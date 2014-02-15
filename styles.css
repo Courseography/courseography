@@ -1,0 +1,273 @@
+div.infoTab {
+  float: left;
+  width:100%;
+  background: #447BD4;
+  color: white;
+  height: 300px;
+  overflow-y: auto;
+}
+
+table {
+  
+}
+
+td {
+  display: inline-block;
+  border: 1px solid white;
+}
+
+ul.tabList {
+  float: left;
+  width: 100%;
+  height: 40px;
+  display: block;
+  margin: 0;
+  background: #04356C;
+  border-top-style: solid;
+  border-bottom-style: solid;
+}
+
+
+ul.tabList li {
+  list-style: none;
+  float:left;
+  background: #274F7D;
+  text-align: center;
+  width: 10em;
+  height: 40px;
+  line-height: 40px;
+  vertical-align: middle;
+  border-right-style: solid;
+  border-left-style: solid;
+  border-right-width: thin;
+  border-left-width: thin;
+}
+
+ul.tabList li.ui-tabs-active {
+  background: #0D56A6;
+}
+
+ul.tabList a {
+  height: 100%;
+  width: 100%;
+  display: block;
+  color: #ccc;
+  text-decoration: none;
+  outline-color: transparent;
+}
+
+ul.tabList a:hover {
+  background: #0D56A6;
+}
+
+
+div.focusDetails {
+  background: #6A93D4;
+  width: 800px;
+  float: left;
+  padding: 1em;
+}
+
+#focusListDiv {
+  height: 100%;
+}
+
+ul.focusList {
+  float: left;
+  width: 300px;
+  height: 100%;
+  display: block;
+  margin-top: 1em;
+}
+
+
+ul.focusList li {
+  list-style: none;
+  height: 40px;
+  line-height: 40px;
+  vertical-align: middle;
+}
+
+ul.focusList li.ui-tabs-active, ul.focusList a:hover {
+  background: #6A93D4;
+}
+
+ul.focusList a {
+  height: 100%;
+  width: 100%;
+  display: block;
+  color: #ccc;
+  text-decoration: none;
+  outline-color: transparent;
+}
+
+
+
+html, body {
+  margin: 0em;
+  padding: 0em;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  font-family: "Trebuchet MS",Arial,Sans-Serif;
+}
+
+
+#title ellipse {
+  fill: #04356C;
+}
+
+#ellipseText, #ellipseText2 {
+  font-size: 1.7em;
+  color: white;
+  font-weight: bold;
+  
+  font-family: Sans-Serif;
+}
+
+
+#graph {
+  width: 100%;
+  height: 750px;
+}
+
+#graphRootSVG {
+  width: 100%;
+  height: 100%;
+  stroke:	black;
+  stroke-linecap:	square;
+  stroke-miterlimit:	10;
+  color-interpolation:	auto;
+  overflow: hidden;
+  shape-rendering: geometricPrecision;
+}
+
+g text{
+  white-space: pre;
+  text-align: center;
+  text-rendering="optimizeQuality";
+  stroke: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+g.node {
+  cursor: pointer;
+}
+
+g[data-active="inactive"] {
+  opacity: 0.4;
+  stroke-dasharray: 8,8;
+}
+
+g[data-active="takeable"] {
+  opacity: 0.75;
+}
+
+path[data-active="takeable"] {
+  fill: none;
+  color: grey;
+  stroke-dasharray: 8,8;
+  marker-end: url(#arrow);
+}
+
+path[data-active="inactive"] {
+  fill: none;
+  opacity: 0.4;
+  stroke-dasharray: 8,8;
+  marker-end: url(#arrow);
+}
+
+path[data-active="active"] {
+  fill: none;
+  opacity: 1.0;
+  marker-end: url(#arrow);
+}
+
+g[data-active="active"] {
+  opacity: 1.0;
+  stroke-width: 3;
+}
+
+g[data-active="missing"] rect {
+  opacity: 0.5;
+  stroke-width: 3;
+}
+
+g[data-active="unlit"] rect {
+  opacity: 1.0;
+  fill: rgb(80,80,80) !important;
+}
+
+
+
+
+g[data-group='theory'] rect {
+  fill: #B1C8D1;
+}
+
+g[data-group='core'] rect {
+  fill: #C9C9C9;
+}
+
+g[data-group='se'] rect {
+  fill: #E68080;
+}
+
+g[data-group='systems'] rect {
+  fill: #C285FF;
+}
+
+g[data-group='graphics'] rect {
+  fill: #66A366;
+}
+
+g[data-group='dbweb'] rect {
+  fill: #FFE680;
+}
+
+g[data-group='num'] rect {
+  fill: #DBB8FF;
+}
+
+g[data-group='ai'] rect {
+  fill: #80B2FF;
+}
+
+g[data-group='hci'] rect {
+  fill: #B8FF70;
+}
+
+
+g.hybrid {
+  cursor: default;
+}
+
+g.hybrid rect {
+  fill: #B84D4D;
+}
+
+g.hybrid text{
+  stroke: none;
+  font-size: 0.6em;
+}
+
+g.bool {
+  cursor: default;
+}
+
+g.bool ellipse {
+  fill: none;
+}
+
+g.bool text {
+  stroke: none;
+  font-size: 6pt;
+  font-family: 'Comic Sans MS';
+  font-weight: bold;
+}

@@ -1,0 +1,215 @@
+Instructor:  D. Heap
+Instructor:  D. Heap
+Instructor:  D. Heap
+Instructor:  M. Craig
+Instructor:  M. Craig
+Instructor:  P. Gries
+Instructor:  J. Campbell
+Instructor:  P. Gries
+Instructor:  J. Campbell
+Instructor:  J. Campbell
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  D. Heap
+Instructor:  D. Heap
+Instructor:  D. Heap
+Instructor:  M. Craig
+Instructor:  G. Baumgartner
+Instructor:  T. Fairgrieve
+Instructor:  T. Fairgrieve
+Instructor:  T. Fairgrieve
+Instructor:  T. Fairgrieve
+Instructor:  T. Fairgrieve
+Instructor:  T. Fairgrieve
+Instructor:  T. Fairgrieve
+Instructor:  T. Fairgrieve
+Instructor:  J. Campbell
+Instructor:  J. Campbell
+Instructor:  Tba
+Instructor:  A. Rosenthal
+Instructor:  K. Reid
+Instructor:  K. Reid
+Instructor:  K. Reid
+Instructor:  A. Farzan
+Instructor:  A. Farzan
+Instructor:  A. Farzan
+Instructor:  A. Farzan
+Instructor:  A. Farzan
+Instructor:  A. Farzan
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  S. Engels
+Instructor:  S. Engels
+Instructor:  S. Engels
+Instructor:  S. Engels
+Instructor:  S. Engels
+Instructor:  S. Engels
+Instructor:  T. Pitassi
+Instructor:  T. Pitassi
+Instructor:  T. Pitassi
+Instructor:  T. Pitassi
+Instructor:  S. Toueg
+Instructor:  S. Toueg
+Instructor:  S. Toueg
+Instructor:  S. Toueg
+Instructor:  S. Toueg
+Instructor:  T. Pitassi
+Instructor:  T. Pitassi
+Instructor:  R. Baecker
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  S. Sim
+Instructor:  S. Sim
+Instructor:  M. Medland
+Instructor:  M. Medland
+Instructor:  E. De Lara
+Instructor:  E. De Lara
+Instructor:  E. De Lara
+Instructor:  E. De Lara
+Instructor:  E. De Lara
+Instructor:  E. De Lara
+Instructor:  E. De Lara
+Instructor:  E. De Lara
+Instructor:  O. St-Cyr
+Instructor:  O. St-Cyr
+Instructor:  O. St-Cyr
+Instructor:  O. St-Cyr
+Instructor:  O. St-Cyr
+Instructor:  O. St-Cyr
+Instructor:  O. St-Cyr
+Instructor:  O. St-Cyr
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  G. Baumgartner
+Instructor:  G. Baumgartner
+Instructor:  G. Baumgartner
+Instructor:  K. Jackson
+Instructor:  K. Jackson
+Instructor:  C. Christara
+Instructor:  C. Christara
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  C. Christara
+Instructor:  C. Christara
+Instructor:  P. Marbach
+Instructor:  P. Marbach
+Instructor:  A. Demke Brown
+Instructor:  K. Reid
+Instructor:  K. Reid
+Instructor:  K. Reid
+Instructor:  K. Reid
+Instructor:  P. Anderson
+Instructor:  P. Anderson
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  F. Bacchus
+Instructor:  F. Bacchus
+Instructor:  F. Bacchus
+Instructor:  F. Bacchus
+Instructor:  F. Bacchus
+Instructor:  F. Bacchus
+Instructor:  F. Bacchus
+Instructor:  F. Bacchus
+Instructor:  F. Bacchus
+Instructor:  F. Bacchus
+Instructor:  F. Bacchus
+Instructor:  F. Bacchus
+Instructor:  S. McIlraith
+Instructor:  S. McIlraith
+Instructor:  S. McIlraith
+Instructor:  S. McIlraith
+Instructor:  F. Rudzicz
+Instructor:  F. Rudzicz
+Instructor:  F. Rudzicz
+Instructor:  S. Engels
+Instructor:  S. Engels
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  R. Zemel
+Instructor:  R. Zemel
+Instructor:  L. Moore
+Instructor:  L. Moore
+Instructor:  L. Moore
+Instructor:  L. Moore
+Instructor:  L. Moore
+Instructor:  L. Moore
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  S. Cook
+Instructor:  S. Cook
+Instructor:  R. Miller
+Instructor:  R. Miller
+Instructor:  R. Miller
+Instructor:  R. Miller
+Instructor:  A. Wytenburg
+Instructor:  A. Wytenburg
+Instructor:  A. Wytenburg
+Instructor:  A. Wytenburg
+Instructor:  A. Wytenburg
+Instructor:  A. Wytenburg
+Instructor:  C. Christara
+Instructor:  C. Christara
+Instructor:  J. Lim
+Instructor:  J. Lim
+Instructor:  J. Lim
+Instructor:  J. Lim
+Instructor:  J. Lim
+Instructor:  J. Lim
+Instructor:  S. Cook
+Instructor:  A. Demke Brown
+Instructor:  A. Demke Brown
+Instructor:  G. Hirst
+Instructor:  G. Hirst
+Instructor:  V. Belle
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  Tba
+Instructor:  K. Singh
+Instructor:  Staff
+Instructor:  Staff
+Instructor:  Staff
+Instructor:  Staff
+Instructor:  Staff
+Instructor:  Staff

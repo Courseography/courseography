@@ -1,0 +1,45 @@
+#!/bin/bash
+
+python3 -c "
+from urllib.request import urlopen
+from html.parser import HTMLParser
+import re
+
+# Extract data from Time Table
+html = urlopen('http://www.artsandscience.utoronto.ca/ofr/timetable/winter/csc.html')
+htmlData = html.read()
+
+# The regular expressions for all 6 fields
+course = re.compile('^CSC\d{3}')
+section = re.compile('^[FS]{1}$')
+lecture = re.compile('^[LT]\d{4}')
+time = re.compile('^[MWTRF]{1,3}\d{1}|Cancel')
+instructor = re.compile('^\w\.|Tba|Staff')
+location = re.compile('^\w{2} \d{1,4}')
+
+# Different cases for extracted data
+class MyHTMLParser(HTMLParser):
+    def handle_data(self, data):
+    	if course.match(data):
+	        #print('----------')
+	        #print('Course: ', data)
+	        pass
+    	if section.match(data):
+	        #print('Section: ', data)
+	        pass
+    	if instructor.match(data):
+	        print('Instructor: ', data)
+	        pass
+    	if lecture.match(data):
+	        #print('Type: ', data)
+	        pass
+    	if time.match(data):
+	        #print('Time: ', data)
+	        pass
+    	if location.match(data):
+	        #print('Location: ', data)
+	        pass
+
+parser = MyHTMLParser(strict=False)
+parser.feed(str(htmlData))
+" > timeTable.txt
