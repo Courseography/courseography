@@ -10,34 +10,43 @@ html = urlopen('http://www.artsandscience.utoronto.ca/ofr/timetable/winter/csc.h
 htmlData = html.read()
 
 # The regular expressions for all 6 fields
-course = re.compile('^CSC\d{3}')
+course = re.compile('^CSC\d{3}H1$')
 section = re.compile('^[FS]{1}$')
-lecture = re.compile('^[LT]\d{4}')
-time = re.compile('^[MWTRF]{1,3}\d{1}|Cancel')
+lecture = re.compile('^[LT](0|5){1}[0152]{1}0{1}')
+time = re.compile('^[MWTRF]{1,3}\d{1}[-]?\d?$|Cancel')
 instructor = re.compile('^\w\.|Tba|Staff')
 location = re.compile('^\w{2} \d{1,4}')
 
+
+
 # Different cases for extracted data
 class MyHTMLParser(HTMLParser):
+    courseMemory = ''
+    sectionMemory = ''
+    typeMemory = ''
+    timeMemory = ''
+    locationMemory = ''
+
+
     def handle_data(self, data):
     	if course.match(data):
-	        print('<tr><td>Course: ', data, '</td>\n')
+	        print('<tr><td>', data, '</td>\n')
+	        self.courseMemory = data
 	        pass
     	if section.match(data):
-	        print('<td>Section: ', data, '</td></tr>\n')
+	        self.sectionMemory = data
 	        pass
-
     	if lecture.match(data):
-	        print('<tr><td>&nbsp&nbsp&nbsp&nbsp&nbsp</td><td>Type: ', data, '</td>\n')
+	        self.typeMemory = data
 	        pass
     	if time.match(data):
-	        print('<td>Time: ', data, '</td>\n')
+	        self.timeMemory = data
 	        pass
     	if location.match(data):
-	        print('<td>Location: ', data, '</td>\n')
+	        self.locationMemory = data
 	        pass
     	if instructor.match(data):
-	        print('<td>Instructor: ', data, '</td></tr>\n')
+	        print('<tr><td>',self.courseMemory,'</td><td>'+self.sectionMemory+'</td><td>' + self.typeMemory +'</td><td>', data, '</td><td>'+self.locationMemory+'</td><td>'+data+'</td>')
 	        pass
 
 parser = MyHTMLParser(strict=False)
@@ -53,4 +62,4 @@ print('<tr>'
 	+ '</tr><div><p>')
 parser.feed(str(htmlData))
 print('</p></div></table>')
-" > res/timeTable.txt
+" > res/timeTable

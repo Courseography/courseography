@@ -1,8 +1,8 @@
+
 var nodes = [];
-var initiallyTakeable = ["CSC104", "CSC120", "CSC108", "CSC165", "Calc1", "Lin1", "CSC200", "CSC300", "CSC490", "CSC491", "CSC494", "CSC495"];
 var num300Plus = 0;
 var clickedCourses = [];
-var clickedNode = parent.document.getElementById("courseGrid");
+var clickedNode = parent.document.getElementById("courseList");
 
 var fragment2 = createTimeTable();
 timeNode = parent.document.getElementById("timetable")
@@ -26,77 +26,78 @@ var webFocusList = ["Sta2", "CSC309", "CSC343", "CSC358", "CSC458", "CSC411", "C
 var activeFocus = "";
 
 function showtime(id) {
-    var focus = window[id + "FocusList"];
-    $("ellipse.spotlight").remove();
-    if (activeFocus == id) {
-        // Deactivate the focuses.
-        $("#graph").css("background", "white");
-        activeFocus = "";
-        for (var i = 0; i < nodes.length; i++) {
-            window[nodes[i]].updateSVG();
-        }
-    } else {
-        $("#graph").css("background", "rgb(40,40,40)");
-        $(".node, .hybrid").attr('data-active', 'unlit');
-        for (var i = 0; i < focus.length; i++) {
-            spotlight(focus[i]);
-            window[focus[i]].updateSVG();
-        }
-        $("#graph").html($("#graph").html());
-        $(".node").click(function() {
-            turnNode();
-        });
-        $(".node").hover(function() {
-            hoverFocus();
-        }, function() {
-            hoverUnfocus();
-        });
-        activeFocus = id;
+  var focus = window[id + "FocusList"];
+  $("ellipse.spotlight").remove();
+  if (activeFocus == id) {
+    // Deactivate the focuses.
+    $("#graph").css("background", "white");
+    activeFocus = "";
+    for (var i = 0; i < nodes.length; i++) {
+      window[nodes[i]].updateSVG();
     }
+  } else {
+    $("#graph").css("background", "rgb(40,40,40)");
+    $(".node, .hybrid").attr('data-active', 'unlit');
+    for (var i = 0; i < focus.length; i++) {
+      spotlight(focus[i]);
+      window[focus[i]].updateSVG();
+    }
+    $("#graph").html($("#graph").html());
+    $(".node").click(function () { turnNode(); });
+    $(".node").hover(function () { hoverFocus(); }, function () { hoverUnfocus(); });
+    activeFocus = id;
+  }
 }
 
 function spotlight(id) {
-    var x = parseFloat($("#".concat(id, " > rect")).attr("x")) + 20;
-    var y = parseFloat($("#".concat(id, " > rect")).attr("y")) + 15;
-    var el = '<ellipse class="spotlight" cx="'.concat(x, '" cy = "', y, '" rx="30" ry = "27" style="fill:white; opacity:0.8; stroke: none" />');
-    $("#" + id).before(el);
-    $("#" + id).attr('data-active', 'lit');
+  var x = parseFloat($("#".concat(id, " > rect")).attr("x")) + 20;
+  var y = parseFloat($("#".concat(id, " > rect")).attr("y")) + 15;
+  var el = '<ellipse class="spotlight" cx="'.concat(x, '" cy = "', y, '" rx="30" ry = "27" style="fill:white; opacity:0.8; stroke: none" />');
+  $("#" + id).before(el);
+  $("#" + id).attr('data-active', 'lit');
 }
 
-function reset() {
+function reset()
+{
     for (var i = 0; i < nodes.length; i++) {
         window[nodes[i]].turnOff();
     }
     num300Plus = 0;
 }
 
-function makeNode(parents, type, name) {
+function makeNode(parents, type, name)
+{
     window[name] = new Node(parents, type, name);
     nodes.push(name);
 }
 
-function makeHybrid(parents, type, name) {
+function makeHybrid(parents, type, name)
+{
     makeNode(parents, type, name);
     window[name].hybrid = true;
 }
 
-function makeEdge(parent, child, name) {
+function makeEdge(parent, child, name)
+{
     window[name] = new Edge(parent, child, name);
     parent.outEdges.push(window[name]);
     child.inEdges.push(window[name]);
 }
 
-function turnNode() {
+function turnNode()
+{
     window[$(event.target).parent().attr("id")].turn();
 }
 
-function Edge(parent, child, name) {
+function Edge(parent, child, name)
+{
     this.parent = parent;
     this.child = child;
     this.name = name;
 }
 
-function Node(parents, type, name) {
+function Node(parents, type, name)
+{
     this.name = name;
     this.parents = parents;
     this.logicalType = type;
@@ -107,12 +108,14 @@ function Node(parents, type, name) {
     this.hybrid = false;
     this.outEdges = [];
     this.inEdges = [];
-
-    for (var i = 0; i < this.parents.length; i++) {
+    
+    for (var i = 0; i < this.parents.length; i++)
+    {
         this.parents[i].children.push(this);
     }
 
-    this.turnOff = function() {
+    this.turnOff = function()
+    {
         this.active = false;
         this.takeable = this.parents.length == 0;
         this.updateSVG();
@@ -120,9 +123,12 @@ function Node(parents, type, name) {
     }
 
 
-    this.turn = function() {
-        if (this.active || this.takeable) {
-            for (var i = 0; i < nodes.length; i++) {
+    this.turn = function()
+    {
+        if (this.active || this.takeable)
+        {
+            for (var i = 0; i < nodes.length; i++)
+            {
                 window[nodes[i]].updated = false;
             }
 
@@ -132,53 +138,62 @@ function Node(parents, type, name) {
             this.updateClickedCourses();
 
             if (this.name == "CSC454") {
-                this.takeable = num300Plus >= 5;
-            } else if (this.name == "CSC494" || this.name == "CSC495") {
-                this.takeable = num300Plus >= 3;
+              this.takeable = num300Plus >= 5;
+            } else if (this.name == "CSC494" || this.name =="CSC495") {
+              this.takeable = num300Plus >= 3;
             } else {
-                this.takeable = true;
+              this.takeable = true;
             }
 
             if (this.name.charAt(3) >= '3' && this.name.length == 6) {
-                if (this.active) {
-                    num300Plus++;
-                } else {
-                    num300Plus--;
-                }
+              if (this.active) {
+                num300Plus++;
+              } else {
+                num300Plus--;
+              }
             }
 
             for (var i = 0; i < this.parents.length; i++) {
                 this.takeable = this.takeable && this.parents[i].active;
             }
             this.updateSVG();
-            for (var i = 0; i < this.children.length; i++) {
+            for (var i = 0; i < this.children.length; i++)
+            {
                 this.children[i].isActive();
             }
 
             // Edges
-            for (var i = 0; i < this.outEdges.length; i++) {
+            for (var i = 0; i < this.outEdges.length; i++)
+            {
                 var id = this.outEdges[i].name;
                 console.log("edge " + id);
-                if (!this.active) {
+                if (!this.active)
+                {
                     $("#" + id).attr("data-active", "inactive");
-                } else if (this.outEdges[i].child.active) {
+                } else if (this.outEdges[i].child.active)
+                {
                     $("#" + id).attr("data-active", "active");
-                } else {
+                } else 
+                {
                     $("#" + id).attr("data-active", "takeable");
                 }
             }
-
-            for (var i = 0; i < this.inEdges.length; i++) {
+            
+            for (var i = 0; i < this.inEdges.length; i++)
+            {
                 var id = this.inEdges[i].name;
-                if (this.active) {
+                if (this.active)
+                {
                     $("#" + id).attr("data-active", "active");
-                } else if (this.inEdges[i].child.active) {
+                } else if (this.inEdges[i].child.active)
+                {
                     $("#" + id).attr("data-active", "takeable");
-                } else {
+                } else 
+                {
                     $("#" + id).attr("data-active", "inactive");
                 }
             }
-
+            
             // Check CSC454
             CSC454.isActive();
             CSC494.isActive();
@@ -187,147 +202,176 @@ function Node(parents, type, name) {
 
     }
 
-    this.isActive = function() {
-        if (this.updated) {
+    this.isActive = function()
+    {
+        if (this.updated)
+        {
             return this.active;
-        } else {
+        }
+        else
+        {
             this.updated = true;
             console.log("\t\t\t", "Running 'isActive' on: ", this.name);
 
             if (this.name == "CSC454") {
-                this.takeable = num300Plus >= 5;
-            } else if (this.name == "CSC494" || this.name == "CSC495") {
-                this.takeable = num300Plus >= 3;
+              this.takeable = num300Plus >= 5;
+            } else if (this.name == "CSC494" || this.name =="CSC495") {
+              this.takeable = num300Plus >= 3;
             } else if (this.logicalType == "AND") {
-                this.takeable = true;
+              this.takeable = true;
             } else {
-                this.takeable = false;
+              this.takeable = false;
             }
 
-            if (this.logicalType == "AND") {
-                for (var i = 0; i < this.parents.length; i++) {
+            if (this.logicalType == "AND")
+            {
+                for (var i = 0; i < this.parents.length; i++)
+                {
                     this.takeable = this.takeable && this.parents[i].isActive();
                 }
-            } else if (this.logicalType == "OR") {
-                for (var i = 0; i < this.parents.length; i++) {
+            }
+            else if (this.logicalType == "OR")
+            {
+                for (var i = 0; i < this.parents.length; i++)
+                {
                     this.takeable = this.takeable || this.parents[i].isActive();
                 }
             }
 
             if (this.active && !this.takeable) {
-                this.active = false;
+              this.active = false;
 
-                this.updateClickedCourses();
+              this.updateClickedCourses();
 
-                if (this.name.charAt(3) >= '3' && this.name.length == 6 && !this.hybrid) {
-                    num300Plus--;
-                }
+              if (this.name.charAt(3) >= '3' && this.name.length == 6 && !this.hybrid) {
+                num300Plus--;
+              }
             } else if (this.hybrid && this.takeable) {
-                this.active = true;
-                this.updateClickedCourses();
+              this.active = true;
+              this.updateClickedCourses();
             }
 
-            for (var i = 0; i < this.children.length; i++) {
+            for (var i = 0; i < this.children.length; i++)
+            {
                 this.children[i].isActive();
             }
-
+            
             this.updateSVG();
 
             // Edges
-            for (var i = 0; i < this.outEdges.length; i++) {
+            for (var i = 0; i < this.outEdges.length; i++)
+            {
                 var id = this.outEdges[i].name;
-                if (!this.active) {
+                if (!this.active)
+                {
                     $("#" + id).attr("data-active", "inactive");
-                } else if (this.outEdges[i].child.active) {
+                } else if (this.outEdges[i].child.active)
+                {
                     $("#" + id).attr("data-active", "active");
-                } else {
+                } else 
+                {
                     $("#" + id).attr("data-active", "takeable");
                 }
             }
-
-            for (var i = 0; i < this.inEdges.length; i++) {
+            
+            for (var i = 0; i < this.inEdges.length; i++)
+            {
                 var id = this.inEdges[i].name;
-                if (this.active) {
+                if (this.active)
+                {
                     $("#" + id).attr("data-active", "active");
-                } else if (this.inEdges[i].child.active) {
+                } else if (this.inEdges[i].child.active)
+                {
                     $("#" + id).attr("data-active", "takeable");
-                } else {
+                } else 
+                {
                     $("#" + id).attr("data-active", "inactive");
                 }
             }
-
+            
             return this.active;
 
         }
 
     }
 
-    this.updateSVG = function() {
-        if (this.active) {
-            $("#" + this.name).attr('data-active', 'active');
-        } else if (this.takeable) {
-            $("#" + this.name).attr('data-active', 'takeable');
-        } else {
-            $("#" + this.name).attr('data-active', 'inactive');
-        }
+    this.updateSVG = function()
+    {
+      if (this.active)
+      {
+        $("#" + this.name).attr('data-active', 'active');
+      }
+      else if (this.takeable)
+      {
+        $("#" + this.name).attr('data-active', 'takeable');
+      }
+      else
+      {
+        $("#" + this.name).attr('data-active', 'inactive');
+      }
     }
 
 
     this.focus = function() {
         if (!this.active) {
-            $("#" + this.name).attr('data-active', 'missing');
-            for (var i = 0; i < this.parents.length; i++) {
-                this.parents[i].focus();
-            }
+          $("#" + this.name).attr('data-active', 'missing');
+          for (var i = 0; i < this.parents.length; i++) {
+            this.parents[i].focus();
+          }
         }
     }
 
     this.unfocus = function() {
-        if (!this.active) {
-            this.updateSVG();
-            for (var i = 0; i < this.parents.length; i++) {
-                this.parents[i].unfocus();
-            }
+      if (!this.active) {
+        this.updateSVG();
+        console.log(this.takeable);
+        for (var i = 0; i < this.parents.length; i++) {
+          this.parents[i].unfocus();
         }
+      }
     }
 
     this.updateClickedCourses = function() {
-        while (clickedNode.firstChild) {
-            parent.document.getElementById("courseGrid").removeChild(clickedNode.firstChild);
-        }
-        if (this.active && !this.hybrid) {
-            if (this.name == "CSC200") {
-                FCEs = FCEs + 1;
+    
+	   while (clickedNode.firstChild) 
+	   {
+	       parent.document.getElementById("courseList").removeChild(clickedNode.firstChild);
+	   }        
+    	if(this.active && !this.hybrid)
+            {   
+                if(this.name == "CSC200") {
+                    FCEs = FCEs + 1;
+                } else {
+                    FCEs = FCEs + 0.5;
+                }
+                clickedCourses.push(this.name);
+                console.log(clickedCourses);  
             } else {
-                FCEs = FCEs + 0.5;
-            }
-            clickedCourses.push(this.name);
-            console.log(clickedCourses);
-        } else {
-            var index = clickedCourses.indexOf(this.name);
-            if (index > -1) {
+                
+                var index = clickedCourses.indexOf(this.name);
+                if (index > -1) {
                 clickedCourses.splice(index, 1);
-                if (this.name == "CSC200") {
+                if(this.name == "CSC200") {
                     FCEs -= 1;
                 } else {
                     FCEs -= 0.5;
                 }
-            }
+                }
         }
+	   var htmlClickedString = "";
+    	   for (var i = 0; i < clickedCourses.length; i++) {
+                htmlClickedString += "<td width = '400' align='center'><div id=" 
+                + clickedCourses[i] 
+                + "><p>" 
+             + clickedCourses[i] 
+             + "</p><p>Course information about this.. course!</p></div></td>";
 
-        $('#FCEcount').html(FCEs);
+     	}
+        
 
 
-        var htmlClickedString = "";
-        for (var i = 0; i < clickedCourses.length; i++) {
-            htmlClickedString += "<td class='courseCell' style='background: " 
-                + $("#" + clickedCourses[i] + "> rect").css('fill') 
-                + "'><div id='" + clickedCourses[i] 
-                + "cell'><p class='courseName'>" 
-                + clickedCourses[i] + "</p><p>Course information about this.. course!</p></div></td>";
-        }
-
-        $('#courseGrid').html(htmlClickedString);
+    	var fragment = createHtml(htmlClickedString);
+	    parent.document.getElementById("courseList").appendChild(fragment);
 
     }
 
@@ -516,44 +560,45 @@ makeEdge(bool5, CSC420, "p78");
 makeEdge(CSC258, CSC488, "p79");
 
 
-function hoverFocus() {
-    var id = $(event.target).parent().attr("id");
-    window[id].focus();
+ function hoverFocus() {
+   var id = $(event.target).parent().attr("id");
+   window[id].focus();
 
-    window.mytimeout = setTimeout(function() {
-        // Get data from course calendar
-        var xmlreq = new XMLHttpRequest();
-        xmlreq.open("GET", "res/calendar.txt", false);
-        xmlreq.send();
+   window.mytimeout = setTimeout(function() {
+     // Get data from course calendar
+     var xmlreq = new XMLHttpRequest();
+     xmlreq.open("GET", "res/calendar.txt", false);
+     xmlreq.send();
 
-        var patt1 = new RegExp("\n" + id + ".*\n.*\n", "im");
-        var courseString = xmlreq.responseText.match(patt1)[0].split("\n");
-        console.log(courseString);
-        var htmlCourseString = "";
-        for (var i = 0; i < courseString.length; i++) {
-            htmlCourseString += "<p>" + courseString[i] + "</p>";
-            $("#calendar").html(htmlCourseString);
-        }
-    }, 500);
-};
+    var patt1 = new RegExp("\n" + id + ".*\n.*\n", "im");
+    var courseString = xmlreq.responseText.match(patt1)[0].split("\n");
+    console.log(courseString);
+    var htmlCourseString = "";
+    for (var i = 0; i < courseString.length; i++) {
+        htmlCourseString += "<p>" + courseString[i] + "</p>";
+        $("#calendar").html(htmlCourseString);
+    }
+  }, 500);
+ };
 
-/* Unnecessary
 function createHtml(htmlStr) {
     var frag = document.createDocumentFragment();   
     temp = document.createElement('div');
-    $('#courseGrid').innerHTML = htmlStr;
+    temp.innerHTML = "<div float='right'>" + FCEs + "</div>" + 
+                    "<table><tr id='tabTable'>" + 
+                    htmlStr + "</tr></table>";
     while (temp.firstChild) {
         frag.appendChild(temp.firstChild);
     }
 
     return frag;
-}*/
+}
 
 function createTimeTable() {
-    var frag = document.createDocumentFragment();
-    temp = document.createElement('div');
-    var xmlreq = new XMLHttpRequest();
-     xmlreq.open("POST", "res/timeTable", false);
+     var frag = document.createDocumentFragment();
+     temp = document.createElement('div');
+     var xmlreq = new XMLHttpRequest();
+     xmlreq.open("GET", "res/timeTable", false);
      xmlreq.send();
      var timeTableString = xmlreq.responseText;
      temp.innerHTML = timeTableString;
@@ -565,27 +610,26 @@ function createTimeTable() {
 }
 
 function hoverUnfocus() {
-    window[$(event.target).parent().attr("id")].unfocus();
-    clearTimeout(window.mytimeout);
+  window[$(event.target).parent().attr("id")].unfocus();
+  clearTimeout(window.mytimeout);
 };
 
-$(document).ready(function() {
-    $(".node").click(function() {
-        turnNode();
-    });
-    $(".node").hover(function() {
-        hoverFocus();
-    }, function() {
-        hoverUnfocus();
-    });
+var initiallyTakeable = ["CSC104", "CSC120", "CSC108", "CSC165", "Calc1", "Lin1", "CSC200", "CSC300", "CSC490", "CSC491", "CSC494", "CSC495"];
+
+$(document).ready(function () {
+    $(".node").click(function () { turnNode(); });
+    $(".node").hover(function () { hoverFocus(); }, function () { hoverUnfocus(); });
     $(".node").attr("data-active", "inactive");
     $(".hybrid").attr("data-active", "inactive");
     $(".bool").attr("data-active", "inactive");
     $("path").attr("data-active", "inactive");
-
-    for (var i = 0; i < initiallyTakeable.length; i++) {
+    
+    for (var i = 0; i < initiallyTakeable.length; i++)
+    {
         var id = initiallyTakeable[i];
         window[id].takeable = true;
         window[id].updateSVG();
     }
 });
+
+
