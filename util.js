@@ -598,7 +598,7 @@ function createTimeTable() {
      var frag = document.createDocumentFragment();
      temp = document.createElement('div');
      var xmlreq = new XMLHttpRequest();
-     xmlreq.open("POST", "res/timeTable", false);
+     xmlreq.open("GET", "res/timeTable", false);
      xmlreq.send();
      var timeTableString = xmlreq.responseText;
      temp.innerHTML = timeTableString;
