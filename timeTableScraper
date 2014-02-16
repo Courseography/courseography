@@ -21,25 +21,36 @@ location = re.compile('^\w{2} \d{1,4}')
 class MyHTMLParser(HTMLParser):
     def handle_data(self, data):
     	if course.match(data):
-	        #print('----------')
-	        #print('Course: ', data)
+	        print('<tr><td>Course: ', data, '</td>\n')
 	        pass
     	if section.match(data):
-	        #print('Section: ', data)
+	        print('<td>Section: ', data, '</td></tr>\n')
 	        pass
-    	if instructor.match(data):
-	        print('Instructor: ', data)
-	        pass
+
     	if lecture.match(data):
-	        #print('Type: ', data)
+	        print('<tr><td>&nbsp&nbsp&nbsp&nbsp&nbsp</td><td>Type: ', data, '</td>\n')
 	        pass
     	if time.match(data):
-	        #print('Time: ', data)
+	        print('<td>Time: ', data, '</td>\n')
 	        pass
     	if location.match(data):
-	        #print('Location: ', data)
+	        print('<td>Location: ', data, '</td>\n')
+	        pass
+    	if instructor.match(data):
+	        print('<td>Instructor: ', data, '</td></tr>\n')
 	        pass
 
 parser = MyHTMLParser(strict=False)
+
+print('<table id=\"timeTable\">')
+print('<tr>'
+	+ '<td>Course</td>'
+	+ '<td>Section</td>'
+	+ '<td>Type</td>'
+	+ '<td>Time</td>'
+	+ '<td>Location</td>'
+	+ '<td>Instructor</td>'
+	+ '</tr><div><p>')
 parser.feed(str(htmlData))
-" > timeTable.txt
+print('</p></div></table>')
+" > res/timeTable.txt

@@ -3,9 +3,15 @@ var nodes = [];
 var num300Plus = 0;
 var clickedCourses = [];
 var clickedNode = parent.document.getElementById("courseList");
+
+var fragment2 = createTimeTable();
+timeNode = parent.document.getElementById("timetable")
+timeNode.appendChild(fragment2);
+
 var FCEs = 0;
 var clickedCourses = [];
-var clickedNode = document.getElementById("t1");
+
+//var clickedNode = document.getElementById("t1");
 
 var sciFocusList = ["CSC336", "CSC446", "CSC456", "CSC320", "CSC418", "CSC321", "CSC411", "CSC343", "CSC384", "CSC358", "CSC458"];
 var AIFocusList = ["CSC310", "CSC330", "CSC438", "CSC448", "CSC463", "CSC401", "CSC485", "CSC320", "CSC420", "CSC321", "CSC411", "CSC412", "CSC384", "CSC486"];
@@ -365,7 +371,8 @@ function Node(parents, type, name)
 
 
     	var fragment = createHtml(htmlClickedString);
-	parent.document.getElementById("courseList").appendChild(fragment);
+	    parent.document.getElementById("courseList").appendChild(fragment);
+
     }
 
 }
@@ -553,14 +560,14 @@ makeEdge(bool5, CSC420, "p78");
 makeEdge(CSC258, CSC488, "p79");
 
 
-function hoverFocus() {
-  var id = $(event.target).parent().attr("id");
-  window[id].focus();
+ function hoverFocus() {
+   var id = $(event.target).parent().attr("id");
+   window[id].focus();
 
    window.mytimeout = setTimeout(function() {
      // Get data from course calendar
      var xmlreq = new XMLHttpRequest();
-     xmlreq.open("GET", "calendar.txt", false);
+     xmlreq.open("GET", "res/calendar.txt", false);
      xmlreq.send();
 
     var patt1 = new RegExp("\n" + id + ".*\n.*\n", "im");
@@ -572,7 +579,7 @@ function hoverFocus() {
         $("#calendar").html(htmlCourseString);
     }
   }, 500);
-};
+ };
 
 function createHtml(htmlStr) {
     var frag = document.createDocumentFragment();   
@@ -583,16 +590,31 @@ function createHtml(htmlStr) {
     while (temp.firstChild) {
         frag.appendChild(temp.firstChild);
     }
+
     return frag;
 }
 
+function createTimeTable() {
+     var frag = document.createDocumentFragment();
+     temp = document.createElement('div');
+     var xmlreq = new XMLHttpRequest();
+     xmlreq.open("POST", "res/timeTable", false);
+     xmlreq.send();
+     var timeTableString = xmlreq.responseText;
+     temp.innerHTML = timeTableString;
+     console.log(timeTableString);
+     while (temp.firstChild) {
+        frag.appendChild(temp.firstChild);
+    }
+    return frag;
+}
 
 function hoverUnfocus() {
   window[$(event.target).parent().attr("id")].unfocus();
   clearTimeout(window.mytimeout);
 };
 
- var initiallyTakeable = ["CSC104", "CSC120", "CSC108", "CSC165", "Calc1", "Lin1", "CSC200", "CSC300", "CSC490", "CSC491", "CSC494", "CSC495"];
+var initiallyTakeable = ["CSC104", "CSC120", "CSC108", "CSC165", "Calc1", "Lin1", "CSC200", "CSC300", "CSC490", "CSC491", "CSC494", "CSC495"];
 
 $(document).ready(function () {
     $(".node").click(function () { turnNode(); });
