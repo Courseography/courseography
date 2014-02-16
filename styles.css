@@ -8,17 +8,32 @@ div.infoTab {
 }
 
 table {
-  
+
 }
 
-td {
+.courseCell {
   display: inline-block;
-  border: 1px solid white;
+  border: 1px solid black;
+  color: black;
+  text-align: center;
+  width: 200px;
+}
+
+.courseCell p {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  margin-left: 1em;
+  margin-right: 1em;
+}
+
+p.courseName {
+  font-size: 1.2em;
+  font-weight: bold;
 }
 
 ul.tabList {
   float: left;
-  width: 100%;
+  width: 100%;ht
   height: 40px;
   display: block;
   margin: 0;
@@ -58,6 +73,12 @@ ul.tabList a {
 
 ul.tabList a:hover {
   background: #0D56A6;
+}
+
+#courseListTableDiv {
+  padding: 1em;
+  height: 100%;
+  width: 100%;
 }
 
 
@@ -203,7 +224,6 @@ g[data-active="unlit"] rect {
   opacity: 1.0;
   fill: rgb(80,80,80) !important;
 }
-
 
 
 

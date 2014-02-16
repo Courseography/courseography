@@ -3,711 +3,809 @@
 <html>
 
 <head>
-<link rel="stylesheet" type="text/css" href="styles.css" />
-<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
-<script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+  <link rel="stylesheet" type="text/css" href="styles.css" />
+  <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 
 </head>
 
 <body>
-<div id="graph">
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="graphRootSVG" viewBox="0 0 1500 1000">
-  <g transform="matrix(1.4859,0,0,1.4859,-359.7965,469.5511)">
-    <defs>
-      <marker id="arrow" viewBox="0 0 10 10" refX="1" refY="5" markerUnits="strokeWidth" orient="auto" markerWidth="10" markerHeight="10">
-      <polyline points="0,1 10,5 0,9" fill="black" />
-      </marker>
-    </defs>
-    <g id="CSC438" class="node" data-group="theory">
-      <rect x="545.5955" y="290.6064" width="40" rx="4" ry="4" height="32"/>
-      <text x="552.2479" y="312.8916">438</text>
-    </g>
-    <g id="CSC463" class="node" data-group="theory">
-      <rect x="435.4041" y="136.2453" width="40" rx="4" ry="4" height="32"/>
-      <text x="442.0565" y="158.5304">463</text>
-    </g>
-    <g id="CSC448" class="node" data-group="theory">
-      <rect x="435.4041" y="290.6064" width="40" rx="4" ry="4" height="32"/>
-      <text x="442.0565" y="312.8916">448</text>
+  <div id="graph">
+    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="graphRootSVG" viewBox="0 0 1500 1000">
+      <g transform="matrix(1.4859,0,0,1.4859,-359.7965,469.5511)">
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="1" refY="5" markerUnits="strokeWidth" orient="auto" markerWidth="10" markerHeight="10">
+            <polyline points="0,1 10,5 0,9" fill="black" />
+          </marker>
+        </defs>
+        <g id="CSC438" class="node" data-group="theory">
+          <rect x="545.5955" y="290.6064" width="40" rx="4" ry="4" height="32"/>
+          <text x="552.2479" y="312.8916">438</text>
+        </g>
+        <g id="CSC463" class="node" data-group="theory">
+          <rect x="435.4041" y="136.2453" width="40" rx="4" ry="4" height="32"/>
+          <text x="442.0565" y="158.5304">463</text>
+        </g>
+        <g id="CSC448" class="node" data-group="theory">
+          <rect x="435.4041" y="290.6064" width="40" rx="4" ry="4" height="32"/>
+          <text x="442.0565" y="312.8916">448</text>
+        </g>
+        <g id="CSC165" class="node" data-group="theory">
+          <rect x="465.568" y="-261.4223" width="65.2075" rx="4" ry="4" height="32"/>
+          <text x="469.2538" y="-239.1371">165/240</text>
+        </g>
+        <g id="CSC236" class="node" data-group="theory">
+          <rect x="465.568" y="-148.4075" width="65.2075" rx="4" ry="4" height="32"/>
+          <text x="469.2538" y="-126.1224">236/240</text>
+        </g>
+        <g id="CSC263" class="node" data-group="theory">
+          <rect x="465.568" y="-59.778" width="65.2075" rx="4" ry="4" height="32"/>
+          <text x="469.2538" y="-37.4929">263/265</text>
+        </g>
+        <g id="CSC373" class="node" data-group="theory">
+          <rect x="478.1717" y="23.6881" width="40" rx="4" ry="4" height="32"/>
+          <text x="484.8241" y="45.9733">373</text>
+        </g>
+        <g id="CSC108" class="node" data-group="core">
+          <rect x="607.1759" y="-261.4223" width="40" rx="4" ry="4" height="32"/>
+          <text x="613.8282" y="-239.1371">108</text>
+        </g>
+        <g id="CSC148" class="node" data-group="core">
+          <rect x="607.1759" y="-199.4223" width="40" rx="4" ry="4" height="32"/>
+          <text x="613.8282" y="-177.1371">148</text>
+        </g>
+        <g id="CSC207" class="node" data-group="se">
+          <rect x="790.0412" y="-148.4075" width="40" rx="4" ry="4" height="32"/>
+          <text x="796.6935" y="-126.1224">207</text>
+        </g>
+        <g id="CSC209" class="node" data-group="systems">
+          <rect x="932.9791" y="-59.778" width="40" rx="4" ry="4" height="32"/>
+          <text x="939.6314" y="-37.4929">209</text>
+        </g>
+        <g id="CSC258" class="node" data-group="systems">
+          <rect x="1005.7129" y="-148.4075" width="40" rx="4" ry="4" height="32"/>
+          <text x="1012.3652" y="-126.1224">258</text>
+        </g>
+        <g id="CSC369" class="node" data-group="systems">
+          <rect x="966.7648" y="23.6881" width="40" rx="4" ry="4" height="32"/>
+          <text x="973.4171" y="45.9733">369</text>
+        </g>
+        <g id="CSC318" class="node" data-group="hci">
+          <rect x="194.3625" y="74.2453" width="40" rx="4" ry="4" height="32"/>
+          <text x="201.0149" y="96.5304">318</text>
+        </g>
+        <g id="CSC320" class="node" data-group="graphics">
+          <rect x="286.8166" y="75.3633" width="40" rx="4" ry="4" height="32"/>
+          <text x="293.4689" y="97.6485">320</text>
+        </g>
+        <g id="CSC418" class="node" data-group="graphics">
+          <rect x="286.8166" y="136.2453" width="40" rx="4" ry="4" height="32"/>
+          <text x="293.4689" y="158.5304">418</text>
+        </g>
+        <g id="CSC454" class="node" data-group="hci">
+          <rect x="194.3625" y="290.6064" width="40" rx="4" ry="4" height="32"/>
+          <text x="201.0149" y="312.8916">454</text>
+        </g>
+        <g id="CSC300" class="node" data-group="hci">
+          <rect x="194.3625" y="4.298" width="40" rx="4" ry="4" height="32"/>
+          <text x="201.0149" y="26.5831">300</text>
+        </g>
+        <g id="CSC200" class="node" data-group="hci">
+          <rect x="194.3625" y="-59.778" width="40" rx="4" ry="4" height="32"/>
+          <text x="201.0149" y="-37.4929">200</text>
+        </g>
+        <g id="CSC404" class="node" data-group="hci">
+          <rect x="194.3625" y="224.3459" width="40" rx="4" ry="4" height="32"/>
+          <text x="201.0149" y="246.6311">404</text>
+        </g>
+        <g id="CSC428" class="node" data-group="hci">
+          <rect x="194.3625" y="136.2453" width="40" rx="4" ry="4" height="32"/>
+          <text x="201.0149" y="158.5304">428</text>
+        </g>
+        <g id="CSC336" class="node" data-group="num">
+          <rect x="395.4041" y="75.3633" width="40" rx="4" ry="4" height="32"/>
+          <text x="402.0565" y="97.6485">336</text>
+        </g>
+        <g id="CSC446" class="node" data-group="num">
+          <rect x="360.576" y="222.2894" width="40" rx="4" ry="4" height="32"/>
+          <text x="367.2284" y="244.5746">446</text>
+        </g>
+        <g id="CSC456" class="node" data-group="num">
+          <rect x="360.576" y="290.6064" width="40" rx="4" ry="4" height="32"/>
+          <text x="367.2284" y="312.8916">456</text>
+        </g>
+        <g id="CSC436" class="node" data-group="num">
+          <rect x="360.576" y="134.4732" width="40" rx="4" ry="4" height="32"/>
+          <text x="367.2284" y="156.7584">436</text>
+        </g>
+        <g id="CSC384" class="node" data-group="ai">
+          <rect x="667.8184" y="192.4732" width="40" rx="4" ry="4" height="32"/>
+          <text x="674.4707" y="214.7584">384</text>
+        </g>
+        <g id="CSC486" class="node" data-group="ai">
+          <rect x="667.8184" y="290.6064" width="40" rx="4" ry="4" height="32"/>
+          <text x="674.4707" y="312.8916">486</text>
+        </g>
+        <g id="CSC401" class="node" data-group="ai">
+          <rect x="747.3" y="192.4732" width="40" rx="4" ry="4" height="32"/>
+          <text x="753.9524" y="214.7584">401</text>
+        </g>
+        <g id="CSC485" class="node" data-group="ai">
+          <rect x="832.036" y="192.4732" width="40" rx="4" ry="4" height="32"/>
+          <text x="838.6884" y="214.7584">485</text>
+        </g>
+        <g id="CSC321" class="node" data-group="ai">
+          <rect x="607.1759" y="136.2453" width="40" rx="4" ry="4" height="32"/>
+          <text x="613.8282" y="158.5304">321</text>
+        </g>
+        <g id="CSC411" class="node" data-group="ai">
+          <rect x="607.1759" y="222.2894" width="40" rx="4" ry="4" height="32"/>
+          <text x="613.8282" y="244.5746">411</text>
+        </g>
+        <g id="CSC301" class="node" data-group="se">
+          <rect x="790.0412" y="23.6881" width="40" rx="4" ry="4" height="32"/>
+          <text x="796.6935" y="45.9733">301</text>
+        </g>
+        <g id="CSC302" class="node" data-group="se">
+          <rect x="790.0412" y="80.1049" width="40" rx="4" ry="4" height="32"/>
+          <text x="796.6935" y="102.39">302</text>
+        </g>
+        <g id="CSC410" class="node" data-group="se">
+          <rect x="711.3377" y="136.2453" width="40" rx="4" ry="4" height="32"/>
+          <text x="717.9901" y="158.5304">410</text>
+        </g>
+        <g id="CSC324" class="node" data-group="theory">
+          <rect x="667.8184" y="23.6881" width="40" rx="4" ry="4" height="32"/>
+          <text x="674.4707" y="45.9733">324</text>
+        </g>
+        <g id="CSC488" class="node" data-group="systems">
+          <rect x="1139.9095" y="192.4732" width="40" rx="4" ry="4" height="32"/>
+          <text x="1146.5619" y="214.7584">488</text>
+        </g>
+        <g id="ECE489" class="node" data-group="systems">
+          <rect x="1139.9095" y="290.6064" width="40" rx="4" ry="4" height="37"/>
+          <text x="1145.5165" y="305.5303">ECE</text>
+          <text x="1148.2303" y="322.6816">489</text>
+        </g>
+        <g id="CSC469" class="node" data-group="systems">
+          <rect x="1045.8298" y="290.6064" width="40" rx="4" ry="4" height="32"/>
+          <text x="1052.4821" y="312.8916">469</text>
+        </g>
+        <g id="CSC358" class="node" data-group="systems">
+          <rect x="1045.8298" y="23.6881" width="40" rx="4" ry="4" height="32"/>
+          <text x="1052.4821" y="45.9733">358</text>
+        </g>
+        <g id="CSC458" class="node" data-group="systems">
+          <rect x="1045.8298" y="80.1049" width="40" rx="4" ry="4" height="32"/>
+          <text x="1052.4821" y="102.39">458</text>
+        </g>
+        <g id="ECE385" class="node" data-group="systems">
+          <rect x="1045.8298" y="192.4732" width="40" rx="4" ry="4" height="37"/>
+          <text x="1051.4366" y="207.397">ECE</text>
+          <text x="1054.1505" y="224.5484">385</text>
+        </g>
+        <g id="CSC309" class="node" data-group="dbweb">
+          <rect x="932.9791" y="222.2894" width="40" rx="4" ry="4" height="32"/>
+          <text x="939.6314" y="244.5746">309</text>
+        </g>
+        <g id="CSC343" class="node" data-group="dbweb">
+          <rect x="893.8128" y="136.5216" width="40" rx="4" ry="4" height="32"/>
+          <text x="900.4651" y="158.8068">343</text>
+        </g>
+        <g id="CSC443" class="node" data-group="dbweb">
+          <rect x="883.7817" y="290.6064" width="40" rx="4" ry="4" height="32"/>
+          <text x="890.434" y="312.8916">443</text>
+        </g>
+        <g id="CSC494" class="node" data-group="core">
+          <rect x="1209.9095" y="270.1562" width="40" rx="4" ry="4" height="32"/>
+          <text x="1216.5619" y="292.4413">494</text>
+        </g>
+        <g id="CSC495" class="node" data-group="core">
+          <rect x="1266.3373" y="270.1562" width="40" rx="4" ry="4" height="32"/>
+          <text x="1272.9896" y="292.4413">495</text>
+        </g>
+        <g id="CSC490" class="node" data-group="core">
+          <rect x="1209.9095" y="222.2894" width="40" rx="4" ry="4" height="32"/>
+          <text x="1216.5619" y="244.5746">490</text>
+        </g>
+        <g id="CSC491" class="node" data-group="core">
+          <rect x="1266.3373" y="222.2894" width="40" rx="4" ry="4" height="32"/>
+          <text x="1272.9896" y="244.5746">491</text>
+        </g>
+        <g  id="Calc1" class="node" data-group="core">
+          <rect x="317.03" y="-261.4223" width="61.5" rx="4" ry="4" height="32"/>
+          <text x="325.112" y="-239.1371">CALC1</text>
+        </g>
+        <g id="Sta1" class="node" data-group="core">
+          <rect x="192.3478" y="-199.4223" width="50" rx="4" ry="4" height="32"/>
+          <text x="198.8986" y="-177.1371">STA1</text>
+        </g>
+        <g id="Sta2" class="node" data-group="core">
+          <rect x="192.3478" y="-137.4223" width="50" rx="4" ry="4" height="32"/>
+          <text x="198.8986" y="-115.1371">STA2</text>
+        </g>
+        <g id="CSC412" class="node" data-group="ai">
+          <rect x="607.1759" y="290.6064" width="40" rx="4" ry="4" height="32"/>
+          <text x="613.8282" y="312.8916">412</text>
+        </g>
+        <g id="CSC420" class="node" data-group="graphics">
+          <rect x="286.8166" y="290.6064" width="40" rx="4" ry="4" height="32"/>
+          <text x="293.4689" y="313.0908">420</text>
+        </g>
+        <g id="CSC104" class="node" data-group="core">
+          <rect x="703.7186" y="-261.4223" width="40" rx="4" ry="4" height="32"/>
+          <text x="710.3709" y="-239.1371">104</text>
+        </g>
+        <g id="CSC120" class="node" data-group="core">
+          <rect x="790.0412" y="-261.4223" width="40" rx="4" ry="4" height="32"/>
+          <text x="796.6935" y="-239.1371">120</text>
+        </g>
+        <g id="Lin1" class="node" data-group="core">
+          <rect x="272.3478" y="-137.4223" width="50" rx="4" ry="4" height="32"/>
+          <text x="283.0118" y="-115.1371">LIN1</text>
+        </g>
+        <g id="CSC372" class="node" data-group="systems">
+          <rect x="1045.8298" y="136.5216" width="40" rx="4" ry="4" height="32"/>
+          <text x="1052.4821" y="158.8068">372</text>
+        </g>
+        <g id="CSC310" class="node" data-group="theory">
+          <rect x="545.5955" y="75.3633" width="40" rx="4" ry="4" height="32"/>
+          <text x="552.2479" y="97.6485">310</text>
+        </g>
+
+        <!-- hybrids -->
+
+        <g id="hybrid1" class="hybrid">
+          <rect x="161.3807" width="50" height="28" y="180.2956"/>
+          <text x="165.9178" y="192.0983">301/318/</text>
+          <text x="167.307" y="204.3493">384/418</text>
+        </g>
+
+        <g id="hybrid2" class="hybrid">
+          <rect x="1099.3696" width="27" height="24" y="-55.778"/>
+          <text x="1104.5273" y="-39.8498">263</text>
+        </g>
+        <g id="hybrid3" class="hybrid">
+          <rect x="274.4031" width="68" height="28" y="196.4732"/>
+          <text x="277.6223" y="207.2759">336/373/463,</text>
+          <text x="292.6984" y="219.5269">CALC1</text>
+        </g>
+        <g id="hybrid4" class="hybrid">
+          <rect x="1206.4095" width="27" height="24" y="143.3476"/>
+          <text x="1211.5673" y="159.2758">324</text>
+        </g>
+        <g id="hybrid5" class="hybrid">
+          <rect x="826.7817" width="27" height="24" y="253.3551"/>
+          <text x="831.9394" y="269.2834">373</text>
+        </g>
+        <g id="hybrid6" class="hybrid">
+          <rect x="574.0033" width="27" height="24" y="-83.4169"/>
+          <text x="576.9984" y="-67.4887">STA1</text>
+        </g>
+        <g id="hybrid7" class="hybrid">
+          <rect x="650.1583" width="27" height="24" y="-83.4169"/>
+          <text x="653.0968" y="-67.4887">LIN1</text>
+        </g>
+        <g id="hybrid8" class="hybrid">
+          <rect x="753.8" width="27" height="24" y="261.6064"/>
+          <text x="756.7952" y="277.5347">STA1</text>
+        </g>
+        <g id="hybrid9" class="hybrid">
+          <rect x="552.0955" width="27" height="24" y="172.7716"/>
+          <text x="555.0906" y="188.6998">STA2</text>
+        </g>
+        <g id="hybrid10" class="hybrid">
+          <rect x="796.5412" width="27" height="24" y="-55.778"/>
+          <text x="801.6989" y="-39.8498">263</text>
+        </g>
+        <g id="hybrid11" class="hybrid">
+          <rect x="1099.3696" width="27" height="24" y="249.3551"/>
+          <text x="1104.5273" y="265.2834">236</text>
+        </g>
+        <g id="hybrid12" class="hybrid">
+          <rect x="254.3566" width="27" height="24" y="-55.778"/>
+          <text x="259.5143" y="-39.8498">209</text>
+        </g>
+        <g id="hybrid13" class="hybrid">
+          <rect x="552.0955" width="27" height="24" y="-14.0449"/>
+          <text x="557.2532" y="1.8833">148</text>
+        </g>
+        <g id="hybrid14" class="hybrid">
+          <rect x="909.7648" width="27" height="24" y="70.6649"/>
+          <text x="914.9225" y="86.5931">207</text>
+        </g>
+        <g id="hybrid15" class="hybrid">
+          <rect x="293.3166" width="27" height="24" y="236.6064"/>
+          <text x="298.4743" y="252.5347">263</text>
+        </g>
+        <g id="hybrid16" class="hybrid">
+          <rect x="864.5923" width="50" height="24" y="31.6881"/>
+          <text x="867.0776" y="47.6164">165/Calc1</text>
+        </g>
+
+
+        <g id="bool1" class="bool">
+          <ellipse rx="9.88" ry="7.3684" cx="627.1759" cy="-103.4169"/>
+          <text x="620.5099" y="-100.1747">and</text>
+        </g>
+        <g id="bool2" class="bool">
+          <ellipse rx="9.88" ry="7.3684" cx="1025.7129" cy="-43.778"/>
+          <text x="1019.0469" y="-40.5358">and</text>
+        </g>
+        <g id="bool3" class="bool">
+          <ellipse rx="9.88" ry="7.3684" cx="498.1717" cy="238.2894"/>
+          <text x="494.1463" y="241.5316">or</text>
+        </g>
+        <g id="bool4" class="bool">
+          <ellipse rx="9.88" ry="7.3684" cx="627.1759" cy="-5.4919"/>
+          <text x="620.5099" y="-2.2497">and</text>
+        </g>
+        <g id="bool5" class="bool">
+          <ellipse rx="9.88" ry="7.3684" cx="347.78" cy="-52.4096"/>
+          <text x="341.1139" y="-49.1674">and</text>
+        </g>
+
+
+        <g id="title">
+          <ellipse rx="100" ry="62.5" cx="1199.3696" cy="-225.9029"/>
+          <text id="ellipseText" x="1115.1777" y="-232.4947">DCS Course</text>
+          <text id="ellipseText2"x="1134.3525" y="-195.7418">Flowchart</text>
+        </g>
+
+        <g data-group="theory">
+          <rect x="1161.9272" width="175" height="30" y="-121.778"/>
+          <text x="1222.085" y="-100.8857">Theory</text>
+        </g>
+        <g data-group="systems">
+          <rect x="1161.9272" width="175" height="30" y="-91.778"/>
+          <text x="1220.6724" y="-70.8857">Systems</text>
+        </g>
+        <g data-group="dbweb">
+          <rect x="1161.9272" width="175" height="30" y="-61.778"/>
+          <text x="1188.9805" y="-40.8857">Databases &amp; Web</text>
+        </g>
+        <g data-group="num">
+          <rect x="1161.9272" width="175" height="30" y="28.222"/>
+          <text x="1174" y="49.1143">Numerical Computing</text>
+        </g>
+        <g data-group="se">
+          <rect x="1161.9272" width="175" height="30" y="-31.778"/>
+          <text x="1173.7158" y="-10.8857">Software Engineering</text>
+        </g>
+        <g data-group="graphics">
+          <rect x="1161.9272" width="175" height="30" y="58.222"/>
+          <text x="1219.4163" y="79.1143">Graphics</text>
+        </g>
+        <g data-group="hci">
+          <rect x="1161.9272" width="175" height="30" y="88.222"/>
+          <text x="1166.5496" y="109.1143">Humans and Computing</text>
+        </g>
+        <g data-group="ai">
+          <rect x="1161.9272" width="175" height="30" y="-1.778"/>
+          <text x="1174" y="19.1143">Artificial Intelligence</text>
+        </g>
+
+
+        <g>
+          <path id="p1" d="M455.4041 168.2617 L455.4041 282.6306"/>
+          <path id="p2" d="M486.4949 -229.423 L486.4949 -156.4426"/>
+          <path id="p3" d="M465.555 -132.4075 L455.4041 -132.4075 L455.4041 128.2266"/>
+          <path id="p4" d="M498.1717 -27.7613 L498.1717 15.715"/>
+          <path id="p5" d="M627.1759 -229.4076 L627.1759 -207.4543"/>
+          <path id="p6" d="M607.1496 -183.4223 L511.8061 -183.4223 L511.8061 -156.3891"/>
+          <path id="p7" d="M647.1322 -183.4223 L810.0412 -183.4223 L810.0412 -156.3994"/>
+          <path id="p8" d="M830.0372 -132.4075 L952.9791 -132.4075 L952.9791 -67.7469"/>
+          <path id="p9" d="M647.1285 -183.4223 L1017.2745 -183.4223 L1017.2745 -156.4256"/>
+          <path id="p10" d="M498.1717 -261.4184 L498.1717 -281.4223 L1035.7622 -281.4223 L1035.7622 -156.383"/>
+          <path id="p10" d="M214.3625 106.2599 L214.3625 128.2132"/>
+          <path id="p11" d="M607.1931 -183.4223 L415.4041 -183.4223 L415.4041 67.3633"/>
+          <path id="p12" d="M415.4041 107.3975 L415.4041 238.2894 L408.609 238.2894"/>
+          <path id="p13" d="M415.4041 107.3647 L415.4041 306.6064 L408.609 306.6064"/>
+          <path id="p14" d="M415.4041 107.3819 L415.4041 150.4732 L408.609 150.4732"/>
+          <path id="p15" d="M687.8184 224.4294 L687.8184 282.5964"/>
+          <path id="p16" d="M790.048 -132.4075 L767.3 -132.4075 L767.3 184.4528"/>
+          <path id="p17" d="M933.0172 -43.778 L852.0361 -43.778 L852.0361 184.492"/>
+          <path id="p18" d="M528.1487 -28.0056 L528.1487 238.2894 L599.1542 238.2894"/>
+          <path id="p19" d="M932.9691 -43.778 L851.7929 -43.778 L851.7929 39.6881 L838.0608 39.6881"/>
+          <path id="p20" d="M810.0412 55.6931 L810.0412 72.1217"/>
+          <path id="p21" d="M687.8184 55.7223 L687.8184 184.4679"/>
+          <path id="p22" d="M986.7648 55.6863 L986.7648 306.6064 L1037.7932 306.6064"/>
+          <path id="p23" d="M952.9791 -27.7671 L952.9791 214.2779"/>
+          <path id="p24" d="M921.1373 168.5612 L942.364 215.0442"/>
+          <path id="p25" d="M903.7817 168.5546 L903.7817 282.597"/>
+          <path id="p26" d="M986.7648 55.6863 L986.7648 306.6064 L931.7576 306.6064"/>
+          <path id="p27" d="M194.0034 208.2956 L199.9133 217.5993"/>
+          <path id="p28" d="M1112.8696 -31.778 L1112.8696 208.4732 L1131.9268 208.4732"/>
+          <path id="p29" d="M1112.8696 -31.778 L1112.8696 39.6881 L1093.8125 39.6881"/>
+          <path id="p30" d="M1112.8696 -31.778 L1112.8696 96.1049 L1093.8125 96.1049"/>
+          <path id="p31" d="M306.8166 195.9732 L306.8166 176.2589"/>
+          <path id="p32" d="M530.7434 -132.4075 L581.6596 -132.4075 L612.9153 -112.4999"/>
+          <path id="p33" d="M790.0251 -132.4075 L674.0781 -132.4075 L641.5879 -112.3251"/>
+          <path id="p34" d="M617.296 -103.4169 L498.1717 -103.4169 L498.1717 -67.7652"/>
+          <path id="p35" d="M637.0559 -103.4169 L731.3378 -103.4169 L731.3378 128.2352"/>
+          <path id="p36" d="M637.0559 -103.4169 L687.8184 -103.4169 L687.8184 15.7216"/>
+          <path id="p37" d="M1205.9095 155.3476 L1177.9095 186.4487"/>
+          <path id="p38" d="M853.7817 274.1251 L877.1755 289.3224"/>
+          <path id="p39" d="M972.9738 -43.778 L1007.8329 -43.778"/>
+          <path id="p40" d="M1025.7129 -116.4386 L1025.7129 -59.1465"/>
+          <path id="p41" d="M1025.7129 -36.4096 L1025.7129 39.6881 L1014.7333 39.6881"/>
+          <path id="p42" d="M1025.7129 -36.4096 L1025.7129 207.3551 L1037.8136 207.6924"/>
+          <path id="p43" d="M1025.7129 -36.4096 L1025.7129 39.6881 L1037.8105 39.6881"/>
+          <path id="p44" d="M1025.7129 -36.4096 L1025.7129 96.1049 L1037.8105 96.1049"/>
+          <path id="p45" d="M455.4041 168.2525 L455.4041 238.2894 L480.2917 238.2894"/>
+          <path  id="p46" d="M498.1717 55.7219 L498.1717 211.161 L498.1717 222.921"/>
+          <path  id="p47" d="M498.1717 245.6579 L498.1717 306.6064 L537.612 306.6064"/>
+          <path  id="p48" d="M498.1717 245.6579 L498.1717 342.6064 L687.8184 342.6064 L687.8184 330.6025"/>
+          <path  id="p49" d="M587.5033 -59.4169 L587.5033 -43.778 L538.7551 -43.778"/>
+          <path  id="p50" d="M753.8 262.5435 L712.4668 228.672"/>
+          <path  id="p51" d="M767.3 261.6064 L767.3 232.4806"/>
+          <path  id="p52" d="M780.8 263.2295 L826.6669 227.9735"/>
+          <path  id="p54" d="M579.0955 196.5041 L603.2718 217.515"/>
+          <path  id="p55" d="M347.7799 -229.4076 L347.7799 -183.4223 L250.3452 -183.4223"/>
+          <path  id="p56" d="M192.3429 -121.4223 L172.3478 -121.4223 L172.3478 152.5216 L186.3644 152.5216"/>
+          <path  id="p57" d="M217.3478 -167.4076 L217.3478 -145.4543"/>
+          <path  id="p58" d="M627.1759 254.2679 L627.1759 282.5829"/>
+          <path  id="p59" d="M810.0412 -31.778 L810.0412 15.6711"/>
+          <path  id="p60" d="M1125.3439 273.3551 L1137.5702 285.1165"/>
+          <path  id="p61" d="M1025.7129 -36.4096 L1025.7129 152.5216 L1037.8105 152.5216"/>
+          <path  id="p62" d="M267.8231 -31.778 L266.7799 342.6064 L380.576 342.6064 L380.576 330.6025"/>
+          <path  id="p63" d="M267.8566 -31.778 L267.8566 152.2453 L242.3444 152.2453"/>
+          <path  id="p64" d="M267.8566 -31.778 L267.8566 91.3633 L278.842 91.3633"/>
+          <path  id="p65" d="M267.8566 -31.778 L267.8566 -4.4825 L267.8566 152.2453 L278.842 152.2453"/>
+          <path  id="p66" d="M657.0176 -59.4169 L634.8187 -19.3027"/>
+          <path  id="p67" d="M594.7247 -59.4169 L619.0055 -19.0689"/>
+          <path  id="p68" d="M627.1759 1.8766 L627.1759 128.2759"/>
+          <path  id="p69" d="M627.1759 1.8766 L627.1759 91.3633 L593.5911 91.3633"/>
+          <path  id="p70" d="M565.5955 9.9551 L565.5955 67.344"/>
+          <path  id="p71" d="M921.6411 94.6649 L917.0528 128.5759"/>
+          <path  id="p72" d="M306.8166 260.6064 L306.8166 282.5693"/>
+          <path  id="p73" d="M876.3403 55.7048 L900.0989 128.9013"/>
+          <path  id="p74" d="M309.0447 -105.4159 L338.3318 -65.3387"/>
+          <path  id="p75" d="M347.7799 -229.4478 L347.7799 -67.778"/>
+          <path  id="p76" d="M347.7799 -45.0411 L347.7799 91.3633 L387.4272 91.3633"/>
+          <path  id="p77" d="M347.7799 -45.0411 L347.7799 91.3633 L334.7782 91.3633"/>
+          <path  id="p78" d="M347.7799 -45.0411 L347.7799 306.6064 L334.7782 306.6064"/>
+          <path  id="p79" d="M1045.3652 -132.1224 L1150.3652 -132.1224 L1150.3652 185.1224"/>
+        </g>
       </g>
-    <g id="CSC165" class="node" data-group="theory">
-      <rect x="465.568" y="-261.4223" width="65.2075" rx="4" ry="4" height="32"/>
-      <text x="469.2538" y="-239.1371">165/240</text>
-    </g>
-    <g id="CSC236" class="node" data-group="theory">
-      <rect x="465.568" y="-148.4075" width="65.2075" rx="4" ry="4" height="32"/>
-      <text x="469.2538" y="-126.1224">236/240</text>
-    </g>
-    <g id="CSC263" class="node" data-group="theory">
-      <rect x="465.568" y="-59.778" width="65.2075" rx="4" ry="4" height="32"/>
-      <text x="469.2538" y="-37.4929">263/265</text>
-    </g>
-    <g id="CSC373" class="node" data-group="theory">
-      <rect x="478.1717" y="23.6881" width="40" rx="4" ry="4" height="32"/>
-      <text x="484.8241" y="45.9733">373</text>
-    </g>
-    <g id="CSC108" class="node" data-group="core">
-      <rect x="607.1759" y="-261.4223" width="40" rx="4" ry="4" height="32"/>
-      <text x="613.8282" y="-239.1371">108</text>
-    </g>
-    <g id="CSC148" class="node" data-group="core">
-      <rect x="607.1759" y="-199.4223" width="40" rx="4" ry="4" height="32"/>
-      <text x="613.8282" y="-177.1371">148</text>
-    </g>
-    <g id="CSC207" class="node" data-group="se">
-      <rect x="790.0412" y="-148.4075" width="40" rx="4" ry="4" height="32"/>
-      <text x="796.6935" y="-126.1224">207</text>
-    </g>
-    <g id="CSC209" class="node" data-group="systems">
-      <rect x="932.9791" y="-59.778" width="40" rx="4" ry="4" height="32"/>
-      <text x="939.6314" y="-37.4929">209</text>
-    </g>
-    <g id="CSC258" class="node" data-group="systems">
-      <rect x="1005.7129" y="-148.4075" width="40" rx="4" ry="4" height="32"/>
-      <text x="1012.3652" y="-126.1224">258</text>
-    </g>
-    <g id="CSC369" class="node" data-group="systems">
-      <rect x="966.7648" y="23.6881" width="40" rx="4" ry="4" height="32"/>
-      <text x="973.4171" y="45.9733">369</text>
-    </g>
-    <g id="CSC318" class="node" data-group="hci">
-      <rect x="194.3625" y="74.2453" width="40" rx="4" ry="4" height="32"/>
-      <text x="201.0149" y="96.5304">318</text>
-    </g>
-    <g id="CSC320" class="node" data-group="graphics">
-      <rect x="286.8166" y="75.3633" width="40" rx="4" ry="4" height="32"/>
-      <text x="293.4689" y="97.6485">320</text>
-    </g>
-    <g id="CSC418" class="node" data-group="graphics">
-      <rect x="286.8166" y="136.2453" width="40" rx="4" ry="4" height="32"/>
-      <text x="293.4689" y="158.5304">418</text>
-    </g>
-    <g id="CSC454" class="node" data-group="hci">
-      <rect x="194.3625" y="290.6064" width="40" rx="4" ry="4" height="32"/>
-      <text x="201.0149" y="312.8916">454</text>
-    </g>
-    <g id="CSC300" class="node" data-group="hci">
-      <rect x="194.3625" y="4.298" width="40" rx="4" ry="4" height="32"/>
-      <text x="201.0149" y="26.5831">300</text>
-    </g>
-    <g id="CSC200" class="node" data-group="hci">
-      <rect x="194.3625" y="-59.778" width="40" rx="4" ry="4" height="32"/>
-      <text x="201.0149" y="-37.4929">200</text>
-    </g>
-    <g id="CSC404" class="node" data-group="hci">
-      <rect x="194.3625" y="224.3459" width="40" rx="4" ry="4" height="32"/>
-      <text x="201.0149" y="246.6311">404</text>
-    </g>
-    <g id="CSC428" class="node" data-group="hci">
-      <rect x="194.3625" y="136.2453" width="40" rx="4" ry="4" height="32"/>
-      <text x="201.0149" y="158.5304">428</text>
-    </g>
-    <g id="CSC336" class="node" data-group="num">
-      <rect x="395.4041" y="75.3633" width="40" rx="4" ry="4" height="32"/>
-      <text x="402.0565" y="97.6485">336</text>
-      </g>
-    <g id="CSC446" class="node" data-group="num">
-      <rect x="360.576" y="222.2894" width="40" rx="4" ry="4" height="32"/>
-      <text x="367.2284" y="244.5746">446</text>
-    </g>
-    <g id="CSC456" class="node" data-group="num">
-      <rect x="360.576" y="290.6064" width="40" rx="4" ry="4" height="32"/>
-      <text x="367.2284" y="312.8916">456</text>
-    </g>
-    <g id="CSC436" class="node" data-group="num">
-      <rect x="360.576" y="134.4732" width="40" rx="4" ry="4" height="32"/>
-      <text x="367.2284" y="156.7584">436</text>
-    </g>
-    <g id="CSC384" class="node" data-group="ai">
-      <rect x="667.8184" y="192.4732" width="40" rx="4" ry="4" height="32"/>
-      <text x="674.4707" y="214.7584">384</text>
-    </g>
-    <g id="CSC486" class="node" data-group="ai">
-      <rect x="667.8184" y="290.6064" width="40" rx="4" ry="4" height="32"/>
-      <text x="674.4707" y="312.8916">486</text>
-    </g>
-    <g id="CSC401" class="node" data-group="ai">
-      <rect x="747.3" y="192.4732" width="40" rx="4" ry="4" height="32"/>
-      <text x="753.9524" y="214.7584">401</text>
-    </g>
-    <g id="CSC485" class="node" data-group="ai">
-      <rect x="832.036" y="192.4732" width="40" rx="4" ry="4" height="32"/>
-      <text x="838.6884" y="214.7584">485</text>
-    </g>
-    <g id="CSC321" class="node" data-group="ai">
-      <rect x="607.1759" y="136.2453" width="40" rx="4" ry="4" height="32"/>
-      <text x="613.8282" y="158.5304">321</text>
-    </g>
-    <g id="CSC411" class="node" data-group="ai">
-      <rect x="607.1759" y="222.2894" width="40" rx="4" ry="4" height="32"/>
-      <text x="613.8282" y="244.5746">411</text>
-    </g>
-    <g id="CSC301" class="node" data-group="se">
-      <rect x="790.0412" y="23.6881" width="40" rx="4" ry="4" height="32"/>
-      <text x="796.6935" y="45.9733">301</text>
-    </g>
-    <g id="CSC302" class="node" data-group="se">
-      <rect x="790.0412" y="80.1049" width="40" rx="4" ry="4" height="32"/>
-      <text x="796.6935" y="102.39">302</text>
-    </g>
-    <g id="CSC410" class="node" data-group="se">
-      <rect x="711.3377" y="136.2453" width="40" rx="4" ry="4" height="32"/>
-      <text x="717.9901" y="158.5304">410</text>
-    </g>
-    <g id="CSC324" class="node" data-group="theory">
-      <rect x="667.8184" y="23.6881" width="40" rx="4" ry="4" height="32"/>
-      <text x="674.4707" y="45.9733">324</text>
-    </g>
-    <g id="CSC488" class="node" data-group="systems">
-      <rect x="1139.9095" y="192.4732" width="40" rx="4" ry="4" height="32"/>
-      <text x="1146.5619" y="214.7584">488</text>
-    </g>
-    <g id="ECE489" class="node" data-group="systems">
-        <rect x="1139.9095" y="290.6064" width="40" rx="4" ry="4" height="37"/>
-      <text x="1145.5165" y="305.5303">ECE</text>
-      <text x="1148.2303" y="322.6816">489</text>
-    </g>
-    <g id="CSC469" class="node" data-group="systems">
-      <rect x="1045.8298" y="290.6064" width="40" rx="4" ry="4" height="32"/>
-      <text x="1052.4821" y="312.8916">469</text>
-    </g>
-    <g id="CSC358" class="node" data-group="systems">
-      <rect x="1045.8298" y="23.6881" width="40" rx="4" ry="4" height="32"/>
-      <text x="1052.4821" y="45.9733">358</text>
-      </g>
-    <g id="CSC458" class="node" data-group="systems">
-      <rect x="1045.8298" y="80.1049" width="40" rx="4" ry="4" height="32"/>
-      <text x="1052.4821" y="102.39">458</text>
-    </g>
-    <g id="ECE385" class="node" data-group="systems">
-      <rect x="1045.8298" y="192.4732" width="40" rx="4" ry="4" height="37"/>
-      <text x="1051.4366" y="207.397">ECE</text>
-      <text x="1054.1505" y="224.5484">385</text>
-    </g>
-    <g id="CSC309" class="node" data-group="dbweb">
-      <rect x="932.9791" y="222.2894" width="40" rx="4" ry="4" height="32"/>
-      <text x="939.6314" y="244.5746">309</text>
-    </g>
-    <g id="CSC343" class="node" data-group="dbweb">
-      <rect x="893.8128" y="136.5216" width="40" rx="4" ry="4" height="32"/>
-      <text x="900.4651" y="158.8068">343</text>
-    </g>
-    <g id="CSC443" class="node" data-group="dbweb">
-      <rect x="883.7817" y="290.6064" width="40" rx="4" ry="4" height="32"/>
-      <text x="890.434" y="312.8916">443</text>
-    </g>
-    <g id="CSC494" class="node" data-group="core">
-      <rect x="1209.9095" y="270.1562" width="40" rx="4" ry="4" height="32"/>
-      <text x="1216.5619" y="292.4413">494</text>
-    </g>
-    <g id="CSC495" class="node" data-group="core">
-      <rect x="1266.3373" y="270.1562" width="40" rx="4" ry="4" height="32"/>
-      <text x="1272.9896" y="292.4413">495</text>
-    </g>
-    <g id="CSC490" class="node" data-group="core">
-      <rect x="1209.9095" y="222.2894" width="40" rx="4" ry="4" height="32"/>
-      <text x="1216.5619" y="244.5746">490</text>
-    </g>
-    <g id="CSC491" class="node" data-group="core">
-      <rect x="1266.3373" y="222.2894" width="40" rx="4" ry="4" height="32"/>
-      <text x="1272.9896" y="244.5746">491</text>
-    </g>
-    <g  id="Calc1" class="node" data-group="core">
-      <rect x="317.03" y="-261.4223" width="61.5" rx="4" ry="4" height="32"/>
-      <text x="325.112" y="-239.1371">CALC1</text>
-    </g>
-    <g id="Sta1" class="node" data-group="core">
-      <rect x="192.3478" y="-199.4223" width="50" rx="4" ry="4" height="32"/>
-      <text x="198.8986" y="-177.1371">STA1</text>
-    </g>
-    <g id="Sta2" class="node" data-group="core">
-      <rect x="192.3478" y="-137.4223" width="50" rx="4" ry="4" height="32"/>
-      <text x="198.8986" y="-115.1371">STA2</text>
-    </g>
-    <g id="CSC412" class="node" data-group="ai">
-      <rect x="607.1759" y="290.6064" width="40" rx="4" ry="4" height="32"/>
-      <text x="613.8282" y="312.8916">412</text>
-    </g>
-    <g id="CSC420" class="node" data-group="graphics">
-      <rect x="286.8166" y="290.6064" width="40" rx="4" ry="4" height="32"/>
-      <text x="293.4689" y="313.0908">420</text>
-    </g>
-    <g id="CSC104" class="node" data-group="core">
-      <rect x="703.7186" y="-261.4223" width="40" rx="4" ry="4" height="32"/>
-      <text x="710.3709" y="-239.1371">104</text>
-    </g>
-    <g id="CSC120" class="node" data-group="core">
-      <rect x="790.0412" y="-261.4223" width="40" rx="4" ry="4" height="32"/>
-      <text x="796.6935" y="-239.1371">120</text>
-    </g>
-    <g id="Lin1" class="node" data-group="core">
-      <rect x="272.3478" y="-137.4223" width="50" rx="4" ry="4" height="32"/>
-      <text x="283.0118" y="-115.1371">LIN1</text>
-    </g>
-    <g id="CSC372" class="node" data-group="systems">
-      <rect x="1045.8298" y="136.5216" width="40" rx="4" ry="4" height="32"/>
-      <text x="1052.4821" y="158.8068">372</text>
-    </g>
-    <g id="CSC310" class="node" data-group="theory">
-      <rect x="545.5955" y="75.3633" width="40" rx="4" ry="4" height="32"/>
-      <text x="552.2479" y="97.6485">310</text>
-    </g>
-
-    <!-- hybrids -->
-
-    <g id="hybrid1" class="hybrid">
-      <rect x="161.3807" width="50" height="28" y="180.2956"/>
-      <text x="165.9178" y="192.0983">301/318/</text>
-      <text x="167.307" y="204.3493">384/418</text>
-    </g>
-
-    <g id="hybrid2" class="hybrid">
-      <rect x="1099.3696" width="27" height="24" y="-55.778"/>
-      <text x="1104.5273" y="-39.8498">263</text>
-    </g>
-    <g id="hybrid3" class="hybrid">
-      <rect x="274.4031" width="68" height="28" y="196.4732"/>
-      <text x="277.6223" y="207.2759">336/373/463,</text>
-      <text x="292.6984" y="219.5269">CALC1</text>
-    </g>
-    <g id="hybrid4" class="hybrid">
-      <rect x="1206.4095" width="27" height="24" y="143.3476"/>
-      <text x="1211.5673" y="159.2758">324</text>
-    </g>
-    <g id="hybrid5" class="hybrid">
-      <rect x="826.7817" width="27" height="24" y="253.3551"/>
-      <text x="831.9394" y="269.2834">373</text>
-    </g>
-    <g id="hybrid6" class="hybrid">
-      <rect x="574.0033" width="27" height="24" y="-83.4169"/>
-      <text x="576.9984" y="-67.4887">STA1</text>
-    </g>
-    <g id="hybrid7" class="hybrid">
-      <rect x="650.1583" width="27" height="24" y="-83.4169"/>
-      <text x="653.0968" y="-67.4887">LIN1</text>
-    </g>
-    <g id="hybrid8" class="hybrid">
-      <rect x="753.8" width="27" height="24" y="261.6064"/>
-      <text x="756.7952" y="277.5347">STA1</text>
-    </g>
-    <g id="hybrid9" class="hybrid">
-      <rect x="552.0955" width="27" height="24" y="172.7716"/>
-      <text x="555.0906" y="188.6998">STA2</text>
-    </g>
-    <g id="hybrid10" class="hybrid">
-      <rect x="796.5412" width="27" height="24" y="-55.778"/>
-      <text x="801.6989" y="-39.8498">263</text>
-    </g>
-    <g id="hybrid11" class="hybrid">
-      <rect x="1099.3696" width="27" height="24" y="249.3551"/>
-      <text x="1104.5273" y="265.2834">236</text>
-    </g>
-    <g id="hybrid12" class="hybrid">
-      <rect x="254.3566" width="27" height="24" y="-55.778"/>
-      <text x="259.5143" y="-39.8498">209</text>
-    </g>
-    <g id="hybrid13" class="hybrid">
-      <rect x="552.0955" width="27" height="24" y="-14.0449"/>
-      <text x="557.2532" y="1.8833">148</text>
-    </g>
-    <g id="hybrid14" class="hybrid">
-      <rect x="909.7648" width="27" height="24" y="70.6649"/>
-      <text x="914.9225" y="86.5931">207</text>
-    </g>
-    <g id="hybrid15" class="hybrid">
-      <rect x="293.3166" width="27" height="24" y="236.6064"/>
-      <text x="298.4743" y="252.5347">263</text>
-    </g>
-    <g id="hybrid16" class="hybrid">
-      <rect x="864.5923" width="50" height="24" y="31.6881"/>
-      <text x="867.0776" y="47.6164">165/Calc1</text>
-    </g>
+    </svg>
 
 
-    <g id="bool1" class="bool">
-      <ellipse rx="9.88" ry="7.3684" cx="627.1759" cy="-103.4169"/>
-      <text x="620.5099" y="-100.1747">and</text>
-    </g>
-    <g id="bool2" class="bool">
-      <ellipse rx="9.88" ry="7.3684" cx="1025.7129" cy="-43.778"/>
-      <text x="1019.0469" y="-40.5358">and</text>
-    </g>
-    <g id="bool3" class="bool">
-      <ellipse rx="9.88" ry="7.3684" cx="498.1717" cy="238.2894"/>
-      <text x="494.1463" y="241.5316">or</text>
-    </g>
-    <g id="bool4" class="bool">
-      <ellipse rx="9.88" ry="7.3684" cx="627.1759" cy="-5.4919"/>
-      <text x="620.5099" y="-2.2497">and</text>
-    </g>
-    <g id="bool5" class="bool">
-        <ellipse rx="9.88" ry="7.3684" cx="347.78" cy="-52.4096"/>
-      <text x="341.1139" y="-49.1674">and</text>
-    </g>
-
-
-    <g id="title">
-      <ellipse rx="100" ry="62.5" cx="1199.3696" cy="-225.9029"/>
-      <text id="ellipseText" x="1115.1777" y="-232.4947">DCS Course</text>
-      <text id="ellipseText2"x="1134.3525" y="-195.7418">Flowchart</text>
-    </g>
-
-    <g data-group="theory">
-      <rect x="1161.9272" width="175" height="30" y="-121.778"/>
-      <text x="1222.085" y="-100.8857">Theory</text>
-    </g>
-    <g data-group="systems">
-      <rect x="1161.9272" width="175" height="30" y="-91.778"/>
-      <text x="1220.6724" y="-70.8857">Systems</text>
-    </g>
-    <g data-group="dbweb">
-      <rect x="1161.9272" width="175" height="30" y="-61.778"/>
-      <text x="1188.9805" y="-40.8857">Databases &amp; Web</text>
-    </g>
-    <g data-group="num">
-      <rect x="1161.9272" width="175" height="30" y="28.222"/>
-      <text x="1174" y="49.1143">Numerical Computing</text>
-    </g>
-    <g data-group="se">
-      <rect x="1161.9272" width="175" height="30" y="-31.778"/>
-      <text x="1173.7158" y="-10.8857">Software Engineering</text>
-    </g>
-    <g data-group="graphics">
-      <rect x="1161.9272" width="175" height="30" y="58.222"/>
-      <text x="1219.4163" y="79.1143">Graphics</text>
-    </g>
-    <g data-group="hci">
-      <rect x="1161.9272" width="175" height="30" y="88.222"/>
-      <text x="1166.5496" y="109.1143">Humans and Computing</text>
-    </g>
-    <g data-group="ai">
-      <rect x="1161.9272" width="175" height="30" y="-1.778"/>
-      <text x="1174" y="19.1143">Artificial Intelligence</text>
-    </g>
-
-
-    <g>
-      <path id="p1" d="M455.4041 168.2617 L455.4041 282.6306"/>
-      <path id="p2" d="M486.4949 -229.423 L486.4949 -156.4426"/>
-      <path id="p3" d="M465.555 -132.4075 L455.4041 -132.4075 L455.4041 128.2266"/>
-      <path id="p4" d="M498.1717 -27.7613 L498.1717 15.715"/>
-      <path id="p5" d="M627.1759 -229.4076 L627.1759 -207.4543"/>
-      <path id="p6" d="M607.1496 -183.4223 L511.8061 -183.4223 L511.8061 -156.3891"/>
-      <path id="p7" d="M647.1322 -183.4223 L810.0412 -183.4223 L810.0412 -156.3994"/>
-      <path id="p8" d="M830.0372 -132.4075 L952.9791 -132.4075 L952.9791 -67.7469"/>
-      <path id="p9" d="M647.1285 -183.4223 L1017.2745 -183.4223 L1017.2745 -156.4256"/>
-      <path id="p10" d="M498.1717 -261.4184 L498.1717 -281.4223 L1035.7622 -281.4223 L1035.7622 -156.383"/>
-      <path id="p10" d="M214.3625 106.2599 L214.3625 128.2132"/>
-      <path id="p11" d="M607.1931 -183.4223 L415.4041 -183.4223 L415.4041 67.3633"/>
-      <path id="p12" d="M415.4041 107.3975 L415.4041 238.2894 L408.609 238.2894"/>
-      <path id="p13" d="M415.4041 107.3647 L415.4041 306.6064 L408.609 306.6064"/>
-      <path id="p14" d="M415.4041 107.3819 L415.4041 150.4732 L408.609 150.4732"/>
-      <path id="p15" d="M687.8184 224.4294 L687.8184 282.5964"/>
-      <path id="p16" d="M790.048 -132.4075 L767.3 -132.4075 L767.3 184.4528"/>
-      <path id="p17" d="M933.0172 -43.778 L852.0361 -43.778 L852.0361 184.492"/>
-      <path id="p18" d="M528.1487 -28.0056 L528.1487 238.2894 L599.1542 238.2894"/>
-      <path id="p19" d="M932.9691 -43.778 L851.7929 -43.778 L851.7929 39.6881 L838.0608 39.6881"/>
-      <path id="p20" d="M810.0412 55.6931 L810.0412 72.1217"/>
-      <path id="p21" d="M687.8184 55.7223 L687.8184 184.4679"/>
-      <path id="p22" d="M986.7648 55.6863 L986.7648 306.6064 L1037.7932 306.6064"/>
-      <path id="p23" d="M952.9791 -27.7671 L952.9791 214.2779"/>
-      <path id="p24" d="M921.1373 168.5612 L942.364 215.0442"/>
-      <path id="p25" d="M903.7817 168.5546 L903.7817 282.597"/>
-      <path id="p26" d="M986.7648 55.6863 L986.7648 306.6064 L931.7576 306.6064"/>
-      <path id="p27" d="M194.0034 208.2956 L199.9133 217.5993"/>
-      <path id="p28" d="M1112.8696 -31.778 L1112.8696 208.4732 L1131.9268 208.4732"/>
-      <path id="p29" d="M1112.8696 -31.778 L1112.8696 39.6881 L1093.8125 39.6881"/>
-      <path id="p30" d="M1112.8696 -31.778 L1112.8696 96.1049 L1093.8125 96.1049"/>
-      <path id="p31" d="M306.8166 195.9732 L306.8166 176.2589"/>
-      <path id="p32" d="M530.7434 -132.4075 L581.6596 -132.4075 L612.9153 -112.4999"/>
-      <path id="p33" d="M790.0251 -132.4075 L674.0781 -132.4075 L641.5879 -112.3251"/>
-      <path id="p34" d="M617.296 -103.4169 L498.1717 -103.4169 L498.1717 -67.7652"/>
-      <path id="p35" d="M637.0559 -103.4169 L731.3378 -103.4169 L731.3378 128.2352"/>
-      <path id="p36" d="M637.0559 -103.4169 L687.8184 -103.4169 L687.8184 15.7216"/>
-      <path id="p37" d="M1205.9095 155.3476 L1177.9095 186.4487"/>
-      <path id="p38" d="M853.7817 274.1251 L877.1755 289.3224"/>
-      <path id="p39" d="M972.9738 -43.778 L1007.8329 -43.778"/>
-      <path id="p40" d="M1025.7129 -116.4386 L1025.7129 -59.1465"/>
-      <path id="p41" d="M1025.7129 -36.4096 L1025.7129 39.6881 L1014.7333 39.6881"/>
-      <path id="p42" d="M1025.7129 -36.4096 L1025.7129 207.3551 L1037.8136 207.6924"/>
-      <path id="p43" d="M1025.7129 -36.4096 L1025.7129 39.6881 L1037.8105 39.6881"/>
-      <path id="p44" d="M1025.7129 -36.4096 L1025.7129 96.1049 L1037.8105 96.1049"/>
-      <path id="p45" d="M455.4041 168.2525 L455.4041 238.2894 L480.2917 238.2894"/>
-      <path  id="p46" d="M498.1717 55.7219 L498.1717 211.161 L498.1717 222.921"/>
-      <path  id="p47" d="M498.1717 245.6579 L498.1717 306.6064 L537.612 306.6064"/>
-      <path  id="p48" d="M498.1717 245.6579 L498.1717 342.6064 L687.8184 342.6064 L687.8184 330.6025"/>
-      <path  id="p49" d="M587.5033 -59.4169 L587.5033 -43.778 L538.7551 -43.778"/>
-      <path  id="p50" d="M753.8 262.5435 L712.4668 228.672"/>
-      <path  id="p51" d="M767.3 261.6064 L767.3 232.4806"/>
-      <path  id="p52" d="M780.8 263.2295 L826.6669 227.9735"/>
-      <path  id="p54" d="M579.0955 196.5041 L603.2718 217.515"/>
-      <path  id="p55" d="M347.7799 -229.4076 L347.7799 -183.4223 L250.3452 -183.4223"/>
-      <path  id="p56" d="M192.3429 -121.4223 L172.3478 -121.4223 L172.3478 152.5216 L186.3644 152.5216"/>
-      <path  id="p57" d="M217.3478 -167.4076 L217.3478 -145.4543"/>
-      <path  id="p58" d="M627.1759 254.2679 L627.1759 282.5829"/>
-      <path  id="p59" d="M810.0412 -31.778 L810.0412 15.6711"/>
-      <path  id="p60" d="M1125.3439 273.3551 L1137.5702 285.1165"/>
-      <path  id="p61" d="M1025.7129 -36.4096 L1025.7129 152.5216 L1037.8105 152.5216"/>
-      <path  id="p62" d="M267.8231 -31.778 L266.7799 342.6064 L380.576 342.6064 L380.576 330.6025"/>
-      <path  id="p63" d="M267.8566 -31.778 L267.8566 152.2453 L242.3444 152.2453"/>
-      <path  id="p64" d="M267.8566 -31.778 L267.8566 91.3633 L278.842 91.3633"/>
-      <path  id="p65" d="M267.8566 -31.778 L267.8566 -4.4825 L267.8566 152.2453 L278.842 152.2453"/>
-      <path  id="p66" d="M657.0176 -59.4169 L634.8187 -19.3027"/>
-      <path  id="p67" d="M594.7247 -59.4169 L619.0055 -19.0689"/>
-      <path  id="p68" d="M627.1759 1.8766 L627.1759 128.2759"/>
-      <path  id="p69" d="M627.1759 1.8766 L627.1759 91.3633 L593.5911 91.3633"/>
-      <path  id="p70" d="M565.5955 9.9551 L565.5955 67.344"/>
-      <path  id="p71" d="M921.6411 94.6649 L917.0528 128.5759"/>
-      <path  id="p72" d="M306.8166 260.6064 L306.8166 282.5693"/>
-      <path  id="p73" d="M876.3403 55.7048 L900.0989 128.9013"/>
-      <path  id="p74" d="M309.0447 -105.4159 L338.3318 -65.3387"/>
-      <path  id="p75" d="M347.7799 -229.4478 L347.7799 -67.778"/>
-      <path  id="p76" d="M347.7799 -45.0411 L347.7799 91.3633 L387.4272 91.3633"/>
-      <path  id="p77" d="M347.7799 -45.0411 L347.7799 91.3633 L334.7782 91.3633"/>
-      <path  id="p78" d="M347.7799 -45.0411 L347.7799 306.6064 L334.7782 306.6064"/>
-      <path  id="p79" d="M1045.3652 -132.1224 L1150.3652 -132.1224 L1150.3652 185.1224"/>
-    </g>
-  </g>
-</svg>
-
-
-</div>
-
-<div class="infoTabs">
-  <ul class="tabList">
-    <li><a href="#courseList">My Courses</a></li>
-    <li><a href="#courseDescriptions">Course Descriptions</a></li>
-    <li><a href="#focuses">Focuses</a></li>
-    <li><a href="#timetable">Timetable</a></li>
-  </ul>
-
-  <div id="courseList" class="infoTab">
-    <p onclick="reset()">Reset</p>
   </div>
 
-  <div id="courseDescriptions" class="infoTab">
-    <div id="calendar">Hover over a course!</div>
-  </div>
 
-  <div id="focuses" class="infoTab">
+  <!-- TABS -->
+  <div class="infoTabs">
+    <ul class="tabList">
+      <li><a href="#courseList">My Courses</a></li>
+      <li><a href="#courseDescriptions">Course Descriptions</a></li>
+      <li><a href="#focuses">Focuses</a></li>
+      <li><a href="#timetable">Timetable</a></li>
+      <li><a href="#post">Check My POSt!</a></li>
+      <li><a onclick="reset()">Reset</a></li>
+      <li id="FCEcount">0.0</li>
+    </ul>
+
+    <div id="courseList" class="infoTab">
+      <div id="courseListTableDiv">
+        <table><tr id="courseGrid"></tr></table>
+
+      </div>
+
+    </div>
+
+    <div id="courseDescriptions" class="infoTab">
+      <div id="calendar">Hover over a course!</div>
+    </div>
+
+    <div id="focuses" class="infoTab">
       <div class="focusTabs">
-          <div id="focusListDiv">
+        <div id="focusListDiv">
           <ul class="focusList">
-              <li><a onclick="showtime('sci')" href="#sciDetails">Scientific Computing</a></li>
-              <li><a onclick="showtime('AI')" href="#AIDetails">Artificial Intelligence</a></li>
-              <li><a onclick="showtime('NLP')" href="#NLPDetails">Natural Language Processing</a></li>
-              <li><a onclick="showtime('vision')" href="#visionDetails">Computer Vision</a></li>
-              <li><a onclick="showtime('systems')" href="#systemsDetails">Computer Systems</a></li>
-              <li><a onclick="showtime('game')" href="#gameDetails">Video Games</a></li>
-              <li><a onclick="showtime('HCI')" href="#HCIDetails">Human Computer Interaction</a></li>
-              <li><a onclick="showtime('theory')" href="#theoryDetails">Theory of Computation</a></li>
-              <li><a onclick="showtime('web')" href="#webDetails">Web Technologies</a></li>
+            <li><a onclick="showtime('sci')" href="#sciDetails">Scientific Computing</a></li>
+            <li><a onclick="showtime('AI')" href="#AIDetails">Artificial Intelligence</a></li>
+            <li><a onclick="showtime('NLP')" href="#NLPDetails">Natural Language Processing</a></li>
+            <li><a onclick="showtime('vision')" href="#visionDetails">Computer Vision</a></li>
+            <li><a onclick="showtime('systems')" href="#systemsDetails">Computer Systems</a></li>
+            <li><a onclick="showtime('game')" href="#gameDetails">Video Games</a></li>
+            <li><a onclick="showtime('HCI')" href="#HCIDetails">Human Computer Interaction</a></li>
+            <li><a onclick="showtime('theory')" href="#theoryDetails">Theory of Computation</a></li>
+            <li><a onclick="showtime('web')" href="#webDetails">Web Technologies</a></li>
           </ul>
-          </div>
+        </div>
 
 
-      <div id="sciDetails" class="focusDetails">
-      <p>
-      Scientific computing studies the world around us. Known and unknown quantities are related through certain rules, e.g. physical laws, formulating mathematical problems. These problems are solved by numerical methods implemented as algorithms and run on computers. The numerical methods are analyzed and their performance (e.g. accuracy, efficiency) studied. Problems, such as choosing the optimal shape for an airplane (to achieve, for example, minimal fuel consumption), finding the fair price for derivative products of the market, or regulating the amount of radiation in medical scans, can be modeled by mathematical expressions, and solved by numerical techniques.
-      </p>
-      <p>
-      Students wishing to study scientific computing should have a strong background in mathematics, in particular calculus of several variables, linear algebra and statistics, be fluent in programming, and have a good understanding of data structures and algorithm design.
-      </p>
-      <p>
-      Required Courses:
-        <ol>
-        <li>MAT235Y1/MAT237Y1/MAT257Y1</li>
-        <li>1.5 FCE from the following: CSC336H1, CSC350H1, CSC351H1, CSC446H1, 456H1</li>
-        <li>1 FCE from the following: CSC320H1/418H1, CSC321H1/411H1, CSC343H1, CSC384H1, CSC358H1/CSC458H1</li>
-        </ol>
-      Suggested Related Courses:
-      <ol>
-         <li>MAT224H1/MAT240H1, MAT244H1, MAT334H1/MAT354H1, MAT337H1/MAT357H1</li>
-      </ol>
-      </p>
-      <p>
-      It is also recommended that students in this focus consider taking a half-course or two from the basic sciences (such as physics, chemistry, biology), as these sciences provide the sources of many problems solved by numerical techniques.
-      </p>
+        <div id="sciDetails" class="focusDetails">
+          <p>
+            Scientific computing studies the world around us. Known and unknown quantities are related through certain rules, e.g. physical laws, formulating mathematical problems. These problems are solved by numerical methods implemented as algorithms and run on computers. The numerical methods are analyzed and their performance (e.g. accuracy, efficiency) studied. Problems, such as choosing the optimal shape for an airplane (to achieve, for example, minimal fuel consumption), finding the fair price for derivative products of the market, or regulating the amount of radiation in medical scans, can be modeled by mathematical expressions, and solved by numerical techniques.
+          </p>
+          <p>
+            Students wishing to study scientific computing should have a strong background in mathematics, in particular calculus of several variables, linear algebra and statistics, be fluent in programming, and have a good understanding of data structures and algorithm design.
+          </p>
+          <p>
+            Required Courses:
+            <ol>
+              <li>MAT235Y1/MAT237Y1/MAT257Y1</li>
+              <li>1.5 FCE from the following: CSC336H1, CSC350H1, CSC351H1, CSC446H1, 456H1</li>
+              <li>1 FCE from the following: CSC320H1/418H1, CSC321H1/411H1, CSC343H1, CSC384H1, CSC358H1/CSC458H1</li>
+            </ol>
+            Suggested Related Courses:
+            <ol>
+             <li>MAT224H1/MAT240H1, MAT244H1, MAT334H1/MAT354H1, MAT337H1/MAT357H1</li>
+           </ol>
+         </p>
+         <p>
+          It is also recommended that students in this focus consider taking a half-course or two from the basic sciences (such as physics, chemistry, biology), as these sciences provide the sources of many problems solved by numerical techniques.
+        </p>
       </div>
 
 
       <div id="AIDetails" class="focusDetails">
-      <p>
-      Artificial Intelligence (AI) is aimed at understanding and replicating the computational processes underlying intelligent behaviour. These behaviours include the perception of one's environment, learning how that environment is structured, communicating with other agents, and reasoning to guide one's actions. This focus is designed to provide students with an introduction to some of the key scientific and technical ideas that have been developed in AI. There are four different sub-areas of AI represented in our department: Computer Vision, Computational Linguistics (CL), Machine Learning (ML), and Knowledge Representation and Reasoning (KR). These areas cover a wide variety of ideas and techniques. Students wanting to achieve this focus are required to take courses from at least two of these sub-areas.
-      </p>
-      <p>Required Courses:
-      <ol>
-      <li>1 FCE from the following: MAT235Y1/237Y1/257Y1, APM236H1/MIE262H1/STA248/261H1, CSC350H1, CSC310H1, CSC330H1, CSC438H1, CSC448H1, CSC463H1</li>
-      <li>2.5 FCEs from the following covering at least two of the four areas
-        <ol>
-          <li>CSC401H1, CSC485H1</li>
-          <li>CSC320H1, CSC420H1</li>
-          <li>CSC321H1, CSC411H1, CSC412H1</li>
-          <li>CSC384H1, CSC486H1</li>
-        </ol>
-      </li>
-      </ol>
-      </p>
-      <p>Suggested Related Courses: CSC200Y1, CSC324H1, COG250Y1, PSY270H1, PHL232H1, PHL342H1, STA414H1</p>
+        <p>
+          Artificial Intelligence (AI) is aimed at understanding and replicating the computational processes underlying intelligent behaviour. These behaviours include the perception of one's environment, learning how that environment is structured, communicating with other agents, and reasoning to guide one's actions. This focus is designed to provide students with an introduction to some of the key scientific and technical ideas that have been developed in AI. There are four different sub-areas of AI represented in our department: Computer Vision, Computational Linguistics (CL), Machine Learning (ML), and Knowledge Representation and Reasoning (KR). These areas cover a wide variety of ideas and techniques. Students wanting to achieve this focus are required to take courses from at least two of these sub-areas.
+        </p>
+        <p>Required Courses:
+          <ol>
+            <li>1 FCE from the following: MAT235Y1/237Y1/257Y1, APM236H1/MIE262H1/STA248/261H1, CSC350H1, CSC310H1, CSC330H1, CSC438H1, CSC448H1, CSC463H1</li>
+            <li>2.5 FCEs from the following covering at least two of the four areas
+              <ol>
+                <li>CSC401H1, CSC485H1</li>
+                <li>CSC320H1, CSC420H1</li>
+                <li>CSC321H1, CSC411H1, CSC412H1</li>
+                <li>CSC384H1, CSC486H1</li>
+              </ol>
+            </li>
+          </ol>
+        </p>
+        <p>Suggested Related Courses: CSC200Y1, CSC324H1, COG250Y1, PSY270H1, PHL232H1, PHL342H1, STA414H1</p>
       </div>
 
       <div id="NLPDetails" class="focusDetails">
-      <p>
-      How can we build and analyze systems for enabling users to communicate with computers using human language (also called natural language), and for automatically processing the vast amounts of data on the web available in the form of text? The focus covers appropriate material on natural language interfaces, as well as tools such as document summarization, intelligent search over the web, and so on. Students considering this focus are encouraged to consider a second Major in Linguistics. [Note 0.5 FCEs in LIN are in addition to the 12.0 FCEs required to complete the Specialist program]
-      </p>
-      <p>
-      Required Courses
-        <ol>
-        <li>CSC318H1</li>
-        <li>CSC401H1, CSC485H1</li>
-        <li>LIN200H1</li>
-        <li>1.5 FCE from the following: CSC309H1, CSC321H1, CSC330H1, CSC411H1, CSC428H1, CSC486H</li>
-        <li>0.5 FCE from the following: PSY100H1, COG250Y1</li>
-        </ol>
-      </p>
-      <p>Suggested Related Courses:</p>
-      <p>
-      Other relevant CSC courses, depending on the student's interests, include other courses in artificial intelligence such as CSC384H1 or CSC420H1. Linguistics, Psychology, and Cognitive Science are all directly relevant to this focus, and we recommend that interested students take additional courses from any or all of them.
-      </p>
+        <p>
+          How can we build and analyze systems for enabling users to communicate with computers using human language (also called natural language), and for automatically processing the vast amounts of data on the web available in the form of text? The focus covers appropriate material on natural language interfaces, as well as tools such as document summarization, intelligent search over the web, and so on. Students considering this focus are encouraged to consider a second Major in Linguistics. [Note 0.5 FCEs in LIN are in addition to the 12.0 FCEs required to complete the Specialist program]
+        </p>
+        <p>
+          Required Courses
+          <ol>
+            <li>CSC318H1</li>
+            <li>CSC401H1, CSC485H1</li>
+            <li>LIN200H1</li>
+            <li>1.5 FCE from the following: CSC309H1, CSC321H1, CSC330H1, CSC411H1, CSC428H1, CSC486H</li>
+            <li>0.5 FCE from the following: PSY100H1, COG250Y1</li>
+          </ol>
+        </p>
+        <p>Suggested Related Courses:</p>
+        <p>
+          Other relevant CSC courses, depending on the student's interests, include other courses in artificial intelligence such as CSC384H1 or CSC420H1. Linguistics, Psychology, and Cognitive Science are all directly relevant to this focus, and we recommend that interested students take additional courses from any or all of them.
+        </p>
       </div>
 
       <div id="visionDetails" class="focusDetails">
-      <p>
-      Computer vision is the science and technology of machines that can see. As a science, the goal of computer vision is to understand the computational processes required for a machine to come to an understanding of the content of a set of images. The data here may be a single snapshot, a video sequence, or a set of images from different viewpoints or provided by medical scanners.
-      </p>
-      <p>
-      The computer vision focus introduces students to the study of vision from a computational point of view. That is, we attempt to clearly define computational problems for various steps of the overall process, and then show how these problems can be tackled with appropriate algorithms.
-      </p>
-      <p>
-      Students who wish to pursue computer vision should have an understanding of linear algebra and calculus of several variables. Moreover, they should be solid programmers and have a good understanding of data structures and algorithm design. These basic tools are required in order to first pose computational vision problems, and then develop and test algorithms for their solution.
-      </p>
-      <p>
-      Required Courses:
-        <ol>
-        <li>MAT235Y1/MAT237Y1/MAT257Y1, CSC320H1, CSC350H1, CSC411H1, CSC420H1</li>
-        <li>0.5 FCE from the following: CSC418H1, CSC412H1, CSC2503H (Note: students must petition to take this course.)</li>
-        </ol>
-      </p>
-      <p>Suggested Related Courses:
-        <ol>
-        <li>ECE216H1</li>
-        </ol>
-      </p>
-      <p>
-      The following are examples of topics and courses that fit naturally with a study of computational vision. The list is meant to be illustrative of the range of cognate topics, but is not necessarily complete. The ordering is alphabetical and not indicative of importance. Note: there are prerequisites for many of these courses that we do not list here.
-      </p>
-      <p>
-      APM462H1, COG250Y1, CSC384H, CSC485H1, CSC486H1, PHL232H1, PHY385H1, PSL440Y1, PSY270H1, PSY280H1, STA257H1/STA261H1
-      </p>
+        <p>
+          Computer vision is the science and technology of machines that can see. As a science, the goal of computer vision is to understand the computational processes required for a machine to come to an understanding of the content of a set of images. The data here may be a single snapshot, a video sequence, or a set of images from different viewpoints or provided by medical scanners.
+        </p>
+        <p>
+          The computer vision focus introduces students to the study of vision from a computational point of view. That is, we attempt to clearly define computational problems for various steps of the overall process, and then show how these problems can be tackled with appropriate algorithms.
+        </p>
+        <p>
+          Students who wish to pursue computer vision should have an understanding of linear algebra and calculus of several variables. Moreover, they should be solid programmers and have a good understanding of data structures and algorithm design. These basic tools are required in order to first pose computational vision problems, and then develop and test algorithms for their solution.
+        </p>
+        <p>
+          Required Courses:
+          <ol>
+            <li>MAT235Y1/MAT237Y1/MAT257Y1, CSC320H1, CSC350H1, CSC411H1, CSC420H1</li>
+            <li>0.5 FCE from the following: CSC418H1, CSC412H1, CSC2503H (Note: students must petition to take this course.)</li>
+          </ol>
+        </p>
+        <p>Suggested Related Courses:
+          <ol>
+            <li>ECE216H1</li>
+          </ol>
+        </p>
+        <p>
+          The following are examples of topics and courses that fit naturally with a study of computational vision. The list is meant to be illustrative of the range of cognate topics, but is not necessarily complete. The ordering is alphabetical and not indicative of importance. Note: there are prerequisites for many of these courses that we do not list here.
+        </p>
+        <p>
+          APM462H1, COG250Y1, CSC384H, CSC485H1, CSC486H1, PHL232H1, PHY385H1, PSL440Y1, PSY270H1, PSY280H1, STA257H1/STA261H1
+        </p>
       </div>
 
 
       <div id="systemsDetails" class="focusDetails">
-      <p>
-      Software systems are complex and interesting. Poorly done systems can be incredibly expensive: they can cost society billions of dollars, and sometimes make the difference between life and death. Rapid changes in technology and applications means that the underlying systems must continually adapt. This focus takes you under the covers of software systems, laying bare the layers and introducing you to concurrency issues, scalability, multiprocessor systems, distributed computing, and more.
-      </p>
+        <p>
+          Software systems are complex and interesting. Poorly done systems can be incredibly expensive: they can cost society billions of dollars, and sometimes make the difference between life and death. Rapid changes in technology and applications means that the underlying systems must continually adapt. This focus takes you under the covers of software systems, laying bare the layers and introducing you to concurrency issues, scalability, multiprocessor systems, distributed computing, and more.
+        </p>
 
-      <p>
-      Required Courses:
-        <ol>
-        <li>CSC324H1, CSC343H1, CSC443H1, CSC469H1, CSC488H1</li>
-        <li>1 FCE from the following: CSC372H1/ECE385H1, CSC358H1, CSC458H1</li>
-        </ol>
-      </p>
-      <p>
-      Suggested Related Courses:
-        <ol>
-        <li>CSC301H1, CSC309H1, CSC410H1, ECE489H1</li>
-        <li>Relevant courses offered at UTM: CSC347H5, CSC423H5, CSC427H5</li>
-        <li>Relevant courses offered by Engineering: ECE454H1, ECE568H1</li>
-        </ol>
-      </p>
+        <p>
+          Required Courses:
+          <ol>
+            <li>CSC324H1, CSC343H1, CSC443H1, CSC469H1, CSC488H1</li>
+            <li>1 FCE from the following: CSC372H1/ECE385H1, CSC358H1, CSC458H1</li>
+          </ol>
+        </p>
+        <p>
+          Suggested Related Courses:
+          <ol>
+            <li>CSC301H1, CSC309H1, CSC410H1, ECE489H1</li>
+            <li>Relevant courses offered at UTM: CSC347H5, CSC423H5, CSC427H5</li>
+            <li>Relevant courses offered by Engineering: ECE454H1, ECE568H1</li>
+          </ol>
+        </p>
       </div>
 
       <div id="gameDetails" class="focusDetails">
-      <p>
-      Video game design combines several disciplines within computer science, including software engineering, graphics, artificial intelligence and human-computer interaction. It also incorporates elements of economics, psychology, music and creative writing, requiring video game researchers to have a diverse, multidisciplinary set of skills.
-      </p>
-      <p>
-      Students who wish to pursue video game design should have an understanding of linear algebra (for computer graphics modeling), computer hardware and operating systems (for console architecture), data structures, and algorithm design. Students will gain a general knowledge of the more advanced topics listed in the courses below.
-      </p>
-      <p>
-      Required courses:
-        <ol>
-        <li>CSC300H1, CSC301H1, CSC318H1, CSC324H1, CSC384H1, CSC418H1, CSC404H1</li>
-        </ol>
-      </p>
-      <p>Suggested Related Courses:
-        <ol>
-        <li>CSC358H1, CSC458H1, CSC428H1</li>
-        <li>MUS300H1, INI222H1, INI465H1, ENG235H1</li>
-        <li>ECO326H1, MGT2056H</li>
-        </ol>
-      </p>
+        <p>
+          Video game design combines several disciplines within computer science, including software engineering, graphics, artificial intelligence and human-computer interaction. It also incorporates elements of economics, psychology, music and creative writing, requiring video game researchers to have a diverse, multidisciplinary set of skills.
+        </p>
+        <p>
+          Students who wish to pursue video game design should have an understanding of linear algebra (for computer graphics modeling), computer hardware and operating systems (for console architecture), data structures, and algorithm design. Students will gain a general knowledge of the more advanced topics listed in the courses below.
+        </p>
+        <p>
+          Required courses:
+          <ol>
+            <li>CSC300H1, CSC301H1, CSC318H1, CSC324H1, CSC384H1, CSC418H1, CSC404H1</li>
+          </ol>
+        </p>
+        <p>Suggested Related Courses:
+          <ol>
+            <li>CSC358H1, CSC458H1, CSC428H1</li>
+            <li>MUS300H1, INI222H1, INI465H1, ENG235H1</li>
+            <li>ECO326H1, MGT2056H</li>
+          </ol>
+        </p>
       </div>
 
       <div id="HCIDetails" class="focusDetails">
-      <p>
-      Human-Computer Interaction (HCI) is the scientific study of the use of computers by people and the design discipline that informs the creation of systems and software that are useful, usable, and enjoyable for the people who use them. HCI students have exciting opportunities for research and graduate school; HCI professionals often have jobs with titles such as user interface architect, user interface specialist, interaction designer, or usability engineer. [Note 3.5 FCEs in SOC & PSY are in addition to the 12.0 FCEs required to complete the Specialist program]
-      </p>
-      <p>
-      Required Courses:
-        <ol>
-        <li>CSC300H1, CSC301H1, CSC318H1, CSC428H1</li>
-        <li>SOC101Y1, SOC200H1, SOC202H1, SOC302H1</li>
-        <li>1 FCE from the following: CSC309H1, CSC320H1, CSC321H1, CSC343H1, CSC384H1, CSC401H1, CSC404H1, CSC418H1, CSC485H1, CSC490H1/491H1</li>
-        <li>PSY100H1, PSY270H1/PSY280H1</li>
-        </ol>
-      </p>
-      <p>
-      Suggested Related Courses:
-        <ol>
-        <li>CSC454H1, CSC290H1</li>
-        <li>At least one half-course in Human Factors or Ergonomics offered by the Department of Mechanical and Industrial Engineering, such as MIE240H, MIE343H, MIE344H, MIE448H, and MIE449H. Human factors is a sister discipline to human-computer interaction that approaches problems in slightly different ways.</li>
-        <li>WDW260H1</li>
-        </ol>
-      </p>
+        <p>
+          Human-Computer Interaction (HCI) is the scientific study of the use of computers by people and the design discipline that informs the creation of systems and software that are useful, usable, and enjoyable for the people who use them. HCI students have exciting opportunities for research and graduate school; HCI professionals often have jobs with titles such as user interface architect, user interface specialist, interaction designer, or usability engineer. [Note 3.5 FCEs in SOC & PSY are in addition to the 12.0 FCEs required to complete the Specialist program]
+        </p>
+        <p>
+          Required Courses:
+          <ol>
+            <li>CSC300H1, CSC301H1, CSC318H1, CSC428H1</li>
+            <li>SOC101Y1, SOC200H1, SOC202H1, SOC302H1</li>
+            <li>1 FCE from the following: CSC309H1, CSC320H1, CSC321H1, CSC343H1, CSC384H1, CSC401H1, CSC404H1, CSC418H1, CSC485H1, CSC490H1/491H1</li>
+            <li>PSY100H1, PSY270H1/PSY280H1</li>
+          </ol>
+        </p>
+        <p>
+          Suggested Related Courses:
+          <ol>
+            <li>CSC454H1, CSC290H1</li>
+            <li>At least one half-course in Human Factors or Ergonomics offered by the Department of Mechanical and Industrial Engineering, such as MIE240H, MIE343H, MIE344H, MIE448H, and MIE449H. Human factors is a sister discipline to human-computer interaction that approaches problems in slightly different ways.</li>
+            <li>WDW260H1</li>
+          </ol>
+        </p>
       </div>
 
       <div id="theoryDetails" class="focusDetails">
-      Theory
+        Theory
       </div>
 
-    <div id="webDetails" class="focusDetails">
-      <p>
-      The Web and Internet Technologies focus introduces students to the systems and algorithms that power today's large-scale web and Internet applications such as search engines, social networking applications, web data mining applications, and content distribution networks. The focus covers both the algorithm foundations of Web and Internet Technologies, as well as the implementation and system architecture.
-      </p>
-      <p>
-      Students who wish to pursue the Web and Internet Technologies focus should have a solid understanding of statistics, should be good programmers and have a good understanding of data structures and algorithm design.
-      </p>
-      <p>
-      To get practical experience, students pursuing the web and Internet technologies focus are encouraged to do either a term project or a summer USRA carrying out a project in web and internet technologies.
-      </p>
-      <p>
-      Required courses:
-        <ol>
-        <li>STA248H1, CSC309H1, CSC343H1, CSC358H1, CSC458H1, CSC411H1</li>
-        <li>0.5 FCEs from the following: CSC310H1, CSC443H1, CSC469H1</li>
-        </ol>
-      </p>
-      <p>
-      Suggested Related Courses:
-        <ol>
-        <li>Courses offered at UTM: CSC347H5, CSC423H5, CSC427H5</li>
-        <li>ECE568H1</li>
-        </ol>
-      </p>
+      <div id="webDetails" class="focusDetails">
+        <p>
+          The Web and Internet Technologies focus introduces students to the systems and algorithms that power today's large-scale web and Internet applications such as search engines, social networking applications, web data mining applications, and content distribution networks. The focus covers both the algorithm foundations of Web and Internet Technologies, as well as the implementation and system architecture.
+        </p>
+        <p>
+          Students who wish to pursue the Web and Internet Technologies focus should have a solid understanding of statistics, should be good programmers and have a good understanding of data structures and algorithm design.
+        </p>
+        <p>
+          To get practical experience, students pursuing the web and Internet technologies focus are encouraged to do either a term project or a summer USRA carrying out a project in web and internet technologies.
+        </p>
+        <p>
+          Required courses:
+          <ol>
+            <li>STA248H1, CSC309H1, CSC343H1, CSC358H1, CSC458H1, CSC411H1</li>
+            <li>0.5 FCEs from the following: CSC310H1, CSC443H1, CSC469H1</li>
+          </ol>
+        </p>
+        <p>
+          Suggested Related Courses:
+          <ol>
+            <li>Courses offered at UTM: CSC347H5, CSC423H5, CSC427H5</li>
+            <li>ECE568H1</li>
+          </ol>
+        </p>
       </div>
     </div>
-</div>
-  <div id="timetable" class="infoTab">
-  See Ian.
   </div>
-</div>
-<script>
-  $(".infoTabs").tabs();
-    $(".focusTabs").tabs({active: false, collapsible: true});
-</script>
-<script src="util.js"></script>
-</body>
-</html>
+  <div id="timetable" class="infoTab">
+    See Ian.
+  </div>
+  
+  <div id="post" class="infoTab">
+    <div style="width:100; float: left">
+      <form>
+        <input type="checkbox" name="csc148" disabled>(CSC108 and) CSC148<br/>
+        <input type="checkbox" name="csc165" disabled>CSC165<br/>
+        <input type="checkbox" name="csc207" disabled>CSC207<br/>
+        <input type="checkbox" name="csc209" disabled>CSC209<br/>
+        <input type="checkbox" name="csc236" disabled>CSC236<br/>
+        <input type="checkbox" name="csc258" disabled>CSC258<br/>
+        <input type="checkbox" name="csc263" disabled>CSC263<br/>
+        <input type="checkbox" name="csc269" disabled>CSC369<br/>
+        <input type="checkbox" name="csc273" disabled>CSC373<br/><br/>
+        <input type="checkbox" name="calc1" disabled>(MAT135,136)/137/157<br>
+        <input type="checkbox" name="lin1" disabled>MAT221/223/240<br>
+        <input type="checkbox" name="sta1" disabled>STA247/255/257<br>
+
+        <form>
+        </div>
+
+        <div style="width:100; float: left; height:100%">
+          <p>At least 1.5 FCEs...</p>
+          <form>
+            <input type="text" name="400a" placeholder="CSC4xx" disabled><br/>
+            <input type="text" name="400b" placeholder="CSC4xx" disabled><br/>
+            <input type="text" name="400c" placeholder="CSC4xx" disabled><br/><br/>
+
+            <select multiple>
+              <option>BCB410</option>
+              <option>BCB420</option>
+              <option>BCB430</option>
+            </select>
+          </div>
+
+          <div style="width:100; float: left; height:100%">
+            <p>Other CSC courses...</p>
+
+            <form>
+              <input type="text" name="CSCa" placeholder="CSC or ECE" disabled><br/>
+              <input type="text" name="CSCb" placeholder="CSC or ECE" disabled><br/>
+              <input type="text" name="CSCc" placeholder="CSC or ECE" disabled><br/>
+              <input type="text" name="CSCd" placeholder="CSC or ECE" disabled><br/>
+              <input type="text" name="CSCe" placeholder="CSC or ECE" disabled><br/>
+            </form>
+
+          </div>
+
+          <div style="width:100; float: left; height:100%">
+            <p>At most 2.0 FCEs...</p>
+
+            <p>MAT224,235,237,257,3xx,4xx except 329, 390, 391</p>
+            <form>
+              <input type="text" name="MATa" placeholder="MAT..."><br/>
+              <input type="text" name="MATb" placeholder="MAT..."><br/>
+              <input type="text" name="MATc" placeholder="MAT..."><br/>
+              <input type="text" name="MATd" placeholder="MAT..."><br/>
+            </form>
+
+            <p>STA248,261,3xx,4xx</p>
+            <form>
+              <input type="text" name="STAa" placeholder="STA..."><br/>
+              <input type="text" name="STAb" placeholder="STA..."><br/>
+              <input type="text" name="STAc" placeholder="STA..."><br/>
+              <input type="text" name="STAd" placeholder="STA..."><br/>
+            </form>
+          </div>
+
+          <div style="width:20%; float: left; height:100%">
+            <form>
+              <p>At least one of...</p>
+              <input type="checkbox" name="PEY">PEY<br/>
+              <input type="checkbox" disabled>CSC301H1<br/>
+              <input type="checkbox" disabled>CSC318H1<br/>
+              <input type="checkbox" disabled>CSC404H1<br/>
+              <input type="checkbox" disabled>CSC411H1<br/>
+              <input type="checkbox" disabled>CSC418H1<br/>
+              <input type="checkbox" disabled>CSC420H1<br/>
+              <input type="checkbox" disabled>CSC428H1<br/>
+              <input type="checkbox" disabled>CSC454H1<br/>
+              <input type="checkbox" disabled>CSC485H1<br/>
+              <input type="checkbox" disabled>CSC490H1<br/>
+              <input type="checkbox" disabled>CSC491H1<br/>
+              <input type="checkbox" disabled>CSC494H1<br/>
+              <input type="checkbox" disabled>CSC495H1<br/>
+            </form>
+
+          </div>
+        </div>
+
+      </div>
+      <script>
+        $(".infoTabs").tabs();
+        $(".focusTabs").tabs({active: false, collapsible: true});
+      </script>
+      <script src="util.js"></script>
+    </body>
+    </html>
