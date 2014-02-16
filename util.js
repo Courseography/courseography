@@ -1,5 +1,4 @@
 var nodes = [];
-var num300Plus = 0;
 var clickedCourses = [];
 var clickedNode = parent.document.getElementById("courseGrid");
 
@@ -8,6 +7,11 @@ timeNode = parent.document.getElementById("timetable");
 timeNode.appendChild(fragment2);
 
 var FCEs = 0;
+var FCEs100 = 0;
+var FCEs200 = 0;
+var FCEs300 = 0;
+var FCEs400 = 0;
+var FCEsMAT = 0;
 var clickedCourses = [];
 
 var sciFocusList = ["CSC336", "CSC446", "CSC456", "CSC320", "CSC418", "CSC321", "CSC411", "CSC343", "CSC384", "CSC358", "CSC458"];
@@ -61,10 +65,10 @@ function spotlight(id) {
 }
 
 function reset() {
+    
     for (var i = 0; i < nodes.length; i++) {
         window[nodes[i]].turnOff();
     }
-    num300Plus = 0;
 }
 
 function makeNode(parents, type, name) {
@@ -111,7 +115,11 @@ function Node(parents, type, name) {
 
     this.turnOff = function() {
         this.active = false;
-        this.takeable = this.parents.length == 0;
+        if (this.name == "CSC454" || this.name == "CSC494" || this.name == "CSC495") {
+            this.takeable = false;
+        } else {
+            this.takeable = this.parents.length == 0;
+        }
         this.updateSVG();
         this.updateClickedCourses();
     }
@@ -129,19 +137,11 @@ function Node(parents, type, name) {
             this.updateClickedCourses();
 
             if (this.name == "CSC454") {
-                this.takeable = num300Plus >= 5;
+                this.takeable = FCEs300 + FCEs400 >= 2.5;
             } else if (this.name == "CSC494" || this.name == "CSC495") {
-                this.takeable = num300Plus >= 3;
+                this.takeable = FCEs300 + FCEs400 >= 1.5;
             } else {
                 this.takeable = true;
-            }
-
-            if (this.name.charAt(3) >= '3' && this.name.length == 6) {
-                if (this.active) {
-                    num300Plus++;
-                } else {
-                    num300Plus--;
-                }
             }
 
             for (var i = 0; i < this.parents.length; i++) {
@@ -192,9 +192,9 @@ function Node(parents, type, name) {
             console.log("\t\t\t", "Running 'isActive' on: ", this.name);
 
             if (this.name == "CSC454") {
-                this.takeable = num300Plus >= 5;
+                this.takeable = FCEs300 + FCEs400 >= 2.5;
             } else if (this.name == "CSC494" || this.name == "CSC495") {
-                this.takeable = num300Plus >= 3;
+                this.takeable = FCEs300 + FCEs400 >= 1.5;
             } else if (this.logicalType == "AND") {
                 this.takeable = true;
             } else {
@@ -295,9 +295,23 @@ function Node(parents, type, name) {
         }
         if (this.active && !this.hybrid) {
             if (this.name == "CSC200") {
-                FCEs = FCEs + 1;
+                FCEs200 += 1
+            } else if (this.name.substr(0, 4) == "CSC1") {
+                FCEs100 += 0.5;
+            } else if (this.name.substr(0, 4) == "CSC2") {
+                FCEs200 += 0.5;
+            } else if (this.name.substr(0, 4) == "CSC3" 
+                || this.name.substr(0,4) == "ECE3") {
+                FCEs300 += 0.5;
+            } else if (this.name.substr(0, 4) == "CSC4"
+                || this.name.substr(0,4) == "ECE4") {
+                FCEs400 += 0.5;
+            } else if (this.name == "Calc1") {
+                FCEsMAT += 1;
+            } else if (this.name == "Lin1" || this.name == "Sta1" || this.name == "Sta2") {
+                FCEsMAT += 0.5;
             } else {
-                FCEs = FCEs + 0.5;
+                console.log("Unexpected course: " + this.name)
             }
             clickedCourses.push(this.name);
             console.log(clickedCourses);
@@ -306,12 +320,27 @@ function Node(parents, type, name) {
             if (index > -1) {
                 clickedCourses.splice(index, 1);
                 if (this.name == "CSC200") {
-                    FCEs -= 1;
+                    FCEs200 -= 1
+                } else if (this.name.substr(0, 4) == "CSC1") {
+                    FCEs100 -= 0.5;
+                } else if (this.name.substr(0, 4) == "CSC2") {
+                    FCEs200 -= 0.5;
+                } else if (this.name.substr(0, 4) == "CSC3" 
+                    || this.name.substr(0,4) == "ECE3") {
+                    FCEs300 -= 0.5;
+                } else if (this.name.substr(0, 4) == "CSC4"
+                    || this.name.substr(0,4) == "ECE4") {
+                    FCEs400 -= 0.5;
+                } else if (this.name == "Calc1") {
+                    FCEsMAT -= 1;
+                } else if (this.name == "Lin1" || this.name == "Sta1" || this.name == "Sta2") {
+                    FCEsMAT -= 0.5;
                 } else {
-                    FCEs -= 0.5;
+                    console.log("Unexpected course: " + this.name)
                 }
             }
         }
+        FCEs = FCEs100 + FCEs200 + FCEs300 + FCEs400 + FCEsMAT;
 
         $('#FCEcount').html(FCEs);
 
