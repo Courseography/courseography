@@ -12,13 +12,13 @@
 <tr><td></td><td></td><td>L0101</td><td>MWF9</td><td>BA 1160 </td><td>M. Craig</td>
 <tr><td></td><td></td><td>L0201</td><td>MWF10</td><td>BA 1160 </td><td>M. Craig</td>
 <tr><td></td><td></td><td>L0202</td><td>MWF10</td><td>WB 116 </td><td>P. Gries</td>
-<tr><td></td><td></td><td>L0202</td><td>MWF1</td><td>HS 610 </td><td>J. Campbell</td>
+<tr><td></td><td></td><td>L0301</td><td>MWF1</td><td>HS 610 </td><td>J. Campbell</td>
 <tr><td></td><td></td><td>L5101</td><td>W6-9</td><td>MS 3153 </td><td>P. Gries</td>
-<tr><td></td><td></td><td>T0201</td><td>T3-5</td><td></td><td></td>
+<tr><td></td><td></td><td>T0301</td><td>T3-5</td><td></td><td></td>
 <tr><td></td><td></td><td>T0501</td><td>W3-5</td><td></td><td></td>
-<tr><td></td><td></td><td>T0501</td><td>R1-3</td><td></td><td></td>
-<tr><td></td><td></td><td>T0501</td><td>R3-5</td><td></td><td></td>
-<tr><td></td><td></td><td>T0501</td><td>F1-3</td><td></td><td></td>
+<tr><td></td><td></td><td>T0701</td><td>R1-3</td><td></td><td></td>
+<tr><td></td><td></td><td>T0801</td><td>R3-5</td><td></td><td></td>
+<tr><td></td><td></td><td>T0901</td><td>F1-3</td><td></td><td></td>
 <tr><td></td><td></td><td>T1001</td><td>W1-3</td><td></td><td></td>
 <tr><td></td><td></td><td>T5101</td><td>T7-9</td><td></td><td></td>
 <tr><td></td><td></td><td>T5201</td><td>R7-9</td><td></td><td></td>
@@ -27,9 +27,9 @@
 <tr><td></td><td></td><td>L0101</td><td>MWF9</td><td>BA 1160 </td><td>J. Campbell</td>
 <tr><td></td><td></td><td>L0201</td><td>MWF10</td><td>BA 1160 </td><td>J. Campbell</td>
 <tr><td></td><td></td><td>L5101</td><td>W6-9</td><td>MS 3154 </td><td>Tba</td>
-<tr><td></td><td></td><td>T0201</td><td>R1-3</td><td></td><td></td>
+<tr><td></td><td></td><td>T0301</td><td>R1-3</td><td></td><td></td>
 <tr><td></td><td></td><td>T0501</td><td>F1-3</td><td></td><td></td>
-<tr><td></td><td></td><td>T0501</td><td>R3-5</td><td></td><td></td>
+<tr><td></td><td></td><td>T0601</td><td>R3-5</td><td></td><td></td>
 <tr><td></td><td></td><td>T5101</td><td>R5-7</td><td></td><td></td>
 <tr><td></td><td></td><td>T5201</td><td>R7-9</td><td></td><td></td>
 <tr><td> CSC120H1 </td><td> S </td>
@@ -47,9 +47,9 @@
 <tr><td></td><td></td><td>L0101</td><td>MW9</td><td>WB 116 </td><td>D. Heap</td>
 <tr><td></td><td></td><td>L0201</td><td>MW10</td><td>WB 116 </td><td>M. Craig</td>
 <tr><td></td><td></td><td>L5101</td><td>W6-8</td><td>MS 3153 </td><td>G. Baumgartner</td>
-<tr><td></td><td></td><td>T0201</td><td>T1-3</td><td></td><td></td>
+<tr><td></td><td></td><td>T0301</td><td>T1-3</td><td></td><td></td>
 <tr><td></td><td></td><td>T0501</td><td>W1-3</td><td></td><td></td>
-<tr><td></td><td></td><td>T0501</td><td>W3-5</td><td></td><td></td>
+<tr><td></td><td></td><td>T0601</td><td>W3-5</td><td></td><td></td>
 <tr><td></td><td></td><td>T5101</td><td>T7-9</td><td></td><td></td>
 <tr><td></td><td></td><td>T5201</td><td>W5-7</td><td></td><td></td>
 <tr><td> CSC165H1 </td><td> F </td>
@@ -64,6 +64,8 @@
 <tr><td></td><td></td><td>L0101</td><td>T2-4</td><td>MP 203 </td><td>T. Fairgrieve</td>
 <tr><td></td><td></td><td>L0201</td><td>MWF3</td><td>BA 1170 </td><td>T. Fairgrieve</td>
 <tr><td></td><td></td><td>L0201</td><td>R2-4</td><td>MP 103 </td><td>T. Fairgrieve</td>
+<tr><td> CSC200Y1 </td><td> Y </td>
+
 <tr><td></td><td></td><td>L0101</td><td>Cancel</td><td></td><td></td>
 <tr><td> CSC207H1 </td><td> F </td>
 
@@ -71,8 +73,8 @@
 <tr><td></td><td></td><td>L5101</td><td>W6-8</td><td>BA 1130 </td><td>J. Campbell</td>
 <tr><td></td><td></td><td>T0101</td><td>M12</td><td></td><td></td>
 <tr><td></td><td></td><td>T0201</td><td>M2</td><td></td><td></td>
-<tr><td></td><td></td><td>T0201</td><td>Cancel</td><td></td><td></td>
-<tr><td></td><td></td><td>T0201</td><td>Cancel</td><td></td><td></td>
+<tr><td></td><td></td><td>T0301</td><td>Cancel</td><td></td><td></td>
+<tr><td></td><td></td><td>T0301</td><td>Cancel</td><td></td><td></td>
 <tr><td></td><td></td><td>T5101</td><td>W5</td><td></td><td></td>
 <tr><td></td><td></td><td>T5201</td><td>T5</td><td></td><td></td>
 <tr><td> CSC207H1 </td><td> S </td>
@@ -85,6 +87,7 @@
 <tr><td></td><td></td><td>L0101</td><td>MTR1</td><td>LM 161 </td><td>A. Rosenthal</td>
 <tr><td> CSC209H1 </td><td> S </td>
 
+<tr><td></td><td></td><td>L0101</td><td>MW</td><td>MP 203</td><td>\r\n    (note: room change)\r\n  </td>
 <tr><td></td><td></td><td>L0101</td><td>MW</td><td>MP 203</td><td>K. Reid</td>
 <tr><td></td><td></td><td>L5101</td><td>T6</td><td>SF 1101 </td><td>K. Reid</td>
 <tr><td></td><td></td><td>L5101</td><td>T7-9</td><td>SF 1101 </td><td>K. Reid</td>
@@ -99,11 +102,13 @@
 <tr><td> CSC236H1 </td><td> S </td>
 
 <tr><td></td><td></td><td>L0101</td><td>TR4</td><td>LM 159</td><td>Tba</td>
+<tr><td></td><td></td><td>L0101</td><td>R5</td><td>LM 159</td><td>\r\n    (note: room change)\r\n  </td>
 <tr><td></td><td></td><td>L0101</td><td>R5</td><td>LM 159</td><td>Tba</td>
 <tr><td></td><td></td><td>L0102</td><td>Cancel</td><td></td><td></td>
 <tr><td></td><td></td><td>L0201</td><td>TR1</td><td>GB 120 </td><td>Tba</td>
 <tr><td></td><td></td><td>L0201</td><td>R11</td><td>GB 120 </td><td>Tba</td>
 <tr><td></td><td></td><td>L2003</td><td>TR4</td><td>LM 159</td><td>Tba</td>
+<tr><td></td><td></td><td>L2003</td><td>R5</td><td>LM 159</td><td>\r\n   (Note: room change)</td>
 <tr><td></td><td></td><td>L2003</td><td>R5</td><td>LM 159</td><td>Tba</td>
 <tr><td> CSC240H1 </td><td> S </td>
 
@@ -138,6 +143,8 @@
 <tr><td> CSC290H1 </td><td> F </td>
 
 <tr><td></td><td></td><td>L5101</td><td>Cancel</td><td></td><td></td>
+<tr><td> CSC299Y1 </td><td> Y </td>
+
 <tr><td></td><td></td><td>L0101</td><td>TBA</td><td>BA 3116 </td><td>R. Baecker</td>
 <tr><td> CSC300H1 </td><td> S </td>
 
@@ -175,7 +182,9 @@
 <tr><td></td><td></td><td>L2001</td><td>Cancel</td><td></td><td></td>
 <tr><td></td><td></td><td>L2501</td><td>M6</td><td>BA 1200 </td><td>O. St-Cyr</td>
 <tr><td></td><td></td><td>L2501</td><td>M7-9</td><td>BA 1200 </td><td>O. St-Cyr</td>
+<tr><td></td><td></td><td>L5101</td><td>M6</td><td>BA 1190 </td><td>(note: room change)</td>
 <tr><td></td><td></td><td>L5101</td><td>M6</td><td>BA 1190 </td><td>O. St-Cyr</td>
+<tr><td></td><td></td><td>L5101</td><td>M7-9</td><td>BA 1190 </td><td>(note: room change)</td>
 <tr><td></td><td></td><td>L5101</td><td>M7-9</td><td>BA 1190 </td><td>O. St-Cyr</td>
 <tr><td> CSC318H1 </td><td> S </td>
 
@@ -199,8 +208,9 @@
 <tr><td></td><td></td><td>L5101</td><td>R7-9</td><td>BA 1190 </td><td>G. Baumgartner</td>
 <tr><td> CSC324H1 </td><td> S </td>
 
+<tr><td></td><td></td><td>L0101</td><td>M2</td><td>KP 108</td><td>\r\n  </td>
 <tr><td></td><td></td><td>L0101</td><td>M2</td><td>KP 108</td><td>G. Baumgartner</td>
-<tr><td></td><td></td><td>L0101</td><td>WF2</td><td>MP 102</td><td>CSC330H1</td>
+<tr><td></td><td></td><td>L0101</td><td>WF2</td><td>MP 102</td><td>\r\n    (note: room change)\r\n  </td>
 <tr><td> CSC330H1 </td><td> F </td>
 
 <tr><td></td><td></td><td>L0101</td><td>Cancel</td><td></td><td></td>
@@ -286,10 +296,13 @@
 <tr><td> CSC384H1 </td><td> S </td>
 
 <tr><td></td><td></td><td>L0101</td><td>MF1</td><td>WB 116</td><td>S. McIlraith</td>
+<tr><td></td><td></td><td>L0101</td><td>W1</td><td>SF 1105</td><td>\r\n    (note: room change)\r\n  </td>
 <tr><td></td><td></td><td>L2001</td><td>MF1</td><td>WB 116</td><td>S. McIlraith</td>
+<tr><td></td><td></td><td>L2001</td><td>W1</td><td>SF 1105</td><td>\r\n  (note: room change)</td>
 <tr><td></td><td></td><td>L2003</td><td>MF1</td><td>WB 116</td><td>S. McIlraith</td>
+<tr><td></td><td></td><td>L2003</td><td>W1</td><td>SF 1105</td><td>\r\n    (note: room change)\r\n  </td>
 <tr><td></td><td></td><td>L2005</td><td>MF1</td><td>WB 116</td><td>S. McIlraith</td>
-<tr><td></td><td></td><td>L2005</td><td>W1</td><td>SF 1105</td><td>CSC401H1</td>
+<tr><td></td><td></td><td>L2005</td><td>W1</td><td>SF 1105</td><td>\r\n  (note: room change)</td>
 <tr><td> CSC401H1 </td><td> S </td>
 
 <tr><td></td><td></td><td>L0101</td><td>MWF10</td><td>RW 110 </td><td>F. Rudzicz</td>
@@ -361,10 +374,13 @@
 <tr><td></td><td></td><td>L0101</td><td>W1</td><td>BA 3012 </td><td>C. Christara</td>
 <tr><td> CSC458H1 </td><td> F </td>
 
+<tr><td></td><td></td><td>L0101</td><td>T1-3</td><td>GB 220</td><td>\r\n  (note: room change)\r\n</td>
 <tr><td></td><td></td><td>L0101</td><td>T1-3</td><td>GB 220</td><td>J. Lim</td>
 <tr><td></td><td></td><td>L0101</td><td>F1</td><td>BA 1180 </td><td>J. Lim</td>
+<tr><td></td><td></td><td>L2003</td><td>T1-3</td><td>GB 220</td><td>\r\n   (note: room change)</td>
 <tr><td></td><td></td><td>L2003</td><td>T1-3</td><td>GB 220</td><td>J. Lim</td>
 <tr><td></td><td></td><td>L2003</td><td>F1</td><td>BA 1180 </td><td>J. Lim</td>
+<tr><td></td><td></td><td>L2005</td><td>T1-3</td><td>GB 220</td><td>\r\n  (note: room change)\r\n</td>
 <tr><td></td><td></td><td>L2005</td><td>T1-3</td><td>GB 220</td><td>J. Lim</td>
 <tr><td></td><td></td><td>L2005</td><td>F1</td><td>BA 1180 </td><td>J. Lim</td>
 <tr><td> CSC463H1 </td><td> F </td>
@@ -377,9 +393,11 @@
 <tr><td> CSC485H1 </td><td> F </td>
 
 <tr><td></td><td></td><td>L0101</td><td>W1-3</td><td>LM 161 </td><td>G. Hirst</td>
+<tr><td></td><td></td><td>L0101</td><td>R4</td><td>BA 1180</td><td>\r\n  </td>
 <tr><td></td><td></td><td>L0101</td><td>R4</td><td>BA 1180</td><td>G. Hirst</td>
 <tr><td> CSC486H1 </td><td> S </td>
 
+<tr><td></td><td></td><td>L0101</td><td>R4</td><td>BA 1200</td><td>\r\n  </td>
 <tr><td></td><td></td><td>L0101</td><td>R4</td><td>BA 1200</td><td>V. Belle</td>
 <tr><td> CSC488H1 </td><td> S </td>
 
@@ -394,6 +412,7 @@
 <tr><td></td><td></td><td>L0101</td><td>Cancel</td><td></td><td></td>
 <tr><td> CSC490H1 </td><td> S </td>
 
+<tr><td></td><td></td><td>L0101</td><td>R3-5</td><td>RS 208</td><td>\r\n  </td>
 <tr><td></td><td></td><td>L0101</td><td>R3-5</td><td>RS 208</td><td>K. Singh</td>
 <tr><td> CSC494H1 </td><td> F </td>
 
@@ -401,6 +420,8 @@
 <tr><td> CSC494H1 </td><td> S </td>
 
 <tr><td></td><td></td><td>L0101</td><td>TBA</td><td>RS 208</td><td>Staff</td>
+<tr><td> CSC494H1 </td><td> Y </td>
+
 <tr><td></td><td></td><td>L0101</td><td>TBA</td><td>RS 208</td><td>Staff</td>
 <tr><td> CSC495H1 </td><td> F </td>
 
@@ -408,5 +429,7 @@
 <tr><td> CSC495H1 </td><td> S </td>
 
 <tr><td></td><td></td><td>L0101</td><td>TBA</td><td>RS 208</td><td>Staff</td>
+<tr><td> CSC495H1 </td><td> Y </td>
+
 <tr><td></td><td></td><td>L0101</td><td>TBA</td><td>RS 208</td><td>Staff</td>
 </p></div></table>
