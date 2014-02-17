@@ -10,8 +10,8 @@ html = urlopen('http://www.artsandscience.utoronto.ca/ofr/timetable/winter/csc.h
 htmlData = html.read()
 
 # The regular expressions for all 6 fields
-course = re.compile('^CSC\d{3}H1$')
-section = re.compile('^[FS]{1}$')
+course = re.compile('^CSC\d{3}(Y|H)1$')
+section = re.compile('^[FSY]{1}$')
 lecture = re.compile('^([TL]){1}(0|2|1|5){1}[0152]{1}0{1}')
 time = re.compile('^[MWTRF]{1,3}\d?[-]?\d?$|Cancel|TBA')
 instructor = re.compile('^\w\.|Tba|Staff')
@@ -23,7 +23,7 @@ location = re.compile('^\w{2} \d{1,4}')
 class MyHTMLParser(HTMLParser):
     courseMemory = ''
     sectionMemory = ''
-    typeMemory = ''
+    typeMemory = 'stringsAgainstIndexErrors!'
     timeMemory = ''
     locationMemory = ''
     switch = False
@@ -55,7 +55,7 @@ class MyHTMLParser(HTMLParser):
     	elif location.match(data):
 	        self.locationMemory = data
 	        self.fieldMemory = 4
-    	elif instructor.match(data) or (self.fieldMemory == 4 and data == '&nbsp'):
+    	elif instructor.match(data) or (self.fieldMemory == 4):
 	        print('<tr><td></td><td></td><td>' + self.typeMemory +'</td><td>' + self.timeMemory+ '</td><td>'+self.locationMemory+'</td><td>'+data+'</td>')
 	        self.fieldMemory = 5
 
