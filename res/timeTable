@@ -1,0 +1,368 @@
+<table class="timeTable">
+<tr><td>Course</td><td>Section</td><td>Type</td><td>Time</td><td>Location</td><td>Instructor</td></tr><div><p>
+<tr><td> CSC104H1 </td>
+
+<tr><td> CSC104H1 </td><td>F</td><td>L5101</td><td>W6-8</td><td>MS 3154 </td><td>D. Heap</td>
+<tr><td> CSC104H1 </td><td>F</td><td>L5101</td><td>W8</td><td>MS 3154 </td><td>D. Heap</td>
+<tr><td> CSC104H1 </td>
+
+<tr><td> CSC104H1 </td><td>S</td><td>L0101</td><td>TRF9</td><td>WB 116 </td><td>D. Heap</td>
+<tr><td> CSC108H1 </td>
+
+<tr><td> CSC108H1 </td><td>F</td><td>L0101</td><td>MWF9</td><td>BA 1160 </td><td>M. Craig</td>
+<tr><td> CSC108H1 </td><td>F</td><td>L0201</td><td>MWF10</td><td>BA 1160 </td><td>M. Craig</td>
+<tr><td> CSC108H1 </td><td>F</td><td>L0202</td><td>MWF10</td><td>WB 116 </td><td>P. Gries</td>
+<tr><td> CSC108H1 </td><td>F</td><td>L0202</td><td>MWF1</td><td>HS 610 </td><td>J. Campbell</td>
+<tr><td> CSC108H1 </td><td>F</td><td>L5101</td><td>W6-9</td><td>MS 3153 </td><td>P. Gries</td>
+<tr><td> CSC108H1 </td>
+
+<tr><td> CSC108H1 </td><td>S</td><td>L0101</td><td>MWF9</td><td>BA 1160 </td><td>J. Campbell</td>
+<tr><td> CSC108H1 </td><td>S</td><td>L0201</td><td>MWF10</td><td>BA 1160 </td><td>J. Campbell</td>
+<tr><td> CSC108H1 </td><td>S</td><td>L5101</td><td>W6-9</td><td>MS 3154 </td><td>Tba</td>
+<tr><td> CSC120H1 </td>
+
+<tr><td> CSC120H1 </td><td>S</td><td>L5101</td><td>R7-9</td><td>BA 1180 </td><td>Tba</td>
+<tr><td> CSC148H1 </td>
+
+<tr><td> CSC148H1 </td><td>F</td><td>L0101</td><td>MW9</td><td>BA 1180 </td><td>D. Heap</td>
+<tr><td> CSC148H1 </td><td>F</td><td>L0201</td><td>MW10</td><td>BA 1180 </td><td>D. Heap</td>
+<tr><td> CSC148H1 </td>
+
+<tr><td> CSC148H1 </td><td>S</td><td>L0101</td><td>MW9</td><td>WB 116 </td><td>D. Heap</td>
+<tr><td> CSC148H1 </td><td>S</td><td>L0201</td><td>MW10</td><td>WB 116 </td><td>M. Craig</td>
+<tr><td> CSC148H1 </td><td>S</td><td>L5101</td><td>W6-8</td><td>MS 3153 </td><td>G. Baumgartner</td>
+<tr><td> CSC165H1 </td>
+
+<tr><td> CSC165H1 </td><td>F</td><td>L0101</td><td>MWF12</td><td>MP 203 </td><td>T. Fairgrieve</td>
+<tr><td> CSC165H1 </td><td>F</td><td>L0101</td><td>M7-9</td><td>SF 1105 </td><td>T. Fairgrieve</td>
+<tr><td> CSC165H1 </td><td>F</td><td>L5101</td><td>T6-9</td><td>SF 1105 </td><td>T. Fairgrieve</td>
+<tr><td> CSC165H1 </td><td>F</td><td>L5101</td><td>R7-9</td><td>SF 1105 </td><td>T. Fairgrieve</td>
+<tr><td> CSC165H1 </td>
+
+<tr><td> CSC165H1 </td><td>S</td><td>L0101</td><td>MWF11</td><td>MP 103 </td><td>T. Fairgrieve</td>
+<tr><td> CSC165H1 </td><td>S</td><td>L0101</td><td>T2-4</td><td>MP 203 </td><td>T. Fairgrieve</td>
+<tr><td> CSC165H1 </td><td>S</td><td>L0201</td><td>MWF3</td><td>BA 1170 </td><td>T. Fairgrieve</td>
+<tr><td> CSC165H1 </td><td>S</td><td>L0201</td><td>R2-4</td><td>MP 103 </td><td>T. Fairgrieve</td>
+<tr><td> CSC207H1 </td>
+
+<tr><td> CSC207H1 </td><td>F</td><td>L0101</td><td>WF12</td><td>HS 610 </td><td>J. Campbell</td>
+<tr><td> CSC207H1 </td><td>F</td><td>L5101</td><td>W6-8</td><td>BA 1130 </td><td>J. Campbell</td>
+<tr><td> CSC207H1 </td>
+
+<tr><td> CSC207H1 </td><td>S</td><td>L0101</td><td>WF1</td><td>BA 1130 </td><td>Tba</td>
+<tr><td> CSC209H1 </td>
+
+<tr><td> CSC209H1 </td><td>F</td><td>L0101</td><td>MTR1</td><td>LM 161 </td><td>A. Rosenthal</td>
+<tr><td> CSC209H1 </td>
+
+<tr><td> CSC209H1 </td><td>S</td><td>L0101</td><td>MW</td><td>MP 203</td><td>K. Reid</td>
+<tr><td> CSC209H1 </td><td>F</td><td>L5101</td><td>T6</td><td>SF 1101 </td><td>K. Reid</td>
+<tr><td> CSC209H1 </td><td>F</td><td>L5101</td><td>T7-9</td><td>SF 1101 </td><td>K. Reid</td>
+<tr><td> CSC236H1 </td>
+
+<tr><td> CSC236H1 </td><td>F</td><td>L0101</td><td>M11</td><td>SS 2102 </td><td>A. Farzan</td>
+<tr><td> CSC236H1 </td><td>F</td><td>L0101</td><td>WF11</td><td>SS 2135 </td><td>A. Farzan</td>
+<tr><td> CSC236H1 </td><td>F</td><td>L2503</td><td>R6</td><td>BA 1180 </td><td>A. Farzan</td>
+<tr><td> CSC236H1 </td><td>F</td><td>L2503</td><td>R7-9</td><td>BA 1180 </td><td>A. Farzan</td>
+<tr><td> CSC236H1 </td><td>F</td><td>L5101</td><td>R6</td><td>BA 1180 </td><td>A. Farzan</td>
+<tr><td> CSC236H1 </td><td>F</td><td>L5101</td><td>R7-9</td><td>BA 1180 </td><td>A. Farzan</td>
+<tr><td> CSC236H1 </td>
+
+<tr><td> CSC236H1 </td><td>S</td><td>L0101</td><td>TR4</td><td>LM 159</td><td>Tba</td>
+<tr><td> CSC236H1 </td><td>S</td><td>L0101</td><td>R5</td><td>LM 159</td><td>Tba</td>
+<tr><td> CSC236H1 </td><td>S</td><td>L0201</td><td>TR1</td><td>GB 120 </td><td>Tba</td>
+<tr><td> CSC236H1 </td><td>S</td><td>L0201</td><td>R11</td><td>GB 120 </td><td>Tba</td>
+<tr><td> CSC236H1 </td><td>S</td><td>L2003</td><td>TR4</td><td>LM 159</td><td>Tba</td>
+<tr><td> CSC236H1 </td><td>S</td><td>L2003</td><td>R5</td><td>LM 159</td><td>Tba</td>
+<tr><td> CSC240H1 </td>
+
+<tr><td> CSC240H1 </td><td>S</td><td>L0101</td><td>MWF11</td><td>RW 110 </td><td>Tba</td>
+<tr><td> CSC258H1 </td>
+
+<tr><td> CSC258H1 </td><td>F</td><td>L5101</td><td>T6-9</td><td>BA 1170 </td><td>S. Engels</td>
+<tr><td> CSC258H1 </td><td>F</td><td>L5101</td><td>R6-9</td><td>BA 3165 </td><td>S. Engels</td>
+<tr><td> CSC258H1 </td>
+
+<tr><td> CSC258H1 </td><td>S</td><td>L0101</td><td>MWF11</td><td>LM 162 </td><td>S. Engels</td>
+<tr><td> CSC258H1 </td><td>S</td><td>L0101</td><td>T3-6</td><td>BA 3165 </td><td>S. Engels</td>
+<tr><td> CSC258H1 </td><td>S</td><td>L5101</td><td>M6-9</td><td>BA 3165 </td><td>S. Engels</td>
+<tr><td> CSC258H1 </td><td>S</td><td>L5101</td><td>T6-9</td><td>BA 1160 </td><td>S. Engels</td>
+<tr><td> CSC263H1 </td>
+
+<tr><td> CSC263H1 </td><td>F</td><td>L0101</td><td>T10</td><td>LM 161 </td><td>T. Pitassi</td>
+<tr><td> CSC263H1 </td><td>F</td><td>L0101</td><td>T10</td><td>LM 161 </td><td>T. Pitassi</td>
+<tr><td> CSC263H1 </td><td>F</td><td>L2003</td><td>T10</td><td>LM 161 </td><td>T. Pitassi</td>
+<tr><td> CSC263H1 </td><td>F</td><td>L2003</td><td>R</td><td>LM 161 </td><td>T. Pitassi</td>
+<tr><td> CSC263H1 </td>
+
+<tr><td> CSC263H1 </td><td>S</td><td>L0101</td><td>MWF3</td><td>BA 1130 </td><td>S. Toueg</td>
+<tr><td> CSC263H1 </td><td>S</td><td>L2503</td><td>R6-8</td><td>BA 1160 </td><td>S. Toueg</td>
+<tr><td> CSC263H1 </td><td>S</td><td>L2503</td><td>R8</td><td>BA 1160 </td><td>S. Toueg</td>
+<tr><td> CSC263H1 </td><td>S</td><td>L5101</td><td>R6-8</td><td>BA 1160 </td><td>S. Toueg</td>
+<tr><td> CSC263H1 </td><td>S</td><td>L5101</td><td>R8</td><td>BA 1160 </td><td>S. Toueg</td>
+<tr><td> CSC265H1 </td>
+
+<tr><td> CSC265H1 </td><td>F</td><td>L0101</td><td>R8</td><td>BA 3116 </td><td>T. Pitassi</td>
+<tr><td> CSC265H1 </td><td>F</td><td>L0101</td><td>R11</td><td>BA 3116 </td><td>T. Pitassi</td>
+<tr><td> CSC290H1 </td>
+
+<tr><td> CSC290H1 </td><td>F</td><td>L0101</td><td>TBA</td><td>BA 3116 </td><td>R. Baecker</td>
+<tr><td> CSC300H1 </td>
+
+<tr><td> CSC300H1 </td><td>S</td><td>L5101</td><td>R6-8</td><td>BA 1190 </td><td>Tba</td>
+<tr><td> CSC300H1 </td><td>S</td><td>L5101</td><td>R8</td><td>BA 1190 </td><td>Tba</td>
+<tr><td> CSC301H1 </td>
+
+<tr><td> CSC301H1 </td><td>F</td><td>L0101</td><td>TR10</td><td>GB 248 </td><td>S. Sim</td>
+<tr><td> CSC301H1 </td><td>F</td><td>L0101</td><td>R11</td><td>GB 248 </td><td>S. Sim</td>
+<tr><td> CSC301H1 </td>
+
+<tr><td> CSC302H1 </td>
+
+<tr><td> CSC302H1 </td><td>S</td><td>L0101</td><td>TR10</td><td>GB 248 </td><td>M. Medland</td>
+<tr><td> CSC302H1 </td><td>S</td><td>L0101</td><td>R11</td><td>GB 248 </td><td>M. Medland</td>
+<tr><td> CSC309H1 </td>
+
+<tr><td> CSC309H1 </td><td>F</td><td>L0101</td><td>T3</td><td>BA 1180 </td><td>E. De Lara</td>
+<tr><td> CSC309H1 </td><td>F</td><td>L0101</td><td>R3</td><td>BA 1190 </td><td>E. De Lara</td>
+<tr><td> CSC309H1 </td><td>F</td><td>L0101</td><td>R4</td><td>BA 1190 </td><td>E. De Lara</td>
+<tr><td> CSC309H1 </td><td>F</td><td>L2001</td><td>T3</td><td>BA 1180 </td><td>E. De Lara</td>
+<tr><td> CSC309H1 </td><td>F</td><td>L2001</td><td>R3</td><td>BA 1190 </td><td>E. De Lara</td>
+<tr><td> CSC309H1 </td><td>F</td><td>L2001</td><td>R4</td><td>BA 1190 </td><td>E. De Lara</td>
+<tr><td> CSC309H1 </td>
+
+<tr><td> CSC309H1 </td><td>S</td><td>L0101</td><td>MWF10</td><td>LM 162 </td><td>E. De Lara</td>
+<tr><td> CSC309H1 </td><td>S</td><td>L2001</td><td>MWF10</td><td>LM 162 </td><td>E. De Lara</td>
+<tr><td> CSC310H1 </td>
+
+<tr><td> CSC318H1 </td>
+
+<tr><td> CSC318H1 </td><td>F</td><td>L2501</td><td>M6</td><td>BA 1200 </td><td>O. St-Cyr</td>
+<tr><td> CSC318H1 </td><td>F</td><td>L2501</td><td>M7-9</td><td>BA 1200 </td><td>O. St-Cyr</td>
+<tr><td> CSC318H1 </td><td>F</td><td>L5101</td><td>M6</td><td>BA 1190 </td><td>O. St-Cyr</td>
+<tr><td> CSC318H1 </td><td>F</td><td>L5101</td><td>M7-9</td><td>BA 1190 </td><td>O. St-Cyr</td>
+<tr><td> CSC318H1 </td>
+
+<tr><td> CSC318H1 </td><td>S</td><td>L0101</td><td>T4-6</td><td>BA 1210 </td><td>O. St-Cyr</td>
+<tr><td> CSC318H1 </td><td>S</td><td>L0101</td><td>T6</td><td>BA 1210 </td><td>O. St-Cyr</td>
+<tr><td> CSC318H1 </td><td>S</td><td>L2001</td><td>T4-6</td><td>BA 1210 </td><td>O. St-Cyr</td>
+<tr><td> CSC318H1 </td><td>S</td><td>L2001</td><td>T6</td><td>BA 1210 </td><td>O. St-Cyr</td>
+<tr><td> CSC320H1 </td>
+
+<tr><td> CSC320H1 </td><td>S</td><td>L2501</td><td>W6-9</td><td>BA 1190 </td><td>Tba</td>
+<tr><td> CSC320H1 </td><td>S</td><td>L5101</td><td>W6-9</td><td>BA 1190 </td><td>Tba</td>
+<tr><td> CSC321H1 </td>
+
+<tr><td> CSC321H1 </td><td>S</td><td>L0101</td><td>TR1</td><td>UC 179 </td><td>Tba</td>
+<tr><td> CSC321H1 </td><td>S</td><td>L0101</td><td>R12</td><td>UC 179 </td><td>Tba</td>
+<tr><td> CSC321H1 </td><td>S</td><td>L2001</td><td>TR1</td><td>UC 179 </td><td>Tba</td>
+<tr><td> CSC321H1 </td><td>S</td><td>L2001</td><td>R12</td><td>UC 179 </td><td>Tba</td>
+<tr><td> CSC324H1 </td>
+
+<tr><td> CSC324H1 </td><td>F</td><td>L5101</td><td>R6</td><td>BA 1190 </td><td>G. Baumgartner</td>
+<tr><td> CSC324H1 </td><td>F</td><td>L5101</td><td>R7-9</td><td>BA 1190 </td><td>G. Baumgartner</td>
+<tr><td> CSC324H1 </td>
+
+<tr><td> CSC324H1 </td><td>S</td><td>L0101</td><td>M2</td><td>KP 108</td><td>G. Baumgartner</td>
+<tr><td> CSC330H1 </td>
+
+<tr><td> CSC336H1 </td>
+
+<tr><td> CSC336H1 </td><td>F</td><td>L0101</td><td>MWF11</td><td>WI 1017 </td><td>K. Jackson</td>
+<tr><td> CSC336H1 </td><td>F</td><td>L2003</td><td>MWF11</td><td>WI 1017 </td><td>K. Jackson</td>
+<tr><td> CSC336H1 </td>
+
+<tr><td> CSC336H1 </td><td>S</td><td>L5101</td><td>M6</td><td>BA 1190 </td><td>C. Christara</td>
+<tr><td> CSC336H1 </td><td>S</td><td>L5101</td><td>M7-9</td><td>BA 1190 </td><td>C. Christara</td>
+<tr><td> CSC343H1 </td>
+
+<tr><td> CSC343H1 </td><td>F</td><td>L0101</td><td>T1-3</td><td>MP 202 </td><td>Tba</td>
+<tr><td> CSC343H1 </td><td>F</td><td>L0101</td><td>R1</td><td>MP 202 </td><td>Tba</td>
+<tr><td> CSC343H1 </td><td>F</td><td>L0201</td><td>W1-3</td><td>BA 1190 </td><td>Tba</td>
+<tr><td> CSC343H1 </td><td>F</td><td>L0201</td><td>F1</td><td>BA 1190 </td><td>Tba</td>
+<tr><td> CSC343H1 </td><td>F</td><td>L2001</td><td>T1-3</td><td>MP 202 </td><td>Tba</td>
+<tr><td> CSC343H1 </td><td>F</td><td>L2001</td><td>R1</td><td>MP 202 </td><td>Tba</td>
+<tr><td> CSC343H1 </td><td>F</td><td>L2003</td><td>W1-3</td><td>BA 1190 </td><td>Tba</td>
+<tr><td> CSC343H1 </td><td>F</td><td>L2003</td><td>F1</td><td>BA 1190 </td><td>Tba</td>
+<tr><td> CSC343H1 </td>
+
+<tr><td> CSC343H1 </td><td>S</td><td>L0101</td><td>MWF12</td><td>MP 102 </td><td>Tba</td>
+<tr><td> CSC343H1 </td><td>S</td><td>L2001</td><td>MWF12</td><td>MP 102 </td><td>Tba</td>
+<tr><td> CSC343H1 </td><td>S</td><td>L2501</td><td>T6-8</td><td>BA 1130 </td><td>Tba</td>
+<tr><td> CSC343H1 </td><td>S</td><td>L2501</td><td>T8</td><td>BA 1130 </td><td>Tba</td>
+<tr><td> CSC343H1 </td><td>S</td><td>L2505</td><td>T6-8</td><td>BA 1130 </td><td>Tba</td>
+<tr><td> CSC343H1 </td><td>S</td><td>L2505</td><td>T8</td><td>BA 1130 </td><td>Tba</td>
+<tr><td> CSC343H1 </td><td>S</td><td>L5101</td><td>T6-8</td><td>BA 1130 </td><td>Tba</td>
+<tr><td> CSC343H1 </td><td>S</td><td>L5101</td><td>T8</td><td>BA 1130 </td><td>Tba</td>
+<tr><td> CSC350H1 </td>
+
+<tr><td> CSC350H1 </td><td>F</td><td>L0101</td><td>T1-3</td><td>BA 1130 </td><td>C. Christara</td>
+<tr><td> CSC350H1 </td><td>F</td><td>L0101</td><td>R1</td><td>BA 1130 </td><td>C. Christara</td>
+<tr><td> CSC358H1 </td>
+
+<tr><td> CSC358H1 </td><td>S</td><td>L0101</td><td>M10</td><td>SS 2102 </td><td>P. Marbach</td>
+<tr><td> CSC358H1 </td><td>S</td><td>L0101</td><td>R3-5</td><td>SS 2102 </td><td>P. Marbach</td>
+<tr><td> CSC369H1 </td>
+
+<tr><td> CSC369H1 </td><td>F</td><td>L0101</td><td>MWR12</td><td>BA 1170 </td><td>A. Demke Brown</td>
+<tr><td> CSC369H1 </td>
+
+<tr><td> CSC369H1 </td><td>S</td><td>L0101</td><td>M3</td><td>RW 110 </td><td>K. Reid</td>
+<tr><td> CSC369H1 </td><td>S</td><td>L0101</td><td>TR2</td><td>RW 110 </td><td>K. Reid</td>
+<tr><td> CSC369H1 </td><td>S</td><td>L2003</td><td>M3</td><td>RW 110 </td><td>K. Reid</td>
+<tr><td> CSC369H1 </td><td>S</td><td>L2003</td><td>TR2</td><td>RW 110 </td><td>K. Reid</td>
+<tr><td> CSC372H1 </td>
+
+<tr><td> CSC372H1 </td><td>F</td><td>L0101</td><td>MWF1</td><td>BA 1240 </td><td>P. Anderson</td>
+<tr><td> CSC372H1 </td><td>F</td><td>L0101</td><td>T3-6</td><td>BA 3165 </td><td>P. Anderson</td>
+<tr><td> CSC373H1 </td>
+
+<tr><td> CSC373H1 </td><td>F</td><td>L0101</td><td>MWF10</td><td>MP 203 </td><td>Tba</td>
+<tr><td> CSC373H1 </td><td>F</td><td>L0101</td><td>R2</td><td>MP 202 </td><td>Tba</td>
+<tr><td> CSC373H1 </td>
+
+<tr><td> CSC373H1 </td><td>S</td><td>L0101</td><td>MWF11</td><td>WI 1016 </td><td>Tba</td>
+<tr><td> CSC373H1 </td><td>S</td><td>L0101</td><td>M4</td><td>WI 1016 </td><td>Tba</td>
+<tr><td> CSC373H1 </td><td>S</td><td>L2003</td><td>MWF11</td><td>WI 1016 </td><td>Tba</td>
+<tr><td> CSC373H1 </td><td>S</td><td>L2003</td><td>M4</td><td>WI 1016 </td><td>Tba</td>
+<tr><td> CSC384H1 </td>
+
+<tr><td> CSC384H1 </td><td>F</td><td>L0101</td><td>T1</td><td>SS 1073 </td><td>F. Bacchus</td>
+<tr><td> CSC384H1 </td><td>F</td><td>L0101</td><td>R1</td><td>SS 2102 </td><td>F. Bacchus</td>
+<tr><td> CSC384H1 </td><td>F</td><td>L0101</td><td>R2</td><td>SS 2102 </td><td>F. Bacchus</td>
+<tr><td> CSC384H1 </td><td>F</td><td>L2001</td><td>T1</td><td>SS 1073 </td><td>F. Bacchus</td>
+<tr><td> CSC384H1 </td><td>F</td><td>L2001</td><td>R1</td><td>SS 2102 </td><td>F. Bacchus</td>
+<tr><td> CSC384H1 </td><td>F</td><td>L2001</td><td>R2</td><td>SS 2102 </td><td>F. Bacchus</td>
+<tr><td> CSC384H1 </td><td>F</td><td>L2003</td><td>T1</td><td>SS 1073 </td><td>F. Bacchus</td>
+<tr><td> CSC384H1 </td><td>F</td><td>L2003</td><td>R1</td><td>SS 2102 </td><td>F. Bacchus</td>
+<tr><td> CSC384H1 </td><td>F</td><td>L2003</td><td>R2</td><td>SS 2102 </td><td>F. Bacchus</td>
+<tr><td> CSC384H1 </td><td>F</td><td>L2005</td><td>T1</td><td>SS 1073 </td><td>F. Bacchus</td>
+<tr><td> CSC384H1 </td><td>F</td><td>L2005</td><td>R1</td><td>SS 2102 </td><td>F. Bacchus</td>
+<tr><td> CSC384H1 </td><td>F</td><td>L2005</td><td>R2</td><td>SS 2102 </td><td>F. Bacchus</td>
+<tr><td> CSC384H1 </td>
+
+<tr><td> CSC384H1 </td><td>S</td><td>L0101</td><td>MF1</td><td>WB 116</td><td>S. McIlraith</td>
+<tr><td> CSC384H1 </td><td>S</td><td>L2001</td><td>MF1</td><td>WB 116</td><td>S. McIlraith</td>
+<tr><td> CSC384H1 </td><td>S</td><td>L2003</td><td>MF1</td><td>WB 116</td><td>S. McIlraith</td>
+<tr><td> CSC384H1 </td><td>S</td><td>L2005</td><td>MF1</td><td>WB 116</td><td>S. McIlraith</td>
+<tr><td> CSC401H1 </td>
+
+<tr><td> CSC401H1 </td><td>S</td><td>L0101</td><td>MWF10</td><td>RW 110 </td><td>F. Rudzicz</td>
+<tr><td> CSC401H1 </td><td>S</td><td>L2001</td><td>MWF10</td><td>RW 110 </td><td>F. Rudzicz</td>
+<tr><td> CSC401H1 </td><td>S</td><td>L2005</td><td>MWF10</td><td>RW 110 </td><td>F. Rudzicz</td>
+<tr><td> CSC404H1 </td>
+
+<tr><td> CSC404H1 </td><td>S</td><td>L0101</td><td>T10</td><td>BA 2145 </td><td>S. Engels</td>
+<tr><td> CSC404H1 </td><td>S</td><td>L0101</td><td>T10</td><td>BA 2145 </td><td>S. Engels</td>
+<tr><td> CSC410H1 </td>
+
+<tr><td> CSC410H1 </td><td>S</td><td>L0101</td><td>M12</td><td>BA 1200 </td><td>Tba</td>
+<tr><td> CSC410H1 </td><td>S</td><td>L0101</td><td>M12</td><td>BA 1200 </td><td>Tba</td>
+<tr><td> CSC411H1 </td>
+
+<tr><td> CSC411H1 </td><td>F</td><td>L0101</td><td>MWF3</td><td>BA 1190 </td><td>R. Zemel</td>
+<tr><td> CSC411H1 </td><td>F</td><td>L2001</td><td>MWF3</td><td>BA 1190 </td><td>R. Zemel</td>
+<tr><td> CSC418H1 </td>
+
+<tr><td> CSC418H1 </td><td>F</td><td>L2501</td><td>W6</td><td>BA 1170 </td><td>L. Moore</td>
+<tr><td> CSC418H1 </td><td>F</td><td>L2501</td><td>W7-9</td><td>BA 1170 </td><td>L. Moore</td>
+<tr><td> CSC418H1 </td><td>F</td><td>L2505</td><td>W6</td><td>BA 1170 </td><td>L. Moore</td>
+<tr><td> CSC418H1 </td><td>F</td><td>L2505</td><td>W7-9</td><td>BA 1170 </td><td>L. Moore</td>
+<tr><td> CSC418H1 </td><td>F</td><td>L5101</td><td>W6</td><td>BA 1170 </td><td>L. Moore</td>
+<tr><td> CSC418H1 </td><td>F</td><td>L5101</td><td>W7-9</td><td>BA 1170 </td><td>L. Moore</td>
+<tr><td> CSC418H1 </td>
+
+<tr><td> CSC418H1 </td><td>S</td><td>L0101</td><td>M3</td><td>BA 1190 </td><td>Tba</td>
+<tr><td> CSC418H1 </td><td>S</td><td>L0101</td><td>W3-5</td><td>BA 1190 </td><td>Tba</td>
+<tr><td> CSC418H1 </td><td>S</td><td>L2001</td><td>M3</td><td>BA 1190 </td><td>Tba</td>
+<tr><td> CSC418H1 </td><td>S</td><td>L2001</td><td>W3-5</td><td>BA 1190 </td><td>Tba</td>
+<tr><td> CSC418H1 </td><td>S</td><td>L2003</td><td>M3</td><td>BA 1190 </td><td>Tba</td>
+<tr><td> CSC418H1 </td><td>S</td><td>L2003</td><td>W3-5</td><td>BA 1190 </td><td>Tba</td>
+<tr><td> CSC418H1 </td><td>S</td><td>L2005</td><td>M3</td><td>BA 1190 </td><td>Tba</td>
+<tr><td> CSC418H1 </td><td>S</td><td>L2005</td><td>W3-5</td><td>BA 1190 </td><td>Tba</td>
+<tr><td> CSC428H1 </td>
+
+<tr><td> CSC428H1 </td><td>S</td><td>L2501</td><td>M6-8</td><td>BA 1230 </td><td>Tba</td>
+<tr><td> CSC428H1 </td><td>S</td><td>L2501</td><td>M8</td><td>BA 1230 </td><td>Tba</td>
+<tr><td> CSC428H1 </td><td>S</td><td>L2505</td><td>M6-8</td><td>BA 1230 </td><td>Tba</td>
+<tr><td> CSC428H1 </td><td>S</td><td>L2505</td><td>M8</td><td>BA 1230 </td><td>Tba</td>
+<tr><td> CSC428H1 </td><td>S</td><td>L5101</td><td>M6-8</td><td>BA 1230 </td><td>Tba</td>
+<tr><td> CSC428H1 </td><td>S</td><td>L5101</td><td>M8</td><td>BA 1230 </td><td>Tba</td>
+<tr><td> CSC438H1 </td>
+
+<tr><td> CSC438H1 </td>
+
+<tr><td> CSC438H1 </td><td>S</td><td>L0101</td><td>MWF2</td><td>BA 1220 </td><td>S. Cook</td>
+<tr><td> CSC438H1 </td><td>S</td><td>L2003</td><td>MWF2</td><td>BA 1220 </td><td>S. Cook</td>
+<tr><td> CSC443H1 </td>
+
+<tr><td> CSC443H1 </td><td>S</td><td>L0101</td><td>T3-5</td><td>BA 1220 </td><td>R. Miller</td>
+<tr><td> CSC443H1 </td><td>S</td><td>L0101</td><td>T5</td><td>BA 1220 </td><td>R. Miller</td>
+<tr><td> CSC443H1 </td><td>S</td><td>L2001</td><td>T3-5</td><td>BA 1220 </td><td>R. Miller</td>
+<tr><td> CSC443H1 </td><td>S</td><td>L2001</td><td>T5</td><td>BA 1220 </td><td>R. Miller</td>
+<tr><td> CSC454H1 </td>
+
+<tr><td> CSC454H1 </td><td>F</td><td>L2503</td><td>W6-8</td><td>BA 1190 </td><td>A. Wytenburg</td>
+<tr><td> CSC454H1 </td><td>F</td><td>L2503</td><td>W8</td><td>BA 1190 </td><td>A. Wytenburg</td>
+<tr><td> CSC454H1 </td><td>F</td><td>L2505</td><td>W6-8</td><td>BA 1190 </td><td>A. Wytenburg</td>
+<tr><td> CSC454H1 </td><td>F</td><td>L2505</td><td>W8</td><td>BA 1190 </td><td>A. Wytenburg</td>
+<tr><td> CSC454H1 </td><td>F</td><td>L5101</td><td>W6-8</td><td>BA 1190 </td><td>A. Wytenburg</td>
+<tr><td> CSC454H1 </td><td>F</td><td>L5101</td><td>W8</td><td>BA 1190 </td><td>A. Wytenburg</td>
+<tr><td> CSC456H1 </td>
+
+<tr><td> CSC456H1 </td><td>F</td><td>L0101</td><td>M1-3</td><td>BA 3012 </td><td>C. Christara</td>
+<tr><td> CSC456H1 </td><td>F</td><td>L0101</td><td>W1</td><td>BA 3012 </td><td>C. Christara</td>
+<tr><td> CSC458H1 </td>
+
+<tr><td> CSC458H1 </td><td>F</td><td>L0101</td><td>T1-3</td><td>GB 220</td><td>J. Lim</td>
+<tr><td> CSC458H1 </td><td>F</td><td>L0101</td><td>F1</td><td>BA 1180 </td><td>J. Lim</td>
+<tr><td> CSC458H1 </td><td>F</td><td>L2003</td><td>T1-3</td><td>GB 220</td><td>J. Lim</td>
+<tr><td> CSC458H1 </td><td>F</td><td>L2003</td><td>F1</td><td>BA 1180 </td><td>J. Lim</td>
+<tr><td> CSC458H1 </td><td>F</td><td>L2005</td><td>T1-3</td><td>GB 220</td><td>J. Lim</td>
+<tr><td> CSC458H1 </td><td>F</td><td>L2005</td><td>F1</td><td>BA 1180 </td><td>J. Lim</td>
+<tr><td> CSC463H1 </td>
+
+<tr><td> CSC463H1 </td><td>F</td><td>L0101</td><td>MWF2</td><td>BA 1220 </td><td>S. Cook</td>
+<tr><td> CSC469H1 </td>
+
+<tr><td> CSC469H1 </td><td>F</td><td>L0101</td><td>MWF2</td><td>SS 2106 </td><td>A. Demke Brown</td>
+<tr><td> CSC469H1 </td><td>F</td><td>L0101</td><td>R1</td><td>SS 2108 </td><td>A. Demke Brown</td>
+<tr><td> CSC485H1 </td>
+
+<tr><td> CSC485H1 </td><td>F</td><td>L0101</td><td>W1-3</td><td>LM 161 </td><td>G. Hirst</td>
+<tr><td> CSC485H1 </td><td>F</td><td>L0101</td><td>R4</td><td>BA 1180</td><td>G. Hirst</td>
+<tr><td> CSC486H1 </td>
+
+<tr><td> CSC486H1 </td><td>S</td><td>L0101</td><td>R4</td><td>BA 1200</td><td>V. Belle</td>
+<tr><td> CSC488H1 </td>
+
+<tr><td> CSC488H1 </td><td>S</td><td>L0101</td><td>TR2</td><td>BA 1210 </td><td>Tba</td>
+<tr><td> CSC488H1 </td><td>S</td><td>L0101</td><td>R1</td><td>BA 1210 </td><td>Tba</td>
+<tr><td> CSC488H1 </td><td>S</td><td>L2003</td><td>TR2</td><td>BA 1210 </td><td>Tba</td>
+<tr><td> CSC488H1 </td><td>S</td><td>L2003</td><td>R1</td><td>BA 1210 </td><td>Tba</td>
+<tr><td> CSC488H1 </td><td>S</td><td>L2005</td><td>TR2</td><td>BA 1210 </td><td>Tba</td>
+<tr><td> CSC488H1 </td><td>S</td><td>L2005</td><td>R1</td><td>BA 1210 </td><td>Tba</td>
+<tr><td> CSC490H1 </td>
+
+<tr><td> CSC490H1 </td>
+
+<tr><td> CSC490H1 </td><td>S</td><td>L0101</td><td>R3-5</td><td>RS 208</td><td>K. Singh</td>
+<tr><td> CSC494H1 </td>
+
+<tr><td> CSC494H1 </td><td>F</td><td>L0101</td><td>TBA</td><td>RS 208</td><td>Staff</td>
+<tr><td> CSC494H1 </td>
+
+<tr><td> CSC494H1 </td><td>S</td><td>L0101</td><td>TBA</td><td>RS 208</td><td>Staff</td>
+<tr><td> CSC494H1 </td>
+
+<tr><td> CSC494H1 </td><td>S</td><td>L0101</td><td>TBA</td><td>RS 208</td><td>Staff</td>
+<tr><td> CSC495H1 </td>
+
+<tr><td> CSC495H1 </td><td>F</td><td>L0101</td><td>TBA</td><td>RS 208</td><td>Staff</td>
+<tr><td> CSC495H1 </td>
+
+<tr><td> CSC495H1 </td><td>S</td><td>L0101</td><td>TBA</td><td>RS 208</td><td>Staff</td>
+<tr><td> CSC495H1 </td>
+
+<tr><td> CSC495H1 </td><td>S</td><td>L0101</td><td>TBA</td><td>RS 208</td><td>Staff</td>
+</p></div></table>

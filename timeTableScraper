@@ -12,8 +12,8 @@ htmlData = html.read()
 # The regular expressions for all 6 fields
 course = re.compile('^CSC\d{3}H1$')
 section = re.compile('^[FS]{1}$')
-lecture = re.compile('^[LT](0|5){1}[0152]{1}0{1}')
-time = re.compile('^[MWTRF]{1,3}\d{1}[-]?\d?$|Cancel')
+lecture = re.compile('^[LT](0|2|1|5){1}[0152]{1}0{1}')
+time = re.compile('^[MWTRF]{1,3}\d?[-]?\d?$|Cancel|TBA')
 instructor = re.compile('^\w\.|Tba|Staff')
 location = re.compile('^\w{2} \d{1,4}')
 
@@ -32,26 +32,20 @@ class MyHTMLParser(HTMLParser):
     	if course.match(data):
 	        print('<tr><td>', data, '</td>\n')
 	        self.courseMemory = data
-	        pass
-    	if section.match(data):
+    	elif section.match(data):
 	        self.sectionMemory = data
-	        pass
-    	if lecture.match(data):
+    	elif lecture.match(data):
 	        self.typeMemory = data
-	        pass
-    	if time.match(data):
+    	elif time.match(data):
 	        self.timeMemory = data
-	        pass
-    	if location.match(data):
+    	elif location.match(data):
 	        self.locationMemory = data
-	        pass
-    	if instructor.match(data):
-	        print('<tr><td>',self.courseMemory,'</td><td>'+self.sectionMemory+'</td><td>' + self.typeMemory +'</td><td>', data, '</td><td>'+self.locationMemory+'</td><td>'+data+'</td>')
-	        pass
+    	elif instructor.match(data):
+	        print('<tr><td>',self.courseMemory,'</td><td>'+self.sectionMemory+'</td><td>' + self.typeMemory +'</td><td>' + self.timeMemory+ '</td><td>'+self.locationMemory+'</td><td>'+data+'</td>')
 
 parser = MyHTMLParser(strict=False)
 
-print('<table id=\"timeTable\">')
+print('<table class=\"timeTable\">')
 print('<tr>'
 	+ '<td>Course</td>'
 	+ '<td>Section</td>'
