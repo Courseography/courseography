@@ -12,7 +12,7 @@ htmlData = html.read()
 # The regular expressions for all 6 fields
 course = re.compile('^CSC\d{3}(Y|H)1$')
 section = re.compile('^[FSY]{1}$')
-lecture = re.compile('^([TL]){1}(0|2|1|5){1}[0152]{1}0{1}')
+lecture = re.compile('^([TL]){1}(\d){1}\d{1}0{1}\d{1}$')
 time = re.compile('^[MWTRF]{1,3}\d?[-]?\d?$|Cancel|TBA')
 instructor = re.compile('^\w\.|Tba|Staff')
 location = re.compile('^\w{2} \d{1,4}')
