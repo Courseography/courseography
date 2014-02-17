@@ -7,6 +7,11 @@ div.infoTab {
   overflow-y: auto;
 }
 
+table.timeTable {
+    width: 50%;
+    margin: 0 auto;
+}
+
 .courseCell {
   display: inline-block;
   border: 1px solid black;

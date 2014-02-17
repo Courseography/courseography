@@ -577,8 +577,8 @@ function createHtml(htmlStr) {
 }
 
 function createTimeTable() {
-    var frag = document.createDocumentFragment();
-    /*temp = document.createElement('div');
+     var frag = document.createDocumentFragment();
+     temp = document.createElement('div');
      var xmlreq = new XMLHttpRequest();
      xmlreq.open("GET", "res/timeTable", false);
      xmlreq.send();
@@ -587,7 +587,7 @@ function createTimeTable() {
      console.log(timeTableString);
      while (temp.firstChild) {
         frag.appendChild(temp.firstChild);
-    }*/
+    }
     return frag;
 }
 
