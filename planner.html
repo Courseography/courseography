@@ -714,98 +714,120 @@
   </div>
   
   <div id="post" class="infoTab">
-    <div style="width:100; float: left">
-      <form>
-        <input type="checkbox" name="csc148" disabled>(CSC108 and) CSC148<br/>
-        <input type="checkbox" name="csc165" disabled>CSC165<br/>
-        <input type="checkbox" name="csc207" disabled>CSC207<br/>
-        <input type="checkbox" name="csc209" disabled>CSC209<br/>
-        <input type="checkbox" name="csc236" disabled>CSC236<br/>
-        <input type="checkbox" name="csc258" disabled>CSC258<br/>
-        <input type="checkbox" name="csc263" disabled>CSC263<br/>
-        <input type="checkbox" name="csc269" disabled>CSC369<br/>
-        <input type="checkbox" name="csc273" disabled>CSC373<br/><br/>
-        <input type="checkbox" name="calc1" disabled>(MAT135,136)/137/157<br>
-        <input type="checkbox" name="lin1" disabled>MAT221/223/240<br>
-        <input type="checkbox" name="sta1" disabled>STA247/255/257<br>
+    <div id="postDiv">
+      <div id="reqPost" class="postFormDiv">
+      <h4>1. CSC: ALL of...</h4>
+        <div width="75px" style="padding-left: 0.5em; padding-right: 0.5em; float: left; margin-left: 0px">
+          <input type="checkbox" id="CSC108check" disabled>CSC108<br/>
+          <input type="checkbox" id="CSC148check" disabled>CSC148<br/>
+          <input type="checkbox" id="CSC207check" disabled>CSC207<br/>
+          <input type="checkbox" id="CSC209check" disabled>CSC209<br/>
+          <input type="checkbox" id="CSC258check" disabled>CSC258<br/>
+          <input type="checkbox" id="CSC369check" disabled>CSC369<br/>
+        </div>
+        <div width="75px" style="padding-left: 0.5em; padding-right: 0.5em; float: left; margin-right: 0px">
+          <input type="checkbox" id="CSC165check" disabled>CSC165<br/>
+          <input type="checkbox" id="CSC236check" disabled>CSC236<br/>
+          <input type="checkbox" id="CSC263check" disabled>CSC263<br/>
+          <input type="checkbox" id="CSC373check" disabled>CSC373<br/>
+        </div>
+        
+      </div>
 
-        <form>
+      <div class="postFormDiv">
+        <h4>2. CSC/ECE/BCB 4xx: <br/>At least 1.5 FCEs from...</h4>
+        <div width="50px" style="padding-left: 0.25em; padding-right: 0.25em; float: left; margin-left: 0px">
+          <input type="text" id="4xx1" placeholder="CSC4xx" disabled><br/>
+          <input type="text" id="4xx2" placeholder="CSC4xx" disabled><br/>
+          <input type="text" id="4xx3" placeholder="CSC4xx" disabled><br/>
+        </div>
+        <div width="50px" style="padding-left: 0.25em; padding-right: 0.25em; float: left; margin-right: 0px">
+          <input type="checkbox">BCB410<br/>
+          <input type="checkbox">BCB420<br/>
+          <input type="checkbox">BCB430<br/>
+        </div>
+      </div>
+
+      <div class="postFormDiv">
+        <h4>3. CSC/ECE 300+</p>
+          <div width="50px" style="padding-left: 0.25em; padding-right: 0.25em; float: left; margin-left: 0px">
+            <input type="text" id="CSC1" placeholder="CSC/ECE" disabled><br/>
+            <input type="text" id="CSC2" placeholder="CSC/ECE" disabled><br/>
+            <input type="text" id="CSC3" placeholder="CSC/ECE" disabled><br/>
+            <input type="text" id="CSC4" placeholder="CSC/ECE" disabled><br/>
+          </div>
+          <div width="50px" style="padding-left: 0.25em; padding-right: 0.25em; float: left; margin-right: 0px">
+            <input type="text" id="CSC5" placeholder="CSC/ECE" disabled><br/>
+            <input type="text" id="CSC6" placeholder="CSC/ECE" disabled><br/>
+            <input type="text" id="CSC7" placeholder="CSC/ECE" disabled>
+          </div>
         </div>
 
-        <div style="width:100; float: left; height:100%">
-          <p>At least 1.5 FCEs...</p>
-          <form>
-            <input type="text" name="400a" placeholder="CSC4xx" disabled><br/>
-            <input type="text" name="400b" placeholder="CSC4xx" disabled><br/>
-            <input type="text" name="400c" placeholder="CSC4xx" disabled><br/><br/>
-
-            <select multiple>
-              <option>BCB410</option>
-              <option>BCB420</option>
-              <option>BCB430</option>
-            </select>
+        <div class="postFormDiv">
+          <h4>4. PEY? <input type="checkbox"></h4>
+          <h4>If not, at least one of...</h4>
+          <div width="50px" style="padding-left: 0.25em; padding-right: 0.25em; float: left; margin-left: 0px">
+            <input type="checkbox" id="CSC301check" disabled>CSC301<br/>
+            <input type="checkbox" id="CSC318check" disabled>CSC318<br/>
+            <input type="checkbox" id="CSC404check" disabled>CSC404<br/>
+            <input type="checkbox" id="CSC411check" disabled>CSC411<br/>
+            <input type="checkbox" id="CSC418check" disabled>CSC418<br/>
+            <input type="checkbox" id="CSC420check" disabled>CSC420<br/>
+            <input type="checkbox" id="CSC428check" disabled>CSC428<br/>
+          </div>
+          <div width="50px" style="padding-left: 0.25em; padding-right: 0.25em; float: left; margin-right: 0px">
+            <input type="checkbox" id="CSC454check" disabled>CSC454<br/>
+            <input type="checkbox" id="CSC485check" disabled>CSC485<br/>
+            <input type="checkbox" id="CSC490check" disabled>CSC490<br/>
+            <input type="checkbox" id="CSC491check" disabled>CSC491<br/>
+            <input type="checkbox" id="CSC494check" disabled>CSC494<br/>
+            <input type="checkbox" id="CSC495check" disabled>CSC495<br/>
           </div>
 
-          <div style="width:100; float: left; height:100%">
-            <p>Other CSC courses...</p>
+        </div>
 
-            <form>
-              <input type="text" name="CSCa" placeholder="CSC or ECE" disabled><br/>
-              <input type="text" name="CSCb" placeholder="CSC or ECE" disabled><br/>
-              <input type="text" name="CSCc" placeholder="CSC or ECE" disabled><br/>
-              <input type="text" name="CSCd" placeholder="CSC or ECE" disabled><br/>
-              <input type="text" name="CSCe" placeholder="CSC or ECE" disabled><br/>
-            </form>
 
+        <div class="postFormDiv">
+          <h4>5. MAT/STA: ALL of...</h4>
+          <input type="checkbox" id="Calc1check" disabled>(MAT135,136)/137/157<br>
+          <input type="checkbox" id="Lin1check" disabled>MAT221/223/240<br>
+          <input type="checkbox" id="Sta1check" disabled>STA247/255/257<br>
+        </div>
+
+        <div class="postFormDiv">
+          <h4>6. MAT/STA: <br/> At most 2 FCEs from...</h4>
+
+          <p>MAT: 224, 235, 237, 257, <br/>300+ except 329, 390, 391</p>
+          <p>STA: 249, 261, any 300+</p>
+          <div width="50px" style="padding-left: 0.25em; padding-right: 0.25em; float: left; margin-left: 0px">
+            <input type="text" name="MATa" placeholder="MAT..."><br/>
+            <input type="text" name="MATb" placeholder="MAT..."><br/>
+            <input type="text" name="MATc" placeholder="MAT..."><br/>
+            <input type="text" name="MATd" placeholder="MAT..."><br/>
           </div>
-
-          <div style="width:100; float: left; height:100%">
-            <p>At most 2.0 FCEs...</p>
-
-            <p>MAT224,235,237,257,3xx,4xx except 329, 390, 391</p>
-            <form>
-              <input type="text" name="MATa" placeholder="MAT..."><br/>
-              <input type="text" name="MATb" placeholder="MAT..."><br/>
-              <input type="text" name="MATc" placeholder="MAT..."><br/>
-              <input type="text" name="MATd" placeholder="MAT..."><br/>
-            </form>
-
-            <p>STA248,261,3xx,4xx</p>
-            <form>
-              <input type="text" name="STAa" placeholder="STA..."><br/>
-              <input type="text" name="STAb" placeholder="STA..."><br/>
-              <input type="text" name="STAc" placeholder="STA..."><br/>
-              <input type="text" name="STAd" placeholder="STA..."><br/>
-            </form>
+          <div width="50px" style="padding-left: 0.25em; padding-right: 0.25em; float: left; margin-right: 0px">
+            <input type="text" name="STAa" placeholder="STA..."><br/>
+            <input type="text" name="STAb" placeholder="STA..."><br/>
+            <input type="text" name="STAc" placeholder="STA..."><br/>
+            <input type="text" name="STAd" placeholder="STA..."><br/>
           </div>
+        </div>
 
-          <div style="width:20%; float: left; height:100%">
-            <form>
-              <p>At least one of...</p>
-              <input type="checkbox" name="PEY">PEY<br/>
-              <input type="checkbox" disabled>CSC301H1<br/>
-              <input type="checkbox" disabled>CSC318H1<br/>
-              <input type="checkbox" disabled>CSC404H1<br/>
-              <input type="checkbox" disabled>CSC411H1<br/>
-              <input type="checkbox" disabled>CSC418H1<br/>
-              <input type="checkbox" disabled>CSC420H1<br/>
-              <input type="checkbox" disabled>CSC428H1<br/>
-              <input type="checkbox" disabled>CSC454H1<br/>
-              <input type="checkbox" disabled>CSC485H1<br/>
-              <input type="checkbox" disabled>CSC490H1<br/>
-              <input type="checkbox" disabled>CSC491H1<br/>
-              <input type="checkbox" disabled>CSC494H1<br/>
-              <input type="checkbox" disabled>CSC495H1<br/>
-            </form>
-
-          </div>
+        <div class="postFormDiv" width="100px">
+        <h4>FCE Total</h4>
+        <p>Required (1, 5) &ndash; <span id="reqTotal">0</span>/14 FCEs</p>
+        <p>Elective (2, 3, 6) &ndash; <span id="elecTotal">0</span>/10 FCEs</p>
+        <p>Total &ndash; <span id="postTotal">0</span>/24 FCEs</p>
         </div>
 
       </div>
-      <script>
-        $(".infoTabs").tabs();
-        $(".focusTabs").tabs({active: false, collapsible: true});
-      </script>
-      <script src="util.js"></script>
-    </body>
-    </html>
+    </div>
+  </div>
+
+  <script>
+    $(".infoTabs").tabs();
+    $(".focusTabs").tabs({active: false, collapsible: true});
+  </script>
+  <script src="util.js"></script>
+</body>
+</html>

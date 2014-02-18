@@ -144,6 +144,7 @@ function Node(parents, type, name) {
             this.active = !this.active;
 
             this.updateClickedCourses();
+            updatePOSt(this.name, this.active);
 
             if (this.name == "CSC454") {
                 this.takeable = FCEs300 + FCEs400 >= 2.5;
@@ -256,6 +257,8 @@ function Node(parents, type, name) {
                     $("#" + id).attr("data-active", "inactive");
                 }
             }
+
+            updatePOSt(this.name, this.active);
 
             return this.active;
 
@@ -619,3 +622,84 @@ $(document).ready(function() {
         window[id].updateSVG();
     }
 });
+
+
+var CSCreqs = ["CSC108", "CSC148", "CSC165", "CSC207", "CSC209", "CSC236", "CSC258", "CSC263", "CSC369", "CSC373", "Calc1", "Lin1", "Sta1"];
+var CSCinq =  ["CSC301", "CSC318", "CSC404", "CSC411", "CSC418", "CSC420", "CSC428", "CSC454", "CSC485", "CSC490", "CSC491", "CSC494", "CSC495"];
+var active400s = [];
+var active300s = [];
+
+var reqtotal = 0;
+var electotal = 0;
+var posttotal = 0;
+
+function updatePOSt(course, active) {
+    if (CSCreqs.indexOf(course) > -1) {
+        $('#' + course + 'check').prop('checked', active);
+    } else if (course.substr(0,4) == "CSC4" || course.substr(0,4) == "ECE4") {
+        if (active && active400s.indexOf(course) == -1) {
+            active400s.push(course);
+            if (active400s.length <= 3) {
+                $('#4xx' + active400s.length).attr('value', course);
+                electotal += 1;
+            }
+        } else if (!active) {
+            var ind = active400s.indexOf(course);
+            if (ind > -1) {
+                active400s.splice(ind, 1);
+                if (ind < 3) {
+                    
+                }
+                if (active400s.length < 3) {
+                    electotal -= 1;
+                }
+            }
+        }
+
+
+    } else if (course.substr(0,4) == "CSC3" || course.substr(0,4) == "ECE3") {
+        if (active && active300s.indexOf(course) == -1) {
+            active300s.push(course);
+        } else if (!active) {
+            var ind = active300s.indexOf(course);
+            if (ind > -1) {
+                active300s.splice(ind, 1);
+            }
+        }
+    }
+
+    for (var i = 0; i < active300s.length && i < 7; i++) {
+        $('#CSC' + (i+1)).attr('value', active300s[i]);
+    }
+
+    for (var i = active300s.length; 
+        i - active300s.length + 3 < active400s.length 
+        && i < 7; i++) {
+        $('#CSC' + (i+1)).attr('value', active400s[i+3]);
+    }
+
+    for (var i = active300s.length + Math.max(active400s.length - 3, 0);
+        i < 7; i++) {
+        $('#CSC' + (i+1)).attr('value', '');
+    }
+
+    console.log(active300s);
+
+    for (var i = ind; i < 3; i++) {
+        if (i < active400s.length) {
+            $('#4xx' + (i+1)).attr('value', active400s[i]);    
+        } else {
+            $('#4xx' + (i+1)).attr('value', '');
+        }
+    }
+
+    reqtotal = $('#reqPost input:checkbox:checked').length;
+
+    $('#reqTotal').html(reqtotal);
+    $('#elecTotal').html(electotal);
+    $('#postTotal').html((reqtotal + electotal));
+
+    if (CSCinq.indexOf(course) > -1) {
+        $('#' + course + 'check').prop('checked', active);
+    }
+};
