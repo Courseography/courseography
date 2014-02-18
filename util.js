@@ -377,7 +377,7 @@ makeNode([], "AND", "CSC120");
 makeNode([CSC108], "AND", "CSC148");
 makeNode([], "AND", "CSC165");
 makeHybrid([CSC165, Calc1], "OR", "hybrid16");
-makeHybrid([Calc1, Lin1], "OR", "bool5");
+makeHybrid([Calc1, Lin1], "AND", "bool5");
 
 // Second year courses
 
@@ -524,7 +524,7 @@ makeEdge(Sta2, CSC428, "p56");
 makeEdge(Sta1, Sta2, "p57");
 makeEdge(CSC411, CSC412, "p58");
 makeEdge(hybrid9, CSC301, "p59");
-makeEdge(hybrid10, ECE489, "p60");
+makeEdge(hybrid11, ECE489, "p60"); // Bug
 makeEdge(bool2, CSC372, "p61");
 makeEdge(hybrid11, CSC456, "p62");
 makeEdge(hybrid11, CSC428, "p63");
