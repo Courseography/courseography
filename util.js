@@ -524,11 +524,11 @@ makeEdge(CSC463, bool3, "p45");
 makeEdge(CSC373, bool3, "p46");
 makeEdge(bool3, CSC438, "p47");
 makeEdge(bool3, CSC486, "p48");
-makeEdge(hybrid6, CSC263, "p49");
-makeEdge(hybrid7, CSC384, "p50");
-makeEdge(hybrid7, CSC401, "p51");
-makeEdge(hybrid7, CSC485, "p52");
-makeEdge(hybrid8, CSC411, "p54");
+makeEdge(Sta1, CSC263, "p49");
+makeEdge(Sta1, CSC384, "p50");
+makeEdge(Sta1, CSC401, "p51");
+makeEdge(Sta1, CSC485, "p52");
+makeEdge(Sta2, CSC411, "p54");
 makeEdge(Calc1, Sta1, "p55");
 makeEdge(Sta2, CSC428, "p56");
 makeEdge(Sta1, Sta2, "p57");
@@ -541,12 +541,12 @@ makeEdge(hybrid11, CSC428, "p63");
 makeEdge(hybrid11, CSC320, "p64");
 makeEdge(hybrid11, CSC418, "p65");
 makeEdge(hybrid12, bool4, "p66");
-makeEdge(hybrid13, bool4, "p67");
+makeEdge(Sta1, bool4, "p67");
 makeEdge(bool4, CSC321, "p68");
 makeEdge(bool4, CSC310, "p69");
-makeEdge(hybrid13, CSC310, "p70");
+makeEdge(CSC148, CSC310, "p70");
 makeEdge(hybrid14, CSC343, "p71");
-makeEdge(hybrid15, CSC420, "p72");
+makeEdge(CSC263, CSC420, "p72");
 makeEdge(hybrid16, CSC343, "p73");
 makeEdge(Lin1, bool5, "p74");
 makeEdge(Calc1, bool5, "p75");
@@ -558,24 +558,24 @@ makeEdge(CSC258, CSC488, "p79");
 
 
 function hoverFocus() {
-    var id = $(event.target).parent().attr("id");
-    window[id].focus();
+    // var id = $(event.target).parent().attr("id");
+    // window[id].focus();
 
-    window.mytimeout = setTimeout(function() {
-        // Get data from course calendar
-        var xmlreq = new XMLHttpRequest();
-        xmlreq.open("GET", "res/calendar.txt", false);
-        xmlreq.send();
+    // window.mytimeout = setTimeout(function() {
+    //     // Get data from course calendar
+    //     var xmlreq = new XMLHttpRequest();
+    //     xmlreq.open("GET", "res/calendar.txt", false);
+    //     xmlreq.send();
 
-        var patt1 = new RegExp("\n" + id + ".*\n.*\n", "im");
-        var courseString = xmlreq.responseText.match(patt1)[0].split("\n");
-        console.log(courseString);
-        var htmlCourseString = "";
-        for (var i = 0; i < courseString.length; i++) {
-            htmlCourseString += "<p>" + courseString[i] + "</p>";
-            $("#calendar").html(htmlCourseString);
-        }
-    }, 500);
+    //     var patt1 = new RegExp("\n" + id + ".*\n.*\n", "im");
+    //     var courseString = xmlreq.responseText.match(patt1)[0].split("\n");
+    //     console.log(courseString);
+    //     var htmlCourseString = "";
+    //     for (var i = 0; i < courseString.length; i++) {
+    //         htmlCourseString += "<p>" + courseString[i] + "</p>";
+    //         $("#calendar").html(htmlCourseString);
+    //     }
+    // }, 500);
 };
 
 function createHtml(htmlStr) {
