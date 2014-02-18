@@ -175,11 +175,20 @@ function Node(parents, type, name) {
                 }
             }
 
+            // Edges
             for (var i = 0; i < this.inEdges.length; i++) {
                 var id = this.inEdges[i].name;
-                $("#" + id).attr("data-active", "active");
-                
+                console.log("edge " + id);
+                if (!this.takeable) {
+                    $("#" + id).attr("data-active", "inactive");
+                } else if (this.inEdges[i].child.active) {
+                    $("#" + id).attr("data-active", "active");
+                } else {
+                    $("#" + id).attr("data-active", "takeable");
+                }
             }
+
+            
 
             // Check CSC454
             CSC454.isActive();
