@@ -1,4 +1,5 @@
 var nodes = [];
+var edges = [];
 var clickedCourses = [];
 var clickedNode = parent.document.getElementById("courseGrid");
 
@@ -120,6 +121,14 @@ function Node(parents, type, name) {
         } else {
             this.takeable = this.parents.length == 0;
         }
+
+        // Edges
+        for (var i = 0; i < this.outEdges.length; i++) {
+            var id = this.outEdges[i].name;
+            console.log("edge " + id);
+            $("#" + id).attr("data-active", "inactive")
+        }
+
         this.updateSVG();
         this.updateClickedCourses();
     }
@@ -167,13 +176,8 @@ function Node(parents, type, name) {
 
             for (var i = 0; i < this.inEdges.length; i++) {
                 var id = this.inEdges[i].name;
-                if (this.active) {
-                    $("#" + id).attr("data-active", "active");
-                } else if (this.inEdges[i].child.active) {
-                    $("#" + id).attr("data-active", "takeable");
-                } else {
-                    $("#" + id).attr("data-active", "inactive");
-                }
+                $("#" + id).attr("data-active", "active");
+                
             }
 
             // Check CSC454
