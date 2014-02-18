@@ -417,7 +417,7 @@ makeNode([CSC148, bool5], "AND", "CSC336");
 makeHybrid([CSC207], "AND", "hybrid14");
 makeNode([hybrid16, hybrid14], "AND", "CSC343");
 makeNode([CSC209, CSC343], "AND", "CSC309");
-makeHybrid([CSC209, CSC263], "AND", "hybrid2");
+makeHybrid([CSC263], "AND", "hybrid2"); // Bug
 makeNode([bool2, hybrid2], "AND", "CSC358");
 makeHybrid([CSC258, CSC209], "AND", "bool3");
 makeNode([bool2], "AND", "CSC369");
