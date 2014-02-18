@@ -26,6 +26,7 @@ class MyHTMLParser(HTMLParser):
     typeMemory = 'stringsAgainstIndexErrors!'
     timeMemory = ''
     locationMemory = ''
+    instructorMemory = ''
     switch = False
     fieldMemory = 0
 
@@ -33,7 +34,7 @@ class MyHTMLParser(HTMLParser):
     def handle_data(self, data):
     	if course.match(data):
 	        if self.fieldMemory == 4:
-	        	print('<tr><td></td><td></td><td>' + self.typeMemory +'</td><td>' + self.timeMemory+ '</td><td>'+self.locationMemory+'</td><td>'+data+'</td>')
+	        	print('<tr><td></td><td></td><td>' + self.typeMemory +'</td><td>' + self.timeMemory+ '</td><td>'+self.locationMemory+'</td><td>'+ self.instructorMemory+'</td>')
 	        self.switch = True
 	        self.fieldMemory = 0
 	        self.courseMemory = data
@@ -55,9 +56,11 @@ class MyHTMLParser(HTMLParser):
     	elif location.match(data):
 	        self.locationMemory = data
 	        self.fieldMemory = 4
-    	elif instructor.match(data) or (self.fieldMemory == 4):
+    	elif instructor.match(data):
 	        print('<tr><td></td><td></td><td>' + self.typeMemory +'</td><td>' + self.timeMemory+ '</td><td>'+self.locationMemory+'</td><td>'+data+'</td>')
 	        self.fieldMemory = 5
+	        self.instructorMemory = data
+	        
 
 parser = MyHTMLParser(strict=False)
 
