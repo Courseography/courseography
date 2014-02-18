@@ -231,7 +231,8 @@ function Node(parents, type, name) {
                 this.updateClickedCourses();
 
                 if (this.name.charAt(3) >= '3' && this.name.length == 6 && !this.hybrid) {
-                    num300Plus--;
+                    //num300Plus not defined
+                    //num300Plus--;
                 }
             } else if (this.hybrid && this.takeable) {
                 this.active = true;
@@ -532,7 +533,7 @@ makeEdge(Calc1, Sta1, "p55");
 makeEdge(Sta2, CSC428, "p56");
 makeEdge(Sta1, Sta2, "p57");
 makeEdge(CSC411, CSC412, "p58");
-makeEdge(hybrid9, CSC301, "p59");
+makeEdge(hybrid10, CSC301, "p59");
 makeEdge(hybrid11, ECE489, "p60"); // Bug
 makeEdge(bool2, CSC372, "p61");
 makeEdge(hybrid11, CSC456, "p62");
@@ -543,9 +544,9 @@ makeEdge(hybrid12, bool4, "p66");
 makeEdge(hybrid13, bool4, "p67");
 makeEdge(bool4, CSC321, "p68");
 makeEdge(bool4, CSC310, "p69");
-makeEdge(hybrid14, CSC310, "p70");
-makeEdge(hybrid15, CSC343, "p71");
-makeEdge(hybrid16, CSC420, "p72");
+makeEdge(hybrid13, CSC310, "p70");
+makeEdge(hybrid14, CSC343, "p71");
+makeEdge(hybrid15, CSC420, "p72");
 makeEdge(hybrid16, CSC343, "p73");
 makeEdge(Lin1, bool5, "p74");
 makeEdge(Calc1, bool5, "p75");
