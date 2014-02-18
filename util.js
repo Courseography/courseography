@@ -481,7 +481,7 @@ makeEdge(CSC336, CSC446, "p12");
 makeEdge(CSC336, CSC456, "p13");
 makeEdge(CSC336, CSC436, "p14");
 makeEdge(CSC384, CSC486, "p15");
-makeEdge(CSC463, CSC448, "p16");
+makeEdge(CSC207, CSC401, "p16"); // BUG
 makeEdge(CSC209, CSC485, "p17");
 makeEdge(CSC263, CSC411, "p18");
 makeEdge(CSC209, CSC301, "p19");
@@ -493,7 +493,7 @@ makeEdge(CSC343, CSC309, "p24");
 makeEdge(CSC343, CSC443, "p25");
 makeEdge(CSC369, CSC443, "p26");
 makeEdge(hybrid1, CSC404, "p27");
-makeEdge(hybrid2, CSC448, "p28");
+makeEdge(hybrid2, CSC488, "p28"); // BUG
 makeEdge(hybrid2, CSC358, "p29");
 makeEdge(hybrid2, CSC458, "p30");
 makeEdge(hybrid3, CSC418, "p31");
@@ -544,6 +544,7 @@ makeEdge(bool5, CSC336, "p76");
 makeEdge(bool5, CSC320, "p77");
 makeEdge(bool5, CSC420, "p78");
 makeEdge(CSC258, CSC488, "p79");
+
 
 
 function hoverFocus() {
