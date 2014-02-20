@@ -165,7 +165,7 @@ function Node(parents, type, name) {
             // Edges
             for (var i = 0; i < this.outEdges.length; i++) {
                 var id = this.outEdges[i].name;
-                console.log("edge " + id);
+                //console.log("edge " + id);
                 if (!this.active) {
                     $("#" + id).attr("data-active", "inactive");
                 } else if (this.outEdges[i].child.active) {
@@ -178,7 +178,7 @@ function Node(parents, type, name) {
             // Edges
             for (var i = 0; i < this.inEdges.length; i++) {
                 var id = this.inEdges[i].name;
-                console.log("edge " + id);
+                //console.log("edge " + id);
                 if (!this.takeable) {
                     $("#" + id).attr("data-active", "inactive");
                 } else if (this.inEdges[i].child.active) {
@@ -200,12 +200,12 @@ function Node(parents, type, name) {
 
     this.isActive = function() {
         if (this.updated) {
+
             return this.active;
         } else {
+            var changed = false;
             this.updated = true;
-            if(this.name == "CSC263") {
-                console.log("\t\t\t", "Running 'isActive' on: ", this.name);
-            }
+
             if (this.name == "CSC454") {
                 this.takeable = FCEs300 + FCEs400 >= 2.5;
             } else if (this.name == "CSC494" || this.name == "CSC495") {
@@ -228,24 +228,20 @@ function Node(parents, type, name) {
 
             if (this.active && !this.takeable) {
                 this.active = false;
-
+                changed = true;
                 this.updateClickedCourses();
-
-                if (this.name.charAt(3) >= '3' && this.name.length == 6 && !this.hybrid) {
-                    //num300Plus not defined
-                    //num300Plus--;
-                }
             } else if (this.hybrid && this.takeable) {
-                this.active = true;
-                this.updateClickedCourses();
+                if (!this.active) {
+                    this.active = true;
+                    changed = true;    
+                }
             }
 
-            for (var i = 0; i < this.children.length; i++) {
-                this.children[i].isActive();
-            }
 
-            if(this.name == "CSC263") {
-                console.log(this.takeable);
+            if (changed) {
+                for (var i = 0; i < this.children.length; i++) {
+                    this.children[i].isActive();
+                }
             }
 
             this.updateSVG();
@@ -375,11 +371,16 @@ function Node(parents, type, name) {
 
         var htmlClickedString = "";
         for (var i = 0; i < clickedCourses.length; i++) {
-            var xmlreq = new XMLHttpRequest();
-            xmlreq.open("GET", "res/calendar.txt", false);
-            xmlreq.send();
-            var patt1 = new RegExp("\n"+clickedCourses[i]+".*", "im");
-            var courseStringText = xmlreq.responseText.match(patt1)[0].split(clickedCourses[i])[1].split("1")[1].split("[")[0];
+            if (clickedCourses[i] == "Calc1" || clickedCourses[i] == "Lin1" || clickedCourses[i] == "Sta1" || clickedCourses[i] == "Sta2") {
+                var courseStringText = clickedCourses[i];
+            } else {
+                var xmlreq = new XMLHttpRequest();
+                xmlreq.open("GET", "res/calendar.txt", false);
+                xmlreq.send();
+                var patt1 = new RegExp("\n"+clickedCourses[i]+".*", "im");
+                var courseStringText = xmlreq.responseText.match(patt1)[0].split(clickedCourses[i])[1].split("1")[1].split("[")[0];    
+            }
+            
             htmlClickedString += "<td class='courseCell' style='background: " + $("#" + clickedCourses[i] + "> rect").css('fill') + "'><div id='" + clickedCourses[i] + "cell'><p class='courseName'>" + clickedCourses[i] + "</p><p class="+clickedCourses[i]+"text>"+courseStringText+"</p></div></td>";
         }
 
@@ -445,7 +446,6 @@ makeNode([hybrid16, hybrid14], "AND", "CSC343");
 makeNode([CSC209, CSC343], "AND", "CSC309");
 makeHybrid([CSC263], "AND", "hybrid2"); // Bug
 makeNode([bool2, hybrid2], "AND", "CSC358");
-makeHybrid([CSC258, CSC209], "AND", "bool3");
 makeNode([bool2], "AND", "CSC369");
 makeNode([bool2], "AND", "CSC372");
 makeNode([CSC263], "AND", "CSC373");
@@ -466,7 +466,7 @@ makeNode([CSC236], "AND", "CSC463");
 
 makeHybrid([CSC373, CSC463], "OR", "bool3");
 
-makeNode([CSC336, CSC373, CSC463], "OR", "CSC336orCSC373orCSC463");
+makeHybrid([CSC336, CSC373, CSC463], "OR", "CSC336orCSC373orCSC463");
 
 makeHybrid([CSC336orCSC373orCSC463, Calc1], "AND", "hybrid3");
 
@@ -590,12 +590,17 @@ function hoverFocus() {
     window.mytimeout = setTimeout(function() {
         // Get data from course calendar
         var xmlreq = new XMLHttpRequest();
-        xmlreq.open("GET", "res/calendar.txt", false);
-        xmlreq.send();
-
-        var patt1 = new RegExp("\n" + id + ".*\n.*\n", "im");
-        var courseString = xmlreq.responseText.match(patt1)[0].split("\n");
-        //console.log(courseString);
+        if (id == "Calc1" || id == "Lin1" || id == "Sta1" || id == "Sta2") {
+            xmlreq.open("GET", "res/" + id + "_calendar.txt", false);
+            xmlreq.send();
+            var courseString = xmlreq.responseText.split("\n");
+        } else {
+            xmlreq.open("GET", "res/calendar.txt", false);    
+            xmlreq.send();
+            var patt1 = new RegExp("\n" + id + ".*\n.*\n", "im");
+            var courseString = xmlreq.responseText.match(patt1)[0].split("\n");
+        }
+        
         var htmlCourseString = "";
         for (var i = 0; i < courseString.length; i++) {
             htmlCourseString += "<p>" + courseString[i] + "</p>";

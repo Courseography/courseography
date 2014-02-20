@@ -1,0 +1,8 @@
+STA247H1    Probability with Computer Applications[36L/12T]
+Introduction to the theory of probability, with emphasis on applications in computer science. The topics covered include random variables, discrete and continuous probability distributions, expectation and variance, independence, conditional probability, normal, exponential, binomial, and Poisson distributions, the central limit theorem, sampling distributions, estimation and testing, applications to the analysis of algorithms, and simulating systems such as queues (Note: STA247H1 does not count as a distribution requirement course).
+
+STA255H1    Statistical Theory[36L/12T]
+This courses deals with the mathematical aspects of some of the topics discussed in STA250H1. Topics include discrete and continuous probability distributions, conditional probability, expectation, sampling distributions, estimation and testing, the linear model (Note: STA255H1 does not count as a distribution requirement course).
+
+STA257H1    Probability and Statistics I[36L/12T]
+This course, and its sequel, STA261H1, are mathematically quite challenging, the target audience  includes anyone proceeding directly to a specialist degree in statistics, as well as anyone with serious and special interest in some other of the identifiably statistical-physical sciences.  Topics, albeit very rigorously covered, are, nevertheless, very standard introductory ones: abstract probability and expectation, discrete and continuous random variables and vectors, with the special mathematics of distribution and density functions, all realized in the special examples of ordinary statistical practice: the binomial, poisson and geometric group, and the gaussian (normal), gamma, chi-squared complex.

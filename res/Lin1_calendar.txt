@@ -1,0 +1,8 @@
+MAT221H1    Applied Linear Algebra[36L/12T]
+An application-oriented approach to linear algebra, based on calculations in standard Euclidean space. Systems of linear equations, matrices, Gausss-Jordan elimination, subspaces, bases, orthogonal vectors and projections. Matrix inverses, kernel and range, rank-nullity theorem. Determinants, eigenvalues and eigenvectors, Cramer's rule, diagonalization. This course has strong  emphasis on building computational skills in the area of algebra. Applications to curve fitting, economics, Markov chains and cryptography.
+
+MAT223H1    Linear Algebra I[36L/12T]
+System of linear equations, matrix algebra, real vector spaces, subspaces, span, linear dependence and independence, bases, rank, inner products, orthogonality, orthogonal complements, Gram-Schmidt, linear transformations, determinants, Cramer's rule, eigenvalues, eigenvectors, eigenspaces, diagonalization.
+
+MAT240H1    Algebra I[36L/24T]
+A theoretical approach to: vector spaces over arbitrary fields including C,Zp. Subspaces, bases and dimension. Linear transformations, matrices, change of basis, similarity, determinants. Polynomials over a field (including unique factorization, resultants). Eigenvalues, eigenvectors, characteristic polynomial, diagonalization. Minimal polynomial, Cayley-Hamilton theorem.
