@@ -1,3 +1,16 @@
+Calendar.txt
+
+Calc1Y1       Calculus I&nbsp&nbsp&nbsp[Year long course]
+A nice little paragraph for new students, describing the calculus course options. Perhaps, even, a link to the calendar. Here they are! : (MAT135H1, MAT136H1)/MAT137Y1/MAT157Y1
+
+Sta1H1       Statistics I&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp[Half credit]
+Refer to Calc1! STA247H1 /STA255H1 /STA257H1
+
+Sta2H1    Statistics II&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp[Half Credit]
+I forgot to add in the courses :(
+
+Lin1H1    Linear Algebera I&nbsp&nbsp&nbsp[]
+MAT223H1 /MAT240H1
 
 CSC104H1    Computational Thinking[24L/12T]
 Humans have solved problems for millennia on computing devices by representing data as diverse numbers, text, images, sound and genomes, and then transforming the data.  A gentle introduction to designing programs (recipes) for systematically solving problems that crop up in diverse domains such as science, literature and graphics.  Social and intellectual issues raised by computing.  Algorithms, hardware, software, operating systems, the limits of computation.
