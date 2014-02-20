@@ -203,8 +203,9 @@ function Node(parents, type, name) {
             return this.active;
         } else {
             this.updated = true;
-            console.log("\t\t\t", "Running 'isActive' on: ", this.name);
-
+            if(this.name == "CSC263") {
+                console.log("\t\t\t", "Running 'isActive' on: ", this.name);
+            }
             if (this.name == "CSC454") {
                 this.takeable = FCEs300 + FCEs400 >= 2.5;
             } else if (this.name == "CSC494" || this.name == "CSC495") {
@@ -241,6 +242,10 @@ function Node(parents, type, name) {
 
             for (var i = 0; i < this.children.length; i++) {
                 this.children[i].isActive();
+            }
+
+            if(this.name == "CSC263") {
+                console.log(this.takeable);
             }
 
             this.updateSVG();
@@ -299,7 +304,7 @@ function Node(parents, type, name) {
     this.unfocus = function() {
         if (!this.active) {
             this.updateSVG();
-            console.log(this.takeable);
+            //console.log(this.takeable);
             for (var i = 0; i < this.parents.length; i++) {
                 this.parents[i].unfocus();
             }
@@ -331,7 +336,7 @@ function Node(parents, type, name) {
                 console.log("Unexpected course: " + this.name)
             }
             clickedCourses.push(this.name);
-            console.log(clickedCourses);
+            //console.log(clickedCourses);
         } else {
             var index = clickedCourses.indexOf(this.name);
             if (index > -1) {
@@ -561,7 +566,7 @@ makeEdge(hybrid11, CSC456, "p62");
 makeEdge(hybrid11, CSC428, "p63");
 makeEdge(hybrid11, CSC320, "p64");
 makeEdge(hybrid11, CSC418, "p65");
-makeEdge(hybrid12, bool4, "p66");
+makeEdge(hybrid7, bool4, "p66");
 makeEdge(Sta1, bool4, "p67");
 makeEdge(bool4, CSC321, "p68");
 makeEdge(bool4, CSC310, "p69");
@@ -590,7 +595,7 @@ function hoverFocus() {
 
         var patt1 = new RegExp("\n" + id + ".*\n.*\n", "im");
         var courseString = xmlreq.responseText.match(patt1)[0].split("\n");
-        console.log(courseString);
+        //console.log(courseString);
         var htmlCourseString = "";
         for (var i = 0; i < courseString.length; i++) {
             htmlCourseString += "<p>" + courseString[i] + "</p>";
@@ -620,7 +625,7 @@ function createTimeTable() {
      xmlreq.send();
      var timeTableString = xmlreq.responseText;
      temp.innerHTML = timeTableString;
-     console.log(timeTableString);
+     //console.log(timeTableString);
      while (temp.firstChild) {
         frag.appendChild(temp.firstChild);
     }
@@ -715,7 +720,7 @@ function updatePOSt(course, active) {
         $('#CSC' + (i+1)).attr('value', '');
     }
 
-    console.log(active300s);
+    //console.log(active300s);
 
     for (var i = ind; i < 3; i++) {
         if (i < active400s.length) {
