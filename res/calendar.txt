@@ -1,16 +1,3 @@
-Calendar.txt
-
-Calc1Y1       Calculus I&nbsp&nbsp&nbsp[Year long course]
-A nice little paragraph for new students, describing the calculus course options. Perhaps, even, a link to the calendar. Here they are! : (MAT135H1, MAT136H1)/MAT137Y1/MAT157Y1
-
-Sta1H1       Statistics I&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp[Half credit]
-Refer to Calc1! STA247H1 /STA255H1 /STA257H1
-
-Sta2H1    Statistics II&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp[Half Credit]
-I forgot to add in the courses :(
-
-Lin1H1    Linear Algebera I&nbsp&nbsp&nbsp[]
-MAT223H1 /MAT240H1
 
 CSC104H1    Computational Thinking[24L/12T]
 Humans have solved problems for millennia on computing devices by representing data as diverse numbers, text, images, sound and genomes, and then transforming the data.  A gentle introduction to designing programs (recipes) for systematically solving problems that crop up in diverse domains such as science, literature and graphics.  Social and intellectual issues raised by computing.  Algorithms, hardware, software, operating systems, the limits of computation.
@@ -151,6 +138,9 @@ Introduction to basic concepts in computer vision. Extraction of image features 
 
 CSC428H1    Human-Computer Interaction[24L/12T]
 Understanding human behaviour as it applies to user interfaces: work activity analysis, observational techniques, questionnaire administration and unobtrusive measures. Operating parameters of the human cognitive system, task analysis and cognitive modelling techniques and their application to designing interfaces. Interface representations and prototyping tools. Cognitive walkthroughs, usability studies and verbal protocol analysis. Case studies of specific user interfaces.
+
+CSC436H1    Numerical Algorithms[24L/12T]
+Numerical algorithms for the algebraic eigenvalue problem, approximation, integration, and the solution of ordinary differential equations. Emphasis is on the convergence, stability and efficiency properties of the algorithms. 
 
 CSC438H1    Computability and Logic[24L/12T]
 Computable functions, Churchs thesis, unsolvable problems, recursively enumerable sets. Predicate calculus, including the completeness, compactness, and Lowenheim-Skolem theorems. Formal theories and the Gdel Incompleteness Theorem.

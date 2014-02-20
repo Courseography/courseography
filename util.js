@@ -179,12 +179,12 @@ function Node(parents, type, name) {
             for (var i = 0; i < this.inEdges.length; i++) {
                 var id = this.inEdges[i].name;
                 //console.log("edge " + id);
-                if (!this.takeable) {
-                    $("#" + id).attr("data-active", "inactive");
-                } else if (this.inEdges[i].child.active) {
+                if (this.inEdges[i].parent.active && this.active) {
                     $("#" + id).attr("data-active", "active");
-                } else {
+                } else if (this.inEdges[i].parent.active) {
                     $("#" + id).attr("data-active", "takeable");
+                } else {
+                    $("#" + id).attr("data-active", "inactive");
                 }
             }
 
@@ -260,9 +260,10 @@ function Node(parents, type, name) {
 
             for (var i = 0; i < this.inEdges.length; i++) {
                 var id = this.inEdges[i].name;
-                if (this.active) {
+                //console.log("edge " + id);
+                if (this.inEdges[i].parent.active && this.active) {
                     $("#" + id).attr("data-active", "active");
-                } else if (this.inEdges[i].child.active) {
+                } else if (this.inEdges[i].parent.active) {
                     $("#" + id).attr("data-active", "takeable");
                 } else {
                     $("#" + id).attr("data-active", "inactive");
@@ -363,12 +364,6 @@ function Node(parents, type, name) {
         $('#FCEcount').html(FCEs);
         // Get data from course calendar
         
-        
-
-        
-
-
-
         var htmlClickedString = "";
         for (var i = 0; i < clickedCourses.length; i++) {
             if (clickedCourses[i] == "Calc1" || clickedCourses[i] == "Lin1" || clickedCourses[i] == "Sta1" || clickedCourses[i] == "Sta2") {
@@ -412,7 +407,7 @@ makeNode([], "AND", "CSC200");
 makeNode([CSC148], "AND", "CSC207");
 makeNode([CSC207], "AND", "CSC209");
 makeNode([CSC148, CSC165], "AND", "CSC236");
-makeNode([CSC236], "AND", "hybrid11");
+makeHybrid([CSC236], "AND", "hybrid11");
 makeNode([CSC148, CSC165], "AND", "CSC258");
 makeHybrid([CSC209, CSC258], "AND", "bool2");
 makeHybrid([Sta1], "AND", "hybrid6");
@@ -439,7 +434,6 @@ makeNode([bool4], "AND", "CSC321");
 makeNode([bool1], "AND", "CSC324");
 makeHybrid([CSC324], "AND", "hybrid4");
 makeNode([CSC236], "AND", "CSC330");
-makeHybrid([Lin1, Calc1], "AND", "hybrid11");
 makeNode([CSC148, bool5], "AND", "CSC336");
 makeHybrid([CSC207], "AND", "hybrid14");
 makeNode([hybrid16, hybrid14], "AND", "CSC343");
@@ -487,7 +481,7 @@ makeNode([CSC343, CSC369, hybrid5], "AND", "CSC443");
 makeNode([CSC336], "AND", "CSC446");
 makeNode([CSC463], "AND", "CSC448");
 makeNode([], "AND", "CSC454");
-makeNode([CSC209, CSC336], "AND", "CSC456");
+makeNode([hybrid12, CSC336], "AND", "CSC456");
 makeNode([bool2, hybrid2], "AND", "CSC458");
 makeNode([CSC236], "AND", "CSC465");
 makeNode([CSC369], "AND", "CSC469");
@@ -560,12 +554,12 @@ makeEdge(Sta2, CSC428, "p56");
 makeEdge(Sta1, Sta2, "p57");
 makeEdge(CSC411, CSC412, "p58");
 makeEdge(hybrid10, CSC301, "p59");
-makeEdge(hybrid11, ECE489, "p60"); // Bug
+makeEdge(hybrid11, ECE489, "p60");
 makeEdge(bool2, CSC372, "p61");
-makeEdge(hybrid11, CSC456, "p62");
-makeEdge(hybrid11, CSC428, "p63");
-makeEdge(hybrid11, CSC320, "p64");
-makeEdge(hybrid11, CSC418, "p65");
+makeEdge(hybrid12, CSC456, "p62");
+makeEdge(hybrid12, CSC428, "p63");
+makeEdge(hybrid12, CSC320, "p64");
+makeEdge(hybrid12, CSC418, "p65");
 makeEdge(hybrid7, bool4, "p66");
 makeEdge(Sta1, bool4, "p67");
 makeEdge(bool4, CSC321, "p68");
