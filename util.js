@@ -470,9 +470,9 @@ makeHybrid([CSC263], "AND", "hybrid15");
 
 makeNode([hybrid15, bool5], "AND", "CSC420");
 makeNode([CSC318, Sta2, hybrid12], "AND", "CSC428"); // Exception "Sta2 may be replaced by PSY201..."
-makeNode([CSC318, CSC418, CSC301, CSC384], "OR", "hybrid1");
+makeHybrid([CSC318, CSC418, CSC301, CSC384], "OR", "hybrid1");
 
-makeHybrid([hybrid1], "AND", "CSC404");
+makeNode([hybrid1], "AND", "CSC404");
 
 makeNode([CSC336], "AND", "CSC436");
 makeNode([bool3], "OR", "CSC438");
