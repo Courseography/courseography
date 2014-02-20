@@ -360,15 +360,26 @@ function Node(parents, type, name) {
         FCEs = FCEs100 + FCEs200 + FCEs300 + FCEs400 + FCEsMAT;
 
         $('#FCEcount').html(FCEs);
+        // Get data from course calendar
+        
+        
+
+        
+
 
 
         var htmlClickedString = "";
         for (var i = 0; i < clickedCourses.length; i++) {
-            htmlClickedString += "<td class='courseCell' style='background: " + $("#" + clickedCourses[i] + "> rect").css('fill') + "'><div id='" + clickedCourses[i] + "cell'><p class='courseName'>" + clickedCourses[i] + "</p><p>Course information about this.. course!</p></div></td>";
+            var xmlreq = new XMLHttpRequest();
+            xmlreq.open("GET", "res/calendar.txt", false);
+            xmlreq.send();
+            var patt1 = new RegExp("\n"+clickedCourses[i]+".*", "im");
+            var courseStringText = xmlreq.responseText.match(patt1)[0].split(clickedCourses[i])[1].split("1")[1].split("[")[0];
+            htmlClickedString += "<td class='courseCell' style='background: " + $("#" + clickedCourses[i] + "> rect").css('fill') + "'><div id='" + clickedCourses[i] + "cell'><p class='courseName'>" + clickedCourses[i] + "</p><p class="+clickedCourses[i]+"text>"+courseStringText+"</p></div></td>";
         }
 
         $('#courseGrid').html(htmlClickedString);
-
+        
     }
 
 }
@@ -441,19 +452,29 @@ makeNode([bool2], "AND", "ECE385");
 
 makeNode([CSC207, hybrid8], "AND", "CSC401");
 makeNode([bool1], "AND", "CSC410");
+
 makeHybrid([Sta2], "AND", "hybrid9");
+
 makeNode([CSC263, Calc1, hybrid9], "AND", "CSC411");
 makeNode([CSC411], "AND", "CSC412");
 makeNode([CSC236], "AND", "CSC463");
+
 makeHybrid([CSC373, CSC463], "OR", "bool3");
+
 makeNode([CSC336, CSC373, CSC463], "OR", "CSC336orCSC373orCSC463");
+
 makeHybrid([CSC336orCSC373orCSC463, Calc1], "AND", "hybrid3");
+
 makeNode([hybrid3, hybrid12], "AND", "CSC418");
+
 makeHybrid([CSC263], "AND", "hybrid15");
+
 makeNode([hybrid15, bool5], "AND", "CSC420");
 makeNode([CSC318, Sta2, hybrid12], "AND", "CSC428"); // Exception "Sta2 may be replaced by PSY201..."
 makeNode([CSC318, CSC418, CSC301, CSC384], "OR", "hybrid1");
+
 makeHybrid([hybrid1], "AND", "CSC404");
+
 makeNode([CSC336], "AND", "CSC436");
 makeNode([bool3], "OR", "CSC438");
 makeHybrid([CSC373], "AND", "hybrid5");
@@ -558,24 +579,24 @@ makeEdge(CSC258, CSC488, "p79");
 
 
 function hoverFocus() {
-    // var id = $(event.target).parent().attr("id");
-    // window[id].focus();
+    var id = $(event.target).parent().attr("id");
+    window[id].focus();
 
-    // window.mytimeout = setTimeout(function() {
-    //     // Get data from course calendar
-    //     var xmlreq = new XMLHttpRequest();
-    //     xmlreq.open("GET", "res/calendar.txt", false);
-    //     xmlreq.send();
+    window.mytimeout = setTimeout(function() {
+        // Get data from course calendar
+        var xmlreq = new XMLHttpRequest();
+        xmlreq.open("GET", "res/calendar.txt", false);
+        xmlreq.send();
 
-    //     var patt1 = new RegExp("\n" + id + ".*\n.*\n", "im");
-    //     var courseString = xmlreq.responseText.match(patt1)[0].split("\n");
-    //     console.log(courseString);
-    //     var htmlCourseString = "";
-    //     for (var i = 0; i < courseString.length; i++) {
-    //         htmlCourseString += "<p>" + courseString[i] + "</p>";
-    //         $("#calendar").html(htmlCourseString);
-    //     }
-    // }, 500);
+        var patt1 = new RegExp("\n" + id + ".*\n.*\n", "im");
+        var courseString = xmlreq.responseText.match(patt1)[0].split("\n");
+        console.log(courseString);
+        var htmlCourseString = "";
+        for (var i = 0; i < courseString.length; i++) {
+            htmlCourseString += "<p>" + courseString[i] + "</p>";
+            $("#calendar").html(htmlCourseString);
+        }
+    }, 500);
 };
 
 function createHtml(htmlStr) {

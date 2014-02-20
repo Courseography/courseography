@@ -1,3 +1,4 @@
+
 CSC104H1    Computational Thinking[24L/12T]
 Humans have solved problems for millennia on computing devices by representing data as diverse numbers, text, images, sound and genomes, and then transforming the data.  A gentle introduction to designing programs (recipes) for systematically solving problems that crop up in diverse domains such as science, literature and graphics.  Social and intellectual issues raised by computing.  Algorithms, hardware, software, operating systems, the limits of computation.
 Note: you may not take this course concurrently with any CSC course, but you may take CSC108H1/CSC148H1 after CSC104H1.
