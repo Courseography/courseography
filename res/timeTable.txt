@@ -1,2151 +1,420 @@
-<table id="timeTable">
-<tr><td>Course</td><td>Section</td><td>Type</td><td>Time</td><td>Location</td><td>Instructor</td></tr><div><p>
-<tr><td> CSC104H1 </td>
-
-<td> F </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L5101 </td>
-
-<tr><td> CSC104H1 </td><td>&nbsp</td><td>&nbsp</td><td> W6-8 </td>
-
-<td> MS 3154  </td>
-
-<td> D. Heap </td></tr>
-
-<tr><td> CSC104H1 </td><td>&nbsp</td><td>&nbsp</td><td> W8 </td>
-
-<td> MS 3154  </td>
-
-<td> D. Heap </td></tr>
-
-<tr><td> CSC104H1 </td>
-
-<td> S </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC104H1 </td><td>&nbsp</td><td>&nbsp</td><td> TRF9 </td>
-
-<td> WB 116  </td>
-
-<td> D. Heap </td></tr>
-
-<tr><td> CSC108H1 </td>
-
-<td> F </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> MWF9 </td>
-
-<td> BA 1160  </td>
-
-<td> M. Craig </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0201 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> MWF10 </td>
-
-<td> BA 1160  </td>
-
-<td> M. Craig </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0202 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> MWF10 </td>
-
-<td> WB 116  </td>
-
-<td> P. Gries </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0301 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> MWF1 </td>
-
-<td> HS 610  </td>
-
-<td> J. Campbell </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L5101 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> W6-9 </td>
-
-<td> MS 3153  </td>
-
-<td> P. Gries </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  T0101 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> T0101 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> T9-11 </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  T0201 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> T0201 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> T11-1 </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  T0301 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> T0301 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> T3-5 </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  T0401 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> T0401 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> W11-1 </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  T0501 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> T0501 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> W3-5 </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  T0601 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> T0601 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> R11-1 </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  T0701 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> T0701 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> R1-3 </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  T0801 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> T0801 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> R3-5 </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  T0901 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> T0901 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> F1-3 </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  T1001 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> T1001 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> W1-3 </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  T5101 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> T5101 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> T7-9 </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  T5201 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> T5201 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> R7-9 </td>
-
-<tr><td> CSC108H1 </td>
-
-<td> S </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> MWF9 </td>
-
-<td> BA 1160  </td>
-
-<td> J. Campbell </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0201 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> MWF10 </td>
-
-<td> BA 1160  </td>
-
-<td> J. Campbell </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L5101 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> W6-9 </td>
-
-<td> MS 3154  </td>
-
-<td> Tba </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  T0101 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> T0101 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> R9-11 </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  T0201 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> T0201 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> R11-1 </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  T0301 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> T0301 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> R1-3 </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  T0401 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> T0401 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> F11-1 </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  T0501 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> T0501 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> F1-3 </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  T0601 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> T0601 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> R3-5 </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  T5101 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> T5101 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> R5-7 </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  T5201 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> T5201 </td>
-
-<tr><td> CSC108H1 </td><td>&nbsp</td><td>&nbsp</td><td> R7-9 </td>
-
-<tr><td> CSC120H1 </td>
-
-<td> S </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L5101 </td>
-
-<tr><td> CSC120H1 </td><td>&nbsp</td><td>&nbsp</td><td> R7-9 </td>
-
-<td> BA 1180  </td>
-
-<td> Tba </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  T0101 </td>
-
-<tr><td> CSC120H1 </td><td>&nbsp</td><td>&nbsp</td><td> T0101 </td>
-
-<tr><td> CSC120H1 </td><td>&nbsp</td><td>&nbsp</td><td> T3-5 </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  T5101 </td>
-
-<tr><td> CSC120H1 </td><td>&nbsp</td><td>&nbsp</td><td> T5101 </td>
-
-<tr><td> CSC120H1 </td><td>&nbsp</td><td>&nbsp</td><td> W7-9 </td>
-
-<tr><td> CSC148H1 </td>
-
-<td> F </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC148H1 </td><td>&nbsp</td><td>&nbsp</td><td> MW9 </td>
-
-<td> BA 1180  </td>
-
-<td> D. Heap </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0201 </td>
-
-<tr><td> CSC148H1 </td><td>&nbsp</td><td>&nbsp</td><td> MW10 </td>
-
-<td> BA 1180  </td>
-
-<td> D. Heap </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  T0101 </td>
-
-<tr><td> CSC148H1 </td><td>&nbsp</td><td>&nbsp</td><td> T0101 </td>
-
-<tr><td> CSC148H1 </td><td>&nbsp</td><td>&nbsp</td><td> T1-3 </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  T0201 </td>
-
-<tr><td> CSC148H1 </td><td>&nbsp</td><td>&nbsp</td><td> T0201 </td>
-
-<tr><td> CSC148H1 </td><td>&nbsp</td><td>&nbsp</td><td> R9-11 </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  T0301 </td>
-
-<tr><td> CSC148H1 </td><td>&nbsp</td><td>&nbsp</td><td> T0301 </td>
-
-<tr><td> CSC148H1 </td><td>&nbsp</td><td>&nbsp</td><td> F9-11 </td>
-
-<tr><td> CSC148H1 </td>
-
-<td> S </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC148H1 </td><td>&nbsp</td><td>&nbsp</td><td> MW9 </td>
-
-<td> WB 116  </td>
-
-<td> D. Heap </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0201 </td>
-
-<tr><td> CSC148H1 </td><td>&nbsp</td><td>&nbsp</td><td> MW10 </td>
-
-<td> WB 116  </td>
-
-<td> M. Craig </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L5101 </td>
-
-<tr><td> CSC148H1 </td><td>&nbsp</td><td>&nbsp</td><td> W6-8 </td>
-
-<td> MS 3153  </td>
-
-<td> G. Baumgartner </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  T0101 </td>
-
-<tr><td> CSC148H1 </td><td>&nbsp</td><td>&nbsp</td><td> T0101 </td>
-
-<tr><td> CSC148H1 </td><td>&nbsp</td><td>&nbsp</td><td> T9-11 </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  T0201 </td>
-
-<tr><td> CSC148H1 </td><td>&nbsp</td><td>&nbsp</td><td> T0201 </td>
-
-<tr><td> CSC148H1 </td><td>&nbsp</td><td>&nbsp</td><td> T11-1 </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  T0301 </td>
-
-<tr><td> CSC148H1 </td><td>&nbsp</td><td>&nbsp</td><td> T0301 </td>
-
-<tr><td> CSC148H1 </td><td>&nbsp</td><td>&nbsp</td><td> T1-3 </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  T0401 </td>
-
-<tr><td> CSC148H1 </td><td>&nbsp</td><td>&nbsp</td><td> T0401 </td>
-
-<tr><td> CSC148H1 </td><td>&nbsp</td><td>&nbsp</td><td> W11-1 </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  T0501 </td>
-
-<tr><td> CSC148H1 </td><td>&nbsp</td><td>&nbsp</td><td> T0501 </td>
-
-<tr><td> CSC148H1 </td><td>&nbsp</td><td>&nbsp</td><td> W1-3 </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  T0601 </td>
-
-<tr><td> CSC148H1 </td><td>&nbsp</td><td>&nbsp</td><td> T0601 </td>
-
-<tr><td> CSC148H1 </td><td>&nbsp</td><td>&nbsp</td><td> W3-5 </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  T5101 </td>
-
-<tr><td> CSC148H1 </td><td>&nbsp</td><td>&nbsp</td><td> T5101 </td>
-
-<tr><td> CSC148H1 </td><td>&nbsp</td><td>&nbsp</td><td> T7-9 </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  T5201 </td>
-
-<tr><td> CSC148H1 </td><td>&nbsp</td><td>&nbsp</td><td> T5201 </td>
-
-<tr><td> CSC148H1 </td><td>&nbsp</td><td>&nbsp</td><td> W5-7 </td>
-
-<tr><td> CSC165H1 </td>
-
-<td> F </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC165H1 </td><td>&nbsp</td><td>&nbsp</td><td> MWF12 </td>
-
-<td> MP 203  </td>
-
-<td> T. Fairgrieve </td></tr>
-
-<tr><td> CSC165H1 </td><td>&nbsp</td><td>&nbsp</td><td> M7-9 </td>
-
-<td> SF 1105  </td>
-
-<td> T. Fairgrieve </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L5101 </td>
-
-<tr><td> CSC165H1 </td><td>&nbsp</td><td>&nbsp</td><td> T6-9 </td>
-
-<td> SF 1105  </td>
-
-<td> T. Fairgrieve </td></tr>
-
-<tr><td> CSC165H1 </td><td>&nbsp</td><td>&nbsp</td><td> R7-9 </td>
-
-<td> SF 1105  </td>
-
-<td> T. Fairgrieve </td></tr>
-
-<tr><td> CSC165H1 </td>
-
-<td> S </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC165H1 </td><td>&nbsp</td><td>&nbsp</td><td> MWF11 </td>
-
-<td> MP 103  </td>
-
-<td> T. Fairgrieve </td></tr>
-
-<tr><td> CSC165H1 </td><td>&nbsp</td><td>&nbsp</td><td> T2-4 </td>
-
-<td> MP 203  </td>
-
-<td> T. Fairgrieve </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0201 </td>
-
-<tr><td> CSC165H1 </td><td>&nbsp</td><td>&nbsp</td><td> MWF3 </td>
-
-<td> BA 1170  </td>
-
-<td> T. Fairgrieve </td></tr>
-
-<tr><td> CSC165H1 </td><td>&nbsp</td><td>&nbsp</td><td> R2-4 </td>
-
-<td> MP 103  </td>
-
-<td> T. Fairgrieve </td></tr>
-
-<tr><td> CSC200Y1 </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC200Y1 </td><td>&nbsp</td><td>&nbsp</td><td> Cancel </td>
-
-<tr><td> CSC207H1 </td>
-
-<td> F </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC207H1 </td><td>&nbsp</td><td>&nbsp</td><td> WF12 </td>
-
-<td> HS 610  </td>
-
-<td> J. Campbell </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L5101 </td>
-
-<tr><td> CSC207H1 </td><td>&nbsp</td><td>&nbsp</td><td> W6-8 </td>
-
-<td> BA 1130  </td>
-
-<td> J. Campbell </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  T0101 </td>
-
-<tr><td> CSC207H1 </td><td>&nbsp</td><td>&nbsp</td><td> T0101 </td>
-
-<tr><td> CSC207H1 </td><td>&nbsp</td><td>&nbsp</td><td> M12 </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  T0201 </td>
-
-<tr><td> CSC207H1 </td><td>&nbsp</td><td>&nbsp</td><td> T0201 </td>
-
-<tr><td> CSC207H1 </td><td>&nbsp</td><td>&nbsp</td><td> M2 </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  T0301 </td>
-
-<tr><td> CSC207H1 </td><td>&nbsp</td><td>&nbsp</td><td> T0301 </td>
-
-<tr><td> CSC207H1 </td><td>&nbsp</td><td>&nbsp</td><td> Cancel </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  T5101 </td>
-
-<tr><td> CSC207H1 </td><td>&nbsp</td><td>&nbsp</td><td> T5101 </td>
-
-<tr><td> CSC207H1 </td><td>&nbsp</td><td>&nbsp</td><td> W5 </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  T5201 </td>
-
-<tr><td> CSC207H1 </td><td>&nbsp</td><td>&nbsp</td><td> T5201 </td>
-
-<tr><td> CSC207H1 </td><td>&nbsp</td><td>&nbsp</td><td> T5 </td>
-
-<tr><td> CSC207H1 </td>
-
-<td> S </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC207H1 </td><td>&nbsp</td><td>&nbsp</td><td> WF1 </td>
-
-<td> BA 1130  </td>
-
-<td> Tba </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  T0101 </td>
-
-<tr><td> CSC207H1 </td><td>&nbsp</td><td>&nbsp</td><td> T0101 </td>
-
-<tr><td> CSC207H1 </td><td>&nbsp</td><td>&nbsp</td><td> M1 </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  T0201 </td>
-
-<tr><td> CSC207H1 </td><td>&nbsp</td><td>&nbsp</td><td> T0201 </td>
-
-<tr><td> CSC207H1 </td><td>&nbsp</td><td>&nbsp</td><td> M2 </td>
-
-<tr><td> CSC209H1 </td>
-
-<td> F </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC209H1 </td><td>&nbsp</td><td>&nbsp</td><td> MTR1 </td>
-
-<td> LM 161  </td>
-
-<td> A. Rosenthal </td></tr>
-
-<tr><td> CSC209H1 </td>
-
-<td> S </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<td> MP 203 </td>
-
-<td> K. Reid </td></tr>
-
-<td> F </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L5101 </td>
-
-<tr><td> CSC209H1 </td><td>&nbsp</td><td>&nbsp</td><td> T6 </td>
-
-<td> SF 1101  </td>
-
-<td> K. Reid </td></tr>
-
-<tr><td> CSC209H1 </td><td>&nbsp</td><td>&nbsp</td><td> T7-9 </td>
-
-<td> SF 1101  </td>
-
-<td> K. Reid </td></tr>
-
-<tr><td> CSC236H1 </td>
-
-<td> F </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC236H1 </td><td>&nbsp</td><td>&nbsp</td><td> M11 </td>
-
-<td> SS 2102  </td>
-
-<td> A. Farzan </td></tr>
-
-<tr><td> CSC236H1 </td><td>&nbsp</td><td>&nbsp</td><td> WF11 </td>
-
-<td> SS 2135  </td>
-
-<td> A. Farzan </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2503 </td>
-
-<tr><td> CSC236H1 </td><td>&nbsp</td><td>&nbsp</td><td> R6 </td>
-
-<td> BA 1180  </td>
-
-<td> A. Farzan </td></tr>
-
-<tr><td> CSC236H1 </td><td>&nbsp</td><td>&nbsp</td><td> R7-9 </td>
-
-<td> BA 1180  </td>
-
-<td> A. Farzan </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L5101 </td>
-
-<tr><td> CSC236H1 </td><td>&nbsp</td><td>&nbsp</td><td> R6 </td>
-
-<td> BA 1180  </td>
-
-<td> A. Farzan </td></tr>
-
-<tr><td> CSC236H1 </td><td>&nbsp</td><td>&nbsp</td><td> R7-9 </td>
-
-<td> BA 1180  </td>
-
-<td> A. Farzan </td></tr>
-
-<tr><td> CSC236H1 </td>
-
-<td> S </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC236H1 </td><td>&nbsp</td><td>&nbsp</td><td> TR4 </td>
-
-<td> LM 159 </td>
-
-<td> Tba </td></tr>
-
-<tr><td> CSC236H1 </td><td>&nbsp</td><td>&nbsp</td><td> R5 </td>
-
-<td> LM 159 </td>
-
-<td> Tba </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0102 </td>
-
-<tr><td> CSC236H1 </td><td>&nbsp</td><td>&nbsp</td><td> Cancel </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0201 </td>
-
-<tr><td> CSC236H1 </td><td>&nbsp</td><td>&nbsp</td><td> TR1 </td>
-
-<td> GB 120  </td>
-
-<td> Tba </td></tr>
-
-<tr><td> CSC236H1 </td><td>&nbsp</td><td>&nbsp</td><td> R11 </td>
-
-<td> GB 120  </td>
-
-<td> Tba </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2003 </td>
-
-<tr><td> CSC236H1 </td><td>&nbsp</td><td>&nbsp</td><td> TR4 </td>
-
-<td> LM 159 </td>
-
-<td> Tba </td></tr>
-
-<tr><td> CSC236H1 </td><td>&nbsp</td><td>&nbsp</td><td> R5 </td>
-
-<td> LM 159 </td>
-
-<td> Tba </td></tr>
-
-<tr><td> CSC240H1 </td>
-
-<td> S </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC240H1 </td><td>&nbsp</td><td>&nbsp</td><td> MWF11 </td>
-
-<td> RW 110  </td>
-
-<td> Tba </td></tr>
-
-<tr><td> CSC258H1 </td>
-
-<td> F </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L5101 </td>
-
-<tr><td> CSC258H1 </td><td>&nbsp</td><td>&nbsp</td><td> T6-9 </td>
-
-<td> BA 1170  </td>
-
-<td> S. Engels </td></tr>
-
-<tr><td> CSC258H1 </td><td>&nbsp</td><td>&nbsp</td><td> R6-9 </td>
-
-<td> BA 3165  </td>
-
-<td> S. Engels </td></tr>
-
-<tr><td> CSC258H1 </td>
-
-<td> S </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC258H1 </td><td>&nbsp</td><td>&nbsp</td><td> MWF11 </td>
-
-<td> LM 162  </td>
-
-<td> S. Engels </td></tr>
-
-<tr><td> CSC258H1 </td><td>&nbsp</td><td>&nbsp</td><td> T3-6 </td>
-
-<td> BA 3165  </td>
-
-<td> S. Engels </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L5101 </td>
-
-<tr><td> CSC258H1 </td><td>&nbsp</td><td>&nbsp</td><td> M6-9 </td>
-
-<td> BA 3165  </td>
-
-<td> S. Engels </td></tr>
-
-<tr><td> CSC258H1 </td><td>&nbsp</td><td>&nbsp</td><td> T6-9 </td>
-
-<td> BA 1160  </td>
-
-<td> S. Engels </td></tr>
-
-<tr><td> CSC263H1 </td>
-
-<td> F </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC263H1 </td><td>&nbsp</td><td>&nbsp</td><td> T10 </td>
-
-<td> LM 161  </td>
-
-<td> T. Pitassi </td></tr>
-
-<tr><td> CSC263H1 </td><td>&nbsp</td><td>&nbsp</td><td> R10-12 </td>
-
-<td> LM 161  </td>
-
-<td> T. Pitassi </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2003 </td>
-
-<tr><td> CSC263H1 </td><td>&nbsp</td><td>&nbsp</td><td> T10 </td>
-
-<td> LM 161  </td>
-
-<td> T. Pitassi </td></tr>
-
-<tr><td> CSC263H1 </td><td>&nbsp</td><td>&nbsp</td><td> R10-12 </td>
-
-<td> LM 161  </td>
-
-<td> T. Pitassi </td></tr>
-
-<tr><td> CSC263H1 </td>
-
-<td> S </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC263H1 </td><td>&nbsp</td><td>&nbsp</td><td> MWF3 </td>
-
-<td> BA 1130  </td>
-
-<td> S. Toueg </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2503 </td>
-
-<tr><td> CSC263H1 </td><td>&nbsp</td><td>&nbsp</td><td> R6-8 </td>
-
-<td> BA 1160  </td>
-
-<td> S. Toueg </td></tr>
-
-<tr><td> CSC263H1 </td><td>&nbsp</td><td>&nbsp</td><td> R8 </td>
-
-<td> BA 1160  </td>
-
-<td> S. Toueg </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L5101 </td>
-
-<tr><td> CSC263H1 </td><td>&nbsp</td><td>&nbsp</td><td> R6-8 </td>
-
-<td> BA 1160  </td>
-
-<td> S. Toueg </td></tr>
-
-<tr><td> CSC263H1 </td><td>&nbsp</td><td>&nbsp</td><td> R8 </td>
-
-<td> BA 1160  </td>
-
-<td> S. Toueg </td></tr>
-
-<tr><td> CSC265H1 </td>
-
-<td> F </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC265H1 </td><td>&nbsp</td><td>&nbsp</td><td> M10-12 </td>
-
-<td> BA 3116  </td>
-
-<td> T. Pitassi </td></tr>
-
-<tr><td> CSC265H1 </td><td>&nbsp</td><td>&nbsp</td><td> R11 </td>
-
-<td> BA 3116  </td>
-
-<td> T. Pitassi </td></tr>
-
-<tr><td> CSC290H1 </td>
-
-<td> F </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L5101 </td>
-
-<tr><td> CSC290H1 </td><td>&nbsp</td><td>&nbsp</td><td> Cancel </td>
-
-<tr><td> CSC299Y1 </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<td> R. Baecker </td></tr>
-
-<tr><td> CSC300H1 </td>
-
-<td> S </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L5101 </td>
-
-<tr><td> CSC300H1 </td><td>&nbsp</td><td>&nbsp</td><td> R6-8 </td>
-
-<td> BA 1190  </td>
-
-<td> Tba </td></tr>
-
-<tr><td> CSC300H1 </td><td>&nbsp</td><td>&nbsp</td><td> R8 </td>
-
-<td> BA 1190  </td>
-
-<td> Tba </td></tr>
-
-<tr><td> CSC301H1 </td>
-
-<td> F </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC301H1 </td><td>&nbsp</td><td>&nbsp</td><td> TR10 </td>
-
-<td> GB 248  </td>
-
-<td> S. Sim </td></tr>
-
-<tr><td> CSC301H1 </td><td>&nbsp</td><td>&nbsp</td><td> R11 </td>
-
-<td> GB 248  </td>
-
-<td> S. Sim </td></tr>
-
-<tr><td> CSC301H1 </td>
-
-<td> S </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L5101 </td>
-
-<tr><td> CSC301H1 </td><td>&nbsp</td><td>&nbsp</td><td> Cancel </td>
-
-<tr><td> CSC302H1 </td>
-
-<td> S </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC302H1 </td><td>&nbsp</td><td>&nbsp</td><td> TR10 </td>
-
-<td> GB 248  </td>
-
-<td> M. Medland </td></tr>
-
-<tr><td> CSC302H1 </td><td>&nbsp</td><td>&nbsp</td><td> R11 </td>
-
-<td> GB 248  </td>
-
-<td> M. Medland </td></tr>
-
-<tr><td> CSC309H1 </td>
-
-<td> F </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC309H1 </td><td>&nbsp</td><td>&nbsp</td><td> T3 </td>
-
-<td> BA 1180  </td>
-
-<td> E. De Lara </td></tr>
-
-<tr><td> CSC309H1 </td><td>&nbsp</td><td>&nbsp</td><td> R3 </td>
-
-<td> BA 1190  </td>
-
-<td> E. De Lara </td></tr>
-
-<tr><td> CSC309H1 </td><td>&nbsp</td><td>&nbsp</td><td> R4 </td>
-
-<td> BA 1190  </td>
-
-<td> E. De Lara </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2001 </td>
-
-<tr><td> CSC309H1 </td><td>&nbsp</td><td>&nbsp</td><td> T3 </td>
-
-<td> BA 1180  </td>
-
-<td> E. De Lara </td></tr>
-
-<tr><td> CSC309H1 </td><td>&nbsp</td><td>&nbsp</td><td> R3 </td>
-
-<td> BA 1190  </td>
-
-<td> E. De Lara </td></tr>
-
-<tr><td> CSC309H1 </td><td>&nbsp</td><td>&nbsp</td><td> R4 </td>
-
-<td> BA 1190  </td>
-
-<td> E. De Lara </td></tr>
-
-<tr><td> CSC309H1 </td>
-
-<td> S </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC309H1 </td><td>&nbsp</td><td>&nbsp</td><td> MWF10 </td>
-
-<td> LM 162  </td>
-
-<td> E. De Lara </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2001 </td>
-
-<tr><td> CSC309H1 </td><td>&nbsp</td><td>&nbsp</td><td> MWF10 </td>
-
-<td> LM 162  </td>
-
-<td> E. De Lara </td></tr>
-
-<tr><td> CSC310H1 </td>
-
-<td> F </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC310H1 </td><td>&nbsp</td><td>&nbsp</td><td> Cancel </td>
-
-<tr><td> CSC318H1 </td>
-
-<td> F </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC318H1 </td><td>&nbsp</td><td>&nbsp</td><td> Cancel </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2001 </td>
-
-<tr><td> CSC318H1 </td><td>&nbsp</td><td>&nbsp</td><td> Cancel </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2501 </td>
-
-<tr><td> CSC318H1 </td><td>&nbsp</td><td>&nbsp</td><td> M6 </td>
-
-<td> BA 1200  </td>
-
-<td> O. St-Cyr </td></tr>
-
-<tr><td> CSC318H1 </td><td>&nbsp</td><td>&nbsp</td><td> M7-9 </td>
-
-<td> BA 1200  </td>
-
-<td> O. St-Cyr </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L5101 </td>
-
-<tr><td> CSC318H1 </td><td>&nbsp</td><td>&nbsp</td><td> M6 </td>
-
-<td> BA 1190  </td>
-
-<td> O. St-Cyr </td></tr>
-
-<tr><td> CSC318H1 </td><td>&nbsp</td><td>&nbsp</td><td> M7-9 </td>
-
-<td> BA 1190  </td>
-
-<td> O. St-Cyr </td></tr>
-
-<tr><td> CSC318H1 </td>
-
-<td> S </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC318H1 </td><td>&nbsp</td><td>&nbsp</td><td> T4-6 </td>
-
-<td> BA 1210  </td>
-
-<td> O. St-Cyr </td></tr>
-
-<tr><td> CSC318H1 </td><td>&nbsp</td><td>&nbsp</td><td> T6 </td>
-
-<td> BA 1210  </td>
-
-<td> O. St-Cyr </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2001 </td>
-
-<tr><td> CSC318H1 </td><td>&nbsp</td><td>&nbsp</td><td> T4-6 </td>
-
-<td> BA 1210  </td>
-
-<td> O. St-Cyr </td></tr>
-
-<tr><td> CSC318H1 </td><td>&nbsp</td><td>&nbsp</td><td> T6 </td>
-
-<td> BA 1210  </td>
-
-<td> O. St-Cyr </td></tr>
-
-<tr><td> CSC320H1 </td>
-
-<td> S </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2501 </td>
-
-<tr><td> CSC320H1 </td><td>&nbsp</td><td>&nbsp</td><td> W6-9 </td>
-
-<td> BA 1190  </td>
-
-<td> Tba </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L5101 </td>
-
-<tr><td> CSC320H1 </td><td>&nbsp</td><td>&nbsp</td><td> W6-9 </td>
-
-<td> BA 1190  </td>
-
-<td> Tba </td></tr>
-
-<tr><td> CSC321H1 </td>
-
-<td> S </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC321H1 </td><td>&nbsp</td><td>&nbsp</td><td> TR1 </td>
-
-<td> UC 179  </td>
-
-<td> Tba </td></tr>
-
-<tr><td> CSC321H1 </td><td>&nbsp</td><td>&nbsp</td><td> R12 </td>
-
-<td> UC 179  </td>
-
-<td> Tba </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2001 </td>
-
-<tr><td> CSC321H1 </td><td>&nbsp</td><td>&nbsp</td><td> TR1 </td>
-
-<td> UC 179  </td>
-
-<td> Tba </td></tr>
-
-<tr><td> CSC321H1 </td><td>&nbsp</td><td>&nbsp</td><td> R12 </td>
-
-<td> UC 179  </td>
-
-<td> Tba </td></tr>
-
-<tr><td> CSC324H1 </td>
-
-<td> F </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L5101 </td>
-
-<tr><td> CSC324H1 </td><td>&nbsp</td><td>&nbsp</td><td> R6 </td>
-
-<td> BA 1190  </td>
-
-<td> G. Baumgartner </td></tr>
-
-<tr><td> CSC324H1 </td><td>&nbsp</td><td>&nbsp</td><td> R7-9 </td>
-
-<td> BA 1190  </td>
-
-<td> G. Baumgartner </td></tr>
-
-<tr><td> CSC324H1 </td>
-
-<td> S </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC324H1 </td><td>&nbsp</td><td>&nbsp</td><td> M2 </td>
-
-<td> KP 108 </td>
-
-<td> G. Baumgartner </td></tr>
-
-<tr><td> CSC324H1 </td><td>&nbsp</td><td>&nbsp</td><td> WF2 </td>
-
-<td> MP 102 </td>
-
-<tr><td> CSC330H1 </td>
-
-<td> F </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC330H1 </td><td>&nbsp</td><td>&nbsp</td><td> Cancel </td>
-
-<tr><td> CSC336H1 </td>
-
-<td> F </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC336H1 </td><td>&nbsp</td><td>&nbsp</td><td> MWF11 </td>
-
-<td> WI 1017  </td>
-
-<td> K. Jackson </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2003 </td>
-
-<tr><td> CSC336H1 </td><td>&nbsp</td><td>&nbsp</td><td> MWF11 </td>
-
-<td> WI 1017  </td>
-
-<td> K. Jackson </td></tr>
-
-<tr><td> CSC336H1 </td>
-
-<td> S </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L5101 </td>
-
-<tr><td> CSC336H1 </td><td>&nbsp</td><td>&nbsp</td><td> M6 </td>
-
-<td> BA 1190  </td>
-
-<td> C. Christara </td></tr>
-
-<tr><td> CSC336H1 </td><td>&nbsp</td><td>&nbsp</td><td> M7-9 </td>
-
-<td> BA 1190  </td>
-
-<td> C. Christara </td></tr>
-
-<tr><td> CSC343H1 </td>
-
-<td> F </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC343H1 </td><td>&nbsp</td><td>&nbsp</td><td> T1-3 </td>
-
-<td> MP 202  </td>
-
-<td> Tba </td></tr>
-
-<tr><td> CSC343H1 </td><td>&nbsp</td><td>&nbsp</td><td> R1 </td>
-
-<td> MP 202  </td>
-
-<td> Tba </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0201 </td>
-
-<tr><td> CSC343H1 </td><td>&nbsp</td><td>&nbsp</td><td> W1-3 </td>
-
-<td> BA 1190  </td>
-
-<td> Tba </td></tr>
-
-<tr><td> CSC343H1 </td><td>&nbsp</td><td>&nbsp</td><td> F1 </td>
-
-<td> BA 1190  </td>
-
-<td> Tba </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2001 </td>
-
-<tr><td> CSC343H1 </td><td>&nbsp</td><td>&nbsp</td><td> T1-3 </td>
-
-<td> MP 202  </td>
-
-<td> Tba </td></tr>
-
-<tr><td> CSC343H1 </td><td>&nbsp</td><td>&nbsp</td><td> R1 </td>
-
-<td> MP 202  </td>
-
-<td> Tba </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2003 </td>
-
-<tr><td> CSC343H1 </td><td>&nbsp</td><td>&nbsp</td><td> W1-3 </td>
-
-<td> BA 1190  </td>
-
-<td> Tba </td></tr>
-
-<tr><td> CSC343H1 </td><td>&nbsp</td><td>&nbsp</td><td> F1 </td>
-
-<td> BA 1190  </td>
-
-<td> Tba </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2203 </td>
-
-<tr><td> CSC343H1 </td><td>&nbsp</td><td>&nbsp</td><td> Cancel </td>
-
-<tr><td> CSC343H1 </td>
-
-<td> S </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC343H1 </td><td>&nbsp</td><td>&nbsp</td><td> MWF12 </td>
-
-<td> MP 102  </td>
-
-<td> Tba </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2001 </td>
-
-<tr><td> CSC343H1 </td><td>&nbsp</td><td>&nbsp</td><td> MWF12 </td>
-
-<td> MP 102  </td>
-
-<td> Tba </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2005 </td>
-
-<tr><td> CSC343H1 </td><td>&nbsp</td><td>&nbsp</td><td> Cancel </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2501 </td>
-
-<tr><td> CSC343H1 </td><td>&nbsp</td><td>&nbsp</td><td> T6-8 </td>
-
-<td> BA 1130  </td>
-
-<td> Tba </td></tr>
-
-<tr><td> CSC343H1 </td><td>&nbsp</td><td>&nbsp</td><td> T8 </td>
-
-<td> BA 1130  </td>
-
-<td> Tba </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2505 </td>
-
-<tr><td> CSC343H1 </td><td>&nbsp</td><td>&nbsp</td><td> T6-8 </td>
-
-<td> BA 1130  </td>
-
-<td> Tba </td></tr>
-
-<tr><td> CSC343H1 </td><td>&nbsp</td><td>&nbsp</td><td> T8 </td>
-
-<td> BA 1130  </td>
-
-<td> Tba </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L5101 </td>
-
-<tr><td> CSC343H1 </td><td>&nbsp</td><td>&nbsp</td><td> T6-8 </td>
-
-<td> BA 1130  </td>
-
-<td> Tba </td></tr>
-
-<tr><td> CSC343H1 </td><td>&nbsp</td><td>&nbsp</td><td> T8 </td>
-
-<td> BA 1130  </td>
-
-<td> Tba </td></tr>
-
-<tr><td> CSC350H1 </td>
-
-<td> F </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC350H1 </td><td>&nbsp</td><td>&nbsp</td><td> T1-3 </td>
-
-<td> C. Christara </td></tr>
-
-<tr><td> CSC350H1 </td><td>&nbsp</td><td>&nbsp</td><td> R1 </td>
-
-<td> C. Christara </td></tr>
-
-<tr><td> CSC358H1 </td>
-
-<td> S </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC358H1 </td><td>&nbsp</td><td>&nbsp</td><td> M10 </td>
-
-<td> SS 2102  </td>
-
-<td> P. Marbach </td></tr>
-
-<tr><td> CSC358H1 </td><td>&nbsp</td><td>&nbsp</td><td> R3-5 </td>
-
-<td> SS 2102  </td>
-
-<td> P. Marbach </td></tr>
-
-<tr><td> CSC369H1 </td>
-
-<td> F </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC369H1 </td><td>&nbsp</td><td>&nbsp</td><td> MWR12 </td>
-
-<td> BA 1170  </td>
-
-<td> A. Demke Brown </td></tr>
-
-<tr><td> CSC369H1 </td>
-
-<td> S </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC369H1 </td><td>&nbsp</td><td>&nbsp</td><td> M3 </td>
-
-<td> RW 110  </td>
-
-<td> K. Reid </td></tr>
-
-<tr><td> CSC369H1 </td><td>&nbsp</td><td>&nbsp</td><td> TR2 </td>
-
-<td> RW 110  </td>
-
-<td> K. Reid </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2003 </td>
-
-<tr><td> CSC369H1 </td><td>&nbsp</td><td>&nbsp</td><td> M3 </td>
-
-<td> RW 110  </td>
-
-<td> K. Reid </td></tr>
-
-<tr><td> CSC369H1 </td><td>&nbsp</td><td>&nbsp</td><td> TR2 </td>
-
-<td> RW 110  </td>
-
-<td> K. Reid </td></tr>
-
-<tr><td> CSC372H1 </td>
-
-<td> F </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC372H1 </td><td>&nbsp</td><td>&nbsp</td><td> MWF1 </td>
-
-<td> BA 1240  </td>
-
-<td> P. Anderson </td></tr>
-
-<tr><td> CSC372H1 </td><td>&nbsp</td><td>&nbsp</td><td> T3-6 </td>
-
-<td> BA 3165  </td>
-
-<td> P. Anderson </td></tr>
-
-<tr><td> CSC373H1 </td>
-
-<td> F </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC373H1 </td><td>&nbsp</td><td>&nbsp</td><td> MWF10 </td>
-
-<td> MP 203  </td>
-
-<td> Tba </td></tr>
-
-<tr><td> CSC373H1 </td><td>&nbsp</td><td>&nbsp</td><td> R2 </td>
-
-<td> MP 202  </td>
-
-<td> Tba </td></tr>
-
-<tr><td> CSC373H1 </td>
-
-<td> S </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC373H1 </td><td>&nbsp</td><td>&nbsp</td><td> MWF11 </td>
-
-<td> WI 1016  </td>
-
-<td> Tba </td></tr>
-
-<tr><td> CSC373H1 </td><td>&nbsp</td><td>&nbsp</td><td> M4 </td>
-
-<td> WI 1016  </td>
-
-<td> Tba </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2003 </td>
-
-<tr><td> CSC373H1 </td><td>&nbsp</td><td>&nbsp</td><td> MWF11 </td>
-
-<td> WI 1016  </td>
-
-<td> Tba </td></tr>
-
-<tr><td> CSC373H1 </td><td>&nbsp</td><td>&nbsp</td><td> M4 </td>
-
-<td> WI 1016  </td>
-
-<td> Tba </td></tr>
-
-<tr><td> CSC384H1 </td>
-
-<td> F </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC384H1 </td><td>&nbsp</td><td>&nbsp</td><td> T1 </td>
-
-<td> SS 1073  </td>
-
-<td> F. Bacchus </td></tr>
-
-<tr><td> CSC384H1 </td><td>&nbsp</td><td>&nbsp</td><td> R1 </td>
-
-<td> SS 2102  </td>
-
-<td> F. Bacchus </td></tr>
-
-<tr><td> CSC384H1 </td><td>&nbsp</td><td>&nbsp</td><td> R2 </td>
-
-<td> SS 2102  </td>
-
-<td> F. Bacchus </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2001 </td>
-
-<tr><td> CSC384H1 </td><td>&nbsp</td><td>&nbsp</td><td> T1 </td>
-
-<td> SS 1073  </td>
-
-<td> F. Bacchus </td></tr>
-
-<tr><td> CSC384H1 </td><td>&nbsp</td><td>&nbsp</td><td> R1 </td>
-
-<td> SS 2102  </td>
-
-<td> F. Bacchus </td></tr>
-
-<tr><td> CSC384H1 </td><td>&nbsp</td><td>&nbsp</td><td> R2 </td>
-
-<td> SS 2102  </td>
-
-<td> F. Bacchus </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2003 </td>
-
-<tr><td> CSC384H1 </td><td>&nbsp</td><td>&nbsp</td><td> T1 </td>
-
-<td> SS 1073  </td>
-
-<td> F. Bacchus </td></tr>
-
-<tr><td> CSC384H1 </td><td>&nbsp</td><td>&nbsp</td><td> R1 </td>
-
-<td> SS 2102  </td>
-
-<td> F. Bacchus </td></tr>
-
-<tr><td> CSC384H1 </td><td>&nbsp</td><td>&nbsp</td><td> R2 </td>
-
-<td> SS 2102  </td>
-
-<td> F. Bacchus </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2005 </td>
-
-<tr><td> CSC384H1 </td><td>&nbsp</td><td>&nbsp</td><td> T1 </td>
-
-<td> SS 1073  </td>
-
-<td> F. Bacchus </td></tr>
-
-<tr><td> CSC384H1 </td><td>&nbsp</td><td>&nbsp</td><td> R1 </td>
-
-<td> SS 2102  </td>
-
-<td> F. Bacchus </td></tr>
-
-<tr><td> CSC384H1 </td><td>&nbsp</td><td>&nbsp</td><td> R2 </td>
-
-<td> SS 2102  </td>
-
-<td> F. Bacchus </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2501 </td>
-
-<tr><td> CSC384H1 </td><td>&nbsp</td><td>&nbsp</td><td> Cancel </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2503 </td>
-
-<tr><td> CSC384H1 </td><td>&nbsp</td><td>&nbsp</td><td> Cancel </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2505 </td>
-
-<tr><td> CSC384H1 </td><td>&nbsp</td><td>&nbsp</td><td> Cancel </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L5101 </td>
-
-<tr><td> CSC384H1 </td><td>&nbsp</td><td>&nbsp</td><td> Cancel </td>
-
-<tr><td> CSC384H1 </td>
-
-<td> S </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC384H1 </td><td>&nbsp</td><td>&nbsp</td><td> MF1 </td>
-
-<td> WB 116 </td>
-
-<td> S. McIlraith </td></tr>
-
-<tr><td> CSC384H1 </td><td>&nbsp</td><td>&nbsp</td><td> W1 </td>
-
-<td> SF 1105 </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2001 </td>
-
-<tr><td> CSC384H1 </td><td>&nbsp</td><td>&nbsp</td><td> MF1 </td>
-
-<td> WB 116 </td>
-
-<td> S. McIlraith </td></tr>
-
-<tr><td> CSC384H1 </td><td>&nbsp</td><td>&nbsp</td><td> W1 </td>
-
-<td> SF 1105 </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2003 </td>
-
-<tr><td> CSC384H1 </td><td>&nbsp</td><td>&nbsp</td><td> MF1 </td>
-
-<td> WB 116 </td>
-
-<td> S. McIlraith </td></tr>
-
-<tr><td> CSC384H1 </td><td>&nbsp</td><td>&nbsp</td><td> W1 </td>
-
-<td> SF 1105 </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2005 </td>
-
-<tr><td> CSC384H1 </td><td>&nbsp</td><td>&nbsp</td><td> MF1 </td>
-
-<td> WB 116 </td>
-
-<td> S. McIlraith </td></tr>
-
-<tr><td> CSC384H1 </td><td>&nbsp</td><td>&nbsp</td><td> W1 </td>
-
-<td> SF 1105 </td>
-
-<tr><td> CSC401H1 </td>
-
-<td> S </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC401H1 </td><td>&nbsp</td><td>&nbsp</td><td> MWF10 </td>
-
-<td> RW 110  </td>
-
-<td> F. Rudzicz </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2001 </td>
-
-<tr><td> CSC401H1 </td><td>&nbsp</td><td>&nbsp</td><td> MWF10 </td>
-
-<td> RW 110  </td>
-
-<td> F. Rudzicz </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2005 </td>
-
-<tr><td> CSC401H1 </td><td>&nbsp</td><td>&nbsp</td><td> MWF10 </td>
-
-<td> RW 110  </td>
-
-<td> F. Rudzicz </td></tr>
-
-<tr><td> CSC404H1 </td>
-
-<td> S </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC404H1 </td><td>&nbsp</td><td>&nbsp</td><td> T10 </td>
-
-<td> BA 2145  </td>
-
-<td> S. Engels </td></tr>
-
-<tr><td> CSC404H1 </td><td>&nbsp</td><td>&nbsp</td><td> R10-12 </td>
-
-<td> BA 2145  </td>
-
-<td> S. Engels </td></tr>
-
-<tr><td> CSC410H1 </td>
-
-<td> S </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC410H1 </td><td>&nbsp</td><td>&nbsp</td><td> M12 </td>
-
-<td> BA 1200  </td>
-
-<td> Tba </td></tr>
-
-<tr><td> CSC410H1 </td><td>&nbsp</td><td>&nbsp</td><td> W11-1 </td>
-
-<td> BA 1200  </td>
-
-<td> Tba </td></tr>
-
-<tr><td> CSC411H1 </td>
-
-<td> F </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC411H1 </td><td>&nbsp</td><td>&nbsp</td><td> MWF3 </td>
-
-<td> BA 1190  </td>
-
-<td> R. Zemel </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2001 </td>
-
-<tr><td> CSC411H1 </td><td>&nbsp</td><td>&nbsp</td><td> MWF3 </td>
-
-<td> BA 1190  </td>
-
-<td> R. Zemel </td></tr>
-
-<tr><td> CSC418H1 </td>
-
-<td> F </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2501 </td>
-
-<tr><td> CSC418H1 </td><td>&nbsp</td><td>&nbsp</td><td> W6 </td>
-
-<td> BA 1170  </td>
-
-<td> L. Moore </td></tr>
-
-<tr><td> CSC418H1 </td><td>&nbsp</td><td>&nbsp</td><td> W7-9 </td>
-
-<td> BA 1170  </td>
-
-<td> L. Moore </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2505 </td>
-
-<tr><td> CSC418H1 </td><td>&nbsp</td><td>&nbsp</td><td> W6 </td>
-
-<td> BA 1170  </td>
-
-<td> L. Moore </td></tr>
-
-<tr><td> CSC418H1 </td><td>&nbsp</td><td>&nbsp</td><td> W7-9 </td>
-
-<td> BA 1170  </td>
-
-<td> L. Moore </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L5101 </td>
-
-<tr><td> CSC418H1 </td><td>&nbsp</td><td>&nbsp</td><td> W6 </td>
-
-<td> BA 1170  </td>
-
-<td> L. Moore </td></tr>
-
-<tr><td> CSC418H1 </td><td>&nbsp</td><td>&nbsp</td><td> W7-9 </td>
-
-<td> BA 1170  </td>
-
-<td> L. Moore </td></tr>
-
-<tr><td> CSC418H1 </td>
-
-<td> S </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC418H1 </td><td>&nbsp</td><td>&nbsp</td><td> M3 </td>
-
-<td> BA 1190  </td>
-
-<td> Tba </td></tr>
-
-<tr><td> CSC418H1 </td><td>&nbsp</td><td>&nbsp</td><td> W3-5 </td>
-
-<td> BA 1190  </td>
-
-<td> Tba </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2001 </td>
-
-<tr><td> CSC418H1 </td><td>&nbsp</td><td>&nbsp</td><td> M3 </td>
-
-<td> BA 1190  </td>
-
-<td> Tba </td></tr>
-
-<tr><td> CSC418H1 </td><td>&nbsp</td><td>&nbsp</td><td> W3-5 </td>
-
-<td> BA 1190  </td>
-
-<td> Tba </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2003 </td>
-
-<tr><td> CSC418H1 </td><td>&nbsp</td><td>&nbsp</td><td> M3 </td>
-
-<td> BA 1190  </td>
-
-<td> Tba </td></tr>
-
-<tr><td> CSC418H1 </td><td>&nbsp</td><td>&nbsp</td><td> W3-5 </td>
-
-<td> BA 1190  </td>
-
-<td> Tba </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2005 </td>
-
-<tr><td> CSC418H1 </td><td>&nbsp</td><td>&nbsp</td><td> M3 </td>
-
-<td> BA 1190  </td>
-
-<td> Tba </td></tr>
-
-<tr><td> CSC418H1 </td><td>&nbsp</td><td>&nbsp</td><td> W3-5 </td>
-
-<td> BA 1190  </td>
-
-<td> Tba </td></tr>
-
-<tr><td> CSC428H1 </td>
-
-<td> S </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2501 </td>
-
-<tr><td> CSC428H1 </td><td>&nbsp</td><td>&nbsp</td><td> M6-8 </td>
-
-<td> BA 1230  </td>
-
-<td> Tba </td></tr>
-
-<tr><td> CSC428H1 </td><td>&nbsp</td><td>&nbsp</td><td> M8 </td>
-
-<td> BA 1230  </td>
-
-<td> Tba </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2505 </td>
-
-<tr><td> CSC428H1 </td><td>&nbsp</td><td>&nbsp</td><td> M6-8 </td>
-
-<td> BA 1230  </td>
-
-<td> Tba </td></tr>
-
-<tr><td> CSC428H1 </td><td>&nbsp</td><td>&nbsp</td><td> M8 </td>
-
-<td> BA 1230  </td>
-
-<td> Tba </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L5101 </td>
-
-<tr><td> CSC428H1 </td><td>&nbsp</td><td>&nbsp</td><td> M6-8 </td>
-
-<td> BA 1230  </td>
-
-<td> Tba </td></tr>
-
-<tr><td> CSC428H1 </td><td>&nbsp</td><td>&nbsp</td><td> M8 </td>
-
-<td> BA 1230  </td>
-
-<td> Tba </td></tr>
-
-<tr><td> CSC438H1 </td>
-
-<td> F </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC438H1 </td><td>&nbsp</td><td>&nbsp</td><td> Cancel </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2003 </td>
-
-<tr><td> CSC438H1 </td><td>&nbsp</td><td>&nbsp</td><td> Cancel </td>
-
-<tr><td> CSC438H1 </td>
-
-<td> S </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC438H1 </td><td>&nbsp</td><td>&nbsp</td><td> MWF2 </td>
-
-<td> BA 1220  </td>
-
-<td> S. Cook </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2003 </td>
-
-<tr><td> CSC438H1 </td><td>&nbsp</td><td>&nbsp</td><td> MWF2 </td>
-
-<td> BA 1220  </td>
-
-<td> S. Cook </td></tr>
-
-<tr><td> CSC443H1 </td>
-
-<td> S </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC443H1 </td><td>&nbsp</td><td>&nbsp</td><td> T3-5 </td>
-
-<td> BA 1220  </td>
-
-<td> R. Miller </td></tr>
-
-<tr><td> CSC443H1 </td><td>&nbsp</td><td>&nbsp</td><td> T5 </td>
-
-<td> BA 1220  </td>
-
-<td> R. Miller </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2001 </td>
-
-<tr><td> CSC443H1 </td><td>&nbsp</td><td>&nbsp</td><td> T3-5 </td>
-
-<td> BA 1220  </td>
-
-<td> R. Miller </td></tr>
-
-<tr><td> CSC443H1 </td><td>&nbsp</td><td>&nbsp</td><td> T5 </td>
-
-<td> BA 1220  </td>
-
-<td> R. Miller </td></tr>
-
-<tr><td> CSC454H1 </td>
-
-<td> F </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2503 </td>
-
-<tr><td> CSC454H1 </td><td>&nbsp</td><td>&nbsp</td><td> W6-8 </td>
-
-<td> BA 1190  </td>
-
-<td> A. Wytenburg </td></tr>
-
-<tr><td> CSC454H1 </td><td>&nbsp</td><td>&nbsp</td><td> W8 </td>
-
-<td> BA 1190  </td>
-
-<td> A. Wytenburg </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2505 </td>
-
-<tr><td> CSC454H1 </td><td>&nbsp</td><td>&nbsp</td><td> W6-8 </td>
-
-<td> BA 1190  </td>
-
-<td> A. Wytenburg </td></tr>
-
-<tr><td> CSC454H1 </td><td>&nbsp</td><td>&nbsp</td><td> W8 </td>
-
-<td> BA 1190  </td>
-
-<td> A. Wytenburg </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L5101 </td>
-
-<tr><td> CSC454H1 </td><td>&nbsp</td><td>&nbsp</td><td> W6-8 </td>
-
-<td> BA 1190  </td>
-
-<td> A. Wytenburg </td></tr>
-
-<tr><td> CSC454H1 </td><td>&nbsp</td><td>&nbsp</td><td> W8 </td>
-
-<td> BA 1190  </td>
-
-<td> A. Wytenburg </td></tr>
-
-<tr><td> CSC456H1 </td>
-
-<td> F </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC456H1 </td><td>&nbsp</td><td>&nbsp</td><td> M1-3 </td>
-
-<td> BA 3012  </td>
-
-<td> C. Christara </td></tr>
-
-<tr><td> CSC456H1 </td><td>&nbsp</td><td>&nbsp</td><td> W1 </td>
-
-<td> BA 3012  </td>
-
-<td> C. Christara </td></tr>
-
-<tr><td> CSC458H1 </td>
-
-<td> F </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC458H1 </td><td>&nbsp</td><td>&nbsp</td><td> T1-3 </td>
-
-<td> GB 220 </td>
-
-<td> J. Lim </td></tr>
-
-<tr><td> CSC458H1 </td><td>&nbsp</td><td>&nbsp</td><td> F1 </td>
-
-<td> BA 1180  </td>
-
-<td> J. Lim </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2003 </td>
-
-<tr><td> CSC458H1 </td><td>&nbsp</td><td>&nbsp</td><td> T1-3 </td>
-
-<td> GB 220 </td>
-
-<td> J. Lim </td></tr>
-
-<tr><td> CSC458H1 </td><td>&nbsp</td><td>&nbsp</td><td> F1 </td>
-
-<td> BA 1180  </td>
-
-<td> J. Lim </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2005 </td>
-
-<tr><td> CSC458H1 </td><td>&nbsp</td><td>&nbsp</td><td> T1-3 </td>
-
-<td> GB 220 </td>
-
-<td> J. Lim </td></tr>
-
-<tr><td> CSC458H1 </td><td>&nbsp</td><td>&nbsp</td><td> F1 </td>
-
-<td> BA 1180  </td>
-
-<td> J. Lim </td></tr>
-
-<tr><td> CSC463H1 </td>
-
-<td> F </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC463H1 </td><td>&nbsp</td><td>&nbsp</td><td> MWF2 </td>
-
-<td> BA 1220  </td>
-
-<td> S. Cook </td></tr>
-
-<tr><td> CSC469H1 </td>
-
-<td> F </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC469H1 </td><td>&nbsp</td><td>&nbsp</td><td> R10-12 </td>
-
-<td> SS 2106  </td>
-
-<td> A. Demke Brown </td></tr>
-
-<tr><td> CSC469H1 </td><td>&nbsp</td><td>&nbsp</td><td> R1 </td>
-
-<td> SS 2108  </td>
-
-<td> A. Demke Brown </td></tr>
-
-<tr><td> CSC485H1 </td>
-
-<td> F </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC485H1 </td><td>&nbsp</td><td>&nbsp</td><td> W1-3 </td>
-
-<td> LM 161  </td>
-
-<td> G. Hirst </td></tr>
-
-<tr><td> CSC485H1 </td><td>&nbsp</td><td>&nbsp</td><td> R4 </td>
-
-<td> BA 1180 </td>
-
-<td> G. Hirst </td></tr>
-
-<tr><td> CSC486H1 </td>
-
-<td> S </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC486H1 </td><td>&nbsp</td><td>&nbsp</td><td> F12-2 </td>
-
-<td> BA 1200 </td>
-
-<td> V. Belle </td></tr>
-
-<tr><td> CSC488H1 </td>
-
-<td> S </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC488H1 </td><td>&nbsp</td><td>&nbsp</td><td> TR2 </td>
-
-<td> BA 1210  </td>
-
-<td> Tba </td></tr>
-
-<tr><td> CSC488H1 </td><td>&nbsp</td><td>&nbsp</td><td> R1 </td>
-
-<td> BA 1210  </td>
-
-<td> Tba </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2003 </td>
-
-<tr><td> CSC488H1 </td><td>&nbsp</td><td>&nbsp</td><td> TR2 </td>
-
-<td> BA 1210  </td>
-
-<td> Tba </td></tr>
-
-<tr><td> CSC488H1 </td><td>&nbsp</td><td>&nbsp</td><td> R1 </td>
-
-<td> BA 1210  </td>
-
-<td> Tba </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L2005 </td>
-
-<tr><td> CSC488H1 </td><td>&nbsp</td><td>&nbsp</td><td> TR2 </td>
-
-<td> BA 1210  </td>
-
-<td> Tba </td></tr>
-
-<tr><td> CSC488H1 </td><td>&nbsp</td><td>&nbsp</td><td> R1 </td>
-
-<td> BA 1210  </td>
-
-<td> Tba </td></tr>
-
-<tr><td> CSC490H1 </td>
-
-<td> F </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC490H1 </td><td>&nbsp</td><td>&nbsp</td><td> Cancel </td>
-
-<tr><td> CSC490H1 </td>
-
-<td> S </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<tr><td> CSC490H1 </td><td>&nbsp</td><td>&nbsp</td><td> R3-5 </td>
-
-<td> RS 208 </td>
-
-<td> K. Singh </td></tr>
-
-<tr><td> CSC494H1 </td>
-
-<td> F </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<td> Staff </td></tr>
-
-<tr><td> CSC494H1 </td>
-
-<td> S </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<td> Staff </td></tr>
-
-<tr><td> CSC494H1 </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<td> Staff </td></tr>
-
-<tr><td> CSC495H1 </td>
-
-<td> F </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<td> Staff </td></tr>
-
-<tr><td> CSC495H1 </td>
-
-<td> S </td></tr>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<td> Staff </td></tr>
-
-<tr><td> CSC495H1 </td>
-
-<tr><td>&nbsp</td><td>&nbsp</td><td>Type:  L0101 </td>
-
-<td> Staff </td></tr>
-
+<table class="timeTable">
+<tr class=timeTableRow><td class=timeTableHeader>Course</td><td class=timeTableHeader>Section</td><td class=timeTableHeader>Type</td><td class=timeTableHeader>Time</td><td class=timeTableHeader>Location</td><td class=timeTableHeader>Instructor</td></tr><div><p>
+<tr class=timeTableRow><td class=timeTableCourse>CSC104H1</td><td class=timeTableBlockSection>F</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>W6-8</td><td class=timeTableBlockLocation>MS 3154 </td><td class=timeTableBlockInstructor>D. Heap</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>W8</td><td class=timeTableBlockLocation>MS 3154 </td><td class=timeTableBlockInstructor>D. Heap</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC104H1</td><td class=timeTableBlockSection>S</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>TRF9</td><td class=timeTableBlockLocation>WB 116 </td><td class=timeTableBlockInstructor>D. Heap</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC108H1</td><td class=timeTableBlockSection>F</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>MWF9</td><td class=timeTableBlockLocation>BA 1160 </td><td class=timeTableBlockInstructor>M. Craig</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0201</td><td class=timeTableBlockTime>MWF10</td><td class=timeTableBlockLocation>BA 1160 </td><td class=timeTableBlockInstructor>M. Craig</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0202</td><td class=timeTableBlockTime>MWF10</td><td class=timeTableBlockLocation>WB 116 </td><td class=timeTableBlockInstructor>P. Gries</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0301</td><td class=timeTableBlockTime>MWF1</td><td class=timeTableBlockLocation>HS 610 </td><td class=timeTableBlockInstructor>J. Campbell</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>W6-9</td><td class=timeTableBlockLocation>MS 3153 </td><td class=timeTableBlockInstructor>P. Gries</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0301</td><td class=timeTableBlockTime>T3-5</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0501</td><td class=timeTableBlockTime>W3-5</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0701</td><td class=timeTableBlockTime>R1-3</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0801</td><td class=timeTableBlockTime>R3-5</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0901</td><td class=timeTableBlockTime>F1-3</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T1001</td><td class=timeTableBlockTime>W1-3</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T5101</td><td class=timeTableBlockTime>T7-9</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T5201</td><td class=timeTableBlockTime>R7-9</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC108H1</td><td class=timeTableBlockSection>S</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>MWF9</td><td class=timeTableBlockLocation>BA 1160 </td><td class=timeTableBlockInstructor>J. Campbell</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0201</td><td class=timeTableBlockTime>MWF10</td><td class=timeTableBlockLocation>BA 1160 </td><td class=timeTableBlockInstructor>J. Campbell</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>W6-9</td><td class=timeTableBlockLocation>MS 3154 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0301</td><td class=timeTableBlockTime>R1-3</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0501</td><td class=timeTableBlockTime>F1-3</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0601</td><td class=timeTableBlockTime>R3-5</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T5101</td><td class=timeTableBlockTime>R5-7</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T5201</td><td class=timeTableBlockTime>R7-9</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC120H1</td><td class=timeTableBlockSection>S</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>R7-9</td><td class=timeTableBlockLocation>BA 1180 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0101</td><td class=timeTableBlockTime>T3-5</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T5101</td><td class=timeTableBlockTime>W7-9</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC148H1</td><td class=timeTableBlockSection>F</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>MW9</td><td class=timeTableBlockLocation>BA 1180 </td><td class=timeTableBlockInstructor>D. Heap</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0201</td><td class=timeTableBlockTime>MW10</td><td class=timeTableBlockLocation>BA 1180 </td><td class=timeTableBlockInstructor>D. Heap</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0101</td><td class=timeTableBlockTime>T1-3</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC148H1</td><td class=timeTableBlockSection>S</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>MW9</td><td class=timeTableBlockLocation>WB 116 </td><td class=timeTableBlockInstructor>D. Heap</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0201</td><td class=timeTableBlockTime>MW10</td><td class=timeTableBlockLocation>WB 116 </td><td class=timeTableBlockInstructor>M. Craig</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>W6-8</td><td class=timeTableBlockLocation>MS 3153 </td><td class=timeTableBlockInstructor>G. Baumgartner</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0301</td><td class=timeTableBlockTime>T1-3</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0501</td><td class=timeTableBlockTime>W1-3</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0601</td><td class=timeTableBlockTime>W3-5</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T5101</td><td class=timeTableBlockTime>T7-9</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T5201</td><td class=timeTableBlockTime>W5-7</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC165H1</td><td class=timeTableBlockSection>F</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>MWF12</td><td class=timeTableBlockLocation>MP 203 </td><td class=timeTableBlockInstructor>T. Fairgrieve</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>M7-9</td><td class=timeTableBlockLocation>SF 1105 </td><td class=timeTableBlockInstructor>T. Fairgrieve</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>T6-9</td><td class=timeTableBlockLocation>SF 1105 </td><td class=timeTableBlockInstructor>T. Fairgrieve</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>R7-9</td><td class=timeTableBlockLocation>SF 1105 </td><td class=timeTableBlockInstructor>T. Fairgrieve</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC165H1</td><td class=timeTableBlockSection>S</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>MWF11</td><td class=timeTableBlockLocation>MP 103 </td><td class=timeTableBlockInstructor>T. Fairgrieve</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>T2-4</td><td class=timeTableBlockLocation>MP 203 </td><td class=timeTableBlockInstructor>T. Fairgrieve</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0201</td><td class=timeTableBlockTime>MWF3</td><td class=timeTableBlockLocation>BA 1170 </td><td class=timeTableBlockInstructor>T. Fairgrieve</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0201</td><td class=timeTableBlockTime>R2-4</td><td class=timeTableBlockLocation>MP 103 </td><td class=timeTableBlockInstructor>T. Fairgrieve</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC200Y1</td><td class=timeTableBlockSection>Y</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC207H1</td><td class=timeTableBlockSection>F</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>WF12</td><td class=timeTableBlockLocation>HS 610 </td><td class=timeTableBlockInstructor>J. Campbell</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>W6-8</td><td class=timeTableBlockLocation>BA 1130 </td><td class=timeTableBlockInstructor>J. Campbell</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0101</td><td class=timeTableBlockTime>M12</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0201</td><td class=timeTableBlockTime>M2</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0301</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0301</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T5101</td><td class=timeTableBlockTime>W5</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T5201</td><td class=timeTableBlockTime>T5</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC207H1</td><td class=timeTableBlockSection>S</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>WF1</td><td class=timeTableBlockLocation>BA 1130 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0101</td><td class=timeTableBlockTime>M1</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0201</td><td class=timeTableBlockTime>M2</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC209H1</td><td class=timeTableBlockSection>F</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>MTR1</td><td class=timeTableBlockLocation>LM 161 </td><td class=timeTableBlockInstructor>A. Rosenthal</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC209H1</td><td class=timeTableBlockSection>S</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>MW</td><td class=timeTableBlockLocation>MP 203</td><td class=timeTableBlockInstructor>K. Reid</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>T6</td><td class=timeTableBlockLocation>SF 1101 </td><td class=timeTableBlockInstructor>K. Reid</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>T7-9</td><td class=timeTableBlockLocation>SF 1101 </td><td class=timeTableBlockInstructor>K. Reid</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC236H1</td><td class=timeTableBlockSection>F</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>M11</td><td class=timeTableBlockLocation>SS 2102 </td><td class=timeTableBlockInstructor>A. Farzan</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>WF11</td><td class=timeTableBlockLocation>SS 2135 </td><td class=timeTableBlockInstructor>A. Farzan</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2503</td><td class=timeTableBlockTime>R6</td><td class=timeTableBlockLocation>BA 1180 </td><td class=timeTableBlockInstructor>A. Farzan</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2503</td><td class=timeTableBlockTime>R7-9</td><td class=timeTableBlockLocation>BA 1180 </td><td class=timeTableBlockInstructor>A. Farzan</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>R6</td><td class=timeTableBlockLocation>BA 1180 </td><td class=timeTableBlockInstructor>A. Farzan</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>R7-9</td><td class=timeTableBlockLocation>BA 1180 </td><td class=timeTableBlockInstructor>A. Farzan</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC236H1</td><td class=timeTableBlockSection>S</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>TR4</td><td class=timeTableBlockLocation>LM 159</td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>R5</td><td class=timeTableBlockLocation>LM 159</td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0102</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0201</td><td class=timeTableBlockTime>TR1</td><td class=timeTableBlockLocation>GB 120 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0201</td><td class=timeTableBlockTime>R11</td><td class=timeTableBlockLocation>GB 120 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2003</td><td class=timeTableBlockTime>TR4</td><td class=timeTableBlockLocation>LM 159</td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2003</td><td class=timeTableBlockTime>R5</td><td class=timeTableBlockLocation>LM 159</td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC240H1</td><td class=timeTableBlockSection>S</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>MWF11</td><td class=timeTableBlockLocation>RW 110 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC258H1</td><td class=timeTableBlockSection>F</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>T6-9</td><td class=timeTableBlockLocation>BA 1170 </td><td class=timeTableBlockInstructor>S. Engels</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>R6-9</td><td class=timeTableBlockLocation>BA 3165 </td><td class=timeTableBlockInstructor>S. Engels</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC258H1</td><td class=timeTableBlockSection>S</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>MWF11</td><td class=timeTableBlockLocation>LM 162 </td><td class=timeTableBlockInstructor>S. Engels</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>T3-6</td><td class=timeTableBlockLocation>BA 3165 </td><td class=timeTableBlockInstructor>S. Engels</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>M6-9</td><td class=timeTableBlockLocation>BA 3165 </td><td class=timeTableBlockInstructor>S. Engels</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>T6-9</td><td class=timeTableBlockLocation>BA 1160 </td><td class=timeTableBlockInstructor>S. Engels</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC263H1</td><td class=timeTableBlockSection>F</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>T10</td><td class=timeTableBlockLocation>LM 161 </td><td class=timeTableBlockInstructor>T. Pitassi</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>T10</td><td class=timeTableBlockLocation>LM 161 </td><td class=timeTableBlockInstructor>T. Pitassi</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2003</td><td class=timeTableBlockTime>T10</td><td class=timeTableBlockLocation>LM 161 </td><td class=timeTableBlockInstructor>T. Pitassi</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2003</td><td class=timeTableBlockTime>R</td><td class=timeTableBlockLocation>LM 161 </td><td class=timeTableBlockInstructor>T. Pitassi</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC263H1</td><td class=timeTableBlockSection>S</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>MWF3</td><td class=timeTableBlockLocation>BA 1130 </td><td class=timeTableBlockInstructor>S. Toueg</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2503</td><td class=timeTableBlockTime>R6-8</td><td class=timeTableBlockLocation>BA 1160 </td><td class=timeTableBlockInstructor>S. Toueg</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2503</td><td class=timeTableBlockTime>R8</td><td class=timeTableBlockLocation>BA 1160 </td><td class=timeTableBlockInstructor>S. Toueg</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>R6-8</td><td class=timeTableBlockLocation>BA 1160 </td><td class=timeTableBlockInstructor>S. Toueg</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>R8</td><td class=timeTableBlockLocation>BA 1160 </td><td class=timeTableBlockInstructor>S. Toueg</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC265H1</td><td class=timeTableBlockSection>F</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>R8</td><td class=timeTableBlockLocation>BA 3116 </td><td class=timeTableBlockInstructor>T. Pitassi</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>R11</td><td class=timeTableBlockLocation>BA 3116 </td><td class=timeTableBlockInstructor>T. Pitassi</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC290H1</td><td class=timeTableBlockSection>F</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC299Y1</td><td class=timeTableBlockSection>Y</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>TBA</td><td class=timeTableBlockLocation>BA 3116 </td><td class=timeTableBlockInstructor>R. Baecker</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC300H1</td><td class=timeTableBlockSection>S</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>R6-8</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>R8</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC301H1</td><td class=timeTableBlockSection>F</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>TR10</td><td class=timeTableBlockLocation>GB 248 </td><td class=timeTableBlockInstructor>S. Sim</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>R11</td><td class=timeTableBlockLocation>GB 248 </td><td class=timeTableBlockInstructor>S. Sim</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC301H1</td><td class=timeTableBlockSection>S</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC302H1</td><td class=timeTableBlockSection>S</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>TR10</td><td class=timeTableBlockLocation>GB 248 </td><td class=timeTableBlockInstructor>M. Medland</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>R11</td><td class=timeTableBlockLocation>GB 248 </td><td class=timeTableBlockInstructor>M. Medland</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC309H1</td><td class=timeTableBlockSection>F</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>T3</td><td class=timeTableBlockLocation>BA 1180 </td><td class=timeTableBlockInstructor>E. De Lara</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>R3</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>E. De Lara</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>R4</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>E. De Lara</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2001</td><td class=timeTableBlockTime>T3</td><td class=timeTableBlockLocation>BA 1180 </td><td class=timeTableBlockInstructor>E. De Lara</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2001</td><td class=timeTableBlockTime>R3</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>E. De Lara</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2001</td><td class=timeTableBlockTime>R4</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>E. De Lara</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC309H1</td><td class=timeTableBlockSection>S</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>MWF10</td><td class=timeTableBlockLocation>LM 162 </td><td class=timeTableBlockInstructor>E. De Lara</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2001</td><td class=timeTableBlockTime>MWF10</td><td class=timeTableBlockLocation>LM 162 </td><td class=timeTableBlockInstructor>E. De Lara</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC310H1</td><td class=timeTableBlockSection>F</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC318H1</td><td class=timeTableBlockSection>F</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2001</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2501</td><td class=timeTableBlockTime>M6</td><td class=timeTableBlockLocation>BA 1200 </td><td class=timeTableBlockInstructor>O. St-Cyr</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2501</td><td class=timeTableBlockTime>M7-9</td><td class=timeTableBlockLocation>BA 1200 </td><td class=timeTableBlockInstructor>O. St-Cyr</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>M6</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>O. St-Cyr</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>M7-9</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>O. St-Cyr</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC318H1</td><td class=timeTableBlockSection>S</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>T4-6</td><td class=timeTableBlockLocation>BA 1210 </td><td class=timeTableBlockInstructor>O. St-Cyr</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>T6</td><td class=timeTableBlockLocation>BA 1210 </td><td class=timeTableBlockInstructor>O. St-Cyr</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2001</td><td class=timeTableBlockTime>T4-6</td><td class=timeTableBlockLocation>BA 1210 </td><td class=timeTableBlockInstructor>O. St-Cyr</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2001</td><td class=timeTableBlockTime>T6</td><td class=timeTableBlockLocation>BA 1210 </td><td class=timeTableBlockInstructor>O. St-Cyr</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC320H1</td><td class=timeTableBlockSection>S</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2501</td><td class=timeTableBlockTime>W6-9</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>W6-9</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC321H1</td><td class=timeTableBlockSection>S</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>TR1</td><td class=timeTableBlockLocation>UC 179 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>R12</td><td class=timeTableBlockLocation>UC 179 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2001</td><td class=timeTableBlockTime>TR1</td><td class=timeTableBlockLocation>UC 179 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2001</td><td class=timeTableBlockTime>R12</td><td class=timeTableBlockLocation>UC 179 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC324H1</td><td class=timeTableBlockSection>F</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>R6</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>G. Baumgartner</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>R7-9</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>G. Baumgartner</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC324H1</td><td class=timeTableBlockSection>S</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>M2</td><td class=timeTableBlockLocation>KP 108</td><td class=timeTableBlockInstructor>G. Baumgartner</td>
+<tr class=timeTableRow><td></td><td class=timeTableBlock></td><td class=timeTableBlock>L0101</td><td class=timeTableBlock>WF2</td><td class=timeTableBlock>MP 102</td><td class=timeTableBlock>G. Baumgartner</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC330H1</td><td class=timeTableBlockSection>F</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC336H1</td><td class=timeTableBlockSection>F</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>MWF11</td><td class=timeTableBlockLocation>WI 1017 </td><td class=timeTableBlockInstructor>K. Jackson</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2003</td><td class=timeTableBlockTime>MWF11</td><td class=timeTableBlockLocation>WI 1017 </td><td class=timeTableBlockInstructor>K. Jackson</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC336H1</td><td class=timeTableBlockSection>S</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>M6</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>C. Christara</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>M7-9</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>C. Christara</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC343H1</td><td class=timeTableBlockSection>F</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>T1-3</td><td class=timeTableBlockLocation>MP 202 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>R1</td><td class=timeTableBlockLocation>MP 202 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0201</td><td class=timeTableBlockTime>W1-3</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0201</td><td class=timeTableBlockTime>F1</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2001</td><td class=timeTableBlockTime>T1-3</td><td class=timeTableBlockLocation>MP 202 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2001</td><td class=timeTableBlockTime>R1</td><td class=timeTableBlockLocation>MP 202 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2003</td><td class=timeTableBlockTime>W1-3</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2003</td><td class=timeTableBlockTime>F1</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2203</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC343H1</td><td class=timeTableBlockSection>S</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>MWF12</td><td class=timeTableBlockLocation>MP 102 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2001</td><td class=timeTableBlockTime>MWF12</td><td class=timeTableBlockLocation>MP 102 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2005</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2501</td><td class=timeTableBlockTime>T6-8</td><td class=timeTableBlockLocation>BA 1130 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2501</td><td class=timeTableBlockTime>T8</td><td class=timeTableBlockLocation>BA 1130 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2505</td><td class=timeTableBlockTime>T6-8</td><td class=timeTableBlockLocation>BA 1130 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2505</td><td class=timeTableBlockTime>T8</td><td class=timeTableBlockLocation>BA 1130 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>T6-8</td><td class=timeTableBlockLocation>BA 1130 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>T8</td><td class=timeTableBlockLocation>BA 1130 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC350H1</td><td class=timeTableBlockSection>F</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>T1-3</td><td class=timeTableBlockLocation>BA 1130 </td><td class=timeTableBlockInstructor>C. Christara</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>R1</td><td class=timeTableBlockLocation>BA 1130 </td><td class=timeTableBlockInstructor>C. Christara</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC358H1</td><td class=timeTableBlockSection>S</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>M10</td><td class=timeTableBlockLocation>SS 2102 </td><td class=timeTableBlockInstructor>P. Marbach</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>R3-5</td><td class=timeTableBlockLocation>SS 2102 </td><td class=timeTableBlockInstructor>P. Marbach</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC369H1</td><td class=timeTableBlockSection>F</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>MWR12</td><td class=timeTableBlockLocation>BA 1170 </td><td class=timeTableBlockInstructor>A. Demke Brown</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC369H1</td><td class=timeTableBlockSection>S</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>M3</td><td class=timeTableBlockLocation>RW 110 </td><td class=timeTableBlockInstructor>K. Reid</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>TR2</td><td class=timeTableBlockLocation>RW 110 </td><td class=timeTableBlockInstructor>K. Reid</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2003</td><td class=timeTableBlockTime>M3</td><td class=timeTableBlockLocation>RW 110 </td><td class=timeTableBlockInstructor>K. Reid</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2003</td><td class=timeTableBlockTime>TR2</td><td class=timeTableBlockLocation>RW 110 </td><td class=timeTableBlockInstructor>K. Reid</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC372H1</td><td class=timeTableBlockSection>F</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>MWF1</td><td class=timeTableBlockLocation>BA 1240 </td><td class=timeTableBlockInstructor>P. Anderson</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>T3-6</td><td class=timeTableBlockLocation>BA 3165 </td><td class=timeTableBlockInstructor>P. Anderson</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC373H1</td><td class=timeTableBlockSection>F</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>MWF10</td><td class=timeTableBlockLocation>MP 203 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>R2</td><td class=timeTableBlockLocation>MP 202 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC373H1</td><td class=timeTableBlockSection>S</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>MWF11</td><td class=timeTableBlockLocation>WI 1016 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>M4</td><td class=timeTableBlockLocation>WI 1016 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2003</td><td class=timeTableBlockTime>MWF11</td><td class=timeTableBlockLocation>WI 1016 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2003</td><td class=timeTableBlockTime>M4</td><td class=timeTableBlockLocation>WI 1016 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC384H1</td><td class=timeTableBlockSection>F</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>T1</td><td class=timeTableBlockLocation>SS 1073 </td><td class=timeTableBlockInstructor>F. Bacchus</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>R1</td><td class=timeTableBlockLocation>SS 2102 </td><td class=timeTableBlockInstructor>F. Bacchus</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>R2</td><td class=timeTableBlockLocation>SS 2102 </td><td class=timeTableBlockInstructor>F. Bacchus</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2001</td><td class=timeTableBlockTime>T1</td><td class=timeTableBlockLocation>SS 1073 </td><td class=timeTableBlockInstructor>F. Bacchus</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2001</td><td class=timeTableBlockTime>R1</td><td class=timeTableBlockLocation>SS 2102 </td><td class=timeTableBlockInstructor>F. Bacchus</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2001</td><td class=timeTableBlockTime>R2</td><td class=timeTableBlockLocation>SS 2102 </td><td class=timeTableBlockInstructor>F. Bacchus</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2003</td><td class=timeTableBlockTime>T1</td><td class=timeTableBlockLocation>SS 1073 </td><td class=timeTableBlockInstructor>F. Bacchus</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2003</td><td class=timeTableBlockTime>R1</td><td class=timeTableBlockLocation>SS 2102 </td><td class=timeTableBlockInstructor>F. Bacchus</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2003</td><td class=timeTableBlockTime>R2</td><td class=timeTableBlockLocation>SS 2102 </td><td class=timeTableBlockInstructor>F. Bacchus</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2005</td><td class=timeTableBlockTime>T1</td><td class=timeTableBlockLocation>SS 1073 </td><td class=timeTableBlockInstructor>F. Bacchus</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2005</td><td class=timeTableBlockTime>R1</td><td class=timeTableBlockLocation>SS 2102 </td><td class=timeTableBlockInstructor>F. Bacchus</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2005</td><td class=timeTableBlockTime>R2</td><td class=timeTableBlockLocation>SS 2102 </td><td class=timeTableBlockInstructor>F. Bacchus</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2501</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2503</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2505</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC384H1</td><td class=timeTableBlockSection>S</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>MF1</td><td class=timeTableBlockLocation>WB 116</td><td class=timeTableBlockInstructor>S. McIlraith</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2001</td><td class=timeTableBlockTime>MF1</td><td class=timeTableBlockLocation>WB 116</td><td class=timeTableBlockInstructor>S. McIlraith</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2003</td><td class=timeTableBlockTime>MF1</td><td class=timeTableBlockLocation>WB 116</td><td class=timeTableBlockInstructor>S. McIlraith</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2005</td><td class=timeTableBlockTime>MF1</td><td class=timeTableBlockLocation>WB 116</td><td class=timeTableBlockInstructor>S. McIlraith</td>
+<tr class=timeTableRow><td></td><td class=timeTableBlock></td><td class=timeTableBlock>L2005</td><td class=timeTableBlock>W1</td><td class=timeTableBlock>SF 1105</td><td class=timeTableBlock>S. McIlraith</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC401H1</td><td class=timeTableBlockSection>S</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>MWF10</td><td class=timeTableBlockLocation>RW 110 </td><td class=timeTableBlockInstructor>F. Rudzicz</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2001</td><td class=timeTableBlockTime>MWF10</td><td class=timeTableBlockLocation>RW 110 </td><td class=timeTableBlockInstructor>F. Rudzicz</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2005</td><td class=timeTableBlockTime>MWF10</td><td class=timeTableBlockLocation>RW 110 </td><td class=timeTableBlockInstructor>F. Rudzicz</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC404H1</td><td class=timeTableBlockSection>S</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>T10</td><td class=timeTableBlockLocation>BA 2145 </td><td class=timeTableBlockInstructor>S. Engels</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>T10</td><td class=timeTableBlockLocation>BA 2145 </td><td class=timeTableBlockInstructor>S. Engels</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC410H1</td><td class=timeTableBlockSection>S</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>M12</td><td class=timeTableBlockLocation>BA 1200 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>M12</td><td class=timeTableBlockLocation>BA 1200 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC411H1</td><td class=timeTableBlockSection>F</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>MWF3</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>R. Zemel</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2001</td><td class=timeTableBlockTime>MWF3</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>R. Zemel</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC418H1</td><td class=timeTableBlockSection>F</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2501</td><td class=timeTableBlockTime>W6</td><td class=timeTableBlockLocation>BA 1170 </td><td class=timeTableBlockInstructor>L. Moore</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2501</td><td class=timeTableBlockTime>W7-9</td><td class=timeTableBlockLocation>BA 1170 </td><td class=timeTableBlockInstructor>L. Moore</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2505</td><td class=timeTableBlockTime>W6</td><td class=timeTableBlockLocation>BA 1170 </td><td class=timeTableBlockInstructor>L. Moore</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2505</td><td class=timeTableBlockTime>W7-9</td><td class=timeTableBlockLocation>BA 1170 </td><td class=timeTableBlockInstructor>L. Moore</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>W6</td><td class=timeTableBlockLocation>BA 1170 </td><td class=timeTableBlockInstructor>L. Moore</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>W7-9</td><td class=timeTableBlockLocation>BA 1170 </td><td class=timeTableBlockInstructor>L. Moore</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC418H1</td><td class=timeTableBlockSection>S</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>M3</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>W3-5</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2001</td><td class=timeTableBlockTime>M3</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2001</td><td class=timeTableBlockTime>W3-5</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2003</td><td class=timeTableBlockTime>M3</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2003</td><td class=timeTableBlockTime>W3-5</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2005</td><td class=timeTableBlockTime>M3</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2005</td><td class=timeTableBlockTime>W3-5</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC428H1</td><td class=timeTableBlockSection>S</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2501</td><td class=timeTableBlockTime>M6-8</td><td class=timeTableBlockLocation>BA 1230 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2501</td><td class=timeTableBlockTime>M8</td><td class=timeTableBlockLocation>BA 1230 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2505</td><td class=timeTableBlockTime>M6-8</td><td class=timeTableBlockLocation>BA 1230 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2505</td><td class=timeTableBlockTime>M8</td><td class=timeTableBlockLocation>BA 1230 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>M6-8</td><td class=timeTableBlockLocation>BA 1230 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>M8</td><td class=timeTableBlockLocation>BA 1230 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC438H1</td><td class=timeTableBlockSection>F</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2003</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC438H1</td><td class=timeTableBlockSection>S</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>MWF2</td><td class=timeTableBlockLocation>BA 1220 </td><td class=timeTableBlockInstructor>S. Cook</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2003</td><td class=timeTableBlockTime>MWF2</td><td class=timeTableBlockLocation>BA 1220 </td><td class=timeTableBlockInstructor>S. Cook</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC443H1</td><td class=timeTableBlockSection>S</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>T3-5</td><td class=timeTableBlockLocation>BA 1220 </td><td class=timeTableBlockInstructor>R. Miller</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>T5</td><td class=timeTableBlockLocation>BA 1220 </td><td class=timeTableBlockInstructor>R. Miller</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2001</td><td class=timeTableBlockTime>T3-5</td><td class=timeTableBlockLocation>BA 1220 </td><td class=timeTableBlockInstructor>R. Miller</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2001</td><td class=timeTableBlockTime>T5</td><td class=timeTableBlockLocation>BA 1220 </td><td class=timeTableBlockInstructor>R. Miller</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC454H1</td><td class=timeTableBlockSection>F</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2503</td><td class=timeTableBlockTime>W6-8</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>A. Wytenburg</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2503</td><td class=timeTableBlockTime>W8</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>A. Wytenburg</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2505</td><td class=timeTableBlockTime>W6-8</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>A. Wytenburg</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2505</td><td class=timeTableBlockTime>W8</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>A. Wytenburg</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>W6-8</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>A. Wytenburg</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>W8</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>A. Wytenburg</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC456H1</td><td class=timeTableBlockSection>F</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>M1-3</td><td class=timeTableBlockLocation>BA 3012 </td><td class=timeTableBlockInstructor>C. Christara</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>W1</td><td class=timeTableBlockLocation>BA 3012 </td><td class=timeTableBlockInstructor>C. Christara</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC458H1</td><td class=timeTableBlockSection>F</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>T1-3</td><td class=timeTableBlockLocation>GB 220</td><td class=timeTableBlockInstructor>J. Lim</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>F1</td><td class=timeTableBlockLocation>BA 1180 </td><td class=timeTableBlockInstructor>J. Lim</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2003</td><td class=timeTableBlockTime>T1-3</td><td class=timeTableBlockLocation>GB 220</td><td class=timeTableBlockInstructor>J. Lim</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2003</td><td class=timeTableBlockTime>F1</td><td class=timeTableBlockLocation>BA 1180 </td><td class=timeTableBlockInstructor>J. Lim</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2005</td><td class=timeTableBlockTime>T1-3</td><td class=timeTableBlockLocation>GB 220</td><td class=timeTableBlockInstructor>J. Lim</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2005</td><td class=timeTableBlockTime>F1</td><td class=timeTableBlockLocation>BA 1180 </td><td class=timeTableBlockInstructor>J. Lim</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC463H1</td><td class=timeTableBlockSection>F</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>MWF2</td><td class=timeTableBlockLocation>BA 1220 </td><td class=timeTableBlockInstructor>S. Cook</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC469H1</td><td class=timeTableBlockSection>F</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>MWF2</td><td class=timeTableBlockLocation>SS 2106 </td><td class=timeTableBlockInstructor>A. Demke Brown</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>R1</td><td class=timeTableBlockLocation>SS 2108 </td><td class=timeTableBlockInstructor>A. Demke Brown</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC485H1</td><td class=timeTableBlockSection>F</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>W1-3</td><td class=timeTableBlockLocation>LM 161 </td><td class=timeTableBlockInstructor>G. Hirst</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>R4</td><td class=timeTableBlockLocation>BA 1180</td><td class=timeTableBlockInstructor>G. Hirst</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC486H1</td><td class=timeTableBlockSection>S</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>R4</td><td class=timeTableBlockLocation>BA 1200</td><td class=timeTableBlockInstructor>V. Belle</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC488H1</td><td class=timeTableBlockSection>S</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>TR2</td><td class=timeTableBlockLocation>BA 1210 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>R1</td><td class=timeTableBlockLocation>BA 1210 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2003</td><td class=timeTableBlockTime>TR2</td><td class=timeTableBlockLocation>BA 1210 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2003</td><td class=timeTableBlockTime>R1</td><td class=timeTableBlockLocation>BA 1210 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2005</td><td class=timeTableBlockTime>TR2</td><td class=timeTableBlockLocation>BA 1210 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2005</td><td class=timeTableBlockTime>R1</td><td class=timeTableBlockLocation>BA 1210 </td><td class=timeTableBlockInstructor>Tba</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC490H1</td><td class=timeTableBlockSection>F</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC490H1</td><td class=timeTableBlockSection>S</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>R3-5</td><td class=timeTableBlockLocation>RS 208</td><td class=timeTableBlockInstructor>K. Singh</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC494H1</td><td class=timeTableBlockSection>F</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>TBA</td><td class=timeTableBlockLocation>RS 208</td><td class=timeTableBlockInstructor>Staff</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC494H1</td><td class=timeTableBlockSection>S</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>TBA</td><td class=timeTableBlockLocation>RS 208</td><td class=timeTableBlockInstructor>Staff</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC494H1</td><td class=timeTableBlockSection>Y</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>TBA</td><td class=timeTableBlockLocation>RS 208</td><td class=timeTableBlockInstructor>Staff</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC495H1</td><td class=timeTableBlockSection>F</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>TBA</td><td class=timeTableBlockLocation>RS 208</td><td class=timeTableBlockInstructor>Staff</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC495H1</td><td class=timeTableBlockSection>S</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>TBA</td><td class=timeTableBlockLocation>RS 208</td><td class=timeTableBlockInstructor>Staff</td>
+<tr class=timeTableRow><td class=timeTableCourse>CSC495H1</td><td class=timeTableBlockSection>Y</td>
+
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>TBA</td><td class=timeTableBlockLocation>RS 208</td><td class=timeTableBlockInstructor>Staff</td>
 </p></div></table>
