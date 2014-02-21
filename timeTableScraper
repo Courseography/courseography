@@ -34,12 +34,12 @@ class MyHTMLParser(HTMLParser):
     def handle_data(self, data):
     	if course.match(data):
 	        if self.fieldMemory == 4:
-	        	print('<tr><td></td><td></td><td>' + self.typeMemory +'</td><td>' + self.timeMemory+ '</td><td>'+self.locationMemory+'</td><td>'+ self.instructorMemory+'</td>')
+	        	print('<tr class=timeTableRow><td></td><td class=timeTableBlock></td><td class=timeTableBlock>' + self.typeMemory +'</td><td class=timeTableBlock>' + self.timeMemory+ '</td><td class=timeTableBlock>'+self.locationMemory+'</td><td class=timeTableBlock>'+ self.instructorMemory+'</td>')
 	        self.switch = True
 	        self.fieldMemory = 0
 	        self.courseMemory = data
     	elif section.match(data) and self.switch:
-	        print('<tr><td>', self.courseMemory, '</td><td>', data, '</td>\n')
+	        print('<tr class=timeTableRow><td class=timeTableCourse>' + self.courseMemory + '</td><td class=timeTableBlockSection>' + data + '</td>\n')
 	        self.sectionMemory = data
 	        self.fieldMemory = 1
 	        self.switch = False
@@ -50,14 +50,14 @@ class MyHTMLParser(HTMLParser):
 	        self.timeMemory = data
 	        self.fieldMemory = 3
 	        if data == 'Cancel':
-	        	print('<tr><td></td><td></td><td>' + self.typeMemory +'</td><td>' + data+ '</td><td></td><td></td>')
+	        	print('<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>' + self.typeMemory +'</td><td class=timeTableBlockTime>' + data+ '</td><td class=timeTableBlock></td><td class=timeTableBlock></td>')
 	        if self.typeMemory[0] == 'T':
-	            print('<tr><td></td><td></td><td>' + self.typeMemory +'</td><td>' + data+ '</td><td></td><td></td>')
+	            print('<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>' + self.typeMemory +'</td><td class=timeTableBlockTime>' + data+ '</td><td class=timeTableBlock></td><td class=timeTableBlock></td>')
     	elif location.match(data):
 	        self.locationMemory = data
 	        self.fieldMemory = 4
     	elif instructor.match(data):
-	        print('<tr><td></td><td></td><td>' + self.typeMemory +'</td><td>' + self.timeMemory+ '</td><td>'+self.locationMemory+'</td><td>'+data+'</td>')
+	        print('<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>' + self.typeMemory +'</td><td class=timeTableBlockTime>' + self.timeMemory+ '</td><td class=timeTableBlockLocation>'+self.locationMemory+'</td><td class=timeTableBlockInstructor>'+data+'</td>')
 	        self.fieldMemory = 5
 	        self.instructorMemory = data
 	        
@@ -65,13 +65,13 @@ class MyHTMLParser(HTMLParser):
 parser = MyHTMLParser(strict=False)
 
 print('<table class=\"timeTable\">')
-print('<tr>'
-	+ '<td>Course</td>'
-	+ '<td>Section</td>'
-	+ '<td>Type</td>'
-	+ '<td>Time</td>'
-	+ '<td>Location</td>'
-	+ '<td>Instructor</td>'
+print('<tr class=timeTableRow>'
+	+ '<td class=timeTableHeader>Course</td>'
+	+ '<td class=timeTableHeader>Section</td>'
+	+ '<td class=timeTableHeader>Type</td>'
+	+ '<td class=timeTableHeader>Time</td>'
+	+ '<td class=timeTableHeader>Location</td>'
+	+ '<td class=timeTableHeader>Instructor</td>'
 	+ '</tr><div><p>')
 parser.feed(str(htmlData))
 print('</p></div></table>')
