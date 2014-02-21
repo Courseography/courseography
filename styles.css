@@ -18,6 +18,7 @@ table.timeTable {
   color: black;
   text-align: center;
   width: 200px;
+  height: 150px;
 }
 
 .courseCell p {
@@ -30,6 +31,11 @@ table.timeTable {
 p.courseName {
   font-size: 1.2em;
   font-weight: bold;
+}
+
+div#calendar {
+  padding-left: 2em;
+  padding-right: 2em;
 }
 
 div#postDiv {
