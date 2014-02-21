@@ -12,8 +12,8 @@ htmlData = html.read()
 # The regular expressions for all 6 fields
 course = re.compile('^CSC\d{3}(Y|H)1$')
 section = re.compile('^[FSY]{1}$')
-lecture = re.compile('^([TL]){1}(\d){1}\d{1}0{1}\d{1}$')
-time = re.compile('^[MWTRF]{1,3}\d?[-]?\d?$|Cancel|TBA')
+lecture = re.compile('^([TL]){1}[0123456789]{2}0{1}\d{1}$')
+time = re.compile('^[MWTRF]{1,3}\d{0,2}[-]?\d{0,2}$|Cancel|TBA')
 instructor = re.compile('^\w\.|Tba|Staff')
 location = re.compile('^\w{2} \d{1,4}')
 
@@ -75,4 +75,4 @@ print('<tr class=timeTableRow>'
 	+ '</tr><div><p>')
 parser.feed(str(htmlData))
 print('</p></div></table>')
-" > res/timeTable
+" > res/timeTable.txt 2> res/timeTableLogFile.txt
