@@ -10,6 +10,45 @@ div.infoTab {
 table.timeTable {
     width: 50%;
     margin: 0 auto;
+    border : 1px solid black;
+    padding: 2em;
+}
+
+tr.timeTableRow {
+    border: 1px solid white;
+}
+
+td.timeTableHeader{
+    background: white;
+    font-color: black;
+}
+
+td.timeTableBlock {
+    background: blue;
+}
+
+td.timeTableCourse {
+    background: green;
+}
+
+td.timeTableBlockSection {
+    background: purple;
+}
+
+td.timeTableBlockType {
+    background: yellow;
+}
+
+td.timeTableBlockTime {
+    background: orange;
+}
+
+td.timeTableBlockLocation {
+    background: teal;
+}
+
+td.timeTableBlockInstructor {
+    background: red;
 }
 
 .courseCell {
