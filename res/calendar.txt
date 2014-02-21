@@ -1,197 +1,509 @@
 
 CSC104H1    Computational Thinking[24L/12T]
 Humans have solved problems for millennia on computing devices by representing data as diverse numbers, text, images, sound and genomes, and then transforming the data.  A gentle introduction to designing programs (recipes) for systematically solving problems that crop up in diverse domains such as science, literature and graphics.  Social and intellectual issues raised by computing.  Algorithms, hardware, software, operating systems, the limits of computation.
+
 Note: you may not take this course concurrently with any CSC course, but you may take CSC108H1/CSC148H1 after CSC104H1.
+
+Exclusion: SMC104H1 (as taught before 1990); VIC104H1 (as taught before 1990); any CSC course.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
 
 CSC108H1    Introduction to Computer Programming[36L/12T/12P]
 Structure of computers; the computing environment. Programming in a language such as Python. Program structure: elementary data types,statements, control flow, functions, classes, objects, methods, fields. Lists; searching, sorting and complexity. Practical (P) sections consist of supervised work in the computing laboratory. These sections are offered when facilities are available, and attendance is required.
+
 NOTE: You may not take this course after or concurrently with CSC148H1, but you may take CSC148H1 after CSC108H1.
+
+Exclusion: CSC107H1, CSC120H1, CSC139H1, CSC148H1, CSC149H1, CSC150H1.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
 
 CSC120H1    Computer Science for the Sciences[24L/12P]
 An introduction to computer science for students in other sciences, with an emphasis on gaining practical skills. Introduction to programming; web programming; database design; software tools; examples and exercises taken from the sciences. At the end of this course you will be able to develop computer tools for scientific applications, such as the structuring and analysis of experimental data. Practical (P) sections consist of supervised work in the computer laboratory. No programming experience is necessary. Students who wish to do more can progress directly to CSC150H1.
 
+Exclusion: any CSC course.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
+
 CSC148H1    Introduction to Computer Science[24L/12T/12P]
 Abstract data types and data structures for implementing them. Linked data structures. Encapsulation and information-hiding. Object-oriented programming. Specifications. Analyzing the efficiency of programs. Recursion. This course assumes programming experience in a language such as Python, C++, or Java, as provided by CSC108H1. Students who already have this background may consult the Computer Science Undergraduate Office for advice about skipping CSC108H1. Practical (P) sections consist of supervised work in the computing laboratory. These sections are offered when facilities are available, and attendance is required. NOTE: Students may go to their college to drop down from CSC148H1 to CSC108H1. See above for the drop down deadline.
+
+Prerequisite: CSC108H1; MHF4U(advanced functions)/MCV4U(calculus and vectors)
+Exclusion: CSC139H1, CSC149H1, CSC150H1; you may not take this course after taking more than two CSC courses at the 200-level or higher.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
 
 CSC150H1    Accelerated Introduction to Computer Science[36L/12T/12P]
 An accelerated course covering object-oriented topics from CSC108H1 (classes, objects, methods and fields, and program design), as well as all the material of CSC148H1. Suitable for students with a solid programming background in Turing, C, Scheme, or a similar language, who are willing to accept a heavier workload than in CSC108H1 and CSC148H1. NOTE: Students may go to their college to drop down from CSC150H1 to CSC108H1. See above for the drop down deadline.
 
+Prerequisite: MHF4U(advanced functions)/MCV4U(calculus and vectors). Students should thoroughly understand arrays, searching, sorting, functions/procedures/subprograms, arguments and parameters, and modular design.
+Exclusion: CSC107H1, CSC108H1, CSC139H1, CSC148H1, CSC149H1; you may not take this course after taking more than two CSC courses at the 200-level or higher.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
+
 CSC165H1    Mathematical Expression and Reasoning for Computer Science[36L/24T]
 Introduction to abstraction and rigour. Informal introduction to logical notation and reasoning. Understanding, using and developing precise expressions of mathematical ideas, including definitions and theorems. Structuring proofs to improve presentation and comprehension. General problem-solving techniques. Diagonalization, the Halting Problem, and some reductions. Unified approaches to programming and theoretical problems.
+
+Prerequisite: MHF4U (advanced functions)/MCV4U (calculus and vectors)
+Corequisite: CSC108H1/CSC148H1/CSC150H1
+Exclusion: CSC236H1, 238H1, 240H1; MAT102H5 (University of Toronto Mississauga); You may not take this course after taking more than two CSC courses at the 200-level or higher
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
+
+200-level courses
+Note:   To enrol in any CSC course at the 200-level or higher, you must have a cumulative GPA of at least 1.50 (3.00 for 300-AND 400-level courses) or be enrolled in a restricted subject POSt sponsored by the Department of Computer Science. The University of Toronto at Mississauga Computer Science Minor and the University of Toronto at Scarborough Minor are not restricted subject POSts. If you are in your first year of studies at the University, the GPA requirement does not apply.
+
 
 CSC200Y1    Economic and Social Networks: Models and Applications[48L/24T]
 The course will provide an informal, but rigourous treatment of a variety of topics, introducing students to the relevant background in graph theory, social network formation, incentives and game theory, and providing exposure to the relevant mathematical and computational tools required to analyze relevant phenomenon. Topics may include: structural analysis of social networks, matching markets, trading networks, web search, information cascades, prediction markets, and online advertising, among others.
 
+Prerequisite: one OAC/U math
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: Society and its Institutions (3) + The Physical and Mathematical Universes (5)
+
 CSC207H1    Software Design[24L/12T]
 An introduction to software design and development concepts, methods, and tools using a statically-typed object-oriented programming language such as Java. Topics from: version control, build management, unit testing, refactoring, design patterns, advanced IDE usage, regular expressions, markup languages, parsing using finite state machines, and reflection.  Representation of ﬂoating-point numbers and introduction to numerical computation.
+
+Prerequisite: CSC148H1/CSC150H1; CGPA 1.5/enrolment in a CSC subject POSt.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
 
 CSC209H1    Software Tools and Systems Programming[24L/12T]
 Software techniques in a Unix-style environment, using scripting languages and a machine-oriented programming language (typically C). What goes on in the operating system when programs are executed. Core topics: creating and using software tools, pipes and filters, file processing, shell programming, processes, system calls, signals, basic network programming.
 
+Prerequisite: CSC207H1/enrolment in Bioinformatics and Computational Biology (BCB) subject POSt; CGPA 1.5/enrolment in a CSC subject POSt.
+Exclusion: CSC372H1, CSC408H1, CSC369H1, CSC468H1, CSC469H1.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
+
 CSC236H1    Introduction to the Theory of Computation[24L/12T]
 The application of logic and proof techniques to Computer Science. Mathematical induction; correctness proofs for iterative and recursive algorithms; recurrence equations and their solutions (including the Master Theorem); introduction to automata and formal languages.
 
+Prerequisite: CSC148H1/CSC150H1, CSC165H1/(CSC148H1 as given before Fall 2003); CGPA 1.5/enrolment in a CSC subject POSt.
+Exclusion: CSC238H1, CSC240H1.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
+
 CSC240H1    Enriched Introduction to the Theory of Computation[24L/12T]
 The rigorous application of logic and proof techniques to Computer Science. Propositional and predicate logic; mathematical induction and other basic proof techniques; correctness proofs for iterative and recursive algorithms; recurrence equations and their solutions (including the Master Theorem); introduction to automata and formal languages. This course covers the same topics as CSC236H1, together with selected material from CSC165H1, but at a faster pace, in greater depth and with more rigour, and with more challenging assignments. Greater emphasis will be placed on proofs and theoretical analysis. Certain topics briefly mentioned in CSC165H1 or CSC236H1 may be covered in more detail in this course, and some additional topics may also be covered.
+
  NOTE: Students may go to their college to drop down from CSC240H1 to CSC165H1 (or to CSC236H1 if you have already passed CSC165H1). See above for the drop down deadline.
+
+Prerequisite: OAC Calculus and one of Algebra & Geometry or Finite Mathematics OR U Advanced Functions and Introductory Calculus, and one of U Geometry and Discrete Mathematics or U Mathematics of Data Management, with high grades; CGPA 1.5/enrolment in a CSC subject POSt
+Corequisite: CSC148H1/CSC150H1
+Exclusion: CSC236H1, CSC238H1.
+Recommended Preparation: first term of MAT137Y1/MAT157Y1.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
 
 CSC258H1    Computer Organization[24L/12T/13P]
 Computer structures, machine languages, instruction execution, addressing techniques, and digital representation of data. Computer system organization, memory storage devices, and microprogramming. Block diagram circuit realizations of memory, control and arithmetic functions. There are a number of laboratory periods in which students conduct experiments with digital logic circuits. 
 
+Prerequisite: CSC148H1/CSC150H1, CSC165H1/CSC240H1/(CSC148H1 as given before Fall 2003); CGPA 1.5/enrolment in a CSC subject POSt.
+Exclusion: CSC257H1 as given before 1985.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
+
 CSC260H1    Introduction to Scientific, Symbolic, and Graphical Computation[24L/12T]
 Problems in transforming continuous mathematical models to discrete computational models. Inadequacy of naive computer solutions, and techniques to remedy inadequacies. Symbolic computation, plotting, 3-D graphics, and conventional programming languages. Intended for students from computer science, sciences and mathematics: for computer scientists, introduction to design and implementation of robust algorithms; for scientists, techniques in transforming scientific problems into computational solutions; for mathematicians, insight into differences between mathematical models and computational solutions.
+
+Prerequisite: CSC108H1/computing experience, as from a good high school programming course; CGPA 1.5/enrolment in a CSC subject POSt.
+Corequisite: (MAT135H1, MAT136H1)/MAT135Y1/MAT137Y1/MAT157Y1, MAT223H1/MAT240H1
+Exclusion: CSC160H1 as taught in Spring 1992; after taking CSC270H1/CSC263H1/CSC265H1 and any 300-/400-level CSC course, you may not take CSC260H1 without Departmental permission in writing.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
 
 CSC263H1    Data Structures and Analysis[24L/12T]
 Algorithm analysis: worst-case, average-case, and amortized complexity. Expected worst-case complexity, randomized quicksort and selection.  Standard abstract data types, such as graphs, dictionaries, priority queues, and disjoint sets. A variety of data structures for implementing these abstract data types, such as balanced search trees, hashing, heaps, and disjoint forests. Design and comparison of data structures. Introduction to lower bounds.
 
+Prerequisite: CSC207H1, CSC236H1/CSC238H1/CSC240H1; STA247H1/STA255H1/STA257H1; CGPA 1.5/enrolment in a CSC subject POSt.
+Exclusion: CSC265H1, CSC378H1.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
+
 CSC265H1    Enriched Data Structures and Analysis[24L/12T]
 This course covers the same topics as CSC263H1, but at a faster pace, in greater depth and with more rigour, and with more challenging assignments. Greater emphasis will be placed on proofs, theoretical analysis, and creative problem-solving. Certain topics briefly mentioned in CSC263H1 may be covered in more detail in this course, and some additional topics may also be covered. Students without the exact course prerequisites but with a strong mathematical background are encouraged to consult the Department about the possibility of taking this course.
+
  NOTE: Students may go to their college to drop down from CSC265H1 to CSC263H1. See above for the drop down deadline.
+
+Prerequisite: CSC240H1 or an A- in CSC236H1; CGPA 1.5/enrolment in a CSC subject POSt.
+Corequisite: STA247H1/STA255H1/STA257H1. 
+Exclusion: CSC263H1, CSC378H1.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
 
 CSC290H1    Communication Skills for Computer Scientists[36L]
 Targeted instruction and significant practice in the communications required for careers in computer science. The curriculum covers written, oral, and interpersonal communication. Students will hand in short pieces of writing each week, will make oral presentations several times in the semester, and will work together in simulated project meetings and other realistic scenarios of pair and small group interaction.
 
+Prerequisite: enrolment in a CSC subject POSt in year 2, 3, or 4.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: None
+
+Note
+If you are not in our Major or Specialist program, you are limited to three 300+ level CSC/ECE half-courses. In addition, you must have a CGPA of 3.00, unless you are in our Minor.
+
+
 CSC300H1    Computers and Society[24L/12T]
 Privacy and Freedom of Information; recent Canadian legislation and reports. Computers and work; employment levels, quality of working life. Electronic fund transfer systems; transborder data flows. Computers and bureaucratization. Computers in the home; public awareness about computers. Robotics. Professionalism and the ethics of computers. The course is designed not only for science students, but also those in social sciences or humanities.
+
+Prerequisite: Any half-course on computing; CGPA 3.0/enrolment in a CSC subject POSt.
+Exclusion: PSCD03H (University of Toronto Scarborough)
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: Society and its Institutions (3)
 
 CSC301H1    Introduction to Software Engineering[24L/12T]
 An introduction to agile development methods appropriate for medium-sized teams and rapidly-moving projects. Basic software development infrastructure; requirements elicitation and tracking; estimation and prioritization; teamwork skills; basic UML; design patterns and refactoring; security, discussion of ethical issues, and professional responsibility.
 
+Prerequisite: CSC209H1, CSC263H1/CSC265H1/CSC378H1; CGPA 3.0/enrolment in a CSC subject POSt
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
+
 CSC302H1    Engineering Large Software Systems[24L/12T]
 An introduction to the theory and practice of large-scale software system design, development, and deployment. Project management; advanced UML; reverse engineering; requirements inspection; verification and validation; software architecture; performance modeling and analysis.
+
+Prerequisite: CSC301H1; CGPA 3.0/enrolment in a CSC subject POSt
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
 
 CSC309H1    Programming on the Web[24L/12T]
 An introduction to software development on the web. Concepts underlying the development of programs that operate on the web; survey of technological alternatives; greater depth on some technologies. Operational concepts of the internet and the web, static client content, dynamic client content, dynamically served content, n-tiered architectures, web development processes, and security on the web. Assignments involve increasingly more complex web-based programs. Guest lecturers from leading e-commerce firms will describe the architecture and operation of their web sites.
 
+Prerequisite: CSC209H1, CSC343H1/CSC228H1; CGPA 3.0/enrolment in a CSC subject POSt.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
+
 CSC310H1    Information Theory[24L/12T]
 Measuring information. The source coding theorem. Data compression using ad hoc methods and dictionary-based methods. Probabilistic source models, and their use via Huffman and arithmetic coding. Noisy channels and the channel coding theorem. Error correcting codes, and their decoding by algebraic and probabilistic methods.
+
+Prerequisite: CSC148H1/CSC150H1/CSC260H1; STA247H1/STA255H1/STA257H1/STA107H1; (MAT135H1, MAT136H1)/MAT135Y1/MAT137Y1/MAT157Y1, MAT223H1/MAT240H1; CGPA 3.0/enrolment in a CSC subject POSt.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
 
 CSC318H1    The Design of Interactive Computational Media[24L/12T]
 User-centred design of interactive systems; methodologies, principles, and metaphors; task analysis. Interdisciplinary design; the role of graphic design, industrial design, and the behavioural sciences. Interactive hardware and software; concepts from computer graphics. Typography, layout, colour, sound, video, gesture, and usability enhancements. Classes of interactive graphical media; direct manipulation systems, extensible systems, rapid prototyping tools. Students work on projects in interdisciplinary teams. Enrolment limited, but non-computer scientists welcome.
 
+Prerequisite: Any CSC half-course; CGPA 3.0/enrolment in a CSC subject POSt.
+Recommended Preparation: CSC300H1 provides useful background for work in CSC318H1, so if you plan to take CSC300H1 then you should do it before CSC318H1.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: None
+
 CSC320H1    Introduction to Visual Computing[24L/12P]
 A unified introduction to image synthesis and image analysis aimed at students with an interest in computer graphics, computer vision or the visual arts. Focus on three major topics: (1) visual computing principles - computational and mathematical methods for creating, capturing, analyzing and manipulating digital photographs (raster algorithms, image acquisition, basic image processing, image warping, anti-aliasing); (2) digital special effects - applying these principles to create special effects found in movies and commercials; (3) visual programming - using C/C++ and OpenGL to create graphical user interfaces for synthesizing and manipulating photographs.
+
+Prerequisite: CSC209H1/(CSC207H1,proficiency in C or C++); MAT(135H1,136H1)/MAT135Y1/MAT137Y1/MAT157Y1, MAT223H1/MAT240H1; CGPA 3.0/enrolment in a CSC subject POSt.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: None
 
 CSC321H1    Introduction to Neural Networks and Machine Learning[24L/12P]
 The first half of the course is about supervised learning for regression and classification problems and will include the perceptron learning procedure, backpropagation, and methods for ensuring good generalisation to new data. The second half of the course is about unsupervised learning methods that discover hidden causes and will include K-means, the EM algorithm, Boltzmann machines, and deep belief nets.
 
+Prerequisite: (MAT135H1, MAT136H1)/MAT135Y1/MAT137Y1/MAT157Y1, MAT223H1/MAT240H1; STA247H1/STA255H1/STA257H1; CGPA 3.0/enrolment in a CSC subject POSt
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
+
 CSC324H1    Principles of Programming Languages[24L/12T]
 Programming principles common in modern languages; details of commonly used paradigms. The structure and meaning of code. Scope, control flow, datatypes and parameter passing. Two non-procedural, non-object-oriented programming paradigms: functional programming (illustrated by languages such as Lisp/Scheme, ML or Haskell) and logic programming (typically illustrated in Prolog).
+
+Prerequisite: CSC207H1, CSC236H1/CSC238H1/CSC240H1; CGPA 3.0/enrolment in a CSC subject POSt.
+Exclusion: CSC248H1.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
 
 CSC330H1    Logical Specifications[24L/12T]
 Logic and its use as a declarative language in computer science. Syntax and semantics of propositional and predicate calculus. Proving entailment and non-entailment rigorously. Formal derivations. Satisfiability. Applications, including information systems, program verification, artificial intelligence, software engineering. Computational tools, including Prolog. Other logics.
 
+Prerequisite: CSC236H1/CSC238H1/CSC240H1; CGPA 3.0/enrolment in a CSC subject POSt.
+Exclusion: CSC230H1.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
+
 CSC336H1    Numerical Methods[24L/12T]
 The study of computational methods for solving problems in linear algebra, non-linear equations, approximation, and integration. The aim is to give students a basic understanding of both floating-point arithmetic and the implementation of algorithms used to solve numerical problems, as well as a familiarity with current numerical computing environments.
+
+Prerequisite: CSC148H1/CSC150H1; MAT133Y1(70%)/(MAT135H1, MAT136H1)/MAT135Y1/MAT137Y1/MAT157Y1, MAT223H1/MAT240H1; CGPA 3.0/enrolment in a CSC subject POSt.
+Exclusion: CSC350H1, CSC351H1.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
 
 CSC343H1    Introduction to Databases[24L/12T]
 Introduction to database management systems. The relational data model. Relational algebra. Querying and updating databases: the query language SQL. Application programming with SQL. Integrity constraints, normal forms, and database design. Elements of database system technology: query processing, transaction management.
 
+Prerequisite: CSC165H1/CSC240H1/MAT(135H1,136H1)/MAT135Y1/MAT137Y1/MAT157Y1; CSC207H1; CGPA 3.0/enrolment in a CSC subject POSt. Prerequisite for Engineering students only: ECE345/CSC190/CSC192
+Exclusion: CSC434H1.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
+
 CSC350H1    Numerical Algebra and Optimization[24L/12T]
 Floating-point arithmetic. The efficiency and stability of solution techniques for systems of linear equations and least squares problems, including LU- and QR-based methods. Eigenvalue and eigenvector calculations. Algorithms for systems of non-linear equations and optimization problems, including linear programming.
+
+Prerequisite: CSC148H1/CSC150H1; MAT223H1/MAT240H1, MAT235Y1/MAT237Y1/MAT257Y1; CGPA 3.0/enrolment in a CSC subject POSt.
+Exclusion: CSC336H1.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
 
 CSC351H1    Numerical Approximation, Integration and Ordinary Differential Equations[24L/12T]
 Analysis of methods for approximation, integration and the solution of ordinary differential equations. Emphasis on the convergence and stability properties of the algorithms, rather than on their implementation.
 
+Prerequisite: CSC350H1; CGPA 3.0/enrolment in a CSC subject POSt.
+Exclusion: CSC336H1.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
+
 CSC358H1    Principles of Computer Networks[24L/12T]
 Introduction to computer networks with an emphasis on fundamental principles. Basic understanding of computer networks and network protocols. Topics include network hardware and software, routing, addressing, congestion control, reliable data transfer, performance analysis, local area networks, and TCP/IP.
+
+Prerequisite: CSC209H1, CSC258H1, CSC263H1/ CSC265H1/CSC378H1, STA247H1/STA255H1/STA257H1/ECO227Y1; CGPA 3.0/enrolment in a CSC subject POSt.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
 
 CSC369H1    Operating Systems[24L/12T]
 Principles of operating systems. The operating system as a control program and as a resource allocator. The concept of a process and concurrency problems: synchronization, mutual exclusion, deadlock. Additional topics include memory management, file systems, process scheduling, threads, and protection.
 
+Prerequisite: CSC258H1, CSC209H1, CSC207H1; CGPA 3.0/enrolment in a CSC subject POSt.
+Exclusion: CSC468H1.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
+
 CSC372H1    Microprocessor Software[24L/12T/36P]
 Development of embedded software for control and monitoring. Techniques for efficient running of multiple real-time, critical multiple processes and for device control. Methods of working on small systems, such as microcontroller-based systems. Projects use microprocessors to control equipment with feedback from sensors. Design, implementation and testing of software using a language such as C.
+
+Prerequisite: CSC209H1; CSC258H1; CGPA 3.0/enrolment in a CSC subject POSt.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
 
 CSC373H1    Algorithm Design, Analysis & Complexity[36L/12T]
 Standard algorithm design techniques: divide-and-conquer, greedy strategies, dynamic programming, linear programming, randomization, network flows, approximation algorithms.  Brief introduction to NP-completeness: polynomial time reductions, examples of various NP-complete problems, self-reducibility. Students will be expected to show good design principles and adequate skills at reasoning about the correctness and complexity of algorithms.
 
+Prerequisite: CSC263H1/CSC265H1/CSC378H1; CGPA 3.0/enrolment in a CSC subject POSt.
+Exclusion: CSC375H1, CSC364H1.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
+
 CSC375H1    Enriched Algorithm Design, Analysis, and Complexity[24L/12T]
 This course covers the same topics as CSC373H1, but at a faster pace, in greater depth and with more rigour, and with more challenging assignments. Greater emphasis will be placed on proofs, theoretical analysis, and creative problem-solving. Certain topics briefly mentioned in CSC373H1 may be covered in more detail in this course, and some additional topics may also be covered. Students without the exact course prerequisites but with a strong mathematical background are encouraged to consult the Department about the possibility of taking this course.
+
  NOTE: Students may go to their college to drop down from CSC375H1 to CSC373H1. See above for the drop down deadline.
+
+Prerequisite: CSC265H1 or an A-in CSC263H1; CGPA 3.0/enrolment in a CSC subject POSt.
+Exclusion: CSC373H1, CSC364H1.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
 
 CSC384H1    Introduction to Artificial Intelligence[24L/12T]
 Theories and algorithms that capture (or approximate) some of the core elements of computational intelligence. Topics include: search; logical representations and reasoning, classical automated planning, representing and reasoning with uncertainty, learning, decision making (planning) under uncertainty. Assignments provide practical experience, both theory and programming, of the core topics.
 
+Prerequisite: CSC324H1; STA247H1/STA255H1/STA257H1; CGPA 3.0/enrolment in a CSC subject POSt.
+Exclusion: CSC484H1.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
+
 ECE385H1    Microprocessor Systems[24L/36P]
 A hardware-oriented course dealing with microprocessor and embedded systems. Microprocessor structures, memory and cache structures, input/output techniques, peripheral device control, hardware system and programming considerations. Laboratory experiments provide "hands-on" experience.
+
+Prerequisite: CSC258H1; CSC209H1/proficiency in C; CGPA 3.0/enrolment in a CSC subject POSt.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
+
+Note
+If you are not in our Major or Specialist program, you are limited to three 300+ level CSC/ECE half-courses. In addition, you must have a CGPA of 3.00, unless you are in our Minor.
+
 
 CSC401H1    Natural Language Computing[24L/12T]
 Introduction to techniques involving natural language and speech in applications such as information retrieval, extraction, and filtering; intelligent Web searching; spelling and grammar checking; speech recognition and synthesis; and multi-lingual systems including machine translation. N-grams, POS-tagging, semantic distance metrics, indexing, on-line lexicons and thesauri, markup languages, collections of on-line documents, corpus analysis. PERL and other software.
 
+Prerequisite: CSC207H1/CSC209H1/CSC228H1; STA247H1/STA255H1/STA257H1; CGPA 3.0/enrolment in a CSC subject POSt.
+Recommended Preparation: MAT223H1/MAT240H1 is strongly recommended.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
+
 CSC404H1    Introduction to Video Game Design[24L/12T]
 Concepts and techniques for the design and development of electronic games. History, social issues and story elements. The business of game development and game promotion. Software engineering, artificial intelligence and graphics elements. Level and model design. Audio elements. Practical assignments leading to team implementation of a complete game.
+
+Prerequisite: One of CSC301H1, CSC318H1, CSC384H1, CSC418H1; CGPA 3.0/enrolment in a CSC subject POSt.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: Creative and Cultural Representations (1)
 
 CSC410H1    Software Testing and Verification[24L/12T]
 Concepts and state of the art techniques in quality assessment for software engineering; quality attributes; formal specifications and their analysis; testing, verification and validation.
 
+Prerequisite: CSC207H1, CSC236H1/CSC240H1; CGPA 3.0/enrolment in a CSC subject POSt
+Recommended Preparation: CSC330H1
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
+
 CSC411H1    Machine Learning and Data Mining[24L/12T]
 An introduction to methods for automated learning of relationships on the basis of empirical data. Classification and regression using nearest neighbour methods, decision trees, linear models, and neural networks. Clustering algorithms. Problems of overfitting and of assessing accuracy. Problems with handling large databases.
+
+Prerequisite: CSC263H1/CSC265H1; MAT(135H1,136H1)/MAT137Y1/MAT137Y1/MAT157Y1, STA247H1/STA255H1/STA257H1, STA248H1/STA250H1/STA261H1; CGPA 3.0/enrolment in a CSC subject POSt.
+Recommended Preparation: CSC336H1/CSC350H1.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
 
 CSC412H1    Probabilistic Learning and Reasoning[24L/12T]
 An introduction to probability as a means of representing and reasoning with uncertain knowledge. Qualitative and quantitative specification of probability distributions using probabilistic graphical models. Algorithms for inference and probabilistic reasoning with graphical models. Statistical approaches and algorithms for learning probability models from empirical data. Applications of these models in artificial intelligence and machine learning.
 
+Prerequisite: CSC411H1; CGPA 3.0/enrolment in a CSC subject POSt.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
+
 CSC418H1    Computer Graphics[24L/12T]
 Identification and characterization of the objects manipulated in computer graphics, the operations possible on these objects, efficient algorithms to perform these operations, and interfaces to transform one type of object to another. Display devices, display data structures and procedures, graphical input, object modelling, transformations, illumination models, primary and secondary light effects; graphics packages and systems. Students, individually or in teams, implement graphical algorithms or entire graphics systems.
+
+Prerequisite: CSC336H1/CSC350H1/CSC351H1/CSC363H1/CSC364H1/CSC365H1/CSC373H1/CSC375H1/CSC378HI/CSC463H1, MAT(135H1,136H1)/MAT135Y1/MAT137Y1/MAT157, CSC209H1/proficiency in C or C++ ; CGPA 3.0/enrolment in a CSC subject POSt. Prerequisite for Engineering students only: ECE345 or ECE352
+Recommended Preparation: MAT237Y1, MAT244H1.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
 
 CSC420H1    Introduction to Image Understanding[24L/12P]
 Introduction to basic concepts in computer vision. Extraction of image features at multiple scales. Robust estimation of model parameters. Multiview geometry and reconstruction. Image motion estimation and tracking. Object recognition. Topics in scene understanding as time permits.
 
+Prerequisite: CSC260H1/CSC263H1/CSC265H1,(MAT135H1, MAT136H1)/MAT135Y1/MAT136Y1/MAT137Y1/MAT157Y1, MAT223H1/MAT240H1; CGPA 3.0/enrolment in a CSC subject POSt.
+Recommended Preparation: CSC320H1.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
+
 CSC428H1    Human-Computer Interaction[24L/12T]
 Understanding human behaviour as it applies to user interfaces: work activity analysis, observational techniques, questionnaire administration and unobtrusive measures. Operating parameters of the human cognitive system, task analysis and cognitive modelling techniques and their application to designing interfaces. Interface representations and prototyping tools. Cognitive walkthroughs, usability studies and verbal protocol analysis. Case studies of specific user interfaces.
 
-CSC436H1    Numerical Algorithms[24L/12T]
+Prerequisite: CSC318H1; STA247H1/STA255H1/STA257H1,(STA248H1/STA250H1/STA261H1)/(PSY201H1, PSY202H1)/(SOC202H1, SOC300H1); CSC209H1/proficiency C++ or Java; CGPA 3.0/enrolment in a CSC subject POSt.
+Recommended Preparation: A course in PSY; CSC209H1.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
+
+CSC436H1 Numerical Algorithms [24L/12T]
 Numerical algorithms for the algebraic eigenvalue problem, approximation, integration, and the solution of ordinary differential equations. Emphasis is on the convergence, stability and efficiency properties of the algorithms. 
+Prerequisite: CSC336H1/CSC350H1
+Exclusion: CSC351H1
+Distribution Requirement Status: Science
+Breadth Requirement: The Physical and Mathematical Universes (5)
 
 CSC438H1    Computability and Logic[24L/12T]
 Computable functions, Churchs thesis, unsolvable problems, recursively enumerable sets. Predicate calculus, including the completeness, compactness, and Lowenheim-Skolem theorems. Formal theories and the Gdel Incompleteness Theorem.
 
+Prerequisite: (CSC363H1/CSC463H1)/CSC364H1/CSC365H1/CSC373H1/CSC375H1/MAT247H1; CGPA 3.0/enrolment in a CSC subject POSt.
+Exclusion: MAT309H1; PHL344H1.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
+
 CSC443H1    Database System Technology[24L/12T]
 Implementation of database management systems. Storage management, indexing, query processing, concurrency control, transaction management. Database systems on parallel and distributed architectures. Modern database applications: data mining, data warehousing, OLAP, data on the web. Object-oriented and object-relational databases.
+
+Prerequisite: CSC343H1/CSC434H1, CSC369H1/CSC468H1, CSC364H1/CSC373H1/CSC375H1; CGPA 3.0/enrolment in a CSC subject POSt.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
 
 CSC446H1    Computational Methods for Partial Differential Equations[24L/12T]
 Finite difference methods for hyperbolic and parabolic equations; consistency, convergence, and stability. Finite element methods for 2-point boundary value problems and elliptic equations. Special problems of interest.
 
+Prerequisite: CSC351H1/(CSC336H1 (75%))/equivalent mathematical background; MAT237Y1/MAT257Y1; APM346H1/APM351Y1/(MAT244H1/2MAT67H1 and exposure to PDEs); CGPA 3.0/enrolment in a CSC subject POSt.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
+
 CSC448H1    Formal Languages and Automata[24L/12T]
 Regular, deterministic, context free, context sensitive, and recursively enumerable languages via generative grammars and corresponding automata (finite state machines, push down machines, and Turing machines). Topics include complexity bounds for recognition, language decision problems and operations on languages.
+
+Prerequisite: CSC236H1/CSC238H1/CSC240H1, CSC363H1/CSC364H1/CSC365H1/CSC463H1/MAT247H1; CGPA 3.0/enrolment in a CSC subject POSt.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
 
 CSC454H1    The Business of Software[24L/12T]
 The software and internet industries; principles of operation for successful software enterprises; innovation and entrepreneurship; software business definition and planning; business models, market and product planning; product development, marketing, sales, and and support; financial management and financing of high-technology ventures; management, leadership, and partnerships. Students will all write business plans in teams.
 
+Prerequisite: Five CSC half-courses at the 200-level or higher; CGPA 3.0/enrolment in a CSC subject POSt.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
+
 CSC456H1    High-Performance Scientific Computing[24L/12T]
 Computationally-intensive applications in science and engineering are implemented on the fastest computers available, today composed of many processors operating in parallel. Parallel computer architectures; implementation of numerical algorithms on parallel architectures. Topics from: performance evaluation; scientific visualization; numerical methods; applications from science and engineering. For students in computer science, applied mathematics, science, engineering.
+
+Prerequisite: CSC350H1/(CSC336H1 (75%))/equivalent mathematical background; CSC209H1/proficiency in C, C++ or Fortran; CGPA 3.0/enrolment in a CSC subject POSt.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
 
 CSC458H1    Computer Networking Systems[24L/12T]
 Computer networks with an emphasis on systems programming of real networks and applications. An overview of networking basics; layering, packet switching fundamentals, socket programming, protocols, congestion control, routing, network security, wireless networks, multimedia, web 2.0, and online social networks.
 
+Prerequisite: CSC209H1, CSC258H1, CSC263H1/ 265H1/378H1, STA247H1/255H1/257H1/ECO227Y1; CGPA 3.0/enrolment in a CSC subject POSt.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
+
 CSC463H1    Computational Complexity and Computability[24L/12P]
 Introduction to the theory of computability: Turing machines and other models of computation, Church’s thesis, computable and noncomputable functions, recursive and recursively enumerable sets, many-one reductions. Introduction to complexity theory: P, NP, polynomial time reducibility, NP-completeness, self-reducibility, space complexity (L, NL, PSPACE and completeness for those classes), hierarchy theorems and provably intractable problems.
+
+Prerequisite: CSC236H1/CSC238H1/CSC240H1; CGPA 3.0/enrolment in a CSC subject POSt
+Exclusion: CSC363H1, CSC364H1, CSC365H1
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
 
 CSC465H1    Formal Methods in Software Design[24L/12T]
 The use of logic as an aid to programming. Formal semantics of programming languages: imperative programs, functional programs, parallel processes, communicating processes. Partial and total correctness. Refinement theorems: by steps, by parts, by cases. Semantics of recursion and the least-fixed-point construction; monotonicity, continuity. Semantics of data types; data refinement.
 
+Prerequisite: CSC236H1/CSC238H1/CSC240H1/MAT309H1; CGPA 3.0/enrolment in a CSC subject POSt.
+Recommended Preparation: (CSC363H1/CSC463H1)/CSC364H1/CSC365H1.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
+
 CSC469H1    Operating Systems Design and Implementation[24L/12T]
 An in-depth exploration of the major components of operating systems with an emphasis on the techniques, algorithms, and structures used to implement these components in modern systems. Project-based study of process management, scheduling, memory management, file systems, and networking is used to build insight into the intricacies of a large concurrent system.
+
+Prerequisite: CSC369H1; CGPA 3.0/enrolment in a CSC subject POSt.
+Exclusion: CSC468H1.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
 
 CSC485H1    Computational Linguistics[24L/12T]
 Computational linguistics and the understanding of language by computer. Possible topics include: augmented context-free grammars; chart parsing, ,statistical parsing; semantics and semantic interpretation; ambiguity resolution techniques; discourse structure and reference resolution. Emphasis on statistical learning methods for lexical, syntactic and semantic knowledge.
 
+Prerequisite: STA247H1/STA255H1/STA257H1 or familiarity with basic probability theory; CSC209H1 or proficiency in C++, Java, or Python; CGPA 3.0/enrolment in a CSC.subject POSt. Suggested preparation: CSC324H1/CSC330H1/CSC384H1.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
+
 CSC486H1    Knowledge Representation and Reasoning[24L/12T]
 Representing knowledge symbolically in a form suitable for automated reasoning, and associated reasoning methods: first-order logic, entailment, the resolution method, Horn clauses, procedural representations, production systems, description logics, inheritance networks, defaults and probabilities, tractable reasoning, abductive explanation, the representation of action, planning.
+
+Prerequisite: CSC384H1, (CSC363H1/CSC463H1)/CSC365H1/CSC373H1/CSC375H1; CGPA 3.0/enrolment in a CSC subject POSt.
+Recommended Preparation: CSC330H1.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
 
 CSC488H1    Compilers and Interpreters[24L/12T]
 Compiler organization, compiler writing tools, use of regular expressions, finite automata and context-free grammars, scanning and parsing, runtime organization, semantic analysis, implementing the runtime model, storage allocation, code generation.
 
+Prerequisite: CSC258H1, CSC324H1, CSC263H1/CSC265H1/CSC378H1; CGPA 3.0/enrolment in a CSC subject POSt.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
+
 ECE489H1    Compilers II[24L/36P]
 Theoretical and practical aspects of building modern optimizing compilers. Topics: intermediate representations, basic blocks and flow graphs, data flow analysis, partial evaluation and redundancy elimination, loop optimizations, register allocation, instruction scheduling, interprocedural analysis, and memory hierarchy optimizations. Students implement significant optimizations within the framework of a modern research compiler. (This course is a cross-listing of ECE540H1, Faculty of Applied Science and Engineering.)
+
+Prerequisite: CSC236H1/238H1/240H1; CGPA 3.0/enrolment in a CSC subject POSt.
+Recommended Preparation: ECE385H1, proficiency in C.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
 
 CSC490H1    Capstone Design Project[48L]
 This half-course gives students experience solving a substantial problem that may span several areas of Computer Science. Students will define the scope of the problem, develop a solution plan, produce a working implementation, and present their work using written, oral, and (if suitable) video reports. Class time will focus on the project, but may include some lectures. The class will be small and highly interactive. Project themes change each year. At the time of printing, the theme for 2010/11 had not been chosen but see www.cs.utoronto.ca/~CSC490H1 for information about this year’s topic themes and required preparation. Ineligible for CR/NCR.
 
+Prerequisite: Permission of the instructor; CGPA 3.0/enrolment in a CSC subject POSt. Consult the Arts & Science Registration Instructions and Timetable at http://www.artsci.utoronto.ca/current/course for course enrolment procedures.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
+
 CSC491H1    Capstone Design Project[48L]
 This half-course gives students experience solving a substantial problem that may span several areas of Computer Science. Students will define the scope of the problem, develop a solution plan, produce a working implementation, and present their work using written, oral, and (if suitable) video reports. Class time will focus on the project, but may include some lectures. The class will be small and highly interactive. Project themes change each year. At the time of printing, the theme FOR 2010/11 had not been chosen but see www.cs.utoronto.ca/~CSC490H1 for information about this year’s topic themes and required preparation. (Not offered in 2011-2012) Ineligible for CR/NCR.
+
+Prerequisite: Permission of the instructor; CGPA 3.0/enrolment in a CSC subject POSt. Consult the Arts & Science Registration Instructions and Timetable at http://www.artsci.utoronto.ca/current/course for course enrolment procedures.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
 
 CSC494H1    Computer Science Project[TBA]
 This half-course involves a significant project in any area of Computer Science. The project may be undertaken individually or in small groups. The course is offered by arrangement with a Computer Science faculty member. Ineligible for CR/NCR.
 
+Prerequisite: Three 300-level Computer Science half-courses, a CGPA of 3.00 (2.50 for students in a CSC Program), and permission of the Associate Chair, Undergraduate Studies. Consult the Arts & Science Registration Instructions and Timetable at http://www.artsci.utoronto.ca/current/course for course enrolment procedures.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)
+
 CSC495H1    Computer Science Project[TBA]
 This half-course involves a significant project in any area of Computer Science. The project may be undertaken individually or in small groups. The course is offered by arrangement with a Computer Science faculty member. Ineligible for CR/NCR.
+
+Prerequisite: Three 300-level Computer Science half-courses, a CGPA of 3.00 (2.50 for students in a CSC Program), and permission of the Associate Chair, Undergraduate Studies. Consult the Arts & Science Registration Instructions and Timetable at http://www.artsci.utoronto.ca/current/course for course enrolment procedures.
+Distribution Requirement Status: This is a Science course
+Breadth Requirement: The Physical and Mathematical Universes (5)

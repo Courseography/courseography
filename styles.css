@@ -1,10 +1,10 @@
 div.infoTab {
-  float: left;
-  width:100%;
-  background: #447BD4;
-  color: white;
-  height: 300px;
-  overflow-y: auto;
+    float: left;
+    width:100%;
+    background: #447BD4;
+    color: white;
+    height: 300px;
+    overflow-y: auto;
 }
 
 table.timeTable {
@@ -52,48 +52,48 @@ td.timeTableBlockInstructor {
 }
 
 .courseCell {
-  display: inline-block;
-  border: 1px solid black;
-  color: black;
-  text-align: center;
-  width: 200px;
-  height: 150px;
+    display: inline-block;
+    border: 1px solid black;
+    color: black;
+    text-align: center;
+    width: 200px;
+    height: 150px;
 }
 
 .courseCell p {
-  margin-top: 0.5em;
-  margin-bottom: 0.5em;
-  margin-left: 1em;
-  margin-right: 1em;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    margin-left: 1em;
+    margin-right: 1em;
 }
 
 p.courseName {
-  font-size: 1.2em;
-  font-weight: bold;
+    font-size: 1.2em;
+    font-weight: bold;
 }
 
 div#calendar {
-  padding-left: 2em;
-  padding-right: 2em;
+    padding-left: 2em;
+    padding-right: 2em;
 }
 
 div#postDiv {
-  width: 100%;
-  height: 100%;
-  margin-left: 2em;
-  margin-right: 2em;
+    width: 100%;
+    height: 100%;
+    margin-left: 2em;
+    margin-right: 2em;
 }
 
 div.postFormDiv {
-  height: 100%;
-  float: left;
-  padding-left: 0.2em;
-  padding-right: 0.2em;  
+    height: 100%;
+    float: left;
+    padding-left: 0.2em;
+    padding-right: 0.2em;  
 }
 
 input[type=text] {
-  width: 75px;
-  text-align: center;
+    width: 75px;
+    text-align: center;
 }
 
 select {
@@ -101,271 +101,277 @@ select {
 }
 
 div.postFormDiv h4 {
-  width: 200px;
-  font-size: 1.05em;
-  text-align: center;
-  font-family: "Trebuchet MS",Arial,Sans-Serif;
-  margin-top: 0.3em;
-  margin-bottom: 0.3em;
+    width: 200px;
+    font-size: 1.05em;
+    text-align: center;
+    font-family: "Trebuchet MS",Arial,Sans-Serif;
+    margin-top: 0.3em;
+    margin-bottom: 0.3em;
 }
 
 ul.tabList {
-  float: left;
-  width: 100%;
-  height: 40px;
-  display: block;
-  margin: 0;
-  background: #04356C;
-  border-top-style: solid;
-  border-bottom-style: solid;
+    float: left;
+    width: 100%;
+    height: 40px;
+    display: block;
+    margin: 0;
+    background: #04356C;
+    border-top-style: solid;
+    border-bottom-style: solid;
 }
 
 
 ul.tabList li {
-  list-style: none;
-  float:left;
-  background: #274F7D;
-  text-align: center;
-  width: 10em;
-  height: 40px;
-  line-height: 40px;
-  vertical-align: middle;
-  border-right-style: solid;
-  border-left-style: solid;
-  border-right-width: thin;
-  border-left-width: thin;
+    list-style: none;
+    float:left;
+    background: #274F7D;
+    text-align: center;
+    width: 10em;
+    height: 40px;
+    line-height: 40px;
+    vertical-align: middle;
+    border-right-style: solid;
+    border-left-style: solid;
+    border-right-width: thin;
+    border-left-width: thin;
 }
 
 ul.tabList li.ui-tabs-active {
-  background: #0D56A6;
+    background: #0D56A6;
 }
 
 ul.tabList a {
-  height: 100%;
-  width: 100%;
-  display: block;
-  color: #ccc;
-  text-decoration: none;
-  outline-color: transparent;
+    height: 100%;
+    width: 100%;
+    display: block;
+    color: #ccc;
+    text-decoration: none;
+    outline-color: transparent;
 }
 
 ul.tabList a:hover {
-  background: #0D56A6;
+    background: #0D56A6;
 }
 
 #courseListTableDiv {
-  padding: 1em;
-  height: 100%;
-  width: 100%;
+    padding: 1em;
+    height: 100%;
+    width: 100%;
 }
 
 
 div.focusDetails {
-  background: #6A93D4;
-  width: 800px;
-  float: left;
-  padding: 1em;
+    background: #6A93D4;
+    width: 800px;
+    float: left;
+    padding: 1em;
 }
 
 #focusListDiv {
-  height: 100%;
+    height: 100%;
 }
 
 ul.focusList {
-  float: left;
-  width: 300px;
-  height: 100%;
-  display: block;
-  margin-top: 1em;
+    float: left;
+    width: 300px;
+    height: 100%;
+    display: block;
+    margin-top: 1em;
 }
 
 
 ul.focusList li {
-  list-style: none;
-  height: 40px;
-  line-height: 40px;
-  vertical-align: middle;
+    list-style: none;
+    height: 40px;
+    line-height: 40px;
+    vertical-align: middle;
 }
 
 ul.focusList li.ui-tabs-active, ul.focusList a:hover {
-  background: #6A93D4;
+    background: #6A93D4;
 }
 
 ul.focusList a {
-  height: 100%;
-  width: 100%;
-  display: block;
-  color: #ccc;
-  text-decoration: none;
-  outline-color: transparent;
+    height: 100%;
+    width: 100%;
+    display: block;
+    color: #ccc;
+    text-decoration: none;
+    outline-color: transparent;
 }
 
 
 
 html, body {
-  margin: 0em;
-  padding: 0em;
-  width: 100%;
-  height: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
-  font-family: "Trebuchet MS",Arial,Sans-Serif;
+    margin: 0em;
+    padding: 0em;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    font-family: "Trebuchet MS", Arial, Sans-Serif;
 }
 
 
-#title ellipse {
-  fill: #04356C;
-}
 
-#ellipseText, #ellipseText2 {
-  font-size: 1.7em;
-  color: white;
-  font-weight: bold;
-  
-  font-family: Sans-Serif;
-}
-
-
+/* SVG Styles */
 #graph {
-  width: 100%;
-  height: 750px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    height: 750px;
 }
 
 #graphRootSVG {
-  width: 100%;
-  height: 100%;
-  stroke:	black;
-  stroke-linecap:	square;
-  stroke-miterlimit:	10;
-  color-interpolation:	auto;
-  overflow: hidden;
-  shape-rendering: geometricPrecision;
+    width: 100%;
+    height: 750px;
+    stroke: black;
+    stroke-linecap: square;
+    stroke-miterlimit: 10;
+    color-interpolation: auto;
+    /*overflow: hidden;*/
+    shape-rendering: geometricPrecision;
 }
 
 g text{
-  white-space: pre;
-  text-align: center;
-  text-rendering="optimizeQuality";
-  stroke: none;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+    white-space: pre;
+    text-align: center;
+    text-rendering="optimizeQuality";
+    font-size: 0.9em;
+    stroke: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
+
+/* Node styles */
 
 g.node {
-  cursor: pointer;
-}
-
-g[data-active="inactive"] {
-  opacity: 0.4;
-  stroke-dasharray: 8,8;
-}
-
-g[data-active="takeable"] {
-  opacity: 0.75;
-}
-
-path[data-active="takeable"] {
-  fill: none;
-  color: grey;
-  stroke-dasharray: 8,8;
-  marker-end: url(#arrow);
-}
-
-path[data-active="inactive"] {
-  fill: none;
-  opacity: 0.4;
-  stroke-dasharray: 8,8;
-  marker-end: url(#arrow);
-}
-
-path[data-active="active"] {
-  fill: none;
-  opacity: 1.0;
-  marker-end: url(#arrow);
+    cursor: pointer;
 }
 
 g[data-active="active"] {
-  opacity: 1.0;
-  stroke-width: 3;
+    opacity: 1.0;
+    stroke-width: 3;
 }
 
+g[data-active="inactive"] {
+    opacity: 0.4;
+    stroke-dasharray: 8,8;
+}
+
+g[data-active="takeable"] {
+    opacity: 0.75;
+}
+
+/* Used for hover */
 g[data-active="missing"] rect {
-  opacity: 0.5;
-  stroke-width: 3;
+    opacity: 0.5;
+    stroke-width: 3;
 }
 
 g[data-active="unlit"] rect {
-  opacity: 1.0;
-  fill: rgb(80,80,80) !important;
+    opacity: 1.0;
+    fill: rgb(80,80,80) !important;
 }
 
-
-
 g[data-group='theory'] rect {
-  fill: #B1C8D1;
+    fill: #B1C8D1;
 }
 
 g[data-group='core'] rect {
-  fill: #C9C9C9;
+    fill: #C9C9C9;
 }
 
 g[data-group='se'] rect {
-  fill: #E68080;
+    fill: #E68080;
 }
 
 g[data-group='systems'] rect {
-  fill: #C285FF;
+    fill: #C285FF;
 }
 
 g[data-group='graphics'] rect {
-  fill: #66A366;
+    fill: #66A366;
 }
 
 g[data-group='dbweb'] rect {
-  fill: #FFE680;
+    fill: #FFE680;
 }
 
 g[data-group='num'] rect {
-  fill: #DBB8FF;
+    fill: #DBB8FF;
 }
 
 g[data-group='ai'] rect {
-  fill: #80B2FF;
+    fill: #80B2FF;
 }
 
 g[data-group='hci'] rect {
-  fill: #B8FF70;
+    fill: #B8FF70;
 }
 
-
 g.hybrid {
-  cursor: default;
+    cursor: default;
 }
 
 g.hybrid rect {
-  fill: #B84D4D;
+    fill: #B84D4D;
 }
 
 g.hybrid text{
-  stroke: none;
-  font-size: 0.6em;
+    stroke: none;
+    font-size: 0.6em;
 }
 
 g.bool {
-  cursor: default;
+    cursor: default;
 }
 
 g.bool ellipse {
-  fill: none;
+    fill: none;
 }
 
 g.bool text {
-  stroke: none;
-  font-size: 6pt;
-  font-family: 'Comic Sans MS';
-  font-weight: bold;
+    stroke: none;
+    font-size: 0.5em;
+    font-family: 'Comic Sans MS';
+    font-weight: bold;
+}
+
+/* Edge styles */
+path[data-active="takeable"] {
+    fill: none;
+    color: grey;
+    stroke-dasharray: 6, 4;
+    marker-end: url(#arrow);
+}
+
+path[data-active="inactive"] {
+    fill: none;
+    opacity: 0.4;
+    stroke-dasharray: 6, 4;
+    marker-end: url(#arrow);
+}
+
+path[data-active="active"] {
+    fill: none;
+    opacity: 1.0;
+    marker-end: url(#arrow);
+}
+
+
+/* Logo style. */
+#title ellipse {
+    fill: #04356C;
+}
+
+#ellipseText, #ellipseText2 {
+    font-size: 1.7em;
+    color: white;
+    font-weight: bold;
+    font-family: Sans-Serif;
 }

@@ -297,12 +297,11 @@ function Node(parents, type, name) {
                 var xmlreq = new XMLHttpRequest();
                 xmlreq.open("GET", "res/calendar.txt", false);
                 xmlreq.send();
-                console.log(i + " " + course);
                 var patt1 = new RegExp("\n" + course + ".*", "im");
                 courseStringText = xmlreq.responseText.match(patt1)[0].split(course)[1].split("1")[1].split("[")[0];
             }
-            return "<td class='courseCell' style='background: " + $("#" 
-                + course + "> rect").css('fill') + "'><div id='" 
+            return "<td class='courseCell' style='background: " 
+                + $("#" + course + "> rect").css('fill') + "'><div id='" 
                 + course + "cell'><p class='courseName'>" + course 
                 + "</p><p class=" + course + "text>"
                 + courseStringText + "</p></div></td>";
@@ -365,12 +364,12 @@ function reset() {
     $('#courseGrid').empty();
 
     // Reset FCE counts
-    var FCEs = 0;
-    var FCEs100 = 0;
-    var FCEs200 = 0;
-    var FCEs300 = 0;
-    var FCEs400 = 0;
-    var FCEsMAT = 0;
+    FCEs = 0;
+    FCEs100 = 0;
+    FCEs200 = 0;
+    FCEs300 = 0;
+    FCEs400 = 0;
+    FCEsMAT = 0;
     $('#FCEcount').html(FCEs);
     clickedCourses = [];
 };
@@ -390,7 +389,7 @@ function fetchCourseDescription(id) {
         var pattern = new RegExp('[.\n]*', 'm');
     } else {
         var calendarUrl = 'res/calendar.txt';
-        var calendarParser = new RegExp("\n" + id + ".*\n.*\n", "im");
+        var calendarParser = new RegExp("\n" + id + "(.|\n)*?Breadth Requirement.*\n", "im");
     }
 
     $.ajax({
