@@ -1,16 +1,106 @@
-div.infoTab {
+/* General */
+
+html, body {
+    margin: 0em;
+    padding: 0em;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    font-family: "Trebuchet MS", Arial, Sans-Serif;
+}
+
+a {
+    height: 100%;
+    width: 100%;
+    display: block;
+    color: #ccc;
+    text-decoration: none;
+    outline-color: transparent;
+}
+
+
+/* Styles for the main tabs */
+ul.tabList {
     float: left;
-    width:100%;
+    width: 100%;
+    height: 40px;
+    display: block;
+    margin: 0px;
+    background: #04356C;
+    border-top-style: solid;
+    border-bottom-style: solid;
+}
+
+ul.tabList li {
+    list-style: none;
+    float: left;
+    background: #274F7D;
+    text-align: center;
+    padding-left: 1em;
+    padding-right: 1em;
+    height: 40px;
+    line-height: 40px;
+    vertical-align: middle;
+    border-right-style: solid;
+    border-left-style: solid;
+    border-right-width: thin;
+    border-left-width: thin;
+}
+
+ul.tabList li.ui-tabs-active, ul.tabList li:hover {
+    background: #0D56A6;
+}
+
+div.infoTab {
+    /*float: left;*/
+    width: 100%;
     background: #447BD4;
     color: white;
     height: 300px;
     overflow-y: auto;
+    padding-left: 2em;
+    padding-right: 2em;
 }
 
+/* My Courses tab */
+.courseCell {
+    display: inline-block;
+    border: 1px solid black;
+    color: black;
+    text-align: center;
+    width: 200px;
+    height: 150px;
+}
+
+.courseCell p {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    margin-left: 1em;
+    margin-right: 1em;
+}
+
+.courseCell p.courseName {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+#courseListTableDiv {
+    padding-top: 2em;
+    height: 100%;
+    width: 100%;
+}
+
+/* Course Calendar tab */
+div#calendar {
+    padding-right: 30%;
+}
+
+/* Timetable tab */
 table.timeTable {
     width: 50%;
     margin: 0 auto;
-    border : 1px solid black;
+    border: 1px solid black;
     padding: 2em;
 }
 
@@ -51,115 +141,8 @@ td.timeTableBlockInstructor {
     background: red;
 }
 
-.courseCell {
-    display: inline-block;
-    border: 1px solid black;
-    color: black;
-    text-align: center;
-    width: 200px;
-    height: 150px;
-}
 
-.courseCell p {
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
-    margin-left: 1em;
-    margin-right: 1em;
-}
-
-p.courseName {
-    font-size: 1.2em;
-    font-weight: bold;
-}
-
-div#calendar {
-    padding-left: 2em;
-    padding-right: 2em;
-}
-
-div#postDiv {
-    width: 100%;
-    height: 100%;
-    margin-left: 2em;
-    margin-right: 2em;
-}
-
-div.postFormDiv {
-    height: 100%;
-    float: left;
-    padding-left: 0.2em;
-    padding-right: 0.2em;  
-}
-
-input[type=text] {
-    width: 75px;
-    text-align: center;
-}
-
-select {
-
-}
-
-div.postFormDiv h4 {
-    width: 200px;
-    font-size: 1.05em;
-    text-align: center;
-    font-family: "Trebuchet MS",Arial,Sans-Serif;
-    margin-top: 0.3em;
-    margin-bottom: 0.3em;
-}
-
-ul.tabList {
-    float: left;
-    width: 100%;
-    height: 40px;
-    display: block;
-    margin: 0;
-    background: #04356C;
-    border-top-style: solid;
-    border-bottom-style: solid;
-}
-
-
-ul.tabList li {
-    list-style: none;
-    float:left;
-    background: #274F7D;
-    text-align: center;
-    width: 10em;
-    height: 40px;
-    line-height: 40px;
-    vertical-align: middle;
-    border-right-style: solid;
-    border-left-style: solid;
-    border-right-width: thin;
-    border-left-width: thin;
-}
-
-ul.tabList li.ui-tabs-active {
-    background: #0D56A6;
-}
-
-ul.tabList a {
-    height: 100%;
-    width: 100%;
-    display: block;
-    color: #ccc;
-    text-decoration: none;
-    outline-color: transparent;
-}
-
-ul.tabList a:hover {
-    background: #0D56A6;
-}
-
-#courseListTableDiv {
-    padding: 1em;
-    height: 100%;
-    width: 100%;
-}
-
-
+/* Focus and POSt tabs */
 div.focusDetails {
     background: #6A93D4;
     width: 800px;
@@ -167,49 +150,124 @@ div.focusDetails {
     padding: 1em;
 }
 
-#focusListDiv {
+div.postDetails {
+    background: #6A93D4;
+    width: 350px;
+    height: 260px;
+    float: left;
+    padding: 1em;
+}
+
+#focusListDiv, #postListDiv {
+    width: 300px;
     height: 100%;
 }
 
-ul.focusList {
+ul.focusList, ul.postList {
     float: left;
     width: 300px;
     height: 100%;
-    display: block;
     margin-top: 1em;
 }
 
-
-ul.focusList li {
+ul.focusList li, ul.postList li {
     list-style: none;
     height: 40px;
     line-height: 40px;
     vertical-align: middle;
 }
 
-ul.focusList li.ui-tabs-active, ul.focusList a:hover {
+ul.focusList li.ui-tabs-active, ul.focusList a:hover, ul.postList li.ui-tabs-active, ul.postList a:hover {
     background: #6A93D4;
 }
 
-ul.focusList a {
+/* POSt tab */
+.postStatusIcon {
+    float: right;
+    margin-top: 0.6em; 
+    margin-bottom: 0.6em; 
+    margin-right: 0.5em;
+    width: 1em;
+    height: 1em;
+}
+
+div.postFCETotalDiv {
     height: 100%;
-    width: 100%;
-    display: block;
-    color: #ccc;
-    text-decoration: none;
-    outline-color: transparent;
+    width: 400px;
+    float: left;
+    padding-top: 1em;
 }
 
 
-
-html, body {
-    margin: 0em;
-    padding: 0em;
+h4 {
+    text-size: 1.1em;
     width: 100%;
-    height: 100%;
-    overflow-x: hidden;
-    overflow-y: auto;
-    font-family: "Trebuchet MS", Arial, Sans-Serif;
+    text-align: center;
+    margin-top: 0.3em;
+    margin-bottom: 0.3em;
+}
+
+div.postFCETotalDiv table {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+td.FCECrit {
+    text-align: right;
+    padding-right: 0.1em;
+}
+
+td.FCETotal {
+    padding-left: 0.1em;
+}
+
+table.checkTable {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.postDetails p {
+    padding-top: 0.1em;
+    padding-bottom: 0.1em;
+}
+
+input[type=text] {
+    width: 75px;
+    text-align: center;
+}
+
+
+/* Styling checkboxes */
+input[type='checkbox'] {
+    display: none;
+}
+
+label {  
+    display: inline-block;  
+    position: relative;  
+    height: 20px;
+    margin: 5px;
+} 
+
+label:before {  
+    content: "";  
+    display: inline-block;  
+    width: 20px;  
+    height: 20px;  
+  
+    color: green;
+    font-size: 1.15em;
+    font-family: bold;
+    background-color: white;  
+    text-align: center;
+    vertical-align: -3px;
+
+    margin-right: 10px;  
+    position: relative;  
+}  
+
+input[type=checkbox]:checked + label:before {  
+    content: "\2713";
 }
 
 
@@ -246,6 +304,7 @@ g text{
     -ms-user-select: none;
     user-select: none;
 }
+
 
 /* Node styles */
 
@@ -314,6 +373,7 @@ g[data-group='hci'] rect {
     fill: #B8FF70;
 }
 
+/* Hybrid styles */
 g.hybrid {
     cursor: default;
 }

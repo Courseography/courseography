@@ -114,6 +114,8 @@ function Node(parents, type, name) {
                 this.takeable = FCEs300 + FCEs400 >= 2.5;
             } else if (this.name == "CSC494" || this.name == "CSC495") {
                 this.takeable = FCEs300 + FCEs400 >= 1.5;
+            } else if (this.name == 'CSC318') {
+                this.takeable = FCEs >= 0.5;
             } else {
                 // We seem to be assuming here that this is an 'AND' node
                 this.takeable = true; 
@@ -135,6 +137,7 @@ function Node(parents, type, name) {
             updatePOSt(this.name, this.active);
 
             // Check the courses with FCE reqs
+            CSC318.isActive();
             CSC454.isActive();
             CSC494.isActive();
             CSC495.isActive();
@@ -153,6 +156,8 @@ function Node(parents, type, name) {
                 this.takeable = FCEs300 + FCEs400 >= 2.5;
             } else if (this.name == "CSC494" || this.name == "CSC495") {
                 this.takeable = FCEs300 + FCEs400 >= 1.5;
+            } else if (this.name == 'CSC318') {
+                this.takeable = FCEs >= 0.5;
             } else if (this.logicalType == "AND") {
                 this.takeable = true;
                 for (var i = 0; i < this.parents.length; i++) {
@@ -279,7 +284,7 @@ function Node(parents, type, name) {
             }
         }
         FCEs = FCEs100 + FCEs200 + FCEs300 + FCEs400 + FCEsMAT;
-        $('#FCEcount').html(FCEs);
+        $('#FCEcount').html(FCEs.toFixed(1));
 
 
         // Get data from course calendar        
@@ -370,8 +375,8 @@ function reset() {
     FCEs300 = 0;
     FCEs400 = 0;
     FCEsMAT = 0;
-    $('#FCEcount').html(FCEs);
     clickedCourses = [];
+    $('#FCEcount').html(FCEs.toFixed(1));
 };
 
 

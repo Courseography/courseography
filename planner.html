@@ -483,15 +483,13 @@
       <li><a href="#timetable">Timetable</a></li>
       <li><a href="#post">Check My POSt!</a></li>
       <li><a onclick="reset()">Reset</a></li>
-      <li id="FCEcount">0.0</li>
+      <li><span id='FCEcount'>0.0</span> FCEs</li>
     </ul>
 
     <div id="courseList" class="infoTab">
       <div id="courseListTableDiv">
         <table><tr id="courseGrid"></tr></table>
-
       </div>
-
     </div>
 
     <div id="courseDescriptions" class="infoTab">
@@ -531,303 +529,417 @@
             </ol>
             Suggested Related Courses:
             <ol>
-             <li>MAT224H1/MAT240H1, MAT244H1, MAT334H1/MAT354H1, MAT337H1/MAT357H1</li>
-           </ol>
-         </p>
-         <p>
-          It is also recommended that students in this focus consider taking a half-course or two from the basic sciences (such as physics, chemistry, biology), as these sciences provide the sources of many problems solved by numerical techniques.
-        </p>
-      </div>
-
-
-      <div id="AIDetails" class="focusDetails">
-        <p>
-          Artificial Intelligence (AI) is aimed at understanding and replicating the computational processes underlying intelligent behaviour. These behaviours include the perception of one's environment, learning how that environment is structured, communicating with other agents, and reasoning to guide one's actions. This focus is designed to provide students with an introduction to some of the key scientific and technical ideas that have been developed in AI. There are four different sub-areas of AI represented in our department: Computer Vision, Computational Linguistics (CL), Machine Learning (ML), and Knowledge Representation and Reasoning (KR). These areas cover a wide variety of ideas and techniques. Students wanting to achieve this focus are required to take courses from at least two of these sub-areas.
-        </p>
-        <p>Required Courses:
-          <ol>
-            <li>1 FCE from the following: MAT235Y1/237Y1/257Y1, APM236H1/MIE262H1/STA248/261H1, CSC350H1, CSC310H1, CSC330H1, CSC438H1, CSC448H1, CSC463H1</li>
-            <li>2.5 FCEs from the following covering at least two of the four areas
-              <ol>
-                <li>CSC401H1, CSC485H1</li>
-                <li>CSC320H1, CSC420H1</li>
-                <li>CSC321H1, CSC411H1, CSC412H1</li>
-                <li>CSC384H1, CSC486H1</li>
-              </ol>
-            </li>
-          </ol>
-        </p>
-        <p>Suggested Related Courses: CSC200Y1, CSC324H1, COG250Y1, PSY270H1, PHL232H1, PHL342H1, STA414H1</p>
-      </div>
-
-      <div id="NLPDetails" class="focusDetails">
-        <p>
-          How can we build and analyze systems for enabling users to communicate with computers using human language (also called natural language), and for automatically processing the vast amounts of data on the web available in the form of text? The focus covers appropriate material on natural language interfaces, as well as tools such as document summarization, intelligent search over the web, and so on. Students considering this focus are encouraged to consider a second Major in Linguistics. [Note 0.5 FCEs in LIN are in addition to the 12.0 FCEs required to complete the Specialist program]
-        </p>
-        <p>
-          Required Courses
-          <ol>
-            <li>CSC318H1</li>
-            <li>CSC401H1, CSC485H1</li>
-            <li>LIN200H1</li>
-            <li>1.5 FCE from the following: CSC309H1, CSC321H1, CSC330H1, CSC411H1, CSC428H1, CSC486H</li>
-            <li>0.5 FCE from the following: PSY100H1, COG250Y1</li>
-          </ol>
-        </p>
-        <p>Suggested Related Courses:</p>
-        <p>
-          Other relevant CSC courses, depending on the student's interests, include other courses in artificial intelligence such as CSC384H1 or CSC420H1. Linguistics, Psychology, and Cognitive Science are all directly relevant to this focus, and we recommend that interested students take additional courses from any or all of them.
-        </p>
-      </div>
-
-      <div id="visionDetails" class="focusDetails">
-        <p>
-          Computer vision is the science and technology of machines that can see. As a science, the goal of computer vision is to understand the computational processes required for a machine to come to an understanding of the content of a set of images. The data here may be a single snapshot, a video sequence, or a set of images from different viewpoints or provided by medical scanners.
-        </p>
-        <p>
-          The computer vision focus introduces students to the study of vision from a computational point of view. That is, we attempt to clearly define computational problems for various steps of the overall process, and then show how these problems can be tackled with appropriate algorithms.
-        </p>
-        <p>
-          Students who wish to pursue computer vision should have an understanding of linear algebra and calculus of several variables. Moreover, they should be solid programmers and have a good understanding of data structures and algorithm design. These basic tools are required in order to first pose computational vision problems, and then develop and test algorithms for their solution.
-        </p>
-        <p>
-          Required Courses:
-          <ol>
-            <li>MAT235Y1/MAT237Y1/MAT257Y1, CSC320H1, CSC350H1, CSC411H1, CSC420H1</li>
-            <li>0.5 FCE from the following: CSC418H1, CSC412H1, CSC2503H (Note: students must petition to take this course.)</li>
-          </ol>
-        </p>
-        <p>Suggested Related Courses:
-          <ol>
-            <li>ECE216H1</li>
-          </ol>
-        </p>
-        <p>
-          The following are examples of topics and courses that fit naturally with a study of computational vision. The list is meant to be illustrative of the range of cognate topics, but is not necessarily complete. The ordering is alphabetical and not indicative of importance. Note: there are prerequisites for many of these courses that we do not list here.
-        </p>
-        <p>
-          APM462H1, COG250Y1, CSC384H, CSC485H1, CSC486H1, PHL232H1, PHY385H1, PSL440Y1, PSY270H1, PSY280H1, STA257H1/STA261H1
-        </p>
-      </div>
-
-
-      <div id="systemsDetails" class="focusDetails">
-        <p>
-          Software systems are complex and interesting. Poorly done systems can be incredibly expensive: they can cost society billions of dollars, and sometimes make the difference between life and death. Rapid changes in technology and applications means that the underlying systems must continually adapt. This focus takes you under the covers of software systems, laying bare the layers and introducing you to concurrency issues, scalability, multiprocessor systems, distributed computing, and more.
-        </p>
-
-        <p>
-          Required Courses:
-          <ol>
-            <li>CSC324H1, CSC343H1, CSC443H1, CSC469H1, CSC488H1</li>
-            <li>1 FCE from the following: CSC372H1/ECE385H1, CSC358H1, CSC458H1</li>
-          </ol>
-        </p>
-        <p>
-          Suggested Related Courses:
-          <ol>
-            <li>CSC301H1, CSC309H1, CSC410H1, ECE489H1</li>
-            <li>Relevant courses offered at UTM: CSC347H5, CSC423H5, CSC427H5</li>
-            <li>Relevant courses offered by Engineering: ECE454H1, ECE568H1</li>
-          </ol>
-        </p>
-      </div>
-
-      <div id="gameDetails" class="focusDetails">
-        <p>
-          Video game design combines several disciplines within computer science, including software engineering, graphics, artificial intelligence and human-computer interaction. It also incorporates elements of economics, psychology, music and creative writing, requiring video game researchers to have a diverse, multidisciplinary set of skills.
-        </p>
-        <p>
-          Students who wish to pursue video game design should have an understanding of linear algebra (for computer graphics modeling), computer hardware and operating systems (for console architecture), data structures, and algorithm design. Students will gain a general knowledge of the more advanced topics listed in the courses below.
-        </p>
-        <p>
-          Required courses:
-          <ol>
-            <li>CSC300H1, CSC301H1, CSC318H1, CSC324H1, CSC384H1, CSC418H1, CSC404H1</li>
-          </ol>
-        </p>
-        <p>Suggested Related Courses:
-          <ol>
-            <li>CSC358H1, CSC458H1, CSC428H1</li>
-            <li>MUS300H1, INI222H1, INI465H1, ENG235H1</li>
-            <li>ECO326H1, MGT2056H</li>
-          </ol>
-        </p>
-      </div>
-
-      <div id="HCIDetails" class="focusDetails">
-        <p>
-          Human-Computer Interaction (HCI) is the scientific study of the use of computers by people and the design discipline that informs the creation of systems and software that are useful, usable, and enjoyable for the people who use them. HCI students have exciting opportunities for research and graduate school; HCI professionals often have jobs with titles such as user interface architect, user interface specialist, interaction designer, or usability engineer. [Note 3.5 FCEs in SOC and PSY are in addition to the 12.0 FCEs required to complete the Specialist program]
-        </p>
-        <p>
-          Required Courses:
-          <ol>
-            <li>CSC300H1, CSC301H1, CSC318H1, CSC428H1</li>
-            <li>SOC101Y1, SOC200H1, SOC202H1, SOC302H1</li>
-            <li>1 FCE from the following: CSC309H1, CSC320H1, CSC321H1, CSC343H1, CSC384H1, CSC401H1, CSC404H1, CSC418H1, CSC485H1, CSC490H1/491H1</li>
-            <li>PSY100H1, PSY270H1/PSY280H1</li>
-          </ol>
-        </p>
-        <p>
-          Suggested Related Courses:
-          <ol>
-            <li>CSC454H1, CSC290H1</li>
-            <li>At least one half-course in Human Factors or Ergonomics offered by the Department of Mechanical and Industrial Engineering, such as MIE240H, MIE343H, MIE344H, MIE448H, and MIE449H. Human factors is a sister discipline to human-computer interaction that approaches problems in slightly different ways.</li>
-            <li>WDW260H1</li>
-          </ol>
-        </p>
-      </div>
-
-      <div id="theoryDetails" class="focusDetails">
-        Theory
-      </div>
-
-      <div id="webDetails" class="focusDetails">
-        <p>
-          The Web and Internet Technologies focus introduces students to the systems and algorithms that power today's large-scale web and Internet applications such as search engines, social networking applications, web data mining applications, and content distribution networks. The focus covers both the algorithm foundations of Web and Internet Technologies, as well as the implementation and system architecture.
-        </p>
-        <p>
-          Students who wish to pursue the Web and Internet Technologies focus should have a solid understanding of statistics, should be good programmers and have a good understanding of data structures and algorithm design.
-        </p>
-        <p>
-          To get practical experience, students pursuing the web and Internet technologies focus are encouraged to do either a term project or a summer USRA carrying out a project in web and internet technologies.
-        </p>
-        <p>
-          Required courses:
-          <ol>
-            <li>STA248H1, CSC309H1, CSC343H1, CSC358H1, CSC458H1, CSC411H1</li>
-            <li>0.5 FCEs from the following: CSC310H1, CSC443H1, CSC469H1</li>
-          </ol>
-        </p>
-        <p>
-          Suggested Related Courses:
-          <ol>
-            <li>Courses offered at UTM: CSC347H5, CSC423H5, CSC427H5</li>
-            <li>ECE568H1</li>
-          </ol>
-        </p>
-      </div>
-    </div>
-  </div>
-  <div id="timetable" class="infoTab">
-
-  </div>
-  
-  <div id="post" class="infoTab">
-    <div id="postDiv">
-      <div id="reqPost" class="postFormDiv">
-      <h4>1. CSC: ALL of...</h4>
-        <div width="75px" style="padding-left: 0.5em; padding-right: 0.5em; float: left; margin-left: 0px">
-          <input type="checkbox" id="CSC108check" disabled>CSC108<br/>
-          <input type="checkbox" id="CSC148check" disabled>CSC148<br/>
-          <input type="checkbox" id="CSC207check" disabled>CSC207<br/>
-          <input type="checkbox" id="CSC209check" disabled>CSC209<br/>
-          <input type="checkbox" id="CSC258check" disabled>CSC258<br/>
-          <input type="checkbox" id="CSC369check" disabled>CSC369<br/>
+              <li>MAT224H1/MAT240H1, MAT244H1, MAT334H1/MAT354H1, MAT337H1/MAT357H1</li>
+            </ol>
+          </p>
+          <p>
+            It is also recommended that students in this focus consider taking a half-course or two from the basic sciences (such as physics, chemistry, biology), as these sciences provide the sources of many problems solved by numerical techniques.
+          </p>
         </div>
-        <div width="75px" style="padding-left: 0.5em; padding-right: 0.5em; float: left; margin-right: 0px">
-          <input type="checkbox" id="CSC165check" disabled>CSC165<br/>
-          <input type="checkbox" id="CSC236check" disabled>CSC236<br/>
-          <input type="checkbox" id="CSC263check" disabled>CSC263<br/>
-          <input type="checkbox" id="CSC373check" disabled>CSC373<br/>
-        </div>
-        
-      </div>
 
-      <div class="postFormDiv">
-        <h4>2. CSC/ECE/BCB 4xx: <br/>At least 1.5 FCEs from...</h4>
-        <div width="50px" style="padding-left: 0.25em; padding-right: 0.25em; float: left; margin-left: 0px">
-          <input type="text" id="4xx1" placeholder="CSC4xx" disabled><br/>
-          <input type="text" id="4xx2" placeholder="CSC4xx" disabled><br/>
-          <input type="text" id="4xx3" placeholder="CSC4xx" disabled><br/>
-        </div>
-        <div width="50px" style="padding-left: 0.25em; padding-right: 0.25em; float: left; margin-right: 0px">
-          <input type="checkbox">BCB410<br/>
-          <input type="checkbox">BCB420<br/>
-          <input type="checkbox">BCB430<br/>
-        </div>
-      </div>
 
-      <div class="postFormDiv">
-        <h4>3. CSC/ECE 300+</p>
-          <div width="50px" style="padding-left: 0.25em; padding-right: 0.25em; float: left; margin-left: 0px">
-            <input type="text" id="CSC1" placeholder="CSC/ECE" disabled><br/>
-            <input type="text" id="CSC2" placeholder="CSC/ECE" disabled><br/>
-            <input type="text" id="CSC3" placeholder="CSC/ECE" disabled><br/>
-            <input type="text" id="CSC4" placeholder="CSC/ECE" disabled><br/>
-          </div>
-          <div width="50px" style="padding-left: 0.25em; padding-right: 0.25em; float: left; margin-right: 0px">
-            <input type="text" id="CSC5" placeholder="CSC/ECE" disabled><br/>
-            <input type="text" id="CSC6" placeholder="CSC/ECE" disabled><br/>
-            <input type="text" id="CSC7" placeholder="CSC/ECE" disabled>
+        <div id="AIDetails" class="focusDetails">
+          <p>
+            Artificial Intelligence (AI) is aimed at understanding and replicating the computational processes underlying intelligent behaviour. These behaviours include the perception of one's environment, learning how that environment is structured, communicating with other agents, and reasoning to guide one's actions. This focus is designed to provide students with an introduction to some of the key scientific and technical ideas that have been developed in AI. There are four different sub-areas of AI represented in our department: Computer Vision, Computational Linguistics (CL), Machine Learning (ML), and Knowledge Representation and Reasoning (KR). These areas cover a wide variety of ideas and techniques. Students wanting to achieve this focus are required to take courses from at least two of these sub-areas.
+          </p>
+          <p>Required Courses:
+            <ol>
+              <li>1 FCE from the following: MAT235Y1/237Y1/257Y1, APM236H1/MIE262H1/STA248/261H1, CSC350H1, CSC310H1, CSC330H1, CSC438H1, CSC448H1, CSC463H1</li>
+              <li>2.5 FCEs from the following covering at least two of the four areas
+                <ol>
+                  <li>CSC401H1, CSC485H1</li>
+                  <li>CSC320H1, CSC420H1</li>
+                  <li>CSC321H1, CSC411H1, CSC412H1</li>
+                  <li>CSC384H1, CSC486H1</li>
+                </ol>
+              </li>
+            </ol>
+          </p>
+          <p>Suggested Related Courses: CSC200Y1, CSC324H1, COG250Y1, PSY270H1, PHL232H1, PHL342H1, STA414H1</p>
+        </div>
+
+        <div id="NLPDetails" class="focusDetails">
+          <p>
+            How can we build and analyze systems for enabling users to communicate with computers using human language (also called natural language), and for automatically processing the vast amounts of data on the web available in the form of text? The focus covers appropriate material on natural language interfaces, as well as tools such as document summarization, intelligent search over the web, and so on. Students considering this focus are encouraged to consider a second Major in Linguistics. [Note 0.5 FCEs in LIN are in addition to the 12.0 FCEs required to complete the Specialist program]
+          </p>
+          <p>
+            Required Courses
+            <ol>
+              <li>CSC318H1</li>
+              <li>CSC401H1, CSC485H1</li>
+              <li>LIN200H1</li>
+              <li>1.5 FCE from the following: CSC309H1, CSC321H1, CSC330H1, CSC411H1, CSC428H1, CSC486H</li>
+              <li>0.5 FCE from the following: PSY100H1, COG250Y1</li>
+            </ol>
+          </p>
+          <p>Suggested Related Courses:</p>
+          <p>
+            Other relevant CSC courses, depending on the student's interests, include other courses in artificial intelligence such as CSC384H1 or CSC420H1. Linguistics, Psychology, and Cognitive Science are all directly relevant to this focus, and we recommend that interested students take additional courses from any or all of them.
+          </p>
+        </div>
+
+        <div id="visionDetails" class="focusDetails">
+          <p>
+            Computer vision is the science and technology of machines that can see. As a science, the goal of computer vision is to understand the computational processes required for a machine to come to an understanding of the content of a set of images. The data here may be a single snapshot, a video sequence, or a set of images from different viewpoints or provided by medical scanners.
+          </p>
+          <p>
+            The computer vision focus introduces students to the study of vision from a computational point of view. That is, we attempt to clearly define computational problems for various steps of the overall process, and then show how these problems can be tackled with appropriate algorithms.
+          </p>
+          <p>
+            Students who wish to pursue computer vision should have an understanding of linear algebra and calculus of several variables. Moreover, they should be solid programmers and have a good understanding of data structures and algorithm design. These basic tools are required in order to first pose computational vision problems, and then develop and test algorithms for their solution.
+          </p>
+          <p>
+            Required Courses:
+            <ol>
+              <li>MAT235Y1/MAT237Y1/MAT257Y1, CSC320H1, CSC350H1, CSC411H1, CSC420H1</li>
+              <li>0.5 FCE from the following: CSC418H1, CSC412H1, CSC2503H (Note: students must petition to take this course.)</li>
+            </ol>
+          </p>
+          <p>Suggested Related Courses:
+            <ol>
+              <li>ECE216H1</li>
+            </ol>
+          </p>
+          <p>
+            The following are examples of topics and courses that fit naturally with a study of computational vision. The list is meant to be illustrative of the range of cognate topics, but is not necessarily complete. The ordering is alphabetical and not indicative of importance. Note: there are prerequisites for many of these courses that we do not list here.
+          </p>
+          <p>
+            APM462H1, COG250Y1, CSC384H, CSC485H1, CSC486H1, PHL232H1, PHY385H1, PSL440Y1, PSY270H1, PSY280H1, STA257H1/STA261H1
+          </p>
+        </div>
+
+
+        <div id="systemsDetails" class="focusDetails">
+          <p>
+            Software systems are complex and interesting. Poorly done systems can be incredibly expensive: they can cost society billions of dollars, and sometimes make the difference between life and death. Rapid changes in technology and applications means that the underlying systems must continually adapt. This focus takes you under the covers of software systems, laying bare the layers and introducing you to concurrency issues, scalability, multiprocessor systems, distributed computing, and more.
+          </p>
+
+          <p>
+            Required Courses:
+            <ol>
+              <li>CSC324H1, CSC343H1, CSC443H1, CSC469H1, CSC488H1</li>
+              <li>1 FCE from the following: CSC372H1/ECE385H1, CSC358H1, CSC458H1</li>
+            </ol>
+          </p>
+          <p>
+            Suggested Related Courses:
+            <ol>
+              <li>CSC301H1, CSC309H1, CSC410H1, ECE489H1</li>
+              <li>Relevant courses offered at UTM: CSC347H5, CSC423H5, CSC427H5</li>
+              <li>Relevant courses offered by Engineering: ECE454H1, ECE568H1</li>
+            </ol>
+          </p>
+        </div>
+
+        <div id="gameDetails" class="focusDetails">
+          <p>
+            Video game design combines several disciplines within computer science, including software engineering, graphics, artificial intelligence and human-computer interaction. It also incorporates elements of economics, psychology, music and creative writing, requiring video game researchers to have a diverse, multidisciplinary set of skills.
+          </p>
+          <p>
+            Students who wish to pursue video game design should have an understanding of linear algebra (for computer graphics modeling), computer hardware and operating systems (for console architecture), data structures, and algorithm design. Students will gain a general knowledge of the more advanced topics listed in the courses below.
+          </p>
+          <p>
+            Required courses:
+            <ol>
+              <li>CSC300H1, CSC301H1, CSC318H1, CSC324H1, CSC384H1, CSC418H1, CSC404H1</li>
+            </ol>
+          </p>
+          <p>Suggested Related Courses:
+            <ol>
+              <li>CSC358H1, CSC458H1, CSC428H1</li>
+              <li>MUS300H1, INI222H1, INI465H1, ENG235H1</li>
+              <li>ECO326H1, MGT2056H</li>
+            </ol>
+          </p>
+        </div>
+
+        <div id="HCIDetails" class="focusDetails">
+          <p>
+            Human-Computer Interaction (HCI) is the scientific study of the use of computers by people and the design discipline that informs the creation of systems and software that are useful, usable, and enjoyable for the people who use them. HCI students have exciting opportunities for research and graduate school; HCI professionals often have jobs with titles such as user interface architect, user interface specialist, interaction designer, or usability engineer. [Note 3.5 FCEs in SOC and PSY are in addition to the 12.0 FCEs required to complete the Specialist program]
+          </p>
+          <p>
+            Required Courses:
+            <ol>
+              <li>CSC300H1, CSC301H1, CSC318H1, CSC428H1</li>
+              <li>SOC101Y1, SOC200H1, SOC202H1, SOC302H1</li>
+              <li>1 FCE from the following: CSC309H1, CSC320H1, CSC321H1, CSC343H1, CSC384H1, CSC401H1, CSC404H1, CSC418H1, CSC485H1, CSC490H1/491H1</li>
+              <li>PSY100H1, PSY270H1/PSY280H1</li>
+            </ol>
+          </p>
+          <p>
+            Suggested Related Courses:
+            <ol>
+              <li>CSC454H1, CSC290H1</li>
+              <li>At least one half-course in Human Factors or Ergonomics offered by the Department of Mechanical and Industrial Engineering, such as MIE240H, MIE343H, MIE344H, MIE448H, and MIE449H. Human factors is a sister discipline to human-computer interaction that approaches problems in slightly different ways.</li>
+              <li>WDW260H1</li>
+            </ol>
+          </p>
+        </div>
+
+        <div id="theoryDetails" class="focusDetails">
+          <p>
+            Why is it easy to sort a list of numbers, but hard to break Internet encryption schemes? Is finding a solution to a problem harder than checking that a solution is correct? Can we find good approximate solutions, even when the exact solutions seem out of reach? Theory of Computation studies the inherent complexity of fundamental algorithmic problems. On one hand, we develop ground-breaking efficient data structures and algorithms. On the other, we have yet to develop good algorithms for many problems despite decades of effort, and for these problems we strive to prove no time- or space-efficient algorithms will ever solve them. While the field has seen some successful impossibility results, there are still many problems &ndash; such that those underlying modern cryptography and security &ndash; for which we do not know either efficient algorithms or strong lower bounds! 
+          </p>
+          <p>
+            This focus takes a rigorous, mathematical approach to computational problem-solving: students will gain a deep understanding of algorithm paradigms and measures of problem complexity, and develop the skills necessary to convey abstract ideas with precision and clarity. Many of our students go on to graduate studies and sophisticated algorithmic work in industry. This focus has natural ties with many branches of mathematics and is the foundation of many computer science fields. Consequently, our students often apply their theoretical knowledge to other fields of interest. We strongly encourage taking the enriched theory courses (CSC240H1, CSC265H1, CSC375H1) as well as specialist/major versions of the MAT requirements for our focus. [Depending on courses selected for points 4 & 5, students may need to complete 0.5-1.0 FCEs in addition to the 12.0 FCEs required to complete the Specialist program.]
+          </p>
+          <p>Required Courses:
+            <ol>
+              <li>MAT137Y1/MAT157Y1/MAT237Y1  Note: if MAT237Y1 is used it cannot be counted in the 2 FCE list below. </li>
+              <li>CSC463H1 </li>
+              <li>CSC336H1/CSC350H1 </li> 
+              <li>1.5 FCEs from the following:
+                <ul>
+                  <li>CSC310H1, CSC438H1, CSC448H1, MAT443H1</li> 
+                  <li>MAT332H1, MAT344H1</li>
+                  <li>At UTM: CSC322H5/MAT302H5, CSC422H5</li>
+                  <li>CSC494H1/CSC495H1 project supervised by a faculty member from the Theory group, or a relevant introductory graduate course in Theory. (Note that students must petition to take a graduate course.)</li>
+                </ul></li>
+                <li>2 FCEs from the following:
+                  <ul>
+                    <li>APM236H1/MIE262H1, MIE263H1, APM421H1, APM461H1</li>
+                    <li>MAT224H1/MAT247H1, MAT237Y1/MAT257Y1, MAT244H1/MAT267H1</li>
+                    <li>MAT301H1/MAT347Y1, MAT315H1, MAT327H1, MAT334H1/MAT354H1, MAT337H1/MAT357H1</li>
+                    <li>Any 400-level MAT course (except MAT443H1)</li>
+                    <li>STA248H1/STA261H1, STA347H1</li>
+                  </ul></li>
+                </ol>
+              </p>
+              <p>Recommended Courses: 
+                <ol>
+                  <li>Students are strongly encouraged to take the enriched theory courses: CSC240H1, CSC265H1, and CSC375H1, rather than their regular counterparts: CSC165H1/CSC236H1, CSC263H1, and CSC373H1, respectively.</li>
+                </ol>
+              </p>
+              <p>Suggested Related Courses:
+                <ol>
+                  <li>BCB410H1</li>
+                  <li>CSC320H1/CSC418H1/CSC420H1, CSC321H1/CSC384H1/CSC411H1/CSC485H1, CSC343H1/CSC443H1, CSC351H1/CSC456H1, CSC358H1/CSC458H1, CSC412H1/CSC465H1/CSC486H1, CSC488H1</li>
+                </ol>
+              </p>
+            </div>
+
+            <div id="webDetails" class="focusDetails">
+              <p>
+                The Web and Internet Technologies focus introduces students to the systems and algorithms that power today's large-scale web and Internet applications such as search engines, social networking applications, web data mining applications, and content distribution networks. The focus covers both the algorithm foundations of Web and Internet Technologies, as well as the implementation and system architecture.
+              </p>
+              <p>
+                Students who wish to pursue the Web and Internet Technologies focus should have a solid understanding of statistics, should be good programmers and have a good understanding of data structures and algorithm design.
+              </p>
+              <p>
+                To get practical experience, students pursuing the web and Internet technologies focus are encouraged to do either a term project or a summer USRA carrying out a project in web and internet technologies.
+              </p>
+              <p>
+                Required courses:
+                <ol>
+                  <li>STA248H1, CSC309H1, CSC343H1, CSC358H1, CSC458H1, CSC411H1</li>
+                  <li>0.5 FCEs from the following: CSC310H1, CSC443H1, CSC469H1</li>
+                </ol>
+              </p>
+              <p>
+                Suggested Related Courses:
+                <ol>
+                  <li>Courses offered at UTM: CSC347H5, CSC423H5, CSC427H5</li>
+                  <li>ECE568H1</li>
+                </ol>
+              </p>
+            </div>
           </div>
         </div>
-
-        <div class="postFormDiv">
-          <h4>4. PEY? <input type="checkbox"></h4>
-          <h4>If not, at least one of...</h4>
-          <div width="50px" style="padding-left: 0.25em; padding-right: 0.25em; float: left; margin-left: 0px">
-            <input type="checkbox" id="CSC301check" disabled>CSC301<br/>
-            <input type="checkbox" id="CSC318check" disabled>CSC318<br/>
-            <input type="checkbox" id="CSC404check" disabled>CSC404<br/>
-            <input type="checkbox" id="CSC411check" disabled>CSC411<br/>
-            <input type="checkbox" id="CSC418check" disabled>CSC418<br/>
-            <input type="checkbox" id="CSC420check" disabled>CSC420<br/>
-            <input type="checkbox" id="CSC428check" disabled>CSC428<br/>
-          </div>
-          <div width="50px" style="padding-left: 0.25em; padding-right: 0.25em; float: left; margin-right: 0px">
-            <input type="checkbox" id="CSC454check" disabled>CSC454<br/>
-            <input type="checkbox" id="CSC485check" disabled>CSC485<br/>
-            <input type="checkbox" id="CSC490check" disabled>CSC490<br/>
-            <input type="checkbox" id="CSC491check" disabled>CSC491<br/>
-            <input type="checkbox" id="CSC494check" disabled>CSC494<br/>
-            <input type="checkbox" id="CSC495check" disabled>CSC495<br/>
-          </div>
+        <div id="timetable" class="infoTab">
 
         </div>
 
+        <div id="post" class="infoTab">
+          <div class="postTabs">
+            <div id="postListDiv">
+              <ul class="postList">
+                <li><a href='#cscReqs'>CSC Required Courses 
+                  <img class='postStatusIcon' src='res/delete.ico'></a>
+                </li>
+                <li><a href='#matReqs'>MAT/STA Required Courses
+                  <img class='postStatusIcon' src='res/delete.ico'/></a>
+                </li>
+                <li><a href='#csc400s'>CSC/ECE/BCB 400+
+                  <img class='postStatusIcon' src='res/delete.ico'/></a>
+                </li>
+                <li><a href='#cscElecs'>CSC Electives
+                  <img class='postStatusIcon' src='res/delete.ico'/></a>
+                </li>
+                <li><a href='#matElecs'>MAT/STA Electives
+                  <img class='postStatusIcon' src='res/delete.ico'/></a>
+                </li>
+                <li><a href='#peyReq'>Inquiry (PEY)
+                  <img class='postStatusIcon' src='res/delete.ico'/></a>
+                </li>
+              </ul>
+            </div>
 
-        <div class="postFormDiv">
-          <h4>5. MAT/STA: ALL of...</h4>
-          <input type="checkbox" id="Calc1check" disabled>(MAT135,136)/137/157<br>
-          <input type="checkbox" id="Lin1check" disabled>MAT221/223/240<br>
-          <input type="checkbox" id="Sta1check" disabled>STA247/255/257<br>
-        </div>
+            <div id="cscReqs" class="postDetails">
+              <h4>ALL of...</h4>
+              <table class='checkTable'>
+              <tr>
+                <td><input type="checkbox" id="CSC108check" disabled><label for='CSC108check'>CSC108</td>
+                <td><input type="checkbox" id="CSC165check" disabled>CSC165</td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" id="CSC148check" disabled>CSC148</td>
+                <td><input type="checkbox" id="CSC236check" disabled>CSC236</td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" id="CSC207check" disabled>CSC207</td>
+                <td><input type="checkbox" id="CSC263check" disabled>CSC263</td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" id="CSC209check" disabled>CSC209</td>
+                <td><input type="checkbox" id="CSC373check" disabled>CSC373</td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" id="CSC258check" disabled>CSC258</td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" id="CSC369check" disabled>CSC369</td>
+              </tr>
+              </table>
+            </div>
 
-        <div class="postFormDiv">
-          <h4>6. MAT/STA: <br/> At most 2 FCEs from...</h4>
+            <div id='matReqs' class='postDetails'>
+              <h4>ALL of...</h4>
+              <table class='checkTable'>
+              <tr>
+                <td><input type='checkbox' id='Calc1check' disabled>(MAT135,136)/137/157</td>
+              </tr>
+              <tr>
+                <td><input type='checkbox' id='Lin1check' disabled>MAT221/223/240</td>
+              </tr>
+              <tr>
+                <td><input type='checkbox' id='Sta1check' disabled>STA247/255/257</td>
+              </tr>
+              </table>
+            </div>
 
-          <p>MAT: 224, 235, 237, 257, <br/>300+ except 329, 390, 391</p>
-          <p>STA: 249, 261, any 300+</p>
-          <div width="50px" style="padding-left: 0.25em; padding-right: 0.25em; float: left; margin-left: 0px">
-            <input type="text" name="MATa" placeholder="MAT..."><br/>
-            <input type="text" name="MATb" placeholder="MAT..."><br/>
-            <input type="text" name="MATc" placeholder="MAT..."><br/>
-            <input type="text" name="MATd" placeholder="MAT..."><br/>
+            <div id='csc400s' class='postDetails'>
+              <h4>At least 1.5 FCEs from...</h4> 
+              <p>CSC400+, ECE489, BCB410, BCB420, and BCB430</p>
+              <p>(Input BCB410/420/430 manually)</p>
+              <table class='checkTable'>
+                <tr>
+                  <td><input type='text' id='4xx1' placeholder='CSC4xx' disabled></td>
+                  <td><input type='checkbox'>BCB410</td>
+                </tr>
+                <tr>
+                  <td><input type='text' id='4xx2' placeholder='CSC4xx' disabled></td>
+                  <td><input type='checkbox'>BCB420</td>
+                </tr>
+                <tr>
+                  <td><input type='text' id='4xx3' placeholder='CSC4xx' disabled></td>
+                  <td><input type='checkbox'>BCB430</td>
+                </tr>
+              </table>
+            </div>
+
+            <div id='cscElecs' class='postDetails'>
+              <p>Note: 400-level courses will fill up "CSC/ECE/BCB 400+" first.</p>
+              <table class='checkTable'>
+                <tr>
+                  <td><input type='text' id='CSC1' placeholder='CSC/ECE' disabled></td>
+                  <td><input type='text' id='CSC2' placeholder='CSC/ECE' disabled></td>
+                </tr>
+                <tr>
+                  <td><input type='text' id='CSC3' placeholder='CSC/ECE' disabled></td>
+                  <td><input type='text' id='CSC4' placeholder='CSC/ECE' disabled></td>
+                </tr>
+                <tr>
+                  <td><input type='text' id='CSC5' placeholder='CSC/ECE' disabled></td>
+                  <td><input type='text' id='CSC6' placeholder='CSC/ECE' disabled></td>
+                </tr>
+                <tr>
+                  <td><input type='text' id='CSC7' placeholder='CSC/ECE' disabled></td>
+                </tr>
+              </table>
+            </div>
+
+            <div id='matElecs' class='postDetails'>
+              <p>Note: you can count at <em>most</em> 2 MAT/STA FCEs from...</p>
+
+              <p>MAT: 224, 235, 237, 257, 300+ except 329, 390, 391. STA: 249, 261, any 300+. (Input manually)
+              </p>
+
+              <table class='checkTable'>
+                <tr>
+                  <td><input type='text' name='MATa' placeholder='MAT/STA'></td>
+                  <td><input type='text' name='MATb' placeholder='MAT/STA'></td>
+                </tr>
+                <tr>
+                  <td><input type='text' name='MATc' placeholder='MAT/STA'></td>
+                  <td><input type='text' name='MATd' placeholder='MAT/STA'></td>
+                </tr>
+                </table>
+              </div>
+
+              <div id='peyReq' class='postDetails'>
+                <h4>Doing PEY? <td><input type='checkbox'></h4>
+                <h4>If not, at least one of...</h4>
+                <table class='checkTable'>
+                  <tr>
+                    <td><td><input type='checkbox' id='CSC301check' disabled>CSC301</td>
+                    <td><td><input type='checkbox' id='CSC318check' disabled>CSC318</td>
+                  </tr>
+                  <tr>
+                    <td><td><input type='checkbox' id='CSC404check' disabled>CSC404</td>
+                    <td><td><input type='checkbox' id='CSC411check' disabled>CSC411</td>
+                  </tr>
+                  <tr>
+                    <td><td><input type='checkbox' id='CSC418check' disabled>CSC418</td>
+                    <td><td><input type='checkbox' id='CSC420check' disabled>CSC420</td>
+                  </tr>
+                  <tr>
+                    <td><td><input type='checkbox' id='CSC428check' disabled>CSC428</td>
+                    <td><td><input type='checkbox' id='CSC454check' disabled>CSC454</td>
+                  </tr>
+                  <tr>
+                    <td><td><input type='checkbox' id='CSC485check' disabled>CSC485</td>
+                    <td><td><input type='checkbox' id='CSC490check' disabled>CSC490</td>
+                  </tr>
+                  <tr>
+                    <td><td><input type='checkbox' id='CSC491check' disabled>CSC491</td>
+                    <td><td><input type='checkbox' id='CSC494check' disabled>CSC494</td>
+                  </tr>
+                  <tr>
+                    <td><td><input type='checkbox' id='CSC495check' disabled>CSC495</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+
+            <div class='postFCETotalDiv'>
+              <h4>FCE Totals</h4>
+              <table>
+                <tr>
+                  <td class='FCECrit'>Required CSC:</td>
+                  <td class='FCETotal'><span id='cscReqTotal'>0.0</span>/10 FCEs</td>
+                </tr>
+                <tr>
+                  <td class='FCECrit'>Required MAT/STA:</td>
+                  <td class='FCETotal'><span id='matReqTotal'>0.0</span>/4 FCEs</td>
+                </tr>
+                <tr>
+                  <td class='FCECrit'>Electives:</td>
+                  <td class='FCETotal'><span id='elecTotal'>0.0</span>/10 FCEs</td>
+                </tr>
+                <tr>
+                  <td class='FCECrit'>Total:</td>
+                  <td class='FCETotal'><span id='postTotal'>0.0</span>/24 FCEs</td>
+                </tr>
+              </div>
+
+            </div>
           </div>
-          <div width="50px" style="padding-left: 0.25em; padding-right: 0.25em; float: left; margin-right: 0px">
-            <input type="text" name="STAa" placeholder="STA..."><br/>
-            <input type="text" name="STAb" placeholder="STA..."><br/>
-            <input type="text" name="STAc" placeholder="STA..."><br/>
-            <input type="text" name="STAd" placeholder="STA..."><br/>
-          </div>
-        </div>
 
-        <div class="postFormDiv" width="100px">
-        <h4>FCE Total</h4>
-        <p>Required (1, 5) &ndash; <span id="reqTotal">0</span>/14 FCEs</p>
-        <p>Elective (2, 3, 6) &ndash; <span id="elecTotal">0</span>/10 FCEs</p>
-        <p>Total &ndash; <span id="postTotal">0</span>/24 FCEs</p>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <script>
-    $(".infoTabs").tabs();
-    $(".focusTabs").tabs({active: false, collapsible: true});
-  </script>
-  <script src="util.js"></script>
-</body>
-</html>
+          <script>
+            $('.infoTabs').tabs();
+            $('.focusTabs').tabs({active: false, collapsible: true});
+            $('.postTabs').tabs({active: 0});
+          </script>
+          <script src='util.js'></script>
+        </body>
+        </html>
