@@ -53,7 +53,7 @@ ul.tabList li.ui-tabs-active, ul.tabList li:hover {
 }
 
 div.infoTab {
-    /*float: left;*/
+    float: left;
     width: 100%;
     background: #447BD4;
     color: white;
@@ -94,6 +94,7 @@ div.infoTab {
 /* Course Calendar tab */
 div#calendar {
     padding-right: 30%;
+    padding-top: 1em;
 }
 
 /* Timetable tab */
@@ -110,7 +111,7 @@ tr.timeTableRow {
 
 td.timeTableHeader{
     background: white;
-    font-color: black;
+    color: black;
 }
 
 td.timeTableBlock {
@@ -200,7 +201,7 @@ div.postFCETotalDiv {
 
 
 h4 {
-    text-size: 1.1em;
+    font-size: 1.1em;
     width: 100%;
     text-align: center;
     margin-top: 0.3em;
@@ -294,7 +295,7 @@ input[type=checkbox]:checked + label:before {
 g text{
     white-space: pre;
     text-align: center;
-    text-rendering="optimizeQuality";
+    text-rendering: geometricPrecision;
     font-size: 0.9em;
     stroke: none;
     -webkit-touch-callout: none;
@@ -407,22 +408,23 @@ path[data-active="takeable"] {
     fill: none;
     color: grey;
     stroke-dasharray: 6, 4;
-    marker-end: url(#arrow);
 }
 
 path[data-active="inactive"] {
     fill: none;
     opacity: 0.4;
     stroke-dasharray: 6, 4;
-    marker-end: url(#arrow);
 }
 
 path[data-active="active"] {
     fill: none;
     opacity: 1.0;
-    marker-end: url(#arrow);
 }
 
+#Triangle path[data-active="inactive"], #Arrow path[data-active="inactive"] {
+  fill: black;
+  stroke: black;
+}
 
 /* Logo style. */
 #title ellipse {
@@ -435,3 +437,4 @@ path[data-active="active"] {
     font-weight: bold;
     font-family: Sans-Serif;
 }
+

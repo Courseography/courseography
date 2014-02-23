@@ -326,10 +326,21 @@ function Node(parents, type, name) {
  * Mouse Event Callbacks
  */
 
+// Set mouse callbacks on all graph nodes
+function setMouseCallbacks() {
+    $(".node").click(function(event) { turnNode(event); });
+    $(".node").hover(
+        function(event) { hoverFocus(event); }, 
+        function(event) { hoverUnfocus(event);
+    });
+}
+
+
 // Activates missing prerequisite display and 
 // fetches course description on hover
-function hoverFocus() {
-    var id = $(event.target).parent().attr("id");
+function hoverFocus(event) {
+    //var id = $(event.target).parent().attr("id");
+    var id = event.target.parentNode.id;
     // Highlight missing prerequisites
     window[id].focus();
 
@@ -339,16 +350,18 @@ function hoverFocus() {
 
 
 // Deactivate missing prerequisites
-function hoverUnfocus() {
-    window[$(event.target).parent().attr("id")].unfocus();
+function hoverUnfocus(event) {
+    var id = event.target.parentNode.id;
+    window[id].unfocus();
     clearTimeout(window.mytimeout);
 };
 
 
 // Callback when a node is clicked
-function turnNode() {
+function turnNode(event) {
     if (activeFocus == '') {
-        window[$(event.target).parent().attr("id")].turn();
+        var id = event.target.parentNode.id;
+        window[id].turn();
         updateCSCReqs();
         updateMATReqs();
         updateCSC400s();
@@ -423,6 +436,7 @@ function fetchCourseDescription(id) {
                 var courseString = response.split('\n');
             } else {
                 var courseString = response.match(calendarParser)[0].split('\n');
+                courseString.shift();
             }
 
             $('#calendar').html($.map(courseString, function(s) {return '<p>' + s + '</p>';}).join(''));
@@ -446,15 +460,6 @@ function showtime(id) {
         setMouseCallbacks(); 
         activeFocus = id;
     }
-}
-
-// Set mouse callbacks on all graph nodes
-function setMouseCallbacks() {
-    $(".node").click(function() { turnNode(); });
-    $(".node").hover(
-        function() { hoverFocus(); }, 
-        function() { hoverUnfocus();
-    });
 }
 
 // Removes spotlight on active focus
