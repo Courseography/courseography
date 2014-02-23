@@ -778,26 +778,26 @@
               <h4>ALL of...</h4>
               <table class='checkTable'>
               <tr>
-                <td><input type="checkbox" id="CSC108check" disabled><label for='CSC108check'>CSC108</td>
-                <td><input type="checkbox" id="CSC165check" disabled>CSC165</td>
+                <td><input type="checkbox" id="CSC108check" disabled><label for='CSC108check'>CSC108</label></td>
+                <td><input type="checkbox" id="CSC165check" disabled><label for='CSC165check'>CSC165</label></td>
               </tr>
               <tr>
-                <td><input type="checkbox" id="CSC148check" disabled>CSC148</td>
-                <td><input type="checkbox" id="CSC236check" disabled>CSC236</td>
+                <td><input type="checkbox" id="CSC148check" disabled><label for='CSC148check'>CSC148</label></td>
+                <td><input type="checkbox" id="CSC236check" disabled><label for='CSC236check'>CSC236</label></td>
               </tr>
               <tr>
-                <td><input type="checkbox" id="CSC207check" disabled>CSC207</td>
-                <td><input type="checkbox" id="CSC263check" disabled>CSC263</td>
+                <td><input type="checkbox" id="CSC207check" disabled><label for='CSC207check'>CSC207</label></td>
+                <td><input type="checkbox" id="CSC263check" disabled><label for='CSC263check'>CSC263</label></td>
               </tr>
               <tr>
-                <td><input type="checkbox" id="CSC209check" disabled>CSC209</td>
-                <td><input type="checkbox" id="CSC373check" disabled>CSC373</td>
+                <td><input type="checkbox" id="CSC209check" disabled><label for='CSC209check'>CSC209</label></td>
+                <td><input type="checkbox" id="CSC373check" disabled><label for='CSC373check'>CSC373</label></td>
               </tr>
               <tr>
-                <td><input type="checkbox" id="CSC258check" disabled>CSC258</td>
+                <td><input type="checkbox" id="CSC258check" disabled><label for='CSC258check'>CSC258</label></td>
               </tr>
               <tr>
-                <td><input type="checkbox" id="CSC369check" disabled>CSC369</td>
+                <td><input type="checkbox" id="CSC369check" disabled><label for='CSC369check'>CSC369</label></td>
               </tr>
               </table>
             </div>
@@ -806,33 +806,38 @@
               <h4>ALL of...</h4>
               <table class='checkTable'>
               <tr>
-                <td><input type='checkbox' id='Calc1check' disabled>(MAT135,136)/137/157</td>
+                <td><input type='checkbox' id='Calc1check' disabled><label for='Calc1check'>(MAT135,136)/137/157</label></td>
               </tr>
               <tr>
-                <td><input type='checkbox' id='Lin1check' disabled>MAT221/223/240</td>
+                <td><input type='checkbox' id='Lin1check' disabled><label for='Lin1check'>MAT221/223/240</label></td>
               </tr>
               <tr>
-                <td><input type='checkbox' id='Sta1check' disabled>STA247/255/257</td>
+                <td><input type='checkbox' id='Sta1check' disabled><label for='Sta1check'>STA247/255/257</label></td>
               </tr>
               </table>
             </div>
 
             <div id='csc400s' class='postDetails'>
               <h4>At least 1.5 FCEs from...</h4> 
-              <p>CSC400+, ECE489, BCB410, BCB420, and BCB430</p>
-              <p>(Input BCB410/420/430 manually)</p>
+              <p>CSC400+, ECE489, BCB410, BCB420, and BCB430. (Input BCB410/420/430 manually.)</p>
               <table class='checkTable'>
                 <tr>
                   <td><input type='text' id='4xx1' placeholder='CSC4xx' disabled></td>
-                  <td><input type='checkbox'>BCB410</td>
+                  <td><input id='BCB410check' type='checkbox' 
+                  onchange='updateCSC400s(); updateElecs(); updatePOStTotal()'>
+                  <label for='BCB410check' >BCB410</label></td>
                 </tr>
                 <tr>
                   <td><input type='text' id='4xx2' placeholder='CSC4xx' disabled></td>
-                  <td><input type='checkbox'>BCB420</td>
+                  <td><input id='BCB420check' type='checkbox' 
+                  onchange='updateCSC400s(); updateElecs(); updatePOStTotal()'>
+                  <label for='BCB420check'>BCB420</label></td>
                 </tr>
                 <tr>
                   <td><input type='text' id='4xx3' placeholder='CSC4xx' disabled></td>
-                  <td><input type='checkbox'>BCB430</td>
+                  <td><input id='BCB430check' type='checkbox' 
+                  onchange='updateCSC400s(); updateElecs(); updatePOStTotal()'>
+                  <label for='BCB430check'>BCB430</label></td>
                 </tr>
               </table>
             </div>
@@ -841,19 +846,19 @@
               <p>Note: 400-level courses will fill up "CSC/ECE/BCB 400+" first.</p>
               <table class='checkTable'>
                 <tr>
-                  <td><input type='text' id='CSC1' placeholder='CSC/ECE' disabled></td>
-                  <td><input type='text' id='CSC2' placeholder='CSC/ECE' disabled></td>
+                  <td><input type='text' id='inputCSC1' placeholder='CSC/ECE' disabled></td>
+                  <td><input type='text' id='inputCSC2' placeholder='CSC/ECE' disabled></td>
                 </tr>
                 <tr>
-                  <td><input type='text' id='CSC3' placeholder='CSC/ECE' disabled></td>
-                  <td><input type='text' id='CSC4' placeholder='CSC/ECE' disabled></td>
+                  <td><input type='text' id='inputCSC3' placeholder='CSC/ECE' disabled></td>
+                  <td><input type='text' id='inputCSC4' placeholder='CSC/ECE' disabled></td>
                 </tr>
                 <tr>
-                  <td><input type='text' id='CSC5' placeholder='CSC/ECE' disabled></td>
-                  <td><input type='text' id='CSC6' placeholder='CSC/ECE' disabled></td>
+                  <td><input type='text' id='inputCSC5' placeholder='CSC/ECE' disabled></td>
+                  <td><input type='text' id='inputCSC6' placeholder='CSC/ECE' disabled></td>
                 </tr>
                 <tr>
-                  <td><input type='text' id='CSC7' placeholder='CSC/ECE' disabled></td>
+                  <td><input type='text' id='inputCSC7' placeholder='CSC/ECE' disabled></td>
                 </tr>
               </table>
             </div>
@@ -861,51 +866,53 @@
             <div id='matElecs' class='postDetails'>
               <p>Note: you can count at <em>most</em> 2 MAT/STA FCEs from...</p>
 
-              <p>MAT: 224, 235, 237, 257, 300+ except 329, 390, 391. STA: 249, 261, any 300+. (Input manually)
+              <p>MAT: 224, 235, 237, 257, 300+ except 329, 390, 391. STA: 249, 261, any 300+. (Input manually. This is currently fragile: it will accept any course starting with "MAT" or "STA".)
               </p>
 
               <table class='checkTable'>
                 <tr>
-                  <td><input type='text' name='MATa' placeholder='MAT/STA'></td>
-                  <td><input type='text' name='MATb' placeholder='MAT/STA'></td>
+                  <td><input type='text' name='MATa' placeholder='MAT/STA' 
+                  onchange="updateElecs(); updatePOStTotal()"></td>
+                  <td><input type='text' name='MATb' placeholder='MAT/STA' 
+                  onchange="updateElecs(); updatePOStTotal()"></td>
                 </tr>
                 <tr>
-                  <td><input type='text' name='MATc' placeholder='MAT/STA'></td>
-                  <td><input type='text' name='MATd' placeholder='MAT/STA'></td>
+                  <td><input type='text' name='MATc' placeholder='MAT/STA' 
+                  onchange="updateElecs(); updatePOStTotal()"></td>
+                  <td><input type='text' name='MATd' placeholder='MAT/STA' 
+                  onchange="updateElecs(); updatePOStTotal()"></td>
                 </tr>
-                </table>
+              </table>
+
               </div>
 
               <div id='peyReq' class='postDetails'>
-                <h4>Doing PEY? <td><input type='checkbox'></h4>
+                <h4>Doing PEY? <input id='peycheck' type='checkbox' onchange='updatePEY()'>
+                <label for='peycheck'></label></h4>
                 <h4>If not, at least one of...</h4>
                 <table class='checkTable'>
                   <tr>
-                    <td><td><input type='checkbox' id='CSC301check' disabled>CSC301</td>
-                    <td><td><input type='checkbox' id='CSC318check' disabled>CSC318</td>
+                    <td><td><input type='checkbox' id='CSC301check' disabled><label for='CSC301check'>CSC301</label></td>
+                    <td><td><input type='checkbox' id='CSC318check' disabled><label for='CSC318check'>CSC318</label></td>
+                    <td><td><input type='checkbox' id='CSC404check' disabled><label for='CSC404check'>CSC404</label></td>
                   </tr>
                   <tr>
-                    <td><td><input type='checkbox' id='CSC404check' disabled>CSC404</td>
-                    <td><td><input type='checkbox' id='CSC411check' disabled>CSC411</td>
+                    <td><td><input type='checkbox' id='CSC411check' disabled><label for='CSC411check'>CSC411</label></td>
+                    <td><td><input type='checkbox' id='CSC418check' disabled><label for='CSC418check'>CSC418</label></td>
+                    <td><td><input type='checkbox' id='CSC420check' disabled><label for='CSC420check'>CSC420</label></td>
                   </tr>
                   <tr>
-                    <td><td><input type='checkbox' id='CSC418check' disabled>CSC418</td>
-                    <td><td><input type='checkbox' id='CSC420check' disabled>CSC420</td>
+                    <td><td><input type='checkbox' id='CSC428check' disabled><label for='CSC428check'>CSC428</label></td>
+                    <td><td><input type='checkbox' id='CSC454check' disabled><label for='CSC454check'>CSC454</label></td>
+                    <td><td><input type='checkbox' id='CSC485check' disabled><label for='CSC485check'>CSC485</label></td>
                   </tr>
                   <tr>
-                    <td><td><input type='checkbox' id='CSC428check' disabled>CSC428</td>
-                    <td><td><input type='checkbox' id='CSC454check' disabled>CSC454</td>
+                    <td><td><input type='checkbox' id='CSC490check' disabled><label for='CSC490check'>CSC490</label></td>
+                    <td><td><input type='checkbox' id='CSC491check' disabled><label for='CSC491check'>CSC491</label></td>
+                    <td><td><input type='checkbox' id='CSC494check' disabled><label for='CSC494check'>CSC494</label></td>
                   </tr>
                   <tr>
-                    <td><td><input type='checkbox' id='CSC485check' disabled>CSC485</td>
-                    <td><td><input type='checkbox' id='CSC490check' disabled>CSC490</td>
-                  </tr>
-                  <tr>
-                    <td><td><input type='checkbox' id='CSC491check' disabled>CSC491</td>
-                    <td><td><input type='checkbox' id='CSC494check' disabled>CSC494</td>
-                  </tr>
-                  <tr>
-                    <td><td><input type='checkbox' id='CSC495check' disabled>CSC495</td>
+                    <td><td><input type='checkbox' id='CSC495check' disabled><label for='CSC495check'>CSC495</label></td>
                   </tr>
                 </table>
               </div>
@@ -916,19 +923,19 @@
               <table>
                 <tr>
                   <td class='FCECrit'>Required CSC:</td>
-                  <td class='FCETotal'><span id='cscReqTotal'>0.0</span>/10 FCEs</td>
+                  <td class='FCETotal'><span id='cscReqTotal'>0.0</span>/5 FCEs</td>
                 </tr>
                 <tr>
                   <td class='FCECrit'>Required MAT/STA:</td>
-                  <td class='FCETotal'><span id='matReqTotal'>0.0</span>/4 FCEs</td>
+                  <td class='FCETotal'><span id='matReqTotal'>0.0</span>/2 FCEs</td>
                 </tr>
                 <tr>
                   <td class='FCECrit'>Electives:</td>
-                  <td class='FCETotal'><span id='elecTotal'>0.0</span>/10 FCEs</td>
+                  <td class='FCETotal'><span id='elecTotal'>0.0</span>/5 FCEs</td>
                 </tr>
                 <tr>
                   <td class='FCECrit'>Total:</td>
-                  <td class='FCETotal'><span id='postTotal'>0.0</span>/24 FCEs</td>
+                  <td class='FCETotal'><span id='postTotal'>0.0</span>/12 FCEs</td>
                 </tr>
               </div>
 
