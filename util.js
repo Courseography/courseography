@@ -19,6 +19,7 @@ var reqs = ["CSC108", "CSC148", "CSC165", "CSC207", "CSC209", "CSC236", "CSC258"
 var CSCinq =  ["CSC301", "CSC318", "CSC404", "CSC411", "CSC418", "CSC420", "CSC428", "CSC454", "CSC485", "CSC490", "CSC491", "CSC494", "CSC495"];
 var active400s = [];
 var active300s = [];
+var projectCourses = [];
 
 var numBCB = 0;
 
@@ -26,6 +27,12 @@ var cscReqTotal = 0;
 var matReqTotal = 0;
 var elecTotal = 0;
 var postTotal = 0;
+
+var cscReqSat = false;
+var matReqSat = false;
+var elec400sSat = false;
+var elecSat = false;
+var peySat = false;
 
 var sciFocusList = ["CSC336", "CSC446", "CSC456", "CSC320", "CSC418", "CSC321", "CSC411", "CSC343", "CSC384", "CSC358", "CSC458"];
 var AIFocusList = ["CSC310", "CSC330", "CSC438", "CSC448", "CSC463", "CSC401", "CSC485", "CSC320", "CSC420", "CSC321", "CSC411", "CSC412", "CSC384", "CSC486"];
@@ -188,7 +195,7 @@ function Node(parents, type, name) {
                 $.each(this.outEdges, function(i, edge) { edge.isActive(); });
                 $.each(this.inEdges, function(i, edge) { edge.isActive(); });
                 if (!this.hybrid) {
-                    this.updateClickedCourses();
+                    //this.updateClickedCourses();
                     updatePOSt(this.name, this.active);    
                 }
             }
@@ -437,9 +444,22 @@ function fetchCourseDescription(id) {
             } else {
                 var courseString = response.match(calendarParser)[0].split('\n');
                 courseString.shift();
+
+                // Add extra description for enriched courses
+                if (id == "CSC165" || id == "CSC236") {
+                    var calendarParserEnriched = new RegExp("\nCSC240(.|\n)*?Breadth Requirement.*\n", "im");
+                    var courseString2 = response.match(calendarParserEnriched)[0].split('\n');
+                    courseString = courseString.concat(courseString2);
+                } else if (id == "CSC263") {
+                    var calendarParserEnriched = new RegExp("\nCSC265(.|\n)*?Breadth Requirement.*\n", "im");
+                    var courseString2 = response.match(calendarParserEnriched)[0].split('\n');
+                    courseString = courseString.concat(courseString2);
+                }
             }
 
-            $('#calendar').html($.map(courseString, function(s) {return '<p>' + s + '</p>';}).join(''));
+            $('#calendar').html($.map(courseString, function(s) {
+                return '<p>' + s + '</p>';
+            }).join(''));
         }
     })
 };
@@ -459,14 +479,18 @@ function showtime(id) {
         $("#graph").html($("#graph").html());
         setMouseCallbacks(); 
         activeFocus = id;
+        $(".focusList a[href='#" + id + "Details']").append(
+            "<img class='closeIcon' src='res/close.ico' alt='Click to close!'/>");
     }
 }
 
 // Removes spotlight on active focus
 function curtains() {
     $("#graph").css("background", "white");
+    $(".closeIcon").remove();
     activeFocus = "";
     $.each(nodes, function(index, elem) { window[elem].updateSVG(); });
+
 }
 
 function spotlight(id) {
@@ -504,7 +528,7 @@ function createTimeTable() {
      var frag = document.createDocumentFragment();
      temp = document.createElement('div');
      var xmlreq = new XMLHttpRequest();
-     xmlreq.open("GET", "res/timeTable.txt", false); // Why was this res/timeTable?
+     xmlreq.open("GET", "res/timeTable.txt", false);
      xmlreq.send();
      var timeTableString = xmlreq.responseText;
      temp.innerHTML = timeTableString;
@@ -514,12 +538,21 @@ function createTimeTable() {
     return frag;
 }
 
+
 // POSt Tab
 function updatePOSt(course, active) {
   if (reqs.indexOf(course) > -1) { // Required course
       $('#' + course + 'check').prop('checked', active);
   } else {
-    if (course.substr(0,4) == "CSC4" || course.substr(0,4) == "ECE4") { // 4th year course
+    if (course.substr(0,5) == "CSC49") {
+      var ind = projectCourses.indexOf(course);
+      if (active && ind == -1) {
+          projectCourses.push(course);
+      } else if (!active && ind > -1) {
+          projectCourses.splice(ind, 1);
+      }
+    }
+    else if (course.substr(0,4) == "CSC4" || course.substr(0,4) == "ECE4") { // 4th year course
       var ind = active400s.indexOf(course);
       if (active && ind == -1) {
           active400s.push(course);
@@ -541,11 +574,6 @@ function updatePOSt(course, active) {
   }
 };
 
-var cscReqSat = false;
-var matReqSat = false;
-var elec400sSat = false;
-var elecSat = false;
-var peySat = false;
 
 function updatePostInterface() {
   updateCSCReqs();
@@ -584,15 +612,17 @@ function updateMATReqs() {
 function updateCSC400s() {
   numBCB = $('#csc400s input:checkbox:checked').length;
 
+  var tmp = active400s.concat(projectCourses.slice(0,2));
+
   for (var i = 1; i <= 3; i++) {
-    if (i <= 3 - numBCB && i <= active400s.length) {
-      $('input#4xx' + i).attr('value', active400s[i-1]);
+    if (i <= 3 - numBCB && i <= tmp.length) {
+      $('input#4xx' + i).attr('value', tmp[i-1]);
     } else {
       $('input#4xx' + i).attr('value', '');
     }
   }
   
-  elec400sSat = numBCB + active400s.length >= 3;
+  elec400sSat = numBCB + tmp.length >= 3;
   if (elec400sSat) {
     $('a[href="#csc400s"] img').attr('src', 'res/check.ico');
   } else {
@@ -602,11 +632,10 @@ function updateCSC400s() {
 
 // Right now, it must be called after updateCSC400s (because of numBCB)
 function updateElecs() {
+  var tmp = active300s.concat(active400s.slice(3-numBCB), projectCourses.slice(0,2));
   for (var i = 1; i <= 7; i++) {
-    if (i <= active300s.length) {
-      $('#inputCSC' + i).attr('value', active300s[i-1]);
-    } else if (i - 1 - active300s.length + 3 - numBCB < active400s.length) {
-      $('#inputCSC' + i).attr('value', active400s[i - 1 - active300s.length + 3 - numBCB]);
+    if (i <= tmp.length) {
+      $('#inputCSC' + i).attr('value', tmp[i-1]);
     } else {
        $('#inputCSC' + i).attr('value', '');
     }
@@ -726,7 +755,7 @@ makeNode([hybrid13, bool4], "AND", "CSC310");
 makeNode([], "AND", "CSC318");
 makeNode([hybrid12, bool5], "AND", "CSC320");
 makeNode([bool4], "AND", "CSC321");
-makeNode([bool1], "AND", "CSC324");
+makeNode([bool1, CSC263], "AND", "CSC324"); // CHANGED
 makeNode([CSC236], "AND", "CSC330");
 makeNode([CSC148, bool5], "AND", "CSC336");
 makeNode([hybrid16, hybrid14], "AND", "CSC343");
@@ -858,3 +887,4 @@ makeEdge(bool5, CSC320, "p77");
 makeEdge(bool5, CSC420, "p78");
 makeEdge(CSC258, CSC488, "p79");
 makeEdge(CSC318, CSC428, "p80");
+makeEdge(CSC263, CSC324, "p81");

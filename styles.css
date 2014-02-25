@@ -154,7 +154,7 @@ div.focusDetails {
 div.postDetails {
     background: #6A93D4;
     width: 350px;
-    height: 260px;
+    height: 300px;
     float: left;
     padding: 1em;
 }
@@ -180,6 +180,15 @@ ul.focusList li, ul.postList li {
 
 ul.focusList li.ui-tabs-active, ul.focusList a:hover, ul.postList li.ui-tabs-active, ul.postList a:hover {
     background: #6A93D4;
+}
+
+.closeIcon {
+    float: right;
+    margin-top: 0.6em; 
+    margin-bottom: 0.6em; 
+    margin-right: 0.5em;
+    width: 1em;
+    height: 1em;
 }
 
 /* POSt tab */

@@ -507,3 +507,4 @@ This half-course involves a significant project in any area of Computer Science.
 Prerequisite: Three 300-level Computer Science half-courses, a CGPA of 3.00 (2.50 for students in a CSC Program), and permission of the Associate Chair, Undergraduate Studies. Consult the Arts & Science Registration Instructions and Timetable at http://www.artsci.utoronto.ca/current/course for course enrolment procedures.
 Distribution Requirement Status: This is a Science course
 Breadth Requirement: The Physical and Mathematical Universes (5)
+
