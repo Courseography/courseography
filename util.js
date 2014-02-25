@@ -479,8 +479,9 @@ function showtime(id) {
         $("#graph").html($("#graph").html());
         setMouseCallbacks(); 
         activeFocus = id;
+        $(".closeIcon").remove(); // Remove old icon.
         $(".focusList a[href='#" + id + "Details']").append(
-            "<img class='closeIcon' src='res/close.ico' alt='Click to close!'/>");
+            "<img class='closeIcon' src='res/close.ico' alt='Click to close!'/>"); // Put in new icon.
     }
 }
 
