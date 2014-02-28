@@ -931,6 +931,28 @@
 
       </div>
     </div>
+    <div id="feedback" class="infoTab">
+    
+      <form method="post" action="email.php" class = "form" align="center">
+        <p align="center">Please feel free to give us feedback about this Computer Science course explorer. All feedback is welcome, and is taken into great consideration. Any contribution is
+        helpful, and bug reports are cherished even more! You're welcome to view any future changes to the project at <a target="_blank" href="https://github.com/Senor-Ian/cscourseplanner"> the github project.</a></a> 
+        Fill in the text area below, and click on submit to send us the feedback. Thanks!</p>
+      </form>
+      <fieldset id="contact_form">
+      <legend>Feedback</legend>
+        <p for="name"><span>Name</span>
+        </p>
+        <input type="text" name="name" id="name" placeholder="Enter Your Name" /> <br/>
+        <p for="message">Message
+        </p>
+        <textarea name="message" id="message" placeholder="Enter Your Message"></textarea>
+    
+        <label><span>&nbsp;</span>
+        <button class="submit_btn" id="submit_btn">Submit</button>
+        </label>
+      </fieldset>
+    <br />
+    </div>
   </div>
   <script>
     $('.infoTabs').tabs();
