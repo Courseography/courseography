@@ -21,7 +21,7 @@
         </defs>
         <g id="CSC438" class="node" data-group="theory">
           <rect x="545.5955" y="290.6064" width="40" rx="4" ry="4" height="32"/>
-          <text x="552.2479" y="312.8916">438</text>
+          <text x="565.5955" y="312.8916" text-anchor="middle">438</text>
         </g>
         <g id="CSC463" class="node" data-group="theory">
           <rect x="435.4041" y="136.2453" width="40" rx="4" ry="4" height="32"/>
@@ -408,7 +408,7 @@
           <path id="p18" d="M528.1487 -28.0056 L528.1487 152.2894 L627 152.2894 L627 213"marker-end="url(#arrow)"/>
           <path id="p19" d="M932.9691 -43.778 L851.7929 -43.778 L851.7929 39.6881 L838.0608 39.6881"marker-end="url(#arrow)"/>
           <path id="p20" d="M810.0412 55.6931 L810.0412 72.1217"marker-end="url(#arrow)"/>
-          <path id="p21" d="M687.8184 167.7223 L687.8184 184.4679"marker-end="url(#arrow)"/>
+          <path id="p21" d="M528.1487 -28.0056 L528.1487 152.2894 L627 152.2894 L627 199 L659 199" marker-end="url(#arrow)"/>
           <path id="p22" d="M986.7648 55.6863 L986.7648 306.6064 L1037.7932 306.6064"marker-end="url(#arrow)"/>
           <path id="p23" d="M952.9791 -27.7671 L952.9791 214.2779"marker-end="url(#arrow)"/>
           <path id="p24" d="M921.1373 168.5612 L942.364 215.0442"marker-end="url(#arrow)"/>
@@ -933,9 +933,16 @@
     </div>
   </div>
   <script>
-    $('.infoTabs').tabs();
-    $('.focusTabs').tabs({active: false, collapsible: true});
-    $('.postTabs').tabs({active: 0});
+    $('.infoTabs').tabs({activate: function(e, ui) {
+    e.currentTarget.blur();
+    }});
+    $('.focusTabs').tabs({active: false, collapsible: true, 
+      activate: function(e, ui) {
+    e.currentTarget.blur();
+    }});
+    $('.postTabs').tabs({active: 0, activate: function(e, ui) {
+    e.currentTarget.blur();
+    }});
   </script>
   <script src='util.js'></script>
 </body>
