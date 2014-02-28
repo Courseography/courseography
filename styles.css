@@ -289,14 +289,24 @@ input[type=checkbox]:checked + label:before {
 
 /* Styles for the form */
 .form {
-    width: 50%;
+    width: 100%;
     margin-top:20px;
     float:center;
 }
 
-.form textarea {
-    width: 70%;
-    height: 100px;
+.formTd {
+    width: 50%;
+}
+
+.form2 {
+    width: 100%;
+    margin-top:0px;
+    float:center;
+}
+
+.form2 textarea {
+    width: 100%;
+    height: 50px;
     border: 1px solid black;
 }
 
