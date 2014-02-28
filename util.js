@@ -3,9 +3,36 @@ var edges = [];
 var clickedCourses = [];
 var clickedNode = parent.document.getElementById("courseGrid");
 
-var fragment2 = createTimeTable();
-timeNode = parent.document.getElementById("timetable");
-timeNode.appendChild(fragment2);
+
+/* The function to send feedback via email.php*/
+$(document).ready(function() {
+    $("#submit_btn").click(function() { 
+        var user_message    = $('textarea[name=message]').val();
+        var proceed = true;
+
+        if(proceed) 
+        {
+            post_data = {'userMessage':user_message};
+            $.post('email.php', post_data, function(data){       
+                $("#result").hide().html('<div class="success">'+data+'</div>').slideDown();
+                $('#contact_form input').val(''); 
+                $('#contact_form textarea').val(''); 
+                
+            }).fail(function(err) {
+                $("#result").hide().html('<div class="error">'+err.statusText+'</div>').slideDown();
+            });
+        }
+                
+    });
+    
+    // Might be a bit useless.
+    $("#contact_form input, #contact_form textarea").keyup(function() { 
+        $("#contact_form input, #contact_form textarea").css('border-color',''); 
+        $("#result").slideUp();
+    });
+    
+});
+
 
 var FCEs = 0;
 var FCEs100 = 0;
@@ -532,12 +559,19 @@ function createTimeTable() {
      xmlreq.open("GET", "res/timeTable.txt", false);
      xmlreq.send();
      var timeTableString = xmlreq.responseText;
+    for (var i=0; i < nodes.length; i++) {
+    
+        timeTableString = timeTableString.replace("backgroundInstertion",$("#" + nodes[i] + "> rect").css('fill'));
+    }
+    
      temp.innerHTML = timeTableString;
      while (temp.firstChild) {
         frag.appendChild(temp.firstChild);
     }
     return frag;
 }
+
+
 
 
 // POSt Tab
@@ -889,3 +923,8 @@ makeEdge(bool5, CSC420, "p78");
 makeEdge(CSC258, CSC488, "p79");
 makeEdge(CSC318, CSC428, "p80");
 makeEdge(CSC263, CSC324, "p81");
+
+
+var fragment2 = createTimeTable();
+timeNode = parent.document.getElementById("timetable");
+timeNode.appendChild(fragment2);
