@@ -172,6 +172,8 @@ function Node(parents, type, name) {
             this.updateSVG();
             this.updateClickedCourses();
             updatePOSt(this.name, this.active);
+            updateMyCoursesTab();
+            updateFCECount();
 
             // Check the courses with FCE reqs
             CSC318.isActive();
@@ -222,7 +224,7 @@ function Node(parents, type, name) {
                 $.each(this.outEdges, function(i, edge) { edge.isActive(); });
                 $.each(this.inEdges, function(i, edge) { edge.isActive(); });
                 if (!this.hybrid) {
-                    //this.updateClickedCourses();
+                    this.updateClickedCourses();
                     updatePOSt(this.name, this.active);    
                 }
             }
@@ -272,8 +274,6 @@ function Node(parents, type, name) {
     // Updates the "My Courses" tab
     // Note: not called on hybrids
     this.updateClickedCourses = function() {
-        $('#courseGrid').empty();
-
         if (this.active) {
             if (this.name == "CSC200") {
                 FCEs200 += 1
@@ -320,40 +320,10 @@ function Node(parents, type, name) {
                 }
             }
         }
-        FCEs = FCEs100 + FCEs200 + FCEs300 + FCEs400 + FCEsMAT;
-        $('#FCEcount').html(FCEs.toFixed(1));
+        
 
-
-        // Get data from course calendar        
-        var htmlClickedString = $.map(clickedCourses, function(course) {
-            var courseStringText = '';
-            if (course == 'Calc1') {
-                courseStringText = 'First-year calculus: MAT135/136, MAT137, or MAT157.';
-            } else if (course == 'Lin1') {
-                courseStringText = 'One term in linear algebra: MAT221, MAT223, or MAT240.';
-            } else if (course == 'Sta1') {
-                courseStringText = 'One term in probability theory: STA247, STA255, or STA257.';
-            } else if (course == 'Sta2') {
-                courseStringText = 'One term in statistics: STA248 or STA261.';
-            } else {
-                var xmlreq = new XMLHttpRequest();
-                xmlreq.open("GET", "res/calendar.txt", false);
-                xmlreq.send();
-                var patt1 = new RegExp("\n" + course + ".*", "im");
-                courseStringText = xmlreq.responseText.match(patt1)[0].split(course)[1].split("1")[1].split("[")[0];
-            }
-            return "<td class='courseCell' style='background: " 
-                + $("#" + course + "> rect").css('fill') + "'><div id='" 
-                + course + "cell'><p class='courseName'>" + course 
-                + "</p><p class=" + course + "text>"
-                + courseStringText + "</p></div></td>";
-        }).join("");
-
-        $('#courseGrid').html(htmlClickedString);
     }
 }
-
-
 
 
 /*
@@ -447,6 +417,43 @@ function reset() {
 /*
  * Tab functions
  */
+
+// My Courses Tab
+function updateMyCoursesTab() {
+  $('#courseGrid').empty();
+
+  // Get data from course calendar        
+  var htmlClickedString = $.map(clickedCourses, function(course) {
+      var courseStringText = '';
+      if (course == 'Calc1') {
+          courseStringText = 'First-year calculus: MAT135/136, MAT137, or MAT157.';
+      } else if (course == 'Lin1') {
+          courseStringText = 'One term in linear algebra: MAT221, MAT223, or MAT240.';
+      } else if (course == 'Sta1') {
+          courseStringText = 'One term in probability theory: STA247, STA255, or STA257.';
+      } else if (course == 'Sta2') {
+          courseStringText = 'One term in statistics: STA248 or STA261.';
+      } else {
+          var xmlreq = new XMLHttpRequest();
+          xmlreq.open("GET", "res/calendar.txt", false);
+          xmlreq.send();
+          var patt1 = new RegExp("\n" + course + ".*", "im");
+          courseStringText = xmlreq.responseText.match(patt1)[0].split(course)[1].split("1")[1].split("[")[0];
+      }
+      return "<td class='courseCell' style='background: " 
+          + $("#" + course + "> rect").css('fill') + "'><div id='" 
+          + course + "cell'><p class='courseName'>" + course 
+          + "</p><p class=" + course + "text>"
+          + courseStringText + "</p></div></td>";
+  }).join("");
+
+  $('#courseGrid').html(htmlClickedString);
+}
+
+function updateFCECount() {
+  FCEs = FCEs100 + FCEs200 + FCEs300 + FCEs400 + FCEsMAT;
+  $('#FCEcount').html(FCEs.toFixed(1));
+}
 
 // Course Description Tab
 
@@ -687,7 +694,9 @@ function updateElecs() {
     }
   });
 
-  elecTotal = (active300s.length + active400s.length + numBCB)/2 + matElecs;
+  elecTotal = (active300s.length + active400s.length + numBCB)/2 
+  + matElecs 
+  + Math.min(projectCourses.length/2, 1);
   if (elecTotal >= 5) {
     elecTotal = 5;
   }
@@ -799,7 +808,8 @@ makeNode([bool2, hybrid2], "AND", "CSC358");
 makeNode([bool2], "AND", "CSC369");
 makeNode([bool2], "AND", "CSC372");
 makeNode([CSC263], "AND", "CSC373");
-makeNode([CSC324, hybrid8], "AND", "CSC384");
+//makeNode([CSC263, hybrid8], "AND", "CSC384"); // CHANGED
+makeNode([CSC263, hybrid8], "AND", "CSC384");
 makeNode([bool2], "AND", "ECE385");
 
 // Third year hybrids
@@ -863,7 +873,7 @@ makeEdge(CSC209, CSC485, "p17");
 makeEdge(CSC263, CSC411, "p18");
 makeEdge(CSC209, CSC301, "p19");
 makeEdge(CSC301, CSC302, "p20");
-makeEdge(CSC324, CSC384, "p21");
+makeEdge(CSC263, CSC384, "p21");
 makeEdge(CSC369, CSC469, "p22");
 makeEdge(CSC209, CSC309, "p23");
 makeEdge(CSC343, CSC309, "p24");
