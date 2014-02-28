@@ -1,108 +1,108 @@
 <table class="timeTable">
 <tr class=timeTableRow><td class=timeTableHeader>Course</td><td class=timeTableHeader>Section</td><td class=timeTableHeader>Type</td><td class=timeTableHeader>Time</td><td class=timeTableHeader>Location</td><td class=timeTableHeader>Instructor</td></tr><div><p>
-<tr class=timeTableRow><td class=timeTableCourse>CSC104H1</td><td class=timeTableBlockSection>F</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC104H1</td><td class=timeTableBlockSection>F</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>W6-8</td><td class=timeTableBlockLocation>MS 3154 </td><td class=timeTableBlockInstructor>D. Heap</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>W8</td><td class=timeTableBlockLocation>MS 3154 </td><td class=timeTableBlockInstructor>D. Heap</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC104H1</td><td class=timeTableBlockSection>S</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC104H1</td><td class=timeTableBlockSection>S</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>TRF9</td><td class=timeTableBlockLocation>WB 116 </td><td class=timeTableBlockInstructor>D. Heap</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC108H1</td><td class=timeTableBlockSection>F</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC108H1</td><td class=timeTableBlockSection>F</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>MWF9</td><td class=timeTableBlockLocation>BA 1160 </td><td class=timeTableBlockInstructor>M. Craig</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0201</td><td class=timeTableBlockTime>MWF10</td><td class=timeTableBlockLocation>BA 1160 </td><td class=timeTableBlockInstructor>M. Craig</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0202</td><td class=timeTableBlockTime>MWF10</td><td class=timeTableBlockLocation>WB 116 </td><td class=timeTableBlockInstructor>P. Gries</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0301</td><td class=timeTableBlockTime>MWF1</td><td class=timeTableBlockLocation>HS 610 </td><td class=timeTableBlockInstructor>J. Campbell</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>W6-9</td><td class=timeTableBlockLocation>MS 3153 </td><td class=timeTableBlockInstructor>P. Gries</td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0101</td><td class=timeTableBlockTime>T9-11</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0201</td><td class=timeTableBlockTime>T11-1</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0301</td><td class=timeTableBlockTime>T3-5</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0401</td><td class=timeTableBlockTime>W11-1</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0501</td><td class=timeTableBlockTime>W3-5</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0601</td><td class=timeTableBlockTime>R11-1</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0701</td><td class=timeTableBlockTime>R1-3</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0801</td><td class=timeTableBlockTime>R3-5</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0901</td><td class=timeTableBlockTime>F1-3</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T1001</td><td class=timeTableBlockTime>W1-3</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T5101</td><td class=timeTableBlockTime>T7-9</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T5201</td><td class=timeTableBlockTime>R7-9</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC108H1</td><td class=timeTableBlockSection>S</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeTutorial>T0101</td><td class=timeTableBlockTime>T9-11</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeTutorial>T0201</td><td class=timeTableBlockTime>T11-1</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeTutorial>T0301</td><td class=timeTableBlockTime>T3-5</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeTutorial>T0401</td><td class=timeTableBlockTime>W11-1</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeTutorial>T0501</td><td class=timeTableBlockTime>W3-5</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeTutorial>T0601</td><td class=timeTableBlockTime>R11-1</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeTutorial>T0701</td><td class=timeTableBlockTime>R1-3</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeTutorial>T0801</td><td class=timeTableBlockTime>R3-5</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeTutorial>T0901</td><td class=timeTableBlockTime>F1-3</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeTutorial>T1001</td><td class=timeTableBlockTime>W1-3</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeTutorial>T5101</td><td class=timeTableBlockTime>T7-9</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeTutorial>T5201</td><td class=timeTableBlockTime>R7-9</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC108H1</td><td class=timeTableBlockSection>S</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>MWF9</td><td class=timeTableBlockLocation>BA 1160 </td><td class=timeTableBlockInstructor>J. Campbell</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0201</td><td class=timeTableBlockTime>MWF10</td><td class=timeTableBlockLocation>BA 1160 </td><td class=timeTableBlockInstructor>J. Campbell</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>W6-9</td><td class=timeTableBlockLocation>MS 3154 </td><td class=timeTableBlockInstructor>Tba</td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0101</td><td class=timeTableBlockTime>R9-11</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0201</td><td class=timeTableBlockTime>R11-1</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0301</td><td class=timeTableBlockTime>R1-3</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0401</td><td class=timeTableBlockTime>F11-1</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0501</td><td class=timeTableBlockTime>F1-3</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0601</td><td class=timeTableBlockTime>R3-5</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T5101</td><td class=timeTableBlockTime>R5-7</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T5201</td><td class=timeTableBlockTime>R7-9</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC120H1</td><td class=timeTableBlockSection>S</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeTutorial>T0101</td><td class=timeTableBlockTime>R9-11</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeTutorial>T0201</td><td class=timeTableBlockTime>R11-1</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeTutorial>T0301</td><td class=timeTableBlockTime>R1-3</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeTutorial>T0401</td><td class=timeTableBlockTime>F11-1</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeTutorial>T0501</td><td class=timeTableBlockTime>F1-3</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeTutorial>T0601</td><td class=timeTableBlockTime>R3-5</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeTutorial>T5101</td><td class=timeTableBlockTime>R5-7</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeTutorial>T5201</td><td class=timeTableBlockTime>R7-9</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC120H1</td><td class=timeTableBlockSection>S</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>R7-9</td><td class=timeTableBlockLocation>BA 1180 </td><td class=timeTableBlockInstructor>Tba</td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0101</td><td class=timeTableBlockTime>T3-5</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T5101</td><td class=timeTableBlockTime>W7-9</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC148H1</td><td class=timeTableBlockSection>F</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeTutorial>T0101</td><td class=timeTableBlockTime>T3-5</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeTutorial>T5101</td><td class=timeTableBlockTime>W7-9</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC148H1</td><td class=timeTableBlockSection>F</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>MW9</td><td class=timeTableBlockLocation>BA 1180 </td><td class=timeTableBlockInstructor>D. Heap</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0201</td><td class=timeTableBlockTime>MW10</td><td class=timeTableBlockLocation>BA 1180 </td><td class=timeTableBlockInstructor>D. Heap</td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0101</td><td class=timeTableBlockTime>T1-3</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0201</td><td class=timeTableBlockTime>R9-11</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0301</td><td class=timeTableBlockTime>F9-11</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC148H1</td><td class=timeTableBlockSection>S</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeTutorial>T0101</td><td class=timeTableBlockTime>T1-3</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeTutorial>T0201</td><td class=timeTableBlockTime>R9-11</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeTutorial>T0301</td><td class=timeTableBlockTime>F9-11</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC148H1</td><td class=timeTableBlockSection>S</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>MW9</td><td class=timeTableBlockLocation>WB 116 </td><td class=timeTableBlockInstructor>D. Heap</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0201</td><td class=timeTableBlockTime>MW10</td><td class=timeTableBlockLocation>WB 116 </td><td class=timeTableBlockInstructor>M. Craig</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>W6-8</td><td class=timeTableBlockLocation>MS 3153 </td><td class=timeTableBlockInstructor>G. Baumgartner</td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0101</td><td class=timeTableBlockTime>T9-11</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0201</td><td class=timeTableBlockTime>T11-1</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0301</td><td class=timeTableBlockTime>T1-3</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0401</td><td class=timeTableBlockTime>W11-1</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0501</td><td class=timeTableBlockTime>W1-3</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0601</td><td class=timeTableBlockTime>W3-5</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T5101</td><td class=timeTableBlockTime>T7-9</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T5201</td><td class=timeTableBlockTime>W5-7</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC165H1</td><td class=timeTableBlockSection>F</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeTutorial>T0101</td><td class=timeTableBlockTime>T9-11</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeTutorial>T0201</td><td class=timeTableBlockTime>T11-1</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeTutorial>T0301</td><td class=timeTableBlockTime>T1-3</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeTutorial>T0401</td><td class=timeTableBlockTime>W11-1</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeTutorial>T0501</td><td class=timeTableBlockTime>W1-3</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeTutorial>T0601</td><td class=timeTableBlockTime>W3-5</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeTutorial>T5101</td><td class=timeTableBlockTime>T7-9</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeTutorial>T5201</td><td class=timeTableBlockTime>W5-7</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC165H1</td><td class=timeTableBlockSection>F</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>MWF12</td><td class=timeTableBlockLocation>MP 203 </td><td class=timeTableBlockInstructor>T. Fairgrieve</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>M7-9</td><td class=timeTableBlockLocation>SF 1105 </td><td class=timeTableBlockInstructor>T. Fairgrieve</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>T6-9</td><td class=timeTableBlockLocation>SF 1105 </td><td class=timeTableBlockInstructor>T. Fairgrieve</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>R7-9</td><td class=timeTableBlockLocation>SF 1105 </td><td class=timeTableBlockInstructor>T. Fairgrieve</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC165H1</td><td class=timeTableBlockSection>S</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC165H1</td><td class=timeTableBlockSection>S</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>MWF11</td><td class=timeTableBlockLocation>MP 103 </td><td class=timeTableBlockInstructor>T. Fairgrieve</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>T2-4</td><td class=timeTableBlockLocation>MP 203 </td><td class=timeTableBlockInstructor>T. Fairgrieve</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0201</td><td class=timeTableBlockTime>MWF3</td><td class=timeTableBlockLocation>BA 1170 </td><td class=timeTableBlockInstructor>T. Fairgrieve</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0201</td><td class=timeTableBlockTime>R2-4</td><td class=timeTableBlockLocation>MP 103 </td><td class=timeTableBlockInstructor>T. Fairgrieve</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC200Y1</td><td class=timeTableBlockSection>Y</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC200Y1</td><td class=timeTableBlockSection>Y</td>
 
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC207H1</td><td class=timeTableBlockSection>F</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeLecture>L0101</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC207H1</td><td class=timeTableBlockSection>F</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>WF12</td><td class=timeTableBlockLocation>HS 610 </td><td class=timeTableBlockInstructor>J. Campbell</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>W6-8</td><td class=timeTableBlockLocation>BA 1130 </td><td class=timeTableBlockInstructor>J. Campbell</td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0101</td><td class=timeTableBlockTime>M12</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0201</td><td class=timeTableBlockTime>M2</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0301</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0301</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T5101</td><td class=timeTableBlockTime>W5</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T5201</td><td class=timeTableBlockTime>T5</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC207H1</td><td class=timeTableBlockSection>S</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeTutorial>T0101</td><td class=timeTableBlockTime>M12</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeTutorial>T0201</td><td class=timeTableBlockTime>M2</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeLecture>T0301</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeTutorial>T0301</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeTutorial>T5101</td><td class=timeTableBlockTime>W5</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeTutorial>T5201</td><td class=timeTableBlockTime>T5</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC207H1</td><td class=timeTableBlockSection>S</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>WF1</td><td class=timeTableBlockLocation>BA 1130 </td><td class=timeTableBlockInstructor>Tba</td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0101</td><td class=timeTableBlockTime>M1</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>T0201</td><td class=timeTableBlockTime>M2</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC209H1</td><td class=timeTableBlockSection>F</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeTutorial>T0101</td><td class=timeTableBlockTime>M1</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeTutorial>T0201</td><td class=timeTableBlockTime>M2</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC209H1</td><td class=timeTableBlockSection>F</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>MTR1</td><td class=timeTableBlockLocation>LM 161 </td><td class=timeTableBlockInstructor>A. Rosenthal</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC209H1</td><td class=timeTableBlockSection>S</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC209H1</td><td class=timeTableBlockSection>S</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>MW</td><td class=timeTableBlockLocation>MP 203</td><td class=timeTableBlockInstructor>K. Reid</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>T6</td><td class=timeTableBlockLocation>SF 1101 </td><td class=timeTableBlockInstructor>K. Reid</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>T7-9</td><td class=timeTableBlockLocation>SF 1101 </td><td class=timeTableBlockInstructor>K. Reid</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC236H1</td><td class=timeTableBlockSection>F</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC236H1</td><td class=timeTableBlockSection>F</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>M11</td><td class=timeTableBlockLocation>SS 2102 </td><td class=timeTableBlockInstructor>A. Farzan</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>WF11</td><td class=timeTableBlockLocation>SS 2135 </td><td class=timeTableBlockInstructor>A. Farzan</td>
@@ -110,67 +110,67 @@
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2503</td><td class=timeTableBlockTime>R7-9</td><td class=timeTableBlockLocation>BA 1180 </td><td class=timeTableBlockInstructor>A. Farzan</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>R6</td><td class=timeTableBlockLocation>BA 1180 </td><td class=timeTableBlockInstructor>A. Farzan</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>R7-9</td><td class=timeTableBlockLocation>BA 1180 </td><td class=timeTableBlockInstructor>A. Farzan</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC236H1</td><td class=timeTableBlockSection>S</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC236H1</td><td class=timeTableBlockSection>S</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>TR4</td><td class=timeTableBlockLocation>LM 159</td><td class=timeTableBlockInstructor>Tba</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>R5</td><td class=timeTableBlockLocation>LM 159</td><td class=timeTableBlockInstructor>Tba</td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0102</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeLecture>L0102</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0201</td><td class=timeTableBlockTime>TR1</td><td class=timeTableBlockLocation>GB 120 </td><td class=timeTableBlockInstructor>Tba</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0201</td><td class=timeTableBlockTime>R11</td><td class=timeTableBlockLocation>GB 120 </td><td class=timeTableBlockInstructor>Tba</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2003</td><td class=timeTableBlockTime>TR4</td><td class=timeTableBlockLocation>LM 159</td><td class=timeTableBlockInstructor>Tba</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2003</td><td class=timeTableBlockTime>R5</td><td class=timeTableBlockLocation>LM 159</td><td class=timeTableBlockInstructor>Tba</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC240H1</td><td class=timeTableBlockSection>S</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC240H1</td><td class=timeTableBlockSection>S</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>MWF11</td><td class=timeTableBlockLocation>RW 110 </td><td class=timeTableBlockInstructor>Tba</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC258H1</td><td class=timeTableBlockSection>F</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC258H1</td><td class=timeTableBlockSection>F</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>T6-9</td><td class=timeTableBlockLocation>BA 1170 </td><td class=timeTableBlockInstructor>S. Engels</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>R6-9</td><td class=timeTableBlockLocation>BA 3165 </td><td class=timeTableBlockInstructor>S. Engels</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC258H1</td><td class=timeTableBlockSection>S</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC258H1</td><td class=timeTableBlockSection>S</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>MWF11</td><td class=timeTableBlockLocation>LM 162 </td><td class=timeTableBlockInstructor>S. Engels</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>T3-6</td><td class=timeTableBlockLocation>BA 3165 </td><td class=timeTableBlockInstructor>S. Engels</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>M6-9</td><td class=timeTableBlockLocation>BA 3165 </td><td class=timeTableBlockInstructor>S. Engels</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>T6-9</td><td class=timeTableBlockLocation>BA 1160 </td><td class=timeTableBlockInstructor>S. Engels</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC263H1</td><td class=timeTableBlockSection>F</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC263H1</td><td class=timeTableBlockSection>F</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>T10</td><td class=timeTableBlockLocation>LM 161 </td><td class=timeTableBlockInstructor>T. Pitassi</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>R10-12</td><td class=timeTableBlockLocation>LM 161 </td><td class=timeTableBlockInstructor>T. Pitassi</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2003</td><td class=timeTableBlockTime>T10</td><td class=timeTableBlockLocation>LM 161 </td><td class=timeTableBlockInstructor>T. Pitassi</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2003</td><td class=timeTableBlockTime>R10-12</td><td class=timeTableBlockLocation>LM 161 </td><td class=timeTableBlockInstructor>T. Pitassi</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC263H1</td><td class=timeTableBlockSection>S</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC263H1</td><td class=timeTableBlockSection>S</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>MWF3</td><td class=timeTableBlockLocation>BA 1130 </td><td class=timeTableBlockInstructor>S. Toueg</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2503</td><td class=timeTableBlockTime>R6-8</td><td class=timeTableBlockLocation>BA 1160 </td><td class=timeTableBlockInstructor>S. Toueg</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2503</td><td class=timeTableBlockTime>R8</td><td class=timeTableBlockLocation>BA 1160 </td><td class=timeTableBlockInstructor>S. Toueg</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>R6-8</td><td class=timeTableBlockLocation>BA 1160 </td><td class=timeTableBlockInstructor>S. Toueg</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>R8</td><td class=timeTableBlockLocation>BA 1160 </td><td class=timeTableBlockInstructor>S. Toueg</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC265H1</td><td class=timeTableBlockSection>F</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC265H1</td><td class=timeTableBlockSection>F</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>M10-12</td><td class=timeTableBlockLocation>BA 3116 </td><td class=timeTableBlockInstructor>T. Pitassi</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>R11</td><td class=timeTableBlockLocation>BA 3116 </td><td class=timeTableBlockInstructor>T. Pitassi</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC290H1</td><td class=timeTableBlockSection>F</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC290H1</td><td class=timeTableBlockSection>F</td>
 
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC299Y1</td><td class=timeTableBlockSection>Y</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeLecture>L5101</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC299Y1</td><td class=timeTableBlockSection>Y</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>TBA</td><td class=timeTableBlockLocation>BA 3116 </td><td class=timeTableBlockInstructor>R. Baecker</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC300H1</td><td class=timeTableBlockSection>S</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC300H1</td><td class=timeTableBlockSection>S</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>R6-8</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>Tba</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>R8</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>Tba</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC301H1</td><td class=timeTableBlockSection>F</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC301H1</td><td class=timeTableBlockSection>F</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>TR10</td><td class=timeTableBlockLocation>GB 248 </td><td class=timeTableBlockInstructor>S. Sim</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>R11</td><td class=timeTableBlockLocation>GB 248 </td><td class=timeTableBlockInstructor>S. Sim</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC301H1</td><td class=timeTableBlockSection>S</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC301H1</td><td class=timeTableBlockSection>S</td>
 
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC302H1</td><td class=timeTableBlockSection>S</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeLecture>L5101</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC302H1</td><td class=timeTableBlockSection>S</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>TR10</td><td class=timeTableBlockLocation>GB 248 </td><td class=timeTableBlockInstructor>M. Medland</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>R11</td><td class=timeTableBlockLocation>GB 248 </td><td class=timeTableBlockInstructor>M. Medland</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC309H1</td><td class=timeTableBlockSection>F</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC309H1</td><td class=timeTableBlockSection>F</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>T3</td><td class=timeTableBlockLocation>BA 1180 </td><td class=timeTableBlockInstructor>E. De Lara</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>R3</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>E. De Lara</td>
@@ -178,57 +178,57 @@
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2001</td><td class=timeTableBlockTime>T3</td><td class=timeTableBlockLocation>BA 1180 </td><td class=timeTableBlockInstructor>E. De Lara</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2001</td><td class=timeTableBlockTime>R3</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>E. De Lara</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2001</td><td class=timeTableBlockTime>R4</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>E. De Lara</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC309H1</td><td class=timeTableBlockSection>S</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC309H1</td><td class=timeTableBlockSection>S</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>MWF10</td><td class=timeTableBlockLocation>LM 162 </td><td class=timeTableBlockInstructor>E. De Lara</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2001</td><td class=timeTableBlockTime>MWF10</td><td class=timeTableBlockLocation>LM 162 </td><td class=timeTableBlockInstructor>E. De Lara</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC310H1</td><td class=timeTableBlockSection>F</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC310H1</td><td class=timeTableBlockSection>F</td>
 
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC318H1</td><td class=timeTableBlockSection>F</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeLecture>L0101</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC318H1</td><td class=timeTableBlockSection>F</td>
 
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2001</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeLecture>L0101</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeLecture>L2001</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2501</td><td class=timeTableBlockTime>M6</td><td class=timeTableBlockLocation>BA 1200 </td><td class=timeTableBlockInstructor>O. St-Cyr</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2501</td><td class=timeTableBlockTime>M7-9</td><td class=timeTableBlockLocation>BA 1200 </td><td class=timeTableBlockInstructor>O. St-Cyr</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>M6</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>O. St-Cyr</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>M7-9</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>O. St-Cyr</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC318H1</td><td class=timeTableBlockSection>S</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC318H1</td><td class=timeTableBlockSection>S</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>T4-6</td><td class=timeTableBlockLocation>BA 1210 </td><td class=timeTableBlockInstructor>O. St-Cyr</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>T6</td><td class=timeTableBlockLocation>BA 1210 </td><td class=timeTableBlockInstructor>O. St-Cyr</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2001</td><td class=timeTableBlockTime>T4-6</td><td class=timeTableBlockLocation>BA 1210 </td><td class=timeTableBlockInstructor>O. St-Cyr</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2001</td><td class=timeTableBlockTime>T6</td><td class=timeTableBlockLocation>BA 1210 </td><td class=timeTableBlockInstructor>O. St-Cyr</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC320H1</td><td class=timeTableBlockSection>S</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC320H1</td><td class=timeTableBlockSection>S</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2501</td><td class=timeTableBlockTime>W6-9</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>Tba</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>W6-9</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>Tba</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC321H1</td><td class=timeTableBlockSection>S</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC321H1</td><td class=timeTableBlockSection>S</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>TR1</td><td class=timeTableBlockLocation>UC 179 </td><td class=timeTableBlockInstructor>Tba</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>R12</td><td class=timeTableBlockLocation>UC 179 </td><td class=timeTableBlockInstructor>Tba</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2001</td><td class=timeTableBlockTime>TR1</td><td class=timeTableBlockLocation>UC 179 </td><td class=timeTableBlockInstructor>Tba</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2001</td><td class=timeTableBlockTime>R12</td><td class=timeTableBlockLocation>UC 179 </td><td class=timeTableBlockInstructor>Tba</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC324H1</td><td class=timeTableBlockSection>F</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC324H1</td><td class=timeTableBlockSection>F</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>R6</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>G. Baumgartner</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>R7-9</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>G. Baumgartner</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC324H1</td><td class=timeTableBlockSection>S</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC324H1</td><td class=timeTableBlockSection>S</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>M2</td><td class=timeTableBlockLocation>KP 108</td><td class=timeTableBlockInstructor>G. Baumgartner</td>
 <tr class=timeTableRow><td></td><td class=timeTableBlock></td><td class=timeTableBlock>L0101</td><td class=timeTableBlock>WF2</td><td class=timeTableBlock>MP 102</td><td class=timeTableBlock>G. Baumgartner</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC330H1</td><td class=timeTableBlockSection>F</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC330H1</td><td class=timeTableBlockSection>F</td>
 
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC336H1</td><td class=timeTableBlockSection>F</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeLecture>L0101</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC336H1</td><td class=timeTableBlockSection>F</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>MWF11</td><td class=timeTableBlockLocation>WI 1017 </td><td class=timeTableBlockInstructor>K. Jackson</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2003</td><td class=timeTableBlockTime>MWF11</td><td class=timeTableBlockLocation>WI 1017 </td><td class=timeTableBlockInstructor>K. Jackson</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC336H1</td><td class=timeTableBlockSection>S</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC336H1</td><td class=timeTableBlockSection>S</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>M6</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>C. Christara</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>M7-9</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>C. Christara</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC343H1</td><td class=timeTableBlockSection>F</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC343H1</td><td class=timeTableBlockSection>F</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>T1-3</td><td class=timeTableBlockLocation>MP 202 </td><td class=timeTableBlockInstructor>Tba</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>R1</td><td class=timeTableBlockLocation>MP 202 </td><td class=timeTableBlockInstructor>Tba</td>
@@ -238,50 +238,50 @@
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2001</td><td class=timeTableBlockTime>R1</td><td class=timeTableBlockLocation>MP 202 </td><td class=timeTableBlockInstructor>Tba</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2003</td><td class=timeTableBlockTime>W1-3</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>Tba</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2003</td><td class=timeTableBlockTime>F1</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>Tba</td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2203</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC343H1</td><td class=timeTableBlockSection>S</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeLecture>L2203</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC343H1</td><td class=timeTableBlockSection>S</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>MWF12</td><td class=timeTableBlockLocation>MP 102 </td><td class=timeTableBlockInstructor>Tba</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2001</td><td class=timeTableBlockTime>MWF12</td><td class=timeTableBlockLocation>MP 102 </td><td class=timeTableBlockInstructor>Tba</td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2005</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeLecture>L2005</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2501</td><td class=timeTableBlockTime>T6-8</td><td class=timeTableBlockLocation>BA 1130 </td><td class=timeTableBlockInstructor>Tba</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2501</td><td class=timeTableBlockTime>T8</td><td class=timeTableBlockLocation>BA 1130 </td><td class=timeTableBlockInstructor>Tba</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2505</td><td class=timeTableBlockTime>T6-8</td><td class=timeTableBlockLocation>BA 1130 </td><td class=timeTableBlockInstructor>Tba</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2505</td><td class=timeTableBlockTime>T8</td><td class=timeTableBlockLocation>BA 1130 </td><td class=timeTableBlockInstructor>Tba</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>T6-8</td><td class=timeTableBlockLocation>BA 1130 </td><td class=timeTableBlockInstructor>Tba</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>T8</td><td class=timeTableBlockLocation>BA 1130 </td><td class=timeTableBlockInstructor>Tba</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC350H1</td><td class=timeTableBlockSection>F</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC350H1</td><td class=timeTableBlockSection>F</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>T1-3</td><td class=timeTableBlockLocation>BA 1130 </td><td class=timeTableBlockInstructor>C. Christara</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>R1</td><td class=timeTableBlockLocation>BA 1130 </td><td class=timeTableBlockInstructor>C. Christara</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC358H1</td><td class=timeTableBlockSection>S</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC358H1</td><td class=timeTableBlockSection>S</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>M10</td><td class=timeTableBlockLocation>SS 2102 </td><td class=timeTableBlockInstructor>P. Marbach</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>R3-5</td><td class=timeTableBlockLocation>SS 2102 </td><td class=timeTableBlockInstructor>P. Marbach</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC369H1</td><td class=timeTableBlockSection>F</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC369H1</td><td class=timeTableBlockSection>F</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>MWR12</td><td class=timeTableBlockLocation>BA 1170 </td><td class=timeTableBlockInstructor>A. Demke Brown</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC369H1</td><td class=timeTableBlockSection>S</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC369H1</td><td class=timeTableBlockSection>S</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>M3</td><td class=timeTableBlockLocation>RW 110 </td><td class=timeTableBlockInstructor>K. Reid</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>TR2</td><td class=timeTableBlockLocation>RW 110 </td><td class=timeTableBlockInstructor>K. Reid</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2003</td><td class=timeTableBlockTime>M3</td><td class=timeTableBlockLocation>RW 110 </td><td class=timeTableBlockInstructor>K. Reid</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2003</td><td class=timeTableBlockTime>TR2</td><td class=timeTableBlockLocation>RW 110 </td><td class=timeTableBlockInstructor>K. Reid</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC372H1</td><td class=timeTableBlockSection>F</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC372H1</td><td class=timeTableBlockSection>F</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>MWF1</td><td class=timeTableBlockLocation>BA 1240 </td><td class=timeTableBlockInstructor>P. Anderson</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>T3-6</td><td class=timeTableBlockLocation>BA 3165 </td><td class=timeTableBlockInstructor>P. Anderson</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC373H1</td><td class=timeTableBlockSection>F</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC373H1</td><td class=timeTableBlockSection>F</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>MWF10</td><td class=timeTableBlockLocation>MP 203 </td><td class=timeTableBlockInstructor>Tba</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>R2</td><td class=timeTableBlockLocation>MP 202 </td><td class=timeTableBlockInstructor>Tba</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC373H1</td><td class=timeTableBlockSection>S</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC373H1</td><td class=timeTableBlockSection>S</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>MWF11</td><td class=timeTableBlockLocation>WI 1016 </td><td class=timeTableBlockInstructor>Tba</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>M4</td><td class=timeTableBlockLocation>WI 1016 </td><td class=timeTableBlockInstructor>Tba</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2003</td><td class=timeTableBlockTime>MWF11</td><td class=timeTableBlockLocation>WI 1016 </td><td class=timeTableBlockInstructor>Tba</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2003</td><td class=timeTableBlockTime>M4</td><td class=timeTableBlockLocation>WI 1016 </td><td class=timeTableBlockInstructor>Tba</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC384H1</td><td class=timeTableBlockSection>F</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC384H1</td><td class=timeTableBlockSection>F</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>T1</td><td class=timeTableBlockLocation>SS 1073 </td><td class=timeTableBlockInstructor>F. Bacchus</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>R1</td><td class=timeTableBlockLocation>SS 2102 </td><td class=timeTableBlockInstructor>F. Bacchus</td>
@@ -295,35 +295,35 @@
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2005</td><td class=timeTableBlockTime>T1</td><td class=timeTableBlockLocation>SS 1073 </td><td class=timeTableBlockInstructor>F. Bacchus</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2005</td><td class=timeTableBlockTime>R1</td><td class=timeTableBlockLocation>SS 2102 </td><td class=timeTableBlockInstructor>F. Bacchus</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2005</td><td class=timeTableBlockTime>R2</td><td class=timeTableBlockLocation>SS 2102 </td><td class=timeTableBlockInstructor>F. Bacchus</td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2501</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2503</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2505</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC384H1</td><td class=timeTableBlockSection>S</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeLecture>L2501</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeLecture>L2503</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeLecture>L2505</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeLecture>L5101</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC384H1</td><td class=timeTableBlockSection>S</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>MF1</td><td class=timeTableBlockLocation>WB 116</td><td class=timeTableBlockInstructor>S. McIlraith</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2001</td><td class=timeTableBlockTime>MF1</td><td class=timeTableBlockLocation>WB 116</td><td class=timeTableBlockInstructor>S. McIlraith</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2003</td><td class=timeTableBlockTime>MF1</td><td class=timeTableBlockLocation>WB 116</td><td class=timeTableBlockInstructor>S. McIlraith</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2005</td><td class=timeTableBlockTime>MF1</td><td class=timeTableBlockLocation>WB 116</td><td class=timeTableBlockInstructor>S. McIlraith</td>
 <tr class=timeTableRow><td></td><td class=timeTableBlock></td><td class=timeTableBlock>L2005</td><td class=timeTableBlock>W1</td><td class=timeTableBlock>SF 1105</td><td class=timeTableBlock>S. McIlraith</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC401H1</td><td class=timeTableBlockSection>S</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC401H1</td><td class=timeTableBlockSection>S</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>MWF10</td><td class=timeTableBlockLocation>RW 110 </td><td class=timeTableBlockInstructor>F. Rudzicz</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2001</td><td class=timeTableBlockTime>MWF10</td><td class=timeTableBlockLocation>RW 110 </td><td class=timeTableBlockInstructor>F. Rudzicz</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2005</td><td class=timeTableBlockTime>MWF10</td><td class=timeTableBlockLocation>RW 110 </td><td class=timeTableBlockInstructor>F. Rudzicz</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC404H1</td><td class=timeTableBlockSection>S</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC404H1</td><td class=timeTableBlockSection>S</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>T10</td><td class=timeTableBlockLocation>BA 2145 </td><td class=timeTableBlockInstructor>S. Engels</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>R10-12</td><td class=timeTableBlockLocation>BA 2145 </td><td class=timeTableBlockInstructor>S. Engels</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC410H1</td><td class=timeTableBlockSection>S</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC410H1</td><td class=timeTableBlockSection>S</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>M12</td><td class=timeTableBlockLocation>BA 1200 </td><td class=timeTableBlockInstructor>Tba</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>W11-1</td><td class=timeTableBlockLocation>BA 1200 </td><td class=timeTableBlockInstructor>Tba</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC411H1</td><td class=timeTableBlockSection>F</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC411H1</td><td class=timeTableBlockSection>F</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>MWF3</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>R. Zemel</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2001</td><td class=timeTableBlockTime>MWF3</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>R. Zemel</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC418H1</td><td class=timeTableBlockSection>F</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC418H1</td><td class=timeTableBlockSection>F</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2501</td><td class=timeTableBlockTime>W6</td><td class=timeTableBlockLocation>BA 1170 </td><td class=timeTableBlockInstructor>L. Moore</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2501</td><td class=timeTableBlockTime>W7-9</td><td class=timeTableBlockLocation>BA 1170 </td><td class=timeTableBlockInstructor>L. Moore</td>
@@ -331,7 +331,7 @@
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2505</td><td class=timeTableBlockTime>W7-9</td><td class=timeTableBlockLocation>BA 1170 </td><td class=timeTableBlockInstructor>L. Moore</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>W6</td><td class=timeTableBlockLocation>BA 1170 </td><td class=timeTableBlockInstructor>L. Moore</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>W7-9</td><td class=timeTableBlockLocation>BA 1170 </td><td class=timeTableBlockInstructor>L. Moore</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC418H1</td><td class=timeTableBlockSection>S</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC418H1</td><td class=timeTableBlockSection>S</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>M3</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>Tba</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>W3-5</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>Tba</td>
@@ -341,7 +341,7 @@
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2003</td><td class=timeTableBlockTime>W3-5</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>Tba</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2005</td><td class=timeTableBlockTime>M3</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>Tba</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2005</td><td class=timeTableBlockTime>W3-5</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>Tba</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC428H1</td><td class=timeTableBlockSection>S</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC428H1</td><td class=timeTableBlockSection>S</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2501</td><td class=timeTableBlockTime>M6-8</td><td class=timeTableBlockLocation>BA 1230 </td><td class=timeTableBlockInstructor>Tba</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2501</td><td class=timeTableBlockTime>M8</td><td class=timeTableBlockLocation>BA 1230 </td><td class=timeTableBlockInstructor>Tba</td>
@@ -349,21 +349,21 @@
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2505</td><td class=timeTableBlockTime>M8</td><td class=timeTableBlockLocation>BA 1230 </td><td class=timeTableBlockInstructor>Tba</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>M6-8</td><td class=timeTableBlockLocation>BA 1230 </td><td class=timeTableBlockInstructor>Tba</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>M8</td><td class=timeTableBlockLocation>BA 1230 </td><td class=timeTableBlockInstructor>Tba</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC438H1</td><td class=timeTableBlockSection>F</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC438H1</td><td class=timeTableBlockSection>F</td>
 
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2003</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC438H1</td><td class=timeTableBlockSection>S</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeLecture>L0101</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeLecture>L2003</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC438H1</td><td class=timeTableBlockSection>S</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>MWF2</td><td class=timeTableBlockLocation>BA 1220 </td><td class=timeTableBlockInstructor>S. Cook</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2003</td><td class=timeTableBlockTime>MWF2</td><td class=timeTableBlockLocation>BA 1220 </td><td class=timeTableBlockInstructor>S. Cook</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC443H1</td><td class=timeTableBlockSection>S</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC443H1</td><td class=timeTableBlockSection>S</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>T3-5</td><td class=timeTableBlockLocation>BA 1220 </td><td class=timeTableBlockInstructor>R. Miller</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>T5</td><td class=timeTableBlockLocation>BA 1220 </td><td class=timeTableBlockInstructor>R. Miller</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2001</td><td class=timeTableBlockTime>T3-5</td><td class=timeTableBlockLocation>BA 1220 </td><td class=timeTableBlockInstructor>R. Miller</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2001</td><td class=timeTableBlockTime>T5</td><td class=timeTableBlockLocation>BA 1220 </td><td class=timeTableBlockInstructor>R. Miller</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC454H1</td><td class=timeTableBlockSection>F</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC454H1</td><td class=timeTableBlockSection>F</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2503</td><td class=timeTableBlockTime>W6-8</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>A. Wytenburg</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2503</td><td class=timeTableBlockTime>W8</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>A. Wytenburg</td>
@@ -371,11 +371,11 @@
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2505</td><td class=timeTableBlockTime>W8</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>A. Wytenburg</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>W6-8</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>A. Wytenburg</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L5101</td><td class=timeTableBlockTime>W8</td><td class=timeTableBlockLocation>BA 1190 </td><td class=timeTableBlockInstructor>A. Wytenburg</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC456H1</td><td class=timeTableBlockSection>F</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC456H1</td><td class=timeTableBlockSection>F</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>M1-3</td><td class=timeTableBlockLocation>BA 3012 </td><td class=timeTableBlockInstructor>C. Christara</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>W1</td><td class=timeTableBlockLocation>BA 3012 </td><td class=timeTableBlockInstructor>C. Christara</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC458H1</td><td class=timeTableBlockSection>F</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC458H1</td><td class=timeTableBlockSection>F</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>T1-3</td><td class=timeTableBlockLocation>GB 220</td><td class=timeTableBlockInstructor>J. Lim</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>F1</td><td class=timeTableBlockLocation>BA 1180 </td><td class=timeTableBlockInstructor>J. Lim</td>
@@ -383,21 +383,21 @@
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2003</td><td class=timeTableBlockTime>F1</td><td class=timeTableBlockLocation>BA 1180 </td><td class=timeTableBlockInstructor>J. Lim</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2005</td><td class=timeTableBlockTime>T1-3</td><td class=timeTableBlockLocation>GB 220</td><td class=timeTableBlockInstructor>J. Lim</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2005</td><td class=timeTableBlockTime>F1</td><td class=timeTableBlockLocation>BA 1180 </td><td class=timeTableBlockInstructor>J. Lim</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC463H1</td><td class=timeTableBlockSection>F</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC463H1</td><td class=timeTableBlockSection>F</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>MWF2</td><td class=timeTableBlockLocation>BA 1220 </td><td class=timeTableBlockInstructor>S. Cook</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC469H1</td><td class=timeTableBlockSection>F</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC469H1</td><td class=timeTableBlockSection>F</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>R10-12</td><td class=timeTableBlockLocation>SS 2106 </td><td class=timeTableBlockInstructor>A. Demke Brown</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>R1</td><td class=timeTableBlockLocation>SS 2108 </td><td class=timeTableBlockInstructor>A. Demke Brown</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC485H1</td><td class=timeTableBlockSection>F</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC485H1</td><td class=timeTableBlockSection>F</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>W1-3</td><td class=timeTableBlockLocation>LM 161 </td><td class=timeTableBlockInstructor>G. Hirst</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>R4</td><td class=timeTableBlockLocation>BA 1180</td><td class=timeTableBlockInstructor>G. Hirst</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC486H1</td><td class=timeTableBlockSection>S</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC486H1</td><td class=timeTableBlockSection>S</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>F12-2</td><td class=timeTableBlockLocation>BA 1200</td><td class=timeTableBlockInstructor>V. Belle</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC488H1</td><td class=timeTableBlockSection>S</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC488H1</td><td class=timeTableBlockSection>S</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>TR2</td><td class=timeTableBlockLocation>BA 1210 </td><td class=timeTableBlockInstructor>Tba</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>R1</td><td class=timeTableBlockLocation>BA 1210 </td><td class=timeTableBlockInstructor>Tba</td>
@@ -405,28 +405,28 @@
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2003</td><td class=timeTableBlockTime>R1</td><td class=timeTableBlockLocation>BA 1210 </td><td class=timeTableBlockInstructor>Tba</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2005</td><td class=timeTableBlockTime>TR2</td><td class=timeTableBlockLocation>BA 1210 </td><td class=timeTableBlockInstructor>Tba</td>
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L2005</td><td class=timeTableBlockTime>R1</td><td class=timeTableBlockLocation>BA 1210 </td><td class=timeTableBlockInstructor>Tba</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC490H1</td><td class=timeTableBlockSection>F</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC490H1</td><td class=timeTableBlockSection>F</td>
 
-<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC490H1</td><td class=timeTableBlockSection>S</td>
+<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeLecture>L0101</td><td class=timeTableBlockTime>Cancel</td><td class=timeTableBlock></td><td class=timeTableBlock></td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC490H1</td><td class=timeTableBlockSection>S</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>R3-5</td><td class=timeTableBlockLocation>RS 208</td><td class=timeTableBlockInstructor>K. Singh</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC494H1</td><td class=timeTableBlockSection>F</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC494H1</td><td class=timeTableBlockSection>F</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>TBA</td><td class=timeTableBlockLocation>RS 208</td><td class=timeTableBlockInstructor>Staff</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC494H1</td><td class=timeTableBlockSection>S</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC494H1</td><td class=timeTableBlockSection>S</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>TBA</td><td class=timeTableBlockLocation>RS 208</td><td class=timeTableBlockInstructor>Staff</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC494H1</td><td class=timeTableBlockSection>Y</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC494H1</td><td class=timeTableBlockSection>Y</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>TBA</td><td class=timeTableBlockLocation>RS 208</td><td class=timeTableBlockInstructor>Staff</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC495H1</td><td class=timeTableBlockSection>F</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC495H1</td><td class=timeTableBlockSection>F</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>TBA</td><td class=timeTableBlockLocation>RS 208</td><td class=timeTableBlockInstructor>Staff</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC495H1</td><td class=timeTableBlockSection>S</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC495H1</td><td class=timeTableBlockSection>S</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>TBA</td><td class=timeTableBlockLocation>RS 208</td><td class=timeTableBlockInstructor>Staff</td>
-<tr class=timeTableRow><td class=timeTableCourse>CSC495H1</td><td class=timeTableBlockSection>Y</td>
+<tr class=timeTableRow><td class=timeTableCourse style="background: backgroundInstertion">CSC495H1</td><td class=timeTableBlockSection>Y</td>
 
 <tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockType>L0101</td><td class=timeTableBlockTime>TBA</td><td class=timeTableBlockLocation>RS 208</td><td class=timeTableBlockInstructor>Staff</td>
 </p></div></table>
