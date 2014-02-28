@@ -529,12 +529,14 @@ function curtains() {
 }
 
 function spotlight(id) {
-    var width = parseFloat($("#".concat(id, " > rect")).attr("width"))/2;
-    var height = parseFloat($("#".concat(id, " > rect")).attr("height"))/2;
-    var x = parseFloat($("#".concat(id, " > rect")).attr("x")) + width;
-    var y = parseFloat($("#".concat(id, " > rect")).attr("y")) + height;
+    var node = $("#".concat(id, " > rect"));
+
+    var width = parseFloat(node.attr("width"))/2;
+    var height = parseFloat(node.attr("height"))/2;
+    var x = parseFloat(node.attr("x")) + width;
+    var y = parseFloat(node.attr("y")) + height;
     
-    var el = '<ellipse class="spotlight" cx="'.concat(x, '" cy = "', y, '" rx="', width + 9, '" ry="', height + 8.5, '" style="fill:white; opacity:0.8; stroke: none" />');
+    var el = '<ellipse class="spotlight" cx="'.concat(x, '" cy = "', y, '" rx="', width + 9, '" ry="', height + 8.5, '"/>');
     $("#" + id).before(el);
     $("#" + id).attr('data-active', 'lit');
 
@@ -566,18 +568,18 @@ function createTimeTable() {
      xmlreq.open("GET", "res/timeTable.txt", false);
      xmlreq.send();
      var timeTableString = xmlreq.responseText;
-    for (var i=0; i < nodes.length; i++) {
-    
-        timeTableString = timeTableString.replace("backgroundInstertion",$("#" + nodes[i] + "> rect").css('fill'));
-    }
-    
+     $.each(nodes, function(index, node) {
+      timeTableString = timeTableString.replace(
+        new RegExp("backgroundInstertion\">" + node, 'g'), 
+        $("#" + node + "> rect").css('fill') + "\">" + node);
+     });
+
      temp.innerHTML = timeTableString;
      while (temp.firstChild) {
         frag.appendChild(temp.firstChild);
     }
     return frag;
 }
-
 
 
 
@@ -626,15 +628,19 @@ function updatePostInterface() {
   updatePOStTotal();
 }
 
+function setIcon(id, sat) {
+  if (sat) {
+    $('a[href="#' + id + '"] img').attr('src', 'res/check.ico');
+  } else {
+    $('a[href="#' + id + '"] img').attr('src', 'res/delete.ico');
+  }
+}
+
 function updateCSCReqs() {
   cscReqTotal = $('#cscReqs input:checkbox:checked').length / 2;
   $('#cscReqTotal').html(cscReqTotal.toFixed(1));
   cscReqSat = cscReqTotal >= 5;
-  if (cscReqSat) {
-    $('a[href="#cscReqs"] img').attr('src', 'res/check.ico');
-  } else {
-    $('a[href="#cscReqs"] img').attr('src', 'res/delete.ico');
-  }
+  setIcon('cscReqs', cscReqSat);
 }
 
 function updateMATReqs() {
@@ -644,11 +650,7 @@ function updateMATReqs() {
   }
   $('#matReqTotal').html(matReqTotal.toFixed(1));
   matReqSat = matReqTotal >= 2;
-  if (matReqSat) {
-    $('a[href="#matReqs"] img').attr('src', 'res/check.ico');
-  } else {
-    $('a[href="#matReqs"] img').attr('src', 'res/delete.ico');
-  }
+  setIcon('matReqs', matReqSat);
 }
 
 function updateCSC400s() {
@@ -665,11 +667,7 @@ function updateCSC400s() {
   }
   
   elec400sSat = numBCB + tmp.length >= 3;
-  if (elec400sSat) {
-    $('a[href="#csc400s"] img').attr('src', 'res/check.ico');
-  } else {
-    $('a[href="#csc400s"] img').attr('src', 'res/delete.ico');
-  }
+  setIcon('csc400s', elec400sSat);
 }
 
 // Right now, it must be called after updateCSC400s (because of numBCB)
@@ -703,23 +701,13 @@ function updateElecs() {
 
   $('#elecTotal').html(elecTotal.toFixed(1));
   elecSat = elecTotal == 5;
-  if (elecSat) {
-    $('a[href="#cscElecs"] img').attr('src', 'res/check.ico');
-    $('a[href="#matElecs"] img').attr('src', 'res/check.ico');
-  } else {
-    $('a[href="#cscElecs"] img').attr('src', 'res/delete.ico');
-    $('a[href="#matElecs"] img').attr('src', 'res/delete.ico');
-  }
+  setIcon('cscElecs', elecSat);
+  setIcon('matElecs', elecSat);
 }
 
 function updatePEY() {
   peySat = $('#peycheck').prop('checked') || $('#peyReq input:checkbox:checked').length > 0;
-
-  if (peySat) {
-    $('a[href="#peyReq"] img').attr('src', 'res/check.ico');
-  } else {
-    $('a[href="#peyReq"] img').attr('src', 'res/delete.ico');
-  }
+  setIcon('peyReq', peySat);
 }
 
 function updatePOStTotal() {
@@ -739,6 +727,10 @@ $(document).ready(function() {
         window[id].takeable = true;
         window[id].updateSVG();
     }
+
+    var fragment2 = createTimeTable();
+    timeNode = parent.document.getElementById("timetable");
+    timeNode.appendChild(fragment2);
 });
 
 
@@ -822,7 +814,7 @@ makeNode([bool1], "AND", "CSC410");
 makeNode([CSC263, Calc1, hybrid9], "AND", "CSC411");
 makeNode([CSC411], "AND", "CSC412");
 makeNode([hybrid15, bool5], "AND", "CSC420");
-makeNode([CSC318, Sta2, hybrid12], "AND", "CSC428"); // Exception "Sta2 may be replaced by PSY201..."
+makeNode([CSC318, Sta2, hybrid12], "AND", "CSC428");
 makeNode([CSC336], "AND", "CSC436");
 makeNode([CSC343, CSC369, hybrid5], "AND", "CSC443");
 makeNode([CSC336], "AND", "CSC446");
@@ -934,7 +926,3 @@ makeEdge(CSC258, CSC488, "p79");
 makeEdge(CSC318, CSC428, "p80");
 makeEdge(CSC263, CSC324, "p81");
 
-
-var fragment2 = createTimeTable();
-timeNode = parent.document.getElementById("timetable");
-timeNode.appendChild(fragment2);

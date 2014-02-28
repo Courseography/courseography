@@ -347,45 +347,43 @@
         </g>
 
 
-        <g id="title">
-          <ellipse rx="100" ry="62.5" cx="1199.3696" cy="-225.9029"/>
-          <text id="ellipseText" x="1115.1777" y="-232.4947">DCS Course</text>
-          <text id="ellipseText2" x="1134.3525" y="-195.7418">Flowchart</text>
-        </g>
+        <image xlink:href="res/dcs.svg" x="1065" y="-300" width="275" height="100"/>
+        <text id="svgTitle" x="1065" y="-175">Course Planner</text>
 
-        <g data-group="theory">
-          <rect x="1166.9272" width="175" height="30" y="-121.778"/>
-          <text x="1227.085" y="-100.8857">Theory</text>
+        <g>
+          <g data-group="theory">
+            <rect x="1166.9272" width="175" height="30" y="-121.778"/>
+            <text x="1227.085" y="-100.8857">Theory</text>
+          </g>
+          <g data-group="systems">
+            <rect x="1166.9272" width="175" height="30" y="-91.778"/>
+            <text x="1225.6724" y="-70.8857">Systems</text>
+          </g>
+          <g data-group="dbweb">
+            <rect x="1166.9272" width="175" height="30" y="-61.778"/>
+            <text x="1193.9805" y="-40.8857">Databases &amp; Web</text>
+          </g>
+          <g data-group="num">
+            <rect x="1166.9272" width="175" height="30" y="28.222"/>
+            <text x="1179" y="49.1143">Numerical Computing</text>
+          </g>
+          <g data-group="se">
+            <rect x="1166.9272" width="175" height="30" y="-31.778"/>
+            <text x="1178.7158" y="-10.8857">Software Engineering</text>
+          </g>
+          <g data-group="graphics">
+            <rect x="1166.9272" width="175" height="30" y="58.222"/>
+            <text x="1224.4163" y="79.1143">Graphics</text>
+          </g>
+          <g data-group="hci">
+            <rect x="1166.9272" width="175" height="30" y="88.222"/>
+            <text x="1171.5496" y="109.1143">Humans and Computing</text>
+          </g>
+          <g data-group="ai">
+            <rect x="1166.9272" width="175" height="30" y="-1.778"/>
+            <text x="1179" y="19.1143">Artificial Intelligence</text>
+          </g>
         </g>
-        <g data-group="systems">
-          <rect x="1166.9272" width="175" height="30" y="-91.778"/>
-          <text x="1225.6724" y="-70.8857">Systems</text>
-        </g>
-        <g data-group="dbweb">
-          <rect x="1166.9272" width="175" height="30" y="-61.778"/>
-          <text x="1193.9805" y="-40.8857">Databases &amp; Web</text>
-        </g>
-        <g data-group="num">
-          <rect x="1166.9272" width="175" height="30" y="28.222"/>
-          <text x="1179" y="49.1143">Numerical Computing</text>
-        </g>
-        <g data-group="se">
-          <rect x="1166.9272" width="175" height="30" y="-31.778"/>
-          <text x="1178.7158" y="-10.8857">Software Engineering</text>
-        </g>
-        <g data-group="graphics">
-          <rect x="1166.9272" width="175" height="30" y="58.222"/>
-          <text x="1224.4163" y="79.1143">Graphics</text>
-        </g>
-        <g data-group="hci">
-          <rect x="1166.9272" width="175" height="30" y="88.222"/>
-          <text x="1171.5496" y="109.1143">Humans and Computing</text>
-        </g>
-        <g data-group="ai">
-          <rect x="1166.9272" width="175" height="30" y="-1.778"/>
-          <text x="1179" y="19.1143">Artificial Intelligence</text>
-        </g>
-
 
         <g>
           <path id="p1" d="M455.4041 168.2617 L455.4041 282.6306"marker-end="url(#arrow)"/>
@@ -932,31 +930,30 @@
 
       </div>
     </div>
+
+
     <div id="feedback" class="infoTab">
-    <table>
-    <tr>
-    <td class = "formTd">
-    <p class="form">Please feel free to give us feedback about this Computer Science course explorer. All feedback is welcome, and is taken into great consideration. Any contribution is
-    helpful, and bug reports are cherished even more! You're welcome to view any future changes to the project at <a target="_blank" href="https://github.com/Senor-Ian/cscourseplanner"> the github project.</a></a> 
-    Fill in the text area below, and click on submit to send us the feedback. Thanks!</p></td><td>
-    <fieldset id="contact_form" class = "form2">
-    <div id="result"></div>
-    <legend>Feedback</legend>
-        <p for="name"><span>Name</span>
+      <div id = "feedbackDescription">
+        <p>
+        Please feel free to give us feedback about this Computer Science course explorer. All feedback is welcome, and is taken into great consideration. Any contribution is
+          helpful, and bug reports are cherished even more! You're welcome to view any future changes to the project on <a target="_blank" href="https://github.com/Senor-Ian/cscourseplanner">github</a>.
+          Thanks!
         </p>
-        <input type="text" name="name" id="name" placeholder="Enter Your Name" /> <br/>
-        <p for="message">Message
-        </p>
-        <textarea name="message" id="message" placeholder="Enter Your Message"></textarea>
-    
-        <label><span>&nbsp;</span>
-        <button class="submit_btn" id="submit_btn">Submit</button>
-        </label>
-</fieldset></td>
-</tr>
-</table>
-<br />
+      </div>
+      <div id = "feedbackFormDiv">
+        <fieldset id="feedbackForm">
+          <legend>Feedback</legend>
+          <p for="name">Name &nbsp; &nbsp; &nbsp; <input type="text" name="name" id="feedbackNameField" placeholder="Enter Your Name" /></p>
+          <p for="message">Message</p>
+          <textarea name="message" id="feedbackMessageField" placeholder="Enter Your Message"></textarea>
+          <br/>
+          <button class="submit_btn" id="submit_btn">Submit</button>
+        </fieldset>
+      </div>
   </div>
+  
+
+
   <script>
     $('.infoTabs').tabs({activate: function(e, ui) {
     e.currentTarget.blur();
