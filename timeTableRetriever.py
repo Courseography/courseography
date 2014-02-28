@@ -62,7 +62,6 @@ class MyHTMLParser(HTMLParser):
 	        
 
 parser = MyHTMLParser(strict=False)
-print("penis")
 print('<table class=\"timeTable\">')
 print('<tr class=timeTableRow>'
 	+ '<td class=timeTableHeader>Course</td>'
