@@ -123,6 +123,8 @@ td.timeTableBlock {
 
 td.timeTableCourse {
     background: #0066CC;
+    border: 2px solid black;
+    color: black;
 }
 
 td.timeTableBlockSection {
@@ -131,22 +133,32 @@ td.timeTableBlockSection {
 
 td.timeTableBlockTypeTutorial {
     background: #6699FF;
+    border: 2px solid black;
+    color: black;
 }
 
 td.timeTableBlockType {
     background: #3333CC;
+    border: 2px solid black;
+    color: black;
 }
 
 td.timeTableBlockTime {
     background: #0099FF;
+    border: 2px solid black;
+    color: black;
 }
 
 td.timeTableBlockLocation {
     background: #3366CC;
+    border: 2px solid black;
+    color: black;
 }
 
 td.timeTableBlockInstructor {
     background: #3300CC;
+    border: 2px solid black;
+    color: black;
 }
 
 
@@ -324,6 +336,7 @@ input[type=checkbox]:checked + label:before {
     margin-right: auto;
     width: 100%;
     height: 750px;
+    overflow: hidden;
 }
 
 #graphRootSVG {
@@ -333,7 +346,7 @@ input[type=checkbox]:checked + label:before {
     stroke-linecap: square;
     stroke-miterlimit: 10;
     color-interpolation: auto;
-    /*overflow: hidden;*/
+    overflow: hidden;
     shape-rendering: geometricPrecision;
 }
 
