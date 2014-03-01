@@ -5,7 +5,7 @@ html, body {
     padding: 0em;
     width: 100%;
     height: 100%;
-    overflow-x: hidden;
+    overflow-x: auto;
     overflow-y: auto;
     font-family: "Trebuchet MS", Arial, Sans-Serif;
 }
@@ -27,6 +27,7 @@ ul.tabList {
     height: 40px;
     display: block;
     margin: 0px;
+    padding: 0px;
     background: #04356C;
     border-top-style: solid;
     border-bottom-style: solid;
@@ -57,10 +58,8 @@ div.infoTab {
     width: 100%;
     background: #447BD4;
     color: white;
-    height: 300px;
+    height: 100%;
     overflow-y: auto;
-    padding-left: 2em;
-    padding-right: 2em;
 }
 
 /* My Courses tab */
@@ -304,6 +303,7 @@ input[type=checkbox]:checked + label:before {
   width: 40%;
   height: 100%;
   float: left;
+  padding-right: 2em;
 }
 
 #feedbackDescription a {
@@ -334,14 +334,15 @@ input[type=checkbox]:checked + label:before {
 #graph {
     margin-left: auto;
     margin-right: auto;
-    width: 100%;
+    width: 1500px;
     height: 750px;
     overflow: hidden;
+    clear: both;
 }
 
 #graphRootSVG {
     width: 100%;
-    height: 750px;
+    height: 100%;
     stroke: black;
     stroke-linecap: square;
     stroke-miterlimit: 10;

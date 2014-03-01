@@ -717,6 +717,11 @@ function updatePOStTotal() {
 }
 
 $(document).ready(function() {
+
+var height = $(window).height() - $("#graph").height() - 46;
+
+$(".infoTabs").height(height + "px");
+
   // Set tabs
     $('.infoTabs').tabs({activate: function(e, ui) {
     e.currentTarget.blur();

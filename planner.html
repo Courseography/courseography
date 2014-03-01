@@ -8,11 +8,12 @@
   <link rel="stylesheet" type="text/css" href="styles.css" marker-end="url(#arrow)" />
   <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
   <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+  <script src='util.js'></script>
 </head>
 
 <body>
   <div id="graph">
-    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="graphRootSVG" viewBox="0 0 1500 1000">
+    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="graphRootSVG" viewBox="0 0 1500 1000" preserveAspectRatio="xMinyMin">
       <g transform="matrix(1.4859,0,0,1.4859,-359.7965,469.5511)">
         <defs>
           <marker id="arrow" viewBox="0 0 10 10" refX="1" refY="5" markerUnits="strokeWidth" orient="auto" markerWidth="10" markerHeight="10">
@@ -347,7 +348,7 @@
         </g>
 
 
-        <image xlink:href="res/dcs.svg" x="1065" y="-300" width="275" height="100"/>
+        <image xlink:href="res/dcs.svg" x="1065" y="-290" width="275" height="85"/>
         <text id="svgTitle" x="1065" y="-175">Course Planner</text>
 
         <g>
@@ -485,8 +486,8 @@
       <li><span id='FCEcount'>0.0</span> FCEs</li>
     </ul>
     <div id="courseList" class="infoTab">
-      <p>Currently empty, but try clicking on some courses!</p>
-      <table style='margin-top:2em'><tr id="courseGrid"></tr></table>
+      <p style='margin-left: 2em'>Currently empty, but try clicking on some courses!</p>
+      <table style='margin: 2em'><tr id="courseGrid"></tr></table>
     </div>
 
     <div id="courseDescriptions" class="infoTab">
@@ -951,7 +952,6 @@
       </div>
   </div>
   
-
-  <script src='util.js'></script>
+  
 </body>
 </html>
