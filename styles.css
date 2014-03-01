@@ -19,6 +19,11 @@ a {
     outline-color: transparent;
 }
 
+fieldset { 
+    border: none; 
+}
+
+
 
 /* Styles for the main tabs */
 ul.tabList {
@@ -172,7 +177,7 @@ td.timeTableBlockLocation {
 
 td.timeTableBlockInstructor {
     width: 16%;
-    background: #3300CC;
+    background: #4D94FF;
     border: 2px solid black;
     color: black;
 }
