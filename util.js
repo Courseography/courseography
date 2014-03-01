@@ -3,6 +3,91 @@ var edges = [];
 var clickedCourses = [];
 var clickedNode = parent.document.getElementById("courseGrid");
 
+/* Draggable function for map*/
+/* Extending the jQuery draggable option to be fitted with right click for either graph or graphRootSVG. This also disables the context menu for graphRootSVG, but not for the tab.*/
+$(document).ready(function () {
+    
+    $.extend($.ui.draggable.prototype, {
+        _mouseInit: function () {
+            var context = this;
+            if (!this.options.mouseButton) {
+                this.options.mouseButton = 1;
+            }
+
+            $.ui.mouse.prototype._mouseInit.apply(this, arguments);
+
+            if (this.options.mouseButton === 3) {
+                this.element.bind("contextmenu." + this.widgetName, function (event) {
+                    if (true === $.data(event.target, context.widgetName + ".preventClickEvent")) {
+                        $.removeData(event.target, context.widgetName + ".preventClickEvent");
+                        event.stopImmediatePropagation();
+                        return false;
+                    }
+                    event.preventDefault();
+                    return false;
+                });
+            }
+
+            this.started = false;
+        },
+        
+        _mouseDown: function (event) {
+
+            (this._mouseStarted && this._mouseUp(event));
+
+            this._mouseDownEvent = event;
+
+            var that = this,
+                btnIsLeft = (event.which === this.options.mouseButton),
+
+                elIsCancel = (typeof this.options.cancel === "string" && event.target.nodeName ? $(event.target).closest(this.options.cancel).length : false);
+            if (!btnIsLeft || elIsCancel || !this._mouseCapture(event)) {
+                return true;
+            }
+
+            this.mouseDelayMet = !this.options.delay;
+            if (!this.mouseDelayMet) {
+                this._mouseDelayTimer = setTimeout(function () {
+                    that.mouseDelayMet = true;
+                }, this.options.delay);
+            }
+
+            if (this._mouseDistanceMet(event) && this._mouseDelayMet(event)) {
+                this._mouseStarted = (this._mouseStart(event) !== false);
+                if (!this._mouseStarted) {
+                    event.preventDefault();
+                    return true;
+                }
+            }
+
+            // This is apparently for Gecko and Opera, but I haven't tested it out yet.
+            if (true === $.data(event.target, this.widgetName + ".preventClickEvent")) {
+                $.removeData(event.target, this.widgetName + ".preventClickEvent");
+            }
+
+            this._mouseMoveDelegate = function (event) {
+                return that._mouseMove(event);
+            };
+            this._mouseUpDelegate = function (event) {
+                return that._mouseUp(event);
+            };
+            
+            $(document)
+                .bind("mousemove." + this.widgetName, this._mouseMoveDelegate)
+                .bind("mouseup." + this.widgetName, this._mouseUpDelegate);
+
+            event.preventDefault();
+
+            mouseHandled = true;
+            return true;
+        }
+    });
+
+    $("#graphRootSVG").draggable({
+        mouseButton: 3
+    });
+});
+
 
 /* The function to send feedback via email.php*/
 $(document).ready(function() {
