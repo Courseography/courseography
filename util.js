@@ -16,18 +16,6 @@ $(document).ready(function () {
 
             $.ui.mouse.prototype._mouseInit.apply(this, arguments);
 
-            if (this.options.mouseButton === 3) {
-                this.element.bind("contextmenu." + this.widgetName, function (event) {
-                    if (true === $.data(event.target, context.widgetName + ".preventClickEvent")) {
-                        $.removeData(event.target, context.widgetName + ".preventClickEvent");
-                        event.stopImmediatePropagation();
-                        return false;
-                    }
-                    event.preventDefault();
-                    return false;
-                });
-            }
-
             this.started = false;
         },
         
