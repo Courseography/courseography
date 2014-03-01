@@ -386,8 +386,8 @@ g[data-active="takeable"] {
 
 /* Used for hover */
 g[data-active="missing"] rect {
-    opacity: 0.5;
     stroke-width: 3;
+    stroke: #FF0000;
 }
 
 g[data-active="unlit"] rect {
@@ -485,9 +485,14 @@ path[data-active="active"] {
     opacity: 1.0;
 }
 
-#arrow path[data-active="inactive"] {
-  fill: black;
-  stroke: black;
+path[data-active="missing"] {
+  stroke: #FF0000;
+  fill: none;
+}
+
+path[data-active="missing"] #arrow path {
+  stroke: #FF0000;
+  fill: #FF0000;
 }
 
 /* Title style. */

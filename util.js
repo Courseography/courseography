@@ -138,14 +138,9 @@ function Node(parents, type, name) {
     this.turn = function() {
         if (this.active || this.takeable) {
             $.each(nodes, function(i, node) { window[node].updated = false; });
-            /*for (var i = 0; i < nodes.length; i++) {
-                window[nodes[i]].updated = false;
-            }*/
 
             this.updated = true;
             this.active = !this.active;
-
-
 
             if (this.name == "CSC454") {
                 this.takeable = FCEs300 + FCEs400 >= 2.5;
@@ -240,6 +235,12 @@ function Node(parents, type, name) {
     this.focus = function() {
         if (!this.active) {
             $("#" + this.name).attr('data-active', 'missing');
+            $.each(this.inEdges, function(index, edge) {
+              if (!edge.parent.active) {
+                $("#" + edge.name).attr('data-active', 'missing');
+              }
+            })
+
             $.each(this.parents, function(i, node) { node.focus(); });
         }
     }
@@ -255,6 +256,7 @@ function Node(parents, type, name) {
             }
             
             $.each(this.parents, function(i, node) { node.unfocus(); });
+            $.each(this.outEdges, function(i, edge) { edge.isActive(); });
         }
     }
 
@@ -715,6 +717,17 @@ function updatePOStTotal() {
 }
 
 $(document).ready(function() {
+  // Set tabs
+    $('.infoTabs').tabs({activate: function(e, ui) {
+    e.currentTarget.blur();
+    }});
+    $('.focusTabs').tabs({active: false, collapsible: true, 
+      activate: function(e, ui) {
+    e.currentTarget.blur();
+    }});
+    $('.postTabs').tabs({active: 0, activate: function(e, ui) {
+    e.currentTarget.blur();
+    }});
     setMouseCallbacks(); 
 
     $(".node").attr("data-active", "inactive");
@@ -791,7 +804,7 @@ makeNode([hybrid13, bool4], "AND", "CSC310");
 makeNode([], "AND", "CSC318");
 makeNode([hybrid12, bool5], "AND", "CSC320");
 makeNode([bool4], "AND", "CSC321");
-makeNode([bool1, CSC263], "AND", "CSC324"); // CHANGED
+makeNode([CSC263], "AND", "CSC324"); // CHANGED
 makeNode([CSC236], "AND", "CSC330");
 makeNode([CSC148, bool5], "AND", "CSC336");
 makeNode([hybrid16, hybrid14], "AND", "CSC343");
@@ -880,7 +893,6 @@ makeEdge(CSC236, bool1, "p32");
 makeEdge(CSC207, bool1, "p33");
 makeEdge(bool1, CSC263, "p34");
 makeEdge(bool1, CSC410, "p35");
-makeEdge(bool1, CSC324, "p36");
 makeEdge(hybrid4, CSC488, "p37");
 makeEdge(hybrid5, CSC443, "p38");
 makeEdge(CSC209, bool2, "p39");
