@@ -60,7 +60,7 @@ class MyHTMLParser(HTMLParser):
     	# The switch indicates that this field comes directly after the course field, 
     	# to prevent waitlist fields from being entered.
     	elif section.match(data) and self.switch:
-	        print('<tr class="searchClass">'+ ' <tr class=timeTableRow><td class=timeTableCourse id='
+	        print('</table><table class="searchClass">'+ ' <tr class=timeTableRow><td class=timeTableCourse id='
 	        	+ self.courseMemory 
 	        	+' style="background: backgroundInstertion">' 
 	        	+ self.courseMemory 
@@ -151,6 +151,6 @@ print('<tr class=timeTableRow>'
 	+ '<td class=timeTableHeader>Time</td>'
 	+ '<td class=timeTableHeader>Location</td>'
 	+ '<td class=timeTableHeader>Instructor</td>'
-	+ '</tr><tr class="lonelyDiv">')
+	+ '</tr><tr><table class="lonelyDiv">')
 parser.feed(str(htmlData))
-print('</tr></div></table>')
+print('</table></div></table>')

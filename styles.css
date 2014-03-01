@@ -100,7 +100,13 @@ div#calendar {
 table.timeTable {
     width: 70%;
     margin: 0 auto;
-    padding: 2em;
+    padding: 0em;
+}
+
+table.searchClass {
+    width: 70%;
+    margin: 0 auto;
+    padding: 0em;
 }
 
 tr.timeTableRow {
@@ -113,53 +119,63 @@ tr.timeTableRow {
 
 td.timeTableHeader{
     height: 25px;
+    width: 16%;
     background: #000099;
 }
 
 td.timeTableBlock {
+    
+    width: 16%;
     background: #447BD4;
 }
 
 td.timeTableCourse {
+    width: 16%;
     background: #0066CC;
     border: 2px solid black;
     color: black;
 }
 
 td.timeTableBlockSection {
-    background: #6666FF;
+    width: 16%;
+    background: #ADC2FF;
+    color: black;
 }
 
 td.timeTableBlockTypeTutorial {
-    background: #6699FF;
+    width: 16%;
+    background: #99B2FF;
     border: 2px solid black;
     color: black;
 }
 
 td.timeTableBlockType {
-    background: #3333CC;
+    width: 16%;
+    background: #85A3FF;
     border: 2px solid black;
     color: black;
 }
 
 td.timeTableBlockTime {
-    background: #0099FF;
+    width: 16%;
+    background: #7094FF;
     border: 2px solid black;
     color: black;
 }
 
 td.timeTableBlockLocation {
-    background: #3366CC;
+    width: 16%;
+    background: #5C85FF;
     border: 2px solid black;
     color: black;
 }
 
 td.timeTableBlockInstructor {
+    width: 16%;
     background: #3300CC;
     border: 2px solid black;
     color: black;
 }
-
 
 /* Focus and POSt tabs */
 div.focusDetails {

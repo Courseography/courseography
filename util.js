@@ -14,7 +14,7 @@ $(document).ready(function(){
  
         var filter = $(this).val();
  
-        $(".timeTableRow").each(function(){
+        $(".searchClass").each(function(){
            
             if ($(this).text().search(new RegExp(filter, "i")) < 0) {
                 $(this).fadeOut();
