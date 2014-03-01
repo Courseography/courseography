@@ -1,38 +1,11 @@
+// List of all nodes and edges
 var nodes = [];
 var edges = [];
+
 var clickedCourses = [];
-var clickedNode = parent.document.getElementById("courseGrid");
-
-
-/* The function to send feedback via email.php*/
-$(document).ready(function() {
-    $("#submit_btn").click(function() { 
-        var user_message    = $('textarea[name=message]').val();
-        var proceed = true;
-
-        if(proceed) 
-        {
-            post_data = {'userMessage':user_message};
-            $.post('email.php', post_data, function(data){       
-                $("#result").hide().html('<div class="success">'+data+'</div>').slideDown();
-                $('#contact_form input').val(''); 
-                $('#contact_form textarea').val(''); 
-                
-            }).fail(function(err) {
-                $("#result").hide().html('<div class="error">'+err.statusText+'</div>').slideDown();
-            });
-        }
-                
-    });
-    
-    // Might be a bit useless.
-    $("#contact_form input, #contact_form textarea").keyup(function() { 
-        $("#contact_form input, #contact_form textarea").css('border-color',''); 
-        $("#result").slideUp();
-    });
-    
-});
-
+var active400s = [];
+var active300s = [];
+var projectCourses = [];
 
 var FCEs = 0;
 var FCEs100 = 0;
@@ -40,16 +13,8 @@ var FCEs200 = 0;
 var FCEs300 = 0;
 var FCEs400 = 0;
 var FCEsMAT = 0;
-var clickedCourses = [];
-
-var reqs = ["CSC108", "CSC148", "CSC165", "CSC207", "CSC209", "CSC236", "CSC258", "CSC263", "CSC369", "CSC373", "Calc1", "Lin1", "Sta1"];
-var CSCinq =  ["CSC301", "CSC318", "CSC404", "CSC411", "CSC418", "CSC420", "CSC428", "CSC454", "CSC485", "CSC490", "CSC491", "CSC494", "CSC495"];
-var active400s = [];
-var active300s = [];
-var projectCourses = [];
 
 var numBCB = 0;
-
 var cscReqTotal = 0;
 var matReqTotal = 0;
 var elecTotal = 0;
@@ -61,6 +26,8 @@ var elec400sSat = false;
 var elecSat = false;
 var peySat = false;
 
+var reqs = ["CSC108", "CSC148", "CSC165", "CSC207", "CSC209", "CSC236", "CSC258", "CSC263", "CSC369", "CSC373", "Calc1", "Lin1", "Sta1"];
+var CSCinq = ["CSC301", "CSC318", "CSC404", "CSC411", "CSC418", "CSC420", "CSC428", "CSC454", "CSC485", "CSC490", "CSC491", "CSC494", "CSC495"];
 var sciFocusList = ["CSC336", "CSC446", "CSC456", "CSC320", "CSC418", "CSC321", "CSC411", "CSC343", "CSC384", "CSC358", "CSC458"];
 var AIFocusList = ["CSC310", "CSC330", "CSC438", "CSC448", "CSC463", "CSC401", "CSC485", "CSC320", "CSC420", "CSC321", "CSC411", "CSC412", "CSC384", "CSC486"];
 var NLPFocusList = ["CSC318", "CSC401", "CSC485", "CSC309", "CSC321", "CSC330", "CSC411", "CSC428", "CSC486"];
@@ -78,253 +45,205 @@ var activeFocus = "";
 
 // Data Structures
 function makeNode(parents, type, name) {
-    window[name] = new Node(parents, type, name);
-    nodes.push(name);
+  window[name] = new Node(parents, type, name);
+  nodes.push(name);
 }
 
 function makeHybrid(parents, type, name) {
-    makeNode(parents, type, name);
-    window[name].hybrid = true;
+  makeNode(parents, type, name);
+  window[name].hybrid = true;
 }
 
 function makeEdge(parent, child, name) {
-    window[name] = new Edge(parent, child, name);
-    parent.outEdges.push(window[name]);
-    child.inEdges.push(window[name]);
+  window[name] = new Edge(parent, child, name);
+  parent.outEdges.push(window[name]);
+  child.inEdges.push(window[name]);
 }
 
 function Edge(parent, child, name) {
-    this.parent = parent;
-    this.child = child;
-    this.name = name;
+  this.parent = parent;
+  this.child = child;
+  this.name = name;
+  this.status = 'inactive';
 
-    this.isActive = function() {
-        var status = '';
-        if (!parent.active) {
-            status = 'inactive';
-        } else if (!child.active) {
-            status = 'takeable';
-        } else {
-            status = 'active';
-        }
-        $('#' + this.name).attr('data-active', status);
+  this.isActive = function() {
+    if (!parent.active) {
+      this.status = 'inactive';
+    } else if (!child.active) {
+      this.status = 'takeable';
+    } else {
+      this.status = 'active';
     }
+    $('#' + this.name).attr('data-active', this.status);
+  }
 }
 
+
 function Node(parents, type, name) {
-    this.name = name;
-    this.parents = parents;
-    this.children = [];
-    this.outEdges = [];
-    this.inEdges = [];
-    this.logicalType = type;
-    this.active = false;
-    this.takeable = false;
-    this.updated = false;
-    this.hybrid = false;
+  this.name = name;
+  this.parents = parents;
+  this.children = [];
+  this.outEdges = [];
+  this.inEdges = [];
+  this.logicalType = type;
+  this.active = false;
+  this.takeable = false;
+  this.updated = false;
+  this.hybrid = false;
 
-    for (var i = 0; i < this.parents.length; i++) {
-        this.parents[i].children.push(this);
+  for (var i = 0; i < this.parents.length; i++) {
+    this.parents[i].children.push(this);
+  }
+
+
+  // Activate/deactivate a node; called when a node is clicked.
+  this.turn = function() {
+    if (this.active || this.takeable) {
+      $.each(nodes, function(i, node) {
+        window[node].updated = false;
+      });
+
+      this.updated = true;
+      this.active = !this.active;
+
+
+      // We seem to be assuming here that this is an 'AND' node
+      this.takeable = true;
+      this.checkFCEBasedPrerequisites();
+      for (var i = 0; i < this.parents.length; i++) {
+        // Note that we don't need to call isActive here
+        // Parents don't change
+        this.takeable = this.takeable && this.parents[i].active;
+      }
+
+      $.each(this.children, function(i, node) {
+        node.isActive();
+      });
+      $.each(this.outEdges, function(i, edge) {
+        edge.isActive();
+      });
+      $.each(this.inEdges, function(i, edge) {
+        edge.isActive();
+      });
+
+
+      // Update interface
+      this.updateSVG();
+      updateClickedCourses(this.name, this.active);
+      updatePOSt(this.name, this.active);
     }
+  }
 
-    // Turn off a node. Called when Reset button is pressed.
-    this.turnOff = function() {
+  
+  this.isActive = function() {
+    if (this.updated) {
+      return this.active;
+    } else {
+      var changed = false;
+      this.updated = true;
+
+      if (this.logicalType == "AND") {
+        this.takeable = true;
+        this.checkFCEBasedPrerequisites();
+        for (var i = 0; i < this.parents.length; i++) {
+          this.takeable = this.takeable && this.parents[i].isActive();
+        }
+      } else { // this.logicalType == "OR"
+        this.takeable = false;
+        this.checkFCEBasedPrerequisites();
+        for (var i = 0; i < this.parents.length; i++) {
+          this.takeable = this.takeable || this.parents[i].isActive();
+        }
+      }
+
+      if (this.active && !this.takeable) {
         this.active = false;
-        this.takeable = initiallyTakeable.indexOf(this.name) > -1;
+        changed = true;
+      } else if (!this.active && this.takeable && this.hybrid) {
+        this.active = true;
+        changed = true;
+      }
+
+      if (changed) {
+        $.each(this.children, function(i, node) {
+          node.isActive();
+        });
+        $.each(this.outEdges, function(i, edge) {
+          edge.isActive();
+        });
+        $.each(this.inEdges, function(i, edge) {
+          edge.isActive();
+        });
+        if (!this.hybrid) {
+          updateClickedCourses(this.name, this.active);
+          updatePOSt(this.name, this.active);
+        }
+      }
+
+      // Takeable status might be changed, even if active isn't
+      this.updateSVG();
+
+      return this.active;
+    }
+  }
+
+
+  this.checkFCEBasedPrerequisites = function() {
+    if (this.name == "CSC454") {
+      this.takeable = FCEs300 + FCEs400 >= 2.5;
+    } else if (this.name == "CSC494" || this.name == "CSC495") {
+      this.takeable = FCEs300 + FCEs400 >= 1.5;
+    } else if (this.name == 'CSC318') {
+      this.takeable = FCEs >= 0.5;
+    }
+  }
+
+  // Used when entering "spotlight mode" (upon hover)
+  this.focus = function() {
+    if (!this.active) {
+      $("#" + this.name).attr('data-active', 'missing');
+      $.each(this.inEdges, function(index, edge) {
+        if (!edge.parent.active) {
+          $("#" + edge.name).attr('data-active', 'missing');
+        }
+      })
+
+      $.each(this.parents, function(i, node) {
+        node.focus();
+      });
+    }
+  }
+
+
+  // Used when leaving "spotlight mode" (upon leaving hover)
+  this.unfocus = function() {
+    if (!this.active) {
+      if (activeFocus == '' || window[activeFocus + "FocusList"].indexOf(this.name) > -1) {
         this.updateSVG();
+      } else {
+        $("#" + this.name).attr('data-active', 'unlit');
+      }
+
+      $.each(this.parents, function(i, node) {
+        node.unfocus();
+      });
+      $.each(this.outEdges, function(i, edge) {
+        edge.isActive();
+      });
     }
+  }
 
-    // Activate/deactivate a node; called when a node is clicked.
-    this.turn = function() {
-        if (this.active || this.takeable) {
-            $.each(nodes, function(i, node) { window[node].updated = false; });
 
-            this.updated = true;
-            this.active = !this.active;
-
-            if (this.name == "CSC454") {
-                this.takeable = FCEs300 + FCEs400 >= 2.5;
-            } else if (this.name == "CSC494" || this.name == "CSC495") {
-                this.takeable = FCEs300 + FCEs400 >= 1.5;
-            } else if (this.name == 'CSC318') {
-                this.takeable = FCEs >= 0.5;
-            } else {
-                // We seem to be assuming here that this is an 'AND' node
-                this.takeable = true; 
-                for (var i = 0; i < this.parents.length; i++) {
-                    // Note that we don't need to call isActive here
-                    // Parents don't change
-                    this.takeable = this.takeable && this.parents[i].active;
-                }
-            }            
-            
-            $.each(this.children, function(i, node) { node.isActive(); });
-            $.each(this.outEdges, function(i, edge) { edge.isActive(); });
-            $.each(this.inEdges, function(i, edge) { edge.isActive(); });
-
-            
-            // Update interface
-            this.updateSVG();
-            this.updateClickedCourses();
-            updatePOSt(this.name, this.active);
-            updateMyCoursesTab();
-            updateFCECount();
-
-            // Check the courses with FCE reqs
-            CSC318.isActive();
-            CSC454.isActive();
-            CSC494.isActive();
-            CSC495.isActive();
-        }
-
+  // Update the style of this node
+  this.updateSVG = function() {
+    if (this.active) {
+      $("#" + this.name).attr('data-active', 'active');
+    } else if (this.takeable) {
+      $("#" + this.name).attr('data-active', 'takeable');
+    } else {
+      $("#" + this.name).attr('data-active', 'inactive');
     }
-
-    this.isActive = function() {
-        if (this.updated) {
-            return this.active;
-        } else {
-            var changed = false;
-            this.updated = true;
-
-            if (this.name == "CSC454") {
-                this.takeable = FCEs300 + FCEs400 >= 2.5;
-            } else if (this.name == "CSC494" || this.name == "CSC495") {
-                this.takeable = FCEs300 + FCEs400 >= 1.5;
-            } else if (this.name == 'CSC318') {
-                this.takeable = FCEs >= 0.5;
-            } else if (this.logicalType == "AND") {
-                this.takeable = true;
-                for (var i = 0; i < this.parents.length; i++) {
-                    this.takeable = this.takeable && this.parents[i].isActive();
-                }
-            } else { // "OR"
-                this.takeable = false;
-                for (var i = 0; i < this.parents.length; i++) {
-                    this.takeable = this.takeable || this.parents[i].isActive();
-                }
-            }
-
-            if (this.active && !this.takeable) {
-                this.active = false;
-                changed = true;
-            } else if (this.hybrid && this.takeable) {
-                if (!this.active) {
-                    this.active = true;
-                    changed = true;    
-                }
-            }
-
-            if (changed) {
-                $.each(this.children, function(i, node) { node.isActive(); });
-                $.each(this.outEdges, function(i, edge) { edge.isActive(); });
-                $.each(this.inEdges, function(i, edge) { edge.isActive(); });
-                if (!this.hybrid) {
-                    this.updateClickedCourses();
-                    updatePOSt(this.name, this.active);    
-                }
-            }
-
-            this.updateSVG(); // Takeable status might be changed
-
-            return this.active;
-        }
-    }
-
-
-    // Used when entering "spotlight mode" (upon hover)
-    this.focus = function() {
-        if (!this.active) {
-            $("#" + this.name).attr('data-active', 'missing');
-            $.each(this.inEdges, function(index, edge) {
-              if (!edge.parent.active) {
-                $("#" + edge.name).attr('data-active', 'missing');
-              }
-            })
-
-            $.each(this.parents, function(i, node) { node.focus(); });
-        }
-    }
-
-
-    // Used when leaving "spotlight mode" (upon leaving hover)
-    this.unfocus = function() {
-        if (!this.active) {
-            if (activeFocus == '' || window[activeFocus + "FocusList"].indexOf(this.name) > -1) {
-                this.updateSVG();    
-            } else {
-                $("#" + this.name).attr('data-active', 'unlit');
-            }
-            
-            $.each(this.parents, function(i, node) { node.unfocus(); });
-            $.each(this.outEdges, function(i, edge) { edge.isActive(); });
-        }
-    }
-
-
-    // Update the style of this node
-    this.updateSVG = function() {
-        if (this.active) {
-            $("#" + this.name).attr('data-active', 'active');
-        } else if (this.takeable) {
-            $("#" + this.name).attr('data-active', 'takeable');
-        } else {
-            $("#" + this.name).attr('data-active', 'inactive');
-        }
-    }
-
-
-    // Updates the "My Courses" tab
-    // Note: not called on hybrids
-    this.updateClickedCourses = function() {
-        if (this.active) {
-            if (this.name == "CSC200") {
-                FCEs200 += 1
-            } else if (this.name.substr(0, 4) == "CSC1") {
-                FCEs100 += 0.5;
-            } else if (this.name.substr(0, 4) == "CSC2") {
-                FCEs200 += 0.5;
-            } else if (this.name.substr(0, 4) == "CSC3" 
-                || this.name.substr(0,4) == "ECE3") {
-                FCEs300 += 0.5;
-            } else if (this.name.substr(0, 4) == "CSC4"
-                || this.name.substr(0,4) == "ECE4") {
-                FCEs400 += 0.5;
-            } else if (this.name == "Calc1") {
-                FCEsMAT += 1;
-            } else if (this.name == "Lin1" || this.name == "Sta1" || this.name == "Sta2") {
-                FCEsMAT += 0.5;
-            } else {
-                console.log("Unexpected course: " + this.name)
-            }
-            clickedCourses.push(this.name);
-        } else {
-            var index = clickedCourses.indexOf(this.name);
-            if (index > -1) {
-                clickedCourses.splice(index, 1);
-                if (this.name == "CSC200") {
-                    FCEs200 -= 1
-                } else if (this.name.substr(0, 4) == "CSC1") {
-                    FCEs100 -= 0.5;
-                } else if (this.name.substr(0, 4) == "CSC2") {
-                    FCEs200 -= 0.5;
-                } else if (this.name.substr(0, 4) == "CSC3" 
-                    || this.name.substr(0,4) == "ECE3") {
-                    FCEs300 -= 0.5;
-                } else if (this.name.substr(0, 4) == "CSC4"
-                    || this.name.substr(0,4) == "ECE4") {
-                    FCEs400 -= 0.5;
-                } else if (this.name == "Calc1") {
-                    FCEsMAT -= 1;
-                } else if (this.name == "Lin1" || this.name == "Sta1" || this.name == "Sta2") {
-                    FCEsMAT -= 0.5;
-                } else {
-                    console.log("Unexpected course: " + this.name)
-                }
-            }
-        }
-        
-
-    }
+  }
 }
 
 
@@ -334,10 +253,15 @@ function Node(parents, type, name) {
 
 // Set mouse callbacks on all graph nodes
 function setMouseCallbacks() {
-    $(".node").click(function(event) { turnNode(event); });
-    $(".node").hover(
-        function(event) { hoverFocus(event); }, 
-        function(event) { hoverUnfocus(event);
+  $(".node").click(function(event) {
+    turnNode(event);
+  });
+  $(".node").hover(
+    function(event) {
+      hoverFocus(event);
+    },
+    function(event) {
+      hoverUnfocus(event);
     });
 }
 
@@ -345,74 +269,86 @@ function setMouseCallbacks() {
 // Activates missing prerequisite display and 
 // fetches course description on hover
 function hoverFocus(event) {
-    //var id = $(event.target).parent().attr("id");
-    var id = event.target.parentNode.id;
-    // Highlight missing prerequisites
-    window[id].focus();
+  var id = event.target.parentNode.id;
+  // Highlight missing prerequisites
+  window[id].focus();
 
-    // Fetch course description
-    fetchCourseDescription(id);
+  // Fetch course description
+  fetchCourseDescription(id);
 };
 
 
 // Deactivate missing prerequisites
 function hoverUnfocus(event) {
-    var id = event.target.parentNode.id;
-    window[id].unfocus();
-    clearTimeout(window.mytimeout);
+  var id = event.target.parentNode.id;
+  window[id].unfocus();
+  clearTimeout(window.mytimeout);
 };
 
 
 // Callback when a node is clicked
 function turnNode(event) {
-    if (activeFocus == '') {
-        var id = event.target.parentNode.id;
-        window[id].turn();
-        updateCSCReqs();
-        updateMATReqs();
-        updateCSC400s();
-        updateElecs();
-        updatePEY();
+  if (activeFocus == '') {
+    var id = event.target.parentNode.id;
+    window[id].turn();
+    // Check the courses with FCE reqs
+    CSC318.isActive();
+    CSC454.isActive();
+    CSC494.isActive();
+    CSC495.isActive();
 
-        $('#postTotal').html((cscReqTotal + matReqTotal + elecTotal));
-    }
+    updateCSCReqs();
+    updateMATReqs();
+    updateCSC400s();
+    updateElecs();
+    updatePEY();
+
+    updateMyCoursesTab();
+    updateFCECount();
+
+    $('#postTotal').html((cscReqTotal + matReqTotal + elecTotal));
+  }
 };
 
 
 // Resets interface to default (nothing selected)
 function reset() {
-    // Deactivate focus, if necessary
-    if (activeFocus != '') {
-        $( ".focusTabs" ).tabs( "option", "active", false );
-        $("ellipse.spotlight").remove();
-        curtains();
-    }
-    
-    // Deactivate nodes
-    $.each(nodes, function(index, elem) { window[elem].turnOff(); });
+  // Deactivate focus, if necessary
+  if (activeFocus != '') {
+    $(".focusTabs").tabs("option", "active", false);
+    $("ellipse.spotlight").remove();
+    curtains();
+  }
 
-    // Deactivate edges
-    $('path').attr('data-active', 'inactive');
+  // Deactivate nodes
+  $.each(nodes, function(i, node) {
+    window[node].active = false;
+    window[node].takeable = initiallyTakeable.indexOf(node) > -1;
+    window[node].updateSVG();
+  });
 
-    // Remove nodes from table
-    $('#courseGrid').empty();
+  // Deactivate edges
+  $('path').attr('data-active', 'inactive');
 
-    // Reset FCE counts
-    FCEs = 0;
-    FCEs100 = 0;
-    FCEs200 = 0;
-    FCEs300 = 0;
-    FCEs400 = 0;
-    FCEsMAT = 0;
-    clickedCourses = [];
-    $('#FCEcount').html(FCEs.toFixed(1));
+  // Remove nodes from table
+  $('#courseGrid').empty();
 
-    active300s = [];
-    active400s = [];
-    $('input:checkbox').attr('checked', false);
-    $('input:text').attr('value', '');
+  // Reset FCE counts
+  FCEs = 0;
+  FCEs100 = 0;
+  FCEs200 = 0;
+  FCEs300 = 0;
+  FCEs400 = 0;
+  FCEsMAT = 0;
+  clickedCourses = [];
+  $('#FCEcount').html(FCEs.toFixed(1));
 
-    updatePostInterface();
+  active300s = [];
+  active400s = [];
+  $('input:checkbox').attr('checked', false);
+  $('input:text').attr('value', '');
+
+  updatePostInterface();
 };
 
 
@@ -421,32 +357,63 @@ function reset() {
  */
 
 // My Courses Tab
+// Updates the "My Courses" tab
+// Note: not called on hybrids
+function updateClickedCourses(name, active) {
+  var i = clickedCourses.indexOf(name);
+  var diff = 0;
+  if (active && i == -1) {
+    if (name == 'CSC200' || name == 'Calc1') {
+      diff = 1;
+    } else {
+      diff = 0.5;
+    }
+    clickedCourses.push(name);
+  } else if (!active && i > -1) {
+    if (name == 'CSC200' || name == 'Calc1') {
+      diff = -1;
+    } else {
+      diff = -0.5;
+    }
+    clickedCourses.splice(i, 1);
+  }
+
+  if (name == 'Calc1' || name == "Lin1" || name == "Sta1" || name == "Sta2") {
+    FCEsMAT += diff;
+  } else if (name.charAt(3) == '1') {
+    FCEs100 += diff;
+  } else if (name.charAt(3) == '2') {
+    FCEs200 += diff;
+  } else if (name.charAt(3) == '3') {
+    FCEs300 += diff;
+  } else if (name.charAt(3) == '4') {
+    FCEs400 += diff;
+  } 
+
+}
+
 function updateMyCoursesTab() {
   $('#courseGrid').empty();
 
   // Get data from course calendar        
   var htmlClickedString = $.map(clickedCourses, function(course) {
-      var courseStringText = '';
-      if (course == 'Calc1') {
-          courseStringText = 'First-year calculus: MAT135/136, MAT137, or MAT157.';
-      } else if (course == 'Lin1') {
-          courseStringText = 'One term in linear algebra: MAT221, MAT223, or MAT240.';
-      } else if (course == 'Sta1') {
-          courseStringText = 'One term in probability theory: STA247, STA255, or STA257.';
-      } else if (course == 'Sta2') {
-          courseStringText = 'One term in statistics: STA248 or STA261.';
-      } else {
-          var xmlreq = new XMLHttpRequest();
-          xmlreq.open("GET", "res/calendar.txt", false);
-          xmlreq.send();
-          var patt1 = new RegExp("\n" + course + ".*", "im");
-          courseStringText = xmlreq.responseText.match(patt1)[0].split(course)[1].split("1")[1].split("[")[0];
-      }
-      return "<td class='courseCell' style='background: " 
-          + $("#" + course + "> rect").css('fill') + "'><div id='" 
-          + course + "cell'><p class='courseName'>" + course 
-          + "</p><p class=" + course + "text>"
-          + courseStringText + "</p></div></td>";
+    var courseStringText = '';
+    if (course == 'Calc1') {
+      courseStringText = 'First-year calculus: MAT135/136, MAT137, or MAT157';
+    } else if (course == 'Lin1') {
+      courseStringText = 'One term in linear algebra: MAT221, MAT223, or MAT240';
+    } else if (course == 'Sta1') {
+      courseStringText = 'One term in probability theory: STA247, STA255, or STA257';
+    } else if (course == 'Sta2') {
+      courseStringText = 'One term in statistics: STA248 or STA261';
+    } else {
+      var xmlreq = new XMLHttpRequest();
+      xmlreq.open("GET", "res/calendar.txt", false);
+      xmlreq.send();
+      var patt1 = new RegExp("\n" + course + ".*", "im");
+      courseStringText = xmlreq.responseText.match(patt1)[0].split(course)[1].split("1")[1].split("[")[0];
+    }
+    return "<td class='courseCell' style='background: " + $("#" + course + "> rect").css('fill') + "'><div id='" + course + "cell'><p class='courseName'>" + course + "</p><p class=" + course + "text>" + courseStringText + "</p></div></td>";
   }).join("");
 
   $('#courseGrid').html(htmlClickedString);
@@ -457,92 +424,98 @@ function updateFCECount() {
   $('#FCEcount').html(FCEs.toFixed(1));
 }
 
+
 // Course Description Tab
 
 // Read course description from resource files
 function fetchCourseDescription(id) {
-    // Get data from course calendar
-    if (id == "Calc1" || id == "Lin1" || id == "Sta1" || id == "Sta2") {
-        var calendarUrl = 'res/' + id + '_calendar.txt';
-        var pattern = new RegExp('[.\n]*', 'm');
-    } else {
-        var calendarUrl = 'res/calendar.txt';
-        var calendarParser = new RegExp("\n" + id + "(.|\n)*?Breadth Requirement.*\n", "im");
-    }
+  // Get data from course calendar
+  if (id == "Calc1" || id == "Lin1" || id == "Sta1" || id == "Sta2") {
+    var calendarUrl = 'res/' + id + '_calendar.txt';
+    var pattern = new RegExp('[.\n]*', 'm');
+  } else {
+    var calendarUrl = 'res/calendar.txt';
+    var calendarParser = new RegExp("\n" + id + "(.|\n)*?Breadth Requirement.*\n", "im");
+  }
 
-    $.ajax({
-        url: calendarUrl,
-        type: 'GET',
-        dataType: 'text',
-        success: function(response) {
-            if (id == "Calc1" || id == "Lin1" || id == "Sta1" || id == "Sta2") {
-                var courseString = response.split('\n');
-            } else {
-                var courseString = response.match(calendarParser)[0].split('\n');
-                courseString.shift();
+  $.ajax({
+    url: calendarUrl,
+    type: 'GET',
+    dataType: 'text',
+    success: function(response) {
+      if (id == "Calc1" || id == "Lin1" || id == "Sta1" || id == "Sta2") {
+        var courseString = response.split('\n');
+      } else {
+        var courseString = response.match(calendarParser)[0].split('\n');
+        courseString.shift();
 
-                // Add extra description for enriched courses
-                if (id == "CSC165" || id == "CSC236") {
-                    var calendarParserEnriched = new RegExp("\nCSC240(.|\n)*?Breadth Requirement.*\n", "im");
-                    var courseString2 = response.match(calendarParserEnriched)[0].split('\n');
-                    courseString = courseString.concat(courseString2);
-                } else if (id == "CSC263") {
-                    var calendarParserEnriched = new RegExp("\nCSC265(.|\n)*?Breadth Requirement.*\n", "im");
-                    var courseString2 = response.match(calendarParserEnriched)[0].split('\n');
-                    courseString = courseString.concat(courseString2);
-                }
-            }
-
-            $('#calendar').html($.map(courseString, function(s) {
-                return '<p>' + s + '</p>';
-            }).join(''));
+        // Add extra description for enriched courses
+        if (id == "CSC165" || id == "CSC236") {
+          var calendarParserEnriched = new RegExp("\nCSC240(.|\n)*?Breadth Requirement.*\n", "im");
+          var courseString2 = response.match(calendarParserEnriched)[0].split('\n');
+          courseString = courseString.concat(courseString2);
+        } else if (id == "CSC263") {
+          var calendarParserEnriched = new RegExp("\nCSC265(.|\n)*?Breadth Requirement.*\n", "im");
+          var courseString2 = response.match(calendarParserEnriched)[0].split('\n');
+          courseString = courseString.concat(courseString2);
         }
-    })
+      }
+
+      $('#calendar').html($.map(courseString, function(s) {
+        return '<p>' + s + '</p>';
+      }).join(''));
+    }
+  })
 };
+
 
 // Focus Tab
 
 // Activate a focus
 function showtime(id) {
-    var focus = window[id + "FocusList"];
-    $("ellipse.spotlight").remove();
-    if (activeFocus == id) {
-        curtains();
-    } else {
-        $("#graph").css("background", "rgb(40,40,40)");
-        $(".node, .hybrid").attr('data-active', 'unlit');
-        $.each(focus, function(index, elem) { spotlight(elem); });
-        $("#graph").html($("#graph").html());
-        setMouseCallbacks(); 
-        activeFocus = id;
-        $(".closeIcon").remove(); // Remove old icon.
-        $(".focusList a[href='#" + id + "Details']").append(
-            "<img class='closeIcon' src='res/close.ico' alt='Click to close!'/>"); // Put in new icon.
-    }
+  var focus = window[id + "FocusList"];
+  $("ellipse.spotlight").remove();
+  if (activeFocus == id) {
+    curtains();
+  } else {
+    $("#graph").css("background", "rgb(40,40,40)");
+    $(".node, .hybrid").attr('data-active', 'unlit');
+    $.each(focus, function(index, elem) {
+      spotlight(elem);
+    });
+    $("#graph").html($("#graph").html());
+    setMouseCallbacks();
+    activeFocus = id;
+    $(".closeIcon").remove(); // Remove old icon.
+    $(".focusList a[href='#" + id + "Details']").append(
+      "<img class='closeIcon' src='res/close.ico' alt='Click to close!'/>"); // Put in new icon.
+  }
 }
 
 // Removes spotlight on active focus
 function curtains() {
-    $("#graph").css("background", "white");
-    $(".closeIcon").remove();
-    activeFocus = "";
-    $.each(nodes, function(index, elem) { window[elem].updateSVG(); });
+  $("#graph").css("background", "white");
+  $(".closeIcon").remove();
+  activeFocus = "";
+  $.each(nodes, function(index, elem) {
+    window[elem].updateSVG();
+  });
 
 }
 
 function spotlight(id) {
-    var node = $("#".concat(id, " > rect"));
+  var node = $("#".concat(id, " > rect"));
 
-    var width = parseFloat(node.attr("width"))/2;
-    var height = parseFloat(node.attr("height"))/2;
-    var x = parseFloat(node.attr("x")) + width;
-    var y = parseFloat(node.attr("y")) + height;
-    
-    var el = '<ellipse class="spotlight" cx="'.concat(x, '" cy = "', y, '" rx="', width + 9, '" ry="', height + 8.5, '"/>');
-    $("#" + id).before(el);
-    $("#" + id).attr('data-active', 'lit');
+  var width = parseFloat(node.attr("width")) / 2;
+  var height = parseFloat(node.attr("height")) / 2;
+  var x = parseFloat(node.attr("x")) + width;
+  var y = parseFloat(node.attr("y")) + height;
 
-    window[id].updateSVG();
+  var el = '<ellipse class="spotlight" cx="'.concat(x, '" cy = "', y, '" rx="', width + 9, '" ry="', height + 8.5, '"/>');
+  $("#" + id).before(el);
+  $("#" + id).attr('data-active', 'lit');
+
+  window[id].updateSVG();
 }
 
 
@@ -550,37 +523,37 @@ function spotlight(id) {
 
 // Generate html for timetable 
 function createHtml(htmlStr) {
-    var frag = document.createDocumentFragment();
-    temp = document.createElement('div');
-    temp.innerHTML = "<div float='right'>" + FCEs + "</div>" +
-        "<table><tr id='tabTable'>" +
-        htmlStr + "</tr></table>";
-    while (temp.firstChild) {
-        frag.appendChild(temp.firstChild);
-    }
+  var frag = document.createDocumentFragment();
+  temp = document.createElement('div');
+  temp.innerHTML = "<div float='right'>" + FCEs + "</div>" +
+    "<table><tr id='tabTable'>" +
+    htmlStr + "</tr></table>";
+  while (temp.firstChild) {
+    frag.appendChild(temp.firstChild);
+  }
 
-    return frag;
+  return frag;
 }
 
 // Fetch timetable information
 function createTimeTable() {
-     var frag = document.createDocumentFragment();
-     temp = document.createElement('div');
-     var xmlreq = new XMLHttpRequest();
-     xmlreq.open("GET", "res/timeTable.txt", false);
-     xmlreq.send();
-     var timeTableString = xmlreq.responseText;
-     $.each(nodes, function(index, node) {
-      timeTableString = timeTableString.replace(
-        new RegExp("backgroundInstertion\">" + node, 'g'), 
-        $("#" + node + "> rect").css('fill') + "\">" + node);
-     });
+  var frag = document.createDocumentFragment();
+  temp = document.createElement('div');
+  var xmlreq = new XMLHttpRequest();
+  xmlreq.open("GET", "res/timeTable.txt", false);
+  xmlreq.send();
+  var timeTableString = xmlreq.responseText;
+  $.each(nodes, function(index, node) {
+    timeTableString = timeTableString.replace(
+      new RegExp("backgroundInstertion\">" + node, 'g'),
+      $("#" + node + "> rect").css('fill') + "\">" + node);
+  });
 
-     temp.innerHTML = timeTableString;
-     while (temp.firstChild) {
-        frag.appendChild(temp.firstChild);
-    }
-    return frag;
+  temp.innerHTML = timeTableString;
+  while (temp.firstChild) {
+    frag.appendChild(temp.firstChild);
+  }
+  return frag;
 }
 
 
@@ -588,34 +561,33 @@ function createTimeTable() {
 // POSt Tab
 function updatePOSt(course, active) {
   if (reqs.indexOf(course) > -1) { // Required course
-      $('#' + course + 'check').prop('checked', active);
+    $('#' + course + 'check').prop('checked', active);
   } else {
-    if (course.substr(0,5) == "CSC49") {
+    if (course.substr(0, 5) == "CSC49") {
       var ind = projectCourses.indexOf(course);
       if (active && ind == -1) {
-          projectCourses.push(course);
+        projectCourses.push(course);
       } else if (!active && ind > -1) {
-          projectCourses.splice(ind, 1);
+        projectCourses.splice(ind, 1);
       }
-    }
-    else if (course.substr(0,4) == "CSC4" || course.substr(0,4) == "ECE4") { // 4th year course
+    } else if (course.substr(0, 4) == "CSC4" || course.substr(0, 4) == "ECE4") { // 4th year course
       var ind = active400s.indexOf(course);
       if (active && ind == -1) {
-          active400s.push(course);
+        active400s.push(course);
       } else if (!active && ind > -1) {
-          active400s.splice(ind, 1);
+        active400s.splice(ind, 1);
       }
-    } else if (course.substr(0,4) == "CSC3" || course.substr(0,4) == "ECE3") { // 3rd year course
+    } else if (course.substr(0, 4) == "CSC3" || course.substr(0, 4) == "ECE3") { // 3rd year course
       var ind = active300s.indexOf(course);
       if (active && ind == -1) {
-          active300s.push(course);
+        active300s.push(course);
       } else if (!active && ind > -1) {
-          active300s.splice(ind, 1);
+        active300s.splice(ind, 1);
       }
     }
 
     if (CSCinq.indexOf(course) > -1) {
-        $('#' + course + 'check').prop('checked', active);
+      $('#' + course + 'check').prop('checked', active);
     }
   }
 };
@@ -658,45 +630,42 @@ function updateMATReqs() {
 function updateCSC400s() {
   numBCB = $('#csc400s input:checkbox:checked').length;
 
-  var tmp = active400s.concat(projectCourses.slice(0,2));
+  var tmp = active400s.concat(projectCourses.slice(0, 2));
 
   for (var i = 1; i <= 3; i++) {
     if (i <= 3 - numBCB && i <= tmp.length) {
-      $('input#4xx' + i).attr('value', tmp[i-1]);
+      $('input#4xx' + i).attr('value', tmp[i - 1]);
     } else {
       $('input#4xx' + i).attr('value', '');
     }
   }
-  
+
   elec400sSat = numBCB + tmp.length >= 3;
   setIcon('csc400s', elec400sSat);
 }
 
 // Right now, it must be called after updateCSC400s (because of numBCB)
 function updateElecs() {
-  var tmp = active300s.concat(active400s.slice(3-numBCB), projectCourses.slice(0,2));
+  var tmp = active300s.concat(active400s.slice(3 - numBCB), projectCourses.slice(0, 2));
   for (var i = 1; i <= 7; i++) {
     if (i <= tmp.length) {
-      $('#inputCSC' + i).attr('value', tmp[i-1]);
+      $('#inputCSC' + i).attr('value', tmp[i - 1]);
     } else {
-       $('#inputCSC' + i).attr('value', '');
+      $('#inputCSC' + i).attr('value', '');
     }
   }
 
   var matElecs = 0;
 
   $('#matElecs input:text').each(function(index) {
-    if (this.value == 'MAT235' || this.value == 'MAT237' || this.value == 'MAT257'
-      || this.value == 'MAT235Y1' || this.value == 'MAT237Y1' || this.value == 'MAT257Y1') {
+    if (this.value == 'MAT235' || this.value == 'MAT237' || this.value == 'MAT257' || this.value == 'MAT235Y1' || this.value == 'MAT237Y1' || this.value == 'MAT257Y1') {
       matElecs += 1;
-    } else if (this.value.substr(0,3) == 'MAT' || this.value.substr(0,3) == 'STA') {
+    } else if (this.value.substr(0, 3) == 'MAT' || this.value.substr(0, 3) == 'STA') {
       matElecs += 0.5;
     }
   });
 
-  elecTotal = (active300s.length + active400s.length + numBCB)/2 
-  + matElecs 
-  + Math.min(projectCourses.length/2, 1);
+  elecTotal = (active300s.length + active400s.length + numBCB) / 2 + matElecs + Math.min(projectCourses.length / 2, 1);
   if (elecTotal >= 5) {
     elecTotal = 5;
   }
@@ -718,39 +687,74 @@ function updatePOStTotal() {
 
 $(document).ready(function() {
 
-var height = $(window).height() - $("#graph").height() - 46;
+  // Set height of tabs
+  var height = $(window).height() - $("#graph").height() - 46;
+  $(".infoTabs").height(height + "px");
 
-$(".infoTabs").height(height + "px");
+  // Enable tabs
+  $('.infoTabs').tabs({
+    activate: function(e, ui) {
+      e.currentTarget.blur();
+    }
+  });
+  $('.focusTabs').tabs({
+    active: false,
+    collapsible: true,
+    activate: function(e, ui) {
+      e.currentTarget.blur();
+    }
+  });
+  $('.postTabs').tabs({
+    active: 0,
+    activate: function(e, ui) {
+      e.currentTarget.blur();
+    }
+  });
+  setMouseCallbacks();
 
-  // Set tabs
-    $('.infoTabs').tabs({activate: function(e, ui) {
-    e.currentTarget.blur();
-    }});
-    $('.focusTabs').tabs({active: false, collapsible: true, 
-      activate: function(e, ui) {
-    e.currentTarget.blur();
-    }});
-    $('.postTabs').tabs({active: 0, activate: function(e, ui) {
-    e.currentTarget.blur();
-    }});
-    setMouseCallbacks(); 
+  $(".node").attr("data-active", "inactive");
+  $(".hybrid").attr("data-active", "inactive");
+  $(".bool").attr("data-active", "inactive");
+  $("path").attr("data-active", "inactive");
 
-    $(".node").attr("data-active", "inactive");
-    $(".hybrid").attr("data-active", "inactive");
-    $(".bool").attr("data-active", "inactive");
-    $("path").attr("data-active", "inactive");
+  for (var i = 0; i < initiallyTakeable.length; i++) {
+    var id = initiallyTakeable[i];
+    window[id].takeable = true;
+    window[id].updateSVG();
+  }
 
-    for (var i = 0; i < initiallyTakeable.length; i++) {
-        var id = initiallyTakeable[i];
-        window[id].takeable = true;
-        window[id].updateSVG();
+  var fragment2 = createTimeTable();
+  timeNode = parent.document.getElementById("timetable");
+  timeNode.appendChild(fragment2);
+
+  // Enable email
+  $("#submit_btn").click(function() {
+    var user_message = $('textarea[name=message]').val();
+    var proceed = true;
+
+    if (proceed) {
+      post_data = {
+        'userMessage': user_message
+      };
+      $.post('email.php', post_data, function(data) {
+        $("#result").hide().html('<div class="success">' + data + '</div>').slideDown();
+        $('#contact_form input').val('');
+        $('#contact_form textarea').val('');
+
+      }).fail(function(err) {
+        $("#result").hide().html('<div class="error">' + err.statusText + '</div>').slideDown();
+      });
     }
 
-    var fragment2 = createTimeTable();
-    timeNode = parent.document.getElementById("timetable");
-    timeNode.appendChild(fragment2);
-});
+  });
 
+  // Might be a bit useless.
+  $("#contact_form input, #contact_form textarea").keyup(function() {
+    $("#contact_form input, #contact_form textarea").css('border-color', '');
+    $("#result").slideUp();
+  });
+
+});
 
 
 
@@ -758,7 +762,7 @@ $(".infoTabs").height(height + "px");
  * The actual dependencies.
  */
 
- // Math courses
+// Math courses
 makeNode([], "AND", "Calc1");
 makeNode([Calc1], "AND", "Sta1");
 makeNode([Sta1], "AND", "Sta2");
@@ -942,4 +946,3 @@ makeEdge(bool5, CSC420, "p78");
 makeEdge(CSC258, CSC488, "p79");
 makeEdge(CSC318, CSC428, "p80");
 makeEdge(CSC263, CSC324, "p81");
-
