@@ -15,10 +15,8 @@ $(document).ready(function () {
             }
 
             $.ui.mouse.prototype._mouseInit.apply(this, arguments);
-
             this.started = false;
         },
-        
         _mouseDown: function (event) {
 
             (this._mouseStarted && this._mouseUp(event));
