@@ -198,6 +198,18 @@ var elec400sSat = false;
 var elecSat = false;
 var peySat = false;
 
+var cscReqSatMajor = false;
+var matReqSatMajor = false;
+var elecSatMajor = false;
+var peySatMajor = false;
+var numBCBMajor = 0;
+var cscReqTotalMajor = 0;
+var matReqTotalMajor = 0;
+var elec200sTotalMajor = 0;
+var elec300sTotalMajor = 0;
+var elecTotalMajor = 0;
+var postTotalMajor = 0;
+
 var reqs = ["CSC108", "CSC148", "CSC165", "CSC207", "CSC209", "CSC236", "CSC258", "CSC263", "CSC369", "CSC373", "Calc1", "Lin1", "Sta1"];
 var CSCinq = ["CSC301", "CSC318", "CSC404", "CSC411", "CSC418", "CSC420", "CSC428", "CSC454", "CSC485", "CSC490", "CSC491", "CSC494", "CSC495"];
 var sciFocusList = ["CSC336", "CSC446", "CSC456", "CSC320", "CSC418", "CSC321", "CSC411", "CSC343", "CSC384", "CSC358", "CSC458"];
@@ -469,16 +481,11 @@ function turnNode(event) {
     CSC494.isActive();
     CSC495.isActive();
 
-    updateCSCReqs();
-    updateMATReqs();
-    updateCSC400s();
-    updateElecs();
-    updatePEY();
+    updatePostInterface();
+    updateMajorPostInterface();
 
     updateMyCoursesTab();
     updateFCECount();
-
-    $('#postTotal').html((cscReqTotal + matReqTotal + elecTotal));
   }
 };
 
@@ -521,6 +528,7 @@ function reset() {
   $('input:text').attr('value', '');
 
   updatePostInterface();
+  updateMajorPostInterface();
 };
 
 
@@ -734,6 +742,7 @@ function createTimeTable() {
 function updatePOSt(course, active) {
   if (reqs.indexOf(course) > -1) { // Required course
     $('#' + course + 'check').prop('checked', active);
+    $('#' + course + 'checkMajor').prop('checked', active);
   } else {
     if (course.substr(0, 5) == "CSC49") {
       var ind = projectCourses.indexOf(course);
@@ -760,8 +769,12 @@ function updatePOSt(course, active) {
 
     if (CSCinq.indexOf(course) > -1) {
       $('#' + course + 'check').prop('checked', active);
+      $('#' + course + 'checkMajor').prop('checked', active);
     }
   }
+
+  $('#' + course + 'check').prop('checked', active);
+  $('#' + course + 'checkMajor').prop('checked', active);
 };
 
 
@@ -772,6 +785,20 @@ function updatePostInterface() {
   updateElecs();
   updatePEY();
   updatePOStTotal();
+
+  setIcon('specCheck', 
+    cscReqSat && matReqSat && elec400sSat && elecSat && peySat);
+}
+
+function updateMajorPostInterface() {
+  updateCSCReqsMajor();
+  updateMATReqsMajor();
+  updateElecsMajor();
+  updatePEYMajor();
+  updatePOStTotalMajor();
+
+  setIcon('majorCheck', 
+    cscReqSatMajor && matReqSatMajor && elecSatMajor && peySatMajor);
 }
 
 function setIcon(id, sat) {
@@ -789,6 +816,14 @@ function updateCSCReqs() {
   setIcon('cscReqs', cscReqSat);
 }
 
+function updateCSCReqsMajor() {
+  cscReqTotalMajor = $('#cscReqsMajor input:checkbox:checked').length / 2;
+  $('#cscReqTotalMajor').html(cscReqTotal.toFixed(1));
+  cscReqSatMajor = cscReqTotalMajor >= 3.5;
+  setIcon('cscReqsMajor', cscReqSatMajor);
+}
+
+
 function updateMATReqs() {
   matReqTotal = $('#matReqs input:checkbox:checked').length / 2;
   if ($('#Calc1check').prop('checked')) {
@@ -798,6 +833,95 @@ function updateMATReqs() {
   matReqSat = matReqTotal >= 2;
   setIcon('matReqs', matReqSat);
 }
+
+function updateMATReqsMajor() {
+  matReqTotalMajor = $('#matReqsMajor input:checkbox:checked').length / 2;
+  if ($('#Calc1checkMajor').prop('checked')) {
+    matReqTotalMajor += 0.5;
+  }
+  $('#matReqTotalMajor').html(matReqTotalMajor.toFixed(1));
+  matReqSatMajor = matReqTotalMajor >= 1.5;
+  setIcon('matReqsMajor', matReqSatMajor);
+}
+
+
+function update200sElecsMajor() {
+  elec200sTotalMajor = 0;
+  if ($('#Calc2checkMajor').prop('checked')) {
+    elec200sTotalMajor += 1;
+  }
+  if ($('#CSC200checkMajor').prop('checked')) {
+    elec200sTotalMajor += 1;
+  }
+  if ($('#CSC209checkMajor').prop('checked')) {
+    elec200sTotalMajor += 0.5;
+  }
+  if ($('#Lin1checkMajor').prop('checked')) {
+    elec200sTotalMajor += 0.5;
+  }
+
+  if (elec200sTotalMajor > 1) {
+    elec200sTotalMajor = 1;
+  }
+}
+
+var extraMajor = 0;
+
+function update300sElecsMajor() {
+  var tmp = active300s.concat(active400s, projectCourses.slice(0, 2));
+  // Manually add active 3rd year courses required by specialist
+  if (CSC373.active) {
+    tmp.push('CSC373');
+    extraMajor += 0.5;
+  }
+
+  if (CSC369.active) {
+    tmp.push('CSC369');
+    extraMajor += 0.5
+  }
+
+  for (var i = 1; i <= 6; i++) {
+    if (i <= tmp.length) {
+      $('#3xx' + i + 'Major').attr('value', tmp[i-1]);
+    } else {
+      $('#3xx' + i + 'Major').attr('value', '');
+    }
+  }
+
+  numBCBMajor = $('#300sElecsMajor input:checkbox:checked').length;
+
+  elec300sTotalMajor = tmp.length + numBCBMajor;
+
+  for (var i = 1; i <= 3; i++) {
+    if ($('#MAT' + i + "Major").prop('value').substr(0,3) == 'MAT') {
+      elec300sTotalMajor += 1;
+    }
+  }
+
+  elec300sTotalMajor /= 2;
+}
+
+
+function updateElecsMajor() {
+  update200sElecsMajor();
+  update300sElecsMajor();
+
+  elecTotalMajor = elec200sTotalMajor + elec300sTotalMajor;
+  if (elecTotalMajor >= 3) {
+    elecTotalMajor = 3;
+  }
+
+  elecSatMajor = elecTotalMajor >= 3 
+    && (active400s.length > 0 || numBCBMajor > 0)
+    && (active300s.concat(active400s, projectCourses.slice(0, 2)).length + extraMajor >= 3);
+  
+  $('#elecTotalMajor').html(elecTotalMajor.toFixed(1));
+
+  setIcon('200sElecsMajor', elecSatMajor);
+  setIcon('300sElecsMajor', elecSatMajor);
+}
+
+
 
 function updateCSC400s() {
   numBCB = $('#csc400s input:checkbox:checked').length;
@@ -848,9 +972,18 @@ function updateElecs() {
   setIcon('matElecs', elecSat);
 }
 
+function updatePEYMajor() {
+  peySatMajor = $('#peycheckMajor').prop('checked') || $('#peyReqMajor input:checkbox:checked').length > 0;
+  setIcon('peyReqMajor', peySatMajor);
+}
+
 function updatePEY() {
   peySat = $('#peycheck').prop('checked') || $('#peyReq input:checkbox:checked').length > 0;
   setIcon('peyReq', peySat);
+}
+
+function updatePOStTotalMajor() {
+  $('#postTotalMajor').html((cscReqTotalMajor + matReqTotalMajor + elecTotalMajor).toFixed(1));
 }
 
 function updatePOStTotal() {
@@ -876,6 +1009,14 @@ $(document).ready(function() {
       e.currentTarget.blur();
     }
   });
+
+  $('.postTypeTabs').tabs({
+    active: 0,
+    activate: function(e, ui) {
+      e.currentTarget.blur();
+    }
+  });
+
   $('.postTabs').tabs({
     active: 0,
     activate: function(e, ui) {

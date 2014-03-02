@@ -721,221 +721,408 @@
     </div>
 
     <div id="timetable" class="infoTab">
-
     </div>
 
     <div id="post" class="infoTab">
-      <div class="postTabs">
-        <div id="postListDiv">
+
+      <div id="postReqs" class="postTypeTabs">
+        <div id="postTypeListDiv">
           <ul class="postList">
-            <li><a href='#cscReqs'>CSC Required Courses 
+            <li><a href='#specCheck'>Specialist 
               <img class='postStatusIcon' src='res/delete.ico' alt='MISSING'></a>
             </li>
-            <li><a href='#matReqs'>MAT/STA Required Courses
-              <img class='postStatusIcon' src='res/delete.ico' alt='MISSING'/></a>
-            </li>
-            <li><a href='#csc400s'>CSC/ECE/BCB 400+
-              <img class='postStatusIcon' src='res/delete.ico' alt='MISSING'/></a>
-            </li>
-            <li><a href='#cscElecs'>CSC Electives
-              <img class='postStatusIcon' src='res/delete.ico' alt='MISSING'/></a>
-            </li>
-            <li><a href='#matElecs'>MAT/STA Electives
-              <img class='postStatusIcon' src='res/delete.ico' alt='MISSING'/></a>
-            </li>
-            <li><a href='#peyReq'>Inquiry (PEY)
-              <img class='postStatusIcon' src='res/delete.ico' alt='MISSING'/></a>
+            <li><a href='#majorCheck'>Major
+              <img class='postStatusIcon' src='res/delete.ico' alt='MISSING'></a>
             </li>
           </ul>
         </div>
 
-        <div id="cscReqs" class="postDetails">
-          <h4>ALL of...</h4>
-          <table class='checkTable'>
-            <tr>
-              <td><input type="checkbox" id="CSC108check" disabled><label for='CSC108check'>CSC108</label></td>
-              <td><input type="checkbox" id="CSC165check" disabled><label for='CSC165check'>CSC165</label></td>
-            </tr>
-            <tr>
-              <td><input type="checkbox" id="CSC148check" disabled><label for='CSC148check'>CSC148</label></td>
-              <td><input type="checkbox" id="CSC236check" disabled><label for='CSC236check'>CSC236</label></td>
-            </tr>
-            <tr>
-              <td><input type="checkbox" id="CSC207check" disabled><label for='CSC207check'>CSC207</label></td>
-              <td><input type="checkbox" id="CSC263check" disabled><label for='CSC263check'>CSC263</label></td>
-            </tr>
-            <tr>
-              <td><input type="checkbox" id="CSC209check" disabled><label for='CSC209check'>CSC209</label></td>
-              <td><input type="checkbox" id="CSC373check" disabled><label for='CSC373check'>CSC373</label></td>
-            </tr>
-            <tr>
-              <td><input type="checkbox" id="CSC258check" disabled><label for='CSC258check'>CSC258</label></td>
-            </tr>
-            <tr>
-              <td><input type="checkbox" id="CSC369check" disabled><label for='CSC369check'>CSC369</label></td>
-              <td></td>
-            </tr>
-          </table>
+        <div id="specCheck" class="postTabs">
+          <div id="postListDiv">
+            <ul class="postList">
+              <li><a href='#cscReqs'>CSC Required Courses
+                <img class='postStatusIcon' src='res/delete.ico' alt='MISSING'></a>
+              </li>
+              <li><a href='#matReqs'>MAT/STA Required Courses
+                <img class='postStatusIcon' src='res/delete.ico' alt='MISSING'/></a>
+              </li>
+              <li><a href='#csc400s'>CSC/ECE/BCB 400+
+                <img class='postStatusIcon' src='res/delete.ico' alt='MISSING'/></a>
+              </li>
+              <li><a href='#cscElecs'>CSC Electives
+                <img class='postStatusIcon' src='res/delete.ico' alt='MISSING'/></a>
+              </li>
+              <li><a href='#matElecs'>MAT/STA Electives
+                <img class='postStatusIcon' src='res/delete.ico' alt='MISSING'/></a>
+              </li>
+              <li><a href='#peyReq'>Inquiry (PEY)
+                <img class='postStatusIcon' src='res/delete.ico' alt='MISSING'/></a>
+              </li>
+            </ul>
+          </div>
+
+          <div id="cscReqs" class="postDetails">
+            <h4>ALL of...</h4>
+            <table class='checkTable'>
+              <tr>
+                <td><input type="checkbox" id="CSC108check" disabled><label for='CSC108check'>CSC108</label></td>
+                <td><input type="checkbox" id="CSC165check" disabled><label for='CSC165check'>CSC165</label></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" id="CSC148check" disabled><label for='CSC148check'>CSC148</label></td>
+                <td><input type="checkbox" id="CSC236check" disabled><label for='CSC236check'>CSC236</label></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" id="CSC207check" disabled><label for='CSC207check'>CSC207</label></td>
+                <td><input type="checkbox" id="CSC263check" disabled><label for='CSC263check'>CSC263</label></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" id="CSC209check" disabled><label for='CSC209check'>CSC209</label></td>
+                <td><input type="checkbox" id="CSC373check" disabled><label for='CSC373check'>CSC373</label></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" id="CSC258check" disabled><label for='CSC258check'>CSC258</label></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" id="CSC369check" disabled><label for='CSC369check'>CSC369</label></td>
+                <td></td>
+              </tr>
+            </table>
+          </div>
+
+          <div id='matReqs' class='postDetails'>
+            <h4>ALL of...</h4>
+            <table class='checkTable'>
+              <tr>
+                <td><input type='checkbox' id='Calc1check' disabled><label for='Calc1check'>(MAT135,136)/137/157</label></td>
+              </tr>
+              <tr>
+                <td><input type='checkbox' id='Lin1check' disabled><label for='Lin1check'>MAT221/223/240</label></td>
+              </tr>
+              <tr>
+                <td><input type='checkbox' id='Sta1check' disabled><label for='Sta1check'>STA247/255/257</label></td>
+              </tr>
+            </table>
+          </div>
+
+          <div id='csc400s' class='postDetails'>
+            <h4>At least 1.5 FCEs from...</h4> 
+            <p>CSC400+, ECE489, BCB410, BCB420, and BCB430. (Input BCB410/420/430 manually.)</p>
+            <table class='checkTable'>
+              <tr>
+                <td><input type='text' id='4xx1' placeholder='CSC4xx' disabled></td>
+                <td><input id='BCB410check' type='checkbox' 
+                  onchange='updateCSC400s(); updateElecs(); updatePOStTotal()'>
+                  <label for='BCB410check' >BCB410</label>
+                </td>
+              </tr>
+              <tr>
+                <td><input type='text' id='4xx2' placeholder='CSC4xx' disabled></td>
+                <td><input id='BCB420check' type='checkbox' 
+                  onchange='updateCSC400s(); updateElecs(); updatePOStTotal()'>
+                  <label for='BCB420check'>BCB420</label>
+                </td>
+              </tr>
+              <tr>
+                <td><input type='text' id='4xx3' placeholder='CSC4xx' disabled></td>
+                <td><input id='BCB430check' type='checkbox' 
+                  onchange='updateCSC400s(); updateElecs(); updatePOStTotal()'>
+                  <label for='BCB430check'>BCB430</label>
+                </td>
+              </tr>
+            </table>
+            <p>Note: no more than two of CSC490/491/494/495 will be counted.</p>
+          </div>
+
+          <div id='cscElecs' class='postDetails'>
+            <p>
+              Note: 400-level courses will fill up "CSC/ECE/BCB 400+" first. 
+              No more than two of CSC490/491/494/495 will be counted.
+            </p>
+
+            <table class='checkTable'>
+              <tr>
+                <td><input type='text' id='inputCSC1' placeholder='CSC/ECE' disabled></td>
+                <td><input type='text' id='inputCSC2' placeholder='CSC/ECE' disabled></td>
+              </tr>
+              <tr>
+                <td><input type='text' id='inputCSC3' placeholder='CSC/ECE' disabled></td>
+                <td><input type='text' id='inputCSC4' placeholder='CSC/ECE' disabled></td>
+              </tr>
+              <tr>
+                <td><input type='text' id='inputCSC5' placeholder='CSC/ECE' disabled></td>
+                <td><input type='text' id='inputCSC6' placeholder='CSC/ECE' disabled></td>
+              </tr>
+              <tr>
+                <td><input type='text' id='inputCSC7' placeholder='CSC/ECE' disabled></td>
+                <td></td>
+              </tr>
+            </table>
+          </div>
+
+          <div id='matElecs' class='postDetails'>
+            <p>Note: you can count at <em>most</em> 2 MAT/STA FCEs from...</p>
+
+            <p>
+              MAT: 224, 235, 237, 257, 300+ except 329, 390, 391. STA: 249, 261, any 300+. (Input manually. This is currently fragile: it will accept any course starting with "MAT" or "STA".)
+            </p>
+
+            <table class='checkTable'>
+              <tr>
+                <td><input type='text' name='MATa' placeholder='MAT/STA' 
+                  onchange="updateElecs(); updatePOStTotal()">
+                </td>
+                <td><input type='text' name='MATb' placeholder='MAT/STA' 
+                  onchange="updateElecs(); updatePOStTotal()">
+                </td>
+              </tr>
+              <tr>
+                <td><input type='text' name='MATc' placeholder='MAT/STA' 
+                  onchange="updateElecs(); updatePOStTotal()">
+                </td>
+                <td><input type='text' name='MATd' placeholder='MAT/STA' 
+                  onchange="updateElecs(); updatePOStTotal()">
+                </td>
+              </tr>
+            </table>
+          </div>
+
+          <div id='peyReq' class='postDetails'>
+            <h4>Doing PEY? <input id='peycheck' type='checkbox' onchange='updatePEY()'>
+              <label for='peycheck'></label>
+            </h4>
+            <h4>If not, at least one of...</h4>
+            <table class='checkTable'>
+              <tr>
+                <td><input type='checkbox' id='CSC301check' disabled><label for='CSC301check'>CSC301</label></td>
+                <td><input type='checkbox' id='CSC318check' disabled><label for='CSC318check'>CSC318</label></td>
+                <td><input type='checkbox' id='CSC404check' disabled><label for='CSC404check'>CSC404</label></td>
+              </tr>
+              <tr>
+                <td><input type='checkbox' id='CSC411check' disabled><label for='CSC411check'>CSC411</label></td>
+                <td><input type='checkbox' id='CSC418check' disabled><label for='CSC418check'>CSC418</label></td>
+                <td><input type='checkbox' id='CSC420check' disabled><label for='CSC420check'>CSC420</label></td>
+              </tr>
+              <tr>
+                <td><input type='checkbox' id='CSC428check' disabled><label for='CSC428check'>CSC428</label></td>
+                <td><input type='checkbox' id='CSC454check' disabled><label for='CSC454check'>CSC454</label></td>
+                <td><input type='checkbox' id='CSC485check' disabled><label for='CSC485check'>CSC485</label></td>
+              </tr>
+              <tr>
+                <td><input type='checkbox' id='CSC490check' disabled><label for='CSC490check'>CSC490</label></td>
+                <td><input type='checkbox' id='CSC491check' disabled><label for='CSC491check'>CSC491</label></td>
+                <td><input type='checkbox' id='CSC494check' disabled><label for='CSC494check'>CSC494</label></td>
+              </tr>
+              <tr>
+                <td><input type='checkbox' id='CSC495check' disabled><label for='CSC495check'>CSC495</label></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </table>
+          </div>
+
+          <div class='postFCETotalDiv'>
+            <h4>FCE Totals</h4>
+            <table>
+              <tr>
+                <td class='FCECrit'>Required CSC:</td>
+                <td class='FCETotal'><span id='cscReqTotal'>0.0</span>/5 FCEs</td>
+              </tr>
+              <tr>
+                <td class='FCECrit'>Required MAT/STA:</td>
+                <td class='FCETotal'><span id='matReqTotal'>0.0</span>/2 FCEs</td>
+              </tr>
+              <tr>
+                <td class='FCECrit'>Electives:</td>
+                <td class='FCETotal'><span id='elecTotal'>0.0</span>/5 FCEs</td>
+              </tr>
+              <tr>
+                <td class='FCECrit'>Total:</td>
+                <td class='FCETotal'><span id='postTotal'>0.0</span>/12 FCEs</td>
+              </tr>
+            </table>
+          </div>
+
         </div>
 
-        <div id='matReqs' class='postDetails'>
-          <h4>ALL of...</h4>
-          <table class='checkTable'>
-            <tr>
-              <td><input type='checkbox' id='Calc1check' disabled><label for='Calc1check'>(MAT135,136)/137/157</label></td>
-            </tr>
-            <tr>
-              <td><input type='checkbox' id='Lin1check' disabled><label for='Lin1check'>MAT221/223/240</label></td>
-            </tr>
-            <tr>
-              <td><input type='checkbox' id='Sta1check' disabled><label for='Sta1check'>STA247/255/257</label></td>
-            </tr>
-          </table>
+
+        <div id="majorCheck" class="postTabs">
+          <div id="postListDiv">
+            <ul class="postList">
+              <li><a href='#cscReqsMajor'>CSC Required Courses 
+                <img class='postStatusIcon' src='res/delete.ico' alt='MISSING'></a>
+              </li>
+              <li><a href='#matReqsMajor'>MAT/STA Required Courses
+                <img class='postStatusIcon' src='res/delete.ico' alt='MISSING'/></a>
+              </li>
+              <li><a href='#200sElecsMajor'>200-Level Electives
+                <img class='postStatusIcon' src='res/delete.ico' alt='MISSING'/></a>
+              </li>
+              <li><a href='#300sElecsMajor'>300/400-Level Electives
+                <img class='postStatusIcon' src='res/delete.ico' alt='MISSING'/></a>
+              </li>
+              <li><a href='#peyReqMajor'>Inquiry (PEY)
+                <img class='postStatusIcon' src='res/delete.ico' alt='MISSING'/></a>
+              </li>
+            </ul>
+          </div>
+
+          <div id="cscReqsMajor" class="postDetails">
+            <h4>ALL of...</h4>
+            <table class='checkTable'>
+              <tr>
+                <td><input type="checkbox" id="CSC108checkMajor" disabled><label for='CSC108checkMajor'>CSC108</label></td>
+                <td><input type="checkbox" id="CSC165checkMajor" disabled><label for='CSC165checkMajor'>CSC165</label></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" id="CSC148checkMajor" disabled><label for='CSC148checkMajor'>CSC148</label></td>
+                <td><input type="checkbox" id="CSC236checkMajor" disabled><label for='CSC236checkMajor'>CSC236</label></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" id="CSC207checkMajor" disabled><label for='CSC207checkMajor'>CSC207</label></td>
+                <td><input type="checkbox" id="CSC263checkMajor" disabled><label for='CSC263checkMajor'>CSC263</label></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" id="CSC258checkMajor" disabled><label for='CSC258checkMajor'>CSC258</label></td>
+                <td></td>
+              </tr>
+            </table>
+          </div>
+
+          <div id='matReqsMajor' class='postDetails'>
+            <h4>ALL of...</h4>
+            <table class='checkTable'>
+              <tr>
+                <td><input type='checkbox' id='Calc1checkMajor' disabled><label for='Calc1checkMajor'>(MAT135,136)/137/157</label></td>
+              </tr>
+              <tr>
+                <td><input type='checkbox' id='Sta1checkMajor' disabled><label for='Sta1checkMajor'>STA247/255/257</label></td>
+              </tr>
+            </table>
+          </div>
+
+          <div id='200sElecsMajor' class='postDetails'>
+            <h4>Up to 1.0 FCE can come from...</h4>
+            <table class='checkTable'>
+              <tr>
+                <td><input type='checkbox' id='CSC200checkMajor' disabled><label for='CSC200checkMajor'>CSC200</label></td>
+                <td><input type='checkbox' id='Lin1checkMajor' disabled><label for='Lin1checkMajor'>Lin1</label></td>
+              </tr>
+              <tr>
+                <td><input type='checkbox' id='CSC209checkMajor' disabled><label for='CSC209checkMajor'>CSC209</label></td>
+                <td><input type='checkbox' id='Calc2checkMajor' onchange="updateElecsMajor(); updatePOStTotalMajor()"><label for='Calc2checkMajor'>MAT235/MAT237/MAT257</label></td>
+              </tr>
+            </table>
+          </div>
+
+          <div id='300sElecsMajor' class='postDetails'>
+            <h4>3.0 FCEs from...</h4>
+            <table class='checkTable'>
+              <tr>
+                <td><input type='text' id='3xx1Major' placeholder='CSC300+' disabled></td>
+                <td><input type='text' id='3xx2Major' placeholder='CSC300+' disabled></td>
+                <td><input type='text' id='3xx3Major' placeholder='CSC300+' disabled></td>
+              </tr>
+              <tr>
+                <td><input type='text' id='3xx4Major' placeholder='CSC300+' disabled></td>
+                <td><input type='text' id='3xx5Major' placeholder='CSC300+' disabled></td>
+                <td><input type='text' id='3xx6Major' placeholder='CSC300+' disabled></td>
+              </tr>
+              <tr>
+              <td><input type='text' id='MAT1Major' placeholder='MAT300+' 
+                  onchange="updateElecsMajor(); updatePOStTotalMajor()">
+                </td>
+                <td><input type='text' id='MAT2Major' placeholder='MAT300+' 
+                  onchange="updateElecsMajor(); updatePOStTotalMajor()">
+                </td>
+                <td><input type='text' id='MAT3Major' placeholder='MAT300+' 
+                  onchange="updateElecsMajor(); updatePOStTotalMajor()">
+                </td>
+              </tr>
+              <tr>
+                <td><input id='BCB410checkMajor' type='checkbox' 
+                  onchange='updateElecsMajor(); updatePOStTotalMajor()'>
+                  <label for='BCB410checkMajor' >BCB410</label>
+                </td>
+                <td><input id='BCB420checkMajor' type='checkbox' 
+                  onchange='updateElecsMajor(); updatePOStTotalMajor()'>
+                  <label for='BCB420checkMajor'>BCB420</label>
+                </td>
+                <td><input id='BCB430checkMajor' type='checkbox' 
+                  onchange='updateElecsMajor(); updatePOStTotalMajor()'>
+                  <label for='BCB430checkMajor'>BCB430</label>
+                </td>
+              </tr>
+            </table>
+
+            <p>Notes: at least 0.5 FCEs must be a 400-level CSC/BCB, and at least 1.0 other FCEs must be CSC/BCB. No more than two of CSC490/491/494/495 will be counted.</p>
+          </div>
+
+
+          <div id='peyReqMajor' class='postDetails'>
+            <h4>Doing PEY? <input id='peycheckMajor' type='checkbox' onchange='updatePEYMajor()'>
+              <label for='peycheckMajor'></label>
+            </h4>
+            <h4>If not, at least one of...</h4>
+            <table class='checkTable'>
+              <tr>
+                <td><input type='checkbox' id='CSC301checkMajor' disabled><label for='CSC301checkMajor'>CSC301</label></td>
+                <td><input type='checkbox' id='CSC318checkMajor' disabled><label for='CSC318checkMajor'>CSC318</label></td>
+                <td><input type='checkbox' id='CSC404checkMajor' disabled><label for='CSC404checkMajor'>CSC404</label></td>
+              </tr>
+              <tr>
+                <td><input type='checkbox' id='CSC411checkMajor' disabled><label for='CSC411checkMajor'>CSC411</label></td>
+                <td><input type='checkbox' id='CSC418checkMajor' disabled><label for='CSC418checkMajor'>CSC418</label></td>
+                <td><input type='checkbox' id='CSC420checkMajor' disabled><label for='CSC420checkMajor'>CSC420</label></td>
+              </tr>
+              <tr>
+                <td><input type='checkbox' id='CSC428checkMajor' disabled><label for='CSC428checkMajor'>CSC428</label></td>
+                <td><input type='checkbox' id='CSC454checkMajor' disabled><label for='CSC454checkMajor'>CSC454</label></td>
+                <td><input type='checkbox' id='CSC485checkMajor' disabled><label for='CSC485checkMajor'>CSC485</label></td>
+              </tr>
+              <tr>
+                <td><input type='checkbox' id='CSC490checkMajor' disabled><label for='CSC490checkMajor'>CSC490</label></td>
+                <td><input type='checkbox' id='CSC491checkMajor' disabled><label for='CSC491checkMajor'>CSC491</label></td>
+                <td><input type='checkbox' id='CSC494checkMajor' disabled><label for='CSC494checkMajor'>CSC494</label></td>
+              </tr>
+              <tr>
+                <td><input type='checkbox' id='CSC495checkMajor' disabled><label for='CSC495checkMajor'>CSC495</label></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </table>
+          </div>
+
+          <div class='postFCETotalDiv'>
+            <h4>FCE Totals</h4>
+            <table>
+              <tr>
+                <td class='FCECrit'>Required CSC:</td>
+                <td class='FCETotal'><span id='cscReqTotalMajor'>0.0</span>/3.5 FCEs</td>
+              </tr>
+              <tr>
+                <td class='FCECrit'>Required MAT/STA:</td>
+                <td class='FCETotal'><span id='matReqTotalMajor'>0.0</span>/1.5 FCEs</td>
+              </tr>
+              <tr>
+                <td class='FCECrit'>Electives:</td>
+                <td class='FCETotal'><span id='elecTotalMajor'>0.0</span>/3 FCEs</td>
+              </tr>
+              <tr>
+                <td class='FCECrit'>Total:</td>
+                <td class='FCETotal'><span id='postTotalMajor'>0.0</span>/8 FCEs</td>
+              </tr>
+            </table>
+          </div>
+
         </div>
-
-        <div id='csc400s' class='postDetails'>
-          <h4>At least 1.5 FCEs from...</h4> 
-          <p>CSC400+, ECE489, BCB410, BCB420, and BCB430. (Input BCB410/420/430 manually.)</p>
-          <table class='checkTable'>
-            <tr>
-              <td><input type='text' id='4xx1' placeholder='CSC4xx' disabled></td>
-              <td><input id='BCB410check' type='checkbox' 
-                onchange='updateCSC400s(); updateElecs(); updatePOStTotal()'>
-                <label for='BCB410check' >BCB410</label>
-              </td>
-            </tr>
-            <tr>
-              <td><input type='text' id='4xx2' placeholder='CSC4xx' disabled></td>
-              <td><input id='BCB420check' type='checkbox' 
-                onchange='updateCSC400s(); updateElecs(); updatePOStTotal()'>
-                <label for='BCB420check'>BCB420</label>
-              </td>
-            </tr>
-            <tr>
-              <td><input type='text' id='4xx3' placeholder='CSC4xx' disabled></td>
-              <td><input id='BCB430check' type='checkbox' 
-                onchange='updateCSC400s(); updateElecs(); updatePOStTotal()'>
-                <label for='BCB430check'>BCB430</label>
-              </td>
-            </tr>
-          </table>
-          <p>Note: no more than two of CSC490/491/494/495 will be counted.</p>
-        </div>
-
-        <div id='cscElecs' class='postDetails'>
-          <p>Note: 400-level courses will fill up "CSC/ECE/BCB 400+" first. 
-          No more than two of CSC490/491/494/495 will be counted.</p>
-
-          <table class='checkTable'>
-            <tr>
-              <td><input type='text' id='inputCSC1' placeholder='CSC/ECE' disabled></td>
-              <td><input type='text' id='inputCSC2' placeholder='CSC/ECE' disabled></td>
-            </tr>
-            <tr>
-              <td><input type='text' id='inputCSC3' placeholder='CSC/ECE' disabled></td>
-              <td><input type='text' id='inputCSC4' placeholder='CSC/ECE' disabled></td>
-            </tr>
-            <tr>
-              <td><input type='text' id='inputCSC5' placeholder='CSC/ECE' disabled></td>
-              <td><input type='text' id='inputCSC6' placeholder='CSC/ECE' disabled></td>
-            </tr>
-            <tr>
-              <td><input type='text' id='inputCSC7' placeholder='CSC/ECE' disabled></td>
-              <td></td>
-            </tr>
-          </table>
-        </div>
-
-        <div id='matElecs' class='postDetails'>
-          <p>Note: you can count at <em>most</em> 2 MAT/STA FCEs from...</p>
-
-          <p>MAT: 224, 235, 237, 257, 300+ except 329, 390, 391. STA: 249, 261, any 300+. (Input manually. This is currently fragile: it will accept any course starting with "MAT" or "STA".)
-          </p>
-
-          <table class='checkTable'>
-            <tr>
-              <td><input type='text' name='MATa' placeholder='MAT/STA' 
-                onchange="updateElecs(); updatePOStTotal()">
-              </td>
-              <td><input type='text' name='MATb' placeholder='MAT/STA' 
-                onchange="updateElecs(); updatePOStTotal()">
-              </td>
-            </tr>
-            <tr>
-              <td><input type='text' name='MATc' placeholder='MAT/STA' 
-                onchange="updateElecs(); updatePOStTotal()">
-              </td>
-              <td><input type='text' name='MATd' placeholder='MAT/STA' 
-                onchange="updateElecs(); updatePOStTotal()">
-              </td>
-            </tr>
-          </table>
-        </div>
-
-        <div id='peyReq' class='postDetails'>
-          <h4>Doing PEY? <input id='peycheck' type='checkbox' onchange='updatePEY()'>
-            <label for='peycheck'></label>
-          </h4>
-          <h4>If not, at least one of...</h4>
-          <table class='checkTable'>
-            <tr>
-              <td><input type='checkbox' id='CSC301check' disabled><label for='CSC301check'>CSC301</label></td>
-              <td><input type='checkbox' id='CSC318check' disabled><label for='CSC318check'>CSC318</label></td>
-              <td><input type='checkbox' id='CSC404check' disabled><label for='CSC404check'>CSC404</label></td>
-            </tr>
-            <tr>
-              <td><input type='checkbox' id='CSC411check' disabled><label for='CSC411check'>CSC411</label></td>
-              <td><input type='checkbox' id='CSC418check' disabled><label for='CSC418check'>CSC418</label></td>
-              <td><input type='checkbox' id='CSC420check' disabled><label for='CSC420check'>CSC420</label></td>
-            </tr>
-            <tr>
-              <td><input type='checkbox' id='CSC428check' disabled><label for='CSC428check'>CSC428</label></td>
-              <td><input type='checkbox' id='CSC454check' disabled><label for='CSC454check'>CSC454</label></td>
-              <td><input type='checkbox' id='CSC485check' disabled><label for='CSC485check'>CSC485</label></td>
-            </tr>
-            <tr>
-              <td><input type='checkbox' id='CSC490check' disabled><label for='CSC490check'>CSC490</label></td>
-              <td><input type='checkbox' id='CSC491check' disabled><label for='CSC491check'>CSC491</label></td>
-              <td><input type='checkbox' id='CSC494check' disabled><label for='CSC494check'>CSC494</label></td>
-            </tr>
-            <tr>
-              <td><input type='checkbox' id='CSC495check' disabled><label for='CSC495check'>CSC495</label></td>
-              <td></td>
-              <td></td>
-            </tr>
-          </table>
-        </div>
-
-        <div class='postFCETotalDiv'>
-          <h4>FCE Totals</h4>
-          <table>
-            <tr>
-              <td class='FCECrit'>Required CSC:</td>
-              <td class='FCETotal'><span id='cscReqTotal'>0.0</span>/5 FCEs</td>
-            </tr>
-            <tr>
-              <td class='FCECrit'>Required MAT/STA:</td>
-              <td class='FCETotal'><span id='matReqTotal'>0.0</span>/2 FCEs</td>
-            </tr>
-            <tr>
-              <td class='FCECrit'>Electives:</td>
-              <td class='FCETotal'><span id='elecTotal'>0.0</span>/5 FCEs</td>
-            </tr>
-            <tr>
-              <td class='FCECrit'>Total:</td>
-              <td class='FCETotal'><span id='postTotal'>0.0</span>/12 FCEs</td>
-            </tr>
-          </table>
-        </div>
-
       </div>
     </div>
-
 
     <div id="feedback" class="infoTab">
       <div id = "feedbackDescription">
         <p>
-        Please feel free to give us feedback about this Computer Science course explorer. All feedback is welcome, and is taken into great consideration. Any contribution is
+          Please feel free to give us feedback about this Computer Science course explorer. All feedback is welcome, and is taken into great consideration. Any contribution is
           helpful, and bug reports are cherished even more! You're welcome to view any future changes to the project on <a target="_blank" href="https://github.com/Senor-Ian/cscourseplanner">github</a>.
           Thanks!
         </p>
@@ -950,8 +1137,8 @@
           <button class="submit_btn" id="submit_btn">Submit</button>
         </fieldset>
       </div>
-  </div>
-  
-  
-</body>
-</html>
+    </div>
+
+
+  </body>
+  </html>
