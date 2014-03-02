@@ -144,19 +144,34 @@ td.timeTableBlock {
 td.timeTableCourse {
     width: 16%;
     background: #0066CC;
+    border: 4px solid black;
+    color: black;
+}
+
+td.timeTableBlockSectionSpring {
+    width: 16%;
+    background: #B2E0FF;
     border: 2px solid black;
     color: black;
 }
 
-td.timeTableBlockSection {
+td.timeTableBlockSectionFall {
     width: 16%;
-    background: #ADC2FF;
+    background: #FFCC66;
+    border: 2px solid black;
+    color: black;
+}
+
+td.timeTableBlockSectionYear {
+    width: 16%;
+    background: #CCFFCC;
+    border: 2px solid black;
     color: black;
 }
 
 td.timeTableBlockTypeTutorial {
     width: 16%;
-    background: #99B2FF;
+    background: #C2D6FF;
     border: 2px solid black;
     color: black;
 }
@@ -168,6 +183,7 @@ td.timeTableBlockType {
     color: black;
 }
 
+
 td.timeTableBlockTime {
     width: 16%;
     background: #7094FF;
@@ -177,119 +193,16 @@ td.timeTableBlockTime {
 
 td.timeTableBlockLocation {
     width: 16%;
-    background: #5C85FF;
+    background: #66C2FF;
     border: 2px solid black;
     color: black;
 }
 
 td.timeTableBlockInstructor {
     width: 16%;
-    background: #4D94FF;
+    background: #DB94B8;
     border: 2px solid black;
     color: black;
-}
-
-/* Focus and POSt tabs */
-div.focusDetails {
-    background: #6A93D4;
-    width: 800px;
-    float: left;
-    padding: 1em;
-}
-
-div.postDetails {
-    background: #6A93D4;
-    width: 350px;
-    height: 300px;
-    float: left;
-    padding: 1em;
-}
-
-#focusListDiv, #postListDiv {
-    width: 300px;
-    height: 100%;
-}
-
-ul.focusList, ul.postList {
-    float: left;
-    width: 300px;
-    height: 100%;
-    margin-top: 1em;
-}
-
-ul.focusList li, ul.postList li {
-    list-style: none;
-    height: 40px;
-    line-height: 40px;
-    vertical-align: middle;
-}
-
-ul.focusList li.ui-tabs-active, ul.focusList a:hover, ul.postList li.ui-tabs-active, ul.postList a:hover {
-    background: #6A93D4;
-}
-
-.closeIcon {
-    float: right;
-    margin-top: 0.6em; 
-    margin-bottom: 0.6em; 
-    margin-right: 0.5em;
-    width: 1em;
-    height: 1em;
-}
-
-/* POSt tab */
-.postStatusIcon {
-    float: right;
-    margin-top: 0.6em; 
-    margin-bottom: 0.6em; 
-    margin-right: 0.5em;
-    width: 1em;
-    height: 1em;
-}
-
-div.postFCETotalDiv {
-    height: 100%;
-    width: 400px;
-    float: left;
-    padding-top: 1em;
-}
-
-
-h4 {
-    font-size: 1.1em;
-    width: 100%;
-    text-align: center;
-    margin-top: 0.3em;
-    margin-bottom: 0.3em;
-}
-
-div.postFCETotalDiv table {
-    margin-left: auto;
-    margin-right: auto;
-}
-
-td.FCECrit {
-    text-align: right;
-    padding-right: 0.1em;
-}
-
-td.FCETotal {
-    padding-left: 0.1em;
-}
-
-table.checkTable {
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.postDetails p {
-    padding-top: 0.1em;
-    padding-bottom: 0.1em;
-}
-
-input[type=text] {
-    width: 75px;
-    text-align: center;
 }
 
 
