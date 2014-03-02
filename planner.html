@@ -4,6 +4,9 @@
 
 <head>
   <meta charset="UTF-8">
+  <meta name="keywords" content="University of Toronto, Computer Science, UofT computer science, UofT comp sci, course planner, u of t, u of t timetable">
+  <meta name="robots" content="index, follow, noarchive, nosnippet">
+  <meta name="description" content="UofT's Department of Computer Science Course Planner."
   <title>CSC Course Planner</title>
   <link rel="stylesheet" type="text/css" href="styles.css" marker-end="url(#arrow)" />
   <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
@@ -720,7 +723,14 @@
       </div>
     </div>
 
-    <div id="timetable" class="infoTab">
+    <div id="timetable" class="infoTab" align="center">
+      <h3>Computer Science Time Table</h3>
+      <p>This data is taken directly from the u of t Timetable, and is updated daily. Search through the time table for a course, or even a course instructor. Enter your query in the box below!</p>
+      <form id="live-search" action="javascript:void(0);">
+      <fieldset>
+        <input type="text" class="text-input" id="filter" value="" />
+      </fieldset>
+      </form>
     </div>
 
     <div id="post" class="infoTab">
@@ -1130,6 +1140,7 @@
       <div id = "feedbackFormDiv">
         <fieldset id="feedbackForm">
           <legend>Feedback</legend>
+          <div id="result"></div>
           <p for="name">Name &nbsp; &nbsp; &nbsp; <input type="text" name="name" id="feedbackNameField" placeholder="Enter Your Name" /></p>
           <p for="message">Message</p>
           <textarea name="message" id="feedbackMessageField" placeholder="Enter Your Message"></textarea>

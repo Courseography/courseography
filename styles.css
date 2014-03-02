@@ -19,6 +19,11 @@ a {
     outline-color: transparent;
 }
 
+fieldset { 
+    border: none; 
+}
+
+
 
 /* Styles for the main tabs */
 ul.tabList {
@@ -97,10 +102,23 @@ div#calendar {
 }
 
 /* Timetable tab */
+
+#filter {
+  width: 200px;
+  border: 1px solid black;
+  font-family: "Trebuchet MS", Arial, Sans-Serif;
+}
+
 table.timeTable {
     width: 70%;
     margin: 0 auto;
-    padding: 2em;
+    padding: 0em;
+}
+
+table.searchClass {
+    width: 70%;
+    margin: 0 auto;
+    padding: 0em;
 }
 
 tr.timeTableRow {
@@ -113,49 +131,76 @@ tr.timeTableRow {
 
 td.timeTableHeader{
     height: 25px;
+    width: 16%;
     background: #000099;
 }
 
 td.timeTableBlock {
+    
+    width: 16%;
     background: #447BD4;
 }
 
 td.timeTableCourse {
+    width: 16%;
     background: #0066CC;
+    border: 4px solid black;
+    color: black;
+}
+
+td.timeTableBlockSectionSpring {
+    width: 16%;
+    background: #B2E0FF;
     border: 2px solid black;
     color: black;
 }
 
-td.timeTableBlockSection {
-    background: #6666FF;
+td.timeTableBlockSectionFall {
+    width: 16%;
+    background: #FFCC66;
+    border: 2px solid black;
+    color: black;
+}
+
+td.timeTableBlockSectionYear {
+    width: 16%;
+    background: #CCFFCC;
+    border: 2px solid black;
+    color: black;
 }
 
 td.timeTableBlockTypeTutorial {
-    background: #6699FF;
+    width: 16%;
+    background: #C2D6FF;
     border: 2px solid black;
     color: black;
 }
 
 td.timeTableBlockType {
-    background: #3333CC;
+    width: 16%;
+    background: #85A3FF;
     border: 2px solid black;
     color: black;
 }
 
+
 td.timeTableBlockTime {
-    background: #0099FF;
+    width: 16%;
+    background: #7094FF;
     border: 2px solid black;
     color: black;
 }
 
 td.timeTableBlockLocation {
-    background: #3366CC;
+    width: 16%;
+    background: #66C2FF;
     border: 2px solid black;
     color: black;
 }
 
 td.timeTableBlockInstructor {
-    background: #3300CC;
+    width: 16%;
+    background: #DB94B8;
     border: 2px solid black;
     color: black;
 }
