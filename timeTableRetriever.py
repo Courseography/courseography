@@ -103,15 +103,6 @@ class MyHTMLParser(HTMLParser):
     	elif time.match(data):
 	        self.timeMemory = data
 	        self.fieldMemory = 3
-
-	        # For cancelled courses.
-	        if data == 'Cancel':
-	        	print('<tr class=timeTableRow><td class=timeTableBlock></td>'
-	        		+'<td class=timeTableBlock></td><td class=timeTableBlockType>' 
-	        		+ self.typeMemory +'</td><td class=timeTableBlockTime>' 
-	        		+ data
-	        		+'</td><td class=timeTableBlock></td><td class=timeTableBlock></td>')
-	        
 	        # For Tutorials. (Either 'L'ecture or 'T'utorial) 
 	        # Time is the last field for a tutorial section.
 	        if self.typeMemory[0] == 'T':
@@ -120,6 +111,15 @@ class MyHTMLParser(HTMLParser):
 	            	+'</td><td class=timeTableBlockTime>' 
 	            	+ data
 	            	+'</td><td class=timeTableBlock></td><td class=timeTableBlock></td>')
+
+	        # For cancelled courses.
+	        elif data == 'Cancel':
+	        	print('<tr class=timeTableRow><td class=timeTableBlock></td>'
+	        		+'<td class=timeTableBlock></td><td class=timeTableBlockType>' 
+	        		+ self.typeMemory +'</td><td class=timeTableBlockTime>' 
+	        		+ data
+	        		+'</td><td class=timeTableBlock></td><td class=timeTableBlock></td>')
+	        
 	        if self.roomChangeMemory == True:
 	        	self.roomSwitch = True
     	# Checks if data is a location.
