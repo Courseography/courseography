@@ -26,16 +26,30 @@ fieldset {
 
 
 /* Styles for the main tabs */
-ul.tabList {
-    float: left;
+.infoTabs {
+    height: 500px;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+.tabListDiv {
     width: 100%;
     height: 40px;
-    display: block;
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
     background: #04356C;
     border-top-style: solid;
     border-bottom-style: solid;
+}
+
+ul.tabList {
+    float: left;
+    width: 100%;
+    height: 100%;
+    display: block;
+    margin: 0px;
+    padding: 0px;
+    
 }
 
 ul.tabList li {
@@ -67,14 +81,16 @@ div.infoTab {
     overflow-y: auto;
 }
 
+
+
 /* My Courses tab */
 .courseCell {
     display: inline-block;
     border: 1px solid black;
     color: black;
     text-align: center;
-    width: 200px;
-    height: 150px;
+    width: 225px;
+    height: 175px;
 }
 
 .courseCell p {
@@ -99,7 +115,10 @@ div.infoTab {
 div#calendar {
     padding-right: 30%;
     padding-top: 1em;
+    padding-left: 2em;
 }
+
+
 
 /* Timetable tab */
 
@@ -223,9 +242,19 @@ div.postDetails {
 }
 
 #focusListDiv {
-    width: 300px;
+    width: 275px;
     height: 100%;
     float: left;
+    padding-top: 1em;
+    padding-left: 2em;
+}
+
+ul.focusList {
+    float: left;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 #postListDiv {
@@ -241,13 +270,6 @@ div.postDetails {
   float: left;
   margin-left: 2em;
   margin-top: 2em;
-}
-
-ul.focusList {
-    float: left;
-    width: 300px;
-    height: 100%;
-    margin-top: 1em;
 }
 
 ul.postList {
@@ -290,7 +312,7 @@ ul.focusList li.ui-tabs-active, ul.focusList a:hover, ul.postList li.ui-tabs-act
 
 div.postFCETotalDiv {
     height: 100%;
-    width: 250px;
+    width: 300px;
     float: left;
     padding-top: 1em;
 }
@@ -373,6 +395,7 @@ input[type=checkbox]:checked + label:before {
   height: 100%;
   float: left;
   padding-right: 2em;
+  padding-left: 2em;
 }
 
 #feedbackDescription a {
@@ -383,6 +406,7 @@ input[type=checkbox]:checked + label:before {
   width: 50%;
   height: 100%;
   float: left;
+  padding-top: 1em;
 }
 
 #feedbackMessageField {
@@ -401,10 +425,9 @@ input[type=checkbox]:checked + label:before {
 
 /* SVG Styles */
 #graph {
-    margin-left: auto;
-    margin-right: auto;
-    width: 1500px;
-    height: 750px;
+    width: 1200px;
+    height: 600px;
+    /*width: 100%;*/
     overflow: hidden;
     clear: both;
 }
@@ -416,14 +439,14 @@ input[type=checkbox]:checked + label:before {
     stroke-linecap: square;
     stroke-miterlimit: 10;
     color-interpolation: auto;
-    overflow: hidden;
+    overflow: auto;
     shape-rendering: geometricPrecision;
 }
 
 g text{
     white-space: pre;
     text-align: center;
-    font-size: 0.9em;
+    font-size: 80%;
     stroke: none;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -431,6 +454,8 @@ g text{
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    padding: 0;
+    margin: 0;
 }
 
 
@@ -457,7 +482,13 @@ g[data-active="takeable"] {
 /* Used for hover */
 g[data-active="missing"] rect {
     stroke-width: 3;
-    stroke: #FF0000;
+    stroke: #BB0199;
+}
+
+/* Used for hover */
+g[data-active="missing"] ellipse {
+    stroke-width: 3;
+    stroke: #BB0199;
 }
 
 g[data-active="unlit"] rect {
@@ -556,8 +587,9 @@ path[data-active="active"] {
 }
 
 path[data-active="missing"] {
-  stroke: #FF0000;
+  stroke: #BB0199;
   fill: none;
+  opactiy: 0.5;
 }
 
 path[data-active="missing"] #arrow path {

@@ -352,6 +352,7 @@ function reset() {
 
   active300s = [];
   active400s = [];
+  projectCourses = [];
   $('input:checkbox').attr('checked', false);
   $('input:text').attr('value', '');
 
@@ -461,11 +462,11 @@ function fetchCourseDescription(id) {
         if (id == "CSC165" || id == "CSC236") {
           var calendarParserEnriched = new RegExp("\nCSC240(.|\n)*?Breadth Requirement.*\n", "im");
           var courseString2 = response.match(calendarParserEnriched)[0].split('\n');
-          courseString = courseString.concat(courseString2);
+          courseString = courseString.concat("<hr/>", courseString2);
         } else if (id == "CSC263") {
           var calendarParserEnriched = new RegExp("\nCSC265(.|\n)*?Breadth Requirement.*\n", "im");
           var courseString2 = response.match(calendarParserEnriched)[0].split('\n');
-          courseString = courseString.concat(courseString2);
+          courseString = courseString.concat("<hr/>", courseString2);
         }
       }
 
@@ -556,6 +557,15 @@ function createTimeTable() {
       new RegExp("backgroundInstertion\">" + node, 'g'),
       $("#" + node + "> rect").css('fill') + "\">" + node);
   });
+
+  // Hardcoded values for enriched theory courses
+  timeTableString = timeTableString.replace(
+      new RegExp("backgroundInstertion\">CSC240", 'g'),
+      $("#CSC165 > rect").css('fill') + "\">CSC240");
+
+  timeTableString = timeTableString.replace(
+      new RegExp("backgroundInstertion\">CSC263", 'g'),
+      $("#CSC165 > rect").css('fill') + "\">CSC263");
 
   temp.innerHTML = timeTableString;
   while (temp.firstChild) {
@@ -696,7 +706,14 @@ function update200sElecsMajor() {
 var extraMajor = 0;
 
 function update300sElecsMajor() {
-  var tmp = active300s.concat(active400s, projectCourses.slice(0, 2));
+  numBCBMajor = $('#300sElecsMajor input:checkbox:checked').length;
+  var numProjects = 2;
+  if ($('#BCB430checkMajor').prop('checked')) {
+    numBCBMajor += 1;
+    numProjects = 0;
+  }
+
+  var tmp = active300s.concat(active400s, projectCourses.slice(0, numProjects));
   // Manually add active 3rd year courses required by specialist
   if (CSC373.active) {
     tmp.push('CSC373');
@@ -716,7 +733,6 @@ function update300sElecsMajor() {
     }
   }
 
-  numBCBMajor = $('#300sElecsMajor input:checkbox:checked').length;
 
   elec300sTotalMajor = tmp.length + numBCBMajor;
 
@@ -739,9 +755,14 @@ function updateElecsMajor() {
     elecTotalMajor = 3;
   }
 
+  var numProjects = 2;
+  if ($('#BCB430check').prop('checked')) {
+    numProjects = 0;
+  }
+
   elecSatMajor = elecTotalMajor >= 3 
     && (active400s.length > 0 || numBCBMajor > 0)
-    && (active300s.concat(active400s, projectCourses.slice(0, 2)).length + extraMajor >= 3);
+    && (active300s.concat(active400s, projectCourses.slice(0, numProjects)).length + extraMajor >= 3);
   
   $('#elecTotalMajor').html(elecTotalMajor.toFixed(1));
 
@@ -754,7 +775,13 @@ function updateElecsMajor() {
 function updateCSC400s() {
   numBCB = $('#csc400s input:checkbox:checked').length;
 
-  var tmp = active400s.concat(projectCourses.slice(0, 2));
+  var numProjects = 2;
+  if ($('#BCB430check').prop('checked')) {
+    numBCB += 1;
+    numProjects = 0;
+  }
+
+  var tmp = active400s.concat(projectCourses.slice(0, numProjects));
 
   for (var i = 1; i <= 3; i++) {
     if (i <= 3 - numBCB && i <= tmp.length) {
@@ -770,7 +797,11 @@ function updateCSC400s() {
 
 // Right now, it must be called after updateCSC400s (because of numBCB)
 function updateElecs() {
-  var tmp = active300s.concat(active400s.slice(3 - numBCB), projectCourses.slice(0, 2));
+  var numProjects = 2;
+  if ($('#BCB430check').prop('checked')) {
+    numProjects = 0;
+  }
+  var tmp = active300s.concat(active400s.slice(3 - numBCB), projectCourses.slice(Math.max(3 - numBCB - active400s.length, 0), numProjects));
   for (var i = 1; i <= 7; i++) {
     if (i <= tmp.length) {
       $('#inputCSC' + i).attr('value', tmp[i - 1]);
@@ -789,7 +820,10 @@ function updateElecs() {
     }
   });
 
-  elecTotal = (active300s.length + active400s.length + numBCB) / 2 + matElecs + Math.min(projectCourses.length / 2, 1);
+  elecTotal = (active300s.length + active400s.length + numBCB) / 2 + matElecs;
+  if (!$('#BCB430check').prop('checked')) {
+    elecTotal += Math.min(projectCourses.length / 2, 1);
+  }
   if (elecTotal >= 5) {
     elecTotal = 5;
   }
@@ -818,11 +852,46 @@ function updatePOStTotal() {
   $('#postTotal').html((cscReqTotal + matReqTotal + elecTotal).toFixed(1));
 }
 
+function setGraphSize() {
+    // Set height of tabs
+  //var graphHeight = Math.min(Math.round($(window).height() * 0.7), $(window).width() / 2);
+  //var height = $(window).height() - graphHeight - 46;
+  console.log("Resizing graph");
+  var height = $(window).height() - $('#graph').height() - 46;
+  //$(".infoTabs").height(height + "px");
+  //$("#graph").height(graphHeight + "px");
+  //$('#graph').css('margin-left', 'auto');
+  //$('#graph').css('margin-right', 'auto');
+  //$("#graph").width('100%');
+  //$(".infoTabs").height("100%");
+  //$(".infoTabs").width($(window).width() + "px");
+  if ($(window).width() < 1200) {
+    $(".infoTabs").width("1200px");
+  } else {
+    $(".infoTabs").width("100%");
+  }
+}
+
 $(document).ready(function() {
 
   // Set height of tabs
-  var height = $(window).height() - $("#graph").height() - 46;
-  $(".infoTabs").height(height + "px");
+  //var graphHeight = Math.min(Math.round($(window).height() * 0.7), $(window).width() / 2);
+  //var height = $(window).height() - graphHeight - 46;
+  var height = $(window).height() - $('#graph').height() - 46;
+  //$(".infoTabs").height(height + "px");
+  //$("#graph").height(graphHeight + "px");
+  //$('#graph').css('margin-left', 'auto');
+  //$('#graph').css('margin-right', 'auto');
+  //$("#graph").width('100%');
+  //$(".infoTabs").height("100%");
+  //$(".infoTabs").width($(window).width() + "px");
+  //$("#graph").width(screen.availWidth + "px");
+  //$(".infoTabs").width(screen.availWidth + "px");
+  if ($(window).width() < 1200) {
+    $(".infoTabs").width("1200px");
+  } else {
+    $(".infoTabs").width("100%");
+  }
 
   // Enable tabs
   $('.infoTabs').tabs({
@@ -897,7 +966,7 @@ $(document).ready(function() {
 
     /* Draggable function for map*/
     /* Extending the jQuery draggable option to be fitted with right click for either graph or graphRootSVG. 
-    This also disables the context menu for graphRootSVG, but not for the tab.*/
+    This also disables the context menu for graphRootSVG, but not for the tab.
     $.extend($.ui.draggable.prototype, {
         _mouseInit: function () {
             var context = this;
@@ -963,6 +1032,7 @@ $(document).ready(function() {
     $("#graphRootSVG").draggable({
         mouseButton: 3
     });
+    */
 
     /*Search function for TimeTable*/
     $("#filter").keyup(function(){

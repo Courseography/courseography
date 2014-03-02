@@ -6,7 +6,7 @@
   <meta charset="UTF-8">
   <meta name="keywords" content="University of Toronto, Computer Science, UofT computer science, UofT comp sci, course planner, u of t, u of t timetable">
   <meta name="robots" content="index, follow, noarchive, nosnippet">
-  <meta name="description" content="UofT's Department of Computer Science Course Planner."
+  <meta name="description" content="UofT's Department of Computer Science Course Planner.">
   <title>CSC Course Planner</title>
   <link rel="stylesheet" type="text/css" href="styles.css" marker-end="url(#arrow)" />
   <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
@@ -14,7 +14,7 @@
   <script src='util.js'></script>
 </head>
 
-<body oncontextmenu="return false;">
+<body onresize="setGraphSize()">
   <div id="graph">
     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="graphRootSVG" viewBox="0 0 1500 1000" preserveAspectRatio="xMinyMin">
       <g transform="matrix(1.4859,0,0,1.4859,-359.7965,469.5511)">
@@ -261,9 +261,9 @@
         <!-- hybrids -->
 
         <g id="hybrid1" class="hybrid">
-          <rect x="161.3807" width="50" height="28" y="180.2956"/>
-          <text x="165.9178" y="192.0983">301/318/</text>
-          <text x="167.307" y="204.3493">384/418</text>
+          <rect x="160" width="55" height="28" y="180.2956"/>
+          <text x="187.5" y="192.0983" text-anchor="middle">301/318/</text>
+          <text x="187.5" y="204.3493" text-anchor="middle">384/418</text>
         </g>
 
         <g id="hybrid2" class="hybrid">
@@ -271,9 +271,9 @@
           <text x="1104.5273" y="-39.8498">263</text>
         </g>
         <g id="hybrid3" class="hybrid">
-          <rect x="274.4031" width="68" height="28" y="196.4732"/>
-          <text x="277.6223" y="207.2759">336/373/463,</text>
-          <text x="292.6984" y="219.5269">CALC1</text>
+          <rect x="272" width="72" height="28" y="196.4732"/>
+          <text x="308" y="207.2759" text-anchor="middle">336/373/463,</text>
+          <text x="308" y="219.5269" text-anchor="middle">CALC1</text>
         </g>
         <g id="hybrid4" class="hybrid">
           <rect x="1206.4095" width="27" height="24" y="143.3476"/>
@@ -296,8 +296,8 @@
           <text x="756.7952" y="277.5347">STA1</text>
         </g>
         <g id="hybrid9" class="hybrid">
-          <rect x="517.0955" width="100" height="24" y="182.7716"/>
-          <text x="520.0906" y="198.6998">CALC1, STA1, STA2</text>
+          <rect x="510" width="110" height="24" y="182.7716"/>
+          <text x="565" y="198" text-anchor="middle">CALC1, STA1, STA2</text>
         </g>
         <g id="hybrid10" class="hybrid">
           <rect x="796.5412" width="27" height="24" y="-55.778"/>
@@ -324,8 +324,8 @@
           <text x="298.4743" y="252.5347">263</text>
         </g>
         <g id="hybrid16" class="hybrid">
-          <rect x="864.5923" width="50" height="24" y="31.6881"/>
-          <text x="867.0776" y="47.6164">165/Calc1</text>
+          <rect x="864" width="58" height="24" y="31.6881"/>
+          <text x="893" y="47.6164" text-anchor="middle">165/Calc1</text>
         </g>
 
 
@@ -356,36 +356,36 @@
 
         <g>
           <g data-group="theory">
-            <rect x="1166.9272" width="175" height="30" y="-121.778"/>
-            <text x="1227.085" y="-100.8857">Theory</text>
+            <rect x="1170" width="175" height="30" y="-121.778"/>
+            <text x="1257.5" y="-100.8857" text-anchor="middle">Theory</text>
           </g>
           <g data-group="systems">
-            <rect x="1166.9272" width="175" height="30" y="-91.778"/>
-            <text x="1225.6724" y="-70.8857">Systems</text>
+            <rect x="1170" width="175" height="30" y="-91.778"/>
+            <text x="1257.5" y="-70.8857" text-anchor="middle">Systems</text>
           </g>
           <g data-group="dbweb">
-            <rect x="1166.9272" width="175" height="30" y="-61.778"/>
-            <text x="1193.9805" y="-40.8857">Databases &amp; Web</text>
+            <rect x="1170" width="175" height="30" y="-61.778"/>
+            <text x="1257.5" y="-40.8857" text-anchor="middle">Databases &amp; Web</text>
           </g>
           <g data-group="num">
-            <rect x="1166.9272" width="175" height="30" y="28.222"/>
-            <text x="1179" y="49.1143">Numerical Computing</text>
+            <rect x="1170" width="175" height="30" y="28.222"/>
+            <text x="1257.5" y="49.1143" text-anchor="middle">Numerical Computing</text>
           </g>
           <g data-group="se">
-            <rect x="1166.9272" width="175" height="30" y="-31.778"/>
-            <text x="1178.7158" y="-10.8857">Software Engineering</text>
+            <rect x="1170" width="175" height="30" y="-31.778"/>
+            <text x="1257.5" y="-10.8857" text-anchor="middle">Software Engineering</text>
           </g>
           <g data-group="graphics">
-            <rect x="1166.9272" width="175" height="30" y="58.222"/>
-            <text x="1224.4163" y="79.1143">Graphics</text>
+            <rect x="1170" width="175" height="30" y="58.222"/>
+            <text x="1257.5" y="79.1143" text-anchor="middle">Graphics</text>
           </g>
           <g data-group="hci">
-            <rect x="1166.9272" width="175" height="30" y="88.222"/>
-            <text x="1171.5496" y="109.1143">Humans and Computing</text>
+            <rect x="1170" width="175" height="30" y="88.222"/>
+            <text x="1257.5" y="109.1143" text-anchor="middle">Humans and Computing</text>
           </g>
           <g data-group="ai">
-            <rect x="1166.9272" width="175" height="30" y="-1.778"/>
-            <text x="1179" y="19.1143">Artificial Intelligence</text>
+            <rect x="1170" width="175" height="30" y="-1.778"/>
+            <text x="1257.5" y="19.1143" text-anchor="middle">Artificial Intelligence</text>
           </g>
         </g>
 
@@ -478,18 +478,21 @@
 
   <!-- TABS -->
   <div class="infoTabs">
-    <ul class="tabList">
-      <li><a href="#courseList">My Courses</a></li>
-      <li><a href="#courseDescriptions">Course Descriptions</a></li>
-      <li><a href="#focuses">Focuses</a></li>
-      <li><a href="#timetable">Timetable</a></li>
-      <li><a href="#post">Check My POSt!</a></li>
-      <li><a href="#feedback">Send Feedback</a></li>
-      <li><a onclick="reset()">Reset</a></li>
-      <li><span id='FCEcount'>0.0</span> FCEs</li>
-    </ul>
+    <div class="tabListDiv">
+      <ul class="tabList">
+        <li><a href="#courseList">My Courses</a></li>
+        <li><a href="#courseDescriptions">Course Descriptions</a></li>
+        <li><a href="#focuses">Focuses</a></li>
+        <li><a href="#timetable">Timetable</a></li>
+        <li><a href="#post">Check My POSt!</a></li>
+        <li><a href="#feedback">Send Feedback</a></li>
+        <li><a onclick="reset()" style="cursor: pointer">Reset</a></li>
+        <li><span id='FCEcount'>0.0</span> FCEs</li>
+      </ul>
+    </div>
+
     <div id="courseList" class="infoTab">
-      <p style='margin-left: 2em'>Currently empty, but try clicking on some courses!</p>
+      <!--p style='margin-left: 2em'>Currently empty, but try clicking on some courses!</p-->
       <table style='margin: 2em'><tr id="courseGrid"></tr></table>
     </div>
 
@@ -724,8 +727,7 @@
     </div>
 
     <div id="timetable" class="infoTab" align="center">
-      <h3>Computer Science Time Table</h3>
-      <p>This data is taken directly from the u of t Timetable, and is updated daily. Search through the time table for a course, or even a course instructor. Enter your query in the box below!</p>
+      <p>Search through the time table for a course, or even a course instructor. Enter your query in the box below!</p>
       <form id="live-search" action="javascript:void(0);">
       <fieldset>
         <input type="text" class="text-input" id="filter" value="" />
@@ -847,7 +849,7 @@
           <div id='cscElecs' class='postDetails'>
             <p>
               Note: 400-level courses will fill up "CSC/ECE/BCB 400+" first. 
-              No more than two of CSC490/491/494/495 will be counted.
+              No more than 1 FCE from {CSC490, 491, 494, 495, BCB430} will be counted.
             </p>
 
             <table class='checkTable'>
@@ -932,7 +934,7 @@
           </div>
 
           <div class='postFCETotalDiv'>
-            <h4>FCE Totals</h4>
+            <h4>FCE Totals (Specialist)</h4>
             <table>
               <tr>
                 <td class='FCECrit'>Required CSC:</td>
@@ -1065,7 +1067,7 @@
               </tr>
             </table>
 
-            <p>Notes: at least 0.5 FCEs must be a 400-level CSC/BCB, and at least 1.0 other FCEs must be CSC/BCB. No more than two of CSC490/491/494/495 will be counted.</p>
+            <p>Notes: at least 0.5 FCEs must be a 400-level CSC/BCB, and at least 1.0 other FCEs must be CSC/BCB. No more than 1 FCE from {CSC490, 491, 494, 495, BCB430} will be counted.</p>
           </div>
 
 
@@ -1104,7 +1106,7 @@
           </div>
 
           <div class='postFCETotalDiv'>
-            <h4>FCE Totals</h4>
+            <h4>FCE Totals (Major)</h4>
             <table>
               <tr>
                 <td class='FCECrit'>Required CSC:</td>
@@ -1133,7 +1135,7 @@
       <div id = "feedbackDescription">
         <p>
           Please feel free to give us feedback about this Computer Science course explorer. All feedback is welcome, and is taken into great consideration. Any contribution is
-          helpful, and bug reports are cherished even more! You're welcome to view any future changes to the project on <a target="_blank" href="https://github.com/Senor-Ian/cscourseplanner">github</a>.
+          helpful, and bug reports are cherished even more! You're welcome to view any future changes to the project on <a target="_blank" href="https://github.com/Senor-Ian/cscourseplanner">Github</a>.
           Thanks!
         </p>
       </div>
