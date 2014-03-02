@@ -98,36 +98,6 @@ $(document).ready(function () {
 });
 
 
-/* The function to send feedback via email.php*/
-$(document).ready(function() {
-    $("#submit_btn").click(function() { 
-        var user_message    = $('textarea[name=message]').val();
-        var proceed = true;
-
-        if(proceed) 
-        {
-            post_data = {'userMessage':user_message};
-            $.post('email.php', post_data, function(data){       
-                $("#result").hide().html('<div class="success">'+data+'</div>').slideDown();
-                $('#contact_form input').val(''); 
-                $('#contact_form textarea').val(''); 
-                
-            }).fail(function(err) {
-                $("#result").hide().html('<div class="error">'+err.statusText+'</div>').slideDown();
-            });
-        }
-                
-    });
-    
-    // Might be a bit useless.
-    $("#contact_form input, #contact_form textarea").keyup(function() { 
-        $("#contact_form input, #contact_form textarea").css('border-color',''); 
-        $("#result").slideUp();
-    });
-    
-});
-
-
 var FCEs = 0;
 var FCEs100 = 0;
 var FCEs200 = 0;
@@ -849,32 +819,32 @@ $(document).ready(function() {
   timeNode.appendChild(fragment2);
 
   // Enable email
-  $("#submit_btn").click(function() {
-    var user_message = $('textarea[name=message]').val();
-    var proceed = true;
+  $("#submit_btn").click(function() { 
+        var user_name       = $('input[name=name]').val(); 
+        var user_message    = $('textarea[name=message]').val();
+        var proceed = true;
 
-    if (proceed) {
-      post_data = {
-        'userMessage': user_message
-      };
-      $.post('email.php', post_data, function(data) {
-        $("#result").hide().html('<div class="success">' + data + '</div>').slideDown();
-        $('#contact_form input').val('');
-        $('#contact_form textarea').val('');
-
-      }).fail(function(err) {
-        $("#result").hide().html('<div class="error">' + err.statusText + '</div>').slideDown();
-      });
-    }
-
-  });
-
-  // Might be a bit useless.
-  $("#contact_form input, #contact_form textarea").keyup(function() {
-    $("#contact_form input, #contact_form textarea").css('border-color', '');
-    $("#result").slideUp();
-  });
-
+        if(proceed) 
+        {
+            post_data = {'userName':user_name, 'userMessage':user_message};
+            $.post('email.php', post_data, function(data){       
+                $("#result").hide().html('<div class="success">'+data+'</div>').slideDown();
+                $('#contact_form input').val(''); 
+                $('#contact_form textarea').val(''); 
+                
+            }).fail(function(err) {
+                $("#result").hide().html('<div class="error">'+err.statusText+'</div>').slideDown();
+            });
+        }
+                
+    });
+    
+    // Might be a bit useless.
+    $("#contact_form input, #contact_form textarea").keyup(function() { 
+        $("#contact_form input, #contact_form textarea").css('border-color',''); 
+        $("#result").slideUp();
+    });
+    
 });
 
 
