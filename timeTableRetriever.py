@@ -41,7 +41,7 @@ class MyHTMLParser(HTMLParser):
 
     	# Checks if the data is a course.
     	if course.match(data):
-	        if self.fieldMemory == 4:
+	        if self.fieldMemory == 4 and self.typeMemory[1] != '2':
 	        	print('<tr class=timeTableRow><td></td><td class=timeTableBlock></td>'
 	        		+'<td class=timeTableBlockType>'
 	        		+ self.typeMemory 
@@ -61,28 +61,28 @@ class MyHTMLParser(HTMLParser):
     	# to prevent waitlist fields from being entered.
     	elif section.match(data) and self.switch:
 	        if data == "F":
-		        print('</table><table class="searchClass">'+ ' <tr class=timeTableRow><td class=timeTableCourse id='
+		        print('</table><table class="searchClass" cellspacing="0">'+ ' <tr class=timeTableRow><td class=timeTableCourse id='
 		        	+ self.courseMemory 
 		        	+' style="background: backgroundInstertion">' 
 		        	+ self.courseMemory 
 		        	+'</td><td class=timeTableBlockSectionFall>' 
-		        	+ data 
+		        	+ "Fall" 
 		        	+'</td>\n')
 	        elif data == "S":
-		        print('</table><table class="searchClass">'+ ' <tr class=timeTableRow><td class=timeTableCourse id='
+		        print('</table><table class="searchClass" cellspacing="0">'+ ' <tr class=timeTableRow><td class=timeTableCourse id='
 		        	+ self.courseMemory 
 		        	+' style="background: backgroundInstertion">' 
 		        	+ self.courseMemory 
 		        	+'</td><td class=timeTableBlockSectionSpring>' 
-		        	+ data 
+		        	+ "Spring"
 		        	+'</td>\n')
 	        elif data == "Y":
-		        print('</table><table class="searchClass">'+ ' <tr class=timeTableRow><td class=timeTableCourse id='
+		        print('</table><table class="searchClass" cellspacing="0">'+ ' <tr class=timeTableRow><td class=timeTableCourse id='
 		        	+ self.courseMemory 
 		        	+' style="background: backgroundInstertion">' 
 		        	+ self.courseMemory 
 		        	+'</td><td class=timeTableBlockSectionYear>' 
-		        	+ data 
+		        	+ "Full Year" 
 		        	+'</td>\n')
 	        self.sectionMemory = data
 	        self.fieldMemory = 1
@@ -105,15 +105,15 @@ class MyHTMLParser(HTMLParser):
 	        self.fieldMemory = 3
 	        # For Tutorials. (Either 'L'ecture or 'T'utorial) 
 	        # Time is the last field for a tutorial section.
-	        if self.typeMemory[0] == 'T':
+	        if self.typeMemory[0] == 'T': #and data!= 'Cancel':
 	            print('<tr class=timeTableRow><td class=timeTableBlock></td><td class=timeTableBlock></td><td class=timeTableBlockTypeTutorial>'
 	            	+ self.typeMemory 
-	            	+'</td><td class=timeTableBlockTime>' 
+	            	+'</td><td class=timeTableBlockTutorialTime>' 
 	            	+ data
 	            	+'</td><td class=timeTableBlock></td><td class=timeTableBlock></td>')
 
-	        # For cancelled courses.
-	        elif data == 'Cancel':
+	        # For cancelled courses. Currently enabled.
+	        elif data == 'Cancel' and self.typeMemory[1] != '2':
 	        	print('<tr class=timeTableRow><td class=timeTableBlock></td>'
 	        		+'<td class=timeTableBlock></td><td class=timeTableBlockType>' 
 	        		+ self.typeMemory +'</td><td class=timeTableBlockTime>' 
@@ -125,7 +125,7 @@ class MyHTMLParser(HTMLParser):
     	# Checks if data is a location.
     	elif location.match(data):
 	        self.locationMemory = data
-	        if self.roomSwitch == True:
+	        if self.roomSwitch == True and self.typeMemory[1] != '2':
 	        	print('<tr class=timeTableRow><td></td><td class=timeTableBlock></td>'
 	        		+'<td class=timeTableBlockType>'
 	        		+ self.typeMemory 
@@ -142,16 +142,17 @@ class MyHTMLParser(HTMLParser):
     	
     	# Checks if data is an instructor.
     	elif instructor.match(data):
-	        print('<tr class=timeTableRow><td class=timeTableBlock></td>' 
-	        	+'<td class=timeTableBlock></td><td class=timeTableBlockType>'
-	        	+ self.typeMemory 
-	        	+'</td><td class=timeTableBlockTime>' 
-	        	+ self.timeMemory
-	        	+'</td><td class=timeTableBlockLocation>'
-	        	+self.locationMemory
-	        	+'</td><td class=timeTableBlockInstructor>'
-	        	+data
-	        	+'</td>')
+	        if self.typeMemory[1] != '2':
+	        	print('<tr class=timeTableRow><td class=timeTableBlock></td>' 
+	        		+'<td class=timeTableBlock></td><td class=timeTableBlockType>'
+	        		+ self.typeMemory 
+	        		+'</td><td class=timeTableBlockTime>' 
+	        		+ self.timeMemory
+	        		+'</td><td class=timeTableBlockLocation>'
+	        		+self.locationMemory
+	        		+'</td><td class=timeTableBlockInstructor>'
+	        		+data
+	        		+'</td>')
 	        self.fieldMemory = 5
 	        self.instructorMemory = data
 	        
@@ -160,7 +161,7 @@ class MyHTMLParser(HTMLParser):
 parser = MyHTMLParser(strict=False)
 
 # Everything is printed, and called in this block.
-print('<table class=\"timeTable\">')
+print('<table class=\"timeTable\" cellspacing="0">')
 print('<tr class=timeTableRow>'
 	+ '<td class=timeTableHeader>Course</td>'
 	+ '<td class=timeTableHeader>Section</td>'
