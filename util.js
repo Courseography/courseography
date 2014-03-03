@@ -1051,6 +1051,13 @@ $(document).ready(function() {
     });
 });
 
+// Disables Tab key
+document.onkeydown = function (e) {
+        if(e.which == 9){
+                return false;
+        }
+}
+
 /*
  * The actual dependencies.
  */
