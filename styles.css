@@ -417,7 +417,7 @@ input[type=checkbox]:checked + label:before {
 }
 
 /* Styles for the form */
-#feedbackDescription {
+/*#feedbackDescription {
   width: 40%;
   height: 100%;
   float: left;
@@ -447,6 +447,15 @@ input[type=checkbox]:checked + label:before {
   width: 200px;
   border: 1px solid black;
   font-family: "Trebuchet MS", Arial, Sans-Serif;
+}*/
+#feedback p {
+  padding-left: 2em;
+  width: 50%;
+}
+
+#feedback a {
+  target: _blank;
+  display: inline;
 }
 
 
