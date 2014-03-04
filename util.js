@@ -854,8 +854,8 @@ function setGraphSize() {
   //$("#graph").width('100%');
   //$(".infoTabs").height("100%");
   //$(".infoTabs").width($(window).width() + "px");
-  if ($(window).width() < 1200) {
-    $(".infoTabs").width("1200px");
+  if ($(window).width() < 1400) {
+    $(".infoTabs").width("1400px");
   } else {
     $(".infoTabs").width("100%");
   }

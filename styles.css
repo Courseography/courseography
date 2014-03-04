@@ -44,12 +44,11 @@ fieldset {
 
 ul.tabList {
     float: left;
-    width: 100%;
     height: 100%;
     display: block;
     margin: 0px;
-    padding: 0px;
-    
+    padding: 0px;   
+    padding-left: 2em; 
 }
 
 ul.tabList li {
@@ -81,10 +80,34 @@ div.infoTab {
     overflow-y: auto;
 }
 
+/* FCE Count */
+#FCECountDiv {
+    background: #66C2FF;
+    float: right;
+    width: 400px;
+    text-align: center;
+    padding: 0;
+    height: 40px;
+    line-height: 40px;
+    font-size: 1.35em;
+    vertical-align: middle;
+    border-right-style: solid;
+    border-left-style: solid;
+    border-right-width: thin;
+    border-left-width: thin;
+}
+
 /* Welcome Tab */
+#welcome h2 {
+  padding-left: 20px;
+}
+
+#welcome p {
+  padding-left: 20px;
+}
 .welcomeList {
-    padding-left:2em;
-    width:50%;
+    padding-left: 20px;
+    width: 50%;
 }
 
 /* My Courses tab */
@@ -192,7 +215,7 @@ td.timeTableBlockSectionYear {
     color: black;
 }
 
-td.timeTableBlockTypeTutorial {
+td.timeTableBlockTypeTutorial, td.timeTableBlockTutorialTime {
     width: 16%;
     background: #C2D6FF;
     border: 2px solid black;
@@ -429,9 +452,8 @@ input[type=checkbox]:checked + label:before {
 
 /* SVG Styles */
 #graph {
-    width: 1200px;
-    height: 600px;
-    /*width: 100%;*/
+    width: 1400px;
+    height: 700px;
     overflow: hidden;
     margin-left: auto;
     margin-right: auto;
@@ -486,14 +508,14 @@ g[data-active="takeable"] {
 
 /* Used for hover */
 g[data-active="missing"] rect {
-    stroke-width: 3;
-    stroke: #BB0199;
+    stroke-width: 5;
+    stroke: #CC0011;
 }
 
 /* Used for hover */
 g[data-active="missing"] ellipse {
     stroke-width: 3;
-    stroke: #BB0199;
+    stroke: #CC0011;
 }
 
 g[data-active="unlit"] rect {
@@ -543,12 +565,13 @@ g.hybrid {
 }
 
 g.hybrid rect {
-    fill: #B84D4D;
+    fill: #333333;
 }
 
 g.hybrid text{
     stroke: none;
     font-size: 0.6em;
+    fill: white;
 }
 
 g.bool {
@@ -564,13 +587,6 @@ g.bool text {
     font-size: 0.5em;
     font-family: 'Comic Sans MS';
     font-weight: bold;
-}
-
-/* Focus spotlight styles */
-ellipse.spotlight {
-  fill: white; 
-  opacity: 0.8; 
-  stroke: none;
 }
 
 /* Edge styles */
@@ -592,15 +608,11 @@ path[data-active="active"] {
 }
 
 path[data-active="missing"] {
-  stroke: #BB0199;
+  stroke: #CC0011;
   fill: none;
   opactiy: 0.5;
 }
 
-path[data-active="missing"] #arrow path {
-  stroke: #FF0000;
-  fill: #FF0000;
-}
 
 /* Title style. */
 #svgTitle {
@@ -608,4 +620,11 @@ path[data-active="missing"] #arrow path {
     fill: #0f2d5b;
     font-family: Garamond, Serif;
     font-weight: bold;
+}
+
+/* Focus spotlight styles */
+ellipse.spotlight {
+  fill: white; 
+  opacity: 0.8; 
+  stroke: none;
 }

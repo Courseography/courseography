@@ -290,7 +290,7 @@
         </g>
         <g id="hybrid7" class="hybrid">
           <rect x="650" width="27" height="24" y="-83.4169"/>
-          <text x="667.5" y="-67.4887">LIN1</text>
+          <text x="663.5" y="-67.4887">LIN1</text>
         </g>
         <g id="hybrid8" class="hybrid">
           <rect x="753" width="27" height="24" y="261.6064"/>
@@ -489,24 +489,27 @@
         <li><a href="#post">Check My POSt!</a></li>
         <li><a href="#feedback">Send Feedback</a></li>
         <li><a onclick="reset()" style="cursor: pointer">Reset</a></li>
-        <li><span id='FCEcount'>0.0</span> FCEs</li>
       </ul>
+    <div id='FCECountDiv'><span id='FCEcount'>0.0</span> FCEs</div>
     </div>
+
     <div id="welcome" class="infoTab">
-        <h3>Welcome to the University of Toronto Computer Science Course Planner.</h3>
-        <p>The Computer Science course planner is a tool to help you plan your degree.</p>
+        <h2>Welcome to the University of Toronto Computer Science Course Planner (Beta)!</h2>
+        <p>Select courses in the graph to satisfy prerequisites and unlock upper-year courses.
+        If you can't select a course, you're probably missing prerequisites! Hover over courses and look for the <span style="color: #CC0011; background: #222222">RED</span> edges.</p>
+        <p>Check out the different tabs for extra features.</p>
         <table>
             <tr>
-                <td class="welcomeList"><h2>The graph</h2>  The graph allows you to explore the courses that you can take during your degree.</td>
-                <td class="welcomeList"><h2>My Courses</h2> The My Courses tab allows you to browse the courses that you've selected, in the order you've selected them.</td>
+                <td class="welcomeList"><h3>My Courses</h3> Browse the courses that you've selected, in the order you've selected them.</td>
+                <td class="welcomeList"><h3>Course Descriptions</h3>Don't recognize a course number? Hover over it and look for the description in this tab.</td>
             </tr>
             <tr>
-                <td class="welcomeList"><h2>Course Descriptions</h2></h2> The Course Descriptions tab allows you to view the course calendar description of any course by hovering over or clicking a course in the graph.</td>
-                <td class="welcomeList"><h2>Focuses</h2> The Focuses tab allows you to explore the possibilities of taking a focus in a specialist degree.</td>
+                <td class="welcomeList"><h3>Focuses</h3> Explore the Computer Science focuses available to our specialists.</td>
+                <td class="welcomeList"><h3>Timetable</h3>Look up course offerings the in current academic year.</td>
                 </tr>
             <tr>
-                <td class="welcomeList"><h2>Timetable</h2> The Timetableallows you to see what times the courses you want to take are offered in the coming year, and allows you to search for specific classes.</td>
-                <td class="welcomeList"><h2>Check my POSt!</h2> The Check my POSt! tab allows you to view what you need to accomplish in order to complete your degree.</td>
+                <td class="welcomeList"><h3>Check my POSt!</h3>Track your progress towards finishing your CS program.</td>
+                <td class="welcomeList"><h3>Send Feedback</h3>We're in beta! Let us know how we're doing over here.</td>
             </tr>
         </table>
     </div>
