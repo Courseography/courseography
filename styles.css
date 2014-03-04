@@ -81,7 +81,11 @@ div.infoTab {
     overflow-y: auto;
 }
 
-
+/* Welcome Tab */
+.welcomeList {
+    padding-left:2em;
+    width:50%;
+}
 
 /* My Courses tab */
 .courseCell {
