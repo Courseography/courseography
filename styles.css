@@ -637,3 +637,17 @@ ellipse.spotlight {
   opacity: 0.8; 
   stroke: none;
 }
+
+/* Styles for disclaimer */
+#disclaimerDiv {
+    width: 60%; 
+    margin-left: auto; 
+    margin-right: auto; 
+    font-size: 12pt;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+#disclaimerDiv a {
+    display: inline;
+}
