@@ -17,7 +17,7 @@
 
 <body onresize="setGraphSize()">
   <div id="graph">
-    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="graphRootSVG" viewBox="0 0 1500 1000" preserveAspectRatio="xMinyMin">
+    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="graphRootSVG" viewBox="50 0 1375 1000">
       <g transform="matrix(1.4859,0,0,1.4859,-359.7965,469.5511)">
         <defs>
           <marker id="arrow" viewBox="0 0 10 10" refX="1" refY="5" markerUnits="strokeWidth" orient="auto" markerWidth="10" markerHeight="10">
@@ -483,6 +483,7 @@
   </div>
 
 
+
   <!-- TABS -->
   <div class="infoTabs">
     <div class="tabListDiv">
@@ -754,13 +755,20 @@
       </div>
     </div>
 
-    <div id="timetable" class="infoTab" align="center">
-      <p>Search through the time table for a course, or even a course instructor. Enter your query in the box below!</p>
+    <div id="timetable" class="infoTab">
+      <div id="timetableContainer">
+      </div>
+
+      <div id="timetableSearch">
+      <p>Search through the time table for a course, or even a course instructor.</p>
+      <p>Enter your query in the box below!</p>
       <form id="live-search" action="javascript:void(0);">
       <fieldset>
         <input type="text" class="text-input" id="filter" value="" />
       </fieldset>
       </form>
+      </div>
+
     </div>
 
     <div id="post" class="infoTab">
@@ -1163,7 +1171,7 @@
       <!--div id = "feedbackDescription"-->
         <p>
           Course Planner is an ongoing project maintained by Ian Stewart-Binks and <a target="_blank" href="http://www.cs.toronto.edu/~liudavid/">David Liu</a>. 
-          Any contribution, whether ideas for new features, better design, or (especially) bug reports! You can also keep up to date with the latest developments on <a target="_blank" href="https://github.com/Ian-Stewart-Binks/cscourseplanner">Github</a>.
+          Any contribution, whether ideas for new features, better design, or (especially) bug reports! You can also keep up to date with the latest developments on <a target="_blank" href="https://github.com/Senor-Ian/cscourseplanner">Github</a>.
           Thanks!
         </p>
 

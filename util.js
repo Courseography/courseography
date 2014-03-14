@@ -535,7 +535,7 @@ function createHtml(htmlStr) {
 
 // Fetch timetable information
 function createTimeTable() {
-  var frag = document.createDocumentFragment();
+  /*var frag = document.createDocumentFragment();
   temp = document.createElement('div');
   var xmlreq = new XMLHttpRequest();
   xmlreq.open("GET", "res/timeTable.txt", false);
@@ -560,7 +560,11 @@ function createTimeTable() {
   while (temp.firstChild) {
     frag.appendChild(temp.firstChild);
   }
-  return frag;
+  return frag;*/
+  var xmlreq = new XMLHttpRequest();
+  xmlreq.open('GET', 'res/timetableHTML.html', false);
+  xmlreq.send();
+  $('#timetableContainer').html(xmlreq.responseText);
 }
 
 
@@ -845,8 +849,8 @@ function setGraphSize() {
     // Set height of tabs
   //var graphHeight = Math.min(Math.round($(window).height() * 0.7), $(window).width() / 2);
   //var height = $(window).height() - graphHeight - 46;
-  console.log("Resizing graph");
-  var height = $(window).height() - $('#graph').height() - 46;
+  //console.log("Resizing graph");
+  //var height = $(window).height() - $('#graph').height() - 46;
   //$(".infoTabs").height(height + "px");
   //$("#graph").height(graphHeight + "px");
   //$('#graph').css('margin-left', 'auto');
@@ -854,11 +858,11 @@ function setGraphSize() {
   //$("#graph").width('100%');
   //$(".infoTabs").height("100%");
   //$(".infoTabs").width($(window).width() + "px");
-  if ($(window).width() < 1400) {
+  /*if ($(window).width() < 1400) {
     $(".infoTabs").width("1400px");
   } else {
     $(".infoTabs").width("100%");
-  }
+  }*/
 }
 
 $(document).ready(function() {
@@ -866,7 +870,7 @@ $(document).ready(function() {
   // Set height of tabs
   //var graphHeight = Math.min(Math.round($(window).height() * 0.7), $(window).width() / 2);
   //var height = $(window).height() - graphHeight - 46;
-  var height = $(window).height() - $('#graph').height() - 46;
+  //var height = $(window).height() - $('#graph').height() - 46;
   //$(".infoTabs").height(height + "px");
   //$("#graph").height(graphHeight + "px");
   //$('#graph').css('margin-left', 'auto');
@@ -876,11 +880,11 @@ $(document).ready(function() {
   //$(".infoTabs").width($(window).width() + "px");
   //$("#graph").width(screen.availWidth + "px");
   //$(".infoTabs").width(screen.availWidth + "px");
-  if ($(window).width() < 1200) {
+  /*if ($(window).width() < 1200) {
     $(".infoTabs").width("1200px");
   } else {
     $(".infoTabs").width("100%");
-  }
+  }*/
 
   // Enable tabs
   $('.infoTabs').tabs({
@@ -924,9 +928,10 @@ $(document).ready(function() {
     window[id].updateSVG();
   }
 
-  var fragment2 = createTimeTable();
-  timeNode = parent.document.getElementById("timetable");
-  timeNode.appendChild(fragment2);
+  //var fragment2 = createTimeTable();
+  //timeNode = parent.document.getElementById("timetable");
+  //timeNode.appendChild(fragment2);
+  createTimeTable();
 
   // Enable email
   $("#submit_btn").click(function() { 

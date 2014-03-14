@@ -4,10 +4,14 @@ html, body {
     margin: 0em;
     padding: 0em;
     width: 100%;
+    min-width: 1300px;
     height: 100%;
-    overflow-x: auto;
-    overflow-y: auto;
     font-family: "Trebuchet MS", Arial, Sans-Serif;
+    font-size: 16px;
+}
+
+html {
+    overflow-y: auto;
 }
 
 a {
@@ -26,10 +30,16 @@ fieldset {
 
 /* Styles for the main tabs */
 .infoTabs {
-    height: 500px;
-    width: 100%;
+    /*height: 450px;*/
+    /*height: 100%;*/
+    min-height: 450px;
+    /*width: 100%;*/
+    min-width: 1300px;
     margin: 0;
     padding: 0;
+    background-color: #447BD4;
+    padding-bottom: 2em;
+    overflow: hidden;
 }
 
 .tabListDiv {
@@ -74,17 +84,17 @@ ul.tabList li.ui-tabs-active, ul.tabList li:hover {
 div.infoTab {
     float: left;
     width: 100%;
-    background: #447BD4;
     color: white;
     height: 100%;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 
 /* FCE Count */
 #FCECountDiv {
     background: #66C2FF;
     float: right;
-    width: 400px;
+    width: 200px;
     text-align: center;
     padding: 0;
     height: 40px;
@@ -104,6 +114,7 @@ div.infoTab {
 
 #welcome p {
   padding-left: 20px;
+  width: 50%;
 }
 .welcomeList {
     padding-left: 20px;
@@ -155,6 +166,91 @@ div#calendar {
   font-family: "Trebuchet MS", Arial, Sans-Serif;
 }
 
+#timetable table {
+    border-spacing: 0;
+}
+
+#timetableContainer {
+    width: 950px;
+    float: left;
+    height: 100%;
+}
+
+#timetableSearch {
+    padding-top: 2em;
+    padding-left: 2em;
+    float: left;
+}
+
+#timetableMain {
+    margin-top: 2em;
+    margin-left: 2em;
+    border: 2px solid black;
+}
+
+#timetableMain tr, #timetableMain td, .sessionHeader {
+    border-color: black;
+    border-style: solid;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 2px;
+    border-right-width: 2px;
+    vertical-align: top;
+    min-height: 20px;
+    color: black;
+    margin: 0;
+    padding: 0;
+}
+
+#timetableMain .courseTable tr, #timetableMain .courseTable td, #timetableMain .courseTable th {
+    border-top-width: 0px;
+    border-bottom-width: 0px;
+    border-left-width: 0px;
+    border-right-width: 0px;
+    border-style: none;
+}
+
+#timetable td.timetableCourseName {
+    background-color: gray;
+    width: 90px;
+    font-size: 1.1em;
+    text-align: center;
+    vertical-align: middle;
+}
+
+
+#timetable td.timetableSection, #timetable th.timetableSection {
+    width: 50px;
+    background-color: #C2D6FF;
+    text-align: center;
+}
+
+#timetable td.timetableTime, #timetable th.timetableTime {
+    width: 135px;
+    background-color: #7094FF;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+#timetable td.timetableInstructor, #timetable th.timetableInstructor {
+    width: 150px;
+    background-color: #DB94B8;
+    padding-left: 5px;
+}
+
+#timetable td.timetableCap, #timetable th.timetableCap {
+    width: 75px;
+    background-color: #B2E0FF;
+    padding-left: 5px;
+}
+
+th.sessionHeader {
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+/*
 table.timeTable {
     width: 70%;
     margin: 0 auto;
@@ -251,6 +347,7 @@ td.timeTableBlockInstructor {
     color: black;
 }
 
+*/
 
 /* Focus and POSt tabs */
 div.focusDetails {
@@ -461,7 +558,7 @@ input[type=checkbox]:checked + label:before {
 
 /* SVG Styles */
 #graph {
-    width: 1400px;
+    width: 1300px;
     height: 700px;
     overflow: hidden;
     margin-left: auto;
@@ -483,7 +580,7 @@ input[type=checkbox]:checked + label:before {
 g text{
     white-space: pre;
     text-align: center;
-    font-size: 80%;
+    /* font-size: 80%;*/
     stroke: none;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -638,6 +735,7 @@ ellipse.spotlight {
   stroke: none;
 }
 
+
 /* Styles for disclaimer */
 #disclaimerDiv {
     width: 60%; 
@@ -650,4 +748,5 @@ ellipse.spotlight {
 
 #disclaimerDiv a {
     display: inline;
+    color: #2115DD;
 }
