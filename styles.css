@@ -511,23 +511,22 @@ label {
 } 
 
 label:before {  
-    content: "";  
+    content: "\00a0";  
     display: inline-block;  
     width: 20px;  
     height: 20px;  
-  
     color: green;
     font-size: 1.15em;
     font-family: bold;
     background-color: white;  
     text-align: center;
-    vertical-align: -3px;
+    vertical-align: -2px;
 
     margin-right: 10px;  
     position: relative;  
 }  
 
-input[type=checkbox]:checked + label:before {  
+input[type=checkbox]:checked + label:before {
     content: "\2713";
 }
 
@@ -563,6 +562,7 @@ input[type=checkbox]:checked + label:before {
   border: 1px solid black;
   font-family: "Trebuchet MS", Arial, Sans-Serif;
 }*/
+
 #feedback p {
   padding-left: 2em;
   width: 50%;
@@ -572,6 +572,9 @@ input[type=checkbox]:checked + label:before {
   target: _blank;
   display: inline;
 }
+
+
+
 
 
 /* SVG Styles */
