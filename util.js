@@ -579,7 +579,6 @@ function createTimeTable() {
         }
       });
     });
-
 }
 
 
@@ -880,6 +879,12 @@ function setGraphSize() {
   }*/
 }
 
+$(window).resize(function() {
+  // Set width of FCE count
+  var w = $('.infoTabs').width() - $('.tabList').outerWidth();
+  $('#FCECountDiv').width(w + 'px');
+});
+
 $(document).ready(function() {
 
   // Set height of tabs
@@ -900,6 +905,10 @@ $(document).ready(function() {
   } else {
     $(".infoTabs").width("100%");
   }*/
+
+  // Set width of FCE count
+  var w = $('.infoTabs').width() - $('.tabList').outerWidth();
+  $('#FCECountDiv').width(w + 'px');
 
   // Enable tabs
   $('.infoTabs').tabs({
@@ -1060,9 +1069,9 @@ $(document).ready(function() {
 
 // Disables Tab key
 document.onkeydown = function (e) {
-        if(e.which == 9){
-                return false;
-        }
+    if(e.which == 9){
+        return false;
+    }
 }
 
 

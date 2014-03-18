@@ -94,17 +94,12 @@ div.infoTab {
 #FCECountDiv {
     background: #66C2FF;
     float: right;
-    width: 200px;
     text-align: center;
     padding: 0;
     height: 40px;
     line-height: 40px;
     font-size: 1.35em;
     vertical-align: middle;
-    border-right-style: solid;
-    border-left-style: solid;
-    border-right-width: thin;
-    border-left-width: thin;
 }
 
 /* Welcome Tab */
