@@ -561,10 +561,25 @@ function createTimeTable() {
     frag.appendChild(temp.firstChild);
   }
   return frag;*/
-  var xmlreq = new XMLHttpRequest();
-  xmlreq.open('GET', 'res/timetableHTML.html', false);
-  xmlreq.send();
-  $('#timetableContainer').html(xmlreq.responseText);
+
+  $.ajax('res/timetableHTML.html')
+    .done(function(response) {
+      $('#timetableContainer').html(response);
+  
+      $('.timetableCourseName').css('background-color', function () {
+        var name = this.innerHTML.substr(0,6);
+        if (name == 'CSC240' || name == 'CSC265') {
+          return $("#CSC165 > rect").css('fill');
+        }
+        else if (name.length == 6) {
+          return $('#' + name + '> rect').css('fill');
+        } 
+        else {
+          return '';
+        }
+      });
+    });
+
 }
 
 

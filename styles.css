@@ -211,7 +211,6 @@ div#calendar {
 }
 
 #timetable td.timetableCourseName {
-    background-color: gray;
     width: 90px;
     font-size: 1.1em;
     text-align: center;
