@@ -168,10 +168,11 @@ div#calendar {
 
 #timetable table {
     border-spacing: 0;
+    table-layout: fixed;
 }
 
 #timetableContainer {
-    width: 950px;
+    width: 900px;
     float: left;
     height: 100%;
 }
@@ -186,9 +187,10 @@ div#calendar {
     margin-top: 2em;
     margin-left: 2em;
     border: 2px solid black;
+    width: 100%;
 }
 
-#timetableMain tr, #timetableMain td, .sessionHeader {
+#timetableMain tr, #timetableMain td, #timetableMain th, .sessionHeader {
     border-color: black;
     border-style: solid;
     border-top-width: 1px;
@@ -197,9 +199,11 @@ div#calendar {
     border-right-width: 2px;
     vertical-align: top;
     min-height: 20px;
+    height: 22px;
     color: black;
     margin: 0;
     padding: 0;
+    border-spacing: 0px
 }
 
 #timetableMain .courseTable tr, #timetableMain .courseTable td, #timetableMain .courseTable th {
@@ -210,8 +214,13 @@ div#calendar {
     border-style: none;
 }
 
+#timetableMain .courseTable {
+    min-height: 23px;
+    width: 100%;
+}
+
 #timetable td.timetableCourseName {
-    width: 90px;
+    width: 95px;
     font-size: 1.1em;
     text-align: center;
     vertical-align: middle;
@@ -225,7 +234,7 @@ div#calendar {
 }
 
 #timetable td.timetableTime, #timetable th.timetableTime {
-    width: 135px;
+    width: 110px;
     background-color: #7094FF;
     padding-left: 5px;
     padding-right: 5px;
@@ -243,10 +252,25 @@ div#calendar {
     padding-left: 5px;
 }
 
-th.sessionHeader {
+#timetableMain th.sessionHeader {
     text-align: center;
     font-weight: bold;
     font-size: 1.1em;
+    color: white;
+}
+
+.FallOffering, .FallOffering table {
+    background-color: #473924;
+    width: 410px;
+}
+
+.WinterOffering, .WinterOffering table {
+    background-color: #002E0F;
+    width: 410px;
+}
+
+.YOffering {
+    width: 100%;
 }
 
 /*

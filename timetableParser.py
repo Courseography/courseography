@@ -72,16 +72,22 @@ def parseTimetable():
 
 def generateRows(course):
   rows = []
-  for term in ['Fall', 'Winter']:
-    if term in course: 
-      rows.append('<td><table class="courseTable">')
+
+  for term in ['Y', 'Fall', 'Winter']:
+    if term in course:
+      if term == 'Y':
+        start = '<td class="' + term + 'Offering" colspan="2">'
+      else:
+        start = '<td class="' + term + 'Offering">'
+      start += '<table class="courseTable">';
+      rows.append(start)
       termRows = []
 
       for i, lec in enumerate(course[term]['lectures']):
         if course['manualTutorialEnrolment']:
           tutString = ''
         else:
-          tutString = '<span style="float: right">(Tut {})</span>'.format(course[term]['tutorials'][i])
+          tutString = '<span style="float: right">({})</span>'.format(course[term]['tutorials'][i])
         row = '<tr>'
 
         row += (
@@ -107,8 +113,19 @@ def generateRows(course):
 
       rows = (rows + termRows)
       rows.append('</table></td>')
-    else:
-      rows.append('<td></td>')
+
+      if term == 'Y':
+        break
+
+    elif term == 'Fall' or term == 'Winter':
+      rows.append('<td class="' + term + 'Offering"></td>')
+
+
+
+  
+  
+
+
   rows = (['<tr class="searchClass">', 
     '<td class="timetableCourseName" style="vertical-align:top">{}</td>'
     .format(course['name'])] + rows + ['</tr>'])
@@ -122,17 +139,17 @@ def generateHTML():
   with open('res/timetableHTML.html', 'w+') as htmlOutput:
     htmlOutput.write('<table id="timetableMain"><tr>' +
       '<td class="timetableCourseName"></td>' +
-      '<th class="sessionHeader">FALL</th>' + 
-      '<th class="sessionHeader">SPRING</th></tr>'
+      '<th class="sessionHeader FallOffering">FALL</th>' + 
+      '<th class="sessionHeader WinterOffering">SPRING</th></tr>'
       )
     
     # Header row
     htmlOutput.write('<tr><td class="timetableCourseName"></td>' + 
-      '<td><table><tr><th class="timetableSection">Sec</th>' + 
+      '<td><table class="courseTable"><tr><th class="timetableSection">Sec</th>' + 
       '<th class="timetableTime">Time</th>' +
       '<th class="timetableInstructor">Instructor</th>' +
       '<th class="timetableCap">Cap</th></tr></table></td>' +
-      '<td><table><tr><th class="timetableSection">Sec</th>' + 
+      '<td><table class="courseTable"><tr><th class="timetableSection">Sec</th>' + 
       '<th class="timetableTime">Time</th>' +
       '<th class="timetableInstructor">Instructor</th>' +
       '<th class="timetableCap">Cap</th></tr></table></td>'
