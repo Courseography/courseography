@@ -6,6 +6,7 @@ var edges = [];
 var clickedCourses = [];
 var active400s = [];
 var active300s = [];
+var active200s = [];
 var projectCourses = []; // CSC49x
 
 // Numbers of active courses
@@ -40,6 +41,15 @@ var elec200sTotalMajor = 0;
 var elec300sTotalMajor = 0;
 var elecTotalMajor = 0;
 var postTotalMajor = 0;
+
+
+var cscReqSatMinor = false;
+var elecSatMinor = false;
+var cscReqTotalMinor = 0;
+var elecTotalMinor = 0;
+var postTotalMinor = 0;
+
+
 
 
 var activeFocus = "";
@@ -300,6 +310,7 @@ function turnNode(event) {
     
     updatePostInterface();
     updateMajorPostInterface();
+    updateMinorPostInterface();
 
     updateMyCoursesTab();
     updateFCECount();
@@ -345,6 +356,7 @@ function reset() {
   clickedCourses = [];
   $('#FCEcount').html('0.0');
 
+  active200s = [];
   active300s = [];
   active400s = [];
   projectCourses = [];
@@ -353,6 +365,7 @@ function reset() {
 
   updatePostInterface();
   updateMajorPostInterface();
+  updateMinorPostInterface();
 };
 
 
@@ -616,16 +629,25 @@ function updatePOSt(course, active) {
       } else if (!active && ind > -1) {
         active300s.splice(ind, 1);
       }
+    } else if (course.substr(0, 4) == "CSC2") { // 2nd year course
+      var ind = active200s.indexOf(course);
+      if (active && ind == -1) {
+        active200s.push(course);
+      } else if (!active && ind > -1) {
+        active200s.splice(ind, 1);
+      }
     }
 
     if (CSCinq.indexOf(course) > -1) {
       $('#' + course + 'check').prop('checked', active);
       $('#' + course + 'checkMajor').prop('checked', active);
+      $('#' + course + 'checkMinor').prop('checked', active);
     }
   }
 
   $('#' + course + 'check').prop('checked', active);
   $('#' + course + 'checkMajor').prop('checked', active);
+  $('#' + course + 'checkMinor').prop('checked', active);
 };
 
 
@@ -652,6 +674,14 @@ function updateMajorPostInterface() {
     cscReqSatMajor && matReqSatMajor && elecSatMajor && peySatMajor);
 }
 
+function updateMinorPostInterface() {
+  updateCSCReqsMinor();
+  updateElecsMinor();
+
+  setIcon('minorCheck', 
+    cscReqSatMinor && elecSatMinor);
+}
+
 function setIcon(id, sat) {
   if (sat) {
     $('a[href="#' + id + '"] img').attr('src', 'res/check.ico');
@@ -672,6 +702,13 @@ function updateCSCReqsMajor() {
   $('#cscReqTotalMajor').html(cscReqTotal.toFixed(1));
   cscReqSatMajor = cscReqTotalMajor >= 3.5;
   setIcon('cscReqsMajor', cscReqSatMajor);
+}
+
+function updateCSCReqsMinor() {
+  cscReqTotalMinor = $('#cscReqsMinor input:checkbox:checked').length / 2;
+  $('#cscReqTotalMinor').html(cscReqTotal.toFixed(1));
+  cscReqSatMinor = cscReqTotalMinor >= 2.5;
+  setIcon('cscReqsMinor', cscReqSatMinor);
 }
 
 
@@ -695,6 +732,75 @@ function updateMATReqsMajor() {
   setIcon('matReqsMajor', matReqSatMajor);
 }
 
+function update200sElecsMinor() {
+  var numProjects = 2;
+  var active300sMinor = active300s;
+  var tmp = active300s.concat(active400s, projectCourses.slice(0, numProjects));
+  if (elecTotalMinor >= 1.5) {
+    elecTotalMinor = 1.5;
+  }
+
+  if (CSC373.active) {
+    active300sMinor.push('CSC373');
+    tmp.push('CSC373');
+    extraMinor += 0.5;
+  }
+
+  if (CSC369.active) {
+    active300sMinor.push('CSC369');
+    tmp.push('CSC369');
+    extraMinor += 0.5;
+  }
+
+  if (CSC258.active) {
+    tmp.push('CSC258');
+    extraMinor += 0.5;
+  }
+
+  if (CSC209.active) {
+    tmp.push('CSC209');
+    extraMinor += 0.5;
+  }
+
+  if (CSC200.active) {
+    tmp.push('CSC200');
+    extraMinor += 1;
+
+    // Quick fix, should find better way.
+    //active200sMinor.push('CSC200a');
+    //active200sMinor.push('CSC200b');
+  }
+  for (var i = 1; i <= 7; i++) {
+    if (i <= tmp.length) {
+      $('#inputMinorCSC' + i).attr('value', tmp[i - 1]);
+    } else {
+      $('#inputMinorCSC' + i).attr('value', '');
+    }
+  }
+
+  elecTotalMinor = (tmp.length) / 2;
+
+  $('#elecTotalMinor').html(elecTotalMinor.toFixed(1));
+  elecSatMinor = (elecTotalMinor >= 1.5) && (1 <= active300sMinor.length + active400s.length + projectCourses.length) && (active300sMinor.length + active400s.length + projectCourses.length <= 3) ;
+  setIcon('cscElecsMinor', elecSatMinor);
+}
+
+
+function updateElecsMinor() {
+  update200sElecsMinor();
+  var numProjects = 2;
+
+  elecSatMinor = elecTotalMinor >= 1.5 
+    && (active300s.length + active400s.length + projectCourses.length > 0)
+    && (active300s.concat(active400s, projectCourses.slice(0, numProjects)).length + extraMinor >= 3);
+  
+  $('#elecTotalMinor').html(elecTotalMinor.toFixed(1));
+
+  setIcon('ElecsMinor', elecSatMinor);
+  console.log("updateElectsMinor called");
+}
+
+var extraMinor = 0;
 
 function update200sElecsMajor() {
   elec200sTotalMajor = 0;
@@ -784,7 +890,6 @@ function updateElecsMajor() {
 }
 
 
-
 function updateCSC400s() {
   numBCB = $('#csc400s input:checkbox:checked').length;
 
@@ -857,12 +962,16 @@ function updatePEY() {
   setIcon('peyReq', peySat);
 }
 
+function updatePOStTotal() {
+  $('#postTotal').html((cscReqTotal + matReqTotal + elecTotal).toFixed(1));
+}
+
 function updatePOStTotalMajor() {
   $('#postTotalMajor').html((cscReqTotalMajor + matReqTotalMajor + elecTotalMajor).toFixed(1));
 }
 
-function updatePOStTotal() {
-  $('#postTotal').html((cscReqTotal + matReqTotal + elecTotal).toFixed(1));
+function updatePostMinor() {
+  $('#postTotalMinor').html((cscReqTotalMinor + elecTotalMinor).toFixed(1));
 }
 
 function setGraphSize() {
