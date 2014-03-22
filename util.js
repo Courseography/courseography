@@ -1033,7 +1033,7 @@ $(document).ready(function() {
   }*/
 
   // Set width of FCE count
-  var w = $('.infoTabs').width() - $('.tabList').outerWidth();
+  var w = $('.infoTabs').width() - $('.tabList').outerWidth() - 1;
   $('#FCECountDiv').width(w + 'px');
 
   // Enable tabs
