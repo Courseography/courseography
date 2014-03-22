@@ -706,7 +706,12 @@ function updateCSCReqsMajor() {
 
 function updateCSCReqsMinor() {
   cscReqTotalMinor = $('#cscReqsMinor input:checkbox:checked').length / 2;
-  $('#cscReqTotalMinor').html(cscReqTotal.toFixed(1));
+
+  if(cscReqTotalMinor > 2.5) {
+    cscReqTotalMinor = 2.5;
+  }
+
+  $('#cscReqTotalMinor').html(cscReqTotalMinor.toFixed(1));
   cscReqSatMinor = cscReqTotalMinor >= 2.5;
   setIcon('cscReqsMinor', cscReqSatMinor);
 }
@@ -732,53 +737,58 @@ function updateMATReqsMajor() {
   setIcon('matReqsMajor', matReqSatMajor);
 }
 
-function update200sElecsMinor() {
+var extraMinor = 0;
+
+function updateAllElecsMinor() {
   var numProjects = 2;
-  var active300sMinor = active300s;
-  var tmp = active300s.concat(active400s, projectCourses.slice(0, numProjects));
+  var active300sMinor = active300s.concat();
+  var tmpMinor = active300s.concat(active400s, projectCourses.slice(0, numProjects));
+  
+
   if (elecTotalMinor >= 1.5) {
     elecTotalMinor = 1.5;
   }
 
   if (CSC373.active) {
     active300sMinor.push('CSC373');
-    tmp.push('CSC373');
+    tmpMinor.push('CSC373');
     extraMinor += 0.5;
   }
 
   if (CSC369.active) {
     active300sMinor.push('CSC369');
-    tmp.push('CSC369');
+    tmpMinor.push('CSC369');
     extraMinor += 0.5;
   }
 
   if (CSC258.active) {
-    tmp.push('CSC258');
+    tmpMinor.push('CSC258');
     extraMinor += 0.5;
   }
 
   if (CSC209.active) {
-    tmp.push('CSC209');
+    tmpMinor.push('CSC209');
     extraMinor += 0.5;
   }
 
   if (CSC200.active) {
-    tmp.push('CSC200');
+    tmpMinor.push('CSC200');
     extraMinor += 1;
-
-    // Quick fix, should find better way.
-    //active200sMinor.push('CSC200a');
-    //active200sMinor.push('CSC200b');
   }
+
   for (var i = 1; i <= 7; i++) {
-    if (i <= tmp.length) {
-      $('#inputMinorCSC' + i).attr('value', tmp[i - 1]);
+    if (i <= tmpMinor.length) {
+      $('#inputMinorCSC' + i).attr('value', tmpMinor[i - 1]);
     } else {
       $('#inputMinorCSC' + i).attr('value', '');
     }
   }
 
-  elecTotalMinor = (tmp.length) / 2;
+  elecTotalMinor = (tmpMinor.length) / 2;
+
+  if(elecTotalMinor > 1.5) {
+    elecTotalMinor = 1.5;
+  }
 
   $('#elecTotalMinor').html(elecTotalMinor.toFixed(1));
   elecSatMinor = (elecTotalMinor >= 1.5) && (1 <= active300sMinor.length + active400s.length + projectCourses.length) && (active300sMinor.length + active400s.length + projectCourses.length <= 3) ;
@@ -787,21 +797,20 @@ function update200sElecsMinor() {
 
 
 function updateElecsMinor() {
-  update200sElecsMinor();
+  updateAllElecsMinor();
   var numProjects = 2;
-
-  elecSatMinor = elecTotalMinor >= 1.5 
-    && (active300s.length + active400s.length + projectCourses.length > 0)
-    && (active300s.length + active400s.length + projectCourses.length < 3)
-    && (active300s.concat(active400s, projectCourses.slice(0, numProjects)).length + extraMinor >= 3);
+  postTotalMinor = elecTotalMinor + cscReqTotalMinor;
+  //elecSatMinor = elecTotalMinor >= 1.5 
+  //  && (active300s.length + active400s.length + projectCourses.length > 0)
+  //  && (active300s.length + active400s.length + projectCourses.length < 3)
+  //  && (active300s.concat(active400s, projectCourses.slice(0, numProjects)).length + extraMinor >= 3);
   
-  $('#elecTotalMinor').html(elecTotalMinor.toFixed(1));
+  $('#postTotalMinor').html(postTotalMinor.toFixed(1));
 
   setIcon('ElecsMinor', elecSatMinor);
-  console.log("updateElectsMinor called");
 }
 
-var extraMinor = 0;
+
 
 function update200sElecsMajor() {
   elec200sTotalMajor = 0;
