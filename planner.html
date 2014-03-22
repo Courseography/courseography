@@ -761,6 +761,9 @@
             <li><a href='#majorCheck'>Major
               <img class='postStatusIcon' src='res/delete.ico' alt='MISSING'></a>
             </li>
+            <li><a href='#minorCheck'>Minor
+              <img class='postStatusIcon' src='res/delete.ico' alt='MISSING'></a>
+            </li>
           </ul>
         </div>
 
@@ -1143,9 +1146,82 @@
           </div>
 
         </div>
+        <div id="minorCheck" class="postTabs">
+          <div id="postListDiv">
+            <ul class="postList">
+              <li><a href='#cscReqsMinor'>CSC Required Courses 
+                <img class='postStatusIcon' src='res/delete.ico' alt='MISSING'></a>
+              </li>
+              <li><a href='#cscElecsMinor'>200/300/400-Level Electives
+                <img class='postStatusIcon' src='res/delete.ico' alt='MISSING'/></a>
+              </li>
+            </ul>
+          </div>
+
+          <div id="cscReqsMinor" class="postDetails">
+            <h4>ALL of...</h4>
+            <table class='checkTable'>
+              <tr>
+                <td><input type="checkbox" id="CSC108checkMinor" disabled><label for='CSC108checkMinor'>CSC108</label></td>
+                <td><input type="checkbox" id="CSC165checkMinor" disabled><label for='CSC165checkMinor'>CSC165</label></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" id="CSC148checkMinor" disabled><label for='CSC148checkMinor'>CSC148</label></td>
+                <td><input type="checkbox" id="CSC236checkMinor" disabled><label for='CSC236checkMinor'>CSC236</label></td>
+              </tr>
+              <tr>
+                <td><input type="checkbox" id="CSC207checkMinor" disabled><label for='CSC207checkMinor'>CSC207</label></td>
+              </tr>
+            </table>
+          </div>
+
+          <div id='cscElecsMinor' class='postDetails'>
+            <p>
+              Note: 400-level courses will fill up "CSC/ECE/BCB 400+" first. 
+              No more than 1 FCE from {CSC490, 491, 494, 495, BCB430} will be counted.
+            </p>
+
+            <table class='checkTable'>
+              <tr>
+                <td><input type='text' id='inputMinorCSC1' placeholder='CSC/ECE' disabled></td>
+                <td><input type='text' id='inputMinorCSC2' placeholder='CSC/ECE' disabled></td>
+              </tr>
+              <tr>
+                <td><input type='text' id='inputMinorCSC3' placeholder='CSC/ECE' disabled></td>
+                <td><input type='text' id='inputMinorCSC4' placeholder='CSC/ECE' disabled></td>
+              </tr>
+              <tr>
+                <td><input type='text' id='inputMinorCSC5' placeholder='CSC/ECE' disabled></td>
+                <td><input type='text' id='inputMinorCSC6' placeholder='CSC/ECE' disabled></td>
+              </tr>
+              <tr>
+                <td><input type='text' id='inputMinorCSC7' placeholder='CSC/ECE' disabled></td>
+                <td></td>
+              </tr>
+            </table>
+          </div>
+
+          <div class='postFCETotalDiv'>
+            <h4>FCE Totals (Minor)</h4>
+            <table>
+              <tr>
+                <td class='FCECrit'>Required CSC:</td>
+                <td class='FCETotal'><span id='cscReqTotalMinor'>0.0</span>/2.5 FCEs</td>
+              </tr>
+              <tr>
+                <td class='FCECrit'>Electives:</td>
+                <td class='FCETotal'><span id='elecTotalMinor'>0.0</span>/1.5 FCEs</td>
+              </tr>
+              <tr>
+                <td class='FCECrit'>Total:</td>
+                <td class='FCETotal'><span id='postTotalMinor'>0.0</span>/4 FCEs</td>
+              </tr>
+            </table>
+          </div>
+
+        </div>
       </div>
     </div>
-
     <div id="feedback" class="infoTab">
       <!--div id = "feedbackDescription"-->
         <p>
