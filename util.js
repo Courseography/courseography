@@ -792,6 +792,7 @@ function updateElecsMinor() {
 
   elecSatMinor = elecTotalMinor >= 1.5 
     && (active300s.length + active400s.length + projectCourses.length > 0)
+    && (active300s.length + active400s.length + projectCourses.length < 3)
     && (active300s.concat(active400s, projectCourses.slice(0, numProjects)).length + extraMinor >= 3);
   
   $('#elecTotalMinor').html(elecTotalMinor.toFixed(1));
