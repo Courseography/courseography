@@ -1,6 +1,10 @@
 import json
 import re
 
+
+
+courses = []
+
 def parseCalendar():
   with open('res/calendar.txt', 'r') as calendarFile:
     course = {}
@@ -10,6 +14,7 @@ def parseCalendar():
         if (len(course) > 0):
           with open('res/courses/' + course['code'] + '.txt', 'w+') as output:
             output.write(json.dumps(course))
+            courses.append(course)
 
         titleParser = re.compile('(.{8})\s*(.*)\[')
         result = titleParser.match(line)

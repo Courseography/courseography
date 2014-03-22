@@ -57,111 +57,111 @@ var initiallyTakeable = [
 
 
 // Math courses
-makeNode([], "AND", "Calc1");
-makeNode([Calc1], "AND", "Sta1");
-makeNode([Sta1], "AND", "Sta2");
-makeNode([], "AND", "Lin1");
+//makeNode([], "AND", "Calc1");
+//makeNode([Calc1], "AND", "Sta1");
+//makeNode([Sta1], "AND", "Sta2");
+//makeNode([], "AND", "Lin1");
 
 // Math Hybrids
-makeHybrid([Sta1], "AND", "hybrid6");
-makeHybrid([Lin1], "AND", "hybrid7");
-makeHybrid([Sta1], "AND", "hybrid8");
-makeHybrid([Sta2], "AND", "hybrid9");
-makeHybrid([hybrid6, hybrid7], "AND", "bool4");
-makeHybrid([Calc1, Lin1], "AND", "bool5");
+//makeHybrid([Sta1], "AND", "hybrid6");
+//makeHybrid([Lin1], "AND", "hybrid7");
+//makeHybrid([Sta1], "AND", "hybrid8");
+//makeHybrid([Sta2], "AND", "hybrid9");
+//makeHybrid([hybrid6, hybrid7], "AND", "bool4");
+//makeHybrid([Calc1, Lin1], "AND", "bool5");
 
 // First year courses
-makeNode([], "AND", "CSC104");
-makeNode([], "AND", "CSC108");
-makeNode([], "AND", "CSC120");
-makeNode([CSC108], "AND", "CSC148");
-makeNode([], "AND", "CSC165");
+//makeNode([], "AND", "CSC104");
+//makeNode([], "AND", "CSC108");
+//makeNode([], "AND", "CSC120");
+//makeNode([CSC108], "AND", "CSC148");
+//makeNode([], "AND", "CSC165");
 
 // First year hybrids
-makeHybrid([CSC148], "AND", "hybrid13")
-makeHybrid([CSC165, Calc1], "OR", "hybrid16");
+//makeHybrid([CSC148], "AND", "hybrid13")
+//makeHybrid([CSC165, Calc1], "OR", "hybrid16");
 
 // Second year courses
-makeNode([], "AND", "CSC200");
-makeNode([CSC148], "AND", "CSC207");
-makeNode([CSC207], "AND", "CSC209");
-makeNode([CSC148, CSC165], "AND", "CSC236");
-makeNode([CSC148, CSC165], "AND", "CSC258");
+//makeNode([], "AND", "CSC200");
+//makeNode([CSC148], "AND", "CSC207");
+//makeNode([CSC207], "AND", "CSC209");
+//makeNode([CSC148, CSC165], "AND", "CSC236");
+//makeNode([CSC148, CSC165], "AND", "CSC258");
 
 // Second year hybrids and CSC263
-makeHybrid([CSC236, CSC207], "AND", "bool1");
-makeHybrid([CSC209, CSC258], "AND", "bool2");
-makeNode([bool1, hybrid6], "AND", "CSC263"); // CSC263
-makeHybrid([CSC263], "AND", "hybrid2");
-makeHybrid([CSC209], "AND", "hybrid12");
-makeHybrid([CSC263], "AND", "hybrid10");
-makeHybrid([CSC236], "AND", "hybrid11");
-makeHybrid([CSC207], "AND", "hybrid14");
-makeHybrid([CSC263], "AND", "hybrid15");
+//makeHybrid([CSC236, CSC207], "AND", "bool1");
+//makeHybrid([CSC209, CSC258], "AND", "bool2");
+//makeNode([bool1, hybrid6], "AND", "CSC263"); // CSC263
+//makeHybrid([CSC263], "AND", "hybrid2");
+//makeHybrid([CSC209], "AND", "hybrid12");
+//makeHybrid([CSC263], "AND", "hybrid10");
+//makeHybrid([CSC236], "AND", "hybrid11");
+//makeHybrid([CSC207], "AND", "hybrid14");
+//makeHybrid([CSC263], "AND", "hybrid15");
 
 // Third year courses
-makeNode([], "AND", "CSC300");
-makeNode([CSC209, hybrid10], "AND", "CSC301");
-makeNode([CSC301], "AND", "CSC302");
-makeNode([hybrid13, bool4], "AND", "CSC310");
-makeNode([], "AND", "CSC318");
-makeNode([hybrid12, bool5], "AND", "CSC320");
-makeNode([bool4], "AND", "CSC321");
-makeNode([CSC263], "AND", "CSC324"); // CHANGED
-makeNode([CSC236], "AND", "CSC330");
-makeNode([CSC148, bool5], "AND", "CSC336");
-makeNode([hybrid16, hybrid14], "AND", "CSC343");
-makeNode([CSC209, CSC343], "AND", "CSC309");
-makeNode([bool2, hybrid2], "AND", "CSC358");
-makeNode([bool2], "AND", "CSC369");
-makeNode([bool2], "AND", "CSC372");
-makeNode([CSC263], "AND", "CSC373");
-//makeNode([CSC263, hybrid8], "AND", "CSC384"); // CHANGED
-makeNode([CSC263, hybrid8], "AND", "CSC384");
-makeNode([bool2], "AND", "ECE385");
+//makeNode([], "AND", "CSC300");
+//makeNode([CSC209, hybrid10], "AND", "CSC301");
+//makeNode([CSC301], "AND", "CSC302");
+//makeNode([hybrid13, bool4], "AND", "CSC310");
+//makeNode([], "AND", "CSC318");
+//makeNode([hybrid12, bool5], "AND", "CSC320");
+//makeNode([bool4], "AND", "CSC321");
+//makeNode([CSC263], "AND", "CSC324"); // CHANGED
+//makeNode([CSC236], "AND", "CSC330");
+//makeNode([CSC148, bool5], "AND", "CSC336");
+//makeNode([hybrid16, hybrid14], "AND", "CSC343");
+//makeNode([CSC209, CSC343], "AND", "CSC309");
+//makeNode([bool2, hybrid2], "AND", "CSC358");
+//makeNode([bool2], "AND", "CSC369");
+//makeNode([bool2], "AND", "CSC372");
+//makeNode([CSC263], "AND", "CSC373");
+////makeNode([CSC263, hybrid8], "AND", "CSC384"); // CHANGED
+//makeNode([CSC263, hybrid8], "AND", "CSC384");
+//makeNode([bool2], "AND", "ECE385");
 
 // Third year hybrids
-makeHybrid([CSC324], "AND", "hybrid4");
-makeHybrid([CSC373], "AND", "hybrid5");
+//makeHybrid([CSC324], "AND", "hybrid4");
+//makeHybrid([CSC373], "AND", "hybrid5");
 
 // Fourth year courses
-makeNode([CSC207, hybrid8], "AND", "CSC401");
-makeNode([bool1], "AND", "CSC410");
-makeNode([CSC263, Calc1, hybrid9], "AND", "CSC411");
-makeNode([CSC411], "AND", "CSC412");
-makeNode([hybrid15, bool5], "AND", "CSC420");
-makeNode([CSC318, Sta2, hybrid12], "AND", "CSC428");
-makeNode([CSC336], "AND", "CSC436");
-makeNode([CSC343, CSC369, hybrid5], "AND", "CSC443");
-makeNode([CSC336], "AND", "CSC446");
-makeNode([], "AND", "CSC454");
-makeNode([hybrid12, CSC336], "AND", "CSC456");
-makeNode([bool2, hybrid2], "AND", "CSC458");
-makeNode([CSC236], "AND", "CSC463");
-makeNode([CSC463], "AND", "CSC448"); // CSC448
-makeNode([CSC236], "AND", "CSC465");
-makeNode([CSC369], "AND", "CSC469");
-makeNode([hybrid8, CSC209], "AND", "CSC485");
-makeNode([CSC258, hybrid4, hybrid2], "AND", "CSC488");
-makeNode([hybrid11], "AND", "ECE489");
-makeNode([], "AND", "CSC490");
-makeNode([], "AND", "CSC491");
-makeNode([], "AND", "CSC494");
-makeNode([], "AND", "CSC495");
+//makeNode([CSC207, hybrid8], "AND", "CSC401");
+//makeNode([bool1], "AND", "CSC410");
+//makeNode([CSC263, Calc1, hybrid9], "AND", "CSC411");
+//makeNode([CSC411], "AND", "CSC412");
+//makeNode([hybrid15, bool5], "AND", "CSC420");
+//makeNode([CSC318, Sta2, hybrid12], "AND", "CSC428");
+//makeNode([CSC336], "AND", "CSC436");
+//makeNode([CSC343, CSC369, hybrid5], "AND", "CSC443");
+//makeNode([CSC336], "AND", "CSC446");
+//makeNode([], "AND", "CSC454");
+//makeNode([hybrid12, CSC336], "AND", "CSC456");
+//makeNode([bool2, hybrid2], "AND", "CSC458");
+//makeNode([CSC236], "AND", "CSC463");
+//makeNode([CSC463], "AND", "CSC448"); // CSC448
+//makeNode([CSC236], "AND", "CSC465");
+//makeNode([CSC369], "AND", "CSC469");
+//makeNode([hybrid8, CSC209], "AND", "CSC485");
+//makeNode([CSC258, hybrid4, hybrid2], "AND", "CSC488");
+//makeNode([hybrid11], "AND", "ECE489");
+//makeNode([], "AND", "CSC490");
+//makeNode([], "AND", "CSC491");
+//makeNode([], "AND", "CSC494");
+//makeNode([], "AND", "CSC495");
 
 // Fourth year hybrids and CSC418, CSC438, and CSC486
-makeHybrid([CSC373, CSC463], "OR", "bool3");
-makeHybrid([CSC336, CSC373, CSC463], "OR", "CSC336orCSC373orCSC463");
-makeHybrid([CSC336orCSC373orCSC463, Calc1], "AND", "hybrid3");
-makeNode([hybrid3, hybrid12], "AND", "CSC418"); // CSC418
-makeNode([bool3], "OR", "CSC438"); // CSC438
-makeNode([CSC384, bool3], "AND", "CSC486"); // CSC486
-makeHybrid([CSC318, CSC418, CSC301, CSC384], "OR", "hybrid1");
-makeNode([hybrid1], "AND", "CSC404"); // CSC404
+//makeHybrid([CSC373, CSC463], "OR", "bool3");
+//makeHybrid([CSC336, CSC373, CSC463], "OR", "CSC336orCSC373orCSC463");
+//makeHybrid([CSC336orCSC373orCSC463, Calc1], "AND", "hybrid3");
+//makeNode([hybrid3, hybrid12], "AND", "CSC418"); // CSC418
+//makeNode([bool3], "OR", "CSC438"); // CSC438
+//makeNode([CSC384, bool3], "AND", "CSC486"); // CSC486
+//makeHybrid([CSC318, CSC418, CSC301, CSC384], "OR", "hybrid1");
+//makeNode([hybrid1], "AND", "CSC404"); // CSC404
 
 
 // Edges
-makeEdge(CSC463, CSC448, "p1");
+/*makeEdge(CSC463, CSC448, "p1");
 makeEdge(CSC165, CSC236, "p2");
 makeEdge(CSC236, CSC463, "p3");
 makeEdge(CSC263, CSC373, "p4");
@@ -239,4 +239,4 @@ makeEdge(bool5, CSC320, "p77");
 makeEdge(bool5, CSC420, "p78");
 makeEdge(CSC258, CSC488, "p79");
 makeEdge(CSC318, CSC428, "p80");
-makeEdge(CSC263, CSC324, "p81");
+makeEdge(CSC263, CSC324, "p81");*/

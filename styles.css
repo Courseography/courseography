@@ -749,6 +749,12 @@ path[data-active="missing"] {
     font-weight: bold;
 }
 
+#svgAuthors {
+    font-size: 1em;
+    fill: #0f2d5b;
+    font-family: Garamond, Serif;
+}
+
 /* Focus spotlight styles */
 ellipse.spotlight {
   fill: white; 

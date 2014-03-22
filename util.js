@@ -60,6 +60,11 @@ function makeEdge(parent, child, name) {
   window[name] = new Edge(parent, child, name);
   parent.outEdges.push(window[name]);
   child.inEdges.push(window[name]);
+  
+  parent.children.push(child);
+  child.parents.push(parent);
+  
+  
 }
 
 function Edge(parent, child, name) {
@@ -83,7 +88,8 @@ function Edge(parent, child, name) {
 
 function Node(parents, type, name) {
   this.name = name;
-  this.parents = parents;
+  //this.parents = parents;
+  this.parents = [];
   this.children = [];
   this.outEdges = [];
   this.inEdges = [];
@@ -94,7 +100,7 @@ function Node(parents, type, name) {
   this.hybrid = false;
 
   for (var i = 0; i < this.parents.length; i++) {
-    this.parents[i].children.push(this);
+    //this.parents[i].children.push(this);
   }
 
   // Activate/deactivate a node; called when a node is clicked.
@@ -886,7 +892,8 @@ $(window).resize(function() {
 });
 
 $(document).ready(function() {
-
+  buildGraph();
+  
   // Set height of tabs
   //var graphHeight = Math.min(Math.round($(window).height() * 0.7), $(window).width() / 2);
   //var height = $(window).height() - graphHeight - 46;
@@ -1065,7 +1072,166 @@ $(document).ready(function() {
         mouseButton: 3
     });
     */
+
 });
+
+function parseAnd(s) {
+  var curr = s;
+  var andList = [];
+  while (curr.length > 0) {
+    if (curr.charAt(0) == ',' || curr.charAt(0) == ';' || curr.charAt(0) == ' ') {
+      curr = curr.substr(1);
+    } else {
+      result = parseOr(curr);
+      if (curr == result[1]) {
+        console.log('Parsing failed for ' + s + '  with curr = ' + curr);
+        break;
+      } else {
+        curr = result[1];
+        andList.push(result[0]);
+      }
+    }   
+  }
+  return [andList, curr];
+}
+
+function parseOr(s) {
+  var curr = s;
+  var orList = [];
+  while (curr.length > 0 && curr.charAt(0) != ',' && curr.charAt(0) != ';') {
+    if (curr.charAt(0) == '(') {
+      var tmp = curr.substr(1, curr.indexOf(')'));
+      var result = parseCourse(tmp);
+      orList.append(result[0]);
+      curr = curr.substr(curr.indexOf(')') + 1);
+    } else if (curr.charAt(0) == ' ' || curr.charAt(0) == '/') {
+      curr = curr.substr(1);
+    } else {
+      var result = parseCourse(curr);
+      if (curr == result[1]) {
+        console.log('Parsing failed for ' + s + ' with curr = ' + curr);
+        break;
+      } else {
+        curr = result[1];
+        orList.push(result[0]);
+      }
+    }
+  }
+  if (orList.length == 1) {
+    orList = orList[0];
+  }
+  return [orList, curr];
+}
+
+function parseCourse(s) {
+  var start = s.search(/[,/]/);
+  if (start == 3) {
+    return ['CSC' + s.substr(0, start), s.substr(start)];
+  } else if (start > 0) {
+    return [s.substr(0, start), s.substr(start)];
+  } else {
+    if (s.length == 3) {
+      return ['CSC' + s, ''];
+    } else {
+      return [s, ''];  
+    }
+  }
+}
+
+function buildGraph() {
+  $('.node').each(function (i) {
+    makeNode([], 'AND', $(this).attr('id'));
+  });
+
+  $('.hybrid').each(function (i) {
+    var id = $(this).attr('id');
+    var course = $(this).children('text').text();
+    var reqs = parseAnd(course)[0];
+    makeHybrid([], 'AND', id);
+    $.each(reqs, function(index, elem) {
+      if ($.isArray(elem)) {
+        var orNode = id + elem.join();
+        makeHybrid([], 'OR', orNode);
+        $.each(elem, function(i, e) {
+          window[orNode].parents.push(window[e]);
+          window[e].children.push(window[id]);
+        });
+        window[id].parents.push(window[orNode]);
+        window[orNode].children.push(window[id]);
+      } else {
+        window[id].parents.push(window[elem]);
+        window[elem].children.push(window[id]);
+      }
+    });
+  });
+
+  $('.bool').each(function (i) {
+    var id = $(this).attr('id');
+    var type = $(this).children('text').text().toUpperCase();
+    makeHybrid([], type, id);
+  })
+
+  $('path').each(function (i) {
+    var coords = $(this).attr('d').split(' ');
+    var xStart = parseFloat(coords[0].substr(1));
+    var yStart = parseFloat(coords[1]);
+    var yEnd = parseFloat(coords.pop());
+    var xEnd = parseFloat(coords.pop().substr(1));
+    var startNode = '';
+    var endNode = '';
+
+    $('.node, .hybrid').each(function (index) {
+      // Check intersection
+      var r = $(this).children('rect');
+      var xRect = parseFloat(r.attr('x'));
+      var yRect = parseFloat(r.attr('y'));
+      var width = parseFloat(r.attr('width'));
+      var height = parseFloat(r.attr('height'));
+
+      if (intersects(xStart, yStart, xRect, yRect, width, height, 1)) {
+        startNode = $(this).attr('id');
+      }
+
+      if (intersects(xEnd, yEnd, xRect, yRect, width, height, 9)) {
+        endNode = $(this).attr('id');
+      }
+
+      if (startNode != '' && endNode != '') {
+        return false;
+      }
+    });
+
+    $('.bool').each(function (index) {
+      // Check intersection
+      var el = $(this).children('ellipse');
+      var cx = parseFloat(el.attr('cx'));
+      var cy = parseFloat(el.attr('cy'));
+      var rx = parseFloat(el.attr('rx'));
+      var ry = parseFloat(el.attr('ry'));
+
+      if (Math.abs(xStart - cx) <= rx + 1 && Math.abs(yStart - cy) <= ry + 1) {
+        startNode = $(this).attr('id');
+      }
+
+      if (Math.abs(xEnd - cx) <= rx + 9 && Math.abs(yEnd - cy) <= ry + 9) {
+        endNode = $(this).attr('id');
+      }
+
+      if (startNode != '' && endNode != '') {
+        return false;
+      }
+    });
+
+    makeEdge(window[startNode], window[endNode], $(this).attr('id'));
+  });
+}
+
+function intersects(px, py, rx, ry, width, height, offset) {
+  var dx = px - rx;
+  var dy = py - ry;
+  return dx >= -1 * offset && dx <= width + offset && dy >= -1 * offset && dy <= height + offset;
+}
+
 
 // Disables Tab key
 document.onkeydown = function (e) {
