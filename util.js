@@ -446,45 +446,56 @@ function updateFCECount() {
 
 // Read course description from resource files
 function fetchCourseDescription(id) {
-  // Get data from course calendar
-  if (id == "Calc1" || id == "Lin1" || id == "Sta1" || id == "Sta2") {
-    var calendarUrl = 'res/' + id + '_calendar.txt';
-    var pattern = new RegExp('[.\n]*', 'm');
+  if (id == 'CSC200') {
+    result = readCalendarEntry(id + 'Y1');
+  } else if (id == 'Calc1') {
+    result = readCalendarEntry('MAT135H1')
+            + readCalendarEntry('MAT136H1')
+            + readCalendarEntry('MAT137H1')
+            + readCalendarEntry('MAT157H1');
+  } else if (id == 'Lin1') {
+    result = readCalendarEntry('MAT221H1')
+            + readCalendarEntry('MAT223H1')
+            + readCalendarEntry('MAT240H1');
+  } else if (id == 'Sta1') {
+    result = readCalendarEntry('STA247H1')
+            + readCalendarEntry('STA255H1');
+  } else if (id == 'Sta2') {
+    result = readCalendarEntry('STA248H1')
+            + readCalendarEntry('STA261H1');
   } else {
-    var calendarUrl = 'res/calendar.txt';
-    var calendarParser = new RegExp("\n" + id + "(.|\n)*?Breadth Requirement.*\n", "im");
+    result = readCalendarEntry(id + 'H1');
   }
 
-  $.ajax({
-    url: calendarUrl,
-    type: 'GET',
-    dataType: 'text',
-    success: function(response) {
-      if (id == "Calc1" || id == "Lin1" || id == "Sta1" || id == "Sta2") {
-        var courseString = response.split('\n');
-      } else {
-        var courseString = response.match(calendarParser)[0].split('\n');
-        courseString.shift();
-
-        // Add extra description for enriched courses
-        if (id == "CSC165" || id == "CSC236") {
-          var calendarParserEnriched = new RegExp("\nCSC240(.|\n)*?Breadth Requirement.*\n", "im");
-          var courseString2 = response.match(calendarParserEnriched)[0].split('\n');
-          courseString = courseString.concat("<hr/>", courseString2);
-        } else if (id == "CSC263") {
-          var calendarParserEnriched = new RegExp("\nCSC265(.|\n)*?Breadth Requirement.*\n", "im");
-          var courseString2 = response.match(calendarParserEnriched)[0].split('\n');
-          courseString = courseString.concat("<hr/>", courseString2);
-        }
-      }
-
-      $('#calendar').html($.map(courseString, function(s) {
-        return '<p>' + s + '</p>';
-      }).join(''));
-    }
-  })
+  $('#calendar').html(result);
 };
 
+function readCalendarEntry(name) {
+  var result = '';
+  $.ajax({
+    url: 'res/courses/' + name + '.txt', 
+    dataType: 'json',
+    async: false,
+    success: function(data) {
+      result += '<h3>' + data.code + ': ' + data.title + '</h3>';
+      result += '<p>' + data.description + '</p>';
+      if (typeof data.prereqString !== 'undefined') {
+        result += '<p><strong>Prerequisite:</strong> ' + data.prereqString + '</p>';  
+      }
+      if (typeof data.prep !== 'undefined') {
+        result += '<p><strong>Recommended Preparation:</strong> ' + data.prep + '</p>';  
+      }
+      if (typeof data.exclusions != 'undefined') {
+        result += '<p><strong>Exclusions:</strong> ' + data.exclusions + '</p>';  
+      }
+      
+      result += '<p><strong>Distribution Requirement Status:</strong> ' + data.distribution + '</p>';
+      result += '<p><strong>Breadth Requirement:</strong> ' + data.breadth + '</p>';
+    }
+  });
+
+  return result;
+};
 
 // Focus Tab
 
@@ -1107,8 +1118,8 @@ $(document).ready(function() {
     $("#contact_form input, #contact_form textarea").keyup(function() { 
         $("#contact_form input, #contact_form textarea").css('border-color', ''); 
         $("#result").slideUp();
-    });
-    
+    })
+;    
     /*Search function for TimeTable*/
     $("#filter").keyup(function() {
         var filter = $(this).val();

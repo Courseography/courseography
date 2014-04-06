@@ -1,19 +1,35 @@
 import json
 import re
-
-
+import urllib.request
+from html.parser import HTMLParser
 
 courses = []
+
+# class CalendarParser(HTMLParser):
+#   def __init__(self):
+#     HTMLParser.__init__(self)
+#     self.text = []
+#   def handle_data(self, data):
+#     if not data.isspace():
+#       self.text.append(data)
+
+# def downloadCalendar():
+#   page = urllib.request.urlopen('http://www.artsandscience.utoronto.ca/ofr/calendar/crs_csc.htm')
+#   parser = CalendarParser()
+#   text = str(page.read())
+#   parser.feed(text)
+#   #print(page.read())
+#   print(parser.text)
 
 def parseCalendar():
   with open('res/calendar.txt', 'r') as calendarFile:
     course = {}
     for line in calendarFile:
-      if line.startswith('CSC'):
+      if line.startswith('CSC') or line.startswith('ECE') or line.startswith('MAT') or line.startswith('STA'):
 
         if (len(course) > 0):
           with open('res/courses/' + course['code'] + '.txt', 'w+') as output:
-            output.write(json.dumps(course))
+            json.dump(course, output)
             courses.append(course)
 
         titleParser = re.compile('(.{8})\s*(.*)\[')
@@ -28,16 +44,17 @@ def parseCalendar():
         distStringLength = len('Distribution Requirement Status: ')
         course['distribution'] = line.strip()[distStringLength:]
       elif line.startswith('Breadth Requirement: '):
-        breadthStringLength = len('Distribution Requirement Status: ')
+        breadthStringLength = len('Breadth Requirement: ')
         course['breadth'] = line.strip()[breadthStringLength:]
       elif line.startswith('Recommended Preparation: '):
         prepStringLength = len('Recommended Preparation: ')
         course['prep'] = line.strip()[prepStringLength:]
-      elif line.startswith('Suggested preparation:: '):
-        prepStringLength = len('Suggested preparation:: ')
+      elif line.startswith('Suggested preparation: '):
+        prepStringLength = len('Suggested preparation: ')
         course['prep'] = line.strip()[prepStringLength:]
       elif line.startswith('Prerequisite: '):
         prereqString = line[14:].rstrip('. \r\n')
+        course['prereqString'] = prereqString
         # Prerequisites for engineering students
         engRegex = re.compile('(.*)(Prerequisite for Engineering students only: .*)')
         engMatch = engRegex.match(prereqString)
@@ -126,6 +143,7 @@ def parseExtra(s):
     return (extraMatch.group(0), s[len(extraMatch.group(0)):])
 
 if __name__ == '__main__':
+  #downloadCalendar()
   parseCalendar()
   #print(parseOr('CSC200Y1blahbla/CSC165H1'))
   #print(parseAnd('CSC200Y1blahbla/CSC165H1'))
