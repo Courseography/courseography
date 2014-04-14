@@ -2,78 +2,137 @@ import json
 
 courses = []
 
+timetablePath = 'res/timetable2014.csv'
+timetableOutputPath = 'res/timetableHTML2014.html'
+
+class TimetableData:
+  code = 1
+  session = 2
+  title = 3
+  section = 4
+  time = 6
+  kind = 7
+  instructor = 8
+
 def parseTimetable():
-  with open('res/timetable.csv', 'r') as timetableFile:
+  '''
+  Parse timetable from internal CSV (stored in timetablePath)
+  Each line has the following fields:
+  <Check Prereqs>, <Code>, <Session>, <Title>, <Section>, <Wait List>, 
+  <Time>, <Kind>, <Instructor>, <I>, <Controls>, <Large>, <Location>, <Notes>
+  '''
+
+  with open(timetablePath, 'r') as timetableFile:
     course = {}
     course['name'] = ''
     for line in timetableFile:
       data = line.split(',')
-      if len(data) < 9:
-        print('Too short: ' + line)
+      # Ignore 'not offered' courses, lines that don't represent courses (no 'time')
+      if data[TimetableData.section] == 'not offered' or data[TimetableData.time] == '':
+        #print('Ignored line: ' + line)
         continue
 
-      if data[0][:8] != course['name']:
-        # New course
-        if (course['name'] != ''):
+      code = data[TimetableData.code][:8]
+
+      if code != course['name'] and code != '' :
+        # Save old course
+        if course['name'] != '':
           courses.append(course)
 
-        # Put in data for new course
-        course = {}
-        course['name'] = data[0][:8] # Course code
-        course[data[1]] = {}
-        course[data[1]]['lectures'] = [{
-          'section': data[2],
-          'time': data[4],
-          'cap': data[3],
-          'instructor': data[8],
-          'extraCap': 0
-          }]
-        course['manualTutorialEnrolment'] = data[6] == ''
-        if not course['manualTutorialEnrolment']:
-          course[data[1]]['tutorials'] = [data[6].strip()]
-        else:
-          course[data[1]]['tutorials'] = []
-      elif data[2].startswith('L') and data[3]:
-          # Another lecture section
-          # Check if it's a repeat section
-          if data[1] not in course:
-            course[data[1]] = {}
-            course[data[1]]['lectures'] = []
-            course[data[1]]['tutorials'] = []
+        # Initialize new course
+        course = addCourse(data)
+        session = addSession(data, course)
 
-          
-          if data[2][1] != '2':
-            # Add a section
-            course[data[1]]['lectures'].append({
-              'section': data[2],
-              'time': data[4],
-              'cap': data[3],
-              'instructor': data[8],
-              'extraCap': 0
-              })
-            if not course['manualTutorialEnrolment'] and data[6].strip():
-              course[data[1]]['tutorials'].append(data[6].strip())
-          else:
-            for lec in course[data[1]]['lectures']:
-              if lec['time'] == data[4]:
-                if len(data[3]) == 0:
-                  print('ERROR?! ' + line)
-                else:
-                  lec['extraCap'] = lec['extraCap'] + int(data[3])
-                break
-      
-      elif data[2].startswith('T'):
-        course['manualTutorialEnrolment'] = data[3] != ''
-        if course['manualTutorialEnrolment']:
-          course[data[1]]['tutorials'].append([data[2], data[6].strip()])
-        elif data[6].strip() and (not (data[6].strip() in course[data[1]]['tutorials'])):
-          course[data[1]]['tutorials'].append(data[6].strip())
+      # New session
+      elif data[TimetableData.code][:8] == course['name']:
+        session addSession(data, course)
+        
+      # New section
+      elif data[TimetableData.section]:
+        addSection(data, course[session])
+        if data[TimetableData.section].startswith('T'):
+          course['manualTutorialEnrolment'] = True
+      else:
+        #print(course)
+        addToSection(data, course[session])
+        
+
+def addCourse(data):
+  course = {}
+  course['name'] = data[TimetableData.code][:8]
+  course['title'] = data[TimetableData.title]
+  course['manualTutorialEnrolment'] = False
+  return course
+
+
+def addSession(data, course):
+  ''' Adds a new session to the current course. Returns the name of the session. '''
+  session = data[TimetableData.session]
+  course[session] = {}
+  course[session]['lectures'] = []
+  course[session]['tutorials'] = []
+  
+  addSection(data, course[session])
+  if data[TimetableData.section].startswith('T'):
+    course['manualTutorialEnrolment'] = True
+
+  return session
+
+
+def addSection(data, session):
+  ''' When a new course section is encountered adds it to the list of lectures/tutorials '''
+  if data[TimetableData.section].startswith('L') or data[TimetableData.kind] == 'L':
+    session['lectures'].append(makeLecture(data))
+    
+  if data[TimetableData.kind] == 'T':
+    session['tutorials'].append(makeTutorial(data))
+
+
+def addToSection(data, session):
+  ''' Used when data doesn't specify the section, so what's being added is either a tutorial or lecture 
+  for an existing section '''
+  if data[TimetableData.kind] == 'L':
+    if session['lectures']:
+      lecture = makeLecture(data)
+      lecture['section'] = session['lectures'][-1]['section']
+      session['lectures'][-1] = lecture
+    else:
+      session['lectures'].append(makeLecture(data))
+  elif data[TimetableData.kind] == 'T':
+    session['tutorials'].append(makeTutorial(data))
+
+
+def makeLecture(data):
+  ''' Create a record of a lecture from a CSV line '''
+  if data[TimetableData.kind] == 'L' or data[TimetableData.kind] == '':
+    return {
+      'section': data[TimetableData.section],
+      'time': data[TimetableData.time],
+      'cap': 0,
+      'instructor': data[TimetableData.instructor],
+      'extraCap': 0
+    }
+  elif data[TimetableData.kind] == 'T' and data[TimetableData.section].startswith('L'):
+    return { 'section': data[TimetableData.section] }
+  else:
+    return {}
+
+
+def makeTutorial(data):
+  ''' Create a record of a tutorial from a CSV line '''
+  if data[TimetableData.section].startswith('T'):
+    return [data[TimetableData.section], data[TimetableData.time]]
+  else:
+    return data[TimetableData.time]
+
+
+
 
 
 def generateRows(course):
   rows = []
 
-  for term in ['Y', 'Fall', 'Winter']:
+  for term in ['Y', 'F', 'S']:
     if term in course:
       if term == 'Y':
         start = '<td class="' + term + 'Offering" colspan="2">'
@@ -83,13 +142,19 @@ def generateRows(course):
       rows.append(start)
       termRows = []
 
+
       for i, lec in enumerate(course[term]['lectures']):
-        if course['manualTutorialEnrolment']:
+        # Don't display enrolment control sections
+        if lec['section'].startswith('L2'):
+          continue
+
+        if course['manualTutorialEnrolment'] or i >= len(course[term]['tutorials']):
           tutString = ''
         else:
           tutString = '<span style="float: right">({})</span>'.format(course[term]['tutorials'][i])
         row = '<tr>'
 
+        print(str(course) + ' ' + str(lec))
         row += (
             '<td class="timetableSection">{}</td>' +
             '<td class="timetableTime">{} {}</td>' +
@@ -117,13 +182,9 @@ def generateRows(course):
       if term == 'Y':
         break
 
-    elif term == 'Fall' or term == 'Winter':
+    elif term == 'F' or term == 'S':
       rows.append('<td class="' + term + 'Offering"></td>')
 
-
-
-  
-  
 
 
   rows = (['<tr class="searchClass">', 
@@ -136,7 +197,7 @@ def generateRows(course):
         
 
 def generateHTML():
-  with open('res/timetableHTML.html', 'w+') as htmlOutput:
+  with open(timetableOutputPath, 'w+') as htmlOutput:
     htmlOutput.write('<table id="timetableMain"><tr>' +
       '<td class="timetableCourseName"></td>' +
       '<th class="sessionHeader FallOffering">FALL</th>' + 
@@ -156,6 +217,7 @@ def generateHTML():
       )
 
     for course in courses:
+      print(course)
       htmlOutput.writelines(iter(generateRows(course)))
     htmlOutput.write('</table>')
 
