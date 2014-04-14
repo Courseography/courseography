@@ -163,20 +163,19 @@ div#calendar {
 }
 
 #timetableContainer {
-    width: 900px;
-    float: left;
+    width: 930px;
     height: 100%;
+    background-color: #111155;
+    margin-left: 2em;
+    margin-top: 2em;
 }
 
 #timetableSearch {
     padding-top: 2em;
     padding-left: 2em;
-    float: left;
 }
 
 #timetableMain {
-    margin-top: 2em;
-    margin-left: 2em;
     border: 2px solid black;
     width: 100%;
 }
@@ -207,7 +206,7 @@ div#calendar {
 
 #timetableMain .courseTable {
     min-height: 23px;
-    width: 100%;
+    /*width: 100%;*/
 }
 
 #timetable td.timetableCourseName {
@@ -215,6 +214,7 @@ div#calendar {
     font-size: 1.1em;
     text-align: center;
     vertical-align: middle;
+    color: white;
 }
 
 
@@ -238,7 +238,7 @@ div#calendar {
 }
 
 #timetable td.timetableCap, #timetable th.timetableCap {
-    width: 75px;
+    width: 50px;
     background-color: #B2E0FF;
     padding-left: 5px;
 }
@@ -250,13 +250,13 @@ div#calendar {
     color: white;
 }
 
-.FallOffering, .FallOffering table {
-    background-color: #473924;
+.FOffering, .FOffering table {
+    /*background-color: #473924;*/
     width: 410px;
 }
 
-.WinterOffering, .WinterOffering table {
-    background-color: #002E0F;
+.SOffering, .SOffering table {
+    /*background-color: #002E0F;*/
     width: 410px;
 }
 
@@ -264,7 +264,13 @@ div#calendar {
     width: 100%;
 }
 
-/*
+.YOffering .courseTable {
+    width: 410px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
 table.timeTable {
     width: 70%;
     margin: 0 auto;
@@ -291,7 +297,7 @@ td.timeTableHeader{
     background: #000099;
 }
 
-td.timeTableBlock {
+/*td.timeTableBlock {
     
     width: 16%;
     background: #447BD4;
@@ -359,9 +365,9 @@ td.timeTableBlockInstructor {
     background: #DB94B8;
     border: 2px solid black;
     color: black;
-}
+}*/
 
-*/
+
 
 /* Focus and POSt tabs */
 div.focusDetails {

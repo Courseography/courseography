@@ -13,6 +13,7 @@ class TimetableData:
   time = 6
   kind = 7
   instructor = 8
+  cap = 12
 
 def parseTimetable():
   '''
@@ -34,6 +35,10 @@ def parseTimetable():
 
       code = data[TimetableData.code][:8]
 
+      # Check if research project course
+      if len(code) > 0 and code[4] == '9' and code[5] != '0':
+        continue
+
       if code != course['name'] and code != '' :
         # Save old course
         if course['name'] != '':
@@ -45,7 +50,7 @@ def parseTimetable():
 
       # New session
       elif data[TimetableData.code][:8] == course['name']:
-        session addSession(data, course)
+        session = addSession(data, course)
         
       # New section
       elif data[TimetableData.section]:
@@ -55,7 +60,9 @@ def parseTimetable():
       else:
         #print(course)
         addToSection(data, course[session])
-        
+    
+    # Add last course
+    courses.append(course)
 
 def addCourse(data):
   course = {}
@@ -108,7 +115,7 @@ def makeLecture(data):
     return {
       'section': data[TimetableData.section],
       'time': data[TimetableData.time],
-      'cap': 0,
+      'cap': data[TimetableData.cap],
       'instructor': data[TimetableData.instructor],
       'extraCap': 0
     }
@@ -200,17 +207,17 @@ def generateHTML():
   with open(timetableOutputPath, 'w+') as htmlOutput:
     htmlOutput.write('<table id="timetableMain"><tr>' +
       '<td class="timetableCourseName"></td>' +
-      '<th class="sessionHeader FallOffering">FALL</th>' + 
-      '<th class="sessionHeader WinterOffering">SPRING</th></tr>'
+      '<th class="sessionHeader FOffering">FALL</th>' + 
+      '<th class="sessionHeader SOffering">SPRING</th></tr>'
       )
     
     # Header row
     htmlOutput.write('<tr><td class="timetableCourseName"></td>' + 
-      '<td><table class="courseTable"><tr><th class="timetableSection">Sec</th>' + 
+      '<td class="FOffering"><table class="courseTable"><tr><th class="timetableSection">Sec</th>' + 
       '<th class="timetableTime">Time</th>' +
       '<th class="timetableInstructor">Instructor</th>' +
       '<th class="timetableCap">Cap</th></tr></table></td>' +
-      '<td><table class="courseTable"><tr><th class="timetableSection">Sec</th>' + 
+      '<td class="SOffering"><table class="courseTable"><tr><th class="timetableSection">Sec</th>' + 
       '<th class="timetableTime">Time</th>' +
       '<th class="timetableInstructor">Instructor</th>' +
       '<th class="timetableCap">Cap</th></tr></table></td>'

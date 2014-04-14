@@ -592,23 +592,9 @@ function createTimeTable() {
   }
   return frag;*/
 
-  $.ajax('res/timetableHTML.html')
-    .done(function(response) {
-      $('#timetableContainer').html(response);
+  $.ajax('res/timetableHTML2014.html') // Note: 2014 calendar test
+    .done(function(response) { $('#timetableContainer').html(response); });
   
-      $('.timetableCourseName').css('background-color', function () {
-        var name = this.innerHTML.substr(0,6);
-        if (name == 'CSC240' || name == 'CSC265') {
-          return $("#CSC165 > rect").css('fill');
-        }
-        else if (name.length == 6) {
-          return $('#' + name + '> rect').css('fill');
-        } 
-        else {
-          return '';
-        }
-      });
-    });
 }
 
 
