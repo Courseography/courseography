@@ -626,6 +626,12 @@ g[data-active="active"] {
     stroke-width: 3;
 }
 
+g[data-active="overridden"] {
+    opacity: 1.0;
+    stroke-width: 3;
+    stroke: #CC0011;
+}
+
 g[data-active="inactive"] {
     opacity: 0.4;
     stroke-dasharray: 8,8;

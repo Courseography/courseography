@@ -9,10 +9,6 @@
   <meta name="description" content="UofT's Department of Computer Science Course Planner.">
   <title>CSC Course Planner</title>
   <link rel="stylesheet" type="text/css" href="styles.css" marker-end="url(#arrow)" />
-  <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
-  <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-  <script src='util.js'></script>
-  <script src="createData.js"></script>
 </head>
 
 <body onresize="setGraphSize()">
@@ -527,15 +523,15 @@
       <div class="focusTabs">
         <div id="focusListDiv">
           <ul class="focusList">
-            <li><a onclick="showtime('sci')" href="#sciDetails">Scientific Computing</a></li>
-            <li><a onclick="showtime('AI')" href="#AIDetails">Artificial Intelligence</a></li>
-            <li><a onclick="showtime('NLP')" href="#NLPDetails">Natural Language Processing</a></li>
-            <li><a onclick="showtime('vision')" href="#visionDetails">Computer Vision</a></li>
-            <li><a onclick="showtime('systems')" href="#systemsDetails">Computer Systems</a></li>
-            <li><a onclick="showtime('game')" href="#gameDetails">Video Games</a></li>
-            <li><a onclick="showtime('HCI')" href="#HCIDetails">Human Computer Interaction</a></li>
-            <li><a onclick="showtime('theory')" href="#theoryDetails">Theory of Computation</a></li>
-            <li><a onclick="showtime('web')" href="#webDetails">Web Technologies</a></li>
+            <li><a onclick="updateActiveFocus('sci')" href="#sciDetails">Scientific Computing</a></li>
+            <li><a onclick="updateActiveFocus('AI')" href="#AIDetails">Artificial Intelligence</a></li>
+            <li><a onclick="updateActiveFocus('NLP')" href="#NLPDetails">Natural Language Processing</a></li>
+            <li><a onclick="updateActiveFocus('vision')" href="#visionDetails">Computer Vision</a></li>
+            <li><a onclick="updateActiveFocus('systems')" href="#systemsDetails">Computer Systems</a></li>
+            <li><a onclick="updateActiveFocus('game')" href="#gameDetails">Video Games</a></li>
+            <li><a onclick="updateActiveFocus('HCI')" href="#HCIDetails">Human Computer Interaction</a></li>
+            <li><a onclick="updateActiveFocus('theory')" href="#theoryDetails">Theory of Computation</a></li>
+            <li><a onclick="updateActiveFocus('web')" href="#webDetails">Web Technologies</a></li>
           </ul>
         </div>
 
@@ -1253,5 +1249,15 @@
     </div>
 
 
-  </body>
-  </html>
+  <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+  <script src='structs.js'></script>
+  <script src='parseGraph.js'></script>
+  <script src='tabs.js'></script>
+  <script src='post.js'></script>
+  <script src='util.js'></script>
+  <script src="createData.js"></script>
+
+
+</body>
+</html>
