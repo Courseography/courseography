@@ -62,8 +62,9 @@ function Node(parents, type, name) {
 
 // Returns true if the node has been selected
 Node.prototype.isSelected = function() {
-	return !this.hybrid && (this.status === 'active' || this.status === 'overridden');
+	return this.status === 'active' || this.status === 'overridden';
 }
+
 
 // Used when entering hover
 Node.prototype.focus = function() {
@@ -109,12 +110,23 @@ Node.prototype.updateStatus = function() {
 			this.status = 'takeable';
 		}
 	} else {
-		if (this.isSelected()) {
+		if (this.isSelected() && !this.hybrid) {
 			this.status = 'overridden';
 		} else {
 			this.status = 'inactive';
 		}
 	}
+
+  // Always update children of hybrids
+  if (this.hybrid) {
+    $.each(this.children, function(i, node) {
+      node.updateStatus();
+    });
+    $.each(this.outEdges, function(i, edge) {
+      edge.updateStatus();
+    });
+  }
+
 	this.updateSVG();
 }
 
@@ -128,7 +140,6 @@ Node.prototype.turn = function() {
 
 	this.updateStatus();
 
-	this.checkFCEBasedPrerequisites();
 	$.each(this.children, function(i, node) {
 		node.updateStatus();
 	});
