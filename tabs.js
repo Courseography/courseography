@@ -161,7 +161,7 @@ function updateActiveFocus(id) {
 
 		// Put in new icon.
 		$(".focusList a[href='#" + id + "Details']").append(
-			"<img class='closeIcon' src='res/close.ico' alt='Click to close!'/>");
+			"<img class='statusIcon' src='res/close.ico' alt='Click to close!'/>");
 	}
 }
 
@@ -195,25 +195,11 @@ function spotlight(id) {
 // Timetable Tab
 //////////////////////////////////////////
 
-// Generate html for timetable 
-/*function createHtml(htmlStr) {
-  var frag = document.createDocumentFragment();
-  temp = document.createElement('div');
-  temp.innerHTML = "<div float='right'>" + FCEs + "</div>" +
-    "<table><tr id='tabTable'>" +
-    htmlStr + "</tr></table>";
-  while (temp.firstChild) {
-    frag.appendChild(temp.firstChild);
-  }
-
-  return frag;
-}*/
-
 // Globals
 // 2013-2014 timetable
-var timetable = 'res/timetableHTML.html';
+//var timetable = 'res/timetableHTML.html';
 // 2014-2015 timetable
-//var timetable = 'res/timetableHTML2014.html';
+var timetable = 'res/timetableHTML2014.html';
 
 
 // Fetch timetable information

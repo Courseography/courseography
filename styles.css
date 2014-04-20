@@ -1,538 +1,324 @@
 /* General */
 
-html, body {
-    margin: 0em;
-    padding: 0em;
-    width: 100%;
-    height: 100%;
-    font-family: "Trebuchet MS", Arial, Sans-Serif;
-    font-size: 16px;
-}
-
 html {
-    overflow-y: auto;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  font-family: "Trebuchet MS", Arial, Sans-Serif;
+  font-size: 16px;
+}
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
 }
 
-a {
-    height: 100%;
-    width: 100%;
-    display: block;
-    color: #FFFFFF;
-    text-decoration: none;
-    outline-color: transparent;
-}
 
-fieldset { 
-    border: none; 
+/* Styles for disclaimer */
+#disclaimerDiv {
+  margin-left: auto; 
+  margin-right: auto; 
+  font-size: 12pt;
+  margin-bottom: 10px;
+  font-weight: bold;
+  text-align: center;
 }
 
 
 /* Styles for the main tabs */
 .infoTabs {
-    /*height: 450px;*/
-    /*height: 100%;*/
-    min-height: 450px;
-    /*width: 100%;*/
-    margin: 0;
-    padding: 0;
-    background-color: #447BD4;
-    padding-bottom: 2em;
-    overflow: hidden;
+  /*width: 100%;*/
+  /*height: 450px;*/
+  /*height: 100%;*/
+  min-height: 450px;
+  margin: 0;
+  padding: 0;
+  background-color: #447BD4;
+  overflow: hidden;
 }
-
+.ui-tabs-anchor {
+  height: 100%;
+  width: 100%;
+  display: block;
+  color: white;
+  text-decoration: none;
+  outline-color: transparent;
+}
 .tabListDiv {
-    width: 100%;
-    height: 40px;
-    margin: 0;
-    padding: 0;
-    background: #04356C;
-    border-top-style: solid;
-    border-bottom-style: solid;
+  width: 100%;
+  height: 40px;
+  margin: 0;
+  padding: 0;
+  background: #04356C;
+  border-top-style: solid;
+  border-bottom-style: solid;
 }
-
-ul.tabList {
-    float: left;
-    height: 100%;
-    display: block;
-    margin: 0px;
-    padding: 0px;   
-    padding-left: 2em; 
+.tabList {
+  float: left;
+  height: 100%;
+  display: block;
+  margin: 0;
+  padding: 0;   
+  padding-left: 2em; 
 }
-
 ul.tabList li {
-    list-style: none;
-    float: left;
-    background: #274F7D;
-    text-align: center;
-    height: 40px;
-    line-height: 40px;
-    vertical-align: middle;
-    border-right-style: solid;
-    border-left-style: solid;
-    border-right-width: thin;
-    border-left-width: thin;
+  list-style: none;
+  float: left;
+  padding: 0 0.5em 0;
+  line-height: 40px;
+  vertical-align: middle;
+  text-align: center;
+  background: #274F7D;
+  border-right: solid thin;
+  border-left: solid thin;
 }
-
-ul.tabList li.ui-tabs-active, ul.tabList li:hover {
-    background: #0D56A6;
-}
-
-div.infoTab {
-    float: left;
-    width: 100%;
-    color: white;
-    height: 100%;
-    overflow-y: auto;
-    overflow-x: hidden;
+.tabList .ui-tabs-active, .tabList li:hover {
+  background: #0D56A6;
 }
 
 /* FCE Count */
 #FCECountDiv {
-    background: #66C2FF;
-    float: right;
-    text-align: center;
-    padding: 0;
-    height: 40px;
-    line-height: 40px;
-    font-size: 1.35em;
-    vertical-align: middle;
+  background: #66C2FF;
+  float: right;
+  padding: 0;
+  line-height: 40px;
+  font-size: 1.35em;
+  vertical-align: middle;
+  text-align: center;
 }
 
-/* Welcome Tab */
-#welcome h2 {
-  padding-left: 20px;
+/* Generic tab */
+.infoTab {
+  float: left;
+  width: 100%;
+  height: 100%;
+  padding: 2em;
+  color: white;
 }
-
-#welcome p {
-  padding-left: 20px;
+.infoTab p {
   width: 50%;
-}
-.welcomeList {
-    padding-left: 20px;
-    width: 50%;
 }
 
 /* My Courses tab */
 .courseCell {
-    display: inline-block;
-    border: 1px solid black;
-    color: black;
-    text-align: center;
-    width: 225px;
-    height: 175px;
+  display: inline-block;
+  width: 180px;
+  height: 130px;
+  padding: 0.5em 0.5em;
+  border: 1px solid black;
+  color: black;
+  text-align: center;
 }
-
-.courseCell p {
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
-    margin-left: 1em;
-    margin-right: 1em;
+.courseName {
+  font-size: 1.1em;
+  font-weight: bold;
 }
-
-.courseCell p.courseName {
-    font-size: 1.2em;
-    font-weight: bold;
-}
-
-#courseListTableDiv {
-    padding-top: 2em;
-    height: 100%;
-    width: 100%;
-}
-
-/* Course Calendar tab */
-div#calendar {
-    padding-right: 30%;
-    padding-top: 1em;
-    padding-left: 2em;
-}
-
-
 
 /* Timetable tab */
-
 #filter {
   width: 200px;
   border: 1px solid black;
   font-family: "Trebuchet MS", Arial, Sans-Serif;
 }
 
-#timetable table {
-    border-spacing: 0;
-    table-layout: fixed;
-}
-
 #timetableContainer {
-    width: 930px;
-    height: 100%;
-    background-color: #111155;
-    margin-left: 2em;
-    margin-top: 2em;
+  width: 863px;
+  height: 100%;
+  background-color: #222266;
+  margin-top: 1em;
 }
-
-#timetableSearch {
-    padding-top: 2em;
-    padding-left: 2em;
-}
-
 #timetableMain {
-    border: 2px solid black;
-    width: 100%;
+  border: 2px solid black;
+  border-spacing: 0;
+  table-layout: fixed;
 }
-
-#timetableMain tr, #timetableMain td, #timetableMain th, .sessionHeader {
-    border-color: black;
-    border-style: solid;
-    border-top-width: 1px;
-    border-bottom-width: 1px;
-    border-left-width: 2px;
-    border-right-width: 2px;
-    vertical-align: top;
-    min-height: 20px;
-    height: 22px;
-    color: black;
-    margin: 0;
-    padding: 0;
-    border-spacing: 0px
+#timetableMain td, 
+#timetableMain th {
+  margin: 0;
+  padding: 0;
+  border-spacing: 0px;
+  border: black solid;
+  border-width: 1.5px 3px;
+  vertical-align: top;
+  color: black;
 }
-
-#timetableMain .courseTable tr, #timetableMain .courseTable td, #timetableMain .courseTable th {
-    border-top-width: 0px;
-    border-bottom-width: 0px;
-    border-left-width: 0px;
-    border-right-width: 0px;
-    border-style: none;
-}
-
 #timetableMain .courseTable {
-    min-height: 23px;
-    /*width: 100%;*/
+  min-height: 23px;
+  border-spacing: 0;
+  table-layout: fixed;
 }
-
-#timetable td.timetableCourseName {
-    width: 95px;
-    font-size: 1.1em;
-    text-align: center;
-    vertical-align: middle;
-    color: white;
+#timetableMain .courseTable tr, 
+#timetableMain .courseTable td,
+#timetableMain .courseTable th {
+  border: none;
 }
-
-
-#timetable td.timetableSection, #timetable th.timetableSection {
-    width: 50px;
-    background-color: #C2D6FF;
-    text-align: center;
+#timetableMain .timetableCourseName {
+  font-size: 1.05em;
+  color: white;
+  padding: 0 0.5em;
 }
-
-#timetable td.timetableTime, #timetable th.timetableTime {
-    width: 110px;
-    background-color: #7094FF;
-    padding-left: 5px;
-    padding-right: 5px;
-}
-
-#timetable td.timetableInstructor, #timetable th.timetableInstructor {
-    width: 150px;
-    background-color: #DB94B8;
-    padding-left: 5px;
-}
-
-#timetable td.timetableCap, #timetable th.timetableCap {
-    width: 50px;
-    background-color: #B2E0FF;
-    padding-left: 5px;
-}
-
 #timetableMain th.sessionHeader {
-    text-align: center;
-    font-weight: bold;
-    font-size: 1.1em;
-    color: white;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.1em;
+  color: white;
 }
-
-.FOffering, .FOffering table {
-    /*background-color: #473924;*/
-    width: 410px;
+.timetableSection {
+  width: 50px;
+  background-color: #C2D6FF;
+  text-align: center;
 }
-
-.SOffering, .SOffering table {
-    /*background-color: #002E0F;*/
-    width: 410px;
+#timetable td.timetableTime, #timetable th.timetableTime {
+  width: 110px;
+  background-color: #7094FF;
+  padding-left: 5px;
+  padding-right: 5px;
 }
-
+#timetable td.timetableInstructor, #timetable th.timetableInstructor {
+  width: 150px;
+  background-color: #DB94B8;
+  padding-left: 5px;
+}
+#timetable td.timetableCap, #timetable th.timetableCap {
+  width: 50px;
+  background-color: #B2E0FF;
+  text-align: center;
+}
+.FOffering, 
+.FOffering table, 
+.SOffering, 
+.SOffering table,
+.FallOffering, 
+.FallOffering table, 
+.WinterOffering, 
+.WinterOffering table {
+  width: 375px;
+  margin: 0;
+  padding: 0;
+}
 .YOffering {
-    width: 100%;
+  width: 100%;
 }
-
 .YOffering .courseTable {
-    width: 410px;
-    margin-left: auto;
-    margin-right: auto;
+  width: 410px;
+  margin-left: auto;
+  margin-right: auto;
 }
-
-
-table.timeTable {
-    width: 70%;
-    margin: 0 auto;
-    padding: 0em;
-}
-
-table.searchClass {
-    width: 70%;
-    margin: 0 auto;
-    padding: 0em;
-}
-
-tr.timeTableRow {
-    border: 1px solid white;
-    width: 75px;
-    height: 5px;
-    text-align: center;
-    font-size: 20px;
-}
-
-td.timeTableHeader{
-    height: 25px;
-    width: 16%;
-    background: #000099;
-}
-
-/*td.timeTableBlock {
-    
-    width: 16%;
-    background: #447BD4;
-}
-
-td.timeTableCourse {
-    width: 16%;
-    background: #0066CC;
-    border: 4px solid black;
-    color: black;
-}
-
-td.timeTableBlockSectionSpring {
-    width: 16%;
-    background: #B2E0FF;
-    border: 2px solid black;
-    color: black;
-}
-
-td.timeTableBlockSectionFall {
-    width: 16%;
-    background: #FFCC66;
-    border: 2px solid black;
-    color: black;
-}
-
-td.timeTableBlockSectionYear {
-    width: 16%;
-    background: #CCFFCC;
-    border: 2px solid black;
-    color: black;
-}
-
-td.timeTableBlockTypeTutorial, td.timeTableBlockTutorialTime {
-    width: 16%;
-    background: #C2D6FF;
-    border: 2px solid black;
-    color: black;
-}
-
-td.timeTableBlockType {
-    width: 16%;
-    background: #85A3FF;
-    border: 2px solid black;
-    color: black;
-}
-
-
-td.timeTableBlockTime {
-    width: 16%;
-    background: #7094FF;
-    border: 2px solid black;
-    color: black;
-}
-
-td.timeTableBlockLocation {
-    width: 16%;
-    background: #66C2FF;
-    border: 2px solid black;
-    color: black;
-}
-
-td.timeTableBlockInstructor {
-    width: 16%;
-    background: #DB94B8;
-    border: 2px solid black;
-    color: black;
-}*/
-
 
 
 /* Focus and POSt tabs */
-div.focusDetails {
-    background: #6A93D4;
-    width: 800px;
-    float: left;
-    padding: 1em;
+.innerTabContents {
+  background: #6A93D4;
+  float: left;
+  padding: 1em;
 }
-
-div.postDetails {
-    background: #6A93D4;
-    width: 350px;
-    height: 300px;
-    float: left;
-    padding: 1em;
+.innerTabContents p {
+  width: 100%;
 }
-
+.focusDetails {
+  width: 600px;
+}
+.postDetails {
+  width: 350px;
+  min-height: 300px;
+}
+.sideListDiv {
+  height: 100%;
+  float: left;
+}
 #focusListDiv {
-    width: 275px;
-    height: 100%;
-    float: left;
-    padding-top: 1em;
-    padding-left: 2em;
+  width: 255px;
 }
-
-ul.focusList {
-    float: left;
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-}
-
 #postListDiv {
   width: 250px;
-  height: 100%;
-  float: left;
-  margin-top: 2em;
 }
-
 #postTypeListDiv {
-  width: 150px;
-  height: 100%;
-  float: left;
-  margin-left: 2em;
-  margin-top: 2em;
+  width: 120px;
 }
-
-ul.postList {
-    float: left;
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
+.sideTabList {
+  margin: 0;
+  padding: 0;
 }
-
-ul.focusList li, ul.postList li {
-    list-style: none;
-    height: 40px;
-    line-height: 40px;
-    vertical-align: middle;
+.sideTabList li {
+  list-style: none;
+  height: 2.5em;
+  line-height: 2.5em;
+  vertical-align: middle;
 }
-
-ul.focusList li.ui-tabs-active, ul.focusList a:hover, ul.postList li.ui-tabs-active, ul.postList a:hover {
-    background: #6A93D4;
+.sideTabList li.ui-tabs-active, .sideTabList a:hover {
+  background: #6A93D4;
 }
-
-.closeIcon {
-    float: right;
-    margin-top: 0.6em; 
-    margin-bottom: 0.6em; 
-    margin-right: 0.5em;
-    width: 1em;
-    height: 1em;
+.statusIcon {
+  float: right;
+  margin-top: 0.6em; 
+  margin-bottom: 0.6em;
+  margin-right: 0.5em;
+  width: 1em;
+  height: 1em;
 }
 
 /* POSt tab */
-.postStatusIcon {
-    float: right;
-    margin-top: 0.6em; 
-    margin-bottom: 0.6em; 
-    margin-right: 0.5em;
-    width: 1em;
-    height: 1em;
+.postFCETotalDiv {
+  height: 100%;
+  width: 300px;
+  float: left;
+  padding-top: 1em;
 }
-
-div.postFCETotalDiv {
-    height: 100%;
-    width: 300px;
-    float: left;
-    padding-top: 1em;
+.FCECrit {
+  text-align: right;
+  padding-right: 0.1em;
 }
-
-
+.postFCETotalDiv table, .checkTable {
+  margin-left: auto;
+  margin-right: auto;
+}
 h4 {
-    font-size: 1.1em;
-    width: 100%;
-    text-align: center;
-    margin-top: 0.3em;
-    margin-bottom: 0.3em;
+  font-size: 1.1em;
+  width: 100%;
+  text-align: center;
+  margin-top: 0.3em;
+  margin-bottom: 0.3em;
 }
-
-div.postFCETotalDiv table {
-    margin-left: auto;
-    margin-right: auto;
-}
-
-td.FCECrit {
-    text-align: right;
-    padding-right: 0.1em;
-}
-
-td.FCETotal {
-    padding-left: 0.1em;
-}
-
-table.checkTable {
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.postDetails p {
-    padding-top: 0.1em;
-    padding-bottom: 0.1em;
-}
-
 input[type=text] {
-    width: 75px;
-    text-align: center;
+  width: 75px;
+  text-align: center;
 }
-
 
 /* Styling checkboxes */
 input[type='checkbox'] {
-    display: none;
+  display: none;
 }
-
 label {  
-    display: inline-block;  
-    position: relative;  
-    height: 20px;
-    margin: 5px;
+  display: inline-block;  
+  position: relative;  
+  height: 20px;
+  margin: 5px;
 } 
-
 label:before {  
-    content: "\00a0";  
-    display: inline-block;  
-    width: 20px;  
-    height: 20px;  
-    color: green;
-    font-size: 1.15em;
-    font-family: bold;
-    background-color: white;  
-    text-align: center;
-    vertical-align: -2px;
+  content: "\00a0";  
+  display: inline-block;  
+  width: 20px;  
+  height: 20px;  
+  color: green;
+  font-size: 1.15em;
+  font-family: bold;
+  background-color: white;  
+  text-align: center;
+  vertical-align: -2px;
 
-    margin-right: 10px;  
-    position: relative;  
+  margin-right: 10px;  
+  position: relative;  
 }  
-
 input[type=checkbox]:checked + label:before {
-    content: "\2713";
+  content: "\2713";
 }
 
-/* Styles for the form */
+
+
+/* Styles for the form in Feedback tab */
 /*#feedbackDescription {
   width: 40%;
   height: 100%;
@@ -563,225 +349,8 @@ input[type=checkbox]:checked + label:before {
   width: 200px;
   border: 1px solid black;
   font-family: "Trebuchet MS", Arial, Sans-Serif;
-}*/
-
-#feedback p {
-  padding-left: 2em;
-  width: 50%;
-}
-
-#feedback a {
-  target: _blank;
-  display: inline;
-}
+  }*/
 
 
 
 
-
-/* SVG Styles */
-#graph {
-    width:100%;
-    height: 100%;
-    overflow: hidden;
-    margin-left: auto;
-    margin-right: auto;
-    clear: both;
-}
-
-#graphRootSVG {
-    width: 100%;
-    height: 100%;
-    stroke: black;
-    stroke-linecap: square;
-    stroke-miterlimit: 10;
-    color-interpolation: auto;
-    overflow: auto;
-    shape-rendering: geometricPrecision;
-}
-
-g text{
-    white-space: pre;
-    text-align: center;
-    /* font-size: 80%;*/
-    stroke: none;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    text-anchor: middle;
-}
-
-
-/* Node styles */
-
-g.node {
-    cursor: pointer;
-}
-
-g[data-active="active"] {
-    opacity: 1.0;
-    stroke-width: 3;
-}
-
-g[data-active="overridden"] {
-    opacity: 1.0;
-    stroke-width: 3;
-    stroke: #CC0011;
-}
-
-g[data-active="inactive"] {
-    opacity: 0.4;
-    stroke-dasharray: 8,8;
-}
-
-g[data-active="takeable"] {
-    opacity: 0.75;
-}
-
-/* Used for hover */
-g[data-active="missing"] rect {
-    stroke-width: 5;
-    stroke: #CC0011;
-}
-
-/* Used for hover */
-g[data-active="missing"] ellipse {
-    stroke-width: 3;
-    stroke: #CC0011;
-}
-
-g[data-active="unlit"] rect {
-    opacity: 1.0;
-    fill: rgb(80,80,80) !important;
-}
-
-g[data-group='theory'] rect {
-    fill: #B1C8D1;
-}
-
-g[data-group='core'] rect {
-    fill: #C9C9C9;
-}
-
-g[data-group='se'] rect {
-    fill: #E68080;
-}
-
-g[data-group='systems'] rect {
-    fill: #C285FF;
-}
-
-g[data-group='graphics'] rect {
-    fill: #66A366;
-}
-
-g[data-group='dbweb'] rect {
-    fill: #FFE680;
-}
-
-g[data-group='num'] rect {
-    fill: #DBB8FF;
-}
-
-g[data-group='ai'] rect {
-    fill: #80B2FF;
-}
-
-g[data-group='hci'] rect {
-    fill: #B8FF70;
-}
-
-/* Hybrid styles */
-g.hybrid {
-    cursor: default;
-}
-
-g.hybrid rect {
-    fill: #333333;
-}
-
-g.hybrid text{
-    stroke: none;
-    font-size: 0.6em;
-    fill: white;
-}
-
-g.bool {
-    cursor: default;
-}
-
-g.bool ellipse {
-    fill: none;
-}
-
-g.bool text {
-    stroke: none;
-    font-size: 0.5em;
-    font-family: 'Comic Sans MS';
-    font-weight: bold;
-}
-
-/* Edge styles */
-path[data-active="takeable"] {
-    fill: none;
-    color: grey;
-    stroke-dasharray: 6, 4;
-}
-
-path[data-active="inactive"] {
-    fill: none;
-    opacity: 0.4;
-    stroke-dasharray: 6, 4;
-}
-
-path[data-active="active"] {
-    fill: none;
-    opacity: 1.0;
-}
-
-path[data-active="missing"] {
-  stroke: #CC0011;
-  fill: none;
-  opactiy: 0.5;
-}
-
-
-/* Title style. */
-#svgTitle {
-    font-size: 2.5em;
-    fill: #0f2d5b;
-    font-family: Garamond, Serif;
-    font-weight: bold;
-}
-
-#svgAuthors {
-    font-size: 1em;
-    fill: #0f2d5b;
-    font-family: Garamond, Serif;
-}
-
-/* Focus spotlight styles */
-ellipse.spotlight {
-  fill: white; 
-  opacity: 0.8; 
-  stroke: none;
-}
-
-
-/* Styles for disclaimer */
-#disclaimerDiv {
-    width: 60%; 
-    margin-left: auto; 
-    margin-right: auto; 
-    font-size: 12pt;
-    margin-bottom: 10px;
-    font-weight: bold;
-}
-
-#disclaimerDiv a {
-    display: inline;
-    color: #2115DD;
-}
