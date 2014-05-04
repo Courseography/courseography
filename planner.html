@@ -443,9 +443,9 @@
         </g>
 
         <!-- Reset Button -->
-        <g id="resetButton" >
-          <ellipse  onclick="reset()" cx="220" cy="-255" rx="30" ry="30"/>
-          <text cursor="pointer"  id="resetButtonText" x="220" y="-250">Reset</text>
+        <g  >
+          <ellipse id="resetButton" onclick="reset()" cx="220" cy="-255" rx="30" ry="30"/>
+          <text cursor="pointer" id="resetButtonText" x="220" y="-250">Reset</text>
         </g>
 
         <!-- Legend -->
@@ -505,7 +505,7 @@
         <li><a href="#focuses">Focuses</a></li>
         <li><a href="#timetable">Timetable</a></li>
         <li><a href="#post">Check My POSt!</a></li>
-        <li><a href="#feedback">Send Feedback</a></li>
+        <!--<li><a href="#feedback">Send Feedback</a></li> --!>
       </ul>
       <div id='FCECountDiv'><span id='FCEcount'>0.0</span> FCEs</div>
     </div>
@@ -513,7 +513,7 @@
     <!-- Welcome Tab -->
     <div id="welcome" class="infoTab">
       <p>
-        <h2>Welcome to the University of Toronto Computer Science Course Planner!</h1>
+        <h2>Welcome to the University of Toronto Computer Science Course Planner!</h2>
         Select courses in the graph to satisfy prerequisites and unlock upper-year courses.
         Courses that you've selected but have not yet completed the current calendar requirements will be highlighted in red. Hover over courses and look for the <span style="color: #CC0011; background: #222222">RED</span> edges.
       </p>
@@ -522,6 +522,15 @@
       </p>
       <p>
         Here's a <a href="res/full_graph.jpg" target="_blank">printable version</a> of the graph.
+      </p>
+      <p>
+        <h3>We welcome your feedback!</h3>
+        Course Planner is an ongoing project maintained by Ian Stewart-Binks and <a target="_blank" href="http://www.cs.toronto.edu/~liudavid/">David Liu</a>. 
+        Any contribution, whether ideas for new features, better design, or (especially) bug reports! You can also keep up to date with the latest developments on <a target="_blank" href="https://github.com/Senor-Ian/cscourseplanner">Github</a>.
+        Thanks!
+      </p>
+
+      <p>Please send all feedback to <a target="_blank" href="mailto:cs.toronto.courseplanner@gmail.com">this address</a>. If you see a bug, please do let us know which browser and version you're using. And if there's a display issue, giving us your screen display info (e.g., resolution) will be rather helpful. Thanks again!
       </p>
     </div>
 
@@ -1245,6 +1254,7 @@
 
 
     <!-- Feedback Tab -->
+    <!--
     <div id="feedback" class="infoTab">
       <p>
         Course Planner is an ongoing project maintained by Ian Stewart-Binks and <a target="_blank" href="http://www.cs.toronto.edu/~liudavid/">David Liu</a>. 
@@ -1255,7 +1265,7 @@
       <p>Please send all feedback to <a target="_blank" href="mailto:cs.toronto.courseplanner@gmail.com">this address</a>. If you see a bug, please do let us know which browser and version you're using. And if there's a display issue, giving us your screen display info (e.g., resolution) will be rather helpful. Thanks again!
       </p>
 
-      <!--div id = "feedbackFormDiv">
+      div id = "feedbackFormDiv">
         <fieldset id="feedbackForm">
           <legend>Feedback</legend>
           <div id="result"></div>
@@ -1265,8 +1275,9 @@
           <br/>
           <button class="submit_btn" id="submit_btn">Submit</button>
         </fieldset>
-      </div-->
+      </div
     </div>
+  -->
   </div>
 
   <!-- Scripts -->
