@@ -8,8 +8,8 @@
   <meta name="robots" content="index, follow, noarchive, nosnippet">
   <meta name="description" content="University of Toronto Department of Computer Science Course Planner.">
   <title>CSC Course Planner</title>
-  <link rel="stylesheet" href="styles.css"/>
-  <link rel="stylesheet" href="graphStyles.css"/>
+  <link rel="stylesheet" href="style/styles.css"/>
+  <link rel="stylesheet" href="style/graphStyles.css"/>
 </head>
 
 <body>
@@ -513,8 +513,9 @@
     <!-- Welcome Tab -->
     <div id="welcome" class="infoTab">
       <p>
+        <h2>Welcome to the University of Toronto Computer Science Course Planner!</h1>
         Select courses in the graph to satisfy prerequisites and unlock upper-year courses.
-        If you can't select a course, you're probably missing prerequisites! Hover over courses and look for the <span style="color: #CC0011; background: #222222">RED</span> edges.
+        Courses that you've selected but have not yet completed the current calendar requirements will be highlighted in red. Hover over courses and look for the <span style="color: #CC0011; background: #222222">RED</span> edges.
       </p>
       <p>
         Check out the different tabs for extra features.
@@ -1271,12 +1272,12 @@
   <!-- Scripts -->
   <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
   <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-  <script src='structs.js'></script>
-  <script src='parseGraph.js'></script>
-  <script src='tabs.js'></script>
-  <script src='post.js'></script>
-  <script src='util.js'></script>
-  <script src="createData.js"></script>
+  <script src='src_js/structs.js'></script>
+  <script src='src_js/parseGraph.js'></script>
+  <script src='src_js/tabs.js'></script>
+  <script src='src_js/post.js'></script>
+  <script src='src_js/util.js'></script>
+  <script src="src_js/createData.js"></script>
 
 </body>
 </html>
