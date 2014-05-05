@@ -191,29 +191,29 @@ function updateAllElecsMinor() {
 		elecTotalMinor = 1.5;
 	}
 
-	if (CSC373.active) {
+	if (CSC373.status == 'active' || CSC373.status == 'overridden') {
 		active300sMinor.push('CSC373');
 		tmpMinor.push('CSC373');
 		extraMinor += 0.5;
 	}
 
-	if (CSC369.active) {
+	if (CSC369.status == 'active' || CSC369.status == 'overridden') {
 		active300sMinor.push('CSC369');
 		tmpMinor.push('CSC369');
 		extraMinor += 0.5;
 	}
 
-	if (CSC258.active) {
+	if (CSC258.status == 'active' || CSC258.status == 'overridden') {
 		tmpMinor.push('CSC258');
 		extraMinor += 0.5;
 	}
 
-	if (CSC209.active) {
+	if (CSC209.status == 'active' || CSC209.status == 'overridden') {
 		tmpMinor.push('CSC209');
 		extraMinor += 0.5;
 	}
 
-	if (CSC200.active) {
+	if (CSC200.status == 'active' || CSC200.status == 'overridden') {
 		tmpMinor.push('CSC200');
 		extraMinor += 1;
 	}
@@ -233,7 +233,7 @@ function updateAllElecsMinor() {
 	}
 
 	$('#elecTotalMinor').html(elecTotalMinor.toFixed(1));
-	elecSatMinor = (elecTotalMinor >= 1.5) && (1 <= active300sMinor.length + active400s.length + projectCourses.length) && (active300sMinor.length + active400s.length + projectCourses.length <= 3);
+	elecSatMinor = (elecTotalMinor >= 1.5) && (1 <= active300sMinor.length + active400s.length + projectCourses.length);
 	setIcon('cscElecsMinor', elecSatMinor);
 }
 
@@ -286,12 +286,12 @@ function update300sElecsMajor() {
 
 	var tmp = active300s.concat(active400s, projectCourses.slice(0, numProjects));
 	// Manually add active 3rd year courses required by specialist
-	if (CSC373.active) {
+	if (CSC373.status == 'active' || CSC373.status == 'overridden') {
 		tmp.push('CSC373');
 		extraMajor += 0.5;
 	}
 
-	if (CSC369.active) {
+	if (CSC369.status == 'active' || CSC369.status == 'overridden') {
 		tmp.push('CSC369');
 		extraMajor += 0.5
 	}
