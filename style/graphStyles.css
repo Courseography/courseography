@@ -6,6 +6,7 @@
   /*width: 95%;
   height: 90%;
   overflow: hidden;
+  max-width: 1600px;
   margin-left: auto;
   margin-right: auto;
   clear: both;*/
@@ -14,6 +15,7 @@
 #graphRootSVG {
   width: 100%;
   height: 100%;
+  clear: both;
   stroke: black;
   stroke-linecap: square;
   stroke-miterlimit: 10;

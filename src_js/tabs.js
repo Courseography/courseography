@@ -144,9 +144,9 @@ var activeFocus = '';
 function updateActiveFocus(id) {
 	$('ellipse.spotlight').remove();
 	// Remove old icon
-	$(".closeIcon").remove();
+	$(".focusList .statusIcon").remove();
 
-	if (activeFocus === id) {
+	if (id === '') {
 		clearFocus();
 	} else {
 		var focus = window[id + 'FocusList'];
@@ -275,8 +275,15 @@ function createTabs() {
 		active: false,
 		collapsible: true,
 		activate: function(e, ui) {
-			e.currentTarget.blur();
-		}
+			var name = ui.newTab.attr('aria-controls');
+			if (name) {
+				name = name.substr(0, name.length - 7);
+				updateActiveFocus(name);	
+			} else {
+				updateActiveFocus('');
+			}
+		},
+
 	});
 	$('.postTypeTabs, .postTabs').tabs({
 		active: 0,

@@ -81,8 +81,12 @@ ul.tabList li {
   border-right: solid thin;
   border-left: solid thin;
 }
-ul.tabList li a {
+ul.tabList li a, 
+ul.tabList li a:hover, 
+ul.tabList li a:visited, 
+ul.tabList li a:active {
   font-weight: normal;
+  color: white;
 }
 .tabList .ui-tabs-active, .tabList li:hover {
   background: #0D56A6;
@@ -257,7 +261,10 @@ ul.tabList li a {
   line-height: 2.5em;
   vertical-align: middle;
 }
-.sideTabList li a {
+.sideTabList li a,
+.sideTabList li a:active,
+.sideTabList li a:hover,
+.sideTabList li a:visited {
   font-weight: normal;
 }
 .sideTabList li.ui-tabs-active, .sideTabList a:hover {
