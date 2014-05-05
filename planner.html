@@ -434,7 +434,6 @@
         </g>
 
 
-
         <!-- Title & Logo -->
         <g>
           <image xlink:href="res/dcs.svg" x="1070" y="-295" width="255" height="85"/>
@@ -442,11 +441,13 @@
           <!--text id="svgAuthors" x="1190" y="-160">Ian Stewart-Binks &amp; David Liu</text-->
         </g>
 
+
         <!-- Reset Button -->
         <g onclick="reset()" cursor="pointer">
           <ellipse id="resetButton"  cx="220" cy="-255" rx="30" ry="30"/>
           <text  id="resetButtonText" x="220" y="-250">Reset</text>
         </g>
+
 
         <!-- Legend -->
         <g>
@@ -490,7 +491,7 @@
 
   <!-- Disclaimer -->
   <div id="disclaimerDiv" >
-    DISCLAIMER: this tool is in beta. Both the 
+    DISCLAIMER: Both the 
     <a href="http://www.artsandscience.utoronto.ca/ofr/timetable/winter/csc.html">Official Timetable</a> and <a href="http://www.artsandscience.utoronto.ca/ofr/calendar/index.html">Calendar</a> take precedence over the information presented here. It's important that you double-check your course selection, prerequisites, and your program plans.
   </div>
 
@@ -512,25 +513,32 @@
 
     <!-- Welcome Tab -->
     <div id="welcome" class="infoTab">
+      <h2>Welcome!</h2>
       <p>
-        <h2>Welcome to the University of Toronto Computer Science Course Planner!</h2>
-        Select courses in the graph to satisfy prerequisites and unlock upper-year courses.
-        Courses that you've selected but have not yet completed the current calendar requirements will be highlighted in red. Hover over courses and look for the <span style="color: #CC0011; background: #222222">RED</span> edges.
+        The graph above displays the prerequisite links connecting courses 
+        in our department. Select courses to plan your enrolments for 
+        future terms! Courses that you've selected but have missing
+        prerequisites will be highlighted in red.
       </p>
       <p>
-        Check out the different tabs for extra features.
+        Check out the different tabs to access helpful features for your 
+        planning. Also, here's a 
+        <a href="res/full_graph.jpg" target="_blank">printable version</a>
+         of the graph.
       </p>
+      <br>
       <p>
-        Here's a <a href="res/full_graph.jpg" target="_blank">printable version</a> of the graph.
-      </p>
-      <p>
-        <h3>We welcome your feedback!</h3>
-        Course Planner is an ongoing project maintained by Ian Stewart-Binks and <a target="_blank" href="http://www.cs.toronto.edu/~liudavid/">David Liu</a>. 
-        Any contribution, whether ideas for new features, better design, or (especially) bug reports! You can also keep up to date with the latest developments on <a target="_blank" href="https://github.com/Senor-Ian/cscourseplanner">Github</a>.
-        Thanks!
-      </p>
-
-      <p>Please send all feedback to <a target="_blank" href="mailto:cs.toronto.courseplanner@gmail.com">this address</a>. If you see a bug, please do let us know which browser and version you're using. And if there's a display issue, giving us your screen display info (e.g., resolution) will be rather helpful. Thanks again!
+        Course Planner is an ongoing 
+        <a target="_blank" href="https://github.com/Ian-Stewart-Binks/cscourseplanner">
+        project</a> maintained by Ian Stewart-Binks
+        and <a target="_blank" href="http://www.cs.toronto.edu/~liudavid/">David Liu</a>. 
+        Ideas for new features, better design, and (especially) bug reports
+        are always welcome! 
+        Please send all feedback to 
+        <a target="_blank" href="mailto:cs.toronto.courseplanner@gmail.com">this address</a>. 
+        If you see a bug, please do let us know which browser and version you're using. 
+        And if there's a display issue, giving us your screen display info 
+        (e.g., resolution) will be rather helpful. Thanks!
       </p>
     </div>
 

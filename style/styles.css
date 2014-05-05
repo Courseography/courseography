@@ -16,6 +16,12 @@ body {
   height: 100%;
 }
 
+a, a:hover, a:visited, a:active {
+  font-weight: bold;
+  text-decoration: none;
+  color: #4C004C;
+}
+
 
 /* Styles for disclaimer */
 #disclaimerDiv {
@@ -74,6 +80,9 @@ ul.tabList li {
   background: #274F7D;
   border-right: solid thin;
   border-left: solid thin;
+}
+ul.tabList li a {
+  font-weight: normal;
 }
 .tabList .ui-tabs-active, .tabList li:hover {
   background: #0D56A6;
@@ -247,6 +256,9 @@ ul.tabList li {
   height: 2.5em;
   line-height: 2.5em;
   vertical-align: middle;
+}
+.sideTabList li a {
+  font-weight: normal;
 }
 .sideTabList li.ui-tabs-active, .sideTabList a:hover {
   background: #6A93D4;
