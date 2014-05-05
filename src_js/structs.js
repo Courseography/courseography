@@ -103,6 +103,8 @@ Node.prototype.unfocus = function() {
 
 // Check whether node's prerequisites are satisfied, update status and GUI
 Node.prototype.updateStatus = function() {
+	if (this.name === "hybrid1") { console.log(this.parents);}
+	console.log(this.name + " " + this.arePrereqsSatisfied());
 	if (this.arePrereqsSatisfied()) {
 		if (this.isSelected() || this.hybrid) {
 			this.status = 'active';
@@ -162,6 +164,7 @@ Node.prototype.arePrereqsSatisfied = function() {
 			sat = sat && this.parents[i].isSelected();
 		}
 	} else if (this.logicalType === 'OR') {
+		sat = false;
 		for (var i = 0; i < this.parents.length; i++) {
 			sat = sat || this.parents[i].isSelected();
 		}
@@ -174,7 +177,6 @@ Node.prototype.arePrereqsSatisfied = function() {
 // Checks FCE-count prerequisites
 Node.prototype.checkFCEBasedPrerequisites = function() {
 	if (this.name === 'CSC454') {
-		console.log(FCEs200 + " " + FCEs300 + " " + FCEs400);
 		return FCEs200 + FCEs300 + FCEs400 >= 2.5;
 	} else if (this.name === 'CSC494' || this.name === 'CSC495') {
 		return FCEs300 + FCEs400 >= 1.5;

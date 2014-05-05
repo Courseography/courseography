@@ -21,7 +21,7 @@ function buildGraph() {
 				makeHybrid([], 'OR', orNode);
 				$.each(elem, function(i, e) {
 					window[orNode].parents.push(window[e]);
-					window[e].children.push(window[id]);
+					window[e].children.push(window[orNode]);
 				});
 				window[id].parents.push(window[orNode]);
 				window[orNode].children.push(window[id]);
