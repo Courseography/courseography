@@ -141,6 +141,12 @@ path[data-active="missing"] {
 
 /* Reset button */
 #resetButton {
-  fill: red;
+  fill: #990000;
   cursor: pointer;
+  stroke-width: 3;
+  stroke: #404040;
+}
+
+#resetButtonText {
+  fill: white;
 }
