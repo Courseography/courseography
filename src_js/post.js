@@ -126,9 +126,9 @@ function updateMinorPostInterface() {
 
 function setIcon(id, sat) {
 	if (sat) {
-		$('a[href="#' + id + '"] img').attr('src', 'res/check.ico');
+		$('a[href="#' + id + '"] img').attr('src', 'res/ico/check.ico');
 	} else {
-		$('a[href="#' + id + '"] img').attr('src', 'res/delete.ico');
+		$('a[href="#' + id + '"] img').attr('src', 'res/ico/delete.ico');
 	}
 }
 

@@ -437,8 +437,8 @@
 
       <!-- Title & Logo -->
       <g>
-        <image xlink:href="res/dcs.svg" x="1070" y="-295" width="255" height="85"/>
-        <text id="svgTitle" x="1195" y="-180">Course Planner</text>
+        <image xlink:href="res/img/dcs.svg" x="1070" y="-285" width="255" height="85"/>
+        <text id="svgTitle" x="1200" y="-170">Course Planner</text>
       </g>
 
 
@@ -511,6 +511,7 @@
 
     <!-- Welcome Tab -->
     <div id="welcome" class="infoTab">
+      <div class="infoTabContent">
       <h2>Welcome!</h2>
       <p>
         The graph above displays the prerequisite links connecting courses 
@@ -538,6 +539,7 @@
         And if there's a display issue, giving us your screen display info 
         (e.g., resolution) will be rather helpful. Thanks!
       </p>
+      </div>
     </div>
 
 
@@ -549,7 +551,7 @@
 
     <!-- Course Description Tab -->
     <div id="courseDescriptions" class="infoTab">
-      <div id="calendar">Hover over a course!</div>
+      <div id="calendar" class="infoTabContent"><h3>Hover over a course!</h3></div>
     </div>
 
 
@@ -780,7 +782,9 @@
 
     <!-- Timetable Tab -->
     <div id="timetable" class="infoTab">
-      <div id="timetableSearch">
+      <div id="timetableSearch" class="infoTabContent">
+        <h2>2013-2014 Timetable</h2>
+        <p>2014-2015 version coming soon!</p>
         <p>Search through the timetable for a course or instructor.</p>
         <input type="text" class="text-input" id="filter" value="" />
       </div>
@@ -794,13 +798,13 @@
         <div id="postTypeListDiv" class="sideListDiv">
           <ul id="postTypeList" class="postList sideTabList">
             <li><a href='#specCheck'>Specialist 
-              <img class='statusIcon' src='res/delete.ico' alt='MISSING'></a>
+              <img class='statusIcon' src='res/ico/delete.ico' alt='MISSING'></a>
             </li>
             <li><a href='#majorCheck'>Major
-              <img class='statusIcon' src='res/delete.ico' alt='MISSING'></a>
+              <img class='statusIcon' src='res/ico/delete.ico' alt='MISSING'></a>
             </li>
             <li><a href='#minorCheck'>Minor
-              <img class='statusIcon' src='res/delete.ico' alt='MISSING'></a>
+              <img class='statusIcon' src='res/ico/delete.ico' alt='MISSING'></a>
             </li>
           </ul>
         </div>
@@ -809,22 +813,22 @@
           <div id="postListDiv" class="sideListDiv">
             <ul class="postList sideTabList">
               <li><a href='#cscReqs'>CSC Required Courses
-                <img class='statusIcon' src='res/delete.ico' alt='MISSING'></a>
+                <img class='statusIcon' src='res/ico/delete.ico' alt='MISSING'></a>
               </li>
               <li><a href='#matReqs'>MAT/STA Required Courses
-                <img class='statusIcon' src='res/delete.ico' alt='MISSING'/></a>
+                <img class='statusIcon' src='res/ico/delete.ico' alt='MISSING'/></a>
               </li>
               <li><a href='#csc400s'>CSC/ECE/BCB 400+
-                <img class='statusIcon' src='res/delete.ico' alt='MISSING'/></a>
+                <img class='statusIcon' src='res/ico/delete.ico' alt='MISSING'/></a>
               </li>
               <li><a href='#cscElecs'>CSC Electives
-                <img class='statusIcon' src='res/delete.ico' alt='MISSING'/></a>
+                <img class='statusIcon' src='res/ico/delete.ico' alt='MISSING'/></a>
               </li>
               <li><a href='#matElecs'>MAT/STA Electives
-                <img class='statusIcon' src='res/delete.ico' alt='MISSING'/></a>
+                <img class='statusIcon' src='res/ico/delete.ico' alt='MISSING'/></a>
               </li>
               <li><a href='#peyReq'>Inquiry (PEY)
-                <img class='statusIcon' src='res/delete.ico' alt='MISSING'/></a>
+                <img class='statusIcon' src='res/ico/delete.ico' alt='MISSING'/></a>
               </li>
             </ul>
           </div>
@@ -1018,19 +1022,19 @@
           <div id="postListDiv" class="sideListDiv">
             <ul class="postList sideTabList">
               <li><a href='#cscReqsMajor'>CSC Required Courses 
-                <img class='statusIcon' src='res/delete.ico' alt='MISSING'></a>
+                <img class='statusIcon' src='res/ico/delete.ico' alt='MISSING'></a>
               </li>
               <li><a href='#matReqsMajor'>MAT/STA Required Courses
-                <img class='statusIcon' src='res/delete.ico' alt='MISSING'/></a>
+                <img class='statusIcon' src='res/ico/delete.ico' alt='MISSING'/></a>
               </li>
               <li><a href='#200sElecsMajor'>200-Level Electives
-                <img class='statusIcon' src='res/delete.ico' alt='MISSING'/></a>
+                <img class='statusIcon' src='res/ico/delete.ico' alt='MISSING'/></a>
               </li>
               <li><a href='#300sElecsMajor'>300/400-Level Electives
-                <img class='statusIcon' src='res/delete.ico' alt='MISSING'/></a>
+                <img class='statusIcon' src='res/ico/delete.ico' alt='MISSING'/></a>
               </li>
               <li><a href='#peyReqMajor'>Inquiry (PEY)
-                <img class='statusIcon' src='res/delete.ico' alt='MISSING'/></a>
+                <img class='statusIcon' src='res/ico/delete.ico' alt='MISSING'/></a>
               </li>
             </ul>
           </div>
@@ -1191,10 +1195,10 @@
           <div id="postListDiv" class="sideListDiv">
             <ul class="postList sideTabList">
               <li><a href='#cscReqsMinor'>CSC Required Courses 
-                <img class='statusIcon' src='res/delete.ico' alt='MISSING'></a>
+                <img class='statusIcon' src='res/ico/delete.ico' alt='MISSING'></a>
               </li>
               <li><a href='#cscElecsMinor'>200/300/400-Level Electives
-                <img class='statusIcon' src='res/delete.ico' alt='MISSING'/></a>
+                <img class='statusIcon' src='res/ico/delete.ico' alt='MISSING'/></a>
               </li>
             </ul>
           </div>

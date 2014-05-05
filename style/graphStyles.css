@@ -3,13 +3,12 @@
  */
 
  #graph {
-  /*width: 95%;
-  height: 90%;
+  width: 95%;
   overflow: hidden;
-  max-width: 1600px;
+  /*max-width: 1600px;*/
   margin-left: auto;
   margin-right: auto;
-  clear: both;*/
+  clear: both;
 }
 
 #graphRootSVG {

@@ -174,7 +174,8 @@ Node.prototype.arePrereqsSatisfied = function() {
 // Checks FCE-count prerequisites
 Node.prototype.checkFCEBasedPrerequisites = function() {
 	if (this.name === 'CSC454') {
-		return FCEs300 + FCEs400 >= 2.5;
+		console.log(FCEs200 + " " + FCEs300 + " " + FCEs400);
+		return FCEs200 + FCEs300 + FCEs400 >= 2.5;
 	} else if (this.name === 'CSC494' || this.name === 'CSC495') {
 		return FCEs300 + FCEs400 >= 1.5;
 	} else if (this.name === 'CSC318') {

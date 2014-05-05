@@ -43,15 +43,16 @@ function turnNode(event) {
     var id = event.target.parentNode.id;
     // Update this node
     window[id].turn();
+
+    updateClickedCourses(id, window[id].isSelected());
+    updateMyCoursesTab();
+    updateFCECount();
+
     // Check the courses with FCE reqs
     CSC318.updateStatus();
     CSC454.updateStatus();
     CSC494.updateStatus();
     CSC495.updateStatus();
-
-    updateClickedCourses(id, window[id].isSelected());
-    updateMyCoursesTab();
-    updateFCECount();
 
     updatePOSt(id, window[id].isSelected());
     updatePostInterface();

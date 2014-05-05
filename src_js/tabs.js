@@ -161,7 +161,7 @@ function updateActiveFocus(id) {
 
 		// Put in new icon.
 		$(".focusList a[href='#" + id + "Details']").append(
-			"<img class='statusIcon' src='res/close.ico' alt='Click to close!'/>");
+			"<img class='statusIcon' src='res/ico/close.ico' alt='Click to close!'/>");
 	}
 }
 
@@ -197,9 +197,9 @@ function spotlight(id) {
 
 // Globals
 // 2013-2014 timetable
-//var timetable = 'res/timetableHTML.html';
+var timetable = 'res/timetableHTML.html';
 // 2014-2015 timetable
-var timetable = 'res/timetableHTML2014.html';
+//var timetable = 'res/timetableHTML2014.html';
 
 
 // Fetch timetable information
