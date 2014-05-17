@@ -143,32 +143,6 @@ document.onkeydown = function(e) {
 
 // Resets interface to default (nothing selected); callback for Reset button
 function reset() {
-  // Set initial node status
-  $.each(nodes, function(i, node) {
-
-    var nodeStatus = getCookie(window[node].name);
-
-    if (initiallyTakeable.indexOf(node) > -1 && nodeStatus == 'inactive') {
-      window[node].status = 'takeable';
-    } else {
-      window[node].status = nodeStatus;
-    }
-    window[node].updateStatus();
-    window[node].updateSVG();
-    $.each(window[node].outEdges, function(i, edge) {
-      edge.updateStatus();
-    });
-  });
-
-  // Clear 'My Courses' tab
-  $('#courseGrid').empty();
-
-  // Clear any active focus
-  if (activeFocus != '') {
-    $('.focusTabs').tabs('option', 'active', false);
-    $('ellipse.spotlight').remove();
-    clearFocus();
-  }
 
   // Clear FCE count and 'Check My POSt!' tab
   FCEs = 0;
@@ -190,6 +164,49 @@ function reset() {
   updatePostInterface();
   updateMajorPostInterface();
   updateMinorPostInterface();
+  
+  // Set initial node status
+  $.each(nodes, function(i, node) {
+
+    var nodeStatus = getCookie(window[node].name);
+
+    if (initiallyTakeable.indexOf(node) > -1 && nodeStatus == 'inactive') {
+      window[node].status = 'takeable';
+    } else {
+      window[node].status = nodeStatus;
+    }
+    window[node].updateStatus();
+    window[node].updateSVG();
+
+    $.each(window[node].outEdges, function(i, edge) {
+      edge.updateStatus();
+    });
+
+
+    updateMyCoursesTab();
+    updateFCECount();
+
+    // Check the courses with FCE reqs
+    CSC318.updateStatus();
+    CSC454.updateStatus();
+    CSC494.updateStatus();
+    CSC495.updateStatus();
+
+    updatePOSt(id, window[id].isSelected());
+    updatePostInterface();
+    updateMajorPostInterface();
+    updateMinorPostInterface();
+  });
+
+  // Clear 'My Courses' tab
+  $('#courseGrid').empty();
+
+  // Clear any active focus
+  if (activeFocus != '') {
+    $('.focusTabs').tabs('option', 'active', false);
+    $('ellipse.spotlight').remove();
+    clearFocus();
+  }
 };
 
 
