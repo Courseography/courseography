@@ -189,6 +189,7 @@ function reset() {
     if(window[node].hybrid == false) {
       updatePOSt(node, window[node].isSelected());
       updateClickedCourses(node, window[node].active);
+      console.log(FCEs300);
     }
   });
   updatePostInterface();
