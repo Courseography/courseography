@@ -58,7 +58,7 @@ function Node(parents, type, name) {
 	this.updated = false; // Used when updating active/inactive state
 	this.hybrid = false; // Identifies whether node is 'hybrid'
 
-  	var nodeStatus = get_cookie(this.name);
+  	var nodeStatus = getCookie(this.name);
   
   	if(nodeStatus == "") {
  		console.log("no cookies!");
