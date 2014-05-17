@@ -1,4 +1,4 @@
-function set_cookie ( cookie_name, cookie_value, lifespan_in_days, valid_domain ) {
+function set_cookie (cookie_name, cookie_value, lifespan_in_days, valid_domain) {
     var domain_string = valid_domain ?
                        ("; domain=" + valid_domain) : '' ;
     document.cookie = cookie_name +

@@ -55,9 +55,17 @@ function Node(parents, type, name) {
 	this.outEdges = []; // Edges leading to children
 	this.inEdges = []; // Edges coming from parents
 	this.logicalType = type; // 'AND' or 'OR' of prerequisites
-	this.status = 'inactive'; // 'active', 'takeable', or 'hybrid'
 	this.updated = false; // Used when updating active/inactive state
 	this.hybrid = false; // Identifies whether node is 'hybrid'
+
+  	var nodeStatus = getCookie(this.name);
+  
+  	if(nodeStatus === null) {
+		this.status = 'inactive';	 // 'active', 'takeable', or 'hybrid'
+ 	} else {
+ 		this.status = nodeStatus;
+  	}
+
 }
 
 // Returns true if the node has been selected
@@ -108,14 +116,18 @@ Node.prototype.updateStatus = function() {
 	if (this.arePrereqsSatisfied()) {
 		if (this.isSelected() || this.hybrid) {
 			this.status = 'active';
+			set_cookie(this.name, this.status, 30, "http://www.cs.toronto.edu/~liudavid/rqs/");
 		} else {
 			this.status = 'takeable';
+			set_cookie(this.name, this.status, 30, "http://www.cs.toronto.edu/~liudavid/rqs/");
 		}
 	} else {
 		if (this.isSelected() && !this.hybrid) {
 			this.status = 'overridden';
+			set_cookie(this.name, this.status, 30, "http://www.cs.toronto.edu/~liudavid/rqs/");
 		} else {
 			this.status = 'inactive';
+			set_cookie(this.name, this.status, 30, "http://www.cs.toronto.edu/~liudavid/rqs/");
 		}
 	}
 
