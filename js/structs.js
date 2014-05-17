@@ -110,18 +110,18 @@ Node.prototype.updateStatus = function() {
 	if (this.arePrereqsSatisfied()) {
 		if (this.isSelected() || this.hybrid) {
 			this.status = 'active';
-			set_cookie(this.name, this.status, 30, "http://www.cs.toronto.edu/~iansb/course_planner/cscourseplanner/");
+			set_cookie(this.name, this.status, 30);
 		} else {
 			this.status = 'takeable';
-			set_cookie(this.name, this.status, 30, "http://www.cs.toronto.edu/~iansb/course_planner/cscourseplanner/");
+			set_cookie(this.name, this.status, 30);
 		}
 	} else {
 		if (this.isSelected() && !this.hybrid) {
 			this.status = 'overridden';
-			set_cookie(this.name, this.status, 30, "http://www.cs.toronto.edu/~iansb/course_planner/cscourseplanner/");
+			set_cookie(this.name, this.status, 30);
 		} else {
 			this.status = 'inactive';
-			set_cookie(this.name, this.status, 30, "http://www.cs.toronto.edu/~iansb/course_planner/cscourseplanner/");
+			set_cookie(this.name, this.status, 30);
 		}
 	}
 
