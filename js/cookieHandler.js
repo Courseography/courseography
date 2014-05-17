@@ -1,4 +1,5 @@
 function set_cookie (cookie_name, cookie_value, lifespan_in_days, valid_domain) {
+    console.log("setting cookie...");
     var domain_string = valid_domain ?
                        ("; domain=" + valid_domain) : '' ;
     document.cookie = cookie_name +
@@ -9,6 +10,7 @@ function set_cookie (cookie_name, cookie_value, lifespan_in_days, valid_domain) 
 }
 
 function getCookie(cookie_name) {
+    console.log("getting cookie!");
     var cookie = document.cookie;
     var prefix = name + "=";
     var begin = cookie.indexOf("; " + prefix);

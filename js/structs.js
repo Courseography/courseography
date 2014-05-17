@@ -61,8 +61,10 @@ function Node(parents, type, name) {
   	var nodeStatus = getCookie(this.name);
   
   	if(nodeStatus === null) {
+ 		console.log("no cookies!");
 		this.status = 'inactive';	 // 'active', 'takeable', or 'hybrid'
  	} else {
+ 		console.log("Node cookie detected");
  		this.status = nodeStatus;
   	}
 
