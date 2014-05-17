@@ -154,6 +154,10 @@ function reset() {
   clickedCourses = [];
   $('#FCEcount').html('0.0');
 
+
+  // Clear 'My Courses' tab
+  $('#courseGrid').empty();
+  
   active200s = [];
   active300s = [];
   active400s = [];
@@ -197,9 +201,6 @@ function reset() {
     updateMajorPostInterface();
     updateMinorPostInterface();
   });
-
-  // Clear 'My Courses' tab
-  $('#courseGrid').empty();
 
   // Clear any active focus
   if (activeFocus != '') {
