@@ -164,7 +164,7 @@ function reset() {
   updatePostInterface();
   updateMajorPostInterface();
   updateMinorPostInterface();
-  
+
   // Set initial node status
   $.each(nodes, function(i, node) {
 
@@ -192,7 +192,7 @@ function reset() {
     CSC494.updateStatus();
     CSC495.updateStatus();
 
-    updatePOSt(id, window[id].isSelected());
+    updatePOSt(id, window[node].isSelected());
     updatePostInterface();
     updateMajorPostInterface();
     updateMinorPostInterface();
