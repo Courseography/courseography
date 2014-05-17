@@ -164,10 +164,6 @@ function reset() {
   $('input:checkbox').attr('checked', false);
   $('input:text').attr('value', '');
 
-  updatePostInterface();
-  updateMajorPostInterface();
-  updateMinorPostInterface();
-
   // Set initial node status
   $.each(nodes, function(i, node) {
 
@@ -192,12 +188,12 @@ function reset() {
     // Check the courses with FCE reqs
     if(window[node].hybrid == false) {
       updatePOSt(node, window[node].isSelected());
-      updateClickedCourses(node, window[node].isSelected());
+      updateClickedCourses(node, window[node].active);
     }
-    updatePostInterface();
-    updateMajorPostInterface();
-    updateMinorPostInterface();
   });
+  updatePostInterface();
+  updateMajorPostInterface();
+  updateMinorPostInterface();
 
   // Clear any active focus
   if (activeFocus != '') {
