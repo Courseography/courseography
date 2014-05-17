@@ -188,7 +188,9 @@ function reset() {
     // Check the courses with FCE reqs
     if(window[node].hybrid == false) {
       updatePOSt(node, window[node].isSelected());
-      updateClickedCourses(node, window[node].active);
+      if(window[node].active === 'active' || window[node].active === 'overridden') {
+        updateClickedCourses(node, true);
+      }
       console.log(FCEs300);
     }
   });
