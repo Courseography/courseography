@@ -204,6 +204,12 @@ function reset() {
     $('ellipse.spotlight').remove();
     clearFocus();
   }
+
+  CSC318.updateStatus();
+  CSC454.updateStatus();
+  CSC494.updateStatus();
+  CSC495.updateStatus();
+  
 };
 
 
