@@ -153,6 +153,7 @@ function reset() {
     } else {
       window[node].status = nodeStatus;
     }
+    window[node].updateStatus();
     window[node].updateSVG();
   });
 
