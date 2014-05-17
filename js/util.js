@@ -148,7 +148,7 @@ function reset() {
 
     var nodeStatus = getCookie(window[node].name);
 
-    if (initiallyTakeable.indexOf(node) > -1 && nodeStatus != 'inactive') {
+    if (initiallyTakeable.indexOf(node) > -1 && nodeStatus == 'inactive') {
       window[node].status = 'takeable';
     } else {
       window[node].status = nodeStatus;
