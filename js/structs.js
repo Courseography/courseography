@@ -57,16 +57,10 @@ function Node(parents, type, name) {
 	this.logicalType = type; // 'AND' or 'OR' of prerequisites
 	this.updated = false; // Used when updating active/inactive state
 	this.hybrid = false; // Identifies whether node is 'hybrid'
-
+	console.log("checking for cookies!");
   	var nodeStatus = getCookie(this.name);
-  
-  	if(nodeStatus == "") {
- 		console.log("no cookies!");
-		this.status = 'inactive';	 // 'active', 'takeable', or 'hybrid'
- 	} else {
- 		console.log("Node cookie detected");
- 		this.status = nodeStatus;
-  	}
+  	this.status = nodeStatus;
+	console.log("worked!");
 
 }
 
