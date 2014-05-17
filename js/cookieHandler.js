@@ -1,5 +1,4 @@
 function set_cookie (cookie_name, cookie_value, lifespan_in_days) {
-    console.log("setting cookie...");
     var domain_string = '' ;
     document.cookie = cookie_name +
                        "=" + encodeURIComponent( cookie_value ) +
@@ -12,10 +11,8 @@ function getCookie(cname) {
 var name = cname + "=";
 var ca = document.cookie.split(';');
 for(var i=0; i<ca.length; i++) {
-  console.log("cookie string found");
   var c = ca[i].trim();
   if (c.indexOf(name)==0) {
-        console.log("cookie" + c.substring(name.length,c.length));
         return c.substring(name.length,c.length);
       }
     }
