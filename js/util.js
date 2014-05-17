@@ -236,13 +236,7 @@ $(window).resize(function() {
 });
 
 $(document).ready(function() {
-  var testCookie = getCookie("TestCookie");
-  
-  if(testCookie === null) {
-    buildGraph();
-  } else {
-
-  }
+  buildGraph();
 
   // Set width of FCE count
   var w = $('.infoTabs').width() - $('.tabList').outerWidth() - 1;
