@@ -154,10 +154,9 @@ function reset() {
   clickedCourses = [];
   $('#FCEcount').html('0.0');
 
-
   // Clear 'My Courses' tab
   $('#courseGrid').empty();
-  
+
   active200s = [];
   active300s = [];
   active400s = [];
@@ -191,12 +190,9 @@ function reset() {
     updateFCECount();
 
     // Check the courses with FCE reqs
-    CSC318.updateStatus();
-    CSC454.updateStatus();
-    CSC494.updateStatus();
-    CSC495.updateStatus();
 
     updatePOSt(node, window[node].isSelected());
+    updateClickedCourses(node, window[node].isSelected());
     updatePostInterface();
     updateMajorPostInterface();
     updateMinorPostInterface();
@@ -208,6 +204,11 @@ function reset() {
     $('ellipse.spotlight').remove();
     clearFocus();
   }
+
+  CSC318.updateStatus();
+  CSC454.updateStatus();
+  CSC494.updateStatus();
+  CSC495.updateStatus();
 };
 
 
