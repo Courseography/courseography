@@ -192,7 +192,7 @@ function reset() {
     CSC494.updateStatus();
     CSC495.updateStatus();
 
-    updatePOSt(id, window[node].isSelected());
+    updatePOSt(node, window[node].isSelected());
     updatePostInterface();
     updateMajorPostInterface();
     updateMinorPostInterface();
