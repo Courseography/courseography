@@ -155,10 +155,10 @@ function reset() {
     }
     window[node].updateStatus();
     window[node].updateSVG();
+    $.each(window[node].outEdges, function(i, edge) {
+      edge.updateStatus();
+    });
   });
-
-  // Edges
-  $('path').attr('data-active', 'inactive');
 
   // Clear 'My Courses' tab
   $('#courseGrid').empty();
