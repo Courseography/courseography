@@ -145,10 +145,13 @@ document.onkeydown = function(e) {
 function reset() {
   // Set initial node status
   $.each(nodes, function(i, node) {
-    if (initiallyTakeable.indexOf(node) > -1) {
+
+    var nodeStatus = getCookie(window[node].name);
+
+    if (initiallyTakeable.indexOf(node) > -1 && nodeStatus != 'inactive') {
       window[node].status = 'takeable';
     } else {
-      window[node].status = 'inactive';
+      window[node].status = nodeStatus;
     }
     window[node].updateSVG();
   });
