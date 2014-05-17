@@ -148,8 +148,10 @@ Node.prototype.updateStatus = function() {
 Node.prototype.turn = function() {
 	if (this.isSelected()) {
 		this.status = 'inactive';
+		set_cookie(this.name, this.status, 30, "http://www.cs.toronto.edu/~liudavid/rqs/");
 	} else {
 		this.status = 'active';
+		set_cookie(this.name, this.status, 30, "http://www.cs.toronto.edu/~liudavid/rqs/");
 	}
 
 	this.updateStatus();
