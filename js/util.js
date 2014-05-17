@@ -190,7 +190,7 @@ function reset() {
     updateFCECount();
 
     // Check the courses with FCE reqs
-    if(node.hybrid == false) {
+    if(window[node].hybrid == false) {
       updatePOSt(node, window[node].isSelected());
       updateClickedCourses(node, window[node].isSelected());
     }
