@@ -119,7 +119,6 @@ Node.prototype.updateStatus = function() {
 			this.status = 'inactive';
 		}
 	}
-	set_cookie(this.name, this.status, 30);
 
   // Always update children of hybrids
   if (this.hybrid) {
@@ -192,4 +191,5 @@ Node.prototype.checkFCEBasedPrerequisites = function() {
 // Update the visual style of the corresponding graphical node
 Node.prototype.updateSVG = function() {
 	$('#' + this.name).attr('data-active', this.status);
+	set_cookie(this.name, this.status, 30);
 }

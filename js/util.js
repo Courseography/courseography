@@ -221,7 +221,9 @@ function reset() {
       window[node].status = 'takeable';
     } else {
       window[node].status = 'inactive';
+
     }
+    
     window[node].updateSVG();
   });
 
