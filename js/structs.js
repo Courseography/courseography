@@ -46,6 +46,7 @@ Edge.prototype.updateStatus = function() {
 
 Edge.prototype.updateSVG = function() {
 	$('#' + this.name).attr('data-active', this.status);
+	set_cookie(this.name, this.status, 30);
 }
 
 function Node(parents, type, name) {
@@ -119,6 +120,7 @@ Node.prototype.updateStatus = function() {
 			this.status = 'inactive';
 		}
 	}
+	set_cookie(this.name, this.status, 30);
 
   // Always update children of hybrids
   if (this.hybrid) {
