@@ -141,8 +141,8 @@ document.onkeydown = function(e) {
 }
 
 
-// Resets interface to default (nothing selected); callback for Reset button
-function reset() {
+// Initializes interface to cookie settings; blank interface if no cookies exist
+function initializeGraphSettings() {
 
   // Clear FCE count and 'Check My POSt!' tab
   FCEs = 0;
@@ -213,6 +213,53 @@ function reset() {
 
 };
 
+// Resets interface to default (nothing selected); callback for Reset button
+function reset() {
+  // Set initial node status
+  $.each(nodes, function(i, node) {
+    if (initiallyTakeable.indexOf(node) > -1) {
+      window[node].status = 'takeable';
+    } else {
+      window[node].status = 'inactive';
+    }
+    window[node].updateSVG();
+  });
+
+  // Edges
+  $('path').attr('data-active', 'inactive');
+
+  // Clear 'My Courses' tab
+  $('#courseGrid').empty();
+
+  // Clear any active focus
+  if (activeFocus != '') {
+    $('.focusTabs').tabs('option', 'active', false);
+    $('ellipse.spotlight').remove();
+    clearFocus();
+  }
+
+  // Clear FCE count and 'Check My POSt!' tab
+  FCEs = 0;
+  FCEs100 = 0;
+  FCEs200 = 0;
+  FCEs300 = 0;
+  FCEs400 = 0;
+  FCEsMAT = 0;
+  clickedCourses = [];
+  $('#FCEcount').html('0.0');
+
+  active200s = [];
+  active300s = [];
+  active400s = [];
+  projectCourses = [];
+  $('input:checkbox').attr('checked', false);
+  $('input:text').attr('value', '');
+
+  updatePostInterface();
+  updateMajorPostInterface();
+  updateMinorPostInterface();
+};
+
 
 // TODO: Resolve Width issues
 function setGraphSize() {
@@ -270,8 +317,8 @@ $(document).ready(function() {
   // Create tabs
   createTabs();
 
-  // Reset interface
-  reset();
+  // Initialize interface
+  initializeGraphSettings();
 
   // Uncomment to enable the feedback form (must also be displayed in html)
   // activateFeedbackForm();

@@ -57,7 +57,7 @@ function Node(parents, type, name) {
 	this.logicalType = type; // 'AND' or 'OR' of prerequisites
 	this.updated = false; // Used when updating active/inactive state
 	this.hybrid = false; // Identifies whether node is 'hybrid'
-  	this.status = 'inactive';
+  	this.status = 'nodeStatus';
 
 }
 
@@ -109,20 +109,17 @@ Node.prototype.updateStatus = function() {
 	if (this.arePrereqsSatisfied()) {
 		if (this.isSelected() || this.hybrid) {
 			this.status = 'active';
-			set_cookie(this.name, this.status, 30);
 		} else {
 			this.status = 'takeable';
-			set_cookie(this.name, this.status, 30);
 		}
 	} else {
 		if (this.isSelected() && !this.hybrid) {
 			this.status = 'overridden';
-			set_cookie(this.name, this.status, 30);
 		} else {
 			this.status = 'inactive';
-			set_cookie(this.name, this.status, 30);
 		}
 	}
+	set_cookie(this.name, this.status, 30);
 
   // Always update children of hybrids
   if (this.hybrid) {
@@ -141,10 +138,8 @@ Node.prototype.updateStatus = function() {
 Node.prototype.turn = function() {
 	if (this.isSelected()) {
 		this.status = 'inactive';
-		set_cookie(this.name, this.status, 30, "http://www.cs.toronto.edu/~iansb/course_planner/cscourseplanner/");
 	} else {
 		this.status = 'active';
-		set_cookie(this.name, this.status, 30, "http://www.cs.toronto.edu/~iansb/course_planner/cscourseplanner/");
 	}
 
 	this.updateStatus();
