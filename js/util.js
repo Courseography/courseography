@@ -174,13 +174,6 @@ function initializeGraphSettings() {
     } else {
       window[node].status = nodeStatus;
     }
-    window[node].updateStatus();
-    window[node].updateSVG();
-
-    $.each(window[node].outEdges, function(i, edge) {
-      edge.updateStatus();
-    });
-
 
     updateMyCoursesTab();
     updateFCECount();
@@ -195,6 +188,15 @@ function initializeGraphSettings() {
       console.log(FCEs300);
     }
   });
+
+  $.each(nodes, function(i, node) {
+    window[node].updateStatus();
+    window[node].updateSVG();
+    $.each(window[node].outEdges, function(i, edge) {
+      edge.updateStatus();
+    });
+  });
+
   updatePostInterface();
   updateMajorPostInterface();
   updateMinorPostInterface();
