@@ -3,6 +3,15 @@ body
 	background-color:grey;
 }
 
+td
+{
+	background-color:white;
+}
+th
+{
+	background-color:white;
+}
+
 /* Timetable */
 .timetable
 {
