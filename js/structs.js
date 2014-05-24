@@ -107,7 +107,6 @@ Node.prototype.unfocus = function() {
 Node.prototype.updateStatus = function() {
 	if (this.name === "hybrid1") { console.log(this.parents);}
 	console.log(this.name + " " + this.arePrereqsSatisfied());
-	console.log(this.name + " " + this.parents);
 	if (this.arePrereqsSatisfied()) {
 		if (this.isSelected() || this.hybrid) {
 			this.status = 'active';
