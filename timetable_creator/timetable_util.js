@@ -29,11 +29,12 @@ for(i=0;i<csvSplitNewline.length;i++) {
 	var notYetLogged  = contentString.indexOf(course) <= -1;
 	if(isACourse && notYetLogged) {
 		contentString = contentString + "<option value="+course+">" + course + "</option>";
-		
+
 		window[course]        = new Course(title);
 		window[course].fall   = (semester==="F");
 		window[course].spring = (semester==="S");
 		window[course].year   = (semester==="Y");
+		console.log(window[course]);
 		window[course].addLectureSection(section, time, false);
 		console.log(window[course]);
 	} else if (isACourse) {
