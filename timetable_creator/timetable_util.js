@@ -26,5 +26,3 @@ for(i=0;i<csvSplitNewline.length;i++) {
 console.log(contentString);
 
 document.getElementById("course-select").innerHTML = contentString;
-
-function 
