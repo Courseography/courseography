@@ -16,17 +16,28 @@ var csvSplitNewline = httpResponse.split('\n');
 var i;
 contentString = "";
 for(i=0;i<csvSplitNewline.length;i++) {
-	var splitLine  = csvSplitNewline[i].split(',');
-	var course     = splitLine[0];
-	var semester   = splitLine[1];
-	var title      = splitLine[2];
-	var section    = splitLine[3];
-	var time       = splitLine[4];
-	var type       = splitLine[5];
-	var instructor = splitLine[6];
-	var capacity   = splitLine[7];
-	if(course.indexOf("CSC")>-1 && contentString.indexOf(course) <= -1) {
+	var splitLine     = csvSplitNewline[i].split(',');
+	var course        = splitLine[0];
+	var semester      = splitLine[1];
+	var title         = splitLine[2];
+	var section       = splitLine[3];
+	var time          = splitLine[4];
+	var type          = splitLine[5];
+	var instructor    = splitLine[6];
+	var capacity      = splitLine[7];
+	var isACourse     = course.indexOf("CSC")>-1;
+	var notYetLogged  = contentString.indexOf(course) <= -1;
+	if(isACourse && notYetLogged) {
 		contentString = contentString + "<option value="+course+">" + course + "</option>";
+		
+		window[course]        = new Course(title);
+		window[course].fall   = (semester==="F");
+		window[course].spring = (semester==="S");
+		window[course].year   = (semester==="Y");
+		window[course].addLectureSection(section, time, false);
+		console.log(window[course]);
+	} else if (isACourse) {
+
 	} else if(type === 'L') { //Lecture
 
 	} else if(type === 'T') { //Tutorial
