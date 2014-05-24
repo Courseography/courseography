@@ -11,7 +11,7 @@ xmlDoc=xmlhttp.responseXML;
 var httpResponse = xmlhttp.responseText;
 
 // Add output now for debugging purposes
-document.getElementById("content").innerHtml = httpResponse; //Temp
+document.getElementById("content").innerHTML = httpResponse; //Temp
 var csvSplitNewline = httpResponse.split('\n');
 var i;
 contentString = "";
@@ -23,4 +23,4 @@ for(i=0;i<csvSplitNewline.length;i++) {
 }
 console.log(contentString);
 
-document.getElementById("course-select").innerHtml = contentString;
+document.getElementById("course-select").innerHTML = contentString;
