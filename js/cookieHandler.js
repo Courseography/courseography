@@ -1,22 +1,30 @@
 function set_cookie (cookie_name, cookie_value, lifespan_in_days) {
     var domain_string = '' ;
-    document.cookie = cookie_name +
-                       "=" + encodeURIComponent( cookie_value ) +
-                       "; max-age=" + 60 * 60 *
-                       24 * lifespan_in_days +
-                       "; path=/" + domain_string ;
-    console.log("Cookie storage:" + cookie_name + ": " + cookie_value);
+    if(cookie_value === "inactive") {
+      deleteCookie(cookie_name);
+    } else {
+      document.cookie = cookie_name +
+                         "=" + encodeURIComponent( cookie_value ) +
+                         "; max-age=" + 60 * 60 *
+                         24 * lifespan_in_days +
+                         "; path=/" + domain_string ;
+    }
+    //console.log("Cookie storage:" + cookie_name + ": " + cookie_value);
 }
 
-function getCookie(cname) {
-    var name = cname + "=";
-    var ca = document.cookie.split(';');
-    for(var i=0; i<ca.length; i++) {
-      var c = ca[i].trim();
+function getCookie(cookie_name) {
+    var name = cookie_name + "=";
+    var cookie = document.cookie.split(';');
+    for(var i=0; i<cookie.length; i++) {
+      var c = cookie[i].trim();
       if (c.indexOf(name)==0) {
-            console.log("Cookie retrieval " + name + ": " + c.substring(name.length,c.length));
+            //console.log("Cookie retrieval " + name + ": " + c.substring(name.length,c.length));
             return c.substring(name.length,c.length);
-          }
-        }
-      return "inactive";
+      }
+    }
+    return "inactive";
+}
+
+function deleteCookie(cookie_name) {
+  document.cookie = cookie_name + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
 }
