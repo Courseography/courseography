@@ -6,7 +6,6 @@ function Course(title) {
 	var spring          = false;
 	var year            = false;
 }
-
 function Lecture(title, time, assignedTutorial) {
 	var title           = title;
 	var time            = time;
@@ -19,12 +18,13 @@ function Tutorial(title, time) {
 	var time  = time;
 }
 
-Course.prototype.addLectureSection(title, time, assignedTutorial) {
+Course.prototype.addLectureSection(title, time, assignedTutorial) = function() {
 	var lecture = new Lecture(title, time, assignedTutorial);
 	this.lectures.push(lecture);
 }
 
-Course.prototype.addTutorialSection(title, time) {
+Course.prototype.addTutorialSection(title, time) = function() {
 	var tutorial = new Tutorial(title, time);
 	this.tutorials.push(tutorial);
 }
+alert("structs loaded");
