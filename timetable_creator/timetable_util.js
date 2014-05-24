@@ -50,6 +50,7 @@ console.log(contentString);
 document.getElementById("course-select").innerHTML = contentString;
 
 function addCourse() {
+	console.log("adding course");
 	alert(document.getElementById('course-select').value);
 	console.log(document.getElementById('course-select').value);
 }
