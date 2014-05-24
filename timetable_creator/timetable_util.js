@@ -14,7 +14,9 @@ var i;
 contentString = "";
 for(i=0;i<csvSplitNewline.length;i++) {
 	if(csvSplitNewline[i].indexOf("CSC")>-1) {
-		contentString = consoleString + "<option>" + csvSplitNewline.substring(0,indexOf("CSC")+6) + "</option>";
+		contentString = contentString + "<option>" + csvSplitNewline.substring(0,indexOf("CSC")+6) + "</option>";
 	}
 }
 console.log(contentString);
+
+document.getElementById("course-select").innerHtml = contentString;
