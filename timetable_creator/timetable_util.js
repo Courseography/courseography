@@ -25,7 +25,7 @@ for(i=0;i<csvSplitNewline.length;i++) {
 	var type       = splitLine[5];
 	var instructor = splitLine[6];
 	var capacity   = splitLine[7];
-	if(course.indexOf("CSC")>-1 && contentString.indexOf(course) <= -1;) {
+	if(course.indexOf("CSC")>-1 && contentString.indexOf(course) <= -1) {
 		contentString = contentString + "<option value="+course+">" + course + "</option>";
 	} else if(type === 'L') { //Lecture
 
