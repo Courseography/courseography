@@ -49,6 +49,6 @@ console.log(contentString);
 
 document.getElementById("course-select").innerHTML = contentString;
 
-function add() {
+function addCourse() {
 	alert(document.getElementById('course-select').value);
 }
