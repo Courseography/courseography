@@ -17,7 +17,7 @@ var i;
 contentString = "";
 for(i=0;i<csvSplitNewline.length;i++) {
 	if(csvSplitNewline[i].indexOf("CSC")>-1) {
-		contentString = contentString + "<option>" + csvSplitNewline.substring(0,csvSplitNewline.indexOf("CSC")+6) + "</option>";
+		contentString = contentString + "<option>" + csvSplitNewline[i].substring(0,csvSplitNewline[i].indexOf("CSC")+6) + "</option>";
 	}
 }
 console.log(contentString);
