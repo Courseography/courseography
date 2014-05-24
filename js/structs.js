@@ -46,7 +46,7 @@ Edge.prototype.updateStatus = function() {
 
 Edge.prototype.updateSVG = function() {
 	$('#' + this.name).attr('data-active', this.status);
-	set_cookie(this.name, this.status, 30);
+	setCookie(this.name, this.status);
 }
 
 function Node(parents, type, name) {
@@ -120,7 +120,7 @@ Node.prototype.updateStatus = function() {
 			this.status = 'inactive';
 		}
 	}
-	set_cookie(this.name, this.status, 30);
+	setCookie(this.name, this.status);
 
   // Always update children of hybrids
   if (this.hybrid) {
@@ -193,5 +193,5 @@ Node.prototype.checkFCEBasedPrerequisites = function() {
 // Update the visual style of the corresponding graphical node
 Node.prototype.updateSVG = function() {
 	$('#' + this.name).attr('data-active', this.status);
-	set_cookie(this.name, this.status, 30);
+	setCookie(this.name, this.status);
 }

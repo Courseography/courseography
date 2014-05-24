@@ -223,7 +223,7 @@ function reset() {
       window[node].status = 'takeable';
     } else {
       window[node].status = 'inactive';
-
+      setCookie(window[node].name, this.status);
     }
     
     window[node].updateSVG();

@@ -1,5 +1,6 @@
-function set_cookie (cookie_name, cookie_value, lifespan_in_days) {
-    var domain_string = '' ;
+function setCookie (cookie_name, cookie_value) {
+    var lifespan_in_days = 300;
+    var domain_string    = '' ;
     if(cookie_value === "inactive") {
       deleteCookie(cookie_name);
     } else {
