@@ -20,7 +20,7 @@ function Tutorial(title, time) {
 
 Course.prototype.addLectureSection = function(title, time, assignedTutorial) {
 	var lecture = new Lecture(title, time, assignedTutorial);
-	this.lectures.push(lecture);//error sometimes, but not others?
+	//this.lectures.push(lecture);//error sometimes, but not others?
 }
 
 Course.prototype.addTutorialSection = function(title, time) {
