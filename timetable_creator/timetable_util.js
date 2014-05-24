@@ -30,7 +30,7 @@ for(i=0;i<csvSplitNewline.length;i++) {
 	if(isACourse && notYetLogged) {
 		contentString = contentString + "<option value="+course+">" + course + "</option>";
 
-		window[course]        = new Course(title);
+		window[course]        = new Course(course);
 		window[course].fall   = (semester==="F");
 		window[course].spring = (semester==="S");
 		window[course].year   = (semester==="Y");
@@ -48,3 +48,8 @@ for(i=0;i<csvSplitNewline.length;i++) {
 console.log(contentString);
 
 document.getElementById("course-select").innerHTML = contentString;
+
+if(document.getElementById('course-select').value == "CSC209") {
+
+    alert("selected 209");
+}
