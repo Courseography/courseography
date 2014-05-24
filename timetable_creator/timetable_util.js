@@ -16,11 +16,15 @@ var csvSplitNewline = httpResponse.split('\n');
 var i;
 contentString = "";
 for(i=0;i<csvSplitNewline.length;i++) {
-	if(csvSplitNewline[i].indexOf("CSC")>-1) {
-		var course = csvSplitNewline[i].substring(0,csvSplitNewline[i].indexOf("CSC")+6);
+	var splitLine = csvSplitNewline[i].split(',');
+	var course = splitLine[0];
+	if(course.indexOf("CSC")>-1) {
 		contentString = contentString + "<option value="+course+">" + course + "</option>";
+
 	}
 }
 console.log(contentString);
 
 document.getElementById("course-select").innerHTML = contentString;
+
+function 
