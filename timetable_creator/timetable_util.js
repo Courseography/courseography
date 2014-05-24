@@ -49,7 +49,6 @@ console.log(contentString);
 
 document.getElementById("course-select").innerHTML = contentString;
 
-if(document.getElementById('course-select').value == "CSC209") {
-
-    alert("selected 209");
+function add() {
+	alert(document.getElementById('course-select').value);
 }
