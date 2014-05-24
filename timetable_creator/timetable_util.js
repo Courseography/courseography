@@ -6,7 +6,7 @@ if (window.XMLHttpRequest) {
 else {
   xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
 }
-xmlhttp.open("GET","../res/timetable2014.csv",false);
+xmlhttp.open("GET","../res/timetable2014.txt",false);
 xmlhttp.send();
 csvText=xmlhttp.responseXML;
 
