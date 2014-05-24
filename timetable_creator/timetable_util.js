@@ -10,5 +10,5 @@ xmlhttp.open("GET","../res/timetable2014.csv",false);
 xmlhttp.send();
 csvText=xmlhttp.responseXML;
 
-var csvNewline = csvText.split('\n');
+//var csvNewline = csvText.split('\n');
 document.getElementById("content").innerHtml = csvText;
