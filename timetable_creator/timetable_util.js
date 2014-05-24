@@ -51,4 +51,5 @@ document.getElementById("course-select").innerHTML = contentString;
 
 function addCourse() {
 	alert(document.getElementById('course-select').value);
+	console.log(document.getElementById('course-select').value);
 }
