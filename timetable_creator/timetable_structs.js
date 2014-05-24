@@ -20,11 +20,10 @@ function Tutorial(title, time) {
 
 Course.prototype.addLectureSection = function(title, time, assignedTutorial) {
 	var lecture = new Lecture(title, time, assignedTutorial);
-	//this.lectures.push(lecture);
+	this.lectures.push(lecture);
 }
 
 Course.prototype.addTutorialSection = function(title, time) {
 	var tutorial = new Tutorial(title, time);
 	this.tutorials.push(tutorial);
 }
-alert("structs loaded");
