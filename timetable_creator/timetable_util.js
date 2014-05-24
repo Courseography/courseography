@@ -9,5 +9,5 @@ xmlhttp.send();
 xmlDoc=xmlhttp.responseXML;
 var httpResponse = xmlhttp.responseText;
 //var csvNewline = csvText.split('\n');
-console.log(csvText);
+console.log(httpResponse);
 document.getElementById("content").innerHtml = httpResponse;
