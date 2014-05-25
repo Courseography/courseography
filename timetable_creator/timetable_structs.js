@@ -1,26 +1,27 @@
 function Course(title) {
-	var title           = title;
-	var lectures        = [];
-	var tutorials       = [];
-	var fall            = false;
-	var spring          = false;
-	var year            = false;
+	this.title           = title;
+	this.lectures        = [];
+	this.tutorials       = [];
+	this.fall            = false;
+	this.spring          = false;
+	this.year            = false;
 }
+
 function Lecture(title, time, assignedTutorial) {
-	var title           = title;
-	var time            = time;
-	var lectureTutorial = assignedTutorial;
-	var hasTutorial     = (assignedTutorial !== null);
+	this.title           = title;
+	this.time            = time;
+	this.lectureTutorial = assignedTutorial;
+	this.hasTutorial     = (assignedTutorial !== null);
 }
 
 function Tutorial(title, time) {
-	var title = title;
-	var time  = time;
+	this.title = title;
+	this.time  = time;
 }
 
 Course.prototype.addLectureSection = function(title, time, assignedTutorial) {
 	var lecture = new Lecture(title, time, assignedTutorial);
-	//this.lectures.push(lecture);//error sometimes, but not others?
+	this.lectures.push(lecture);//error sometimes, but not others?
 }
 
 Course.prototype.addTutorialSection = function(title, time) {

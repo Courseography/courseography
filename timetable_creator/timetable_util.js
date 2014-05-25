@@ -5,7 +5,7 @@ if (window.XMLHttpRequest) {
 else {
   xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
 }
-xmlhttp.open("GET","../res/timetable2014.txt",false);
+xmlhttp.open("GET","../res/timetable2014.csv",false);
 xmlhttp.send();
 xmlDoc=xmlhttp.responseXML;
 var httpResponse = xmlhttp.responseText;

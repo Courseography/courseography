@@ -46,7 +46,6 @@ Edge.prototype.updateStatus = function() {
 
 Edge.prototype.updateSVG = function() {
 	$('#' + this.name).attr('data-active', this.status);
-	setCookie(this.name, this.status);
 }
 
 function Node(parents, type, name) {
@@ -58,7 +57,7 @@ function Node(parents, type, name) {
 	this.logicalType = type; // 'AND' or 'OR' of prerequisites
 	this.updated = false; // Used when updating active/inactive state
 	this.hybrid = false; // Identifies whether node is 'hybrid'
-  	this.status = 'nodeStatus';
+  	this.status = 'inactive';
 
 }
 
@@ -105,8 +104,6 @@ Node.prototype.unfocus = function() {
 
 // Check whether node's prerequisites are satisfied, update status and GUI
 Node.prototype.updateStatus = function() {
-	if (this.name === "hybrid1") { console.log(this.parents);}
-	console.log(this.name + " " + this.arePrereqsSatisfied());
 	if (this.arePrereqsSatisfied()) {
 		if (this.isSelected() || this.hybrid) {
 			this.status = 'active';
@@ -193,5 +190,4 @@ Node.prototype.checkFCEBasedPrerequisites = function() {
 // Update the visual style of the corresponding graphical node
 Node.prototype.updateSVG = function() {
 	$('#' + this.name).attr('data-active', this.status);
-	setCookie(this.name, this.status);
 }

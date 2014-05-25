@@ -22,13 +22,13 @@ courses = []
 #   print(parser.text)
 
 def parseCalendar():
-  with open('res/calendar.txt', 'r') as calendarFile:
+  with open('../res/calendar.txt', 'r') as calendarFile:
     course = {}
     for line in calendarFile:
       if line.startswith('CSC') or line.startswith('ECE') or line.startswith('MAT') or line.startswith('STA'):
 
         if (len(course) > 0):
-          with open('res/courses/' + course['code'] + '.txt', 'w+') as output:
+          with open('../res/courses/' + course['code'] + '.txt', 'w+') as output:
             json.dump(course, output)
             courses.append(course)
 

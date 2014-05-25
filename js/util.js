@@ -168,8 +168,7 @@ function initializeGraphSettings() {
   $.each(nodes, function(i, node) {
 
     var nodeStatus = getCookie(window[node].name);
-
-    if (initiallyTakeable.indexOf(node) > -1 && nodeStatus == 'inactive') {
+    if (initiallyTakeable.indexOf(node) > -1 && nodeStatus === 'inactive') {
       window[node].status = 'takeable';
     } else {
       window[node].status = nodeStatus;
@@ -190,7 +189,6 @@ function initializeGraphSettings() {
   });
 
   $.each(nodes, function(i, node) {
-    window[node].updateStatus();
     window[node].updateSVG();
     $.each(window[node].outEdges, function(i, edge) {
       edge.updateStatus();
@@ -223,8 +221,8 @@ function reset() {
       window[node].status = 'takeable';
     } else {
       window[node].status = 'inactive';
-      setCookie(window[node].name, this.status);
     }
+    setCookie(window[node].name, window[node].status);
     
     window[node].updateSVG();
   });
