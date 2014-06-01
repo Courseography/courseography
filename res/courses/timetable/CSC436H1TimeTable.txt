@@ -1,0 +1,1 @@
+{"F": {"tutorials": ["R2"], "lectures": [{"instructor": "Christara", "section": "L0101", "cap": "50\n", "extraCap": 0, "time": "M1-3"}]}, "manualTutorialEnrolment": false, "name": "CSC436H1", "title": "Numerical Algorithms"}

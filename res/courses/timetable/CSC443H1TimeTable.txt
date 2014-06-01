@@ -1,0 +1,1 @@
+{"F": {"tutorials": ["M8", "M8"], "lectures": [{"instructor": "Miller", "section": "L5101", "cap": "75\n", "extraCap": 0, "time": "M6-8"}, {"instructor": "Miller", "section": "L2501", "cap": "5\n", "extraCap": 0, "time": "M6-8"}]}, "manualTutorialEnrolment": false, "name": "CSC443H1", "title": "Database Sys Techn"}

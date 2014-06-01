@@ -1,0 +1,1 @@
+{"S": {"tutorials": [["T0101", "T3-5"], ["T5101", "T5-7"]], "lectures": [{"instructor": "Campbell", "section": "L0101", "cap": "120\n", "extraCap": 0, "time": "MW10"}]}, "manualTutorialEnrolment": true, "name": "CSC120H1", "title": "CompSci for Sciences"}

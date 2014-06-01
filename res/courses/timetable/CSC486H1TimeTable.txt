@@ -1,0 +1,1 @@
+{"S": {"tutorials": ["W1"], "lectures": [{"instructor": "TBA", "section": "L0101", "cap": "25\n", "extraCap": 0, "time": "F12-2"}]}, "manualTutorialEnrolment": false, "name": "CSC486H1", "title": "Knowledge Rep & Reas"}

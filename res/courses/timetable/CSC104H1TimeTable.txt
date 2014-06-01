@@ -1,0 +1,1 @@
+{"S": {"tutorials": ["F9"], "lectures": [{"instructor": "Baumgartner", "section": "L0101", "cap": "240\n", "extraCap": 0, "time": "TR9"}]}, "F": {"tutorials": ["F9"], "lectures": [{"instructor": "Heap", "section": "L0101", "cap": "200\n", "extraCap": 0, "time": "MW9"}]}, "manualTutorialEnrolment": false, "name": "CSC104H1", "title": "Computational Thinking"}

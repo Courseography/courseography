@@ -1,0 +1,1 @@
+{"S": {"tutorials": ["WR4"], "lectures": [{"instructor": "Neal", "section": "L0101", "cap": "80\n", "extraCap": 0, "time": "M4"}]}, "manualTutorialEnrolment": false, "name": "CSC412H1", "title": "Uncertainty & Learng"}
