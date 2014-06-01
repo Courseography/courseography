@@ -13,11 +13,38 @@ th
 }
 
 /* Timetable */
-.timetable
+#timetable
 {
-	/*border: 2px solid black;*/
-	cellspacing:0;
-	cellpadding:0;
+	border: 2px solid black;
+	position:absolute;
+	left:350px;
+	margin-right:0px;
+	margin-left:0px;
+	right:200px;
+	top:50px;
+	width:850px;
+	float:right;
+}
+#layout
+{
+	position:absolute;
+	width:100%;
+}
+
+.course
+{
+	color:black;
+	border: 2px solid black;
+	text-align:center;
+	background-color:white;
+	color:black;
+	cursor:pointer;
+}
+
+.course:hover 
+{
+	background-color:black;
+	color:white;
 }
 
 .timetable-header
@@ -44,5 +71,15 @@ th
 /* Course selection */
 #course-select
 {
+	position:absolute;
+	float:left;
+	background-color:white;
+	color:black;
+	top:50px;
+	margin-right:0px;
+	margin-left:0px;
+    list-style-type: none;
+	left:50px;
+	right:50px;
 	width:200px;
 }

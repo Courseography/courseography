@@ -7,14 +7,15 @@
 	<link rel="stylesheet" href="timetable_styles.css"/>
 
 </head>
-<select id="course-select">
-</select>
-<button type="button" onClick="addCourse()">Add (not yet functional)</button>
+<div id="layout">
+<div>
+	<ul id="course-select">
+	</ul>
+</div>
 <body>
-<table class="timetable" align="center">
+<table id="timetable" align="center">
 	<thead>
 		<th class="timetable-header">
-			Time
 		</th>
 		<th class="timetable-header">
 			Monday
@@ -273,9 +274,10 @@
 		</td>
 	</tr>
 </table>
-<div id="content">
 </div>
 <!-- Scripts -->
+<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 <script src="timetable_structs.js"></script>
 <script src="timetable_util.js"></script>
 </body>
