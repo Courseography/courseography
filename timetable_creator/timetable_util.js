@@ -160,7 +160,6 @@ function getSectionTimeSlot(section, type) {
 				firstTimeSlot = firstTimeSlot + lectureTime.charAt(2);
 
 				if(timeLength > 2 && lectureTime.charAt(3).match(hyphen)) {
-					console.log("parsed!:" + lectureTime.substring(1,3));
 					console.log(timeLength + " " + firstTimeSlot.charAt(4) + " " + lectureTime);
 					console.log(lectureTime.substring(1,3));
 					console.log(lectureTime.substring(4,6));
@@ -172,13 +171,16 @@ function getSectionTimeSlot(section, type) {
 						var difference = lectureTime.charAt(1) - (lectureTime.substring(1,3) - 12);
 					}
 
+					var newTime = parseInt(firstTimeSlot.substring(1,3));
 					for(var i = 0; i < difference; i++) {
-						var newTime = parseInt(firstTimeSlot.substring(1,3)) + 1;
+
 						if(newTime > 12) {
 							newTime = newTime - 12;
 						}
 						firstTimeSlot = firstTimeSlot.charAt(0) + newTime;
 						timeSlots.push(firstTimeSlot);
+						newTime = newTime + 1;
+
 					}
 				} else {
 					timeSlots.push(firstTimeSlot);

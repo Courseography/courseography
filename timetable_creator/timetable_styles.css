@@ -18,7 +18,7 @@ th
 #timetable
 {
 	border: 2px solid black;
-	position:absolute;
+	position:fixed;
 	left:350px;
 	margin-right:0px;
 	margin-left:0px;
