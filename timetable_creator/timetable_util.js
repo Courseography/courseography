@@ -45,23 +45,28 @@ function addCourseToList(course) {
 				}
 				$.each(sectionTimes, function(i, time) {
 					$(section).click(function(){
-						if(document.getElementById(time).getAttribute("clicked") === "true") {
+						if(document.getElementById(time).getAttribute("clicked") === "true" && document.getElementById(time).innerHTML === courseNode.name) {
 							document.getElementById(time).innerHTML = "";
-						document.getElementById(time).setAttribute("clicked","false");
-						} else {
+							document.getElementById(time).setAttribute("clicked","false");
+						} else if(document.getElementById(time).getAttribute("clicked") !== "true") {
 							document.getElementById(time).innerHTML = courseNode.name;
 							document.getElementById(time).setAttribute("clicked","true");
 						}
 					});
 
 					$(section).mouseover(function(){
-						document.getElementById(time).innerHTML = courseNode.name;
+						if(document.getElementById(time).getAttribute("clicked") === "true") {
+							$("#"+time).css("background-color", "red");
+						} else {
+							document.getElementById(time).innerHTML = courseNode.name;
+						}
 					});
 
 					$(section).mouseout(function(){
 						if(document.getElementById(time).getAttribute("clicked") !== "true") {
 							document.getElementById(time).innerHTML = "";	
 						}
+						$("#"+time).css("background-color", "white");
 					});
 
 				});
@@ -96,11 +101,15 @@ function getSectionTimeSlot(section, type) {
 	var timeSlots  = [];
 	var times = [];
 	if(type === "lecture") {
+		console.log("input: " + section.time);
 		times = section.time.split(',');
+		console.log("times after: " + times);
 	} else if (type === "tutorial" && typeof(section) !== "undefined") {
 		times.push(section);
 	}
+
 	$.each(times, function(i, lectureTime) {
+		console.log("iterating on: " +lectureTime);
 		var timeLength = lectureTime.length;
 
 		if(lectureTime.charAt(0).match(day) !== null) {
@@ -119,7 +128,7 @@ function getSectionTimeSlot(section, type) {
 				if(lectureTime.charAt(3) === "1" && lectureTime.charAt(4).match(timeSecondDig)) {
 					firstTimeSlot  = firstTimeSlot  + lectureTime.charAt(4);
 					secondTimeSlot = secondTimeSlot + lectureTime.charAt(4);
-					thirdTimeSlot = thirdTimeSlot + lectureTime.charAt(4);
+					thirdTimeSlot  = thirdTimeSlot  + lectureTime.charAt(4);
 				}
 
 				timeSlots.push(firstTimeSlot);
@@ -146,15 +155,18 @@ function getSectionTimeSlot(section, type) {
 
 				if(timeLength > 2 && lectureTime.charAt(3).match(hyphen)) {
 					console.log("parsed!:" + lectureTime.substring(1,3));
-
-					if(timeLength > 5 && firstTimeSlot.charAt(4) === "1") {
+					console.log(timeLength + " " + firstTimeSlot.charAt(4) + " " + lectureTime);
+					console.log(lectureTime.substring(1,3));
+					console.log(lectureTime.substring(4,6));
+					if(timeLength > 5) {
 						var difference = lectureTime.substring(4,6) - lectureTime.substring(1,3);
+						console.log(lectureTime + " " + difference);
 
 					} else {
 						var difference = lectureTime.charAt(1) - (lectureTime.substring(1,3) - 12);
 					}
 
-					for(var i = 1; i < difference; i++) {
+					for(var i = 0; i < difference; i++) {
 						var newTime = parseInt(firstTimeSlot.substring(1,3)) + 1;
 						if(newTime > 12) {
 							newTime = newTime - 12;
@@ -162,12 +174,17 @@ function getSectionTimeSlot(section, type) {
 						firstTimeSlot = firstTimeSlot.charAt(0) + newTime;
 						timeSlots.push(firstTimeSlot);
 					}
-				}
+				} else {
+					timeSlots.push(firstTimeSlot);
 			}
-			timeSlots.push(firstTimeSlot);
+			} else if(timeLength === 2) {
+				timeSlots.push(firstTimeSlot);
+			}
 		}
 
+
 		if(timeLength > 2 && lectureTime.charAt(2).match(hyphen)) {
+			timeSlots.push(firstTimeSlot);
 			var difference = lectureTime.charAt(3) - lectureTime.charAt(1);
 			for(var i = 1; i < difference; i++) {
 				var newTime = parseInt(firstTimeSlot.charAt(1)) + 1;
@@ -176,7 +193,7 @@ function getSectionTimeSlot(section, type) {
 			}
 		}
 	});
-
+	console.log(timeSlots);
 	return timeSlots;
 }
 
