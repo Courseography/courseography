@@ -27,6 +27,7 @@ function addCourseToList(course) {
 	var courseNode = getCourse(course);
 	if(typeof(courseNode.F) !== "undefined" || typeof(courseNode.Y) !== "undefined") {
 		var entry    = document.createElement('li');
+		$(entry).css("border","2px solid black");
 		var header   = document.createElement('h3');
 		var sections = document.createElement('div');
 		header.appendChild(document.createTextNode(course));
@@ -48,9 +49,11 @@ function addCourseToList(course) {
 						if(document.getElementById(time).getAttribute("clicked") === "true" && document.getElementById(time).innerHTML === courseNode.name) {
 							document.getElementById(time).innerHTML = "";
 							document.getElementById(time).setAttribute("clicked","false");
+							$("#"+time).css("background-color", "black");
 						} else if(document.getElementById(time).getAttribute("clicked") !== "true") {
 							document.getElementById(time).innerHTML = courseNode.name;
 							document.getElementById(time).setAttribute("clicked","true");
+							$("#"+time).css("background-color", "blue");
 						}
 					});
 
@@ -64,9 +67,12 @@ function addCourseToList(course) {
 
 					$(section).mouseout(function(){
 						if(document.getElementById(time).getAttribute("clicked") !== "true") {
-							document.getElementById(time).innerHTML = "";	
+							document.getElementById(time).innerHTML = "";
+							$("#"+time).css("background-color", "black");	
+						} else {
+							$("#"+time).css("background-color", "blue");
+
 						}
-						$("#"+time).css("background-color", "white");
 					});
 
 				});

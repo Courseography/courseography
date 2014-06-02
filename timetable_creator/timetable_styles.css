@@ -1,15 +1,17 @@
 body
 {
-	background-color:black;
+	background-color:#335CD6;
 }
 
 td
 {
-	background-color:white;
+	background-color:black;
+	color:white;
 }
 th
 {
-	background-color:white;
+	background-color:black;
+	color:white;
 }
 
 /* Timetable */
@@ -25,6 +27,7 @@ th
 	width:850px;
 	float:right;
 }
+
 #layout
 {
 	position:absolute;
@@ -55,7 +58,6 @@ th
 	cursor:pointer;
     margin: 0;
     display: block;
-
 }
 .course h3:hover 
 {
