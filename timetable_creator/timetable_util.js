@@ -1,19 +1,27 @@
 
+var day           = /M|T|W|R|F/;
+var time          = /1|2|3|4|5|6|7|8|9/;
+var timeSecondDig = /0|1|2/;
+var hyphen        = /-/;
+var result;
+var i;
+var contentString = "";
+
+// In the future, it would be nice to pull the course values either from all json files, or the course nodes.
 if (window.XMLHttpRequest) {
   xmlhttp=new XMLHttpRequest();
 }
 else {
   xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
 }
+
 xmlhttp.open("GET","../res/timetable2014.csv",false);
 xmlhttp.send();
 xmlDoc=xmlhttp.responseXML;
-var result;
+
 var httpResponse = xmlhttp.responseText;
 var csvSplitNewline = httpResponse.split('\n');
-var i;
 var courseSelect = document.getElementById("course-select");
-contentString = "";
 
 function addCourseToList(course) {
 	var courseNode = getCourse(course);
@@ -31,15 +39,29 @@ function addCourseToList(course) {
 				var section = document.createElement("li");
 				section.setAttribute("class", "section");
 				section.appendChild(document.createTextNode(lecture.section));
-				var sectionTimes = getSectionTimeSlot(lecture);
+				var sectionTimes = getSectionTimeSlot(lecture, "lecture");
+				if(courseNode.manualTutorialEnrolment === false) {
+					sectionTimes = sectionTimes.concat(getSectionTimeSlot(courseNode.F.tutorials[i], "tutorial"));
+				}
 				$.each(sectionTimes, function(i, time) {
-					console.log(time + " " + courseNode.name);
+					$(section).click(function(){
+						if(document.getElementById(time).getAttribute("clicked") === "true") {
+							document.getElementById(time).innerHTML = "";
+						document.getElementById(time).setAttribute("clicked","false");
+						} else {
+							document.getElementById(time).innerHTML = courseNode.name;
+							document.getElementById(time).setAttribute("clicked","true");
+						}
+					});
+
 					$(section).mouseover(function(){
-						document.getElementById(time).innerHTML = lecture.section;
+						document.getElementById(time).innerHTML = courseNode.name;
 					});
 
 					$(section).mouseout(function(){
-						document.getElementById(time).innerHTML = "";
+						if(document.getElementById(time).getAttribute("clicked") !== "true") {
+							document.getElementById(time).innerHTML = "";	
+						}
 					});
 
 				});
@@ -66,88 +88,95 @@ function addCourseToList(course) {
 	}
 }
 
-var day           = /M|T|W|R|F/;
-var time          = /1|2|3|4|5|6|7|8|9/;
-var timeSecondDig = /0|1|2/;
-var hyphen        = /-/;
-var comma         = /,/;
 
-function getSectionTimeSlot(lecture) {
+function getSectionTimeSlot(section, type) {
 	var firstTimeSlot;
 	var secondTimeSlot;
 	var thirdTimeSlot;
-	var timeLength = lecture.time.length;
 	var timeSlots  = [];
-	var times = lecture.time.split(',');
-	var lectureTimes = times[0];
-	$.each(times, function(i, lectureTime) {
-	if(lectureTime.charAt(0).match(day) !== null) {
-		firstTimeSlot = lectureTime.charAt(0);
+	var times = [];
+	if(type === "lecture") {
+		times = section.time.split(',');
+	} else if (type === "tutorial" && typeof(section) !== "undefined") {
+		times.push(section);
 	}
+	$.each(times, function(i, lectureTime) {
+		var timeLength = lectureTime.length;
 
-	if(lectureTime.charAt(1).match(day) !== null) {
-		secondTimeSlot = lectureTime.charAt(1);
-		if(lectureTime.charAt(2).match(day) !== null) {
-			thirdTimeSlot  = lectureTime.charAt(2).match(day);
-			firstTimeSlot  = firstTimeSlot  + lectureTime.charAt(3);
-			secondTimeSlot = secondTimeSlot + lectureTime.charAt(3);
-			thirdTimeSlot  = thirdTimeSlot  + lectureTime.charAt(3);
-			if(lectureTime.charAt(3) === "1" && lectureTime.charAt(4).match(timeSecondDig)) {
-				firstTimeSlot  = firstTimeSlot  + lectureTime.charAt(4);
-				secondTimeSlot = secondTimeSlot + lectureTime.charAt(4);
-				thirdTimeSlot = thirdTimeSlot + lectureTime.charAt(4);
-			}
-			timeSlots.push(firstTimeSlot);
-			timeSlots.push(secondTimeSlot);
-			timeSlots.push(thirdTimeSlot);
+		if(lectureTime.charAt(0).match(day) !== null) {
+			firstTimeSlot = lectureTime.charAt(0);
+		}
 
-		} else {
-			firstTimeSlot  = firstTimeSlot  + lectureTime.charAt(2);
-			secondTimeSlot = secondTimeSlot + lectureTime.charAt(2);
+		if(lectureTime.charAt(1).match(day) !== null) {
+			secondTimeSlot = lectureTime.charAt(1);
 
-
-			if(lectureTime.charAt(2) === "1"  && lectureTime.charAt(3).match(timeSecondDig)) {
+			if(lectureTime.charAt(2).match(day) !== null) {
+				thirdTimeSlot  = lectureTime.charAt(2).match(day);
 				firstTimeSlot  = firstTimeSlot  + lectureTime.charAt(3);
 				secondTimeSlot = secondTimeSlot + lectureTime.charAt(3);
+				thirdTimeSlot  = thirdTimeSlot  + lectureTime.charAt(3);
+
+				if(lectureTime.charAt(3) === "1" && lectureTime.charAt(4).match(timeSecondDig)) {
+					firstTimeSlot  = firstTimeSlot  + lectureTime.charAt(4);
+					secondTimeSlot = secondTimeSlot + lectureTime.charAt(4);
+					thirdTimeSlot = thirdTimeSlot + lectureTime.charAt(4);
+				}
+
+				timeSlots.push(firstTimeSlot);
+				timeSlots.push(secondTimeSlot);
+				timeSlots.push(thirdTimeSlot);
+			} else {
+				firstTimeSlot  = firstTimeSlot  + lectureTime.charAt(2);
+				secondTimeSlot = secondTimeSlot + lectureTime.charAt(2);
+
+				if(lectureTime.charAt(2) === "1"  && lectureTime.charAt(3).match(timeSecondDig)) {
+					firstTimeSlot  = firstTimeSlot  + lectureTime.charAt(3);
+					secondTimeSlot = secondTimeSlot + lectureTime.charAt(3);
+				}
+
+				timeSlots.push(firstTimeSlot);
+				timeSlots.push(secondTimeSlot);
+			}
+
+		} else if(lectureTime.charAt(1).match(time)) {
+			firstTimeSlot = firstTimeSlot + lectureTime.charAt(1);
+
+			if(lectureTime.charAt(1) === "1" && lectureTime.charAt(2).match(timeSecondDig)) {
+				firstTimeSlot = firstTimeSlot + lectureTime.charAt(2);
+
+				if(timeLength > 2 && lectureTime.charAt(3).match(hyphen)) {
+					console.log("parsed!:" + lectureTime.substring(1,3));
+
+					if(timeLength > 5 && firstTimeSlot.charAt(4) === "1") {
+						var difference = lectureTime.substring(4,6) - lectureTime.substring(1,3);
+
+					} else {
+						var difference = lectureTime.charAt(1) - (lectureTime.substring(1,3) - 12);
+					}
+
+					for(var i = 1; i < difference; i++) {
+						var newTime = parseInt(firstTimeSlot.substring(1,3)) + 1;
+						if(newTime > 12) {
+							newTime = newTime - 12;
+						}
+						firstTimeSlot = firstTimeSlot.charAt(0) + newTime;
+						timeSlots.push(firstTimeSlot);
+					}
+				}
 			}
 			timeSlots.push(firstTimeSlot);
-			timeSlots.push(secondTimeSlot);
-
 		}
 
-
-
-	} else if(lectureTime.charAt(1).match(time)) {
-		firstTimeSlot = firstTimeSlot + lectureTime.charAt(1);
-		if(lectureTime.charAt(1) === "1" && lectureTime.charAt(2).match(timeSecondDig)) {
-			firstTimeSlot = firstTimeSlot + lectureTime.charAt(2);
-			if(timeLength > 2 && lectureTime.charAt(3).match(hyphen)) {
-				console.log("parsed!:" + lectureTime.substring(1,3));
-				if(timeLength > 5 && firstTimeSlot.charAt(4) === "1") {
-					var difference = lectureTime.substring(4,6) - lectureTime.substring(1,3);
-
-				} else {
-					var difference = lectureTime.charAt(1) - (lectureTime.substring(1,3) - 12);
-				}
+		if(timeLength > 2 && lectureTime.charAt(2).match(hyphen)) {
+			var difference = lectureTime.charAt(3) - lectureTime.charAt(1);
 			for(var i = 1; i < difference; i++) {
-					var newTime = parseInt(firstTimeSlot.substring(1,3)) + 1;
-					firstTimeSlot = firstTimeSlot.charAt(0) + newTime;
-					timeSlots.push(firstTimeSlot);
-				}
+				var newTime = parseInt(firstTimeSlot.charAt(1)) + 1;
+				firstTimeSlot = firstTimeSlot.charAt(0) + newTime;
+				timeSlots.push(firstTimeSlot);
 			}
 		}
-		timeSlots.push(firstTimeSlot);
-	}
+	});
 
-	if(timeLength > 2 && lectureTime.charAt(2).match(hyphen)) {
-		var difference = lectureTime.charAt(3) - lectureTime.charAt(1);
-		for(var i = 1; i < difference; i++) {
-			var newTime = parseInt(firstTimeSlot.charAt(1)) + 1;
-			firstTimeSlot = firstTimeSlot.charAt(0) + newTime;
-			timeSlots.push(firstTimeSlot);
-		}
-	}
-});
 	return timeSlots;
 }
 
