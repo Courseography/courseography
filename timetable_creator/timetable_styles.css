@@ -1,6 +1,6 @@
 body
 {
-	background-color:grey;
+	background-color:black;
 }
 
 td
@@ -33,15 +33,31 @@ th
 
 .course
 {
-	color:black;
-	border: 2px solid black;
+	background-color:white;
+}
+.section
+{
 	text-align:center;
 	background-color:white;
-	color:black;
+}
+.section:hover
+{
+	background-color:blue;
+	color:white;
+	border: 2px solid black;
 	cursor:pointer;
 }
+.course h3 
+{
+	color:black;
+	text-align:center;
+	color:black;
+	cursor:pointer;
+    margin: 0;
+    display: block;
 
-.course:hover 
+}
+.course h3:hover 
 {
 	background-color:black;
 	color:white;
@@ -64,7 +80,7 @@ th
 {
 	border: 2px solid black;
 	min-width:100px;
-	height:70px;
+	height:30px;
 	text-align:center;
 }
 
@@ -73,13 +89,17 @@ th
 {
 	position:absolute;
 	float:left;
-	background-color:white;
 	color:black;
 	top:50px;
 	margin-right:0px;
 	margin-left:0px;
     list-style-type: none;
-	left:50px;
+	left:20px;
 	right:50px;
 	width:200px;
+    margin: 0;
+}
+li
+{
+	display:block;
 }
