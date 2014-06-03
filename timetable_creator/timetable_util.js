@@ -53,6 +53,7 @@ function addCourseToList(course) {
 						} else if(document.getElementById(time).getAttribute("clicked") !== "true") {
 							document.getElementById(time).innerHTML = courseNode.name;
 							document.getElementById(time).setAttribute("clicked","true");
+							console.log(courseNode.name);
 							$("#"+time).css("background-color", "blue");
 						}
 					});
@@ -99,109 +100,213 @@ function addCourseToList(course) {
 	}
 }
 
-
-function getSectionTimeSlot(section, type) {
-	var firstTimeSlot;
-	var secondTimeSlot;
-	var thirdTimeSlot;
-	var timeSlots  = [];
+function getTimesArray(section, type) {
 	var times = [];
 	if(type === "lecture") {
-		console.log("input: " + section.time);
 		times = section.time.split(',');
-		console.log("times after: " + times);
 	} else if (type === "tutorial" && typeof(section) !== "undefined") {
 		times.push(section);
 	}
+	return times;
+}
 
+
+function constructTimesArray(times) {
+	var firstTimeSlot;
+	var secondTimeSlot;
+	var thirdTimeSlot;
+	var timeSlots = [];
+	var numDays;
 	$.each(times, function(i, lectureTime) {
-		console.log("iterating on: " +lectureTime);
 		var timeLength = lectureTime.length;
+		var difference;
+		numDays = 0;
+		for(var k = 0; k < timeLength; k++) {
 
-		if(lectureTime.charAt(0).match(day) !== null) {
-			firstTimeSlot = lectureTime.charAt(0);
+			if(lectureTime.charAt(k).match(day) !== null) {
+				numDays++;
+			}
+
+			switch (k) {
+				case 0: // M,T,W,R,F - Always a day
+					firstTimeSlot = lectureTime.charAt(0);
+					break;
+				case 1: //M1, MW
+					switch(numDays) {
+						case 1: // M1
+							console.log("M1 ish");
+							firstTimeSlot = firstTimeSlot + lectureTime.charAt(1);
+							break;
+						case 2: //MW
+							secondTimeSlot = lectureTime.charAt(1);
+							console.log("second time slot: " + secondTimeSlot);
+							break;
+					}
+					break;
+				case 2: //MWF. MW1. M1-
+					switch(numDays) {
+						case 1: // M10, M1- !!!!!
+							if(!lectureTime.charAt(2).match(hyphen)) {
+								firstTimeSlot = firstTimeSlot + lectureTime.charAt(2);		
+							}
+							break;
+						case 2: //MW1
+							firstTimeSlot  = firstTimeSlot   + lectureTime.charAt(2);
+							secondTimeSlot = secondTimeSlot  + lectureTime.charAt(2);
+							break;
+						case 3: // MWF
+							thirdTimeSlot = lectureTime.charAt(2);
+							break;
+					}
+					break;
+				case 3: //MWF1
+					switch(numDays) {
+						case 1: //M10-, M1-2 W6-9
+
+							var newTime;
+							if(timeLength > 5) {
+								difference = lectureTime.substring(4,6) - lectureTime.substring(1,3);
+								newTime = parseInt(firstTimeSlot.substring(1,3));
+							} else if (timeLength === 5) {
+								if(lectureTime.charAt(2).match(hyphen)) { //M9-11
+									difference = lectureTime.substring(3,5) - lectureTime.charAt(1);
+									newTime = parseInt(firstTimeSlot.charAt(1));
+								} else { //M11-1
+									difference = lectureTime.charAt(4) - lectureTime.substring(1,3) + 12;
+									newTime = parseInt(firstTimeSlot.substring(1,3));
+								}
+							} else { // M1-2
+								difference = lectureTime.charAt(3) - (lectureTime.charAt(1));
+								newTime = parseInt(firstTimeSlot.charAt(1));
+							}
+
+							for(var l = 0; l < difference; l++) {
+								if(newTime > 12) {
+									newTime = newTime - 12;
+								}
+								firstTimeSlot = firstTimeSlot.charAt(0) + newTime;
+								timeSlots.push(firstTimeSlot);
+								newTime = newTime + 1;
+							}
+
+							return timeSlots;
+
+							break;
+						case 2: //MW1-, MW10-12, WF11
+							if(lectureTime.search("-") <= -1) {
+
+								firstTimeSlot  = firstTimeSlot   + lectureTime.charAt(3);
+								secondTimeSlot = secondTimeSlot  + lectureTime.charAt(3);
+
+							} else {
+								var newTime;
+								if(timeLength > 5) {
+									difference = lectureTime.substring(5,7) - lectureTime.substring(2,4);
+									newTime = parseInt(firstTimeSlot.substring(2,4));
+								} else if (timeLength === 6) {
+									difference = lectureTime.substring(1,3) - lectureTime.charAt(4);
+									newTime = parseInt(firstTimeSlot.substring(1,3));
+								} else {
+									difference = lectureTime.charAt(1) - (lectureTime.substring(1,3) - 12);
+									newTime = parseInt(firstTimeSlot.charAt(1));
+								}
+
+								for(var o = 0; o < difference; o++) {
+									if(newTime > 12) {
+										newTime = newTime - 12;
+									}
+									firstTimeSlot = firstTimeSlot.charAt(0) + newTime;
+									//timeSlots.push(firstTimeSlot);
+									newTime = newTime + 1;
+								}
+							}
+							break;
+						case 3: // MWF1
+								firstTimeSlot  = firstTimeSlot  + lectureTime.charAt(3);
+								secondTimeSlot = secondTimeSlot + lectureTime.charAt(3);
+								thirdTimeSlot  = thirdTimeSlot  + lectureTime.charAt(3);
+							break;
+						case 4: // MWTF, not yet covered by CS, but german has sections like this.
+
+							break;
+					}
+					break;
+				case 4:
+					switch(numDays) {
+						case 1: // M10-1, case previously covered
+
+							break;
+						case 2: // MW10-1, MW1-10, cases previously covered
+
+							break;
+						case 3: // MWF12, MWF1-2 <-- need to cover this case, for future.
+							firstTimeSlot  = firstTimeSlot  + lectureTime.charAt(4);
+							secondTimeSlot = secondTimeSlot + lectureTime.charAt(4);
+							thirdTimeSlot  = thirdTimeSlot  + lectureTime.charAt(4);
+							break;
+						case 4: // MTWF1, todo
+
+							break;
+					}
+					break;
+				case 5:
+					switch(numDays) {
+						case 1: // No strings reach this state.
+
+							break;
+						case 2: // MT10-12 <-- already covered
+
+							break;
+						case 3: //
+
+							break;
+						case 3: //
+
+							break;
+					}
+					break;
+				case 6: //MW11-12
+					switch(numDays) {
+						case 1: // No strings reach this state.
+
+							break;
+						case 2: //
+
+							break;
+						case 3: // 
+
+							break;
+						case 3: // 
+
+							break;
+					}
+					break;
+			}
 		}
 
-		if(lectureTime.charAt(1).match(day) !== null) {
-			secondTimeSlot = lectureTime.charAt(1);
-
-			if(lectureTime.charAt(2).match(day) !== null) {
-				thirdTimeSlot  = lectureTime.charAt(2).match(day);
-				firstTimeSlot  = firstTimeSlot  + lectureTime.charAt(3);
-				secondTimeSlot = secondTimeSlot + lectureTime.charAt(3);
-				thirdTimeSlot  = thirdTimeSlot  + lectureTime.charAt(3);
-
-				if(lectureTime.charAt(3) === "1" && lectureTime.charAt(4).match(timeSecondDig)) {
-					firstTimeSlot  = firstTimeSlot  + lectureTime.charAt(4);
-					secondTimeSlot = secondTimeSlot + lectureTime.charAt(4);
-					thirdTimeSlot  = thirdTimeSlot  + lectureTime.charAt(4);
-				}
-
-				timeSlots.push(firstTimeSlot);
-				timeSlots.push(secondTimeSlot);
-				timeSlots.push(thirdTimeSlot);
-			} else {
-				firstTimeSlot  = firstTimeSlot  + lectureTime.charAt(2);
-				secondTimeSlot = secondTimeSlot + lectureTime.charAt(2);
-
-				if(lectureTime.charAt(2) === "1"  && lectureTime.charAt(3).match(timeSecondDig)) {
-					firstTimeSlot  = firstTimeSlot  + lectureTime.charAt(3);
-					secondTimeSlot = secondTimeSlot + lectureTime.charAt(3);
-				}
-
-				timeSlots.push(firstTimeSlot);
-				timeSlots.push(secondTimeSlot);
-			}
-
-		} else if(lectureTime.charAt(1).match(time)) {
-			firstTimeSlot = firstTimeSlot + lectureTime.charAt(1);
-
-			if(lectureTime.charAt(1) === "1" && lectureTime.charAt(2).match(timeSecondDig)) {
-				firstTimeSlot = firstTimeSlot + lectureTime.charAt(2);
-
-				if(timeLength > 2 && lectureTime.charAt(3).match(hyphen)) {
-					console.log(timeLength + " " + firstTimeSlot.charAt(4) + " " + lectureTime);
-					console.log(lectureTime.substring(1,3));
-					console.log(lectureTime.substring(4,6));
-					if(timeLength > 5) {
-						var difference = lectureTime.substring(4,6) - lectureTime.substring(1,3);
-						console.log(lectureTime + " " + difference);
-
-					} else {
-						var difference = lectureTime.charAt(1) - (lectureTime.substring(1,3) - 12);
-					}
-
-					var newTime = parseInt(firstTimeSlot.substring(1,3));
-					for(var i = 0; i < difference; i++) {
-
-						if(newTime > 12) {
-							newTime = newTime - 12;
-						}
-						firstTimeSlot = firstTimeSlot.charAt(0) + newTime;
-						timeSlots.push(firstTimeSlot);
-						newTime = newTime + 1;
-
-					}
-				} else {
-					timeSlots.push(firstTimeSlot);
-			}
-			} else if(timeLength === 2) {
-				timeSlots.push(firstTimeSlot);
-			}
-		}
-
-
-		if(timeLength > 2 && lectureTime.charAt(2).match(hyphen)) {
+		if(typeof(firstTimeSlot) !== "undefined") {
 			timeSlots.push(firstTimeSlot);
-			var difference = lectureTime.charAt(3) - lectureTime.charAt(1);
-			for(var i = 1; i < difference; i++) {
-				var newTime = parseInt(firstTimeSlot.charAt(1)) + 1;
-				firstTimeSlot = firstTimeSlot.charAt(0) + newTime;
-				timeSlots.push(firstTimeSlot);
-			}
+
+		} 
+		if (typeof(secondTimeSlot) !== "undefined") {
+			timeSlots.push(secondTimeSlot);
+
+		}
+		if (typeof(thirdTimeSlot) !== "undefined") {
+			timeSlots.push(thirdTimeSlot);
+
 		}
 	});
+	
 	console.log(timeSlots);
+
+	return timeSlots;
+
+}
+
+function getSectionTimeSlot(section, type) {
+	var times = getTimesArray(section, type);
+	var timeSlots = constructTimesArray(times);
 	return timeSlots;
 }
 
