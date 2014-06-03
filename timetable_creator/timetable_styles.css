@@ -1,23 +1,24 @@
 body
 {
-	background-color:#335CD6;
+	background-color:black;
 }
 
 td
 {
-	background-color:black;
+	background-color:#003366;
 	color:white;
+	border-right:2px solid rgba(0, 0, 0, .5);
 }
 th
 {
-	background-color:black;
+	background-color:#003366;
 	color:white;
 }
 
 /* Timetable */
 #timetable
 {
-	border: 2px solid black;
+	border: 2px solid white;
 	position:fixed;
 	left:350px;
 	margin-right:0px;
@@ -36,12 +37,14 @@ th
 
 .course
 {
-	background-color:white;
+	background-color:#003366;
+	color:white;
 }
 .section
 {
 	text-align:center;
-	background-color:white;
+	background-color:#003366;
+	color:white;
 }
 .section:hover
 {
@@ -52,9 +55,8 @@ th
 }
 .course h3 
 {
-	color:black;
+	color:white;
 	text-align:center;
-	color:black;
 	cursor:pointer;
     margin: 0;
     display: block;
@@ -80,7 +82,7 @@ th
 
 .timetable-cell	
 {
-	border: 2px solid black;
+	border-bottom: 1px dashed rgba(0, 0, 255, .5);
 	min-width:100px;
 	height:30px;
 	text-align:center;
@@ -99,7 +101,9 @@ th
 	left:20px;
 	right:50px;
 	width:200px;
+	bottom:200px;
     margin: 0;
+    padding-bottom:200px;
 }
 li
 {

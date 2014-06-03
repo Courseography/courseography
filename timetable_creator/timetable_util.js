@@ -1,4 +1,3 @@
-
 var day           = /M|T|W|R|F/;
 var time          = /1|2|3|4|5|6|7|8|9/;
 var timeSecondDig = /0|1|2/;
@@ -10,8 +9,7 @@ var contentString = "";
 // In the future, it would be nice to pull the course values either from all json files, or the course nodes.
 if (window.XMLHttpRequest) {
   xmlhttp=new XMLHttpRequest();
-}
-else {
+} else {
   xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
 }
 
@@ -22,82 +20,123 @@ xmlDoc=xmlhttp.responseXML;
 var httpResponse = xmlhttp.responseText;
 var csvSplitNewline = httpResponse.split('\n');
 var courseSelect = document.getElementById("course-select");
+var backgroundTdColor = "#003366";
 
 function addCourseToList(course) {
 	var courseNode = getCourse(course);
+	setupEntry(courseNode);
+}
+
+function setupEntry(courseNode) {
 	if(typeof(courseNode.F) !== "undefined" || typeof(courseNode.Y) !== "undefined") {
 		var entry    = document.createElement('li');
 		$(entry).css("border","2px solid black");
 		var header   = document.createElement('h3');
 		var sections = document.createElement('div');
-		header.appendChild(document.createTextNode(course));
+		header.appendChild(document.createTextNode(courseNode.name));
 		entry.setAttribute("class", "course");
-		sections.id = course + "Sections";
+		sections.id = courseNode.name + "Sections";
 		var sectionList = document.createElement('ul');
-		var fall = document.createElement("li");
+
 		if(typeof(courseNode.F) !== "undefined") {
-			$.each(courseNode.F.lectures, function(i, lecture){
-				var section = document.createElement("li");
-				section.setAttribute("class", "section");
-				section.appendChild(document.createTextNode(lecture.section));
-				var sectionTimes = getSectionTimeSlot(lecture, "lecture");
-				if(courseNode.manualTutorialEnrolment === false) {
-					sectionTimes = sectionTimes.concat(getSectionTimeSlot(courseNode.F.tutorials[i], "tutorial"));
-				}
-				$.each(sectionTimes, function(i, time) {
-					$(section).click(function(){
-						if(document.getElementById(time).getAttribute("clicked") === "true" && document.getElementById(time).innerHTML === courseNode.name) {
-							document.getElementById(time).innerHTML = "";
-							document.getElementById(time).setAttribute("clicked","false");
-							$("#"+time).css("background-color", "black");
-						} else if(document.getElementById(time).getAttribute("clicked") !== "true") {
-							document.getElementById(time).innerHTML = courseNode.name;
-							document.getElementById(time).setAttribute("clicked","true");
-							console.log(courseNode.name);
-							$("#"+time).css("background-color", "blue");
-						}
-					});
-
-					$(section).mouseover(function(){
-						if(document.getElementById(time).getAttribute("clicked") === "true") {
-							$("#"+time).css("background-color", "red");
-						} else {
-							document.getElementById(time).innerHTML = courseNode.name;
-						}
-					});
-
-					$(section).mouseout(function(){
-						if(document.getElementById(time).getAttribute("clicked") !== "true") {
-							document.getElementById(time).innerHTML = "";
-							$("#"+time).css("background-color", "black");	
-						} else {
-							$("#"+time).css("background-color", "blue");
-
-						}
-					});
-
-				});
-
-				sectionList.appendChild(section);
-			});
-
-		} else {
-
-			$.each(courseNode.Y.lectures, function(i, lecture){
-				var section = document.createElement("li");
-				section.setAttribute("class", "section");
-				section.appendChild(document.createTextNode(lecture.section));
-				sectionList.appendChild(section);
-			});
-
+			sectionList = processSession(courseNode.F, courseNode, header, sectionList);
+						
+		} else if(typeof(courseNode.Y) !== "undefined") {
+			sectionList = processSession(courseNode.Y, courseNode, header, sectionList);
 		}
 
 		sections.appendChild(sectionList);
 		entry.appendChild(header);
 		entry.appendChild(sections);
 		courseSelect.appendChild(entry);
-		return entry;
 	}
+}
+
+function processSession(session, courseNode, header, sectionList) {
+	$.each(session.lectures, function(i, lecture){
+		if(lecture.section.charAt(1) !== "2") {
+			var section = document.createElement("li");
+			section.setAttribute("class", "section");
+			section.appendChild(document.createTextNode(lecture.section));
+			var sectionTimes = getSectionTimeSlot(lecture, "lecture");
+			if(courseNode.manualTutorialEnrolment === false) {
+				sectionTimes = sectionTimes.concat(getSectionTimeSlot(session.tutorials[i], "tutorial"));
+			}
+			processSectionTimes(section, sectionTimes, header, courseNode);
+			sectionList.appendChild(section);
+		}
+	});
+
+	$.each(session.tutorials, function(i, tutorial){
+		if(courseNode.manualTutorialEnrolment) {
+			var section = document.createElement("li");
+			section.setAttribute("class", "section");
+			section.appendChild(document.createTextNode(tutorial[0]));
+			console.log(courseNode + " " + tutorial[0] + " " + tutorial[1]);
+			var sectionTimes = getSectionTimeSlot(tutorial[1], "tutorial");
+			processSectionTimes(section, sectionTimes, header, courseNode);
+			sectionList.appendChild(section);
+		}
+	});
+
+	return sectionList;
+}
+
+function processSectionTimes(section, sectionTimes, header, courseNode) {
+	$.each(sectionTimes, function(i, time) {
+		setSectionMouseEvents(section, time, header, courseNode);
+	});
+}
+
+function setSectionMouseEvents(section, time, header, courseNode) {
+	setSectionOnClick(section, time, header, courseNode);
+	setSectionMouseOver(section, time, courseNode);
+	setSectionMouseOut(section, time);
+}
+
+function setSectionOnClick(section, time, header, courseNode) {
+	$(section).click(function(){
+		if(document.getElementById(time).getAttribute("clicked") === "true" && document.getElementById(time).innerHTML === courseNode.name) {
+			document.getElementById(time).innerHTML = "";
+			document.getElementById(time).setAttribute("clicked","false");
+			$("#"+time).css("background-color", backgroundTdColor);
+			$(section).css("background-color", backgroundTdColor);
+			$(section).css("color", "white");
+			$(header).css("background-color", backgroundTdColor);
+			$(header).css("color", "white");
+		} else if(document.getElementById(time).getAttribute("clicked") !== "true") {
+			document.getElementById(time).innerHTML = courseNode.name;
+			document.getElementById(time).setAttribute("clicked","true");
+			console.log(courseNode.name);
+			$("#"+time).css("background-color", "blue");
+			$(section).css("background-color", "blue");
+			$(header).css("background-color", "blue");
+			$(section).css("color", "white");
+			$(header).css("color", "white");
+		}
+	});
+}
+
+function setSectionMouseOver(section, time, courseNode) {
+	$(section).mouseover(function(){
+		if(document.getElementById(time).getAttribute("clicked") === "true") {
+			$("#"+time).css("background-color", "#FF6666");
+		} else {
+			document.getElementById(time).innerHTML = courseNode.name;
+		}
+	});
+}
+
+function setSectionMouseOut(section, time) {
+	$(section).mouseout(function(){
+		if(document.getElementById(time).getAttribute("clicked") !== "true") {
+			document.getElementById(time).innerHTML = "";
+			$("#"+time).css("background-color", backgroundTdColor);	
+		} else {
+			$("#"+time).css("background-color", "blue");
+
+		}
+	});
 }
 
 function getTimesArray(section, type) {
@@ -322,30 +361,9 @@ function getCourse(courseCode) {
 	return result;
 }
 
-function getCourseTitle(course) {
-	$.ajax({
-				url: '../res/courses/timetable/' + course + 'H1TimeTable.txt',
-				dataType: 'json',
-				async: false,
-				success: function(data) {
-					result = data.title;
-				}
-			});
-	return result;
-}
-
-function addSectionsToList(course) {
-	//console.log(course);
-	//console.log(course.innerHTML);
-	//var courseName = course.innerHTML + "Sections";
-	//console.log(course.id);
-	//document.getElementById(courseName).appendChild("hello!");
-}
-
 function linkCourseToLI() {
 	$(".course h3").each(function() {
 		$(this).data(this.innerHTML, getCourse(this.innerHTML));
-		addSectionsToList(this);
 	});
 }
 
@@ -365,8 +383,8 @@ function setupList() {
 }
 }
 
-$( document ).ready(function() {
+$(document).ready(function() {
     setupList();
 	linkCourseToLI();
-	$("#course-select").accordion({heightStyle: "content"});
+	$("#course-select").accordion({heightStyle: "content", collapsible: true});
 });
