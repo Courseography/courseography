@@ -1,26 +1,26 @@
-var day           = /M|T|W|R|F/;
-var time          = /1|2|3|4|5|6|7|8|9/;
+var day = /M|T|W|R|F/;
+var time = /1|2|3|4|5|6|7|8|9/;
 var timeSecondDig = /0|1|2/;
-var hyphen        = /-/;
+var hyphen = /-/;
 var result;
 var i;
 var contentString = "";
+var courseSelect = document.getElementById("course-select");
+var backgroundTdColor = "#003366";
 
 // In the future, it would be nice to pull the course values either from all json files, or the course nodes.
 if (window.XMLHttpRequest) {
-  xmlhttp=new XMLHttpRequest();
+ xmlhttp=new XMLHttpRequest();
 } else {
-  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+ xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
 }
 
-xmlhttp.open("GET","../res/timetable2014.csv",false);
+xmlhttp.open("GET", "../res/timetable2014.csv",false);
 xmlhttp.send();
 xmlDoc=xmlhttp.responseXML;
 
 var httpResponse = xmlhttp.responseText;
 var csvSplitNewline = httpResponse.split('\n');
-var courseSelect = document.getElementById("course-select");
-var backgroundTdColor = "#003366";
 
 function addCourseToList(course) {
 	var courseNode = getCourse(course);
@@ -29,9 +29,9 @@ function addCourseToList(course) {
 
 function setupEntry(courseNode) {
 	if(typeof(courseNode.F) !== "undefined" || typeof(courseNode.Y) !== "undefined") {
-		var entry    = document.createElement('li');
+		var entry = document.createElement('li');
 		$(entry).css("border","2px solid black");
-		var header   = document.createElement('h3');
+		var header = document.createElement('h3');
 		var sections = document.createElement('div');
 		header.appendChild(document.createTextNode(courseNode.name));
 		entry.setAttribute("class", "course");
@@ -82,17 +82,20 @@ function processSession(session, courseNode, header, sectionList) {
 	return sectionList;
 }
 
+
 function processSectionTimes(section, sectionTimes, header, courseNode) {
 	$.each(sectionTimes, function(i, time) {
 		setSectionMouseEvents(section, time, header, courseNode);
 	});
 }
 
+
 function setSectionMouseEvents(section, time, header, courseNode) {
 	setSectionOnClick(section, time, header, courseNode);
 	setSectionMouseOver(section, time, courseNode);
 	setSectionMouseOut(section, time);
 }
+
 
 function setSectionOnClick(section, time, header, courseNode) {
 	$(section).click(function(){
@@ -117,6 +120,7 @@ function setSectionOnClick(section, time, header, courseNode) {
 	});
 }
 
+
 function setSectionMouseOver(section, time, courseNode) {
 	$(section).mouseover(function(){
 		if(document.getElementById(time).getAttribute("clicked") === "true") {
@@ -124,8 +128,12 @@ function setSectionMouseOver(section, time, courseNode) {
 		} else {
 			document.getElementById(time).innerHTML = courseNode.name;
 		}
+		if(courseNode.name === "CSC309H1") {
+			alert("Bug alert! 309 has a mislabeled section in the CSC timesheet!");
+		}
 	});
 }
+
 
 function setSectionMouseOut(section, time) {
 	$(section).mouseout(function(){
@@ -138,6 +146,7 @@ function setSectionMouseOut(section, time) {
 		}
 	});
 }
+
 
 function getTimesArray(section, type) {
 	var times = [];
@@ -173,12 +182,10 @@ function constructTimesArray(times) {
 				case 1: //M1, MW
 					switch(numDays) {
 						case 1: // M1
-							console.log("M1 ish");
 							firstTimeSlot = firstTimeSlot + lectureTime.charAt(1);
 							break;
 						case 2: //MW
 							secondTimeSlot = lectureTime.charAt(1);
-							console.log("second time slot: " + secondTimeSlot);
 							break;
 					}
 					break;
@@ -190,8 +197,8 @@ function constructTimesArray(times) {
 							}
 							break;
 						case 2: //MW1
-							firstTimeSlot  = firstTimeSlot   + lectureTime.charAt(2);
-							secondTimeSlot = secondTimeSlot  + lectureTime.charAt(2);
+							firstTimeSlot = firstTimeSlot + lectureTime.charAt(2);
+							secondTimeSlot = secondTimeSlot + lectureTime.charAt(2);
 							break;
 						case 3: // MWF
 							thirdTimeSlot = lectureTime.charAt(2);
@@ -234,8 +241,8 @@ function constructTimesArray(times) {
 						case 2: //MW1-, MW10-12, WF11
 							if(lectureTime.search("-") <= -1) {
 
-								firstTimeSlot  = firstTimeSlot   + lectureTime.charAt(3);
-								secondTimeSlot = secondTimeSlot  + lectureTime.charAt(3);
+								firstTimeSlot = firstTimeSlot + lectureTime.charAt(3);
+								secondTimeSlot = secondTimeSlot + lectureTime.charAt(3);
 
 							} else {
 								var newTime;
@@ -261,9 +268,9 @@ function constructTimesArray(times) {
 							}
 							break;
 						case 3: // MWF1
-								firstTimeSlot  = firstTimeSlot  + lectureTime.charAt(3);
+								firstTimeSlot = firstTimeSlot + lectureTime.charAt(3);
 								secondTimeSlot = secondTimeSlot + lectureTime.charAt(3);
-								thirdTimeSlot  = thirdTimeSlot  + lectureTime.charAt(3);
+								thirdTimeSlot = thirdTimeSlot + lectureTime.charAt(3);
 							break;
 						case 4: // MWTF, not yet covered by CS, but german has sections like this.
 
@@ -279,9 +286,9 @@ function constructTimesArray(times) {
 
 							break;
 						case 3: // MWF12, MWF1-2 <-- need to cover this case, for future.
-							firstTimeSlot  = firstTimeSlot  + lectureTime.charAt(4);
+							firstTimeSlot = firstTimeSlot + lectureTime.charAt(4);
 							secondTimeSlot = secondTimeSlot + lectureTime.charAt(4);
-							thirdTimeSlot  = thirdTimeSlot  + lectureTime.charAt(4);
+							thirdTimeSlot = thirdTimeSlot + lectureTime.charAt(4);
 							break;
 						case 4: // MTWF1, todo
 
@@ -340,8 +347,8 @@ function constructTimesArray(times) {
 	console.log(timeSlots);
 
 	return timeSlots;
-
 }
+
 
 function getSectionTimeSlot(section, type) {
 	var times = getTimesArray(section, type);
@@ -349,17 +356,19 @@ function getSectionTimeSlot(section, type) {
 	return timeSlots;
 }
 
+
 function getCourse(courseCode) {
 	$.ajax({
-				url: '../res/courses/timetable/' + courseCode + 'TimeTable.txt',
-				dataType: 'json',
-				async: false,
-				success: function(data) {
-					result = data;
-				}
-			});
+		url: '../res/courses/timetable/' + courseCode + 'TimeTable.txt',
+		dataType: 'json',
+		async: false,
+		success: function(data) {
+			result = data;
+		}
+	});
 	return result;
 }
+
 
 function linkCourseToLI() {
 	$(".course h3").each(function() {
@@ -367,24 +376,26 @@ function linkCourseToLI() {
 	});
 }
 
+
 function setupList() {
 	for(i = 0; i < csvSplitNewline.length; i++) {
-	var splitLine     = csvSplitNewline[i].split(',');
-	var course        = splitLine[0];
-	var isACourse     = course.indexOf("CSC")>-1;
-	if(course.indexOf("/") > -1) {
-		course = course.substring(0, course.indexOf("/"));
+		var splitLine = csvSplitNewline[i].split(',');
+		var course = splitLine[0];
+		var isACourse = course.indexOf("CSC")>-1;
+		if(course.indexOf("/") > -1) {
+			course = course.substring(0, course.indexOf("/"));
+		}
+		var notYetLogged = contentString.indexOf(course) <= -1;
+		if(isACourse && notYetLogged) {
+			addCourseToList(course);
+			contentString = contentString + course;
+		}
 	}
-	var notYetLogged  = contentString.indexOf(course) <= -1;
-	if(isACourse && notYetLogged) {
-		addCourseToList(course);
-		contentString = contentString + course;
-	}
-}
 }
 
+
 $(document).ready(function() {
-    setupList();
+ setupList();
 	linkCourseToLI();
 	$("#course-select").accordion({heightStyle: "content", collapsible: true});
 });
