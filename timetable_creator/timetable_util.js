@@ -25,6 +25,9 @@ var csvSplitNewline = httpResponse.split('\n');
 function addCourseToList(course) {
 	var courseNode = getCourse(course);
 	courseNode.selected = "false";
+
+	// Convert CSC***H1 -> CSC***
+	courseNode.name = courseNode.name.substring(0,6);
 	setupEntry(courseNode);
 }
 
@@ -73,7 +76,6 @@ function processSession(session, courseNode, header, sectionList) {
 			var section = document.createElement("li");
 			section.setAttribute("class", "section");
 			section.appendChild(document.createTextNode(tutorial[0]));
-			console.log(courseNode + " " + tutorial[0] + " " + tutorial[1]);
 			var sectionTimes = getSectionTimeSlot(tutorial[1], "tutorial");
 			processSectionTimes(section, sectionTimes, header, courseNode);
 			sectionList.appendChild(section);
@@ -100,18 +102,77 @@ function setSectionMouseEvents(section, sectionTimes, header, courseNode) {
 function setSectionOnClick(section, sectionTimes, header, courseNode) {
 	$(section).click(function() {
 		var isLecture = section.innerHTML.charAt(0) === "L";
+		var cancelSection;
 		if(courseNode.selected === "true" && isLecture && courseNode.isLectureSelected === "true") {
 			alert("lecture selected detected");
-			courseNode.selected = "false";
-			courseNode.selectedLecture = null;
+			$(courseNode.selectedLecture).css("background-color", backgroundTdColor);
+			$(courseNode.selectedLecture).css("color", "white");
+			$(courseNode.selectedLectureHeader).css("background-color", backgroundTdColor);
+			$(courseNode.selectedLectureHeader).css("color", "white");
 			$.each(courseNode.selectedTimes, function(i, time) {
 				document.getElementById(time).innerHTML = "";
 				document.getElementById(time).setAttribute("clicked","false");
 				$("#"+time).css("background-color", backgroundTdColor);
-				$(courseNode.selectedLecture).css("background-color", backgroundTdColor);
-				$(courseNode.selectedLecture).css("color", "white");
-				$(courseNode.selectedLectureHeader).css("background-color", backgroundTdColor);
-				$(courseNode.selectedLectureHeader).css("color", "white");
+			});
+			if(courseNode.selectedLecture.innerHTML !== section.innerHTML) {
+
+				courseNode.selectedLecture = section;
+				courseNode.selectedLectureHeader = header;
+				courseNode.selectedTimes = sectionTimes;
+
+				if(section.innerHTML.charAt(0) === "L") {
+					$(section).css("background-color", "blue");
+					$(header).css("background-color", "blue");
+				} else {
+					$(section).css("background-color", "orange");
+					$(header).css("background-color", "orange");
+				}
+
+				$.each(sectionTimes, function(i, time) {
+					
+						document.getElementById(time).innerHTML = courseNode.name;
+						document.getElementById(time).setAttribute("clicked","true");
+						$("#"+time).css("background-color", "blue");
+						$(section).css("color", "white");
+						$(header).css("color", "white");
+						$(section).attr("clicked", "true");
+						
+				});
+				
+
+			
+			} else {
+
+				courseNode.selected = "false";
+				courseNode.selectedLecture = null;
+			}
+		} else if (!isLecture) {
+			$.each(sectionTimes, function(i, time) {
+				if(document.getElementById(time).getAttribute("clicked") === "true" && document.getElementById(time).innerHTML === courseNode.name) {
+					document.getElementById(time).innerHTML = "";
+					document.getElementById(time).setAttribute("clicked","false");
+					$("#"+time).css("background-color", backgroundTdColor);
+					$(section).css("background-color", backgroundTdColor);
+					$(section).css("color", "white");
+					$(header).css("background-color", backgroundTdColor);
+					$(header).css("color", "white");
+				} else if(document.getElementById(time).getAttribute("clicked") !== "true") {
+					document.getElementById(time).innerHTML = courseNode.name;
+					document.getElementById(time).setAttribute("clicked","true");
+					$("#"+time).css("background-color", "blue");
+					if(section.innerHTML.charAt(0) === "L") {
+
+						$(section).css("background-color", "blue");
+						$(header).css("background-color", "blue");
+					} else {
+
+						$(section).css("background-color", "orange");
+						$(header).css("background-color", "orange");
+					}
+					$(section).css("color", "white");
+					$(header).css("color", "white");
+					$(section).attr("clicked", "true");
+				}
 			});
 		} else if (courseNode.selected === "false") {
 
@@ -126,39 +187,35 @@ function setSectionOnClick(section, sectionTimes, header, courseNode) {
 
 			courseNode.selectedLectureHeader = header;
 			courseNode.selectedTimes = sectionTimes;
-		}
 
+			$.each(sectionTimes, function(i, time) {
+				if(document.getElementById(time).getAttribute("clicked") === "true" && document.getElementById(time).innerHTML === courseNode.name) {
+					document.getElementById(time).innerHTML = "";
+					document.getElementById(time).setAttribute("clicked","false");
+					$("#"+time).css("background-color", backgroundTdColor);
+					$(section).css("background-color", backgroundTdColor);
+					$(section).css("color", "white");
+					$(header).css("background-color", backgroundTdColor);
+					$(header).css("color", "white");
+				} else if(document.getElementById(time).getAttribute("clicked") !== "true") {
+					document.getElementById(time).innerHTML = courseNode.name;
+					document.getElementById(time).setAttribute("clicked","true");
+					$("#"+time).css("background-color", "blue");
+					if(section.innerHTML.charAt(0) === "L") {
 
+						$(section).css("background-color", "blue");
+						$(header).css("background-color", "blue");
+					} else {
 
-
-		$.each(sectionTimes, function(i, time) {
-			if(document.getElementById(time).getAttribute("clicked") === "true" && document.getElementById(time).innerHTML === courseNode.name) {
-				document.getElementById(time).innerHTML = "";
-				document.getElementById(time).setAttribute("clicked","false");
-				$("#"+time).css("background-color", backgroundTdColor);
-				$(section).css("background-color", backgroundTdColor);
-				$(section).css("color", "white");
-				$(header).css("background-color", backgroundTdColor);
-				$(header).css("color", "white");
-			} else if(document.getElementById(time).getAttribute("clicked") !== "true") {
-				document.getElementById(time).innerHTML = courseNode.name;
-				document.getElementById(time).setAttribute("clicked","true");
-				$("#"+time).css("background-color", "blue");
-				if(section.innerHTML.charAt(0) === "L") {
-
-					$(section).css("background-color", "blue");
-					$(header).css("background-color", "blue");
-				} else {
-
-					$(section).css("background-color", "orange");
-					$(header).css("background-color", "orange");
+						$(section).css("background-color", "orange");
+						$(header).css("background-color", "orange");
+					}
+					$(section).css("color", "white");
+					$(header).css("color", "white");
+					$(section).attr("clicked", "true");
 				}
-				$(section).css("color", "white");
-				$(header).css("color", "white");
-				$(section).attr("clicked", "true");
-			}
-		});
-
+			});
+		}
 		
 	});
 }
@@ -390,8 +447,6 @@ function constructTimesArray(times) {
 
 		}
 	});
-	
-	console.log(timeSlots);
 
 	return timeSlots;
 }
