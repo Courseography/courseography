@@ -72,7 +72,7 @@ def parseTimetable():
     course = {}
     course['name'] = ''
     for line in timetableFile:
-      data = line.split(',')
+      data = line.strip().split(',')
       code = data[TimetableData.code][:8]
 
       # Check if research project course
@@ -123,12 +123,22 @@ def addSession(data, course):
 def addSection(data, session, course):
   ''' Adds lecture/tutorial section; updates manualTutorialEnrolment. '''
   if data[TimetableData.section].startswith('L'):
+    # Reserved spots
+    if data[TimetableData.section].startswith('L2') and data[TimetableData.cap]:
+      time = data[TimetableData.time]
+      addToExtraCap(session['lectures'], data[TimetableData.time], int(data[TimetableData.cap]))
+
     session['lectures'].append(makeLecture(data))
     
   if isTutorial(data):
     course['manualTutorialEnrolment'] = data[TimetableData.section].startswith('T')
     session['tutorials'].append(makeTutorial(data))
 
+
+def addToExtraCap(lectures, time, extra):
+  for lec in lectures:
+    if lec['time'] == time and not lec['section'].startswith('L2'):
+      lec['extraCap'] = lec['extraCap'] + extra
 
 def addToSection(data, session):
   ''' 
@@ -146,6 +156,9 @@ def addToSection(data, session):
       lecture['cap'] = data[TimetableData.cap]
     if not lecture['instructor']:
       lecture['instructor'] = data[TimetableData.instructor]
+    # Reserved spots
+    if lecture['section'].startswith('L2') and data[TimetableData.cap]:
+      addToExtraCap(session['lectures'], data[TimetableData.time], int(data[TimetableData.cap]))
   elif isTutorial(data):
     session['tutorials'].append(makeTutorial(data))
   else:
@@ -217,7 +230,8 @@ def generateRows(course):
                 lec['section'], 
                 lec['time'], tutString,
                 lec['instructor'], 
-                lec['cap'], '+ ' + lec['extraCap'] if lec['extraCap'] > 0 else ''
+                lec['cap'], 
+                ' (+{})'.format(lec['extraCap']) if lec['extraCap'] > 0 else ''
               ))
 
       # Add separate tutorial secitons, if necessary
