@@ -9,6 +9,7 @@ var courseSelect = document.getElementById("course-select");
 var backgroundTdColor = "#003366";
 
 // In the future, it would be nice to pull the course values either from all json files, or the course nodes.
+
 if (window.XMLHttpRequest) {
  xmlhttp=new XMLHttpRequest();
 } else {
@@ -17,11 +18,16 @@ if (window.XMLHttpRequest) {
 
 xmlhttp.open("GET", "../res/timetable2014.csv",false);
 xmlhttp.send();
-xmlDoc=xmlhttp.responseXML;
 
 var httpResponse = xmlhttp.responseText;
 var csvSplitNewline = httpResponse.split('\n');
 
+/**
+ * Adds the course to the course-select list navigation panel.
+ *
+ * @param course The course code of the course being added to the list. For example "CSC108H1"
+ * TODO: Make sure limiting the course node name doesn't affect anything.
+ */
 function addCourseToList(course) {
 	var courseNode = getCourse(course);
 	courseNode.selected = "false";
@@ -31,6 +37,11 @@ function addCourseToList(course) {
 	setupEntry(courseNode);
 }
 
+/**
+ * Sets up the list item entry, adding the element to the course-select list.
+ *
+ * @param courseNode The course that is being added to the list.
+ */
 function setupEntry(courseNode) {
 	if(typeof(courseNode.F) !== "undefined" || typeof(courseNode.Y) !== "undefined") {
 		var entry = document.createElement('li');
@@ -40,13 +51,13 @@ function setupEntry(courseNode) {
 		header.appendChild(document.createTextNode(courseNode.name));
 		entry.setAttribute("class", "course");
 		sections.id = courseNode.name + "Sections";
-		var sectionList = document.createElement('ul');
+		var sectionList;
 
 		if(typeof(courseNode.F) !== "undefined") {
-			sectionList = processSession(courseNode.F, courseNode, header, sectionList);
+			sectionList = processSession(courseNode.F, courseNode, header);
 						
 		} else if(typeof(courseNode.Y) !== "undefined") {
-			sectionList = processSession(courseNode.Y, courseNode, header, sectionList);
+			sectionList = processSession(courseNode.Y, courseNode, header);
 		}
 
 		sections.appendChild(sectionList);
@@ -56,7 +67,16 @@ function setupEntry(courseNode) {
 	}
 }
 
-function processSession(session, courseNode, header, sectionList) {
+/**
+ * Processes courseNodes session. A session is the semester construct within the timetable.
+ *
+ * @param session     This courseNode's session. Either courseNode.Y, courseNode.F, courseNode.S.
+ * @param courseNode  The courseNode that is currently being processed.
+ * @param header      The corresponding header to the courseNode object.
+ * @param sectionList Recently taken out.
+ */
+function processSession(session, courseNode, header) {
+	var sectionList = document.createElement('ul');
 	$.each(session.lectures, function(i, lecture) {
 		if(lecture.section.charAt(1) !== "2") {
 			var section = document.createElement("li");
@@ -85,13 +105,29 @@ function processSession(session, courseNode, header, sectionList) {
 	return sectionList;
 }
 
-
+/**
+ * Processes this sections times. 
+ * TODO: Decide whether to shave this function from the project. There are bigger plans for this function,
+ * other than to just call setSectionMouseEvents.
+ * @param sections
+ * @param sectionTimes
+ * @param header
+ * @param courseNode
+ */
 function processSectionTimes(section, sectionTimes, header, courseNode) {
 
 	setSectionMouseEvents(section, sectionTimes, header, courseNode);
 }
 
 
+/**
+ * Set's all section's mouse events: onclick, mouseover and mouseout. header is generally affected cosmetically.
+ *
+ * @param section
+ * @param sectionTimes
+ * @param header
+ * @param courseNode
+ */
 function setSectionMouseEvents(section, sectionTimes, header, courseNode) {
 	setSectionOnClick(section, sectionTimes, header, courseNode);
 	setSectionMouseOver(section, sectionTimes, courseNode);
@@ -99,12 +135,21 @@ function setSectionMouseEvents(section, sectionTimes, header, courseNode) {
 }
 
 
+/**
+ * Sets section's onclick function. header is also modified in section's onclick method.
+ *
+ * TODO: use css class attrribute instead of dynamically changing style.
+ * TODO: break up function to increase readability.
+ * @param section      The lecture section that is course's mousover function is being applied to.
+ * @param sectionTimes
+ * @param header
+ * @param courseNode
+ */
 function setSectionOnClick(section, sectionTimes, header, courseNode) {
 	$(section).click(function() {
 		var isLecture = section.innerHTML.charAt(0) === "L";
 		var cancelSection;
 		if(courseNode.selected === "true" && isLecture && courseNode.isLectureSelected === "true") {
-			alert("lecture selected detected");
 			$(courseNode.selectedLecture).css("background-color", backgroundTdColor);
 			$(courseNode.selectedLecture).css("color", "white");
 			$(courseNode.selectedLectureHeader).css("background-color", backgroundTdColor);
@@ -135,14 +180,9 @@ function setSectionOnClick(section, sectionTimes, header, courseNode) {
 						$("#"+time).css("background-color", "blue");
 						$(section).css("color", "white");
 						$(header).css("color", "white");
-						$(section).attr("clicked", "true");
-						
+						$(section).attr("clicked", "true");	
 				});
-				
-
-			
 			} else {
-
 				courseNode.selected = "false";
 				courseNode.selectedLecture = null;
 			}
@@ -175,7 +215,6 @@ function setSectionOnClick(section, sectionTimes, header, courseNode) {
 				}
 			});
 		} else if (courseNode.selected === "false") {
-
 			courseNode.selected = "true";
 			courseNode.selectedLecture = section;
 
@@ -220,7 +259,13 @@ function setSectionOnClick(section, sectionTimes, header, courseNode) {
 	});
 }
 
-
+/**
+ * Sets section's mouseover function.
+ *
+ * @param section      The lecture section that is course's mousover function is being applied to.
+ * @param sectionTimes
+ * @param courseNode   The courseNode that owns the lecture section.
+ */
 function setSectionMouseOver(section, sectionTimes, courseNode) {
 	$(section).mouseover(function(){
 		$.each(sectionTimes, function(i, time) {
@@ -236,7 +281,12 @@ function setSectionMouseOver(section, sectionTimes, courseNode) {
 	});
 }
 
-
+/**
+ * Sets section's mouseout function. 
+ *
+ * @param section      The lecture section that is course's mousover function is being applied to.
+ * @param sectionTimes
+ */
 function setSectionMouseOut(section, sectionTimes) {
 	$(section).mouseout(function(){
 		$.each(sectionTimes, function(i, time) {
@@ -245,13 +295,20 @@ function setSectionMouseOut(section, sectionTimes) {
 				$("#"+time).css("background-color", backgroundTdColor);	
 			} else {
 				$("#"+time).css("background-color", "blue");
-
 			}
 		});
 	});
 }
 
 
+/**
+ * Returns an array of strings of separate lecture times for the specified section. 
+ * Sections of type "lecture" are generally separated with commas, whereas tutorials are generally not.
+ * TODO: Experiment with split method to shave down code.
+ * @param   section
+ * @param   type
+ * @returns An array of this sections listed time sections.
+ */
 function getTimesArray(section, type) {
 	var times = [];
 	if(type === "lecture") {
@@ -263,6 +320,16 @@ function getTimesArray(section, type) {
 }
 
 
+/**
+ * Parses the individual course time string.
+ * Example strings: "MWF10-12" | "M10" | "MT10-1".
+ * TODO: Redo entire function. It works for now, but could be made simpler. As mentioned in the below TODO, it needs to be shaved.
+ * @param An array of strings representing this course sections allocated times. ["F10","MT10-1"]
+ * @return An array of strings representing each individual time. For instance, "M10-12" would be split into
+ * ["M10","M11","M12"].
+ * TODO: Break up function to increase readability.
+ * @param times
+ */
 function constructTimesArray(times) {
 	var firstTimeSlot;
 	var secondTimeSlot;
@@ -452,13 +519,23 @@ function constructTimesArray(times) {
 }
 
 
+/**
+ * Gets an Array of section's time slots. For example, ["M10","M11","M12","F10"].
+ *
+ * @param section
+ * @param type
+ */
 function getSectionTimeSlot(section, type) {
 	var times = getTimesArray(section, type);
 	var timeSlots = constructTimesArray(times);
 	return timeSlots;
 }
 
-
+/**
+ * Requests the JSON object stored within the res folder of the project.
+ *
+ * @param courseCode
+ */
 function getCourse(courseCode) {
 	$.ajax({
 		url: '../res/courses/timetable/' + courseCode + 'TimeTable.txt',
@@ -471,23 +548,37 @@ function getCourse(courseCode) {
 	return result;
 }
 
-
+/**
+ * Links each JSON course object to its list item counterpart.
+ *
+ */
 function linkCourseToLI() {
 	$(".course h3").each(function() {
 		$(this).data(this.innerHTML, getCourse(this.innerHTML));
 	});
 }
 
-
+/**
+ * Sets up the course-select list (unordered list HTML element).
+ * 
+ */
 function setupList() {
+
+	// Iterates through the courses grabbed with the XMLHTTP request.
+	// TODO: Rely on better way to grab all course node name in the future.
 	for(i = 0; i < csvSplitNewline.length; i++) {
 		var splitLine = csvSplitNewline[i].split(',');
 		var course = splitLine[0];
 		var isACourse = course.indexOf("CSC")>-1;
+
+		// Filters out graduate/undergraduate hybrid courses and makes them purely undergraduate courses.
 		if(course.indexOf("/") > -1) {
 			course = course.substring(0, course.indexOf("/"));
 		}
+
+		// Many courses have duplicate listings due to the timetable holding both F and S sections.
 		var notYetLogged = contentString.indexOf(course) <= -1;
+
 		if(isACourse && notYetLogged) {
 			addCourseToList(course);
 			contentString = contentString + course;
@@ -495,7 +586,11 @@ function setupList() {
 	}
 }
 
-
+/**
+ * Called when the document is ready. This links all courses that have been grabbed from the XMLHTTP request
+ * with their corresponding JSON object, and adds them to the course-select HTML component, including all
+ * onclick, mouseover, mouseout methods. 
+ */
 $(document).ready(function() {
  setupList();
 	linkCourseToLI();
