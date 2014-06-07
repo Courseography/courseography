@@ -6,25 +6,25 @@ import json
 from grid import *
 import xlrd
 
-courses = []
+courses             = []
 
-timetablePath = '../res/timetable2014.csv'
+timetablePath       = '../res/timetable2014.csv'
 timetableOutputPath = '../res/timetableHTML2014.html'
 
-fallGridPath = '../res/fallGrid.html'
-springGridPath = '../res/springGrid.html'
+fallGridPath        = '../res/fallGrid.html'
+springGridPath      = '../res/springGrid.html'
 
-excelPath = '../res/master.xlsx'
+excelPath           = '../res/master.xlsx'
 
 class TimetableData:
-  code = 0
-  session = 1
-  title = 2
-  section = 3
-  time = 4
-  kind = 5
+  code       = 0
+  session    = 1
+  title      = 2
+  section    = 3
+  time       = 4
+  kind       = 5
   instructor = 6
-  cap = 7
+  cap        = 7
 
 ##################################################
 # WORK WITH EXCEL FILE
@@ -83,6 +83,8 @@ def parseTimetable():
       if code and code != course['name']:
         # Save old course
         if course['name']:
+        #  with open('../res/courses/timetable/' + course['name'] + 'TimeTable.txt', 'w+') as output:
+        #    json.dump(course, output)
           courses.append(course)
 
         # Initialize new course
@@ -101,6 +103,13 @@ def parseTimetable():
     
     # Add last course
     courses.append(course)
+  
+
+def outputJSON():
+  for course in courses:
+
+    with open('../res/courses/timetable/' + course['name'] + 'TimeTable.txt', 'w+') as output:
+      json.dump(course, output)
 
 def addCourse(data):
   return {
@@ -220,7 +229,7 @@ def generateRows(course):
                 lec['cap'], '+ ' + lec['extraCap'] if lec['extraCap'] > 0 else ''
               ))
 
-      # Add separate tutorial secitons, if necessary
+      # Add separate tutorial sections, if necessary
       if course['manualTutorialEnrolment']:
         for tut in tuts:
           termRows.append(
@@ -305,3 +314,4 @@ if __name__ == '__main__':
   generateHTML()
   generateFallGrid()
   generateSpringGrid()
+  outputJSON()
