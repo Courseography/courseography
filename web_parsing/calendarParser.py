@@ -72,6 +72,10 @@ def parseCalendar():
       elif len(line.strip()) > 0:
         course['description'] = course['description'] + line
 
+    with open('../res/courses/' + course['code'] + '.txt', 'w+') as output:
+      json.dump(course, output)
+      courses.append(course)
+      
 def parseAnd(s):
   curr = s
   andList = []
