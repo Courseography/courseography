@@ -6,25 +6,25 @@ import json
 from grid import *
 import xlrd
 
-courses             = []
+courses = []
 
-timetablePath       = '../res/timetable2014.csv'
+timetablePath = '../res/timetable2014.csv'
 timetableOutputPath = '../res/timetableHTML2014.html'
 
-fallGridPath        = '../res/fallGrid.html'
-springGridPath      = '../res/springGrid.html'
+fallGridPath = '../res/fallGrid.html'
+springGridPath = '../res/springGrid.html'
 
-excelPath           = '../res/master.xlsx'
+excelPath  = '../res/master.xlsx'
 
 class TimetableData:
-  code       = 0
-  session    = 1
-  title      = 2
-  section    = 3
-  time       = 4
-  kind       = 5
+  code = 0
+  session = 1
+  title = 2
+  section = 3
+  time = 4
+  kind = 5
   instructor = 6
-  cap        = 7
+  cap = 7
 
 ##################################################
 # WORK WITH EXCEL FILE

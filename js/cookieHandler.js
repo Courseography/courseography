@@ -1,14 +1,13 @@
-function setCookie (cookie_name, cookie_value) {
+function setCookie (cookieName, cookieValue) {
     var lifespan_in_days = 300;
-    var domain_string    = '' ;
-    document.cookie = cookie_name 
-                      + "=" + encodeURIComponent(cookie_value)
+    document.cookie = cookieName 
+                      + "=" + encodeURIComponent(cookieValue)
                       + "; max-age=" + 60 * 60 * 24 * lifespan_in_days;
 }
 
-function getCookie(cookie_name) {
-    var name = cookie_name + "=";
-    var cookie = document.cookie.split(';');
+function getCookie(cookieName) {
+    var name = cookieName + "=";
+    var cookie = document.cookie.split(";");
     for(var i = 0; i < cookie.length; i++) {
       var c = cookie[i].trim();
       if (c.indexOf(name) === 0) {
