@@ -243,6 +243,13 @@ h3 {
   margin-right: auto;
 }
 
+.timetableInstructor a, 
+.timetableInstructor a:hover,
+.timetableInstructor a:visited,
+.timetableInstructor a:active {
+  color: black;
+  font-weight: normal
+}
 
 /* Focus and POSt tabs */
 #focuses,
