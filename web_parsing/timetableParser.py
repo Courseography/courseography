@@ -7,6 +7,8 @@ from grid import *
 import xlrd
 
 courses = []
+courseTimes = []
+updatedJsonCourses = []
 
 timetablePath = '../res/timetable2014.csv'
 timetableOutputPath = '../res/timetableHTML2014.html'
@@ -14,7 +16,7 @@ timetableOutputPath = '../res/timetableHTML2014.html'
 fallGridPath = '../res/fallGrid.html'
 springGridPath = '../res/springGrid.html'
 
-excelPath  = '../res/master.xlsx'
+excelPath = '../res/master.xlsx'
 
 class TimetableData:
   code = 0
@@ -83,8 +85,6 @@ def parseTimetable():
       if code and code != course['name']:
         # Save old course
         if course['name']:
-        #  with open('../res/courses/timetable/' + course['name'] + 'TimeTable.txt', 'w+') as output:
-        #    json.dump(course, output)
           courses.append(course)
 
         # Initialize new course
@@ -103,13 +103,7 @@ def parseTimetable():
     
     # Add last course
     courses.append(course)
-  
 
-def outputJSON():
-  for course in courses:
-
-    with open('../res/courses/timetable/' + course['name'] + 'TimeTable.txt', 'w+') as output:
-      json.dump(course, output)
 
 def addCourse(data):
   return {
@@ -309,18 +303,79 @@ def generateSpringGrid():
   generateGrid(['S','Y'], springGridPath)
 
 def generateGrid(terms, file):
-  courseTimes = []
   for course in courses:
     for term in terms:
       if term in course:
         for lec in course[term]['lectures']:
           if not lec['section'].startswith('L2'):
-            allSlots = parseTimeSlots(lec['time'])[0]
-            if allSlots:
-              courseTimes.append((course['name'], allSlots))
+            lecSlots = parseTimeSlots(lec['time'])[0]
+            lecSlotsString = convertTimes(lecSlots)
+            if lecSlots:
+              lec['times'] = lecSlotsString
+              courseTimes.append((course['name'], lecSlots))
+        for tut in course[term]['tutorials']:
+          print(course['name'])
+          tutSlots = []
+          if type(tut) == list:
+            tutSlots = parseTimeSlots(tut[1])[0]
+            tutSlots = convertTimes(tutSlots)
+            tut[1] = tutSlots
+          else:
+            tutSlots = parseTimeSlots(tut)[0]
+            if tutSlots:
+              tutSlots = convertTimes(tutSlots)
+              course[term]['tutorials'][course[term]['tutorials'].index(tut)] = tutSlots
 
   grid = buildGrid(courseTimes)
   renderGrid(grid, file)
+
+def convertTimes(times):
+  '''
+  Converts the numerical/tuple times in times into their corresponding readable strings.
+  '''
+  timeList = []
+  timeString = ""
+
+  for classTime in times:
+    day = classTime[0]
+    
+    if (classTime[1] % 12) != 0:
+      time = str(classTime[1] % 12)
+    else:
+      time = str(classTime[1])
+
+    if day == 0:
+      timeString = "M" + time
+    elif day == 1:
+      timeString = "T" + time
+    elif day == 2:
+      timeString = "W" + time
+    elif day == 3:
+      timeString = "R" + time
+    elif day == 4:
+      timeString = "F" + time
+    timeList.append(timeString)
+  return timeList
+
+
+##################################################
+# OUTPUT JSON FILES
+##################################################  
+
+
+def extractJSON():
+  for course in courses:
+    with open('../res/courses/' + course['name'] + '.txt', 'r+') as jsonInput:
+      jsonCourseData = json.load(jsonInput)
+      jsonCourseData.update(course)
+      updatedJsonCourses.append(jsonCourseData)
+
+def outputJSON():
+  for course in updatedJsonCourses:
+    with open('../res/courses/timetable/' + course['code'] + 'TimeTable.txt', 'w+') as output:
+      del course['name'] 
+      json.dump(course, output)
+
 
 if __name__ == '__main__':
   generateCSV()
@@ -328,4 +383,7 @@ if __name__ == '__main__':
   generateHTML()
   generateFallGrid()
   generateSpringGrid()
+  extractJSON()
   outputJSON()
+  import doctest
+  doctest.testmod()
