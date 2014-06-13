@@ -39,20 +39,20 @@ function buildGraph() {
 	})
 
 	$('path').each(function(i) {
-		var coords    = $(this).attr('d').split(' ');
-		var xStart    = parseFloat(coords[0].substr(1));
-		var yStart    = parseFloat(coords[1]);
-		var yEnd      = parseFloat(coords.pop());
-		var xEnd      = parseFloat(coords.pop().substr(1));
+		var coords = $(this).attr('d').split(' ');
+		var xStart = parseFloat(coords[0].substr(1));
+		var yStart = parseFloat(coords[1]);
+		var yEnd = parseFloat(coords.pop());
+		var xEnd = parseFloat(coords.pop().substr(1));
 		var startNode = '';
-		var endNode   = '';
+		var endNode = '';
 
 		$('.node, .hybrid').each(function(index) {
 			// Check intersection
-			var r      = $(this).children('rect');
-			var xRect  = parseFloat(r.attr('x'));
-			var yRect  = parseFloat(r.attr('y'));
-			var width  = parseFloat(r.attr('width'));
+			var r = $(this).children('rect');
+			var xRect = parseFloat(r.attr('x'));
+			var yRect = parseFloat(r.attr('y'));
+			var width = parseFloat(r.attr('width'));
 			var height = parseFloat(r.attr('height'));
 
 			if (intersects(xStart, yStart, xRect, yRect, width, height, 1)) {

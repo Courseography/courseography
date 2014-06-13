@@ -1,5 +1,5 @@
 /*jslint todo: true */
-/*global $, alert*/
+/*global $, console*/
 /*jslint browser:true */
 /*jslint plusplus: true */
 "use strict";
@@ -9,7 +9,6 @@ var hyphen = /-/;
 var result;
 var i;
 var contentString = "";
-var backgroundTdColor = "#003366";
 var courseSelect;
 var xmlhttp;
 var csvSplitNewline;
@@ -24,8 +23,6 @@ var sectionTimes;
 var times;
 var timeSlots;
 var entry;
-// In the future, it would be nice to pull the course values either from all json files, or the course nodes.
-
 
 /**
  * Processes this sections times. 
@@ -33,138 +30,124 @@ var entry;
  * other than to just call setSectionMouseEvents.
  * @param sections
  * @param sectionTimes
- * @param header
- * @param courseNode
+ * @param courseObject
  */
-function processSectionTimes(section, sectionTimes, header, courseNode) {
-    setSectionMouseEvents(section, sectionTimes, header, courseNode);
+ function processSectionTimes(section, sectionTimes, courseObject) {
+    setSectionMouseEvents(section, sectionTimes, courseObject);
 }
 
 /**
- * Returns an array of strings of separate lecture times for the specified section. 
- * Sections of type "lecture" are generally separated with commas, whereas tutorials are generally not.
- * TODO: Experiment with split method to shave down code.
- * @param   section
- * @param   type
- * @returns An array of this sections listed time sections.
- */
-function getTimesArray(section, type) {
-    var times = [];
-    if (type === "lecture") {
-        times = section.time.split(",");
-    } else if (type === "tutorial" && typeof section !== "undefined") {
-        times.push(section);
-    }
-    return times;
-}
-
-
-/**
- * Gets an Array of section's time slots. For example, ["M10","M11","M12","F10"].
+ * Processes courseObjects session's lectures.
  *
- * @param section
- * @param type
- */
-function getSectionTimeSlot(section, type) {
-    times = getTimesArray(section, type);
-    timeSlots = constructTimesArray(times);
-    return timeSlots;
-}
-
-/**
- * Processes courseNodes session's lectures.
- *
- * @param session     This courseNode's session. Either courseNode.Y, courseNode.F, courseNode.S.
- * @param courseNode  The courseNode that is currently being processed.
- * @param header      The corresponding header to the courseNode object.
+ * @param session     This courseObject's session. Either courseObject.Y, courseObject.F, courseObject.S.
+ * @param courseObject  The courseObject that is currently being processed.
+ * @param header      The corresponding header to the courseObject object.
  * @param sectionList Recently taken out.
  */
-function processSessionLectures(session, courseNode, header, sectionList) {
-    $.each(session.lectures, function (i, lecture) {
-        if (lecture.section.charAt(1) !== "2") {
-            section = document.createElement("li");
-            sectionTimes = getSectionTimeSlot(lecture, "lecture");
-            section.setAttribute("class", "section");
-            section.appendChild(document.createTextNode(lecture.section));
-            if (courseNode.manualTutorialEnrolment === false) {
-                sectionTimes = sectionTimes.concat(getSectionTimeSlot(session.tutorials[i], "tutorial"));
-            }
-            processSectionTimes(section, sectionTimes, header, courseNode);
-            sectionList.appendChild(section);
-        }
-    });
-    return sectionList;
-}
-
-/**
- * Processes courseNodes session's tutorials.
- *
- * @param session     This courseNode's session. Either courseNode.Y, courseNode.F, courseNode.S.
- * @param courseNode  The courseNode that is currently being processed.
- * @param header      The corresponding header to the courseNode object.
- * @param sectionList Recently taken out.
- */
-function processSessionTutorials(session, courseNode, header, sectionList) {
-    $.each(session.tutorials, function (i, tutorial) {
-        if (courseNode.manualTutorialEnrolment) {
-            section = document.createElement("li");
-            sectionTimes = getSectionTimeSlot(tutorial[1], "tutorial");
-            section.setAttribute("class", "section");
-            section.appendChild(document.createTextNode(tutorial[0]));
-            processSectionTimes(section, sectionTimes, header, courseNode);
-            sectionList.appendChild(section);
-        }
-    });
-    return sectionList;
-}
-
-
-/**
- * Processes courseNodes session. A session is the semester construct within the timetable.
- *
- * @param session     This courseNode's session. Either courseNode.Y, courseNode.F, courseNode.S.
- * @param courseNode  The courseNode that is currently being processed.
- * @param header      The corresponding header to the courseNode object.
- * @param sectionList Recently taken out.
- */
-function processSession(session, courseNode, header) {
+ function processSessionLectures(session, courseObject) {
     var sectionList = document.createElement("ul");
-    sectionList = processSessionLectures(session, courseNode, header, sectionList);
-    sectionList = processSessionTutorials(session, courseNode, header, sectionList);
-
+    $.each(session.lectures, function (i, lecture) {
+        if (lecture.section.charAt(1) !== "2" && lecture.time !== "Online Web Version") {
+            section = document.createElement("li");
+            sectionTimes = lecture.times;
+            section.appendChild(document.createTextNode(lecture.section));
+            if (courseObject.manualTutorialEnrolment === false && session['tutorials'].length > 0) {
+                sectionTimes = sectionTimes.concat(session['tutorials'][i]);
+            }
+            processSectionTimes(section, sectionTimes, courseObject);
+            sectionList.appendChild(section);
+        }
+    });
     return sectionList;
+}
+
+function returnUniqueElements(array) {
+    var sortedArray = array.sort();
+    var result = []
+    for (var i = 0; i < array.length - 1; i++) {
+        if (sortedArray[i + 1] !== sortedArray[i]) {
+            result.push(sortedArray[i]);
+        }
+    }
+    result.push(sortedArray[array.length-1]);
+    return result;
+}
+
+/**
+ * Processes courseObjects session's tutorials.
+ *
+ * @param session     This courseObject's session. Either courseObject.Y, courseObject.F, courseObject.S.
+ * @param courseObject  The courseObject that is currently being processed.
+ * @param header      The corresponding header to the courseObject object.
+ * @param sectionList Recently taken out.
+ */
+ function processSessionTutorials(session, courseObject, sectionList) {
+    $.each(session.tutorials, function (i, tutorial) {
+        if (courseObject.manualTutorialEnrolment) {
+            section = document.createElement("li");
+            console.log("tutorial" + tutorial[1])
+            sectionTimes = tutorial[1];
+            section.appendChild(document.createTextNode(tutorial[0]));
+            processSectionTimes(section, sectionTimes, courseObject);
+            sectionList.appendChild(section);
+        }
+    });
+    return sectionList;
+}
+
+
+/**
+ * Processes courseObjects session. A session is the semester construct within the timetable.
+ *
+ * @param session     This courseObject's session. Either courseObject.Y, courseObject.F, courseObject.S.
+ * @param courseObject  The courseObject that is currently being processed.
+ * @param header      The corresponding header to the courseObject object.
+ * @param sectionList Recently taken out.
+ */
+ function processSession(courseObject) {
+    sections = document.createElement("div");
+    sections.setAttribute("class", "sections");
+    if (typeof courseObject.Y !== "undefined") {  
+        var sectionList = document.createElement("ul");  
+        sectionList = processSessionLectures(courseObject.Y, courseObject);
+        sectionList = processSessionTutorials(courseObject.Y, courseObject, sectionList);
+        $(sectionList).attr("class", "sectionList-year");
+        sections.appendChild(sectionList);
+    } else {
+        var sectionList = document.createElement("ul");
+        if (typeof courseObject.F !== "undefined") {
+            sectionList = processSessionLectures(courseObject.F, courseObject);
+            sectionList = processSessionTutorials(courseObject.F, courseObject, sectionList);
+            $(sectionList).attr("class", "sectionList-fall");
+            sections.appendChild(sectionList);
+        }
+        if (typeof courseObject.S !== "undefined") { 
+            var sectionList = document.createElement("ul");
+            sectionList = processSessionLectures(courseObject.S, courseObject);
+            sectionList = processSessionTutorials(courseObject.S, courseObject, sectionList);
+            $(sectionList).attr("class", "sectionList-spring");
+            sections.appendChild(sectionList);
+        }
+    }
+    return sections;
 }
 
 /**
  * Sets up the list item entry, adding the element to the course-select list.
  *
- * @param courseNode The course that is being added to the list.
+ * @param courseObject The course that is being added to the list.
  */
-function setupEntry(courseNode) {
-
-    // TODO: Set up winter/spring ability
-    if (typeof (courseNode.F) !== "undefined" || typeof (courseNode.Y) !== "undefined") {
-        entry = document.createElement("li");
-        header = document.createElement("h3");
-        sections = document.createElement("div");
-
-        $(entry).css("border", "2px solid black");
-        header.appendChild(document.createTextNode(courseNode.name));
-        entry.setAttribute("class", "course");
-        sections.id = courseNode.name + "Sections";
-
-        if (typeof (courseNode.F) !== "undefined") {
-            sectionList = processSession(courseNode.F, courseNode, header);
-                        
-        } else if (typeof (courseNode.Y) !== "undefined") {
-            sectionList = processSession(courseNode.Y, courseNode, header);
-        }
-
-        sections.appendChild(sectionList);
-        entry.appendChild(header);
-        entry.appendChild(sections);
-        courseSelect.appendChild(entry);
-    }
+ function setupEntry(courseObject) {
+    entry = document.createElement("li");
+    header = document.createElement("h3");
+    header.appendChild(document.createTextNode(courseObject.code));
+    courseObject.header = header;
+    sections = processSession(courseObject);
+    entry.appendChild(header);
+    $(sections).css("height","100%");
+    $(sections).css("width","100%");
+    entry.appendChild(sections);
+    courseSelect.appendChild(entry);
 }
 
 /**
@@ -172,7 +155,7 @@ function setupEntry(courseNode) {
  *
  * @param courseCode
  */
-function getCourse(courseCode) {
+ function getCourse(courseCode) {
     $.ajax({
         url: "../res/courses/timetable/" + courseCode + "TimeTable.txt",
         dataType: "json",
@@ -190,13 +173,14 @@ function getCourse(courseCode) {
  * @param course The course code of the course being added to the list. For example "CSC108H1"
  * TODO: Make sure limiting the course node name doesn't affect anything.
  */
-function addCourseToList(course) {
-    var courseNode = getCourse(course);
-    courseNode.selected = "false";
+ function addCourseToList(course) {
+    var courseObject = getCourse(course);
+    courseObject.selectedSession = null;
+    courseObject.selected = "false";
 
     // Convert CSC***H1 -> CSC***
-    courseNode.name = courseNode.name.substring(0, 6);
-    setupEntry(courseNode);
+    courseObject.code = courseObject.code.substring(0, 6);
+    setupEntry(courseObject);
 }
 
 
@@ -204,7 +188,7 @@ function addCourseToList(course) {
  * Sets up the course-select list (unordered list HTML element).
  * 
  */
-function setupList() {
+ function setupList() {
     var course;
     // Iterates through the courses grabbed with the XMLHTTP request.
     // TODO: Rely on better way to grab all course node name in the future.
@@ -228,39 +212,19 @@ function setupList() {
     }
 }
 
-
-/**
- * Links each JSON course object to its list item counterpart.
- *
- */
-function linkCourseToLI() {
-    $(".course h3").each(function () {
-        $(this).data(this.innerHTML, getCourse(this.innerHTML));
-    });
-}
-
-
-
-
-
-
-
-
-
 /**
  * Set's all section's mouse events: onclick, mouseover and mouseout. header is generally affected cosmetically.
  *
  * @param section
  * @param sectionTimes
  * @param header
- * @param courseNode
+ * @param courseObject
  */
-function setSectionMouseEvents(section, sectionTimes, header, courseNode) {
-    setSectionOnClick(section, sectionTimes, header, courseNode);
-    setSectionMouseOver(section, sectionTimes, courseNode);
+ function setSectionMouseEvents(section, sectionTimes, courseObject) {
+    setSectionOnClick(section, sectionTimes, courseObject);
+    setSectionMouseOver(section, sectionTimes, courseObject);
     setSectionMouseOut(section, sectionTimes);
 }
-
 
 /**
  * Sets section's onclick function. header is also modified in section's onclick method.
@@ -270,128 +234,167 @@ function setSectionMouseEvents(section, sectionTimes, header, courseNode) {
  * TODO: Fix cross course conflicts.
  * @param section      The lecture section that is course's mousover function is being applied to.
  * @param sectionTimes
- * @param header
- * @param courseNode
+ * @param courseObject
  */
-function setSectionOnClick(section, sectionTimes, header, courseNode) {
-
+ function setSectionOnClick(section, sectionTimes, courseObject) {
     $(section).click(function () {
-
         var isLecture = section.innerHTML.charAt(0) === "L";
-
-        // Duplicate course call
-        if (courseNode.selected === "true" && isLecture && courseNode.isLectureSelected === "true") {
-            $(courseNode.selectedLecture).css("background-color", backgroundTdColor);
-            $(courseNode.selectedLecture).css("color", "white");
-            $(courseNode.selectedLectureHeader).css("background-color", backgroundTdColor);
-            $(courseNode.selectedLectureHeader).css("color", "white");
-            $.each(courseNode.selectedTimes, function (i, time) {
-                document.getElementById(time).innerHTML = "";
-                document.getElementById(time).setAttribute("clicked", "false");
-                $("#" + time).css("background-color", "");
-            });
-            if (courseNode.selectedLecture.innerHTML !== section.innerHTML) {
-
-                courseNode.selectedLecture = section;
-                courseNode.selectedLectureHeader = header;
-                courseNode.selectedTimes = sectionTimes;
-
-                if (section.innerHTML.charAt(0) === "L") {
-                    $(section).css("background-color", "blue");
-                    $(header).css("background-color", "blue");
-                } else {
-                    $(section).css("background-color", "orange");
-                    $(header).css("background-color", "orange");
-                }
-
-                $.each(sectionTimes, function (i, time) {
-                        document.getElementById(time).innerHTML = courseNode.name;
-                        document.getElementById(time).setAttribute("clicked","true");
-                        $("#" + time).css("background-color", "blue");
-                        $(section).attr("clicked", "true");    
-                });
-            } else {
-                courseNode.selected = "false";
-                courseNode.selectedLecture = null;
-            }
-
+        var selectedSession;
+        console.log(courseObject.selectedSession);
+        if (courseObject.selected === "true" && isLecture && courseObject.isLectureSelected === "true") {
+            $(section).addClass("clickedLectureTime");
+            unselectCourse(section, sectionTimes, courseObject);
         } else if (!isLecture) {
-            $.each(sectionTimes, function (i, time) {
-                if (document.getElementById(time).getAttribute("clicked") === "true" && document.getElementById(time).innerHTML === courseNode.name) {
-                    document.getElementById(time).innerHTML = "";
-                    document.getElementById(time).setAttribute("clicked", "false");
-                $("#" + time).css("background-color", "");
-                    resetSectionAndHeaderStyle(time, section, header);
-                } else if (document.getElementById(time).getAttribute("clicked") !== "true") {
-                    document.getElementById(time).innerHTML = courseNode.name;
-                    document.getElementById(time).setAttribute("clicked","true");
-                    setSectionAndHeaderStyle(time, section, header);
-                }
-            });
-
-
-
-        } else if (courseNode.selected === "false") {
-            courseNode.selected = "true";
-            courseNode.selectedLecture = section;
-
-            if (courseNode.selectedLecture.innerHTML.charAt(0) === "L") {
-                courseNode.isLectureSelected = "true";
+            selectTutorial(section, sectionTimes, courseObject);
+        } else if (courseObject.selected === "false") {
+            $(section).addClass("clickedLectureTime");
+            if ($(section.parentNode).attr("class") === "sectionList-fall") {
+                courseObject.selectedSession = "F";
             } else {
-                courseNode.isTutorialSelected = "true";
+                courseObject.selectedSession = "S";
             }
-
-            courseNode.selectedLectureHeader = header;
-            courseNode.selectedTimes = sectionTimes;
-
-            $.each(sectionTimes, function (i, time) {
-                if (document.getElementById(time).getAttribute("clicked") === "true" && document.getElementById(time).innerHTML === courseNode.name) {
-                    document.getElementById(time).innerHTML = "";
-                    document.getElementById(time).setAttribute("clicked","false");
-                    resetSectionAndHeaderStyle(time, section, header);
-                    setTimeStyleOFF(time);
-                } else if (document.getElementById(time).getAttribute("clicked") !== "true") {
-                    document.getElementById(time).innerHTML = courseNode.name;
-                    document.getElementById(time).setAttribute("clicked","true");
-                    setSectionAndHeaderStyle(time, section, header);
-                    setTimeStyleON(time, section);
-                }
-            });
+            selectUnselectedCourse(courseObject, section, sectionTimes);
+        } else {
+            console.log("Uncaught section click case for: " + courseObject.code);
         }
     });
 }
 
-
-/**---------------Functions to help style changes------------------------*/
-function setSectionAndHeaderStyle(time, section, header) {
-    if (section.innerHTML.charAt(0) === "L") {
-        $(section).attr("class", "sectionClickedLecture");
-        $(header).attr("class", "headerClickedLecture");
-    } else {
-        $(section).attr("class", "sectionClickedTutorial");
-        $(header).attr("class", "headerClickedTutorial");
-    }
-    $(section).attr("clicked", "true");
-}
-
-function setTimeStyleON(time, section) {
-    if (section.innerHTML.charAt(0) === "L") {
-        $("#" + time).css("background-color", "blue");
-    } else {
-        $("#" + time).css("background-color", "orange");
+function unselectCourse(section, sectionTimes, courseObject) {
+    var timeElement;
+    var timeSuffix;
+    var selectedSession;
+    // TODO: Fix cross session courses taken twice!
+    // TODO: Adapt timeElement to hold Y courses as well.
+    if (courseObject.selectedSession === "F") {
+        timeSuffix = "-fall";
+    } else {   
+        timeSuffix = "-spring";
     }
 
+    $.each(courseObject.selectedTimes, function (i, time) {
+        timeElement = time + timeSuffix;
+        if ($("#" + timeElement).hasClass("clickedConflictTime")) {
+            $("#" + timeElement).removeClass("clickedConflictTime");
+            var indexOfOffender = document.getElementById(timeElement).innerHTML.indexOf(courseObject.code);
+            if (indexOfOffender === 0) {
+                document.getElementById(timeElement).innerHTML = document.getElementById(timeElement).innerHTML.substring(indexOfOffender, 6);
+            } else{
+                document.getElementById(timeElement).innerHTML = document.getElementById(timeElement).innerHTML.substring(0, indexOfOffender);
+            }
+        } else {
+            document.getElementById(timeElement).innerHTML = "";
+            document.getElementById(timeElement).setAttribute("clicked", "false");
+            $("#" + timeElement).removeClass("clickedLectureTime");
+        }
+        $("#" + timeElement).removeClass("mouseOverConflict");
+        $("#" + timeElement).removeClass("mouseOverGood");
+    });
+
+    if ($(section.parentNode).attr("class") === "sectionList-fall") {
+        selectedSession = "F";
+    } else {
+        selectedSession = "S";
+    }
+
+    if (courseObject.selectedLecture.innerHTML !== section.innerHTML || courseObject.selectedSession !== selectedSession) {
+        if(courseObject.selectedSession !== selectedSession) {
+            if (selectedSession === "F") {
+                courseObject.selectedSession = "F";
+            } else {
+                courseObject.selectedSession = "S";
+            }
+        }
+        courseObject.selectedLecture = section;
+        courseObject.selectedLectureHeader = courseObject.header;
+        courseObject.selectedTimes = sectionTimes;
+
+        if (section.innerHTML.charAt(0) === "L") {
+            // $(courseObject.header).addClass("selectedLectureSection");
+        } else {
+            // $(courseObject.header).addClass("selectedTutorialSection");
+        }
+
+        $.each(sectionTimes, function (i, time) {
+            if ($(section.parentNode).attr("class") === "sectionList-fall") {
+                timeElement = time + "-fall";
+            } else {
+                timeElement = time + "-spring";
+            }
+            document.getElementById(timeElement).innerHTML = courseObject.code;
+            document.getElementById(timeElement).setAttribute("clicked","true");
+            $("#" + timeElement).addClass("clickedLectureTime");
+            $(section).attr("clicked", "true"); 
+            $("#" + timeElement).removeClass("mouseOverGood");   
+        });
+    } else {
+        courseObject.selected = "false";
+        courseObject.selectedLecture = null;
+        courseObject.selectedSession = null;
+
+    }
 }
 
-function setTimeStyleOFF(time) {
-    $("#" + time).css("background-color", backgroundTdColor);
+function selectTutorial(section, sectionTimes, courseObject) {
+    var timeElement;
+
+    $.each(sectionTimes, function (i, time) {
+        if ($(section.parentNode).attr("class") === "sectionList-fall") {
+            timeElement = time + "-fall";
+        } else {
+            timeElement = time + "-spring";
+        }
+        if (document.getElementById(timeElement).getAttribute("clicked") === "true" && document.getElementById(timeElement).innerHTML === courseObject.code) {
+            document.getElementById(timeElement).innerHTML = "";
+            document.getElementById(timeElement).setAttribute("clicked", "false");
+            $("#" + timeElement).removeClass("mouseOverConflict");
+            $("#" + timeElement).removeClass("mouseOverGood");
+            $("#" + timeElement).removeClass("clickedTutorialTime");
+        } else if (document.getElementById(timeElement).getAttribute("clicked") !== "true") {
+            document.getElementById(timeElement).innerHTML = courseObject.code;
+            document.getElementById(timeElement).setAttribute("clicked","true");
+            $("#" + timeElement).addClass("clickedTutorialTime");
+        }
+        $("#" + timeElement).removeClass("mouseOverGood");
+    });
 }
-/**---------------Functions to help style changes------------------------*/
-function resetSectionAndHeaderStyle(time, section, header) {
-    $(section).css("background-color", backgroundTdColor);
-    $(section).css("color", "white");
-    $(header).css("background-color", backgroundTdColor);
-    $(header).css("color", "white");
+
+function selectUnselectedCourse(courseObject, section, sectionTimes) {
+    var timeElement;
+    courseObject.selected = "true";
+    courseObject.selectedLecture = section;
+    if (courseObject.selectedLecture.innerHTML.charAt(0) === "L") {
+        courseObject.isLectureSelected = "true";
+    } else {
+        courseObject.isTutorialSelected = "true";
+    }
+
+    courseObject.selectedLectureHeader = header;
+    courseObject.selectedTimes = sectionTimes;
+
+    $.each(sectionTimes, function (i, time) {
+
+        if ($(section.parentNode).attr("class") === "sectionList-fall") {
+            timeElement = time + "-fall";
+        } else {
+            timeElement = time + "-spring";
+        }
+        if (document.getElementById(timeElement).getAttribute("clicked") === "true" && document.getElementById(timeElement).innerHTML === courseObject.code) {
+            document.getElementById(timeElement).innerHTML = "";
+            document.getElementById(timeElement).setAttribute("clicked", "false");
+            $("#" + timeElement).removeClass("clickedLectureTime");
+        } else if (document.getElementById(timeElement).getAttribute("clicked") !== "true") {
+            document.getElementById(timeElement).innerHTML = courseObject.code;
+            document.getElementById(timeElement).setAttribute("clicked","true");
+            $("#" + timeElement).addClass("clickedLectureTime");
+            $(section).attr("clicked", "true");
+            $("#" + timeElement).removeClass("mouseOverGood");
+        } else {
+            document.getElementById(timeElement).innerHTML = document.getElementById(timeElement).innerHTML + courseObject.code;
+            $(section).attr("clicked", "true");
+            $("#" + timeElement).addClass("clickedConflictTime");
+        }
+    });
 }
 
 /**
@@ -399,24 +402,29 @@ function resetSectionAndHeaderStyle(time, section, header) {
  *
  * @param section      The lecture section that is course's mousover function is being applied to.
  * @param sectionTimes
- * @param courseNode   The courseNode that owns the lecture section.
+ * @param courseObject   The courseObject that owns the lecture section.
  */
-function setSectionMouseOver(section, sectionTimes, courseNode) {
+ function setSectionMouseOver(section, sectionTimes, courseObject) {
+    var timeElement;
     $(section).mouseover(function () {
         $.each(sectionTimes, function (i, time) {
-            if (document.getElementById(time).getAttribute("clicked") === "true") {
-                $("#" + time).css("background-color", "#FF6666");
+            if ($(section.parentNode).attr("class") === "sectionList-fall") {
+                timeElement = time + "-fall";
             } else {
-                document.getElementById(time).innerHTML = courseNode.name;
+                timeElement = time + "-spring";
             }
-            if (courseNode.name === "CSC309") {
-                // TODO: Speak with David about 309.
-                alert("Bug alert! 309 has a mislabeled section in the CSC timesheet!");
+            console.log(timeElement)
+            if (document.getElementById(timeElement).getAttribute("clicked") === "true") {
+                $("#" + timeElement).addClass("mouseOverConflict");
+            } else {
+                document.getElementById(timeElement).innerHTML = courseObject.code;
+                $("#" + timeElement).addClass("mouseOverGood");
             }
         });
+        document.getElementById("course-info-code").innerHTML = courseObject.code;
+        document.getElementById("course-info-title").innerHTML = courseObject.title;
     });
 }
-
 
 /**
  * Sets section's mouseout function. 
@@ -424,227 +432,45 @@ function setSectionMouseOver(section, sectionTimes, courseNode) {
  * @param section      The lecture section that is course's mousover function is being applied to.
  * @param sectionTimes
  */
-function setSectionMouseOut(section, sectionTimes) {
+ function setSectionMouseOut(section, sectionTimes) {
+    var timeElement;
     $(section).mouseout(function () {
         $.each(sectionTimes, function (i, time) {
-            if (document.getElementById(time).getAttribute("clicked") !== "true") {
-                document.getElementById(time).innerHTML = "";
-                //$("#" + time).css("background-color", backgroundTdColor);    
+            if ($(section.parentNode).attr("class") === "sectionList-fall") {
+                timeElement = time + "-fall";
             } else {
-                //Cancels out the tutorial on click TODO: find better solution.
-                $("#" + time).css("background-color", "blue");
+                timeElement = time + "-spring";
+            }
+            if (document.getElementById(timeElement).getAttribute("clicked") !== "true") {
+                document.getElementById(timeElement).innerHTML = "";
+                $("#" + timeElement).removeClass("mouseOverGood"); 
+            } else {
+                $("#" + timeElement).removeClass("mouseOverConflict");
             }
         });
     });
 }
 
-/**
- * Parses the individual course time string.
- * Example strings: "MWF10-12" | "M10" | "MT10-1".
- * TODO: Redo entire function. It works for now, but could be made simpler. As mentioned in the below TODO, it needs to be shaved.
- * @param An array of strings representing this course sections allocated times. ["F10","MT10-1"]
- * @return An array of strings representing each individual time. For instance, "M10-12" would be split into
- * ["M10","M11","M12"].
- * TODO: Break up function to increase readability.
- * @param times
- */
-function constructTimesArray(times) {
-    var firstTimeSlot;
-    var secondTimeSlot;
-    var thirdTimeSlot;
-    var timeSlots = [];
-    var numDays;
-    var difference;
-    var timeLength;
-    $.each(times, function (i, lectureTime) {
-        timeLength = lectureTime.length;
-        numDays = 0;
-        for (var k = 0; k < timeLength; k++) {
-
-            if (lectureTime.charAt(k).match(day) !== null) {
-                numDays++;
-            }
-
-            switch (k) {
-                case 0: // M,T,W,R,F - Always a day
-                    firstTimeSlot = lectureTime.charAt(0);
-                    break;
-                case 1: //M1, MW
-                    switch(numDays) {
-                        case 1: // M1
-                            firstTimeSlot = firstTimeSlot + lectureTime.charAt(1);
-                            break;
-                        case 2: //MW
-                            secondTimeSlot = lectureTime.charAt(1);
-                            break;
-                    }
-                    break;
-                case 2: //MWF. MW1. M1-
-                    switch(numDays) {
-                        case 1: // M10, M1- !!!!!
-                            if (!lectureTime.charAt(2).match(hyphen)) {
-                                firstTimeSlot = firstTimeSlot + lectureTime.charAt(2);        
-                            }
-                            break;
-                        case 2: //MW1
-                            firstTimeSlot = firstTimeSlot + lectureTime.charAt(2);
-                            secondTimeSlot = secondTimeSlot + lectureTime.charAt(2);
-                            break;
-                        case 3: // MWF
-                            thirdTimeSlot = lectureTime.charAt(2);
-                            break;
-                    }
-                    break;
-                case 3: //MWF1
-                    switch(numDays) {
-                        case 1: //M10-, M1-2 W6-9
-
-                            if (timeLength > 5) {
-                                difference = lectureTime.substring(4,6) - lectureTime.substring(1,3);
-                                newTime = parseInt(firstTimeSlot.substring(1,3));
-                            } else if (timeLength === 5) {
-                                if (lectureTime.charAt(2).match(hyphen)) { //M9-11
-                                    difference = lectureTime.substring(3,5) - lectureTime.charAt(1);
-                                    newTime = parseInt(firstTimeSlot.charAt(1));
-                                } else { //M11-1
-                                    difference = lectureTime.charAt(4) - lectureTime.substring(1,3) + 12;
-                                    newTime = parseInt(firstTimeSlot.substring(1,3));
-                                }
-                            } else { // M1-2
-                                difference = lectureTime.charAt(3) - (lectureTime.charAt(1));
-                                newTime = parseInt(firstTimeSlot.charAt(1));
-                            }
-
-                            for (var l = 0; l < difference; l++) {
-                                if (newTime > 12) {
-                                    newTime = newTime - 12;
-                                }
-                                firstTimeSlot = firstTimeSlot.charAt(0) + newTime;
-                                timeSlots.push(firstTimeSlot);
-                                newTime = newTime + 1;
-                            }
-
-                            return timeSlots;
-                        case 2: //MW1-, MW10-12, WF11
-                            if (lectureTime.search("-") <= -1) {
-
-                                firstTimeSlot = firstTimeSlot + lectureTime.charAt(3);
-                                secondTimeSlot = secondTimeSlot + lectureTime.charAt(3);
-
-                            } else {
-                                var newTime;
-                                if (timeLength > 5) {
-                                    difference = lectureTime.substring(5,7) - lectureTime.substring(2,4);
-                                    newTime = parseInt(firstTimeSlot.substring(2,4));
-                                } else if (timeLength === 6) {
-                                    difference = lectureTime.substring(1,3) - lectureTime.charAt(4);
-                                    newTime = parseInt(firstTimeSlot.substring(1,3));
-                                } else {
-                                    difference = lectureTime.charAt(1) - (lectureTime.substring(1,3) - 12);
-                                    newTime = parseInt(firstTimeSlot.charAt(1));
-                                }
-
-                                for (var o = 0; o < difference; o++) {
-                                    if (newTime > 12) {
-                                        newTime = newTime - 12;
-                                    }
-                                    firstTimeSlot = firstTimeSlot.charAt(0) + newTime;
-                                    //timeSlots.push(firstTimeSlot);
-                                    newTime = newTime + 1;
-                                }
-                            }
-                            break;
-                        case 3: // MWF1
-                                firstTimeSlot = firstTimeSlot + lectureTime.charAt(3);
-                                secondTimeSlot = secondTimeSlot + lectureTime.charAt(3);
-                                thirdTimeSlot = thirdTimeSlot + lectureTime.charAt(3);
-                            break;
-                        case 4: // MWTF, not yet covered by CS, but german has sections like this.
-
-                            break;
-                    }
-                    break;
-                case 4:
-                    switch(numDays) {
-                        case 1: // M10-1, case previously covered
-
-                            break;
-                        case 2: // MW10-1, MW1-10, cases previously covered
-
-                            break;
-                        case 3: // MWF12, MWF1-2 <-- need to cover this case, for future.
-                            firstTimeSlot = firstTimeSlot + lectureTime.charAt(4);
-                            secondTimeSlot = secondTimeSlot + lectureTime.charAt(4);
-                            thirdTimeSlot = thirdTimeSlot + lectureTime.charAt(4);
-                            break;
-                        case 4: // MTWF1, todo
-
-                            break;
-                    }
-                    break;
-                case 5:
-                    switch(numDays) {
-                        case 1: // No strings reach this state.
-
-                            break;
-                        case 2: // MT10-12 <-- already covered
-
-                            break;
-                        case 3: //
-
-                            break;
-                        case 3: //
-
-                            break;
-                    }
-                    break;
-                case 6: //MW11-12
-                    switch(numDays) {
-                        case 1: // No strings reach this state.
-
-                            break;
-                        case 2: //
-
-                            break;
-                        case 3: // 
-
-                            break;
-                        case 3: // 
-
-                            break;
-                    }
-                    break;
-            }
-        }
-
-        if (typeof (firstTimeSlot) !== "undefined") {
-            timeSlots.push(firstTimeSlot);
-
-        } 
-        if (typeof (secondTimeSlot) !== "undefined") {
-            timeSlots.push(secondTimeSlot);
-
-        }
-        if (typeof (thirdTimeSlot) !== "undefined") {
-            timeSlots.push(thirdTimeSlot);
-
-        }
-    });
-    return timeSlots;
+function setAccordion() {
+$("#course-select").accordion({heightStyle: "content", collapsible: true, active: false/*, event: "click hoverintent"*/});
 }
-
-
-
-
-
 
 /**
  * Called when the document is ready. This links all courses that have been grabbed from the XMLHTTP request
  * with their corresponding JSON object, and adds them to the course-select HTML component, including all
  * onclick, mouseover, mouseout methods. 
  */
-$(document).ready(function () {
+ $(document).ready(function () {
     courseSelect = document.getElementById("course-select");
+    
+    csvSplitNewline = getCourseArray();
+    setupList();
+    setAccordion();
+    trapScroll();
+});
+
+function getCourseArray() {
+    var httpResponse;
     if (window.XMLHttpRequest) {
         xmlhttp = new XMLHttpRequest();
     } else {
@@ -654,21 +480,121 @@ $(document).ready(function () {
     xmlhttp.open("GET", "../res/timetable2014.csv", false);
     xmlhttp.send();
 
-    var httpResponse = xmlhttp.responseText;
-    csvSplitNewline = httpResponse.split("\n");
-    setupList();
-    linkCourseToLI();
-    $("#course-select").accordion({heightStyle: "content", collapsible: true});
+    httpResponse = xmlhttp.responseText;
+
+    return httpResponse.split("\n");
+}
+
+$.event.special.hoverintent = {
+    setup: function() {
+      $( this ).bind( "mouseover", jQuery.event.special.hoverintent.handler );
+    },
+    teardown: function() {
+        $( this ).unbind( "mouseover", jQuery.event.special.hoverintent.handler );
+    },
+    handler: function( event ) {
+        var currentX, currentY, timeout,
+        args = arguments,
+        target = $( event.target ),
+        previousX = event.pageX,
+        previousY = event.pageY;
+
+        function track( event ) {
+          currentX = event.pageX;
+          currentY = event.pageY;
+        };
+
+    function clear() {
+        target
+        .unbind( "mousemove", track )
+        .unbind( "mouseout", clear );
+        clearTimeout( timeout );
+    }
+
+    function handler() {
+        var prop,
+        orig = event;
+
+        if ( ( Math.abs( previousX - currentX ) +
+            Math.abs( previousY - currentY ) ) < 7 ) {
+          clear();
+
+        event = $.Event( "hoverintent" );
+        for ( prop in orig ) {
+            if ( !( prop in event ) ) {
+              event[ prop ] = orig[ prop ];
+            }
+        }
+            // Prevent accessing the original event since the new event
+            // is fired asynchronously and the old event is no longer
+            // usable (#6028)
+            delete event.originalEvent;
+
+            target.trigger( event );
+        } else {
+            previousX = currentX;
+            previousY = currentY;
+            timeout = setTimeout( handler, 100 );
+        }
+    }
+ 
+    timeout = setTimeout( handler, 100 );
+    target.bind({
+        mousemove: track,
+        mouseout: clear
 });
+}
+};
 
-// function showValue(newValue) {
-// 	document.getElementById("range").innerHTML=newValue;
-// 	timetable = document.getElementById("timeTable");
-// 	$(timetable).css("background", "-webkit-linear-gradient(top, #32a3ff 6%,#1e5799 62%,#1e5799 64%,#000000 100%);");
-// }
+var trapScroll;
 
-$(function() {
-    $( "#tabs" ).tabs({
-      collapsible: true, active: 0
-    });
- });
+
+/*
+ * Adapted from http://codepen.io/LelandKwong/pen/edAmn. Will look into http://jscrollpane.kelvinluck.com/.
+ */
+ (function($){  
+
+  trapScroll = function(opt){
+
+    var trapElement;
+    var scrollableDist;
+    var trapClassName = 'trapScroll-enabled';
+    var trapSelector = '#course-select';
+    
+    var trapWheel = function(e){
+      if (!$('body').hasClass(trapClassName)) return;
+      else {        
+        var curScrollPos = trapElement.scrollTop();
+        var wheelEvent = e.originalEvent;
+        var dY = wheelEvent.deltaY;
+
+        // only trap events once we've scrolled to the end
+        // or beginning
+        if ((dY>0 && curScrollPos >= scrollableDist) ||
+            (dY<0 && curScrollPos <= 0)) {
+
+          return false;
+  }
+}
+}
+
+$(document)
+.on('wheel', trapWheel)
+.on('mouseleave', trapSelector, function(){
+
+    $('body').removeClass(trapClassName);
+})
+.on('mouseenter', trapSelector, function(){        
+
+    trapElement = $(this);
+    var containerHeight = trapElement.outerHeight();
+        var contentHeight = trapElement[0].scrollHeight; // height of scrollable content
+        scrollableDist = contentHeight - containerHeight;
+        
+        if (contentHeight>containerHeight)
+          $('body').addClass(trapClassName);        
+  });       
+}   
+})($);
+
+

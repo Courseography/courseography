@@ -5,13 +5,12 @@
 import json
 from grid import *
 import xlrd
+from faculty import facultyWebsites
 
 courses = []
-courseTimes = []
-updatedJsonCourses = []
 
 timetablePath = '../res/timetable2014.csv'
-timetableOutputPath = '../res/timetableHTML2014.html'
+timetableOutputPath = '../res/timetableHTML.html'
 
 fallGridPath = '../res/fallGrid.html'
 springGridPath = '../res/springGrid.html'
@@ -85,7 +84,7 @@ def parseTimetable():
       if code and code != course['name']:
         # Save old course
         if course['name']:
-          courses.append(course)
+          finaliseCourse(course)
 
         # Initialize new course
         course = addCourse(data)
@@ -102,7 +101,18 @@ def parseTimetable():
         addToSection(data, course[session])
     
     # Add last course
-    courses.append(course)
+    finaliseCourse(course)
+
+
+def finaliseCourse(course):
+  ''' Add course to the list of courses. Also handle reserved seats. '''
+  for session in ['F', 'S', 'Y']:
+    if session in course:
+      for lecture in course[session]['lectures']:
+        if lecture['section'].startswith('L2'):
+          addToExtraCap(course[session]['lectures'], lecture['time'], int(lecture['cap']))
+
+  courses.append(course)
 
 
 def addCourse(data):
@@ -127,9 +137,9 @@ def addSection(data, session, course):
   ''' Adds lecture/tutorial section; updates manualTutorialEnrolment. '''
   if data[TimetableData.section].startswith('L'):
     # Reserved spots
-    if data[TimetableData.section].startswith('L2') and data[TimetableData.cap]:
-      time = data[TimetableData.time]
-      addToExtraCap(session['lectures'], data[TimetableData.time], int(data[TimetableData.cap]))
+    #if data[TimetableData.section].startswith('L2') and data[TimetableData.cap]:
+    #  time = data[TimetableData.time]
+    #  addToExtraCap(session['lectures'], data[TimetableData.time], int(data[TimetableData.cap]))
 
     session['lectures'].append(makeLecture(data))
     
@@ -160,8 +170,8 @@ def addToSection(data, session):
     if not lecture['instructor']:
       lecture['instructor'] = data[TimetableData.instructor]
     # Reserved spots
-    if lecture['section'].startswith('L2') and data[TimetableData.cap]:
-      addToExtraCap(session['lectures'], data[TimetableData.time], int(data[TimetableData.cap]))
+    #if lecture['section'].startswith('L2') and data[TimetableData.cap]:
+    #  addToExtraCap(session['lectures'], data[TimetableData.time], int(data[TimetableData.cap]))
   elif isTutorial(data):
     session['tutorials'].append(makeTutorial(data))
   else:
@@ -224,6 +234,22 @@ def generateRows(course):
         else:
           tutString = tutString.format('')
         
+        # TODO: fix hack for Borodin/Boutillier
+        if lec['instructor'] == 'Borodin/Boutilier':
+          instructorString = '<a href="{}" target="_blank">{}</a>/'.format(
+                                facultyWebsites['Borodin'],
+                                'Borodin')
+          instructorString += '<a href="{}" target="_blank">{}</a>/'.format(
+                                facultyWebsites['Boutilier'],
+                                'Boutilier')
+        elif lec['instructor'] in facultyWebsites:
+          instructorString = '<a href="{}" target="_blank">{}</a>'.format(
+                                facultyWebsites[lec['instructor']],
+                                lec['instructor'])
+        else:
+          print('Could not find instructor ' + lec['instructor'])
+          instructorString = lec['instructor']
+
         termRows.append(('<tr>' + 
               '<td class="timetableSection">{}</td>' +
               '<td class="timetableTime">{} {}</td>' +
@@ -232,12 +258,12 @@ def generateRows(course):
               .format(
                 lec['section'], 
                 lec['time'], tutString,
-                lec['instructor'], 
+                instructorString, 
                 lec['cap'], 
                 ' (+{})'.format(lec['extraCap']) if lec['extraCap'] > 0 else ''
               ))
 
-      # Add separate tutorial sections, if necessary
+      # Add separate tutorial secitons, if necessary
       if course['manualTutorialEnrolment']:
         for tut in tuts:
           termRows.append(
@@ -303,79 +329,18 @@ def generateSpringGrid():
   generateGrid(['S','Y'], springGridPath)
 
 def generateGrid(terms, file):
+  courseTimes = []
   for course in courses:
     for term in terms:
       if term in course:
         for lec in course[term]['lectures']:
           if not lec['section'].startswith('L2'):
-            lecSlots = parseTimeSlots(lec['time'])[0]
-            lecSlotsString = convertTimes(lecSlots)
-            if lecSlots:
-              lec['times'] = lecSlotsString
-              courseTimes.append((course['name'], lecSlots))
-        for tut in course[term]['tutorials']:
-          print(course['name'])
-          tutSlots = []
-          if type(tut) == list:
-            tutSlots = parseTimeSlots(tut[1])[0]
-            tutSlots = convertTimes(tutSlots)
-            tut[1] = tutSlots
-          else:
-            tutSlots = parseTimeSlots(tut)[0]
-            if tutSlots:
-              tutSlots = convertTimes(tutSlots)
-              course[term]['tutorials'][course[term]['tutorials'].index(tut)] = tutSlots
+            allSlots = parseTimeSlots(lec['time'])[0]
+            if allSlots:
+              courseTimes.append((course['name'], allSlots))
 
   grid = buildGrid(courseTimes)
   renderGrid(grid, file)
-
-def convertTimes(times):
-  '''
-  Converts the numerical/tuple times in times into their corresponding readable strings.
-  '''
-  timeList = []
-  timeString = ""
-
-  for classTime in times:
-    day = classTime[0]
-    
-    if (classTime[1] % 12) != 0:
-      time = str(classTime[1] % 12)
-    else:
-      time = str(classTime[1])
-
-    if day == 0:
-      timeString = "M" + time
-    elif day == 1:
-      timeString = "T" + time
-    elif day == 2:
-      timeString = "W" + time
-    elif day == 3:
-      timeString = "R" + time
-    elif day == 4:
-      timeString = "F" + time
-    timeList.append(timeString)
-  return timeList
-
-
-##################################################
-# OUTPUT JSON FILES
-##################################################  
-
-
-def extractJSON():
-  for course in courses:
-    with open('../res/courses/' + course['name'] + '.txt', 'r+') as jsonInput:
-      jsonCourseData = json.load(jsonInput)
-      jsonCourseData.update(course)
-      updatedJsonCourses.append(jsonCourseData)
-
-def outputJSON():
-  for course in updatedJsonCourses:
-    with open('../res/courses/timetable/' + course['code'] + 'TimeTable.txt', 'w+') as output:
-      del course['name'] 
-      json.dump(course, output)
-
 
 if __name__ == '__main__':
   generateCSV()
@@ -383,7 +348,3 @@ if __name__ == '__main__':
   generateHTML()
   generateFallGrid()
   generateSpringGrid()
-  extractJSON()
-  outputJSON()
-  import doctest
-  doctest.testmod()
