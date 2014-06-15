@@ -3,6 +3,7 @@
 /*jslint browser:true */
 /*jslint plusplus: true */
 "use strict";
+var result;
 var sections;
 var section;
 var sectionTimes;
@@ -40,8 +41,8 @@ function processSessionTutorials(session, courseObject, sectionList) {
 function processSession(courseObject) {
     var sectionList;
     sections = document.createElement("div");
-    $(sections).attr("class", "sections");
-    if (typeof courseObject.Y !== "undefined") {
+    sections.setAttribute("class", "sections");
+    if (typeof courseObject.Y !== "undefined") {  
         sectionList = document.createElement("ul");  
         sectionList = processSessionLectures(courseObject.Y, courseObject);
         sectionList = processSessionTutorials(courseObject.Y, courseObject, sectionList);
@@ -55,7 +56,7 @@ function processSession(courseObject) {
             $(sectionList).attr("class", "sectionList-fall");
             sections.appendChild(sectionList);
         }
-        if (typeof courseObject.S !== "undefined") {
+        if (typeof courseObject.S !== "undefined") { 
             sectionList = document.createElement("ul");
             sectionList = processSessionLectures(courseObject.S, courseObject);
             sectionList = processSessionTutorials(courseObject.S, courseObject, sectionList);

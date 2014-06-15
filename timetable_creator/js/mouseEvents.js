@@ -33,7 +33,6 @@ function setSectionMouseOver(section, sectionTimes, courseObject) {
         var timeSuffix = getTimeSuffix(section);
         $.each(sectionTimes, function (i, time) {
             timeElement = time + timeSuffix;
-
             if ($("#" + timeElement).attr("clicked") === "true") {
                 $("#" + timeElement).addClass("mouseOverConflict");
             } else {
@@ -41,9 +40,13 @@ function setSectionMouseOver(section, sectionTimes, courseObject) {
                 $("#" + timeElement).addClass("mouseOverGood");
             }
         });
-        $("course-info-code").html(courseObject.code);
-        $("course-info-title").html(courseObject.title);
+        setMouseOverCourseInfo(courseObject);
     });
+}
+
+function setMouseOverCourseInfo(courseObject) {
+    $("#course-info-code").html(courseObject.code);
+    $("#course-info-title").html(courseObject.title);
 }
 
 function setSectionOnClick(section, sectionTimes, courseObject) {
