@@ -19,7 +19,7 @@ function setSectionMouseOut(section, sectionTimes) {
             timeElement = time + timeSuffix;
             if ($("#" + timeElement).attr("clicked") !== "true") {
                 $("#" + timeElement).html("");
-                $("#" + timeElement).removeClass("mouseOverGood"); 
+                $("#" + timeElement).removeClass("mouseOverGood");
             } else {
                 $("#" + timeElement).removeClass("mouseOverConflict");
             }

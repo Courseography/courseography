@@ -15,6 +15,7 @@ var notYetLogged;
 var header;
 var sections;
 var entry;
+
 $(document).ready(function () {
     courseSelect = document.getElementById("course-select");
     
