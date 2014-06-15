@@ -68,7 +68,7 @@ function getCourse(courseCode) {
 function addCourseToList(course) {
     var courseObject = getCourse(course);
     courseObject.selectedSession = null;
-    courseObject.selected = "false";
+    courseObject.selected = false;
 
     // Convert CSC***H1 -> CSC***
     courseObject.code = courseObject.code.substring(0, 6);

@@ -5,7 +5,7 @@ body {
 
 td {
 	color: white;
-	max-width: 120px;
+	max-width: 70px;
 	min-width: 60px;
 	width:70px;
     overflow: hidden;
@@ -236,6 +236,8 @@ a:visited {
 
 .clickedConflictTime {
 	background-color: rgba(255, 0, 0, 0.5);
+	font-size: 7px;
+	overflow: hidden;
 }
 
 .selectedTime {

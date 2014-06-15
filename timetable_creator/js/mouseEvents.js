@@ -4,17 +4,21 @@
 /*jslint plusplus: true */
 "use strict";
 
+function setSectionMouseEvents(section, sectionTimes, courseObject) {
+    setSectionOnClick(section, sectionTimes, courseObject);
+    setSectionMouseOver(section, sectionTimes, courseObject);
+    setSectionMouseOut(section, sectionTimes);
+}
+
+
 function setSectionMouseOut(section, sectionTimes) {
     var timeElement;
+    var timeSuffix = getTimeSuffix(section);
     $(section).mouseout(function () {
         $.each(sectionTimes, function (i, time) {
-            if ($(section.parentNode).attr("class") === "sectionList-fall") {
-                timeElement = time + "-fall";
-            } else {
-                timeElement = time + "-spring";
-            }
-            if (document.getElementById(timeElement).getAttribute("clicked") !== "true") {
-                document.getElementById(timeElement).innerHTML = "";
+            timeElement = time + timeSuffix;
+            if ($("#" + timeElement).attr("clicked") !== "true") {
+                $("#" + timeElement).html("");
                 $("#" + timeElement).removeClass("mouseOverGood"); 
             } else {
                 $("#" + timeElement).removeClass("mouseOverConflict");
@@ -23,43 +27,34 @@ function setSectionMouseOut(section, sectionTimes) {
     });
 }
 
-function setSectionMouseEvents(section, sectionTimes, courseObject) {
-    setSectionOnClick(section, sectionTimes, courseObject);
-    setSectionMouseOver(section, sectionTimes, courseObject);
-    setSectionMouseOut(section, sectionTimes);
-}
-
 function setSectionMouseOver(section, sectionTimes, courseObject) {
     var timeElement;
+    var timeSuffix = getTimeSuffix(section);
     $(section).mouseover(function () {
+        timeElement = time + timeSuffix;
         $.each(sectionTimes, function (i, time) {
-            if ($(section.parentNode).attr("class") === "sectionList-fall") {
-                timeElement = time + "-fall";
-            } else {
-                timeElement = time + "-spring";
-            }
-            if (document.getElementById(timeElement).getAttribute("clicked") === "true") {
+            timeElement = time + timeSuffix;
+            if ($("#" + timeElement).attr("clicked") === "true") {
                 $("#" + timeElement).addClass("mouseOverConflict");
             } else {
-                document.getElementById(timeElement).innerHTML = courseObject.code;
+                $("#" + timeElement).html(courseObject.code);
                 $("#" + timeElement).addClass("mouseOverGood");
             }
         });
-        document.getElementById("course-info-code").innerHTML = courseObject.code;
-        document.getElementById("course-info-title").innerHTML = courseObject.title;
+        $("course-info-code").html(courseObject.code);
+        $("course-info-title").html(courseObject.title);
     });
 }
 
 function setSectionOnClick(section, sectionTimes, courseObject) {
     $(section).click(function () {
         var isLecture = section.innerHTML.charAt(0) === "L";
-        console.log(courseObject.selectedSession);
-        if (courseObject.selected === "true" && isLecture && courseObject.isLectureSelected === "true") {
+        if (courseObject.selected && isLecture && courseObject.isLectureSelected) {
             $(section).addClass("clickedLectureTime");
             unselectCourse(section, sectionTimes, courseObject);
         } else if (!isLecture) {
             selectTutorial(section, sectionTimes, courseObject);
-        } else if (courseObject.selected === "false") {
+        } else if (!courseObject.selected) {
             $(section).addClass("clickedLectureTime");
             if ($(section.parentNode).attr("class") === "sectionList-fall") {
                 courseObject.selectedSession = "F";
@@ -88,15 +83,15 @@ function unselectCourse(section, sectionTimes, courseObject) {
         timeElement = time + timeSuffix;
         if ($("#" + timeElement).hasClass("clickedConflictTime")) {
             $("#" + timeElement).removeClass("clickedConflictTime");
-            var indexOfOffender = document.getElementById(timeElement).innerHTML.indexOf(courseObject.code);
+            var indexOfOffender = $("#" + timeElement).html().indexOf(courseObject.code);
             if (indexOfOffender === 0) {
-                document.getElementById(timeElement).innerHTML = document.getElementById(timeElement).innerHTML.substring(indexOfOffender, 6);
+                $("#" + timeElement).html($("#" + timeElement).html().substring(6));
             } else{
-                document.getElementById(timeElement).innerHTML = document.getElementById(timeElement).innerHTML.substring(0, indexOfOffender);
+                $("#" + timeElement).html($("#" + timeElement).html().substring(0, indexOfOffender));
             }
         } else {
-            document.getElementById(timeElement).innerHTML = "";
-            document.getElementById(timeElement).setAttribute("clicked", "false");
+            $("#" + timeElement).html("");
+            $("#" + timeElement).attr("clicked", "false");
             $("#" + timeElement).removeClass("clickedLectureTime");
         }
         $("#" + timeElement).removeClass("mouseOverConflict");
@@ -127,44 +122,37 @@ function unselectCourse(section, sectionTimes, courseObject) {
             // $(courseObject.header).addClass("selectedTutorialSection");
         }
 
+        timeSuffix = getTimeSuffix(section);
         $.each(sectionTimes, function (i, time) {
-            if ($(section.parentNode).attr("class") === "sectionList-fall") {
-                timeElement = time + "-fall";
-            } else {
-                timeElement = time + "-spring";
-            }
-            document.getElementById(timeElement).innerHTML = courseObject.code;
-            document.getElementById(timeElement).setAttribute("clicked","true");
+            timeElement = time + timeSuffix;
+            $("#" + timeElement).html(courseObject.code);
+            $("#" + timeElement).attr("clicked","true");
             $("#" + timeElement).addClass("clickedLectureTime");
             $(section).attr("clicked", "true"); 
             $("#" + timeElement).removeClass("mouseOverGood");   
         });
     } else {
-        courseObject.selected = "false";
+        courseObject.selected = false;
         courseObject.selectedLecture = null;
         courseObject.selectedSession = null;
-
     }
 }
 
 function selectTutorial(section, sectionTimes, courseObject) {
     var timeElement;
-
+    var timeSuffix;
+    timeSuffix = getTimeSuffix(section);
     $.each(sectionTimes, function (i, time) {
-        if ($(section.parentNode).attr("class") === "sectionList-fall") {
-            timeElement = time + "-fall";
-        } else {
-            timeElement = time + "-spring";
-        }
-        if (document.getElementById(timeElement).getAttribute("clicked") === "true" && document.getElementById(timeElement).innerHTML === courseObject.code) {
-            document.getElementById(timeElement).innerHTML = "";
-            document.getElementById(timeElement).setAttribute("clicked", "false");
+        timeElement = time + timeSuffix;
+        if ($("#" + timeElement).attr("clicked") === "true" && $("#" + timeElement).html() === courseObject.code) {
+            $("#" + timeElement).html = "";
+            $("#" + timeElement).attr("clicked", "false");
             $("#" + timeElement).removeClass("mouseOverConflict");
             $("#" + timeElement).removeClass("mouseOverGood");
             $("#" + timeElement).removeClass("clickedTutorialTime");
-        } else if (document.getElementById(timeElement).getAttribute("clicked") !== "true") {
-            document.getElementById(timeElement).innerHTML = courseObject.code;
-            document.getElementById(timeElement).setAttribute("clicked","true");
+        } else if ($("#" + timeElement).attr("clicked") !== "true") {
+            $("#" + timeElement).html(courseObject.code);
+            $("#" + timeElement).attr("clicked", "true");
             $("#" + timeElement).addClass("clickedTutorialTime");
         }
         $("#" + timeElement).removeClass("mouseOverGood");
@@ -173,38 +161,45 @@ function selectTutorial(section, sectionTimes, courseObject) {
 
 function selectUnselectedCourse(courseObject, section, sectionTimes) {
     var timeElement;
-    courseObject.selected = "true";
+    courseObject.selected = true;
     courseObject.selectedLecture = section;
+
     if (courseObject.selectedLecture.innerHTML.charAt(0) === "L") {
-        courseObject.isLectureSelected = "true";
+        courseObject.isLectureSelected = true;
     } else {
-        courseObject.isTutorialSelected = "true";
+        courseObject.isTutorialSelected = true;
     }
 
+    // header is not defined.
     courseObject.selectedLectureHeader = header;
     courseObject.selectedTimes = sectionTimes;
-
+    var timeSuffix = getTimeSuffix(section);
     $.each(sectionTimes, function (i, time) {
-
-        if ($(section.parentNode).attr("class") === "sectionList-fall") {
-            timeElement = time + "-fall";
-        } else {
-            timeElement = time + "-spring";
-        }
-        if (document.getElementById(timeElement).getAttribute("clicked") === "true" && document.getElementById(timeElement).innerHTML === courseObject.code) {
-            document.getElementById(timeElement).innerHTML = "";
-            document.getElementById(timeElement).setAttribute("clicked", "false");
+        timeElement = time + timeSuffix;
+        if ($("#" + timeElement).attr("clicked") === "true" && $("#" + timeElement).html() === courseObject.code) {
+            $("#" + timeElement).html("");
+            $("#" + timeElement).attr("clicked", "false");
             $("#" + timeElement).removeClass("clickedLectureTime");
-        } else if (document.getElementById(timeElement).getAttribute("clicked") !== "true") {
-            document.getElementById(timeElement).innerHTML = courseObject.code;
-            document.getElementById(timeElement).setAttribute("clicked","true");
+        } else if ($("#" + timeElement).attr("clicked") !== "true") {
+            $("#" + timeElement).html(courseObject.code);
+            $("#" + timeElement).attr("clicked", "true");
             $("#" + timeElement).addClass("clickedLectureTime");
             $(section).attr("clicked", "true");
             $("#" + timeElement).removeClass("mouseOverGood");
         } else {
-            document.getElementById(timeElement).innerHTML = document.getElementById(timeElement).innerHTML + courseObject.code;
+            $("#" + timeElement).html($("#" + timeElement).html() + courseObject.code);
             $(section).attr("clicked", "true");
             $("#" + timeElement).addClass("clickedConflictTime");
         }
     });
+}
+
+function getTimeSuffix(section) {
+    var timeSuffix;
+    if ($(section.parentNode).attr("class") === "sectionList-fall") {
+        timeSuffix = "-fall";
+    } else {
+        timeSuffix = "-spring";
+    }
+    return timeSuffix;
 }

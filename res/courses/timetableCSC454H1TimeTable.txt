@@ -1,0 +1,1 @@
+{"S": {"tutorials": ["W8"], "lectures": [{"instructor": "TBA", "section": "L5101", "cap": "60\n", "extraCap": 0, "time": "W6-8"}]}, "F": {"tutorials": ["W8"], "lectures": [{"instructor": "TBA", "section": "L5101", "cap": "60\n", "extraCap": 0, "time": "W6-8"}]}, "manualTutorialEnrolment": false, "name": "CSC454H1", "title": "Business Software"}

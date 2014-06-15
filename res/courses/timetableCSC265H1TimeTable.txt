@@ -1,0 +1,1 @@
+{"F": {"tutorials": ["R11"], "lectures": [{"instructor": "Ellen", "section": "L0101", "cap": "100\n", "extraCap": 0, "time": "M10-12"}]}, "manualTutorialEnrolment": false, "name": "CSC265H1", "title": "Enr Data Struct Anal"}

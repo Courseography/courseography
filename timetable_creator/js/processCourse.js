@@ -40,7 +40,7 @@ function processSessionTutorials(session, courseObject, sectionList) {
 function processSession(courseObject) {
     var sectionList;
     sections = document.createElement("div");
-    sections.setAttribute("class", "sections");
+    $(sections).attr("class", "sections");
     if (typeof courseObject.Y !== "undefined") {  
         sectionList = document.createElement("ul");  
         sectionList = processSessionLectures(courseObject.Y, courseObject);

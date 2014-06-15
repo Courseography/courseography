@@ -1,0 +1,1 @@
+{"F": {"tutorials": ["R4"], "lectures": [{"instructor": "Fidler", "section": "L0101", "cap": "40\n", "extraCap": 0, "time": "TR3"}]}, "manualTutorialEnrolment": false, "name": "CSC420H1", "title": "Intro Image Unstand"}

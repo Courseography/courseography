@@ -1,0 +1,1 @@
+{"S": {"tutorials": ["F10", "F10"], "lectures": [{"instructor": "TBA", "section": "L0101", "cap": "115\n", "extraCap": 0, "time": "MW10"}, {"instructor": "TBA", "section": "L2001", "cap": "5\n", "extraCap": 0, "time": "MW10"}]}, "manualTutorialEnrolment": false, "name": "CSC401H1", "title": "Natural Lang Compt"}

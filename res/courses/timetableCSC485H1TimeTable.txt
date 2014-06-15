@@ -1,0 +1,1 @@
+{"F": {"tutorials": [], "lectures": [{"instructor": "Hirst", "section": "L0101", "cap": "45\n", "extraCap": 0, "time": "W1-3,R4"}]}, "manualTutorialEnrolment": false, "name": "CSC485H1", "title": "Comp Linguistics"}

@@ -1,0 +1,1 @@
+{"F": {"tutorials": ["T3-6"], "lectures": [{"instructor": "TBA", "section": "L0101", "cap": "60\n", "extraCap": 0, "time": "MWF1"}]}, "manualTutorialEnrolment": false, "name": "CSC372H1", "title": "Microprocessor Software"}

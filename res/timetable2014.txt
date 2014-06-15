@@ -1,0 +1,283 @@
+CSC104H1,F,Computational Thinking,L0101,MW9,L,Heap,200
+,,,,F9,T,,
+CSC104H1,S,Computational Thinking,L0101,TR9,L,Baumgartner,240
+,,,,F9,T,,
+CSC108H1,F,Intro to Comp Prog,L0101,Online Web Version,,Gries,220
+,,,L0201,MWF10,L,Campbell,220
+,,,L0202,MWF10,L,Fairgrieve,220
+,,,L0301,MWF1,L,Fairgrieve,220
+,,,L5101,W6-9,L,Campbell,250
+CSC108H1,S,Intro to Comp Prog,L0101,MWF9,L,TBA,220
+,,,L0201,MWF10,L,Fairgrieve,220
+,,,L5101,W6-9,L,Fairgrieve,250
+CSC120H1,S,CompSci for Sciences,L0101,MW10,L,Campbell,120
+,,,T0101,T3-5,T, ,60
+,,,T5101,T5-7,T, ,60
+CSC148H1,F,Intro to Comp Sci,L0101,MW9,L,TBA,150
+,,,L0201,MW10,L,TBA,150
+,,,T0101,R9-11,T, ,
+,,,T0201,R11-1,T, ,
+,,,T5101,R7-9,T,,
+CSC148H1,S,Intro to Comp Sci,L0101,MW9,L,Horton,240
+,,,L0201,MW10,L,Heap,240
+,,,L5101,W6-8,L,Heap,250
+,,,T0101,R9-11,T, ,
+,,,T0201,R11-1,T, ,
+,,,T0301,R1-3,T, ,
+,,,T0401,R3-5,T, ,
+,,,T5101,R5-7,T, ,
+,,,T5201,R7-9,T, ,
+,,,T0501,F11-1,T, ,
+CSC165H1,F,Math Expr&Rsng for Cs,L0101,MWF11,L,Heap,150
+,,,,T9-11,T,,
+,,,L0201,MWF12,L,Heap,150
+,,,,M7-9,T,,
+,,,L5101,T6-9,L,TBA,150
+,,,,R7-9,T,,
+CSC165H1,S,Math Expr&Rsng for Cs,L0101,MWF11,L,TBA,170
+,,,,T2-4,T,,
+,,,L0201,MWF2,L,TBA,170
+,,,,R2-4,T,,
+CSC200Y1,Y,Eco & Soc Networks,L0101,MWF3,L,Borodin/Boutilier,100
+CSC207H1,F,Software Design,L0101,WF12,L,TBA,108
+,,,,M12,T,,
+,,,L0201,WF2,L,TBA,108
+,,,,M2,T,,
+,,,L5101,W6-8,L,TBA,108
+,,,,W5,T,,
+CSC207H1,S,Software Design,L0101,WF1,L,Campbell,103
+,,,,M1,T,,
+,,,L2003,WF1,L,Campbell,
+,,,,M1,T,,
+CSC209H1,F,Soft Tools & Sys Prog,L0101,TR1,L,Craig,155
+,,,T0101,F11,T,,
+,,,T0201,F12,T,,
+,,,L2003,TR1,L,Craig,5
+CSC209H1,S,Soft Tools & Sys Prog,L0101,MW12,L,Reid,160
+,,,T0101,F1,T,,
+,,,T0201,F2,T,,
+,,,T0301,F3,T,,
+,,,L5101,W6-8,L,Reid,160
+,,,T5101,W8,T,,
+CSC236H1,F,Intro to Theory Comp,L0101,M11,T,,
+,,,,WF11,L,Baumgartner,130
+,,,L5101,R6,L,Baumgartner,130
+,,,,R7-9,T,,
+CSC236H1,S,Intro to Theory Comp,L0101,TR4,L,Baumgartner,125
+,,,,R5,T,,
+,,,L0201,TR1,L,Baumgartner,130
+,,,,R2,T,,
+,,,L2003,TR4,L,Baumgartner,5
+,,,,R5,T,,
+CSC240H1,S,Enr Intro Theor Comp,L0101,MW11,L,Ellen,120
+,,,,F11,T,,
+CSC258H1,F,Computer Organizatn,L5101,T6-9,L,Engels,125
+,,,,TBA,LAB,,
+CSC258H1,S,Computer Organizatn,L0101,MWF11,L,Engels,125
+,,,,TBA,LAB,,
+,,,L5101,TBA,LAB,,
+,,,,T6-9,L,Engels,125
+CSC263H1,F,Data Struct & Anal,L0101,T10,T,,
+,,,,R10-12,L,Pitt,95
+,,,L2003,T10,T,,
+,,,,R10-12,L,Pitt,5
+CSC263H1,S,Data Struct & Anal,L0101,MW2,L,Craig,100
+,,,,F2,T,,
+,,,L0201,MW3,L,Craig,100
+,,,,F3,T,,
+,,,L5101,R6-8,L,Pitt,100
+,,,,R8,T,,
+CSC265H1,F,Enr Data Struct Anal,L0101,M10-12,L,Ellen,100
+,,,,R11,T,,
+CSC300H1,F,Computers & Society,L5101,W3-5,L,Engels,80
+,,,,W5,T,,
+CSC300H1,S,Computers & Society,L5101,R6-8,L,TBA,80
+,,,,R8,T,,
+CSC301H1,F,Intro to Soft Eng,L0101,TR10,L,TBA,80
+,,,,R11,T,,
+CSC301H1,S,Intro to Soft Eng,L5101,M6-8,L,TBA,75
+,,,,M8,T,,
+,,,L2503,M6-8,L,TBA,5
+,,,,M8,T,,
+CSC302H1,S,Eng Lrg Soft Sys,L0101,TR10,L,TBA,80
+,,,,R11,T,,
+CSC309H1,F,Prog on the Web,L0101,T2,L,de Lara,95
+,,,,R1-3,L,,
+,,,L2001,T2,L,de Lara,5
+,,,,R1-3,L,,
+,,,L0201,MW3,L,TBA,100
+,,,,F3,T,,
+CSC309H1,S,Prog on the Web,L0101,MW10,L,de Lara,95
+,,,,F10,T,,
+,,,L2001,MW10,L,de Lara,5
+,,,,F10,T,,
+,,,L5101,W6-8,L,TBA,100
+,,,,W8,T,,
+CSC318H1,F,Interact Comp Media,L0101,R1-3,L,TBA,75
+,,,,R12,T,,
+,,,L2001,R1-3,L,TBA,5
+,,,,R12,T,,
+,,,L2501,M6,T,,5
+,,,,M7-9,L,TBA,
+,,,L5101,M6,T,,
+,,,,M7-9,L,TBA,75
+CSC318H1,S,Interact Comp Media,L0101,T4-6,L,TBA,75
+,,,,T6,T,,
+,,,L2001,T4-6,L,TBA,5
+,,,,T6,T,,
+,,,L0201,MW11,L,TBA,80
+,,,,F11,T,,
+CSC320H1,S,Intro Visual Compt,L0101,MW2,L,TBA,75
+,,,,F2,T,,
+,,,L2001,MW2,L,TBA,5
+,,,,F2,T,,
+,,,L5101,W6-8,L,Kutulakos,75
+,,,,W8,T,,
+,,,L2501,W6-8,L,Kutulakos,5
+,,,,W8,T,,
+CSC321H1,S,Neural Networks,L0101,TR1,L,TBA,75
+,,,,R12,T,,
+,,,L2001,TR1,L,TBA,5
+,,,,R12,T,,
+,,,L2501,T6-8,L,TBA,5
+,,,,T8,T,,
+,,,L5101,T6-8,L,TBA,75
+,,,,T8,T,,
+CSC324H1,F,Prog Languages,L0101,M11,T,,
+,,,,WF11,L,TBA,95
+,,,L2003,M11,T,,
+,,,,WF11,L,TBA,5
+,,,L5101,R6,T,,
+,,,,R7-9,L,TBA,100
+CSC324H1,S,Prog Languages,L0101,M2,T,,
+,,,,WF2,L,TBA,100
+,,,L5101,R6,T,,
+,,,,R7-9,L,TBA,100
+CSC336H1,F,Numerical Methods,L0101,MW11,L,Jackson,120
+,,,,F11,T,,
+CSC336H1,S,Numerical Methods,L5101,M6,T,,
+,,,,M7-9,L,Christara,120
+CSC343H1,F,Intro to Databases,L0101,T1-3,L,Horton,95
+,,,,R1,L,,
+,,,L2001,T1-3,L,Horton,25
+,,,,R1,L,,
+,,,L0201,W1-3,L,Horton,115
+,,,,F1,L,,
+,,,L2003,W1-3,L,Horton,5
+,,,,F1,L,,
+,,,L2501,T6-8,L,TBA,25
+,,,,T8,L,,
+,,,L5101,T6-8,L,TBA,95
+,,,,T8,L,,
+CSC343H1,S,Intro to Databases,L0101,MW12,L,Horton,60
+,,,,F12,L,,
+,,,L2001,MW12,L,Horton,60
+,,,,F12,L,,
+,,,L0201,MW2,L,Horton,80
+,,,,F2,L,,
+,,,L2201,MW2,L,Horton,40
+,,,,F2,L,,
+,,,L2501,T6-8,L,TBA,40
+,,,,T8,L,,
+,,,L5101,T6-8,L,TBA,80
+,,,,T8,L,,
+CSC358H1,S,Intro Comp Networks,L0101,M10,T,,
+,,,,R3-5,L,Marbach,100
+,,,L5101,T6,T,,
+,,,,T7-9,L,TBA,100
+CSC369H1,F,Operating Systems,L0101,MW12,L,Reid,90
+,,,,R12,T,,
+,,,L0201,MW2,L,Reid,90
+,,,,R2,T,,
+CSC369H1,S,Operating Systems,L0101,M3,T,,
+,,,,TR2,L,Reid,90
+,,,L5101,R6-8,L,Demke Brown,90
+,,,,R8,T,,
+CSC372H1,F,Microprocessor Software,L0101,MWF1,L,TBA,60
+,,,,T3-6,LAB,,
+CSC373H1,F,Algo Design & Analysis,L0101,MWF10,L,Pitt,80
+,,,,R2,T,,
+,,,L5101,W6-9,L,Cook,80
+,,,,R6,T,,
+CSC373H1,S,Algo Design & Analysis,L0101,MWF11,L,Pitt,80
+,,,,M4,T,,
+,,,L0201,MWF3,L,Pitt,80
+,,,,M4,T,,
+CSC384H1,F,Intro Artif Intell,L0101,TR1,L,TBA,85
+,,,,R2,T,,
+,,,L2001,TR1,L,TBA,15
+,,,,R2,T,,
+CSC384H1,S,Intro Artif Intell,L0101,MW12,L,Bacchus,80
+,,,,F12,T,,
+,,,L2001,MW12,L,Bacchus,20
+,,,,F12,T,,
+,,,L0201,MW1,L,Bacchus,100
+,,,,F1,T,,
+CSC401H1/2511H,S,Natural Lang Compt,L0101,MW10,L,TBA,115
+,,,,F10,T,,
+,,,L2001,MW10,L,TBA,5
+,,,,F10,T,,
+CSC404H1,S,Video Game Design,L0101,T10,T,,
+,,,,R10-12,L,Engels,40
+CSC410H1,S,Software Test & Verif,L0101,M12,T,,
+,,,,W11-1,L,TBA,80
+CSC411H1,F,Machine Learning,L0101,MW12,L,Zemel,75
+,,,,F12,T,,
+,,,L2001,MW12,L,Zemel,5
+,,,,F12,T,,
+,,,L0201,MW3,L,Urtasun,80
+,,,,F3,T,,
+CSC412H1,S,Uncertainty & Learng,L0101,M4,L,Neal,80
+,,,,WR4,T,,
+CSC418H1/2504H,F,Computer Graphics,L2501,W6,T,,
+,,,,W7-9,L,TBA,10
+,,,L5101,W6,T,,
+,,,,W7-9,L,TBA,60
+CSC418H1/2504H,S,Computer Graphics,L0101,M3,T,,
+,,,,W3-5,L,TBA,60
+,,,L2001,M3,T,,
+,,,,W3-5,L,TBA,10
+,,,L5101,T6,T,,
+,,,,T7-9,L,TBA,70
+CSC420H1,F,Intro Image Unstand,L0101,TR3,L,Fidler,40
+,,,,R4,T,,
+CSC428H1/2514H,F,Human-Comp Interact,L0101,M10-12,L,TBA,50
+,,,,W10,T,,
+CSC428H1/2514H,S,Human-Comp Interact,L2501,M6,T,,
+,,,,M7-9,L,TBA,10
+,,,L5101,M6,T,,
+,,,,M7-9,L,TBA,40
+CSC436H1,F,Numerical Algorithms,L0101,M1-3,L,Christara,50
+,,,,R2,T,,
+CSC438H1/2404H,F,Computabil & Logic,L0101,T9-11,L,Pitassi,60
+,,,,F12,T,,
+CSC443H1,F,Database Sys Techn,L5101,M6-8,L,Miller,75
+,,,,M8,T,,
+,,,L2501,M6-8,L,Miller,5
+,,,,M8,T,,
+CSC446H1/2310H,S,Comput Meth for Pde,L5101,T6-8,L,Jackson,60
+,,,,T8,T,,
+CSC454H1/2527H,F,Business Software,L5101,W6-8,L,TBA,60
+,,,,W8,T,,
+CSC454H1/2527H,S,Business Software,L5101,W6-8,L,TBA,60
+,,,,W8,T,,
+CSC458H1/2209H,F,Computer Networks,L0101,T1-3,L,Ganjali,60
+,,,,F1,T,,
+,,,L0201,R1-3,L,Ganjali,60
+,,,,F11,T,,
+CSC463H1,S,Complex & Comput,L0101,MW2,L,Cook,75
+,,,,F2,T,,
+CSC469H1/2208H,F,Oper Sys Design,L0101,R10-12,L,Demke Brown,50
+,,,,R1,T,,
+CSC485H1/2501H,F,Comp Linguistics,L0101,W1-3,L,Hirst,45
+,,,,R4,L,,
+CSC486H1/2502H,S,Knowledge Rep & Reas,L0101,W1,T,,
+,,,,F12-2,L,TBA,25
+CSC488H1/2107H,S,Compilers & Interpreters,L0101,TR2,L,TBA,60
+,,,,R1,T,TBA,
+CSC494H1,F,Project in CSC,L0101,TBA,,Staff,
+CSC494H1,S,Project in CSC,L0101,TBA,,Staff,
+CSC494H1,Y,Project in CSC,L0101,TBA,,Staff,
+CSC495H1,F,Project in CSC,L0101,TBA,,Staff,
+CSC495H1,S,Project in CSC,L0101,TBA,,Staff,
+CSC495H1,Y,Project in CSC,L0101,TBA,,Staff,
