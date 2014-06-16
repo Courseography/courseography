@@ -146,6 +146,7 @@ function turnCourseOff(section, sectionTimes, courseObject) {
 function selectNewSection(section, sectionTimes, courseObject, selectedSession) {
     var timeElement;
     var timeSuffix;
+    var isTimeClicked;
 
     if(courseObject.selectedSession !== selectedSession) {
         if (selectedSession === "F") {
@@ -167,11 +168,12 @@ function selectNewSection(section, sectionTimes, courseObject, selectedSession) 
     timeSuffix = getTimeSuffix(section);
     $.each(sectionTimes, function (i, time) {
         timeElement = time + timeSuffix;
-        $("#" + timeElement).html(courseObject.code);
-        $("#" + timeElement).attr("clicked", "true");
-        $("#" + timeElement).addClass("clickedLectureTime");
-        $(section).attr("clicked", "true"); 
-        $("#" + timeElement).removeClass("mouseOverGood");   
+        isTimeClicked = getIsClicked(timeElement);
+        if (!isTimeClicked) {
+            setClickedCourse(courseObject, timeElement, section);
+        } else {
+            setClickedConflict(courseObject, timeElement, section);
+        }  
     });
 }
 
@@ -232,14 +234,14 @@ function selectUnselectedCourse(courseObject, section, sectionTimes) {
             $("#" + timeElement).attr("clicked", "false");
             $("#" + timeElement).removeClass("clickedLectureTime");
         } else if (!isTimeClicked) {
-            setNewClickedCourse(courseObject, timeElement, section);
+            setClickedCourse(courseObject, timeElement, section);
         } else {
-            setNewClickedConflict(courseObject, timeElement, section);
+            setClickedConflict(courseObject, timeElement, section);
         }
     });
 }
 
-function setNewClickedCourse(courseObject, timeElement, section) {
+function setClickedCourse(courseObject, timeElement, section) {
     $("#" + timeElement).html(courseObject.code);
     $("#" + timeElement).attr("clicked", "true");
     $("#" + timeElement).addClass("clickedLectureTime");
@@ -247,7 +249,7 @@ function setNewClickedCourse(courseObject, timeElement, section) {
     $("#" + timeElement).removeClass("mouseOverGood");
 }
 
-function setNewClickedConflict(courseObject, timeElement, section) {
+function setClickedConflict(courseObject, timeElement, section) {
     $("#" + timeElement).html($("#" + timeElement).html() + courseObject.code);
     $(section).attr("clicked", "true");
     $("#" + timeElement).addClass("clickedConflictTime");
