@@ -13,7 +13,8 @@ function processSessionLectures(session, courseObject) {
     $.each(session.lectures, function (i, lecture) {
         if (lecture.section.charAt(1) !== "2" && lecture.time !== "Online Web Version") {
             section = document.createElement("li");
-            sectionTimes = lecture.times;
+            sectionTimes = convertTimes(lecture.time);
+            console.log(sectionTimes);
             section.appendChild(document.createTextNode(lecture.section));
             if (courseObject.manualTutorialEnrolment === false && session.tutorials.length > 0) {
                 sectionTimes = sectionTimes.concat(session.tutorials[i]);
@@ -29,7 +30,7 @@ function processSessionTutorials(session, courseObject, sectionList) {
     $.each(session.tutorials, function (i, tutorial) {
         if (courseObject.manualTutorialEnrolment) {
             section = document.createElement("li");
-            sectionTimes = tutorial[1];
+            sectionTimes = convertTimes(tutorial[1]);
             section.appendChild(document.createTextNode(tutorial[0]));
             setSectionMouseEvents(section, sectionTimes, courseObject);
             sectionList.appendChild(section);

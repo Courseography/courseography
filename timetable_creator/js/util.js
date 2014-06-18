@@ -149,33 +149,45 @@ function createTimetableSearch() {
         }
         courseList = document.createElement("ul");
         $.each(courses, function(i, course) {
-
             if (course.toLowerCase().indexOf(filter) > -1) {
                 courseEntry = document.createElement("li");
-                courseEntry.innerHTML = course;
+                var shortenedCourseName = course.substring(0, 8);
+                courseEntry.innerHTML = shortenedCourseName;
                 $(courseEntry).click(function() {
-                    index = $.inArray(course, selectedCourses);
+                    index = $.inArray(shortenedCourseName, selectedCourses);
                     if (index > -1) {
                         selectedCourses.splice(index, 1);
-                        removeCourseFromList(course);
+                        removeCourseFromList(shortenedCourseName);
                     } else {
-                        selectedCourses.push(course);
-                        addCourseToList($(this).html());
+                        selectedCourses.push(shortenedCourseName);
+                        addCourseToList(course);
                         setAccordion();
                         refreshAccordion();
                     }
                 });
                 courseList.appendChild(courseEntry);
             }
-            // if ($(this).text().search(new RegExp(filter, "i")) < 0) {
-            //     $(this).fadeOut();
-            // } else {
-            //     //searchList.innerHTML = $(this);
-            // }
-            // if (counter === 10) {
-            //     return false;
-            // }
         });
         searchList.appendChild(courseList);
     });
+}
+
+function convertTimes(times) {
+    var timeList = [];
+    var timeString;
+    var days = "MTWRF";
+    var time;
+    for(var i = 0; i < times.length; i++) { 
+        if ((times[i][1] % 12) !== 0) {
+            time = times[i][1] % 12;
+        } else {
+            time = times[i][1];
+        }
+        timeString = days.charAt(times[i][0]);
+        timeString = timeString + time;
+        timeList.push(timeString);
+    }
+
+    return timeList;
+
 }
