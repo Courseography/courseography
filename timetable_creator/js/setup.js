@@ -22,7 +22,6 @@ $(document).ready(function () {
     courseSelect = document.getElementById("course-select");
     searchList = document.getElementById("search-list");
     createTimetableSearch();
-    csvSplitNewline = getCourseArray();
     courses = getVeryLargeCourseArray();
     trapScroll();
 });
