@@ -1,1 +1,0 @@
-{"S": {"tutorials": ["F11"], "lectures": [{"instructor": "Ellen", "section": "L0101", "cap": "120\n", "extraCap": 0, "time": "MW11"}]}, "manualTutorialEnrolment": false, "name": "CSC240H1", "title": "Enr Intro Theor Comp"}

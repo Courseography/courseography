@@ -1,1 +1,0 @@
-{"S": {"tutorials": ["R8"], "lectures": [{"instructor": "TBA", "section": "L5101", "cap": "80\n", "extraCap": 0, "time": "R6-8"}]}, "F": {"tutorials": ["W5"], "lectures": [{"instructor": "Engels", "section": "L5101", "cap": "80\n", "extraCap": 0, "time": "W3-5"}]}, "manualTutorialEnrolment": false, "name": "CSC300H1", "title": "Computers & Society"}
