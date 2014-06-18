@@ -116,6 +116,10 @@ function setAccordion() {
     $("#course-select").accordion({heightStyle: "content", collapsible: true, active: false/*, event: "click hoverintent"*/});
 }
 
+function refreshAccordion() {
+    $("#course-select").accordion("refresh");
+}
+
 /*
  * Previously used to eliminate duplicate times, such as R10 for 263.
  */
@@ -130,3 +134,48 @@ function setAccordion() {
 //     result.push(sortedArray[array.length-1]);
 //     return result;
 // }
+
+// Search function for timetable
+function createTimetableSearch() {
+    var courseList;
+    var courseEntry;
+    var counter;
+    var selectedCourses = [];
+    var index;
+    $("#course-filter").keyup(function() {
+        var filter = $(this).val().toLowerCase();
+        while (searchList.firstChild) {
+            searchList.removeChild(searchList.firstChild);
+        }
+        courseList = document.createElement("ul");
+        $.each(courses, function(i, course) {
+
+            if (course.toLowerCase().indexOf(filter) > -1) {
+                courseEntry = document.createElement("li");
+                courseEntry.innerHTML = course;
+                $(courseEntry).click(function() {
+                    index = $.inArray(course, selectedCourses);
+                    if (index > -1) {
+                        selectedCourses.splice(index, 1);
+                        removeCourseFromList(course);
+                    } else {
+                        selectedCourses.push(course);
+                        addCourseToList($(this).html());
+                        setAccordion();
+                        refreshAccordion();
+                    }
+                });
+                courseList.appendChild(courseEntry);
+            }
+            // if ($(this).text().search(new RegExp(filter, "i")) < 0) {
+            //     $(this).fadeOut();
+            // } else {
+            //     //searchList.innerHTML = $(this);
+            // }
+            // if (counter === 10) {
+            //     return false;
+            // }
+        });
+        searchList.appendChild(courseList);
+    });
+}
