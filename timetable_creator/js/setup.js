@@ -15,13 +15,16 @@ var notYetLogged;
 var header;
 var sections;
 var entry;
+var courses;
+var searchList;
 
 $(document).ready(function () {
     courseSelect = document.getElementById("course-select");
-    
+    searchList = document.getElementById("search-list");
+    createTimetableSearch();
     csvSplitNewline = getCourseArray();
-    setupList();
-    setAccordion();
+    courses = getVeryLargeCourseArray();
+    // setupList();
     trapScroll();
 });
 
@@ -41,8 +44,29 @@ function getCourseArray() {
     return httpResponse.split("\n");
 }
 
+function getVeryLargeCourseArray() {
+    var httpResponse;
+    var splitArray;
+    if (window.XMLHttpRequest) {
+        xmlhttp = new XMLHttpRequest();
+    } else {
+        xmlhttp = new window.ActiveXObject("Microsoft.XMLHTTP");
+    }
+
+    xmlhttp.open("GET", "../../timetable_creator/js/courses.out", false);
+    xmlhttp.send();
+
+    httpResponse = xmlhttp.responseText;
+    splitArray = httpResponse.split("\n");
+    for (var i = 0; i < splitArray.length; i++) {
+        splitArray[i] = splitArray[i].substring(0, 6);
+    }
+    return splitArray;
+}
+
 function setupEntry(courseObject) {
     entry = document.createElement("li");
+    entry.id = courseObject.code + "-li";
     header = document.createElement("h3");
     header.appendChild(document.createTextNode(courseObject.code));
     courseObject.header = header;
@@ -56,7 +80,7 @@ function setupEntry(courseObject) {
 
 function getCourse(courseCode) {
     $.ajax({
-        url: "../../res/courses/timetable/" + courseCode + "TimeTable.txt",
+        url: "../../res/courses/timetable/" + courseCode + "H1TimeTable.txt",
         dataType: "json",
         async: false,
         success: function (data) {
@@ -98,4 +122,12 @@ function setupList() {
             contentString = contentString + course;
         }
     }
+}
+
+function removeCourseFromList(course) {
+    var courseElement = document.getElementById(course + "-li");
+    $("#" + course + "-li" + " li[clicked]").each(function() {
+        $(this).click();
+    });
+    courseSelect.removeChild(courseElement);
 }

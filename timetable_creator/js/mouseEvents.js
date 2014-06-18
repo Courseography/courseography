@@ -266,3 +266,7 @@ function getTimeSuffix(section) {
     return timeSuffix;
 }
 
+// function addToWishList(item) {
+//         addCourseToList($(this).html());
+//     }
+// }

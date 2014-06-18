@@ -64,6 +64,7 @@ a:visited {
 
 /* The container for both time tables.*/
 #timetables {
+	float:left;
 	margin-left: 220px;
 	margin-right: 0px;
 	/*position:fixed;*/
@@ -430,4 +431,44 @@ course {
 	font-size: 30px;
 	color: white;
     text-decoration: underline;
+}
+
+/* Search Box styles*/
+#search-layout {
+	background-color: rgba(0, 0, 0, 0.5);
+	border: 2px solid black;
+	width: 230px;
+	height: 400px;
+	float: right;
+}
+
+#search-container {
+	background-color: rgba(255, 255, 255, 0.5);
+	border: 2px solid white;
+	color: black;
+	margin: 10px;
+	padding: 10px;
+	height: 200px;
+	text-align: center;
+}
+
+#course-filter {
+
+}
+
+#search-list {
+	background-color:blue;
+	height: 40px;
+	width:100px;
+}
+
+#search-list ul li {
+	background-color: black;
+	color: white;
+}
+
+#search-list ul li:hover {
+	background-color: white;
+	color: black;
+	cursor:pointer;
 }
