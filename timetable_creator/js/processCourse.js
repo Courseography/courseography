@@ -17,7 +17,9 @@ function processSessionLectures(session, courseObject) {
             $(section).data("instructor", lecture.instructor);
             section.appendChild(document.createTextNode(lecture.section));
             if (!courseObject.manualTutorialEnrolment && session.tutorials.length > 0) {
-                sectionTimes = sectionTimes.concat(session.tutorials[i]);
+                console.log("Tuts" + courseObject.name);
+                sectionTimes = sectionTimes.concat(convertTimes(session.tutorials[i]));
+                console.log(sectionTimes);
             }
             setSectionMouseEvents(section, sectionTimes, courseObject);
             sectionList.appendChild(section);
@@ -28,15 +30,12 @@ function processSessionLectures(session, courseObject) {
 
 function processSessionTutorials(session, courseObject, sectionList) {
     $.each(session.tutorials, function (i, tutorial) {
-        console.log("PROC TUTS: " + courseObject.manualTutorialEnrolment);
         if (courseObject.manualTutorialEnrolment) {
             section = document.createElement("li");
             sectionTimes = convertTimes(tutorial[1]);
             section.appendChild(document.createTextNode(tutorial[0]));
             setSectionMouseEvents(section, sectionTimes, courseObject);
             sectionList.appendChild(section);
-        } else {
-            console.log("missed case in processSessionTutorials");
         }
     });
     return sectionList;
