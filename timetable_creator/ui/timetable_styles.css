@@ -3,16 +3,13 @@ html, body {
 	font-family: "Museo Sans", Museo, sans;
 	margin: 0;
 	padding: 0;
+	width: 100%;
+	height: 100%;
 }
 
 
 li {
 	display:block;
-}
-
-caption {
-	font-size: 1.6em;
-	margin: 0.5em 0;
 }
 
 a {
@@ -66,31 +63,54 @@ a:visited {
 	background-color: rgba(0, 0, 0, 0.7);
 	display: inline-block;
 	color: white;
-	width: 44%;
-	min-width: 300px;
+	width: 600px;
+	min-width: 200px;
 	margin: 0;
 	padding: 0;
 	text-align: center;
 	table-layout: fixed;
+	border-collapse: collapse;
+}
+
+caption {
+	font-size: 1.6em;
+	margin: 0.5em 0;
+	text-align: center;
 }
 
 #timetable-fall {
 	border: 5px solid black;
-	padding-left: 30px;
+}
+
+#timetable-fall thead,
+#timetable-fall tbody, 
+#timetable-fall tr {
+	width: 100%;
 }
 
 #timetable-spring {
 	border: 5px solid black;
-	padding-right: 30px;
+}
+
+#timetable-spring thead,
+#timetable-spring tbody,
+#timetable-spring tr {
+	width: 100%;
+}
+
+.timetable td,
+.timetable th {
+	width: 99px;
+	height: 40px;
+	padding: 0;
+	margin: 0;
 }
 
 .timetable th {
-	border: 2px solid;
+	/*border: 2px solid;*/
 	font-size: 1.5em;
 	font-width: bold;
-	height: 45px;
 }
-
 
 .timetable-header-fall {
 	background-color: rgba(219, 148, 184, 0.5);
@@ -108,11 +128,9 @@ a:visited {
 	border-bottom: 1px dashed;
 	border-right: 1px solid;
 	border-left: 1px solid;
-	height: 45px;
-	/*width: 93px;*/
-	width: 17.8%;
 	padding: 0;
 	margin: 0;
+	font-size: 0.8em;
 }
 
 .timetable-cell-fall {
@@ -125,12 +143,14 @@ a:visited {
 
 #timetable-spring .timetable-time {
 	text-align: left;
-	padding-left: 0.4em;
+	padding-left: 10px;
+	width: 90px;
 }
 
 #timetable-fall .timetable-time {
 	text-align: right;
-	padding-right: 0.4em;
+	padding-right: 10px;
+	width: 90px;
 }
 
 #no-border {
@@ -379,35 +399,44 @@ course {
 /* Search Box styles*/
 #search-layout {
 	background-color: rgba(0, 0, 0, 0.5);
-	border: 2px solid black;
 	width: 230px;
-	height: 400px;
-	float: right;
+	height: 100%;
+	right: 0px;
+	margin: 0;
+	position: absolute;
+	overflow: hidden;
 }
 
 #search-container {
-	background-color: rgba(255, 255, 255, 0.5);
-	border: 2px solid white;
-	color: black;
-	margin: 10px;
-	padding: 10px;
-	height: 200px;
 	text-align: center;
+	color: white;
+	overflow-y: scroll;
+	height: 100%;
+	margin-left: 15px;
+	width: 230px;
+}
+
+#search-container h2 {
+	margin: 0.5em 0;
+	font-size: 1.2em;
 }
 
 #course-filter {
-
+	margin-bottom: 0.5em;
 }
 
 #search-list {
-	background-color:blue;
-	height: 40px;
-	width:100px;
+}
+
+#search-list ul {
+	margin: 0;
+	padding: 0;
 }
 
 #search-list ul li {
-	background-color: black;
 	color: white;
+	margin: 0;
+	padding: 0;
 }
 
 #search-list ul li:hover {

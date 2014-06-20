@@ -14,10 +14,10 @@
 		<ul id="course-select" class="trapScroll-enabled"></ul>
 	</div>
 	<div id="timetables">
-		<table id="timetable-fall" class="timetable" align="center" cellspacing="0">
+		<table id="timetable-fall" class="timetable">
 			<caption>Fall</caption>
 			<thead>
-				<th id="no-border">
+				<th id="no-border" class="timetable-time">
 				</th>
 				<th class="timetable-header-fall">
 					Mon
@@ -276,7 +276,7 @@
 				</td>
 			</tr>
 		</table>
-		<table id="timetable-spring" class="timetable" align="center" cellspacing="0">
+		<table id="timetable-spring" class="timetable">
 			<caption>Spring</caption>
 			<thead>
 				<th class="timetable-header-spring">
@@ -293,6 +293,8 @@
 				</th>
 				<th class="timetable-header-spring">
 					Fri
+				</th>
+				<th id="no-border" class="timetable-time">
 				</th>
 			</thead>
 			<tr>
@@ -559,6 +561,7 @@
 
 	<div id="search-layout">
 		<div id="search-container">
+			<h2>Search</h2>
         	<input type="text" id="course-filter" value="" />
         	<div id="search-list">
 
