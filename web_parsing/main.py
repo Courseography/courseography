@@ -1,4 +1,4 @@
-import timetableParser
+import dcsTimetableParser
 import fasTimetableParser
 import calendarParser
 import fasCalendarParser
@@ -12,7 +12,6 @@ if __name__ == '__main__':
   parser.add_argument('master', help='master CSC spreadsheet file')
   parser.add_argument('--clean', action='store_const', const=True, help='remove existing files')
   parser.add_argument('--nofas', action='store_const', const=True, help='don\'t regenerate fas files')
-  parser.add_argument('--grid', action='store_const', const=True, help='generate simple grid of courses')
   args = parser.parse_args()
 
   # Clean
@@ -28,8 +27,7 @@ if __name__ == '__main__':
   # Create files for all FAS courses
   if not args.nofas:
     print('Creating FAS course files')
-    fasTimetableParser.downloadTimetables()
-    fasTimetableParser.parseTimetable()
+    fasTimetableParser.parse_fas_timetable()
 
   # Parse FAS calendar
   print('Fetching course titles')
@@ -41,12 +39,5 @@ if __name__ == '__main__':
 
   # Add to CSC files using timetable
   print('Extra timetable info for CSC courses')
-  timetableParser.generateCSV(args.master)
-  timetableParser.parseTimetable()
-  timetableParser.generateHTML()
-  timetableParser.write()
-
-  # Generate grids
-  if args.grid:
-    timetableParser.generateFallGrid()
-    timetableParser.generateSpringGrid()
+  courses = dcsTimetableParser.parse_dcs_timetable(args.master)
+  dcsTimetableParser.generateHTML(courses)
