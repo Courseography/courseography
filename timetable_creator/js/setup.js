@@ -52,6 +52,7 @@ function setupEntry(courseObject) {
     $(sections).css("height", "100%");
     $(sections).css("width", "100%");
     entry.appendChild(sections);
+    $(entry).accordion({heightStyle: "content", collapsible: true, active: false/*, event: "click hoverintent"*/});
     courseSelect.appendChild(entry);
 }
 
@@ -72,6 +73,13 @@ function addCourseToList(course) {
     var courseObject = getCourse(course);
     courseObject.selectedSession = null;
     courseObject.selected = false;
+    courseObject.isLectureSelected = false;
+    courseObject.isTutorialSelected = false;
+    if (courseObject.manualTutorialEnrolment) {
+        courseObject.satisfied = false;
+    } else {
+        courseObject.satisfied = true;
+    }
     setupEntry(courseObject);
 }
 

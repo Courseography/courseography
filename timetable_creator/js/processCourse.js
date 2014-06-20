@@ -14,9 +14,9 @@ function processSessionLectures(session, courseObject) {
         if (lecture.section.charAt(1) !== "2" && lecture.time !== "Online Web Version") {
             section = document.createElement("li");
             sectionTimes = convertTimes(lecture.time);
-            console.log(sectionTimes);
+            $(section).data("instructor", lecture.instructor);
             section.appendChild(document.createTextNode(lecture.section));
-            if (courseObject.manualTutorialEnrolment === false && session.tutorials.length > 0) {
+            if (!courseObject.manualTutorialEnrolment && session.tutorials.length > 0) {
                 sectionTimes = sectionTimes.concat(session.tutorials[i]);
             }
             setSectionMouseEvents(section, sectionTimes, courseObject);
@@ -28,12 +28,15 @@ function processSessionLectures(session, courseObject) {
 
 function processSessionTutorials(session, courseObject, sectionList) {
     $.each(session.tutorials, function (i, tutorial) {
+        console.log("PROC TUTS: " + courseObject.manualTutorialEnrolment);
         if (courseObject.manualTutorialEnrolment) {
             section = document.createElement("li");
             sectionTimes = convertTimes(tutorial[1]);
             section.appendChild(document.createTextNode(tutorial[0]));
             setSectionMouseEvents(section, sectionTimes, courseObject);
             sectionList.appendChild(section);
+        } else {
+            console.log("missed case in processSessionTutorials");
         }
     });
     return sectionList;
