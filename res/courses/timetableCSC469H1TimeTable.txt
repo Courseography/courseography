@@ -1,1 +1,0 @@
-{"F": {"tutorials": ["R1"], "lectures": [{"instructor": "Demke Brown", "section": "L0101", "cap": "50\n", "extraCap": 0, "time": "R10-12"}]}, "manualTutorialEnrolment": false, "name": "CSC469H1", "title": "Oper Sys Design"}

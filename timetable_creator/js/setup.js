@@ -15,54 +15,56 @@ var notYetLogged;
 var header;
 var sections;
 var entry;
+var courses;
+var searchList;
 
 $(document).ready(function () {
     courseSelect = document.getElementById("course-select");
-    
-    csvSplitNewline = getCourseArray();
-    setupList();
-    setAccordion();
+    searchList = document.getElementById("search-list");
+    createTimetableSearch();
+    courses = getVeryLargeCourseArray();
     trapScroll();
 });
 
-function getCourseArray() {
+function getVeryLargeCourseArray() {
     var httpResponse;
+    var splitArray;
     if (window.XMLHttpRequest) {
         xmlhttp = new XMLHttpRequest();
     } else {
         xmlhttp = new window.ActiveXObject("Microsoft.XMLHTTP");
     }
-
-    xmlhttp.open("GET", "../../res/timetable2014.csv", false);
+    xmlhttp.open("GET", "../../timetable_creator/js/courses.out", false);
     xmlhttp.send();
-
     httpResponse = xmlhttp.responseText;
-
-    return httpResponse.split("\n");
+    splitArray = httpResponse.split("\n");
+    return splitArray;
 }
 
 function setupEntry(courseObject) {
     entry = document.createElement("li");
+    entry.id = courseObject.name + "-li";
     header = document.createElement("h3");
-    header.appendChild(document.createTextNode(courseObject.code));
+    header.appendChild(document.createTextNode(courseObject.name));
     courseObject.header = header;
     sections = processSession(courseObject);
     entry.appendChild(header);
-    $(sections).css("height","100%");
-    $(sections).css("width","100%");
+    $(sections).css("height", "100%");
+    $(sections).css("width", "100%");
     entry.appendChild(sections);
     courseSelect.appendChild(entry);
 }
 
 function getCourse(courseCode) {
     $.ajax({
-        url: "../../res/courses/timetable/" + courseCode + "TimeTable.txt",
+        url: "../../res/courses/" + courseCode,
         dataType: "json",
         async: false,
         success: function (data) {
             result = data;
         }
     });
+    console.log(result);
     return result;
 }
 
@@ -70,32 +72,14 @@ function addCourseToList(course) {
     var courseObject = getCourse(course);
     courseObject.selectedSession = null;
     courseObject.selected = false;
-
-    // Convert CSC***H1 -> CSC***
-    courseObject.code = courseObject.code.substring(0, 6);
     setupEntry(courseObject);
 }
 
-function setupList() {
-    var course;
-    // Iterates through the courses grabbed with the XMLHTTP request.
-    // TODO: Rely on better way to grab all course node name in the future.
-    for (i = 0; i < csvSplitNewline.length; i++) {
-        splitLine = csvSplitNewline[i].split(",");
-        course = splitLine[0];
-        isACourse = course.indexOf("CSC") > -1;
-
-        // Filters out graduate/undergraduate hybrid courses and makes them purely undergraduate courses.
-        if (course.indexOf("/") > -1) {
-            course = course.substring(0, course.indexOf("/"));
-        }
-
-        // Many courses have duplicate listings due to the timetable holding both F and S sections.
-        notYetLogged = contentString.indexOf(course) <= -1;
-
-        if (isACourse && notYetLogged) {
-            addCourseToList(course);
-            contentString = contentString + course;
-        }
-    }
+function removeCourseFromList(course) {
+    console.log(course);
+    var courseElement = document.getElementById(course + "-li");
+    $("#" + course + "-li" + " li[clicked*='true']").each(function() {
+        $(this).click();
+    });
+    courseSelect.removeChild(courseElement);
 }

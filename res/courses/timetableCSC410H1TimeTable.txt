@@ -1,1 +1,0 @@
-{"S": {"tutorials": ["M12"], "lectures": [{"instructor": "TBA", "section": "L0101", "cap": "80\n", "extraCap": 0, "time": "W11-1"}]}, "manualTutorialEnrolment": false, "name": "CSC410H1", "title": "Software Test & Verif"}

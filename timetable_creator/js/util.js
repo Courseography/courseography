@@ -116,6 +116,10 @@ function setAccordion() {
     $("#course-select").accordion({heightStyle: "content", collapsible: true, active: false/*, event: "click hoverintent"*/});
 }
 
+function refreshAccordion() {
+    $("#course-select").accordion("refresh");
+}
+
 /*
  * Previously used to eliminate duplicate times, such as R10 for 263.
  */
@@ -130,3 +134,60 @@ function setAccordion() {
 //     result.push(sortedArray[array.length-1]);
 //     return result;
 // }
+
+// Search function for timetable
+function createTimetableSearch() {
+    var courseList;
+    var courseEntry;
+    var counter;
+    var selectedCourses = [];
+    var index;
+    $("#course-filter").keyup(function() {
+        var filter = $(this).val().toLowerCase();
+        while (searchList.firstChild) {
+            searchList.removeChild(searchList.firstChild);
+        }
+        courseList = document.createElement("ul");
+        $.each(courses, function(i, course) {
+            if (course.toLowerCase().indexOf(filter) > -1) {
+                courseEntry = document.createElement("li");
+                var shortenedCourseName = course.substring(0, 8);
+                courseEntry.innerHTML = shortenedCourseName;
+                $(courseEntry).click(function() {
+                    index = $.inArray(shortenedCourseName, selectedCourses);
+                    if (index > -1) {
+                        selectedCourses.splice(index, 1);
+                        removeCourseFromList(shortenedCourseName);
+                    } else {
+                        selectedCourses.push(shortenedCourseName);
+                        addCourseToList(course);
+                        setAccordion();
+                        refreshAccordion();
+                    }
+                });
+                courseList.appendChild(courseEntry);
+            }
+        });
+        searchList.appendChild(courseList);
+    });
+}
+
+function convertTimes(times) {
+    var timeList = [];
+    var timeString;
+    var days = "MTWRF";
+    var time;
+    for(var i = 0; i < times.length; i++) { 
+        if ((times[i][1] % 12) !== 0) {
+            time = times[i][1] % 12;
+        } else {
+            time = times[i][1];
+        }
+        timeString = days.charAt(times[i][0]);
+        timeString = timeString + time;
+        timeList.push(timeString);
+    }
+
+    return timeList;
+
+}

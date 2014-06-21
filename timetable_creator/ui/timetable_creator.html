@@ -1,572 +1,276 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<title>
-		Timetable Creator
-	</title>
-	<link rel="stylesheet" href="timetable_styles.css"/>
-
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Course Planner - Timetable</title>
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+	<link href="timetable_styles.css" rel="stylesheet">
 </head>
 
 <body>
-<div id="master-layout">
-	<div id="course-select-wrapper">
-		<ul id="course-select" class="trapScroll-enabled"></ul>
-	</div>
-	<div id="timetables">
-		<table id="timetable-fall" class="timetable" align="center" cellspacing="0">
-			<caption>Fall</caption>
-			<thead>
-				<th>
-				</th>
-				<th class="timetable-header-fall">
-					Mon
-				</th>
-				<th class="timetable-header-fall">
-					Tue
-				</th>
-				<th class="timetable-header-fall">
-					Wed
-				</th>
-				<th class="timetable-header-fall">
-					Thu
-				</th>
-				<th class="timetable-header-fall">
-					Fri
-				</th>
-			</thead>
-			<tr>
-				<td class="timetable-time">
-					9:00
-				</td>
-				<td id="M9-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="T9-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="W9-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="R9-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="F9-fall" class="timetable-cell-fall">
-
-				</td>
-			</tr>
-			<tr>
-				<td class="timetable-time">
-					10:00
-				</td>
-				<td id="M10-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="T10-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="W10-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="R10-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="F10-fall" class="timetable-cell-fall">
-
-				</td>
-			</tr>
-			<tr>
-				<td class="timetable-time">
-					11:00
-				</td>
-				<td id="M11-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="T11-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="W11-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="R11-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="F11-fall" class="timetable-cell-fall">
-
-				</td>
-			</tr>
-			<tr>
-				<td class="timetable-time">
-					12:00
-				</td>
-				<td id="M12-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="T12-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="W12-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="R12-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="F12-fall" class="timetable-cell-fall">
-
-				</td>
-			</tr>
-			<tr>
-				<td class="timetable-time">
-					1:00
-				</td>
-				<td id="M1-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="T1-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="W1-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="R1-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="F1-fall" class="timetable-cell-fall">
-
-				</td>
-			</tr>
-			<tr>
-				<td class="timetable-time">
-					2:00
-				</td>
-				<td id="M2-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="T2-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="W2-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="R2-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="F2-fall" class="timetable-cell-fall">
-
-				</td>
-			</tr>
-			<tr>
-				<td class="timetable-time">
-					3:00
-				</td>
-				<td id="M3-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="T3-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="W3-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="R3-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="F3-fall" class="timetable-cell-fall">
-
-				</td>
-			</tr>
-			<tr>
-				<td class="timetable-time">
-					4:00
-				</td>
-				<td id="M4-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="T4-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="W4-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="R4-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="F4-fall" class="timetable-cell-fall">
-
-				</td>
-			</tr>
-			<tr>
-				<td class="timetable-time">
-					5:00
-				</td>
-				<td id="M5-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="T5-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="W5-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="R5-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="F5-fall" class="timetable-cell-fall">
-
-				</td>
-			</tr>
-			<tr>
-				<td class="timetable-time">
-					6:00
-				</td>
-				<td id="M6-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="T6-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="W6-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="R6-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="F6-fall" class="timetable-cell-fall">
-
-				</td>
-			</tr>
-			<tr>
-				<td class="timetable-time">
-					7:00
-				</td>
-				<td id="M7-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="T7-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="W7-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="R7-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="F7-fall" class="timetable-cell-fall">
-
-				</td>
-			</tr>
-			<tr>
-				<td class="timetable-time">
-					8:00
-				</td>
-				<td id="M8-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="T8-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="W8-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="R8-fall" class="timetable-cell-fall">
-
-				</td>
-				<td id="F8-fall" class="timetable-cell-fall">
-
-				</td>
-			</tr>
-		</table>
-		<table id="timetable-spring" class="timetable" align="center" cellspacing="0">
-			<caption>Spring</caption>
-			<thead>
-				<th class="timetable-header-spring">
-					Mon
-				</th>
-				<th class="timetable-header-spring">
-					Tue
-				</th>
-				<th class="timetable-header-spring">
-					Wed
-				</th>
-				<th class="timetable-header-spring">
-					Thu
-				</th>
-				<th class="timetable-header-spring">
-					Fri
-				</th>
-			</thead>
-			<tr>
-				<td id="M9-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="T9-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="W9-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="R9-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="F9-spring" class="timetable-cell-spring">
-
-				</td>
-				<td class="timetable-time">
-					9:00
-				</td>
-			</tr>
-			<tr>
-				<td id="M10-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="T10-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="W10-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="R10-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="F10-spring" class="timetable-cell-spring">
-
-				</td>
-				<td class="timetable-time">
-					10:00
-				</td>
-			</tr>
-			<tr>
-				<td id="M11-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="T11-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="W11-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="R11-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="F11-spring" class="timetable-cell-spring">
-
-				</td>
-				<td class="timetable-time">
-					11:00
-				</td>
-			</tr>
-			<tr>
-				<td id="M12-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="T12-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="W12-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="R12-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="F12-spring" class="timetable-cell-spring">
-
-				</td>
-				<td class="timetable-time">
-					12:00
-				</td>
-			</tr>
-			<tr>
-				<td id="M1-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="T1-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="W1-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="R1-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="F1-spring" class="timetable-cell-spring">
-
-				</td>
-				<td class="timetable-time">
-					1:00
-				</td>
-			</tr>
-			<tr>
-				<td id="M2-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="T2-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="W2-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="R2-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="F2-spring" class="timetable-cell-spring">
-
-				</td>
-				<td class="timetable-time">
-					2:00
-				</td>
-			</tr>
-			<tr>
-				<td id="M3-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="T3-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="W3-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="R3-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="F3-spring" class="timetable-cell-spring">
-
-				</td>
-				<td class="timetable-time">
-					3:00
-				</td>
-			</tr>
-			<tr>
-				<td id="M4-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="T4-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="W4-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="R4-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="F4-spring" class="timetable-cell-spring">
-
-				</td>
-				<td class="timetable-time">
-					4:00
-				</td>
-			</tr>
-			<tr>
-				<td id="M5-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="T5-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="W5-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="R5-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="F5-spring" class="timetable-cell-spring">
-
-				</td>
-				<td class="timetable-time">
-					5:00
-				</td>
-			</tr>
-			<tr>
-				<td id="M6-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="T6-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="W6-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="R6-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="F6-spring" class="timetable-cell-spring">
-
-				</td>
-				<td class="timetable-time">
-					6:00
-				</td>
-			</tr>
-			<tr>
-				<td id="M7-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="T7-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="W7-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="R7-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="F7-spring" class="timetable-cell-spring">
-
-				</td>
-				<td class="timetable-time">
-					7:00
-				</td>
-			</tr>
-			<tr>
-				<td id="M8-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="T8-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="W8-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="R8-spring" class="timetable-cell-spring">
-
-				</td>
-				<td id="F8-spring" class="timetable-cell-spring">
-
-				</td>
-				<td class="timetable-time">
-					8:00
-				</td>
-			</tr>
-		</table>
-	<div id="info-layout">
-		<!--<div id="course-info-code">
-			CSC108
-		</div>-->
-		<div id="pane-wrapper">
-			<div id="course-pane">
-				<span id="course-info-code">
-					
-				</span>
-				<span id="course-info-title">
-					
-				</span>
-			</div>
-			<div id="section-stats-pane">
-				<div id="section-stats-section">
-					Lecture Section
+	<div class="row main">
+		<div class="col-md-2" id="course-select-wrapper">
+			<ul id="course-select" class="trapScroll-enabled"></ul>
+		</div>
+		<div class="col-md-8">
+			<div class="row">
+				<div class="col-md-6 timetable-container">
+					<table id="timetable-fall" class="timetable table">
+						<caption>Fall</caption>
+						<thead>
+							<th id="no-border" class="timetable-time"></th>
+							<th class="timetable-header-fall">Mon</th>
+							<th class="timetable-header-fall">Tue</th>
+							<th class="timetable-header-fall">Wed</th>
+							<th class="timetable-header-fall">Thu</th>
+							<th class="timetable-header-fall">Fri</th>
+						</thead>
+						<tr>
+							<td class="timetable-time">9:00</td>
+							<td id="M9-fall" class="timetable-cell-fall"></td>
+							<td id="T9-fall" class="timetable-cell-fall"></td>
+							<td id="W9-fall" class="timetable-cell-fall"></td>
+							<td id="R9-fall" class="timetable-cell-fall"></td>
+							<td id="F9-fall" class="timetable-cell-fall"></td>
+						</tr>
+						<tr>
+							<td class="timetable-time">10:00</td>
+							<td id="M10-fall" class="timetable-cell-fall"></td>
+							<td id="T10-fall" class="timetable-cell-fall"></td>
+							<td id="W10-fall" class="timetable-cell-fall"></td>
+							<td id="R10-fall" class="timetable-cell-fall"></td>
+							<td id="F10-fall" class="timetable-cell-fall"></td>
+						</tr>
+						<tr>
+							<td class="timetable-time">11:00</td>
+							<td id="M11-fall" class="timetable-cell-fall"></td>
+							<td id="T11-fall" class="timetable-cell-fall"></td>
+							<td id="W11-fall" class="timetable-cell-fall"></td>
+							<td id="R11-fall" class="timetable-cell-fall"></td>
+							<td id="F11-fall" class="timetable-cell-fall"></td>
+						</tr>
+						<tr>
+							<td class="timetable-time">12:00</td>
+							<td id="M12-fall" class="timetable-cell-fall"></td>
+							<td id="T12-fall" class="timetable-cell-fall"></td>
+							<td id="W12-fall" class="timetable-cell-fall"></td>
+							<td id="R12-fall" class="timetable-cell-fall"></td>
+							<td id="F12-fall" class="timetable-cell-fall"></td>
+						</tr>
+						<tr>
+							<td class="timetable-time">1:00</td>
+							<td id="M1-fall" class="timetable-cell-fall"></td>
+							<td id="T1-fall" class="timetable-cell-fall"></td>
+							<td id="W1-fall" class="timetable-cell-fall"></td>
+							<td id="R1-fall" class="timetable-cell-fall"></td>
+							<td id="F1-fall" class="timetable-cell-fall"></td>
+						</tr>
+						<tr>
+							<td class="timetable-time">2:00</td>
+							<td id="M2-fall" class="timetable-cell-fall"></td>
+							<td id="T2-fall" class="timetable-cell-fall"></td>
+							<td id="W2-fall" class="timetable-cell-fall"></td>
+							<td id="R2-fall" class="timetable-cell-fall"></td>
+							<td id="F2-fall" class="timetable-cell-fall"></td>
+						</tr>
+						<tr>
+							<td class="timetable-time">3:00</td>
+							<td id="M3-fall" class="timetable-cell-fall"></td>
+							<td id="T3-fall" class="timetable-cell-fall"></td>
+							<td id="W3-fall" class="timetable-cell-fall"></td>
+							<td id="R3-fall" class="timetable-cell-fall"></td>
+							<td id="F3-fall" class="timetable-cell-fall"></td>
+						</tr>
+						<tr>
+							<td class="timetable-time">4:00</td>
+							<td id="M4-fall" class="timetable-cell-fall"></td>
+							<td id="T4-fall" class="timetable-cell-fall"></td>
+							<td id="W4-fall" class="timetable-cell-fall"></td>
+							<td id="R4-fall" class="timetable-cell-fall"></td>
+							<td id="F4-fall" class="timetable-cell-fall"></td>
+						</tr>
+						<tr>
+							<td class="timetable-time">5:00</td>
+							<td id="M5-fall" class="timetable-cell-fall"></td>
+							<td id="T5-fall" class="timetable-cell-fall"></td>
+							<td id="W5-fall" class="timetable-cell-fall"></td>
+							<td id="R5-fall" class="timetable-cell-fall"></td>
+							<td id="F5-fall" class="timetable-cell-fall"></td>
+						</tr>
+						<tr>
+							<td class="timetable-time">6:00</td>
+							<td id="M6-fall" class="timetable-cell-fall"></td>
+							<td id="T6-fall" class="timetable-cell-fall"></td>
+							<td id="W6-fall" class="timetable-cell-fall"></td>
+							<td id="R6-fall" class="timetable-cell-fall"></td>
+							<td id="F6-fall" class="timetable-cell-fall"></td>
+						</tr>
+						<tr>
+							<td class="timetable-time">7:00</td>
+							<td id="M7-fall" class="timetable-cell-fall"></td>
+							<td id="T7-fall" class="timetable-cell-fall"></td>
+							<td id="W7-fall" class="timetable-cell-fall"></td>
+							<td id="R7-fall" class="timetable-cell-fall"></td>
+							<td id="F7-fall" class="timetable-cell-fall"></td>
+						</tr>
+						<tr>
+							<td class="timetable-time">8:00</td>
+							<td id="M8-fall" class="timetable-cell-fall"></td>
+							<td id="T8-fall" class="timetable-cell-fall"></td>
+							<td id="W8-fall" class="timetable-cell-fall"></td>
+							<td id="R8-fall" class="timetable-cell-fall"></td>
+							<td id="F8-fall" class="timetable-cell-fall"></td>
+						</tr>
+					</table>
 				</div>
-				<div id="section-stats-instructor">
-					Instructor
+				<div class="col-md-6 timetable-container">
+					<table id="timetable-spring" class="timetable table">
+						<caption>Spring</caption>
+						<thead>
+							<th class="timetable-header-spring">Mon</th>
+							<th class="timetable-header-spring">Tue</th>
+							<th class="timetable-header-spring">Wed</th>
+							<th class="timetable-header-spring">Thu</th>
+							<th class="timetable-header-spring">Fri</th>
+							<th id="no-border" class="timetable-time"></th>
+						</thead>
+						<tr>
+							<td id="M9-spring" class="timetable-cell-spring"></td>
+							<td id="T9-spring" class="timetable-cell-spring"></td>
+							<td id="W9-spring" class="timetable-cell-spring"></td>
+							<td id="R9-spring" class="timetable-cell-spring"></td>
+							<td id="F9-spring" class="timetable-cell-spring"></td>
+							<td class="timetable-time">9:00</td>
+						</tr>
+						<tr>
+							<td id="M10-spring" class="timetable-cell-spring"></td>
+							<td id="T10-spring" class="timetable-cell-spring"></td>
+							<td id="W10-spring" class="timetable-cell-spring"></td>
+							<td id="R10-spring" class="timetable-cell-spring"></td>
+							<td id="F10-spring" class="timetable-cell-spring"></td>
+							<td class="timetable-time">10:00</td>
+						</tr>
+						<tr>
+							<td id="M11-spring" class="timetable-cell-spring"></td>
+							<td id="T11-spring" class="timetable-cell-spring"></td>
+							<td id="W11-spring" class="timetable-cell-spring"></td>
+							<td id="R11-spring" class="timetable-cell-spring"></td>
+							<td id="F11-spring" class="timetable-cell-spring"></td>
+							<td class="timetable-time">11:00</td>
+						</tr>
+						<tr>
+							<td id="M12-spring" class="timetable-cell-spring"></td>
+							<td id="T12-spring" class="timetable-cell-spring"></td>
+							<td id="W12-spring" class="timetable-cell-spring"></td>
+							<td id="R12-spring" class="timetable-cell-spring"></td>
+							<td id="F12-spring" class="timetable-cell-spring"></td>
+							<td class="timetable-time">12:00</td>
+						</tr>
+						<tr>
+							<td id="M1-spring" class="timetable-cell-spring"></td>
+							<td id="T1-spring" class="timetable-cell-spring"></td>
+							<td id="W1-spring" class="timetable-cell-spring"></td>
+							<td id="R1-spring" class="timetable-cell-spring"></td>
+							<td id="F1-spring" class="timetable-cell-spring"></td>
+							<td class="timetable-time">1:00</td>
+						</tr>
+						<tr>
+							<td id="M2-spring" class="timetable-cell-spring"></td>
+							<td id="T2-spring" class="timetable-cell-spring"></td>
+							<td id="W2-spring" class="timetable-cell-spring"></td>
+							<td id="R2-spring" class="timetable-cell-spring"></td>
+							<td id="F2-spring" class="timetable-cell-spring"></td>
+							<td class="timetable-time">2:00</td>
+						</tr>
+						<tr>
+							<td id="M3-spring" class="timetable-cell-spring"></td>
+							<td id="T3-spring" class="timetable-cell-spring"></td>
+							<td id="W3-spring" class="timetable-cell-spring"></td>
+							<td id="R3-spring" class="timetable-cell-spring"></td>
+							<td id="F3-spring" class="timetable-cell-spring"></td>
+							<td class="timetable-time">3:00</td>
+						</tr>
+						<tr>
+							<td id="M4-spring" class="timetable-cell-spring"></td>
+							<td id="T4-spring" class="timetable-cell-spring"></td>
+							<td id="W4-spring" class="timetable-cell-spring"></td>
+							<td id="R4-spring" class="timetable-cell-spring"></td>
+							<td id="F4-spring" class="timetable-cell-spring"></td>
+							<td class="timetable-time">4:00</td>
+						</tr>
+						<tr>
+							<td id="M5-spring" class="timetable-cell-spring"></td>
+							<td id="T5-spring" class="timetable-cell-spring"></td>
+							<td id="W5-spring" class="timetable-cell-spring"></td>
+							<td id="R5-spring" class="timetable-cell-spring"></td>
+							<td id="F5-spring" class="timetable-cell-spring"></td>
+							<td class="timetable-time">5:00</td>
+						</tr>
+						<tr>
+							<td id="M6-spring" class="timetable-cell-spring"></td>
+							<td id="T6-spring" class="timetable-cell-spring"></td>
+							<td id="W6-spring" class="timetable-cell-spring"></td>
+							<td id="R6-spring" class="timetable-cell-spring"></td>
+							<td id="F6-spring" class="timetable-cell-spring"></td>
+							<td class="timetable-time">6:00</td>
+						</tr>
+						<tr>
+							<td id="M7-spring" class="timetable-cell-spring"></td>
+							<td id="T7-spring" class="timetable-cell-spring"></td>
+							<td id="W7-spring" class="timetable-cell-spring"></td>
+							<td id="R7-spring" class="timetable-cell-spring"></td>
+							<td id="F7-spring" class="timetable-cell-spring"></td>
+							<td class="timetable-time">7:00</td>
+						</tr>
+						<tr>
+							<td id="M8-spring" class="timetable-cell-spring"></td>
+							<td id="T8-spring" class="timetable-cell-spring"></td>
+							<td id="W8-spring" class="timetable-cell-spring"></td>
+							<td id="R8-spring" class="timetable-cell-spring"></td>
+							<td id="F8-spring" class="timetable-cell-spring"></td>
+							<td class="timetable-time">8:00</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div class="row">
+				<div id="info-layout">
+					<h2>
+						<span id="course-info-code"></span>
+						<span id="course-info-title"></span>
+					</h2>
+					<h4>
+						<span id="section-stats-section"></span>
+						<span id="section-stats-instructor"></span>
+					</h4>
 				</div>
 			</div>
 		</div>
+
+		<div class="col-md-2" id="search-layout">
+			<div id="search-container">
+				<form><input type="text" id="course-filter" class="form-control" placeholder="Enter a course!" /></form>
+				<div id="search-list"></div>
+			</div>
+		</div>
 	</div>
-	</div>
-</div>
-<!-- Scripts -->
-<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
-<script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-<script src="../js/util.js"></script>
-<script src="../js/setup.js"></script>
-<script src="../js/processCourse.js"></script>
-<script src="../js/mouseEvents.js"></script>
+
+
+
+
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+	<script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+	<script src="../js/util.js"></script>
+	<script src="../js/setup.js"></script>
+	<script src="../js/processCourse.js"></script>
+	<script src="../js/mouseEvents.js"></script>
+
+
 </body>
 </html>
