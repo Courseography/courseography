@@ -1,19 +1,23 @@
 def parseTimeSlots(s):
     """ Parse multiple time slots """
-    rest = s
-    allSlots = []
-    while rest:
-        slots, newRest = parseTimeSlot(rest)
-        allSlots.extend(slots)
-        if rest == newRest:
-            break
-        else:
-            if newRest and newRest[0] == ",":
-                rest = newRest[1:]
+    rest = s.strip()
+    # Check for 'TBA':
+    if rest.upper() == 'TBA':
+        return ([], 'TBA')
+    else:
+        allSlots = []
+        while rest:
+            slots, newRest = parseTimeSlot(rest)
+            allSlots.extend(slots)
+            if rest == newRest:
+                break
             else:
-                rest = newRest
+                if newRest and newRest[0] == ",":
+                    rest = newRest[1:]
+                else:
+                    rest = newRest
 
-    return allSlots, rest
+        return allSlots, rest
 
 def parseTimeSlot(s):
     """ Parse string s of form M?T?W?R?F?#(-#)? """
@@ -25,11 +29,11 @@ def parseTimeSlot(s):
 
 def parseDays(s):
     """ Parse string s of form M?T?W?R?F? """
-    rest = s
+    rest = s.strip()
     days = []
     while rest and rest[0] in 'MTWRF':
         days.append('MTWRF'.find(rest[0]))
-        rest = rest[1:]
+        rest = rest[1:].strip()
 
     if not days:
         print('Error: no days parsed on string ' + s)
@@ -43,7 +47,13 @@ def parseTimes(s):
         end, rest = parseEndTime(rest[1:])
     else:
         end = start + 1
-    times = [time for time in range(start, end)]
+
+    time = start
+    times = []
+    while time < end:
+        # TODO: this fails for 1.5 hour courses!
+        times.append(time)
+        time += 1
 
     return times, rest
 
@@ -62,6 +72,10 @@ def parseStartTime(s):
     if time < 9:
         time += 12
 
+    if rest.startswith(':30'):
+        time += 0.5
+        rest = rest[3:]
+
     return time, rest
 
 def parseEndTime(s):
@@ -78,6 +92,10 @@ def parseEndTime(s):
 
     if time < 11:
         time += 12
+
+    if rest.startswith(':30'):
+        time += 0.5
+        rest = rest[3:]
 
     return time, rest
 
