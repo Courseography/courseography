@@ -1,1 +1,0 @@
-{"S": {"tutorials": ["T10"], "lectures": [{"instructor": "Engels", "section": "L0101", "cap": "40\n", "extraCap": 0, "time": "R10-12"}]}, "manualTutorialEnrolment": false, "name": "CSC404H1", "title": "Video Game Design"}

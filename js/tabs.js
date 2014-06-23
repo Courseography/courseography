@@ -110,7 +110,7 @@ function readCalendarEntry(name) {
 		dataType: 'json',
 		async: false,
 		success: function(data) {
-			result += '<h3>' + data.code + ': ' + data.title + '</h3>';
+			result += '<h3>' + data.name + ': ' + data.title + '</h3>';
 			result += '<p>' + data.description + '</p>';
 			if (typeof data.prereqString !== 'undefined') {
 				result += '<p><strong>Prerequisite:</strong> ' + data.prereqString + '</p>';
@@ -197,7 +197,7 @@ function spotlight(id) {
 
 // Globals
 // 2013-2014 timetable
-var timetable = 'res/timetableHTML.html';
+var timetable = 'res/timetable.html';
 // 2014-2015 timetable
 //var timetable = 'res/timetableHTML2014.html';
 
