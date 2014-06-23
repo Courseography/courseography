@@ -1,1 +1,0 @@
-{"S": {"tutorials": ["F2"], "lectures": [{"instructor": "Cook", "section": "L0101", "cap": "75\n", "extraCap": 0, "time": "MW2"}]}, "manualTutorialEnrolment": false, "name": "CSC463H1", "title": "Complex & Comput"}
