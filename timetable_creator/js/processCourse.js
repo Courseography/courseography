@@ -14,10 +14,9 @@ function processSessionLectures(session, courseObject) {
         if (lecture.section.charAt(1) !== "2" && lecture.time !== "Online Web Version") {
             section = document.createElement("li");
             sectionTimes = convertTimes(lecture.time);
-            console.log(sectionTimes);
             section.appendChild(document.createTextNode(lecture.section));
             if (courseObject.manualTutorialEnrolment === false && session.tutorials.length > 0) {
-                sectionTimes = sectionTimes.concat(session.tutorials[i]);
+                sectionTimes = sectionTimes.concat(convertTimes(session.tutorials[i][0]));
             }
             setSectionMouseEvents(section, sectionTimes, courseObject);
             sectionList.appendChild(section);
