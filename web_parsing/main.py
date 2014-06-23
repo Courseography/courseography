@@ -6,6 +6,8 @@ import argparse
 import os
 import shutil
 
+COURSES_DIR = '../res/courses'
+
 if __name__ == '__main__':
   # Parse arguments
   parser = argparse.ArgumentParser(description='Build Course Planner.')
@@ -16,13 +18,13 @@ if __name__ == '__main__':
 
   # Clean
   if args.clean:
-    print('Removing directory ../res/courses')
-    shutil.rmtree('../res/courses')
+    print('Removing directory ' + COURSES_DIR)
+    shutil.rmtree(COURSES_DIR)
 
   # Make correct directory
-  if not os.path.exists('../res/courses'):
-    print('Creating directory ../res/courses')
-    os.makedirs('../res/courses')
+  if not os.path.exists(COURSES_DIR):
+    print('Creating directory ' + COURSES_DIR)
+    os.makedirs(COURSES_DIR)
 
   # Create files for all FAS courses
   if not args.nofas:
