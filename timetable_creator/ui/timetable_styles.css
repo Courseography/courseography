@@ -1,296 +1,286 @@
 html, body {
-	background-color: #dd9ded;
-	font-family: "Museo Sans", Museo, sans;
-	margin: 0;
-	padding: 0;
+  background-color: #dd9ded;
+  font-family: "Museo Sans", Museo, sans;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
 }
 
+div {
+  padding: 0;
+  margin: 0;
+}
 
 li {
-	display:block;
+  display: block;
 }
 
-caption {
-	font-size: 1.6em;
-	margin: 0.5em 0;
-}
-
-a {
-	color:white;
-}
-
+a,
 a:visited {
-	color:white;
+  color:white;
 }
 
-#master-layout {
-	padding-top: 0;
-	padding-left: 0;
-}
-
-/* Course selection */
-#course-select-wrapper {
-	overflow: hidden;
-	width: 200px;
-	position: absolute;
-	height: 100%;
-}
-
-#course-select {
-	background-color: #261B2A;
-    overflow: scroll;
-	margin: 0;
-	padding-top: 1em;
-	padding-left: 0px;
-	padding-right: 17px;
-	padding-bottom: 17px;
-    list-style-type: none;
-	width: 200px;
-    height: 100%;
-	float: left;
-}
-
-/* The container for both timetables.*/
-#timetables {
-	margin: 0;
-	padding: 0;
-	padding-left: 220px;
-	overflow: hidden;
-	width: 70%;
-	height: 80%;
-	min-width: 620px;
-	float: left;
+/* Timetable styles */
+.timetable-container {
+  background-color: #7E4D66;
+  padding: 0;
+  margin: 0;
 }
 
 .timetable {
-	background-color: rgba(0, 0, 0, 0.7);
-	display: inline-block;
-	color: white;
-	width: 44%;
-	min-width: 300px;
-	margin: 0;
-	padding: 0;
-	text-align: center;
-	table-layout: fixed;
+  margin: 0;
+  padding: 0;
+  table-layout: fixed;
+  border-collapse: collapse;
+  color: white;
+}
+
+caption {
+  font-size: 1.6em;
+  margin: 0.5em 0;
+  text-align: center;
 }
 
 #timetable-fall {
-	border: 5px solid black;
-	padding-left: 30px;
+  border-right: 2px solid black;
 }
 
 #timetable-spring {
-	border: 5px solid black;
-	padding-right: 30px;
+  border-left: 2px solid black;
+}
+
+.timetable td,
+.timetable th {
+  width: 18%;
+  height: 45px;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+  vertical-align: middle !important;
+  border-color: #DB94B8 !important;
+}
+
+.timetable .timetable-time {
+  width: 10%;
+  border: none;
 }
 
 .timetable th {
-	border: 2px solid;
-	font-size: 1.5em;
-	font-width: bold;
-	height: 45px;
-}
-
-
-.timetable-header-fall {
-	background-color: rgba(219, 148, 184, 0.5);
-	border-color: #DB94B8;
-}
-
-.timetable-header-spring {
-	background-color: rgba(112, 148, 255, 0.5);
-	border-color: #7094FF;
-}
-
-.timetable-cell-fall,
-.timetable-cell-spring {
-	border-top: 1px dashed;
-	border-bottom: 1px dashed;
-	border-right: 1px solid;
-	border-left: 1px solid;
-	height: 45px;
-	/*width: 93px;*/
-	width: 17.8%;
-	padding: 0;
-	margin: 0;
-}
-
-.timetable-cell-fall {
-	border-color: #DB94B8;
-}
-
-.timetable-cell-spring {
-	border-color: #7094FF;
-}
-
-#timetable-spring .timetable-time {
-	text-align: left;
-	padding-left: 0.4em;
-}
-
-#timetable-fall .timetable-time {
-	text-align: right;
-	padding-right: 0.4em;
+  font-size: 1.5em;
+  background-color: rgba(219, 148, 184, 0.5);
+  border-bottom: 1px solid !important;
+  border-color: #DB94B8 !important;
+  font-weight: normal;
 }
 
 #no-border {
-	border: none
+  border: none
+}
+
+
+.timetable-cell-fall,
+.timetable-cell-spring {
+  border-top: 1px dashed !important;
+  border-bottom: none !important;
+  border-right: 1px solid !important;
+  border-left: 1px solid !important;
+  font-size: 1.3em;
+}
+
+#timetable-spring .timetable-time {
+  text-align: left;
+}
+
+#timetable-fall .timetable-time {
+  text-align: right;
+}
+
+
+/* Course selection */
+#course-select-wrapper {
+  overflow: hidden;
+  height: 100%;
+  background-color: #261B2A;
+  margin: 0;
+  padding: 0;
+}
+
+.main {
+  height: 100%;
+  margin: 0;
+}
+
+#course-select {
+  list-style-type: none;
+  padding: 0;
+  margin: 17px 0 0 17px;
+  width: 100%;
+  overflow: scroll;
+  height: 100%;
+  text-align: center;
+}
+
+#course-select > li {
+	width: 95%;
 }
 
 /* Course select sections*/
 .sections {
-	overflow: auto;
+  overflow: auto;
 }
 
 .sections:hover {
-	cursor:pointer;
+  cursor: pointer;
 }
 
 .sectionList-fall {
-	background-color: #DB94B8;
-	width: 50%;
-	float: left;
+  background-color: #DB94B8;
+  width: 50%;
+  float: left;
+  border-right: 1px solid black;
 }
 
 .sectionList-spring {
-	background-color: #7094FF;
-	width:50%;
-	float: right;
+  background-color: #DB94B8;
+  width: 50%;
+  float: right;
+  border-left: 1px solid black;
 }
 
 .ui-accordion-content ul {
-	display: block;
-	margin: 0;
-	padding: 0;
+  display: block;
+  margin: 0;
+  padding: 0;
 }
 
 .sectionList-fall li:hover {
-	background-color: #FF94B8;
+  background-color: #FF94B8;
 
 }
 
 .sectionList-spring li:hover {
-	background-color: #F494FF;
-	
+  background-color: #F494FF;
+  
 }
 
 .sectionList-year {
-	background-color: yellow;
+  background-color: yellow;
 }
 
 .clickedLectureTime {
-	background-color: rgba(0, 0, 255, 0.4);
+  background-color: rgba(0, 0, 255, 0.4);
 }
 
 .clickedTutorialTime {
-	background-color: rgba(250, 149, 60, 0.4);
+  background-color: rgba(250, 149, 60, 0.4);
 }
 
 .mouseOverGood {
-	background-color: rgba(60, 250, 82, 0.6);
+  background-color: #DB94B8;
 }
 
 .clickedLectureTime:hover {
-	background-color: rgba(20, 0, 255, 0.5);
-	cursor: pointer;
+  background-color: rgba(20, 0, 255, 0.5);
+  cursor: pointer;
 }
 
 .clickedTutorialTime:hover {
-	background-color: orange;
-	cursor:pointer;
+  background-color: orange;
+  cursor:pointer;
 }
 
 .mouseOverConflict {
-	background-color: rgba(255, 0, 0, 0.5);
+  background-color: rgba(255, 0, 0, 0.5);
 }
 
 .clickedConflictTime {
-	background-color: rgba(255, 0, 0, 0.5);
-	font-size: 7px;
-	overflow: hidden;
+  background-color: rgba(255, 0, 0, 0.5);
+  font-size: 7px;
+  overflow: hidden;
 }
 
 .selectedTime {
-	background-color: rgba(0,255,0,0.5);
+  background-color: rgba(0,255,0,0.5);
 }
 
 .selectedLectureSection {
-	background-color: white;
-	color: black;
+  background-color: white;
+  color: black;
 }
 
 .selectedTutorialSection {
-	background-color: yellow;
-	color: black;
+  background-color: yellow;
+  color: black;
 }
 
 #range {
-	color: white;
+  color: white;
 }
 
 #layout {
-	width: 100%;
+  width: 100%;
 }
 
 ./*
 course {
-	background-color: red;
-	color: black;
-	display: block;
+  background-color: red;
+  color: black;
+  display: block;
 }
 */
 
 .section-fall {
-	text-align:center;
-	background-color:#003366;
-	color:white;
-	display:block;
+  text-align:center;
+  background-color:#003366;
+  color:white;
+  display:block;
 }
 
 .section-spring {
-	text-align: center;
-	background-color: #003366;
-	color: white;
-	display: block;
+  text-align: center;
+  background-color: #003366;
+  color: white;
+  display: block;
 }
 
 .section-year {
-	text-align: center;
-	background-color: #003366;
-	color: white;
+  text-align: center;
+  background-color: #003366;
+  color: white;
 }
 
 .sectionClickedLecture {
-	text-align: center;
-	background-color: blue;
-	color: white;
+  text-align: center;
+  background-color: blue;
+  color: white;
 }
 
 .sectionClickedTutorial {
-	text-align: center;
-	background-color: orange;
-	color: white;
+  text-align: center;
+  background-color: orange;
+  color: white;
 }
 
 .section-fall:hover {
-	background-color: blue;
-	color: white;
-	border: 2px solid black;
-	cursor: pointer;
+  background-color: blue;
+  color: white;
+  border: 2px solid black;
+  cursor: pointer;
 }
 
 .section-spring:hover {
-	background-color: blue;
-	color: white;
-	border: 2px solid black;
-	cursor: pointer;
+  background-color: blue;
+  color: white;
+  border: 2px solid black;
+  cursor: pointer;
 }
 
 .section-year:hover {
-	background-color: blue;
-	color: white;
-	border: 2px solid black;
-	cursor:pointer;
+  background-color: blue;
+  color: white;
+  border: 2px solid black;
+  cursor:pointer;
 }
 
 .header {
@@ -298,46 +288,42 @@ course {
 }
 
 .headerClickedLecture {
-	text-align:center;
-	background-color:blue;
-	color:white;
+  text-align:center;
+  background-color:blue;
+  color:white;
 }
 
 .headerClickedTutorial {
-	text-align:center;
-	background-color:orange;
-	color:white;
+  text-align:center;
+  background-color:orange;
+  color:white;
 }
 
 .ui-accordion-header {
-	color: white;
-	text-align: center;
-	cursor: pointer;
-    margin: 0;
-	padding: 0;
-    display: block;
-    /*width: 100%;*/
-	width: 200px;
+  color: white;
+  text-align: center;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
+  display: block;
+  width: 100%;
+  outline: none;
 }
 
 .ui-accordion-header:hover {
-	background-color: #6600ff;
-}
-
-.accordion li {
-    
+  background-color: #6600ff;
 }
 
 .ui-accordion-content {
-	color: black;
-	text-align: center;
-	overflow: auto;
-	width: 200px !important;
+  color: black;
+  text-align: center;
+  overflow: auto;
+  width: 50%
 }
 
 .ui-accordion-header-active {
-	background-color: #6600ff;
-	border: 1px black;
+  background-color: #6600ff;
+  border: 1px black;
 }
 
 .ui-tabs-anchor {
@@ -345,73 +331,57 @@ course {
 }
 
 /* Info layout div*/
+
 #info-layout {
-	width: 70%;
-    height: 70%;
+  padding: 0em;
+  margin: 0em;
+  width: 100%;
 }
 
-#pane-wrapper {
-	margin-top: 20px;
-	margin-left:20px;
-	margin-right:20px;
+#info-layout h2 {
+  font-size: 1.3em;
+  margin: 0.5em;
 }
 
-#course-pane {
-	width: 70%;
-	float: left;
-	height:20%;
+#info-layout h4 {
+  font-size: 1.1em;
+  margin: 0.5em;
 }
 
-#section-stats-pane {
-	width: 30%;
-	float: right;
-}
-
-#course-info-code {
-	font-size: 1.3em;
-    border-radius: 10px;
-}
-
-#course-info-title {
-	font-size: 1.3em;
-}
 
 /* Search Box styles*/
 #search-layout {
-	background-color: rgba(0, 0, 0, 0.5);
-	border: 2px solid black;
-	width: 230px;
-	height: 400px;
-	float: right;
+  background-color: rgba(0, 0, 0, 0.5);
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
 }
 
 #search-container {
-	background-color: rgba(255, 255, 255, 0.5);
-	border: 2px solid white;
-	color: black;
-	margin: 10px;
-	padding: 10px;
-	height: 200px;
-	text-align: center;
+  text-align: center;
+  color: white;
+  overflow-y: scroll;
+  height: 100%;
+  margin: 17px 0 0 17px;
+  width: 100%;
+  padding: 0 10px 0 0;
 }
 
-#course-filter {
-
+#search-list ul {
+  margin: 0.5em 0 0 0;
+  padding: 0;
 }
 
-#search-list {
-	background-color:blue;
-	height: 40px;
-	width:100px;
-}
-
-#search-list ul li {
-	background-color: black;
-	color: white;
+#search-list li {
+  color: white;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
 }
 
 #search-list ul li:hover {
-	background-color: white;
-	color: black;
-	cursor:pointer;
+  background-color: white;
+  color: black;
+  cursor: pointer;
 }
