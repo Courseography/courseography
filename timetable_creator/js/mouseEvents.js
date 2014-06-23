@@ -142,7 +142,7 @@ function turnLectureOff(courseObject, section, sectionTimes) {
     var indexOfOffender;
     courseObject.isLectureSelected = false;
     unsatisfyCourse(courseObject, section);
-    $(section).attr("clicked", "false");
+    $(courseObject.selectedLecture).attr("clicked", "false");
 
     if (courseObject.selectedLectureSession === "F") {
         timeSuffix = "-fall";
@@ -197,6 +197,7 @@ function selectNewLectureSection(section, sectionTimes, courseObject, selectedSe
     var timeElement;
     var timeSuffix;
     var isTimeClicked;
+    $(section).attr("clicked", "true");
     if(courseObject.selectedLectureSession !== selectedSession) {
         if (selectedSession === "F") {
             courseObject.selectedLectureSession = "F";
@@ -273,7 +274,7 @@ function turnTutorialOff(courseObject, section, sectionTimes) {
     var indexOfOffender;
     courseObject.isTutorialSelected = false;
     unsatisfyCourse(courseObject, section);
-    $(section).attr("clicked", "false");
+    $(courseObject.selectedTutorial).attr("clicked", "false");
 
     if (courseObject.selectedTutorialSession === "F") {
         timeSuffix = "-fall";
@@ -328,6 +329,9 @@ function selectNewTutorialSection(section, sectionTimes, courseObject, selectedS
     var timeElement;
     var timeSuffix;
     var isTimeClicked;
+
+    $(section).attr("clicked", "true");
+
     if(courseObject.selectedTutorialSession !== selectedSession) {
         if (selectedSession === "F") {
             courseObject.selectedTutorialSession = "F";
@@ -372,10 +376,12 @@ function selectUnselectedTutorial(courseObject, section, sectionTimes) {
     var timeElement;
     var timeSuffix;
     var isTimeClicked;
+    $(section).attr("clicked", "true");
     setTutorialSession(courseObject, section);
     satisfyCourse(courseObject, section);
     timeSuffix = getTimeSuffix(section);
     selectUnselectedTutorialTimes(courseObject, section, sectionTimes, timeSuffix);
+    courseObject.selectedTutorial = section;
 
     if (getIsYearSection(section)) {
         timeSuffix = reverseTimeSuffix(timeSuffix);
@@ -392,7 +398,6 @@ function selectUnselectedTutorialTimes(courseObject, section, sectionTimes, time
         isTimeClicked = getIsClicked(timeElement);
         if (!isTimeClicked) {
             setTutorialClicked(timeElement, courseObject);
-            courseObject.selectedTutorial = section;
         }
         $("#" + timeElement).removeClass("mouseOverGood");
     });
@@ -401,6 +406,7 @@ function selectUnselectedTutorialTimes(courseObject, section, sectionTimes, time
 function setTutorialClicked(timeElement, courseObject) {
     courseObject.isTutorialSelected = true;
     $("#" + timeElement).html(courseObject.name);
+    console.log("name=" + courseObject.name + " " + timeElement);
     $("#" + timeElement).attr("clicked", "true");
     if (courseObject.satisfied) {
         $("#" + timeElement).removeClass("mouseOverGood");
@@ -425,6 +431,7 @@ function selectUnselectedLecture(courseObject, section, sectionTimes) {
     var timeElement;
     var timeSuffix;
     var isTimeClicked;
+    $(section).attr("clicked", "true");
     setLectureSession(courseObject, section);
     satisfyCourse(courseObject, section);
     courseObject.selectedLecture = section;
@@ -462,7 +469,6 @@ function setClickedCourse(courseObject, timeElement, section) {
     }
     $("#" + timeElement).html(courseObject.name);
     $("#" + timeElement).attr("clicked", "true");
-    $(section).attr("clicked", "true");
     $("#" + timeElement).removeClass("mouseOverGood");
 }
 
