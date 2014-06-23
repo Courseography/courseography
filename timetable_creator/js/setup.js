@@ -65,7 +65,7 @@ function getCourse(courseCode) {
             result = data;
         }
     });
-    console.log(result);
+    console.log("Getting course " + result + "from file ../../res/courses/" + courseCode);
     return result;
 }
 
@@ -84,7 +84,7 @@ function addCourseToList(course) {
 }
 
 function removeCourseFromList(course) {
-    console.log(course);
+    console.log("Removing course " + course);
     var courseElement = document.getElementById(course + "-li");
     $("#" + course + "-li" + " li[clicked*='true']").each(function() {
         $(this).click();

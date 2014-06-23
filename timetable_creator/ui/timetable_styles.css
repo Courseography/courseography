@@ -169,11 +169,11 @@ caption {
 }
 
 .clickedLectureTime {
-  background-color: rgba(0, 0, 255, 0.4);
+  background-color: rgba(100, 50, 255, 0.6);
 }
 
 .clickedTutorialTime {
-  background-color: rgba(250, 149, 60, 0.4);
+  background-color: rgba(100, 149, 60, 0.6);
 }
 
 .mouseOverGood {
@@ -191,7 +191,7 @@ caption {
 }
 
 .mouseOverConflict {
-  background-color: rgba(255, 0, 0, 0.5);
+  background-color: rgba(255, 100, 0, 0.5);
 }
 
 .clickedConflictTime {
@@ -222,13 +222,9 @@ caption {
   width: 100%;
 }
 
-./*
-course {
-  background-color: red;
-  color: black;
-  display: block;
+.starred-course {
+  background-color: yellow;
 }
-*/
 
 .section-fall {
   text-align:center;
@@ -252,7 +248,7 @@ course {
 
 .sectionClickedLecture {
   text-align: center;
-  background-color: blue;
+  background-color: #6600FF;
   color: white;
 }
 
@@ -289,7 +285,7 @@ course {
 
 .headerClickedLecture {
   text-align:center;
-  background-color:blue;
+  background-color: blue;
   color:white;
 }
 
@@ -341,6 +337,7 @@ course {
   padding: 0em;
   margin: 0em;
   width: 100%;
+  height:100px;
 }
 
 #info-layout h2 {
@@ -353,6 +350,13 @@ course {
   margin: 0.5em;
 }
 
+#info-layout h2 span {
+  color: white;
+}
+
+#info-layout h4 span {
+  color: white;
+}
 
 /* Search Box styles*/
 #search-layout {
@@ -389,4 +393,12 @@ course {
   background-color: white;
   color: black;
   cursor: pointer;
+}
+
+/* Beta Warning */
+#beta-warning {
+  background-color: rgba(0, 0, 0, 0.5);
+  float: center;
+  color: white;
+  padding: 10px 10px 10px 10px;
 }
