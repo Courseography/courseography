@@ -142,7 +142,7 @@ function createTimetableSearch() {
     var counter;
     var selectedCourses = [];
     var index;
-    
+
     $("#course-filter").keyup(function() {
         counter = 0;
         var filter = $(this).val().toLowerCase();
@@ -214,4 +214,13 @@ function convertTimes(times) {
 
     return timeList;
 
+}
+
+function removeCourseFromList(course) {
+    console.log("Removing course " + course);
+    var courseElement = document.getElementById(course + "-li");
+    $("#" + course + "-li" + " li[clicked*='true']").each(function() {
+        $(this).click();
+    });
+    courseSelect.removeChild(courseElement);
 }

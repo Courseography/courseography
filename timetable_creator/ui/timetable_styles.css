@@ -279,20 +279,8 @@ caption {
   cursor:pointer;
 }
 
-.header {
-
-}
-
-.headerClickedLecture {
-  text-align:center;
-  background-color: blue;
-  color:white;
-}
-
-.headerClickedTutorial {
-  text-align:center;
-  background-color:orange;
-  color:white;
+.clicked-header {
+  background-color: red;
 }
 
 .ui-accordion-header {
