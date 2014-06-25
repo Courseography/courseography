@@ -252,8 +252,9 @@ caption {
   width: 100%;
 }
 
-.starred-course {
+#search-list .starred-course {
   background-color: yellow;
+  color: black;
 }
 
 .section-fall {
