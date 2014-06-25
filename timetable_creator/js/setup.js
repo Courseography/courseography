@@ -19,8 +19,10 @@ var courses;
 var searchList;
 
 $(document).ready(function () {
+    $("#dialog").fadeOut();
     courseSelect = document.getElementById("course-select");
     searchList = document.getElementById("search-list");
+    restoreFromCookies();
     createTimetableSearch();
     courses = getVeryLargeCourseArray();
     trapScroll();
@@ -83,11 +85,3 @@ function addCourseToList(course) {
     setupEntry(courseObject);
 }
 
-function removeCourseFromList(course) {
-    console.log("Removing course " + course);
-    var courseElement = document.getElementById(course + "-li");
-    $("#" + course + "-li" + " li[clicked*='true']").each(function() {
-        $(this).click();
-    });
-    courseSelect.removeChild(courseElement);
-}

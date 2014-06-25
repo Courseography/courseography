@@ -1,4 +1,6 @@
 var trapScroll;
+var selectedCourses = [];
+var selectedLectures = [];
 
 /*
  * Adapted from http://codepen.io/LelandKwong/pen/edAmn. Will look into http://jscrollpane.kelvinluck.com/.
@@ -120,27 +122,11 @@ function refreshAccordion() {
     $("#course-select").accordion("refresh");
 }
 
-/*
- * Previously used to eliminate duplicate times, such as R10 for 263.
- */
-// function returnUniqueElements(array) {
-//     var sortedArray = array.sort();
-//     var result = []
-//     for (var i = 0; i < array.length - 1; i++) {
-//         if (sortedArray[i + 1] !== sortedArray[i]) {
-//             result.push(sortedArray[i]);
-//         }
-//     }
-//     result.push(sortedArray[array.length-1]);
-//     return result;
-// }
-
 // Search function for timetable
 function createTimetableSearch() {
     var courseList;
     var courseEntry;
     var counter;
-    var selectedCourses = [];
     var index;
 
     $("#course-filter").keyup(function() {
@@ -183,6 +169,8 @@ function createTimetableSearch() {
                             $("#" + shortenedCourseName + "-search").addClass("starred-course");
                             addCourseToList(course);
                         }
+                        var jsonCookie = JSON.stringify(selectedCourses);
+                        setCookie("selected-courses", jsonCookie);
                     });
 
                     // Increase the number of courses presently shown on the right hand search list.
@@ -193,6 +181,27 @@ function createTimetableSearch() {
         }
         searchList.appendChild(courseList);
     });
+}
+
+function restoreFromCookies() {
+    var starredCourseCookie = getCookie("selected-courses");
+    if (starredCourseCookie.length > 0) {
+        selectedCourses = $.parseJSON(starredCourseCookie);
+        $.each(selectedCourses, function (i, course) {
+            addCourseToList(course + ".txt");
+        });
+    }
+
+    var starredLectureCookie = getCookie("selected-lectures");
+    if (starredCourseCookie.length > 0) {
+        selectedLectures = $.parseJSON(starredLectureCookie);
+        $.each(selectedLectures, function (i, course) {
+            console.log(course);
+            $("#" + course).click();
+            console.log("cliocked " + course);
+        });
+    }
+    console.log("Courses that have been set in cookies are: " + selectedCourses);
 }
 
 function convertTimes(times) {
@@ -217,7 +226,7 @@ function convertTimes(times) {
 }
 
 function removeCourseFromList(course) {
-    console.log("Removing course " + course);
+    console.log("Removing course " + course + " from the list on the left.");
     var courseElement = document.getElementById(course + "-li");
     $("#" + course + "-li" + " li[clicked*='true']").each(function() {
         $(this).click();
