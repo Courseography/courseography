@@ -142,31 +142,55 @@ function createTimetableSearch() {
     var counter;
     var selectedCourses = [];
     var index;
+
     $("#course-filter").keyup(function() {
+        counter = 0;
         var filter = $(this).val().toLowerCase();
         while (searchList.firstChild) {
             searchList.removeChild(searchList.firstChild);
         }
         courseList = document.createElement("ul");
-        $.each(courses, function(i, course) {
-            if (course.toLowerCase().indexOf(filter) > -1) {
-                courseEntry = document.createElement("li");
-                var shortenedCourseName = course.substring(0, 8);
-                courseEntry.innerHTML = shortenedCourseName;
-                $(courseEntry).click(function() {
-                    index = $.inArray(shortenedCourseName, selectedCourses);
-                    if (index > -1) {
-                        selectedCourses.splice(index, 1);
-                        removeCourseFromList(shortenedCourseName);
-                    } else {
-                        selectedCourses.push(shortenedCourseName);
-                        addCourseToList(course);
-                        //setAccordion();
+        if (filter !== "") {
+
+            // Iterate through every course.
+            $.each(courses, function(i, course) {
+
+                // If the course matches and if there are less than 100 courses in the list, add it to the list.
+                if (course.toLowerCase().indexOf(filter) > -1 && counter < 100) {
+                    courseEntry = document.createElement("li");
+                    var shortenedCourseName = course.substring(0, 8);
+
+                    // "Star" the course if it has been previously selected.
+                    if ($.inArray(shortenedCourseName, selectedCourses) > -1) {
+                        $(courseEntry).addClass("starred-course");
                     }
-                });
-                courseList.appendChild(courseEntry);
-            }
-        });
+
+                    // Add an ID to the list so we can come back and star it when it is clicked.
+                    $(courseEntry).attr("id", shortenedCourseName + "-search");
+                    courseEntry.innerHTML = shortenedCourseName;
+                    $(courseEntry).click(function() {
+
+                        // Has the course already been clicked?
+                        index = $.inArray(shortenedCourseName, selectedCourses);
+                        if (index > -1) {
+                            // Yes, take it out of the list and "unstar" it. Unstarring may be useless, as it is taken out of the list.
+                            selectedCourses.splice(index, 1);
+                            $("#" + shortenedCourseName + "-search").removeClass("starred-course");
+                            removeCourseFromList(shortenedCourseName);
+                        } else {
+                            // No, add it to the left list (starrted courses list) and add the corresponding class.
+                            selectedCourses.push(shortenedCourseName);
+                            $("#" + shortenedCourseName + "-search").addClass("starred-course");
+                            addCourseToList(course);
+                        }
+                    });
+
+                    // Increase the number of courses presently shown on the right hand search list.
+                    counter++;
+                    courseList.appendChild(courseEntry);
+                }
+            });
+        }
         searchList.appendChild(courseList);
     });
 }
@@ -176,7 +200,8 @@ function convertTimes(times) {
     var timeString;
     var days = "MTWRF";
     var time;
-    for(var i = 0; i < times.length; i++) { 
+    for(var i = 0; i < times.length; i++) {
+        // If a course is "12", we don't want to add a "0". That would result in something like "M0". We exclude this from the mod cases. 
         if ((times[i][1] % 12) !== 0) {
             time = times[i][1] % 12;
         } else {
@@ -189,4 +214,13 @@ function convertTimes(times) {
 
     return timeList;
 
+}
+
+function removeCourseFromList(course) {
+    console.log("Removing course " + course);
+    var courseElement = document.getElementById(course + "-li");
+    $("#" + course + "-li" + " li[clicked*='true']").each(function() {
+        $(this).click();
+    });
+    courseSelect.removeChild(courseElement);
 }
