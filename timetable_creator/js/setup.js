@@ -52,6 +52,7 @@ function setupEntry(courseObject) {
     $(sections).css("height", "100%");
     $(sections).css("width", "100%");
     entry.appendChild(sections);
+    $(entry).accordion({heightStyle: "content", collapsible: true, active: false/*, event: "click hoverintent"*/});
     courseSelect.appendChild(entry);
 }
 
@@ -64,7 +65,7 @@ function getCourse(courseCode) {
             result = data;
         }
     });
-    console.log(result);
+    console.log("Getting course " + result + "from file ../../res/courses/" + courseCode);
     return result;
 }
 
@@ -72,11 +73,18 @@ function addCourseToList(course) {
     var courseObject = getCourse(course);
     courseObject.selectedSession = null;
     courseObject.selected = false;
+    courseObject.isLectureSelected = false;
+    courseObject.isTutorialSelected = false;
+    if (courseObject.manualTutorialEnrolment) {
+        courseObject.satisfied = false;
+    } else {
+        courseObject.satisfied = true;
+    }
     setupEntry(courseObject);
 }
 
 function removeCourseFromList(course) {
-    console.log(course);
+    console.log("Removing course " + course);
     var courseElement = document.getElementById(course + "-li");
     $("#" + course + "-li" + " li[clicked*='true']").each(function() {
         $(this).click();

@@ -5,6 +5,7 @@ html, body {
   padding: 0;
   width: 100%;
   height: 100%;
+  overflow: hidden;
 }
 
 div {
@@ -19,6 +20,35 @@ li {
 a,
 a:visited {
   color:white;
+}
+
+/* Header styles */
+.header {
+  /*width: 100%;*/
+  background-color: #330000;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+  text-align: vertical;
+}
+
+.header h2 {
+  font-size: 1.7em;
+  font-weight: bold;
+  color: white;
+  padding: 0;
+  margin: 0.5em 0;
+}
+
+#home-link {
+  text-align: right;
+  font-weight: normal;
+  width: 100%;
+}
+
+#home-link a,
+#home-link a:hover,
+#home-link a:visited {
+  text-decoration: none;
 }
 
 /* Timetable styles */
@@ -85,7 +115,7 @@ caption {
   border-bottom: none !important;
   border-right: 1px solid !important;
   border-left: 1px solid !important;
-  font-size: 1.3em;
+  font-size: 1.1em;
 }
 
 #timetable-spring .timetable-time {
@@ -169,11 +199,11 @@ caption {
 }
 
 .clickedLectureTime {
-  background-color: rgba(0, 0, 255, 0.4);
+  background-color: rgba(100, 50, 255, 0.6);
 }
 
 .clickedTutorialTime {
-  background-color: rgba(250, 149, 60, 0.4);
+  background-color: rgba(100, 149, 60, 0.6);
 }
 
 .mouseOverGood {
@@ -191,7 +221,7 @@ caption {
 }
 
 .mouseOverConflict {
-  background-color: rgba(255, 0, 0, 0.5);
+  background-color: rgba(255, 100, 0, 0.5);
 }
 
 .clickedConflictTime {
@@ -222,13 +252,10 @@ caption {
   width: 100%;
 }
 
-./*
-course {
-  background-color: red;
+#search-list .starred-course {
+  background-color: yellow;
   color: black;
-  display: block;
 }
-*/
 
 .section-fall {
   text-align:center;
@@ -252,7 +279,7 @@ course {
 
 .sectionClickedLecture {
   text-align: center;
-  background-color: blue;
+  background-color: #6600FF;
   color: white;
 }
 
@@ -283,20 +310,8 @@ course {
   cursor:pointer;
 }
 
-.header {
-
-}
-
-.headerClickedLecture {
-  text-align:center;
-  background-color:blue;
-  color:white;
-}
-
-.headerClickedTutorial {
-  text-align:center;
-  background-color:orange;
-  color:white;
+.clicked-header {
+  background-color: red;
 }
 
 .ui-accordion-header {
@@ -330,12 +345,18 @@ course {
 
 }
 
+.clickedSectionUnsatisfied {
+  background-color: purple;
+  opacity: 0.5;
+}
+
 /* Info layout div*/
 
 #info-layout {
   padding: 0em;
   margin: 0em;
   width: 100%;
+  height:100px;
 }
 
 #info-layout h2 {
@@ -348,6 +369,13 @@ course {
   margin: 0.5em;
 }
 
+#info-layout h2 span {
+  color: white;
+}
+
+#info-layout h4 span {
+  color: white;
+}
 
 /* Search Box styles*/
 #search-layout {
@@ -384,4 +412,12 @@ course {
   background-color: white;
   color: black;
   cursor: pointer;
+}
+
+/* Beta Warning */
+#beta-warning {
+  background-color: rgba(0, 0, 0, 0.5);
+  float: center;
+  color: white;
+  padding: 10px 10px 10px 10px;
 }
