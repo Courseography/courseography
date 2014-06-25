@@ -13,10 +13,11 @@ function processSessionLectures(session, courseObject) {
     $.each(session.lectures, function (i, lecture) {
         if (lecture.section.charAt(1) !== "2" && lecture.time !== "Online Web Version") {
             section = document.createElement("li");
-            sectionTimes = lecture.times;
+            sectionTimes = convertTimes(lecture.time);
+            $(section).data("instructor", lecture.instructor);
             section.appendChild(document.createTextNode(lecture.section));
-            if (courseObject.manualTutorialEnrolment === false && session.tutorials.length > 0) {
-                sectionTimes = sectionTimes.concat(session.tutorials[i]);
+            if (!courseObject.manualTutorialEnrolment && session.tutorials.length > 0) {
+                sectionTimes = sectionTimes.concat(convertTimes(session.tutorials[i]));
             }
             setSectionMouseEvents(section, sectionTimes, courseObject);
             sectionList.appendChild(section);
@@ -29,7 +30,7 @@ function processSessionTutorials(session, courseObject, sectionList) {
     $.each(session.tutorials, function (i, tutorial) {
         if (courseObject.manualTutorialEnrolment) {
             section = document.createElement("li");
-            sectionTimes = tutorial[1];
+            sectionTimes = convertTimes(tutorial[1]);
             section.appendChild(document.createTextNode(tutorial[0]));
             setSectionMouseEvents(section, sectionTimes, courseObject);
             sectionList.appendChild(section);
@@ -47,6 +48,7 @@ function processSession(courseObject) {
         sectionList = processSessionLectures(courseObject.Y, courseObject);
         sectionList = processSessionTutorials(courseObject.Y, courseObject, sectionList);
         $(sectionList).attr("class", "sectionList-year");
+        setSectionIds(courseObject, sectionList, "Y");
         sections.appendChild(sectionList);
     } else {
         if (typeof courseObject.F !== "undefined") {
@@ -54,6 +56,7 @@ function processSession(courseObject) {
             sectionList = processSessionLectures(courseObject.F, courseObject);
             sectionList = processSessionTutorials(courseObject.F, courseObject, sectionList);
             $(sectionList).attr("class", "sectionList-fall");
+            setSectionIds(courseObject, sectionList, "F");
             sections.appendChild(sectionList);
         }
         if (typeof courseObject.S !== "undefined") { 
@@ -61,8 +64,15 @@ function processSession(courseObject) {
             sectionList = processSessionLectures(courseObject.S, courseObject);
             sectionList = processSessionTutorials(courseObject.S, courseObject, sectionList);
             $(sectionList).attr("class", "sectionList-spring");
+            setSectionIds(courseObject, sectionList, "S");
             sections.appendChild(sectionList);
         }
     }
     return sections;
+}
+
+function setSectionIds(courseObject, sectionList, sessionSuffix) {
+    $(sectionList).children("li").each(function(index, lecture) {
+        $(lecture).attr("id", courseObject.name + "-" + $(this).html() + "-" + sessionSuffix);
+    });
 }

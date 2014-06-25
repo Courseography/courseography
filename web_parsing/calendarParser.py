@@ -5,22 +5,6 @@ from html.parser import HTMLParser
 
 courses = []
 
-# class CalendarParser(HTMLParser):
-#   def __init__(self):
-#     HTMLParser.__init__(self)
-#     self.text = []
-#   def handle_data(self, data):
-#     if not data.isspace():
-#       self.text.append(data)
-
-# def downloadCalendar():
-#   page = urllib.request.urlopen('http://www.artsandscience.utoronto.ca/ofr/calendar/crs_csc.htm')
-#   parser = CalendarParser()
-#   text = str(page.read())
-#   parser.feed(text)
-#   #print(page.read())
-#   print(parser.text)
-
 def parseCalendar():
   with open('../res/calendar.txt', 'r') as calendarFile:
     course = {}
@@ -28,7 +12,7 @@ def parseCalendar():
       if line.startswith('CSC') or line.startswith('ECE') or line.startswith('MAT') or line.startswith('STA'):
 
         if (len(course) > 0):
-          with open('../res/courses/' + course['code'] + '.txt', 'w+') as output:
+          with open('../res/courses/' + course['name'] + '.txt', 'w+', encoding='utf-8') as output:
             json.dump(course, output)
             courses.append(course)
 
@@ -36,7 +20,7 @@ def parseCalendar():
         result = titleParser.match(line)
         course = {};
         course['description'] = ''
-        course['code'] = result.group(1)
+        course['name'] = result.group(1)
         course['title'] = result.group(2)
       elif line.startswith('Exclusion:'):
         course['exclusions'] = re.split(',|;', line[10:].rstrip('. \r\n'))
@@ -72,7 +56,7 @@ def parseCalendar():
       elif len(line.strip()) > 0:
         course['description'] = course['description'] + line
 
-    with open('../res/courses/' + course['code'] + '.txt', 'w+') as output:
+    with open('../res/courses/' + course['name'] + '.txt', 'w+') as output:
       json.dump(course, output)
       courses.append(course)
       

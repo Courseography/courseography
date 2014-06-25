@@ -1,433 +1,419 @@
-body {
-	background-color: #c9c9c9;
-	font-family: "Museo Sans", Museo, sans;
+html, body {
+  background-color: #dd9ded;
+  font-family: "Museo Sans", Museo, sans;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 
-td {
-	color: white;
-	max-width: 70px;
-	min-width: 60px;
-	width:70px;
-    overflow: hidden;
-}
-
-th {
-    border-radius: 10px;
+div {
+  padding: 0;
+  margin: 0;
 }
 
 li {
-	display:block;
+  display: block;
+}
+
+a,
+a:visited {
+  color:white;
+}
+
+/* Header styles */
+.header {
+  /*width: 100%;*/
+  background-color: #330000;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+  text-align: vertical;
+}
+
+.header h2 {
+  font-size: 1.7em;
+  font-weight: bold;
+  color: white;
+  padding: 0;
+  margin: 0.5em 0;
+}
+
+#home-link {
+  text-align: right;
+  font-weight: normal;
+  width: 100%;
+}
+
+#home-link a,
+#home-link a:hover,
+#home-link a:visited {
+  text-decoration: none;
+}
+
+/* Timetable styles */
+.timetable-container {
+  background-color: #7E4D66;
+  padding: 0;
+  margin: 0;
+}
+
+.timetable {
+  margin: 0;
+  padding: 0;
+  table-layout: fixed;
+  border-collapse: collapse;
+  color: white;
 }
 
 caption {
-	color:white;
-}
-
-a {
-	color:white;
-}
-
-a:visited {
-	color:white;
-}
-
-#master-layout {
-	padding-top:10px;
-	padding-left:10px;
-}
-
-/* Course selection */
-#course-select-wrapper {
-	overflow: hidden;
-	width: 200px;
-	position: absolute;
-	height: 100%;
-}
-
-#course-select {
-	position: relative;
-    overflow: scroll;
-	top: 5px;
-	margin-right: 0px;
-	margin-left: 0px;
-	padding-left: 0px;
-    list-style-type: none;
-	left: 0px;
-	right: 0px;
-	width: 200px;
-	bottom: 200px;
-    margin: 0;
-    height: 100%;
-    padding-right: 15px;
-    padding-bottom: 200px;
-}
-
-/* The container for both time tables.*/
-#timetables {
-	margin-left: 220px;
-	margin-right: 0px;
-	/*position:fixed;*/
-	overflow: hidden;
-	width: 920px;
-	min-width: 920px;
+  font-size: 1.6em;
+  margin: 0.5em 0;
+  text-align: center;
 }
 
 #timetable-fall {
-	background-color: rgba(0, 0, 0, 0.7);
-    display: inline-block;
-	color: black;
-	border-bottom: 2px solid #DB94B8;
-	border-right: 2px solid #DB94B8;
-    border-radius: 10px;
-	left: 20px;
-	margin-right: 0px;
-	margin-left: 0px;
-	width: 450px;
-	right: 200px;
-	top: 50px;
-	/*float: left;*/
+  border-right: 2px solid black;
 }
 
 #timetable-spring {
-	background-color: rgba(0, 0, 0, 0.7);
-    display: inline-block;
-	border-bottom: 2px solid #7094FF;
-	border-right: 2px solid #7094FF;
-    border-radius: 10px;
-	left: 750px;
-	margin-right: 0px;
-	margin-left: 0px;
-	width: 450px;
-	right: 0px;
-	top: 50px;
-	/*float: right;*/
+  border-left: 2px solid black;
 }
 
-.timetable-header-fall {
-	background-color: rgba(219, 148, 184, 0.5);
-	border: 2px solid #DB94B8;
-	color: white;
-	font-weight: 900;
-	font-size: 20px;
-	/*border: 2px solid #DD94B8;*/
-	height: 50px;
+.timetable td,
+.timetable th {
+  width: 18%;
+  height: 45px;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+  vertical-align: middle !important;
+  border-color: #DB94B8 !important;
 }
 
-.timetable-header-spring {
-	background-color: rgba(112, 148, 255, 0.5);
-	border: 2px solid #7094FF;
-	color: white;
-	font-weight: 900;
-	font-size: 20px;
-	/*border: 2px solid #7094FF;*/
-	height: 50px;
+.timetable .timetable-time {
+  width: 10%;
+  border: none;
 }
 
-.timetable-cell-fall {
-	border-bottom: 1px dashed #DB94B8;
-	border-right: 1px solid #DB94B8;
-	height: 30px;
-	text-align: center;
-	color: white;
-	overflow: auto;
+.timetable th {
+  font-size: 1.5em;
+  background-color: rgba(219, 148, 184, 0.5);
+  border-bottom: 1px solid !important;
+  border-color: #DB94B8 !important;
+  font-weight: normal;
 }
 
+#no-border {
+  border: none
+}
+
+
+.timetable-cell-fall,
 .timetable-cell-spring {
-	border-bottom: 1px dashed #7094FF;
-	border-right: 1px solid #7094FF;
-	border-left: 1px solid #7094FF;
-	height: 30px;
-	text-align: center;
-	color: white;
-	overflow: hidden;
+  border-top: 1px dashed !important;
+  border-bottom: none !important;
+  border-right: 1px solid !important;
+  border-left: 1px solid !important;
+  font-size: 1.1em;
 }
 
-.timetable-time {
-	background-color: rgba(34, 34, 102, 0.5);
-	border: 1px solid #222266;
-	border-right: 2px solid #222266;
-	text-align: center;
-	color: white;
-    border-radius: 10px;
+#timetable-spring .timetable-time {
+  text-align: left;
+}
+
+#timetable-fall .timetable-time {
+  text-align: right;
+}
+
+
+/* Course selection */
+#course-select-wrapper {
+  overflow: hidden;
+  height: 100%;
+  background-color: #261B2A;
+  margin: 0;
+  padding: 0;
+}
+
+.main {
+  height: 100%;
+  margin: 0;
+}
+
+#course-select {
+  list-style-type: none;
+  padding: 0;
+  margin: 17px 0 0 17px;
+  width: 100%;
+  overflow: scroll;
+  height: 100%;
+  text-align: center;
+}
+
+#course-select > li {
+	width: 95%;
 }
 
 /* Course select sections*/
 .sections {
-	overflow:auto;
+  overflow: auto;
 }
 
 .sections:hover {
-	cursor:pointer;
+  cursor: pointer;
 }
 
 .sectionList-fall {
-	background-color: #DB94B8;
-	color: black;
-    margin: auto;
-	width:90px;
-	overflow:hidden;
-	display:block;
-	float:left;
-	text-align:center;
-	margin: 0px 0px 0px 0px;
-   	padding: 0px 0px 0px 0px;
+  background-color: #DB94B8;
+  width: 50%;
+  float: left;
+  border-right: 1px solid black;
 }
 
 .sectionList-spring {
-	background-color: #7094FF;
-	color: black;
-	vertical-align: middle;
-	width: 90px;
-	overflow: hidden;
-	display: block; 
-	text-align:center;
-	float: right;
-	margin: 0px 0px 0px 0px;
-   	padding: 0px 0px 0px 0px;
+  background-color: #DB94B8;
+  width: 50%;
+  float: right;
+  border-left: 1px solid black;
+}
+
+.ui-accordion-content ul {
+  display: block;
+  margin: 0;
+  padding: 0;
 }
 
 .sectionList-fall li:hover {
-	background-color: #FF94B8;
+  background-color: #FF94B8;
 
 }
 
 .sectionList-spring li:hover {
-	background-color: #F494FF;
-	
+  background-color: #F494FF;
+  
 }
 
 .sectionList-year {
-	background-color: yellow;
-	vertical-align: middle;
-	width: 186px;
-	overflow: hidden;
-	display: block; 
-	text-align:center;
-	float: right;
-	margin: 0px 0px 0px 0px;
-   	padding: 0px 0px 0px 0px;
+  background-color: yellow;
 }
 
 .clickedLectureTime {
-	background-color: rgba(0, 0, 255, 0.4);
+  background-color: rgba(100, 50, 255, 0.6);
 }
 
 .clickedTutorialTime {
-	background-color: rgba(250, 149, 60, 0.4);
+  background-color: rgba(255, 127, 80, 0.6);
 }
 
 .mouseOverGood {
-	background-color: rgba(60, 250, 82, 0.6);
+  background-color: #DB94B8;
 }
 
 .clickedLectureTime:hover {
-	background-color: rgba(20, 0, 255, 0.5);
-	cursor: pointer;
+  background-color: rgba(20, 0, 255, 0.5);
+  cursor: pointer;
 }
 
 .clickedTutorialTime:hover {
-	background-color: orange;
-	cursor:pointer;
+  background-color: orange;
+  cursor:pointer;
 }
 
 .mouseOverConflict {
-	background-color: rgba(255, 0, 0, 0.5);
+  background-color: rgba(255, 0, 0, 0.5);
 }
 
 .clickedConflictTime {
-	background-color: rgba(255, 0, 0, 0.5);
-	font-size: 7px;
-	overflow: hidden;
+  background-color: rgba(255, 0, 0, 0.5);
 }
 
 .selectedTime {
-	background-color: rgba(0,255,0,0.5);
+  background-color: rgba(0,255,0,0.5);
 }
 
 .selectedLectureSection {
-	background-color: white;
-	color: black;
+  background-color: white;
+  color: black;
 }
 
 .selectedTutorialSection {
-	background-color: yellow;
-	color: black;
+  background-color: rgba(255, 127,80,0);
+  color: black;
 }
 
 #range {
-	color: white;
+  color: white;
 }
 
 #layout {
-	width: 100%;
+  width: 100%;
 }
 
-./*
-course {
-	background-color: red;
-	color: black;
-	display: block;
+.starred-course {
+  background-color: #261B2A;
 }
-*/
 
 .section-fall {
-	text-align:center;
-	background-color:#003366;
-	color:white;
-	display:block;
+  text-align:center;
+  background-color:#003366;
+  color:white;
+  display:block;
 }
 
 .section-spring {
-	text-align: center;
-	background-color: #003366;
-	color: white;
-	display: block;
+  text-align: center;
+  background-color: #003366;
+  color: white;
+  display: block;
 }
 
 .section-year {
-	text-align: center;
-	background-color: #003366;
-	color: white;
+  text-align: center;
+  background-color: #003366;
+  color: white;
 }
 
 .sectionClickedLecture {
-	text-align: center;
-	background-color: blue;
-	color: white;
+  text-align: center;
+  background-color: #6600FF;
+  color: white;
 }
 
 .sectionClickedTutorial {
-	text-align: center;
-	background-color: orange;
-	color: white;
+  text-align: center;
+  background-color: orange;
+  color: white;
 }
 
 .section-fall:hover {
-	background-color: blue;
-	color: white;
-	border: 2px solid black;
-	cursor: pointer;
+  background-color: blue;
+  color: white;
+  border: 2px solid black;
+  cursor: pointer;
 }
 
 .section-spring:hover {
-	background-color: blue;
-	color: white;
-	border: 2px solid black;
-	cursor: pointer;
+  background-color: blue;
+  color: white;
+  border: 2px solid black;
+  cursor: pointer;
 }
 
 .section-year:hover {
-	background-color:blue;
-	color:white;
-	border: 2px solid black;
-	cursor:pointer;
+  background-color: blue;
+  color: white;
+  border: 2px solid black;
+  cursor:pointer;
 }
 
-.header {
-
-}
-
-.headerClickedLecture {
-	text-align:center;
-	background-color:blue;
-	color:white;
-}
-
-.headerClickedTutorial {
-	text-align:center;
-	background-color:orange;
-	color:white;
+.clicked-header {
+  background-color: rgba(219, 148, 184, 0.5);
 }
 
 .ui-accordion-header {
-	background-color: rgba(0, 51, 102, 0.9);
-	color:white;
-	text-align:center;
-	cursor:pointer;
-    margin: 0;
-    display: block;
-    width:100%;
+  color: white;
+  text-align: center;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
+  display: block;
+  width: 100%;
+  outline: none;
 }
 
 .ui-accordion-header:hover {
-	background-color: rgba(0, 61, 112, 0.5);
-	color: white;
-	display: block;
+  background-color: #6600ff;
 }
 
-.accordion li {
-    
-}
-
-.ui-accordion-content-active {
-	
+.ui-accordion-content {
+  color: black;
+  text-align: center;
+  overflow: auto;
+  width: 50%
 }
 
 .ui-accordion-header-active {
-	background-color: rgba(0, 51, 102, 0.5);
-	color: white;
+  background-color: #6600ff;
+  border: 1px black;
 }
 
 .ui-tabs-anchor {
 
 }
 
+.clickedSectionUnsatisfied {
+  background-color: rgba(160,32,240,0.6);
+}
+
 /* Info layout div*/
+
 #info-layout {
-	border: 2px solid black;
-	background-color: rgba(0, 0, 0, 0.7);
-    border-radius: 10px;
-	min-width: 900px;
-	width: 900px;
-    height: 500px;
-}
-/*
-#course-info-code {
-	margin-top: 10px;
-	font-size: 20px;
-	text-align:center;
-	color: white;
-	border: 2px solid blue;
-    border-radius: 10px;
-    background-color: rgba(0, 0, 255, 0.2);
-}
-*/
-
-#pane-wrapper {
-	margin-top: 20px;
-	margin-left:20px;
-	margin-right:20px;
-	height: 400px;
+  padding: 0em;
+  margin: 0em;
+  width: 100%;
+  height:100px;
 }
 
-#course-pane {
-	background-color: rgba(60, 250, 82, 0.6);
-	border: 2px solid #3CFA52;
-    border-radius: 10px;
-	width: 600px;
-	float: left;
-	height:100%;
+#info-layout h2 {
+  font-size: 1.3em;
+  margin: 0.5em;
 }
 
-#section-stats-pane {
-	background-color: rgba(60, 250, 82, 0.6);
-	border: 2px solid #3CFA52;
-    border-radius: 10px;
-	width: 230px;
-	float: right;
-	height:100%;
+#info-layout h4 {
+  font-size: 1.1em;
+  margin: 0.5em;
 }
 
-#course-info-code {
-	font-size: 30px;
-	color: white;
-    border-radius: 10px;
-    /*background-color: rgba(0, 0, 255, 0.2);*/
-    text-decoration: underline;
+#info-layout h2 span {
+  color: white;
 }
 
-#course-info-title {
-	font-size: 30px;
-	color: white;
-    text-decoration: underline;
+#info-layout h4 span {
+  color: white;
+}
+
+/* Search Box styles*/
+#search-layout {
+  background-color: rgba(0, 0, 0, 0.5);
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+#search-container {
+  text-align: center;
+  color: white;
+  overflow-y: scroll;
+  height: 100%;
+  margin: 17px 0 0 17px;
+  width: 100%;
+  padding: 0 10px 0 0;
+}
+
+#search-list ul {
+  margin: 0.5em 0 0 0;
+  padding: 0;
+}
+
+#search-list li {
+  color: white;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+
+#search-list ul li:hover {
+  background-color: white;
+  color: black;
+  cursor: pointer;
+}
+
+/* Beta Warning */
+#beta-warning {
+  background-color: rgba(0, 0, 0, 0.5);
+  float: center;
+  color: white;
+  padding: 10px 10px 10px 10px;
 }
