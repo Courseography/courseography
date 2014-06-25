@@ -160,8 +160,7 @@ class TimetableParser:
                 lecture['time_str'] += ', ' + time
             else:
                 lecture['time_str'] = time
-            lecture['instructor'] = lecture.get('instructor',
-                                                data[self.instructor])
+            lecture['instructor'] = lecture['instructor'] if lecture['instructor'] else data[self.instructor]
             if self.cap >= 0:
                 lecture['cap'] += int(data[self.cap]) if data[self.cap] else 0
         elif self.is_tutorial(data):
