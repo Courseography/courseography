@@ -18,7 +18,7 @@ function processSessionLectures(session, courseObject) {
             section.appendChild(document.createTextNode(lecture.section));
             if (!courseObject.manualTutorialEnrolment && session.tutorials.length > 0) {
                 console.log("Tuts" + courseObject.name);
-                sectionTimes = sectionTimes.concat(convertTimes(session.tutorials[i]));
+                sectionTimes = sectionTimes.concat(convertTimes(session.tutorials[i][0]));
                 console.log(sectionTimes);
             }
             setSectionMouseEvents(section, sectionTimes, courseObject);
