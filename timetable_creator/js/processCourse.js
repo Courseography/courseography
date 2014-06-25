@@ -14,10 +14,12 @@ function processSessionLectures(session, courseObject) {
         if (lecture.section.charAt(1) !== "2" && lecture.time !== "Online Web Version") {
             section = document.createElement("li");
             sectionTimes = convertTimes(lecture.time);
-            console.log(sectionTimes);
+            $(section).data("instructor", lecture.instructor);
             section.appendChild(document.createTextNode(lecture.section));
-            if (courseObject.manualTutorialEnrolment === false && session.tutorials.length > 0) {
-                sectionTimes = sectionTimes.concat(session.tutorials[i]);
+            if (!courseObject.manualTutorialEnrolment && session.tutorials.length > 0) {
+                console.log("Tuts" + courseObject.name);
+                sectionTimes = sectionTimes.concat(convertTimes(session.tutorials[i][0]));
+                console.log(sectionTimes);
             }
             setSectionMouseEvents(section, sectionTimes, courseObject);
             sectionList.appendChild(section);

@@ -113,7 +113,7 @@ $.event.special.hoverintent = {
 };
 
 function setAccordion() {
-    $("#course-select").accordion({heightStyle: "content", collapsible: true, active: false/*, event: "click hoverintent"*/});
+    $("#course-select li").accordion({heightStyle: "content", collapsible: true, active: false/*, event: "click hoverintent"*/});
 }
 
 function refreshAccordion() {
@@ -161,8 +161,7 @@ function createTimetableSearch() {
                     } else {
                         selectedCourses.push(shortenedCourseName);
                         addCourseToList(course);
-                        setAccordion();
-                        refreshAccordion();
+                        //setAccordion();
                     }
                 });
                 courseList.appendChild(courseEntry);

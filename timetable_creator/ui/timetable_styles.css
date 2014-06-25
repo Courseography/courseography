@@ -360,6 +360,11 @@ course {
 
 }
 
+.clickedSectionUnsatisfied {
+  background-color: purple;
+  opacity: 0.5;
+}
+
 /* Info layout div*/
 
 #info-layout {
