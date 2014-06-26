@@ -20,12 +20,18 @@
 		</div>
 	</div>
 	<div class="row main">
-		<div class="col-md-2" id="course-select-wrapper">
+		<div class="col-md-2 col-xs-6" id="course-select-wrapper">
 			<ul id="course-select" class="trapScroll-enabled"></ul>
 		</div>
-		<div class="col-md-8">
+		<div class="col-md-2 col-xs-6 col-md-push-8" id="search-layout">
+			<div id="search-container">
+				<form><input type="text" id="course-filter" class="form-control" placeholder="Enter a course!" /></form>
+				<div id="search-list"></div>
+			</div>
+		</div>
+		<div class="col-md-8 col-xs-12 col-md-pull-2">
 			<div class="row">
-				<div class="col-md-6 timetable-container">
+				<div class="col-md-6 col-xs-12 timetable-container">
 					<table id="timetable-fall" class="timetable table">
 						<caption>Fall</caption>
 						<thead>
@@ -134,7 +140,7 @@
 						</tr>
 					</table>
 				</div>
-				<div class="col-md-6 timetable-container">
+				<div class="col-md-6 col-xs-12 timetable-container">
 					<table id="timetable-spring" class="timetable table">
 						<caption>Spring</caption>
 						<thead>
@@ -258,13 +264,6 @@
 			</div>
 			<div id="beta-warning">
 				<h3>This tool is currently in Beta. If there is defective course, please let us know and we will fix it right away. Please consult ROSI for the most accurate information regarding the UTSG undergaduate timetable.</h3>
-			</div>
-		</div>
-
-		<div class="col-md-2" id="search-layout">
-			<div id="search-container">
-				<form><input type="text" id="course-filter" class="form-control" placeholder="Enter a course!" /></form>
-				<div id="search-list"></div>
 			</div>
 		</div>
 	</div>
