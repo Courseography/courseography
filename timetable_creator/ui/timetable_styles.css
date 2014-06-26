@@ -202,7 +202,7 @@ caption {
 }
 
 .clickedTutorialTime {
-  background-color: rgba(100, 149, 60, 0.6);
+  background-color: rgba(255, 127, 80, 0.6);
 }
 
 .mouseOverGood {
@@ -220,13 +220,11 @@ caption {
 }
 
 .mouseOverConflict {
-  background-color: rgba(255, 100, 0, 0.5);
+  background-color: rgba(255, 0, 0, 0.5);
 }
 
 .clickedConflictTime {
   background-color: rgba(255, 0, 0, 0.5);
-  font-size: 7px;
-  overflow: hidden;
 }
 
 .selectedTime {
@@ -239,7 +237,7 @@ caption {
 }
 
 .selectedTutorialSection {
-  background-color: yellow;
+  background-color: rgba(255, 127,80,0);
   color: black;
 }
 
@@ -252,7 +250,7 @@ caption {
 }
 
 #search-list .starred-course {
-  background-color: yellow;
+  background-color: #261B2A;
   color: black;
 }
 
@@ -310,7 +308,7 @@ caption {
 }
 
 .clicked-header {
-  background-color: red;
+  background-color: rgba(219, 148, 184, 0.5);
 }
 
 .ui-accordion-header {
@@ -345,8 +343,7 @@ caption {
 }
 
 .clickedSectionUnsatisfied {
-  background-color: purple;
-  opacity: 0.5;
+  background-color: rgba(160,32,240,0.6);
 }
 
 /* Info layout div*/
