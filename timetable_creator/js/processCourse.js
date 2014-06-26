@@ -16,7 +16,7 @@ function processSessionLectures(session, courseObject) {
             sectionTimes = convertTimes(lecture.time);
             $(section).data("instructor", lecture.instructor);
             section.appendChild(document.createTextNode(lecture.section));
-            if (courseObject.manualTutorialEnrolment === false && session.tutorials.length > 0) {
+            if (!courseObject.manualTutorialEnrolment && session.tutorials.length > 0) {
                 sectionTimes = sectionTimes.concat(convertTimes(session.tutorials[i][0]));
             }
             setSectionMouseEvents(section, sectionTimes, courseObject);
@@ -48,6 +48,7 @@ function processSession(courseObject) {
         sectionList = processSessionLectures(courseObject.Y, courseObject);
         sectionList = processSessionTutorials(courseObject.Y, courseObject, sectionList);
         $(sectionList).attr("class", "sectionList-year");
+        setSectionIds(courseObject, sectionList, "Y");
         sections.appendChild(sectionList);
     } else {
         if (typeof courseObject.F !== "undefined") {
@@ -55,6 +56,7 @@ function processSession(courseObject) {
             sectionList = processSessionLectures(courseObject.F, courseObject);
             sectionList = processSessionTutorials(courseObject.F, courseObject, sectionList);
             $(sectionList).attr("class", "sectionList-fall");
+            setSectionIds(courseObject, sectionList, "F");
             sections.appendChild(sectionList);
         }
         if (typeof courseObject.S !== "undefined") { 
@@ -62,8 +64,15 @@ function processSession(courseObject) {
             sectionList = processSessionLectures(courseObject.S, courseObject);
             sectionList = processSessionTutorials(courseObject.S, courseObject, sectionList);
             $(sectionList).attr("class", "sectionList-spring");
+            setSectionIds(courseObject, sectionList, "S");
             sections.appendChild(sectionList);
         }
     }
     return sections;
+}
+
+function setSectionIds(courseObject, sectionList, sessionSuffix) {
+    $(sectionList).children("li").each(function(index, lecture) {
+        $(lecture).attr("id", courseObject.name + "-" + $(this).html() + "-" + sessionSuffix);
+    });
 }

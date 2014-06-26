@@ -5,15 +5,15 @@ if($_POST)
         die();
     } 
     
-    $toEmail       = "cs.toronto.courseplanner@gmail.com";
-    $subject        = 'Feedback from course planner!!!';
+    $toEmail = "cs.toronto.courseplanner@gmail.com";
+    $subject = 'Feedback from course planner!!!';
     
     if(/*!isset($_POST["userName"])*/ !isset($_POST["userMessage"])) {
         die();
     }
     
-    $userName        = filter_var($_POST["userName"], FILTER_SANITIZE_STRING);
-    $userMessage     = filter_var($_POST["userMessage"], FILTER_SANITIZE_STRING);
+    $userName = filter_var($_POST["userName"], FILTER_SANITIZE_STRING);
+    $userMessage = filter_var($_POST["userMessage"], FILTER_SANITIZE_STRING);
 
     $headers = 'New Message!' . " From: " . $userName .
     '  X-Mailer: PHP/' . phpversion();
