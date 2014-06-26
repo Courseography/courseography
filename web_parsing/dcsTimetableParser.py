@@ -2,6 +2,8 @@ import csv
 import json
 import xlrd
 from ttparser import TimetableParser
+from faculty import facultyWebsites
+
 courses = []
 
 outputDir = '../res/'
@@ -56,7 +58,7 @@ def generateCSV(path):
 
 def sanitize(s):
     ''' Really only for the Borodin/Boutillier cell '''
-    return str(s).replace('\n', '/')
+    return str(s).strip().replace('\n', '/')
 
 
 def parse_dcs_timetable(f):
@@ -93,7 +95,23 @@ def generateRows(course):
                 else:
                     tutString = tutString.format('')
 
-                extra = '+ ' + str(lec['extra']) if lec['extra'] > 0 else ''
+                extra = ' + ' + str(lec['extra']) if lec['extra'] > 0 else ''
+
+                # TODO: fix hack for Borodin/Boutillier
+                if lec['instructor'] == 'Borodin/Boutilier':
+                    instructorString = '<a href="{}" target="_blank">{}</a>/'.format(
+                                        facultyWebsites['Borodin'],
+                                        'Borodin')
+                    instructorString += '<a href="{}" target="_blank">{}</a>/'.format(
+                                        facultyWebsites['Boutilier'],
+                                        'Boutilier')
+                elif lec['instructor'] in facultyWebsites:
+                    instructorString = '<a href="{}" target="_blank">{}</a>'.format(
+                                        facultyWebsites[lec['instructor']],
+                                        lec['instructor'])
+                else:
+                    print('Could not find instructor ' + lec['instructor'])
+                    instructorString = lec['instructor']
 
                 termRows.append(('<tr>' +
                                  '<td class="timetableSection">{}</td>' +
@@ -101,8 +119,9 @@ def generateRows(course):
                                  '<td class="timetableInstructor">{}</td>' +
                                  '<td class="timetableCap">{}{}</td></tr>')
                                 .format(lec['section'],
-                                        lec['time_str'], tutString,
-                                        lec['instructor'],
+                                        lec['time_str'], 
+                                        tutString,
+                                        instructorString,
                                         lec['cap'],
                                         extra
                                         ))
