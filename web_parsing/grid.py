@@ -1,4 +1,4 @@
-def parseTimeSlots(s):
+def parse_time_slots(s):
     """ Parse multiple time slots """
     rest = s.strip()
     # Check for 'TBA':

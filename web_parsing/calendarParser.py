@@ -56,10 +56,21 @@ def parseCalendar():
       elif len(line.strip()) > 0:
         course['description'] = course['description'] + line
 
-    with open('../res/courses/' + course['name'] + '.txt', 'w+') as output:
-      json.dump(course, output)
-      courses.append(course)
-      
+      if 'name' in course:
+        path = '../res/courses/' + course['name'] + '.txt'   
+        try:
+          with open(path, 'r', encoding='utf-8') as course_file:
+            old = json.load(course_file)
+            for field in ['F', 'S', 'Y', 'manualTutorialEnrolment']:
+              if field in old:
+                course[field] = old.get(field)
+        except FileNotFoundError:
+          pass
+
+        with open(path, 'w+', encoding='utf-8') as output:
+            json.dump(course, output)
+            courses.append(course)
+        
 def parseAnd(s):
   curr = s
   andList = []
@@ -129,11 +140,3 @@ def parseExtra(s):
   else:
     extraMatch = extraRegex.match(s)
     return (extraMatch.group(0), s[len(extraMatch.group(0)):])
-
-if __name__ == '__main__':
-  #downloadCalendar()
-  parseCalendar()
-  #print(parseOr('CSC200Y1blahbla/CSC165H1'))
-  #print(parseAnd('CSC200Y1blahbla/CSC165H1'))
-  #print(parseAnd('CSC209H1/proficiency in C++, Java, or Python;'))
-  #print(parseAnd('STA247H1/STA255H1/STA257H1 or familiarity with basic probability theory; CSC209H1/proficiency in C++, Java, or Python;'))
