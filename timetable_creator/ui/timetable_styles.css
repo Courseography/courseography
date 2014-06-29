@@ -21,6 +21,16 @@ a:visited {
   color:white;
 }
 
+#dialog {
+  position: fixed;
+  background-color: white;
+  width: 100%;
+  visibility: hidden;
+  text-align: center;
+  border-bottom: 2px solid #330000;
+  z-index: 2147483647;
+}
+
 /* Header styles */
 .header {
   background-color: #330000;
@@ -212,6 +222,10 @@ caption {
   background-color: #DB94B8;
 }
 
+.mouseOverTaken {
+  background-color: black;
+}
+
 .clickedLectureTime:hover {
   background-color: rgba(20, 0, 255, 0.5);
   cursor: pointer;
@@ -224,6 +238,10 @@ caption {
 
 .mouseOverConflict {
   background-color: rgba(255, 0, 0, 0.5);
+}
+
+.mouseOverRemove {
+  background-color: fuchsia;
 }
 
 .clickedConflictTime {

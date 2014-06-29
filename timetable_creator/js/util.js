@@ -1,6 +1,25 @@
 var trapScroll;
 var selectedCourses = [];
 var selectedLectures = [];
+var courseObjects = [];
+
+function removeCourseObject(courseName) {
+    for (var i = 0; i < courseObjects.length; i++) {
+        if (courseObjects[i].name === courseName) {
+            courseObjects.splice(i,1);
+        }
+    }
+}
+
+function getCourseObject(courseName) {
+    var courseObject;
+    for (var i = 0; i < courseObjects.length; i++) {
+        if (courseObjects[i].name === courseName) {
+            courseObject = courseObjects[i];
+        }
+    }
+    return courseObject;
+}
 
 /*
  * Adapted from http://codepen.io/LelandKwong/pen/edAmn. Will look into http://jscrollpane.kelvinluck.com/.
@@ -196,9 +215,7 @@ function restoreFromCookies() {
     if (starredCourseCookie.length > 0) {
         selectedLectures = $.parseJSON(starredLectureCookie);
         $.each(selectedLectures, function (i, course) {
-            console.log(course);
             $("#" + course).click();
-            console.log("cliocked " + course);
         });
     }
     console.log("Courses that have been set in cookies are: " + selectedCourses);
@@ -232,4 +249,5 @@ function removeCourseFromList(course) {
         $(this).click();
     });
     courseSelect.removeChild(courseElement);
+    removeCourseObject(course);
 }
