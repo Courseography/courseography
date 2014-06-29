@@ -20,12 +20,18 @@ var searchList;
 
 $(document).ready(function () {
     $("#dialog").fadeOut();
+    $("td").each(function() {
+        $(this).attr("in-conflict", "false");
+        $(this).attr("satisfied", "true");
+    });
     courseSelect = document.getElementById("course-select");
     searchList = document.getElementById("search-list");
     restoreFromCookies();
     createTimetableSearch();
     courses = getVeryLargeCourseArray();
     trapScroll();
+
+    
 });
 
 function getVeryLargeCourseArray() {
@@ -68,6 +74,7 @@ function getCourse(courseCode) {
         }
     });
     console.log("Getting course " + result + "from file ../../res/courses/" + courseCode);
+    courseObjects.push(result);
     return result;
 }
 

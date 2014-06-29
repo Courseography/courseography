@@ -4,6 +4,8 @@
 /*jslint plusplus: true */
 "use strict";
 
+console.log = function() {}
+
 function setSectionMouseEvents(section, sectionTimes, courseObject) {
     setSectionOnClick(section, sectionTimes, courseObject);
     setSectionMouseOver(section, sectionTimes, courseObject);
@@ -23,6 +25,7 @@ function setSectionMouseOut(section, sectionTimes) {
             timeSuffix = reverseTimeSuffix(timeSuffix);
             performMouseOut(sectionTimes, timeSuffix);
         }
+        removeMouseOverClasses();
     });
 }
 
@@ -33,31 +36,23 @@ function performMouseOut(sectionTimes, timeSuffix) {
         timeElement = time + timeSuffix;
         if ($("#" + timeElement).attr("clicked") !== "true") {
             $("#" + timeElement).html("");
-            $("#" + timeElement).removeClass("mouseOverGood");
-        } else {
-            $("#" + timeElement).removeClass("mouseOverConflict");
         }
     });
 }
 
 /** Mouse Over Direct Functions **/
+
 function setSectionMouseOver(section, sectionTimes, courseObject) {
     var timeSuffix;
 
     $(section).mouseover(function () {
         timeSuffix = getTimeSuffix(section);
         performMouseOver(sectionTimes, timeSuffix, courseObject);
-        $("#course-info-code").html(courseObject.name);
-        $("#course-info-title").html(courseObject.title);
-        $("#section-stats-section").html($(this).html());
-        $("#section-stats-instructor").html($(this).data("instructor"));
+        displayCourseInformation(courseObject, $(this));
         if (getIsYearSection(section)) {
             timeSuffix = reverseTimeSuffix(timeSuffix);
-            performMouseOver(sectionTimes, timeSuffix, courseObject)
-            $("#course-info-code").html(courseObject.name);
-            $("#course-info-title").html(courseObject.title);
-            $("#section-stats-section").html($(this).html());
-            $("#section-stats-instructor").html($(this).data("instructor"));
+            performMouseOver(sectionTimes, timeSuffix, courseObject);
+            displayCourseInformation(courseObject, $(this));
         }
     }); 
 }
@@ -70,22 +65,58 @@ function performMouseOver(sectionTimes, timeSuffix, courseObject) {
         timeElement = time + timeSuffix;
         isTimeClicked = getIsClicked(timeElement);
         if (isTimeClicked) {
-            lightUpConflict(timeElement);
+            lightUpConflict(courseObject, timeElement);
         } else {
-            lightUpTakeable(timeElement, courseObject.name);
+            lightUpTakeable(courseObject, timeElement);
         }
     });
 }
 
-/** Mouse Over Direct Functions **/
+function lightUpConflict(courseObject, timeElement) {
+    if ($("#" + timeElement).html() === courseObject.name) {
+        $("#" + timeElement).addClass("mouseOverRemove");
+    } else {
+        $("#" + timeElement).addClass("mouseOverConflict");
+    }
+}
+
+function lightUpTakeable(courseObject, timeElement) {
+    if (courseObject.taken) {
+        $("#" + timeElement).addClass("mouseOverTaken");
+    } else {
+        $("#" + timeElement).addClass("mouseOverGood");
+    }
+    $("#" + timeElement).html(courseObject.name);
+}
+
+function removeMouseOverClasses() {
+    $("td").each(function (i, time) {
+        $(time).removeClass("mouseOverConflict");
+        $(time).removeClass("mouseOverGood");
+        $(time).removeClass("mouseOverTaken");
+        $(time).removeClass("mouseOverRemove");
+    });
+}
+
+function displayCourseInformation(courseObject, section) {
+    $("#course-info-code").html(courseObject.name);
+    $("#course-info-title").html(courseObject.title);
+    $("#section-stats-section").html(section.html());
+    $("#section-stats-instructor").html(section.data("instructor"));
+}
+
+/** Mouse Click Direct Functions **/
+
 function setSectionOnClick(section, sectionTimes, courseObject) {
     var isLecture;
-    var setHeader;
+    var taken;
     var satisfied;
     var inConflict;
     $(section).click(function () {
+        console.log("> click : " + courseObject.name);
         isLecture = section.innerHTML.charAt(0) === "L";
-        setHeader = false;
+        //courseObject.satisfied = !courseObject.manualTutorialEnrolment;
+        taken = false;
         satisfied = true;
         inConflict = false;
         if (isLecture) {
@@ -102,6 +133,8 @@ function setSectionOnClick(section, sectionTimes, courseObject) {
             if (courseObject.isTutorialSelected) {
                 selectAlreadySelectedTutorial(courseObject, section, sectionTimes);
             } else {
+                setTutorialSession(courseObject, section);
+
                 selectUnselectedTutorial(courseObject, section, sectionTimes);
             }
 
@@ -112,7 +145,6 @@ function setSectionOnClick(section, sectionTimes, courseObject) {
         });
 
         $("#" + courseObject.name + "-li" + " li[clicked*='true']").each(function() {
-
             if (satisfied) {
                 $(this).addClass("clickedLectureTime");
             }
@@ -123,13 +155,11 @@ function setSectionOnClick(section, sectionTimes, courseObject) {
                     selectedLectures.push($(this).attr("id"));
             }
 
-            setHeader = true;
+            taken = true;
         });
 
         $("#" + courseObject.name + "-li" + " li[clicked*='false']").each(function() {
-
             $(this).removeClass("clickedLectureTime");
-
             var index = $.inArray($(this).attr("id"), selectedLectures);
 
             if (index > -1) {
@@ -138,46 +168,91 @@ function setSectionOnClick(section, sectionTimes, courseObject) {
 
         });
 
-        if (setHeader && satisfied) {
-            $(courseObject.header).removeClass("clickedSectionUnsatisfied"); 
-            $(courseObject.header).addClass("clicked-header");
-        } else if (!satisfied) {
-            $(courseObject.header).addClass("clickedSectionUnsatisfied"); 
-        } else {
-            $(courseObject.header).removeClass("clickedSectionUnsatisfied"); 
-            $(courseObject.header).removeClass("clicked-header"); 
-        }
-
-        setCookie("selected-lectures", JSON.stringify(selectedLectures));
-
-        $("td[class*=clickedConflictTime").each(function() {
-            inConflict = true;
+        $("td[clicked*=false]").each(function() {
+            $(this).attr("satisfied", true);
+            $(this).attr("type", "");
+            $(this).removeClass("clickedLectureTime");
+            $(this).removeClass("clickedTutorialTime"); 
         });
 
-        if (inConflict) {
-            $("#dialog").fadeIn(2000);
-        } else {
-            $("#dialog").fadeOut(2000);
-        }
+        $("td[satisfied*=false][in-conflict*=false]").each(function() {
+            $(this).addClass("clickedSectionUnsatisfied");
+            $(this).removeClass("clickedLectureTime");
+            $(this).removeClass("clickedTutorialTime"); 
+        });
+
+        $("td[satisfied*=true]").each(function() {
+            $(this).removeClass("clickedSectionUnsatisfied");
+        });
+
+        $("td[in-conflict*=true]").each(function() {
+            $(this).removeClass("clickedSectionUnsatisfied");
+            $(this).removeClass("clickedLectureTime");
+            $(this).removeClass("clickedTutorialTime"); 
+            $(this).addClass("clickedConflictTime");
+        });
+
+        $("td[in-conflict*=false]").each(function() {
+            $(this).removeClass("clickedConflictTime"); 
+        });
+
+        $("td[in-conflict*=false][satisfied*=true][type*=lecture]").each(function() {
+            $(this).addClass("clickedLectureTime"); 
+        });
+
+        $("td[in-conflict*=false][satisfied*=true][type*=tutorial]").each(function() {
+            $(this).addClass("clickedTutorialTime"); 
+        });
+
+        setHeader(courseObject, taken, satisfied);
+        setCookie("selected-lectures", JSON.stringify(selectedLectures));
+        removeMouseOverClasses();
+        inConflict = getInConflict(inConflict);
+        alertUserOfConflict(inConflict);
+        console.log("< click : " + courseObject.name);
     });
 }
 
 /** Utilities **/
 
+function setHeader(courseObject, taken, satisfied) {
+    console.log("> setHeader");
+    if (taken && satisfied) {
+        $(courseObject.header).removeClass("clickedSectionUnsatisfied"); 
+        $(courseObject.header).addClass("clicked-header");
+        courseObject.taken = true;
+    } else if (!satisfied) {
+        $(courseObject.header).addClass("clickedSectionUnsatisfied"); 
+    } else {
+        $(courseObject.header).removeClass("clickedSectionUnsatisfied"); 
+        $(courseObject.header).removeClass("clicked-header"); 
+        courseObject.taken = false;
+    }
+    console.log("< setHeader");
+}
+
+function getInConflict(inConflict) {
+    $("td[class*=clickedConflictTime]").each(function() {
+        inConflict = true;
+    });
+
+    return inConflict;
+}
+
+function alertUserOfConflict(inConflict) {
+    if (inConflict) {
+        $("#dialog").fadeIn(1500);
+    } else {
+        $("#dialog").fadeOut(1500);
+    }
+}
+
 function getIsClicked(timeElement) {
     return $("#" + timeElement).attr("clicked") === "true";
 }
 
-function lightUpConflict(timeElement) {
-    $("#" + timeElement).addClass("mouseOverConflict");
-}
-
-function lightUpTakeable(timeElement, courseCode) {
-    $("#" + timeElement).html(courseCode);
-    $("#" + timeElement).addClass("mouseOverGood");
-}
-
 function getSectionSessionFromSection(section) {
+    console.log("> getSectionSessionFromSection");
     if (getIsYearSection(section)) {
         return "Y";
     } else if (getIsFallSection(section)) {
@@ -185,6 +260,7 @@ function getSectionSessionFromSection(section) {
     } else if (getIsSpringSection(section)) {
         return "S";
     }
+    console.log("< getSectionSessionFromSection");
 }
 
 function getIsYearSection(section) {
@@ -200,15 +276,18 @@ function getIsSpringSection(section) {
 }
 
 function reverseTimeSuffix(timeSuffix) {
+    console.log("> reverseTimeSuffix");
     if (timeSuffix === "-fall") {
         timeSuffix = "-spring";
     } else if (timeSuffix === "-spring") {
         timeSuffix = "-fall";
     }
+    console.log("< reverseTimeSuffix");
     return timeSuffix;
 }
 
 function getTimeSuffix(section) {
+    console.log("> getTimeSuffix");
     var timeSuffix;
 
     if (getIsFallSection(section)) {
@@ -217,58 +296,85 @@ function getTimeSuffix(section) {
         timeSuffix = "-spring";
     }
 
+    console.log("< getTimeSuffix");
     return timeSuffix;
 }
 
-function setClickedConflict(courseObject, timeElement, section) {
+function setClickedConflict(courseObject, timeElement, section, type) {
+    console.log("> setClickedConflict");
     var conflictArray = $("#" + timeElement).data("conflictArray");
+    var typeArray = $("#" + timeElement).data("typeArray");
     if (typeof conflictArray === "undefined") {
         conflictArray = [];
     }
+
+    if (typeof typeArray === "undefined") {
+        typeArray = [];
+    }
+
+    if (!courseObject.satisfied) {
+        if (courseObject.isTutorialSelected) {
+            $(courseObject.selectedTutorial).addClass("clickedSectionUnsatisfied");
+        } else if (courseObject.isLectureSelected) {
+            $(courseObject.selectedLecture).addClass("clickedSectionUnsatisfied");
+        } else {
+            console.log("Unsuspected case in setClickedConflict()");
+        }
+    }
+
     conflictArray.push(courseObject.name);
+    typeArray.push(type);
     $("#" + timeElement).data("conflictArray", conflictArray);
+    $("#" + timeElement).data("typeArray", typeArray);
     $("#" + timeElement).attr("title", conflictArray);
-    $("#" + timeElement).addClass("clickedConflictTime");
+    $("#" + timeElement).attr("in-conflict", true);
+    console.log("< setClickedConflict");
 }
 
 function removeClickedConflict(courseObject, timeElement, section) {
+    console.log("> removeClickedConflict");
     var index;
     var conflictArray = $("#" + timeElement).data("conflictArray");
-    if (typeof conflictArray === "undefined") {
+    var typeArray = $("#" + timeElement).data("typeArray");
+    if (typeof conflictArray === "undefined" || typeof typeArray === "undefined") {
         console.log("Unexpected case in removeClickedConflict()");
     } else {
         index = conflictArray.indexOf(courseObject.name);
-        conflictArray.splice(index, 1);
-        $("#" + timeElement).data("conflictArray", conflictArray);
-        $("#" + timeElement).attr("title", conflictArray);
-        if (conflictArray.length === 0) {
-            $("#" + timeElement).removeClass("clickedConflictTime");
+        if ($("#" + timeElement).html() === courseObject.name) {
+            $("#" + timeElement).html(conflictArray[0]);
+            $("#" + timeElement).attr("type", typeArray[0]);
         }
+        if (conflictArray.length === 1 ) { 
+            $("#" + timeElement).attr("in-conflict", false);
+        }
+        conflictArray.splice(index, 1);
+        typeArray.splice(index, 1);
+        var newCourseObject = getCourseObject($("#" + timeElement).html());
+        $("#" + timeElement).attr("satisfied", newCourseObject.satisfied);
+        $("#" + timeElement).data("conflictArray", conflictArray);
+        $("#" + timeElement).attr("title", conflictArray);    
     }
+    console.log("< removeClickedConflict");
 }
 
 
 /** Lecture Functions **/
 
 function setLectureSession(courseObject, section) {
-    if (getIsFallSection(section)) {
-        courseObject.selectedLectureSession = "F";
-    } else if (getIsSpringSection(section)) {
-        courseObject.selectedLectureSession = "S";
-    } else {
-        courseObject.selectedLectureSession = "Y";
-    }
+    console.log("> setLectureSession");
+    courseObject.selectedLectureSession = getSectionSessionFromSection(section);
+    console.log("< setLectureSession");
 }
 
 function selectUnselectedLecture(courseObject, section, sectionTimes) {
+    console.log("> selectUnselectedLecture");
     var timeElement;
     var timeSuffix;
     var isTimeClicked;
 
     $(section).attr("clicked", "true");
-    //$(section).addClass("clickedLectureTime");
-    setLectureSession(courseObject, section);
     satisfyCourse(courseObject, section);
+    setLectureSession(courseObject, section);
     courseObject.selectedLecture = section;
     courseObject.isLectureSelected = true;
     timeSuffix = getTimeSuffix(section);
@@ -280,9 +386,12 @@ function selectUnselectedLecture(courseObject, section, sectionTimes) {
     }
 
     courseObject.selectedTimes = sectionTimes;
+    satisfyCourse(courseObject, section);
+    console.log("< selectUnselectedLecture");
 }
 
 function selectAlreadySelectedLecture(courseObject, section, sectionTimes) {
+    console.log("> selectAlreadySelectedLecture");
     var selectedSession;
 
     turnLectureOff(courseObject, section, sectionTimes);
@@ -303,9 +412,11 @@ function selectAlreadySelectedLecture(courseObject, section, sectionTimes) {
         courseObject.selectedLectureSession = null;
         courseObject.selectedTimes = null;
     }
+    console.log("< selectAlreadySelectedLecture");
 }
 
 function turnLectureOff(courseObject, section, sectionTimes) {
+    console.log("> turnLectureOff");
     var timeSuffix;
     var timeElement;
 
@@ -325,16 +436,10 @@ function turnLectureOff(courseObject, section, sectionTimes) {
 
         if ($("#" + timeElement).hasClass("clickedConflictTime")) {
             removeClickedConflict(courseObject, timeElement, section);
-
         } else {
             $("#" + timeElement).html("");
             $("#" + timeElement).attr("clicked", "false");
-            $("#" + timeElement).removeClass("clickedLectureTime");
-            $("#" + timeElement).removeClass("clickedSectionUnsatisfied");
         }
-
-        $("#" + timeElement).removeClass("mouseOverConflict");
-        $("#" + timeElement).removeClass("mouseOverGood");
     });
 
     $(courseObject.selectedLecture).removeClass("clickedSectionUnsatisfied");
@@ -347,21 +452,17 @@ function turnLectureOff(courseObject, section, sectionTimes) {
 
             if ($("#" + timeElement).hasClass("clickedConflictTime")) {
                 removeClickedConflict(courseObject, timeElement, section);
-
             } else {
                 $("#" + timeElement).html("");
                 $("#" + timeElement).attr("clicked", "false");
-                $("#" + timeElement).removeClass("clickedLectureTime");
-                $("#" + timeElement).removeClass("clickedSectionUnsatisfied");
             }
-
-            $("#" + timeElement).removeClass("mouseOverConflict");
-            $("#" + timeElement).removeClass("mouseOverGood");
         });
     }
+    console.log("< turnLectureOff");
 }
 
 function selectNewLectureSection(section, sectionTimes, courseObject, selectedSession) {
+    console.log("> selectNewLectureSection");
     var timeElement;
     var timeSuffix;
     var isTimeClicked;
@@ -369,63 +470,30 @@ function selectNewLectureSection(section, sectionTimes, courseObject, selectedSe
     $(section).attr("clicked", "true");
 
     if(courseObject.selectedLectureSession !== selectedSession) {
-
-        if (selectedSession === "F") {
-            courseObject.selectedLectureSession = "F";
-        } else if (selectedSession === "S") {
-            courseObject.selectedLectureSession = "S";
-        } else {
-            courseObject.selectedLectureSession = "Y";
-        }
-
+        courseObject.selectedLectureSession = selectedSession;
     }
 
-    satisfyCourse(courseObject, section);
     courseObject.isLectureSelected = true;
     courseObject.selectedLecture = section;
     courseObject.selectedLectureHeader = courseObject.header;
     courseObject.selectedTimes = sectionTimes;
 
-    // if (section.innerHTML.charAt(0) === "L") {
-    //     $(courseObject.header).addClass("clickedSectionSatisfied");
-    //     $(courseObject.selectedLecture).addClass("clickedSectionSatisfied");
-    // } else {
-    //     $(courseObject.header).addClass("clickedSectionSatisfied");
-    //     $(courseObject.selectedTutorial).addClass("clickedSectionSatisfied");
-    // }
-
     timeSuffix = getTimeSuffix(section);
 
-    $.each(sectionTimes, function (i, time) {
-        timeElement = time + timeSuffix;
-        isTimeClicked = getIsClicked(timeElement);
-
-        if (!isTimeClicked) {
-            setLectureClicked(courseObject, timeElement, section);
-        } else {
-            setClickedConflict(courseObject, timeElement, section);
-        }
-
-    });
+    satisfyCourse(courseObject, section);
+    console.log(courseObject.selectedTutorialSession === courseObject.selectedLectureSession);
+    selectUnselectedLectureTimes(sectionTimes, timeSuffix, courseObject, section);
 
     if (getIsYearSection(section)) {
         timeSuffix = reverseTimeSuffix(timeSuffix);
 
-        $.each(sectionTimes, function (i, time) {
-            timeElement = time + timeSuffix;
-            isTimeClicked = getIsClicked(timeElement);
-
-            if (!isTimeClicked) {
-                setLectureClicked(courseObject, timeElement, section);
-            } else {
-                setClickedConflict(courseObject, timeElement, section);
-            } 
-
-        });
+        selectUnselectedLectureTimes(sectionTimes, timeSuffix, courseObject, section);
     }
+    console.log("< selectNewLectureSection");
 }
 
 function selectUnselectedLectureTimes(sectionTimes, timeSuffix, courseObject, section) {
+    console.log("> selectUnselectedLectureTimes");
     var timeElement;
     var isTimeClicked;
 
@@ -436,50 +504,47 @@ function selectUnselectedLectureTimes(sectionTimes, timeSuffix, courseObject, se
         if (!isTimeClicked) {
             setLectureClicked(courseObject, timeElement, section);
         } else {
-            setClickedConflict(courseObject, timeElement, section);
+            setClickedConflict(courseObject, timeElement, section, "lecture");
         }
 
     });
-
+    console.log("< selectUnselectedLectureTimes");
 }
 
 function setLectureClicked(courseObject, timeElement, section) {
-    if (courseObject.satisfied) {
-        $("#" + timeElement).addClass("clickedLectureTime");
-    } else {
-        $("#" + timeElement).addClass("clickedSectionUnsatisfied");
+    console.log("> setLectureClicked");
+    $("#" + timeElement).attr("type", "lecture");
+
+    if (!courseObject.satisfied) {
+        setSatisfaction(courseObject, timeElement);
         $(courseObject.selectedLecture).attr("satisfied", "false");
         $(courseObject.selectedLecture).addClass("clickedSectionUnsatisfied");
     }
 
     $("#" + timeElement).html(courseObject.name);
     $("#" + timeElement).attr("clicked", "true");
-    $("#" + timeElement).removeClass("mouseOverGood");
+    console.log("< setLectureClicked");
 }
 
 /** Tutorial Functions **/
 
 function setTutorialSession(courseObject, section) {
-    if (getIsFallSection(section)) {
-        courseObject.selectedTutorialSession = "F";
-    } else if (getIsSpringSection(section)) {
-        courseObject.selectedTutorialSession = "S";
-    } else {
-        courseObject.selectedTutorialSession = "Y";
-    }
+    courseObject.selectedTutorialSession = getSectionSessionFromSection(section);
 }
 
 function selectUnselectedTutorial(courseObject, section, sectionTimes) {
+    console.log("> selectUnselectedTutorial");
     var timeElement;
     var timeSuffix;
     var isTimeClicked;
 
     $(section).attr("clicked", "true");
     setTutorialSession(courseObject, section);
-    satisfyCourse(courseObject, section);
     courseObject.selectedTutorial = section;
+    satisfyCourse(courseObject, section);
     courseObject.isTutorialSelected = true;
     timeSuffix = getTimeSuffix(section);
+
     selectUnselectedTutorialTimes(courseObject, section, sectionTimes, timeSuffix);
 
     if (getIsYearSection(section)) {
@@ -488,9 +553,11 @@ function selectUnselectedTutorial(courseObject, section, sectionTimes) {
     }
 
     courseObject.selectedTutorialTime = sectionTimes;
+    console.log("< selectUnselectedTutorial");
 }
 
 function selectAlreadySelectedTutorial(courseObject, section, sectionTimes) {
+    console.log("> selectAlreadySelectedTutorial");
     var selectedSession;
 
     turnTutorialOff(courseObject, section, sectionTimes);
@@ -511,9 +578,11 @@ function selectAlreadySelectedTutorial(courseObject, section, sectionTimes) {
         courseObject.selectedTutorialSession = null;
         courseObject.selectedTutorialTime = null;
     }
+    console.log("< selectAlreadySelectedTutorial");
 }
 
 function turnTutorialOff(courseObject, section, sectionTimes) {
+    console.log("> turnTutorialOff");
     var timeSuffix;
     var timeElement;
 
@@ -533,16 +602,11 @@ function turnTutorialOff(courseObject, section, sectionTimes) {
 
         if ($("#" + timeElement).hasClass("clickedConflictTime")) {
             removeClickedConflict(courseObject, timeElement, section);
-
         } else {
             $("#" + timeElement).html("");
             $("#" + timeElement).attr("clicked", "false");
             $("#" + timeElement).removeClass("clickedTutorialTime");
-            $("#" + timeElement).removeClass("clickedSectionUnsatisfied");
         }
-
-        $("#" + timeElement).removeClass("mouseOverConflict");
-        $("#" + timeElement).removeClass("mouseOverGood");
     });
 
     $(courseObject.selectedTutorial).removeClass("clickedSectionUnsatisfied");
@@ -555,21 +619,18 @@ function turnTutorialOff(courseObject, section, sectionTimes) {
 
             if ($("#" + timeElement).hasClass("clickedConflictTime")) {
                 removeClickedConflict(courseObject, timeElement, section);
-
             } else {
                 $("#" + timeElement).html("");
                 $("#" + timeElement).attr("clicked", "false");
                 $("#" + timeElement).removeClass("clickedTutorialTime");
-                $("#" + timeElement).removeClass("clickedSectionUnsatisfied");
             }
-
-            $("#" + timeElement).removeClass("mouseOverConflict");
-            $("#" + timeElement).removeClass("mouseOverGood");
         });
     }
+    console.log("< turnTutorialOff");
 }
 
 function selectNewTutorialSection(section, sectionTimes, courseObject, selectedSession) {
+    console.log("> selectNewTutorialSection");
     var timeElement;
     var timeSuffix;
     var isTimeClicked;
@@ -577,14 +638,7 @@ function selectNewTutorialSection(section, sectionTimes, courseObject, selectedS
     $(section).attr("clicked", "true");
 
     if(courseObject.selectedTutorialSession !== selectedSession) {
-
-        if (selectedSession === "F") {
-            courseObject.selectedTutorialSession = "F";
-        } else if (selectedSession === "S") {
-            courseObject.selectedTutorialSession = "S";
-        } else if (selectedSession === "Y") {
-            courseObject.selectedTutorialSession = "Y";
-        }
+        courseObject.selectedTutorialSession = selectedSession;
     }
 
     satisfyCourse(courseObject, section);
@@ -594,36 +648,17 @@ function selectNewTutorialSection(section, sectionTimes, courseObject, selectedS
     courseObject.selectedTutorialTime = sectionTimes;
 
     timeSuffix = getTimeSuffix(section);
-    $.each(sectionTimes, function (i, time) {
-        timeElement = time + timeSuffix;
-        isTimeClicked = getIsClicked(timeElement);
-
-        if (!isTimeClicked) {
-            setTutorialClicked(timeElement, courseObject);
-        } else {
-            setClickedConflict(courseObject, timeElement, section);
-        }  
-
-    });
+    selectUnselectedTutorialTimes(courseObject, section, sectionTimes, timeSuffix);
 
     if (getIsYearSection(section)) {
         timeSuffix = reverseTimeSuffix(timeSuffix);
-
-        $.each(sectionTimes, function (i, time) {
-            timeElement = time + timeSuffix;
-            isTimeClicked = getIsClicked(timeElement);
-
-            if (!isTimeClicked) {
-                setTutorialClicked(timeElement, courseObject);
-            } else {
-                setClickedConflict(courseObject, timeElement, section);
-            }  
-
-        });
+        selectUnselectedTutorialTimes(courseObject, section, sectionTimes, timeSuffix);
     }
+    console.log("< selectNewTutorialSection");
 }
 
 function selectUnselectedTutorialTimes(courseObject, section, sectionTimes, timeSuffix) {
+    console.log("> selectUnselectedTutorialTimes");
     var timeElement;
     var isTimeClicked;
 
@@ -634,50 +669,55 @@ function selectUnselectedTutorialTimes(courseObject, section, sectionTimes, time
         if (!isTimeClicked) {
             setTutorialClicked(timeElement, courseObject);
         } else {
-            setClickedConflict(courseObject, timeElement, section);
+            setClickedConflict(courseObject, timeElement, section, "tutorial");
         }
-
-        $("#" + timeElement).removeClass("mouseOverGood");
     });
 
+    console.log("< selectUnselectedTutorialTimes");
 }
 
 function setTutorialClicked(timeElement, courseObject) {
+    console.log("> setTutorialClicked");
     courseObject.isTutorialSelected = true;
 
+    $("#" + timeElement).attr("type", "tutorial");
     $("#" + timeElement).html(courseObject.name);
     $("#" + timeElement).attr("clicked", "true");
 
-    if (courseObject.satisfied) {
-        $("#" + timeElement).removeClass("mouseOverGood");
-        $("#" + timeElement).addClass("clickedTutorialTime");
-    } else {
-        $("#" + timeElement).addClass("clickedSectionUnsatisfied");
+    if (!courseObject.satisfied) {
+        setSatisfaction(courseObject, timeElement);
         $(courseObject.selectedTutorial).addClass("clickedSectionUnsatisfied");
         $(courseObject.selectedTutorial).attr("satisfied", "false");
     }
+    console.log("< setTutorialClicked");
 }
 
 function setTutorialUnclicked(timeElement, courseObject) {
+    console.log("> setTutorialUnclicked");
     courseObject.isTutorialSelected = false;
 
     $("#" + timeElement).html("");
     $("#" + timeElement).attr("clicked", "false");
-    $("#" + timeElement).removeClass("mouseOverConflict");
     $("#" + timeElement).removeClass("clickedTutorialTime");
-    $("#" + timeElement).removeClass("clickedSectionUnsatisfied");
+    // $("#" + timeElement).removeClass("clickedSectionUnsatisfied");
 
     $(courseObject.selectedTutorial).removeClass("clickedSectionUnsatisfied");
+    console.log("< setTutorialUnclicked");
 }
 
 /** Course Satisfaction **/
 
 function satisfyCourse(courseObject, section) {
+    console.log("> satisfyCourse");
     var timeSuffix;
     var timeElement;
 
     if (courseObject.manualTutorialEnrolment) {
-        if (courseObject.isTutorialSelected && (courseObject.selectedTutorialSession === courseObject.selectedLectureSession)) {
+        if (courseObject.isTutorialSelected && ((courseObject.selectedTutorialSession === courseObject.selectedLectureSession))) {
+            courseObject.satisfied = true;
+            $(section).attr("satisfied", true);
+            satisfyCourseSections(courseObject);
+
             if (courseObject.selectedTutorialSession === "F") {
                 timeSuffix = "-fall";
             } else {   
@@ -686,31 +726,22 @@ function satisfyCourse(courseObject, section) {
 
             $.each(courseObject.selectedTutorialTime, function (i, time) {
                 timeElement = time + timeSuffix;
-                if ($("#" + timeElement).hasClass("clickedConflictTime")) {
-                } else {
-                    $("#" + timeElement).removeClass("clickedSectionUnsatisfied");
-                    $("#" + timeElement).removeClass("mouseOverGood");
-                    $("#" + timeElement).addClass("clickedTutorialTime");
-                }
+                setSatisfaction(courseObject, timeElement);
             });
 
             if (getIsYearSection(section)) {
                 timeSuffix = reverseTimeSuffix(timeSuffix);
                 $.each(courseObject.selectedTutorialTime, function (i, time) {
                     timeElement = time + timeSuffix;
-                    if ($("#" + timeElement).hasClass("clickedConflictTime")) {
-                    } else {
-                        $("#" + timeElement).removeClass("clickedSectionUnsatisfied");
-                        $("#" + timeElement).removeClass("mouseOverGood");
-                        $("#" + timeElement).addClass("clickedTutorialTime");
-                    }
+                    setSatisfaction(courseObject, timeElement);
                 });
             }
 
+        } else if (courseObject.isLectureSelected && ((courseObject.selectedLectureSession === courseObject.selectedTutorialSession))) {
             courseObject.satisfied = true;
-            $(section).attr("satisfied", "true");
+            $(section).attr("satisfied", true);
             satisfyCourseSections(courseObject);
-        } else if (courseObject.isLectureSelected && (courseObject.selectedLectureSession === courseObject.selectedTutorialSession)) {
+
             if (courseObject.selectedLectureSession === "F") {
                 timeSuffix = "-fall";
             } else {   
@@ -719,38 +750,27 @@ function satisfyCourse(courseObject, section) {
 
             $.each(courseObject.selectedTimes, function (i, time) {
                 timeElement = time + timeSuffix;
-
-                if ($("#" + timeElement).hasClass("clickedConflictTime")) {
-                } else {
-                    $("#" + timeElement).removeClass("clickedSectionUnsatisfied");
-                    $("#" + timeElement).addClass("clickedLectureTime");
-                }
-
+                setSatisfaction(courseObject, timeElement);
             });
             if (getIsYearSection(section)) {
                 timeSuffix = reverseTimeSuffix(timeSuffix);
 
                 $.each(courseObject.selectedTimes, function (i, time) {
                     timeElement = time + timeSuffix;
-                    if ($("#" + timeElement).hasClass("clickedConflictTime")) {
-                    } else {
-                        $("#" + timeElement).removeClass("clickedSectionUnsatisfied");
-                        $("#" + timeElement).addClass("clickedLectureTime");
-                    }
+                    setSatisfaction(courseObject, timeElement);
                 });
-
             }
-            courseObject.satisfied = true;
-            $(section).attr("satisfied", "true");
-            satisfyCourseSections(courseObject);
+            
         }
     }
+    console.log("< satisfyCourse");
 }
 
 function unsatisfyCourse(courseObject, section) {
+    console.log("> unsatisfyCourse");
     var timeSuffix;
     var timeElement;
-
+    console.log("unsatisfying");
     if (courseObject.manualTutorialEnrolment) {
 
         if (courseObject.selectedLectureSession === "F") {
@@ -760,63 +780,55 @@ function unsatisfyCourse(courseObject, section) {
         }
 
         if (courseObject.isTutorialSelected && (courseObject.selectedTutorialSession === courseObject.selectedLectureSession)) {
+            courseObject.satisfied = false;
+            $(section).attr("satisfied", false);
+            $(courseObject.selectedTutorial).addClass("clickedSectionUnsatisfied");
+
             $.each(courseObject.selectedTutorialTime, function (i, time) {
                 timeElement = time + timeSuffix;
-                if ($("#" + timeElement).hasClass("clickedConflictTime")) {
-                } else {
-                    $("#" + timeElement).addClass("clickedSectionUnsatisfied");
-                    $("#" + timeElement).removeClass("clickedTutorialTime");
-                }
+                setSatisfaction(courseObject, timeElement);
             });
 
             if (getIsYearSection(section)) {
                 timeSuffix = reverseTimeSuffix(timeSuffix);
+
                 $.each(courseObject.selectedTutorialTime, function (i, time) {
                     timeElement = time + timeSuffix;
-                    if ($("#" + timeElement).hasClass("clickedConflictTime")) {
-                    } else {
-                        $("#" + timeElement).addClass("clickedSectionUnsatisfied");
-                        $("#" + timeElement).removeClass("clickedTutorialTime");
-                    }
+                    setSatisfaction(courseObject, timeElement);
                 });
             }
 
-            courseObject.satisfied = false;
-            $(section).attr("satisfied", "false");
-            $(courseObject.selectedTutorial).addClass("clickedSectionUnsatisfied");
         } else if (courseObject.isLectureSelected && (courseObject.selectedLectureSession === courseObject.selectedTutorialSession)) {
+            courseObject.satisfied = false;
+            $(section).attr("satisfied", false);
+            $(courseObject.selectedLecture).addClass("clickedSectionUnsatisfied");
+
             $.each(courseObject.selectedTimes, function (i, time) {
                 timeElement = time + timeSuffix;
-                if ($("#" + timeElement).hasClass("clickedConflictTime")) {
-                } else {
-                    $("#" + timeElement).addClass("clickedSectionUnsatisfied");
-                    $("#" + timeElement).removeClass("clickedLectureTime");
-                }
+                setSatisfaction(courseObject, timeElement);
             });
 
             if (getIsYearSection(section)) {
                 timeSuffix = reverseTimeSuffix(timeSuffix);
+
                 $.each(courseObject.selectedTimes, function (i, time) {
                     timeElement = time + timeSuffix;
-                    if ($("#" + timeElement).hasClass("clickedConflictTime")) {
-                    } else {
-                        $("#" + timeElement).addClass("clickedSectionUnsatisfied");
-                        $("#" + timeElement).removeClass("clickedLectureTime");
-                    }
+                    setSatisfaction(courseObject, timeElement);
                 });
             }
-
-            courseObject.satisfied = false;
-            $(section).attr("satisfied", "false");
-            $(courseObject.selectedLecture).addClass("clickedSectionUnsatisfied");
         }
     }
+    console.log("< unsatisfyCourse");
 }
 
 function satisfyCourseSections(courseObject) {
     $(courseObject.selectedLecture).removeClass("clickedSectionUnsatisfied");
     $(courseObject.selectedTutorial).removeClass("clickedSectionUnsatisfied");   
     $("#" + courseObject.name + "-li" + " li").each(function() {
-        $(this).attr("satisfied", "true");
+        $(this).attr("satisfied", true);
     });
+}
+
+function setSatisfaction(courseObject, timeElement) {
+    $("#" + timeElement).attr("satisfied", courseObject.satisfied);
 }
