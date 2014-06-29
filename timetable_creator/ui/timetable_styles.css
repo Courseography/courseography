@@ -26,6 +26,7 @@ a:visited {
   position: fixed;
   background-color: white;
   width: 100%;
+  visibility: hidden;
   text-align: center;
   border-bottom: 2px solid #330000;
   z-index: 2147483647;

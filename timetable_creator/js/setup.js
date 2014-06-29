@@ -20,6 +20,7 @@ var searchList;
 
 $(document).ready(function () {
     $("#dialog").fadeOut();
+    $("#dialog").css("visibility", "visible");
     $("td").each(function() {
         $(this).attr("in-conflict", "false");
         $(this).attr("satisfied", "true");
