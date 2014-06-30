@@ -25,6 +25,7 @@ a:visited {
   position: fixed;
   background-color: white;
   width: 100%;
+  display: none;
   visibility: hidden;
   text-align: center;
   border-bottom: 2px solid #330000;
@@ -33,7 +34,7 @@ a:visited {
 
 /* Header styles */
 .header {
-  background-color: #330000;
+  background-color: #261B2A;
   padding-left: 0.5em;
   padding-right: 0.5em;
   text-align: vertical;
@@ -98,6 +99,7 @@ caption {
   text-align: center;
   vertical-align: middle !important;
   border-color: #DB94B8 !important;
+  overflow: hidden;
 }
 
 .timetable .timetable-time {
@@ -130,12 +132,12 @@ caption {
 
 #timetable-spring .timetable-time {
   text-align: left;
-  padding-left: 5px !important;
+  padding-left: 10px !important;
 }
 
 #timetable-fall .timetable-time {
   text-align: right;
-  padding-right: 5px !important;
+  padding-right: 10px !important;
 }
 
 
@@ -143,13 +145,14 @@ caption {
 #course-select-wrapper {
   overflow: hidden;
   height: 100%;
-  background-color: #261B2A;
+  background-color: #46364A;
+  color: white;
   margin: 0;
   padding: 0;
 }
 
 .main {
-  height: 100%;
+  height: calc(100% - 3.55em);
   margin: 0;
 }
 
@@ -177,14 +180,12 @@ caption {
 }
 
 .sectionList-fall {
-  background-color: #DB94B8;
   width: 50%;
   float: left;
   border-right: 1px solid black;
 }
 
 .sectionList-spring {
-  background-color: #DB94B8;
   width: 50%;
   float: right;
   border-left: 1px solid black;
@@ -196,75 +197,59 @@ caption {
   padding: 0;
 }
 
+.ui-accordion-content li {
+  background-color: #336685;
+}
+
 .sectionList-fall li:hover {
-  background-color: #FF94B8;
+  background-color: #437699;
 
 }
 
 .sectionList-spring li:hover {
-  background-color: #F494FF;
+  background-color: #437699;
   
 }
 
-.sectionList-year {
-  background-color: yellow;
-}
-
+.ui-accordion-content li.clickedLectureTime,
 .clickedLectureTime {
-  background-color: rgba(100, 50, 255, 0.6);
-}
-
-.clickedTutorialTime {
-  background-color: rgba(255, 127, 80, 0.6);
-}
-
-.mouseOverGood {
-  background-color: #DB94B8;
-}
-
-.mouseOverTaken {
-  background-color: black;
+  background-color: #437699;
 }
 
 .clickedLectureTime:hover {
-  background-color: rgba(20, 0, 255, 0.5);
-  cursor: pointer;
+  background-color: #336685;
+  /*cursor: pointer;*/
+}
+
+.clickedTutorialTime {
+  background-color: #737A99;
 }
 
 .clickedTutorialTime:hover {
-  background-color: orange;
-  cursor:pointer;
+  background-color: #636A89;
+  /*cursor:pointer;*/
 }
 
-.mouseOverConflict {
-  background-color: rgba(255, 0, 0, 0.5);
+.mouseOverGood {
+  background-color: #437699;
+}
+
+.mouseOverTaken {
+  background-color: #336685;
 }
 
 .mouseOverRemove {
-  background-color: fuchsia;
+  /*background-color: fuchsia;*/
+  -webkit-transition: all 0.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out;
+  -ms-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
+  -webkit-opacity: 0.5;
+  -moz-opacity: 0.5;
+  opacity: 0.5;
 }
 
-.clickedConflictTime {
-  background-color: rgba(255, 0, 0, 0.5);
-}
-
-.selectedTime {
-  background-color: rgba(0,255,0,0.5);
-}
-
-.selectedLectureSection {
-  background-color: white;
-  color: black;
-}
-
-.selectedTutorialSection {
-  background-color: rgba(255, 127,80,0);
-  color: black;
-}
-
-#range {
-  color: white;
-}
 
 #layout {
   width: 100%;
@@ -272,7 +257,6 @@ caption {
 
 #search-list .starred-course {
   background-color: #261B2A;
-  color: black;
 }
 
 .section-fall {
@@ -297,39 +281,12 @@ caption {
 
 .sectionClickedLecture {
   text-align: center;
-  background-color: #6600FF;
-  color: white;
+  background-color: #336685;
 }
 
-.sectionClickedTutorial {
-  text-align: center;
-  background-color: orange;
-  color: white;
-}
-
-.section-fall:hover {
-  background-color: blue;
-  color: white;
-  border: 2px solid black;
-  cursor: pointer;
-}
-
-.section-spring:hover {
-  background-color: blue;
-  color: white;
-  border: 2px solid black;
-  cursor: pointer;
-}
-
-.section-year:hover {
-  background-color: blue;
-  color: white;
-  border: 2px solid black;
-  cursor:pointer;
-}
 
 .clicked-header {
-  background-color: rgba(219, 148, 184, 0.5);
+  background-color: #336685;
 }
 
 .ui-accordion-header {
@@ -337,35 +294,44 @@ caption {
   text-align: center;
   cursor: pointer;
   margin: 0;
-  padding: 0;
+  padding: 0.25em 0;
   display: block;
   width: 100%;
   outline: none;
+  border-top: 1px solid black;
 }
 
-.ui-accordion-header:hover {
-  background-color: #6600ff;
+.clickedSectionUnsatisfied {
+  background-color: rgb(215, 117, 70) !important;
+}
+
+.clickedSectionUnsatisfied:hover {
+  background-color: rgb(195, 97, 50) !important;
+}
+
+.clickedConflictTime {
+  background-color: #C92343;
+}
+
+.clickedConflictTime:hover {
+  background-color: #B91333;
+}
+
+.mouseOverConflict {
+  background-color: #C92343;
+}
+
+.ui-accordion-header:hover,
+.ui-accordion-header-active {
+  background-color: #261B2A !important;
 }
 
 .ui-accordion-content {
-  color: black;
   text-align: center;
   overflow: auto;
   width: 50%
 }
 
-.ui-accordion-header-active {
-  background-color: #6600ff;
-  border: 1px black;
-}
-
-.ui-tabs-anchor {
-
-}
-
-.clickedSectionUnsatisfied {
-  background-color: rgba(160,32,240,0.6);
-}
 
 /* Info layout div*/
 
@@ -373,30 +339,26 @@ caption {
   padding: 0em;
   margin: 0em;
   width: 100%;
-  height:100px;
+  height: 4.7em;
+  color: black;
+  border-bottom: 1px solid black;
+  text-align: center;
 }
 
 #info-layout h2 {
-  font-size: 1.3em;
+  font-size: 1.4em;
   margin: 0.5em;
+  font-weight: bold;
 }
 
 #info-layout h4 {
-  font-size: 1.1em;
+  font-size: 1.2em;
   margin: 0.5em;
-}
-
-#info-layout h2 span {
-  color: white;
-}
-
-#info-layout h4 span {
-  color: white;
 }
 
 /* Search Box styles*/
 #search-layout {
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: #46364A;
   height: 100%;
   margin: 0;
   padding: 0;
@@ -426,15 +388,23 @@ caption {
 }
 
 #search-list ul li:hover {
-  background-color: white;
-  color: black;
+  /*background-color: white;
+  color: black;*/
   cursor: pointer;
+  text-decoration: underline;
 }
 
 /* Beta Warning */
 #beta-warning {
-  background-color: rgba(0, 0, 0, 0.5);
+  /*background-color: rgba(0, 0, 0, 0.5);*/
   float: center;
   color: white;
   padding: 10px 10px 10px 10px;
+  color: black;
+}
+
+#beta-warning h3 {
+  padding: 0;
+  margin: 0;
+  font-size: 1.1em;
 }
