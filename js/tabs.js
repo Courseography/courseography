@@ -112,13 +112,13 @@ function readCalendarEntry(name) {
 		success: function(data) {
 			result += '<h3>' + data.name + ': ' + data.title + '</h3>';
 			result += '<p>' + data.description + '</p>';
-			if (typeof data.prereqString !== 'undefined') {
+			if (typeof data.prereqString !== 'undefined' && data.prereqString !== null) {
 				result += '<p><strong>Prerequisite:</strong> ' + data.prereqString + '</p>';
 			}
-			if (typeof data.prep !== 'undefined') {
+			if (typeof data.prep !== 'undefined' && data.prep !== null) {
 				result += '<p><strong>Recommended Preparation:</strong> ' + data.prep + '</p>';
 			}
-			if (typeof data.exclusions != 'undefined') {
+			if (typeof data.exclusions != 'undefined' && data.exclusions !== null) {
 				result += '<p><strong>Exclusions:</strong> ' + data.exclusions + '</p>';
 			}
 
