@@ -231,4 +231,4 @@ class TimetableParser:
             return True
 
         section = data[self.section]
-        return len(section) == 5 and section.startswith('L')
+        return len(section) == 0 or (len(section) == 5 and section.startswith('L'))
