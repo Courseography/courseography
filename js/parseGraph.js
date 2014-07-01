@@ -40,12 +40,23 @@ function buildGraph() {
 
 	$('path').each(function(i) {
 		var coords = $(this).attr('d').split(' ');
-		var xStart = parseFloat(coords[0].substr(1));
-		var yStart = parseFloat(coords[1]);
-		var yEnd = parseFloat(coords.pop());
-		var xEnd = parseFloat(coords.pop().substr(1));
+		coords = coords.filter(function(str) {return str !== 'M' && str !== 'L';});
+		// Do something for internet explorer
+		if (!!navigator.userAgent.match(/Trident.*rv[ :]*11\./) ||
+			  window.navigator.userAgent.indexOf("MSIE ") > -1) {
+			var xStart = parseFloat(coords[0]);
+			var yStart = parseFloat(coords[1]);
+			var yEnd = parseFloat(coords.pop());
+			var xEnd = parseFloat(coords.pop());
+		} else {
+			var xStart = parseFloat(coords[0].substr(1));
+			var yStart = parseFloat(coords[1]);
+			var yEnd = parseFloat(coords.pop());
+			var xEnd = parseFloat(coords.pop().substr(1));
+		}
+
 		var startNode = '';
-		var endNode = '';
+		var endNode = '';	
 
 		$('.node, .hybrid').each(function(index) {
 			// Check intersection

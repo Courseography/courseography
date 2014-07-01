@@ -4,10 +4,11 @@
 
 <head>
   <meta charset="utf-8">
-  <meta name="keywords" content="University of Toronto, Computer Science, UofT computer science, UofT comp sci, course planner, u of t, u of t timetable">
+  <meta name="keywords" content="University of Toronto, Computer Science, UofT computer science, UofT comp sci, course planner, u of t, u of t timetable, flowscopic, David Liu, Ian Stewart-Binks">
   <meta name="robots" content="index, follow, noarchive, nosnippet">
   <meta name="description" content="University of Toronto Department of Computer Science Course Planner.">
-  <title>CSC Course Planner</title>
+  <title>Flowscopic</title>
+  <link href='http://fonts.googleapis.com/css?family=Bitter:400,400italic' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="style/styles.css"/>
   <link rel="stylesheet" href="style/graphStyles.css"/>
 </head>
@@ -437,8 +438,8 @@
 
       <!-- Title & Logo -->
       <g>
-        <image xlink:href="res/img/dcs.svg" x="1070" y="-285" width="255" height="85"/>
-        <text id="svgTitle" x="1200" y="-170">Course Planner</text>
+        <image xlink:href="res/img/dcs.png" x="1070" y="-285" width="270" height="90"/>
+        <text id="svgTitle" x="1200" y="-170">Flowscopic</text>
       </g>
 
 
@@ -527,7 +528,7 @@
       </p>
       <br>
       <p>
-        Course Planner is an ongoing 
+        Flowscopic is an ongoing 
         <a target="_blank" href="https://github.com/Ian-Stewart-Binks/cscourseplanner">
         project</a> maintained by Ian Stewart-Binks
         and <a target="_blank" href="http://www.cs.toronto.edu/~liudavid/">David Liu</a>. 
@@ -783,10 +784,10 @@
     <!-- Timetable Tab -->
     <div id="timetable" class="infoTab">
       <div id="timetableSearch" class="infoTabContent">
-        <h2>2013-2014 Timetable</h2>
-        <p>2014-2015 version coming soon!</p>
+        <h2>2014-2015 Timetable</h2>
         <p>Search through the timetable for a course or instructor.</p>
         <p>The "(+5)" caps are extra reserved seats. See official timetable for details.</p>
+        <p id="timetable-creator-link"><a href="timetable_creator.html"> Plan your timetable here! </a></p>
         <input type="text" class="text-input" id="filter" value="" />
       </div>
       <div id="timetableContainer"></div>
@@ -1266,6 +1267,13 @@
   <script src='js/tabs.js'></script>
   <script src='js/util.js'></script>
   <script src='js/post.js'></script>
-
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-52400540-1', 'auto');
+    ga('send', 'pageview');
+  </script>
 </body>
 </html>

@@ -1,1 +1,0 @@
-{"F": {"tutorials": ["F12"], "lectures": [{"instructor": "Pitassi", "section": "L0101", "cap": "60\n", "extraCap": 0, "time": "T9-11"}]}, "manualTutorialEnrolment": false, "name": "CSC438H1", "title": "Computabil & Logic"}

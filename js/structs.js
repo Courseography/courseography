@@ -57,7 +57,7 @@ function Node(parents, type, name) {
 	this.logicalType = type; // 'AND' or 'OR' of prerequisites
 	this.updated = false; // Used when updating active/inactive state
 	this.hybrid = false; // Identifies whether node is 'hybrid'
-  	this.status = 'inactive';
+	this.status = 'inactive';
 
 }
 

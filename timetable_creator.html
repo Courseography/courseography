@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="University of Toronto, Computer Science, UofT computer science, UofT comp sci, time, timetable, u of t, u of t timetable">
+    <meta name="robots" content="index, follow, noarchive, nosnippet">
+    <meta name="description" content="University of Toronto Department of Computer Science Timetable Creator.">
+	<title>Course Planner - Timetable</title>
+	<!-- Bootstrap -->
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+	<link href="style/timetable_styles.css" rel="stylesheet">
+</head>
+
+<body>
+	<div class="row header">
+		<div class="col-md-6 col-xs-6" id="header">
+			<h2>2014-2015 Timetable</h2>
+		</div>
+		<div class="col-md-6 col-xs-6">
+			<h2 id="home-link"><a href="planner.html">Back to Planner</a></h2>
+		</div>
+	</div>
+	<div id="dialog">
+		Conflicting courses are difficult to manage. Make sure you understand the added responsibility of having two or more conflicting courses.
+	</div>
+	<div class="row main">
+		<div class="col-md-2 col-xs-6" id="course-select-wrapper">
+			<ul id="course-select" class="trapScroll-enabled"></ul>
+		</div>
+		<div class="col-md-2 col-xs-6 col-md-push-8" id="search-layout">
+			<div id="search-container">
+				<form><input type="text" id="course-filter" class="form-control" placeholder="Enter a course!" /></form>
+				<div id="search-list"></div>
+			</div>
+		</div>
+		<div class="col-md-8 col-xs-12 col-md-pull-2">
+			<div class="row">
+				<div class="col-md-6 col-xs-12 timetable-container">
+					<table id="timetable-fall" class="timetable table">
+						<caption>Fall</caption>
+						<thead>
+							<th id="no-border" class="timetable-time"></th>
+							<th class="timetable-header-fall">Mon</th>
+							<th class="timetable-header-fall">Tue</th>
+							<th class="timetable-header-fall">Wed</th>
+							<th class="timetable-header-fall">Thu</th>
+							<th class="timetable-header-fall">Fri</th>
+						</thead>
+						<tr>
+							<td class="timetable-time">9</td>
+							<td id="M9-fall" class="timetable-cell-fall"></td>
+							<td id="T9-fall" class="timetable-cell-fall"></td>
+							<td id="W9-fall" class="timetable-cell-fall"></td>
+							<td id="R9-fall" class="timetable-cell-fall"></td>
+							<td id="F9-fall" class="timetable-cell-fall"></td>
+						</tr>
+						<tr>
+							<td class="timetable-time">10</td>
+							<td id="M10-fall" class="timetable-cell-fall"></td>
+							<td id="T10-fall" class="timetable-cell-fall"></td>
+							<td id="W10-fall" class="timetable-cell-fall"></td>
+							<td id="R10-fall" class="timetable-cell-fall"></td>
+							<td id="F10-fall" class="timetable-cell-fall"></td>
+						</tr>
+						<tr>
+							<td class="timetable-time">11</td>
+							<td id="M11-fall" class="timetable-cell-fall"></td>
+							<td id="T11-fall" class="timetable-cell-fall"></td>
+							<td id="W11-fall" class="timetable-cell-fall"></td>
+							<td id="R11-fall" class="timetable-cell-fall"></td>
+							<td id="F11-fall" class="timetable-cell-fall"></td>
+						</tr>
+						<tr>
+							<td class="timetable-time">12</td>
+							<td id="M12-fall" class="timetable-cell-fall"></td>
+							<td id="T12-fall" class="timetable-cell-fall"></td>
+							<td id="W12-fall" class="timetable-cell-fall"></td>
+							<td id="R12-fall" class="timetable-cell-fall"></td>
+							<td id="F12-fall" class="timetable-cell-fall"></td>
+						</tr>
+						<tr>
+							<td class="timetable-time">1</td>
+							<td id="M1-fall" class="timetable-cell-fall"></td>
+							<td id="T1-fall" class="timetable-cell-fall"></td>
+							<td id="W1-fall" class="timetable-cell-fall"></td>
+							<td id="R1-fall" class="timetable-cell-fall"></td>
+							<td id="F1-fall" class="timetable-cell-fall"></td>
+						</tr>
+						<tr>
+							<td class="timetable-time">2</td>
+							<td id="M2-fall" class="timetable-cell-fall"></td>
+							<td id="T2-fall" class="timetable-cell-fall"></td>
+							<td id="W2-fall" class="timetable-cell-fall"></td>
+							<td id="R2-fall" class="timetable-cell-fall"></td>
+							<td id="F2-fall" class="timetable-cell-fall"></td>
+						</tr>
+						<tr>
+							<td class="timetable-time">3</td>
+							<td id="M3-fall" class="timetable-cell-fall"></td>
+							<td id="T3-fall" class="timetable-cell-fall"></td>
+							<td id="W3-fall" class="timetable-cell-fall"></td>
+							<td id="R3-fall" class="timetable-cell-fall"></td>
+							<td id="F3-fall" class="timetable-cell-fall"></td>
+						</tr>
+						<tr>
+							<td class="timetable-time">4</td>
+							<td id="M4-fall" class="timetable-cell-fall"></td>
+							<td id="T4-fall" class="timetable-cell-fall"></td>
+							<td id="W4-fall" class="timetable-cell-fall"></td>
+							<td id="R4-fall" class="timetable-cell-fall"></td>
+							<td id="F4-fall" class="timetable-cell-fall"></td>
+						</tr>
+						<tr>
+							<td class="timetable-time">5</td>
+							<td id="M5-fall" class="timetable-cell-fall"></td>
+							<td id="T5-fall" class="timetable-cell-fall"></td>
+							<td id="W5-fall" class="timetable-cell-fall"></td>
+							<td id="R5-fall" class="timetable-cell-fall"></td>
+							<td id="F5-fall" class="timetable-cell-fall"></td>
+						</tr>
+						<tr>
+							<td class="timetable-time">6</td>
+							<td id="M6-fall" class="timetable-cell-fall"></td>
+							<td id="T6-fall" class="timetable-cell-fall"></td>
+							<td id="W6-fall" class="timetable-cell-fall"></td>
+							<td id="R6-fall" class="timetable-cell-fall"></td>
+							<td id="F6-fall" class="timetable-cell-fall"></td>
+						</tr>
+						<tr>
+							<td class="timetable-time">7</td>
+							<td id="M7-fall" class="timetable-cell-fall"></td>
+							<td id="T7-fall" class="timetable-cell-fall"></td>
+							<td id="W7-fall" class="timetable-cell-fall"></td>
+							<td id="R7-fall" class="timetable-cell-fall"></td>
+							<td id="F7-fall" class="timetable-cell-fall"></td>
+						</tr>
+						<tr>
+							<td class="timetable-time">8</td>
+							<td id="M8-fall" class="timetable-cell-fall"></td>
+							<td id="T8-fall" class="timetable-cell-fall"></td>
+							<td id="W8-fall" class="timetable-cell-fall"></td>
+							<td id="R8-fall" class="timetable-cell-fall"></td>
+							<td id="F8-fall" class="timetable-cell-fall"></td>
+						</tr>
+					</table>
+				</div>
+				<div class="col-md-6 col-xs-12 timetable-container">
+					<table id="timetable-spring" class="timetable table">
+						<caption>Spring</caption>
+						<thead>
+							<th class="timetable-header-spring">Mon</th>
+							<th class="timetable-header-spring">Tue</th>
+							<th class="timetable-header-spring">Wed</th>
+							<th class="timetable-header-spring">Thu</th>
+							<th class="timetable-header-spring">Fri</th>
+							<th id="no-border" class="timetable-time"></th>
+						</thead>
+						<tr>
+							<td id="M9-spring" class="timetable-cell-spring"></td>
+							<td id="T9-spring" class="timetable-cell-spring"></td>
+							<td id="W9-spring" class="timetable-cell-spring"></td>
+							<td id="R9-spring" class="timetable-cell-spring"></td>
+							<td id="F9-spring" class="timetable-cell-spring"></td>
+							<td class="timetable-time">9</td>
+						</tr>
+						<tr>
+							<td id="M10-spring" class="timetable-cell-spring"></td>
+							<td id="T10-spring" class="timetable-cell-spring"></td>
+							<td id="W10-spring" class="timetable-cell-spring"></td>
+							<td id="R10-spring" class="timetable-cell-spring"></td>
+							<td id="F10-spring" class="timetable-cell-spring"></td>
+							<td class="timetable-time">10</td>
+						</tr>
+						<tr>
+							<td id="M11-spring" class="timetable-cell-spring"></td>
+							<td id="T11-spring" class="timetable-cell-spring"></td>
+							<td id="W11-spring" class="timetable-cell-spring"></td>
+							<td id="R11-spring" class="timetable-cell-spring"></td>
+							<td id="F11-spring" class="timetable-cell-spring"></td>
+							<td class="timetable-time">11</td>
+						</tr>
+						<tr>
+							<td id="M12-spring" class="timetable-cell-spring"></td>
+							<td id="T12-spring" class="timetable-cell-spring"></td>
+							<td id="W12-spring" class="timetable-cell-spring"></td>
+							<td id="R12-spring" class="timetable-cell-spring"></td>
+							<td id="F12-spring" class="timetable-cell-spring"></td>
+							<td class="timetable-time">12</td>
+						</tr>
+						<tr>
+							<td id="M1-spring" class="timetable-cell-spring"></td>
+							<td id="T1-spring" class="timetable-cell-spring"></td>
+							<td id="W1-spring" class="timetable-cell-spring"></td>
+							<td id="R1-spring" class="timetable-cell-spring"></td>
+							<td id="F1-spring" class="timetable-cell-spring"></td>
+							<td class="timetable-time">1</td>
+						</tr>
+						<tr>
+							<td id="M2-spring" class="timetable-cell-spring"></td>
+							<td id="T2-spring" class="timetable-cell-spring"></td>
+							<td id="W2-spring" class="timetable-cell-spring"></td>
+							<td id="R2-spring" class="timetable-cell-spring"></td>
+							<td id="F2-spring" class="timetable-cell-spring"></td>
+							<td class="timetable-time">2</td>
+						</tr>
+						<tr>
+							<td id="M3-spring" class="timetable-cell-spring"></td>
+							<td id="T3-spring" class="timetable-cell-spring"></td>
+							<td id="W3-spring" class="timetable-cell-spring"></td>
+							<td id="R3-spring" class="timetable-cell-spring"></td>
+							<td id="F3-spring" class="timetable-cell-spring"></td>
+							<td class="timetable-time">3</td>
+						</tr>
+						<tr>
+							<td id="M4-spring" class="timetable-cell-spring"></td>
+							<td id="T4-spring" class="timetable-cell-spring"></td>
+							<td id="W4-spring" class="timetable-cell-spring"></td>
+							<td id="R4-spring" class="timetable-cell-spring"></td>
+							<td id="F4-spring" class="timetable-cell-spring"></td>
+							<td class="timetable-time">4</td>
+						</tr>
+						<tr>
+							<td id="M5-spring" class="timetable-cell-spring"></td>
+							<td id="T5-spring" class="timetable-cell-spring"></td>
+							<td id="W5-spring" class="timetable-cell-spring"></td>
+							<td id="R5-spring" class="timetable-cell-spring"></td>
+							<td id="F5-spring" class="timetable-cell-spring"></td>
+							<td class="timetable-time">5</td>
+						</tr>
+						<tr>
+							<td id="M6-spring" class="timetable-cell-spring"></td>
+							<td id="T6-spring" class="timetable-cell-spring"></td>
+							<td id="W6-spring" class="timetable-cell-spring"></td>
+							<td id="R6-spring" class="timetable-cell-spring"></td>
+							<td id="F6-spring" class="timetable-cell-spring"></td>
+							<td class="timetable-time">6</td>
+						</tr>
+						<tr>
+							<td id="M7-spring" class="timetable-cell-spring"></td>
+							<td id="T7-spring" class="timetable-cell-spring"></td>
+							<td id="W7-spring" class="timetable-cell-spring"></td>
+							<td id="R7-spring" class="timetable-cell-spring"></td>
+							<td id="F7-spring" class="timetable-cell-spring"></td>
+							<td class="timetable-time">7</td>
+						</tr>
+						<tr>
+							<td id="M8-spring" class="timetable-cell-spring"></td>
+							<td id="T8-spring" class="timetable-cell-spring"></td>
+							<td id="W8-spring" class="timetable-cell-spring"></td>
+							<td id="R8-spring" class="timetable-cell-spring"></td>
+							<td id="F8-spring" class="timetable-cell-spring"></td>
+							<td class="timetable-time">8</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div class="row">
+				<div id="info-layout">
+					<h2>
+						<span id="course-info-code"></span>
+						<span id="course-info-title"></span>
+					</h2>
+					<h4>
+						<span id="section-stats-section"></span>
+						<span id="section-stats-instructor"></span>
+					</h4>
+				</div>
+			</div>
+			<div id="beta-warning">
+				<h3>This tool is currently in Beta. If there are any errors, please let us know and we will fix them right away! Please consult ROSI for the most accurate information regarding the UTSG undergaduate timetable.</h3>
+			</div>
+		</div>
+	</div>
+
+
+
+
+
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+	<script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+	<script src="js/timetable/timetableCookieHandler.js"></script>
+	<script src="js/timetable/timetable_util.js"></script>
+	<script src="js/timetable/setup.js"></script>
+	<script src="js/timetable/processCourse.js"></script>
+	<script src="js/timetable/mouseEvents.js"></script>
+	<script>
+	    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	    ga('create', 'UA-52400540-1', 'auto');
+	    ga('send', 'pageview');
+  	</script>
+
+</body>
+</html>
