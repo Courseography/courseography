@@ -143,63 +143,65 @@ function refreshAccordion() {
 
 // Search function for timetable
 function createTimetableSearch() {
+    $("#course-filter").keyup(function() {
+        resetSearchList();
+    });
+}
+
+function resetSearchList() {
     var courseList;
     var courseEntry;
     var counter;
     var index;
+    counter = 0;
+    var filter = $("#course-filter").val().toLowerCase();
+    while (searchList.firstChild) {
+        searchList.removeChild(searchList.firstChild);
+    }
+    courseList = document.createElement("ul");
+    if (filter !== "") {
 
-    $("#course-filter").keyup(function() {
-        counter = 0;
-        var filter = $(this).val().toLowerCase();
-        while (searchList.firstChild) {
-            searchList.removeChild(searchList.firstChild);
-        }
-        courseList = document.createElement("ul");
-        if (filter !== "") {
+        // Iterate through every course.
+        $.each(courses, function(i, course) {
 
-            // Iterate through every course.
-            $.each(courses, function(i, course) {
+            // If the course matches and if there are less than 100 courses in the list, add it to the list.
+            if (course.toLowerCase().indexOf(filter) > -1 && counter < 100) {
+                courseEntry = document.createElement("li");
+                var shortenedCourseName = course.substring(0, 8);
 
-                // If the course matches and if there are less than 100 courses in the list, add it to the list.
-                if (course.toLowerCase().indexOf(filter) > -1 && counter < 100) {
-                    courseEntry = document.createElement("li");
-                    var shortenedCourseName = course.substring(0, 8);
-
-                    // "Star" the course if it has been previously selected.
-                    if ($.inArray(shortenedCourseName, selectedCourses) > -1) {
-                        $(courseEntry).addClass("starred-course");
-                    }
-
-                    // Add an ID to the list so we can come back and star it when it is clicked.
-                    $(courseEntry).attr("id", shortenedCourseName + "-search");
-                    courseEntry.innerHTML = shortenedCourseName;
-                    $(courseEntry).click(function() {
-
-                        // Has the course already been clicked?
-                        index = $.inArray(shortenedCourseName, selectedCourses);
-                        if (index > -1) {
-                            // Yes, take it out of the list and "unstar" it. Unstarring may be useless, as it is taken out of the list.
-                            selectedCourses.splice(index, 1);
-                            $("#" + shortenedCourseName + "-search").removeClass("starred-course");
-                            removeCourseFromList(shortenedCourseName);
-                        } else {
-                            // No, add it to the left list (starrted courses list) and add the corresponding class.
-                            selectedCourses.push(shortenedCourseName);
-                            $("#" + shortenedCourseName + "-search").addClass("starred-course");
-                            addCourseToList(course);
-                        }
-                        var jsonCookie = JSON.stringify(selectedCourses);
-                        setCookie("selected-courses", jsonCookie);
-                    });
-
-                    // Increase the number of courses presently shown on the right hand search list.
-                    counter++;
-                    courseList.appendChild(courseEntry);
+                // "Star" the course if it has been previously selected.
+                if ($.inArray(shortenedCourseName, selectedCourses) > -1) {
+                    $(courseEntry).addClass("starred-course");
                 }
-            });
-        }
-        searchList.appendChild(courseList);
-    });
+
+                // Add an ID to the list so we can come back and star it when it is clicked.
+                $(courseEntry).attr("id", shortenedCourseName + "-search");
+                courseEntry.innerHTML = shortenedCourseName;
+                $(courseEntry).click(function() {
+
+                    // Has the course already been clicked?
+                    index = $.inArray(shortenedCourseName, selectedCourses);
+                    if (index > -1) {
+                        // Yes, take it out of the list and "unstar" it. Unstarring may be useless, as it is taken out of the list.
+                        $("#" + shortenedCourseName + "-search").removeClass("starred-course");
+                        removeCourseFromList(shortenedCourseName);
+                    } else {
+                        // No, add it to the left list (starrted courses list) and add the corresponding class.
+                        selectedCourses.push(shortenedCourseName);
+                        $("#" + shortenedCourseName + "-search").addClass("starred-course");
+                        addCourseToList(course);
+                    }
+                    var jsonCookie = JSON.stringify(selectedCourses);
+                    setCookie("selected-courses", jsonCookie);
+                });
+
+                // Increase the number of courses presently shown on the right hand search list.
+                counter++;
+                courseList.appendChild(courseEntry);
+            }
+        });
+    }
+    searchList.appendChild(courseList);
 }
 
 function restoreFromCookies() {
@@ -243,11 +245,25 @@ function convertTimes(times) {
 }
 
 function removeCourseFromList(course) {
+    var jsonCookie;
+    var index;
+    var shortenedCourseName;
+    var courseElement;
+    courseElement = document.getElementById(course + "-li");
     console.log("Removing course " + course + " from the list on the left.");
-    var courseElement = document.getElementById(course + "-li");
+
     $("#" + course + "-li" + " li[clicked*='true']").each(function() {
         $(this).click();
     });
+
     courseSelect.removeChild(courseElement);
+    shortenedCourseName = course.substring(0, 8);
+    index = $.inArray(shortenedCourseName, selectedCourses);
+    selectedCourses.splice(index, 1);
+    jsonCookie = JSON.stringify(selectedCourses);
+    setCookie("selected-courses", jsonCookie);
+
+    resetSearchList();
+
     removeCourseObject(course);
 }

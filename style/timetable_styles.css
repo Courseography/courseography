@@ -32,6 +32,17 @@ a:visited {
   z-index: 2147483647;
 }
 
+.close-icon {
+  width: 30px;
+  height: 30px;
+  float: left;
+  padding-bottom: 5px;
+}
+
+/*.close-icon:hover {
+  background-color: black;
+}*/
+
 /* Header styles */
 .header {
   background-color: #261B2A;

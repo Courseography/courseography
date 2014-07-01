@@ -52,8 +52,20 @@ function getVeryLargeCourseArray() {
 
 function setupEntry(courseObject) {
     entry = document.createElement("li");
+    var courseImg = document.createElement("img");
+    $(courseImg).attr("src", "../cscourseplanner/res/ico/close.ico");
+    $(courseImg).addClass("close-icon");
+    // $(courseImg).css("margin-top", "-40px");
+
+    $(courseImg).click(function() {
+        removeCourseFromList(courseObject.name);
+    });
+
     entry.id = courseObject.name + "-li";
     header = document.createElement("h3");
+    $(header).css("height", "100%");
+    $(header).css("width", "100%");
+    header.appendChild(courseImg);
     header.appendChild(document.createTextNode(courseObject.name));
     courseObject.header = header;
     sections = processSession(courseObject);
