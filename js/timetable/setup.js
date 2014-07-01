@@ -43,7 +43,7 @@ function getVeryLargeCourseArray() {
     } else {
         xmlhttp = new window.ActiveXObject("Microsoft.XMLHTTP");
     }
-    xmlhttp.open("GET", "../cscourseplanner/js/timetable/courses.out", false);
+    xmlhttp.open("GET", "js/timetable/courses.txt", false);
     xmlhttp.send();
     httpResponse = xmlhttp.responseText;
     splitArray = httpResponse.split("\n");
@@ -67,7 +67,7 @@ function setupEntry(courseObject) {
 
 function getCourse(courseCode) {
     $.ajax({
-        url: "../cscourseplanner/res/courses/" + courseCode,
+        url: "res/courses/" + courseCode,
         dataType: "json",
         async: false,
         success: function (data) {

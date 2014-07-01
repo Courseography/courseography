@@ -39,10 +39,10 @@ def parseFASCalendar():
       title = result.group(2)
 
       try:
-        with open('../res/courses/' + name + '.txt', 'r', encoding='utf-8') as coursefile:
+        with open('../../res/courses/' + name + '.txt', 'r', encoding='utf-8') as coursefile:
           data = json.load(coursefile)
           data['title'] = title
-        with open('../res/courses/' + name + '.txt', 'w', encoding='utf-8') as coursefile:
+        with open('../../res/courses/' + name + '.txt', 'w', encoding='utf-8') as coursefile:
           json.dump(data, coursefile)
       except FileNotFoundError:
         pass

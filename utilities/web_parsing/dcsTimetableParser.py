@@ -6,7 +6,7 @@ from faculty import facultyWebsites
 
 courses = []
 
-outputDir = '../res/'
+outputDir = '../../res/'
 coursePath = outputDir + 'courses/'
 timetablePath = outputDir + 'timetable2014.csv'
 timetableOutputPath = outputDir + 'timetable.html'

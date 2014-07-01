@@ -7,7 +7,7 @@ class TimetableParser:
     Written for input from both FAS and DCS.
     """
 
-    RES_PATH = '../res/'
+    RES_PATH = '../../res/'
     COURSES_PATH = RES_PATH + 'courses/'
 
     def __init__(self, gen_data, data_map, data_file):

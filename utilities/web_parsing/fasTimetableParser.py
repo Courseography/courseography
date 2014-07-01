@@ -3,7 +3,7 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup
 from ttparser import TimetableParser
 
-timetablePath = '../res/fastimetable2014.csv'
+timetablePath = '../../res/fastimetable2014.csv'
 
 fasTimetableDir = 'http://www.artsandscience.utoronto.ca/ofr/timetable/winter/'
 fasTimetableList = fasTimetableDir + 'sponsors.htm'

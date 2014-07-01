@@ -6,13 +6,13 @@ from html.parser import HTMLParser
 courses = []
 
 def parseCalendar():
-  with open('../res/calendar.txt', 'r') as calendarFile:
+  with open('../../res/calendar.txt', 'r') as calendarFile:
     course = {}
     for line in calendarFile:
       if line.startswith('CSC') or line.startswith('ECE') or line.startswith('MAT') or line.startswith('STA'):
 
         if (len(course) > 0):
-          with open('../res/courses/' + course['name'] + '.txt', 'w+', encoding='utf-8') as output:
+          with open('../../res/courses/' + course['name'] + '.txt', 'w+', encoding='utf-8') as output:
             json.dump(course, output)
             courses.append(course)
 
@@ -57,7 +57,7 @@ def parseCalendar():
         course['description'] = course['description'] + line
 
       if 'name' in course:
-        path = '../res/courses/' + course['name'] + '.txt'   
+        path = '../../res/courses/' + course['name'] + '.txt'   
         try:
           with open(path, 'r', encoding='utf-8') as course_file:
             old = json.load(course_file)

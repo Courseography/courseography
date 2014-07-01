@@ -6,7 +6,7 @@ import argparse
 import os
 import shutil
 
-COURSES_DIR = '../res/courses'
+COURSES_DIR = '../../res/courses'
 
 if __name__ == '__main__':
   # Parse arguments
