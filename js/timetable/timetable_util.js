@@ -190,9 +190,9 @@ function resetSearchList() {
                         selectedCourses.push(shortenedCourseName);
                         $("#" + shortenedCourseName + "-search").addClass("starred-course");
                         addCourseToList(course);
+                        var jsonCookie = JSON.stringify(selectedCourses);
+                        setCookie("selected-courses", jsonCookie);
                     }
-                    var jsonCookie = JSON.stringify(selectedCourses);
-                    setCookie("selected-courses", jsonCookie);
                 });
 
                 // Increase the number of courses presently shown on the right hand search list.
@@ -214,7 +214,7 @@ function restoreFromCookies() {
     }
 
     var starredLectureCookie = getCookie("selected-lectures");
-    if (starredCourseCookie.length > 0) {
+    if (starredLectureCookie.length > 0) {
         selectedLectures = $.parseJSON(starredLectureCookie);
         $.each(selectedLectures, function (i, course) {
             $("#" + course).click();
