@@ -201,12 +201,7 @@ h3 {
   font-size: 1.1em;
   color: white;
 }
-.close-icon {
-  width: 30px;
-  height: 30px;
-  float: left;
-  padding-bottom: 5px;
-}
+
 .timetableSection {
   width: 50px;
   background-color: #C2D6FF;

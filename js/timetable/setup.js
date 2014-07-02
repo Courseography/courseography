@@ -53,9 +53,8 @@ function getVeryLargeCourseArray() {
 function setupEntry(courseObject) {
     entry = document.createElement("li");
     var courseImg = document.createElement("img");
-    $(courseImg).attr("src", "../cscourseplanner/res/ico/close.ico");
+    $(courseImg).attr("src", "res/ico/close.ico");
     $(courseImg).addClass("close-icon");
-    // $(courseImg).css("margin-top", "-40px");
 
     $(courseImg).click(function() {
         removeCourseFromList(courseObject.name);
@@ -70,8 +69,6 @@ function setupEntry(courseObject) {
     courseObject.header = header;
     sections = processSession(courseObject);
     entry.appendChild(header);
-    $(sections).css("height", "100%");
-    $(sections).css("width", "100%");
     entry.appendChild(sections);
     $(entry).accordion({heightStyle: "content", collapsible: true, active: false/*, event: "click hoverintent"*/});
     courseSelect.appendChild(entry);

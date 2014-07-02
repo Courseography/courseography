@@ -155,16 +155,14 @@ function resetSearchList() {
     var index;
     counter = 0;
     var filter = $("#course-filter").val().toLowerCase();
-    while (searchList.firstChild) {
-        searchList.removeChild(searchList.firstChild);
-    }
+    $('#search-list').empty();
     courseList = document.createElement("ul");
     if (filter !== "") {
 
         // Iterate through every course.
         $.each(courses, function(i, course) {
 
-            // If the course matches and if there are less than 100 courses in the list, add it to the list.
+            // If the course matches and if there are fewer than 100 courses in the list, add it to the list.
             if (course.toLowerCase().indexOf(filter) > -1 && counter < 100) {
                 courseEntry = document.createElement("li");
                 var shortenedCourseName = course.substring(0, 8);

@@ -33,15 +33,11 @@ a:visited {
 }
 
 .close-icon {
-  width: 30px;
-  height: 30px;
+  width: 20px;
+  height: 20px;
   float: left;
-  padding-bottom: 5px;
+  padding: 7px 0 0 5px;
 }
-
-/*.close-icon:hover {
-  background-color: black;
-}*/
 
 /* Header styles */
 .header {
@@ -340,7 +336,7 @@ caption {
 .ui-accordion-content {
   text-align: center;
   overflow: auto;
-  width: 50%
+  width: 100%;
 }
 
 
