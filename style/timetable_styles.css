@@ -215,7 +215,7 @@ caption {
 
 .sectionList-spring li:hover {
   background-color: #437699;
-  
+
 }
 
 .ui-accordion-content li.clickedLectureTime,
@@ -308,24 +308,24 @@ caption {
   border-top: 1px solid black;
 }
 
-.clickedSectionUnsatisfied {
-  background-color: rgb(215, 117, 70) !important;
+td[satisfied=false] {
+  background-color: rgb(215, 117, 70);
 }
 
-.clickedSectionUnsatisfied:hover {
-  background-color: rgb(195, 97, 50) !important;
+td[satisfied=false]:hover {
+  background-color: rgb(195, 97, 50);
 }
 
 .clickedConflictTime {
-  background-color: #C92343;
+  background-color: #C92343 !important;
 }
 
 .clickedConflictTime:hover {
-  background-color: #B91333;
+  background-color: #B91333 !important;
 }
 
 .mouseOverConflict {
-  background-color: #C92343;
+  background-color: #C92343 !important;
 }
 
 .ui-accordion-header:hover,

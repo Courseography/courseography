@@ -4,8 +4,6 @@
 /*jslint plusplus: true */
 "use strict";
 
-console.log = function() {}
-
 function setSectionMouseEvents(section, sectionTimes, courseObject) {
     setSectionOnClick(section, sectionTimes, courseObject);
     setSectionMouseOver(section, sectionTimes, courseObject);
@@ -15,61 +13,56 @@ function setSectionMouseEvents(section, sectionTimes, courseObject) {
 /** Mouse Out Direct Functions **/
 
 function setSectionMouseOut(section, sectionTimes) {
-    var timeElement;
-    var timeSuffix;
-
     $(section).mouseout(function () {
-        timeSuffix = getTimeSuffix(section);
+        var timeSuffix = getTimeSuffix(section);
         performMouseOut(sectionTimes, timeSuffix);
-        if (getIsYearSection(section)) {
-            timeSuffix = reverseTimeSuffix(timeSuffix);
-            performMouseOut(sectionTimes, timeSuffix);
-        }
-        removeMouseOverClasses();
     });
 }
 
 function performMouseOut(sectionTimes, timeSuffix) {
-    var timeElement;
-
-    $.each(sectionTimes, function (i, time) {
-        timeElement = time + timeSuffix;
-        if ($("#" + timeElement).attr("clicked") !== "true") {
-            $("#" + timeElement).html("");
-        }
-    });
+    if (timeSuffix === "-year") {
+        performMouseOut(sectionTimes, "-fall");
+        performMouseOut(sectionTimes, "-spring");
+    } else {
+        $.each(sectionTimes, function (i, time) {
+            var timeElement = "#" + time + timeSuffix;
+            if ($(timeElement).attr("clicked") !== "true") {
+                $(timeElement).html("");
+            }
+            $(timeElement).removeClass("mouseOverConflict mouseOverGood " +
+                                       "mouseOverTaken mouseOverRemove");
+        });
+    }
 }
 
+function removeMouseOverClasses() {
+    $("td").removeClass("mouseOverConflict mouseOverGood " +
+                        "mouseOverTaken mouseOverRemove");
+}
 /** Mouse Over Direct Functions **/
 
 function setSectionMouseOver(section, sectionTimes, courseObject) {
-    var timeSuffix;
-
     $(section).mouseover(function () {
-        timeSuffix = getTimeSuffix(section);
+        var timeSuffix = getTimeSuffix(section);
         performMouseOver(sectionTimes, timeSuffix, courseObject);
         displayCourseInformation(courseObject, $(this));
-        if (getIsYearSection(section)) {
-            timeSuffix = reverseTimeSuffix(timeSuffix);
-            performMouseOver(sectionTimes, timeSuffix, courseObject);
-            displayCourseInformation(courseObject, $(this));
-        }
-    }); 
+    });
 }
 
 function performMouseOver(sectionTimes, timeSuffix, courseObject) {
-    var timeElement;
-    var isTimeClicked;
-
-    $.each(sectionTimes, function (i, time) {
-        timeElement = time + timeSuffix;
-        isTimeClicked = getIsClicked(timeElement);
-        if (isTimeClicked) {
-            lightUpConflict(courseObject, timeElement);
-        } else {
-            lightUpTakeable(courseObject, timeElement);
-        }
-    });
+    if (timeSuffix === "-year") {
+        performMouseOver(sectionTimes, "-fall", courseObject);
+        performMouseOver(sectionTimes, "-spring", courseObject);
+    } else {
+        $.each(sectionTimes, function (i, time) {
+            var timeElement = time + timeSuffix;
+            if (getIsClicked(timeElement)) {
+                lightUpConflict(courseObject, timeElement);
+            } else {
+                lightUpTakeable(courseObject, timeElement);
+            }
+        });
+    }
 }
 
 function lightUpConflict(courseObject, timeElement) {
@@ -81,21 +74,12 @@ function lightUpConflict(courseObject, timeElement) {
 }
 
 function lightUpTakeable(courseObject, timeElement) {
-    if (courseObject.taken) {
+    if (courseObject.taken) { //TODO: Highlight already taken section times.
         $("#" + timeElement).addClass("mouseOverTaken");
     } else {
         $("#" + timeElement).addClass("mouseOverGood");
     }
     $("#" + timeElement).html(courseObject.name);
-}
-
-function removeMouseOverClasses() {
-    $("td").each(function (i, time) {
-        $(time).removeClass("mouseOverConflict");
-        $(time).removeClass("mouseOverGood");
-        $(time).removeClass("mouseOverTaken");
-        $(time).removeClass("mouseOverRemove");
-    });
 }
 
 function displayCourseInformation(courseObject, section) {
@@ -108,28 +92,20 @@ function displayCourseInformation(courseObject, section) {
 /** Mouse Click Direct Functions **/
 
 function setSectionOnClick(section, sectionTimes, courseObject) {
-    var isLecture;
-    var taken;
-    var satisfied;
-    var inConflict;
     $(section).click(function () {
-        console.log("> click : " + courseObject.name);
-        isLecture = section.innerHTML.charAt(0) === "L";
-        //courseObject.satisfied = !courseObject.manualTutorialEnrolment;
-        taken = false;
-        satisfied = true;
-        inConflict = false;
+        var isLecture = section.innerHTML.charAt(0) === "L";
+        var taken = false;
+        var satisfied = true;
+        var inConflict = false;
         if (isLecture) {
-
             if (courseObject.isLectureSelected) {
                 selectAlreadySelectedLecture(courseObject, section, sectionTimes);
             } else {
                 setLectureSession(courseObject, section);
-                
-                selectUnselectedLecture(courseObject, section, sectionTimes);
+
+                selectNewLecture(courseObject, section, sectionTimes);
             }
         } else {
-
             if (courseObject.isTutorialSelected) {
                 selectAlreadySelectedTutorial(courseObject, section, sectionTimes);
             } else {
@@ -172,13 +148,13 @@ function setSectionOnClick(section, sectionTimes, courseObject) {
             $(this).attr("satisfied", true);
             $(this).attr("type", "");
             $(this).removeClass("clickedLectureTime");
-            $(this).removeClass("clickedTutorialTime"); 
+            $(this).removeClass("clickedTutorialTime");
         });
 
         $("td[satisfied*=false][in-conflict*=false]").each(function() {
             $(this).addClass("clickedSectionUnsatisfied");
             $(this).removeClass("clickedLectureTime");
-            $(this).removeClass("clickedTutorialTime"); 
+            $(this).removeClass("clickedTutorialTime");
         });
 
         $("td[satisfied*=true]").each(function() {
@@ -188,20 +164,20 @@ function setSectionOnClick(section, sectionTimes, courseObject) {
         $("td[in-conflict*=true]").each(function() {
             $(this).removeClass("clickedSectionUnsatisfied");
             $(this).removeClass("clickedLectureTime");
-            $(this).removeClass("clickedTutorialTime"); 
+            $(this).removeClass("clickedTutorialTime");
             $(this).addClass("clickedConflictTime");
         });
 
         $("td[in-conflict*=false]").each(function() {
-            $(this).removeClass("clickedConflictTime"); 
+            $(this).removeClass("clickedConflictTime");
         });
 
         $("td[in-conflict*=false][satisfied*=true][type*=lecture]").each(function() {
-            $(this).addClass("clickedLectureTime"); 
+            $(this).addClass("clickedLectureTime");
         });
 
         $("td[in-conflict*=false][satisfied*=true][type*=tutorial]").each(function() {
-            $(this).addClass("clickedTutorialTime"); 
+            $(this).addClass("clickedTutorialTime");
         });
 
         setHeader(courseObject, taken, satisfied);
@@ -218,14 +194,14 @@ function setSectionOnClick(section, sectionTimes, courseObject) {
 function setHeader(courseObject, taken, satisfied) {
     console.log("> setHeader");
     if (taken && satisfied) {
-        $(courseObject.header).removeClass("clickedSectionUnsatisfied"); 
+        $(courseObject.header).removeClass("clickedSectionUnsatisfied");
         $(courseObject.header).addClass("clicked-header");
         courseObject.taken = true;
     } else if (!satisfied) {
-        $(courseObject.header).addClass("clickedSectionUnsatisfied"); 
+        $(courseObject.header).addClass("clickedSectionUnsatisfied");
     } else {
-        $(courseObject.header).removeClass("clickedSectionUnsatisfied"); 
-        $(courseObject.header).removeClass("clicked-header"); 
+        $(courseObject.header).removeClass("clickedSectionUnsatisfied");
+        $(courseObject.header).removeClass("clicked-header");
         courseObject.taken = false;
     }
     console.log("< setHeader");
@@ -287,16 +263,16 @@ function reverseTimeSuffix(timeSuffix) {
 }
 
 function getTimeSuffix(section) {
-    console.log("> getTimeSuffix");
     var timeSuffix;
 
     if (getIsFallSection(section)) {
         timeSuffix = "-fall";
-    } else {
+    } else if (getIsSpringSection(section)) {
         timeSuffix = "-spring";
+    } else {
+        timeSuffix = "-year";
     }
 
-    console.log("< getTimeSuffix");
     return timeSuffix;
 }
 
@@ -344,7 +320,7 @@ function removeClickedConflict(courseObject, timeElement, section) {
             $("#" + timeElement).html(conflictArray[0]);
             $("#" + timeElement).attr("type", typeArray[0]);
         }
-        if (conflictArray.length === 1 ) { 
+        if (conflictArray.length === 1 ) {
             $("#" + timeElement).attr("in-conflict", false);
         }
         conflictArray.splice(index, 1);
@@ -352,7 +328,7 @@ function removeClickedConflict(courseObject, timeElement, section) {
         var newCourseObject = getCourseObject($("#" + timeElement).html());
         $("#" + timeElement).attr("satisfied", newCourseObject.satisfied);
         $("#" + timeElement).data("conflictArray", conflictArray);
-        $("#" + timeElement).attr("title", conflictArray);    
+        $("#" + timeElement).attr("title", conflictArray);
     }
     console.log("< removeClickedConflict");
 }
@@ -373,8 +349,8 @@ function selectUnselectedLecture(courseObject, section, sectionTimes) {
     var isTimeClicked;
 
     $(section).attr("clicked", "true");
-    satisfyCourse(courseObject, section);
     setLectureSession(courseObject, section);
+    satisfyCourse(courseObject, section);
     courseObject.selectedLecture = section;
     courseObject.isLectureSelected = true;
     timeSuffix = getTimeSuffix(section);
@@ -386,7 +362,6 @@ function selectUnselectedLecture(courseObject, section, sectionTimes) {
     }
 
     courseObject.selectedTimes = sectionTimes;
-    satisfyCourse(courseObject, section);
     console.log("< selectUnselectedLecture");
 }
 
@@ -404,9 +379,9 @@ function selectAlreadySelectedLecture(courseObject, section, sectionTimes) {
         selectedSession = "Y";
     }
 
-    if (courseObject.selectedLecture.innerHTML !== section.innerHTML 
+    if (courseObject.selectedLecture.innerHTML !== section.innerHTML
         || courseObject.selectedLectureSession !== selectedSession) {
-        selectNewLectureSection(section, sectionTimes, courseObject, selectedSession);
+        selectNewLecture(courseObject, section, sectionTimes);
     } else {
         courseObject.selectedLecture = null;
         courseObject.selectedLectureSession = null;
@@ -418,7 +393,6 @@ function selectAlreadySelectedLecture(courseObject, section, sectionTimes) {
 function turnLectureOff(courseObject, section, sectionTimes) {
     console.log("> turnLectureOff");
     var timeSuffix;
-    var timeElement;
 
     courseObject.isLectureSelected = false;
     unsatisfyCourse(courseObject, section);
@@ -427,26 +401,24 @@ function turnLectureOff(courseObject, section, sectionTimes) {
 
     if (courseObject.selectedLectureSession === "F") {
         timeSuffix = "-fall";
-    } else {
+    } else if (courseObject.selectedLectureSession === "S") {
         timeSuffix = "-spring";
+    } else {
+        timeSuffix = "-year";
     }
 
-    $.each(courseObject.selectedTimes, function (i, time) {
-        timeElement = time + timeSuffix;
-
-        if ($("#" + timeElement).hasClass("clickedConflictTime")) {
-            removeClickedConflict(courseObject, timeElement, section);
-        } else {
-            $("#" + timeElement).html("");
-            $("#" + timeElement).attr("clicked", "false");
-        }
-    });
+    removeLecture(courseObject, section, timeSuffix);
 
     $(courseObject.selectedLecture).removeClass("clickedSectionUnsatisfied");
 
-    if (getIsYearSection(section)) {
-        timeSuffix = reverseTimeSuffix(timeSuffix);
+    console.log("< turnLectureOff");
+}
 
+function removeLecture(courseObject, section, timeSuffix) {
+    if (timeSuffix === "-year") {
+        removeLecture(courseObject, section, "-fall");
+        removeLecture(courseObject, section, "-spring");
+    } else {
         $.each(courseObject.selectedTimes, function (i, time) {
             timeElement = time + timeSuffix;
 
@@ -458,56 +430,49 @@ function turnLectureOff(courseObject, section, sectionTimes) {
             }
         });
     }
-    console.log("< turnLectureOff");
 }
 
-function selectNewLectureSection(section, sectionTimes, courseObject, selectedSession) {
-    console.log("> selectNewLectureSection");
+function selectNewLecture(courseObject, section, sectionTimes) {
+    console.log("> selectNewLecture");
     var timeElement;
     var timeSuffix;
     var isTimeClicked;
 
     $(section).attr("clicked", "true");
-
-    if(courseObject.selectedLectureSession !== selectedSession) {
-        courseObject.selectedLectureSession = selectedSession;
-    }
-
+    setLectureSession(courseObject, section);
     courseObject.isLectureSelected = true;
     courseObject.selectedLecture = section;
-    courseObject.selectedLectureHeader = courseObject.header;
     courseObject.selectedTimes = sectionTimes;
 
     timeSuffix = getTimeSuffix(section);
 
     satisfyCourse(courseObject, section);
-    console.log(courseObject.selectedTutorialSession === courseObject.selectedLectureSession);
     selectUnselectedLectureTimes(sectionTimes, timeSuffix, courseObject, section);
 
-    if (getIsYearSection(section)) {
-        timeSuffix = reverseTimeSuffix(timeSuffix);
-
-        selectUnselectedLectureTimes(sectionTimes, timeSuffix, courseObject, section);
-    }
-    console.log("< selectNewLectureSection");
+    console.log("< selectNewLecture");
 }
 
 function selectUnselectedLectureTimes(sectionTimes, timeSuffix, courseObject, section) {
     console.log("> selectUnselectedLectureTimes");
     var timeElement;
     var isTimeClicked;
+    if (timeSuffix === "-year") {
+        selectUnselectedLectureTimes(sectionTimes, "-fall", courseObject, section);
+        selectUnselectedLectureTimes(sectionTimes, "-spring", courseObject, section);
+    } else {
+        $.each(sectionTimes, function (i, time) {
+            timeElement = time + timeSuffix;
+            isTimeClicked = getIsClicked(timeElement);
 
-    $.each(sectionTimes, function (i, time) {
-        timeElement = time + timeSuffix;
-        isTimeClicked = getIsClicked(timeElement);
+            if (!isTimeClicked) {
+                setLectureClicked(courseObject, timeElement, section);
+            } else {
+                setClickedConflict(courseObject, timeElement, section, "lecture");
+            }
 
-        if (!isTimeClicked) {
-            setLectureClicked(courseObject, timeElement, section);
-        } else {
-            setClickedConflict(courseObject, timeElement, section, "lecture");
-        }
+        });
+    }
 
-    });
     console.log("< selectUnselectedLectureTimes");
 }
 
@@ -570,7 +535,7 @@ function selectAlreadySelectedTutorial(courseObject, section, sectionTimes) {
         selectedSession = "Y";
     }
 
-    if (courseObject.selectedTutorial.innerHTML !== section.innerHTML 
+    if (courseObject.selectedTutorial.innerHTML !== section.innerHTML
         || courseObject.selectedTutorialSession !== selectedSession) {
         selectNewTutorialSection(section, sectionTimes, courseObject, selectedSession);
     } else {
@@ -720,7 +685,7 @@ function satisfyCourse(courseObject, section) {
 
             if (courseObject.selectedTutorialSession === "F") {
                 timeSuffix = "-fall";
-            } else {   
+            } else {
                 timeSuffix = "-spring";
             }
 
@@ -744,7 +709,7 @@ function satisfyCourse(courseObject, section) {
 
             if (courseObject.selectedLectureSession === "F") {
                 timeSuffix = "-fall";
-            } else {   
+            } else {
                 timeSuffix = "-spring";
             }
 
@@ -760,7 +725,7 @@ function satisfyCourse(courseObject, section) {
                     setSatisfaction(courseObject, timeElement);
                 });
             }
-            
+
         }
     }
     console.log("< satisfyCourse");
@@ -770,12 +735,10 @@ function unsatisfyCourse(courseObject, section) {
     console.log("> unsatisfyCourse");
     var timeSuffix;
     var timeElement;
-    console.log("unsatisfying");
     if (courseObject.manualTutorialEnrolment) {
-
         if (courseObject.selectedLectureSession === "F") {
             timeSuffix = "-fall";
-        } else {   
+        } else {
             timeSuffix = "-spring";
         }
 
@@ -823,7 +786,7 @@ function unsatisfyCourse(courseObject, section) {
 
 function satisfyCourseSections(courseObject) {
     $(courseObject.selectedLecture).removeClass("clickedSectionUnsatisfied");
-    $(courseObject.selectedTutorial).removeClass("clickedSectionUnsatisfied");   
+    $(courseObject.selectedTutorial).removeClass("clickedSectionUnsatisfied");
     $("#" + courseObject.name + "-li" + " li").each(function() {
         $(this).attr("satisfied", true);
     });
