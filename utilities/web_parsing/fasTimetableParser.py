@@ -28,7 +28,6 @@ def downloadTimetables():
   with open(timetablePath, 'w+', encoding='utf8', newline='') as csvfile:
     for li in fasSoup.find_all('li'):
       html = fasTimetableDir + li.a['href']
-      print('Reading ', html)
 
       try:
         htmlData = urlopen(html).read()
