@@ -156,7 +156,7 @@ h3 {
 }
 
 #timetableContainer {
-  width: 863px;
+  width: 893px;
   height: 100%;
   background-color: #222266;
   margin-top: 1em;
@@ -201,6 +201,7 @@ h3 {
   font-size: 1.1em;
   color: white;
 }
+
 .timetableSection {
   width: 50px;
   background-color: #C2D6FF;
@@ -218,7 +219,7 @@ h3 {
   padding-left: 5px;
 }
 #timetable td.timetableCap, #timetable th.timetableCap {
-  width: 50px;
+  width: 65px;
   background-color: #B2E0FF;
   text-align: center;
 }
@@ -230,7 +231,7 @@ h3 {
 .FallOffering table, 
 .WinterOffering, 
 .WinterOffering table {
-  width: 375px;
+  width: 390px;
   margin: 0;
   padding: 0;
 }
@@ -238,11 +239,18 @@ h3 {
   width: 100%;
 }
 .YOffering .courseTable {
-  width: 410px;
+  width: 425px;
   margin-left: auto;
   margin-right: auto;
 }
 
+.timetableInstructor a, 
+.timetableInstructor a:hover,
+.timetableInstructor a:visited,
+.timetableInstructor a:active {
+  color: black;
+  font-weight: normal
+}
 
 /* Focus and POSt tabs */
 #focuses,

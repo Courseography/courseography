@@ -1,3 +1,0 @@
-#!/bin/bash
-
-./timeTableRetriever.py > res/timeTable.txt 2> res/timeTableLogFile.txt
