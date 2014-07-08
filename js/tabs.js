@@ -196,11 +196,7 @@ function spotlight(id) {
 //////////////////////////////////////////
 
 // Globals
-// 2013-2014 timetable
 var timetable = 'res/timetable.html';
-// 2014-2015 timetable
-//var timetable = 'res/timetableHTML2014.html';
-
 
 // Fetch timetable information
 function createTimetable() {
