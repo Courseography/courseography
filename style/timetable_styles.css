@@ -1,0 +1,417 @@
+html, body {
+  background-color: #dd9ded;
+  font-family: "Museo Sans", Museo, sans;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+div {
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  display: block;
+}
+
+a,
+a:visited {
+  color:white;
+}
+
+#dialog {
+  position: fixed;
+  background-color: white;
+  width: 100%;
+  display: none;
+  visibility: hidden;
+  text-align: center;
+  border-bottom: 2px solid #330000;
+  z-index: 2147483647;
+}
+
+.close-icon {
+  width: 20px;
+  height: 20px;
+  float: left;
+  padding: 7px 0 0 5px;
+}
+
+/* Header styles */
+.header {
+  background-color: #261B2A;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+  text-align: vertical;
+  margin: 0;
+}
+
+.header h2 {
+  font-size: 1.7em;
+  font-weight: bold;
+  color: white;
+  padding: 0;
+  margin: 0.5em 0;
+}
+
+#home-link {
+  text-align: right;
+  font-weight: normal;
+  width: 100%;
+}
+
+#home-link a,
+#home-link a:hover,
+#home-link a:visited {
+  text-decoration: none;
+}
+
+/* Timetable styles */
+.timetable-container {
+  background-color: #7E4D66;
+  padding: 0;
+  margin: 0;
+}
+
+.timetable {
+  margin: 0;
+  padding: 0;
+  table-layout: fixed;
+  border-collapse: collapse;
+  color: white;
+}
+
+caption {
+  font-size: 1.6em;
+  margin: 0.5em 0;
+  text-align: center;
+}
+
+#timetable-fall {
+  border-right: 2px solid black;
+}
+
+#timetable-spring {
+  border-left: 2px solid black;
+}
+
+.timetable td,
+.timetable th {
+  width: 18%;
+  height: 45px;
+  padding: 0 !important;
+  margin: 0 !important;
+  text-align: center;
+  vertical-align: middle !important;
+  border-color: #DB94B8 !important;
+  overflow: hidden;
+}
+
+.timetable .timetable-time {
+  width: 10%;
+  border: none;
+  padding: 10px;
+}
+
+
+.timetable th {
+  font-size: 1.5em;
+  background-color: rgba(219, 148, 184, 0.5);
+  border-bottom: 1px solid !important;
+  border-color: #DB94B8 !important;
+  font-weight: normal;
+}
+
+#no-border {
+  border: none
+}
+
+
+.timetable-cell-fall,
+.timetable-cell-spring {
+  border-top: 1px dashed !important;
+  border-bottom: none !important;
+  border-right: 1px solid !important;
+  border-left: 1px solid !important;
+}
+
+#timetable-spring .timetable-time {
+  text-align: left;
+  padding-left: 10px !important;
+}
+
+#timetable-fall .timetable-time {
+  text-align: right;
+  padding-right: 10px !important;
+}
+
+
+/* Course selection */
+#course-select-wrapper {
+  overflow: hidden;
+  height: 100%;
+  background-color: #46364A;
+  color: white;
+  margin: 0;
+  padding: 0;
+}
+
+.main {
+  height: calc(100% - 3.55em);
+  margin: 0;
+}
+
+#course-select {
+  list-style-type: none;
+  padding: 0;
+  margin: 17px 0 0 17px;
+  width: 100%;
+  overflow: scroll;
+  height: 100%;
+  text-align: center;
+}
+
+#course-select > li {
+	width: 95%;
+}
+
+/* Course select sections*/
+.sections {
+  overflow: auto;
+}
+
+.sections:hover {
+  cursor: pointer;
+}
+
+.sectionList-fall {
+  width: 50%;
+  float: left;
+  border-right: 1px solid black;
+}
+
+.sectionList-spring {
+  width: 50%;
+  float: right;
+  border-left: 1px solid black;
+}
+
+.ui-accordion-content ul {
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
+.ui-accordion-content li {
+  background-color: #336685;
+}
+
+.sectionList-fall li:hover {
+  background-color: #437699;
+
+}
+
+.sectionList-spring li:hover {
+  background-color: #437699;
+  
+}
+
+.ui-accordion-content li.clickedLectureTime,
+.clickedLectureTime {
+  background-color: #437699;
+}
+
+.clickedLectureTime:hover {
+  background-color: #336685;
+  /*cursor: pointer;*/
+}
+
+.clickedTutorialTime {
+  background-color: #737A99;
+}
+
+.clickedTutorialTime:hover {
+  background-color: #636A89;
+  /*cursor:pointer;*/
+}
+
+.mouseOverGood {
+  background-color: #437699;
+}
+
+.mouseOverTaken {
+  background-color: #336685;
+}
+
+.mouseOverRemove {
+  /*background-color: fuchsia;*/
+  -webkit-transition: all 0.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out;
+  -ms-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
+  -webkit-opacity: 0.5;
+  -moz-opacity: 0.5;
+  opacity: 0.5;
+}
+
+
+#layout {
+  width: 100%;
+}
+
+#search-list .starred-course {
+  background-color: #261B2A;
+}
+
+.section-fall {
+  text-align:center;
+  background-color:#003366;
+  color:white;
+  display:block;
+}
+
+.section-spring {
+  text-align: center;
+  background-color: #003366;
+  color: white;
+  display: block;
+}
+
+.section-year {
+  text-align: center;
+  background-color: #003366;
+  color: white;
+}
+
+.sectionClickedLecture {
+  text-align: center;
+  background-color: #336685;
+}
+
+
+.clicked-header {
+  background-color: #336685;
+}
+
+.ui-accordion-header {
+  color: white;
+  text-align: center;
+  cursor: pointer;
+  margin: 0;
+  padding: 0.25em 0;
+  display: block;
+  width: 100%;
+  outline: none;
+  border-top: 1px solid black;
+}
+
+.clickedSectionUnsatisfied {
+  background-color: rgb(215, 117, 70) !important;
+}
+
+.clickedSectionUnsatisfied:hover {
+  background-color: rgb(195, 97, 50) !important;
+}
+
+.clickedConflictTime {
+  background-color: #C92343;
+}
+
+.clickedConflictTime:hover {
+  background-color: #B91333;
+}
+
+.mouseOverConflict {
+  background-color: #C92343;
+}
+
+.ui-accordion-header:hover,
+.ui-accordion-header-active {
+  background-color: #261B2A !important;
+}
+
+.ui-accordion-content {
+  text-align: center;
+  overflow: auto;
+  width: 100%;
+}
+
+
+/* Info layout div*/
+
+#info-layout {
+  padding: 0em;
+  margin: 0em;
+  width: 100%;
+  height: 4.7em;
+  color: black;
+  border-bottom: 1px solid black;
+  text-align: center;
+}
+
+#info-layout h2 {
+  font-size: 1.4em;
+  margin: 0.5em;
+  font-weight: bold;
+}
+
+#info-layout h4 {
+  font-size: 1.2em;
+  margin: 0.5em;
+}
+
+/* Search Box styles*/
+#search-layout {
+  background-color: #46364A;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+#search-container {
+  text-align: center;
+  color: white;
+  overflow-y: scroll;
+  height: 100%;
+  margin: 17px 0 0 17px;
+  width: 100%;
+  padding: 0 10px 0 0;
+}
+
+#search-list ul {
+  margin: 0.5em 0 0 0;
+  padding: 0;
+}
+
+#search-list li {
+  color: white;
+  margin: 0;
+  padding: 0;
+  font-size: 1.5em;
+}
+
+#search-list ul li:hover {
+  /*background-color: white;
+  color: black;*/
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+/* Beta Warning */
+#beta-warning {
+  /*background-color: rgba(0, 0, 0, 0.5);*/
+  float: center;
+  color: white;
+  padding: 10px 10px 10px 10px;
+  color: black;
+}
+
+#beta-warning h3 {
+  padding: 0;
+  margin: 0;
+  font-size: 1.1em;
+}
