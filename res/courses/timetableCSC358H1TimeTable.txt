@@ -1,1 +1,0 @@
-{"S": {"tutorials": ["M10", "T6"], "lectures": [{"instructor": "Marbach", "section": "L0101", "cap": "100\n", "extraCap": 0, "time": "R3-5"}, {"instructor": "TBA", "section": "L5101", "cap": "100\n", "extraCap": 0, "time": "T7-9"}]}, "manualTutorialEnrolment": false, "name": "CSC358H1", "title": "Intro Comp Networks"}

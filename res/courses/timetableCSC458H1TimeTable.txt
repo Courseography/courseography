@@ -1,1 +1,0 @@
-{"F": {"tutorials": ["F1", "F11"], "lectures": [{"instructor": "Ganjali", "section": "L0101", "cap": "60\n", "extraCap": 0, "time": "T1-3"}, {"instructor": "Ganjali", "section": "L0201", "cap": "60\n", "extraCap": 0, "time": "R1-3"}]}, "manualTutorialEnrolment": false, "name": "CSC458H1", "title": "Computer Networks"}
