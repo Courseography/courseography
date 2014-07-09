@@ -4,15 +4,10 @@ import xlrd
 from ttparser import TimetableParser
 from faculty import facultyWebsites
 
-courses = []
-
 outputDir = '../../res/'
 coursePath = outputDir + 'courses/'
 timetablePath = outputDir + 'timetable2014.csv'
 timetableOutputPath = outputDir + 'timetable.html'
-
-fallGridPath = outputDir + 'fallGrid.html'
-springGridPath = outputDir + 'springGrid.html'
 
 
 data_map = {
