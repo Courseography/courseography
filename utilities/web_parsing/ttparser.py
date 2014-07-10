@@ -218,8 +218,8 @@ class TimetableParser:
     def is_tutorial(self, data):
         ''' Returns True if data represents a tutorial. '''
 
-        if self.kind >= 0 and data[self.kind] in ['T', 'LAB']:
-            return True
+        if self.kind >= 0:
+            return data[self.kind] in ['T', 'LAB']
 
         section = data[self.section]
         return (section is None or len(section) == 0 or
@@ -229,8 +229,8 @@ class TimetableParser:
     def is_lecture(self, data):
         ''' Returns True if data represents a lecture. '''
 
-        if self.kind >= 0 and data[self.kind] == 'L':
-            return True
+        if self.kind >= 0:
+            return data[self.kind] == 'L'
 
         section = data[self.section]
         return len(section) == 0 or (len(section) == 5 and section.startswith('L'))
