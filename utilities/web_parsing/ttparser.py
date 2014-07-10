@@ -1,5 +1,6 @@
 import csv
 import json
+import re
 from grid import *
 
 class TimetableParser:
@@ -52,10 +53,11 @@ class TimetableParser:
                         print('Skipping short line, unicode :(')
                     continue
 
-                code = data[self.code]
+                code = data[self.code].strip()
 
                 # Check if code is not an actual course code
-                if len(code) > 8:
+                code_regex = re.compile('^[A-Z]{3}[0-9]{3}[HY][01]$', re.IGNORECASE)
+                if len(code) > 0 and re.search(code_regex, code) is None:
                     print('Ignoring code:', code)
                     data[self.code] = ''
                     code = ''
