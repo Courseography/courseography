@@ -27,12 +27,11 @@ $(document).ready(function () {
     });
     courseSelect = document.getElementById("course-select");
     searchList = document.getElementById("search-list");
+    appendClearAllButton();
     restoreFromCookies();
     createTimetableSearch();
     courses = getVeryLargeCourseArray();
     trapScroll();
-
-    
 });
 
 function getVeryLargeCourseArray() {
@@ -102,3 +101,19 @@ function addCourseToList(course) {
     setupEntry(courseObject);
 }
 
+function appendClearAllButton() {
+    var clearAllItem = document.createElement("li");
+    $(clearAllItem).attr("id", "clear-all");
+    $(clearAllItem).click(function() {
+        if (confirm("Clear all selected courses?")) {
+            $.each(courseObjects, function() {
+                removeCourseFromList(courseObjects[0].name);
+            }); 
+        }
+    });
+    var clearAllHeader = document.createElement("h3");
+    clearAllHeader.innerHTML = "Clear All";
+    clearAllItem.appendChild(clearAllHeader);
+
+    courseSelect.appendChild(clearAllItem);
+}
