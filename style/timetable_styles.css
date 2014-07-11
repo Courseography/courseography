@@ -398,7 +398,7 @@ caption {
 
 #search-list ul {
   margin: 0.5em 0 0 0;
-  margin-bottom: 50px;
+  margin-bottom: 50em;
   padding: 0;
 }
 
@@ -409,7 +409,7 @@ caption {
   font-size: 1.5em;
 }
 
-#search-list ul li:hover {
+#search-list ul li:hover { 
   /*background-color: white;
   color: black;*/
   cursor: pointer;
