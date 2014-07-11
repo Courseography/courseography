@@ -57,6 +57,7 @@ function performMouseOver(sectionTimes, timeSuffix, courseObject) {
     } else {
         $.each(sectionTimes, function (i, time) {
             var timeElement = time + timeSuffix;
+
             if (getIsClicked(timeElement)) {
                 lightUpConflict(courseObject, timeElement);
             } else {
@@ -272,16 +273,6 @@ function getIsSpringSection(section) {
     return $(section.parentNode).hasClass("sectionList-spring");
 }
 
-// IAN-TODO delete this
-function reverseTimeSuffix(timeSuffix) {
-    if (timeSuffix === "-fall") {
-        timeSuffix = "-spring";
-    } else if (timeSuffix === "-spring") {
-        timeSuffix = "-fall";
-    }
-    return timeSuffix;
-}
-
 // IAN-TODO Combine with getSectionSessionFromSection
 // or at least put them next to each other
 function getTimeSuffix(section) {
@@ -338,13 +329,13 @@ function setClickedConflict(courseObject, timeElement, section, type) {
 // It seems like this function doesn't do the right thing if
 // courseObject.name !== $(...).html()
 function removeClickedConflict(courseObject, timeElement, section) {
-    var index;
     var conflictArray = $("#" + timeElement).data("conflictArray");
     var typeArray = $("#" + timeElement).data("typeArray");
+
     if (typeof conflictArray === "undefined" || typeof typeArray === "undefined") {
         console.log("Unexpected case in removeClickedConflict()");
     } else {
-        index = conflictArray.indexOf(courseObject.name);
+        var index = conflictArray.indexOf(courseObject.name);
         if ($("#" + timeElement).html() === courseObject.name) {
             $("#" + timeElement).html(conflictArray[0]);
             $("#" + timeElement).attr("type", typeArray[0]);
@@ -369,16 +360,12 @@ function setLectureSession(courseObject, section) {
 }
 
 function selectUnselectedLecture(courseObject, section, sectionTimes) {
-    var timeElement;
-    var timeSuffix;
-    var isTimeClicked;
-
     $(section).attr("clicked", "true");
     setLectureSession(courseObject, section);
     satisfyCourse(courseObject, section);
     courseObject.selectedLecture = section;
     courseObject.isLectureSelected = true;
-    timeSuffix = getTimeSuffix(section);
+    var timeSuffix = getTimeSuffix(section);
     selectUnselectedLectureTimes(sectionTimes, timeSuffix, courseObject, section);
 
     if (getIsYearSection(section)) {
@@ -452,34 +439,27 @@ function removeLecture(courseObject, section, timeSuffix) {
 }
 
 function selectNewLecture(courseObject, section, sectionTimes) {
-    var timeElement;
-    var timeSuffix;
-    var isTimeClicked;
-
     $(section).attr("clicked", "true");
     setLectureSession(courseObject, section);
     courseObject.isLectureSelected = true;
     courseObject.selectedLecture = section;
     courseObject.selectedTimes = sectionTimes;
 
-    timeSuffix = getTimeSuffix(section);
+    var timeSuffix = getTimeSuffix(section);
 
     satisfyCourse(courseObject, section);
     selectUnselectedLectureTimes(sectionTimes, timeSuffix, courseObject, section);
 }
 
 function selectUnselectedLectureTimes(sectionTimes, timeSuffix, courseObject, section) {
-    var timeElement;
-    var isTimeClicked;
     if (timeSuffix === "-year") {
         selectUnselectedLectureTimes(sectionTimes, "-fall", courseObject, section);
         selectUnselectedLectureTimes(sectionTimes, "-spring", courseObject, section);
     } else {
         $.each(sectionTimes, function (i, time) {
-            timeElement = time + timeSuffix;
-            isTimeClicked = getIsClicked(timeElement);
+            var timeElement = time + timeSuffix;
 
-            if (!isTimeClicked) {
+            if (!getIsClicked(timeElement)) {
                 setLectureClicked(courseObject, timeElement, section);
             } else {
                 setClickedConflict(courseObject, timeElement, section, "lecture");
@@ -493,7 +473,7 @@ function setLectureClicked(courseObject, timeElement, section) {
     $("#" + timeElement).attr("type", "lecture");
 
     if (!courseObject.satisfied) {
-        setSatisfaction(courseObject, timeElement);
+        setSatisfaction(timeElement, courseObject.satisfied);
         $(courseObject.selectedLecture).attr("satisfied", "false");
         $(courseObject.selectedLecture).addClass("clickedSectionUnsatisfied");
     }
@@ -509,16 +489,12 @@ function setTutorialSession(courseObject, section) {
 }
 
 function selectUnselectedTutorial(courseObject, section, sectionTimes) {
-    var timeElement;
-    var timeSuffix;
-    var isTimeClicked;
-
     $(section).attr("clicked", "true");
     setTutorialSession(courseObject, section);
     courseObject.selectedTutorial = section;
     satisfyCourse(courseObject, section);
     courseObject.isTutorialSelected = true;
-    timeSuffix = getTimeSuffix(section);
+    var timeSuffix = getTimeSuffix(section);
 
     selectUnselectedTutorialTimes(courseObject, section, sectionTimes, timeSuffix);
 
@@ -556,7 +532,6 @@ function selectAlreadySelectedTutorial(courseObject, section, sectionTimes) {
 // IAN-TODO time suffix
 function turnTutorialOff(courseObject, section, sectionTimes) {
     var timeSuffix;
-    var timeElement;
 
     courseObject.isTutorialSelected = false;
     unsatisfyCourse(courseObject, section);
@@ -570,7 +545,7 @@ function turnTutorialOff(courseObject, section, sectionTimes) {
     }
 
     $.each(courseObject.selectedTutorialTime, function (i, time) {
-        timeElement = time + timeSuffix;
+        var timeElement = time + timeSuffix;
 
         if ($("#" + timeElement).hasClass("clickedConflictTime")) {
             removeClickedConflict(courseObject, timeElement, section);
@@ -601,10 +576,6 @@ function turnTutorialOff(courseObject, section, sectionTimes) {
 }
 
 function selectNewTutorialSection(section, sectionTimes, courseObject, selectedSession) {
-    var timeElement;
-    var timeSuffix;
-    var isTimeClicked;
-
     $(section).attr("clicked", "true");
 
     if(courseObject.selectedTutorialSession !== selectedSession) {
@@ -617,7 +588,7 @@ function selectNewTutorialSection(section, sectionTimes, courseObject, selectedS
     courseObject.selectedTutorialHeader = courseObject.header;
     courseObject.selectedTutorialTime = sectionTimes;
 
-    timeSuffix = getTimeSuffix(section);
+    var timeSuffix = getTimeSuffix(section);
     selectUnselectedTutorialTimes(courseObject, section, sectionTimes, timeSuffix);
 
     if (getIsYearSection(section)) {
@@ -628,16 +599,10 @@ function selectNewTutorialSection(section, sectionTimes, courseObject, selectedS
 
 // IAN-TODO: timeSuffix
 function selectUnselectedTutorialTimes(courseObject, section, sectionTimes, timeSuffix) {
-    var timeElement;
-    var isTimeClicked;
-
     $.each(sectionTimes, function (i, time) {
-        timeElement = time + timeSuffix;
-        // IAN-TODO: don't need a variable isTimeClicked
-        // just put getIsClicked in the if
-        isTimeClicked = getIsClicked(timeElement);
-
-        if (!isTimeClicked) {
+        var timeElement = time + timeSuffix;
+        
+        if (!getIsClicked(timeElement)) {
             setTutorialClicked(timeElement, courseObject);
         } else {
             setClickedConflict(courseObject, timeElement, section, "tutorial");
@@ -656,7 +621,7 @@ function setTutorialClicked(timeElement, courseObject) {
     $("#" + timeElement).attr("clicked", "true");
 
     if (!courseObject.satisfied) {
-        setSatisfaction(courseObject, timeElement);
+        setSatisfaction(timeElement, courseObject.satisfied);
         $(courseObject.selectedTutorial).addClass("clickedSectionUnsatisfied");
         $(courseObject.selectedTutorial).attr("satisfied", "false");
     }
@@ -665,11 +630,9 @@ function setTutorialClicked(timeElement, courseObject) {
 function setTutorialUnclicked(timeElement, courseObject) {
     courseObject.isTutorialSelected = false;
 
-    // IAN-TODO: chain and remove commented line
-    $("#" + timeElement).html("");
-    $("#" + timeElement).attr("clicked", "false");
-    $("#" + timeElement).removeClass("clickedTutorialTime");
-    // $("#" + timeElement).removeClass("clickedSectionUnsatisfied");
+    $("#" + timeElement).html("")
+                        .attr("clicked", "false")
+                        .removeClass("clickedTutorialTime");
 
     $(courseObject.selectedTutorial).removeClass("clickedSectionUnsatisfied");
 }
@@ -694,14 +657,14 @@ function satisfyCourse(courseObject, section) {
 
             $.each(courseObject.selectedTutorialTime, function (i, time) {
                 timeElement = time + timeSuffix;
-                setSatisfaction(courseObject, timeElement);
+                setSatisfaction(timeElement, courseObject.satisfied);
             });
 
             if (getIsYearSection(section)) {
                 timeSuffix = reverseTimeSuffix(timeSuffix);
                 $.each(courseObject.selectedTutorialTime, function (i, time) {
                     timeElement = time + timeSuffix;
-                    setSatisfaction(courseObject, timeElement);
+                    setSatisfaction(timeElement, courseObject.satisfied);
                 });
             }
 
@@ -718,14 +681,14 @@ function satisfyCourse(courseObject, section) {
 
             $.each(courseObject.selectedTimes, function (i, time) {
                 timeElement = time + timeSuffix;
-                setSatisfaction(courseObject, timeElement);
+                setSatisfaction(timeElement, courseObject.satisfied);
             });
             if (getIsYearSection(section)) {
                 timeSuffix = reverseTimeSuffix(timeSuffix);
 
                 $.each(courseObject.selectedTimes, function (i, time) {
                     timeElement = time + timeSuffix;
-                    setSatisfaction(courseObject, timeElement);
+                    setSatisfaction(timeElement, courseObject.satisfied);
                 });
             }
 
@@ -736,6 +699,7 @@ function satisfyCourse(courseObject, section) {
 function unsatisfyCourse(courseObject, section) {
     var timeSuffix;
     var timeElement;
+
     if (courseObject.manualTutorialEnrolment) {
         if (courseObject.selectedLectureSession === "F") {
             timeSuffix = "-fall";
@@ -750,7 +714,7 @@ function unsatisfyCourse(courseObject, section) {
 
             $.each(courseObject.selectedTutorialTime, function (i, time) {
                 timeElement = time + timeSuffix;
-                setSatisfaction(courseObject, timeElement);
+                setSatisfaction(timeElement, courseObject.satisfied);
             });
 
             if (getIsYearSection(section)) {
@@ -758,7 +722,7 @@ function unsatisfyCourse(courseObject, section) {
 
                 $.each(courseObject.selectedTutorialTime, function (i, time) {
                     timeElement = time + timeSuffix;
-                    setSatisfaction(courseObject, timeElement);
+                    setSatisfaction(timeElement, courseObject.satisfied);
                 });
             }
 
@@ -769,7 +733,7 @@ function unsatisfyCourse(courseObject, section) {
 
             $.each(courseObject.selectedTimes, function (i, time) {
                 timeElement = time + timeSuffix;
-                setSatisfaction(courseObject, timeElement);
+                setSatisfaction(timeElement, courseObject.satisfied);
             });
 
             if (getIsYearSection(section)) {
@@ -777,7 +741,7 @@ function unsatisfyCourse(courseObject, section) {
 
                 $.each(courseObject.selectedTimes, function (i, time) {
                     timeElement = time + timeSuffix;
-                    setSatisfaction(courseObject, timeElement);
+                    setSatisfaction(timeElement, courseObject.satisfied);
                 });
             }
         }
@@ -787,14 +751,9 @@ function unsatisfyCourse(courseObject, section) {
 function satisfyCourseSections(courseObject) {
     $(courseObject.selectedLecture).removeClass("clickedSectionUnsatisfied");
     $(courseObject.selectedTutorial).removeClass("clickedSectionUnsatisfied");
-    // IAN-TODO: don't need each; .attr will work on a multiple objects
-    $("#" + courseObject.name + "-li" + " li").each(function() {
-        $(this).attr("satisfied", true);
-    });
+    $("#" + courseObject.name + "-li" + " li").attr("satisfied", true);
 }
 
-// IAN-TODO: change signature to setSatisfaction(timeElement, satisfied)
-// where satisfied is the boolean, rather than the courseObject
-function setSatisfaction(courseObject, timeElement) {
-    $("#" + timeElement).attr("satisfied", courseObject.satisfied);
+function setSatisfaction(timeElement, satisfied) {
+    $("#" + timeElement).attr("satisfied", satisfied);
 }
