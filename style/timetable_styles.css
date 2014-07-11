@@ -178,7 +178,8 @@ caption {
 }
 
 #clear-all h3 {
-  margin-top:0px;
+  margin: 0;
+  padding: 0.25em;
   cursor: pointer;
 }
 
