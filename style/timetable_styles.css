@@ -177,6 +177,16 @@ caption {
 	width: 95%;
 }
 
+#clear-all h3 {
+  margin: 0;
+  padding: 0.25em;
+  cursor: pointer;
+}
+
+#clear-all h3:hover {
+  background-color: #261B2A !important;
+}
+
 /* Course select sections*/
 .sections {
   overflow: auto;
