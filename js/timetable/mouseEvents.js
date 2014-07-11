@@ -39,6 +39,7 @@ function removeMouseOverClasses() {
     $("td").removeClass("mouseOverConflict mouseOverGood " +
                         "mouseOverTaken mouseOverRemove");
 }
+
 /** Mouse Over Direct Functions **/
 
 function setSectionMouseOver(section, sectionTimes, courseObject) {
@@ -74,7 +75,11 @@ function lightUpConflict(courseObject, timeElement) {
 }
 
 function lightUpTakeable(courseObject, timeElement) {
-    if (courseObject.taken) { //TODO: Highlight already taken section times.
+    if (courseObject.taken) {
+        // IAN-TODO: Highlight already taken section times.
+        // I actually think that the hovered section
+        // should look the same regardless of other sections,
+        // so we should replace mouseOverTaken with mouseOverGood.
         $("#" + timeElement).addClass("mouseOverTaken");
     } else {
         $("#" + timeElement).addClass("mouseOverGood");
@@ -82,6 +87,7 @@ function lightUpTakeable(courseObject, timeElement) {
     $("#" + timeElement).html(courseObject.name);
 }
 
+// IAN-TODO: you'll need to break this into two separate functions
 function displayCourseInformation(courseObject, section) {
     $("#course-info-code").html(courseObject.name);
     $("#course-info-title").html(courseObject.title);
@@ -97,12 +103,13 @@ function setSectionOnClick(section, sectionTimes, courseObject) {
         var taken = false;
         var satisfied = true;
         var inConflict = false;
+        // IAN-TODO: this is a bigger task, but I really don't think
+        // we need separate functions for lectures and tutorials
         if (isLecture) {
             if (courseObject.isLectureSelected) {
                 selectAlreadySelectedLecture(courseObject, section, sectionTimes);
             } else {
                 setLectureSession(courseObject, section);
-
                 selectNewLecture(courseObject, section, sectionTimes);
             }
         } else {
@@ -110,32 +117,36 @@ function setSectionOnClick(section, sectionTimes, courseObject) {
                 selectAlreadySelectedTutorial(courseObject, section, sectionTimes);
             } else {
                 setTutorialSession(courseObject, section);
-
                 selectUnselectedTutorial(courseObject, section, sectionTimes);
             }
 
         }
 
-        $("#" + courseObject.name + "-li" + " li[satisfied*='false']").each(function() {
+        // IAN-TODO: use jquery empty or something
+        $("#" + courseObject.name + "-li li[satisfied*='false']").each(function() {
             satisfied = false;
         });
 
-        $("#" + courseObject.name + "-li" + " li[clicked*='true']").each(function() {
+        $("#" + courseObject.name + "-li li[clicked*='true']").each(function() {
             if (satisfied) {
                 $(this).addClass("clickedLectureTime");
             }
 
             var index = $.inArray($(this).attr("id"), selectedLectures);
 
+            // IAN-TODO check index == -1
             if (!(index > -1)) {
                     selectedLectures.push($(this).attr("id"));
             }
 
+            // IAN-TODO move out of function (like satisfied = false)
             taken = true;
         });
 
-        $("#" + courseObject.name + "-li" + " li[clicked*='false']").each(function() {
+        $("#" + courseObject.name + "-li li[clicked*='false']").each(function() {
             $(this).removeClass("clickedLectureTime");
+            // IAN-TODO I'm tired of reading these. Let's create helper
+            // functions that return booleans
             var index = $.inArray($(this).attr("id"), selectedLectures);
 
             if (index > -1) {
@@ -144,6 +155,9 @@ function setSectionOnClick(section, sectionTimes, courseObject) {
 
         });
 
+        // IAN-TODO: for all of these .each calls
+        // 1) use chaining,
+        // 2) you don't need each (attr, *Class work on multiple)
         $("td[clicked*=false]").each(function() {
             $(this).attr("satisfied", true);
             $(this).attr("type", "");
@@ -180,9 +194,14 @@ function setSectionOnClick(section, sectionTimes, courseObject) {
             $(this).addClass("clickedTutorialTime");
         });
 
+        // IAN-TODO Seems like taken and satisfied can be recovered
+        // from courseObject
         setHeader(courseObject, taken, satisfied);
         setCookie("selected-lectures", JSON.stringify(selectedLectures));
+        // IAN-TODO we had a problem with this before. Can't remember why.
         removeMouseOverClasses();
+
+        // IAN-TODO Don't pass in inConflict
         inConflict = getInConflict(inConflict);
         alertUserOfConflict(inConflict);
         console.log("< click : " + courseObject.name);
@@ -191,6 +210,9 @@ function setSectionOnClick(section, sectionTimes, courseObject) {
 
 /** Utilities **/
 
+// IAN-TODO I guess you want to switch to attributes
+// There should really be just one status attribute.
+// This seems just like how we handle the nodes in the graph.
 function setHeader(courseObject, taken, satisfied) {
     console.log("> setHeader");
     if (taken && satisfied) {
@@ -207,6 +229,7 @@ function setHeader(courseObject, taken, satisfied) {
     console.log("< setHeader");
 }
 
+// IAN-TODO This is a one liner
 function getInConflict(inConflict) {
     $("td[class*=clickedConflictTime]").each(function() {
         inConflict = true;
@@ -215,6 +238,7 @@ function getInConflict(inConflict) {
     return inConflict;
 }
 
+// IAN-TODO shorter animation
 function alertUserOfConflict(inConflict) {
     if (inConflict) {
         $("#dialog").fadeIn(1500);
@@ -227,6 +251,8 @@ function getIsClicked(timeElement) {
     return $("#" + timeElement).attr("clicked") === "true";
 }
 
+// IAN-TODO Somewhere you redo this code, but you should call this function
+// instead
 function getSectionSessionFromSection(section) {
     console.log("> getSectionSessionFromSection");
     if (getIsYearSection(section)) {
@@ -251,6 +277,7 @@ function getIsSpringSection(section) {
     return $(section.parentNode).hasClass("sectionList-spring");
 }
 
+// IAN-TODO delete this
 function reverseTimeSuffix(timeSuffix) {
     console.log("> reverseTimeSuffix");
     if (timeSuffix === "-fall") {
@@ -262,6 +289,8 @@ function reverseTimeSuffix(timeSuffix) {
     return timeSuffix;
 }
 
+// IAN-TODO Combine with getSectionSessionFromSection
+// or at least put them next to each other
 function getTimeSuffix(section) {
     var timeSuffix;
 
@@ -276,10 +305,14 @@ function getTimeSuffix(section) {
     return timeSuffix;
 }
 
+
+// IAN-TODO you really shouldn't need "type" as a parameter
 function setClickedConflict(courseObject, timeElement, section, type) {
     console.log("> setClickedConflict");
     var conflictArray = $("#" + timeElement).data("conflictArray");
     var typeArray = $("#" + timeElement).data("typeArray");
+    // IAN-TODO Rather than check these, why not initialize them
+    // when the page is first created?
     if (typeof conflictArray === "undefined") {
         conflictArray = [];
     }
@@ -288,6 +321,7 @@ function setClickedConflict(courseObject, timeElement, section, type) {
         typeArray = [];
     }
 
+    // IAN-TODO: if block doesn't belong in here
     if (!courseObject.satisfied) {
         if (courseObject.isTutorialSelected) {
             $(courseObject.selectedTutorial).addClass("clickedSectionUnsatisfied");
@@ -303,10 +337,15 @@ function setClickedConflict(courseObject, timeElement, section, type) {
     $("#" + timeElement).data("conflictArray", conflictArray);
     $("#" + timeElement).data("typeArray", typeArray);
     $("#" + timeElement).attr("title", conflictArray);
+    // IAN-TODO Not sure, but should it be "true"?
     $("#" + timeElement).attr("in-conflict", true);
     console.log("< setClickedConflict");
 }
 
+
+// IAN-TODO What's the point of passing courseObject here?
+// It seems like this function doesn't do the right thing if
+// courseObject.name !== $(...).html()
 function removeClickedConflict(courseObject, timeElement, section) {
     console.log("> removeClickedConflict");
     var index;
@@ -320,7 +359,7 @@ function removeClickedConflict(courseObject, timeElement, section) {
             $("#" + timeElement).html(conflictArray[0]);
             $("#" + timeElement).attr("type", typeArray[0]);
         }
-        if (conflictArray.length === 1 ) {
+        if (conflictArray.length === 1) {
             $("#" + timeElement).attr("in-conflict", false);
         }
         conflictArray.splice(index, 1);
@@ -546,6 +585,7 @@ function selectAlreadySelectedTutorial(courseObject, section, sectionTimes) {
     console.log("< selectAlreadySelectedTutorial");
 }
 
+// IAN-TODO time suffix
 function turnTutorialOff(courseObject, section, sectionTimes) {
     console.log("> turnTutorialOff");
     var timeSuffix;
@@ -622,6 +662,7 @@ function selectNewTutorialSection(section, sectionTimes, courseObject, selectedS
     console.log("< selectNewTutorialSection");
 }
 
+// IAN-TODO: timeSuffix
 function selectUnselectedTutorialTimes(courseObject, section, sectionTimes, timeSuffix) {
     console.log("> selectUnselectedTutorialTimes");
     var timeElement;
@@ -629,6 +670,8 @@ function selectUnselectedTutorialTimes(courseObject, section, sectionTimes, time
 
     $.each(sectionTimes, function (i, time) {
         timeElement = time + timeSuffix;
+        // IAN-TODO: don't need a variable isTimeClicked
+        // just put getIsClicked in the if
         isTimeClicked = getIsClicked(timeElement);
 
         if (!isTimeClicked) {
@@ -641,6 +684,8 @@ function selectUnselectedTutorialTimes(courseObject, section, sectionTimes, time
     console.log("< selectUnselectedTutorialTimes");
 }
 
+// IAN-TODO: combine this with setTutorialUnclicked.
+// These actions should be symmetric.
 function setTutorialClicked(timeElement, courseObject) {
     console.log("> setTutorialClicked");
     courseObject.isTutorialSelected = true;
@@ -661,6 +706,7 @@ function setTutorialUnclicked(timeElement, courseObject) {
     console.log("> setTutorialUnclicked");
     courseObject.isTutorialSelected = false;
 
+    // IAN-TODO: chain and remove commented line
     $("#" + timeElement).html("");
     $("#" + timeElement).attr("clicked", "false");
     $("#" + timeElement).removeClass("clickedTutorialTime");
@@ -787,11 +833,14 @@ function unsatisfyCourse(courseObject, section) {
 function satisfyCourseSections(courseObject) {
     $(courseObject.selectedLecture).removeClass("clickedSectionUnsatisfied");
     $(courseObject.selectedTutorial).removeClass("clickedSectionUnsatisfied");
+    // IAN-TODO: don't need each; .attr will work on a multiple objects
     $("#" + courseObject.name + "-li" + " li").each(function() {
         $(this).attr("satisfied", true);
     });
 }
 
+// IAN-TODO: change signature to setSatisfaction(timeElement, satisfied)
+// where satisfied is the boolean, rather than the courseObject
 function setSatisfaction(courseObject, timeElement) {
     $("#" + timeElement).attr("satisfied", courseObject.satisfied);
 }
