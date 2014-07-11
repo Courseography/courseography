@@ -204,7 +204,6 @@ function setSectionOnClick(section, sectionTimes, courseObject) {
         // IAN-TODO Don't pass in inConflict
         inConflict = getInConflict(inConflict);
         alertUserOfConflict(inConflict);
-        console.log("< click : " + courseObject.name);
     });
 }
 
@@ -214,7 +213,6 @@ function setSectionOnClick(section, sectionTimes, courseObject) {
 // There should really be just one status attribute.
 // This seems just like how we handle the nodes in the graph.
 function setHeader(courseObject, taken, satisfied) {
-    console.log("> setHeader");
     if (taken && satisfied) {
         $(courseObject.header).removeClass("clickedSectionUnsatisfied");
         $(courseObject.header).addClass("clicked-header");
@@ -226,7 +224,6 @@ function setHeader(courseObject, taken, satisfied) {
         $(courseObject.header).removeClass("clicked-header");
         courseObject.taken = false;
     }
-    console.log("< setHeader");
 }
 
 // IAN-TODO This is a one liner
@@ -254,7 +251,6 @@ function getIsClicked(timeElement) {
 // IAN-TODO Somewhere you redo this code, but you should call this function
 // instead
 function getSectionSessionFromSection(section) {
-    console.log("> getSectionSessionFromSection");
     if (getIsYearSection(section)) {
         return "Y";
     } else if (getIsFallSection(section)) {
@@ -262,7 +258,6 @@ function getSectionSessionFromSection(section) {
     } else if (getIsSpringSection(section)) {
         return "S";
     }
-    console.log("< getSectionSessionFromSection");
 }
 
 function getIsYearSection(section) {
@@ -279,13 +274,11 @@ function getIsSpringSection(section) {
 
 // IAN-TODO delete this
 function reverseTimeSuffix(timeSuffix) {
-    console.log("> reverseTimeSuffix");
     if (timeSuffix === "-fall") {
         timeSuffix = "-spring";
     } else if (timeSuffix === "-spring") {
         timeSuffix = "-fall";
     }
-    console.log("< reverseTimeSuffix");
     return timeSuffix;
 }
 
@@ -308,7 +301,6 @@ function getTimeSuffix(section) {
 
 // IAN-TODO you really shouldn't need "type" as a parameter
 function setClickedConflict(courseObject, timeElement, section, type) {
-    console.log("> setClickedConflict");
     var conflictArray = $("#" + timeElement).data("conflictArray");
     var typeArray = $("#" + timeElement).data("typeArray");
     // IAN-TODO Rather than check these, why not initialize them
@@ -339,7 +331,6 @@ function setClickedConflict(courseObject, timeElement, section, type) {
     $("#" + timeElement).attr("title", conflictArray);
     // IAN-TODO Not sure, but should it be "true"?
     $("#" + timeElement).attr("in-conflict", true);
-    console.log("< setClickedConflict");
 }
 
 
@@ -347,7 +338,6 @@ function setClickedConflict(courseObject, timeElement, section, type) {
 // It seems like this function doesn't do the right thing if
 // courseObject.name !== $(...).html()
 function removeClickedConflict(courseObject, timeElement, section) {
-    console.log("> removeClickedConflict");
     var index;
     var conflictArray = $("#" + timeElement).data("conflictArray");
     var typeArray = $("#" + timeElement).data("typeArray");
@@ -369,20 +359,16 @@ function removeClickedConflict(courseObject, timeElement, section) {
         $("#" + timeElement).data("conflictArray", conflictArray);
         $("#" + timeElement).attr("title", conflictArray);
     }
-    console.log("< removeClickedConflict");
 }
 
 
 /** Lecture Functions **/
 
 function setLectureSession(courseObject, section) {
-    console.log("> setLectureSession");
     courseObject.selectedLectureSession = getSectionSessionFromSection(section);
-    console.log("< setLectureSession");
 }
 
 function selectUnselectedLecture(courseObject, section, sectionTimes) {
-    console.log("> selectUnselectedLecture");
     var timeElement;
     var timeSuffix;
     var isTimeClicked;
@@ -401,11 +387,9 @@ function selectUnselectedLecture(courseObject, section, sectionTimes) {
     }
 
     courseObject.selectedTimes = sectionTimes;
-    console.log("< selectUnselectedLecture");
 }
 
 function selectAlreadySelectedLecture(courseObject, section, sectionTimes) {
-    console.log("> selectAlreadySelectedLecture");
     var selectedSession;
 
     turnLectureOff(courseObject, section, sectionTimes);
@@ -426,11 +410,9 @@ function selectAlreadySelectedLecture(courseObject, section, sectionTimes) {
         courseObject.selectedLectureSession = null;
         courseObject.selectedTimes = null;
     }
-    console.log("< selectAlreadySelectedLecture");
 }
 
 function turnLectureOff(courseObject, section, sectionTimes) {
-    console.log("> turnLectureOff");
     var timeSuffix;
 
     courseObject.isLectureSelected = false;
@@ -449,8 +431,6 @@ function turnLectureOff(courseObject, section, sectionTimes) {
     removeLecture(courseObject, section, timeSuffix);
 
     $(courseObject.selectedLecture).removeClass("clickedSectionUnsatisfied");
-
-    console.log("< turnLectureOff");
 }
 
 function removeLecture(courseObject, section, timeSuffix) {
@@ -472,7 +452,6 @@ function removeLecture(courseObject, section, timeSuffix) {
 }
 
 function selectNewLecture(courseObject, section, sectionTimes) {
-    console.log("> selectNewLecture");
     var timeElement;
     var timeSuffix;
     var isTimeClicked;
@@ -487,12 +466,9 @@ function selectNewLecture(courseObject, section, sectionTimes) {
 
     satisfyCourse(courseObject, section);
     selectUnselectedLectureTimes(sectionTimes, timeSuffix, courseObject, section);
-
-    console.log("< selectNewLecture");
 }
 
 function selectUnselectedLectureTimes(sectionTimes, timeSuffix, courseObject, section) {
-    console.log("> selectUnselectedLectureTimes");
     var timeElement;
     var isTimeClicked;
     if (timeSuffix === "-year") {
@@ -511,12 +487,9 @@ function selectUnselectedLectureTimes(sectionTimes, timeSuffix, courseObject, se
 
         });
     }
-
-    console.log("< selectUnselectedLectureTimes");
 }
 
 function setLectureClicked(courseObject, timeElement, section) {
-    console.log("> setLectureClicked");
     $("#" + timeElement).attr("type", "lecture");
 
     if (!courseObject.satisfied) {
@@ -527,7 +500,6 @@ function setLectureClicked(courseObject, timeElement, section) {
 
     $("#" + timeElement).html(courseObject.name);
     $("#" + timeElement).attr("clicked", "true");
-    console.log("< setLectureClicked");
 }
 
 /** Tutorial Functions **/
@@ -537,7 +509,6 @@ function setTutorialSession(courseObject, section) {
 }
 
 function selectUnselectedTutorial(courseObject, section, sectionTimes) {
-    console.log("> selectUnselectedTutorial");
     var timeElement;
     var timeSuffix;
     var isTimeClicked;
@@ -557,11 +528,9 @@ function selectUnselectedTutorial(courseObject, section, sectionTimes) {
     }
 
     courseObject.selectedTutorialTime = sectionTimes;
-    console.log("< selectUnselectedTutorial");
 }
 
 function selectAlreadySelectedTutorial(courseObject, section, sectionTimes) {
-    console.log("> selectAlreadySelectedTutorial");
     var selectedSession;
 
     turnTutorialOff(courseObject, section, sectionTimes);
@@ -582,12 +551,10 @@ function selectAlreadySelectedTutorial(courseObject, section, sectionTimes) {
         courseObject.selectedTutorialSession = null;
         courseObject.selectedTutorialTime = null;
     }
-    console.log("< selectAlreadySelectedTutorial");
 }
 
 // IAN-TODO time suffix
 function turnTutorialOff(courseObject, section, sectionTimes) {
-    console.log("> turnTutorialOff");
     var timeSuffix;
     var timeElement;
 
@@ -631,11 +598,9 @@ function turnTutorialOff(courseObject, section, sectionTimes) {
             }
         });
     }
-    console.log("< turnTutorialOff");
 }
 
 function selectNewTutorialSection(section, sectionTimes, courseObject, selectedSession) {
-    console.log("> selectNewTutorialSection");
     var timeElement;
     var timeSuffix;
     var isTimeClicked;
@@ -659,12 +624,10 @@ function selectNewTutorialSection(section, sectionTimes, courseObject, selectedS
         timeSuffix = reverseTimeSuffix(timeSuffix);
         selectUnselectedTutorialTimes(courseObject, section, sectionTimes, timeSuffix);
     }
-    console.log("< selectNewTutorialSection");
 }
 
 // IAN-TODO: timeSuffix
 function selectUnselectedTutorialTimes(courseObject, section, sectionTimes, timeSuffix) {
-    console.log("> selectUnselectedTutorialTimes");
     var timeElement;
     var isTimeClicked;
 
@@ -681,13 +644,11 @@ function selectUnselectedTutorialTimes(courseObject, section, sectionTimes, time
         }
     });
 
-    console.log("< selectUnselectedTutorialTimes");
 }
 
 // IAN-TODO: combine this with setTutorialUnclicked.
 // These actions should be symmetric.
 function setTutorialClicked(timeElement, courseObject) {
-    console.log("> setTutorialClicked");
     courseObject.isTutorialSelected = true;
 
     $("#" + timeElement).attr("type", "tutorial");
@@ -699,11 +660,9 @@ function setTutorialClicked(timeElement, courseObject) {
         $(courseObject.selectedTutorial).addClass("clickedSectionUnsatisfied");
         $(courseObject.selectedTutorial).attr("satisfied", "false");
     }
-    console.log("< setTutorialClicked");
 }
 
 function setTutorialUnclicked(timeElement, courseObject) {
-    console.log("> setTutorialUnclicked");
     courseObject.isTutorialSelected = false;
 
     // IAN-TODO: chain and remove commented line
@@ -713,13 +672,11 @@ function setTutorialUnclicked(timeElement, courseObject) {
     // $("#" + timeElement).removeClass("clickedSectionUnsatisfied");
 
     $(courseObject.selectedTutorial).removeClass("clickedSectionUnsatisfied");
-    console.log("< setTutorialUnclicked");
 }
 
 /** Course Satisfaction **/
 
 function satisfyCourse(courseObject, section) {
-    console.log("> satisfyCourse");
     var timeSuffix;
     var timeElement;
 
@@ -774,11 +731,9 @@ function satisfyCourse(courseObject, section) {
 
         }
     }
-    console.log("< satisfyCourse");
 }
 
 function unsatisfyCourse(courseObject, section) {
-    console.log("> unsatisfyCourse");
     var timeSuffix;
     var timeElement;
     if (courseObject.manualTutorialEnrolment) {
@@ -827,7 +782,6 @@ function unsatisfyCourse(courseObject, section) {
             }
         }
     }
-    console.log("< unsatisfyCourse");
 }
 
 function satisfyCourseSections(courseObject) {
