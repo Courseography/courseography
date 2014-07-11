@@ -392,6 +392,12 @@ caption {
   padding: 0 10px 0 0;
 }
 
+#filter-container form {
+  position: absolute;
+  width:100%;
+  padding-right: 25px;
+}
+
 #search-list ul {
   margin: 0.5em 0 0 0;
   padding: 0;
