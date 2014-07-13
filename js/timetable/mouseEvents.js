@@ -258,6 +258,7 @@ function getTimeSuffix(section) {
 
 // IAN-TODO Somewhere you redo this code, but you should call this function
 // instead
+// IAN-TODO Rename to getSession
 function getSectionSession(section) {
     if (getIsYearSection(section)) {
         return "Y";
@@ -314,14 +315,6 @@ function setClickedConflict(courseObject, timeElement, section, type) {
     $("#" + timeElement).attr("in-conflict", true);
 }
 
-// IAN-TODO What's the point of passing courseObject here?
-// It seems like this function doesn't do the right thing if
-// courseObject.name !== $(...).html()
-
-// IAN-RESPONSE: 
-// If we're removing the courseObject that is represented in the td, we set the td html to the first element
-// in the conflict array. Otherwise, we keep the html as it is, because we're removing an element from the 
-// conflictArray (title).
 function removeClickedConflict(courseObject, timeElement, section) {
     var conflictArray = $("#" + timeElement).data("conflictArray");
     var typeArray = $("#" + timeElement).data("typeArray");
@@ -329,6 +322,9 @@ function removeClickedConflict(courseObject, timeElement, section) {
     if (typeof conflictArray === "undefined" || typeof typeArray === "undefined") {
         console.log("Unexpected case in removeClickedConflict()");
     } else {
+        // IAN-TODO This code should be (basically) one big if-else block.
+        // Either courseObject.name is in the td, or it's in the list,
+        // but not both.
         var index = conflictArray.indexOf(courseObject.name);
         if ($("#" + timeElement).html() === courseObject.name) {
             $("#" + timeElement).html(conflictArray[0]);
@@ -514,7 +510,6 @@ function selectAlreadySelectedTutorial(courseObject, section, sectionTimes) {
     satisfyCourse(courseObject, section);
 }
 
-// IAN-TODO time suffix
 function turnTutorialOff(courseObject, section, sectionTimes) {
     var timeSuffix;
 
@@ -571,7 +566,6 @@ function selectNewTutorialSection(section, sectionTimes, courseObject, selectedS
     selectUnselectedTutorialTimes(courseObject, section, sectionTimes, timeSuffix);
 }
 
-// IAN-TODO: timeSuffix
 function selectUnselectedTutorialTimes(courseObject, section, sectionTimes, timeSuffix) {
     if (timeSuffix === "-year") {
         selectUnselectedTutorialTimes(courseObject, section, sectionTimes, "-fall");
@@ -579,13 +573,13 @@ function selectUnselectedTutorialTimes(courseObject, section, sectionTimes, time
     } else {
         $.each(sectionTimes, function (i, time) {
             var timeElement = time + timeSuffix;
-            
+
             if (!getIsClicked(timeElement)) {
                 setTutorialClicked(timeElement, courseObject);
             } else {
                 setClickedConflict(courseObject, timeElement, section, "tutorial");
             }
-        }); 
+        });
     }
 }
 
@@ -617,6 +611,13 @@ function setTutorialUnclicked(timeElement, courseObject) {
 
 /** Course Satisfaction **/
 
+// IAN-TODO
+// 1. Split off all function calls that change the view
+//    out of this function.
+// 2. The only purpose of this function should be to update
+//    courseObject.satisfied. The logic for this is about
+//    10 lines long.
+// 3. Do something for non-manualTutorialEnrolment courses
 function satisfyCourse(courseObject, section) {
     var timeSuffix;
     var timeElement;
@@ -663,6 +664,7 @@ function satisfyCourse(courseObject, section) {
                 timeSuffix = "-year";
             }
 
+            // IAN-TODO Move this into "satisfyCourseSections"
             courseObject.satisfied = false;
             $(courseObject.selectedTutorial).addClass("clickedSectionUnsatisfied");
 
@@ -682,17 +684,19 @@ function satisfyCourse(courseObject, section) {
 
             setLectureSatisfaction(courseObject, timeSuffix);
 
-        } else { 
+        } else {
             alert("Sat: Uncaught!");
         }
         $(section).attr("satisfied", courseObject.satisfied);
     }
 }
 
+// IAN-TODO don't need to pass in timeSuffix.
+// Just use courseObject.selected___Time.
 function setLectureSatisfaction(courseObject, timeSuffix) {
     if (timeSuffix === "-year") {
-        satisfyLecture(courseObject, "-fall");
-        satisfyLecture(courseObject, "-spring");
+        setLectureSatisfaction(courseObject, "-fall");
+        setLectureSatisfaction(courseObject, "-spring");
     } else {
         $.each(courseObject.selectedTimes, function (i, time) {
             var timeElement = time + timeSuffix;
@@ -703,8 +707,8 @@ function setLectureSatisfaction(courseObject, timeSuffix) {
 
 function setTutorialSatisfaction(courseObject, timeSuffix) {
     if (timeSuffix === "-year") {
-        satisfyTutorial(courseObject, "-fall");
-        satisfyTutorial(courseObject, "-spring");
+        setTutorialSatisfaction(courseObject, "-fall");
+        setTutorialSatisfaction(courseObject, "-spring");
     } else {
         $.each(courseObject.selectedTutorialTime, function (i, time) {
             var timeElement = time + timeSuffix;
