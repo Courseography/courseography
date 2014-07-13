@@ -162,14 +162,12 @@ function setSectionOnClick(section, sectionTimes, courseObject) {
         $("td[clicked*=false]").each(function() {
             $(this).attr("satisfied", true);
             $(this).attr("type", "");
-            $(this).removeClass("clickedLectureTime");
-            $(this).removeClass("clickedTutorialTime");
+            $(this).removeClass("clickedLectureTime clickedTutorialTime");
         });
 
         $("td[satisfied*=false][in-conflict*=false]").each(function() {
             $(this).addClass("clickedSectionUnsatisfied");
-            $(this).removeClass("clickedLectureTime");
-            $(this).removeClass("clickedTutorialTime");
+            $(this).removeClass("clickedLectureTime clickedTutorialTime");
         });
 
         $("td[satisfied*=true]").each(function() {
@@ -177,9 +175,7 @@ function setSectionOnClick(section, sectionTimes, courseObject) {
         });
 
         $("td[in-conflict*=true]").each(function() {
-            $(this).removeClass("clickedSectionUnsatisfied");
-            $(this).removeClass("clickedLectureTime");
-            $(this).removeClass("clickedTutorialTime");
+            $(this).removeClass("clickedSectionUnsatisfied clickedLectureTime clickedTutorialTime");
             $(this).addClass("clickedConflictTime");
         });
 
@@ -236,12 +232,11 @@ function getInConflict(inConflict) {
     return inConflict;
 }
 
-// IAN-TODO shorter animation
 function alertUserOfConflict(inConflict) {
     if (inConflict) {
-        $("#dialog").fadeIn(1500);
+        $("#dialog").fadeIn(750);
     } else {
-        $("#dialog").fadeOut(1500);
+        $("#dialog").fadeOut(750);
     }
 }
 
@@ -249,9 +244,21 @@ function getIsClicked(timeElement) {
     return $("#" + timeElement).attr("clicked") === "true";
 }
 
+// IAN-TODO Combine with getSectionSession
+// or at least put them next to each other
+function getTimeSuffix(section) {
+    if (getIsFallSection(section)) {
+        return "-fall";
+    } else if (getIsSpringSection(section)) {
+        return "-spring";
+    } else {
+        return "-year";
+    }
+}
+
 // IAN-TODO Somewhere you redo this code, but you should call this function
 // instead
-function getSectionSessionFromSection(section) {
+function getSectionSession(section) {
     if (getIsYearSection(section)) {
         return "Y";
     } else if (getIsFallSection(section)) {
@@ -272,23 +279,6 @@ function getIsFallSection(section) {
 function getIsSpringSection(section) {
     return $(section.parentNode).hasClass("sectionList-spring");
 }
-
-// IAN-TODO Combine with getSectionSessionFromSection
-// or at least put them next to each other
-function getTimeSuffix(section) {
-    var timeSuffix;
-
-    if (getIsFallSection(section)) {
-        timeSuffix = "-fall";
-    } else if (getIsSpringSection(section)) {
-        timeSuffix = "-spring";
-    } else {
-        timeSuffix = "-year";
-    }
-
-    return timeSuffix;
-}
-
 
 // IAN-TODO you really shouldn't need "type" as a parameter
 function setClickedConflict(courseObject, timeElement, section, type) {
@@ -324,10 +314,14 @@ function setClickedConflict(courseObject, timeElement, section, type) {
     $("#" + timeElement).attr("in-conflict", true);
 }
 
-
 // IAN-TODO What's the point of passing courseObject here?
 // It seems like this function doesn't do the right thing if
 // courseObject.name !== $(...).html()
+
+// IAN-RESPONSE: 
+// If we're removing the courseObject that is represented in the td, we set the td html to the first element
+// in the conflict array. Otherwise, we keep the html as it is, because we're removing an element from the 
+// conflictArray (title).
 function removeClickedConflict(courseObject, timeElement, section) {
     var conflictArray = $("#" + timeElement).data("conflictArray");
     var typeArray = $("#" + timeElement).data("typeArray");
@@ -356,7 +350,7 @@ function removeClickedConflict(courseObject, timeElement, section) {
 /** Lecture Functions **/
 
 function setLectureSession(courseObject, section) {
-    courseObject.selectedLectureSession = getSectionSessionFromSection(section);
+    courseObject.selectedLectureSession = getSectionSession(section);
 }
 
 function selectUnselectedLecture(courseObject, section, sectionTimes) {
@@ -367,11 +361,6 @@ function selectUnselectedLecture(courseObject, section, sectionTimes) {
     courseObject.isLectureSelected = true;
     var timeSuffix = getTimeSuffix(section);
     selectUnselectedLectureTimes(sectionTimes, timeSuffix, courseObject, section);
-
-    if (getIsYearSection(section)) {
-        timeSuffix = reverseTimeSuffix(timeSuffix);
-        selectUnselectedLectureTimes(sectionTimes, timeSuffix, courseObject, section);
-    }
 
     courseObject.selectedTimes = sectionTimes;
 }
@@ -397,13 +386,13 @@ function selectAlreadySelectedLecture(courseObject, section, sectionTimes) {
         courseObject.selectedLectureSession = null;
         courseObject.selectedTimes = null;
     }
+    satisfyCourse(courseObject, section);
 }
 
 function turnLectureOff(courseObject, section, sectionTimes) {
     var timeSuffix;
 
     courseObject.isLectureSelected = false;
-    unsatisfyCourse(courseObject, section);
 
     $(courseObject.selectedLecture).attr("clicked", "false");
 
@@ -426,7 +415,7 @@ function removeLecture(courseObject, section, timeSuffix) {
         removeLecture(courseObject, section, "-spring");
     } else {
         $.each(courseObject.selectedTimes, function (i, time) {
-            timeElement = time + timeSuffix;
+            var timeElement = time + timeSuffix;
 
             if ($("#" + timeElement).hasClass("clickedConflictTime")) {
                 removeClickedConflict(courseObject, timeElement, section);
@@ -485,7 +474,7 @@ function setLectureClicked(courseObject, timeElement, section) {
 /** Tutorial Functions **/
 
 function setTutorialSession(courseObject, section) {
-    courseObject.selectedTutorialSession = getSectionSessionFromSection(section);
+    courseObject.selectedTutorialSession = getSectionSession(section);
 }
 
 function selectUnselectedTutorial(courseObject, section, sectionTimes) {
@@ -497,11 +486,6 @@ function selectUnselectedTutorial(courseObject, section, sectionTimes) {
     var timeSuffix = getTimeSuffix(section);
 
     selectUnselectedTutorialTimes(courseObject, section, sectionTimes, timeSuffix);
-
-    if (getIsYearSection(section)) {
-        timeSuffix = reverseTimeSuffix(timeSuffix);
-        selectUnselectedTutorialTimes(courseObject, section, sectionTimes, timeSuffix);
-    }
 
     courseObject.selectedTutorialTime = sectionTimes;
 }
@@ -527,6 +511,7 @@ function selectAlreadySelectedTutorial(courseObject, section, sectionTimes) {
         courseObject.selectedTutorialSession = null;
         courseObject.selectedTutorialTime = null;
     }
+    satisfyCourse(courseObject, section);
 }
 
 // IAN-TODO time suffix
@@ -534,35 +519,29 @@ function turnTutorialOff(courseObject, section, sectionTimes) {
     var timeSuffix;
 
     courseObject.isTutorialSelected = false;
-    unsatisfyCourse(courseObject, section);
 
     $(courseObject.selectedTutorial).attr("clicked", "false");
 
     if (courseObject.selectedTutorialSession === "F") {
         timeSuffix = "-fall";
-    } else {
+    } else if (courseObject.selectedTutorialSession === "S") {
         timeSuffix = "-spring";
+    } else {
+        timeSuffix = "-year";
     }
 
-    $.each(courseObject.selectedTutorialTime, function (i, time) {
-        var timeElement = time + timeSuffix;
-
-        if ($("#" + timeElement).hasClass("clickedConflictTime")) {
-            removeClickedConflict(courseObject, timeElement, section);
-        } else {
-            $("#" + timeElement).html("");
-            $("#" + timeElement).attr("clicked", "false");
-            $("#" + timeElement).removeClass("clickedTutorialTime");
-        }
-    });
+    removeTutorial(courseObject, section, timeSuffix);
 
     $(courseObject.selectedTutorial).removeClass("clickedSectionUnsatisfied");
+}
 
-    if (getIsYearSection(section)) {
-        timeSuffix = reverseTimeSuffix(timeSuffix);
-
+function removeTutorial(courseObject, section, timeSuffix) {
+    if (timeSuffix === "-year") {
+        removeTutorial(courseObject, section, "-fall");
+        removeTutorial(courseObject, section, "-spring");
+    } else {
         $.each(courseObject.selectedTutorialTime, function (i, time) {
-            timeElement = time + timeSuffix;
+            var timeElement = time + timeSuffix;
 
             if ($("#" + timeElement).hasClass("clickedConflictTime")) {
                 removeClickedConflict(courseObject, timeElement, section);
@@ -590,25 +569,24 @@ function selectNewTutorialSection(section, sectionTimes, courseObject, selectedS
 
     var timeSuffix = getTimeSuffix(section);
     selectUnselectedTutorialTimes(courseObject, section, sectionTimes, timeSuffix);
-
-    if (getIsYearSection(section)) {
-        timeSuffix = reverseTimeSuffix(timeSuffix);
-        selectUnselectedTutorialTimes(courseObject, section, sectionTimes, timeSuffix);
-    }
 }
 
 // IAN-TODO: timeSuffix
 function selectUnselectedTutorialTimes(courseObject, section, sectionTimes, timeSuffix) {
-    $.each(sectionTimes, function (i, time) {
-        var timeElement = time + timeSuffix;
-        
-        if (!getIsClicked(timeElement)) {
-            setTutorialClicked(timeElement, courseObject);
-        } else {
-            setClickedConflict(courseObject, timeElement, section, "tutorial");
-        }
-    });
-
+    if (timeSuffix === "-year") {
+        selectUnselectedTutorialTimes(courseObject, section, sectionTimes, "-fall");
+        selectUnselectedTutorialTimes(courseObject, section, sectionTimes, "-spring");
+    } else {
+        $.each(sectionTimes, function (i, time) {
+            var timeElement = time + timeSuffix;
+            
+            if (!getIsClicked(timeElement)) {
+                setTutorialClicked(timeElement, courseObject);
+            } else {
+                setClickedConflict(courseObject, timeElement, section, "tutorial");
+            }
+        }); 
+    }
 }
 
 // IAN-TODO: combine this with setTutorialUnclicked.
@@ -645,108 +623,120 @@ function satisfyCourse(courseObject, section) {
 
     if (courseObject.manualTutorialEnrolment) {
         if (courseObject.isTutorialSelected && ((courseObject.selectedTutorialSession === courseObject.selectedLectureSession))) {
+            alert("Sat: case 1");
             courseObject.satisfied = true;
-            $(section).attr("satisfied", true);
             satisfyCourseSections(courseObject);
 
             if (courseObject.selectedTutorialSession === "F") {
                 timeSuffix = "-fall";
-            } else {
+            } else if (courseObject.selectedTutorialSession === "S") {
                 timeSuffix = "-spring";
+            } else {
+                timeSuffix = "-year";
             }
 
-            $.each(courseObject.selectedTutorialTime, function (i, time) {
-                timeElement = time + timeSuffix;
-                setSatisfaction(timeElement, courseObject.satisfied);
-            });
-
-            if (getIsYearSection(section)) {
-                timeSuffix = reverseTimeSuffix(timeSuffix);
-                $.each(courseObject.selectedTutorialTime, function (i, time) {
-                    timeElement = time + timeSuffix;
-                    setSatisfaction(timeElement, courseObject.satisfied);
-                });
-            }
+            setTutorialSatisfaction(courseObject, timeSuffix);
 
         } else if (courseObject.isLectureSelected && ((courseObject.selectedLectureSession === courseObject.selectedTutorialSession))) {
+            alert("Sat: case 2");
             courseObject.satisfied = true;
-            $(section).attr("satisfied", true);
             satisfyCourseSections(courseObject);
 
             if (courseObject.selectedLectureSession === "F") {
                 timeSuffix = "-fall";
-            } else {
+            } else if (courseObject.selectedLectureSession === "S") {
                 timeSuffix = "-spring";
+            } else {
+                timeSuffix = "-year";
             }
 
-            $.each(courseObject.selectedTimes, function (i, time) {
-                timeElement = time + timeSuffix;
-                setSatisfaction(timeElement, courseObject.satisfied);
-            });
-            if (getIsYearSection(section)) {
-                timeSuffix = reverseTimeSuffix(timeSuffix);
+            setLectureSatisfaction(courseObject, timeSuffix);
 
-                $.each(courseObject.selectedTimes, function (i, time) {
-                    timeElement = time + timeSuffix;
-                    setSatisfaction(timeElement, courseObject.satisfied);
-                });
+        } else if (courseObject.isTutorialSelected && (courseObject.selectedTutorialSession !== courseObject.selectedLectureSession)) {
+            alert("Sat: case 3");
+
+            if (courseObject.selectedTutorialSession === "F") {
+                timeSuffix = "-fall";
+            } else if (courseObject.selectedTutorialSession === "S") {
+                timeSuffix = "-spring";
+            } else {
+                timeSuffix = "-year";
             }
 
-        }
-    }
-}
-
-function unsatisfyCourse(courseObject, section) {
-    var timeSuffix;
-    var timeElement;
-
-    if (courseObject.manualTutorialEnrolment) {
-        if (courseObject.selectedLectureSession === "F") {
-            timeSuffix = "-fall";
-        } else {
-            timeSuffix = "-spring";
-        }
-
-        if (courseObject.isTutorialSelected && (courseObject.selectedTutorialSession === courseObject.selectedLectureSession)) {
             courseObject.satisfied = false;
-            $(section).attr("satisfied", false);
             $(courseObject.selectedTutorial).addClass("clickedSectionUnsatisfied");
 
-            $.each(courseObject.selectedTutorialTime, function (i, time) {
-                timeElement = time + timeSuffix;
-                setSatisfaction(timeElement, courseObject.satisfied);
-            });
+            setTutorialSatisfaction(courseObject, timeSuffix)
 
-            if (getIsYearSection(section)) {
-                timeSuffix = reverseTimeSuffix(timeSuffix);
-
-                $.each(courseObject.selectedTutorialTime, function (i, time) {
-                    timeElement = time + timeSuffix;
-                    setSatisfaction(timeElement, courseObject.satisfied);
-                });
+        } else if (courseObject.isLectureSelected && (courseObject.selectedLectureSession !== courseObject.selectedTutorialSession)) {
+            alert("Sat: case 4");
+            if (courseObject.selectedLectureSession === "F") {
+                timeSuffix = "-fall";
+            } else if (courseObject.selectedLectureSession === "S") {
+                timeSuffix = "-spring";
+            } else {
+                timeSuffix = "-year";
             }
-
-        } else if (courseObject.isLectureSelected && (courseObject.selectedLectureSession === courseObject.selectedTutorialSession)) {
             courseObject.satisfied = false;
-            $(section).attr("satisfied", false);
             $(courseObject.selectedLecture).addClass("clickedSectionUnsatisfied");
 
-            $.each(courseObject.selectedTimes, function (i, time) {
-                timeElement = time + timeSuffix;
-                setSatisfaction(timeElement, courseObject.satisfied);
-            });
+            setLectureSatisfaction(courseObject, timeSuffix);
 
-            if (getIsYearSection(section)) {
-                timeSuffix = reverseTimeSuffix(timeSuffix);
-
-                $.each(courseObject.selectedTimes, function (i, time) {
-                    timeElement = time + timeSuffix;
-                    setSatisfaction(timeElement, courseObject.satisfied);
-                });
-            }
+        } else { 
+            alert("Sat: Uncaught!");
         }
+        $(section).attr("satisfied", courseObject.satisfied);
     }
 }
+
+function setLectureSatisfaction(courseObject, timeSuffix) {
+    if (timeSuffix === "-year") {
+        satisfyLecture(courseObject, "-fall");
+        satisfyLecture(courseObject, "-spring");
+    } else {
+        $.each(courseObject.selectedTimes, function (i, time) {
+            var timeElement = time + timeSuffix;
+            setSatisfaction(timeElement, courseObject.satisfied);
+        });
+    }
+}
+
+function setTutorialSatisfaction(courseObject, timeSuffix) {
+    if (timeSuffix === "-year") {
+        satisfyTutorial(courseObject, "-fall");
+        satisfyTutorial(courseObject, "-spring");
+    } else {
+        $.each(courseObject.selectedTutorialTime, function (i, time) {
+            var timeElement = time + timeSuffix;
+            setSatisfaction(timeElement, courseObject.satisfied);
+        });
+    }
+}
+
+// function unsatisfyLecture(courseObject, timeSuffix) {
+//     if (timeSuffix === "-year") {
+//         satisfyLecture(courseObject, "-fall");
+//         satisfyLecture(courseObject, "-spring");
+//     } else {
+//         $.each(courseObject.selectedTimes, function (i, time) {
+//             timeElement = time + timeSuffix;
+//             setSatisfaction(timeElement, courseObject.satisfied);
+//         });
+//     }
+// }
+
+// function unsatisfyTutorial(courseObject, timeSuffix) {
+//     if (timeSuffix === "-year") {
+//         satisfyTutorial(courseObject, "-fall");
+//         satisfyTutorial(courseObject, "-spring");
+//     } else {
+//         $.each(courseObject.selectedTutorialTime, function (i, time) {
+//             timeElement = time + timeSuffix;
+//             setSatisfaction(timeElement, courseObject.satisfied);
+//         });
+//     }
+// }
+
 
 function satisfyCourseSections(courseObject) {
     $(courseObject.selectedLecture).removeClass("clickedSectionUnsatisfied");
