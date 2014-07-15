@@ -8,7 +8,7 @@ var sections;
 var section;
 var sectionTimes;
 
-function processSessionLectures(session, courseObject) {
+function processSessionLectures(session, courseObject, timeSuffix) {
     var sectionList = document.createElement("ul");
     $.each(session.lectures, function (i, lecture) {
         if (lecture.section.charAt(1) !== "2" && lecture.time !== "Online Web Version") {
@@ -19,6 +19,19 @@ function processSessionLectures(session, courseObject) {
             if (!courseObject.manualTutorialEnrolment && session.tutorials.length > 0) {
                 sectionTimes = sectionTimes.concat(convertTimes(session.tutorials[i][0]));
             }
+            if (timeSuffix === "Y") {   
+                var springTimes = [];
+                $.each(sectionTimes, function(i) {
+                    springTimes.push("#" + sectionTimes[i] + "S");
+                    sectionTimes[i] = "#" + sectionTimes[i] + "F";
+                });
+                sectionTimes = sectionTimes.concat(springTimes);
+
+            } else {
+                $.each(sectionTimes, function(i) {
+                    sectionTimes[i] = "#" + sectionTimes[i] + timeSuffix;
+                });
+            }
             setSectionMouseEvents(section, sectionTimes, courseObject);
             sectionList.appendChild(section);
         }
@@ -26,16 +39,25 @@ function processSessionLectures(session, courseObject) {
     return sectionList;
 }
 
-function processSessionTutorials(session, courseObject, sectionList) {
+function processSessionTutorials(session, courseObject, sectionList, timeSuffix) {
     $.each(session.tutorials, function (i, tutorial) {
         if (courseObject.manualTutorialEnrolment) {
             section = document.createElement("li");
             sectionTimes = convertTimes(tutorial[1]);
             section.appendChild(document.createTextNode(tutorial[0]));
-            // $.each(sectionTimes, function(i, sectionTime) {
-            //     sectionTime = sectionTime + 
-            // });
-            console.log("section times: " + sectionTimes);
+            if (timeSuffix === "Y") {   
+                var springTimes = [];
+                $.each(sectionTimes, function(i) {
+                    springTimes.push("#" + sectionTimes[i] + "S");
+                    sectionTimes[i] = "#" + sectionTimes[i] + "F";
+                });
+                sectionTimes = sectionTimes.concat(springTimes);
+
+            } else {
+                $.each(sectionTimes, function(i) {
+                    sectionTimes[i] = "#" + sectionTimes[i] + timeSuffix;
+                });
+            }
             setSectionMouseEvents(section, sectionTimes, courseObject);
             sectionList.appendChild(section);
         }
@@ -49,24 +71,24 @@ function processSession(courseObject) {
     sections.setAttribute("class", "sections");
     if (typeof courseObject.Y !== "undefined") {  
         sectionList = document.createElement("ul");  
-        sectionList = processSessionLectures(courseObject.Y, courseObject);
-        sectionList = processSessionTutorials(courseObject.Y, courseObject, sectionList);
+        sectionList = processSessionLectures(courseObject.Y, courseObject, "Y");
+        sectionList = processSessionTutorials(courseObject.Y, courseObject, sectionList, "Y");
         $(sectionList).attr("class", "sectionList-year");
         setSectionIds(courseObject, sectionList, "Y");
         sections.appendChild(sectionList);
     } else {
         if (typeof courseObject.F !== "undefined") {
             sectionList = document.createElement("ul");
-            sectionList = processSessionLectures(courseObject.F, courseObject);
-            sectionList = processSessionTutorials(courseObject.F, courseObject, sectionList);
+            sectionList = processSessionLectures(courseObject.F, courseObject, "F");
+            sectionList = processSessionTutorials(courseObject.F, courseObject, sectionList, "S");
             $(sectionList).attr("class", "sectionList-fall");
             setSectionIds(courseObject, sectionList, "F");
             sections.appendChild(sectionList);
         }
         if (typeof courseObject.S !== "undefined") { 
             sectionList = document.createElement("ul");
-            sectionList = processSessionLectures(courseObject.S, courseObject);
-            sectionList = processSessionTutorials(courseObject.S, courseObject, sectionList);
+            sectionList = processSessionLectures(courseObject.S, courseObject, "S");
+            sectionList = processSessionTutorials(courseObject.S, courseObject, sectionList, "S");
             $(sectionList).attr("class", "sectionList-spring");
             setSectionIds(courseObject, sectionList, "S");
             sections.appendChild(sectionList);
