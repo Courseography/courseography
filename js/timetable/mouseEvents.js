@@ -68,10 +68,10 @@ function performMouseOver(sectionTimes, timeSuffix, courseObject) {
 }
 
 function lightUpConflict(courseObject, timeElement) {
-    if ($("#" + timeElement).html() === courseObject.name) {
-        $("#" + timeElement).addClass("mouseOverRemove");
+    if ($(timeElement).html() === courseObject.name) {
+        $(timeElement).addClass("mouseOverRemove");
     } else {
-        $("#" + timeElement).addClass("mouseOverConflict");
+        $(timeElement).addClass("mouseOverConflict");
     }
 }
 
@@ -258,21 +258,21 @@ function getSectionSession(section) {
 }
 
 function getIsYearSection(section) {
-    return $(section.parentNode).hasClass("sectionListY");
+    return $(section.parentNode).hasClass("sectionList-year");
 }
 
 function getIsFallSection(section) {
-    return $(section.parentNode).hasClass("sectionListF");
+    return $(section.parentNode).hasClass("sectionList-fall");
 }
 
 function getIsSpringSection(section) {
-    return $(section.parentNode).hasClass("sectionListS");
+    return $(section.parentNode).hasClass("sectionList-spring");
 }
 
 // IAN-TODO you really shouldn't need "type" as a parameter
 function setClickedConflict(courseObject, timeElement, section, type) {
-    var conflictArray = $("#" + timeElement).data("conflictArray");
-    var typeArray = $("#" + timeElement).data("typeArray");
+    var conflictArray = $(timeElement).data("conflictArray");
+    var typeArray = $(timeElement).data("typeArray");
     // IAN-TODO Rather than check these, why not initialize them
     // when the page is first created?
     if (typeof conflictArray === "undefined") {
@@ -304,8 +304,8 @@ function setClickedConflict(courseObject, timeElement, section, type) {
 }
 
 function removeClickedConflict(courseObject, timeElement, section) {
-    var conflictArray = $("#" + timeElement).data("conflictArray");
-    var typeArray = $("#" + timeElement).data("typeArray");
+    var conflictArray = $(timeElement).data("conflictArray");
+    var typeArray = $(timeElement).data("typeArray");
 
     if (typeof conflictArray === "undefined" || typeof typeArray === "undefined") {
         console.log("Unexpected case in removeClickedConflict()");
@@ -323,7 +323,7 @@ function removeClickedConflict(courseObject, timeElement, section) {
         }
         conflictArray.splice(index, 1);
         typeArray.splice(index, 1);
-        var newCourseObject = getCourseObject($("#" + timeElement).html());
+        var newCourseObject = getCourseObject($(timeElement).html());
         $(timeElement).attr("satisfied", newCourseObject.satisfied);
         $(timeElement).data("conflictArray", conflictArray);
         $(timeElement).attr("title", conflictArray);
@@ -424,7 +424,7 @@ function selectUnselectedLectureTimes(sectionTimes, timeSuffix, courseObject, se
             } else {
                 setClickedConflict(courseObject, timeElement, section, "lecture");
             }
-
+            console.log("Timelement" + " " + timeElement);
         });
     }
 }

@@ -32,6 +32,10 @@ function processSessionTutorials(session, courseObject, sectionList) {
             section = document.createElement("li");
             sectionTimes = convertTimes(tutorial[1]);
             section.appendChild(document.createTextNode(tutorial[0]));
+            // $.each(sectionTimes, function(i, sectionTime) {
+            //     sectionTime = sectionTime + 
+            // });
+            console.log("section times: " + sectionTimes);
             setSectionMouseEvents(section, sectionTimes, courseObject);
             sectionList.appendChild(section);
         }
