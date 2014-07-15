@@ -19,13 +19,13 @@ var courses;
 var searchList;
 
 $(document).ready(function () {
-    $("#dialog").fadeOut();
-    $("#dialog").css("visibility", "visible");
+    $("#dialog").fadeOut()
+                .css("visibility", "visible");
 
-    $("td").each(function() {
-        $(this).attr("in-conflict", "false");
-        $(this).attr("satisfied", "true");
-    });
+    $("td").attr("in-conflict", "false")
+               .attr("satisfied", "true")
+               .data("conflictArray", [])
+               .data("typeArray", []);
 
     courseSelect = document.getElementById("course-select");
     searchList = document.getElementById("search-list");
@@ -70,7 +70,7 @@ function setupEntry(courseObject) {
     sections = processSession(courseObject);
     entry.appendChild(header);
     entry.appendChild(sections);
-    $(entry).accordion({heightStyle: "content", collapsible: true, active: false});
+    $(entry).accordion({ heightStyle: "content", collapsible: true, active: false });
     courseSelect.appendChild(entry);
 }
 

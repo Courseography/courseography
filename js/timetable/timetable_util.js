@@ -11,12 +11,14 @@ function removeCourseObject(courseName) {
 }
 
 function getCourseObject(courseName) {
-    var index = $.inArray(courseName, courseObjects);
-    if (index > -1) {
-        return courseObjects[i];
-    } else {
-        return undefined;
+    var courseObject;
+    for (var i = 0; i < courseObjects.length; i++) {
+        if (courseObjects[i].name === courseName) {
+            courseObject = courseObjects[i];
+        }
     }
+    return courseObject;
+
 }
 
 /*
@@ -167,7 +169,6 @@ function addCourseToList(course) {
     courseObject.isLectureSelected = false;
     courseObject.isTutorialSelected = false;
     courseObject.satisfied = !courseObject.manualTutorialEnrolment;
-    courseObjects.push(courseObject);
     setupEntry(courseObject);
 
     selectedCourses.push(course);
