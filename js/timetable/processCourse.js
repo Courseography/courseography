@@ -15,6 +15,8 @@ function processSessionLectures(session, courseObject) {
             section = document.createElement("li");
             sectionTimes = convertTimes(lecture.time);
             $(section).data("instructor", lecture.instructor);
+            $(section).data("cap", lecture.cap);
+            $(section).data("enrol", lecture.enrol);
             section.appendChild(document.createTextNode(lecture.section));
             if (!courseObject.manualTutorialEnrolment && session.tutorials.length > 0) {
                 sectionTimes = sectionTimes.concat(convertTimes(session.tutorials[i][0]));
@@ -33,6 +35,8 @@ function processSessionTutorials(session, courseObject, sectionList) {
             sectionTimes = convertTimes(tutorial[1]);
             section.appendChild(document.createTextNode(tutorial[0]));
             setSectionMouseEvents(section, sectionTimes, courseObject);
+            $(section).data("cap", tutorial[2]);
+            $(section).data("enrol", tutorial[3]);
             sectionList.appendChild(section);
         }
     });
@@ -43,8 +47,8 @@ function processSession(courseObject) {
     var sectionList;
     sections = document.createElement("div");
     sections.setAttribute("class", "sections");
-    if (typeof courseObject.Y !== "undefined") {  
-        sectionList = document.createElement("ul");  
+    if (typeof courseObject.Y !== "undefined") {
+        sectionList = document.createElement("ul");
         sectionList = processSessionLectures(courseObject.Y, courseObject);
         sectionList = processSessionTutorials(courseObject.Y, courseObject, sectionList);
         $(sectionList).attr("class", "sectionList-year");
@@ -59,7 +63,7 @@ function processSession(courseObject) {
             setSectionIds(courseObject, sectionList, "F");
             sections.appendChild(sectionList);
         }
-        if (typeof courseObject.S !== "undefined") { 
+        if (typeof courseObject.S !== "undefined") {
             sectionList = document.createElement("ul");
             sectionList = processSessionLectures(courseObject.S, courseObject);
             sectionList = processSessionTutorials(courseObject.S, courseObject, sectionList);
