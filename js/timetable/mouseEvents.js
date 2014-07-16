@@ -106,7 +106,7 @@ function displayCourseInformation(courseObject, section) {
     var cap = section.data("cap");
     var enrol = section.data("enrol");
     if (cap !== null && enrol !== null) {
-        var enrolString = (cap - enrol) + " out of " + enrol + " spot remaining";
+        var enrolString = (cap - enrol) + " out of " + cap + " spots remaining";
         $("#section-stats-enrol").html(enrolString);
     }
 }

@@ -35,8 +35,8 @@ function processSessionTutorials(session, courseObject, sectionList) {
             sectionTimes = convertTimes(tutorial[1]);
             section.appendChild(document.createTextNode(tutorial[0]));
             setSectionMouseEvents(section, sectionTimes, courseObject);
-            $(section).data("cap", tutorial[2]);
-            $(section).data("enrol", tutorial[3]);
+            $(section).data("cap", parseInt(tutorial[3]));
+            $(section).data("enrol", parseInt(tutorial[4]));
             sectionList.appendChild(section);
         }
     });
