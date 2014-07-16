@@ -100,7 +100,7 @@ caption {
 .timetable td,
 .timetable th {
   width: 18%;
-  height: 45px;
+  height: 35px;
   padding: 0 !important;
   margin: 0 !important;
   text-align: center;
@@ -356,7 +356,7 @@ caption {
   padding: 0em;
   margin: 0em;
   width: 100%;
-  height: 4.7em;
+  height: 7em;
   color: black;
   border-bottom: 1px solid black;
   text-align: center;

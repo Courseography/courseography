@@ -54,7 +54,7 @@ function setSectionMouseOver(section, sectionTimes, courseObject) {
             performMouseOver(sectionTimes, timeSuffix, courseObject);
             displayCourseInformation(courseObject, $(this));
         }
-    }); 
+    });
 }
 
 function performMouseOver(sectionTimes, timeSuffix, courseObject) {
@@ -103,6 +103,12 @@ function displayCourseInformation(courseObject, section) {
     $("#course-info-title").html(courseObject.title);
     $("#section-stats-section").html(section.html());
     $("#section-stats-instructor").html(section.data("instructor"));
+    var cap = section.data("cap");
+    var enrol = section.data("enrol");
+    if (cap !== null && enrol !== null) {
+        var enrolString = (cap - enrol) + " out of " + cap + " spots remaining";
+        $("#section-stats-enrol").html(enrolString);
+    }
 }
 
 /** Mouse Click Direct Functions **/
@@ -125,7 +131,7 @@ function setSectionOnClick(section, sectionTimes, courseObject) {
                 selectAlreadySelectedLecture(courseObject, section, sectionTimes);
             } else {
                 setLectureSession(courseObject, section);
-                
+
                 selectUnselectedLecture(courseObject, section, sectionTimes);
             }
         } else {
@@ -172,13 +178,13 @@ function setSectionOnClick(section, sectionTimes, courseObject) {
             $(this).attr("satisfied", true);
             $(this).attr("type", "");
             $(this).removeClass("clickedLectureTime");
-            $(this).removeClass("clickedTutorialTime"); 
+            $(this).removeClass("clickedTutorialTime");
         });
 
         $("td[satisfied*=false][in-conflict*=false]").each(function() {
             $(this).addClass("clickedSectionUnsatisfied");
             $(this).removeClass("clickedLectureTime");
-            $(this).removeClass("clickedTutorialTime"); 
+            $(this).removeClass("clickedTutorialTime");
         });
 
         $("td[satisfied*=true]").each(function() {
@@ -188,20 +194,20 @@ function setSectionOnClick(section, sectionTimes, courseObject) {
         $("td[in-conflict*=true]").each(function() {
             $(this).removeClass("clickedSectionUnsatisfied");
             $(this).removeClass("clickedLectureTime");
-            $(this).removeClass("clickedTutorialTime"); 
+            $(this).removeClass("clickedTutorialTime");
             $(this).addClass("clickedConflictTime");
         });
 
         $("td[in-conflict*=false]").each(function() {
-            $(this).removeClass("clickedConflictTime"); 
+            $(this).removeClass("clickedConflictTime");
         });
 
         $("td[in-conflict*=false][satisfied*=true][type*=lecture]").each(function() {
-            $(this).addClass("clickedLectureTime"); 
+            $(this).addClass("clickedLectureTime");
         });
 
         $("td[in-conflict*=false][satisfied*=true][type*=tutorial]").each(function() {
-            $(this).addClass("clickedTutorialTime"); 
+            $(this).addClass("clickedTutorialTime");
         });
 
         setHeader(courseObject, taken, satisfied);
@@ -218,14 +224,14 @@ function setSectionOnClick(section, sectionTimes, courseObject) {
 function setHeader(courseObject, taken, satisfied) {
     console.log("> setHeader");
     if (taken && satisfied) {
-        $(courseObject.header).removeClass("clickedSectionUnsatisfied"); 
+        $(courseObject.header).removeClass("clickedSectionUnsatisfied");
         $(courseObject.header).addClass("clicked-header");
         courseObject.taken = true;
     } else if (!satisfied) {
-        $(courseObject.header).addClass("clickedSectionUnsatisfied"); 
+        $(courseObject.header).addClass("clickedSectionUnsatisfied");
     } else {
-        $(courseObject.header).removeClass("clickedSectionUnsatisfied"); 
-        $(courseObject.header).removeClass("clicked-header"); 
+        $(courseObject.header).removeClass("clickedSectionUnsatisfied");
+        $(courseObject.header).removeClass("clicked-header");
         courseObject.taken = false;
     }
     console.log("< setHeader");
@@ -344,7 +350,7 @@ function removeClickedConflict(courseObject, timeElement, section) {
             $("#" + timeElement).html(conflictArray[0]);
             $("#" + timeElement).attr("type", typeArray[0]);
         }
-        if (conflictArray.length === 1 ) { 
+        if (conflictArray.length === 1 ) {
             $("#" + timeElement).attr("in-conflict", false);
         }
         conflictArray.splice(index, 1);
@@ -352,7 +358,7 @@ function removeClickedConflict(courseObject, timeElement, section) {
         var newCourseObject = getCourseObject($("#" + timeElement).html());
         $("#" + timeElement).attr("satisfied", newCourseObject.satisfied);
         $("#" + timeElement).data("conflictArray", conflictArray);
-        $("#" + timeElement).attr("title", conflictArray);    
+        $("#" + timeElement).attr("title", conflictArray);
     }
     console.log("< removeClickedConflict");
 }
@@ -404,7 +410,7 @@ function selectAlreadySelectedLecture(courseObject, section, sectionTimes) {
         selectedSession = "Y";
     }
 
-    if (courseObject.selectedLecture.innerHTML !== section.innerHTML 
+    if (courseObject.selectedLecture.innerHTML !== section.innerHTML
         || courseObject.selectedLectureSession !== selectedSession) {
         selectNewLectureSection(section, sectionTimes, courseObject, selectedSession);
     } else {
@@ -570,7 +576,7 @@ function selectAlreadySelectedTutorial(courseObject, section, sectionTimes) {
         selectedSession = "Y";
     }
 
-    if (courseObject.selectedTutorial.innerHTML !== section.innerHTML 
+    if (courseObject.selectedTutorial.innerHTML !== section.innerHTML
         || courseObject.selectedTutorialSession !== selectedSession) {
         selectNewTutorialSection(section, sectionTimes, courseObject, selectedSession);
     } else {
@@ -720,7 +726,7 @@ function satisfyCourse(courseObject, section) {
 
             if (courseObject.selectedTutorialSession === "F") {
                 timeSuffix = "-fall";
-            } else {   
+            } else {
                 timeSuffix = "-spring";
             }
 
@@ -744,7 +750,7 @@ function satisfyCourse(courseObject, section) {
 
             if (courseObject.selectedLectureSession === "F") {
                 timeSuffix = "-fall";
-            } else {   
+            } else {
                 timeSuffix = "-spring";
             }
 
@@ -760,7 +766,7 @@ function satisfyCourse(courseObject, section) {
                     setSatisfaction(courseObject, timeElement);
                 });
             }
-            
+
         }
     }
     console.log("< satisfyCourse");
@@ -775,7 +781,7 @@ function unsatisfyCourse(courseObject, section) {
 
         if (courseObject.selectedLectureSession === "F") {
             timeSuffix = "-fall";
-        } else {   
+        } else {
             timeSuffix = "-spring";
         }
 
@@ -823,7 +829,7 @@ function unsatisfyCourse(courseObject, section) {
 
 function satisfyCourseSections(courseObject) {
     $(courseObject.selectedLecture).removeClass("clickedSectionUnsatisfied");
-    $(courseObject.selectedTutorial).removeClass("clickedSectionUnsatisfied");   
+    $(courseObject.selectedTutorial).removeClass("clickedSectionUnsatisfied");
     $("#" + courseObject.name + "-li" + " li").each(function() {
         $(this).attr("satisfied", true);
     });
