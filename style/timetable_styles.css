@@ -225,7 +225,7 @@ caption {
 
 .sectionList-spring li:hover {
   background-color: #437699;
-  
+
 }
 
 .ui-accordion-content li.clickedLectureTime,
@@ -382,18 +382,29 @@ caption {
   overflow: hidden;
 }
 
+#filter-container {
+  padding: 10px 10px 0 10px;
+}
+
 #search-container {
   text-align: center;
   color: white;
-  overflow-y: scroll;
   height: 100%;
-  margin: 17px 0 0 17px;
   width: 100%;
-  padding: 0 10px 0 0;
+  margin: 0;
+  padding: 0;
+}
+
+#search-list {
+  margin: 0 0 0 17px;
+  padding: 0.5em 17px 4.5em 0;
+  height: 100%;
+  width: 100%;
+  overflow-y: scroll;
 }
 
 #search-list ul {
-  margin: 0.5em 0 0 0;
+  margin: 0;
   padding: 0;
 }
 
