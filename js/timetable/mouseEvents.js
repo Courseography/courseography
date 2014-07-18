@@ -24,13 +24,13 @@ function performMouseOut(sectionTimes) {
             $(time).html("");
         }
         $(time).removeClass("mouseOverConflict mouseOverGood " +
-                                   "mouseOverTaken mouseOverRemove");
+                            "mouseOverRemove");
     });
 }
 
 function removeMouseOverClasses() {
     $("td").removeClass("mouseOverConflict mouseOverGood " +
-                        "mouseOverTaken mouseOverRemove");
+                        "mouseOverRemove");
 }
 
 /** Mouse Over Direct Functions **/
@@ -62,19 +62,12 @@ function lightUpConflict(course, time) {
 }
 
 function lightUpTakeable(course, time) {
-    if (course.taken) {
-        // IAN-TODO: Highlight already taken section times.
-        // I actually think that the hovered section
-        // should look the same regardless of other sections,
-        // so we should replace mouseOverTaken with mouseOverGood.
-        $(time).addClass("mouseOverTaken");
-    } else {
-        $(time).addClass("mouseOverGood");
-    }
+    $(time).addClass("mouseOverGood");
     $(time).html(course.name);
 }
 
 // IAN-TODO: you'll need to break this into two separate functions
+// IAN-RESPONSE: Let's discuss this.
 function displayCourseInformation(course, section) {
     $("#course-info-code").html(course.name);
     $("#course-info-title").html(course.title);
@@ -92,58 +85,47 @@ function setSectionOnClick(section, sectionTimes, course) {
         var inConflict = false;
         // IAN-TODO: this is a bigger task, but I really don't think
         // we need separate functions for lectures and tutorials
+        // IAN-RESPONSE: IPR
         if (isLecture) {
             if (course.isLectureSelected) {
                 selectAlreadySelectedLecture(course, section, sectionTimes);
             } else {
-                setLectureSession(course, section);
+                setSession(course, section);
                 selectNewLecture(course, section, sectionTimes);
             }
         } else {
             if (course.isTutorialSelected) {
                 selectAlreadySelectedTutorial(course, section, sectionTimes);
             } else {
-                setTutorialSession(course, section);
+                setSession(course, section);
                 selectUnselectedTutorial(course, section, sectionTimes);
             }
 
         }
-
-        // IAN-TODO: use jquery empty or something
-        $("#" + course.name + "-li li[satisfied*='false']").each(function() {
-            satisfied = false;
-        });
+        satisfyCourse(course);
 
         $("#" + course.name + "-li li[clicked*='true']").each(function() {
-            if (satisfied) {
+            if (course.satisfied) {
                 $(this).addClass("clickedLectureTime");
             }
 
-            var index = $.inArray($(this).attr("id"), selectedLectures);
-
-            if ((index === -1)) {
+            if (!inArray($(this).attr("id"), selectedLectures)) {
                     selectedLectures.push($(this).attr("id"));
             }
-
-            // IAN-TODO move out of function (like satisfied = false)
-            taken = true;
         });
 
         $("#" + course.name + "-li li[clicked*='false']").each(function() {
             $(this).removeClass("clickedLectureTime");
-            // IAN-TODO I'm tired of reading these. Let's create helper
-            // functions that return booleans
-            var index = $.inArray($(this).attr("id"), selectedLectures);
 
+            var index = $.inArray($(this).attr("id"), selectedLectures);
             if (index > -1) {
                 selectedLectures.splice(index, 1);
             }
 
         });
 
-        // IAN-TODO: for all of these .each calls
-        // 1) use chaining,
-        // 2) you don't need each (attr, *Class work on multiple)
+        $("#" + course.name + "-li li[satisfied*='true']").removeClass("clickedSectionUnsatisfied");
+
         $("td[clicked*=false]").attr("satisfied", true)
                                .attr("type", "")
                                .html("")
@@ -161,15 +143,16 @@ function setSectionOnClick(section, sectionTimes, course) {
 
         $("td[in-conflict*=false]").removeClass("clickedConflictTime");
 
-        $("td[in-conflict*=false][satisfied*=true][type*=lecture]").addClass("clickedLectureTime");
+        $("td[in-conflict*=false][satisfied*=true][type*=L]").addClass("clickedLectureTime");
 
-        $("td[in-conflict*=false][satisfied*=true][type*=tutorial]").addClass("clickedTutorialTime");
+        $("td[in-conflict*=false][satisfied*=true][type*=T]").addClass("clickedTutorialTime");
 
         // IAN-TODO Seems like taken and satisfied can be recovered
         // from course
-        setHeader(course, taken, satisfied);
+        setHeader(course);
         setCookie("selected-lectures", JSON.stringify(selectedLectures));
         // IAN-TODO we had a problem with this before. Can't remember why.
+        // IAN-RESPONSE: Can't remember either. When all CSS is moved to a .CSS file, push will come to shove.
         removeMouseOverClasses();
 
         alertUserOfConflict();
@@ -207,15 +190,26 @@ function setSectionOnClick(section, sectionTimes, course) {
 
 /** Utilities **/
 
+// IAN-RESPONSE It seemed kind of silly to make this function, given that the index is sometimes used.
+function inArray(item, array) {
+    return $.inArray(item, array) > -1;
+}
+
 // IAN-TODO I guess you want to switch to attributes
 // There should really be just one status attribute.
 // This seems just like how we handle the nodes in the graph.
-function setHeader(course, taken, satisfied) {
-    if (taken && satisfied) {
+function setHeader(course) {
+    var taken;
+
+    if ($("#" + course.name + "-li li[clicked*='true']").length) {
+        taken = true;
+    }
+
+    if (taken && course.satisfied) {
         $(course.header).removeClass("clickedSectionUnsatisfied")
-                              .addClass("clicked-header");
+                        .addClass("clicked-header");
         course.taken = true;
-    } else if (!satisfied) {
+    } else if (!course.satisfied) {
         $(course.header).addClass("clickedSectionUnsatisfied");
     } else {
         $(course.header).removeClass("clickedSectionUnsatisfied clicked-header");
@@ -223,14 +217,8 @@ function setHeader(course, taken, satisfied) {
     }
 }
 
-// IAN-TODO This is a one liner
 function getInConflict() {
-    var inConflict = false;
-    $("td[class*=clickedConflictTime]").each(function() {
-        inConflict = true;
-    });
-
-    return inConflict;
+    return $("td[class*=clickedConflictTime]").length > 0;
 }
 
 function alertUserOfConflict() {
@@ -267,13 +255,19 @@ function getIsSpringSection(section) {
     return $(section.parentNode).hasClass("sectionList-spring");
 }
 
-// IAN-TODO you really shouldn't need "type" as a parameter
-function setClickedConflict(course, time, section, type) {
-    alert(time);
+// Need to adapt code for P.
+function getType(section) {
+    if (($(section).html().charAt(0) == 'L')) {
+        return "L";
+    } else {
+        return "T";
+    }
+}
+
+function setClickedConflict(course, time, section) {
+    var type = getType(section);
     var conflictArray = $(time).data("conflictArray");
     var typeArray = $(time).data("typeArray");
-    console.log(time);
-    console.log(conflictArray);
     conflictArray.push(course.name);
     typeArray.push(type);
     $(time).data("conflictArray", conflictArray)
@@ -283,50 +277,39 @@ function setClickedConflict(course, time, section, type) {
 }
 
 function removeClickedConflict(course, time, section) {
-    alert(time);
     var conflictArray = $(time).data("conflictArray");
     var typeArray = $(time).data("typeArray");
-    console.log("removing conflict");
-    if (typeof conflictArray === "undefined" || typeof typeArray === "undefined") {
-        console.log("Unexpected case in removeClickedConflict()");
-    } else {
-        // IAN-TODO This code should be (basically) one big if-else block.
-        // Either course.name is in the td, or it's in the list,
-        // but not both.
-        var index = conflictArray.indexOf(course.name);
-        if ($(time).html() === course.name) {
-            $(time).html(conflictArray[0])
-                   .attr("type", typeArray[0]);
-        }
-        if (conflictArray.length === 1) {
-            $(time).attr("in-conflict", "false");
-        }
-        console.log(conflictArray);
-        conflictArray.splice(index, 1);
-        typeArray.splice(index, 1);
-        console.log(conflictArray);
-        var newCourseObject = getCourseObject($(time).html());
-        $(time).attr("satisfied", newCourseObject.satisfied)
-               .data("conflictArray", conflictArray)
-               .data("typeArray", typeArray)
-               .attr("title", conflictArray);
+
+    // IAN-TODO This code should be (basically) one big if-else block.
+    // Either course.name is in the td, or it's in the list,
+    // but not both.
+    // IAN-RESPONSE Let's discuss this again
+    var index = conflictArray.indexOf(course.name);
+    if ($(time).html() === course.name) {
+        $(time).html(conflictArray[0])
+               .attr("type", typeArray[0]);
     }
+    if (conflictArray.length === 1) {
+        $(time).attr("in-conflict", "false");
+    }
+    conflictArray.splice(index, 1);
+    typeArray.splice(index, 1);
+    var newCourseObject = getCourseObject($(time).html());
+    $(time).attr("satisfied", newCourseObject.satisfied)
+           .data("conflictArray", conflictArray)
+           .data("typeArray", typeArray)
+           .attr("title", conflictArray);
 }
 
 
 /** Lecture Functions **/
 
-function setLectureSession(course, section) {
-    course.selectedLectureSession = getSession(section);
-}
-
 function selectUnselectedLecture(course, section, sectionTimes) {
     $(section).attr("clicked", "true");
-    setLectureSession(course, section);
-    satisfyCourse(course, section);
+    setSession(course, section);
     course.selectedLecture = section;
     course.isLectureSelected = true;
-    selectUnselectedLectureTimes(sectionTimes, course, section);
+    selectUnselectedTimes(course, sectionTimes, section);
 
     course.selectedLectureTimes = sectionTimes;
 }
@@ -342,11 +325,10 @@ function selectAlreadySelectedLecture(course, section, sectionTimes) {
         || course.selectedLectureSession !== selectedSession) {
         selectNewLecture(course, section, sectionTimes);
     } else {
-        course.selectedLecture = null;
-        course.selectedLectureSession = null;
-        course.selectedLectureTimes = null;
+        course.selectedLecture = undefined;
+        course.selectedLectureSession = undefined;
+        course.selectedLectureTimes = undefined;
     }
-    satisfyCourse(course, section);
 }
 
 function turnLectureOff(course, section, sectionTimes) {
@@ -359,7 +341,6 @@ function turnLectureOff(course, section, sectionTimes) {
 function removeLecture(course, section) {
     $.each(course.selectedLectureTimes, function (i, time) {
         if ($(time).attr("in-conflict") === "true") {
-        console.log("removing");
             removeClickedConflict(course, time, section);
         } else {
             $(time).html("")
@@ -370,50 +351,22 @@ function removeLecture(course, section) {
 
 function selectNewLecture(course, section, sectionTimes) {
     $(section).attr("clicked", "true");
-    setLectureSession(course, section);
+    setSession(course, section);
     course.isLectureSelected = true;
     course.selectedLecture = section;
     course.selectedLectureTimes = sectionTimes;
-    satisfyCourse(course, section);
-    selectUnselectedLectureTimes(sectionTimes, course, section);
-}
-
-function selectUnselectedLectureTimes(sectionTimes, course, section) {
-    $.each(sectionTimes, function (i, time) {
-        if (!getIsClicked(time)) {
-            setLectureClicked(course, time, section);
-        } else {
-            setClickedConflict(course, time, section, "lecture");
-        }
-    });
-}
-
-function setLectureClicked(course, time, section) {
-    $(time).attr("type", "lecture");
-
-    if (!course.satisfied) {
-        setSatisfaction(time, course.satisfied);
-        $(course.selectedLecture).attr("satisfied", "false");
-    }
-
-    $(time).html(course.name)
-           .attr("clicked", "true");
+    selectUnselectedTimes(course, sectionTimes, section);
 }
 
 /** Tutorial Functions **/
 
-function setTutorialSession(course, section) {
-    course.selectedTutorialSession = getSession(section);
-}
-
 function selectUnselectedTutorial(course, section, sectionTimes) {
     $(section).attr("clicked", "true");
-    setTutorialSession(course, section);
+    setSession(course, section);
     course.selectedTutorial = section;
-    satisfyCourse(course, section);
     course.isTutorialSelected = true;
 
-    selectUnselectedTutorialTimes(course, section, sectionTimes);
+    selectUnselectedTimes(course, sectionTimes, section);
 
     course.selectedTutorialTimes = sectionTimes;
 }
@@ -428,11 +381,10 @@ function selectAlreadySelectedTutorial(course, section, sectionTimes) {
         || course.selectedTutorialSession !== selectedSession) {
         selectNewTutorialSection(section, sectionTimes, course, selectedSession);
     } else {
-        course.selectedTutorial = null;
-        course.selectedTutorialSession = null;
-        course.selectedTutorialTimes = null;
+        course.selectedTutorial = undefined;
+        course.selectedTutorialSession = undefined;
+        course.selectedTutorialTimes = undefined;
     }
-    satisfyCourse(course, section);
 }
 
 function turnTutorialOff(course, section, sectionTimes) {
@@ -460,37 +412,11 @@ function selectNewTutorialSection(section, sectionTimes, course, selectedSession
         course.selectedTutorialSession = selectedSession;
     }
 
-    satisfyCourse(course, section);
     course.isTutorialSelected = true;
     course.selectedTutorial = section;
     course.selectedTutorialHeader = course.header;
     course.selectedTutorialTimes = sectionTimes;
-    selectUnselectedTutorialTimes(course, section, sectionTimes);
-}
-
-function selectUnselectedTutorialTimes(course, section, sectionTimes) {
-    $.each(sectionTimes, function (i, time) {
-        if (!getIsClicked(time)) {
-            setTutorialClicked(time, course);
-        } else {
-            setClickedConflict(course, time, section, "tutorial");
-        }
-    });
-}
-
-// IAN-TODO: combine this with setTutorialUnclicked.
-// These actions should be symmetric.
-function setTutorialClicked(time, course) {
-    course.isTutorialSelected = true;
-
-    $(time).attr("type", "tutorial")
-                  .html(course.name)
-                  .attr("clicked", "true");
-
-    if (!course.satisfied) {
-        setSatisfaction(time, course.satisfied);
-        $(course.selectedTutorial).attr("satisfied", "false");
-    }
+    selectUnselectedTimes(course, sectionTimes, section);
 }
 
 function setTutorialUnclicked(time, course) {
@@ -498,53 +424,68 @@ function setTutorialUnclicked(time, course) {
     $(time).attr("clicked", "false");
 }
 
-/** Course Satisfaction **/
+/** Unified course functions (!) **/
 
-// IAN-TODO
-// 1. Split off all function calls that change the view
-//    out of this function.
-// 2. The only purpose of this function should be to update
-//    course.satisfied. The logic for this is about
-//    10 lines long.
-// 3. Do something for non-manualTutorialEnrolment courses
-function satisfyCourse(course, section) {
-    if (course.manualTutorialEnrolment) {
-        if (course.isTutorialSelected && ((course.selectedTutorialSession === course.selectedLectureSession))) {
-            course.satisfied = true;
-            setTutorialSatisfaction(course);
-
-        } else if (course.isLectureSelected && ((course.selectedLectureSession === course.selectedTutorialSession))) {
-            course.satisfied = true;
-            setLectureSatisfaction(course);
-
-        } else if (course.isTutorialSelected && (course.selectedTutorialSession !== course.selectedLectureSession)) {
-            // IAN-TODO Move this into "satisfyCourseSections"
-            course.satisfied = false;
-            setTutorialSatisfaction(course)
-
-        } else if (course.isLectureSelected && (course.selectedLectureSession !== course.selectedTutorialSession)) {
-            course.satisfied = false;
-            setLectureSatisfaction(course);
-
-        }
-        $(section).attr("satisfied", course.satisfied);
+function setSession(course, section) {
+    var type = getType(section);
+    var session = getSession(section);
+    if (type == "L") {
+        course.selectedLectureSession = session;
+    } else {
+        course.selectedTutorialSession = session;
     }
 }
 
-// IAN-TODO
-// Just use course.selected___Time.
-function setLectureSatisfaction(course) {
-    $.each(course.selectedLectureTimes, function (i, time) {
-        setSatisfaction(time, course.satisfied);
+function selectUnselectedTimes(course, sectionTimes, section) {
+    $.each(sectionTimes, function (i, time) {
+        if (!getIsClicked(time)) {
+            setClickedTime(course, time, section);
+        } else {
+            setClickedConflict(course, time, section);
+        }
     });
 }
 
-function setTutorialSatisfaction(course) {
-    $.each(course.selectedTutorialTimes, function (i, time) {
-        setSatisfaction(time, course.satisfied);
-    });
+function setClickedTime(course, time, section) {
+    var type = getType(section);
+
+    if (type === "L") {
+        course.isLectureSelected = true;
+        if (!course.satisfied) {
+            setSatisfaction(time, course.satisfied);
+            $(course.selectedLecture).attr("satisfied", "false");
+        }
+    } else {
+        course.isTutorialSelected = true;
+        if (!course.satisfied) {
+            setSatisfaction(time, course.satisfied);
+            $(course.selectedTutorial).attr("satisfied", "false");
+        }
+    }
+
+    $(time).html(course.name)
+           .attr("clicked", "true")
+           .attr("type", type);
 }
 
-function setSatisfaction(time, satisfied) {
-    $(time).attr("satisfied", satisfied);
+// IAN RESPONSE: :-)
+function satisfyCourse(course) {
+    course.satisfied = (course.selectedTutorialSession === course.selectedLectureSession) || !course.manualTutorialEnrolment;
+    setSatisfaction(course);
+}
+
+function setSatisfaction(course) {
+    if (typeof course.selectedLectureTimes !== "undefined") {
+        $.each(course.selectedLectureTimes, function (i, time) {
+            $(time).attr("satisfied", course.satisfied);
+        });
+        $(course.selectedLecture).attr("satisfied", course.satisfied);
+    }
+
+    if (typeof course.selectedTutorialTimes !== "undefined") {
+        $.each(course.selectedTutorialTimes, function (i, time) {
+            $(time).attr("satisfied", course.satisfied);
+        });
+        $(course.selectedTutorial).attr("satisfied", course.satisfied);
+    }
 }

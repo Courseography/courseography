@@ -80,7 +80,7 @@ function processSession(courseObject) {
         if (typeof courseObject.F !== "undefined") {
             sectionList = document.createElement("ul");
             sectionList = processSessionLectures(courseObject.F, courseObject, "F");
-            sectionList = processSessionTutorials(courseObject.F, courseObject, sectionList, "S");
+            sectionList = processSessionTutorials(courseObject.F, courseObject, sectionList, "F");
             $(sectionList).attr("class", "sectionList-fall");
             setSectionIds(courseObject, sectionList, "F");
             sections.appendChild(sectionList);

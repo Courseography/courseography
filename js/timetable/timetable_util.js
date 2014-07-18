@@ -168,7 +168,8 @@ function addCourseToList(course) {
     courseObject.selected = false;
     courseObject.isLectureSelected = false;
     courseObject.isTutorialSelected = false;
-    courseObject.satisfied = !courseObject.manualTutorialEnrolment;
+    courseObject.status = "inactive";
+    // courseObject.satisfied = !courseObject.manualTutorialEnrolment;
     setupEntry(courseObject);
 
     selectedCourses.push(course);

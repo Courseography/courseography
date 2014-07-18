@@ -23,9 +23,14 @@ $(document).ready(function () {
                 .css("visibility", "visible");
 
     $("td").attr("in-conflict", "false")
-               .attr("satisfied", "true")
-               .data("conflictArray", [])
-               .data("typeArray", []);
+           .attr("satisfied", "true");
+
+    // .data attribute cannot be set for multiple elements through chaining.
+    $("td").each(function() {
+        $(this).data("conflictArray", []);
+        $(this).data("typeArray", []);
+    })
+               
 
     courseSelect = document.getElementById("course-select");
     searchList = document.getElementById("search-list");
