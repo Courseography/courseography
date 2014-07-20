@@ -74,6 +74,12 @@ function displayCourseInformation(course, section) {
     $("#course-info-title").html(course.title);
     $("#section-stats-section").html(section.html());
     $("#section-stats-instructor").html(section.data("instructor"));
+    var cap = section.data("cap");
+    var enrol = section.data("enrol");
+    if (cap !== null && enrol !== null) {
+        var enrolString = (cap - enrol) + " out of " + cap + " spots remaining";
+        $("#section-stats-enrol").html(enrolString);
+    }
 }
 
 /** Mouse Click Direct Functions **/

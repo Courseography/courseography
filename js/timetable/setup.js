@@ -30,10 +30,11 @@ $(document).ready(function () {
         $(this).data("conflictArray", []);
         $(this).data("typeArray", []);
     })
-               
+
 
     courseSelect = document.getElementById("course-select");
     searchList = document.getElementById("search-list");
+    appendClearAllButton();
     restoreFromCookies();
     enableSearch();
     courses = getVeryLargeCourseArray();
@@ -66,11 +67,10 @@ function setupEntry(courseObject) {
                 .click(function() {
                     removeCourseFromList(courseObject.name);
                 });
-
     entry.id = courseObject.name + "-li";
     header = document.createElement("h3");
     header.appendChild(courseImg);
-    header.innerHTML = courseObject.name;
+    header.appendChild(document.createTextNode(courseObject.name));
     courseObject.header = header;
     sections = processSession(courseObject);
     entry.appendChild(header);
@@ -90,4 +90,15 @@ function getCourse(courseCode) {
     });
     courseObjects.push(result);
     return result;
+}
+
+function appendClearAllButton() {
+    var clearAllItem = document.getElementById("clear-all");
+    $(clearAllItem).click(function() {
+        if (confirm("Clear all selected courses?")) {
+            $.each(courseObjects, function() {
+                removeCourseFromList(courseObjects[0].name);
+            });
+        }
+    });
 }

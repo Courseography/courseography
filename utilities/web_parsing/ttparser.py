@@ -1,5 +1,6 @@
 import csv
 import json
+import re
 from grid import *
 
 class TimetableParser:
@@ -52,10 +53,11 @@ class TimetableParser:
                         print('Skipping short line, unicode :(')
                     continue
 
-                code = data[self.code]
+                code = data[self.code].strip()
 
                 # Check if code is not an actual course code
-                if len(code) > 8:
+                code_regex = re.compile('^[A-Z]{3}[0-9]{3}[HY][01]$', re.IGNORECASE)
+                if len(code) > 0 and re.search(code_regex, code) is None:
                     print('Ignoring code:', code)
                     data[self.code] = ''
                     code = ''
@@ -216,8 +218,8 @@ class TimetableParser:
     def is_tutorial(self, data):
         ''' Returns True if data represents a tutorial. '''
 
-        if self.kind >= 0 and data[self.kind] in ['T', 'LAB']:
-            return True
+        if self.kind >= 0:
+            return data[self.kind] in ['T', 'LAB']
 
         section = data[self.section]
         return (section is None or len(section) == 0 or
@@ -227,8 +229,8 @@ class TimetableParser:
     def is_lecture(self, data):
         ''' Returns True if data represents a lecture. '''
 
-        if self.kind >= 0 and data[self.kind] == 'L':
-            return True
+        if self.kind >= 0:
+            return data[self.kind] == 'L'
 
         section = data[self.section]
         return len(section) == 0 or (len(section) == 5 and section.startswith('L'))

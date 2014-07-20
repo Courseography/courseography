@@ -72,8 +72,8 @@ def parseStartTime(s):
     if time < 9:
         time += 12
 
-    if rest.startswith(':30'):
-        time += 0.5
+    # TODO: fix times in the middle of an hour
+    if rest.startswith(':'):
         rest = rest[3:]
 
     return time, rest
@@ -93,8 +93,10 @@ def parseEndTime(s):
     if time < 11:
         time += 12
 
-    if rest.startswith(':30'):
-        time += 0.5
+    # TODO: fix times in the middle of an hour
+    if rest.startswith(':'):
+        if not rest.startswith(':00'):
+            time += 1
         rest = rest[3:]
 
     return time, rest

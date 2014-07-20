@@ -100,7 +100,7 @@ caption {
 .timetable td,
 .timetable th {
   width: 18%;
-  height: 45px;
+  height: 35px;
   padding: 0 !important;
   margin: 0 !important;
   text-align: center;
@@ -175,6 +175,16 @@ caption {
 
 #course-select > li {
 	width: 95%;
+}
+
+#clear-all h3 {
+  margin: 0;
+  padding: 0.25em;
+  cursor: pointer;
+}
+
+#clear-all h3:hover {
+  background-color: #261B2A !important;
 }
 
 /* Course select sections*/
@@ -349,7 +359,7 @@ li[satisfied=false]:hover {
   padding: 0em;
   margin: 0em;
   width: 100%;
-  height: 4.7em;
+  height: 7em;
   color: black;
   border-bottom: 1px solid black;
   text-align: center;
@@ -375,18 +385,29 @@ li[satisfied=false]:hover {
   overflow: hidden;
 }
 
+#filter-container {
+  padding: 10px 10px 0 10px;
+}
+
 #search-container {
   text-align: center;
   color: white;
-  overflow-y: scroll;
   height: 100%;
-  margin: 17px 0 0 17px;
   width: 100%;
-  padding: 0 10px 0 0;
+  margin: 0;
+  padding: 0;
+}
+
+#search-list {
+  margin: 0 0 0 17px;
+  padding: 0.5em 17px 4.5em 0;
+  height: 100%;
+  width: 100%;
+  overflow-y: scroll;
 }
 
 #search-list ul {
-  margin: 0.5em 0 0 0;
+  margin: 0;
   padding: 0;
 }
 

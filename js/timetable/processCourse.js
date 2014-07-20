@@ -17,6 +17,8 @@ function processSessionLectures(session, courseObject, timeSuffix) {
             section = document.createElement("li");
             sectionTimes = convertTimes(lecture.time);
             $(section).data("instructor", lecture.instructor);
+            $(section).data("cap", lecture.cap);
+            $(section).data("enrol", lecture.enrol);
             section.appendChild(document.createTextNode(lecture.section));
             if (!courseObject.manualTutorialEnrolment && session.tutorials.length > 0) {
                 sectionTimes = sectionTimes.concat(convertTimes(session.tutorials[i][0]));
@@ -62,6 +64,8 @@ function processSessionTutorials(session, courseObject, sectionList, timeSuffix)
                 });
             }
             setSectionMouseEvents(section, sectionTimes, courseObject);
+            $(section).data("cap", parseInt(tutorial[3]));
+            $(section).data("enrol", parseInt(tutorial[4]));
             sectionList.appendChild(section);
         }
     });
