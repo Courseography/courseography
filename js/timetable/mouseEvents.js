@@ -28,6 +28,8 @@ function performMouseOut(sectionTimes) {
     });
 }
 
+// IAN-TODO We still need to figure out a better way to do this,
+// to not loop through every td.
 function removeMouseOverClasses() {
     $("td").removeClass("mouseOverConflict mouseOverGood " +
                         "mouseOverRemove");
@@ -67,7 +69,6 @@ function lightUpTakeable(course, time) {
 }
 
 // IAN-TODO: you'll need to break this into two separate functions
-// IAN-RESPONSE: Let's discuss this.
 function displayCourseInformation(course, section) {
     $("#course-info-code").html(course.name);
     $("#course-info-title").html(course.title);
@@ -85,13 +86,11 @@ function setSectionOnClick(section, sectionTimes, course) {
         var inConflict = false;
         // IAN-TODO: this is a bigger task, but I really don't think
         // we need separate functions for lectures and tutorials
-        // IAN-RESPONSE: IPR
         if (isLecture) {
             if (course.isLectureSelected) {
                 selectAlreadySelectedLecture(course, section, sectionTimes);
             } else {
-                setSession(course, section);
-                selectNewLecture(course, section, sectionTimes);
+                selectLecture(course, section, sectionTimes);
             }
         } else {
             if (course.isTutorialSelected) {
@@ -104,7 +103,9 @@ function setSectionOnClick(section, sectionTimes, course) {
         }
         satisfyCourse(course);
 
+        // IAN-TODO Don't use loop. We know which section (it's called $(section)).
         $("#" + course.name + "-li li[clicked*='true']").each(function() {
+            // IAN-TODO Remove this class (and elsewhere).
             if (course.satisfied) {
                 $(this).addClass("clickedLectureTime");
             }
@@ -115,8 +116,11 @@ function setSectionOnClick(section, sectionTimes, course) {
         });
 
         $("#" + course.name + "-li li[clicked*='false']").each(function() {
+            // IAN-TODO Don't use class here. Remove line.
             $(this).removeClass("clickedLectureTime");
 
+            // IAN-TODO This should be done in the same place where the clicked
+            // attribute is set to false.
             var index = $.inArray($(this).attr("id"), selectedLectures);
             if (index > -1) {
                 selectedLectures.splice(index, 1);
@@ -147,12 +151,8 @@ function setSectionOnClick(section, sectionTimes, course) {
 
         $("td[in-conflict*=false][satisfied*=true][type*=T]").addClass("clickedTutorialTime");
 
-        // IAN-TODO Seems like taken and satisfied can be recovered
-        // from course
         setHeader(course);
         setCookie("selected-lectures", JSON.stringify(selectedLectures));
-        // IAN-TODO we had a problem with this before. Can't remember why.
-        // IAN-RESPONSE: Can't remember either. When all CSS is moved to a .CSS file, push will come to shove.
         removeMouseOverClasses();
 
         alertUserOfConflict();
@@ -191,6 +191,8 @@ function setSectionOnClick(section, sectionTimes, course) {
 /** Utilities **/
 
 // IAN-RESPONSE It seemed kind of silly to make this function, given that the index is sometimes used.
+// IAN-RESPONSE-RESPONSE The only time we use index is when removing an item.
+// We should create a helper function for that, too.
 function inArray(item, array) {
     return $.inArray(item, array) > -1;
 }
@@ -222,11 +224,7 @@ function getInConflict() {
 }
 
 function alertUserOfConflict() {
-    if (getInConflict()) {
-        $("#dialog").fadeIn(750);
-    } else {
-        $("#dialog").fadeOut(750);
-    }
+    getInConflict() ? $("#dialog").fadeIn(750) : $("#dialog").fadeOut(750);
 }
 
 function getIsClicked(time) {
@@ -243,6 +241,7 @@ function getSession(section) {
     }
 }
 
+// IAN-TODO Should this be sectionList-Y/F/S?
 function getIsYearSection(section) {
     return $(section.parentNode).hasClass("sectionList-year");
 }
@@ -284,6 +283,19 @@ function removeClickedConflict(course, time, section) {
     // Either course.name is in the td, or it's in the list,
     // but not both.
     // IAN-RESPONSE Let's discuss this again
+    /*
+
+    if ($(time).html() === course.name) {
+        # set $(time) to be the conflictArray[0]
+        # remove the conflictArray[0]
+        # newCourseObject stuff
+    } else {
+        # remove course.name from conflictArray, typeArray
+    }
+
+    # check if there is still a conflict
+    */
+
     var index = conflictArray.indexOf(course.name);
     if ($(time).html() === course.name) {
         $(time).html(conflictArray[0])
@@ -304,14 +316,13 @@ function removeClickedConflict(course, time, section) {
 
 /** Lecture Functions **/
 
-function selectUnselectedLecture(course, section, sectionTimes) {
+function selectLecture(course, section, sectionTimes) {
     $(section).attr("clicked", "true");
     setSession(course, section);
     course.selectedLecture = section;
     course.isLectureSelected = true;
-    selectUnselectedTimes(course, sectionTimes, section);
-
     course.selectedLectureTimes = sectionTimes;
+    selectUnselectedTimes(course, sectionTimes, section);
 }
 
 function selectAlreadySelectedLecture(course, section, sectionTimes) {
@@ -323,8 +334,9 @@ function selectAlreadySelectedLecture(course, section, sectionTimes) {
 
     if (course.selectedLecture.innerHTML !== section.innerHTML
         || course.selectedLectureSession !== selectedSession) {
-        selectNewLecture(course, section, sectionTimes);
+        selectLecture(course, section, sectionTimes);
     } else {
+        // IAN-TODO Do this in turnLectureOff
         course.selectedLecture = undefined;
         course.selectedLectureSession = undefined;
         course.selectedLectureTimes = undefined;
@@ -338,6 +350,7 @@ function turnLectureOff(course, section, sectionTimes) {
     removeLecture(course, section);
 }
 
+// IAN-TODO Change name to removeLectureTimes
 function removeLecture(course, section) {
     $.each(course.selectedLectureTimes, function (i, time) {
         if ($(time).attr("in-conflict") === "true") {
@@ -349,14 +362,6 @@ function removeLecture(course, section) {
     });
 }
 
-function selectNewLecture(course, section, sectionTimes) {
-    $(section).attr("clicked", "true");
-    setSession(course, section);
-    course.isLectureSelected = true;
-    course.selectedLecture = section;
-    course.selectedLectureTimes = sectionTimes;
-    selectUnselectedTimes(course, sectionTimes, section);
-}
 
 /** Tutorial Functions **/
 
@@ -390,7 +395,7 @@ function selectAlreadySelectedTutorial(course, section, sectionTimes) {
 function turnTutorialOff(course, section, sectionTimes) {
     course.isTutorialSelected = false;
     $(course.selectedTutorial).attr("clicked", "false");
-    
+
     removeTutorial(course, section);
 }
 
@@ -448,27 +453,11 @@ function selectUnselectedTimes(course, sectionTimes, section) {
 
 function setClickedTime(course, time, section) {
     var type = getType(section);
-
-    if (type === "L") {
-        course.isLectureSelected = true;
-        if (!course.satisfied) {
-            setSatisfaction(time, course.satisfied);
-            $(course.selectedLecture).attr("satisfied", "false");
-        }
-    } else {
-        course.isTutorialSelected = true;
-        if (!course.satisfied) {
-            setSatisfaction(time, course.satisfied);
-            $(course.selectedTutorial).attr("satisfied", "false");
-        }
-    }
-
     $(time).html(course.name)
            .attr("clicked", "true")
            .attr("type", type);
 }
 
-// IAN RESPONSE: :-)
 function satisfyCourse(course) {
     course.satisfied = (course.selectedTutorialSession === course.selectedLectureSession) || !course.manualTutorialEnrolment;
     setSatisfaction(course);

@@ -219,7 +219,8 @@ caption {
 }
 
 .ui-accordion-content li.clickedLectureTime,
-.clickedLectureTime {
+.clickedLectureTime,
+li[clicked*=true][satisfied*=true] {
   background-color: #437699;
 }
 
@@ -308,11 +309,13 @@ caption {
   border-top: 1px solid black;
 }
 
-td[satisfied=false] {
+td[satisfied=false],
+li[satisfied=false] {
   background-color: rgb(215, 117, 70);
 }
 
-td[satisfied=false]:hover {
+td[satisfied=false]:hover,
+li[satisfied=false]:hover {
   background-color: rgb(195, 97, 50);
 }
 
