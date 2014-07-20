@@ -4,10 +4,9 @@ var selectedLectures = [];
 var courseObjects = [];
 
 function removeCourseObject(courseName) {
-    for (var i = 0; i < courseObjects.length; i++) {
-        if (courseObjects[i].name === courseName) {
-            courseObjects.splice(i,1);
-        }
+    var index = $.inArray(courseName, courseObjects);
+    if (index > -1) {
+        courseObjects.splice(i, 1);
     }
 }
 
@@ -19,24 +18,23 @@ function getCourseObject(courseName) {
         }
     }
     return courseObject;
+
 }
 
 /*
  * Adapted from http://codepen.io/LelandKwong/pen/edAmn. Will look into http://jscrollpane.kelvinluck.com/.
  */
- (function($){  
-
+ (function($) {
     trapScroll = function(){
-
         var trapElement;
         var scrollableDist;
         var trapClassName = "trapScroll-enabled";
         var trapSelector = "#course-select";
-        
+
         var trapWheel = function(e){
             if (!$("body").hasClass(trapClassName)) {
                 return;
-            } else {        
+            } else {
                 var curScrollPos = trapElement.scrollTop();
                 var wheelEvent = e.originalEvent;
                 var dY = wheelEvent.deltaY;
@@ -45,7 +43,6 @@ function getCourseObject(courseName) {
                 // or beginning
                 if ((dY>0 && curScrollPos >= scrollableDist) ||
                     (dY<0 && curScrollPos <= 0)) {
-
                     return false;
                 }
             }
@@ -53,96 +50,30 @@ function getCourseObject(courseName) {
 
         $(document)
         .on("wheel", trapWheel)
-        .on("mouseleave", trapSelector, function(){
-
+        .on("mouseleave", trapSelector, function() {
             $("body").removeClass(trapClassName);
         })
-        .on("mouseenter", trapSelector, function(){        
-
+        .on("mouseenter", trapSelector, function() {
             trapElement = $(this);
             var containerHeight = trapElement.outerHeight();
-                var contentHeight = trapElement[0].scrollHeight; // height of scrollable content
-                scrollableDist = contentHeight - containerHeight;
-                
-                if (contentHeight>containerHeight) {
-                    $("body").addClass(trapClassName); 
-                }       
-        });       
-    };
+            var contentHeight = trapElement[0].scrollHeight; // height of scrollable content
+            scrollableDist = contentHeight - containerHeight;
 
+            if (contentHeight > containerHeight) {
+                $("body").addClass(trapClassName);
+            }
+        });
+    };
 })($);
 
-$.event.special.hoverintent = {
-    setup: function() {
-        $( this ).bind( "mouseover", jQuery.event.special.hoverintent.handler );
-    },
-    teardown: function() {
-        $( this ).unbind( "mouseover", jQuery.event.special.hoverintent.handler );
-    },
-    handler: function( event ) {
-        var currentX, currentY, timeout,
-        args = arguments,
-        target = $( event.target ),
-        previousX = event.pageX,
-        previousY = event.pageY;
-
-        function track( event ) {
-            currentX = event.pageX;
-            currentY = event.pageY;
-        }
-
-        function clear() {
-            target
-            .unbind( "mousemove", track )
-            .unbind( "mouseout", clear );
-            clearTimeout( timeout );
-        }
-
-        function handler() {
-            var prop,
-            orig = event;
-
-            if ( ( Math.abs( previousX - currentX ) +
-                Math.abs( previousY - currentY ) ) < 7 ) {
-                clear();
-
-            event = $.Event( "hoverintent" );
-            for ( prop in orig ) {
-                if ( !( prop in event ) ) {
-                  event[ prop ] = orig[ prop ];
-                }
-            }
-                // Prevent accessing the original event since the new event
-                // is fired asynchronously and the old event is no longer
-                // usable (#6028)
-                delete event.originalEvent;
-
-                target.trigger( event );
-            } else {
-                previousX = currentX;
-                previousY = currentY;
-                timeout = setTimeout( handler, 100 );
-            }
-        }
-     
-        timeout = setTimeout( handler, 100 );
-        target.bind({
-            mousemove: track,
-            mouseout: clear
-        });
-    }
-};
 
 function setAccordion() {
-    $("#course-select li").accordion({heightStyle: "content", collapsible: true, active: false/*, event: "click hoverintent"*/});
+    $("#course-select li").accordion({heightStyle: "content", collapsible: true, active: false});
 }
 
-function refreshAccordion() {
-    $("#course-select").accordion("refresh");
-}
 
 // Search function for timetable
-function createTimetableSearch() {
+function enableSearch() {
     $("#course-filter").keyup(function() {
         resetSearchList();
     });
@@ -151,49 +82,35 @@ function createTimetableSearch() {
 function resetSearchList() {
     var courseList;
     var courseEntry;
-    var counter;
+    var counter = 0;
     var index;
-    counter = 0;
     var filter = $("#course-filter").val().toLowerCase();
     $('#search-list').empty();
     courseList = document.createElement("ul");
     if (filter !== "") {
-
-        // Iterate through every course.
         $.each(courses, function(i, course) {
 
             // If the course matches and if there are fewer than 100 courses in the list, add it to the list.
             if (course.toLowerCase().indexOf(filter) > -1 && counter < 100) {
                 courseEntry = document.createElement("li");
-                var shortenedCourseName = course.substring(0, 8);
 
                 // "Star" the course if it has been previously selected.
-                if ($.inArray(shortenedCourseName, selectedCourses) > -1) {
+                if ($.inArray(course, selectedCourses) > -1) {
                     $(courseEntry).addClass("starred-course");
                 }
 
                 // Add an ID to the list so we can come back and star it when it is clicked.
-                $(courseEntry).attr("id", shortenedCourseName + "-search");
-                courseEntry.innerHTML = shortenedCourseName;
+                $(courseEntry).attr("id", course + "-search");
+                courseEntry.innerHTML = course;
                 $(courseEntry).click(function() {
-
-                    // Has the course already been clicked?
-                    index = $.inArray(shortenedCourseName, selectedCourses);
-                    if (index > -1) {
-                        // Yes, take it out of the list and "unstar" it. Unstarring may be useless, as it is taken out of the list.
-                        $("#" + shortenedCourseName + "-search").removeClass("starred-course");
-                        removeCourseFromList(shortenedCourseName);
+                    $(this).toggleClass("starred-course")
+                    if ($.inArray(course, selectedCourses) > -1) {
+                        removeCourseFromList(course);
                     } else {
-                        // No, add it to the left list (starrted courses list) and add the corresponding class.
-                        selectedCourses.push(shortenedCourseName);
-                        $("#" + shortenedCourseName + "-search").addClass("starred-course");
                         addCourseToList(course);
-                        var jsonCookie = JSON.stringify(selectedCourses);
-                        setCookie("selected-courses", jsonCookie);
                     }
                 });
 
-                // Increase the number of courses presently shown on the right hand search list.
                 counter++;
                 courseList.appendChild(courseEntry);
             }
@@ -205,9 +122,9 @@ function resetSearchList() {
 function restoreFromCookies() {
     var starredCourseCookie = getCookie("selected-courses");
     if (starredCourseCookie.length > 0) {
-        selectedCourses = $.parseJSON(starredCourseCookie);
-        $.each(selectedCourses, function (i, course) {
-            addCourseToList(course + ".txt");
+        var selectedCoursesTemp = $.parseJSON(starredCourseCookie);
+        $.each(selectedCoursesTemp, function (i, course) {
+            addCourseToList(course);
         });
     }
 
@@ -218,6 +135,7 @@ function restoreFromCookies() {
             $("#" + course).click();
         });
     }
+
     console.log("Courses that have been set in cookies are: " + selectedCourses);
 }
 
@@ -226,39 +144,50 @@ function convertTimes(times) {
     var timeString;
     var days = "MTWRF";
     var time;
+
     for(var i = 0; i < times.length; i++) {
-        // If a course is "12", we don't want to add a "0". That would result in something like "M0". We exclude this from the mod cases. 
+
+        // If a course is "12", we don't want to add a "0". That would result in something like "M0". We exclude this from the mod cases.
         if ((times[i][1] % 12) !== 0) {
             time = times[i][1] % 12;
         } else {
             time = times[i][1];
         }
+
         timeString = days.charAt(times[i][0]);
         timeString = timeString + time;
         timeList.push(timeString);
     }
 
     return timeList;
+}
 
+function addCourseToList(course) {
+    var courseObject = getCourse(course);
+    courseObject.selectedSession = null;
+    courseObject.selected = false;
+    courseObject.isLectureSelected = false;
+    courseObject.isTutorialSelected = false;
+    courseObject.status = "inactive";
+    // courseObject.satisfied = !courseObject.manualTutorialEnrolment;
+    setupEntry(courseObject);
+
+    selectedCourses.push(course);
+    var jsonCookie = JSON.stringify(selectedCourses);
+    setCookie("selected-courses", jsonCookie);
 }
 
 function removeCourseFromList(course) {
-    var jsonCookie;
-    var index;
-    var shortenedCourseName;
-    var courseElement;
-    courseElement = document.getElementById(course + "-li");
+    var courseElement = document.getElementById(course + "-li");
     console.log("Removing course " + course + " from the list on the left.");
-
     $("#" + course + "-li" + " li[clicked*='true']").each(function() {
         $(this).click();
     });
-
     courseSelect.removeChild(courseElement);
-    shortenedCourseName = course.substring(0, 8);
-    index = $.inArray(shortenedCourseName, selectedCourses);
+
+    var index = $.inArray(course, selectedCourses);
     selectedCourses.splice(index, 1);
-    jsonCookie = JSON.stringify(selectedCourses);
+    var jsonCookie = JSON.stringify(selectedCourses);
     setCookie("selected-courses", jsonCookie);
 
     resetSearchList();
