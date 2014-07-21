@@ -40,7 +40,8 @@ function removeMouseOverClasses() {
 function setSectionMouseOver(section, sectionTimes, course) {
     $(section).mouseover(function () {
         performMouseOver(sectionTimes, course);
-        displayCourseInformation(course, $(this));
+        displayCourseInformation(course);
+        displaySectionInformation(course, $(this))
     });
 }
 
@@ -68,10 +69,12 @@ function lightUpTakeable(course, time) {
     $(time).html(course.name);
 }
 
-// IAN-TODO: you'll need to break this into two separate functions
-function displayCourseInformation(course, section) {
+function displayCourseInformation(course) {
     $("#course-info-code").html(course.name);
     $("#course-info-title").html(course.title);
+}
+
+function displaySectionInformation(course, section) {
     $("#section-stats-section").html(section.html());
     $("#section-stats-instructor").html(section.data("instructor"));
     var cap = section.data("cap");
