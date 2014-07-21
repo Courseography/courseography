@@ -8,6 +8,30 @@ function setSectionMouseEvents(section, sectionTimes, course) {
     setSectionOnClick(section, sectionTimes, course);
     setSectionMouseOver(section, sectionTimes, course);
     setSectionMouseOut(section, sectionTimes);
+    setTdHover();
+}
+
+
+function setTdHover() {
+    $("td").mouseover(function() {
+        var courseHtml = $(this).html();
+        var course = getCourseObject(courseHtml);
+        if (typeof course !== "undefined") {   
+            $.each(course.selectedLectureTimes.concat(course.selectedTutorialTimes), function(i, time) {
+                $(time).addClass("hover-time");
+            });
+        }
+    });
+
+    $("td").mouseout(function() {
+        var courseHtml = $(this).html();
+        var course = getCourseObject(courseHtml);
+        if (typeof course !== "undefined") {   
+            $.each(course.selectedLectureTimes.concat(course.selectedTutorialTimes), function(i, time) {
+                $(time).removeClass("hover-time");
+            });
+        }
+    });
 }
 
 /** Mouse Out Direct Functions **/
