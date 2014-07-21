@@ -89,11 +89,11 @@ caption {
   text-align: center;
 }
 
-#timetable-fall {
+#timetable-F {
   border-right: 2px solid black;
 }
 
-#timetable-spring {
+#timetable-S {
   border-left: 2px solid black;
 }
 
@@ -129,20 +129,20 @@ caption {
 }
 
 
-.timetable-cell-fall,
-.timetable-cell-spring {
+.timetable-cell-F,
+.timetable-cell-S {
   border-top: 1px dashed !important;
   border-bottom: none !important;
   border-right: 1px solid !important;
   border-left: 1px solid !important;
 }
 
-#timetable-spring .timetable-time {
+#timetable-S .timetable-time {
   text-align: left;
   padding-left: 10px !important;
 }
 
-#timetable-fall .timetable-time {
+#timetable-F .timetable-time {
   text-align: right;
   padding-right: 10px !important;
 }
@@ -196,13 +196,13 @@ caption {
   cursor: pointer;
 }
 
-.sectionList-fall {
+.sectionList-F {
   width: 50%;
   float: left;
   border-right: 1px solid black;
 }
 
-.sectionList-spring {
+.sectionList-S {
   width: 50%;
   float: right;
   border-left: 1px solid black;
@@ -218,12 +218,12 @@ caption {
   background-color: #336685;
 }
 
-.sectionList-fall li:hover {
+.sectionList-F li:hover {
   background-color: #437699;
 
 }
 
-.sectionList-spring li:hover {
+.sectionList-S li:hover {
   background-color: #437699;
 
 }
@@ -277,21 +277,21 @@ li[clicked*=true][satisfied*=true] {
   background-color: #261B2A;
 }
 
-.section-fall {
+.section-F {
   text-align:center;
   background-color:#003366;
   color:white;
   display:block;
 }
 
-.section-spring {
+.section-S {
   text-align: center;
   background-color: #003366;
   color: white;
   display: block;
 }
 
-.section-year {
+.section-Y {
   text-align: center;
   background-color: #003366;
   color: white;

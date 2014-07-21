@@ -252,15 +252,15 @@ function getSession(section) {
 
 // IAN-TODO Should this be sectionList-Y/F/S?
 function getIsYearSection(section) {
-    return $(section.parentNode).hasClass("sectionList-year");
+    return $(section.parentNode).hasClass("sectionList-Y");
 }
 
 function getIsFallSection(section) {
-    return $(section.parentNode).hasClass("sectionList-fall");
+    return $(section.parentNode).hasClass("sectionList-F");
 }
 
 function getIsSpringSection(section) {
-    return $(section.parentNode).hasClass("sectionList-spring");
+    return $(section.parentNode).hasClass("sectionList-S");
 }
 
 // Need to adapt code for P.

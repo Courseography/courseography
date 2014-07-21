@@ -80,7 +80,7 @@ function processSession(courseObject) {
         sectionList = document.createElement("ul");
         sectionList = processSessionLectures(courseObject.Y, courseObject, "Y");
         sectionList = processSessionTutorials(courseObject.Y, courseObject, sectionList, "Y");
-        $(sectionList).attr("class", "sectionList-year");
+        $(sectionList).attr("class", "sectionList-Y");
         setSectionIds(courseObject, sectionList, "Y");
         sections.appendChild(sectionList);
     } else {
@@ -89,7 +89,7 @@ function processSession(courseObject) {
             sectionList = processSessionLectures(courseObject.F, courseObject, "F");
             sectionList = processSessionTutorials(courseObject.F, courseObject, sectionList, "F");
             // IAN-TODO Convert all fall, spring and year to F S and Y
-            $(sectionList).attr("class", "sectionList-fall");
+            $(sectionList).attr("class", "sectionList-F");
             setSectionIds(courseObject, sectionList, "F");
             sections.appendChild(sectionList);
         }
@@ -97,7 +97,7 @@ function processSession(courseObject) {
             sectionList = document.createElement("ul");
             sectionList = processSessionLectures(courseObject.S, courseObject, "S");
             sectionList = processSessionTutorials(courseObject.S, courseObject, sectionList, "S");
-            $(sectionList).attr("class", "sectionList-spring");
+            $(sectionList).attr("class", "sectionList-S");
             setSectionIds(courseObject, sectionList, "S");
             sections.appendChild(sectionList);
         }
