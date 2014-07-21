@@ -344,11 +344,6 @@ function selectAlreadySelectedLecture(course, section, sectionTimes) {
     if (course.selectedLecture.innerHTML !== section.innerHTML
         || course.selectedLectureSession !== selectedSession) {
         selectLecture(course, section, sectionTimes);
-    } else {
-        // IAN-TODO Do this in turnLectureOff
-        course.selectedLecture = undefined;
-        course.selectedLectureSession = undefined;
-        course.selectedLectureTimes = undefined;
     }
 }
 
@@ -357,6 +352,9 @@ function turnLectureOff(course, section, sectionTimes) {
 
     $(course.selectedLecture).attr("clicked", "false");
     removeLecture(course, section);
+    course.selectedLecture = undefined;
+    course.selectedLectureSession = undefined;
+    course.selectedLectureTimes = undefined;
 }
 
 // IAN-TODO Change name to removeLectureTimes
