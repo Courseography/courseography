@@ -87,24 +87,13 @@ function setSectionOnClick(section, sectionTimes, course) {
     $(section).click(function () {
         var isLecture = section.innerHTML.charAt(0) === "L";
         var taken = false;
-        var satisfied = true;
-        var inConflict = false;
-        // IAN-TODO: this is a bigger task, but I really don't think
-        // we need separate functions for lectures and tutorials
-        if (isLecture) {
-            if (course.isLectureSelected) {
-                selectAlreadySelectedSection(course, section, sectionTimes);
-            } else {
-                selectSection(course, section, sectionTimes);
-            }
-        } else {
-            if (course.isTutorialSelected) {
-                selectAlreadySelectedSection(course, section, sectionTimes);
-            } else {
-                selectSection(course, section, sectionTimes);
-            }
 
+        if ((course.isLectureSelected && isLecture) || (course.isTutorialSelected && !isLecture)) {
+            selectAlreadySelectedSection(course, section, sectionTimes);
+        } else {
+            selectSection(course, section, sectionTimes);
         }
+        
         satisfyCourse(course);
 
         // IAN-TODO Don't use loop. We know which section (it's called $(section)).
@@ -138,22 +127,6 @@ function setSectionOnClick(section, sectionTimes, course) {
                                .attr("type", "")
                                .html("")
                                .removeClass("clickedLectureTime clickedTutorialTime");
-
-        $("td[satisfied*=false][in-conflict*=false]").addClass("clickedSectionUnsatisfied")
-                                                     .removeClass("clickedLectureTime clickedTutorialTime");
-
-        $("td[satisfied*=true]").removeClass("clickedSectionUnsatisfied");
-
-        $("td[in-conflict*=true]").removeClass("clickedSectionUnsatisfied" +
-                                               "clickedLectureTime clickedTutorialTime")
-                                  .addClass("clickedConflictTime");
-
-
-        $("td[in-conflict*=false]").removeClass("clickedConflictTime");
-
-        $("td[in-conflict*=false][satisfied*=true][type*=L]").addClass("clickedLectureTime");
-
-        $("td[in-conflict*=false][satisfied*=true][type*=T]").addClass("clickedTutorialTime");
 
         setHeader(course);
         setCookie("selected-lectures", JSON.stringify(selectedLectures));
@@ -282,36 +255,25 @@ function removeClickedConflict(course, time, section) {
     var conflictArray = $(time).data("conflictArray");
     var typeArray = $(time).data("typeArray");
 
-    // IAN-TODO This code should be (basically) one big if-else block.
-    // Either course.name is in the td, or it's in the list,
-    // but not both.
-    // IAN-RESPONSE Let's discuss this again
-    /*
-
-    if ($(time).html() === course.name) {
-        # set $(time) to be the conflictArray[0]
-        # remove the conflictArray[0]
-        # newCourseObject stuff
-    } else {
-        # remove course.name from conflictArray, typeArray
-    }
-
-    # check if there is still a conflict
-    */
-
-    var index = conflictArray.indexOf(course.name);
     if ($(time).html() === course.name) {
         $(time).html(conflictArray[0])
                .attr("type", typeArray[0]);
+        conflictArray.splice(0, 1);
+        typeArray.splice(0, 1);
+    } else {
+        var index = conflictArray.indexOf(course.name);
+        conflictArray.splice(index, 1);
+        typeArray.splice(index, 1);
     }
-    if (conflictArray.length === 1) {
+
+    if (conflictArray.length === 0) {
         $(time).attr("in-conflict", "false");
     }
-    conflictArray.splice(index, 1);
-    typeArray.splice(index, 1);
+
     var newCourseObject = getCourseObject($(time).html());
-    $(time).attr("satisfied", newCourseObject.satisfied)
-           .data("conflictArray", conflictArray)
+    $(time).attr("satisfied", newCourseObject.satisfied);
+
+    $(time).data("conflictArray", conflictArray)
            .data("typeArray", typeArray)
            .attr("title", conflictArray);
 }
@@ -392,18 +354,6 @@ function removeSectionTimes(course, section) {
         }
     });
 }
-
-
-// function setTimeUnclicked(course, time) {
-//     var type = getType(section);
-//     if (type === "L") {
-//         course.isLectureSelected = false;
-//     } else {
-//         course.isTutorialSelected = false;
-//     }
-//     $(time).attr("clicked", "false");
-// }
-
 
 function setSession(course, section) {
     var type = getType(section);

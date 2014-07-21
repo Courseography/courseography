@@ -230,7 +230,8 @@ caption {
 
 .ui-accordion-content li.clickedLectureTime,
 .clickedLectureTime,
-li[clicked*=true][satisfied*=true] {
+li[clicked*=true][satisfied*=true],
+td[in-conflict*=false][satisfied*=true][type*=L] {
   background-color: #437699;
 }
 
@@ -239,7 +240,8 @@ li[clicked*=true][satisfied*=true] {
   /*cursor: pointer;*/
 }
 
-.clickedTutorialTime {
+.clickedTutorialTime,
+td[in-conflict*=false][satisfied*=true][type*=T] {
   background-color: #737A99;
 }
 
@@ -329,11 +331,13 @@ li[satisfied=false]:hover {
   background-color: rgb(195, 97, 50);
 }
 
-.clickedConflictTime {
+.clickedConflictTime,
+td[in-conflict*=true] {
   background-color: #C92343 !important;
 }
 
-.clickedConflictTime:hover {
+.clickedConflictTime:hover,
+td[in-conflict*=true]:hover {
   background-color: #B91333 !important;
 }
 
