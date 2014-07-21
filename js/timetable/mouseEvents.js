@@ -1,7 +1,3 @@
-/*jslint todo: true */
-/*global $, console*/
-/*jslint browser:true */
-/*jslint plusplus: true */
 "use strict";
 
 function setSectionMouseEvents(section, sectionTimes, course) {
@@ -97,16 +93,15 @@ function setSectionOnClick(section, sectionTimes, course) {
         // we need separate functions for lectures and tutorials
         if (isLecture) {
             if (course.isLectureSelected) {
-                selectAlreadySelectedLecture(course, section, sectionTimes);
+                selectAlreadySelectedSection(course, section, sectionTimes);
             } else {
-                selectLecture(course, section, sectionTimes);
+                selectSection(course, section, sectionTimes);
             }
         } else {
             if (course.isTutorialSelected) {
-                selectAlreadySelectedTutorial(course, section, sectionTimes);
+                selectAlreadySelectedSection(course, section, sectionTimes);
             } else {
-                setSession(course, section);
-                selectUnselectedTutorial(course, section, sectionTimes);
+                selectSection(course, section, sectionTimes);
             }
 
         }
@@ -250,7 +245,6 @@ function getSession(section) {
     }
 }
 
-// IAN-TODO Should this be sectionList-Y/F/S?
 function getIsYearSection(section) {
     return $(section.parentNode).hasClass("sectionList-Y");
 }
@@ -323,125 +317,98 @@ function removeClickedConflict(course, time, section) {
 }
 
 
-/** Lecture Functions **/
-
-function selectLecture(course, section, sectionTimes) {
-    $(section).attr("clicked", "true");
-    setSession(course, section);
-    course.selectedLecture = section;
-    course.isLectureSelected = true;
-    course.selectedLectureTimes = sectionTimes;
-    selectUnselectedTimes(course, sectionTimes, section);
-}
-
-function selectAlreadySelectedLecture(course, section, sectionTimes) {
-    var selectedSession;
-
-    turnLectureOff(course, section, sectionTimes);
-
-    selectedSession = getSession(section);
-
-    if (course.selectedLecture.innerHTML !== section.innerHTML
-        || course.selectedLectureSession !== selectedSession) {
-        selectLecture(course, section, sectionTimes);
-    }
-}
-
-function turnLectureOff(course, section, sectionTimes) {
-    course.isLectureSelected = false;
-
-    $(course.selectedLecture).attr("clicked", "false");
-    removeLecture(course, section);
-    course.selectedLecture = undefined;
-    course.selectedLectureSession = undefined;
-    course.selectedLectureTimes = undefined;
-}
-
-// IAN-TODO Change name to removeLectureTimes
-function removeLecture(course, section) {
-    $.each(course.selectedLectureTimes, function (i, time) {
-        if ($(time).attr("in-conflict") === "true") {
-            removeClickedConflict(course, time, section);
-        } else {
-            $(time).html("")
-                   .attr("clicked", "false");
-        }
-    });
-}
-
-
-/** Tutorial Functions **/
-
-function selectUnselectedTutorial(course, section, sectionTimes) {
-    $(section).attr("clicked", "true");
-    setSession(course, section);
-    course.selectedTutorial = section;
-    course.isTutorialSelected = true;
-
-    selectUnselectedTimes(course, sectionTimes, section);
-
-    course.selectedTutorialTimes = sectionTimes;
-}
-
-function selectAlreadySelectedTutorial(course, section, sectionTimes) {
-    var selectedSession;
-
-    turnTutorialOff(course, section, sectionTimes);
-    selectedSession = getSession(section);
-
-    if (course.selectedTutorial.innerHTML !== section.innerHTML
-        || course.selectedTutorialSession !== selectedSession) {
-        selectNewTutorialSection(section, sectionTimes, course, selectedSession);
-    } else {
-        course.selectedTutorial = undefined;
-        course.selectedTutorialSession = undefined;
-        course.selectedTutorialTimes = undefined;
-    }
-}
-
-function turnTutorialOff(course, section, sectionTimes) {
-    course.isTutorialSelected = false;
-    $(course.selectedTutorial).attr("clicked", "false");
-
-    removeTutorial(course, section);
-}
-
-function removeTutorial(course, section) {
-    $.each(course.selectedTutorialTimes, function (i, time) {
-        if ($(time).attr("in-conflict") === "true") {
-            removeClickedConflict(course, time, section);
-        } else {
-            $(time).html("")
-                   .attr("clicked", "false");
-        }
-    });
-}
-
-function selectNewTutorialSection(section, sectionTimes, course, selectedSession) {
-    $(section).attr("clicked", "true");
-
-    if(course.selectedTutorialSession !== selectedSession) {
-        course.selectedTutorialSession = selectedSession;
-    }
-
-    course.isTutorialSelected = true;
-    course.selectedTutorial = section;
-    course.selectedTutorialHeader = course.header;
-    course.selectedTutorialTimes = sectionTimes;
-    selectUnselectedTimes(course, sectionTimes, section);
-}
-
-function setTutorialUnclicked(time, course) {
-    course.isTutorialSelected = false;
-    $(time).attr("clicked", "false");
-}
-
 /** Unified course functions (!) **/
+
+function selectAlreadySelectedSection(course, section, sectionTimes) {
+    turnSectionOff(course, section, sectionTimes);
+    var selectedSession = getSession(section);
+    var type = getType(section);
+    if (type === "L") {
+        if (course.selectedLecture.innerHTML !== section.innerHTML
+            || course.selectedLectureSession !== selectedSession) {
+            selectSection(course, section, sectionTimes);
+        } else {
+            course.selectedLecture = undefined;
+            course.selectedLectureSession = undefined;
+            course.selectedLectureTimes = undefined;
+        }
+    } else {
+        if (course.selectedTutorial.innerHTML !== section.innerHTML
+            || course.selectedTutorialSession !== selectedSession) {
+            selectSection(course, section, sectionTimes);
+        } else {
+            course.selectedTutorial = undefined;
+            course.selectedTutorialSession = undefined;
+            course.selectedTutorialTimes = undefined;
+        }
+    }
+    
+}
+
+function selectSection(course, section, sectionTimes) {
+    var type = getType(section);
+    if (type === "L") {
+        course.selectedLecture = section;
+        course.isLectureSelected = true;
+        course.selectedLectureTimes = sectionTimes;
+    } else {
+        course.selectedTutorial = section;
+        course.isTutorialSelected = true;
+        course.selectedTutorialTimes = sectionTimes;
+    }
+    $(section).attr("clicked", "true");
+    setSession(course, section);
+
+    selectUnselectedTimes(course, sectionTimes, section);
+}
+
+function turnSectionOff(course, section, sectionTimes) {
+    var type = getType(section);
+    removeSectionTimes(course, section);
+    if (type === "L") {
+        course.isLectureSelected = false;
+        $(course.selectedLecture).attr("clicked", "false");
+    } else {  
+        course.isTutorialSelected = false;
+        $(course.selectedTutorial).attr("clicked", "false");
+    }
+    
+}
+
+function removeSectionTimes(course, section) {
+    var sectionTimes;
+    var type = getType(section);
+    if (type === "L") {
+        sectionTimes = course.selectedLectureTimes;
+    } else {
+        sectionTimes = course.selectedTutorialTimes;
+    }
+    $.each(sectionTimes, function (i, time) {
+        if ($(time).attr("in-conflict") === "true") {
+            removeClickedConflict(course, time, section);
+        } else {
+            $(time).html("")
+                   .attr("clicked", "false");
+        }
+    });
+}
+
+
+// function setTimeUnclicked(course, time) {
+//     var type = getType(section);
+//     if (type === "L") {
+//         course.isLectureSelected = false;
+//     } else {
+//         course.isTutorialSelected = false;
+//     }
+//     $(time).attr("clicked", "false");
+// }
+
 
 function setSession(course, section) {
     var type = getType(section);
     var session = getSession(section);
-    if (type == "L") {
+    if (type === "L") {
         course.selectedLectureSession = session;
     } else {
         course.selectedTutorialSession = session;
