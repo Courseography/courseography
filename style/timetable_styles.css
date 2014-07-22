@@ -229,8 +229,7 @@ caption {
 
 .ui-accordion-content li.clickedLectureTime,
 .clickedLectureTime,
-li[clicked*=true][satisfied*=true],
-li[clicked*=false][satisfied*=false] {
+li[clicked*=true][satisfied*=true] {
   background-color: #437699;
 }
 
@@ -310,7 +309,7 @@ li[clicked*=false][satisfied*=false] {
 }
 
 td[satisfied=false],
-li[satisfied=false] {
+li[satisfied=false][clicked=true] {
   background-color: rgb(215, 117, 70);
 }
 
