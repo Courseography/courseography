@@ -229,7 +229,8 @@ caption {
 
 .ui-accordion-content li.clickedLectureTime,
 .clickedLectureTime,
-li[clicked*=true][satisfied*=true] {
+li[clicked*=true][satisfied*=true],
+li[clicked*=false][satisfied*=false] {
   background-color: #437699;
 }
 
