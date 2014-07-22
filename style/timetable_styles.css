@@ -233,17 +233,9 @@ li[clicked*=true][satisfied*=true] {
   background-color: #437699;
 }
 
-/*.clickedLectureTime:hover {
-  background-color: #336685;
-}*/
-
 .clickedTutorialTime {
   background-color: #737A99;
 }
-
-/*.clickedTutorialTime:hover {
-  background-color: #636A89;
-}*/
 
 .mouseOverGood {
   background-color: #437699;
@@ -336,6 +328,10 @@ li[satisfied=false]:hover {
 
 .mouseOverConflict {
   background-color: #C92343 !important;
+}
+
+.hover-time {
+  background-color: #5566F5 !important;
 }
 
 .ui-accordion-header:hover,
@@ -435,8 +431,4 @@ li[satisfied=false]:hover {
   padding: 0;
   margin: 0;
   font-size: 1.1em;
-}
-
-.hover-time {
-  background-color: #5566F5 !important;
 }
