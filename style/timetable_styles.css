@@ -115,7 +115,6 @@ caption {
   padding: 10px;
 }
 
-
 .timetable th {
   font-size: 1.5em;
   background-color: rgba(219, 148, 184, 0.5);
@@ -234,19 +233,17 @@ li[clicked*=true][satisfied*=true] {
   background-color: #437699;
 }
 
-.clickedLectureTime:hover {
+/*.clickedLectureTime:hover {
   background-color: #336685;
-  /*cursor: pointer;*/
-}
+}*/
 
 .clickedTutorialTime {
   background-color: #737A99;
 }
 
-.clickedTutorialTime:hover {
+/*.clickedTutorialTime:hover {
   background-color: #636A89;
-  /*cursor:pointer;*/
-}
+}*/
 
 .mouseOverGood {
   background-color: #437699;
@@ -438,4 +435,8 @@ li[satisfied=false]:hover {
   padding: 0;
   margin: 0;
   font-size: 1.1em;
+}
+
+.hover-time {
+  background-color: #5566F5 !important;
 }
