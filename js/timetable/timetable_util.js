@@ -12,7 +12,7 @@ function removeCourseObject(courseName) {
         }
     }
     if (index > -1) {
-        courseObjects.splice(i, 1);
+        courseObjects.splice(index, 1);
     }
 }
 
