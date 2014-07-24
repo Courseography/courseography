@@ -96,37 +96,13 @@ function setSectionOnClick(section, sectionTimes, course) {
         
         satisfyCourse(course);
 
-        // IAN-TODO Don't use loop. We know which section (it's called $(section)).
-        $("#" + course.name + "-li li[clicked*='true']").each(function() {
-            // IAN-TODO Remove this class (and elsewhere).
-            if (course.satisfied) {
-                $(this).addClass("clickedLectureTime");
-            }
-
-            if (!inArray($(this).attr("id"), selectedLectures)) {
-                    selectedLectures.push($(this).attr("id"));
-            }
-        });
-
-        $("#" + course.name + "-li li[clicked*='false']").each(function() {
-            // IAN-TODO Don't use class here. Remove line.
-            $(this).removeClass("clickedLectureTime");
-
-            // IAN-TODO This should be done in the same place where the clicked
-            // attribute is set to false.
-            var index = $.inArray($(this).attr("id"), selectedLectures);
-            if (index > -1) {
-                selectedLectures.splice(index, 1);
-            }
-
-        });
-
-        $("#" + course.name + "-li li[satisfied*='true']").removeClass("clickedSectionUnsatisfied");
+        if (!inArray($(section).attr("id"), selectedLectures)) {
+            selectedLectures.push($(section).attr("id"));
+        }
 
         $("td[clicked*=false]").attr("satisfied", true)
                                .attr("type", "")
-                               .html("")
-                               .removeClass("clickedLectureTime clickedTutorialTime");
+                               .html("");
 
         setHeader(course);
         setCookie("selected-lectures", JSON.stringify(selectedLectures));
@@ -135,32 +111,7 @@ function setSectionOnClick(section, sectionTimes, course) {
         alertUserOfConflict();
 
         if (course.satisfied) {
-            $(course.selectedLecture).removeClass("clickedSectionUnsatisfied");
-            $(course.selectedTutorial).removeClass("clickedSectionUnsatisfied");
             $("#" + course.name + "-li" + " li").attr("satisfied", true);
-        } else {
-            $(course.selectedLecture).addClass("clickedSectionUnsatisfied");
-            $(course.selectedTutorial).addClass("clickedSectionUnsatisfied");
-        }
-
-        if (!course.isTutorialSelected) {
-            $(course.selectedTutorial).removeClass("clickedSectionUnsatisfied");
-        } else if (!course.satisfied) {
-            $(course.selectedTutorial).addClass("clickedSectionUnsatisfied");
-        }
-
-        if (!course.isLectureSelected) {
-            $(course.selectedLecture).removeClass("clickedSectionUnsatisfied");
-        } else if (!course.satisfied) {
-            $(course.selectedLecture).addClass("clickedSectionUnsatisfied");
-        }
-
-        if (!course.satisfied) {
-            if (course.isTutorialSelected) {
-                $(course.selectedTutorial).addClass("clickedSectionUnsatisfied");
-            } else if (course.isLectureSelected) {
-                $(course.selectedLecture).addClass("clickedSectionUnsatisfied");
-            }
         }
     });
 }
@@ -330,9 +281,14 @@ function turnSectionOff(course, section, sectionTimes) {
     if (type === "L") {
         course.isLectureSelected = false;
         $(course.selectedLecture).attr("clicked", "false");
+        var index = $.inArray($(course.selectedLecture).attr("id"), selectedLectures);
     } else {  
         course.isTutorialSelected = false;
         $(course.selectedTutorial).attr("clicked", "false");
+        var index = $.inArray($(course.selectedTutorial).attr("id"), selectedLectures);
+    }
+    if (index > -1) {
+        selectedLectures.splice(index, 1);
     }
     
 }
