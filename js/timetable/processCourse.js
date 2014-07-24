@@ -1,26 +1,14 @@
-/*jslint todo: true */
-/*global $, console, jQuery*/
-/*jslint browser:true */
-/*jslint plusplus: true */
-"use strict";
-var result;
-var sections;
-var section;
-var sectionTimes;
-
-// IAN-TODO Make sure to combine Lecture and Tutorial functions everywhere.
-// Get rid of the vars while you are at it.
-function processSessionLectures(session, courseObject, timeSuffix) {
+function processSessionSections(session, course, timeSuffix) {
     var sectionList = document.createElement("ul");
     $.each(session.lectures, function (i, lecture) {
         if (lecture.section.charAt(1) !== "2" && lecture.time !== "Online Web Version") {
-            section = document.createElement("li");
-            sectionTimes = convertTimes(lecture.time);
+            var section = document.createElement("li");
+            var sectionTimes = convertTimes(lecture.time);
             $(section).data("instructor", lecture.instructor);
             $(section).data("cap", lecture.cap);
             $(section).data("enrol", lecture.enrol);
             section.appendChild(document.createTextNode(lecture.section));
-            if (!courseObject.manualTutorialEnrolment && session.tutorials.length > 0) {
+            if (!course.manualTutorialEnrolment && session.tutorials.length > 0) {
                 sectionTimes = sectionTimes.concat(convertTimes(session.tutorials[i][0]));
             }
             if (timeSuffix === "Y") {
@@ -37,16 +25,13 @@ function processSessionLectures(session, courseObject, timeSuffix) {
                     sectionTimes[i] = "#" + sectionTimes[i] + timeSuffix;
                 });
             }
-            setSectionMouseEvents(section, sectionTimes, courseObject);
+            setSectionMouseEvents(section, sectionTimes, course);
             sectionList.appendChild(section);
         }
     });
-    return sectionList;
-}
 
-function processSessionTutorials(session, courseObject, sectionList, timeSuffix) {
     $.each(session.tutorials, function (i, tutorial) {
-        if (courseObject.manualTutorialEnrolment) {
+        if (course.manualTutorialEnrolment) {
             section = document.createElement("li");
             sectionTimes = convertTimes(tutorial[1]);
             section.appendChild(document.createTextNode(tutorial[0]));
@@ -63,7 +48,7 @@ function processSessionTutorials(session, courseObject, sectionList, timeSuffix)
                     sectionTimes[i] = "#" + sectionTimes[i] + timeSuffix;
                 });
             }
-            setSectionMouseEvents(section, sectionTimes, courseObject);
+            setSectionMouseEvents(section, sectionTimes, course);
             $(section).data("cap", parseInt(tutorial[3]));
             $(section).data("enrol", parseInt(tutorial[4]));
             sectionList.appendChild(section);
@@ -72,41 +57,35 @@ function processSessionTutorials(session, courseObject, sectionList, timeSuffix)
     return sectionList;
 }
 
-function processSession(courseObject) {
+function processSession(course) {
     var sectionList;
-    sections = document.createElement("div");
+    var sections = document.createElement("div");
     sections.setAttribute("class", "sections");
-    if (typeof courseObject.Y !== "undefined") {
+    if (typeof course.Y !== "undefined") {
         sectionList = document.createElement("ul");
-        sectionList = processSessionLectures(courseObject.Y, courseObject, "Y");
-        sectionList = processSessionTutorials(courseObject.Y, courseObject, sectionList, "Y");
+        sectionList = processSessionSections(course.Y, course, "Y");
         $(sectionList).attr("class", "sectionList-Y");
-        setSectionIds(courseObject, sectionList, "Y");
+        setSectionIds(course, sectionList, "Y");
         sections.appendChild(sectionList);
     } else {
-        if (typeof courseObject.F !== "undefined") {
-            sectionList = document.createElement("ul");
-            sectionList = processSessionLectures(courseObject.F, courseObject, "F");
-            sectionList = processSessionTutorials(courseObject.F, courseObject, sectionList, "F");
-            // IAN-TODO Convert all fall, spring and year to F S and Y
+        if (typeof course.F !== "undefined") {
+            sectionList = processSessionSections(course.F, course, "F");
             $(sectionList).attr("class", "sectionList-F");
-            setSectionIds(courseObject, sectionList, "F");
+            setSectionIds(course, sectionList, "F");
             sections.appendChild(sectionList);
         }
-        if (typeof courseObject.S !== "undefined") {
-            sectionList = document.createElement("ul");
-            sectionList = processSessionLectures(courseObject.S, courseObject, "S");
-            sectionList = processSessionTutorials(courseObject.S, courseObject, sectionList, "S");
+        if (typeof course.S !== "undefined") {
+            sectionList = processSessionSections(course.S, course, "S");
             $(sectionList).attr("class", "sectionList-S");
-            setSectionIds(courseObject, sectionList, "S");
+            setSectionIds(course, sectionList, "S");
             sections.appendChild(sectionList);
         }
     }
     return sections;
 }
 
-function setSectionIds(courseObject, sectionList, sessionSuffix) {
+function setSectionIds(course, sectionList, sessionSuffix) {
     $(sectionList).children("li").each(function(index, lecture) {
-        $(lecture).attr("id", courseObject.name + "-" + $(this).html() + "-" + sessionSuffix);
+        $(lecture).attr("id", course.name + "-" + $(this).html() + "-" + sessionSuffix);
     });
 }

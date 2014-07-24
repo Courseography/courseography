@@ -21,19 +21,6 @@ function getCourseObject(courseName) {
 
 }
 
-function getCourse(courseCode) {
-    $.ajax({
-        url: "res/courses/" + courseCode + ".txt",
-        dataType: "json",
-        async: false,
-        success: function (data) {
-            result = data;
-        }
-    });
-    courseObjects.push(result);
-    return result;
-}
-
 /*
  * Adapted from http://codepen.io/LelandKwong/pen/edAmn. Will look into http://jscrollpane.kelvinluck.com/.
  */
