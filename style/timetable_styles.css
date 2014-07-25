@@ -89,11 +89,11 @@ caption {
   text-align: center;
 }
 
-#timetable-fall {
+#timetable-F {
   border-right: 2px solid black;
 }
 
-#timetable-spring {
+#timetable-S {
   border-left: 2px solid black;
 }
 
@@ -128,24 +128,23 @@ caption {
 }
 
 
-.timetable-cell-fall,
-.timetable-cell-spring {
+.timetable-cell-F,
+.timetable-cell-S {
   border-top: 1px dashed !important;
   border-bottom: none !important;
   border-right: 1px solid !important;
   border-left: 1px solid !important;
 }
 
-#timetable-spring .timetable-time {
+#timetable-S .timetable-time {
   text-align: left;
   padding-left: 10px !important;
 }
 
-#timetable-fall .timetable-time {
+#timetable-F .timetable-time {
   text-align: right;
   padding-right: 10px !important;
 }
-
 
 /* Course selection */
 #course-select-wrapper {
@@ -195,13 +194,13 @@ caption {
   cursor: pointer;
 }
 
-.sectionList-fall {
+.sectionList-F {
   width: 50%;
   float: left;
   border-right: 1px solid black;
 }
 
-.sectionList-spring {
+.sectionList-S {
   width: 50%;
   float: right;
   border-left: 1px solid black;
@@ -217,36 +216,47 @@ caption {
   background-color: #336685;
 }
 
-.sectionList-fall li:hover {
+.sectionList-F li:hover {
   background-color: #437699;
 
 }
 
-.sectionList-spring li:hover {
+.sectionList-S li:hover {
   background-color: #437699;
 
 }
 
 .ui-accordion-content li.clickedLectureTime,
 .clickedLectureTime,
-li[clicked*=true][satisfied*=true] {
+li[clicked*=true][satisfied*=true],
+td[in-conflict*=false][satisfied*=true][type*=L],
+h3[taken*=true][satisfied*=true] {
   background-color: #437699;
 }
 
-.clickedTutorialTime {
+.clickedLectureTime:hover {
+  background-color: #336685;
+  /*cursor: pointer;*/
+}
+
+.clickedTutorialTime,
+td[in-conflict*=false][satisfied*=true][type*=T] {
   background-color: #737A99;
 }
 
-.mouseOverGood {
+.clickedTutorialTime:hover {
+  background-color: #636A89;
+}
+td[hover*=good] {
   background-color: #437699;
 }
+td[hover*=off] {
 
-.mouseOverTaken {
-  background-color: #336685;
 }
+td[hover*=conflict] {
 
-.mouseOverRemove {
-  /*background-color: fuchsia;*/
+}
+td[hover*=remove] {
   -webkit-transition: all 0.5s ease-in-out;
   -moz-transition: all 0.5s ease-in-out;
   -ms-transition: all 0.5s ease-in-out;
@@ -266,21 +276,21 @@ li[clicked*=true][satisfied*=true] {
   background-color: #261B2A;
 }
 
-.section-fall {
+.section-F {
   text-align:center;
   background-color:#003366;
   color:white;
   display:block;
 }
 
-.section-spring {
+.section-S {
   text-align: center;
   background-color: #003366;
   color: white;
   display: block;
 }
 
-.section-year {
+.section-Y {
   text-align: center;
   background-color: #003366;
   color: white;
@@ -290,7 +300,6 @@ li[clicked*=true][satisfied*=true] {
   text-align: center;
   background-color: #336685;
 }
-
 
 .clicked-header {
   background-color: #336685;
@@ -309,7 +318,8 @@ li[clicked*=true][satisfied*=true] {
 }
 
 td[satisfied=false],
-li[satisfied=false] {
+li[satisfied=false],
+h3[satisfied*=false] {
   background-color: rgb(215, 117, 70);
 }
 
@@ -318,15 +328,17 @@ li[satisfied=false]:hover {
   background-color: rgb(195, 97, 50);
 }
 
-.clickedConflictTime {
+.clickedConflictTime,
+td[in-conflict*=true] {
   background-color: #C92343 !important;
 }
 
-.clickedConflictTime:hover {
+.clickedConflictTime:hover,
+td[in-conflict*=true]:hover {
   background-color: #B91333 !important;
 }
 
-.mouseOverConflict {
+td[hover*=conflict] {
   background-color: #C92343 !important;
 }
 
