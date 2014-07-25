@@ -115,7 +115,6 @@ caption {
   padding: 10px;
 }
 
-
 .timetable th {
   font-size: 1.5em;
   background-color: rgba(219, 148, 184, 0.5);
@@ -247,7 +246,6 @@ td[in-conflict*=false][satisfied*=true][type*=T] {
 
 .clickedTutorialTime:hover {
   background-color: #636A89;
-  /*cursor:pointer;*/
 }
 td[hover*=good] {
   background-color: #437699;
@@ -342,6 +340,10 @@ td[in-conflict*=true]:hover {
 
 td[hover*=conflict] {
   background-color: #C92343 !important;
+}
+
+.hover-time {
+  background-color: #5566F5 !important;
 }
 
 .ui-accordion-header:hover,

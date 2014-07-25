@@ -7,6 +7,7 @@ function processSessionSections(session, course, timeSuffix) {
             $(section).data("instructor", lecture.instructor);
             $(section).data("cap", lecture.cap);
             $(section).data("enrol", lecture.enrol);
+            $(section).data("wait", lecture.wait);
             section.appendChild(document.createTextNode(lecture.section));
             if (!course.manualTutorialEnrolment && session.tutorials.length > 0) {
                 sectionTimes = sectionTimes.concat(convertTimes(session.tutorials[i][0]));
@@ -51,6 +52,7 @@ function processSessionSections(session, course, timeSuffix) {
             setSectionMouseEvents(section, sectionTimes, course);
             $(section).data("cap", parseInt(tutorial[3]));
             $(section).data("enrol", parseInt(tutorial[4]));
+            $(section).data("wait", parseInt(tutorial[5]));
             sectionList.appendChild(section);
         }
     });

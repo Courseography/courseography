@@ -4,6 +4,30 @@ function setSectionMouseEvents(section, sectionTimes, course) {
     setSectionOnClick(section, sectionTimes, course);
     setSectionMouseOver(section, sectionTimes, course);
     setSectionMouseOut(section, sectionTimes);
+    setTdHover();
+}
+
+
+function setTdHover() {
+    $("td").mouseover(function() {
+        var courseHtml = $(this).html();
+        var course = getCourseObject(courseHtml);
+        if (typeof course !== "undefined") {
+            $.each(course.selectedLectureTimes.concat(course.selectedTutorialTimes), function(i, time) {
+                $(time).addClass("hover-time");
+            });
+        }
+    });
+
+    $("td").mouseout(function() {
+        var courseHtml = $(this).html();
+        var course = getCourseObject(courseHtml);
+        if (typeof course !== "undefined") {
+            $.each(course.selectedLectureTimes.concat(course.selectedTutorialTimes), function(i, time) {
+                $(time).removeClass("hover-time");
+            });
+        }
+    });
 }
 
 /** Mouse Out Direct Functions **/
@@ -67,10 +91,15 @@ function displaySectionInformation(course, section) {
     $("#section-stats-instructor").html(section.data("instructor"));
     var cap = section.data("cap");
     var enrol = section.data("enrol");
+    var wait = section.data("wait");
     if (cap !== null && enrol !== null) {
         var enrolString = (cap - enrol) + " out of " + cap + " spots remaining";
+        if (wait !== null && wait !== undefined && wait !== 0) {
+            enrolString += "; " + wait + " students on the waitlist";
+        }
         $("#section-stats-enrol").html(enrolString);
     }
+
 }
 
 /** Mouse Click Direct Functions **/
