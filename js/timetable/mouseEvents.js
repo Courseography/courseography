@@ -107,7 +107,7 @@ function displaySectionInformation(course, section) {
 function setSectionOnClick(section, sectionTimes, course) {
     $(section).click(function () {
         var isLecture = section.innerHTML.charAt(0) === "L";
-
+        updateSelectedLectures($(section));
         if ((course.isLectureSelected && isLecture) || (course.isTutorialSelected && !isLecture)) {
             selectAlreadySelectedSection(course, section, sectionTimes);
         } else {
@@ -115,8 +115,6 @@ function setSectionOnClick(section, sectionTimes, course) {
         }
         
         satisfyCourse(course);
-
-        updateSelectedLectures($(section));
         setCookie("selected-lectures", JSON.stringify(selectedLectures));
 
         alertUserOfConflict();
@@ -249,7 +247,6 @@ function selectAlreadySelectedSection(course, section, sectionTimes) {
             course.selectedTutorialTimes = undefined;
         }
     }
-    
 }
 
 function selectSection(course, section, sectionTimes) {
@@ -270,21 +267,21 @@ function selectSection(course, section, sectionTimes) {
 }
 
 function turnSectionOff(course, section, sectionTimes) {
+    var index;
     var type = getType(section);
     removeSectionTimes(course, section);
     if (type === "L") {
         course.isLectureSelected = false;
         $(course.selectedLecture).attr("clicked", "false");
-        var index = $.inArray($(course.selectedLecture).attr("id"), selectedLectures);
+        index = $.inArray($(course.selectedLecture).attr("id"), selectedLectures);
     } else {  
         course.isTutorialSelected = false;
         $(course.selectedTutorial).attr("clicked", "false");
-        var index = $.inArray($(course.selectedTutorial).attr("id"), selectedLectures);
+        index = $.inArray($(course.selectedTutorial).attr("id"), selectedLectures);
     }
     if (index > -1) {
         selectedLectures.splice(index, 1);
     }
-    
 }
 
 function removeSectionTimes(course, section) {
