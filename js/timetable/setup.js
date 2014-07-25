@@ -96,8 +96,8 @@ function appendClearAllButton() {
     var clearAllItem = document.getElementById("clear-all");
     $(clearAllItem).click(function() {
         if (confirm("Clear all selected courses?")) {
-            $.each(courseObjects, function() {
-                removeCourseFromList(courseObjects[0].name);
+            $.each(courseObjects.slice(0), function(i, course) {
+                removeCourseFromList(course.name);
             });
         }
     });
