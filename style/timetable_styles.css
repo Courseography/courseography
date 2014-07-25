@@ -147,7 +147,6 @@ caption {
   padding-right: 10px !important;
 }
 
-
 /* Course selection */
 #course-select-wrapper {
   overflow: hidden;
@@ -249,17 +248,16 @@ td[in-conflict*=false][satisfied*=true][type*=T] {
   background-color: #636A89;
   /*cursor:pointer;*/
 }
-
-.mouseOverGood {
+td[hover*=good] {
   background-color: #437699;
 }
+td[hover*=off] {
 
-.mouseOverTaken {
-  background-color: #336685;
 }
+td[hover*=conflict] {
 
-.mouseOverRemove {
-  /*background-color: fuchsia;*/
+}
+td[hover*=remove] {
   -webkit-transition: all 0.5s ease-in-out;
   -moz-transition: all 0.5s ease-in-out;
   -ms-transition: all 0.5s ease-in-out;
@@ -304,7 +302,6 @@ td[in-conflict*=false][satisfied*=true][type*=T] {
   background-color: #336685;
 }
 
-
 .clicked-header {
   background-color: #336685;
 }
@@ -341,7 +338,7 @@ td[in-conflict*=true]:hover {
   background-color: #B91333 !important;
 }
 
-.mouseOverConflict {
+td[hover*=conflict] {
   background-color: #C92343 !important;
 }
 

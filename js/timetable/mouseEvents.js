@@ -19,16 +19,8 @@ function performMouseOut(sectionTimes) {
         if ($(time).attr("clicked") !== "true") {
             $(time).html("");
         }
-        $(time).removeClass("mouseOverConflict mouseOverGood " +
-                            "mouseOverRemove");
+        $(time).attr("hover", "off");
     });
-}
-
-// IAN-TODO We still need to figure out a better way to do this,
-// to not loop through every td.
-function removeMouseOverClasses() {
-    $("td").removeClass("mouseOverConflict mouseOverGood " +
-                        "mouseOverRemove");
 }
 
 /** Mouse Over Direct Functions **/
@@ -54,15 +46,15 @@ function performMouseOver(sectionTimes, course) {
 
 function lightUpConflict(course, time) {
     if ($(time).html() === course.name) {
-        $(time).addClass("mouseOverRemove");
+        $(time).attr("hover", "remove");
     } else {
-        $(time).addClass("mouseOverConflict");
+        $(time).attr("hover", "conflict");
     }
 }
 
 function lightUpTakeable(course, time) {
-    $(time).addClass("mouseOverGood");
     $(time).html(course.name);
+    $(time).attr("hover", "good");
 }
 
 function displayCourseInformation(course) {
