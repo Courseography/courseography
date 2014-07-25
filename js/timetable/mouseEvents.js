@@ -18,9 +18,17 @@ function setTdHover() {
         var courseHtml = $(this).html();
         var course = getCourseObject(courseHtml);
         if (typeof course !== "undefined") {
-            $.each(course.selectedLectureTimes.concat(course.selectedTutorialTimes), function(i, time) {
+            var sectionTimes = [];
+            if (typeof course.selectedLectureTimes !== undefined) {
+                sectionTimes = sectionTimes.concat(course.selectedLectureTimes);
+            }
+            if (typeof course.selectedTutorialTimes !== undefined) {
+                sectionTimes = sectionTimes.concat(course.selectedTutorialTimes);
+            }
+            $.each(sectionTimes, function(i, time) {
                 $(time).addClass("hover-time");
             });
+            displayCourseInformation(course, $(course.selectedLecture));
         }
     });
 
@@ -28,7 +36,14 @@ function setTdHover() {
         var courseHtml = $(this).html();
         var course = getCourseObject(courseHtml);
         if (typeof course !== "undefined") {
-            $.each(course.selectedLectureTimes.concat(course.selectedTutorialTimes), function(i, time) {
+            var sectionTimes = [];
+            if (typeof course.selectedLectureTimes !== undefined) {
+                sectionTimes = sectionTimes.concat(course.selectedLectureTimes);
+            }
+            if (typeof course.selectedTutorialTimes !== undefined) {
+                sectionTimes = sectionTimes.concat(course.selectedTutorialTimes);
+            }
+            $.each(sectionTimes, function(i, time) {
                 $(time).removeClass("hover-time");
             });
         }
@@ -113,10 +128,7 @@ function displayCourseInformation(course, section) {
 
 function setHeaderHover(course) {
     $(course.header).mouseover(function() {
-        $("#course-info-code").html(course.name);
-        $("#course-info-title").html(course.title);
-        $("#section-stats-section").html("");
-        $("#section-stats-instructor").html("");
+        displayCourseTitle(course);
     });
 }
 
