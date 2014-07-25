@@ -78,7 +78,6 @@ function displaySectionInformation(course, section) {
 function setSectionOnClick(section, sectionTimes, course) {
     $(section).click(function () {
         var isLecture = section.innerHTML.charAt(0) === "L";
-        var taken = false;
 
         if ((course.isLectureSelected && isLecture) || (course.isTutorialSelected && !isLecture)) {
             selectAlreadySelectedSection(course, section, sectionTimes);
@@ -197,9 +196,6 @@ function removeClickedConflict(course, time, section) {
            .data("typeArray", typeArray)
            .attr("title", conflictArray);
 }
-
-
-/** Unified course functions (!) **/
 
 function selectAlreadySelectedSection(course, section, sectionTimes) {
     turnSectionOff(course, section, sectionTimes);
