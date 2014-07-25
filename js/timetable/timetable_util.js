@@ -164,12 +164,9 @@ function convertTimes(times) {
 
 function addCourseToList(course) {
     var courseObject = getCourse(course);
-    courseObject.selectedSession = null;
-    courseObject.selected = false;
     courseObject.isLectureSelected = false;
     courseObject.isTutorialSelected = false;
     courseObject.status = "inactive";
-    // courseObject.satisfied = !courseObject.manualTutorialEnrolment;
     setupEntry(courseObject);
 
     selectedCourses.push(course);

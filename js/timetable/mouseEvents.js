@@ -88,55 +88,32 @@ function setSectionOnClick(section, sectionTimes, course) {
         
         satisfyCourse(course);
 
-        if (!inArray($(section).attr("id"), selectedLectures)) {
-            selectedLectures.push($(section).attr("id"));
-        }
-
-        $("td[clicked*=false]").attr("satisfied", true)
-                               .attr("type", "")
-                               .html("");
-
-        setHeader(course);
+        updateSelectedLectures($(section));
         setCookie("selected-lectures", JSON.stringify(selectedLectures));
-        removeMouseOverClasses();
 
         alertUserOfConflict();
-
-        if (course.satisfied) {
-            $("#" + course.name + "-li" + " li").attr("satisfied", true);
-        }
+        setHeader(course);
     });
 }
 
 /** Utilities **/
+
+function setHeader(course) {
+    $(course.header).attr("taken", $("#" + course.name + "-li li[clicked*='true']").length > 0)
+                    .attr("satisfied", course.satisfied);
+}
+
+function updateSelectedLectures(section) {
+    if (!inArray(section.attr("id"), selectedLectures)) {
+        selectedLectures.push(section.attr("id"));
+    }
+}
 
 // IAN-RESPONSE It seemed kind of silly to make this function, given that the index is sometimes used.
 // IAN-RESPONSE-RESPONSE The only time we use index is when removing an item.
 // We should create a helper function for that, too.
 function inArray(item, array) {
     return $.inArray(item, array) > -1;
-}
-
-// IAN-TODO I guess you want to switch to attributes
-// There should really be just one status attribute.
-// This seems just like how we handle the nodes in the graph.
-function setHeader(course) {
-    var taken;
-
-    if ($("#" + course.name + "-li li[clicked*='true']").length) {
-        taken = true;
-    }
-
-    if (taken && course.satisfied) {
-        $(course.header).removeClass("clickedSectionUnsatisfied")
-                        .addClass("clicked-header");
-        course.taken = true;
-    } else if (!course.satisfied) {
-        $(course.header).addClass("clickedSectionUnsatisfied");
-    } else {
-        $(course.header).removeClass("clickedSectionUnsatisfied clicked-header");
-        course.taken = false;
-    }
 }
 
 function getInConflict() {
@@ -298,7 +275,9 @@ function removeSectionTimes(course, section) {
             removeClickedConflict(course, time, section);
         } else {
             $(time).html("")
-                   .attr("clicked", "false");
+                   .attr("clicked", "false")
+                   .attr("satisfied", true)
+                   .attr("type", "");               
         }
     });
 }
@@ -348,5 +327,12 @@ function setSatisfaction(course) {
             $(time).attr("satisfied", course.satisfied);
         });
         $(course.selectedTutorial).attr("satisfied", course.satisfied);
+    }
+    setSectionsSatisfied(course);
+}
+
+function setSectionsSatisfied(course) {
+    if (course.satisfied) {
+        $("#" + course.name + "-li" + " li").attr("satisfied", true);
     }
 }

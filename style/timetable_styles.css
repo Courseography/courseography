@@ -230,7 +230,8 @@ caption {
 .ui-accordion-content li.clickedLectureTime,
 .clickedLectureTime,
 li[clicked*=true][satisfied*=true],
-td[in-conflict*=false][satisfied*=true][type*=L] {
+td[in-conflict*=false][satisfied*=true][type*=L],
+h3[taken*=true][satisfied*=true] {
   background-color: #437699;
 }
 
@@ -319,7 +320,8 @@ td[hover*=remove] {
 }
 
 td[satisfied=false],
-li[satisfied=false] {
+li[satisfied=false],
+h3[satisfied*=false] {
   background-color: rgb(215, 117, 70);
 }
 
