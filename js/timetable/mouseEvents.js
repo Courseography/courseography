@@ -9,6 +9,7 @@ function setSectionMouseEvents(section, sectionTimes, course) {
     setSectionMouseOver(section, sectionTimes, course);
     setSectionMouseOut(section, sectionTimes);
     setTdHover();
+    setHeaderHover(course);
 }
 
 
@@ -108,7 +109,15 @@ function displayCourseInformation(course, section) {
         }
         $("#section-stats-enrol").html(enrolString);
     }
+}
 
+function setHeaderHover(course) {
+    $(course.header).mouseover(function() {
+        $("#course-info-code").html(course.name);
+        $("#course-info-title").html(course.title);
+        $("#section-stats-section").html("");
+        $("#section-stats-instructor").html("");
+    });
 }
 
 /** Mouse Click Direct Functions **/
