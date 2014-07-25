@@ -4,9 +4,15 @@ var selectedLectures = [];
 var courseObjects = [];
 
 function removeCourseObject(courseName) {
-    var index = $.inArray(courseName, courseObjects);
+    var index = -1;
+    for (var i = 0; i < courseObjects.length; i++) {
+        if (courseName === courseObjects[i].name) {
+            index = i;
+            break;
+        }
+    }
     if (index > -1) {
-        courseObjects.splice(i, 1);
+        courseObjects.splice(index, 1);
     }
 }
 
@@ -164,12 +170,9 @@ function convertTimes(times) {
 
 function addCourseToList(course) {
     var courseObject = getCourse(course);
-    courseObject.selectedSession = null;
-    courseObject.selected = false;
     courseObject.isLectureSelected = false;
     courseObject.isTutorialSelected = false;
     courseObject.status = "inactive";
-    // courseObject.satisfied = !courseObject.manualTutorialEnrolment;
     setupEntry(courseObject);
 
     selectedCourses.push(course);
