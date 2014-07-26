@@ -13,14 +13,10 @@ function processSessionSections(session, course, timeSuffix) {
                 sectionTimes = sectionTimes.concat(convertTimes(session.tutorials[i][0]));
             }
             if (timeSuffix === "Y") {
-                var springTimes = [];
-                // IAN-TODO Make array be one array.
                 $.each(sectionTimes, function(i) {
-                    springTimes.push("#" + sectionTimes[i] + "S");
+                    sectionTimes.push("#" + sectionTimes[i] + "S");
                     sectionTimes[i] = "#" + sectionTimes[i] + "F";
                 });
-                sectionTimes = sectionTimes.concat(springTimes);
-
             } else {
                 $.each(sectionTimes, function(i) {
                     sectionTimes[i] = "#" + sectionTimes[i] + timeSuffix;
@@ -37,12 +33,10 @@ function processSessionSections(session, course, timeSuffix) {
             sectionTimes = convertTimes(tutorial[1]);
             section.appendChild(document.createTextNode(tutorial[0]));
             if (timeSuffix === "Y") {
-                var springTimes = [];
                 $.each(sectionTimes, function(i) {
-                    springTimes.push("#" + sectionTimes[i] + "S");
+                    secionTimes.push("#" + sectionTimes[i] + "S");
                     sectionTimes[i] = "#" + sectionTimes[i] + "F";
                 });
-                sectionTimes = sectionTimes.concat(springTimes);
 
             } else {
                 $.each(sectionTimes, function(i) {
