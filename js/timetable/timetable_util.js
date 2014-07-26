@@ -141,8 +141,6 @@ function restoreFromCookies() {
             $("#" + course).click();
         });
     }
-
-    console.log("Courses that have been set in cookies are: " + selectedCourses);
 }
 
 function convertTimes(times) {
@@ -172,6 +170,18 @@ function addCourseToList(course) {
     var courseObject = getCourse(course);
     courseObject.isLectureSelected = false;
     courseObject.isTutorialSelected = false;
+    courseObject.isPracticalSelected = false;
+    courseObject.tutorialEnrolment = false;
+    courseObject.practicalEnrolement = false;
+    if (courseObject.manualTutorialEnrolment) {
+        $.each(courseObject.S.tutorials, function(i, tutorial) {
+            if (tutorial[0].charAt(0) === "P") {
+                courseObject.practicalEnrolment = true;
+            } else if (tutorial[0].charAt(0) === "T") {
+                courseObject.tutorialEnrolment = true;
+            }
+        });
+    }
     courseObject.status = "inactive";
     setupEntry(courseObject);
 
@@ -182,7 +192,6 @@ function addCourseToList(course) {
 
 function removeCourseFromList(course) {
     var courseElement = document.getElementById(course + "-li");
-    console.log("Removing course " + course + " from the list on the left.");
     $("#" + course + "-li" + " li[clicked*='true']").each(function() {
         $(this).click();
     });

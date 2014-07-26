@@ -1,8 +1,3 @@
-/*jslint todo: true */
-/*global $, console, jQuery*/
-/*jslint browser:true */
-/*jslint plusplus: true */
-"use strict";
 var result;
 var i;
 var contentString = "";

@@ -65,7 +65,6 @@ function performMouseOver(sectionTimes, course) {
             lightUpTakeable(course, time);
         }
     });
-
 }
 
 function lightUpConflict(course, time) {
@@ -99,7 +98,6 @@ function displaySectionInformation(course, section) {
         }
         $("#section-stats-enrol").html(enrolString);
     }
-
 }
 
 /** Mouse Click Direct Functions **/
@@ -107,8 +105,12 @@ function displaySectionInformation(course, section) {
 function setSectionOnClick(section, sectionTimes, course) {
     $(section).click(function () {
         var isLecture = section.innerHTML.charAt(0) === "L";
+        var isTutorial = section.innerHTML.charAt(0) === "T";
+        var isPractical = section.innerHTML.charAt(0) === "P";
         updateSelectedLectures($(section));
-        if ((course.isLectureSelected && isLecture) || (course.isTutorialSelected && !isLecture)) {
+        if ((course.isLectureSelected && isLecture) 
+            || (course.isTutorialSelected && isTutorial)
+            || (course.isPracticalSelected && isPractical)) {
             selectAlreadySelectedSection(course, section, sectionTimes);
         } else {
             selectSection(course, section, sectionTimes);
@@ -178,11 +180,7 @@ function getIsSpringSection(section) {
 
 // Need to adapt code for P.
 function getType(section) {
-    if (($(section).html().charAt(0) == 'L')) {
-        return "L";
-    } else {
-        return "T";
-    }
+    return $(section).html().charAt(0);
 }
 
 function setClickedConflict(course, time, section) {
@@ -237,7 +235,7 @@ function selectAlreadySelectedSection(course, section, sectionTimes) {
             course.selectedLectureSession = undefined;
             course.selectedLectureTimes = undefined;
         }
-    } else {
+    } else if (type === "T") {
         if (course.selectedTutorial.innerHTML !== section.innerHTML
             || course.selectedTutorialSession !== selectedSession) {
             selectSection(course, section, sectionTimes);
@@ -245,6 +243,15 @@ function selectAlreadySelectedSection(course, section, sectionTimes) {
             course.selectedTutorial = undefined;
             course.selectedTutorialSession = undefined;
             course.selectedTutorialTimes = undefined;
+        }
+    } else if (type === "P") {
+        if (course.selectedPractical.innerHTML !== section.innerHTML
+            || course.selectedPracticalSession !== selectedSession) {
+            selectSection(course, section, sectionTimes);
+        } else {
+            course.selectedPractical = undefined;
+            course.selectedPracticalSession = undefined;
+            course.selectedPracticalTimes = undefined;
         }
     }
 }
@@ -255,10 +262,14 @@ function selectSection(course, section, sectionTimes) {
         course.selectedLecture = section;
         course.isLectureSelected = true;
         course.selectedLectureTimes = sectionTimes;
-    } else {
+    } else if (type === "T") {
         course.selectedTutorial = section;
         course.isTutorialSelected = true;
         course.selectedTutorialTimes = sectionTimes;
+    } else if (type === "P") {
+        course.selectedPractical = section;
+        course.isPracticalSelected = true;
+        course.selectedPracticalTimes = sectionTimes;
     }
     $(section).attr("clicked", "true");
     setSession(course, section);
@@ -274,10 +285,14 @@ function turnSectionOff(course, section, sectionTimes) {
         course.isLectureSelected = false;
         $(course.selectedLecture).attr("clicked", "false");
         index = $.inArray($(course.selectedLecture).attr("id"), selectedLectures);
-    } else {  
+    } else if (type === "T") {  
         course.isTutorialSelected = false;
         $(course.selectedTutorial).attr("clicked", "false");
         index = $.inArray($(course.selectedTutorial).attr("id"), selectedLectures);
+    } else if (type === "P") {  
+        course.isPracticalSelected = false;
+        $(course.selectedPractical).attr("clicked", "false");
+        index = $.inArray($(course.selectedPractical).attr("id"), selectedLectures);
     }
     if (index > -1) {
         selectedLectures.splice(index, 1);
@@ -289,8 +304,10 @@ function removeSectionTimes(course, section) {
     var type = getType(section);
     if (type === "L") {
         sectionTimes = course.selectedLectureTimes;
-    } else {
+    } else if (type === "T") {
         sectionTimes = course.selectedTutorialTimes;
+    } else if (type === "P") {
+        sectionTimes = course.selectedPracticalTimes;
     }
     $.each(sectionTimes, function (i, time) {
         if ($(time).attr("in-conflict") === "true") {
@@ -309,8 +326,10 @@ function setSession(course, section) {
     var session = getSession(section);
     if (type === "L") {
         course.selectedLectureSession = session;
-    } else {
+    } else if (type === "T") {
         course.selectedTutorialSession = session;
+    } else if (type === "P") {
+        course.selectedPracticalSession = session;
     }
 }
 
@@ -332,7 +351,12 @@ function setClickedTime(course, time, section) {
 }
 
 function satisfyCourse(course) {
-    course.satisfied = (course.selectedTutorialSession === course.selectedLectureSession) || !course.manualTutorialEnrolment;
+    course.satisfied = ((course.selectedTutorialSession === course.selectedLectureSession) && !course.practicalEnrolment) 
+    || ((course.selectedPracticalSession === course.selectedLectureSession) && !course.tutorialEnrolment) 
+    || !course.manualTutorialEnrolment
+    || ((course.selectedTutorialSession === course.selectedLectureSession)
+        && (course.selectedTutorialSession === course.selectedPracticalSession)
+        && (course.selectedPracticalSession === course.selectedLectureSession));
     setSatisfaction(course);
 }
 
@@ -349,6 +373,13 @@ function setSatisfaction(course) {
             $(time).attr("satisfied", course.satisfied);
         });
         $(course.selectedTutorial).attr("satisfied", course.satisfied);
+    }
+
+    if (typeof course.selectedPracticalTimes !== "undefined") {
+        $.each(course.selectedPracticalTimes, function (i, time) {
+            $(time).attr("satisfied", course.satisfied);
+        });
+        $(course.selectedPractical).attr("satisfied", course.satisfied);
     }
     setSectionsSatisfied(course);
 }
