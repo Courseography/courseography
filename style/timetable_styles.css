@@ -318,13 +318,13 @@ td[hover*=remove] {
 }
 
 td[satisfied=false],
-li[satisfied=false],
+li[satisfied=false][clicked=true],
 h3[satisfied*=false] {
   background-color: rgb(215, 117, 70);
 }
 
 td[satisfied=false]:hover,
-li[satisfied=false]:hover {
+li[satisfied=false][clicked=true]:hover {
   background-color: rgb(195, 97, 50);
 }
 
