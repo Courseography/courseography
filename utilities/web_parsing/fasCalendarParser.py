@@ -34,7 +34,7 @@ def parseFASCalendar():
     deptSoup = BeautifulSoup(urlopen(fasCalendar + dept.a['href']).read())
     heading = deptSoup.find_all('h2')[-1]
     courses = heading.find_all_next(
-                lambda elem: 
+                lambda elem:
                   elem.get('name') != None and
                   len(elem.get('name').strip()) == 8)
     for elem in courses:
@@ -42,7 +42,7 @@ def parseFASCalendar():
         course_string = elem.next_sibling.string.strip()
       else:
         continue
-        
+
       if course_string == '':
         continue
       result = titleParser.match(course_string + '[')
@@ -54,7 +54,10 @@ def parseFASCalendar():
       name = result.group(1)
       title = result.group(2)
 
-      curr_elem = elem.next_sibling.next_sibling
+      if elem.parent.name == 'strong':
+        curr_elem = elem.parent.parent.next_sibling
+      else:
+        curr_elem = elem.next_sibling.next_sibling
       s = ''
 
       while curr_elem and (curr_elem.name != 'a' or curr_elem.get('name') is None):
@@ -102,7 +105,7 @@ def parseFASCalendar():
 
       data.update(new_data)
 
-      with open('../../res/courses/' + name + '.txt', 'w+', encoding='utf-8') as coursefile:
+      with open(course_path, 'w+', encoding='utf-8') as coursefile:
         json.dump(data, coursefile)
 
 
@@ -116,3 +119,6 @@ def read_field(s, field):
     return s[len(field):].strip()
   else:
     return None
+
+if __name__ == '__main__':
+  parseFASCalendar()
