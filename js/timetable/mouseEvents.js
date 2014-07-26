@@ -355,8 +355,7 @@ function satisfyCourse(course) {
     || ((course.selectedPracticalSession === course.selectedLectureSession) && !course.tutorialEnrolment) 
     || !course.manualTutorialEnrolment
     || ((course.selectedTutorialSession === course.selectedLectureSession)
-        && (course.selectedTutorialSession === course.selectedPracticalSession)
-        && (course.selectedPracticalSession === course.selectedLectureSession));
+        && (course.selectedTutorialSession === course.selectedPracticalSession));
     setSatisfaction(course);
 }
 
