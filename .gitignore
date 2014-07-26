@@ -2,7 +2,7 @@ res/courses/
 res/fastimetable2014.csv
 timetable.html
 timetable2014.csv
-web_parsing/__pycache__/
+__pycache__/
 *.xlsx
 res/courses/*
 timetable_creator/js/courses.txt
