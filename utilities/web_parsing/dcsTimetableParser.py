@@ -59,7 +59,10 @@ def sanitize(s):
 
 
 def parse_dcs_timetable(f):
-    parser = TimetableParser(lambda: generateCSV(f), data_map, 'timetable2014.csv')
+    parser = TimetableParser(lambda: generateCSV(f),
+                             data_map,
+                             'timetable2014.csv',
+                             lambda x: x[data_map['section']] == 'not offered')
     return parser.run()
 
 ##################################################
@@ -67,12 +70,15 @@ def parse_dcs_timetable(f):
 ##################################################
 
 
+# Note: only returns courses that should appear in timetable
 def getCSCcourses():
     courses = []
     for filename in glob.glob(coursePath + 'CSC*.txt'):
         print(filename)
         with open(filename, 'r', encoding='utf-8') as course_file:
-            courses.append(json.load(course_file))
+            course_json = json.load(course_file)
+            if 'F' in course_json or 'S' in course_json or 'Y' in course_json:
+                courses.append(course_json)
     return courses
 
 
