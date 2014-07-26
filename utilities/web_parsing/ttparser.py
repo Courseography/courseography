@@ -11,7 +11,7 @@ class TimetableParser:
     RES_PATH = '../../res/'
     COURSES_PATH = RES_PATH + 'courses/'
 
-    def __init__(self, gen_data, data_map, data_file):
+    def __init__(self, gen_data, data_map, data_file, ignore_function=None):
         self.gen_data = gen_data  # Function which generates a csv file
         self.data_file = data_file  # File name for csv
         self.data_map = data_map
@@ -26,6 +26,12 @@ class TimetableParser:
 
         self.courses = []
 
+        # self.ignore is called on each line when parsing;
+        # if it returns True, line is skipped
+        if ignore_function is not None:
+            self.ignore = ignore_function
+        else:
+            self.ignore = lambda x: False
 
     def run(self):
         self.gen_data()
@@ -51,6 +57,9 @@ class TimetableParser:
                         print('Skipping short line "{}"'.format(data))
                     except Exception:
                         print('Skipping short line, unicode :(')
+                    continue
+
+                if self.ignore(data):
                     continue
 
                 code = data[self.code].strip()
@@ -104,13 +113,13 @@ class TimetableParser:
         try:
             with open(path, 'r', encoding='utf-8') as course_file:
                 old = json.load(course_file)
-                for field in ['title', 
-                              'description', 
-                              'exclusions', 
-                              'distribution', 
-                              'breadth', 
-                              'prep', 
-                              'prereqs', 
+                for field in ['title',
+                              'description',
+                              'exclusions',
+                              'distribution',
+                              'breadth',
+                              'prep',
+                              'prereqs',
                               'prereqString']:
                     course[field] = old.get(field)
         except FileNotFoundError:
@@ -203,8 +212,8 @@ class TimetableParser:
         """ Create a tutorial from data. """
 
         if data[self.section].startswith(('T', 'P')):
-            return [data[self.section], 
-                    parse_time_slots(data[self.time])[0], 
+            return [data[self.section],
+                    parse_time_slots(data[self.time])[0],
                     data[self.time]]
         else:
             return [parse_time_slots(data[self.time])[0],
