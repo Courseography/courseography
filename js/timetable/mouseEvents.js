@@ -178,7 +178,6 @@ function getIsSpringSection(section) {
     return $(section.parentNode).hasClass("sectionList-S");
 }
 
-// Need to adapt code for P.
 function getType(section) {
     return $(section).html().charAt(0);
 }
