@@ -138,7 +138,7 @@ document.onkeydown = function(e) {
   if (e.which == 9) {
     return false;
   }
-}
+};
 
 
 // Initializes interface to cookie settings; blank interface if no cookies exist

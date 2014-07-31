@@ -18,9 +18,9 @@ var areas = {
   'num': ['CSC336', 'CSC436', 'CSC446', 'CSC456'],
   'ai': ['CSC321', 'CSC384', 'CSC401', 'CSC411', 'CSC412', 'CSC485', 'CSC486'],
   'dbweb': ['CSC309', 'CSC343', 'CSC443']
-}
+};
 
-var areaNames = ['theory', 'core', 'se', 'systems', 'hci', 'graphics', 'num', 'ai', 'dbweb']
+var areaNames = ['theory', 'core', 'se', 'systems', 'hci', 'graphics', 'num', 'ai', 'dbweb'];
 
 
 // Required for specialist

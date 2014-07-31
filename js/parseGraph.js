@@ -36,7 +36,7 @@ function buildGraph() {
 		var id = $(this).attr('id');
 		var type = $(this).children('text').text().toUpperCase();
 		makeHybrid([], type, id);
-	})
+	});
 
 	$('path').each(function(i) {
 		var coords = $(this).attr('d').split(' ');

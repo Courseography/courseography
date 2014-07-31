@@ -1,5 +1,5 @@
 /**
- * Javscript functions for all the tabs except 'Check My POSt!'
+ * Javascript functions for all the tabs except 'Check My POSt!'
  */
 
 //////////////////////////////////////////
@@ -241,8 +241,8 @@ function activateFeedbackForm() {
 			$.post('email.php', post_data, function(data) {
 				$("#result").hide()
 					.html('<div class="success">' + data + '</div>').slideDown();
-				$('#contact_form input').val('');
-				$('#contact_form textarea').val('');
+				$('#contact_form').find('input').val('');
+				$('#contact_form').find('textarea').val('');
 
 			}).fail(function(err) {
 				$("#result").hide()
@@ -278,8 +278,7 @@ function createTabs() {
 			} else {
 				updateActiveFocus('');
 			}
-		},
-
+		}
 	});
 	$('.postTypeTabs, .postTabs').tabs({
 		active: 0,

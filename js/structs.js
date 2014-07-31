@@ -42,11 +42,11 @@ Edge.prototype.updateStatus = function() {
 		this.status = 'active';
 	}
 	this.updateSVG();
-}
+};
 
 Edge.prototype.updateSVG = function() {
 	$('#' + this.name).attr('data-active', this.status);
-}
+};
 
 function Node(parents, type, name) {
 	this.name = name; // Used to idenfity the GUI node
@@ -64,7 +64,7 @@ function Node(parents, type, name) {
 // Returns true if the node has been selected
 Node.prototype.isSelected = function() {
 	return this.status === 'active' || this.status === 'overridden';
-}
+};
 
 
 // Used when entering hover
@@ -82,7 +82,7 @@ Node.prototype.focus = function() {
 			node.focus();
 		});
 	}
-}
+};
 
 // Used when leaving hover
 Node.prototype.unfocus = function() {
@@ -100,7 +100,7 @@ Node.prototype.unfocus = function() {
 	$.each(this.outEdges, function(i, edge) {
 		edge.updateStatus();
 	});
-}
+};
 
 // Check whether node's prerequisites are satisfied, update status and GUI
 Node.prototype.updateStatus = function() {
@@ -130,7 +130,7 @@ Node.prototype.updateStatus = function() {
   }
 
 	this.updateSVG();
-}
+};
 
 // Activate/deactivate a node; called when a node is clicked
 Node.prototype.turn = function() {
@@ -154,7 +154,7 @@ Node.prototype.turn = function() {
 
 	// Update interface
 	this.updateSVG();
-}
+};
 
 // Returns true if the node's prerequisites are satisfied
 Node.prototype.arePrereqsSatisfied = function() {
@@ -172,7 +172,7 @@ Node.prototype.arePrereqsSatisfied = function() {
 		console.log('Error: invalid node logicalType ' + this.type + ' for node ' + this.name);
 	}
 	return sat;
-}
+};
 
 // Checks FCE-count prerequisites
 Node.prototype.checkFCEBasedPrerequisites = function() {
@@ -185,9 +185,9 @@ Node.prototype.checkFCEBasedPrerequisites = function() {
 	} else {
 		return true;
 	}
-}
+};
 
 // Update the visual style of the corresponding graphical node
 Node.prototype.updateSVG = function() {
 	$('#' + this.name).attr('data-active', this.status);
-}
+};
