@@ -73,9 +73,9 @@ function getCourseObject(courseName) {
 })($);
 
 
-function setAccordion() {
-    $("#course-select li").accordion({heightStyle: "content", collapsible: true, active: false});
-}
+//function setAccordion() {
+//    $("#course-select li").accordion({heightStyle: "content", collapsible: true, active: false});
+//}
 
 
 // Search function for timetable
@@ -89,7 +89,6 @@ function resetSearchList() {
     var courseList;
     var courseEntry;
     var counter = 0;
-    var index;
     var filter = $("#course-filter").val().toLowerCase();
     $('#search-list').empty();
     courseList = document.createElement("ul");
@@ -109,7 +108,7 @@ function resetSearchList() {
                 $(courseEntry).attr("id", course + "-search");
                 courseEntry.innerHTML = course;
                 $(courseEntry).click(function() {
-                    $(this).toggleClass("starred-course")
+                    $(this).toggleClass("starred-course");
                     if ($.inArray(course, selectedCourses) > -1) {
                         removeCourseFromList(course);
                     } else {

@@ -9,7 +9,9 @@ function setSectionMouseEvents(section, sectionTimes, course) {
 
 
 function setTdHover() {
-    $("td").mouseover(function() {
+    var tdSelector = $("td");
+
+    tdSelector.mouseover(function() {
         var courseHtml = $(this).html();
         var course = getCourseObject(courseHtml);
         if (typeof course !== "undefined") {
@@ -19,7 +21,7 @@ function setTdHover() {
         }
     });
 
-    $("td").mouseout(function() {
+    tdSelector.mouseout(function() {
         var courseHtml = $(this).html();
         var course = getCourseObject(courseHtml);
         if (typeof course !== "undefined") {
@@ -86,7 +88,7 @@ function displayCourseInformation(course) {
     $("#course-info-title").html(course.title);
 }
 
-function displaySectionInformation(course, section) {
+function displaySectionInformation(section) {
     $("#section-stats-section").html(section.html());
     $("#section-stats-instructor").html(section.data("instructor"));
     var cap = section.data("cap");
@@ -149,7 +151,8 @@ function getInConflict() {
 }
 
 function alertUserOfConflict() {
-    getInConflict() ? $("#dialog").fadeIn(750) : $("#dialog").fadeOut(750);
+    var dialogSelector = $("#dialog");
+    getInConflict() ? dialogSelector.fadeIn(750) : dialogSelector.fadeOut(750);
 }
 
 function getIsClicked(time) {
@@ -199,7 +202,7 @@ function setClickedConflict(course, time, section) {
            .attr("in-conflict", "true");
 }
 
-function removeClickedConflict(course, time, section) {
+function removeClickedConflict(course, time) {
     var conflictArray = $(time).data("conflictArray");
     var typeArray = $(time).data("typeArray");
 
@@ -269,17 +272,18 @@ function selectSection(course, section, sectionTimes) {
     selectUnselectedTimes(course, sectionTimes, section);
 }
 
-function turnSectionOff(course, section, sectionTimes) {
+function turnSectionOff(course, section) {
     var type = getType(section);
+    var index = -1;
     removeSectionTimes(course, section);
     if (type === "L") {
         course.isLectureSelected = false;
         $(course.selectedLecture).attr("clicked", "false");
-        var index = $.inArray($(course.selectedLecture).attr("id"), selectedLectures);
+        index = $.inArray($(course.selectedLecture).attr("id"), selectedLectures);
     } else {  
         course.isTutorialSelected = false;
         $(course.selectedTutorial).attr("clicked", "false");
-        var index = $.inArray($(course.selectedTutorial).attr("id"), selectedLectures);
+        index = $.inArray($(course.selectedTutorial).attr("id"), selectedLectures);
     }
     if (index > -1) {
         selectedLectures.splice(index, 1);

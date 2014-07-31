@@ -29,12 +29,12 @@ function processSessionSections(session, course, timeSuffix) {
 
     $.each(session.tutorials, function (i, tutorial) {
         if (course.manualTutorialEnrolment) {
-            section = document.createElement("li");
-            sectionTimes = convertTimes(tutorial[1]);
+            var section = document.createElement("li");
+            var sectionTimes = convertTimes(tutorial[1]);
             section.appendChild(document.createTextNode(tutorial[0]));
             if (timeSuffix === "Y") {
                 $.each(sectionTimes, function(i) {
-                    secionTimes.push("#" + sectionTimes[i] + "S");
+                    sectionTimes.push("#" + sectionTimes[i] + "S");
                     sectionTimes[i] = "#" + sectionTimes[i] + "F";
                 });
 
@@ -58,7 +58,6 @@ function processSession(course) {
     var sections = document.createElement("div");
     sections.setAttribute("class", "sections");
     if (typeof course.Y !== "undefined") {
-        sectionList = document.createElement("ul");
         sectionList = processSessionSections(course.Y, course, "Y");
         $(sectionList).attr("class", "sectionList-Y");
         setSectionIds(course, sectionList, "Y");

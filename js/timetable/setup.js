@@ -5,13 +5,7 @@
 "use strict";
 var result;
 var i;
-var contentString = "";
 var courseSelect;
-var xmlhttp;
-var csvSplitNewline;
-var splitLine;
-var isACourse;
-var notYetLogged;
 var header;
 var sections;
 var entry;
@@ -19,17 +13,19 @@ var courses;
 var searchList;
 
 $(document).ready(function () {
+    var tdSelector = $("td");
+
     $("#dialog").fadeOut()
                 .css("visibility", "visible");
 
-    $("td").attr("in-conflict", "false")
+    tdSelector.attr("in-conflict", "false")
            .attr("satisfied", "true");
 
     // .data attribute cannot be set for multiple elements through chaining.
-    $("td").each(function() {
+    tdSelector.each(function() {
         $(this).data("conflictArray", []);
         $(this).data("typeArray", []);
-    })
+    });
 
 
     courseSelect = document.getElementById("course-select");
@@ -42,15 +38,14 @@ $(document).ready(function () {
 });
 
 function getVeryLargeCourseArray() {
-    var httpResponse;
-    var splitArray;
+    var splitArray = undefined;
 
     $.ajax({
         url: "js/timetable/courses.txt",
         dataType: "text",
         async: false,
         success: function (data) {
-            splitArray = data.split("\n").map(function (course, index) {
+            splitArray = data.split("\n").map(function (course) {
                 return course.substring(0, 8);
             });
         }
