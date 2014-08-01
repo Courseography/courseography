@@ -16,7 +16,7 @@ function processSessionSections(session, course, timeSuffix) {
                 var springTimes = [];
                 // IAN-TODO Make array be one array.
                 $.each(sectionTimes, function(i) {
-                    springTimes.push("#" + sectionTimes[i] + "S");
+                    sectionTimes.push("#" + sectionTimes[i] + "S");
                     sectionTimes[i] = "#" + sectionTimes[i] + "F";
                 });
                 sectionTimes = sectionTimes.concat(springTimes);
