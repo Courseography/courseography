@@ -197,14 +197,17 @@ function setClickedConflict(course, time, section) {
 function removeClickedConflict(course, time, section) {
     var conflictArray = $(time).data("conflictArray");
     var typeArray = $(time).data("typeArray");
-
+    var index = conflictArray.indexOf(course.name);
     if ($(time).html() === course.name) {
-        $(time).html(conflictArray[0])
-               .attr("type", typeArray[0]);
+        $(time).html(conflictArray[0]);
+
+        if (index === -1 && !(getType(section) === typeArray[0])) {
+            $(time).attr("type", typeArray[0]);
+        }
+
         conflictArray.splice(0, 1);
         typeArray.splice(0, 1);
     } else {
-        var index = conflictArray.indexOf(course.name);
         conflictArray.splice(index, 1);
         typeArray.splice(index, 1);
     }
