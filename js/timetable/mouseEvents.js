@@ -11,23 +11,23 @@ function setSectionMouseEvents(section, sectionTimes, course) {
 function setTdHover() {
     var tdSelector = $("td");
 
-    tdSelector.mouseover(function() {
+    tdSelector.mouseover(function () {
         var courseHtml = $(this).html();
         var course = getCourseObject(courseHtml);
         if (typeof course !== "undefined") {
             $.each(course.selectedLectureTimes.concat(course
-                .selectedTutorialTimes), function(i, time) {
+                .selectedTutorialTimes), function (i, time) {
                 $(time).addClass("hover-time");
             });
         }
     });
 
-    tdSelector.mouseout(function() {
+    tdSelector.mouseout(function () {
         var courseHtml = $(this).html();
         var course = getCourseObject(courseHtml);
         if (typeof course !== "undefined") {
             $.each(course.selectedLectureTimes.concat(course
-                .selectedTutorialTimes), function(i, time) {
+                .selectedTutorialTimes), function (i, time) {
                 $(time).removeClass("hover-time");
             });
         }

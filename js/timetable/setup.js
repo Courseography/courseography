@@ -23,7 +23,7 @@ $(document).ready(function () {
            .attr("satisfied", "true");
 
     // .data attribute cannot be set for multiple elements through chaining.
-    tdSelector.each(function() {
+    tdSelector.each(function () {
         $(this).data("conflictArray", []);
         $(this).data("typeArray", []);
     });
@@ -62,7 +62,7 @@ function setupEntry(courseObject) {
     var courseImg = document.createElement("img");
     $(courseImg).attr("src", "res/ico/delete.ico")
                 .addClass("close-icon")
-                .click(function() {
+                .click(function () {
                     removeCourseFromList(courseObject.name);
                 });
     entry.id = courseObject.name + "-li";
@@ -98,9 +98,9 @@ function getCourse(courseCode) {
 
 function appendClearAllButton() {
     var clearAllItem = document.getElementById("clear-all");
-    $(clearAllItem).click(function() {
+    $(clearAllItem).click(function () {
         if (confirm("Clear all selected courses?")) {
-            $.each(courseObjects.slice(0), function(i, course) {
+            $.each(courseObjects.slice(0), function (i, course) {
                 removeCourseFromList(course.name);
             });
         }
