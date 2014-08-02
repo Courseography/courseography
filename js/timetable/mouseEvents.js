@@ -115,7 +115,7 @@ function displaySectionInformation(section) {
 function setSectionOnClick(section, sectionTimes, course) {
     $(section).click(function () {
         var isLecture = section.innerHTML.charAt(0) === "L";
-
+        updateSelectedLectures($(section));
         if ((course.isLectureSelected && isLecture) ||
             (course.isTutorialSelected && !isLecture)) {
             selectAlreadySelectedSection(course, section, sectionTimes);
@@ -124,8 +124,6 @@ function setSectionOnClick(section, sectionTimes, course) {
         }
         
         satisfyCourse(course);
-
-        updateSelectedLectures($(section));
         setCookie("selected-lectures", JSON.stringify(selectedLectures));
 
         alertUserOfConflict();
@@ -273,7 +271,6 @@ function selectAlreadySelectedSection(course, section, sectionTimes) {
             course.selectedTutorialTimes = undefined;
         }
     }
-    
 }
 
 
@@ -313,7 +310,6 @@ function turnSectionOff(course, section) {
     if (index > -1) {
         selectedLectures.splice(index, 1);
     }
-    
 }
 
 

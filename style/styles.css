@@ -26,8 +26,8 @@ a, a:hover, a:visited, a:active {
 /* Styles for disclaimer */
 #disclaimerDiv {
   width: 95%;
-  margin-left: auto; 
-  margin-right: auto; 
+  margin-left: auto;
+  margin-right: auto;
   font-size: 11pt;
   margin-bottom: 10px;
   font-weight: bold;
@@ -68,8 +68,8 @@ a, a:hover, a:visited, a:active {
   height: 100%;
   display: block;
   margin: 0;
-  padding: 0;   
-  padding-left: 2em; 
+  padding: 0;
+  padding-left: 2em;
 }
 ul.tabList li {
   list-style: none;
@@ -82,9 +82,9 @@ ul.tabList li {
   border-right: solid thin;
   border-left: solid thin;
 }
-ul.tabList li a, 
-ul.tabList li a:hover, 
-ul.tabList li a:visited, 
+ul.tabList li a,
+ul.tabList li a:hover,
+ul.tabList li a:visited,
 ul.tabList li a:active {
   font-weight: normal;
   color: white;
@@ -156,7 +156,7 @@ h3 {
 }
 
 #timetableContainer {
-  width: 893px;
+  width: 1035px;
   height: 100%;
   background-color: #222266;
   margin-top: 1em;
@@ -168,7 +168,7 @@ h3 {
   border-spacing: 0;
   table-layout: fixed;
 }
-#timetableMain td, 
+#timetableMain td,
 #timetableMain th {
   margin: 0;
   padding: 0;
@@ -183,7 +183,7 @@ h3 {
   border-spacing: 0;
   table-layout: fixed;
 }
-#timetableMain .courseTable tr, 
+#timetableMain .courseTable tr,
 #timetableMain .courseTable td,
 #timetableMain .courseTable th {
   border: none;
@@ -219,21 +219,29 @@ h3 {
   padding-left: 5px;
 }
 #timetable td.timetableCap, #timetable th.timetableCap {
-  width: 65px;
+  width: 95px;
   background-color: #B2E0FF;
   text-align: center;
 }
-.FOffering, 
-.FOffering table, 
-.SOffering, 
+
+#timetable td.timetableWait, #timetable th.timetableWait {
+  width: 40px;
+  background-color: #D8D8A3;
+  text-align: center;
+}
+
+.FOffering,
+.FOffering table,
+.SOffering,
 .SOffering table,
-.FallOffering, 
-.FallOffering table, 
-.WinterOffering, 
+.FallOffering,
+.FallOffering table,
+.WinterOffering,
 .WinterOffering table {
-  width: 390px;
+  width: 460px;
   margin: 0;
   padding: 0;
+  border: none;
 }
 .YOffering {
   width: 100%;
@@ -244,7 +252,7 @@ h3 {
   margin-right: auto;
 }
 
-.timetableInstructor a, 
+.timetableInstructor a,
 .timetableInstructor a:hover,
 .timetableInstructor a:visited,
 .timetableInstructor a:active {
@@ -307,7 +315,7 @@ h3 {
 }
 .statusIcon {
   float: right;
-  margin-top: 0.6em; 
+  margin-top: 0.6em;
   margin-bottom: 0.6em;
   margin-right: 0.5em;
   width: 1em;
@@ -345,27 +353,27 @@ input[type=text] {
 input[type='checkbox'] {
   display: none;
 }
-label {  
-  display: inline-block;  
-  position: relative;  
+label {
+  display: inline-block;
+  position: relative;
   height: 20px;
   margin: 5px;
-} 
-label:before {  
-  content: "\00a0";  
-  display: inline-block;  
-  width: 20px;  
-  height: 20px;  
+}
+label:before {
+  content: "\00a0";
+  display: inline-block;
+  width: 20px;
+  height: 20px;
   color: green;
   font-size: 1.15em;
   font-family: bold;
-  background-color: white;  
+  background-color: white;
   text-align: center;
   vertical-align: -2px;
 
-  margin-right: 10px;  
-  position: relative;  
-}  
+  margin-right: 10px;
+  position: relative;
+}
 input[type=checkbox]:checked + label:before {
   content: "\2713";
 }

@@ -59,5 +59,8 @@ def downloadTimetables():
 
 
 def parse_fas_timetable():
-  parser = TimetableParser(downloadTimetables, data_map, 'fastimetable2014.csv')
+  parser = TimetableParser(downloadTimetables,
+                           data_map,
+                           'fastimetable2014.csv',
+                           lambda x: x[data_map['section']+1] == 'Cancel')
   parser.run()

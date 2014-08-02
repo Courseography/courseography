@@ -1,3 +1,4 @@
+import glob
 import csv
 import json
 import xlrd
@@ -9,6 +10,7 @@ coursePath = outputDir + 'courses/'
 timetablePath = outputDir + 'timetable2014.csv'
 timetableOutputPath = outputDir + 'timetable.html'
 
+SHOW_ENROLMENT = True
 
 data_map = {
     'code': 0,
@@ -19,7 +21,7 @@ data_map = {
     'instructor': 6,
     'cap': 7
 }
-    
+
 
 ##################################################
 # WORK WITH EXCEL FILE
@@ -57,12 +59,28 @@ def sanitize(s):
 
 
 def parse_dcs_timetable(f):
-    parser = TimetableParser(lambda: generateCSV(f), data_map, 'timetable2014.csv')
+    parser = TimetableParser(lambda: generateCSV(f),
+                             data_map,
+                             'timetable2014.csv',
+                             lambda x: x[data_map['section']] == 'not offered')
     return parser.run()
 
 ##################################################
 # GENERATE HTML
 ##################################################
+
+
+# Note: only returns courses that should appear in timetable
+def getCSCcourses():
+    courses = []
+    for filename in glob.glob(coursePath + 'CSC*.txt'):
+        print(filename)
+        with open(filename, 'r', encoding='utf-8') as course_file:
+            course_json = json.load(course_file)
+            if 'F' in course_json or 'S' in course_json or 'Y' in course_json:
+                courses.append(course_json)
+    return courses
+
 
 def generateRows(course):
     ''' Generate all html rows for one course. '''
@@ -90,7 +108,7 @@ def generateRows(course):
                 else:
                     tutString = tutString.format('')
 
-                extra = ' + ' + str(lec['extra']) if lec['extra'] > 0 else ''
+                extra = ' (+{})'.format(lec['extra']) if lec['extra'] > 0 else ''
 
                 # TODO: fix hack for Borodin/Boutillier
                 if lec['instructor'] == 'Borodin/Boutilier':
@@ -108,17 +126,27 @@ def generateRows(course):
                     print('Could not find instructor ' + lec['instructor'])
                     instructorString = lec['instructor']
 
+                # Enrolment
+                if SHOW_ENROLMENT and 'enrol' in lec:
+                    enrolString = '{}/{}'.format(lec['enrol'], lec['cap'])
+                    if lec['enrol'] == lec['cap']:
+                        enrolString = '<strong>' + enrolString + '</strong>'
+                else:
+                    enrolString = str(lec['cap'])
+
                 termRows.append(('<tr>' +
                                  '<td class="timetableSection">{}</td>' +
                                  '<td class="timetableTime">{} {}</td>' +
                                  '<td class="timetableInstructor">{}</td>' +
-                                 '<td class="timetableCap">{}{}</td></tr>')
+                                 '<td class="timetableCap">{}{}</td>' +
+                                 '<td class="timetableWait">{}</td></tr>')
                                 .format(lec['section'],
-                                        lec['time_str'], 
+                                        lec['time_str'],
                                         tutString,
                                         instructorString,
-                                        lec['cap'],
-                                        extra
+                                        enrolString,
+                                        extra,
+                                        lec['wait'] if 'wait' in lec else 0
                                         ))
 
             # Add separate tutorial sections, if necessary
@@ -162,18 +190,22 @@ def generateHTML(courses):
                          '<tr><th class="timetableSection">Sec</th>' +
                          '<th class="timetableTime">Time</th>' +
                          '<th class="timetableInstructor">Instructor</th>' +
-                         '<th class="timetableCap">Cap</th></tr></table></td>' +
+                         '<th class="timetableCap">Cap</th>' +
+                         '<th class="timetableWait">Wait</th>' +
+                         '</tr></table></td>' +
                          '<td class="SOffering"><table class="courseTable">' +
                          '<tr><th class="timetableSection">Sec</th>' +
                          '<th class="timetableTime">Time</th>' +
                          '<th class="timetableInstructor">Instructor</th>' +
-                         '<th class="timetableCap">Cap</th></tr></table></td>'
+                         '<th class="timetableCap">Cap</th>' +
+                         '<th class="timetableWait">Wait</th>' +
+                         '</tr></table></td>'
                          )
 
         for course in courses:
             htmlOutput.writelines(iter(generateRows(course)))
         htmlOutput.write('</table>')
 
-if __name__ == '__main__':
-    courses = parse_dcs_timetable('master.xlsx')
-    generateHTML(courses)
+#if __name__ == '__main__':
+    #courses = parse_dcs_timetable('master.xlsx')
+    #generateHTML(courses)
