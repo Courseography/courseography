@@ -34,13 +34,13 @@ function setTdHover() {
     });
 }
 
-/** Mouse Out Direct Functions **/
 
 function setSectionMouseOut(section, sectionTimes) {
     $(section).mouseout(function () {
         performMouseOut(sectionTimes);
     });
 }
+
 
 function performMouseOut(sectionTimes) {
     $.each(sectionTimes, function (i, time) {
@@ -50,6 +50,7 @@ function performMouseOut(sectionTimes) {
         $(time).attr("hover", "off");
     });
 }
+
 
 /** Mouse Over Direct Functions **/
 
@@ -72,6 +73,7 @@ function performMouseOver(sectionTimes, course) {
 
 }
 
+
 function lightUpConflict(course, time) {
     if ($(time).html() === course.name) {
         $(time).attr("hover", "remove");
@@ -85,10 +87,12 @@ function lightUpTakeable(course, time) {
     $(time).attr("hover", "good");
 }
 
+
 function displayCourseInformation(course) {
     $("#course-info-code").html(course.name);
     $("#course-info-title").html(course.title);
 }
+
 
 function displaySectionInformation(section) {
     $("#section-stats-section").html(section.html());
@@ -107,7 +111,6 @@ function displaySectionInformation(section) {
 
 }
 
-/** Mouse Click Direct Functions **/
 
 function setSectionOnClick(section, sectionTimes, course) {
     $(section).click(function () {
@@ -130,7 +133,6 @@ function setSectionOnClick(section, sectionTimes, course) {
     });
 }
 
-/** Utilities **/
 
 function setHeader(course) {
     $(course.header).attr("taken", $("#" + course.name +
@@ -138,11 +140,13 @@ function setHeader(course) {
                     .attr("satisfied", course.satisfied);
 }
 
+
 function updateSelectedLectures(section) {
     if (!inArray(section.attr("id"), selectedLectures)) {
         selectedLectures.push(section.attr("id"));
     }
 }
+
 
 // IAN-RESPONSE It seemed kind of silly to make this function,
 // given that the index is sometimes used.
@@ -152,9 +156,11 @@ function inArray(item, array) {
     return $.inArray(item, array) > -1;
 }
 
+
 function getInConflict() {
     return $("td[class*=clickedConflictTime]").length > 0;
 }
+
 
 function alertUserOfConflict() {
     var dialogSelector = $("#dialog");
@@ -162,9 +168,11 @@ function alertUserOfConflict() {
         dialogSelector.fadeOut(750);
 }
 
+
 function getIsClicked(time) {
     return $(time).attr("clicked") === "true";
 }
+
 
 function getSession(section) {
     if (getIsYearSection(section)) {
@@ -176,6 +184,7 @@ function getSession(section) {
     }
 }
 
+
 function getIsYearSection(section) {
     return $(section.parentNode).hasClass("sectionList-Y");
 }
@@ -184,9 +193,11 @@ function getIsFallSection(section) {
     return $(section.parentNode).hasClass("sectionList-F");
 }
 
+
 function getIsSpringSection(section) {
     return $(section.parentNode).hasClass("sectionList-S");
 }
+
 
 // Need to adapt code for P.
 function getType(section) {
@@ -196,6 +207,7 @@ function getType(section) {
         return "T";
     }
 }
+
 
 function setClickedConflict(course, time, section) {
     var type = getType(section);
@@ -208,6 +220,7 @@ function setClickedConflict(course, time, section) {
            .attr("title", conflictArray)
            .attr("in-conflict", "true");
 }
+
 
 function removeClickedConflict(course, time) {
     var conflictArray = $(time).data("conflictArray");
@@ -236,6 +249,7 @@ function removeClickedConflict(course, time) {
            .attr("title", conflictArray);
 }
 
+
 function selectAlreadySelectedSection(course, section, sectionTimes) {
     turnSectionOff(course, section, sectionTimes);
     var selectedSession = getSession(section);
@@ -262,6 +276,7 @@ function selectAlreadySelectedSection(course, section, sectionTimes) {
     
 }
 
+
 function selectSection(course, section, sectionTimes) {
     var type = getType(section);
     if (type === "L") {
@@ -278,6 +293,7 @@ function selectSection(course, section, sectionTimes) {
 
     selectUnselectedTimes(course, sectionTimes, section);
 }
+
 
 function turnSectionOff(course, section) {
     var type = getType(section);
@@ -300,6 +316,7 @@ function turnSectionOff(course, section) {
     
 }
 
+
 function removeSectionTimes(course, section) {
     var sectionTimes;
     var type = getType(section);
@@ -319,6 +336,7 @@ function removeSectionTimes(course, section) {
         }
     });
 }
+
 
 function setSession(course, section) {
     var type = getType(section);
@@ -340,6 +358,7 @@ function selectUnselectedTimes(course, sectionTimes, section) {
     });
 }
 
+
 function setClickedTime(course, time, section) {
     var type = getType(section);
     $(time).html(course.name)
@@ -353,6 +372,7 @@ function satisfyCourse(course) {
         !course.manualTutorialEnrolment;
     setSatisfaction(course);
 }
+
 
 function setSatisfaction(course) {
     if (typeof course.selectedLectureTimes !== "undefined") {
@@ -370,6 +390,7 @@ function setSatisfaction(course) {
     }
     setSectionsSatisfied(course);
 }
+
 
 function setSectionsSatisfied(course) {
     if (course.satisfied) {

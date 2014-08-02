@@ -12,6 +12,7 @@ var entry;
 var courses;
 var searchList;
 
+
 $(document).ready(function () {
     var tdSelector = $("td");
 
@@ -37,6 +38,7 @@ $(document).ready(function () {
     trapScroll();
 });
 
+
 function getVeryLargeCourseArray() {
     var splitArray = undefined;
 
@@ -53,6 +55,7 @@ function getVeryLargeCourseArray() {
 
     return splitArray;
 }
+
 
 function setupEntry(courseObject) {
     entry = document.createElement("li");
@@ -78,6 +81,7 @@ function setupEntry(courseObject) {
     courseSelect.appendChild(entry);
 }
 
+
 function getCourse(courseCode) {
     $.ajax({
         url: "res/courses/" + courseCode + ".txt",
@@ -90,6 +94,7 @@ function getCourse(courseCode) {
     courseObjects.push(result);
     return result;
 }
+
 
 function appendClearAllButton() {
     var clearAllItem = document.getElementById("clear-all");

@@ -3,6 +3,7 @@ var selectedCourses = [];
 var selectedLectures = [];
 var courseObjects = [];
 
+
 function removeCourseObject(courseName) {
     var index = -1;
     for (var i = 0; i < courseObjects.length; i++) {
@@ -16,6 +17,7 @@ function removeCourseObject(courseName) {
     }
 }
 
+
 function getCourseObject(courseName) {
     var courseObject;
     for (var i = 0; i < courseObjects.length; i++) {
@@ -26,6 +28,7 @@ function getCourseObject(courseName) {
     return courseObject;
 
 }
+
 
 /*
  * Adapted from http://codepen.io/LelandKwong/pen/edAmn.
@@ -74,18 +77,13 @@ function getCourseObject(courseName) {
 })($);
 
 
-//function setAccordion() {
-//    $("#course-select li").accordion({heightStyle: "content",
-// collapsible: true, active: false});
-//}
-
-
 // Search function for timetable
 function enableSearch() {
     $("#course-filter").keyup(function() {
         resetSearchList();
     });
 }
+
 
 function resetSearchList() {
     var courseList;
@@ -128,6 +126,7 @@ function resetSearchList() {
     searchList.appendChild(courseList);
 }
 
+
 function restoreFromCookies() {
     var starredCourseCookie = getCookie("selected-courses");
     if (starredCourseCookie.length > 0) {
@@ -144,9 +143,8 @@ function restoreFromCookies() {
             $("#" + course).click();
         });
     }
-
-    console.log("Courses that have been set in cookies are: " + selectedCourses);
 }
+
 
 function convertTimes(times) {
     var timeList = [];
@@ -172,6 +170,7 @@ function convertTimes(times) {
     return timeList;
 }
 
+
 function addCourseToList(course) {
     var courseObject = getCourse(course);
     courseObject.isLectureSelected = false;
@@ -183,6 +182,7 @@ function addCourseToList(course) {
     var jsonCookie = JSON.stringify(selectedCourses);
     setCookie("selected-courses", jsonCookie);
 }
+
 
 function removeCourseFromList(course) {
     var courseElement = document.getElementById(course + "-li");

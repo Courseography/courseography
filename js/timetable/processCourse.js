@@ -55,6 +55,7 @@ function processSessionSections(session, course, timeSuffix) {
     return sectionList;
 }
 
+
 function processSession(course) {
     var sectionList;
     var sections = document.createElement("div");
@@ -80,6 +81,7 @@ function processSession(course) {
     }
     return sections;
 }
+
 
 function setSectionIds(course, sectionList, sessionSuffix) {
     $(sectionList).children("li").each(function(index, lecture) {

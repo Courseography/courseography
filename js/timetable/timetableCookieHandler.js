@@ -1,9 +1,9 @@
 function setCookie (cookieName, cookieValue) {
-    var lifespan_in_days = 300;
-    document.cookie = cookieName 
-                      + "=" + cookieValue
-                      + "; max-age=" + 60 * 60 * 24 * lifespan_in_days;
+    document.cookie = cookieName +
+        "=" + cookieValue +
+        "; max-age=" + 60 * 60 * 24 * 1000;
 }
+
 
 function getCookie(cookieName) {
     var name = cookieName + "=";
