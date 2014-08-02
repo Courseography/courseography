@@ -51,24 +51,25 @@ function performMouseOut(sectionTimes) {
 
 function setSectionMouseOver(section, sectionTimes, course) {
     $(section).mouseover(function () {
-        performMouseOver(sectionTimes, course);
+        performMouseOver(sectionTimes, course, section);
         displayCourseInformation(course);
         displaySectionInformation(course, $(this))
     });
 }
 
-function performMouseOver(sectionTimes, course) {
+function performMouseOver(sectionTimes, course, section) {
     $.each(sectionTimes, function (i, time) {
         if (getIsClicked(time)) {
-            lightUpConflict(course, time);
+            lightUpConflict(course, time, section);
         } else {
             lightUpTakeable(course, time);
         }
     });
 }
 
-function lightUpConflict(course, time) {
-    if ($(time).html() === course.name) {
+function lightUpConflict(course, time, section) {
+    if ($(time).html() === course.name
+        && $(time).attr("type") === getType(section)) {
         $(time).attr("hover", "remove");
     } else {
         $(time).attr("hover", "conflict");
@@ -201,7 +202,7 @@ function removeClickedConflict(course, time, section) {
     if ($(time).html() === course.name) {
         $(time).html(conflictArray[0]);
 
-        if (index === -1 && !(getType(section) === typeArray[0])) {
+        if (index === -1 || !(getType(section) === typeArray[0])) {
             $(time).attr("type", typeArray[0]);
         }
 
