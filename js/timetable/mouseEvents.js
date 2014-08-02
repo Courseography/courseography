@@ -28,7 +28,14 @@ function setTdHover() {
             $.each(sectionTimes, function(i, time) {
                 $(time).addClass("hover-time");
             });
-            displayCourseInformation(course, $(course.selectedLecture));
+
+            var section;
+            if ($(this).attr("type") === "L") {
+                section = course.selectedLecture;
+            } else if ($(this).attr("type") === "T") {
+                section = course.selectedTutorial;
+            }
+            displayCourseInformation(course, $(section));
         }
     });
 
@@ -47,6 +54,7 @@ function setTdHover() {
                 $(time).removeClass("hover-time");
             });
         }
+        clearCourseInformation();
     });
 }
 
@@ -81,7 +89,10 @@ function setSectionMouseOver(section, sectionTimes, course) {
     $(section).mouseover(function () {
         performMouseOver(sectionTimes, course);
         displayCourseInformation(course, $(this));
-    });
+    })
+        .mouseout(function() {
+           clearCourseInformation();
+        });
 }
 
 function performMouseOver(sectionTimes, course) {
@@ -126,10 +137,21 @@ function displayCourseInformation(course, section) {
     }
 }
 
+function clearCourseInformation() {
+    $("#course-info-code").empty();
+    $("#course-info-title").empty();
+    $("#section-stats-section").empty();
+    $("#section-stats-instructor").empty();
+    $("#section-stats-enrol").empty();
+}
+
 function setHeaderHover(course) {
     $(course.header).mouseover(function() {
         displayCourseTitle(course);
-    });
+    })
+        .mouseout(function() {
+            clearCourseInformation();
+        });
 }
 
 /** Mouse Click Direct Functions **/
