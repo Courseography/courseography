@@ -15,7 +15,8 @@ function setTdHover() {
         var courseHtml = $(this).html();
         var course = getCourseObject(courseHtml);
         if (typeof course !== "undefined") {
-            $.each(course.selectedLectureTimes.concat(course.selectedTutorialTimes), function(i, time) {
+            $.each(course.selectedLectureTimes.concat(course
+                .selectedTutorialTimes), function(i, time) {
                 $(time).addClass("hover-time");
             });
         }
@@ -25,7 +26,8 @@ function setTdHover() {
         var courseHtml = $(this).html();
         var course = getCourseObject(courseHtml);
         if (typeof course !== "undefined") {
-            $.each(course.selectedLectureTimes.concat(course.selectedTutorialTimes), function(i, time) {
+            $.each(course.selectedLectureTimes.concat(course
+                .selectedTutorialTimes), function(i, time) {
                 $(time).removeClass("hover-time");
             });
         }
@@ -55,7 +57,7 @@ function setSectionMouseOver(section, sectionTimes, course) {
     $(section).mouseover(function () {
         performMouseOver(sectionTimes, course);
         displayCourseInformation(course);
-        displaySectionInformation(course, $(this))
+        displaySectionInformation(course, $(this));
     });
 }
 
@@ -95,7 +97,8 @@ function displaySectionInformation(section) {
     var enrol = section.data("enrol");
     var wait = section.data("wait");
     if (cap !== null && enrol !== null) {
-        var enrolString = (cap - enrol) + " out of " + cap + " spots remaining";
+        var enrolString = (cap - enrol) + " out of " + cap +
+            " spots remaining";
         if (wait !== null && wait !== undefined && wait !== 0) {
             enrolString += "; " + wait + " students on the waitlist";
         }
@@ -110,7 +113,8 @@ function setSectionOnClick(section, sectionTimes, course) {
     $(section).click(function () {
         var isLecture = section.innerHTML.charAt(0) === "L";
 
-        if ((course.isLectureSelected && isLecture) || (course.isTutorialSelected && !isLecture)) {
+        if ((course.isLectureSelected && isLecture) ||
+            (course.isTutorialSelected && !isLecture)) {
             selectAlreadySelectedSection(course, section, sectionTimes);
         } else {
             selectSection(course, section, sectionTimes);
@@ -129,7 +133,8 @@ function setSectionOnClick(section, sectionTimes, course) {
 /** Utilities **/
 
 function setHeader(course) {
-    $(course.header).attr("taken", $("#" + course.name + "-li li[clicked*='true']").length > 0)
+    $(course.header).attr("taken", $("#" + course.name +
+        "-li li[clicked*='true']").length > 0)
                     .attr("satisfied", course.satisfied);
 }
 
@@ -139,7 +144,8 @@ function updateSelectedLectures(section) {
     }
 }
 
-// IAN-RESPONSE It seemed kind of silly to make this function, given that the index is sometimes used.
+// IAN-RESPONSE It seemed kind of silly to make this function,
+// given that the index is sometimes used.
 // IAN-RESPONSE-RESPONSE The only time we use index is when removing an item.
 // We should create a helper function for that, too.
 function inArray(item, array) {
@@ -152,7 +158,8 @@ function getInConflict() {
 
 function alertUserOfConflict() {
     var dialogSelector = $("#dialog");
-    getInConflict() ? dialogSelector.fadeIn(750) : dialogSelector.fadeOut(750);
+    getInConflict() ? dialogSelector.fadeIn(750) :
+        dialogSelector.fadeOut(750);
 }
 
 function getIsClicked(time) {
@@ -183,7 +190,7 @@ function getIsSpringSection(section) {
 
 // Need to adapt code for P.
 function getType(section) {
-    if (($(section).html().charAt(0) == 'L')) {
+    if (($(section).html().charAt(0) === 'L')) {
         return "L";
     } else {
         return "T";
@@ -234,8 +241,8 @@ function selectAlreadySelectedSection(course, section, sectionTimes) {
     var selectedSession = getSession(section);
     var type = getType(section);
     if (type === "L") {
-        if (course.selectedLecture.innerHTML !== section.innerHTML
-            || course.selectedLectureSession !== selectedSession) {
+        if (course.selectedLecture.innerHTML !== section.innerHTML ||
+            course.selectedLectureSession !== selectedSession) {
             selectSection(course, section, sectionTimes);
         } else {
             course.selectedLecture = undefined;
@@ -243,8 +250,8 @@ function selectAlreadySelectedSection(course, section, sectionTimes) {
             course.selectedLectureTimes = undefined;
         }
     } else {
-        if (course.selectedTutorial.innerHTML !== section.innerHTML
-            || course.selectedTutorialSession !== selectedSession) {
+        if (course.selectedTutorial.innerHTML !== section.innerHTML ||
+            course.selectedTutorialSession !== selectedSession) {
             selectSection(course, section, sectionTimes);
         } else {
             course.selectedTutorial = undefined;
@@ -279,11 +286,13 @@ function turnSectionOff(course, section) {
     if (type === "L") {
         course.isLectureSelected = false;
         $(course.selectedLecture).attr("clicked", "false");
-        index = $.inArray($(course.selectedLecture).attr("id"), selectedLectures);
+        index = $.inArray($(course.selectedLecture).attr("id"),
+            selectedLectures);
     } else {  
         course.isTutorialSelected = false;
         $(course.selectedTutorial).attr("clicked", "false");
-        index = $.inArray($(course.selectedTutorial).attr("id"), selectedLectures);
+        index = $.inArray($(course.selectedTutorial).attr("id"),
+            selectedLectures);
     }
     if (index > -1) {
         selectedLectures.splice(index, 1);
@@ -339,7 +348,9 @@ function setClickedTime(course, time, section) {
 }
 
 function satisfyCourse(course) {
-    course.satisfied = (course.selectedTutorialSession === course.selectedLectureSession) || !course.manualTutorialEnrolment;
+    course.satisfied = (course.selectedTutorialSession ===
+        course.selectedLectureSession) ||
+        !course.manualTutorialEnrolment;
     setSatisfaction(course);
 }
 

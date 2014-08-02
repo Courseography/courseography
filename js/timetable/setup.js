@@ -70,7 +70,11 @@ function setupEntry(courseObject) {
     sections = processSession(courseObject);
     entry.appendChild(header);
     entry.appendChild(sections);
-    $(entry).accordion({ heightStyle: "content", collapsible: true, active: false });
+    $(entry).accordion({
+        heightStyle: "content",
+        collapsible: true,
+        active: false
+    });
     courseSelect.appendChild(entry);
 }
 

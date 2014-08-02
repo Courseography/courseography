@@ -28,7 +28,8 @@ function getCourseObject(courseName) {
 }
 
 /*
- * Adapted from http://codepen.io/LelandKwong/pen/edAmn. Will look into http://jscrollpane.kelvinluck.com/.
+ * Adapted from http://codepen.io/LelandKwong/pen/edAmn.
+ * Will look into http://jscrollpane.kelvinluck.com/.
  */
  (function($) {
     trapScroll = function(){
@@ -74,7 +75,8 @@ function getCourseObject(courseName) {
 
 
 //function setAccordion() {
-//    $("#course-select li").accordion({heightStyle: "content", collapsible: true, active: false});
+//    $("#course-select li").accordion({heightStyle: "content",
+// collapsible: true, active: false});
 //}
 
 
@@ -95,7 +97,8 @@ function resetSearchList() {
     if (filter !== "") {
         $.each(courses, function(i, course) {
 
-            // If the course matches and if there are fewer than 100 courses in the list, add it to the list.
+            // If the course matches and if there are fewer than
+            // 100 courses in the list, add it to the list.
             if (course.toLowerCase().indexOf(filter) > -1 && counter < 100) {
                 courseEntry = document.createElement("li");
 
@@ -104,7 +107,8 @@ function resetSearchList() {
                     $(courseEntry).addClass("starred-course");
                 }
 
-                // Add an ID to the list so we can come back and star it when it is clicked.
+                // Add an ID to the list so we can come back and star
+                // it when it is clicked.
                 $(courseEntry).attr("id", course + "-search");
                 courseEntry.innerHTML = course;
                 $(courseEntry).click(function() {
@@ -152,7 +156,8 @@ function convertTimes(times) {
 
     for(var i = 0; i < times.length; i++) {
 
-        // If a course is "12", we don't want to add a "0". That would result in something like "M0". We exclude this from the mod cases.
+        // If a course is "12", we don't want to add a "0". That would result
+        // in something like "M0". We exclude this from the mod cases.
         if ((times[i][1] % 12) !== 0) {
             time = times[i][1] % 12;
         } else {

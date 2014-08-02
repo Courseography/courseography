@@ -1,7 +1,8 @@
 function processSessionSections(session, course, timeSuffix) {
     var sectionList = document.createElement("ul");
     $.each(session.lectures, function (i, lecture) {
-        if (lecture.section.charAt(1) !== "2" && lecture.time !== "Online Web Version") {
+        if (lecture.section.charAt(1) !== "2" && lecture.time !==
+            "Online Web Version") {
             var section = document.createElement("li");
             var sectionTimes = convertTimes(lecture.time);
             $(section).data("instructor", lecture.instructor);
@@ -10,7 +11,8 @@ function processSessionSections(session, course, timeSuffix) {
             $(section).data("wait", lecture.wait);
             section.appendChild(document.createTextNode(lecture.section));
             if (!course.manualTutorialEnrolment && session.tutorials.length > 0) {
-                sectionTimes = sectionTimes.concat(convertTimes(session.tutorials[i][0]));
+                sectionTimes = sectionTimes.concat(convertTimes(session
+                    .tutorials[i][0]));
             }
             if (timeSuffix === "Y") {
                 $.each(sectionTimes, function(i) {
@@ -81,6 +83,7 @@ function processSession(course) {
 
 function setSectionIds(course, sectionList, sessionSuffix) {
     $(sectionList).children("li").each(function(index, lecture) {
-        $(lecture).attr("id", course.name + "-" + $(this).html() + "-" + sessionSuffix);
+        $(lecture).attr("id", course.name + "-" + $(this).html() + "-" +
+            sessionSuffix);
     });
 }
