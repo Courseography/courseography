@@ -6,6 +6,7 @@ var sections;
 var entry;
 var courses;
 var searchList;
+var courseCache = [];
 
 
 $(document).ready(function () {
@@ -77,20 +78,25 @@ function setupEntry(courseObject) {
 }
 
 
-// Will refactor with better algorithm once refactoring branch merged.
 function fetchCourse(courseCode) {
+    var course = getCourseObject(courseCode, courseCache);
+    if (typeof course !== "undefined") {
+        console.log("found cached course!");
+        return course;
+    }
     $.ajax({
         url: "res/courses/" + courseCode + ".txt",
         dataType: "json",
         async: false,
         success: function (data) {
-            result = data;
+            course = data;
         }
     });
-    return result;
+    courseCache.push(course);
+    return course;
 }
 
-// Will refactor.
+
 function getCourse(courseCode) {
     result = fetchCourse(courseCode);
     courseObjects.push(result);

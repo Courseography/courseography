@@ -15,7 +15,7 @@ function setTdHover() {
 
     tdSelector.mouseover(function () {
         var courseHtml = $(this).html();
-        var course = getCourseObject(courseHtml);
+        var course = getCourseObject(courseHtml, courseObjects);
         if (typeof course === "undefined") {
             return;
         }
@@ -43,7 +43,7 @@ function setTdHover() {
 
     tdSelector.mouseout(function () {
         var courseHtml = $(this).html();
-        var course = getCourseObject(courseHtml);
+        var course = getCourseObject(courseHtml, courseObjects);
         if (typeof course !== "undefined") {
             var sectionTimes = [];
             if (typeof course.selectedLectureTimes !== undefined) {

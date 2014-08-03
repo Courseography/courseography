@@ -18,18 +18,18 @@ function removeCourseObject(courseName) {
 }
 
 
-function getCourseObject(courseName) {
+function getCourseObject(courseName, courseArray) {
     var courseObject;
-    for (var i = 0; i < courseObjects.length; i++) {
-        if (courseObjects[i].name === courseName) {
-            courseObject = courseObjects[i];
+    for (var i = 0; i < courseArray.length; i++) {
+        if (courseArray[i].name === courseName) {
+            courseObject = courseArray[i];
         }
     }
     return courseObject;
 }
 
 
-/*
+/**
  * Adapted from http://codepen.io/LelandKwong/pen/edAmn.
  * Will look into http://jscrollpane.kelvinluck.com/.
  */
@@ -109,7 +109,7 @@ function resetSearchList() {
                 courseEntry = document.createElement("li");
 
                 // "Star" the course if it has been previously selected.
-                if ($.inArray(course, selectedCourses) > -1) {
+                if ($.inArray(courseName, selectedCourses) > -1) {
                     $(courseEntry).addClass("starred-course");
                 }
 
