@@ -93,7 +93,7 @@ function displayCourseTitle(course) {
     $("#section-stats-enrol").html("");
 }
 
-// var course should be renamed
+
 function resetSearchList() {
     var courseList;
     var courseEntry;
@@ -102,11 +102,11 @@ function resetSearchList() {
     $('#search-list').empty();
     courseList = document.createElement("ul");
     if (filter !== "") {
-        $.each(courses, function(i, course) {
+        $.each(courses, function(i, courseName) {
 
             // If the course matches and if there are fewer than
             // 100 courses in the list, add it to the list.
-            if (course.toLowerCase().indexOf(filter) > -1 && counter < 100) {
+            if (courseName.toLowerCase().indexOf(filter) > -1 && counter < 100) {
                 courseEntry = document.createElement("li");
 
                 // "Star" the course if it has been previously selected.
@@ -116,18 +116,18 @@ function resetSearchList() {
 
                 // Add an ID to the list so we can come back and star
                 // it when it is clicked.
-                $(courseEntry).attr("id", course + "-search");
-                courseEntry.innerHTML = course;
+                $(courseEntry).attr("id", courseName + "-search");
+                courseEntry.innerHTML = courseName;
                 $(courseEntry).click(function() {
                     $(this).toggleClass("starred-course");
-                    if ($.inArray(course, selectedCourses) > -1) {
+                    if ($.inArray(courseName, selectedCourses) > -1) {
                         removeCourseFromList(course);
                     } else {
-                        addCourseToList(course);
+                        addCourseToList(courseName);
                     }
                 })
                 .mouseover(function() {
-                    var courseResult = fetchCourse(course);
+                    var courseResult = fetchCourse(courseName);
                     displayCourseTitle(courseResult);
                 })
                 .mouseout(function() {
