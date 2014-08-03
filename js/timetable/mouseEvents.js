@@ -6,6 +6,7 @@ function setSectionMouseEvents(section, sectionTimes, course) {
     setSectionMouseOver(section, sectionTimes, course);
     setSectionMouseOut(section, sectionTimes);
     setTdHover();
+    setHeaderHover(course);
 }
 
 
@@ -15,11 +16,26 @@ function setTdHover() {
     tdSelector.mouseover(function () {
         var courseHtml = $(this).html();
         var course = getCourseObject(courseHtml);
-        if (typeof course !== "undefined") {
-            $.each(course.selectedLectureTimes.concat(course
-                .selectedTutorialTimes), function (i, time) {
+            var sectionTimes = [];
+            if (typeof course.selectedLectureTimes !== undefined) {
+                sectionTimes = sectionTimes.concat(course.selectedLectureTimes);
+            }
+            if (typeof course.selectedTutorialTimes !== undefined) {
+                sectionTimes = sectionTimes.concat(course.selectedTutorialTimes);
+            }
+            $.each(sectionTimes, function(i, time) {
                 $(time).addClass("hover-time");
             });
+
+            var section;
+            if ($(this).attr("type") === "L") {
+                section = course.selectedLecture;
+            } else if ($(this).attr("type") === "T") {
+                section = course.selectedTutorial;
+            } else if ($(this).attr("type") === "P") {
+				section = course.selectedPractical;
+                displayCourseInformation(course, $(section));
+            }
         }
     });
 
@@ -27,11 +43,18 @@ function setTdHover() {
         var courseHtml = $(this).html();
         var course = getCourseObject(courseHtml);
         if (typeof course !== "undefined") {
-            $.each(course.selectedLectureTimes.concat(course
-                .selectedTutorialTimes), function (i, time) {
+            var sectionTimes = [];
+            if (typeof course.selectedLectureTimes !== undefined) {
+                sectionTimes = sectionTimes.concat(course.selectedLectureTimes);
+            }
+            if (typeof course.selectedTutorialTimes !== undefined) {
+                sectionTimes = sectionTimes.concat(course.selectedTutorialTimes);
+            }
+            $.each(sectionTimes, function(i, time) {
                 $(time).removeClass("hover-time");
             });
         }
+        clearCourseInformation();
     });
 }
 
@@ -39,6 +62,7 @@ function setTdHover() {
 function setSectionMouseOut(section, sectionTimes) {
     $(section).mouseout(function () {
         performMouseOut(sectionTimes);
+        clearCourseInformation();
     });
 }
 
@@ -57,26 +81,25 @@ function performMouseOut(sectionTimes) {
 
 function setSectionMouseOver(section, sectionTimes, course) {
     $(section).mouseover(function () {
-        performMouseOver(sectionTimes, course);
+        performMouseOver(sectionTimes, course, section);
         displayCourseInformation(course);
         displaySectionInformation(course, $(this));
     });
 }
 
-function performMouseOver(sectionTimes, course) {
+function performMouseOver(sectionTimes, course, section) {
     $.each(sectionTimes, function (i, time) {
         if (getIsClicked(time)) {
-            lightUpConflict(course, time);
+            lightUpConflict(course, time, section);
         } else {
             lightUpTakeable(course, time);
         }
     });
-
 }
 
-
-function lightUpConflict(course, time) {
-    if ($(time).html() === course.name) {
+function lightUpConflict(course, time, section) {
+    if ($(time).html() === course.name &&
+        $(time).attr("type") === getType(section)) {
         $(time).attr("hover", "remove");
     } else {
         $(time).attr("hover", "conflict");
@@ -109,16 +132,35 @@ function displaySectionInformation(section) {
         }
         $("#section-stats-enrol").html(enrolString);
     }
+}
 
+function clearCourseInformation() {
+    $("#course-info-code").empty();
+    $("#course-info-title").empty();
+    $("#section-stats-section").empty();
+    $("#section-stats-instructor").empty();
+    $("#section-stats-enrol").empty();
+}
+
+function setHeaderHover(course) {
+    $(course.header).mouseover(function() {
+        displayCourseTitle(course);
+    })
+        .mouseout(function() {
+            clearCourseInformation();
+        });
 }
 
 
 function setSectionOnClick(section, sectionTimes, course) {
     $(section).click(function () {
         var isLecture = section.innerHTML.charAt(0) === "L";
+        var isTutorial = section.innerHTML.charAt(0) === "T";
+        var isPractical = section.innerHTML.charAt(0) === "P";
         updateSelectedLectures($(section));
         if ((course.isLectureSelected && isLecture) ||
-            (course.isTutorialSelected && !isLecture)) {
+            (course.isTutorialSelected && isTutorial) ||
+            (course.isPracticalSelected && isPractical)) {
             selectAlreadySelectedSection(course, section, sectionTimes);
         } else {
             selectSection(course, section, sectionTimes);
@@ -209,13 +251,8 @@ function getIsSpringSection(section) {
 }
 
 
-// Need to adapt code for P.
 function getType(section) {
-    if (($(section).html().charAt(0) === 'L')) {
-        return "L";
-    } else {
-        return "T";
-    }
+    return $(section).html().charAt(0);
 }
 
 
@@ -235,10 +272,14 @@ function setClickedConflict(course, time, section) {
 function removeClickedConflict(course, time) {
     var conflictArray = $(time).data("conflictArray");
     var typeArray = $(time).data("typeArray");
-
+    var index = conflictArray.indexOf(course.name);
     if ($(time).html() === course.name) {
-        $(time).html(conflictArray[0])
-               .attr("type", typeArray[0]);
+        $(time).html(conflictArray[0]);
+
+        if (index === -1 || !(getType(section) === typeArray[0])) {
+            $(time).attr("type", typeArray[0]);
+        }
+
         conflictArray.splice(0, 1);
         typeArray.splice(0, 1);
     } else {
@@ -271,7 +312,7 @@ function selectAlreadySelectedSection(course, section, sectionTimes) {
             course.selectedLectureSession = undefined;
             course.selectedLectureTimes = undefined;
         }
-    } else {
+    } else if (type === "T") {
         if (course.selectedTutorial.innerHTML !== section.innerHTML ||
             course.selectedTutorialSession !== selectedSession) {
             selectSection(course, section, sectionTimes);
@@ -279,6 +320,15 @@ function selectAlreadySelectedSection(course, section, sectionTimes) {
             course.selectedTutorial = undefined;
             course.selectedTutorialSession = undefined;
             course.selectedTutorialTimes = undefined;
+        }
+    } else if (type === "P") {
+        if (course.selectedPractical.innerHTML !== section.innerHTML
+            || course.selectedPracticalSession !== selectedSession) {
+            selectSection(course, section, sectionTimes);
+        } else {
+            course.selectedPractical = undefined;
+            course.selectedPracticalSession = undefined;
+            course.selectedPracticalTimes = undefined;
         }
     }
 }
@@ -290,10 +340,14 @@ function selectSection(course, section, sectionTimes) {
         course.selectedLecture = section;
         course.isLectureSelected = true;
         course.selectedLectureTimes = sectionTimes;
-    } else {
+    } else if (type === "T") {
         course.selectedTutorial = section;
         course.isTutorialSelected = true;
         course.selectedTutorialTimes = sectionTimes;
+    } else if (type === "P") {
+        course.selectedPractical = section;
+        course.isPracticalSelected = true;
+        course.selectedPracticalTimes = sectionTimes;
     }
     $(section).attr("clicked", "true");
     setSession(course, section);
@@ -309,13 +363,15 @@ function turnSectionOff(course, section) {
     if (type === "L") {
         course.isLectureSelected = false;
         $(course.selectedLecture).attr("clicked", "false");
-        index = getIndexFromArray($(course.selectedLecture).attr("id"),
-            selectedLectures);
-    } else {  
+        index = getIndexFromArray($(course.selectedLecture).attr("id"), selectedLectures);
+    } else if (type === "T") {  
         course.isTutorialSelected = false;
         $(course.selectedTutorial).attr("clicked", "false");
-        index = getIndexFromArray($(course.selectedTutorial).attr("id"),
-            selectedLectures);
+        index = getIndexFromArray($(course.selectedTutorial).attr("id"), selectedLectures);
+    } else if (type === "P") {  
+        course.isPracticalSelected = false;
+        $(course.selectedPractical).attr("clicked", "false");
+        index = getIndexFromArray($(course.selectedPractical).attr("id"), selectedLectures);
     }
 
     if (index > -1) {
@@ -329,8 +385,10 @@ function removeSectionTimes(course, section) {
     var type = getType(section);
     if (type === "L") {
         sectionTimes = course.selectedLectureTimes;
-    } else {
+    } else if (type === "T") {
         sectionTimes = course.selectedTutorialTimes;
+    } else if (type === "P") {
+        sectionTimes = course.selectedPracticalTimes;
     }
     $.each(sectionTimes, function (i, time) {
         if ($(time).attr("in-conflict") === "true") {
@@ -350,8 +408,10 @@ function setSession(course, section) {
     var session = getSession(section);
     if (type === "L") {
         course.selectedLectureSession = session;
-    } else {
+    } else if (type === "T") {
         course.selectedTutorialSession = session;
+    } else if (type === "P") {
+        course.selectedPracticalSession = session;
     }
 }
 
@@ -375,9 +435,11 @@ function setClickedTime(course, time, section) {
 }
 
 function satisfyCourse(course) {
-    course.satisfied = (course.selectedTutorialSession ===
-        course.selectedLectureSession) ||
-        !course.manualTutorialEnrolment;
+    course.satisfied = ((course.selectedTutorialSession === course.selectedLectureSession) && !course.practicalEnrolment) 
+    || ((course.selectedPracticalSession === course.selectedLectureSession) && !course.tutorialEnrolment) 
+    || !course.manualTutorialEnrolment
+    || ((course.selectedTutorialSession === course.selectedLectureSession)
+        && (course.selectedTutorialSession === course.selectedPracticalSession));
     setSatisfaction(course);
 }
 
@@ -395,6 +457,13 @@ function setSatisfaction(course) {
             $(time).attr("satisfied", course.satisfied);
         });
         $(course.selectedTutorial).attr("satisfied", course.satisfied);
+    }
+
+    if (typeof course.selectedPracticalTimes !== "undefined") {
+        $.each(course.selectedPracticalTimes, function (i, time) {
+            $(time).attr("satisfied", course.satisfied);
+        });
+        $(course.selectedPractical).attr("satisfied", course.satisfied);
     }
     setSectionsSatisfied(course);
 }

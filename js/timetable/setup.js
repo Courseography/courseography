@@ -1,8 +1,3 @@
-/*jslint todo: true */
-/*global $, console, jQuery*/
-/*jslint browser:true */
-/*jslint plusplus: true */
-"use strict";
 var result;
 var i;
 var courseSelect;
@@ -82,7 +77,8 @@ function setupEntry(courseObject) {
 }
 
 
-function getCourse(courseCode) {
+// Will refactor with better algorithm once refactoring branch merged.
+function fetchCourse(courseCode) {
     $.ajax({
         url: "res/courses/" + courseCode + ".txt",
         dataType: "json",
@@ -91,6 +87,12 @@ function getCourse(courseCode) {
             result = data;
         }
     });
+    return result;
+}
+
+// Will refactor.
+function getCourse(courseCode) {
+    result = fetchCourse(courseCode);
     courseObjects.push(result);
     return result;
 }
