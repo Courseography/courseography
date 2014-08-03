@@ -80,8 +80,6 @@ function performMouseOut(sectionTimes) {
 }
 
 
-/** Mouse Over Direct Functions **/
-
 function setSectionMouseOver(section, sectionTimes, course) {
     $(section).mouseover(function () {
         performMouseOver(sectionTimes, course, section);
@@ -89,6 +87,7 @@ function setSectionMouseOver(section, sectionTimes, course) {
         displaySectionInformation($(this));
     });
 }
+
 
 function performMouseOver(sectionTimes, course, section) {
     $.each(sectionTimes, function (i, time) {
@@ -108,6 +107,7 @@ function lightUpConflict(course, time, section) {
         $(time).attr("hover", "conflict");
     }
 }
+
 
 function lightUpTakeable(course, time) {
     $(time).html(course.name);
@@ -136,6 +136,7 @@ function displaySectionInformation(section) {
         $("#section-stats-enrol").html(enrolString);
     }
 }
+
 
 function clearCourseInformation() {
     $("#course-info-code").empty();
@@ -192,19 +193,17 @@ function updateSelectedLectures(section) {
 }
 
 
-// IAN-RESPONSE It seemed kind of silly to make this function,
-// given that the index is sometimes used.
-// IAN-RESPONSE-RESPONSE The only time we use index is when removing an item.
-// We should create a helper function for that, too.
 function inArray(item, array) {
     return $.inArray(item, array) > -1;
 }
+
 
 function removeFromArray(item, array) {
     var index = array.indexOf(item);
     array.splice(index, 1);
     return index;
 }
+
 
 function getIndexFromArray(item, array) {
     return $.inArray(item, array);
@@ -437,12 +436,13 @@ function setClickedTime(course, time, section) {
            .attr("type", type);
 }
 
+
 function satisfyCourse(course) {
-    course.satisfied = ((course.selectedTutorialSession === course.selectedLectureSession) && !course.practicalEnrolment) 
-    || ((course.selectedPracticalSession === course.selectedLectureSession) && !course.tutorialEnrolment) 
-    || !course.manualTutorialEnrolment
-    || ((course.selectedTutorialSession === course.selectedLectureSession)
-        && (course.selectedTutorialSession === course.selectedPracticalSession));
+    course.satisfied = ((course.selectedTutorialSession === course.selectedLectureSession) && !course.practicalEnrolment) ||
+        ((course.selectedPracticalSession === course.selectedLectureSession) && !course.tutorialEnrolment) ||
+        !course.manualTutorialEnrolment ||
+        ((course.selectedTutorialSession === course.selectedLectureSession) &&
+            (course.selectedTutorialSession === course.selectedPracticalSession));
     setSatisfaction(course);
 }
 
