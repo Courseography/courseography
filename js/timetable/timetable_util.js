@@ -128,6 +128,9 @@ function resetSearchList() {
                 .mouseover(function() {
                     var courseResult = fetchCourse(course);
                     displayCourseTitle(courseResult);
+                })
+                .mouseout(function() {
+                    clearCourseInformation();
                 });
 
                 counter++;
