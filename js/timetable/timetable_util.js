@@ -85,6 +85,15 @@ function enableSearch() {
     });
 }
 
+function displayCourseTitle(course) {
+    $("#course-info-code").html(course.name);
+    $("#course-info-title").html(course.title);
+    $("#section-stats-section").html("");
+    $("#section-stats-instructor").html("");
+    $("#section-stats-enrol").html("");
+}
+
+// var course should be renamed
 function resetSearchList() {
     var courseList;
     var courseEntry;
@@ -115,6 +124,13 @@ function resetSearchList() {
                     } else {
                         addCourseToList(course);
                     }
+                })
+                .mouseover(function() {
+                    var courseResult = fetchCourse(course);
+                    displayCourseTitle(courseResult);
+                })
+                .mouseout(function() {
+                    clearCourseInformation();
                 });
 
                 counter++;

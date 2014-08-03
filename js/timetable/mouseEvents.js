@@ -5,6 +5,7 @@ function setSectionMouseEvents(section, sectionTimes, course) {
     setSectionMouseOver(section, sectionTimes, course);
     setSectionMouseOut(section, sectionTimes);
     setTdHover();
+    setHeaderHover(course);
 }
 
 
@@ -13,9 +14,24 @@ function setTdHover() {
         var courseHtml = $(this).html();
         var course = getCourseObject(courseHtml);
         if (typeof course !== "undefined") {
-            $.each(course.selectedLectureTimes.concat(course.selectedTutorialTimes), function(i, time) {
+            var sectionTimes = [];
+            if (typeof course.selectedLectureTimes !== undefined) {
+                sectionTimes = sectionTimes.concat(course.selectedLectureTimes);
+            }
+            if (typeof course.selectedTutorialTimes !== undefined) {
+                sectionTimes = sectionTimes.concat(course.selectedTutorialTimes);
+            }
+            $.each(sectionTimes, function(i, time) {
                 $(time).addClass("hover-time");
             });
+
+            var section;
+            if ($(this).attr("type") === "L") {
+                section = course.selectedLecture;
+            } else if ($(this).attr("type") === "T") {
+                section = course.selectedTutorial;
+            }
+            displayCourseInformation(course, $(section));
         }
     });
 
@@ -23,10 +39,18 @@ function setTdHover() {
         var courseHtml = $(this).html();
         var course = getCourseObject(courseHtml);
         if (typeof course !== "undefined") {
-            $.each(course.selectedLectureTimes.concat(course.selectedTutorialTimes), function(i, time) {
+            var sectionTimes = [];
+            if (typeof course.selectedLectureTimes !== undefined) {
+                sectionTimes = sectionTimes.concat(course.selectedLectureTimes);
+            }
+            if (typeof course.selectedTutorialTimes !== undefined) {
+                sectionTimes = sectionTimes.concat(course.selectedTutorialTimes);
+            }
+            $.each(sectionTimes, function(i, time) {
                 $(time).removeClass("hover-time");
             });
         }
+        clearCourseInformation();
     });
 }
 
@@ -35,6 +59,7 @@ function setTdHover() {
 function setSectionMouseOut(section, sectionTimes) {
     $(section).mouseout(function () {
         performMouseOut(sectionTimes);
+        clearCourseInformation();
     });
 }
 
@@ -53,7 +78,7 @@ function setSectionMouseOver(section, sectionTimes, course) {
     $(section).mouseover(function () {
         performMouseOver(sectionTimes, course);
         displayCourseInformation(course);
-        displaySectionInformation(course, $(this))
+        displaySectionInformation(course, $(this));
     });
 }
 
@@ -98,6 +123,23 @@ function displaySectionInformation(course, section) {
         }
         $("#section-stats-enrol").html(enrolString);
     }
+}
+
+function clearCourseInformation() {
+    $("#course-info-code").empty();
+    $("#course-info-title").empty();
+    $("#section-stats-section").empty();
+    $("#section-stats-instructor").empty();
+    $("#section-stats-enrol").empty();
+}
+
+function setHeaderHover(course) {
+    $(course.header).mouseover(function() {
+        displayCourseTitle(course);
+    })
+        .mouseout(function() {
+            clearCourseInformation();
+        });
 }
 
 /** Mouse Click Direct Functions **/
@@ -197,17 +239,14 @@ function setClickedConflict(course, time, section) {
 function removeClickedConflict(course, time, section) {
     var conflictArray = $(time).data("conflictArray");
     var typeArray = $(time).data("typeArray");
-    var index = conflictArray.indexOf(course.name);
+
     if ($(time).html() === course.name) {
-        $(time).html(conflictArray[0]);
-
-        if (index === -1 && !(getType(section) === typeArray[0])) {
-            $(time).attr("type", typeArray[0]);
-        }
-
+        $(time).html(conflictArray[0])
+               .attr("type", typeArray[0]);
         conflictArray.splice(0, 1);
         typeArray.splice(0, 1);
     } else {
+        var index = conflictArray.indexOf(course.name);
         conflictArray.splice(index, 1);
         typeArray.splice(index, 1);
     }
