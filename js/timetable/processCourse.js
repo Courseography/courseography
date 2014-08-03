@@ -1,8 +1,14 @@
 function processSessionSections(session, course, timeSuffix) {
     var sectionList = document.createElement("ul");
+    processLectures(session, course, timeSuffix, sectionList);
+    processTutorials(session, course, timeSuffix, sectionList);
+    return sectionList;
+}
+
+function processLectures(session, course, timeSuffix, sectionList) {
     $.each(session.lectures, function (i, lecture) {
         if (lecture.section.charAt(1) !== "2" && lecture.time !==
-            "Online Web Version") {
+                "Online Web Version") {
             var section = document.createElement("li");
             var sectionTimes = convertTimes(lecture.time);
             $(section).data("instructor", lecture.instructor);
@@ -15,12 +21,12 @@ function processSessionSections(session, course, timeSuffix) {
                     .tutorials[i][0]));
             }
             if (timeSuffix === "Y") {
-                $.each(sectionTimes, function(i) {
+                $.each(sectionTimes, function (i) {
                     sectionTimes.push("#" + sectionTimes[i] + "S");
                     sectionTimes[i] = "#" + sectionTimes[i] + "F";
                 });
             } else {
-                $.each(sectionTimes, function(i) {
+                $.each(sectionTimes, function (i) {
                     sectionTimes[i] = "#" + sectionTimes[i] + timeSuffix;
                 });
             }
@@ -28,20 +34,22 @@ function processSessionSections(session, course, timeSuffix) {
             sectionList.appendChild(section);
         }
     });
+}
 
+function processTutorials(session, course, timeSuffix, sectionList) {
     $.each(session.tutorials, function (i, tutorial) {
         if (course.manualTutorialEnrolment) {
             var section = document.createElement("li");
             var sectionTimes = convertTimes(tutorial[1]);
             section.appendChild(document.createTextNode(tutorial[0]));
             if (timeSuffix === "Y") {
-                $.each(sectionTimes, function(i) {
+                $.each(sectionTimes, function (i) {
                     sectionTimes.push("#" + sectionTimes[i] + "S");
                     sectionTimes[i] = "#" + sectionTimes[i] + "F";
                 });
 
             } else {
-                $.each(sectionTimes, function(i) {
+                $.each(sectionTimes, function (i) {
                     sectionTimes[i] = "#" + sectionTimes[i] + timeSuffix;
                 });
             }
@@ -52,9 +60,7 @@ function processSessionSections(session, course, timeSuffix) {
             sectionList.appendChild(section);
         }
     });
-    return sectionList;
 }
-
 
 function processSession(course) {
     var sectionList;
