@@ -97,7 +97,7 @@ function resetSearchList() {
     var courseList;
     var courseEntry;
     var counter = 0;
-    var filter = $("#course-filter").val().toLowerCase();
+    var filter = $("#course-filter").val().toUpperCase();
     $('#search-list').empty();
     courseList = document.createElement("ul");
     if (filter !== "") {
@@ -105,7 +105,7 @@ function resetSearchList() {
 
             // If the course matches and if there are fewer than
             // 100 courses in the list, add it to the list.
-            if (courseName.toLowerCase().indexOf(filter) > -1 && counter < 100) {
+            if (courseName.indexOf(filter) > -1 && counter < 100) {
                 courseEntry = document.createElement("li");
 
                 // "Star" the course if it has been previously selected.

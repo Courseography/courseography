@@ -7,18 +7,18 @@ function processSessionSections(session, course, timeSuffix) {
 
 function processLectures(session, course, timeSuffix, sectionList) {
     $.each(session.lectures, function (i, lecture) {
-        if (lecture.section.charAt(1) !== "2" && lecture.time !==
-                "Online Web Version") {
+        if (lecture.section.charAt(1) !== "2" &&
+            lecture.time !== "Online Web Version") {
             var section = document.createElement("li");
             var sectionTimes = convertTimes(lecture.time);
-            $(section).data("instructor", lecture.instructor);
-            $(section).data("cap", lecture.cap);
-            $(section).data("enrol", lecture.enrol);
-            $(section).data("wait", lecture.wait);
+            $(section).data("instructor", lecture.instructor)
+                      .data("cap", lecture.cap)
+                      .data("enrol", lecture.enrol)
+                      .data("wait", lecture.wait);
             section.appendChild(document.createTextNode(lecture.section));
             if (!course.manualTutorialEnrolment && session.tutorials.length > 0) {
-                sectionTimes = sectionTimes.concat(convertTimes(session
-                    .tutorials[i][0]));
+                sectionTimes = sectionTimes.concat(
+                    convertTimes(session.tutorials[i][0]));
             }
             if (timeSuffix === "Y") {
                 $.each(sectionTimes, function (i) {

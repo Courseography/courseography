@@ -10,18 +10,17 @@ var courseCache = [];
 
 
 $(document).ready(function () {
-    var tdSelector = $("td");
+    var tdObjects = $("td");
 
     $("#dialog").fadeOut()
                 .css("visibility", "visible");
 
-    tdSelector.attr("in-conflict", "false")
+    tdObjects.attr("in-conflict", "false")
            .attr("satisfied", "true");
 
-    // .data attribute cannot be set for multiple elements through chaining.
-    tdSelector.each(function () {
-        $(this).data("conflictArray", []);
-        $(this).data("typeArray", []);
+    tdObjects.each(function () {
+        $(this).data("conflictArray", [])
+               .data("typeArray", []);
     });
 
 
@@ -81,7 +80,6 @@ function setupEntry(courseObject) {
 function fetchCourse(courseCode) {
     var course = getCourseObject(courseCode, courseCache);
     if (typeof course !== "undefined") {
-        console.log("found cached course!");
         return course;
     }
     $.ajax({

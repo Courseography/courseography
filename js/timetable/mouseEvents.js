@@ -11,38 +11,37 @@ function setSectionMouseEvents(section, sectionTimes, course) {
 
 
 function setTdHover() {
-    var tdSelector = $("td");
+    var tdObjects = $("td");
 
-    tdSelector.mouseover(function () {
+    tdObjects.mouseover(function () {
         var courseHtml = $(this).html();
         var course = getCourseObject(courseHtml, courseObjects);
-        if (typeof course === "undefined") {
-            return;
-        }
-        var sectionTimes = [];
-        if (typeof course.selectedLectureTimes !== "undefined") {
-            sectionTimes = sectionTimes.concat(course.selectedLectureTimes);
-        }
-        if (typeof course.selectedTutorialTimes !== "undefined") {
-            sectionTimes = sectionTimes.concat(course.selectedTutorialTimes);
-        }
-        $.each(sectionTimes, function(i, time) {
-            $(time).addClass("hover-time");
-        });
+        if (typeof course !== "undefined") {
+            var sectionTimes = [];
+            if (typeof course.selectedLectureTimes !== "undefined") {
+                sectionTimes = sectionTimes.concat(course.selectedLectureTimes);
+            }
+            if (typeof course.selectedTutorialTimes !== "undefined") {
+                sectionTimes = sectionTimes.concat(course.selectedTutorialTimes);
+            }
+            $.each(sectionTimes, function(i, time) {
+                $(time).addClass("hover-time");
+            });
 
-        var section;
-        if ($(this).attr("type") === "L") {
-            section = course.selectedLecture;
-        } else if ($(this).attr("type") === "T") {
-            section = course.selectedTutorial;
-        } else if ($(this).attr("type") === "P") {
-            section = course.selectedPractical;
+            var section;
+            if ($(this).attr("type") === "L") {
+                section = course.selectedLecture;
+            } else if ($(this).attr("type") === "T") {
+                section = course.selectedTutorial;
+            } else if ($(this).attr("type") === "P") {
+                section = course.selectedPractical;
+            }
+            displayCourseInformation(course);
+            displaySectionInformation($(section));
         }
-        displayCourseInformation(course);
-        displaySectionInformation($(section));
     });
 
-    tdSelector.mouseout(function () {
+    tdObjects.mouseout(function () {
         var courseHtml = $(this).html();
         var course = getCourseObject(courseHtml, courseObjects);
         if (typeof course !== "undefined") {
@@ -169,7 +168,7 @@ function setSectionOnClick(section, sectionTimes, course) {
         } else {
             selectSection(course, section, sectionTimes);
         }
-        
+
         satisfyCourse(course);
         setCookie("selected-lectures", JSON.stringify(selectedLectures));
 
@@ -218,7 +217,7 @@ function getInConflict() {
 function alertUserOfConflict() {
     var dialogSelector = $("#dialog");
     getInConflict() ? dialogSelector.fadeIn(750) :
-        dialogSelector.fadeOut(750);
+                      dialogSelector.fadeOut(750);
 }
 
 
@@ -285,7 +284,7 @@ function removeClickedConflict(course, time) {
         conflictArray.splice(0, 1);
         typeArray.splice(0, 1);
     } else {
-        var index = removeFromArray(course.name, conflictArray);
+        conflictArray.splice(index, 1);
         typeArray.splice(index, 1);
     }
 
@@ -366,11 +365,11 @@ function turnSectionOff(course, section) {
         course.isLectureSelected = false;
         $(course.selectedLecture).attr("clicked", "false");
         index = getIndexFromArray($(course.selectedLecture).attr("id"), selectedLectures);
-    } else if (type === "T") {  
+    } else if (type === "T") {
         course.isTutorialSelected = false;
         $(course.selectedTutorial).attr("clicked", "false");
         index = getIndexFromArray($(course.selectedTutorial).attr("id"), selectedLectures);
-    } else if (type === "P") {  
+    } else if (type === "P") {
         course.isPracticalSelected = false;
         $(course.selectedPractical).attr("clicked", "false");
         index = getIndexFromArray($(course.selectedPractical).attr("id"), selectedLectures);
@@ -399,7 +398,7 @@ function removeSectionTimes(course, section) {
             $(time).html("")
                    .attr("clicked", "false")
                    .attr("satisfied", true)
-                   .attr("type", "");               
+                   .attr("type", "");
         }
     });
 }
@@ -438,11 +437,13 @@ function setClickedTime(course, time, section) {
 
 
 function satisfyCourse(course) {
-    course.satisfied = ((course.selectedTutorialSession === course.selectedLectureSession) && !course.practicalEnrolment) ||
-        ((course.selectedPracticalSession === course.selectedLectureSession) && !course.tutorialEnrolment) ||
-        !course.manualTutorialEnrolment ||
-        ((course.selectedTutorialSession === course.selectedLectureSession) &&
-            (course.selectedTutorialSession === course.selectedPracticalSession));
+    course.satisfied = !course.manualTutorialEnrolment ||
+        (!course.practicalEnrolment &&
+         course.selectedTutorialSession === course.selectedLectureSession) ||
+        (!course.tutorialEnrolment &&
+         course.selectedPracticalSession === course.selectedLectureSession) ||
+        (course.selectedTutorialSession === course.selectedLectureSession &&
+         course.selectedTutorialSession === course.selectedPracticalSession);
     setSatisfaction(course);
 }
 
