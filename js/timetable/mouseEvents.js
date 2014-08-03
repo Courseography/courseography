@@ -38,7 +38,8 @@ function setTdHover() {
         } else if ($(this).attr("type") === "P") {
             section = course.selectedPractical;
         }
-        displayCourseInformation(course, $(section));
+        displayCourseInformation(course);
+        displaySectionInformation($(section));
     });
 
     tdSelector.mouseout(function () {
