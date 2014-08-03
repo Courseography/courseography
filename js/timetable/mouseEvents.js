@@ -85,7 +85,7 @@ function setSectionMouseOver(section, sectionTimes, course) {
     $(section).mouseover(function () {
         performMouseOver(sectionTimes, course, section);
         displayCourseInformation(course);
-        displaySectionInformation(course, $(this));
+        displaySectionInformation($(this));
     });
 }
 
