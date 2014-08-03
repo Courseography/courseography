@@ -270,7 +270,7 @@ function setClickedConflict(course, time, section) {
 }
 
 
-function removeClickedConflict(course, time) {
+function removeClickedConflict(course, time, section) {
     var conflictArray = $(time).data("conflictArray");
     var typeArray = $(time).data("typeArray");
     var index = conflictArray.indexOf(course.name);
@@ -292,7 +292,7 @@ function removeClickedConflict(course, time) {
         $(time).attr("in-conflict", "false");
     }
 
-    var newCourseObject = getCourseObject($(time).html());
+    var newCourseObject = getCourseObject($(time).html(), courseObjects);
     $(time).attr("satisfied", newCourseObject.satisfied)
            .data("conflictArray", conflictArray)
            .data("typeArray", typeArray)
