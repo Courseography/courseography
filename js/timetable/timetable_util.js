@@ -120,7 +120,7 @@ function resetSearchList() {
                 $(courseEntry).click(function() {
                     $(this).toggleClass("starred-course");
                     if ($.inArray(courseName, selectedCourses) > -1) {
-                        removeCourseFromList(course);
+                        removeCourseFromList(courseName);
                     } else {
                         addCourseToList(courseName);
                     }
