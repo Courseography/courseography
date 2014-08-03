@@ -1,5 +1,6 @@
 "use strict";
 
+
 function setSectionMouseEvents(section, sectionTimes, course) {
     setSectionOnClick(section, sectionTimes, course);
     setSectionMouseOver(section, sectionTimes, course);
@@ -154,6 +155,16 @@ function inArray(item, array) {
     return $.inArray(item, array) > -1;
 }
 
+function removeFromArray(item, array) {
+    var index = array.indexOf(item);
+    array.splice(index, 1);
+    return index;
+}
+
+function getIndexFromArray(item, array) {
+    return $.inArray(item, array);
+}
+
 
 function getInConflict() {
     return $("td[class*=clickedConflictTime]").length > 0;
@@ -186,6 +197,7 @@ function getSession(section) {
 function getIsYearSection(section) {
     return $(section.parentNode).hasClass("sectionList-Y");
 }
+
 
 function getIsFallSection(section) {
     return $(section.parentNode).hasClass("sectionList-F");
@@ -230,8 +242,7 @@ function removeClickedConflict(course, time) {
         conflictArray.splice(0, 1);
         typeArray.splice(0, 1);
     } else {
-        var index = conflictArray.indexOf(course.name);
-        conflictArray.splice(index, 1);
+        var index = removeFromArray(course.name, conflictArray);
         typeArray.splice(index, 1);
     }
 
@@ -240,9 +251,8 @@ function removeClickedConflict(course, time) {
     }
 
     var newCourseObject = getCourseObject($(time).html());
-    $(time).attr("satisfied", newCourseObject.satisfied);
-
-    $(time).data("conflictArray", conflictArray)
+    $(time).attr("satisfied", newCourseObject.satisfied)
+           .data("conflictArray", conflictArray)
            .data("typeArray", typeArray)
            .attr("title", conflictArray);
 }
@@ -299,14 +309,15 @@ function turnSectionOff(course, section) {
     if (type === "L") {
         course.isLectureSelected = false;
         $(course.selectedLecture).attr("clicked", "false");
-        index = $.inArray($(course.selectedLecture).attr("id"),
+        index = getIndexFromArray($(course.selectedLecture).attr("id"),
             selectedLectures);
     } else {  
         course.isTutorialSelected = false;
         $(course.selectedTutorial).attr("clicked", "false");
-        index = $.inArray($(course.selectedTutorial).attr("id"),
+        index = getIndexFromArray($(course.selectedTutorial).attr("id"),
             selectedLectures);
     }
+
     if (index > -1) {
         selectedLectures.splice(index, 1);
     }
@@ -343,6 +354,7 @@ function setSession(course, section) {
         course.selectedTutorialSession = session;
     }
 }
+
 
 function selectUnselectedTimes(course, sectionTimes, section) {
     $.each(sectionTimes, function (i, time) {
