@@ -16,27 +16,29 @@ function setTdHover() {
     tdSelector.mouseover(function () {
         var courseHtml = $(this).html();
         var course = getCourseObject(courseHtml);
-            var sectionTimes = [];
-            if (typeof course.selectedLectureTimes !== undefined) {
-                sectionTimes = sectionTimes.concat(course.selectedLectureTimes);
-            }
-            if (typeof course.selectedTutorialTimes !== undefined) {
-                sectionTimes = sectionTimes.concat(course.selectedTutorialTimes);
-            }
-            $.each(sectionTimes, function(i, time) {
-                $(time).addClass("hover-time");
-            });
-
-            var section;
-            if ($(this).attr("type") === "L") {
-                section = course.selectedLecture;
-            } else if ($(this).attr("type") === "T") {
-                section = course.selectedTutorial;
-            } else if ($(this).attr("type") === "P") {
-				section = course.selectedPractical;
-                displayCourseInformation(course, $(section));
-            }
+        if (typeof course === "undefined") {
+            return;
         }
+        var sectionTimes = [];
+        if (typeof course.selectedLectureTimes !== "undefined") {
+            sectionTimes = sectionTimes.concat(course.selectedLectureTimes);
+        }
+        if (typeof course.selectedTutorialTimes !== "undefined") {
+            sectionTimes = sectionTimes.concat(course.selectedTutorialTimes);
+        }
+        $.each(sectionTimes, function(i, time) {
+            $(time).addClass("hover-time");
+        });
+
+        var section;
+        if ($(this).attr("type") === "L") {
+            section = course.selectedLecture;
+        } else if ($(this).attr("type") === "T") {
+            section = course.selectedTutorial;
+        } else if ($(this).attr("type") === "P") {
+            section = course.selectedPractical;
+        }
+        displayCourseInformation(course, $(section));
     });
 
     tdSelector.mouseout(function () {

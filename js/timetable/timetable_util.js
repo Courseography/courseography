@@ -26,7 +26,6 @@ function getCourseObject(courseName) {
         }
     }
     return courseObject;
-
 }
 
 
