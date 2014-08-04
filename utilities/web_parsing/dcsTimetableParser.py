@@ -79,6 +79,7 @@ def getCSCcourses():
             course_json = json.load(course_file)
             if 'F' in course_json or 'S' in course_json or 'Y' in course_json:
                 courses.append(course_json)
+    courses.sort(key=lambda course: course['name'])
     return courses
 
 
@@ -129,7 +130,7 @@ def generateRows(course):
                 # Enrolment
                 if SHOW_ENROLMENT and 'enrol' in lec:
                     enrolString = '{}/{}'.format(lec['enrol'], lec['cap'])
-                    if lec['enrol'] == lec['cap']:
+                    if lec['enrol'] >= lec['cap']:
                         enrolString = '<strong>' + enrolString + '</strong>'
                 else:
                     enrolString = str(lec['cap'])
