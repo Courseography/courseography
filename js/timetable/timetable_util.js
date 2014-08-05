@@ -194,13 +194,35 @@ function addCourseToList(course) {
     courseObject.tutorialEnrolment = false;
     courseObject.practicalEnrolement = false;
     if (courseObject.manualTutorialEnrolment) {
-        $.each(courseObject.S.tutorials, function(i, tutorial) {
-            if (tutorial[0].charAt(0) === "P") {
-                courseObject.practicalEnrolment = true;
-            } else if (tutorial[0].charAt(0) === "T") {
-                courseObject.tutorialEnrolment = true;
+        if (courseObject.Y !== undefined) {
+            $.each(courseObject.Y.tutorials, function(i, tutorial) {
+                if (tutorial[0].charAt(0) === "P") {
+                    courseObject.practicalEnrolment = true;
+                } else if (tutorial[0].charAt(0) === "T") {
+                    courseObject.tutorialEnrolment = true;
+                }
+            });
+        } else {
+            if (courseObject.F !== undefined) {
+                $.each(courseObject.F.tutorials, function(i, tutorial) {
+                    if (tutorial[0].charAt(0) === "P") {
+                        courseObject.practicalEnrolment = true;
+                    } else if (tutorial[0].charAt(0) === "T") {
+                        courseObject.tutorialEnrolment = true;
+                    }
+                });
             }
-        });
+            if (courseObject.S !== undefined) {
+                $.each(courseObject.S.tutorials, function(i, tutorial) {
+                    if (tutorial[0].charAt(0) === "P") {
+                        courseObject.practicalEnrolment = true;
+                    } else if (tutorial[0].charAt(0) === "T") {
+                        courseObject.tutorialEnrolment = true;
+                    }
+                });
+            }
+        }
+
     }
     courseObject.status = "inactive";
     setupEntry(courseObject);
