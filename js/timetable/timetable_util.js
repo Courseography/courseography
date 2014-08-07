@@ -22,6 +22,8 @@ function getIndexFromArray(item, array) {
 }
 
 
+/* These specifically manipulate the two global arrays,
+courseObjects and selectedLectures. */
 function removeCourseObject(courseName) {
     for (var i = 0; i < courseObjects.length; i++) {
         if (courseName === courseObjects[i].name) {
@@ -39,6 +41,13 @@ function getCourseObject(courseName, courseArray) {
         }
     }
     return undefined;
+}
+
+
+function updateSelectedLectures(section) {
+    if (!inArray(section.attr("id"), selectedLectures)) {
+        selectedLectures.push(section.attr("id"));
+    }
 }
 
 
@@ -258,12 +267,44 @@ function renderHeader(name) {
 }
 
 
+/* Info box */
 function displayCourseTitle(course) {
-    $("#course-info-code").html(course.name);
-    $("#course-info-title").html(course.title);
+    displayCourseInformation(course);
     $("#section-stats-section").html("");
     $("#section-stats-instructor").html("");
     $("#section-stats-enrol").html("");
+}
+
+
+function displayCourseInformation(course) {
+    $("#course-info-code").html(course.name);
+    $("#course-info-title").html(course.title);
+}
+
+
+function displaySectionInformation(section) {
+    $("#section-stats-section").html(section.html());
+    $("#section-stats-instructor").html(section.data("instructor"));
+    var cap = section.data("cap");
+    var enrol = section.data("enrol");
+    var wait = section.data("wait");
+    if (cap !== null && enrol !== null) {
+        var enrolString = (cap - enrol) + " out of " + cap +
+            " spots remaining";
+        if (wait !== null && wait !== undefined && wait !== 0) {
+            enrolString += "; " + wait + " students on the waitlist";
+        }
+        $("#section-stats-enrol").html(enrolString);
+    }
+}
+
+
+function clearCourseInformation() {
+    $("#course-info-code").empty();
+    $("#course-info-title").empty();
+    $("#section-stats-section").empty();
+    $("#section-stats-instructor").empty();
+    $("#section-stats-enrol").empty();
 }
 
 

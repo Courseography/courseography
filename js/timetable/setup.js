@@ -14,8 +14,7 @@ $(document).ready(function () {
            .attr("satisfied", "true");
 
     tdObjects.each(function () {
-        $(this).data("conflictArray", [])
-               .data("typeArray", []);
+        $(this).data("conflicts", []);
     });
 
     appendClearAllButton();
