@@ -42,6 +42,38 @@ function getCourseObject(courseName, courseArray) {
 }
 
 
+/* AJAX Functions */
+function getCourse(name) {
+    var course = getCourseObject(name, courseCache);
+    if (course === undefined) {
+        course = fetchCourse(name);
+    }
+    return course;
+}
+
+
+function fetchCourse(name) {
+    var course;
+    $.ajax({
+        url: "res/courses/" + name + ".txt",
+        dataType: "json",
+        async: false,
+        success: function (data) {
+            course = data;
+        },
+        error: function () {
+            throw "No course file";
+        }
+    });
+    courseCache.push(course);
+    return course;
+}
+
+
+
+
+
+
 /* Timetable Search List */
 function enableSearch() {
     $("#course-filter").keyup(function() {
@@ -76,7 +108,7 @@ function resetSearchList() {
                     }
                 })
                 .mouseover(function() {
-                    var courseResult = fetchCourse(course);
+                    var courseResult = getCourse(course);
                     displayCourseTitle(courseResult);
                 })
                 .mouseout(function() {
@@ -164,6 +196,7 @@ function hasManualTutorial(section, index, array) {
 function addCourseToList(name) {
     var course = new Course(name);
     $("#course-select").append(renderEntry(course));
+    courseObjects.push(course);
     selectedCourses.push(name);
     saveCookies(selectedCourses, selectedLectures);
 }
