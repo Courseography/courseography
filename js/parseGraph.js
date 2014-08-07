@@ -104,7 +104,6 @@ function buildGraph() {
 	});
 }
 
-
 function parseAnd(s) {
 	var curr = s;
 	var andList = [];
