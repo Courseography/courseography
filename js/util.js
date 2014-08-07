@@ -32,16 +32,15 @@ function createDiv(xPos, yPos, width, height, color) {
     "use strict";
     var div = $('<div></div>');
     $('#graph').append(div);
-    div.css('width', width)
+    div.delay( 800 )
+        .css('width', width)
         .animate({height: height}, 1000)
         .css('background-color', color)
-        .css({top: (parseFloat(yPos)), left: (parseInt(xPos)), position: 'absolute'});
+        .css({top: (parseFloat(yPos) - 50), left: (parseInt(xPos) - 60), position: 'absolute'});
 }
 
 function displayToolTip(nodeId, xPos, yPos) {
-    createDiv(xPos, yPos, 20, 20, "blue");
-    createDiv(xPos, yPos - 20, 20, 20, "red");
-    createDiv(xPos, yPos - 40, 20, 20, "purple");
+    createDiv(xPos, yPos, 60, 30, "blue");
 }
 
 
@@ -64,7 +63,9 @@ function hoverUnfocus(event) {
     var id = event.target.parentNode.id;
     window[id].unfocus();
     setTimeout(function () {
-        $("#graph div").remove();
+        $("#graph").find("div").hide('slow', function () {
+            $(this).remove();
+        });
     }, 5000);
 }
 
