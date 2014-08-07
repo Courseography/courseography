@@ -1,9 +1,7 @@
 var result;
 var i;
 var courseSelect;
-var header;
 var sections;
-var entry;
 var courses;
 var searchList;
 var courseCache = [];
@@ -49,31 +47,6 @@ function getVeryLargeCourseArray() {
     });
 
     return splitArray;
-}
-
-
-function setupEntry(courseObject) {
-    entry = document.createElement("li");
-    var courseImg = document.createElement("img");
-    $(courseImg).attr("src", "res/ico/delete.ico")
-                .addClass("close-icon")
-                .click(function () {
-                    removeCourseFromList(courseObject.name);
-                });
-    entry.id = courseObject.name + "-li";
-    header = document.createElement("h3");
-    header.appendChild(courseImg);
-    header.appendChild(document.createTextNode(courseObject.name));
-    courseObject.header = header;
-    sections = processSession(courseObject);
-    entry.appendChild(header);
-    entry.appendChild(sections);
-    $(entry).accordion({
-        heightStyle: "content",
-        collapsible: true,
-        active: false
-    });
-    courseSelect.appendChild(entry);
 }
 
 

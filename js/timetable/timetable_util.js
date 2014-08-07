@@ -4,28 +4,247 @@ var selectedLectures = [];
 var courseObjects = [];
 
 
+/* Array utilities */
+function inArray(item, array) {
+    return $.inArray(item, array) > -1;
+}
+
+
 function removeCourseObject(courseName) {
-    var index = -1;
     for (var i = 0; i < courseObjects.length; i++) {
         if (courseName === courseObjects[i].name) {
-            index = i;
+            courseObjects.splice(i, 1)
             break;
         }
-    }
-    if (index > -1) {
-        courseObjects.splice(index, 1);
     }
 }
 
 
 function getCourseObject(courseName, courseArray) {
-    var courseObject;
     for (var i = 0; i < courseArray.length; i++) {
         if (courseArray[i].name === courseName) {
-            courseObject = courseArray[i];
+            return courseArray[i];
         }
     }
-    return courseObject;
+    return undefined;
+}
+
+
+/* Timetable Search List */
+function enableSearch() {
+    $("#course-filter").keyup(function() {
+        resetSearchList();
+    });
+}
+
+
+function resetSearchList() {
+    var filter = $("#course-filter").val().toUpperCase();
+    $("#search-list").empty();
+    var courseList = document.createElement("ul");
+    if (filter !== "") {
+        $.each(courses, function(i, course) {
+            var counter = 0;
+
+            // If the course matches and if there are fewer than
+            // 100 courses in the list, add it to the list.
+            if (course.indexOf(filter) > -1 && counter < 100) {
+                var courseEntry = document.createElement("li");
+
+                // "Star" the course if it has been previously selected.
+                if (inArray(course, selectedCourses)) {
+                    $(courseEntry).addClass("starred-course");
+                }
+
+                // Add an ID to the list so we can come back and star
+                // it when it is clicked.
+                $(courseEntry).attr("id", course + "-search");
+                courseEntry.innerHTML = course;
+                $(courseEntry).click(function() {
+                    $(this).toggleClass("starred-course");
+                    if (inArray(course, selectedCourses)) {
+                        removeCourseFromList(course);
+                    } else {
+                        addCourseToList(course);
+                    }
+                })
+                .mouseover(function() {
+                    var courseResult = fetchCourse(course);
+                    displayCourseTitle(courseResult);
+                })
+                .mouseout(function() {
+                    clearCourseInformation();
+                });
+
+                counter++;
+                courseList.appendChild(courseEntry);
+            }
+        });
+    }
+    $("#search-list").append(courseList);
+}
+
+
+/* Cookie Interaction */
+function restoreFromCookies() {
+    var starredCourseCookie = getJSONCookie("selected-courses");
+    if (starredCourseCookie.length > 0) {
+        var selectedCoursesTemp = $.parseJSON(starredCourseCookie);
+        var newCourses = [];
+        $.each(selectedCoursesTemp, function (i, course) {
+            try {
+                addCourseToList(course);
+                newCourses.push(course);
+            } catch (e) {
+                console.log("Removed bad course from cookie: " + course);
+                console.log(e);
+            }
+        });
+    }
+
+    var starredLectureCookie = getJSONCookie("selected-lectures");
+    if (starredLectureCookie.length > 0) {
+        selectedLectures = $.parseJSON(starredLectureCookie);
+        var newSections = [];
+        $.each(selectedLectures, function (i, section) {
+            try {
+                $("#" + section).click();
+                newSections.push(section);
+            } catch (e) {
+                console.log("Removed bad section from cookie: " + section);
+            }
+            
+        });
+    }
+
+    setCookie("selected-courses", JSON.stringify(newCourses));
+    setCookie("selected-lectures", JSON.stringify(newSections));
+}
+
+
+function convertTimes(times) {
+    var timeList = [];
+    var timeString;
+    var days = "MTWRF";
+    var time;
+
+    for(var i = 0; i < times.length; i++) {
+
+        // If a course is "12", we don't want to add a "0". That would result
+        // in something like "M0". We exclude this from the mod cases.
+        if ((times[i][1] % 12) !== 0) {
+            time = times[i][1] % 12;
+        } else {
+            time = times[i][1];
+        }
+
+        timeString = days.charAt(times[i][0]);
+        timeString = timeString + time;
+        timeList.push(timeString);
+    }
+
+    return timeList;
+}
+
+
+// Used to determine if course requires manual practical enrolment
+function hasManualPractical(section, index, array) {
+    return (section[0].charAt(0) === "P");
+}
+
+
+// Used to determine if course requires manual tutorial enrolment
+function hasManualTutorial(section, index, array) {
+    return (section[0].charAt(0) === "T");
+}
+
+
+function addCourseToList(courseName) {
+    var course = getCourse(courseName);
+    course.isLectureSelected = false;
+    course.isTutorialSelected = false;
+    course.isPracticalSelected = false;
+    if (course.manualTutorialEnrolment) {
+        if (course.Y !== undefined) {
+            course.practicalEnrolment = course.Y.tutorials.some(hasManualPractical);
+            course.tutorialEnrolment = course.Y.tutorials.some(hasManualTutorial);
+        } else if (course.F !== undefined) {
+            course.practicalEnrolment = course.F.tutorials.some(hasManualPractical);
+            course.tutorialEnrolment = course.F.tutorials.some(hasManualTutorial);
+        } else {
+            course.practicalEnrolment = course.S.tutorials.some(hasManualPractical);
+            course.tutorialEnrolment = course.S.tutorials.some(hasManualTutorial);
+        }
+    }
+    course.status = "inactive";
+    $("#course-select").append(renderEntry(course));
+
+    selectedCourses.push(courseName);
+    var jsonCookie = JSON.stringify(selectedCourses);
+    setCookie("selected-courses", jsonCookie);
+}
+
+
+function renderEntry(course) {
+    var entry = document.createElement("li");
+    entry.id = course.name + "-li";
+    
+    var header = renderHeader(course.name);
+    entry.appendChild(header);
+    course.header = header;
+
+    sections = processSession(course);
+    
+    entry.appendChild(sections);
+    $(entry).accordion({
+        heightStyle: "content",
+        collapsible: true,
+        active: false
+    });
+    
+    return entry;
+}
+
+
+function renderHeader(name) {
+    var header = document.createElement("h3");
+    header.appendChild(document.createTextNode(name));
+    
+    var courseImg = document.createElement("img");
+    $(courseImg).attr("src", "res/ico/delete.ico")
+                .addClass("close-icon")
+                .click(function () {
+                    removeCourseFromList(course.name);
+                });
+    header.appendChild(courseImg);
+    
+    return header;
+}
+
+function removeCourseFromList(course) {
+    var courseElement = document.getElementById(course + "-li");
+    $("#" + course + "-li" + " li[clicked*='true']").each(function() {
+        $(this).click();
+    });
+    courseSelect.removeChild(courseElement);
+
+    var index = $.inArray(course, selectedCourses);
+    selectedCourses.splice(index, 1);
+    var jsonCookie = JSON.stringify(selectedCourses);
+    setCookie("selected-courses", jsonCookie);
+
+    resetSearchList();
+
+    removeCourseObject(course);
+}
+
+
+function displayCourseTitle(course) {
+    $("#course-info-code").html(course.name);
+    $("#course-info-title").html(course.title);
+    $("#section-stats-section").html("");
+    $("#section-stats-instructor").html("");
+    $("#section-stats-enrol").html("");
 }
 
 
@@ -74,194 +293,3 @@ function getCourseObject(courseName, courseArray) {
         });
     };
 })($);
-
-
-// Search function for timetable
-function enableSearch() {
-    $("#course-filter").keyup(function() {
-        resetSearchList();
-    });
-}
-
-
-function displayCourseTitle(course) {
-    $("#course-info-code").html(course.name);
-    $("#course-info-title").html(course.title);
-    $("#section-stats-section").html("");
-    $("#section-stats-instructor").html("");
-    $("#section-stats-enrol").html("");
-}
-
-
-function resetSearchList() {
-    var courseList;
-    var courseEntry;
-    var counter = 0;
-    var filter = $("#course-filter").val().toUpperCase();
-    $('#search-list').empty();
-    courseList = document.createElement("ul");
-    if (filter !== "") {
-        $.each(courses, function(i, courseName) {
-
-            // If the course matches and if there are fewer than
-            // 100 courses in the list, add it to the list.
-            if (courseName.indexOf(filter) > -1 && counter < 100) {
-                courseEntry = document.createElement("li");
-
-                // "Star" the course if it has been previously selected.
-                if ($.inArray(courseName, selectedCourses) > -1) {
-                    $(courseEntry).addClass("starred-course");
-                }
-
-                // Add an ID to the list so we can come back and star
-                // it when it is clicked.
-                $(courseEntry).attr("id", courseName + "-search");
-                courseEntry.innerHTML = courseName;
-                $(courseEntry).click(function() {
-                    $(this).toggleClass("starred-course");
-                    if ($.inArray(courseName, selectedCourses) > -1) {
-                        removeCourseFromList(courseName);
-                    } else {
-                        addCourseToList(courseName);
-                    }
-                })
-                .mouseover(function() {
-                    var courseResult = fetchCourse(courseName);
-                    displayCourseTitle(courseResult);
-                })
-                .mouseout(function() {
-                    clearCourseInformation();
-                });
-
-                counter++;
-                courseList.appendChild(courseEntry);
-            }
-        });
-    }
-    searchList.appendChild(courseList);
-}
-
-
-function restoreFromCookies() {
-    var starredCourseCookie = getJSONCookie("selected-courses");
-    if (starredCourseCookie.length > 0) {
-        var selectedCoursesTemp = $.parseJSON(starredCourseCookie);
-        var newCourses = [];
-        $.each(selectedCoursesTemp, function (i, course) {
-            try {
-                addCourseToList(course);
-                newCourses.push(course);
-            } catch (e) {
-                console.log("Removed bad course in cookie: " + course);
-            }
-        });
-    }
-
-    var starredLectureCookie = getJSONCookie("selected-lectures");
-    if (starredLectureCookie.length > 0) {
-        selectedLectures = $.parseJSON(starredLectureCookie);
-        var newSections = [];
-        $.each(selectedLectures, function (i, section) {
-            try {
-                $("#" + section).click();
-                newSections.push(section);
-            } catch (e) {
-                console.log("Removed bad section in cookie: " + section);
-            }
-            
-        });
-    }
-
-    setCookie("selected-courses", JSON.stringify(newCourses));
-    setCookie("selected-lectures", JSON.stringify(newSections));
-}
-
-
-function convertTimes(times) {
-    var timeList = [];
-    var timeString;
-    var days = "MTWRF";
-    var time;
-
-    for(var i = 0; i < times.length; i++) {
-
-        // If a course is "12", we don't want to add a "0". That would result
-        // in something like "M0". We exclude this from the mod cases.
-        if ((times[i][1] % 12) !== 0) {
-            time = times[i][1] % 12;
-        } else {
-            time = times[i][1];
-        }
-
-        timeString = days.charAt(times[i][0]);
-        timeString = timeString + time;
-        timeList.push(timeString);
-    }
-
-    return timeList;
-}
-
-
-function addCourseToList(course) {
-    var courseObject = getCourse(course);
-    courseObject.isLectureSelected = false;
-    courseObject.isTutorialSelected = false;
-    courseObject.isPracticalSelected = false;
-    courseObject.tutorialEnrolment = false;
-    courseObject.practicalEnrolement = false;
-    if (courseObject.manualTutorialEnrolment) {
-        if (courseObject.Y !== undefined) {
-            $.each(courseObject.Y.tutorials, function(i, tutorial) {
-                if (tutorial[0].charAt(0) === "P") {
-                    courseObject.practicalEnrolment = true;
-                } else if (tutorial[0].charAt(0) === "T") {
-                    courseObject.tutorialEnrolment = true;
-                }
-            });
-        } else {
-            if (courseObject.F !== undefined) {
-                $.each(courseObject.F.tutorials, function(i, tutorial) {
-                    if (tutorial[0].charAt(0) === "P") {
-                        courseObject.practicalEnrolment = true;
-                    } else if (tutorial[0].charAt(0) === "T") {
-                        courseObject.tutorialEnrolment = true;
-                    }
-                });
-            }
-            if (courseObject.S !== undefined) {
-                $.each(courseObject.S.tutorials, function(i, tutorial) {
-                    if (tutorial[0].charAt(0) === "P") {
-                        courseObject.practicalEnrolment = true;
-                    } else if (tutorial[0].charAt(0) === "T") {
-                        courseObject.tutorialEnrolment = true;
-                    }
-                });
-            }
-        }
-
-    }
-    courseObject.status = "inactive";
-    setupEntry(courseObject);
-
-    selectedCourses.push(course);
-    var jsonCookie = JSON.stringify(selectedCourses);
-    setCookie("selected-courses", jsonCookie);
-}
-
-
-function removeCourseFromList(course) {
-    var courseElement = document.getElementById(course + "-li");
-    $("#" + course + "-li" + " li[clicked*='true']").each(function() {
-        $(this).click();
-    });
-    courseSelect.removeChild(courseElement);
-
-    var index = $.inArray(course, selectedCourses);
-    selectedCourses.splice(index, 1);
-    var jsonCookie = JSON.stringify(selectedCourses);
-    setCookie("selected-courses", jsonCookie);
-
-    resetSearchList();
-
-    removeCourseObject(course);
-}
