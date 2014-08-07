@@ -192,23 +192,6 @@ function updateSelectedLectures(section) {
 }
 
 
-function inArray(item, array) {
-    return $.inArray(item, array) > -1;
-}
-
-
-function removeFromArray(item, array) {
-    var index = array.indexOf(item);
-    array.splice(index, 1);
-    return index;
-}
-
-
-function getIndexFromArray(item, array) {
-    return $.inArray(item, array);
-}
-
-
 function getInConflict() {
     return $("td[class*=clickedConflictTime]").length > 0;
 }

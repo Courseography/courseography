@@ -10,6 +10,18 @@ function inArray(item, array) {
 }
 
 
+function removeFromArray(item, array) {
+    var index = array.indexOf(item);
+    array.splice(index, 1);
+    return index;
+}
+
+
+function getIndexFromArray(item, array) {
+    return $.inArray(item, array);
+}
+
+
 function removeCourseObject(courseName) {
     for (var i = 0; i < courseObjects.length; i++) {
         if (courseName === courseObjects[i].name) {
@@ -51,11 +63,6 @@ function resetSearchList() {
             if (course.indexOf(filter) > -1 && counter < 100) {
                 var courseEntry = document.createElement("li");
 
-                // "Star" the course if it has been previously selected.
-                if (inArray(course, selectedCourses)) {
-                    $(courseEntry).addClass("starred-course");
-                }
-
                 // Add an ID to the list so we can come back and star
                 // it when it is clicked.
                 $(courseEntry).attr("id", course + "-search");
@@ -82,12 +89,28 @@ function resetSearchList() {
         });
     }
     $("#search-list").append(courseList);
+    // "Star" the course if it has been previously selected.
+    refreshStarredCourses();
 }
 
+
+// Highlight starred (selected) courses in search list
+function refreshStarredCourses() {
+    $("#search-list").find("li").each(function (index) {
+        var course = $(this).text();
+        if (inArray(course, selectedCourses)) {
+            $(this).addClass("starred-course");
+        } else {
+            $(this).removeClass("starred-course");
+        }
+    });
+}
 
 /* Cookie Interaction */
 function restoreFromCookies() {
     var starredCourseCookie = getJSONCookie("selected-courses");
+    var starredLectureCookie = getJSONCookie("selected-lectures");
+
     if (starredCourseCookie.length > 0) {
         var selectedCoursesTemp = $.parseJSON(starredCourseCookie);
         var newCourses = [];
@@ -102,7 +125,6 @@ function restoreFromCookies() {
         });
     }
 
-    var starredLectureCookie = getJSONCookie("selected-lectures");
     if (starredLectureCookie.length > 0) {
         selectedLectures = $.parseJSON(starredLectureCookie);
         var newSections = [];
@@ -117,33 +139,13 @@ function restoreFromCookies() {
         });
     }
 
-    setCookie("selected-courses", JSON.stringify(newCourses));
-    setCookie("selected-lectures", JSON.stringify(newSections));
+    saveCookies(newCourses, newSections);
 }
 
 
-function convertTimes(times) {
-    var timeList = [];
-    var timeString;
-    var days = "MTWRF";
-    var time;
-
-    for(var i = 0; i < times.length; i++) {
-
-        // If a course is "12", we don't want to add a "0". That would result
-        // in something like "M0". We exclude this from the mod cases.
-        if ((times[i][1] % 12) !== 0) {
-            time = times[i][1] % 12;
-        } else {
-            time = times[i][1];
-        }
-
-        timeString = days.charAt(times[i][0]);
-        timeString = timeString + time;
-        timeList.push(timeString);
-    }
-
-    return timeList;
+function saveCookies(courses, sections) {
+    setCookie("selected-courses", JSON.stringify(courses));
+    setCookie("selected-lectures", JSON.stringify(sections));
 }
 
 
@@ -159,32 +161,33 @@ function hasManualTutorial(section, index, array) {
 }
 
 
-function addCourseToList(courseName) {
-    var course = getCourse(courseName);
-    course.isLectureSelected = false;
-    course.isTutorialSelected = false;
-    course.isPracticalSelected = false;
-    if (course.manualTutorialEnrolment) {
-        if (course.Y !== undefined) {
-            course.practicalEnrolment = course.Y.tutorials.some(hasManualPractical);
-            course.tutorialEnrolment = course.Y.tutorials.some(hasManualTutorial);
-        } else if (course.F !== undefined) {
-            course.practicalEnrolment = course.F.tutorials.some(hasManualPractical);
-            course.tutorialEnrolment = course.F.tutorials.some(hasManualTutorial);
-        } else {
-            course.practicalEnrolment = course.S.tutorials.some(hasManualPractical);
-            course.tutorialEnrolment = course.S.tutorials.some(hasManualTutorial);
-        }
-    }
-    course.status = "inactive";
+function addCourseToList(name) {
+    var course = new Course(name);
     $("#course-select").append(renderEntry(course));
-
-    selectedCourses.push(courseName);
-    var jsonCookie = JSON.stringify(selectedCourses);
-    setCookie("selected-courses", jsonCookie);
+    selectedCourses.push(name);
+    saveCookies(selectedCourses, selectedLectures);
 }
 
 
+function removeCourseFromList(name) {
+    var courseSelector = "#" + name + "-li";
+    var courseElement = $(courseSelector);
+    $(courseSelector + " li[clicked*='true']").each(function() {
+        $(this).click();
+    });
+    courseElement.remove();
+
+    // Remove memory from memory
+    removeCourseObject(name);
+    removeFromArray(name, selectedCourses);
+    saveCookies(selectedCourses, selectedLectures);
+
+    // Refresh starred courses
+    refreshStarredCourses();
+}
+
+
+// DOM Elements/manipulation
 function renderEntry(course) {
     var entry = document.createElement("li");
     entry.id = course.name + "-li";
@@ -214,28 +217,11 @@ function renderHeader(name) {
     $(courseImg).attr("src", "res/ico/delete.ico")
                 .addClass("close-icon")
                 .click(function () {
-                    removeCourseFromList(course.name);
+                    removeCourseFromList(name);
                 });
     header.appendChild(courseImg);
     
     return header;
-}
-
-function removeCourseFromList(course) {
-    var courseElement = document.getElementById(course + "-li");
-    $("#" + course + "-li" + " li[clicked*='true']").each(function() {
-        $(this).click();
-    });
-    courseSelect.removeChild(courseElement);
-
-    var index = $.inArray(course, selectedCourses);
-    selectedCourses.splice(index, 1);
-    var jsonCookie = JSON.stringify(selectedCourses);
-    setCookie("selected-courses", jsonCookie);
-
-    resetSearchList();
-
-    removeCourseObject(course);
 }
 
 
@@ -245,6 +231,30 @@ function displayCourseTitle(course) {
     $("#section-stats-section").html("");
     $("#section-stats-instructor").html("");
     $("#section-stats-enrol").html("");
+}
+
+
+// Parse times for cell ids.
+function convertTimes(times) {
+    var timeList = [];
+    var time;
+
+    for(var i = 0; i < times.length; i++) {
+
+        // If a course is "12", we don't want to add a "0". That would result
+        // in something like "M0". We exclude this from the mod cases.
+        if ((times[i][1] % 12) !== 0) {
+            time = times[i][1] % 12;
+        } else {
+            time = times[i][1];
+        }
+
+        var timeString = "MTWRF".charAt(times[i][0]);
+        timeString = timeString + time;
+        timeList.push(timeString);
+    }
+
+    return timeList;
 }
 
 
