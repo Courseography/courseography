@@ -88,6 +88,9 @@ function fetchCourse(courseCode) {
         async: false,
         success: function (data) {
             course = data;
+        },
+        error: function () {
+            throw "No course file";
         }
     });
     courseCache.push(course);

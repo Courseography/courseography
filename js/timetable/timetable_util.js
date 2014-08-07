@@ -143,21 +143,37 @@ function resetSearchList() {
 
 
 function restoreFromCookies() {
-    var starredCourseCookie = getCookie("selected-courses");
+    var starredCourseCookie = getJSONCookie("selected-courses");
     if (starredCourseCookie.length > 0) {
         var selectedCoursesTemp = $.parseJSON(starredCourseCookie);
+        var newCourses = [];
         $.each(selectedCoursesTemp, function (i, course) {
-            addCourseToList(course);
+            try {
+                addCourseToList(course);
+                newCourses.push(course);
+            } catch (e) {
+                console.log("Removed bad course in cookie: " + course);
+            }
         });
     }
 
-    var starredLectureCookie = getCookie("selected-lectures");
+    var starredLectureCookie = getJSONCookie("selected-lectures");
     if (starredLectureCookie.length > 0) {
         selectedLectures = $.parseJSON(starredLectureCookie);
-        $.each(selectedLectures, function (i, course) {
-            $("#" + course).click();
+        var newSections = [];
+        $.each(selectedLectures, function (i, section) {
+            try {
+                $("#" + section).click();
+                newSections.push(section);
+            } catch (e) {
+                console.log("Removed bad section in cookie: " + section);
+            }
+            
         });
     }
+
+    setCookie("selected-courses", JSON.stringify(newCourses));
+    setCookie("selected-lectures", JSON.stringify(newSections));
 }
 
 
