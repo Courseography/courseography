@@ -58,11 +58,10 @@ function Node(parents, type, name) {
     this.updated = false; // Used when updating active/inactive state
     this.hybrid = false; // Identifies whether node is 'hybrid'
     this.status = 'inactive';
-
 }
 
 // Returns true if the node has been selected
-Node.prototype.isSelected = function() {
+Node.prototype.isSelected = function () {
     return this.status === 'active' || this.status === 'overridden';
 };
 
@@ -73,12 +72,12 @@ Node.prototype.focus = function () {
         if (this.status !== 'overridden') {
             $("#" + this.name).attr('data-active', 'missing');
         }
-        $.each(this.inEdges, function(i, edge) {
+        $.each(this.inEdges, function (i, edge) {
             if (edge.parent.status !== 'active') {
                 $("#" + edge.name).attr('data-active', 'missing');
             }
         });
-        $.each(this.parents, function(i, node) {
+        $.each(this.parents, function (i, node) {
             node.focus();
         });
     }
@@ -94,10 +93,10 @@ Node.prototype.unfocus = function () {
         }
     }
 
-    $.each(this.parents, function(i, node) {
+    $.each(this.parents, function (i, node) {
         node.unfocus();
     });
-    $.each(this.outEdges, function(i, edge) {
+    $.each(this.outEdges, function (i, edge) {
         edge.updateStatus();
     });
 };
@@ -121,10 +120,10 @@ Node.prototype.updateStatus = function () {
 
     // Always update children of hybrids
     if (this.hybrid) {
-        $.each(this.children, function(i, node) {
+        $.each(this.children, function (i, node) {
             node.updateStatus();
         });
-        $.each(this.outEdges, function(i, edge) {
+        $.each(this.outEdges, function (i, edge) {
             edge.updateStatus();
         });
     }

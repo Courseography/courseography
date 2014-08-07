@@ -20,13 +20,41 @@ function setMouseCallbacks() {
 }
 
 
+/**
+ * Creates a div.
+ * @param posX The x position of the div ('left' attribute).
+ * @param posY The y position of the div ('top' attribute).
+ * @param width The width of the div.
+ * @param height The height of the div.
+ * @param color The background-color of the div.
+ */
+function createDiv(xPos, yPos, width, height, color) {
+    "use strict";
+    var div = $('<div></div>');
+    $('#graph').append(div);
+    div.css('width', width)
+        .animate({height: height}, 1000)
+        .css('background-color', color)
+        .css({top: (parseFloat(yPos)), left: (parseInt(xPos)), position: 'absolute'});
+}
+
+function displayToolTip(nodeId, xPos, yPos) {
+    createDiv(xPos, yPos, 20, 20, "blue");
+    createDiv(xPos, yPos - 20, 20, 20, "red");
+    createDiv(xPos, yPos - 40, 20, 20, "purple");
+}
+
+
 // Activates missing prerequisite display and 
 // fetches course description on hover
 function hoverFocus(event) {
+    var x=event.clientX;
+    var y=event.clientY;
     var id = event.target.parentNode.id;
     // Highlight missing prerequisites
     window[id].focus();
     // Fetch course description
+    displayToolTip(id, x, y);
     fetchCourseDescription(id);
 }
 
@@ -35,6 +63,9 @@ function hoverFocus(event) {
 function hoverUnfocus(event) {
     var id = event.target.parentNode.id;
     window[id].unfocus();
+    setTimeout(function () {
+        $("#graph div").remove();
+    }, 5000);
 }
 
 
