@@ -21,26 +21,6 @@ function setMouseCallbacks() {
 
 
 /**
- * Creates a div.
- * @param posX The x position of the div ('left' attribute).
- * @param posY The y position of the div ('top' attribute).
- * @param width The width of the div.
- * @param height The height of the div.
- * @param color The background-color of the div.
- */
-function createDiv(xPos, yPos, width, height, color) {
-    "use strict";
-    var div = $('<div></div>');
-    $('#graph').append(div);
-    div.delay( 800 )
-        .css('width', width)
-        .animate({height: height}, 1000)
-        .css('background-color', color)
-        .css({top: (parseFloat(yPos) - 50), left: (parseInt(xPos) - 60), position: 'absolute'});
-}
-
-
-/**
  * Creates an svg rect and appends it to #graph0.
  * @param posX The x position of the rect.
  * @param posY The y position of the rect.
@@ -78,6 +58,8 @@ function createRect(nodeId, rectClass, rectId, posX, posY, width, height, color)
             div.attr("title", nodeId).html(fetchCourseDescription(nodeId))
                 .addClass("modal").dialog({modal: true});
             alert(div.dialog( "option", "modal" ));
+            $('.node, .hybrid').attr('data-active', 'unlit');
+            setMouseCallbacks();
         });
 }
 
@@ -92,18 +74,22 @@ function displayToolTip(nodeId) {
 // Activates missing prerequisite display and 
 // fetches course description on hover
 function hoverFocus(event) {
-    var id = event.target.parentNode.id;
-    // Highlight missing prerequisites
-    window[id].focus();
-    // Fetch course description
-    setTimeout(displayToolTip(id), 3000);
+    if ($(".modal").length === 0) {
+        var id = event.target.parentNode.id;
+        // Highlight missing prerequisites
+        window[id].focus();
+        // Fetch course description
+        setTimeout(displayToolTip(id), 3000);
+    }
 }
 
 
 // Deactivate missing prerequisites
 function hoverUnfocus(event) {
-    var id = event.target.parentNode.id;
-    window[id].unfocus();
+    if ($(".modal").length === 0) {
+        var id = event.target.parentNode.id;
+        window[id].unfocus();
+    }
     d3.select("#" + id + "-tooltip").interrupt();
     setTimeout(function () {
         $("." + id + "-tooltip").hide('slow', function () {
@@ -115,7 +101,7 @@ function hoverUnfocus(event) {
 
 // Activate/Deactivate node when clicked
 function turnNode(event) {
-    if (activeFocus === '') {
+    if (activeFocus === '' && $(".modal").length === 0) {
         var id = event.target.parentNode.id;
         // Update this node
         window[id].turn();
