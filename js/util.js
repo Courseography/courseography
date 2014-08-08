@@ -39,21 +39,49 @@ function createDiv(xPos, yPos, width, height, color) {
         .css({top: (parseFloat(yPos) - 50), left: (parseInt(xPos) - 60), position: 'absolute'});
 }
 
-function displayToolTip(nodeId, xPos, yPos) {
-    createDiv(xPos, yPos, 60, 30, "blue");
+
+/**
+ * Creates an svg rect and appends it to #graph0.
+ * @param posX The x position of the rect.
+ * @param posY The y position of the rect.
+ * @param width The width of the rect.
+ * @param height The height of the rect.
+ * @param color The fill and stroke color of the rect.
+ */
+function createRect(rectClass, posX, posY, width, height, color) {
+    "use strict";
+    d3.select('#nodes').append('rect')
+        .attr("class", rectClass)
+        .attr("x", posX)
+        .attr("y", posY)
+        .attr("rx", 20)
+        .attr("ry", 20)
+        .attr("fill", color)
+        .attr("stroke", color)
+        .attr("width", 0)
+        .attr("height", 0)
+        .transition()
+        .duration(5000)
+        .attr("width", width)
+        .attr("height", height);
+}
+
+function displayToolTip(nodeId) {
+    var rectObject = $("#" + nodeId).find("rect");
+    var xPos = rectObject.attr("x") - 30;
+    var yPos = rectObject.attr("y") - 30;
+    createRect("node-tooltip", xPos, yPos, 60, 30, "blue");
 }
 
 
 // Activates missing prerequisite display and 
 // fetches course description on hover
 function hoverFocus(event) {
-    var x=event.clientX;
-    var y=event.clientY;
     var id = event.target.parentNode.id;
     // Highlight missing prerequisites
     window[id].focus();
     // Fetch course description
-    displayToolTip(id, x, y);
+    displayToolTip(id);
     fetchCourseDescription(id);
 }
 
@@ -63,7 +91,7 @@ function hoverUnfocus(event) {
     var id = event.target.parentNode.id;
     window[id].unfocus();
     setTimeout(function () {
-        $("#graph").find("div").hide('slow', function () {
+        $(".node-tooltip").hide('slow', function () {
             $(this).remove();
         });
     }, 5000);
