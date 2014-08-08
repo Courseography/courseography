@@ -48,29 +48,44 @@ function createDiv(xPos, yPos, width, height, color) {
  * @param height The height of the rect.
  * @param color The fill and stroke color of the rect.
  */
-function createRect(rectClass, posX, posY, width, height, color) {
+function createRect(nodeId, rectClass, rectId, posX, posY, width, height, color) {
     "use strict";
+    console.log(d3.select("#" + rectId));
     d3.select('#nodes').append('rect')
-        .attr("class", rectClass)
+        .attr("class", rectClass + " " + rectId)
+        .attr("id", rectId)
         .attr("x", posX)
         .attr("y", posY)
-        .attr("rx", 20)
-        .attr("ry", 20)
-        .attr("fill", color)
+        .attr("rx", 10)
+        .attr("ry", 10)
+        .attr("fill", "white")
         .attr("stroke", color)
-        .attr("width", 0)
-        .attr("height", 0)
+        .attr("stroke-width", 2)
+        .attr("width", width)
+        .attr("height", height)
+        .attr("fill-opacity", 0)
+        .attr("stroke-opacity", 0)
         .transition()
         .duration(5000)
-        .attr("width", width)
-        .attr("height", height);
+        .attr("fill-opacity", 1)
+        .attr("stroke-opacity", 1);
+    d3.select('#nodes').append("text").text("...")
+        .attr("x", parseFloat(posX) + 30)
+        .attr("y", parseFloat(posY) + 15)
+        .style("cursor", "pointer")
+        .on("click", function() {
+            var div = $("<div></div>");
+            div.attr("title", nodeId).html(fetchCourseDescription(nodeId))
+                .addClass("modal").dialog({modal: true});
+            alert(div.dialog( "option", "modal" ));
+        });
 }
 
 function displayToolTip(nodeId) {
     var rectObject = $("#" + nodeId).find("rect");
-    var xPos = rectObject.attr("x") - 30;
-    var yPos = rectObject.attr("y") - 30;
-    createRect("node-tooltip", xPos, yPos, 60, 30, "blue");
+    var xPos = rectObject.attr("x") - 65;
+    var yPos = rectObject.attr("y");
+    createRect(nodeId, "node-tooltip", nodeId + "-tooltip", xPos, yPos, 60, 30, "black");
 }
 
 
@@ -81,8 +96,7 @@ function hoverFocus(event) {
     // Highlight missing prerequisites
     window[id].focus();
     // Fetch course description
-    displayToolTip(id);
-    fetchCourseDescription(id);
+    setTimeout(displayToolTip(id), 3000);
 }
 
 
@@ -90,8 +104,9 @@ function hoverFocus(event) {
 function hoverUnfocus(event) {
     var id = event.target.parentNode.id;
     window[id].unfocus();
+    d3.select("#" + id + "-tooltip").interrupt();
     setTimeout(function () {
-        $(".node-tooltip").hide('slow', function () {
+        $("." + id + "-tooltip").hide('slow', function () {
             $(this).remove();
         });
     }, 5000);
@@ -366,6 +381,9 @@ $(window).resize(function() {
     var w = $('.infoTabs').width() - $('.tabList').outerWidth() - 1;
     $('#FCECountDiv').width(w + 'px');
 });
+
+function setToolTip() {
+}
 
 $(document).ready(function() {
     buildGraph();
