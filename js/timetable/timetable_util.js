@@ -234,7 +234,7 @@ function renderEntry(course) {
     var entry = document.createElement("li");
     entry.id = course.name + "-li";
     
-    var header = renderHeader(course.name);
+    var header = renderHeader(course);
     entry.appendChild(header);
     course.header = header;
 
@@ -251,18 +251,26 @@ function renderEntry(course) {
 }
 
 
-function renderHeader(name) {
+function renderHeader(course) {
     var header = document.createElement("h3");
-    header.appendChild(document.createTextNode(name));
+    header.appendChild(document.createTextNode(course.name));
     
+    $(header).mouseover(function () {
+                displayCourseTitle(course);
+             })
+             .mouseout(function () {
+                 clearCourseInformation();
+             });
+
+
     var courseImg = document.createElement("img");
     $(courseImg).attr("src", "res/ico/delete.ico")
                 .addClass("close-icon")
                 .click(function () {
-                    removeCourseFromList(name);
+                    removeCourseFromList(course.name);
                 });
     header.appendChild(courseImg);
-    
+
     return header;
 }
 

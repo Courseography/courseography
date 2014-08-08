@@ -41,6 +41,9 @@ function getType(section) {
 }
 
 
+function getCourseName(section) {
+    return section.id.substring(0, 8);
+}
 
 
 function Course(name) {
@@ -215,6 +218,18 @@ Course.prototype.renderUpdatedHeader = function () {
                                             this.selected.T !== undefined ||
                                             this.selected.P !== undefined)
                                       .attr("satisfied", this.satisfied);
+}
+
+
+Course.prototype.sectionTimes = function () {
+    var sectionTimes = [];
+    var course = this;
+    $.each(["L", "T", "P"], function (i, type) {
+        if (course.selected[type] !== undefined) {
+            sectionTimes = sectionTimes.concat(course.selected[type].times);
+        }
+    })
+    return sectionTimes;
 }
 
 function sameSession(section1, section2) {
