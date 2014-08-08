@@ -1,9 +1,16 @@
 /* Section class */
-function Section(section, times, course) {
+function Section(section, times, course, id) {
+    if (section !== undefined) {
+        this.name = $(section).html();
+        this.id = $(section).attr("id");
+        this.session = getSession(section);    
+    } else {
+        this.id = id;
+        this.name = this.id.substring(9, 14);
+        this.session = this.id.substring(15, 16);
+    }
+    
     this.course = course;
-    this.name = $(section).html();
-    this.id = $(section).attr("id");
-    this.session = getSession(section);
     this.type = this.name.charAt(0);
     this.times = times;
     this.courseName = this.id.substring(0, 8);
@@ -51,7 +58,7 @@ function Course(name) {
     // Copy attributes
     this.F = course.F;
     this.S = course.S;
-    this.Y = course.Y
+    this.Y = course.Y;
     this.name = course.name;
     this.title = course.title;
     this.prereqs = course.prereqs;
@@ -61,6 +68,9 @@ function Course(name) {
     this.description = course.description;
     this.exclusions = course.exclusions;
     this.distribution = course.distribution;
+
+    // Create sections
+    this.parseSessions(course);
 
     this.manualTutorialEnrolment = course.manualTutorialEnrolment;
     this.selected = {"L": undefined, "T": undefined, "P": undefined};
@@ -86,6 +96,101 @@ function Course(name) {
     this.manual = {"T": this.tutorialEnrolment, "P": this.practicalEnrolment};
 }
 
+
+/* Section initialization */
+Course.prototype.parseSessions = function (course) {
+    this.sections = {"F": undefined, "S": undefined, "Y": undefined};
+    var tmp = this;
+    $.each(["F", "S", "Y"], function (i, s) {
+        if (course[s] !== undefined) {
+            tmp.sections[s] = tmp.parseSections(course[s], s);
+        }
+    })
+}
+
+
+Course.prototype.parseSections = function(session, timeSuffix) {
+    var sectionList = [];
+    sectionList.concat(this.parseLectures(session, timeSuffix));
+    sectionList.concat(this.parseTutorials(session, timeSuffix));
+    return sectionList;
+}
+
+
+Course.prototype.parseLectures = function (session, timeSuffix) {
+    var tmp = this;
+
+    return session.lectures.filter(function (lecture) {
+        return lecture.section.charAt(1) !== "2" && 
+               lecture.time !== "Online Web Version";
+    }).map(function (lecture, i) {
+        var id = tmp.name + "-" + lecture.section + "-" + timeSuffix;
+        var sectionTimes = convertTimes(lecture.time);
+        if (!tmp.manualTutorialEnrolment && session.tutorials.length > 0) {
+            sectionTimes = sectionTimes.concat(
+                convertTimes(session.tutorials[i][0]));
+        }
+        if (timeSuffix === "Y") {
+            sectionTimes = sectionTimes.map(function (t) {
+                                              return "#" + t + "F";
+                                       })
+                                       .concat(function (t) {
+                                              return "#" + t + "S";
+                                       });
+        } else {
+            sectionTimes = sectionTimes.map(function (time) {
+                return "#" + time + timeSuffix;
+            });
+        }
+        return makeLecture(lecture, tmp, id, sectionTimes);
+    });
+
+}
+
+
+Course.prototype.parseTutorials = function (session, timeSuffix) {
+    if (!this.manualTutorialEnrolment) {
+        return [];
+    } else {
+        return session.tutorials.map(function (tutorial) {
+            var sectionTimes = convertTimes(tutorial[1]);
+            if (timeSuffix === "Y") {
+                sectionTimes = sectionTimes.map(function (t) {
+                                                  return "#" + t + "F";
+                                           })
+                                           .concat(function (t) {
+                                                  return "#" + t + "S";
+                                           });
+            } else {
+                sectionTimes = sectionTimes.map(function (time) {
+                    return "#" + time + timeSuffix;
+                });
+            }
+
+            var id = tmp.name + "-" + tutorial[0] + "-" + timeSuffix;
+            return makeTutorial(tutorial, tmp, id, sectionTimes);
+        });
+    }
+}
+
+
+function makeLecture(lecture, course, id, sectionTimes) {
+    var section = new Section(undefined, sectionTimes, course, id);
+    section.instructor = lecture.instructor;
+    section.cap = lecture.cap;
+    section.enrol = lecture.enrol;
+    section.wait = lecture.wait;
+    return section;
+}
+
+
+function makeTutorial(tutorial, course, id, sectionTimes) {
+    var section = new Section(undefined, sectionTimes, course, id);
+    section.cap = tutorial[3];
+    section.enrol = tutorial[4];
+    section.wait = tutorial[5];
+    return section;
+}
 
 /* Manipulate course sections */
 Course.prototype.clickSection = function (section, sectionTimes) {
