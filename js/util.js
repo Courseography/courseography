@@ -32,8 +32,8 @@ function createRect(nodeId, rectClass, rectId, posX, posY, width, height, color)
     "use strict";
     console.log(d3.select("#" + rectId));
     d3.select('#nodes').append('rect')
-        .attr("class", rectClass + " " + rectId)
-        .attr("id", rectId)
+        .attr("class", rectClass + "-rect " + rectId + "-rect")
+        .attr("id", rectId + "-rect")
         .attr("x", posX)
         .attr("y", posY)
         .attr("rx", 10)
@@ -49,18 +49,32 @@ function createRect(nodeId, rectClass, rectId, posX, posY, width, height, color)
         .duration(5000)
         .attr("fill-opacity", 1)
         .attr("stroke-opacity", 1);
-    d3.select('#nodes').append("text").text("...")
+    d3.select('#nodes').append("text").text("Info")
+        .attr("class", rectClass + "-text " + rectId + "-text")
+        .attr("id", rectId + "-text")
         .attr("x", parseFloat(posX) + 30)
         .attr("y", parseFloat(posY) + 15)
+        .attr("fill-opacity", 0)
+        .attr("stroke-opacity", 0)
         .style("cursor", "pointer")
         .on("click", function() {
             var div = $("<div></div>");
             div.attr("title", nodeId).html(fetchCourseDescription(nodeId))
-                .addClass("modal").dialog({modal: true});
+                .addClass("modal").dialog({modal: true,
+                    close: function() {
+                        $(this).remove();
+                        $.each(nodes, function(index, elem) {
+                            window[elem].updateSVG();
+                        });
+                    }});
             alert(div.dialog( "option", "modal" ));
             $('.node, .hybrid').attr('data-active', 'unlit');
             setMouseCallbacks();
-        });
+        })
+        .transition()
+        .duration(5000)
+        .attr("fill-opacity", 1)
+        .attr("stroke-opacity", 1);
 }
 
 function displayToolTip(nodeId) {
@@ -90,9 +104,13 @@ function hoverUnfocus(event) {
         var id = event.target.parentNode.id;
         window[id].unfocus();
     }
-    d3.select("#" + id + "-tooltip").interrupt();
+    d3.select("#" + id + "-tooltip-rect").interrupt();
+    d3.select("#" + id + "-tooltip-text").interrupt();
     setTimeout(function () {
-        $("." + id + "-tooltip").hide('slow', function () {
+        $("." + id + "-tooltip-rect").hide('slow', function () {
+            $(this).remove();
+        });
+        $("." + id + "-tooltip-text").hide('slow', function () {
             $(this).remove();
         });
     }, 5000);
