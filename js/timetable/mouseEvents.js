@@ -12,7 +12,7 @@ function setSectionMouseEvents(section, sectionTimes, course) {
 /* Hover functions */
 function setTdHover() {
     $("td").mouseover(function () {
-        var course = getCourseObject($(this).html(), courseObjects);
+        var course = getCourse($(this).html());
         if (course !== undefined) {
             $.each(course.sectionTimes(), function (i, time) {
                 $(time).addClass("hover-time");
@@ -23,7 +23,7 @@ function setTdHover() {
             displaySectionInformation(section);
         }
     }).mouseout(function () {
-        var course = getCourseObject($(this).html(), courseObjects);
+        var course = getCourse($(this).html());
         if (course !== undefined) {
             $.each(course.sectionTimes(), function (i, time) {
                 $(time).removeClass("hover-time");
@@ -154,7 +154,7 @@ function renderConflicts(time, conflicts) {
             )
            .attr("in-conflict", "" + (conflicts.length > 0))
            .attr("status", conflicts.length > 0 ? "conflict" : "occupied")
-           .attr("satisfied", getCourseObject($(time).html(), courseObjects).satisfied);
+           .attr("satisfied", getCourse($(time).html()).satisfied);
 
 }
 

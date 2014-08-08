@@ -1,9 +1,3 @@
-var trapScroll;
-var selectedCourses = [];
-var selectedLectures = [];
-var courseObjects = [];
-
-
 /* Array utilities */
 function inArray(item, array) {
     return $.inArray(item, array) > -1;
@@ -52,12 +46,21 @@ function updateSelectedLectures(section) {
 
 
 /* AJAX Functions */
-function getCourse(name) {
-    var course = getCourseObject(name, courseCache);
-    if (course === undefined) {
-        course = fetchCourse(name);
-    }
-    return course;
+function getVeryLargeCourseArray() {
+    var splitArray = undefined;
+
+    $.ajax({
+        url: "js/timetable/courses.txt",
+        dataType: "text",
+        async: false,
+        success: function (data) {
+            splitArray = data.split("\n").map(function (course) {
+                return course.substring(0, 8);
+            });
+        }
+    });
+
+    return splitArray;
 }
 
 
@@ -79,8 +82,13 @@ function fetchCourse(name) {
 }
 
 
-
-
+function getCourse(name) {
+    var course = getCourseObject(name, courseCache);
+    if (course === undefined) {
+        course = fetchCourse(name);
+    }
+    return course;
+}
 
 
 /* Timetable Search List */
@@ -130,7 +138,6 @@ function resetSearchList() {
         });
     }
     $("#search-list").append(courseList);
-    // "Star" the course if it has been previously selected.
     refreshStarredCourses();
 }
 
@@ -219,7 +226,7 @@ function removeCourseFromList(name) {
     });
     courseElement.remove();
 
-    // Remove memory from memory
+    // Remove course from memory
     removeCourseObject(name);
     removeFromArray(name, selectedCourses);
     saveCookies(selectedCourses, selectedLectures);
@@ -292,50 +299,3 @@ function convertTimes(times) {
 
     return timeList;
 }
-
-
-/**
- * Adapted from http://codepen.io/LelandKwong/pen/edAmn.
- * Will look into http://jscrollpane.kelvinluck.com/.
- */
- (function($) {
-    trapScroll = function(){
-        var trapElement;
-        var scrollableDist;
-        var trapClassName = "trapScroll-enabled";
-        var trapSelector = "#course-select";
-
-        var trapWheel = function(e){
-            if (!$("body").hasClass(trapClassName)) {
-                return;
-            } else {
-                var curScrollPos = trapElement.scrollTop();
-                var wheelEvent = e.originalEvent;
-                var dY = wheelEvent.deltaY;
-
-                // only trap events once we've scrolled to the end
-                // or beginning
-                if ((dY>0 && curScrollPos >= scrollableDist) ||
-                    (dY<0 && curScrollPos <= 0)) {
-                    return false;
-                }
-            }
-        };
-
-        $(document)
-        .on("wheel", trapWheel)
-        .on("mouseleave", trapSelector, function() {
-            $("body").removeClass(trapClassName);
-        })
-        .on("mouseenter", trapSelector, function() {
-            trapElement = $(this);
-            var containerHeight = trapElement.outerHeight();
-            var contentHeight = trapElement[0].scrollHeight; // height of scrollable content
-            scrollableDist = contentHeight - containerHeight;
-
-            if (contentHeight > containerHeight) {
-                $("body").addClass(trapClassName);
-            }
-        });
-    };
-})($);
