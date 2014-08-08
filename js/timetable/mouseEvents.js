@@ -30,7 +30,7 @@ function setTdHover() {
             });
 
             clearCourseInformation();
-        }        
+        }
     });
 }
 
@@ -121,7 +121,7 @@ function setClickedConflict(course, time, section) {
 
 function removeClickedConflict(section, time) {
     var conflicts = $(time).data("conflicts");
-    
+
     // Find section in conflicts
     var name = getCourseName(section);
     var type = getType(section);
@@ -155,14 +155,12 @@ function renderConflicts(time, conflicts) {
            .attr("in-conflict", "" + (conflicts.length > 0))
            .attr("status", conflicts.length > 0 ? "conflict" : "occupied")
            .attr("satisfied", getCourseObject($(time).html(), courseObjects).satisfied);
-                              
+
 }
 
 
 /* Remove a section from locations in the grid. */
 function removeSectionTimes(section, times) {
-    var sectionTimes = times;
-    console.log(times);
     $.each(times, function (i, time) {
         if ($(time).attr("in-conflict") === "true") {
             removeClickedConflict(section, time);

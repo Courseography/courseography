@@ -176,7 +176,7 @@ function restoreFromCookies() {
             } catch (e) {
                 console.log("Removed bad section from cookie: " + section);
             }
-            
+
         });
     }
 
@@ -204,7 +204,7 @@ function hasManualTutorial(section, index, array) {
 
 function addCourseToList(name) {
     var course = new Course(name);
-    $("#course-select").append(renderEntry(course));
+    $("#course-select").append(course.render());
     courseObjects.push(course);
     selectedCourses.push(name);
     saveCookies(selectedCourses, selectedLectures);
@@ -226,52 +226,6 @@ function removeCourseFromList(name) {
 
     // Refresh starred courses
     refreshStarredCourses();
-}
-
-
-// DOM Elements/manipulation
-function renderEntry(course) {
-    var entry = document.createElement("li");
-    entry.id = course.name + "-li";
-    
-    var header = renderHeader(course);
-    entry.appendChild(header);
-    course.header = header;
-
-    sections = processSession(course);
-    
-    entry.appendChild(sections);
-    $(entry).accordion({
-        heightStyle: "content",
-        collapsible: true,
-        active: false
-    });
-    
-    return entry;
-}
-
-
-function renderHeader(course) {
-    var header = document.createElement("h3");
-    header.appendChild(document.createTextNode(course.name));
-    
-    $(header).mouseover(function () {
-                displayCourseTitle(course);
-             })
-             .mouseout(function () {
-                 clearCourseInformation();
-             });
-
-
-    var courseImg = document.createElement("img");
-    $(courseImg).attr("src", "res/ico/delete.ico")
-                .addClass("close-icon")
-                .click(function () {
-                    removeCourseFromList(course.name);
-                });
-    header.appendChild(courseImg);
-
-    return header;
 }
 
 

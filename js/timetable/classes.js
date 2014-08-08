@@ -1,48 +1,35 @@
 /* Section class */
 function Section(section, times, course, id) {
     if (section !== undefined) {
-        this.name = $(section).html();
         this.id = $(section).attr("id");
-        this.session = getSession(section);    
     } else {
         this.id = id;
-        this.name = this.id.substring(9, 14);
-        this.session = this.id.substring(15, 16);
     }
-    
-    this.course = course;
+
+    this.name = this.id.substring(9, 14);
+    this.session = this.id.substring(15, 16);
+    this.course = course; // Not sure if this is necessary...
     this.type = this.name.charAt(0);
     this.times = times;
     this.courseName = this.id.substring(0, 8);
 }
 
 
-function getSession(section) {
-    if (isYearSection(section)) {
-        return "Y";
-    } else if (isFallSection(section)) {
-        return "F";
-    } else if (isSpringSection(section)) {
-        return "S";
-    }
+// Rendering
+Section.prototype.render = function () {
+    var li = document.createElement("li");
+    $(li).data("instructor", this.instructor)
+              .data("cap", this.cap)
+              .data("enrol", this.enrol)
+              .data("wait", this.wait);
+    li.appendChild(document.createTextNode(this.name));
+    setSectionMouseEvents(li, this.times, this.course);
+    $(li).attr("id", this.id);
+    return li;
 }
 
 
-function isYearSection(section) {
-    return $(section.parentNode).hasClass("sectionList-Y");
-}
-
-
-function isFallSection(section) {
-    return $(section.parentNode).hasClass("sectionList-F");
-}
-
-
-function isSpringSection(section) {
-    return $(section.parentNode).hasClass("sectionList-S");
-}
-
-
+// TODO: remove getType and getCourseName
 function getType(section) {
     return $(section).html().charAt(0);
 }
@@ -68,18 +55,17 @@ function Course(name) {
     this.description = course.description;
     this.exclusions = course.exclusions;
     this.distribution = course.distribution;
-
+    this.manualTutorialEnrolment = course.manualTutorialEnrolment;
     // Create sections
     this.parseSessions(course);
 
-    this.manualTutorialEnrolment = course.manualTutorialEnrolment;
     this.selected = {"L": undefined, "T": undefined, "P": undefined};
     this.isLectureSelected = false;
     this.isTutorialSelected = false;
     this.isPracticalSelected = false;
 
     this.status = "inactive";
-    
+
     if (course.manualTutorialEnrolment) {
         if (course.Y !== undefined) {
             this.practicalEnrolment = course.Y.tutorials.some(hasManualPractical);
@@ -110,18 +96,16 @@ Course.prototype.parseSessions = function (course) {
 
 
 Course.prototype.parseSections = function(session, timeSuffix) {
-    var sectionList = [];
-    sectionList.concat(this.parseLectures(session, timeSuffix));
-    sectionList.concat(this.parseTutorials(session, timeSuffix));
-    return sectionList;
+    return this.parseLectures(session, timeSuffix)
+           .concat(this.parseTutorials(session, timeSuffix));
 }
 
 
 Course.prototype.parseLectures = function (session, timeSuffix) {
     var tmp = this;
 
-    return session.lectures.filter(function (lecture) {
-        return lecture.section.charAt(1) !== "2" && 
+    var t = session.lectures.filter(function (lecture) {
+        return lecture.section.charAt(1) !== "2" &&
                lecture.time !== "Online Web Version";
     }).map(function (lecture, i) {
         var id = tmp.name + "-" + lecture.section + "-" + timeSuffix;
@@ -144,7 +128,7 @@ Course.prototype.parseLectures = function (session, timeSuffix) {
         }
         return makeLecture(lecture, tmp, id, sectionTimes);
     });
-
+    return t;
 }
 
 
@@ -152,6 +136,7 @@ Course.prototype.parseTutorials = function (session, timeSuffix) {
     if (!this.manualTutorialEnrolment) {
         return [];
     } else {
+        var tmp = this;
         return session.tutorials.map(function (tutorial) {
             var sectionTimes = convertTimes(tutorial[1]);
             if (timeSuffix === "Y") {
@@ -221,7 +206,7 @@ Course.prototype.addSection = function (section, sectionTimes) {
         this.selectedPractical = section;
         this.selected.P = new Section(section, sectionTimes, this);
     }
-    
+
     this.setSession();
     $(section).attr("clicked", "true");
     selectUnselectedTimes(this, sectionTimes, section);
@@ -232,7 +217,7 @@ Course.prototype.removeSection = function (section) {
     var name = $(section).html();
     var type = name.charAt(0);
     removeSectionTimes(section, this.selected[type].times);
-    
+
     $(section).attr("clicked", "false");
 
     if (type === "L") {
@@ -273,7 +258,7 @@ Course.prototype.setSession = function (section) {
 Course.prototype.updateSatisfaction = function () {
     if (!this.manual.T && !this.manual.P) {
         this.satisfied = true;
-    } else if (!this.manual.P && 
+    } else if (!this.manual.P &&
                sameSession(this.selected.L, this.selected.T)) {
         this.satisfied = true;
     } else if (!this.manual.T &&
@@ -286,6 +271,82 @@ Course.prototype.updateSatisfaction = function () {
         this.satisfied = false;
     }
     return this.satisfied;
+}
+
+
+/* Rendering methods (manipulate/return DOM elements) */
+// DOM Elements/manipulation
+Course.prototype.render = function () {
+    var entry = document.createElement("li");
+    entry.id = this.name + "-li";
+
+    var header = this.renderHeader();
+    entry.appendChild(header);
+    this.header = header; // Still necessary...?
+
+    var sections = this.renderSessions();
+
+    entry.appendChild(sections);
+    $(entry).accordion({
+        heightStyle: "content",
+        collapsible: true,
+        active: false
+    });
+
+    return entry;
+}
+
+
+Course.prototype.renderHeader = function () {
+    var header = document.createElement("h3");
+    header.appendChild(document.createTextNode(this.name));
+
+    $(header).mouseover(function () {
+                displayCourseTitle(this);
+             })
+             .mouseout(function () {
+                 clearCourseInformation();
+             });
+
+
+    var courseImg = document.createElement("img");
+    $(courseImg).attr("src", "res/ico/delete.ico")
+                .addClass("close-icon")
+                .click(function () {
+                    removeCourseFromList(this.name);
+                });
+    header.appendChild(courseImg);
+
+    return header;
+}
+
+
+Course.prototype.renderSessions = function () {
+    var sessionDiv = document.createElement("div");
+    $(sessionDiv).addClass("sections");
+    var course = this;
+    $.each(["Y", "F", "S"], function (i, session) {
+        if (course.sections[session] !== undefined) {
+            sessionDiv.appendChild(course.renderSections(session));
+        }
+
+    });
+    return sessionDiv;
+}
+
+
+Course.prototype.renderSections = function (session) {
+    var sections = this.sections[session];
+    if (sections === undefined) {
+        return undefined;
+    } else {
+        var sectionList = document.createElement("ul");
+        $.each(sections, function(i, section) {
+            sectionList.appendChild(section.render());
+        })
+        $(sectionList).addClass("sectionList-" + session);
+        return sectionList;
+    }
 }
 
 
@@ -310,7 +371,7 @@ Course.prototype.renderSatisfaction = function () {
         });
         $(this.selectedPractical).attr("satisfied", this.satisfied);
     }
-    
+
     if (this.satisfied) {
         $("#" + this.name + "-li" + " li").attr("satisfied", true);
     }
