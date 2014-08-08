@@ -23,6 +23,7 @@ $(document).ready(function () {
     enableSearch();
     courses = getVeryLargeCourseArray();
     trapScroll();
+    setTdHover();
 });
 
 

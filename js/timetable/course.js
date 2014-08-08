@@ -1,44 +1,4 @@
-/* Section class */
-function Section(section, times, course, id) {
-    if (section !== undefined) {
-        this.id = $(section).attr("id");
-    } else {
-        this.id = id;
-    }
-
-    this.name = this.id.substring(9, 14);
-    this.session = this.id.substring(15, 16);
-    this.course = course; // Not sure if this is necessary...
-    this.type = this.name.charAt(0);
-    this.times = times;
-    this.courseName = this.id.substring(0, 8);
-}
-
-
-// Rendering
-Section.prototype.render = function () {
-    var li = document.createElement("li");
-    $(li).data("instructor", this.instructor)
-              .data("cap", this.cap)
-              .data("enrol", this.enrol)
-              .data("wait", this.wait);
-    li.appendChild(document.createTextNode(this.name));
-    setSectionMouseEvents(li, this.times, this.course);
-    $(li).attr("id", this.id);
-    return li;
-}
-
-
-// TODO: remove getType and getCourseName
-function getType(section) {
-    return $(section).html().charAt(0);
-}
-
-
-function getCourseName(section) {
-    return section.id.substring(0, 8);
-}
-
+/* Course class */
 
 function Course(name) {
     var course = getCourse(name);
@@ -159,101 +119,54 @@ Course.prototype.parseTutorials = function (session, timeSuffix) {
 }
 
 
-function makeLecture(lecture, course, id, sectionTimes) {
-    var section = new Section(undefined, sectionTimes, course, id);
-    section.instructor = lecture.instructor;
-    section.cap = lecture.cap;
-    section.enrol = lecture.enrol;
-    section.wait = lecture.wait;
-    return section;
-}
-
-
-function makeTutorial(tutorial, course, id, sectionTimes) {
-    var section = new Section(undefined, sectionTimes, course, id);
-    section.cap = tutorial[3];
-    section.enrol = tutorial[4];
-    section.wait = tutorial[5];
-    return section;
-}
-
 /* Manipulate course sections */
-Course.prototype.clickSection = function (section, sectionTimes) {
-    var type = getType(section);
-    var id = $(section).attr("id");
+Course.prototype.activateSection = function (section) {
 
     // Check if section was already selected
-    var curr = this.selected[type];
+    var curr = this.selected[section.type];
     if (curr !== undefined) {
-        this.removeSection(document.getElementById(curr.id));
-        if (curr.id !== id) {
-            this.addSection(section, sectionTimes);
+        this.removeSection(curr);
+        if (curr.id !== section.id) {
+            this.addSection(section);
         }
     } else {
-        this.addSection(section, sectionTimes);
+        this.addSection(section);
     }
 }
 
-Course.prototype.addSection = function (section, sectionTimes) {
-    var type = getType(section);
-    if (type === "L") {
-        this.selectedLecture = section;
-        this.selected.L = new Section(section, sectionTimes, this);
-    } else if (type === "T") {
-        this.selectedTutorial = section;
-        this.selected.T = new Section(section, sectionTimes, this);
-    } else if (type === "P") {
-        this.selectedPractical = section;
-        this.selected.P = new Section(section, sectionTimes, this);
-    }
 
-    this.setSession();
-    $(section).attr("clicked", "true");
-    selectUnselectedTimes(this, sectionTimes, section);
+Course.prototype.addSection = function (section) {
+    var type = section.type;
+    this.selected[section.type] = section;
+
+    section.clicked = true;
+    //selectUnselectedTimes(this, section);
+    this.selectTimes(section);
 }
+
+
+Course.prototype.selectTimes = function (section) {
+    $.each(section.times, function (i, time) {
+        if ($(time).attr("clicked") !== "true") {
+            section.setTime(time);
+        } else {
+            section.setConflictTime(time);
+        }
+    });
+}
+
 
 
 Course.prototype.removeSection = function (section) {
-    var name = $(section).html();
-    var type = name.charAt(0);
-    removeSectionTimes(section, this.selected[type].times);
+    var name = section.name;
+    var type = section.type;
 
-    $(section).attr("clicked", "false");
-
-    if (type === "L") {
-        removeFromArray(this.selected.L, selectedLectures);
-        this.selected.L = undefined;
-        this.selectedLecture = undefined;
-    } else if (type === "T") {
-        removeFromArray(this.selected.T, selectedLectures);
-        this.selected.T = undefined;
-        this.selectedTutorial = undefined;
-    } else if (type === "P") {
-        removeFromArray($(this.selectedPractical).attr("id"), selectedLectures);
-        this.selected.P = undefined;
-        this.selectedPractical = undefined;
-    }
-    this.setSession(section);
+    section.removeTimes();
+    removeFromArray(section, selectedLectures);
+    this.selected[type] = undefined;
+    section.clicked = false;
 }
 
-
-// TODO: Remove this.
-Course.prototype.setSession = function (section) {
-    var lec = this.selected.L;
-    var tut = this.selected.T;
-    var prac = this.selected.P;
-    this.selectedLectureSession = lec === undefined? undefined : lec.session;
-    this.selectedTutorialSession = tut === undefined? undefined : tut.session;
-    this.selectedPracticalSession = prac === undefined? undefined : prac.session;
-
-    this.selectedLectureTimes = lec === undefined? undefined : lec.times;
-    this.selectedTutorialTimes = tut === undefined? undefined : tut.times;
-    this.selectedPracticalTimes = prac === undefined? undefined : prac.times;
-
-    this.isLectureSelected = lec !== undefined;
-    this.isTutorialSelected = tut !== undefined;
-    this.isPracticalSelected = prac !== undefined;
-}
 
 Course.prototype.updateSatisfaction = function () {
     if (!this.manual.T && !this.manual.P) {
@@ -270,12 +183,21 @@ Course.prototype.updateSatisfaction = function () {
     } else {
         this.satisfied = false;
     }
+
+    var sat = this.satisfied;
+    $.each(this.sections["F"].concat(this.sections["S"])
+                             .concat(this.sections["Y"]),
+           function (i, section) {
+                if (section !== undefined) {
+                    section.satisfied = sat;
+                }
+           });
+
     return this.satisfied;
 }
 
 
-/* Rendering methods (manipulate/return DOM elements) */
-// DOM Elements/manipulation
+// Rendering methods (manipulate/return DOM elements)
 Course.prototype.render = function () {
     var entry = document.createElement("li");
     entry.id = this.name + "-li";
@@ -293,7 +215,25 @@ Course.prototype.render = function () {
         active: false
     });
 
+    $(entry).attr("satisfied", "" + this.satisfied);
+
     return entry;
+}
+
+
+Course.prototype.renderUpdate = function () {
+    $("#" + this.id + "-li").attr("satisfied", "" + this.satisfied);
+    var tmp = this;
+    $.each(["F", "S", "Y"], function (i, session) {
+        if (tmp.sections[session] !== undefined) {
+            $.each(tmp.sections[session], function (ind, section) {
+                if (section !== undefined) {
+                    section.renderUpdate();
+                }
+            });
+        }
+
+    });
 }
 
 
@@ -301,8 +241,9 @@ Course.prototype.renderHeader = function () {
     var header = document.createElement("h3");
     header.appendChild(document.createTextNode(this.name));
 
+    var tmp = this;
     $(header).mouseover(function () {
-                displayCourseTitle(this);
+                displayCourseTitle(tmp);
              })
              .mouseout(function () {
                  clearCourseInformation();
@@ -351,30 +292,15 @@ Course.prototype.renderSections = function (session) {
 
 
 Course.prototype.renderSatisfaction = function () {
-    if (this.selectedLectureTimes !== undefined) {
-        $.each(this.selectedLectureTimes, function (i, time) {
-            $(time).attr("satisfied", this.satisfied);
-        });
-        $(this.selectedLecture).attr("satisfied", this.satisfied);
-    }
-
-    if (this.selectedTutorialTimes !== undefined) {
-        $.each(this.selectedTutorialTimes, function (i, time) {
-            $(time).attr("satisfied", this.satisfied);
-        });
-        $(this.selectedTutorial).attr("satisfied", this.satisfied);
-    }
-
-    if (this.selectedPracticalTimes !== undefined) {
-        $.each(this.selectedPracticalTimes, function (i, time) {
-            $(time).attr("satisfied", this.satisfied);
-        });
-        $(this.selectedPractical).attr("satisfied", this.satisfied);
-    }
-
-    if (this.satisfied) {
-        $("#" + this.name + "-li" + " li").attr("satisfied", true);
-    }
+    var tmp = this;
+    $.each(["L", "T", "P"], function (i, session) {
+        var section = tmp.selected[session];
+        if (section !== undefined) {
+            $.each(section.times, function (i, time) {
+                $(time).attr("satisfied", tmp.satisfied);
+            })
+        }
+    });
 }
 
 

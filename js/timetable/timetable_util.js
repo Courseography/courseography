@@ -39,8 +39,8 @@ function getCourseObject(courseName, courseArray) {
 
 
 function updateSelectedLectures(section) {
-    if (!inArray(section.attr("id"), selectedLectures)) {
-        selectedLectures.push(section.attr("id"));
+    if (!inArray(section.id, selectedLectures)) {
+        selectedLectures.push(section.id);
     }
 }
 
@@ -252,15 +252,15 @@ function displayCourseInformation(course) {
 
 
 function displaySectionInformation(section) {
-    $("#section-stats-section").html(section.html());
-    $("#section-stats-instructor").html(section.data("instructor"));
-    var cap = section.data("cap");
-    var enrol = section.data("enrol");
-    var wait = section.data("wait");
-    if (cap !== null && enrol !== null) {
+    $("#section-stats-section").html(section.name);
+    $("#section-stats-instructor").html(section.instructor);
+    var cap = section.cap;
+    var enrol = section.enrol;
+    var wait = section.wait;
+    if (cap !== undefined && enrol !== undefined) {
         var enrolString = (cap - enrol) + " out of " + cap +
             " spots remaining";
-        if (wait !== null && wait !== undefined && wait !== 0) {
+        if (wait !== undefined && wait !== 0) {
             enrolString += "; " + wait + " students on the waitlist";
         }
         $("#section-stats-enrol").html(enrolString);
