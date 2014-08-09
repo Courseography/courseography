@@ -60,14 +60,25 @@ function createRect(nodeId, rectClass, rectId, posX, posY, width, height, color)
         .on("click", function() {
             var div = $("<div></div>");
             div.attr("title", nodeId).html(fetchCourseDescription(nodeId))
-                .addClass("modal").dialog({modal: true,
+                .addClass("modal").dialog({
+                    utoOpen: false,
+                    show: {
+                        effect: "blind",
+                        duration: 1000
+                    },
+                    hide: {
+                        effect: "explode",
+                        duration: 1000
+                    },
+                    modal: true,
+                    minWidth: 1000,
+                    minHeight: 600,
                     close: function() {
                         $(this).remove();
                         $.each(nodes, function(index, elem) {
                             window[elem].updateSVG();
                         });
                     }});
-            alert(div.dialog( "option", "modal" ));
             $('.node, .hybrid').attr('data-active', 'unlit');
             setMouseCallbacks();
         })
@@ -104,8 +115,15 @@ function hoverUnfocus(event) {
         var id = event.target.parentNode.id;
         window[id].unfocus();
     }
-    d3.select("#" + id + "-tooltip-rect").interrupt();
-    d3.select("#" + id + "-tooltip-text").interrupt();
+    if (parseFloat(d3.select("#" + id + "-tooltip-rect").style("fill-opacity")) < 0.5) {
+        $("." + id + "-tooltip-rect").hide('slow', function () {
+            $(this).remove();
+        });
+        $("." + id + "-tooltip-text").hide('slow', function () {
+            $(this).remove();
+        });
+    }
+
     setTimeout(function () {
         $("." + id + "-tooltip-rect").hide('slow', function () {
             $(this).remove();
@@ -139,7 +157,7 @@ function turnNode(event) {
         updateMajorPostInterface();
         updateMinorPostInterface();
     }
-};
+}
 
 
 // Draggable function for map
