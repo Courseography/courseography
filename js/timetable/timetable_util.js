@@ -11,11 +11,6 @@ function removeFromArray(item, array) {
 }
 
 
-function getIndexFromArray(item, array) {
-    return $.inArray(item, array);
-}
-
-
 /* These specifically manipulate the two global arrays,
 courseObjects and selectedLectures. */
 function removeCourseObject(courseName) {
@@ -114,23 +109,23 @@ function resetSearchList() {
 
                 // Add an ID to the list so we can come back and star
                 // it when it is clicked.
-                $(courseEntry).attr("id", course + "-search");
-                courseEntry.innerHTML = course;
-                $(courseEntry).click(function() {
-                    $(this).toggleClass("starred-course");
-                    if (inArray(course, selectedCourses)) {
-                        removeCourseFromList(course);
-                    } else {
-                        addCourseToList(course);
-                    }
-                })
-                .mouseover(function() {
-                    var courseResult = getCourse(course);
-                    displayCourseTitle(courseResult);
-                })
-                .mouseout(function() {
-                    clearCourseInformation();
-                });
+                $(courseEntry).attr("id", course + "-search")
+                              .html(course)
+                              .click(function() {
+                                   $(this).toggleClass("starred-course");
+                                   if (inArray(course, selectedCourses)) {
+                                       removeCourseFromList(course);
+                                   } else {
+                                       addCourseToList(course);
+                                   }
+                               })
+                               .mouseover(function() {
+                                   var courseResult = getCourse(course);
+                                   renderDisplayCourseTitle(courseResult);
+                               })
+                               .mouseout(function() {
+                                   renderClearCourseInformation();
+                               });
 
                 counter++;
                 courseList.appendChild(courseEntry);
@@ -229,6 +224,7 @@ function removeCourseFromList(name) {
     // Remove course from memory
     removeCourseObject(name);
     removeFromArray(name, selectedCourses);
+
     saveCookies(selectedCourses, selectedLectures);
 
     // Refresh starred courses
@@ -237,21 +233,21 @@ function removeCourseFromList(name) {
 
 
 /* Info box */
-function displayCourseTitle(course) {
-    displayCourseInformation(course);
-    $("#section-stats-section").html("");
-    $("#section-stats-instructor").html("");
-    $("#section-stats-enrol").html("");
+function renderDisplayCourseTitle(course) {
+    renderDisplayCourseInformation(course);
+    $("#section-stats-section").empty();
+    $("#section-stats-instructor").empty();
+    $("#section-stats-enrol").empty();
 }
 
 
-function displayCourseInformation(course) {
+function renderDisplayCourseInformation(course) {
     $("#course-info-code").html(course.name);
     $("#course-info-title").html(course.title);
 }
 
 
-function displaySectionInformation(section) {
+function renderDisplaySectionInformation(section) {
     $("#section-stats-section").html(section.name);
     $("#section-stats-instructor").html(section.instructor);
     var cap = section.cap;
@@ -268,7 +264,7 @@ function displaySectionInformation(section) {
 }
 
 
-function clearCourseInformation() {
+function renderClearCourseInformation() {
     $("#course-info-code").empty();
     $("#course-info-title").empty();
     $("#section-stats-section").empty();

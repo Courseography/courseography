@@ -20,9 +20,6 @@ function Course(name) {
     this.parseSessions(course);
 
     this.selected = {"L": undefined, "T": undefined, "P": undefined};
-    this.isLectureSelected = false;
-    this.isTutorialSelected = false;
-    this.isPracticalSelected = false;
 
     this.status = "inactive";
 
@@ -37,6 +34,9 @@ function Course(name) {
             this.practicalEnrolment = course.S.tutorials.some(hasManualPractical);
             this.tutorialEnrolment = course.S.tutorials.some(hasManualTutorial);
         }
+    } else {
+        this.practicalEnrolment = false;
+        this.tutorialEnrolment = false;
     }
 
     this.manual = {"T": this.tutorialEnrolment, "P": this.practicalEnrolment};
@@ -45,6 +45,7 @@ function Course(name) {
 
 /* Section initialization */
 Course.prototype.parseSessions = function (course) {
+    // In the long run, maybe initialize to []
     this.sections = {"F": undefined, "S": undefined, "Y": undefined};
     var tmp = this;
     $.each(["F", "S", "Y"], function (i, s) {
@@ -64,31 +65,31 @@ Course.prototype.parseSections = function(session, timeSuffix) {
 Course.prototype.parseLectures = function (session, timeSuffix) {
     var tmp = this;
 
-    var t = session.lectures.filter(function (lecture) {
-        return lecture.section.charAt(1) !== "2" &&
-               lecture.time !== "Online Web Version";
-    }).map(function (lecture, i) {
-        var id = tmp.name + "-" + lecture.section + "-" + timeSuffix;
-        var sectionTimes = convertTimes(lecture.time);
-        if (!tmp.manualTutorialEnrolment && session.tutorials.length > 0) {
-            sectionTimes = sectionTimes.concat(
-                convertTimes(session.tutorials[i][0]));
-        }
-        if (timeSuffix === "Y") {
-            sectionTimes = sectionTimes.map(function (t) {
-                                              return "#" + t + "F";
-                                       })
-                                       .concat(function (t) {
-                                              return "#" + t + "S";
-                                       });
-        } else {
-            sectionTimes = sectionTimes.map(function (time) {
-                return "#" + time + timeSuffix;
+    return session.lectures.filter(function (lecture) {
+                return lecture.section.charAt(1) !== "2" &&
+                       lecture.time !== "Online Web Version";
+            }).map(function (lecture, i) {
+                var id = tmp.name + "-" + lecture.section + "-" + timeSuffix;
+                var sectionTimes = convertTimes(lecture.time);
+                if (!tmp.manualTutorialEnrolment && session.tutorials.length > 0) {
+                    sectionTimes = sectionTimes.concat(
+                        convertTimes(session.tutorials[i][0]));
+                }
+                if (timeSuffix === "Y") {
+                    sectionTimes = sectionTimes.map(function (t) {
+                                                      return "#" + t + "F";
+                                               })
+                                               .concat(sectionTimes.map(
+                                                function (t) {
+                                                      return "#" + t + "S";
+                                               }));
+                } else {
+                    sectionTimes = sectionTimes.map(function (time) {
+                        return "#" + time + timeSuffix;
+                    });
+                }
+                return makeLecture(lecture, tmp, id, sectionTimes);
             });
-        }
-        return makeLecture(lecture, tmp, id, sectionTimes);
-    });
-    return t;
 }
 
 
@@ -140,7 +141,6 @@ Course.prototype.addSection = function (section) {
     this.selected[section.type] = section;
 
     section.clicked = true;
-    //selectUnselectedTimes(this, section);
     this.selectTimes(section);
 }
 
@@ -156,14 +156,10 @@ Course.prototype.selectTimes = function (section) {
 }
 
 
-
 Course.prototype.removeSection = function (section) {
-    var name = section.name;
-    var type = section.type;
-
     section.removeTimes();
     removeFromArray(section, selectedLectures);
-    this.selected[type] = undefined;
+    this.selected[section.type] = undefined;
     section.clicked = false;
 }
 
@@ -185,8 +181,14 @@ Course.prototype.updateSatisfaction = function () {
     }
 
     var sat = this.satisfied;
-    $.each(this.sections["F"].concat(this.sections["S"])
-                             .concat(this.sections["Y"]),
+    var sections = [];
+    var tmp = this;
+    $.each(["F", "S", "Y"], function (i, session) {
+        if (tmp.sections[session] !== undefined) {
+            sections = sections.concat(tmp.sections[session]);
+        }
+    })
+    $.each(sections,
            function (i, section) {
                 if (section !== undefined) {
                     section.satisfied = sat;
@@ -232,7 +234,6 @@ Course.prototype.renderUpdate = function () {
                 }
             });
         }
-
     });
 }
 
@@ -243,10 +244,10 @@ Course.prototype.renderHeader = function () {
 
     var tmp = this;
     $(header).mouseover(function () {
-                displayCourseTitle(tmp);
+                renderDisplayCourseTitle(tmp);
              })
              .mouseout(function () {
-                 clearCourseInformation();
+                 renderClearCourseInformation();
              });
 
 
@@ -254,7 +255,7 @@ Course.prototype.renderHeader = function () {
     $(courseImg).attr("src", "res/ico/delete.ico")
                 .addClass("close-icon")
                 .click(function () {
-                    removeCourseFromList(this.name);
+                    removeCourseFromList(tmp.name);
                 });
     header.appendChild(courseImg);
 
@@ -282,10 +283,10 @@ Course.prototype.renderSections = function (session) {
         return undefined;
     } else {
         var sectionList = document.createElement("ul");
+        $(sectionList).addClass("sectionList-" + session);
         $.each(sections, function(i, section) {
             sectionList.appendChild(section.render());
-        })
-        $(sectionList).addClass("sectionList-" + session);
+        });
         return sectionList;
     }
 }
@@ -298,7 +299,7 @@ Course.prototype.renderSatisfaction = function () {
         if (section !== undefined) {
             $.each(section.times, function (i, time) {
                 $(time).attr("satisfied", tmp.satisfied);
-            })
+            });
         }
     });
 }
@@ -320,7 +321,7 @@ Course.prototype.sectionTimes = function () {
         if (course.selected[type] !== undefined) {
             sectionTimes = sectionTimes.concat(course.selected[type].times);
         }
-    })
+    });
     return sectionTimes;
 }
 

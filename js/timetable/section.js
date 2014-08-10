@@ -4,11 +4,11 @@ function Section(times, course, id) {
     this.courseName = this.id.substring(0, 8);
     this.name = this.id.substring(9, 14);
     this.session = this.id.substring(15, 16);
-    this.course = course;
     this.type = this.name.charAt(0);
+    this.course = course;
     this.times = times;
     this.clicked = false;
-    this.satisfied = true; // I think we agreed this should be the default
+    this.satisfied = true;
 }
 
 
@@ -16,17 +16,17 @@ function Section(times, course, id) {
 Section.prototype.setMouseEvents = function (li) {
     var tmp = this;
     $(li).mouseout(function () {
-        tmp.mouseout();
-        tmp.course.renderUpdate();
-    })
+             tmp.mouseout();
+             //tmp.course.renderUpdate();
+         })
          .mouseover(function () {
-        tmp.mouseover();
-        tmp.course.renderUpdate();
-    })
+             tmp.mouseover();
+             //tmp.course.renderUpdate();
+         })
          .click(function () {
-        tmp.onclick();
-        tmp.course.renderUpdate();
-    });
+             tmp.onclick();
+             tmp.course.renderUpdate();
+         });
 }
 
 
@@ -34,7 +34,7 @@ Section.prototype.mouseout = function () {
     $.each(this.times, function (i, time) {
         renderClearHover(time);
     });
-    clearCourseInformation();
+    renderClearCourseInformation();
 }
 
 
@@ -43,12 +43,16 @@ Section.prototype.mouseover = function () {
     $.each(this.times, function (i, time) {
         renderAddHover(time, tmp);
     });
-    displayCourseInformation(this.course);
-    displaySectionInformation(this);
+    renderDisplayCourseInformation(this.course);
+    renderDisplaySectionInformation(this);
 }
 
 
 Section.prototype.onclick = function () {
+    $.each(this.times, function (i, time) {
+        renderClearHover(time);
+    });
+
     updateSelectedLectures(this);
     var course = this.course;
 
@@ -69,6 +73,13 @@ Section.prototype.setTime = function (time) {
 }
 
 
+Section.prototype.setConflictTime = function (time) {
+    var conflicts = $(time).data("conflicts");
+    conflicts.push(this);
+    renderConflicts(time, conflicts);
+}
+
+
 Section.prototype.removeTimes = function () {
     var tmp = this;
     $.each(this.times, function (i, time) {
@@ -81,24 +92,9 @@ Section.prototype.removeTimes = function () {
 }
 
 
-Section.prototype.setConflictTime = function (time) {
-    var conflicts = $(time).data("conflicts");
-    conflicts.push(this);
-    renderConflicts(time, conflicts);
-}
-
-
 Section.prototype.removeConflict = function (time) {
     var conflicts = $(time).data("conflicts");
-
-    // Find section in conflicts
-    var index = -1;
-    for (var i = 0; i < conflicts.length; i++) {
-        if (conflicts[i] === this) {
-            index = i;
-            break;
-        }
-    }
+    var index = $.inArray(this, conflicts);
 
     if (index === -1) {
         $(time).html(conflicts[0].courseName)
@@ -115,7 +111,8 @@ Section.prototype.removeConflict = function (time) {
 // Rendering
 Section.prototype.render = function () {
     var li = document.createElement("li");
-    $(li).data("instructor", this.instructor)
+    $(li).attr("id", this.id)
+         .data("instructor", this.instructor)
          .data("cap", this.cap)
          .data("enrol", this.enrol)
          .data("wait", this.wait)
@@ -123,7 +120,6 @@ Section.prototype.render = function () {
          .attr("satisfied", "" + this.satisfied);
     li.appendChild(document.createTextNode(this.name));
     this.setMouseEvents(li);
-    $(li).attr("id", this.id);
     return li;
 }
 

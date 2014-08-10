@@ -13,8 +13,8 @@ function setTdHover() {
                 });
 
                 var section = course.selected[$(this).attr("type")];
-                displayCourseInformation(course);
-                displaySectionInformation(section);
+                renderDisplayCourseInformation(course);
+                renderDisplaySectionInformation(section);
             }
         }
 
@@ -25,7 +25,7 @@ function setTdHover() {
                 $(time).removeClass("hover-time");
             });
 
-            clearCourseInformation();
+            renderClearCourseInformation();
         }
     });
 }
@@ -78,8 +78,8 @@ function renderClearHover(time) {
 
 function renderAddHover(time, section) {
     if ($(time).attr("clicked") !== "true") {
-        $(time).html(section.courseName);
-        $(time).attr("hover", "good");
+        $(time).html(section.courseName)
+               .attr("hover", "good");
     } else if ($(time).html() === section.courseName &&
                $(time).attr("type") === section.type) {
         $(time).attr("hover", "remove");
