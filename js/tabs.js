@@ -101,7 +101,8 @@ function fetchCourseDescription(id) {
 	}
 
 	$('#calendar').html(result);
-};
+    return result;
+}
 
 function readCalendarEntry(name) {
 	var result = '';

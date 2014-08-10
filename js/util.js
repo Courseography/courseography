@@ -49,6 +49,7 @@ function createRect(nodeId, rectClass, rectId, posX, posY, width, height, color)
         .duration(5000)
         .attr("fill-opacity", 1)
         .attr("stroke-opacity", 1);
+
     d3.select('#nodes').append("text").text("Info")
         .attr("class", rectClass + "-text " + rectId + "-text")
         .attr("id", rectId + "-text")
@@ -58,16 +59,15 @@ function createRect(nodeId, rectClass, rectId, posX, posY, width, height, color)
         .attr("stroke-opacity", 0)
         .style("cursor", "pointer")
         .on("click", function() {
-            var div = $("<div></div>");
-            div.attr("title", nodeId).html(fetchCourseDescription(nodeId))
-                .addClass("modal").dialog({
+            var div = createModalDiv(nodeId);
+            div.attr("title", nodeId).addClass("modal").dialog({
                     utoOpen: false,
                     show: {
                         effect: "blind",
                         duration: 1000
                     },
                     hide: {
-                        effect: "explode",
+                        effect: "blind",
                         duration: 1000
                     },
                     modal: true,
@@ -88,6 +88,21 @@ function createRect(nodeId, rectClass, rectId, posX, posY, width, height, color)
         .attr("stroke-opacity", 1);
 }
 
+function createModalDiv(id) {
+    var div = $("<div></div>");
+    var p = $("<p></p>").css("color", "white").html(fetchCourseDescription(id));
+    div.append(p);
+    var video = $("<video></video>");
+    video.addClass("video-js vjs-default-skin").width(640).height(264).attr("controls preload", "auto")
+        .attr("poster", "http://video-js.zencoder.com/oceans-clip.png").attr("id", "example_video_1_html5_api");
+    var src1 = $("<source></source>").attr("src", "http://video-js.zencoder.com/oceans-clip.webm").attr("type", "video/webm");
+    var src2 = $("<source></source>").attr("src", "http://video-js.zencoder.com/oceans-clip.ogv").attr("type", "video/ogv");
+    var src3 = $("<source></source>").attr("src", "http://video-js.zencoder.com/oceans-clip.mp4").attr("type", "video/mp4");
+    video.append(src1).append(src2).append(src3);
+    div.append(video);
+    return div;
+}
+
 function displayToolTip(nodeId) {
     var rectObject = $("#" + nodeId).find("rect");
     var xPos = rectObject.attr("x") - 65;
@@ -105,6 +120,7 @@ function hoverFocus(event) {
         window[id].focus();
         // Fetch course description
         setTimeout(displayToolTip(id), 3000);
+        fetchCourseDescription(id);
     }
 }
 
