@@ -1,3 +1,5 @@
+/*global $*/
+
 /**
  * Generates the duplex timetable grid.
  */
@@ -7,10 +9,11 @@ function generateGrid() {
     var timetableContainerDivSpring = createTimeTableContainer();
     var timetableTableFall = createTimeTable("F");
     var fallCaption = createCaption("Fall");
-    var fallThead = $("<thead></thead>");
-    var timetableTableSpring =createTimeTable("S");
+    var fallThead = createThead();
+    var timetableTableSpring = createTimeTable("S");
     var springCaption = createCaption("Spring");
-    var springThead = $("<thead></thead>");
+    var springThead = createThead();
+
     timetableTableFall.append(fallCaption)
         .append(fallThead);
     timetableTableSpring.append(springCaption)
@@ -19,17 +22,23 @@ function generateGrid() {
     appendHeaders(fallThead, springThead);
     appendTableRows(timetableTableFall, timetableTableSpring);
 
-
-    rowDiv.append(timetableContainerDivFall)
-        .append(timetableContainerDivSpring);
     timetableContainerDivFall.append(timetableTableFall);
     timetableContainerDivSpring.append(timetableTableSpring);
-    rowDiv.insertBefore($("#info"));
+    rowDiv.append(timetableContainerDivFall)
+        .append(timetableContainerDivSpring)
+        .insertBefore($("#info"));
 }
 
-function createCaption(name) {
-    $("<caption></caption>").html(name);
+
+function createThead() {
+    return $("<thead></thead>");
 }
+
+
+function createCaption(name) {
+    return $("<caption></caption>").html(name);
+}
+
 
 function createTimeTable(suffix) {
     return $("<table></table>")
@@ -37,10 +46,12 @@ function createTimeTable(suffix) {
         .attr("id", "timetable-" + suffix);
 }
 
+
 function createTimeTableContainer() {
     return $("<div></div>")
         .addClass("col-md-6 col-xs-12 timetable-container");
 }
+
 
 function appendHeaders(fallThead, springThead) {
     var days = ["Mon", "Tue", "Wed", "Thu", "Fri"];
@@ -58,6 +69,7 @@ function appendHeaders(fallThead, springThead) {
         .addClass("timetable-time"));
 }
 
+
 function appendTableRows(timetableTableFall, timetableTableSpring) {
     var time;
     for (var i = 9; i < 22; i++) {
@@ -74,19 +86,20 @@ function appendTableRows(timetableTableFall, timetableTableSpring) {
     }
 }
 
+
 function appendTableData(trFall, trSpring, time) {
     var weekPrefixArray = ["M", "T", "W", "R", "F"];
     trFall.append($("<td></td>").addClass("timetable-time").html(time));
 
     for (var k = 0; k < 5; k++) {
         trFall.append($("<td></td>")
-                .attr("id", weekPrefixArray[k] + time + "F")
-                .attr("rowspan", "1")
-                .addClass("timetable-cell")
-        );
+            .attr("id", weekPrefixArray[k] + time + "F")
+            .attr("rowspan", "1")
+            .addClass("timetable-cell"));
         trSpring.append($("<td></td>")
             .attr("id", weekPrefixArray[k] + time + "S")
             .addClass("timetable-cell"));
     }
+
     trSpring.append($("<td></td>").addClass("timetable-time").html(time));
 }
