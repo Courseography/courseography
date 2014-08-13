@@ -12,14 +12,14 @@ $(document).ready(function () {
     $("#dialog").fadeOut()
                 .css("visibility", "visible");
 
+    generateGrid();
     tdObjects.attr("in-conflict", "false")
-             .attr("satisfied", "true")
-             .each(function () {
-        $(this).data("conflicts", []);
-    });
-
-    renderClearAllButton();
+        .attr("satisfied", "true")
+        .each(function () {
+            $(this).data("conflicts", []);
+        });
     restoreFromCookies();
+    renderClearAllButton();
     enableSearch();
     courses = getVeryLargeCourseArray();
     trapScroll();
