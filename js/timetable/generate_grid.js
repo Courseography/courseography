@@ -72,12 +72,7 @@ function appendHeaders(fallThead, springThead) {
 
 function appendTableRows(timetableTableFall, timetableTableSpring) {
     var time;
-    for (var i = 9; i < 22; i++) {
-        if (parseInt(i) > 12) {
-            time = parseInt(i) % 12;
-        } else {
-            time = i;
-        }
+    for (var time = 9; time < 22; time++) {
         var trFall = $("<tr></tr>");
         var trSpring = $("<tr></tr>");
         appendTableData(trFall, trSpring, time);
