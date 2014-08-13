@@ -71,7 +71,6 @@ function appendHeaders(fallThead, springThead) {
 
 
 function appendTableRows(timetableTableFall, timetableTableSpring) {
-    var time;
     for (var i = 9; i < 22; i++) {
         var trFall = $("<tr></tr>");
         var trSpring = $("<tr></tr>");
@@ -85,7 +84,7 @@ function appendTableRows(timetableTableFall, timetableTableSpring) {
 function appendTableData(trFall, trSpring, time) {
     var weekPrefixArray = ["M", "T", "W", "R", "F"];
 
-    var adjustedTime = parseInt(time) % 12;
+    var adjustedTime = time === 12 ? 12 : time % 12;
     trFall.append($("<td></td>").addClass("timetable-time").html(adjustedTime));
 
     for (var k = 0; k < 5; k++) {
