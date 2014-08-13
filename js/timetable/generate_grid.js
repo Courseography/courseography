@@ -90,10 +90,13 @@ function appendTableData(trFall, trSpring, time) {
     for (var k = 0; k < 5; k++) {
         trFall.append($("<td></td>")
             .attr("id", weekPrefixArray[k] + time + "F")
-            .attr("rowspan", "1")
+            .attr('in-conflict', 'false')
+            .attr("satisfied", "true")
             .addClass("timetable-cell"));
         trSpring.append($("<td></td>")
             .attr("id", weekPrefixArray[k] + time + "S")
+            .attr('in-conflict', 'false')
+            .attr("satisfied", "true")
             .addClass("timetable-cell"));
     }
 

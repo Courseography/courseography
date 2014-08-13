@@ -7,15 +7,13 @@ var courseObjects = [];
 
 
 $(document).ready(function () {
-    var tdObjects = $("td");
 
     $("#dialog").fadeOut()
                 .css("visibility", "visible");
 
     generateGrid();
-    tdObjects.attr("in-conflict", "false")
-        .attr("satisfied", "true")
-        .each(function () {
+    var tdObjects = $("td");
+    tdObjects.each(function () {
             $(this).data("conflicts", []);
         });
     restoreFromCookies();
