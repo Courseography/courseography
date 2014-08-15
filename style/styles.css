@@ -413,6 +413,29 @@ input[type=checkbox]:checked + label:before {
   font-family: "Trebuchet MS", Arial, Sans-Serif;
   }*/
 
+/* Modals */
+.ui-dialog {
+    background-color: #37FFA1;
+}
 
+.ui-dialog-titlebar {
+    background-color: #FF4AA1;
+    color: white;
+    font-size: 200%;
+}
 
+.ui-dialog-title{
+    background-color: #374AFF;
+}
+
+.ui-dialog-titlebar-close {
+    /*background-color: #3700A1;*/
+    /*color: white;*/
+    float: right;
+}
+
+.modal {
+    background-color: #374AA1;
+    padding: 20px 20px 20px 20px;
+}
 
