@@ -15,8 +15,8 @@ $(document).ready(function () {
     tdObjects.attr("in-conflict", "false")
              .attr("satisfied", "true")
              .each(function () {
-        $(this).data("conflicts", []);
-    });
+                       $(this).data("conflicts", []);
+                   });
 
     renderClearAllButton();
     restoreFromCookies();
@@ -43,7 +43,7 @@ function renderClearAllButton() {
  * Adapted from http://codepen.io/LelandKwong/pen/edAmn.
  * Will look into http://jscrollpane.kelvinluck.com/.
  */
- (function($) {
+(function($) {
     trapScroll = function(){
         var trapElement;
         var scrollableDist;
@@ -68,19 +68,19 @@ function renderClearAllButton() {
         };
 
         $(document)
-        .on("wheel", trapWheel)
-        .on("mouseleave", trapSelector, function() {
-            $("body").removeClass(trapClassName);
-        })
-        .on("mouseenter", trapSelector, function() {
-            trapElement = $(this);
-            var containerHeight = trapElement.outerHeight();
-            var contentHeight = trapElement[0].scrollHeight; // height of scrollable content
-            scrollableDist = contentHeight - containerHeight;
+            .on("wheel", trapWheel)
+            .on("mouseleave", trapSelector, function() {
+                $("body").removeClass(trapClassName);
+            })
+            .on("mouseenter", trapSelector, function() {
+                trapElement = $(this);
+                var containerHeight = trapElement.outerHeight();
+                var contentHeight = trapElement[0].scrollHeight; // height of scrollable content
+                scrollableDist = contentHeight - containerHeight;
 
-            if (contentHeight > containerHeight) {
-                $("body").addClass(trapClassName);
-            }
-        });
+                if (contentHeight > containerHeight) {
+                    $("body").addClass(trapClassName);
+                }
+            });
     };
 })($);

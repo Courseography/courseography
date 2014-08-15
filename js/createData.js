@@ -9,18 +9,25 @@ var math = [
 
 // Course disciplines
 var areas = {
-  'theory': ['CSC165', 'CSC236', 'CSC240', 'CSC263', 'CSC265', 'CSC310', 'CSC324', 'CSC373', 'CSC438', 'CSC448', 'CSC463'],
-  'core': ['CSC108', 'CSC148', 'CSC104', 'CSC120', 'CSC490', 'CSC491', 'CSC494', 'CSC495'],
+  'theory': ['CSC165', 'CSC236', 'CSC240', 'CSC263', 'CSC265',
+             'CSC310', 'CSC324', 'CSC373', 'CSC438', 'CSC448',
+             'CSC463'],
+  'core': ['CSC108', 'CSC148', 'CSC104', 'CSC120', 'CSC490',
+           'CSC491', 'CSC494', 'CSC495'],
   'se': ['CSC207', 'CSC301', 'CSC302', 'CSC410'],
-  'systems': ['CSC209', 'CSC258', 'CSC358', 'CSC369', 'CSC372', 'CSC458', 'CSC469', 'CSC488', 'ECE385', 'ECE489'],
-  'hci': ['CSC200', 'CSC300',  'CSC318', 'CSC404', 'CSC428', 'CSC454'],
+  'systems': ['CSC209', 'CSC258', 'CSC358', 'CSC369', 'CSC372',
+              'CSC458', 'CSC469', 'CSC488', 'ECE385', 'ECE489'],
+  'hci': ['CSC200', 'CSC300',  'CSC318', 'CSC404', 'CSC428',
+          'CSC454'],
   'graphics': ['CSC320', 'CSC418', 'CSC420'],
   'num': ['CSC336', 'CSC436', 'CSC446', 'CSC456'],
-  'ai': ['CSC321', 'CSC384', 'CSC401', 'CSC411', 'CSC412', 'CSC485', 'CSC486'],
+  'ai': ['CSC321', 'CSC384', 'CSC401', 'CSC411', 'CSC412',
+         'CSC485', 'CSC486'],
   'dbweb': ['CSC309', 'CSC343', 'CSC443']
 };
 
-var areaNames = ['theory', 'core', 'se', 'systems', 'hci', 'graphics', 'num', 'ai', 'dbweb'];
+var areaNames = ['theory', 'core', 'se', 'systems', 'hci',
+                 'graphics', 'num', 'ai', 'dbweb'];
 
 
 // Required for specialist
