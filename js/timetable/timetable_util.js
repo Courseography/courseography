@@ -16,7 +16,7 @@ courseObjects and selectedLectures. */
 function removeCourseObject(courseName) {
     for (var i = 0; i < courseObjects.length; i++) {
         if (courseName === courseObjects[i].name) {
-            courseObjects.splice(i, 1)
+            courseObjects.splice(i, 1);
             break;
         }
     }
@@ -95,8 +95,10 @@ function enableSearch() {
 
 
 function resetSearchList() {
+    var searchListObject = $("#search-list");
+
     var filter = $("#course-filter").val().toUpperCase();
-    $("#search-list").empty();
+    searchListObject.empty();
     var courseList = document.createElement("ul");
     if (filter !== "") {
         $.each(courses, function(i, course) {
@@ -132,7 +134,7 @@ function resetSearchList() {
             }
         });
     }
-    $("#search-list").append(courseList);
+    searchListObject.append(courseList);
     refreshStarredCourses();
 }
 
@@ -193,13 +195,13 @@ function saveCookies(courses, sections) {
 
 
 // Used to determine if course requires manual practical enrolment
-function hasManualPractical(section, index, array) {
+function hasManualPractical(section) {
     return (section[0].charAt(0) === "P");
 }
 
 
 // Used to determine if course requires manual tutorial enrolment
-function hasManualTutorial(section, index, array) {
+function hasManualTutorial(section) {
     return (section[0].charAt(0) === "T");
 }
 

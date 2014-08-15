@@ -52,14 +52,14 @@ Course.prototype.parseSessions = function (course) {
         if (course[s] !== undefined) {
             tmp.sections[s] = tmp.parseSections(course[s], s);
         }
-    })
-}
+    });
+};
 
 
 Course.prototype.parseSections = function(session, timeSuffix) {
     return this.parseLectures(session, timeSuffix)
            .concat(this.parseTutorials(session, timeSuffix));
-}
+};
 
 
 Course.prototype.parseLectures = function (session, timeSuffix) {
@@ -90,7 +90,7 @@ Course.prototype.parseLectures = function (session, timeSuffix) {
                 }
                 return makeLecture(lecture, tmp, id, sectionTimes);
             });
-}
+};
 
 
 Course.prototype.parseTutorials = function (session, timeSuffix) {
@@ -117,7 +117,7 @@ Course.prototype.parseTutorials = function (session, timeSuffix) {
             return makeTutorial(tutorial, tmp, id, sectionTimes);
         });
     }
-}
+};
 
 
 /* Manipulate course sections */
@@ -133,16 +133,16 @@ Course.prototype.activateSection = function (section) {
     } else {
         this.addSection(section);
     }
-}
+};
 
 
 Course.prototype.addSection = function (section) {
-    var type = section.type;
+    var type = section.type; // Not used.
     this.selected[section.type] = section;
 
     section.clicked = true;
     this.selectTimes(section);
-}
+};
 
 
 Course.prototype.selectTimes = function (section) {
@@ -153,7 +153,7 @@ Course.prototype.selectTimes = function (section) {
             section.setConflictTime(time);
         }
     });
-}
+};
 
 
 Course.prototype.removeSection = function (section) {
@@ -161,7 +161,7 @@ Course.prototype.removeSection = function (section) {
     removeFromArray(section, selectedLectures);
     this.selected[section.type] = undefined;
     section.clicked = false;
-}
+};
 
 
 Course.prototype.updateSatisfaction = function () {
@@ -187,7 +187,7 @@ Course.prototype.updateSatisfaction = function () {
         if (tmp.sections[session] !== undefined) {
             sections = sections.concat(tmp.sections[session]);
         }
-    })
+    });
     $.each(sections,
            function (i, section) {
                 if (section !== undefined) {
@@ -196,7 +196,7 @@ Course.prototype.updateSatisfaction = function () {
            });
 
     return this.satisfied;
-}
+};
 
 
 // Rendering methods (manipulate/return DOM elements)
@@ -220,7 +220,7 @@ Course.prototype.render = function () {
     $(entry).attr("satisfied", "" + this.satisfied);
 
     return entry;
-}
+};
 
 
 Course.prototype.renderUpdate = function () {
@@ -235,7 +235,7 @@ Course.prototype.renderUpdate = function () {
             });
         }
     });
-}
+};
 
 
 Course.prototype.renderHeader = function () {
@@ -260,7 +260,7 @@ Course.prototype.renderHeader = function () {
     header.appendChild(courseImg);
 
     return header;
-}
+};
 
 
 Course.prototype.renderSessions = function () {
@@ -274,7 +274,7 @@ Course.prototype.renderSessions = function () {
 
     });
     return sessionDiv;
-}
+};
 
 
 Course.prototype.renderSections = function (session) {
@@ -289,7 +289,7 @@ Course.prototype.renderSections = function (session) {
         });
         return sectionList;
     }
-}
+};
 
 
 Course.prototype.renderSatisfaction = function () {
@@ -302,7 +302,7 @@ Course.prototype.renderSatisfaction = function () {
             });
         }
     });
-}
+};
 
 
 Course.prototype.renderUpdatedHeader = function () {
@@ -311,7 +311,7 @@ Course.prototype.renderUpdatedHeader = function () {
                                             this.selected.T !== undefined ||
                                             this.selected.P !== undefined)
                                       .attr("satisfied", this.satisfied);
-}
+};
 
 
 Course.prototype.sectionTimes = function () {
@@ -323,10 +323,10 @@ Course.prototype.sectionTimes = function () {
         }
     });
     return sectionTimes;
-}
+};
 
 function sameSession(section1, section2) {
     return section1 !== undefined &&
            section2 !== undefined &&
-           section1.session == section2.session;
+           section1.session === section2.session;
 }

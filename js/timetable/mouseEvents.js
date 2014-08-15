@@ -57,7 +57,7 @@ function alertUserOfConflict() {
 }
 
 
-/* Functions to manipuate grid DOM */
+/* Functions to manipulate grid DOM */
 function renderClearTime(time) {
     $(time).html("")
            .attr("clicked", "false")

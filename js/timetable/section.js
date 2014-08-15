@@ -27,7 +27,7 @@ Section.prototype.setMouseEvents = function (li) {
              tmp.onclick();
              tmp.course.renderUpdate();
          });
-}
+};
 
 
 Section.prototype.mouseout = function () {
@@ -35,7 +35,7 @@ Section.prototype.mouseout = function () {
         renderClearHover(time);
     });
     renderClearCourseInformation();
-}
+};
 
 
 Section.prototype.mouseover = function () {
@@ -45,7 +45,7 @@ Section.prototype.mouseover = function () {
     });
     renderDisplayCourseInformation(this.course);
     renderDisplaySectionInformation(this);
-}
+};
 
 
 Section.prototype.onclick = function () {
@@ -63,21 +63,21 @@ Section.prototype.onclick = function () {
 
     saveCookies(selectedCourses, selectedLectures);
     alertUserOfConflict();
-}
+};
 
 
 Section.prototype.setTime = function (time) {
     $(time).html(this.courseName)
            .attr("clicked", "true")
            .attr("type", this.type);
-}
+};
 
 
 Section.prototype.setConflictTime = function (time) {
     var conflicts = $(time).data("conflicts");
     conflicts.push(this);
     renderConflicts(time, conflicts);
-}
+};
 
 
 Section.prototype.removeTimes = function () {
@@ -89,7 +89,7 @@ Section.prototype.removeTimes = function () {
             renderClearTime(time);
         }
     });
-}
+};
 
 
 Section.prototype.removeConflict = function (time) {
@@ -105,7 +105,7 @@ Section.prototype.removeConflict = function (time) {
     }
 
     renderConflicts(time, conflicts);
-}
+};
 
 
 // Rendering
@@ -116,18 +116,18 @@ Section.prototype.render = function () {
          .data("cap", this.cap)
          .data("enrol", this.enrol)
          .data("wait", this.wait)
-         .attr("clicked", "" + this.clicked)
-         .attr("satisfied", "" + this.satisfied);
+         .attr("clicked", String(this.clicked))
+         .attr("satisfied", String(this.satisfied));
     li.appendChild(document.createTextNode(this.name));
     this.setMouseEvents(li);
     return li;
-}
+};
 
 
 Section.prototype.renderUpdate = function () {
-    $("#" + this.id).attr("clicked", "" + this.clicked)
-                    .attr("satisfied", "" + this.satisfied);
-}
+    $("#" + this.id).attr("clicked", String(this.clicked))
+                    .attr("satisfied", String(this.satisfied));
+};
 
 
 // Other constructors
