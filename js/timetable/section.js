@@ -67,7 +67,6 @@ Section.prototype.onclick = function () {
 
 
 Section.prototype.setTime = function (time) {
-    console.log(time);
     $(time).html(this.courseName)
            .attr("clicked", "true")
            .attr("type", this.type);
