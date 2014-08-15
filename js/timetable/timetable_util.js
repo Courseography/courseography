@@ -279,16 +279,8 @@ function convertTimes(times) {
     var time;
 
     for(var i = 0; i < times.length; i++) {
-
-        // If a course is "12", we don't want to add a "0". That would result
-        // in something like "M0". We exclude this from the mod cases.
-        if ((times[i][1] % 12) !== 0) {
-            time = times[i][1] % 12;
-        } else {
-            time = times[i][1];
-        }
-
         var timeString = "MTWRF".charAt(times[i][0]);
+        time = times[i][1];
         timeString = timeString + time;
         timeList.push(timeString);
     }
