@@ -1,5 +1,7 @@
 // Activate a focus
 function updateActiveFocus(id) {
+    'use strict';
+
     var graphObject = $('#graph');
 
     $('ellipse.spotlight').remove();
@@ -29,6 +31,8 @@ function updateActiveFocus(id) {
 
 // Removes spotlight on active focus
 function clearFocus() {
+    'use strict';
+
     $('body').css('background', 'white');
     activeFocus = '';
     $.each(nodes, function (index, elem) {
@@ -39,6 +43,8 @@ function clearFocus() {
 
 // Put a spotlight on a node
 function spotlight(id) {
+    'use strict';
+
     var node = $('#' + id + ' > rect');
     var width = parseFloat(node.attr('width')) / 2;
     var height = parseFloat(node.attr('height')) / 2;

@@ -1,5 +1,7 @@
 /* Section class */
 function Section(times, course, id) {
+    'use strict';
+
     this.id = id;
     this.courseName = this.id.substring(0, 8);
     this.name = this.id.substring(9, 14);
@@ -14,6 +16,8 @@ function Section(times, course, id) {
 
 // Mouse events
 Section.prototype.setMouseEvents = function (li) {
+    'use strict';
+
     var tmp = this;
     $(li).mouseout(function () {
              tmp.mouseout();
@@ -31,6 +35,8 @@ Section.prototype.setMouseEvents = function (li) {
 
 
 Section.prototype.mouseout = function () {
+    'use strict';
+
     $.each(this.times, function (i, time) {
         renderClearHover(time);
     });
@@ -39,6 +45,8 @@ Section.prototype.mouseout = function () {
 
 
 Section.prototype.mouseover = function () {
+    'use strict';
+
     var tmp = this;
     $.each(this.times, function (i, time) {
         renderAddHover(time, tmp);
@@ -49,6 +57,8 @@ Section.prototype.mouseover = function () {
 
 
 Section.prototype.onclick = function () {
+    'use strict';
+
     $.each(this.times, function (i, time) {
         renderClearHover(time);
     });
@@ -67,6 +77,8 @@ Section.prototype.onclick = function () {
 
 
 Section.prototype.setTime = function (time) {
+    'use strict';
+
     $(time).html(this.courseName)
            .attr("clicked", "true")
            .attr("type", this.type);
@@ -74,6 +86,8 @@ Section.prototype.setTime = function (time) {
 
 
 Section.prototype.setConflictTime = function (time) {
+    'use strict';
+
     var conflicts = $(time).data("conflicts");
     conflicts.push(this);
     renderConflicts(time, conflicts);
@@ -81,6 +95,8 @@ Section.prototype.setConflictTime = function (time) {
 
 
 Section.prototype.removeTimes = function () {
+    'use strict';
+
     var tmp = this;
     $.each(this.times, function (i, time) {
         if ($(time).data("conflicts").length > 0) {
@@ -93,6 +109,8 @@ Section.prototype.removeTimes = function () {
 
 
 Section.prototype.removeConflict = function (time) {
+    'use strict';
+
     var conflicts = $(time).data("conflicts");
     var index = $.inArray(this, conflicts);
 
@@ -110,6 +128,8 @@ Section.prototype.removeConflict = function (time) {
 
 // Rendering
 Section.prototype.render = function () {
+    'use strict';
+
     var li = document.createElement("li");
     $(li).attr("id", this.id)
          .data("instructor", this.instructor)
@@ -125,6 +145,8 @@ Section.prototype.render = function () {
 
 
 Section.prototype.renderUpdate = function () {
+    'use strict';
+
     $("#" + this.id).attr("clicked", String(this.clicked))
                     .attr("satisfied", String(this.satisfied));
 };
@@ -132,6 +154,8 @@ Section.prototype.renderUpdate = function () {
 
 // Other constructors
 function makeLecture(lecture, course, id, sectionTimes) {
+    'use strict';
+
     var section = new Section(sectionTimes, course, id);
     section.instructor = lecture.instructor;
     section.cap = lecture.cap;
@@ -142,6 +166,8 @@ function makeLecture(lecture, course, id, sectionTimes) {
 
 
 function makeTutorial(tutorial, course, id, sectionTimes) {
+    'use strict';
+
     var section = new Section(sectionTimes, course, id);
     section.cap = tutorial[3];
     section.enrol = tutorial[4];

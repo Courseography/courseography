@@ -1,4 +1,6 @@
 function setCookie(cookieName, cookieValue) {
+    'use strict';
+
     var lifeSpanInDays = 300;
     document.cookie = cookieName
                       + '=' + cookieValue
@@ -8,6 +10,8 @@ function setCookie(cookieName, cookieValue) {
 
 // Right now, only used to get the status of a node in the graph.
 function getCookie(cookieName) {
+    'use strict';
+
     var name = cookieName + '=';
     var cookie = document.cookie.split(';');
     for (var i = 0; i < cookie.length; i++) {
@@ -22,6 +26,8 @@ function getCookie(cookieName) {
 
 // Right now, only used to get JSON for timetable (grid)
 function getJSONCookie(cookieName) {
+    'use strict';
+
     var name = cookieName + '=';
     var cookie = document.cookie.split(';');
     for(var i = 0; i < cookie.length; i++) {

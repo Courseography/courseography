@@ -3,6 +3,8 @@
  * Javascript functions for 'Check My POSt!' tab.
  */
 function updatePOSt(course, active) {
+    'use strict';
+
     if (reqs.indexOf(course) > -1) { // Required course
         $('#' + course + 'check').prop('checked', active);
         $('#' + course + 'checkMajor').prop('checked', active);
@@ -53,6 +55,8 @@ function updatePOSt(course, active) {
 
 
 function updatePostInterface() {
+    'use strict';
+
     updateCSCReqs();
     updateMATReqs();
     updateCSC400s();
@@ -66,6 +70,8 @@ function updatePostInterface() {
 
 
 function updateMajorPostInterface() {
+    'use strict';
+
     updateCSCReqsMajor();
     updateMATReqsMajor();
     updateElecsMajor();
@@ -78,6 +84,8 @@ function updateMajorPostInterface() {
 
 
 function updateMinorPostInterface() {
+    'use strict';
+
     updateCSCReqsMinor();
     updateElecsMinor();
 
@@ -87,6 +95,8 @@ function updateMinorPostInterface() {
 
 
 function setIcon(id, sat) {
+    'use strict';
+
     if (sat) {
         $('a[href="#' + id + '"] img').attr('src', 'res/ico/check.ico');
     } else {
@@ -96,6 +106,8 @@ function setIcon(id, sat) {
 
 
 function updateCSCReqs() {
+    'use strict';
+
     cscReqTotal = $('#cscReqs input:checkbox:checked').length / 2;
     $('#cscReqTotal').html(cscReqTotal.toFixed(1));
     cscReqSat = cscReqTotal >= 5;
@@ -104,6 +116,8 @@ function updateCSCReqs() {
 
 
 function updateCSCReqsMajor() {
+    'use strict';
+
     cscReqTotalMajor = $('#cscReqsMajor input:checkbox:checked').length / 2;
     $('#cscReqTotalMajor').html(cscReqTotal.toFixed(1));
     cscReqSatMajor = cscReqTotalMajor >= 3.5;
@@ -112,6 +126,8 @@ function updateCSCReqsMajor() {
 
 
 function updateCSCReqsMinor() {
+    'use strict';
+
     cscReqTotalMinor = $('#cscReqsMinor input:checkbox:checked').length / 2;
 
     if (cscReqTotalMinor > 2.5) {
@@ -125,6 +141,8 @@ function updateCSCReqsMinor() {
 
 
 function updateMATReqs() {
+    'use strict';
+
     matReqTotal = $('#matReqs input:checkbox:checked').length / 2;
     if ($('#Calc1check').prop('checked')) {
         matReqTotal += 0.5;
@@ -136,6 +154,8 @@ function updateMATReqs() {
 
 
 function updateMATReqsMajor() {
+    'use strict';
+
     matReqTotalMajor = $('#matReqsMajor input:checkbox:checked').length / 2;
     if ($('#Calc1checkMajor').prop('checked')) {
         matReqTotalMajor += 0.5;
@@ -147,6 +167,8 @@ function updateMATReqsMajor() {
 
 
 function updateAllElecsMinor() {
+    'use strict';
+
     var numProjects = 2;
     var active300sMinor = active300s.concat();
     var tmpMinor = active300s.concat(active400s, projectCourses.slice(0, numProjects));
@@ -204,6 +226,8 @@ function updateAllElecsMinor() {
 
 
 function updateElecsMinor() {
+    'use strict';
+
     updateAllElecsMinor();
     var numProjects = 2;
     postTotalMinor = elecTotalMinor + cscReqTotalMinor;
@@ -219,6 +243,8 @@ function updateElecsMinor() {
 
 
 function update200sElecsMajor() {
+    'use strict';
+
     elec200sTotalMajor = 0;
     if ($('#Calc2checkMajor').prop('checked')) {
         elec200sTotalMajor += 1;
@@ -240,6 +266,8 @@ function update200sElecsMajor() {
 
 
 function update300sElecsMajor() {
+    'use strict';
+
     numBCBMajor = $('#300sElecsMajor input:checkbox:checked').length;
     var numProjects = 2;
     if ($('#BCB430checkMajor').prop('checked')) {
@@ -281,6 +309,8 @@ function update300sElecsMajor() {
 
 
 function updateElecsMajor() {
+    'use strict';
+
     update200sElecsMajor();
     update300sElecsMajor();
 
@@ -304,6 +334,8 @@ function updateElecsMajor() {
 
 
 function updateCSC400s() {
+    'use strict';
+
     numBCB = $('#csc400s input:checkbox:checked').length;
 
     var numProjects = 2;
@@ -329,6 +361,8 @@ function updateCSC400s() {
 
 // Right now, it must be called after updateCSC400s (because of numBCB)
 function updateElecs() {
+    'use strict';
+
     var numProjects = 2;
     if ($('#BCB430check').prop('checked')) {
         numProjects = 0;
@@ -371,6 +405,8 @@ function updateElecs() {
 
 
 function updatePEYMajor() {
+    'use strict';
+
     peySatMajor = $('#peycheckMajor').prop('checked') ||
                   $('#peyReqMajor input:checkbox:checked').length > 0;
     setIcon('peyReqMajor', peySatMajor);
@@ -378,6 +414,8 @@ function updatePEYMajor() {
 
 
 function updatePEY() {
+    'use strict';
+
     peySat = $('#peycheck').prop('checked') ||
              $('#peyReq input:checkbox:checked').length > 0;
     setIcon('peyReq', peySat);
@@ -385,15 +423,21 @@ function updatePEY() {
 
 
 function updatePOStTotal() {
+    'use strict';
+
     $('#postTotal').html((cscReqTotal + matReqTotal + elecTotal).toFixed(1));
 }
 
 
 function updatePOStTotalMajor() {
+    'use strict';
+
     $('#postTotalMajor').html((cscReqTotalMajor + matReqTotalMajor + elecTotalMajor).toFixed(1));
 }
 
 
 function updatePostMinor() {
+    'use strict';
+
     $('#postTotalMinor').html((cscReqTotalMinor + elecTotalMinor).toFixed(1));
 }

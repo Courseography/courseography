@@ -4,6 +4,8 @@
  * Generates the duplex timetable grid.
  */
 function generateGrid() {
+    'use strict';
+
     var rowDiv = $('<div></div>').addClass('row');
     var timetableContainerDivFall = createTimeTableContainer();
     var timetableContainerDivSpring = createTimeTableContainer();
@@ -31,16 +33,22 @@ function generateGrid() {
 
 
 function createThead() {
+    'use strict';
+
     return $('<thead></thead>');
 }
 
 
 function createCaption(name) {
+    'use strict';
+
     return $('<caption></caption>').html(name);
 }
 
 
 function createTimeTable(suffix) {
+    'use strict';
+
     return $('<table></table>')
         .addClass('timetable table')
         .attr('id', 'timetable-' + suffix);
@@ -48,12 +56,16 @@ function createTimeTable(suffix) {
 
 
 function createTimeTableContainer() {
+    'use strict';
+
     return $('<div></div>')
         .addClass('col-md-6 col-xs-12 timetable-container');
 }
 
 
 function appendHeaders(fallThead, springThead) {
+    'use strict';
+
     var days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
     fallThead.append($('<th></th>')
         .attr('id', 'no-border')
@@ -71,6 +83,8 @@ function appendHeaders(fallThead, springThead) {
 
 
 function appendTableRows(timetableTableFall, timetableTableSpring) {
+    'use strict';
+
     for (var i = 9; i < 22; i++) {
         var trFall = $('<tr></tr>');
         var trSpring = $('<tr></tr>');
@@ -82,6 +96,8 @@ function appendTableRows(timetableTableFall, timetableTableSpring) {
 
 
 function appendTableData(trFall, trSpring, time) {
+    'use strict';
+
     var weekPrefixArray = ['M', 'T', 'W', 'R', 'F'];
 
     var adjustedTime = time === 12 ? 12 : time % 12;

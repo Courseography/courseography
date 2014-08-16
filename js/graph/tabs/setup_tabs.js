@@ -1,11 +1,15 @@
 // Update the total FCE count, and display total
 function updateFCECount() {
+    'use strict';
+
     FCEs = FCEs100 + FCEs200 + FCEs300 + FCEs400 + FCEsMAT;
     $('#FCEcount').html(FCEs.toFixed(1));
 }
 
 
 function createTabs() {
+    'use strict';
+
     $('.infoTabs').tabs({
         activate: function (e, ui) {
             e.currentTarget.blur();

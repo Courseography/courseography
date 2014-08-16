@@ -1,5 +1,7 @@
 // A form for feedback; currently disabled
 function activateFeedbackForm() {
+    'use strict';
+
     $('#submit_btn').click(function () {
         var userName = $('input[name=name]').val();
         var userMessage = $('textarea[name=message]').val();

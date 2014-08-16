@@ -1,10 +1,14 @@
 /* Array utilities */
 function inArray(item, array) {
+    'use strict';
+
     return $.inArray(item, array) > -1;
 }
 
 
 function removeFromArray(item, array) {
+    'use strict';
+
     var index = array.indexOf(item);
     array.splice(index, 1);
     return index;
@@ -14,6 +18,8 @@ function removeFromArray(item, array) {
 /* These specifically manipulate the two global arrays,
 courseObjects and selectedLectures. */
 function removeCourseObject(courseName) {
+    'use strict';
+
     for (var i = 0; i < courseObjects.length; i++) {
         if (courseName === courseObjects[i].name) {
             courseObjects.splice(i, 1);
@@ -24,6 +30,8 @@ function removeCourseObject(courseName) {
 
 
 function getCourseObject(courseName, courseArray) {
+    'use strict';
+
     for (var i = 0; i < courseArray.length; i++) {
         if (courseArray[i].name === courseName) {
             return courseArray[i];
@@ -34,6 +42,8 @@ function getCourseObject(courseName, courseArray) {
 
 
 function updateSelectedLectures(section) {
+    'use strict';
+
     if (!inArray(section.id, selectedLectures)) {
         selectedLectures.push(section.id);
     }
@@ -42,6 +52,8 @@ function updateSelectedLectures(section) {
 
 /* AJAX Functions */
 function getVeryLargeCourseArray() {
+    'use strict';
+
     var splitArray = undefined;
 
     $.ajax({
@@ -60,6 +72,8 @@ function getVeryLargeCourseArray() {
 
 
 function fetchCourse(name) {
+    'use strict';
+
     var course;
     $.ajax({
         url: 'res/courses/' + name + '.txt',
@@ -78,6 +92,8 @@ function fetchCourse(name) {
 
 
 function getCourse(name) {
+    'use strict';
+
     var course = getCourseObject(name, courseCache);
     if (course === undefined) {
         course = fetchCourse(name);
@@ -88,6 +104,8 @@ function getCourse(name) {
 
 /* Timetable Search List */
 function enableSearch() {
+    'use strict';
+
     $('#course-filter').keyup(function() {
         resetSearchList();
     });
@@ -95,6 +113,8 @@ function enableSearch() {
 
 
 function resetSearchList() {
+    'use strict';
+
     var searchListObject = $('#search-list');
 
     var filter = $('#course-filter').val().toUpperCase();
@@ -141,6 +161,8 @@ function resetSearchList() {
 
 // Highlight starred (selected) courses in search list
 function refreshStarredCourses() {
+    'use strict';
+
     $('#search-list').find('li').each(function (index) {
         var course = $(this).text();
         if (inArray(course, selectedCourses)) {
@@ -153,6 +175,8 @@ function refreshStarredCourses() {
 
 /* Cookie Interaction */
 function restoreFromCookies() {
+    'use strict';
+
     var starredCourseCookie = getJSONCookie('selected-courses');
     var starredLectureCookie = getJSONCookie('selected-lectures');
 
@@ -189,6 +213,8 @@ function restoreFromCookies() {
 
 
 function saveCookies(courses, sections) {
+    'use strict';
+
     setCookie('selected-courses', JSON.stringify(courses));
     setCookie('selected-lectures', JSON.stringify(sections));
 }
@@ -196,17 +222,23 @@ function saveCookies(courses, sections) {
 
 // Used to determine if course requires manual practical enrolment
 function hasManualPractical(section) {
+    'use strict';
+
     return (section[0].charAt(0) === 'P');
 }
 
 
 // Used to determine if course requires manual tutorial enrolment
 function hasManualTutorial(section) {
+    'use strict';
+
     return (section[0].charAt(0) === 'T');
 }
 
 
 function addCourseToList(name) {
+    'use strict';
+
     var course = new Course(name);
     $('#course-select').append(course.render());
     courseObjects.push(course);
@@ -216,9 +248,11 @@ function addCourseToList(name) {
 
 
 function removeCourseFromList(name) {
+    'use strict';
+
     var courseSelector = '#' + name + '-li';
     var courseElement = $(courseSelector);
-    $(courseSelector + ' li[clicked*='true']').each(function() {
+    $(courseSelector + ' li[clicked*="true"]').each(function() {
         $(this).click();
     });
     courseElement.remove();

@@ -6,6 +6,8 @@
 
 // Generate Node and Edge objects based on geometric relationships
 function buildGraph() {
+    'use strict';
+
     $('.node').each(function () {
         makeNode([], 'AND', $(this).attr('id'));
     });
@@ -106,6 +108,8 @@ function buildGraph() {
 
 
 function parseAnd(s) {
+    'use strict';
+
     var curr = s;
     var andList = [];
     while (curr.length > 0) {
@@ -129,6 +133,8 @@ function parseAnd(s) {
 
 
 function parseOr(s) {
+    'use strict';
+
     var curr = s;
     var orList = [];
     while (curr.length > 0 &&
@@ -161,6 +167,8 @@ function parseOr(s) {
 
 
 function parseCourse(s) {
+    'use strict';
+
     var start = s.search(/[,/]/);
     if (start === 3) {
         return ['CSC' + s.substr(0, start), s.substr(start)];
@@ -177,6 +185,8 @@ function parseCourse(s) {
 
 
 function intersects(px, py, rx, ry, width, height, offset) {
+    'use strict';
+
     var dx = px - rx;
     var dy = py - ry;
     return dx >= -1 * offset && dx <= width + offset && dy >= -1 * offset && dy <= height + offset;

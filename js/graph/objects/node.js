@@ -1,4 +1,6 @@
 function Node(parents, type, name) { // parents is never used.
+    'use strict';
+
     this.name = name; // Used to identify the GUI node
     this.parents = []; // Prerequisite nodes
     this.children = []; // Nodes for which this is a prerequisite
@@ -14,12 +16,16 @@ function Node(parents, type, name) { // parents is never used.
 
 // Returns true if the node has been selected
 Node.prototype.isSelected = function () {
+    'use strict';
+
     return this.status === 'active' || this.status === 'overridden';
 };
 
 
 // Used when entering hover
 Node.prototype.focus = function () {
+    'use strict';
+
     if (this.status !== 'active') {
         if (this.status !== 'overridden') {
             $('#' + this.name).attr('data-active', 'missing');
@@ -38,6 +44,8 @@ Node.prototype.focus = function () {
 
 // Used when leaving hover
 Node.prototype.unfocus = function () {
+    'use strict';
+
     if (!this.isSelected()) {
         if (activeFocus === '' || window[activeFocus + 'FocusList'].indexOf(this.name) > -1) {
             this.updateSVG();
@@ -57,6 +65,8 @@ Node.prototype.unfocus = function () {
 
 // Check whether node's prerequisites are satisfied, update status and GUI
 Node.prototype.updateStatus = function () {
+    'use strict';
+
     if (this.arePrereqsSatisfied()) {
         if (this.isSelected() || this.hybrid) {
             this.status = 'active';
@@ -77,7 +87,7 @@ Node.prototype.updateStatus = function () {
         $.each(this.children, function(i, node) {
             node.updateStatus();
         });
-        $.each(this.outEdges, function(i, edge) {
+        $.each(this.outEdges, function (i, edge) {
             edge.updateStatus();
         });
     }
@@ -87,7 +97,9 @@ Node.prototype.updateStatus = function () {
 
 
 // Activate/deactivate a node; called when a node is clicked
-Node.prototype.turn = function() {
+Node.prototype.turn = function () {
+    'use strict';
+
     if (this.isSelected()) {
         this.status = 'inactive';
     } else {
@@ -113,6 +125,8 @@ Node.prototype.turn = function() {
 
 // Returns true if the node's prerequisites are satisfied
 Node.prototype.arePrereqsSatisfied = function () {
+    'use strict';
+
     var sat = this.checkFCEBasedPrerequisites();
     if (this.logicalType === 'AND') {
         for (var i = 0; i < this.parents.length; i++) {
@@ -132,6 +146,8 @@ Node.prototype.arePrereqsSatisfied = function () {
 
 // Checks FCE-count prerequisites
 Node.prototype.checkFCEBasedPrerequisites = function() {
+    'use strict';
+
     if (this.name === 'CSC454') {
         return FCEs200 + FCEs300 + FCEs400 >= 2.5;
     } else if (this.name === 'CSC494' || this.name === 'CSC495') {
@@ -146,5 +162,7 @@ Node.prototype.checkFCEBasedPrerequisites = function() {
 
 // Update the visual style of the corresponding graphical node
 Node.prototype.updateSVG = function() {
+    'use strict';
+
     $('#' + this.name).attr('data-active', this.status);
 };

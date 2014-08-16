@@ -72,6 +72,8 @@ function enableGraphDragging() {
 
 // Disables Tab key
 document.onkeydown = function(e) {
+    'use strict';
+
     if (e.which === 9) {
         return false;
     }
@@ -80,6 +82,7 @@ document.onkeydown = function(e) {
 
 // Initializes interface to cookie settings; blank interface if no cookies exist
 function initializeGraphSettings() {
+    'use strict';
 
     // Clear FCE count and 'Check My POSt!' tab
     FCEs = 0;
@@ -152,6 +155,8 @@ function initializeGraphSettings() {
 
 // Resets interface to default (nothing selected); callback for Reset button
 function reset() {
+    'use strict';
+
     // Set initial node status
     $.each(nodes, function(i, node) {
         if (initiallyTakeable.indexOf(node) > -1) {
@@ -242,6 +247,8 @@ function setGraphSize() {
 
 
 $(window).resize(function() {
+    'use strict';
+
     // Set width of FCE count
     var w = $('.infoTabs').width() - $('.tabList').outerWidth() - 1;
     $('#FCECountDiv').width(w + 'px');

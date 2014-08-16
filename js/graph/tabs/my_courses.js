@@ -1,6 +1,8 @@
 // Updates the "My Courses" tab
 // Note: not called on hybrids
 function updateClickedCourses(name, active) {
+    'use strict';
+
     var i = clickedCourses.indexOf(name);
     var diff = (name === 'CSC200' || name === 'Calc1') ? 1 : 0.5; // Full-year
     if (active && i === -1) {
@@ -26,6 +28,8 @@ function updateClickedCourses(name, active) {
 
 // Generate table of clicked courses
 function updateMyCoursesTab() {
+    'use strict';
+
     var courseGridObject = $('#courseGrid');
     courseGridObject.empty();
 

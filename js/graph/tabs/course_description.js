@@ -1,5 +1,7 @@
 // Read course description from resource files
 function fetchCourseDescription(id) {
+    'use strict';
+
     var result;
     if (id === 'CSC200') {
         result = readCalendarEntry(id + 'Y1');
@@ -20,6 +22,8 @@ function fetchCourseDescription(id) {
 
 
 function readCalendarEntry(name) {
+    'use strict';
+
     var result = '';
     $.ajax({
         url: 'res/courses/' + name + '.txt',

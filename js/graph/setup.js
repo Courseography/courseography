@@ -50,7 +50,9 @@ var extraMinor = 0;
 
 var activeFocus = '';
 
-$(document).ready(function() {
+$(document).ready(function () {
+    'use strict';
+
     buildGraph();
 
     // Set width of FCE count

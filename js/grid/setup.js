@@ -7,6 +7,7 @@ var courseObjects = [];
 
 
 $(document).ready(function () {
+    'use strict';
 
     $('#dialog').fadeOut()
                 .css('visibility', 'visible');
@@ -27,6 +28,8 @@ $(document).ready(function () {
 
 
 function renderClearAllButton() {
+    'use strict';
+
     var clearAllItem = document.getElementById('clear-all');
     $(clearAllItem).click(function () {
         if (confirm('Clear all selected courses?')) {

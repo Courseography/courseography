@@ -1,4 +1,6 @@
 function setMouseCallbacks() {
+    'use strict';
+
     var nodeObjects = $('.node');
 
     nodeObjects.click(function (event) {
@@ -17,6 +19,8 @@ function setMouseCallbacks() {
 // Activates missing prerequisite display and
 // fetches course description on hover
 function hoverFocus(event) {
+    'use strict';
+
     var id = event.target.parentNode.id;
     // Highlight missing prerequisites
     window[id].focus();
@@ -27,12 +31,16 @@ function hoverFocus(event) {
 
 // Deactivate missing prerequisites
 function hoverUnfocus(event) {
+    'use strict';
+
     var id = event.target.parentNode.id;
     window[id].unfocus();
 }
 
 // Activate/Deactivate node when clicked
 function turnNode(event) {
+    'use strict';
+
     if (activeFocus === '') {
         var id = event.target.parentNode.id;
         // Update this node
