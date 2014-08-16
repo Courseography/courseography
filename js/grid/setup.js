@@ -7,19 +7,18 @@ var courseObjects = [];
 
 
 $(document).ready(function () {
-    var tdObjects = $("td");
 
     $("#dialog").fadeOut()
                 .css("visibility", "visible");
 
-    tdObjects.attr("in-conflict", "false")
-             .attr("satisfied", "true")
-             .each(function () {
-                       $(this).data("conflicts", []);
-                   });
+    generateGrid();
+    var tdObjects = $("td");
+    tdObjects.each(function () {
+            $(this).data("conflicts", []);
+        });
 
-    renderClearAllButton();
     restoreFromCookies();
+    renderClearAllButton();
     enableSearch();
     courses = getVeryLargeCourseArray();
     trapScroll();
