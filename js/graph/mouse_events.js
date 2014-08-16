@@ -1,5 +1,5 @@
 function setMouseCallbacks() {
-    var nodeObjects = $(".node");
+    var nodeObjects = $('.node');
 
     nodeObjects.click(function (event) {
         turnNode(event);

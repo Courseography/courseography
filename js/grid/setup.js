@@ -8,13 +8,13 @@ var courseObjects = [];
 
 $(document).ready(function () {
 
-    $("#dialog").fadeOut()
-                .css("visibility", "visible");
+    $('#dialog').fadeOut()
+                .css('visibility', 'visible');
 
     generateGrid();
-    var tdObjects = $("td");
+    var tdObjects = $('td');
     tdObjects.each(function () {
-            $(this).data("conflicts", []);
+            $(this).data('conflicts', []);
         });
 
     restoreFromCookies();
@@ -27,9 +27,9 @@ $(document).ready(function () {
 
 
 function renderClearAllButton() {
-    var clearAllItem = document.getElementById("clear-all");
+    var clearAllItem = document.getElementById('clear-all');
     $(clearAllItem).click(function () {
-        if (confirm("Clear all selected courses?")) {
+        if (confirm('Clear all selected courses?')) {
             $.each(courseObjects.slice(0), function (i, course) {
                 removeCourseFromList(course.name);
             });
@@ -46,11 +46,11 @@ function renderClearAllButton() {
     trapScroll = function(){
         var trapElement;
         var scrollableDist;
-        var trapClassName = "trapScroll-enabled";
-        var trapSelector = "#course-select";
+        var trapClassName = 'trapScroll-enabled';
+        var trapSelector = '#course-select';
 
         var trapWheel = function(e){
-            if (!$("body").hasClass(trapClassName)) {
+            if (!$('body').hasClass(trapClassName)) {
                 return;
             } else {
                 var curScrollPos = trapElement.scrollTop();
@@ -67,18 +67,18 @@ function renderClearAllButton() {
         };
 
         $(document)
-            .on("wheel", trapWheel)
-            .on("mouseleave", trapSelector, function() {
-                $("body").removeClass(trapClassName);
+            .on('wheel', trapWheel)
+            .on('mouseleave', trapSelector, function() {
+                $('body').removeClass(trapClassName);
             })
-            .on("mouseenter", trapSelector, function() {
+            .on('mouseenter', trapSelector, function() {
                 trapElement = $(this);
                 var containerHeight = trapElement.outerHeight();
                 var contentHeight = trapElement[0].scrollHeight; // height of scrollable content
                 scrollableDist = contentHeight - containerHeight;
 
                 if (contentHeight > containerHeight) {
-                    $("body").addClass(trapClassName);
+                    $('body').addClass(trapClassName);
                 }
             });
     };

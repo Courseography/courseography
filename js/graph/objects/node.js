@@ -22,11 +22,11 @@ Node.prototype.isSelected = function () {
 Node.prototype.focus = function () {
     if (this.status !== 'active') {
         if (this.status !== 'overridden') {
-            $("#" + this.name).attr('data-active', 'missing');
+            $('#' + this.name).attr('data-active', 'missing');
         }
         $.each(this.inEdges, function (i, edge) {
             if (edge.parent.status !== 'active') {
-                $("#" + edge.name).attr('data-active', 'missing');
+                $('#' + edge.name).attr('data-active', 'missing');
             }
         });
         $.each(this.parents, function (i, node) {
@@ -39,10 +39,10 @@ Node.prototype.focus = function () {
 // Used when leaving hover
 Node.prototype.unfocus = function () {
     if (!this.isSelected()) {
-        if (activeFocus === '' || window[activeFocus + "FocusList"].indexOf(this.name) > -1) {
+        if (activeFocus === '' || window[activeFocus + 'FocusList'].indexOf(this.name) > -1) {
             this.updateSVG();
         } else {
-            $("#" + this.name).attr('data-active', 'unlit');
+            $('#' + this.name).attr('data-active', 'unlit');
         }
     }
 

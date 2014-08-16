@@ -1,10 +1,10 @@
 // Activate a focus
 function updateActiveFocus(id) {
-    var graphObject = $("#graph");
+    var graphObject = $('#graph');
 
     $('ellipse.spotlight').remove();
     // Remove old icon
-    $(".focusList .statusIcon").remove();
+    $('.focusList .statusIcon').remove();
 
     if (id === '') {
         clearFocus();
@@ -20,7 +20,7 @@ function updateActiveFocus(id) {
         activeFocus = id;
 
         // Put in new icon.
-        $(".focusList a[href='#" + id + "Details']").append(
+        $('.focusList a[href="#' + id + 'Details"]').append(
             "<img class='statusIcon' src='res/ico/close.ico' alt='Click to close!'/>"
         );
     }

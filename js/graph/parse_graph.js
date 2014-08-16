@@ -43,7 +43,7 @@ function buildGraph() {
         coords = coords.filter(function (str) {return str !== 'M' && str !== 'L'; });
         // Do something for internet explorer
         if (!!navigator.userAgent.match(/Trident.*rv[ :]*11\./) ||
-              window.navigator.userAgent.indexOf("MSIE ") > -1) {
+              window.navigator.userAgent.indexOf('MSIE ') > -1) {
             var xStart = parseFloat(coords[0]);
             var yStart = parseFloat(coords[1]);
             var yEnd = parseFloat(coords.pop());

@@ -51,7 +51,14 @@ function updateMyCoursesTab() {
             });
             title = result;
         }
-        return "<td class='courseCell' style='background: " + $("#" + course + "> rect").css('fill') + "'><div id='" + course + "cell'><p class='courseName'>" + course + "</p><p class=" + course + "text>" + title + "</p></div></td>";
+        return '<td class="courseCell" style="background: ' +
+               $('#' + course + '> rect').css('fill') +
+               '"><div id="' + course + 'cell"><p class="courseName">' +
+               course +
+               '</p><p class=' +
+               course + 'text>' +
+               title +
+               '</p></div></td>';
     }).join('');
 
     courseGridObject.html(htmlClickedString);

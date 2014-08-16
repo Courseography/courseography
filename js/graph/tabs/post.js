@@ -7,28 +7,30 @@ function updatePOSt(course, active) {
         $('#' + course + 'check').prop('checked', active);
         $('#' + course + 'checkMajor').prop('checked', active);
     } else {
-        if (course.substr(0, 5) === "CSC49") {
+        if (course.substr(0, 5) === 'CSC49') {
             var ind = projectCourses.indexOf(course);
             if (active && ind === -1) {
                 projectCourses.push(course);
             } else if (!active && ind > -1) {
                 projectCourses.splice(ind, 1);
             }
-        } else if (course.substr(0, 4) === "CSC4" || course.substr(0, 4) === "ECE4") { // 4th year course
+        } else if (course.substr(0, 4) === 'CSC4' ||
+                   course.substr(0, 4) === 'ECE4') { // 4th year course
             var ind = active400s.indexOf(course);
             if (active && ind === -1) {
                 active400s.push(course);
             } else if (!active && ind > -1) {
                 active400s.splice(ind, 1);
             }
-        } else if (course.substr(0, 4) === "CSC3" || course.substr(0, 4) === "ECE3") { // 3rd year course
+        } else if (course.substr(0, 4) === 'CSC3' ||
+                   course.substr(0, 4) === 'ECE3') { // 3rd year course
             var ind = active300s.indexOf(course);
             if (active && ind === -1) {
                 active300s.push(course);
             } else if (!active && ind > -1) {
                 active300s.splice(ind, 1);
             }
-        } else if (course.substr(0, 4) === "CSC2") { // 2nd year course
+        } else if (course.substr(0, 4) === 'CSC2') { // 2nd year course
             var ind = active200s.indexOf(course);
             if (active && ind === -1) {
                 active200s.push(course);
@@ -269,7 +271,7 @@ function update300sElecsMajor() {
     elec300sTotalMajor = tmp.length + numBCBMajor;
 
     for (var i = 1; i <= 3; i++) {
-        if ($('#MAT' + i + "Major").prop('value').substr(0, 3) === 'MAT') {
+        if ($('#MAT' + i + 'Major').prop('value').substr(0, 3) === 'MAT') {
             elec300sTotalMajor += 1;
         }
     }

@@ -21,7 +21,7 @@ function enableGraphDragging() {
             var that = this,
                 btnIsLeft = (event.which === this.options.mouseButton),
 
-                elIsCancel = (typeof this.options.cancel === "string" && event.target.nodeName ? $(event.target).closest(this.options.cancel).length : false);
+                elIsCancel = (typeof this.options.cancel === 'string' && event.target.nodeName ? $(event.target).closest(this.options.cancel).length : false);
             if (!btnIsLeft || elIsCancel || !this._mouseCapture(event)) {
                 return true;
             }
@@ -42,8 +42,8 @@ function enableGraphDragging() {
             }
 
             // This is apparently for Gecko and Opera, but I haven't tested it out yet.
-            if (true === $.data(event.target, this.widgetName + ".preventClickEvent")) {
-                $.removeData(event.target, this.widgetName + ".preventClickEvent");
+            if (true === $.data(event.target, this.widgetName + '.preventClickEvent')) {
+                $.removeData(event.target, this.widgetName + '.preventClickEvent');
             }
 
             this._mouseMoveDelegate = function(event) {
@@ -54,8 +54,8 @@ function enableGraphDragging() {
             };
 
             $(document)
-                .bind("mousemove." + this.widgetName, this._mouseMoveDelegate)
-                .bind("mouseup." + this.widgetName, this._mouseUpDelegate);
+                .bind('mousemove.' + this.widgetName, this._mouseMoveDelegate)
+                .bind('mouseup.' + this.widgetName, this._mouseUpDelegate);
 
             event.preventDefault();
 
@@ -64,7 +64,7 @@ function enableGraphDragging() {
         }
     });
 
-    $("#graphRootSVG").draggable({
+    $('#graphRootSVG').draggable({
         mouseButton: 3
     });
 }
