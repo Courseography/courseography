@@ -128,8 +128,7 @@ caption {
 }
 
 
-.timetable-cell-F,
-.timetable-cell-S {
+.timetable-cell {
   border-top: 1px dashed !important;
   border-bottom: none !important;
   border-right: 1px solid !important;
