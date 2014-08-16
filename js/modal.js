@@ -9,10 +9,13 @@ function createModalDiv(id) {
     var p = $("<p></p>").css("color", "white").html(fetchCourseDescription(id));
     div.append(p);
 
-    var video = $('<video id="course_video" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="500"></video>');
-    var src1 = $("<source></source>").attr("src", "http://video-js.zencoder.com/oceans-clip.webm").attr("type", "video/webm");
-    var src2 = $("<source></source>").attr("src", "http://video-js.zencoder.com/oceans-clip.ogv").attr("type", "video/ogv");
-    var src3 = $("<source></source>").attr("src", "http://video-js.zencoder.com/oceans-clip.mp4").attr("type", "video/mp4");
+    var video = $('<video id="course_video" class="video-js vjs-default-skin" controls preload="auto" width="50%" height="250"></video>');
+    var src1 = $("<source></source>")
+                .attr("src", "http://video-js.zencoder.com/oceans-clip.webm").attr("type", "video/webm");
+    var src2 = $("<source></source>")
+                .attr("src", "http://video-js.zencoder.com/oceans-clip.ogv").attr("type", "video/ogv");
+    var src3 = $("<source></source>")
+                .attr("src", "http://video-js.zencoder.com/oceans-clip.mp4").attr("type", "video/mp4");
     video.append(src1).append(src2).append(src3);
     div.append(video);
     return div;
@@ -79,7 +82,42 @@ function createRect(rectClass, rectId, posX, posY, width, height, color) {
 function createText(nodeId, rectClass, rectId, posX, posY, width, height, color) {
     "use strict";
 
-    d3.select('#graphRootSVG').append('rect')
+    var g = d3.select('#graphRootSVG').append('g')
+        .attr('class', 'tooltip-group')
+        .style("cursor", "pointer")
+        .on("click", function () {
+            if ($(".modal").length === 0) {
+                var div = createModalDiv(nodeId);
+                div.attr("title", nodeId)
+                    .addClass("modal").dialog({
+                        autoOpen: true,
+                        show: {
+                            effect: "blind",
+                            duration: 1000
+                        },
+                        hide: {
+                            effect: "blind",
+                            duration: 1000
+                        },
+                        modal: true,
+                        minWidth: 1000,
+                        minHeight: 600,
+                        close: function () {
+                            $(this).remove();
+                            $.each(nodes, function (index, elem) {
+                                window[elem].updateSVG();
+                            });
+                            $('body').css('background', 'rgb(255,255,255)');
+                        }});
+                $('.node, .hybrid').attr('data-active', 'unlit');
+                $('body').css('background', 'rgb(40,40,40)');
+                setMouseCallbacks();
+                enableVideoJS();
+                $('.tooltip-group').remove();
+            }
+        });
+
+    g.append('rect')
         .attr("class", rectClass + "-rect " + rectId + "-rect")
         .attr("id", rectId + "-rect")
         .attr("x", posX)
@@ -99,43 +137,14 @@ function createText(nodeId, rectClass, rectId, posX, posY, width, height, color)
         .attr("fill-opacity", 1)
         .attr("stroke-opacity", 1);
 
-    d3.select('#graphRootSVG').append("text").text("Info")
+
+    g.append("text").text("Info")
         .attr("class", rectClass + "-text " + rectId + "-text")
         .attr("id", rectId + "-text")
-        .attr("x", parseFloat(posX) + 20)
+        .attr("x", parseFloat(posX)+ 30)
         .attr("y", parseFloat(posY) + 20)
         .attr("fill-opacity", 0)
         .attr("stroke-opacity", 0)
-        .style("cursor", "pointer")
-        .on("click", function () {
-            var div = createModalDiv(nodeId);
-            div.attr("title", nodeId)
-                .addClass("modal").dialog({
-                    autoOpen: true,
-                    show: {
-                        effect: "blind",
-                        duration: 1000
-                    },
-                    hide: {
-                        effect: "blind",
-                        duration: 1000
-                    },
-                    modal: true,
-                    minWidth: 1000,
-                    minHeight: 600,
-                    close: function () {
-                        $(this).remove();
-                        $('.video').remove();
-                        $.each(nodes, function (index, elem) {
-                            window[elem].updateSVG();
-                        });
-                        $('body').css('background', 'rgb(255,255,255)');
-                    }});
-            $('.node, .hybrid').attr('data-active', 'unlit');
-            $('body').css('background', 'rgb(40,40,40)');
-            setMouseCallbacks();
-            enableVideoJS();
-        })
         .transition()
         .duration(5000)
         .ease('cube')

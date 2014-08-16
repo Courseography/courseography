@@ -40,7 +40,7 @@ function hoverUnfocus(event) {
         var id = event.target.parentNode.id;
         window[id].unfocus();
     }
-    if (parseFloat(d3.select("#" + id + "-tooltip-rect").style("fill-opacity")) < 0.5) {
+    if (parseFloat(d3.select("#" + id + "-tooltip-rect").style("fill-opacity")) < 0.3) {
         $("." + id + "-tooltip-rect").hide('slow', function () {
             $(this).remove();
         });
