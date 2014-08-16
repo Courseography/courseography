@@ -39,7 +39,7 @@ function renderConflicts(time, conflicts) {
                               return section.courseName;
                           })
             )
-           .attr('in-conflict', '' + (conflicts.length > 0))
+           .attr('in-conflict', String(conflicts.length > 0))
            .attr('status', conflicts.length > 0 ? 'conflict' : 'occupied')
            .attr('satisfied', getCourseObject($(time).html(), courseObjects).satisfied);
 

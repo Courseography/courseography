@@ -28,7 +28,7 @@ function enableGraphDragging() {
 
             this.mouseDelayMet = !this.options.delay;
             if (!this.mouseDelayMet) {
-                this._mouseDelayTimer = setTimeout(function() {
+                this._mouseDelayTimer = setTimeout(function () {
                     that.mouseDelayMet = true;
                 }, this.options.delay);
             }
@@ -71,7 +71,7 @@ function enableGraphDragging() {
 
 
 // Disables Tab key
-document.onkeydown = function(e) {
+document.onkeydown = function (e) {
     'use strict';
 
     if (e.which === 9) {
@@ -158,7 +158,7 @@ function reset() {
     'use strict';
 
     // Set initial node status
-    $.each(nodes, function(i, node) {
+    $.each(nodes, function (i, node) {
         if (initiallyTakeable.indexOf(node) > -1) {
             window[node].status = 'takeable';
         } else {

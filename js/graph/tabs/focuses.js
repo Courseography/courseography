@@ -44,6 +44,7 @@ function clearFocus() {
 // Put a spotlight on a node
 function spotlight(id) {
     'use strict';
+    var nodeObject = $('#' + id);
 
     var node = $('#' + id + ' > rect');
     var width = parseFloat(node.attr('width')) / 2;
@@ -51,9 +52,16 @@ function spotlight(id) {
     var x = parseFloat(node.attr('x')) + width;
     var y = parseFloat(node.attr('y')) + height;
 
-    var ellipse = '<ellipse class="spotlight" cx="'.concat(x, '" cy = "', y, '" rx="', width + 9, '" ry="', height + 8.5, '"/>');
-    $('#' + id).before(ellipse);
-    $('#' + id).attr('data-active', 'lit');
+    var ellipse = '<ellipse class="spotlight" cx="'.concat(String(x),
+                                                           '" cy = "',
+                                                           String(y),
+                                                           '" rx="',
+                                                           String(width + 9),
+                                                           '" ry="',
+                                                           String(height + 8.5),
+                                                           '"/>');
+    nodeObject.before(ellipse);
+    nodeObject.attr('data-active', 'lit');
 
     window[id].updateSVG();
 }

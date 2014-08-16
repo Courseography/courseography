@@ -30,7 +30,7 @@ function createTabs() {
     });
     $('.postTypeTabs, .postTabs').tabs({
         active: 0,
-        activate: function(e, ui) {
+        activate: function (e, ui) {
             e.currentTarget.blur();
         }
     });

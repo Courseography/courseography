@@ -9,8 +9,9 @@ function updatePOSt(course, active) {
         $('#' + course + 'check').prop('checked', active);
         $('#' + course + 'checkMajor').prop('checked', active);
     } else {
+        var ind;
         if (course.substr(0, 5) === 'CSC49') {
-            var ind = projectCourses.indexOf(course);
+            ind = projectCourses.indexOf(course);
             if (active && ind === -1) {
                 projectCourses.push(course);
             } else if (!active && ind > -1) {
@@ -18,7 +19,7 @@ function updatePOSt(course, active) {
             }
         } else if (course.substr(0, 4) === 'CSC4' ||
                    course.substr(0, 4) === 'ECE4') { // 4th year course
-            var ind = active400s.indexOf(course);
+            ind = active400s.indexOf(course);
             if (active && ind === -1) {
                 active400s.push(course);
             } else if (!active && ind > -1) {
@@ -26,14 +27,14 @@ function updatePOSt(course, active) {
             }
         } else if (course.substr(0, 4) === 'CSC3' ||
                    course.substr(0, 4) === 'ECE3') { // 3rd year course
-            var ind = active300s.indexOf(course);
+            ind = active300s.indexOf(course);
             if (active && ind === -1) {
                 active300s.push(course);
             } else if (!active && ind > -1) {
                 active300s.splice(ind, 1);
             }
         } else if (course.substr(0, 4) === 'CSC2') { // 2nd year course
-            var ind = active200s.indexOf(course);
+            ind = active200s.indexOf(course);
             if (active && ind === -1) {
                 active200s.push(course);
             } else if (!active && ind > -1) {
@@ -362,9 +363,10 @@ function updateCSC400s() {
 // Right now, it must be called after updateCSC400s (because of numBCB)
 function updateElecs() {
     'use strict';
+    var BCB430Check = $('#BCB430check');
 
     var numProjects = 2;
-    if ($('#BCB430check').prop('checked')) {
+    if (BCB430Check.prop('checked')) {
         numProjects = 0;
     }
     var tmp = active300s.concat(active400s.slice(3 - numBCB), projectCourses.slice(Math.max(3 - numBCB - active400s.length, 0), numProjects));
@@ -390,7 +392,7 @@ function updateElecs() {
     });
 
     elecTotal = (active300s.length + active400s.length + numBCB) / 2 + matElecs;
-    if (!$('#BCB430check').prop('checked')) {
+    if (!BCB430Check.prop('checked')) {
         elecTotal += Math.min(projectCourses.length / 2, 1);
     }
     if (elecTotal >= 5) {

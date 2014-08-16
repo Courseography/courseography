@@ -7,6 +7,10 @@
 // Generate Node and Edge objects based on geometric relationships
 function buildGraph() {
     'use strict';
+    var xStart;
+    var yStart;
+    var yEnd;
+    var xEnd;
 
     $('.node').each(function () {
         makeNode([], 'AND', $(this).attr('id'));
@@ -46,15 +50,15 @@ function buildGraph() {
         // Do something for internet explorer
         if (!!navigator.userAgent.match(/Trident.*rv[ :]*11\./) ||
               window.navigator.userAgent.indexOf('MSIE ') > -1) {
-            var xStart = parseFloat(coords[0]);
-            var yStart = parseFloat(coords[1]);
-            var yEnd = parseFloat(coords.pop());
-            var xEnd = parseFloat(coords.pop());
+            xStart = parseFloat(coords[0]);
+            yStart = parseFloat(coords[1]);
+            yEnd = parseFloat(coords.pop());
+            xEnd = parseFloat(coords.pop());
         } else {
-            var xStart = parseFloat(coords[0].substr(1));
-            var yStart = parseFloat(coords[1]);
-            var yEnd = parseFloat(coords.pop());
-            var xEnd = parseFloat(coords.pop().substr(1));
+            xStart = parseFloat(coords[0].substr(1));
+            yStart = parseFloat(coords[1]);
+            yEnd = parseFloat(coords.pop());
+            xEnd = parseFloat(coords.pop().substr(1));
         }
 
         var startNode = '';
@@ -137,31 +141,35 @@ function parseOr(s) {
 
     var curr = s;
     var orList = [];
+    var tmp;
+    var result;
     while (curr.length > 0 &&
            curr.charAt(0) !== ',' &&
            curr.charAt(0) !== ';') {
+
         if (curr.charAt(0) === '(') {
-            var tmp = curr.substr(1, curr.indexOf(')'));
-            var result = parseCourse(tmp);
+            tmp = curr.substr(1, curr.indexOf(')'));
+            result = parseCourse(tmp);
             orList.append(result[0]);
             curr = curr.substr(curr.indexOf(')') + 1);
         } else if (curr.charAt(0) === ' ' ||
                    curr.charAt(0) === '/') {
             curr = curr.substr(1);
         } else {
-            var result = parseCourse(curr);
+            result = parseCourse(curr);
             if (curr === result[1]) {
                 console.log('Parsing failed for ' + s + ' with curr = ' + curr);
                 break;
-            } else {
-                curr = result[1];
-                orList.push(result[0]);
             }
+            curr = result[1];
+            orList.push(result[0]);
         }
     }
+
     if (orList.length === 1) {
         orList = orList[0];
     }
+
     return [orList, curr];
 }
 
@@ -170,17 +178,19 @@ function parseCourse(s) {
     'use strict';
 
     var start = s.search(/[,/]/);
+
     if (start === 3) {
         return ['CSC' + s.substr(0, start), s.substr(start)];
     } else if (start > 0) {
         return [s.substr(0, start), s.substr(start)];
-    } else {
-        if (s.length === 3) {
-            return ['CSC' + s, ''];
-        } else {
-            return [s, ''];
-        }
     }
+
+    if (s.length === 3) {
+        return ['CSC' + s, ''];
+    }
+
+    return [s, ''];
+
 }
 
 

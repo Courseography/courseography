@@ -60,7 +60,7 @@ Course.prototype.parseSessions = function (course) {
 };
 
 
-Course.prototype.parseSections = function(session, timeSuffix) {
+Course.prototype.parseSections = function (session, timeSuffix) {
     'use strict';
 
     return this.parseLectures(session, timeSuffix)

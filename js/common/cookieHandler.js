@@ -2,9 +2,9 @@ function setCookie(cookieName, cookieValue) {
     'use strict';
 
     var lifeSpanInDays = 300;
-    document.cookie = cookieName
-                      + '=' + cookieValue
-                      + '; max-age=' + 60 * 60 * 24 * lifeSpanInDays;
+    document.cookie = cookieName +
+                      '=' + cookieValue +
+                      '; max-age=' + 60 * 60 * 24 * lifeSpanInDays;
 }
 
 
