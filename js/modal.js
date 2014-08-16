@@ -125,11 +125,14 @@ function createText(nodeId, rectClass, rectId, posX, posY, width, height, color)
                     minHeight: 600,
                     close: function () {
                         $(this).remove();
+                        $('.video').remove();
                         $.each(nodes, function (index, elem) {
                             window[elem].updateSVG();
                         });
+                        $('body').css('background', 'rgb(255,255,255)');
                     }});
             $('.node, .hybrid').attr('data-active', 'unlit');
+            $('body').css('background', 'rgb(40,40,40)');
             setMouseCallbacks();
             enableVideoJS();
         })
@@ -142,5 +145,5 @@ function createText(nodeId, rectClass, rectId, posX, posY, width, height, color)
 
 function enableVideoJS() {
     "use strict";
-    videojs('course_video', {}, function () {});
+    videojs(document.getElementsByClassName('vjs-default-skin')[0], {}, function () {});
 }
