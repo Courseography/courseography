@@ -10,3 +10,5 @@ enrolParser.py
 enrol.txt
 res/courses-copy/
 *.pyc
+courses.tar.gz
+

@@ -1,108 +1,31 @@
-var result;
-var i;
-var courseSelect;
-var header;
-var sections;
-var entry;
+var trapScroll;
 var courses;
-var searchList;
 var courseCache = [];
+var selectedCourses = [];
+var selectedLectures = [];
+var courseObjects = [];
 
 
 $(document).ready(function () {
-    var tdObjects = $("td");
 
     $("#dialog").fadeOut()
                 .css("visibility", "visible");
 
-    tdObjects.attr("in-conflict", "false")
-           .attr("satisfied", "true");
-
+    generateGrid();
+    var tdObjects = $("td");
     tdObjects.each(function () {
-        $(this).data("conflictArray", [])
-               .data("typeArray", []);
-    });
-
-
-    courseSelect = document.getElementById("course-select");
-    searchList = document.getElementById("search-list");
-    appendClearAllButton();
+            $(this).data("conflicts", []);
+        });
     restoreFromCookies();
+    renderClearAllButton();
     enableSearch();
     courses = getVeryLargeCourseArray();
     trapScroll();
+    setTdHover();
 });
 
 
-function getVeryLargeCourseArray() {
-    var splitArray = undefined;
-
-    $.ajax({
-        url: "js/timetable/courses.txt",
-        dataType: "text",
-        async: false,
-        success: function (data) {
-            splitArray = data.split("\n").map(function (course) {
-                return course.substring(0, 8);
-            });
-        }
-    });
-
-    return splitArray;
-}
-
-
-function setupEntry(courseObject) {
-    entry = document.createElement("li");
-    var courseImg = document.createElement("img");
-    $(courseImg).attr("src", "res/ico/delete.ico")
-                .addClass("close-icon")
-                .click(function () {
-                    removeCourseFromList(courseObject.name);
-                });
-    entry.id = courseObject.name + "-li";
-    header = document.createElement("h3");
-    header.appendChild(courseImg);
-    header.appendChild(document.createTextNode(courseObject.name));
-    courseObject.header = header;
-    sections = processSession(courseObject);
-    entry.appendChild(header);
-    entry.appendChild(sections);
-    $(entry).accordion({
-        heightStyle: "content",
-        collapsible: true,
-        active: false
-    });
-    courseSelect.appendChild(entry);
-}
-
-
-function fetchCourse(courseCode) {
-    var course = getCourseObject(courseCode, courseCache);
-    if (typeof course !== "undefined") {
-        return course;
-    }
-    $.ajax({
-        url: "res/courses/" + courseCode + ".txt",
-        dataType: "json",
-        async: false,
-        success: function (data) {
-            course = data;
-        }
-    });
-    courseCache.push(course);
-    return course;
-}
-
-
-function getCourse(courseCode) {
-    result = fetchCourse(courseCode);
-    courseObjects.push(result);
-    return result;
-}
-
-
-function appendClearAllButton() {
+function renderClearAllButton() {
     var clearAllItem = document.getElementById("clear-all");
     $(clearAllItem).click(function () {
         if (confirm("Clear all selected courses?")) {
@@ -112,3 +35,50 @@ function appendClearAllButton() {
         }
     });
 }
+
+
+/**
+ * Adapted from http://codepen.io/LelandKwong/pen/edAmn.
+ * Will look into http://jscrollpane.kelvinluck.com/.
+ */
+ (function($) {
+    trapScroll = function(){
+        var trapElement;
+        var scrollableDist;
+        var trapClassName = "trapScroll-enabled";
+        var trapSelector = "#course-select";
+
+        var trapWheel = function(e){
+            if (!$("body").hasClass(trapClassName)) {
+                return;
+            } else {
+                var curScrollPos = trapElement.scrollTop();
+                var wheelEvent = e.originalEvent;
+                var dY = wheelEvent.deltaY;
+
+                // only trap events once we've scrolled to the end
+                // or beginning
+                if ((dY>0 && curScrollPos >= scrollableDist) ||
+                    (dY<0 && curScrollPos <= 0)) {
+                    return false;
+                }
+            }
+        };
+
+        $(document)
+        .on("wheel", trapWheel)
+        .on("mouseleave", trapSelector, function() {
+            $("body").removeClass(trapClassName);
+        })
+        .on("mouseenter", trapSelector, function() {
+            trapElement = $(this);
+            var containerHeight = trapElement.outerHeight();
+            var contentHeight = trapElement[0].scrollHeight; // height of scrollable content
+            scrollableDist = contentHeight - containerHeight;
+
+            if (contentHeight > containerHeight) {
+                $("body").addClass(trapClassName);
+            }
+        });
+    };
+})($);
