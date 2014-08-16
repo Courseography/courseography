@@ -226,7 +226,6 @@ function createTimetableSearch() {
 }
 
 
-
 //////////////////////////////////////////
 // Feedback Tab
 //////////////////////////////////////////
@@ -294,5 +293,4 @@ function createTabs() {
 
     createTimetable();
     createTimetableSearch();
-    setMouseCallbacks(); // This should not be here.
 }

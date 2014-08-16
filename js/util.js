@@ -325,6 +325,9 @@ $(document).ready(function() {
     // Create tabs
     createTabs();
 
+    // Set mouse callbacks
+    setMouseCallbacks();
+
     // Initialize interface
     initializeGraphSettings();
 
