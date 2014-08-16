@@ -1,21 +1,9 @@
-/**
- * Javascript functions for all the tabs except 'Check My POSt!'
- */
-
-//////////////////////////////////////////
-// My Courses Tab
-//////////////////////////////////////////
-
-
-
 // Update the total FCE count, and display total
 function updateFCECount() {
     FCEs = FCEs100 + FCEs200 + FCEs300 + FCEs400 + FCEsMAT;
     $('#FCEcount').html(FCEs.toFixed(1));
 }
 
-// Globals
-var activeFocus = '';
 
 function createTabs() {
     $('.infoTabs').tabs({

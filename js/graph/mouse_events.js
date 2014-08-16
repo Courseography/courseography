@@ -13,6 +13,7 @@ function setMouseCallbacks() {
         });
 }
 
+
 // Activates missing prerequisite display and
 // fetches course description on hover
 function hoverFocus(event) {
@@ -22,6 +23,7 @@ function hoverFocus(event) {
     // Fetch course description
     fetchCourseDescription(id);
 }
+
 
 // Deactivate missing prerequisites
 function hoverUnfocus(event) {

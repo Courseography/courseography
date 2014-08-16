@@ -45,6 +45,11 @@ var cscReqTotalMinor = 0;
 var elecTotalMinor = 0;
 var postTotalMinor = 0;
 
+var extraMajor = 0;
+var extraMinor = 0;
+
+var activeFocus = '';
+
 $(document).ready(function() {
     buildGraph();
 

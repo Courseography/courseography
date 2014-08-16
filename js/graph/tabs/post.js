@@ -62,6 +62,7 @@ function updatePostInterface() {
         cscReqSat && matReqSat && elec400sSat && elecSat && peySat);
 }
 
+
 function updateMajorPostInterface() {
     updateCSCReqsMajor();
     updateMATReqsMajor();
@@ -73,6 +74,7 @@ function updateMajorPostInterface() {
         cscReqSatMajor && matReqSatMajor && elecSatMajor && peySatMajor);
 }
 
+
 function updateMinorPostInterface() {
     updateCSCReqsMinor();
     updateElecsMinor();
@@ -80,6 +82,7 @@ function updateMinorPostInterface() {
     setIcon('minorCheck',
         cscReqSatMinor && elecSatMinor);
 }
+
 
 function setIcon(id, sat) {
     if (sat) {
@@ -89,6 +92,7 @@ function setIcon(id, sat) {
     }
 }
 
+
 function updateCSCReqs() {
     cscReqTotal = $('#cscReqs input:checkbox:checked').length / 2;
     $('#cscReqTotal').html(cscReqTotal.toFixed(1));
@@ -96,12 +100,14 @@ function updateCSCReqs() {
     setIcon('cscReqs', cscReqSat);
 }
 
+
 function updateCSCReqsMajor() {
     cscReqTotalMajor = $('#cscReqsMajor input:checkbox:checked').length / 2;
     $('#cscReqTotalMajor').html(cscReqTotal.toFixed(1));
     cscReqSatMajor = cscReqTotalMajor >= 3.5;
     setIcon('cscReqsMajor', cscReqSatMajor);
 }
+
 
 function updateCSCReqsMinor() {
     cscReqTotalMinor = $('#cscReqsMinor input:checkbox:checked').length / 2;
@@ -126,6 +132,7 @@ function updateMATReqs() {
     setIcon('matReqs', matReqSat);
 }
 
+
 function updateMATReqsMajor() {
     matReqTotalMajor = $('#matReqsMajor input:checkbox:checked').length / 2;
     if ($('#Calc1checkMajor').prop('checked')) {
@@ -136,7 +143,6 @@ function updateMATReqsMajor() {
     setIcon('matReqsMajor', matReqSatMajor);
 }
 
-var extraMinor = 0;
 
 function updateAllElecsMinor() {
     var numProjects = 2;
@@ -210,7 +216,6 @@ function updateElecsMinor() {
 }
 
 
-
 function update200sElecsMajor() {
     elec200sTotalMajor = 0;
     if ($('#Calc2checkMajor').prop('checked')) {
@@ -231,7 +236,6 @@ function update200sElecsMajor() {
     }
 }
 
-var extraMajor = 0;
 
 function update300sElecsMajor() {
     numBCBMajor = $('#300sElecsMajor input:checkbox:checked').length;
@@ -320,6 +324,7 @@ function updateCSC400s() {
     setIcon('csc400s', elec400sSat);
 }
 
+
 // Right now, it must be called after updateCSC400s (because of numBCB)
 function updateElecs() {
     var numProjects = 2;
@@ -362,11 +367,13 @@ function updateElecs() {
     setIcon('matElecs', elecSat);
 }
 
+
 function updatePEYMajor() {
     peySatMajor = $('#peycheckMajor').prop('checked') ||
                   $('#peyReqMajor input:checkbox:checked').length > 0;
     setIcon('peyReqMajor', peySatMajor);
 }
+
 
 function updatePEY() {
     peySat = $('#peycheck').prop('checked') ||
@@ -374,13 +381,16 @@ function updatePEY() {
     setIcon('peyReq', peySat);
 }
 
+
 function updatePOStTotal() {
     $('#postTotal').html((cscReqTotal + matReqTotal + elecTotal).toFixed(1));
 }
 
+
 function updatePOStTotalMajor() {
     $('#postTotalMajor').html((cscReqTotalMajor + matReqTotalMajor + elecTotalMajor).toFixed(1));
 }
+
 
 function updatePostMinor() {
     $('#postTotalMinor').html((cscReqTotalMinor + elecTotalMinor).toFixed(1));

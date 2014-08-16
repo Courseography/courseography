@@ -1,8 +1,3 @@
-/**
- * Main Javascript functions powering Course Planner.
- * Requires JQuery and JQuery-UI libraries.
- */
-
 // Draggable function for map
 function enableGraphDragging() {
     /* Extending the jQuery draggable option to be fitted with right click for either graph or graphRootSVG.

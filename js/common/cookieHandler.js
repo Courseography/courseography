@@ -5,6 +5,7 @@ function setCookie(cookieName, cookieValue) {
                       + "; max-age=" + 60 * 60 * 24 * lifeSpanInDays;
 }
 
+
 // Right now, only used to get the status of a node in the graph.
 function getCookie(cookieName) {
     var name = cookieName + "=";
@@ -17,6 +18,7 @@ function getCookie(cookieName) {
     }
     return "inactive";
 }
+
 
 // Right now, only used to get JSON for timetable (grid)
 function getJSONCookie(cookieName) {

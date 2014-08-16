@@ -23,6 +23,7 @@ function updateClickedCourses(name, active) {
     }
 }
 
+
 // Generate table of clicked courses
 function updateMyCoursesTab() {
     var courseGridObject = $('#courseGrid');

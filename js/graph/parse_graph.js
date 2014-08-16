@@ -127,6 +127,7 @@ function parseAnd(s) {
     return [andList, curr];
 }
 
+
 function parseOr(s) {
     var curr = s;
     var orList = [];
@@ -158,6 +159,7 @@ function parseOr(s) {
     return [orList, curr];
 }
 
+
 function parseCourse(s) {
     var start = s.search(/[,/]/);
     if (start === 3) {
@@ -172,6 +174,7 @@ function parseCourse(s) {
         }
     }
 }
+
 
 function intersects(px, py, rx, ry, width, height, offset) {
     var dx = px - rx;

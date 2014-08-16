@@ -26,6 +26,7 @@ function updateActiveFocus(id) {
     }
 }
 
+
 // Removes spotlight on active focus
 function clearFocus() {
     $('body').css('background', 'white');
@@ -34,6 +35,7 @@ function clearFocus() {
         window[elem].updateSVG();
     });
 }
+
 
 // Put a spotlight on a node
 function spotlight(id) {

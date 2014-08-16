@@ -18,6 +18,7 @@ function fetchCourseDescription(id) {
     $('#calendar').html(result);
 }
 
+
 function readCalendarEntry(name) {
     var result = '';
     $.ajax({

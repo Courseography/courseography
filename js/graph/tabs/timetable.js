@@ -6,6 +6,7 @@ function createTimetable() {
         });
 }
 
+
 // Search function for timetable
 function createTimetableSearch() {
     $("#filter").keyup(function () {
