@@ -423,6 +423,7 @@ input[type=checkbox]:checked + label:before {
     color: white;
     font-size: 200%;
     border-radius: 10px;
+    cursor: move;
 }
 
 .ui-dialog-title {
@@ -441,7 +442,6 @@ input[type=checkbox]:checked + label:before {
 }
 
 .modal {
-    opacity: 0.9;
     background-color: #374AA1;
     padding: 20px 20px 20px 20px;
     border-radius: 10px;
