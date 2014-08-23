@@ -28,8 +28,9 @@ function displayToolTip(nodeId) {
     var rectObject = $("#" + nodeId).find("rect");
     var xPos = rectObject.attr("x") - 65;
     var yPos = rectObject.attr("y");
-    createRect("node-tooltip", nodeId + "-tooltip", xPos, yPos, 60, 30, "black");
-    createText(nodeId, "node-tooltip", nodeId + "-tooltip", xPos, yPos, 60, 30, "black");
+    var g = createG(nodeId);
+    createRect(g, "node-tooltip", nodeId + "-tooltip", xPos, yPos, 60, 30, "black");
+    createText(g, nodeId, "node-tooltip", nodeId + "-tooltip", xPos, yPos, 60, 30, "black");
 }
 
 
@@ -43,10 +44,10 @@ function displayToolTip(nodeId) {
  * @param height The height of the rect.
  * @param color The fill and stroke color of the rect.
  */
-function createRect(rectClass, rectId, posX, posY, width, height, color) {
+function createRect(g, rectClass, rectId, posX, posY, width, height, color) {
     "use strict";
 
-    d3.select('#graphRootSVG').append('rect')
+    g.append('rect')
         .attr("class", rectClass + "-rect " + rectId + "-rect")
         .attr("id", rectId + "-rect")
         .attr("x", posX)
@@ -61,8 +62,8 @@ function createRect(rectClass, rectId, posX, posY, width, height, color) {
         .attr("fill-opacity", 0)
         .attr("stroke-opacity", 0)
         .transition()
-        .duration(5000)
-        .ease('cube')
+        .duration(1000)
+        .ease('elastic')
         .attr("fill-opacity", 1)
         .attr("stroke-opacity", 1);
 }
@@ -79,10 +80,26 @@ function createRect(rectClass, rectId, posX, posY, width, height, color) {
  * @param height The height of the rect.
  * @param color The fill and stroke color of the rect.
  */
-function createText(nodeId, rectClass, rectId, posX, posY, width, height, color) {
+function createText(g, nodeId, rectClass, rectId, posX, posY, width, height, color) {
     "use strict";
 
-    var g = d3.select('#graphRootSVG').append('g')
+    g.append("text").text("Info")
+        .attr("class", rectClass + "-text " + rectId + "-text")
+        .attr("id", rectId + "-text")
+        .attr("x", parseFloat(posX)+ 30)
+        .attr("y", parseFloat(posY) + 20)
+        .attr("fill-opacity", 0)
+        .attr("stroke-opacity", 0)
+        .transition()
+        .duration(1000)
+        .ease('elastic')
+        .attr("fill-opacity", 1)
+        .attr("stroke-opacity", 1);
+}
+
+
+function createG(nodeId) {
+    return d3.select('#graphRootSVG').append('g')
         .attr('class', 'tooltip-group')
         .style("cursor", "pointer")
         .on("click", function () {
@@ -116,40 +133,6 @@ function createText(nodeId, rectClass, rectId, posX, posY, width, height, color)
                 $('.tooltip-group').remove();
             }
         });
-
-    g.append('rect')
-        .attr("class", rectClass + "-rect " + rectId + "-rect")
-        .attr("id", rectId + "-rect")
-        .attr("x", posX)
-        .attr("y", posY)
-        .attr("rx", 10)
-        .attr("ry", 10)
-        .attr("fill", "white")
-        .attr("stroke", color)
-        .attr("stroke-width", 2)
-        .attr("width", width)
-        .attr("height", height)
-        .attr("fill-opacity", 0)
-        .attr("stroke-opacity", 0)
-        .transition()
-        .duration(5000)
-        .ease('cube')
-        .attr("fill-opacity", 1)
-        .attr("stroke-opacity", 1);
-
-
-    g.append("text").text("Info")
-        .attr("class", rectClass + "-text " + rectId + "-text")
-        .attr("id", rectId + "-text")
-        .attr("x", parseFloat(posX)+ 30)
-        .attr("y", parseFloat(posY) + 20)
-        .attr("fill-opacity", 0)
-        .attr("stroke-opacity", 0)
-        .transition()
-        .duration(5000)
-        .ease('cube')
-        .attr("fill-opacity", 1)
-        .attr("stroke-opacity", 1);
 }
 
 function enableVideoJS() {
