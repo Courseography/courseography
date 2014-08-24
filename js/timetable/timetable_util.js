@@ -45,7 +45,7 @@ function getVeryLargeCourseArray() {
     var splitArray = undefined;
 
     $.ajax({
-        url: "js/timetable/courses.txt",
+        url: "res/courses.txt",
         dataType: "text",
         async: false,
         success: function (data) {

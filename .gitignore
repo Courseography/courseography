@@ -5,10 +5,7 @@ timetable2014.csv
 __pycache__/*
 *.xlsx
 res/courses/*
-timetable_creator/js/courses.txt
-enrolParser.py
 enrol.txt
 res/courses-copy/
 *.pyc
 courses.tar.gz
-

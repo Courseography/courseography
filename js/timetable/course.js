@@ -57,6 +57,7 @@ Course.prototype.parseSessions = function (course) {
 
 
 Course.prototype.parseSections = function(session, timeSuffix) {
+    console.log(session);
     return this.parseLectures(session, timeSuffix)
            .concat(this.parseTutorials(session, timeSuffix));
 }
@@ -64,32 +65,34 @@ Course.prototype.parseSections = function(session, timeSuffix) {
 
 Course.prototype.parseLectures = function (session, timeSuffix) {
     var tmp = this;
+    lectures = [];
 
-    return session.lectures.filter(function (lecture) {
-                return lecture.section.charAt(1) !== "2" &&
-                       lecture.time !== "Online Web Version";
-            }).map(function (lecture, i) {
-                var id = tmp.name + "-" + lecture.section + "-" + timeSuffix;
-                var sectionTimes = convertTimes(lecture.time);
-                if (!tmp.manualTutorialEnrolment && session.tutorials.length > 0) {
-                    sectionTimes = sectionTimes.concat(
-                        convertTimes(session.tutorials[i][0]));
-                }
-                if (timeSuffix === "Y") {
-                    sectionTimes = sectionTimes.map(function (t) {
-                                                      return "#" + t + "F";
-                                               })
-                                               .concat(sectionTimes.map(
-                                                function (t) {
-                                                      return "#" + t + "S";
-                                               }));
-                } else {
-                    sectionTimes = sectionTimes.map(function (time) {
-                        return "#" + time + timeSuffix;
-                    });
-                }
-                return makeLecture(lecture, tmp, id, sectionTimes);
-            });
+    $.each(session.lectures, function (i, lecture) {
+        if (lecture.section.charAt(1) !== "2" &&
+            lecture.time !== "Online Web Version") {
+            var id = tmp.name + "-" + lecture.section + "-" + timeSuffix;
+            var sectionTimes = convertTimes(lecture.time);
+            if (!tmp.manualTutorialEnrolment && session.tutorials.length > 0) {
+                sectionTimes = sectionTimes.concat(
+                    convertTimes(session.tutorials[i][0]));
+            }
+            if (timeSuffix === "Y") {
+                sectionTimes = sectionTimes.map(function (t) {
+                                                  return "#" + t + "F";
+                                           })
+                                           .concat(sectionTimes.map(
+                                            function (t) {
+                                                  return "#" + t + "S";
+                                           }));
+            } else {
+                sectionTimes = sectionTimes.map(function (time) {
+                    return "#" + time + timeSuffix;
+                });
+            }
+            lectures.push(makeLecture(lecture, tmp, id, sectionTimes));
+        }
+    });
+    return lectures
 }
 
 
@@ -104,9 +107,9 @@ Course.prototype.parseTutorials = function (session, timeSuffix) {
                 sectionTimes = sectionTimes.map(function (t) {
                                                   return "#" + t + "F";
                                            })
-                                           .concat(function (t) {
+                                           .concat(sectionTimes.map(function (t) {
                                                   return "#" + t + "S";
-                                           });
+                                           }));
             } else {
                 sectionTimes = sectionTimes.map(function (time) {
                     return "#" + time + timeSuffix;
