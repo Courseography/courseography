@@ -27,7 +27,8 @@ function hoverFocus(event) {
         var id = event.target.parentNode.id;
         // Highlight missing prerequisites
         window[id].focus();
-        // Fetch course description
+
+        removeUnusedToolTips(id)
         setTimeout(displayToolTip(id), 3000);
         fetchCourseDescription(id);
     }
@@ -57,6 +58,14 @@ function hoverUnfocus(event) {
             $(this).remove();
         });
     }, 5000);
+}
+
+function removeUnusedToolTips(id) {
+    $.each($('.tooltip-group'), function () {
+        if ($(this).children('rect').attr('id') !== id + "-tooltip-rect") {
+            $(this).remove();
+        }
+    });
 }
 
 
