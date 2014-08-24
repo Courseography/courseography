@@ -84,7 +84,6 @@ function appendTableRows(timetableTableFall, timetableTableSpring) {
 function appendTableData(trFall, trSpring, time) {
     var weekPrefixArray = ["M", "T", "W", "R", "F"];
 
-//    var adjustedTime = time === 12 ? 12 : time % 12;
     var adjustedTime = time + ':00';
     trFall.append($("<td></td>").addClass("timetable-time").html(adjustedTime));
 
