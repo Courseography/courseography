@@ -10,8 +10,11 @@ function createModalDiv(id) {
     div.append(p);
     var video = setupVideoPlayer();
     var timetable = setupTimeslot(id);
+    var relatedLinks = setupRelatedLinks(id);
+    div.css('overflow', 'auto');
     div.append(timetable);
     div.append(video);
+    div.append(relatedLinks);
     return div;
 }
 
@@ -19,13 +22,19 @@ function setupVideoPlayer() {
 
     // Not divided up into 'attr' yet because 'controls preload' cannot be added that way...
     var videoDiv = $('<div></div>');
-    var video = $('<video id="course_video" class="video-js vjs-default-skin" controls preload="auto" width="50%" height="250"></video>');
+    videoDiv.css('display', 'inline')
+            .css('float', 'left')
+            .css('width', '45%');
+    var video = $('<video id="course_video" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="250"></video>');
     var src1 = $("<source></source>")
-        .attr("src", "http://video-js.zencoder.com/oceans-clip.webm").attr("type", "video/webm");
+        .attr("src", "http://video-js.zencoder.com/oceans-clip.webm")
+        .attr("type", "video/webm");
     var src2 = $("<source></source>")
-        .attr("src", "http://video-js.zencoder.com/oceans-clip.ogv").attr("type", "video/ogv");
+        .attr("src", "http://video-js.zencoder.com/oceans-clip.ogv")
+        .attr("type", "video/ogv");
     var src3 = $("<source></source>")
-        .attr("src", "http://video-js.zencoder.com/oceans-clip.mp4").attr("type", "video/mp4");
+        .attr("src", "http://video-js.zencoder.com/oceans-clip.mp4")
+        .attr("type", "video/mp4");
     video.append(src1).append(src2).append(src3);
     videoDiv.append(video);
     return videoDiv;
@@ -34,9 +43,9 @@ function setupVideoPlayer() {
 function setupTimeslot(id) {
     var courseName;
     var timeslot = $('<div></div>');
-    timeslot.css('padding-bottom', '2em');
     var title = $('<h3></h3>');
     title.css('color', 'white')
+         .css('padding-bottom', '2em')
          .html(id + ' Section Times');
     timeslot.append(title);
     timeslot.append($('#timetableMain').children('tbody').children('tr').first().clone());
@@ -52,6 +61,15 @@ function setupTimeslot(id) {
     return timeslot;
 }
 
+function setupRelatedLinks(id) {
+    var relatedLinksDiv = $('<div></div>').css('display', 'inline')
+                                          .css('float', 'right')
+                                          .css('width', '45%')
+                                          .css('height', '250');
+    var title = $('<h3></h3>');
+    relatedLinksDiv.append(title);
+    return relatedLinksDiv;
+}
 
 function displayToolTip(nodeId) {
     "use strict";
