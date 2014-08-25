@@ -34,14 +34,17 @@ function setupVideoPlayer() {
 function setupTimeslot(id) {
 
     var timeslot = $('<div></div>');
-
+    var title = $('<h3></h3>');
+    title.css('color', 'white')
+         .html(id + ' Section Times');
+    timeslot.append(title);
     $('.searchClass').each(function () {
         var courseName = $(this).children('td').first().html();
         if (courseName.indexOf(id) > -1) {
             timeslot.append($(this));
         }
     });
-
+    timeslot.children('.searchClass').children('td').first().remove();
     return timeslot;
 }
 
