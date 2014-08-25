@@ -30,7 +30,7 @@ function hoverFocus(event) {
         // Highlight missing prerequisites
         window[id].focus();
 
-        removeUnusedToolTips(id);
+        removeToolTips();
         displayToolTip(id);
         fetchCourseDescription(id);
     }
@@ -63,12 +63,9 @@ function hoverUnfocus(event) {
     timeouts.push(timeout);
 }
 
-function removeUnusedToolTips(id) {
-    $.each($('.tooltip-group'), function () {
-        if ($(this).children('rect').attr('id') !== id + "-tooltip-rect") {
-            $(this).remove();
-        }
-    });
+
+function removeToolTips() {
+    $('.tooltip-group').remove();
 }
 
 
@@ -340,9 +337,6 @@ $(window).resize(function() {
     var w = $('.infoTabs').width() - $('.tabList').outerWidth() - 1;
     $('#FCECountDiv').width(w + 'px');
 });
-
-function setToolTip() {
-}
 
 $(document).ready(function() {
     buildGraph();

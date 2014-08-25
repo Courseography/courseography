@@ -66,6 +66,14 @@ function createRect(g, rectClass, rectId, posX, posY, width, height, color) {
         .ease('elastic')
         .attr("fill-opacity", 1)
         .attr("stroke-opacity", 1);
+
+    $('.tooltip-group').hover(
+        function () {
+        clearAllTimeouts();
+    }, function () {
+        console.log("out");
+        $('.tooltip-group').fadeOut(1000, function () {$(this).remove();});
+    });
 }
 
 
@@ -132,13 +140,8 @@ function createG(nodeId) {
                 enableVideoJS();
                 $('.tooltip-group').remove();
             }
-        }).on('mouseover', function () {
-            clearAllTimeouts();
         });
 
-    $('.tooltip-group').mouseout(function () {
-        $('.tooltip-group').remove();
-    });
     return g;
 }
 
