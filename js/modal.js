@@ -4,20 +4,44 @@
 function createModalDiv(id) {
     "use strict";
 
+    console.log("here!");
     var div = $("<div></div>");
+    div.attr('id', 'modal-content-container');
     var p = $("<p></p>").css("color", "white").html(fetchCourseDescription(id));
     div.append(p);
-
-    var video = $('<video id="course_video" class="video-js vjs-default-skin" controls preload="auto" width="50%" height="250"></video>');
-    var src1 = $("<source></source>")
-                .attr("src", "http://video-js.zencoder.com/oceans-clip.webm").attr("type", "video/webm");
-    var src2 = $("<source></source>")
-                .attr("src", "http://video-js.zencoder.com/oceans-clip.ogv").attr("type", "video/ogv");
-    var src3 = $("<source></source>")
-                .attr("src", "http://video-js.zencoder.com/oceans-clip.mp4").attr("type", "video/mp4");
-    video.append(src1).append(src2).append(src3);
+    var video = setupVideoPlayer();
+    var timetable = setupTimeslot(id);
+    console.log('here, sir');
+    div.append(timetable);
     div.append(video);
     return div;
+}
+
+function setupVideoPlayer() {
+
+    // Not divided up into 'attr' yet because 'controls preload' cannot be added that way...
+    var video = $('<video id="course_video" class="video-js vjs-default-skin" controls preload="auto" width="50%" height="250"></video>');
+    var src1 = $("<source></source>")
+        .attr("src", "http://video-js.zencoder.com/oceans-clip.webm").attr("type", "video/webm");
+    var src2 = $("<source></source>")
+        .attr("src", "http://video-js.zencoder.com/oceans-clip.ogv").attr("type", "video/ogv");
+    var src3 = $("<source></source>")
+        .attr("src", "http://video-js.zencoder.com/oceans-clip.mp4").attr("type", "video/mp4");
+    video.append(src1).append(src2).append(src3);
+    return video;
+}
+
+function setupTimeslot(id) {
+    var timeslot;
+
+    $('.searchClass').each(function () {
+        var courseName = $(this).children('td').first().html();
+        if (courseName.indexOf(id) > -1) {
+            timeslot = $(this);
+        }
+    });
+
+    return timeslot;
 }
 
 
@@ -94,7 +118,7 @@ function createText(g, nodeId, rectClass, rectId, posX, posY, width, height, col
 
 
 function createG(nodeId) {
-    var g = $(document.createElementNS('http://www.w3.org/2000/svg', 'g'))
+    var g = $(document.createElementNS('http://www.w3.org/2000/svg', 'g'));
     g.attr('class', 'tooltip-group')
         .css("cursor", "pointer")
         .click(function () {
