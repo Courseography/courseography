@@ -1,4 +1,3 @@
-/* global d3 */
 /* global $ */
 /* global nodes */
 
@@ -46,8 +45,7 @@ function displayToolTip(nodeId) {
  */
 function createRect(g, rectClass, rectId, posX, posY, width, height, color) {
     "use strict";
-
-    var rect = g.append('rect')
+    var rect = $(document.createElementNS('http://www.w3.org/2000/svg', 'rect'))
         .attr("class", rectClass + "-rect " + rectId + "-rect")
         .attr("id", rectId + "-rect")
         .attr("x", posX)
@@ -58,20 +56,14 @@ function createRect(g, rectClass, rectId, posX, posY, width, height, color) {
         .attr("stroke", color)
         .attr("stroke-width", 2)
         .attr("width", width)
-        .attr("height", height)
-        .attr("fill-opacity", 0)
-        .attr("stroke-opacity", 0)
-        .transition()
-        .duration(1000)
-        .ease('elastic')
-        .attr("fill-opacity", 1)
-        .attr("stroke-opacity", 1);
+        .attr("height", height);
+
+    g.append(rect);
 
     $('.tooltip-group').hover(
         function () {
         clearAllTimeouts();
     }, function () {
-        console.log("out");
         $('.tooltip-group').fadeOut(1000, function () {$(this).remove();});
     });
 }
@@ -91,26 +83,21 @@ function createRect(g, rectClass, rectId, posX, posY, width, height, color) {
 function createText(g, nodeId, rectClass, rectId, posX, posY, width, height, color) {
     "use strict";
 
-    g.append("text").text("Info")
+    var text = $(document.createElementNS('http://www.w3.org/2000/svg', 'text'))
+        .text("Info")
         .attr("class", rectClass + "-text " + rectId + "-text")
         .attr("id", rectId + "-text")
         .attr("x", parseFloat(posX)+ 30)
-        .attr("y", parseFloat(posY) + 20)
-        .attr("fill-opacity", 0)
-        .attr("stroke-opacity", 0)
-        .transition()
-        .duration(1000)
-        .ease('elastic')
-        .attr("fill-opacity", 1)
-        .attr("stroke-opacity", 1);
+        .attr("y", parseFloat(posY) + 20);
+    g.append(text);
 }
 
 
 function createG(nodeId) {
-    var g = d3.select('#graphRootSVG').append('g')
-        .attr('class', 'tooltip-group')
-        .style("cursor", "pointer")
-        .on("click", function () {
+    var g = $(document.createElementNS('http://www.w3.org/2000/svg', 'g'))
+    g.attr('class', 'tooltip-group')
+        .css("cursor", "pointer")
+        .click(function () {
             if ($(".modal").length === 0) {
                 var div = createModalDiv(nodeId);
                 div.attr("title", nodeId)
@@ -141,7 +128,7 @@ function createG(nodeId) {
                 $('.tooltip-group').remove();
             }
         });
-
+    $('#graphRootSVG').append(g);
     return g;
 }
 
