@@ -2,69 +2,101 @@
  * Main Javascript functions powering Course Planner.
  * Requires JQuery and JQuery-UI libraries.
  */
+var timeouts = [];
+
 
 // MOUSE CALLBACKS
 
 function setMouseCallbacks() {
-  $(".node").click(function(event) {
-    turnNode(event);
-  });
-  $(".node").hover(
-    function(event) {
-      hoverFocus(event);
-    },
-    function(event) {
-      hoverUnfocus(event);
+    $(".node").click(function(event) {
+          turnNode(event);
     });
+    $(".node").hover(
+        function(event) {
+            hoverFocus(event);
+        },
+        function(event) {
+            hoverUnfocus(event);
+        }
+    );
 }
 
 
 // Activates missing prerequisite display and 
 // fetches course description on hover
 function hoverFocus(event) {
-  var id = event.target.parentNode.id;
-  // Highlight missing prerequisites
-  window[id].focus();
-  // Fetch course description
-  fetchCourseDescription(id);
-};
+    if ($(".modal").length === 0) {
+        var id = event.target.parentNode.id;
+        // Highlight missing prerequisites
+        window[id].focus();
+
+        removeToolTips();
+        displayToolTip(id);
+        fetchCourseDescription(id);
+    }
+}
 
 
 // Deactivate missing prerequisites
 function hoverUnfocus(event) {
-  var id = event.target.parentNode.id;
-  window[id].unfocus();
-};
+    if ($(".modal").length === 0) {
+        var id = event.target.parentNode.id;
+        window[id].unfocus();
+    }
+    if (parseFloat($("#" + id + "-tooltip-rect").css("fill-opacity")) < 0.3) {
+        $("." + id + "-tooltip-rect").hide('slow', function () {
+            $(this).remove();
+        });
+        $("." + id + "-tooltip-text").hide('slow', function () {
+            $(this).remove();
+        });
+    }
+
+    var timeout = setTimeout(function () {
+        $("." + id + "-tooltip-rect").hide('slow', function () {
+            $(this).remove();
+        });
+        $("." + id + "-tooltip-text").hide('slow', function () {
+            $(this).remove();
+        });
+    }, 5000);
+    timeouts.push(timeout);
+}
+
+
+function removeToolTips() {
+    $('.tooltip-group').remove();
+}
 
 
 // Activate/Deactivate node when clicked
 function turnNode(event) {
-  if (activeFocus === '') {
-    var id = event.target.parentNode.id;
-    // Update this node
-    window[id].turn();
+    if (activeFocus === '' && $(".modal").length === 0) {
+        var id = event.target.parentNode.id;
+        // Update this node
+        window[id].turn();
 
-    updateClickedCourses(id, window[id].isSelected());
-    updateMyCoursesTab();
-    updateFCECount();
+        updateClickedCourses(id, window[id].isSelected());
+        updateMyCoursesTab();
+        updateFCECount();
 
-    // Check the courses with FCE reqs
-    CSC318.updateStatus();
-    CSC454.updateStatus();
-    CSC494.updateStatus();
-    CSC495.updateStatus();
+        // Check the courses with FCE reqs
+        CSC318.updateStatus();
+        CSC454.updateStatus();
+        CSC494.updateStatus();
+        CSC495.updateStatus();
 
-    updatePOSt(id, window[id].isSelected());
-    updatePostInterface();
-    updateMajorPostInterface();
-    updateMinorPostInterface();
-  }
-};
+        updatePOSt(id, window[id].isSelected());
+        updatePostInterface();
+        updateMajorPostInterface();
+        updateMinorPostInterface();
+    }
+}
 
 
 // Draggable function for map
 function enableGraphDragging() {
-  /* Extending the jQuery draggable option to be fitted with right click for either graph or graphRootSVG. 
+  /* Extending the jQuery draggable option to be fitted with right click for either graph or graphRootSVG.
     This also disables the context menu for graphRootSVG, but not for the tab.*/
   $.extend($.ui.draggable.prototype, {
     _mouseInit: function() {
@@ -135,9 +167,9 @@ function enableGraphDragging() {
 
 // Disables Tab key
 document.onkeydown = function(e) {
-  if (e.which == 9) {
-    return false;
-  }
+    if (e.which === 9) {
+        return false;
+    }
 };
 
 
@@ -145,121 +177,118 @@ document.onkeydown = function(e) {
 function initializeGraphSettings() {
 
   // Clear FCE count and 'Check My POSt!' tab
-  FCEs = 0;
-  FCEs100 = 0;
-  FCEs200 = 0;
-  FCEs300 = 0;
-  FCEs400 = 0;
-  FCEsMAT = 0;
-  clickedCourses = [];
-  $('#FCEcount').html('0.0');
+    FCEs = 0;
+    FCEs100 = 0;
+    FCEs200 = 0;
+    FCEs300 = 0;
+    FCEs400 = 0;
+    FCEsMAT = 0;
+    clickedCourses = [];
+    $('#FCEcount').html('0.0');
 
-  // Clear 'My Courses' tab
-  $('#courseGrid').empty();
+    // Clear 'My Courses' tab
+    $('#courseGrid').empty();
 
-  active200s = [];
-  active300s = [];
-  active400s = [];
-  projectCourses = [];
-  $('input:checkbox').attr('checked', false);
-  $('input:text').attr('value', '');
+    active200s = [];
+    active300s = [];
+    active400s = [];
+    projectCourses = [];
+    $('input:checkbox').attr('checked', false);
+    $('input:text').attr('value', '');
 
-  // Set initial node status
-  $.each(nodes, function(i, node) {
+    // Set initial node status
+    $.each(nodes, function(i, node) {
+        var nodeStatus = getCookie(window[node].name);
+        if (initiallyTakeable.indexOf(node) > -1 && nodeStatus === 'inactive') {
+            window[node].status = 'takeable';
+        } else {
+            window[node].status = nodeStatus;
+        }
+        updateMyCoursesTab();
+        updateFCECount();
 
-    var nodeStatus = getCookie(window[node].name);
-    if (initiallyTakeable.indexOf(node) > -1 && nodeStatus === 'inactive') {
-      window[node].status = 'takeable';
-    } else {
-      window[node].status = nodeStatus;
-    }
-
-    updateMyCoursesTab();
-    updateFCECount();
-
-    // Check the courses with FCE reqs
-    if(window[node].hybrid == false) {
-      updatePOSt(node, window[node].isSelected());
-      console.log(window[node].status);
-      if(window[node].status === 'active' || window[node].status === 'overridden') {
-        updateClickedCourses(node, true);
-      }
-      console.log(FCEs300);
-    }
-  });
-
-  $.each(nodes, function(i, node) {
-    window[node].updateSVG();
-    $.each(window[node].outEdges, function(i, edge) {
-      edge.updateStatus();
+        // Check the courses with FCE reqs
+        if(window[node].hybrid == false) {
+            updatePOSt(node, window[node].isSelected());
+            console.log(window[node].status);
+            if(window[node].status === 'active' || window[node].status === 'overridden') {
+                updateClickedCourses(node, true);
+            }
+            console.log(FCEs300);
+        }
     });
-  });
 
-  updatePostInterface();
-  updateMajorPostInterface();
-  updateMinorPostInterface();
+    $.each(nodes, function(i, node) {
+        window[node].updateSVG();
+        $.each(window[node].outEdges, function(i, edge) {
+            edge.updateStatus();
+        });
+    });
 
-  // Clear any active focus
-  if (activeFocus != '') {
-    $('.focusTabs').tabs('option', 'active', false);
-    $('ellipse.spotlight').remove();
-    clearFocus();
-  }
+    updatePostInterface();
+    updateMajorPostInterface();
+    updateMinorPostInterface();
 
-  CSC318.updateStatus();
-  CSC454.updateStatus();
-  CSC494.updateStatus();
-  CSC495.updateStatus();
+    // Clear any active focus
+    if (activeFocus != '') {
+        $('.focusTabs').tabs('option', 'active', false);
+        $('ellipse.spotlight').remove();
+        clearFocus();
+    }
 
-};
+    CSC318.updateStatus();
+    CSC454.updateStatus();
+    CSC494.updateStatus();
+    CSC495.updateStatus();
+}
 
 // Resets interface to default (nothing selected); callback for Reset button
 function reset() {
-  // Set initial node status
-  $.each(nodes, function(i, node) {
-    if (initiallyTakeable.indexOf(node) > -1) {
-      window[node].status = 'takeable';
-    } else {
-      window[node].status = 'inactive';
+    // Set initial node status
+    $.each(nodes, function(i, node) {
+        if (initiallyTakeable.indexOf(node) > -1) {
+            window[node].status = 'takeable';
+        } else {
+            window[node].status = 'inactive';
+        }
+        setCookie(window[node].name, window[node].status);
+
+        window[node].updateSVG();
+    });
+
+    // Edges
+    $('path').attr('data-active', 'inactive');
+
+    // Clear 'My Courses' tab
+    $('#courseGrid').empty();
+
+    // Clear any active focus
+    if (activeFocus != '') {
+        $('.focusTabs').tabs('option', 'active', false);
+        $('ellipse.spotlight').remove();
+        clearFocus();
     }
-    setCookie(window[node].name, window[node].status);
-    
-    window[node].updateSVG();
-  });
 
-  // Edges
-  $('path').attr('data-active', 'inactive');
+    // Clear FCE count and 'Check My POSt!' tab
+    FCEs = 0;
+    FCEs100 = 0;
+    FCEs200 = 0;
+    FCEs300 = 0;
+    FCEs400 = 0;
+    FCEsMAT = 0;
+    clickedCourses = [];
+    $('#FCEcount').html('0.0');
 
-  // Clear 'My Courses' tab
-  $('#courseGrid').empty();
+    active200s = [];
+    active300s = [];
+    active400s = [];
+    projectCourses = [];
+    $('input:checkbox').attr('checked', false);
+    $('input:text').attr('value', '');
 
-  // Clear any active focus
-  if (activeFocus != '') {
-    $('.focusTabs').tabs('option', 'active', false);
-    $('ellipse.spotlight').remove();
-    clearFocus();
-  }
-
-  // Clear FCE count and 'Check My POSt!' tab
-  FCEs = 0;
-  FCEs100 = 0;
-  FCEs200 = 0;
-  FCEs300 = 0;
-  FCEs400 = 0;
-  FCEsMAT = 0;
-  clickedCourses = [];
-  $('#FCEcount').html('0.0');
-
-  active200s = [];
-  active300s = [];
-  active400s = [];
-  projectCourses = [];
-  $('input:checkbox').attr('checked', false);
-  $('input:text').attr('value', '');
-
-  updatePostInterface();
-  updateMajorPostInterface();
-  updateMinorPostInterface();
+    updatePostInterface();
+    updateMajorPostInterface();
+    updateMinorPostInterface();
 };
 
 
@@ -304,26 +333,34 @@ function setGraphSize() {
 }
 
 $(window).resize(function() {
-  // Set width of FCE count
-  var w = $('.infoTabs').width() - $('.tabList').outerWidth() - 1;
-  $('#FCECountDiv').width(w + 'px');
+    // Set width of FCE count
+    var w = $('.infoTabs').width() - $('.tabList').outerWidth() - 1;
+    $('#FCECountDiv').width(w + 'px');
 });
 
 $(document).ready(function() {
-  buildGraph();
+    buildGraph();
 
-  // Set width of FCE count
-  var w = $('.infoTabs').width() - $('.tabList').outerWidth() - 1;
-  $('#FCECountDiv').width(w + 'px');
+    // Set width of FCE count
+    var w = $('.infoTabs').width() - $('.tabList').outerWidth() - 1;
+    $('#FCECountDiv').width(w + 'px');
 
-  // Create tabs
-  createTabs();
+    // Create tabs
+    createTabs();
 
-  // Initialize interface
-  initializeGraphSettings();
+    // Initialize interface
+    initializeGraphSettings();
 
-  // Uncomment to enable the feedback form (must also be displayed in html)
-  // activateFeedbackForm();
-  // Uncomment to enable graph dragging
-  // enableGraphDragging();
+    // Uncomment to enable the feedback form (must also be displayed in html)
+    // activateFeedbackForm();
+    // Uncomment to enable graph dragging
+    // enableGraphDragging();
 });
+
+function clearAllTimeouts() {
+    for(var i = 0; i < timeouts.length; i++) {
+        clearTimeout(timeouts[i]);
+    }
+
+    timeouts = [];
+}

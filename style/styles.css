@@ -168,8 +168,8 @@ h3 {
   border-spacing: 0;
   table-layout: fixed;
 }
-#timetableMain td,
-#timetableMain th {
+td,
+th {
   margin: 0;
   padding: 0;
   border-spacing: 0px;
@@ -178,24 +178,24 @@ h3 {
   vertical-align: top;
   color: black;
 }
-#timetableMain .courseTable {
+.courseTable {
   min-height: 23px;
   border-spacing: 0;
   table-layout: fixed;
 }
-#timetableMain .courseTable tr,
-#timetableMain .courseTable td,
-#timetableMain .courseTable th {
+.courseTable tr,
+.courseTable td,
+.courseTable th {
   border: none;
 }
-#timetableMain .timetableCourseName {
+.timetableCourseName {
   font-size: 1.05em;
   color: white;
   /*padding: 0 0.5em;*/
   min-width: 90px;
   text-align: center;
 }
-#timetableMain th.sessionHeader {
+th.sessionHeader {
   text-align: center;
   font-weight: bold;
   font-size: 1.1em;
@@ -207,24 +207,24 @@ h3 {
   background-color: #C2D6FF;
   text-align: center;
 }
-#timetable td.timetableTime, #timetable th.timetableTime {
+td.timetableTime, th.timetableTime {
   width: 110px;
   background-color: #7094FF;
   padding-left: 5px;
   padding-right: 5px;
 }
-#timetable td.timetableInstructor, #timetable th.timetableInstructor {
+td.timetableInstructor, th.timetableInstructor {
   width: 150px;
   background-color: #DB94B8;
   padding-left: 5px;
 }
-#timetable td.timetableCap, #timetable th.timetableCap {
+td.timetableCap, th.timetableCap {
   width: 95px;
   background-color: #B2E0FF;
   text-align: center;
 }
 
-#timetable td.timetableWait, #timetable th.timetableWait {
+td.timetableWait, th.timetableWait {
   width: 40px;
   background-color: #D8D8A3;
   text-align: center;
@@ -413,6 +413,37 @@ input[type=checkbox]:checked + label:before {
   font-family: "Trebuchet MS", Arial, Sans-Serif;
   }*/
 
+/* Modals */
+.ui-dialog {
+    border-radius: 10px;
+}
 
+.ui-dialog-titlebar {
+    background-color: #004AA1;
+    color: white;
+    font-size: 200%;
+    border-radius: 10px;
+    cursor: move;
+}
 
+.ui-dialog-title {
+    background-color: white;
+    color: #374AFF;
+    border-radius: 10px;
+    padding: 2px 2px 2px 2px;
+    border: 2px solid #374AFF;
+}
+
+.ui-dialog-titlebar-close {
+    /*background-color: #3700A1;*/
+    /*color: white;*/
+    float: right;
+    border-radius: 10px;
+}
+
+.modal {
+    background-color: #374AA1;
+    padding: 20px 20px 20px 20px;
+    border-radius: 10px;
+}
 

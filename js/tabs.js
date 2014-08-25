@@ -101,7 +101,8 @@ function fetchCourseDescription(id) {
 	}
 
 	$('#calendar').html(result);
-};
+    return result;
+}
 
 function readCalendarEntry(name) {
 	var result = '';
@@ -274,7 +275,7 @@ function createTabs() {
 			var name = ui.newTab.attr('aria-controls');
 			if (name) {
 				name = name.substr(0, name.length - 7);
-				updateActiveFocus(name);	
+				updateActiveFocus(name);
 			} else {
 				updateActiveFocus('');
 			}
