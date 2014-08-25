@@ -32,19 +32,23 @@ function setupVideoPlayer() {
 }
 
 function setupTimeslot(id) {
-
+    var courseName;
     var timeslot = $('<div></div>');
+    timeslot.css('padding-bottom', '2em');
     var title = $('<h3></h3>');
     title.css('color', 'white')
          .html(id + ' Section Times');
     timeslot.append(title);
+    timeslot.append($('#timetableMain').children('tbody').children('tr').first().clone());
+
     $('.searchClass').each(function () {
-        var courseName = $(this).children('td').first().html();
+        courseName = $(this).children('td').first().html();
         if (courseName.indexOf(id) > -1) {
-            timeslot.append($(this));
+            timeslot.append($(this).clone());
         }
     });
     timeslot.children('.searchClass').children('td').first().remove();
+    timeslot.children('tr').children('td').first().remove();
     return timeslot;
 }
 
