@@ -47,7 +47,7 @@ function displayToolTip(nodeId) {
 function createRect(g, rectClass, rectId, posX, posY, width, height, color) {
     "use strict";
 
-    g.append('rect')
+    var rect = g.append('rect')
         .attr("class", rectClass + "-rect " + rectId + "-rect")
         .attr("id", rectId + "-rect")
         .attr("x", posX)
@@ -99,7 +99,7 @@ function createText(g, nodeId, rectClass, rectId, posX, posY, width, height, col
 
 
 function createG(nodeId) {
-    return d3.select('#graphRootSVG').append('g')
+    var g = d3.select('#graphRootSVG').append('g')
         .attr('class', 'tooltip-group')
         .style("cursor", "pointer")
         .on("click", function () {
@@ -132,7 +132,14 @@ function createG(nodeId) {
                 enableVideoJS();
                 $('.tooltip-group').remove();
             }
+        }).on('mouseover', function () {
+            clearAllTimeouts();
         });
+
+    $('.tooltip-group').mouseout(function () {
+        $('.tooltip-group').remove();
+    });
+    return g;
 }
 
 function enableVideoJS() {

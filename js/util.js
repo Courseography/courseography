@@ -2,6 +2,8 @@
  * Main Javascript functions powering Course Planner.
  * Requires JQuery and JQuery-UI libraries.
  */
+var timeouts = [];
+
 
 // MOUSE CALLBACKS
 
@@ -28,8 +30,8 @@ function hoverFocus(event) {
         // Highlight missing prerequisites
         window[id].focus();
 
-        removeUnusedToolTips(id)
-        setTimeout(displayToolTip(id), 3000);
+        removeUnusedToolTips(id);
+        displayToolTip(id);
         fetchCourseDescription(id);
     }
 }
@@ -50,7 +52,7 @@ function hoverUnfocus(event) {
         });
     }
 
-    setTimeout(function () {
+    var timeout = setTimeout(function () {
         $("." + id + "-tooltip-rect").hide('slow', function () {
             $(this).remove();
         });
@@ -58,6 +60,7 @@ function hoverUnfocus(event) {
             $(this).remove();
         });
     }, 5000);
+    timeouts.push(timeout);
 }
 
 function removeUnusedToolTips(id) {
@@ -359,3 +362,11 @@ $(document).ready(function() {
     // Uncomment to enable graph dragging
     // enableGraphDragging();
 });
+
+function clearAllTimeouts() {
+    for(var i = 0; i < timeouts.length; i++) {
+        clearTimeout(timeouts[i]);
+    }
+
+    timeouts = [];
+}
