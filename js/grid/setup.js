@@ -9,7 +9,6 @@ var courseObjects = [];
 $(document).ready(function () {
     'use strict';
 
-
     $('#dialog').fadeOut()
                 .css('visibility', 'visible');
 

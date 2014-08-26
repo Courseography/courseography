@@ -10,7 +10,6 @@ function Node(parents, type, name) { // parents is never used.
     this.updated = false; // Used when updating active/inactive state
     this.hybrid = false; // Identifies whether node is 'hybrid'
     this.status = 'inactive';
-
 }
 
 
