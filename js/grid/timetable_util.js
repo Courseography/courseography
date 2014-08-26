@@ -177,8 +177,16 @@ function refreshStarredCourses() {
 function restoreFromCookies() {
     'use strict';
 
-    var starredCourseCookie = getJSONCookie('selected-courses');
-    var starredLectureCookie = getJSONCookie('selected-lectures');
+    var starredCourseCookie = getCookie('selected-courses');
+    var starredLectureCookie = getCookie('selected-lectures');
+
+    if (starredCourseCookie.length === 0) {
+        starredCourseCookie = [];
+    }
+
+    if (starredLectureCookie.length === 0) {
+        starredLectureCookie = [];
+    }
 
     if (starredCourseCookie.length > 0) {
         var selectedCoursesTemp = $.parseJSON(starredCourseCookie);

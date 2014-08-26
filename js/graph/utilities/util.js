@@ -108,6 +108,11 @@ function initializeGraphSettings() {
     $.each(nodes, function (i, node) {
 
         var nodeStatus = getCookie(window[node].name);
+
+        if (nodeStatus.length === 0) {
+            nodeStatus = 'inactive';
+        }
+
         if (initiallyTakeable.indexOf(node) > -1 && nodeStatus === 'inactive') {
             window[node].status = 'takeable';
         } else {
