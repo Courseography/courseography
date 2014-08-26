@@ -125,11 +125,9 @@ function initializeGraphSettings() {
         // Check the courses with FCE reqs
         if (window[node].hybrid === false) {
             updatePOSt(node, window[node].isSelected());
-            console.log(window[node].status);
             if (window[node].status === 'active' || window[node].status === 'overridden') {
                 updateClickedCourses(node, true);
             }
-            console.log(FCEs300);
         }
     });
 
