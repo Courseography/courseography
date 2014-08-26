@@ -7,6 +7,7 @@
 // Generate Node and Edge objects based on geometric relationships
 function buildGraph() {
     'use strict';
+
     var xStart;
     var yStart;
     var yEnd;

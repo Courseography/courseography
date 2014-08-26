@@ -96,6 +96,8 @@ function appendTableRows(timetableTableFall, timetableTableSpring) {
 
 
 function appendTableData(trFall, trSpring, time) {
+    'use strict';
+
     var weekPrefixArray = ["M", "T", "W", "R", "F"];
 
     var adjustedTime = (time === 12 ? 12 : time % 12) + ':00';

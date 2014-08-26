@@ -363,6 +363,7 @@ function updateCSC400s() {
 // Right now, it must be called after updateCSC400s (because of numBCB)
 function updateElecs() {
     'use strict';
+
     var BCB430Check = $('#BCB430check');
 
     var numProjects = 2;

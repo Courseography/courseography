@@ -278,6 +278,8 @@ function removeCourseFromList(name) {
 
 /* Info box */
 function renderDisplayCourseTitle(course) {
+    'use strict';
+
     renderDisplayCourseInformation(course);
     $('#section-stats-section').empty();
     $('#section-stats-instructor').empty();
@@ -286,12 +288,16 @@ function renderDisplayCourseTitle(course) {
 
 
 function renderDisplayCourseInformation(course) {
+    'use strict';
+
     $('#course-info-code').html(course.name);
     $('#course-info-title').html(course.title);
 }
 
 
 function renderDisplaySectionInformation(section) {
+    'use strict';
+
     $('#section-stats-section').html(section.name);
     $('#section-stats-instructor').html(section.instructor);
     var cap = section.cap;
@@ -309,6 +315,8 @@ function renderDisplaySectionInformation(section) {
 
 
 function renderClearCourseInformation() {
+    'use strict';
+
     $('#course-info-code').empty();
     $('#course-info-title').empty();
     $('#section-stats-section').empty();
@@ -319,6 +327,8 @@ function renderClearCourseInformation() {
 
 // Parse times for cell ids.
 function convertTimes(times) {
+    'use strict';
+
     var timeList = [];
     var time;
 

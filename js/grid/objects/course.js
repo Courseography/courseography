@@ -134,7 +134,6 @@ Course.prototype.parseTutorials = function (session, timeSuffix) {
 Course.prototype.activateSection = function (section) {
     'use strict';
 
-
     // Check if section was already selected
     var curr = this.selected[section.type];
     if (curr !== undefined) {
