@@ -4,15 +4,17 @@ function setMouseCallbacks() {
     var nodeObjects = $('.node');
 
     nodeObjects.click(function (event) {
-        turnNode(event);
-    });
-    nodeObjects.hover(
-        function (event) {
-            hoverFocus(event);
-        },
-        function (event) {
-            hoverUnfocus(event);
-        });
+
+        // TODO: Test as click(turnNode)
+        turnNode(event)
+    })
+        .hover(
+            function (event) {
+                hoverFocus(event);
+            },
+            function (event) {
+                hoverUnfocus(event);
+            });
 }
 
 
@@ -51,10 +53,9 @@ function turnNode(event) {
         updateFCECount();
 
         // Check the courses with FCE reqs
-        CSC318.updateStatus();
-        CSC454.updateStatus();
-        CSC494.updateStatus();
-        CSC495.updateStatus();
+        $.each(FCEPrerequisiteCourses, function (i, course) {
+            course.updateStatus();
+        });
 
         updatePOSt(id, window[id].isSelected());
         updatePostInterface();
