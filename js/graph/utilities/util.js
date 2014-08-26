@@ -210,47 +210,6 @@ function reset() {
 }
 
 
-// TODO: Resolve Width issues
-function setGraphSize() {
-    // Set height of tabs
-    //var graphHeight = Math.min(Math.round($(window).height() * 0.7), $(window).width() / 2);
-    //var height = $(window).height() - graphHeight - 46;
-    //var height = $(window).height() - $('#graph').height() - 46;
-    //$(".infoTabs").height(height + "px");
-    //$("#graph").height(graphHeight + "px");
-    //$('#graph').css('margin-left', 'auto');
-    //$('#graph').css('margin-right', 'auto');
-    //$("#graph").width('100%');
-    //$(".infoTabs").height("100%");
-    //$(".infoTabs").width($(window).width() + "px");
-    //$("#graph").width(screen.availWidth + "px");
-    //$(".infoTabs").width(screen.availWidth + "px");
-    /*if ($(window).width() < 1200) {
-     $(".infoTabs").width("1200px");
-     } else {
-     $(".infoTabs").width("100%");
-     }*/
-
-    // Set height of tabs
-    //var graphHeight = Math.min(Math.round($(window).height() * 0.7), $(window).width() / 2);
-    //var height = $(window).height() - graphHeight - 46;
-    //console.log("Resizing graph");
-    //var height = $(window).height() - $('#graph').height() - 46;
-    //$(".infoTabs").height(height + "px");
-    //$("#graph").height(graphHeight + "px");
-    //$('#graph').css('margin-left', 'auto');
-    //$('#graph').css('margin-right', 'auto');
-    //$("#graph").width('100%');
-    //$(".infoTabs").height("100%");
-    //$(".infoTabs").width($(window).width() + "px");
-    /*if ($(window).width() < 1400) {
-     $(".infoTabs").width("1400px");
-     } else {
-     $(".infoTabs").width("100%");
-     }*/
-}
-
-
 $(window).resize(function() {
     'use strict';
 
