@@ -145,6 +145,7 @@ Course.prototype.addSection = function (section) {
 
     section.clicked = true;
     this.selectTimes(section);
+    updateSelectedLectures(section.id);
 }
 
 
