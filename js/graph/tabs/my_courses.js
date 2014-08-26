@@ -45,6 +45,7 @@ function updateMyCoursesTab() {
         } else if (course === 'Sta2') {
             title = 'One term in statistics: STA248 or STA261';
         } else {
+            var result;
             $.ajax({
                 url: 'res/courses/' + course + 'H1.txt',
                 dataType: 'json',

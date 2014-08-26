@@ -114,9 +114,9 @@ Course.prototype.parseTutorials = function (session, timeSuffix) {
                 sectionTimes = sectionTimes.map(function (t) {
                                                   return '#' + t + 'F';
                                            })
-                                           .concat(function (t) {
-                                                  return '#' + t + 'S';
-                                           });
+                                           .concat(sectionTimes.map(function (t) {
+                                                  return "#" + t + "S";
+                                           }));
             } else {
                 sectionTimes = sectionTimes.map(function (time) {
                     return '#' + time + timeSuffix;

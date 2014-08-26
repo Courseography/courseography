@@ -57,8 +57,8 @@ function getVeryLargeCourseArray() {
     var splitArray = undefined;
 
     $.ajax({
-        url: 'js/grid/courses.txt',
-        dataType: 'text',
+        url: "res/courses.txt",
+        dataType: "text",
         async: false,
         success: function (data) {
             splitArray = data.split('\n').map(function (course) {

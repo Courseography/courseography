@@ -1,5 +1,5 @@
 // Globals
-var timetable = 'res/grid.html';
+var timetable = 'res/timetable.html';
 var clickedCourses = [];
 var FCEs = 0;
 var FCEs100 = 0;
