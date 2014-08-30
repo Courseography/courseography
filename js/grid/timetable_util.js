@@ -41,11 +41,11 @@ function getCourseObject(courseName, courseArray) {
 }
 
 
-function updateSelectedLectures(section) {
+function updateSelectedLectures(sectionId) {
     'use strict';
 
-    if (!inArray(section.id, selectedLectures)) {
-        selectedLectures.push(section.id);
+    if (!inArray(sectionId, selectedLectures)) {
+        selectedLectures.push(sectionId);
     }
 }
 
@@ -223,8 +223,17 @@ function restoreFromCookies() {
 function saveCookies(courses, sections) {
     'use strict';
 
-    setCookie('selected-courses', JSON.stringify(courses));
-    setCookie('selected-lectures', JSON.stringify(sections));
+    if (courses !== undefined) {
+        setCookie("selected-courses", JSON.stringify(courses));    
+    } else {
+        setCookie("selected-courses", "[]");
+    }
+
+    if (sections !== undefined) {
+        setCookie("selected-lectures", JSON.stringify(sections));    
+    } else {
+        setCookie("selected-lectures", "[]");
+    }
 }
 
 
