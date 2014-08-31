@@ -169,6 +169,7 @@ function createG(nodeId) {
                         modal: true,
                         minWidth: 1000,
                         minHeight: 600,
+                        closeText: "X",
                         close: function () {
                             $(this).remove();
                             $.each(nodes, function (index, elem) {
