@@ -19,6 +19,7 @@ function createModalDiv(id) {
 }
 
 function setupVideoPlayer() {
+    "use strict";
 
     // Not divided up into 'attr' yet because 'controls preload' cannot be added that way...
     var videoDiv = $('<div></div>');
@@ -41,12 +42,11 @@ function setupVideoPlayer() {
 }
 
 function setupTimeslot(id) {
+    "use strict";
+
     var courseName;
     var timeslot = $('<div></div>');
     var title = $('<h3></h3>');
-    title.css('color', 'white')
-         .css('padding-bottom', '2em')
-         .html(id + ' Section Times');
     timeslot.append(title);
     timeslot.append($('#timetableMain').children('tbody').children('tr').first().clone());
 
@@ -62,6 +62,8 @@ function setupTimeslot(id) {
 }
 
 function setupRelatedLinks(id) {
+    "use strict";
+
     var relatedLinksDiv = $('<div></div>').css('display', 'inline')
                                           .css('float', 'right')
                                           .css('width', '45%')
@@ -95,6 +97,7 @@ function displayToolTip(nodeId) {
  */
 function createRect(g, rectClass, rectId, posX, posY, width, height, color) {
     "use strict";
+
     var rect = $(document.createElementNS('http://www.w3.org/2000/svg', 'rect'))
         .attr("class", rectClass + "-rect " + rectId + "-rect")
         .attr("id", rectId + "-rect")
@@ -144,6 +147,8 @@ function createText(g, nodeId, rectClass, rectId, posX, posY, width, height, col
 
 
 function createG(nodeId) {
+    "use strict";
+
     var g = $(document.createElementNS('http://www.w3.org/2000/svg', 'g'));
     g.attr('class', 'tooltip-group')
         .css("cursor", "pointer")
@@ -184,5 +189,6 @@ function createG(nodeId) {
 
 function enableVideoJS() {
     "use strict";
+
     videojs(document.getElementsByClassName('vjs-default-skin')[0], {}, function () {});
 }
