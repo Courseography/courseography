@@ -59,7 +59,7 @@ function hoverUnfocus(event) {
         $("." + id + "-tooltip-text").hide('slow', function () {
             $(this).remove();
         });
-    }, 5000);
+    }, 500);
     timeouts.push(timeout);
 }
 
