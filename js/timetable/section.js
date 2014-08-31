@@ -53,7 +53,6 @@ Section.prototype.onclick = function () {
         renderClearHover(time);
     });
 
-    updateSelectedLectures(this);
     var course = this.course;
 
     course.activateSection(this);
