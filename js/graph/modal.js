@@ -169,6 +169,7 @@ function createG(nodeId) {
         .css("cursor", "pointer")
         .click(function () {
             if ($(".modal").length === 0) {
+                $('.infoTabs').hide();
                 var div = createModalDiv(nodeId);
                 div.attr("title", nodeId)
                     .addClass("modal").dialog({
@@ -191,6 +192,7 @@ function createG(nodeId) {
                                 window[elem].updateSVG();
                             });
                             $('body').css('background', 'rgb(255,255,255)');
+                            $('.infoTabs').show();
                         }});
                 $('.node, .hybrid').attr('data-active', 'unlit');
                 $('body').css('background', 'rgb(40,40,40)');
