@@ -50,6 +50,8 @@ var extraMinor = 0;
 
 var activeFocus = '';
 
+var timeouts = [];
+
 $(document).ready(function () {
     'use strict';
 
