@@ -172,11 +172,11 @@ function createG(nodeId) {
                         autoOpen: true,
                         show: {
                             effect: "blind",
-                            duration: 1000
+                            duration: 500
                         },
                         hide: {
                             effect: "blind",
-                            duration: 1000
+                            duration: 500
                         },
                         modal: true,
                         minWidth: 1000,
