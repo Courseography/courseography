@@ -77,7 +77,19 @@ function displayToolTip(nodeId) {
     "use strict";
 
     var rectObject = $("#" + nodeId).find("rect");
-    var xPos = rectObject.attr("x") - 65;
+
+    // The tooltip displays with a width of 222. If the node has an x position of
+    // less than 222, the tooltip will be cut off by the svg boundaries. In this case,
+    // we display the tooltip on the left.
+    var rightSide = rectObject.attr("x") > 222;
+
+    // The tooltip is offset with a 'padding' of 5.
+    if (rightSide) {
+        var xPos = parseFloat(rectObject.attr("x")) - 65;
+    } else {
+        var xPos = parseFloat(rectObject.attr("x")) + 45;
+    }
+
     var yPos = rectObject.attr("y");
     var g = createG(nodeId);
     createRect(g, "node-tooltip", nodeId + "-tooltip", xPos, yPos, 60, 30, "black");
