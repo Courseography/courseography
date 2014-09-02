@@ -416,35 +416,28 @@ input[type=checkbox]:checked + label:before {
 
 /* Modals */
 .ui-dialog {
-    border-radius: 10px;
 }
 
 .ui-dialog-titlebar {
     background-color: #004AA1;
     color: white;
     font-size: 200%;
-    border-radius: 10px;
     cursor: move;
 }
 
 .ui-dialog-title {
     background-color: white;
     color: #374AFF;
-    border-radius: 10px;
     padding: 2px 2px 2px 2px;
     border: 2px solid #374AFF;
 }
 
 .ui-dialog-titlebar-close {
-    /*background-color: #3700A1;*/
-    /*color: white;*/
     float: right;
-    border-radius: 10px;
 }
 
 .modal {
     background-color: #374AA1;
     padding: 20px 20px 20px 20px;
-    border-radius: 10px;
 }
 
