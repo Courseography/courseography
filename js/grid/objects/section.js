@@ -1,5 +1,7 @@
 /* Section class */
 function Section(times, course, id) {
+    'use strict';
+
     this.id = id;
     this.courseName = this.id.substring(0, 8);
     this.name = this.id.substring(9, 14);
@@ -14,6 +16,8 @@ function Section(times, course, id) {
 
 // Mouse events
 Section.prototype.setMouseEvents = function (li) {
+    'use strict';
+
     var tmp = this;
     $(li).mouseout(function () {
              tmp.mouseout();
@@ -27,28 +31,34 @@ Section.prototype.setMouseEvents = function (li) {
              tmp.onclick();
              tmp.course.renderUpdate();
          });
-}
+};
 
 
 Section.prototype.mouseout = function () {
+    'use strict';
+
     $.each(this.times, function (i, time) {
         renderClearHover(time);
     });
     renderClearCourseInformation();
-}
+};
 
 
 Section.prototype.mouseover = function () {
+    'use strict';
+
     var tmp = this;
     $.each(this.times, function (i, time) {
         renderAddHover(time, tmp);
     });
     renderDisplayCourseInformation(this.course);
     renderDisplaySectionInformation(this);
-}
+};
 
 
 Section.prototype.onclick = function () {
+    'use strict';
+
     $.each(this.times, function (i, time) {
         renderClearHover(time);
     });
@@ -62,24 +72,30 @@ Section.prototype.onclick = function () {
 
     saveCookies(selectedCourses, selectedLectures);
     alertUserOfConflict();
-}
+};
 
 
 Section.prototype.setTime = function (time) {
+    'use strict';
+
     $(time).html(this.courseName)
            .attr("clicked", "true")
            .attr("type", this.type);
-}
+};
 
 
 Section.prototype.setConflictTime = function (time) {
+    'use strict';
+
     var conflicts = $(time).data("conflicts");
     conflicts.push(this);
     renderConflicts(time, conflicts);
-}
+};
 
 
 Section.prototype.removeTimes = function () {
+    'use strict';
+
     var tmp = this;
     $.each(this.times, function (i, time) {
         if ($(time).data("conflicts").length > 0) {
@@ -88,10 +104,12 @@ Section.prototype.removeTimes = function () {
             renderClearTime(time);
         }
     });
-}
+};
 
 
 Section.prototype.removeConflict = function (time) {
+    'use strict';
+
     var conflicts = $(time).data("conflicts");
     var index = $.inArray(this, conflicts);
 
@@ -104,33 +122,39 @@ Section.prototype.removeConflict = function (time) {
     }
 
     renderConflicts(time, conflicts);
-}
+};
 
 
 // Rendering
 Section.prototype.render = function () {
+    'use strict';
+
     var li = document.createElement("li");
     $(li).attr("id", this.id)
          .data("instructor", this.instructor)
          .data("cap", this.cap)
          .data("enrol", this.enrol)
          .data("wait", this.wait)
-         .attr("clicked", "" + this.clicked)
-         .attr("satisfied", "" + this.satisfied);
+         .attr("clicked", String(this.clicked))
+         .attr("satisfied", String(this.satisfied));
     li.appendChild(document.createTextNode(this.name));
     this.setMouseEvents(li);
     return li;
-}
+};
 
 
 Section.prototype.renderUpdate = function () {
-    $("#" + this.id).attr("clicked", "" + this.clicked)
-                    .attr("satisfied", "" + this.satisfied);
-}
+    'use strict';
+
+    $("#" + this.id).attr("clicked", String(this.clicked))
+                    .attr("satisfied", String(this.satisfied));
+};
 
 
 // Other constructors
 function makeLecture(lecture, course, id, sectionTimes) {
+    'use strict';
+
     var section = new Section(sectionTimes, course, id);
     section.instructor = lecture.instructor;
     section.cap = lecture.cap;
@@ -141,6 +165,8 @@ function makeLecture(lecture, course, id, sectionTimes) {
 
 
 function makeTutorial(tutorial, course, id, sectionTimes) {
+    'use strict';
+
     var section = new Section(sectionTimes, course, id);
     section.cap = tutorial[3];
     section.enrol = tutorial[4];
