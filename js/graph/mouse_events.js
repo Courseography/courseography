@@ -23,7 +23,7 @@ function setMouseCallbacks() {
 function hoverFocus(event) {
     'use strict';
 
-    if ($(".modal").length === 0) {
+    if ($(".modal").length === 0 && activeFocus === '') {
         var id = event.target.parentNode.id;
         // Highlight missing prerequisites
         window[id].focus();
@@ -55,6 +55,7 @@ function hoverUnfocus(event) {
     timeouts.push(timeout);
 }
 
+
 // Activate/Deactivate node when clicked
 function turnNode(event) {
     'use strict';
@@ -80,4 +81,3 @@ function turnNode(event) {
         updateMinorPostInterface();
     }
 }
-
