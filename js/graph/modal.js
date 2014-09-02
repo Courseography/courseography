@@ -6,7 +6,10 @@ function createModalDiv(id) {
 
     var div = $("<div></div>");
     div.attr('id', 'modal-content-container');
-    var p = $("<p></p>").css("color", "white").html(fetchCourseDescription(id));
+
+    var courseDescription = fetchCourseDescription(id);
+    console.log(courseDescription);
+    var p = $("<p></p>").css("color", "white").html(courseDescription);
     div.append(p);
     var video = setupVideoPlayer();
     var timetable = setupTimeslot(id);

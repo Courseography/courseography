@@ -17,7 +17,7 @@ function fetchCourseDescription(id) {
         result = readCalendarEntry(id + 'H1');
     }
 
-    $('#calendar').html(result);
+    return result;
 }
 
 
