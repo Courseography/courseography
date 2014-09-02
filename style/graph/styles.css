@@ -202,6 +202,10 @@ th.sessionHeader {
   color: white;
 }
 
+.ui-dialog th.sessionHeader {
+    background-color: #004AA1;
+}
+
 .timetableSection {
   width: 50px;
   background-color: #C2D6FF;
