@@ -119,9 +119,6 @@ function initializeGraphSettings() {
             window[node].status = nodeStatus;
         }
 
-        updateMyCoursesTab();
-        updateFCECount();
-
         // Check the courses with FCE reqs
         if (window[node].hybrid === false) {
             updatePOSt(node, window[node].isSelected());
@@ -137,6 +134,9 @@ function initializeGraphSettings() {
             edge.updateStatus();
         });
     });
+
+    updateFCECount();
+    updateMyCoursesTab();
 
     updatePostInterface();
     updateMajorPostInterface();
