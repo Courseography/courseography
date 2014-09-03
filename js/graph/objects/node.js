@@ -1,54 +1,6 @@
-/**
- * Data Structures for the course graph
- */
+function Node(parents, type, name) { // parents is never used.
+    'use strict';
 
-// Global variables
-var nodes = []; // List of all nodes
-var edges = []; // List of all edges
-
-// Data Structures
-function makeNode(parents, type, name) {
-    window[name] = new Node(parents, type, name);
-    nodes.push(name);
-}
-
-function makeHybrid(parents, type, name) {
-    makeNode(parents, type, name);
-    window[name].hybrid = true;
-}
-
-function makeEdge(parent, child, name) {
-    window[name] = new Edge(parent, child, name);
-    parent.outEdges.push(window[name]);
-    child.inEdges.push(window[name]);
-
-    parent.children.push(child);
-    child.parents.push(parent);
-}
-
-function Edge(parent, child, name) {
-    this.parent = parent;
-    this.child = child;
-    this.name = name;
-    this.status = 'inactive';
-}
-
-Edge.prototype.updateStatus = function () {
-    if (!this.parent.isSelected()) {
-        this.status = 'inactive';
-    } else if (!this.child.isSelected()) {
-        this.status = 'takeable';
-    } else {
-        this.status = 'active';
-    }
-    this.updateSVG();
-};
-
-Edge.prototype.updateSVG = function () {
-    $('#' + this.name).attr('data-active', this.status);
-};
-
-function Node(parents, type, name) {
     this.name = name; // Used to identify the GUI node
     this.parents = []; // Prerequisite nodes
     this.children = []; // Nodes for which this is a prerequisite
@@ -60,21 +12,26 @@ function Node(parents, type, name) {
     this.status = 'inactive';
 }
 
+
 // Returns true if the node has been selected
 Node.prototype.isSelected = function () {
+    'use strict';
+
     return this.status === 'active' || this.status === 'overridden';
 };
 
 
 // Used when entering hover
 Node.prototype.focus = function () {
+    'use strict';
+
     if (this.status !== 'active') {
         if (this.status !== 'overridden') {
-            $("#" + this.name).attr('data-active', 'missing');
+            $('#' + this.name).attr('data-active', 'missing');
         }
         $.each(this.inEdges, function (i, edge) {
             if (edge.parent.status !== 'active') {
-                $("#" + edge.name).attr('data-active', 'missing');
+                $('#' + edge.name).attr('data-active', 'missing');
             }
         });
         $.each(this.parents, function (i, node) {
@@ -83,13 +40,16 @@ Node.prototype.focus = function () {
     }
 };
 
+
 // Used when leaving hover
 Node.prototype.unfocus = function () {
+    'use strict';
+
     if (!this.isSelected()) {
-        if (activeFocus === '' || window[activeFocus + "FocusList"].indexOf(this.name) > -1) {
+        if (activeFocus === '' || window[activeFocus + 'FocusList'].indexOf(this.name) > -1) {
             this.updateSVG();
         } else {
-            $("#" + this.name).attr('data-active', 'unlit');
+            $('#' + this.name).attr('data-active', 'unlit');
         }
     }
 
@@ -101,8 +61,11 @@ Node.prototype.unfocus = function () {
     });
 };
 
+
 // Check whether node's prerequisites are satisfied, update status and GUI
 Node.prototype.updateStatus = function () {
+    'use strict';
+
     if (this.arePrereqsSatisfied()) {
         if (this.isSelected() || this.hybrid) {
             this.status = 'active';
@@ -120,7 +83,7 @@ Node.prototype.updateStatus = function () {
 
     // Always update children of hybrids
     if (this.hybrid) {
-        $.each(this.children, function (i, node) {
+        $.each(this.children, function(i, node) {
             node.updateStatus();
         });
         $.each(this.outEdges, function (i, edge) {
@@ -131,8 +94,11 @@ Node.prototype.updateStatus = function () {
     this.updateSVG();
 };
 
+
 // Activate/deactivate a node; called when a node is clicked
-Node.prototype.turn = function() {
+Node.prototype.turn = function () {
+    'use strict';
+
     if (this.isSelected()) {
         this.status = 'inactive';
     } else {
@@ -141,13 +107,13 @@ Node.prototype.turn = function() {
 
     this.updateStatus();
 
-    $.each(this.children, function(i, node) {
+    $.each(this.children, function (i, node) {
         node.updateStatus();
     });
-    $.each(this.outEdges, function(i, edge) {
+    $.each(this.outEdges, function (i, edge) {
         edge.updateStatus();
     });
-    $.each(this.inEdges, function(i, edge) {
+    $.each(this.inEdges, function (i, edge) {
         edge.updateStatus();
     });
 
@@ -155,8 +121,11 @@ Node.prototype.turn = function() {
     this.updateSVG();
 };
 
+
 // Returns true if the node's prerequisites are satisfied
-Node.prototype.arePrereqsSatisfied = function() {
+Node.prototype.arePrereqsSatisfied = function () {
+    'use strict';
+
     var sat = this.checkFCEBasedPrerequisites();
     if (this.logicalType === 'AND') {
         for (var i = 0; i < this.parents.length; i++) {
@@ -173,8 +142,11 @@ Node.prototype.arePrereqsSatisfied = function() {
     return sat;
 };
 
+
 // Checks FCE-count prerequisites
 Node.prototype.checkFCEBasedPrerequisites = function() {
+    'use strict';
+
     if (this.name === 'CSC454') {
         return FCEs200 + FCEs300 + FCEs400 >= 2.5;
     } else if (this.name === 'CSC494' || this.name === 'CSC495') {
@@ -186,7 +158,10 @@ Node.prototype.checkFCEBasedPrerequisites = function() {
     }
 };
 
+
 // Update the visual style of the corresponding graphical node
 Node.prototype.updateSVG = function() {
+    'use strict';
+
     $('#' + this.name).attr('data-active', this.status);
 };

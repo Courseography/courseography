@@ -6,20 +6,27 @@
 
 // Generate Node and Edge objects based on geometric relationships
 function buildGraph() {
-    $('.node').each(function() {
+    'use strict';
+
+    var xStart;
+    var yStart;
+    var yEnd;
+    var xEnd;
+
+    $('.node').each(function () {
         makeNode([], 'AND', $(this).attr('id'));
     });
 
-    $('.hybrid').each(function() {
+    $('.hybrid').each(function () {
         var id = $(this).attr('id');
         var course = $(this).children('text').text();
         var reqs = parseAnd(course)[0];
         makeHybrid([], 'AND', id);
-        $.each(reqs, function(index, elem) {
+        $.each(reqs, function (index, elem) {
             if ($.isArray(elem)) {
                 var orNode = id + elem.join();
                 makeHybrid([], 'OR', orNode);
-                $.each(elem, function(i, e) {
+                $.each(elem, function (i, e) {
                     window[orNode].parents.push(window[e]);
                     window[e].children.push(window[orNode]);
                 });
@@ -32,35 +39,33 @@ function buildGraph() {
         });
     });
 
-    $('.bool').each(function(i) {
+    $('.bool').each(function () {
         var id = $(this).attr('id');
         var type = $(this).children('text').text().toUpperCase();
         makeHybrid([], type, id);
     });
 
-    $('path').each(function(i) {
+    $('path').each(function () {
         var coords = $(this).attr('d').split(' ');
-        coords = coords.filter(function(str) {
-            return str !== 'M' && str !== 'L';
-        });
+        coords = coords.filter(function (str) {return str !== 'M' && str !== 'L'; });
         // Do something for internet explorer
         if (!!navigator.userAgent.match(/Trident.*rv[ :]*11\./) ||
-              window.navigator.userAgent.indexOf("MSIE ") > -1) {
-            var xStart = parseFloat(coords[0]);
-            var yStart = parseFloat(coords[1]);
-            var yEnd = parseFloat(coords.pop());
-            var xEnd = parseFloat(coords.pop());
+              window.navigator.userAgent.indexOf('MSIE ') > -1) {
+            xStart = parseFloat(coords[0]);
+            yStart = parseFloat(coords[1]);
+            yEnd = parseFloat(coords.pop());
+            xEnd = parseFloat(coords.pop());
         } else {
-            var xStart = parseFloat(coords[0].substr(1));
-            var yStart = parseFloat(coords[1]);
-            var yEnd = parseFloat(coords.pop());
-            var xEnd = parseFloat(coords.pop().substr(1));
+            xStart = parseFloat(coords[0].substr(1));
+            yStart = parseFloat(coords[1]);
+            yEnd = parseFloat(coords.pop());
+            xEnd = parseFloat(coords.pop().substr(1));
         }
 
         var startNode = '';
         var endNode = '';
 
-        $('.node, .hybrid').each(function(index) {
+        $('.node, .hybrid').each(function () {
             // Check intersection
             var r = $(this).children('rect');
             var xRect = parseFloat(r.attr('x'));
@@ -76,12 +81,12 @@ function buildGraph() {
                 endNode = $(this).attr('id');
             }
 
-            if (startNode != '' && endNode != '') {
+            if (startNode !== '' && endNode !== '') {
                 return false;
             }
         });
 
-        $('.bool').each(function(index) {
+        $('.bool').each(function () {
             // Check intersection
             var el = $(this).children('ellipse');
             var cx = parseFloat(el.attr('cx'));
@@ -97,7 +102,7 @@ function buildGraph() {
                 endNode = $(this).attr('id');
             }
 
-            if (startNode != '' && endNode != '') {
+            if (startNode !== '' && endNode !== '') {
                 return false;
             }
         });
@@ -106,15 +111,20 @@ function buildGraph() {
     });
 }
 
+
 function parseAnd(s) {
+    'use strict';
+
     var curr = s;
     var andList = [];
     while (curr.length > 0) {
-        if (curr.charAt(0) == ',' || curr.charAt(0) == ';' || curr.charAt(0) == ' ') {
+        if (curr.charAt(0) === ',' ||
+            curr.charAt(0) === ';' ||
+            curr.charAt(0) === ' ') {
             curr = curr.substr(1);
         } else {
-            result = parseOr(curr);
-            if (curr == result[1]) {
+            var result = parseOr(curr);
+            if (curr === result[1]) {
                 console.log('Parsing failed for ' + s + '  with curr = ' + curr);
                 break;
             } else {
@@ -126,50 +136,68 @@ function parseAnd(s) {
     return [andList, curr];
 }
 
+
 function parseOr(s) {
+    'use strict';
+
     var curr = s;
     var orList = [];
-    while (curr.length > 0 && curr.charAt(0) != ',' && curr.charAt(0) != ';') {
-        if (curr.charAt(0) == '(') {
-            var tmp = curr.substr(1, curr.indexOf(')'));
-            var result = parseCourse(tmp);
+    var tmp;
+    var result;
+    while (curr.length > 0 &&
+           curr.charAt(0) !== ',' &&
+           curr.charAt(0) !== ';') {
+
+        if (curr.charAt(0) === '(') {
+            tmp = curr.substr(1, curr.indexOf(')'));
+            result = parseCourse(tmp);
             orList.append(result[0]);
             curr = curr.substr(curr.indexOf(')') + 1);
-        } else if (curr.charAt(0) == ' ' || curr.charAt(0) == '/') {
+        } else if (curr.charAt(0) === ' ' ||
+                   curr.charAt(0) === '/') {
             curr = curr.substr(1);
         } else {
-            var result = parseCourse(curr);
-            if (curr == result[1]) {
+            result = parseCourse(curr);
+            if (curr === result[1]) {
                 console.log('Parsing failed for ' + s + ' with curr = ' + curr);
                 break;
-            } else {
-                curr = result[1];
-                orList.push(result[0]);
             }
+            curr = result[1];
+            orList.push(result[0]);
         }
     }
-    if (orList.length == 1) {
+
+    if (orList.length === 1) {
         orList = orList[0];
     }
+
     return [orList, curr];
 }
 
+
 function parseCourse(s) {
+    'use strict';
+
     var start = s.search(/[,/]/);
-    if (start == 3) {
+
+    if (start === 3) {
         return ['CSC' + s.substr(0, start), s.substr(start)];
     } else if (start > 0) {
         return [s.substr(0, start), s.substr(start)];
-    } else {
-        if (s.length == 3) {
-            return ['CSC' + s, ''];
-        } else {
-            return [s, ''];
-        }
     }
+
+    if (s.length === 3) {
+        return ['CSC' + s, ''];
+    }
+
+    return [s, ''];
+
 }
 
+
 function intersects(px, py, rx, ry, width, height, offset) {
+    'use strict';
+
     var dx = px - rx;
     var dy = py - ry;
     return dx >= -1 * offset && dx <= width + offset && dy >= -1 * offset && dy <= height + offset;

@@ -6,7 +6,10 @@ function createModalDiv(id) {
 
     var div = $("<div></div>");
     div.attr('id', 'modal-content-container');
-    var p = $("<p></p>").css("color", "white").html(fetchCourseDescription(id));
+
+    var courseDescription = fetchCourseDescription(id);
+    console.log(courseDescription);
+    var p = $("<p></p>").css("color", "white").html(courseDescription);
     div.append(p);
     var video = setupVideoPlayer();
     var timetable = setupTimeslot(id);
@@ -19,6 +22,7 @@ function createModalDiv(id) {
 }
 
 function setupVideoPlayer() {
+    "use strict";
 
     // Not divided up into 'attr' yet because 'controls preload' cannot be added that way...
     var videoDiv = $('<div></div>');
@@ -41,12 +45,11 @@ function setupVideoPlayer() {
 }
 
 function setupTimeslot(id) {
+    "use strict";
+
     var courseName;
     var timeslot = $('<div></div>');
     var title = $('<h3></h3>');
-    title.css('color', 'white')
-         .css('padding-bottom', '2em')
-         .html(id + ' Section Times');
     timeslot.append(title);
     timeslot.append($('#timetableMain').children('tbody').children('tr').first().clone());
 
@@ -62,6 +65,8 @@ function setupTimeslot(id) {
 }
 
 function setupRelatedLinks(id) {
+    "use strict";
+
     var relatedLinksDiv = $('<div></div>').css('display', 'inline')
                                           .css('float', 'right')
                                           .css('width', '45%')
@@ -75,7 +80,19 @@ function displayToolTip(nodeId) {
     "use strict";
 
     var rectObject = $("#" + nodeId).find("rect");
-    var xPos = rectObject.attr("x") - 65;
+
+    // The tooltip displays with a width of 222. If the node has an x position of
+    // less than 222, the tooltip will be cut off by the svg boundaries. In this case,
+    // we display the tooltip on the left.
+    var rightSide = rectObject.attr("x") > 222;
+
+    // The tooltip is offset with a 'padding' of 5.
+    if (rightSide) {
+        var xPos = parseFloat(rectObject.attr("x")) - 65;
+    } else {
+        var xPos = parseFloat(rectObject.attr("x")) + 45;
+    }
+
     var yPos = rectObject.attr("y");
     var g = createG(nodeId);
     createRect(g, "node-tooltip", nodeId + "-tooltip", xPos, yPos, 60, 30, "black");
@@ -95,6 +112,7 @@ function displayToolTip(nodeId) {
  */
 function createRect(g, rectClass, rectId, posX, posY, width, height, color) {
     "use strict";
+
     var rect = $(document.createElementNS('http://www.w3.org/2000/svg', 'rect'))
         .attr("class", rectClass + "-rect " + rectId + "-rect")
         .attr("id", rectId + "-rect")
@@ -144,32 +162,37 @@ function createText(g, nodeId, rectClass, rectId, posX, posY, width, height, col
 
 
 function createG(nodeId) {
+    "use strict";
+
     var g = $(document.createElementNS('http://www.w3.org/2000/svg', 'g'));
     g.attr('class', 'tooltip-group')
         .css("cursor", "pointer")
         .click(function () {
             if ($(".modal").length === 0) {
+                $('.infoTabs').hide();
                 var div = createModalDiv(nodeId);
                 div.attr("title", nodeId)
                     .addClass("modal").dialog({
                         autoOpen: true,
                         show: {
                             effect: "blind",
-                            duration: 1000
+                            duration: 500
                         },
                         hide: {
                             effect: "blind",
-                            duration: 1000
+                            duration: 500
                         },
                         modal: true,
                         minWidth: 1000,
                         minHeight: 600,
+                        closeText: "X",
                         close: function () {
                             $(this).remove();
                             $.each(nodes, function (index, elem) {
                                 window[elem].updateSVG();
                             });
                             $('body').css('background', 'rgb(255,255,255)');
+                            $('.infoTabs').show();
                         }});
                 $('.node, .hybrid').attr('data-active', 'unlit');
                 $('body').css('background', 'rgb(40,40,40)');
@@ -184,5 +207,6 @@ function createG(nodeId) {
 
 function enableVideoJS() {
     "use strict";
+
     videojs(document.getElementsByClassName('vjs-default-skin')[0], {}, function () {});
 }
