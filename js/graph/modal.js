@@ -174,14 +174,6 @@ function createG(nodeId) {
                 div.attr("title", nodeId)
                     .addClass("modal").dialog({
                         autoOpen: true,
-                        show: {
-                            effect: "blind",
-                            duration: 500
-                        },
-                        hide: {
-                            effect: "blind",
-                            duration: 500
-                        },
                         modal: true,
                         minWidth: 1000,
                         minHeight: 600,
