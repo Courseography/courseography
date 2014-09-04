@@ -4,21 +4,23 @@
 function createModalDiv(id) {
     "use strict";
 
-    var div = $("<div></div>");
-    div.attr('id', 'modal-content-container');
+    var contentDiv = $("<div></div>");
+    contentDiv.attr('id', 'modal-content-container');
 
     var courseDescription = fetchCourseDescription(id);
-    console.log(courseDescription);
     var p = $("<p></p>").css("color", "white").html(courseDescription);
-    div.append(p);
+    contentDiv.append(p);
+    var bottomContentDiv = $('<div></div>');
+    bottomContentDiv.attr('id', 'bottom-content-container')
     var video = setupVideoPlayer();
     var timetable = setupTimeslot(id);
     var relatedLinks = setupRelatedLinks(id);
-    div.css('overflow', 'auto');
-    div.append(timetable);
-    div.append(video);
-    div.append(relatedLinks);
-    return div;
+    contentDiv.css('overflow', 'auto');
+    contentDiv.append(timetable);
+    contentDiv.append(bottomContentDiv);
+    bottomContentDiv.append(video);
+    bottomContentDiv.append(relatedLinks);
+    return contentDiv;
 }
 
 function setupVideoPlayer() {

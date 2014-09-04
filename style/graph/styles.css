@@ -445,3 +445,6 @@ input[type=checkbox]:checked + label:before {
     padding: 20px 20px 20px 20px;
 }
 
+#bottom-content-container {
+    padding-top: 1em;
+}
