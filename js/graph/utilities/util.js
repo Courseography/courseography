@@ -122,9 +122,6 @@ function initializeGraphSettings() {
         // Check the courses with FCE reqs
         if (window[node].hybrid === false) {
             updatePOSt(node, window[node].isSelected());
-            if (window[node].status === 'active' || window[node].status === 'overridden') {
-                updateClickedCourses(node, true);
-            }
         }
     });
 
@@ -136,7 +133,6 @@ function initializeGraphSettings() {
     });
 
     updateFCECount();
-    updateMyCoursesTab();
 
     updatePostInterface();
     updateMajorPostInterface();
