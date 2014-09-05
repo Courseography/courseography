@@ -103,5 +103,3 @@ var initiallyTakeable = [
     'Calc1', 'Lin1', 'CSC200', 'CSC300',
     'CSC490', 'CSC491'
 ];
-
-var FCEPrerequisiteCourses = [CSC318, CSC454, CSC494, CSC495];
