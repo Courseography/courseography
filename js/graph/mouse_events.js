@@ -41,6 +41,7 @@ function hoverUnfocus(event) {
 
 // Activate/Deactivate node when clicked
 function turnNode(event) {
+    'use strict';
 
     if (activeFocus === '') {
         var id = event.target.parentNode.id;
