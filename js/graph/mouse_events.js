@@ -41,13 +41,12 @@ function hoverUnfocus(event) {
 
 // Activate/Deactivate node when clicked
 function turnNode(event) {
-    'use strict';
 
     if (activeFocus === '') {
         var id = event.target.parentNode.id;
         // Update this node
         window[id].turn();
-
+        updateClickedCourses(id, window[id].isSelected());
         updateFCECount();
 
         // Check the courses with FCE reqs
