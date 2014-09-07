@@ -39,8 +39,8 @@ function setupVideoPlayer(id) {
     var videoDiv = $('<div></div>');
     videoDiv.css('display', 'inline')
             .css('float', 'left')
-            .css('width', '45%');
-    var video = $('<video id="course_video" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="250"></video>');
+            .css('width', '100%');
+    var video = $('<video id="course_video" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="400"></video>');
     var src = $("<source></source>")
         .attr("src", url)
         .attr("type", "video/mp4");
