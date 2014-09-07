@@ -411,13 +411,6 @@ input[type=checkbox]:checked + label:before {
     cursor: move;
 }
 
-.ui-dialog-title {
-    background-color: white;
-    color: #374AFF;
-    padding: 2px 2px 2px 2px;
-    border: 2px solid #374AFF;
-}
-
 .ui-dialog-titlebar-close {
     float: right;
 }

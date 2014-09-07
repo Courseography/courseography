@@ -12,36 +12,37 @@ function createModalDiv(id) {
     contentDiv.append(p);
     var bottomContentDiv = $('<div></div>');
     bottomContentDiv.attr('id', 'bottom-content-container')
-    var video = setupVideoPlayer();
+    var video = setupVideoPlayer(id);
     var timetable = setupTimeslot(id);
     var relatedLinks = setupRelatedLinks(id);
     contentDiv.css('overflow', 'auto');
     contentDiv.append(timetable);
     contentDiv.append(bottomContentDiv);
-    bottomContentDiv.append(video);
+    if (video) {
+        bottomContentDiv.append(video);
+    }
     bottomContentDiv.append(relatedLinks);
     return contentDiv;
 }
 
-function setupVideoPlayer() {
+function setupVideoPlayer(id) {
     "use strict";
-
+    var url = "http://www.cs.toronto.edu/~liudavid/" + id.toLowerCase().substring(0,6) + ".mp4";
+    var videoExists;
+    var exists = urlExists(url);
+    if (!exists) {
+        return false;
+    }
     // Not divided up into 'attr' yet because 'controls preload' cannot be added that way...
     var videoDiv = $('<div></div>');
     videoDiv.css('display', 'inline')
             .css('float', 'left')
             .css('width', '45%');
     var video = $('<video id="course_video" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="250"></video>');
-    var src1 = $("<source></source>")
-        .attr("src", "http://video-js.zencoder.com/oceans-clip.webm")
-        .attr("type", "video/webm");
-    var src2 = $("<source></source>")
-        .attr("src", "http://video-js.zencoder.com/oceans-clip.ogv")
-        .attr("type", "video/ogv");
-    var src3 = $("<source></source>")
-        .attr("src", "http://video-js.zencoder.com/oceans-clip.mp4")
+    var src = $("<source></source>")
+        .attr("src", url)
         .attr("type", "video/mp4");
-    video.append(src1).append(src2).append(src3);
+    video.append(src);
     videoDiv.append(video);
     return videoDiv;
 }
@@ -77,6 +78,7 @@ function setupRelatedLinks(id) {
     relatedLinksDiv.append(title);
     return relatedLinksDiv;
 }
+
 
 function displayToolTip(nodeId) {
     "use strict";
@@ -173,8 +175,7 @@ function createG(nodeId) {
             if ($(".modal").length === 0) {
                 $('.infoTabs').hide();
                 var div = createModalDiv(nodeId);
-                div.attr("title", nodeId)
-                    .addClass("modal").dialog({
+                div.addClass("modal").dialog({
                         autoOpen: true,
                         modal: true,
                         minWidth: 1000,
@@ -200,8 +201,39 @@ function createG(nodeId) {
     return g;
 }
 
+
 function enableVideoJS() {
     "use strict";
+    if (document.getElementsByClassName('vjs-default-skin').length > 0) {
+        videojs(document.getElementsByClassName('vjs-default-skin')[0], {}, function () {});
+    }
+}
 
-    videojs(document.getElementsByClassName('vjs-default-skin')[0], {}, function () {});
+
+function getVideo(id) {
+    var lowercaseId = id.toLowerCase();
+    $.ajax({
+        url: 'res/courses/' + name + '.txt',
+        dataType: 'json',
+        async: false,
+        success: function (data) {
+        }
+    });
+}
+
+
+function urlExists(url) {
+    var exists;
+  $.ajax({
+    type: 'HEAD',
+    async: false,
+    url: url,
+    success: function(){
+      exists = true;
+    },
+    error: function() {
+      exists = false;
+    }
+  });
+  return exists;
 }
