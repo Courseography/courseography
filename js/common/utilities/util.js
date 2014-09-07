@@ -78,7 +78,7 @@ function convertTimes(times) {
     var timeList = [];
     var time;
 
-    for(var i = 0; i < times.length; i++) {
+    for (var i = 0; i < times.length; i++) {
         var timeString = 'MTWRF'.charAt(times[i][0]);
         time = times[i][1];
         timeString = timeString + time;
