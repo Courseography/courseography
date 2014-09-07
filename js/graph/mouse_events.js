@@ -30,7 +30,6 @@ function hoverFocus(event) {
 
         removeToolTips();
         displayToolTip(id);
-        fetchCourseDescription(id);
     }
 }
 

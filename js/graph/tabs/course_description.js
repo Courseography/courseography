@@ -24,6 +24,10 @@ function fetchCourseDescription(id) {
 function readCalendarEntry(name) {
     'use strict';
 
+    if (name in courseDescriptions) {
+        return courseDescriptions[name];
+    }
+
     var result = '';
     $.ajax({
         url: 'res/courses/' + name + '.txt',
@@ -46,6 +50,6 @@ function readCalendarEntry(name) {
             result += '<p><strong>Breadth Requirement:</strong> ' + data.breadth + '</p>';
         }
     });
-
+    courseDescriptions[name] = result;
     return result;
 }
