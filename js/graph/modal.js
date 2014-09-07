@@ -180,6 +180,7 @@ function createG(nodeId) {
                         minWidth: 1000,
                         minHeight: 600,
                         closeText: "X",
+                        open: function(event, ui) { $('.ui-widget-overlay').bind('click', function(){ div.dialog('close'); }); },
                         close: function () {
                             $(this).remove();
                             $.each(nodes, function (index, elem) {

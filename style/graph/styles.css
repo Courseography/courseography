@@ -430,3 +430,11 @@ input[type=checkbox]:checked + label:before {
 #bottom-content-container {
     padding-top: 1em;
 }
+
+.ui-widget-overlay {
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
