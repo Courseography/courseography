@@ -2,7 +2,7 @@
 /* global nodes */
 
 function createModalDiv(id) {
-    "use strict";
+    'use strict';
 
     var contentDiv = $("<div></div>");
     contentDiv.attr('id', 'modal-content-container');
@@ -25,8 +25,10 @@ function createModalDiv(id) {
     return contentDiv;
 }
 
+
 function setupVideoPlayer(id) {
-    "use strict";
+    'use strict';
+
     var url = "http://www.cs.toronto.edu/~liudavid/" + id.toLowerCase().substring(0,6) + ".mp4";
     var videoExists;
     var exists = urlExists(url);
@@ -47,8 +49,9 @@ function setupVideoPlayer(id) {
     return videoDiv;
 }
 
+
 function setupTimeslot(id) {
-    "use strict";
+    'use strict';
 
     var courseName;
     var timeslot = $('<div></div>');
@@ -67,8 +70,9 @@ function setupTimeslot(id) {
     return timeslot;
 }
 
+
 function setupRelatedLinks(id) {
-    "use strict";
+    'use strict';
 
     var relatedLinksDiv = $('<div></div>').css('display', 'inline')
                                           .css('float', 'right')
@@ -81,7 +85,7 @@ function setupRelatedLinks(id) {
 
 
 function displayToolTip(nodeId) {
-    "use strict";
+    'use strict';
 
     var rectObject = $("#" + nodeId).find("rect");
 
@@ -115,7 +119,7 @@ function displayToolTip(nodeId) {
  * @param color The fill and stroke color of the rect.
  */
 function createRect(g, rectClass, rectId, posX, posY, width, height, color) {
-    "use strict";
+    'use strict';
 
     var rect = $(document.createElementNS('http://www.w3.org/2000/svg', 'rect'))
         .attr("class", rectClass + "-rect " + rectId + "-rect")
@@ -153,7 +157,7 @@ function createRect(g, rectClass, rectId, posX, posY, width, height, color) {
  * @param color The fill and stroke color of the rect.
  */
 function createText(g, nodeId, rectClass, rectId, posX, posY, width, height, color) {
-    "use strict";
+    'use strict';
 
     var text = $(document.createElementNS('http://www.w3.org/2000/svg', 'text'))
         .text("Info")
@@ -166,7 +170,7 @@ function createText(g, nodeId, rectClass, rectId, posX, posY, width, height, col
 
 
 function createG(nodeId) {
-    "use strict";
+    'use strict';
 
     var g = $(document.createElementNS('http://www.w3.org/2000/svg', 'g'));
     g.attr('class', 'tooltip-group')
@@ -203,7 +207,8 @@ function createG(nodeId) {
 
 
 function enableVideoJS() {
-    "use strict";
+    'use strict';
+
     if (document.getElementsByClassName('vjs-default-skin').length > 0) {
         videojs(document.getElementsByClassName('vjs-default-skin')[0], {}, function () {});
     }
@@ -211,6 +216,8 @@ function enableVideoJS() {
 
 
 function getVideo(id) {
+    'use strict';
+
     var lowercaseId = id.toLowerCase();
     $.ajax({
         url: 'res/courses/' + name + '.txt',
@@ -223,17 +230,19 @@ function getVideo(id) {
 
 
 function urlExists(url) {
+    'use strict';
+    
     var exists;
-  $.ajax({
-    type: 'HEAD',
-    async: false,
-    url: url,
-    success: function(){
-      exists = true;
-    },
-    error: function() {
-      exists = false;
-    }
-  });
-  return exists;
+    $.ajax({
+        type: 'HEAD',
+        async: false,
+        url: url,
+        success: function (){
+            exists = true;
+        },
+        error: function () {
+            exists = false;
+        }
+    });
+    return exists;
 }
