@@ -136,7 +136,6 @@ function initializeGraphSettings() {
     });
 
     updateFCECount();
-    updateMyCoursesTab();
 
     updatePostInterface();
     updateMajorPostInterface();

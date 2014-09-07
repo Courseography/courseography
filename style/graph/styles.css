@@ -127,24 +127,6 @@ h3 {
   text-align: center;
 }
 
-/* My Courses tab */
-#courseList {
-  padding: 2em;
-}
-.courseCell {
-  display: inline-block;
-  width: 180px;
-  height: 130px;
-  padding: 0.5em 0.5em;
-  border: 1px solid black;
-  color: black;
-  text-align: center;
-}
-.courseName {
-  font-size: 1.1em;
-  font-weight: bold;
-}
-
 /* Timetable tab */
 #timetableSearch {
   text-align: center;
