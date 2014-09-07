@@ -24,32 +24,26 @@ function fetchCourseDescription(id) {
 function readCalendarEntry(name) {
     'use strict';
 
-    if (name in courseDescriptions) {
-        return courseDescriptions[name];
+    var course = new Course(name);
+    return formatCourseDescription(course);
+}
+
+function formatCourseDescription(course) {
+    var courseDescription = '<h3>' + course.name + ': ' + course.title + '</h3>';
+    courseDescription += '<p>' + course.description + '</p>';
+    
+    if (course.prereqString !== undefined && course.prereqString !== null) {
+        courseDescription += '<p><strong>Prerequisite:</strong> ' + course.prereqString + '</p>';
+    }
+    if (course.prep !== undefined && course.prep !== null) {
+        courseDescription += '<p><strong>Recommended Preparation:</strong> ' + course.prep + '</p>';
+    }
+    if (course.exclusions !== undefined && course.exclusions !== null) {
+        courseDescription += '<p><strong>Exclusions:</strong> ' + course.exclusions + '</p>';
     }
 
-    var result = '';
-    $.ajax({
-        url: 'res/courses/' + name + '.txt',
-        dataType: 'json',
-        async: false,
-        success: function (data) {
-            result += '<h3>' + data.name + ': ' + data.title + '</h3>';
-            result += '<p>' + data.description + '</p>';
-            if (data.prereqString !== undefined && data.prereqString !== null) {
-                result += '<p><strong>Prerequisite:</strong> ' + data.prereqString + '</p>';
-            }
-            if (data.prep !== undefined && data.prep !== null) {
-                result += '<p><strong>Recommended Preparation:</strong> ' + data.prep + '</p>';
-            }
-            if (data.exclusions !== undefined && data.exclusions !== null) {
-                result += '<p><strong>Exclusions:</strong> ' + data.exclusions + '</p>';
-            }
+    courseDescription += '<p><strong>Distribution Requirement Status:</strong> ' + course.distribution + '</p>';
+    courseDescription += '<p><strong>Breadth Requirement:</strong> ' + course.breadth + '</p>';
 
-            result += '<p><strong>Distribution Requirement Status:</strong> ' + data.distribution + '</p>';
-            result += '<p><strong>Breadth Requirement:</strong> ' + data.breadth + '</p>';
-        }
-    });
-    courseDescriptions[name] = result;
-    return result;
+    return courseDescription;
 }

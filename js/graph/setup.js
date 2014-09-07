@@ -54,7 +54,7 @@ var timeouts = [];
 
 var FCEPrerequisiteCourses;
 
-var courseDescriptions = {}
+var courseCache = [];
 
 $(document).ready(function () {
     'use strict';
