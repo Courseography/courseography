@@ -103,9 +103,9 @@ function displayToolTip(nodeId) {
     if (rightSide) {
         var xPos = parseFloat(rectObject.attr('x')) - 65;
     } else {
-        var xPos = parseFloat(rectObject.attr('x')) + 45;
+        var xPos = parseFloat(rectObject.attr('x')) + parseFloat($('#' + nodeId).children('rect').attr('width')) + 5;
     }
-
+    
     var yPos = rectObject.attr('y');
     var g = createG(nodeId);
     createRect(g, 'node-tooltip', nodeId + '-tooltip', xPos, yPos, 60, 30, 'black');
