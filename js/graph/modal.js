@@ -14,7 +14,6 @@ function createModalDiv(id) {
     var timetable = setupTimeslot(id);
     var relatedLinks = setupRelatedLinks(id);
 
-
     bottomContentDiv.attr('id', 'bottom-content-container');
 
     contentDiv.append(p);
@@ -27,6 +26,7 @@ function createModalDiv(id) {
     }
 
     bottomContentDiv.append(relatedLinks);
+
     return contentDiv;
 }
 
@@ -40,6 +40,7 @@ function setupVideoPlayer(id) {
     if (!exists) {
         return false;
     }
+
     // Not divided up into 'attr' yet because 'controls preload' cannot be added that way...
     var videoDiv = $('<div></div>');
     videoDiv.css('display', 'inline')
@@ -49,8 +50,10 @@ function setupVideoPlayer(id) {
     var src = $('<source></source>')
         .attr('src', url)
         .attr('type', 'video/mp4');
+
     video.append(src);
     videoDiv.append(video);
+
     return videoDiv;
 }
 
@@ -61,6 +64,7 @@ function setupTimeslot(id) {
     var courseName;
     var timeslot = $('<div></div>');
     var title = $('<h3></h3>');
+
     timeslot.append(title);
     timeslot.append($('#timetableMain').children('tbody').children('tr').first().clone());
 
@@ -70,8 +74,10 @@ function setupTimeslot(id) {
             timeslot.append($(this).clone());
         }
     });
+
     timeslot.children('.searchClass').children('td').first().remove();
     timeslot.children('tr').children('td').first().remove();
+
     return timeslot;
 }
 
@@ -105,7 +111,7 @@ function displayToolTip(nodeId) {
     } else {
         var xPos = parseFloat(rectObject.attr('x')) + parseFloat($('#' + nodeId).children('rect').attr('width')) + 5;
     }
-    
+
     var yPos = rectObject.attr('y');
     var g = createG(nodeId);
     createRect(g, 'node-tooltip', nodeId + '-tooltip', xPos, yPos, 60, 30, 'black');
@@ -143,10 +149,10 @@ function createRect(g, rectClass, rectId, posX, posY, width, height, color) {
 
     $('.tooltip-group').hover(
         function () {
-        clearAllTimeouts();
-    }, function () {
-        $('.tooltip-group').fadeOut(1000, function () {$(this).remove(); });
-    });
+            clearAllTimeouts();
+        }, function () {
+            $('.tooltip-group').fadeOut(1000, function () {$(this).remove(); });
+        });
 }
 
 
@@ -191,30 +197,30 @@ function openModal(nodeId) {
     'use strict';
 
     if ($('.modal').length === 0) {
-                $('.infoTabs').hide();
-                var div = createModalDiv(nodeId);
-                div.attr('title', getCourseTitle(nodeId))
-                   .addClass('modal').dialog({
-                        autoOpen: true,
-                        modal: true,
-                        minWidth: 1000,
-                        minHeight: 600,
-                        closeText: 'X',
-                        open: function(event, ui) { $('.ui-widget-overlay').bind('click', function(){ div.dialog('close'); }); },
-                        close: function () {
-                            $(this).remove();
-                            $.each(nodes, function (index, elem) {
-                                window[elem].updateSVG();
-                            });
-                            $('body').css('background', 'rgb(255,255,255)');
-                            $('.infoTabs').show();
-                        }});
-                $('.node, .hybrid').attr('data-active', 'unlit');
-                $('body').css('background', 'rgb(40,40,40)');
-                setMouseCallbacks();
-                enableVideoJS();
-                $('.tooltip-group').remove();
-            }
+        $('.infoTabs').hide();
+        var div = createModalDiv(nodeId);
+        div.attr('title', getCourseTitle(nodeId))
+           .addClass('modal').dialog({
+                autoOpen: true,
+                modal: true,
+                minWidth: 1000,
+                minHeight: 600,
+                closeText: 'X',
+                open: function(event, ui) { $('.ui-widget-overlay').bind('click', function(){ div.dialog('close'); }); },
+                close: function () {
+                    $(this).remove();
+                    $.each(nodes, function (index, elem) {
+                        window[elem].updateSVG();
+                    });
+                    $('body').css('background', 'rgb(255,255,255)');
+                    $('.infoTabs').show();
+                }});
+        $('.node, .hybrid').attr('data-active', 'unlit');
+        $('body').css('background', 'rgb(40,40,40)');
+        setMouseCallbacks();
+        enableVideoJS();
+        $('.tooltip-group').remove();
+    }
 }
 
 
@@ -242,5 +248,6 @@ function urlExists(url) {
             exists = false;
         }
     });
+
     return exists;
 }
