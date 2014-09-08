@@ -185,7 +185,7 @@ th.sessionHeader {
 }
 
 .ui-dialog th.sessionHeader {
-    background-color: #004AA1;
+    background-color: #222266;
 }
 
 .timetableSection {
@@ -405,10 +405,14 @@ input[type=checkbox]:checked + label:before {
 }
 
 .ui-dialog-titlebar {
-    background-color: #004AA1;
+    background-color: #222266;
     color: white;
     font-size: 200%;
     cursor: move;
+    text-align: center;
+}
+
+.ui-dialog-title {
 }
 
 .ui-dialog-titlebar-close {
