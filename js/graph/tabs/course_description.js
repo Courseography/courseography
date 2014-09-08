@@ -5,13 +5,12 @@ function fetchCourseDescription(id) {
     var result = '';
     var names = formatCourseName(id);
     $.each(names, function (i, name) {
-        console.log(name);
         result += readCalendarEntry(name);
-        console.log(result);
     });
 
     return result;
 }
+
 
 function formatCourseName(id) {
     'use strict';
@@ -44,11 +43,12 @@ function readCalendarEntry(name) {
     return formatCourseDescription(course);
 }
 
+
 function formatCourseDescription(course) {
     'use strict';
 
     var courseDescription = '<p>' + course.description + '</p>';
-    
+
     if (course.prereqString !== undefined && course.prereqString !== null) {
         courseDescription += '<p><strong>Prerequisite:</strong> ' + course.prereqString + '</p>';
     }
@@ -64,6 +64,7 @@ function formatCourseDescription(course) {
 
     return courseDescription;
 }
+
 
 function getCourseTitle(id) {
     'use strict';

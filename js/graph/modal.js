@@ -183,6 +183,8 @@ function createG(nodeId) {
 }
 
 function openModal(nodeId) {
+    'use strict';
+    
     if ($(".modal").length === 0) {
                 $('.infoTabs').hide();
                 var div = createModalDiv(nodeId);
