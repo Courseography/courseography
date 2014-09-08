@@ -176,10 +176,18 @@ function createG(nodeId) {
     g.attr('class', 'tooltip-group')
         .css("cursor", "pointer")
         .click(function () {
-            if ($(".modal").length === 0) {
+            openModal(nodeId);
+        });
+    $('#graphRootSVG').append(g);
+    return g;
+}
+
+function openModal(nodeId) {
+    if ($(".modal").length === 0) {
                 $('.infoTabs').hide();
                 var div = createModalDiv(nodeId);
-                div.addClass("modal").dialog({
+                div.attr('title', getCourseTitle(nodeId))
+                   .addClass("modal").dialog({
                         autoOpen: true,
                         modal: true,
                         minWidth: 1000,
@@ -200,9 +208,6 @@ function createG(nodeId) {
                 enableVideoJS();
                 $('.tooltip-group').remove();
             }
-        });
-    $('#graphRootSVG').append(g);
-    return g;
 }
 
 

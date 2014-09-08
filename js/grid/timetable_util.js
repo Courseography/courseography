@@ -164,22 +164,6 @@ function saveCookies(courses, sections) {
 }
 
 
-// Used to determine if course requires manual practical enrolment
-function hasManualPractical(section) {
-    'use strict';
-
-    return (section[0].charAt(0) === 'P');
-}
-
-
-// Used to determine if course requires manual tutorial enrolment
-function hasManualTutorial(section) {
-    'use strict';
-
-    return (section[0].charAt(0) === 'T');
-}
-
-
 function addCourseToList(name) {
     'use strict';
 
