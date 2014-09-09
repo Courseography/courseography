@@ -1,3 +1,10 @@
+/**
+ * Represents an edge in the graph.
+ * @param parent The parent Node that this Edge points from.
+ * @param child The child Node that this Edge points to.
+ * @param name The id of the SVG path element that this Edge represents.
+ * @constructor
+ */
 function Edge(parent, child, name) {
     'use strict';
 
@@ -8,6 +15,9 @@ function Edge(parent, child, name) {
 }
 
 
+/**
+ * Updates this Edge's status.
+ */
 Edge.prototype.updateStatus = function () {
     'use strict';
 
@@ -22,6 +32,9 @@ Edge.prototype.updateStatus = function () {
 };
 
 
+/**
+ * Updates the corresponding SVG path element.
+ */
 Edge.prototype.updateSVG = function () {
     'use strict';
 
