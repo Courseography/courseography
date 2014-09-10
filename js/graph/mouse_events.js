@@ -41,17 +41,12 @@ function hoverUnfocus(event) {
     if ($(".modal").length === 0) {
         var id = event.target.parentNode.id;
         window[id].unfocus();
-    }
 
-    var timeout = setTimeout(function () {
-        $("." + id + "-tooltip-rect").hide('slow', function () {
-            $(this).remove();
-        });
-        $("." + id + "-tooltip-text").hide('slow', function () {
-            $(this).remove();
-        });
-    }, 500);
-    timeouts.push(timeout);
+        var timeout = setTimeout(function () {
+            $('.tooltip-group').hide('slow', function () { $(this).remove();});
+        }, 100);
+        timeouts.push(timeout);
+    }
 }
 
 
@@ -59,7 +54,7 @@ function hoverUnfocus(event) {
 function turnNode(event) {
     'use strict';
 
-    if (activeFocus === '' && $(".modal").length === 0) {
+    if (activeFocus === '' && $('.modal').length === 0) {
         var id = event.target.parentNode.id;
         // Update this node
         window[id].turn();

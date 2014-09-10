@@ -6,18 +6,17 @@ function createModalDiv(id) {
 
     var contentDiv = $('<div></div>');
     contentDiv.attr('id', 'modal-content-container');
+    contentDiv.css('overflow', 'auto');
 
     var courseDescription = fetchCourseDescription(id);
     var p = $('<p></p>').css('color', 'white').html(courseDescription);
     var bottomContentDiv = $('<div></div>');
+    bottomContentDiv.attr('id', 'bottom-content-container');
     var video = setupVideoPlayer(id);
     var timetable = setupTimeslot(id);
     var relatedLinks = setupRelatedLinks(id);
 
-    bottomContentDiv.attr('id', 'bottom-content-container');
-
     contentDiv.append(p);
-    contentDiv.css('overflow', 'auto');
     contentDiv.append(timetable);
     contentDiv.append(bottomContentDiv);
 
@@ -47,9 +46,8 @@ function setupVideoPlayer(id) {
             .css('float', 'left')
             .css('width', '100%');
     var video = $('<video id="course_video" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="400"></video>');
-    var src = $('<source></source>')
-        .attr('src', url)
-        .attr('type', 'video/mp4');
+    var src = $('<source></source>').attr('src', url)
+                                    .attr('type', 'video/mp4');
 
     video.append(src);
     videoDiv.append(video);
@@ -75,9 +73,10 @@ function setupTimeslot(id) {
         }
     });
 
+    timeslot.attr('style', 'width: 920px; margin: 0 auto;');
+
     timeslot.children('.searchClass').children('td').first().remove();
     timeslot.children('tr').children('td').first().remove();
-
     return timeslot;
 }
 
@@ -150,8 +149,9 @@ function createRect(g, rectClass, rectId, posX, posY, width, height, color) {
     $('.tooltip-group').hover(
         function () {
             clearAllTimeouts();
-        }, function () {
-            $('.tooltip-group').fadeOut(1000, function () {$(this).remove(); });
+        },
+        function () {
+            $('.tooltip-group').fadeOut(400, function () {$(this).remove(); });
         });
 }
 
@@ -192,6 +192,7 @@ function createG(nodeId) {
     $('#graphRootSVG').append(g);
     return g;
 }
+
 
 function openModal(nodeId) {
     'use strict';

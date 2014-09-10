@@ -216,9 +216,7 @@ td.timetableWait, th.timetableWait {
   text-align: center;
 }
 
-.FOffering,
 .FOffering table,
-.SOffering,
 .SOffering table,
 .FallOffering,
 .FallOffering table,
@@ -229,6 +227,13 @@ td.timetableWait, th.timetableWait {
   padding: 0;
   border: none;
 }
+
+.FOffering,
+.SOffering {
+  width: 460px;
+}
+
+
 .YOffering {
   width: 100%;
 }
@@ -416,7 +421,7 @@ input[type=checkbox]:checked + label:before {
 }
 
 .ui-dialog-titlebar-close {
-    float: right;
+    display: none;
 }
 
 .modal {
@@ -435,3 +440,15 @@ input[type=checkbox]:checked + label:before {
     top: 0;
     width: 100%;
 }
+
+
+.ui-dialog .FOffering,
+.ui-dialog .SOffering {
+  border: none;
+}
+
+.ui-dialog tr {
+  margin-left: auto;
+  margin-right: auto;
+}
+
