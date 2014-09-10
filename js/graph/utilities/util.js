@@ -214,3 +214,21 @@ $(window).resize(function() {
     var w = $('.infoTabs').width() - $('.tabList').outerWidth() - 1;
     $('#FCECountDiv').width(w + 'px');
 });
+
+
+function removeToolTips() {
+    'use strict';
+
+    $('.tooltip-group').remove();
+}
+
+
+function clearAllTimeouts() {
+    'use strict';
+
+    for(var i = 0; i < timeouts.length; i++) {
+        clearTimeout(timeouts[i]);
+    }
+
+    timeouts = [];
+}

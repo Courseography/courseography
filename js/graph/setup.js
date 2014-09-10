@@ -50,7 +50,11 @@ var extraMinor = 0;
 
 var activeFocus = '';
 
+var timeouts = [];
+
 var FCEPrerequisiteCourses;
+
+var courseCache = [];
 
 $(document).ready(function () {
     'use strict';

@@ -11,6 +11,7 @@
   <link href='http://fonts.googleapis.com/css?family=Bitter:400,400italic' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="style/graph/styles.css"/>
   <link rel="stylesheet" href="style/graph/graph_styles.css"/>
+  <link rel="stylesheet" href="res/video-js/video-js.css">
 </head>
 
 <body>
@@ -23,7 +24,7 @@
       </defs>
 
       <!-- Nodes -->
-      <g>
+      <g id="nodes">
         <g id="CSC438" class="node" data-group="theory">
           <rect x="545.5955" y="290.6064" width="40" rx="4" ry="4" height="32"/>
           <text x="565.5955" y="312.8916">438</text>
@@ -510,7 +511,6 @@
     <div class="tabListDiv">
       <ul class="tabList">
         <li><a href="#welcome">Welcome!</a></li>
-        <li><a href="#courseDescriptions">Course Descriptions</a></li>
         <li><a href="#focuses">Focuses</a></li>
         <li><a href="#timetable">Timetable</a></li>
         <li><a href="#post">Check My POSt!</a></li>
@@ -549,12 +549,6 @@
         (e.g., resolution) will be rather helpful. Thanks!
       </p>
       </div>
-    </div>
-
-
-    <!-- Course Description Tab -->
-    <div id="courseDescriptions" class="infoTab">
-      <div id="calendar" class="infoTabContent"><h3>Hover over a course!</h3></div>
     </div>
 
 
@@ -1263,19 +1257,27 @@
   <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
   <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 
+  <script src="js/graph/modal.js"></script>
+
   <script src="js/graph/objects/edge.js"></script>
   <script src="js/graph/objects/node.js"></script>
+
+  <script src="js/common/objects/course.js"></script>
+
 
   <script src="js/common/cookieHandler.js"></script>
 
   <script src='js/graph/tabs/setup_tabs.js'></script>
-  <script src='js/graph/tabs/course_description.js'></script>
+  <script src='js/graph/utilities/course_description.js'></script>
   <script src='js/graph/tabs/feedback_form.js'></script>
   <script src='js/graph/tabs/focuses.js'></script>
   <script src='js/graph/tabs/post.js'></script>
   <script src='js/graph/tabs/timetable.js'></script>
   <script src='js/graph/tabs/fce_count.js'></script>
 
+
+  <script src="js/common/objects/section.js"></script>
+  <script src="js/common/utilities/util.js"></script>
 
   <script src='js/graph/utilities/structs.js'></script>
   <script src='js/graph/utilities/util.js'></script>
@@ -1292,6 +1294,10 @@
     })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
     ga('create', 'UA-52400540-1', 'auto');
     ga('send', 'pageview');
+  </script>
+  <script src="res/video-js/video.js"></script>
+  <script>
+      videojs.options.flash.swf = "video-js/video-js.swf"
   </script>
 </body>
 </html>

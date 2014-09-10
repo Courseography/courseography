@@ -23,11 +23,14 @@ function setMouseCallbacks() {
 function hoverFocus(event) {
     'use strict';
 
-    var id = event.target.parentNode.id;
-    // Highlight missing prerequisites
-    window[id].focus();
-    // Fetch course description
-    fetchCourseDescription(id);
+    if ($(".modal").length === 0 && activeFocus === '') {
+        var id = event.target.parentNode.id;
+        // Highlight missing prerequisites
+        window[id].focus();
+
+        removeToolTips();
+        displayToolTip(id);
+    }
 }
 
 
@@ -35,15 +38,23 @@ function hoverFocus(event) {
 function hoverUnfocus(event) {
     'use strict';
 
-    var id = event.target.parentNode.id;
-    window[id].unfocus();
+    if ($(".modal").length === 0) {
+        var id = event.target.parentNode.id;
+        window[id].unfocus();
+
+        var timeout = setTimeout(function () {
+            $('.tooltip-group').hide('slow', function () { $(this).remove();});
+        }, 100);
+        timeouts.push(timeout);
+    }
 }
+
 
 // Activate/Deactivate node when clicked
 function turnNode(event) {
     'use strict';
 
-    if (activeFocus === '') {
+    if (activeFocus === '' && $('.modal').length === 0) {
         var id = event.target.parentNode.id;
         // Update this node
         window[id].turn();
@@ -51,9 +62,10 @@ function turnNode(event) {
         updateFCECount();
 
         // Check the courses with FCE reqs
-        $.each(FCEPrerequisiteCourses, function (i, course) {
-            course.updateStatus();
-        });
+        CSC318.updateStatus();
+        CSC454.updateStatus();
+        CSC494.updateStatus();
+        CSC495.updateStatus();
 
         updatePOSt(id, window[id].isSelected());
         updatePostInterface();
