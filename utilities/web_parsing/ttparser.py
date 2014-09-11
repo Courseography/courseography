@@ -122,6 +122,8 @@ class TimetableParser:
                               'prereqs',
                               'prereqString']:
                     course[field] = old.get(field)
+        except IOError:
+            pass
         except FileNotFoundError:
             pass
         with open(TimetableParser.COURSES_PATH + code + '.txt', 'w+') as output:
@@ -171,7 +173,9 @@ class TimetableParser:
                 lecture['time_str'] += ', ' + time
             else:
                 lecture['time_str'] = time
-            lecture['instructor'] = lecture['instructor'] if lecture['instructor'] else data[self.instructor]
+            if not lecture['instructor'] or lecture['instructor'].upper() == 'TBA':
+                lecture['instructor'] = data[self.instructor]
+            #lecture['instructor'] = lecture['instructor'] if lecture['instructor'] else data[self.instructor]
             if self.cap >= 0:
                 lecture['cap'] += int(data[self.cap]) if data[self.cap] else 0
         elif self.is_tutorial(data):

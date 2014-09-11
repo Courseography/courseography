@@ -27,6 +27,8 @@ def downloadTimetables():
 
   with open(timetablePath, 'w+', encoding='utf8', newline='') as csvfile:
     for li in fasSoup.find_all('li'):
+      if li.a['href'] == 'csc.html':
+        continue
       # Hack for ENG
       if li.a['href'] == 'http://www.english.utoronto.ca/undergrad/2014-15_Timetable.htm':
         html = fasTimetableDir + 'eng.html'
