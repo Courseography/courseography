@@ -1,5 +1,5 @@
 /**
- *
+ * Sets all mouse callbacks.
  */
 function setMouseCallbacks() {
     'use strict';
@@ -21,11 +21,9 @@ function setMouseCallbacks() {
 }
 
 
-// Activates missing prerequisite display and
-// fetches course description on hover
 /**
- *
- * @param event
+ * Performs hover function for a Node.
+ * @param {object} event The hover event.
  */
 function hoverFocus(event) {
     'use strict';
@@ -41,10 +39,9 @@ function hoverFocus(event) {
 }
 
 
-// Deactivate missing prerequisites
 /**
- *
- * @param event
+ * Performs the mouse out function for a Node.
+ * @param {object} event The mouse out event.
  */
 function hoverUnfocus(event) {
     'use strict';
@@ -61,10 +58,9 @@ function hoverUnfocus(event) {
 }
 
 
-// Activate/Deactivate node when clicked
 /**
- *
- * @param event
+ * Activates/Deactivates a clicked Node.
+ * @param {object} event The click event.
  */
 function turnNode(event) {
     'use strict';
