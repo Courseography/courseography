@@ -1,6 +1,6 @@
 /**
- *
- * @param {string} sectionId
+ * Updates selectedLectures with sectionId.
+ * @param {string} sectionId The ID of the lecture section being updated.
  */
 function updateSelectedLectures(sectionId) {
     'use strict';
@@ -12,8 +12,8 @@ function updateSelectedLectures(sectionId) {
 
 
 /**
- *
- * @returns {*}
+ * Returns all course codes.
+ * @returns {Array} All course codes.
  */
 function getVeryLargeCourseArray() {
     'use strict';
@@ -36,7 +36,7 @@ function getVeryLargeCourseArray() {
 
 
 /**
- *
+ * Enables course search functionality.
  */
 function enableSearch() {
     'use strict';
@@ -48,7 +48,8 @@ function enableSearch() {
 
 
 /**
- *
+ * Resets the course search list.
+ * TODO: Function is a bit lengthy and convoluted
  */
 function resetSearchList() {
     'use strict';
@@ -97,9 +98,8 @@ function resetSearchList() {
 }
 
 
-// Highlight starred (selected) courses in search list
 /**
- *
+ * Highlights the starred (selected) courses in the course search list.
  */
 function refreshStarredCourses() {
     'use strict';
@@ -116,8 +116,10 @@ function refreshStarredCourses() {
 
 
 /* Cookie Interaction */
+
+
 /**
- *
+ * Restores selected courses and sections from a previous session.
  */
 function restoreFromCookies() {
     'use strict';
@@ -156,6 +158,7 @@ function restoreFromCookies() {
                 newSections.push(section);
             } catch (e) {
                 console.log('Removed bad section from cookie: ' + section);
+                console.log(e);
             }
 
         });
@@ -166,9 +169,9 @@ function restoreFromCookies() {
 
 
 /**
- *
- * @param {Array} courses
- * @param {Array} sections
+ * Stores courses and sections in cookies.
+ * @param {Array} courses All selected courses.
+ * @param {Array} sections All selected sections.
  */
 function saveCookies(courses, sections) {
     'use strict';
@@ -188,8 +191,10 @@ function saveCookies(courses, sections) {
 
 
 /**
- *
- * @param {string} name
+ * Selects a course.
+ * TODO: Bad function name
+ * TODO: Bad param name
+ * @param {string} name The course code.
  */
 function addCourseToList(name) {
     'use strict';
@@ -203,8 +208,10 @@ function addCourseToList(name) {
 
 
 /**
- *
- * @param {string} name
+ * Deselects a course.
+ * TODO: Bad function name
+ * TODO: Bad param name
+ * @param {string} name The course code.
  */
 function removeCourseFromList(name) {
     'use strict';
@@ -228,9 +235,12 @@ function removeCourseFromList(name) {
 
 
 /* Info box */
+
+
 /**
- *
- * @param {Course} course
+ * Displays course's title.
+ * TODO: Bad function name
+ * @param {Course} course The course.
  */
 function renderDisplayCourseTitle(course) {
     'use strict';
@@ -243,8 +253,8 @@ function renderDisplayCourseTitle(course) {
 
 
 /**
- *
- * @param {Course} course
+ * Displays course's information.
+ * @param {Course} course The course.
  */
 function renderDisplayCourseInformation(course) {
     'use strict';
@@ -255,8 +265,8 @@ function renderDisplayCourseInformation(course) {
 
 
 /**
- *
- * @param {Section} section
+ * Displays section's information.
+ * @param {Section} section The section.
  */
 function renderDisplaySectionInformation(section) {
     'use strict';
@@ -278,7 +288,7 @@ function renderDisplaySectionInformation(section) {
 
 
 /**
- *
+ * Clears displayed course information.
  */
 function renderClearCourseInformation() {
     'use strict';
