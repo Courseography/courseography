@@ -1,4 +1,7 @@
 /* Hover functions */
+/**
+ *
+ */
 function setTdHover() {
     'use strict';
 
@@ -31,6 +34,11 @@ function setTdHover() {
 
 
 /* Conflicts */
+/**
+ *
+ * @param time
+ * @param conflicts
+ */
 function renderConflicts(time, conflicts) {
     'use strict';
 
@@ -46,6 +54,10 @@ function renderConflicts(time, conflicts) {
 }
 
 
+/**
+ *
+ * @returns {boolean}
+ */
 function getInConflict() {
     'use strict';
 
@@ -53,6 +65,9 @@ function getInConflict() {
 }
 
 
+/**
+ *
+ */
 function alertUserOfConflict() {
     'use strict';
 
@@ -63,6 +78,10 @@ function alertUserOfConflict() {
 
 
 /* Functions to manipulate grid DOM */
+/**
+ *
+ * @param time
+ */
 function renderClearTime(time) {
     'use strict';
 
@@ -75,6 +94,10 @@ function renderClearTime(time) {
 }
 
 
+/**
+ *
+ * @param time
+ */
 function renderClearHover(time) {
     'use strict';
 
@@ -85,6 +108,11 @@ function renderClearHover(time) {
 }
 
 
+/**
+ *
+ * @param time
+ * @param section
+ */
 function renderAddHover(time, section) {
     'use strict';
 

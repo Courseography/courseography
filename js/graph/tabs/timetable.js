@@ -1,4 +1,6 @@
-// Fetch timetable information
+/**
+ *
+ */
 function createTimetable() {
     'use strict';
 
@@ -9,6 +11,9 @@ function createTimetable() {
 
 
 // Search function for timetable
+/**
+ *
+ */
 function createTimetableSearch() {
     'use strict';
 

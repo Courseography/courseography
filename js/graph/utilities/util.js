@@ -1,4 +1,6 @@
-// Draggable function for map
+/**
+ *
+ */
 function enableGraphDragging() {
     /* Extending the jQuery draggable option to be fitted with right click for either graph or graphRootSVG.
      This also disables the context menu for graphRootSVG, but not for the tab.*/
@@ -70,7 +72,11 @@ function enableGraphDragging() {
 }
 
 
-// Disables Tab key
+/**
+ * Disables Tab key
+ * @param e
+ * @returns {boolean}
+ */
 document.onkeydown = function (e) {
     'use strict';
 
@@ -80,7 +86,10 @@ document.onkeydown = function (e) {
 };
 
 
-// Initializes interface to cookie settings; blank interface if no cookies exist
+/**
+ * Initializes interface to cookie settings; blank interface if no cookies exist
+ * TODO: Function too long
+ */
 function initializeGraphSettings() {
     'use strict';
 
@@ -155,7 +164,9 @@ function initializeGraphSettings() {
 }
 
 
-// Resets interface to default (nothing selected); callback for Reset button
+/**
+ * Resets interface to default (nothing selected); callback for Reset button.
+ */
 function reset() {
     'use strict';
 
@@ -207,6 +218,9 @@ function reset() {
 }
 
 
+/**
+ *
+ */
 $(window).resize(function() {
     'use strict';
 
@@ -216,6 +230,9 @@ $(window).resize(function() {
 });
 
 
+/**
+ *
+ */
 function removeToolTips() {
     'use strict';
 
@@ -223,6 +240,9 @@ function removeToolTips() {
 }
 
 
+/**
+ *
+ */
 function clearAllTimeouts() {
     'use strict';
 

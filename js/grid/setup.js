@@ -6,6 +6,9 @@ var selectedLectures = [];
 var courseObjects = [];
 
 
+/**
+ *
+ */
 $(document).ready(function () {
     'use strict';
 
@@ -27,6 +30,9 @@ $(document).ready(function () {
 });
 
 
+/**
+ *
+ */
 function renderClearAllButton() {
     'use strict';
 

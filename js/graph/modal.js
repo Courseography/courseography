@@ -1,6 +1,11 @@
 /* global $ */
 /* global nodes */
 
+/**
+ *
+ * @param id
+ * @returns {*|jQuery|HTMLElement}
+ */
 function createModalDiv(id) {
     'use strict';
 
@@ -30,6 +35,11 @@ function createModalDiv(id) {
 }
 
 
+/**
+ *
+ * @param id
+ * @returns {*}
+ */
 function setupVideoPlayer(id) {
     'use strict';
 
@@ -56,6 +66,11 @@ function setupVideoPlayer(id) {
 }
 
 
+/**
+ *
+ * @param id
+ * @returns {*|jQuery|HTMLElement}
+ */
 function setupTimeslot(id) {
     'use strict';
 
@@ -81,6 +96,11 @@ function setupTimeslot(id) {
 }
 
 
+/**
+ *
+ * @param id
+ * @returns {*|jQuery}
+ */
 function setupRelatedLinks(id) {
     'use strict';
 
@@ -94,6 +114,10 @@ function setupRelatedLinks(id) {
 }
 
 
+/**
+ *
+ * @param nodeId
+ */
 function displayToolTip(nodeId) {
     'use strict';
 
@@ -180,6 +204,11 @@ function createText(g, nodeId, rectClass, rectId, posX, posY, width, height, col
 }
 
 
+/**
+ *
+ * @param nodeId
+ * @returns {*|jQuery|HTMLElement}
+ */
 function createG(nodeId) {
     'use strict';
 
@@ -194,6 +223,10 @@ function createG(nodeId) {
 }
 
 
+/**
+ *
+ * @param nodeId
+ */
 function openModal(nodeId) {
     'use strict';
 
@@ -225,6 +258,9 @@ function openModal(nodeId) {
 }
 
 
+/**
+ *
+ */
 function enableVideoJS() {
     'use strict';
 
@@ -234,6 +270,11 @@ function enableVideoJS() {
 }
 
 
+/**
+ *
+ * @param url
+ * @returns {*}
+ */
 function urlExists(url) {
     'use strict';
 

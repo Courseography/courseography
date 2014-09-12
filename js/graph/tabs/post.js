@@ -1,6 +1,6 @@
 /* global $ */
 /**
- * Javascript functions for 'Check My POSt!' tab.
+ *
  */
 function updatePOSt(course, active) {
     'use strict';
@@ -55,6 +55,9 @@ function updatePOSt(course, active) {
 }
 
 
+/**
+ *
+ */
 function updatePostInterface() {
     'use strict';
 
@@ -70,6 +73,9 @@ function updatePostInterface() {
 }
 
 
+/**
+ *
+ */
 function updateMajorPostInterface() {
     'use strict';
 
@@ -84,6 +90,9 @@ function updateMajorPostInterface() {
 }
 
 
+/**
+ *
+ */
 function updateMinorPostInterface() {
     'use strict';
 
@@ -95,6 +104,11 @@ function updateMinorPostInterface() {
 }
 
 
+/**
+ *
+ * @param id
+ * @param sat
+ */
 function setIcon(id, sat) {
     'use strict';
 
@@ -106,6 +120,9 @@ function setIcon(id, sat) {
 }
 
 
+/**
+ *
+ */
 function updateCSCReqs() {
     'use strict';
 
@@ -116,6 +133,9 @@ function updateCSCReqs() {
 }
 
 
+/**
+ *
+ */
 function updateCSCReqsMajor() {
     'use strict';
 
@@ -126,6 +146,9 @@ function updateCSCReqsMajor() {
 }
 
 
+/**
+ *
+ */
 function updateCSCReqsMinor() {
     'use strict';
 
@@ -141,6 +164,9 @@ function updateCSCReqsMinor() {
 }
 
 
+/**
+ *
+ */
 function updateMATReqs() {
     'use strict';
 
@@ -154,6 +180,9 @@ function updateMATReqs() {
 }
 
 
+/**
+ *
+ */
 function updateMATReqsMajor() {
     'use strict';
 
@@ -167,6 +196,9 @@ function updateMATReqsMajor() {
 }
 
 
+/**
+ *
+ */
 function updateAllElecsMinor() {
     'use strict';
 
@@ -226,6 +258,9 @@ function updateAllElecsMinor() {
 }
 
 
+/**
+ *
+ */
 function updateElecsMinor() {
     'use strict';
 
@@ -243,6 +278,9 @@ function updateElecsMinor() {
 }
 
 
+/**
+ *
+ */
 function update200sElecsMajor() {
     'use strict';
 
@@ -266,6 +304,9 @@ function update200sElecsMajor() {
 }
 
 
+/**
+ *
+ */
 function update300sElecsMajor() {
     'use strict';
 
@@ -309,6 +350,9 @@ function update300sElecsMajor() {
 }
 
 
+/**
+ *
+ */
 function updateElecsMajor() {
     'use strict';
 
@@ -334,6 +378,9 @@ function updateElecsMajor() {
 }
 
 
+/**
+ *
+ */
 function updateCSC400s() {
     'use strict';
 
@@ -361,6 +408,9 @@ function updateCSC400s() {
 
 
 // Right now, it must be called after updateCSC400s (because of numBCB)
+/**
+ *
+ */
 function updateElecs() {
     'use strict';
 
@@ -407,6 +457,9 @@ function updateElecs() {
 }
 
 
+/**
+ *
+ */
 function updatePEYMajor() {
     'use strict';
 
@@ -416,6 +469,9 @@ function updatePEYMajor() {
 }
 
 
+/**
+ *
+ */
 function updatePEY() {
     'use strict';
 
@@ -425,6 +481,9 @@ function updatePEY() {
 }
 
 
+/**
+ *
+ */
 function updatePOStTotal() {
     'use strict';
 
@@ -432,6 +491,9 @@ function updatePOStTotal() {
 }
 
 
+/**
+ *
+ */
 function updatePOStTotalMajor() {
     'use strict';
 
@@ -439,6 +501,9 @@ function updatePOStTotalMajor() {
 }
 
 
+/**
+ *
+ */
 function updatePostMinor() {
     'use strict';
 

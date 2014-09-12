@@ -1,6 +1,8 @@
-// Globals
+// All Global Variables
 var timetable = 'res/timetable.html';
+
 var clickedCourses = [];
+
 var FCEs = 0;
 var FCEs100 = 0;
 var FCEs200 = 0;
@@ -48,13 +50,10 @@ var postTotalMinor = 0;
 var extraMajor = 0;
 var extraMinor = 0;
 
-var activeFocus = '';
-
-var timeouts = [];
-
-var FCEPrerequisiteCourses;
-
-var courseCache = [];
+var activeFocus = ''; // The active focus from the 'Focuses' tab.
+var timeouts = []; // All timeouts. Used to remove timeouts later on
+var FCEPrerequisiteCourses; // Courses that have FCE based prerequisites, initialised at runtime
+var courseCache = []; // Cached Courses. Courses are cached to minimise AJAX rezuests
 
 $(document).ready(function () {
     'use strict';

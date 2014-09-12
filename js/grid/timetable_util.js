@@ -1,3 +1,7 @@
+/**
+ *
+ * @param sectionId
+ */
 function updateSelectedLectures(sectionId) {
     'use strict';
 
@@ -7,7 +11,10 @@ function updateSelectedLectures(sectionId) {
 }
 
 
-/* AJAX Functions */
+/**
+ *
+ * @returns {undefined}
+ */
 function getVeryLargeCourseArray() {
     'use strict';
 
@@ -28,7 +35,9 @@ function getVeryLargeCourseArray() {
 }
 
 
-/* Timetable Search List */
+/**
+ *
+ */
 function enableSearch() {
     'use strict';
 
@@ -38,6 +47,9 @@ function enableSearch() {
 }
 
 
+/**
+ *
+ */
 function resetSearchList() {
     'use strict';
 
@@ -86,6 +98,9 @@ function resetSearchList() {
 
 
 // Highlight starred (selected) courses in search list
+/**
+ *
+ */
 function refreshStarredCourses() {
     'use strict';
 
@@ -101,6 +116,9 @@ function refreshStarredCourses() {
 
 
 /* Cookie Interaction */
+/**
+ *
+ */
 function restoreFromCookies() {
     'use strict';
 
@@ -147,6 +165,11 @@ function restoreFromCookies() {
 }
 
 
+/**
+ *
+ * @param courses
+ * @param sections
+ */
 function saveCookies(courses, sections) {
     'use strict';
 
@@ -164,6 +187,10 @@ function saveCookies(courses, sections) {
 }
 
 
+/**
+ *
+ * @param name
+ */
 function addCourseToList(name) {
     'use strict';
 
@@ -175,6 +202,10 @@ function addCourseToList(name) {
 }
 
 
+/**
+ *
+ * @param name
+ */
 function removeCourseFromList(name) {
     'use strict';
 
@@ -197,6 +228,10 @@ function removeCourseFromList(name) {
 
 
 /* Info box */
+/**
+ *
+ * @param course
+ */
 function renderDisplayCourseTitle(course) {
     'use strict';
 
@@ -207,6 +242,10 @@ function renderDisplayCourseTitle(course) {
 }
 
 
+/**
+ *
+ * @param course
+ */
 function renderDisplayCourseInformation(course) {
     'use strict';
 
@@ -215,6 +254,10 @@ function renderDisplayCourseInformation(course) {
 }
 
 
+/**
+ *
+ * @param section
+ */
 function renderDisplaySectionInformation(section) {
     'use strict';
 
@@ -234,6 +277,9 @@ function renderDisplaySectionInformation(section) {
 }
 
 
+/**
+ *
+ */
 function renderClearCourseInformation() {
     'use strict';
 

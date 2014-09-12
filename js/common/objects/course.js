@@ -1,5 +1,10 @@
 /* Course class */
 
+/**
+ *
+ * @param name
+ * @constructor
+ */
 function Course(name) {
     'use strict';
 
@@ -46,6 +51,10 @@ function Course(name) {
 
 
 /* Section initialization */
+/**
+ *
+ * @param course
+ */
 Course.prototype.parseSessions = function (course) {
     'use strict';
 
@@ -60,6 +69,12 @@ Course.prototype.parseSessions = function (course) {
 };
 
 
+/**
+ *
+ * @param session
+ * @param timeSuffix
+ * @returns {Array|string}
+ */
 Course.prototype.parseSections = function (session, timeSuffix) {
     'use strict';
 
@@ -68,6 +83,12 @@ Course.prototype.parseSections = function (session, timeSuffix) {
 };
 
 
+/**
+ *
+ * @param session
+ * @param timeSuffix
+ * @returns {Array}
+ */
 Course.prototype.parseLectures = function (session, timeSuffix) {
     'use strict';
 
@@ -101,6 +122,12 @@ Course.prototype.parseLectures = function (session, timeSuffix) {
 };
 
 
+/**
+ *
+ * @param session
+ * @param timeSuffix
+ * @returns {Array}
+ */
 Course.prototype.parseTutorials = function (session, timeSuffix) {
     'use strict';
 
@@ -131,6 +158,10 @@ Course.prototype.parseTutorials = function (session, timeSuffix) {
 
 
 /* Manipulate course sections */
+/**
+ *
+ * @param section
+ */
 Course.prototype.activateSection = function (section) {
     'use strict';
 
@@ -147,6 +178,10 @@ Course.prototype.activateSection = function (section) {
 };
 
 
+/**
+ *
+ * @param section
+ */
 Course.prototype.addSection = function (section) {
     'use strict';
 
@@ -159,6 +194,10 @@ Course.prototype.addSection = function (section) {
 };
 
 
+/**
+ *
+ * @param section
+ */
 Course.prototype.selectTimes = function (section) {
     'use strict';
 
@@ -172,6 +211,10 @@ Course.prototype.selectTimes = function (section) {
 };
 
 
+/**
+ *
+ * @param section
+ */
 Course.prototype.removeSection = function (section) {
     'use strict';
 
@@ -182,6 +225,10 @@ Course.prototype.removeSection = function (section) {
 };
 
 
+/**
+ *
+ * @returns {boolean|*}
+ */
 Course.prototype.updateSatisfaction = function () {
     'use strict';
 
@@ -220,6 +267,10 @@ Course.prototype.updateSatisfaction = function () {
 
 
 // Rendering methods (manipulate/return DOM elements)
+/**
+ *
+ * @returns {HTMLElement}
+ */
 Course.prototype.render = function () {
     'use strict';
 
@@ -245,6 +296,9 @@ Course.prototype.render = function () {
 };
 
 
+/**
+ *
+ */
 Course.prototype.renderUpdate = function () {
     'use strict';
 
@@ -262,6 +316,10 @@ Course.prototype.renderUpdate = function () {
 };
 
 
+/**
+ *
+ * @returns {HTMLElement}
+ */
 Course.prototype.renderHeader = function () {
     'use strict';
 
@@ -289,6 +347,10 @@ Course.prototype.renderHeader = function () {
 };
 
 
+/**
+ *
+ * @returns {HTMLElement}
+ */
 Course.prototype.renderSessions = function () {
     'use strict';
 
@@ -305,6 +367,11 @@ Course.prototype.renderSessions = function () {
 };
 
 
+/**
+ *
+ * @param session
+ * @returns {*}
+ */
 Course.prototype.renderSections = function (session) {
     'use strict';
 
@@ -322,6 +389,9 @@ Course.prototype.renderSections = function (session) {
 };
 
 
+/**
+ *
+ */
 Course.prototype.renderSatisfaction = function () {
     'use strict';
 
@@ -337,6 +407,9 @@ Course.prototype.renderSatisfaction = function () {
 };
 
 
+/**
+ *
+ */
 Course.prototype.renderUpdatedHeader = function () {
     'use strict';
 
@@ -348,6 +421,10 @@ Course.prototype.renderUpdatedHeader = function () {
 };
 
 
+/**
+ *
+ * @returns {Array}
+ */
 Course.prototype.sectionTimes = function () {
     'use strict';
 
@@ -361,6 +438,13 @@ Course.prototype.sectionTimes = function () {
     return sectionTimes;
 };
 
+
+/**
+ * 
+ * @param section1
+ * @param section2
+ * @returns {boolean}
+ */
 function sameSession(section1, section2) {
     'use strict';
 

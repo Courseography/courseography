@@ -1,4 +1,10 @@
 /* Array utilities */
+/**
+ *
+ * @param item
+ * @param array
+ * @returns {boolean}
+ */
 function inArray(item, array) {
     'use strict';
 
@@ -6,6 +12,12 @@ function inArray(item, array) {
 }
 
 
+/**
+ *
+ * @param item
+ * @param array
+ * @returns {number|Number}
+ */
 function removeFromArray(item, array) {
     'use strict';
 
@@ -17,6 +29,10 @@ function removeFromArray(item, array) {
 
 /* These specifically manipulate the two global arrays,
 courseObjects and selectedLectures. */
+/**
+ *
+ * @param courseName
+ */
 function removeCourseObject(courseName) {
     'use strict';
 
@@ -29,6 +45,12 @@ function removeCourseObject(courseName) {
 }
 
 
+/**
+ *
+ * @param courseName
+ * @param courseArray
+ * @returns {*}
+ */
 function getCourseObject(courseName, courseArray) {
     'use strict';
 
@@ -41,6 +63,11 @@ function getCourseObject(courseName, courseArray) {
 }
 
 
+/**
+ *
+ * @param name
+ * @returns {*}
+ */
 function getCourse(name) {
     'use strict';
 
@@ -52,6 +79,11 @@ function getCourse(name) {
 }
 
 
+/**
+ *
+ * @param name
+ * @returns {*}
+ */
 function fetchCourse(name) {
     'use strict';
 
@@ -72,6 +104,11 @@ function fetchCourse(name) {
 }
 
 
+/**
+ *
+ * @param times
+ * @returns {Array}
+ */
 function convertTimes(times) {
     'use strict';
 
@@ -90,6 +127,11 @@ function convertTimes(times) {
 
 
 // Used to determine if course requires manual practical enrolment
+/**
+ *
+ * @param section
+ * @returns {boolean}
+ */
 function hasManualPractical(section) {
     'use strict';
 
@@ -98,6 +140,11 @@ function hasManualPractical(section) {
 
 
 // Used to determine if course requires manual tutorial enrolment
+/**
+ *
+ * @param section
+ * @returns {boolean}
+ */
 function hasManualTutorial(section) {
     'use strict';
 

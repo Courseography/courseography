@@ -1,5 +1,6 @@
 /*global $*/
 
+
 /**
  * Generates the duplex timetable grid.
  */
@@ -32,6 +33,10 @@ function generateGrid() {
 }
 
 
+/**
+ *
+ * @returns {*|jQuery|HTMLElement}
+ */
 function createThead() {
     'use strict';
 
@@ -39,6 +44,11 @@ function createThead() {
 }
 
 
+/**
+ *
+ * @param name
+ * @returns {*|jQuery}
+ */
 function createCaption(name) {
     'use strict';
 
@@ -46,6 +56,11 @@ function createCaption(name) {
 }
 
 
+/**
+ *
+ * @param suffix
+ * @returns {*|jQuery}
+ */
 function createTimeTable(suffix) {
     'use strict';
 
@@ -55,6 +70,10 @@ function createTimeTable(suffix) {
 }
 
 
+/**
+ *
+ * @returns {*|vjs.Component|jQuery}
+ */
 function createTimeTableContainer() {
     'use strict';
 
@@ -63,6 +82,11 @@ function createTimeTableContainer() {
 }
 
 
+/**
+ *
+ * @param fallThead
+ * @param springThead
+ */
 function appendHeaders(fallThead, springThead) {
     'use strict';
 
@@ -82,6 +106,11 @@ function appendHeaders(fallThead, springThead) {
 }
 
 
+/**
+ *
+ * @param timetableTableFall
+ * @param timetableTableSpring
+ */
 function appendTableRows(timetableTableFall, timetableTableSpring) {
     'use strict';
 
@@ -95,6 +124,12 @@ function appendTableRows(timetableTableFall, timetableTableSpring) {
 }
 
 
+/**
+ *
+ * @param trFall
+ * @param trSpring
+ * @param time
+ */
 function appendTableData(trFall, trSpring, time) {
     'use strict';
 

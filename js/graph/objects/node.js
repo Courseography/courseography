@@ -1,5 +1,5 @@
 /**
- * Represents a node in the graph.
+ * Constructs a Node.
  * @param parents The parent Nodes of this Node.
  * @param type The logical type of this Node's prerequisites. Either 'OR' or 'AND'.
  * @param name The id of the SVG g element that this Node represents.
@@ -31,12 +31,8 @@ Node.prototype.isSelected = function () {
 };
 
 
-// Used when entering hover
 /**
- * Displays the missing prerequisites of this Node when this Node is hovered over.
- * These prerequisites are displayed by having their corresponding 'rect' element's stroke
- * turn red.
- * If this Node is neither 'active' nor 'overriden', the Node's stroke will turn red.
+ * Hightlights this Node and this Node's missing prerequisites when this Node is hovered over.
  */
 Node.prototype.focus = function () {
     'use strict';
@@ -58,8 +54,7 @@ Node.prototype.focus = function () {
 
 
 /**
- * Returns this Node's prerequisites to a normal state.
- * TODO: Make a better doc.
+ * Removes highlight from this Node and Node's missing prerequisites when this Node is un-hovered.
  */
 Node.prototype.unfocus = function () {
     'use strict';
@@ -81,7 +76,9 @@ Node.prototype.unfocus = function () {
 };
 
 
-// Check whether node's prerequisites are satisfied, update status and GUI
+/**
+ * Updates this Node's status.
+ */
 Node.prototype.updateStatus = function () {
     'use strict';
 

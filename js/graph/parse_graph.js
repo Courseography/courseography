@@ -4,7 +4,10 @@
  */
 
 
-// Generate Node and Edge objects based on geometric relationships
+/**
+ * Generates Node and Edge objects based on geometric relationships.
+ * TODO: This function is too long.
+ */
 function buildGraph() {
     'use strict';
 
@@ -175,6 +178,11 @@ function parseOr(s) {
 }
 
 
+/**
+ *
+ * @param s
+ * @returns {*}
+ */
 function parseCourse(s) {
     'use strict';
 
@@ -191,10 +199,20 @@ function parseCourse(s) {
     }
 
     return [s, ''];
-
 }
 
 
+/**
+ *
+ * @param px
+ * @param py
+ * @param rx
+ * @param ry
+ * @param width
+ * @param height
+ * @param offset
+ * @returns {boolean}
+ */
 function intersects(px, py, rx, ry, width, height, offset) {
     'use strict';
 

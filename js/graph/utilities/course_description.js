@@ -1,4 +1,8 @@
-// Read course description from resource files
+/**
+ *
+ * @param id
+ * @returns {string}
+ */
 function fetchCourseDescription(id) {
     'use strict';
 
@@ -12,6 +16,11 @@ function fetchCourseDescription(id) {
 }
 
 
+/**
+ *
+ * @param id
+ * @returns {Array}
+ */
 function formatCourseName(id) {
     'use strict';
 
@@ -36,6 +45,11 @@ function formatCourseName(id) {
 }
 
 
+/**
+ *
+ * @param name
+ * @returns {*}
+ */
 function readCalendarEntry(name) {
     'use strict';
 
@@ -44,6 +58,11 @@ function readCalendarEntry(name) {
 }
 
 
+/**
+ *
+ * @param course
+ * @returns {string}
+ */
 function formatCourseDescription(course) {
     'use strict';
 
@@ -66,6 +85,11 @@ function formatCourseDescription(course) {
 }
 
 
+/**
+ *
+ * @param id
+ * @returns {string}
+ */
 function getCourseTitle(id) {
     'use strict';
     var name = formatCourseName(id);

@@ -1,3 +1,6 @@
+/**
+ *
+ */
 function setMouseCallbacks() {
     'use strict';
 
@@ -20,6 +23,10 @@ function setMouseCallbacks() {
 
 // Activates missing prerequisite display and
 // fetches course description on hover
+/**
+ *
+ * @param event
+ */
 function hoverFocus(event) {
     'use strict';
 
@@ -35,6 +42,10 @@ function hoverFocus(event) {
 
 
 // Deactivate missing prerequisites
+/**
+ *
+ * @param event
+ */
 function hoverUnfocus(event) {
     'use strict';
 
@@ -51,6 +62,10 @@ function hoverUnfocus(event) {
 
 
 // Activate/Deactivate node when clicked
+/**
+ *
+ * @param event
+ */
 function turnNode(event) {
     'use strict';
 

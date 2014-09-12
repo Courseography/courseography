@@ -1,4 +1,7 @@
 // A form for feedback; currently disabled
+/**
+ *
+ */
 function activateFeedbackForm() {
     'use strict';
 

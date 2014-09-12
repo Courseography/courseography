@@ -1,4 +1,11 @@
 /* Section class */
+/**
+ *
+ * @param times
+ * @param course
+ * @param id
+ * @constructor
+ */
 function Section(times, course, id) {
     'use strict';
 
@@ -15,6 +22,10 @@ function Section(times, course, id) {
 
 
 // Mouse events
+/**
+ *
+ * @param li
+ */
 Section.prototype.setMouseEvents = function (li) {
     'use strict';
 
@@ -34,6 +45,9 @@ Section.prototype.setMouseEvents = function (li) {
 };
 
 
+/**
+ *
+ */
 Section.prototype.mouseout = function () {
     'use strict';
 
@@ -44,6 +58,9 @@ Section.prototype.mouseout = function () {
 };
 
 
+/**
+ *
+ */
 Section.prototype.mouseover = function () {
     'use strict';
 
@@ -56,6 +73,9 @@ Section.prototype.mouseover = function () {
 };
 
 
+/**
+ *
+ */
 Section.prototype.onclick = function () {
     'use strict';
 
@@ -75,6 +95,10 @@ Section.prototype.onclick = function () {
 };
 
 
+/**
+ *
+ * @param time
+ */
 Section.prototype.setTime = function (time) {
     'use strict';
 
@@ -84,6 +108,10 @@ Section.prototype.setTime = function (time) {
 };
 
 
+/**
+ *
+ * @param time
+ */
 Section.prototype.setConflictTime = function (time) {
     'use strict';
 
@@ -93,6 +121,9 @@ Section.prototype.setConflictTime = function (time) {
 };
 
 
+/**
+ *
+ */
 Section.prototype.removeTimes = function () {
     'use strict';
 
@@ -107,6 +138,10 @@ Section.prototype.removeTimes = function () {
 };
 
 
+/**
+ *
+ * @param time
+ */
 Section.prototype.removeConflict = function (time) {
     'use strict';
 
@@ -126,6 +161,10 @@ Section.prototype.removeConflict = function (time) {
 
 
 // Rendering
+/**
+ *
+ * @returns {HTMLElement}
+ */
 Section.prototype.render = function () {
     'use strict';
 
@@ -143,6 +182,9 @@ Section.prototype.render = function () {
 };
 
 
+/**
+ *
+ */
 Section.prototype.renderUpdate = function () {
     'use strict';
 
@@ -152,6 +194,14 @@ Section.prototype.renderUpdate = function () {
 
 
 // Other constructors
+/**
+ *
+ * @param lecture
+ * @param course
+ * @param id
+ * @param sectionTimes
+ * @returns {Section}
+ */
 function makeLecture(lecture, course, id, sectionTimes) {
     'use strict';
 
@@ -164,6 +214,14 @@ function makeLecture(lecture, course, id, sectionTimes) {
 }
 
 
+/**
+ *
+ * @param tutorial
+ * @param course
+ * @param id
+ * @param sectionTimes
+ * @returns {Section}
+ */
 function makeTutorial(tutorial, course, id, sectionTimes) {
     'use strict';
 

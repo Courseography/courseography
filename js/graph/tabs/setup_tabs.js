@@ -1,3 +1,6 @@
+/**
+ *
+ */
 function createTabs() {
     'use strict';
 

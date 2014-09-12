@@ -1,7 +1,7 @@
 /**
- * Represents an edge in the graph.
- * @param parent The parent Node that this Edge points from.
- * @param child The child Node that this Edge points to.
+ * Constructs an Edge.
+ * @param parent This Edge's source Node.
+ * @param child This Edge's child Node.
  * @param name The id of the SVG path element that this Edge represents.
  * @constructor
  */

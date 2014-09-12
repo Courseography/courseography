@@ -1,4 +1,7 @@
 // Update the total FCE count, and display total
+/**
+ *
+ */
 function updateFCECount() {
     'use strict';
 
@@ -7,6 +10,11 @@ function updateFCECount() {
 }
 
 // Note: not called on hybrids
+/**
+ *
+ * @param name
+ * @param active
+ */
 function updateClickedCourses(name, active) {
     'use strict';
 
