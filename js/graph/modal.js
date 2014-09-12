@@ -3,7 +3,7 @@
 
 /**
  *
- * @param id
+ * @param {string} id
  * @returns {*|jQuery|HTMLElement}
  */
 function createModalDiv(id) {
@@ -37,7 +37,7 @@ function createModalDiv(id) {
 
 /**
  *
- * @param id
+ * @param {string} id
  * @returns {*}
  */
 function setupVideoPlayer(id) {
@@ -68,7 +68,7 @@ function setupVideoPlayer(id) {
 
 /**
  *
- * @param id
+ * @param {string} id
  * @returns {*|jQuery|HTMLElement}
  */
 function setupTimeslot(id) {
@@ -144,13 +144,13 @@ function displayToolTip(nodeId) {
 
 /**
  * Creates an svg rect object and appends it to #graphRootSVG.
- * @param rectClass
- * @param rectId
- * @param posX The x position of the rect.
- * @param posY The y position of the rect.
- * @param width The width of the rect.
- * @param height The height of the rect.
- * @param color The fill and stroke color of the rect.
+ * @param {string} rectClass
+ * @param {string} rectId
+ * @param {number} posX The x position of the rect.
+ * @param {number} posY The y position of the rect.
+ * @param {number} width The width of the rect.
+ * @param {number} height The height of the rect.
+ * @param {string} color The fill and stroke color of the rect.
  */
 function createRect(g, rectClass, rectId, posX, posY, width, height, color) {
     'use strict';
@@ -182,14 +182,14 @@ function createRect(g, rectClass, rectId, posX, posY, width, height, color) {
 
 /**
  * Creates an svg text object and appends it to #graphRootSVG.
- * @param nodeId
- * @param rectClass
- * @param rectId
- * @param posX The x position of the rect.
- * @param posY The y position of the rect.
- * @param width The width of the rect.
- * @param height The height of the rect.
- * @param color The fill and stroke color of the rect.
+ * @param {string} nodeId
+ * @param {string} rectClass
+ * @param {string} rectId
+ * @param {number} posX The x position of the rect.
+ * @param {number} posY The y position of the rect.
+ * @param {number} width The width of the rect.
+ * @param {number} height The height of the rect.
+ * @param {string} color The fill and stroke color of the rect.
  */
 function createText(g, nodeId, rectClass, rectId, posX, posY, width, height, color) {
     'use strict';
@@ -206,7 +206,7 @@ function createText(g, nodeId, rectClass, rectId, posX, posY, width, height, col
 
 /**
  *
- * @param nodeId
+ * @param {string} nodeId
  * @returns {*|jQuery|HTMLElement}
  */
 function createG(nodeId) {
@@ -225,7 +225,7 @@ function createG(nodeId) {
 
 /**
  *
- * @param nodeId
+ * @param {string} nodeId
  */
 function openModal(nodeId) {
     'use strict';
@@ -272,7 +272,7 @@ function enableVideoJS() {
 
 /**
  *
- * @param url
+ * @param {string} url
  * @returns {*}
  */
 function urlExists(url) {

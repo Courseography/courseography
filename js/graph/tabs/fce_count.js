@@ -12,13 +12,14 @@ function updateFCECount() {
 // Note: not called on hybrids
 /**
  *
- * @param name
- * @param active
+ * @param {string} name
+ * @param {boolean} active
  */
 function updateClickedCourses(name, active) {
     'use strict';
 
-    var diff = (name === 'CSC200' || name === 'Calc1') ? 1 : 0.5; // Full-year
+    var diff = (name === 'CSC200' ||
+                name === 'Calc1') ? 1 : 0.5; // Full-year
     if (!active) {
         diff *= -1;
     }

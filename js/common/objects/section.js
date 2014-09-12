@@ -3,11 +3,14 @@
  *
  * @param times
  * @param course
- * @param id
+ * @param {string} id
  * @constructor
  */
 function Section(times, course, id) {
     'use strict';
+    console.log(typeof times);
+    console.log(typeof course);
+    console.log(typeof id);
 
     this.id = id;
     this.courseName = this.id.substring(0, 8);
@@ -24,10 +27,11 @@ function Section(times, course, id) {
 // Mouse events
 /**
  *
- * @param li
+ * @param {HTMLElement} li
  */
 Section.prototype.setMouseEvents = function (li) {
     'use strict';
+    console.log(typeof li);
 
     var tmp = this;
     $(li).mouseout(function () {
@@ -97,10 +101,11 @@ Section.prototype.onclick = function () {
 
 /**
  *
- * @param time
+ * @param {string} time
  */
 Section.prototype.setTime = function (time) {
     'use strict';
+    console.log(typeof time);
 
     $(time).html(this.courseName)
            .attr("clicked", "true")
@@ -110,10 +115,11 @@ Section.prototype.setTime = function (time) {
 
 /**
  *
- * @param time
+ * @param {string} time
  */
 Section.prototype.setConflictTime = function (time) {
     'use strict';
+    console.log(typeof time);
 
     var conflicts = $(time).data("conflicts");
     conflicts.push(this);
@@ -144,6 +150,7 @@ Section.prototype.removeTimes = function () {
  */
 Section.prototype.removeConflict = function (time) {
     'use strict';
+    console.log(typeof time);
 
     var conflicts = $(time).data("conflicts");
     var index = $.inArray(this, conflicts);

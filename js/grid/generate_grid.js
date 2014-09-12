@@ -128,7 +128,7 @@ function appendTableRows(timetableTableFall, timetableTableSpring) {
  *
  * @param trFall
  * @param trSpring
- * @param time
+ * @param {int} time
  */
 function appendTableData(trFall, trSpring, time) {
     'use strict';

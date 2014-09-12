@@ -9,9 +9,9 @@ var edges = []; // List of all edges, Edges is never used.
 
 /**
  *
- * @param parents
- * @param type
- * @param name
+ * @param {Array} parents
+ * @param {string} type
+ * @param {string} name
  */
 function makeNode(parents, type, name) {
     'use strict';
@@ -23,9 +23,9 @@ function makeNode(parents, type, name) {
 
 /**
  *
- * @param parents
- * @param type
- * @param name
+ * @param {Array} parents
+ * @param {string} type
+ * @param {string} name
  */
 function makeHybrid(parents, type, name) {
     'use strict';
@@ -37,9 +37,9 @@ function makeHybrid(parents, type, name) {
 
 /**
  *
- * @param parent
- * @param child
- * @param name
+ * @param {Node} parent
+ * @param {Node} child
+ * @param {string} name
  */
 function makeEdge(parent, child, name) {
     'use strict';

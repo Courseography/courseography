@@ -115,6 +115,11 @@ function buildGraph() {
 }
 
 
+/**
+ *
+ * @param {string} s
+ * @returns {*[]}
+ */
 function parseAnd(s) {
     'use strict';
 
@@ -140,6 +145,11 @@ function parseAnd(s) {
 }
 
 
+/**
+ *
+ * @param {string} s
+ * @returns {*[]}
+ */
 function parseOr(s) {
     'use strict';
 
@@ -180,7 +190,7 @@ function parseOr(s) {
 
 /**
  *
- * @param s
+ * @param {string} s
  * @returns {*}
  */
 function parseCourse(s) {
@@ -204,13 +214,13 @@ function parseCourse(s) {
 
 /**
  *
- * @param px
- * @param py
- * @param rx
- * @param ry
- * @param width
- * @param height
- * @param offset
+ * @param {number} px
+ * @param {number} py
+ * @param {number} rx
+ * @param {number} ry
+ * @param {number} width
+ * @param {number} height
+ * @param {number} offset
  * @returns {boolean}
  */
 function intersects(px, py, rx, ry, width, height, offset) {

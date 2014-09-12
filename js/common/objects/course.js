@@ -2,7 +2,7 @@
 
 /**
  *
- * @param name
+ * @param {string} name
  * @constructor
  */
 function Course(name) {
@@ -53,7 +53,7 @@ function Course(name) {
 /* Section initialization */
 /**
  *
- * @param course
+ * @param {JSON} course
  */
 Course.prototype.parseSessions = function (course) {
     'use strict';
@@ -71,8 +71,8 @@ Course.prototype.parseSessions = function (course) {
 
 /**
  *
- * @param session
- * @param timeSuffix
+ * @param {string} session
+ * @param {string} timeSuffix
  * @returns {Array|string}
  */
 Course.prototype.parseSections = function (session, timeSuffix) {
@@ -85,8 +85,8 @@ Course.prototype.parseSections = function (session, timeSuffix) {
 
 /**
  *
- * @param session
- * @param timeSuffix
+ * @param {string} session
+ * @param {string} timeSuffix
  * @returns {Array}
  */
 Course.prototype.parseLectures = function (session, timeSuffix) {
@@ -124,8 +124,8 @@ Course.prototype.parseLectures = function (session, timeSuffix) {
 
 /**
  *
- * @param session
- * @param timeSuffix
+ * @param {string} session
+ * @param {string} timeSuffix
  * @returns {Array}
  */
 Course.prototype.parseTutorials = function (session, timeSuffix) {
@@ -160,7 +160,7 @@ Course.prototype.parseTutorials = function (session, timeSuffix) {
 /* Manipulate course sections */
 /**
  *
- * @param section
+ * @param {Section} section
  */
 Course.prototype.activateSection = function (section) {
     'use strict';
@@ -180,10 +180,11 @@ Course.prototype.activateSection = function (section) {
 
 /**
  *
- * @param section
+ * @param {Section} section
  */
 Course.prototype.addSection = function (section) {
     'use strict';
+    console.log(typeof section);
 
     var type = section.type; // Not used.
     this.selected[section.type] = section;
@@ -196,10 +197,11 @@ Course.prototype.addSection = function (section) {
 
 /**
  *
- * @param section
+ * @param {Section} section
  */
 Course.prototype.selectTimes = function (section) {
     'use strict';
+    console.log(typeof section);
 
     $.each(section.times, function (i, time) {
         if ($(time).attr('clicked') !== 'true') {
@@ -213,10 +215,11 @@ Course.prototype.selectTimes = function (section) {
 
 /**
  *
- * @param section
+ * @param {Section} section
  */
 Course.prototype.removeSection = function (section) {
     'use strict';
+    console.log(typeof section);
 
     section.removeTimes();
     removeFromArray(section, selectedLectures);
@@ -369,7 +372,7 @@ Course.prototype.renderSessions = function () {
 
 /**
  *
- * @param session
+ * @param {string} session
  * @returns {*}
  */
 Course.prototype.renderSections = function (session) {
@@ -440,9 +443,9 @@ Course.prototype.sectionTimes = function () {
 
 
 /**
- * 
- * @param section1
- * @param section2
+ *
+ * @param {Section} section1
+ * @param {Section} section2
  * @returns {boolean}
  */
 function sameSession(section1, section2) {

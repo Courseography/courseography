@@ -1,6 +1,6 @@
 /**
  *
- * @param sectionId
+ * @param {string} sectionId
  */
 function updateSelectedLectures(sectionId) {
     'use strict';
@@ -13,7 +13,7 @@ function updateSelectedLectures(sectionId) {
 
 /**
  *
- * @returns {undefined}
+ * @returns {*}
  */
 function getVeryLargeCourseArray() {
     'use strict';
@@ -25,7 +25,7 @@ function getVeryLargeCourseArray() {
         dataType: "text",
         async: false,
         success: function (data) {
-            splitArray = data.split('\n').map(function (course) {
+            var splitArray = data.split('\n').map(function (course) {
                 return course.substring(0, 8);
             });
         }
@@ -167,20 +167,20 @@ function restoreFromCookies() {
 
 /**
  *
- * @param courses
- * @param sections
+ * @param {Array} courses
+ * @param {Array} sections
  */
 function saveCookies(courses, sections) {
     'use strict';
 
     if (courses !== undefined) {
-        setCookie("selected-courses", JSON.stringify(courses));    
+        setCookie("selected-courses", JSON.stringify(courses));
     } else {
         setCookie("selected-courses", "[]");
     }
 
     if (sections !== undefined) {
-        setCookie("selected-lectures", JSON.stringify(sections));    
+        setCookie("selected-lectures", JSON.stringify(sections));
     } else {
         setCookie("selected-lectures", "[]");
     }
@@ -189,7 +189,7 @@ function saveCookies(courses, sections) {
 
 /**
  *
- * @param name
+ * @param {string} name
  */
 function addCourseToList(name) {
     'use strict';
@@ -204,7 +204,7 @@ function addCourseToList(name) {
 
 /**
  *
- * @param name
+ * @param {string} name
  */
 function removeCourseFromList(name) {
     'use strict';
@@ -230,7 +230,7 @@ function removeCourseFromList(name) {
 /* Info box */
 /**
  *
- * @param course
+ * @param {Course} course
  */
 function renderDisplayCourseTitle(course) {
     'use strict';
@@ -244,7 +244,7 @@ function renderDisplayCourseTitle(course) {
 
 /**
  *
- * @param course
+ * @param {Course} course
  */
 function renderDisplayCourseInformation(course) {
     'use strict';
@@ -256,7 +256,7 @@ function renderDisplayCourseInformation(course) {
 
 /**
  *
- * @param section
+ * @param {Section} section
  */
 function renderDisplaySectionInformation(section) {
     'use strict';

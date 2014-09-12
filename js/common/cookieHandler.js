@@ -1,7 +1,7 @@
 /**
  *
- * @param cookieName
- * @param cookieValue
+ * @param {string} cookieName
+ * @param {string} cookieValue
  */
 function setCookie(cookieName, cookieValue) {
     'use strict';
@@ -15,7 +15,7 @@ function setCookie(cookieName, cookieValue) {
 
 /**
  *
- * @param cookieName
+ * @param {string} cookieName
  * @returns {string}
  */
 function getCookie(cookieName) {

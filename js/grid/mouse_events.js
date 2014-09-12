@@ -36,8 +36,8 @@ function setTdHover() {
 /* Conflicts */
 /**
  *
- * @param time
- * @param conflicts
+ * @param {string} time
+ * @param {Array} conflicts
  */
 function renderConflicts(time, conflicts) {
     'use strict';
@@ -80,7 +80,7 @@ function alertUserOfConflict() {
 /* Functions to manipulate grid DOM */
 /**
  *
- * @param time
+ * @param {string} time
  */
 function renderClearTime(time) {
     'use strict';
@@ -96,7 +96,7 @@ function renderClearTime(time) {
 
 /**
  *
- * @param time
+ * @param {string} time
  */
 function renderClearHover(time) {
     'use strict';
@@ -110,8 +110,8 @@ function renderClearHover(time) {
 
 /**
  *
- * @param time
- * @param section
+ * @param {string} time
+ * @param {Section} section
  */
 function renderAddHover(time, section) {
     'use strict';

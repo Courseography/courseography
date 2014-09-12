@@ -1,6 +1,6 @@
 /**
  *
- * @param id
+ * @param {string} id
  * @returns {string}
  */
 function fetchCourseDescription(id) {
@@ -18,7 +18,7 @@ function fetchCourseDescription(id) {
 
 /**
  *
- * @param id
+ * @param {string} id
  * @returns {Array}
  */
 function formatCourseName(id) {
@@ -47,7 +47,7 @@ function formatCourseName(id) {
 
 /**
  *
- * @param name
+ * @param {string} name
  * @returns {*}
  */
 function readCalendarEntry(name) {
@@ -60,7 +60,7 @@ function readCalendarEntry(name) {
 
 /**
  *
- * @param course
+ * @param {Course} course
  * @returns {string}
  */
 function formatCourseDescription(course) {
@@ -87,11 +87,12 @@ function formatCourseDescription(course) {
 
 /**
  *
- * @param id
+ * @param {string} id
  * @returns {string}
  */
 function getCourseTitle(id) {
     'use strict';
+
     var name = formatCourseName(id);
     if (name.length === 1) {
         var course = new Course(name);

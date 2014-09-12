@@ -1,6 +1,6 @@
 /**
  *
- * @param id
+ * @param {string} id
  */
 function updateActiveFocus(id) {
     'use strict';
@@ -50,10 +50,11 @@ function clearFocus() {
 // Put a spotlight on a node
 /**
  *
- * @param id
+ * @param {string} id
  */
 function spotlight(id) {
     'use strict';
+
     var nodeObject = $('#' + id);
 
     var node = $('#' + id + ' > rect');

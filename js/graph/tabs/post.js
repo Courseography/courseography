@@ -106,8 +106,8 @@ function updateMinorPostInterface() {
 
 /**
  *
- * @param id
- * @param sat
+ * @param {string} id
+ * @param {boolean} sat
  */
 function setIcon(id, sat) {
     'use strict';
