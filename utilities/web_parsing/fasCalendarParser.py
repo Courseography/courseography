@@ -100,6 +100,8 @@ def parseFASCalendar():
           data['title'] = title
         with open(course_path, 'w', encoding='utf-8') as coursefile:
           json.dump(data, coursefile)
+      except IOError:
+        data = {}
       except FileNotFoundError:
         data = {}
 
