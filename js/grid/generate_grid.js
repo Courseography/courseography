@@ -34,8 +34,8 @@ function generateGrid() {
 
 
 /**
- *
- * @returns {*|jQuery|HTMLElement}
+ * Returns a jQuery HTML thead element object.
+ * @returns {jQuery}
  */
 function createThead() {
     'use strict';
@@ -45,9 +45,9 @@ function createThead() {
 
 
 /**
- *
+ * Returns a jQuery HTML caption element object.
  * @param name
- * @returns {*|jQuery}
+ * @returns {jQuery}
  */
 function createCaption(name) {
     'use strict';
@@ -59,7 +59,7 @@ function createCaption(name) {
 /**
  *
  * @param suffix
- * @returns {*|jQuery}
+ * @returns {jQuery}
  */
 function createTimeTable(suffix) {
     'use strict';
@@ -71,8 +71,8 @@ function createTimeTable(suffix) {
 
 
 /**
- *
- * @returns {*|vjs.Component|jQuery}
+ * Creates and returns a timetable container HTML div element.
+ * @returns {jQuery}
  */
 function createTimeTableContainer() {
     'use strict';
@@ -83,9 +83,9 @@ function createTimeTableContainer() {
 
 
 /**
- *
- * @param fallThead
- * @param springThead
+ * Appends table headers to the timetables.
+ * @param fallThead The fall table header.
+ * @param springThead The spring table header.
  */
 function appendHeaders(fallThead, springThead) {
     'use strict';
@@ -107,9 +107,9 @@ function appendHeaders(fallThead, springThead) {
 
 
 /**
- *
- * @param timetableTableFall
- * @param timetableTableSpring
+ * Appends all table rows to the timetables.
+ * @param timetableTableFall The fall timetable.
+ * @param timetableTableSpring The spring timetable.
  */
 function appendTableRows(timetableTableFall, timetableTableSpring) {
     'use strict';
@@ -125,10 +125,10 @@ function appendTableRows(timetableTableFall, timetableTableSpring) {
 
 
 /**
- *
- * @param trFall
- * @param trSpring
- * @param {int} time
+ * Appends table cells to table rows.
+ * @param trFall The fall table row.
+ * @param trSpring The spring table row.
+ * @param {int} time The table rows time.
  */
 function appendTableData(trFall, trSpring, time) {
     'use strict';
