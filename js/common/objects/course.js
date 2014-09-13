@@ -1,8 +1,8 @@
 /* Course class */
 
 /**
- *
- * @param {string} name
+ * Constructs a Course.
+ * @param {string} name The course code.
  * @constructor
  */
 function Course(name) {
@@ -52,8 +52,8 @@ function Course(name) {
 
 /* Section initialization */
 /**
- *
- * @param {JSON} course
+ * Parses this Course's sessions.
+ * @param {JSON} course The object from which the sessions are retrieved.
  */
 Course.prototype.parseSessions = function (course) {
     'use strict';
@@ -70,10 +70,10 @@ Course.prototype.parseSessions = function (course) {
 
 
 /**
- *
- * @param {string} session
- * @param {string} timeSuffix
- * @returns {Array|string}
+ * Parses this Course's sections.
+ * @param {string} session The session of the section.
+ * @param {string} timeSuffix The suffix of the section ID.
+ * @returns {Array} This Course's sections.
  */
 Course.prototype.parseSections = function (session, timeSuffix) {
     'use strict';
@@ -84,10 +84,10 @@ Course.prototype.parseSections = function (session, timeSuffix) {
 
 
 /**
- *
- * @param {string} session
- * @param {string} timeSuffix
- * @returns {Array}
+ * Parses this Course's lectures.
+ * @param {string} session The session of the lecture.
+ * @param {string} timeSuffix The suffix of the section ID.
+ * @returns {Array} The lecture's sections.
  */
 Course.prototype.parseLectures = function (session, timeSuffix) {
     'use strict';
@@ -123,10 +123,10 @@ Course.prototype.parseLectures = function (session, timeSuffix) {
 
 
 /**
- *
- * @param {string} session
- * @param {string} timeSuffix
- * @returns {Array}
+ * Parses this Course's tutorials.
+ * @param {string} session The session of the tutorial.
+ * @param {string} timeSuffix The suffix of the section ID.
+ * @returns {Array} The tutorial's sections.
  */
 Course.prototype.parseTutorials = function (session, timeSuffix) {
     'use strict';
@@ -159,8 +159,8 @@ Course.prototype.parseTutorials = function (session, timeSuffix) {
 
 /* Manipulate course sections */
 /**
- *
- * @param {Section} section
+ * Activates a section of this Course.
+ * @param {Section} section The section being activated.
  */
 Course.prototype.activateSection = function (section) {
     'use strict';
@@ -179,8 +179,8 @@ Course.prototype.activateSection = function (section) {
 
 
 /**
- *
- * @param {Section} section
+ * Adds a section to this Course.
+ * @param {Section} section The section being added.
  */
 Course.prototype.addSection = function (section) {
     'use strict';
@@ -196,8 +196,8 @@ Course.prototype.addSection = function (section) {
 
 
 /**
- *
- * @param {Section} section
+ * Selects this Course's section times.
+ * @param {Section} section The section whose times are being selected.
  */
 Course.prototype.selectTimes = function (section) {
     'use strict';
@@ -214,12 +214,11 @@ Course.prototype.selectTimes = function (section) {
 
 
 /**
- *
- * @param {Section} section
+ * Removes one of this Course's sections.
+ * @param {Section} section The section being removed.
  */
 Course.prototype.removeSection = function (section) {
     'use strict';
-    console.log(typeof section);
 
     section.removeTimes();
     removeFromArray(section, selectedLectures);
@@ -229,8 +228,8 @@ Course.prototype.removeSection = function (section) {
 
 
 /**
- *
- * @returns {boolean|*}
+ * Returns and updates whether this course is satisfied.
+ * @returns {boolean} Whether this course is satisfied.
  */
 Course.prototype.updateSatisfaction = function () {
     'use strict';
@@ -271,8 +270,8 @@ Course.prototype.updateSatisfaction = function () {
 
 // Rendering methods (manipulate/return DOM elements)
 /**
- *
- * @returns {HTMLElement}
+ * Renders this Course.
+ * @returns {HTMLElement} The list element representing this Course.
  */
 Course.prototype.render = function () {
     'use strict';
@@ -300,7 +299,7 @@ Course.prototype.render = function () {
 
 
 /**
- *
+ * Updates this Course in the grid.
  */
 Course.prototype.renderUpdate = function () {
     'use strict';
@@ -320,8 +319,8 @@ Course.prototype.renderUpdate = function () {
 
 
 /**
- *
- * @returns {HTMLElement}
+ * Returns and renders this Course's header element.
+ * @returns {HTMLElement} This course's header element.
  */
 Course.prototype.renderHeader = function () {
     'use strict';
@@ -351,8 +350,8 @@ Course.prototype.renderHeader = function () {
 
 
 /**
- *
- * @returns {HTMLElement}
+ * Renders this Course's sessions in the grid.
+ * @returns {HTMLElement} This Course's session elements.
  */
 Course.prototype.renderSessions = function () {
     'use strict';
@@ -371,9 +370,9 @@ Course.prototype.renderSessions = function () {
 
 
 /**
- *
- * @param {string} session
- * @returns {*}
+ * Renders this Course's sections in the grid.
+ * @param {string} session The session of the sections.
+ * @returns {*} The updated list of sections.
  */
 Course.prototype.renderSections = function (session) {
     'use strict';
@@ -393,7 +392,7 @@ Course.prototype.renderSections = function (session) {
 
 
 /**
- *
+ * Renders this Course's satisfaction attribute.
  */
 Course.prototype.renderSatisfaction = function () {
     'use strict';
@@ -411,7 +410,7 @@ Course.prototype.renderSatisfaction = function () {
 
 
 /**
- *
+ * Updates the rendering of this Course's header.
  */
 Course.prototype.renderUpdatedHeader = function () {
     'use strict';
@@ -425,8 +424,9 @@ Course.prototype.renderUpdatedHeader = function () {
 
 
 /**
- *
- * @returns {Array}
+ * Returns this Course's selected section times.
+ * TODO: Change function name
+ * @returns {Array} This Course's selected section times.
  */
 Course.prototype.sectionTimes = function () {
     'use strict';
@@ -443,10 +443,11 @@ Course.prototype.sectionTimes = function () {
 
 
 /**
- *
- * @param {Section} section1
- * @param {Section} section2
- * @returns {boolean}
+ * Returns whether two sections are in the same session.
+ * @param {Section} section1 The first section.
+ * @param {Section} section2 The second section.
+ * @returns {boolean} Whether two sections are in the same session.
+ * TODO: Put in different file?
  */
 function sameSession(section1, section2) {
     'use strict';
