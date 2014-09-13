@@ -1,16 +1,13 @@
 /* Section class */
 /**
- *
- * @param times
- * @param course
- * @param {string} id
+ * Constructs a Section.
+ * @param {Array} times The times of this Section.
+ * @param {Course} course The Course of this Section.
+ * @param {string} id The ID of this Section.
  * @constructor
  */
 function Section(times, course, id) {
     'use strict';
-    console.log(typeof times);
-    console.log(typeof course);
-    console.log(typeof id);
 
     this.id = id;
     this.courseName = this.id.substring(0, 8);
@@ -26,12 +23,10 @@ function Section(times, course, id) {
 
 // Mouse events
 /**
- *
- * @param {HTMLElement} li
+ * Sets this Section's mouse events.
  */
 Section.prototype.setMouseEvents = function (li) {
     'use strict';
-    console.log(typeof li);
 
     var tmp = this;
     $(li).mouseout(function () {
@@ -50,7 +45,7 @@ Section.prototype.setMouseEvents = function (li) {
 
 
 /**
- *
+ * Sets this section's mouseout event.
  */
 Section.prototype.mouseout = function () {
     'use strict';
@@ -63,7 +58,7 @@ Section.prototype.mouseout = function () {
 
 
 /**
- *
+ * Sets this section's mouseover event.
  */
 Section.prototype.mouseover = function () {
     'use strict';
@@ -78,7 +73,7 @@ Section.prototype.mouseover = function () {
 
 
 /**
- *
+ * Sets this sections click event.
  */
 Section.prototype.onclick = function () {
     'use strict';
@@ -100,12 +95,11 @@ Section.prototype.onclick = function () {
 
 
 /**
- *
- * @param {string} time
+ * Sets/updates one of this Section's times.
+ * @param {string} time The time's cell ID.
  */
 Section.prototype.setTime = function (time) {
     'use strict';
-    console.log(typeof time);
 
     $(time).html(this.courseName)
            .attr("clicked", "true")
@@ -114,12 +108,11 @@ Section.prototype.setTime = function (time) {
 
 
 /**
- *
- * @param {string} time
+ * Sets one of this Section's times as in conflict.
+ * @param {string} time The time's cell ID.
  */
 Section.prototype.setConflictTime = function (time) {
     'use strict';
-    console.log(typeof time);
 
     var conflicts = $(time).data("conflicts");
     conflicts.push(this);
@@ -128,7 +121,7 @@ Section.prototype.setConflictTime = function (time) {
 
 
 /**
- *
+ * Removes this Section's times.
  */
 Section.prototype.removeTimes = function () {
     'use strict';
@@ -145,12 +138,11 @@ Section.prototype.removeTimes = function () {
 
 
 /**
- *
- * @param time
+ * Removes one of this Section's times in conflict status.
+ * @param time The time's cell ID.
  */
 Section.prototype.removeConflict = function (time) {
     'use strict';
-    console.log(typeof time);
 
     var conflicts = $(time).data("conflicts");
     var index = $.inArray(this, conflicts);
@@ -169,8 +161,8 @@ Section.prototype.removeConflict = function (time) {
 
 // Rendering
 /**
- *
- * @returns {HTMLElement}
+ * Renders this Section, returns this Section's list item representation.
+ * @returns {HTMLElement} This Section's list item representation.
  */
 Section.prototype.render = function () {
     'use strict';
@@ -190,7 +182,7 @@ Section.prototype.render = function () {
 
 
 /**
- *
+ * Updates the rendering of this Section in the grid.
  */
 Section.prototype.renderUpdate = function () {
     'use strict';
@@ -202,12 +194,12 @@ Section.prototype.renderUpdate = function () {
 
 // Other constructors
 /**
- *
- * @param lecture
- * @param course
- * @param id
- * @param sectionTimes
- * @returns {Section}
+ * Makes a lecture section.
+ * @param {object} lecture The lecture.
+ * @param course The course.
+ * @param {string} id The section ID.
+ * @param {Array} sectionTimes The section's times.
+ * @returns {Section} The lecture Section.
  */
 function makeLecture(lecture, course, id, sectionTimes) {
     'use strict';
@@ -222,12 +214,12 @@ function makeLecture(lecture, course, id, sectionTimes) {
 
 
 /**
- *
- * @param tutorial
- * @param course
- * @param id
- * @param sectionTimes
- * @returns {Section}
+ * Makes a tutorial section.
+ * @param {array} tutorial The tutorial.
+ * @param course The Course.
+ * @param {string} id The section's ID.
+ * @param {Array} sectionTimes The section's times.
+ * @returns {Section} The tutorial Section.
  */
 function makeTutorial(tutorial, course, id, sectionTimes) {
     'use strict';
