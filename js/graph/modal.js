@@ -2,9 +2,9 @@
 /* global nodes */
 
 /**
- *
- * @param {string} id
- * @returns {*|jQuery|HTMLElement}
+ * Creates and returns the main modal content div.
+ * @param {string} id The course course.
+ * @returns {*|jQuery|HTMLElement} The main modal content div.
  */
 function createModalDiv(id) {
     'use strict';
@@ -36,9 +36,10 @@ function createModalDiv(id) {
 
 
 /**
- *
- * @param {string} id
- * @returns {*}
+ * Sets up and returns the video player, false if the video URL does not exist.
+ * TODO: Function should be split up.
+ * @param {string} id The course code.
+ * @returns {boolean|jQuery}
  */
 function setupVideoPlayer(id) {
     'use strict';
@@ -67,9 +68,9 @@ function setupVideoPlayer(id) {
 
 
 /**
- *
- * @param {string} id
- * @returns {*|jQuery|HTMLElement}
+ * Returns a formatted course timeslot.
+ * @param {string} id The course code.
+ * @returns {jQuery}
  */
 function setupTimeslot(id) {
     'use strict';
@@ -97,9 +98,9 @@ function setupTimeslot(id) {
 
 
 /**
- *
- * @param id
- * @returns {*|jQuery}
+ * Sets up and returns the related links HTML div element.
+ * @param id The course code.
+ * @returns {jQuery}
  */
 function setupRelatedLinks(id) {
     'use strict';
@@ -115,8 +116,8 @@ function setupRelatedLinks(id) {
 
 
 /**
- *
- * @param nodeId
+ * Displays a tool-tip for a Node.
+ * @param nodeId The Node's ID.
  */
 function displayToolTip(nodeId) {
     'use strict';
@@ -144,8 +145,8 @@ function displayToolTip(nodeId) {
 
 /**
  * Creates an svg rect object and appends it to #graphRootSVG.
- * @param {string} rectClass
- * @param {string} rectId
+ * @param {string} rectClass Class(es) of the rect.
+ * @param {string} rectId The ID of the rect.
  * @param {number} posX The x position of the rect.
  * @param {number} posY The y position of the rect.
  * @param {number} width The width of the rect.
@@ -181,17 +182,17 @@ function createRect(g, rectClass, rectId, posX, posY, width, height, color) {
 
 
 /**
- * Creates an svg text object and appends it to #graphRootSVG.
- * @param {string} nodeId
- * @param {string} rectClass
- * @param {string} rectId
- * @param {number} posX The x position of the rect.
- * @param {number} posY The y position of the rect.
- * @param {number} width The width of the rect.
- * @param {number} height The height of the rect.
- * @param {string} color The fill and stroke color of the rect.
+ * Creates an svg text element and appends it to #graphRootSVG.
+ * @param {string} nodeId The Node's ID.
+ * @param {string} textClass Class(es) of the text element.
+ * @param {string} textId The ID of the text element.
+ * @param {number} posX The x position of the text element.
+ * @param {number} posY The y position of the text element.
+ * @param {number} width The width of the text element.
+ * @param {number} height The height of the text element.
+ * @param {string} color The fill and stroke color of the text element.
  */
-function createText(g, nodeId, rectClass, rectId, posX, posY, width, height, color) {
+function createText(g, nodeId, textClass, textId, posX, posY, width, height, color) {
     'use strict';
 
     var text = $(document.createElementNS('http://www.w3.org/2000/svg', 'text'))
@@ -205,9 +206,9 @@ function createText(g, nodeId, rectClass, rectId, posX, posY, width, height, col
 
 
 /**
- *
+ * Sets up and Returns a tool-tips SVG g element.
  * @param {string} nodeId
- * @returns {*|jQuery|HTMLElement}
+ * @returns {jQuery}
  */
 function createG(nodeId) {
     'use strict';
@@ -224,16 +225,16 @@ function createG(nodeId) {
 
 
 /**
- *
- * @param {string} nodeId
+ * Opens the course information modal.
+ * @param {string} id The course code.
  */
-function openModal(nodeId) {
+function openModal(id) {
     'use strict';
 
     if ($('.modal').length === 0) {
         $('.infoTabs').hide();
         var div = createModalDiv(nodeId);
-        div.attr('title', getCourseTitle(nodeId))
+        div.attr('title', getCourseTitle(id))
            .addClass('modal').dialog({
                 autoOpen: true,
                 modal: true,
@@ -259,7 +260,8 @@ function openModal(nodeId) {
 
 
 /**
- *
+ * Enables VideoJS.
+ * Note: Must be called after the video player is set up.
  */
 function enableVideoJS() {
     'use strict';
@@ -271,9 +273,9 @@ function enableVideoJS() {
 
 
 /**
- *
- * @param {string} url
- * @returns {*}
+ * Returns whether the url exists.
+ * @param {string} url The URL.
+ * @returns {boolean} Whether the url exists.
  */
 function urlExists(url) {
     'use strict';
