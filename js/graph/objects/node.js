@@ -142,7 +142,7 @@ Node.prototype.turn = function () {
 
 /**
  * Returns true if this Node's prerequisites are satisfied.
- * @returns {*}
+ * @returns {boolean} Whether this Node's prerequisites are satisfied.
  */
 Node.prototype.arePrereqsSatisfied = function () {
     'use strict';
