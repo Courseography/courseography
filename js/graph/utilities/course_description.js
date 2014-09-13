@@ -47,10 +47,10 @@ function formatCourseName(id) {
 
 
 /**
- * Returns a formatted version course's description.
+ * Returns a formatted version of a course's description.
  * TODO: Duplicate description
  * @param {string} name The name of the course.
- * @returns {*}
+ * @returns {*} A formatted version of a course's description.
  */
 function readCalendarEntry(name) {
     'use strict';
