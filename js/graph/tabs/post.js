@@ -1,6 +1,12 @@
 /* global $ */
+
+// TODO: File too long
+// TODO: Bad function names\
+
 /**
- *
+ * Updates the POSt requirements that correspond with a certain course.
+ * @param {string} course The course code.
+ * @param {boolean} active Whether this course is selected.
  */
 function updatePOSt(course, active) {
     'use strict';
@@ -56,7 +62,7 @@ function updatePOSt(course, active) {
 
 
 /**
- *
+ * Updates the 'Specialist' POSt interface.
  */
 function updatePostInterface() {
     'use strict';
@@ -74,7 +80,7 @@ function updatePostInterface() {
 
 
 /**
- *
+ * Updates the 'Major' POSt interface.
  */
 function updateMajorPostInterface() {
     'use strict';
@@ -91,7 +97,7 @@ function updateMajorPostInterface() {
 
 
 /**
- *
+ * Updates the 'Minor' POSt interface.
  */
 function updateMinorPostInterface() {
     'use strict';
@@ -105,9 +111,9 @@ function updateMinorPostInterface() {
 
 
 /**
- *
- * @param {string} id
- * @param {boolean} sat
+ * Sets the complete/incomplete icon.
+ * @param {string} id The ID of the img container.
+ * @param {boolean} sat Whether the complete icon should be displayed.
  */
 function setIcon(id, sat) {
     'use strict';
@@ -121,7 +127,7 @@ function setIcon(id, sat) {
 
 
 /**
- *
+ * Updates the specialist CSC requirements.
  */
 function updateCSCReqs() {
     'use strict';
@@ -134,7 +140,7 @@ function updateCSCReqs() {
 
 
 /**
- *
+ * Updates the major CSC requirements.
  */
 function updateCSCReqsMajor() {
     'use strict';
@@ -147,7 +153,7 @@ function updateCSCReqsMajor() {
 
 
 /**
- *
+ * Updates the minor CSC requirements.
  */
 function updateCSCReqsMinor() {
     'use strict';
@@ -165,7 +171,7 @@ function updateCSCReqsMinor() {
 
 
 /**
- *
+ * Updates the specialist MAT requirements.
  */
 function updateMATReqs() {
     'use strict';
@@ -181,7 +187,7 @@ function updateMATReqs() {
 
 
 /**
- *
+ * Updates the major MAT requirements.
  */
 function updateMATReqsMajor() {
     'use strict';
@@ -197,7 +203,7 @@ function updateMATReqsMajor() {
 
 
 /**
- *
+ * Updates all electives for the minor.
  */
 function updateAllElecsMinor() {
     'use strict';
@@ -259,13 +265,13 @@ function updateAllElecsMinor() {
 
 
 /**
- *
+ * Updates minor electives.
  */
 function updateElecsMinor() {
     'use strict';
 
     updateAllElecsMinor();
-    var numProjects = 2;
+//    var numProjects = 2;
     postTotalMinor = elecTotalMinor + cscReqTotalMinor;
     //elecSatMinor = elecTotalMinor >= 1.5
     //  && (active300s.length + active400s.length + projectCourses.length > 0)
@@ -279,7 +285,7 @@ function updateElecsMinor() {
 
 
 /**
- *
+ * Updates the major 200 series electives.
  */
 function update200sElecsMajor() {
     'use strict';
@@ -305,7 +311,7 @@ function update200sElecsMajor() {
 
 
 /**
- *
+ * Updates the major 300 series electives.
  */
 function update300sElecsMajor() {
     'use strict';
@@ -351,7 +357,7 @@ function update300sElecsMajor() {
 
 
 /**
- *
+ * Updates the major electives.
  */
 function updateElecsMajor() {
     'use strict';
@@ -379,7 +385,7 @@ function updateElecsMajor() {
 
 
 /**
- *
+ * Updates 400 series CSC courses.
  */
 function updateCSC400s() {
     'use strict';
@@ -407,9 +413,9 @@ function updateCSC400s() {
 }
 
 
-// Right now, it must be called after updateCSC400s (because of numBCB)
 /**
- *
+ * Updates specialist electives.
+ * Note: Must be called after updateCSC400s because of numBCB.
  */
 function updateElecs() {
     'use strict';
@@ -458,7 +464,7 @@ function updateElecs() {
 
 
 /**
- *
+ * Updates the major PEY requirement.
  */
 function updatePEYMajor() {
     'use strict';
@@ -470,7 +476,7 @@ function updatePEYMajor() {
 
 
 /**
- *
+ * Updates the specialist PEY requirement.
  */
 function updatePEY() {
     'use strict';
@@ -482,7 +488,7 @@ function updatePEY() {
 
 
 /**
- *
+ * Updates total specialist requirements.
  */
 function updatePOStTotal() {
     'use strict';
@@ -492,7 +498,7 @@ function updatePOStTotal() {
 
 
 /**
- *
+ * Updates total major requirements.
  */
 function updatePOStTotalMajor() {
     'use strict';
@@ -502,7 +508,8 @@ function updatePOStTotalMajor() {
 
 
 /**
- *
+ * Updates total major requirements.
+ * TODO: Not used?
  */
 function updatePostMinor() {
     'use strict';
