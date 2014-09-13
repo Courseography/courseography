@@ -1,7 +1,7 @@
 /**
- *
- * @param {string} id
- * @returns {string}
+ * Returns a course's description.
+ * @param {string} id The Node's id.
+ * @returns {string} The course description.
  */
 function fetchCourseDescription(id) {
     'use strict';
@@ -17,9 +17,10 @@ function fetchCourseDescription(id) {
 
 
 /**
- *
- * @param {string} id
- * @returns {Array}
+ * Returns and formats all course codes in 'id'.
+ * @param {string} id The Node's ID.
+ * @returns {Array} All formatted course codes.
+ * TODO: Change function name
  */
 function formatCourseName(id) {
     'use strict';
@@ -46,8 +47,9 @@ function formatCourseName(id) {
 
 
 /**
- *
- * @param {string} name
+ * Returns a formatted version course's description.
+ * TODO: Duplicate description
+ * @param {string} name The name of the course.
  * @returns {*}
  */
 function readCalendarEntry(name) {
@@ -59,9 +61,9 @@ function readCalendarEntry(name) {
 
 
 /**
- *
- * @param {Course} course
- * @returns {string}
+ * Returns a formatted version of the course's description.
+ * @param {Course} course The course.
+ * @returns {string} The Course's description.
  */
 function formatCourseDescription(course) {
     'use strict';
@@ -86,9 +88,9 @@ function formatCourseDescription(course) {
 
 
 /**
- *
- * @param {string} id
- * @returns {string}
+ * Returns a course's title.
+ * @param {string} id The Node's ID.
+ * @returns {string} The course's title.
  */
 function getCourseTitle(id) {
     'use strict';
