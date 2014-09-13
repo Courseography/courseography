@@ -2,16 +2,12 @@
  * Data Structures for the course graph
  */
 
-// Global variables
-var nodes = []; // List of all nodes
-var edges = []; // List of all edges, Edges is never used.
-
 
 /**
- *
- * @param {Array} parents
- * @param {string} type
- * @param {string} name
+ * Makes a Node.
+ * @param {Array} parents The Node's parents.
+ * @param {string} type The Node's type.
+ * @param {string} name The Node's name.
  */
 function makeNode(parents, type, name) {
     'use strict';
@@ -22,10 +18,10 @@ function makeNode(parents, type, name) {
 
 
 /**
- *
- * @param {Array} parents
- * @param {string} type
- * @param {string} name
+ * Makes a hybrid.
+ * @param {Array} parents The hybrid's parents.
+ * @param {string} type The hybrid's type.
+ * @param {string} name The hybrid's name.
  */
 function makeHybrid(parents, type, name) {
     'use strict';
@@ -36,10 +32,10 @@ function makeHybrid(parents, type, name) {
 
 
 /**
- *
- * @param {Node} parent
- * @param {Node} child
- * @param {string} name
+ * Makes an Edge.
+ * @param {Node} parent The source Node of the Edge.
+ * @param {Node} child The target Node of the Edge.
+ * @param {string} name The name of the Edge.
  */
 function makeEdge(parent, child, name) {
     'use strict';
