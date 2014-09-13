@@ -1,5 +1,5 @@
 /**
- *
+ * Enables graph dragging.
  */
 function enableGraphDragging() {
     /* Extending the jQuery draggable option to be fitted with right click for either graph or graphRootSVG.
@@ -73,14 +73,14 @@ function enableGraphDragging() {
 
 
 /**
- * Disables Tab key
- * @param e
- * @returns {boolean}
+ * Disables Tab key.
+ * @param event The keydown event.
+ * @returns {boolean} Whether the key is the tab key.
  */
-document.onkeydown = function (e) {
+document.onkeydown = function (event) {
     'use strict';
 
-    if (e.which === 9) {
+    if (event.which === 9) { // 9 is the Tab key.
         return false;
     }
 };
@@ -165,7 +165,7 @@ function initializeGraphSettings() {
 
 
 /**
- * Resets interface to default (nothing selected); callback for Reset button.
+ * Resets graph to default (no Nodes selected).
  */
 function reset() {
     'use strict';
@@ -219,7 +219,7 @@ function reset() {
 
 
 /**
- *
+ * Resizes contents when window is resized.
  */
 $(window).resize(function() {
     'use strict';
@@ -231,7 +231,7 @@ $(window).resize(function() {
 
 
 /**
- *
+ * Removes all tool-tips.
  */
 function removeToolTips() {
     'use strict';
@@ -241,7 +241,7 @@ function removeToolTips() {
 
 
 /**
- *
+ * Clears all timeouts.
  */
 function clearAllTimeouts() {
     'use strict';
