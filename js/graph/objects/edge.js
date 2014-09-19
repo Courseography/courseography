@@ -1,7 +1,7 @@
 /**
  * Constructs an Edge.
- * @param parent This Edge's source Node.
- * @param child This Edge's child Node.
+ * @param {Node} parent This Edge's source Node.
+ * @param {Node} child This Edge's child Node.
  * @param {string} name The id of the SVG path element that this Edge represents.
  * @constructor
  */

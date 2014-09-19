@@ -1,13 +1,15 @@
-var trapScroll;
-var courses;
-var courseCache = [];
-var selectedCourses = [];
-var selectedLectures = [];
-var courseObjects = [];
+// All Global Variables for the Grid
+//TODO: Are all of these used?
+var trapScroll;             // Disables ability to scroll parent div.
+var courses;                //
+var courseCache = [];       // All Courses that have been previously requested.
+var selectedCourses = [];   // All selected Courses.
+var selectedLectures = [];  // All selected sections. TODO: Bad name
+var courseObjects = [];     //
 
 
 /**
- *
+ * Sets up the page.
  */
 $(document).ready(function () {
     'use strict';
@@ -31,7 +33,7 @@ $(document).ready(function () {
 
 
 /**
- *
+ * Renders the button that allows the user to deselected all selected courses.
  */
 function renderClearAllButton() {
     'use strict';

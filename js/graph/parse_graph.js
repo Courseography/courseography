@@ -118,7 +118,7 @@ function buildGraph() {
 /**
  *
  * @param {string} s
- * @returns {*[]}
+ * @returns {Array}
  */
 function parseAnd(s) {
     'use strict';
@@ -148,7 +148,7 @@ function parseAnd(s) {
 /**
  *
  * @param {string} s
- * @returns {*[]}
+ * @returns {Array}
  */
 function parseOr(s) {
     'use strict';
@@ -191,7 +191,7 @@ function parseOr(s) {
 /**
  *
  * @param {string} s
- * @returns {*}
+ * @returns {Array}
  */
 function parseCourse(s) {
     'use strict';
