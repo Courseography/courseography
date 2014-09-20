@@ -5,28 +5,26 @@
 
 /**
  * Makes a Node.
- * @param {Array} parents The Node's parents.
  * @param {string} type The Node's type.
  * @param {string} name The Node's name.
  */
-function makeNode(parents, type, name) {
+function makeNode(type, name) {
     'use strict';
 
-    window[name] = new Node(parents, type, name);
+    window[name] = new Node(type, name);
     nodes.push(name);
 }
 
 
 /**
- * Makes a hybrid.
- * @param {Array} parents The hybrid's parents.
+ * Makes a Hybrid.
  * @param {string} type The hybrid's type.
  * @param {string} name The hybrid's name.
  */
-function makeHybrid(parents, type, name) {
+function makeHybrid(type, name) {
     'use strict';
 
-    makeNode(parents, type, name);
+    makeNode(type, name);
     window[name].hybrid = true;
 }
 

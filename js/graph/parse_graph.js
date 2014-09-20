@@ -24,11 +24,11 @@ function buildGraph() {
         var id = $(this).attr('id');
         var course = $(this).children('text').text();
         var reqs = parseAnd(course)[0];
-        makeHybrid([], 'AND', id);
+        makeHybrid('AND', id);
         $.each(reqs, function (index, elem) {
             if ($.isArray(elem)) {
                 var orNode = id + elem.join();
-                makeHybrid([], 'OR', orNode);
+                makeHybrid('OR', orNode);
                 $.each(elem, function (i, e) {
                     window[orNode].parents.push(window[e]);
                     window[e].children.push(window[orNode]);
@@ -45,7 +45,7 @@ function buildGraph() {
     $('.bool').each(function () {
         var id = $(this).attr('id');
         var type = $(this).children('text').text().toUpperCase();
-        makeHybrid([], type, id);
+        makeHybrid(type, id);
     });
 
     $('path').each(function () {

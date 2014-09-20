@@ -1,11 +1,10 @@
 /**
  * Constructs a Node.
- * @param parents The parent Nodes of this Node.
  * @param {string} type The logical type of this Node's prerequisites. Either 'OR' or 'AND'.
  * @param {string} name The id of the SVG g element that this Node represents.
  * @constructor
  */
-function Node(parents, type, name) { // parents is never used.
+function Node(type, name) {
     'use strict';
 
     this.name = name; // Used to identify the GUI node
