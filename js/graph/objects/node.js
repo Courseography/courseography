@@ -1,7 +1,7 @@
 /**
  * Constructs a Node.
  * @param {string} type The logical type of this Node's prerequisites. Either 'OR' or 'AND'.
- * @param {string} id The id of the SVG g element that this Node represents.
+ * @param {string} id The ID of the SVG g element that this Node represents.
  * @constructor
  */
 function Node(type, id) {
@@ -31,7 +31,7 @@ Node.prototype.isSelected = function () {
 
 
 /**
- * Hightlights this Node and this Node's missing prerequisites when this Node is hovered over.
+ * Highlights this Node and this Node's missing prerequisites when this Node is hovered over.
  */
 Node.prototype.focus = function () {
     'use strict';
@@ -111,7 +111,7 @@ Node.prototype.updateStatus = function () {
 
 
 /**
- * Activates/deactivates this Node when the Node is clicked.
+ * Selects/deselects this Node.
  */
 Node.prototype.turn = function () {
     'use strict';
