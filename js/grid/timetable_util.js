@@ -49,7 +49,7 @@ function enableSearch() {
 
 /**
  * Resets the course search list.
- * TODO: Function is a bit lengthy and convoluted
+ * TODO: Function is a bit lengthy and convoluted.
  */
 function resetSearchList() {
     'use strict';
@@ -94,14 +94,14 @@ function resetSearchList() {
         });
     }
     searchListObject.append(courseList);
-    refreshStarredCourses();
+    refreshSelectedCourses();
 }
 
 
 /**
- * Highlights the starred (selected) courses in the course search list.
+ * Highlights the selected courses in the course search list.
  */
-function refreshStarredCourses() {
+function refreshSelectedCourses() {
     'use strict';
 
     $('#search-list').find('li').each(function (index) {
@@ -230,7 +230,7 @@ function removeCourseFromList(name) {
     saveCookies(selectedCourses, selectedLectures);
 
     // Refresh starred courses
-    refreshStarredCourses();
+    refreshSelectedCourses();
 }
 
 
