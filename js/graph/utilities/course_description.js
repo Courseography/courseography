@@ -17,9 +17,9 @@ function fetchCourseDescription(id) {
 
 
 /**
- * Returns and formats all course codes in 'id'.
+ * Returns and formats all course codes in id.
  * @param {string} id The Node's ID.
- * @returns {Array} All formatted course codes.
+ * @returns {string[]} All formatted course codes.
  * TODO: Change function name
  */
 function formatCourseName(id) {

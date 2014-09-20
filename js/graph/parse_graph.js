@@ -213,15 +213,17 @@ function parseCourse(s) {
 
 
 /**
- *
- * @param {number} px
- * @param {number} py
- * @param {number} rx
- * @param {number} ry
- * @param {number} width
- * @param {number} height
- * @param {number} offset
- * @returns {boolean}
+ * Returns whether point px,py intersects with
+ * the rectangle whose top left corner is at rx,ry with width
+ * width, height height and an offset of offset.
+ * @param {number} px The point's x position.
+ * @param {number} py The point's y position.
+ * @param {number} rx The rectangle's x position.
+ * @param {number} ry The rectangle's y position.
+ * @param {number} width The rectangle's width.
+ * @param {number} height The rectangle's height.
+ * @param {number} offset The offset.
+ * @returns {boolean} Whether the point intersects with the rectangle + offset.
  */
 function intersects(px, py, rx, ry, width, height, offset) {
     'use strict';

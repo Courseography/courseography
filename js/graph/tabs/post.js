@@ -1,7 +1,7 @@
 /* global $ */
 
 // TODO: File too long
-// TODO: Bad function names\
+// TODO: Bad function names
 
 /**
  * Updates the POSt requirements that correspond with a certain course.

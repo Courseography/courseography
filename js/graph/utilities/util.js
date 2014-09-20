@@ -74,7 +74,7 @@ function enableGraphDragging() {
 
 /**
  * Disables Tab key.
- * @param event The keydown event.
+ * @param {object} event The keydown event.
  * @returns {boolean} Whether the key is the tab key.
  */
 document.onkeydown = function (event) {

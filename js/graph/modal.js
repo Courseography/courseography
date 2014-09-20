@@ -4,7 +4,7 @@
 /**
  * Creates and returns the main modal content div.
  * @param {string} id The course course.
- * @returns {*|jQuery|HTMLElement} The main modal content div.
+ * @returns {jQuery} The main modal content div.
  */
 function createModalDiv(id) {
     'use strict';
@@ -117,7 +117,7 @@ function setupRelatedLinks(id) {
 
 /**
  * Displays a tooltip for a Node.
- * @param nodeId The Node's ID.
+ * @param {string} nodeId The Node's ID.
  */
 function displayTooltip(nodeId) {
     'use strict';

@@ -34,7 +34,7 @@ var matReqSatMajor = false;   // MAT requirements satisfieds for the CSC major P
 var elecSatMajor = false;     // Elective requirement satisfied for the CSC major POSt
 var peySatMajor = false;      // PEY satisfied for major POSt
 var numBCBMajor = 0;          // Number of satisfied BCB courses for the CSC major POSt
-var cscReqTotalMajor = 0;     // Total number of satisfied fields for the CSC specialist POSt
+var cscReqTotalMajor = 0;     // Total number of satisfied fields for the CSC major POSt
 var matReqTotalMajor = 0;     // Total number of satisfied MAT courses for the CSC major POSt
 var elec200sTotalMajor = 0;   // Total number of satisfied 200 series course electives for the CSC major POSt
 var elec300sTotalMajor = 0;   // Total number of satisfied 300 series course electives for the CSC major POSt
@@ -57,7 +57,6 @@ var FCEPrerequisiteCourses;   // Courses that have FCE based prerequisites, init
 var courseCache = [];         // Cached Courses. Courses are cached to minimise AJAX requests
 
 var nodes = [];               // List of all nodes
-var edges = [];               // List of all edges, Edges is never used.
 
 
 $(document).ready(function () {
