@@ -219,18 +219,6 @@ function reset() {
 
 
 /**
- * Resizes contents when window is resized.
- */
-$(window).resize(function() {
-    'use strict';
-
-    // Set width of FCE count
-    var w = $('.infoTabs').width() - $('.tabList').outerWidth() - 1;
-    $('#FCECountDiv').width(w + 'px');
-});
-
-
-/**
  * Removes all tool-tips.
  */
 function removeToolTips() {
