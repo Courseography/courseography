@@ -1,8 +1,3 @@
-/**
- * The actual dependencies.
- * TODO: I'm not sure if this note describes the file well
- */
-
 // Math courses
 var math = [
     'Calc1', 'Lin1', 'Sta1', 'Sta2'
