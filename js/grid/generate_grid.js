@@ -17,6 +17,7 @@ function generateGrid() {
     var springCaption = $('<caption></caption>').html('Spring');
     var springThead = $('<thead></thead>');
 
+    /* Appends caption elements first to display them above table. */
     timetableTableFall.append(fallCaption)
                       .append(fallThead);
     timetableTableSpring.append(springCaption)
@@ -29,22 +30,22 @@ function generateGrid() {
     timetableContainerDivSpring.append(timetableTableSpring);
 
     rowDiv.append(timetableContainerDivFall)
-        .append(timetableContainerDivSpring)
-        .insertBefore($('#info'));
+          .append(timetableContainerDivSpring)
+          .insertBefore($('#info'));
 }
 
 
 /**
- *
- * @param suffix
+ * Creates a timetable.
+ * @param {string} idSuffix The suffix of the ID of the timetable.
  * @returns {jQuery}
  */
-function createTimeTable(suffix) {
+function createTimeTable(idSuffix) {
     'use strict';
 
     return $('<table></table>')
         .addClass('timetable table')
-        .attr('id', 'timetable-' + suffix);
+        .attr('id', 'timetable-' + idSuffix);
 }
 
 
@@ -62,8 +63,8 @@ function createTimeTableContainer() {
 
 /**
  * Appends table headers to the timetables.
- * @param fallThead The fall table header.
- * @param springThead The spring table header.
+ * @param {jQuery} fallThead The fall table header.
+ * @param {jQuery} springThead The spring table header.
  */
 function appendHeaders(fallThead, springThead) {
     'use strict';
@@ -86,8 +87,8 @@ function appendHeaders(fallThead, springThead) {
 
 /**
  * Appends all table rows to the timetables.
- * @param timetableTableFall The fall timetable.
- * @param timetableTableSpring The spring timetable.
+ * @param {jQuery} timetableTableFall The fall timetable.
+ * @param {jQuery} timetableTableSpring The spring timetable.
  */
 function appendTableRows(timetableTableFall, timetableTableSpring) {
     'use strict';
@@ -104,8 +105,8 @@ function appendTableRows(timetableTableFall, timetableTableSpring) {
 
 /**
  * Appends table cells to table rows.
- * @param trFall The fall table row.
- * @param trSpring The spring table row.
+ * @param {jQuery} trFall The fall table row.
+ * @param {jQuery} trSpring The spring table row.
  * @param {int} time The table rows time.
  */
 function appendTableData(trFall, trSpring, time) {
