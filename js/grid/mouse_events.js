@@ -10,7 +10,7 @@ function setTdHover() {
         if (courseName !== '') {
             var course = getCourseObject(courseName, courseObjects);
             if (course !== undefined) {
-                $.each(course.sectionTimes(), function (i, time) {
+                $.each(course.getSectionTimes(), function (i, time) {
                     $(time).addClass('hover-time');
                 });
 
@@ -23,7 +23,7 @@ function setTdHover() {
     }).mouseout(function () {
         var course = getCourseObject($(this).html(), courseObjects);
         if (course !== undefined) {
-            $.each(course.sectionTimes(), function (i, time) {
+            $.each(course.getSectionTimes(), function (i, time) {
                 $(time).removeClass('hover-time');
             });
 

@@ -428,7 +428,7 @@ Course.prototype.renderUpdatedHeader = function () {
  * TODO: Change function name
  * @returns {Array} This Course's selected section times.
  */
-Course.prototype.sectionTimes = function () {
+Course.prototype.getSectionTimes = function () {
     'use strict';
 
     var sectionTimes = [];
