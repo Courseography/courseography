@@ -2,15 +2,15 @@
  * Constructs an Edge.
  * @param {Node} parent This Edge's source Node.
  * @param {Node} child This Edge's child Node.
- * @param {string} name The id of the SVG path element that this Edge represents.
+ * @param {string} id The id of the SVG path element that this Edge represents.
  * @constructor
  */
-function Edge(parent, child, name) {
+function Edge(parent, child, id) {
     'use strict';
 
     this.parent = parent;
     this.child = child;
-    this.name = name;
+    this.id = id;
     this.status = 'inactive';
 }
 
@@ -38,5 +38,5 @@ Edge.prototype.updateStatus = function () {
 Edge.prototype.updateSVG = function () {
     'use strict';
 
-    $('#' + this.name).attr('data-active', this.status);
+    $('#' + this.id).attr('data-active', this.status);
 };

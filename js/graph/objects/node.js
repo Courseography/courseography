@@ -1,13 +1,13 @@
 /**
  * Constructs a Node.
  * @param {string} type The logical type of this Node's prerequisites. Either 'OR' or 'AND'.
- * @param {string} name The id of the SVG g element that this Node represents.
+ * @param {string} id The id of the SVG g element that this Node represents.
  * @constructor
  */
-function Node(type, name) {
+function Node(type, id) {
     'use strict';
 
-    this.name = name; // Used to identify the GUI node
+    this.id = id; // Used to identify the GUI node
     this.parents = []; // Prerequisite nodes
     this.children = []; // Nodes for which this is a prerequisite
     this.outEdges = []; // Edges leading to children
@@ -38,7 +38,7 @@ Node.prototype.focus = function () {
 
     if (this.status !== 'active') {
         if (this.status !== 'overridden') {
-            $('#' + this.name).attr('data-active', 'missing');
+            $('#' + this.id).attr('data-active', 'missing');
         }
         $.each(this.inEdges, function (i, edge) {
             if (edge.parent.status !== 'active') {
@@ -59,10 +59,10 @@ Node.prototype.unfocus = function () {
     'use strict';
 
     if (!this.isSelected()) {
-        if (activeFocus === '' || window[activeFocus + 'FocusList'].indexOf(this.name) > -1) {
+        if (activeFocus === '' || window[activeFocus + 'FocusList'].indexOf(this.id) > -1) {
             this.updateSVG();
         } else {
-            $('#' + this.name).attr('data-active', 'unlit');
+            $('#' + this.id).attr('data-active', 'unlit');
         }
     }
 
@@ -94,7 +94,7 @@ Node.prototype.updateStatus = function () {
             this.status = 'inactive';
         }
     }
-    setCookie(this.name, this.status);
+    setCookie(this.id, this.status);
 
     // Always update children of hybrids
     if (this.hybrid) {
@@ -157,7 +157,7 @@ Node.prototype.arePrereqsSatisfied = function () {
             sat = sat || this.parents[i].isSelected();
         }
     } else {
-        console.log('Error: invalid node logicalType ' + this.type + ' for node ' + this.name);
+        console.log('Error: invalid node logicalType ' + this.type + ' for node ' + this.id);
     }
     return sat;
 };
@@ -171,11 +171,11 @@ Node.prototype.arePrereqsSatisfied = function () {
 Node.prototype.checkFCEBasedPrerequisites = function() {
     'use strict';
 
-    if (this.name === 'CSC454') {
+    if (this.id === 'CSC454') {
         return FCEs200 + FCEs300 + FCEs400 >= 2.5;
-    } else if (this.name === 'CSC494' || this.name === 'CSC495') {
+    } else if (this.id === 'CSC494' || this.id === 'CSC495') {
         return FCEs300 + FCEs400 >= 1.5;
-    } else if (this.name === 'CSC318') {
+    } else if (this.id === 'CSC318') {
         return FCEs >= 0.5;
     } else {
         return true;
@@ -189,5 +189,5 @@ Node.prototype.checkFCEBasedPrerequisites = function() {
 Node.prototype.updateSVG = function() {
     'use strict';
 
-    $('#' + this.name).attr('data-active', this.status);
+    $('#' + this.id).attr('data-active', this.status);
 };
