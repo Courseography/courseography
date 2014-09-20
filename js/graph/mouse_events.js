@@ -9,7 +9,7 @@ function setMouseCallbacks() {
     nodeObjects.click(function (event) {
 
         // TODO: Test as click(turnNode)
-        turnNode(event)
+        turnNode(event);
     })
         .hover(
             function (event) {

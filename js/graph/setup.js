@@ -30,7 +30,7 @@ var peySat = false;           // PEY satisfied for specialist POSt
 
 // Major requirements
 var cscReqSatMajor = false;   // CSC requirements satisfied for major POSt
-var matReqSatMajor = false;   // MAT requirements satisfieds for the CSC major POSt
+var matReqSatMajor = false;   // MAT requirements satisfied for the CSC major POSt
 var elecSatMajor = false;     // Elective requirement satisfied for the CSC major POSt
 var peySatMajor = false;      // PEY satisfied for major POSt
 var numBCBMajor = 0;          // Number of satisfied BCB courses for the CSC major POSt

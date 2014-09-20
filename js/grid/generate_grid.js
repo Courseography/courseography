@@ -61,6 +61,7 @@ function createTimeTableContainer() {
 }
 
 
+//noinspection JSValidateJSDoc
 /**
  * Appends table headers to the timetables.
  * @param {jQuery} fallThead The fall table header.
