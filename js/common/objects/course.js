@@ -184,7 +184,6 @@ Course.prototype.activateSection = function (section) {
  */
 Course.prototype.addSection = function (section) {
     'use strict';
-    console.log(typeof section);
 
     var type = section.type; // Not used.
     this.selected[section.type] = section;
@@ -201,7 +200,6 @@ Course.prototype.addSection = function (section) {
  */
 Course.prototype.selectTimes = function (section) {
     'use strict';
-    console.log(typeof section);
 
     $.each(section.times, function (i, time) {
         if ($(time).attr('clicked') !== 'true') {

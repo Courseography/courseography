@@ -215,7 +215,7 @@ function makeLecture(lecture, course, id, sectionTimes) {
 
 /**
  * Makes a tutorial Section.
- * @param {array} tutorial The tutorial.
+ * @param {Array} tutorial The tutorial.
  * @param course The Course.
  * @param {string} id The Section's ID.
  * @param {Array} sectionTimes The Section's times.
