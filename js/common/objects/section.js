@@ -45,7 +45,7 @@ Section.prototype.setMouseEvents = function (li) {
 
 
 /**
- * Sets this section's mouseout event.
+ * Sets this Section's mouseout event.
  */
 Section.prototype.mouseout = function () {
     'use strict';
@@ -58,7 +58,7 @@ Section.prototype.mouseout = function () {
 
 
 /**
- * Sets this section's mouseover event.
+ * Sets this Section's mouseover event.
  */
 Section.prototype.mouseover = function () {
     'use strict';
@@ -73,7 +73,7 @@ Section.prototype.mouseover = function () {
 
 
 /**
- * Sets this sections click event.
+ * Sets this Section's click event.
  */
 Section.prototype.onclick = function () {
     'use strict';
@@ -95,7 +95,7 @@ Section.prototype.onclick = function () {
 
 
 /**
- * Sets/updates one of this Section's times.
+ * Sets one of this Section's times.
  * @param {string} time The time's cell ID.
  */
 Section.prototype.setTime = function (time) {
@@ -194,11 +194,11 @@ Section.prototype.renderUpdate = function () {
 
 // Other constructors
 /**
- * Makes a lecture section.
+ * Makes a lecture Section.
  * @param {object} lecture The lecture.
  * @param course The course.
- * @param {string} id The section ID.
- * @param {Array} sectionTimes The section's times.
+ * @param {string} id The Section ID.
+ * @param {Array} sectionTimes The Section's times.
  * @returns {Section} The lecture Section.
  */
 function makeLecture(lecture, course, id, sectionTimes) {
@@ -214,11 +214,11 @@ function makeLecture(lecture, course, id, sectionTimes) {
 
 
 /**
- * Makes a tutorial section.
+ * Makes a tutorial Section.
  * @param {array} tutorial The tutorial.
  * @param course The Course.
- * @param {string} id The section's ID.
- * @param {Array} sectionTimes The section's times.
+ * @param {string} id The Section's ID.
+ * @param {Array} sectionTimes The Section's times.
  * @returns {Section} The tutorial Section.
  */
 function makeTutorial(tutorial, course, id, sectionTimes) {
