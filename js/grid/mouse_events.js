@@ -37,7 +37,7 @@ function setTdHover() {
 /**
  * Displays the conflicts in the table cell time.
  * @param {string} time
- * @param {Array} conflicts
+ * @param {string[]} conflicts
  */
 function renderConflicts(time, conflicts) {
     'use strict';

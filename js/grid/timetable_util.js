@@ -13,7 +13,7 @@ function updateSelectedLectures(sectionId) {
 
 /**
  * Returns all course codes.
- * @returns {Array} All course codes.
+ * @returns {string[]} All course codes.
  */
 function getVeryLargeCourseArray() {
     'use strict';
@@ -170,8 +170,8 @@ function restoreFromCookies() {
 
 /**
  * Stores courses and sections in cookies.
- * @param {Array} courses All selected courses.
- * @param {Array} sections All selected sections.
+ * @param {string[]} courses All selected courses.
+ * @param {string[]} sections All selected sections.
  */
 function saveCookies(courses, sections) {
     'use strict';
