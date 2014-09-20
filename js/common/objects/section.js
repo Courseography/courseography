@@ -230,3 +230,17 @@ function makeTutorial(tutorial, course, id, sectionTimes) {
     section.wait = tutorial[5];
     return section;
 }
+
+/**
+ * Returns whether two Sections are in the same session.
+ * @param {Section} section1 The first section.
+ * @param {Section} section2 The second section.
+ * @returns {boolean} Whether two sections are in the same session.
+ */
+function sameSession(section1, section2) {
+    'use strict';
+
+    return section1 !== undefined &&
+        section2 !== undefined &&
+        section1.session === section2.session;
+}
