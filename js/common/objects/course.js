@@ -73,7 +73,7 @@ Course.prototype.parseSessions = function (course) {
  * Parses this Course's sections.
  * @param {string} session The session of the section.
  * @param {string} timeSuffix The suffix of the section ID.
- * @returns {Array} This Course's sections.
+ * @returns {Section[]} This Course's Sections.
  */
 Course.prototype.parseSections = function (session, timeSuffix) {
     'use strict';
@@ -87,7 +87,7 @@ Course.prototype.parseSections = function (session, timeSuffix) {
  * Parses this Course's lectures.
  * @param {string} session The session of the lecture.
  * @param {string} timeSuffix The suffix of the section ID.
- * @returns {Array} The lecture's sections.
+ * @returns {Section[]} The lecture's Sections.
  */
 Course.prototype.parseLectures = function (session, timeSuffix) {
     'use strict';
@@ -126,7 +126,7 @@ Course.prototype.parseLectures = function (session, timeSuffix) {
  * Parses this Course's tutorials.
  * @param {string} session The session of the tutorial.
  * @param {string} timeSuffix The suffix of the section ID.
- * @returns {Array} The tutorial's sections.
+ * @returns {Section[]} The tutorial's Sections.
  */
 Course.prototype.parseTutorials = function (session, timeSuffix) {
     'use strict';
@@ -160,7 +160,7 @@ Course.prototype.parseTutorials = function (session, timeSuffix) {
 /* Manipulate course sections */
 /**
  * Activates a section of this Course.
- * @param {Section} section The section being activated.
+ * @param {Section} section The Section being activated.
  */
 Course.prototype.activateSection = function (section) {
     'use strict';
@@ -195,7 +195,7 @@ Course.prototype.addSection = function (section) {
 
 
 /**
- * Selects this Course's section times.
+ * Selects the times of section for this Course.
  * @param {Section} section The section whose times are being selected.
  */
 Course.prototype.selectTimes = function (section) {
@@ -212,8 +212,8 @@ Course.prototype.selectTimes = function (section) {
 
 
 /**
- * Removes one of this Course's sections.
- * @param {Section} section The section being removed.
+ * Removes section from the grid.
+ * @param {Section} section The Section being removed.
  */
 Course.prototype.removeSection = function (section) {
     'use strict';
@@ -349,7 +349,7 @@ Course.prototype.renderHeader = function () {
 
 /**
  * Renders this Course's sessions in the grid.
- * @returns {HTMLElement} This Course's session elements.
+ * @returns {HTMLElement} This Course's sessions.
  */
 Course.prototype.renderSessions = function () {
     'use strict';
@@ -368,9 +368,9 @@ Course.prototype.renderSessions = function () {
 
 
 /**
- * Renders this Course's sections in the grid.
+ * Renders this Course's Sections from session in the grid.
  * @param {string} session The session of the sections.
- * @returns {*} The updated list of sections.
+ * @returns {undefined|HTMLElement} The updated list of sections.
  */
 Course.prototype.renderSections = function (session) {
     'use strict';
@@ -423,8 +423,7 @@ Course.prototype.renderUpdatedHeader = function () {
 
 /**
  * Returns this Course's selected section times.
- * TODO: Change function name
- * @returns {Array} This Course's selected section times.
+ * @returns {string[]} This Course's selected section times.
  */
 Course.prototype.getSectionTimes = function () {
     'use strict';
