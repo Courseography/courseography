@@ -11,48 +11,26 @@ function generateGrid() {
     var timetableContainerDivFall = createTimeTableContainer();
     var timetableContainerDivSpring = createTimeTableContainer();
     var timetableTableFall = createTimeTable('F');
-    var fallCaption = createCaption('Fall');
-    var fallThead = createThead();
+    var fallCaption = $('<caption></caption>').html('Fall');
+    var fallThead = $('<thead></thead>');
     var timetableTableSpring = createTimeTable('S');
-    var springCaption = createCaption('Spring');
-    var springThead = createThead();
+    var springCaption = $('<caption></caption>').html('Spring');
+    var springThead = $('<thead></thead>');
 
     timetableTableFall.append(fallCaption)
-        .append(fallThead);
+                      .append(fallThead);
     timetableTableSpring.append(springCaption)
-        .append(springThead);
+                        .append(springThead);
 
     appendHeaders(fallThead, springThead);
     appendTableRows(timetableTableFall, timetableTableSpring);
 
     timetableContainerDivFall.append(timetableTableFall);
     timetableContainerDivSpring.append(timetableTableSpring);
+
     rowDiv.append(timetableContainerDivFall)
         .append(timetableContainerDivSpring)
         .insertBefore($('#info'));
-}
-
-
-/**
- * Returns a jQuery HTML thead element object.
- * @returns {jQuery}
- */
-function createThead() {
-    'use strict';
-
-    return $('<thead></thead>');
-}
-
-
-/**
- * Returns a jQuery HTML caption element object.
- * @param name
- * @returns {jQuery}
- */
-function createCaption(name) {
-    'use strict';
-
-    return $('<caption></caption>').html(name);
 }
 
 
