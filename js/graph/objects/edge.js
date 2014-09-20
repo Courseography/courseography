@@ -1,15 +1,15 @@
 /**
  * Constructs an Edge.
- * @param {Node} parent This Edge's source Node.
- * @param {Node} child This Edge's child Node.
+ * @param {Node} source This Edge's source Node.
+ * @param {Node} target This Edge's target Node.
  * @param {string} id The id of the SVG path element that this Edge represents.
  * @constructor
  */
-function Edge(parent, child, id) {
+function Edge(source, target, id) {
     'use strict';
 
-    this.parent = parent;
-    this.child = child;
+    this.source = source;
+    this.target = target;
     this.id = id;
     this.status = 'inactive';
 }
@@ -21,9 +21,9 @@ function Edge(parent, child, id) {
 Edge.prototype.updateStatus = function () {
     'use strict';
 
-    if (!this.parent.isSelected()) {
+    if (!this.source.isSelected()) {
         this.status = 'inactive';
-    } else if (!this.child.isSelected()) {
+    } else if (!this.target.isSelected()) {
         this.status = 'takeable';
     } else {
         this.status = 'active';

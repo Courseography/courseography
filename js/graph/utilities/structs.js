@@ -31,18 +31,18 @@ function makeHybrid(type, name) {
 
 /**
  * Makes an Edge.
- * @param {Node} parent The source Node of the Edge.
- * @param {Node} child The target Node of the Edge.
- * @param {string} name The name of the Edge.
+ * @param {Node} source The source Node of the Edge.
+ * @param {Node} target The target Node of the Edge.
+ * @param {string} id The name of the Edge.
  */
-function makeEdge(parent, child, name) {
+function makeEdge(source, target, id) {
     'use strict';
 
-    window[name] = new Edge(parent, child, name);
-    parent.outEdges.push(window[name]);
-    child.inEdges.push(window[name]);
+    window[id] = new Edge(source, target, id);
+    source.outEdges.push(window[id]);
+    target.inEdges.push(window[id]);
 
-    parent.children.push(child);
-    child.parents.push(parent);
+    source.children.push(target);
+    target.parents.push(source);
 }
 
