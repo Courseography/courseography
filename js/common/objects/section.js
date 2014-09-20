@@ -1,7 +1,7 @@
 /* Section class */
 /**
  * Constructs a Section.
- * @param {Array} times The times of this Section.
+ * @param {string[]} times The times that this Section is offered at.
  * @param {Course} course The Course of this Section.
  * @param {string} id The ID of this Section.
  * @constructor
@@ -97,6 +97,7 @@ Section.prototype.onclick = function () {
 /**
  * Sets one of this Section's times.
  * @param {string} time The time's cell ID.
+ * TODO: Rename parameter.
  */
 Section.prototype.setTime = function (time) {
     'use strict';
@@ -110,6 +111,7 @@ Section.prototype.setTime = function (time) {
 /**
  * Sets one of this Section's times as in conflict.
  * @param {string} time The time's cell ID.
+ * TODO: Rename parameter.
  */
 Section.prototype.setConflictTime = function (time) {
     'use strict';
@@ -139,7 +141,8 @@ Section.prototype.removeTimes = function () {
 
 /**
  * Removes one of this Section's times in conflict status.
- * @param time The time's cell ID.
+ * @param {string} time The time's cell ID.
+ * TODO: Rename parameter.
  */
 Section.prototype.removeConflict = function (time) {
     'use strict';
@@ -196,9 +199,9 @@ Section.prototype.renderUpdate = function () {
 /**
  * Makes a lecture Section.
  * @param {object} lecture The lecture.
- * @param course The course.
+ * @param {object} course The course.
  * @param {string} id The Section ID.
- * @param {Array} sectionTimes The Section's times.
+ * @param {string[]} sectionTimes The Section's times.
  * @returns {Section} The lecture Section.
  */
 function makeLecture(lecture, course, id, sectionTimes) {
@@ -218,7 +221,7 @@ function makeLecture(lecture, course, id, sectionTimes) {
  * @param {Array} tutorial The tutorial.
  * @param course The Course.
  * @param {string} id The Section's ID.
- * @param {Array} sectionTimes The Section's times.
+ * @param {string[]} sectionTimes The Section's times.
  * @returns {Section} The tutorial Section.
  */
 function makeTutorial(tutorial, course, id, sectionTimes) {
