@@ -19,13 +19,13 @@ function makeNode(type, name) {
 /**
  * Makes a Hybrid.
  * @param {string} type The hybrid's type.
- * @param {string} name The hybrid's name.
+ * @param {string} id The hybrid's name.
  */
-function makeHybrid(type, name) {
+function makeHybrid(type, id) {
     'use strict';
 
-    makeNode(type, name);
-    window[name].hybrid = true;
+    makeNode(type, id);
+    window[id].hybrid = true;
 }
 
 
