@@ -34,7 +34,7 @@ function hoverFocus(event) {
         window[id].focus();
 
         removeToolTips();
-        displayToolTip(id);
+        displayTooltip(id);
     }
 }
 

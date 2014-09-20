@@ -116,10 +116,10 @@ function setupRelatedLinks(id) {
 
 
 /**
- * Displays a tool-tip for a Node.
+ * Displays a tooltip for a Node.
  * @param nodeId The Node's ID.
  */
-function displayToolTip(nodeId) {
+function displayTooltip(nodeId) {
     'use strict';
 
     var rectObject = $('#' + nodeId).find('rect');
@@ -206,7 +206,7 @@ function createText(g, nodeId, textClass, textId, posX, posY, width, height, col
 
 
 /**
- * Sets up and Returns a tool-tips SVG g element.
+ * Sets up and Returns a tooltips SVG g element.
  * @param {string} nodeId
  * @returns {jQuery}
  */
