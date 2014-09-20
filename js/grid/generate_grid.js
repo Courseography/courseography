@@ -107,7 +107,7 @@ function appendTableRows(timetableTableFall, timetableTableSpring) {
  * Appends table cells to table rows.
  * @param {jQuery} trFall The fall table row.
  * @param {jQuery} trSpring The spring table row.
- * @param {int} time The table rows time.
+ * @param {int} time The table row's time.
  */
 function appendTableData(trFall, trSpring, time) {
     'use strict';
