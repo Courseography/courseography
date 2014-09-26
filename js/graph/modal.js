@@ -35,7 +35,6 @@ function createModalDiv(id) {
 }
 
 
-//noinspection JSValidateJSDoc
 /**
  * Sets up and returns the video player, false if the video URL does not exist.
  * TODO: Function should be split up.
