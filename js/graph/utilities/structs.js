@@ -1,3 +1,5 @@
+/* global $ */
+
 /**
  * Data Structures for the course graph
  */

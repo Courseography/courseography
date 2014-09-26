@@ -1,3 +1,5 @@
+/* global $ */
+
 /**
  * Sets all mouse callbacks.
  */

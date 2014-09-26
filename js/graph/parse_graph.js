@@ -1,3 +1,5 @@
+/* global $ */
+
 /**
  * Javascript code to generate the logical data structures
  * (Node & Edge) to represent prerequisites, given just the SVG graph.

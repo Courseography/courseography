@@ -1,3 +1,5 @@
+/* global $ */
+
 /**
  * Enables graph dragging.
  */

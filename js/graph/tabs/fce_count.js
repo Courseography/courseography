@@ -1,3 +1,5 @@
+/* global $ */
+
 /**
  * Updates and displays total number of selected FCEs.
  */

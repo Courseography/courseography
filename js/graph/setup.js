@@ -1,3 +1,5 @@
+/* global $ */
+
 // All Global Variables for the Graph
 var timetable = 'res/timetable.html'; // Location of timetable file
 

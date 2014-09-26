@@ -1,3 +1,4 @@
+/* global $ */
 /* Array utilities */
 /**
  * Returns whether item is in array.

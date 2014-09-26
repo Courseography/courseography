@@ -1,3 +1,5 @@
+/* global $ */
+
 /**
  * Constructs an Edge.
  * @param {Node} source This Edge's source Node.

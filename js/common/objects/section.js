@@ -1,3 +1,5 @@
+/* global $ */
+
 /**
  * Constructs a Section.
  * @param {string[]} times The times that this Section is offered at.
