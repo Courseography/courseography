@@ -101,6 +101,7 @@ function fetchCourse(name) {
             throw 'No course file';
         }
     });
+
     courseCache.push(course);
     return course;
 }
@@ -128,7 +129,6 @@ function convertTimes(times) {
 }
 
 
-// Used to determine if course requires manual practical enrolment
 /**
  * Returns whether section has manual practical enrolment. (P sections).
  * @param {JSON} section The section.
@@ -141,7 +141,6 @@ function hasManualPractical(section) {
 }
 
 
-// Used to determine if course requires manual tutorial enrolment
 /**
  * Returns whether section has manual tutorial enrolment. (T sections).
  * @param {JSON} section The section.
