@@ -1,9 +1,10 @@
 /* Array utilities */
 /**
- *
- * @param item
- * @param array
- * @returns {boolean}
+ * Returns whether item is in array.
+ * @param item The item being searched for in array.
+ * @param array The array that is being searched.
+ * @returns {boolean} Whether item is in array.
+ * TODO: This function needs to be removed.
  */
 function inArray(item, array) {
     'use strict';
@@ -47,8 +48,8 @@ function removeCourseObject(courseName) {
 
 /**
  * Gets a course JSON object with courseName from courseArray.
- * @param courseName The course's course code.
- * @param courseArray The array from which the Course is retrieved.
+ * @param {string} courseName The course's course code.
+ * @param {Array} courseArray The array from which the Course is retrieved.
  * @returns {JSON} The retrieved course.
  */
 function getCourseObject(courseName, courseArray) {
@@ -82,7 +83,7 @@ function getCourse(name) {
 
 /**
  * Retrieves a course from file.
- * @param name The course code. This + '.txt' is the name of the file.
+ * @param {string} name The course code. This + '.txt' is the name of the file.
  * @returns {undefined|JSON} The JSON object representing the course.
  */
 function fetchCourse(name) {
@@ -107,7 +108,7 @@ function fetchCourse(name) {
 
 /**
  * Converts times from format used in file to format used in td IDs.
- * @param {string[]}times The times to be converted.
+ * @param {string[]} times The times to be converted.
  * @returns {string[]} The converted times.
  */
 function convertTimes(times) {
