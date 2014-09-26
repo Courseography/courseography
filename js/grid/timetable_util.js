@@ -70,7 +70,7 @@ function resetSearchList() {
             if (course.indexOf(filter) > -1 && counter < 100) {
                 var courseEntry = document.createElement('li');
 
-                // Add an ID to the list so we can come back and star
+                // Add an ID to the list so we can come back and select
                 // it when it is clicked.
                 $(courseEntry).attr('id', course + '-search')
                               .html(course)
@@ -126,19 +126,19 @@ function refreshSelectedCourses() {
 function restoreFromCookies() {
     'use strict';
 
-    var starredCourseCookie = getCookie('selected-courses');
-    var starredLectureCookie = getCookie('selected-lectures');
+    var selectedCourseCookie = getCookie('selected-courses');
+    var selectedSectionCookie = getCookie('selected-lectures');
 
-    if (starredCourseCookie.length === 0) {
-        starredCourseCookie = [];
+    if (selectedCourseCookie.length === 0) {
+        selectedCourseCookie = [];
     }
 
-    if (starredLectureCookie.length === 0) {
-        starredLectureCookie = [];
+    if (selectedSectionCookie.length === 0) {
+        selectedSectionCookie = [];
     }
 
-    if (starredCourseCookie.length > 0) {
-        var selectedCoursesTemp = $.parseJSON(starredCourseCookie);
+    if (selectedCourseCookie.length > 0) {
+        var selectedCoursesTemp = $.parseJSON(selectedCourseCookie);
         var newCourses = [];
         $.each(selectedCoursesTemp, function (i, course) {
             try {
@@ -151,8 +151,8 @@ function restoreFromCookies() {
         });
     }
 
-    if (starredLectureCookie.length > 0) {
-        selectedLectures = $.parseJSON(starredLectureCookie);
+    if (selectedSectionCookie.length > 0) {
+        selectedLectures = $.parseJSON(selectedSectionCookie);
         var newSections = [];
         $.each(selectedLectures, function (i, section) {
             try {
@@ -231,7 +231,7 @@ function removeCourseFromList(name) {
 
     saveCookies(selectedCourses, selectedLectures);
 
-    // Refresh starred courses
+    // Refresh selected courses
     refreshSelectedCourses();
 }
 
