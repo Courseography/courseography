@@ -34,7 +34,8 @@ $(document).ready(function () {
 
 
 /**
- * Renders the button that allows the user to deselected all selected courses.
+ * Renders the button that allows the user to deselect
+ * all selected courses.
  */
 function renderClearAllButton() {
     'use strict';
