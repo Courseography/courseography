@@ -5,7 +5,7 @@ var trapScroll;             // Disables ability to scroll parent div.
 var courses;                //
 var courseCache = [];       // All Courses that have been previously requested.
 var selectedCourses = [];   // All selected Courses.
-var selectedSections = [];  // All selected sections. TODO: Bad name
+var selectedSections = [];  // All selected sections.
 var courseObjects = [];     //
 
 
@@ -53,7 +53,6 @@ function renderClearAllButton() {
 
 /**
  * Adapted from http://codepen.io/LelandKwong/pen/edAmn.
- * Will look into http://jscrollpane.kelvinluck.com/.
  */
 (function($) {
     trapScroll = function () {
