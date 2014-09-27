@@ -6,7 +6,7 @@ var courses;                //
 var courseCache = [];       // All Courses that have been previously requested.
 var selectedCourses = [];   // All selected Courses.
 var selectedSections = [];  // All selected sections.
-var courseObjects = [];     //
+var courseObjects = [];     // All selected course JSON files.
 
 
 /**

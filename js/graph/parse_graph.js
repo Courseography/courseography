@@ -216,8 +216,8 @@ function parseCourse(s) {
 
 
 /**
- * Returns whether point px,py intersects with
- * the rectangle whose top left corner is at rx,ry with width
+ * Returns whether point (px,py) intersects with
+ * the rectangle whose top left corner is at (rx,ry) with width
  * width, height height and an offset of offset.
  * @param {number} px The point's x position.
  * @param {number} py The point's y position.
