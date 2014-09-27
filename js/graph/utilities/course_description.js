@@ -32,7 +32,8 @@ function formatCourseName(id) {
     if (id === 'CSC200') {
         names = id + 'Y1';
     } else if (id === 'Calc1') {
-        names = 'MAT135H1' + ' ' + 'MAT136H1' + ' ' + 'MAT137Y1' + ' ' + 'MAT157Y1';
+        names = 'MAT135H1' + ' ' + 'MAT136H1' + ' ' + 'MAT137Y1' + ' ' +
+                'MAT157Y1';
     } else if (id === 'Lin1') {
         names = 'MAT221H1' + ' ' + 'MAT223H1' + ' ' + 'MAT240H1';
     } else if (id === 'Sta1') {
@@ -73,17 +74,22 @@ function formatCourseDescription(course) {
     var courseDescription = '<p>' + course.description + '</p>';
 
     if (course.prereqString !== undefined && course.prereqString !== null) {
-        courseDescription += '<p><strong>Prerequisite:</strong> ' + course.prereqString + '</p>';
+        courseDescription += '<p><strong>Prerequisite:</strong> ' +
+                             course.prereqString + '</p>';
     }
     if (course.prep !== undefined && course.prep !== null) {
-        courseDescription += '<p><strong>Recommended Preparation:</strong> ' + course.prep + '</p>';
+        courseDescription += '<p><strong>Recommended Preparation:</strong> ' +
+                             course.prep + '</p>';
     }
     if (course.exclusions !== undefined && course.exclusions !== null) {
-        courseDescription += '<p><strong>Exclusions:</strong> ' + course.exclusions + '</p>';
+        courseDescription += '<p><strong>Exclusions:</strong> ' +
+                             course.exclusions + '</p>';
     }
 
-    courseDescription += '<p><strong>Distribution Requirement Status:</strong> ' + course.distribution + '</p>';
-    courseDescription += '<p><strong>Breadth Requirement:</strong> ' + course.breadth + '</p>';
+    courseDescription += '<p><strong>Distribution Requirement Status:</strong> ' +
+                         course.distribution + '</p>';
+    courseDescription += '<p><strong>Breadth Requirement:</strong> ' +
+                          course.breadth + '</p>';
 
     return courseDescription;
 }

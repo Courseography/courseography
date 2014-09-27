@@ -2,7 +2,8 @@
 
 /**
  * Constructs a Node.
- * @param {string} type The logical type of this Node's prerequisites. Either 'OR' or 'AND'.
+ * @param {string} type The logical type of this Node's prerequisites.
+ *                      Either 'OR' or 'AND'.
  * @param {string} id The ID of the SVG g element that this Node represents.
  * @constructor
  */
@@ -33,7 +34,8 @@ Node.prototype.isSelected = function () {
 
 
 /**
- * Highlights this Node and this Node's missing prerequisites when this Node is hovered over.
+ * Highlights this Node and this Node's missing prerequisites when this Node
+ * is hovered over.
  */
 Node.prototype.focus = function () {
     'use strict';
@@ -55,13 +57,15 @@ Node.prototype.focus = function () {
 
 
 /**
- * Removes highlight from this Node and Node's missing prerequisites when this Node is un-hovered.
+ * Removes highlight from this Node and Node's missing prerequisites when this
+ * Node is un-hovered.
  */
 Node.prototype.unfocus = function () {
     'use strict';
 
     if (!this.isSelected()) {
-        if (activeFocus === '' || window[activeFocus + 'FocusList'].indexOf(this.id) > -1) {
+        if (activeFocus === '' ||
+            window[activeFocus + 'FocusList'].indexOf(this.id) > -1) {
             this.updateSVG();
         } else {
             $('#' + this.id).attr('data-active', 'unlit');
@@ -159,7 +163,8 @@ Node.prototype.arePrereqsSatisfied = function () {
             sat = sat || this.parents[i].isSelected();
         }
     } else {
-        console.log('Error: invalid node logicalType ' + this.type + ' for node ' + this.id);
+        console.log('Error: invalid node logicalType ' + this.type +
+                    ' for node ' + this.id);
     }
     return sat;
 };
@@ -168,7 +173,8 @@ Node.prototype.arePrereqsSatisfied = function () {
 /**
  * Returns true if this Node's FCE-count prerequisites have been satisfied.
  * Note: Only certain courses have FCE-count prerequisites.
- * @returns {boolean} Whether this Node's FCE-count prerequisites have been satisfied.
+ * @returns {boolean} Whether this Node's FCE-count prerequisites have
+ *                    been satisfied.
  */
 Node.prototype.checkFCEBasedPrerequisites = function() {
     'use strict';

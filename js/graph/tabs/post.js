@@ -210,7 +210,8 @@ function updateAllElecsMinor() {
 
     var numProjects = 2;
     var active300sMinor = active300s.concat();
-    var tmpMinor = active300s.concat(active400s, projectCourses.slice(0, numProjects));
+    var tmpMinor = active300s.concat(active400s,
+                                     projectCourses.slice(0, numProjects));
 
 
     if (elecTotalMinor >= 1.5) {
@@ -259,7 +260,9 @@ function updateAllElecsMinor() {
     }
 
     $('#elecTotalMinor').html(elecTotalMinor.toFixed(1));
-    elecSatMinor = (elecTotalMinor >= 1.5) && (1 <= active300sMinor.length + active400s.length + projectCourses.length);
+    elecSatMinor = (elecTotalMinor >= 1.5) && (1 <= active300sMinor.length +
+                                                    active400s.length +
+                                                    projectCourses.length);
     setIcon('cscElecsMinor', elecSatMinor);
 }
 
@@ -271,12 +274,7 @@ function updateElecsMinor() {
     'use strict';
 
     updateAllElecsMinor();
-//    var numProjects = 2;
     postTotalMinor = elecTotalMinor + cscReqTotalMinor;
-    //elecSatMinor = elecTotalMinor >= 1.5
-    //  && (active300s.length + active400s.length + projectCourses.length > 0)
-    //  && (active300s.length + active400s.length + projectCourses.length < 3)
-    //  && (active300s.concat(active400s, projectCourses.slice(0, numProjects)).length + extraMinor >= 3);
 
     $('#postTotalMinor').html(postTotalMinor.toFixed(1));
 
@@ -323,7 +321,9 @@ function update300sElecsMajor() {
         numProjects = 0;
     }
 
-    var tmp = active300s.concat(active400s, projectCourses.slice(0, numProjects));
+    var tmp = active300s.concat(active400s,
+                                projectCourses.slice(0, numProjects));
+
     // Manually add active 3rd year courses required by specialist
     if (CSC373.status === 'active' || CSC373.status === 'overridden') {
         tmp.push('CSC373');
@@ -375,7 +375,12 @@ function updateElecsMajor() {
         numProjects = 0;
     }
 
-    elecSatMajor = elecTotalMajor >= 3 && (active400s.length > 0 || numBCBMajor > 0) && (active300s.concat(active400s, projectCourses.slice(0, numProjects)).length + extraMajor >= 3);
+    elecSatMajor = elecTotalMajor >= 3 &&
+                   (active400s.length > 0 ||
+                    numBCBMajor > 0) &&
+                    (active300s.concat(active400s,
+                                       projectCourses.slice(0, numProjects))
+                                                     .length + extraMajor >= 3);
 
     $('#elecTotalMajor').html(elecTotalMajor.toFixed(1));
 
@@ -423,10 +428,16 @@ function updateElecs() {
     var BCB430Check = $('#BCB430check');
 
     var numProjects = 2;
+
     if (BCB430Check.prop('checked')) {
         numProjects = 0;
     }
-    var tmp = active300s.concat(active400s.slice(3 - numBCB), projectCourses.slice(Math.max(3 - numBCB - active400s.length, 0), numProjects));
+
+    var tmp = active300s.concat(active400s.slice(3 - numBCB),
+                                projectCourses.slice(Math.max(3 - numBCB -
+                                                              active400s.length,
+                                                              0), numProjects));
+
     for (var i = 1; i <= 7; i++) {
         if (i <= tmp.length) {
             $('#inputCSC' + i).attr('value', tmp[i - 1]);
@@ -503,7 +514,8 @@ function updatePOStTotal() {
 function updatePOStTotalMajor() {
     'use strict';
 
-    $('#postTotalMajor').html((cscReqTotalMajor + matReqTotalMajor + elecTotalMajor).toFixed(1));
+    $('#postTotalMajor').html((cscReqTotalMajor + matReqTotalMajor +
+                               elecTotalMajor).toFixed(1));
 }
 
 

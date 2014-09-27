@@ -51,12 +51,14 @@ function setupVideoPlayer(id) {
         return false;
     }
 
-    // Not divided up into 'attr' yet because 'controls preload' cannot be added that way...
+    // Not divided up into 'attr' yet because 'controls preload'
+    // cannot be added that way...
     var videoDiv = $('<div></div>');
     videoDiv.css('display', 'inline')
             .css('float', 'left')
             .css('width', '100%');
-    var video = $('<video id="course_video" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="400"></video>');
+    var video = $('<video id="course_video" class="video-js vjs-default-skin"' +
+                  'controls preload="auto" width="100%" height="400"></video>');
     var src = $('<source></source>').attr('src', url)
                                     .attr('type', 'video/mp4');
 
@@ -80,7 +82,10 @@ function setupTimeslot(id) {
     var title = $('<h3></h3>');
 
     timeslot.append(title);
-    timeslot.append($('#timetableMain').children('tbody').children('tr').first().clone());
+    timeslot.append($('#timetableMain').children('tbody')
+                                       .children('tr')
+                                       .first()
+                                       .clone());
 
     $('.searchClass').each(function () {
         courseName = $(this).children('td').first().html();
@@ -124,22 +129,25 @@ function displayTooltip(nodeId) {
 
     var rectObject = $('#' + nodeId).find('rect');
 
-    // The tooltip displays with a width of 222. If the node has an x position of
-    // less than 222, the tooltip will be cut off by the svg boundaries. In this case,
-    // we display the tooltip on the left.
+    // The tooltip displays with a width of 222. If the node has an x
+    // position of less than 222, the tooltip will be cut off by the svg
+    // boundaries. In this case, we display the tooltip on the left.
     var rightSide = rectObject.attr('x') > 222;
 
     // The tooltip is offset with a 'padding' of 5.
     if (rightSide) {
         var xPos = parseFloat(rectObject.attr('x')) - 65;
     } else {
-        var xPos = parseFloat(rectObject.attr('x')) + parseFloat($('#' + nodeId).children('rect').attr('width')) + 5;
+        var xPos = parseFloat(rectObject.attr('x')) +
+                   parseFloat($('#' + nodeId).children('rect').attr('width')) + 5;
     }
 
     var yPos = rectObject.attr('y');
     var g = createG(nodeId);
-    createRect(g, 'node-tooltip', nodeId + '-tooltip', xPos, yPos, 60, 30, 'black');
-    createText(g, nodeId, 'node-tooltip', nodeId + '-tooltip', xPos, yPos, 60, 30, 'black');
+    createRect(g, 'node-tooltip', nodeId + '-tooltip', xPos, yPos,
+               60, 30, 'black');
+    createText(g, nodeId, 'node-tooltip', nodeId + '-tooltip', xPos, yPos,
+               60, 30, 'black');
 }
 
 
@@ -227,13 +235,16 @@ function createG(nodeId) {
 /**
  * Opens the course information modal.
  * @param {string} id The course code.
+ * TODO: Needs to be cleaned up.
  */
 function openModal(id) {
     'use strict';
 
     if ($('.modal').length === 0) {
         $('.infoTabs').hide();
+
         var div = createModalDiv(nodeId);
+
         div.attr('title', getCourseTitle(id))
            .addClass('modal').dialog({
                 autoOpen: true,
@@ -241,7 +252,10 @@ function openModal(id) {
                 minWidth: 1000,
                 minHeight: 600,
                 closeText: 'X',
-                open: function(event, ui) { $('.ui-widget-overlay').bind('click', function(){ div.dialog('close'); }); },
+                open: function(event, ui) {
+                        $('.ui-widget-overlay').bind('click', function () {
+                                                                  div.dialog('close');
+                                                              }); },
                 close: function () {
                     $(this).remove();
                     $.each(nodes, function (index, elem) {
@@ -250,6 +264,7 @@ function openModal(id) {
                     $('body').css('background', 'rgb(255,255,255)');
                     $('.infoTabs').show();
                 }});
+
         $('.node, .hybrid').attr('data-active', 'unlit');
         $('body').css('background', 'rgb(40,40,40)');
         setMouseCallbacks();
@@ -267,6 +282,7 @@ function enableVideoJS() {
     'use strict';
 
     if (document.getElementsByClassName('vjs-default-skin').length > 0) {
-        videojs(document.getElementsByClassName('vjs-default-skin')[0], {}, function () {});
+        videojs(document.getElementsByClassName('vjs-default-skin')[0], {},
+                function () {});
     }
 }

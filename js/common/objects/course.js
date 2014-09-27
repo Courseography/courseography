@@ -32,14 +32,20 @@ function Course(name) {
 
     if (course.manualTutorialEnrolment) {
         if (course.Y !== undefined) {
-            this.practicalEnrolment = course.Y.tutorials.some(hasManualPractical);
-            this.tutorialEnrolment = course.Y.tutorials.some(hasManualTutorial);
+            this.practicalEnrolment = course.Y
+                                            .tutorials.some(hasManualPractical);
+            this.tutorialEnrolment = course.Y
+                                           .tutorials.some(hasManualTutorial);
         } else if (course.F !== undefined) {
-            this.practicalEnrolment = course.F.tutorials.some(hasManualPractical);
-            this.tutorialEnrolment = course.F.tutorials.some(hasManualTutorial);
+            this.practicalEnrolment = course.F
+                                            .tutorials.some(hasManualPractical);
+            this.tutorialEnrolment = course.F
+                                           .tutorials.some(hasManualTutorial);
         } else {
-            this.practicalEnrolment = course.S.tutorials.some(hasManualPractical);
-            this.tutorialEnrolment = course.S.tutorials.some(hasManualTutorial);
+            this.practicalEnrolment = course.S
+                                            .tutorials.some(hasManualPractical);
+            this.tutorialEnrolment = course.S
+                                           .tutorials.some(hasManualTutorial);
         }
     } else {
         this.practicalEnrolment = false;
@@ -100,7 +106,8 @@ Course.prototype.parseLectures = function (session, timeSuffix) {
             }).map(function (lecture, i) {
                 var id = tmp.name + '-' + lecture.section + '-' + timeSuffix;
                 var sectionTimes = convertTimes(lecture.time);
-                if (!tmp.manualTutorialEnrolment && session.tutorials.length > 0) {
+                if (!tmp.manualTutorialEnrolment &&
+                    session.tutorials.length > 0) {
                     sectionTimes = sectionTimes.concat(
                         convertTimes(session.tutorials[i][0]));
                 }
@@ -141,7 +148,8 @@ Course.prototype.parseTutorials = function (session, timeSuffix) {
                 sectionTimes = sectionTimes.map(function (t) {
                                                   return '#' + t + 'F';
                                            })
-                                           .concat(sectionTimes.map(function (t) {
+                                           .concat(sectionTimes.map(
+                                           function (t) {
                                                   return "#" + t + "S";
                                            }));
             } else {

@@ -52,7 +52,8 @@ function buildGraph() {
 
     $('path').each(function () {
         var coords = $(this).attr('d').split(' ');
-        coords = coords.filter(function (str) {return str !== 'M' && str !== 'L'; });
+        coords = coords.filter(function (str) {return str !== 'M' &&
+                                                      str !== 'L'; });
         // Do something for internet explorer
         if (!!navigator.userAgent.match(/Trident.*rv[ :]*11\./) ||
               window.navigator.userAgent.indexOf('MSIE ') > -1) {
@@ -232,5 +233,8 @@ function intersects(px, py, rx, ry, width, height, offset) {
 
     var dx = px - rx;
     var dy = py - ry;
-    return dx >= -1 * offset && dx <= width + offset && dy >= -1 * offset && dy <= height + offset;
+    return dx >= -1 * offset &&
+           dx <= width + offset &&
+           dy >= -1 * offset &&
+           dy <= height + offset;
 }
