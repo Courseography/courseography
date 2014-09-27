@@ -5,7 +5,6 @@ import Data.ByteString.Lazy.Char8
 import Data.ByteString.Char8
 import Data.String
 import Control.Monad    (msum)
---import template
 import Happstack.Server
 import           Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
@@ -82,6 +81,20 @@ graphResponse =
                                          H.span ! A.id "section-stats-instructor" $ ""
 
                                      H.p ! A.id "section-stats-enrol" $ ""
+
+                     H.script ! A.src "https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" $ H.span $ ""
+                     -- Include all compiled plugins (below), or include individual files as needed -->
+                     H.script ! A.src "//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js" $ H.span $ ""
+                     H.script ! A.src "http://code.jquery.com/ui/1.10.4/jquery-ui.js" $ H.span $ ""
+                     H.script ! A.src "static/js/common/cookieHandler.js" $ H.span $ ""
+                     H.script ! A.src "static/js/grid/generate_grid.js" $ H.span $ ""
+                     H.script ! A.src "static/js/common/objects/course.js" $ H.span $ ""
+                     H.script ! A.src "static/js/common/objects/section.js" $ H.span $ ""
+                     H.script ! A.src "static/js/grid/timetable_util.js" $ H.span $ ""
+                     H.script ! A.src "static/js/grid/setup.js" $ H.span $ ""
+                     H.script ! A.src "static/js/grid/mouse_events.js" $ H.span $ ""
+
+                     H.script ! A.src "static/js/common/utilities/util.js" $ H.span $ ""
                          )
 
 graph :: String
