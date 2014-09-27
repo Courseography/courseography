@@ -30,7 +30,7 @@ function removeFromArray(item, array) {
 
 
 /* These specifically manipulate the two global arrays,
-courseObjects and selectedLectures. */
+courseObjects and selectedSections. */
 /**
  * Removes a Course with courseName from courseObjects.
  * @param {string} courseName The Course code.

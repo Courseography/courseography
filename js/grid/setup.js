@@ -5,7 +5,7 @@ var trapScroll;             // Disables ability to scroll parent div.
 var courses;                //
 var courseCache = [];       // All Courses that have been previously requested.
 var selectedCourses = [];   // All selected Courses.
-var selectedLectures = [];  // All selected sections. TODO: Bad name
+var selectedSections = [];  // All selected sections. TODO: Bad name
 var courseObjects = [];     //
 
 

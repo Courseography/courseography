@@ -90,7 +90,7 @@ Section.prototype.onclick = function () {
     course.renderSatisfaction();
     course.renderUpdatedHeader();
 
-    saveCookies(selectedCourses, selectedLectures);
+    saveCookies(selectedCourses, selectedSections);
     alertUserOfConflict();
 };
 

@@ -1,14 +1,14 @@
 /* global $ */
 
 /**
- * Updates selectedLectures with sectionId.
+ * Updates selectedSections with sectionId.
  * @param {string} sectionId The ID of the lecture section being updated.
  */
 function updateSelectedLectures(sectionId) {
     'use strict';
 
-    if (!inArray(sectionId, selectedLectures)) {
-        selectedLectures.push(sectionId);
+    if (!inArray(sectionId, selectedSections)) {
+        selectedSections.push(sectionId);
     }
 }
 
@@ -152,9 +152,9 @@ function restoreFromCookies() {
     }
 
     if (selectedSectionCookie.length > 0) {
-        selectedLectures = $.parseJSON(selectedSectionCookie);
+        selectedSections = $.parseJSON(selectedSectionCookie);
         var newSections = [];
-        $.each(selectedLectures, function (i, section) {
+        $.each(selectedSections, function (i, section) {
             try {
                 $('#' + section).click();
                 newSections.push(section);
@@ -205,7 +205,7 @@ function addCourseToList(name) {
     $('#course-select').append(course.render());
     courseObjects.push(course);
     selectedCourses.push(name);
-    saveCookies(selectedCourses, selectedLectures);
+    saveCookies(selectedCourses, selectedSections);
 }
 
 
@@ -229,7 +229,7 @@ function removeCourseFromList(name) {
     removeCourseObject(name);
     removeFromArray(name, selectedCourses);
 
-    saveCookies(selectedCourses, selectedLectures);
+    saveCookies(selectedCourses, selectedSections);
 
     // Refresh selected courses
     refreshSelectedCourses();
