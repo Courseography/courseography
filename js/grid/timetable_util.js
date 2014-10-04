@@ -1,5 +1,3 @@
-/* global $ */
-
 /**
  * Updates selectedSections with sectionId.
  * @param {string} sectionId The ID of the lecture section being updated.

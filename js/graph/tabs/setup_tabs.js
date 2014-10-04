@@ -1,5 +1,3 @@
-/* global $ */
-
 /**
  * Sets up the tabs.
  */

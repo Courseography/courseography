@@ -1,5 +1,3 @@
-/* global $ */
-
 // A form for feedback; currently disabled
 /**
  * Activates the feedback form.

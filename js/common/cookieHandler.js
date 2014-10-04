@@ -1,5 +1,3 @@
-/* global $ */
-
 /**
  * Sets a cookie with name cookieName and value cookieValue.
  * @param {string} cookieName The name of the cookie.

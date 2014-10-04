@@ -1,5 +1,3 @@
-/* global $ */
-
 // TODO: File too long
 // TODO: Bad function names
 

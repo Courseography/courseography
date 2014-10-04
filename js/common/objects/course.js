@@ -1,5 +1,3 @@
-/* global $ */
-
 /**
  * Constructs a Course.
  * @param {string} name The course code.

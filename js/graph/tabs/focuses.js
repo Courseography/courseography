@@ -1,5 +1,3 @@
-/* global $ */
-
 /**
  * Updates the active focus.
  * @param {string} id The ID of the active focus.

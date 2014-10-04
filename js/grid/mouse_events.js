@@ -1,4 +1,3 @@
-/* global $ */
 /* Hover functions */
 /**
  * Sets the selected section table cell's hover.

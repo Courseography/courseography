@@ -1,5 +1,3 @@
-/* global $ */
-
 /**
  * Returns a course's description.
  * @param {string} id The Node's id.

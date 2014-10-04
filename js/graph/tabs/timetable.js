@@ -1,5 +1,3 @@
-/* global $ */
-
 /**
  * Creates the timetable.
  */

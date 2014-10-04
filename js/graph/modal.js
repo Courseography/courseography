@@ -1,6 +1,3 @@
-/* global $ */
-/* global nodes */
-
 /**
  * Creates and returns the main modal content div.
  * @param {string} id The course course.

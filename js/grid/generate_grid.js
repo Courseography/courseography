@@ -1,6 +1,3 @@
-/* global $ */
-
-
 /**
  * Generates the duplex timetable grid.
  */

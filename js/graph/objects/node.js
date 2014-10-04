@@ -1,5 +1,3 @@
-/* global $ */
-
 /**
  * Constructs a Node.
  * @param {string} type The logical type of this Node's prerequisites.
