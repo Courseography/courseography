@@ -378,7 +378,7 @@ function updateElecsMajor() {
                     numBCBMajor > 0) &&
                     (active300s.concat(active400s,
                                        projectCourses.slice(0, numProjects))
-                                                     .length + extraMajor >= 3);
+                               .length + extraMajor >= 3);
 
     $('#elecTotalMajor').html(elecTotalMajor.toFixed(1));
 
