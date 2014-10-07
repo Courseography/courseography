@@ -1,3 +1,8 @@
+/**
+ * Sets a cookie with name cookieName and value cookieValue.
+ * @param {string} cookieName The name of the cookie.
+ * @param {string} cookieValue The cookies value.
+ */
 function setCookie(cookieName, cookieValue) {
     'use strict';
 
@@ -8,6 +13,11 @@ function setCookie(cookieName, cookieValue) {
 }
 
 
+/**
+ * Gets a cookie with name cookieName.
+ * @param {string} cookieName The name of the cookie being retrieved.
+ * @returns {string} The cookie.
+ */
 function getCookie(cookieName) {
     'use strict';
 

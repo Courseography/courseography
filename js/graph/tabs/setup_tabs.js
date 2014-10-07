@@ -1,3 +1,6 @@
+/**
+ * Sets up the tabs.
+ */
 function createTabs() {
     'use strict';
 

@@ -2,36 +2,47 @@
  * Data Structures for the course graph
  */
 
-// Global variables
-var nodes = []; // List of all nodes
-var edges = []; // List of all edges, Edges is never used.
 
-
-// Data Structures
-function makeNode(parents, type, name) {
+/**
+ * Makes a Node.
+ * @param {string} type The Node's type.
+ * @param {string} name The Node's name.
+ */
+function makeNode(type, name) {
     'use strict';
 
-    window[name] = new Node(parents, type, name);
+    window[name] = new Node(type, name);
     nodes.push(name);
 }
 
 
-function makeHybrid(parents, type, name) {
+/**
+ * Makes a Hybrid.
+ * @param {string} type The hybrid's type.
+ * @param {string} id The hybrid's name.
+ */
+function makeHybrid(type, id) {
     'use strict';
 
-    makeNode(parents, type, name);
-    window[name].hybrid = true;
+    makeNode(type, id);
+    window[id].hybrid = true;
 }
 
 
-function makeEdge(parent, child, name) {
+/**
+ * Makes an Edge.
+ * @param {Node} source The source Node of the Edge.
+ * @param {Node} target The target Node of the Edge.
+ * @param {string} id The name of the Edge.
+ */
+function makeEdge(source, target, id) {
     'use strict';
 
-    window[name] = new Edge(parent, child, name);
-    parent.outEdges.push(window[name]);
-    child.inEdges.push(window[name]);
+    window[id] = new Edge(source, target, id);
+    source.outEdges.push(window[id]);
+    target.inEdges.push(window[id]);
 
-    parent.children.push(child);
-    child.parents.push(parent);
+    source.children.push(target);
+    target.parents.push(source);
 }
 

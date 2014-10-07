@@ -1,11 +1,16 @@
-var trapScroll;
-var courses;
-var courseCache = [];
-var selectedCourses = [];
-var selectedLectures = [];
-var courseObjects = [];
+// All Global Variables for the Grid
+//TODO: Are all of these used?
+var trapScroll;             // Disables ability to scroll parent div.
+var courses;                //
+var courseCache = [];       // All Courses that have been previously requested.
+var selectedCourses = [];   // All selected Courses.
+var selectedSections = [];  // All selected sections.
+var courseObjects = [];     // All selected course JSON files.
 
 
+/**
+ * Sets up the page.
+ */
 $(document).ready(function () {
     'use strict';
 
@@ -27,6 +32,10 @@ $(document).ready(function () {
 });
 
 
+/**
+ * Renders the button that allows the user to deselect
+ * all selected courses.
+ */
 function renderClearAllButton() {
     'use strict';
 
@@ -43,7 +52,6 @@ function renderClearAllButton() {
 
 /**
  * Adapted from http://codepen.io/LelandKwong/pen/edAmn.
- * Will look into http://jscrollpane.kelvinluck.com/.
  */
 (function($) {
     trapScroll = function () {
