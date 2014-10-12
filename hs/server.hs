@@ -11,8 +11,8 @@ import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 import MakeElements
 
-gridTemplate :: String -> [H.Html] -> H.Html -> H.Html
-gridTemplate title headers body =
+masterTemplate :: String -> [H.Html] -> H.Html -> H.Html
+masterTemplate title headers body =
     H.html $ do
       H.head $ do
         H.title (H.toHtml title)
@@ -25,12 +25,12 @@ gridTemplate title headers body =
         insertTimetableScripts
 
 
-graphResponse :: ServerPart Response
-graphResponse =
+gridResponse :: ServerPart Response
+gridResponse =
    ok $ toResponse $
-    gridTemplate "Courseography - Grid"
+    masterTemplate "Courseography - Grid"
                 [H.meta ! A.name "keywords"
-                        ! A.content "happstack, david, liu"
+                        ! A.content ""
                 ]
                 (do  insertGridHeader
 
@@ -107,6 +107,22 @@ insertInfoPanel = createTag H.div "" "col-md-8 col-xs-12 col-md-pull-2" $ do
 insertjQuery :: H.Html
 insertjQuery = makeScript "https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"
 
+graphResponse :: ServerPart Response
+graphResponse =
+   ok $ toResponse $
+    masterTemplate "Courseography - Svg serving test!"
+                [H.meta ! A.name "keywords"
+                        ! A.content ""
+                ]
+                (do  insertGridHeader
+
+                     insertSVG "static/graph_regions.svg"
+
+                     createTag H.div "" "row main" $ do
+                           insertSVG "static/graph_regions.svg"
+                )
+
+
 graph :: String
 graph = "planner.html"
 
@@ -122,5 +138,6 @@ staticDir = "/home/cynic/courseography"
 main :: IO ()
 main = simpleHTTP nullConf $
   msum [ dir grid $ graphResponse,
+         dir graph $ gridResponse,
          dir static $ serveDirectory EnableBrowsing [] staticDir
        ]

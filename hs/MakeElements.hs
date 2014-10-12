@@ -5,6 +5,10 @@ import           Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 
+insertSVG :: H.AttributeValue -> H.Html
+insertSVG src = H.object ! A.data_ src ! A.type_ "image/svg+xml" $ do ""
+
+
 createTag :: (H.Html -> H.Html) ->  H.AttributeValue -> H.AttributeValue -> H.Html -> H.Html
 createTag tag id class_ content = tag ! A.id id ! A.class_ class_ $ do content
 
