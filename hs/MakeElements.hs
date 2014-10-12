@@ -17,7 +17,6 @@ makeLink rel type_ href = H.link ! A.rel rel ! A.type_ type_ ! A.href href
 makeScript :: H.AttributeValue -> H.Html
 makeScript src = H.script ! A.src src $ ""
 
--- Headers
 makeForm :: H.AttributeValue -> H.AttributeValue -> H.AttributeValue -> H.Html -> H.Html
 makeForm id class_ onSubmit content = H.form ! A.id id ! A.class_ class_ ! A.onsubmit onSubmit $ do content
 
@@ -26,3 +25,10 @@ makeInput id class_ placeholder autocomplete type_ = H.input ! A.id id ! A.class
 
 makeA :: H.AttributeValue -> H.AttributeValue -> H.AttributeValue -> H.Html -> H.Html
 makeA id class_ href content = H.a ! A.id id ! A.class_ class_ ! A.href href $ do content
+
+insertjQuery :: H.Html
+insertjQuery = makeScript "https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"
+
+insertTimetableLinks :: H.Html
+insertTimetableLinks = do makeLink "stylesheet" "text/css" "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"
+                          makeLink "stylesheet" "text/css" "static/style/grid/timetable_styles.css"
