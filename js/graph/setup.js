@@ -58,7 +58,7 @@ var courseCache = [];
 
 $(document).ready(function () {
     'use strict';
-    var graphPage = getRemote;
+    var graphPage = getRemote();
 
     $("#graph").append(graphPage);
 
