@@ -58,9 +58,12 @@ var courseCache = [];
 
 $(document).ready(function () {
     'use strict';
+    var graphPage = getRemote;
+
+    $("#graph").append(graphPage);
 
     buildGraph();
-    
+
     FCEPrerequisiteCourses = [CSC318, CSC454, CSC494, CSC495];
 
     // Set width of FCE count
@@ -81,3 +84,11 @@ $(document).ready(function () {
     // Uncomment to enable graph dragging
     // enableGraphDragging();
 });
+
+function getRemote() {
+    return $.ajax({
+        type: "GET",
+        url: 'static/hs/csc_graph.svg',
+        async: false
+    }).responseText;
+}
