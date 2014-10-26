@@ -23,12 +23,19 @@ makeForm id class_ onSubmit content = H.form ! A.id id ! A.class_ class_ ! A.ons
 makeInput :: H.AttributeValue -> H.AttributeValue -> H.AttributeValue -> H.AttributeValue -> H.AttributeValue -> H.Html
 makeInput id class_ placeholder autocomplete type_ = H.input ! A.id id ! A.class_ class_ ! A.placeholder placeholder ! A.autocomplete autocomplete ! A.type_ type_
 
-makeA :: H.AttributeValue -> H.AttributeValue -> H.AttributeValue -> H.Html -> H.Html
-makeA id class_ href content = H.a ! A.id id ! A.class_ class_ ! A.href href $ do content
+makeA :: H.AttributeValue -> H.AttributeValue -> H.AttributeValue -> H.AttributeValue -> H.Html -> H.Html
+makeA id class_ href target content = H.a ! A.id id ! A.class_ class_ ! A.href href ! A.target target $ do content
 
-insertjQuery :: H.Html
-insertjQuery = makeScript "https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"
+jQuery :: H.Html
+jQuery = makeScript "https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"
 
-insertTimetableLinks :: H.Html
-insertTimetableLinks = do makeLink "stylesheet" "text/css" "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"
-                          makeLink "stylesheet" "text/css" "static/style/grid/timetable_styles.css"
+timetableLinks :: H.Html
+timetableLinks = do makeLink "stylesheet" "text/css" "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"
+                    makeLink "stylesheet" "text/css" "static/style/grid/timetable_styles.css"
+
+plannerLinks :: H.Html
+plannerLinks = do makeLink "stylesheet" "text/css" "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"
+                  makeLink "stylesheet" "text/css" "static/style/grid/timetable_styles.css"
+                  makeLink "stylesheet" "text/css" "static/style/graph/styles.css"
+                  makeLink "stylesheet" "text/css" "static/style/graph/graph_styles.css"
+                  makeLink "stylesheet" "text/css" "static/res/video-js/video-js.css"

@@ -15,10 +15,10 @@ import GridResponse
 import GraphResponse
 
 graph :: String
-graph = "planner.html"
+graph = "graph"
 
 grid :: String
-grid = "timetable_creator.html"
+grid = "grid"
 
 static :: String
 static = "static"
@@ -28,7 +28,7 @@ staticDir = "/home/cynic/courseography"
 
 main :: IO ()
 main = simpleHTTP nullConf $
-  msum [ dir grid $ graphResponse,
-         dir graph $ gridResponse,
+  msum [ dir grid $ gridResponse,
+         dir graph $ graphResponse,
          dir static $ serveDirectory EnableBrowsing [] staticDir
        ]
