@@ -28,8 +28,8 @@ header page = createTag H.div "" "row header" $ do
                             createTag H.div "" "col-md-6 col-xs-6" $ do
                                           if page == "graph" then
                                               makeA "" "" "grid" "" $ do
-                                              createTag H.h2 "home-link" "" "Back to Graph"
+                                              createTag H.h2 "home-link" "" "Back to Grid"
                                           else
                                               makeA "" "" "graph" "" $ do
-                                              createTag H.h2 "home-link" "" "Back to Grid"
+                                              createTag H.h2 "home-link" "" "Back to Graph"
 

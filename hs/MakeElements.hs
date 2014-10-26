@@ -4,6 +4,7 @@ module MakeElements where
 import           Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
+import Control.Monad    (msum)
 
 insertSVG :: H.AttributeValue -> H.Html
 insertSVG src = H.object ! A.data_ src ! A.type_ "image/svg+xml" $ do ""
@@ -13,6 +14,9 @@ createTag tag id class_ content = tag ! A.id id ! A.class_ class_ $ do content
 
 makeLink :: H.AttributeValue -> H.AttributeValue -> H.AttributeValue -> H.Html
 makeLink rel type_ href = H.link ! A.rel rel ! A.type_ type_ ! A.href href
+
+stylesheet :: H.AttributeValue -> H.Html
+stylesheet href = H.link ! A.rel "stylesheet" ! A.type_ "text/css" ! A.href href
 
 makeScript :: H.AttributeValue -> H.Html
 makeScript src = H.script ! A.src src $ ""
@@ -30,12 +34,12 @@ jQuery :: H.Html
 jQuery = makeScript "https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"
 
 timetableLinks :: H.Html
-timetableLinks = do makeLink "stylesheet" "text/css" "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"
-                    makeLink "stylesheet" "text/css" "static/style/grid/timetable_styles.css"
+timetableLinks = do map stylesheet ["//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css",
+                                         "static/style/grid/timetable_styles.css"]
 
 plannerLinks :: H.Html
-plannerLinks = do makeLink "stylesheet" "text/css" "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"
-                  makeLink "stylesheet" "text/css" "static/style/grid/timetable_styles.css"
-                  makeLink "stylesheet" "text/css" "static/style/graph/styles.css"
-                  makeLink "stylesheet" "text/css" "static/style/graph/graph_styles.css"
-                  makeLink "stylesheet" "text/css" "static/res/video-js/video-js.css"
+plannerLinks = do map stylesheet ["//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css",
+                                       "static/style/grid/timetable_styles.css",
+                                       "static/style/graph/styles.css",
+                                       "static/style/graph/graph_styles.css",
+                                       "static/res/video-js/video-js.css"]

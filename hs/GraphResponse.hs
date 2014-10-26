@@ -23,6 +23,7 @@ graphResponse =
                     createTag H.div "" "infoTabs" $ do
                         tabList $ do
                             welcomeTab
+                            timetableTab
                 )
                 plannerScripts
 
@@ -92,16 +93,36 @@ welcomeTab = createTag H.div "welcome" "infoTab" $ do
 
                          --createTag H.br "" ""
                          createTag H.p "" "" $ do
-                             "Courseography is an ongoing"
-                             makeA "" "" "https://github.com/Ian-Stewart-Binks/courseography" "_blank" $ do "project"
+                             "Courseography is an ongoing "
+                             makeA "" "" "https://github.com/Ian-Stewart-Binks/courseography" "_blank" $ do "project "
                              "maintained by Ian Stewart-Binks and"
-                             makeA "" "" "http://www.cs.toronto.edu/~liudavid/" "_blank" $ do "David Liu"
+                             makeA "" "" "http://www.cs.toronto.edu/~liudavid/" "_blank" $ do " David Liu "
                              "."
                              "Ideas for new features, better design, and (especially) bug reports"
                              "are always welcome!"
                              "Please send all feedback to"
-                             makeA "" "" "mailto:cs.toronto.courseplanner@gmail.com" "_blank" $ do "this address"
+                             makeA "" "" "mailto:cs.toronto.courseplanner@gmail.com" "_blank" $ do " this address "
                              "."
                              "If you see a bug, please do let us know which browser and version you're using."
                              "And if there's a display issue, giving us your screen display info"
                              "(e.g., resolution) will be rather helpful. Thanks!"
+
+focusesTab :: H.Html
+focusesTab = ""
+
+timetableTab :: H.Html
+timetableTab = createTag H.div "timetable" "infoTab" $ do
+                           createTag H.div "timetableSearch" "infoTabContent" $ do
+                               createTag H.h2 "" ""  $ do
+                                   "2014-2015 Timetable"
+                               createTag H.p "" "" "Search through the timetable for a course or instructor."
+                               createTag H.p "" "" "The \"(+5)\" caps are extra reserved seats. See official timetable for details."
+                               createTag H.p "timetable-creator-link" "" $ do
+                                   makeA "" "" "timetable_creator.html" "" $ do
+                                       "Plan your timetable here!"
+                               makeInput "filter" "text-input" "" "" "text"
+                           createTag H.div "timetableContainer" "" $ do
+                               ""
+
+checkMyPostTab :: H.Html
+checkMyPostTab = ""
