@@ -22,10 +22,9 @@ gridResponse =
 
                      createTag H.div "" "row main" $ do
                          coursePanel
-
                          searchPanel
-
                          infoPanel
+                         -- TODO: Add disclaimer.
                 )
                 timetableScripts
 
@@ -41,9 +40,11 @@ coursePanel = createTag H.div "course-select-wrapper" "col-md-2 col-xs-6" $ do
 
 searchPanel :: H.Html
 searchPanel =  createTag H.div "search-layout" "col-md-2 col-xs-6 col-md-push-8" $ do
+
                              createTag H.div "filter-container" "" $ do
                                      makeForm "" "" "return false;" $ do
                                      makeInput "course-filter" "form-control" "Enter a course!" "off" "text"
+
                              createTag H.div "search-container" "" $ do
                                      createTag H.div "search-list" "" ""
 
@@ -51,11 +52,11 @@ infoPanel :: H.Html
 infoPanel = createTag H.div "" "col-md-8 col-xs-12 col-md-pull-2" $ do
                             createTag H.div "info" "row" $ do
                                     createTag H.div "info-layout" "" $ do
-                                            createTag H.div "" "" $ do
+                                            H.div $ do
                                                    createTag H.span "course-info-code" "" ""
                                                    createTag H.span "course-info-title" "" ""
 
-                                            createTag H.h4 "" "" $ do
+                                            H.h4 $ do
                                                    createTag H.span "section-stats-section" "" ""
                                                    createTag H.span "section-stats-instructor" "" ""
 

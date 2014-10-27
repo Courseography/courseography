@@ -19,8 +19,7 @@ graphResponse =
                  plannerLinks
                 ]
                 (do header "graph"
-                    createTag H.div "graph" "graph" $ do
-                        ""
+                    createTag H.div "graph" "graph" ""
                     createTag H.div "" "infoTabs" $ do
                         tabList $ do
                             welcomeTab
@@ -32,38 +31,37 @@ graphResponse =
 tabList :: H.Html -> H.Html
 tabList content = createTag H.div "" "tabListDiv" $ do
                   createTag H.ul "" "tabList" $ do
-                      H.li $ do
-                          tabAnchor "#welcome" "Welcome!"
-                      H.li $ do
-                          tabAnchor "#focuses" "Focuses"
-                      H.li $ do
-                          tabAnchor "#timetable" "Timetable"
-                      H.li $ do
-                           tabAnchor "#post" "Check My POSt!"
+                      H.li $ tabAnchor "#welcome" "Welcome!"
+                      H.li $ tabAnchor "#focuses" "Focuses"
+                      H.li $ tabAnchor "#timetable" "Timetable"
+                      H.li $ tabAnchor "#post" "Check My POSt!"
                       do content
+                  fceCountDiv
 
-                  createTag H.div "FCECountDiv" "" $ do
-                      createTag H.span "FCEcount" "" $ do "0.0"
+
+fceCountDiv :: H.Html
+fceCountDiv = createTag H.div "FCECountDiv" "" $ do
+                  createTag H.span "FCEcount" "" $ do "0.0"
                   "FCEs" -- Being difficult. Won't show up correctly.
 
 welcomeTab :: H.Html
 welcomeTab = createTag H.div "welcome" "infoTab" $ do
                      createTag H.div "" "infoTabContent" $ do
-                         createTag H.h2 "" "" $ do "Welcome!"
-                         createTag H.p "" "" $ do
-                             "The graph above displays the prerequisite links connecting courses"
-                             "in our department. Select courses to plan your enrolments for"
-                             "future terms! Courses that you've selected but have missing"
-                             "prerequisites will be highlighted in red."
+                         H.h2 $ do "Welcome!"
+                         H.p $ do
+                             "The graph above displays the prerequisite links connecting courses "
+                             "in our department. Select courses to plan your enrolments for "
+                             "future terms! Courses that you've selected but have missing "
+                             "prerequisites will be highlighted in red. "
 
-                         createTag H.p "" "" $ do
-                             "Check out the different tabs to access helpful features for your"
+                         H.p $ do
+                             "Check out the different tabs to access helpful features for your "
                              "planning. Also, here's a"
-                             makeA "" "" "res/full_graph.jpg" "_blank" $ do "printable version"
+                             makeA "" "" "res/full_graph.jpg" "_blank" $ do "printable version "
                              "of the graph."
 
                          --createTag H.br "" ""
-                         createTag H.p "" "" $ do
+                         H.p $ do
                              "Courseography is an ongoing "
                              makeA "" "" "https://github.com/Ian-Stewart-Binks/courseography" "_blank" $ do "project "
                              "maintained by Ian Stewart-Binks and"
@@ -86,8 +84,8 @@ timetableTab = createTag H.div "timetable" "infoTab" $ do
                            createTag H.div "timetableSearch" "infoTabContent" $ do
                                createTag H.h2 "" ""  $ do
                                    "2014-2015 Timetable"
-                               createTag H.p "" "" "Search through the timetable for a course or instructor."
-                               createTag H.p "" "" "The \"(+5)\" caps are extra reserved seats. See official timetable for details."
+                               H.p "Search through the timetable for a course or instructor."
+                               H.p "The \"(+5)\" caps are extra reserved seats. See official timetable for details."
                                createTag H.p "timetable-creator-link" "" $ do
                                    makeA "" "" "timetable_creator.html" "" $ do
                                        "Plan your timetable here!"

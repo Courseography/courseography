@@ -19,7 +19,7 @@ masterTemplate title headers body scripts =
         scripts
 
 
--- Insert the header of the Grid. This contains the year of the timetable, and
+-- Insert the header of the Grid and Graph. This contains the year of the timetable, and
 -- a link back to the Graph.
 header :: String -> H.Html
 header page = createTag H.div "" "row header" $ do
