@@ -31,16 +31,16 @@ gridResponse =
 -- Create <scripts/>
 timetableScripts :: H.Html
 timetableScripts = do jQuery
-                      makeScript "static/js/grid/timetable_util.js"
-                      makeScript "static/js/grid/setup.js"
-                      makeScript "static/js/grid/mouse_events.js"
-                      makeScript "//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"
-                      makeScript "http://code.jquery.com/ui/1.10.4/jquery-ui.js"
-                      makeScript "static/js/common/cookieHandler.js"
-                      makeScript "static/js/grid/generate_grid.js"
-                      makeScript "static/js/common/objects/course.js"
-                      makeScript "static/js/common/objects/section.js"
-                      makeScript "static/js/common/utilities/util.js"
+                      concatHtml (map makeScript ["static/js/grid/timetable_util.js",
+                                                "static/js/grid/setup.js",
+                                                "static/js/grid/mouse_events.js",
+                                                "//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js",
+                                                "http://code.jquery.com/ui/1.10.4/jquery-ui.js",
+                                                "static/js/common/cookieHandler.js",
+                                                "static/js/grid/generate_grid.js",
+                                                "static/js/common/objects/course.js",
+                                                "static/js/common/objects/section.js",
+                                                "static/js/common/utilities/util.js"])
 
 
 conflictDialog :: H.Html

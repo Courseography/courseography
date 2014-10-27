@@ -34,12 +34,15 @@ jQuery :: H.Html
 jQuery = makeScript "https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"
 
 timetableLinks :: H.Html
-timetableLinks = foldl (>>) "" $ map stylesheet ["//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css",
-                                         "static/style/grid/timetable_styles.css"]
+timetableLinks = concatHtml (map stylesheet ["//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css",
+                                         "static/style/grid/timetable_styles.css"])
 
 plannerLinks :: H.Html
-plannerLinks = foldl (>>) "" $ map stylesheet ["//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css",
+plannerLinks = concatHtml (map stylesheet ["//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css",
                                        "static/style/grid/timetable_styles.css",
                                        "static/style/graph/styles.css",
                                        "static/style/graph/graph_styles.css",
-                                       "static/res/video-js/video-js.css"]
+                                       "static/res/video-js/video-js.css"])
+
+concatHtml :: [H.Html] -> H.Html
+concatHtml html = foldl (>>) "" $ html
