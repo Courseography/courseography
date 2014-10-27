@@ -33,17 +33,13 @@ tabList :: H.Html -> H.Html
 tabList content = createTag H.div "" "tabListDiv" $ do
                   createTag H.ul "" "tabList" $ do
                       H.li $ do
-                          makeA "" "" "#welcome" "" $ do
-                              "Welcome!"
+                          tabAnchor "#welcome" "Welcome!"
                       H.li $ do
-                          makeA "" "" "#focuses" "" $ do
-                              "Focuses"
+                          tabAnchor "#focuses" "Focuses"
                       H.li $ do
-                          makeA "" "" "#timetable" "" $ do
-                              "Timetable"
+                          tabAnchor "#timetable" "Timetable"
                       H.li $ do
-                          makeA "" "" "#post" "" $ do
-                              "Check My POSt!"
+                           tabAnchor "#post" "Check My POSt!"
                       do content
 
                   createTag H.div "FCECountDiv" "" $ do

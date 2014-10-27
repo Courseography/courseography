@@ -30,6 +30,9 @@ makeInput id class_ placeholder autocomplete type_ = H.input ! A.id id ! A.class
 makeA :: H.AttributeValue -> H.AttributeValue -> H.AttributeValue -> H.AttributeValue -> H.Html -> H.Html
 makeA id class_ href target content = H.a ! A.id id ! A.class_ class_ ! A.href href ! A.target target $ do content
 
+tabAnchor :: H.AttributeValue -> H.Html -> H.Html
+tabAnchor href content = H.a ! A.href href $ do content
+
 jQuery :: H.Html
 jQuery = makeScript "https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"
 
