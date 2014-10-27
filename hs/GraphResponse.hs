@@ -8,6 +8,7 @@ import qualified Text.Blaze.Html5.Attributes as A
 import Happstack.Server
 import MakeElements
 import MasterTemplate
+import Scripts
 
 graphResponse :: ServerPart Response
 graphResponse =
@@ -28,44 +29,19 @@ graphResponse =
                 plannerScripts
 
 
-plannerScripts :: H.Html
-plannerScripts = concatHtml (map makeScript["http://code.jquery.com/jquery-1.10.2.js",
-                                           "http://code.jquery.com/ui/1.10.4/jquery-ui.js",
-                                           "static/js/graph/modal.js",
-                                           "static/js/graph/objects/edge.js",
-                                           "static/js/graph/objects/node.js",
-                                           "static/js/common/objects/course.js",
-                                           "static/js/common/cookieHandler.js",
-                                           "static/js/graph/tabs/setup_tabs.js",
-                                           "static/js/graph/utilities/course_description.js",
-                                           "static/js/graph/tabs/feedback_form.js",
-                                           "static/js/graph/tabs/focuses.js",
-                                           "static/js/graph/tabs/post.js",
-                                           "static/js/graph/tabs/timetable.js",
-                                           "static/js/graph/tabs/fce_count.js",
-                                           "static/js/common/objects/section.js",
-                                           "static/js/common/utilities/util.js",
-                                           "static/js/graph/utilities/structs.js",
-                                           "static/js/graph/utilities/util.js",
-                                           "static/js/graph/create_data.js",
-                                           "static/js/graph/parse_graph.js",
-                                           "static/js/graph/mouse_events.js",
-                                           "static/js/graph/setup.js"])
-
-
 tabList :: H.Html -> H.Html
 tabList content = createTag H.div "" "tabListDiv" $ do
                   createTag H.ul "" "tabList" $ do
-                      createTag H.li "" "" $ do
+                      H.li $ do
                           makeA "" "" "#welcome" "" $ do
                               "Welcome!"
-                      createTag H.li "" "" $ do
+                      H.li $ do
                           makeA "" "" "#focuses" "" $ do
                               "Focuses"
-                      createTag H.li "" "" $ do
+                      H.li $ do
                           makeA "" "" "#timetable" "" $ do
                               "Timetable"
-                      createTag H.li "" "" $ do
+                      H.li $ do
                           makeA "" "" "#post" "" $ do
                               "Check My POSt!"
                       do content
@@ -125,3 +101,4 @@ timetableTab = createTag H.div "timetable" "infoTab" $ do
 
 checkMyPostTab :: H.Html
 checkMyPostTab = ""
+
