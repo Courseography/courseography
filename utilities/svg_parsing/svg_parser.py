@@ -28,7 +28,7 @@ def output_svg():
 		print("        ", end="")
 		i.output_haskell()
 	
-	print("    S.g $ do")
+	print("    S.g ! A.transform \"translate(-146,288)\" $ do")
 	for i in paths:
 		print("        ", end="")
 		i.output_haskell()
@@ -50,7 +50,8 @@ def process_rect(elem):
 			height = elem.get("height")
 			x = elem.get("x")
 			y = elem.get("y")
-			rects.append(Rect(width, height, x, y))
+			transform = elem.parent.get("transform")
+			rects.append(Rect(width, height, x, y, transform))
 
 if __name__ == "__main__":
 	read_svg()
