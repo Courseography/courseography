@@ -24,7 +24,7 @@ static :: String
 static = "static"
 
 staticDir :: String
-staticDir = "C:\\Users\\David\\Documents\\courseography"
+staticDir = "C:\\inetpub\\wwwroot\\courseography"
 
 main :: IO ()
 main = simpleHTTP nullConf $

@@ -1,27 +1,3 @@
-/* General */
-
-html {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-  overflow-y: auto;
-  font-family: "Trebuchet MS", Arial, Sans-Serif;
-  font-size: 16px;
-}
-body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  height: 100%;
-}
-
-a, a:hover, a:visited, a:active {
-  font-weight: bold;
-  text-decoration: none;
-  color: #4C004C;
-}
-
 
 /* Styles for disclaimer */
 #disclaimerDiv {
@@ -121,11 +97,6 @@ ul.tabList li a:active {
   margin-right: auto;
 }
 
-h1,
-h2,
-h3 {
-  text-align: center;
-}
 
 /* Timetable tab */
 #timetableSearch {
@@ -329,13 +300,7 @@ td.timetableWait, th.timetableWait {
   margin-left: auto;
   margin-right: auto;
 }
-h4 {
-  font-size: 1.1em;
-  width: 100%;
-  text-align: center;
-  margin-top: 0.3em;
-  margin-bottom: 0.3em;
-}
+
 input[type=text] {
   width: 75px;
   text-align: center;
