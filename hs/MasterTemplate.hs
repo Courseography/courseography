@@ -16,6 +16,7 @@ masterTemplate title headers body scripts =
         sequence_ headers
       H.body $ do
         body
+        disclaimer
         scripts
 
 
@@ -29,3 +30,16 @@ header page = createTag H.nav "" "row header" $ do
     H.li $ makeA "" "" "grid" "" $ "Grid"
     H.li $ makeA "" "" "" "" $ "Check My POSt!"
     H.li $ makeA "" "" "" "" $ "About"
+
+-- Disclaimer. This will be the same for both pages, I guess?
+disclaimer :: H.Html
+disclaimer = H.div ! A.id "disclaimerDiv" $ do
+  "DISCLAIMER: Both the "
+  H.a ! A.href "http://www.artsandscience.utoronto.ca/ofr/timetable/winter/csc.html"
+    $ "Official Timetable"
+  " and "
+  H.a ! A.href "http://www.artsandscience.utoronto.ca/ofr/calendar/index.html"
+    $ "Calendar"
+  " take precedence over the information presented here. "
+  "It's important that you double-check your course selection, "
+  "prerequisites, and your program plans."

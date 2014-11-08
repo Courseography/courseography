@@ -3,6 +3,7 @@
 {
   width      : 95%;
   min-height : 600px;
+  height     : 85vh;
   overflow   : hidden;
   margin     : 0px auto 0px auto;
 }
@@ -226,6 +227,54 @@ path[data-active='missing']
   font-family : "Bitter", serif;
   font-style  : italic;
   fill        : #072D68;
+}
+
+.modal
+{
+  background-color : rgb(55,74,161);
+  padding          : 20px 20px 20px 20px;
+  width            : 70%;
+  height           : 70%;
+  overflow         : auto;
+}
+
+.modal p
+{
+  color : rgb(255,255,255);
+}
+
+.ui-dialog-titlebar
+{
+  background-color : rgb(34,34,102);
+  color            : rgb(255,255,255);
+  font-size        : 2em;
+  cursor           : move;
+  text-align       : center;
+}
+
+.ui-dialog-titlebar-close
+{
+  display : none;
+}
+
+#bottom-content-container
+{
+  padding-top : 1em;
+}
+
+.ui-width-overlay
+{
+  height   : 100%;
+  width    : 100%;
+  left     : 0px;
+  position : fixed;
+  top      : 0px;
+}
+
+
+.ui-dialog tr
+{
+  margin : 0px auto 0px auto;
 }
 
 

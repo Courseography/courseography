@@ -14,7 +14,7 @@ function getVeryLargeCourseArray() {
     var splitArray = undefined;
 
     $.ajax({
-        url: "res/courses.txt",
+        url: "static/res/courses.txt",
         dataType: "text",
         async: false,
         success: function (data) {
@@ -151,13 +151,13 @@ function saveCookies(courses, sections) {
     'use strict';
 
     if (courses !== undefined) {
-        setCookie("selected-courses", JSON.stringify(courses));    
+        setCookie("selected-courses", JSON.stringify(courses));
     } else {
         setCookie("selected-courses", "[]");
     }
 
     if (sections !== undefined) {
-        setCookie("selected-lectures", JSON.stringify(sections));    
+        setCookie("selected-lectures", JSON.stringify(sections));
     } else {
         setCookie("selected-lectures", "[]");
     }

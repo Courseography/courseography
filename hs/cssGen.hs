@@ -12,8 +12,8 @@ padding0 = padding 0 0 0 0
 width100 = width $ pct 100
 height100 = height $ pct 100
 
-common = do 
-    html ? 
+common = do
+    html ?
         do margin0
            padding0
            width100
@@ -28,6 +28,7 @@ common = do
            fontFamily ["Trebuchet MS", "Arial"] [sansSerif]
     headerCSS
     aDefaultCSS
+    disclaimerCSS
 
 headerCSS = do
     ".header" ?
@@ -35,14 +36,15 @@ headerCSS = do
            padding 0 (em 0.5) 0 (em 0.5)
            backgroundColor $ parse "#261B2A"
            color white
-           h2 ? 
+           h2 ?
              do fontSize $ em 1.6
                 fontWeight bold
                 textAlign $ alignSide sideLeft
                 width $ px 200
                 display inlineBlock
+                margin (px 10) 0 (px 5) 0
     "#nav-links" ?
-        do 
+        do
             "list-style" -: "none"
             width $ pct 70
             margin 0 0 0 0
@@ -63,16 +65,21 @@ aDefaultCSS = do
 
 headers = do
     h1 ? do
-        textAlign $ alignSide sideCenter
+        alignCenter
     h2 ? do
-        textAlign $ alignSide sideCenter
+        alignCenter
     h3 ? do
-        textAlign $ alignSide sideCenter
+        alignCenter
     h4 ? do
         width100
         fontSize $ em 1.1
         alignCenter
         margin (em 0.3) 0 (em 0.3) 0
+
+-- Disclaimer
+disclaimerCSS = "#disclaimerDiv" ? do
+    padding 0 (em 1) (em 0.5) (em 1)
+    fontSize (pt 11)
 
 
 -- Style for graph
@@ -83,6 +90,7 @@ graphStyles = do
     pathCSS
     resetCSS
     titleCSS
+    modalCSS
 
 alignCenter = textAlign $ alignSide sideCenter
 cursor = (-:) "cursor"
@@ -201,7 +209,7 @@ pathCSS = "path" ? do
     "data-active" @= "missing" & do
         faded
         strokeRed
-    
+
 resetCSS = "#resetButton" ? do
     fill "#990000"
     cursor "pointer"
@@ -214,6 +222,7 @@ graphContainer = do
     "#graph" ? do
         width (pct 95)
         minHeight (px 600)
+        "height" -: "85vh"
         overflow hidden
         margin 0 auto 0 auto
         -- clear both
@@ -232,3 +241,51 @@ titleCSS = "#svgTitle" ? do
     fontFamily ["Bitter"] [serif]
     fontStyle italic
     fill titleColour
+
+
+-- Course Modal
+modalColor = parse "#374AA1"
+
+modalCSS = do
+    ".modal" ? do
+        backgroundColor modalColor
+        padding (px 20) (px 20) (px 20) (px 20)
+        width (pct 70)
+        height (pct 70)
+        overflow auto
+        p ? do
+            color white
+    ".ui-dialog-titlebar" ? do
+        backgroundColor $ parse "#222266"
+        color white
+        fontSize (em 2)
+        "cursor" -: "move"
+        alignCenter
+    ".ui-dialog-titlebar-close" ? do
+        display none
+    "#bottom-content-container" ? do
+        paddingTop (em 1)
+    ".ui-width-overlay" ? do
+        height100
+        width100
+        left 0
+        position fixed
+        top 0
+    ".ui-dialog" ? do
+        tr ? do
+            margin 0 auto 0 auto
+
+-- Currently not used
+
+-- FCECount
+fceCountColor = parse "#66C2FF"
+
+fceCountCSS = "#FCECountDiv" ? do
+    backgroundColor fceCountColor
+    float floatRight
+    padding0
+    lineHeight (px 40)
+    "vertical-align" -: "middle"
+    fontSize (em 1.35)
+    alignCenter
+

@@ -6,10 +6,9 @@ function createModalDiv(id) {
 
     var contentDiv = $('<div></div>');
     contentDiv.attr('id', 'modal-content-container');
-    contentDiv.css('overflow', 'auto');
 
     var courseDescription = fetchCourseDescription(id);
-    var p = $('<p></p>').css('color', 'white').html(courseDescription);
+    var p = $('<p></p>').html(courseDescription);
     var bottomContentDiv = $('<div></div>');
     bottomContentDiv.attr('id', 'bottom-content-container');
     var video = setupVideoPlayer(id);
@@ -198,14 +197,15 @@ function openModal(nodeId) {
     'use strict';
 
     if ($('.modal').length === 0) {
-        $('.infoTabs').hide();
         var div = createModalDiv(nodeId);
         div.attr('title', getCourseTitle(nodeId))
            .addClass('modal').dialog({
                 autoOpen: true,
                 modal: true,
-                minWidth: 1000,
-                minHeight: 600,
+                minWidth: 700,
+                minHeight: 500,
+                width: 700,
+                height: 500,
                 closeText: 'X',
                 open: function(event, ui) { $('.ui-widget-overlay').bind('click', function(){ div.dialog('close'); }); },
                 close: function () {
