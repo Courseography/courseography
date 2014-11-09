@@ -36,7 +36,7 @@ headerCSS = do
     ".header" ?
         do margin0
            padding 0 (em 0.5) 0 (em 0.5)
-           backgroundColor $ parse "#261B2A"
+           backgroundColor $ blue1
            color white
            h2 ?
              do fontSize $ em 1.6
@@ -282,10 +282,15 @@ modalCSS = do
 timetableStyles = do
     body ? do
         overflowX hidden
+    ".main" ? do -- TODO: change to id, and pick better name
+        "height" -: "calc(90% - 3.55em)"
+        margin0
     searchCSS
     timetableCSS
+    courseSelectCSS
+    tdColours
+    infoCSS
 
-purple1 = parse "#46364A"
 
 searchCSS = do
     "#search-layout" ? do
@@ -322,7 +327,10 @@ searchCSS = do
                     fontWeight bold
                     cursor "pointer"
                     textDecoration underline
+            ".starred-course" & do
+                backgroundColor blue1
 
+purple1 = parse "#46364A"
 purple2 = parse "#7E4D66"
 pink1 = parse "#DB94B8"
 
@@ -364,7 +372,7 @@ timetableCSS = do
             fontWeight normal
             backgroundColor $ rgba 219 148 184 1
             borderBottom solid (px 2) pink1 -- important
-            ".term-name" & do -- TODO: change HTML to put in
+            ".term-name" & do
                 padding0
                 width (pct 10)
                 fontWeight bold
@@ -375,6 +383,127 @@ timetableCSS = do
 
 borderNone = border solid (px 0) white
 
+courseSelectCSS = do
+    "#course-select-wrapper" ? do
+        margin0
+        padding0
+        overflow hidden
+        height100
+        backgroundColor purple1
+        color white
+    "#course-select" ? do
+        padding0
+        margin (px 18) 0 0 (px 17)
+        width100
+        height100
+        alignCenter
+        overflowY scroll
+        overflowX hidden
+        "list-style-type" -: "none"
+        li <? do
+            width (pct 95)
+            clear both
+            h3 <? do
+                "cursor" -: "pointer"
+                margin0
+                padding (em 0.25) 0 (em 0.25) 0
+                display block
+                width100
+                outline solid (px 0) white
+                borderTop solid (px 1) black
+                "#clear-all" <? do
+                    h3 <? do
+                        margin0
+                        padding (em 0.25) (em 0.25) (em 0.25) (em 0.25)
+                        "cursor" -: "pointer"
+                        ":hover" & do
+                            backgroundColor blue1
+                        ".ui-accordion-header-active" & do
+                            backgroundColor blue1 -- important    
+        ".close-icon" ? do
+            width (px 20)
+            height (px 20)
+            float floatLeft
+            padding (px 7) 0 0 (px 5)
+        ".sections" ? do
+            -- overflow: auto <-- really necessary?
+            "cursor" -: "pointer" -- necessary?
+            "ul" <? do
+                display block
+                margin0
+                padding0
+                "list-style-type" -: "none"
+                ".sectionList-F" & do
+                    width (pct 50)
+                    float floatLeft
+                    borderRight solid (px 1) black
+                ".sectionList-S" & do
+                    width (pct 50)
+                    float floatRight
+                    borderLeft solid (px 1) black
+                li <? do
+                    backgroundColor blue2
+                    ":hover" & do
+                        backgroundColor blue3
+
+
+tdColours = ".timetable " ?  do
+    td ? do
+        ".hover-time" & do
+            backgroundColor blue4 -- important
+        "hover" *= "good" & do
+            backgroundColor blue3
+        "hover" *= "conflict" & do
+            backgroundColor red1
+        "hover" *= "remove" & do
+            opacity 0.5
+            transition "all" (sec 0.5) easeInOut (sec 0)
+        "in-conflict" *= "true" & do
+            backgroundColor red1
+            ":hover" & do
+                backgroundColor red2
+        "satisfied" *= "false" & do
+            backgroundColor red3
+            ":hover" & do
+                backgroundColor red4
+    td # ("in-conflict" *= "false") # ("satisfied" *= "true") # ("type" *= "L") ? do
+            backgroundColor blue3
+    td # ("in-conflict" *= "false") # ("satisfied" *= "true") # ("type" *= "T") ? do
+            backgroundColor teal1
+    td # ("in-conflict" *= "false") # ("satisfied" *= "true") # ("type" *= "P") ? do
+            backgroundColor orange1
+
+
+teal1 = parse "#737A99"
+orange1 = parse "#1E7FCC"
+
+blue1 = parse "#261B2A"
+blue2 = parse "#336685"
+blue3 = parse "#437699"
+
+blue4 = parse "#5566F5"
+
+red1 = parse "#C92343"
+red2 = parse "#B91333"
+
+red3 = rgb 215 117 70
+red4 = rgb 195 97 50
+
+
+-- info layout
+infoCSS = "#info-layout" ? do
+    padding0
+    margin0
+    width100
+    height (em 7)
+    alignCenter
+    h2 <? do
+        fontSize (em 1.3)
+        margin (em 0.5) (em 0.5) (em 0.5) (em 0.5)
+        fontWeight bold
+    h4 <? do
+        fontSize (em 1.15)
+        margin (em 0.5) (em 0.5) (em 0.5) (em 0.5)
 
 
 -- Currently not used
