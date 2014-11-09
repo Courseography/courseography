@@ -4,7 +4,9 @@ import Clay
 import Prelude hiding ((**))
 import Data.Monoid
 
-main = putCss graphStyles
+--main = putCss graphStyles
+-- main = putCss common
+main = putCss timetableStyles
 
 margin0 = margin 0 0 0 0
 padding0 = padding 0 0 0 0
@@ -274,6 +276,106 @@ modalCSS = do
     ".ui-dialog" ? do
         tr ? do
             margin 0 auto 0 auto
+
+
+-- Timetable styles
+timetableStyles = do
+    body ? do
+        overflowX hidden
+    searchCSS
+    timetableCSS
+
+purple1 = parse "#46364A"
+
+searchCSS = do
+    "#search-layout" ? do
+        backgroundColor purple1
+        height100
+        margin0
+        padding0
+        overflowY scroll
+        overflowX hidden
+    "#filter-container" ? do
+        padding (px 10) (px 10) (px 10) (px 10)
+        form <? do
+            margin0
+    "#search-container" ? do
+        alignCenter
+        color white
+        height100
+        width100
+        margin0
+        padding (em 0.5) 0 (em 1) 0
+    "#search-list" ? do
+        margin0
+        padding 0 0 0 0
+        height100
+        width100
+        ul <? do
+            margin0
+            padding0
+            li <? do
+                display block
+                margin0
+                padding0
+                ":hover" & do
+                    fontWeight bold
+                    cursor "pointer"
+                    textDecoration underline
+
+purple2 = parse "#7E4D66"
+pink1 = parse "#DB94B8"
+
+timetableCSS = do
+    ".timetable-container" ? do
+        backgroundColor white -- purple2
+        padding0
+        margin0
+    ".timetable" ? do
+        margin0
+        padding0
+        "table-layout" -: "fixed"
+        "border-collapse" -: "collapse"
+        caption <? do
+            fontSize (em 1.6)
+            margin (em 0.5) 0 (em 0.5) 0
+            alignCenter
+        "#timetable-F" & do
+            borderRight solid (px 2) black
+            ".timetable-time" ? do
+                textAlign $ alignSide sideRight
+                paddingRight (px 10) -- important
+        "#timetable-S" & do
+            borderLeft solid (px 2) black
+            ".timetable-time" ? do
+                textAlign $ alignSide sideLeft
+                paddingLeft (px 10) -- important
+        td <> th ? do
+            width (pct 18)
+            height (px 35)
+            padding0 -- !important
+            margin0 -- !important
+            alignCenter
+            "vertical-align" -: "middle"
+            overflow hidden
+            borderColor pink1 -- !important
+        th ? do
+            fontSize (em 1.1)
+            fontWeight normal
+            backgroundColor $ rgba 219 148 184 1
+            borderBottom solid (px 2) pink1 -- important
+            ".term-name" & do -- TODO: change HTML to put in
+                padding0
+                width (pct 10)
+                fontWeight bold
+        ".timetable-time" ? do
+            width (pct 10)
+            borderNone
+            padding (px 10) (px 10) (px 10) (px 10)
+
+borderNone = border solid (px 0) white
+
+
 
 -- Currently not used
 
