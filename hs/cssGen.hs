@@ -474,6 +474,19 @@ tdColours = ".timetable " ?  do
             backgroundColor orange1
 
 
+courseSelectColours = do
+    li # ("satisfied" *= "false") # ("clicked" *= "true") ? do
+        backgroundColor red3
+        ":hover" & do
+            backgroundColor red4
+    li # ("satisfied" *= "true") # ("clicked" *= "true") ? do
+        backgroundColor blue3
+    h3 # ("satisfied" *= "false") # ("taken" *= "true") ? do
+        backgroundColor blue3
+    h3 # ("satisfied" *= "false") ? do
+        backgroundColor red3
+
+
 teal1 = parse "#737A99"
 orange1 = parse "#1E7FCC"
 
