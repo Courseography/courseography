@@ -14,14 +14,17 @@ aboutResponse =
     masterTemplate "Courseography - SVG serving test!"
                 [H.meta ! A.name "keywords"
                         ! A.content "",
-                 plannerLinks
+                 aboutLinks
                 ]
-                aboutHtml
+                (do 
+                    header "about"
+                    aboutHtml
+                )
                 ""
 
 
 aboutHtml :: H.Html
-aboutHtml = do
+aboutHtml = H.div ! A.id "aboutDiv" $ do
   H.h1 "About Courseography"
   H.p $ do
     "Here are the University of Toronto, we have hundreds of courses to choose from, "

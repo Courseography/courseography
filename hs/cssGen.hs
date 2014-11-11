@@ -6,7 +6,8 @@ import Data.Monoid
 
 --main = putCss graphStyles
 -- main = putCss common
-main = putCss timetableStyles
+-- main = putCss timetableStyles
+main = putCss aboutStyles
 
 margin0 = margin 0 0 0 0
 padding0 = padding 0 0 0 0
@@ -517,6 +518,15 @@ infoCSS = "#info-layout" ? do
     h4 <? do
         fontSize (em 1.15)
         margin (em 0.5) (em 0.5) (em 0.5) (em 0.5)
+
+-- About page
+aboutStyles = "#aboutDiv" ? do
+    maxWidth (px 1000)
+    padding 0 (em 1) 0 (em 1)
+    margin 0 auto 0 auto
+    textAlign justify
+    h1 <> h2 <> h3 <? do
+        color blue3
 
 
 -- Currently not used
