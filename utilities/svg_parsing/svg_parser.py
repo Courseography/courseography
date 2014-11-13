@@ -51,7 +51,9 @@ def process_rect(elem):
 			x = elem.get("x")
 			y = elem.get("y")
 			transform = elem.parent.get("transform")
-			rects.append(Rect(width, height, x, y, transform, "Ian"))
+			text = elem.parent.text.strip()
+			fill = elem.get("fill")
+			rects.append(Rect(width, height, x, y, fill, transform, text))
 
 if __name__ == "__main__":
 	read_svg()
