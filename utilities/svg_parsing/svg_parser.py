@@ -14,7 +14,7 @@ def read_svg():
 	for elem in soup.find_all('path'):
 		process_path(elem)
 
-	for elem in soup.find_all('rect'):
+	for elem in soup.find_all('text'):
 		process_rect(elem)
 
 def output_svg():
@@ -46,14 +46,16 @@ def process_path(elem):
 			paths.append(Path(elem.get("d")))
 
 def process_rect(elem):
-			width = elem.get("width")
-			height = elem.get("height")
-			x = elem.get("x")
-			y = elem.get("y")
+			rect = elem.parent.find_previous_sibling().find("rect")
+			if rect == None:
+				return
+			width = rect.get("width")
+			height = rect.get("height")
+			x = rect.get("x")
+			y = rect.get("y")
 			transform = elem.parent.get("transform")
-			text = elem.parent.text.strip()
-			fill = elem.get("fill")
-			rects.append(Rect(width, height, x, y, fill, transform, text))
+			text = elem.text
+			rects.append(Rect(width, height, x, y, transform, text))
 
 if __name__ == "__main__":
 	read_svg()
