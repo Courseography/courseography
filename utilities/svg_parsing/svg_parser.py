@@ -1,5 +1,5 @@
 from bs4 import BeautifulSoup
-
+import sys
 from path import *
 from rect import *
 paths = []
@@ -51,7 +51,7 @@ def process_rect(elem):
 			x = elem.get("x")
 			y = elem.get("y")
 			transform = elem.parent.get("transform")
-			rects.append(Rect(width, height, x, y, transform))
+			rects.append(Rect(width, height, x, y, transform, "Ian"))
 
 if __name__ == "__main__":
 	read_svg()
