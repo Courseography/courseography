@@ -51,7 +51,9 @@ def print_header():
 
 def process_path(elem):
 	if elem.parent.get("id") == "layer3":
-		regions.append(Region(elem.get("d")))
+		regions.append(Region(elem.get("d"),
+			                  elem.get("style")))
+
 	elif elem.parent.get("id") == "layer2":
 		pass
 	else:

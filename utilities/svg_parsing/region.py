@@ -1,7 +1,12 @@
 class Region:
 
-	def __init__(self, d):
+	def __init__(self, d, style):
 		self.d = d
+		self.style = style
 
 	def output_haskell(self):
-		print("S.path ! A.style \"fill:#222222;fill-opacity:1;stroke:none;display:inline\" ! A.d \"" + self.d + "\"")
+		print("S.path ! A.style \"" + 
+			  self.style + 
+			  "\" ! A.d \"" +
+			  self.d +
+			  "\"")	
