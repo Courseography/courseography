@@ -1,6 +1,7 @@
 class Region:
 
-	def __init__(self, d, style):
+	def __init__(self, d, style, id_):
+		self.id = id_
 		self.d = d
 		self.style = style
 

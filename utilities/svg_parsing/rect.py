@@ -14,6 +14,10 @@ class Rect:
 	def output_haskell(self):
 		print("S.g ! A.transform \"" + self.parent_transform + "\" ! A.style \"" + self.style + "\" $ do \n"  + 
 			  "             S.rect" +
+			  " ! A.class_ \"node\"" +
+			  " ! A.id_ \"" + 
+			  self.text + 
+			  "\"" +
 		      " ! A.width \"" + self.width +
 		      "\" ! A.height \"" + self.height + 
 		      "\" ! A.x \"" + self.x +

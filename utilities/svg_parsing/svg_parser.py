@@ -9,6 +9,8 @@ rects = []
 regions = []
 bools = []
 
+path_id_counter = 0;
+
 def read_svg():
 	with open("../../graph_regions.svg", "r") as svg_file:
 		content = svg_file.read()
@@ -33,7 +35,7 @@ def output_svg():
 		i.output_haskell()
 
 	print("    S.g ! A.transform \" translate(0,-308.2677)\" $ do")
-	print("        S.g ! A.transform \"translate(29.540919,340.70929)\" $ do")
+	print("        S.g ! A.transform \"translate(29.540919,340.70929)\" ! A.class_ \"nodes\"$ do")
 	for i in rects:
 		print("            ", end="")
 		i.output_haskell()
@@ -61,9 +63,12 @@ def print_header():
 
 
 def process_path(elem):
+	global path_id_counter
 	if elem.parent.get("id") == "layer3":
 		regions.append(Region(elem.get("d"),
-			                  elem.get("style")))
+			                  elem.get("style"),
+			                  "p" + str(path_id_counter)))
+		path_id_counter += 1
 
 	elif elem.parent.get("id") == "layer2":
 		pass
@@ -74,7 +79,9 @@ def process_path(elem):
 	elif elem.parent.get("id") == "clipPath2":
 		pass
 	else:
-		paths.append(Path(elem.get("d")))
+		paths.append(Path(elem.get("d"),
+		                  "p" + str(path_id_counter)))
+		path_id_counter += 1
 
 def process_rect(elem):
 	rect = elem.parent.find_previous_sibling().find("rect")
