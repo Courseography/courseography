@@ -1,6 +1,6 @@
 class Rect:
 
-	def __init__(self, width, height, x, y, transform, text):
+	def __init__(self, width, height, x, y, transform, text, style):
 		self.width =  width
 		self.height =  height
 		self.x =  x
@@ -9,9 +9,10 @@ class Rect:
 		self.text_y =  float(y) + (float(height)/2)
 		self.parent_transform =  transform
 		self.text = text
+		self.style = style
 
 	def output_haskell(self):
-		print("S.g ! A.transform \"" + self.parent_transform + "\" $ do \n"  + 
+		print("S.g ! A.transform \"" + self.parent_transform + "\" ! A.style \"" + self.style + "\" $ do \n"  + 
 			  "             S.rect" +
 		      " ! A.width \"" + self.width +
 		      "\" ! A.height \"" + self.height + 

@@ -85,8 +85,9 @@ def process_rect(elem):
 	x = rect.get("x")
 	y = rect.get("y")
 	transform = elem.parent.get("transform")
+	style = elem.parent.get("style")
 	text = elem.text
-	rects.append(Rect(width, height, x, y, transform, text))
+	rects.append(Rect(width, height, x, y, transform, text, style))
 
 def process_bool(elem):
 	bools.append(BoolNode(elem.get("d"),
