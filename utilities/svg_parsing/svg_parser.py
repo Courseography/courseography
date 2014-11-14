@@ -29,15 +29,16 @@ def output_svg():
 		print("        ", end="")
 		i.output_haskell()
 
-	print("    S.g $ do")
+	print("    S.g ! A.transform \" translate(0,-308.2677)\" $ do")
+	print("        S.g ! A.transform \"translate(29.540919,340.70929)\" $ do")
 	for i in rects:
-		print("        ", end="")
+		print("            ", end="")
 		i.output_haskell()
 	
-	print("    S.g ! A.transform \"translate(-146,288)\" $ do")
-	for i in paths:
-		print("        ", end="")
-		i.output_haskell()
+	# print("    S.g ! A.transform \"translate(-146,288)\" $ do")
+	# for i in paths:
+	# 	print("        ", end="")
+	# 	i.output_haskell()
 
 def print_header():
 	print("{-# LANGUAGE OverloadedStrings #-}")
