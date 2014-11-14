@@ -10,6 +10,7 @@ regions = []
 bools = []
 
 path_id_counter = 0;
+bool_id_counter = 0;
 
 def read_svg():
 	with open("../../graph_regions.svg", "r") as svg_file:
@@ -97,11 +98,14 @@ def process_rect(elem):
 	rects.append(Rect(width, height, x, y, transform, text, style))
 
 def process_bool(elem):
+	global bool_id_counter
 	bools.append(BoolNode(elem.get("d"),
 	                      elem.get("cx"),
 	                      elem.get("cy"),
 	                      elem.get("rx"),
-	                      elem.get("ry")))
+	                      elem.get("ry"),
+	                      "bool" + str(bool_id_counter)))
+	bool_id_counter += 1
 
 if __name__ == "__main__":
 	read_svg()
