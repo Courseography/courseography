@@ -3,21 +3,24 @@ import sys
 from path import *
 from rect import *
 from region import *
+from bool_node import *
 paths = []
 rects = []
 regions = []
+bools = []
 
 def read_svg():
 	with open("../../graph_regions.svg", "r") as svg_file:
 		content = svg_file.read()
-
 		soup = BeautifulSoup(content)
 
-	for elem in soup.find_all('path'):
-		process_path(elem)
+	find__all_and_process(soup, 'path', process_path)
+	find__all_and_process(soup, 'text', process_rect)
+	find__all_and_process(soup, 'ellipse', process_bool)
 
-	for elem in soup.find_all('text'):
-		process_rect(elem)
+def find__all_and_process(soup, tag, fn):
+	for elem in soup.find_all(tag):
+		fn(elem)
 
 def output_svg():
 	print_header()
@@ -35,10 +38,18 @@ def output_svg():
 		print("            ", end="")
 		i.output_haskell()
 	
-	# print("    S.g ! A.transform \"translate(-146,288)\" $ do")
-	# for i in paths:
-	# 	print("        ", end="")
-	# 	i.output_haskell()
+	print("            S.g ! A.transform \"translate(-146,288)\" $ do")
+	for i in paths:
+		print("                ", end="")
+		i.output_haskell()
+
+	print("            S.g ! A.transform \"translate(-146,288)\" $ do")
+	for i in bools:
+		print("                ", end="")
+		i.output_haskell()
+
+
+		
 
 def print_header():
 	print("{-# LANGUAGE OverloadedStrings #-}")
@@ -56,6 +67,12 @@ def process_path(elem):
 
 	elif elem.parent.get("id") == "layer2":
 		pass
+
+	elif elem.parent.get("id") == "clipPath1":
+		pass
+
+	elif elem.parent.get("id") == "clipPath2":
+		pass
 	else:
 		paths.append(Path(elem.get("d")))
 
@@ -71,6 +88,12 @@ def process_rect(elem):
 	text = elem.text
 	rects.append(Rect(width, height, x, y, transform, text))
 
+def process_bool(elem):
+	bools.append(BoolNode(elem.get("d"),
+	                      elem.get("cx"),
+	                      elem.get("cy"),
+	                      elem.get("rx"),
+	                      elem.get("ry")))
 
 if __name__ == "__main__":
 	read_svg()
