@@ -45,7 +45,7 @@ function buildGraph() {
         makeHybrid([], type, id);
     });
 
-    $('path').each(function () {
+    $('.path').each(function () {
         var coords = $(this).attr('d').split(' ');
         coords = coords.filter(function (str) {return str !== 'M' && str !== 'L'; });
         // Do something for internet explorer
