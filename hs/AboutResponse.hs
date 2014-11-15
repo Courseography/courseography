@@ -63,7 +63,7 @@ aboutHtml = H.div ! A.id "aboutDiv" $ do
     " on "
     H.a ! A.href "" $ "Github"
     " and the accompanying "
-    H.a ! A.href "projects" $ "Projects"
+    H.a ! A.href "https://github.com/Courseography/courseography/wiki/Courseography-Projects" $ "Projects"
     " page. For CS students: David is also accepting "
     H.strong "CSC494/495"
     " project students for the upcoming Winter 2015 term."
