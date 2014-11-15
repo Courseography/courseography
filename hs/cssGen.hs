@@ -298,6 +298,7 @@ timetableStyles = do
     searchCSS
     timetableCSS
     courseSelectCSS
+    courseSelectColours
     tdColours
     infoCSS
     conflictNotificationStyle
@@ -508,6 +509,8 @@ courseSelectColours = do
         backgroundColor blue3
     h3 # ("satisfied" *= "false") ? do
         backgroundColor red3
+    h3 # ("satisfied" *= "true") # ("taken" *= "true") ? do
+        backgroundColor blue4
 
 
 teal1 = parse "#737A99"
