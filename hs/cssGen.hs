@@ -472,6 +472,7 @@ courseSelectCSS = do
                     float floatRight
                     borderLeft solid (px 1) black
                 li <? do
+                    fontSize (em 0.8)
                     backgroundColor blue2
                     ":hover" & do
                         backgroundColor blue3
