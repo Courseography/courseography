@@ -298,7 +298,6 @@ timetableStyles = do
     searchCSS
     timetableCSS
     courseSelectCSS
-    courseSelectColours
     tdColours
     infoCSS
     conflictNotificationStyle
@@ -444,6 +443,13 @@ courseSelectCSS = do
                             backgroundColor blue1
                         ".ui-accordion-header-active" & do
                             backgroundColor blue1 -- important    
+                "satisfied" *= "false" & do
+                    "taken" *= "true" & do
+                        backgroundColor blue3
+                    backgroundColor red3
+                "satisfied" *= "true" & do
+                    "taken" *= "true" & do
+                        backgroundColor blue4
         ".close-icon" ? do
             width (px 20)
             height (px 20)
@@ -469,6 +475,14 @@ courseSelectCSS = do
                     backgroundColor blue2
                     ":hover" & do
                         backgroundColor blue3
+                    "clicked" *= "true" & do
+                        "satisfied" *= "false" & do
+                            backgroundColor red3
+                            ":hover" & do
+                                backgroundColor red4
+                        "satisfied" *= "true" & do
+                            backgroundColor blue3
+
 
 
 tdColours = ".timetable " ?  do
@@ -496,21 +510,6 @@ tdColours = ".timetable " ?  do
             backgroundColor teal1
     td # ("in-conflict" *= "false") # ("satisfied" *= "true") # ("type" *= "P") ? do
             backgroundColor orange1
-
-
-courseSelectColours = do
-    li # ("satisfied" *= "false") # ("clicked" *= "true") ? do
-        backgroundColor red3
-        ":hover" & do
-            backgroundColor red4
-    li # ("satisfied" *= "true") # ("clicked" *= "true") ? do
-        backgroundColor blue3
-    h3 # ("satisfied" *= "false") # ("taken" *= "true") ? do
-        backgroundColor blue3
-    h3 # ("satisfied" *= "false") ? do
-        backgroundColor red3
-    h3 # ("satisfied" *= "true") # ("taken" *= "true") ? do
-        backgroundColor blue4
 
 
 teal1 = parse "#737A99"
