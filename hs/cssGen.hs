@@ -113,7 +113,7 @@ wideStroke = "stroke-width" -: "3"
 faded = opacity 0.4
 semiVisible = opacity 0.7
 strokeRed = "stroke" -: "#CC0011"
-strokeDashed = "stroked-dasharray" -: "8,8"
+strokeDashed = "stroke-dasharray" -: "8,8"
 
 theoryDark = "#B1C8D1"
 coreDark = "#C9C9C9"
@@ -194,14 +194,14 @@ nodeCSS = "g" ? do
         "rect" <? do
             fill "grey"
         "text" <? do
-            fontSize (em 0.6)
+            fontSize (em 0.45)
             fill "white"
     ".bool" & do
         cursor "default"
         "ellipse" <? do
             fill "none"
         "text" <? do
-            fontSize (em 0.5)
+            fontSize (em 0.45)
             fontFamily ["Comic Sans MS"] [sansSerif]
             fontWeight bold
     ".spotlight" & do
@@ -300,6 +300,7 @@ timetableStyles = do
     courseSelectCSS
     tdColours
     infoCSS
+    conflictNotificationStyle
 
 
 searchCSS = do
@@ -390,6 +391,18 @@ timetableCSS = do
             width (pct 10)
             borderNone
             padding (px 10) (px 10) (px 10) (px 10)
+
+
+conflictNotificationStyle = "#dialog" ? do
+    position fixed
+    backgroundColor white
+    width100
+    display none
+    visibility hidden
+    alignCenter
+    borderBottom solid (px 2) $ parse "#330000"
+    "z-index" -: "2147483647"
+
 
 borderNone = border solid (px 0) white
 
