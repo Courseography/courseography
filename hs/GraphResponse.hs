@@ -20,10 +20,7 @@ graphResponse =
                 ]
                 (do header "graph"
                     createTag H.div "graph" "graph" ""
-                    --createTag H.div "" "infoTabs" $ do
-                    --    tabList $ do
-                    --        welcomeTab
-                    --        timetableTab
+                    disclaimer
                 )
                 plannerScripts
 

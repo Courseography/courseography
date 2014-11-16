@@ -10,16 +10,12 @@ function generateGrid() {
     var timetableContainerDivFall = createTimeTableContainer();
     var timetableContainerDivSpring = createTimeTableContainer();
     var timetableTableFall = createTimeTable('F');
-    //var fallCaption = createCaption('Fall');
     var fallThead = createThead();
     var timetableTableSpring = createTimeTable('S');
-    //var springCaption = createCaption('Spring');
     var springThead = createThead();
 
-    timetableTableFall//.append(fallCaption)
-        .append(fallThead);
-    timetableTableSpring//.append(springCaption)
-        .append(springThead);
+    timetableTableFall.append(fallThead);
+    timetableTableSpring.append(springThead);
 
     appendHeaders(fallThead, springThead);
     appendTableRows(timetableTableFall, timetableTableSpring);

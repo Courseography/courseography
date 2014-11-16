@@ -24,7 +24,7 @@ gridResponse =
                          coursePanel
                          searchPanel
                          infoPanel
-                         -- TODO: Add disclaimer.
+                     disclaimer
                 )
                 timetableScripts
 
