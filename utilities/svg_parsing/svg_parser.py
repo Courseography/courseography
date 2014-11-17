@@ -17,11 +17,12 @@ def read_svg():
 		content = svg_file.read()
 		soup = BeautifulSoup(content)
 
-	find__all_and_process(soup, 'path', process_path)
-	find__all_and_process(soup, 'text', process_rect)
-	find__all_and_process(soup, 'ellipse', process_bool)
+	find_all_and_process(soup, 'path', process_path)
+	find_all_and_process(soup, 'rect', process_rect)
+	find_all_and_process(soup, 'ellipse', process_bool)
+	find_all_and_process(soup, 'text', process_text)
 
-def find__all_and_process(soup, tag, fn):
+def find_all_and_process(soup, tag, fn):
 	for elem in soup.find_all(tag):
 		fn(elem)
 
@@ -51,8 +52,6 @@ def output_svg():
 		print("                ", end="")
 		i.output_haskell()
 
-
-		
 
 def print_header():
 	print("{-# LANGUAGE OverloadedStrings #-}")
@@ -85,7 +84,7 @@ def process_path(elem):
 		path_id_counter += 1
 
 def process_rect(elem):
-	rect = elem.parent.find_previous_sibling().find("rect")
+	rect = elem
 	if rect == None:
 		return
 	width = rect.get("width")
@@ -94,8 +93,15 @@ def process_rect(elem):
 	y = rect.get("y")
 	transform = elem.parent.get("transform")
 	style = elem.parent.get("style")
-	text = elem.text
-	rects.append(Rect(width, height, x, y, transform, text, style))
+	rects.append(Rect(width, height, x, y, transform, style))
+
+def process_text(elem):
+	if elem == None or elem.get("x") == None or elem.get("y") == None:
+		return
+
+	for rect in rects:
+		if elem in rect:
+			rect.text = elem.text
 
 def process_bool(elem):
 	global bool_id_counter
