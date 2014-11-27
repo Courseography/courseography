@@ -1,11 +1,12 @@
 
 #graph
 {
-  width      : 95%;
-  min-height : 600px;
-  height     : 85vh;
+  width      : 1100px;
+  min-height : 700px;
+  height     : 700px;
   overflow   : hidden;
   margin     : 0px auto 0px auto;
+  clear      : both;
 }
 
 #graphRootSVG
@@ -62,8 +63,8 @@ g.node[data-active='overridden'] > rect
 
 g.node[data-active='inactive'] > rect
 {
-  opacity           : 0.4;
-  stroked-dasharray : 8,8;
+  opacity          : 0.4;
+  stroke-dasharray : 8,8;
 }
 
 
@@ -140,6 +141,12 @@ g.node[data-group='hci'] > rect
   fill : #B8FF70;
 }
 
+g.node > rect
+{
+  stroke : black;
+  fill   : #C285FF;
+}
+
 g.hybrid
 {
   cursor : default;
@@ -152,7 +159,7 @@ g.hybrid > rect
 
 g.hybrid > text
 {
-  font-size : 0.59999em;
+  font-size : 0.45em;
   fill      : white;
 }
 
@@ -163,14 +170,21 @@ g.bool
 
 g.bool > ellipse
 {
-  fill : none;
+  fill   : none;
+  stroke : black;
 }
 
 g.bool > text
 {
-  font-size   : 0.5em;
+  font-size   : 0.45em;
   font-family : "Comic Sans MS", sans-serif;
   font-weight : bold;
+}
+
+g ellipse
+{
+  fill   : none;
+  stroke : black;
 }
 
 g.spotlight
@@ -187,13 +201,13 @@ path
 
 path[data-active='takeable']
 {
-  stroked-dasharray : 8,8;
+  stroke-dasharray : 8,8;
 }
 
 path[data-active='inactive']
 {
-  opacity           : 0.4;
-  stroked-dasharray : 8,8;
+  opacity          : 0.4;
+  stroke-dasharray : 8,8;
 }
 
 path[data-active='active']

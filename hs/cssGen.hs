@@ -189,6 +189,10 @@ nodeCSS = "g" ? do
         "data-group" @= "hci" & do
             "rect" <? do
                 fill hciDark
+        -- Since groups are missing right now
+        "rect" <? do
+            stroke "black"
+            fill systemsDark
     ".hybrid" & do
         cursor "default"
         "rect" <? do
@@ -200,10 +204,15 @@ nodeCSS = "g" ? do
         cursor "default"
         "ellipse" <? do
             fill "none"
+            stroke "black"
         "text" <? do
             fontSize (em 0.45)
             fontFamily ["Comic Sans MS"] [sansSerif]
             fontWeight bold
+    -- TODO: get rid of this style
+    "ellipse" ? do
+        fill "none"
+        stroke "black"
     ".spotlight" & do
         semiVisible
         fill "white"
@@ -232,12 +241,12 @@ resetCSS = "#resetButton" ? do
 
 graphContainer = do
     "#graph" ? do
-        width (pct 95)
-        minHeight (px 600)
-        "height" -: "85vh"
+        width (px 1100)
+        minHeight (px 700)
+        height (px 700)
         overflow hidden
         margin 0 auto 0 auto
-        -- clear both
+        clear both
     "#graphRootSVG" ? do
         width100
         height100
@@ -442,7 +451,7 @@ courseSelectCSS = do
                         ":hover" & do
                             backgroundColor blue1
                         ".ui-accordion-header-active" & do
-                            backgroundColor blue1 -- important    
+                            backgroundColor blue1 -- important
                 "satisfied" *= "false" & do
                     "taken" *= "true" & do
                         backgroundColor blue3

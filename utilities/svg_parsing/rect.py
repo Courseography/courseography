@@ -12,19 +12,18 @@ class Rect:
 		self.style = style
 
 	def output_haskell(self):
-		print("S.g ! A.style \"" + self.style + "\" $ do \n"  + 
+		print("S.g ! A.class_ \"node\" $ do \n" +
 			  "             S.rect" +
-			  " ! A.class_ \"node\"" +
-			  " ! A.id_ \"" + 
-			  self.text + 
+			  " ! A.id_ \"" +
+			  self.text +
 			  "\"" +
 		      " ! A.width \"" + self.width +
-		      "\" ! A.height \"" + self.height + 
+		      "\" ! A.height \"" + self.height +
 		      "\" ! A.x \"" + str(self.x) +
 		      "\" ! A.y \"" + str(self.y) +
-		      "\" ! A.stroke \"#ccc\" ! A.fill \"#fff\" \n" + 
+		      "\"\n" +
 		      "             S.text_ " +
-		      " ! A.x \"" + str(self.text_x) + 
+		      " ! A.x \"" + str(self.text_x) +
 		      "\" ! A.y \"" + str(self.text_y) +
 		      '" $ "'+ self.text + '"')
 

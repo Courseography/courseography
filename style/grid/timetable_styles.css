@@ -1,399 +1,387 @@
-div {
-  padding: 0;
-  margin: 0;
+
+body
+{
+  overflow-x : hidden;
 }
 
-li {
-  display: block;
+.main
+{
+  height : calc(90% - 3.55em);
+  margin : 0px 0px 0px 0px;
 }
 
-
-#dialog {
-  position: fixed;
-  background-color: white;
-  width: 100%;
-  display: none;
-  visibility: hidden;
-  text-align: center;
-  border-bottom: 2px solid #330000;
-  z-index: 2147483647;
+#search-layout
+{
+  background-color : rgb(70,54,74);
+  height           : 100%;
+  margin           : 0px 0px 0px 0px;
+  padding          : 0px 0px 0px 0px;
+  overflow-y       : scroll;
+  overflow-x       : hidden;
 }
 
-.close-icon {
-  width: 20px;
-  height: 20px;
-  float: left;
-  padding: 7px 0 0 5px;
+#filter-container
+{
+  padding : 10px 10px 10px 10px;
 }
 
-
-/* Timetable styles */
-.timetable-container {
-  background-color: #7E4D66;
-  padding: 0;
-  margin: 0;
+#filter-container > form
+{
+  margin : 0px 0px 0px 0px;
 }
 
-.timetable {
-  margin: 0;
-  padding: 0;
-  table-layout: fixed;
-  border-collapse: collapse;
-  color: white;
+#search-container
+{
+  text-align : center;
+  color      : rgb(255,255,255);
+  height     : 100%;
+  width      : 100%;
+  margin     : 0px 0px 0px 0px;
+  padding    : 0.5em 0px 1em 0px;
 }
 
-caption {
-  font-size: 1.6em;
-  margin: 0.5em 0;
-  text-align: center;
+#search-list
+{
+  margin  : 0px 0px 0px 0px;
+  padding : 0px 0px 0px 0px;
+  height  : 100%;
+  width   : 100%;
 }
 
-#timetable-F {
-  border-right: 2px solid black;
+#search-list > ul
+{
+  margin  : 0px 0px 0px 0px;
+  padding : 0px 0px 0px 0px;
 }
 
-#timetable-S {
-  border-left: 2px solid black;
+#search-list > ul > li
+{
+  display : block;
+  margin  : 0px 0px 0px 0px;
+  padding : 0px 0px 0px 0px;
+}
+
+#search-list > ul > li:hover
+{
+  font-weight     : bold;
+  cursor          : pointer;
+  text-decoration : underline;
+}
+
+#search-list > ul.starred-course
+{
+  background-color : rgb(38,27,42);
+}
+
+.timetable-container
+{
+  background-color : rgb(255,255,255);
+  padding          : 0px 0px 0px 0px;
+  margin           : 0px 0px 0px 0px;
+}
+
+.timetable
+{
+  margin          : 0px 0px 0px 0px;
+  padding         : 0px 0px 0px 0px;
+  table-layout    : fixed;
+  border-collapse : collapse;
+}
+
+.timetable > caption
+{
+  font-size  : 1.6em;
+  margin     : 0.5em 0px 0.5em 0px;
+  text-align : center;
+}
+
+#timetable-F.timetable
+{
+  border-right : solid 2px rgb(0,0,0);
+}
+
+#timetable-F.timetable .timetable-time
+{
+  text-align    : right;
+  padding-right : 10px;
+}
+
+#timetable-S.timetable
+{
+  border-left : solid 2px rgb(0,0,0);
+}
+
+#timetable-S.timetable .timetable-time
+{
+  text-align   : left;
+  padding-left : 10px;
 }
 
 .timetable td,
-.timetable th {
-  width: 18%;
-  height: 35px;
-  padding: 0 !important;
-  margin: 0 !important;
-  text-align: center;
-  vertical-align: middle !important;
-  border-color: #DB94B8 !important;
-  overflow: hidden;
+.timetable th
+{
+  width          : 18%;
+  height         : 35px;
+  padding        : 0px 0px 0px 0px;
+  margin         : 0px 0px 0px 0px;
+  text-align     : center;
+  vertical-align : middle;
+  overflow       : hidden;
+  border-color   : rgb(219,148,184);
 }
 
-.timetable .timetable-time {
-  width: 10%;
-  border: none;
-  padding: 10px;
+.timetable th
+{
+  font-size        : 1.1em;
+  font-weight      : normal;
+  background-color : rgba(219,148,184,0.0039);
+  border-bottom    : solid 2px rgb(219,148,184);
 }
 
-.timetable th {
-  font-size: 1.5em;
-  background-color: rgba(219, 148, 184, 0.5);
-  border-bottom: 1px solid !important;
-  border-color: #DB94B8 !important;
-  font-weight: normal;
+.timetable th.term-name
+{
+  padding     : 0px 0px 0px 0px;
+  width       : 10%;
+  font-weight : bold;
 }
 
-#no-border {
-  border: none
-}
-#timetable-S .timetable-time {
-  text-align: left;
-  padding-left: 10px !important;
-}
-
-#timetable-F .timetable-time {
-  text-align: right;
-  padding-right: 10px !important;
+.timetable .timetable-time
+{
+  width   : 10%;
+  border  : solid 0px rgb(255,255,255);
+  padding : 10px 10px 10px 10px;
 }
 
-/* Course selection */
-#course-select-wrapper {
-  overflow: hidden;
-  height: 100%;
-  background-color: #46364A;
-  color: white;
-  margin: 0;
-  padding: 0;
+#course-select-wrapper
+{
+  margin           : 0px 0px 0px 0px;
+  padding          : 0px 0px 0px 0px;
+  overflow         : hidden;
+  height           : 100%;
+  background-color : rgb(70,54,74);
+  color            : rgb(255,255,255);
 }
 
-.main {
-  height: calc(100% - 3.55em);
-  margin: 0;
+#course-select
+{
+  padding         : 0px 0px 0px 0px;
+  margin          : 18px 0px 0px 17px;
+  width           : 100%;
+  height          : 100%;
+  text-align      : center;
+  overflow-y      : scroll;
+  overflow-x      : hidden;
+  list-style-type : none;
 }
 
-#course-select {
-  list-style-type: none;
-  padding: 0;
-  margin: 17px 0 0 17px;
-  width: 100%;
-  overflow: scroll;
-  height: 100%;
-  text-align: center;
+#course-select > li
+{
+  width : 95%;
+  clear : both;
 }
 
-#course-select > li {
-	width: 95%;
-}
-
-#clear-all h3 {
-  margin: 0;
-  padding: 0.25em;
-  cursor: pointer;
-}
-
-#clear-all h3:hover {
-  background-color: #261B2A !important;
-}
-
-/* Course select sections*/
-.sections {
-  overflow: auto;
-}
-
-.sections:hover {
-  cursor: pointer;
-}
-
-.sectionList-F {
-  width: 50%;
-  float: left;
-  border-right: 1px solid black;
-}
-
-.sectionList-S {
-  width: 50%;
-  float: right;
-  border-left: 1px solid black;
-}
-
-.ui-accordion-content ul {
-  display: block;
-  margin: 0;
-  padding: 0;
-}
-
-.ui-accordion-content li {
-  background-color: #336685;
-}
-
-.sectionList-F li:hover {
-  background-color: #437699;
-
-}
-
-.sectionList-S li:hover {
-  background-color: #437699;
-
-}
-
-.ui-accordion-content li.clickedLectureTime,
-.clickedLectureTime,
-li[clicked*=true][satisfied*=true],
-td[in-conflict*=false][satisfied*=true][type*=L],
-h3[taken*=true][satisfied*=true] {
-  background-color: #437699;
-}
-
-.clickedLectureTime:hover {
-  background-color: #336685;
-  /*cursor: pointer;*/
-}
-
-.clickedTutorialTime,
-td[in-conflict*=false][satisfied*=true][type*=T] {
-  background-color: #737A99;
-}
-
-.clickedTutorialTime:hover {
-  background-color: #636A89;
-}
-
-td[in-conflict*=false][satisfied*=true][type*=P] {
-    background-color: #1E7FCC;
-}
-td[hover*=good] {
-  background-color: #437699;
-}
-td[hover*=off] {
-
-}
-td[hover*=conflict] {
-
-}
-td[hover*=remove] {
-  -webkit-transition: all 0.5s ease-in-out;
-  -moz-transition: all 0.5s ease-in-out;
-  -ms-transition: all 0.5s ease-in-out;
-  -o-transition: all 0.5s ease-in-out;
-  transition: all 0.5s ease-in-out;
-  -webkit-opacity: 0.5;
-  -moz-opacity: 0.5;
-  opacity: 0.5;
+#course-select > li > h3
+{
+  cursor     : pointer;
+  margin     : 0px 0px 0px 0px;
+  padding    : 0.25em 0px 0.25em 0px;
+  display    : block;
+  width      : 100%;
+  outline    : solid 0px rgb(255,255,255);
+  border-top : solid 1px rgb(0,0,0);
 }
 
 
-#layout {
-  width: 100%;
+#course-select > li > h3 > #clear-all > h3
+{
+  margin  : 0px 0px 0px 0px;
+  padding : 0.25em 0.25em 0.25em 0.25em;
+  cursor  : pointer;
 }
 
-#search-list .starred-course {
-  background-color: #261B2A;
+#course-select > li > h3 > #clear-all > h3:hover
+{
+  background-color : rgb(38,27,42);
 }
 
-.section-F {
-  text-align:center;
-  background-color:#003366;
-  color:white;
-  display:block;
+#course-select > li > h3 > #clear-all > h3.ui-accordion-header-active
+{
+  background-color : rgb(38,27,42);
 }
 
-.section-S {
-  text-align: center;
-  background-color: #003366;
-  color: white;
-  display: block;
+#course-select > li > h3[satisfied*='false']
+{
+  background-color : rgb(215,117,70);
 }
 
-.section-Y {
-  text-align: center;
-  background-color: #003366;
-  color: white;
-}
-
-.sectionClickedLecture {
-  text-align: center;
-  background-color: #336685;
-}
-
-.clicked-header {
-  background-color: #336685;
-}
-
-.ui-accordion-header {
-  color: white;
-  text-align: center;
-  cursor: pointer;
-  margin: 0;
-  padding: 0.25em 0;
-  display: block;
-  width: 100%;
-  outline: none;
-  border-top: 1px solid black;
-}
-
-td[satisfied=false],
-li[satisfied=false][clicked=true],
-h3[satisfied*=false] {
-  background-color: rgb(215, 117, 70);
-}
-
-td[satisfied=false]:hover,
-li[satisfied=false][clicked=true]:hover {
-  background-color: rgb(195, 97, 50);
-}
-
-.clickedConflictTime,
-td[in-conflict*=true] {
-  background-color: #C92343 !important;
-}
-
-.clickedConflictTime:hover,
-td[in-conflict*=true]:hover {
-  background-color: #B91333 !important;
-}
-
-td[hover*=conflict] {
-  background-color: #C92343 !important;
-}
-
-.hover-time {
-  background-color: #5566F5 !important;
-}
-
-.ui-accordion-header:hover,
-.ui-accordion-header-active {
-  background-color: #261B2A !important;
-}
-
-.ui-accordion-content {
-  text-align: center;
-  overflow: auto;
-  width: 100%;
+#course-select > li > h3[satisfied*='false'][taken*='true']
+{
+  background-color : rgb(67,118,153);
 }
 
 
-/* Info layout div*/
-
-#info-layout {
-  padding: 0em;
-  margin: 0em;
-  width: 100%;
-  height: 7em;
-  color: black;
-  border-bottom: 1px solid black;
-  text-align: center;
+#course-select > li > h3[satisfied*='true'][taken*='true']
+{
+  background-color : rgb(85,102,245);
 }
 
-#info-layout h2 {
-  font-size: 1.4em;
-  margin: 0.5em;
-  font-weight: bold;
+#course-select .close-icon
+{
+  width   : 20px;
+  height  : 20px;
+  float   : left;
+  padding : 7px 0px 0px 5px;
 }
 
-#info-layout h4 {
-  font-size: 1.2em;
-  margin: 0.5em;
+#course-select .sections
+{
+  cursor : pointer;
 }
 
-/* Search Box styles*/
-#search-layout {
-  background-color: #46364A;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
+#course-select .sections > ul
+{
+  display         : block;
+  margin          : 0px 0px 0px 0px;
+  padding         : 0px 0px 0px 0px;
+  list-style-type : none;
 }
 
-#filter-container {
-  padding: 10px 10px 0 10px;
+#course-select .sections > ul.sectionList-F
+{
+  width        : 50%;
+  float        : left;
+  border-right : solid 1px rgb(0,0,0);
 }
 
-#search-container {
-  text-align: center;
-  color: white;
-  height: 100%;
-  width: 100%;
-  margin: 0;
-  padding: 0;
+#course-select .sections > ul.sectionList-S
+{
+  width       : 50%;
+  float       : right;
+  border-left : solid 1px rgb(0,0,0);
 }
 
-#search-list {
-  margin: 0 0 0 17px;
-  padding: 0.5em 17px 4.5em 0;
-  height: 100%;
-  width: 100%;
-  overflow-y: scroll;
+#course-select .sections > ul > li
+{
+  font-size        : 0.8em;
+  background-color : rgb(51,102,133);
 }
 
-#search-list ul {
-  margin: 0;
-  padding: 0;
+#course-select .sections > ul > li:hover
+{
+  background-color : rgb(67,118,153);
 }
 
-#search-list li {
-  color: white;
-  margin: 0;
-  padding: 0;
-  font-size: 1.5em;
+
+#course-select .sections > ul > li[clicked*='true'][satisfied*='false']
+{
+  background-color : rgb(215,117,70);
 }
 
-#search-list ul li:hover {
-  /*background-color: white;
-  color: black;*/
-  cursor: pointer;
-  text-decoration: underline;
+#course-select .sections > ul > li[clicked*='true'][satisfied*='false']:hover
+{
+  background-color : rgb(195,97,50);
 }
 
-/* Beta Warning */
-#beta-warning {
-  /*background-color: rgba(0, 0, 0, 0.5);*/
-  float: center;
-  color: white;
-  padding: 10px 10px 10px 10px;
-  color: black;
+#course-select .sections > ul > li[clicked*='true'][satisfied*='true']
+{
+  background-color : rgb(67,118,153);
 }
 
-#beta-warning h3 {
-  padding: 0;
-  margin: 0;
-  font-size: 1.1em;
+
+
+.timetable  td.hover-time
+{
+  background-color : rgb(85,102,245);
 }
+
+.timetable  td[hover*='good']
+{
+  background-color : rgb(67,118,153);
+}
+
+.timetable  td[hover*='conflict']
+{
+  background-color : rgb(201,35,67);
+}
+
+.timetable  td[hover*='remove']
+{
+  opacity            : 0.5;
+  -webkit-transition : all 0.5s ease-in-out 0.0s;
+  -moz-transition    : all 0.5s ease-in-out 0.0s;
+  -ms-transition     : all 0.5s ease-in-out 0.0s;
+  -o-transition      : all 0.5s ease-in-out 0.0s;
+  transition         : all 0.5s ease-in-out 0.0s;
+}
+
+.timetable  td[in-conflict*='true']
+{
+  background-color : rgb(201,35,67);
+}
+
+.timetable  td[in-conflict*='true']:hover
+{
+  background-color : rgb(185,19,51);
+}
+
+.timetable  td[satisfied*='false']
+{
+  background-color : rgb(215,117,70);
+}
+
+.timetable  td[satisfied*='false']:hover
+{
+  background-color : rgb(195,97,50);
+}
+
+.timetable  td[in-conflict*='false'][satisfied*='true'][type*='L']
+{
+  background-color : rgb(67,118,153);
+}
+
+.timetable  td[in-conflict*='false'][satisfied*='true'][type*='T']
+{
+  background-color : rgb(115,122,153);
+}
+
+.timetable  td[in-conflict*='false'][satisfied*='true'][type*='P']
+{
+  background-color : rgb(30,127,204);
+}
+
+#info-layout
+{
+  padding    : 0px 0px 0px 0px;
+  margin     : 0px 0px 0px 0px;
+  width      : 100%;
+  height     : 7em;
+  text-align : center;
+}
+
+#info-layout > h2
+{
+  font-size   : 1.3em;
+  margin      : 0.5em 0.5em 0.5em 0.5em;
+  font-weight : bold;
+}
+
+#info-layout > h4
+{
+  font-size : 1.14999em;
+  margin    : 0.5em 0.5em 0.5em 0.5em;
+}
+
+#dialog
+{
+  position         : fixed;
+  background-color : rgb(255,255,255);
+  width            : 100%;
+  display          : none;
+  visibility       : hidden;
+  text-align       : center;
+  border-bottom    : solid 2px rgb(51,0,0);
+  z-index          : 2147483647;
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */

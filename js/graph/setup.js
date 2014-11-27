@@ -60,7 +60,7 @@ $(document).ready(function () {
     'use strict';
     var graphPage = getRemote();
 
-    $("#graph").append(graphPage);
+    //$("#graph").append(graphPage);
 
     buildGraph();
 

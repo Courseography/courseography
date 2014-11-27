@@ -9,6 +9,7 @@ import Happstack.Server
 import MakeElements
 import MasterTemplate
 import Scripts
+import SVGGen
 
 graphResponse :: ServerPart Response
 graphResponse =
@@ -19,7 +20,8 @@ graphResponse =
                  plannerLinks
                 ]
                 (do header "graph"
-                    createTag H.div "graph" "graph" ""
+                    H.div ! A.id "graph" ! A.class_ "graph" $ do
+                      svgDoc
                     disclaimer
                 )
                 plannerScripts
