@@ -41,11 +41,11 @@ function buildGraph() {
 
     $('.bool').each(function () {
         var id = $(this).attr('id');
-        var type = $(this).children('text').text().toUpperCase();
+        var type = "AND";//$(this).children('text').text().toUpperCase();
         makeHybrid([], type, id);
     });
 
-    $('path').each(function () {
+    $('.path').each(function () {
         var coords = $(this).attr('d').split(' ');
         coords = coords.filter(function (str) {return str !== 'M' && str !== 'L'; });
         // Do something for internet explorer

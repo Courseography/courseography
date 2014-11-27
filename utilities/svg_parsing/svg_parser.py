@@ -1,37 +1,57 @@
 from bs4 import BeautifulSoup
-
+import sys
 from path import *
 from rect import *
+from region import *
+from bool_node import *
 paths = []
 rects = []
+regions = []
+bools = []
+
+path_id_counter = 0;
+bool_id_counter = 0;
 
 def read_svg():
 	with open("../../graph_regions.svg", "r") as svg_file:
 		content = svg_file.read()
-
 		soup = BeautifulSoup(content)
 
-	for elem in soup.find_all('path'):
-		process_path(elem)
+	find_all_and_process(soup, 'path', process_path)
+	find_all_and_process(soup, 'rect', process_rect)
+	find_all_and_process(soup, 'ellipse', process_bool)
+	find_all_and_process(soup, 'text', process_text)
 
-	for elem in soup.find_all('rect'):
-		process_rect(elem)
+def find_all_and_process(soup, tag, fn):
+	for elem in soup.find_all(tag):
+		fn(elem)
 
 def output_svg():
 	print_header()
 	print("svgDoc :: S.Svg")
 	print("svgDoc = S.docTypeSvg ! A.version \"1.1\" ! A.width \"1052.3622\" ! A.height \"744.09448\" $ do")
-
-
+	
 	print("    S.g $ do")
-	for i in rects:
+	for i in regions:
 		print("        ", end="")
+		i.output_haskell()
+
+	print("    S.g ! A.transform \" translate(0,-308.2677)\" $ do")
+	print("        S.g ! A.transform \"translate(29.540919,340.70929)\" ! A.class_ \"nodes\"$ do")
+	for i in rects:
+		print("            ", end="")
 		i.output_haskell()
 	
-	print("    S.g ! A.transform \"translate(-146,288)\" $ do")
+	print("            S.g ! A.transform \"translate(-146,288)\" $ do")
 	for i in paths:
-		print("        ", end="")
+		print("                ", end="")
 		i.output_haskell()
+
+	print("            S.g ! A.transform \"translate(-146,288)\" $ do")
+	for i in bools:
+		print("                ", end="")
+		i.output_haskell()
+
 
 def print_header():
 	print("{-# LANGUAGE OverloadedStrings #-}")
@@ -43,15 +63,55 @@ def print_header():
 
 
 def process_path(elem):
-			paths.append(Path(elem.get("d")))
+	global path_id_counter
+	if elem.parent.get("id") == "layer3":
+		regions.append(Region(elem.get("d"),
+			                  elem.get("style"),
+			                  "p" + str(path_id_counter)))
+		path_id_counter += 1
+
+	elif elem.parent.get("id") == "layer2":
+		pass
+
+	elif elem.parent.get("id") == "clipPath1":
+		pass
+
+	elif elem.parent.get("id") == "clipPath2":
+		pass
+	else:
+		paths.append(Path(elem.get("d"),
+		                  "p" + str(path_id_counter)))
+		path_id_counter += 1
 
 def process_rect(elem):
-			width = elem.get("width")
-			height = elem.get("height")
-			x = elem.get("x")
-			y = elem.get("y")
-			transform = elem.parent.get("transform")
-			rects.append(Rect(width, height, x, y, transform))
+	rect = elem
+	if rect == None:
+		return
+	width = rect.get("width")
+	height = rect.get("height")
+	x = rect.get("x")
+	y = rect.get("y")
+	transform = elem.parent.get("transform")
+	style = elem.parent.get("style")
+	rects.append(Rect(width, height, x, y, transform, style))
+
+def process_text(elem):
+	if elem == None or elem.get("x") == None or elem.get("y") == None:
+		return
+
+	for rect in rects:
+		if elem in rect:
+			rect.text = elem.text
+
+def process_bool(elem):
+	global bool_id_counter
+	bools.append(BoolNode(elem.get("d"),
+	                      elem.get("cx"),
+	                      elem.get("cy"),
+	                      elem.get("rx"),
+	                      elem.get("ry"),
+	                      "bool" + str(bool_id_counter)))
+	bool_id_counter += 1
 
 if __name__ == "__main__":
 	read_svg()

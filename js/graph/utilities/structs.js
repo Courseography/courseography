@@ -26,12 +26,16 @@ function makeHybrid(parents, type, name) {
 
 function makeEdge(parent, child, name) {
     'use strict';
+    try {
+        window[name] = new Edge(parent, child, name);
+        parent.outEdges.push(window[name]);
+        child.inEdges.push(window[name]);
 
-    window[name] = new Edge(parent, child, name);
-    parent.outEdges.push(window[name]);
-    child.inEdges.push(window[name]);
-
-    parent.children.push(child);
-    child.parents.push(parent);
+        parent.children.push(child);
+        child.parents.push(parent);
+    } catch (err) {
+        console.log('Encountered an error for: ' + name);
+        console.log(err)
+    }
 }
 
