@@ -11,16 +11,21 @@ class Rect:
 		self.parent_transform_y = float(transform[transform.find(",") + 1 : transform.find(")")])
 		self.text = ""
 		self.style = style
-		self.hohoho = hybrid
+		self.hybrid = hybrid
 		self.colour = "#fff"
+		self.class_ = "hybrid" if self.hybrid else "node"
 
 	def output_haskell(self):
-		if self.hohoho:
+		if self.hybrid:
 			self.colour = "#bbb"
-		print("S.g ! A.class_ \"node\" " +
-			  " ! A.id_ \"CSC" + 
-			  self.text + 
-			  "\" ! A.style \"" + self.style + "\" $ do \n"  + 
+		prefix = ""
+		if not self.text[0].isalpha():
+			prefix = "CSC"
+		if self.hybrid:
+			prefix = "h"
+		print("S.g ! A.class_ \"" + self.class_ + "\" " +
+			  " ! A.id_ \"" + prefix + self.text + 
+			  "\" ! A.style \"" + "\" $ do \n"  + 
 			  "             S.rect ! A.width \"" + self.width +
 		      "\" ! A.height \"" + self.height + 
 		      "\" ! A.rx \"4" + 

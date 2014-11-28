@@ -32,8 +32,8 @@ def read_svg():
 		for rect_2 in rects:
 
 			if (rect_2.x, rect_2.y, 0) in rect_1:
-				rect_1.hohoho = rect_1.hohoho or rect_2.hohoho
-				rect_2.hohoho = rect_1.hohoho or rect_2.hohoho
+				# rect_1.hohoho = rect_1.hohoho or rect_2.hohoho
+				# rect_2.hohoho = rect_1.hohoho or rect_2.hohoho
 				if rect_1.text == "":
 					rects.remove(rect_1)
 					final_rects.append(rect_2)
@@ -68,7 +68,7 @@ def output_svg():
 		print("                ", end="")
 		i.output_haskell()
 
-	print("            S.g ! A.transform \"translate(-146,288)\" $ do")
+	print("            S.g $ do")
 	for i in bools:
 		print("                ", end="")
 		i.output_haskell()
@@ -124,7 +124,15 @@ def process_text(elem):
 
 	for rect in rects:
 		if (elem.get("x"), elem.get("y"), 1) in rect:
-			rect.text = elem.text
+			text = elem.text
+			if "/" in text:
+				text = text[:text.index("/")]
+			if "," in text:
+				text = text[:text.index(",")]
+			rect.text = text
+	for boolean in bools:
+		if (elem.get("x"), elem.get("y"), 0) in boolean:
+			boolean.text = elem.text
 
 def process_bool(elem):
 	global bool_id_counter

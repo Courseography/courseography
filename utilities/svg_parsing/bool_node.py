@@ -2,11 +2,12 @@ class BoolNode:
 
 	def __init__(self, d, cx, cy, rx, ry, id_):
 		self.d = d
-		self.cx = cx
-		self.cy = cy
+		self.cx = float(cx) + -146
+		self.cy = float(cy) + 288
 		self.rx = rx
 		self.ry = ry
 		self.id = id_
+		self.text = ""
 
 	def output_haskell(self):
 		print("S.ellipse ! A.class_ \"bool\" ! A.id_ \"" + 
@@ -14,11 +15,22 @@ class BoolNode:
 			  "\" ! A.d \"" +
 		      self.d +
 		      '" ! A.cx "' +
-		      self.cx +
+		      str(self.cx) +
 		      '" ! A.cy "' +
-		      self.cy +
+		      str(self.cy) +
 		      '" ! A.rx "' +
 		      self.rx +
 		      '" ! A.ry "' +
 		      self.ry +
+		      '"\n                S.text_ $ do "' +
+		      self.text +
 		      '"')
+
+	def __contains__(self, coords):
+		dx = float(coords[0]) - float(self.cx)
+		dy = float(coords[1]) - float(self.cy)
+		offset = 9
+		return dx >= -1 * offset and \
+		       dx <= float(2) + offset and \
+		       dy >= -1 * offset and \
+		       dy <= float(2) + offset
