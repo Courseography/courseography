@@ -21,6 +21,14 @@ def read_svg():
 	find_all_and_process(soup, 'rect', process_rect)
 	find_all_and_process(soup, 'ellipse', process_bool)
 	find_all_and_process(soup, 'text', process_text)
+	for rect_1 in rects:
+		for rect_2 in rects:
+
+			if (rect_2.x, rect_2.y, 0) in rect_1:
+				if rect_1.text == "":
+					rects.remove(rect_1)
+				else:
+					rects.remove(rect_2)
 
 def find_all_and_process(soup, tag, fn):
 	for elem in soup.find_all(tag):
@@ -42,8 +50,10 @@ def output_svg():
 		print("            ", end="")
 		i.output_haskell()
 	
-	print("            S.g ! A.transform \"translate(-146,288)\" $ do")
+	print("            S.g $ do")
 	for i in paths:
+		if not i.isPath:
+			continue
 		print("                ", end="")
 		i.output_haskell()
 
@@ -80,7 +90,7 @@ def process_path(elem):
 		pass
 	else:
 		paths.append(Path(elem.get("d"),
-		                  "p" + str(path_id_counter)))
+		                  "p" + str(path_id_counter), -146, 288))
 		path_id_counter += 1
 
 def process_rect(elem):
@@ -93,14 +103,15 @@ def process_rect(elem):
 	y = rect.get("y")
 	transform = elem.parent.get("transform")
 	style = elem.parent.get("style")
-	rects.append(Rect(width, height, x, y, transform, style))
+	new_rect = Rect(width, height, x, y, transform, style)
+	rects.append(new_rect)
 
 def process_text(elem):
 	if elem == None or elem.get("x") == None or elem.get("y") == None:
 		return
 
 	for rect in rects:
-		if elem in rect:
+		if (elem.get("x"), elem.get("y"), 1) in rect:
 			rect.text = elem.text
 
 def process_bool(elem):
