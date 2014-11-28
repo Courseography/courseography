@@ -4,7 +4,10 @@
  */
 
 
-// Generate Node and Edge objects based on geometric relationships
+/**
+ * Generates Node and Edge objects based on geometric relationships.
+ * TODO: This function is too long.
+ */
 function buildGraph() {
     'use strict';
 
@@ -14,18 +17,18 @@ function buildGraph() {
     var xEnd;
 
     $('.node').each(function () {
-        makeNode([], 'AND', $(this).attr('id'));
+        makeNode('AND', $(this).attr('id'));
     });
 
     $('.hybrid').each(function () {
         var id = $(this).attr('id');
         var course = $(this).children('text').text();
         var reqs = parseAnd(course)[0];
-        makeHybrid([], 'AND', id);
+        makeHybrid('AND', id);
         $.each(reqs, function (index, elem) {
             if ($.isArray(elem)) {
                 var orNode = id + elem.join();
-                makeHybrid([], 'OR', orNode);
+                makeHybrid('OR', orNode);
                 $.each(elem, function (i, e) {
                     window[orNode].parents.push(window[e]);
                     window[e].children.push(window[orNode]);
@@ -41,26 +44,21 @@ function buildGraph() {
 
     $('.bool').each(function () {
         var id = $(this).attr('id');
-        var type = "AND";//$(this).children('text').text().toUpperCase();
-        makeHybrid([], type, id);
+        var type = $(this).children('text').text().toUpperCase();
+        makeHybrid(type, id);
     });
 
-    $('.path').each(function () {
+    $('path').each(function () {
         var coords = $(this).attr('d').split(' ');
-        coords = coords.filter(function (str) {return str !== 'M' && str !== 'L'; });
+        coords = coords.filter(function (str) {return str !== 'M' &&
+            str !== 'L' && str !== ''; });
+
         // Do something for internet explorer
-        if (!!navigator.userAgent.match(/Trident.*rv[ :]*11\./) ||
-              window.navigator.userAgent.indexOf('MSIE ') > -1) {
-            xStart = parseFloat(coords[0]);
-            yStart = parseFloat(coords[1]);
-            yEnd = parseFloat(coords.pop());
-            xEnd = parseFloat(coords.pop());
-        } else {
-            xStart = parseFloat(coords[0].substr(1));
-            yStart = parseFloat(coords[1]);
-            yEnd = parseFloat(coords.pop());
-            xEnd = parseFloat(coords.pop().substr(1));
-        }
+        xStart = parseFloat(coords[0].split(",")[0]);
+        yStart = parseFloat(coords[0].split(",")[1]);
+        var end = coords.pop();
+        xEnd = parseFloat(end.split(",")[0]);
+        yEnd = parseFloat(end.split(",")[1]);
 
         var startNode = '';
         var endNode = '';
@@ -73,11 +71,11 @@ function buildGraph() {
             var width = parseFloat(r.attr('width'));
             var height = parseFloat(r.attr('height'));
 
-            if (intersects(xStart, yStart, xRect, yRect, width, height, 1)) {
+            if (intersects(xStart, yStart, xRect, yRect, width, height, 10)) {
                 startNode = $(this).attr('id');
             }
 
-            if (intersects(xEnd, yEnd, xRect, yRect, width, height, 9)) {
+            if (intersects(xEnd, yEnd, xRect, yRect, width, height, 20)) {
                 endNode = $(this).attr('id');
             }
 
@@ -107,11 +105,22 @@ function buildGraph() {
             }
         });
 
+        if (startNode === '' && endNode === '') {
+            console.log("Could not make edge, diagnose:");
+            console.log("Start: " + startNode);
+            console.log("End: " + endNode);
+        }
+
         makeEdge(window[startNode], window[endNode], $(this).attr('id'));
     });
 }
 
 
+/**
+ *
+ * @param {string} s
+ * @returns {Array}
+ */
 function parseAnd(s) {
     'use strict';
 
@@ -137,6 +146,11 @@ function parseAnd(s) {
 }
 
 
+/**
+ *
+ * @param {string} s
+ * @returns {Array}
+ */
 function parseOr(s) {
     'use strict';
 
@@ -145,8 +159,8 @@ function parseOr(s) {
     var tmp;
     var result;
     while (curr.length > 0 &&
-           curr.charAt(0) !== ',' &&
-           curr.charAt(0) !== ';') {
+        curr.charAt(0) !== ',' &&
+        curr.charAt(0) !== ';') {
 
         if (curr.charAt(0) === '(') {
             tmp = curr.substr(1, curr.indexOf(')'));
@@ -154,7 +168,7 @@ function parseOr(s) {
             orList.append(result[0]);
             curr = curr.substr(curr.indexOf(')') + 1);
         } else if (curr.charAt(0) === ' ' ||
-                   curr.charAt(0) === '/') {
+            curr.charAt(0) === '/') {
             curr = curr.substr(1);
         } else {
             result = parseCourse(curr);
@@ -175,6 +189,11 @@ function parseOr(s) {
 }
 
 
+/**
+ *
+ * @param {string} s
+ * @returns {Array}
+ */
 function parseCourse(s) {
     'use strict';
 
@@ -191,14 +210,29 @@ function parseCourse(s) {
     }
 
     return [s, ''];
-
 }
 
 
+/**
+ * Returns whether point (px,py) intersects with
+ * the rectangle whose top left corner is at (rx,ry) with width
+ * width, height height and an offset of offset.
+ * @param {number} px The point's x position.
+ * @param {number} py The point's y position.
+ * @param {number} rx The rectangle's x position.
+ * @param {number} ry The rectangle's y position.
+ * @param {number} width The rectangle's width.
+ * @param {number} height The rectangle's height.
+ * @param {number} offset The offset.
+ * @returns {boolean} Whether the point intersects with the rectangle + offset.
+ */
 function intersects(px, py, rx, ry, width, height, offset) {
     'use strict';
 
     var dx = px - rx;
     var dy = py - ry;
-    return dx >= -1 * offset && dx <= width + offset && dy >= -1 * offset && dy <= height + offset;
+    return dx >= -1 * offset &&
+        dx <= width + offset &&
+        dy >= -1 * offset &&
+        dy <= height + offset;
 }

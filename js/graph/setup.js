@@ -64,7 +64,7 @@ $(document).ready(function () {
 
     buildGraph();
 
-    FCEPrerequisiteCourses = [CSC318, CSC454, CSC494, CSC495];
+    FCEPrerequisiteCourses = [CSC318, CSC454];
 
     // Set width of FCE count
     var w = $('.infoTabs').width() - $('.tabList').outerWidth() - 1;

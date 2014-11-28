@@ -8,18 +8,22 @@ var edges = []; // List of all edges, Edges is never used.
 
 
 // Data Structures
-function makeNode(parents, type, name) {
+function makeNode(type, name) {
     'use strict';
+    try {
+        window[name] = new Node(type, name);
 
-    window[name] = new Node(parents, type, name);
+    } catch (err) {
+        console.log("Trying to find name: " + name);
+    }
     nodes.push(name);
 }
 
 
-function makeHybrid(parents, type, name) {
+function makeHybrid(type, name) {
     'use strict';
 
-    makeNode(parents, type, name);
+    makeNode(type, name);
     window[name].hybrid = true;
 }
 

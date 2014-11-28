@@ -1,4 +1,4 @@
-function Node(parents, type, name) { // parents is never used.
+function Node(type, name) { // parents is never used.
     'use strict';
 
     this.name = name; // Used to identify the GUI node

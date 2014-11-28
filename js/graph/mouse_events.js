@@ -64,8 +64,6 @@ function turnNode(event) {
         // Check the courses with FCE reqs
         CSC318.updateStatus();
         CSC454.updateStatus();
-        CSC494.updateStatus();
-        CSC495.updateStatus();
 
         updatePOSt(id, window[id].isSelected());
         updatePostInterface();
