@@ -202,10 +202,8 @@ function openModal(nodeId) {
            .addClass('modal').dialog({
                 autoOpen: true,
                 modal: true,
-                minWidth: 700,
-                minHeight: 500,
-                width: 700,
-                height: 500,
+                minWidth: 1000,
+                minHeight: 600,
                 closeText: 'X',
                 open: function(event, ui) { $('.ui-widget-overlay').bind('click', function(){ div.dialog('close'); }); },
                 close: function () {
@@ -214,7 +212,6 @@ function openModal(nodeId) {
                         window[elem].updateSVG();
                     });
                     $('body').css('background', 'rgb(255,255,255)');
-                    $('.infoTabs').show();
                 }});
         $('.node, .hybrid').attr('data-active', 'unlit');
         $('body').css('background', 'rgb(40,40,40)');

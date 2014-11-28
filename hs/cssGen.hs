@@ -259,12 +259,21 @@ titleCSS = "#svgTitle" ? do
 modalColor = parse "#374AA1"
 
 modalCSS = do
+    ".ui-dialog" ? do
+        outline solid (px 0) black
+    ".ui-widget-overlay" ? do
+        height100
+        width100
+        position fixed
+        left 0
+        top 0
     ".modal" ? do
         backgroundColor modalColor
         padding (px 20) (px 20) (px 20) (px 20)
         width (pct 70)
         height (pct 70)
         overflow auto
+        position static
         p ? do
             color white
     ".ui-dialog-titlebar" ? do
