@@ -29,8 +29,8 @@ def find_all_and_process(soup, tag, fn):
 def output_svg():
 	print_header()
 	print("svgDoc :: S.Svg")
-	print("svgDoc = S.docTypeSvg ! A.version \"1.1\" ! A.width \"1052.3622\" ! A.height \"744.09448\" $ do")
-	
+	print("svgDoc = S.docTypeSvg ! A.id_ \"graphRootSVG\" ! A.version \"1.1\" ! S.customAttribute \"viewBox\" \"0 0 1050 700\"$ do")
+
 	print("    S.g $ do")
 	for i in regions:
 		print("        ", end="")
@@ -41,7 +41,7 @@ def output_svg():
 	for i in rects:
 		print("            ", end="")
 		i.output_haskell()
-	
+
 	print("            S.g ! A.transform \"translate(-146,288)\" $ do")
 	for i in paths:
 		print("                ", end="")

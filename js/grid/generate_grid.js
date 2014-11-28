@@ -10,16 +10,12 @@ function generateGrid() {
     var timetableContainerDivFall = createTimeTableContainer();
     var timetableContainerDivSpring = createTimeTableContainer();
     var timetableTableFall = createTimeTable('F');
-    var fallCaption = createCaption('Fall');
     var fallThead = createThead();
     var timetableTableSpring = createTimeTable('S');
-    var springCaption = createCaption('Spring');
     var springThead = createThead();
 
-    timetableTableFall.append(fallCaption)
-        .append(fallThead);
-    timetableTableSpring.append(springCaption)
-        .append(springThead);
+    timetableTableFall.append(fallThead);
+    timetableTableSpring.append(springThead);
 
     appendHeaders(fallThead, springThead);
     appendTableRows(timetableTableFall, timetableTableSpring);
@@ -68,8 +64,8 @@ function appendHeaders(fallThead, springThead) {
 
     var days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
     fallThead.append($('<th></th>')
-        .attr('id', 'no-border')
-        .addClass('timetable-time'));
+        .addClass('term-name')
+        .html('Fall'));
 
     for (var j = 0; j < 5; j++) {
         fallThead.append($('<th></th>').html(days[j]));
@@ -77,8 +73,8 @@ function appendHeaders(fallThead, springThead) {
     }
 
     springThead.append($('<th></th>')
-        .attr('id', 'no-border')
-        .addClass('timetable-time'));
+        .addClass('term-name')
+        .html('Spring'));
 }
 
 
