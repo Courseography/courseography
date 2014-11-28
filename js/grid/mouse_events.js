@@ -1,4 +1,7 @@
 /* Hover functions */
+/**
+ * Sets the selected section table cell's hover.
+ */
 function setTdHover() {
     'use strict';
 
@@ -7,7 +10,7 @@ function setTdHover() {
         if (courseName !== '') {
             var course = getCourseObject(courseName, courseObjects);
             if (course !== undefined) {
-                $.each(course.sectionTimes(), function (i, time) {
+                $.each(course.getSectionTimes(), function (i, time) {
                     $(time).addClass('hover-time');
                 });
 
@@ -20,7 +23,7 @@ function setTdHover() {
     }).mouseout(function () {
         var course = getCourseObject($(this).html(), courseObjects);
         if (course !== undefined) {
-            $.each(course.sectionTimes(), function (i, time) {
+            $.each(course.getSectionTimes(), function (i, time) {
                 $(time).removeClass('hover-time');
             });
 
@@ -31,6 +34,11 @@ function setTdHover() {
 
 
 /* Conflicts */
+/**
+ * Displays the conflicts in the table cell time.
+ * @param {string} time
+ * @param {string[]} conflicts
+ */
 function renderConflicts(time, conflicts) {
     'use strict';
 
@@ -41,11 +49,16 @@ function renderConflicts(time, conflicts) {
             )
            .attr('in-conflict', String(conflicts.length > 0))
            .attr('status', conflicts.length > 0 ? 'conflict' : 'occupied')
-           .attr('satisfied', getCourseObject($(time).html(), courseObjects).satisfied);
+           .attr('satisfied', getCourseObject($(time).html(),
+                                              courseObjects).satisfied);
 
 }
 
 
+/**
+ * Returns whether any cell in the table is in conflict.
+ * @returns {boolean} Whether any cell in the table is in conflict.
+ */
 function getInConflict() {
     'use strict';
 
@@ -53,6 +66,9 @@ function getInConflict() {
 }
 
 
+/**
+ * Alerts the user of conflicting selected sections.
+ */
 function alertUserOfConflict() {
     'use strict';
 
@@ -63,6 +79,11 @@ function alertUserOfConflict() {
 
 
 /* Functions to manipulate grid DOM */
+
+/**
+ * Clears a cell in the grid.
+ * @param {string} time The time's cell ID.
+ */
 function renderClearTime(time) {
     'use strict';
 
@@ -75,6 +96,10 @@ function renderClearTime(time) {
 }
 
 
+/**
+ * Clears a cell's hover.
+ * @param {string} time The time's cell ID.
+ */
 function renderClearHover(time) {
     'use strict';
 
@@ -85,6 +110,11 @@ function renderClearHover(time) {
 }
 
 
+/**
+ * Renders a cell on hover.
+ * @param {string} time The time's cell ID.
+ * @param {Section} section The time's occupying Section.
+ */
 function renderAddHover(time, section) {
     'use strict';
 

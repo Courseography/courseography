@@ -1,4 +1,6 @@
-// Update the total FCE count, and display total
+/**
+ * Updates and displays total number of selected FCEs.
+ */
 function updateFCECount() {
     'use strict';
 
@@ -6,11 +8,18 @@ function updateFCECount() {
     $('#FCEcount').html(FCEs.toFixed(1));
 }
 
-// Note: not called on hybrids
+
+/**
+ * Updates structures used to measure clicked courses.
+ * Note: Not called on hybrids.
+ * @param {string} name The name of the clicked course.
+ * @param {boolean} active Whether the course is active.
+ */
 function updateClickedCourses(name, active) {
     'use strict';
 
-    var diff = (name === 'CSC200' || name === 'Calc1') ? 1 : 0.5; // Full-year
+    var diff = (name === 'CSC200' ||
+                name === 'Calc1') ? 1 : 0.5; // Full-year
     if (!active) {
         diff *= -1;
     }

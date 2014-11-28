@@ -1,4 +1,7 @@
 // A form for feedback; currently disabled
+/**
+ * Activates the feedback form.
+ */
 function activateFeedbackForm() {
     'use strict';
 
@@ -15,13 +18,17 @@ function activateFeedbackForm() {
             };
             $.post('email.php', postData, function (data) {
                 $('#result').hide()
-                    .html('<div class="success">' + data + '</div>').slideDown();
+                            .html('<div class="success">' + data + '</div>')
+                            .slideDown();
                 contactFormObject.find('input').val('');
                 contactFormObject.find('textarea').val('');
 
             }).fail(function (err) {
                 $('#result').hide()
-                    .html('<div class="error">' + err.statusText + '</div>').slideDown();
+                            .html('<div class="error">' +
+                                  err.statusText +
+                                  '</div>')
+                            .slideDown();
             });
         }
 

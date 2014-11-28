@@ -1,7 +1,3 @@
-/*
- * The actual dependencies.
- */
-
 // Math courses
 var math = [
     'Calc1', 'Lin1', 'Sta1', 'Sta2'

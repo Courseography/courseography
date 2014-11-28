@@ -1,4 +1,10 @@
-/* Section class */
+/**
+ * Constructs a Section.
+ * @param {string[]} times The times that this Section is offered at.
+ * @param {Course} course The Course of this Section.
+ * @param {string} id The ID of this Section.
+ * @constructor
+ */
 function Section(times, course, id) {
     'use strict';
 
@@ -15,6 +21,9 @@ function Section(times, course, id) {
 
 
 // Mouse events
+/**
+ * Sets this Section's mouse events.
+ */
 Section.prototype.setMouseEvents = function (li) {
     'use strict';
 
@@ -34,6 +43,9 @@ Section.prototype.setMouseEvents = function (li) {
 };
 
 
+/**
+ * Sets this Section's mouseout event.
+ */
 Section.prototype.mouseout = function () {
     'use strict';
 
@@ -44,6 +56,9 @@ Section.prototype.mouseout = function () {
 };
 
 
+/**
+ * Sets this Section's mouseover event.
+ */
 Section.prototype.mouseover = function () {
     'use strict';
 
@@ -56,6 +71,9 @@ Section.prototype.mouseover = function () {
 };
 
 
+/**
+ * Sets this Section's click event.
+ */
 Section.prototype.onclick = function () {
     'use strict';
 
@@ -70,11 +88,16 @@ Section.prototype.onclick = function () {
     course.renderSatisfaction();
     course.renderUpdatedHeader();
 
-    saveCookies(selectedCourses, selectedLectures);
+    saveCookies(selectedCourses, selectedSections);
     alertUserOfConflict();
 };
 
 
+/**
+ * Sets one of this Section's times.
+ * @param {string} time The time's cell ID.
+ * TODO: Rename parameter.
+ */
 Section.prototype.setTime = function (time) {
     'use strict';
 
@@ -84,6 +107,11 @@ Section.prototype.setTime = function (time) {
 };
 
 
+/**
+ * Sets one of this Section's times as in conflict.
+ * @param {string} time The time's cell ID.
+ * TODO: Rename parameter.
+ */
 Section.prototype.setConflictTime = function (time) {
     'use strict';
 
@@ -93,6 +121,9 @@ Section.prototype.setConflictTime = function (time) {
 };
 
 
+/**
+ * Removes this Section's times.
+ */
 Section.prototype.removeTimes = function () {
     'use strict';
 
@@ -107,6 +138,11 @@ Section.prototype.removeTimes = function () {
 };
 
 
+/**
+ * Removes one of this Section's times in conflict status.
+ * @param {string} time The time's cell ID.
+ * TODO: Rename parameter.
+ */
 Section.prototype.removeConflict = function (time) {
     'use strict';
 
@@ -126,6 +162,10 @@ Section.prototype.removeConflict = function (time) {
 
 
 // Rendering
+/**
+ * Renders this Section, returns this Section's list item representation.
+ * @returns {HTMLElement} This Section's list item representation.
+ */
 Section.prototype.render = function () {
     'use strict';
 
@@ -143,6 +183,9 @@ Section.prototype.render = function () {
 };
 
 
+/**
+ * Updates the rendering of this Section in the grid.
+ */
 Section.prototype.renderUpdate = function () {
     'use strict';
 
@@ -152,6 +195,14 @@ Section.prototype.renderUpdate = function () {
 
 
 // Other constructors
+/**
+ * Makes a lecture Section.
+ * @param {object} lecture The lecture.
+ * @param {object} course The course.
+ * @param {string} id The Section ID.
+ * @param {string[]} sectionTimes The Section's times.
+ * @returns {Section} The lecture Section.
+ */
 function makeLecture(lecture, course, id, sectionTimes) {
     'use strict';
 
@@ -164,6 +215,14 @@ function makeLecture(lecture, course, id, sectionTimes) {
 }
 
 
+/**
+ * Makes a tutorial Section.
+ * @param {Array} tutorial The tutorial.
+ * @param course The Course.
+ * @param {string} id The Section's ID.
+ * @param {string[]} sectionTimes The Section's times.
+ * @returns {Section} The tutorial Section.
+ */
 function makeTutorial(tutorial, course, id, sectionTimes) {
     'use strict';
 
@@ -172,4 +231,18 @@ function makeTutorial(tutorial, course, id, sectionTimes) {
     section.enrol = tutorial[4];
     section.wait = tutorial[5];
     return section;
+}
+
+/**
+ * Returns whether two Sections are in the same session.
+ * @param {Section} section1 The first section.
+ * @param {Section} section2 The second section.
+ * @returns {boolean} Whether two sections are in the same session.
+ */
+function sameSession(section1, section2) {
+    'use strict';
+
+    return section1 !== undefined &&
+        section2 !== undefined &&
+        section1.session === section2.session;
 }

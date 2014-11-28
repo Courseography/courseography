@@ -1,19 +1,29 @@
-function Edge(parent, child, name) {
+/**
+ * Constructs an Edge.
+ * @param {Node} source This Edge's source Node.
+ * @param {Node} target This Edge's target Node.
+ * @param {string} id The id of the SVG path element that this Edge represents.
+ * @constructor
+ */
+function Edge(source, target, id) {
     'use strict';
 
-    this.parent = parent;
-    this.child = child;
-    this.name = name;
+    this.source = source;
+    this.target = target;
+    this.id = id;
     this.status = 'inactive';
 }
 
 
+/**
+ * Updates this Edge's status.
+ */
 Edge.prototype.updateStatus = function () {
     'use strict';
 
-    if (!this.parent.isSelected()) {
+    if (!this.source.isSelected()) {
         this.status = 'inactive';
-    } else if (!this.child.isSelected()) {
+    } else if (!this.target.isSelected()) {
         this.status = 'takeable';
     } else {
         this.status = 'active';
@@ -22,8 +32,11 @@ Edge.prototype.updateStatus = function () {
 };
 
 
+/**
+ * Updates the corresponding SVG path element.
+ */
 Edge.prototype.updateSVG = function () {
     'use strict';
 
-    $('#' + this.name).attr('data-active', this.status);
+    $('#' + this.id).attr('data-active', this.status);
 };
