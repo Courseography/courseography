@@ -22,13 +22,17 @@ class BoolNode:
 		      self.rx +
 		      '" ! A.ry "' +
 		      self.ry +
-		      '"\n                S.text_ $ do "' +
+		      '"\n                S.text_ ' +
+		      ' ! A.x "' +
+		      str(self.cx) +
+		      '" ! A.y "' +
+		      str(self.cy) + '" $ do "' +
 		      self.text +
 		      '"')
 
 	def __contains__(self, coords):
-		dx = float(coords[0]) - float(self.cx)
-		dy = float(coords[1]) - float(self.cy)
+		dx = float(coords[0]) - float(self.cx) + - 146
+		dy = float(coords[1]) - float(self.cy	) + 288
 		offset = 9
 		return dx >= -1 * offset and \
 		       dx <= float(2) + offset and \

@@ -130,6 +130,7 @@ def process_text(elem):
 			if "," in text:
 				text = text[:text.index(",")]
 			rect.text = text
+			
 	for boolean in bools:
 		if (elem.get("x"), elem.get("y"), 0) in boolean:
 			boolean.text = elem.text
