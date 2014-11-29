@@ -22,6 +22,7 @@ def convert_path_to_absolute(d, x_transform, y_transform):
 	path = d.split(" ")
 	chars = ['m','l','z', 'M']
 	upper_chars = ['M']
+	
 	for i in range(len(path)):
 		if not path[i][0].isalpha():
 			path[i] = path[i].split(",")
