@@ -2,11 +2,12 @@
  * Data Structures for the course graph
  */
 
-/**
- * Makes a Node.
- * @param {string} type The Node's type.
- * @param {string} name The Node's name.
- */
+// Global variables
+var nodes = []; // List of all nodes
+var edges = []; // List of all edges, Edges is never used.
+
+
+// Data Structures
 function makeNode(type, name) {
     'use strict';
     try {
@@ -18,32 +19,27 @@ function makeNode(type, name) {
     nodes.push(name);
 }
 
-/**
- * Makes a Hybrid.
- * @param {string} type The hybrid's type.
- * @param {string} id The hybrid's name.
- */
-function makeHybrid(type, id) {
+
+function makeHybrid(type, name) {
     'use strict';
 
-    makeNode(type, id);
-    window[id].hybrid = true;
+    makeNode(type, name);
+    window[name].hybrid = true;
 }
 
 
-/**
- * Makes an Edge.
- * @param {Node} source The source Node of the Edge.
- * @param {Node} target The target Node of the Edge.
- * @param {string} id The name of the Edge.
- */
-function makeEdge(source, target, id) {
+function makeEdge(parent, child, name) {
     'use strict';
-    window[id] = new Edge(source, target, id);
-    source.outEdges.push(window[id]);
-    target.inEdges.push(window[id]);
+    try {
+        window[name] = new Edge(parent, child, name);
+        parent.outEdges.push(window[name]);
+        child.inEdges.push(window[name]);
 
-    source.children.push(target);
-    target.parents.push(source);
+        parent.children.push(child);
+        child.parents.push(parent);
+    } catch (err) {
+        console.log('Encountered an error for: ' + name);
+        console.log(err)
+    }
 }
 
