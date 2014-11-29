@@ -5,7 +5,7 @@ import qualified Text.Blaze.Svg11 as S
 import qualified Text.Blaze.Svg11.Attributes as A
 import Text.Blaze.Svg.Renderer.String (renderSvg)
 svgDoc :: S.Svg
-svgDoc = S.docTypeSvg ! A.version "1.1" ! A.width "1052.3622" ! A.height "744.09448" $ do
+svgDoc = S.docTypeSvg ! A.id_ "graphRootSVG" ! A.version "1.1" ! S.customAttribute "viewBox" "0 0 1050 700"$ do
     S.g $ do
         S.path ! A.style "fill:#f298ff;fill-opacity:0.54497358;stroke:none;display:inline" ! A.d "m 872.9544,541.69048 0,-117.849 -27.28329,0 -23.37349,0 -31.23745,0 -50.21917,0 0,-186.49687 0,-77.23323 104.46025,0 85.47853,0 107.79952,0.24101 -0.8962,185.02361 0,157.36769 0,190.70079 -84.31924,0 -80.40946,0 0,-151.75398 z"
         S.path ! A.style "fill:#ff008f;fill-opacity:0.56613758;stroke:none;display:inline" ! A.d "m 740.84103,551.62569 -3e-5,-127.78412 59.21055,0 72.25845,-9e-5 0,127.78433 0,141.81867 -72.25845,0 -59.21055,0 z"
@@ -17,7 +17,7 @@ svgDoc = S.docTypeSvg ! A.version "1.1" ! A.width "1052.3622" ! A.height "744.09
         S.path ! A.style "fill:#2f692b;fill-opacity:0.58730164;stroke:none;display:inline" ! A.d "m 141.766,504.40981 0,-146.05263 46.88205,0 42.67295,3e-4 0,146.05233 0,152.19267 -31.708,0 0,36.842 -57.847,0 0,-36.842 z"
     S.g ! A.transform " translate(0,-308.2677)" $ do
         S.g ! A.transform "translate(29.540919,340.70929)" ! A.class_ "nodes"$ do
-            S.g ! A.class_ "node"  ! A.id_ "CSC438" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC438" ! A.style "" $ do
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "399.59551999999996" ! A.y "578.60641" ! A.fill "#fff" 
              S.text_  ! A.x "419.59551999999996" ! A.y "594.60641" $ "438"
             S.g ! A.class_ "node"  ! A.id_ "CSC463" ! A.style "" $ do 

@@ -1,14 +1,13 @@
-// All Global Variables for the Graph
-var timetable = 'res/timetable.html'; // Location of timetable file
 
-var clickedCourses = [];      // All clicked courses
-
-var FCEs = 0;                 // Total number of selected FCEs
-var FCEs100 = 0;              // Total number of 100 series selected FCEs
-var FCEs200 = 0;              // Total number of 200 series selected FCEs
-var FCEs300 = 0;              // Total number of 300 series selected FCEs
-var FCEs400 = 0;              // Total number of 400 series selected FCEs
-var FCEsMAT = 0;              // Total number of MAT selected FCEs
+// Globals
+var timetable = 'static/res/timetable.html';
+var clickedCourses = [];
+var FCEs = 0;
+var FCEs100 = 0;
+var FCEs200 = 0;
+var FCEs300 = 0;
+var FCEs400 = 0;
+var FCEsMAT = 0;
 
 // Track active courses
 var active400s = [];          // Active 400 series courses
@@ -83,7 +82,7 @@ $(document).ready(function () {
     'use strict';
     var graphPage = getRemote();
 
-    $("#graph").append(graphPage);
+    //$("#graph").append(graphPage);
 
     buildGraph();
 
@@ -115,11 +114,3 @@ function getRemote() {
         async: false
     }).responseText;
 }
-
-$(window).resize(function () {
-    'use strict';
-
-    // Set width of FCE count
-    var w = $('.infoTabs').width() - $('.tabList').outerWidth() - 1;
-    $('#FCECountDiv').width(w + 'px');
-});

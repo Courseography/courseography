@@ -91,7 +91,7 @@ function fetchCourse(name) {
 
     var course;
     $.ajax({
-        url: 'res/courses/' + name + '.txt',
+        url: 'static/res/courses/' + name + '.txt',
         dataType: 'json',
         async: false,
         success: function (data) {

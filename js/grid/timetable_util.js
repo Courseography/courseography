@@ -21,7 +21,7 @@ function getVeryLargeCourseArray() {
     var splitArray = undefined;
 
     $.ajax({
-        url: "res/courses.txt",
+        url: "static/res/courses.txt",
         dataType: "text",
         async: false,
         success: function (data) {

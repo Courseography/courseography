@@ -20,25 +20,11 @@ graphResponse =
                  plannerLinks
                 ]
                 (do header "graph"
-                    --createTag H.div "graph" "graph" ""
-                    --createTag H.div "" "infoTabs" $ do
-                    --    tabList $ do
-                    --        welcomeTab
-                    --        timetableTab
-                    svgDoc
+                    H.div ! A.id "graph" ! A.class_ "graph" $ do
+                      svgDoc
+                    disclaimer
                 )
                 plannerScripts
-
-
-tabList :: H.Html -> H.Html
-tabList content = createTag H.div "" "tabListDiv" $ do
-                  createTag H.ul "" "tabList" $ do
-                      H.li $ tabAnchor "#welcome" "Welcome!"
-                      H.li $ tabAnchor "#focuses" "Focuses"
-                      H.li $ tabAnchor "#timetable" "Timetable"
-                      H.li $ tabAnchor "#post" "Check My POSt!"
-                      do content
-                  fceCountDiv
 
 
 fceCountDiv :: H.Html
