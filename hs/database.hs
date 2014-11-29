@@ -16,7 +16,7 @@ import           Database.Persist.TH
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 Courses
     Department String
-    cNum Int
+    code Int
     breadth Int
     title String
     description String
@@ -24,13 +24,13 @@ Courses
     manualPracticalEnrolment Bool
     prereqs [String]
     exclusions [String]
-    distribution String
+    distribution Int
     prep String
     deriving Show
 
 Lectures
     Department String
-    cNum Int
+    code Int
     session String
     lId String
     times [[Int]]
@@ -42,7 +42,6 @@ Lectures
     time_str String
     deriving Show
 
-
 Tutorials
     Department String
     cNum Int
@@ -52,6 +51,11 @@ Tutorials
 
 Breadth
     bId Int
+    description String
+    deriving Show
+
+Distribution
+    dId Int
     description String
     deriving Show
 |]
