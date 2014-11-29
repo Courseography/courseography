@@ -16,7 +16,6 @@ class Rect:
 		self.class_ = "hybrid" if self.hybrid else "node"
 
 	def output_haskell(self):
-<<<<<<< HEAD
 		if self.hybrid:
 			self.colour = "#bbb"
 		prefix = ""
@@ -33,19 +32,7 @@ class Rect:
 		      "\" ! A.ry \"4" +
 		      "\" ! A.x \"" + str(self.x) +
 		      "\" ! A.y \"" + str(self.y) +
-		      "\" ! A.fill \"" + self.colour + "\" \n" + 
-=======
-		print("S.g ! A.class_ \"node\" $ do \n" +
-			  "             S.rect" +
-			  " ! A.id_ \"" +
-			  self.text +
-			  "\"" +
-		      " ! A.width \"" + self.width +
-		      "\" ! A.height \"" + self.height +
-		      "\" ! A.x \"" + str(self.x) +
-		      "\" ! A.y \"" + str(self.y) +
-		      "\"\n" +
->>>>>>> upstream/happstack
+		      "\" ! A.fill \"" + self.colour + "\" \n" +
 		      "             S.text_ " +
 		      " ! A.x \"" + str(self.text_x) +
 		      "\" ! A.y \"" + str(self.text_y) +

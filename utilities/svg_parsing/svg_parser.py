@@ -61,11 +61,7 @@ def output_svg():
 		print("            ", end="")
 		i.output_haskell()
 
-<<<<<<< HEAD
 	print("            S.g $ do")
-=======
-	print("            S.g ! A.transform \"translate(-146,288)\" $ do")
->>>>>>> upstream/happstack
 	for i in paths:
 		if not i.isPath:
 			continue
