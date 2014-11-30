@@ -1,6 +1,8 @@
-/* global $ */
-/* global nodes */
-
+/**
+ * Creates and returns the main modal content div.
+ * @param {string} id The course course.
+ * @returns {jQuery} The main modal content div.
+ */
 function createModalDiv(id) {
     'use strict';
 
@@ -29,6 +31,12 @@ function createModalDiv(id) {
 }
 
 
+/**
+ * Sets up and returns the video player, false if the video URL does not exist.
+ * TODO: Function should be split up.
+ * @param {string} id The course code.
+ * @returns {boolean|jQuery}
+ */
 function setupVideoPlayer(id) {
     'use strict';
 
@@ -39,12 +47,14 @@ function setupVideoPlayer(id) {
         return false;
     }
 
-    // Not divided up into 'attr' yet because 'controls preload' cannot be added that way...
+    // Not divided up into 'attr' yet because 'controls preload'
+    // cannot be added that way...
     var videoDiv = $('<div></div>');
     videoDiv.css('display', 'inline')
             .css('float', 'left')
             .css('width', '100%');
-    var video = $('<video id="course_video" class="video-js vjs-default-skin" controls preload="auto" width="100%" height="400"></video>');
+    var video = $('<video id="course_video" class="video-js vjs-default-skin"' +
+                  'controls preload="auto" width="100%" height="400"></video>');
     var src = $('<source></source>').attr('src', url)
                                     .attr('type', 'video/mp4');
 
@@ -55,6 +65,11 @@ function setupVideoPlayer(id) {
 }
 
 
+/**
+ * Returns a formatted course timeslot.
+ * @param {string} id The course code.
+ * @returns {jQuery}
+ */
 function setupTimeslot(id) {
     'use strict';
 
@@ -63,7 +78,10 @@ function setupTimeslot(id) {
     var title = $('<h3></h3>');
 
     timeslot.append(title);
-    timeslot.append($('#timetableMain').children('tbody').children('tr').first().clone());
+    timeslot.append($('#timetableMain').children('tbody')
+                                       .children('tr')
+                                       .first()
+                                       .clone());
 
     $('.searchClass').each(function () {
         courseName = $(this).children('td').first().html();
@@ -80,6 +98,11 @@ function setupTimeslot(id) {
 }
 
 
+/**
+ * Sets up and returns the related links HTML div element.
+ * @param id The course code.
+ * @returns {jQuery}
+ */
 function setupRelatedLinks(id) {
     'use strict';
 
@@ -93,39 +116,46 @@ function setupRelatedLinks(id) {
 }
 
 
-function displayToolTip(nodeId) {
+/**
+ * Displays a tooltip for a Node.
+ * @param {string} nodeId The Node's ID.
+ */
+function displayTooltip(nodeId) {
     'use strict';
 
     var rectObject = $('#' + nodeId).find('rect');
 
-    // The tooltip displays with a width of 222. If the node has an x position of
-    // less than 222, the tooltip will be cut off by the svg boundaries. In this case,
-    // we display the tooltip on the left.
+    // The tooltip displays with a width of 222. If the node has an x
+    // position of less than 222, the tooltip will be cut off by the svg
+    // boundaries. In this case, we display the tooltip on the left.
     var rightSide = rectObject.attr('x') > 222;
 
     // The tooltip is offset with a 'padding' of 5.
     if (rightSide) {
         var xPos = parseFloat(rectObject.attr('x')) - 65;
     } else {
-        var xPos = parseFloat(rectObject.attr('x')) + parseFloat($('#' + nodeId).children('rect').attr('width')) + 5;
+        var xPos = parseFloat(rectObject.attr('x')) +
+                   parseFloat($('#' + nodeId).children('rect').attr('width')) + 5;
     }
 
     var yPos = rectObject.attr('y');
     var g = createG(nodeId);
-    createRect(g, 'node-tooltip', nodeId + '-tooltip', xPos, yPos, 60, 30, 'black');
-    createText(g, nodeId, 'node-tooltip', nodeId + '-tooltip', xPos, yPos, 60, 30, 'black');
+    createRect(g, 'node-tooltip', nodeId + '-tooltip', xPos, yPos,
+               60, 30, 'black');
+    createText(g, nodeId, 'node-tooltip', nodeId + '-tooltip', xPos, yPos,
+               60, 30, 'black');
 }
 
 
 /**
  * Creates an svg rect object and appends it to #graphRootSVG.
- * @param rectClass
- * @param rectId
- * @param posX The x position of the rect.
- * @param posY The y position of the rect.
- * @param width The width of the rect.
- * @param height The height of the rect.
- * @param color The fill and stroke color of the rect.
+ * @param {string} rectClass Class(es) of the rect.
+ * @param {string} rectId The ID of the rect.
+ * @param {number} posX The x position of the rect.
+ * @param {number} posY The y position of the rect.
+ * @param {number} width The width of the rect.
+ * @param {number} height The height of the rect.
+ * @param {string} color The fill and stroke color of the rect.
  */
 function createRect(g, rectClass, rectId, posX, posY, width, height, color) {
     'use strict';
@@ -156,29 +186,34 @@ function createRect(g, rectClass, rectId, posX, posY, width, height, color) {
 
 
 /**
- * Creates an svg text object and appends it to #graphRootSVG.
- * @param nodeId
- * @param rectClass
- * @param rectId
- * @param posX The x position of the rect.
- * @param posY The y position of the rect.
- * @param width The width of the rect.
- * @param height The height of the rect.
- * @param color The fill and stroke color of the rect.
+ * Creates an svg text element and appends it to #graphRootSVG.
+ * @param {string} nodeId The Node's ID.
+ * @param {string} textClass Class(es) of the text element.
+ * @param {string} textId The ID of the text element.
+ * @param {number} posX The x position of the text element.
+ * @param {number} posY The y position of the text element.
+ * @param {number} width The width of the text element.
+ * @param {number} height The height of the text element.
+ * @param {string} color The fill and stroke color of the text element.
  */
-function createText(g, nodeId, rectClass, rectId, posX, posY, width, height, color) {
+function createText(g, nodeId, textClass, textId, posX, posY, width, height, color) {
     'use strict';
 
     var text = $(document.createElementNS('http://www.w3.org/2000/svg', 'text'))
         .text('Info')
-        .attr('class', rectClass + '-text ' + rectId + '-text')
-        .attr('id', rectId + '-text')
+        .attr('class', textClass + '-text ' + textId + '-text')
+        .attr('id', textId + '-text')
         .attr('x', parseFloat(posX) + 30)
         .attr('y', parseFloat(posY) + 20);
     g.append(text);
 }
 
 
+/**
+ * Sets up and Returns a tooltips SVG g element.
+ * @param {string} nodeId
+ * @returns {jQuery}
+ */
 function createG(nodeId) {
     'use strict';
 
@@ -193,19 +228,28 @@ function createG(nodeId) {
 }
 
 
-function openModal(nodeId) {
+/**
+ * Opens the course information modal.
+ * @param {string} id The course code.
+ * TODO: Needs to be cleaned up.
+ */
+function openModal(id) {
     'use strict';
 
     if ($('.modal').length === 0) {
-        var div = createModalDiv(nodeId);
-        div.attr('title', getCourseTitle(nodeId))
+        var div = createModalDiv(id);
+
+        div.attr('title', getCourseTitle(id))
            .addClass('modal').dialog({
                 autoOpen: true,
                 modal: true,
                 minWidth: 1000,
                 minHeight: 600,
                 closeText: 'X',
-                open: function(event, ui) { $('.ui-widget-overlay').bind('click', function(){ div.dialog('close'); }); },
+                open: function(event, ui) {
+                        $('.ui-widget-overlay').bind('click', function () {
+                                                                  div.dialog('close');
+                                                              }); },
                 close: function () {
                     $(this).remove();
                     $.each(nodes, function (index, elem) {
@@ -213,6 +257,7 @@ function openModal(nodeId) {
                     });
                     $('body').css('background', 'rgb(255,255,255)');
                 }});
+
         $('.node, .hybrid').attr('data-active', 'unlit');
         $('body').css('background', 'rgb(40,40,40)');
         setMouseCallbacks();
@@ -222,30 +267,15 @@ function openModal(nodeId) {
 }
 
 
+/**
+ * Enables VideoJS.
+ * Note: Must be called after the video player is set up.
+ */
 function enableVideoJS() {
     'use strict';
 
     if (document.getElementsByClassName('vjs-default-skin').length > 0) {
-        videojs(document.getElementsByClassName('vjs-default-skin')[0], {}, function () {});
+        videojs(document.getElementsByClassName('vjs-default-skin')[0], {},
+                function () {});
     }
-}
-
-
-function urlExists(url) {
-    'use strict';
-
-    var exists;
-    $.ajax({
-        type: 'HEAD',
-        async: false,
-        url: url,
-        success: function (){
-            exists = true;
-        },
-        error: function () {
-            exists = false;
-        }
-    });
-
-    return exists;
 }

@@ -1,4 +1,7 @@
-// Activate a focus
+/**
+ * Updates the active focus.
+ * @param {string} id The ID of the active focus.
+ */
 function updateActiveFocus(id) {
     'use strict';
 
@@ -29,7 +32,9 @@ function updateActiveFocus(id) {
 }
 
 
-// Removes spotlight on active focus
+/**
+ * Removes active focus spotlights.
+ */
 function clearFocus() {
     'use strict';
 
@@ -41,9 +46,13 @@ function clearFocus() {
 }
 
 
-// Put a spotlight on a node
+/**
+ * Highlights a Node with a 'spotlight'.
+ * @param {string} id The ID of the highlighted Node.
+ */
 function spotlight(id) {
     'use strict';
+
     var nodeObject = $('#' + id);
 
     var node = $('#' + id + ' > rect');

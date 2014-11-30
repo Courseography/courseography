@@ -9,3 +9,5 @@ enrol.txt
 res/courses-copy/
 *.pyc
 courses.tar.gz
+out/
+*.exe

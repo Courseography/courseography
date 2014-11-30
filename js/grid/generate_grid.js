@@ -1,5 +1,3 @@
-/*global $*/
-
 /**
  * Generates the duplex timetable grid.
  */
@@ -22,35 +20,31 @@ function generateGrid() {
 
     timetableContainerDivFall.append(timetableTableFall);
     timetableContainerDivSpring.append(timetableTableSpring);
+
     rowDiv.append(timetableContainerDivFall)
-        .append(timetableContainerDivSpring)
-        .insertBefore($('#info'));
+          .append(timetableContainerDivSpring)
+          .insertBefore($('#info'));
 }
 
 
-function createThead() {
-    'use strict';
-
-    return $('<thead></thead>');
-}
-
-
-function createCaption(name) {
-    'use strict';
-
-    return $('<caption></caption>').html(name);
-}
-
-
-function createTimeTable(suffix) {
+/**
+ * Creates a timetable.
+ * @param {string} idSuffix The suffix of the ID of the timetable.
+ * @returns {jQuery}
+ */
+function createTimeTable(idSuffix) {
     'use strict';
 
     return $('<table></table>')
         .addClass('timetable table')
-        .attr('id', 'timetable-' + suffix);
+        .attr('id', 'timetable-' + idSuffix);
 }
 
 
+/**
+ * Creates and returns a timetable container HTML div element.
+ * @returns {jQuery}
+ */
 function createTimeTableContainer() {
     'use strict';
 
@@ -59,6 +53,11 @@ function createTimeTableContainer() {
 }
 
 
+/**
+ * Appends table headers to the timetables.
+ * @param {jQuery} fallThead The fall table header.
+ * @param {jQuery} springThead The spring table header.
+ */
 function appendHeaders(fallThead, springThead) {
     'use strict';
 
@@ -78,6 +77,11 @@ function appendHeaders(fallThead, springThead) {
 }
 
 
+/**
+ * Appends all table rows to the timetables.
+ * @param {jQuery} timetableTableFall The fall timetable.
+ * @param {jQuery} timetableTableSpring The spring timetable.
+ */
 function appendTableRows(timetableTableFall, timetableTableSpring) {
     'use strict';
 
@@ -91,6 +95,12 @@ function appendTableRows(timetableTableFall, timetableTableSpring) {
 }
 
 
+/**
+ * Appends table cells to table rows.
+ * @param {jQuery} trFall The fall table row.
+ * @param {jQuery} trSpring The spring table row.
+ * @param {int} time The table row's time.
+ */
 function appendTableData(trFall, trSpring, time) {
     'use strict';
 

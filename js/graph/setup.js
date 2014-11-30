@@ -1,3 +1,4 @@
+
 // Globals
 var timetable = 'static/res/timetable.html';
 var clickedCourses = [];
@@ -9,52 +10,73 @@ var FCEs400 = 0;
 var FCEsMAT = 0;
 
 // Track active courses
-var active400s = [];
-var active300s = [];
-var active200s = [];
-var projectCourses = []; // CSC49x
+var active400s = [];          // Active 400 series courses
+var active300s = [];          // Active 300 series courses
+var active200s = [];          // Active 200 series courses
+var projectCourses = [];      // Active project courses (CSC49*)
 
 // Specialist requirements
-var numBCB = 0;
-var cscReqTotal = 0;
-var matReqTotal = 0;
-var elecTotal = 0;
+var numBCB = 0;               // Number of satisfied BCB courses
+var cscReqTotal = 0;          // Total number of satisfied fields for
+                              // the CSC specialist POSt
+var matReqTotal = 0;          // Total number of satisfied MAT courses for
+                              // the CSC specialist POSt
+var elecTotal = 0;            // Total number of satisfied electives for
+                              // the CSC specialist POSt
 var postTotal = 0;
-var cscReqSat = false;
-var matReqSat = false;
-var elec400sSat = false;
-var elecSat = false;
-var peySat = false;
+var cscReqSat = false;        // CSC requirements satisfied for specialist POSt
+var matReqSat = false;        // MAT requirements satisfied for specialist POSt
+var elec400sSat = false;      // 400 series course electives satisfied
+var elecSat = false;          // Elective requirement satisfied for
+                              // specialist POSt
+var peySat = false;           // PEY satisfied for specialist POSt
 
 // Major requirements
-var cscReqSatMajor = false;
-var matReqSatMajor = false;
-var elecSatMajor = false;
-var peySatMajor = false;
-var numBCBMajor = 0;
-var cscReqTotalMajor = 0;
-var matReqTotalMajor = 0;
-var elec200sTotalMajor = 0;
-var elec300sTotalMajor = 0;
-var elecTotalMajor = 0;
+var cscReqSatMajor = false;   // CSC requirements satisfied for major POSt
+var matReqSatMajor = false;   // MAT requirements satisfied for the CSC
+                              // major POSt
+var elecSatMajor = false;     // Elective requirement satisfied for the CSC
+                              // major POSt
+var peySatMajor = false;      // PEY satisfied for major POSt
+var numBCBMajor = 0;          // Number of satisfied BCB courses for the CSC
+                              // major POSt
+var cscReqTotalMajor = 0;     // Total number of satisfied fields for the CSC
+                              // major POSt
+var matReqTotalMajor = 0;     // Total number of satisfied MAT courses for
+                              // the CSC major POSt
+var elec200sTotalMajor = 0;   // Total number of satisfied 200 series course
+                              // electives for the CSC major POSt
+var elec300sTotalMajor = 0;   // Total number of satisfied 300 series course
+                              // electives for the CSC major POSt
+var elecTotalMajor = 0;       // Total number of satisfied electives for
+// the CSC major POSt
 var postTotalMajor = 0;
 
-var cscReqSatMinor = false;
-var elecSatMinor = false;
-var cscReqTotalMinor = 0;
-var elecTotalMinor = 0;
-var postTotalMinor = 0;
+// Minor requirements
+var cscReqSatMinor = false;   // CSC requirements satisfied for minor POSt
+var elecSatMinor = false;     // Elective requirement satisfied  for
+                              // the CSC minor POSt
+var cscReqTotalMinor = 0;     // Total number of satisfied fields for
+                              // the CSC minor POSt
+var elecTotalMinor = 0;       // Total number of satisfied electives
+                              // for the CSC minor POSt
+var postTotalMinor = 0;       // Total number of satisfied fields for
+                              // the CSC minor POSt
 
-var extraMajor = 0;
-var extraMinor = 0;
+var extraMajor = 0;           // Number of satisfied courses that are required
+                              // for specialist, but are electives for major
+var extraMinor = 0;           // Number of satisfied courses that are required
+                              // for specialist, but are electives for minor
 
-var activeFocus = '';
+var activeFocus = '';         // The active focus from the 'Focuses' tab.
+var timeouts = [];            // All timeouts. Used to remove timeouts later on
+var FCEPrerequisiteCourses;   // Courses that have FCE based prerequisites,
+                              // initialised at runtime
+var courseCache = [];         // Cached Courses. Courses are cached to
+                              // minimise AJAX requests
 
-var timeouts = [];
+var nodes = [];               // List of all nodes
 
-var FCEPrerequisiteCourses;
-
-var courseCache = [];
 
 $(document).ready(function () {
     'use strict';
@@ -64,7 +86,7 @@ $(document).ready(function () {
 
     buildGraph();
 
-    FCEPrerequisiteCourses = [CSC318, CSC454, CSC494, CSC495];
+    FCEPrerequisiteCourses = [CSC318, CSC454];
 
     // Set width of FCE count
     var w = $('.infoTabs').width() - $('.tabList').outerWidth() - 1;

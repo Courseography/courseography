@@ -1,3 +1,6 @@
+/**
+ * Sets all mouse callbacks.
+ */
 function setMouseCallbacks() {
     'use strict';
 
@@ -6,7 +9,7 @@ function setMouseCallbacks() {
     nodeObjects.click(function (event) {
 
         // TODO: Test as click(turnNode)
-        turnNode(event)
+        turnNode(event);
     })
         .hover(
             function (event) {
@@ -18,8 +21,10 @@ function setMouseCallbacks() {
 }
 
 
-// Activates missing prerequisite display and
-// fetches course description on hover
+/**
+ * Performs hover function for a Node.
+ * @param {object} event The hover event.
+ */
 function hoverFocus(event) {
     'use strict';
 
@@ -29,12 +34,15 @@ function hoverFocus(event) {
         window[id].focus();
 
         removeToolTips();
-        displayToolTip(id);
+        displayTooltip(id);
     }
 }
 
 
-// Deactivate missing prerequisites
+/**
+ * Performs the mouse out function for a Node.
+ * @param {object} event The mouse out event.
+ */
 function hoverUnfocus(event) {
     'use strict';
 
@@ -50,7 +58,10 @@ function hoverUnfocus(event) {
 }
 
 
-// Activate/Deactivate node when clicked
+/**
+ * Activates/Deactivates a clicked Node.
+ * @param {object} event The click event.
+ */
 function turnNode(event) {
     'use strict';
 
@@ -64,8 +75,6 @@ function turnNode(event) {
         // Check the courses with FCE reqs
         CSC318.updateStatus();
         CSC454.updateStatus();
-        CSC494.updateStatus();
-        CSC495.updateStatus();
 
         updatePOSt(id, window[id].isSelected());
         updatePostInterface();

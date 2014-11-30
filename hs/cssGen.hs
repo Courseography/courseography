@@ -113,7 +113,9 @@ wideStroke = "stroke-width" -: "3"
 faded = opacity 0.4
 semiVisible = opacity 0.7
 strokeRed = "stroke" -: "#CC0011"
-strokeDashed = "stroke-dasharray" -: "8,8"
+strokeDashed = do
+    "stroke-dasharray" -: "8,5"
+    "stroke-width" -: "2px"
 
 theoryDark = "#B1C8D1"
 coreDark = "#C9C9C9"

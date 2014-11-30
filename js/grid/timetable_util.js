@@ -1,13 +1,20 @@
+/**
+ * Updates selectedSections with sectionId.
+ * @param {string} sectionId The ID of the lecture section being updated.
+ */
 function updateSelectedLectures(sectionId) {
     'use strict';
 
-    if (!inArray(sectionId, selectedLectures)) {
-        selectedLectures.push(sectionId);
+    if (!inArray(sectionId, selectedSections)) {
+        selectedSections.push(sectionId);
     }
 }
 
 
-/* AJAX Functions */
+/**
+ * Returns all course codes.
+ * @returns {string[]} All course codes.
+ */
 function getVeryLargeCourseArray() {
     'use strict';
 
@@ -18,7 +25,7 @@ function getVeryLargeCourseArray() {
         dataType: "text",
         async: false,
         success: function (data) {
-            splitArray = data.split('\n').map(function (course) {
+            var splitArray = data.split('\n').map(function (course) {
                 return course.substring(0, 8);
             });
         }
@@ -28,7 +35,9 @@ function getVeryLargeCourseArray() {
 }
 
 
-/* Timetable Search List */
+/**
+ * Enables course search functionality.
+ */
 function enableSearch() {
     'use strict';
 
@@ -38,6 +47,10 @@ function enableSearch() {
 }
 
 
+/**
+ * Resets the course search list.
+ * TODO: Function is a bit lengthy and convoluted.
+ */
 function resetSearchList() {
     'use strict';
 
@@ -55,7 +68,7 @@ function resetSearchList() {
             if (course.indexOf(filter) > -1 && counter < 100) {
                 var courseEntry = document.createElement('li');
 
-                // Add an ID to the list so we can come back and star
+                // Add an ID to the list so we can come back and select
                 // it when it is clicked.
                 $(courseEntry).attr('id', course + '-search')
                               .html(course)
@@ -81,12 +94,14 @@ function resetSearchList() {
         });
     }
     searchListObject.append(courseList);
-    refreshStarredCourses();
+    refreshSelectedCourses();
 }
 
 
-// Highlight starred (selected) courses in search list
-function refreshStarredCourses() {
+/**
+ * Highlights the selected courses in the course search list.
+ */
+function refreshSelectedCourses() {
     'use strict';
 
     $('#search-list').find('li').each(function (index) {
@@ -101,22 +116,27 @@ function refreshStarredCourses() {
 
 
 /* Cookie Interaction */
+
+
+/**
+ * Restores selected courses and sections from a previous session.
+ */
 function restoreFromCookies() {
     'use strict';
 
-    var starredCourseCookie = getCookie('selected-courses');
-    var starredLectureCookie = getCookie('selected-lectures');
+    var selectedCourseCookie = getCookie('selected-courses');
+    var selectedSectionCookie = getCookie('selected-lectures');
 
-    if (starredCourseCookie.length === 0) {
-        starredCourseCookie = [];
+    if (selectedCourseCookie.length === 0) {
+        selectedCourseCookie = [];
     }
 
-    if (starredLectureCookie.length === 0) {
-        starredLectureCookie = [];
+    if (selectedSectionCookie.length === 0) {
+        selectedSectionCookie = [];
     }
 
-    if (starredCourseCookie.length > 0) {
-        var selectedCoursesTemp = $.parseJSON(starredCourseCookie);
+    if (selectedCourseCookie.length > 0) {
+        var selectedCoursesTemp = $.parseJSON(selectedCourseCookie);
         var newCourses = [];
         $.each(selectedCoursesTemp, function (i, course) {
             try {
@@ -129,15 +149,16 @@ function restoreFromCookies() {
         });
     }
 
-    if (starredLectureCookie.length > 0) {
-        selectedLectures = $.parseJSON(starredLectureCookie);
+    if (selectedSectionCookie.length > 0) {
+        selectedSections = $.parseJSON(selectedSectionCookie);
         var newSections = [];
-        $.each(selectedLectures, function (i, section) {
+        $.each(selectedSections, function (i, section) {
             try {
                 $('#' + section).click();
                 newSections.push(section);
             } catch (e) {
                 console.log('Removed bad section from cookie: ' + section);
+                console.log(e);
             }
 
         });
@@ -147,6 +168,11 @@ function restoreFromCookies() {
 }
 
 
+/**
+ * Stores courses and sections in cookies.
+ * @param {string[]} courses All selected courses.
+ * @param {string[]} sections All selected sections.
+ */
 function saveCookies(courses, sections) {
     'use strict';
 
@@ -164,6 +190,12 @@ function saveCookies(courses, sections) {
 }
 
 
+/**
+ * Selects a course.
+ * TODO: Bad function name
+ * TODO: Bad param name
+ * @param {string} name The course code.
+ */
 function addCourseToList(name) {
     'use strict';
 
@@ -171,10 +203,16 @@ function addCourseToList(name) {
     $('#course-select').append(course.render());
     courseObjects.push(course);
     selectedCourses.push(name);
-    saveCookies(selectedCourses, selectedLectures);
+    saveCookies(selectedCourses, selectedSections);
 }
 
 
+/**
+ * Deselects a course.
+ * TODO: Bad function name
+ * TODO: Bad param name
+ * @param {string} name The course code.
+ */
 function removeCourseFromList(name) {
     'use strict';
 
@@ -189,14 +227,21 @@ function removeCourseFromList(name) {
     removeCourseObject(name);
     removeFromArray(name, selectedCourses);
 
-    saveCookies(selectedCourses, selectedLectures);
+    saveCookies(selectedCourses, selectedSections);
 
-    // Refresh starred courses
-    refreshStarredCourses();
+    // Refresh selected courses
+    refreshSelectedCourses();
 }
 
 
 /* Info box */
+
+
+/**
+ * Displays course's title.
+ * TODO: Bad function name
+ * @param {Course} course The course.
+ */
 function renderDisplayCourseTitle(course) {
     'use strict';
 
@@ -207,6 +252,10 @@ function renderDisplayCourseTitle(course) {
 }
 
 
+/**
+ * Displays course's information.
+ * @param {Course} course The course.
+ */
 function renderDisplayCourseInformation(course) {
     'use strict';
 
@@ -215,6 +264,10 @@ function renderDisplayCourseInformation(course) {
 }
 
 
+/**
+ * Displays section's information.
+ * @param {Section} section The section.
+ */
 function renderDisplaySectionInformation(section) {
     'use strict';
 
@@ -234,6 +287,9 @@ function renderDisplaySectionInformation(section) {
 }
 
 
+/**
+ * Clears displayed course information.
+ */
 function renderClearCourseInformation() {
     'use strict';
 

@@ -1,4 +1,6 @@
-// Draggable function for map
+/**
+ * Enables graph dragging.
+ */
 function enableGraphDragging() {
     /* Extending the jQuery draggable option to be fitted with right click for either graph or graphRootSVG.
      This also disables the context menu for graphRootSVG, but not for the tab.*/
@@ -70,17 +72,24 @@ function enableGraphDragging() {
 }
 
 
-// Disables Tab key
-document.onkeydown = function (e) {
+/**
+ * Disables Tab key.
+ * @param {object} event The keydown event.
+ * @returns {boolean} Whether the key is the tab key.
+ */
+document.onkeydown = function (event) {
     'use strict';
 
-    if (e.which === 9) {
+    if (event.which === 9) { // 9 is the Tab key.
         return false;
     }
 };
 
 
-// Initializes interface to cookie settings; blank interface if no cookies exist
+/**
+ * Initializes interface to cookie settings; blank interface if no cookies exist
+ * TODO: Function too long
+ */
 function initializeGraphSettings() {
     'use strict';
 
@@ -150,12 +159,12 @@ function initializeGraphSettings() {
 
     CSC318.updateStatus();
     CSC454.updateStatus();
-    CSC494.updateStatus();
-    CSC495.updateStatus();
 }
 
 
-// Resets interface to default (nothing selected); callback for Reset button
+/**
+ * Resets graph to default (no Nodes selected).
+ */
 function reset() {
     'use strict';
 
@@ -207,15 +216,9 @@ function reset() {
 }
 
 
-$(window).resize(function() {
-    'use strict';
-
-    // Set width of FCE count
-    var w = $('.infoTabs').width() - $('.tabList').outerWidth() - 1;
-    $('#FCECountDiv').width(w + 'px');
-});
-
-
+/**
+ * Removes all tool-tips.
+ */
 function removeToolTips() {
     'use strict';
 
@@ -223,6 +226,9 @@ function removeToolTips() {
 }
 
 
+/**
+ * Clears all timeouts.
+ */
 function clearAllTimeouts() {
     'use strict';
 
@@ -231,4 +237,28 @@ function clearAllTimeouts() {
     }
 
     timeouts = [];
+}
+
+/**
+ * Returns whether the url exists.
+ * @param {string} url The URL.
+ * @returns {boolean} Whether the url exists.
+ */
+function urlExists(url) {
+    'use strict';
+
+    var exists;
+    $.ajax({
+        type: 'HEAD',
+        async: false,
+        url: url,
+        success: function (){
+            exists = true;
+        },
+        error: function () {
+            exists = false;
+        }
+    });
+
+    return exists;
 }
