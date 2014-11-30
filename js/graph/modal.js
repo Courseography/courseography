@@ -201,8 +201,8 @@ function createText(g, nodeId, textClass, textId, posX, posY, width, height, col
 
     var text = $(document.createElementNS('http://www.w3.org/2000/svg', 'text'))
         .text('Info')
-        .attr('class', rectClass + '-text ' + rectId + '-text')
-        .attr('id', rectId + '-text')
+        .attr('class', textClass + '-text ' + textId + '-text')
+        .attr('id', textId + '-text')
         .attr('x', parseFloat(posX) + 30)
         .attr('y', parseFloat(posY) + 20);
     g.append(text);
@@ -237,7 +237,7 @@ function openModal(id) {
     'use strict';
 
     if ($('.modal').length === 0) {
-        var div = createModalDiv(nodeId);
+        var div = createModalDiv(id);
 
         div.attr('title', getCourseTitle(id))
            .addClass('modal').dialog({

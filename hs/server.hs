@@ -28,8 +28,8 @@ static :: String
 static = "static"
 
 staticDir :: String
---staticDir = "C:\\Users\\David\\Documents\\courseography"
-staticDir = "/home/cynic/courseography"
+staticDir = "C:\\Users\\David\\Documents\\courseography"
+--staticDir = "/home/cynic/courseography"
 
 main :: IO ()
 main = simpleHTTP nullConf $

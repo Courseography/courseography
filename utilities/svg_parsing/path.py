@@ -13,16 +13,16 @@ class Path:
 		# self.xStart = float()
 
 	def output_haskell(self):
-		print("S.path ! A.id_ \"" + 
+		print("S.path ! A.id_ \"" +
 			  self.id +
 			  "\" ! A.class_ \"path\"" +
-			  " ! A.style \"fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1\" ! A.d \"" + self.d + "\"")
+			  " ! A.d \"" + self.d + "\"")
 
 def convert_path_to_absolute(d, x_transform, y_transform):
 	path = d.split(" ")
 	chars = ['m','l','z', 'M']
 	upper_chars = ['M']
-	
+
 	for i in range(len(path)):
 		if not path[i][0].isalpha():
 			path[i] = path[i].split(",")

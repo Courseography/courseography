@@ -1,0 +1,18 @@
+
+#aboutDiv
+{
+  max-width  : 1000px;
+  padding    : 0px 1em 0px 1em;
+  margin     : 0px auto 0px auto;
+  text-align : justify;
+}
+
+#aboutDiv > h1,
+#aboutDiv > h2,
+#aboutDiv > h3
+{
+  color : rgb(67,118,153);
+}
+
+
+/* Generated with Clay, http://fvisser.nl/clay */

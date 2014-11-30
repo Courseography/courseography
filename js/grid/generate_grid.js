@@ -8,26 +8,12 @@ function generateGrid() {
     var timetableContainerDivFall = createTimeTableContainer();
     var timetableContainerDivSpring = createTimeTableContainer();
     var timetableTableFall = createTimeTable('F');
-<<<<<<< HEAD
-    var fallCaption = $('<caption></caption>').html('Fall');
-    var fallThead = $('<thead></thead>');
-    var timetableTableSpring = createTimeTable('S');
-    var springCaption = $('<caption></caption>').html('Spring');
-    var springThead = $('<thead></thead>');
-
-    /* Appends caption elements first to display them above table. */
-    timetableTableFall.append(fallCaption)
-                      .append(fallThead);
-    timetableTableSpring.append(springCaption)
-                        .append(springThead);
-=======
     var fallThead = createThead();
     var timetableTableSpring = createTimeTable('S');
     var springThead = createThead();
 
     timetableTableFall.append(fallThead);
     timetableTableSpring.append(springThead);
->>>>>>> upstream/happstack
 
     appendHeaders(fallThead, springThead);
     appendTableRows(timetableTableFall, timetableTableSpring);

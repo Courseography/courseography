@@ -48,7 +48,7 @@ function buildGraph() {
         makeHybrid(type, id);
     });
 
-    $('path').each(function () {
+    $('.path').each(function () {
         var coords = $(this).attr('d').split(' ');
         coords = coords.filter(function (str) {return str !== 'M' &&
             str !== 'L' && str !== ''; });
@@ -71,11 +71,11 @@ function buildGraph() {
             var width = parseFloat(r.attr('width'));
             var height = parseFloat(r.attr('height'));
 
-            if (intersects(xStart, yStart, xRect, yRect, width, height, 10)) {
+            if (intersects(xStart, yStart, xRect, yRect, width, height, 1)) {
                 startNode = $(this).attr('id');
             }
 
-            if (intersects(xEnd, yEnd, xRect, yRect, width, height, 20)) {
+            if (intersects(xEnd, yEnd, xRect, yRect, width, height, 9)) {
                 endNode = $(this).attr('id');
             }
 

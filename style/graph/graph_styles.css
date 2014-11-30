@@ -64,7 +64,8 @@ g.node[data-active='overridden'] > rect
 g.node[data-active='inactive'] > rect
 {
   opacity          : 0.4;
-  stroke-dasharray : 8,8;
+  stroke-dasharray : 8,5;
+  stroke-width     : 2px;
 }
 
 
@@ -201,13 +202,15 @@ path
 
 path[data-active='takeable']
 {
-  stroke-dasharray : 8,8;
+  stroke-dasharray : 8,5;
+  stroke-width     : 2px;
 }
 
 path[data-active='inactive']
 {
   opacity          : 0.4;
-  stroke-dasharray : 8,8;
+  stroke-dasharray : 8,5;
+  stroke-width     : 2px;
 }
 
 path[data-active='active']
@@ -243,6 +246,20 @@ path[data-active='missing']
   fill        : #072D68;
 }
 
+.ui-dialog
+{
+  outline : solid 0px rgb(0,0,0);
+}
+
+.ui-widget-overlay
+{
+  height   : 100%;
+  width    : 100%;
+  position : fixed;
+  left     : 0px;
+  top      : 0px;
+}
+
 .modal
 {
   background-color : rgb(55,74,161);
@@ -250,6 +267,7 @@ path[data-active='missing']
   width            : 70%;
   height           : 70%;
   overflow         : auto;
+  position         : static;
 }
 
 .modal p
