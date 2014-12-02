@@ -98,32 +98,43 @@ Course.prototype.parseLectures = function (session, timeSuffix) {
 
     var tmp = this;
 
-    return session.lectures.filter(function (lecture) {
-                return lecture.section.charAt(1) !== '2' &&
-                       lecture.time !== 'Online Web Version';
-            }).map(function (lecture, i) {
-                var id = tmp.name + '-' + lecture.section + '-' + timeSuffix;
-                var sectionTimes = convertTimes(lecture.time);
-                if (!tmp.manualTutorialEnrolment &&
-                    session.tutorials.length > 0) {
-                    sectionTimes = sectionTimes.concat(
-                        convertTimes(session.tutorials[i][0]));
-                }
-                if (timeSuffix === 'Y') {
-                    sectionTimes = sectionTimes.map(function (t) {
-                                                      return '#' + t + 'F';
-                                               })
-                                               .concat(sectionTimes.map(
-                                                function (t) {
-                                                      return '#' + t + 'S';
-                                               }));
-                } else {
-                    sectionTimes = sectionTimes.map(function (time) {
-                        return '#' + time + timeSuffix;
-                    });
-                }
-                return makeLecture(lecture, tmp, id, sectionTimes);
+    var sectionTimes = [];
+    var sections = [];
+
+    session.lectures.forEach(function (lecture, i, arr) {
+        if (lecture.section.charAt(1) == '2' ||
+            lecture.time == 'Online Web Version') {
+            return;
+        }
+
+        sectionTimes = [];
+
+        var id = tmp.name + '-' + lecture.section + '-' + timeSuffix;
+        sectionTimes = sectionTimes.concat(convertTimes(lecture.time));
+        if (!tmp.manualTutorialEnrolment &&
+            session.tutorials.length > 0) {
+            sectionTimes = sectionTimes.concat(
+                convertTimes(session.tutorials[i][0]));
+        }
+
+        if (timeSuffix === 'Y') {
+            sectionTimes = sectionTimes.map(function (t) {
+                                              return '#' + t + 'F';
+                                       })
+                                       .concat(sectionTimes.map(
+                                        function (t) {
+                                              return '#' + t + 'S';
+                                       }));
+        } else {
+            sectionTimes = sectionTimes.map(function (time) {
+                return '#' + time + timeSuffix;
             });
+        }
+
+        sections.push(makeLecture(lecture, tmp, id, sectionTimes));
+    })
+
+    return sections;
 };
 
 
@@ -140,7 +151,14 @@ Course.prototype.parseTutorials = function (session, timeSuffix) {
         return [];
     } else {
         var tmp = this;
-        return session.tutorials.map(function (tutorial) {
+        var tutorials = []
+        var i;
+        for (i = 0; i < session.tutorials.length(); i++) {
+            if (!inArray(session.tutorials[i], tutorials)) {
+                tutorials.push(session.tutorials[i])
+            }
+        }
+        return tutorials.map(function (tutorial) {
             var sectionTimes = convertTimes(tutorial[1]);
             if (timeSuffix === 'Y') {
                 sectionTimes = sectionTimes.map(function (t) {
