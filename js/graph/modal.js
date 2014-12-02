@@ -260,7 +260,7 @@ function openModal(id) {
 
         $('.node, .hybrid').attr('data-active', 'unlit');
         $('body').css('background', 'rgb(40,40,40)');
-        setMouseCallbacks();
+
         enableVideoJS();
         $('.tooltip-group').remove();
     }
