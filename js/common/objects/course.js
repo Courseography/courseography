@@ -153,7 +153,7 @@ Course.prototype.parseTutorials = function (session, timeSuffix) {
         var tmp = this;
         var tutorials = []
         var i;
-        for (i = 0; i < session.tutorials.length(); i++) {
+        for (i = 0; i < session.tutorials.length; i++) {
             if (!inArray(session.tutorials[i], tutorials)) {
                 tutorials.push(session.tutorials[i])
             }
