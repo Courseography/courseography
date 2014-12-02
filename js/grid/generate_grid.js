@@ -8,9 +8,9 @@ function generateGrid() {
     var timetableContainerDivFall = createTimeTableContainer();
     var timetableContainerDivSpring = createTimeTableContainer();
     var timetableTableFall = createTimeTable('F');
-    var fallThead = createThead();
+    var fallThead = $('<thead></thead>');
     var timetableTableSpring = createTimeTable('S');
-    var springThead = createThead();
+    var springThead = $('<thead></thead>');
 
     timetableTableFall.append(fallThead);
     timetableTableSpring.append(springThead);
