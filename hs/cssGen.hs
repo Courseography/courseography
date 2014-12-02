@@ -139,6 +139,7 @@ nodeCSS = "g" ? do
         "-moz-user-select" -: "none"
         "-ms-user-select" -: "none"
         "text-anchor" -: "middle"
+        "dominant-baseline" -: "central"
     ".node" & do
         cursor "pointer"
         "text" ? do
