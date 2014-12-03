@@ -138,7 +138,8 @@ function displayTooltip(nodeId) {
                    parseFloat($('#' + nodeId).children('rect').attr('width')) + 5;
     }
 
-    var yPos = rectObject.attr('y');
+    var yPos = parseFloat(rectObject.attr('y'));
+
     var g = createG(nodeId);
     createRect(g, 'node-tooltip', nodeId + '-tooltip', xPos, yPos,
                60, 30, 'black');
@@ -203,8 +204,8 @@ function createText(g, nodeId, textClass, textId, posX, posY, width, height, col
         .text('Info')
         .attr('class', textClass + '-text ' + textId + '-text')
         .attr('id', textId + '-text')
-        .attr('x', parseFloat(posX) + 30)
-        .attr('y', parseFloat(posY) + 20);
+        .attr('x', parseFloat(posX) + width / 2)
+        .attr('y', parseFloat(posY) + height / 2);
     g.append(text);
 }
 
@@ -223,7 +224,7 @@ function createG(nodeId) {
         .click(function () {
             openModal(nodeId);
         });
-    $('#graphRootSVG').append(g);
+    $('.nodes').append(g);
     return g;
 }
 
