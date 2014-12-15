@@ -20,220 +20,220 @@ svgDoc = S.docTypeSvg ! A.id_ "graphRootSVG" ! A.version "1.1" ! S.customAttribu
         S.path ! A.style "fill:#2f692b;fill-opacity:0.58730164;stroke:none;display:inline" ! A.d "m 141.766,504.40981 0,-146.05263 46.88205,0 42.67295,3e-4 0,146.05233 0,152.19267 -31.708,0 0,36.842 -57.847,0 0,-36.842 z"
     S.g ! A.transform " translate(0,-308.2677)" $ do
         S.g ! A.transform "translate(29.540919,340.70929)" ! A.class_ "nodes"$ do
-            S.g ! A.class_ "node"  ! A.id_ "CSC438" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC438" ! S.dataAttribute "group" "theory" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "399.59551999999996" ! A.y "578.60641" ! A.fill "#fff" 
              S.text_  ! A.x "419.59551999999996" ! A.y "594.60641" $ "438"
-            S.g ! A.class_ "node"  ! A.id_ "CSC463" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC463" ! S.dataAttribute "group" "theory" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "289.40411" ! A.y "424.2453" ! A.fill "#fff" 
              S.text_  ! A.x "309.40411" ! A.y "440.2453" $ "463"
-            S.g ! A.class_ "node"  ! A.id_ "CSC448" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC448" ! S.dataAttribute "group" "theory" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "289.40411" ! A.y "578.60641" ! A.fill "#fff" 
              S.text_  ! A.x "309.40411" ! A.y "594.60641" $ "448"
-            S.g ! A.class_ "node"  ! A.id_ "CSC165" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC165" ! S.dataAttribute "group" "theory" ! A.style "" $ do 
              S.rect ! A.width "65.207497" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "319.56799" ! A.y "37.80279999999999" ! A.fill "#fff" 
              S.text_  ! A.x "352.1717385" ! A.y "53.80279999999999" $ "165"
-            S.g ! A.class_ "node"  ! A.id_ "CSC236" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC236" ! S.dataAttribute "group" "theory" ! A.style "" $ do 
              S.rect ! A.width "65.207497" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "319.56799" ! A.y "139.5925" ! A.fill "#fff" 
              S.text_  ! A.x "352.1717385" ! A.y "155.5925" $ "236"
-            S.g ! A.class_ "node"  ! A.id_ "CSC373" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC373" ! S.dataAttribute "group" "theory" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "332.17169" ! A.y "362.2453" ! A.fill "#fff" 
              S.text_  ! A.x "352.17169" ! A.y "378.2453" $ "373"
-            S.g ! A.class_ "node"  ! A.id_ "CSC108" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC108" ! S.dataAttribute "group" "core" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "461.17589999999996" ! A.y "37.80279999999999" ! A.fill "#fff" 
              S.text_  ! A.x "481.17589999999996" ! A.y "53.80279999999999" $ "108"
-            S.g ! A.class_ "node"  ! A.id_ "CSC148" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC148" ! S.dataAttribute "group" "core" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "461.17589999999996" ! A.y "88.5777" ! A.fill "#fff" 
              S.text_  ! A.x "481.17589999999996" ! A.y "104.5777" $ "148"
-            S.g ! A.class_ "node"  ! A.id_ "CSC207" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC207" ! S.dataAttribute "group" "se" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "633.82123" ! A.y "139.5925" ! A.fill "#fff" 
              S.text_  ! A.x "653.82123" ! A.y "155.5925" $ "207"
-            S.g ! A.class_ "node"  ! A.id_ "CSC209" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC209" ! S.dataAttribute "group" "systems" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "753.82123" ! A.y "228.222" ! A.fill "#fff" 
              S.text_  ! A.x "773.82123" ! A.y "244.222" $ "209"
-            S.g ! A.class_ "node"  ! A.id_ "CSC258" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC258" ! S.dataAttribute "group" "systems" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "822.76929" ! A.y "139.5925" ! A.fill "#fff" 
              S.text_  ! A.x "842.76929" ! A.y "155.5925" $ "258"
-            S.g ! A.class_ "node"  ! A.id_ "CSC369" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC369" ! S.dataAttribute "group" "systems" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "783.82123" ! A.y "311.688101" ! A.fill "#fff" 
              S.text_  ! A.x "803.82123" ! A.y "327.688101" $ "369"
-            S.g ! A.class_ "node"  ! A.id_ "CSC318" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC318" ! S.dataAttribute "group" "hci" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "48.36250000000001" ! A.y "362.2453" ! A.fill "#fff" 
              S.text_  ! A.x "68.36250000000001" ! A.y "378.2453" $ "318"
-            S.g ! A.class_ "node"  ! A.id_ "CSC320" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC320" ! S.dataAttribute "group" "graphics" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "145.04160000000002" ! A.y "363.363297" ! A.fill "#fff" 
              S.text_  ! A.x "165.04160000000002" ! A.y "379.363297" $ "320"
-            S.g ! A.class_ "node"  ! A.id_ "CSC418" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC418" ! S.dataAttribute "group" "graphics" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "145.04160000000002" ! A.y "424.2453" ! A.fill "#fff" 
              S.text_  ! A.x "165.04160000000002" ! A.y "440.2453" $ "418"
-            S.g ! A.class_ "node"  ! A.id_ "CSC454" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC454" ! S.dataAttribute "group" "hci" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "48.36250000000001" ! A.y "578.60641" ! A.fill "#fff" 
              S.text_  ! A.x "68.36250000000001" ! A.y "594.60641" $ "454"
-            S.g ! A.class_ "node"  ! A.id_ "CSC300" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC300" ! S.dataAttribute "group" "hci" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "48.36250000000001" ! A.y "298.9904" ! A.fill "#fff" 
              S.text_  ! A.x "68.36250000000001" ! A.y "314.9904" $ "300"
-            S.g ! A.class_ "node"  ! A.id_ "CSC200" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC200" ! S.dataAttribute "group" "hci" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "48.36250000000001" ! A.y "236.990398" ! A.fill "#fff" 
              S.text_  ! A.x "68.36250000000001" ! A.y "252.990398" $ "200"
-            S.g ! A.class_ "node"  ! A.id_ "CSC404" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC404" ! S.dataAttribute "group" "hci" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "48.36250000000001" ! A.y "512.3459" ! A.fill "#fff" 
              S.text_  ! A.x "68.36250000000001" ! A.y "528.3459" $ "404"
-            S.g ! A.class_ "node"  ! A.id_ "CSC428" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC428" ! S.dataAttribute "group" "hci" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "48.36250000000001" ! A.y "424.2453" ! A.fill "#fff" 
              S.text_  ! A.x "68.36250000000001" ! A.y "440.2453" $ "428"
-            S.g ! A.class_ "node"  ! A.id_ "CSC336" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC336" ! S.dataAttribute "group" "num" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "249.40411" ! A.y "363.363297" ! A.fill "#fff" 
              S.text_  ! A.x "269.40411" ! A.y "379.363297" $ "336"
-            S.g ! A.class_ "node"  ! A.id_ "CSC446" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC446" ! S.dataAttribute "group" "num" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "214.57599" ! A.y "510.2894" ! A.fill "#fff" 
              S.text_  ! A.x "234.57599" ! A.y "526.2894" $ "446"
-            S.g ! A.class_ "node"  ! A.id_ "CSC456" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC456" ! S.dataAttribute "group" "num" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "214.57599" ! A.y "578.60641" ! A.fill "#fff" 
              S.text_  ! A.x "234.57599" ! A.y "594.60641" $ "456"
-            S.g ! A.class_ "node"  ! A.id_ "CSC436" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC436" ! S.dataAttribute "group" "num" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "214.57599" ! A.y "422.47321" ! A.fill "#fff" 
              S.text_  ! A.x "234.57599" ! A.y "438.47321" $ "436"
-            S.g ! A.class_ "node"  ! A.id_ "CSC384" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC384" ! S.dataAttribute "group" "ai" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "519.1554" ! A.y "480.47321" ! A.fill "#fff" 
              S.text_  ! A.x "539.1554" ! A.y "496.47321" $ "384"
-            S.g ! A.class_ "node"  ! A.id_ "CSC486" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC486" ! S.dataAttribute "group" "ai" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "519.1554" ! A.y "578.60641" ! A.fill "#fff" 
              S.text_  ! A.x "539.1554" ! A.y "594.60641" $ "486"
-            S.g ! A.class_ "node"  ! A.id_ "CSC401" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC401" ! S.dataAttribute "group" "ai" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "591.08002" ! A.y "480.47321" ! A.fill "#fff" 
              S.text_  ! A.x "611.08002" ! A.y "496.47321" $ "401"
-            S.g ! A.class_ "node"  ! A.id_ "CSC485" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC485" ! S.dataAttribute "group" "ai" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "663.00458" ! A.y "480.47321" ! A.fill "#fff" 
              S.text_  ! A.x "683.00458" ! A.y "496.47321" $ "485"
-            S.g ! A.class_ "node"  ! A.id_ "CSC321" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC321" ! S.dataAttribute "group" "ai" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "454.80798000000004" ! A.y "424.2453" ! A.fill "#fff" 
              S.text_  ! A.x "474.80798000000004" ! A.y "440.2453" $ "321"
-            S.g ! A.class_ "node"  ! A.id_ "CSC411" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC411" ! S.dataAttribute "group" "ai" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "459.37549" ! A.y "480.47321" ! A.fill "#fff" 
              S.text_  ! A.x "479.37549" ! A.y "496.47321" $ "411"
-            S.g ! A.class_ "node"  ! A.id_ "CSC301" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC301" ! S.dataAttribute "group" "se" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "633.82123" ! A.y "311.688101" ! A.fill "#fff" 
              S.text_  ! A.x "653.82123" ! A.y "327.688101" $ "301"
-            S.g ! A.class_ "node"  ! A.id_ "CSC302" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC302" ! S.dataAttribute "group" "se" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "633.82123" ! A.y "373.688103" ! A.fill "#fff" 
              S.text_  ! A.x "653.82123" ! A.y "389.688103" $ "302"
-            S.g ! A.class_ "node"  ! A.id_ "CSC410" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC410" ! S.dataAttribute "group" "se" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "559.83911" ! A.y "373.688103" ! A.fill "#fff" 
              S.text_  ! A.x "579.83911" ! A.y "389.688103" $ "410"
-            S.g ! A.class_ "node"  ! A.id_ "CSC324" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC324" ! S.dataAttribute "group" "theory" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "402.17169" ! A.y "373.688103" ! A.fill "#fff" 
              S.text_  ! A.x "422.17169" ! A.y "389.688103" $ "324"
-            S.g ! A.class_ "node"  ! A.id_ "CSC488" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC488" ! S.dataAttribute "group" "systems" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "956.9658999999999" ! A.y "424.52161" ! A.fill "#fff" 
              S.text_  ! A.x "976.9658999999999" ! A.y "440.52161" $ "488"
-            S.g ! A.class_ "node"  ! A.id_ "CSC489" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "ECE489" ! S.dataAttribute "group" "systems" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "956.9658999999999" ! A.y "479.3551" ! A.fill "#fff" 
              S.text_  ! A.x "976.9658999999999" ! A.y "495.3551" $ "489"
-            S.g ! A.class_ "node"  ! A.id_ "CSC469" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC469" ! S.dataAttribute "group" "systems" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "862.8861" ! A.y "578.60641" ! A.fill "#fff" 
              S.text_  ! A.x "882.8861" ! A.y "594.60641" $ "469"
-            S.g ! A.class_ "node"  ! A.id_ "CSC358" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC358" ! S.dataAttribute "group" "systems" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "862.8861" ! A.y "311.688101" ! A.fill "#fff" 
              S.text_  ! A.x "882.8861" ! A.y "327.688101" $ "358"
-            S.g ! A.class_ "node"  ! A.id_ "CSC458" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC458" ! S.dataAttribute "group" "systems" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "862.8861" ! A.y "368.104897" ! A.fill "#fff" 
              S.text_  ! A.x "882.8861" ! A.y "384.104897" $ "458"
-            S.g ! A.class_ "node"  ! A.id_ "CSC385" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "ECE385" ! S.dataAttribute "group" "systems" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "862.8861" ! A.y "480.47321" ! A.fill "#fff" 
              S.text_  ! A.x "882.8861" ! A.y "496.47321" $ "385"
-            S.g ! A.class_ "node"  ! A.id_ "CSC309" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC309" ! S.dataAttribute "group" "dbweb" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "753.82123" ! A.y "510.2894" ! A.fill "#fff" 
              S.text_  ! A.x "773.82123" ! A.y "526.2894" $ "309"
-            S.g ! A.class_ "node"  ! A.id_ "CSC343" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC343" ! S.dataAttribute "group" "dbweb" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "725.48462" ! A.y "424.52161" ! A.fill "#fff" 
              S.text_  ! A.x "745.48462" ! A.y "440.52161" $ "343"
-            S.g ! A.class_ "node"  ! A.id_ "CSC443" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC443" ! S.dataAttribute "group" "dbweb" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "715.45349" ! A.y "578.60641" ! A.fill "#fff" 
              S.text_  ! A.x "735.45349" ! A.y "594.60641" $ "443"
-            S.g ! A.class_ "hybrid"  ! A.id_ "h301" ! A.style "" $ do 
+            S.g ! A.class_ "hybrid"  ! A.id_ "CSC301" ! S.dataAttribute "group" "se" ! A.style "" $ do 
              S.rect ! A.width "50" ! A.height "24" ! A.rx "4" ! A.ry "4" ! A.x "15.380709999999993" ! A.y "472.29559" ! A.fill "#bbb" 
              S.text_  ! A.x "40.38070999999999" ! A.y "484.29559" $ "301"
-            S.g ! A.class_ "hybrid"  ! A.id_ "h263" ! A.style "" $ do 
+            S.g ! A.class_ "hybrid"  ! A.id_ "CSC263" ! S.dataAttribute "group" "theory" ! A.style "" $ do 
              S.rect ! A.width "27" ! A.height "24" ! A.rx "4" ! A.ry "4" ! A.x "916.4259999999999" ! A.y "232.222" ! A.fill "#bbb" 
              S.text_  ! A.x "929.9259999999999" ! A.y "244.222" $ "263"
-            S.g ! A.class_ "hybrid"  ! A.id_ "hCalc1" ! A.style "" $ do 
+            S.g ! A.class_ "hybrid"  ! A.id_ "hCalc1" ! S.dataAttribute "group" "core" ! A.style "" $ do 
              S.rect ! A.width "64.826897" ! A.height "24" ! A.rx "4" ! A.ry "4" ! A.x "125.19790999999998" ! A.y "478.4258" ! A.fill "#bbb" 
              S.text_  ! A.x "157.6113585" ! A.y "490.4258" $ "Calc1"
-            S.g ! A.class_ "hybrid"  ! A.id_ "h258" ! A.style "" $ do 
+            S.g ! A.class_ "hybrid"  ! A.id_ "CSC258" ! S.dataAttribute "group" "systems" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "24" ! A.rx "4" ! A.ry "4" ! A.x "956.9658999999999" ! A.y "347.688099" ! A.fill "#bbb" 
              S.text_  ! A.x "976.9658999999999" ! A.y "359.688099" $ "258"
-            S.g ! A.class_ "hybrid"  ! A.id_ "h373" ! A.style "" $ do 
+            S.g ! A.class_ "hybrid"  ! A.id_ "CSC373" ! S.dataAttribute "group" "theory" ! A.style "" $ do 
              S.rect ! A.width "27" ! A.height "24" ! A.rx "4" ! A.ry "4" ! A.x "663.00458" ! A.y "541.3551" ! A.fill "#bbb" 
              S.text_  ! A.x "676.50458" ! A.y "553.3551" $ "373"
-            S.g ! A.class_ "hybrid"  ! A.id_ "hSta1" ! A.style "" $ do 
+            S.g ! A.class_ "hybrid"  ! A.id_ "hSta1" ! S.dataAttribute "group" "core" ! A.style "" $ do 
              S.rect ! A.width "27" ! A.height "24" ! A.rx "4" ! A.ry "4" ! A.x "420.63" ! A.y "204.583099" ! A.fill "#bbb" 
              S.text_  ! A.x "434.13" ! A.y "216.583099" $ "Sta1"
-            S.g ! A.class_ "hybrid"  ! A.id_ "hLin1" ! A.style "" $ do 
+            S.g ! A.class_ "hybrid"  ! A.id_ "hLin1" ! S.dataAttribute "group" "core" ! A.style "" $ do 
              S.rect ! A.width "27" ! A.height "24" ! A.rx "4" ! A.ry "4" ! A.x "482.72748" ! A.y "204.583099" ! A.fill "#bbb" 
              S.text_  ! A.x "496.22748" ! A.y "216.583099" $ "Lin1"
-            S.g ! A.class_ "hybrid"  ! A.id_ "hSta1" ! A.style "" $ do 
+            S.g ! A.class_ "hybrid"  ! A.id_ "hSta1" ! S.dataAttribute "group" "core" ! A.style "" $ do 
              S.rect ! A.width "27" ! A.height "24" ! A.rx "4" ! A.ry "4" ! A.x "597.58002" ! A.y "549.60641" ! A.fill "#bbb" 
              S.text_  ! A.x "611.08002" ! A.y "561.60641" $ "Sta1"
-            S.g ! A.class_ "hybrid"  ! A.id_ "hSta1" ! A.style "" $ do 
+            S.g ! A.class_ "hybrid"  ! A.id_ "hSta1" ! S.dataAttribute "group" "core" ! A.style "" $ do 
              S.rect ! A.width "55.5783" ! A.height "24" ! A.rx "4" ! A.ry "4" ! A.x "380.78949" ! A.y "533.53979" ! A.fill "#bbb" 
              S.text_  ! A.x "408.57864" ! A.y "545.53979" $ "Sta1"
-            S.g ! A.class_ "node"  ! A.id_ "Calc1" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "Calc1" ! S.dataAttribute "group" "core" ! A.style "" $ do 
              S.rect ! A.width "61.5" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "171.02999999999997" ! A.y "37.80279999999999" ! A.fill "#fff" 
              S.text_  ! A.x "201.77999999999997" ! A.y "53.80279999999999" $ "Calc1"
-            S.g ! A.class_ "node"  ! A.id_ "Sta1" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "Sta1" ! S.dataAttribute "group" "core" ! A.style "" $ do 
              S.rect ! A.width "50" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "46.34779" ! A.y "88.5777" ! A.fill "#fff" 
              S.text_  ! A.x "71.34779" ! A.y "104.5777" $ "Sta1"
-            S.g ! A.class_ "node"  ! A.id_ "Sta2" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "Sta2" ! S.dataAttribute "group" "core" ! A.style "" $ do 
              S.rect ! A.width "50" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "46.34779" ! A.y "150.5777" ! A.fill "#fff" 
              S.text_  ! A.x "71.34779" ! A.y "166.5777" $ "Sta2"
-            S.g ! A.class_ "node"  ! A.id_ "CSC412" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC412" ! S.dataAttribute "group" "ai" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "459.37549" ! A.y "578.60641" ! A.fill "#fff" 
              S.text_  ! A.x "479.37549" ! A.y "594.60641" $ "412"
-            S.g ! A.class_ "node"  ! A.id_ "CSC420" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC420" ! S.dataAttribute "group" "graphics" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "145.97791" ! A.y "578.60641" ! A.fill "#fff" 
              S.text_  ! A.x "165.97791" ! A.y "594.60641" $ "420"
-            S.g ! A.class_ "node"  ! A.id_ "CSC104" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC104" ! S.dataAttribute "group" "core" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "547.49847" ! A.y "37.80279999999999" ! A.fill "#fff" 
              S.text_  ! A.x "567.49847" ! A.y "53.80279999999999" $ "104"
-            S.g ! A.class_ "node"  ! A.id_ "CSC120" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC120" ! S.dataAttribute "group" "core" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "633.82123" ! A.y "37.80279999999999" ! A.fill "#fff" 
              S.text_  ! A.x "653.82123" ! A.y "53.80279999999999" $ "120"
-            S.g ! A.class_ "node"  ! A.id_ "Lin1" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "Lin1" ! S.dataAttribute "group" "core" ! A.style "" $ do 
              S.rect ! A.width "50" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "126.34780999999998" ! A.y "150.5777" ! A.fill "#fff" 
              S.text_  ! A.x "151.34780999999998" ! A.y "166.5777" $ "Lin1"
-            S.g ! A.class_ "hybrid"  ! A.id_ "h263" ! A.style "" $ do 
+            S.g ! A.class_ "hybrid"  ! A.id_ "CSC263" ! S.dataAttribute "group" "theory" ! A.style "" $ do 
              S.rect ! A.width "27" ! A.height "24" ! A.rx "4" ! A.ry "4" ! A.x "640.32123" ! A.y "232.222" ! A.fill "#bbb" 
              S.text_  ! A.x "653.82123" ! A.y "244.222" $ "263"
-            S.g ! A.class_ "hybrid"  ! A.id_ "h236" ! A.style "" $ do 
+            S.g ! A.class_ "hybrid"  ! A.id_ "CSC236" ! S.dataAttribute "group" "theory" ! A.style "" $ do 
              S.rect ! A.width "27" ! A.height "24" ! A.rx "4" ! A.ry "4" ! A.x "916.4259999999999" ! A.y "524.6064" ! A.fill "#bbb" 
              S.text_  ! A.x "929.9259999999999" ! A.y "536.6064" $ "236"
-            S.g ! A.class_ "node"  ! A.id_ "CSC372" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC372" ! S.dataAttribute "group" "systems" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "862.8861" ! A.y "424.52161" ! A.fill "#fff" 
              S.text_  ! A.x "882.8861" ! A.y "440.52161" $ "372"
-            S.g ! A.class_ "hybrid"  ! A.id_ "h209" ! A.style "" $ do 
+            S.g ! A.class_ "hybrid"  ! A.id_ "CSC209" ! S.dataAttribute "group" "systems" ! A.style "" $ do 
              S.rect ! A.width "27" ! A.height "24" ! A.rx "4" ! A.ry "4" ! A.x "98.7251" ! A.y "331.271599" ! A.fill "#bbb" 
              S.text_  ! A.x "112.2251" ! A.y "343.271599" $ "209"
-            S.g ! A.class_ "node"  ! A.id_ "CSC310" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC310" ! S.dataAttribute "group" "theory" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "402.17169" ! A.y "311.688101" ! A.fill "#fff" 
              S.text_  ! A.x "422.17169" ! A.y "327.688101" $ "310"
-            S.g ! A.class_ "hybrid"  ! A.id_ "h148" ! A.style "" $ do 
+            S.g ! A.class_ "hybrid"  ! A.id_ "CSC148" ! S.dataAttribute "group" "core" ! A.style "" $ do 
              S.rect ! A.width "27" ! A.height "24" ! A.rx "4" ! A.ry "4" ! A.x "408.67169" ! A.y "270.508101" ! A.fill "#bbb" 
              S.text_  ! A.x "422.17169" ! A.y "282.508101" $ "148"
-            S.g ! A.class_ "hybrid"  ! A.id_ "h207" ! A.style "" $ do 
+            S.g ! A.class_ "hybrid"  ! A.id_ "CSC207" ! S.dataAttribute "group" "se" ! A.style "" $ do 
              S.rect ! A.width "27" ! A.height "24" ! A.rx "4" ! A.ry "4" ! A.x "741.43658" ! A.y "358.664902" ! A.fill "#bbb" 
              S.text_  ! A.x "754.93658" ! A.y "370.664902" $ "207"
-            S.g ! A.class_ "hybrid"  ! A.id_ "h263" ! A.style "" $ do 
+            S.g ! A.class_ "hybrid"  ! A.id_ "CSC263" ! S.dataAttribute "group" "theory" ! A.style "" $ do 
              S.rect ! A.width "27" ! A.height "24" ! A.rx "4" ! A.ry "4" ! A.x "133.56439" ! A.y "524.6064" ! A.fill "#bbb" 
              S.text_  ! A.x "147.06439" ! A.y "536.6064" $ "263"
-            S.g ! A.class_ "hybrid"  ! A.id_ "h165" ! A.style "" $ do 
+            S.g ! A.class_ "hybrid"  ! A.id_ "CSC165" ! S.dataAttribute "group" "theory" ! A.style "" $ do 
              S.rect ! A.width "50" ! A.height "24" ! A.rx "4" ! A.ry "4" ! A.x "703.82123" ! A.y "319.688101" ! A.fill "#bbb" 
              S.text_  ! A.x "728.82123" ! A.y "331.688101" $ "165"
-            S.g ! A.class_ "node"  ! A.id_ "CSC263" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC263" ! S.dataAttribute "group" "theory" ! A.style "" $ do 
              S.rect ! A.width "65.207497" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "319.56799" ! A.y "228.222" ! A.fill "#fff" 
              S.text_  ! A.x "352.1717385" ! A.y "244.222" $ "263"
-            S.g ! A.class_ "node"  ! A.id_ "CSC465" ! A.style "" $ do 
+            S.g ! A.class_ "node"  ! A.id_ "CSC465" ! S.dataAttribute "group" "core" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "507.44426999999996" ! A.y "373.688103" ! A.fill "#fff" 
              S.text_  ! A.x "527.44427" ! A.y "389.688103" $ "465"
-            S.g ! A.class_ "hybrid"  ! A.id_ "h236" ! A.style "" $ do 
+            S.g ! A.class_ "hybrid"  ! A.id_ "CSC236" ! S.dataAttribute "group" "theory" ! A.style "" $ do 
              S.rect ! A.width "27" ! A.height "24" ! A.rx "4" ! A.ry "4" ! A.x "487.62622" ! A.y "315.688101" ! A.fill "#bbb" 
              S.text_  ! A.x "501.12622" ! A.y "327.688101" $ "236"
             S.g $ do
