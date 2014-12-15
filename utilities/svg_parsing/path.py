@@ -16,7 +16,8 @@ class Path:
 		print("S.path ! A.id_ \"" +
 			  self.id +
 			  "\" ! A.class_ \"path\"" +
-			  " ! A.d \"" + self.d + "\"")
+			  " ! A.d \"" + self.d + "\" " +
+			  " ! A.markerEnd \"url(#arrow)\"")
 
 def convert_path_to_absolute(d, x_transform, y_transform):
 	path = d.split(" ")
