@@ -4,11 +4,14 @@ from path import *
 from rect import *
 from region import *
 from bool_node import *
+from label import *
 paths = []
 rects = []
 regions = []
+region_labels = []
 bools = []
 final_rects = []
+
 
 path_id_counter = 0;
 bool_id_counter = 0;
@@ -73,6 +76,11 @@ def output_svg():
 		print("                ", end="")
 		i.output_haskell()
 
+	print("    S.g ! A.transform \"translate(-120,313.70929)\" $ do")
+	for i in region_labels:
+		print("        ", end="")
+		i.output_haskell()
+
 
 def print_header():
 	print("{-# LANGUAGE OverloadedStrings #-}")
@@ -122,6 +130,7 @@ def process_text(elem):
 	if elem == None or elem.get("x") == None or elem.get("y") == None:
 		return
 
+	found = False
 	for rect in rects:
 		if (elem.get("x"), elem.get("y"), 1) in rect:
 			text = elem.text
@@ -130,10 +139,16 @@ def process_text(elem):
 			if "," in text:
 				text = text[:text.index(",")]
 			rect.text = text
-			
+			found = True
+
 	for boolean in bools:
 		if (elem.get("x"), elem.get("y"), 0) in boolean:
 			boolean.text = elem.text
+			found = True
+
+	if not found:
+		region_labels.append(Label(elem.text, elem.get("x"), elem.get("y"), elem.get("transform")))
+
 
 def process_bool(elem):
 	global bool_id_counter

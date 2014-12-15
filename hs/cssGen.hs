@@ -103,6 +103,7 @@ graphStyles = do
     resetCSS
     titleCSS
     modalCSS
+    regionCSS
 
 alignCenter = textAlign $ alignSide sideCenter
 cursor = (-:) "cursor"
@@ -266,6 +267,10 @@ titleCSS = "#svgTitle" ? do
     fontStyle italic
     fill titleColour
 
+
+regionCSS = ".region-label" ? do
+    fontSize (em 0.65)
+    "text-anchor" -: "start"
 
 -- Course Modal
 modalColor = parse "#374AA1"

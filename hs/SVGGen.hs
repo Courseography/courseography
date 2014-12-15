@@ -330,3 +330,17 @@ svgDoc = S.docTypeSvg ! A.id_ "graphRootSVG" ! A.version "1.1" ! S.customAttribu
                 S.g ! A.class_ "bool" ! A.id_ "bool4" $do
                     S.ellipse ! A.d "m 357.66,-52.409599 c 0,4.069455 -4.42343,7.3684 -9.88,7.3684 -5.45657,0 -9.88,-3.298945 -9.88,-7.3684 0,-4.069455 4.42343,-7.3684 9.88,-7.3684 5.45657,0 9.88,3.298945 9.88,7.3684 z" ! A.cx "201.77999999999997" ! A.cy "235.59040099999999" ! A.rx "9.8800001" ! A.ry "7.3684001"
                     S.text_  ! A.x "201.77999999999997" ! A.y "235.59040099999999" $ do "and"
+    S.g ! A.transform "translate(-120,313.70929)" $ do
+        S.text_ ! A.class_ "region-label" ! A.x "322.88751" ! A.y "357.7804" $ "Numerical"
+        S.text_ ! A.class_ "region-label" ! A.x "322.88751" ! A.y "370.91171299999996" $ "Computing"
+        S.text_ ! A.class_ "region-label" ! A.x "256.146212" ! A.y "-13.036373999999999" $ "Humans and"
+        S.text_ ! A.class_ "region-label" ! A.x "261.150112" ! A.y "1.6647260000000017" $ "Computing"
+        S.text_ ! A.class_ "region-label" ! A.x "287.03281" ! A.y "57.3218" $ "Graphics"
+        S.text_ ! A.class_ "region-label" ! A.x "539.17513" ! A.y "-200.8463565" $ "Theory"
+        S.text_ ! A.class_ "region-label" ! A.x "755.20093" ! A.y "320.30141000000003" $ "Artificial"
+        S.text_ ! A.class_ "region-label" ! A.x "745.8493" ! A.y "335.00259" $ "Intelligence"
+        S.text_ ! A.class_ "region-label" ! A.x "690.63831" ! A.y "9.5697002" $ "Software"
+        S.text_ ! A.class_ "region-label" ! A.x "682.29163" ! A.y "24.270901" $ "Engineering"
+        S.text_ ! A.class_ "region-label" ! A.x "1054.1652" ! A.y "-97.782898" $ "Systems"
+        S.text_ ! A.class_ "region-label" ! A.x "909.37219" ! A.y "339.72839" $ "Web and"
+        S.text_ ! A.class_ "region-label" ! A.x "904.70227" ! A.y "354.4296" $ "Databases"

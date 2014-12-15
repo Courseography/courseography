@@ -310,5 +310,11 @@ path[data-active='missing']
   margin : 0px auto 0px auto;
 }
 
+.region-label
+{
+  font-size   : 0.65em;
+  text-anchor : start;
+}
+
 
 /* Generated with Clay, http://fvisser.nl/clay */
