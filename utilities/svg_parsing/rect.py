@@ -41,8 +41,8 @@ class Rect:
 			prefix = 'ECE'
 		elif not self.text[0].isalpha():
 			prefix = "CSC"
-		elif self.hybrid:
-			prefix = "h"
+		if self.hybrid:
+			prefix = "hCSC"
 
 		#Figure out the research area
 		code = (prefix + self.text)[:6]
