@@ -191,8 +191,7 @@ g.bool[data-active='overridden'] > ellipse
 
 g.bool[data-active='inactive'] > ellipse
 {
-  fill             : white;
-  opacity          : 0.4;
+  fill             : #CCCCCC;
   stroke-dasharray : 8,5;
   stroke-width     : 2px;
 }
@@ -200,8 +199,7 @@ g.bool[data-active='inactive'] > ellipse
 
 g.bool[data-active='takeable'] > ellipse
 {
-  fill    : white;
-  opacity : 0.69999;
+  fill : #CCCCCC;
 }
 
 

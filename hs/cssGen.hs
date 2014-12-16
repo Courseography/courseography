@@ -131,6 +131,8 @@ aiDark = "#80B2FF"
 hciDark = "#B8FF70"
 titleColour = "#072D68"
 
+lightGrey = "#CCCCCC"
+
 nodeCSS = "g" ? do
     "text" ? do
         alignCenter
@@ -218,13 +220,11 @@ nodeCSS = "g" ? do
                 strokeRed
         "data-active" @= "inactive" & do
             "ellipse" <? do
-                fill "white"
-                faded
+                fill lightGrey
                 strokeDashed
         "data-active" @= "takeable" & do
             "ellipse" <? do
-                fill "white"
-                semiVisible
+                fill lightGrey
         "data-active" @= "missing" & do
             "ellipse" <? do
                 fill "white"
