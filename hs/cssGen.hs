@@ -7,10 +7,10 @@ import Data.Text.Lazy
 
 styleFiles :: [(String, Css)]
 styleFiles = [
-    ("../style/common/common.css", common),
-    ("../style/graph/graph_styles.css", graphStyles),
-    ("../style/grid/timetable_styles.css", timetableStyles),
-    ("../style/common/about.css", aboutStyles)
+    ("./style/common/common.css", common),
+    ("./style/graph/graph_styles.css", graphStyles),
+    ("./style/grid/timetable_styles.css", timetableStyles),
+    ("./style/common/about.css", aboutStyles)
     ]
 
 renderStyleFile :: (String, Css) -> IO ()
