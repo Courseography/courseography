@@ -17,6 +17,9 @@ import qualified Data.ByteString.Lazy as B
 import Data.Aeson
 import GHC.Generics
 import System.Directory	
+import Control.Monad.Logger
+import Control.Monad.Trans.Resource.Internal
+import Control.Monad.Trans.Reader
 import Control.Monad
 import Control.Applicative
 
@@ -69,40 +72,35 @@ Distribution
     deriving Show
 |]
 
-processDirectoryContents :: IO [FilePath] -> t0
-processDirectoryContents [] = 0
-processDirectoryContents (x:xs) = do
-    processFile "../../copy/courses/" ++ x
-    processDirectoryContents xs
-
-processDirectory :: String -> Control.Monad.Trans.Reader.ReaderT
-                     SqlBackend
-                     (Control.Monad.Logger.NoLoggingT
-                        (Control.Monad.Trans.Resource.Internal.ResourceT IO))
-
-processDirectory path = processDirectoryContents $ getDirectoryContents path
-
 main :: IO ()
 main = runStderrLoggingT $ withPostgresqlPool connStr 10 $ \pool ->
     liftIO $ do
     flip runSqlPersistMPool pool $ do
         runMigration migrateAll
-        processDirectory $ "../../copy/courses"
+--        processDirectory $ "../../copy/courses"
         insert $ Distribution "David"
-        liftIO $ print "Ian"
+        liftIO $ processDirectory $ "../../copy/courses"
 
+instance Show Course
 
+printDirectory :: String -> IO ()
+printDirectory x = do 
+                       files <- getDirectoryContents x
+                       print files
 
-getJSON :: String -> IO B.ByteString
-getJSON jsonFile = B.readFile jsonFile
+processDirectory :: String -> IO ()
+processDirectory x = do
+                       files <- getDirectoryContents x
+                       printFiles files
 
-processFile :: String -> IO ()
-processFile path = do
-    d <- (eitherDecode <$> getJSON path) :: IO (Either String [Course])
-    case d of
-     Left err -> putStrLn err
-     Right ps -> print ps
+printFiles :: [String] -> IO ()
+printFiles [] = print "Done"
+printFiles (x:xs) = do
+                      print x
+                      printFiles xs 
 
+--getJSON :: String -> IO B.ByteString
+--getJSON jsonFile = B.readFile jsonFile
 
 data Session =
     Session { tutorials :: [Lecture],
