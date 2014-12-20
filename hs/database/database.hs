@@ -27,17 +27,17 @@ import Control.Applicative
 connStr = "host=localhost dbname=coursedb user=cynic password=**** port=5432"
 
 data Course = 
-    Course { --breadth     :: String
-            prereqString :: !Text
-            -- title       :: String,
-            -- prereqString :: String,
-            -- f           :: String, --Session,
-            -- s           :: String, --Session,
-            -- name        :: String,
-            -- exclusions  :: String ,
-            -- manualTutorialEnrol :: Bool,
-            -- distribution :: String,
-            -- prereqs     :: [String]
+    Course { breadth               :: !Text,
+             description           :: !Text,
+             title               :: !Text,
+             prereqString        :: !Text,
+             f                   :: !Text, --Session,
+             s                   :: !Text, --Session,
+             name                :: !Text,
+             exclusions          :: !Text,
+             manualTutorialEnrol :: Bool,
+             distribution        :: !Text,
+             prereqs             :: ![Text]
 	   } deriving (Show, Generic)
 
 fileJ :: FilePath
@@ -101,17 +101,17 @@ main = runStderrLoggingT $ withPostgresqlPool connStr 10 $ \pool ->
 
 instance FromJSON Course where
     parseJSON (Object v) = 
-        Course <$> v .: "prereqString"
-              -- <*> v .: "description"
-              -- <*> v .: "title"
-              -- <*> v .: "prereqString"
-              -- <*> v .: "F"
-              -- <*> v .: "S"
-              -- <*> v .: "name"
-              -- <*> v .: "exclusions"
-              -- <*> v .: "manualTutorialEnrolment"
-              -- <*> v .: "distributio"
-              -- <*> v .: "prereqs"
+        Course <$> v .: "breadth"
+               <*> v .: "description"
+               <*> v .: "title"
+               <*> v .: "prereqString"
+               <*> v .: "F"
+               <*> v .: "S"
+               <*> v .: "name"
+               <*> v .: "exclusions"
+               <*> v .: "manualTutorialEnrolment"
+               <*> v .: "distribution"
+               <*> v .: "prereqs"
     parseJSON _ = mzero
 
 --instance FromJSON Session where
@@ -161,11 +161,11 @@ closeJSON = "]"
 
 getJSON :: String -> IO B.ByteString
 getJSON jsonFile = do
-                     a <- (B.readFile fileJ)
+                     a <- (B.readFile jsonFile)
                      let b = B.append openJSON a
                      let c = B.append b closeJSON
 		     return c
-data Session =yuy
+data Session =
     Session { tutorials :: [Lecture],
               lectures  :: [[Tutorial]]
             } deriving (Show)
