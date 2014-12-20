@@ -3,7 +3,7 @@
 {-# LANGUAGE GADTs                      #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE MultiParamTypeClasses      #-}
-{-# LANGUAGE OverloadedStrings          #-}
+{-# LANGUAGE OverloadedStrings, DeriveGeneric #-}
 {-# LANGUAGE QuasiQuotes                #-}
 {-# LANGUAGE TemplateHaskell            #-}
 {-# LANGUAGE TypeFamilies               #-}
@@ -14,6 +14,7 @@ import           Database.Persist
 import           Database.Persist.Postgresql
 import           Database.Persist.TH
 import qualified Data.ByteString.Lazy as B
+import Data.Text
 import Data.Aeson
 import GHC.Generics
 import System.Directory	
@@ -24,6 +25,23 @@ import Control.Monad
 import Control.Applicative
 
 connStr = "host=localhost dbname=coursedb user=cynic password=**** port=5432"
+
+data Course = 
+    Course { --breadth     :: String
+            prereqString :: !Text
+            -- title       :: String,
+            -- prereqString :: String,
+            -- f           :: String, --Session,
+            -- s           :: String, --Session,
+            -- name        :: String,
+            -- exclusions  :: String ,
+            -- manualTutorialEnrol :: Bool,
+            -- distribution :: String,
+            -- prereqs     :: [String]
+	   } deriving (Show, Generic)
+
+fileJ :: FilePath
+fileJ = "./file.json"
 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 Courses
@@ -81,7 +99,29 @@ main = runStderrLoggingT $ withPostgresqlPool connStr 10 $ \pool ->
         insert $ Distribution "David"
         liftIO $ processDirectory $ "../../copy/courses"
 
-instance Show Course
+instance FromJSON Course where
+    parseJSON (Object v) = 
+        Course <$> v .: "prereqString"
+              -- <*> v .: "description"
+              -- <*> v .: "title"
+              -- <*> v .: "prereqString"
+              -- <*> v .: "F"
+              -- <*> v .: "S"
+              -- <*> v .: "name"
+              -- <*> v .: "exclusions"
+              -- <*> v .: "manualTutorialEnrolment"
+              -- <*> v .: "distributio"
+              -- <*> v .: "prereqs"
+    parseJSON _ = mzero
+
+--instance FromJSON Session where
+--    parseJSON (Object v) =
+
+--instance FromJSON Lecture
+--    parseJSON (Object v) =
+
+--instance FromJSON Tutorial
+--    parseJSON (Object v) =
 
 printDirectory :: String -> IO ()
 printDirectory x = do 
@@ -96,31 +136,40 @@ processDirectory x = do
 printFiles :: [String] -> IO ()
 printFiles [] = print "Done"
 printFiles (x:xs) = do
-                      print x
+                      f <- doesFileExist $ "../../copy/courses/" ++ x
+                      if f 
+                      then do 
+                             d <- (eitherDecode <$> (getJSON ("../../copy/courses/" ++ x))) :: IO (Either String [Course])
+                             print d
+                             --case d of
+                             --  Left err -> putStrLn err
+                             --  Right ps -> print (ps)
+                      else print "Directory"
                       printFiles xs 
 
---getJSON :: String -> IO B.ByteString
---getJSON jsonFile = B.readFile jsonFile
+(+++) :: Monad m => m [a] -> m [a] -> m [a]
+ms1 +++ ms2 = do
+    s1 <- ms1
+    s2 <- ms2
+    return $ s1 ++ s2
 
-data Session =
+openJSON :: B.ByteString
+openJSON = "["
+
+closeJSON :: B.ByteString
+closeJSON = "]"
+
+getJSON :: String -> IO B.ByteString
+getJSON jsonFile = do
+                     a <- (B.readFile fileJ)
+                     let b = B.append openJSON a
+                     let c = B.append b closeJSON
+		     return c
+data Session =yuy
     Session { tutorials :: [Lecture],
               lectures  :: [[Tutorial]]
-            }
+            } deriving (Show)
 
-
-data Course = 
-    Course { breadth     :: String,
-             description :: String,
-             title       :: String,
-             prereqString :: String,
-             f           :: Session,
-             s           :: Session,
-             name        :: String,
-             exclusions  :: String,
-             manualTutorialEnrol :: Bool,
-             distribution :: String,
-             prereqs     :: [String]
-	   }
 
 data Lecture =
     Lecture { extra :: Int,
@@ -131,9 +180,9 @@ data Lecture =
               instructor :: String,
               enrol :: Int,
               wait :: Int
-            }
+            } deriving (Show)
 
 data Tutorial =
     Tutorial { times   :: [[Int]],
                timeStr :: String
-             }
+             } deriving (Show)
