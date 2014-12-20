@@ -26,13 +26,34 @@ import Control.Applicative
 
 connStr = "host=localhost dbname=coursedb user=cynic password=**** port=5432"
 
+data Lecture =
+    Lecture { extra      :: Int,
+              section    :: String,
+              cap        :: Int,
+              time_str   :: String,
+              time       :: [[Int]],
+              instructor :: String,
+              enrol      :: Int,
+              wait       :: Int
+            } deriving (Show)
+
+data Tutorial =
+    Tutorial { times   :: [[Int]],
+               timeStr :: String
+             } deriving (Show)
+
+data Session =
+    Session { tutorials :: [Lecture],
+              lectures  :: [[Tutorial]]
+            } deriving (Show)
+
 data Course = 
     Course { breadth               :: !Text,
              description           :: !Text,
              title               :: !Text,
              prereqString        :: Maybe Text,
-             f                   :: Maybe Text, --Session,
-             s                   :: Maybe Text, --Session,
+             f                   :: Maybe Session,
+             s                   :: Maybe Session,
              name                :: !Text,
              exclusions          :: Maybe Text,
              manualTutorialEnrol :: Maybe Bool,
@@ -114,14 +135,29 @@ instance FromJSON Course where
                <*> v .:? "prereqs"
     parseJSON _ = mzero
 
---instance FromJSON Session where
---    parseJSON (Object v) =
+instance FromJSON Session where
+    parseJSON (Object v) =
+        Session <$> v .: "lectures"
+                <*> v .: "tutorials"
+    parseJSON _ = mzero    
 
---instance FromJSON Lecture
---    parseJSON (Object v) =
+instance FromJSON Lecture where
+    parseJSON (Object v) =
+        Lecture <$> v .: "extra"
+                <*> v .: "section"
+                <*> v .: "cap"
+                <*> v .: "time_str"
+                <*> v .: "time"
+                <*> v .: "instructor"
+                <*> v .: "enrol"
+                <*> v .: "wait"
+    parseJSON _ = mzero
 
---instance FromJSON Tutorial
---    parseJSON (Object v) =
+instance FromJSON Tutorial where
+    parseJSON (Object v) =
+        Tutorial <$> v .: "times"
+                 <*> v .: "timeStr"
+    parseJSON _ = mzero
 
 printDirectory :: String -> IO ()
 printDirectory x = do 
@@ -158,24 +194,3 @@ getJSON jsonFile = do
                      let b = B.append openJSON a
                      let c = B.append b closeJSON
 		     return c
-data Session =
-    Session { tutorials :: [Lecture],
-              lectures  :: [[Tutorial]]
-            } deriving (Show)
-
-
-data Lecture =
-    Lecture { extra      :: Int,
-              section    :: String,
-              cap        :: Int,
-              time_str   :: String,
-              time       :: [[Int]],
-              instructor :: String,
-              enrol      :: Int,
-              wait       :: Int
-            } deriving (Show)
-
-data Tutorial =
-    Tutorial { times   :: [[Int]],
-               timeStr :: String
-             } deriving (Show)
