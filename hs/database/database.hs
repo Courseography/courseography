@@ -30,14 +30,14 @@ data Course =
     Course { breadth               :: !Text,
              description           :: !Text,
              title               :: !Text,
-             prereqString        :: !Text,
-             f                   :: !Text, --Session,
-             s                   :: !Text, --Session,
+             prereqString        :: Maybe Text,
+             f                   :: Maybe Text, --Session,
+             s                   :: Maybe Text, --Session,
              name                :: !Text,
-             exclusions          :: !Text,
-             manualTutorialEnrol :: Bool,
+             exclusions          :: Maybe Text,
+             manualTutorialEnrol :: Maybe Bool,
              distribution        :: !Text,
-             prereqs             :: ![Text]
+             prereqs             :: Maybe [Text]
 	   } deriving (Show, Generic)
 
 fileJ :: FilePath
@@ -105,13 +105,13 @@ instance FromJSON Course where
                <*> v .: "description"
                <*> v .: "title"
                <*> v .: "prereqString"
-               <*> v .: "F"
-               <*> v .: "S"
+               <*> v .:? "F"
+               <*> v .:? "S"
                <*> v .: "name"
                <*> v .: "exclusions"
-               <*> v .: "manualTutorialEnrolment"
+               <*> v .:? "manualTutorialEnrolment"
                <*> v .: "distribution"
-               <*> v .: "prereqs"
+               <*> v .:? "prereqs"
     parseJSON _ = mzero
 
 --instance FromJSON Session where
@@ -140,18 +140,11 @@ printFiles (x:xs) = do
                       if f 
                       then do 
                              d <- (eitherDecode <$> (getJSON ("../../copy/courses/" ++ x))) :: IO (Either String [Course])
-                             print d
-                             --case d of
-                             --  Left err -> putStrLn err
-                             --  Right ps -> print (ps)
+                             case d of
+                               Left err -> putStrLn err
+                               Right ps -> print ("Good")
                       else print "Directory"
                       printFiles xs 
-
-(+++) :: Monad m => m [a] -> m [a] -> m [a]
-ms1 +++ ms2 = do
-    s1 <- ms1
-    s2 <- ms2
-    return $ s1 ++ s2
 
 openJSON :: B.ByteString
 openJSON = "["
@@ -172,14 +165,14 @@ data Session =
 
 
 data Lecture =
-    Lecture { extra :: Int,
-              section :: String,
-              cap  :: Int,
-              time_str :: String,
-              time :: [[Int]],
+    Lecture { extra      :: Int,
+              section    :: String,
+              cap        :: Int,
+              time_str   :: String,
+              time       :: [[Int]],
               instructor :: String,
-              enrol :: Int,
-              wait :: Int
+              enrol      :: Int,
+              wait       :: Int
             } deriving (Show)
 
 data Tutorial =
