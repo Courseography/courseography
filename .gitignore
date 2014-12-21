@@ -11,3 +11,5 @@ res/courses-copy/
 courses.tar.gz
 out/
 *.exe
+*.hi
+*.o

@@ -59,6 +59,7 @@ g.node[data-active='overridden'] > rect
 {
   stroke-width : 3;
   stroke       : #CC0011;
+  stroke-width : 2px;
 }
 
 
@@ -81,12 +82,14 @@ g.node[data-active='missing'] > ellipse
 {
   stroke-width : 3;
   stroke       : #CC0011;
+  stroke-width : 2px;
 }
 
 g.node[data-active='unlit']
 {
   stroke-width : 3;
   stroke       : #CC0011;
+  stroke-width : 2px;
 }
 
 
@@ -170,10 +173,48 @@ g.bool
   cursor : default;
 }
 
-g.bool > ellipse
+
+g.bool[data-active='active'] > ellipse
 {
-  fill   : none;
+  fill   : white;
   stroke : black;
+}
+
+
+g.bool[data-active='overridden'] > ellipse
+{
+  fill         : white;
+  stroke       : #CC0011;
+  stroke-width : 2px;
+}
+
+
+g.bool[data-active='inactive'] > ellipse
+{
+  fill             : #CCCCCC;
+  stroke-dasharray : 8,5;
+  stroke-width     : 2px;
+}
+
+
+g.bool[data-active='takeable'] > ellipse
+{
+  fill : #CCCCCC;
+}
+
+
+g.bool[data-active='missing'] > ellipse
+{
+  fill         : white;
+  stroke       : #CC0011;
+  stroke-width : 2px;
+}
+
+g.bool[data-active='unlit']
+{
+  stroke-width : 3;
+  stroke       : #CC0011;
+  stroke-width : 2px;
 }
 
 g.bool > text
@@ -216,13 +257,17 @@ path[data-active='inactive']
 
 path[data-active='active']
 {
-  opacity : 1;
+  opacity      : 1;
+  stroke-width : 2px;
 }
 
 path[data-active='missing']
 {
-  opacity : 0.4;
-  stroke  : #CC0011;
+  opacity          : 0.4;
+  stroke           : #CC0011;
+  stroke-width     : 2px;
+  stroke-dasharray : 8,5;
+  stroke-width     : 2px;
 }
 
 #resetButton
@@ -308,6 +353,12 @@ path[data-active='missing']
 .ui-dialog tr
 {
   margin : 0px auto 0px auto;
+}
+
+.region-label
+{
+  font-size   : 0.65em;
+  text-anchor : start;
 }
 
 

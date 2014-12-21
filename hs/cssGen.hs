@@ -103,6 +103,7 @@ graphStyles = do
     resetCSS
     titleCSS
     modalCSS
+    regionCSS
 
 alignCenter = textAlign $ alignSide sideCenter
 cursor = (-:) "cursor"
@@ -112,7 +113,9 @@ fill = (-:) "fill"
 wideStroke = "stroke-width" -: "3"
 faded = opacity 0.4
 semiVisible = opacity 0.7
-strokeRed = "stroke" -: "#CC0011"
+strokeRed = do
+    "stroke" -: "#CC0011"
+    "stroke-width" -: "2px"
 strokeDashed = do
     "stroke-dasharray" -: "8,5"
     "stroke-width" -: "2px"
@@ -127,6 +130,8 @@ numDark = "#DBB8FF"
 aiDark = "#80B2FF"
 hciDark = "#B8FF70"
 titleColour = "#072D68"
+
+lightGrey = "#CCCCCC"
 
 nodeCSS = "g" ? do
     "text" ? do
@@ -205,9 +210,28 @@ nodeCSS = "g" ? do
             fill "white"
     ".bool" & do
         cursor "default"
-        "ellipse" <? do
-            fill "none"
-            stroke "black"
+        "data-active" @= "active" & do
+            "ellipse" <? do
+                fill "white"
+                stroke "black"
+        "data-active" @= "overridden" & do
+            "ellipse" <? do
+                fill "white"
+                strokeRed
+        "data-active" @= "inactive" & do
+            "ellipse" <? do
+                fill lightGrey
+                strokeDashed
+        "data-active" @= "takeable" & do
+            "ellipse" <? do
+                fill lightGrey
+        "data-active" @= "missing" & do
+            "ellipse" <? do
+                fill "white"
+                strokeRed
+        "data-active" @= "unlit" & do
+            wideStroke
+            strokeRed
         "text" <? do
             fontSize (em 0.45)
             fontFamily ["Comic Sans MS"] [sansSerif]
@@ -230,9 +254,11 @@ pathCSS = "path" ? do
         strokeDashed
     "data-active" @= "active" & do
         opacity 1
+        "stroke-width" -: "2px"
     "data-active" @= "missing" & do
         faded
         strokeRed
+        strokeDashed
 
 resetCSS = "#resetButton" ? do
     fill "#990000"
@@ -266,6 +292,10 @@ titleCSS = "#svgTitle" ? do
     fontStyle italic
     fill titleColour
 
+
+regionCSS = ".region-label" ? do
+    fontSize (em 0.65)
+    "text-anchor" -: "start"
 
 -- Course Modal
 modalColor = parse "#374AA1"
