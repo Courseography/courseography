@@ -33,8 +33,8 @@ data Lecture =
               time_str   :: String,
               time       :: [[Int]],
               instructor :: String,
-              enrol      :: Int,
-              wait       :: Int
+              enrol      :: Maybe Int,
+              wait       :: Maybe Int
             } deriving (Show)
 
 data Tutorial =
@@ -61,9 +61,6 @@ data Course =
              prereqs             :: Maybe [Text]
 	   } deriving (Show, Generic)
 
-fileJ :: FilePath
-fileJ = "./file.json"
-
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 Courses
     department String
@@ -84,7 +81,7 @@ Lectures
     code Int
     session String
     lid String
-    times [Int] - [[]]
+    times [Int] -- [[]]
     capacity Int
     enrolled Int
     waitlist Int
@@ -116,7 +113,6 @@ main = runStderrLoggingT $ withPostgresqlPool connStr 10 $ \pool ->
     liftIO $ do
     flip runSqlPersistMPool pool $ do
         runMigration migrateAll
---        processDirectory $ "../../copy/courses"
         insert $ Distribution "David"
         liftIO $ processDirectory $ "../../copy/courses"
 
@@ -147,10 +143,10 @@ instance FromJSON Lecture where
                 <*> v .: "section"
                 <*> v .: "cap"
                 <*> v .: "time_str"
-                <*> v .: "time"
+                 <*> v .: "time"
                 <*> v .: "instructor"
-                <*> v .: "enrol"
-                <*> v .: "wait"
+                <*> v .:? "enrol"
+                <*> v .:? "wait"
     parseJSON _ = mzero
 
 instance FromJSON Tutorial where
@@ -160,27 +156,19 @@ instance FromJSON Tutorial where
     parseJSON _ = mzero
 
 printDirectory :: String -> IO ()
-printDirectory x = do 
-                       files <- getDirectoryContents x
-                       print files
+printDirectory x =  getDirectoryContents x >>= print
 
 processDirectory :: String -> IO ()
-processDirectory x = do
-                       files <- getDirectoryContents x
-                       printFiles files
+processDirectory x = getDirectoryContents x >>= \ xd -> 
+                     let xy = ((Prelude.map ("../../copy/courses/" ++) xd))
+		     in filterM doesFileExist xy >>= mapM_ printFile
 
-printFiles :: [String] -> IO ()
-printFiles [] = print "Done"
-printFiles (x:xs) = do
-                      f <- doesFileExist $ "../../copy/courses/" ++ x
-                      if f 
-                      then do 
-                             d <- (eitherDecode <$> (getJSON ("../../copy/courses/" ++ x))) :: IO (Either String [Course])
-                             case d of
-                               Left err -> putStrLn err
-                               Right ps -> print ("Good")
-                      else print "Directory"
-                      printFiles xs 
+printFile :: String -> IO ()
+printFile x =  do
+                 d <- (eitherDecode <$> (getJSON (x))) :: IO (Either String [Course])
+                 case d of
+                   Left err -> putStrLn $ x ++ err
+                   Right ps -> print ("SUCCESS")
 
 openJSON :: B.ByteString
 openJSON = "["
