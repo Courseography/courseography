@@ -21,6 +21,10 @@ import Control.Monad.Trans.Reader
 import Control.Monad
 import Control.Applicative
 
+main :: IO ()
+main = liftIO $ processDirectory $ "../../copy/courses"
+
+-- | A Lecture.
 data Lecture =
     Lecture { extra      :: Int,
               section    :: String,
@@ -32,32 +36,32 @@ data Lecture =
               wait       :: Maybe Int
             } deriving (Show)
 
+-- | A Tutorial.
 data Tutorial =
     Tutorial { times   :: [[Int]],
                timeStr :: String
              } deriving (Show)
 
+-- | A Session.
 data Session =
     Session { tutorials :: [Lecture],
               lectures  :: [[Tutorial]]
             } deriving (Show)
 
+-- | A Course.
 data Course = 
     Course { breadth               :: !Text,
              description           :: !Text,
-             title               :: !Text,
-             prereqString        :: Maybe Text,
-             f                   :: Maybe Session,
-             s                   :: Maybe Session,
-             name                :: !Text,
-             exclusions          :: Maybe Text,
-             manualTutorialEnrol :: Maybe Bool,
-             distribution        :: !Text,
-             prereqs             :: Maybe [Text]
+             title                 :: !Text,
+             prereqString          :: Maybe Text,
+             f                     :: Maybe Session,
+             s                     :: Maybe Session,
+             name                  :: !Text,
+             exclusions            :: Maybe Text,
+             manualTutorialEnrol   :: Maybe Bool,
+             distribution          :: !Text,
+             prereqs               :: Maybe [Text]
 	   } deriving (Show, Generic)
-
-main :: IO ()
-main = liftIO $ processDirectory $ "../../copy/courses"
 
 instance FromJSON Course where
     parseJSON (Object v) = 
@@ -86,7 +90,7 @@ instance FromJSON Lecture where
                 <*> v .: "section"
                 <*> v .: "cap"
                 <*> v .: "time_str"
-                 <*> v .: "time"
+                <*> v .: "time"
                 <*> v .: "instructor"
                 <*> v .:? "enrol"
                 <*> v .:? "wait"
@@ -98,11 +102,13 @@ instance FromJSON Tutorial where
                  <*> v .: "timeStr"
     parseJSON _ = mzero
 
+-- | Opens a directory contained in dir, and processes every file.
 processDirectory :: String -> IO ()
-processDirectory x = getDirectoryContents x >>= \ xd -> 
-                     let xy = ((Prelude.map ("../../copy/courses/" ++) xd))
-		     in filterM doesFileExist xy >>= mapM_ printFile
+processDirectory dir = getDirectoryContents dir >>= \ contents -> 
+                       let formattedContents = ((Prelude.map ("../../copy/courses/" ++) contents))
+		       in filterM doesFileExist formattedContents >>= mapM_ printFile
 
+-- | Opens and reads a files contents, and decodes JSON content into a Course data structure.
 printFile :: String -> IO ()
 printFile x =  do
                  d <- (eitherDecode <$> (getJSON (x))) :: IO (Either String [Course])
@@ -110,15 +116,15 @@ printFile x =  do
                    Left err -> putStrLn $ x ++ err
                    Right ps -> print ("SUCCESS")
 
+-- | An opening square bracket.
 openJSON :: B.ByteString
 openJSON = "["
 
+-- | A closing square bracket.
 closeJSON :: B.ByteString
 closeJSON = "]"
 
+-- | Opens and reads the file contained in `jsonFile`. File contents are returned, surrounded by
+-- | square brackets.
 getJSON :: String -> IO B.ByteString
-getJSON jsonFile = do
-                     a <- (B.readFile jsonFile)
-                     let b = B.append openJSON a
-                     let c = B.append b closeJSON
-		     return c
+getJSON jsonFile = (B.readFile jsonFile) >>= \ a -> return $ B.append (B.append openJSON a) closeJSON
