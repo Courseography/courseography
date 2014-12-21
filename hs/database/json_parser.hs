@@ -102,7 +102,7 @@ instance FromJSON Tutorial where
                  <*> v .: "timeStr"
     parseJSON _ = mzero
 
--- | Opens a directory contained in dir, and processes every file.
+-- | Opens a directory contained in dir, and processes every file in that directory.
 processDirectory :: String -> IO ()
 processDirectory dir = getDirectoryContents dir >>= \ contents -> 
                        let formattedContents = ((Prelude.map ("../../copy/courses/" ++) contents))
@@ -110,11 +110,10 @@ processDirectory dir = getDirectoryContents dir >>= \ contents ->
 
 -- | Opens and reads a files contents, and decodes JSON content into a Course data structure.
 printFile :: String -> IO ()
-printFile x =  do
-                 d <- (eitherDecode <$> (getJSON (x))) :: IO (Either String [Course])
-                 case d of
-                   Left err -> putStrLn $ x ++ err
-                   Right ps -> print ("SUCCESS")
+printFile courseFile = ((eitherDecode <$> getJSON courseFile) :: IO (Either String [Course])) >>= \ d ->
+                       case d of
+                         Left err -> putStrLn $ courseFile ++ err
+                         Right ps -> print "SUCCESS"
 
 -- | An opening square bracket.
 openJSON :: B.ByteString
