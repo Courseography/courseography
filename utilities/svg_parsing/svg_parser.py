@@ -23,7 +23,7 @@ def read_svg():
     global regions
     global bools
 
-    with open('../../graph_regions.svg') as svg_file:
+    with open('graph_regions.svg') as svg_file:
         content = svg_file.read()
         soup = BeautifulSoup(content)
 
@@ -41,7 +41,6 @@ def read_svg():
                 else:
                     rects.remove(rect_2)
                     final_rects.append(rect_1)
-
 
 def find_all_and_process(soup, tag, fn):
     for elem in soup.find_all(tag):
