@@ -18,8 +18,12 @@ import GHC.Generics
 import System.Directory	
 import Data.Conduit
 import qualified Data.Conduit.List as CL
+import JsonParser
 
 connStr = "host=localhost dbname=coursedb user=cynic password=eriatarka port=5432"
+
+data Time = Time { time :: [Int] } deriving (Show, Read, Eq)
+derivePersistField "Time"
 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 Courses
@@ -41,7 +45,7 @@ Lectures
     code Int
     session String
     lid String
-    times [Int] -- [[]]
+    times [Time]
     capacity Int
     enrolled Int
     waitlist Int
@@ -54,7 +58,7 @@ Tutorials
     department String
     cNum Int
     tId String
-    times [Int] -- [[]]
+    times [Time]
     deriving Show
 
 Breadth
@@ -67,6 +71,7 @@ Distribution
     description String
     deriving Show
 |]
+
 
 main :: IO ()
 main = runSqlite ":memory:" $ do
@@ -81,6 +86,8 @@ main = runSqlite ":memory:" $ do
         insert $ Breadth 3 "Society and Its Institutions"
         insert $ Breadth 4 "Living Things and Their Environment"
         insert $ Breadth 5 "The Physical and Mathematical Universes"
+        
         let sql = "SELECT * FROM Distribution"
         rawQuery sql [] $$ CL.mapM_ (liftIO . print)
-        liftIO $ print "Complete"
+        liftIO $ print "Done" --processDirectory $ "../../copy/courses"
+
