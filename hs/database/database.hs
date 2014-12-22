@@ -17,7 +17,7 @@ import Data.Text
 import GHC.Generics
 import System.Directory	
 
-connStr = "host=localhost dbname=coursedb user=cynic password=**** port=5432"
+connStr = "host=localhost dbname=coursedb user=cynic password=eriatarka port=5432"
 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 Courses
@@ -71,7 +71,14 @@ main = runStderrLoggingT $ withPostgresqlPool connStr 10 $ \pool ->
     liftIO $ do
     flip runSqlPersistMPool pool $ do
         runMigration migrateAll
+
         insert $ Distribution 1 "Humanities"
         insert $ Distribution 2 "Social Sciences"
         insert $ Distribution 3 "Sciences"
+
+        insert $ Breadth 1 "Creative and Cultural Representations"
+        insert $ Breadth 2 "Thought, Belief, and Behaviour"
+        insert $ Breadth 3 "Society and Its Institutions"
+        insert $ Breadth 4 "Living Things and Their Environment"
+        insert $ Breadth 5 "The Physical and Mathematical Universes"
         liftIO $ print "Complete"
