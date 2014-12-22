@@ -11,11 +11,13 @@
 import           Control.Monad.IO.Class  (liftIO)
 import           Control.Monad.Logger    (runStderrLoggingT)
 import           Database.Persist
-import           Database.Persist.Postgresql
+import           Database.Persist.Sqlite
 import           Database.Persist.TH
 import Data.Text
 import GHC.Generics
 import System.Directory	
+import Data.Conduit
+import qualified Data.Conduit.List as CL
 
 connStr = "host=localhost dbname=coursedb user=cynic password=eriatarka port=5432"
 
@@ -67,9 +69,7 @@ Distribution
 |]
 
 main :: IO ()
-main = runStderrLoggingT $ withPostgresqlPool connStr 10 $ \pool ->
-    liftIO $ do
-    flip runSqlPersistMPool pool $ do
+main = runSqlite ":memory:" $ do
         runMigration migrateAll
 
         insert $ Distribution 1 "Humanities"
@@ -81,4 +81,6 @@ main = runStderrLoggingT $ withPostgresqlPool connStr 10 $ \pool ->
         insert $ Breadth 3 "Society and Its Institutions"
         insert $ Breadth 4 "Living Things and Their Environment"
         insert $ Breadth 5 "The Physical and Mathematical Universes"
+        let sql = "SELECT * FROM Distribution"
+        rawQuery sql [] $$ CL.mapM_ (liftIO . print)
         liftIO $ print "Complete"
