@@ -7,6 +7,7 @@
 {-# LANGUAGE QuasiQuotes                #-}
 {-# LANGUAGE TemplateHaskell            #-}
 {-# LANGUAGE TypeFamilies               #-}
+module JsonParser where
 
 import           Control.Monad.IO.Class  (liftIO)
 import           Control.Monad.Logger    (runStderrLoggingT)
@@ -15,14 +16,66 @@ import Data.Text
 import Data.Aeson
 import GHC.Generics
 import System.Directory	
+import           Database.Persist
+import           Database.Persist.TH
 import Control.Monad.Logger
 import Control.Monad.Trans.Resource.Internal
 import Control.Monad.Trans.Reader
 import Control.Monad
 import Control.Applicative
 
-main :: IO ()
-main = liftIO $ processDirectory $ "../../copy/courses"
+--main :: IO ()
+--main = liftIO $ processDirectory $ "../../copy/courses"
+
+data Time = Time { timeField :: [Int] } deriving (Show, Read, Eq)
+derivePersistField "Time"
+
+share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
+Courses
+    department String
+    code Int
+    breadth Int
+    title String
+    description String
+    manualTutorialEnrolment Bool
+    manualPracticalEnrolment Bool
+    prereqs [String]
+    exclusions [String]
+    distribution Int
+    prep String
+    deriving Show
+
+Lectures
+    department String
+    code Int
+    session String
+    lid String
+    times [Time]
+    capacity Int
+    enrolled Int
+    waitlist Int
+    extra Int
+    location String
+    time_str String
+    deriving Show
+
+Tutorials
+    department String
+    cNum Int
+    tId String
+    times [Time]
+    deriving Show
+
+Breadth
+    bId Int
+    description String
+    deriving Show
+
+Distribution
+    dId Int
+    description String
+    deriving Show
+|]
 
 -- | A Lecture.
 data Lecture =
@@ -110,10 +163,12 @@ processDirectory dir = getDirectoryContents dir >>= \ contents ->
 
 -- | Opens and reads a files contents, and decodes JSON content into a Course data structure.
 printFile :: String -> IO ()
-printFile courseFile = ((eitherDecode <$> getJSON courseFile) :: IO (Either String [Course])) >>= \ d ->
+printFile courseFile = do
+                       d <- ((eitherDecode <$> getJSON courseFile) :: IO (Either String [Course]))
                        case d of
                          Left err -> putStrLn $ courseFile ++ err
-                         Right ps -> print "SUCCESS"
+                         Right ps -> print (title $ Prelude.last ps)
+                       print "I did it"
 
 -- | An opening square bracket.
 openJSON :: B.ByteString
