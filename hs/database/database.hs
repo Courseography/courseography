@@ -61,7 +61,7 @@ Breadth
     deriving Show
 
 Distribution
-    -- dId Int
+    dId Int
     description String
     deriving Show
 |]
@@ -71,5 +71,7 @@ main = runStderrLoggingT $ withPostgresqlPool connStr 10 $ \pool ->
     liftIO $ do
     flip runSqlPersistMPool pool $ do
         runMigration migrateAll
-        insert $ Distribution "David"
+        insert $ Distribution 1 "Humanities"
+        insert $ Distribution 2 "Social Sciences"
+        insert $ Distribution 3 "Sciences"
         liftIO $ print "Complete"
