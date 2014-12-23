@@ -32,17 +32,17 @@ derivePersistField "Time"
 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 Courses
-    department String
-    code Int
-    breadth Int
-    title String
-    description String
-    manualTutorialEnrolment Bool
-    manualPracticalEnrolment Bool
-    prereqs [String]
-    exclusions [String]
-    distribution Int
-    prep String
+    --department String
+    code String
+    --breadth Int
+    --title String
+    --description String
+    --manualTutorialEnrolment Bool
+    --manualPracticalEnrolment Bool
+    --prereqs [String]
+    --exclusions [String]
+    --distribution Int
+    --prep String
     deriving Show
 
 Lectures
@@ -167,8 +167,14 @@ printFile courseFile = do
                        d <- ((eitherDecode <$> getJSON courseFile) :: IO (Either String [Course]))
                        case d of
                          Left err -> putStrLn $ courseFile ++ err
-                         Right ps -> print (title $ Prelude.last ps)
-                       print "I did it"
+                         Right ps -> do 
+                                       --print (title $ Prelude.last ps)
+                                       liftIO $ print "Comp"
+                       liftIO $ insert $ Course "Change"
+                       print "Done"
+
+--insertIt :: Text -> IO ()
+--insertIt st = liftIO  $ insert $ Course st 
 
 -- | An opening square bracket.
 openJSON :: B.ByteString
