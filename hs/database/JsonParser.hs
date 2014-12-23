@@ -12,12 +12,14 @@ module JsonParser where
 import           Control.Monad.IO.Class  (liftIO)
 import           Control.Monad.Logger    (runStderrLoggingT)
 import qualified Data.ByteString.Lazy as B
+import Yesod
 import Data.Text
 import Data.Aeson
 import GHC.Generics
 import System.Directory	
-import           Database.Persist
-import           Database.Persist.TH
+--import           Database.Persist
+import           Database.Persist.Sqlite
+--import           Database.Persist.TH
 import Control.Monad.Logger
 import Control.Monad.Trans.Resource.Internal
 import Control.Monad.Trans.Reader
@@ -166,13 +168,16 @@ printFile :: String -> IO ()
 printFile courseFile = do
                        d <- ((eitherDecode <$> getJSON courseFile) :: IO (Either String [Course]))
                        case d of
-                         Left err -> putStrLn $ courseFile ++ err
+                         Left err -> print "ERROR"
                          Right ps -> do 
                                        --print (title $ Prelude.last ps)
                                        liftIO $ print "Comp"
-                       liftIO $ insert $ Course "Change"
+                       --links <- print $ show $ runDB $ 
+                       print $ insertCourse
                        print "Done"
 
+insertCourse :: String
+insertCourse =  show $ runSqlite $ "INSERT INTO Courses VALUES (\"Change\")"
 --insertIt :: Text -> IO ()
 --insertIt st = liftIO  $ insert $ Course st 
 
