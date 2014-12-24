@@ -598,7 +598,7 @@ infoCSS = "#info-layout" ? do
 aboutStyles = "#aboutDiv" ? do
     maxWidth (px 1000)
     padding (em 0) (em 1) (em 0) (em 1)
-    margin nil auto nil auto
+    margin (em 0) auto (em 0) auto
     textAlign justify
     h1 <> h2 <> h3 <? do
         color blue3
