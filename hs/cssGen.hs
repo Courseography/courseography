@@ -18,8 +18,8 @@ renderStyleFile (path, css) = writeFile path $ unpack $ render css
 
 main = Prelude.foldl1 (>>) $ Prelude.map renderStyleFile styleFiles
 
-margin0 = margin (em 0) (em 0) (em 0) (em 0)
-padding0 = padding (em 0) (em 0) (em 0) (em 0)
+margin0 = margin nil nil nil nil
+padding0 = padding nil nil nil nil
 
 width100 = width $ pct 100
 height100 = height $ pct 100
@@ -59,7 +59,7 @@ headerCSS = do
         do
             "list-style" -: "none"
             width $ pct 70
-            margin (em 0) (em 0) (em 0) (em 0)
+            margin nil nil nil nil
             display inlineBlock
             li <? do
                 textAlign $ alignSide sideCenter
@@ -274,7 +274,7 @@ graphContainer = do
         minHeight (px 700)
         height (px 700)
         overflow hidden
-        margin (em 0) auto (em 0) auto
+        margin nil auto nil auto
         clear both
     "#graphRootSVG" ? do
         width100
@@ -307,8 +307,8 @@ modalCSS = do
         height100
         width100
         position fixed
-        left (em 0)
-        top (em 0)
+        left nil
+        top nil
     ".modal" ? do
         backgroundColor modalColor
         padding (px 20) (px 20) (px 20) (px 20)
@@ -322,7 +322,7 @@ modalCSS = do
         backgroundColor $ parse "#222266"
         color white
         fontSize (em 2)
-        "cursor" -: "move"
+        cursor move
         alignCenter
     ".ui-dialog-titlebar-close" ? do
         display none
@@ -331,12 +331,12 @@ modalCSS = do
     ".ui-width-overlay" ? do
         height100
         width100
-        left (em 0)
+        left nil
         position fixed
-        top (em 0)
+        top nil
     ".ui-dialog" ? do
         tr ? do
-            margin (em 0) auto (em 0) auto
+            margin nil auto nil auto
 
 
 -- Timetable styles
@@ -375,7 +375,7 @@ searchCSS = do
         padding (em 0.5) 0 (em 1) 0
     "#search-list" ? do
         margin0
-        padding (em 0) (em 0) (em 0) (em 0)
+        padding nil nil nil nil
         height100
         width100
         ul <? do
@@ -478,7 +478,7 @@ courseSelectCSS = do
             width (pct 95)
             clear both
             h3 <? do
-                "cursor" -: "pointer"
+                cursor pointer
                 margin0
                 padding (em 0.25) 0 (em 0.25) 0
                 display block
@@ -489,7 +489,7 @@ courseSelectCSS = do
                     h3 <? do
                         margin0
                         padding (em 0.25) (em 0.25) (em 0.25) (em 0.25)
-                        "cursor" -: "pointer"
+                        cursor pointer
                         ":hover" & do
                             backgroundColor blue1
                         ".ui-accordion-header-active" & do
@@ -508,7 +508,7 @@ courseSelectCSS = do
             padding (px 7) 0 0 (px 5)
         ".sections" ? do
             -- overflow: auto <-- really necessary?
-            "cursor" -: "pointer" -- necessary?
+            cursor pointer -- necessary?
             "ul" <? do
                 display block
                 margin0
@@ -599,7 +599,7 @@ infoCSS = "#info-layout" ? do
 aboutStyles = "#aboutDiv" ? do
     maxWidth (px 1000)
     padding 0 (em 1) 0 (em 1)
-    margin (em 0) auto (em 0) auto
+    margin nil auto nil auto
     textAlign justify
     h1 <> h2 <> h3 <? do
         color blue3
