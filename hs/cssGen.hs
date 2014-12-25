@@ -18,8 +18,8 @@ renderStyleFile (path, css) = writeFile path $ unpack $ render css
 
 main = Prelude.foldl1 (>>) $ Prelude.map renderStyleFile styleFiles
 
-margin0 = margin 0 0 0 0
-padding0 = padding 0 0 0 0
+margin0 = margin nil nil nil nil
+padding0 = padding nil nil nil nil
 
 width100 = width $ pct 100
 height100 = height $ pct 100
@@ -59,7 +59,7 @@ headerCSS = do
         do
             "list-style" -: "none"
             width $ pct 70
-            margin 0 0 0 0
+            margin nil nil nil nil
             display inlineBlock
             li <? do
                 textAlign $ alignSide sideCenter
@@ -106,7 +106,7 @@ graphStyles = do
     regionCSS
 
 alignCenter = textAlign $ alignSide sideCenter
-cursor = (-:) "cursor"
+
 stroke = (-:) "stroke"
 fill = (-:) "fill"
 
@@ -146,7 +146,7 @@ nodeCSS = "g" ? do
         "text-anchor" -: "middle"
         "dominant-baseline" -: "central"
     ".node" & do
-        cursor "pointer"
+        cursor pointer
         "text" ? do
             fontSize (pt 12)
         "data-active" @= "active" & do
@@ -202,14 +202,14 @@ nodeCSS = "g" ? do
             stroke "black"
             fill systemsDark
     ".hybrid" & do
-        cursor "default"
+        cursor cursorDefault
         "rect" <? do
             fill "grey"
         "text" <? do
             fontSize (em 0.45)
             fill "white"
     ".bool" & do
-        cursor "default"
+        cursor cursorDefault
         "data-active" @= "active" & do
             "ellipse" <? do
                 fill "white"
@@ -262,7 +262,7 @@ pathCSS = "path" ? do
 
 resetCSS = "#resetButton" ? do
     fill "#990000"
-    cursor "pointer"
+    cursor pointer
     wideStroke
     "stroke" -: "#404040"
     "text" <? do
@@ -274,7 +274,7 @@ graphContainer = do
         minHeight (px 700)
         height (px 700)
         overflow hidden
-        margin 0 auto 0 auto
+        margin nil auto nil auto
         clear both
     "#graphRootSVG" ? do
         width100
@@ -307,8 +307,8 @@ modalCSS = do
         height100
         width100
         position fixed
-        left 0
-        top 0
+        left nil
+        top nil
     ".modal" ? do
         backgroundColor modalColor
         padding (px 20) (px 20) (px 20) (px 20)
@@ -322,7 +322,7 @@ modalCSS = do
         backgroundColor $ parse "#222266"
         color white
         fontSize (em 2)
-        "cursor" -: "move"
+        cursor move
         alignCenter
     ".ui-dialog-titlebar-close" ? do
         display none
@@ -331,12 +331,12 @@ modalCSS = do
     ".ui-width-overlay" ? do
         height100
         width100
-        left 0
+        left nil
         position fixed
-        top 0
+        top nil
     ".ui-dialog" ? do
         tr ? do
-            margin 0 auto 0 auto
+            margin nil auto nil auto
 
 
 -- Timetable styles
@@ -375,7 +375,7 @@ searchCSS = do
         padding (em 0.5) 0 (em 1) 0
     "#search-list" ? do
         margin0
-        padding 0 0 0 0
+        padding nil nil nil nil
         height100
         width100
         ul <? do
@@ -387,7 +387,7 @@ searchCSS = do
                 padding0
                 ":hover" & do
                     fontWeight bold
-                    cursor "pointer"
+                    cursor pointer
                     textDecoration underline
             ".starred-course" & do
                 backgroundColor blue1
@@ -478,7 +478,7 @@ courseSelectCSS = do
             width (pct 95)
             clear both
             h3 <? do
-                "cursor" -: "pointer"
+                cursor pointer
                 margin0
                 padding (em 0.25) 0 (em 0.25) 0
                 display block
@@ -489,7 +489,7 @@ courseSelectCSS = do
                     h3 <? do
                         margin0
                         padding (em 0.25) (em 0.25) (em 0.25) (em 0.25)
-                        "cursor" -: "pointer"
+                        cursor pointer
                         ":hover" & do
                             backgroundColor blue1
                         ".ui-accordion-header-active" & do
@@ -508,7 +508,7 @@ courseSelectCSS = do
             padding (px 7) 0 0 (px 5)
         ".sections" ? do
             -- overflow: auto <-- really necessary?
-            "cursor" -: "pointer" -- necessary?
+            cursor pointer -- necessary?
             "ul" <? do
                 display block
                 margin0
@@ -599,7 +599,7 @@ infoCSS = "#info-layout" ? do
 aboutStyles = "#aboutDiv" ? do
     maxWidth (px 1000)
     padding 0 (em 1) 0 (em 1)
-    margin 0 auto 0 auto
+    margin nil auto nil auto
     textAlign justify
     h1 <> h2 <> h3 <? do
         color blue3
