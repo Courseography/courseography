@@ -121,16 +121,16 @@ data Course =
 
 instance FromJSON Course where
     parseJSON (Object v) = 
-        Course <$> v .: "breadth"
-               <*> v .: "description"
-               <*> v .: "title"
-               <*> v .: "prereqString"
+        Course <$> v .:  "breadth"
+               <*> v .:  "description"
+               <*> v .:  "title"
+               <*> v .:  "prereqString"
                <*> v .:? "F"
                <*> v .:? "S"
-               <*> v .: "name"
-               <*> v .: "exclusions"
+               <*> v .:  "name"
+               <*> v .:  "exclusions"
                <*> v .:? "manualTutorialEnrolment"
-               <*> v .: "distribution"
+               <*> v .:  "distribution"
                <*> v .:? "prereqs"
     parseJSON _ = mzero
 
@@ -142,12 +142,12 @@ instance FromJSON Session where
 
 instance FromJSON Lecture where
     parseJSON (Object v) =
-        Lecture <$> v .: "extra"
-                <*> v .: "section"
-                <*> v .: "cap"
-                <*> v .: "time_str"
-                <*> v .: "time"
-                <*> v .: "instructor"
+        Lecture <$> v .:  "extra"
+                <*> v .:  "section"
+                <*> v .:  "cap"
+                <*> v .:  "time_str"
+                <*> v .:  "time"
+                <*> v .:  "instructor"
                 <*> v .:? "enrol"
                 <*> v .:? "wait"
     parseJSON _ = mzero
@@ -212,7 +212,6 @@ getRequirement reqString
 query :: IO ()
 query = runSqlite dbStr $ do
         let sql = "SELECT * FROM Courses"
-        --insertFunc
         rawQuery sql [] $$ CL.mapM_ (liftIO . print)
 
 dbStr :: Text
