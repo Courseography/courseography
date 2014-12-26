@@ -209,7 +209,7 @@ insertLectures :: Course -> IO ()
 insertLectures course = do
                           case (f course) of
                             Just value -> liftIO $ Prelude.foldl1 (>>) $ Prelude.map ((insertLecture "F") (course)) (lectures value)
-                            Nothing    -> print "Incomplete"
+                            Nothing    -> print $ "No F section for: " ++ show (name course)
                                              
 
 insertLecture :: Text -> Course -> Lecture -> IO ()
@@ -247,4 +247,4 @@ query = runSqlite dbStr $ do
         rawQuery sql [] $$ CL.mapM_ (liftIO . print)
 
 dbStr :: Text
-dbStr = "data26.sqlite3"
+dbStr = "data27.sqlite3"
