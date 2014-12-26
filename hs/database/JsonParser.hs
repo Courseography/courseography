@@ -54,7 +54,7 @@ Lectures
     session Text
     section Text
     times [Time]
-    --capacity Int
+    capacity Int
     --enrolled Int
     --waitlist Int
     extra Int
@@ -219,6 +219,7 @@ insertLecture session course lecture = runSqlite dbStr $ do
                                                           session
                                                           (section lecture)
                                                           (Prelude.map Time (time lecture))
+                                                          (cap lecture)
                                                           (extra lecture)
                                                           (time_str lecture)
 
@@ -240,4 +241,4 @@ query = runSqlite dbStr $ do
         rawQuery sql [] $$ CL.mapM_ (liftIO . print)
 
 dbStr :: Text
-dbStr = "data23.sqlite3"
+dbStr = "data24.sqlite3"
