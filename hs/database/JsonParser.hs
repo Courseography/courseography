@@ -172,6 +172,7 @@ printFile courseFile = do
                            Left err -> print courseFile ++ " " ++ err
                            Right course -> do 
                                              insertCourse $ Prelude.last course
+                                             print "Inserted " ++ courseFile
                                              --query
 
 
