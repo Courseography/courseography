@@ -52,7 +52,7 @@ Lectures
     --department String
     code Text
     session Text
-    --lid String
+    section Text
     --times [Time]
     --capacity Int
     --enrolled Int
@@ -83,11 +83,11 @@ Distribution
 -- | A Lecture.
 data Lecture =
     Lecture { extra      :: Int,
-              section    :: String,
+              section    :: Text,
               cap        :: Int,
-              time_str   :: String,
+              time_str   :: Text,
               time       :: [[Int]],
-              instructor :: String,
+              instructor :: Text,
               enrol      :: Maybe Int,
               wait       :: Maybe Int
             } deriving (Show)
@@ -212,6 +212,7 @@ insertLecture session course lecture = runSqlite dbStr $ do
                                        runMigration migrateAll 
                                        insert_ $ Lectures (name course)
                                                           session
+                                                          (section lecture)
 
 getRequirement :: Text -> Int
 getRequirement reqString
@@ -231,4 +232,4 @@ query = runSqlite dbStr $ do
         rawQuery sql [] $$ CL.mapM_ (liftIO . print)
 
 dbStr :: Text
-dbStr = "data16.sqlite3"
+dbStr = "data17.sqlite3"
