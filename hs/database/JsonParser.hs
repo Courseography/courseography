@@ -57,7 +57,7 @@ Lectures
     --capacity Int
     --enrolled Int
     --waitlist Int
-    --extra Int
+    extra Int
     --location String
     --time_str String
     deriving Show
@@ -213,6 +213,7 @@ insertLecture session course lecture = runSqlite dbStr $ do
                                        insert_ $ Lectures (name course)
                                                           session
                                                           (section lecture)
+                                                          (extra lecture)
 
 getRequirement :: Text -> Int
 getRequirement reqString
@@ -232,4 +233,4 @@ query = runSqlite dbStr $ do
         rawQuery sql [] $$ CL.mapM_ (liftIO . print)
 
 dbStr :: Text
-dbStr = "data17.sqlite3"
+dbStr = "data18.sqlite3"
