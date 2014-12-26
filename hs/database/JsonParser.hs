@@ -58,8 +58,8 @@ Lectures
     --enrolled Int
     --waitlist Int
     extra Int
-    --location String
-    --time_str String
+    -- location Text -- Location does not exist in JSON files.
+    time_str Text
     deriving Show
 
 Tutorials
@@ -214,6 +214,7 @@ insertLecture session course lecture = runSqlite dbStr $ do
                                                           session
                                                           (section lecture)
                                                           (extra lecture)
+                                                          (time_str lecture)
 
 getRequirement :: Text -> Int
 getRequirement reqString
@@ -233,4 +234,4 @@ query = runSqlite dbStr $ do
         rawQuery sql [] $$ CL.mapM_ (liftIO . print)
 
 dbStr :: Text
-dbStr = "data18.sqlite3"
+dbStr = "data19.sqlite3"
