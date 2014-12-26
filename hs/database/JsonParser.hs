@@ -25,6 +25,8 @@ import Control.Monad.Trans.Resource (runResourceT)
 import Control.Monad.Trans.Resource.Internal
 import Control.Monad.Trans.Reader
 import Control.Monad
+--import Data.Attoparsec
+import Text.Parsec.Token
 import Data.Conduit
 import qualified Data.Conduit.List as CL
 import Control.Monad.IO.Class
@@ -63,10 +65,12 @@ Lectures
     deriving Show
 
 Tutorials
-    department String
-    cNum Int
-    tId String
-    times [Time]
+    --department String
+    code Text
+    session Text
+    tutorial Text
+    --times [Time]
+    --timeStr Text
     deriving Show
 
 Breadth
@@ -94,14 +98,15 @@ data Lecture =
 
 -- | A Tutorial.
 data Tutorial =
-    Tutorial { times   :: [[Int]],
-               timeStr :: String
+    Tutorial { tut_section :: Text,
+               times   :: Text,
+               timeStr :: Text
              } deriving (Show)
 
 -- | A Session.
 data Session =
     Session { lectures :: [Lecture],
-              tutorials  :: [[Tutorial]]
+              tutorials  :: [Text]
             } deriving (Show)
 
 -- | A Course.
@@ -152,11 +157,12 @@ instance FromJSON Lecture where
                 <*> v .:? "wait"
     parseJSON _ = mzero
 
-instance FromJSON Tutorial where
-    parseJSON (Object v) =
-        Tutorial <$> v .: "times"
-                 <*> v .: "timeStr"
-    parseJSON _ = mzero
+--instance FromJSON Tutorial where
+--    parseJSON (Object v) =
+--        Tutorial <$> v .: "section"
+--                 <*> v .: "times"
+--                 <*> v .: "timeStr"
+--    parseJSON _ = mzero
 
 --instance FromJSON Time where
 --    parseJSON (Object v) =
@@ -172,12 +178,14 @@ processDirectory dir = getDirectoryContents dir >>= \ contents ->
 -- | Opens and reads a files contents, and decodes JSON content into a Course data structure.
 printFile :: String -> IO ()
 printFile courseFile = do
-                         d <- ((eitherDecode <$> getJSON courseFile) :: IO (Either String [Course]))
+                         let xf = getJSON courseFile
+                         d <- ((eitherDecode <$> xf) :: IO (Either String [Course]))
                          case d of
                            Left err -> print $ courseFile ++ " " ++ err
                            Right course -> do 
                                              insertCourse $ Prelude.last course
                                              insertLectures $ Prelude.last course
+                                             insertTutorials $ Prelude.last course
                                              print $ "Inserted " ++ courseFile
 
 -- | An opening square bracket.
@@ -207,15 +215,13 @@ insertCourse course = runSqlite dbStr $ do
 
 insertLectures :: Course -> IO ()
 insertLectures course = do
-                          insertSession (f course) "F" course 
-                          insertSession (s course) "S" course 
+                          insertSessionLectures (f course) "F" course 
+                          insertSessionLectures (s course) "S" course 
 
-                          
-                                             
-insertSession :: Maybe Session -> String -> Course -> IO ()
-insertSession session sessionStr course = case session of
+insertSessionLectures :: Maybe Session -> String -> Course -> IO ()
+insertSessionLectures session sessionStr course = case session of
                             Just value -> liftIO $ Prelude.foldl1 (>>) $ Prelude.map ((insertLecture "S") (course)) (lectures value)
-                            Nothing    -> print $ "No " ++ sessionStr ++ " section for: " ++ show (name course)
+                            Nothing    -> print $ "No " ++ sessionStr ++ " lecture section for: " ++ show (name course)
 
 insertLecture :: Text -> Course -> Lecture -> IO ()
 insertLecture session course lecture = runSqlite dbStr $ do
@@ -233,6 +239,35 @@ insertLecture session course lecture = runSqlite dbStr $ do
                                                                 Nothing    -> 0)
                                                           (extra lecture)
                                                           (time_str lecture)
+
+insertTutorials :: Course -> IO ()
+insertTutorials course = do
+                          insertSessionTutorials (f course) "F" course 
+                          insertSessionTutorials (s course) "S" course 
+
+insertSessionTutorials :: Maybe Session -> String -> Course -> IO ()
+insertSessionTutorials session sessionStr course = case session of
+                            Just value -> if Prelude.null (tutorials value) 
+                                          then print "Cannot find tut" 
+                                          else liftIO $ Prelude.foldl1 (>>) $ Prelude.map ((insertTutorial "S") (course)) (tutorials value)
+                            Nothing    -> print $ "No " ++ sessionStr ++ " tutorial section for: " ++ show (name course)
+
+insertTutorial :: Text -> Course -> Text -> IO ()
+insertTutorial session course tutorial = runSqlite dbStr $ do
+                                       runMigration migrateAll 
+                                       --let tut = parseOnly parseTutorial tutorial
+                                       insert_ $ Tutorials (name course)
+                                                           session
+                                                           tutorial
+
+--parseTutorial :: Parser Tutorial
+--parseTutorial = do
+--    ts <- stringLiteral
+--    comma
+--    t <- stringLiteral
+--    comma
+--    tstr <- stringLiteral
+--    return $ Tutorial ts t tstr
 
 getRequirement :: Text -> Int
 getRequirement reqString
@@ -252,4 +287,4 @@ query = runSqlite dbStr $ do
         rawQuery sql [] $$ CL.mapM_ (liftIO . print)
 
 dbStr :: Text
-dbStr = "data27.sqlite3"
+dbStr = "data34.sqlite3"
