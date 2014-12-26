@@ -12,18 +12,22 @@ module JsonParser where
 import           Control.Monad.IO.Class  (liftIO)
 import           Control.Monad.Logger    (runStderrLoggingT)
 import qualified Data.ByteString.Lazy as B
-import Yesod
+--import Yesod
 import Data.Text
 import Data.Aeson
 import GHC.Generics
 import System.Directory	
---import           Database.Persist
+import           Database.Persist
 import           Database.Persist.Sqlite
---import           Database.Persist.TH
+import           Database.Persist.TH
 import Control.Monad.Logger
+import Control.Monad.Trans.Resource (runResourceT)
 import Control.Monad.Trans.Resource.Internal
 import Control.Monad.Trans.Reader
 import Control.Monad
+import Data.Conduit
+import qualified Data.Conduit.List as CL
+import Control.Monad.IO.Class
 import Control.Applicative
 
 --main :: IO ()
@@ -35,10 +39,10 @@ derivePersistField "Time"
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 Courses
     --department String
-    code String
+    code Text
     --breadth Int
-    --title String
-    --description String
+    title Text  
+    description Text
     --manualTutorialEnrolment Bool
     --manualPracticalEnrolment Bool
     --prereqs [String]
@@ -161,25 +165,18 @@ instance FromJSON Tutorial where
 processDirectory :: String -> IO ()
 processDirectory dir = getDirectoryContents dir >>= \ contents -> 
                        let formattedContents = ((Prelude.map ("../../copy/courses/" ++) contents))
-		       in filterM doesFileExist formattedContents >>= mapM_ printFile
+		                   in filterM doesFileExist formattedContents >>= mapM_ printFile
 
 -- | Opens and reads a files contents, and decodes JSON content into a Course data structure.
 printFile :: String -> IO ()
 printFile courseFile = do
-                       d <- ((eitherDecode <$> getJSON courseFile) :: IO (Either String [Course]))
-                       case d of
-                         Left err -> print "ERROR"
-                         Right ps -> do 
-                                       --print (title $ Prelude.last ps)
-                                       liftIO $ print "Comp"
-                       --links <- print $ show $ runDB $ 
-                       print $ insertCourse
-                       print "Done"
+                         d <- ((eitherDecode <$> getJSON courseFile) :: IO (Either String [Course]))
+                         case d of
+                           Left err -> print "L" --liftIO $ insertFunc
+                           Right course -> do 
+                                             insertCourse $ Prelude.last course
+                                             query
 
-insertCourse :: String
-insertCourse =  show $ runSqlite $ "INSERT INTO Courses VALUES (\"Change\")"
---insertIt :: Text -> IO ()
---insertIt st = liftIO  $ insert $ Course st 
 
 -- | An opening square bracket.
 openJSON :: B.ByteString
@@ -193,3 +190,19 @@ closeJSON = "]"
 -- | square brackets.
 getJSON :: String -> IO B.ByteString
 getJSON jsonFile = (B.readFile jsonFile) >>= \ a -> return $ B.append (B.append openJSON a) closeJSON
+
+insertCourse :: Course -> IO ()
+insertCourse course = runSqlite dbStr $ do
+                        runMigration migrateAll 
+                        insert_ $ Courses (name course) 
+                                          (title course)
+                                          (description course)
+
+query :: IO ()
+query = runSqlite dbStr $ do
+        let sql = "SELECT * FROM Courses"
+        --insertFunc
+        rawQuery sql [] $$ CL.mapM_ (liftIO . print)
+
+dbStr :: Text
+dbStr = "data6.sqlite3"
