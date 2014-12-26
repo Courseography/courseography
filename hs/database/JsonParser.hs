@@ -39,11 +39,11 @@ Courses
     code Text
     title Text  
     description Text
-    breadth Int
     --manualTutorialEnrolment Bool
     --manualPracticalEnrolment Bool
-    --prereqs [String]
+    prereqs Text Maybe
     --exclusions [String]
+    breadth Int
     distribution Int
     --prep Text
     deriving Show
@@ -169,10 +169,10 @@ printFile :: String -> IO ()
 printFile courseFile = do
                          d <- ((eitherDecode <$> getJSON courseFile) :: IO (Either String [Course]))
                          case d of
-                           Left err -> print courseFile ++ " " ++ err
+                           Left err -> print $ courseFile ++ " " ++ err
                            Right course -> do 
                                              insertCourse $ Prelude.last course
-                                             print "Inserted " ++ courseFile
+                                             print $ "Inserted " ++ courseFile
                                              --query
 
 
@@ -195,6 +195,7 @@ insertCourse course = runSqlite dbStr $ do
                         insert_ $ Courses (name course) 
                                           (title course)
                                           (description course)
+                                          (prereqString course)
                                           (getRequirement $  breadth course)
                                           (getRequirement $  distribution course)
 
@@ -216,4 +217,4 @@ query = runSqlite dbStr $ do
         rawQuery sql [] $$ CL.mapM_ (liftIO . print)
 
 dbStr :: Text
-dbStr = "data11.sqlite3"
+dbStr = "data12.sqlite3"
