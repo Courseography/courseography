@@ -42,24 +42,24 @@ Courses
     manualTutorialEnrolment Bool Maybe
     --manualPracticalEnrolment Bool
     prereqs Text Maybe
-    exclusions Text Maybe
+    exclusions Text Maybe 
     breadth Int
     distribution Int
     --prep Text
     deriving Show
 
 Lectures
-    department String
-    code Int
-    session String
-    lid String
-    times [Time]
-    capacity Int
-    enrolled Int
-    waitlist Int
-    extra Int
-    location String
-    time_str String
+    --department String
+    code Text
+    --session String
+    --lid String
+    --times [Time]
+    --capacity Int
+    --enrolled Int
+    --waitlist Int
+    --extra Int
+    --location String
+    --time_str String
     deriving Show
 
 Tutorials
@@ -100,8 +100,8 @@ data Tutorial =
 
 -- | A Session.
 data Session =
-    Session { tutorials :: [Lecture],
-              lectures  :: [[Tutorial]]
+    Session { lectures :: [Lecture],
+              tutorials  :: [[Tutorial]]
             } deriving (Show)
 
 -- | A Course.
@@ -172,8 +172,8 @@ printFile courseFile = do
                            Left err -> print $ courseFile ++ " " ++ err
                            Right course -> do 
                                              insertCourse $ Prelude.last course
+                                             insertLectures $ Prelude.last course
                                              print $ "Inserted " ++ courseFile
-                                             --query
 
 
 -- | An opening square bracket.
@@ -201,6 +201,18 @@ insertCourse course = runSqlite dbStr $ do
                                           (getRequirement $  breadth course)
                                           (getRequirement $  distribution course)
 
+insertLectures :: Course -> IO ()
+insertLectures course = do
+                          case (f course) of
+                            Just value -> liftIO $ Prelude.foldl1 (>>) $ Prelude.map (insertLecture (course)) (lectures value)
+                            Nothing    -> print "Incomplete"
+                                             
+
+insertLecture :: Course -> Lecture -> IO ()
+insertLecture course lecture = runSqlite dbStr $ do
+                               runMigration migrateAll 
+                               insert_ $ Lectures (name course)
+
 getRequirement :: Text -> Int
 getRequirement reqString
     |   (isInfixOf "5" reqString) = 5
@@ -215,8 +227,8 @@ getRequirement reqString
 
 query :: IO ()
 query = runSqlite dbStr $ do
-        let sql = "SELECT * FROM Courses"
+        let sql = "SELECT * FROM Lectures WHERE code like '%CSC%'"
         rawQuery sql [] $$ CL.mapM_ (liftIO . print)
 
 dbStr :: Text
-dbStr = "data14.sqlite3"
+dbStr = "data15.sqlite3"

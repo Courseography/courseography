@@ -32,6 +32,7 @@ main = runResourceT $ do
                         liftIO $ setupBreadthTable
                         liftIO $ print "breadth table set up"
                         liftIO $ processDirectory $ "../../copy/courses"
+                        liftIO $ query
 
 
 setupDistributionTable :: IO ()
