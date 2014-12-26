@@ -56,7 +56,7 @@ Lectures
     times [Time]
     capacity Int
     enrolled Int
-    --waitlist Int
+    waitlist Int
     extra Int
     -- location Text -- Location does not exist in JSON files.
     time_str Text
@@ -223,6 +223,9 @@ insertLecture session course lecture = runSqlite dbStr $ do
                                                           (case enrol lecture of
                                                                 Just value -> value
                                                                 Nothing    -> 0)
+                                                          (case wait lecture of
+                                                                Just value -> value
+                                                                Nothing    -> 0)
                                                           (extra lecture)
                                                           (time_str lecture)
 
@@ -244,4 +247,4 @@ query = runSqlite dbStr $ do
         rawQuery sql [] $$ CL.mapM_ (liftIO . print)
 
 dbStr :: Text
-dbStr = "data25.sqlite3"
+dbStr = "data26.sqlite3"
