@@ -51,7 +51,7 @@ Courses
 Lectures
     --department String
     code Text
-    --session String
+    session Text
     --lid String
     --times [Time]
     --capacity Int
@@ -175,7 +175,6 @@ printFile courseFile = do
                                              insertLectures $ Prelude.last course
                                              print $ "Inserted " ++ courseFile
 
-
 -- | An opening square bracket.
 openJSON :: B.ByteString
 openJSON = "["
@@ -204,14 +203,15 @@ insertCourse course = runSqlite dbStr $ do
 insertLectures :: Course -> IO ()
 insertLectures course = do
                           case (f course) of
-                            Just value -> liftIO $ Prelude.foldl1 (>>) $ Prelude.map (insertLecture (course)) (lectures value)
+                            Just value -> liftIO $ Prelude.foldl1 (>>) $ Prelude.map ((insertLecture "F") (course)) (lectures value)
                             Nothing    -> print "Incomplete"
                                              
 
-insertLecture :: Course -> Lecture -> IO ()
-insertLecture course lecture = runSqlite dbStr $ do
-                               runMigration migrateAll 
-                               insert_ $ Lectures (name course)
+insertLecture :: Text -> Course -> Lecture -> IO ()
+insertLecture session course lecture = runSqlite dbStr $ do
+                                       runMigration migrateAll 
+                                       insert_ $ Lectures (name course)
+                                                          session
 
 getRequirement :: Text -> Int
 getRequirement reqString
@@ -231,4 +231,4 @@ query = runSqlite dbStr $ do
         rawQuery sql [] $$ CL.mapM_ (liftIO . print)
 
 dbStr :: Text
-dbStr = "data15.sqlite3"
+dbStr = "data16.sqlite3"
