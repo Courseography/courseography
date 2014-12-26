@@ -44,8 +44,8 @@ Courses
     --manualPracticalEnrolment Bool
     --prereqs [String]
     --exclusions [String]
-    --distribution Int
-    --prep String
+    distribution Int
+    --prep Text
     deriving Show
 
 Lectures
@@ -194,16 +194,20 @@ insertCourse course = runSqlite dbStr $ do
                         insert_ $ Courses (name course) 
                                           (title course)
                                           (description course)
-                                          (getBreadth $  breadth course)
+                                          (getRequirement $  breadth course)
+                                          (getRequirement $  distribution course)
 
-getBreadth :: Text -> Int
-getBreadth breadthString
-    |   (isInfixOf "5" breadthString) = 5
-    |   (isInfixOf "4" breadthString) = 4
-    |   (isInfixOf "3" breadthString) = 3
-    |   (isInfixOf "2" breadthString) = 2
-    |   (isInfixOf "1" breadthString) = 1 
-    | otherwise = 6  
+getRequirement :: Text -> Int
+getRequirement reqString
+    |   (isInfixOf "5" reqString) = 5
+    |   (isInfixOf "4" reqString) = 4
+    |   (isInfixOf "3" reqString) = 3
+    |   (isInfixOf "2" reqString) = 2
+    |   (isInfixOf "1" reqString) = 1 
+    |   (isInfixOf "This is a Science course" reqString) = 3 
+    |   (isInfixOf "This is a Social Science course" reqString) = 2
+    |   (isInfixOf "This is a Humanities course" reqString) = 1 
+    | otherwise = 6 
 
 query :: IO ()
 query = runSqlite dbStr $ do
@@ -212,4 +216,4 @@ query = runSqlite dbStr $ do
         rawQuery sql [] $$ CL.mapM_ (liftIO . print)
 
 dbStr :: Text
-dbStr = "data7.sqlite3"
+dbStr = "data10.sqlite3"
