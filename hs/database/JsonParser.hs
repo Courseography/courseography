@@ -30,9 +30,6 @@ import qualified Data.Conduit.List as CL
 import Control.Monad.IO.Class
 import Control.Applicative
 
---main :: IO ()
---main = liftIO $ processDirectory $ "../../copy/courses"
-
 data Time = Time { timeField :: [Int] } deriving (Show, Read, Eq)
 derivePersistField "Time"
 
@@ -40,9 +37,9 @@ share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 Courses
     --department String
     code Text
-    --breadth Int
     title Text  
     description Text
+    breadth Int
     --manualTutorialEnrolment Bool
     --manualPracticalEnrolment Bool
     --prereqs [String]
@@ -197,6 +194,16 @@ insertCourse course = runSqlite dbStr $ do
                         insert_ $ Courses (name course) 
                                           (title course)
                                           (description course)
+                                          (getBreadth $  breadth course)
+
+getBreadth :: Text -> Int
+getBreadth breadthString
+    |   (isInfixOf "5" breadthString) = 5
+    |   (isInfixOf "4" breadthString) = 4
+    |   (isInfixOf "3" breadthString) = 3
+    |   (isInfixOf "2" breadthString) = 2
+    |   (isInfixOf "1" breadthString) = 1 
+    | otherwise = 6  
 
 query :: IO ()
 query = runSqlite dbStr $ do
@@ -205,4 +212,4 @@ query = runSqlite dbStr $ do
         rawQuery sql [] $$ CL.mapM_ (liftIO . print)
 
 dbStr :: Text
-dbStr = "data6.sqlite3"
+dbStr = "data7.sqlite3"

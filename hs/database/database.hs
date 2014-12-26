@@ -50,3 +50,4 @@ setupBreadthTable = runSqlite dbStr $ do
                                      insert_ $ Breadth 3 "Society and Its Institutions"
                                      insert_ $ Breadth 4 "Living Things and Their Environment"
                                      insert_ $ Breadth 5 "The Physical and Mathematical Universes"
+                                     insert_ $ Breadth 6 "No Breadth"
