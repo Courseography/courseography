@@ -169,10 +169,10 @@ printFile :: String -> IO ()
 printFile courseFile = do
                          d <- ((eitherDecode <$> getJSON courseFile) :: IO (Either String [Course]))
                          case d of
-                           Left err -> print "L" --liftIO $ insertFunc
+                           Left err -> print courseFile ++ " " ++ err
                            Right course -> do 
                                              insertCourse $ Prelude.last course
-                                             query
+                                             --query
 
 
 -- | An opening square bracket.
@@ -215,4 +215,4 @@ query = runSqlite dbStr $ do
         rawQuery sql [] $$ CL.mapM_ (liftIO . print)
 
 dbStr :: Text
-dbStr = "data10.sqlite3"
+dbStr = "data11.sqlite3"
