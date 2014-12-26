@@ -13,31 +13,40 @@ import           Control.Monad.Logger    (runStderrLoggingT)
 import           Database.Persist
 import           Database.Persist.Sqlite
 import           Database.Persist.TH
+import Control.Monad.Trans.Resource (runResourceT)
 import Data.Text
 import GHC.Generics
 import System.Directory	
+import Control.Monad.IO.Class
+import Control.Monad.Trans.Reader
 import Data.Conduit
 import qualified Data.Conduit.List as CL
 import JsonParser
 
-connStr = "host=localhost dbname=coursedb user=cynic password=eriatarka port=5432"
-
+connStr = "host=localhost dbname=coursedb user=cynic password=*** port=5432"
 
 main :: IO ()
-main = runSqlite ":memory:" $ do
-        runMigration migrateAll
+main = runResourceT $ do
+                        liftIO $ setupDistributionTable
+                        liftIO $ print "Distribution table set up"
+                        liftIO $ setupBreadthTable
+                        liftIO $ print "breadth table set up"
+                        liftIO $ processDirectory $ "../../copy/courses"
 
-        insert $ Distribution 1 "Humanities"
-        insert $ Distribution 2 "Social Sciences"
-        insert $ Distribution 3 "Sciences"
 
-        insert $ Breadth 1 "Creative and Cultural Representations"
-        insert $ Breadth 2 "Thought, Belief, and Behaviour"
-        insert $ Breadth 3 "Society and Its Institutions"
-        insert $ Breadth 4 "Living Things and Their Environment"
-        insert $ Breadth 5 "The Physical and Mathematical Universes"
-        
-        let sql = "SELECT * FROM Distribution"
-        rawQuery sql [] $$ CL.mapM_ (liftIO . print)
-        liftIO $ processDirectory $ "../../copy/courses"
+setupDistributionTable :: IO ()
+setupDistributionTable = runSqlite dbStr $ do
+                                     runMigration migrateAll 
+                                     insert_ $ Distribution 1 "Humanities"
+                                     insert_ $ Distribution 2 "Social Sciences"
+                                     insert_ $ Distribution 3 "Sciences"
 
+
+setupBreadthTable :: IO ()
+setupBreadthTable = runSqlite dbStr $ do
+                                     runMigration migrateAll 
+                                     insert_ $ Breadth 1 "Creative and Cultural Representations"
+                                     insert_ $ Breadth 2 "Thought, Belief, and Behaviour"
+                                     insert_ $ Breadth 3 "Society and Its Institutions"
+                                     insert_ $ Breadth 4 "Living Things and Their Environment"
+                                     insert_ $ Breadth 5 "The Physical and Mathematical Universes"
