@@ -39,10 +39,10 @@ Courses
     code Text
     title Text  
     description Text
-    --manualTutorialEnrolment Bool
+    manualTutorialEnrolment Bool Maybe
     --manualPracticalEnrolment Bool
     prereqs Text Maybe
-    --exclusions [String]
+    exclusions Text Maybe
     breadth Int
     distribution Int
     --prep Text
@@ -195,7 +195,9 @@ insertCourse course = runSqlite dbStr $ do
                         insert_ $ Courses (name course) 
                                           (title course)
                                           (description course)
+                                          (manualTutorialEnrol course)
                                           (prereqString course)
+                                          (exclusions course)
                                           (getRequirement $  breadth course)
                                           (getRequirement $  distribution course)
 
@@ -217,4 +219,4 @@ query = runSqlite dbStr $ do
         rawQuery sql [] $$ CL.mapM_ (liftIO . print)
 
 dbStr :: Text
-dbStr = "data12.sqlite3"
+dbStr = "data14.sqlite3"
