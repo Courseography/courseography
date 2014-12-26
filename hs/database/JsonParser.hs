@@ -207,10 +207,15 @@ insertCourse course = runSqlite dbStr $ do
 
 insertLectures :: Course -> IO ()
 insertLectures course = do
-                          case (f course) of
-                            Just value -> liftIO $ Prelude.foldl1 (>>) $ Prelude.map ((insertLecture "F") (course)) (lectures value)
-                            Nothing    -> print $ "No F section for: " ++ show (name course)
+                          insertSession (f course) "F" course 
+                          insertSession (s course) "S" course 
+
+                          
                                              
+insertSession :: Maybe Session -> String -> Course -> IO ()
+insertSession session sessionStr course = case session of
+                            Just value -> liftIO $ Prelude.foldl1 (>>) $ Prelude.map ((insertLecture "S") (course)) (lectures value)
+                            Nothing    -> print $ "No " ++ sessionStr ++ " section for: " ++ show (name course)
 
 insertLecture :: Text -> Course -> Lecture -> IO ()
 insertLecture session course lecture = runSqlite dbStr $ do
