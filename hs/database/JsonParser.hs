@@ -53,7 +53,7 @@ Lectures
     code Text
     session Text
     section Text
-    --times [Time]
+    times [Time]
     --capacity Int
     --enrolled Int
     --waitlist Int
@@ -158,6 +158,11 @@ instance FromJSON Tutorial where
                  <*> v .: "timeStr"
     parseJSON _ = mzero
 
+--instance FromJSON Time where
+--    parseJSON (Object v) =
+--        Time <$> v .: "timeField"
+--    parseJSON _ = mzero
+
 -- | Opens a directory contained in dir, and processes every file in that directory.
 processDirectory :: String -> IO ()
 processDirectory dir = getDirectoryContents dir >>= \ contents -> 
@@ -213,6 +218,7 @@ insertLecture session course lecture = runSqlite dbStr $ do
                                        insert_ $ Lectures (name course)
                                                           session
                                                           (section lecture)
+                                                          (Prelude.map Time (time lecture))
                                                           (extra lecture)
                                                           (time_str lecture)
 
@@ -234,4 +240,4 @@ query = runSqlite dbStr $ do
         rawQuery sql [] $$ CL.mapM_ (liftIO . print)
 
 dbStr :: Text
-dbStr = "data19.sqlite3"
+dbStr = "data23.sqlite3"
