@@ -93,7 +93,7 @@ function fetchCourse(name) {
     $.ajax({
         //url: 'static/res/courses/' + name + '.txt',
         url: 'course/' + name,
-        //dataType: 'json',
+        dataType: 'json',
         async: false,
         success: function (data) {
             course = data;
@@ -105,11 +105,11 @@ function fetchCourse(name) {
 
     console.log("Course " + course);
 
-    try {
-         course = JSON.parse(course.replace(new RegExp("'", 'g'), "\""));
-    } catch (err) {
-         console.log(err);
-    }
+    // try {
+    //      course = JSON.parse(course.replace(new RegExp("'", 'g'), "\""));
+    // } catch (err) {
+    //      console.log(err);
+    // }
 
     courseCache.push(course);
     return course;
