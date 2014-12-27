@@ -91,8 +91,9 @@ function fetchCourse(name) {
 
     var course;
     $.ajax({
-        url: 'static/res/courses/' + name + '.txt',
-        dataType: 'json',
+        //url: 'static/res/courses/' + name + '.txt',
+        url: 'course/' + name,
+        //dataType: 'json',
         async: false,
         success: function (data) {
             course = data;
@@ -102,13 +103,13 @@ function fetchCourse(name) {
         }
     });
 
-    // console.log("Course " + course);
+    console.log("Course " + course);
 
-    // try {
-    //     course = JSON.parse(course.replace(new RegExp("'", 'g'), "\""));
-    // } catch (err) {
-    //     console.log(err);
-    // }
+    try {
+         course = JSON.parse(course.replace(new RegExp("'", 'g'), "\""));
+    } catch (err) {
+         console.log(err);
+    }
 
     courseCache.push(course);
     return course;

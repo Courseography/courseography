@@ -16,7 +16,7 @@ import           Database.Persist.TH
 import Control.Monad.Trans.Resource (runResourceT)
 import Data.Text
 import GHC.Generics
-import System.Directory	
+import System.Directory
 import Control.Monad.IO.Class
 import Control.Monad.Trans.Reader
 import Data.Conduit
@@ -31,12 +31,12 @@ main = runResourceT $ do
                         liftIO $ print "Distribution table set up"
                         liftIO $ setupBreadthTable
                         liftIO $ print "breadth table set up"
-                        liftIO $ processDirectory $ "../../copy/coursesl"
+                        liftIO $ processDirectory $ "../../res/courses"
 
 -- | Sets up the Distribution table.
 setupDistributionTable :: IO ()
 setupDistributionTable = runSqlite dbStr $ do
-                                     runMigration migrateAll 
+                                     runMigration migrateAll
                                      insert_ $ Distribution 1 "Humanities"
                                      insert_ $ Distribution 2 "Social Sciences"
                                      insert_ $ Distribution 3 "Sciences"
@@ -44,7 +44,7 @@ setupDistributionTable = runSqlite dbStr $ do
 -- | Sets up the Breadth table.
 setupBreadthTable :: IO ()
 setupBreadthTable = runSqlite dbStr $ do
-                                     runMigration migrateAll 
+                                     runMigration migrateAll
                                      insert_ $ Breadth 1 "Creative and Cultural Representations"
                                      insert_ $ Breadth 2 "Thought, Belief, and Behaviour"
                                      insert_ $ Breadth 3 "Society and Its Institutions"
