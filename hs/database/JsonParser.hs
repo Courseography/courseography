@@ -157,27 +157,16 @@ instance FromJSON Lecture where
                 <*> v .:? "wait"
     parseJSON _ = mzero
 
---instance FromJSON Tutorial where
---    parseJSON (Object v) =
---        Tutorial <$> v .: "section"
---                 <*> v .: "times"
---                 <*> v .: "timeStr"
---    parseJSON _ = mzero
-
---instance FromJSON Time where
---    parseJSON (Object v) =
---        Time <$> v .: "timeField"
---    parseJSON _ = mzero
-
 -- | Opens a directory contained in dir, and processes every file in that directory.
 processDirectory :: String -> IO ()
 processDirectory dir = getDirectoryContents dir >>= \ contents -> 
-                       let formattedContents = ((Prelude.map ("../../copy/courses/" ++) contents))
+                       let formattedContents = ((Prelude.map ("../copy/coursesl/" ++) contents))
 		                   in filterM doesFileExist formattedContents >>= mapM_ printFile
 
 -- | Opens and reads a files contents, and decodes JSON content into a Course data structure.
 printFile :: String -> IO ()
 printFile courseFile = do
+                         print "Checking"
                          let xf = getJSON courseFile
                          d <- ((eitherDecode <$> xf) :: IO (Either String [Course]))
                          case d of
@@ -201,6 +190,7 @@ closeJSON = "]"
 getJSON :: String -> IO B.ByteString
 getJSON jsonFile = (B.readFile jsonFile) >>= \ a -> return $ B.append (B.append openJSON a) closeJSON
 
+-- | Inserts course into the Courses table.
 insertCourse :: Course -> IO ()
 insertCourse course = runSqlite dbStr $ do
                         runMigration migrateAll 
@@ -213,16 +203,19 @@ insertCourse course = runSqlite dbStr $ do
                                           (getRequirement $  breadth course)
                                           (getRequirement $  distribution course)
 
+-- | Inserts the lectures from course into the Lectures table.
 insertLectures :: Course -> IO ()
 insertLectures course = do
                           insertSessionLectures (f course) "F" course 
                           insertSessionLectures (s course) "S" course 
 
+-- | Inserts the lectures from a specified section into the Lectures table.
 insertSessionLectures :: Maybe Session -> String -> Course -> IO ()
 insertSessionLectures session sessionStr course = case session of
                             Just value -> liftIO $ Prelude.foldl1 (>>) $ Prelude.map ((insertLecture "S") (course)) (lectures value)
                             Nothing    -> print $ "No " ++ sessionStr ++ " lecture section for: " ++ show (name course)
 
+-- | Inserts a lecture into the Lectures table.
 insertLecture :: Text -> Course -> Lecture -> IO ()
 insertLecture session course lecture = runSqlite dbStr $ do
                                        runMigration migrateAll 
@@ -240,11 +233,13 @@ insertLecture session course lecture = runSqlite dbStr $ do
                                                           (extra lecture)
                                                           (time_str lecture)
 
+-- | Inserts the tutorials from course into the Tutorials table.
 insertTutorials :: Course -> IO ()
 insertTutorials course = do
                           insertSessionTutorials (f course) "F" course 
                           insertSessionTutorials (s course) "S" course 
 
+-- | Inserts the tutorials from a specified section into the Tutorials table.
 insertSessionTutorials :: Maybe Session -> String -> Course -> IO ()
 insertSessionTutorials session sessionStr course = case session of
                             Just value -> if Prelude.null (tutorials value) 
@@ -252,6 +247,7 @@ insertSessionTutorials session sessionStr course = case session of
                                           else liftIO $ Prelude.foldl1 (>>) $ Prelude.map ((insertTutorial "S") (course)) (tutorials value)
                             Nothing    -> print $ "No " ++ sessionStr ++ " tutorial section for: " ++ show (name course)
 
+-- | Inserts a tutorial into the Tutorials table.
 insertTutorial :: Text -> Course -> Text -> IO ()
 insertTutorial session course tutorial = runSqlite dbStr $ do
                                        runMigration migrateAll 
@@ -269,6 +265,7 @@ insertTutorial session course tutorial = runSqlite dbStr $ do
 --    tstr <- stringLiteral
 --    return $ Tutorial ts t tstr
 
+-- | Gets the corresponding numeric requirement from a requirement description (Breadth, Distribution).
 getRequirement :: Text -> Int
 getRequirement reqString
     |   (isInfixOf "5" reqString) = 5
@@ -281,10 +278,5 @@ getRequirement reqString
     |   (isInfixOf "This is a Humanities course" reqString) = 1 
     | otherwise = 6 
 
-query :: IO ()
-query = runSqlite dbStr $ do
-        let sql = "SELECT * FROM Lectures WHERE code like '%CSC%'"
-        rawQuery sql [] $$ CL.mapM_ (liftIO . print)
-
 dbStr :: Text
-dbStr = "data34.sqlite3"
+dbStr = "11data34.sqlite3"

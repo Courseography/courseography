@@ -31,10 +31,9 @@ main = runResourceT $ do
                         liftIO $ print "Distribution table set up"
                         liftIO $ setupBreadthTable
                         liftIO $ print "breadth table set up"
-                        liftIO $ processDirectory $ "../../copy/courses"
-                        liftIO $ query
+                        liftIO $ processDirectory $ "../../copy/coursesl"
 
-
+-- | Sets up the Distribution table.
 setupDistributionTable :: IO ()
 setupDistributionTable = runSqlite dbStr $ do
                                      runMigration migrateAll 
@@ -42,7 +41,7 @@ setupDistributionTable = runSqlite dbStr $ do
                                      insert_ $ Distribution 2 "Social Sciences"
                                      insert_ $ Distribution 3 "Sciences"
 
-
+-- | Sets up the Breadth table.
 setupBreadthTable :: IO ()
 setupBreadthTable = runSqlite dbStr $ do
                                      runMigration migrateAll 
