@@ -91,7 +91,7 @@ function fetchCourse(name) {
 
     var course;
     $.ajax({
-        url: 'course',// + name + '.txt',
+        url: 'course/' + name,
         async: false,
         success: function (data) {
             course = data;
