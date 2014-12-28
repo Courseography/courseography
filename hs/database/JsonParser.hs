@@ -10,26 +10,19 @@
 module JsonParser where
 
 import           Control.Monad.IO.Class  (liftIO)
-import           Control.Monad.Logger    (runStderrLoggingT)
 import qualified Data.ByteString.Lazy as B
 --import Yesod
 import Data.Text
 import Data.Aeson
 import GHC.Generics
 import System.Directory
+
 import           Database.Persist
 import           Database.Persist.Sqlite
 import           Database.Persist.TH
-import Control.Monad.Logger
-import Control.Monad.Trans.Resource (runResourceT)
-import Control.Monad.Trans.Resource.Internal
-import Control.Monad.Trans.Reader
+
 import Control.Monad
---import Data.Attoparsec
-import Text.Parsec.Token
-import Data.Conduit
 import qualified Data.Conduit.List as CL
-import Control.Monad.IO.Class
 import Control.Applicative
 
 data Time = Time { timeField :: [Int] } deriving (Show, Read, Eq)

@@ -9,17 +9,9 @@
 {-# LANGUAGE TypeFamilies               #-}
 
 import           Control.Monad.IO.Class  (liftIO)
-import           Control.Monad.Logger    (runStderrLoggingT)
 import           Database.Persist
 import           Database.Persist.Sqlite
-import           Database.Persist.TH
 import Control.Monad.Trans.Resource (runResourceT)
-import Data.Text
-import GHC.Generics
-import System.Directory
-import Control.Monad.IO.Class
-import Control.Monad.Trans.Reader
-import Data.Conduit
 import qualified Data.Conduit.List as CL
 import JsonParser
 

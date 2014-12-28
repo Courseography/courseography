@@ -4,14 +4,8 @@ module Main where
 import qualified Data.Text as T
 import Data.ByteString.Lazy.Char8
 import Data.ByteString.Char8
-import Data.String
 import Control.Monad    (msum)
 import Happstack.Server
-import           Text.Blaze ((!))
-import qualified Text.Blaze.Html5 as H
-import qualified Text.Blaze.Html5.Attributes as A
-import MakeElements
-import MasterTemplate
 import GridResponse
 import GraphResponse
 import AboutResponse
