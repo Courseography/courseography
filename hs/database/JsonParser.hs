@@ -1,17 +1,18 @@
-{-# LANGUAGE EmptyDataDecls             #-}
-{-# LANGUAGE FlexibleContexts           #-}
-{-# LANGUAGE GADTs                      #-}
-{-# LANGUAGE GeneralizedNewtypeDeriving #-}
-{-# LANGUAGE MultiParamTypeClasses      #-}
-{-# LANGUAGE OverloadedStrings, DeriveGeneric #-}
-{-# LANGUAGE QuasiQuotes                #-}
-{-# LANGUAGE TemplateHaskell            #-}
-{-# LANGUAGE TypeFamilies               #-}
+{-# LANGUAGE EmptyDataDecls, 
+             FlexibleContexts,
+             GADTs,
+             GeneralizedNewtypeDeriving,
+             MultiParamTypeClasses,
+             OverloadedStrings,
+             DeriveGeneric,
+             QuasiQuotes,
+             TemplateHaskell,            
+             TypeFamilies #-}
+
 module JsonParser where
 
 import           Control.Monad.IO.Class  (liftIO)
 import qualified Data.ByteString.Lazy as B
---import Yesod
 import Data.Text
 import Data.Aeson
 import GHC.Generics
