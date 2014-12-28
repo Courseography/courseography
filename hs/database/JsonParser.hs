@@ -249,15 +249,6 @@ insertTutorial session course tutorial = runSqlite dbStr $ do
                                                            session
                                                            tutorial
 
---parseTutorial :: Parser Tutorial
---parseTutorial = do
---    ts <- stringLiteral
---    comma
---    t <- stringLiteral
---    comma
---    tstr <- stringLiteral
---    return $ Tutorial ts t tstr
-
 -- | Gets the corresponding numeric requirement from a requirement description (Breadth, Distribution).
 getRequirement :: Text -> Int
 getRequirement reqString
