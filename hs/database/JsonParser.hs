@@ -228,8 +228,7 @@ insertLecture session course lecture = runSqlite dbStr $ do
 
 -- | Inserts the tutorials from course into the Tutorials table.
 insertTutorials :: Course -> IO ()
-insertTutorials course = do
-                          insertSessionTutorials (f course) "F" course
+insertTutorials course =  insertSessionTutorials (f course) "F" course >>
                           insertSessionTutorials (s course) "S" course
 
 -- | Inserts the tutorials from a specified section into the Tutorials table.
