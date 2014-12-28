@@ -15,8 +15,6 @@ import Control.Monad.Trans.Resource (runResourceT)
 import qualified Data.Conduit.List as CL
 import JsonParser
 
-connStr = "host=localhost dbname=coursedb user=cynic password=*** port=5432"
-
 main :: IO ()
 main = runResourceT $ do
                         liftIO $ setupDistributionTable
