@@ -65,3 +65,6 @@ Distribution
     description String
     deriving Show
 |]
+
+dbStr :: Text
+dbStr = "data53.sqlite3"

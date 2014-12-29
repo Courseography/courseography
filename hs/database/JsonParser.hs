@@ -223,6 +223,3 @@ getDistributionRequirement reqString
     |   (isInfixOf "This is a Social Science course" reqString) = 2
     |   (isInfixOf "This is a Humanities course" reqString) = 1
     |   otherwise = 6
-
-dbStr :: Text
-dbStr = "data53.sqlite3"
