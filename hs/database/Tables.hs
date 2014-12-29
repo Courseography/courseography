@@ -40,6 +40,7 @@ Lectures
     section Text
     times [Time]
     capacity Int
+    instructor Text
     enrolled Int
     waitlist Int
     extra Int
