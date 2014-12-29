@@ -142,8 +142,8 @@ insertCourse course = runSqlite dbStr $ do
                                           (manualTutorialEnrol course)
                                           (prereqString course)
                                           (exclusions course)
-                                          (getRequirement $  breadth course)
-                                          (getRequirement $  distribution course)
+                                          (getBreadthRequirement      $  breadth course)
+                                          (getDistributionRequirement $  distribution course)
 
 -- | Inserts the lectures from course into the Lectures table.
 insertLectures :: Course -> IO ()
@@ -197,18 +197,25 @@ insertTutorial session course tutorial = runSqlite dbStr $ do
                                                            session
                                                            tutorial
 
--- | Gets the corresponding numeric requirement from a requirement description (Breadth, Distribution).
-getRequirement :: Text -> Int
-getRequirement reqString
+-- | Gets the corresponding numeric requirement from a breadth requirement description.
+-- | 6 indicates a parsing error.
+getBreadthRequirement :: Text -> Int
+getBreadthRequirement reqString
     |   (isInfixOf "5" reqString) = 5
     |   (isInfixOf "4" reqString) = 4
     |   (isInfixOf "3" reqString) = 3
     |   (isInfixOf "2" reqString) = 2
     |   (isInfixOf "1" reqString) = 1
+    |   otherwise = 6
+
+-- | Gets the corresponding numeric requirement from a distribution requirement description.
+-- | 6 indicates a parsing error.
+getDistributionRequirement :: Text -> Int
+getDistributionRequirement reqString
     |   (isInfixOf "This is a Science course" reqString) = 3
     |   (isInfixOf "This is a Social Science course" reqString) = 2
     |   (isInfixOf "This is a Humanities course" reqString) = 1
-    | otherwise = 6
+    |   otherwise = 6
 
 dbStr :: Text
 dbStr = "11data34.sqlite3"
