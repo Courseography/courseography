@@ -30,8 +30,8 @@ static :: String
 static = "static"
 
 staticDir :: String
-staticDir = "C:\\Users\\David\\Documents\\courseography"
---staticDir = "/home/cynic/4/courseography"
+--staticDir = "C:\\Users\\David\\Documents\\courseography"
+staticDir = "/home/cynic/4/courseography"
 
 course :: String
 course = "course"
@@ -47,18 +47,18 @@ main = simpleHTTP nullConf $
 
 queryCourse :: String -> IO Response
 queryCourse course = runSqlite (T.pack ("database/" ++ T.unpack dbStr)) $ do
-        sqlCourse    :: [Entity Courses] <- selectList [CoursesCode ==. "CSC108H1"] []
+        sqlCourse    :: [Entity Courses] <- selectList [CoursesCode ==. (T.pack course)] []
         --sqlLectures  :: [Entity Lectures] <- selectList [LecturesCode ==. "CSC108H1"] []
         --sqlTutorials :: [Entity Tutorials] <- selectList [TutorialsCode ==. "CSC108H1"] []
         return $ toResponseBS (BS.pack "application/json") $
                               (BSL.pack $
-                               reverse $
-                               tail $
-                               reverse $
-                               tail $
+                               removeQuotationMarks $
                                (filter (\c -> c /= '\\') $ 
                                	BSL.unpack $
                                 Aeson.encode $ 
                                 (toJsonText $ 
                                  entityVal $ 
                                  head sqlCourse)))
+
+removeQuotationMarks :: String -> String
+removeQuotationMarks x = reverse $ tail $ reverse $ tail $ x
