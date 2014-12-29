@@ -51,9 +51,8 @@ Tutorials
     --department String
     code Text
     session Text
-    tutorial Text
-    --times [Time]
-    --timeStr Text
+    times [Time]
+    timeStr Text
     deriving Show
 
 Breadth

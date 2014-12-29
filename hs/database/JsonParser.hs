@@ -13,6 +13,7 @@ module JsonParser where
 
 import           Control.Monad.IO.Class  (liftIO)
 import qualified Data.ByteString.Lazy as B
+import qualified Data.Vector as V
 import Data.Text
 import Data.Aeson
 import GHC.Generics
@@ -40,15 +41,14 @@ data Lecture =
 
 -- | A Tutorial.
 data Tutorial =
-    Tutorial { tut_section :: Text,
-               times   :: Text,
-               timeStr :: Text
+    Tutorial { times       :: [[Int]],
+               timeStr     :: Text
              } deriving (Show)
 
 -- | A Session.
 data Session =
     Session { lectures :: [Lecture],
-              tutorials  :: [Text]
+              tutorials  :: [Tutorial]
             } deriving (Show)
 
 -- | A Course.
@@ -99,10 +99,19 @@ instance FromJSON Lecture where
                 <*> v .:? "wait"
     parseJSON _ = mzero
 
+instance FromJSON Tutorial where
+    parseJSON (Array v)
+        | V.length v == 2 = do
+            x <- parseJSON $ v V.! 0
+            y <- parseJSON $ v V.! 1
+            return $ Tutorial x y
+        | otherwise = mzero
+    parseJSON _ = mzero
+
 -- | Opens a directory contained in dir, and processes every file in that directory.
 processDirectory :: String -> IO ()
 processDirectory dir = getDirectoryContents dir >>= \ contents ->
-                       let formattedContents = ((Prelude.map ("../../res/courses/" ++) contents))
+                       let formattedContents = ((Prelude.map ("../../res/courses2/" ++) contents))
 		                   in filterM doesFileExist formattedContents >>= mapM_ printFile
 
 -- | Opens and reads a files contents, and decodes JSON content into a Course data structure.
@@ -187,13 +196,13 @@ insertSessionTutorials session sessionStr course = case session of
                             Nothing    -> print $ "No " ++ sessionStr ++ " tutorial section for: " ++ show (name course)
 
 -- | Inserts a tutorial into the Tutorials table.
-insertTutorial :: Text -> Course -> Text -> IO ()
+insertTutorial :: Text -> Course -> Tutorial -> IO ()
 insertTutorial session course tutorial = runSqlite dbStr $ do
                                        runMigration migrateAll
-                                       --let tut = parseOnly parseTutorial tutorial
                                        insert_ $ Tutorials (name course)
                                                            session
-                                                           tutorial
+                                                           (Prelude.map Time  (times tutorial))
+                                                           (timeStr tutorial)
 
 -- | Gets the corresponding numeric requirement from a breadth requirement description.
 -- | 6 indicates a parsing error.
@@ -216,4 +225,4 @@ getDistributionRequirement reqString
     |   otherwise = 6
 
 dbStr :: Text
-dbStr = "11data34.sqlite3"
+dbStr = "data53.sqlite3"
