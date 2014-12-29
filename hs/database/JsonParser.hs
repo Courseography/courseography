@@ -47,7 +47,7 @@ data Tutorial =
 
 -- | A Session.
 data Session =
-    Session { lectures :: [Lecture],
+    Session { lectures   :: [Lecture],
               tutorials  :: [Tutorial]
             } deriving (Show)
 
