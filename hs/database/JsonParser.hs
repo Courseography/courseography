@@ -189,7 +189,7 @@ insertCourse course = runSqlite dbStr $ do
                                           (breadth course)      --(getBreadthRequirement      $  breadth course)
                                           (distribution course) --(getDistributionRequirement $  distribution course)
                                           (prereqString course)
-                                          
+
 -- | Inserts the lectures from course into the Lectures table.
 insertLectures :: Course -> IO ()
 insertLectures course = insertSessionLectures (f course) "F" course >>
@@ -210,6 +210,7 @@ insertLecture session course lecture = runSqlite dbStr $ do
                                                           (section lecture)
                                                           (Prelude.map Time (time lecture))
                                                           (cap lecture)
+                                                          (instructor lecture)
                                                           (case enrol lecture of
                                                                 Just value -> value
                                                                 Nothing    -> 0)
