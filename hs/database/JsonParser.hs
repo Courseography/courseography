@@ -108,9 +108,7 @@ processDirectory dir = getDirectoryContents dir >>= \ contents ->
 -- | Opens and reads a files contents, and decodes JSON content into a Course data structure.
 printFile :: String -> IO ()
 printFile courseFile = do
-                         print "Checking"
-                         let xf = getJSON courseFile
-                         d <- ((eitherDecode <$> xf) :: IO (Either String [Course]))
+                         d <- ((eitherDecode <$> getJSON courseFile) :: IO (Either String [Course]))
                          case d of
                            Left err -> print $ courseFile ++ " " ++ err
                            Right course -> do
