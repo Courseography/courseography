@@ -153,7 +153,7 @@ instance FromJSON Lecture where
 
 -- | Opens a directory contained in dir, and processes every file in that directory.
 processDirectory :: String -> IO ()
-processDirectory dir = getDirectoryContents dir >>= \ contents ->
+processDirectory dir = getDirectoryContents dir >>= \contents ->
                        let formattedContents = ((Prelude.map ("../../res/courses/" ++) contents))
 		                   in filterM doesFileExist formattedContents >>= mapM_ printFile
 
