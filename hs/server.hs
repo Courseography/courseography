@@ -36,6 +36,8 @@ staticDir = "/home/cynic/4/courseography"
 course :: String
 course = "course"
 
+data Dummy = Dummy {dummField :: T.Text, dumm2Field :: T.Text}
+
 main :: IO ()
 main = simpleHTTP nullConf $
   msum [ dir grid $ gridResponse,
@@ -48,17 +50,39 @@ main = simpleHTTP nullConf $
 queryCourse :: String -> IO Response
 queryCourse course = runSqlite (T.pack ("database/" ++ T.unpack dbStr)) $ do
         sqlCourse    :: [Entity Courses] <- selectList [CoursesCode ==. (T.pack course)] []
+        let x = entityVal $ head sqlCourse
+        let d = Course "breadth"
+        	            (coursesTitle x)
+        	            (coursesDescription x)
+        	            Nothing
+        	            Nothing
+        	            Nothing
+        	            "name"
+        	            Nothing
+        	            Nothing
+        	            "(coursesDistribution x)"
+        	            Nothing
+             --distribution          :: !Text,
+             --prereqs               :: Maybe [Text]
+        return $ toResponse $ formatJsonResonse $ encodeJSON (Aeson.toJSON d)
         --sqlLectures  :: [Entity Lectures] <- selectList [LecturesCode ==. "CSC108H1"] []
         --sqlTutorials :: [Entity Tutorials] <- selectList [TutorialsCode ==. "CSC108H1"] []
-        return $ formatJsonResonse $
-                  (BSL.pack $
+        --return $ formatJsonResonse $
+        --          (BSL.pack $
+        --           removeQuotationMarks $
+        --           (filter (\c -> c /= '\\') $ 
+        --           	BSL.unpack $
+        --            Aeson.encode $ 
+        --            (toJsonText $ 
+        --             entityVal $ 
+        --             head sqlCourse)))
+
+encodeJSON :: Aeson.Value -> BSL.ByteString
+encodeJSON x = BSL.pack $
                    removeQuotationMarks $
-                   (filter (\c -> c /= '\\') $ 
+                   filter (\c -> c /= '\\') $ 
                    	BSL.unpack $
-                    Aeson.encode $ 
-                    (toJsonText $ 
-                     entityVal $ 
-                     head sqlCourse)))
+                    Aeson.encode $ x
 
 formatJsonResonse :: BSL.ByteString -> Response
 formatJsonResonse x = toResponseBS (BS.pack "application/json") $ x
