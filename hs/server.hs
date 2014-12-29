@@ -2,14 +2,15 @@
 
 module Main where
 import qualified Data.Text as T
-import Data.ByteString.Lazy.Char8
-import Data.ByteString.Char8
+import qualified Data.ByteString.Lazy.Char8 as BSL
+import qualified Data.ByteString.Char8 as BS
 import Control.Monad    (msum)
 import Happstack.Server
 import GridResponse
 import GraphResponse
 import AboutResponse
 import JsonParser
+import Tables
 import qualified Data.Aeson as Aeson
 import Control.Monad.IO.Class  (liftIO)
 
@@ -46,8 +47,18 @@ main = simpleHTTP nullConf $
 
 queryCourse :: String -> IO Response
 queryCourse course = runSqlite (T.pack ("database/" ++ T.unpack dbStr)) $ do
-        --let sql = "SELECT * FROM Lectures WHERE code like '%" ++ course ++ "'"
-        --rawQuery sql [] $$ CL.mapM_ (liftIO . print)
-        sql :: [Entity Courses] <- selectList [CoursesCode ==. "CSC108H1"] []
-        --let c = entityVal $ Prelude.head sql
-        return $ toResponseBS (Data.ByteString.Char8.pack "application/json") $ (Data.ByteString.Lazy.Char8.pack $ Prelude.reverse $ Prelude.tail $ Prelude.reverse $ Prelude.tail $ (Prelude.filter (\c -> c /= '\\') $ Data.ByteString.Lazy.Char8.unpack $ Aeson.encode $ (toJsonText $ entityVal $ Prelude.head sql)))
+        sqlCourse    :: [Entity Courses] <- selectList [CoursesCode ==. "CSC108H1"] []
+        --sqlLectures  :: [Entity Lectures] <- selectList [LecturesCode ==. "CSC108H1"] []
+        --sqlTutorials :: [Entity Tutorials] <- selectList [TutorialsCode ==. "CSC108H1"] []
+        return $ toResponseBS (BS.pack "application/json") $
+                              (BSL.pack $
+                               reverse $
+                               tail $
+                               reverse $
+                               tail $
+                               (filter (\c -> c /= '\\') $ 
+                               	BSL.unpack $
+                                Aeson.encode $ 
+                                (toJsonText $ 
+                                 entityVal $ 
+                                 head sqlCourse)))
