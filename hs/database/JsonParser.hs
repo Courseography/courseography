@@ -13,7 +13,7 @@ module JsonParser where
 
 import           Control.Monad.IO.Class  (liftIO)
 import qualified Data.ByteString.Lazy as B
-import Data.Text
+import qualified Data.Text as T
 import Data.Aeson
 import GHC.Generics
 import System.Directory
@@ -26,8 +26,8 @@ import Control.Monad
 import qualified Data.Conduit.List as CL
 import Control.Applicative
 
-dbStr :: Text
-dbStr = "11data34.sqlite3"
+dbStr :: T.Text
+dbStr = "11d1ata34.sqlite3"
 
 courseDirectory :: String
 courseDirectory = "../../res/courses/"
@@ -38,37 +38,37 @@ derivePersistField "Time"
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 Courses json
     --department String
-    code Text
-    title Text
-    description Text
+    code T.Text
+    title T.Text
+    description T.Text
     manualTutorialEnrolment Bool Maybe
     --manualPracticalEnrolment Bool
-    prereqs Text Maybe
-    exclusions Text Maybe
+    prereqs T.Text Maybe
+    exclusions T.Text Maybe
     breadth Int
     distribution Int
-    --prep Text
+    --prep T.Text
     deriving Show
 
 Lectures
     --department String
-    code Text
-    session Text
-    section Text
+    code T.Text
+    session T.Text
+    section T.Text
     times [Time]
     capacity Int
     enrolled Int
     waitlist Int
     extra Int
     -- location Text -- Location does not exist in JSON files.
-    time_str Text
+    time_str T.Text
     deriving Show
 
 Tutorials
     --department String
-    code Text
-    session Text
-    tutorial Text
+    code T.Text
+    session T.Text
+    tutorial T.Text
     --times [Time]
     --timeStr Text
     deriving Show
@@ -87,41 +87,41 @@ Distribution
 -- | A Lecture.
 data Lecture =
     Lecture { extra      :: Int,
-              section    :: Text,
+              section    :: T.Text,
               cap        :: Int,
-              time_str   :: Text,
+              time_str   :: T.Text,
               time       :: [[Int]],
-              instructor :: Text,
+              instructor :: T.Text,
               enrol      :: Maybe Int,
               wait       :: Maybe Int
             } deriving Show
 
 -- | A Tutorial.
 data Tutorial =
-    Tutorial { tut_section :: Text,
-               times   :: Text,
-               timeStr :: Text
+    Tutorial { tut_section :: T.Text,
+               times   :: T.Text,
+               timeStr :: T.Text
              } deriving Show
 
 -- | A Session.
 data Session =
     Session { lectures :: [Lecture],
-              tutorials  :: [Text]
+              tutorials  :: [T.Text]
             } deriving Show
 
 -- | A Course.
 data Course =
-    Course { breadth               :: !Text,
-             description           :: !Text,
-             title                 :: !Text,
-             prereqString          :: Maybe Text,
+    Course { breadth               :: !T.Text,
+             description           :: !T.Text,
+             title                 :: !T.Text,
+             prereqString          :: Maybe T.Text,
              f                     :: Maybe Session,
              s                     :: Maybe Session,
-             name                  :: !Text,
-             exclusions            :: Maybe Text,
+             name                  :: !T.Text,
+             exclusions            :: Maybe T.Text,
              manualTutorialEnrol   :: Maybe Bool,
-             distribution          :: !Text,
-             prereqs               :: Maybe [Text]
+             distribution          :: !T.Text,
+             prereqs               :: Maybe [T.Text]
 	   } deriving (Show, Generic)
 
 instance FromJSON Course where
@@ -160,7 +160,7 @@ instance FromJSON Lecture where
 -- | Opens a directory contained in dir, and processes every file in that directory.
 processDirectory :: IO ()
 processDirectory = getDirectoryContents courseDirectory >>= \contents ->
-                    let formattedContents = ((Prelude.map (courseDirectory ++) contents))
+                    let formattedContents = ((map (courseDirectory ++) contents))
 		                in filterM doesFileExist formattedContents >>= mapM_ printFile
 
 -- | Opens and reads a files contents, and decodes JSON content into a Course data structure.
@@ -172,9 +172,9 @@ printFile courseFile = do
                          case d of
                            Left err -> print $ courseFile ++ " " ++ err
                            Right course -> do
-                                             insertCourse $ Prelude.last course
-                                             insertLectures $ Prelude.last course
-                                             insertTutorials $ Prelude.last course
+                                             insertCourse $ last course
+                                             insertLectures $ last course
+                                             insertTutorials $ last course
                                              print $ "Inserted " ++ courseFile
 
 -- | An opening square bracket.
@@ -211,17 +211,17 @@ insertLectures course = insertSessionLectures (f course) "F" course >>
 -- | Inserts the lectures from a specified section into the Lectures table.
 insertSessionLectures :: Maybe Session -> String -> Course -> IO ()
 insertSessionLectures session sessionStr course = case session of
-                            Just value -> liftIO $ Prelude.foldl1 (>>) $ Prelude.map ((insertLecture "S") (course)) (lectures value)
+                            Just value -> liftIO $ foldl1 (>>) $ map ((insertLecture "S") (course)) (lectures value)
                             Nothing    -> print $ "No " ++ sessionStr ++ " lecture section for: " ++ show (name course)
 
 -- | Inserts a lecture into the Lectures table.
-insertLecture :: Text -> Course -> Lecture -> IO ()
+insertLecture :: T.Text -> Course -> Lecture -> IO ()
 insertLecture session course lecture = runSqlite dbStr $ do
                                        runMigration migrateAll
                                        insert_ $ Lectures (name course)
                                                           session
                                                           (section lecture)
-                                                          (Prelude.map Time (time lecture))
+                                                          (map Time (time lecture))
                                                           (cap lecture)
                                                           (case enrol lecture of
                                                                 Just value -> value
@@ -240,13 +240,13 @@ insertTutorials course =  insertSessionTutorials (f course) "F" course >>
 -- | Inserts the tutorials from a specified section into the Tutorials table.
 insertSessionTutorials :: Maybe Session -> String -> Course -> IO ()
 insertSessionTutorials session sessionStr course = case session of
-                            Just value -> if Prelude.null (tutorials value)
+                            Just value -> if null (tutorials value)
                                           then print "Cannot find tut"
-                                          else liftIO $ Prelude.foldl1 (>>) $ Prelude.map ((insertTutorial "S") (course)) (tutorials value)
+                                          else liftIO $ foldl1 (>>) $ map ((insertTutorial "S") (course)) (tutorials value)
                             Nothing    -> print $ "No " ++ sessionStr ++ " tutorial section for: " ++ show (name course)
 
 -- | Inserts a tutorial into the Tutorials table.
-insertTutorial :: Text -> Course -> Text -> IO ()
+insertTutorial :: T.Text -> Course -> T.Text -> IO ()
 insertTutorial session course tutorial = runSqlite dbStr $ do
                                        runMigration migrateAll
                                        --let tut = parseOnly parseTutorial tutorial
@@ -257,20 +257,20 @@ insertTutorial session course tutorial = runSqlite dbStr $ do
 
 -- | Gets the corresponding numeric requirement from a breadth requirement description.
 -- | 6 indicates a parsing error.
-getBreadthRequirement :: Text -> Int
+getBreadthRequirement :: T.Text -> Int
 getBreadthRequirement reqString
-    |   (isInfixOf "5" reqString) = 5
-    |   (isInfixOf "4" reqString) = 4
-    |   (isInfixOf "3" reqString) = 3
-    |   (isInfixOf "2" reqString) = 2
-    |   (isInfixOf "1" reqString) = 1
+    |   (T.isInfixOf "5" reqString) = 5
+    |   (T.isInfixOf "4" reqString) = 4
+    |   (T.isInfixOf "3" reqString) = 3
+    |   (T.isInfixOf "2" reqString) = 2
+    |   (T.isInfixOf "1" reqString) = 1
     |   otherwise = 6
 
 -- | Gets the corresponding numeric requirement from a distribution requirement description.
 -- | 6 indicates a parsing error.
-getDistributionRequirement :: Text -> Int
+getDistributionRequirement :: T.Text -> Int
 getDistributionRequirement reqString
-    |   (isInfixOf "This is a Science course" reqString) = 3
-    |   (isInfixOf "This is a Social Science course" reqString) = 2
-    |   (isInfixOf "This is a Humanities course" reqString) = 1
+    |   (T.isInfixOf "This is a Science course" reqString) = 3
+    |   (T.isInfixOf "This is a Social Science course" reqString) = 2
+    |   (T.isInfixOf "This is a Humanities course" reqString) = 1
     |   otherwise = 6
