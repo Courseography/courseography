@@ -81,11 +81,32 @@ instance FromJSON Course where
                <*> v .:? "prereqs"
     parseJSON _ = mzero
 
+instance ToJSON Course where
+  toJSON (Course breadth description title prereqString f s name exclusions manualTutorialEnrol distribution prereqs) 
+          = object ["breadth" .= breadth,
+                    "description" .= description,
+                    "title" .= title,
+                    "prereqString" .= prereqString,
+                    "F" .= f,
+                    "S" .= s,
+                    "name" .= name,
+                    "exclusions" .= exclusions,
+                    "manualTutorialEnrolment" .= manualTutorialEnrol,
+                    "distribution" .= distribution,
+                    "prereqs" .= prereqs
+                              ]
+
 instance FromJSON Session where
     parseJSON (Object v) =
         Session <$> v .: "lectures"
                 <*> v .: "tutorials"
     parseJSON _ = mzero
+
+instance ToJSON Session where
+  toJSON (Session lectures tutorials) 
+          = object ["lectures" .= lectures,
+                    "tutorials" .= tutorials
+                   ]
 
 instance FromJSON Lecture where
     parseJSON (Object v) =
@@ -99,6 +120,18 @@ instance FromJSON Lecture where
                 <*> v .:? "wait"
     parseJSON _ = mzero
 
+instance ToJSON Lecture where
+  toJSON (Lecture extra section cap time_str time instructor enrol wait) 
+          = object ["extra" .= extra,
+                    "section" .= section,
+                    "cap" .= cap,
+                    "time_str" .= time_str,
+                    "time" .= time,
+                    "instructor" .= instructor,
+                    "enrol" .= enrol,
+                    "wait" .= wait
+                   ]
+
 instance FromJSON Tutorial where
     parseJSON (Array v)
         | V.length v == 2 = do
@@ -107,6 +140,10 @@ instance FromJSON Tutorial where
             return $ Tutorial x y
         | otherwise = mzero
     parseJSON _ = mzero
+
+instance ToJSON Tutorial where
+  toJSON (Tutorial times timeStr) 
+          = Array (V.fromList (Prelude.map toJSON times) V.++ (V.singleton $ toJSON timeStr))
 
 -- | Opens a directory contained in dir, and processes every file in that directory.
 processDirectory :: String -> IO ()
