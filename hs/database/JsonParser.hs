@@ -27,7 +27,7 @@ import qualified Data.Conduit.List as CL
 import Control.Applicative
 
 dbStr :: T.Text
-dbStr = "23.sqlite3"
+dbStr = "file1.sqlite3"
 
 courseDirectory :: String
 courseDirectory = "../../res/courses/"
@@ -203,7 +203,7 @@ insertLectures course = insertSessionLectures (f course) "F" course >>
 -- | Inserts the lectures from a specified section into the Lectures table.
 insertSessionLectures :: Maybe Session -> String -> Course -> IO ()
 insertSessionLectures session sessionStr course = case session of
-                            Just value -> liftIO $ foldl1 (>>) $ map ((insertLecture "S") (course)) (lectures value)
+                            Just value -> liftIO $ mapM_ ((insertLecture "S") (course)) (lectures value)
                             Nothing    -> print $ "No " ++ sessionStr ++ " lecture section for: " ++ show (name course)
 
 -- | Inserts a lecture into the Lectures table.
