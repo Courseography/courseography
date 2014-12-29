@@ -50,15 +50,18 @@ queryCourse course = runSqlite (T.pack ("database/" ++ T.unpack dbStr)) $ do
         sqlCourse    :: [Entity Courses] <- selectList [CoursesCode ==. (T.pack course)] []
         --sqlLectures  :: [Entity Lectures] <- selectList [LecturesCode ==. "CSC108H1"] []
         --sqlTutorials :: [Entity Tutorials] <- selectList [TutorialsCode ==. "CSC108H1"] []
-        return $ toResponseBS (BS.pack "application/json") $
-                              (BSL.pack $
-                               removeQuotationMarks $
-                               (filter (\c -> c /= '\\') $ 
-                               	BSL.unpack $
-                                Aeson.encode $ 
-                                (toJsonText $ 
-                                 entityVal $ 
-                                 head sqlCourse)))
+        return $ formatJsonResonse $
+                  (BSL.pack $
+                   removeQuotationMarks $
+                   (filter (\c -> c /= '\\') $ 
+                   	BSL.unpack $
+                    Aeson.encode $ 
+                    (toJsonText $ 
+                     entityVal $ 
+                     head sqlCourse)))
+
+formatJsonResonse :: BSL.ByteString -> Response
+formatJsonResonse x = toResponseBS (BS.pack "application/json") $ x
 
 removeQuotationMarks :: String -> String
 removeQuotationMarks x = reverse $ tail $ reverse $ tail $ x
