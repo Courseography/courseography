@@ -51,21 +51,26 @@ queryCourse :: String -> IO Response
 queryCourse course = runSqlite (T.pack ("database/" ++ T.unpack dbStr)) $ do
         sqlCourse    :: [Entity Courses] <- selectList [CoursesCode ==. (T.pack course)] []
         let x = entityVal $ head sqlCourse
-        let d = Course "breadth"
-        	            (coursesTitle x)
-        	            (coursesDescription x)
-        	            Nothing
-        	            Nothing
-        	            Nothing
-        	            "name"
-        	            Nothing
-        	            Nothing
-        	            "(coursesDistribution x)"
-        	            Nothing
-             --distribution          :: !Text,
-             --prereqs               :: Maybe [Text]
+        sqlLectures  :: [Entity Lectures] <- selectList [LecturesCode ==. (T.pack course)] []
+        sqlTutorials :: [Entity Tutorials] <- selectList [TutorialsCode ==. (T.pack course)] []
+        let y = (map entityVal) sqlLectures
+        let z = (map entityVal) sqlTutorials
+        let y1 = map extractLecture y
+        let z1 = map extractTutorial z
+        let session = JsonParser.Session y1 z1
+        let d = Course (coursesBreadth x)
+        	           (coursesDescription x)
+        	           (coursesTitle x)
+        	            Nothing --prereqString
+        	           (Just session) --f
+        	           (Just session) --s
+        	           (coursesCode x)  --name
+        	           (coursesExclusions x) --exclusions
+        	            Nothing -- man tut
+        	           (coursesDistribution x)
+        	            Nothing -- prereqs               :: Maybe [Text]
+
         return $ toResponse $ formatJsonResonse $ encodeJSON (Aeson.toJSON d)
-        --sqlLectures  :: [Entity Lectures] <- selectList [LecturesCode ==. "CSC108H1"] []
         --sqlTutorials :: [Entity Tutorials] <- selectList [TutorialsCode ==. "CSC108H1"] []
         --return $ formatJsonResonse $
         --          (BSL.pack $
@@ -77,9 +82,24 @@ queryCourse course = runSqlite (T.pack ("database/" ++ T.unpack dbStr)) $ do
         --             entityVal $ 
         --             head sqlCourse)))
 
+
+extractLecture :: Lectures -> Lecture
+extractLecture ent = Lecture (lecturesExtra ent)
+                             (lecturesSection ent)
+                             (lecturesCapacity ent)
+                             (lecturesTime_str ent)
+                             (map timeField (lecturesTimes ent))
+                             (lecturesInstructor ent)
+                             (Just (lecturesEnrolled ent))
+                             (Just (lecturesWaitlist ent))
+
+extractTutorial :: (Tutorials) -> Tutorial
+extractTutorial ent = Tutorial (map timeField (tutorialsTimes ent))
+                               (tutorialsTimeStr ent)
+
 encodeJSON :: Aeson.Value -> BSL.ByteString
 encodeJSON x = BSL.pack $
-                   removeQuotationMarks $
+                   --removeQuotationMarks $
                    filter (\c -> c /= '\\') $ 
                    	BSL.unpack $
                     Aeson.encode $ x
@@ -88,4 +108,5 @@ formatJsonResonse :: BSL.ByteString -> Response
 formatJsonResonse x = toResponseBS (BS.pack "application/json") $ x
 
 removeQuotationMarks :: String -> String
-removeQuotationMarks x = reverse $ tail $ reverse $ tail $ x
+removeQuotationMarks x = (reverse $ tail $ reverse $ tail $ x)
+
