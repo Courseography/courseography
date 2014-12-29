@@ -111,7 +111,7 @@ instance FromJSON Tutorial where
 -- | Opens a directory contained in dir, and processes every file in that directory.
 processDirectory :: String -> IO ()
 processDirectory dir = getDirectoryContents dir >>= \ contents ->
-                       let formattedContents = ((Prelude.map ("../../res/courses2/" ++) contents))
+                       let formattedContents = ((Prelude.map (dir ++) contents))
 		                   in filterM doesFileExist formattedContents >>= mapM_ printFile
 
 -- | Opens and reads a files contents, and decodes JSON content into a Course data structure.
