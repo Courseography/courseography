@@ -27,7 +27,7 @@ import qualified Data.Conduit.List as CL
 import Control.Applicative
 
 dbStr :: T.Text
-dbStr = "11d1ata34.sqlite3"
+dbStr = "23.sqlite3"
 
 courseDirectory :: String
 courseDirectory = "../../res/courses/"
@@ -168,27 +168,19 @@ printFile :: String -> IO ()
 printFile courseFile = do
                          print "Checking"
                          let xf = getJSON courseFile
-                         d <- ((eitherDecode <$> xf) :: IO (Either String [Course]))
+                         d <- ((eitherDecode <$> xf) :: IO (Either String Course))
                          case d of
                            Left err -> print $ courseFile ++ " " ++ err
                            Right course -> do
-                                             insertCourse $ last course
-                                             insertLectures $ last course
-                                             insertTutorials $ last course
+                                             insertCourse $ course
+                                             insertLectures $ course
+                                             insertTutorials $ course
                                              print $ "Inserted " ++ courseFile
-
--- | An opening square bracket.
-openJSON :: B.ByteString
-openJSON = "["
-
--- | A closing square bracket.
-closeJSON :: B.ByteString
-closeJSON = "]"
 
 -- | Opens and reads the file contained in `jsonFile`. File contents are returned, surrounded by
 -- | square brackets.
 getJSON :: String -> IO B.ByteString
-getJSON jsonFile = (B.readFile jsonFile) >>= \ a -> return $ B.append (B.append openJSON a) closeJSON
+getJSON jsonFile = (B.readFile jsonFile)
 
 -- | Inserts course into the Courses table.
 insertCourse :: Course -> IO ()
