@@ -28,9 +28,9 @@ Courses json
     --manualPracticalEnrolment Bool
     prereqs Text Maybe
     exclusions Text Maybe
-    breadth Int
-    distribution Int
-    --prep Text
+    breadth Text
+    distribution Text
+    prereqString Text Maybe
     deriving Show
 
 Lectures
@@ -67,4 +67,4 @@ Distribution
 |]
 
 dbStr :: Text
-dbStr = "data53.sqlite3"
+dbStr = "data55.sqlite3"

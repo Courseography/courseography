@@ -161,7 +161,7 @@ printFile courseFile = do
                                              insertCourse $ Prelude.last course
                                              insertLectures $ Prelude.last course
                                              insertTutorials $ Prelude.last course
-                                             print $ "Inserted " ++ courseFile
+                                             --print $ "Inserted " ++ courseFile
 
 -- | An opening square bracket.
 openJSON :: B.ByteString
@@ -186,9 +186,10 @@ insertCourse course = runSqlite dbStr $ do
                                           (manualTutorialEnrol course)
                                           (prereqString course)
                                           (exclusions course)
-                                          (getBreadthRequirement      $  breadth course)
-                                          (getDistributionRequirement $  distribution course)
-
+                                          (breadth course)      --(getBreadthRequirement      $  breadth course)
+                                          (distribution course) --(getDistributionRequirement $  distribution course)
+                                          (prereqString course)
+                                          
 -- | Inserts the lectures from course into the Lectures table.
 insertLectures :: Course -> IO ()
 insertLectures course = insertSessionLectures (f course) "F" course >>
@@ -228,7 +229,7 @@ insertSessionTutorials :: Maybe Session -> String -> Course -> IO ()
 insertSessionTutorials session sessionStr course = case session of
                             Just value -> if Prelude.null (tutorials value)
                                           then print "Cannot find tut"
-                                          else liftIO $ Prelude.foldl1 (>>) $ Prelude.map ((insertTutorial "S") (course)) (tutorials value)
+                                            else liftIO $ Prelude.foldl1 (>>) $ Prelude.map ((insertTutorial "S") (course)) (tutorials value)
                             Nothing    -> print $ "No " ++ sessionStr ++ " tutorial section for: " ++ show (name course)
 
 -- | Inserts a tutorial into the Tutorials table.
