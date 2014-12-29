@@ -192,8 +192,8 @@ insertCourse course = runSqlite dbStr $ do
                                           (manualTutorialEnrol course)
                                           (prereqString course)
                                           (exclusions course)
-                                          (getBreadthRequirement $  breadth course)
-                                          (getDistributionRequirement $  distribution course)
+                                          (getBreadthRequirement $ breadth course)
+                                          (getDistributionRequirement $ distribution course)
 
 -- | Inserts the lectures from course into the Lectures table.
 insertLectures :: Course -> IO ()
