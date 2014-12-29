@@ -203,7 +203,7 @@ insertLectures course = insertSessionLectures (f course) "F" course >>
 -- | Inserts the lectures from a specified section into the Lectures table.
 insertSessionLectures :: Maybe Session -> String -> Course -> IO ()
 insertSessionLectures session sessionStr course = case session of
-                            Just value -> liftIO $ mapM_ ((insertLecture "S") (course)) (lectures value)
+                            Just value -> liftIO $ mapM_ ((insertLecture (T.pack sessionStr)) (course)) (lectures value)
                             Nothing    -> print $ "No " ++ sessionStr ++ " lecture section for: " ++ show (name course)
 
 -- | Inserts a lecture into the Lectures table.
@@ -234,7 +234,7 @@ insertSessionTutorials :: Maybe Session -> String -> Course -> IO ()
 insertSessionTutorials session sessionStr course = case session of
                             Just value -> if null (tutorials value)
                                           then print "Cannot find tut"
-                                          else liftIO $ foldl1 (>>) $ map ((insertTutorial "S") (course)) (tutorials value)
+                                          else liftIO $ mapM_ ((insertTutorial (T.pack sessionStr)) (course)) (tutorials value)
                             Nothing    -> print $ "No " ++ sessionStr ++ " tutorial section for: " ++ show (name course)
 
 -- | Inserts a tutorial into the Tutorials table.
