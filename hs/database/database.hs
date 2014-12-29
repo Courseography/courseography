@@ -21,7 +21,7 @@ main = runResourceT $ do
                         liftIO $ print "Distribution table set up"
                         liftIO $ setupBreadthTable
                         liftIO $ print "breadth table set up"
-                        liftIO $ processDirectory $ "../../res/courses"
+                        liftIO $ processDirectory
 
 -- | Sets up the Distribution table.
 setupDistributionTable :: IO ()

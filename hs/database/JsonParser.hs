@@ -26,6 +26,12 @@ import Control.Monad
 import qualified Data.Conduit.List as CL
 import Control.Applicative
 
+dbStr :: Text
+dbStr = "11data34.sqlite3"
+
+courseDirectory :: String
+courseDirectory = "../../res/courses/"
+
 data Time = Time { timeField :: [Int] } deriving (Show, Read, Eq)
 derivePersistField "Time"
 
@@ -152,10 +158,10 @@ instance FromJSON Lecture where
     parseJSON _ = mzero
 
 -- | Opens a directory contained in dir, and processes every file in that directory.
-processDirectory :: String -> IO ()
-processDirectory dir = getDirectoryContents dir >>= \contents ->
-                       let formattedContents = ((Prelude.map ("../../res/courses/" ++) contents))
-		                   in filterM doesFileExist formattedContents >>= mapM_ printFile
+processDirectory :: IO ()
+processDirectory = getDirectoryContents courseDirectory >>= \contents ->
+                    let formattedContents = ((Prelude.map (courseDirectory ++) contents))
+		                in filterM doesFileExist formattedContents >>= mapM_ printFile
 
 -- | Opens and reads a files contents, and decodes JSON content into a Course data structure.
 printFile :: String -> IO ()
@@ -268,6 +274,3 @@ getDistributionRequirement reqString
     |   (isInfixOf "This is a Social Science course" reqString) = 2
     |   (isInfixOf "This is a Humanities course" reqString) = 1
     |   otherwise = 6
-
-dbStr :: Text
-dbStr = "11data34.sqlite3"
