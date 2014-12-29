@@ -88,20 +88,20 @@ data Lecture =
               instructor :: Text,
               enrol      :: Maybe Int,
               wait       :: Maybe Int
-            } deriving (Show)
+            } deriving Show
 
 -- | A Tutorial.
 data Tutorial =
     Tutorial { tut_section :: Text,
                times   :: Text,
                timeStr :: Text
-             } deriving (Show)
+             } deriving Show
 
 -- | A Session.
 data Session =
     Session { lectures :: [Lecture],
               tutorials  :: [Text]
-            } deriving (Show)
+            } deriving Show
 
 -- | A Course.
 data Course =
