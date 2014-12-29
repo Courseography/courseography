@@ -1,18 +1,18 @@
-{-# LANGUAGE EmptyDataDecls             #-}
-{-# LANGUAGE FlexibleContexts           #-}
-{-# LANGUAGE GADTs                      #-}
-{-# LANGUAGE GeneralizedNewtypeDeriving #-}
-{-# LANGUAGE MultiParamTypeClasses      #-}
-{-# LANGUAGE OverloadedStrings, DeriveGeneric #-}
-{-# LANGUAGE QuasiQuotes                #-}
-{-# LANGUAGE TemplateHaskell            #-}
-{-# LANGUAGE TypeFamilies               #-}
+{-# LANGUAGE EmptyDataDecls,
+             FlexibleContexts,
+             GADTs,
+             GeneralizedNewtypeDeriving,
+             MultiParamTypeClasses,
+             OverloadedStrings, 
+             DeriveGeneric, 
+             QuasiQuotes, 
+             TemplateHaskell, 
+             TypeFamilies #-}
 
 import           Control.Monad.IO.Class  (liftIO)
 import           Database.Persist
 import           Database.Persist.Sqlite
 import Control.Monad.Trans.Resource (runResourceT)
-import qualified Data.Conduit.List as CL
 import JsonParser
 
 main :: IO ()
