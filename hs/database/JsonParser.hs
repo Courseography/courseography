@@ -160,7 +160,7 @@ instance FromJSON Lecture where
 -- | Opens a directory contained in dir, and processes every file in that directory.
 processDirectory :: IO ()
 processDirectory = getDirectoryContents courseDirectory >>= \contents ->
-                    let formattedContents = ((map (courseDirectory ++) contents))
+                    let formattedContents = (map (courseDirectory ++) contents)
 		                in filterM doesFileExist formattedContents >>= mapM_ printFile
 
 -- | Opens and reads a files contents, and decodes JSON content into a Course data structure.
