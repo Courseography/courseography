@@ -203,7 +203,7 @@ insertLectures course = insertSessionLectures (f course) "F" course >>
 -- | Inserts the lectures from a specified section into the Lectures table.
 insertSessionLectures :: Maybe Session -> String -> Course -> IO ()
 insertSessionLectures session sessionStr course = case session of
-                            Just value -> liftIO $ mapM_ ((insertLecture (T.pack sessionStr)) (course)) (lectures value)
+                            Just value -> liftIO $ mapM_ ((insertLecture $ T.pack sessionStr) course) (lectures value)
                             Nothing    -> print $ "No " ++ sessionStr ++ " lecture section for: " ++ show (name course)
 
 -- | Inserts a lecture into the Lectures table.
