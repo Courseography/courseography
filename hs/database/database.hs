@@ -27,7 +27,7 @@ main = runResourceT $ do
                         liftIO $ print "Distribution table set up"
                         liftIO $ setupBreadthTable
                         liftIO $ print "breadth table set up"
-                        liftIO $ processDirectory $ "../../res/courses/"
+                        liftIO $ processDirectory
 
 query :: IO ()
 query = runSqlite dbStr $ do
