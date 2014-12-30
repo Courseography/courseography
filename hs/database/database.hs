@@ -1,75 +1,43 @@
-{-# LANGUAGE EmptyDataDecls             #-}
-{-# LANGUAGE FlexibleContexts           #-}
-{-# LANGUAGE GADTs                      #-}
-{-# LANGUAGE GeneralizedNewtypeDeriving #-}
-{-# LANGUAGE MultiParamTypeClasses      #-}
-{-# LANGUAGE OverloadedStrings, DeriveGeneric #-}
-{-# LANGUAGE QuasiQuotes                #-}
-{-# LANGUAGE TemplateHaskell            #-}
-{-# LANGUAGE TypeFamilies               #-}
+{-# LANGUAGE EmptyDataDecls,
+             FlexibleContexts,
+             GADTs,
+             GeneralizedNewtypeDeriving,
+             MultiParamTypeClasses,
+             OverloadedStrings, 
+             DeriveGeneric, 
+             QuasiQuotes, 
+             TemplateHaskell, 
+             TypeFamilies #-}
 
 import           Control.Monad.IO.Class  (liftIO)
-import           Control.Monad.Logger    (runStderrLoggingT)
 import           Database.Persist
-import           Database.Persist.Postgresql
-import           Database.Persist.TH
-import Data.Text
-import GHC.Generics
-import System.Directory	
-
-connStr = "host=localhost dbname=coursedb user=cynic password=**** port=5432"
-
-share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
-Courses
-    department String
-    code Int
-    breadth Int
-    title String
-    description String
-    manualTutorialEnrolment Bool
-    manualPracticalEnrolment Bool
-    prereqs [String]
-    exclusions [String]
-    distribution Int
-    prep String
-    deriving Show
-
-Lectures
-    department String
-    code Int
-    session String
-    lid String
-    times [Int] -- [[]]
-    capacity Int
-    enrolled Int
-    waitlist Int
-    extra Int
-    location String
-    time_str String
-    deriving Show
-
-Tutorials
-    department String
-    cNum Int
-    tId String
-    times [Int] -- [[]]
-    deriving Show
-
-Breadth
-    bId Int
-    description String
-    deriving Show
-
-Distribution
-    -- dId Int
-    description String
-    deriving Show
-|]
+import           Database.Persist.Sqlite
+import Control.Monad.Trans.Resource (runResourceT)
+import JsonParser
 
 main :: IO ()
-main = runStderrLoggingT $ withPostgresqlPool connStr 10 $ \pool ->
-    liftIO $ do
-    flip runSqlPersistMPool pool $ do
-        runMigration migrateAll
-        insert $ Distribution "David"
-        liftIO $ print "Complete"
+main = runResourceT $ do
+                        liftIO $ setupDistributionTable
+                        liftIO $ print "Distribution table set up"
+                        liftIO $ setupBreadthTable
+                        liftIO $ print "breadth table set up"
+                        liftIO $ processDirectory
+
+-- | Sets up the Distribution table.
+setupDistributionTable :: IO ()
+setupDistributionTable = runSqlite dbStr $ do
+                                     runMigration migrateAll
+                                     insert_ $ Distribution 1 "Humanities"
+                                     insert_ $ Distribution 2 "Social Sciences"
+                                     insert_ $ Distribution 3 "Sciences"
+
+-- | Sets up the Breadth table.
+setupBreadthTable :: IO ()
+setupBreadthTable = runSqlite dbStr $ do
+                                     runMigration migrateAll
+                                     insert_ $ Breadth 1 "Creative and Cultural Representations"
+                                     insert_ $ Breadth 2 "Thought, Belief, and Behaviour"
+                                     insert_ $ Breadth 3 "Society and Its Institutions"
+                                     insert_ $ Breadth 4 "Living Things and Their Environment"
+                                     insert_ $ Breadth 5 "The Physical and Mathematical Universes"
+                                     insert_ $ Breadth 6 "No Breadth"
