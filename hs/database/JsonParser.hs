@@ -27,9 +27,6 @@ import qualified Data.Conduit.List as CL
 import Control.Applicative
 import Tables
 
-dbStr :: T.Text
-dbStr = "file1.sqlite3"
-
 courseDirectory :: String
 courseDirectory = "../../res/courses/"
 
@@ -48,7 +45,7 @@ data Lecture =
 -- | A Tutorial.
 data Tutorial =
     Tutorial { times       :: [[Int]],
-               timeStr     :: Text
+               timeStr     :: T.Text
              } deriving Show
 
 -- | A Session.
@@ -164,7 +161,7 @@ printFile courseFile = do
                          case d of
                            Left err -> print $ courseFile ++ " " ++ err
                            Right course -> do
-                                             insertCourse $ curse
+                                             insertCourse $ course
                                              insertLectures $ course
                                              insertTutorials $ course
                                              --print $ "Inserted " ++ courseFile
@@ -226,11 +223,12 @@ insertTutorials course =  insertSessionTutorials (f course) "F" course >>
 insertSessionTutorials :: Maybe Session -> T.Text -> Course -> IO ()
 insertSessionTutorials session sessionStr course = case session of
                             Just value -> if null (tutorials value)
+                                          then print "Error"
                                           else liftIO $ mapM_ ((insertTutorial sessionStr) course) (tutorials value)
                             Nothing    -> print $ "No " ++ (T.unpack sessionStr) ++ " tutorial section for: " ++ show (name course)
 
 -- | Inserts a tutorial into the Tutorials table.
-insertTutorial :: T.Text -> Course -> T.Text -> IO ()
+insertTutorial :: T.Text -> Course -> Tutorial -> IO ()
 insertTutorial session course tutorial = runSqlite dbStr $ do
                                        runMigration migrateAll
                                        insert_ $ Tutorials (name course)
