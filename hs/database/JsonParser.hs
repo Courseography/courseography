@@ -201,10 +201,10 @@ insertLectures course = insertSessionLectures (f course) "F" course >>
                         insertSessionLectures (s course) "S" course
 
 -- | Inserts the lectures from a specified section into the Lectures table.
-insertSessionLectures :: Maybe Session -> String -> Course -> IO ()
+insertSessionLectures :: Maybe Session -> T.Text -> Course -> IO ()
 insertSessionLectures session sessionStr course = case session of
-                            Just value -> liftIO $ mapM_ ((insertLecture $ T.pack sessionStr) course) (lectures value)
-                            Nothing    -> print $ "No " ++ sessionStr ++ " lecture section for: " ++ show (name course)
+                            Just value -> liftIO $ mapM_ ((insertLecture sessionStr) course) (lectures value)
+                            Nothing    -> print $ "No " ++ (T.unpack sessionStr) ++ " lecture section for: " ++ show (name course)
 
 -- | Inserts a lecture into the Lectures table.
 insertLecture :: T.Text -> Course -> Lecture -> IO ()
@@ -230,12 +230,12 @@ insertTutorials course =  insertSessionTutorials (f course) "F" course >>
                           insertSessionTutorials (s course) "S" course
 
 -- | Inserts the tutorials from a specified section into the Tutorials table.
-insertSessionTutorials :: Maybe Session -> String -> Course -> IO ()
+insertSessionTutorials :: Maybe Session -> T.Text -> Course -> IO ()
 insertSessionTutorials session sessionStr course = case session of
                             Just value -> if null (tutorials value)
                                           then print "Cannot find tut"
-                                          else liftIO $ mapM_ ((insertTutorial (T.pack sessionStr)) (course)) (tutorials value)
-                            Nothing    -> print $ "No " ++ sessionStr ++ " tutorial section for: " ++ show (name course)
+                                          else liftIO $ mapM_ ((insertTutorial sessionStr) course) (tutorials value)
+                            Nothing    -> print $ "No " ++ (T.unpack sessionStr) ++ " tutorial section for: " ++ show (name course)
 
 -- | Inserts a tutorial into the Tutorials table.
 insertTutorial :: T.Text -> Course -> T.Text -> IO ()
