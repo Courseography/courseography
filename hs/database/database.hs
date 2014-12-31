@@ -15,12 +15,11 @@ import           Database.Persist.Sqlite
 import Control.Monad.Trans.Resource (runResourceT)
 import qualified Data.Conduit.List as CL
 import Database.Persist.Sql (rawQuery)
+import JsonParser
+import Tables
 import Data.Conduit (($$))
 import Control.Monad.Trans.Resource.Internal
 import Control.Monad.Reader
-
-import JsonParser
-import Tables
 
 main :: IO ()
 main = runResourceT $ do
@@ -29,7 +28,7 @@ main = runResourceT $ do
                         liftIO $ setupBreadthTable
                         liftIO $ print "breadth table set up"
                         liftIO $ processDirectory
-      
+
 -- | Sets up the Distribution table.
 setupDistributionTable :: IO ()
 setupDistributionTable = runSqlite dbStr $ do
