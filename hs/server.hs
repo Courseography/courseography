@@ -48,24 +48,24 @@ main = simpleHTTP nullConf $
 -- | Queries the database for all information about `course`, constructs a JSON object 
 -- | representing the course and returns the appropriate JSON response.
 queryCourse :: String -> IO Response
-queryCourse course = runSqlite (T.pack ("database/" ++ T.unpack dbStr)) $ do
+queryCourse courseStr = runSqlite (T.pack ("database/" ++ T.unpack dbStr)) $ do
 
 
         sqlCourse :: [Entity Courses] <- selectList [CoursesCode ==. (T.pack course)] []
 
-        sqlLecturesFall :: [Entity Lectures]  <- selectList [LecturesCode  ==. (T.pack course),
+        sqlLecturesFall :: [Entity Lectures]  <- selectList [LecturesCode  ==. (T.pack courseStr),
                                                              LecturesSession ==. "F"] []
 
-        sqlLecturesSpring :: [Entity Lectures]  <- selectList [LecturesCode  ==. (T.pack course), 
+        sqlLecturesSpring :: [Entity Lectures]  <- selectList [LecturesCode  ==. (T.pack courseStr), 
                                                                LecturesSession ==. "S"] []
 
-        sqlTutorialsFall :: [Entity Tutorials] <- selectList [TutorialsCode ==. (T.pack course), 
+        sqlTutorialsFall :: [Entity Tutorials] <- selectList [TutorialsCode ==. (T.pack courseStr), 
                                                               TutorialsSession ==. "F"] []
-                                                              
-        sqlTutorialsSpring :: [Entity Tutorials] <- selectList [TutorialsCode ==. (T.pack course), 
+
+        sqlTutorialsSpring :: [Entity Tutorials] <- selectList [TutorialsCode ==. (T.pack courseStr), 
                                                                 TutorialsSession ==. "S"] []
         
-        let x = entityVal $ head sqlCourse
+        let course = entityVal $ head sqlCourse
 
         let fallLectures = map entityVal sqlLecturesFall
         let springLectures = map entityVal sqlLecturesSpring
@@ -80,20 +80,24 @@ queryCourse course = runSqlite (T.pack ("database/" ++ T.unpack dbStr)) $ do
         let fallSession   = JsonParser.Session fallLecturesExtracted fallTutorialsExtracted
         let springSession = JsonParser.Session springLecturesExtracted springTutorialsExtracted
 
-        -- Some fields still need to be added in.
-        let courseJSON = Course (coursesBreadth x)
-                                (coursesDescription x)
-                                (coursesTitle x)
-                                 Nothing               --prereqString
-                                (Just fallSession)
-                                (Just springSession)
-                                (coursesCode x)        --name
-                                (coursesExclusions x)  --exclusions
-                                 Nothing               -- manualTutorialEnrolment
-                                (coursesDistribution x)
-                                 Nothing               -- prereqs
+        let courseJSON = buildCourse fallSession springSession course
 
         return $ toResponse $ createJSONResponse $ encodeJSON $ Aeson.toJSON courseJSON
+
+-- | Builds a Course structure from a tuple from the Courses table.
+-- Some fields still need to be added in.
+buildCourse :: Session -> Session -> Courses -> Course 
+buildCourse fallSession springSession course = Course (coursesBreadth course)
+                                                      (coursesDescription course)
+                                                      (coursesTitle course)
+                                                       Nothing               --prereqString
+                                                      (Just fallSession)
+                                                      (Just springSession)
+                                                      (coursesCode course)        --name
+                                                      (coursesExclusions course)  --exclusions
+                                                       Nothing               -- manualTutorialEnrolment
+                                                      (coursesDistribution course)
+                                                       Nothing               -- prereqs
 
 -- | Builds a Lecture structure from a tuple from the Lectures table.
 buildLecture :: Lectures -> Lecture
