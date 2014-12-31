@@ -141,9 +141,9 @@ instance ToJSON Lecture where
 instance FromJSON Tutorial where
     parseJSON (Array v)
         | V.length v == 2 = do
-            x <- parseJSON $ v V.! 0
-            y <- parseJSON $ v V.! 1
-            return $ Tutorial x y
+            times <- parseJSON $ v V.! 0
+            timeStr <- parseJSON $ v V.! 1
+            return $ Tutorial times timeStr
         | otherwise = mzero
     parseJSON _ = mzero
 
@@ -155,7 +155,7 @@ instance ToJSON Tutorial where
 processDirectory :: IO ()
 processDirectory = getDirectoryContents courseDirectory >>= \contents ->
                     let formattedContents = (map (courseDirectory ++) contents)
-                        in filterM doesFileExist formattedContents >>= mapM_ printFile
+                    in filterM doesFileExist formattedContents >>= mapM_ printFile
 
 -- | Opens and reads a files contents, and decodes JSON content into a Course data structure.
 printFile :: String -> IO ()
