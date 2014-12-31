@@ -13,13 +13,9 @@ import           Control.Monad.IO.Class  (liftIO)
 import           Database.Persist
 import           Database.Persist.Sqlite
 import Control.Monad.Trans.Resource (runResourceT)
-import qualified Data.Conduit.List as CL
-import Database.Persist.Sql (rawQuery)
+
 import JsonParser
 import Tables
-import Data.Conduit (($$))
-import Control.Monad.Trans.Resource.Internal
-import Control.Monad.Reader
 
 main :: IO ()
 main = runResourceT $ do
