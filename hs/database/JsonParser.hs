@@ -28,7 +28,7 @@ import Control.Applicative
 import Tables
 
 courseDirectory :: String
-courseDirectory = "../../res/courses2/"
+courseDirectory = "../../res/courses/"
 
 -- | A Lecture.
 data Lecture =
