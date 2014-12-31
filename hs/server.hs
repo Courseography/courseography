@@ -36,8 +36,6 @@ staticDir = "/home/cynic/4/courseography"
 course :: String
 course = "course"
 
-data Dummy = Dummy {dummField :: T.Text, dumm2Field :: T.Text}
-
 main :: IO ()
 main = simpleHTTP nullConf $
   msum [ dir grid $ gridResponse,
@@ -47,76 +45,76 @@ main = simpleHTTP nullConf $
          dir course $ path (\s -> liftIO $ queryCourse s)
        ]
 
+-- | Queries the database for all information about `course`, constructs a JSON object 
+-- | representing the course and returns the appropriate JSON response.
 queryCourse :: String -> IO Response
 queryCourse course = runSqlite (T.pack ("database/" ++ T.unpack dbStr)) $ do
-        sqlCourse    :: [Entity Courses] <- selectList [CoursesCode ==. (T.pack course)] []
-        let x = entityVal $ head sqlCourse
-        sqlLecturesFall    :: [Entity Lectures]  <- selectList [LecturesCode  ==. (T.pack course), LecturesSession ==. "F"] []
-        sqlLecturesSpring  :: [Entity Lectures]  <- selectList [LecturesCode  ==. (T.pack course), LecturesSession ==. "S"] []
-        sqlTutorialsFall   :: [Entity Tutorials] <- selectList [TutorialsCode ==. (T.pack course), TutorialsSession ==. "F"] []
-        sqlTutorialsSpring :: [Entity Tutorials] <- selectList [TutorialsCode ==. (T.pack course), TutorialsSession ==. "S"] []
+
+
+        sqlCourse :: [Entity Courses] <- selectList [CoursesCode ==. (T.pack course)] []
+
+        sqlLecturesFall :: [Entity Lectures]  <- selectList [LecturesCode  ==. (T.pack course),
+                                                             LecturesSession ==. "F"] []
+
+        sqlLecturesSpring :: [Entity Lectures]  <- selectList [LecturesCode  ==. (T.pack course), 
+                                                               LecturesSession ==. "S"] []
+
+        sqlTutorialsFall :: [Entity Tutorials] <- selectList [TutorialsCode ==. (T.pack course), 
+                                                              TutorialsSession ==. "F"] []
+                                                              
+        sqlTutorialsSpring :: [Entity Tutorials] <- selectList [TutorialsCode ==. (T.pack course), 
+                                                                TutorialsSession ==. "S"] []
         
-        let fallLectures    = map entityVal sqlLecturesFall
-        let springLectures  = map entityVal sqlLecturesSpring
-        let fallTutorials   = map entityVal sqlTutorialsFall
+        let x = entityVal $ head sqlCourse
+
+        let fallLectures = map entityVal sqlLecturesFall
+        let springLectures = map entityVal sqlLecturesSpring
+        let fallTutorials = map entityVal sqlTutorialsFall
         let springTutorials = map entityVal sqlTutorialsSpring
         
-        let fallLecturesExtracted    = map extractLecture fallLectures
-        let springLecturesExtracted  = map extractLecture springLectures
-        let fallTutorialsExtracted   = map extractTutorial fallTutorials
-        let springTutorialsExtracted = map extractTutorial springTutorials
+        let fallLecturesExtracted = map buildLecture fallLectures
+        let springLecturesExtracted = map buildLecture springLectures
+        let fallTutorialsExtracted = map buildTutorial fallTutorials
+        let springTutorialsExtracted = map buildTutorial springTutorials
+
         let fallSession   = JsonParser.Session fallLecturesExtracted fallTutorialsExtracted
         let springSession = JsonParser.Session springLecturesExtracted springTutorialsExtracted
 
-        let d = Course (coursesBreadth x)
-        	           (coursesDescription x)
-        	           (coursesTitle x)
-        	            Nothing --prereqString
-        	           (Just fallSession) --f
-        	           (Just springSession) --s
-        	           (coursesCode x)  --name
-        	           (coursesExclusions x) --exclusions
-        	            Nothing -- man tut
-        	           (coursesDistribution x)
-        	            Nothing -- prereqs               :: Maybe [Text]
+        -- Some fields still need to be added in.
+        let courseJSON = Course (coursesBreadth x)
+                                (coursesDescription x)
+                                (coursesTitle x)
+                                 Nothing               --prereqString
+                                (Just fallSession)
+                                (Just springSession)
+                                (coursesCode x)        --name
+                                (coursesExclusions x)  --exclusions
+                                 Nothing               -- manualTutorialEnrolment
+                                (coursesDistribution x)
+                                 Nothing               -- prereqs
 
-        return $ toResponse $ formatJsonResonse $ encodeJSON (Aeson.toJSON d)
-        --sqlTutorials :: [Entity Tutorials] <- selectList [TutorialsCode ==. "CSC108H1"] []
-        --return $ formatJsonResonse $
-        --          (BSL.pack $
-        --           removeQuotationMarks $
-        --           (filter (\c -> c /= '\\') $ 
-        --           	BSL.unpack $
-        --            Aeson.encode $ 
-        --            (toJsonText $ 
-        --             entityVal $ 
-        --             head sqlCourse)))
+        return $ toResponse $ createJSONResponse $ encodeJSON $ Aeson.toJSON courseJSON
 
+-- | Builds a Lecture structure from a tuple from the Lectures table.
+buildLecture :: Lectures -> Lecture
+buildLecture entity = Lecture (lecturesExtra entity)
+                              (lecturesSection entity)
+                              (lecturesCapacity entity)
+                              (lecturesTime_str entity)
+                              (map timeField (lecturesTimes entity))
+                              (lecturesInstructor entity)
+                              (Just (lecturesEnrolled entity))
+                              (Just (lecturesWaitlist entity))
 
-extractLecture :: Lectures -> Lecture
-extractLecture ent = Lecture (lecturesExtra ent)
-                             (lecturesSection ent)
-                             (lecturesCapacity ent)
-                             (lecturesTime_str ent)
-                             (map timeField (lecturesTimes ent))
-                             (lecturesInstructor ent)
-                             (Just (lecturesEnrolled ent))
-                             (Just (lecturesWaitlist ent))
+-- | Builds a Tutorial structure from a tuple from the Tutorials table.
+buildTutorial :: Tutorials -> Tutorial
+buildTutorial entity = Tutorial (map timeField (tutorialsTimes entity))
+                                (tutorialsTimeStr entity)
 
-extractTutorial :: (Tutorials) -> Tutorial
-extractTutorial ent = Tutorial (map timeField (tutorialsTimes ent))
-                               (tutorialsTimeStr ent)
-
+-- | Encodes an Aeson Value into a ByteString.
 encodeJSON :: Aeson.Value -> BSL.ByteString
-encodeJSON x = BSL.pack $
-                   --removeQuotationMarks $
-                   filter (\c -> c /= '\\') $ 
-                   	BSL.unpack $
-                    Aeson.encode $ x
+encodeJSON json = BSL.pack $ filter (\c -> c /= '\\') $ BSL.unpack $ Aeson.encode $ json
 
-formatJsonResonse :: BSL.ByteString -> Response
-formatJsonResonse x = toResponseBS (BS.pack "application/json") $ x
-
-removeQuotationMarks :: String -> String
-removeQuotationMarks x = (reverse $ tail $ reverse $ tail $ x)
-
+-- | Creates a JSON response.
+createJSONResponse :: BSL.ByteString -> Response
+createJSONResponse jsonStr = toResponseBS (BS.pack "application/json") $ jsonStr

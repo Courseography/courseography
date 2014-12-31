@@ -67,7 +67,7 @@ data Course =
              manualTutorialEnrol   :: Maybe Bool,
              distribution          :: !T.Text,
              prereqs               :: Maybe [T.Text]
-	   } deriving (Show, Generic)
+           } deriving Show
 
 instance FromJSON Course where
     parseJSON (Object v) =
@@ -146,13 +146,13 @@ instance FromJSON Tutorial where
 
 instance ToJSON Tutorial where
   toJSON (Tutorial times timeStr) 
-          = Array (V.fromList (Prelude.map toJSON times) V.++ (V.singleton $ toJSON timeStr))
+          = Array (V.fromList (map toJSON times) V.++ (V.singleton $ toJSON timeStr))
 
 -- | Opens a directory contained in dir, and processes every file in that directory.
 processDirectory :: IO ()
 processDirectory = getDirectoryContents courseDirectory >>= \contents ->
                     let formattedContents = (map (courseDirectory ++) contents)
-		                in filterM doesFileExist formattedContents >>= mapM_ printFile
+                        in filterM doesFileExist formattedContents >>= mapM_ printFile
 
 -- | Opens and reads a files contents, and decodes JSON content into a Course data structure.
 printFile :: String -> IO ()
@@ -164,7 +164,7 @@ printFile courseFile = do
                                              insertCourse $ course
                                              insertLectures $ course
                                              insertTutorials $ course
-                                             --print $ "Inserted " ++ courseFile
+
 -- | Opens and reads the file contained in `jsonFile`. File contents are returned, surrounded by
 -- | square brackets.
 getJSON :: String -> IO B.ByteString
@@ -180,8 +180,8 @@ insertCourse course = runSqlite dbStr $ do
                                           (manualTutorialEnrol course)
                                           (prereqString course)
                                           (exclusions course)
-                                          (breadth course)      --(getBreadthRequirement      $  breadth course)
-                                          (distribution course) --(getDistributionRequirement $  distribution course)
+                                          (breadth course) 
+                                          (distribution course)
                                           (prereqString course)
 
 -- | Inserts the lectures from course into the Lectures table.
@@ -233,7 +233,7 @@ insertTutorial session course tutorial = runSqlite dbStr $ do
                                        runMigration migrateAll
                                        insert_ $ Tutorials (name course)
                                                            session
-                                                           (Prelude.map Time  (times tutorial))
+                                                           (map Time  (times tutorial))
                                                            (timeStr tutorial)
 
 -- | Gets the corresponding numeric requirement from a breadth requirement description.
