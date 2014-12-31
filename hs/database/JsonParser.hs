@@ -100,7 +100,7 @@ instance ToJSON Course where
                     "manualTutorialEnrolment" .= manualTutorialEnrol,
                     "distribution" .= distribution,
                     "prereqs" .= prereqs
-                              ]
+                   ]
 
 instance FromJSON Session where
     parseJSON (Object v) =
