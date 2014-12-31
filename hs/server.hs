@@ -51,7 +51,7 @@ queryCourse :: String -> IO Response
 queryCourse courseStr = runSqlite (T.pack ("database/" ++ T.unpack dbStr)) $ do
 
 
-        sqlCourse :: [Entity Courses] <- selectList [CoursesCode ==. (T.pack course)] []
+        sqlCourse :: [Entity Courses] <- selectList [CoursesCode ==. (T.pack courseStr)] []
 
         sqlLecturesFall :: [Entity Lectures]  <- selectList [LecturesCode  ==. (T.pack courseStr),
                                                              LecturesSession ==. "F"] []
@@ -75,11 +75,11 @@ queryCourse courseStr = runSqlite (T.pack ("database/" ++ T.unpack dbStr)) $ do
 
         let fallLectures = map entityVal sqlLecturesFall
         let springLectures = map entityVal sqlLecturesSpring
-        let yearLectures = map entityVal sqlLecturesSpring
+        let yearLectures = map entityVal sqlLecturesYear
 
         let fallTutorials = map entityVal sqlTutorialsFall
         let springTutorials = map entityVal sqlTutorialsSpring
-        let yearTutorials = map entityVal sqlTutorialsSpring
+        let yearTutorials = map entityVal sqlTutorialsYear
         
         let fallLecturesExtracted = map buildLecture fallLectures
         let springLecturesExtracted = map buildLecture springLectures
@@ -93,20 +93,20 @@ queryCourse courseStr = runSqlite (T.pack ("database/" ++ T.unpack dbStr)) $ do
         let springSession = JsonParser.Session springLecturesExtracted springTutorialsExtracted
         let yearSession = JsonParser.Session yearLecturesExtracted yearTutorialsExtracted
 
-        let courseJSON = buildCourse fallSession yearSession springSession course
+        let courseJSON = buildCourse (Just fallSession) (Just springSession) (Just yearSession) course
 
         return $ toResponse $ createJSONResponse $ encodeJSON $ Aeson.toJSON courseJSON
 
 -- | Builds a Course structure from a tuple from the Courses table.
 -- Some fields still need to be added in.
-buildCourse :: Session -> Session -> Session -> Courses -> Course 
+buildCourse :: Maybe Session -> Maybe Session -> Maybe Session -> Courses -> Course 
 buildCourse fallSession springSession yearSession course = Course (coursesBreadth course)
                                                                   (coursesDescription course)
                                                                   (coursesTitle course)
                                                                    Nothing               --prereqString
-                                                                  (Just fallSession)
-                                                                  (Just springSession)
-                                                                  (Just yearSession)
+                                                                  (fallSession)
+                                                                  (springSession)
+                                                                  (yearSession)
                                                                   (coursesCode course)        --name
                                                                   (coursesExclusions course)  --exclusions
                                                                    Nothing               -- manualTutorialEnrolment
