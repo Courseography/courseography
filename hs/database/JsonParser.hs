@@ -28,7 +28,7 @@ import Control.Applicative
 import Tables
 
 courseDirectory :: String
-courseDirectory = "../../res/courses/"
+courseDirectory = "../../res/courses2/"
 
 -- | A Lecture.
 data Lecture =
@@ -228,7 +228,7 @@ insertTutorials course =  insertSessionTutorials (f course) "F" course >>
 insertSessionTutorials :: Maybe Session -> T.Text -> Course -> IO ()
 insertSessionTutorials session sessionStr course = case session of
                             Just value -> if null (tutorials value)
-                                          then print "Error"
+                                          then print $ "Cannot find tutorial for" ++ show (name course)
                                           else liftIO $ mapM_ ((insertTutorial sessionStr) course) (tutorials value)
                             Nothing    -> print $ "No " ++ (T.unpack sessionStr) ++ " tutorial section for: " ++ show (name course)
 
