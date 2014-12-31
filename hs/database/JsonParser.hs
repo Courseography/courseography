@@ -11,7 +11,7 @@
 
 module JsonParser where
 
-import           Control.Monad.IO.Class  (liftIO)
+import Control.Monad.IO.Class  (liftIO)
 import qualified Data.ByteString.Lazy as B
 import qualified Data.Vector as V
 import qualified Data.Text as T
@@ -19,8 +19,8 @@ import Data.Aeson
 import GHC.Generics
 import System.Directory
 
-import           Database.Persist
-import           Database.Persist.Sqlite
+import Database.Persist
+import Database.Persist.Sqlite
 
 import Control.Monad
 import qualified Data.Conduit.List as CL
@@ -62,6 +62,7 @@ data Course =
              prereqString          :: Maybe T.Text,
              f                     :: Maybe Session,
              s                     :: Maybe Session,
+             y                     :: Maybe Session,
              name                  :: !T.Text,
              exclusions            :: Maybe T.Text,
              manualTutorialEnrol   :: Maybe Bool,
@@ -77,6 +78,7 @@ instance FromJSON Course where
                <*> v .:  "prereqString"
                <*> v .:? "F"
                <*> v .:? "S"
+               <*> v .:? "Y"
                <*> v .:  "name"
                <*> v .:  "exclusions"
                <*> v .:? "manualTutorialEnrolment"
@@ -85,13 +87,14 @@ instance FromJSON Course where
     parseJSON _ = mzero
 
 instance ToJSON Course where
-  toJSON (Course breadth description title prereqString f s name exclusions manualTutorialEnrol distribution prereqs) 
+  toJSON (Course breadth description title prereqString f s y name exclusions manualTutorialEnrol distribution prereqs) 
           = object ["breadth" .= breadth,
                     "description" .= description,
                     "title" .= title,
                     "prereqString" .= prereqString,
                     "F" .= f,
                     "S" .= s,
+                    "Y" .= y,
                     "name" .= name,
                     "exclusions" .= exclusions,
                     "manualTutorialEnrolment" .= manualTutorialEnrol,
@@ -187,7 +190,8 @@ insertCourse course = runSqlite dbStr $ do
 -- | Inserts the lectures from course into the Lectures table.
 insertLectures :: Course -> IO ()
 insertLectures course = insertSessionLectures (f course) "F" course >>
-                        insertSessionLectures (s course) "S" course
+                        insertSessionLectures (s course) "S" course >>
+                        insertSessionLectures (y course) "Y" course
 
 -- | Inserts the lectures from a specified section into the Lectures table.
 insertSessionLectures :: Maybe Session -> T.Text -> Course -> IO ()
@@ -217,7 +221,8 @@ insertLecture session course lecture = runSqlite dbStr $ do
 -- | Inserts the tutorials from course into the Tutorials table.
 insertTutorials :: Course -> IO ()
 insertTutorials course =  insertSessionTutorials (f course) "F" course >>
-                          insertSessionTutorials (s course) "S" course
+                          insertSessionTutorials (s course) "S" course >>
+                          insertSessionTutorials (y course) "Y" course
 
 -- | Inserts the tutorials from a specified section into the Tutorials table.
 insertSessionTutorials :: Maybe Session -> T.Text -> Course -> IO ()
