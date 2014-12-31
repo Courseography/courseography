@@ -59,45 +59,59 @@ queryCourse courseStr = runSqlite (T.pack ("database/" ++ T.unpack dbStr)) $ do
         sqlLecturesSpring :: [Entity Lectures]  <- selectList [LecturesCode  ==. (T.pack courseStr), 
                                                                LecturesSession ==. "S"] []
 
+        sqlLecturesYear :: [Entity Lectures]  <- selectList [LecturesCode  ==. (T.pack courseStr), 
+                                                               LecturesSession ==. "Y"] []
+
         sqlTutorialsFall :: [Entity Tutorials] <- selectList [TutorialsCode ==. (T.pack courseStr), 
                                                               TutorialsSession ==. "F"] []
 
         sqlTutorialsSpring :: [Entity Tutorials] <- selectList [TutorialsCode ==. (T.pack courseStr), 
                                                                 TutorialsSession ==. "S"] []
-        
+
+        sqlTutorialsYear :: [Entity Tutorials] <- selectList [TutorialsCode ==. (T.pack courseStr), 
+                                                                TutorialsSession ==. "Y"] []
+
         let course = entityVal $ head sqlCourse
 
         let fallLectures = map entityVal sqlLecturesFall
         let springLectures = map entityVal sqlLecturesSpring
+        let yearLectures = map entityVal sqlLecturesSpring
+
         let fallTutorials = map entityVal sqlTutorialsFall
         let springTutorials = map entityVal sqlTutorialsSpring
+        let yearTutorials = map entityVal sqlTutorialsSpring
         
         let fallLecturesExtracted = map buildLecture fallLectures
         let springLecturesExtracted = map buildLecture springLectures
+        let yearLecturesExtracted = map buildLecture yearLectures
+
         let fallTutorialsExtracted = map buildTutorial fallTutorials
         let springTutorialsExtracted = map buildTutorial springTutorials
+        let yearTutorialsExtracted = map buildTutorial yearTutorials
 
         let fallSession   = JsonParser.Session fallLecturesExtracted fallTutorialsExtracted
         let springSession = JsonParser.Session springLecturesExtracted springTutorialsExtracted
+        let yearSession = JsonParser.Session yearLecturesExtracted yearTutorialsExtracted
 
-        let courseJSON = buildCourse fallSession springSession course
+        let courseJSON = buildCourse fallSession yearSession springSession course
 
         return $ toResponse $ createJSONResponse $ encodeJSON $ Aeson.toJSON courseJSON
 
 -- | Builds a Course structure from a tuple from the Courses table.
 -- Some fields still need to be added in.
-buildCourse :: Session -> Session -> Courses -> Course 
-buildCourse fallSession springSession course = Course (coursesBreadth course)
-                                                      (coursesDescription course)
-                                                      (coursesTitle course)
-                                                       Nothing               --prereqString
-                                                      (Just fallSession)
-                                                      (Just springSession)
-                                                      (coursesCode course)        --name
-                                                      (coursesExclusions course)  --exclusions
-                                                       Nothing               -- manualTutorialEnrolment
-                                                      (coursesDistribution course)
-                                                       Nothing               -- prereqs
+buildCourse :: Session -> Session -> Session -> Courses -> Course 
+buildCourse fallSession springSession yearSession course = Course (coursesBreadth course)
+                                                                  (coursesDescription course)
+                                                                  (coursesTitle course)
+                                                                   Nothing               --prereqString
+                                                                  (Just fallSession)
+                                                                  (Just springSession)
+                                                                  (Just yearSession)
+                                                                  (coursesCode course)        --name
+                                                                  (coursesExclusions course)  --exclusions
+                                                                   Nothing               -- manualTutorialEnrolment
+                                                                  (coursesDistribution course)
+                                                                   Nothing               -- prereqs
 
 -- | Builds a Lecture structure from a tuple from the Lectures table.
 buildLecture :: Lectures -> Lecture
