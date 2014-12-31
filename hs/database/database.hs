@@ -13,7 +13,9 @@ import           Control.Monad.IO.Class  (liftIO)
 import           Database.Persist
 import           Database.Persist.Sqlite
 import Control.Monad.Trans.Resource (runResourceT)
+
 import JsonParser
+import Tables
 
 main :: IO ()
 main = runResourceT $ do
