@@ -238,7 +238,7 @@ insertTutorial session course tutorial = runSqlite dbStr $ do
                                        runMigration migrateAll
                                        insert_ $ Tutorials (name course)
                                                            session
-                                                           (map Time  (times tutorial))
+                                                           (map Time (times tutorial))
                                                            (timeStr tutorial)
 
 -- | Gets the corresponding numeric requirement from a breadth requirement description.
