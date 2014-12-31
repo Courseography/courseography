@@ -51,19 +51,29 @@ queryCourse :: String -> IO Response
 queryCourse course = runSqlite (T.pack ("database/" ++ T.unpack dbStr)) $ do
         sqlCourse    :: [Entity Courses] <- selectList [CoursesCode ==. (T.pack course)] []
         let x = entityVal $ head sqlCourse
-        sqlLectures  :: [Entity Lectures] <- selectList [LecturesCode ==. (T.pack course)] []
-        sqlTutorials :: [Entity Tutorials] <- selectList [TutorialsCode ==. (T.pack course)] []
-        let y = (map entityVal) sqlLectures
-        let z = (map entityVal) sqlTutorials
-        let y1 = map extractLecture y
-        let z1 = map extractTutorial z
-        let session = JsonParser.Session y1 z1
+        sqlLecturesFall    :: [Entity Lectures]  <- selectList [LecturesCode  ==. (T.pack course), LecturesSession ==. "F"] []
+        sqlLecturesSpring  :: [Entity Lectures]  <- selectList [LecturesCode  ==. (T.pack course), LecturesSession ==. "S"] []
+        sqlTutorialsFall   :: [Entity Tutorials] <- selectList [TutorialsCode ==. (T.pack course), TutorialsSession ==. "F"] []
+        sqlTutorialsSpring :: [Entity Tutorials] <- selectList [TutorialsCode ==. (T.pack course), TutorialsSession ==. "S"] []
+        
+        let fallLectures    = map entityVal sqlLecturesFall
+        let springLectures  = map entityVal sqlLecturesSpring
+        let fallTutorials   = map entityVal sqlTutorialsFall
+        let springTutorials = map entityVal sqlTutorialsSpring
+        
+        let fallLecturesExtracted    = map extractLecture fallLectures
+        let springLecturesExtracted  = map extractLecture springLectures
+        let fallTutorialsExtracted   = map extractTutorial fallTutorials
+        let springTutorialsExtracted = map extractTutorial springTutorials
+        let fallSession   = JsonParser.Session fallLecturesExtracted fallTutorialsExtracted
+        let springSession = JsonParser.Session springLecturesExtracted springTutorialsExtracted
+
         let d = Course (coursesBreadth x)
         	           (coursesDescription x)
         	           (coursesTitle x)
         	            Nothing --prereqString
-        	           (Just session) --f
-        	           (Just session) --s
+        	           (Just fallSession) --f
+        	           (Just springSession) --s
         	           (coursesCode x)  --name
         	           (coursesExclusions x) --exclusions
         	            Nothing -- man tut
