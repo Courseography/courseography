@@ -131,8 +131,8 @@ buildTutorial entity = Tutorial (map timeField (tutorialsTimes entity))
 
 -- | Encodes an Aeson Value into a ByteString.
 encodeJSON :: Aeson.Value -> BSL.ByteString
-encodeJSON json = BSL.pack $ filter (\c -> c /= '\\') $ BSL.unpack $ Aeson.encode $ json
+encodeJSON json = BSL.pack $ filter (\c -> c /= '\\') $ BSL.unpack $ Aeson.encode json
 
 -- | Creates a JSON response.
 createJSONResponse :: BSL.ByteString -> Response
-createJSONResponse jsonStr = toResponseBS (BS.pack "application/json") $ jsonStr
+createJSONResponse jsonStr = toResponseBS (BS.pack "application/json") jsonStr
