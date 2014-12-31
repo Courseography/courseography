@@ -73,27 +73,11 @@ queryCourse courseStr = runSqlite (T.pack ("database/" ++ T.unpack dbStr)) $ do
 
         let course = entityVal $ head sqlCourse
 
-        let fallLectures = map entityVal sqlLecturesFall
-        let springLectures = map entityVal sqlLecturesSpring
-        let yearLectures = map entityVal sqlLecturesYear
+        let fallSession   = buildSession sqlLecturesFall sqlTutorialsFall
+        let springSession = buildSession sqlLecturesYear sqlTutorialsSpring
+        let yearSession = buildSession sqlLecturesYear sqlTutorialsYear
 
-        let fallTutorials = map entityVal sqlTutorialsFall
-        let springTutorials = map entityVal sqlTutorialsSpring
-        let yearTutorials = map entityVal sqlTutorialsYear
-        
-        let fallLecturesExtracted = map buildLecture fallLectures
-        let springLecturesExtracted = map buildLecture springLectures
-        let yearLecturesExtracted = map buildLecture yearLectures
-
-        let fallTutorialsExtracted = map buildTutorial fallTutorials
-        let springTutorialsExtracted = map buildTutorial springTutorials
-        let yearTutorialsExtracted = map buildTutorial yearTutorials
-
-        let fallSession   = JsonParser.Session fallLecturesExtracted fallTutorialsExtracted
-        let springSession = JsonParser.Session springLecturesExtracted springTutorialsExtracted
-        let yearSession = JsonParser.Session yearLecturesExtracted yearTutorialsExtracted
-
-        let courseJSON = buildCourse (Just fallSession) (Just springSession) (Just yearSession) course
+        let courseJSON = buildCourse fallSession springSession yearSession course
 
         return $ toResponse $ createJSONResponse $ encodeJSON $ Aeson.toJSON courseJSON
 
@@ -132,6 +116,13 @@ buildTutorial entity = Tutorial (map timeField (tutorialsTimes entity))
 -- | Encodes an Aeson Value into a ByteString.
 encodeJSON :: Aeson.Value -> BSL.ByteString
 encodeJSON json = BSL.filter (\c -> c /= '\\') $ Aeson.encode json
+
+
+
+buildSession :: [Entity Lectures] -> [Entity Tutorials] -> Maybe JsonParser.Session
+buildSession lectures tutorials = Just $ JsonParser.Session (map buildLecture (map entityVal lectures))
+                                                          (map buildTutorial (map entityVal tutorials))
+
 
 -- | Creates a JSON response.
 createJSONResponse :: BSL.ByteString -> Response
