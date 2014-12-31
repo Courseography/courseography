@@ -118,7 +118,7 @@ buildLecture :: Lectures -> Lecture
 buildLecture entity = Lecture (lecturesExtra entity)
                               (lecturesSection entity)
                               (lecturesCapacity entity)
-                              (lecturesTime_str entity)
+                              (lecturesTimeStr entity)
                               (map timeField (lecturesTimes entity))
                               (lecturesInstructor entity)
                               (Just (lecturesEnrolled entity))
