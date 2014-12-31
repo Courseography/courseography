@@ -44,7 +44,7 @@ Lectures
     waitlist Int
     extra Int
     -- location Text -- Location does not exist in JSON files.
-    time_str Text
+    timeStr Text
     deriving Show
 
 Tutorials
@@ -67,4 +67,4 @@ Distribution
 |]
 
 dbStr :: Text
-dbStr = "data62.sqlite3"
+dbStr = "data63.sqlite3"
