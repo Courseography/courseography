@@ -11,9 +11,8 @@
 
 module Tables where
     
-import           Database.Persist.TH
+import Database.Persist.TH
 import Data.Text
-
 
 data Time = Time { timeField :: [Int] } deriving (Show, Read, Eq)
 derivePersistField "Time"
@@ -68,4 +67,4 @@ Distribution
 |]
 
 dbStr :: Text
-dbStr = "data55.sqlite3"
+dbStr = "data62.sqlite3"
