@@ -160,7 +160,7 @@ processDirectory = getDirectoryContents courseDirectory >>= \contents ->
 -- | Opens and reads a files contents, and decodes JSON content into a Course data structure.
 printFile :: String -> IO ()
 printFile courseFile = do
-                         d <- ((eitherDecode <$> getJSON courseFile) :: IO (Either String Course))
+                         d <- ((eitherDecode <$> getJSON courseFile))
                          case d of
                            Left err -> print $ courseFile ++ " " ++ err
                            Right course -> do
