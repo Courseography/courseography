@@ -35,7 +35,6 @@ static = "static"
 course :: String
 course = "course"
 
-
 main :: IO ()
 main = do
     cwd <- getCurrentDirectory
