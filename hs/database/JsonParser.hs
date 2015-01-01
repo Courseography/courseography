@@ -197,9 +197,8 @@ insertLectures course = insertSessionLectures (f course) "F" course >>
 
 -- | Inserts the lectures from a specified section into the Lectures table.
 insertSessionLectures :: Maybe Session -> T.Text -> Course -> IO ()
-insertSessionLectures session sessionStr course = case session of
-                            Just value -> liftIO $ mapM_ ((insertLecture sessionStr) course) (lectures value)
-                            Nothing    -> return ()
+insertSessionLectures Nothing sessionStr course = return ()
+insertSessionLectures (Just session) sessionStr course = liftIO $ mapM_ ((insertLecture sessionStr) course) (lectures session)
 
 -- | Inserts a lecture into the Lectures table.
 insertLecture :: T.Text -> Course -> Lecture -> IO ()
@@ -228,9 +227,8 @@ insertTutorials course =  insertSessionTutorials (f course) "F" course >>
 
 -- | Inserts the tutorials from a specified section into the Tutorials table.
 insertSessionTutorials :: Maybe Session -> T.Text -> Course -> IO ()
-insertSessionTutorials session sessionStr course = case session of
-                            Just value -> when (not $ null (tutorials value)) $ liftIO $ mapM_ ((insertTutorial sessionStr) course) (tutorials value)
-                            Nothing    -> return ()
+insertSessionTutorials Nothing sessionStr course = return ()
+insertSessionTutorials (Just session) sessionStr course = when (not $ null (tutorials session)) $ liftIO $ mapM_ ((insertTutorial sessionStr) course) (tutorials session)
 
 -- | Inserts a tutorial into the Tutorials table.
 insertTutorial :: T.Text -> Course -> Tutorial -> IO ()
