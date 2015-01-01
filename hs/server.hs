@@ -74,7 +74,7 @@ queryCourse courseStr = runSqlite (T.pack ("database/" ++ T.unpack dbStr)) $ do
         let course = entityVal $ head sqlCourse
 
         let fallSession   = buildSession sqlLecturesFall sqlTutorialsFall
-        let springSession = buildSession sqlLecturesYear sqlTutorialsSpring
+        let springSession = buildSession sqlLecturesSpring sqlTutorialsSpring
         let yearSession = buildSession sqlLecturesYear sqlTutorialsYear
 
         let courseJSON = buildCourse fallSession springSession yearSession course
@@ -93,7 +93,7 @@ buildCourse fallSession springSession yearSession course = Course (coursesBreadt
                                                                   yearSession
                                                                   (coursesCode course)        --name
                                                                   (coursesExclusions course)  --exclusions
-                                                                   Nothing               -- manualTutorialEnrolment
+                                                                  (coursesManualTutorialEnrolment course)               -- manualTutorialEnrolment
                                                                   (coursesDistribution course)
                                                                    Nothing               -- prereqs
 
@@ -110,7 +110,8 @@ buildLecture entity = Lecture (lecturesExtra entity)
 
 -- | Builds a Tutorial structure from a tuple from the Tutorials table.
 buildTutorial :: Tutorials -> Tutorial
-buildTutorial entity = Tutorial (map timeField (tutorialsTimes entity))
+buildTutorial entity = Tutorial Nothing
+                                (map timeField (tutorialsTimes entity))
                                 (tutorialsTimeStr entity)
 
 -- | Encodes an Aeson Value into a ByteString.
