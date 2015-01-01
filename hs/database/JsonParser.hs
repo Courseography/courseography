@@ -29,7 +29,7 @@ import Control.Applicative
 import Tables
 
 courseDirectory :: String
-courseDirectory = "../../res/courses/"
+courseDirectory = "../../res/courses2/"
 
 -- | A Lecture.
 data Lecture =
@@ -45,7 +45,8 @@ data Lecture =
 
 -- | A Tutorial.
 data Tutorial =
-    Tutorial { times       :: [[Int]],
+    Tutorial { tutorialSection :: Maybe T.Text,
+               times       :: [[Int]],
                timeStr     :: T.Text
              } deriving Show
 
@@ -142,14 +143,18 @@ instance ToJSON Lecture where
 instance FromJSON Tutorial where
     parseJSON (Array v)
         | V.length v == 2 = do
-            times <- parseJSON $ v V.! 0
+            times   <- parseJSON $ v V.! 0
             timeStr <- parseJSON $ v V.! 1
-            return $ Tutorial times timeStr
+            return $ Tutorial Nothing times timeStr
+        | V.length v == 3 = do
+            times   <- parseJSON $ v V.! 1
+            timeStr <- parseJSON $ v V.! 2
+            return $ Tutorial Nothing times timeStr
         | otherwise = mzero
     parseJSON _ = mzero
 
 instance ToJSON Tutorial where
-  toJSON (Tutorial times timeStr) 
+  toJSON (Tutorial tutorialSection times timeStr) 
           = Array (V.fromList (map toJSON times) V.++ (V.singleton $ toJSON timeStr))
 
 -- | Opens a directory contained in dir, and processes every file in that directory.
