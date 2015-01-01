@@ -147,15 +147,18 @@ instance FromJSON Tutorial where
             timeStr <- parseJSON $ v V.! 1
             return $ Tutorial Nothing times timeStr
         | V.length v == 3 = do
-            times   <- parseJSON $ v V.! 1
+            tutorialSection <- parseJSON $ v V.! 0
+            times <- parseJSON $ v V.! 1
             timeStr <- parseJSON $ v V.! 2
-            return $ Tutorial Nothing times timeStr
+            return $ Tutorial tutorialSection times timeStr
         | otherwise = mzero
     parseJSON _ = mzero
 
 instance ToJSON Tutorial where
   toJSON (Tutorial tutorialSection times timeStr) 
-          = Array (V.fromList (map toJSON times) V.++ (V.singleton $ toJSON timeStr))
+          = Array ((V.singleton (case tutorialSection of
+                        Just value -> toJSON value
+                        Nothing    -> toJSON timeStr)) V.++ V.singleton (toJSON (map toJSON times)) V.++ (V.singleton $ toJSON timeStr))
 
 -- | Opens a directory contained in dir, and processes every file in that directory.
 processDirectory :: IO ()
