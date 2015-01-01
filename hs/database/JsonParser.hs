@@ -58,9 +58,9 @@ courseDirectory = "../../res/courses/"
 
 -- | A Course.
 data Course =
-    Course { breadth               :: !T.Text,
-             description           :: !T.Text,
-             title                 :: !T.Text,
+    Course { breadth               :: Maybe T.Text,
+             description           :: Maybe T.Text,
+             title                 :: Maybe T.Text,
              prereqString          :: Maybe T.Text,
              --f                     :: Maybe Session,
              --s                     :: Maybe Session,
@@ -68,23 +68,23 @@ data Course =
              name                  :: !T.Text,
              exclusions            :: Maybe T.Text,
              manualTutorialEnrol   :: Maybe Bool,
-             distribution          :: !T.Text,
-             prereqs               :: Maybe [[T.Text]]
+             distribution          :: Maybe T.Text,
+             prereqs               :: Maybe Array
            } deriving Show
 
 instance FromJSON Course where
     parseJSON (Object v) =
-        Course <$> v .:  "breadth"
-               <*> v .:  "description"
-               <*> v .:  "title"
-               <*> v .:  "prereqString"
+        Course <$> v .:? "breadth"
+               <*> v .:? "description"
+               <*> v .:? "title"
+               <*> v .:? "prereqString"
                -- <*> v .:? "F"
                -- <*> v .:? "S"
                -- <*> v .:? "Y"
                <*> v .:  "name"
-               <*> v .:  "exclusions"
+               <*> v .:? "exclusions"
                <*> v .:? "manualTutorialEnrolment"
-               <*> v .:  "distribution"
+               <*> v .:? "distribution"
                <*> v .:? "prereqs"
     parseJSON _ = mzero
 
