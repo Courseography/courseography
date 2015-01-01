@@ -173,7 +173,7 @@ printFile courseFile = do
 -- | Opens and reads the file contained in `jsonFile`. File contents are returned, surrounded by
 -- | square brackets.
 getJSON :: String -> IO B.ByteString
-getJSON jsonFile = (B.readFile jsonFile)
+getJSON jsonFile = B.readFile jsonFile
 
 -- | Inserts course into the Courses table.
 insertCourse :: Course -> IO ()
