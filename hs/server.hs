@@ -29,21 +29,20 @@ about = "about"
 static :: String
 static = "static"
 
-staticDir :: String
---staticDir = "C:\\Users\\David\\Documents\\courseography"
-staticDir = "/home/cynic/4/courseography"
-
 course :: String
 course = "course"
 
 main :: IO ()
-main = simpleHTTP nullConf $
-  msum [ dir grid $ gridResponse,
-         dir graph $ graphResponse,
-         dir about $ aboutResponse,
-         dir static $ serveDirectory EnableBrowsing [] staticDir,
-         dir course $ path (\s -> liftIO $ queryCourse s)
-       ]
+main = do
+         simpleHTTP nullConf $
+         cwd <- getCurrentDirectory
+         let staticDir = encodeString $ parent $ fromText (T.pack cwd)
+         msum [ dir grid $ gridResponse,
+                dir graph $ graphResponse,
+                dir about $ aboutResponse,
+                dir static $ serveDirectory EnableBrowsing [] staticDir,
+                dir course $ path (\s -> liftIO $ queryCourse s)
+              ]
 
 -- | Queries the database for all information about `course`, constructs a JSON object 
 -- | representing the course and returns the appropriate JSON response.
@@ -93,7 +92,7 @@ buildCourse fallSession springSession yearSession course = Course (coursesBreadt
                                                                   yearSession
                                                                   (coursesCode course)        --name
                                                                   (coursesExclusions course)  --exclusions
-                                                                   Nothing               -- manualTutorialEnrolment
+                                                                  (coursesManualTutorialEnrolment course)               -- manualTutorialEnrolment
                                                                   (coursesDistribution course)
                                                                    Nothing               -- prereqs
 
