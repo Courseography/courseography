@@ -95,7 +95,7 @@ buildCourse fallSession springSession yearSession course = Course (coursesBreadt
                                                                   yearSession
                                                                   (coursesCode course)        --name
                                                                   (coursesExclusions course)  --exclusions
-                                                                  (coursesManualTutorialEnrolment course)               -- manualTutorialEnrolment
+                                                                   Nothing               -- manualTutorialEnrolment
                                                                   (coursesDistribution course)
                                                                    Nothing               -- prereqs
 
