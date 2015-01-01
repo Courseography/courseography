@@ -21,14 +21,14 @@ share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 Courses json
     --department String
     code Text
-    title Text
-    description Text
+    title Text Maybe
+    description Text Maybe
     manualTutorialEnrolment Bool Maybe
     --manualPracticalEnrolment Bool
     prereqs Text Maybe
     exclusions Text Maybe
-    breadth Text
-    distribution Text
+    breadth Text Maybe
+    distribution Text Maybe
     prereqString Text Maybe
     deriving Show
 
@@ -67,4 +67,4 @@ Distribution
 |]
 
 dbStr :: Text
-dbStr = "data63.sqlite3"
+dbStr = "data78.sqlite3"
