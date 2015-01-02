@@ -16,6 +16,7 @@ import qualified Data.ByteString.Lazy as B
 import qualified Data.Vector as V
 import qualified Data.Text as T
 import Data.Aeson
+import Data.List as L
 import GHC.Generics
 import System.Directory
 
@@ -154,7 +155,7 @@ instance ToJSON Tutorial where
 -- | Opens a directory contained in dir, and processes every file in that directory.
 processDirectory :: IO ()
 processDirectory = getDirectoryContents courseDirectory >>= \contents ->
-                    let formattedContents = (map (courseDirectory ++) contents)
+                    let formattedContents = map (courseDirectory ++) (L.sort contents)
                     in filterM doesFileExist formattedContents >>= mapM_ printFile
 
 -- | Opens and reads a files contents, and decodes JSON content into a Course data structure.
@@ -167,11 +168,12 @@ printFile courseFile = do
                                              insertCourse $ course
                                              insertLectures $ course
                                              insertTutorials $ course
+                                             print $ "Inserted " ++ show (name course)
 
 -- | Opens and reads the file contained in `jsonFile`. File contents are returned, surrounded by
 -- | square brackets.
 getJSON :: String -> IO B.ByteString
-getJSON jsonFile = (B.readFile jsonFile)
+getJSON jsonFile = B.readFile jsonFile
 
 -- | Inserts course into the Courses table.
 insertCourse :: Course -> IO ()
@@ -195,9 +197,8 @@ insertLectures course = insertSessionLectures (f course) "F" course >>
 
 -- | Inserts the lectures from a specified section into the Lectures table.
 insertSessionLectures :: Maybe Session -> T.Text -> Course -> IO ()
-insertSessionLectures session sessionStr course = case session of
-                            Just value -> liftIO $ mapM_ ((insertLecture sessionStr) course) (lectures value)
-                            Nothing    -> print $ "No " ++ (T.unpack sessionStr) ++ " lecture section for: " ++ show (name course)
+insertSessionLectures Nothing sessionStr course = return ()
+insertSessionLectures (Just session) sessionStr course = liftIO $ mapM_ ((insertLecture sessionStr) course) (lectures session)
 
 -- | Inserts a lecture into the Lectures table.
 insertLecture :: T.Text -> Course -> Lecture -> IO ()
@@ -226,11 +227,8 @@ insertTutorials course =  insertSessionTutorials (f course) "F" course >>
 
 -- | Inserts the tutorials from a specified section into the Tutorials table.
 insertSessionTutorials :: Maybe Session -> T.Text -> Course -> IO ()
-insertSessionTutorials session sessionStr course = case session of
-                            Just value -> if null (tutorials value)
-                                          then print $ "Cannot find tutorial for" ++ show (name course)
-                                          else liftIO $ mapM_ ((insertTutorial sessionStr) course) (tutorials value)
-                            Nothing    -> print $ "No " ++ (T.unpack sessionStr) ++ " tutorial section for: " ++ show (name course)
+insertSessionTutorials Nothing sessionStr course = return ()
+insertSessionTutorials (Just session) sessionStr course = when (not $ null (tutorials session)) $ liftIO $ mapM_ ((insertTutorial sessionStr) course) (tutorials session)
 
 -- | Inserts a tutorial into the Tutorials table.
 insertTutorial :: T.Text -> Course -> Tutorial -> IO ()
