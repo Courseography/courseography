@@ -158,7 +158,7 @@ instance ToJSON Tutorial where
   toJSON (Tutorial tutorialSection times timeStr)
           = Array ((case tutorialSection of
                         Just value -> V.singleton $ toJSON value
-                        Nothing -> V.empty) V.++ V.singleton (toJSON (map toJSON times)) V.++ (V.singleton $ toJSON timeStr))
+                        Nothing -> V.empty) V.++ V.singleton (toJSON times) V.++ (V.singleton $ toJSON timeStr))
 
 -- | Opens a directory contained in dir, and processes every file in that directory.
 processDirectory :: IO ()
