@@ -1,4 +1,4 @@
-{-# LANGUAGE EmptyDataDecls, 
+{-# LANGUAGE EmptyDataDecls,
              FlexibleContexts,
              GADTs,
              GeneralizedNewtypeDeriving,
@@ -6,7 +6,7 @@
              OverloadedStrings,
              DeriveGeneric,
              QuasiQuotes,
-             TemplateHaskell,            
+             TemplateHaskell,
              TypeFamilies #-}
 
 module JsonParser where
@@ -46,8 +46,8 @@ data Lecture =
 -- | A Tutorial.
 data Tutorial =
     Tutorial { tutorialSection :: Maybe T.Text,
-               times       :: [[Int]],
-               timeStr     :: T.Text
+               times :: [[Int]],
+               timeStr :: T.Text
              } deriving Show
 
 -- | A Session.
@@ -89,7 +89,7 @@ instance FromJSON Course where
     parseJSON _ = mzero
 
 instance ToJSON Course where
-  toJSON (Course breadth description title prereqString f s y name exclusions manualTutorialEnrol distribution prereqs) 
+  toJSON (Course breadth description title prereqString f s y name exclusions manualTutorialEnrol distribution prereqs)
           = object ["breadth" .= breadth,
                     "description" .= description,
                     "title" .= title,
@@ -111,7 +111,7 @@ instance FromJSON Session where
     parseJSON _ = mzero
 
 instance ToJSON Session where
-  toJSON (Session lectures tutorials) 
+  toJSON (Session lectures tutorials)
           = object ["lectures" .= lectures,
                     "tutorials" .= tutorials
                    ]
@@ -129,7 +129,7 @@ instance FromJSON Lecture where
     parseJSON _ = mzero
 
 instance ToJSON Lecture where
-  toJSON (Lecture extra section cap time_str time instructor enrol wait) 
+  toJSON (Lecture extra section cap time_str time instructor enrol wait)
           = object ["extra" .= extra,
                     "section" .= section,
                     "cap" .= cap,
@@ -155,10 +155,10 @@ instance FromJSON Tutorial where
     parseJSON _ = mzero
 
 instance ToJSON Tutorial where
-  toJSON (Tutorial tutorialSection times timeStr) 
-          = Array ((V.singleton (case tutorialSection of
-                        Just value -> toJSON value
-                        Nothing -> toJSON (B.unpack "N/A"))) V.++ V.singleton (toJSON (map toJSON times)) V.++ (V.singleton $ toJSON timeStr))
+  toJSON (Tutorial tutorialSection times timeStr)
+          = Array ((case tutorialSection of
+                        Just value -> V.singleton $ toJSON value
+                        Nothing -> V.empty) V.++ V.singleton (toJSON (map toJSON times)) V.++ (V.singleton $ toJSON timeStr))
 
 -- | Opens a directory contained in dir, and processes every file in that directory.
 processDirectory :: IO ()
@@ -193,7 +193,7 @@ insertCourse course = runSqlite dbStr $ do
                                           (manualTutorialEnrol course)
                                           (prereqString course)
                                           (exclusions course)
-                                          (breadth course) 
+                                          (breadth course)
                                           (distribution course)
                                           (prereqString course)
 
