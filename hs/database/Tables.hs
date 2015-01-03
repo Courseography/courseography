@@ -50,6 +50,7 @@ Lectures
 Tutorials
     --department String
     code Text
+    section Text Maybe
     session Text
     times [Time]
     timeStr Text
@@ -67,4 +68,4 @@ Distribution
 |]
 
 dbStr :: Text
-dbStr = "data78.sqlite3"
+dbStr = "data80.sqlite3"
