@@ -17,6 +17,9 @@ import Control.Monad.IO.Class  (liftIO)
 import Database.Persist
 import Database.Persist.Sqlite
 
+import Filesystem.Path.CurrentOS
+import System.Directory
+
 graph :: String
 graph = "graph"
 
@@ -29,21 +32,20 @@ about = "about"
 static :: String
 static = "static"
 
-staticDir :: String
---staticDir = "C:\\Users\\David\\Documents\\courseography"
-staticDir = "/home/cynic/4/courseography"
-
 course :: String
 course = "course"
 
 main :: IO ()
-main = simpleHTTP nullConf $
-  msum [ dir grid $ gridResponse,
-         dir graph $ graphResponse,
-         dir about $ aboutResponse,
-         dir static $ serveDirectory EnableBrowsing [] staticDir,
-         dir course $ path (\s -> liftIO $ queryCourse s)
-       ]
+main = do
+    cwd <- getCurrentDirectory
+    let staticDir = encodeString $ parent $ decodeString cwd
+    simpleHTTP nullConf $
+      msum [ dir grid $ gridResponse,
+             dir graph $ graphResponse,
+             dir about $ aboutResponse,
+             dir static $ serveDirectory EnableBrowsing [] staticDir,
+             dir course $ path (\s -> liftIO $ queryCourse s)
+           ]
 
 -- | Queries the database for all information about `course`, constructs a JSON object 
 -- | representing the course and returns the appropriate JSON response.
