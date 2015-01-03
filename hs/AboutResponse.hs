@@ -79,6 +79,6 @@ aboutHtml = H.div ! A.id "aboutDiv" $ do
     H.strong "You don't need to be a programmer to get involved."
   H.p $ do
     "We can be reached at "
-    H.a ! A.href "mailto:cs.toronto.courseplanner@gmail.com" ! A.target "_blank"
-        $ "cs.toronto.courseplanner@gmail.com"
+    H.a ! A.href "mailto:courseography@cs.toronto.edu" ! A.target "_blank"
+        $ "courseography@cs.toronto.edu"
     ", and look forward to hearing from you!"
