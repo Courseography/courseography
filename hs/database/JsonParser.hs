@@ -155,10 +155,11 @@ instance FromJSON Tutorial where
     parseJSON _ = mzero
 
 instance ToJSON Tutorial where
-  toJSON (Tutorial tutorialSection times timeStr)
-          = Array ((case tutorialSection of
-                        Just value -> V.singleton $ toJSON value
-                        Nothing -> V.empty) V.++ V.singleton (toJSON times) V.++ (V.singleton $ toJSON timeStr))
+  toJSON (Tutorial Nothing times timeStr) =
+      Array $ V.fromList [toJSON times, toJSON timeStr]
+  toJSON (Tutorial (Just value) times timeStr) =
+      Array $ V.fromList [toJSON value, toJSON times, toJSON timeStr]
+
 
 -- | Opens a directory contained in dir, and processes every file in that directory.
 processDirectory :: IO ()
