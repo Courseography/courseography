@@ -33,14 +33,14 @@ courseDirectory = "../../res/courses/"
 
 -- | A Lecture.
 data Lecture =
-    Lecture { extra      :: Int,
-              section    :: T.Text,
-              cap        :: Int,
-              time_str   :: T.Text,
-              time       :: [[Int]],
+    Lecture { extra :: Int,
+              section :: T.Text,
+              cap :: Int,
+              time_str :: T.Text,
+              time :: [[Int]],
               instructor :: T.Text,
-              enrol      :: Maybe Int,
-              wait       :: Maybe Int
+              enrol :: Maybe Int,
+              wait :: Maybe Int
             } deriving Show
 
 -- | A Tutorial.
@@ -52,24 +52,24 @@ data Tutorial =
 
 -- | A Session.
 data Session =
-    Session { lectures   :: [Lecture],
-              tutorials  :: [Tutorial]
+    Session { lectures :: [Lecture],
+              tutorials :: [Tutorial]
             } deriving Show
 
 -- | A Course.
 data Course =
-    Course { breadth               :: Maybe T.Text,
-             description           :: Maybe T.Text,
-             title                 :: Maybe T.Text,
-             prereqString          :: Maybe T.Text,
-             f                     :: Maybe Session,
-             s                     :: Maybe Session,
-             y                     :: Maybe Session,
-             name                  :: !T.Text,
-             exclusions            :: Maybe T.Text,
-             manualTutorialEnrol   :: Maybe Bool,
-             distribution          :: Maybe T.Text,
-             prereqs               :: Maybe Array
+    Course { breadth :: Maybe T.Text,
+             description :: Maybe T.Text,
+             title :: Maybe T.Text,
+             prereqString :: Maybe T.Text,
+             f :: Maybe Session,
+             s :: Maybe Session,
+             y :: Maybe Session,
+             name :: !T.Text,
+             exclusions :: Maybe T.Text,
+             manualTutorialEnrol :: Maybe Bool,
+             distribution :: Maybe T.Text,
+             prereqs :: Maybe Array
            } deriving Show
 
 instance FromJSON Course where
@@ -143,7 +143,7 @@ instance ToJSON Lecture where
 instance FromJSON Tutorial where
     parseJSON (Array v)
         | V.length v == 2 = do
-            times   <- parseJSON $ v V.! 0
+            times <- parseJSON $ v V.! 0
             timeStr <- parseJSON $ v V.! 1
             return $ Tutorial Nothing times timeStr
         | V.length v == 3 = do
@@ -158,7 +158,7 @@ instance ToJSON Tutorial where
   toJSON (Tutorial tutorialSection times timeStr) 
           = Array ((V.singleton (case tutorialSection of
                         Just value -> toJSON value
-                        Nothing    -> toJSON timeStr)) V.++ V.singleton (toJSON (map toJSON times)) V.++ (V.singleton $ toJSON timeStr))
+                        Nothing -> toJSON timeStr)) V.++ V.singleton (toJSON (map toJSON times)) V.++ (V.singleton $ toJSON timeStr))
 
 -- | Opens a directory contained in dir, and processes every file in that directory.
 processDirectory :: IO ()
@@ -252,18 +252,18 @@ insertTutorial session course tutorial = runSqlite dbStr $ do
 -- | 6 indicates a parsing error.
 getBreadthRequirement :: T.Text -> Int
 getBreadthRequirement reqString
-    |   (T.isInfixOf "5" reqString) = 5
-    |   (T.isInfixOf "4" reqString) = 4
-    |   (T.isInfixOf "3" reqString) = 3
-    |   (T.isInfixOf "2" reqString) = 2
-    |   (T.isInfixOf "1" reqString) = 1
-    |   otherwise = 6
+    | (T.isInfixOf "5" reqString) = 5
+    | (T.isInfixOf "4" reqString) = 4
+    | (T.isInfixOf "3" reqString) = 3
+    | (T.isInfixOf "2" reqString) = 2
+    | (T.isInfixOf "1" reqString) = 1
+    | otherwise = 6
 
 -- | Gets the corresponding numeric requirement from a distribution requirement description.
 -- | 6 indicates a parsing error.
 getDistributionRequirement :: T.Text -> Int
 getDistributionRequirement reqString
-    |   (T.isInfixOf "This is a Science course" reqString) = 3
-    |   (T.isInfixOf "This is a Social Science course" reqString) = 2
-    |   (T.isInfixOf "This is a Humanities course" reqString) = 1
-    |   otherwise = 6
+    | (T.isInfixOf "This is a Science course" reqString) = 3
+    | (T.isInfixOf "This is a Social Science course" reqString) = 2
+    | (T.isInfixOf "This is a Humanities course" reqString) = 1
+    | otherwise = 6

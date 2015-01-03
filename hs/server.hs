@@ -50,7 +50,6 @@ main = simpleHTTP nullConf $
 queryCourse :: String -> IO Response
 queryCourse courseStr = runSqlite (T.pack ("database/" ++ T.unpack dbStr)) $ do
 
-
         sqlCourse :: [Entity Courses] <- selectList [CoursesCode ==. (T.pack courseStr)] []
 
         sqlLecturesFall :: [Entity Lectures]  <- selectList [LecturesCode  ==. (T.pack courseStr),
@@ -87,7 +86,7 @@ buildCourse :: Maybe Session -> Maybe Session -> Maybe Session -> Courses -> Cou
 buildCourse fallSession springSession yearSession course = Course (coursesBreadth course)
                                                                   (coursesDescription course)
                                                                   (coursesTitle course)
-                                                                   Nothing               --prereqString
+                                                                  Nothing               --prereqString
                                                                   fallSession
                                                                   springSession
                                                                   yearSession
@@ -95,7 +94,7 @@ buildCourse fallSession springSession yearSession course = Course (coursesBreadt
                                                                   (coursesExclusions course)  --exclusions
                                                                   (coursesManualTutorialEnrolment course)               -- manualTutorialEnrolment
                                                                   (coursesDistribution course)
-                                                                   Nothing               -- prereqs
+                                                                  Nothing               -- prereqs
 
 -- | Builds a Lecture structure from a tuple from the Lectures table.
 buildLecture :: Lectures -> Lecture
