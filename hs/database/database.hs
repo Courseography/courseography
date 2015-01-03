@@ -3,10 +3,10 @@
              GADTs,
              GeneralizedNewtypeDeriving,
              MultiParamTypeClasses,
-             OverloadedStrings, 
-             DeriveGeneric, 
-             QuasiQuotes, 
-             TemplateHaskell, 
+             OverloadedStrings,
+             DeriveGeneric,
+             QuasiQuotes,
+             TemplateHaskell,
              TypeFamilies #-}
 
 import           Control.Monad.IO.Class  (liftIO)
