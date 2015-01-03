@@ -1,16 +1,17 @@
-{-# LANGUAGE EmptyDataDecls, 
+{-# LANGUAGE EmptyDataDecls,
              FlexibleContexts,
+             FlexibleInstances,
              GADTs,
              GeneralizedNewtypeDeriving,
              MultiParamTypeClasses,
              OverloadedStrings,
              DeriveGeneric,
              QuasiQuotes,
-             TemplateHaskell,            
+             TemplateHaskell,
              TypeFamilies #-}
 
 module Tables where
-    
+
 import Database.Persist.TH
 import Data.Text
 
