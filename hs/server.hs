@@ -38,7 +38,7 @@ course = "course"
 main :: IO ()
 main = do
     cwd <- getCurrentDirectory
-    let staticDir = encodeString $ parent $ fromText (T.pack cwd)
+    let staticDir = encodeString $ parent $ decodeString cwd
     simpleHTTP nullConf $
       msum [ dir grid $ gridResponse,
              dir graph $ graphResponse,
