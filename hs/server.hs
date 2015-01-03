@@ -110,7 +110,7 @@ buildLecture entity = Lecture (lecturesExtra entity)
 
 -- | Builds a Tutorial structure from a tuple from the Tutorials table.
 buildTutorial :: Tutorials -> Tutorial
-buildTutorial entity = Tutorial Nothing
+buildTutorial entity = Tutorial (tutorialsSection entity)
                                 (map timeField (tutorialsTimes entity))
                                 (tutorialsTimeStr entity)
 

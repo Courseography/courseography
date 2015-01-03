@@ -243,6 +243,7 @@ insertTutorial :: T.Text -> Course -> Tutorial -> IO ()
 insertTutorial session course tutorial = runSqlite dbStr $ do
                                        runMigration migrateAll
                                        insert_ $ Tutorials (name course)
+                                                           (tutorialSection tutorial)
                                                            session
                                                            (map Time (times tutorial))
                                                            (timeStr tutorial)
