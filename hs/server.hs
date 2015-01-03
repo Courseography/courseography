@@ -52,7 +52,6 @@ main = do
 queryCourse :: String -> IO Response
 queryCourse courseStr = runSqlite (T.pack ("database/" ++ T.unpack dbStr)) $ do
 
-
         sqlCourse :: [Entity Courses] <- selectList [CoursesCode ==. (T.pack courseStr)] []
 
         sqlLecturesFall :: [Entity Lectures]  <- selectList [LecturesCode  ==. (T.pack courseStr),
@@ -76,7 +75,7 @@ queryCourse courseStr = runSqlite (T.pack ("database/" ++ T.unpack dbStr)) $ do
         let course = entityVal $ head sqlCourse
 
         let fallSession   = buildSession sqlLecturesFall sqlTutorialsFall
-        let springSession = buildSession sqlLecturesYear sqlTutorialsSpring
+        let springSession = buildSession sqlLecturesSpring sqlTutorialsSpring
         let yearSession = buildSession sqlLecturesYear sqlTutorialsYear
 
         let courseJSON = buildCourse fallSession springSession yearSession course
@@ -89,15 +88,15 @@ buildCourse :: Maybe Session -> Maybe Session -> Maybe Session -> Courses -> Cou
 buildCourse fallSession springSession yearSession course = Course (coursesBreadth course)
                                                                   (coursesDescription course)
                                                                   (coursesTitle course)
-                                                                   Nothing               --prereqString
+                                                                  Nothing               --prereqString
                                                                   fallSession
                                                                   springSession
                                                                   yearSession
                                                                   (coursesCode course)        --name
                                                                   (coursesExclusions course)  --exclusions
-                                                                   Nothing               -- manualTutorialEnrolment
+                                                                  (coursesManualTutorialEnrolment course)               -- manualTutorialEnrolment
                                                                   (coursesDistribution course)
-                                                                   Nothing               -- prereqs
+                                                                  Nothing               -- prereqs
 
 -- | Builds a Lecture structure from a tuple from the Lectures table.
 buildLecture :: Lectures -> Lecture
@@ -112,7 +111,8 @@ buildLecture entity = Lecture (lecturesExtra entity)
 
 -- | Builds a Tutorial structure from a tuple from the Tutorials table.
 buildTutorial :: Tutorials -> Tutorial
-buildTutorial entity = Tutorial (map timeField (tutorialsTimes entity))
+buildTutorial entity = Tutorial (tutorialsSection entity)
+                                (map timeField (tutorialsTimes entity))
                                 (tutorialsTimeStr entity)
 
 -- | Encodes an Aeson Value into a ByteString.
