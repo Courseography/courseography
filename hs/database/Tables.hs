@@ -20,12 +20,10 @@ derivePersistField "Time"
 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 Courses json
-    --department String
     code Text
     title Text Maybe
     description Text Maybe
     manualTutorialEnrolment Bool Maybe
-    --manualPracticalEnrolment Bool
     prereqs Text Maybe
     exclusions Text Maybe
     breadth Text Maybe
@@ -34,7 +32,6 @@ Courses json
     deriving Show
 
 Lectures
-    --department String
     code Text
     session Text
     section Text
@@ -44,12 +41,10 @@ Lectures
     enrolled Int
     waitlist Int
     extra Int
-    -- location Text -- Location does not exist in JSON files.
     timeStr Text
     deriving Show
 
 Tutorials
-    --department String
     code Text
     section Text Maybe
     session Text
