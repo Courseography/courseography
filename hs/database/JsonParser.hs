@@ -11,20 +11,18 @@
 
 module JsonParser where
 
-import Control.Monad.IO.Class  (liftIO)
 import qualified Data.ByteString.Lazy as B
 import qualified Data.Vector as V
 import qualified Data.Text as T
+import qualified Data.Conduit.List as CL
 import Data.Aeson
 import Data.List as L
 import GHC.Generics
 import System.Directory
-
 import Database.Persist
 import Database.Persist.Sqlite
-
+import Control.Monad.IO.Class  (liftIO)
 import Control.Monad
-import qualified Data.Conduit.List as CL
 import Control.Applicative
 import Tables
 
