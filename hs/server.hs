@@ -120,9 +120,9 @@ encodeJSON :: Aeson.Value -> BSL.ByteString
 encodeJSON json = BSL.filter (\c -> c /= '\\') $ Aeson.encode json
 
 -- | Builds a Session structure from a list of tuples from the Lectures table, and a list of tuples from the Tutorials table.
-buildSession :: [Entity Lectures] -> [Entity Tutorials] -> Maybe JsonParser.Session
-buildSession lectures tutorials = Just $ JsonParser.Session (map buildLecture (map entityVal lectures))
-                                                            (map buildTutorial (map entityVal tutorials))
+buildSession :: [Entity Lectures] -> [Entity Tutorials] -> Maybe Tables.Session
+buildSession lectures tutorials = Just $ Tables.Session (map buildLecture (map entityVal lectures))
+                                                        (map buildTutorial (map entityVal tutorials))
 
 -- | Creates a JSON response.
 createJSONResponse :: BSL.ByteString -> Response
