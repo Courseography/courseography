@@ -88,15 +88,15 @@ buildCourse :: Maybe Session -> Maybe Session -> Maybe Session -> Courses -> Cou
 buildCourse fallSession springSession yearSession course = Course (coursesBreadth course)
                                                                   (coursesDescription course)
                                                                   (coursesTitle course)
-                                                                  Nothing               --prereqString
+                                                                  Nothing --prereqString
                                                                   fallSession
                                                                   springSession
                                                                   yearSession
-                                                                  (coursesCode course)        --name
-                                                                  (coursesExclusions course)  --exclusions
+                                                                  (coursesCode course)
+                                                                  (coursesExclusions course)
                                                                   (coursesManualTutorialEnrolment course)               -- manualTutorialEnrolment
                                                                   (coursesDistribution course)
-                                                                  Nothing               -- prereqs
+                                                                  Nothing -- prereqs
 
 -- | Builds a Lecture structure from a tuple from the Lectures table.
 buildLecture :: Lectures -> Lecture
@@ -119,12 +119,10 @@ buildTutorial entity = Tutorial (tutorialsSection entity)
 encodeJSON :: Aeson.Value -> BSL.ByteString
 encodeJSON json = BSL.filter (\c -> c /= '\\') $ Aeson.encode json
 
-
 -- | Builds a Session structure from a list of tuples from the Lectures table, and a list of tuples from the Tutorials table.
 buildSession :: [Entity Lectures] -> [Entity Tutorials] -> Maybe JsonParser.Session
 buildSession lectures tutorials = Just $ JsonParser.Session (map buildLecture (map entityVal lectures))
                                                             (map buildTutorial (map entityVal tutorials))
-
 
 -- | Creates a JSON response.
 createJSONResponse :: BSL.ByteString -> Response
