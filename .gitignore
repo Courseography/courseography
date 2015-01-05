@@ -13,3 +13,4 @@ out/
 *.exe
 *.hi
 *.o
+*.sqlite3
