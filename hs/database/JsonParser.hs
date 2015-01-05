@@ -27,7 +27,7 @@ import Control.Applicative
 import Tables
 
 dbStr :: T.Text
-dbStr = "data80.sqlite3"
+dbStr = "database.sqlite3"
 
 courseDirectory :: String
 courseDirectory = "../../res/courses/"
