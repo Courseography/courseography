@@ -28,6 +28,8 @@ class Rect:
         self.parent_transform_x = float(transform[transform.find('(') + 1: transform.find(',')])
         self.parent_transform_y = float(transform[transform.find(',') + 1: transform.find(')')])
         self.text = '' # Text is set later.
+        self.extra_text = '' # Some hybrids require two lines of text, and SVG text elements do not
+                             # wrap around, nor do they respect the newline character.
         self.hybrid = hybrid
         self.colour = '#fff'
         self.class_ = 'hybrid' if self.hybrid else 'node'
