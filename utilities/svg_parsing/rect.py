@@ -46,7 +46,7 @@ class Rect:
             prefix = "hCSC"
 
         #Figure out the research area
-        code = (prefix + self.text)[:6]
+        code = (prefix + self.text + self.extra_text)[:6]
         self.area = 'core'
         for area, courses in AREAS.items():
             if code in courses:
@@ -77,7 +77,7 @@ class Rect:
                    '"')
 
         print("S.g ! A.class_ \"" + self.class_ + "\" " +
-              " ! A.id_ \"" + prefix + self.text + "\""
+              " ! A.id_ \"" + prefix + self.text + self.extra_text + "\""
               " ! S.dataAttribute \"group\" \"" + self.area + "\""
               " ! A.style \"" + "\" $ do \n"  +
               "             S.rect ! A.width \"" + self.width +
