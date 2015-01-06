@@ -132,15 +132,7 @@ def process_text(elem):
     found = False
     for rect in rects:
         if (elem.get('x'), elem.get('y'), 1) in rect:
-            if len(rect.text) == 0:
-                rect.text.append(elem.text)
-                rect.input_text_y = float(elem.get('y'))
-            else:
-                if float(elem.get('y')) < rect.input_text_y:
-                    rect.text.append(rect.text[0])
-                    rect.text[0] = elem.text
-                else:
-                    rect.text.append(elem.text)
+            rect.text[elem.get('y')] = (elem.text)
             found = True
 
     for boolean in bools:

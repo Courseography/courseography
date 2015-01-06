@@ -27,29 +27,32 @@ class Rect:
         self.text_y = float(self.y) + (float(height)/2)
         self.parent_transform_x = float(transform[transform.find('(') + 1: transform.find(',')])
         self.parent_transform_y = float(transform[transform.find(',') + 1: transform.find(')')])
-        self.text = [] # Text is set later.
+        self.text = {} # This is a dictionary, whose keys are y coordinates and values are strings.
+                       # (text element text).
                        # Some hybrids require two lines of text, and SVG text elements do not
                        # wrap around, nor do they respect the newline character.
+                       # The y value of the first text value seen by the parser.
+                       # When a second text value for a node is seen, we want
+                       # to be able to identify which text element goes above,
+                       # and which goes below.
+                       # 
         self.hybrid = hybrid
         self.colour = '#fff'
         self.class_ = 'hybrid' if self.hybrid else 'node'
-
-        self.input_text_y = 0 # The y value of the first text value seen by the parser.
-                              # When a second text value for a node is seen, we want
-                              # to be able to identify which text element goes above,
-                              # and which goes below.
 
     def output_haskell(self):
         if self.hybrid:
             self.colour = "#bbb"
         prefix = ""
-        if not self.text[0][0].isalpha():
+        if not self.text[min(self.text.keys())][0].isalpha():
             prefix = "CSC"
         if self.hybrid:
             prefix = "hCSC"
 
+        code = (prefix + self.text[sorted(self.text.keys())[0]] +
+               (self.text[sorted(self.text.keys())[1]] if len(self.text) > 1 else ""))[:6]
+
         #Figure out the research area
-        code = (prefix + self.text[0] + (self.text[1] if len(self.text) > 1 else ""))[:6]
         self.area = 'core'
         for area, courses in AREAS.items():
             if code in courses:
@@ -65,24 +68,27 @@ class Rect:
                    " ! A.x \"" + str(self.text_x) +
                    "\" ! A.y \"" + str(self.text_y) +
                    '" $ "' +
-                   self.text[0] +
+                   self.text[min(self.text.keys())] +
                    '"')
         else:
-            text = ("             S.text_ " +
-                   " ! A.x \"" + str(self.text_x) +
-                   "\" ! A.y \"" + str(self.text_y - float(self.height)/4) +
-                   '" $ "' +
-                   self.text[0] +
-                   '"\n'
-                   "             S.text_ " +
-                   " ! A.x \"" + str(self.text_x) +
-                   "\" ! A.y \"" + str(self.text_y + float(self.height)/4) +
-                   '" $ "' +
-                   self.text[1] +
-                   '"')
+            text = ""
+            for t in range(len(self.text)):
+                d = {k:v for (k,v) in self.text.items() if v != None}
+                text_fragment = self.text[min(d.keys())]
+                offset = float(self.height)/(len(self.text)*2)
+                offset = -offset if t < len(self.text)/2 else offset
+
+                text +=  ("             S.text_ " +
+                         " ! A.x \"" + str(self.text_x) +
+                         "\" ! A.y \"" + str(self.text_y + offset) +
+                         '" $ "' +
+                         text_fragment +
+                         '"\n')
+
+                self.text[min(d.keys())] = None
 
         print("S.g ! A.class_ \"" + self.class_ + "\" " +
-              " ! A.id_ \"" + prefix + self.text[0] + (self.text[1] if len(self.text) > 1 else "") + "\""
+              " ! A.id_ \"" + code + "\""
               " ! S.dataAttribute \"group\" \"" + self.area + "\""
               " ! A.style \"" + "\" $ do \n"  +
               "             S.rect ! A.width \"" + self.width +
