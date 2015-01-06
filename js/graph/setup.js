@@ -81,8 +81,6 @@ var nodes = [];               // List of all nodes
 $(document).ready(function () {
     'use strict';
 
-    //$("#graph").append(graphPage);
-
     buildGraph();
 
     FCEPrerequisiteCourses = [CSC318, CSC454];
