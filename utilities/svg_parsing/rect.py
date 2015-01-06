@@ -27,7 +27,7 @@ class Rect:
         self.text_y = float(self.y) + (float(height)/2)
         self.parent_transform_x = float(transform[transform.find('(') + 1: transform.find(',')])
         self.parent_transform_y = float(transform[transform.find(',') + 1: transform.find(')')])
-        self.text = {} # This is a dictionary, whose keys are y coordinates and values are strings.
+        self.text = {} # This is a dictionary whose keys are y coordinates and values are strings.
                        # (text element text).
                        # Some hybrids require two lines of text, and SVG text elements do not
                        # wrap around, nor do they respect the newline character.
