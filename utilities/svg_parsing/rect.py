@@ -27,9 +27,9 @@ class Rect:
         self.text_y = float(self.y) + (float(height)/2)
         self.parent_transform_x = float(transform[transform.find('(') + 1: transform.find(',')])
         self.parent_transform_y = float(transform[transform.find(',') + 1: transform.find(')')])
-        self.text = '' # Text is set later.
-        self.extra_text = '' # Some hybrids require two lines of text, and SVG text elements do not
-                             # wrap around, nor do they respect the newline character.
+        self.text = [] # Text is set later.
+                       # Some hybrids require two lines of text, and SVG text elements do not
+                       # wrap around, nor do they respect the newline character.
         self.hybrid = hybrid
         self.colour = '#fff'
         self.class_ = 'hybrid' if self.hybrid else 'node'
@@ -43,15 +43,13 @@ class Rect:
         if self.hybrid:
             self.colour = "#bbb"
         prefix = ""
-        if self.text == '385' or self.text == '489':
-            prefix = 'ECE'
-        elif not self.text[0].isalpha():
+        if not self.text[0][0].isalpha():
             prefix = "CSC"
         if self.hybrid:
             prefix = "hCSC"
 
         #Figure out the research area
-        code = (prefix + self.text + self.extra_text)[:6]
+        code = (prefix + self.text[0] + (self.text[1] if len(self.text) > 1 else ""))[:6]
         self.area = 'core'
         for area, courses in AREAS.items():
             if code in courses:
@@ -62,29 +60,29 @@ class Rect:
         # line wrapping or newlines, so two text elements need to be created.
         # Since there are now two text elements fitting into the node, the y positions
         # of the text elements need to be recalculated to account for this.
-        if len(self.extra_text) == 0:
+        if len(self.text) == 1:
             text = ("             S.text_ " +
                    " ! A.x \"" + str(self.text_x) +
                    "\" ! A.y \"" + str(self.text_y) +
                    '" $ "' +
-                   self.text +
+                   self.text[0] +
                    '"')
         else:
             text = ("             S.text_ " +
                    " ! A.x \"" + str(self.text_x) +
                    "\" ! A.y \"" + str(self.text_y - float(self.height)/4) +
                    '" $ "' +
-                   self.text +
+                   self.text[0] +
                    '"\n'
                    "             S.text_ " +
                    " ! A.x \"" + str(self.text_x) +
                    "\" ! A.y \"" + str(self.text_y + float(self.height)/4) +
                    '" $ "' +
-                   self.extra_text +
+                   self.text[1] +
                    '"')
 
         print("S.g ! A.class_ \"" + self.class_ + "\" " +
-              " ! A.id_ \"" + prefix + self.text + self.extra_text + "\""
+              " ! A.id_ \"" + prefix + self.text[0] + (self.text[1] if len(self.text) > 1 else "") + "\""
               " ! S.dataAttribute \"group\" \"" + self.area + "\""
               " ! A.style \"" + "\" $ do \n"  +
               "             S.rect ! A.width \"" + self.width +
