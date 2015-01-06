@@ -4,7 +4,7 @@ AREAS = {
                'CSC463'],
     'core': ['CSC108', 'CSC148', 'CSC104', 'CSC120', 'CSC490',
              'CSC491', 'CSC494', 'CSC495'],
-    'se': ['CSC207', 'CSC301', 'CSC302', 'CSC410'],
+    'se': ['CSC207', 'CSC301', 'CSC302', 'CSC410', 'CSC465'],
     'systems': ['CSC209', 'CSC258', 'CSC358', 'CSC369', 'CSC372',
                 'CSC458', 'CSC469', 'CSC488', 'ECE385', 'ECE489'],
     'hci': ['CSC200', 'CSC300',  'CSC318', 'CSC404', 'CSC428',
