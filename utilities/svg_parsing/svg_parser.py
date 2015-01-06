@@ -132,7 +132,14 @@ def process_text(elem):
     found = False
     for rect in rects:
         if (elem.get('x'), elem.get('y'), 1) in rect:
-            rect.text = elem.text
+            if len(rect.text) == 0:
+                rect.text = elem.text
+            else:
+                if len(elem.text) > len(rect.text) or elem.text == "ECE":
+                    rect.extra_text = rect.text[:]
+                    rect.text = elem.text
+                else:
+                    rect.extra_text = elem.text
             found = True
 
     for boolean in bools:

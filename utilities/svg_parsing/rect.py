@@ -53,6 +53,29 @@ class Rect:
                 self.area = area
                 break
 
+        
+
+        if len(self.extra_text) == 0:
+            text = ("             S.text_ " +
+                   " ! A.x \"" + str(self.text_x) +
+                   "\" ! A.y \"" + str(self.text_y) +
+                   '" $ "' +
+                   self.text +
+                   '"')
+        else:
+            text = ("             S.text_ " +
+                   " ! A.x \"" + str(self.text_x) +
+                   "\" ! A.y \"" + str(self.text_y - float(self.height)/4) +
+                   '" $ "' +
+                   self.text +
+                   '"\n'
+                   "             S.text_ " +
+                   " ! A.x \"" + str(self.text_x) +
+                   "\" ! A.y \"" + str(self.text_y + float(self.height)/4) +
+                   '" $ "' +
+                   self.extra_text +
+                   '"')
+
         print("S.g ! A.class_ \"" + self.class_ + "\" " +
               " ! A.id_ \"" + prefix + self.text + "\""
               " ! S.dataAttribute \"group\" \"" + self.area + "\""
@@ -64,12 +87,8 @@ class Rect:
               "\" ! A.x \"" + str(self.x) +
               "\" ! A.y \"" + str(self.y) +
               "\" ! A.fill \"" + self.colour + "\" \n" +
-              "             S.text_ " +
-              " ! A.x \"" + str(self.text_x) +
-              "\" ! A.y \"" + str(self.text_y) +
-              '" $ "' +
-              self.text +
-              '"')
+              text
+              )
 
     def __contains__(self, coords):
         dx = float(coords[0]) - float(self.x) + (float(self.parent_transform_x) * coords[2]) # Coords[2] is 0 if translation should not be applied, 1 if it should. Very hacky.
