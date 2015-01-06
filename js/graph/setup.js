@@ -80,7 +80,6 @@ var nodes = [];               // List of all nodes
 
 $(document).ready(function () {
     'use strict';
-    var graphPage = getRemote();
 
     //$("#graph").append(graphPage);
 
@@ -106,11 +105,3 @@ $(document).ready(function () {
     // Uncomment to enable graph dragging
     // enableGraphDragging();
 });
-
-function getRemote() {
-    return $.ajax({
-        type: "GET",
-        url: 'static/hs/csc_graph.svg',
-        async: false
-    }).responseText;
-}
