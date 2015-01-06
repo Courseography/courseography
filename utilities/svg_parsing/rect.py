@@ -35,7 +35,6 @@ class Rect:
                        # When a second text value for a node is seen, we want
                        # to be able to identify which text element goes above,
                        # and which goes below.
-                       # 
         self.hybrid = hybrid
         self.colour = '#fff'
         self.class_ = 'hybrid' if self.hybrid else 'node'
@@ -49,10 +48,9 @@ class Rect:
         if self.hybrid:
             prefix = "hCSC"
 
+        #Figure out the research area
         code = (prefix + self.text[sorted(self.text.keys())[0]] +
                (self.text[sorted(self.text.keys())[1]] if len(self.text) > 1 else ""))[:6]
-
-        #Figure out the research area
         self.area = 'core'
         for area, courses in AREAS.items():
             if code in courses:
