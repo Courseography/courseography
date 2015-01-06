@@ -34,6 +34,11 @@ class Rect:
         self.colour = '#fff'
         self.class_ = 'hybrid' if self.hybrid else 'node'
 
+        self.input_text_y = 0 # The y value of the first text value seen by the parser.
+                              # When a second text value for a node is seen, we want
+                              # to be able to identify which text element goes above,
+                              # and which goes below.
+
     def output_haskell(self):
         if self.hybrid:
             self.colour = "#bbb"
@@ -53,8 +58,10 @@ class Rect:
                 self.area = area
                 break
 
-        
-
+        # Certain nodes have multiple lines of text. SVG text elements do not support
+        # line wrapping or newlines, so two text elements need to be created.
+        # Since there are now two text elements fitting into the node, the y positions
+        # of the text elements need to be recalculated to account for this.
         if len(self.extra_text) == 0:
             text = ("             S.text_ " +
                    " ! A.x \"" + str(self.text_x) +
