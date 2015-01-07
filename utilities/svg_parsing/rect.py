@@ -99,7 +99,7 @@ class Rect:
 			    -1 * offset <= dy <= float(self.height) + offset)
 
     def create_output_text(self, dict_entry):
-        y_pos = str(float(dict_entry[0]) + self.parent_transform_y)
+        y_pos = str(float(dict_entry[0]) + self.parent_transform_y - 4)
         text_fragment = dict_entry[1]
 
         return ("             S.text_ " +
