@@ -15,8 +15,8 @@ class Path:
     def output_haskell(self):
         print('S.path ! A.id_ "' +
               self.id +
-              '" ! A.class_ "path"' +
-              ' ! A.d "' + self.d + '" ' +
+              '" ! A.class_ "path"'
+              ' ! A.d "' + self.d + '" '
               ' ! A.markerEnd "url(#arrow)"')
 
 def convert_path_to_absolute(d, x_transform, y_transform):

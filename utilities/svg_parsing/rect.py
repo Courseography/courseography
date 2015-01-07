@@ -65,7 +65,7 @@ class Rect:
         # Since there are now two text elements fitting into the node, the y positions
         # of the text elements need to be recalculated to account for this.
         if len(self.text) == 1:
-            text = ('             S.text_ ' +
+            text = ('             S.text_ '
                    ' ! A.x "' + str(self.text_x) +
                    '" ! A.y "' + str(self.text_y) +
                    '" $ "' +
@@ -77,18 +77,18 @@ class Rect:
 
         # Some hybrids may have identical IDs. 
         # This may cause problems when building the graph.
-        print('S.g ! A.class_ "' + self.class_ + '" ' +
+        print('S.g ! A.class_ "' + self.class_ + '" '
               ' ! A.id_ "' + code + '"'
               ' ! S.dataAttribute "group" "' + self.area + '"'
-              ' ! A.style "' + '" $ do \n'  +
+              ' ! A.style "" $ do \n'
               '             S.rect ! A.width "' + self.width +
               '" ! A.height "' + self.height +
-              '" ! A.rx "4' +
-              '" ! A.ry "4' +
+              '" ! A.rx "4'
+              '" ! A.ry "4'
               '" ! A.x "' + str(self.x) +
               '" ! A.y "' + str(self.y) +
-              '" ! A.fill "' + self.colour + '" \n' +
-              text
+              '" ! A.fill "' + self.colour +
+              '" \n' + text
               )
 
     def __contains__(self, coords):
@@ -106,7 +106,7 @@ class Rect:
         y_pos = str(float(dict_entry[0]) + self.parent_transform_y - 4)
         text_fragment = dict_entry[1]
 
-        return ('             S.text_ ' +
+        return ('             S.text_ '
                 ' ! A.x "' + str(self.text_x) +
                 '" ! A.y "' + 
                 y_pos +

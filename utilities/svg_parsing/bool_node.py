@@ -22,7 +22,7 @@ class BoolNode:
               self.rx +
               '" ! A.ry "' +
               self.ry +
-              '"\n                    S.text_ ' +
+              '"\n                    S.text_ '
               ' ! A.x "' +
               str(self.cx) +
               '" ! A.y "' +

@@ -8,7 +8,7 @@ class Label:
         self.text = text
 
     def output_haskell(self):
-        print('S.text_ ! A.class_ "region-label"' +
-              ' ! A.x "' + str(self.x) + '"' +
-              ' ! A.y "' + str(self.y) + '"' +
+        print('S.text_ ! A.class_ "region-label"'
+              ' ! A.x "' + str(self.x) + '"'
+              ' ! A.y "' + str(self.y) + '"'
               ' $ "' + self.text + '"')

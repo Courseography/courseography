@@ -54,9 +54,9 @@ def output_svg():
 
     # Arrowhead def
     print('    S.defs $ do')
-    print('        S.marker ! A.id_ "arrow" ! ' +
+    print('        S.marker ! A.id_ "arrow" ! '
           'A.viewbox "0 0 10 10" ! '
-          'A.refx "1" ! A.refy "5" ! A.markerunits "strokewidth" ! ' +
+          'A.refx "1" ! A.refy "5" ! A.markerunits "strokewidth" ! '
           'A.orient "auto" ! A.markerwidth "4.5" ! A.markerheight "4.5" $ do'
     )
     print('            S.polyline ! A.points "0,1 10,5 0,9" ! A.fill "black"')
