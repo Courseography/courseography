@@ -76,6 +76,7 @@ def output_svg():
     print('    S.g ! A.transform "translate(-120,313.70929)" $ do')
     list(map(output_region_label, region_labels))
 
+
 def output_rect(rect):
     print('            ', end='')
     rect.output_haskell()
@@ -96,6 +97,7 @@ def output_bool(boolean):
 def output_region_label(label):
     print('        ', end='')
     label.output_haskell()
+
 
 def print_header():
     print('{-# LANGUAGE OverloadedStrings #-}')
