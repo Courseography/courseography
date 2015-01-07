@@ -43,14 +43,17 @@ class Rect:
         if self.hybrid:
             self.colour = "#bbb"
         prefix = ""
-        if not self.text[min(self.text.keys())][0].isalpha():
+        sorted_text = sorted(self.text.items()) 
+
+        if not sorted_text[0][1][0].isalpha():
             prefix = "CSC"
         if self.hybrid:
             prefix = "hCSC"
 
-        #Figure out the research area
-        code = (prefix + self.text[sorted(self.text.keys())[0]] +
-               (self.text[sorted(self.text.keys())[1]] if len(self.text) > 1 else ""))[:6]
+
+        # Figure out the research area
+        code = (prefix + sorted_text[0][1] +
+               (sorted_text[1][1] if len(self.text) > 1 else ""))[:6]
         self.area = 'core'
         for area, courses in AREAS.items():
             if code in courses:
@@ -66,25 +69,14 @@ class Rect:
                    " ! A.x \"" + str(self.text_x) +
                    "\" ! A.y \"" + str(self.text_y) +
                    '" $ "' +
-                   self.text[min(self.text.keys())] +
+                   sorted_text[0][1] +
                    '"')
         else:
-            text = ""
-            for t in range(len(self.text)):
-                d = {k:v for (k,v) in self.text.items() if v != None}
-                text_fragment = self.text[min(d.keys())]
-                offset = float(self.height)/(len(self.text)*2)
-                offset = -offset if t < len(self.text)/2 else offset
+            text = list(map(self.create_output_text, sorted_text))
+            text = "".join(text)
 
-                text +=  ("             S.text_ " +
-                         " ! A.x \"" + str(self.text_x) +
-                         "\" ! A.y \"" + str(self.text_y + offset) +
-                         '" $ "' +
-                         text_fragment +
-                         '"\n')
-
-                self.text[min(d.keys())] = None
-
+        # Some hybrids may have identical IDs. 
+        # This may cause problems when building the graph.
         print("S.g ! A.class_ \"" + self.class_ + "\" " +
               " ! A.id_ \"" + code + "\""
               " ! S.dataAttribute \"group\" \"" + self.area + "\""
@@ -105,3 +97,15 @@ class Rect:
         offset = 9
         return (-1 * offset <= dx <= float(self.width) + offset and
 			    -1 * offset <= dy <= float(self.height) + offset)
+
+    def create_output_text(self, dict_entry):
+        y_pos = str(float(dict_entry[0]) + self.parent_transform_y - 4)
+        text_fragment = dict_entry[1]
+
+        return ("             S.text_ " +
+                " ! A.x \"" + str(self.text_x) +
+                "\" ! A.y \"" + 
+                y_pos +
+                '" $ "' +
+                text_fragment +
+                '"\n')
