@@ -45,10 +45,10 @@ class Rect:
         prefix = ""
         sorted_text = sorted(self.text.items()) 
 
-        if not sorted_text[0][1][0].isalpha():
-            prefix = "CSC"
         if self.hybrid:
             prefix = "hCSC"
+        elif not sorted_text[0][1][0].isalpha():
+            prefix = "CSC"
 
 
         # Figure out the research area
@@ -80,6 +80,7 @@ class Rect:
         print("S.g ! A.class_ \"" + self.class_ + "\" " +
               " ! A.id_ \"" + code + "\""
               " ! S.dataAttribute \"group\" \"" + self.area + "\""
+              " ! S.customAttribute \"text-rendering\" \"geometricPrecision\"" +
               " ! A.style \"" + "\" $ do \n"  +
               "             S.rect ! A.width \"" + self.width +
               "\" ! A.height \"" + self.height +
@@ -99,7 +100,7 @@ class Rect:
 			    -1 * offset <= dy <= float(self.height) + offset)
 
     def create_output_text(self, dict_entry):
-        y_pos = str(float(dict_entry[0]) + self.parent_transform_y - 4)
+        y_pos = str(float(dict_entry[0]) + self.parent_transform_y)
         text_fragment = dict_entry[1]
 
         return ("             S.text_ " +
