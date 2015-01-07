@@ -62,10 +62,7 @@ def output_svg():
     print('            S.polyline ! A.points "0,1 10,5 0,9" ! A.fill "black"')
 
     print('    S.g $ do')
-    for i in regions:
-        print('        ', end='')
-        i.output_haskell()
-
+    list(map(output_region, regions))
     print('    S.g ! A.transform " translate(0,-308.2677)" $ do')
     print('        S.g ! A.transform "translate(29.540919,340.70929)" ! A.class_ "nodes"$ do')
     list(map(output_rect, final_rects))
@@ -75,6 +72,11 @@ def output_svg():
     list(map(output_bool, bools))
     print('    S.g ! A.transform "translate(-120,313.70929)" $ do')
     list(map(output_region_label, region_labels))
+
+
+def output_region(region):
+    print('        ', end='')
+    region.output_haskell()
 
 
 def output_rect(rect):
