@@ -80,7 +80,6 @@ class Rect:
         print("S.g ! A.class_ \"" + self.class_ + "\" " +
               " ! A.id_ \"" + code + "\""
               " ! S.dataAttribute \"group\" \"" + self.area + "\""
-              " ! S.customAttribute \"text-rendering\" \"geometricPrecision\"" +
               " ! A.style \"" + "\" $ do \n"  +
               "             S.rect ! A.width \"" + self.width +
               "\" ! A.height \"" + self.height +
