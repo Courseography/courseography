@@ -99,6 +99,10 @@ class Rect:
 			    -1 * offset <= dy <= float(self.height) + offset)
 
     def create_output_text(self, dict_entry):
+
+        # The Y coordinate of the text is identical to the input graph,
+        # but for some reason the 4 position needs an offest of 4 to display
+        # correctly with their parent rects.
         y_pos = str(float(dict_entry[0]) + self.parent_transform_y - 4)
         text_fragment = dict_entry[1]
 
