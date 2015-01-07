@@ -69,27 +69,34 @@ def output_svg():
 
     print("    S.g ! A.transform \" translate(0,-308.2677)\" $ do")
     print("        S.g ! A.transform \"translate(29.540919,340.70929)\" ! A.class_ \"nodes\"$ do")
-    for i in final_rects:
-        print("            ", end="")
-        i.output_haskell()
-
+    list(map(output_rect, final_rects))
     print("            S.g $ do")
-    for i in paths:
-        if not i.isPath:
-            continue
-        print("                ", end="")
-        i.output_haskell()
-
+    list(map(output_path, paths))
     print("            S.g $ do")
-    for i in bools:
-        print("                ", end="")
-        i.output_haskell()
-
+    list(map(output_bool, bools))
     print("    S.g ! A.transform \"translate(-120,313.70929)\" $ do")
-    for i in region_labels:
-        print("        ", end="")
-        i.output_haskell()
+    list(map(output_region_label, region_labels))
 
+def output_rect(rect):
+    print("            ", end="")
+    rect.output_haskell()
+
+
+def output_path(path):
+    if not path.isPath:
+        return
+    print("                ", end="")
+    path.output_haskell()
+
+
+def output_bool(boolean):
+    print("                ", end="")
+    boolean.output_haskell()
+
+
+def output_region_label(label):
+    print("        ", end="")
+    label.output_haskell()
 
 def print_header():
     print("{-# LANGUAGE OverloadedStrings #-}")
