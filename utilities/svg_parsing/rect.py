@@ -41,19 +41,19 @@ class Rect:
 
     def output_haskell(self):
         if self.hybrid:
-            self.colour = "#bbb"
-        prefix = ""
+            self.colour = '#bbb'
+        prefix = ''
         sorted_text = sorted(self.text.items()) 
 
         if self.hybrid:
-            prefix = "hCSC"
+            prefix = 'hCSC'
         elif not sorted_text[0][1][0].isalpha():
-            prefix = "CSC"
+            prefix = 'CSC'
 
 
         # Figure out the research area
         code = (prefix + sorted_text[0][1] +
-               (sorted_text[1][1] if len(self.text) > 1 else ""))[:6]
+               (sorted_text[1][1] if len(self.text) > 1 else ''))[:6]
         self.area = 'core'
         for area, courses in AREAS.items():
             if code in courses:
@@ -65,29 +65,29 @@ class Rect:
         # Since there are now two text elements fitting into the node, the y positions
         # of the text elements need to be recalculated to account for this.
         if len(self.text) == 1:
-            text = ("             S.text_ " +
-                   " ! A.x \"" + str(self.text_x) +
-                   "\" ! A.y \"" + str(self.text_y) +
+            text = ('             S.text_ ' +
+                   ' ! A.x "' + str(self.text_x) +
+                   '" ! A.y "' + str(self.text_y) +
                    '" $ "' +
                    sorted_text[0][1] +
                    '"')
         else:
             text = list(map(self.create_output_text, sorted_text))
-            text = "".join(text)
+            text = ''.join(text)
 
         # Some hybrids may have identical IDs. 
         # This may cause problems when building the graph.
-        print("S.g ! A.class_ \"" + self.class_ + "\" " +
-              " ! A.id_ \"" + code + "\""
-              " ! S.dataAttribute \"group\" \"" + self.area + "\""
-              " ! A.style \"" + "\" $ do \n"  +
-              "             S.rect ! A.width \"" + self.width +
-              "\" ! A.height \"" + self.height +
-              "\" ! A.rx \"4" +
-              "\" ! A.ry \"4" +
-              "\" ! A.x \"" + str(self.x) +
-              "\" ! A.y \"" + str(self.y) +
-              "\" ! A.fill \"" + self.colour + "\" \n" +
+        print('S.g ! A.class_ "' + self.class_ + '" ' +
+              ' ! A.id_ "' + code + '"'
+              ' ! S.dataAttribute "group" "' + self.area + '"'
+              ' ! A.style "' + '" $ do \n'  +
+              '             S.rect ! A.width "' + self.width +
+              '" ! A.height "' + self.height +
+              '" ! A.rx "4' +
+              '" ! A.ry "4' +
+              '" ! A.x "' + str(self.x) +
+              '" ! A.y "' + str(self.y) +
+              '" ! A.fill "' + self.colour + '" \n' +
               text
               )
 
@@ -106,9 +106,9 @@ class Rect:
         y_pos = str(float(dict_entry[0]) + self.parent_transform_y - 4)
         text_fragment = dict_entry[1]
 
-        return ("             S.text_ " +
-                " ! A.x \"" + str(self.text_x) +
-                "\" ! A.y \"" + 
+        return ('             S.text_ ' +
+                ' ! A.x "' + str(self.text_x) +
+                '" ! A.y "' + 
                 y_pos +
                 '" $ "' +
                 text_fragment +

@@ -7,12 +7,12 @@ class BoolNode:
         self.rx = rx
         self.ry = ry
         self.id = id_
-        self.text = ""
+        self.text = ''
 
     def output_haskell(self):
-        print("S.g ! A.class_ \"bool\" ! A.id_ \"" +
+        print('S.g ! A.class_ "bool" ! A.id_ "' +
               self.id +
-              "\" $do\n                    S.ellipse ! A.d \"" +
+              '" $do\n                    S.ellipse ! A.d "' +
               self.d +
               '" ! A.cx "' +
               str(self.cx) +
