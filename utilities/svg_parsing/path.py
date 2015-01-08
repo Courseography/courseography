@@ -9,8 +9,6 @@ class Path:
             self.isPath = False
         else:
             self.isPath = True
-        # coords = list(filter(lambda l: l != 'm' and l != 'l' and l != 'M' and l != 'L'), coords)
-        # self.xStart = float()
 
     def output_haskell(self):
         print('S.path ! A.id_ "' +
@@ -50,4 +48,5 @@ def convert_path_to_absolute(d, x_transform, y_transform):
             string = string + str(i[0]) + ',' + str(i[1]) + ' '
         else:
             string = string + str(i) + ' '
+            
     return string
