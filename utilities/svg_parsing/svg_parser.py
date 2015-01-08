@@ -49,22 +49,19 @@ def find_all_and_process(soup, tag, fn):
 
 def output_svg():
     print_header()
-    print('svgDoc :: S.Svg')
-    print('svgDoc = S.docTypeSvg ! A.id_ "graphRootSVG" ! A.version "1.1" ! S.customAttribute "viewBox" "0 0 1050 700"$ do')
-
-    # Arrowhead def
-    print('    S.defs $ do')
-    print('        S.marker ! A.id_ "arrow" ! '
+    print('svgDoc :: S.Svg\n'
+          'svgDoc = S.docTypeSvg ! A.id_ "graphRootSVG" ! A.version "1.1" ! S.customAttribute "viewBox" "0 0 1050 700"$ do\n'
+          '    S.defs $ do\n'
+          '        S.marker ! A.id_ "arrow" ! '
           'A.viewbox "0 0 10 10" ! '
           'A.refx "1" ! A.refy "5" ! A.markerunits "strokewidth" ! '
-          'A.orient "auto" ! A.markerwidth "4.5" ! A.markerheight "4.5" $ do'
-    )
-    print('            S.polyline ! A.points "0,1 10,5 0,9" ! A.fill "black"')
+          'A.orient "auto" ! A.markerwidth "4.5" ! A.markerheight "4.5" $ do\n'
+          '            S.polyline ! A.points "0,1 10,5 0,9" ! A.fill "black"\n'
+          '    S.g $ do')
 
-    print('    S.g $ do')
     list(map(output_region, regions))
-    print('    S.g ! A.transform " translate(0,-308.2677)" $ do')
-    print('        S.g ! A.transform "translate(29.540919,340.70929)" ! A.class_ "nodes"$ do')
+    print('    S.g ! A.transform " translate(0,-308.2677)" $ do\n'
+          '        S.g ! A.transform "translate(29.540919,340.70929)" ! A.class_ "nodes"$ do')
     list(map(output_rect, final_rects))
     print('            S.g $ do')
     list(map(output_path, paths))
@@ -75,39 +72,40 @@ def output_svg():
 
 
 def output_region(region):
-    indent(2)
+    print("        ", end='')
     region.output_haskell()
 
 
 def output_rect(rect):
-    indent(3)
+    print("            ", end='')
     rect.output_haskell()
 
 
 def output_path(path):
     if not path.isPath:
         return
-    indent(4)
+    print("    ", end='')
+    print("                ", end='')
     path.output_haskell()
 
 
 def output_bool(boolean):
-    indent(4)
+    print("                ", end='')
     boolean.output_haskell()
 
 
 def output_region_label(label):
-    indent(2)
+    print("        ", end='')
     label.output_haskell()
 
 
 def print_header():
-    print('{-# LANGUAGE OverloadedStrings #-}')
-    print('module SVGGen where')
-    print('import Text.Blaze.Svg11 ((!), mkPath, rotate, l, m)')
-    print('import qualified Text.Blaze.Svg11 as S')
-    print('import qualified Text.Blaze.Svg11.Attributes as A')
-    print('import Text.Blaze.Svg.Renderer.String (renderSvg)')
+    print('{-# LANGUAGE OverloadedStrings #-}\n'
+          'module SVGGen where\n'
+          'import Text.Blaze.Svg11 ((!), mkPath, rotate, l, m)\n'
+          'import qualified Text.Blaze.Svg11 as S\n'
+          'import qualified Text.Blaze.Svg11.Attributes as A\n'
+          'import Text.Blaze.Svg.Renderer.String (renderSvg)')
 
 
 def process_path(elem):
@@ -163,11 +161,6 @@ def process_bool(elem):
                           elem.get('ry'),
                           'bool' + str(bool_id_counter)))
     bool_id_counter += 1
-
-
-def indent(times):
-    indent = '    ' * times
-    print(indent, end='')
 
 
 if __name__ == '__main__':
