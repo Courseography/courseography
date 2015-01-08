@@ -42,9 +42,9 @@ def read_svg():
                     rects.remove(rect_2)
                     final_rects.append(rect_1)
 
+
 def find_all_and_process(soup, tag, fn):
-    for elem in soup.find_all(tag):
-        fn(elem)
+    list(map(fn, soup.find_all(tag)))
 
 
 def output_svg():
@@ -75,29 +75,29 @@ def output_svg():
 
 
 def output_region(region):
-    print('        ', end='')
+    indent(2)
     region.output_haskell()
 
 
 def output_rect(rect):
-    print('            ', end='')
+    indent(3)
     rect.output_haskell()
 
 
 def output_path(path):
     if not path.isPath:
         return
-    print('                ', end='')
+    indent(4)
     path.output_haskell()
 
 
 def output_bool(boolean):
-    print('                ', end='')
+    indent(4)
     boolean.output_haskell()
 
 
 def output_region_label(label):
-    print('        ', end='')
+    indent(2)
     label.output_haskell()
 
 
@@ -163,6 +163,11 @@ def process_bool(elem):
                           elem.get('ry'),
                           'bool' + str(bool_id_counter)))
     bool_id_counter += 1
+
+
+def indent(times):
+    indent = '    ' * times
+    print(indent, end='')
 
 
 if __name__ == '__main__':
