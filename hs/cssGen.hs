@@ -70,7 +70,6 @@ headerCSS = do
 
 aDefaultCSS = do
     a <> a # hover <> a # visited <> a # active ? do
-        fontWeight bold
         textDecoration none
         color $ parse "#4C004C"
 
