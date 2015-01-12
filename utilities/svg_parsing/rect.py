@@ -16,6 +16,8 @@ AREAS = {
     'dbweb': ['CSC309', 'CSC343', 'CSC443']
 }
 
+hybrid_id_counter = 0
+
 class Rect:
 
     def __init__(self, width, height, x, y, transform, hybrid):
@@ -40,6 +42,7 @@ class Rect:
         self.class_ = 'hybrid' if self.hybrid else 'node'
 
     def output_haskell(self):
+        global hybrid_id_counter
         if self.hybrid:
             self.colour = "#bbb"
         prefix = ""
@@ -53,8 +56,12 @@ class Rect:
         # Figure out the research area
         code = (prefix + sorted_text[0][1] +
                (sorted_text[1][1] if len(self.text) > 1 else ""))
+
         if prefix == "CSC":
             code = code[:6]
+        elif self.hybrid:
+            code = 'h' + str(hybrid_id_counter)
+            hybrid_id_counter += 1
             
         self.area = 'core'
         for area, courses in AREAS.items():
