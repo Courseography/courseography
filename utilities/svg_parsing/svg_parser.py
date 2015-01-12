@@ -44,8 +44,8 @@ def read_svg():
 
 
 def find_all_and_process(soup, tag, fn):
-    for i in soup.find_all(tag):
-        fn(i)
+    for elem in soup.find_all(tag):
+        fn(elem)
 
 
 def output_svg():
