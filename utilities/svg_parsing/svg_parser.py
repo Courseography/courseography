@@ -132,12 +132,7 @@ def process_text(elem):
     found = False
     for rect in rects:
         if (elem.get('x'), elem.get('y'), 1) in rect:
-            text = elem.text
-            if '/' in text:
-                text = text[:text.index('/')]
-            if "," in text:
-                text = text[:text.index(',')]
-            rect.text = text
+            rect.text[elem.get('y')] = (elem.text)
             found = True
 
     for boolean in bools:
