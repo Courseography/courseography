@@ -50,10 +50,12 @@ class Rect:
         elif not sorted_text[0][1][0].isalpha():
             prefix = "CSC"
 
-
         # Figure out the research area
         code = (prefix + sorted_text[0][1] +
-               (sorted_text[1][1] if len(self.text) > 1 else ""))[:6]
+               (sorted_text[1][1] if len(self.text) > 1 else ""))
+        if prefix == "CSC":
+            code = code[:6]
+            
         self.area = 'core'
         for area, courses in AREAS.items():
             if code in courses:
