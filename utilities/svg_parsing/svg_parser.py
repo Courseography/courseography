@@ -44,7 +44,8 @@ def read_svg():
 
 
 def find_all_and_process(soup, tag, fn):
-    list(map(fn, soup.find_all(tag)))
+    for i in soup.find_all(tag):
+        fn(i)
 
 
 def output_svg():
@@ -58,17 +59,32 @@ def output_svg():
           'A.orient "auto" ! A.markerwidth "4.5" ! A.markerheight "4.5" $ do\n'
           '            S.polyline ! A.points "0,1 10,5 0,9" ! A.fill "black"\n'
           '    S.g $ do')
+    for i in regions:
+        print('        ', end='')
+        i.output_haskell()
 
-    list(map(output_region, regions))
-    print('    S.g ! A.transform " translate(0,-308.2677)" $ do\n'
-          '        S.g ! A.transform "translate(29.540919,340.70929)" ! A.class_ "nodes"$ do')
-    list(map(output_rect, final_rects))
+    print('    S.g ! A.transform " translate(0,-308.2677)" $ do')
+    print('        S.g ! A.transform "translate(29.540919,340.70929)" ! A.class_ "nodes"$ do')
+    for i in final_rects:
+        print('            ', end='')
+        i.output_haskell()
+
     print('            S.g $ do')
-    list(map(output_path, paths))
+    for i in paths:
+        if not i.isPath:
+            continue
+        print('                ', end='')
+        i.output_haskell()
+
     print('            S.g $ do')
-    list(map(output_bool, bools))
+    for i in bools:
+        print('                ', end='')
+        i.output_haskell()
+
     print('    S.g ! A.transform "translate(-120,313.70929)" $ do')
-    list(map(output_region_label, region_labels))
+    for i in region_labels:
+        print('        ', end='')
+        i.output_haskell()
 
 
 def output_region(region):
