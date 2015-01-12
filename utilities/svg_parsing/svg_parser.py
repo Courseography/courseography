@@ -87,34 +87,6 @@ def output_svg():
         i.output_haskell()
 
 
-def output_region(region):
-    print("        ", end='')
-    region.output_haskell()
-
-
-def output_rect(rect):
-    print("            ", end='')
-    rect.output_haskell()
-
-
-def output_path(path):
-    if not path.isPath:
-        return
-    print("    ", end='')
-    print("                ", end='')
-    path.output_haskell()
-
-
-def output_bool(boolean):
-    print("                ", end='')
-    boolean.output_haskell()
-
-
-def output_region_label(label):
-    print("        ", end='')
-    label.output_haskell()
-
-
 def print_header():
     print('{-# LANGUAGE OverloadedStrings #-}\n'
           'module SVGGen where\n'
