@@ -43,6 +43,7 @@ class Rect:
 
     def output_haskell(self):
         global hybrid_id_counter
+        
         if self.hybrid:
             self.colour = "#bbb"
         prefix = ""
