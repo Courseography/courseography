@@ -221,6 +221,7 @@ nodeCSS = "g" ? do
         "data-active" @= "inactive" & do
             "ellipse" <? do
                 fill lightGrey
+                faded
                 strokeDashed
         "data-active" @= "takeable" & do
             "ellipse" <? do
