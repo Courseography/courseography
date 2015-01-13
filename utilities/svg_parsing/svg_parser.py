@@ -23,7 +23,7 @@ def read_svg():
     global regions
     global bools
 
-    with open('graph_regions.svg') as svg_file:
+    with open('res/graphs/graph_regions.svg') as svg_file:
         content = svg_file.read()
         soup = BeautifulSoup(content)
 
