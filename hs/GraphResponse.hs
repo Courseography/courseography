@@ -14,7 +14,7 @@ import SVGGen
 graphResponse :: ServerPart Response
 graphResponse =
    ok $ toResponse $
-    masterTemplate "Courseography - SVG serving test!"
+    masterTemplate "Courseography"
                 [H.meta ! A.name "keywords"
                         ! A.content "",
                  plannerLinks
