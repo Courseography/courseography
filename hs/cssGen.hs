@@ -4,6 +4,7 @@ import Clay
 import Prelude hiding ((**))
 import Data.Monoid
 import Data.Text.Lazy
+import System.Directory
 
 styleFiles :: [(String, Css)]
 styleFiles = [
@@ -16,7 +17,11 @@ styleFiles = [
 renderStyleFile :: (String, Css) -> IO ()
 renderStyleFile (path, css) = writeFile path $ unpack $ render css
 
-main = Prelude.foldl1 (>>) $ Prelude.map renderStyleFile styleFiles
+main = do
+    createDirectoryIfMissing True "style/common"
+    createDirectoryIfMissing True "style/graph"
+    createDirectoryIfMissing True "style/grid"
+    Prelude.foldl1 (>>) $ Prelude.map renderStyleFile styleFiles
 
 margin0 = margin nil nil nil nil
 padding0 = padding nil nil nil nil
