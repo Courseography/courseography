@@ -7,7 +7,7 @@ import Text.Blaze.Svg.Renderer.String (renderSvg)
 svgDoc :: S.Svg
 svgDoc = S.docTypeSvg ! A.id_ "graphRootSVG" ! A.version "1.1" ! S.customAttribute "viewBox" "0 0 1050 700"$ do
     S.defs $ do
-        S.marker ! A.id_ "arrow" ! A.viewbox "0 0 10 10" ! A.refx "1" ! A.refy "5" ! A.markerunits "strokewidth" ! A.orient "auto" ! A.markerwidth "4.5" ! A.markerheight "4.5" $ do
+        S.marker ! A.id_ "arrow" ! A.viewbox "0 0 10 10" ! A.refx "1" ! A.refy "5" ! A.markerunits "strokeWidth" ! A.orient "auto" ! A.markerwidth "4.5" ! A.markerheight "4.5" $ do
             S.polyline ! A.points "0,1 10,5 0,9" ! A.fill "black"
     S.g $ do
         S.path ! A.style "fill:#f298ff;fill-opacity:0.54497358;stroke:none;display:inline" ! A.d "m 872.9544,541.69048 0,-117.849 -27.28329,0 -23.37349,0 -31.23745,0 -50.21917,0 0,-186.49687 0,-77.23323 104.46025,0 85.47853,0 107.79952,0.24101 -0.8962,185.02361 0,157.36769 0,190.70079 -84.31924,0 -80.40946,0 0,-151.75398 z"
@@ -31,10 +31,10 @@ svgDoc = S.docTypeSvg ! A.id_ "graphRootSVG" ! A.version "1.1" ! S.customAttribu
              S.text_  ! A.x "309.40411" ! A.y "594.60641" $ "448"
             S.g ! A.class_ "node"  ! A.id_ "CSC165" ! S.dataAttribute "group" "theory" ! A.style "" $ do 
              S.rect ! A.width "65.207497" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "319.56799" ! A.y "37.80279999999999" ! A.fill "#fff" 
-             S.text_  ! A.x "352.1717385" ! A.y "53.80279999999999" $ "165"
+             S.text_  ! A.x "352.1717385" ! A.y "53.80279999999999" $ "165/240"
             S.g ! A.class_ "node"  ! A.id_ "CSC236" ! S.dataAttribute "group" "theory" ! A.style "" $ do 
              S.rect ! A.width "65.207497" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "319.56799" ! A.y "139.5925" ! A.fill "#fff" 
-             S.text_  ! A.x "352.1717385" ! A.y "155.5925" $ "236"
+             S.text_  ! A.x "352.1717385" ! A.y "155.5925" $ "236/240"
             S.g ! A.class_ "node"  ! A.id_ "CSC373" ! S.dataAttribute "group" "theory" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "332.17169" ! A.y "362.2453" ! A.fill "#fff" 
              S.text_  ! A.x "352.17169" ! A.y "378.2453" $ "373"
@@ -127,7 +127,9 @@ svgDoc = S.docTypeSvg ! A.id_ "graphRootSVG" ! A.version "1.1" ! S.customAttribu
              S.text_  ! A.x "976.9658999999999" ! A.y "440.52161" $ "488"
             S.g ! A.class_ "node"  ! A.id_ "ECE489" ! S.dataAttribute "group" "systems" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "956.9658999999999" ! A.y "479.3551" ! A.fill "#fff" 
-             S.text_  ! A.x "976.9658999999999" ! A.y "495.3551" $ "489"
+             S.text_  ! A.x "976.9658999999999" ! A.y "488.2789" $ "ECE"
+             S.text_  ! A.x "976.9658999999999" ! A.y "505.4303" $ "489"
+
             S.g ! A.class_ "node"  ! A.id_ "CSC469" ! S.dataAttribute "group" "systems" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "862.8861" ! A.y "578.60641" ! A.fill "#fff" 
              S.text_  ! A.x "882.8861" ! A.y "594.60641" $ "469"
@@ -139,7 +141,9 @@ svgDoc = S.docTypeSvg ! A.id_ "graphRootSVG" ! A.version "1.1" ! S.customAttribu
              S.text_  ! A.x "882.8861" ! A.y "384.104897" $ "458"
             S.g ! A.class_ "node"  ! A.id_ "ECE385" ! S.dataAttribute "group" "systems" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "862.8861" ! A.y "480.47321" ! A.fill "#fff" 
-             S.text_  ! A.x "882.8861" ! A.y "496.47321" $ "385"
+             S.text_  ! A.x "882.8861" ! A.y "489.397" $ "ECE"
+             S.text_  ! A.x "882.8861" ! A.y "506.5484" $ "385"
+
             S.g ! A.class_ "node"  ! A.id_ "CSC309" ! S.dataAttribute "group" "dbweb" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "753.82123" ! A.y "510.2894" ! A.fill "#fff" 
              S.text_  ! A.x "773.82123" ! A.y "526.2894" $ "309"
@@ -149,33 +153,37 @@ svgDoc = S.docTypeSvg ! A.id_ "graphRootSVG" ! A.version "1.1" ! S.customAttribu
             S.g ! A.class_ "node"  ! A.id_ "CSC443" ! S.dataAttribute "group" "dbweb" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "715.45349" ! A.y "578.60641" ! A.fill "#fff" 
              S.text_  ! A.x "735.45349" ! A.y "594.60641" $ "443"
-            S.g ! A.class_ "hybrid"  ! A.id_ "hCSC301" ! S.dataAttribute "group" "core" ! A.style "" $ do 
+            S.g ! A.class_ "hybrid"  ! A.id_ "h0" ! S.dataAttribute "group" "core" ! A.style "" $ do 
              S.rect ! A.width "50" ! A.height "24" ! A.rx "4" ! A.ry "4" ! A.x "15.380709999999993" ! A.y "472.29559" ! A.fill "#bbb" 
-             S.text_  ! A.x "40.38070999999999" ! A.y "484.29559" $ "301"
-            S.g ! A.class_ "hybrid"  ! A.id_ "hCSC263" ! S.dataAttribute "group" "core" ! A.style "" $ do 
+             S.text_  ! A.x "40.38070999999999" ! A.y "478.0983" $ "318/418/"
+             S.text_  ! A.x "40.38070999999999" ! A.y "490.34929999999997" $ "301/384"
+
+            S.g ! A.class_ "hybrid"  ! A.id_ "h1" ! S.dataAttribute "group" "core" ! A.style "" $ do 
              S.rect ! A.width "27" ! A.height "24" ! A.rx "4" ! A.ry "4" ! A.x "916.4259999999999" ! A.y "232.222" ! A.fill "#bbb" 
              S.text_  ! A.x "929.9259999999999" ! A.y "244.222" $ "263"
-            S.g ! A.class_ "hybrid"  ! A.id_ "hCSCCalc1" ! S.dataAttribute "group" "core" ! A.style "" $ do 
+            S.g ! A.class_ "hybrid"  ! A.id_ "h2" ! S.dataAttribute "group" "core" ! A.style "" $ do 
              S.rect ! A.width "64.826897" ! A.height "24" ! A.rx "4" ! A.ry "4" ! A.x "125.19790999999998" ! A.y "478.4258" ! A.fill "#bbb" 
-             S.text_  ! A.x "157.6113585" ! A.y "490.4258" $ "Calc1"
-            S.g ! A.class_ "hybrid"  ! A.id_ "hCSC258" ! S.dataAttribute "group" "core" ! A.style "" $ do 
+             S.text_  ! A.x "157.6113585" ! A.y "484.22861" $ "336/373/463,"
+             S.text_  ! A.x "157.6113585" ! A.y "496.4796" $ "Calc1"
+
+            S.g ! A.class_ "hybrid"  ! A.id_ "h3" ! S.dataAttribute "group" "core" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "24" ! A.rx "4" ! A.ry "4" ! A.x "956.9658999999999" ! A.y "347.688099" ! A.fill "#bbb" 
-             S.text_  ! A.x "976.9658999999999" ! A.y "359.688099" $ "258"
-            S.g ! A.class_ "hybrid"  ! A.id_ "hCSC373" ! S.dataAttribute "group" "core" ! A.style "" $ do 
+             S.text_  ! A.x "976.9658999999999" ! A.y "359.688099" $ "258,324"
+            S.g ! A.class_ "hybrid"  ! A.id_ "h4" ! S.dataAttribute "group" "core" ! A.style "" $ do 
              S.rect ! A.width "27" ! A.height "24" ! A.rx "4" ! A.ry "4" ! A.x "663.00458" ! A.y "541.3551" ! A.fill "#bbb" 
              S.text_  ! A.x "676.50458" ! A.y "553.3551" $ "373"
-            S.g ! A.class_ "hybrid"  ! A.id_ "hCSCSta1" ! S.dataAttribute "group" "core" ! A.style "" $ do 
+            S.g ! A.class_ "hybrid"  ! A.id_ "h5" ! S.dataAttribute "group" "core" ! A.style "" $ do 
              S.rect ! A.width "27" ! A.height "24" ! A.rx "4" ! A.ry "4" ! A.x "420.63" ! A.y "204.583099" ! A.fill "#bbb" 
              S.text_  ! A.x "434.13" ! A.y "216.583099" $ "Sta1"
-            S.g ! A.class_ "hybrid"  ! A.id_ "hCSCLin1" ! S.dataAttribute "group" "core" ! A.style "" $ do 
+            S.g ! A.class_ "hybrid"  ! A.id_ "h6" ! S.dataAttribute "group" "core" ! A.style "" $ do 
              S.rect ! A.width "27" ! A.height "24" ! A.rx "4" ! A.ry "4" ! A.x "482.72748" ! A.y "204.583099" ! A.fill "#bbb" 
              S.text_  ! A.x "496.22748" ! A.y "216.583099" $ "Lin1"
-            S.g ! A.class_ "hybrid"  ! A.id_ "hCSCSta1" ! S.dataAttribute "group" "core" ! A.style "" $ do 
+            S.g ! A.class_ "hybrid"  ! A.id_ "h7" ! S.dataAttribute "group" "core" ! A.style "" $ do 
              S.rect ! A.width "27" ! A.height "24" ! A.rx "4" ! A.ry "4" ! A.x "597.58002" ! A.y "549.60641" ! A.fill "#bbb" 
              S.text_  ! A.x "611.08002" ! A.y "561.60641" $ "Sta1"
-            S.g ! A.class_ "hybrid"  ! A.id_ "hCSCSta1" ! S.dataAttribute "group" "core" ! A.style "" $ do 
+            S.g ! A.class_ "hybrid"  ! A.id_ "h8" ! S.dataAttribute "group" "core" ! A.style "" $ do 
              S.rect ! A.width "55.5783" ! A.height "24" ! A.rx "4" ! A.ry "4" ! A.x "380.78949" ! A.y "533.53979" ! A.fill "#bbb" 
-             S.text_  ! A.x "408.57864" ! A.y "545.53979" $ "Sta1"
+             S.text_  ! A.x "408.57864" ! A.y "545.53979" $ "Sta1,Sta2"
             S.g ! A.class_ "node"  ! A.id_ "Calc1" ! S.dataAttribute "group" "core" ! A.style "" $ do 
              S.rect ! A.width "61.5" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "171.02999999999997" ! A.y "37.80279999999999" ! A.fill "#fff" 
              S.text_  ! A.x "201.77999999999997" ! A.y "53.80279999999999" $ "Calc1"
@@ -200,40 +208,40 @@ svgDoc = S.docTypeSvg ! A.id_ "graphRootSVG" ! A.version "1.1" ! S.customAttribu
             S.g ! A.class_ "node"  ! A.id_ "Lin1" ! S.dataAttribute "group" "core" ! A.style "" $ do 
              S.rect ! A.width "50" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "126.34780999999998" ! A.y "150.5777" ! A.fill "#fff" 
              S.text_  ! A.x "151.34780999999998" ! A.y "166.5777" $ "Lin1"
-            S.g ! A.class_ "hybrid"  ! A.id_ "hCSC263" ! S.dataAttribute "group" "core" ! A.style "" $ do 
+            S.g ! A.class_ "hybrid"  ! A.id_ "h9" ! S.dataAttribute "group" "core" ! A.style "" $ do 
              S.rect ! A.width "27" ! A.height "24" ! A.rx "4" ! A.ry "4" ! A.x "640.32123" ! A.y "232.222" ! A.fill "#bbb" 
              S.text_  ! A.x "653.82123" ! A.y "244.222" $ "263"
-            S.g ! A.class_ "hybrid"  ! A.id_ "hCSC236" ! S.dataAttribute "group" "core" ! A.style "" $ do 
+            S.g ! A.class_ "hybrid"  ! A.id_ "h10" ! S.dataAttribute "group" "core" ! A.style "" $ do 
              S.rect ! A.width "27" ! A.height "24" ! A.rx "4" ! A.ry "4" ! A.x "916.4259999999999" ! A.y "524.6064" ! A.fill "#bbb" 
              S.text_  ! A.x "929.9259999999999" ! A.y "536.6064" $ "236"
             S.g ! A.class_ "node"  ! A.id_ "CSC372" ! S.dataAttribute "group" "systems" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "862.8861" ! A.y "424.52161" ! A.fill "#fff" 
              S.text_  ! A.x "882.8861" ! A.y "440.52161" $ "372"
-            S.g ! A.class_ "hybrid"  ! A.id_ "hCSC209" ! S.dataAttribute "group" "core" ! A.style "" $ do 
+            S.g ! A.class_ "hybrid"  ! A.id_ "h11" ! S.dataAttribute "group" "core" ! A.style "" $ do 
              S.rect ! A.width "27" ! A.height "24" ! A.rx "4" ! A.ry "4" ! A.x "98.7251" ! A.y "331.271599" ! A.fill "#bbb" 
              S.text_  ! A.x "112.2251" ! A.y "343.271599" $ "209"
             S.g ! A.class_ "node"  ! A.id_ "CSC310" ! S.dataAttribute "group" "theory" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "402.17169" ! A.y "311.688101" ! A.fill "#fff" 
              S.text_  ! A.x "422.17169" ! A.y "327.688101" $ "310"
-            S.g ! A.class_ "hybrid"  ! A.id_ "hCSC148" ! S.dataAttribute "group" "core" ! A.style "" $ do 
+            S.g ! A.class_ "hybrid"  ! A.id_ "h12" ! S.dataAttribute "group" "core" ! A.style "" $ do 
              S.rect ! A.width "27" ! A.height "24" ! A.rx "4" ! A.ry "4" ! A.x "408.67169" ! A.y "270.508101" ! A.fill "#bbb" 
              S.text_  ! A.x "422.17169" ! A.y "282.508101" $ "148"
-            S.g ! A.class_ "hybrid"  ! A.id_ "hCSC207" ! S.dataAttribute "group" "core" ! A.style "" $ do 
+            S.g ! A.class_ "hybrid"  ! A.id_ "h13" ! S.dataAttribute "group" "core" ! A.style "" $ do 
              S.rect ! A.width "27" ! A.height "24" ! A.rx "4" ! A.ry "4" ! A.x "741.43658" ! A.y "358.664902" ! A.fill "#bbb" 
              S.text_  ! A.x "754.93658" ! A.y "370.664902" $ "207"
-            S.g ! A.class_ "hybrid"  ! A.id_ "hCSC263" ! S.dataAttribute "group" "core" ! A.style "" $ do 
+            S.g ! A.class_ "hybrid"  ! A.id_ "h14" ! S.dataAttribute "group" "core" ! A.style "" $ do 
              S.rect ! A.width "27" ! A.height "24" ! A.rx "4" ! A.ry "4" ! A.x "133.56439" ! A.y "524.6064" ! A.fill "#bbb" 
              S.text_  ! A.x "147.06439" ! A.y "536.6064" $ "263"
-            S.g ! A.class_ "hybrid"  ! A.id_ "hCSC165" ! S.dataAttribute "group" "core" ! A.style "" $ do 
+            S.g ! A.class_ "hybrid"  ! A.id_ "h15" ! S.dataAttribute "group" "core" ! A.style "" $ do 
              S.rect ! A.width "50" ! A.height "24" ! A.rx "4" ! A.ry "4" ! A.x "703.82123" ! A.y "319.688101" ! A.fill "#bbb" 
-             S.text_  ! A.x "728.82123" ! A.y "331.688101" $ "165"
+             S.text_  ! A.x "728.82123" ! A.y "331.688101" $ "165/Calc1"
             S.g ! A.class_ "node"  ! A.id_ "CSC263" ! S.dataAttribute "group" "theory" ! A.style "" $ do 
              S.rect ! A.width "65.207497" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "319.56799" ! A.y "228.222" ! A.fill "#fff" 
-             S.text_  ! A.x "352.1717385" ! A.y "244.222" $ "263"
-            S.g ! A.class_ "node"  ! A.id_ "CSC465" ! S.dataAttribute "group" "core" ! A.style "" $ do 
+             S.text_  ! A.x "352.1717385" ! A.y "244.222" $ "263/265"
+            S.g ! A.class_ "node"  ! A.id_ "CSC465" ! S.dataAttribute "group" "se" ! A.style "" $ do 
              S.rect ! A.width "40" ! A.height "32" ! A.rx "4" ! A.ry "4" ! A.x "507.44426999999996" ! A.y "373.688103" ! A.fill "#fff" 
              S.text_  ! A.x "527.44427" ! A.y "389.688103" $ "465"
-            S.g ! A.class_ "hybrid"  ! A.id_ "hCSC236" ! S.dataAttribute "group" "core" ! A.style "" $ do 
+            S.g ! A.class_ "hybrid"  ! A.id_ "h16" ! S.dataAttribute "group" "core" ! A.style "" $ do 
              S.rect ! A.width "27" ! A.height "24" ! A.rx "4" ! A.ry "4" ! A.x "487.62622" ! A.y "315.688101" ! A.fill "#bbb" 
              S.text_  ! A.x "501.12622" ! A.y "327.688101" $ "236"
             S.g $ do
