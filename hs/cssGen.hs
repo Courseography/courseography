@@ -61,6 +61,8 @@ headerCSS = do
             width $ pct 70
             margin nil nil nil nil
             display inlineBlock
+            a ?
+              do fontWeight normal
             li <? do
                 textAlign $ alignSide sideCenter
                 display inlineBlock
@@ -68,7 +70,9 @@ headerCSS = do
                 a <? do
                     color white
 
+
 aDefaultCSS = do
+    fontWeight bold
     a <> a # hover <> a # visited <> a # active ? do
         textDecoration none
         color $ parse "#4C004C"
