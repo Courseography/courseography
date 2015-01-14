@@ -1,4 +1,3 @@
-// Includes the Facebook JavaScript SDK
 $(document).ready(function() {
 	$.ajaxSetup({ cache: true });
 	$.getScript('//connect.facebook.net/en_UK/all.js', function() {
@@ -9,6 +8,7 @@ $(document).ready(function() {
 	        version    : 'v2.1'
 	    });
 
+	    // Add the user's name to the navigation bar.
 	    FB.getLoginStatus(function(response) {
 		    if (response.status === 'connected') {
 		        console.log('Logged in.');
