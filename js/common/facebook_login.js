@@ -1,24 +1,27 @@
 window.fbAsyncInit = function() {
-        FB.init({
-          appId      : '442286309258193',
-          xfbml      : true,
-          version    : 'v2.1'
-        });
-        FB.getLoginStatus(function(response) {
-		  if (response.status === 'connected') {
-		    console.log('Logged in.');
 
-		    console.log('Welcome!  Fetching your information.... ');
-		    FB.api('/me', function(response) {
-		      console.log('Successful login for: ' + response.name);
-		      document.getElementById('facebook-name').innerHTML = response.name;
-		    });
-		  }
-		  else {
-		    console.log('Logged in.');
-		  }
-		});
-      };
+    FB.init({
+        appId      : '442286309258193',
+        xfbml      : true,
+        version    : 'v2.1'
+    });
+
+    FB.getLoginStatus(function(response) {
+	    if (response.status === 'connected') {
+	        console.log('Logged in.');
+	        console.log('Welcome!  Fetching your information.... ');
+
+	        FB.api('/me', function(response) {
+	            console.log('Successful login for: ' + response.name);
+	            $('#facebook-name').html(response.name);
+	        });
+	        
+	    }
+	    else {
+	        console.log('Logged in.');
+	    }
+	});
+};
 
 // Includes the Facebook JavaScript SDK
 (function(d, s, id) {
