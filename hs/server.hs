@@ -8,6 +8,7 @@ import Control.Monad    (msum)
 import Happstack.Server
 import GridResponse
 import GraphResponse
+import DrawResponse
 import AboutResponse
 import JsonParser
 import Tables
@@ -26,6 +27,9 @@ graph = "graph"
 grid :: String
 grid = "grid"
 
+draw :: String
+draw = "draw"
+
 about :: String
 about = "about"
 
@@ -42,6 +46,7 @@ main = do
     simpleHTTP nullConf $
       msum [ dir grid $ gridResponse,
              dir graph $ graphResponse,
+             dir draw $ drawResponse,
              dir about $ aboutResponse,
              dir static $ serveDirectory EnableBrowsing [] staticDir,
              dir course $ path (\s -> liftIO $ queryCourse s)

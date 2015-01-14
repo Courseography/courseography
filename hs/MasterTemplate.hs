@@ -28,6 +28,7 @@ header page = createTag H.nav "" "row header" $ do
     H.li $ makeA "" "" "graph" "" $ "Graph"
     H.li $ makeA "" "" "grid" "" $ "Grid"
     H.li $ makeA "" "" "" "" $ "Check My POSt!"
+    H.li $ makeA "" "" "draw" "" $ "Draw"
     H.li $ makeA "" "" "about" "" $ "About"
 
 -- Disclaimer. This will be the same for both pages, I guess?
