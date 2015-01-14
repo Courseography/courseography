@@ -14,3 +14,5 @@ out/
 *.hi
 *.o
 *.sqlite3
+style/
+SVGGen.hs
