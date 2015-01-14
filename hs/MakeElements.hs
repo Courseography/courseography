@@ -43,14 +43,12 @@ timetableLinks = concatHtml (map stylesheet ["//netdna.bootstrapcdn.com/bootstra
 
 plannerLinks :: H.Html
 plannerLinks = concatHtml (map stylesheet ["//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css",
-                                       "static/style/graph/styles.css",
                                        "static/style/graph/graph_styles.css",
                                        "static/res/video-js/video-js.css",
                                        "static/style/common/common.css"])
 
 aboutLinks :: H.Html
 aboutLinks = concatHtml (map stylesheet ["//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css",
-                                       "static/style/graph/styles.css",
                                        "static/style/common/about.css",
                                        "static/style/common/common.css"])
 
