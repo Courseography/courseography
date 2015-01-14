@@ -6,7 +6,7 @@ class Region:
         self.style = style
 
     def output_haskell(self):
-        print('S.path ! A.style "' +
+        print('S.path ! A.class_ "region" ! A.style "' +
               self.style +
               '" ! A.d "' +
               self.d +
