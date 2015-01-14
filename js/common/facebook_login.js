@@ -13,7 +13,7 @@ $(document).ready(function() {
 		        console.log('Logged in.');
 		        console.log('Welcome!  Fetching your information.... ');
 
-	            // Add the user's name to the navigation bar.
+                // Add the user's name to the navigation bar.
 		        FB.api('/me', function (response) {
 		            console.log('Successful login for: ' + response.name);
 		            $('#facebook-name').html(response.name);
