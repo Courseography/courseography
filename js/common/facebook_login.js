@@ -22,6 +22,17 @@ $(document).ready(function() {
             } else {
                 console.log('Not logged in.');
             }
+
+        
         });
+
+	    FB.Event.subscribe('auth.statusChange', function (response) {
+	        FB.getLoginStatus(function (response) {
+	            if (response.status !== 'connected') {
+	                $('#facebook-name').empty();
+	            }
+	        });
+	    });
+
     });
 });
