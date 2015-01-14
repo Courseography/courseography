@@ -10,29 +10,39 @@ $(document).ready(function() {
 
         FB.getLoginStatus(function (response) {
             if (response.status === 'connected') {
-                console.log('Logged in.');
-                console.log('Welcome!  Fetching your information.... ');
-
-                // Add the user's name to the navigation bar.
-                FB.api('/me', function (response) {
-                    console.log('Successful login for: ' + response.name);
-                    $('#facebook-name').html(response.name);
-                });
-
-            } else {
-                console.log('Not logged in.');
+	            addNameToNavBar();
             }
-
         
         });
 
 	    FB.Event.subscribe('auth.statusChange', function (response) {
 	        FB.getLoginStatus(function (response) {
-	            if (response.status !== 'connected') {
-	                $('#facebook-name').empty();
+	            if (response.status === 'connected') {
+	                addNameToNavBar();
+	            } else {
+	            	removeNameFromNavBar();
 	            }
 	        });
 	    });
 
     });
 });
+
+
+/**
+ * Adds the user's name to the navigation bar.
+ */
+function addNameToNavBar() {
+	FB.api('/me', function (response) {
+        console.log('Successful login for: ' + response.name);
+        $('#facebook-name').html(response.name);
+    });
+}
+
+
+/**
+ * Removes the name from the navigation bar.
+ */
+function removeNameFromNavBar() {
+	$('#facebook-name').empty();
+}
