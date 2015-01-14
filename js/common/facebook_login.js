@@ -8,13 +8,13 @@ $(document).ready(function() {
 	        version    : 'v2.1'
 	    });
 
-	    // Add the user's name to the navigation bar.
-	    FB.getLoginStatus(function(response) {
+	    FB.getLoginStatus(function (response) {
 		    if (response.status === 'connected') {
 		        console.log('Logged in.');
 		        console.log('Welcome!  Fetching your information.... ');
 
-		        FB.api('/me', function(response) {
+	            // Add the user's name to the navigation bar.
+		        FB.api('/me', function (response) {
 		            console.log('Successful login for: ' + response.name);
 		            $('#facebook-name').html(response.name);
 		        });
