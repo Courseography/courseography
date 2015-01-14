@@ -10,20 +10,20 @@ $(document).ready(function() {
 
         FB.getLoginStatus(function (response) {
             if (response.status === 'connected') {
-	            addNameToNavBar();
+                addNameToNavBar();
             }
         
         });
 
-	    FB.Event.subscribe('auth.statusChange', function (response) {
-	        FB.getLoginStatus(function (response) {
-	            if (response.status === 'connected') {
-	                addNameToNavBar();
-	            } else {
-	            	removeNameFromNavBar();
-	            }
-	        });
-	    });
+        FB.Event.subscribe('auth.statusChange', function (response) {
+            FB.getLoginStatus(function (response) {
+                if (response.status === 'connected') {
+                    addNameToNavBar();
+                } else {
+                    removeNameFromNavBar();
+                }
+            });
+        });
 
     });
 });
@@ -33,7 +33,7 @@ $(document).ready(function() {
  * Adds the user's name to the navigation bar.
  */
 function addNameToNavBar() {
-	FB.api('/me', function (response) {
+    FB.api('/me', function (response) {
         console.log('Successful login for: ' + response.name);
         $('#facebook-name').html(response.name);
     });
@@ -44,5 +44,5 @@ function addNameToNavBar() {
  * Removes the name from the navigation bar.
  */
 function removeNameFromNavBar() {
-	$('#facebook-name').empty();
+    $('#facebook-name').empty();
 }
