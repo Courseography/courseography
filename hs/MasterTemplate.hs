@@ -32,6 +32,7 @@ header page = createTag H.nav "" "row header" $ do
     H.li ! A.class_ "fb-login-button" 
          ! H.customAttribute "data-max-rows" "1" 
          ! H.customAttribute "data-size" "medium"
+         ! H.customAttribute "autologoutlink" "true"
          ! H.customAttribute "data-show-faces" "false"
          ! H.customAttribute "data-auto-logout-link" "false" $ ""
 
