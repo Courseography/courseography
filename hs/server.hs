@@ -5,6 +5,7 @@ import qualified Data.Text as T
 import qualified Data.ByteString.Lazy.Char8 as BSL
 import qualified Data.ByteString.Char8 as BS
 import Control.Monad    (msum)
+import Network.HTTP.Conduit (withManager)
 import Happstack.Server
 import GridResponse
 import GraphResponse
@@ -19,6 +20,7 @@ import Database.Persist.Sqlite
 
 import Filesystem.Path.CurrentOS
 import System.Directory
+import qualified Facebook as FB
 
 graph :: String
 graph = "graph"
@@ -32,11 +34,25 @@ about = "about"
 static :: String
 static = "static"
 
+app :: FB.Credentials
+app = FB.Credentials "localhost" "442286309258193" "secret!"
+
+url :: FB.RedirectUrl
+url = "http://localhost:8000/graph/"
+
+perms :: [FB.Permission]
+perms = ["user_birthday"]
+
+fb :: String
+fb = "fb"
+
 course :: String
 course = "course"
 
 main :: IO ()
 main = do
+    print url
+    fun
     cwd <- getCurrentDirectory
     let staticDir = encodeString $ parent $ decodeString cwd
     simpleHTTP nullConf $
@@ -44,7 +60,8 @@ main = do
              dir graph $ graphResponse,
              dir about $ aboutResponse,
              dir static $ serveDirectory EnableBrowsing [] staticDir,
-             dir course $ path (\s -> liftIO $ queryCourse s)
+             dir course $ path (\s -> liftIO $ queryCourse s),
+             dir fb $ liftIO runFacebook
            ]
 
 -- | Queries the database for all information about `course`, constructs a JSON object 
@@ -127,3 +144,19 @@ buildSession lectures tutorials = Just $ Tables.Session (map buildLecture (map e
 -- | Creates a JSON response.
 createJSONResponse :: BSL.ByteString -> Response
 createJSONResponse jsonStr = toResponseBS (BS.pack "application/json") jsonStr
+
+args :: FB.Argument
+args = ("code", "")
+
+runFacebook :: IO Response
+runFacebook = withManager $ \manager -> FB.runFacebookT app manager $ do
+    fbAuthUrl <- FB.getUserAccessTokenStep1 url perms
+    
+    token <- FB.getUserAccessTokenStep2 url [argument]
+    u <- FB.getUser "me" [] (Just token)
+    return $ toResponse $ BS.pack $ T.unpack (FB.idCode (FB.userId u))
+
+fun :: IO ()
+fun = withManager $ \manager -> FB.runFacebookT app manager $ do
+    fbAuthUrl <- FB.getUserAccessTokenStep1 url perms
+    liftIO $ print fbAuthUrl
