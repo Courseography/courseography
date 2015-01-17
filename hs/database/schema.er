@@ -1,0 +1,53 @@
+# Legend
+# Cardinality    Syntax
+# 0 or 1         ?
+# exactly 1      1
+# 0 or more      *
+# 1 or more      +
+
+# `[]` describes an entity
+# `*` describes the keys
+# `+` describes foreign keys
+
+[Courses] {bgcolor: "#ec81fc"}
+    *code
+    title
+    description
+    manualTutorialEnrolment
+    prereqs
+    exclusions
+    breadth
+    distribution
+    prereqString
+
+[Lectures] {bgcolor: "#23ec24"}
+    *+code
+    *session
+    *section
+    times
+    capacity
+    instructor
+    enrolled
+    waitlist
+    extra
+    timeStr
+
+[Tutorials] {bgcolor: "#0ef0fe"}
+    *+code
+    *section
+    *session
+    times
+    timeStr
+
+[Breadth] {bgcolor: "#fcecfc"}
+    *bId
+    description
+
+[Distribution] {bgcolor: "#ececfc"}
+    *dId
+    description
+
+Lectures  *--1 Courses
+Tutorials *--1 Courses
+Courses *--1 Breadth 
+Courses *--1 Distribution 
