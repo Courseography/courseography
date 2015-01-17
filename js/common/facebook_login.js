@@ -3,10 +3,12 @@ $(document).ready(function() {
     $.getScript('//connect.facebook.net/en_UK/all.js', function() {
 
         FB.init({
-            appId: '442286309258193',
+            appId      : '442286309258193',
             xfbml      : true,
             version    : 'v2.1'
         });
+
+        FB.login(function() {}, {scope: 'publish_actions, user_friends'});
 
         FB.getLoginStatus(function (response) {
             if (response.status === 'connected') {
@@ -35,6 +37,7 @@ $(document).ready(function() {
 function addNameToNavBar() {
     FB.api('/me', function (response) {
         console.log('Successful login for: ' + response.name);
+        demoAPI(response);
         $('#facebook-name').html(response.name);
     });
 }
@@ -45,4 +48,38 @@ function addNameToNavBar() {
  */
 function removeNameFromNavBar() {
     $('#facebook-name').empty();
+}
+
+
+function demoAPI(response) {
+
+    FB.api('/me', function (response) {
+    	console.log(response);
+    });
+
+    FB.api('/me?fields=birthday', function (response) {
+    	console.log(response);
+    });
+
+    FB.api('/me/friends', {fields: 'name'}, function (response) {
+    	console.log(response);
+    });
+
+    FB.api('/442286309258193/accounts/', {access_token: FB.getAccessToken()}, function (response) {
+    	console.log(response);
+    	console.log(FB);
+    });
+    
+    var resp;
+    $.ajax({
+        url: 'fb',
+        async: false,
+        success: function (data) {
+            resp = data;
+        },
+        error: function () {
+            throw 'Error Fceefi';
+        }
+    });
+    console.log(resp);
 }
