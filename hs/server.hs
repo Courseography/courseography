@@ -10,6 +10,7 @@ import Happstack.Server
 import GridResponse
 import GraphResponse
 import AboutResponse
+import qualified Data.Text.Lazy as L
 import JsonParser
 import Tables
 import qualified Data.Aeson as Aeson
@@ -35,10 +36,10 @@ static :: String
 static = "static"
 
 app :: FB.Credentials
-app = FB.Credentials "localhost" "442286309258193" "secret!"
+app = FB.Credentials "localhost" "442286309258193" "INSERT_SECRET"
 
 url :: FB.RedirectUrl
-url = "http://localhost:8000/graph/"
+url = "http://localhost:8000/test"
 
 perms :: [FB.Permission]
 perms = ["user_birthday"]
@@ -49,20 +50,33 @@ fb = "fb"
 course :: String
 course = "course"
 
+test :: String
+test = "test"
+
+code :: String
+code = "graph-fb"
+
 main :: IO ()
 main = do
     print url
-    fun
     cwd <- getCurrentDirectory
+
     let staticDir = encodeString $ parent $ decodeString cwd
     simpleHTTP nullConf $
       msum [ dir grid $ gridResponse,
              dir graph $ graphResponse,
+             dir code $ seeOther fbAuth1Url $ toResponse test,
+             dir test $ look "code" >>= getEmail,
              dir about $ aboutResponse,
              dir static $ serveDirectory EnableBrowsing [] staticDir,
-             dir course $ path (\s -> liftIO $ queryCourse s),
-             dir fb $ liftIO runFacebook
+             dir course $ path (\s -> liftIO $ queryCourse s)
            ]
+
+getEmail :: String -> ServerPart Response
+getEmail cdf = liftIO $ retrieveFBData cdf
+
+fbAuth1Url :: String
+fbAuth1Url = "https://www.facebook.com/dialog/oauth?client_id=442286309258193&redirect_uri=http://localhost:8000/test&scope=user_birthday"
 
 -- | Queries the database for all information about `course`, constructs a JSON object 
 -- | representing the course and returns the appropriate JSON response.
@@ -145,18 +159,14 @@ buildSession lectures tutorials = Just $ Tables.Session (map buildLecture (map e
 createJSONResponse :: BSL.ByteString -> Response
 createJSONResponse jsonStr = toResponseBS (BS.pack "application/json") jsonStr
 
-args :: FB.Argument
-args = ("code", "")
+-- | The arguments passed to the API. The first argument is the key of the query data ('code')
+-- and the second argument is the code that was retrieved in the first authorization step.
+args :: String -> FB.Argument
+args code = ("code", BS.pack code)
 
-runFacebook :: IO Response
-runFacebook = withManager $ \manager -> FB.runFacebookT app manager $ do
-    fbAuthUrl <- FB.getUserAccessTokenStep1 url perms
-    
-    token <- FB.getUserAccessTokenStep2 url [argument]
-    u <- FB.getUser "me" [] (Just token)
-    return $ toResponse $ BS.pack $ T.unpack (FB.idCode (FB.userId u))
-
-fun :: IO ()
-fun = withManager $ \manager -> FB.runFacebookT app manager $ do
-    fbAuthUrl <- FB.getUserAccessTokenStep1 url perms
-    liftIO $ print fbAuthUrl
+-- | Retrieves the user's email.s
+retrieveFBData :: String -> IO Response
+retrieveFBData code = withManager $ \manager -> FB.runFacebookT app manager $ do
+        token <- FB.getUserAccessTokenStep2 url [args code]
+        u <- FB.getUser "me" [] (Just token)
+        return $ toResponse (FB.userEmail u)
