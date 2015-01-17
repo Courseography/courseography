@@ -48,6 +48,6 @@
     description
 
 Lectures  *--1 Courses
-Tutorials *--? Courses
+Tutorials *--1 Courses
 Courses *--1 Breadth 
 Courses *--1 Distribution 
