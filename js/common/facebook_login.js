@@ -3,16 +3,9 @@ $(document).ready(function() {
     $.getScript('//connect.facebook.net/en_UK/all.js', function() {
 
         FB.init({
-            appId: '442286309258193',
+            appId      : '442286309258193',
             xfbml      : true,
             version    : 'v2.1'
-        });
-
-        FB.getLoginStatus(function (response) {
-            if (response.status === 'connected') {
-                addNameToNavBar();
-            }
-        
         });
 
         FB.Event.subscribe('auth.statusChange', function (response) {
