@@ -46,9 +46,6 @@ url = "http://localhost:8000/test"
 perms :: [FB.Permission]
 perms = ["user_birthday"]
 
-fb :: String
-fb = "fb"
-
 course :: String
 course = "course"
 
@@ -75,7 +72,7 @@ main = do
            ]
 
 getEmail :: String -> ServerPart Response
-getEmail cdf = liftIO $ retrieveFBData cdf
+getEmail code = liftIO $ retrieveFBData code
 
 fbAuth1Url :: String
 fbAuth1Url = "https://www.facebook.com/dialog/oauth?client_id=442286309258193&redirect_uri=http://localhost:8000/test&scope=user_birthday"
