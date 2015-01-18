@@ -10,12 +10,15 @@ import Happstack.Server
 import GridResponse
 import GraphResponse
 import AboutResponse
+import qualified Data.Text.Lazy as L
 import JsonParser
+import qualified Data.Conduit.List as CL
 import Tables
 import qualified Data.Aeson as Aeson
 import Control.Monad.IO.Class  (liftIO)
 
 import Database.Persist
+import Data.Conduit (($$))
 import Database.Persist.Sqlite
 
 import Filesystem.Path.CurrentOS
@@ -41,7 +44,7 @@ url :: FB.RedirectUrl
 url = "http://localhost:8000/test"
 
 perms :: [FB.Permission]
-perms = []
+perms = ["user_birthday"]
 
 fb :: String
 fb = "fb"
@@ -57,7 +60,9 @@ code = "graph-fb"
 
 main :: IO ()
 main = do
+    print url
     cwd <- getCurrentDirectory
+
     let staticDir = encodeString $ parent $ decodeString cwd
     simpleHTTP nullConf $
       msum [ dir grid $ gridResponse,
@@ -161,7 +166,7 @@ createJSONResponse jsonStr = toResponseBS (BS.pack "application/json") jsonStr
 args :: String -> FB.Argument
 args code = ("code", BS.pack code)
 
--- | Retrieves the user's email.
+-- | Retrieves the user's email.s
 retrieveFBData :: String -> IO Response
 retrieveFBData code = withManager $ \manager -> FB.runFacebookT app manager $ do
         token <- FB.getUserAccessTokenStep2 url [args code]
@@ -173,3 +178,6 @@ insertIdIntoDb :: FB.Id -> IO ()
 insertIdIntoDb id_ = runSqlite fbdbStr $ do
                        runMigration migrateAll
                        insert_ $ FacebookTest (show id_) "Test String"
+                       liftIO $ print "Inserted..."
+                       let sql = "SELECT * FROM facebook_test"
+                       rawQuery sql [] $$ CL.mapM_ (liftIO . print)
