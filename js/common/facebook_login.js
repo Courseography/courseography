@@ -7,16 +7,6 @@ $(document).ready(function() {
             xfbml      : true,
             version    : 'v2.1'
         });
-
-
-        FB.getLoginStatus(function (response) {
-            if (response.status === 'connected') {
-                FB.login(function() {}, {scope: 'publish_actions'});
-                addNameToNavBar();
-            }
-        
-        });
-
         FB.Event.subscribe('auth.statusChange', function (response) {
             FB.getLoginStatus(function (response) {
                 if (response.status === 'connected') {
@@ -36,7 +26,6 @@ $(document).ready(function() {
  */
 function addNameToNavBar() {
     FB.api('/me', function (response) {
-        console.log('Successful login for: ' + response.name);
         demoAPI(response);
         $('#facebook-name').html(response.name);
     });
