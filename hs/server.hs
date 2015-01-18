@@ -10,7 +10,6 @@ import Happstack.Server
 import GridResponse
 import GraphResponse
 import AboutResponse
-import qualified Data.Text.Lazy as L
 import JsonParser
 import Tables
 import qualified Data.Aeson as Aeson
@@ -42,7 +41,7 @@ url :: FB.RedirectUrl
 url = "http://localhost:8000/test"
 
 perms :: [FB.Permission]
-perms = ["user_birthday"]
+perms = []
 
 fb :: String
 fb = "fb"
