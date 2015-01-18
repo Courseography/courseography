@@ -65,6 +65,11 @@ Distribution
     dId Int
     description String
     deriving Show
+
+FacebookTest
+    fId String
+    testString String
+    deriving Show
 |]
 
 -- | A Lecture.
