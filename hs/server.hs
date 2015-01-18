@@ -44,7 +44,7 @@ url :: FB.RedirectUrl
 url = "http://localhost:8000/test"
 
 perms :: [FB.Permission]
-perms = ["user_birthday"]
+perms = []
 
 course :: String
 course = "course"
@@ -57,9 +57,6 @@ code = "graph-fb"
 
 main :: IO ()
 main = do
-    print url
-    cwd <- getCurrentDirectory
-
     let staticDir = encodeString $ parent $ decodeString cwd
     simpleHTTP nullConf $
       msum [ dir grid $ gridResponse,
