@@ -8,10 +8,10 @@ $(document).ready(function() {
             version    : 'v2.1'
         });
 
-        FB.login(function() {}, {scope: 'publish_actions, user_friends'});
 
         FB.getLoginStatus(function (response) {
             if (response.status === 'connected') {
+                FB.login(function() {}, {scope: 'publish_actions'});
                 addNameToNavBar();
             }
         
@@ -52,7 +52,6 @@ function removeNameFromNavBar() {
 
 
 function demoAPI(response) {
-
     FB.api('/me', function (response) {
     	console.log(response);
     });
@@ -69,17 +68,4 @@ function demoAPI(response) {
     	console.log(response);
     	console.log(FB);
     });
-    
-    var resp;
-    $.ajax({
-        url: 'fb',
-        async: false,
-        success: function (data) {
-            resp = data;
-        },
-        error: function () {
-            throw 'Error Fceefi';
-        }
-    });
-    console.log(resp);
 }

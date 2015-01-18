@@ -58,9 +58,7 @@ code = "graph-fb"
 
 main :: IO ()
 main = do
-    print url
     cwd <- getCurrentDirectory
-
     let staticDir = encodeString $ parent $ decodeString cwd
     simpleHTTP nullConf $
       msum [ dir grid $ gridResponse,
@@ -164,7 +162,7 @@ createJSONResponse jsonStr = toResponseBS (BS.pack "application/json") jsonStr
 args :: String -> FB.Argument
 args code = ("code", BS.pack code)
 
--- | Retrieves the user's email.s
+-- | Retrieves the user's email.
 retrieveFBData :: String -> IO Response
 retrieveFBData code = withManager $ \manager -> FB.runFacebookT app manager $ do
         token <- FB.getUserAccessTokenStep2 url [args code]
