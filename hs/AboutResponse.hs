@@ -67,10 +67,6 @@ aboutHtml = H.div ! A.id "aboutDiv" $ do
     H.a ! A.href "https://github.com/Courseography/courseography/wiki/Courseography-Projects" $ "Projects"
     " page."
   H.p $ do
-    "For CS students: David is also accepting "
-    H.strong "CSC494/495"
-    " project students for the upcoming Winter 2015 term."
-  H.p $ do
     "If you're coming from outside of the Department of Computer Science, "
     "we'd love to hear from you! We welcome help on making new graphs, "
     "understanding department- or program-specific policies, "

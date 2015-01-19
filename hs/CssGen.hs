@@ -1,22 +1,31 @@
 {-# LANGUAGE OverloadedStrings #-}
 
+module CssGen where
+
 import Clay
 import Prelude hiding ((**))
 import Data.Monoid
 import Data.Text.Lazy
+import System.Directory
+
 
 styleFiles :: [(String, Css)]
 styleFiles = [
-    ("style/common/common.css", common),
-    ("style/graph/graph_styles.css", graphStyles),
-    ("style/grid/timetable_styles.css", timetableStyles),
-    ("style/common/about.css", aboutStyles)
+    ("../style/common/common.css", common),
+    ("../style/graph/graph_styles.css", graphStyles),
+    ("../style/grid/timetable_styles.css", timetableStyles),
+    ("../style/common/about.css", aboutStyles)
     ]
 
 renderStyleFile :: (String, Css) -> IO ()
 renderStyleFile (path, css) = writeFile path $ unpack $ render css
 
-main = Prelude.foldl1 (>>) $ Prelude.map renderStyleFile styleFiles
+generateCSS :: IO ()
+generateCSS = do
+    createDirectoryIfMissing True "../style/common"
+    createDirectoryIfMissing True "../style/graph"
+    createDirectoryIfMissing True "../style/grid"
+    Prelude.foldl1 (>>) $ Prelude.map renderStyleFile styleFiles
 
 margin0 = margin nil nil nil nil
 padding0 = padding nil nil nil nil
@@ -221,6 +230,7 @@ nodeCSS = "g" ? do
         "data-active" @= "inactive" & do
             "ellipse" <? do
                 fill lightGrey
+                faded
                 strokeDashed
         "data-active" @= "takeable" & do
             "ellipse" <? do
