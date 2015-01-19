@@ -1,63 +1,62 @@
 h1, h2, h3, h4, h5, h6, p, a, ul, ol, li, small {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	outline: 0;
-	font-size: 100%;
-	background: transparent; 
- }
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-size: 100%;
+    background: transparent; 
+}
  
 
 body {
-	background-color: #EBE8E4;
-	color: #222;
-	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-	font-weight: 300;
-	font-size: 15px;
+    background-color: #EBE8E4;
+    color: #222;
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    font-weight: 300;
+    font-size: 15px;
 }
 
 nav{
-	width: 95%;
-	background-color: #fff;
-	border: 1px solid #dedede;
-	border-radius: 4px;
-	box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.055);
-	display: block;
-	overflow: hidden;
-	color: #888;
-	margin: 8px 22px 8px 22px;
- }
+    width: 95%;
+    background-color: #fff;
+    border: 1px solid #dedede;
+    border-radius: 4px;
+    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.055);
+    display: block;
+    overflow: hidden;
+    color: #888;
+    margin: 8px 22px 8px 22px;
+}
  
 nav ul {
-	width: 100%;
- }
+    width: 100%;
+}
  
 nav ul li {
-	list-style-type: none;
-	display: inline-block;
-	width: 33.1%;
-	text-align: centre;
+    list-style-type: none;
+    display: inline-block;
+    width: 33.1%;
+    text-align: centre;
 	
-	
-	-webkit-transition: all 0.2s;
-	-moz-transition: all 0.2s;
-	-ms-transition: all 0.2s;
-	-o-transition: all 0.2s;
-	transition: all 0.2s; 
- }
+    -webkit-transition: all 0.2s;
+    -moz-transition: all 0.2s;
+    -ms-transition: all 0.2s;
+    -o-transition: all 0.2s;
+    transition: all 0.2s; 
+}
  
 
 nav > ul > li > a {
-	color: #aaa;
-	display: inline-block;
-	line-height: 56px;
-	padding: 0 24px;
-	width: 100%;
-	text-decoration: none;
+    color: #aaa;
+    display: inline-block;
+    line-height: 56px;
+    padding: 0 24px;
+    width: 100%;
+    text-decoration: none;
 }
 
 nav > ul > li:hover {
-	background-color: #9C9C9C;
+    background-color: #9C9C9C;
 }
 
 nav > ul > li:hover > a {
@@ -65,48 +64,49 @@ nav > ul > li:hover > a {
 }
 
 div  div  ul {
-	list-style-type: none;
-	line-height: 56px;
+    list-style-type: none;
+    line-height: 56px;
 }
 
 div  div  ul  li {
-	padding-left: 20px;
-	box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.055);
+    padding-left: 20px;
+    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.055);
 
-	-webkit-transition: all 0.2s;
-	-moz-transition: all 0.2s;
-	-ms-transition: all 0.2s;
-	-o-transition: all 0.2s;
-	transition: all 0.2s; 
+    -webkit-transition: all 0.2s;
+    -moz-transition: all 0.2s;
+    -ms-transition: all 0.2s;
+    -o-transition: all 0.2s;
+    transition: all 0.2s; 
 }
 
 
 .credit_total > ul > li:hover {
-	background-color: #FFF68F;
+    background-color: #FFF68F;
 }
 
 .credit_total > ul > li:hover a {
-	color: black;
+    color: black;
 }
 
 #div_specialist, #div_major, #div_minor {
-	position: absolute;
-	margin-above: 70px;
-	height: 70%;
-	margin-left: 25px;
-	width: 100%;
+    position: absolute;
+    margin-above: 70px;
+    height: 70%;
+    margin-left: 25px;
+    width: 100%;
 }
 
 .credit_total {
-	float: left;
-	width: 30%;
-	height: 100%;
+    float: left;
+    width: 30%;
+    height: 100%;
 }
 
 .requirements {
-	background-color: #D0D2C4;
-	width: 65%;
-	height: 100%;
-	float: left;
-	border-left: 1px solid black;
-	background: -webkit-linear-gradient(#D0D2C4, #EBE8E4)
+    background-color: #D0D2C4;
+    width: 65%;
+    height: 100%;
+    float: left;
+    border-left: 1px solid black;
+    background: -webkit-linear-gradient(#D0D2C4, #EBE8E4)
+}
