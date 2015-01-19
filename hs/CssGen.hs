@@ -70,6 +70,8 @@ headerCSS = do
             width $ pct 70
             margin nil nil nil nil
             display inlineBlock
+            a ?
+              do fontWeight normal
             li <? do
                 textAlign $ alignSide sideCenter
                 display inlineBlock
