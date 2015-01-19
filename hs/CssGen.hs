@@ -79,9 +79,7 @@ headerCSS = do
                 a <? do
                     color white
 
-
 aDefaultCSS = do
-
     a <> a # hover <> a # visited <> a # active ? do
         fontWeight bold
         textDecoration none
