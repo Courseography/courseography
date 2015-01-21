@@ -16,6 +16,7 @@ plannerScripts = concatHtml (map makeScript["http://code.jquery.com/jquery-1.10.
                                            "static/js/graph/objects/edge.js",
                                            "static/js/graph/objects/node.js",
                                            "static/js/common/objects/course.js",
+                                           "static/js/common/facebook_login.js",
                                            "static/js/common/cookieHandler.js",
                                            "static/js/graph/tabs/setup_tabs.js",
                                            "static/js/graph/utilities/course_description.js",
@@ -44,4 +45,5 @@ timetableScripts = do jQuery
                                                 "static/js/grid/generate_grid.js",
                                                 "static/js/common/objects/course.js",
                                                 "static/js/common/objects/section.js",
+                                                "static/js/common/facebook_login.js",
                                                 "static/js/common/utilities/util.js"])
