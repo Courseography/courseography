@@ -42,6 +42,5 @@ button = createTag H.div "target" "" $ do "Click Here"
 
 -- <canvas id="myCanvas" width="200" height="100"></canvas>
 theCanvas :: H.Html
-theCanvas = createTag H.div "canvasDiv" $ do 
-  H.canvas "theCanvas" "" "No canvas support."
+theCanvas = createTag H.canvas "theCanvas" "" "No canvas support."
 
