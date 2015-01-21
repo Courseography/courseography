@@ -90,10 +90,10 @@
      inkscape:cx="552.36748"
      inkscape:cy="308.88099"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="g4134"
      showgrid="false"
-     inkscape:window-width="1280"
-     inkscape:window-height="697"
+     inkscape:window-width="1366"
+     inkscape:window-height="705"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1" />
@@ -2647,7 +2647,8 @@
            xml:space="preserve"
            y="261.46799"
            clip-path="url(#clipPath2)"
-           id="text4707">Sta1,Sta2</text>
+           id="text4707"
+           transform="translate(10,-1.25)">Sta1</text>
         <rect
            style="fill:none"
            x="526.78949"
@@ -3823,18 +3824,6 @@
            d="m 919.8212,222.2779 5,-12 -5,3 -5,-3 z"
            clip-path="url(#clipPath2)"
            id="path5035" />
-        <path
-           style="fill:none;stroke-linecap:butt;stroke-dasharray:none;stroke-dashoffset:0"
-           inkscape:connector-curvature="0"
-           d="m 896.7838,168.5612 15.252,46.164"
-           clip-path="url(#clipPath2)"
-           id="path5037" />
-        <path
-           style="stroke:none"
-           inkscape:connector-curvature="0"
-           d="m 914.5455,222.3214 0.9831,-12.9628 -3.8065,4.4171 -5.6887,-1.28 z"
-           clip-path="url(#clipPath2)"
-           id="path5039" />
         <path
            style="fill:none;stroke-linecap:butt;stroke-dasharray:none;stroke-dashoffset:0"
            inkscape:connector-curvature="0"
