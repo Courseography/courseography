@@ -115,6 +115,7 @@ graphStyles = do
     titleCSS
     modalCSS
     regionCSS
+    regionShapeCSS
 
 alignCenter = textAlign $ alignSide sideCenter
 
@@ -308,6 +309,9 @@ titleCSS = "#svgTitle" ? do
 regionCSS = ".region-label" ? do
     fontSize (em 0.65)
     "text-anchor" -: "start"
+
+regionShapeCSS = ".region" ? do
+    faded
 
 -- Course Modal
 modalColor = parse "#374AA1"
