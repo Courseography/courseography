@@ -57,7 +57,6 @@ drawLinks :: H.Html
 drawLinks = concatHtml (map stylesheet ["//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css",
                                        "static/style/graph/styles.css",
                                        "static/style/graph/graph_styles.css",
-                                       "static/style/common/about.css",
                                        "static/style/common/common.css"])
 
 

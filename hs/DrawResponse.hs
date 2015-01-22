@@ -31,8 +31,7 @@ drawResponse =
 drawHtml :: H.Html
 drawHtml = H.div ! A.id "aboutDiv" $ do
   H.h1 "Draw a Graph"
-  H.p $ do
-    "Here you can create a graph yourself!"
+  H.p "Here you can create a graph yourself!"
 
 button :: H.Html
 button = createTag H.div "target" "" $ do "Click Here"
@@ -42,5 +41,5 @@ button = createTag H.div "target" "" $ do "Click Here"
 
 -- <canvas id="myCanvas" width="200" height="100"></canvas>
 theCanvas :: H.Html
-theCanvas = createTag H.canvas "theCanvas" "" "No canvas support."
+theCanvas = H.canvas ! A.id "theCanvas" ! A.width "800" ! A.height"375" $ do "No canvas support."
 
