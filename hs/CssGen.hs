@@ -1,26 +1,30 @@
 {-# LANGUAGE OverloadedStrings #-}
 
+module CssGen where
+
 import Clay
 import Prelude hiding ((**))
 import Data.Monoid
 import Data.Text.Lazy
 import System.Directory
 
+
 styleFiles :: [(String, Css)]
 styleFiles = [
-    ("style/common/common.css", common),
-    ("style/graph/graph_styles.css", graphStyles),
-    ("style/grid/timetable_styles.css", timetableStyles),
-    ("style/common/about.css", aboutStyles)
+    ("../style/common/common.css", common),
+    ("../style/graph/graph_styles.css", graphStyles),
+    ("../style/grid/timetable_styles.css", timetableStyles),
+    ("../style/common/about.css", aboutStyles)
     ]
 
 renderStyleFile :: (String, Css) -> IO ()
 renderStyleFile (path, css) = writeFile path $ unpack $ render css
 
-main = do
-    createDirectoryIfMissing True "style/common"
-    createDirectoryIfMissing True "style/graph"
-    createDirectoryIfMissing True "style/grid"
+generateCSS :: IO ()
+generateCSS = do
+    createDirectoryIfMissing True "../style/common"
+    createDirectoryIfMissing True "../style/graph"
+    createDirectoryIfMissing True "../style/grid"
     Prelude.foldl1 (>>) $ Prelude.map renderStyleFile styleFiles
 
 margin0 = margin nil nil nil nil
@@ -66,6 +70,8 @@ headerCSS = do
             width $ pct 70
             margin nil nil nil nil
             display inlineBlock
+            a ?
+              do fontWeight normal
             li <? do
                 textAlign $ alignSide sideCenter
                 display inlineBlock

@@ -21,6 +21,8 @@ import Database.Persist.Sqlite
 import Filesystem.Path.CurrentOS
 import System.Directory
 
+import CssGen
+
 graph :: String
 graph = "graph"
 
@@ -41,6 +43,7 @@ course = "course"
 
 main :: IO ()
 main = do
+    generateCSS
     cwd <- getCurrentDirectory
     let staticDir = encodeString $ parent $ decodeString cwd
     simpleHTTP nullConf $
