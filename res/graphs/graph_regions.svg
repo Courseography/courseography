@@ -86,11 +86,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.8"
-     inkscape:cx="552.36748"
-     inkscape:cy="308.88099"
+     inkscape:zoom="2.2627417"
+     inkscape:cx="547.49549"
+     inkscape:cy="191.92316"
      inkscape:document-units="px"
-     inkscape:current-layer="g4134"
+     inkscape:current-layer="g4705"
      showgrid="false"
      inkscape:window-width="1366"
      inkscape:window-height="705"
@@ -2626,9 +2626,9 @@
          id="g4701">
         <rect
            style="stroke:none"
-           x="526.78949"
-           width="55.5783"
-           height="24"
+           x="553.80249"
+           width="25.27507"
+           height="23.191942"
            y="245.53979"
            clip-path="url(#clipPath2)"
            id="rect4703" />
@@ -2643,16 +2643,15 @@
          id="g4705">
         <text
            style="stroke:none"
-           x="532.61823"
+           x="556.617867"
            xml:space="preserve"
            y="261.46799"
            clip-path="url(#clipPath2)"
-           id="text4707"
-           transform="translate(10,-1.25)">Sta1</text>
+           id="text4707">Sta1</text>
         <rect
            style="fill:none"
-           x="526.78949"
-           width="55.5783"
+           x="553.80249"
+           width="25.27507"
            height="24"
            y="245.53979"
            clip-path="url(#clipPath2)"
