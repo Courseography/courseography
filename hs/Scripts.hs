@@ -44,4 +44,9 @@ timetableScripts = do jQuery
                                                 "static/js/grid/generate_grid.js",
                                                 "static/js/common/objects/course.js",
                                                 "static/js/common/objects/section.js",
-                                                "static/js/common/utilities/util.js"])
+                                                "static/js/common/utilities/util.js",
+                                                "static/js/experiment.js"])
+
+--drawScripts :: H.Html
+--drawScripts = do jQuery 
+--                  concatHtml (map makeScript ["static/js/experiment.js"])
