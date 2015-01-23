@@ -34,6 +34,12 @@ about = "about"
 static :: String
 static = "static"
 
+-- In order to access information as the Courseography application, the secret needs
+-- to be declared in the third string below that has the place holder 'INSERT_SECRET'.
+-- The secret should NEVER be committed to GitHub.
+-- The secret can be found here: https://developers.facebook.com/apps/442286309258193/dashboard/
+-- Should the secret be committed to GitHub, it needs to be reset immediately. If you find
+-- yourself in this pickle, please contact someone who can do this.
 app :: FB.Credentials
 app = FB.Credentials "localhost" "442286309258193" "INSERT_SECRET"
 
