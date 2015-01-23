@@ -63,14 +63,11 @@ nav > ul > li:hover > a {
     color: white;
 }
 
-div  div  ul {
-    list-style-type: none;
-    line-height: 56px;
-}
-
-div  div  ul  li {
+div  p {
     padding-left: 20px;
     box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.055);
+	line-height: 56px;
+	 list-style-type: none;
 
     -webkit-transition: all 0.2s;
     -moz-transition: all 0.2s;
@@ -80,14 +77,6 @@ div  div  ul  li {
 }
 
 
-.credit_total > ul > li:hover {
-    background-color: #FFF68F;
-}
-
-.credit_total > ul > li:hover a {
-    color: black;
-}
-
 #div_specialist, #div_major, #div_minor {
     position: absolute;
     margin-above: 70px;
@@ -96,17 +85,3 @@ div  div  ul  li {
     width: 100%;
 }
 
-.credit_total {
-    float: left;
-    width: 30%;
-    height: 100%;
-}
-
-.requirements {
-    background-color: #D0D2C4;
-    width: 65%;
-    height: 100%;
-    float: left;
-    border-left: 1px solid black;
-    background: -webkit-linear-gradient(#D0D2C4, #EBE8E4)
-}
