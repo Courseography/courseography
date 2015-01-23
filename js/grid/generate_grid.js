@@ -85,7 +85,7 @@ function appendHeaders(fallThead, springThead) {
 function appendTableRows(timetableTableFall, timetableTableSpring) {
     'use strict';
 
-    for (var i = 8; i < 22; i++) {
+    for (var i = 8; i < 22; i+=0.5) {
         var trFall = $('<tr></tr>');
         var trSpring = $('<tr></tr>');
         appendTableData(trFall, trSpring, i);
