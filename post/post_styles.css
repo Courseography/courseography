@@ -67,7 +67,9 @@ div  p {
     padding-left: 20px;
     box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.055);
 	line-height: 56px;
-	 list-style-type: none;
+	list-style-type: none;
+	text-align: center;
+	margin-right: 10px;
 
     -webkit-transition: all 0.2s;
     -moz-transition: all 0.2s;
@@ -76,12 +78,15 @@ div  p {
     transition: all 0.2s; 
 }
 
+i {
+    color: red;
+}
 
 #div_specialist, #div_major, #div_minor {
     position: absolute;
     margin-above: 70px;
     height: 70%;
     margin-left: 25px;
-    width: 100%;
+    width: 95%;
 }
 
