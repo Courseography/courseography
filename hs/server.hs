@@ -5,6 +5,7 @@ import qualified Data.Text as T
 import qualified Data.ByteString.Lazy.Char8 as BSL
 import qualified Data.ByteString.Char8 as BS
 import Control.Monad    (msum)
+import Network.HTTP.Conduit (withManager)
 import Happstack.Server
 import GridResponse
 import GraphResponse
@@ -19,6 +20,7 @@ import Database.Persist.Sqlite
 
 import Filesystem.Path.CurrentOS
 import System.Directory
+import qualified Facebook as FB
 
 graph :: String
 graph = "graph"
@@ -32,8 +34,29 @@ about = "about"
 static :: String
 static = "static"
 
+-- In order to access information as the Courseography application, the secret needs
+-- to be declared in the third string below that has the place holder 'INSERT_SECRET'.
+-- The secret should NEVER be committed to GitHub.
+-- The secret can be found here: https://developers.facebook.com/apps/442286309258193/dashboard/
+-- Should the secret be committed to GitHub, it needs to be reset immediately. If you find
+-- yourself in this pickle, please contact someone who can do this.
+app :: FB.Credentials
+app = FB.Credentials "localhost" "442286309258193" "INSERT_SECRET"
+
+url :: FB.RedirectUrl
+url = "http://localhost:8000/test"
+
+perms :: [FB.Permission]
+perms = []
+
 course :: String
 course = "course"
+
+test :: String
+test = "test"
+
+code :: String
+code = "graph-fb"
 
 main :: IO ()
 main = do
@@ -42,10 +65,18 @@ main = do
     simpleHTTP nullConf $
       msum [ dir grid $ gridResponse,
              dir graph $ graphResponse,
+             dir code $ seeOther fbAuth1Url $ toResponse test,
+             dir test $ look "code" >>= getEmail,
              dir about $ aboutResponse,
              dir static $ serveDirectory EnableBrowsing [] staticDir,
              dir course $ path (\s -> liftIO $ queryCourse s)
            ]
+
+getEmail :: String -> ServerPart Response
+getEmail code = liftIO $ retrieveFBData code
+
+fbAuth1Url :: String
+fbAuth1Url = "https://www.facebook.com/dialog/oauth?client_id=442286309258193&redirect_uri=http://localhost:8000/test&scope=user_birthday"
 
 -- | Queries the database for all information about `course`, constructs a JSON object 
 -- | representing the course and returns the appropriate JSON response.
@@ -127,3 +158,15 @@ buildSession lectures tutorials = Just $ Tables.Session (map buildLecture (map e
 -- | Creates a JSON response.
 createJSONResponse :: BSL.ByteString -> Response
 createJSONResponse jsonStr = toResponseBS (BS.pack "application/json") jsonStr
+
+-- | The arguments passed to the API. The first argument is the key of the query data ('code')
+-- and the second argument is the code that was retrieved in the first authorization step.
+args :: String -> FB.Argument
+args code = ("code", BS.pack code)
+
+-- | Retrieves the user's email.
+retrieveFBData :: String -> IO Response
+retrieveFBData code = withManager $ \manager -> FB.runFacebookT app manager $ do
+        token <- FB.getUserAccessTokenStep2 url [args code]
+        u <- FB.getUser "me" [] (Just token)
+        return $ toResponse (FB.userEmail u)

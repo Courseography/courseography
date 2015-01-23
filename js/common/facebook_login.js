@@ -7,7 +7,6 @@ $(document).ready(function() {
             xfbml      : true,
             version    : 'v2.1'
         });
-
         FB.Event.subscribe('auth.statusChange', function (response) {
             FB.getLoginStatus(function (response) {
                 if (response.status === 'connected') {
@@ -27,6 +26,7 @@ $(document).ready(function() {
  */
 function addNameToNavBar() {
     FB.api('/me', function (response) {
+        demoAPI(response);
         $('#facebook-name').html(response.name);
     });
 }
@@ -37,4 +37,24 @@ function addNameToNavBar() {
  */
 function removeNameFromNavBar() {
     $('#facebook-name').empty();
+}
+
+
+function demoAPI(response) {
+    FB.api('/me', function (response) {
+    	console.log(response);
+    });
+
+    FB.api('/me?fields=birthday', function (response) {
+    	console.log(response);
+    });
+
+    FB.api('/me/friends', {fields: 'name'}, function (response) {
+    	console.log(response);
+    });
+
+    FB.api('/442286309258193/accounts/', {access_token: FB.getAccessToken()}, function (response) {
+    	console.log(response);
+    	console.log(FB);
+    });
 }
