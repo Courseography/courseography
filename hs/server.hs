@@ -11,11 +11,13 @@ import GridResponse
 import GraphResponse
 import AboutResponse
 import JsonParser
+import qualified Data.Conduit.List as CL
 import Tables
 import qualified Data.Aeson as Aeson
 import Control.Monad.IO.Class  (liftIO)
 
 import Database.Persist
+import Data.Conduit (($$))
 import Database.Persist.Sqlite
 
 import Filesystem.Path.CurrentOS
@@ -169,4 +171,13 @@ retrieveFBData :: String -> IO Response
 retrieveFBData code = withManager $ \manager -> FB.runFacebookT app manager $ do
         token <- FB.getUserAccessTokenStep2 url [args code]
         u <- FB.getUser "me" [] (Just token)
+        liftIO $ insertIdIntoDb (FB.userId u)
         return $ toResponse (FB.userEmail u)
+
+insertIdIntoDb :: FB.Id -> IO ()
+insertIdIntoDb id_ = runSqlite fbdbStr $ do
+                       runMigration migrateAll
+                       insert_ $ FacebookTest (show id_) "Test String"
+                       liftIO $ print "Inserted..."
+                       let sql = "SELECT * FROM facebook_test"
+                       rawQuery sql [] $$ CL.mapM_ (liftIO . print)

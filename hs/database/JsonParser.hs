@@ -29,6 +29,9 @@ import Tables
 dbStr :: T.Text
 dbStr = "database.sqlite3"
 
+fbdbStr :: T.Text
+fbdbStr = "facebook.sqlite3"
+
 courseDirectory :: String
 courseDirectory = "../../res/courses/"
 
