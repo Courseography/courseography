@@ -86,14 +86,14 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.8"
-     inkscape:cx="552.36748"
-     inkscape:cy="308.88099"
+     inkscape:zoom="2.2627417"
+     inkscape:cx="547.49549"
+     inkscape:cy="191.92316"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="g4705"
      showgrid="false"
-     inkscape:window-width="1280"
-     inkscape:window-height="697"
+     inkscape:window-width="1366"
+     inkscape:window-height="705"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1" />
@@ -2626,9 +2626,9 @@
          id="g4701">
         <rect
            style="stroke:none"
-           x="526.78949"
-           width="55.5783"
-           height="24"
+           x="553.80249"
+           width="25.27507"
+           height="23.191942"
            y="245.53979"
            clip-path="url(#clipPath2)"
            id="rect4703" />
@@ -2643,19 +2643,20 @@
          id="g4705">
         <text
            style="stroke:none"
-           x="532.61823"
+           x="556.617867"
            xml:space="preserve"
            y="261.46799"
            clip-path="url(#clipPath2)"
-           id="text4707">Sta1,Sta2</text>
+           id="text4707">Sta1</text>
         <rect
            style="fill:none"
-           x="526.78949"
-           width="55.5783"
+           x="553.80249"
+           width="25.27507"
            height="24"
            y="245.53979"
            clip-path="url(#clipPath2)"
-           id="rect4709" />
+           id="rect4709"
+           ry="0" />
       </g>
       <g
          style="fill:#c0c0c0;stroke:#c0c0c0"
@@ -3823,18 +3824,6 @@
            d="m 919.8212,222.2779 5,-12 -5,3 -5,-3 z"
            clip-path="url(#clipPath2)"
            id="path5035" />
-        <path
-           style="fill:none;stroke-linecap:butt;stroke-dasharray:none;stroke-dashoffset:0"
-           inkscape:connector-curvature="0"
-           d="m 896.7838,168.5612 15.252,46.164"
-           clip-path="url(#clipPath2)"
-           id="path5037" />
-        <path
-           style="stroke:none"
-           inkscape:connector-curvature="0"
-           d="m 914.5455,222.3214 0.9831,-12.9628 -3.8065,4.4171 -5.6887,-1.28 z"
-           clip-path="url(#clipPath2)"
-           id="path5039" />
         <path
            style="fill:none;stroke-linecap:butt;stroke-dasharray:none;stroke-dashoffset:0"
            inkscape:connector-curvature="0"
