@@ -436,8 +436,8 @@ timetableCSS = do
             ".timetable-time" ? do
                 textAlign $ alignSide sideLeft
                 paddingLeft (px 10) -- important
-        td <> th ? do
-            width (pct 18)
+        tbody |> tr |> td <> thead |> th ? do
+            width (pct 13.5)
             height (px 35)
             padding0 -- !important
             margin0 -- !important
@@ -445,6 +445,7 @@ timetableCSS = do
             "vertical-align" -: "middle"
             overflow hidden
             borderColor pink1 -- !important
+            lineHeight (em 0.9)
         th ? do
             fontSize (em 1.1)
             fontWeight normal
@@ -454,10 +455,19 @@ timetableCSS = do
                 padding0
                 width (pct 10)
                 fontWeight bold
+        td ? do
+            fontSize (em 0.9)
         ".timetable-time" ? do
-            width (pct 10)
-            borderNone
-            padding (px 10) (px 10) (px 10) (px 10)
+            width (pct 12)
+    -- Overriding bootstrap
+    ".col-md-2" ? do
+        width (pct 14)
+    ".col-md-8" ? do
+        width (pct 72)
+    ".col-md-pull-2" ? do
+        right (pct 14)
+    ".col-md-push-8" ? do
+        left (pct 72)
 
 
 conflictNotificationStyle = "#dialog" ? do
