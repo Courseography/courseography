@@ -50,7 +50,8 @@ searchPanel =  createTag H.div "search-layout" "col-md-2 col-xs-6 col-md-push-8"
 
 infoPanel :: H.Html
 infoPanel = createTag H.div "" "col-md-8 col-xs-12 col-md-pull-2" $ do
-                            createTag H.div "info" "row" $ do
+                            createTag H.div "info" "row" ""
+                            {-createTag H.div "info" "row" $ do
                                     createTag H.div "info-layout" "" $ do
                                             H.div $ do
                                                    createTag H.span "course-info-code" "" ""
@@ -61,3 +62,4 @@ infoPanel = createTag H.div "" "col-md-8 col-xs-12 col-md-pull-2" $ do
                                                    createTag H.span "section-stats-instructor" "" ""
 
                                             createTag H.p "section-stats-enrol" "" ""
+                            -}

@@ -366,7 +366,7 @@ timetableStyles = do
     timetableCSS
     courseSelectCSS
     tdColours
-    infoCSS
+    --infoCSS
     conflictNotificationStyle
 
 
