@@ -88,10 +88,10 @@ main = do
            ]
 
 postToFacebook :: String -> ServerPart Response
-postToFacebook code = liftIO $ performPost code
+postToFacebook code = (liftIO $ performPost code) >> graphResponse
 
 args2 :: FB.Argument
-args2 = ("message", "Test post please ignore")
+args2 = ("message", "Test post please ignore #2")
 
 performPost :: String -> IO Response
 performPost code = withManager $ \manager -> FB.runFacebookT app manager $ do
