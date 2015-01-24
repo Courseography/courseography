@@ -12,7 +12,9 @@ import GraphResponse
 import AboutResponse
 import JsonParser
 import qualified Data.Conduit.List as CL
+import Control.Monad.Trans.Resource
 import Tables
+import Data.Time.Clock
 import qualified Data.Aeson as Aeson
 import Control.Monad.IO.Class  (liftIO)
 
@@ -48,6 +50,9 @@ app = FB.Credentials "localhost" "442286309258193" "INSERT_SECRET"
 url :: FB.RedirectUrl
 url = "http://localhost:8000/test"
 
+url2 :: FB.RedirectUrl
+url2 = "http://localhost:8000/test-post"
+
 perms :: [FB.Permission]
 perms = []
 
@@ -57,8 +62,14 @@ course = "course"
 test :: String
 test = "test"
 
+testPost :: String
+testPost = "test-post"
+
 code :: String
 code = "graph-fb"
+
+postFB :: String
+postFB = "post-fb"
 
 main :: IO ()
 main = do
@@ -71,14 +82,35 @@ main = do
              dir test $ look "code" >>= getEmail,
              dir about $ aboutResponse,
              dir static $ serveDirectory EnableBrowsing [] staticDir,
-             dir course $ path (\s -> liftIO $ queryCourse s)
+             dir course $ path (\s -> liftIO $ queryCourse s),
+             dir postFB $ seeOther fbAuth1UrlPost $ toResponse test,
+             dir testPost $ look "code" >>= postToFacebook
            ]
+
+postToFacebook :: String -> ServerPart Response
+postToFacebook code = liftIO $ performPost code
+
+args2 :: FB.Argument
+args2 = ("message", "Test post please ignore")
+
+performPost :: String -> IO Response
+performPost code = withManager $ \manager -> FB.runFacebookT app manager $ do
+        token <- FB.getUserAccessTokenStep2 url2 [args code]
+        u <- FB.getUser "me" [] (Just token)
+        postToFB code token
+        return $ toResponse $ postFB
+
+postToFB :: (MonadResource m, MonadBaseControl IO m) => String -> FB.UserAccessToken -> FB.FacebookT FB.Auth m FB.Id
+postToFB code token = FB.postObject "me/feed" [args2] token
 
 getEmail :: String -> ServerPart Response
 getEmail code = liftIO $ retrieveFBData code
 
 fbAuth1Url :: String
 fbAuth1Url = "https://www.facebook.com/dialog/oauth?client_id=442286309258193&redirect_uri=http://localhost:8000/test&scope=user_birthday"
+
+fbAuth1UrlPost :: String
+fbAuth1UrlPost = "https://www.facebook.com/dialog/oauth?client_id=442286309258193&redirect_uri=http://localhost:8000/test-post"
 
 -- | Queries the database for all information about `course`, constructs a JSON object 
 -- | representing the course and returns the appropriate JSON response.
