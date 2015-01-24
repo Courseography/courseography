@@ -24,4 +24,4 @@ aboutResponse aboutContents =
                 ""
 
 aboutHtml :: String -> H.Html
-aboutHtml contents = writeHtml def $ readMarkdown def $ contents
+aboutHtml contents = H.div ! A.id "aboutDiv" $ writeHtml def $ readMarkdown def $ contents
