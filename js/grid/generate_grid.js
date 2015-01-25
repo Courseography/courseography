@@ -90,6 +90,9 @@ function appendTableRows(timetableTableFall, timetableTableSpring) {
 =======
     for (var i = 8; i < 22; i++) {
 >>>>>>> parent of c1388be... Revert "Revert "testing""
+=======
+    for (var i = 8; i < 22; i++) {
+>>>>>>> origin/timetable
         var trFall = $('<tr></tr>');
         var trSpring = $('<tr></tr>');
         appendTableData(trFall, trSpring, i);
