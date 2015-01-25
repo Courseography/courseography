@@ -520,8 +520,10 @@ courseSelectCSS = do
         ".close-icon" ? do
             width (px 20)
             height (px 20)
-            float floatLeft
-            padding (px 7) 0 0 (px 5)
+            float floatTo
+            padding0
+        ".icon-div" ? do
+            width (px 20)
         ".sections" ? do
             -- overflow: auto <-- really necessary?
             cursor pointer -- necessary?
