@@ -85,17 +85,15 @@ function appendHeaders(fallThead, springThead) {
 function appendTableRows(timetableTableFall, timetableTableSpring) {
     'use strict';
 
-<<<<<<< HEAD
-    for (var i = 7; i < 22; i++) {
-=======
     for (var i = 8; i < 22; i++) {
->>>>>>> parent of c1388be... Revert "Revert "testing""
-=======
-    for (var i = 8; i < 22; i++) {
->>>>>>> origin/timetable
         var trFall = $('<tr></tr>');
         var trSpring = $('<tr></tr>');
         appendTableData(trFall, trSpring, i);
+        timetableTableSpring.append(trSpring);
+        timetableTableFall.append(trFall);
+        var trFall = $('<tr></tr>');
+        var trSpring = $('<tr></tr>');
+        appendTableData(trFall, trSpring, i + 0.5);
         timetableTableSpring.append(trSpring);
         timetableTableFall.append(trFall);
     }
@@ -113,7 +111,12 @@ function appendTableData(trFall, trSpring, time) {
 
     var weekPrefixArray = ["M", "T", "W", "R", "F"];
 
-    var adjustedTime = (time === 12 ? 12 : time % 12) + ':00';
+    if (time % 1 == 0){
+        var adjustedTime = (time === 12 ? 12 : time % 12) + ':00';}
+    else {
+    	time -= 0.5
+        var adjustedTime = (time === 12 ? 12 : time % 12) + ':30';}
+    
     trFall.append($("<td></td>").addClass("timetable-time").html(adjustedTime));
 
     for (var k = 0; k < 5; k++) {
