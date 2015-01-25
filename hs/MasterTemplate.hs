@@ -29,6 +29,7 @@ header page = createTag H.nav "" "row header" $ do
     H.li $ makeA "" "" "grid" "" $ "Grid"
     H.li $ makeA "" "" "" "" $ "Check My POSt!"
     H.li $ makeA "" "" "about" "" $ "About"
+    H.li $ makeA "" "" "export" "" $ "Export to PDF"
 
 -- Disclaimer. This will be the same for both pages, I guess?
 disclaimer :: H.Html
