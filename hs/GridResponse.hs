@@ -40,7 +40,6 @@ coursePanel = createTag H.div "course-select-wrapper" "col-md-2 col-xs-6" $ do
 
 searchPanel :: H.Html
 searchPanel =  createTag H.div "search-layout" "col-md-2 col-xs-6 col-md-push-8" $ do
-
                              createTag H.div "filter-container" "" $ do
                                      makeForm "" "" "return false;" $ do
                                      makeInput "course-filter" "form-control" "Enter a course!" "off" "text"
