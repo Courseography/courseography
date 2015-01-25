@@ -9,6 +9,7 @@ import Happstack.Server
 import GridResponse
 import GraphResponse
 import AboutResponse
+import ExportResponse
 import JsonParser
 import Tables
 import qualified Data.Aeson as Aeson
@@ -31,6 +32,9 @@ grid = "grid"
 about :: String
 about = "about"
 
+export :: String
+export = "export"
+
 static :: String
 static = "static"
 
@@ -46,6 +50,7 @@ main = do
       msum [ dir grid $ gridResponse,
              dir graph $ graphResponse,
              dir about $ aboutResponse,
+             dir export $ exportResponse,
              dir static $ serveDirectory EnableBrowsing [] staticDir,
              dir course $ path (\s -> liftIO $ queryCourse s)
            ]
