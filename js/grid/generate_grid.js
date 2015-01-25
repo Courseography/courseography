@@ -85,7 +85,11 @@ function appendHeaders(fallThead, springThead) {
 function appendTableRows(timetableTableFall, timetableTableSpring) {
     'use strict';
 
+<<<<<<< HEAD
     for (var i = 7; i < 22; i++) {
+=======
+    for (var i = 8; i < 22; i++) {
+>>>>>>> parent of c1388be... Revert "Revert "testing""
         var trFall = $('<tr></tr>');
         var trSpring = $('<tr></tr>');
         appendTableData(trFall, trSpring, i);
