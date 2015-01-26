@@ -21,7 +21,6 @@ drawResponse =
                     header "draw"
                     drawHtml
 
-                    button
                     modePanel
                 )
                 timetableScripts
@@ -31,12 +30,12 @@ drawHtml :: H.Html
 drawHtml = H.div ! A.id "aboutDiv" $ do
   H.h1 "Draw a Graph"
 
-button :: H.Html
-button = createTag H.div "target" "" $ do "Click Here"
-
 modePanel :: H.Html
 modePanel = createTag H.div "mode-panel" "" $ do 
   createTag H.div "node-mode" "mode" $ do "NODE"
+  createTag H.div "red" "colour" $ do "RED"
+  createTag H.div "green" "colour" $ do "GREEN"
+  createTag H.div "blue" "colour" $ do "BLUE"
+  createTag H.div "purple" "colour" $ do "PURPLE"
   createTag H.div "erase-mode" "mode" $ do "ERASE" 
 
---modePanel = H.div ! A.id "mode-panel" ! A.height "500" ! A.width "200" $ do "HAHA"

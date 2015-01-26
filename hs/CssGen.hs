@@ -636,6 +636,11 @@ fceCountCSS = "#FCECountDiv" ? do
 drawStyles = do
     panelCSS
     modeButtonsCSS
+    colourButtonsCSS
+    redCSS
+    greenCSS
+    blueCSS
+    purpleCSS
 
 panelCSS = "#mode-panel" ? do
     height (px 500)
@@ -644,5 +649,26 @@ panelCSS = "#mode-panel" ? do
     float floatLeft
 
 modeButtonsCSS = ".mode" ? do
+    cursor pointer
     width (px 25)
     margin (px 5) (px 5) (px 5) (px 5)
+    padding 0 (px 155) 0 0
+
+colourButtonsCSS = ".colour" ? do
+    cursor pointer
+    width (px 100)
+    margin (px 5) (px 5) (px 5) (px 5)
+    alignCenter
+
+redCSS = "#red" ? do
+    backgroundColor red3
+    
+greenCSS = "#green"? do
+    backgroundColor $ parse "#2E8B57"
+
+blueCSS = "#blue"? do
+    backgroundColor blue3
+
+purpleCSS = "#purple"? do
+    backgroundColor purple1
+

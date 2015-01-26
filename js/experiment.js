@@ -1,5 +1,11 @@
 var nodeId = 0;
-var nodeColour = '#FF8800';
+var colours = { 
+     "red": "#D77546", 
+     "green":"#2E8B57", 
+     "blue":"#437699",
+     "purple":"#46364A"
+};
+var nodeColour = colours["red"];
 //var nodes = [];
 var mode = '';
 var xmlns = 'http://www.w3.org/2000/svg';
@@ -24,7 +30,7 @@ function getClickPosition(e) {
     var yPosition = e.clientY - parentPosition.y;
 
     // decide what to do based on what mode it is?
-    if (mode === 'node') {
+    if (mode === 'node-mode') {
     	makeNode(xPosition, yPosition);
     }
 }
@@ -51,7 +57,7 @@ function makeNode(x, y) {
 	node.setAttributeNS(null,'x',x);
 	node.setAttributeNS(null,'y',y);
 	node.setAttributeNS(null,'width',60);
-	node.setAttributeNS(null,'height',30);
+	node.setAttributeNS(null,'height', 30);
 	node.setAttributeNS(null,'fill', nodeColour);
 	node.setAttributeNS(null,"onclick", 'nodeSelected(this)');
 
@@ -59,13 +65,44 @@ function makeNode(x, y) {
 }
 
 function nodeSelected(elem) {
-	if (mode  === 'erase') {
+	if (mode  === 'erase-mode') {
 		document.getElementById("mySVG").removeChild(elem);
-	} 
+	}
 }
 
-$('#node-mode').click(function () {mode = 'node';});
-$('#erase-mode').click(function () {mode = 'erase';});
+function changeMode(id) {
+	//if (mode !== '') {
+	//	oldMode = document.getElementById(mode);
+	//	oldMode.setAttribute('border', 'border: 2px solid #008080');
+	//}
+	mode = id;
+	//newMode = document.getElementById(mode);
+	//newMode.setAttribute('border', 'border: 2px solid white');
+}
+
+function changeColour(id) {
+	//if (mode !== '') {
+	//	oldColour = document.getElementById(nodeColour);
+	//	oldColour.setAttribute('border', 'border: 2px solid #008080');
+	//}
+	nodeColour = colours[id];
+	//newMode = document.getElementById(mode);
+	//newMode.setAttribute('border', 'border: 2px solid white');
+}
+
+$('#node-mode').click(function () {
+	changeMode('node-mode');});
+$('#erase-mode').click(function () {
+	changeMode('erase-mode');});
+$('#red').click(function () {
+	changeColour('red');});
+$('#green').click(function () {
+	changeColour('green');});
+$('#blue').click(function () {
+	changeColour('blue');});
+$('#purple').click(function () {
+	changeColour('purple');});
+
 
 setupSVGCanvas();
 document.getElementById('mySVG').addEventListener('click', getClickPosition, false);
