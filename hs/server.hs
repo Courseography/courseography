@@ -97,12 +97,15 @@ performPost code = withManager $ \manager -> FB.runFacebookT app manager $ do
         postToFB code =<< getToken url2 code
         return $ toResponse postFB
 
+-- | Gets a user access token.
 getToken :: (MonadResource m, MonadBaseControl IO m) => FB.RedirectUrl -> String -> FB.FacebookT FB.Auth m FB.UserAccessToken
 getToken url code = FB.getUserAccessTokenStep2 url [args code]
 
+-- | Posts a message to Facebook.
 postToFB :: (MonadResource m, MonadBaseControl IO m) => String -> FB.UserAccessToken -> FB.FacebookT FB.Auth m FB.Id
 postToFB code token = FB.postObject "me/feed" [args2] token
 
+-- | Gets a users Facebook email.
 getEmail :: String -> ServerPart Response
 getEmail code = liftIO $ retrieveFBData code
 
