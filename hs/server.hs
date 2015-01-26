@@ -80,18 +80,18 @@ main = do
              dir graph $ graphResponse,
              dir code $ seeOther fbAuth1Url $ toResponse test,
              dir test $ look "code" >>= getEmail,
+             dir testPost $ look "code" >>= postToFacebook,
              dir about $ aboutResponse,
              dir static $ serveDirectory EnableBrowsing [] staticDir,
              dir course $ path (\s -> liftIO $ queryCourse s),
-             dir postFB $ seeOther fbAuth1UrlPost $ toResponse test,
-             dir testPost $ look "code" >>= postToFacebook
+             dir postFB $ seeOther fbAuth1UrlPost $ toResponse test
            ]
 
 postToFacebook :: String -> ServerPart Response
 postToFacebook code = (liftIO $ performPost code) >> graphResponse
 
 args2 :: FB.Argument
-args2 = ("message", "Test post please ignore #2")
+args2 = ("message", "Test post please ignore")
 
 performPost :: String -> IO Response
 performPost code = withManager $ \manager -> FB.runFacebookT app manager $ do
