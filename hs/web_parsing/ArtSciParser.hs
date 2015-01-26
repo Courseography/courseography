@@ -48,7 +48,8 @@ doStuff s =
 
 {----------------------------------------------------------------------------------------
 INPUT: an html filename of a department (which are found from getDeptList)
-OUTPUT: a list of all course related strings and tags found in that department
+OUTPUT: a list, where each element is a list of strings and tags relating to a single
+course found in that department
 ----------------------------------------------------------------------------------------}
 getCalendar :: String -> IO ()
 getCalendar str = do
@@ -82,7 +83,7 @@ processCourseToData :: [Tag String] -> Course
 processCourseToData tags  =
     let cleanTags = map cleanTag tags
         getTitle = find (~== TagText "") cleanTags
-        --splitat 8 since first 8 represnt course code
+        --splitat 8 since first 8 represent course code
         courseNames = splitAt 8 $ removeTitleGarbage $ removeLectureSection $ getTitle
     in Course {breadth = Nothing, 
             description = Nothing, 
@@ -114,6 +115,11 @@ main = do
     let depts = doStuff body
     --getCalendar $ filter (== "crs_csc.htm") depts
     mapM_ getCalendar depts
+
+
+{-
+doStuff -> getDeptList -> map getCalendar 
+-}
 
 {----------------------------------------------------------------------------------------
 course codes can be found in body <a href="csc_...#asdf">
