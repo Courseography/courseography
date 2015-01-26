@@ -66,10 +66,10 @@ nav > ul > li:hover > a {
 div  p {
     padding-left: 20px;
     box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.055);
-	line-height: 56px;
-	list-style-type: none;
-	text-align: center;
-	margin-right: 10px;
+    line-height: 56px;
+    list-style-type: none;
+    text-align: center;
+    margin-right: 10px;
 
     -webkit-transition: all 0.2s;
     -moz-transition: all 0.2s;

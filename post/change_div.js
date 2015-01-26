@@ -11,7 +11,7 @@ $('#specialist').click(function (e) {
     e.preventDefault();
     resetAttributes();
     $('#div_specialist').show();
-	$('#specialist').css('background-color', '#9C9C9C');	
+    $('#specialist').css('background-color', '#9C9C9C');	
 });
 	
 	
@@ -19,9 +19,9 @@ $('#major').click(function (e) {
     'use-strict';
 	
     e.preventDefault();
-	resetAttributes();
+    resetAttributes();
     $('#div_major').show();
-	$('#major').css('background-color', '#9C9C9C');
+    $('#major').css('background-color', '#9C9C9C');
 });
 	
 	
@@ -29,9 +29,9 @@ $('#minor').click (function (e) {
     'user-strict';
 	
     e.preventDefault();
-	resetAttributes();
+    resetAttributes();
     $('#div_minor').show();
-	$('#minor').css('background-color', '#9C9C9C');
+    $('#minor').css('background-color', '#9C9C9C');
 });
 
 /**
@@ -39,8 +39,8 @@ $('#minor').click (function (e) {
 **/
 function resetAttributes() {
     document.getElementById('div_specialist').style.display = 'none';
-	document.getElementById('div_major').style.display = 'none';
-	document.getElementById('div_minor').style.display = 'none';
+    document.getElementById('div_major').style.display = 'none';
+    document.getElementById('div_minor').style.display = 'none';
     $('#specialist, #major, #minor').css('background-color', 'white');
 };
 
