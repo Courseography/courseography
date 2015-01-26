@@ -1,7 +1,7 @@
 $(document).ready(function() {
     'use-strict';
 	
-    $('#div_specialist, #div_major, #div_minor').hide();
+    resetAttributes();
 });
 
 
@@ -9,20 +9,9 @@ $('#specialist').click(function (e) {
     'use-strict';
 	
     e.preventDefault();
-	// reset nav bar colours
-	$('nav ul li').css('background-color', 'white');
-    $('nav > ul > li > a').css('color', 'black');
-
-	
-	// hide all divs
-    $('#div_specialist, #div_major, #div_minor').hide();
-	
-	// show current div
+    resetAttributes();
     $('#div_specialist').show();
-	
-	// change current nav
-	$('#specialist').css('background-color', '#9C9C9C');
-    $('#specialist').css('#specialist > a').css('color', 'white');
+	$('#specialist').css('background-color', '#9C9C9C');	
 });
 	
 	
@@ -30,19 +19,9 @@ $('#major').click(function (e) {
     'use-strict';
 	
     e.preventDefault();
-	// reset nav bar colours
-	$('nav ul li').css('background-color', 'white');
-    $('nav > ul > li > a').css('color', 'black');
-	
-	// hide all divs
-    $('#div_specialist, #div_major, #div_minor').hide();
-	
-	// show current div
+	resetAttributes();
     $('#div_major').show();
-	
-	// change current nav
 	$('#major').css('background-color', '#9C9C9C');
-    $('#major').css('#major > a').css('color', 'white');
 });
 	
 	
@@ -50,19 +29,20 @@ $('#minor').click (function (e) {
     'user-strict';
 	
     e.preventDefault();
-	// reset nav bar colours
-	$('nav ul li').css('background-color', 'white');
-    $('nav > ul > li > a').css('color', 'black');
-
-	
-	// hide all divs
-    $('#div_specialist, #div_major, #div_minor').hide();
-	
-	// show current div
+	resetAttributes();
     $('#div_minor').show();
-	
-	// change current nav
 	$('#minor').css('background-color', '#9C9C9C');
-    $('#minor').css('#minor > a').css('color', 'white');
 });
+
+/**
+    Hides all currently open divs and resets navbar to display none of the links as clicked.
+**/
+function resetAttributes() {
+    document.getElementById('div_specialist').style.display = 'none';
+	document.getElementById('div_major').style.display = 'none';
+	document.getElementById('div_minor').style.display = 'none';
+    $('#specialist, #major, #minor').css('background-color', 'white');
+};
+
+
 
