@@ -23,7 +23,7 @@ drawResponse =
 
                     button
                     --modePanel
-                    theCanvas
+                    --theCanvas
                 )
                 timetableScripts
 
@@ -40,6 +40,6 @@ button = createTag H.div "target" "" $ do "Click Here"
 --modePanel = createTag H.div "mode-select" "col-md-2 col-xs-6" $ do "HAHA"
 
 -- <canvas id="myCanvas" width="200" height="100"></canvas>
-theCanvas :: H.Html
-theCanvas = H.canvas ! A.id "theCanvas" ! A.width "800" ! A.height"375" $ do "No canvas support."
+--theCanvas :: H.Html
+--theCanvas = H.canvas ! A.id "theCanvas" ! A.width "800" ! A.height"375" $ do "No canvas support."
 
