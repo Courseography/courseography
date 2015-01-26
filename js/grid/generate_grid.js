@@ -113,10 +113,10 @@ function appendTableData(trFall, trSpring, time) {
 
     if (time % 1 === 0) {
         var adjustedTime = (time === 12 ? 12 : time % 12) + ':00';
-   } else {
+    } else {
         time -= 0.5
         var adjustedTime = (time === 12 ? 12 : time % 12) + ':30';
-   }
+    }
     
     trFall.append($("<td></td>").addClass("timetable-time").html(adjustedTime));
 
