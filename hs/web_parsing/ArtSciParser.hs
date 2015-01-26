@@ -9,7 +9,8 @@ import Tables
 {----------------------------------------------------------------------------------------
 TODO
     use Data.Text type instead of String for all functions
-    remove duplicates
+    remove duplicate courses
+    account for edge cases (courses that will encapsulate )
 ----------------------------------------------------------------------------------------}
 
 fasCalendarURL :: String
