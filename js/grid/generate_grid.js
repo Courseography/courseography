@@ -116,7 +116,7 @@ function appendTableData(trFall, trSpring, time) {
     } else {
         var adjustedTime = '';
     }
-    
+
     trFall.append($("<td></td>").addClass("timetable-time").html(adjustedTime));
 
     for (var k = 0; k < 5; k++) {
@@ -131,6 +131,6 @@ function appendTableData(trFall, trSpring, time) {
             .attr("satisfied", "true")
             .addClass("timetable-cell"));
     }
-    
+
     trSpring.append($("<td></td>").addClass("timetable-time").html(adjustedTime));
 }
