@@ -501,16 +501,18 @@ courseSelectCSS = do
         overflowY scroll
         overflowX hidden
         "list-style-type" -: "none"
+        ".ui-accordion-header" ? do
+            outline solid nil white
         li <? do
             width (pct 95)
             clear both
-            h3 <? do
+            h3 ? do
                 cursor pointer
                 margin0
                 padding (em 0.25) 0 (em 0.25) 0
                 display block
                 width100
-                outline solid (px 0) white
+                minHeight (px 40)
                 borderTop solid (px 1) black
                 "#clear-all" <? do
                     h3 <? do
@@ -529,10 +531,13 @@ courseSelectCSS = do
                     "taken" *= "true" & do
                         backgroundColor blue4
         ".close-icon" ? do
-            width (px 20)
+            width (px 18)
             height (px 20)
+            padding (px 1) 0 (px 1) 0
+        ".icon-div" ? do
+            width (px 20)
+            minHeight (px 40)
             float floatLeft
-            padding (px 7) 0 0 (px 5)
         ".sections" ? do
             -- overflow: auto <-- really necessary?
             cursor pointer -- necessary?
