@@ -14,7 +14,6 @@ import JsonParser
 import qualified Data.Conduit.List as CL
 import Control.Monad.Trans.Resource
 import Tables
-import Data.Time.Clock
 import qualified Data.Aeson as Aeson
 import Control.Monad.IO.Class  (liftIO)
 
