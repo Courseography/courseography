@@ -13,8 +13,8 @@ $('#specialist').click(function (e) {
     $('#div_specialist').show();
     $('#specialist').css('background-color', '#9C9C9C');	
 });
-	
-	
+
+
 $('#major').click(function (e) {
     'use-strict';
 	
@@ -23,8 +23,8 @@ $('#major').click(function (e) {
     $('#div_major').show();
     $('#major').css('background-color', '#9C9C9C');
 });
-	
-	
+
+
 $('#minor').click (function (e) {
     'user-strict';
 	
@@ -43,6 +43,3 @@ function resetAttributes() {
     document.getElementById('div_minor').style.display = 'none';
     $('#specialist, #major, #minor').css('background-color', 'white');
 };
-
-
-
