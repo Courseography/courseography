@@ -109,23 +109,15 @@ function appendTableRows(timetableTableFall, timetableTableSpring) {
 function appendTableData(trFall, trSpring, time) {
     'use strict';
 
+    var weekPrefixArray = ["M", "T", "W", "R", "F"];
+
     if (time % 1 === 0) {
         var adjustedTime = (time === 12 ? 12 : time % 12) + ':00';
-        trFall.append($("<td></td>").addClass("timetable-time").html(adjustedTime));
-        appendTableDataDays(trFall, trSpring, time);
-        trSpring.append($("<td></td>").addClass("timetable-time").html(adjustedTime));
     } else {
-        trFall.append($("<td></td>").addClass("timetable-time").html('     '));
-        appendTableDataDays(trFall, trSpring, time);
-        trSpring.append($("<td></td>").addClass("timetable-time").html('     '));
+        var adjustedTime = '     ';
     }
-
-}
-
-function appendTableDataDays(trFall, trSpring, time) {
-    'use strict';
-
-    var weekPrefixArray = ["M", "T", "W", "R", "F"];
+    
+    trFall.append($("<td></td>").addClass("timetable-time").html(adjustedTime));
 
     for (var k = 0; k < 5; k++) {
         trFall.append($("<td></td>")
@@ -139,4 +131,7 @@ function appendTableDataDays(trFall, trSpring, time) {
             .attr("satisfied", "true")
             .addClass("timetable-cell"));
     }
+    
+    trSpring.append($("<td></td>").addClass("timetable-time").html(adjustedTime));
+
 }
