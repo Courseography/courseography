@@ -51,7 +51,7 @@ nav > ul > li > a {
     display: inline-block;
     line-height: 56px;
     padding: 0 24px;
-    width: 100%;
+    width: 70%;
     text-decoration: none;
 }
 
@@ -88,5 +88,11 @@ i {
     height: 70%;
     margin-left: 25px;
     width: 95%;
+}
+
+#spec_creds, #maj_creds, #min_creds {
+    display: inline-block;
+    margin-left: 0;
+	color: red;
 }
 
