@@ -56,11 +56,11 @@ nav > ul > li > a {
 }
 
 nav > ul > li:hover {
-    background-color: #9C9C9C;
+    background-color: #9C9C9C !important;
 }
 
 nav > ul > li:hover > a {
-    color: white;
+    color: white !important;
 }
 
 div  p {
