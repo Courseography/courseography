@@ -11,7 +11,7 @@ import MasterTemplate
 aboutResponse :: ServerPart Response
 aboutResponse =
    ok $ toResponse $
-    masterTemplate "Courseography - SVG serving test!"
+    masterTemplate "Courseography - About"
                 [H.meta ! A.name "keywords"
                         ! A.content "",
                  aboutLinks
