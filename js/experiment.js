@@ -1,18 +1,8 @@
-// makes grid
 var nodeId = 0;
 var nodeColour = '#FF8800'
 var nodes = []
 //var mode = 'node'
 var xmlns = 'http://www.w3.org/2000/svg';
-
-function drawRect(x, y) {
-	'use-strict';
-
-	var c = document.getElementById('theCanvas');
-	var ctx = c.getContext('2d');
-	ctx.fillStyle = '#FF8800';
-	ctx.fillRect(x, y, 80, 80);
-}
 
 $( '#target' ).click(function() {
   alert( 'Handler for .click() called.' );
@@ -25,7 +15,7 @@ function setupSVGCanvas(){
 	svg.setAttribute('id', 'mySVG');
 	svg.setAttribute('style', 'border: 2px solid black');
 	svg.setAttribute('width', '800');
-	svg.setAttribute('height', '700');
+	svg.setAttribute('height', '500');
 	svg.setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xlink', 'http://www.w3.org/1999/xlink');
 	document.body.appendChild(svg);
 }
@@ -57,7 +47,7 @@ function getPosition(elem) {
 
 function makeNode(x, y){
 	'use-strict';
-	
+
 	var node = document.createElementNS(xmlns, 'rect');
 	// check for overlaps and off the chart problems before creating
 	node.setAttributeNS(null,'x',x);
