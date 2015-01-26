@@ -101,7 +101,7 @@ headers = do
 
 -- Disclaimer
 disclaimerCSS = "#disclaimerDiv" ? do
-    padding 0 (em 1) (em 0.5) (em 1)
+    padding 0 (em 1) 0 (em 1)
     fontSize (pt 11)
 
 
@@ -360,35 +360,36 @@ timetableStyles = do
     body ? do
         overflowX hidden
     ".main" ? do -- TODO: change to id, and pick better name
-        "height" -: "calc(90% - 3.55em)"
+        height (pct 84)
         margin0
     searchCSS
     timetableCSS
     courseSelectCSS
     tdColours
-    infoCSS
+    --infoCSS
     conflictNotificationStyle
 
 
 searchCSS = do
     "#search-layout" ? do
         backgroundColor purple1
-        height100
         margin0
         padding0
-        overflowY scroll
+        overflowY hidden
         overflowX hidden
     "#filter-container" ? do
         padding (px 10) (px 10) (px 10) (px 10)
+        height (pct 10)
         form <? do
             margin0
     "#search-container" ? do
         alignCenter
         color white
-        height100
+        height (pct 90)
         width100
         margin0
         padding (em 0.5) 0 (em 1) 0
+        overflowY auto
     "#search-list" ? do
         margin0
         padding nil nil nil nil
@@ -436,8 +437,8 @@ timetableCSS = do
             ".timetable-time" ? do
                 textAlign $ alignSide sideLeft
                 paddingLeft (px 10) -- important
-        td <> th ? do
-            width (pct 18)
+        tbody |> tr |> td <> thead |> th ? do
+            width (pct 13.5)
             height (px 35)
             padding0 -- !important
             margin0 -- !important
@@ -445,6 +446,7 @@ timetableCSS = do
             "vertical-align" -: "middle"
             overflow hidden
             borderColor pink1 -- !important
+            lineHeight (em 0.9)
         th ? do
             fontSize (em 1.1)
             fontWeight normal
@@ -454,10 +456,19 @@ timetableCSS = do
                 padding0
                 width (pct 10)
                 fontWeight bold
+        td ? do
+            fontSize (em 0.9)
         ".timetable-time" ? do
-            width (pct 10)
-            borderNone
-            padding (px 10) (px 10) (px 10) (px 10)
+            width (pct 12)
+    -- Overriding bootstrap
+    ".col-md-2" ? do
+        width (pct 14)
+    ".col-md-8" ? do
+        width (pct 72)
+    ".col-md-pull-2" ? do
+        right (pct 14)
+    ".col-md-push-8" ? do
+        left (pct 72)
 
 
 conflictNotificationStyle = "#dialog" ? do
@@ -477,8 +488,8 @@ courseSelectCSS = do
     "#course-select-wrapper" ? do
         margin0
         padding0
-        overflow hidden
         height100
+        overflow hidden
         backgroundColor purple1
         color white
     "#course-select" ? do
