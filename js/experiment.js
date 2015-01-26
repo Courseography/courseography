@@ -16,8 +16,8 @@ function setupSVGCanvas() {
     var svg = document.createElementNS(xmlns, 'svg');
     svg.setAttribute('id', 'mySVG');
     svg.setAttribute('style', 'border: 2px solid black');
-    svg.setAttribute('width', '800');
-    svg.setAttribute('height', '500');
+ //   svg.setAttribute('width', '800');
+ //   svg.setAttribute('height', '500');
     svg.setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xlink', 'http://www.w3.org/1999/xlink');
     document.body.appendChild(svg);
 }
@@ -54,12 +54,13 @@ function makeNode(x, y) {
 
     var node = document.createElementNS(xmlns, 'rect');
     // check for overlaps and off the chart problems before creating
-    node.setAttributeNS(null,'x',x);
-    node.setAttributeNS(null,'y',y);
-    node.setAttributeNS(null,'width',60);
-    node.setAttributeNS(null,'height', 30);
-    node.setAttributeNS(null,'fill', nodeColour);
-    node.setAttributeNS(null,"onclick", 'nodeSelected(this)');
+    node.setAttributeNS(null, 'x', x);
+    node.setAttributeNS(null, 'y', y);
+    node.setAttributeNS(null, 'width', 60);
+    node.setAttributeNS(null, 'height', 30);
+    node.setAttributeNS(null, 'fill', nodeColour);
+    node.setAttributeNS(null, 'style', 'border: 2px solid black');
+    node.setAttributeNS(null, 'onclick', 'nodeSelected(this)');
 
     document.getElementById('mySVG').appendChild(node);
 }
