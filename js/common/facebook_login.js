@@ -11,7 +11,6 @@ $(document).ready(function() {
             FB.getLoginStatus(function (response) {
                 if (response.status === 'connected') {
                     addNameToNavBar();
-                    setPostFBClick();
                 } else {
                     removeNameFromNavBar();
                 }
@@ -20,33 +19,6 @@ $(document).ready(function() {
 
     });
 });
-
-function setPostFBClick() {
-    var postFBButton = $("#post-to-facebook-button");
-    var response;
-    var id;
-
-    FB.api('/me', function (response) {
-        id = response.id;
-        console.log(id);
-        console.log(response);
-    });
-
-    postFBButton.click(function () {
-        $.ajax({
-            url: 'post-fb?at=' + FB.getAuthResponse()['accessToken'] +
-                 '&id=' + id,
-            async: false,
-            success: function (data) {
-                response = data;
-            },
-            error: function () {
-                alert("Could not post to facebook. Hmm.");
-            }
-        });
-        postFBButton.html(response);
-    });
-}
 
 
 /**
