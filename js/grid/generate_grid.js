@@ -133,5 +133,4 @@ function appendTableData(trFall, trSpring, time) {
     }
     
     trSpring.append($("<td></td>").addClass("timetable-time").html(adjustedTime));
-
 }
