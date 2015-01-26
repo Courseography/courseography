@@ -36,7 +36,7 @@ button = createTag H.div "target" "" $ do "Click Here"
 
 modePanel :: H.Html
 modePanel = createTag H.div "mode-panel" "" $ do 
-  createTag H.div "node-mode" "mode" $ do "NODE" 
+  createTag H.div "node-mode" "mode" $ do "NODE"
   createTag H.div "erase-mode" "mode" $ do "ERASE" 
 
 --modePanel = H.div ! A.id "mode-panel" ! A.height "500" ! A.width "200" $ do "HAHA"
