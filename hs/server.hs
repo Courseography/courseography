@@ -94,10 +94,11 @@ args2 = ("message", "Test post please ignore")
 
 performPost :: String -> IO Response
 performPost code = withManager $ \manager -> FB.runFacebookT app manager $ do
-        token <- FB.getUserAccessTokenStep2 url2 [args code]
-        u <- FB.getUser "me" [] (Just token)
-        postToFB code token
-        return $ toResponse $ postFB
+        postToFB code =<< getToken url2 code
+        return $ toResponse postFB
+
+getToken :: (MonadResource m, MonadBaseControl IO m) => FB.RedirectUrl -> String -> FB.FacebookT FB.Auth m FB.UserAccessToken
+getToken url code = FB.getUserAccessTokenStep2 url [args code]
 
 postToFB :: (MonadResource m, MonadBaseControl IO m) => String -> FB.UserAccessToken -> FB.FacebookT FB.Auth m FB.Id
 postToFB code token = FB.postObject "me/feed" [args2] token
@@ -200,10 +201,10 @@ args code = ("code", BS.pack code)
 -- | Retrieves the user's email.
 retrieveFBData :: String -> IO Response
 retrieveFBData code = withManager $ \manager -> FB.runFacebookT app manager $ do
-        token <- FB.getUserAccessTokenStep2 url [args code]
-        u <- FB.getUser "me" [] (Just token)
-        liftIO $ insertIdIntoDb (FB.userId u)
-        return $ toResponse (FB.userEmail u)
+        token <- getToken url code
+        user <- FB.getUser "me" [] token
+        liftIO $ insertIdIntoDb (FB.userId user)
+        return $ toResponse (FB.userEmail user)
 
 insertIdIntoDb :: FB.Id -> IO ()
 insertIdIntoDb id_ = runSqlite fbdbStr $ do
