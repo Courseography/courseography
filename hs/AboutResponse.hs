@@ -26,4 +26,9 @@ aboutResponse aboutContents =
 -- | AboutHtml takes in the contents of the README.md file (the GitHub README file) and translates
 -- the markdown to blaze-HTML.
 aboutHtml :: String -> H.Html
-aboutHtml contents = H.div ! A.id "aboutDiv" $ writeHtml def $ readMarkdown def contents
+aboutHtml contents = H.div ! A.id "aboutDiv" $ mdToHTML contents
+
+-- | mdToHTML takes in the contents of a file written in Mark Down and converts it to 
+-- blaze-HTML.
+mdToHTML :: String -> H.Html
+mdToHTML contents = writeHtml def $ readMarkdown def contents
