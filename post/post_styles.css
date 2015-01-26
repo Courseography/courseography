@@ -47,30 +47,29 @@ nav ul li {
  
 
 nav > ul > li > a {
-    color: #aaa;
+    color: black;
     display: inline-block;
     line-height: 56px;
     padding: 0 24px;
-    width: 100%;
+    width: 70%;
     text-decoration: none;
 }
 
 nav > ul > li:hover {
-    background-color: #9C9C9C;
+    background-color: #9C9C9C !important;
 }
 
 nav > ul > li:hover > a {
-    color: white;
+    color: white !important;
 }
 
-div  div  ul {
-    list-style-type: none;
-    line-height: 56px;
-}
-
-div  div  ul  li {
+div  p {
     padding-left: 20px;
     box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.055);
+    line-height: 56px;
+    list-style-type: none;
+    text-align: center;
+    margin-right: 10px;
 
     -webkit-transition: all 0.2s;
     -moz-transition: all 0.2s;
@@ -79,13 +78,8 @@ div  div  ul  li {
     transition: all 0.2s; 
 }
 
-
-.credit_total > ul > li:hover {
-    background-color: #FFF68F;
-}
-
-.credit_total > ul > li:hover a {
-    color: black;
+i {
+    color: red;
 }
 
 #div_specialist, #div_major, #div_minor {
@@ -93,20 +87,12 @@ div  div  ul  li {
     margin-above: 70px;
     height: 70%;
     margin-left: 25px;
-    width: 100%;
+    width: 95%;
 }
 
-.credit_total {
-    float: left;
-    width: 30%;
-    height: 100%;
+#spec_creds, #maj_creds, #min_creds {
+    display: inline-block;
+    margin-left: 0;
+    color: red;
 }
 
-.requirements {
-    background-color: #D0D2C4;
-    width: 65%;
-    height: 100%;
-    float: left;
-    border-left: 1px solid black;
-    background: -webkit-linear-gradient(#D0D2C4, #EBE8E4)
-}
