@@ -16,9 +16,9 @@ TODO
 fasCalendarURL :: String
 fasCalendarURL = "http://www.artsandscience.utoronto.ca/ofr/calendar/"
 
-{-
+{----------------------------------------------------------------------------------------
 A collection of pages that do not contain any course information
--}
+----------------------------------------------------------------------------------------}
 toDelete :: [String]
 toDelete = ["199299398399Big_Ideas_(Faculty_of_Arts_&_Science_Programs).html",
             "Joint_Courses.html",
@@ -142,20 +142,3 @@ getCrossListedCourses =  do
         isOtherLink (TagOpen _ [("name", _)]) = True
         isotherLink _ = False
 -}
-
-{----------------------------------------------------------------------------------------
-INPUT: a list of tags representing a single course
-OUTPUT: 
-----------------------------------------------------------------------------------------}
-processCourse :: [Tag String] -> String
-processCourse tags =
-    let cleanTags = map cleanTag tags
-        title = find (~== TagText "") cleanTags
-        titleText = getTitleText title
-    in --[titleText]
-        --map getText cleanTags
-        titleText
-    where
-        getTitleText (Just (TagText s)) = replace "\160\160\160\160" " " s
-        cleanTag (TagText s) = TagText (replace "\r\n                   " " " s)
-        getText (TagText s) = s
