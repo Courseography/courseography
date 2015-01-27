@@ -14,6 +14,7 @@ styleFiles = [
     ("../style/common/common.css", common),
     ("../style/graph/graph_styles.css", graphStyles),
     ("../style/grid/timetable_styles.css", timetableStyles),
+    ("../style/draw/draw_styles.css", drawStyles),
     ("../style/common/about.css", aboutStyles)
     ]
 
@@ -25,6 +26,7 @@ generateCSS = do
     createDirectoryIfMissing True "../style/common"
     createDirectoryIfMissing True "../style/graph"
     createDirectoryIfMissing True "../style/grid"
+    createDirectoryIfMissing True "../style/draw"
     Prelude.foldl1 (>>) $ Prelude.map renderStyleFile styleFiles
 
 margin0 = margin nil nil nil nil
@@ -630,4 +632,43 @@ fceCountCSS = "#FCECountDiv" ? do
     "vertical-align" -: "middle"
     fontSize (em 1.35)
     alignCenter
+
+drawStyles = do
+    panelCSS
+    modeButtonsCSS
+    colourButtonsCSS
+    redCSS
+    greenCSS
+    blueCSS
+    purpleCSS
+
+panelCSS = "#mode-panel" ? do
+    height (px 500)
+    width (px 200)
+    backgroundColor $ parse "#008080"
+    float floatLeft
+
+modeButtonsCSS = ".mode" ? do
+    cursor pointer
+    width (px 25)
+    margin (px 5) (px 5) (px 5) (px 5)
+    padding 0 (px 155) 0 0
+
+colourButtonsCSS = ".colour" ? do
+    cursor pointer
+    width (px 100)
+    margin (px 5) (px 5) (px 5) (px 5)
+    alignCenter
+
+redCSS = "#red" ? do
+    backgroundColor red3
+    
+greenCSS = "#green"? do
+    backgroundColor $ parse "#2E8B57"
+
+blueCSS = "#blue"? do
+    backgroundColor blue3
+
+purpleCSS = "#purple"? do
+    backgroundColor purple1
 
