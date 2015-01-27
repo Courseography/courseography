@@ -76,7 +76,6 @@ postFB = "post-fb"
 
 main :: IO ()
 main = do
-    print "Server is ready. . ."
     cwd <- getCurrentDirectory
     let staticDir = encodeString $ parent $ decodeString cwd
     simpleHTTP nullConf $
