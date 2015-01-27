@@ -9,6 +9,7 @@ import qualified Data.ByteString.Lazy.Char8 as BSL
 import qualified Data.ByteString.Char8 as BS
 import Control.Monad    (msum)
 import Network.HTTP.Conduit (withManager)
+import Data.Conduit
 import Happstack.Server
 import GridResponse
 import GraphResponse
@@ -75,6 +76,7 @@ postFB = "post-fb"
 
 main :: IO ()
 main = do
+    print "Server is ready. . ."
     cwd <- getCurrentDirectory
     let staticDir = encodeString $ parent $ decodeString cwd
     simpleHTTP nullConf $
@@ -96,7 +98,7 @@ args2 :: FB.Argument
 args2 = ("message", "Test post please ignore")
 
 performPost :: String -> IO Response
-performPost code = withManager $ \manager -> FB.runFacebookT app manager $ do
+performPost code = performFBAction $ do
         postToFB code =<< getToken url2 code
         return $ toResponse postFB
 
@@ -206,9 +208,9 @@ args code = ("code", BS.pack code)
 
 -- | Retrieves the user's email.
 retrieveFBData :: String -> IO Response
-retrieveFBData code = withManager $ \manager -> FB.runFacebookT app manager $ do
+retrieveFBData code = performFBAction $ do
         token <- getToken url code
-        user <- FB.getUser "me" [] token
+        user <- FB.getUser "me" [] (Just token)
         liftIO $ insertIdIntoDb (FB.userId user)
         return $ toResponse (FB.userEmail user)
 
@@ -219,3 +221,6 @@ insertIdIntoDb id_ = runSqlite fbdbStr $ do
                        liftIO $ print "Inserted..."
                        let sql = "SELECT * FROM facebook_test"
                        rawQuery sql [] $$ CL.mapM_ (liftIO . print)
+
+performFBAction :: FB.FacebookT FB.Auth (ResourceT IO) a -> IO a
+performFBAction action = withManager $ \manager -> FB.runFacebookT app manager action
