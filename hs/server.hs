@@ -1,4 +1,7 @@
-{-# LANGUAGE OverloadedStrings, ScopedTypeVariables, FlexibleInstances #-}
+{-# LANGUAGE OverloadedStrings,
+             ScopedTypeVariables,
+             FlexibleInstances,
+             FlexibleContexts #-}
 
 module Main where
 import qualified Data.Text as T
