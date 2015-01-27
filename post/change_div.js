@@ -1,8 +1,7 @@
-$(document).ready(function() {
+$(document).ready(function () {
     'use-strict';
 	
-    $('#div_specialist, #div_major, #div_minor').hide();
-    $('.reqs').hide();
+    resetAttributes();
 });
 
 
@@ -10,49 +9,37 @@ $('#specialist').click(function (e) {
     'use-strict';
 	
     e.preventDefault();
-    $('#div_specialist, #div_major, #div_minor').hide();
-    $('.reqs').hide();
+    resetAttributes();
     $('#div_specialist').show();
+    $('#specialist').css('background-color', '#9C9C9C');	
 });
-	
-	
+
+
 $('#major').click(function (e) {
     'use-strict';
 	
     e.preventDefault();
-    $('#div_specialist, #div_major, #div_minor').hide();
-    $('.reqs').hide();
+    resetAttributes();
     $('#div_major').show();
+    $('#major').css('background-color', '#9C9C9C');
 });
-	
-	
+
+
 $('#minor').click (function (e) {
-    'user-strict';
+    'use-strict';
 	
     e.preventDefault();
-    $('#div_specialist, #div_major, #div_minor').hide();
-    $('.reqs').hide();
+    resetAttributes();
     $('#div_minor').show();
+    $('#minor').css('background-color', '#9C9C9C');
 });
 
-
-$('.csc').click (function (e) {
-    'use-strict';
-
-    e.preventDefault();
-    $('.reqs').hide();
-    if ($(this).parent().parent().parent().attr('id') == 'div_specialist') {
-        $('#specialist_csc').show();
-    }
-});
-
-
-$('.mat').click (function (e) {
-    'use-strict';
-
-    e.preventDefault();
-    $('.reqs').hide();
-    if ($(this).parent().parent().parent().attr('id') == 'div_specialist') {
-        $('#specialist_mat').show();
-    }
-});
+/**
+    Hides all currently open divs and resets navbar to display none of the links as clicked.
+**/
+function resetAttributes() {
+    document.getElementById('div_specialist').style.display = 'none';
+    document.getElementById('div_major').style.display = 'none';
+    document.getElementById('div_minor').style.display = 'none';
+    $('#specialist, #major, #minor').css('background-color', 'white');
+};
