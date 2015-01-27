@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function () {
     'use-strict';
 	
     resetAttributes();
@@ -26,7 +26,7 @@ $('#major').click(function (e) {
 
 
 $('#minor').click (function (e) {
-    'user-strict';
+    'use-strict';
 	
     e.preventDefault();
     resetAttributes();
