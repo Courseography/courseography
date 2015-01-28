@@ -37,6 +37,8 @@ url2 = "http://localhost:8000/test-post"
 perms :: [FB.Permission]
 perms = []
 
+-- | Constructs the Facebook authorization URL. This method does not actually
+-- interact with Facebook.
 retrieveAuthURL :: T.Text -> IO String
 retrieveAuthURL url = withManager $ \manager -> FB.runFacebookT app manager $ do
         fbAuthUrl <- FB.getUserAccessTokenStep1 url perms
@@ -55,6 +57,7 @@ retrieveFBData code = performFBAction $ do
         liftIO $ insertIdIntoDb (FB.userId user)
         return $ toResponse (FB.userEmail user)
 
+-- | Inserts a string into the database along with the current user's Facebook ID.
 insertIdIntoDb :: FB.Id -> IO ()
 insertIdIntoDb id_ = runSqlite fbdbStr $ do
                        runMigration migrateAll
@@ -63,12 +66,16 @@ insertIdIntoDb id_ = runSqlite fbdbStr $ do
                        let sql = "SELECT * FROM facebook_test"
                        rawQuery sql [] $$ CL.mapM_ (liftIO . print)
 
+-- | Performs a Facebook action.
 performFBAction :: FB.FacebookT FB.Auth (ResourceT IO) a -> IO a
 performFBAction action = withManager $ \manager -> FB.runFacebookT app manager action
 
+-- | Posts a message to the user's Facebook feed, with the code 'code'. GraphResponse
+-- is then sent back to the user.
 postToFacebook :: String -> ServerPart Response
 postToFacebook code = (liftIO $ performPost code) >> graphResponse
 
+-- | Performs the posting to facebook.
 performPost :: String -> IO Response
 performPost code = performFBAction $ do
         postToFB code =<< getToken url2 code
