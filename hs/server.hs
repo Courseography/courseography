@@ -14,6 +14,7 @@ import GridResponse
 import GraphResponse
 import AboutResponse
 import JsonParser
+import ConvertSVGToPNG
 import CourseographyFacebook
 import qualified Data.Conduit.List as CL
 import Tables
@@ -55,6 +56,8 @@ post = "post-fb"
 
 main :: IO ()
 main = do
+    convertSVGToPNG
+    print "Worked"
     cwd <- getCurrentDirectory
     let staticDir = encodeString $ parent $ decodeString cwd
     redirectUrlGraphEmail <- retrieveAuthURL url1
@@ -63,7 +66,7 @@ main = do
       msum [ dir grid $ gridResponse,
              dir graph $ graphResponse,
              dir code $ seeOther redirectUrlGraphEmail $ toResponse post,
-             dir post $ seeOther redirectUrlGraphPost $ toResponse test,
+             dir post $ seeOther test $ toResponse test,
              dir test $ look "code" >>= getEmail,
              dir testPost $ look "code" >>= postToFacebook,
              dir about $ aboutResponse,
