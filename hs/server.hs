@@ -1,14 +1,12 @@
 {-# LANGUAGE OverloadedStrings,
              ScopedTypeVariables,
-             FlexibleInstances,
-             FlexibleContexts #-}
+             FlexibleInstances #-}
 
 module Main where
 import qualified Data.Text as T
 import qualified Data.ByteString.Lazy.Char8 as BSL
 import qualified Data.ByteString.Char8 as BS
 import Control.Monad    (msum)
-import Network.HTTP.Conduit (withManager)
 import Data.Conduit
 import Happstack.Server
 import GridResponse
@@ -17,7 +15,6 @@ import AboutResponse
 import JsonParser
 import CourseographyFacebook
 import qualified Data.Conduit.List as CL
-import Control.Monad.Trans.Resource
 import Tables
 import qualified Data.Aeson as Aeson
 import Control.Monad.IO.Class  (liftIO)
