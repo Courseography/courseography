@@ -3,6 +3,7 @@ module CourseographyFacebook where
 
 import qualified Facebook as FB
 import Control.Monad.IO.Class  (liftIO)
+import qualified Data.Text as T
 import Happstack.Server
 import Network.HTTP.Conduit (withManager)
 import Control.Monad.Trans.Resource
@@ -27,14 +28,19 @@ postFB = "post-fb"
 app :: FB.Credentials
 app = FB.Credentials "localhost" "442286309258193" "INSERT_SECRET"
 
-url :: FB.RedirectUrl
-url = "http://localhost:8000/test"
+url1 :: FB.RedirectUrl
+url1 = "http://localhost:8000/test"
 
 url2 :: FB.RedirectUrl
 url2 = "http://localhost:8000/test-post"
 
 perms :: [FB.Permission]
 perms = []
+
+retrieveAuthURL :: T.Text -> IO String
+retrieveAuthURL url = withManager $ \manager -> FB.runFacebookT app manager $ do
+        fbAuthUrl <- FB.getUserAccessTokenStep1 url perms
+        return $ T.unpack fbAuthUrl
 
 -- | The arguments passed to the API. The first argument is the key of the query data ('code')
 -- and the second argument is the code that was retrieved in the first authorization step.
@@ -44,7 +50,7 @@ args arg1 arg2 = (BS.pack arg1, BS.pack arg2)
 -- | Retrieves the user's email.
 retrieveFBData :: String -> IO Response
 retrieveFBData code = performFBAction $ do
-        token <- getToken url code
+        token <- getToken url1 code
         user <- FB.getUser "me" [] (Just token)
         liftIO $ insertIdIntoDb (FB.userId user)
         return $ toResponse (FB.userEmail user)
@@ -79,9 +85,3 @@ postToFB code token = FB.postObject "me/feed" [args "message" "Test Post Pls Ign
 -- | Gets a users Facebook email.
 getEmail :: String -> ServerPart Response
 getEmail code = liftIO $ retrieveFBData code
-
-fbAuth1Url :: String
-fbAuth1Url = "https://www.facebook.com/dialog/oauth?client_id=442286309258193&redirect_uri=http://localhost:8000/test&scope=user_birthday"
-
-fbAuth1UrlPost :: String
-fbAuth1UrlPost = "https://www.facebook.com/dialog/oauth?client_id=442286309258193&redirect_uri=http://localhost:8000/test-post"

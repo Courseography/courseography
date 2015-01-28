@@ -1,6 +1,7 @@
 {-# LANGUAGE OverloadedStrings,
              ScopedTypeVariables,
-             FlexibleInstances #-}
+             FlexibleInstances,
+             FlexibleContexts #-}
 
 module Main where
 import qualified Data.Text as T
@@ -56,16 +57,18 @@ main :: IO ()
 main = do
     cwd <- getCurrentDirectory
     let staticDir = encodeString $ parent $ decodeString cwd
+    redirectUrlGraphEmail <- retrieveAuthURL url1
+    redirectUrlGraphPost <- retrieveAuthURL url2
     simpleHTTP nullConf $
       msum [ dir grid $ gridResponse,
              dir graph $ graphResponse,
-             dir code $ seeOther fbAuth1Url $ toResponse test,
+             dir code $ seeOther redirectUrlGraphEmail $ toResponse post,
+             dir post $ seeOther redirectUrlGraphPost $ toResponse test,
              dir test $ look "code" >>= getEmail,
              dir testPost $ look "code" >>= postToFacebook,
              dir about $ aboutResponse,
              dir static $ serveDirectory EnableBrowsing [] staticDir,
-             dir course $ path (\s -> liftIO $ queryCourse s),
-             dir post $ seeOther fbAuth1UrlPost $ toResponse test
+             dir course $ path (\s -> liftIO $ queryCourse s)
            ]
 
 -- | Queries the database for all information about `course`, constructs a JSON object 
