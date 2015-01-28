@@ -40,7 +40,8 @@ perms = []
 -- | Constructs the Facebook authorization URL. This method does not actually
 -- interact with Facebook.
 retrieveAuthURL :: T.Text -> IO String
-retrieveAuthURL url = withManager $ \manager -> FB.runFacebookT app manager $ do
+retrieveAuthURL url = 
+	withManager $ \manager -> FB.runFacebookT app manager $ do
         fbAuthUrl <- FB.getUserAccessTokenStep1 url perms
         return $ T.unpack fbAuthUrl
 
@@ -51,7 +52,8 @@ args arg1 arg2 = (BS.pack arg1, BS.pack arg2)
 
 -- | Retrieves the user's email.
 retrieveFBData :: String -> IO Response
-retrieveFBData code = performFBAction $ do
+retrieveFBData code = 
+	performFBAction $ do
         token <- getToken url1 code
         user <- FB.getUser "me" [] (Just token)
         liftIO $ insertIdIntoDb (FB.userId user)
@@ -59,12 +61,13 @@ retrieveFBData code = performFBAction $ do
 
 -- | Inserts a string into the database along with the current user's Facebook ID.
 insertIdIntoDb :: FB.Id -> IO ()
-insertIdIntoDb id_ = runSqlite fbdbStr $ do
-                       runMigration migrateAll
-                       insert_ $ FacebookTest (show id_) "Test String"
-                       liftIO $ print "Inserted..."
-                       let sql = "SELECT * FROM facebook_test"
-                       rawQuery sql [] $$ CL.mapM_ (liftIO . print)
+insertIdIntoDb id_ = 
+	runSqlite fbdbStr $ do
+        runMigration migrateAll
+        insert_ $ FacebookTest (show id_) "Test String"
+        liftIO $ print "Inserted..."
+        let sql = "SELECT * FROM facebook_test"
+        rawQuery sql [] $$ CL.mapM_ (liftIO . print)
 
 -- | Performs a Facebook action.
 performFBAction :: FB.FacebookT FB.Auth (ResourceT IO) a -> IO a
@@ -77,7 +80,8 @@ postToFacebook code = (liftIO $ performPost code) >> graphResponse
 
 -- | Performs the posting to facebook.
 performPost :: String -> IO Response
-performPost code = performFBAction $ do
+performPost code = 
+	performFBAction $ do
         postToFB code =<< getToken url2 code
         return $ toResponse postFB
 
