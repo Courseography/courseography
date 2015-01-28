@@ -30,8 +30,6 @@ checkPost =  do
         H.head $ do
             H.title "Check My Post!"
             H.link ! A.rel "stylesheet" ! A.type_ "text/css" ! A.href "post_styles.css"
-            H.script ! A.src "http://code.jquery.com/ui/1.10.4/jquery-ui.js" $ mempty
-            H.script ! A.src "http://code.jquery.com/jquery-1.10.2.js" $ mempty
         H.nav ! A.id "posts" $ H.ul $ do
             H.li ! A.id "specialist" $ do
                 H.a ! A.href "" $ "Specialist"
@@ -233,6 +231,5 @@ checkPost =  do
                 ","
                 "CSC263H/CSC265H"
                 "(1.5 FCEs)"
-        H.script ! A.src "change_div.js" $ mempty
 
                    
