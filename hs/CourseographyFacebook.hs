@@ -18,7 +18,6 @@ import Database.Persist.Sqlite
 postFB :: String
 postFB = "post-fb"
 
-
 -- In order to access information as the Courseography application, the secret needs
 -- to be declared in the third string below that has the place holder 'INSERT_SECRET'.
 -- The secret should NEVER be committed to GitHub.
@@ -39,8 +38,8 @@ perms = []
 
 -- | The arguments passed to the API. The first argument is the key of the query data ('code')
 -- and the second argument is the code that was retrieved in the first authorization step.
-args :: String -> FB.Argument
-args code = ("code", BS.pack code)
+args :: String -> String -> FB.Argument
+args arg1 arg2 = (BS.pack arg1, BS.pack arg2)
 
 -- | Retrieves the user's email.
 retrieveFBData :: String -> IO Response
@@ -64,9 +63,6 @@ performFBAction action = withManager $ \manager -> FB.runFacebookT app manager a
 postToFacebook :: String -> ServerPart Response
 postToFacebook code = (liftIO $ performPost code) >> graphResponse
 
-args2 :: FB.Argument
-args2 = ("message", "Test post please ignore")
-
 performPost :: String -> IO Response
 performPost code = performFBAction $ do
         postToFB code =<< getToken url2 code
@@ -74,11 +70,11 @@ performPost code = performFBAction $ do
 
 -- | Gets a user access token.
 getToken :: (MonadResource m, MonadBaseControl IO m) => FB.RedirectUrl -> String -> FB.FacebookT FB.Auth m FB.UserAccessToken
-getToken url code = FB.getUserAccessTokenStep2 url [args code]
+getToken url code = FB.getUserAccessTokenStep2 url [args "code" code]
 
 -- | Posts a message to Facebook.
 postToFB :: (MonadResource m, MonadBaseControl IO m) => String -> FB.UserAccessToken -> FB.FacebookT FB.Auth m FB.Id
-postToFB code token = FB.postObject "me/feed" [args2] token
+postToFB code token = FB.postObject "me/feed" [args "message" "Test Post Pls Ignore"] token
 
 -- | Gets a users Facebook email.
 getEmail :: String -> ServerPart Response
