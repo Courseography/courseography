@@ -12,6 +12,7 @@
 module JsonParser where
 
 import qualified Data.ByteString.Lazy as B
+import qualified Data.ByteString.Lazy.Char8 as BSL
 import qualified Data.Vector as V
 import qualified Data.Text as T
 import qualified Data.Conduit.List as CL
@@ -139,3 +140,7 @@ getDistributionRequirement reqString
     | (T.isInfixOf "This is a Social Science course" reqString) = 2
     | (T.isInfixOf "This is a Humanities course" reqString) = 1
     | otherwise = 6
+
+-- | Encodes an Aeson Value into a ByteString.
+encodeJSON :: Value -> BSL.ByteString
+encodeJSON json = BSL.filter (\c -> c /= '\\') $ encode json
