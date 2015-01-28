@@ -45,3 +45,7 @@ timetableScripts = do jQuery
                                                 "static/js/common/objects/course.js",
                                                 "static/js/common/objects/section.js",
                                                 "static/js/common/utilities/util.js"])
+postScripts :: H.Html
+postScripts = concatHtml (map makeScript ["http://code.jquery.com/jquery-1.10.2.js",
+                                          "http://code.jquery.com/ui/1.10.4/jquery-ui.js",
+                                          "static/post/change_div.js"])
