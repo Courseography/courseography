@@ -91,6 +91,11 @@ function appendTableRows(timetableTableFall, timetableTableSpring) {
         appendTableData(trFall, trSpring, i);
         timetableTableSpring.append(trSpring);
         timetableTableFall.append(trFall);
+        trFall = $('<tr></tr>');
+        trSpring = $('<tr></tr>');
+        appendTableData(trFall, trSpring, i + 0.5);
+        timetableTableSpring.append(trSpring);
+        timetableTableFall.append(trFall);
     }
 }
 
@@ -106,7 +111,12 @@ function appendTableData(trFall, trSpring, time) {
 
     var weekPrefixArray = ["M", "T", "W", "R", "F"];
 
-    var adjustedTime = (time === 12 ? 12 : time % 12) + ':00';
+    if (time % 1 === 0) {
+        var adjustedTime = (time === 12 ? 12 : time % 12) + ':00';
+    } else {
+        var adjustedTime = '';
+    }
+
     trFall.append($("<td></td>").addClass("timetable-time").html(adjustedTime));
 
     for (var k = 0; k < 5; k++) {

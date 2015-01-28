@@ -17,6 +17,7 @@ main = do
     generateCSS
     cwd <- getCurrentDirectory
     let staticDir = encodeString $ parent $ decodeString cwd
+    contents <- readFile "../README.md"
     simpleHTTP nullConf $
       msum [ dir "grid" $ gridResponse,
              dir "graph" $ graphResponse,
