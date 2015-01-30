@@ -65,6 +65,24 @@ Distribution
     dId Int
     description String
     deriving Show
+
+Graphs
+    gId Int
+    title String
+    deriving Show
+
+Nodes
+    gId Int
+    xPos Float
+    yPos Float
+    colour String
+    text String
+    deriving Show
+
+Edge
+    gId Int
+    d String
+    deriving Show
 |]
 
 -- | A Lecture.
