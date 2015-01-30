@@ -9,10 +9,10 @@ function Section(times, course, id) {
     'use strict';
 
     this.id = id;
-    this.courseName = this.id.substring(0, 6);
     this.name = this.id.substring(9, 14);
-    this.session = this.id.substring(15, 16);
     this.type = this.name.charAt(0);
+    this.courseName = this.id.substring(0, 6) + " (" + this.type + ")";
+    this.session = this.id.substring(15, 16);
     this.course = course;
     this.times = times;
     this.clicked = false;
