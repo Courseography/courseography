@@ -73,8 +73,10 @@ Graphs
 
 Nodes
     gId Int
-    xPos Float
-    yPos Float
+    width Rational
+    height Rational
+    xPos Rational
+    yPos Rational
     colour String
     text String
     deriving Show
