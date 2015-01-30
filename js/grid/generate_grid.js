@@ -117,20 +117,78 @@ function appendTableData(trFall, trSpring, time) {
         var adjustedTime = '';
     }
 
-    trFall.append($("<td></td>").addClass("timetable-time").html(adjustedTime));
-
-    for (var k = 0; k < 5; k++) {
+    if (time < 9 || time >= 17) {
         trFall.append($("<td></td>")
-            .attr("id", weekPrefixArray[k] + time + "F")
-            .attr('in-conflict', 'false')
-            .attr("satisfied", "true")
-            .addClass("timetable-cell"));
-        trSpring.append($("<td></td>")
-            .attr("id", weekPrefixArray[k] + time + "S")
-            .attr('in-conflict', 'false')
-            .attr("satisfied", "true")
-            .addClass("timetable-cell"));
+            .attr("hidden", "true")
+            .addClass("timetable-time")
+            .html(adjustedTime));
+    } else {
+        trFall.append($("<td></td>").addClass("timetable-time").html(adjustedTime));
     }
 
-    trSpring.append($("<td></td>").addClass("timetable-time").html(adjustedTime));
+    if (time % 1 === 0) {
+
+        for (var k = 0; k < 5; k++) {
+
+            if (time < 9 || time >= 17) {
+                trFall.append($("<td></td>")
+                    .attr("id", weekPrefixArray[k] + time + "F")
+                    .attr('in-conflict', 'false')
+                    .attr("satisfied", "true")
+                    .attr("rowspan", "2")
+                    .attr("hidden", "true")
+                    .addClass("timetable-cell"));
+                trSpring.append($("<td></td>")
+                    .attr("id", weekPrefixArray[k] + time + "S")
+                    .attr('in-conflict', 'false')
+                    .attr("satisfied", "true")
+                    .attr("rowspan", "2")
+                    .attr("hidden", "true")
+                    .addClass("timetable-cell"));
+
+            } else {
+                trFall.append($("<td></td>")
+                    .attr("id", weekPrefixArray[k] + time + "F")
+                    .attr('in-conflict', 'false')
+                    .attr("satisfied", "true")
+                    .attr("rowspan", "2")
+                    .addClass("timetable-cell"));
+                trSpring.append($("<td></td>")
+                    .attr("id", weekPrefixArray[k] + time + "S")
+                    .attr('in-conflict', 'false')
+                    .attr("satisfied", "true")
+                    .attr("rowspan", "2")
+                    .addClass("timetable-cell"));
+            }
+
+        }
+
+    } else {
+
+        for (var k = 0; k < 5; k++) {
+            trFall.append($("<td></td>")
+                .attr("id", weekPrefixArray[k] + time + "F")
+                .attr('in-conflict', 'false')
+                .attr("satisfied", "true")
+                .attr("hidden", "true")
+                .addClass("timetable-cell"));
+            trSpring.append($("<td></td>")
+                .attr("id", weekPrefixArray[k] + time + "S")
+                .attr('in-conflict', 'false')
+                .attr("satisfied", "true")
+                .attr("hidden", "true")
+                .addClass("timetable-cell"));
+        }
+        
+    }
+
+    if (time < 9 || time >= 17) {
+        trSpring.append($("<td></td>")
+            .attr("hidden", "true")
+            .addClass("timetable-time")
+            .html(adjustedTime));
+    } else {
+        trSpring.append($("<td></td>").addClass("timetable-time").html(adjustedTime));
+    }
+    
 }
