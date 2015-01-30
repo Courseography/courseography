@@ -22,6 +22,10 @@ import Control.Applicative
 data Time = Time { timeField :: [Int] } deriving (Show, Read, Eq)
 derivePersistField "Time"
 
+
+data Point = Point { point :: (Rational, Rational)} deriving (Show, Read, Eq)
+derivePersistField "Point"
+
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 Courses json
     code T.Text
@@ -83,13 +87,14 @@ Rects
 
 Texts
     gId Int
-    rId Int
-    yPos Rational
+    rId Int Maybe
+    yPos Rational Maybe
+    xPos Rational Maybe
     text String
 
 Paths
     gId Int
-    d String
+    d [Point]
     deriving Show
 |]
 
