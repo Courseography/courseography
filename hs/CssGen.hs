@@ -591,9 +591,9 @@ tdColours = ".timetable " ?  do
     td # ("in-conflict" *= "false") # ("satisfied" *= "true") # ("type" *= "L") ? do
             backgroundColor blue3
     td # ("in-conflict" *= "false") # ("satisfied" *= "true") # ("type" *= "T") ? do
-            backgroundColor teal1
+            backgroundColor blue3
     td # ("in-conflict" *= "false") # ("satisfied" *= "true") # ("type" *= "P") ? do
-            backgroundColor orange1
+            backgroundColor blue3
 
 
 teal1 = parse "#737A99"
