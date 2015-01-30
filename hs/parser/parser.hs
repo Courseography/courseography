@@ -44,33 +44,3 @@ getAttrVal ((a,b)) = show b
 convertAttributeToTuple :: Attribute -> (String, String)
 convertAttributeToTuple at = (getAttrName at, getAttrVal at)
 
-Graphs
-    gId Int
-    title String
-    deriving Show
-
-Nodes
-    gId Int
-    width Rational
-    height Rational
-    xPos Rational
-    yPos Rational
-    colour String
-    text String
-    deriving Show
-
-Edge
-    gId Int
-    d String
-
-data Lecture =
-    Lecture { extra :: Int,
-              section :: T.Text,
-              cap :: Int,
-              time_str :: T.Text,
-              time :: [[Int]],
-              instructor :: T.Text,
-              enrol :: Maybe Int,
-              wait :: Maybe Int
-            } deriving Show
-
