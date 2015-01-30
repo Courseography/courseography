@@ -14,19 +14,32 @@ main = do x <- readFile "../../res/graphs/graph_regions.svg"
           let at = AttValue $ [Left "913.45227"]
           let y = xmlParse "output.error" x
           let a = attrval (N "x", at)
-          let z = deep $ tag "text"
+          let z = deep $ tag "rect"
           let svg = tag "svg"
-          let c = head $ map contentElem $ parseContent z y
-          print $ map tagTextContent $ parseContent z y
-          print $ getName c
-          print $ map (\x -> map convertAttributeToTuple x) $ map getAttrs $ map contentElem $ parseContent z y
-          print $ map convertAttributeToTuple $ getAttrs c 
-          print $ map convertAttributeToTuple $ getAttrs $ head $ map contentElem $ parseContent svg y
+          let ch = path [children]
+          let c = head $ map contentElem $ parseDocument z y
+          --print $ map tagTextContent $ parseDocument z y
+          --print $ getName c
+          --print $ map (\x -> map convertAttributeToTuple x) $ map getAttrs $ map contentElem $ parseDocument z y
+          --print $ map convertAttributeToTuple $ getAttrs c 
+          --print $ map convertAttributeToTuple $ getAttrs $ head $ map contentElem $ parseDocument svg y
+          --print $ parseDocument ch y
+          print $ map (\x -> parseContent (tag "path") x) $ parseDocument ch y
+          print $ getRoot y
+
+getRoot :: Document i -> Content i
+getRoot doc = head $ parseDocument (tag "svg") doc
+
+filterAttrVal :: [Attribute] -> String -> String
+filterAttrVal attrs attrName = snd $ head $ filter (\x -> snd x == attrName) $ map convertAttributeToTuple attrs
 
 -- | Applys a CFilter to a Document and produces a list of the Content filtered 
 -- by the CFilter.
-parseContent :: CFilter i -> Document i -> [Content i]
-parseContent filter (Document p s e m) = filter (CElem e undefined)
+parseDocument :: CFilter i -> Document i -> [Content i]
+parseDocument filter (Document p s e m) = filter (CElem e undefined)
+
+parseContent :: CFilter i -> Content i -> [Content i]
+parseContent filter cont = filter cont 
 
 -- | Gets the tag name of an Element.
 getName :: Element s -> String
@@ -52,7 +65,7 @@ data Graph =
     Graph { 
             gId :: Int,
             title :: String
-          } deriving Show
+          } deriving (Show)
 
 data Rect =
     Rect {
@@ -62,7 +75,7 @@ data Rect =
            xPos :: Rational,
            yPos :: Rational,
            colour :: String
-         } deriving Show
+         } deriving (Show)
 
 data Text =
     Text {}
