@@ -588,8 +588,10 @@ tdColours = ".timetable " ?  do
             backgroundColor red3
             ":hover" & do
                 backgroundColor red4
-    td # ("in-conflict" *= "false") # ("satisfied" *= "true") # ("clicked" *= "true") ? do
-            backgroundColor blue3
+    td # ("in-conflict" *= "false") # ("satisfied" *= "true") ? do
+        backgroundColor blue3
+        ":empty" & do
+            backgroundColor white
             
 
 teal1 = parse "#737A99"
