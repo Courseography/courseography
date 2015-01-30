@@ -124,12 +124,6 @@ function appendTableData(trFall, trSpring, time) {
             .attr("id", weekPrefixArray[k] + time + "F")
             .attr('in-conflict', 'false')
             .attr("satisfied", "true")
-            if (adjustedTime === '') {
-                .attr("hidden", "true")
-            } else {
-                .attr("rowspan", "2")
-                .attr("hidden", "false")
-            }
             .addClass("timetable-cell"));
         trSpring.append($("<td></td>")
             .attr("id", weekPrefixArray[k] + time + "S")
