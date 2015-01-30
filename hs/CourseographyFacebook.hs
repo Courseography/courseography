@@ -5,16 +5,22 @@ import qualified Facebook as FB
 import Control.Monad.IO.Class  (liftIO)
 import qualified Data.Text as T
 import Happstack.Server
-import Network.HTTP.Conduit (withManager)
+import Happstack.Server.Internal.Multipart
+import Network.HTTP.Conduit (withManager, parseUrl, httpLbs, RequestBody(..))
 import Control.Monad.Trans.Resource
 import qualified Data.Conduit.List as CL
 import Data.Conduit
+import Data.Text.Encoding as TE
 import Database.Persist
 import JsonParser
 import GraphResponse
+import Data.Maybe
 import Tables
+import Text.Digestive.Form as TEF
 import qualified Data.ByteString.Char8 as BS
+import qualified Data.ByteString.Lazy as BL
 import Database.Persist.Sqlite
+import Network.HTTP.Client.MultipartFormData
 
 postFB :: String
 postFB = "post-fb"
@@ -26,7 +32,7 @@ postFB = "post-fb"
 -- Should the secret be committed to GitHub, it needs to be reset immediately. If you find
 -- yourself in this pickle, please contact someone who can do this.
 app :: FB.Credentials
-app = FB.Credentials "localhost" "442286309258193" "INSERT_SECRET"
+app = FB.Credentials "localhost" "442286309258193" "2f29d40c58ac8d987004f967660a64db"
 
 url1 :: FB.RedirectUrl
 url1 = "http://localhost:8000/test"
@@ -80,19 +86,28 @@ postToFacebook code = (liftIO $ performPost code) >> graphResponse
 
 -- | Performs the posting to facebook.
 performPost :: String -> IO Response
-performPost code = 
+performPost code = do
+	x <- BS.readFile "test.png"
+	--let y = show $ BodyPart "source" x
 	performFBAction $ do
-        postToFB code =<< getToken url2 code
+        postToFB (BS.unpack x) code =<< getToken url2 code
         return $ toResponse postFB
-
+    
 -- | Gets a user access token.
 getToken :: (MonadResource m, MonadBaseControl IO m) => FB.RedirectUrl -> String -> FB.FacebookT FB.Auth m FB.UserAccessToken
 getToken url code = FB.getUserAccessTokenStep2 url [args "code" code]
 
 -- | Posts a message to Facebook.
-postToFB :: (MonadResource m, MonadBaseControl IO m) => String -> FB.UserAccessToken -> FB.FacebookT FB.Auth m FB.Id
-postToFB code token = FB.postObject "me/feed" [args "message" "Test Post Pls Ignore"] token
+postToFB :: (MonadResource m, MonadBaseControl IO m) => String -> String -> FB.UserAccessToken -> FB.FacebookT FB.Auth m FB.Id
+postToFB dataString code token = FB.postObject "me/photos" [args "message" "Test Post Pls Ignore",
+                                                            args "source" $ cd dataString] token
 
 -- | Gets a users Facebook email.
 getEmail :: String -> ServerPart Response
 getEmail code = liftIO $ retrieveFBData code
+
+
+cd :: String -> String
+cd s = "------ThisIsTheBoundary1234567890\r\n" ++ 
+       "Content-Disposition: form-data; name=\"source\"; filename=\"@test.png\"\r\n'" ++
+       "Content-Type: image/png\r\n\r\n" ++  s ++ "\r\n------ThisIsTheBoundary1234567890--\r\n"

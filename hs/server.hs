@@ -20,6 +20,7 @@ import qualified Data.Conduit.List as CL
 import Tables
 import qualified Data.Aeson as Aeson
 import Control.Monad.IO.Class  (liftIO)
+import Control.Concurrent.MVar
 
 import Database.Persist
 import Data.Conduit (($$))
@@ -63,10 +64,11 @@ main = do
     redirectUrlGraphEmail <- retrieveAuthURL url1
     redirectUrlGraphPost <- retrieveAuthURL url2
     simpleHTTP nullConf $
-      msum [ dir grid $ gridResponse,
+      msum [ dir "form" $ reqExample,
+             dir grid $ gridResponse,
              dir graph $ graphResponse,
              dir code $ seeOther redirectUrlGraphEmail $ toResponse post,
-             dir post $ seeOther test $ toResponse test,
+             dir post $ seeOther redirectUrlGraphPost $ toResponse test,
              dir test $ look "code" >>= getEmail,
              dir testPost $ look "code" >>= postToFacebook,
              dir about $ aboutResponse,
@@ -151,6 +153,15 @@ buildSession :: [Entity Lectures] -> [Entity Tutorials] -> Maybe Tables.Session
 buildSession lectures tutorials = Just $ Tables.Session (map buildLecture (map entityVal lectures))
                                                         (map buildTutorial (map entityVal tutorials))
 
+myPolicy :: BodyPolicy
+myPolicy = (defaultBodyPolicy "/tmp/" 0 1000 1000)
+
 -- | Creates a JSON response.
 createJSONResponse :: BSL.ByteString -> Response
 createJSONResponse jsonStr = toResponseBS (BS.pack "application/json") jsonStr
+
+reqExample :: ServerPartT IO Response
+reqExample = do req <- askRq
+                --nex <- ok $ takeMVar (rqBody req)
+                reqf <- decodeBody myPolicy
+                ok $ toResponse $ show $ reqf
