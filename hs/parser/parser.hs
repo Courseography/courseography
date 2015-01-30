@@ -19,10 +19,26 @@ main = do x <- readFile "../../res/graphs/graph_regions.svg"
           print $ parseContent z y
           print $ map tagTextContent $ parseContent z y
           print $ getName c
+          print $ map convertAttributeToTuple $ getAttrs c
 
 -- | I took this from onContent, and modified it quite a bit.
 parseContent :: CFilter i -> Document i -> [Content i]
 parseContent filter (Document p s e m) = filter (CElem e undefined)
 
-getName :: Element s -> QName
-getName (Elem a _ _) = a
+getName :: Element s -> String
+getName (Elem a _ _) = printableName a
+
+getAttrs :: Element s -> [Attribute]
+getAttrs (Elem a b _) = b
+
+getAttrVals :: Element s -> [Attribute]
+getAttrVals el = getAttrs el
+
+getAttrName :: Attribute -> String
+getAttrName ((a,b)) = printableName a 
+
+getAttrVal :: Attribute -> String
+getAttrVal ((a,b)) = show b
+
+convertAttributeToTuple :: Attribute -> (String, String)
+convertAttributeToTuple at = (getAttrName at, getAttrVal at)
