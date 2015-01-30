@@ -590,7 +590,7 @@ tdColours = ".timetable " ?  do
                 backgroundColor red4
     td # ("in-conflict" *= "false") # ("satisfied" *= "true") # ("clicked" *= "true") ? do
             backgroundColor blue3
-        
+            
 
 teal1 = parse "#737A99"
 orange1 = parse "#1E7FCC"
@@ -606,8 +606,6 @@ red2 = parse "#B91333"
 
 red3 = rgb 215 117 70
 red4 = rgb 195 97 50
-
-
 
 
 -- info layout
