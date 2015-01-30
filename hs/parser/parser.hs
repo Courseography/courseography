@@ -14,11 +14,12 @@ main = do x <- readFile "../../res/graphs/graph_regions.svg"
           let at = AttValue $ [Left "913.45227"]
           let y = xmlParse "output.error" x
           let a = attrval (N "x", at)
-          let z = deep $ a
+          let z = deep $ tag "text"
           let c = head $ map contentElem $ parseContent z y
-          print $ parseContent z y
+          --print $ parseContent z y
           print $ map tagTextContent $ parseContent z y
           print $ getName c
+          print $ map (\x -> map convertAttributeToTuple x) $ map getAttrs $ map contentElem $ parseContent z y
           print $ map convertAttributeToTuple $ getAttrs c
 
 -- | I took this from onContent, and modified it quite a bit.
@@ -42,3 +43,34 @@ getAttrVal ((a,b)) = show b
 
 convertAttributeToTuple :: Attribute -> (String, String)
 convertAttributeToTuple at = (getAttrName at, getAttrVal at)
+
+Graphs
+    gId Int
+    title String
+    deriving Show
+
+Nodes
+    gId Int
+    width Rational
+    height Rational
+    xPos Rational
+    yPos Rational
+    colour String
+    text String
+    deriving Show
+
+Edge
+    gId Int
+    d String
+
+data Lecture =
+    Lecture { extra :: Int,
+              section :: T.Text,
+              cap :: Int,
+              time_str :: T.Text,
+              time :: [[Int]],
+              instructor :: T.Text,
+              enrol :: Maybe Int,
+              wait :: Maybe Int
+            } deriving Show
+
