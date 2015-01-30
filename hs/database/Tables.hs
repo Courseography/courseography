@@ -71,17 +71,23 @@ Graphs
     title String
     deriving Show
 
-Nodes
+Rects
     gId Int
+    rId Int
     width Rational
     height Rational
     xPos Rational
     yPos Rational
     colour String
-    text String
     deriving Show
 
-Edge
+Texts
+    gId Int
+    rId Int
+    yPos Rational
+    text String
+
+Paths
     gId Int
     d String
     deriving Show
