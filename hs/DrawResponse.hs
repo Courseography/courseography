@@ -33,10 +33,9 @@ drawHtml = H.div ! A.id "aboutDiv" $ do
 modePanel :: H.Html
 modePanel = createTag H.div "mode-panel" "" $ do 
   createTag H.div "node-mode" "mode" "NODE"
-  createTag H.ul "colour-select" "" $ do
-    createTag H.li "red" "colour" "RED"
-    createTag H.li "green" "colour" "GREEN"
-    createTag H.li "blue" "colour" "BLUE"
-    createTag H.li "purple" "colour" "PURPLE"
+  createTag H.div "red" "colour" "RED"
+  createTag H.div "green" "colour" "GREEN"
+  createTag H.div "blue" "colour" "BLUE"
+  createTag H.div "purple" "colour" "PURPLE"
   createTag H.div "erase-mode" "mode" "ERASE" 
 

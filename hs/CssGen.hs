@@ -633,6 +633,7 @@ fceCountCSS = "#FCECountDiv" ? do
     fontSize (em 1.35)
     alignCenter
 
+
 drawStyles = do
     canvasCSS
     panelCSS
@@ -642,7 +643,6 @@ drawStyles = do
     greenCSS
     blueCSS
     purpleCSS
-    lists
 
 canvasCSS = "#mySVG" ? do
     height (pct 80)
@@ -655,19 +655,20 @@ panelCSS = "#mode-panel" ? do
     float floatLeft
 
 modeButtonsCSS = ".mode" ? do
-    width (px 25)
+    width (pct 90)
     margin (px 5) (px 5) (px 5) (px 5)
-    padding 0 (px 155) 0 0
+    padding 0 (px 155) 0 (px 5)
+    "border-radius" -: "10px"
     ":hover" & do
         fontWeight bold
         cursor pointer
         textDecoration underline
 
 colourButtonsCSS = ".colour" ? do
---    width (px 100)
- --   margin (px 5) (px 5) (px 5) (px 5)
-    margin0
+    width (pct 50)
+    margin (px 5) (px 5) (px 5) (px 5)
     padding0
+    "border-radius" -: "8px"
     alignCenter
     ":hover" & do
         fontWeight bold
@@ -677,7 +678,7 @@ colourButtonsCSS = ".colour" ? do
 redCSS = "#red" ? do
     backgroundColor red3
     
-greenCSS = "#green"? do
+greenCSS = "#green" ? do
     backgroundColor $ parse "#2E8B57"
 
 blueCSS = "#blue"? do
@@ -686,5 +687,3 @@ blueCSS = "#blue"? do
 purpleCSS = "#purple"? do
     backgroundColor purple1
 
-lists = li ? do
-    "list-style-type" -: "none"

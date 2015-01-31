@@ -5,6 +5,7 @@ var colours = {
      "blue":"#437699",
      "purple":"#46364A"
 };
+var nodeColourId = "red";
 var nodeColour = colours["red"];
 //var nodes = [];
 var mode = '';
@@ -72,23 +73,24 @@ function nodeSelected(elem) {
 }
 
 function changeMode(id) {
-    //if (mode !== '') {
-    //  oldMode = document.getElementById(mode);
-    //  oldMode.setAttribute('border', 'border: 2px solid #008080');
-    //}
+    if (mode !== '') {
+      oldMode = document.getElementById(mode);
+      oldMode.style.opacity = 1;
+      oldMode.style.background = "transparent";
+    }
     mode = id;
-    //newMode = document.getElementById(mode);
-    //newMode.setAttribute('border', 'border: 2px solid white');
+    newMode = document.getElementById(mode);
+    newMode.style.opacity = 0.5;
+    newMode.style.background = "white";
 }
 
 function changeColour(id) {
-    //if (mode !== '') {
-    //  oldColour = document.getElementById(nodeColour);
-    //  oldColour.setAttribute('border', 'border: 2px solid #008080');
-    //}
+    oldColour = document.getElementById(nodeColourId);
+    oldColour.style.opacity = 1;
+    nodeColourId = id;
     nodeColour = colours[id];
-    //newMode = document.getElementById(mode);
-    //newMode.setAttribute('border', 'border: 2px solid white');
+    newColour = document.getElementById(nodeColourId);
+    newColour.style.opacity = 0.5;
 }
 
 $('#node-mode').click(function () {
