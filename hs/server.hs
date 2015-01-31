@@ -57,8 +57,8 @@ main :: IO ()
 main = do
     cwd <- getCurrentDirectory
     let staticDir = encodeString $ parent $ decodeString cwd
-    redirectUrlGraphEmail <- retrieveAuthURL url1
-    redirectUrlGraphPost <- retrieveAuthURL url2
+    redirectUrlGraphEmail <- retrieveAuthURL testUrl
+    redirectUrlGraphPost <- retrieveAuthURL testPostUrl
     simpleHTTP nullConf $
       msum [ dir grid $ gridResponse,
              dir graph $ graphResponse,

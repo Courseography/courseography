@@ -16,8 +16,20 @@ import Tables
 import qualified Data.ByteString.Char8 as BS
 import Database.Persist.Sqlite
 
+courseographyUrl :: String
+courseographyUrl = "http://localhost:8000"
+
+testUrl :: FB.RedirectUrl
+testUrl = T.pack $ courseographyUrl ++ "/test"
+
+testPostUrl :: FB.RedirectUrl
+testPostUrl = T.pack $ courseographyUrl ++ "/test-post"
+
 postFB :: String
 postFB = "post-fb"
+
+appId :: T.Text
+appId = "442286309258193"
 
 -- In order to access information as the Courseography application, the secret needs
 -- to be declared in the third string below that has the place holder 'INSERT_SECRET'.
@@ -25,14 +37,11 @@ postFB = "post-fb"
 -- The secret can be found here: https://developers.facebook.com/apps/442286309258193/dashboard/
 -- Should the secret be committed to GitHub, it needs to be reset immediately. If you find
 -- yourself in this pickle, please contact someone who can do this.
-app :: FB.Credentials
-app = FB.Credentials "localhost" "442286309258193" "INSERT_SECRET"
+appSecret :: T.Text
+appSecret = "INSERT_SECRET"
 
-url1 :: FB.RedirectUrl
-url1 = "http://localhost:8000/test"
-
-url2 :: FB.RedirectUrl
-url2 = "http://localhost:8000/test-post"
+credentials :: FB.Credentials
+credentials = FB.Credentials (T.pack courseographyUrl) appId appSecret
 
 perms :: [FB.Permission]
 perms = []
@@ -41,7 +50,7 @@ perms = []
 -- interact with Facebook.
 retrieveAuthURL :: T.Text -> IO String
 retrieveAuthURL url = 
-	withManager $ \manager -> FB.runFacebookT app manager $ do
+	performFBAction $ do
         fbAuthUrl <- FB.getUserAccessTokenStep1 url perms
         return $ T.unpack fbAuthUrl
 
@@ -54,7 +63,7 @@ args arg1 arg2 = (BS.pack arg1, BS.pack arg2)
 retrieveFBData :: String -> IO Response
 retrieveFBData code = 
 	performFBAction $ do
-        token <- getToken url1 code
+        token <- getToken testUrl code
         user <- FB.getUser "me" [] (Just token)
         liftIO $ insertIdIntoDb (FB.userId user)
         return $ toResponse (FB.userEmail user)
@@ -71,7 +80,7 @@ insertIdIntoDb id_ =
 
 -- | Performs a Facebook action.
 performFBAction :: FB.FacebookT FB.Auth (ResourceT IO) a -> IO a
-performFBAction action = withManager $ \manager -> FB.runFacebookT app manager action
+performFBAction action = withManager $ \manager -> FB.runFacebookT credentials manager action
 
 -- | Posts a message to the user's Facebook feed, with the code 'code'. GraphResponse
 -- is then sent back to the user.
@@ -82,7 +91,7 @@ postToFacebook code = (liftIO $ performPost code) >> graphResponse
 performPost :: String -> IO Response
 performPost code = 
 	performFBAction $ do
-        postToFB code =<< getToken url2 code
+        postToFB code =<< getToken testPostUrl code
         return $ toResponse postFB
 
 -- | Gets a user access token.
@@ -93,6 +102,6 @@ getToken url code = FB.getUserAccessTokenStep2 url [args "code" code]
 postToFB :: (MonadResource m, MonadBaseControl IO m) => String -> FB.UserAccessToken -> FB.FacebookT FB.Auth m FB.Id
 postToFB code token = FB.postObject "me/feed" [args "message" "Test Post Pls Ignore"] token
 
--- | Gets a users Facebook email.
+-- | Gets a user's Facebook email.
 getEmail :: String -> ServerPart Response
 getEmail code = liftIO $ retrieveFBData code
