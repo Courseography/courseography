@@ -3,14 +3,32 @@ module ConvertSVGToPNG where
 import System.Process
 import GHC.IO.Handle.Types
 
-convertSVGToPNG :: IO
+convertSVGToPNG :: String -> String -> IO
                      (Maybe Handle,
                       Maybe Handle,
                       Maybe Handle,
                       ProcessHandle)
 
-convertSVGToPNG = createProcess $ CreateProcess
-                                  (ShellCommand "inkscape -z -e test.png -w 1024 -h 1024 ../res/graphs/graph_regions.svg")
+convertSVGToPNG inName outName = createProcess $ CreateProcess
+                                  (ShellCommand $ "inkscape -z -e " ++
+                                   inName ++
+                                   " -w 1024 -h 1024 " ++
+                                   outName)
+                                  Nothing
+                                  Nothing
+                                  Inherit
+                                  Inherit
+                                  Inherit
+                                  False
+                                  False
+removePNG :: String -> IO
+                     (Maybe Handle,
+                      Maybe Handle,
+                      Maybe Handle,
+                      ProcessHandle)
+
+removePNG name = createProcess $ CreateProcess
+                                  (ShellCommand $ "rm " ++ name)
                                   Nothing
                                   Nothing
                                   Inherit

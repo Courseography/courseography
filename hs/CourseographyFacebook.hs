@@ -94,7 +94,7 @@ performPost code = do
 	--let y = show $ BodyPart "source" x
 	performFBAction $ do
         liftIO createPNGFile
-        --postToFB (BS.unpack x) code =<< getToken url2 code
+        postToFB (BS.unpack x) code =<< getToken url2 code
         liftIO $ removePNG "test.png"
         liftIO $ print "File Deleted."
         return $ toResponse postFB
@@ -111,7 +111,7 @@ getToken url code = FB.getUserAccessTokenStep2 url [args "code" code]
 -- | Posts a message to Facebook.
 postToFB :: (MonadResource m, MonadBaseControl IO m) => String -> String -> FB.UserAccessToken -> FB.FacebookT FB.Auth m FB.Id
 postToFB dataString code token = FB.postObject "me/photos" [args "message" "Test Post Pls Ignore",
-                                                            args "url" $ "teststr"] token
+                                                            args "url" $ "http://localhost:8000/static/hs/test2.png"] token
 
 -- | Gets a users Facebook email.
 getEmail :: String -> ServerPart Response

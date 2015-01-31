@@ -14,7 +14,6 @@ import GridResponse
 import GraphResponse
 import AboutResponse
 import JsonParser
-import ConvertSVGToPNG
 import CourseographyFacebook
 import qualified Data.Conduit.List as CL
 import Tables
@@ -57,8 +56,7 @@ post = "post-fb"
 
 main :: IO ()
 main = do
-    convertSVGToPNG
-    print "Worked"
+    print "Server is running..."
     cwd <- getCurrentDirectory
     let staticDir = encodeString $ parent $ decodeString cwd
     redirectUrlGraphEmail <- retrieveAuthURL url1
