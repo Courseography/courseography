@@ -88,9 +88,10 @@ Rects
 Texts
     gId Int
     rId Int Maybe
-    yPos Rational Maybe
-    xPos Rational Maybe
+    yPos Rational
+    xPos Rational
     text String
+    deriving Show
 
 Paths
     gId Int
