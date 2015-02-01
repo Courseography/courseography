@@ -101,7 +101,7 @@ Section.prototype.onclick = function () {
 Section.prototype.setTime = function (time) {
     'use strict';
 
-    $(time).html(this.courseName.substring(0,6) + ' (' + this.type + ')')
+    $(time).html(this.courseName.substring(0, 6) + ' (' + this.type + ')')
            .attr("clicked", "true")
            .attr("type", this.type);
 };
