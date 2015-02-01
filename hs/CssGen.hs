@@ -658,14 +658,14 @@ modeButtonsCSS = ".mode" ? do
     width (pct 90)
     margin (px 5) (px 5) (px 5) (px 5)
     padding 0 (px 155) 0 (px 5)
-    "border-radius" -: "10px"
+    "border-radius" -: "8px"
     ":hover" & do
         fontWeight bold
         cursor pointer
         textDecoration underline
 
 colourButtonsCSS = ".colour" ? do
-    width (pct 50)
+    width (pct 40)
     margin (px 5) (px 5) (px 5) (px 5)
     padding0
     "border-radius" -: "8px"

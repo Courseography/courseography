@@ -97,6 +97,8 @@ $('#node-mode').click(function () {
     changeMode('node-mode');});
 $('#erase-mode').click(function () {
     changeMode('erase-mode');});
+$('#change-mode').click(function () {
+    changeMode('change-mode');});
 $('#red').click(function () {
     changeColour('red');});
 $('#green').click(function () {
