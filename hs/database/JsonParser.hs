@@ -1,7 +1,6 @@
  {-# LANGUAGE FlexibleContexts, GADTs, MultiParamTypeClasses,
     OverloadedStrings, TypeFamilies #-}
 
-
 module JsonParser where
 
 import qualified Data.ByteString.Lazy as B
@@ -29,20 +28,21 @@ courseDirectory = "../../res/courses/"
 
 -- | Opens a directory contained in dir, and processes every file in that directory.
 processDirectory :: IO ()
-processDirectory = getDirectoryContents courseDirectory >>= \contents ->
-                    let formattedContents = map (courseDirectory ++) (L.sort contents)
-                    in filterM doesFileExist formattedContents >>= mapM_ printFile
+processDirectory = 
+    getDirectoryContents courseDirectory >>= \contents ->
+        let formattedContents = map (courseDirectory ++) (L.sort contents)
+        in filterM doesFileExist formattedContents >>= mapM_ printFile
 
 -- | Opens and reads a files contents, and decodes JSON content into a Course data structure.
 printFile :: String -> IO ()
 printFile courseFile = 
-  do d <- eitherDecode <$> getJSON courseFile
-     case d of
-         Left err -> print $ courseFile ++ " " ++ err
-         Right course -> do insertCourse course
-                            insertLectures course
-                            insertTutorials course
-                            print $ "Inserted " ++ show (name course)
+    do d <- eitherDecode <$> getJSON courseFile
+        case d of
+            Left err -> print $ courseFile ++ " " ++ err
+            Right course -> do insertCourse course
+                               insertLectures course
+                               insertTutorials course
+                               print $ "Inserted " ++ show (name course)
 
 -- | Opens and reads the file contained in `jsonFile`. File contents are returned, surrounded by
 -- | square brackets.
@@ -80,24 +80,25 @@ insertSessionLectures (Just session) sessionStr course =
 -- | Inserts a lecture into the Lectures table.
 insertLecture :: T.Text -> Course -> Lecture -> IO ()
 insertLecture session course lecture = 
-  runSqlite dbStr $ do
-  runMigration migrateAll
-  insert_ $ Lectures (name course)
-                      session
-                     (section lecture)
-                     (map Time (time lecture))
-                     (cap lecture)
-                     (instructor lecture)
-                     (fromMaybe 0 (enrol lecture))
-                     (fromMaybe 0 (wait lecture))
-                     (extra lecture)
-                     (time_str lecture)
+    runSqlite dbStr $ do
+    runMigration migrateAll
+    insert_ $ Lectures (name course)
+                        session
+                       (section lecture)
+                       (map Time (time lecture))
+                       (cap lecture)
+                       (instructor lecture)
+                       (fromMaybe 0 (enrol lecture))
+                       (fromMaybe 0 (wait lecture))
+                       (extra lecture)
+                       (time_str lecture)
 
 -- | Inserts the tutorials from course into the Tutorials table.
 insertTutorials :: Course -> IO ()
-insertTutorials course =  insertSessionTutorials (f course) "F" course >>
-                          insertSessionTutorials (s course) "S" course >>
-                          insertSessionTutorials (y course) "Y" course
+insertTutorials course =  
+    insertSessionTutorials (f course) "F" course >>
+    insertSessionTutorials (s course) "S" course >>
+    insertSessionTutorials (y course) "Y" course
 
 -- | Inserts the tutorials from a specified section into the Tutorials table.
 insertSessionTutorials :: Maybe Session -> T.Text -> Course -> IO ()
@@ -108,13 +109,14 @@ insertSessionTutorials (Just session) sessionStr course =
 
 -- | Inserts a tutorial into the Tutorials table.
 insertTutorial :: T.Text -> Course -> Tutorial -> IO ()
-insertTutorial session course tutorial = runSqlite dbStr $ do
-                                       runMigration migrateAll
-                                       insert_ $ Tutorials (name course)
-                                                           (tutorialSection tutorial)
-                                                           session
-                                                           (map Time (times tutorial))
-                                                           (timeStr tutorial)
+insertTutorial session course tutorial = 
+  runSqlite dbStr $ do
+      runMigration migrateAll
+      insert_ $ Tutorials (name course)
+                          (tutorialSection tutorial)
+                           session
+                          (map Time (times tutorial))
+                          (timeStr tutorial)
 
 -- | Gets the corresponding numeric requirement from a breadth requirement description.
 -- | 6 indicates a parsing error.
