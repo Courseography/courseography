@@ -58,9 +58,9 @@ postPhoto :: FB.UserAccessToken -> FB.UserId -> IO Response
 postPhoto (FB.UserAccessToken _ b _) id_ = withSocketsDo $ withManager $ \m -> do
     fbpost <- parseUrl $ "https://graph.facebook.com/v2.2/me/photos?access_token=" ++ T.unpack b
     flip httpLbs m =<<
-        (formDataBody [partBS "message" "Test Message",
-                       partFileSource "graph" $ (show id_) ++ "-graph.png"]
-                      fbpost)
+        formDataBody [partBS "message" "Test Message",
+                      partFileSource "graph" $ (show id_) ++ "-graph.png"]
+                      fbpost
     return $ toResponse postFB
 
 -- | Constructs the Facebook authorization URL. This method does not actually
@@ -101,7 +101,7 @@ postToFacebook code = (liftIO $ performPost (BS.pack code)) >> graphResponse
 
 -- | Performs the posting to facebook.
 performPost :: BS.ByteString -> IO Response
-performPost code = do
+performPost code = 
     performFBAction $ do
         token <- getToken testPostUrl code
         user <- FB.getUser "me" [] (Just token)
