@@ -15,7 +15,6 @@ import ConvertSVGToPNG
 import JsonParser
 import System.Process
 import GraphResponse
-import GHC.IO.Exception
 import Tables
 import qualified Data.ByteString.Char8 as BS
 import qualified Data.ByteString.Lazy as BL
@@ -25,8 +24,20 @@ import Network.HTTP.Client (RequestBody(..))
 import Network (withSocketsDo)
 
 
+courseographyUrl :: String
+courseographyUrl = "http://localhost:8000"
+
+testUrl :: FB.RedirectUrl
+testUrl = T.pack $ courseographyUrl ++ "/test"
+
+testPostUrl :: FB.RedirectUrl
+testPostUrl = T.pack $ courseographyUrl ++ "/test-post"
+
 postFB :: String
 postFB = "post-fb"
+
+appId :: T.Text
+appId = "442286309258193"
 
 -- In order to access information as the Courseography application, the secret needs
 -- to be declared in the third string below that has the place holder 'INSERT_SECRET'.
@@ -34,24 +45,21 @@ postFB = "post-fb"
 -- The secret can be found here: https://developers.facebook.com/apps/442286309258193/dashboard/
 -- Should the secret be committed to GitHub, it needs to be reset immediately. If you find
 -- yourself in this pickle, please contact someone who can do this.
-app :: FB.Credentials
-app = FB.Credentials "localhost" "442286309258193" "INSERT_SECRET"
+appSecret :: T.Text
+appSecret = "INSERT_SECRET"
 
-url1 :: FB.RedirectUrl
-url1 = "http://localhost:8000/test"
-
-url2 :: FB.RedirectUrl
-url2 = "http://localhost:8000/test-post"
+credentials :: FB.Credentials
+credentials = FB.Credentials (T.pack courseographyUrl) appId appSecret
 
 perms :: [FB.Permission]
 perms = ["publish_actions"]
 
-postPhoto :: FB.UserAccessToken -> IO Response
-postPhoto (FB.UserAccessToken _ b _) = withSocketsDo $ withManager $ \m -> do
+postPhoto :: FB.UserAccessToken -> FB.UserId -> IO Response
+postPhoto (FB.UserAccessToken _ b _) id_ = withSocketsDo $ withManager $ \m -> do
     fbpost <- parseUrl $ "https://graph.facebook.com/v2.2/me/photos?access_token=" ++ T.unpack b
     flip httpLbs m =<<
         (formDataBody [partBS "message" "Test Message",
-                       partFileSource "graph" "graph.png"]
+                       partFileSource "graph" $ (show id_) ++ "-graph.png"]
                       fbpost)
     return $ toResponse postFB
 
@@ -67,7 +75,7 @@ retrieveAuthURL url =
 retrieveFBData :: BS.ByteString -> IO Response
 retrieveFBData code = 
     performFBAction $ do
-        token <- getToken url1 code
+        token <- getToken testUrl code
         user <- FB.getUser "me" [] (Just token)
         liftIO $ insertIdIntoDb (FB.userId user)
         return $ toResponse (FB.userEmail user)
@@ -84,7 +92,7 @@ insertIdIntoDb id_ =
 
 -- | Performs a Facebook action.
 performFBAction :: FB.FacebookT FB.Auth (ResourceT IO) a -> IO a
-performFBAction action = withManager $ \manager -> FB.runFacebookT app manager action
+performFBAction action = withManager $ \manager -> FB.runFacebookT credentials manager action
 
 -- | Posts a message to the user's Facebook feed, with the code 'code'. GraphResponse
 -- is then sent back to the user.
@@ -94,20 +102,19 @@ postToFacebook code = (liftIO $ performPost (BS.pack code)) >> graphResponse
 -- | Performs the posting to facebook.
 performPost :: BS.ByteString -> IO Response
 performPost code = do
-    createPNGFile
     performFBAction $ do
-        token <- getToken url2 code
-        liftIO $ postPhoto token
+        token <- getToken testPostUrl code
+        user <- FB.getUser "me" [] (Just token)
+        let id_ = FB.userId user
+        liftIO $ createPNGFile (id_ ++ "-graph.png")
+        liftIO $ postPhoto token id_
+        liftIO $ removePNG (id_ ++ "-graph.png")
         return $ toResponse postFB
-
-createPNGFile :: IO ExitCode
-createPNGFile =  do (inp,out,err,pid) <- convertSVGToPNG "graph.png" "../res/graphs/graph_regions.svg"
-                    liftIO $ waitForProcess pid
 
 -- | Gets a user access token.
 getToken :: (MonadResource m, MonadBaseControl IO m) => FB.RedirectUrl -> BS.ByteString -> FB.FacebookT FB.Auth m FB.UserAccessToken
 getToken url code = FB.getUserAccessTokenStep2 url [("code", code)]
 
--- | Gets a users Facebook email.
+-- | Gets a user's Facebook email.
 getEmail :: String -> ServerPart Response
 getEmail code = liftIO $ retrieveFBData (BS.pack code)

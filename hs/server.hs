@@ -59,8 +59,8 @@ main = do
     print "Server is running..."
     cwd <- getCurrentDirectory
     let staticDir = encodeString $ parent $ decodeString cwd
-    redirectUrlGraphEmail <- retrieveAuthURL url1
-    redirectUrlGraphPost <- retrieveAuthURL url2
+    redirectUrlGraphEmail <- retrieveAuthURL testUrl
+    redirectUrlGraphPost <- retrieveAuthURL testPostUrl
     simpleHTTP nullConf $
       msum [ dir "form" $ reqExample,
              dir grid $ gridResponse,
