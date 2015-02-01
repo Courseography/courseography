@@ -37,12 +37,12 @@ processDirectory =
 printFile :: String -> IO ()
 printFile courseFile = 
     do d <- eitherDecode <$> getJSON courseFile
-        case d of
-            Left err -> print $ courseFile ++ " " ++ err
-            Right course -> do insertCourse course
-                               insertLectures course
-                               insertTutorials course
-                               print $ "Inserted " ++ show (name course)
+       case d of
+           Left err -> print $ courseFile ++ " " ++ err
+           Right course -> do insertCourse course
+                              insertLectures course
+                              insertTutorials course
+                              print $ "Inserted " ++ show (name course)
 
 -- | Opens and reads the file contained in `jsonFile`. File contents are returned, surrounded by
 -- | square brackets.
