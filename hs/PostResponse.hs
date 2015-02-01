@@ -17,7 +17,7 @@ postResponse =
         masterTemplate "Courseography - Check My POSt!"
                     [H.meta ! A.name "keywords"
                             ! A.content "",
-                        aboutLinks
+                            postLinks
                     ]
                     (do header "post"
                         checkPost
@@ -29,7 +29,6 @@ checkPost =  do
     H.html $ do
         H.head $ do
             H.title "Check My Post!"
-            H.link ! A.rel "stylesheet" ! A.type_ "text/css" ! A.href "post_styles.css"
         H.nav ! A.id "posts" $ H.ul $ do
             H.li ! A.id "specialist" $ do
                 H.a ! A.href "" $ "Specialist"
