@@ -33,22 +33,22 @@ conflictDialog :: H.Html
 conflictDialog = createTag H.div "dialog" "" "Conflicting courses are difficult to manage. Make sure you understand the added responsibility of having two or more conflicting courses."
 
 coursePanel :: H.Html
-coursePanel = createTag H.div "course-select-wrapper" "col-md-2 col-xs-6" $ do
-                            createTag H.ul "course-select" "trapScroll-enabled" $ do
-                                   createTag H.li "clear-all" "" $ do
+coursePanel = createTag H.div "course-select-wrapper" "col-md-2 col-xs-6" $
+                            createTag H.ul "course-select" "trapScroll-enabled" $
+                                   createTag H.li "clear-all" "" $
                                           createTag H.h3 "" "" "Clear All"
 
 searchPanel :: H.Html
 searchPanel =  createTag H.div "search-layout" "col-md-2 col-xs-6 col-md-push-8" $ do
-                             createTag H.div "filter-container" "" $ do
-                                     makeForm "" "" "return false;" $ do
+                             createTag H.div "filter-container" "" $
+                                     makeForm "" "" "return false;" $
                                      makeInput "course-filter" "form-control" "Enter a course!" "off" "text"
 
-                             createTag H.div "search-container" "" $ do
+                             createTag H.div "search-container" "" $
                                      createTag H.div "search-list" "" ""
 
 infoPanel :: H.Html
-infoPanel = createTag H.div "" "col-md-8 col-xs-12 col-md-pull-2" $ do
+infoPanel = createTag H.div "" "col-md-8 col-xs-12 col-md-pull-2" $
                             createTag H.div "info" "row" ""
                             {-createTag H.div "info" "row" $ do
                                     createTag H.div "info-layout" "" $ do
