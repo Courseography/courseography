@@ -14,7 +14,8 @@ styleFiles = [
     ("../style/common/common.css", common),
     ("../style/graph/graph_styles.css", graphStyles),
     ("../style/grid/timetable_styles.css", timetableStyles),
-    ("../style/common/about.css", aboutStyles)
+    ("../style/common/about.css", aboutStyles),
+    ("../style/post/post_styles.css", postStyles)
     ]
 
 renderStyleFile :: (String, Css) -> IO ()
@@ -25,6 +26,7 @@ generateCSS = do
     createDirectoryIfMissing True "../style/common"
     createDirectoryIfMissing True "../style/graph"
     createDirectoryIfMissing True "../style/grid"
+    createDirectoryIfMissing True "../style/post"
     Prelude.foldl1 (>>) $ Prelude.map renderStyleFile styleFiles
 
 margin0 = margin nil nil nil nil
@@ -650,4 +652,79 @@ fceCountCSS = "#FCECountDiv" ? do
     "vertical-align" -: "middle"
     fontSize (em 1.35)
     alignCenter
+   
+-- Post Styles
+postStyles = do
+    body ?
+        do backgroundColor $ "#EBE8E4"
+           color "#222"
+           fontWeight $ normal
+    tabsCSS
+    postCSS
 
+
+tabsCSS = do
+    "#posts" & do 
+        fontFamily ["HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", "Lucida Grande"][sansSerif]
+        fontSize $ (px 15)
+        width $ pct 95
+        backgroundColor $ "#fff"
+        border solid (px 1) "#dedede"
+        "border-radius" -: "4px"
+        "box-shadow" -: "0 2px 2px -1px rgba(0, 0, 0, 0.055)"
+        display block
+        overflow hidden
+        color $ "#888"
+        margin (px 8) (px 22) (px 8) (px 22)
+        ul ? do
+            width $ (pct 100)
+            li ? do
+                "list-style-type" -: "none"
+                display inlineBlock
+                width (pct 32)
+                --textAlign $ alignSide sideCenter
+                "-webkit-transition" -: "all 0.2s"
+                "-moz-transition" -: "all 0.2s"
+                "-ms-transition" -: "all 0.2s"
+                "-o-transition" -: "all 0.2s"
+                "transition" -: "all 0.2s"
+                ":hover" & do
+                    "background-color" -: "#9C9C9C !important"
+                    a ? do
+                        "color" -: "white !important" 
+                a ? do
+                    color black
+                    display inlineBlock
+                    lineHeight (px 56)
+                    "padding" -: "0 24px"
+                    width (pct 70)
+                    textDecoration none
+
+                
+postCSS = do 
+    "div" ? do
+        p ? do
+            paddingLeft (px 20)
+            "box-shadow" -: "0 2px 2px -1px rgba(0, 0, 0, 0.055)"
+            lineHeight (px 56)
+            "list-style-type" -: "none"
+            textAlign $ alignSide sideCenter
+            "margin-right" -: "10px"
+            "-webkit-transition" -: "all 0.2s"
+            "-moz-transition" -: "all 0.2s"
+            "-ms-transition" -: "all 0.2s"
+            "-o-transition" -: "all 0.2s"
+            "transition" -: "all 0.2s"
+    i ? do
+        color red
+    "#div_specialist, #div_major, #div_minor" ? do
+        position absolute
+        "margin-above" -: "70px"
+        height (pct 70)
+        marginLeft (px 25)
+        width (pct 95)
+    "#spec_creds, #maj_creds, #min_creds" ? do
+        display inlineBlock
+        marginLeft nil 
+        color red
+        
