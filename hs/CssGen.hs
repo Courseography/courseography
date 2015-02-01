@@ -77,8 +77,8 @@ headerCSS = do
                 padding 0 (px 10) 0 (px 10)
                 a <? do
                     color white
-                a # hover <? do
-                    color gray
+                    hover & do
+                        color gray
 
 aDefaultCSS = do
     a <> a # hover <> a # visited <> a # active ? do
