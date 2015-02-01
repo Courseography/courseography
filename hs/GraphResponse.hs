@@ -20,8 +20,7 @@ graphResponse =
                  plannerLinks
                 ]
                 (do header "graph"
-                    H.div ! A.id "graph" ! A.class_ "graph" $ do
-                      svgDoc
+                    H.div ! A.id "graph" ! A.class_ "graph" $ svgDoc
                     disclaimer
                 )
                 plannerScripts
@@ -29,13 +28,13 @@ graphResponse =
 
 fceCountDiv :: H.Html
 fceCountDiv = createTag H.div "FCECountDiv" "" $ do
-                  createTag H.span "FCEcount" "" $ do "0.0"
+                  createTag H.span "FCEcount" "" "0.0"
                   "FCEs" -- Being difficult. Won't show up correctly.
 
 welcomeTab :: H.Html
-welcomeTab = createTag H.div "welcome" "infoTab" $ do
+welcomeTab = createTag H.div "welcome" "infoTab" $
                      createTag H.div "" "infoTabContent" $ do
-                         H.h2 $ do "Welcome!"
+                         H.h2 "Welcome!"
                          H.p $ do
                              "The graph above displays the prerequisite links connecting courses "
                              "in our department. Select courses to plan your enrolments for "
@@ -45,20 +44,20 @@ welcomeTab = createTag H.div "welcome" "infoTab" $ do
                          H.p $ do
                              "Check out the different tabs to access helpful features for your "
                              "planning. Also, here's a"
-                             makeA "" "" "res/full_graph.jpg" "_blank" $ do "printable version "
+                             makeA "" "" "res/full_graph.jpg" "_blank" "printable version "
                              "of the graph."
 
                          --createTag H.br "" ""
                          H.p $ do
                              "Courseography is an ongoing "
-                             makeA "" "" "https://github.com/Ian-Stewart-Binks/courseography" "_blank" $ do "project "
+                             makeA "" "" "https://github.com/Ian-Stewart-Binks/courseography" "_blank" "project "
                              "maintained by Ian Stewart-Binks and"
-                             makeA "" "" "http://www.cs.toronto.edu/~liudavid/" "_blank" $ do " David Liu "
+                             makeA "" "" "http://www.cs.toronto.edu/~liudavid/" "_blank" " David Liu "
                              "."
                              "Ideas for new features, better design, and (especially) bug reports"
                              "are always welcome!"
                              "Please send all feedback to"
-                             makeA "" "" "mailto:cs.toronto.courseplanner@gmail.com" "_blank" $ do " this address "
+                             makeA "" "" "mailto:cs.toronto.courseplanner@gmail.com" "_blank" " this address "
                              "."
                              "If you see a bug, please do let us know which browser and version you're using."
                              "And if there's a display issue, giving us your screen display info"
@@ -70,16 +69,13 @@ focusesTab = ""
 timetableTab :: H.Html
 timetableTab = createTag H.div "timetable" "infoTab" $ do
                            createTag H.div "timetableSearch" "infoTabContent" $ do
-                               createTag H.h2 "" ""  $ do
-                                   "2014-2015 Timetable"
+                               createTag H.h2 "" "" "2014-2015 Timetable"
                                H.p "Search through the timetable for a course or instructor."
                                H.p "The \"(+5)\" caps are extra reserved seats. See official timetable for details."
-                               createTag H.p "timetable-creator-link" "" $ do
-                                   makeA "" "" "timetable_creator.html" "" $ do
-                                       "Plan your timetable here!"
+                               createTag H.p "timetable-creator-link" "" $
+                                   makeA "" "" "timetable_creator.html" "" "Plan your timetable here!"
                                makeInput "filter" "text-input" "" "" "text"
-                           createTag H.div "timetableContainer" "" $ do
-                               ""
+                           createTag H.div "timetableContainer" "" ""
 
 checkMyPostTab :: H.Html
 checkMyPostTab = ""
