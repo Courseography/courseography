@@ -650,6 +650,7 @@ canvasCSS = "#mySVG" ? do
     width (pct 85)
     "border-radius" -: "8px"
     backgroundColor $ parse "#D3D3D3"
+    border solid (px 2) "#000000"
 
 panelCSS = "#mode-panel" ? do
     height (pct 85)
@@ -662,8 +663,8 @@ modeButtonsCSS = ".mode" ? do
     width (pct 90)
     margin (px 5) (px 5) (px 5) (px 5)
     padding 0 (px 155) 0 (px 5)
-    opacity 1
     "border-radius" -: "8px"
+    border solid (px 2) "#008080"
     ":hover" & do
         fontWeight bold
         cursor pointer
@@ -672,8 +673,7 @@ modeButtonsCSS = ".mode" ? do
 clickedButtonsCSS = ".clicked" ? do
         fontWeight bold
         textDecoration underline
-        faded
-        backgroundColor $ parse "#FFFFFF"
+        border solid (px 2) "#000000"
 
 colourButtonsCSS = ".colour" ? do
     width (pct 40)
@@ -681,6 +681,7 @@ colourButtonsCSS = ".colour" ? do
     padding0
     "border-radius" -: "8px"
     alignCenter
+    border solid (px 2) "#008080"
     ":hover" & do
         fontWeight bold
         cursor pointer

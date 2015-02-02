@@ -1,18 +1,17 @@
 var nodeId = 0;
+//var nodes = [];
+var xmlns = 'http://www.w3.org/2000/svg';
+var mode = 'node-mode';
+var nodeColourId = 'red';
 var colours = { 
      'red': '#D77546', 
      'green':'#2E8B57', 
      'blue':'#437699',
      'purple':'#46364A'
 };
-var nodeColourId = 'red';
-var nodeColour = colours['red'];
-//var nodes = [];
-var mode = '';
-var xmlns = 'http://www.w3.org/2000/svg';
-var nodeSelected = null;
-var nodeX = -1;
-var nodeY = -1;
+var nodeSelected = null; // for movement and path creation
+var nodeX = -1; // for movement
+var nodeY = -1; // for movement
 
 //document.getElementById('red').style.spacity = 0.5;
 
@@ -22,7 +21,6 @@ function setupSVGCanvas() {
 
     var svg = document.createElementNS(xmlns, 'svg');
     svg.setAttribute('id', 'mySVG');
-    svg.setAttribute('style', 'border: 2px solid black');   // also should go in CSS?
     svg.setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xlink', 'http://www.w3.org/1999/xlink');
     document.body.appendChild(svg);
     document.getElementById('mySVG').addEventListener('click', makeNode, false);
@@ -64,22 +62,20 @@ function makeNode(e) {
         var node = document.createElementNS(xmlns, 'rect');
 
         console.log(position.x, position.y);
-        // check for overlaps and off the chart problems before creating
+        // check for overlaps and off the chart problems before creating ?
         node.setAttributeNS(null, 'x', position.x);
         node.setAttributeNS(null, 'y', position.y);
         node.setAttributeNS(null, 'id', nodeId);
         node.setAttributeNS(null, 'width', 60);
         node.setAttributeNS(null, 'height', 30);
-        node.setAttributeNS(null, 'fill', nodeColour);
-    //    node.setAttributeNS(null, 'style', 'border: 2px solid black');
+        node.setAttributeNS(null, 'fill', colours[nodeColourId]);
         node.setAttributeNS(null, 'class', 'node');
         
         document.getElementById('mySVG').appendChild(node);
         document.getElementById(nodeId).addEventListener('mousedown', nodeClicked, false);
         document.getElementById(nodeId).addEventListener('mousemove', nodeMoved, false);
         document.getElementById(nodeId).addEventListener('mouseup', nodeUnclicked, false);
-        //$("#" + nodeId).mousedown(function () {nodeClicked(nodeClicked())};);
-        nodeId = nodeId + 1;
+        nodeId += 1;
     }
 }
 
@@ -90,8 +86,8 @@ function nodeClicked(e) {
     if (mode  === 'erase-mode') {
         document.getElementById('mySVG').removeChild(e.currentTarget);
     } else if (mode === 'change-mode') {
-        nodeSelected = e.currentTarget;
         var position = getClickPosition(e);
+        nodeSelected = e.currentTarget;
         nodeX = position.x;
         nodeY = position.y;
         console.log(nodeX, nodeY);
@@ -103,10 +99,10 @@ function nodeMoved(e) {
     'use-strict';
 
     if (mode === 'change-mode' && nodeSelected !== null) {
-        nodeSelected = this;
         var position = getClickPosition(e);
-        var rectX = e.currentTarget.getAttribute('x')*1;
-        var rectY = e.currentTarget.getAttribute('y')*1;
+        var rectX = parseFloat(e.currentTarget.getAttribute('x'));
+        var rectY = parseFloat(e.currentTarget.getAttribute('y'));
+        nodeSelected = e.currentTarget;
         rectX += (position.x - nodeX);
         rectY += (position.y - nodeY);
         e.currentTarget.setAttribute('x', rectX);
@@ -133,36 +129,32 @@ function nodeUnclicked(e) {
 function changeMode(id) {
     'use-strict';
 
-    if (mode !== '') {
-      $('#'+mode).toggleClass('clicked');
-    }
+    //if (mode !== '') {
+      $('#' + mode).toggleClass('clicked');
+    //}
     mode = id;
-    newMode = document.getElementById(mode);
-    $('#'+mode).toggleClass('clicked');
+    $('#' + mode).toggleClass('clicked');
 }
 
 
 function changeColour(id) {
     'use-strict';
 
-    oldColour = document.getElementById(nodeColourId);      // clicked class
-    oldColour.style.opacity = 1;
+    $('#' + nodeColourId).toggleClass('clicked'); // how to start?
     nodeColourId = id;
-    nodeColour = colours[id];
-    newColour = document.getElementById(nodeColourId);
-    newColour.style.opacity = 0.5;
+    $('#' + nodeColourId).toggleClass('clicked');
 }
 
 
 setupSVGCanvas();
 
-$( '.mode' ).each(function( index ) {
+$('.mode').each(function(index) {
   $( this ). click(function () {
-    changeMode(this.id);}); //console.log( index + ': ' + $( this ).text() );
+    changeMode(this.id);}); 
 });
-$( '.colour' ).each(function( index ) {
-  $( this ). click(function () {
-    changeColour(this.id);}); //console.log( index + ': ' + $( this ).text() );
+$('.colour').each(function(index) {
+  $(this). click(function () {
+    changeColour(this.id);});
 });
 
 
@@ -179,6 +171,4 @@ x put all style related stuff in CSS especially all the clicked button stuff
 - node type buttons
 - connect CSS of main graph with the nodes and types in this graph 
 - colour picker for choosing colour: <input type='color'/>
-http://stackoverflow.com/questions/11282366/get-mouse-location-during-mouse-down
-http://www.w3schools.com/jsref/event_onmouseover.asp
 */
