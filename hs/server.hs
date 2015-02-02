@@ -19,7 +19,6 @@ import qualified Data.Conduit.List as CL
 import Tables
 import qualified Data.Aeson as Aeson
 import Control.Monad.IO.Class  (liftIO)
-import Control.Concurrent.MVar
 
 import Database.Persist
 import Data.Conduit (($$))
@@ -151,15 +150,6 @@ buildSession :: [Entity Lectures] -> [Entity Tutorials] -> Maybe Tables.Session
 buildSession lectures tutorials = Just $ Tables.Session (map buildLecture (map entityVal lectures))
                                                         (map buildTutorial (map entityVal tutorials))
 
-myPolicy :: BodyPolicy
-myPolicy = (defaultBodyPolicy "/tmp/" 0 1000 1000)
-
 -- | Creates a JSON response.
 createJSONResponse :: BSL.ByteString -> Response
 createJSONResponse jsonStr = toResponseBS (BS.pack "application/json") jsonStr
-
-reqExample :: ServerPartT IO Response
-reqExample = do req <- askRq
-                --nex <- ok $ takeMVar (rqBody req)
-                reqf <- decodeBody myPolicy
-                ok $ toResponse $ show $ reqf
