@@ -748,6 +748,9 @@ postCSS = do
     ".full_name" ? do
         textAlign $ alignSide sideCenter
         margin0
+    "input" ? do
+        textAlign $ alignSide sideCenter
+        height $ (px 40)
     
     
         
