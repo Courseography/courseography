@@ -633,37 +633,63 @@ fceCountCSS = "#FCECountDiv" ? do
     fontSize (em 1.35)
     alignCenter
 
+
 drawStyles = do
+    canvasCSS
     panelCSS
     modeButtonsCSS
+    clickedButtonsCSS 
     colourButtonsCSS
     redCSS
     greenCSS
     blueCSS
     purpleCSS
 
+canvasCSS = "#mySVG" ? do
+    height (pct 85)
+    width (pct 85)
+    "border-radius" -: "8px"
+    backgroundColor $ parse "#D3D3D3"
+
 panelCSS = "#mode-panel" ? do
-    height (px 500)
-    width (px 200)
+    height (pct 85)
+    width (pct 15)
     backgroundColor $ parse "#008080"
     float floatLeft
+    "border-radius" -: "8px"
 
 modeButtonsCSS = ".mode" ? do
-    cursor pointer
-    width (px 25)
+    width (pct 90)
     margin (px 5) (px 5) (px 5) (px 5)
-    padding 0 (px 155) 0 0
+    padding 0 (px 155) 0 (px 5)
+    opacity 1
+    "border-radius" -: "8px"
+    ":hover" & do
+        fontWeight bold
+        cursor pointer
+        textDecoration underline
+
+clickedButtonsCSS = ".clicked" ? do
+        fontWeight bold
+        textDecoration underline
+        faded
+        backgroundColor $ parse "#FFFFFF"
 
 colourButtonsCSS = ".colour" ? do
-    cursor pointer
-    width (px 100)
+    width (pct 40)
     margin (px 5) (px 5) (px 5) (px 5)
+    padding0
+    "border-radius" -: "8px"
     alignCenter
+    ":hover" & do
+        fontWeight bold
+        cursor pointer
+        textDecoration underline
 
 redCSS = "#red" ? do
     backgroundColor red3
     
-greenCSS = "#green"? do
+greenCSS = "#green" ? do
     backgroundColor $ parse "#2E8B57"
 
 blueCSS = "#blue"? do

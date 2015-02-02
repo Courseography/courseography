@@ -28,7 +28,7 @@ drawResponse =
 
 drawHtml :: H.Html
 drawHtml = H.div ! A.id "aboutDiv" $ do
-  H.h1 "Draw a Graph"
+  H.h2 "Draw a Graph"
 
 modePanel :: H.Html
 modePanel = createTag H.div "mode-panel" "" $ do 
@@ -38,4 +38,4 @@ modePanel = createTag H.div "mode-panel" "" $ do
   createTag H.div "blue" "colour" "BLUE"
   createTag H.div "purple" "colour" "PURPLE"
   createTag H.div "erase-mode" "mode" "ERASE" 
-
+  createTag H.div "change-mode" "mode" "MODIFY" 
