@@ -705,13 +705,15 @@ tabsCSS = do
 postCSS = do 
     "div" ? do
         ".code" ? do
+            fontFamily ["HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", "Lucida Grande"][sansSerif]
+            fontSize (px 20)
             paddingLeft (px 20)
             "cursor" -: "pointer"
             "box-shadow" -: "0 2px 2px -1px rgba(0, 0, 0, 0.055)"
             lineHeight (px 50)
             "list-style-type" -: "none"
             textAlign $ alignSide sideCenter
-            margin (px 5) (px 5) (px 5) (px 5)
+            margin0
             width (pct 97)
             "margin-right" -: "10px"
             "-webkit-transition" -: "all 0.2s"
@@ -733,6 +735,8 @@ postCSS = do
         color red
     ".more-info" ? do
         paddingLeft (px 20)
+        border solid (px 2) "#949494"
+        "border-radius" -: "4px"
         backgroundColor "#BABABA"
         "box-shadow" -: "0 2px 2px -1px rgba(0, 0, 0, 0.055)"
         lineHeight (px 40)
