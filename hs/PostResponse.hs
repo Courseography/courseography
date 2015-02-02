@@ -42,20 +42,20 @@ checkPost =  do
         H.div ! A.id "div_specialist" $ do
             H.h2 "First Year"
             H.div ! A.id "spec_108" $ do
-                H.p "CSC108H"
+                H.p ! A.class_ "code" $ "CSC108H"
                 H.div ! A.class_ "more-info" $ do
                     H.p ! A.class_ "full_name" $ "CSC108H (Introduction to Computer Programming)"
             H.div ! A.id "spec_148" $ do
-                H.p "CSC148H"
+                H.p ! A.class_ "code" $ "CSC148H"
                 H.div ! A.class_ "more-info" $ do
                     H.p ! A.class_ "full_name" $ "CSC148H (Introduction to Computer Programming)"
             H.div ! A.id "spec_165" $ do
-                H.p "CSC165H or CSC240H"
+                H.p ! A.class_ "code" $ "CSC165H or CSC240H"
                 H.div ! A.class_ "more-info" $ do
                     H.p ! A.class_ "full_name" $ "CSC165H (Mathematical Expression and Reasoning for Computer Science)"
                     H.p ! A.class_ "full_name" $ "CSC240H (Enriched Intro to the Theory of Computation)"
             H.div ! A.id "spec_135" $ do
-                H.p $ "(MAT135H and MAT136H) or MAT137H or MAT157H"
+                H.p ! A.class_ "code" $ "(MAT135H and MAT136H) or MAT137H or MAT157H"
                 H.div ! A.class_ "more-info" $ do
                     H.p ! A.class_ "full_name" $ "MAT135H (Calculus 1(A))"
                     H.p ! A.class_ "full_name" $ "MAT136H (Calculus 1(B))"
@@ -63,57 +63,57 @@ checkPost =  do
                     H.p ! A.class_ "full_name" $ "MAT157Y (Analysis 1)"
             H.h2 "Second Year"
             H.div ! A.id "spec_207" $ do
-                H.p "CSC207H"
+                H.p ! A.class_ "code" $ "CSC207H"
                 H.div ! A.class_ "more-info" $ do
                     H.p ! A.class_ "full_name" $ "CSC207H (Software Design)"
             H.div ! A.id "spec_209" $ do
-                H.p "CSC209H"
+                H.p ! A.class_ "code" $ "CSC209H"
                 H.div ! A.class_ "more-info" $ do
                     H.p ! A.class_ "full_name" $ "CSC209H (Software Tools And System Programming)"
             H.div ! A.id "spec_258" $ do
-                H.p "CSC258H"
+                H.p ! A.class_ "code" $ "CSC258H"
                 H.div ! A.class_ "more-info" $ do
                     H.p ! A.class_ "full_name" $ "CSC258H (Computer Organization)"
             H.div ! A.id "spec_236" $ do
-                H.p $ "CSC236H or CSC240H"
+                H.p ! A.class_ "code" $ "CSC236H or CSC240H"
                 H.div ! A.class_ "more-info" $ do
                     H.p ! A.class_ "full_name" $ "CSC236H (Intro to the Theory of Computation)"
                     H.p ! A.class_ "full_name" $ "CSC240H (Enriched Intro to the Theory of Computation)"
             H.div ! A.id "spec_263" $ do
-                H.p "CSC263H or CSC265H"
+                H.p ! A.class_ "code" $ "CSC263H or CSC265H"
                 H.div ! A.class_ "more-info" $ do
                     H.p ! A.class_ "full_name" $ "CSC263H (Data Structures and Analysis)"
                     H.p ! A.class_ "full_name" $ "CSC265H (Enriched Data Structures and Analysis)"
             H.div ! A.id "spec_223" $ do
-                H.p "MAT221H or MAT223H"
+                H.p ! A.class_ "code" $ "MAT221H or MAT223H"
                 H.div ! A.class_ "more-info" $ do
                     H.p ! A.class_ "full_name" $ "MAT221H (Applied Linear Algebra)"
                     H.p ! A.class_ "full_name" $ "MAT223H (Linear Algebra 1)"
             H.div ! A.id "spec_247" $ do
-                H.p "STA247H or STA255H or STA257H"
+                H.p ! A.class_ "code" $ "STA247H or STA255H or STA257H"
                 H.div ! A.class_ "more-info" $ do
                     H.p ! A.class_ "full_name" $ "STA247H (Probability with Computer Applications)"
                     H.p ! A.class_ "full_name" $ "STA255H (Statistical Analysis)"
                     H.p ! A.class_ "full_name" $ "STA257H (Probability and Statistics 1)"
             H.h2 "Later Years"
             H.div ! A.id "spec_369" $ do
-                H.p "CSC369H"
+                H.p ! A.class_ "code" $ "CSC369H"
                 H.div ! A.class_ "more-info" $ do
                     H.p ! A.class_ "full_name" $ "CSC369H (Operating Systems)"
             H.div ! A.id "spec_373" $ do
-                H.p "CSC373H"
+                H.p ! A.class_ "code" $ "CSC373H"
                 H.div ! A.class_ "more-info" $ do
                         H.p ! A.class_ "full_name" $ "CSC373H (Algorithm Design, Analysis, and Complexity)"
             H.div ! A.id "spec_400" $ do
-                H.p "Any 400-level CSC course, BCB410H, BCB420H, BCB430Y (1.5 FCEs)"
+                H.p ! A.class_ "code" $ "Any 400-level CSC course, BCB410H, BCB420H, BCB430Y (1.5 FCEs)"
                 H.div ! A.class_ "more-info" $ do
                         H.p ! A.class_ "full_name" $ "CSC108H (Introduction to Computer Programming)"
             H.div ! A.id "spec_300" $ do
-                H.p "Any 300-level CSC course, BCB410H, BCB420H, BCB430Y, ECE385H, ECE489H (1.5 FCEs)"
+                H.p ! A.class_ "code" $ "Any 300-level CSC course, BCB410H, BCB420H, BCB430Y, ECE385H, ECE489H (1.5 FCEs)"
                 H.div ! A.class_ "more-info" $ do
                         H.p ! A.class_ "full_name" $ "CSC108H (Introduction to Computer Programming)"
-            H.p $ H.em "Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H, CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H (2.0 FCEs)"
-            H.p $ H.em "No more than 1.0 FCEs from CSC490H, CSC491H, CSC494H, CSC495H, BCB430Y"
+            H.p ! A.class_ "code" $ H.em "Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H, CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H (2.0 FCEs)"
+            H.p ! A.class_ "code" $ H.em "No more than 1.0 FCEs from CSC490H, CSC491H, CSC494H, CSC495H, BCB430Y"
         H.div ! A.id "div_major" $ do
             H.h2 "First Year"
             H.p "CSC108H (Introduction to Computer Programming)"
