@@ -61,8 +61,7 @@ main = do
     redirectUrlGraphEmail <- retrieveAuthURL testUrl
     redirectUrlGraphPost <- retrieveAuthURL testPostUrl
     simpleHTTP nullConf $
-      msum [ dir "form" $ reqExample,
-             dir grid $ gridResponse,
+      msum [ dir grid $ gridResponse,
              dir graph $ graphResponse,
              dir code $ seeOther redirectUrlGraphEmail $ toResponse post,
              dir post $ seeOther redirectUrlGraphPost $ toResponse test,
