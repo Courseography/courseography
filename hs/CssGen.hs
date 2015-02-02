@@ -667,7 +667,7 @@ tabsCSS = do
     "#posts" & do 
         fontFamily ["HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", "Lucida Grande"][sansSerif]
         fontSize $ (px 15)
-        width $ pct 95
+        width $ pct 97
         backgroundColor $ "#fff"
         border solid (px 1) "#dedede"
         "border-radius" -: "4px"
@@ -678,6 +678,7 @@ tabsCSS = do
         margin (px 8) (px 22) (px 8) (px 22)
         ul ? do
             width $ (pct 100)
+            margin0
             li ? do
                 "list-style-type" -: "none"
                 display inlineBlock
@@ -695,7 +696,7 @@ tabsCSS = do
                 a ? do
                     color black
                     display inlineBlock
-                    lineHeight (px 56)
+                    lineHeight (px 50)
                     "padding" -: "0 24px"
                     width (pct 70)
                     textDecoration none
@@ -703,12 +704,15 @@ tabsCSS = do
                 
 postCSS = do 
     "div" ? do
-        p ? do
+        ".code" ? do
             paddingLeft (px 20)
+            "cursor" -: "pointer"
             "box-shadow" -: "0 2px 2px -1px rgba(0, 0, 0, 0.055)"
-            lineHeight (px 56)
+            lineHeight (px 50)
             "list-style-type" -: "none"
             textAlign $ alignSide sideCenter
+            margin (px 5) (px 5) (px 5) (px 5)
+            width (pct 97)
             "margin-right" -: "10px"
             "-webkit-transition" -: "all 0.2s"
             "-moz-transition" -: "all 0.2s"
@@ -722,9 +726,28 @@ postCSS = do
         "margin-above" -: "70px"
         height (pct 70)
         marginLeft (px 25)
-        width (pct 95)
+        width (pct 97)
     "#spec_creds, #maj_creds, #min_creds" ? do
         display inlineBlock
         marginLeft nil 
         color red
+    ".more-info" ? do
+        paddingLeft (px 20)
+        backgroundColor "#BABABA"
+        "box-shadow" -: "0 2px 2px -1px rgba(0, 0, 0, 0.055)"
+        lineHeight (px 40)
+        "list-style-type" -: "none"
+        textAlign $ alignSide sideCenter
+        margin0
+        "margin-right" -: "10px"
+        "-webkit-transition" -: "all 0.2s"
+        "-moz-transition" -: "all 0.2s"
+        "-ms-transition" -: "all 0.2s"
+        "-o-transition" -: "all 0.2s"
+        "transition" -: "all 0.2s"
+    ".full_name" ? do
+        textAlign $ alignSide sideCenter
+        margin0
+    
+    
         
