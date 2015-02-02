@@ -14,6 +14,8 @@ var nodeSelected = null;
 var nodeX = -1;
 var nodeY = -1;
 
+//document.getElementById('red').style.spacity = 0.5;
+
 function setupSVGCanvas() {
     'use-strict';
 
@@ -22,6 +24,7 @@ function setupSVGCanvas() {
     svg.setAttribute('style', 'border: 2px solid black');   // also should go in CSS?
     svg.setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xlink', 'http://www.w3.org/1999/xlink');
     document.body.appendChild(svg);
+    document.getElementById('mySVG').addEventListener('click', makeNode, false);
 }
 
 function getClickPosition(e) {
@@ -31,10 +34,7 @@ function getClickPosition(e) {
     var xPosition = e.clientX - parentPosition.x;
     var yPosition = e.clientY - parentPosition.y;
 
-    // decide what to do based on what mode it is?
-    if (mode === 'node-mode') {
-        makeNode(xPosition, yPosition);
-    } 
+    return { x: xPosition, y: yPosition };
 }
 
 function getPosition(elem) {
@@ -51,29 +51,67 @@ function getPosition(elem) {
     return { x: xPosition, y: yPosition };
 }
 
-function makeNode(x, y) {
+function makeNode(e) {
     'use-strict';
 
-    var node = document.createElementNS(xmlns, 'rect');
-    // check for overlaps and off the chart problems before creating
-    node.setAttributeNS(null, 'x', x);
-    node.setAttributeNS(null, 'y', y);
-    node.setAttributeNS(null, 'width', 60);
-    node.setAttributeNS(null, 'height', 30);
-    node.setAttributeNS(null, 'fill', nodeColour);
-    node.setAttributeNS(null, 'style', 'border: 2px solid black');
-    node.setAttributeNS(null, 'onmousedown', 'nodeClicked(this)');
-    node.setAttributeNS(null, 'class', 'node');
-    document.getElementById('mySVG').appendChild(node);
+    // decide what to do based on what mode it is?
+    if (mode === 'node-mode') {
+        var position = getClickPosition(e);
+        var node = document.createElementNS(xmlns, 'rect');
+
+        console.log(position.x, position.y);
+        // check for overlaps and off the chart problems before creating
+        node.setAttributeNS(null, 'x', position.x);
+        node.setAttributeNS(null, 'y', position.y);
+        node.setAttributeNS(null, 'id', nodeId);
+        node.setAttributeNS(null, 'width', 60);
+        node.setAttributeNS(null, 'height', 30);
+        node.setAttributeNS(null, 'fill', nodeColour);
+    //    node.setAttributeNS(null, 'style', 'border: 2px solid black');
+        node.setAttributeNS(null, 'class', 'node');
+        
+        document.getElementById('mySVG').appendChild(node);
+        document.getElementById(nodeId).addEventListener('mousedown', nodeClicked, false);
+        document.getElementById(nodeId).addEventListener('mousemove', nodeMoved, false);
+        document.getElementById(nodeId).addEventListener('mouseup', nodeUnclicked, false);
+        //$("#" + nodeId).mousedown(function () {nodeClicked(nodeClicked())};);
+        nodeId = nodeId + 1;
+    }
 }
 
-function nodeClicked(elem) {
+function nodeClicked(e) {
     if (mode  === 'erase-mode') {
-        document.getElementById('mySVG').removeChild(elem);
+        document.getElementById('mySVG').removeChild(e.currentTarget);
     } else if (mode === 'change-mode') {
-        nodeSelected = elem;
-        nodeX = 5;
-        nodeY = 10;
+        nodeSelected = e.currentTarget;
+        var position = getClickPosition(e);
+        nodeX = position.x;
+        nodeY = position.y;
+        console.log(nodeX, nodeY);
+    }
+}
+
+function nodeMoved(e) {
+    if (mode === 'change-mode' && nodeSelected !== null) {
+        nodeSelected = this;
+        var position = getClickPosition(e);
+        var rectX = e.currentTarget.getAttribute('x')*1;
+        var rectY = e.currentTarget.getAttribute('y')*1;
+        rectX += (position.x - nodeX);
+        rectY += (position.y - nodeY);
+        e.currentTarget.setAttribute('x', rectX);
+        e.currentTarget.setAttribute('y', rectY);
+        nodeX = position.x;
+        nodeY = position.y;
+        console.log(e.currentTarget.x.animVal.value, e.currentTarget.y.animVal.value, nodeX, nodeY);
+    }
+}
+
+function nodeUnclicked(e) {
+    if (mode === 'change-mode') {
+        nodeSelected = null;
+        nodeX = -1;
+        nodeY = -1;
         console.log(nodeX, nodeY);
     }
 }
@@ -97,7 +135,6 @@ function changeColour(id) {
 }
 
 setupSVGCanvas();
-document.getElementById('mySVG').addEventListener('click', getClickPosition, false);
 
 $( '.mode' ).each(function( index ) {
   $( this ). click(function () {
@@ -111,7 +148,7 @@ $( '.colour' ).each(function( index ) {
 
 // TODO:
 /*
-- document ready method
+- document ready method ?
 x put all the jQuery .click definitions in a loop instead of for each button
 x put all style related stuff in CSS especially all the clicked button stuff
 - for node on click change to on mouse down on mouse move and on mouse up methods
