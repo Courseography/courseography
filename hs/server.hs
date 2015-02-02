@@ -8,7 +8,7 @@ import Control.Monad    (msum)
 import Happstack.Server
 import GridResponse
 import GraphResponse
-import AboutResponse
+--import AboutResponse
 import JsonParser
 import Tables
 import qualified Data.Aeson as Aeson
@@ -46,7 +46,7 @@ main = do
     simpleHTTP nullConf $
       msum [ dir grid $ gridResponse,
              dir graph $ graphResponse,
-             dir about $ aboutResponse contents,
+             --dir about $ aboutResponse contents,
              dir static $ serveDirectory EnableBrowsing [] staticDir,
              dir course $ path (\s -> liftIO $ queryCourse s)
            ]
