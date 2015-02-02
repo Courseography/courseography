@@ -35,7 +35,7 @@ $('#minor').click (function (e) {
     $('#minor').css('background-color', '#9C9C9C');
 });
 
-$(".code").click (function (e) {
+$('.code').click (function (e) {
     e.preventDefault();
     $(this).parent().find('.more-info').toggle();
 });
