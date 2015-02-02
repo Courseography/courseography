@@ -16,6 +16,7 @@ var nodeY = -1;
 
 //document.getElementById('red').style.spacity = 0.5;
 
+
 function setupSVGCanvas() {
     'use-strict';
 
@@ -27,6 +28,7 @@ function setupSVGCanvas() {
     document.getElementById('mySVG').addEventListener('click', makeNode, false);
 }
 
+
 function getClickPosition(e) {
     'use-strict';
 
@@ -36,6 +38,7 @@ function getClickPosition(e) {
 
     return { x: xPosition, y: yPosition };
 }
+
 
 function getPosition(elem) {
     'use-strict';
@@ -50,6 +53,7 @@ function getPosition(elem) {
     }
     return { x: xPosition, y: yPosition };
 }
+
 
 function makeNode(e) {
     'use-strict';
@@ -79,7 +83,10 @@ function makeNode(e) {
     }
 }
 
+
 function nodeClicked(e) {
+    'use-strict';
+
     if (mode  === 'erase-mode') {
         document.getElementById('mySVG').removeChild(e.currentTarget);
     } else if (mode === 'change-mode') {
@@ -91,7 +98,10 @@ function nodeClicked(e) {
     }
 }
 
+
 function nodeMoved(e) {
+    'use-strict';
+
     if (mode === 'change-mode' && nodeSelected !== null) {
         nodeSelected = this;
         var position = getClickPosition(e);
@@ -107,7 +117,10 @@ function nodeMoved(e) {
     }
 }
 
+
 function nodeUnclicked(e) {
+    'use-strict';
+
     if (mode === 'change-mode') {
         nodeSelected = null;
         nodeX = -1;
@@ -116,7 +129,10 @@ function nodeUnclicked(e) {
     }
 }
 
+
 function changeMode(id) {
+    'use-strict';
+
     if (mode !== '') {
       $('#'+mode).toggleClass('clicked');
     }
@@ -125,7 +141,10 @@ function changeMode(id) {
     $('#'+mode).toggleClass('clicked');
 }
 
+
 function changeColour(id) {
+    'use-strict';
+
     oldColour = document.getElementById(nodeColourId);      // clicked class
     oldColour.style.opacity = 1;
     nodeColourId = id;
@@ -133,6 +152,7 @@ function changeColour(id) {
     newColour = document.getElementById(nodeColourId);
     newColour.style.opacity = 0.5;
 }
+
 
 setupSVGCanvas();
 
