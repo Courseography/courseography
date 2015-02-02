@@ -2,7 +2,7 @@ $(document).ready(function () {
     'use-strict';
 	
     resetAttributes();
-    $(".more-info").hide();
+    $('.more-info').hide();
 });
 
 
@@ -37,7 +37,7 @@ $('#minor').click (function (e) {
 
 $(".code").click (function (e) {
     e.preventDefault();
-    $(this).parent().find(".more-info").toggle();
+    $(this).parent().find('.more-info').toggle();
 });
 
 /**
