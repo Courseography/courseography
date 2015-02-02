@@ -13,7 +13,7 @@ convertSVGToPNG :: String -> String -> IO
                       ProcessHandle)
 
 convertSVGToPNG inName outName = createProcess $ CreateProcess
-                                  (ShellCommand $ "convert ../res/graphs/graph_regions.svg graph.png"
+                                  (ShellCommand $ "convert ../res/graphs/graph_regions.svg INSERT_ID-graph.png"
                                    )
                                   Nothing
                                   Nothing

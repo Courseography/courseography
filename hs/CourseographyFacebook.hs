@@ -59,7 +59,7 @@ postPhoto (FB.UserAccessToken _ b _) id_ = withSocketsDo $ withManager $ \m -> d
     fbpost <- parseUrl $ "https://graph.facebook.com/v2.2/me/photos?access_token=" ++ T.unpack b
     flip httpLbs m =<<
         formDataBody [partBS "message" "Test Message",
-                      partFileSource "graph" $ (show id_) ++ "-graph.png"]
+                      partFileSource "graph" $ "INSERT_ID" ++ "-graph.png"]
                       fbpost
     return $ toResponse postFB
 
@@ -106,9 +106,9 @@ performPost code =
         token <- getToken testPostUrl code
         user <- FB.getUser "me" [] (Just token)
         let id_ = FB.userId user
-        liftIO $ createPNGFile (id_ ++ "-graph.png")
+        liftIO $ createPNGFile ("INSERT_ID" ++ "-graph.png")
         liftIO $ postPhoto token id_
-        liftIO $ removePNG (id_ ++ "-graph.png")
+        liftIO $ removePNG ("INSERT_ID" ++ "-graph.png")
         return $ toResponse postFB
 
 -- | Gets a user access token.
