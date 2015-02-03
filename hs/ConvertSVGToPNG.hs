@@ -23,6 +23,7 @@ convertSVGToPNG inName outName = createProcess $ CreateProcess
                                   CreatePipe
                                   False
                                   False
+                                  False
 -- | Removes a file.
 removePNG :: String -> IO
                      (Maybe Handle,
@@ -37,6 +38,7 @@ removePNG name = createProcess $ CreateProcess
                                   Inherit
                                   CreatePipe
                                   CreatePipe
+                                  False
                                   False
                                   False
 
