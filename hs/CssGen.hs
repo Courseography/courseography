@@ -59,7 +59,6 @@ headerCSS = do
            color white
            h2 ?
              do fontSize $ em 1.6
-                fontWeight bold
                 textAlign $ alignSide sideLeft
                 width $ px 200
                 display inlineBlock
@@ -78,6 +77,8 @@ headerCSS = do
                 padding 0 (px 10) 0 (px 10)
                 a <? do
                     color white
+                    hover & do
+                        color gray
 
 aDefaultCSS = do
     a <> a # hover <> a # visited <> a # active ? do
