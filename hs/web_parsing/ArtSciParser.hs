@@ -4,13 +4,16 @@ import Data.List
 import qualified Data.Text as T
 import qualified Data.Text.IO as B
 import Data.List.Utils
+import Data.Maybe
 import Tables
+import ParsingHelp
+
 
 {----------------------------------------------------------------------------------------
 TODO
     use Data.Text type instead of String for all functions
     remove duplicate courses
-    account for edge cases (courses that will encapsulate )
+    remove edge cases
 ----------------------------------------------------------------------------------------}
 
 fasCalendarURL :: String
@@ -22,7 +25,9 @@ A collection of pages that do not contain any course information
 toDelete :: [String]
 toDelete = ["199299398399Big_Ideas_(Faculty_of_Arts_&_Science_Programs).html",
             "Joint_Courses.html",
-            "Writing_in_the_Faculty_of_Arts_&_Science.html"]
+            "Writing_in_the_Faculty_of_Arts_&_Science.html",
+            "crs_bio.htm",
+            "Life_Sciences.html"]
 
 {----------------------------------------------------------------------------------------
 INPUT: 'processed' main page
@@ -65,8 +70,9 @@ getCalendar str = do
     let courses = map (filter (~== TagText "")) $ partitions isCourseTitle coursesSoup
     --converts course partitions into course Records
     let course = map (processCourseToData . filter (~/= TagText "\r\n")) courses
-    mapM_ (B.putStrLn . name)  course
-    --print  course
+    mapM_ (\c -> B.putStrLn $ name c) course
+    --B.putStrLn $ fromJust $ description $ (head course)
+    --print  courses
     where
         isComment (TagComment _) = False
         isComment _ = True
@@ -82,63 +88,29 @@ OUTPUT: Course 'record' containing course info
 ----------------------------------------------------------------------------------------}
 processCourseToData :: [Tag String] -> Course
 processCourseToData tags  =
-    let cleanTags = map cleanTag tags
-        getTitle = find (~== TagText "") cleanTags
-        --splitat 8 since first 8 represent course code
-        courseNames = splitAt 8 $ removeTitleGarbage $ removeLectureSection $ getTitle
-    in Course {breadth = Nothing, 
+    let course = 
+          Course {breadth = Nothing, 
             description = Nothing, 
-            --we drop 1 to remove space between title and course 
-            title  = (Just (T.pack $ drop 1 $ snd courseNames)),
+            title  = Nothing,
             prereqString = Nothing,
             f = Nothing,
             s = Nothing,
             y = Nothing,
-            name = T.pack $ fst courseNames,
+            name = T.pack "",
             exclusions = Nothing,
             manualTutorialEnrol = Nothing ,
             distribution = Nothing,
             prereqs = Nothing
         }
-    where
-        --remove [12l/24t] or similar from tag containing course code and name
-        removeLectureSection (Just (TagText s)) = takeWhile (/= '[') s
+    in snd (parsePrerequisite (parseDescription (parseTitle (tags, course))))
 
-        removeTitleGarbage s = replace "\160\160\160\160" " " s
-
-        cleanTag (TagText s) = TagText (replace "\r\n                   " " " s)
-
+-}
 main :: IO ()
 main = do
     rsp <- simpleHTTP (getRequest fasCalendarURL)
               -- fetch document and return it (as a 'String'.)
     body <- getResponseBody rsp
     let depts = doStuff body
-    --getCalendar $ filter (== "crs_csc.htm") depts
-    mapM_ getCalendar depts
+    getCalendar $ filter (== "crs_csc.htm") depts
+    --getCalendar (head depts)
 
-
-{-
-doStuff -> getDeptList -> map getCalendar 
--}
-
-{----------------------------------------------------------------------------------------
-course codes can be found in body <a href="csc_...#asdf">
-only other links either contain utoronto, or maps.google in href property
-----------------------------------------------------------------------------------------}
-{-
-getCrossListedCourses :: IO()
-getCrossListedCourses =  do
-    let path = fasCalendarURL ++ "Joint_Courses.html"
-    rsp <- simpleHTTP (getRequest path)
-              -- fetch document and return it (as a 'String'.)
-    body <- getResponseBody rsp
-    let tags  = partitions (isTagOpenName "a") (parseTags body)
-    let names = map (takeWhile (\x -> not (isTagClose x))) tags
-    let removeUseless = filter (\x -> not (isOtherLink (head x))) names
-    mapM_ (fromTagText . head . tail) removeUseless
-    where
-        isOtherLink (TagOpen _ [("href", link)]) = isInfixOf ".ca" link
-        isOtherLink (TagOpen _ [("name", _)]) = True
-        isotherLink _ = False
--}
