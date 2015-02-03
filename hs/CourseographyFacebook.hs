@@ -24,16 +24,16 @@ import Network.HTTP.Client (RequestBody(..))
 import Network (withSocketsDo)
 
 
-courseographyUrl :: String
+courseographyUrl :: T.Text
 courseographyUrl = "http://localhost:8000"
 
 testUrl :: FB.RedirectUrl
-testUrl = T.pack $ courseographyUrl ++ "/test"
+testUrl = T.append courseographyUrl "/test"
 
 testPostUrl :: FB.RedirectUrl
-testPostUrl = T.pack $ courseographyUrl ++ "/test-post"
+testPostUrl = T.append courseographyUrl "/test-post"
 
-postFB :: String
+postFB :: T.Text
 postFB = "post-fb"
 
 appId :: T.Text
@@ -49,7 +49,7 @@ appSecret :: T.Text
 appSecret = "INSERT_SECRET"
 
 credentials :: FB.Credentials
-credentials = FB.Credentials (T.pack courseographyUrl) appId appSecret
+credentials = FB.Credentials courseographyUrl appId appSecret
 
 perms :: [FB.Permission]
 perms = ["publish_actions"]
@@ -65,11 +65,11 @@ postPhoto (FB.UserAccessToken _ b _) id_ = withSocketsDo $ withManager $ \m -> d
 
 -- | Constructs the Facebook authorization URL. This method does not actually
 -- interact with Facebook.
-retrieveAuthURL :: T.Text -> IO String
+retrieveAuthURL :: T.Text -> IO T.Text
 retrieveAuthURL url = 
     performFBAction $ do
         fbAuthUrl <- FB.getUserAccessTokenStep1 url perms
-        return $ T.unpack fbAuthUrl
+        return fbAuthUrl
 
 -- | Retrieves the user's email.
 retrieveFBData :: BS.ByteString -> IO Response
