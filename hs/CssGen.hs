@@ -588,13 +588,11 @@ tdColours = ".timetable " ?  do
             backgroundColor red3
             ":hover" & do
                 backgroundColor red4
-    td # ("in-conflict" *= "false") # ("satisfied" *= "true") # ("type" *= "L") ? do
-            backgroundColor blue3
-    td # ("in-conflict" *= "false") # ("satisfied" *= "true") # ("type" *= "T") ? do
-            backgroundColor teal1
-    td # ("in-conflict" *= "false") # ("satisfied" *= "true") # ("type" *= "P") ? do
-            backgroundColor orange1
-
+    td # ("in-conflict" *= "false") # ("satisfied" *= "true") ? do
+        backgroundColor blue3
+        Clay.empty & do
+            backgroundColor white
+            
 
 teal1 = parse "#737A99"
 orange1 = parse "#1E7FCC"
