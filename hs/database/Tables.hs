@@ -22,6 +22,10 @@ import Control.Applicative
 data Time = Time { timeField :: [Int] } deriving (Show, Read, Eq)
 derivePersistField "Time"
 
+
+data Point = Point { point :: (Rational, Rational)} deriving (Show, Read, Eq)
+derivePersistField "Point"
+
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 Courses json
     code T.Text
@@ -64,6 +68,34 @@ Breadth
 Distribution
     dId Int
     description String
+    deriving Show
+
+Graphs
+    gId Int
+    title String
+    deriving Show
+
+Rects
+    gId Int
+    rId Int
+    width Rational
+    height Rational
+    xPos Rational
+    yPos Rational
+    colour String
+    deriving Show
+
+Texts
+    gId Int
+    rId Int Maybe
+    yPos Rational
+    xPos Rational
+    text String
+    deriving Show
+
+Paths
+    gId Int
+    d [Point]
     deriving Show
 |]
 
