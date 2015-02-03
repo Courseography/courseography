@@ -55,6 +55,7 @@ post = "post-fb"
 
 main :: IO ()
 main = do
+    print "Server is running..."
     cwd <- getCurrentDirectory
     let staticDir = encodeString $ parent $ decodeString cwd
     redirectUrlGraphEmail <- retrieveAuthURL testUrl
