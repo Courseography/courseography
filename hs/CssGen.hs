@@ -613,6 +613,13 @@ red2 = parse "#B91333"
 red3 = rgb 215 117 70
 red4 = rgb 195 97 50
 
+beige1 = parse "#EBE8E4"
+
+grey1 = parse "#222"
+grey2 = parse "#dedede"
+grey3 = parse "#949494"
+grey4 = parse "#BABABA"
+
 
 -- info layout
 infoCSS = "#info-layout" ? do
@@ -656,8 +663,8 @@ fceCountCSS = "#FCECountDiv" ? do
 -- Post Styles
 postStyles = do
     body ?
-        do backgroundColor $ "#EBE8E4"
-           color "#222"
+        do backgroundColor beige1
+           color grey1
            fontWeight $ normal
     tabsCSS
     postCSS
@@ -668,13 +675,12 @@ tabsCSS = do
         fontFamily ["HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", "Lucida Grande"][sansSerif]
         fontSize $ (px 15)
         width $ pct 97
-        backgroundColor $ "#fff"
-        border solid (px 1) "#dedede"
+        backgroundColor white 
+        border solid (px 1) grey2
         "border-radius" -: "4px"
         "box-shadow" -: "0 2px 2px -1px rgba(0, 0, 0, 0.055)"
         display block
         overflow hidden
-        color $ "#888"
         margin (px 8) (px 22) (px 8) (px 22)
         ul ? do
             width $ (pct 100)
@@ -735,9 +741,9 @@ postCSS = do
         color red
     ".more-info" ? do
         paddingLeft (px 20)
-        border solid (px 2) "#949494"
+        border solid (px 2) grey3
         "border-radius" -: "4px"
-        backgroundColor "#BABABA"
+        backgroundColor grey4
         "box-shadow" -: "0 2px 2px -1px rgba(0, 0, 0, 0.055)"
         lineHeight (px 40)
         "list-style-type" -: "none"
