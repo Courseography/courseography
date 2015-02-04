@@ -28,10 +28,10 @@ courseDirectory = "../../res/courses/"
 
 -- | Opens a directory contained in dir, and processes every file in that directory.
 processDirectory :: IO ()
-processDirectory = 
-    getDirectoryContents courseDirectory >>= \contents ->
-        let formattedContents = map (courseDirectory ++) (L.sort contents)
-        in filterM doesFileExist formattedContents >>= mapM_ printFile
+processDirectory = do
+    contents <- getDirectoryContents courseDirectory
+    let formattedContents = map (courseDirectory ++) (L.sort contents)
+    filterM doesFileExist formattedContents >>= mapM_ printFile
 
 -- | Opens and reads a files contents, and decodes JSON content into a Course data structure.
 printFile :: String -> IO ()
