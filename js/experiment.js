@@ -21,14 +21,16 @@ function setupSVGCanvas() {
     svg.setAttribute('id', 'mySVG');
     svg.setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xlink', 'http://www.w3.org/1999/xlink');
     document.body.appendChild(svg);
-    document.getElementById('mySVG').addEventListener('click', makeNode, false);
+    document.getElementById('mySVG').addEventListener('mousedown', makeNode, false);
+    document.getElementById('mySVG').addEventListener('mousemove', nodeMoved, false);
+    document.getElementById('mySVG').addEventListener('mouseup', nodeUnclicked, false);
 }
 
 
-function getClickPosition(e) {
+function getClickPosition(e, elem) {
     'use-strict';
 
-    var parentPosition = getPosition(e.currentTarget);
+    var parentPosition = getPosition(elem);
     var xPosition = e.clientX - parentPosition.x;
     var yPosition = e.clientY - parentPosition.y;
 
@@ -57,7 +59,7 @@ function makeNode(e) {
     // decide what to do based on what mode it is?
     if (mode === 'node-mode') {
         var g = document.createElementNS(xmlns, 'g');
-        var position = getClickPosition(e);
+        var position = getClickPosition(e, e.currentTarget);
         var node = document.createElementNS(xmlns, 'rect');
 
         g.setAttribute('class', 'node');
@@ -78,8 +80,6 @@ function makeNode(e) {
         g.appendChild(node);
         document.getElementById('mySVG').appendChild(g);
         document.getElementById(nodeId).addEventListener('mousedown', nodeClicked, false);
-        document.getElementById(nodeId).addEventListener('mousemove', nodeMoved, false);
-        document.getElementById(nodeId).addEventListener('mouseup', nodeUnclicked, false);
         nodeId += 1;
     }
 }
@@ -91,7 +91,7 @@ function nodeClicked(e) {
     if (mode  === 'erase-mode') {
         document.getElementById('mySVG').removeChild(e.currentTarget.parentNode);
     } else if (mode === 'change-mode') {
-        var position = getClickPosition(e);
+        var position = getClickPosition(e, e.currentTarget);
         nodeMoving = e.currentTarget;
         nodeX = position.x;
         nodeY = position.y;
@@ -104,17 +104,16 @@ function nodeMoved(e) {
     'use-strict';
 
     if (mode === 'change-mode' && nodeMoving !== null) {
-        var position = getClickPosition(e);
-        var rectX = parseFloat(e.currentTarget.getAttribute('x'));
-        var rectY = parseFloat(e.currentTarget.getAttribute('y'));
-        nodeMoving = e.currentTarget;
+        var position = getClickPosition(e, nodeMoving);
+        var rectX = parseFloat(nodeMoving.getAttribute('x'));
+        var rectY = parseFloat(nodeMoving.getAttribute('y'));
         rectX += (position.x - nodeX);
         rectY += (position.y - nodeY);
-        e.currentTarget.setAttribute('x', rectX);
-        e.currentTarget.setAttribute('y', rectY);
+        nodeMoving.setAttribute('x', rectX);
+        nodeMoving.setAttribute('y', rectY);
         nodeX = position.x;
         nodeY = position.y;
-        console.log(e.currentTarget.x.animVal.value, e.currentTarget.y.animVal.value, nodeX, nodeY);
+        console.log(nodeMoving.x.animVal.value, nodeMoving.y.animVal.value, nodeX, nodeY);
     }
 }
 
