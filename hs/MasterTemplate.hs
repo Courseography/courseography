@@ -27,7 +27,7 @@ header page = createTag H.nav "" "row header" $ do
   H.ul ! A.id "nav-links" $ do
     H.li $ makeA "" "" "graph" "" $ "Graph"
     H.li $ makeA "" "" "grid" "" $ "Grid"
-    H.li $ makeA "" "" "static/post/post.html" "" $ "Check My POSt!"
+    H.li $ makeA "" "" "post" "" $ "Check My POSt!"
     H.li $ makeA "" "" "about" "" $ "About"
 
 -- Disclaimer. This will be the same for both pages, I guess?

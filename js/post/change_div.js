@@ -2,6 +2,7 @@ $(document).ready(function () {
     'use-strict';
 	
     resetAttributes();
+    $('.more-info').hide();
 });
 
 
@@ -32,6 +33,11 @@ $('#minor').click (function (e) {
     resetAttributes();
     $('#div_minor').show();
     $('#minor').css('background-color', '#9C9C9C');
+});
+
+$('.code').click (function (e) {
+    e.preventDefault();
+    $(this).parent().find('.more-info').toggle();
 });
 
 /**

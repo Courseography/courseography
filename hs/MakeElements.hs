@@ -52,5 +52,9 @@ aboutLinks = concatHtml (map stylesheet ["//netdna.bootstrapcdn.com/bootstrap/3.
                                        "static/style/common/about.css",
                                        "static/style/common/common.css"])
 
+postLinks :: H.Html
+postLinks = concatHtml (map stylesheet ["static/style/post/post_styles.css",
+                                        "static/style/common/common.css"])
+
 concatHtml :: [H.Html] -> H.Html
 concatHtml html = foldl (>>) "" $ html

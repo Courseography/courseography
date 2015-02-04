@@ -9,6 +9,7 @@ import Happstack.Server
 import GridResponse
 import GraphResponse
 import AboutResponse
+import PostResponse
 import JsonParser
 import Tables
 import qualified Data.Aeson as Aeson
@@ -37,6 +38,9 @@ static = "static"
 course :: String
 course = "course"
 
+post :: String
+post = "post"
+
 main :: IO ()
 main = do
     generateCSS
@@ -46,6 +50,7 @@ main = do
     simpleHTTP nullConf $
       msum [ dir grid $ gridResponse,
              dir graph $ graphResponse,
+             dir post $ postResponse,
              dir about $ aboutResponse contents,
              dir static $ serveDirectory EnableBrowsing [] staticDir,
              dir course $ path (\s -> liftIO $ queryCourse s)
