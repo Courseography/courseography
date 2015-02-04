@@ -9,11 +9,9 @@ var colours = {
      'blue':'#437699',
      'purple':'#46364A'
 };
-var nodeSelected = null; // for movement and path creation
+var nodeMoving = null; // for movement and path creation
 var nodeX = -1; // for movement
 var nodeY = -1; // for movement
-
-//document.getElementById('red').style.spacity = 0.5;
 
 
 function setupSVGCanvas() {
@@ -58,20 +56,27 @@ function makeNode(e) {
 
     // decide what to do based on what mode it is?
     if (mode === 'node-mode') {
+        var g = document.createElementNS(xmlns, 'g');
         var position = getClickPosition(e);
         var node = document.createElementNS(xmlns, 'rect');
 
-        console.log(position.x, position.y);
+        g.setAttribute('class', 'node');
+        g.setAttribute('data-active', 'active');
+        g.setAttribute('data-group', nodeColourId);
+    
         // check for overlaps and off the chart problems before creating ?
-        node.setAttributeNS(null, 'x', position.x);
-        node.setAttributeNS(null, 'y', position.y);
-        node.setAttributeNS(null, 'id', nodeId);
-        node.setAttributeNS(null, 'width', 60);
-        node.setAttributeNS(null, 'height', 30);
-        node.setAttributeNS(null, 'fill', colours[nodeColourId]);
-        node.setAttributeNS(null, 'class', 'node');
+        node.setAttribute('x', position.x);
+        node.setAttribute('y', position.y);
+        node.setAttribute('rx', 4);
+        node.setAttribute('ry', 4);
+        node.setAttribute('id', nodeId);
+        node.setAttribute('width', 40);
+        node.setAttribute('height', 32);
+        //node.setAttribute('fill', colours[nodeColourId]);
+        node.setAttribute('class', 'node');
         
-        document.getElementById('mySVG').appendChild(node);
+        g.appendChild(node);
+        document.getElementById('mySVG').appendChild(g);
         document.getElementById(nodeId).addEventListener('mousedown', nodeClicked, false);
         document.getElementById(nodeId).addEventListener('mousemove', nodeMoved, false);
         document.getElementById(nodeId).addEventListener('mouseup', nodeUnclicked, false);
@@ -84,10 +89,10 @@ function nodeClicked(e) {
     'use-strict';
 
     if (mode  === 'erase-mode') {
-        document.getElementById('mySVG').removeChild(e.currentTarget);
+        document.getElementById('mySVG').removeChild(e.currentTarget.parentNode);
     } else if (mode === 'change-mode') {
         var position = getClickPosition(e);
-        nodeSelected = e.currentTarget;
+        nodeMoving = e.currentTarget;
         nodeX = position.x;
         nodeY = position.y;
         console.log(nodeX, nodeY);
@@ -98,11 +103,11 @@ function nodeClicked(e) {
 function nodeMoved(e) {
     'use-strict';
 
-    if (mode === 'change-mode' && nodeSelected !== null) {
+    if (mode === 'change-mode' && nodeMoving !== null) {
         var position = getClickPosition(e);
         var rectX = parseFloat(e.currentTarget.getAttribute('x'));
         var rectY = parseFloat(e.currentTarget.getAttribute('y'));
-        nodeSelected = e.currentTarget;
+        nodeMoving = e.currentTarget;
         rectX += (position.x - nodeX);
         rectY += (position.y - nodeY);
         e.currentTarget.setAttribute('x', rectX);
@@ -118,7 +123,7 @@ function nodeUnclicked(e) {
     'use-strict';
 
     if (mode === 'change-mode') {
-        nodeSelected = null;
+        nodeMoving = null;
         nodeX = -1;
         nodeY = -1;
         console.log(nodeX, nodeY);
@@ -140,7 +145,7 @@ function changeMode(id) {
 function changeColour(id) {
     'use-strict';
 
-    $('#' + nodeColourId).toggleClass('clicked'); // how to start?
+    $('#' + nodeColourId).toggleClass('clicked');
     nodeColourId = id;
     $('#' + nodeColourId).toggleClass('clicked');
 }

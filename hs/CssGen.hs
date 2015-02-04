@@ -144,6 +144,11 @@ aiDark = "#80B2FF"
 hciDark = "#B8FF70"
 titleColour = "#072D68"
 
+dRed = "#D77546"
+dGreen = "#2E8B57"
+dBlue = "#437699"
+dPurple = "#46364A"
+
 lightGrey = "#CCCCCC"
 
 nodeCSS = "g" ? do
@@ -210,6 +215,19 @@ nodeCSS = "g" ? do
         "data-group" @= "hci" & do
             "rect" <? do
                 fill hciDark
+        -- For nodes in draw tab
+        "data-group" @= "red" & do
+            "rect" <? do
+                fill dRed
+        "data-group" @= "blue" & do
+            "rect" <? do
+                fill dBlue
+        "data-group" @= "green" & do
+            "rect" <? do
+                fill dGreen
+        "data-group" @= "purple" & do
+            "rect" <? do
+                fill dPurple
         -- Since groups are missing right now
         "rect" <? do
             stroke "black"
@@ -688,14 +706,14 @@ colourButtonsCSS = ".colour" ? do
         textDecoration underline
 
 redCSS = "#red" ? do
-    backgroundColor red3
+    backgroundColor $ parse dRed
     
 greenCSS = "#green" ? do
-    backgroundColor $ parse "#2E8B57"
+    backgroundColor $ parse dGreen
 
 blueCSS = "#blue"? do
-    backgroundColor blue3
+    backgroundColor $ parse dBlue
 
 purpleCSS = "#purple"? do
-    backgroundColor purple1
+    backgroundColor $ parse dPurple
 

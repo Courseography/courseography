@@ -20,7 +20,6 @@ drawResponse =
                 (do
                     header "draw"
                     drawHtml
-
                     modePanel
                 )
                 timetableScripts
