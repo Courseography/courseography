@@ -12,21 +12,21 @@ import qualified Data.Aeson as Aeson
 
 -- | Queries the database for all information about `course`, constructs a JSON object 
 -- | representing the course and returns the appropriate JSON response.
-queryCourse :: String -> IO Response
+queryCourse :: T.Text -> IO Response
 queryCourse courseStr = 
     runSqlite (T.pack ("database/" ++ T.unpack dbStr)) $ do
-        sqlCourse :: [Entity Courses] <- selectList [CoursesCode ==. T.pack courseStr] []
-        sqlLecturesFall :: [Entity Lectures]  <- selectList [LecturesCode  ==. T.pack courseStr,
+        sqlCourse :: [Entity Courses] <- selectList [CoursesCode ==. courseStr] []
+        sqlLecturesFall :: [Entity Lectures]  <- selectList [LecturesCode  ==. courseStr,
                                                              LecturesSession ==. "F"] []
-        sqlLecturesSpring :: [Entity Lectures]  <- selectList [LecturesCode  ==. T.pack courseStr, 
+        sqlLecturesSpring :: [Entity Lectures]  <- selectList [LecturesCode  ==. courseStr, 
                                                                LecturesSession ==. "S"] []
-        sqlLecturesYear :: [Entity Lectures]  <- selectList [LecturesCode  ==. T.pack courseStr, 
+        sqlLecturesYear :: [Entity Lectures]  <- selectList [LecturesCode  ==. courseStr, 
                                                                LecturesSession ==. "Y"] []
-        sqlTutorialsFall :: [Entity Tutorials] <- selectList [TutorialsCode ==. T.pack courseStr, 
+        sqlTutorialsFall :: [Entity Tutorials] <- selectList [TutorialsCode ==. courseStr, 
                                                               TutorialsSession ==. "F"] []
-        sqlTutorialsSpring :: [Entity Tutorials] <- selectList [TutorialsCode ==. T.pack courseStr, 
+        sqlTutorialsSpring :: [Entity Tutorials] <- selectList [TutorialsCode ==. courseStr, 
                                                                 TutorialsSession ==. "S"] []
-        sqlTutorialsYear :: [Entity Tutorials] <- selectList [TutorialsCode ==. T.pack courseStr, 
+        sqlTutorialsYear :: [Entity Tutorials] <- selectList [TutorialsCode ==. courseStr, 
                                                                 TutorialsSession ==. "Y"] []
         let course = entityVal $ head sqlCourse
         let fallSession   = buildSession sqlLecturesFall sqlTutorialsFall
@@ -42,15 +42,15 @@ buildCourse fallSession springSession yearSession course =
     Course (coursesBreadth course)
            (coursesDescription course)
            (coursesTitle course)
-            Nothing --prereqString
-            fallSession
-            springSession
-            yearSession
+           Nothing
+           fallSession
+           springSession
+           yearSession
            (coursesCode course)
            (coursesExclusions course)
-           (coursesManualTutorialEnrolment course)               -- manualTutorialEnrolment
+           (coursesManualTutorialEnrolment course)
            (coursesDistribution course)
-            Nothing -- prereqs
+           Nothing
 
 -- | Builds a Lecture structure from a tuple from the Lectures table.
 buildLecture :: Lectures -> Lecture
