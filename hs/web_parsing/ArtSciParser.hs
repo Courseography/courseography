@@ -104,7 +104,7 @@ processCourseToData tags  =
         }
     in snd (parsePrerequisite (parseDescription (parseTitle (tags, course))))
 
--}
+
 main :: IO ()
 main = do
     rsp <- simpleHTTP (getRequest fasCalendarURL)

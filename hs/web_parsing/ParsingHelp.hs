@@ -1,6 +1,5 @@
 module ParsingHelp 
-  (getCourse,
-    regReplace,
+  (regReplace,
     tagContains,
     tagContainsAny,
     parseTitle,
@@ -17,16 +16,6 @@ import Tables
 
 type CoursePart = ([Tag String], Course)
 
-{-
-preProcess :: [Tag String] -> [Tag String]
-preprocess tags =
-  filter (~/= TagText "\r\n") tags 
-  regReplace "(\160)*" " "
--}
-
-
-getCourse :: CoursePart -> Course
-getCourse (_, course) = course
 {------------------------------------------------------------------------------
 INPUT: reg is a regex string, str is a string
 OUTPUT: string where every instance of reg in str is replaced
@@ -46,17 +35,10 @@ INPUT: a tag containing string tagtext, and reg, a regex string
 OUTPUT: True if reg can match tagtext
 -------------------------------------------------------------------------------}
 tagContains :: String -> Tag String -> Bool
-tagContains str (TagText tagtext) = contains str tagtext 
+tagContains reg (TagText tagtext) = tagtext =~ reg
 
 {------------------------------------------------------------------------------
-INPUT: a list of strings str, a tag tag
-OUTPUT: True if the text contained in tag contains any of the strings in strs
-------------------------------------------------------------------------------}
-tagContainsAny :: [String] -> Tag String -> Bool
-tagContainsAny strs tag = or (map (\str -> tagContains str tag) strs)
-
-{------------------------------------------------------------------------------
-INPUT a tag
+INPUT a coursePart with empty course record
 OUTPUT: A CoursePart with a course record that has title and name filled in
 
 assumes all TagText "\r\n" have been removed
@@ -70,41 +52,47 @@ parseTitle (title:tags, course) =
   where removeLectureSection (TagText s) = takeWhile (/= '[') s
         removeTitleGarbage s = replace "\160\160\160\160" " " s
 
-
 {------------------------------------------------------------------------------
-INPUT: a CourseParser
-OUTPUT: a CourseParser, where the course record now contains 
+INPUT: a CoursePart with title fields filled
+OUTPUT: a CoursePart, where the course record now contains description info
 ------------------------------------------------------------------------------}
 parseDescription :: CoursePart -> CoursePart
 parseDescription (tags, course) = 
   --want to take everything before the next field, and since Prerequisites and Exlusion are optional,
   --we have to make sure 
-  let descriptags = takeWhile (\tag -> not (tagContainsAny ["Prerequisite", "Exclusion", "Distribution"] tag)) tags
+  let descriptags = takeWhile notNextTags tags
       descriptn = (Just (T.pack (concat (map fromTagText descriptags))))
-      restofTags = dropWhile (\tag -> not (tagContainsAny ["Prerequisite", "Exclusion", "Distribution"] tag)) tags
+      restofTags = dropWhile notNextTags tags
   in (restofTags, course {description = descriptn})
+  where notNextTags x = not $ (tagContains "Prerequisite|Exclusion|Distribution" x)
 
 {-----------------------------------------------------------------------------
-
-STILL NEED TO PUT IN PREREQ FIELD
+INPUT: a CoursePart with title and description fields filled
+OUTPUT: A CoursePart, where the course record now contains prerequisite info
 -----------------------------------------------------------------------------}
 parsePrerequisite :: CoursePart -> CoursePart
 parsePrerequisite (tags, course) = 
-  let prereqTags = takeWhile (\x -> not (tagContainsAny ["Exclusion", "Distribution"] x)) tags
+  let prereqTags = takeWhile notNextTags tags
       cleanedTags = map cleanTag prereqTags
-      restOfTags = dropWhile (\x -> not (tagContainsAny ["Exclusion", "Distribution"] x)) tags
+      restOfTags = dropWhile notNextTags tags
       prereqstr = (Just (T.pack (concat (map fromTagText cleanedTags))))
   in  if prereqTags == []
       then (tags, course)
       else (restOfTags, course {prereqString = prereqstr})  
   where cleanTag (TagText s) = TagText (replace "Prerequisite:\r\n                   " " " s)
+        notNextTags x = not $ (tagContains "Exclusion|Distribution" x)
 
 {-----------------------------------------------------------------------------
 -----------------------------------------------------------------------------}
---parseExclusion :: CoursePart -> CoursePart
-
+parseExclusion :: CoursePart -> CoursePart
+parseExclusion coursepart = coursepart
 
 {-----------------------------------------------------------------------------
------------------------------------------------------------------------------
+-----------------------------------------------------------------------------}
 parseDistribution :: CoursePart -> CoursePart
--}
+parseDistribution coursepart = coursepart
+
+{-----------------------------------------------------------------------------
+-----------------------------------------------------------------------------}
+parseBreadth :: CoursePart -> CoursePart
+parseBreadth coursepart = coursepart 
