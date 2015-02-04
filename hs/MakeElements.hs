@@ -53,4 +53,4 @@ aboutLinks = concatHtml (map stylesheet ["//netdna.bootstrapcdn.com/bootstrap/3.
                                        "static/style/common/common.css"])
 
 concatHtml :: [H.Html] -> H.Html
-concatHtml html = foldl (>>) "" html
+concatHtml html = sequence_ html
