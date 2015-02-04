@@ -19,8 +19,8 @@ main = do
     let staticDir = encodeString $ parent $ decodeString cwd
     contents <- readFile "../README.md"
     simpleHTTP nullConf $
-        msum [ dir "grid" $ gridResponse,
-               dir "graph" $ graphResponse,
+        msum [ dir "grid" gridResponse,
+               dir "graph" graphResponse,
                --dir "about" $ aboutResponse contents,
                dir "static" $ serveDirectory EnableBrowsing [] staticDir,
                dir "course" $ path (\s -> liftIO $ queryCourse (T.pack s))
