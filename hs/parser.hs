@@ -1,4 +1,4 @@
-{-# LANGUAGE OverloadedStrings, FlexibleContexts, GADTs #-}
+{-# LANGUAGE OverloadedStrings, FlexibleContexts, GADTs, ScopedTypeVariables #-}
 module Main where
 
 import Text.XML.HaXml
@@ -14,6 +14,7 @@ import Database.Persist
 import Database.Persist.Sqlite
 import Text.XML.HaXml.Namespaces
 import Data.Conduit
+import Data.Text as T (pack, unpack)
 import Tables
 import JsonParser
 
@@ -35,24 +36,76 @@ main = do x <- readFile "../res/graphs/graph_regions.svg"
           --print $ map (\x -> parseContent (tag "path") x) $ parseDocument ch y
           --print $ getAttribute "x" $ head $ parseDocument z y
           --print $ map (getAttribute "id") $ parseLevel $ getRoot y
-          parseLevel $ getRoot y
+          --parseLevel (0,0) $ getRoot y
+          queryCourse
+          printDB
 --          print $ getAttrs $ contentElem $ head $ drop 9 $  getChildren $ getRoot y
 
-parseLevel :: Content i -> IO ()--[Content i]
-parseLevel content3 = do
-  -- Get Rects
+svgHeader :: String
+svgHeader = "<svg" ++
+   "xmlns:dc=\"http://purl.org/dc/elements/1.1/\"" ++
+   "xmlns:cc=\"http://creativecommons.org/ns#\"" ++
+   "xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"" ++
+   "xmlns:svg=\"http://www.w3.org/2000/svg\"" ++
+   "xmlns=\"http://www.w3.org/2000/svg\"" ++
+   "xmlns:xlink=\"http://www.w3.org/1999/xlink\"" ++
+   "xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\"" ++
+   "xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\"" ++
+   "width=\"1052.3622\"" ++
+   "height=\"744.09448\"" ++
+   "id=\"svg2\"" ++
+   "version=\"1.1\"" ++
+   "sodipodi:docname=\"graph_regions.svg\"><g>"
+
+svgFooter :: String
+svgFooter = "</g></svg>"
+
+printDB :: IO ()
+printDB = runSqlite dbStr $ do
+          let sql = "SELECT * FROM rects"
+          rawQuery sql [] $$ CL.mapM_ (liftIO . print)
+
+queryCourse :: IO ()
+queryCourse = 
+    runSqlite dbStr $ do
+        sqlRects :: [Entity Rects] <- selectList [] []
+        let x = map (convertRectToXML . buildRect . entityVal) sqlRects
+        liftIO $ writeFile "Testfile" svgHeader
+        liftIO $ appendFile "Testfile" $ unwords x
+        liftIO $ appendFile "Testfile" svgFooter
+
+convertRectToXML :: Rect -> String
+convertRectToXML rect = "<rect x=\"" ++ 
+                        (show $ fromRational $ xPos rect) ++
+                        "\" y=\"" ++
+                        (show $ fromRational $ yPos rect) ++
+                        "\" width=\"" ++
+                        (show $ fromRational $ width rect) ++
+                        "\" height=\"" ++
+                        (show $ fromRational $ height rect) ++
+                        "\"/>"
+
+buildRect :: Rects -> Rect
+buildRect entity = Rect (rectsWidth entity)
+                        (rectsHeight entity)
+                        (rectsXPos entity)
+                        (rectsYPos entity)
+
+parseLevel :: (Float, Float) -> Content i -> IO ()
+parseLevel parentTransform content3 = do
   let rects = parseContent (tag "rect") content3
-  -- Get Children
   let children = getChildren content3
-  parseRects rects
-  parseChildren children
+  let transform = getAttribute "transform" content3
+  let x = if null transform then (0,0) else parseTransform transform
+  let adjustedTransform = (fst parentTransform + fst x, snd parentTransform + snd x)
+  parseElements (parseRect adjustedTransform) rects
+  parseChildren adjustedTransform children
 
 
-parseChildren :: [Content i] -> IO ()
-parseChildren [] = print "Level parsed"
-parseChildren (x:xs) = do parseLevel x
-                          parseChildren xs
-
+parseChildren :: (Float, Float) -> [Content i] -> IO ()
+parseChildren adjustedTransform [] = print "Level parsed"
+parseChildren adjustedTransform (x:xs) = do parseLevel adjustedTransform x
+                                            parseChildren adjustedTransform xs
 
 --parseLevel :: Content i -> (Float, Float)--[Content i]
 --parseLevel content3 = do
@@ -66,18 +119,26 @@ parseChildren (x:xs) = do parseLevel x
 --  let childrenTransformX = foldl (+) 0 (map fst $ map parseLevel $ getChildren content3)
 --  let childrenTransformY = foldl (+) 0 (map snd $ map parseLevel $ getChildren content3)
 --  (fst x + childrenTransformX, snd x + childrenTransformY)
-  
-parseRects :: [Content i] -> IO ()
-parseRects (x:xs) = do parseRect x
-                       parseRects xs
-parseRects [] = print "Done"
 
-parseRect :: Content i -> IO ()
-parseRect content = insertRectIntoDB (getAttribute "id" content)
-                                     (read $ getAttribute "width" content :: Float)
-                                     (read $ getAttribute "height" content :: Float)
-                                     (read $ getAttribute "x" content :: Float)
-                                     (read $ getAttribute "y" content :: Float)
+parseElements :: (Content i -> IO ()) -> [Content i] -> IO ()
+parseElements f (x:xs) = do f x
+                            parseElements f xs
+parseElements f [] = print "Done Rects"
+
+parseRect :: (Float, Float) -> Content i -> IO ()
+parseRect transform content = 
+    insertRectIntoDB (getAttribute "id" content)
+       (read $ getAttribute "width" content :: Float)
+       (read $ getAttribute "height" content :: Float)
+       ((read $ getAttribute "x" content :: Float) + fst transform)
+       ((read $ getAttribute "y" content :: Float) + snd transform)
+
+--parseText :: Content i -> IO ()
+--parseText content = insertRectIntoDB (getAttribute "id" content)
+--                                     (read $ getAttribute "width" content :: Float)
+--                                     (read $ getAttribute "height" content :: Float)
+--                                     (read $ getAttribute "x" content :: Float)
+--                                     (read $ getAttribute "y" content :: Float)
 
 getRoot :: Document i -> Content i
 getRoot doc = head $ parseDocument (tag "svg") doc
@@ -91,8 +152,6 @@ insertRectIntoDB id_ width height xPos yPos = runSqlite dbStr $ do
                         (toRational height)
                         (toRational xPos)
                         (toRational yPos)
-        let sql = "SELECT * FROM rects"
-        rawQuery sql [] $$ CL.mapM_ (liftIO . print)
 
 filterAttrVal :: [Attribute] -> String -> String
 filterAttrVal attrs attrName = snd $ head $ filter (\x -> snd x == attrName) $ map convertAttributeToTuple attrs
