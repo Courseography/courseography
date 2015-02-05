@@ -535,10 +535,12 @@ courseSelectCSS = do
             width (px 18)
             height (px 20)
             padding (px 1) 0 (px 1) 0
+            cursor pointer
         ".icon-div" ? do
             width (px 20)
             minHeight (px 40)
             float floatLeft
+            cursor pointer
         ".sections" ? do
             -- overflow: auto <-- really necessary?
             cursor pointer -- necessary?
