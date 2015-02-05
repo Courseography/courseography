@@ -540,7 +540,6 @@ courseSelectCSS = do
             width (px 20)
             minHeight (px 40)
             float floatLeft
-            cursor pointer
         ".sections" ? do
             -- overflow: auto <-- really necessary?
             cursor pointer -- necessary?
