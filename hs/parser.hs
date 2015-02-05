@@ -44,7 +44,14 @@ parseLevel content3 = do
   let rects = parseContent (tag "rect") content3
   -- Get Children
   let children = getChildren content3
-  insertRectIntoDB "f" 3.3 3.3 3.3 3.3
+  parseRects rects
+  parseChildren children
+
+
+parseChildren :: [Content i] -> IO ()
+parseChildren [] = print "Level parsed"
+parseChildren (x:xs) = do parseLevel x
+                          parseChildren xs
 
 
 --parseLevel :: Content i -> (Float, Float)--[Content i]
@@ -59,6 +66,18 @@ parseLevel content3 = do
 --  let childrenTransformX = foldl (+) 0 (map fst $ map parseLevel $ getChildren content3)
 --  let childrenTransformY = foldl (+) 0 (map snd $ map parseLevel $ getChildren content3)
 --  (fst x + childrenTransformX, snd x + childrenTransformY)
+  
+parseRects :: [Content i] -> IO ()
+parseRects (x:xs) = do parseRect x
+                       parseRects xs
+parseRects [] = print "Done"
+
+parseRect :: Content i -> IO ()
+parseRect content = insertRectIntoDB (getAttribute "id" content)
+                                     (read $ getAttribute "width" content :: Float)
+                                     (read $ getAttribute "height" content :: Float)
+                                     (read $ getAttribute "x" content :: Float)
+                                     (read $ getAttribute "y" content :: Float)
 
 getRoot :: Document i -> Content i
 getRoot doc = head $ parseDocument (tag "svg") doc
