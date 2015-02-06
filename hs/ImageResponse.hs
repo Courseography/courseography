@@ -10,7 +10,7 @@ import qualified Data.ByteString.Base64.Lazy as B
 
 import ConvertSVGToPNG
 imageResponse :: ServerPart Response
-imageResponse = liftIO $ getImage
+imageResponse = liftIO getImage
 
 -- | Creates an image, and returns the base64 representation of that image.
 getImage :: IO Response
