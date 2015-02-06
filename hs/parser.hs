@@ -19,19 +19,9 @@ import Tables
 import JsonParser
 
 main :: IO ()
-main = do x <- readFile "../res/graphs/graph_regions.svg"
-          let y = xmlParse "output.error" x
-          --let c = head $ map contentElem $ parseDocument z y
-          --print $ map tagTextContent $ parseDocument z y
-          --print $ getName c
-          --print $ map (\x -> map convertAttributeToTuple x) $ map getAttrs $ map contentElem $ parseDocument z y
-          --print $ map convertAttributeToTuple $ getAttrs c 
-          --print $ map convertAttributeToTuple $ getAttrs $ head $ map contentElem $ parseDocument svg y
-          --print $ parseDocument ch y
-          --print $ map (\x -> parseContent (tag "path") x) $ parseDocument ch y
-          --print $ getAttribute "x" $ head $ parseDocument z y
-          --print $ map (getAttribute "id") $ parseLevel $ getRoot y
-          --parseLevel (0,0) $ getRoot y
+main = do graphFile <- readFile "../res/graphs/graph_regions.svg"
+          let graphDoc = xmlParse "output.error" graphFile
+          parseLevel (0,0) $ getRoot graphDoc
           queryRects
           --printDB
 
@@ -59,8 +49,8 @@ svgStyle = "fill:#8ccdf6;stroke:#8ccdf6"
 
 printDB :: IO ()
 printDB = runSqlite dbStr $ do
-          let sql = "SELECT * FROM rects"
-          rawQuery sql [] $$ CL.mapM_ (liftIO . print)
+              let sql = "SELECT * FROM rects"
+              rawQuery sql [] $$ CL.mapM_ (liftIO . print)
 
 queryRects :: IO ()
 queryRects = 
@@ -75,72 +65,63 @@ queryRects =
         liftIO $ appendFile "Testfile.svg" svgFooter
 
 convertRectToXML :: Rect -> String
-convertRectToXML rect = "<rect x=\"" ++ 
-                        (show $ fromRational $ xPos rect) ++
-                        "\" y=\"" ++
-                        (show $ fromRational $ yPos rect) ++
-                        "\" width=\"" ++
-                        (show $ fromRational $ width rect) ++
-                        "\" height=\"" ++
-                        (show $ fromRational $ height rect) ++
-                        "\" style=\"" ++
-                        svgStyle ++
-                        "\"/>"
+convertRectToXML rect = 
+    "<rect x=\"" ++ 
+    show (fromRational $ xPos rect) ++
+    "\" y=\"" ++
+    show (fromRational $ yPos rect) ++
+    "\" width=\"" ++
+    show (fromRational $ width rect) ++
+    "\" height=\"" ++
+    show (fromRational $ height rect) ++
+    "\" style=\"" ++
+    svgStyle ++
+    "\"/>"
 
 convertTextToXML :: Text -> String
-convertTextToXML text = "<text xml:space=\"preserve\" x=\"" ++ 
-                        (show $ fromRational $ textXPos text) ++
-                        "\" y=\"" ++
-                        (show $ fromRational $ textYPos text) ++
-                        "\">" ++ (textText text) ++"</text>"
+convertTextToXML text = 
+    "<text xml:space=\"preserve\" x=\"" ++ 
+    (show $ fromRational $ textXPos text) ++
+    "\" y=\"" ++
+    (show $ fromRational $ textYPos text) ++
+    "\">" ++ (textText text) ++"</text>"
 
 buildRect :: Rects -> Rect
-buildRect entity = Rect (rectsWidth entity)
-                        (rectsHeight entity)
-                        (rectsXPos entity)
-                        (rectsYPos entity)
-                        (rectsStyle entity)
+buildRect entity = 
+    Rect (rectsWidth entity)
+         (rectsHeight entity)
+         (rectsXPos entity)
+         (rectsYPos entity)
+         (rectsStyle entity)
 
 buildText :: Texts -> Text
-buildText entity = Text (textsXPos entity)
-                        (textsYPos entity)
-                        (textsText entity)
+buildText entity = 
+    Text (textsXPos entity)
+         (textsYPos entity)
+         (textsText entity)
 
 parseLevel :: (Float, Float) -> Content i -> IO ()
 parseLevel parentTransform content3 = do
-  let rects = parseContent (tag "rect") content3
-  let texts = parseContent (tag "text") content3
-  let children = getChildren content3
-  let transform = getAttribute "transform" content3
-  let x = if null transform then (0,0) else parseTransform transform
-  let adjustedTransform = (fst parentTransform + fst x, snd parentTransform + snd x)
-  parseElements (parseRect adjustedTransform) rects
-  parseElements (parseText adjustedTransform) texts
-  parseChildren adjustedTransform children
+    let rects = parseContent (tag "rect") content3
+    let texts = parseContent (tag "text") content3
+    let children = getChildren content3
+    let transform = getAttribute "transform" content3
+    let x = if null transform then (0,0) else parseTransform transform
+    let adjustedTransform = (fst parentTransform + fst x, snd parentTransform + snd x)
+    parseElements (parseRect adjustedTransform) rects
+    parseElements (parseText adjustedTransform) texts
+    parseChildren adjustedTransform children
 
 
 parseChildren :: (Float, Float) -> [Content i] -> IO ()
-parseChildren adjustedTransform [] = print "Level parsed"
+parseChildren adjustedTransform [] = print "Level parsed..."
 parseChildren adjustedTransform (x:xs) = do parseLevel adjustedTransform x
                                             parseChildren adjustedTransform xs
 
---parseLevel :: Content i -> (Float, Float)--[Content i]
---parseLevel content3 = do
---  -- Get Rects
---  let rects = parseContent (tag "rect") content3
---  -- Get Children
---  let children = getChildren content3
---  --let x = foldl (++) [] (map parseLevel children)
---  let transform = getAttribute "transform" content3
---  let x = if null transform then (0,0) else parseTransform transform
---  let childrenTransformX = foldl (+) 0 (map fst $ map parseLevel $ getChildren content3)
---  let childrenTransformY = foldl (+) 0 (map snd $ map parseLevel $ getChildren content3)
---  (fst x + childrenTransformX, snd x + childrenTransformY)
-
 parseElements :: (Content i -> IO ()) -> [Content i] -> IO ()
+parseElements f [] = print "Finished elements..."
 parseElements f (x:xs) = do f x
                             parseElements f xs
-parseElements f [] = print "Done Rects"
 
 parseRect :: (Float, Float) -> Content i -> IO ()
 parseRect transform content = 
@@ -161,7 +142,8 @@ getRoot :: Document i -> Content i
 getRoot doc = head $ parseDocument (tag "svg") doc
 
 insertRectIntoDB :: String -> Float -> Float -> Float -> Float -> String -> IO ()
-insertRectIntoDB id_ width height xPos yPos style = runSqlite dbStr $ do
+insertRectIntoDB id_ width height xPos yPos style = 
+    runSqlite dbStr $ do
         runMigration migrateAll
         insert_ $ Rects 1
                         id_
@@ -172,7 +154,8 @@ insertRectIntoDB id_ width height xPos yPos style = runSqlite dbStr $ do
                         style
 
 insertTextIntoDB :: String -> Float -> Float -> String -> IO ()
-insertTextIntoDB id_ xPos yPos text = runSqlite dbStr $ do
+insertTextIntoDB id_ xPos yPos text = 
+    runSqlite dbStr $ do
         runMigration migrateAll
         insert_ $ Texts 1
                         id_
@@ -180,8 +163,8 @@ insertTextIntoDB id_ xPos yPos text = runSqlite dbStr $ do
                         (toRational yPos)
                         text
 
-filterAttrVal :: [Attribute] -> String -> String
-filterAttrVal attrs attrName = snd $ head $ filter (\x -> snd x == attrName) $ map convertAttributeToTuple attrs
+--filterAttrVal :: [Attribute] -> String -> String
+--filterAttrVal attrs attrName = snd $ head $ filter (\x -> snd x == attrName) $ map convertAttributeToTuple attrs
 
 -- | Applys a CFilter to a Document and produces a list of the Content filtered 
 -- by the CFilter.
@@ -189,7 +172,7 @@ parseDocument :: CFilter i -> Document i -> [Content i]
 parseDocument filter (Document p s e m) = filter (CElem e undefined)
 
 parseContent :: CFilter i -> Content i -> [Content i]
-parseContent filter contenta = filter contenta
+parseContent filter content = filter content
 
 -- | Gets the tag name of an Element.
 getName :: Element s -> String
@@ -212,24 +195,15 @@ convertAttributeToTuple :: Attribute -> (String, String)
 convertAttributeToTuple at = (getAttrName at, getAttrVal at)
 
 getChildren :: Content i -> [Content i]
-getChildren content1 = parseContent (path [children]) content1
-
-isRect :: Content i -> Bool
-isRect content1 = (getName $ contentElem content1) == "rect"
-
-isPath :: Content i -> Bool
-isPath content2 = (getName $ contentElem content2) == "path"
-
-isText :: Content i -> Bool
-isText content = (getName $ contentElem content) == "text"
+getChildren content = parseContent (path [children]) content
 
 getAttribute :: String -> Content i -> String
-getAttribute attr (CElem content2 undefined) = 
-  let x = filter (\x -> (getAttrName x) == attr) $ getAttrs content2
-  in
-  if null $ x
-  then ""
-  else getAttrVal $ head x
+getAttribute attr (CElem content undefined) = 
+    let x = filter (\x -> getAttrName x == attr) $ getAttrs content
+    in
+    if null x
+    then ""
+    else getAttrVal $ head x
 getAttribute _ _ = ""
 
 parseTransform :: String -> (Float, Float)
@@ -240,7 +214,7 @@ parseTransform transform = do
     (xPos, yPos)
 
 getComma :: Int -> String -> Int
-getComma accum x = if (head x) == ',' then accum else getComma (accum + 1) (tail x)
+getComma accum x = if head x == ',' then accum else getComma (accum + 1) (tail x)
 
 data Graph =
     Graph { 
