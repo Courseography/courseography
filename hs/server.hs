@@ -13,6 +13,7 @@ import Happstack.Server
 import GridResponse
 import GraphResponse
 import AboutResponse
+import ImageResponse
 import JsonParser
 import CourseographyFacebook
 import qualified Data.Conduit.List as CL
@@ -63,6 +64,7 @@ main = do
     simpleHTTP nullConf $
       msum [ dir grid $ gridResponse,
              dir graph $ graphResponse,
+             dir "image" $ imageResponse,
              dir code $ seeOther redirectUrlGraphEmail $ toResponse post,
              dir post $ seeOther redirectUrlGraphPost $ toResponse test,
              dir test $ look "code" >>= getEmail,
