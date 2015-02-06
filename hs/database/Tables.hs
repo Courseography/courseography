@@ -77,19 +77,19 @@ Graphs
 
 Rects
     gId Int
-    rId Int
+    rId String
     width Rational
     height Rational
     xPos Rational
     yPos Rational
-    colour String
+    style String
     deriving Show
 
 Texts
     gId Int
-    rId Int Maybe
-    yPos Rational Maybe
-    xPos Rational Maybe
+    rId String
+    xPos Rational
+    yPos Rational
     text String
 
 Paths
