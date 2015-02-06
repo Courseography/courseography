@@ -55,7 +55,7 @@ printDB = runSqlite dbStr $ do
 
 convertRectToXML :: Rect -> String
 convertRectToXML rect = 
-    "<rect x=\"" ++ 
+    "<rect rx=\"4\" ry=\"4\" x=\"" ++ 
     show (fromRational $ xPos rect) ++
     "\" y=\"" ++
     show (fromRational $ yPos rect) ++
@@ -64,7 +64,7 @@ convertRectToXML rect =
     "\" height=\"" ++
     show (fromRational $ height rect) ++
     "\" style=\"" ++
-    svgStyle ++
+    (style rect) ++
     "\"/>"
 
 convertTextToXML :: Text -> String
@@ -75,11 +75,15 @@ convertTextToXML text =
     (show $ fromRational $ textYPos text) ++
     "\" style=\"" ++
     (textStyle text) ++
-    "\">" ++ (textText text) ++"</text>"
+    "\">" ++
+    (textText text) ++
+    "</text>"
 
 convertPathToXML :: Path -> String
 convertPathToXML path = 
-    "<path style=\"stroke:#000000;fill:none;\" d=\"M " ++ (buildPathString $ points path) ++ "\"/>"
+    "<path style=\"stroke:#000000;fill:none;\" d=\"M " ++
+    buildPathString (points path) ++
+    "\"/>"
          
 buildRect :: Rects -> Rect
 buildRect entity = 
@@ -102,10 +106,10 @@ buildPath entity =
          (pathsStyle entity)
 
 buildPathString :: [(Rational, Rational)] -> String
-buildPathString d = intercalate " " $ map joinPathTuple $ map convertRationalTupToString d
+buildPathString d = intercalate " " $ map (joinPathTuple . convertRationalTupToString) d
 
 joinPathTuple :: (String, String) -> String
-joinPathTuple tup = (fst tup) ++ "," ++ (snd tup)
+joinPathTuple tup = fst tup ++ "," ++ snd tup
 
 convertRationalTupToString :: (Rational, Rational) -> (String, String)
 convertRationalTupToString tup = (show $ fromRational (fst tup), show $ fromRational (snd tup))

@@ -25,44 +25,51 @@ import SVGTypes
 main :: IO ()
 main = do graphFile <- readFile "../res/graphs/graph_regions.svg"
           let graphDoc = xmlParse "output.error" graphFile
-          --parseLevel (0,0) $ getRoot graphDoc
+          --parseLevel (0,0) "" $ getRoot graphDoc
           queryRects
-          --printDB
+          printDB
 
-parseLevel :: (Float, Float) -> Content i -> IO ()
-parseLevel parentTransform content3 = do
+parseLevel :: (Float, Float) -> String -> Content i -> IO ()
+parseLevel parentTransform parentFill content3 = do
     let rects = parseContent (tag "rect") content3
     let texts = parseContent (tag "text") content3
     let paths = parseContent (tag "path") content3
     let children = getChildren content3
     let transform = getAttribute "transform" content3
     let style = getAttribute "style" content3
+    let fill = getFill style
+    let fillx = if null fill then parentFill else fill
+    let filly = if fillx == "none" then parentFill else fillx
+    let fillz = if fillx == "#000000" then "none" else filly
     let x = if null transform then (0,0) else parseTransform transform
     let adjustedTransform = (fst parentTransform + fst x, snd parentTransform + snd x)
-    parseElements (parseRect adjustedTransform) rects
+    parseElements (parseRect adjustedTransform fillz) rects
     parseElements (parseText adjustedTransform style) texts
     parseElements (parsePath adjustedTransform) paths
-    parseChildren adjustedTransform children
+    parseChildren adjustedTransform fillz children
 
 
-parseChildren :: (Float, Float) -> [Content i] -> IO ()
-parseChildren adjustedTransform [] = print "Level parsed..."
-parseChildren adjustedTransform (x:xs) = do parseLevel adjustedTransform x
-                                            parseChildren adjustedTransform xs
+parseChildren :: (Float, Float) -> String -> [Content i] -> IO ()
+parseChildren adjustedTransform parentFill [] = print "Level parsed..."
+parseChildren adjustedTransform parentFill (x:xs) = do parseLevel adjustedTransform parentFill x
+                                                       parseChildren adjustedTransform parentFill xs
+
+getFill :: String -> String
+getFill style = drop 5 $ head $ (filter (\x -> take 4 x == "fill") $ splitOn ";" style) ++ [""]
 
 parseElements :: (Content i -> IO ()) -> [Content i] -> IO ()
 parseElements f [] = print "Finished elements..."
 parseElements f (x:xs) = do f x
                             parseElements f xs
 
-parseRect :: (Float, Float) -> Content i -> IO ()
-parseRect transform content = 
+parseRect :: (Float, Float) -> String -> Content i -> IO ()
+parseRect transform parentFill content = 
     insertRectIntoDB (getAttribute "id" content)
                      (read $ getAttribute "width" content :: Float)
                      (read $ getAttribute "height" content :: Float)
                      ((read $ getAttribute "x" content :: Float) + fst transform)
                      ((read $ getAttribute "y" content :: Float) + snd transform)
-                     (getAttribute "style" content)
+                     ("fill:" ++ parentFill)
 
 parsePath :: (Float, Float) -> Content i -> IO ()
 parsePath transform content = 
@@ -75,7 +82,6 @@ parseText transform parentStyle content = insertTextIntoDB (getAttribute "id" co
                                                ((read $ getAttribute "y" content :: Float) + snd transform)
                                                (tagTextContent content) 
                                                parentStyle
-
 
 getRoot :: Document i -> Content i
 getRoot doc = head $ parseDocument (tag "svg") doc
@@ -107,7 +113,7 @@ insertPathIntoDB :: [(Float, Float)] -> String -> IO ()
 insertPathIntoDB d style = 
     runSqlite dbStr $ do
         runMigration migrateAll
-        insert_ $ Paths (map Point (map convertFloatTupToRationalTup d))
+        insert_ $ Paths (map (Point . convertFloatTupToRationalTup) d)
                         style
 
 addTransform :: (Float, Float) -> (Float, Float) -> (Float, Float)
@@ -169,9 +175,9 @@ getComma :: Int -> String -> Int
 getComma accum x = if head x == ',' then accum else getComma (accum + 1) (tail x)
 
 parsePathD :: String -> [(Float, Float)]--[(Rational, Rational)]
-parsePathD d = if (head d) == 'm'
-             then tail $ foldCoords $ filter (\x -> length x > 1) $ map (splitOn ",") $ splitOn " " d
-             else tail $ foldCoords $ filter (\x -> length x > 1) $ map (splitOn ",") $ splitOn " " d
+parsePathD d = tail (if head d == 'm'
+                     then foldCoords $ filter (\x -> length x > 1) $ map (splitOn ",") $ splitOn " " d
+                     else foldCoords $ filter (\x -> length x > 1) $ map (splitOn ",") $ splitOn " " d)
 
 foldCoords :: [[String]] -> [(Float, Float)]
 foldCoords dCoords = foldl (\x y -> x ++ [(addTuples (convertToFloatTuple y) (last x))]) [(0,0)] dCoords
