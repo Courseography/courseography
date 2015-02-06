@@ -108,6 +108,7 @@ parseLevel :: (Float, Float) -> Content i -> IO ()
 parseLevel parentTransform content3 = do
     let rects = parseContent (tag "rect") content3
     let texts = parseContent (tag "text") content3
+    let paths = parseContent (tag "path") content3
     let children = getChildren content3
     let transform = getAttribute "transform" content3
     let style = getAttribute "style" content3
@@ -115,6 +116,7 @@ parseLevel parentTransform content3 = do
     let adjustedTransform = (fst parentTransform + fst x, snd parentTransform + snd x)
     parseElements (parseRect adjustedTransform) rects
     parseElements (parseText adjustedTransform style) texts
+    parseElements parsePath paths
     parseChildren adjustedTransform children
 
 
@@ -136,6 +138,10 @@ parseRect transform content =
                      ((read $ getAttribute "x" content :: Float) + fst transform)
                      ((read $ getAttribute "y" content :: Float) + snd transform)
                      (getAttribute "style" content)
+
+parsePath :: Content i -> IO ()
+parsePath content = 
+    insertPathIntoDB (parsePathD $ getAttribute "d" content)
 
 parseText :: (Float, Float) -> String -> Content i -> IO ()
 parseText transform parentStyle content = insertTextIntoDB (getAttribute "id" content)
@@ -170,6 +176,16 @@ insertTextIntoDB id_ xPos yPos text style =
                         (toRational yPos)
                         text
                         style
+
+insertPathIntoDB :: [(Float, Float)] -> IO ()
+insertPathIntoDB d = 
+    runSqlite dbStr $ do
+        runMigration migrateAll
+        insert_ $ Paths (map Point (map convertFloatTupToRationalTup d))
+
+
+convertFloatTupToRationalTup :: (Float, Float) -> (Rational, Rational)
+convertFloatTupToRationalTup tup = (toRational (fst tup), toRational (snd tup))
 
 --filterAttrVal :: [Attribute] -> String -> String
 --filterAttrVal attrs attrName = snd $ head $ filter (\x -> snd x == attrName) $ map convertAttributeToTuple attrs
