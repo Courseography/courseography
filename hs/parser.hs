@@ -84,6 +84,8 @@ convertTextToXML text =
     (show $ fromRational $ textXPos text) ++
     "\" y=\"" ++
     (show $ fromRational $ textYPos text) ++
+    "\" style=\"" ++
+    (textStyle text) ++
     "\">" ++ (textText text) ++"</text>"
 
 buildRect :: Rects -> Rect
@@ -99,6 +101,7 @@ buildText entity =
     Text (textsXPos entity)
          (textsYPos entity)
          (textsText entity)
+         (textsStyle entity)
 
 parseLevel :: (Float, Float) -> Content i -> IO ()
 parseLevel parentTransform content3 = do
@@ -106,10 +109,11 @@ parseLevel parentTransform content3 = do
     let texts = parseContent (tag "text") content3
     let children = getChildren content3
     let transform = getAttribute "transform" content3
+    let style = getAttribute "style" content3
     let x = if null transform then (0,0) else parseTransform transform
     let adjustedTransform = (fst parentTransform + fst x, snd parentTransform + snd x)
     parseElements (parseRect adjustedTransform) rects
-    parseElements (parseText adjustedTransform) texts
+    parseElements (parseText adjustedTransform style) texts
     parseChildren adjustedTransform children
 
 
@@ -132,11 +136,13 @@ parseRect transform content =
                      ((read $ getAttribute "y" content :: Float) + snd transform)
                      (getAttribute "style" content)
 
-parseText :: (Float, Float) -> Content i -> IO ()
-parseText transform content = insertTextIntoDB (getAttribute "id" content)
+parseText :: (Float, Float) -> String -> Content i -> IO ()
+parseText transform parentStyle content = insertTextIntoDB (getAttribute "id" content)
                                                ((read $ getAttribute "x" content :: Float) + fst transform)
                                                ((read $ getAttribute "y" content :: Float) + snd transform)
                                                (tagTextContent content) 
+                                               parentStyle
+
 
 getRoot :: Document i -> Content i
 getRoot doc = head $ parseDocument (tag "svg") doc
@@ -153,8 +159,8 @@ insertRectIntoDB id_ width height xPos yPos style =
                         (toRational yPos)
                         style
 
-insertTextIntoDB :: String -> Float -> Float -> String -> IO ()
-insertTextIntoDB id_ xPos yPos text = 
+insertTextIntoDB :: String -> Float -> Float -> String -> String -> IO ()
+insertTextIntoDB id_ xPos yPos text style = 
     runSqlite dbStr $ do
         runMigration migrateAll
         insert_ $ Texts 1
@@ -162,6 +168,7 @@ insertTextIntoDB id_ xPos yPos text =
                         (toRational xPos)
                         (toRational yPos)
                         text
+                        style
 
 --filterAttrVal :: [Attribute] -> String -> String
 --filterAttrVal attrs attrName = snd $ head $ filter (\x -> snd x == attrName) $ map convertAttributeToTuple attrs
@@ -200,10 +207,9 @@ getChildren content = parseContent (path [children]) content
 getAttribute :: String -> Content i -> String
 getAttribute attr (CElem content undefined) = 
     let x = filter (\x -> getAttrName x == attr) $ getAttrs content
-    in
-    if null x
-    then ""
-    else getAttrVal $ head x
+    in if null x
+       then ""
+       else getAttrVal $ head x
 getAttribute _ _ = ""
 
 parseTransform :: String -> (Float, Float)
@@ -235,7 +241,8 @@ data Text =
     Text {
            textXPos :: Rational,
            textYPos :: Rational,
-           textText :: String
+           textText :: String,
+           textStyle :: String
          } deriving Show
 
 
