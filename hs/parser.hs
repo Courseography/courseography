@@ -14,6 +14,7 @@ import Database.Persist
 import Database.Persist.Sqlite
 import Text.XML.HaXml.Namespaces
 import Data.Conduit
+import Data.List.Split
 import Data.Text as T (pack, unpack)
 import Tables
 import JsonParser
@@ -222,6 +223,20 @@ parseTransform transform = do
 getComma :: Int -> String -> Int
 getComma accum x = if head x == ',' then accum else getComma (accum + 1) (tail x)
 
+parsePathD :: String -> [(Float, Float)]--[(Rational, Rational)]
+parsePathD d = if (head d) == 'm'
+             then tail $ foldCoords $ filter (\x -> length x > 1) $ map (splitOn ",") $ splitOn " " d
+             else tail $ foldCoords $ filter (\x -> length x > 1) $ map (splitOn ",") $ splitOn " " d
+
+foldCoords :: [[String]] -> [(Float, Float)]
+foldCoords dCoords = foldl (\x y -> x ++ [(addTuples (convertToFloatTuple y) (last x))]) [(0,0)] dCoords
+
+convertToFloatTuple :: [String] -> (Float, Float)
+convertToFloatTuple y = (read (head y) :: Float, read (last y) :: Float)
+
+addTuples :: (Float, Float) -> (Float, Float) -> (Float, Float)
+addTuples tup1 tup2 = (fst tup1 + fst tup2, snd tup1 + snd tup2)
+
 data Graph =
     Graph { 
             gId :: Int,
@@ -247,4 +262,6 @@ data Text =
 
 
 data Path =
-    Path {}
+    Path { 
+           points :: (Rational, Rational)
+         }
