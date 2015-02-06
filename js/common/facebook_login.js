@@ -18,7 +18,7 @@ $(document).ready(function() {
         });
 
     });
-    $("#post-fb").click(openFBPostModal);
+    $('#post-fb').click(openFBPostModal);
 });
 
 /**
@@ -30,7 +30,7 @@ function openFBPostModal() {
     if ($('.modal').length === 0) {
         var div = createFBModalDiv();
 
-        div.attr('title', "Post To Facebook")
+        div.attr('title', 'Post To Facebook')
            .addClass('modal').dialog({
                 autoOpen: true,
                 modal: true,
