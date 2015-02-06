@@ -25,28 +25,33 @@ import SVGTypes
 main :: IO ()
 main = do graphFile <- readFile "../res/graphs/graph_regions.svg"
           let graphDoc = xmlParse "output.error" graphFile
-          --parseLevel (0,0) "" $ getRoot graphDoc
+          parseLevel (0,0) "" $ getRoot graphDoc
           queryRects
           printDB
 
 parseLevel :: (Float, Float) -> String -> Content i -> IO ()
 parseLevel parentTransform parentFill content3 = do
-    let rects = parseContent (tag "rect") content3
-    let texts = parseContent (tag "text") content3
-    let paths = parseContent (tag "path") content3
-    let children = getChildren content3
-    let transform = getAttribute "transform" content3
-    let style = getAttribute "style" content3
-    let fill = getFill style
-    let fillx = if null fill then parentFill else fill
-    let filly = if fillx == "none" then parentFill else fillx
-    let fillz = if fillx == "#000000" then "none" else filly
-    let x = if null transform then (0,0) else parseTransform transform
-    let adjustedTransform = (fst parentTransform + fst x, snd parentTransform + snd x)
-    parseElements (parseRect adjustedTransform fillz) rects
-    parseElements (parseText adjustedTransform style) texts
-    parseElements (parsePath adjustedTransform) paths
-    parseChildren adjustedTransform fillz children
+    if (getAttribute "id" content3) == "layer3" || 
+       (getAttribute "id" content3) == "layer2"
+      then liftIO $ print "Abort"
+      else do
+           let rects = parseContent (tag "rect") content3
+           let texts = parseContent (tag "text") content3
+           let paths = parseContent (tag "path") content3
+           let children = getChildren content3
+           let transform = getAttribute "transform" content3
+           let style = getAttribute "style" content3
+           let fill = getFill style
+           let fillx = if null fill then parentFill else fill
+           let filly = if fillx == "none" then parentFill else fillx
+           let fillz = if fillx == "#000000" then "none" else filly
+           let x = if null transform then (0,0) else parseTransform transform
+           let adjustedTransform = (fst parentTransform + fst x,
+                                    snd parentTransform + snd x)
+           parseElements (parseRect adjustedTransform fillz) rects
+           parseElements (parseText adjustedTransform style) texts
+           parseElements (parsePath adjustedTransform) paths
+           parseChildren adjustedTransform fillz children
 
 
 parseChildren :: (Float, Float) -> String -> [Content i] -> IO ()
