@@ -91,10 +91,11 @@ Texts
     xPos Rational
     yPos Rational
     text String
+    style String
 
 Paths
-    gId Int
     d [Point]
+    style String
     deriving Show
 |]
 
