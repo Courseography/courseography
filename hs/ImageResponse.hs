@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module ImageResponse where
-	
+
 import Data.List
 import Happstack.Server
 import qualified Data.ByteString.Lazy as BS
@@ -17,6 +17,6 @@ getImage :: IO Response
 getImage = do
 	liftIO $ createPNGFile "INSERT_ID-graph.png"
 	imageData <- BS.readFile "INSERT_ID-graph.png"
-	liftIO $ removePNG ("INSERT_ID-graph.png")
+	liftIO $ removePNG "INSERT_ID-graph.png"
 	let encodedData = B.encode imageData
 	return $ toResponse encodedData
