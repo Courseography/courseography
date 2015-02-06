@@ -54,6 +54,9 @@ code = "graph-fb"
 post :: String
 post = "post-fb"
 
+image :: String
+image = "image"
+
 main :: IO ()
 main = do
     print "Server is running..."
@@ -64,7 +67,7 @@ main = do
     simpleHTTP nullConf $
       msum [ dir grid $ gridResponse,
              dir graph $ graphResponse,
-             dir "image" $ imageResponse,
+             dir image $ imageResponse,
              dir code $ seeOther redirectUrlGraphEmail $ toResponse post,
              dir post $ seeOther redirectUrlGraphPost $ toResponse test,
              dir test $ look "code" >>= getEmail,
