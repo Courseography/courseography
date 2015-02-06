@@ -15,6 +15,7 @@ import Database.Persist.Sqlite
 import Text.XML.HaXml.Namespaces
 import Data.Conduit
 import Data.List.Split
+import Data.List
 import Data.Text as T (pack, unpack)
 import Tables
 import JsonParser
@@ -58,9 +59,12 @@ queryRects =
     runSqlite dbStr $ do
         sqlRects :: [Entity Rects] <- selectList [] []
         sqlTexts :: [Entity Texts] <- selectList [] []
+        sqlPaths :: [Entity Paths] <- selectList [] []
         let rectXml = map (convertRectToXML . buildRect . entityVal) sqlRects
         let textXml = map (convertTextToXML . buildText . entityVal) sqlTexts
+        let pathXml = map (convertPathToXML . buildPath . entityVal) sqlPaths
         liftIO $ writeFile "Testfile.svg" svgHeader
+        liftIO $ appendFile "Testfile.svg" $ unwords pathXml
         liftIO $ appendFile "Testfile.svg" $ unwords rectXml
         liftIO $ appendFile "Testfile.svg" $ unwords textXml
         liftIO $ appendFile "Testfile.svg" svgFooter
@@ -89,6 +93,10 @@ convertTextToXML text =
     (textStyle text) ++
     "\">" ++ (textText text) ++"</text>"
 
+convertPathToXML :: Path -> String
+convertPathToXML path = 
+    "<path style=\"stroke:#000000;fill:none;\" d=\"M " ++ (buildPathString $ points path) ++ "\"/>"
+
 buildRect :: Rects -> Rect
 buildRect entity = 
     Rect (rectsWidth entity)
@@ -104,6 +112,11 @@ buildText entity =
          (textsText entity)
          (textsStyle entity)
 
+buildPath :: Paths -> Path
+buildPath entity = 
+    Path (map point $ pathsD entity)
+         (pathsStyle entity)
+
 parseLevel :: (Float, Float) -> Content i -> IO ()
 parseLevel parentTransform content3 = do
     let rects = parseContent (tag "rect") content3
@@ -116,7 +129,7 @@ parseLevel parentTransform content3 = do
     let adjustedTransform = (fst parentTransform + fst x, snd parentTransform + snd x)
     parseElements (parseRect adjustedTransform) rects
     parseElements (parseText adjustedTransform style) texts
-    parseElements parsePath paths
+    parseElements (parsePath adjustedTransform) paths
     parseChildren adjustedTransform children
 
 
@@ -139,9 +152,10 @@ parseRect transform content =
                      ((read $ getAttribute "y" content :: Float) + snd transform)
                      (getAttribute "style" content)
 
-parsePath :: Content i -> IO ()
-parsePath content = 
-    insertPathIntoDB (parsePathD $ getAttribute "d" content)
+parsePath :: (Float, Float) -> Content i -> IO ()
+parsePath transform content = 
+    insertPathIntoDB (map (addTransform transform) $ parsePathD $ getAttribute "d" content)
+                     (getAttribute "style" content)
 
 parseText :: (Float, Float) -> String -> Content i -> IO ()
 parseText transform parentStyle content = insertTextIntoDB (getAttribute "id" content)
@@ -177,15 +191,27 @@ insertTextIntoDB id_ xPos yPos text style =
                         text
                         style
 
-insertPathIntoDB :: [(Float, Float)] -> IO ()
-insertPathIntoDB d = 
+insertPathIntoDB :: [(Float, Float)] -> String -> IO ()
+insertPathIntoDB d style = 
     runSqlite dbStr $ do
         runMigration migrateAll
         insert_ $ Paths (map Point (map convertFloatTupToRationalTup d))
+                        style
 
+addTransform :: (Float, Float) -> (Float, Float) -> (Float, Float)
+addTransform tup transTup = (fst tup + fst transTup, snd tup + snd transTup)
+
+buildPathString :: [(Rational, Rational)] -> String
+buildPathString d = intercalate " " $ map joinPathTuple $ map convertRationalTupToString d
+
+joinPathTuple :: (String, String) -> String
+joinPathTuple tup = (fst tup) ++ "," ++ (snd tup)
 
 convertFloatTupToRationalTup :: (Float, Float) -> (Rational, Rational)
 convertFloatTupToRationalTup tup = (toRational (fst tup), toRational (snd tup))
+
+convertRationalTupToString :: (Rational, Rational) -> (String, String)
+convertRationalTupToString tup = (show $ fromRational (fst tup), show $ fromRational (snd tup))
 
 --filterAttrVal :: [Attribute] -> String -> String
 --filterAttrVal attrs attrName = snd $ head $ filter (\x -> snd x == attrName) $ map convertAttributeToTuple attrs
@@ -279,5 +305,6 @@ data Text =
 
 data Path =
     Path { 
-           points :: (Rational, Rational)
+           points :: [(Rational, Rational)],
+           pathStyle :: String
          }
