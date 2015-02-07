@@ -58,7 +58,6 @@ getCalendar str = do
         isCourseTitle (TagOpen _ attrs) = any (\x -> fst x == "name" && T.length (snd x) == 8) attrs
         isCourseTitle _ = False
 
-
 parseTitleFAS :: CoursePart -> CoursePart
 parseTitleFAS (tags, course) =  
     let courseNames = T.splitAt 8 $ removeTitleGarbage $ removeLectureSection $ head tags
@@ -66,7 +65,6 @@ parseTitleFAS (tags, course) =
                     name =  fst courseNames})
   where removeLectureSection (TagText s) = T.takeWhile (/= '[') s
         removeTitleGarbage s = regReplace "\160" "" s
-
 {----------------------------------------------------------------------------------------
 INPUT: a list of tags representing a single course, 
 OUTPUT: Course 'record' containing course info
