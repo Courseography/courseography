@@ -23,7 +23,7 @@ def read_svg():
     global regions
     global bools
 
-    with open('graph_regions.svg') as svg_file:
+    with open('res/graphs/graph_regions.svg') as svg_file:
         content = svg_file.read()
         soup = BeautifulSoup(content)
 
@@ -42,6 +42,7 @@ def read_svg():
                     rects.remove(rect_2)
                     final_rects.append(rect_1)
 
+
 def find_all_and_process(soup, tag, fn):
     for elem in soup.find_all(tag):
         fn(elem)
@@ -49,55 +50,52 @@ def find_all_and_process(soup, tag, fn):
 
 def output_svg():
     print_header()
-    print("svgDoc :: S.Svg")
-    print(
-        "svgDoc = S.docTypeSvg ! A.id_ \"graphRootSVG\" ! A.version \"1.1\" ! S.customAttribute \"viewBox\" \"0 0 1050 700\"$ do")
+    
+    print('svgDoc :: S.Svg\n'
+          'svgDoc = S.docTypeSvg ! A.id_ "graphRootSVG" ! A.version "1.1" ! S.customAttribute "viewBox" "0 0 1050 700"$ do\n'
+          '    S.defs $ do\n'
+          '        S.marker ! A.id_ "arrow" ! '
+          'A.viewbox "0 0 10 10" ! '
+          'A.refx "1" ! A.refy "5" ! A.markerunits "strokeWidth" ! '
+          'A.orient "auto" ! A.markerwidth "4.5" ! A.markerheight "4.5" $ do\n'
+          '            S.polyline ! A.points "0,1 10,5 0,9" ! A.fill "black"\n'
+          '    S.g $ do')
 
-    # Arrowhead def
-    print("    S.defs $ do")
-    print("        S.marker ! A.id_ \"arrow\" ! " +
-          "A.viewbox \"0 0 10 10\" ! "
-          "A.refx \"1\" ! A.refy \"5\" ! A.markerunits \"strokewidth\" ! " +
-          "A.orient \"auto\" ! A.markerwidth \"4.5\" ! A.markerheight \"4.5\" $ do"
-    )
-    print("            S.polyline ! A.points \"0,1 10,5 0,9\" ! A.fill \"black\"")
-
-    print("    S.g $ do")
     for i in regions:
-        print("        ", end="")
+        print('        ', end='')
         i.output_haskell()
 
-    print("    S.g ! A.transform \" translate(0,-308.2677)\" $ do")
-    print("        S.g ! A.transform \"translate(29.540919,340.70929)\" ! A.class_ \"nodes\"$ do")
+    print('    S.g ! A.transform " translate(0,-308.2677)" $ do')
+    print('        S.g ! A.transform "translate(29.540919,340.70929)" ! A.class_ "nodes"$ do')
     for i in final_rects:
-        print("            ", end="")
+        print('            ', end='')
         i.output_haskell()
 
-    print("            S.g $ do")
+    print('            S.g $ do')
     for i in paths:
         if not i.isPath:
             continue
-        print("                ", end="")
+        print('                ', end='')
         i.output_haskell()
 
-    print("            S.g $ do")
+    print('            S.g $ do')
     for i in bools:
-        print("                ", end="")
+        print('                ', end='')
         i.output_haskell()
 
-    print("    S.g ! A.transform \"translate(-120,313.70929)\" $ do")
+    print('    S.g ! A.transform "translate(-120,313.70929)" $ do')
     for i in region_labels:
-        print("        ", end="")
+        print('        ', end='')
         i.output_haskell()
 
 
 def print_header():
-    print("{-# LANGUAGE OverloadedStrings #-}")
-    print("module SVGGen where")
-    print("import Text.Blaze.Svg11 ((!), mkPath, rotate, l, m)")
-    print("import qualified Text.Blaze.Svg11 as S")
-    print("import qualified Text.Blaze.Svg11.Attributes as A")
-    print("import Text.Blaze.Svg.Renderer.String (renderSvg)")
+    print('{-# LANGUAGE OverloadedStrings #-}\n'
+          'module SVGGen where\n'
+          'import Text.Blaze.Svg11 ((!), mkPath, rotate, l, m)\n'
+          'import qualified Text.Blaze.Svg11 as S\n'
+          'import qualified Text.Blaze.Svg11.Attributes as A\n'
+          'import Text.Blaze.Svg.Renderer.String (renderSvg)')
 
 
 def process_path(elem):
@@ -132,12 +130,7 @@ def process_text(elem):
     found = False
     for rect in rects:
         if (elem.get('x'), elem.get('y'), 1) in rect:
-            text = elem.text
-            if '/' in text:
-                text = text[:text.index('/')]
-            if "," in text:
-                text = text[:text.index(',')]
-            rect.text = text
+            rect.text[elem.get('y')] = (elem.text)
             found = True
 
     for boolean in bools:
@@ -160,6 +153,6 @@ def process_bool(elem):
     bool_id_counter += 1
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     read_svg()
     output_svg()
