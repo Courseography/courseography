@@ -1,5 +1,7 @@
+{-# LANGUAGE OverloadedStrings #-}
 import Network.HTTP
 import Text.HTML.TagSoup
+import Text.HTML.TagSoup.Match
 import Data.List
 import qualified Data.Text as T
 import qualified Data.Text.IO as B
@@ -7,14 +9,6 @@ import Data.List.Utils
 import Data.Maybe
 import Tables
 import ParsingHelp
-
-
-{----------------------------------------------------------------------------------------
-TODO
-    use Data.Text type instead of String for all functions
-    remove duplicate courses
-    remove edge cases
-----------------------------------------------------------------------------------------}
 
 fasCalendarURL :: String
 fasCalendarURL = "http://www.artsandscience.utoronto.ca/ofr/calendar/"
@@ -35,22 +29,11 @@ OUTPUT: a list of department html page names
 -----------------------------------------------------------------------------------------}
 getDeptList :: [Tag String] -> [String]
 getDeptList tags =
-    let lists = sections (~== TagOpen "ul" [("class","simple")]) tags
-        contents = takeWhile (~/= TagClose "ul") . head . tail $ lists
-        as = filter (~== TagOpen "a" []) contents
+    let lists = sections (== TagOpen "ul" [("class","simple")]) tags
+        contents = takeWhile (/= TagClose "ul") . head . tail $ lists
+        as = filter (tagOpen (== "a") (\x -> True)) contents
         rawList = map (\x -> case x of TagOpen "a" [("href", link)] -> link) as
     in nub $ filter (\dept -> not (dept `elem` toDelete)) rawList
-
-{----------------------------------------------------------------------------------------
-INPUT: a string representation of the ArtSci html page
-OUTPUT: a list of department html page names
-
-a simple 'preprocessing' function
-----------------------------------------------------------------------------------------}
-doStuff :: String -> [String]
-doStuff s = 
-    let tags = parseTags s
-    in  getDeptList tags
 
 {----------------------------------------------------------------------------------------
 INPUT: an html filename of a department (which are found from getDeptList)
@@ -61,56 +44,62 @@ getCalendar :: String -> IO ()
 getCalendar str = do
     let path = fasCalendarURL ++ str
     rsp <- simpleHTTP (getRequest path)
-              -- fetch document and return it (as a 'String'.)
     body <- getResponseBody rsp
-    let tags = filter isComment $ parseTags body
-    --course description begins after the final h2 heading
+    let tags = filter isComment $ parseTags (T.pack body)
     let coursesSoup = lastH2 tags
-    --partitions tags into sections, where each element starts with course name
-    let courses = map (filter (~== TagText "")) $ partitions isCourseTitle coursesSoup
-    --converts course partitions into course Records
-    let course = map (processCourseToData . filter (~/= TagText "\r\n")) courses
-    mapM_ (\c -> B.putStrLn $ name c) course
-    --B.putStrLn $ fromJust $ description $ (head course)
-    --print  courses
+    let courses = map (filter (tagText (\x -> True))) $ partitions isCourseTitle coursesSoup
+    let course = map processCourseToData courses
+    mapM_ (\c -> print c) course
+    --print courses 
     where
         isComment (TagComment _) = False
         isComment _ = True
-
-        lastH2 = last . sections (~== TagOpen "h2" [])
-
-        isCourseTitle (TagOpen _ attrs) = any (\x -> fst x == "name" && length (snd x) == 8) attrs
+        lastH2 = last . sections (tagOpen (== "h2") (\x -> True))
+        isCourseTitle (TagOpen _ attrs) = any (\x -> fst x == "name" && T.length (snd x) == 8) attrs
         isCourseTitle _ = False
 
+parseTitleFAS :: CoursePart -> CoursePart
+parseTitleFAS (tags, course) =  
+    let courseNames = T.splitAt 8 $ removeTitleGarbage $ removeLectureSection $ head tags
+  in (tail tags, course {title  = Just (snd courseNames), 
+                    name =  fst courseNames})
+  where removeLectureSection (TagText s) = T.takeWhile (/= '[') s
+        removeTitleGarbage s = regReplace "\160" "" s
 {----------------------------------------------------------------------------------------
 INPUT: a list of tags representing a single course, 
 OUTPUT: Course 'record' containing course info
 ----------------------------------------------------------------------------------------}
-processCourseToData :: [Tag String] -> Course
+processCourseToData :: [Tag T.Text] -> Course
 processCourseToData tags  =
     let course = 
-          Course {breadth = Nothing, 
+          Course {
+            breadth = Nothing, 
             description = Nothing, 
             title  = Nothing,
             prereqString = Nothing,
             f = Nothing,
             s = Nothing,
             y = Nothing,
-            name = T.pack "",
+            name = T.empty,
             exclusions = Nothing,
             manualTutorialEnrol = Nothing ,
             distribution = Nothing,
             prereqs = Nothing
         }
-    in snd (parsePrerequisite (parseDescription (parseTitle (tags, course))))
+    in snd $ (tags, course) ~:
+             preProcess -: 
+             parseTitleFAS -:
+            parseDescription -:
+            parsePrerequisite -:
+            parseCorequisite -:
+            parseExclusion -:
+            parseRecommendedPrep -:  
+            parseDistAndBreadth     
 
--}
 main :: IO ()
 main = do
     rsp <- simpleHTTP (getRequest fasCalendarURL)
-              -- fetch document and return it (as a 'String'.)
     body <- getResponseBody rsp
-    let depts = doStuff body
-    getCalendar $ filter (== "crs_csc.htm") depts
-    --getCalendar (head depts)
+    let depts = getDeptList $ parseTags  body
+    mapM_ getCalendar depts
 

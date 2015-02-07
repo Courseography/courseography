@@ -1,110 +1,164 @@
+{-# LANGUAGE OverloadedStrings #-}
 module ParsingHelp 
-  (getCourse,
+  ( CoursePart,
+    (-:),
+    (~:),
+    preProcess, 
     regReplace,
     tagContains,
-    tagContainsAny,
+    dropBetween,
+    dropBetweenAll, 
     parseTitle,
     parseDescription,
-    parsePrerequisite) where
+    parseCorequisite,
+    parsePrerequisite,
+    parseExclusion,
+    parseRecommendedPrep,
+    parseDistAndBreadth,
+    ) where
 import Text.Regex.Posix
 import Text.HTML.TagSoup
+import Text.HTML.TagSoup.Match
 import Data.List
 import qualified Data.Text as T
 import Data.List.Utils
 import Data.Maybe
 import Tables
 
-
-type CoursePart = ([Tag String], Course)
-
-{-
-preProcess :: [Tag String] -> [Tag String]
-preprocess tags =
-  filter (~/= TagText "\r\n") tags 
-  regReplace "(\160)*" " "
--}
+type CoursePart = ([Tag T.Text], Course)
+type TagParser = (Maybe [Tag T.Text], [Tag T.Text])
 
 
-getCourse :: CoursePart -> Course
-getCourse (_, course) = course
+(-:) :: CoursePart -> (CoursePart -> CoursePart) -> CoursePart
+coursepart -: fn = fn coursepart
+
+(~:) :: CoursePart -> ([Tag T.Text] -> [Tag T.Text]) -> CoursePart
+(tags, course) ~: fn =  (fn tags, course)
+
 {------------------------------------------------------------------------------
 INPUT: reg is a regex string, str is a string
 OUTPUT: string where every instance of reg in str is replaced
 
-WARNING: currently does 
+DOESN'T SEEM TO WORK WITH *
 ------------------------------------------------------------------------------}
-regReplace :: String -> String -> String -> String
+regReplace :: T.Text -> T.Text -> T.Text -> T.Text
 regReplace reg replacement str =
-    let match = (str =~ reg)
+    let match = T.pack $ (T.unpack str) =~ T.unpack reg
     in
-        if match == ""
+        if match == T.empty
         then str
-        else regReplace reg  replacement (replace match replacement str)
+        else regReplace reg replacement (T.replace match replacement str)
 
 {------------------------------------------------------------------------------
 INPUT: a tag containing string tagtext, and reg, a regex string
 OUTPUT: True if reg can match tagtext
 -------------------------------------------------------------------------------}
-tagContains :: String -> Tag String -> Bool
-tagContains str (TagText tagtext) = contains str tagtext 
+tagContains :: T.Text -> Tag T.Text -> Bool
+tagContains reg (TagText tagtext) = (T.unpack tagtext) =~ T.unpack reg
 
 {------------------------------------------------------------------------------
-INPUT: a list of strings str, a tag tag
-OUTPUT: True if the text contained in tag contains any of the strings in strs
-------------------------------------------------------------------------------}
-tagContainsAny :: [String] -> Tag String -> Bool
-tagContainsAny strs tag = or (map (\str -> tagContains str tag) strs)
+splits a list of tags into two pieces at the first matching instance of reg.
+e.g >>tagBreak "hehe" [TagtText "lol", TagText "lmao", TagText "hehe]
+    >>([TagText "lol", TagText "lmao"], [TagText "hehe"])
+if no matches occur
+    >>tagBreak "wat" [TagtText "lol", TagText "lmao", TagText "hehe]
+    >>([TagtText "lol", TagText "lmao", TagText "hehe], [])
+-------------------------------------------------------------------------------}
+tagBreak ::  T.Text -> [Tag T.Text] -> (Maybe [Tag T.Text], [Tag T.Text])
+tagBreak reg tags = 
+  let first = takeWhile (\tag -> not $ tagContains reg tag) tags 
+      second = dropWhile (\tag -> not $ tagContains reg tag) tags
+  in if first == []
+     then (Nothing, second)
+     else (Just first, second)
 
 {------------------------------------------------------------------------------
-INPUT a tag
-OUTPUT: A CoursePart with a course record that has title and name filled in
-
-assumes all TagText "\r\n" have been removed
-assumes all \160 have been removed
+takes in a possible list of tags that represent a specific field in a Course
+Record. removes instances of str, and concatenates all tagText into a single
+Text entity.
+If nothing needs to be removed, pass Nothing as the Text
 ------------------------------------------------------------------------------}
-parseTitle :: CoursePart -> CoursePart
-parseTitle (title:tags, course) =  
-	let courseNames = splitAt 8 $ removeTitleGarbage $ removeLectureSection $ title
-  in (tags, course {title  = (Just (T.pack $ drop 1 $ snd courseNames)), 
-                    name = T.pack $ fst courseNames})
-  where removeLectureSection (TagText s) = takeWhile (/= '[') s
-        removeTitleGarbage s = replace "\160\160\160\160" " " s
-
+makeEntry :: Maybe [Tag T.Text] -> Maybe T.Text -> Maybe T.Text
+makeEntry Nothing _ = Nothing
+makeEntry (Just []) _ = Nothing
+makeEntry (Just tags) Nothing = Just (T.concat (map fromTagText tags)) 
+makeEntry (Just tags) (Just str) = 
+  Just (regReplace str "" (T.concat (map fromTagText tags)))
 
 {------------------------------------------------------------------------------
-INPUT: a CourseParser
-OUTPUT: a CourseParser, where the course record now contains 
 ------------------------------------------------------------------------------}
+replaceBetween :: Eq a =>  (a -> Bool) -> (a -> Bool) -> [a] -> [a]-> [a]
+replaceBetween start end rep lst =
+  let (before, rest) = break start lst
+      (between, after) = break end rest 
+  in if (after == [])
+     then before
+     else (concat [before, rep, (drop 1 after)])
+
+replaceBetweenAll :: Eq a =>  (a -> Bool) -> (a -> Bool) -> [a] -> [a]-> [a]
+replaceBetweenAll _ _ _ [] = []
+replaceBetweenAll start end rep lst = 
+  let (before, rest) = break start lst
+      (between, after) = break end rest 
+  in  if (or [(rest == []), (after == [])])
+      then lst 
+      else (concat [before, rep, (replaceBetweenAll start end rep (drop 1 after))])
+{------------------------------------------------------------------------------
+DROPBETWEEN removes all elements between the first element satisfying start, 
+and the first element satisfying end inclusive. 
+>>dropBetween (== 'b') (== 'd') "abcde"
+>>"ae"
+------------------------------------------------------------------------------}
+dropBetween :: Eq a =>  (a -> Bool) -> (a -> Bool) -> [a] -> [a]
+dropBetween start end lst = replaceBetween start end [] lst
+
+dropBetweenAll :: Eq a => (a -> Bool) -> (a -> Bool) -> [a] -> [a]
+dropBetweenAll start end lst = replaceBetweenAll start end [] lst
+
+-------------COURSE PARSING FUNCTIONS------------------------------------------
+-------------------------------------------------------------------------------
+preProcess :: [Tag T.Text] -> [Tag T.Text]
+preProcess tags = 
+  let nobreaks = filter (/= TagText "\r\n") tags
+      removeUseless = filter isntUseless nobreaks 
+      removeEnrol = filter (\t -> not $ tagContains "Enrolment Limits:" t) removeUseless
+  in map cleanText removeEnrol
+  where
+    cleanText (TagText s) = TagText (regReplace "\n                    |\160|\194|\r\n                    |\r\n" "" s)
+    isntUseless (TagText s) = not $ T.all (\c -> or [(c == ' '), (c =='\n')]) s
+
 parseDescription :: CoursePart -> CoursePart
 parseDescription (tags, course) = 
-  --want to take everything before the next field, and since Prerequisites and Exlusion are optional,
-  --we have to make sure 
-  let descriptags = takeWhile (\tag -> not (tagContainsAny ["Prerequisite", "Exclusion", "Distribution"] tag)) tags
-      descriptn = (Just (T.pack (concat (map fromTagText descriptags))))
-      restofTags = dropWhile (\tag -> not (tagContainsAny ["Prerequisite", "Exclusion", "Distribution"] tag)) tags
-  in (restofTags, course {description = descriptn})
+  let (parsed, rest) = tagBreak "Corequisite|Prerequisite|Exclusion|Recommended|Distribution|Breadth" tags
+      descriptn = makeEntry parsed Nothing
+  in (rest, course {description = descriptn})
 
-{-----------------------------------------------------------------------------
-
-STILL NEED TO PUT IN PREREQ FIELD
------------------------------------------------------------------------------}
 parsePrerequisite :: CoursePart -> CoursePart
 parsePrerequisite (tags, course) = 
-  let prereqTags = takeWhile (\x -> not (tagContainsAny ["Exclusion", "Distribution"] x)) tags
-      cleanedTags = map cleanTag prereqTags
-      restOfTags = dropWhile (\x -> not (tagContainsAny ["Exclusion", "Distribution"] x)) tags
-      prereqstr = (Just (T.pack (concat (map fromTagText cleanedTags))))
-  in  if prereqTags == []
-      then (tags, course)
-      else (restOfTags, course {prereqString = prereqstr})  
-  where cleanTag (TagText s) = TagText (replace "Prerequisite:\r\n                   " " " s)
+  let (parsed, rest) = tagBreak "Corequisite|Exclusion|Recommended|Distribution|Breadth" tags
+      prereqstr = makeEntry parsed (Just "Prerequisite:")
+  in  (rest, course {prereqString = prereqstr})
 
-{-----------------------------------------------------------------------------
------------------------------------------------------------------------------}
---parseExclusion :: CoursePart -> CoursePart
+parseCorequisite :: CoursePart -> CoursePart
+parseCorequisite (tags, course)  = 
+  let (parsed, rest) = tagBreak "Exclusion|Recommended|Distribution|Breadth" tags
+  in (rest, course)
+
+parseExclusion :: CoursePart -> CoursePart
+parseExclusion (tags, course) =
+  let (parsed, rest) = tagBreak "Recommended|Distribution|Breadth" tags
+      ex = makeEntry parsed (Just "Exclusion:")
+  in (rest, course {exclusions = ex})
+
+parseRecommendedPrep :: CoursePart -> CoursePart
+parseRecommendedPrep (tags, course) = 
+  let (parsed, rest) = tagBreak "Distribution|Breadth" tags
+  in (rest, course)
+
+parseDistAndBreadth :: CoursePart -> CoursePart
+parseDistAndBreadth (tags, course) =
+  let dist = makeEntry (Just (filter (tagContains "Distribution:") tags)) (Just "Distribution Requirement Status: ") 
+      brdth = makeEntry (Just (filter (tagContains "Breadth") tags)) (Just "Breadth Requirement: ")
+  in (tail $ tail tags, course {distribution = dist, breadth = brdth})   
 
 
-{-----------------------------------------------------------------------------
------------------------------------------------------------------------------
-parseDistribution :: CoursePart -> CoursePart
--}
