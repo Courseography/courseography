@@ -7,8 +7,9 @@ import Control.Monad.Trans.Resource (runResourceT)
 import Database.Persist
 import Database.Persist.Sqlite
 
-import JsonParser
+import InsertCourses
 import Tables
+import ParseAll
 
 main :: IO ()
 main = runResourceT $ do
@@ -16,7 +17,7 @@ main = runResourceT $ do
                         liftIO $ print "Distribution table set up"
                         liftIO setupBreadthTable
                         liftIO $ print "breadth table set up"
-                        liftIO processDirectory
+                        liftIO parseAll
 
 -- | Sets up the Distribution table.
 setupDistributionTable :: IO ()
