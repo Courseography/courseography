@@ -7,8 +7,7 @@ module ParsingHelp
     regReplace,
     tagContains,
     dropBetween,
-    dropBetweenAll, 
-    parseTitle,
+    dropBetweenAll,
     parseDescription,
     parseCorequisite,
     parsePrerequisite,
@@ -157,7 +156,7 @@ parseRecommendedPrep (tags, course) =
 
 parseDistAndBreadth :: CoursePart -> CoursePart
 parseDistAndBreadth (tags, course) =
-  let dist = makeEntry (Just (filter (tagContains "Distribution:") tags)) (Just "Distribution Requirement Status: ") 
+  let dist = makeEntry (Just (filter (tagContains "Distribution") tags)) (Just "Distribution Requirement Status: ") 
       brdth = makeEntry (Just (filter (tagContains "Breadth") tags)) (Just "Breadth Requirement: ")
   in (tail $ tail tags, course {distribution = dist, breadth = brdth})   
 
