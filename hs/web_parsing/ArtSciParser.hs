@@ -1,4 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
+module ArtSciParser (parseArtSci) where
 import Network.HTTP
 import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Match
@@ -9,6 +10,8 @@ import Data.List.Utils
 import Data.Maybe
 import Tables
 import ParsingHelp
+import InsertCourses
+import CourseQueries
 
 fasCalendarURL :: String
 fasCalendarURL = "http://www.artsandscience.utoronto.ca/ofr/calendar/"
@@ -49,7 +52,7 @@ getCalendar str = do
     let coursesSoup = lastH2 tags
     let courses = map (filter (tagText (\x -> True))) $ partitions isCourseTitle coursesSoup
     let course = map processCourseToData courses
-    mapM_ (\c -> print c) course
+    mapM_ insertCourse course
     --print courses 
     where
         isComment (TagComment _) = False
@@ -96,10 +99,18 @@ processCourseToData tags  =
             parseRecommendedPrep -:  
             parseDistAndBreadth     
 
+parseArtSci :: IO ()
+parseArtSci = do
+    rsp <- simpleHTTP (getRequest fasCalendarURL)
+    body <- getResponseBody rsp
+    let depts = getDeptList $ parseTags  body
+    mapM_ getCalendar depts
+
+
 main :: IO ()
 main = do
     rsp <- simpleHTTP (getRequest fasCalendarURL)
     body <- getResponseBody rsp
     let depts = getDeptList $ parseTags  body
-    mapM_ getCalendar depts
+    getCalendar "crs_csc.htm"
 
