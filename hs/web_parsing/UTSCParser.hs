@@ -1,4 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
+module UTSCParser (parseUTSC) where
 import Network.HTTP
 import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Match
@@ -8,6 +9,8 @@ import qualified Data.Text.IO as B
 import Data.List.Utils
 import Data.Maybe
 import Tables
+import JsonParser
+import CourseQueries
 import ParsingHelp
 
 utscCalendarUrl :: String
@@ -33,8 +36,7 @@ getCalendar str = do
   let coursesSoup =  takeWhile (/= TagOpen "div" [("id", "pdf_files")]) $ lastH2 tags
   let courses = map (filter (tagText (\x -> True))) $ partitions isCourseTitle coursesSoup
   let course = map processCourseToData courses
-  mapM_ (\c -> print c) course
-  --print coursesSoup
+  mapM_ insertCourse course
   where
       isntComment (TagComment _) = False
       isntComment _ = True
@@ -79,8 +81,8 @@ processCourseToData tags  =
             parseRecommendedPrep -:  
             parseDistAndBreadth     
 
-main :: IO ()
-main = do
+parseUTSC :: IO ()
+parseUTSC = do
 	rsp <- simpleHTTP (getRequest (utscCalendarUrl ++ "Table_of_Contents.html"))
 	body <- getResponseBody rsp
 	let depts = getDeptList $ parseTags body
