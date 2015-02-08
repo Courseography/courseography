@@ -733,6 +733,7 @@ postCSS = do
     "#div_specialist, #div_major, #div_minor" ? do
         position absolute
         "margin-above" -: "70px"
+        display none
         height (pct 70)
         marginLeft (px 25)
         width (pct 97)
@@ -750,6 +751,7 @@ postCSS = do
         "list-style-type" -: "none"
         textAlign $ alignSide sideCenter
         margin0
+        display none
         "margin-right" -: "10px"
         "-webkit-transition" -: "all 0.2s"
         "-moz-transition" -: "all 0.2s"

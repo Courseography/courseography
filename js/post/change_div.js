@@ -1,8 +1,7 @@
 $(document).ready(function () {
     'use-strict';
 	
-    resetAttributes();
-    $('.more-info').hide();
+    $('#div_specialist').show();
 });
 
 
