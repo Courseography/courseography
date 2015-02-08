@@ -4,7 +4,7 @@ module ParsingHelp
     (-:),
     (~:),
     preProcess, 
-    regReplace,
+    replaceAll, 
     tagContains,
     dropBetween,
     dropBetweenAll,
@@ -34,26 +34,18 @@ coursepart -: fn = fn coursepart
 (~:) :: CoursePart -> ([Tag T.Text] -> [Tag T.Text]) -> CoursePart
 (tags, course) ~: fn =  (fn tags, course)
 
-{------------------------------------------------------------------------------
-INPUT: reg is a regex string, str is a string
-OUTPUT: string where every instance of reg in str is replaced
 
-DOESN'T SEEM TO WORK WITH *
-------------------------------------------------------------------------------}
-regReplace :: T.Text -> T.Text -> T.Text -> T.Text
-regReplace reg replacement str =
-    let match = T.pack $ (T.unpack str) =~ T.unpack reg
-    in
-        if match == T.empty
-        then str
-        else regReplace reg replacement (T.replace match replacement str)
+replaceAll :: [T.Text] -> T.Text -> T.Text -> T.Text
+replaceAll matches replacement str = 
+  foldl (\str match-> T.replace match replacement str) str matches
 
 {------------------------------------------------------------------------------
 INPUT: a tag containing string tagtext, and reg, a regex string
 OUTPUT: True if reg can match tagtext
 -------------------------------------------------------------------------------}
-tagContains :: T.Text -> Tag T.Text -> Bool
-tagContains reg (TagText tagtext) = (T.unpack tagtext) =~ T.unpack reg
+tagContains :: [T.Text] -> Tag T.Text -> Bool
+tagContains matches (TagText tagtext) = 
+  True == foldl (\bool match -> or [(T.isInfixOf match tagtext), bool]) False matches
 
 {------------------------------------------------------------------------------
 splits a list of tags into two pieces at the first matching instance of reg.
@@ -63,7 +55,7 @@ if no matches occur
     >>tagBreak "wat" [TagtText "lol", TagText "lmao", TagText "hehe]
     >>([TagtText "lol", TagText "lmao", TagText "hehe], [])
 -------------------------------------------------------------------------------}
-tagBreak ::  T.Text -> [Tag T.Text] -> (Maybe [Tag T.Text], [Tag T.Text])
+tagBreak ::  [T.Text] -> [Tag T.Text] -> (Maybe [Tag T.Text], [Tag T.Text])
 tagBreak reg tags = 
   let first = takeWhile (\tag -> not $ tagContains reg tag) tags 
       second = dropWhile (\tag -> not $ tagContains reg tag) tags
@@ -77,12 +69,12 @@ Record. removes instances of str, and concatenates all tagText into a single
 Text entity.
 If nothing needs to be removed, pass Nothing as the Text
 ------------------------------------------------------------------------------}
-makeEntry :: Maybe [Tag T.Text] -> Maybe T.Text -> Maybe T.Text
+makeEntry :: Maybe [Tag T.Text] -> Maybe [T.Text] -> Maybe T.Text
 makeEntry Nothing _ = Nothing
 makeEntry (Just []) _ = Nothing
 makeEntry (Just tags) Nothing = Just (T.concat (map fromTagText tags)) 
 makeEntry (Just tags) (Just str) = 
-  Just (regReplace str "" (T.concat (map fromTagText tags)))
+  Just (replaceAll str "" (T.concat (map fromTagText tags)))
 
 {------------------------------------------------------------------------------
 ------------------------------------------------------------------------------}
@@ -120,44 +112,44 @@ preProcess :: [Tag T.Text] -> [Tag T.Text]
 preProcess tags = 
   let nobreaks = filter (/= TagText "\r\n") tags
       removeUseless = filter isntUseless nobreaks 
-      removeEnrol = filter (\t -> not $ tagContains "Enrolment Limits:" t) removeUseless
+      removeEnrol = filter (\t -> not $ tagContains ["Enrolment Limits:"] t) removeUseless
   in map cleanText removeEnrol
   where
-    cleanText (TagText s) = TagText (regReplace "\n                    |\160|\194|\r\n                    |\r\n" "" s)
+    cleanText (TagText s) = TagText (replaceAll ["\r\n                    ", "\n                    ","\160","\194","\r\n"] "" s)
     isntUseless (TagText s) = not $ T.all (\c -> or [(c == ' '), (c =='\n')]) s
 
 parseDescription :: CoursePart -> CoursePart
 parseDescription (tags, course) = 
-  let (parsed, rest) = tagBreak "Corequisite|Prerequisite|Exclusion|Recommended|Distribution|Breadth" tags
+  let (parsed, rest) = tagBreak ["Corequisite","Prerequisite","Exclusion","Recommended","Distribution","Breadth"] tags
       descriptn = makeEntry parsed Nothing
   in (rest, course {description = descriptn})
 
 parsePrerequisite :: CoursePart -> CoursePart
 parsePrerequisite (tags, course) = 
-  let (parsed, rest) = tagBreak "Corequisite|Exclusion|Recommended|Distribution|Breadth" tags
-      prereqstr = makeEntry parsed (Just "Prerequisite:")
+  let (parsed, rest) = tagBreak ["Corequisite","Exclusion","Recommended","Distribution","Breadth"] tags
+      prereqstr = makeEntry parsed (Just ["Prerequisite:"])
   in  (rest, course {prereqString = prereqstr})
 
 parseCorequisite :: CoursePart -> CoursePart
 parseCorequisite (tags, course)  = 
-  let (parsed, rest) = tagBreak "Exclusion|Recommended|Distribution|Breadth" tags
+  let (parsed, rest) = tagBreak ["Exclusion","Recommended","Distribution","Breadth"] tags
   in (rest, course)
 
 parseExclusion :: CoursePart -> CoursePart
 parseExclusion (tags, course) =
-  let (parsed, rest) = tagBreak "Recommended|Distribution|Breadth" tags
-      ex = makeEntry parsed (Just "Exclusion:")
+  let (parsed, rest) = tagBreak ["Recommended","Distribution","Breadth"] tags
+      ex = makeEntry parsed (Just ["Exclusion:"])
   in (rest, course {exclusions = ex})
 
 parseRecommendedPrep :: CoursePart -> CoursePart
 parseRecommendedPrep (tags, course) = 
-  let (parsed, rest) = tagBreak "Distribution|Breadth" tags
+  let (parsed, rest) = tagBreak ["Distribution","Breadth"] tags
   in (rest, course)
 
 parseDistAndBreadth :: CoursePart -> CoursePart
 parseDistAndBreadth (tags, course) =
-  let dist = makeEntry (Just (filter (tagContains "Distribution") tags)) (Just "Distribution Requirement Status: ") 
-      brdth = makeEntry (Just (filter (tagContains "Breadth") tags)) (Just "Breadth Requirement: ")
+  let dist = makeEntry (Just (filter (tagContains ["Distribution"]) tags)) (Just ["Distribution Requirement Status: "]) 
+      brdth = makeEntry (Just (filter (tagContains ["Breadth"]) tags)) (Just ["Breadth Requirement: "])
   in (tail $ tail tags, course {distribution = dist, breadth = brdth})   
 
 
