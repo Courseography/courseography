@@ -52,8 +52,8 @@ getCalendar str = do
     let coursesSoup = lastH2 tags
     let courses = map (filter (tagText (\x -> True))) $ partitions isCourseTitle coursesSoup
     let course = map processCourseToData courses
-    mapM_ insertCourse course
-    --print courses 
+    mapM_ print course
+    --print "parsed " + "str" 
     where
         isComment (TagComment _) = False
         isComment _ = True
@@ -67,7 +67,7 @@ parseTitleFAS (tags, course) =
   in (tail tags, course {title  = Just (snd courseNames), 
                     name =  fst courseNames})
   where removeLectureSection (TagText s) = T.takeWhile (/= '[') s
-        removeTitleGarbage s = regReplace "\160" "" s
+        removeTitleGarbage s = replaceAll ["\160"] "" s
 {----------------------------------------------------------------------------------------
 INPUT: a list of tags representing a single course, 
 OUTPUT: Course 'record' containing course info
@@ -104,6 +104,7 @@ parseArtSci = do
     rsp <- simpleHTTP (getRequest fasCalendarURL)
     body <- getResponseBody rsp
     let depts = getDeptList $ parseTags  body
+    --print "parsing Arts and Science Calendar:\n"
     mapM_ getCalendar depts
 
 
@@ -112,5 +113,5 @@ main = do
     rsp <- simpleHTTP (getRequest fasCalendarURL)
     body <- getResponseBody rsp
     let depts = getDeptList $ parseTags  body
-    getCalendar "crs_csc.htm"
+    mapM_ getCalendar depts
 
