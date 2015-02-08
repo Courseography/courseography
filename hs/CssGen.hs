@@ -536,6 +536,9 @@ courseSelectCSS = do
             height (px 20)
             padding (px 1) 0 (px 1) 0
             cursor pointer
+            opacity 0.8
+            ":hover" & do
+                opacity 1.0
         ".icon-div" ? do
             width (px 20)
             minHeight (px 40)
