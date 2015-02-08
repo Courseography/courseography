@@ -347,6 +347,7 @@ Course.prototype.renderUpdate = function () {
 Course.prototype.renderHeader = function () {
     'use strict';
 
+    var headerDiv = document.createElement('div');
     var header = document.createElement('h3');
     header.appendChild(document.createTextNode(this.name));
 
@@ -359,15 +360,23 @@ Course.prototype.renderHeader = function () {
              });
 
 
+    var iconDiv = document.createElement('div');
+    $(iconDiv).addClass('icon-div');
     var courseImg = document.createElement('img');
     $(courseImg).attr('src', 'static/res/ico/delete.ico')
                 .addClass('close-icon')
                 .click(function () {
                     removeCourseFromList(tmp.name);
                 });
-    header.appendChild(courseImg);
+    var aboutImg = document.createElement('img');
+    $(aboutImg).attr('src', 'static/res/ico/about.png')
+               .addClass('close-icon');
+    iconDiv.appendChild(courseImg);
+    iconDiv.appendChild(aboutImg);
+    headerDiv.appendChild(iconDiv);
+    headerDiv.appendChild(header);
 
-    return header;
+    return headerDiv;
 };
 
 
