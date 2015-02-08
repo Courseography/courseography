@@ -703,8 +703,7 @@ tabsCSS = do
                     color black
                     display inlineBlock
                     lineHeight (px 50)
-                    paddingTop (px 0)
-                    paddingRight (px 24)
+                    paddingLeft (px 24)
                     width (pct 70)
                     textDecoration none
 
