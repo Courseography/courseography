@@ -23,7 +23,7 @@ data Time = Time { timeField :: [Int] } deriving (Show, Read, Eq)
 derivePersistField "Time"
 
 
-data Point = Point { point :: (Rational, Rational)} deriving (Show, Read, Eq)
+data Point = Point { point :: (Rational, Rational) } deriving (Show, Read, Eq)
 derivePersistField "Point"
 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
@@ -92,6 +92,7 @@ Texts
     yPos Rational
     text String
     style String
+    deriving Show
 
 Paths
     d [Point]
