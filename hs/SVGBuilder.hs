@@ -11,6 +11,7 @@ import Data.Conduit
 import Data.List
 import JsonParser
 
+-- | The SVG tag for an SVG document, along with an opening 'g' tag.
 svgHeader :: String
 svgHeader = "<svg" ++
    " xmlns:dc=\"http://purl.org/dc/elements/1.1/\"" ++
@@ -27,14 +28,13 @@ svgHeader = "<svg" ++
    " version=\"1.1\"" ++
    " sodipodi:docname=\"graph_regions.svg\"><g>"
 
+-- | A closing 'g' tag followed by a closing 'svg' tag.
 svgFooter :: String
 svgFooter = "</g></svg>"
 
-svgStyle :: String
-svgStyle = "fill:#8ccdf6;stroke:#8ccdf6"
-
-queryRects :: IO ()
-queryRects = 
+-- | Builds an SVG document.
+buildSVG :: IO ()
+buildSVG = 
     runSqlite dbStr $ do
         sqlRects :: [Entity Rects] <- selectList [] []
         sqlTexts :: [Entity Texts] <- selectList [] []
@@ -48,11 +48,13 @@ queryRects =
         liftIO $ appendFile "Testfile.svg" $ unwords textXml
         liftIO $ appendFile "Testfile.svg" svgFooter
 
+-- | Prints the database table 'rects'.
 printDB :: IO ()
 printDB = runSqlite dbStr $ do
               let sql = "SELECT * FROM rects"
               rawQuery sql [] $$ CL.mapM_ (liftIO . print)
 
+-- | Converts a `Rect` to XML. 
 convertRectToXML :: Rect -> String
 convertRectToXML rect = 
     "<rect rx=\"4\" ry=\"4\" x=\"" ++ 
@@ -67,6 +69,7 @@ convertRectToXML rect =
     (style rect) ++
     "\"/>"
 
+-- | Converts a `Text` to XML.
 convertTextToXML :: Text -> String
 convertTextToXML text = 
     "<text xml:space=\"preserve\" x=\"" ++ 
@@ -79,12 +82,14 @@ convertTextToXML text =
     (textText text) ++
     "</text>"
 
+-- | Converts a `Path` to XML.
 convertPathToXML :: Path -> String
 convertPathToXML path = 
     "<path style=\"stroke:#000000;fill:none;\" d=\"M " ++
     buildPathString (points path) ++
     "\"/>"
-         
+
+-- | Builds a Rect from a database entry in the rects table.
 buildRect :: Rects -> Rect
 buildRect entity = 
     Rect (rectsWidth entity)
@@ -93,6 +98,7 @@ buildRect entity =
          (rectsYPos entity)
          (rectsStyle entity)
 
+-- | Builds a Text from a database entry in the texts table.
 buildText :: Texts -> Text
 buildText entity = 
     Text (textsXPos entity)
@@ -100,16 +106,20 @@ buildText entity =
          (textsText entity)
          (textsStyle entity)
 
+-- | Builds a Path from a database entry in the paths table.
 buildPath :: Paths -> Path
 buildPath entity = 
     Path (map point $ pathsD entity)
          (pathsStyle entity)
 
+-- | Rebuilds a path's `d` attribute based on a list of Rational tuples.
 buildPathString :: [(Rational, Rational)] -> String
 buildPathString d = intercalate " " $ map (joinPathTuple . convertRationalTupToString) d
 
+-- | Joins two String values in a tuple with a comma.
 joinPathTuple :: (String, String) -> String
 joinPathTuple tup = fst tup ++ "," ++ snd tup
 
+-- | Converts a tuple of Rationals to a tuple of String.
 convertRationalTupToString :: (Rational, Rational) -> (String, String)
 convertRationalTupToString tup = (show $ fromRational (fst tup), show $ fromRational (snd tup))

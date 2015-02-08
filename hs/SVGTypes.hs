@@ -1,11 +1,13 @@
 module SVGTypes where
 
+-- | A Graph.
 data Graph =
     Graph { 
             gId :: Int,
             title :: String
           } deriving Show
 
+-- | A Rect.
 data Rect =
     Rect {
            width :: Rational,
@@ -15,6 +17,7 @@ data Rect =
            style :: String
          } deriving Show
 
+-- | A Text.
 data Text =
     Text {
            textXPos :: Rational,
@@ -23,7 +26,7 @@ data Text =
            textStyle :: String
          } deriving Show
 
-
+-- | A Path.
 data Path =
     Path { 
            points :: [(Rational, Rational)],
