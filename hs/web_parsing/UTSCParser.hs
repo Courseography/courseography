@@ -36,7 +36,8 @@ getCalendar str = do
   let coursesSoup =  takeWhile (/= TagOpen "div" [("id", "pdf_files")]) $ lastH2 tags
   let courses = map (filter (tagText (\x -> True))) $ partitions isCourseTitle coursesSoup
   let course = map processCourseToData courses
-  mapM_ insertCourse course
+  mapM_ print course
+  --print "parsed " ++ str
   where
       isntComment (TagComment _) = False
       isntComment _ = True
@@ -86,5 +87,13 @@ parseUTSC = do
 	rsp <- simpleHTTP (getRequest (utscCalendarUrl ++ "Table_of_Contents.html"))
 	body <- getResponseBody rsp
 	let depts = getDeptList $ parseTags body
+  --print "parsing UTSC Calendar: \n"
 	mapM_ getCalendar depts
 
+main :: IO ()
+main = do
+  rsp <- simpleHTTP (getRequest (utscCalendarUrl ++ "Table_of_Contents.html"))
+  body <- getResponseBody rsp
+  let depts = getDeptList $ parseTags body
+  --print "parsing UTSC Calendar: \n"
+  mapM_ getCalendar depts
