@@ -118,13 +118,48 @@ function renderClearHover(time) {
 function renderAddHover(time, section) {
     'use strict';
 
+    var n;
+
+    n = time.indexOf('H');
+
+    if(n != -1) {
+        extendRow(time.slice(2,n));
+    } 
+
     if ($(time).attr('clicked') !== 'true') {
         $(time).html(section.courseName)
                .attr('hover', 'good');
     } else if ($(time).html() === section.courseName &&
-               $(time).attr('type') === section.type) {
-        $(time).attr('hover', 'remove');
+        $(time).attr('type') === section.type) {
+    $(time).attr('hover', 'remove');
     } else {
         $(time).attr('hover', 'conflict');
     }
+}
+
+function extendRow(time) {
+    var weekPrefixArray = ['M', 'T', 'W', 'R', 'F'];
+    var pcells = [];
+    var ccells = [];
+    var cellID;
+
+    for (var k = 0; k < 5; k++) {
+        cellID = '#' + weekPrefixArray[k] + time + 'F';
+        pcells[pcells.length] = cellID;
+        cellID = '#' + weekPrefixArray[k] + time + 'S';
+        pcells[pcells.length] = cellID;
+    }
+
+    for (var k = 0; k < 5; k++) {
+        cellID = '#' + weekPrefixArray[k] + time +'H' + 'F';
+        ccells[ccells.length] = cellID;
+        cellID = '#' + weekPrefixArray[k] + time +'H'+ 'S';
+        ccells[ccells.length] = cellID;
+    }
+
+    for (var i = 0; i < 10; i++) {
+        $(pcells[i]).attr('rowspan', '1');
+        $(ccells[i]).attr('display', 'table-cell');
+    }
+
 }
