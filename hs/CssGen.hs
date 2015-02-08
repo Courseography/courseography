@@ -126,6 +126,7 @@ fill = (-:) "fill"
 wideStroke = "stroke-width" -: "3"
 faded = opacity 0.4
 semiVisible = opacity 0.7
+fullyVisible = opacity 1.0
 strokeRed = do
     "stroke" -: "#CC0011"
     "stroke-width" -: "2px"
@@ -162,13 +163,18 @@ nodeCSS = "g" ? do
         cursor pointer
         "text" ? do
             fontSize (pt 12)
+            faded
         "data-active" @= "active" & do
             "rect" <? do
                 wideStroke
+            "text" <? do
+                fullyVisible
         "data-active" @= "overridden" & do
             "rect" <? do
                 wideStroke
                 strokeRed
+            "text" <? do
+                fullyVisible
         "data-active" @= "inactive" & do
             "rect" <? do
                 faded
@@ -180,6 +186,8 @@ nodeCSS = "g" ? do
             "rect" <> "ellipse" <? do
                 wideStroke
                 strokeRed
+            "text" <? do
+                fullyVisible
         "data-active" @= "unlit" & do
             wideStroke
             strokeRed
