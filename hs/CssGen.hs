@@ -182,6 +182,8 @@ nodeCSS = "g" ? do
         "data-active" @= "takeable" & do
             "rect" <? do
                 semiVisible
+            "text" <? do
+                semiVisible
         "data-active" @= "missing" & do
             "rect" <> "ellipse" <? do
                 wideStroke
