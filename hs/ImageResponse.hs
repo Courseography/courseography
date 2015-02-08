@@ -7,8 +7,8 @@ import Happstack.Server
 import qualified Data.ByteString.Lazy as BS
 import Control.Monad.IO.Class  (liftIO)
 import qualified Data.ByteString.Base64.Lazy as B
-
 import ConvertSVGToPNG
+
 imageResponse :: ServerPart Response
 imageResponse = liftIO getImage
 
