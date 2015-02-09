@@ -109,7 +109,7 @@ function makeNode(e) {
         node.setAttribute('width', nodeWidth);
         node.setAttribute('height', nodeHeight);
         node.setAttribute('class', 'node');
-        node.attributes['parents'] = [];
+        node.attributes['parents'] = []; // node.parents = []
         node.attributes['children'] = [];
         node.attributes['inEdges'] = [];
         node.attributes['outEdges'] = [];
@@ -197,7 +197,7 @@ function nodeClicked(e) {
             e.currentTarget.attributes['parents'].push(startNode);
             startNode.attributes['outEdges'].push(thePath);
             e.currentTarget.attributes['inEdges'].push(thePath);
-
+            // startNode.children
             startNode = null;
             curPath = null;
         }
@@ -329,6 +329,7 @@ $('#add-text').click(function (){
     - delete path if start or end node deleted
     - don't allow elbow points in end node
 https://www.dashingd3js.com/svg-paths-and-d3js
+- multiple elbows??
 
 */
 
