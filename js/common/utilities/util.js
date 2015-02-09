@@ -124,7 +124,7 @@ function convertTimes(times) {
         time = times[i][1];
         if (time > 21) {
             stime = time.toString();
-            if (stime.charAt(stime.length-1) == '0') {
+            if (stime.charAt(stime.length - 1) == '0') {
                 stime = stime.slice(0, -1) + 'E';
             } else {
                 stime = stime.slice(0, -1) + 'H';
