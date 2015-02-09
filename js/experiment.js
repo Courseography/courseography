@@ -24,16 +24,48 @@ function setupSVGCanvas() {
     var svg = document.createElementNS(xmlns, 'svg');
     svg.setAttribute('id', 'mySVG');
     svg.setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xlink', 'http://www.w3.org/1999/xlink');
+    //svg.setAttributeNS(xmlns, 'xmlns', xmlns);
+    
+    svg.addEventListener('mousedown', makeNode, false);
+    svg.addEventListener('mousemove', nodeMoved, false);
+    svg.addEventListener('mouseup', nodeUnclicked, false);
+
+    svg.appendChild(setupMarker());
     document.body.appendChild(svg);
-    document.getElementById('mySVG').addEventListener('mousedown', makeNode, false);
-    document.getElementById('mySVG').addEventListener('mousemove', nodeMoved, false);
-    document.getElementById('mySVG').addEventListener('mouseup', nodeUnclicked, false);
+}
 
-    // arrow head for paths
-    // S.defs $ do
-    //    S.marker ! A.id_ "arrow" ! A.viewbox "0 0 10 10" ! A.refx "1" ! A.refy "5" ! A.markerunits "strokeWidth" ! A.orient "auto" ! A.markerwidth "4.5" ! A.markerheight "4.5" $ do
-    //        S.polyline ! A.points "0,1 10,5 0,9" ! A.fill "black"
 
+    /*arrow head for paths
+    BLAZE:
+    S.defs $ do
+        S.marker ! A.id_ "arrow" ! A.viewbox "0 0 10 10" ! A.refx "1" ! A.refy "5" ! 
+        A.markerunits "strokeWidth" ! A.orient "auto" ! A.markerwidth "4.5" ! A.markerheight "4.5" $ do
+            S.polyline ! A.points "0,1 10,5 0,9" ! A.fill "black"
+    */
+function setupMarker() {
+    'use-strict'
+
+    var defs = document.createElementNS(xmlns, 'defs');
+    var marker = document.createElementNS(xmlns, 'marker');
+    var polyline = document.createElementNS(xmlns, 'polyline');
+    
+    marker.setAttributeNS(null, 'id', 'arrow');
+    marker.setAttributeNS(null, 'class', 'path');
+    marker.setAttributeNS(null, 'viewBox', '0 0 10 10');
+    marker.setAttributeNS(null, 'refx', '10');
+    marker.setAttributeNS(null, 'refy', '7');
+    marker.setAttributeNS(null, 'markerunits', 'strokeWidth');
+    marker.setAttributeNS(null, 'orient', 'auto');
+    marker.setAttributeNS(null, 'markerWidth', '4.5');
+    marker.setAttributeNS(null, 'markerHeight', '4.5');
+
+    polyline.setAttributeNS(null, 'points', '0,1 10,5 0,9');
+    polyline.setAttributeNS(null, 'fill', 'black');
+
+    marker.appendChild(polyline);
+    defs.appendChild(marker);
+
+    return defs
 }
 
 
@@ -86,7 +118,10 @@ function makeNode(e) {
         node.setAttribute('width', nodeWidth);
         node.setAttribute('height', nodeHeight);
         node.setAttribute('class', 'node');
-        
+        node.attributes['parents'] = [];
+        node.attributes['children'] = [];
+        node.attributes['inEdges'] = [];
+        node.attributes['outEdges'] = [];
         g.appendChild(node);
         document.getElementById('mySVG').appendChild(g);
         document.getElementById(nodeId).addEventListener('mousedown', nodeClicked, false);
@@ -114,8 +149,9 @@ function makeNode(e) {
 function nodeClicked(e) {
     'use-strict';
 
+    var svgDoc = document.getElementById('mySVG');
     if (mode  === 'erase-mode') {
-        document.getElementById('mySVG').removeChild(e.currentTarget.parentNode);
+        svgDoc.removeChild(e.currentTarget.parentNode);
     } else if (mode === 'change-mode') {
         var position = getClickPosition(e, e.currentTarget);
         nodeMoving = e.currentTarget;
@@ -136,15 +172,29 @@ function nodeClicked(e) {
             console.log('starting it ' + curPath);
         } else {
             // make the path from startNode to current node then make startNode Null
-            curPath += 'L' + (parseFloat(e.currentTarget.getAttribute('x')) + nodeWidth/2) + ',' + e.currentTarget.getAttribute('y');  
+            curPath += 'L' + (parseFloat(e.currentTarget.getAttribute('x')) + nodeWidth/2 /*- 10*/) + ',' + (parseFloat(e.currentTarget.getAttribute('y')) /*- 10*/);  
             var thePath = document.createElementNS(xmlns, 'path');
             thePath.setAttributeNS(null, 'd', curPath);
             thePath.setAttributeNS(null, 'fill', 'none');
             thePath.setAttributeNS(null, 'stroke', 'black');
             thePath.setAttributeNS(null, 'data-active', 'drawn');
+            // thePath.setAttributeNS(null, 'marker-end', 'url(#arrow)');
             thePath.addEventListener('click', pathClicked, false);
             console.log('creating it ' + curPath);
             document.getElementById('mySVG').appendChild(thePath);
+
+            thePath.attributes['start'] = startNode;
+            thePath.attributes['end'] = e.currentTarget;
+
+            console.log(startNode.attributes['children']);
+            console.log(startNode.attributes['parents']);
+
+            // update relationships
+            startNode.attributes['children'].push(e.currentTarget);
+            e.currentTarget.attributes['parents'].push(startNode);
+            startNode.attributes['outEdges'].push(thePath);
+            e.currentTarget.attributes['inEdges'].push(thePath);
+
             startNode = null;
             curPath = null;
         }
