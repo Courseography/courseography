@@ -688,10 +688,11 @@ panelCSS = "#mode-panel" ? do
     "border-radius" -: "8px"
 
 modeButtonsCSS = ".mode" ? do
-    width (pct 90)
+    width (pct 93)
     margin (px 5) (px 5) (px 5) (px 5)
     padding 0 (px 155) 0 (px 5)
     roundCorners
+    fontSize (px 16)
     border solid (px 2) "#008080"
     ":hover" & do
         fontWeight bold
@@ -709,6 +710,7 @@ colourButtonsCSS = ".colour" ? do
     padding0
     roundCorners
     alignCenter
+    fontSize (px 16)
     border solid (px 2) "#008080"
     ":hover" & do
         fontWeight bold
@@ -728,7 +730,7 @@ purpleCSS = "#purple"? do
     backgroundColor $ parse dPurple
 
 inputCSS = "input" ? do
-    fontSize (px 20)
+    fontSize (px 16)
     border solid (px 2) "#dcdcdc"
     roundCorners
     margin (px 5) (px 0) (px 5) (px 5)
@@ -740,9 +742,10 @@ inputCSS = "input" ? do
 textButtonCSS = ".button" ? do
     "display" -: "inline"
     margin (px 5) (px 5) (px 5) (px 5)
-    padding (px 2) (px 26) (px 2) (px 26)
+    padding (px 2) (px 20) (px 2) (px 20)
     roundCorners
     alignCenter
+    fontSize (px 16)
     border solid (px 2) "#dcdcdc"
     ":hover" & do
         cursor pointer
