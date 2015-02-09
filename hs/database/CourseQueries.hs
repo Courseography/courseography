@@ -1,5 +1,5 @@
 {-# LANGUAGE ScopedTypeVariables, OverloadedStrings #-}
-module CourseQueries where
+module CourseQueries (queryCourse) where
 
 import Database.Persist
 import Database.Persist.Sqlite
