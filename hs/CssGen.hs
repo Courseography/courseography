@@ -741,7 +741,6 @@ postCSS = do
         marginLeft nil 
         color red
     ".more-info" ? do
-        paddingLeft (px 20)
         border solid (px 2) grey3
         "border-radius" -: "4px"
         backgroundColor grey4
@@ -758,6 +757,7 @@ postCSS = do
         "-o-transition" -: "all 0.2s"
         "transition" -: "all 0.2s"
     ".full_name" ? do
+        paddingLeft (px 20)
         textAlign $ alignSide sideCenter
         margin0
     "input" ? do
