@@ -188,6 +188,10 @@ nodeCSS = "g" ? do
         "data-active" @= "unlit" & do
             wideStroke
             strokeRed
+        "data-active" @= "unselected" & do
+            "rect" <? do
+                wideStroke
+                faded
         "data-group" @= "theory" & do
             "rect" <? do
                 fill theoryDark
@@ -651,6 +655,7 @@ fceCountCSS = "#FCECountDiv" ? do
     fontSize (em 1.35)
     alignCenter
 
+roundCorners = "border-radius" -: "8px"
 
 drawStyles = do
     canvasCSS
@@ -662,6 +667,8 @@ drawStyles = do
     greenCSS
     blueCSS
     purpleCSS
+    inputCSS
+    textButtonCSS
 
 canvasCSS = "#mySVG" ? do
     height (pct 85)
@@ -681,7 +688,7 @@ modeButtonsCSS = ".mode" ? do
     width (pct 90)
     margin (px 5) (px 5) (px 5) (px 5)
     padding 0 (px 155) 0 (px 5)
-    "border-radius" -: "8px"
+    roundCorners
     border solid (px 2) "#008080"
     ":hover" & do
         fontWeight bold
@@ -697,7 +704,7 @@ colourButtonsCSS = ".colour" ? do
     width (pct 40)
     margin (px 5) (px 5) (px 5) (px 5)
     padding0
-    "border-radius" -: "8px"
+    roundCorners
     alignCenter
     border solid (px 2) "#008080"
     ":hover" & do
@@ -717,3 +724,22 @@ blueCSS = "#blue"? do
 purpleCSS = "#purple"? do
     backgroundColor $ parse dPurple
 
+inputCSS = "input" ? do
+    fontSize (px 20)
+    border solid (px 2) "#dcdcdc"
+    roundCorners
+    margin (px 5) (px 0) (px 5) (px 5)
+    padding0
+    ":focus" & do
+        border solid (px 2) "#FFD700"
+        "box-shadow" -: "0 0 5px 1px #FFD700"
+
+textButtonCSS = ".button" ? do
+    "display" -: "inline"
+    margin (px 5) (px 5) (px 5) (px 5)
+    padding (px 2) (px 26) (px 2) (px 26)
+    roundCorners
+    alignCenter
+    border solid (px 2) "#dcdcdc"
+    ":hover" & do
+        cursor pointer
