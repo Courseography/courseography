@@ -35,13 +35,6 @@ function setupSVGCanvas() {
 }
 
 
-    /*arrow head for paths
-    BLAZE:
-    S.defs $ do
-        S.marker ! A.id_ "arrow" ! A.viewbox "0 0 10 10" ! A.refx "1" ! A.refy "5" ! 
-        A.markerunits "strokeWidth" ! A.orient "auto" ! A.markerwidth "4.5" ! A.markerheight "4.5" $ do
-            S.polyline ! A.points "0,1 10,5 0,9" ! A.fill "black"
-    */
 function setupMarker() {
     'use-strict'
 
@@ -99,7 +92,6 @@ function makeNode(e) {
     'use-strict';
 
     var position = getClickPosition(e, e.currentTarget);
-    // decide what to do based on what mode it is?
     if (mode === 'node-mode') {
         var g = document.createElementNS(xmlns, 'g');
         var node = document.createElementNS(xmlns, 'rect');
@@ -153,7 +145,7 @@ function nodeClicked(e) {
             index = item.attributes['start'].attributes['outEdges'].indexOf(item);
             if (index > -1) {
                 console.log('delete index from outEdges: ?  ', index);
-                (item.attributes['start'].attributes['outEdges']).splice(index, 1);
+                console.log((item.attributes['start'].attributes['outEdges']).splice(index, 1));
             }
             svgDoc.removeChild(item);
         });
@@ -161,7 +153,7 @@ function nodeClicked(e) {
             index = item.attributes['end'].attributes['inEdges'].indexOf(item);
             if (index > -1) {
                 console.log('delete index from inEdges: ? ', index);
-                item.attributes['end'].attributes['inEdges'].splice(index, 1);
+                console.log(item.attributes['end'].attributes['inEdges'].splice(index, 1));
             }
             svgDoc.removeChild(item);
         });
@@ -262,7 +254,7 @@ function nodeUnclicked(e) {
 function pathClicked(e) {
     'use-strict'
 
-    if (mode === 'erase-mode') {
+    if (mode === 'erase-mode') { // need to remove path from node lists!
         document.getElementById('mySVG').removeChild(e.currentTarget);
     }
 }
