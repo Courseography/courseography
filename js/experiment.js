@@ -125,18 +125,14 @@ function makeNode(e) {
         document.getElementById('mySVG').appendChild(g);
         document.getElementById(nodeId).addEventListener('mousedown', nodeClicked, false);
 
-        // select the newly created node and deselect the old selected node
-        console.log(nodeSelected);
-        if (nodeSelected !== null) {
-            nodeSelected.parentNode.setAttribute('data-active', 'unselected');
-        }
-        nodeSelected = document.getElementById(nodeId);
+        select(document.getElementById(nodeId));
+
         nodeId += 1;
     } else if (mode === 'path-mode') {
         // make elbow joint, only if the dummy point is outside the starting node
         if (startNode !== null && (position.x < startNode.getAttribute('x') || 
-                                    position.x > parseFloat(startNode.getAttribute('x')) + nodeWidth)
-                    && (position.y < startNode.getAttribute('y') || 
+                                    position.x > parseFloat(startNode.getAttribute('x')) + nodeWidth) &&
+                    (position.y < startNode.getAttribute('y') || 
                                     position.y > parseFloat(startNode.getAttribute('y')) + nodeHeight)) {
             curPath += 'L' + position.x + ',' + position.y + ' ';
             console.log('adding elbow to it ' + curPath);  
@@ -146,16 +142,17 @@ function makeNode(e) {
 
 
 function nodeClicked(e) {
-    'use-strict';
+    'use-stri`ct';
 
     var svgDoc = document.getElementById('mySVG');
     var index = null;
 
-    if (mode  === 'erase-mode') {
+    if (mode  === 'erase-mode') { 
+        // remove any paths leading to and from this node from the other node's list
         e.currentTarget.attributes['inEdges'].map( function (item) {
             index = item.attributes['start'].attributes['outEdges'].indexOf(item);
             if (index > -1) {
-                console.log('its not going away? ', index);
+                console.log('delete index from outEdges: ?  ', index);
                 (item.attributes['start'].attributes['outEdges']).splice(index, 1);
             }
             svgDoc.removeChild(item);
@@ -163,7 +160,7 @@ function nodeClicked(e) {
         e.currentTarget.attributes['outEdges'].map( function (item) {
             index = item.attributes['end'].attributes['inEdges'].indexOf(item);
             if (index > -1) {
-                console.log('its not going away? ', index);
+                console.log('delete index from inEdges: ? ', index);
                 item.attributes['end'].attributes['inEdges'].splice(index, 1);
             }
             svgDoc.removeChild(item);
@@ -176,22 +173,20 @@ function nodeClicked(e) {
         nodeY = position.y;
         
         // show which node has been selected
-        if (nodeSelected !== null) {
-            nodeSelected.parentNode.setAttribute('data-active', 'unselected');
-        }
-        nodeSelected = e.currentTarget;
-        nodeSelected.parentNode.setAttribute('data-active', 'active');
-        console.log(nodeSelected.attributes['children']);
-        console.log(nodeSelected.attributes['parents']);
+        select(e.currentTarget);
+
     } else if (mode === 'path-mode') {
         if (startNode === null) {
             // this is the start node of the path about to be created
             startNode = e.currentTarget;
-            curPath = 'M' + (parseFloat(startNode.getAttribute('x')) + nodeWidth/2) + ',' + startNode.getAttribute('y') + ' ';   
+            curPath = 'M' + (parseFloat(startNode.getAttribute('x')) + nodeWidth/2) + 
+                                ',' + startNode.getAttribute('y') + ' ';   
             console.log('starting it ' + curPath);
+            select(e.currentTarget);
         } else {
             // make the path from startNode to current node then make startNode Null
-            curPath += 'L' + (parseFloat(e.currentTarget.getAttribute('x')) + nodeWidth/2 /*- 10*/) + ',' + (parseFloat(e.currentTarget.getAttribute('y')) /*- 10*/);  
+            curPath += 'L' + (parseFloat(e.currentTarget.getAttribute('x')) + nodeWidth/2 /*- 10*/) + 
+                        ',' + (parseFloat(e.currentTarget.getAttribute('y')) /*- 10*/);  
             var thePath = document.createElementNS(xmlns, 'path');
             thePath.setAttributeNS(null, 'd', curPath);
             thePath.setAttributeNS(null, 'fill', 'none');
@@ -205,9 +200,6 @@ function nodeClicked(e) {
             thePath.attributes['start'] = startNode;
             thePath.attributes['end'] = e.currentTarget;
 
-            console.log(startNode.attributes['children']);
-            console.log(startNode.attributes['parents']);
-
             // update relationships
             startNode.attributes['children'].push(e.currentTarget);
             e.currentTarget.attributes['parents'].push(startNode);
@@ -220,6 +212,16 @@ function nodeClicked(e) {
     }
 }
 
+function select(newNode) {
+    console.log(nodeSelected);
+    if (nodeSelected !== null) {
+        nodeSelected.parentNode.setAttribute('data-active', 'unselected');
+    }
+    nodeSelected = newNode;
+    nodeSelected.parentNode.setAttribute('data-active', 'active');
+    console.log('parents: ', nodeSelected.attributes['parents']);
+    console.log('children: ', nodeSelected.attributes['children']);
+}
 
 function nodeMoved(e) {
     'use-strict';
@@ -327,17 +329,13 @@ $('#add-text').click(function (){
 
 // TODO:
 /*
-x put all the jQuery .click definitions in a loop instead of for each button
-x put all style related stuff in CSS especially all the clicked button stuff
-x for node on click change to on mouse down on mouse move and on mouse up methods
 - node type buttons
-x connect CSS of main graph with the nodes and types in this graph 
-x input field to add text
 - add paths with elbow joints
     - pick best side of start node and end node to make line, so no overlap
     - moving path when start or end point of path move
     - moving elbow points
     - delete path if start or end node deleted
+    - don't allow elbow points in end node
 https://www.dashingd3js.com/svg-paths-and-d3js
 
 */
@@ -346,8 +344,9 @@ https://www.dashingd3js.com/svg-paths-and-d3js
 /*
 - change mode to node-mode when colour changed ?
 - document ready method ?
+- when path created should end node be selected?
 - key board shortcuts to switch modes
 - make a grid background for the svg canvas, could prove to be useful if we want to add snapping
 http://www.openjs.com/scripts/events/keyboard_shortcuts/#disable_in_input
-- colour picker for choosing colour: <input type='color'/>
+- colour picker for choosing colour of node: <input type='color'/>
 */
