@@ -48,4 +48,6 @@ timetableScripts = do jQuery
 postScripts :: H.Html
 postScripts = concatHtml (map makeScript ["https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js",
                                           "https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js",
-                                          "static/js/post/change_div.js"])
+                                          "static/js/post/change_div.js",
+                                          "static/js/common/cookieHandler.js",
+                                          "static/js/post/update_post.js"])
