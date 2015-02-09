@@ -12,6 +12,7 @@ var colours = {
 var nodeMoving = null; // for movement and path creation
 var nodeX = -1; // for movement
 var nodeY = -1; // for movement
+var nodeSelected = null; // for adding text
 
 
 function setupSVGCanvas() {
@@ -63,6 +64,7 @@ function makeNode(e) {
         var node = document.createElementNS(xmlns, 'rect');
 
         g.setAttribute('class', 'node');
+        g.setAttribute('id', 'g' + nodeId);
         g.setAttribute('data-active', 'active');
         g.setAttribute('data-group', nodeColourId);
     
@@ -74,12 +76,18 @@ function makeNode(e) {
         node.setAttribute('id', nodeId);
         node.setAttribute('width', 40);
         node.setAttribute('height', 32);
-        //node.setAttribute('fill', colours[nodeColourId]);
         node.setAttribute('class', 'node');
         
         g.appendChild(node);
         document.getElementById('mySVG').appendChild(g);
         document.getElementById(nodeId).addEventListener('mousedown', nodeClicked, false);
+
+        // select the newly created node and deselect the old selected node
+        console.log(nodeSelected);
+        if (nodeSelected !== null) {
+            nodeSelected.parentNode.setAttribute('data-active', 'unselected');
+        }
+        nodeSelected = document.getElementById(nodeId);
         nodeId += 1;
     }
 }
@@ -96,6 +104,14 @@ function nodeClicked(e) {
         nodeX = position.x;
         nodeY = position.y;
         console.log(nodeX, nodeY);
+    }
+    // show which node has been selected
+    if (mode !== 'erase-mode') {
+        if (nodeSelected !== null) {
+            nodeSelected.parentNode.setAttribute('data-active', 'unselected');
+        }
+        nodeSelected = e.currentTarget;
+        nodeSelected.parentNode.setAttribute('data-active', 'active');
     }
 }
 
@@ -150,6 +166,29 @@ function changeColour(id) {
 }
 
 
+function addText() {
+    'use-strict'
+
+    var courseCode = document.getElementById("course-code").value;
+    if (nodeSelected !== null && courseCode.length > 2) { // the rect element
+        var g = nodeSelected.parentNode;
+        if (g.childNodes.length > 1){
+            g.removeChild(g.childNodes[1]); 
+        }
+        console.log(nodeSelected.getAttribute('id'), nodeSelected.getAttribute('x'));
+    //    createText(g, nodeSelected.getAttribute('id'), 't' + nodeSelected.getAttribute('id'), nodeSelected.getAttribute('x'), 
+    //                nodeSelected.getAttribute('y'), nodeSelected.getAttribute('width'), nodeSelected.getAttribute('height'), "black");
+        var code = document.createElementNS(xmlns, 'text');
+        code.setAttributeNS(null, 'id', 'haha');//'t' + nodeSelected.getAttribute('id'));
+        code.setAttributeNS(null, 'x', parseFloat(nodeSelected.getAttribute('x')) + 20);
+        code.setAttributeNS(null, 'y', parseFloat(nodeSelected.getAttribute('y')) + 17);
+        var textNode = document.createTextNode(courseCode);
+        code.appendChild(textNode);
+        console.log(code);
+        g.appendChild(code);
+    }
+}
+
 setupSVGCanvas();
 
 $('.mode').each(function(index) {
@@ -160,19 +199,28 @@ $('.colour').each(function(index) {
   $(this). click(function () {
     changeColour(this.id);});
 });
-
+$('#add-text').click(function (){
+    addText();
+});
 
 // TODO:
 /*
-- document ready method ?
 x put all the jQuery .click definitions in a loop instead of for each button
 x put all style related stuff in CSS especially all the clicked button stuff
-- for node on click change to on mouse down on mouse move and on mouse up methods
-    - in erase mode erase the node on up i guess
-    - in change mode make it the current node and on move calculate the change in p
-        position of the cursor and move the x and y coord of the current node accordingly
-        on mouse up unselect the node, (i.e. make the current node var NULL).
+x for node on click change to on mouse down on mouse move and on mouse up methods
 - node type buttons
-- connect CSS of main graph with the nodes and types in this graph 
+x connect CSS of main graph with the nodes and types in this graph 
+- input field to add text
+- add paths with elbow joints
+http://stackoverflow.com/questions/6725288/svg-text-inside-rect
+*/
+
+// RANDOM
+/*
+- change mode to node-mode when colour changed ?
+- document ready method ?
+- key board shortcuts to switch modes
+- make a grid background for the svg canvas, could prove to be useful if we want to add snapping
+http://www.openjs.com/scripts/events/keyboard_shortcuts/#disable_in_input
 - colour picker for choosing colour: <input type='color'/>
 */
