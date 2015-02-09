@@ -35,6 +35,8 @@ $('#minor').click (function (e) {
 });
 
 $('.code').click (function (e) {
+    'use-strict';
+    
     e.preventDefault();
     $(this).parent().find('.more-info').toggle();
 });
