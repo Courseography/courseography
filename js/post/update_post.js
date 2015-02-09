@@ -3,7 +3,17 @@
 **/
 $('.code').click (function (e) {
    'use-strict';
+    
+    // update 300 level and 400 level text boxes - in progress
+    /*
+    if ($(this).parent().attr('id') === 'spec_300' || $(this).parent().attr('id') === 'spec_400') {
+        update300sAnd400s(this);
+    }
+    */
 
+    var active = 0;
+    var inactive = 0;
+    
     e.preventDefault();
     var children = $(this).parent().children('.more-info').children();
     for (i = 0; i < children.length; i++) {
@@ -17,12 +27,23 @@ $('.code').click (function (e) {
         } 
         
         var courseCode = children[i].className.substring(index, children[i].className.length);
-        if (getCookie(courseCode) === 'active') {
+        if (getCookie(courseCode) === 'active' || getCookie(courseCode) === 'overridden') {
             activateCourse(courseCode);
+            active += 1;
         } else {
             deactivateCourse(courseCode);
+            inactive += 1;
         }
     }
+    
+    // Changes category to show it is satisfied - in progress
+    /*
+    var elem = children[0].parentNode.parentNode;
+    if (active === children.length) {
+        updateCategory(elem, 'fulfilled');
+    } else if (inactive > 0) {
+        updateCategory(elem, 'not fulfilled');
+    }*/
 });
 
 /**
@@ -50,3 +71,30 @@ function deactivateCourse(courseCode) {
             elements[i].style.backgroundColor = '#BABABA';
     }
 }
+
+/**
+ * Records a category as fulfilled or not fulfilled
+ * @param {Element} category Element of category
+ * @param {string} status Whether it is 'fulfilled' or 'not fulfilled'
+**/
+function updateCategory(category, status) {
+    if (status === 'fulfilled') {
+        category.style.backgroundColor = "#3CB371";
+    } else if (status === 'not fulfilled') {
+        category.style.backgroundColor = '#ebe8e4';
+    }
+}
+
+/**
+ * Updates textbox in 300 or 400 level category
+ * @param {object} obj Object that was clicked
+**/
+function update300sAnd400s(obj) {
+    var textboxes = $(obj).parent().children('more-info).children();
+    var i = 0;
+    while (textboxes[i].value) {
+        i = i + 1;
+    }
+    //textboxes[i].value = ;
+    
+}   
