@@ -89,6 +89,8 @@ function createFBModalDiv() {
  * @returns {String} The base64 representation of an image.
  */
 function getImage() {
+    'use strict';
+    
     var img;
 
     $.ajax({
@@ -110,6 +112,8 @@ function getImage() {
  * Adds the user's name to the navigation bar.
  */
 function addNameToNavBar() {
+    'use strict';
+    
     FB.api('/me', function (response) {
         demoAPI(response);
         $('#facebook-name').html(response.name);
@@ -121,5 +125,7 @@ function addNameToNavBar() {
  * Removes the name from the navigation bar.
  */
 function removeNameFromNavBar() {
+    'use strict';
+    
     $('#facebook-name').empty();
 }
