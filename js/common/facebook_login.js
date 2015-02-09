@@ -115,7 +115,6 @@ function addNameToNavBar() {
     'use strict';
     
     FB.api('/me', function (response) {
-        demoAPI(response);
         $('#facebook-name').html(response.name);
     });
 }
