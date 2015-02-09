@@ -130,7 +130,7 @@ function renderAddHover(time, section) {
         $(time).html(section.courseName)
                .attr('hover', 'good');
     } else if ($(time).html() === section.courseName &&
-        $(time).attr('type') === section.type) {
+               $(time).attr('type') === section.type) {
         $(time).attr('hover', 'remove');
     } else {
         $(time).attr('hover', 'conflict');
