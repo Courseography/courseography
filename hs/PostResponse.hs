@@ -107,15 +107,15 @@ checkPost =  do
             H.div ! A.id "spec_400" $ do
                 H.p ! A.class_ "code" $ "Any 400-level CSC course, BCB410H, BCB420H, BCB430Y (1.5 FCEs)"
                 H.div ! A.class_ "more-info" $ do
-                    H.input ! A.type_ "text" 
-                    H.input ! A.type_ "text"
-                    H.input ! A.type_ "text"
-            H.div ! A.id "spec_300" $ do
+                    H.input ! A.type_ "text" ! A.class_ "400lvl" 
+                    H.input ! A.type_ "text" ! A.class_ "400lvl" 
+                    H.input ! A.type_ "text" ! A.class_ "400lvl" 
+            H.div ! A.id "spec_300" $ do 
                 H.p ! A.class_ "code" $ "Any 300-level CSC course, BCB410H, BCB420H, BCB430Y, ECE385H, ECE489H (1.5 FCEs)"
                 H.div ! A.class_ "more-info" $ do
-                    H.input ! A.type_ "text" 
-                    H.input ! A.type_ "text"
-                    H.input ! A.type_ "text"
+                    H.input ! A.type_ "text" ! A.class_ "300lvl" 
+                    H.input ! A.type_ "text" ! A.class_ "300lvl"
+                    H.input ! A.type_ "text" ! A.class_ "300lvl"
             H.div ! A.id "spec_misc" $ do 
                 H.p ! A.class_ "code" $ H.em "Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H, CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H (2.0 FCEs)"
                 H.div ! A.class_ "more-info" $ do
@@ -175,15 +175,15 @@ checkPost =  do
             H.div ! A.id "maj_400" $ do
                 H.p ! A.class_ "code" $ "Any 400-level CSC course, BCB410H, BCB420H, BCB430Y (1.5 FCEs)"
                 H.div ! A.class_ "more-info" $ do
-                    H.input ! A.type_ "text" 
-                    H.input ! A.type_ "text"
-                    H.input ! A.type_ "text"
+                    H.input ! A.type_ "text" ! A.class_ "400lvl" 
+                    H.input ! A.type_ "text" ! A.class_ "400lvl" 
+                    H.input ! A.type_ "text" ! A.class_ "400lvl" 
             H.div ! A.id "maj_300" $ do
                 H.p ! A.class_ "code" $ "Any 300-level CSC course, BCB410H, BCB420H, BCB430Y, ECE385H, ECE489H (1.5 FCEs)"
                 H.div ! A.class_ "more-info" $ do
-                    H.input ! A.type_ "text" 
-                    H.input ! A.type_ "text"
-                    H.input ! A.type_ "text"
+                    H.input ! A.type_ "text" ! A.class_ "300lvl" 
+                    H.input ! A.type_ "text" ! A.class_ "300lvl"
+                    H.input ! A.type_ "text" ! A.class_ "300lvl"
             H.div ! A.id "maj_misc" $ do
                 H.p ! A.class_ "code" $ H.em "Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H, CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H (2.0 FCEs)"
                 H.div ! A.class_ "more-info" $ do
@@ -216,9 +216,9 @@ checkPost =  do
             H.div ! A.id "min_misc" $ do
                 H.p ! A.class_ "code" $ "Any 300/400-level CSC course (atleast 1.0 FCE), CSC209H, CSC258H, CSC263H/CSC265H (1.5 FCEs)"  
                 H.div ! A.class_ "more-info" $ do
-                    H.input ! A.type_ "text" 
-                    H.input ! A.type_ "text"
-                    H.input ! A.type_ "text"
+                    H.input ! A.type_ "text" ! A.class_ "300lvl 400lvl"
+                    H.input ! A.type_ "text" ! A.class_ "300lvl 400lvl"
+                    H.input ! A.type_ "text" ! A.class_ "300lvl 400lvl"
                 
 
                    
