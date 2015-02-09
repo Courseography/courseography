@@ -295,6 +295,9 @@ pathCSS = "path" ? do
         faded
         strokeRed
         strokeDashed
+    "data-active" @= "drawn" & do
+        faded
+        wideStroke
 
 resetCSS = "#resetButton" ? do
     fill "#990000"

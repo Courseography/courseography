@@ -1,5 +1,6 @@
 var nodeId = 0;
-//var nodes = [];
+var nodeWidth = 40;
+var nodeHeight = 32;
 var xmlns = 'http://www.w3.org/2000/svg';
 var mode = 'node-mode';
 var nodeColourId = 'red';
@@ -9,10 +10,12 @@ var colours = {
      'blue':'#437699',
      'purple':'#46364A'
 };
-var nodeMoving = null; // for movement and path creation
-var nodeX = -1; // for movement
-var nodeY = -1; // for movement
-var nodeSelected = null; // for adding text
+var nodeMoving = null;      // for movement and path creation
+var nodeX = -1;             // for movement
+var nodeY = -1;             // for movement
+var nodeSelected = null;    // for adding text
+var startNode = null;       // for making paths
+var curPath = null;         // for making paths with elbow joints
 
 
 function setupSVGCanvas() {
@@ -25,6 +28,12 @@ function setupSVGCanvas() {
     document.getElementById('mySVG').addEventListener('mousedown', makeNode, false);
     document.getElementById('mySVG').addEventListener('mousemove', nodeMoved, false);
     document.getElementById('mySVG').addEventListener('mouseup', nodeUnclicked, false);
+
+    // arrow head for paths
+    // S.defs $ do
+    //    S.marker ! A.id_ "arrow" ! A.viewbox "0 0 10 10" ! A.refx "1" ! A.refy "5" ! A.markerunits "strokeWidth" ! A.orient "auto" ! A.markerwidth "4.5" ! A.markerheight "4.5" $ do
+    //        S.polyline ! A.points "0,1 10,5 0,9" ! A.fill "black"
+
 }
 
 
@@ -57,10 +66,11 @@ function getPosition(elem) {
 function makeNode(e) {
     'use-strict';
 
+
+    var position = getClickPosition(e, e.currentTarget);
     // decide what to do based on what mode it is?
     if (mode === 'node-mode') {
         var g = document.createElementNS(xmlns, 'g');
-        var position = getClickPosition(e, e.currentTarget);
         var node = document.createElementNS(xmlns, 'rect');
 
         g.setAttribute('class', 'node');
@@ -68,14 +78,13 @@ function makeNode(e) {
         g.setAttribute('data-active', 'active');
         g.setAttribute('data-group', nodeColourId);
     
-        // check for overlaps and off the chart problems before creating ?
         node.setAttribute('x', position.x);
         node.setAttribute('y', position.y);
         node.setAttribute('rx', 4);
         node.setAttribute('ry', 4);
         node.setAttribute('id', nodeId);
-        node.setAttribute('width', 40);
-        node.setAttribute('height', 32);
+        node.setAttribute('width', nodeWidth);
+        node.setAttribute('height', nodeHeight);
         node.setAttribute('class', 'node');
         
         g.appendChild(node);
@@ -89,6 +98,15 @@ function makeNode(e) {
         }
         nodeSelected = document.getElementById(nodeId);
         nodeId += 1;
+    } else if (mode === 'path-mode') {
+        // make elbow joint, only if the dummy point is outside the starting node
+        if (startNode !== null && (position.x < startNode.getAttribute('x') || 
+                                    position.x > parseFloat(startNode.getAttribute('x')) + nodeWidth)
+                    && (position.y < startNode.getAttribute('y') || 
+                                    position.y > parseFloat(startNode.getAttribute('y')) + nodeHeight)) {
+            curPath += 'L' + position.x + ',' + position.y + ' ';
+            console.log('adding elbow to it ' + curPath);  
+        }
     }
 }
 
@@ -103,15 +121,33 @@ function nodeClicked(e) {
         nodeMoving = e.currentTarget;
         nodeX = position.x;
         nodeY = position.y;
-        console.log(nodeX, nodeY);
-    }
-    // show which node has been selected
-    if (mode !== 'erase-mode') {
+        
+        // show which node has been selected
         if (nodeSelected !== null) {
             nodeSelected.parentNode.setAttribute('data-active', 'unselected');
         }
         nodeSelected = e.currentTarget;
         nodeSelected.parentNode.setAttribute('data-active', 'active');
+    } else if (mode === 'path-mode') {
+        if (startNode === null) {
+            // this is the start node of the path about to be created
+            startNode = e.currentTarget;
+            curPath = 'M' + (parseFloat(startNode.getAttribute('x')) + nodeWidth/2) + ',' + startNode.getAttribute('y') + ' ';   
+            console.log('starting it ' + curPath);
+        } else {
+            // make the path from startNode to current node then make startNode Null
+            curPath += 'L' + (parseFloat(e.currentTarget.getAttribute('x')) + nodeWidth/2) + ',' + e.currentTarget.getAttribute('y');  
+            var thePath = document.createElementNS(xmlns, 'path');
+            thePath.setAttributeNS(null, 'd', curPath);
+            thePath.setAttributeNS(null, 'fill', 'none');
+            thePath.setAttributeNS(null, 'stroke', 'black');
+            thePath.setAttributeNS(null, 'data-active', 'drawn');
+            thePath.addEventListener('click', pathClicked, false);
+            console.log('creating it ' + curPath);
+            document.getElementById('mySVG').appendChild(thePath);
+            startNode = null;
+            curPath = null;
+        }
     }
 }
 
@@ -146,6 +182,15 @@ function nodeUnclicked(e) {
 }
 
 
+function pathClicked(e) {
+    'use-strict'
+
+    if (mode === 'erase-mode') {
+        document.getElementById('mySVG').removeChild(e.currentTarget);
+    }
+}
+
+
 function changeMode(id) {
     'use-strict';
 
@@ -154,6 +199,7 @@ function changeMode(id) {
     //}
     mode = id;
     $('#' + mode).toggleClass('clicked');
+    startNode = null; // necessary?
 }
 
 
@@ -180,15 +226,15 @@ function addText() {
     //                nodeSelected.getAttribute('y'), nodeSelected.getAttribute('width'), nodeSelected.getAttribute('height'), "black");
         var code = document.createElementNS(xmlns, 'text');
         code.setAttributeNS(null, 'id', 't' + nodeSelected.getAttribute('id'));
-        code.setAttributeNS(null, 'x', parseFloat(nodeSelected.getAttribute('x')) + 20);
-        code.setAttributeNS(null, 'y', parseFloat(nodeSelected.getAttribute('y')) + 17);
+        code.setAttributeNS(null, 'x', parseFloat(nodeSelected.getAttribute('x')) + nodeWidth/2);
+        code.setAttributeNS(null, 'y', parseFloat(nodeSelected.getAttribute('y')) + nodeHeight/2);
         var textNode = document.createTextNode(courseCode);
         code.appendChild(textNode);
-        console.log(code);
         g.appendChild(code);
     }
 }
 
+// document ready
 setupSVGCanvas();
 
 $('.mode').each(function(index) {
@@ -203,6 +249,7 @@ $('#add-text').click(function (){
     addText();
 });
 
+
 // TODO:
 /*
 x put all the jQuery .click definitions in a loop instead of for each button
@@ -210,9 +257,14 @@ x put all style related stuff in CSS especially all the clicked button stuff
 x for node on click change to on mouse down on mouse move and on mouse up methods
 - node type buttons
 x connect CSS of main graph with the nodes and types in this graph 
-- input field to add text
+x input field to add text
 - add paths with elbow joints
-http://stackoverflow.com/questions/6725288/svg-text-inside-rect
+    - pick best side of start node and end node to make line, so no overlap
+    - moving path when start or end point of path move
+    - moving elbow points
+    - delete path if start or end node deleted
+https://www.dashingd3js.com/svg-paths-and-d3js
+
 */
 
 // RANDOM
