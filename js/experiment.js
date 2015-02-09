@@ -179,7 +179,7 @@ function addText() {
     //    createText(g, nodeSelected.getAttribute('id'), 't' + nodeSelected.getAttribute('id'), nodeSelected.getAttribute('x'), 
     //                nodeSelected.getAttribute('y'), nodeSelected.getAttribute('width'), nodeSelected.getAttribute('height'), "black");
         var code = document.createElementNS(xmlns, 'text');
-        code.setAttributeNS(null, 'id', 'haha');//'t' + nodeSelected.getAttribute('id'));
+        code.setAttributeNS(null, 'id', 't' + nodeSelected.getAttribute('id'));
         code.setAttributeNS(null, 'x', parseFloat(nodeSelected.getAttribute('x')) + 20);
         code.setAttributeNS(null, 'y', parseFloat(nodeSelected.getAttribute('y')) + 17);
         var textNode = document.createTextNode(courseCode);
