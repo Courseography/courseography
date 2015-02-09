@@ -134,7 +134,7 @@ function makeNode(e) {
 
 
 function nodeClicked(e) {
-    'use-stri`ct';
+    'use-strict';
 
     var svgDoc = document.getElementById('mySVG');
     var index = null;
@@ -205,6 +205,8 @@ function nodeClicked(e) {
 }
 
 function select(newNode) {
+    'use-strict'
+
     console.log(nodeSelected);
     if (nodeSelected !== null) {
         nodeSelected.parentNode.setAttribute('data-active', 'unselected');
