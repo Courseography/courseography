@@ -98,7 +98,6 @@ function getPosition(elem) {
 function makeNode(e) {
     'use-strict';
 
-
     var position = getClickPosition(e, e.currentTarget);
     // decide what to do based on what mode it is?
     if (mode === 'node-mode') {
@@ -150,7 +149,25 @@ function nodeClicked(e) {
     'use-strict';
 
     var svgDoc = document.getElementById('mySVG');
+    var index = null;
+
     if (mode  === 'erase-mode') {
+        e.currentTarget.attributes['inEdges'].map( function (item) {
+            index = item.attributes['start'].attributes['outEdges'].indexOf(item);
+            if (index > -1) {
+                console.log('its not going away? ', index);
+                (item.attributes['start'].attributes['outEdges']).splice(index, 1);
+            }
+            svgDoc.removeChild(item);
+        });
+        e.currentTarget.attributes['outEdges'].map( function (item) {
+            index = item.attributes['end'].attributes['inEdges'].indexOf(item);
+            if (index > -1) {
+                console.log('its not going away? ', index);
+                item.attributes['end'].attributes['inEdges'].splice(index, 1);
+            }
+            svgDoc.removeChild(item);
+        });
         svgDoc.removeChild(e.currentTarget.parentNode);
     } else if (mode === 'change-mode') {
         var position = getClickPosition(e, e.currentTarget);
@@ -164,6 +181,8 @@ function nodeClicked(e) {
         }
         nodeSelected = e.currentTarget;
         nodeSelected.parentNode.setAttribute('data-active', 'active');
+        console.log(nodeSelected.attributes['children']);
+        console.log(nodeSelected.attributes['parents']);
     } else if (mode === 'path-mode') {
         if (startNode === null) {
             // this is the start node of the path about to be created
@@ -209,10 +228,16 @@ function nodeMoved(e) {
         var position = getClickPosition(e, nodeMoving);
         var rectX = parseFloat(nodeMoving.getAttribute('x'));
         var rectY = parseFloat(nodeMoving.getAttribute('y'));
+        var textX = parseFloat(nodeMoving.parentNode.childNodes[1].getAttribute('x'));
+        var textY = parseFloat(nodeMoving.parentNode.childNodes[1].getAttribute('y'));
         rectX += (position.x - nodeX);
         rectY += (position.y - nodeY);
+        textX += (position.x - nodeX);
+        textY += (position.y - nodeY);
         nodeMoving.setAttribute('x', rectX);
         nodeMoving.setAttribute('y', rectY);
+        nodeMoving.parentNode.childNodes[1].setAttribute('x', textX);
+        nodeMoving.parentNode.childNodes[1].setAttribute('y', textY);
         nodeX = position.x;
         nodeY = position.y;
         console.log(nodeMoving.x.animVal.value, nodeMoving.y.animVal.value, nodeX, nodeY);
