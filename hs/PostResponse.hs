@@ -57,10 +57,10 @@ checkPost =  do
             H.div ! A.id "spec_135" $ do
                 H.p ! A.class_ "code" $ "(MAT135H and MAT136H) or MAT137H or MAT157H"
                 H.div ! A.class_ "more-info" $ do
-                    H.p ! A.class_ "full_name MAT135" $ "MAT135H (Calculus 1(A))"
-                    H.p ! A.class_ "full_name MAT136" $ "MAT136H (Calculus 1(B))"
-                    H.p ! A.class_ "full_name MAT137" $ "MAT137Y (Calculus)"
-                    H.p ! A.class_ "full_name MAT157" $ "MAT157Y (Analysis 1)"
+                    H.p ! A.class_ "full_name Calc1" $ "MAT135H (Calculus 1(A))"
+                    H.p ! A.class_ "full_name Calc1" $ "MAT136H (Calculus 1(B))"
+                    H.p ! A.class_ "full_name Calc1" $ "MAT137Y (Calculus)"
+                    H.p ! A.class_ "full_name Calc1" $ "MAT157Y (Analysis 1)"
             H.h2 "Second Year"
             H.div ! A.id "spec_207" $ do
                 H.p ! A.class_ "code" $ "CSC207H"
@@ -87,14 +87,14 @@ checkPost =  do
             H.div ! A.id "spec_223" $ do
                 H.p ! A.class_ "code" $ "MAT221H or MAT223H"
                 H.div ! A.class_ "more-info" $ do
-                    H.p ! A.class_ "full_name MAT221" $ "MAT221H (Applied Linear Algebra)"
-                    H.p ! A.class_ "full_name MAT223" $ "MAT223H (Linear Algebra 1)"
+                    H.p ! A.class_ "full_name Lin1" $ "MAT221H (Applied Linear Algebra)"
+                    H.p ! A.class_ "full_name Lin1" $ "MAT223H (Linear Algebra 1)"
             H.div ! A.id "spec_247" $ do
                 H.p ! A.class_ "code" $ "STA247H or STA255H or STA257H"
                 H.div ! A.class_ "more-info" $ do
-                    H.p ! A.class_ "full_name STA247" $ "STA247H (Probability with Computer Applications)"
-                    H.p ! A.class_ "full_name STA255" $ "STA255H (Statistical Analysis)"
-                    H.p ! A.class_ "full_name STA257" $ "STA257H (Probability and Statistics 1)"
+                    H.p ! A.class_ "full_name STA1" $ "STA247H (Probability with Computer Applications)"
+                    H.p ! A.class_ "full_name STA1" $ "STA255H (Statistical Analysis)"
+                    H.p ! A.class_ "full_name STA1" $ "STA257H (Probability and Statistics 1)"
             H.h2 "Later Years"
             H.div ! A.id "spec_369" $ do
                 H.p ! A.class_ "code" $ "CSC369H"
@@ -142,10 +142,10 @@ checkPost =  do
             H.div ! A.id "maj_135" $ do
                 H.p ! A.class_ "code" $ "(MAT135H and MAT136H) or MAT137H or MAT157H"
                 H.div ! A.class_ "more-info" $ do
-                    H.p ! A.class_ "full_name MAT135" $ "MAT135H (Calculus 1(A))"
-                    H.p ! A.class_ "full_name MAT136" $ "MAT136H (Calculus 1(B))"
-                    H.p ! A.class_ "full_name MAT137" $ "MAT137Y (Calculus)"
-                    H.p ! A.class_ "full_name MAT157" $ "MAT157Y (Analysis 1)"
+                    H.p ! A.class_ "full_name Lin1" $ "MAT135H (Calculus 1(A))"
+                    H.p ! A.class_ "full_name Lin1" $ "MAT136H (Calculus 1(B))"
+                    H.p ! A.class_ "full_name Lin1" $ "MAT137Y (Calculus)"
+                    H.p ! A.class_ "full_name Lin1" $ "MAT157Y (Analysis 1)"
             H.h2 "Second Year"
             H.div ! A.id "maj_207" $ do
                 H.p ! A.class_ "code" $ "CSC207H"
@@ -168,9 +168,9 @@ checkPost =  do
             H.div ! A.id "maj_247" $ do
                 H.p ! A.class_ "code" $ "STA247H or STA255H or STA257H"
                 H.div ! A.class_ "more-info" $ do
-                    H.p ! A.class_ "full_name STA247" $ "STA247H (Probability with Computer Applications)"
-                    H.p ! A.class_ "full_name STA255" $ "STA255H (Statistical Analysis)"
-                    H.p ! A.class_ "full_name STA257" $ "STA257H (Probability and Statistics 1)"
+                    H.p ! A.class_ "full_name Sta1" $ "STA247H (Probability with Computer Applications)"
+                    H.p ! A.class_ "full_name Sta1" $ "STA255H (Statistical Analysis)"
+                    H.p ! A.class_ "full_name Sta1" $ "STA257H (Probability and Statistics 1)"
             H.h2 "Later Years"
             H.div ! A.id "maj_400" $ do
                 H.p ! A.class_ "code" $ "Any 400-level CSC course, BCB410H, BCB420H, BCB430Y (1.5 FCEs)"
