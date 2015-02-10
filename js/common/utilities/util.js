@@ -117,14 +117,25 @@ function convertTimes(times) {
 
     var timeList = [];
     var time;
+    var stime;
 
     for (var i = 0; i < times.length; i++) {
         var timeString = 'MTWRF'.charAt(times[i][0]);
         time = times[i][1];
-        timeString = timeString + time;
+        if (time > 21) {
+            stime = time.toString();
+            if (stime.charAt(stime.length - 1) === '0') {
+                stime = stime.slice(0, -1) + 'E';
+            } else {
+                stime = stime.slice(0, -1) + 'H';
+            }
+            timeString = timeString + stime;
+        } else {
+            timeString = timeString + time;
+        }
+
         timeList.push(timeString);
     }
-
     return timeList;
 }
 

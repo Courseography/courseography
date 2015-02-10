@@ -118,6 +118,14 @@ function renderClearHover(time) {
 function renderAddHover(time, section) {
     'use strict';
 
+    var n;
+
+    n = time.indexOf('H');
+
+    if (n != -1) {
+        extendRow(time.slice(2,n));
+    } 
+
     if ($(time).attr('clicked') !== 'true') {
         $(time).html(section.courseName.substring(0,6) + ' (' + section.type + ')')
                .attr('hover', 'good');
@@ -127,4 +135,33 @@ function renderAddHover(time, section) {
     } else {
         $(time).attr('hover', 'conflict');
     }
+}
+/**
+ * Extends a given row to display half hour sections.
+ * @param {string} time The full hour time of the row.
+ */
+function extendRow(time) {
+    'use strict';
+
+    var weekPrefixArray = ['M', 'T', 'W', 'R', 'F'];
+    var pcells = [];
+    var ccells = [];
+    var cellID;
+
+    for (var k = 0; k < 5; k++) {
+        cellID = '#' + weekPrefixArray[k] + time + 'F';
+        pcells[pcells.length] = cellID;
+        cellID = '#' + weekPrefixArray[k] + time + 'S';
+        pcells[pcells.length] = cellID;
+        cellID = '#' + weekPrefixArray[k] + time +'H' + 'F';
+        ccells[ccells.length] = cellID;
+        cellID = '#' + weekPrefixArray[k] + time +'H'+ 'S';
+        ccells[ccells.length] = cellID;
+    }
+
+    for (var i = 0; i < 10; i++) {
+        $(pcells[i]).attr('rowspan', '1');
+        $(ccells[i]).attr('display', 'table-cell');
+    }
+
 }
