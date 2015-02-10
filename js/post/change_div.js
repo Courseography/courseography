@@ -1,8 +1,7 @@
 $(document).ready(function () {
     'use-strict';
 	
-    resetAttributes();
-    $('.more-info').hide();
+    $('#div_specialist').show();
 });
 
 
@@ -36,6 +35,8 @@ $('#minor').click (function (e) {
 });
 
 $('.code').click (function (e) {
+    'use-strict';
+    
     e.preventDefault();
     $(this).parent().find('.more-info').toggle();
 });

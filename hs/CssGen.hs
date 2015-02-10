@@ -703,8 +703,7 @@ tabsCSS = do
                     color black
                     display inlineBlock
                     lineHeight (px 50)
-                    paddingTop (px 0)
-                    paddingRight (px 24)
+                    paddingLeft (px 24)
                     width (pct 70)
                     textDecoration none
 
@@ -733,6 +732,7 @@ postCSS = do
     "#div_specialist, #div_major, #div_minor" ? do
         position absolute
         "margin-above" -: "70px"
+        display none
         height (pct 70)
         marginLeft (px 25)
         width (pct 97)
@@ -741,7 +741,6 @@ postCSS = do
         marginLeft nil 
         color red
     ".more-info" ? do
-        paddingLeft (px 20)
         border solid (px 2) grey3
         "border-radius" -: "4px"
         backgroundColor grey4
@@ -750,6 +749,7 @@ postCSS = do
         "list-style-type" -: "none"
         textAlign $ alignSide sideCenter
         margin0
+        display none
         "margin-right" -: "10px"
         "-webkit-transition" -: "all 0.2s"
         "-moz-transition" -: "all 0.2s"
@@ -757,6 +757,7 @@ postCSS = do
         "-o-transition" -: "all 0.2s"
         "transition" -: "all 0.2s"
     ".full_name" ? do
+        paddingLeft (px 20)
         textAlign $ alignSide sideCenter
         margin0
     "input" ? do
