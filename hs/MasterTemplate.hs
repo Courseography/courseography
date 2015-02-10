@@ -29,7 +29,7 @@ header page = createTag H.nav "" "row header" $ do
     H.li $ makeA "" "" "grid" "" $ "Grid"
     H.li $ makeA "" "" "" "" $ "Check My POSt!"
     H.li $ makeA "" "" "about" "" $ "About"
-    H.li $ makeA "" "" "post-fb" "" $ "Post to Facebook!"
+    H.li $ makeA "post-fb" "" "#" "" $ "Post to Facebook!"
     H.li ! A.id "facebook-name" $ ""
     H.li ! A.class_ "fb-login-button" 
          ! H.customAttribute "data-max-rows" "1" 
