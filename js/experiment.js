@@ -109,10 +109,10 @@ function makeNode(e) {
         node.setAttribute('width', nodeWidth);
         node.setAttribute('height', nodeHeight);
         node.setAttribute('class', 'node');
-        node.attributes['parents'] = []; // node.parents = []
-        node.attributes['children'] = [];
-        node.attributes['inEdges'] = [];
-        node.attributes['outEdges'] = [];
+        /*node.parents = []; */ node.attributes['parents'] = [];
+        /*node.children = []; */ node.attributes['children'] = [];
+        /*node.inEdges = []; */ node.attributes['inEdges'] = [];
+        /*node.outEdges = []; */ node.attributes['outEdges'] = [];
         g.appendChild(node);
         document.getElementById('mySVG').appendChild(g);
         document.getElementById(nodeId).addEventListener('mousedown', nodeClicked, false);
@@ -142,18 +142,28 @@ function nodeClicked(e) {
     if (mode  === 'erase-mode') { 
         // remove any paths leading to and from this node from the other node's list
         e.currentTarget.attributes['inEdges'].map( function (item) {
-            index = item.attributes['start'].attributes['outEdges'].indexOf(item);
+            index = item.attributes['parents'].attributes['outEdges'].indexOf(item);
             if (index > -1) {
                 console.log('delete index from outEdges: ?  ', index);
-                console.log((item.attributes['start'].attributes['outEdges']).splice(index, 1));
+                (item.attributes['parents'].attributes['outEdges']).splice(index, 1);
+            }
+            index = item.attributes['parents'].attributes['children'].indexOf(e.currentTarget);
+            if (index > -1) {
+                console.log('delete index from child: ?  ', index);
+                (item.attributes['parents'].attributes['children']).splice(index, 1);
             }
             svgDoc.removeChild(item);
         });
         e.currentTarget.attributes['outEdges'].map( function (item) {
-            index = item.attributes['end'].attributes['inEdges'].indexOf(item);
+            index = item.attributes['children'].attributes['inEdges'].indexOf(item);
             if (index > -1) {
                 console.log('delete index from inEdges: ? ', index);
-                console.log(item.attributes['end'].attributes['inEdges'].splice(index, 1));
+                item.attributes['children'].attributes['inEdges'].splice(index, 1);
+            }
+            index = item.attributes['children'].attributes['parents'].indexOf(e.currentTarget);
+            if (index > -1) {
+                console.log('delete index from parent: ?  ', index);
+                (item.attributes['children'].attributes['parents']).splice(index, 1);
             }
             svgDoc.removeChild(item);
         });
@@ -189,20 +199,20 @@ function nodeClicked(e) {
             console.log('creating it ' + curPath);
             document.getElementById('mySVG').appendChild(thePath);
 
-            thePath.attributes['start'] = startNode;
-            thePath.attributes['end'] = e.currentTarget;
+            thePath.attributes['parents'] = startNode;
+            thePath.attributes['children'] = e.currentTarget;
 
             // update relationships
             startNode.attributes['children'].push(e.currentTarget);
             e.currentTarget.attributes['parents'].push(startNode);
             startNode.attributes['outEdges'].push(thePath);
             e.currentTarget.attributes['inEdges'].push(thePath);
-            // startNode.children
             startNode = null;
             curPath = null;
         }
     }
 }
+
 
 function select(newNode) {
     'use-strict'
@@ -217,6 +227,7 @@ function select(newNode) {
     console.log('children: ', nodeSelected.attributes['children']);
 }
 
+
 function nodeMoved(e) {
     'use-strict';
 
@@ -230,13 +241,14 @@ function nodeMoved(e) {
         rectY += (position.y - nodeY);
         textX += (position.x - nodeX);
         textY += (position.y - nodeY);
+        // move in and out edges by the same amount
         nodeMoving.setAttribute('x', rectX);
         nodeMoving.setAttribute('y', rectY);
         nodeMoving.parentNode.childNodes[1].setAttribute('x', textX);
         nodeMoving.parentNode.childNodes[1].setAttribute('y', textY);
         nodeX = position.x;
         nodeY = position.y;
-        console.log(nodeMoving.x.animVal.value, nodeMoving.y.animVal.value, nodeX, nodeY);
+        // console.log(nodeMoving.x.animVal.value, nodeMoving.y.animVal.value, nodeX, nodeY);
     }
 }
 
@@ -325,13 +337,15 @@ $('#add-text').click(function (){
 /*
 - node type buttons
 - add paths with elbow joints
-    - pick best side of start node and end node to make line, so no overlap
-    - moving path when start or end point of path move
-    - moving elbow points
-    - delete path if start or end node deleted
-    - don't allow elbow points in end node
+    1. fix relationships and multiple elbows
+    2. don't allow elbow points in end node
+    3. pick best side of start node and end node to make line, so no overlap
+    4. moving path when start or end point of path move
+    5. moving elbow points
+    6. Show partial paths
+    x delete path if start or end node deleted
+    
 https://www.dashingd3js.com/svg-paths-and-d3js
-- multiple elbows??
 
 */
 
