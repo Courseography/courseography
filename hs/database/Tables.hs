@@ -96,7 +96,7 @@ Texts
 
 Paths
     d [Point]
-    style String
+    fill String
     deriving Show
 |]
 

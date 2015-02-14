@@ -30,5 +30,5 @@ data Text =
 data Path =
     Path { 
            points :: [(Rational, Rational)],
-           pathStyle :: String
+           pathFill :: String
          }

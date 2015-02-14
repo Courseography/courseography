@@ -85,7 +85,9 @@ convertTextToXML text =
 -- | Converts a `Path` to XML.
 convertPathToXML :: Path -> String
 convertPathToXML path = 
-    "<path style=\"stroke:#000000;fill:none;\" d=\"M " ++
+    "<path style=\"stroke:#000000;fill:" ++ (if null (pathFill path)
+                                            then "none"
+                                            else (pathFill path)) ++ ";\" d=\"M " ++
     buildPathString (points path) ++
     "\"/>"
 
@@ -110,7 +112,7 @@ buildText entity =
 buildPath :: Paths -> Path
 buildPath entity = 
     Path (map point $ pathsD entity)
-         (pathsStyle entity)
+         (pathsFill entity)
 
 -- | Rebuilds a path's `d` attribute based on a list of Rational tuples.
 buildPathString :: [(Rational, Rational)] -> String
