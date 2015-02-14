@@ -25,7 +25,7 @@ import SVGTypes
 main :: IO ()
 main = do graphFile <- readFile "../res/graphs/graph_regions.svg"
           let graphDoc = xmlParse "output.error" graphFile
-          parseLevel (Style (0,0) "" "none" "none" "none") (getRoot graphDoc)
+          parseLevel (Style (0,0) "" "none" "none" "none" "none" "none") (getRoot graphDoc)
           buildSVG
           printDB
 
@@ -42,30 +42,33 @@ parseLevel style content = do
            let children = getChildren content
            let newTransform = getAttribute "transform" content
            let newStyle = getAttribute "style" content
-           let newFill = getStyleAttr "fill" newStyle
-           let fillx = if null newFill then (fill style) else newFill
-           let filly = if fillx == "none" then (fill style) else fillx
-           let fillz = if fillx == "#000000" then "none" else filly
-           let newFontSize = if (null (getStyleAttr "font-size" newStyle) ||
-                                 (getStyleAttr "font-size" newStyle) == "none") 
-                             then (fontSize style)
-                             else (getStyleAttr "font-size" newStyle)
-           let newStroke = if (null (getStyleAttr "stroke" newStyle) ||
-                               (getStyleAttr "stroke" newStyle) == "none") 
-                             then (stroke style)
-                             else (getStyleAttr "stroke" newStyle)
-           let newFillOpacity = if (null (getStyleAttr "fill-opacity" newStyle) ||
-                                    (getStyleAttr "fill-opacity" newStyle) == "none") 
-                                then (fillOpacity style)
-                                else (getStyleAttr "fill-opacity" newStyle)
+           let newFill = getStyleAttr "fill" (fontSize style)
+           let newFontSize = getNewStyleAttr newStyle "font-size" (fontSize style)
+           let newStroke = getNewStyleAttr newStyle "stroke" (stroke style)
+           let newFillOpacity = getNewStyleAttr newStyle "fill-opacity" (fillOpacity style)
+           let newFontWeight = getNewStyleAttr newStyle "font-weight" (fontWeight style)
+           let newFontFamily = getNewStyleAttr newStyle "font-family" (fontFamily style)
            let x = if null newTransform then (0,0) else parseTransform newTransform
            let adjustedTransform = (fst (transform style) + fst x,
                                     snd (transform style) + snd x)
-           let parentStyle = Style adjustedTransform fillz  newFontSize  newStroke newFillOpacity
+           let parentStyle = Style adjustedTransform 
+                                   newFill  
+                                   newFontSize  
+                                   newStroke 
+                                   newFillOpacity 
+                                   newFontWeight
+                                   newFontFamily
            parseElements (parseRect parentStyle) rects
            parseElements (parseText parentStyle) texts
            parseElements (parsePath parentStyle) paths
            parseChildren parentStyle children
+
+
+getNewStyleAttr :: String -> String -> String -> String
+getNewStyleAttr newStyle attr parent = if (null (getStyleAttr attr newStyle) ||
+                                           (getStyleAttr attr newStyle) == "none") 
+                                       then parent
+                                       else (getStyleAttr attr newStyle)
 
 -- | Parses a list of Content.
 parseChildren :: Style -> [Content i] -> IO ()
@@ -99,6 +102,7 @@ parsePath :: Style -> Content i -> IO ()
 parsePath style content = 
     insertPathIntoDB (map (addTransform (transform style)) $ parsePathD $ getAttribute "d" content)
                      style
+                     --(getAttribute "clip-path" content)
 
 -- | Parses a text.
 parseText :: Style -> Content i -> IO ()
@@ -107,7 +111,7 @@ parseText style content =
                      ((read $ getAttribute "x" content :: Float) + fst (transform style))
                      ((read $ getAttribute "y" content :: Float) + snd (transform style))
                      (tagTextContent content)
-                     (fontSize style)
+                     style
 
 -- | Gets the root element of the document.
 getRoot :: Document i -> Content i
@@ -129,7 +133,7 @@ insertRectIntoDB id_ width height xPos yPos style =
                         (fillOpacity style)
 
 -- | Inserts a text entry into the texts table.
-insertTextIntoDB :: String -> Float -> Float -> String -> String -> IO ()
+insertTextIntoDB :: String -> Float -> Float -> String -> Style -> IO ()
 insertTextIntoDB id_ xPos yPos text style = 
     runSqlite dbStr $ do
         runMigration migrateAll
@@ -138,7 +142,9 @@ insertTextIntoDB id_ xPos yPos text style =
                         (toRational xPos)
                         (toRational yPos)
                         text
-                        style
+                        (fontSize style)
+                        (fontWeight style)
+                        (fontFamily style)
 
 -- | Inserts a tex entry into the texts table.
 insertPathIntoDB :: [(Float, Float)] -> Style -> IO ()
@@ -149,6 +155,7 @@ insertPathIntoDB d style =
                         (fill style)
                         (fillOpacity style)
                         (stroke style)
+                        --clipPath
 
 -- | Adds one tuple to the second tuple.
 -- NOTE: Can be replaced by addTuples.
