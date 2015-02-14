@@ -56,7 +56,7 @@ parseLevel parentTransform parentFill content = do
 
 -- | Parses a list of Content.
 parseChildren :: (Float, Float) -> String -> [Content i] -> IO ()
-parseChildren adjustedTransform parentFill [] = print "Level parsed..."
+parseChildren adjustedTransform parentFill [] = return ()
 parseChildren adjustedTransform parentFill (x:xs) = do parseLevel adjustedTransform parentFill x
                                                        parseChildren adjustedTransform parentFill xs
 
@@ -66,7 +66,7 @@ getFill style = drop 5 $ head $ (filter (\x -> take 4 x == "fill") $ splitOn ";"
 
 -- | Applies a parser to a list of Content.
 parseElements :: (Content i -> IO ()) -> [Content i] -> IO ()
-parseElements f [] = print "Finished elements..."
+parseElements f [] = return ()
 parseElements f (x:xs) = do f x
                             parseElements f xs
 
@@ -201,13 +201,18 @@ getComma accum x = if head x == ',' then accum else getComma (accum + 1) (tail x
 
 -- | Parses a path's `d` attribute.
 parsePathD :: String -> [(Float, Float)]--[(Rational, Rational)]
-parsePathD d = tail (if head d == 'm'
-                     then foldCoords $ filter (\x -> length x > 1) $ map (splitOn ",") $ splitOn " " d
-                     else foldCoords $ filter (\x -> length x > 1) $ map (splitOn ",") $ splitOn " " d)
+parsePathD d = (if head d == 'm'
+                     then foldCoordsRel $ filter (\x -> length x > 1) $ map (splitOn ",") $ splitOn " " d
+                     else processAbsCoords $ filter (\x -> length x > 1) $ map (splitOn ",") $ splitOn " " d)
 
 -- | Converts a relative coordinate structure into an absolute one.
-foldCoords :: [[String]] -> [(Float, Float)]
-foldCoords dCoords = foldl (\x y -> x ++ [(addTuples (convertToFloatTuple y) (last x))]) [(0,0)] dCoords
+foldCoordsRel :: [[String]] -> [(Float, Float)]
+foldCoordsRel dCoords = tail $ foldl (\x y -> x ++ [(addTuples (convertToFloatTuple y) (last x))]) [(0,0)] dCoords
+
+-- | Converts a relative coordinate structure into an absolute one.
+processAbsCoords :: [[String]] -> [(Float, Float)]
+processAbsCoords dCoords = map convertToFloatTuple dCoords
+
 
 -- | Converts a list of String of length 2 into a tuple of Float.
 convertToFloatTuple :: [String] -> (Float, Float)
