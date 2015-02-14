@@ -33,3 +33,11 @@ data Path =
            points :: [(Rational, Rational)],
            pathFill :: String
          }
+
+data Style =
+    Style {
+            transform :: (Float,Float),
+            fill :: String,
+            fontSize :: String,
+            stroke :: String
+    }

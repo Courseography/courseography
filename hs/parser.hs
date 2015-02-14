@@ -25,13 +25,13 @@ import SVGTypes
 main :: IO ()
 main = do graphFile <- readFile "../res/graphs/graph_regions.svg"
           let graphDoc = xmlParse "output.error" graphFile
-          parseLevel (0,0) "" "none" "none" $ getRoot graphDoc
+          parseLevel (Style (0,0) "" "none" "none") (getRoot graphDoc)
           buildSVG
           printDB
 
 -- | Parses a level.
-parseLevel :: (Float, Float) -> String -> String -> String -> Content i -> IO ()
-parseLevel parentTransform parentFill parentFontSize parentStroke content = do
+parseLevel :: Style -> Content i -> IO ()
+parseLevel style content = do
     if (getAttribute "id" content) == "layer2"
       then liftIO $ print "Abort"
       else do
@@ -39,34 +39,35 @@ parseLevel parentTransform parentFill parentFontSize parentStroke content = do
            let texts = parseContent (tag "text") content
            let paths = parseContent (tag "path") content
            let children = getChildren content
-           let transform = getAttribute "transform" content
-           let style = getAttribute "style" content
-           let fill = getStyleAttr "fill" style
-           let fillx = if null fill then parentFill else fill
-           let filly = if fillx == "none" then parentFill else fillx
+           let newTransform = getAttribute "transform" content
+           let newStyle = getAttribute "style" content
+           let newFill = getStyleAttr "fill" newStyle
+           let fillx = if null newFill then (fill style) else newFill
+           let filly = if fillx == "none" then (fill style) else fillx
            let fillz = if fillx == "#000000" then "none" else filly
-           let newFontSize = if (null (getStyleAttr "font-size" style) ||
-                                 (getStyleAttr "font-size" style) == "none") 
-                             then parentFontSize
-                             else (getStyleAttr "font-size" style)
-           let newStroke = if (null (getStyleAttr "stroke" style) ||
-                               (getStyleAttr "stroke" style) == "none") 
-                             then parentStroke
-                             else (getStyleAttr "stroke" style)
-           let x = if null transform then (0,0) else parseTransform transform
-           let adjustedTransform = (fst parentTransform + fst x,
-                                    snd parentTransform + snd x)
-           parseElements (parseRect adjustedTransform fillz newStroke) rects
-           parseElements (parseText adjustedTransform style parentFontSize) texts
+           let newFontSize = if (null (getStyleAttr "font-size" newStyle) ||
+                                 (getStyleAttr "font-size" newStyle) == "none") 
+                             then (fontSize style)
+                             else (getStyleAttr "font-size" newStyle)
+           let newStroke = if (null (getStyleAttr "stroke" newStyle) ||
+                               (getStyleAttr "stroke" newStyle) == "none") 
+                             then (stroke style)
+                             else (getStyleAttr "stroke" newStyle)
+           let x = if null newTransform then (0,0) else parseTransform newTransform
+           let adjustedTransform = (fst (transform style) + fst x,
+                                    snd (transform style) + snd x)
+           let parentStyle = Style adjustedTransform fillz  newFontSize  newStroke
+           parseElements (parseRect parentStyle) rects
+           parseElements (parseText adjustedTransform newStyle (fontSize style)) texts
            parseElements (parsePath adjustedTransform) paths
-           parseChildren adjustedTransform fillz newFontSize newStroke children
+           parseChildren parentStyle children
 
 -- | Parses a list of Content.
-parseChildren :: (Float, Float) -> String -> String -> String -> [Content i] -> IO ()
-parseChildren _ _ _ _ [] = return ()
-parseChildren adjustedTransform parentFill parentFontSize parentStroke (x:xs) =
-    do parseLevel adjustedTransform parentFill parentFontSize parentStroke x
-       parseChildren adjustedTransform parentFill parentFontSize parentStroke xs
+parseChildren :: Style -> [Content i] -> IO ()
+parseChildren _ [] = return ()
+parseChildren style (x:xs) =
+    do parseLevel style x
+       parseChildren style xs
 
 -- | Gets the fill from a style String.
 getStyleAttr :: String -> String -> String
@@ -79,15 +80,15 @@ parseElements f (x:xs) = do f x
                             parseElements f xs
 
 -- | Parses a rect.
-parseRect :: (Float, Float) -> String -> String -> Content i -> IO ()
-parseRect transform parentFill parentStroke content = 
+parseRect :: Style -> Content i -> IO ()
+parseRect style content = 
     insertRectIntoDB (getAttribute "id" content)
                      (read $ getAttribute "width" content :: Float)
                      (read $ getAttribute "height" content :: Float)
-                     ((read $ getAttribute "x" content :: Float) + fst transform)
-                     ((read $ getAttribute "y" content :: Float) + snd transform)
-                     parentFill
-                     parentStroke
+                     ((read $ getAttribute "x" content :: Float) + fst (transform style))
+                     ((read $ getAttribute "y" content :: Float) + snd (transform style))
+                     (fill style)
+                     (stroke style)
 
 -- | Parses a path.
 parsePath :: (Float, Float) -> Content i -> IO ()
