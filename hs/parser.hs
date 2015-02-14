@@ -25,7 +25,7 @@ import SVGTypes
 main :: IO ()
 main = do graphFile <- readFile "../res/graphs/graph_regions.svg"
           let graphDoc = xmlParse "output.error" graphFile
-          parseLevel (Style (0,0) "" "none" "none") (getRoot graphDoc)
+          parseLevel (Style (0,0) "" "none" "none" "none") (getRoot graphDoc)
           buildSVG
           printDB
 
@@ -53,13 +53,17 @@ parseLevel style content = do
                                (getStyleAttr "stroke" newStyle) == "none") 
                              then (stroke style)
                              else (getStyleAttr "stroke" newStyle)
+           let newFillOpacity = if (null (getStyleAttr "fill-opacity" newStyle) ||
+                                    (getStyleAttr "fill-opacity" newStyle) == "none") 
+                                then (fillOpacity style)
+                                else (getStyleAttr "fill-opacity" newStyle)
            let x = if null newTransform then (0,0) else parseTransform newTransform
            let adjustedTransform = (fst (transform style) + fst x,
                                     snd (transform style) + snd x)
-           let parentStyle = Style adjustedTransform fillz  newFontSize  newStroke
+           let parentStyle = Style adjustedTransform fillz  newFontSize  newStroke newFillOpacity
            parseElements (parseRect parentStyle) rects
-           parseElements (parseText adjustedTransform newStyle (fontSize style)) texts
-           parseElements (parsePath adjustedTransform) paths
+           parseElements (parseText parentStyle) texts
+           parseElements (parsePath parentStyle) paths
            parseChildren parentStyle children
 
 -- | Parses a list of Content.
@@ -89,29 +93,30 @@ parseRect style content =
                      ((read $ getAttribute "y" content :: Float) + snd (transform style))
                      (fill style)
                      (stroke style)
+                     (fillOpacity style)
 
 -- | Parses a path.
-parsePath :: (Float, Float) -> Content i -> IO ()
-parsePath transform content = 
-    insertPathIntoDB (map (addTransform transform) $ parsePathD $ getAttribute "d" content)
-                     (getStyleAttr "fill" (getAttribute "style" content))
+parsePath :: Style -> Content i -> IO ()
+parsePath style content = 
+    insertPathIntoDB (map (addTransform (transform style)) $ parsePathD $ getAttribute "d" content)
+                     (fill style)
 
 -- | Parses a text.
-parseText :: (Float, Float) -> String -> String -> Content i -> IO ()
-parseText transform parentStyle parentFontSize content = 
+parseText :: Style -> Content i -> IO ()
+parseText style content = 
     insertTextIntoDB (getAttribute "id" content)
-    ((read $ getAttribute "x" content :: Float) + fst transform)
-    ((read $ getAttribute "y" content :: Float) + snd transform)
+    ((read $ getAttribute "x" content :: Float) + fst (transform style))
+    ((read $ getAttribute "y" content :: Float) + snd (transform style))
     (tagTextContent content)
-    parentFontSize
+    (fontSize style)
 
 -- | Gets the root element of the document.
 getRoot :: Document i -> Content i
 getRoot doc = head $ parseDocument (tag "svg") doc
 
 -- | Inserts a rect entry into the rects table.
-insertRectIntoDB :: String -> Float -> Float -> Float -> Float -> String -> String -> IO ()
-insertRectIntoDB id_ width height xPos yPos fill stroke = 
+insertRectIntoDB :: String -> Float -> Float -> Float -> Float -> String -> String -> String -> IO ()
+insertRectIntoDB id_ width height xPos yPos fill stroke fillOp = 
     runSqlite dbStr $ do
         runMigration migrateAll
         insert_ $ Rects 1
@@ -122,6 +127,7 @@ insertRectIntoDB id_ width height xPos yPos fill stroke =
                         (toRational yPos)
                         fill
                         stroke
+                        fillOp
 
 -- | Inserts a text entry into the texts table.
 insertTextIntoDB :: String -> Float -> Float -> String -> String -> IO ()
