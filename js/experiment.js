@@ -46,8 +46,8 @@ function setupMarker() {
     marker.setAttributeNS(null, 'id', 'arrow');
     marker.setAttributeNS(null, 'class', 'path');
     marker.setAttributeNS(null, 'viewBox', '0 0 10 10');
-    marker.setAttributeNS(null, 'refx', '10');
-    marker.setAttributeNS(null, 'refy', '7');
+    marker.setAttributeNS(null, 'refX', '10');
+    marker.setAttributeNS(null, 'refY', '5');
     marker.setAttributeNS(null, 'markerunits', 'strokeWidth');
     marker.setAttributeNS(null, 'orient', 'auto');
     marker.setAttributeNS(null, 'markerWidth', '4.5');
@@ -210,7 +210,7 @@ function nodeClicked(e) {
             thePath.setAttributeNS(null, 'fill', 'none');
             thePath.setAttributeNS(null, 'stroke', 'black');
             thePath.setAttributeNS(null, 'data-active', 'drawn');
-            // thePath.setAttributeNS(null, 'marker-end', 'url(#arrow)');
+            thePath.setAttributeNS(null, 'marker-end', 'url(#arrow)');
             thePath.addEventListener('click', pathClicked, false);
             console.log('creating it ' + curPath);
             document.getElementById('mySVG').appendChild(thePath);
@@ -367,7 +367,7 @@ function movePath(path, xBy, yBy, startOrEnd) {
         thePath = thePath.slice(0, thePath.lastIndexOf('L') + 1) + theX + ',' + theY;
         console.log(thePath);
     }
-    path.setAttribute('d', thePath);
+    path.setAttribute('d', thePath); 
 }
 
 
