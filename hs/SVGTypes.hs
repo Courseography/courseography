@@ -40,6 +40,14 @@ data Path =
            --pathClipPath :: String
          }
 
+-- | A Ellipse.
+data Ellipse =
+    Ellipse { 
+              ellipseXPos :: Rational,
+              ellipseYPos :: Rational,
+              ellipseStroke :: String
+         }
+
 data Style =
     Style {
             transform :: (Float,Float),

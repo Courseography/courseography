@@ -43,13 +43,16 @@ buildSVG =
         sqlRects :: [Entity Rects] <- selectList [] []
         sqlTexts :: [Entity Texts] <- selectList [] []
         sqlPaths :: [Entity Paths] <- selectList [] []
+        sqlEllipses :: [Entity Ellipses] <- selectList [] []
         let rectXml = map (convertRectToXML . buildRect . entityVal) sqlRects
         let textXml = map (convertTextToXML . buildText . entityVal) sqlTexts
         let pathXml = map (convertPathToXML . buildPath . entityVal) sqlPaths
+        let ellipseXml = map (convertEllipseToXML . buildEllipse . entityVal) sqlEllipses
         liftIO $ writeFile "Testfile.svg" svgHeader
         liftIO $ appendFile "Testfile.svg" $ unwords pathXml
         liftIO $ appendFile "Testfile.svg" $ unwords rectXml
         liftIO $ appendFile "Testfile.svg" $ unwords textXml
+        liftIO $ appendFile "Testfile.svg" $ unwords ellipseXml
         liftIO $ appendFile "Testfile.svg" svgFooter
 
 -- | Prints the database table 'rects'.
@@ -101,6 +104,17 @@ convertPathToXML path =
     buildPathString (points path) ++
     "\"/>"
 
+-- | Converts an `Ellipse` to XML.
+convertEllipseToXML :: Ellipse -> String
+convertEllipseToXML ellipse = 
+    "<ellipse cx=\"" ++ 
+    show (fromRational $ ellipseXPos ellipse) ++
+    "\" cy=\"" ++
+    show (fromRational $ ellipseYPos ellipse) ++
+    "\" style=\"stroke:" ++
+    (ellipseStroke ellipse) ++
+    "\"/>"
+
 -- | Builds a Rect from a database entry in the rects table.
 buildRect :: Rects -> Rect
 buildRect entity = 
@@ -129,6 +143,13 @@ buildPath entity =
          (pathsFill entity)
          (pathsFillOpacity entity)
          (pathsStroke entity)
+
+-- | Builds a Path from a database entry in the paths table.
+buildEllipse :: Ellipses -> Ellipse
+buildEllipse entity = 
+    Ellipse (ellipsesXPos entity)
+            (ellipsesYPos entity)
+            (ellipsesStroke entity)
 
 -- | Rebuilds a path's `d` attribute based on a list of Rational tuples.
 buildPathString :: [(Rational, Rational)] -> String

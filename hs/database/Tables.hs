@@ -104,6 +104,11 @@ Paths
     fillOpacity String
     stroke String
     deriving Show
+
+Ellipses
+    xPos Rational
+    yPos Rational
+    stroke String
 |]
 
 -- | A Lecture.

@@ -40,6 +40,7 @@ parseLevel style content = do
            let rects = parseContent (tag "rect") content
            let texts = parseContent (tag "text") content
            let paths = parseContent (tag "path") content
+           let ellipses = parseContent (tag "ellipse") content
            let children = getChildren content
            let newTransform = getAttribute "transform" content
            let newStyle = getAttribute "style" content
@@ -65,6 +66,7 @@ parseLevel style content = do
            parseElements (parseRect parentStyle) rects
            parseElements (parseText parentStyle) texts
            parseElements (parsePath parentStyle) paths
+           parseElements (parseEllipse parentStyle) ellipses
            parseChildren parentStyle children
 
 -- | Parses a list of Content.
@@ -73,7 +75,7 @@ parseChildren _ [] = return ()
 parseChildren style (x:xs) =
     do parseLevel style x
        parseChildren style xs
-       
+
 -- | Applies a parser to a list of Content.
 parseElements :: (Content i -> IO ()) -> [Content i] -> IO ()
 parseElements f [] = return ()
@@ -104,6 +106,21 @@ parseText style content =
                      ((read $ getAttribute "y" content :: Float) + snd (transform style))
                      (tagTextContent content)
                      style
+
+-- | Parses a text.
+parseEllipse :: Style -> Content i -> IO ()
+parseEllipse style content = 
+    insertEllipseIntoDB ((read $ getAttribute "cx" content :: Float) + fst (transform style))
+                        ((read $ getAttribute "cy" content :: Float) + snd (transform style))
+                        (fill style)
+
+insertEllipseIntoDB :: Float -> Float -> String -> IO ()
+insertEllipseIntoDB xPos yPos stroke = 
+    runSqlite dbStr $ do
+        runMigration migrateAll
+        insert_ $ Ellipses (toRational xPos)
+                           (toRational yPos)
+                           stroke
 
 -- | Inserts a rect entry into the rects table.
 insertRectIntoDB :: String -> Float -> Float -> Float -> Float -> Style -> IO ()
