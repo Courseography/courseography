@@ -14,7 +14,8 @@ data Rect =
            height :: Rational,
            xPos :: Rational,
            yPos :: Rational,
-           style :: String
+           rectFill :: String,
+           rectStroke :: String
          } deriving Show
 
 -- | A Text.

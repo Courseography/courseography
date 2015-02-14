@@ -65,9 +65,9 @@ convertRectToXML rect =
     show (fromRational $ width rect) ++
     "\" height=\"" ++
     show (fromRational $ height rect) ++
-    "\" style=\"" ++
-    (style rect) ++
-    "\"/>"
+    "\" style=\"fill:" ++
+    (rectFill rect) ++
+    ";stroke:" ++ (rectStroke rect) ++ ";\"/>"
 
 -- | Converts a `Text` to XML.
 convertTextToXML :: Text -> String
@@ -98,7 +98,8 @@ buildRect entity =
          (rectsHeight entity)
          (rectsXPos entity)
          (rectsYPos entity)
-         (rectsStyle entity)
+         (rectsFill entity)
+         (rectsStroke entity)
 
 -- | Builds a Text from a database entry in the texts table.
 buildText :: Texts -> Text

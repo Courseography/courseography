@@ -25,13 +25,13 @@ import SVGTypes
 main :: IO ()
 main = do graphFile <- readFile "../res/graphs/graph_regions.svg"
           let graphDoc = xmlParse "output.error" graphFile
-          parseLevel (0,0) "" "" $ getRoot graphDoc
+          parseLevel (0,0) "" "none" "none" $ getRoot graphDoc
           buildSVG
           printDB
 
 -- | Parses a level.
-parseLevel :: (Float, Float) -> String -> String -> Content i -> IO ()
-parseLevel parentTransform parentFill parentFontSize content = do
+parseLevel :: (Float, Float) -> String -> String -> String -> Content i -> IO ()
+parseLevel parentTransform parentFill parentFontSize parentStroke content = do
     if (getAttribute "id" content) == "layer2"
       then liftIO $ print "Abort"
       else do
@@ -45,28 +45,32 @@ parseLevel parentTransform parentFill parentFontSize content = do
            let fillx = if null fill then parentFill else fill
            let filly = if fillx == "none" then parentFill else fillx
            let fillz = if fillx == "#000000" then "none" else filly
-           let newFontSize = if null (getStyleAttr "font-size" style)
-                             then "none"
+           let newFontSize = if (null (getStyleAttr "font-size" style) ||
+                                 (getStyleAttr "font-size" style) == "none") 
+                             then parentFontSize
                              else (getStyleAttr "font-size" style)
+           let newStroke = if (null (getStyleAttr "stroke" style) ||
+                               (getStyleAttr "stroke" style) == "none") 
+                             then parentStroke
+                             else (getStyleAttr "stroke" style)
            let x = if null transform then (0,0) else parseTransform transform
            let adjustedTransform = (fst parentTransform + fst x,
                                     snd parentTransform + snd x)
-           parseElements (parseRect adjustedTransform fillz) rects
+           parseElements (parseRect adjustedTransform fillz newStroke) rects
            parseElements (parseText adjustedTransform style parentFontSize) texts
            parseElements (parsePath adjustedTransform) paths
-           parseChildren adjustedTransform fillz newFontSize children
+           parseChildren adjustedTransform fillz newFontSize newStroke children
 
 -- | Parses a list of Content.
-parseChildren :: (Float, Float) -> String -> String -> [Content i] -> IO ()
-parseChildren adjustedTransform parentFill _ [] = return ()
-parseChildren adjustedTransform parentFill parentFontSize (x:xs) =
-    do parseLevel adjustedTransform parentFill parentFontSize x
-       parseChildren adjustedTransform parentFill parentFontSize xs
+parseChildren :: (Float, Float) -> String -> String -> String -> [Content i] -> IO ()
+parseChildren _ _ _ _ [] = return ()
+parseChildren adjustedTransform parentFill parentFontSize parentStroke (x:xs) =
+    do parseLevel adjustedTransform parentFill parentFontSize parentStroke x
+       parseChildren adjustedTransform parentFill parentFontSize parentStroke xs
 
 -- | Gets the fill from a style String.
 getStyleAttr :: String -> String -> String
-getStyleAttr attr style = drop ((length attr) + 1) $ head $ (filter (\x -> take (length attr) x == attr) $
-    splitOn ";" style) ++ [""]
+getStyleAttr attr style = drop ((length attr) + 1) $ head $ (filter (\x -> take (length attr) x == attr) $ splitOn ";" style) ++ [""]
 
 -- | Applies a parser to a list of Content.
 parseElements :: (Content i -> IO ()) -> [Content i] -> IO ()
@@ -75,14 +79,15 @@ parseElements f (x:xs) = do f x
                             parseElements f xs
 
 -- | Parses a rect.
-parseRect :: (Float, Float) -> String -> Content i -> IO ()
-parseRect transform parentFill content = 
+parseRect :: (Float, Float) -> String -> String -> Content i -> IO ()
+parseRect transform parentFill parentStroke content = 
     insertRectIntoDB (getAttribute "id" content)
                      (read $ getAttribute "width" content :: Float)
                      (read $ getAttribute "height" content :: Float)
                      ((read $ getAttribute "x" content :: Float) + fst transform)
                      ((read $ getAttribute "y" content :: Float) + snd transform)
-                     ("fill:" ++ parentFill)
+                     parentFill
+                     parentStroke
 
 -- | Parses a path.
 parsePath :: (Float, Float) -> Content i -> IO ()
@@ -104,8 +109,8 @@ getRoot :: Document i -> Content i
 getRoot doc = head $ parseDocument (tag "svg") doc
 
 -- | Inserts a rect entry into the rects table.
-insertRectIntoDB :: String -> Float -> Float -> Float -> Float -> String -> IO ()
-insertRectIntoDB id_ width height xPos yPos style = 
+insertRectIntoDB :: String -> Float -> Float -> Float -> Float -> String -> String -> IO ()
+insertRectIntoDB id_ width height xPos yPos fill stroke = 
     runSqlite dbStr $ do
         runMigration migrateAll
         insert_ $ Rects 1
@@ -114,7 +119,8 @@ insertRectIntoDB id_ width height xPos yPos style =
                         (toRational height)
                         (toRational xPos)
                         (toRational yPos)
-                        style
+                        fill
+                        stroke
 
 -- | Inserts a text entry into the texts table.
 insertTextIntoDB :: String -> Float -> Float -> String -> String -> IO ()
