@@ -32,7 +32,8 @@ main = do graphFile <- readFile "../res/graphs/graph_regions.svg"
 -- | Parses a level.
 parseLevel :: Style -> Content i -> IO ()
 parseLevel style content = do
-    if (getAttribute "id" content) == "layer2"
+    if (getAttribute "id" content) == "layer2" ||
+       ((getName content) == "defs")
       then liftIO $ print "Abort"
       else do
            let rects = parseContent (tag "rect") content
@@ -172,8 +173,9 @@ parseContent :: CFilter i -> Content i -> [Content i]
 parseContent filter content = filter content
 
 -- | Gets the tag name of an Element.
-getName :: Element s -> String
-getName (Elem a _ _) = printableName a
+getName :: Content i -> String
+getName (CElem (Elem a _ _) _) = printableName a
+getName _ = ""
 
 -- | Gets the list of Attributes of an Element.
 getAttrs :: Element s -> [Attribute]
