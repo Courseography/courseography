@@ -28,7 +28,7 @@ function setupSVGCanvas() {
     //svg.setAttributeNS(xmlns, 'xmlns', xmlns);
     
     svg.addEventListener('mousedown', makeNode, false);
-    svg.addEventListener('mousemove', nodeMoved, false);
+    svg.addEventListener('mousemove', moveNode, false);
     svg.addEventListener('mouseup', nodeUnclicked, false);
 
     svg.appendChild(setupMarker());
@@ -127,7 +127,6 @@ function makeNode(e) {
                                     position.x > parseFloat(startNode.getAttribute('x')) + nodeWidth) &&
                     (position.y < startNode.getAttribute('y') || 
                                     position.y > parseFloat(startNode.getAttribute('y')) + nodeHeight)) {
-            console.log('here ' + curPath);
             if (curPath === null) {
                 findClosest({x: parseFloat(startNode.getAttribute('x')), y: parseFloat(startNode.getAttribute('y'))},
                             'node', position, 'elbow');
@@ -148,7 +147,8 @@ function nodeClicked(e) {
     var index = null;
 
     if (mode  === 'erase-mode') { 
-        // remove any paths leading to and from this node from the other node's list
+        // remove any paths leading to and from this node from the other node's list of paths
+        // and remove this node from the other nodes' adjacency lists
         e.currentTarget.attributes['inEdges'].map( function (item) {
             index = item.attributes['parents'].attributes['outEdges'].indexOf(item);
             if (index > -1) {
@@ -186,6 +186,7 @@ function nodeClicked(e) {
             // this is the start node of the path about to be created
             startNode = e.currentTarget;
             select(e.currentTarget);
+            console.log('Path started ---------------');
             curPath = null;
             curElbow = null;
         } else {
@@ -246,28 +247,24 @@ function findClosest(beg, typeB, end, typeE) {
         var theElbow = beg;
     }
     var nodeCoord = '';
-    if (theNode.x < theElbow.x) {
-    // elbow is to the right of theNode
+    if (theNode.x < theElbow.x) { // elbow is to the right of theNode
         if (theNode.x + nodeWidth > theElbow.x || theNode.y - nodeHeight > theElbow.y) {
             // elbow is above theNode, pick top edge
             nodeCoord = (theNode.x + nodeWidth/2) +  ',' + theNode.y;
         } else if (theNode.x + nodeWidth > theElbow.x || theNode.y + 2 * nodeHeight < theElbow.y) {
             // elbow is below theNode, pick bottom edge
             nodeCoord = (theNode.x + nodeWidth/2) + ',' + (theNode.y + nodeHeight);
-        } else {
-            // pick right edge
+        } else { // pick right edge
             nodeCoord = (theNode.x + nodeWidth) + ',' + (theNode.y + nodeHeight/2);
         }
-    } else { // theNode.x >= theElbow.x
-    // elbow is to the left of theNode
+    } else { // theNode.x >= theElbow.x, elbow is to the left of theNode
         if (theNode.y - nodeHeight > theElbow.y) {
             // elbow is above theNode, pick top edge
             nodeCoord = (theNode.x + nodeWidth/2) + ',' + theNode.y;
         } else if (theNode.y + 2 * nodeHeight < theElbow.y) {
             // elbow is below theNode, pick bottom edge
             nodeCoord = (theNode.x + nodeWidth/2) + ',' + (theNode.y + nodeHeight);
-        } else {
-            // pick left edge
+        } else { // pick left edge
             nodeCoord = theNode.x + ',' + (theNode.y + nodeHeight/2);
         }
     }
@@ -285,7 +282,6 @@ function findClosest(beg, typeB, end, typeE) {
 function select(newNode) {
     'use-strict'
 
-    // console.log(nodeSelected);
     if (nodeSelected !== null) {
         nodeSelected.parentNode.setAttribute('data-active', 'unselected');
     }
@@ -296,24 +292,35 @@ function select(newNode) {
 }
 
 
-function nodeMoved(e) {
+function moveNode(e) {
     'use-strict';
 
     if (mode === 'change-mode' && nodeMoving !== null) {
         var position = getClickPosition(e, nodeMoving);
         var rectX = parseFloat(nodeMoving.getAttribute('x'));
         var rectY = parseFloat(nodeMoving.getAttribute('y'));
-        var textX = parseFloat(nodeMoving.parentNode.childNodes[1].getAttribute('x'));
-        var textY = parseFloat(nodeMoving.parentNode.childNodes[1].getAttribute('y'));
         rectX += (position.x - nodeX);
         rectY += (position.y - nodeY);
-        textX += (position.x - nodeX);
-        textY += (position.y - nodeY);
-        // move in and out edges by the same amount
         nodeMoving.setAttribute('x', rectX);
         nodeMoving.setAttribute('y', rectY);
-        nodeMoving.parentNode.childNodes[1].setAttribute('x', textX);
-        nodeMoving.parentNode.childNodes[1].setAttribute('y', textY);
+
+        if (nodeMoving.parentNode.childNodes.length > 1){
+            var textX = parseFloat(nodeMoving.parentNode.childNodes[1].getAttribute('x'));
+            var textY = parseFloat(nodeMoving.parentNode.childNodes[1].getAttribute('y'));
+            textX += (position.x - nodeX);
+            textY += (position.y - nodeY);
+            nodeMoving.parentNode.childNodes[1].setAttribute('x', textX);
+            nodeMoving.parentNode.childNodes[1].setAttribute('y', textY);
+        }
+        
+        // move in and out edges by the same amount
+        nodeMoving.attributes['inEdges'].map( function (item) { // modify last node in path
+            movePath(item, (position.x - nodeX), (position.y - nodeY), 'end');
+        });
+        nodeMoving.attributes['outEdges'].map( function (item) { // modify the first node in path
+            movePath(item, (position.x - nodeX), (position.y - nodeY), 'start');
+        });   
+
         nodeX = position.x;
         nodeY = position.y;
         // console.log(nodeMoving.x.animVal.value, nodeMoving.y.animVal.value, nodeX, nodeY);
@@ -328,7 +335,6 @@ function nodeUnclicked(e) {
         nodeMoving = null;
         nodeX = -1;
         nodeY = -1;
-        console.log(nodeX, nodeY);
     }
 }
 
@@ -339,6 +345,29 @@ function pathClicked(e) {
     if (mode === 'erase-mode') { // need to remove path from node lists!
         document.getElementById('mySVG').removeChild(e.currentTarget);
     }
+}
+
+
+function movePath(path, xBy, yBy, startOrEnd) {
+    'use-strict'
+
+    var thePath = path.getAttribute('d');
+    var theX = null;
+    var theY = null;
+    if (startOrEnd === 'start') {
+        theX = parseFloat(thePath.slice(1, thePath.indexOf(','))) + xBy; // exclude the M
+        theY = parseFloat(thePath.slice(thePath.indexOf(',') + 1, thePath.indexOf('L'))) + yBy;
+        console.log(thePath);
+        thePath = 'M' + theX + ',' + theY + thePath.slice(thePath.indexOf('L'));
+        console.log(thePath);
+    } else if (startOrEnd === 'end') {
+        theX = parseFloat(thePath.slice(thePath.lastIndexOf('L') + 1, thePath.lastIndexOf(','))) + xBy;
+        theY = parseFloat(thePath.slice(thePath.lastIndexOf(',') + 1)) + yBy;
+        console.log(thePath);
+        thePath = thePath.slice(0, thePath.lastIndexOf('L') + 1) + theX + ',' + theY;
+        console.log(thePath);
+    }
+    path.setAttribute('d', thePath);
 }
 
 
