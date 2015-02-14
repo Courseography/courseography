@@ -82,7 +82,9 @@ Rects
     height Rational
     xPos Rational
     yPos Rational
-    style String
+    fill String
+    stroke String
+    fillOpacity String
     deriving Show
 
 Texts
@@ -97,6 +99,8 @@ Texts
 Paths
     d [Point]
     fill String
+    fillOpacity String
+    stroke String
     deriving Show
 |]
 

@@ -67,7 +67,7 @@ convertRectToXML rect =
     show (fromRational $ height rect) ++
     "\" style=\"fill:" ++
     (rectFill rect) ++
-    ";stroke:" ++ (rectStroke rect) ++ ";\"/>"
+    ";stroke:" ++ (rectStroke rect) ++ ";fill-opacity:" ++ (rectFillOpacity rect) ++ ";\"/>"
 
 -- | Converts a `Text` to XML.
 convertTextToXML :: Text -> String
@@ -85,9 +85,8 @@ convertTextToXML text =
 -- | Converts a `Path` to XML.
 convertPathToXML :: Path -> String
 convertPathToXML path = 
-    "<path style=\"stroke:#000000;fill:" ++ (if null (pathFill path)
-                                            then "none"
-                                            else (pathFill path)) ++ ";\" d=\"M " ++
+    "<path style=\"stroke:" ++ (pathStroke path) ++ ";fill:" ++ (pathFill path) ++ ";fill-opacity:"
+                                         ++ (pathFillOpacity path) ++ ";\" d=\"M " ++
     buildPathString (points path) ++
     "\"/>"
 
@@ -100,6 +99,7 @@ buildRect entity =
          (rectsYPos entity)
          (rectsFill entity)
          (rectsStroke entity)
+         (rectsFillOpacity entity)
 
 -- | Builds a Text from a database entry in the texts table.
 buildText :: Texts -> Text
@@ -114,6 +114,8 @@ buildPath :: Paths -> Path
 buildPath entity = 
     Path (map point $ pathsD entity)
          (pathsFill entity)
+         (pathsFillOpacity entity)
+         (pathsStroke entity)
 
 -- | Rebuilds a path's `d` attribute based on a list of Rational tuples.
 buildPathString :: [(Rational, Rational)] -> String

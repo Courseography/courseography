@@ -15,7 +15,8 @@ data Rect =
            xPos :: Rational,
            yPos :: Rational,
            rectFill :: String,
-           rectStroke :: String
+           rectStroke :: String,
+           rectFillOpacity :: String
          } deriving Show
 
 -- | A Text.
@@ -31,7 +32,9 @@ data Text =
 data Path =
     Path { 
            points :: [(Rational, Rational)],
-           pathFill :: String
+           pathFill :: String,
+           pathFillOpacity :: String,
+           pathStroke :: String
          }
 
 data Style =
@@ -39,5 +42,6 @@ data Style =
             transform :: (Float,Float),
             fill :: String,
             fontSize :: String,
-            stroke :: String
+            stroke :: String,
+            fillOpacity :: String
     }

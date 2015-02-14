@@ -91,32 +91,30 @@ parseRect style content =
                      (read $ getAttribute "height" content :: Float)
                      ((read $ getAttribute "x" content :: Float) + fst (transform style))
                      ((read $ getAttribute "y" content :: Float) + snd (transform style))
-                     (fill style)
-                     (stroke style)
-                     (fillOpacity style)
+                     style
 
 -- | Parses a path.
 parsePath :: Style -> Content i -> IO ()
 parsePath style content = 
     insertPathIntoDB (map (addTransform (transform style)) $ parsePathD $ getAttribute "d" content)
-                     (fill style)
+                     style
 
 -- | Parses a text.
 parseText :: Style -> Content i -> IO ()
 parseText style content = 
     insertTextIntoDB (getAttribute "id" content)
-    ((read $ getAttribute "x" content :: Float) + fst (transform style))
-    ((read $ getAttribute "y" content :: Float) + snd (transform style))
-    (tagTextContent content)
-    (fontSize style)
+                     ((read $ getAttribute "x" content :: Float) + fst (transform style))
+                     ((read $ getAttribute "y" content :: Float) + snd (transform style))
+                     (tagTextContent content)
+                     (fontSize style)
 
 -- | Gets the root element of the document.
 getRoot :: Document i -> Content i
 getRoot doc = head $ parseDocument (tag "svg") doc
 
 -- | Inserts a rect entry into the rects table.
-insertRectIntoDB :: String -> Float -> Float -> Float -> Float -> String -> String -> String -> IO ()
-insertRectIntoDB id_ width height xPos yPos fill stroke fillOp = 
+insertRectIntoDB :: String -> Float -> Float -> Float -> Float -> Style -> IO ()
+insertRectIntoDB id_ width height xPos yPos style = 
     runSqlite dbStr $ do
         runMigration migrateAll
         insert_ $ Rects 1
@@ -125,9 +123,9 @@ insertRectIntoDB id_ width height xPos yPos fill stroke fillOp =
                         (toRational height)
                         (toRational xPos)
                         (toRational yPos)
-                        fill
-                        stroke
-                        fillOp
+                        (fill style)
+                        (stroke style)
+                        (fillOpacity style)
 
 -- | Inserts a text entry into the texts table.
 insertTextIntoDB :: String -> Float -> Float -> String -> String -> IO ()
@@ -142,12 +140,14 @@ insertTextIntoDB id_ xPos yPos text style =
                         style
 
 -- | Inserts a tex entry into the texts table.
-insertPathIntoDB :: [(Float, Float)] -> String -> IO ()
+insertPathIntoDB :: [(Float, Float)] -> Style -> IO ()
 insertPathIntoDB d style = 
     runSqlite dbStr $ do
         runMigration migrateAll
         insert_ $ Paths (map (Point . convertFloatTupToRationalTup) d)
-                        style
+                        (fill style)
+                        (fillOpacity style)
+                        (stroke style)
 
 -- | Adds one tuple to the second tuple.
 -- NOTE: Can be replaced by addTuples.
