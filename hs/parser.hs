@@ -70,7 +70,7 @@ parseChildren adjustedTransform parentFill parentFontSize parentStroke (x:xs) =
 
 -- | Gets the fill from a style String.
 getStyleAttr :: String -> String -> String
-getStyleAttr attr style = drop ((length attr) + 1) $ head $ (filter (\x -> take (length attr) x == attr) $ splitOn ";" style) ++ [""]
+getStyleAttr attr style = drop ((length attr) + 1) $ head $ (filter (\x -> take ((length attr) + 1) x == (attr ++ ":")) $ splitOn ";" style) ++ [""]
 
 -- | Applies a parser to a list of Content.
 parseElements :: (Content i -> IO ()) -> [Content i] -> IO ()
