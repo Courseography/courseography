@@ -23,7 +23,7 @@ data Text =
            textXPos :: Rational,
            textYPos :: Rational,
            textText :: String,
-           textStyle :: String
+           textFontSize :: String
          } deriving Show
 
 -- | A Path.

@@ -91,7 +91,7 @@ Texts
     xPos Rational
     yPos Rational
     text String
-    style String
+    fontSize String
     deriving Show
 
 Paths

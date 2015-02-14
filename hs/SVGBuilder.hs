@@ -76,8 +76,8 @@ convertTextToXML text =
     (show $ fromRational $ textXPos text) ++
     "\" y=\"" ++
     (show $ fromRational $ textYPos text) ++
-    "\" style=\"" ++
-    (textStyle text) ++
+    "\" style=\"font-size:" ++
+    (textFontSize text) ++
     "\">" ++
     (textText text) ++
     "</text>"
@@ -106,7 +106,7 @@ buildText entity =
     Text (textsXPos entity)
          (textsYPos entity)
          (textsText entity)
-         (textsStyle entity)
+         (textsFontSize entity)
 
 -- | Builds a Path from a database entry in the paths table.
 buildPath :: Paths -> Path

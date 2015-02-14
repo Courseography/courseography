@@ -25,13 +25,13 @@ import SVGTypes
 main :: IO ()
 main = do graphFile <- readFile "../res/graphs/graph_regions.svg"
           let graphDoc = xmlParse "output.error" graphFile
-          parseLevel (0,0) "" $ getRoot graphDoc
+          parseLevel (0,0) "" "" $ getRoot graphDoc
           buildSVG
           printDB
 
 -- | Parses a level.
-parseLevel :: (Float, Float) -> String -> Content i -> IO ()
-parseLevel parentTransform parentFill content = do
+parseLevel :: (Float, Float) -> String -> String -> Content i -> IO ()
+parseLevel parentTransform parentFill parentFontSize content = do
     if (getAttribute "id" content) == "layer2"
       then liftIO $ print "Abort"
       else do
@@ -45,19 +45,23 @@ parseLevel parentTransform parentFill content = do
            let fillx = if null fill then parentFill else fill
            let filly = if fillx == "none" then parentFill else fillx
            let fillz = if fillx == "#000000" then "none" else filly
+           let newFontSize = if null (getStyleAttr "font-size" style)
+                             then "none"
+                             else (getStyleAttr "font-size" style)
            let x = if null transform then (0,0) else parseTransform transform
            let adjustedTransform = (fst parentTransform + fst x,
                                     snd parentTransform + snd x)
            parseElements (parseRect adjustedTransform fillz) rects
-           parseElements (parseText adjustedTransform style) texts
+           parseElements (parseText adjustedTransform style parentFontSize) texts
            parseElements (parsePath adjustedTransform) paths
-           parseChildren adjustedTransform fillz children
+           parseChildren adjustedTransform fillz newFontSize children
 
 -- | Parses a list of Content.
-parseChildren :: (Float, Float) -> String -> [Content i] -> IO ()
-parseChildren adjustedTransform parentFill [] = return ()
-parseChildren adjustedTransform parentFill (x:xs) = do parseLevel adjustedTransform parentFill x
-                                                       parseChildren adjustedTransform parentFill xs
+parseChildren :: (Float, Float) -> String -> String -> [Content i] -> IO ()
+parseChildren adjustedTransform parentFill _ [] = return ()
+parseChildren adjustedTransform parentFill parentFontSize (x:xs) =
+    do parseLevel adjustedTransform parentFill parentFontSize x
+       parseChildren adjustedTransform parentFill parentFontSize xs
 
 -- | Gets the fill from a style String.
 getStyleAttr :: String -> String -> String
@@ -87,12 +91,13 @@ parsePath transform content =
                      (getStyleAttr "fill" (getAttribute "style" content))
 
 -- | Parses a text.
-parseText :: (Float, Float) -> String -> Content i -> IO ()
-parseText transform parentStyle content = insertTextIntoDB (getAttribute "id" content)
-                                               ((read $ getAttribute "x" content :: Float) + fst transform)
-                                               ((read $ getAttribute "y" content :: Float) + snd transform)
-                                               (tagTextContent content) 
-                                               parentStyle
+parseText :: (Float, Float) -> String -> String -> Content i -> IO ()
+parseText transform parentStyle parentFontSize content = 
+    insertTextIntoDB (getAttribute "id" content)
+    ((read $ getAttribute "x" content :: Float) + fst transform)
+    ((read $ getAttribute "y" content :: Float) + snd transform)
+    (tagTextContent content)
+    parentFontSize
 
 -- | Gets the root element of the document.
 getRoot :: Document i -> Content i
