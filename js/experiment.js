@@ -16,6 +16,7 @@ var nodeY = -1;             // for movement
 var nodeSelected = null;    // for adding text
 var startNode = null;       // for making paths
 var curPath = null;         // for making paths with elbow joints
+var curElbow = null;        // for remembering the last elbow
 
 
 function setupSVGCanvas() {
@@ -126,7 +127,14 @@ function makeNode(e) {
                                     position.x > parseFloat(startNode.getAttribute('x')) + nodeWidth) &&
                     (position.y < startNode.getAttribute('y') || 
                                     position.y > parseFloat(startNode.getAttribute('y')) + nodeHeight)) {
-            curPath += 'L' + position.x + ',' + position.y + ' ';
+            console.log('here ' + curPath);
+            if (curPath === null) {
+                findClosest({x: parseFloat(startNode.getAttribute('x')), y: parseFloat(startNode.getAttribute('y'))},
+                            'node', position, 'elbow');
+            } else {
+                curPath += 'L' + position.x + ',' + position.y + ' ';   
+            }
+            curElbow = position;
             console.log('adding elbow to it ' + curPath);  
         }
     }
@@ -144,12 +152,10 @@ function nodeClicked(e) {
         e.currentTarget.attributes['inEdges'].map( function (item) {
             index = item.attributes['parents'].attributes['outEdges'].indexOf(item);
             if (index > -1) {
-                console.log('delete index from outEdges: ?  ', index);
                 (item.attributes['parents'].attributes['outEdges']).splice(index, 1);
             }
             index = item.attributes['parents'].attributes['children'].indexOf(e.currentTarget);
             if (index > -1) {
-                console.log('delete index from child: ?  ', index);
                 (item.attributes['parents'].attributes['children']).splice(index, 1);
             }
             svgDoc.removeChild(item);
@@ -157,12 +163,10 @@ function nodeClicked(e) {
         e.currentTarget.attributes['outEdges'].map( function (item) {
             index = item.attributes['children'].attributes['inEdges'].indexOf(item);
             if (index > -1) {
-                console.log('delete index from inEdges: ? ', index);
                 item.attributes['children'].attributes['inEdges'].splice(index, 1);
             }
             index = item.attributes['children'].attributes['parents'].indexOf(e.currentTarget);
             if (index > -1) {
-                console.log('delete index from parent: ?  ', index);
                 (item.attributes['children'].attributes['parents']).splice(index, 1);
             }
             svgDoc.removeChild(item);
@@ -178,17 +182,28 @@ function nodeClicked(e) {
         select(e.currentTarget);
 
     } else if (mode === 'path-mode') {
-        if (startNode === null) {
+        if (startNode === null || startNode === e.currentTarget) {
             // this is the start node of the path about to be created
             startNode = e.currentTarget;
-            curPath = 'M' + (parseFloat(startNode.getAttribute('x')) + nodeWidth/2) + 
-                                ',' + startNode.getAttribute('y') + ' ';   
-            console.log('starting it ' + curPath);
             select(e.currentTarget);
+            curPath = null;
+            curElbow = null;
         } else {
             // make the path from startNode to current node then make startNode Null
-            curPath += 'L' + (parseFloat(e.currentTarget.getAttribute('x')) + nodeWidth/2 /*- 10*/) + 
-                        ',' + (parseFloat(e.currentTarget.getAttribute('y')) /*- 10*/);  
+            if (curPath === null) {
+                // later we can call findClosest with 'node', 'node'
+                curPath = 'M' + (parseFloat(startNode.getAttribute('x')) + nodeWidth/2) + 
+                                ',' + parseFloat(startNode.getAttribute('y')) +
+                    ' L' + (parseFloat(e.currentTarget.getAttribute('x')) + nodeWidth/2) + 
+                        ',' + (parseFloat(e.currentTarget.getAttribute('y')));
+            } else {
+                // also call findClosest but with different arguments 'elbow' 'node'
+                findClosest( curElbow, 'elbow', 
+                    {x: parseFloat(e.currentTarget.getAttribute('x')), y: parseFloat(e.currentTarget.getAttribute('y'))},
+                            'node'); 
+            }
+            select(e.currentTarget);
+              
             var thePath = document.createElementNS(xmlns, 'path');
             thePath.setAttributeNS(null, 'd', curPath);
             thePath.setAttributeNS(null, 'fill', 'none');
@@ -209,7 +224,60 @@ function nodeClicked(e) {
             e.currentTarget.attributes['inEdges'].push(thePath);
             startNode = null;
             curPath = null;
+            curElbow = null;
         }
+    }
+}
+
+
+/*
+Return the best coordinates for the start and end of a edge. theNode and end could
+be a node or an elbow. Atleast one of beg and end must be a node.
+*/
+function findClosest(beg, typeB, end, typeE) {
+    'use-strict'
+
+    if (typeB === 'node' && typeE === 'elbow') {
+        var theNode = beg;
+        var theElbow = end;
+    } else if (typeB === 'elbow' && typeE === 'node') {
+        // only need to add end point to curPath
+        var theNode = end;
+        var theElbow = beg;
+    }
+    var nodeCoord = '';
+    if (theNode.x < theElbow.x) {
+    // elbow is to the right of theNode
+        if (theNode.x + nodeWidth > theElbow.x || theNode.y - nodeHeight > theElbow.y) {
+            // elbow is above theNode, pick top edge
+            nodeCoord = (theNode.x + nodeWidth/2) +  ',' + theNode.y;
+        } else if (theNode.x + nodeWidth > theElbow.x || theNode.y + 2 * nodeHeight < theElbow.y) {
+            // elbow is below theNode, pick bottom edge
+            nodeCoord = (theNode.x + nodeWidth/2) + ',' + (theNode.y + nodeHeight);
+        } else {
+            // pick right edge
+            nodeCoord = (theNode.x + nodeWidth) + ',' + (theNode.y + nodeHeight/2);
+        }
+    } else { // theNode.x >= theElbow.x
+    // elbow is to the left of theNode
+        if (theNode.y - nodeHeight > theElbow.y) {
+            // elbow is above theNode, pick top edge
+            nodeCoord = (theNode.x + nodeWidth/2) + ',' + theNode.y;
+        } else if (theNode.y + 2 * nodeHeight < theElbow.y) {
+            // elbow is below theNode, pick bottom edge
+            nodeCoord = (theNode.x + nodeWidth/2) + ',' + (theNode.y + nodeHeight);
+        } else {
+            // pick left edge
+            nodeCoord = theNode.x + ',' + (theNode.y + nodeHeight/2);
+        }
+    }
+    if (typeB === 'node' && typeE === 'elbow') {
+        curPath = 'M' + nodeCoord + ' L' + end.x + ',' + end.y + ' ';
+    } else if (typeB === 'elbow' && typeE === 'node') {
+        // only need to add end point to curPath
+        curPath += 'L' + nodeCoord;
+    } else {
+        // don't know what do for 2 nodes yet
     }
 }
 
@@ -217,14 +285,14 @@ function nodeClicked(e) {
 function select(newNode) {
     'use-strict'
 
-    console.log(nodeSelected);
+    // console.log(nodeSelected);
     if (nodeSelected !== null) {
         nodeSelected.parentNode.setAttribute('data-active', 'unselected');
     }
     nodeSelected = newNode;
     nodeSelected.parentNode.setAttribute('data-active', 'active');
-    console.log('parents: ', nodeSelected.attributes['parents']);
-    console.log('children: ', nodeSelected.attributes['children']);
+    // console.log('parents: ', nodeSelected.attributes['parents']);
+    // console.log('children: ', nodeSelected.attributes['children']);
 }
 
 
@@ -304,7 +372,6 @@ function addText() {
         if (g.childNodes.length > 1){
             g.removeChild(g.childNodes[1]); 
         }
-        console.log(nodeSelected.getAttribute('id'), nodeSelected.getAttribute('x'));
     //    createText(g, nodeSelected.getAttribute('id'), 't' + nodeSelected.getAttribute('id'), nodeSelected.getAttribute('x'), 
     //                nodeSelected.getAttribute('y'), nodeSelected.getAttribute('width'), nodeSelected.getAttribute('height'), "black");
         var code = document.createElementNS(xmlns, 'text');
@@ -337,7 +404,7 @@ $('#add-text').click(function (){
 /*
 - node type buttons
 - add paths with elbow joints
-    1. fix relationships and multiple elbows
+    x fix relationships and multiple elbows (?)
     2. don't allow elbow points in end node
     3. pick best side of start node and end node to make line, so no overlap
     4. moving path when start or end point of path move
