@@ -32,8 +32,7 @@ main = do graphFile <- readFile "../res/graphs/graph_regions.svg"
 -- | Parses a level.
 parseLevel :: (Float, Float) -> String -> Content i -> IO ()
 parseLevel parentTransform parentFill content = do
-    if (getAttribute "id" content) == "layer3" || 
-       (getAttribute "id" content) == "layer2"
+    if (getAttribute "id" content) == "layer2"
       then liftIO $ print "Abort"
       else do
            let rects = parseContent (tag "rect") content
@@ -42,7 +41,7 @@ parseLevel parentTransform parentFill content = do
            let children = getChildren content
            let transform = getAttribute "transform" content
            let style = getAttribute "style" content
-           let fill = getFill style
+           let fill = getStyleAttr "fill" style
            let fillx = if null fill then parentFill else fill
            let filly = if fillx == "none" then parentFill else fillx
            let fillz = if fillx == "#000000" then "none" else filly
@@ -61,8 +60,9 @@ parseChildren adjustedTransform parentFill (x:xs) = do parseLevel adjustedTransf
                                                        parseChildren adjustedTransform parentFill xs
 
 -- | Gets the fill from a style String.
-getFill :: String -> String
-getFill style = drop 5 $ head $ (filter (\x -> take 4 x == "fill") $ splitOn ";" style) ++ [""]
+getStyleAttr :: String -> String -> String
+getStyleAttr attr style = drop ((length attr) + 1) $ head $ (filter (\x -> take (length attr) x == attr) $
+    splitOn ";" style) ++ [""]
 
 -- | Applies a parser to a list of Content.
 parseElements :: (Content i -> IO ()) -> [Content i] -> IO ()
@@ -84,7 +84,7 @@ parseRect transform parentFill content =
 parsePath :: (Float, Float) -> Content i -> IO ()
 parsePath transform content = 
     insertPathIntoDB (map (addTransform transform) $ parsePathD $ getAttribute "d" content)
-                     (getAttribute "style" content)
+                     (getStyleAttr "fill" (getAttribute "style" content))
 
 -- | Parses a text.
 parseText :: (Float, Float) -> String -> Content i -> IO ()
