@@ -26,7 +26,11 @@ svgHeader = "<svg" ++
    " height=\"744.09448\"" ++
    " id=\"svg2\"" ++
    " version=\"1.1\"" ++
-   " sodipodi:docname=\"graph_regions.svg\"><g>"
+   " sodipodi:docname=\"graph_regions.svg\"><defs>" ++
+   "     <marker id=\"arrow\" viewBox=\"0 0 10 10\" refX=\"1\" refY=\"5\" markerUnits=\"strokeWidth\" orient=\"auto\" markerWidth=\"10\" markerHeight=\"10\">" ++
+   "       <polyline points=\"0,1 10,5 0,9\" fill=\"black\"></polyline>" ++
+   "     </marker>" ++
+   "   </defs><g>"
 
 -- | A closing 'g' tag followed by a closing 'svg' tag.
 svgFooter :: String
@@ -78,6 +82,10 @@ convertTextToXML text =
     (show $ fromRational $ textYPos text) ++
     "\" style=\"font-size:" ++
     (textFontSize text) ++
+    ";font-weight:" ++ 
+    (textFontWeight text) ++ 
+    ";font-family:" ++
+    (textFontFamily text) ++
     "\">" ++
     (textText text) ++
     "</text>"
@@ -85,8 +93,11 @@ convertTextToXML text =
 -- | Converts a `Path` to XML.
 convertPathToXML :: Path -> String
 convertPathToXML path = 
-    "<path style=\"stroke:" ++ (pathStroke path) ++ ";fill:" ++ (pathFill path) ++ ";fill-opacity:"
-                                         ++ (pathFillOpacity path) ++ ";\" d=\"M " ++
+    "<path style=\"stroke:" ++
+    (pathStroke path) ++
+    ";fill:" ++
+    (pathFill path) ++ 
+    ";fill-opacity:" ++ (pathFillOpacity path) ++ ";\" d=\"M " ++
     buildPathString (points path) ++
     "\"/>"
 
@@ -108,6 +119,8 @@ buildText entity =
          (textsYPos entity)
          (textsText entity)
          (textsFontSize entity)
+         (textsFontWeight entity)
+         (textsFontFamily entity)
 
 -- | Builds a Path from a database entry in the paths table.
 buildPath :: Paths -> Path

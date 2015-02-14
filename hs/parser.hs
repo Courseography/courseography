@@ -25,7 +25,7 @@ import SVGTypes
 main :: IO ()
 main = do graphFile <- readFile "../res/graphs/graph_regions.svg"
           let graphDoc = xmlParse "output.error" graphFile
-          parseLevel (Style (0,0) "" "none" "none" "none" "none" "none") (getRoot graphDoc)
+          parseLevel (Style (0,0) "none" "none" "none" "none" "none" "none") (getRoot graphDoc)
           buildSVG
           printDB
 
@@ -42,7 +42,10 @@ parseLevel style content = do
            let children = getChildren content
            let newTransform = getAttribute "transform" content
            let newStyle = getAttribute "style" content
-           let newFill = getStyleAttr "fill" (fontSize style)
+           let newFill = getStyleAttr "fill" newStyle
+           let fillx = if null newFill then (fill style) else newFill
+           let filly = if fillx == "none" then (fill style) else fillx
+           let fillz = if fillx == "#000000" then "none" else filly
            let newFontSize = getNewStyleAttr newStyle "font-size" (fontSize style)
            let newStroke = getNewStyleAttr newStyle "stroke" (stroke style)
            let newFillOpacity = getNewStyleAttr newStyle "fill-opacity" (fillOpacity style)
@@ -52,7 +55,7 @@ parseLevel style content = do
            let adjustedTransform = (fst (transform style) + fst x,
                                     snd (transform style) + snd x)
            let parentStyle = Style adjustedTransform 
-                                   newFill  
+                                   fillz  
                                    newFontSize  
                                    newStroke 
                                    newFillOpacity 

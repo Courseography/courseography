@@ -25,7 +25,9 @@ data Text =
            textXPos :: Rational,
            textYPos :: Rational,
            textText :: String,
-           textFontSize :: String
+           textFontSize :: String,
+           textFontWeight :: String,
+           textFontFamily :: String
          } deriving Show
 
 -- | A Path.
@@ -35,6 +37,7 @@ data Path =
            pathFill :: String,
            pathFillOpacity :: String,
            pathStroke :: String
+           --pathClipPath :: String
          }
 
 data Style =
@@ -43,5 +46,7 @@ data Style =
             fill :: String,
             fontSize :: String,
             stroke :: String,
-            fillOpacity :: String
+            fillOpacity :: String,
+            fontWeight :: String,
+            fontFamily :: String
     }
