@@ -54,7 +54,7 @@ buildSVG =
         let rectXml = map (convertRectToXML . buildRect texts . entityVal) sqlRects
         let textXml = map (convertTextToXML . buildText . entityVal) sqlTexts
         let edgeXml = createPathXML 0 edges
-        let regionXml = createPathXML 0 regions
+        let regionXml = createRegionXML 0 regions
         let ellipseXml = createEllipseXML 0 texts sqlEllipses
         liftIO $ writeFile "Testfile.svg" svgHeader
         liftIO $ appendFile "Testfile.svg" regionXml
