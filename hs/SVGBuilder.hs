@@ -33,7 +33,7 @@ svgHeader = "<svg" ++
    "     <marker id=\"arrow\" viewBox=\"0 0 10 10\" refX=\"1\" refY=\"5\" markerUnits=\"strokeWidth\" orient=\"auto\" markerWidth=\"7\" markerHeight=\"7\">" ++
    "       <polyline points=\"0,1 10,5 0,9\" fill=\"black\"></polyline>" ++
    "     </marker>" ++
-   "   </defs><g style=\"stroke:#000000\">"
+   "   </defs><g>"
 
 -- | A closing 'g' tag followed by a closing 'svg' tag.
 svgFooter :: String
@@ -48,21 +48,30 @@ buildSVG =
         sqlPaths :: [Entity Paths] <- selectList [] []
         sqlEllipses :: [Entity Ellipses] <- selectList [] []
         let texts = map (buildText . entityVal) sqlTexts
+        let paths = map (buildPath . entityVal) sqlPaths
+        let regions = filter pathIsRegion paths
+        let edges = filter (\x -> not $ pathIsRegion x) paths
         let rectXml = map (convertRectToXML . buildRect texts . entityVal) sqlRects
         let textXml = map (convertTextToXML . buildText . entityVal) sqlTexts
-        let pathXml = createPathXML 0 sqlPaths
+        let edgeXml = createPathXML 0 edges
+        let regionXml = createPathXML 0 regions
         let ellipseXml = createEllipseXML 0 texts sqlEllipses
         liftIO $ writeFile "Testfile.svg" svgHeader
-        liftIO $ appendFile "Testfile.svg" pathXml
+        liftIO $ appendFile "Testfile.svg" regionXml
+        liftIO $ appendFile "Testfile.svg" "<g style=\"stroke:#000000\">"
+        liftIO $ appendFile "Testfile.svg" edgeXml 
+        liftIO $ appendFile "Testfile.svg" "</g>"
         liftIO $ appendFile "Testfile.svg" $ unwords rectXml
         liftIO $ appendFile "Testfile.svg"  ellipseXml
         liftIO $ appendFile "Testfile.svg" svgFooter
 
-createPathXML :: Int -> [Entity Paths] -> String
+createRegionXML :: Int -> [Path] -> String
+createRegionXML _ [] = ""
+createRegionXML idCounter paths = (convertRegionToXML (show idCounter) (head paths)) ++ (createRegionXML (idCounter + 1) (tail paths))
+
+createPathXML :: Int -> [Path] -> String
 createPathXML _ [] = ""
-createPathXML idCounter paths = (((convertPathToXML (show idCounter)) .
-                                 buildPath .
-                                 entityVal) (head paths)) ++ (createPathXML (idCounter + 1) (tail paths))
+createPathXML idCounter paths = (convertPathToXML (show idCounter) (head paths)) ++ (createPathXML (idCounter + 1) (tail paths))
 
 createEllipseXML :: Int -> [Text] -> [Entity Ellipses] -> String
 createEllipseXML _ _ [] = ""
@@ -121,16 +130,22 @@ convertTextToXML text =
 -- | Converts a `Path` to XML.
 convertPathToXML :: String -> Path -> String
 convertPathToXML id_ path = 
-    "<path id=\"p" ++ id_ ++ "\" class=\"" ++ 
-    (if pathIsRegion path then "region" else "path") ++
-    "\" style=\"stroke-dasharray:none;" ++
+    "<path id=\"p" ++ id_ ++ "\" class=\"path\" style=\"stroke-dasharray:none;" ++
     ";fill:" ++
     (pathFill path) ++ 
     ";fill-opacity:" ++ (pathFillOpacity path) ++ ";\" d=\"M " ++
     buildPathString (points path) ++
-    "\" " ++
-    (if pathIsRegion path then "" else "marker-end=\"url(#arrow)\"") ++
-    "/>"
+    "\" marker-end=\"url(#arrow)\"/>"
+
+-- | Converts a `Path` to XML.
+convertRegionToXML :: String -> Path -> String
+convertRegionToXML id_ path = 
+    "<path id=\"region" ++ id_ ++ "\" class=\"region\" style=\"stroke-dasharray:none;" ++
+    ";fill:" ++
+    (pathFill path) ++ 
+    ";fill-opacity:" ++ (pathFillOpacity path) ++ ";\" d=\"M " ++
+    buildPathString (points path) ++
+    "\"/>"
 
 -- | Converts an `Ellipse` to XML.
 convertEllipseToXML :: String -> Ellipse -> String
