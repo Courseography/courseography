@@ -49,27 +49,30 @@ buildSVG =
         sqlEllipses :: [Entity Ellipses] <- selectList [] []
 
         let texts      = map (buildText . entityVal) sqlTexts
-        let paths      = buildPaths 0 $ (map entityVal) sqlPaths
+        let paths      = buildPaths 0 $ map entityVal sqlPaths
         let regions    = filter pathIsRegion paths
         let edges      = filter (\x -> not $ pathIsRegion x) paths
         let rects      = map (buildRect texts . entityVal) sqlRects
-        --let processedRects = processRects paths rects
-        let processedEdges = map (processPath rects) edges
+        let ellipses   = buildEllipses texts 0 $ map entityVal sqlEllipses
+
+        let processedEdges = map (processPath rects ellipses) edges
         let processedRects = map (processRect processedEdges) rects
+        let processedEllipses = map (processEllipse processedEdges) ellipses
 
         let rectXml    = map convertRectToXML processedRects
 
         let textXml    = map (convertTextToXML . buildText . entityVal) sqlTexts
         let edgeXml    = map convertPathToXML processedEdges
         let regionXml  = createRegionXML 0 regions
-        let ellipseXml = createEllipseXML 0 texts sqlEllipses
+        let ellipseXml = map convertEllipseToXML processedEllipses
+
         liftIO $ writeFile  "Testfile.svg" svgHeader
         liftIO $ appendFile "Testfile.svg" regionXml
         liftIO $ appendFile "Testfile.svg" "<g style=\"stroke:#000000\">"
         liftIO $ appendFile "Testfile.svg" $ unwords edgeXml 
         liftIO $ appendFile "Testfile.svg" "</g>"
         liftIO $ appendFile "Testfile.svg" $ unwords rectXml
-        liftIO $ appendFile "Testfile.svg"  ellipseXml
+        liftIO $ appendFile "Testfile.svg" $ unwords ellipseXml
         liftIO $ appendFile "Testfile.svg" svgFooter
 
 processRect :: [Path] -> Rect -> Rect
@@ -89,6 +92,21 @@ processRect edges rect = do
          (rectText rect)
          inEdges
          outEdges
+
+processEllipse :: [Path] -> Ellipse -> Ellipse
+processEllipse edges ellipse = do
+    let id_ = ellipseId ellipse
+    let inEdges = map pathId $ filter (\x -> target x == id_) edges
+    let outEdges = map pathId $ filter (\x -> source x == id_) edges
+    Ellipse (ellipseId ellipse)
+             (ellipseXPos ellipse)
+             (ellipseYPos ellipse)
+             (ellipseRx ellipse)
+             (ellipseRy ellipse)
+             (ellipseStroke ellipse)
+             (ellipseText ellipse)
+             inEdges
+             outEdges
 
 -- | Builds a Path from a database entry in the paths table.
 buildPaths :: Int -> [Paths] -> [Path]
@@ -133,15 +151,19 @@ buildRect texts entity = do
          []
          []
 
-processPath :: [Rect] -> Path -> Path
-processPath rects edge = 
+processPath :: [Rect] -> [Ellipse] -> Path -> Path
+processPath rects ellipses edge = 
     do let coords = points edge
        let xStart = fromRational $ fst $ head coords
        let yStart = fromRational $ snd $ head coords
        let xEnd = fromRational $ fst $ last coords
        let yEnd = fromRational $ snd $ last coords
-       let sourceNode = getIntersectingNode xStart yStart rects
-       let targetNode = getIntersectingNode xEnd yEnd rects
+       let intersectingSourceRect = getIntersectingNode xStart yStart rects
+       let intersectingTargetRect = getIntersectingNode xEnd yEnd rects
+       let intersectingSourceBool = getIntersectingEllipse xStart yStart ellipses
+       let intersectingTargetBool = getIntersectingEllipse xEnd yEnd ellipses
+       let sourceNode = if null intersectingSourceRect then intersectingSourceBool else intersectingSourceRect
+       let targetNode = if null intersectingTargetRect then intersectingTargetBool else intersectingTargetRect
        Path (pathId edge)
             (points edge)
             (pathFill edge)
@@ -157,6 +179,12 @@ getIntersectingNode xpos ypos rects = if null
                                       then ""
                                       else rectId $ head $ filter (intersectsWithPoint xpos ypos) rects
 
+getIntersectingEllipse :: Float -> Float -> [Ellipse] -> String
+getIntersectingEllipse xpos ypos ellipses = if null
+                                      $ filter (ellipseIntersectsWithPoint xpos ypos) ellipses
+                                      then "place"
+                                      else ellipseId $ head $ filter (ellipseIntersectsWithPoint xpos ypos) ellipses
+
 intersectsWithPoint :: Float -> Float -> Rect -> Bool
 intersectsWithPoint xpos ypos rect = intersects
                             (fromRational $ width rect)
@@ -167,16 +195,26 @@ intersectsWithPoint xpos ypos rect = intersects
                             xpos
                             ypos
 
+ellipseIntersectsWithPoint :: Float -> Float -> Ellipse -> Bool
+ellipseIntersectsWithPoint xpos ypos ellipse = intersects
+                                            5
+                                            5
+                                            (fromRational (ellipseXPos ellipse))
+                                            (fromRational (ellipseYPos ellipse))
+                                            20
+                                            xpos
+                                            ypos
+
 createRegionXML :: Int -> [Path] -> String
 createRegionXML _ [] = ""
 createRegionXML idCounter paths = (convertRegionToXML (show idCounter) (head paths)) ++ (createRegionXML (idCounter + 1) (tail paths))
 
-createEllipseXML :: Int -> [Text] -> [Entity Ellipses] -> String
-createEllipseXML _ _ [] = ""
-createEllipseXML idCounter texts ellipses = (((convertEllipseToXML (show idCounter)) .
-                                 buildEllipse texts .
-                                 entityVal) (head ellipses)) ++
-                                 (createEllipseXML (idCounter + 1) texts (tail ellipses))
+--createEllipseXML :: Int -> [Text] -> [Entity Ellipses] -> String
+--createEllipseXML _ _ [] = ""
+--createEllipseXML idCounter texts ellipses = (((convertEllipseToXML (show idCounter)) .
+--                                 buildEllipse texts .
+--                                 entityVal) (head ellipses)) ++
+--                                 (createEllipseXML (idCounter + 1) texts (tail ellipses))
 
 -- | Prints the database table 'rects'.
 printDB :: IO ()
@@ -248,9 +286,12 @@ convertRegionToXML id_ path =
     "\"/>"
 
 -- | Converts an `Ellipse` to XML.
-convertEllipseToXML :: String -> Ellipse -> String
-convertEllipseToXML id_ ellipse = 
-    "<g id=\"bool" ++ id_ ++ "\" class=\"bool\"><ellipse cx=\"" ++ 
+convertEllipseToXML :: Ellipse -> String
+convertEllipseToXML ellipse = 
+    "<g id=\"" ++ (ellipseId ellipse) ++ "\" class=\"bool\" in-edges=\"" ++
+    intercalate " " (ellipseInEdges ellipse) ++
+    "\" out-edges=\"" ++  intercalate " " (ellipseOutEdges ellipse) ++ "\">" ++
+    "<ellipse cx=\"" ++ 
     show (fromRational $ ellipseXPos ellipse) ++
     "\" cy=\"" ++
     show (fromRational $ ellipseYPos ellipse) ++
@@ -274,14 +315,11 @@ buildText entity =
          (textsFontFamily entity)
 
 -- | Builds a Path from a database entry in the paths table.
-buildEllipse :: [Text] -> Ellipses -> Ellipse
-buildEllipse texts entity = 
-    Ellipse (ellipsesXPos entity)
-            (ellipsesYPos entity)
-            (ellipsesRx entity)
-            (ellipsesRy entity)
-            (ellipsesStroke entity)
-            (filter (\x -> (intersects
+buildEllipses :: [Text] -> Int -> [Ellipses] -> [Ellipse]
+buildEllipses _ _ [] = []
+buildEllipses texts idCounter entities = do
+    let entity = head entities
+    let ellipseText = (filter (\x -> (intersects
                             5
                             5
                             (fromRational (ellipsesXPos entity))
@@ -290,6 +328,15 @@ buildEllipse texts entity =
                             (fromRational (textXPos x))
                             (fromRational (textYPos x))
                             )) texts)
+    [Ellipse ("bool" ++ show idCounter)
+            (ellipsesXPos entity)
+            (ellipsesYPos entity)
+            (ellipsesRx entity)
+            (ellipsesRy entity)
+            (ellipsesStroke entity)
+            ellipseText
+            []
+            []] ++ buildEllipses texts (idCounter + 1) (tail entities)
 
 -- | Rebuilds a path's `d` attribute based on a list of Rational tuples.
 buildPathString :: [(Rational, Rational)] -> String
