@@ -27,6 +27,7 @@ main :: IO ()
 main = do graphFile <- readFile "../res/graphs/graph_regions.svg"
           let graphDoc = xmlParse "output.error" graphFile
           parseLevel False (Style (0,0) "" "" "" "" "" "") (getRoot graphDoc)
+          --buildInteractive
           buildSVG
           printDB
 
@@ -92,10 +93,11 @@ parseRect style content =
 
 -- | Parses a path.
 parsePath :: Bool -> Style -> Content i -> IO ()
-parsePath isRegion style content = 
-    insertPathIntoDB (map (addTransform (transform style)) $ parsePathD $ getAttribute "d" content)
-                     style
-                     isRegion
+parsePath isRegion style content = do
+    if (((last (getAttribute "d" content)) == 'z') && not isRegion) then return () else
+        insertPathIntoDB (map (addTransform (transform style)) $ parsePathD $ getAttribute "d" content)
+                         style
+                         isRegion
 
 -- | Parses a text.
 parseText :: Style -> Content i -> IO ()

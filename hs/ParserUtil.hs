@@ -18,7 +18,6 @@ import Data.List
 import Data.Text as T (pack, unpack)
 import Tables
 import JsonParser
-import SVGBuilder
 import SVGTypes
 
 -- | Gets the root element of the document.
@@ -125,3 +124,10 @@ convertToFloatTuple y = (read (head y) :: Float, read (last y) :: Float)
 -- | Adds two tuples together.
 addTuples :: (Float, Float) -> (Float, Float) -> (Float, Float)
 addTuples tup1 tup2 = (fst tup1 + fst tup2, snd tup1 + snd tup2)
+
+
+intersects :: Float -> Float -> Float -> Float -> Float -> Float -> Float -> Bool
+intersects width height rx ry offset px py = do
+    let dx = px - rx
+    let dy = py - ry
+    dx >= -1 * offset && dx <= width + offset && dy >= -1 * offset && dy <= height + offset;

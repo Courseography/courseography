@@ -17,7 +17,8 @@ data Rect =
            rectFill :: String,
            rectStroke :: String,
            rectFillOpacity :: String,
-           rectIsHybrid :: Bool
+           rectIsHybrid :: Bool,
+           rectText :: [Text]
          } deriving Show
 
 -- | A Text.
@@ -48,8 +49,9 @@ data Ellipse =
               ellipseYPos :: Rational,
               ellipseRx :: Rational,
               ellipseRy :: Rational,
-              ellipseStroke :: String
-         }
+              ellipseStroke :: String,
+              ellipseText :: [Text]
+            }
 
 data Style =
     Style {
@@ -60,4 +62,4 @@ data Style =
             fillOpacity :: String,
             fontWeight :: String,
             fontFamily :: String
-    }
+          }
