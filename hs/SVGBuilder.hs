@@ -43,35 +43,113 @@ svgFooter = "</g></svg>"
 buildSVG :: IO ()
 buildSVG = 
     runSqlite dbStr $ do
-        sqlRects :: [Entity Rects] <- selectList [] []
-        sqlTexts :: [Entity Texts] <- selectList [] []
-        sqlPaths :: [Entity Paths] <- selectList [] []
+        sqlRects    :: [Entity Rects] <- selectList [] []
+        sqlTexts    :: [Entity Texts] <- selectList [] []
+        sqlPaths    :: [Entity Paths] <- selectList [] []
         sqlEllipses :: [Entity Ellipses] <- selectList [] []
-        let texts = map (buildText . entityVal) sqlTexts
-        let paths = map (buildPath . entityVal) sqlPaths
-        let regions = filter pathIsRegion paths
-        let edges = filter (\x -> not $ pathIsRegion x) paths
-        let rectXml = map (convertRectToXML . buildRect texts . entityVal) sqlRects
-        let textXml = map (convertTextToXML . buildText . entityVal) sqlTexts
-        let edgeXml = createPathXML 0 edges
-        let regionXml = createRegionXML 0 regions
+
+        let texts      = map (buildText . entityVal) sqlTexts
+        let paths      = buildPaths 0 $ (map entityVal) sqlPaths
+        let regions    = filter pathIsRegion paths
+        let edges      = filter (\x -> not $ pathIsRegion x) paths
+        let rects      = map (buildRect texts . entityVal) sqlRects
+        --let processedRects = processRects paths rects
+        let processedEdges = map (processPath rects) edges
+        let rectXml    = map convertRectToXML rects
+
+        let textXml    = map (convertTextToXML . buildText . entityVal) sqlTexts
+        let edgeXml    = map convertPathToXML processedEdges
+        let regionXml  = createRegionXML 0 regions
         let ellipseXml = createEllipseXML 0 texts sqlEllipses
-        liftIO $ writeFile "Testfile.svg" svgHeader
+        liftIO $ writeFile  "Testfile.svg" svgHeader
         liftIO $ appendFile "Testfile.svg" regionXml
         liftIO $ appendFile "Testfile.svg" "<g style=\"stroke:#000000\">"
-        liftIO $ appendFile "Testfile.svg" edgeXml 
+        liftIO $ appendFile "Testfile.svg" $ unwords edgeXml 
         liftIO $ appendFile "Testfile.svg" "</g>"
         liftIO $ appendFile "Testfile.svg" $ unwords rectXml
         liftIO $ appendFile "Testfile.svg"  ellipseXml
         liftIO $ appendFile "Testfile.svg" svgFooter
 
+-- | Builds a Path from a database entry in the paths table.
+buildPaths :: Int -> [Paths] -> [Path]
+buildPaths _ [] = [] 
+buildPaths idCounter entities = do
+    let entity = head entities
+    [Path ("p" ++ show idCounter)
+          (map point $ pathsD entity)
+          (pathsFill entity)
+          (pathsFillOpacity entity)
+          (pathsStroke entity)
+          (pathsIsRegion entity)
+          ""
+          ""] ++ (buildPaths (idCounter + 1) $ tail entities)
+
+
+-- | Builds a Rect from a database entry in the rects table.
+buildRect :: [Text] -> Rects -> Rect
+buildRect texts entity = do
+    let rectTexts = (filter (\x -> (intersects
+                            (fromRational (rectsWidth entity))
+                            (fromRational (rectsHeight entity))
+                            (fromRational (rectsXPos entity))
+                            (fromRational (rectsYPos entity))
+                            9
+                            (fromRational (textXPos x))
+                            (fromRational (textYPos x))
+                            )) texts)
+    let textString = (foldl (++) "" (map textText rectTexts))
+    let id_ = (if(rectsIsHybrid entity) then "h" else "") ++ 
+              (if isDigit $ head textString then "CSC" else "") ++ dropSlash textString
+    Rect id_
+         (rectsWidth entity)
+         (rectsHeight entity)
+         (rectsXPos entity)
+         (rectsYPos entity)
+         (rectsFill entity)
+         (rectsStroke entity)
+         (rectsFillOpacity entity)
+         (rectsIsHybrid entity)
+         rectTexts
+         []
+         []
+
+processPath :: [Rect] -> Path -> Path
+processPath rects edge = 
+    do let coords = points edge
+       let xStart = fromRational $ fst $ head coords
+       let yStart = fromRational $ snd $ head coords
+       let xEnd = fromRational $ fst $ last coords
+       let yEnd = fromRational $ snd $ last coords
+       let sourceNode = getIntersectingNode xStart yStart rects
+       let targetNode = getIntersectingNode xEnd yEnd rects
+       Path (pathId edge)
+            (points edge)
+            (pathFill edge)
+            (pathFillOpacity edge)
+            (pathStroke edge)
+            (pathIsRegion edge)
+            sourceNode
+            targetNode
+
+getIntersectingNode :: Float -> Float -> [Rect] -> String
+getIntersectingNode xpos ypos rects = if null
+                                      $ filter (intersectsWithPoint xpos ypos) rects
+                                      then ""
+                                      else rectId $ head $ filter (intersectsWithPoint xpos ypos) rects
+
+intersectsWithPoint :: Float -> Float -> Rect -> Bool
+intersectsWithPoint xpos ypos rect = intersects
+                            (fromRational $ width rect)
+                            (fromRational $ height rect)
+                            (fromRational (xPos rect))
+                            (fromRational (yPos rect))
+                            9
+                            xpos
+                            ypos
+
 createRegionXML :: Int -> [Path] -> String
 createRegionXML _ [] = ""
 createRegionXML idCounter paths = (convertRegionToXML (show idCounter) (head paths)) ++ (createRegionXML (idCounter + 1) (tail paths))
-
-createPathXML :: Int -> [Path] -> String
-createPathXML _ [] = ""
-createPathXML idCounter paths = (convertPathToXML (show idCounter) (head paths)) ++ (createPathXML (idCounter + 1) (tail paths))
 
 createEllipseXML :: Int -> [Text] -> [Entity Ellipses] -> String
 createEllipseXML _ _ [] = ""
@@ -90,9 +168,8 @@ printDB = runSqlite dbStr $ do
 convertRectToXML :: Rect -> String
 convertRectToXML rect = 
     if (rectFill rect) == "none" then "" else
-    "<g id=\"" ++ (if (rectIsHybrid rect) then "h" else "") ++
-    (if (isDigit $ head (foldl (\x y -> x ++ y) "" (map textText (rectText rect)))) then "CSC" else "") ++
-    dropSlash (foldl (\x y -> x ++ y) "" (map textText (rectText rect))) ++ 
+    "<g id=\"" ++ 
+    (rectId rect) ++ 
     "\" class=\"" ++
     (if (rectIsHybrid rect) then "hybrid" else "node") ++
     "\"><rect rx=\"4\" ry=\"4\"  x=\"" ++ 
@@ -129,14 +206,15 @@ convertTextToXML text =
     "</text>"
 
 -- | Converts a `Path` to XML.
-convertPathToXML :: String -> Path -> String
-convertPathToXML id_ path = 
-    "<path id=\"p" ++ id_ ++ "\" class=\"path\" style=\"" ++
+convertPathToXML :: Path -> String
+convertPathToXML path = 
+    "<path id=\"" ++ (pathId path) ++ "\" class=\"path\" style=\"" ++
     "fill:" ++
     (pathFill path) ++ 
     ";fill-opacity:" ++ (pathFillOpacity path) ++ ";\" d=\"M " ++
     buildPathString (points path) ++
-    "\" marker-end=\"url(#arrow)\"/>"
+    "\" marker-end=\"url(#arrow)\" " ++
+    "source-node=\"" ++ (source path) ++ "\" target-node=\"" ++ (target path) ++ "\"/>"
 
 -- | Converts a `Path` to XML.
 convertRegionToXML :: String -> Path -> String
@@ -164,27 +242,6 @@ convertEllipseToXML id_ ellipse =
     ++ (unwords (map convertTextToXML (ellipseText ellipse))) ++
     "</g>"
 
--- | Builds a Rect from a database entry in the rects table.
-buildRect :: [Text] -> Rects -> Rect
-buildRect texts entity = 
-    Rect (rectsWidth entity)
-         (rectsHeight entity)
-         (rectsXPos entity)
-         (rectsYPos entity)
-         (rectsFill entity)
-         (rectsStroke entity)
-         (rectsFillOpacity entity)
-         (rectsIsHybrid entity)
-         (filter (\x -> (intersects
-                            (fromRational (rectsWidth entity))
-                            (fromRational (rectsHeight entity))
-                            (fromRational (rectsXPos entity))
-                            (fromRational (rectsYPos entity))
-                            9
-                            (fromRational (textXPos x))
-                            (fromRational (textYPos x))
-                            )) texts)
-
 -- | Builds a Text from a database entry in the texts table.
 buildText :: Texts -> Text
 buildText entity = 
@@ -194,15 +251,6 @@ buildText entity =
          (textsFontSize entity)
          (textsFontWeight entity)
          (textsFontFamily entity)
-
--- | Builds a Path from a database entry in the paths table.
-buildPath :: Paths -> Path
-buildPath entity = 
-    Path (map point $ pathsD entity)
-         (pathsFill entity)
-         (pathsFillOpacity entity)
-         (pathsStroke entity)
-         (pathsIsRegion entity)
 
 -- | Builds a Path from a database entry in the paths table.
 buildEllipse :: [Text] -> Ellipses -> Ellipse
