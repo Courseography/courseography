@@ -31,8 +31,7 @@ getStyleAttr :: String -> String -> String
 getStyleAttr attr style = drop (length attr + 1) $ head $ (filter (\x -> take (length attr + 1) x == (attr ++ ":")) $ splitOn ";" style) ++ [""]
 
 getNewStyleAttr :: String -> String -> String -> String
-getNewStyleAttr newStyle attr parent = if null (getStyleAttr attr newStyle) ||
-                                          getStyleAttr attr newStyle == "none"
+getNewStyleAttr newStyle attr parent = if null (getStyleAttr attr newStyle)
                                        then parent
                                        else getStyleAttr attr newStyle
 -- | Adds one tuple to the second tuple.
