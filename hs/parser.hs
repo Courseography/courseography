@@ -26,7 +26,7 @@ import ParserUtil
 main :: IO ()
 main = do graphFile <- readFile "../res/graphs/graph_regions.svg"
           let graphDoc = xmlParse "output.error" graphFile
-          parseLevel False (Style (0,0) "" "" "" "" "" "") (getRoot graphDoc)
+          --parseLevel False (Style (0,0) "" "" "" "" "" "") (getRoot graphDoc)
           --buildInteractive
           buildSVG
           printDB

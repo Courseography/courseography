@@ -33,7 +33,7 @@ svgHeader = "<svg" ++
    "     <marker id=\"arrow\" viewBox=\"0 0 10 10\" refX=\"1\" refY=\"5\" markerUnits=\"strokeWidth\" orient=\"auto\" markerWidth=\"7\" markerHeight=\"7\">" ++
    "       <polyline points=\"0,1 10,5 0,9\" fill=\"black\"></polyline>" ++
    "     </marker>" ++
-   "   </defs><g>"
+   "   </defs><g style=\"stroke:#000000\">"
 
 -- | A closing 'g' tag followed by a closing 'svg' tag.
 svgFooter :: String
@@ -80,6 +80,7 @@ printDB = runSqlite dbStr $ do
 -- | Converts a `Rect` to XML. 
 convertRectToXML :: Rect -> String
 convertRectToXML rect = 
+    if (rectFill rect) == "none" then "" else
     "<g id=\"" ++ (if (rectIsHybrid rect) then "h" else "") ++
     (if (isDigit $ head (foldl (\x y -> x ++ y) "" (map textText (rectText rect)))) then "CSC" else "") ++
     dropSlash (foldl (\x y -> x ++ y) "" (map textText (rectText rect))) ++ 
@@ -122,8 +123,7 @@ convertPathToXML :: String -> Path -> String
 convertPathToXML id_ path = 
     "<path id=\"p" ++ id_ ++ "\" class=\"" ++ 
     (if pathIsRegion path then "region" else "path") ++
-    "\" style=\"stroke:" ++
-    (pathStroke path) ++
+    "\" style=\"stroke-dasharray:none;" ++
     ";fill:" ++
     (pathFill path) ++ 
     ";fill-opacity:" ++ (pathFillOpacity path) ++ ";\" d=\"M " ++
