@@ -16,7 +16,8 @@ data Rect =
            yPos :: Rational,
            rectFill :: String,
            rectStroke :: String,
-           rectFillOpacity :: String
+           rectFillOpacity :: String,
+           rectIsHybrid :: Bool
          } deriving Show
 
 -- | A Text.
@@ -36,7 +37,8 @@ data Path =
            points :: [(Rational, Rational)],
            pathFill :: String,
            pathFillOpacity :: String,
-           pathStroke :: String
+           pathStroke :: String,
+           pathIsRegion :: Bool
          }
 
 -- | A Ellipse.

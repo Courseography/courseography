@@ -85,6 +85,7 @@ Rects
     fill String
     stroke String
     fillOpacity String
+    isHybrid Bool
     deriving Show
 
 Texts
@@ -103,6 +104,7 @@ Paths
     fill String
     fillOpacity String
     stroke String
+    isRegion Bool
     deriving Show
 
 Ellipses

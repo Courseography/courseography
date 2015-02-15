@@ -64,7 +64,9 @@ printDB = runSqlite dbStr $ do
 -- | Converts a `Rect` to XML. 
 convertRectToXML :: Rect -> String
 convertRectToXML rect = 
-    "<rect rx=\"4\" ry=\"4\" x=\"" ++ 
+    "<rect rx=\"4\" ry=\"4\" class=\"" ++
+    (if (rectIsHybrid rect) then "hybrid" else "node") ++
+    "\" x=\"" ++ 
     show (fromRational $ xPos rect) ++
     "\" y=\"" ++
     show (fromRational $ yPos rect) ++
@@ -74,7 +76,8 @@ convertRectToXML rect =
     show (fromRational $ height rect) ++
     "\" style=\"fill:" ++
     (rectFill rect) ++
-    ";stroke:" ++ (rectStroke rect) ++ ";fill-opacity:" ++ (rectFillOpacity rect) ++ ";\"/>"
+    ";stroke:" ++ (rectStroke rect) ++
+    ";fill-opacity:" ++ (rectFillOpacity rect) ++ ";\"/>"
 
 -- | Converts a `Text` to XML.
 convertTextToXML :: Text -> String
@@ -96,7 +99,9 @@ convertTextToXML text =
 -- | Converts a `Path` to XML.
 convertPathToXML :: Path -> String
 convertPathToXML path = 
-    "<path style=\"stroke:" ++
+    "<path class=\"" ++ 
+    (if pathIsRegion path then "region" else "path") ++
+    "\" style=\"stroke:" ++
     (pathStroke path) ++
     ";fill:" ++
     (pathFill path) ++ 
@@ -128,6 +133,7 @@ buildRect entity =
          (rectsFill entity)
          (rectsStroke entity)
          (rectsFillOpacity entity)
+         (rectsIsHybrid entity)
 
 -- | Builds a Text from a database entry in the texts table.
 buildText :: Texts -> Text
@@ -146,6 +152,7 @@ buildPath entity =
          (pathsFill entity)
          (pathsFillOpacity entity)
          (pathsStroke entity)
+         (pathsIsRegion entity)
 
 -- | Builds a Path from a database entry in the paths table.
 buildEllipse :: Ellipses -> Ellipse
