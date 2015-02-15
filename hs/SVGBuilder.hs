@@ -55,7 +55,9 @@ buildSVG =
         let rects      = map (buildRect texts . entityVal) sqlRects
         --let processedRects = processRects paths rects
         let processedEdges = map (processPath rects) edges
-        let rectXml    = map convertRectToXML rects
+        let processedRects = map (processRect processedEdges) rects
+
+        let rectXml    = map convertRectToXML processedRects
 
         let textXml    = map (convertTextToXML . buildText . entityVal) sqlTexts
         let edgeXml    = map convertPathToXML processedEdges
@@ -69,6 +71,24 @@ buildSVG =
         liftIO $ appendFile "Testfile.svg" $ unwords rectXml
         liftIO $ appendFile "Testfile.svg"  ellipseXml
         liftIO $ appendFile "Testfile.svg" svgFooter
+
+processRect :: [Path] -> Rect -> Rect
+processRect edges rect = do
+    let id_ = rectId rect
+    let inEdges = map pathId $ filter (\x -> target x == id_) edges
+    let outEdges = map pathId $ filter (\x -> source x == id_) edges
+    Rect id_
+         (width rect)
+         (height rect)
+         (xPos rect)
+         (yPos rect)
+         (rectFill rect)
+         (rectStroke rect)
+         (rectFillOpacity rect)
+         (rectIsHybrid rect)
+         (rectText rect)
+         inEdges
+         outEdges
 
 -- | Builds a Path from a database entry in the paths table.
 buildPaths :: Int -> [Paths] -> [Path]
@@ -172,7 +192,8 @@ convertRectToXML rect =
     (rectId rect) ++ 
     "\" class=\"" ++
     (if (rectIsHybrid rect) then "hybrid" else "node") ++
-    "\"><rect rx=\"4\" ry=\"4\"  x=\"" ++ 
+    "\" in-edges=\"" ++ intercalate " " (rectInEdges rect) ++
+    "\" out-edges=\"" ++  intercalate " " (rectOutEdges rect) ++ "\"" ++ "><rect rx=\"4\" ry=\"4\"  x=\"" ++ 
     show (fromRational $ xPos rect) ++
     "\" y=\"" ++
     show (fromRational $ yPos rect) ++
