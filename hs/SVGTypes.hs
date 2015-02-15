@@ -37,7 +37,6 @@ data Path =
            pathFill :: String,
            pathFillOpacity :: String,
            pathStroke :: String
-           --pathClipPath :: String
          }
 
 -- | A Ellipse.
@@ -45,6 +44,8 @@ data Ellipse =
     Ellipse { 
               ellipseXPos :: Rational,
               ellipseYPos :: Rational,
+              ellipseRx :: Rational,
+              ellipseRy :: Rational,
               ellipseStroke :: String
          }
 

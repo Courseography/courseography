@@ -26,7 +26,7 @@ import ParserUtil
 main :: IO ()
 main = do graphFile <- readFile "../res/graphs/graph_regions.svg"
           let graphDoc = xmlParse "output.error" graphFile
-          parseLevel (Style (0,0) "" "" "" "" "" "") (getRoot graphDoc)
+          --parseLevel (Style (0,0) "" "" "" "" "" "") (getRoot graphDoc)
           buildSVG
           printDB
 
@@ -113,14 +113,18 @@ parseEllipse :: Style -> Content i -> IO ()
 parseEllipse style content = 
     insertEllipseIntoDB ((read $ getAttribute "cx" content :: Float) + fst (transform style))
                         ((read $ getAttribute "cy" content :: Float) + snd (transform style))
+                        (read $ getAttribute "rx" content :: Float)
+                        (read $ getAttribute "ry" content :: Float)
                         (fill style)
 
-insertEllipseIntoDB :: Float -> Float -> String -> IO ()
-insertEllipseIntoDB xPos yPos stroke = 
+insertEllipseIntoDB :: Float -> Float -> Float -> Float -> String -> IO ()
+insertEllipseIntoDB xPos yPos rx ry stroke = 
     runSqlite dbStr $ do
         runMigration migrateAll
         insert_ $ Ellipses (toRational xPos)
                            (toRational yPos)
+                           (toRational rx)
+                           (toRational ry)
                            stroke
 
 -- | Inserts a rect entry into the rects table.

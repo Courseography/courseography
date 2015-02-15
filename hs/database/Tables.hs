@@ -108,6 +108,8 @@ Paths
 Ellipses
     xPos Rational
     yPos Rational
+    rx Rational
+    ry Rational
     stroke String
 |]
 

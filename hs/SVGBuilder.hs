@@ -111,8 +111,11 @@ convertEllipseToXML ellipse =
     show (fromRational $ ellipseXPos ellipse) ++
     "\" cy=\"" ++
     show (fromRational $ ellipseYPos ellipse) ++
-    "\" style=\"stroke:" ++
-    (ellipseStroke ellipse) ++
+    "\" rx=\"" ++ 
+    show (fromRational $ ellipseRx ellipse) ++
+    "\" ry=\"" ++
+    show (fromRational $ ellipseRy ellipse) ++
+    "\" style=\"stroke:#000000;fill:none" ++
     "\"/>"
 
 -- | Builds a Rect from a database entry in the rects table.
@@ -149,6 +152,8 @@ buildEllipse :: Ellipses -> Ellipse
 buildEllipse entity = 
     Ellipse (ellipsesXPos entity)
             (ellipsesYPos entity)
+            (ellipsesRx entity)
+            (ellipsesRy entity)
             (ellipsesStroke entity)
 
 -- | Rebuilds a path's `d` attribute based on a list of Rational tuples.
