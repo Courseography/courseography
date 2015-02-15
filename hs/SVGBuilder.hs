@@ -105,7 +105,8 @@ convertRectToXML rect =
     show (fromRational $ height rect) ++
     "\" style=\"fill:" ++
     (rectFill rect) ++
-    ";stroke:" ++ (rectStroke rect) ++
+    ";stroke:#000000" ++ 
+    --";stroke:" ++ (rectStroke rect) ++
     ";fill-opacity:" ++ (rectFillOpacity rect) ++ ";\"/>"
     ++ (unwords (map convertTextToXML (rectText rect))) ++
     "</g>"
@@ -130,8 +131,8 @@ convertTextToXML text =
 -- | Converts a `Path` to XML.
 convertPathToXML :: String -> Path -> String
 convertPathToXML id_ path = 
-    "<path id=\"p" ++ id_ ++ "\" class=\"path\" style=\"stroke-dasharray:none;" ++
-    ";fill:" ++
+    "<path id=\"p" ++ id_ ++ "\" class=\"path\" style=\"" ++
+    "fill:" ++
     (pathFill path) ++ 
     ";fill-opacity:" ++ (pathFillOpacity path) ++ ";\" d=\"M " ++
     buildPathString (points path) ++
@@ -140,8 +141,8 @@ convertPathToXML id_ path =
 -- | Converts a `Path` to XML.
 convertRegionToXML :: String -> Path -> String
 convertRegionToXML id_ path = 
-    "<path id=\"region" ++ id_ ++ "\" class=\"region\" style=\"stroke-dasharray:none;" ++
-    ";fill:" ++
+    "<path id=\"region" ++ id_ ++ "\" class=\"region\" style=\"" ++
+    "fill:" ++
     (pathFill path) ++ 
     ";fill-opacity:" ++ (pathFillOpacity path) ++ ";\" d=\"M " ++
     buildPathString (points path) ++
