@@ -80,11 +80,12 @@ var nodes = [];               // List of all nodes
 
 $(document).ready(function () {
     'use strict';
-
+    
     buildGraph();
 
-    FCEPrerequisiteCourses = [CSC318, CSC454];
+     $("#graph").append(getRemote());
 
+    FCEPrerequisiteCourses = [CSC318, CSC454];
     // Set width of FCE count
     var w = $('.infoTabs').width() - $('.tabList').outerWidth() - 1;
     $('#FCECountDiv').width(w + 'px');
@@ -103,3 +104,13 @@ $(document).ready(function () {
     // Uncomment to enable graph dragging
     // enableGraphDragging();
 });
+
+function getRemote() {
+    'use strict';
+
+    return $.ajax({
+        type: "GET",
+        url: 'static/hs/Testfile.svg',
+        async: false
+    }).responseText;
+}

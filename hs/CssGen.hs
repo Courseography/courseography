@@ -147,16 +147,12 @@ lightGrey = "#CCCCCC"
 
 nodeCSS = "g" ? do
     "text" ? do
-        alignCenter
-        "stroke" -: "none"
         userSelect none
         "-webkit-touch-callout" -: "none"
         "-webkit-user-select" -: "none"
         "-khtml-user-select" -: "none"
         "-moz-user-select" -: "none"
         "-ms-user-select" -: "none"
-        "text-anchor" -: "middle"
-        "dominant-baseline" -: "central"
     ".node" & do
         cursor pointer
         "text" ? do
