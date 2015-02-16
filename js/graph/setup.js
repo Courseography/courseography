@@ -106,11 +106,16 @@ $(document).ready(function () {
     // enableGraphDragging();
 });
 
+
+/**
+ * Retrieves an SVG file.
+ * @returns {string} An SVG string representing a graph. 
+ */
 function getRemote() {
     'use strict';
 
     return $.ajax({
-        type: "GET",
+        type: 'GET',
         url: 'static/hs/Testfile.svg',
         async: false
     }).responseText;
