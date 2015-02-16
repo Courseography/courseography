@@ -35,7 +35,7 @@ getStyleAttr attr style =
 -- | Gets a style attribute from a style String. If the style attribute is "",
 -- then this function defaults to the previous style attribute, 'parent'.
 getNewStyleAttr :: String -> String -> String -> String
-getNewStyleAttr newStyle attr parent = 
+getNewStyleAttr newStyle attr parent =
     if null (getStyleAttr attr newStyle)
     then parent
     else getStyleAttr attr newStyle
@@ -44,7 +44,7 @@ getNewStyleAttr newStyle attr parent =
 convertFloatTupToRationalTup :: (Float, Float) -> (Rational, Rational)
 convertFloatTupToRationalTup tup = (toRational (fst tup), toRational (snd tup))
 
--- | Applys a CFilter to a Document and produces a list of Content filtered 
+-- | Applys a CFilter to a Document and produces a list of Content filtered
 -- by the CFilter.
 parseDocument :: CFilter i -> Document i -> [Content i]
 parseDocument filter (Document p s e m) = filter (CElem e undefined)
@@ -60,7 +60,7 @@ getAttrs (Elem _ b _) = b
 
 -- | Gets an Attribute's name.
 getAttrName :: Attribute -> String
-getAttrName ((a,b)) = printableName a 
+getAttrName ((a,b)) = printableName a
 
 -- | Gets an Attribute's value.
 getAttrVal :: Attribute -> String
@@ -76,7 +76,7 @@ getChildren = (path [children])
 
 -- | Gets the value of the attribute with the corresponding key.
 getAttribute :: String -> Content i -> String
-getAttribute attr (CElem content undefined) = 
+getAttribute attr (CElem content undefined) =
     let matchingAttrs = filter (\x -> getAttrName x == attr) $ getAttrs content
     in if null matchingAttrs
        then ""
@@ -91,14 +91,9 @@ parseTransform transform =
        let yPos = read $ init $ parsedTransform!!1 :: Float
        (xPos, yPos)
 
--- | Gets the location of a comma in a string.
--- NOTE: Can probably be replaced by Data.List.Split.
-getComma :: Int -> String -> Int
-getComma accum x = if head x == ',' then accum else getComma (accum + 1) (tail x)
-
 -- | Parses a path's `d` attribute.
-parsePathD :: String -> [(Float, Float)]--[(Rational, Rational)]
-parsePathD d = 
+parsePathD :: String -> [(Float, Float)]
+parsePathD d =
     if head d == 'm'
     then foldCoordsRel $ filter (\x -> length x > 1) $ map (splitOn ",") $ splitOn " " d
     else processAbsCoords $ filter (\x -> length x > 1) $ map (splitOn ",") $ splitOn " " d
