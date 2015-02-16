@@ -51,7 +51,7 @@ buildSVG =
         let texts      = map (buildText . entityVal) sqlTexts
         let paths      = buildPaths 0 $ map entityVal sqlPaths
         let regions    = filter pathIsRegion paths
-        let edges      = filter (\x -> not $ pathIsRegion x) paths
+        let edges      = filter (not . pathIsRegion) paths
         let rects      = map (buildRect texts . entityVal) sqlRects
         let ellipses   = buildEllipses texts 0 $ map entityVal sqlEllipses
 
@@ -113,20 +113,20 @@ buildPaths :: Int -> [Paths] -> [Path]
 buildPaths _ [] = [] 
 buildPaths idCounter entities = do
     let entity = head entities
-    [Path ("p" ++ show idCounter)
-          (map point $ pathsD entity)
-          (pathsFill entity)
-          (pathsFillOpacity entity)
-          (pathsStroke entity)
-          (pathsIsRegion entity)
-          ""
-          ""] ++ (buildPaths (idCounter + 1) $ tail entities)
+    Path ('p' : show idCounter)
+         (map point $ pathsD entity)
+         (pathsFill entity)
+         (pathsFillOpacity entity)
+         (pathsStroke entity)
+         (pathsIsRegion entity)
+         ""
+         "" : buildPaths (idCounter + 1) (tail entities)
 
 
 -- | Builds a Rect from a database entry in the rects table.
 buildRect :: [Text] -> Rects -> Rect
 buildRect texts entity = do
-    let rectTexts = (filter (\x -> (intersects
+    let rectTexts = filter (\x -> intersects
                             (fromRational (rectsWidth entity))
                             (fromRational (rectsHeight entity))
                             (fromRational (rectsXPos entity))
@@ -134,9 +134,9 @@ buildRect texts entity = do
                             9
                             (fromRational (textXPos x))
                             (fromRational (textYPos x))
-                            )) texts)
-    let textString = (foldl (++) "" (map textText rectTexts))
-    let id_ = (if(rectsIsHybrid entity) then "h" else "") ++ 
+                            ) texts
+    let textString = foldl (++) "" (map textText rectTexts)
+    let id_ = (if rectsIsHybrid entity then "h" else "") ++ 
               (if isDigit $ head textString then "CSC" else "") ++ dropSlash textString
     Rect id_
          (rectsWidth entity)
@@ -174,16 +174,18 @@ processPath rects ellipses edge =
             targetNode
 
 getIntersectingNode :: Float -> Float -> [Rect] -> String
-getIntersectingNode xpos ypos rects = if null
-                                      $ filter (intersectsWithPoint xpos ypos) rects
-                                      then ""
-                                      else rectId $ head $ filter (intersectsWithPoint xpos ypos) rects
+getIntersectingNode xpos ypos rects = do
+    let intersectingRects = filter (intersectsWithPoint xpos ypos) rects
+    if null intersectingRects
+    then ""
+    else rectId $ head intersectingRects
 
 getIntersectingEllipse :: Float -> Float -> [Ellipse] -> String
-getIntersectingEllipse xpos ypos ellipses = if null
-                                      $ filter (ellipseIntersectsWithPoint xpos ypos) ellipses
-                                      then "place"
-                                      else ellipseId $ head $ filter (ellipseIntersectsWithPoint xpos ypos) ellipses
+getIntersectingEllipse xpos ypos ellipses = do
+    let intersectingEllipses = filter (ellipseIntersectsWithPoint xpos ypos) ellipses
+    if null intersectingEllipses
+    then ""
+    else ellipseId $ head intersectingEllipses
 
 intersectsWithPoint :: Float -> Float -> Rect -> Bool
 intersectsWithPoint xpos ypos rect = intersects
@@ -207,14 +209,9 @@ ellipseIntersectsWithPoint xpos ypos ellipse = intersects
 
 createRegionXML :: Int -> [Path] -> String
 createRegionXML _ [] = ""
-createRegionXML idCounter paths = (convertRegionToXML (show idCounter) (head paths)) ++ (createRegionXML (idCounter + 1) (tail paths))
-
---createEllipseXML :: Int -> [Text] -> [Entity Ellipses] -> String
---createEllipseXML _ _ [] = ""
---createEllipseXML idCounter texts ellipses = (((convertEllipseToXML (show idCounter)) .
---                                 buildEllipse texts .
---                                 entityVal) (head ellipses)) ++
---                                 (createEllipseXML (idCounter + 1) texts (tail ellipses))
+createRegionXML idCounter paths = 
+    convertRegionToXML (show idCounter) (head paths) ++
+    createRegionXML (idCounter + 1) (tail paths)
 
 -- | Prints the database table 'rects'.
 printDB :: IO ()
@@ -225,13 +222,16 @@ printDB = runSqlite dbStr $ do
 -- | Converts a `Rect` to XML. 
 convertRectToXML :: Rect -> String
 convertRectToXML rect = 
-    if (rectFill rect) == "none" then "" else
+    if rectFill rect == "none" then "" else
     "<g id=\"" ++ 
-    (rectId rect) ++ 
+    rectId rect ++ 
     "\" class=\"" ++
-    (if (rectIsHybrid rect) then "hybrid" else "node") ++
-    "\" in-edges=\"" ++ intercalate " " (rectInEdges rect) ++
-    "\" out-edges=\"" ++  intercalate " " (rectOutEdges rect) ++ "\"" ++ "><rect rx=\"4\" ry=\"4\"  x=\"" ++ 
+    (if rectIsHybrid rect then "hybrid" else "node") ++
+    "\" in-edges=\"" ++ 
+    unwords (rectInEdges rect) ++
+    "\" out-edges=\"" ++ 
+    unwords (rectOutEdges rect) ++ 
+    "\"><rect rx=\"4\" ry=\"4\"  x=\"" ++ 
     show (fromRational $ xPos rect) ++
     "\" y=\"" ++
     show (fromRational $ yPos rect) ++
@@ -240,57 +240,58 @@ convertRectToXML rect =
     "\" height=\"" ++
     show (fromRational $ height rect) ++
     "\" style=\"fill:" ++
-    (rectFill rect) ++
+    rectFill rect ++
     ";stroke:#000000" ++ 
-    --";stroke:" ++ (rectStroke rect) ++
-    ";fill-opacity:" ++ (rectFillOpacity rect) ++ ";\"/>"
-    ++ (unwords (map convertTextToXML (rectText rect))) ++
+    ";fill-opacity:" ++ 
+    rectFillOpacity rect ++ 
+    ";\"/>" ++ 
+    unwords (map convertTextToXML (rectText rect)) ++
     "</g>"
 
 -- | Converts a `Text` to XML.
 convertTextToXML :: Text -> String
 convertTextToXML text = 
     "<text xml:space=\"preserve\" x=\"" ++ 
-    (show $ fromRational $ textXPos text) ++
+    show (fromRational $ textXPos text) ++
     "\" y=\"" ++
-    (show $ fromRational $ textYPos text) ++
+    show (fromRational $ textYPos text) ++
     "\" style=\"font-size:" ++
-    (textFontSize text) ++
+    textFontSize text ++
     ";font-weight:" ++ 
-    (textFontWeight text) ++ 
+    textFontWeight text ++ 
     ";font-family:" ++
-    (textFontFamily text) ++
+    textFontFamily text ++
     "\">" ++
-    (textText text) ++
+    textText text ++
     "</text>"
 
 -- | Converts a `Path` to XML.
 convertPathToXML :: Path -> String
 convertPathToXML path = 
-    "<path id=\"" ++ (pathId path) ++ "\" class=\"path\" style=\"" ++
+    "<path id=\"" ++ pathId path ++ "\" class=\"path\" style=\"" ++
     "fill:" ++
-    (pathFill path) ++ 
-    ";fill-opacity:" ++ (pathFillOpacity path) ++ ";\" d=\"M " ++
+    pathFill path ++ 
+    ";fill-opacity:" ++ pathFillOpacity path ++ ";\" d=\"M " ++
     buildPathString (points path) ++
     "\" marker-end=\"url(#arrow)\" " ++
-    "source-node=\"" ++ (source path) ++ "\" target-node=\"" ++ (target path) ++ "\"/>"
+    "source-node=\"" ++ source path ++ "\" target-node=\"" ++ target path ++ "\"/>"
 
 -- | Converts a `Path` to XML.
 convertRegionToXML :: String -> Path -> String
 convertRegionToXML id_ path = 
     "<path id=\"region" ++ id_ ++ "\" class=\"region\" style=\"" ++
     "fill:" ++
-    (pathFill path) ++ 
-    ";fill-opacity:" ++ (pathFillOpacity path) ++ ";\" d=\"M " ++
+    pathFill path ++ 
+    ";fill-opacity:" ++ pathFillOpacity path ++ ";\" d=\"M " ++
     buildPathString (points path) ++
     "\"/>"
 
 -- | Converts an `Ellipse` to XML.
 convertEllipseToXML :: Ellipse -> String
 convertEllipseToXML ellipse = 
-    "<g id=\"" ++ (ellipseId ellipse) ++ "\" class=\"bool\" in-edges=\"" ++
-    intercalate " " (ellipseInEdges ellipse) ++
-    "\" out-edges=\"" ++  intercalate " " (ellipseOutEdges ellipse) ++ "\">" ++
+    "<g id=\"" ++ ellipseId ellipse ++ "\" class=\"bool\" in-edges=\"" ++
+    unwords (ellipseInEdges ellipse) ++
+    "\" out-edges=\"" ++  unwords (ellipseOutEdges ellipse) ++ "\">" ++
     "<ellipse cx=\"" ++ 
     show (fromRational $ ellipseXPos ellipse) ++
     "\" cy=\"" ++
@@ -301,7 +302,7 @@ convertEllipseToXML ellipse =
     show (fromRational $ ellipseRy ellipse) ++
     "\" style=\"stroke:#000000;fill:none" ++
     "\"/>"
-    ++ (unwords (map convertTextToXML (ellipseText ellipse))) ++
+    ++ unwords (map convertTextToXML (ellipseText ellipse)) ++
     "</g>"
 
 -- | Builds a Text from a database entry in the texts table.
@@ -319,7 +320,7 @@ buildEllipses :: [Text] -> Int -> [Ellipses] -> [Ellipse]
 buildEllipses _ _ [] = []
 buildEllipses texts idCounter entities = do
     let entity = head entities
-    let ellipseText = (filter (\x -> (intersects
+    let ellipseText = filter (\x -> intersects
                             5
                             5
                             (fromRational (ellipsesXPos entity))
@@ -327,8 +328,8 @@ buildEllipses texts idCounter entities = do
                             9
                             (fromRational (textXPos x))
                             (fromRational (textYPos x))
-                            )) texts)
-    [Ellipse ("bool" ++ show idCounter)
+                            ) texts
+    Ellipse ("bool" ++ show idCounter)
             (ellipsesXPos entity)
             (ellipsesYPos entity)
             (ellipsesRx entity)
@@ -336,11 +337,11 @@ buildEllipses texts idCounter entities = do
             (ellipsesStroke entity)
             ellipseText
             []
-            []] ++ buildEllipses texts (idCounter + 1) (tail entities)
+            [] : buildEllipses texts (idCounter + 1) (tail entities)
 
 -- | Rebuilds a path's `d` attribute based on a list of Rational tuples.
 buildPathString :: [(Rational, Rational)] -> String
-buildPathString d = intercalate " " $ map (joinPathTuple . convertRationalTupToString) d
+buildPathString d = unwords $ map (joinPathTuple . convertRationalTupToString) d
 
 -- | Joins two String values in a tuple with a comma.
 joinPathTuple :: (String, String) -> String
