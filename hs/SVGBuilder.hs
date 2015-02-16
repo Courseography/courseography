@@ -42,14 +42,14 @@ processEllipse edges ellipse = do
     let inEdges = map pathId $ filter (\x -> target x == id_) edges
     let outEdges = map pathId $ filter (\x -> source x == id_) edges
     Ellipse (ellipseId ellipse)
-             (ellipseXPos ellipse)
-             (ellipseYPos ellipse)
-             (ellipseRx ellipse)
-             (ellipseRy ellipse)
-             (ellipseStroke ellipse)
-             (ellipseText ellipse)
-             inEdges
-             outEdges
+            (ellipseXPos ellipse)
+            (ellipseYPos ellipse)
+            (ellipseRx ellipse)
+            (ellipseRy ellipse)
+            (ellipseStroke ellipse)
+            (ellipseText ellipse)
+            inEdges
+            outEdges
 
 -- | Builds a Path from a database entry in the paths table.
 buildPaths :: Int -> [Paths] -> [Path]
@@ -64,7 +64,6 @@ buildPaths idCounter entities = do
          (pathsIsRegion entity)
          ""
          "" : buildPaths (idCounter + 1) (tail entities)
-
 
 -- | Builds a Rect from a database entry in the rects table.
 buildRect :: [Text] -> Rects -> Rect
@@ -135,14 +134,14 @@ getIntersectingEllipse xpos ypos ellipses = do
 
 -- | Determines if a rect intersects with the given coordinates.
 intersectsWithPoint :: Float -> Float -> Rect -> Bool
-intersectsWithPoint xpos ypos rect = intersects
-                            (fromRational $ width rect)
-                            (fromRational $ height rect)
-                            (fromRational (xPos rect))
-                            (fromRational (yPos rect))
-                            9
-                            xpos
-                            ypos
+intersectsWithPoint xpos ypos rect =
+    intersects (fromRational $ width rect)
+               (fromRational $ height rect)
+               (fromRational (xPos rect))
+               (fromRational (yPos rect))
+               9
+               xpos
+               ypos
 
 -- | Determines if an ellipse intersects with the given coordinates.
 ellipseIntersectsWithPoint :: Float -> Float -> Ellipse -> Bool

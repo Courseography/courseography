@@ -24,13 +24,13 @@ import SVGTypes
 getRoot :: Document i -> Content i
 getRoot doc = head $ parseDocument (tag "svg") doc
 
-
 -- | Gets a style attribute from a style String.
 getStyleAttr :: String -> String -> String
-getStyleAttr attr style = drop (length attr + 1) $ 
-                          head $ (filter 
-                                  (\x -> take (length attr + 1) x == (attr ++ ":")) $
-                                  splitOn ";" style) ++ [""]
+getStyleAttr attr style =
+    drop (length attr + 1) $
+    head $ filter
+            (\x -> take (length attr + 1) x == (attr ++ ":"))
+            (splitOn ";" style) ++ [""]
 
 -- | Gets a style attribute from a style String. If the style attribute is "",
 -- then this function defaults to the previous style attribute, 'parent'.
@@ -40,17 +40,9 @@ getNewStyleAttr newStyle attr parent =
     then parent
     else getStyleAttr attr newStyle
 
--- | Adds one tuple to the second tuple.
--- NOTE: Can be replaced by addTuples.
-addTransform :: (Float, Float) -> (Float, Float) -> (Float, Float)
-addTransform tup transTup = (fst tup + fst transTup, snd tup + snd transTup)
-
 -- | Converts a tuple of Float to a tuple of Rational.
 convertFloatTupToRationalTup :: (Float, Float) -> (Rational, Rational)
 convertFloatTupToRationalTup tup = (toRational (fst tup), toRational (snd tup))
-
---filterAttrVal :: [Attribute] -> String -> String
---filterAttrVal attrs attrName = snd $ head $ filter (\x -> snd x == attrName) $ map convertAttributeToTuple attrs
 
 -- | Applys a CFilter to a Document and produces a list of Content filtered 
 -- by the CFilter.
@@ -60,7 +52,7 @@ parseDocument filter (Document p s e m) = filter (CElem e undefined)
 -- | Applys a CFilter to a Content and produces a list of Content filtered by the
 -- CFilter.
 parseContent :: CFilter i -> Content i -> [Content i]
-parseContent filter content = filter content
+parseContent filter = filter
 
 -- | Gets the tag name of an Element.
 getName :: Content i -> String
@@ -85,7 +77,7 @@ convertAttributeToTuple at = (getAttrName at, getAttrVal at)
 
 -- | Gets the children of the current node.
 getChildren :: Content i -> [Content i]
-getChildren content = parseContent (path [children]) content
+getChildren = parseContent (path [children])
 
 -- | Gets the value of the attribute with the corresponding key.
 getAttribute :: String -> Content i -> String
@@ -118,11 +110,15 @@ parsePathD d =
 
 -- | Converts a relative coordinate structure into an absolute one.
 foldCoordsRel :: [[String]] -> [(Float, Float)]
-foldCoordsRel dCoords = tail $ foldl (\x y -> x ++ [addTuples (convertToFloatTuple y) (last x)]) [(0,0)] dCoords
+foldCoordsRel dCoords =
+    tail $
+    foldl (\x y -> x ++ [addTuples (convertToFloatTuple y) (last x)])
+          [(0,0)]
+          dCoords
 
 -- | Converts a relative coordinate structure into an absolute one.
 processAbsCoords :: [[String]] -> [(Float, Float)]
-processAbsCoords dCoords = map convertToFloatTuple dCoords
+processAbsCoords = map convertToFloatTuple
 
 -- | Converts a list of String of length 2 into a tuple of Float.
 convertToFloatTuple :: [String] -> (Float, Float)

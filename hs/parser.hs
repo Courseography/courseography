@@ -12,6 +12,7 @@ import Text.XML.HaXml.XmlContent.Parser
 import qualified Data.Conduit.List as CL
 import Database.Persist
 import Database.Persist.Sqlite
+import Control.Monad
 import Text.XML.HaXml.Namespaces
 import Data.Conduit
 import Data.List.Split
@@ -27,19 +28,21 @@ import ParserUtil
 main :: IO ()
 main = do graphFile <- readFile "../res/graphs/graph_regions.svg"
           let graphDoc = xmlParse "output.error" graphFile
+          print "Parsing SVG file..."
           parseLevel False (Style (0,0) "" "" "" "" "" "") (getRoot graphDoc)
           --buildInteractive
           buildSVG
-          printDB
+          --printDB
+          print "Parsing complete"
 
 -- | Parses a level.
 parseLevel :: Bool -> Style -> Content i -> IO ()
-parseLevel currentlyInRegion style content = do
-    if (getAttribute "id" content) == "layer2" ||
-       ((getName content) == "defs")
+parseLevel currentlyInRegion style content =
+    if getAttribute "id" content == "layer2" ||
+       (getName content == "defs")
       then liftIO $ print "Abort"
       else do
-           let isRegion       = (getAttribute "id" content) == "layer3"
+           let isRegion       = getAttribute "id" content == "layer3"
            let rects          = parseContent (tag "rect") content
            let texts          = parseContent (tag "text") content
            let paths          = parseContent (tag "path") content
@@ -94,9 +97,9 @@ parseRect style content =
 
 -- | Parses a path.
 parsePath :: Bool -> Style -> Content i -> IO ()
-parsePath isRegion style content = do
-    if (((last (getAttribute "d" content)) == 'z') && not isRegion) then return () else
-        insertPathIntoDB (map (addTransform (transform style)) $ parsePathD $ getAttribute "d" content)
+parsePath isRegion style content =
+    unless (last (getAttribute "d" content) == 'z' && not isRegion) $
+        insertPathIntoDB (map (addTuples (transform style)) $ parsePathD $ getAttribute "d" content)
                          style
                          isRegion
 
@@ -143,7 +146,7 @@ insertRectIntoDB id_ width height xPos yPos style =
                         (fill style)
                         (stroke style)
                         (fillOpacity style)
-                        ((fill style) == "#a14c3a")
+                        (fill style == "#a14c3a")
 
 -- | Inserts a text entry into the texts table.
 insertTextIntoDB :: String -> Float -> Float -> String -> Style -> IO ()
