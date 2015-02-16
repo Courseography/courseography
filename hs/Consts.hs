@@ -5,7 +5,7 @@ module Consts where
 import Clay
 import Prelude hiding ((**))
 import Data.Monoid
-import Data.Text.Lazy as T
+import Data.Text as T
 
 
 {- Empty padding and margins. -}
