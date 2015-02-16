@@ -43,10 +43,10 @@ parseLevel currentlyInRegion style content =
       then liftIO $ print "Abort"
       else do
            let isRegion       = getAttribute "id" content == "layer3"
-           let rects          = parseContent (tag "rect") content
-           let texts          = parseContent (tag "text") content
-           let paths          = parseContent (tag "path") content
-           let ellipses       = parseContent (tag "ellipse") content
+           let rects          = (tag "rect") content
+           let texts          = (tag "text") content
+           let paths          = (tag "path") content
+           let ellipses       = (tag "ellipse") content
            let children       = getChildren content
            let newTransform   = getAttribute "transform" content
            let newStyle       = getAttribute "style" content

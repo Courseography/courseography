@@ -49,11 +49,6 @@ convertFloatTupToRationalTup tup = (toRational (fst tup), toRational (snd tup))
 parseDocument :: CFilter i -> Document i -> [Content i]
 parseDocument filter (Document p s e m) = filter (CElem e undefined)
 
--- | Applys a CFilter to a Content and produces a list of Content filtered by the
--- CFilter.
-parseContent :: CFilter i -> Content i -> [Content i]
-parseContent filter = filter
-
 -- | Gets the tag name of an Element.
 getName :: Content i -> String
 getName (CElem (Elem a _ _) _) = printableName a
@@ -77,23 +72,23 @@ convertAttributeToTuple at = (getAttrName at, getAttrVal at)
 
 -- | Gets the children of the current node.
 getChildren :: Content i -> [Content i]
-getChildren = parseContent (path [children])
+getChildren = (path [children])
 
 -- | Gets the value of the attribute with the corresponding key.
 getAttribute :: String -> Content i -> String
 getAttribute attr (CElem content undefined) = 
-    let x = filter (\x -> getAttrName x == attr) $ getAttrs content
-    in if null x
+    let matchingAttrs = filter (\x -> getAttrName x == attr) $ getAttrs content
+    in if null matchingAttrs
        then ""
-       else getAttrVal $ head x
+       else getAttrVal $ head matchingAttrs
 getAttribute _ _ = ""
 
 -- | Parses a transform String into a tuple of Float.
 parseTransform :: String -> (Float, Float)
-parseTransform transform = 
-    do let commaPos = getComma 0 $ drop 9 transform
-       let xPos = read $ drop 1 $ take commaPos $ drop 9 transform :: Float
-       let yPos = read $ init $ drop (commaPos + 1) $ drop 9 transform :: Float
+parseTransform transform =
+    do let parsedTransform = splitOn "," $ drop 10 transform
+       let xPos = read $ parsedTransform!!0 :: Float
+       let yPos = read $ init $ parsedTransform!!1 :: Float
        (xPos, yPos)
 
 -- | Gets the location of a comma in a string.
