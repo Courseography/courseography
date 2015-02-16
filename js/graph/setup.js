@@ -80,10 +80,10 @@ var nodes = [];               // List of all nodes
 
 $(document).ready(function () {
     'use strict';
-    
-    buildGraph();
 
-     $("#graph").append(getRemote());
+    $("#graph").append(getRemote());
+
+    buildGraph();
 
     FCEPrerequisiteCourses = [CSC318, CSC454];
     // Set width of FCE count
