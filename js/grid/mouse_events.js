@@ -51,7 +51,6 @@ function renderConflicts(time, conflicts) {
            .attr('status', conflicts.length > 0 ? 'conflict' : 'occupied')
            .attr('satisfied', getCourseObject($(time).html(),
                                               courseObjects).satisfied);
-
 }
 
 
