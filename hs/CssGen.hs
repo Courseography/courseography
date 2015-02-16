@@ -392,6 +392,11 @@ searchCSS = do
         padding (px 10) (px 10) (px 10) (px 10)
         height (pct 10)
         form <? do
+            -- background : url(../../res/ico/search.png) no-repeat right;
+            background <? do
+                url "../../res/ico/search.png"
+                noRepeat
+                sideRight
             margin0
     "#search-container" ? do
         alignCenter
