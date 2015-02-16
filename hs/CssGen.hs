@@ -1,4 +1,4 @@
-{-# LANGUAGE OverloadedStrings #-}
+i{-# LANGUAGE OverloadedStrings #-}
 
 module CssGen where
 
@@ -7,7 +7,7 @@ import Prelude hiding ((**))
 import Data.Monoid
 import Data.Text.Lazy
 import System.Directory
-
+import Consts
 
 styleFiles :: [(String, Css)]
 styleFiles = [
@@ -26,12 +26,6 @@ generateCSS = do
     createDirectoryIfMissing True "../style/graph"
     createDirectoryIfMissing True "../style/grid"
     Prelude.foldl1 (>>) $ Prelude.map renderStyleFile styleFiles
-
-margin0 = margin nil nil nil nil
-padding0 = padding nil nil nil nil
-
-width100 = width $ pct 100
-height100 = height $ pct 100
 
 common = do
     html ?
@@ -117,35 +111,6 @@ graphStyles = do
     modalCSS
     regionCSS
     regionShapeCSS
-
-alignCenter = textAlign $ alignSide sideCenter
-
-stroke = (-:) "stroke"
-fill = (-:) "fill"
-
-wideStroke = "stroke-width" -: "3"
-faded = opacity 0.4
-semiVisible = opacity 0.7
-fullyVisible = opacity 1.0
-strokeRed = do
-    "stroke" -: "#CC0011"
-    "stroke-width" -: "2px"
-strokeDashed = do
-    "stroke-dasharray" -: "8,5"
-    "stroke-width" -: "2px"
-
-theoryDark = "#B1C8D1"
-coreDark = "#C9C9C9"
-seDark = "#E68080"
-systemsDark = "#C285FF"
-graphicsDark = "#66A366"
-dbwebDark = "#C42B97"
-numDark = "#B8FF70"
-aiDark = "#80B2FF"
-hciDark = "#91F27A"
-titleColour = "#072D68"
-
-lightGrey = "#CCCCCC"
 
 nodeCSS = "g" ? do
     "text" ? do
@@ -324,9 +289,6 @@ regionCSS = ".region-label" ? do
 regionShapeCSS = ".region" ? do
     faded
 
--- Course Modal
-modalColor = parse "#374AA1"
-
 modalCSS = do
     ".ui-dialog" ? do
         outline solid (px 0) black
@@ -380,7 +342,6 @@ timetableStyles = do
     --infoCSS
     conflictNotificationStyle
 
-
 searchCSS = do
     "#search-layout" ? do
         backgroundColor purple1
@@ -419,10 +380,6 @@ searchCSS = do
                     textDecoration underline
             ".starred-course" & do
                 backgroundColor blue1
-
-purple1 = parse "#46364A"
-purple2 = parse "#7E4D66"
-pink1 = parse "#DB94B8"
 
 timetableCSS = do
     ".timetable-container" ? do
@@ -491,9 +448,6 @@ conflictNotificationStyle = "#dialog" ? do
     alignCenter
     borderBottom solid (px 2) $ parse "#330000"
     "z-index" -: "2147483647"
-
-
-borderNone = border solid (px 0) white
 
 courseSelectCSS = do
     "#course-select-wrapper" ? do
@@ -582,8 +536,6 @@ courseSelectCSS = do
                         "satisfied" *= "true" & do
                             backgroundColor blue3
 
-
-
 tdColours = ".timetable " ?  do
     td ? do
         ".hover-time" & do
@@ -608,23 +560,6 @@ tdColours = ".timetable " ?  do
         Clay.empty & do
             backgroundColor white
             
-
-teal1 = parse "#737A99"
-orange1 = parse "#1E7FCC"
-
-blue1 = parse "#261B2A"
-blue2 = parse "#336685"
-blue3 = parse "#437699"
-
-blue4 = parse "#5566F5"
-
-red1 = parse "#C92343"
-red2 = parse "#B91333"
-
-red3 = rgb 215 117 70
-red4 = rgb 195 97 50
-
-
 -- info layout
 infoCSS = "#info-layout" ? do
     padding0
@@ -649,11 +584,7 @@ aboutStyles = "#aboutDiv" ? do
     h1 <> h2 <> h3 <? do
         color blue3
 
-
 -- Currently not used
-
--- FCECount
-fceCountColor = parse "#66C2FF"
 
 fceCountCSS = "#FCECountDiv" ? do
     backgroundColor fceCountColor
