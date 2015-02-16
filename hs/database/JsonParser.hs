@@ -17,7 +17,6 @@ import Database.Persist.Sqlite
 import Control.Monad.IO.Class  (liftIO, MonadIO)
 import Control.Monad
 import Control.Monad.Trans.Reader
-
 import Control.Applicative
 import Data.Maybe
 import Tables
