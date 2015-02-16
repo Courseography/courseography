@@ -195,7 +195,6 @@ function createRect(g, rectClass, rectId, posX, posY, width, height, color) {
  * @param {number} posY The y position of the text element.
  * @param {number} width The width of the text element.
  * @param {number} height The height of the text element.
- * @param {string} color The fill and stroke color of the text element.
  */
 function createText(g, nodeId, textClass, textId, posX, posY, width, height) {
     'use strict';
