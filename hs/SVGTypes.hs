@@ -10,6 +10,7 @@ data Graph =
 -- | A Rect.
 data Rect =
     Rect {
+           rectId :: String,
            width :: Rational,
            height :: Rational,
            xPos :: Rational,
@@ -18,7 +19,9 @@ data Rect =
            rectStroke :: String,
            rectFillOpacity :: String,
            rectIsHybrid :: Bool,
-           rectText :: [Text]
+           rectText :: [Text],
+           rectInEdges :: [String],
+           rectOutEdges :: [String]
          } deriving Show
 
 -- | A Text.
@@ -35,22 +38,28 @@ data Text =
 -- | A Path.
 data Path =
     Path { 
+           pathId :: String,
            points :: [(Rational, Rational)],
            pathFill :: String,
            pathFillOpacity :: String,
            pathStroke :: String,
-           pathIsRegion :: Bool
+           pathIsRegion :: Bool,
+           source :: String,
+           target :: String
          }
 
 -- | A Ellipse.
 data Ellipse =
     Ellipse { 
+              ellipseId :: String,
               ellipseXPos :: Rational,
               ellipseYPos :: Rational,
               ellipseRx :: Rational,
               ellipseRy :: Rational,
               ellipseStroke :: String,
-              ellipseText :: [Text]
+              ellipseText :: [Text],
+              ellipseInEdges :: [String],
+              ellipseOutEdges :: [String]
             }
 
 data Style =
