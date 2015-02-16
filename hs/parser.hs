@@ -6,13 +6,14 @@ import Text.XML.HaXml.ByteStringPP
 import Text.XML.HaXml.Wrappers
 import Text.XML.HaXml.Types
 import Text.XML.HaXml.Combinators
-import Control.Monad.IO.Class  (liftIO)
+import Control.Monad.IO.Class  (liftIO, MonadIO)
 import Text.XML.HaXml.Util
 import Text.XML.HaXml.XmlContent.Parser
 import qualified Data.Conduit.List as CL
 import Database.Persist
 import Database.Persist.Sqlite
 import Control.Monad
+import Control.Monad.Trans.Reader
 import Text.XML.HaXml.Namespaces
 import Data.Conduit
 import Data.List.Split
@@ -29,14 +30,15 @@ main :: IO ()
 main = do graphFile <- readFile "../res/graphs/graph_regions.svg"
           let graphDoc = xmlParse "output.error" graphFile
           print "Parsing SVG file..."
-          parseLevel False (Style (0,0) "" "" "" "" "" "") (getRoot graphDoc)
-          --buildInteractive
+          runSqlite dbStr $ do
+              runMigration migrateAll
+              parseLevel False (Style (0,0) "" "" "" "" "" "") (getRoot graphDoc)
+              --buildInteractive
+              liftIO $ print "Parsing complete"
           buildSVG
-          --printDB
-          print "Parsing complete"
 
 -- | Parses a level.
-parseLevel :: Bool -> Style -> Content i -> IO ()
+parseLevel :: MonadIO m0 =>  Bool -> Style -> Content i -> ReaderT SqlBackend m0 ()
 parseLevel currentlyInRegion style content =
     if getAttribute "id" content == "layer2" ||
        (getName content == "defs")
@@ -73,20 +75,20 @@ parseLevel currentlyInRegion style content =
            parseChildren (currentlyInRegion || isRegion) parentStyle children
 
 -- | Parses a list of Content.
-parseChildren :: Bool -> Style -> [Content i] -> IO ()
+parseChildren :: MonadIO m0 => Bool -> Style -> [Content i] -> ReaderT SqlBackend m0 ()
 parseChildren _ _ [] = return ()
 parseChildren currentlyInRegion style (x:xs) =
     do parseLevel currentlyInRegion style x
        parseChildren currentlyInRegion style xs
 
 -- | Applies a parser to a list of Content.
-parseElements :: (Content i -> IO ()) -> [Content i] -> IO ()
+parseElements :: MonadIO m0 => (Content i ->  ReaderT SqlBackend m0 ()) -> [Content i] -> ReaderT SqlBackend m0 ()
 parseElements f [] = return ()
 parseElements f (x:xs) = do f x
                             parseElements f xs
 
 -- | Parses a rect.
-parseRect :: Style -> Content i -> IO ()
+parseRect :: MonadIO m0 => Style -> Content i -> ReaderT SqlBackend m0 ()
 parseRect style content = 
     insertRectIntoDB (getAttribute "id" content)
                      (read $ getAttribute "width" content :: Float)
@@ -96,7 +98,7 @@ parseRect style content =
                      style
 
 -- | Parses a path.
-parsePath :: Bool -> Style -> Content i -> IO ()
+parsePath :: MonadIO m0 => Bool -> Style -> Content i -> ReaderT SqlBackend m0 ()
 parsePath isRegion style content =
     unless (last (getAttribute "d" content) == 'z' && not isRegion) $
         insertPathIntoDB (map (addTuples (transform style)) $ parsePathD $ getAttribute "d" content)
@@ -104,7 +106,7 @@ parsePath isRegion style content =
                          isRegion
 
 -- | Parses a text.
-parseText :: Style -> Content i -> IO ()
+parseText :: MonadIO m0 => Style -> Content i -> ReaderT SqlBackend m0 ()
 parseText style content = 
     insertTextIntoDB (getAttribute "id" content)
                      ((read $ getAttribute "x" content :: Float) + fst (transform style))
@@ -113,7 +115,7 @@ parseText style content =
                      style
 
 -- | Parses a text.
-parseEllipse :: Style -> Content i -> IO ()
+parseEllipse :: MonadIO m0 => Style -> Content i -> ReaderT SqlBackend m0 ()
 parseEllipse style content = 
     insertEllipseIntoDB ((read $ getAttribute "cx" content :: Float) + fst (transform style))
                         ((read $ getAttribute "cy" content :: Float) + snd (transform style))
@@ -122,10 +124,8 @@ parseEllipse style content =
                         (fill style)
 
 -- | Inserts an ellipse entry into the rects table.
-insertEllipseIntoDB :: Float -> Float -> Float -> Float -> String -> IO ()
-insertEllipseIntoDB xPos yPos rx ry stroke = 
-    runSqlite dbStr $ do
-        runMigration migrateAll
+insertEllipseIntoDB :: MonadIO m0 => Float -> Float -> Float -> Float -> String -> ReaderT SqlBackend m0 ()
+insertEllipseIntoDB xPos yPos rx ry stroke =
         insert_ $ Ellipses (toRational xPos)
                            (toRational yPos)
                            (toRational rx)
@@ -133,10 +133,8 @@ insertEllipseIntoDB xPos yPos rx ry stroke =
                            stroke
 
 -- | Inserts a rect entry into the rects table.
-insertRectIntoDB :: String -> Float -> Float -> Float -> Float -> Style -> IO ()
-insertRectIntoDB id_ width height xPos yPos style = 
-    runSqlite dbStr $ do
-        runMigration migrateAll
+insertRectIntoDB :: MonadIO m0 => String -> Float -> Float -> Float -> Float -> Style -> ReaderT SqlBackend m0 ()
+insertRectIntoDB id_ width height xPos yPos style =
         insert_ $ Rects 1
                         id_
                         (toRational width)
@@ -149,10 +147,8 @@ insertRectIntoDB id_ width height xPos yPos style =
                         (fill style == "#a14c3a")
 
 -- | Inserts a text entry into the texts table.
-insertTextIntoDB :: String -> Float -> Float -> String -> Style -> IO ()
-insertTextIntoDB id_ xPos yPos text style = 
-    runSqlite dbStr $ do
-        runMigration migrateAll
+insertTextIntoDB :: MonadIO m0 => String -> Float -> Float -> String -> Style -> ReaderT SqlBackend m0 ()
+insertTextIntoDB id_ xPos yPos text style =
         insert_ $ Texts 1
                         id_
                         (toRational xPos)
@@ -163,10 +159,8 @@ insertTextIntoDB id_ xPos yPos text style =
                         (fontFamily style)
 
 -- | Inserts a tex entry into the texts table.
-insertPathIntoDB :: [(Float, Float)] -> Style -> Bool -> IO ()
-insertPathIntoDB d style isRegion = 
-    runSqlite dbStr $ do
-        runMigration migrateAll
+insertPathIntoDB :: MonadIO m0 => [(Float, Float)] -> Style -> Bool -> ReaderT SqlBackend m0 ()
+insertPathIntoDB d style isRegion =
         insert_ $ Paths (map (Point . convertFloatTupToRationalTup) d)
                         (fill style)
                         (fillOpacity style)
