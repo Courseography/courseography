@@ -25,14 +25,21 @@ getRoot :: Document i -> Content i
 getRoot doc = head $ parseDocument (tag "svg") doc
 
 
--- | Gets the fill from a style String.
+-- | Gets a style attribute from a style String.
 getStyleAttr :: String -> String -> String
-getStyleAttr attr style = drop (length attr + 1) $ head $ (filter (\x -> take (length attr + 1) x == (attr ++ ":")) $ splitOn ";" style) ++ [""]
+getStyleAttr attr style = drop (length attr + 1) $ 
+                          head $ (filter 
+                                  (\x -> take (length attr + 1) x == (attr ++ ":")) $
+                                  splitOn ";" style) ++ [""]
 
+-- | Gets a style attribute from a style String. If the style attribute is "",
+-- then this function defaults to the previous style attribute, 'parent'.
 getNewStyleAttr :: String -> String -> String -> String
-getNewStyleAttr newStyle attr parent = if null (getStyleAttr attr newStyle)
-                                       then parent
-                                       else getStyleAttr attr newStyle
+getNewStyleAttr newStyle attr parent = 
+    if null (getStyleAttr attr newStyle)
+    then parent
+    else getStyleAttr attr newStyle
+
 -- | Adds one tuple to the second tuple.
 -- NOTE: Can be replaced by addTuples.
 addTransform :: (Float, Float) -> (Float, Float) -> (Float, Float)
@@ -91,11 +98,11 @@ getAttribute _ _ = ""
 
 -- | Parses a transform String into a tuple of Float.
 parseTransform :: String -> (Float, Float)
-parseTransform transform = do
-    let commaPos = getComma 0 $ drop 9 transform
-    let xPos = read $ drop 1 $ take commaPos $ drop 9 transform :: Float
-    let yPos = read $ init $ drop (commaPos + 1) $ drop 9 transform :: Float
-    (xPos, yPos)
+parseTransform transform = 
+    do let commaPos = getComma 0 $ drop 9 transform
+       let xPos = read $ drop 1 $ take commaPos $ drop 9 transform :: Float
+       let yPos = read $ init $ drop (commaPos + 1) $ drop 9 transform :: Float
+       (xPos, yPos)
 
 -- | Gets the location of a comma in a string.
 -- NOTE: Can probably be replaced by Data.List.Split.
@@ -104,9 +111,10 @@ getComma accum x = if head x == ',' then accum else getComma (accum + 1) (tail x
 
 -- | Parses a path's `d` attribute.
 parsePathD :: String -> [(Float, Float)]--[(Rational, Rational)]
-parsePathD d = if head d == 'm'
-                     then foldCoordsRel $ filter (\x -> length x > 1) $ map (splitOn ",") $ splitOn " " d
-                     else processAbsCoords $ filter (\x -> length x > 1) $ map (splitOn ",") $ splitOn " " d
+parsePathD d = 
+    if head d == 'm'
+    then foldCoordsRel $ filter (\x -> length x > 1) $ map (splitOn ",") $ splitOn " " d
+    else processAbsCoords $ filter (\x -> length x > 1) $ map (splitOn ",") $ splitOn " " d
 
 -- | Converts a relative coordinate structure into an absolute one.
 foldCoordsRel :: [[String]] -> [(Float, Float)]
@@ -116,7 +124,6 @@ foldCoordsRel dCoords = tail $ foldl (\x y -> x ++ [addTuples (convertToFloatTup
 processAbsCoords :: [[String]] -> [(Float, Float)]
 processAbsCoords dCoords = map convertToFloatTuple dCoords
 
-
 -- | Converts a list of String of length 2 into a tuple of Float.
 convertToFloatTuple :: [String] -> (Float, Float)
 convertToFloatTuple y = (read (head y) :: Float, read (last y) :: Float)
@@ -125,14 +132,12 @@ convertToFloatTuple y = (read (head y) :: Float, read (last y) :: Float)
 addTuples :: (Float, Float) -> (Float, Float) -> (Float, Float)
 addTuples tup1 tup2 = (fst tup1 + fst tup2, snd tup1 + snd tup2)
 
-
 -- | Determines if a point intersects with a shape.
 intersects :: Float -> Float -> Float -> Float -> Float -> Float -> Float -> Bool
 intersects width height rx ry offset px py = do
     let dx = px - rx
     let dy = py - ry
     dx >= -1 * offset && dx <= width + offset && dy >= -1 * offset && dy <= height + offset;
-
 
 -- | Removes the part of a string after the first forward slash.
 dropSlash :: String -> String
