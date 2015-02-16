@@ -392,12 +392,9 @@ searchCSS = do
         padding (px 10) (px 10) (px 10) (px 10)
         height (pct 10)
         form <? do
-            -- background : url(../../res/ico/search.png) no-repeat right;
-            background <? do
-                url "../../res/ico/search.png"
-                noRepeat
-                sideRight
+            background ((url "/static/res/ico/search.png", noRepeat), placed sideRight sideCenter)
             margin0
+            paddingRight (px 34)
     "#search-container" ? do
         alignCenter
         color white
