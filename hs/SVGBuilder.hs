@@ -13,7 +13,9 @@ import Data.List.Split
 import Data.List
 import JsonParser
 import ParserUtil
- 
+
+-- | Adds intersecting paths to the rect's inEdges and outEdges.
+-- | Note: This is one step that may be completely unneccessary.
 processRect :: [Path] -> Rect -> Rect
 processRect edges rect = do
     let id_ = rectId rect
@@ -32,6 +34,8 @@ processRect edges rect = do
          inEdges
          outEdges
 
+-- | Adds intersecting paths to the ellipse's inEdges and outEdges.
+-- | Note: This is one step that may be completely unneccessary.
 processEllipse :: [Path] -> Ellipse -> Ellipse
 processEllipse edges ellipse = do
     let id_ = ellipseId ellipse
@@ -90,6 +94,7 @@ buildRect texts entity = do
          []
          []
 
+-- | Determines the source and target nodes of the path.
 processPath :: [Rect] -> [Ellipse] -> Path -> Path
 processPath rects ellipses edge = 
     do let coords = points edge
@@ -112,6 +117,7 @@ processPath rects ellipses edge =
             sourceNode
             targetNode
 
+-- | Gets the first rect that intersects with the given coordinates. 
 getIntersectingNode :: Float -> Float -> [Rect] -> String
 getIntersectingNode xpos ypos rects = do
     let intersectingRects = filter (intersectsWithPoint xpos ypos) rects
@@ -119,6 +125,7 @@ getIntersectingNode xpos ypos rects = do
     then ""
     else rectId $ head intersectingRects
 
+-- | Gets the first ellipse that intersects with the given coordinates.
 getIntersectingEllipse :: Float -> Float -> [Ellipse] -> String
 getIntersectingEllipse xpos ypos ellipses = do
     let intersectingEllipses = filter (ellipseIntersectsWithPoint xpos ypos) ellipses
@@ -126,6 +133,7 @@ getIntersectingEllipse xpos ypos ellipses = do
     then ""
     else ellipseId $ head intersectingEllipses
 
+-- | Determines if a rect intersects with the given coordinates.
 intersectsWithPoint :: Float -> Float -> Rect -> Bool
 intersectsWithPoint xpos ypos rect = intersects
                             (fromRational $ width rect)
@@ -136,6 +144,7 @@ intersectsWithPoint xpos ypos rect = intersects
                             xpos
                             ypos
 
+-- | Determines if an ellipse intersects with the given coordinates.
 ellipseIntersectsWithPoint :: Float -> Float -> Ellipse -> Bool
 ellipseIntersectsWithPoint xpos ypos ellipse = intersects
                                             5
@@ -167,15 +176,16 @@ buildEllipses :: [Text] -> Int -> [Ellipses] -> [Ellipse]
 buildEllipses _ _ [] = []
 buildEllipses texts idCounter entities = do
     let entity = head entities
-    let ellipseText = filter (\x -> intersects
-                            5
-                            5
-                            (fromRational (ellipsesXPos entity))
-                            (fromRational (ellipsesYPos entity))
-                            9
-                            (fromRational (textXPos x))
-                            (fromRational (textYPos x))
-                            ) texts
+    let ellipseText = filter (\x -> 
+                                  intersects
+                                  5
+                                  5
+                                  (fromRational (ellipsesXPos entity))
+                                  (fromRational (ellipsesYPos entity))
+                                  9
+                                  (fromRational (textXPos x))
+                                  (fromRational (textYPos x))
+                                  ) texts
     Ellipse ("bool" ++ show idCounter)
             (ellipsesXPos entity)
             (ellipsesYPos entity)
@@ -197,7 +207,3 @@ joinPathTuple tup = fst tup ++ "," ++ snd tup
 -- | Converts a tuple of Rationals to a tuple of String.
 convertRationalTupToString :: (Rational, Rational) -> (String, String)
 convertRationalTupToString tup = (show $ fromRational (fst tup), show $ fromRational (snd tup))
-
-
-dropSlash :: String -> String
-dropSlash str = head $ splitOn "/" str

@@ -17,23 +17,24 @@ import SVGBuilder
 
 -- | The SVG tag for an SVG document, along with an opening 'g' tag.
 svgHeader :: String
-svgHeader = "<svg" ++
-   " xmlns:dc=\"http://purl.org/dc/elements/1.1/\"" ++
-   " xmlns:cc=\"http://creativecommons.org/ns#\"" ++
-   " xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"" ++
-   " xmlns:svg=\"http://www.w3.org/2000/svg\"" ++
-   " xmlns=\"http://www.w3.org/2000/svg\"" ++
-   " xmlns:xlink=\"http://www.w3.org/1999/xlink\"" ++
-   " xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\"" ++
-   " xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\"" ++
-   " width=\"1052.3622\"" ++
-   " height=\"744.09448\"" ++
-   " version=\"1.1\"" ++
-   " sodipodi:docname=\"graph_regions.svg\"><defs>" ++
-   "     <marker id=\"arrow\" viewBox=\"0 0 10 10\" refX=\"1\" refY=\"5\" markerUnits=\"strokeWidth\" orient=\"auto\" markerWidth=\"7\" markerHeight=\"7\">" ++
-   "       <polyline points=\"0,1 10,5 0,9\" fill=\"black\"></polyline>" ++
-   "     </marker>" ++
-   "   </defs><g>"
+svgHeader = 
+    "<svg" ++
+    " xmlns:dc=\"http://purl.org/dc/elements/1.1/\"" ++
+    " xmlns:cc=\"http://creativecommons.org/ns#\"" ++
+    " xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"" ++
+    " xmlns:svg=\"http://www.w3.org/2000/svg\"" ++
+    " xmlns=\"http://www.w3.org/2000/svg\"" ++
+    " xmlns:xlink=\"http://www.w3.org/1999/xlink\"" ++
+    " xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\"" ++
+    " xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\"" ++
+    " width=\"1052.3622\"" ++
+    " height=\"744.09448\"" ++
+    " version=\"1.1\"" ++
+    " sodipodi:docname=\"graph_regions.svg\"><defs>" ++
+    "     <marker id=\"arrow\" viewBox=\"0 0 10 10\" refX=\"1\" refY=\"5\" markerUnits=\"strokeWidth\" orient=\"auto\" markerWidth=\"7\" markerHeight=\"7\">" ++
+    "       <polyline points=\"0,1 10,5 0,9\" fill=\"black\"></polyline>" ++
+    "     </marker>" ++
+    "   </defs><g>"
 
 -- | A closing 'g' tag followed by a closing 'svg' tag.
 svgFooter :: String
@@ -63,40 +64,46 @@ buildSVG =
 
         let textXml    = map (convertTextToXML . buildText . entityVal) sqlTexts
         let edgeXml    = map convertPathToXML processedEdges
-        let regionXml  = createRegionXML 0 regions
+        let regionXml  = map convertRegionToXML regions
         let ellipseXml = map convertEllipseToXML processedEllipses
 
         liftIO $ writeHeader
-        liftIO $ writeRegions regionXml
+        liftIO $ writeRegions $ unwords regionXml
         liftIO $ writeEdges $ unwords edgeXml
         liftIO $ writeRects $ unwords rectXml
         liftIO $ writeEllipses $ unwords ellipseXml
         liftIO $ writeFooter
 
+-- | Writes the SVG header to the output file.
 writeHeader :: IO ()
 writeHeader = writeFile "Testfile.svg" svgHeader
 
+-- | Writes the SVG footer to the output file.
 writeFooter :: IO ()
-writeFooter = writeFile "Testfile.svg" svgFooter
+writeFooter = appendFile "Testfile.svg" svgFooter
 
+-- | Writes the `rect` section to the output file.
 writeRects :: String -> IO ()
 writeRects rectXml = do
     appendFile "Testfile.svg" "<g>"
     appendFile "Testfile.svg" rectXml
     appendFile "Testfile.svg" "</g>"
 
+-- | Writes the `ellipse` section to the output file.
 writeEllipses :: String -> IO ()
 writeEllipses ellipseXml = do
     appendFile "Testfile.svg" "<g>"
     appendFile "Testfile.svg" ellipseXml
     appendFile "Testfile.svg" "</g>"
 
+-- | Writes the `region` section to the output file.
 writeRegions :: String -> IO ()
 writeRegions regionXml = do
     appendFile "Testfile.svg" "<g>"
     appendFile "Testfile.svg" regionXml
     appendFile "Testfile.svg" "</g>"
 
+-- | Writes the `edge` section to the output file.
 writeEdges :: String -> IO ()
 writeEdges edgeXml = do
     appendFile "Testfile.svg" "<g style=\"stroke:#000000\">"
@@ -149,12 +156,6 @@ convertTextToXML text =
     textText text ++
     "</text>"
 
-createRegionXML :: Int -> [Path] -> String
-createRegionXML _ [] = ""
-createRegionXML idCounter paths = 
-    convertRegionToXML (show idCounter) (head paths) ++
-    createRegionXML (idCounter + 1) (tail paths)
-
 -- | Converts a `Path` to XML.
 convertPathToXML :: Path -> String
 convertPathToXML path = 
@@ -175,10 +176,10 @@ convertPathToXML path =
     "\"/>"
 
 -- | Converts a `Path` to XML.
-convertRegionToXML :: String -> Path -> String
-convertRegionToXML id_ path = 
+convertRegionToXML :: Path -> String
+convertRegionToXML path = 
     "<path id=\"region" ++ 
-    id_ ++ 
+    pathId path ++ 
     "\" class=\"region\" style=\"" ++
     "fill:" ++
     pathFill path ++ 

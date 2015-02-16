@@ -126,8 +126,14 @@ addTuples :: (Float, Float) -> (Float, Float) -> (Float, Float)
 addTuples tup1 tup2 = (fst tup1 + fst tup2, snd tup1 + snd tup2)
 
 
+-- | Determines if a point intersects with a shape.
 intersects :: Float -> Float -> Float -> Float -> Float -> Float -> Float -> Bool
 intersects width height rx ry offset px py = do
     let dx = px - rx
     let dy = py - ry
     dx >= -1 * offset && dx <= width + offset && dy >= -1 * offset && dy <= height + offset;
+
+
+-- | Removes the part of a string after the first forward slash.
+dropSlash :: String -> String
+dropSlash str = head $ splitOn "/" str

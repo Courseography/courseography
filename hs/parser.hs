@@ -19,6 +19,7 @@ import Data.List
 import Data.Text as T (pack, unpack)
 import Tables
 import JsonParser
+import SVGGenerator
 import SVGBuilder
 import SVGTypes
 import ParserUtil
@@ -117,6 +118,7 @@ parseEllipse style content =
                         (read $ getAttribute "ry" content :: Float)
                         (fill style)
 
+-- | Inserts an ellipse entry into the rects table.
 insertEllipseIntoDB :: Float -> Float -> Float -> Float -> String -> IO ()
 insertEllipseIntoDB xPos yPos rx ry stroke = 
     runSqlite dbStr $ do
