@@ -1,4 +1,4 @@
-i{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE OverloadedStrings #-}
 
 module CssGen where
 
