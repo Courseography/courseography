@@ -39,6 +39,8 @@ checkPost =  do
             H.li ! A.id "minor" $ do
                 H.a ! A.href "" $ "Minor"
                 H.div ! A.id "min_creds" $ "(0/4.0)"
+        H.div ! A.id "button_wrapper" $ do
+            H.button ! A.id "update" $ "Update POSts"
         H.div ! A.id "div_specialist" $ do
             H.h2 "First Year"
             H.div ! A.id "spec_csc108" $ do

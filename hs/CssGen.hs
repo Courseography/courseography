@@ -127,6 +127,7 @@ fill = (-:) "fill"
 wideStroke = "stroke-width" -: "3"
 faded = opacity 0.4
 semiVisible = opacity 0.7
+fullyVisible = opacity 1.0
 strokeRed = do
     "stroke" -: "#CC0011"
     "stroke-width" -: "2px"
@@ -709,6 +710,17 @@ tabsCSS = do
 
                 
 postCSS = do 
+    "#button_wrapper" ? do
+        textAlign $ alignSide sideCenter
+        height (px 50)
+        paddingLeft (px 20)
+    "#update" ? do 
+        height (px 40)
+        fontSize (px 14)
+        cursor pointer
+        semiVisible
+        ":hover" & do
+            fullyVisible
     "div" ? do
         ".code" ? do
             fontFamily ["HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", "Lucida Grande"][sansSerif]
@@ -731,7 +743,7 @@ postCSS = do
         color red
     "#div_specialist, #div_major, #div_minor" ? do
         position absolute
-        "margin-above" -: "70px"
+        "margin-above" -: "30px"
         display none
         height (pct 70)
         marginLeft (px 25)

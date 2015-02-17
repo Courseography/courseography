@@ -7,10 +7,16 @@ var completed_maj = {'CSC108': 0, 'CSC148': 0, 'CSC165': 0, 'Calc1': 0, 'CSC207'
 
 var completed_min = {'CSC108': 0, 'CSC148': 0, 'CSC165': 0, 'CSC236': 0}; 
 
+$('#update').click(function (e) {
+    'use-strict';
+
+    updateAllCategories();
+});
 
 /**
  * Updates all categories to see if they are fulfilled or not.
 **/
+// TODO: Add CSC240 and CSC265
 function updateAllCategories() {
     updateCompletedMinCourses();
     updateCompletedMajCourses();
@@ -71,10 +77,10 @@ function updateCompletedSpecCourses () {
             if (getCookie(courseCode) === 'active' || getCookie(courseCode) === 'overridden') {
                 if (completed_spec[courseCode] < 1) {
                     completed_spec[courseCode] += 1;
-                } else {
+                } 
+            } else if (getCookie(courseCode) === 'inactive' || getCookie(courseCode) === 'takeable') {
                     completed_spec[courseCode] -= 1;
-                }
-            }       
+            }      
         }
     }
 }
@@ -91,7 +97,7 @@ function updateCompletedMajCourses () {
             if (getCookie(courseCode) === 'active' || getCookie(courseCode) === 'overridden') {
                 if (completed_maj[courseCode] < 1) {
                     completed_maj[courseCode] += 1;
-                } else {
+                } if (getCookie(courseCode) === 'inactive' || getCookie(courseCode) === 'takeable') {
                     completed_maj[courseCode] -= 1;
                 }
             }       
@@ -111,7 +117,7 @@ function updateCompletedMinCourses() {
             if (getCookie(courseCode) === 'active' || getCookie(courseCode) === 'overridden') {
                 if (completed_min[courseCode] < 1) {
                     completed_min[courseCode] += 1;
-                } else {
+                } if (getCookie(courseCode) === 'inactive' || getCookie(courseCode) === 'takeable') {
                     completed_min[courseCode] -= 1;
                 }
             }       
@@ -176,3 +182,4 @@ function update300sAnd400s(obj) {
     //textboxes[i].value = ;
     
 }   
+
