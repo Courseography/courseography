@@ -46,7 +46,7 @@ data Path =
            pathIsRegion :: Bool,
            source :: String,
            target :: String
-         }
+         } deriving Show
 
 -- | A Ellipse.
 data Ellipse =
@@ -60,7 +60,7 @@ data Ellipse =
               ellipseText :: [Text],
               ellipseInEdges :: [String],
               ellipseOutEdges :: [String]
-            }
+            } deriving Show
 
 data Style =
     Style {
@@ -71,4 +71,24 @@ data Style =
             fillOpacity :: String,
             fontWeight :: String,
             fontFamily :: String
-          }
+          } deriving Show
+
+class Shape a where
+    getX, getY, getWidth, getHeight, getTolerance :: a -> Float
+    getId :: a -> String
+
+instance Shape Rect where
+    getX a = fromRational $ xPos a
+    getY a = fromRational $ yPos a
+    getWidth a = fromRational $ width a
+    getHeight a = fromRational $ height a
+    getId a = rectId a
+    getTolerance a = 9
+
+instance Shape Ellipse where
+    getX a = fromRational $ ellipseXPos a
+    getY a = fromRational $ ellipseYPos a
+    getWidth a = 5
+    getHeight a = 5
+    getId a = ellipseId a
+    getTolerance a = 20

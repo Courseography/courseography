@@ -47,7 +47,7 @@ convertFloatTupToRationalTup tup = (toRational (fst tup), toRational (snd tup))
 -- | Applys a CFilter to a Document and produces a list of Content filtered
 -- by the CFilter.
 parseDocument :: CFilter i -> Document i -> [Content i]
-parseDocument filter (Document p s e m) = filter (CElem e undefined)
+parseDocument filter (Document _ _ e _) = filter (CElem e undefined)
 
 -- | Gets the tag name of an Element.
 getName :: Content i -> String
@@ -60,11 +60,11 @@ getAttrs (Elem _ b _) = b
 
 -- | Gets an Attribute's name.
 getAttrName :: Attribute -> String
-getAttrName ((a,b)) = printableName a
+getAttrName ((a,_)) = printableName a
 
 -- | Gets an Attribute's value.
 getAttrVal :: Attribute -> String
-getAttrVal ((a,b)) = show b
+getAttrVal ((_,b)) = show b
 
 -- | Converts an Attribute into a more parsable form.
 convertAttributeToTuple :: Attribute -> (String, String)

@@ -15,7 +15,7 @@ import JsonParser
 import ParserUtil
 
 -- | Adds intersecting paths to the rect's inEdges and outEdges.
--- | Note: This is one step that may be completely unneccessary.
+-- | Note: This is one step that may be completely unnecessary.
 processRect :: [Path] -> Rect -> Rect
 processRect edges rect = do
     let id_ = rectId rect
@@ -101,10 +101,10 @@ processPath rects ellipses edge =
        let yStart = fromRational $ snd $ head coords
        let xEnd = fromRational $ fst $ last coords
        let yEnd = fromRational $ snd $ last coords
-       let intersectingSourceRect = getIntersectingNode xStart yStart rects
-       let intersectingTargetRect = getIntersectingNode xEnd yEnd rects
-       let intersectingSourceBool = getIntersectingEllipse xStart yStart ellipses
-       let intersectingTargetBool = getIntersectingEllipse xEnd yEnd ellipses
+       let intersectingSourceRect = getIntersectingShape xStart yStart rects
+       let intersectingTargetRect = getIntersectingShape xEnd yEnd rects
+       let intersectingSourceBool = getIntersectingShape xStart yStart ellipses
+       let intersectingTargetBool = getIntersectingShape xEnd yEnd ellipses
        let sourceNode = if null intersectingSourceRect then intersectingSourceBool else intersectingSourceRect
        let targetNode = if null intersectingTargetRect then intersectingTargetBool else intersectingTargetRect
        Path (pathId edge)
@@ -116,43 +116,24 @@ processPath rects ellipses edge =
             sourceNode
             targetNode
 
--- | Gets the first rect that intersects with the given coordinates. 
-getIntersectingNode :: Float -> Float -> [Rect] -> String
-getIntersectingNode xpos ypos rects = do
-    let intersectingRects = filter (intersectsWithPoint xpos ypos) rects
-    if null intersectingRects
+-- | Gets the first rect that intersects with the given coordinates.
+getIntersectingShape :: Shape a => Float -> Float -> [a] -> String
+getIntersectingShape xpos ypos shapes = do
+    let intersectingShapes = filter (intersectsWithPoint xpos ypos) shapes
+    if null intersectingShapes
     then ""
-    else rectId $ head intersectingRects
-
--- | Gets the first ellipse that intersects with the given coordinates.
-getIntersectingEllipse :: Float -> Float -> [Ellipse] -> String
-getIntersectingEllipse xpos ypos ellipses = do
-    let intersectingEllipses = filter (ellipseIntersectsWithPoint xpos ypos) ellipses
-    if null intersectingEllipses
-    then ""
-    else ellipseId $ head intersectingEllipses
+    else getId $ head intersectingShapes
 
 -- | Determines if a rect intersects with the given coordinates.
-intersectsWithPoint :: Float -> Float -> Rect -> Bool
-intersectsWithPoint xpos ypos rect =
-    intersects (fromRational $ width rect)
-               (fromRational $ height rect)
-               (fromRational (xPos rect))
-               (fromRational (yPos rect))
-               9
+intersectsWithPoint :: Shape a => Float -> Float -> a -> Bool
+intersectsWithPoint xpos ypos shape =
+    intersects (getWidth shape)
+               (getHeight shape)
+               (getX shape)
+               (getY shape)
+               (getTolerance shape)
                xpos
                ypos
-
--- | Determines if an ellipse intersects with the given coordinates.
-ellipseIntersectsWithPoint :: Float -> Float -> Ellipse -> Bool
-ellipseIntersectsWithPoint xpos ypos ellipse = intersects
-                                            5
-                                            5
-                                            (fromRational (ellipseXPos ellipse))
-                                            (fromRational (ellipseYPos ellipse))
-                                            20
-                                            xpos
-                                            ypos
 
 -- | Prints the database table 'rects'.
 printDB :: IO ()
