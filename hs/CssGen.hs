@@ -8,10 +8,11 @@ import Data.Monoid
 import Data.Text.Lazy
 import System.Directory
 import Consts
+import CommonCssGen as COMMON
 
 styleFiles :: [(String, Css)]
 styleFiles = [
-    ("../style/common/common.css", common),
+    ("../style/common/common.css", COMMON.common),
     ("../style/graph/graph_styles.css", graphStyles),
     ("../style/grid/timetable_styles.css", timetableStyles),
     ("../style/common/about.css", aboutStyles)
@@ -26,78 +27,6 @@ generateCSS = do
     createDirectoryIfMissing True "../style/graph"
     createDirectoryIfMissing True "../style/grid"
     Prelude.foldl1 (>>) $ Prelude.map renderStyleFile styleFiles
-
-common = do
-    html ?
-        do margin0
-           padding0
-           width100
-           height100
-           overflowY auto
-    body ?
-        do margin0
-           padding0
-           width100
-           minHeight $ pct 100
-           fontSize $ pt 16
-           fontFamily ["Trebuchet MS", "Arial"] [sansSerif]
-    headerCSS
-    aDefaultCSS
-    disclaimerCSS
-
-headerCSS = do
-    ".header" ?
-        do margin0
-           padding 0 (em 0.5) 0 (em 0.5)
-           backgroundColor $ blue1
-           color white
-           h2 ?
-             do fontSize $ em 1.6
-                textAlign $ alignSide sideLeft
-                width $ px 200
-                display inlineBlock
-                margin (px 10) 0 (px 5) 0
-    "#nav-links" ?
-        do
-            "list-style" -: "none"
-            width $ pct 70
-            margin nil nil nil nil
-            display inlineBlock
-            a ?
-              do fontWeight normal
-            li <? do
-                textAlign $ alignSide sideCenter
-                display inlineBlock
-                padding 0 (px 10) 0 (px 10)
-                a <? do
-                    color white
-                    hover & do
-                        color gray
-
-aDefaultCSS = do
-    a <> a # hover <> a # visited <> a # active ? do
-        fontWeight bold
-        textDecoration none
-        color $ parse "#4C004C"
-
-
-headers = do
-    h1 ? do
-        alignCenter
-    h2 ? do
-        alignCenter
-    h3 ? do
-        alignCenter
-    h4 ? do
-        width100
-        fontSize $ em 1.1
-        alignCenter
-        margin (em 0.3) 0 (em 0.3) 0
-
--- Disclaimer
-disclaimerCSS = "#disclaimerDiv" ? do
-    padding 0 (em 1) 0 (em 1)
-    fontSize (pt 11)
 
 
 -- Style for graph
