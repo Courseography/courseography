@@ -1,3 +1,12 @@
+// Objects to store how many courses in each category have been completed
+var completed_spec = {'CSC108': 0, 'CSC148': 0, 'CSC165': 0, 'Calc1': 0, 'CSC207': 0, 'CSC209': 0, 
+                      'CSC236': 0, 'CSC258': 0, 'CSC263': 0, 'Sta1': 0, 'Lin1:': 0, 'CSC369': 0, 'CSC373': 0};
+
+var completed_maj = {'CSC108': 0, 'CSC148': 0, 'CSC165': 0, 'Calc1': 0, 'CSC207': 0, 'CSC236': 0, 
+                     'CSC258': 0, 'CSC263': 0, 'Sta1': 0};
+
+var completed_min = {'CSC108': 0, 'CSC148': 0, 'CSC165': 0, 'CSC236': 0}; 
+
 /**
     Checks if any courses under the course code clicked are changed.
 **/
@@ -10,9 +19,6 @@ $('.code').click (function (e) {
         update300sAnd400s(this);
     }
     */
-
-    var active = 0;
-    var inactive = 0;
     
     e.preventDefault();
     var children = $(this).parent().children('.more-info').children();
@@ -31,21 +37,19 @@ $('.code').click (function (e) {
         var courseCode = children[i].className.substring(index, children[i].className.length);
         if (getCookie(courseCode) === 'active' || getCookie(courseCode) === 'overridden') {
             activateCourse(courseCode);
-            active += 1;
+            if (completed_min[courseCode] < 1 && completed_maj[courseCode]  < 1 && 
+                completed_spec[courseCode] < 1) {
+                    completed_spec[courseCode] += 1;
+                    completed_maj[courseCode] += 1;
+                    completed_min[courseCode] += 1;
+            }
         } else {
             deactivateCourse(courseCode);
-            inactive += 1;
+            completed_spec[courseCode] -= 1;
+            completed_maj[courseCode] -= 1;
+            completed_min[courseCode] -= 1;
         }
     }
-    
-    // Changes category to show it is satisfied - in progress
-    /*
-    var elem = children[0].parentNode.parentNode;
-    if (active === children.length) {
-        updateCategory(elem, 'fulfilled');
-    } else if (inactive > 0) {
-        updateCategory(elem, 'not fulfilled');
-    }*/
 });
 
 /**
@@ -73,6 +77,49 @@ function deactivateCourse(courseCode) {
             elements[i].style.backgroundColor = '#BABABA';
     }
 }
+
+/**
+ * Updates all categories to see if they are fulfilled or not.
+**/
+function updateAllCategories() {
+
+    // Update Specialist
+    for (var property in completed_spec) {
+        if (completed_spec.hasOwnProperty(property)) {
+            var category = $('#spec_' + property.toLowerCase())[0].getElementsByClassName('code')[0];
+            if (completed_spec[property] === 1) { // if the category is completed
+                updateCategory(category, 'fulfilled');
+            } else { // if the category is not completed
+                updateCategory(category, 'not fulfilled');
+            }
+        }
+    }
+
+    // Update Major
+    for (var property in completed_maj) {
+        if (completed_maj.hasOwnProperty(property)) {
+            var category = $('#maj_' + property.toLowerCase())[0].getElementsByClassName('code')[0];
+            if (completed_maj[property] === 1) { // if the category is completed
+                updateCategory(category, 'fulfilled');
+            } else { // if the category is not completed
+                updateCategory(category, 'not fulfilled');
+            }
+        }
+    }
+
+    // Update Minor
+    for (var property in completed_min) {
+        if (completed_min.hasOwnProperty(property)) {
+            var category = $('#min_' + property.toLowerCase())[0].getElementsByClassName('code')[0];
+            if (completed_min[property] === 1) { // if the category is completed
+                updateCategory($('#min_' + property.toLowerCase())[0], 'fulfilled');
+            } else { // if the category is not completed
+                updateCategory($('#min_' + property.toLowerCase())[0], 'not fulfilled');
+            }
+        }
+    }
+}
+
 
 /**
  * Records a category as fulfilled or not fulfilled
