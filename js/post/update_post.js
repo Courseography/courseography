@@ -90,7 +90,7 @@ function updateCategory(category, status) {
  * @param {object} obj Object that was clicked
 **/
 function update300sAnd400s(obj) {
-    var textboxes = $(obj).parent().children('more-info).children();
+    var textboxes = $(obj).parent().children('more-info').children();
     var i = 0;
     while (textboxes[i].value) {
         i = i + 1;
