@@ -66,7 +66,14 @@ makeTable :: [[String]] -> Diagram B R2
 makeTable s = vcat $ header : intersperse rowBorder (map makeRow s)
 
 renderTable :: String -> IO ()
-renderTable s = putStrLn s
+renderTable courses = do
+    let courseTable = partition5 $ lines courses
+    print courseTable
+    let g = makeTable $ zipWith (:) times courseTable
+    renderSVG "circle.svg" (Width 600) g
+    where
+        partition5 [] = []
+        partition5 lst = take 5 lst : partition5 (drop 5 lst)
 
 main :: IO ()
 main = 

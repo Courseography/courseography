@@ -30,7 +30,7 @@ header page =
           H.li $ makeA "" "" "grid" "" "Grid"
           H.li $ makeA "" "" "" "" "Check My POSt!"
           H.li $ makeA "" "" "about" "" "About"
-
+          H.li ! A.onclick "getTable();" $ "SVG"
 -- Disclaimer. This will be the same for both pages, I guess?
 disclaimer :: H.Html
 disclaimer = 

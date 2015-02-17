@@ -1,7 +1,7 @@
 module Main where
 
 import Control.Monad    (msum)
-import Control.Monad.IO.Class
+import Control.Monad.IO.Class (liftIO)
 import Happstack.Server
 import GridResponse
 import GraphResponse
@@ -27,8 +27,11 @@ main = do
                --dir "about" $ aboutResponse contents,
                dir "static" $ serveDirectory EnableBrowsing [] staticDir,
                dir "course" $ path (\s -> liftIO $ queryCourse (T.pack s)),
-               dir "svg" $ look "courses" >>= a
+               dir "svg" $ look "courses" >>= svgResponse
              ]
 
-a :: String -> ServerPart Response
-a s = return $ toResponse "okay"
+svgResponse :: String -> ServerPart Response
+svgResponse courses = do
+  liftIO $ renderTable courses
+  -- Right now serving the file, but the client isn't doing anthing with it
+  serveFile (asContentType "image/svg+xml") "circle.svg"
