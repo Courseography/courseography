@@ -48,7 +48,7 @@ checkPost =  do
             H.div ! A.id "spec_csc148" $ do
                 H.p ! A.class_ "code" $ "CSC148H"
                 H.div ! A.class_ "more-info" $ do 
-                    H.p ! A.class_ "full_name CSC148" $ "CSC148H (Introduction to Computer Programming)"
+                    H.p ! A.class_ "full_name CSC148" $ "CSC148H (Introduction to Computer Science)"
             H.div ! A.id "spec_csc165" $ do
                 H.p ! A.class_ "code" $ "CSC165H or CSC240H"
                 H.div ! A.class_ "more-info" $ do
@@ -133,7 +133,7 @@ checkPost =  do
             H.div ! A.id "maj_csc148" $ do
                 H.p ! A.class_ "code" $ "CSC148H"
                 H.div ! A.class_ "more-info" $ do
-                    H.p ! A.class_ "full_name CSC148" $ "CSC148H (Introduction to Computer Programming)"
+                    H.p ! A.class_ "full_name CSC148" $ "CSC148H (Introduction to Computer Science)"
             H.div ! A.id "maj_csc165" $ do
                 H.p ! A.class_ "code" $ "CSC165H or CSC240H"
                 H.div ! A.class_ "more-info" $ do
@@ -165,7 +165,7 @@ checkPost =  do
                 H.div ! A.class_ "more-info" $ do
                     H.p ! A.class_ "full_name CSC263" $ "CSC263H (Data Structures and Analysis)"
                     H.p ! A.class_ "full_name CSC265" $ "CSC265H (Enriched Data Structures and Analysis)"
-            H.div ! A.id "maj_csc247" $ do
+            H.div ! A.id "maj_sta1" $ do
                 H.p ! A.class_ "code" $ "STA247H or STA255H or STA257H"
                 H.div ! A.class_ "more-info" $ do
                     H.p ! A.class_ "full_name Sta1" $ "STA247H (Probability with Computer Applications)"
@@ -201,7 +201,7 @@ checkPost =  do
             H.div ! A.id "min_csc148" $ do
                 H.p ! A.class_ "code" $ "CSC148H"
                 H.div ! A.class_ "more-info" $ do
-                    H.p ! A.class_ "full_name CSC148" $ "CSC148H (Introduction to Computer Programming)"
+                    H.p ! A.class_ "full_name CSC148" $ "CSC148H (Introduction to Computer Science)"
             H.div ! A.id "min_csc165" $ do
                 H.p ! A.class_ "code" $ "CSC165H or CSC240H"
                 H.div ! A.class_ "more-info" $ do
