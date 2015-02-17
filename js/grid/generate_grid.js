@@ -170,3 +170,20 @@ function appendTableData(trFall, trSpring, time) {
     }
 
 }
+
+function getTable() {
+    var days = ["M", "T", "W", "R", "F"];
+    var courses = "";
+    for (var i = 8; i < 22; i++) {
+        for (var j = 0; j < 5; j++) {
+            courses += $("#" + days[j] + i + "F").text();
+            courses += ",";
+        }
+    }
+    console.log(courses);
+
+    $.ajax({
+        url: "svg",
+        data: {courses: courses}
+    });
+}
