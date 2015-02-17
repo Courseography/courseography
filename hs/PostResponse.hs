@@ -92,9 +92,9 @@ checkPost =  do
             H.div ! A.id "spec_247" $ do
                 H.p ! A.class_ "code" $ "STA247H or STA255H or STA257H"
                 H.div ! A.class_ "more-info" $ do
-                    H.p ! A.class_ "full_name STA1" $ "STA247H (Probability with Computer Applications)"
-                    H.p ! A.class_ "full_name STA1" $ "STA255H (Statistical Analysis)"
-                    H.p ! A.class_ "full_name STA1" $ "STA257H (Probability and Statistics 1)"
+                    H.p ! A.class_ "full_name Sta1" $ "STA247H (Probability with Computer Applications)"
+                    H.p ! A.class_ "full_name Sta1" $ "STA255H (Statistical Analysis)"
+                    H.p ! A.class_ "full_name Sta1" $ "STA257H (Probability and Statistics 1)"
             H.h2 "Later Years"
             H.div ! A.id "spec_369" $ do
                 H.p ! A.class_ "code" $ "CSC369H"
