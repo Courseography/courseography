@@ -139,7 +139,7 @@ checkPost =  do
                 H.div ! A.class_ "more-info" $ do
                     H.p ! A.class_ "full_name CSC165" $ "CSC165H (Mathematical Expression and Reasoning for Computer Science)"
                     H.p ! A.class_ "full_name CSC240" $ "CSC240H (Enriched Intro to the Theory of Computation)"
-            H.div ! A.id "maj_mat1" $ do
+            H.div ! A.id "maj_calc1" $ do
                 H.p ! A.class_ "code" $ "(MAT135H and MAT136H) or MAT137H or MAT157H"
                 H.div ! A.class_ "more-info" $ do
                     H.p ! A.class_ "full_name Lin1" $ "MAT135H (Calculus 1(A))"
