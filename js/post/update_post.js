@@ -16,15 +16,17 @@ $('.code').click (function (e) {
     
     e.preventDefault();
     var children = $(this).parent().children('.more-info').children();
+
     for (i = 0; i < children.length; i++) {
-        
-        if (children[i].className.indexOf("CSC") != 0) {
-           var index = children[i].className.indexOf("CSC");
-        } else if (children[i].className.indexOf("Lin") != 0) {
-           var index = children[i].className.indexOf("Lin");
-        } else if (children[i].className.indexOf("Mat") != 0) {
-           var index = children[i].className.indexOf("Mat");
-        } 
+        if (children[i].className.indexOf('CSC') > 0) {
+            var index = children[i].className.indexOf('CSC');
+        } if (children[i].className.indexOf('Lin') > 0) {
+            var index = children[i].className.indexOf('Lin');
+        } if (children[i].className.indexOf('Calc') > 0) {
+            var index = children[i].className.indexOf('Calc');
+        } if (children[i].className.indexOf('Sta1') > 0) {
+            var index = children[i].className.indexOf('Sta1');
+        }
         
         var courseCode = children[i].className.substring(index, children[i].className.length);
         if (getCookie(courseCode) === 'active' || getCookie(courseCode) === 'overridden') {
