@@ -6,17 +6,8 @@ function setMouseCallbacks() {
 
     var nodeObjects = $('.node');
 
-    nodeObjects.click(function (event) {
-        // TODO: Test as click(turnNode)
-        turnNode(event);
-    })
-        .hover(
-            function (event) {
-                hoverFocus(event);
-            },
-            function (event) {
-                hoverUnfocus(event);
-            });
+    nodeObjects.click(turnNode)
+               .hover(hoverFocus, hoverUnfocus);
 }
 
 
