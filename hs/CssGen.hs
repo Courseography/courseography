@@ -8,17 +8,17 @@ import Data.Monoid
 import Data.Text.Lazy
 import System.Directory
 import Consts
-import CommonCssGen as COMMON
-import GraphCssGen as GRAPH
-import TimetableCssGen as TIMETABLE
-import AboutCssGen as ABOUT
+import CommonCss
+import GraphCss
+import TimetableCss
+import AboutCss
 
 styleFiles :: [(String, Css)]
 styleFiles = [
-    ("../style/common/common.css", COMMON.common),
-    ("../style/graph/graph_styles.css", GRAPH.graphStyles),
-    ("../style/grid/timetable_styles.css", TIMETABLE.timetableStyles),
-    ("../style/common/about.css", ABOUT.aboutStyles)
+    ("../style/common/common.css", common),
+    ("../style/graph/graph_styles.css", graphStyles),
+    ("../style/grid/timetable_styles.css", timetableStyles),
+    ("../style/common/about.css", aboutStyles)
     ]
 
 renderStyleFile :: (String, Css) -> IO ()
@@ -40,4 +40,3 @@ fceCountCSS = "#FCECountDiv" ? do
     "vertical-align" -: "middle"
     fontSize (em 1.35)
     alignCenter
-

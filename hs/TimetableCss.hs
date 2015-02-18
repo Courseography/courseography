@@ -1,12 +1,10 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module TimetableCssGen where
+module TimetableCss where
 
 import Clay
 import Prelude hiding ((**))
 import Data.Monoid
-import Data.Text.Lazy
-import System.Directory
 import Consts
 
 {- timetableStyles
@@ -40,7 +38,9 @@ searchCSS = do
         padding (px 10) (px 10) (px 10) (px 10)
         height (pct 10)
         form <? do
+            background ((url "/static/res/ico/search.png", noRepeat), placed sideRight sideCenter)
             margin0
+            paddingRight (px 34)
     "#search-container" ? do
         alignCenter
         color white
@@ -277,4 +277,3 @@ infoCSS = "#info-layout" ? do
     h4 <? do
         fontSize (em 1.15)
         margin (em 0.5) (em 0.5) (em 0.5) (em 0.5)
-

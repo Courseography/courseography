@@ -1,12 +1,10 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module CommonCssGen where
+module CommonCss where
 
 import Clay
 import Prelude hiding ((**))
 import Data.Monoid
-import Data.Text.Lazy
-import System.Directory
 import Consts
 
 {- common
@@ -96,5 +94,3 @@ headers = do
 disclaimerCSS = "#disclaimerDiv" ? do
     padding 0 (em 1) 0 (em 1)
     fontSize (pt 11)
-
-

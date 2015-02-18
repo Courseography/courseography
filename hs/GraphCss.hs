@@ -1,12 +1,10 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module GraphCssGen where
+module GraphCss where
 
 import Clay
 import Prelude hiding ((**))
 import Data.Monoid
-import Data.Text.Lazy
-import System.Directory
 import Consts
 
 {- graphStyles

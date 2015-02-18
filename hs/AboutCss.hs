@@ -1,12 +1,10 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module AboutCssGen where
+module AboutCss where
 
 import Clay
 import Prelude hiding ((**))
 import Data.Monoid
-import Data.Text.Lazy
-import System.Directory
 import Consts
 
 {- aboutStyles
@@ -19,5 +17,3 @@ aboutStyles = "#aboutDiv" ? do
     textAlign justify
     h1 <> h2 <> h3 <? do
         color blue3
-
-
