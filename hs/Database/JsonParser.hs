@@ -1,7 +1,7 @@
  {-# LANGUAGE FlexibleContexts, GADTs, MultiParamTypeClasses,
     OverloadedStrings, TypeFamilies #-}
 
-module JsonParser where
+module Database.JsonParser where
 
 import qualified Data.ByteString.Lazy as B
 import qualified Data.ByteString.Lazy.Char8 as BSL
@@ -18,7 +18,7 @@ import Control.Monad.IO.Class  (liftIO)
 import Control.Monad
 import Control.Applicative
 import Data.Maybe
-import Tables
+import Database.Tables
 
 dbStr :: T.Text
 dbStr = "database.sqlite3"
