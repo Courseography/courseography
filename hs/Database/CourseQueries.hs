@@ -75,4 +75,4 @@ buildTutorial entity =
 buildSession :: [Entity Lectures] -> [Entity Tutorials] -> Maybe Tables.Session
 buildSession lectures tutorials = 
     Just $ Tables.Session (map (buildLecture . entityVal) lectures)
-                                   (map (buildTutorial . entityVal) tutorials)
+                          (map (buildTutorial . entityVal) tutorials)
