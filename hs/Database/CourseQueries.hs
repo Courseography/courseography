@@ -3,7 +3,7 @@ module Database.CourseQueries where
 
 import Database.Persist
 import Database.Persist.Sqlite
-import Database.Tables
+import Database.Tables as Tables
 import JsonResponse
 import Database.JsonParser
 import Happstack.Server
@@ -72,7 +72,7 @@ buildTutorial entity =
              (tutorialsTimeStr entity)
 
 -- | Builds a Session structure from a list of tuples from the Lectures table, and a list of tuples from the Tutorials table.
-buildSession :: [Entity Lectures] -> [Entity Tutorials] -> Maybe Database.Tables.Session
+buildSession :: [Entity Lectures] -> [Entity Tutorials] -> Maybe Tables.Session
 buildSession lectures tutorials = 
-    Just $ Database.Tables.Session (map (buildLecture . entityVal) lectures)
+    Just $ Tables.Session (map (buildLecture . entityVal) lectures)
                                    (map (buildTutorial . entityVal) tutorials)
