@@ -709,7 +709,9 @@ tabsCSS = do
                     textDecoration none
 
                 
-postCSS = do 
+postCSS = do
+    "input" ? do
+        fontSize (px 14)
     "#button_wrapper" ? do
         textAlign $ alignSide sideCenter
         height (px 50)

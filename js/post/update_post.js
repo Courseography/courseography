@@ -7,6 +7,22 @@ var completed_maj = {'CSC108': 0, 'CSC148': 0, 'CSC165': 0, 'Calc1': 0, 'CSC207'
 
 var completed_min = {'CSC108': 0, 'CSC148': 0, 'CSC165': 0, 'CSC236': 0}; 
 
+var level300 = {'CSC300': 0, 'CSC301': 0, 'CSC302': 0, 'CSC309': 0, 'CSC310': 0, 
+                'CSC318': 0, 'CSC320': 0, 'CSC321': 0, 'CSC324': 0, 'CSC336': 0,
+                'CSC343': 0, 'CSC358': 0, 'CSC372': 0, 'CSC384': 0, 'ECE385': 0,
+                'BCB410': 0, 'BCB420': 0, 'BCB430': 0};
+
+var level400 = {'CSC401': 0, 'CSC404': 0, 'CSC411': 0, 'CSC412': 0, 'CSC418': 0,
+                'CSC420': 0, 'CSC428': 0, 'CSC436': 0, 'CSC438': 0, 'CSC443': 0, 
+                'CSC446': 0, 'CSC448': 0, 'CSC454': 0, 'CSC456': 0, 'CSC458': 0,
+                'CSC463': 0, 'CSC465': 0, 'CSC469': 0, 'CSC486': 0, 'CSC488': 0,
+                'CSC490': 0, 'CSC491': 0, 'CSC494': 0, 'CSC495': 0, 'ECE489': 0,
+                'BCB410': 0, 'BCB420': 0, 'BCB430': 0};
+
+
+/**
+ * Updates POSts when button is clicked.
+**/
 $('#update').click(function (e) {
     'use-strict';
 
@@ -18,9 +34,14 @@ $('#update').click(function (e) {
 **/
 // TODO: Add CSC240 and CSC265
 function updateAllCategories() {
+    'use-strict';
+
     updateCompletedMinCourses();
     updateCompletedMajCourses();
     updateCompletedSpecCourses();
+    update300s();
+    update400s();
+    fill300s();
 
     // Update Specialist
     for (var property in completed_spec) {
@@ -161,6 +182,8 @@ function deactivateCourse(courseCode) {
  * @param {string} status Whether it is 'fulfilled' or 'not fulfilled'
 **/
 function updateCategory(category, status) {
+    'use-strict';
+
     if (status === 'fulfilled') {
         category.style.backgroundColor = "#3CB371";
     } else if (status === 'not fulfilled') {
@@ -169,17 +192,61 @@ function updateCategory(category, status) {
 }
 
 
-/**
- * Updates textbox in 300 or 400 level category
- * @param {object} obj Object that was clicked
-**/
-function update300sAnd400s(obj) {
-    var textboxes = $(obj).parent().children('more-info').children();
-    var i = 0;
-    while (textboxes[i].value) {
-        i = i + 1;
+function update300s() {
+    'use-strict';
+
+    for (var courseCode in level300) {
+        if (level300.hasOwnProperty(courseCode)) {
+            if (getCookie(courseCode) === 'active' || getCookie(courseCode) === 'overridden') {
+                if (level300[courseCode] < 1) {
+                    level300[courseCode] += 1;
+                } if (getCookie(courseCode) === 'inactive' || getCookie(courseCode) === 'takeable') {
+                    level300[courseCode] -= 1;
+                }
+            }       
+        }
     }
-    //textboxes[i].value = ;
-    
+}
+
+function update400s() {
+    'use-strict';
+
+    for (var courseCode in level400) {
+        if (level300.hasOwnProperty(courseCode)) {
+            if (getCookie(courseCode) === 'active' || getCookie(courseCode) === 'overridden') {
+                if (level400[courseCode] < 1) {
+                    level400[courseCode] += 1;
+                } if (getCookie(courseCode) === 'inactive' || getCookie(courseCode) === 'takeable') {
+                    level400[courseCode] -= 1;
+                }
+            }       
+        }
+    }
+
+}
+
+/**
+ * Autofills textboxes for 300 level courses. 
+**/
+function fill300s() {
+    'use-strict';
+
+    var i = 0; 
+    var spec300s = $('.300lvlspec');
+    var maj300s = $('.300lvlmaj');
+    var min300s = $('.300lvlmin');
+
+    for (course in level300) {
+        if (level300.hasOwnProperty(course)) {
+            if (level300[course] === 1) {
+                spec300s[i].value = course;
+                maj300s[i].value = course;
+                min300s[i].value = course; 
+                i += 1;
+            } if (i === 3) {
+                break;
+            }
+        }
+    }
 }   
 
