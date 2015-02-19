@@ -22,10 +22,10 @@ var curElbow = null;        // for remembering the last elbow
 function setupSVGCanvas() {
     'use-strict';
 
-    var div = document.createElement("div");
+    var div = document.createElement('div');
     div.setAttribute('id', 'main');
-    var bgdiv = document.createElement("div");
-    bgdiv.setAttribute("id", "background");
+    var bgdiv = document.createElement('div');
+    bgdiv.setAttribute('id', 'background');
     var svg = document.createElementNS(xmlns, 'svg');
     svg.setAttribute('id', 'mySVG');
     svg.setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xlink', 'http://www.w3.org/1999/xlink');
@@ -313,6 +313,8 @@ function findClosest(beg, typeB, end, typeE) {
 
 
 function dist(a, b) {
+    'use-strict'
+
     return Math.sqrt((b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y))
 }
 
@@ -433,14 +435,14 @@ function changeColour(id) {
 function addText() {
     'use-strict'
 
-    var courseCode = document.getElementById("course-code").value;
+    var courseCode = document.getElementById('course-code').value;
     if (nodeSelected !== null && courseCode.length > 2) { // the rect element
         var g = nodeSelected.parentNode;
         if (g.childNodes.length > 1){
             g.removeChild(g.childNodes[1]); 
         }
     //    createText(g, nodeSelected.getAttribute('id'), 't' + nodeSelected.getAttribute('id'), nodeSelected.getAttribute('x'), 
-    //                nodeSelected.getAttribute('y'), nodeSelected.getAttribute('width'), nodeSelected.getAttribute('height'), "black");
+    //                nodeSelected.getAttribute('y'), nodeSelected.getAttribute('width'), nodeSelected.getAttribute('height'), 'black');
         var code = document.createElementNS(xmlns, 'text');
         code.setAttributeNS(null, 'id', 't' + nodeSelected.getAttribute('id'));
         code.setAttributeNS(null, 'x', parseFloat(nodeSelected.getAttribute('x')) + nodeWidth/2);
@@ -486,14 +488,16 @@ function keyboard(e) {
 // register the handler 
 document.addEventListener('keyup', keyboard, false);
 */
+
+
 // TODO:
 /*
 - node type buttons
 - add paths with elbow joints
     x fix relationships and multiple elbows (?)
-    2. don't allow elbow points in end node
-    3. pick best side of start node and end node to make line, so no overlap
-    4. moving path when start or end point of path move
+    ? don't allow elbow points in end node
+    x pick best side of start node and end node to make line, so no overlap
+    x moving path when start or end point of path move
     5. moving elbow points
     6. Show partial paths
     x delete path if start or end node deleted
@@ -508,7 +512,6 @@ https://www.dashingd3js.com/svg-paths-and-d3js
 - document ready method ?
 - when path created should end node be selected?
 - key board shortcuts to switch modes
-- make a grid background for the svg canvas, could prove to be useful if we want to add snapping
-http://www.openjs.com/scripts/events/keyboard_shortcuts/#disable_in_input
+- make grid background optional
 - colour picker for choosing colour of node: <input type='color'/>
 */
