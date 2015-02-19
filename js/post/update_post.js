@@ -99,7 +99,8 @@ function updateCompletedSpecCourses () {
                 if (completed_spec[courseCode] < 1) {
                     completed_spec[courseCode] += 1;
                 } 
-            } else if (getCookie(courseCode) === 'inactive' || getCookie(courseCode) === 'takeable') {
+            } else if ((getCookie(courseCode) === 'inactive' || getCookie(courseCode) === 'takeable')
+                       && (completed_spec[courseCode] > 0)) {
                     completed_spec[courseCode] -= 1;
             }      
         }
@@ -118,7 +119,8 @@ function updateCompletedMajCourses () {
             if (getCookie(courseCode) === 'active' || getCookie(courseCode) === 'overridden') {
                 if (completed_maj[courseCode] < 1) {
                     completed_maj[courseCode] += 1;
-                } if (getCookie(courseCode) === 'inactive' || getCookie(courseCode) === 'takeable') {
+                } else if ((getCookie(courseCode) === 'inactive' || getCookie(courseCode) === 'takeable')
+                      && (completed_maj[courseCode] > 0)) {
                     completed_maj[courseCode] -= 1;
                 }
             }       
@@ -138,7 +140,8 @@ function updateCompletedMinCourses() {
             if (getCookie(courseCode) === 'active' || getCookie(courseCode) === 'overridden') {
                 if (completed_min[courseCode] < 1) {
                     completed_min[courseCode] += 1;
-                } if (getCookie(courseCode) === 'inactive' || getCookie(courseCode) === 'takeable') {
+                } else if ((getCookie(courseCode) === 'inactive' || getCookie(courseCode) === 'takeable')
+                           && (completed_min[courseCode] > 0)) {
                     completed_min[courseCode] -= 1;
                 }
             }       
@@ -212,7 +215,7 @@ function update400s() {
     'use-strict';
 
     for (var courseCode in level400) {
-        if (level300.hasOwnProperty(courseCode)) {
+        if (level400.hasOwnProperty(courseCode)) {
             if (getCookie(courseCode) === 'active' || getCookie(courseCode) === 'overridden') {
                 if (level400[courseCode] < 1) {
                     level400[courseCode] += 1;
