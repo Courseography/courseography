@@ -22,6 +22,10 @@ var curElbow = null;        // for remembering the last elbow
 function setupSVGCanvas() {
     'use-strict';
 
+    var div = document.createElement("div");
+    div.setAttribute('id', 'main');
+    var bgdiv = document.createElement("div");
+    bgdiv.setAttribute("id", "background");
     var svg = document.createElementNS(xmlns, 'svg');
     svg.setAttribute('id', 'mySVG');
     svg.setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xlink', 'http://www.w3.org/1999/xlink');
@@ -31,7 +35,9 @@ function setupSVGCanvas() {
     svg.addEventListener('mouseup', nodeUnclicked, false);
 
     svg.appendChild(setupMarker());
-    document.body.appendChild(svg);
+    div.appendChild(bgdiv);
+    div.appendChild(svg);
+    document.body.appendChild(div);
 }
 
 
