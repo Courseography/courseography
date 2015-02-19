@@ -25,7 +25,6 @@ function setupSVGCanvas() {
     var svg = document.createElementNS(xmlns, 'svg');
     svg.setAttribute('id', 'mySVG');
     svg.setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xlink', 'http://www.w3.org/1999/xlink');
-    //svg.setAttributeNS(xmlns, 'xmlns', xmlns);
     
     svg.addEventListener('mousedown', makeNode, false);
     svg.addEventListener('mousemove', moveNode, false);
@@ -193,14 +192,20 @@ function nodeClicked(e) {
             // make the path from startNode to current node then make startNode Null
             if (curPath === null) {
                 // later we can call findClosest with 'node', 'node'
-                curPath = 'M' + (parseFloat(startNode.getAttribute('x')) + nodeWidth/2) + 
+                /*curPath = 'M' + (parseFloat(startNode.getAttribute('x')) + nodeWidth/2) + 
                                 ',' + parseFloat(startNode.getAttribute('y')) +
                     ' L' + (parseFloat(e.currentTarget.getAttribute('x')) + nodeWidth/2) + 
-                        ',' + (parseFloat(e.currentTarget.getAttribute('y')));
+                        ',' + (parseFloat(e.currentTarget.getAttribute('y')));*/
+                findClosest( {x: parseFloat(startNode.getAttribute('x')), 
+                              y: parseFloat(startNode.getAttribute('y'))},
+                            'node', 
+                            {x: parseFloat(e.currentTarget.getAttribute('x')), 
+                             y: parseFloat(e.currentTarget.getAttribute('y'))},
+                            'node');
             } else {
-                // also call findClosest but with different arguments 'elbow' 'node'
                 findClosest( curElbow, 'elbow', 
-                    {x: parseFloat(e.currentTarget.getAttribute('x')), y: parseFloat(e.currentTarget.getAttribute('y'))},
+                            {x: parseFloat(e.currentTarget.getAttribute('x')), 
+                             y: parseFloat(e.currentTarget.getAttribute('y'))},
                             'node'); 
             }
             select(e.currentTarget);
@@ -245,9 +250,33 @@ function findClosest(beg, typeB, end, typeE) {
         // only need to add end point to curPath
         var theNode = end;
         var theElbow = beg;
+    } else {
+        // top, bottom, left, right
+        var theNode = null;
+        var node1Edges = [{x: beg.x + nodeWidth/2, y: beg.y}, 
+            {x: beg.x + nodeWidth/2, y: beg.y + nodeHeight}, 
+            {x: beg.x + nodeWidth, y: beg.y + nodeHeight/2},
+            {x: beg.x, y: beg.y + nodeHeight/2}];
+        var node2Edges = [{x: end.x + nodeWidth/2, y: end.y}, 
+            {x: end.x + nodeWidth/2, y: end.y + nodeHeight}, 
+            {x: end.x + nodeWidth, y: end.y + nodeHeight/2},
+            {x: end.x, y: end.y + nodeHeight/2}];
+        var best_edges = [node1Edges[0], node2Edges[0]];
+        var best_dist = dist(node1Edges[0], node2Edges[0]);
+        for (var i = 0; i < 4; i++) {
+            for (var j = 0; j < 4; j++) {
+                if (dist(node1Edges[i], node2Edges[j]) < best_dist) {
+                    best_edges = [node1Edges[i], node2Edges[j]];
+                    best_dist = dist(node1Edges[i], node2Edges[j]);
+                } 
+            }
+        }
+        curPath = 'M' + best_edges[0].x + ',' + best_edges[0].y + ' L' +
+                best_edges[1].x + ',' + best_edges[1].y ;
     }
+
     var nodeCoord = '';
-    if (theNode.x < theElbow.x) { // elbow is to the right of theNode
+    if (theNode && theNode.x < theElbow.x) { // elbow is to the right of theNode
         if (theNode.x + nodeWidth > theElbow.x || theNode.y - nodeHeight > theElbow.y) {
             // elbow is above theNode, pick top edge
             nodeCoord = (theNode.x + nodeWidth/2) +  ',' + theNode.y;
@@ -257,7 +286,7 @@ function findClosest(beg, typeB, end, typeE) {
         } else { // pick right edge
             nodeCoord = (theNode.x + nodeWidth) + ',' + (theNode.y + nodeHeight/2);
         }
-    } else { // theNode.x >= theElbow.x, elbow is to the left of theNode
+    } else if (theNode) { // theNode.x >= theElbow.x, elbow is to the left of theNode
         if (theNode.y - nodeHeight > theElbow.y) {
             // elbow is above theNode, pick top edge
             nodeCoord = (theNode.x + nodeWidth/2) + ',' + theNode.y;
@@ -273,9 +302,12 @@ function findClosest(beg, typeB, end, typeE) {
     } else if (typeB === 'elbow' && typeE === 'node') {
         // only need to add end point to curPath
         curPath += 'L' + nodeCoord;
-    } else {
-        // don't know what do for 2 nodes yet
     }
+}
+
+
+function dist(a, b) {
+    return Math.sqrt((b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y))
 }
 
 
@@ -428,7 +460,26 @@ $('#add-text').click(function (){
     addText();
 });
 
+/*
+$(document).bind('keydown', 'ctrl+n', changeMode('node-mode'));
+$(document).bind('keydown', 'ctrl+m', changeMode('change-mode'));
+$(document).bind('keydown', 'ctrl+e', changeMode('erase-mode'));
+$(document).bind('keydown', 'ctrl+p', changeMode('path-mode'));
+*/
 
+/*
+// define a handler
+function keyboard(e) {
+
+    // this would test for whichever key is 40 and the ctrl key at the same time
+    if (e.keyCode == 17 && e.keyCode == 77) { // m
+        // call your function to do the thing
+        changeMode('move-mode');
+    }
+}
+// register the handler 
+document.addEventListener('keyup', keyboard, false);
+*/
 // TODO:
 /*
 - node type buttons
