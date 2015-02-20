@@ -91,7 +91,7 @@ function fetchCourse(courseName) {
 
     var course;
     $.ajax({
-        url: 'course?name=' + courseName,
+        url: 'course',
         dataType: 'json',
         data: {name : courseName},
         async: false,
