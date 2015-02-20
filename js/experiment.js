@@ -476,7 +476,7 @@ function addText() {
     var courseCode = document.getElementById('course-code').value;
     if (nodeSelected !== null && courseCode.length > 2) { // the rect element
         var g = nodeSelected.parentNode;
-        if (g.childNodes.length > 1){
+        if (g.childNodes.length > 1) {
             g.removeChild(g.childNodes[1]); 
         }
     //    createText(g, nodeSelected.getAttribute('id'), 't' + nodeSelected.getAttribute('id'), nodeSelected.getAttribute('x'), 
@@ -496,14 +496,14 @@ function addText() {
 // document ready
 setupSVGCanvas();
 
-$('.mode').each(function(index) {
-  $( this ). click(function () {
-    changeMode(this.id);}); 
-});
-$('.colour').each(function(index) {
-  $(this). click(function () {
-    changeColour(this.id);});
-});
+$('.mode').each(function() {
+    $(this). click(function () {
+        changeMode(this.id);}); 
+    });
+$('.colour').each(function() {
+    $(this). click(function () {
+        changeColour(this.id);});
+    });
 $('#add-text').click(function (){
     addText();
 });
