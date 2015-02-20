@@ -128,7 +128,7 @@ function updateAllCategories() {
 
     // Update 300s
     var i = 0; 
-    var spec300s = $('.300lvlspec');
+    var spec300s = $('.lvl300spec');
     for (var m = 0; m < 3; m++) {
         if (spec300s[m].value != '') {
             i += 1;
@@ -149,7 +149,7 @@ function updateAllCategories() {
     // Update 400s
 
     i = 0; 
-    var spec400s = $('.400lvlspec');
+    var spec400s = $('.lvl400spec');
     for (var l = 0; l < 3; l++) {
         if (spec400s[l].value != '') {
             i += 1;
@@ -221,9 +221,9 @@ function fill300s() {
     'use-strict';
 
     var i = 0; 
-    var spec300s = $('.300lvlspec');
-    var maj300s = $('.300lvlmaj');
-    var min300s = $('.300lvlmin');
+    var spec300s = $('.lvl300spec');
+    var maj300s = $('.lvl300maj');
+    var min300s = $('.lvl300min');
 
     
     // clear textboxes
@@ -260,9 +260,9 @@ function fill400s() {
     'use-strict';
 
     var i = 0; 
-    var spec400s = $('.400lvlspec');
-    var maj400s = $('.400lvlmaj');
-    var min400s = $('.400lvlmin');
+    var spec400s = $('.lvl400spec');
+    var maj400s = $('.lvl400maj');
+    var min400s = $('.lvl400min');
 
     
     // clear textboxes
