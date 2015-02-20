@@ -30,10 +30,10 @@ makeSVGDoc rects ellipses edges regions =
                  ! A.version "1.1" $ do
                       makeSVGDefs
                       S.g ! A.id_ "nodes" $ do
+                          concatSVG $ map convertRegionToSVG regions
                           concatSVG $ map convertRectToSVG rects
                           concatSVG $ map convertEllipseToSVG ellipses
-                          concatSVG $ map convertEdgeToSVG edges
-                          concatSVG $ map convertRegionToSVG regions
+                          S.g ! A.style "stroke:#000000" $ concatSVG $ map convertEdgeToSVG edges
 
 makeSVGDefs :: S.Svg
 makeSVGDefs = S.defs $ do
@@ -65,16 +65,10 @@ buildSVG =
 
         let processedEdges = map (processPath rects ellipses) edges
 
-        --let rectXml    = map convertRectToXML rects
-
-        --let textXml    = map (convertTextToXML . buildText . entityVal) sqlTexts
-        --let edgeXml    = map convertPathToXML processedEdges
-        --let regionXml  = map convertRegionToXML regions
-        --let ellipseXml = map convertEllipseToXML ellipses
         let stringSVG = renderSvg $ makeSVGDoc rects ellipses processedEdges regions
         liftIO $ writeFile "Testfile.svg.2" stringSVG
 
--- | Converts a `Rect` to XML. 
+-- | Converts a `Rect` to SVG.
 convertRectToSVG :: Shape -> S.Svg
 convertRectToSVG rect = if shapeFill rect == "none" then S.rect else
                         S.g ! A.id_ (stringValue $ shapeId rect)
@@ -90,7 +84,7 @@ convertRectToSVG rect = if shapeFill rect == "none" then S.rect else
                                                  ";stroke:#000000;")
                                concatSVG $ map convertTextToSVG (shapeText rect)
 
--- | Converts a `Text` to XML.
+-- | Converts a `Text` to SVG.
 convertTextToSVG :: Text -> S.Svg
 convertTextToSVG text =
     S.text_ ! A.x (stringValue $ show $ fromRational $ textXPos text)
@@ -109,7 +103,7 @@ convertEdgeToSVG :: Path -> S.Svg
 convertEdgeToSVG path =
     S.path ! A.id_ (stringValue $ "path" ++ (pathId path))
            ! A.class_ (stringValue $ "path")
-           ! A.d (stringValue $ buildPathString $ points path)
+           ! A.d (stringValue $ "M" ++ (buildPathString $ points path))
            ! A.markerEnd (stringValue $ "url(#arrow)")
            ! S.customAttribute "source-node" (stringValue $ source path)
            ! S.customAttribute "target-node" (stringValue $ target path)
@@ -124,10 +118,7 @@ convertRegionToSVG :: Path -> S.Svg
 convertRegionToSVG path =
     S.path ! A.id_ (stringValue $ "region" ++ (pathId path))
            ! A.class_ (stringValue $ "region")
-           ! A.d (stringValue $ buildPathString $ points path)
-           ! A.markerEnd (stringValue $ "url(#arrow)")
-           ! S.customAttribute "source-node" (stringValue $ source path)
-           ! S.customAttribute "target-node" (stringValue $ target path)
+           ! A.d (stringValue $ "M" ++ (buildPathString $ points path))
            ! A.style (stringValue $ "fill:" ++
                       pathFill path ++
                       ";fill-opacity:" ++
@@ -139,24 +130,9 @@ convertRegionToSVG path =
 convertEllipseToSVG :: Shape -> S.Svg
 convertEllipseToSVG ellipse = S.g ! A.id_ (stringValue (shapeId ellipse))
                                   ! A.class_ "bool" $ do
-                                      S.ellipse ! A.rx "4"
-                                                ! A.ry "4"
-                                                ! A.cx (stringValue $ show $ fromRational $ shapeXPos ellipse)
+                                      S.ellipse ! A.cx (stringValue $ show $ fromRational $ shapeXPos ellipse)
                                                 ! A.cy (stringValue $ show $ fromRational $ shapeYPos ellipse)
                                                 ! A.rx (stringValue $ show $ (fromRational $ shapeWidth ellipse) / 2)
                                                 ! A.ry (stringValue $ show $ (fromRational $ shapeHeight ellipse) / 2)
                                                 ! A.style "stroke:#000000;fill:none;"
                                       concatSVG $ map convertTextToSVG (shapeText ellipse)
---
----- | The SVG tag for an SVG document, along with an opening 'g' tag.
---svgHeader :: String
---svgHeader =
---    " xmlns:dc=\"http://purl.org/dc/elements/1.1/\"" ++
---    " xmlns:cc=\"http://creativecommons.org/ns#\"" ++
---    " xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"" ++
---    " xmlns:svg=\"http://www.w3.org/2000/svg\"" ++
---    " xmlns=\"http://www.w3.org/2000/svg\"" ++
---    " xmlns:xlink=\"http://www.w3.org/1999/xlink\"" ++
---    " xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\"" ++
---    " xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\"" ++
---    " sodipodi:docname=\"graph_regions.svg\"><defs>"
