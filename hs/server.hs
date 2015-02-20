@@ -8,7 +8,8 @@ import Control.Monad    (msum)
 import Happstack.Server
 import GridResponse
 import GraphResponse
-import AboutResponse
+--import AboutResponse
+import PostResponse
 import JsonParser
 import Tables
 import qualified Data.Aeson as Aeson
@@ -28,8 +29,8 @@ graph = "graph"
 grid :: String
 grid = "grid"
 
-about :: String
-about = "about"
+--about :: String
+--about = "about"
 
 static :: String
 static = "static"
@@ -37,15 +38,20 @@ static = "static"
 course :: String
 course = "course"
 
+post :: String
+post = "post"
+
 main :: IO ()
 main = do
     generateCSS
     cwd <- getCurrentDirectory
     let staticDir = encodeString $ parent $ decodeString cwd
+    contents <- readFile "../README.md"
     simpleHTTP nullConf $
       msum [ dir grid $ gridResponse,
              dir graph $ graphResponse,
-             dir about $ aboutResponse,
+             dir post $ postResponse,
+            -- dir about $ aboutResponse contents,
              dir static $ serveDirectory EnableBrowsing [] staticDir,
              dir course $ path (\s -> liftIO $ queryCourse s)
            ]

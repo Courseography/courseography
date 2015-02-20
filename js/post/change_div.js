@@ -1,7 +1,7 @@
-$(document).ready(function() {
+$(document).ready(function () {
     'use-strict';
 	
-    resetAttributes();
+    $('#div_specialist').show();
 });
 
 
@@ -26,12 +26,19 @@ $('#major').click(function (e) {
 
 
 $('#minor').click (function (e) {
-    'user-strict';
+    'use-strict';
 	
     e.preventDefault();
     resetAttributes();
     $('#div_minor').show();
     $('#minor').css('background-color', '#9C9C9C');
+});
+
+$('.code').click (function (e) {
+    'use-strict';
+    
+    e.preventDefault();
+    $(this).parent().find('.more-info').toggle();
 });
 
 /**
