@@ -43,8 +43,8 @@ Node.prototype.focus = function () {
             $('#' + this.id).attr('data-active', 'missing');
         }
         $.each(this.inEdges, function (i, edge) {
-            if (edge.parent.status !== 'active') {
-                $('#' + edge.name).attr('data-active', 'missing');
+            if (edge.source.status !== 'active') {
+                $('#' + edge.id).attr('data-active', 'missing');
             }
         });
         $.each(this.parents, function (i, node) {

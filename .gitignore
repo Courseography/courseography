@@ -9,3 +9,10 @@ enrol.txt
 res/courses-copy/
 *.pyc
 courses.tar.gz
+out/
+*.exe
+*.hi
+*.o
+*.sqlite3
+style/
+SVGGen.hs

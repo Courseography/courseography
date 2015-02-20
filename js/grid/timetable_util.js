@@ -12,26 +12,21 @@ function updateSelectedLectures(sectionId) {
 
 
 /**
- * Returns all course codes.
- * @returns {string[]} All course codes.
+ * Populate the global list of courses.
  */
 function getVeryLargeCourseArray() {
     'use strict';
 
-    var splitArray = undefined;
-
     $.ajax({
-        url: "res/courses.txt",
+        url: "static/res/courses.txt",
         dataType: "text",
         async: false,
         success: function (data) {
-            var splitArray = data.split('\n').map(function (course) {
+            courses = data.split('\n').map(function (course) {
                 return course.substring(0, 8);
             });
         }
     });
-
-    return splitArray;
 }
 
 
@@ -40,7 +35,6 @@ function getVeryLargeCourseArray() {
  */
 function enableSearch() {
     'use strict';
-
     $('#course-filter').keyup(function() {
         resetSearchList();
     });

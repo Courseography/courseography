@@ -1,7 +1,7 @@
 // All Global Variables for the Grid
 //TODO: Are all of these used?
 var trapScroll;             // Disables ability to scroll parent div.
-var courses;                //
+var courses = [];           //
 var courseCache = [];       // All Courses that have been previously requested.
 var selectedCourses = [];   // All selected Courses.
 var selectedSections = [];  // All selected sections.
@@ -26,7 +26,7 @@ $(document).ready(function () {
     restoreFromCookies();
     renderClearAllButton();
     enableSearch();
-    courses = getVeryLargeCourseArray();
+    getVeryLargeCourseArray();
     trapScroll();
     setTdHover();
 });

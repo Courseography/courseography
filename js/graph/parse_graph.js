@@ -17,7 +17,7 @@ function buildGraph() {
     var xEnd;
 
     $('.node').each(function () {
-        makeNode([], 'AND', $(this).attr('id'));
+        makeNode('AND', $(this).attr('id'));
     });
 
     $('.hybrid').each(function () {
@@ -48,23 +48,17 @@ function buildGraph() {
         makeHybrid(type, id);
     });
 
-    $('path').each(function () {
+    $('.path').each(function () {
         var coords = $(this).attr('d').split(' ');
         coords = coords.filter(function (str) {return str !== 'M' &&
-                                                      str !== 'L'; });
+            str !== 'L' && str !== ''; });
+
         // Do something for internet explorer
-        if (!!navigator.userAgent.match(/Trident.*rv[ :]*11\./) ||
-              window.navigator.userAgent.indexOf('MSIE ') > -1) {
-            xStart = parseFloat(coords[0]);
-            yStart = parseFloat(coords[1]);
-            yEnd = parseFloat(coords.pop());
-            xEnd = parseFloat(coords.pop());
-        } else {
-            xStart = parseFloat(coords[0].substr(1));
-            yStart = parseFloat(coords[1]);
-            yEnd = parseFloat(coords.pop());
-            xEnd = parseFloat(coords.pop().substr(1));
-        }
+        xStart = parseFloat(coords[0].split(",")[0]);
+        yStart = parseFloat(coords[0].split(",")[1]);
+        var end = coords.pop();
+        xEnd = parseFloat(end.split(",")[0]);
+        yEnd = parseFloat(end.split(",")[1]);
 
         var startNode = '';
         var endNode = '';
@@ -110,6 +104,12 @@ function buildGraph() {
                 return false;
             }
         });
+
+        if (startNode === '' && endNode === '') {
+            console.log("Could not make edge, diagnose:");
+            console.log("Start: " + startNode);
+            console.log("End: " + endNode);
+        }
 
         makeEdge(window[startNode], window[endNode], $(this).attr('id'));
     });
@@ -159,8 +159,8 @@ function parseOr(s) {
     var tmp;
     var result;
     while (curr.length > 0 &&
-           curr.charAt(0) !== ',' &&
-           curr.charAt(0) !== ';') {
+        curr.charAt(0) !== ',' &&
+        curr.charAt(0) !== ';') {
 
         if (curr.charAt(0) === '(') {
             tmp = curr.substr(1, curr.indexOf(')'));
@@ -168,7 +168,7 @@ function parseOr(s) {
             orList.append(result[0]);
             curr = curr.substr(curr.indexOf(')') + 1);
         } else if (curr.charAt(0) === ' ' ||
-                   curr.charAt(0) === '/') {
+            curr.charAt(0) === '/') {
             curr = curr.substr(1);
         } else {
             result = parseCourse(curr);
@@ -232,7 +232,7 @@ function intersects(px, py, rx, ry, width, height, offset) {
     var dx = px - rx;
     var dy = py - ry;
     return dx >= -1 * offset &&
-           dx <= width + offset &&
-           dy >= -1 * offset &&
-           dy <= height + offset;
+        dx <= width + offset &&
+        dy >= -1 * offset &&
+        dy <= height + offset;
 }

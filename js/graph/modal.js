@@ -8,10 +8,9 @@ function createModalDiv(id) {
 
     var contentDiv = $('<div></div>');
     contentDiv.attr('id', 'modal-content-container');
-    contentDiv.css('overflow', 'auto');
 
     var courseDescription = fetchCourseDescription(id);
-    var p = $('<p></p>').css('color', 'white').html(courseDescription);
+    var p = $('<p></p>').html(courseDescription);
     var bottomContentDiv = $('<div></div>');
     bottomContentDiv.attr('id', 'bottom-content-container');
     var video = setupVideoPlayer(id);
@@ -139,12 +138,13 @@ function displayTooltip(nodeId) {
                    parseFloat($('#' + nodeId).children('rect').attr('width')) + 5;
     }
 
-    var yPos = rectObject.attr('y');
+    var yPos = parseFloat(rectObject.attr('y'));
+
     var g = createG(nodeId);
     createRect(g, 'node-tooltip', nodeId + '-tooltip', xPos, yPos,
                60, 30, 'black');
     createText(g, nodeId, 'node-tooltip', nodeId + '-tooltip', xPos, yPos,
-               60, 30, 'black');
+               60, 30);
 }
 
 
@@ -195,17 +195,16 @@ function createRect(g, rectClass, rectId, posX, posY, width, height, color) {
  * @param {number} posY The y position of the text element.
  * @param {number} width The width of the text element.
  * @param {number} height The height of the text element.
- * @param {string} color The fill and stroke color of the text element.
  */
-function createText(g, nodeId, textClass, textId, posX, posY, width, height, color) {
+function createText(g, nodeId, textClass, textId, posX, posY, width, height) {
     'use strict';
 
     var text = $(document.createElementNS('http://www.w3.org/2000/svg', 'text'))
         .text('Info')
-        .attr('class', rectClass + '-text ' + rectId + '-text')
-        .attr('id', rectId + '-text')
-        .attr('x', parseFloat(posX) + 30)
-        .attr('y', parseFloat(posY) + 20);
+        .attr('class', textClass + '-text ' + textId + '-text')
+        .attr('id', textId + '-text')
+        .attr('x', parseFloat(posX) + width / 2)
+        .attr('y', parseFloat(posY) + height / 2);
     g.append(text);
 }
 
@@ -224,7 +223,7 @@ function createG(nodeId) {
         .click(function () {
             openModal(nodeId);
         });
-    $('#graphRootSVG').append(g);
+    $('.nodes').append(g);
     return g;
 }
 
@@ -238,9 +237,7 @@ function openModal(id) {
     'use strict';
 
     if ($('.modal').length === 0) {
-        $('.infoTabs').hide();
-
-        var div = createModalDiv(nodeId);
+        var div = createModalDiv(id);
 
         div.attr('title', getCourseTitle(id))
            .addClass('modal').dialog({
@@ -259,12 +256,11 @@ function openModal(id) {
                         window[elem].updateSVG();
                     });
                     $('body').css('background', 'rgb(255,255,255)');
-                    $('.infoTabs').show();
                 }});
 
         $('.node, .hybrid').attr('data-active', 'unlit');
         $('body').css('background', 'rgb(40,40,40)');
-        setMouseCallbacks();
+
         enableVideoJS();
         $('.tooltip-group').remove();
     }

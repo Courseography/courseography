@@ -53,9 +53,6 @@ function updatePOSt(course, active) {
         }
     }
 
-    $('#' + course + 'check').prop('checked', active);
-    $('#' + course + 'checkMajor').prop('checked', active);
-    $('#' + course + 'checkMinor').prop('checked', active);
 }
 
 
@@ -344,11 +341,11 @@ function update300sElecsMajor() {
 
     elec300sTotalMajor = tmp.length + numBCBMajor;
 
-    for (var i = 1; i <= 3; i++) {
-        if ($('#MAT' + i + 'Major').prop('value').substr(0, 3) === 'MAT') {
-            elec300sTotalMajor += 1;
-        }
-    }
+//    for (var i = 1; i <= 3; i++) {
+//        if ($('#MAT' + i + 'Major').prop('value').substr(0, 3) === 'MAT') {
+//            elec300sTotalMajor += 1;
+//        }
+//    }
 
     elec300sTotalMajor /= 2;
 }
