@@ -2,7 +2,7 @@
     OverloadedStrings, TypeFamilies #-}
 
 
-module JsonParser (insertCourse, 
+module Database.JsonParser (insertCourse, 
                     dbStr,
                     encodeJSON) where
 
@@ -23,7 +23,7 @@ import Control.Monad
 import Control.Monad.Trans.Reader
 import Control.Applicative
 import Data.Maybe
-import Tables
+import Database.Tables
 
 dbStr :: T.Text
 dbStr = "database1.sqlite3"

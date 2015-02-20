@@ -6,10 +6,9 @@ import Control.Monad.IO.Class  (liftIO)
 import Control.Monad.Trans.Resource (runResourceT)
 import Database.Persist
 import Database.Persist.Sqlite
-
-import InsertCourses
-import Tables
-import ParseAll
+import Database.JsonParser
+import Database.Tables
+import WebParsing.ParseAll
 
 main :: IO ()
 main = runResourceT $ do
