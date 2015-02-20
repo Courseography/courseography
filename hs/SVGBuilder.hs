@@ -77,7 +77,7 @@ buildRect texts entity = do
                             (fromRational (textXPos x))
                             (fromRational (textYPos x))
                             ) texts
-    let textString = foldl (++) "" (map textText rectTexts)
+    let textString = concat $ map textText rectTexts
     let id_ = (if rectsIsHybrid entity then "h" else "") ++ 
               (if isDigit $ head textString then "CSC" else "") ++ dropSlash textString
     Rect id_

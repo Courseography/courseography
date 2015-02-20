@@ -71,7 +71,7 @@ convertAttributeToTuple at = (getAttrName at, getAttrVal at)
 
 -- | Gets the children of the current node.
 getChildren :: Content i -> [Content i]
-getChildren = (path [children])
+getChildren = path [children]
 
 -- | Gets the value of the attribute with the corresponding key.
 getAttribute :: String -> Content i -> String
@@ -115,7 +115,7 @@ convertToFloatTuple y = (read (head y) :: Float, read (last y) :: Float)
 
 -- | Adds two tuples together.
 addTuples :: (Float, Float) -> (Float, Float) -> (Float, Float)
-addTuples tup1 tup2 = (fst tup1 + fst tup2, snd tup1 + snd tup2)
+addTuples (a,b) (c,d) = (a + c, b + d)
 
 -- | Determines if a point intersects with a shape.
 intersects :: Float -> Float -> Float -> Float -> Float -> Float -> Float -> Bool
