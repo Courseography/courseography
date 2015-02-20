@@ -127,6 +127,7 @@ fill = (-:) "fill"
 wideStroke = "stroke-width" -: "3"
 faded = opacity 0.4
 semiVisible = opacity 0.7
+fullyVisible = opacity 1.0
 strokeRed = do
     "stroke" -: "#CC0011"
     "stroke-width" -: "2px"
@@ -708,7 +709,20 @@ tabsCSS = do
                     textDecoration none
 
                 
-postCSS = do 
+postCSS = do
+    "input" ? do
+        fontSize (px 14)
+    "#button_wrapper" ? do
+        textAlign $ alignSide sideCenter
+        height (px 50)
+        paddingLeft (px 20)
+    "#update" ? do 
+        height (px 40)
+        fontSize (px 14)
+        cursor pointer
+        semiVisible
+        ":hover" & do
+            fullyVisible
     "div" ? do
         ".code" ? do
             fontFamily ["HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", "Lucida Grande"][sansSerif]
@@ -731,7 +745,7 @@ postCSS = do
         color red
     "#div_specialist, #div_major, #div_minor" ? do
         position absolute
-        "margin-above" -: "70px"
+        "margin-above" -: "30px"
         display none
         height (pct 70)
         marginLeft (px 25)
@@ -741,6 +755,7 @@ postCSS = do
         marginLeft nil 
         color red
     ".more-info" ? do
+        cursor pointer
         border solid (px 2) grey3
         "border-radius" -: "4px"
         backgroundColor grey4
