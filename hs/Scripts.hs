@@ -51,4 +51,5 @@ postScripts = concatHtml (map makeScript ["https://ajax.googleapis.com/ajax/libs
                                           "static/js/post/change_div.js",
                                           "static/js/common/cookieHandler.js",
                                           "static/js/post/update_post.js",
-                                          "static/js/graph/create_data.js"])
+                                          "static/js/graph/create_data.js",
+                                          "static/js/post/update_counts.js"])
