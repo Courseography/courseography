@@ -44,7 +44,7 @@ function buildGraph() {
     });
 
     $('.path').each(function () {
-        makeEdge(window[$(this).attr("source-node")], window[$(this).attr("target-node")], $(this).attr('id'));
+        makeEdge(window[$(this).attr('source-node')], window[$(this).attr('target-node')], $(this).attr('id'));
     });
 }
 
