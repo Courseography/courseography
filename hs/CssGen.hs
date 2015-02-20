@@ -639,7 +639,7 @@ aboutStyles = "#aboutDiv" ? do
     maxWidth (px 1000)
     padding 0 (em 1) 0 (em 1)
     margin nil auto nil auto
-    textAlign justify 
+    textAlign justify
     h1 <> h2 <> h3 <? do
         color blue3
 
@@ -684,14 +684,14 @@ mainCSS = "#main" ? do
     border solid (px 2) "#000000"
 
 canvasBackground = "#background" ? do
-    height (pct 100)
-    width (pct 100)
+    height100
+    width100
     "background-image" -: "url(http://www.emba.uvm.edu/~jtl/gimpdoc-html/plugab17.gif)"
     opacity 0.3
 
 canvasCSS = "#mySVG" ? do
-    height (pct 100)
-    width (pct 100)
+    height100
+    width100
     position absolute
     top nil
     left nil

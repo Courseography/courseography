@@ -64,7 +64,7 @@ function setupMarker() {
     marker.appendChild(polyline);
     defs.appendChild(marker);
 
-    return defs
+    return defs;
 }
 
 
@@ -142,7 +142,6 @@ function makeNode(e) {
                 curPath += 'L' + position.x + ',' + position.y + ' ';   
             }
             curElbow = position;
-            console.log('adding elbow to it ' + curPath);  
         }
     }
 }
@@ -194,7 +193,6 @@ function nodeClicked(e) {
             // this is the start node of the path about to be created
             startNode = e.currentTarget;
             select(e.currentTarget);
-            console.log('Path started ---------------');
             curPath = null;
             curElbow = null;
         } else {
@@ -227,7 +225,6 @@ function nodeClicked(e) {
             thePath.setAttributeNS(null, 'data-active', 'drawn');
             thePath.setAttributeNS(null, 'marker-end', 'url(#arrow)');
             thePath.addEventListener('click', pathClicked, false);
-            console.log('creating it ' + curPath);
             document.getElementById('mySVG').appendChild(thePath);
 
             thePath.parents = startNode;
@@ -266,13 +263,13 @@ function findClosest(beg, typeB, end, typeE) {
     } else {
         // top, bottom, left, right
         var node1Edges = [{x: beg.x + nodeWidth/2, y: beg.y}, 
-            {x: beg.x + nodeWidth/2, y: beg.y + nodeHeight}, 
-            {x: beg.x + nodeWidth, y: beg.y + nodeHeight/2},
-            {x: beg.x, y: beg.y + nodeHeight/2}];
+                          {x: beg.x + nodeWidth/2, y: beg.y + nodeHeight}, 
+                          {x: beg.x + nodeWidth, y: beg.y + nodeHeight/2},
+                          {x: beg.x, y: beg.y + nodeHeight/2}];
         var node2Edges = [{x: end.x + nodeWidth/2, y: end.y}, 
-            {x: end.x + nodeWidth/2, y: end.y + nodeHeight}, 
-            {x: end.x + nodeWidth, y: end.y + nodeHeight/2},
-            {x: end.x, y: end.y + nodeHeight/2}];
+                          {x: end.x + nodeWidth/2, y: end.y + nodeHeight}, 
+                          {x: end.x + nodeWidth, y: end.y + nodeHeight/2},
+                          {x: end.x, y: end.y + nodeHeight/2}];
         var best_edges = [node1Edges[0], node2Edges[0]];
         var best_dist = dist(node1Edges[0], node2Edges[0]);
         for (var i = 0; i < 4; i++) {
@@ -335,8 +332,6 @@ function select(newNode) {
     }
     nodeSelected = newNode;
     nodeSelected.parentNode.setAttribute('data-active', 'active');
-    // console.log('parents: ', nodeSelected.parents);
-    // console.log('kids: ', nodeSelected.kids);
 }
 
 
@@ -371,7 +366,6 @@ function moveNode(e) {
 
         nodeX = position.x;
         nodeY = position.y;
-        // console.log(nodeMoving.x.animVal.value, nodeMoving.y.animVal.value, nodeX, nodeY);
     }
 }
 
@@ -393,7 +387,6 @@ function pathClicked(e) {
     if (mode === 'erase-mode') { // need to remove path from node lists!
         var index = -1;
         var pathId = e.currentTarget.getAttribute('id');
-        console.log(pathId.slice(1, pathId.indexOf('n', 1)), pathId.slice(pathId.indexOf('n', 1) + 1));
         var beg = document.getElementById(pathId.slice(1, pathId.indexOf('n', 1)));
         var end = document.getElementById(pathId.slice(pathId.indexOf('n', 1) + 1));
         
@@ -430,16 +423,12 @@ function movePath(path, xBy, yBy, startOrEnd) {
     if (startOrEnd === 'start') {
         theX = parseFloat(thePath.slice(1, thePath.indexOf(','))) + xBy; // exclude the M
         theY = parseFloat(thePath.slice(thePath.indexOf(',') + 1, thePath.indexOf('L'))) + yBy;
-        console.log(thePath);
         thePath = 'M' + theX + ',' + theY + thePath.slice(thePath.indexOf('L'));
-        console.log(thePath);
     } else if (startOrEnd === 'end') {
         theX = parseFloat(thePath.slice(thePath.lastIndexOf('L') + 1, 
                                         thePath.lastIndexOf(','))) + xBy;
         theY = parseFloat(thePath.slice(thePath.lastIndexOf(',') + 1)) + yBy;
-        console.log(thePath);
         thePath = thePath.slice(0, thePath.lastIndexOf('L') + 1) + theX + ',' + theY;
-        console.log(thePath);
     }
     path.setAttribute('d', thePath); 
 }
