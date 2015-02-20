@@ -1,13 +1,6 @@
-{-# LANGUAGE EmptyDataDecls,
-             FlexibleContexts,
-             GADTs,
-             GeneralizedNewtypeDeriving,
-             MultiParamTypeClasses,
-             OverloadedStrings,
-             DeriveGeneric,
-             QuasiQuotes,
-             TemplateHaskell,
-             TypeFamilies #-}
+{-# LANGUAGE FlexibleContexts, GADTs, MultiParamTypeClasses,
+ OverloadedStrings, TypeFamilies #-}
+
 
 import Control.Monad.IO.Class  (liftIO)
 import Control.Monad.Trans.Resource (runResourceT)
@@ -19,11 +12,11 @@ import Tables
 
 main :: IO ()
 main = runResourceT $ do
-                        liftIO $ setupDistributionTable
+                        liftIO setupDistributionTable
                         liftIO $ print "Distribution table set up"
-                        liftIO $ setupBreadthTable
+                        liftIO setupBreadthTable
                         liftIO $ print "breadth table set up"
-                        liftIO $ processDirectory
+                        liftIO processDirectory
 
 -- | Sets up the Distribution table.
 setupDistributionTable :: IO ()

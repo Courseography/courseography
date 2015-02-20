@@ -168,10 +168,10 @@ function renderAddHover(time, section) {
     
     if ($(time).attr('clicked') !== 'true') {
         if ($(time).attr('rowspan') !== '1') {
-            $(time).html(section.courseName)
+            $(time).html(section.courseName.substring(0,6) + ' (' + section.type + ')')
                     .attr('hover', 'good');
         } else {
-            $(time).html(section.courseName)
+            $(time).html(section.courseName.substring(0,6) + ' (' + section.type + ')')
                     .attr('hover', 'good')
                     .css('font-size', '0');
         }
