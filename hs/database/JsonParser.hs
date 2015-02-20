@@ -1,7 +1,9 @@
  {-# LANGUAGE FlexibleContexts, GADTs, MultiParamTypeClasses,
     OverloadedStrings, TypeFamilies #-}
 
-module JsonParser where
+module JsonParser (insertCourse, 
+                    dbStr,
+                    encodeJSON) where
 
 import qualified Data.ByteString.Lazy as B
 import qualified Data.ByteString.Lazy.Char8 as BSL
@@ -21,7 +23,7 @@ import Data.Maybe
 import Tables
 
 dbStr :: T.Text
-dbStr = "database.sqlite3"
+dbStr = "database1.sqlite3"
 
 courseDirectory :: String
 courseDirectory = "../../res/courses/"
