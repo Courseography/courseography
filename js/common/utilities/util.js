@@ -72,7 +72,6 @@ function getCourseObject(courseName, courseArray) {
  */
 function getCourse(name) {
     'use strict';
-
     var course = getCourseObject(name, courseCache);
     if (course === undefined) {
         course = fetchCourse(name);
@@ -83,16 +82,17 @@ function getCourse(name) {
 
 /**
  * Retrieves a course from file.
- * @param {string} name The course code. This + '.txt' is the name of the file.
+ * @param {string} courseName The course code. This + '.txt' is the name of the file.
  * @returns {undefined|JSON} The JSON object representing the course.
  */
-function fetchCourse(name) {
+function fetchCourse(courseName) {
     'use strict';
 
     var course;
     $.ajax({
-        url: 'course/' + name,
+        url: 'course',
         dataType: 'json',
+        data: {name : courseName},
         async: false,
         success: function (data) {
             course = data;
