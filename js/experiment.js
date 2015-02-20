@@ -42,7 +42,7 @@ function setupSVGCanvas() {
 
 
 function setupMarker() {
-    'use-strict'
+    'use-strict';
 
     var defs = document.createElementNS(xmlns, 'defs');
     var marker = document.createElementNS(xmlns, 'marker');
@@ -133,7 +133,8 @@ function makeNode(e) {
                     (position.y < startNode.getAttribute('y') || 
                                     position.y > parseFloat(startNode.getAttribute('y')) + nodeHeight)) {
             if (curPath === null) {
-                findClosest({x: parseFloat(startNode.getAttribute('x')), y: parseFloat(startNode.getAttribute('y'))},
+                findClosest({x: parseFloat(startNode.getAttribute('x')), 
+                             y: parseFloat(startNode.getAttribute('y'))},
                             'node', position, 'elbow');
             } else {
                 curPath += 'L' + position.x + ',' + position.y + ' ';   
@@ -152,9 +153,9 @@ function nodeClicked(e) {
     var index = null;
 
     if (mode  === 'erase-mode') { 
-        // remove any paths leading to and from this node from the other node's list of paths
-        // and remove this node from the other nodes' adjacency lists
-        e.currentTarget.attributes['inEdges'].map( function (item) {
+        // remove any paths leading to and from this node from the other node's 
+        // list of paths and remove this node from the other nodes' adjacency lists
+        e.currentTarget.attributes['inEdges'].map(function (item) {
             index = item.attributes['parents'].attributes['outEdges'].indexOf(item);
             if (index > -1) {
                 (item.attributes['parents'].attributes['outEdges']).splice(index, 1);
@@ -165,7 +166,7 @@ function nodeClicked(e) {
             }
             svgDoc.removeChild(item);
         });
-        e.currentTarget.attributes['outEdges'].map( function (item) {
+        e.currentTarget.attributes['outEdges'].map(function (item) {
             index = item.attributes['children'].attributes['inEdges'].indexOf(item);
             if (index > -1) {
                 item.attributes['children'].attributes['inEdges'].splice(index, 1);
@@ -217,6 +218,7 @@ function nodeClicked(e) {
             select(e.currentTarget);
               
             var thePath = document.createElementNS(xmlns, 'path');
+            thePath.setAttributeNS(null, 'id', 'n' + startNode.id + 'n' + e.currentTarget.id);
             thePath.setAttributeNS(null, 'd', curPath);
             thePath.setAttributeNS(null, 'fill', 'none');
             thePath.setAttributeNS(null, 'stroke', 'black');
@@ -244,21 +246,23 @@ function nodeClicked(e) {
 
 /*
 Return the best coordinates for the start and end of a edge. theNode and end could
-be a node or an elbow. Atleast one of beg and end must be a node.
+be a node or an elbow. At least one of beg and end must be a node.
 */
 function findClosest(beg, typeB, end, typeE) {
-    'use-strict'
+    'use-strict';
+
+    var theNode = null;
+    var theElbow = null;
 
     if (typeB === 'node' && typeE === 'elbow') {
-        var theNode = beg;
-        var theElbow = end;
+        theNode = beg;
+        theElbow = end;
     } else if (typeB === 'elbow' && typeE === 'node') {
         // only need to add end point to curPath
-        var theNode = end;
-        var theElbow = beg;
+        theNode = end;
+        theElbow = beg;
     } else {
         // top, bottom, left, right
-        var theNode = null;
         var node1Edges = [{x: beg.x + nodeWidth/2, y: beg.y}, 
             {x: beg.x + nodeWidth/2, y: beg.y + nodeHeight}, 
             {x: beg.x + nodeWidth, y: beg.y + nodeHeight/2},
@@ -283,10 +287,12 @@ function findClosest(beg, typeB, end, typeE) {
 
     var nodeCoord = '';
     if (theNode && theNode.x < theElbow.x) { // elbow is to the right of theNode
-        if (theNode.x + nodeWidth > theElbow.x || theNode.y - nodeHeight > theElbow.y) {
+        if (theNode.x + nodeWidth > theElbow.x || 
+            theNode.y - nodeHeight > theElbow.y) {
             // elbow is above theNode, pick top edge
             nodeCoord = (theNode.x + nodeWidth/2) +  ',' + theNode.y;
-        } else if (theNode.x + nodeWidth > theElbow.x || theNode.y + 2 * nodeHeight < theElbow.y) {
+        } else if (theNode.x + nodeWidth > theElbow.x || 
+            theNode.y + 2 * nodeHeight < theElbow.y) {
             // elbow is below theNode, pick bottom edge
             nodeCoord = (theNode.x + nodeWidth/2) + ',' + (theNode.y + nodeHeight);
         } else { // pick right edge
@@ -313,14 +319,14 @@ function findClosest(beg, typeB, end, typeE) {
 
 
 function dist(a, b) {
-    'use-strict'
+    'use-strict';
 
     return Math.sqrt((b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y))
 }
 
 
 function select(newNode) {
-    'use-strict'
+    'use-strict';
 
     if (nodeSelected !== null) {
         nodeSelected.parentNode.setAttribute('data-active', 'unselected');
@@ -354,10 +360,10 @@ function moveNode(e) {
         }
         
         // move in and out edges by the same amount
-        nodeMoving.attributes['inEdges'].map( function (item) { // modify last node in path
+        nodeMoving.attributes['inEdges'].map(function (item) { // modify last node in path
             movePath(item, (position.x - nodeX), (position.y - nodeY), 'end');
         });
-        nodeMoving.attributes['outEdges'].map( function (item) { // modify the first node in path
+        nodeMoving.attributes['outEdges'].map(function (item) { // modify the first node in path
             movePath(item, (position.x - nodeX), (position.y - nodeY), 'start');
         });   
 
@@ -380,16 +386,41 @@ function nodeUnclicked(e) {
 
 
 function pathClicked(e) {
-    'use-strict'
+    'use-strict';
 
     if (mode === 'erase-mode') { // need to remove path from node lists!
+        var index = -1;
+        var pathId = e.currentTarget.getAttribute('id');
+        console.log(pathId.slice(1, pathId.indexOf('n', 1)), pathId.slice(pathId.indexOf('n', 1) + 1));
+        var beg = document.getElementById(pathId.slice(1, pathId.indexOf('n', 1)));
+        var end = document.getElementById(pathId.slice(pathId.indexOf('n', 1) + 1));
+        
+        // delete the nodes from each others' list
+        index = beg.attributes['children'].indexOf(end);
+        if (index > -1) {
+            beg.attributes['children'].splice(index, 1);
+        }
+        index = end.attributes['parents'].indexOf(beg);
+        if (index > -1) {
+            end.attributes['parents'].splice(index, 1);
+        }
+        // delete this path from the nodes' list
+        index = beg.attributes['outEdges'].indexOf(e.currentTarget);
+        if (index > -1) {
+            beg.attributes['outEdges'].splice(index, 1);
+        }
+        index = end.attributes['inEdges'].indexOf(e.currentTarget);
+        if (index > -1) {
+            end.attributes['inEdges'].splice(index, 1);
+        }
         document.getElementById('mySVG').removeChild(e.currentTarget);
     }
+
 }
 
 
 function movePath(path, xBy, yBy, startOrEnd) {
-    'use-strict'
+    'use-strict';
 
     var thePath = path.getAttribute('d');
     var theX = null;
@@ -401,7 +432,8 @@ function movePath(path, xBy, yBy, startOrEnd) {
         thePath = 'M' + theX + ',' + theY + thePath.slice(thePath.indexOf('L'));
         console.log(thePath);
     } else if (startOrEnd === 'end') {
-        theX = parseFloat(thePath.slice(thePath.lastIndexOf('L') + 1, thePath.lastIndexOf(','))) + xBy;
+        theX = parseFloat(thePath.slice(thePath.lastIndexOf('L') + 1, 
+                                        thePath.lastIndexOf(','))) + xBy;
         theY = parseFloat(thePath.slice(thePath.lastIndexOf(',') + 1)) + yBy;
         console.log(thePath);
         thePath = thePath.slice(0, thePath.lastIndexOf('L') + 1) + theX + ',' + theY;
@@ -433,7 +465,7 @@ function changeColour(id) {
 
 
 function addText() {
-    'use-strict'
+    'use-strict';
 
     var courseCode = document.getElementById('course-code').value;
     if (nodeSelected !== null && courseCode.length > 2) { // the rect element
@@ -445,8 +477,10 @@ function addText() {
     //                nodeSelected.getAttribute('y'), nodeSelected.getAttribute('width'), nodeSelected.getAttribute('height'), 'black');
         var code = document.createElementNS(xmlns, 'text');
         code.setAttributeNS(null, 'id', 't' + nodeSelected.getAttribute('id'));
-        code.setAttributeNS(null, 'x', parseFloat(nodeSelected.getAttribute('x')) + nodeWidth/2);
-        code.setAttributeNS(null, 'y', parseFloat(nodeSelected.getAttribute('y')) + nodeHeight/2);
+        code.setAttributeNS(null, 'x', parseFloat(nodeSelected.getAttribute('x')) + 
+                                        nodeWidth/2);
+        code.setAttributeNS(null, 'y', parseFloat(nodeSelected.getAttribute('y')) + 
+                                        nodeHeight/2);
         var textNode = document.createTextNode(courseCode);
         code.appendChild(textNode);
         g.appendChild(code);
@@ -467,27 +501,6 @@ $('.colour').each(function(index) {
 $('#add-text').click(function (){
     addText();
 });
-
-/*
-$(document).bind('keydown', 'ctrl+n', changeMode('node-mode'));
-$(document).bind('keydown', 'ctrl+m', changeMode('change-mode'));
-$(document).bind('keydown', 'ctrl+e', changeMode('erase-mode'));
-$(document).bind('keydown', 'ctrl+p', changeMode('path-mode'));
-*/
-
-/*
-// define a handler
-function keyboard(e) {
-
-    // this would test for whichever key is 40 and the ctrl key at the same time
-    if (e.keyCode == 17 && e.keyCode == 77) { // m
-        // call your function to do the thing
-        changeMode('move-mode');
-    }
-}
-// register the handler 
-document.addEventListener('keyup', keyboard, false);
-*/
 
 
 // TODO:
