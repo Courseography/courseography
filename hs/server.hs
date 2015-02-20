@@ -23,5 +23,9 @@ main = do
                dir "graph" graphResponse,
                --dir "about" $ aboutResponse contents,
                dir "static" $ serveDirectory EnableBrowsing [] staticDir,
-               dir "course" $ path (\s -> liftIO $ queryCourse (T.pack s))
-             ]
+               dir "course" $ look "name" >>= retrieveCourse 
+               ]
+
+retrieveCourse :: String -> ServerPart Response
+retrieveCourse course = do
+   liftIO $ queryCourse (T.pack course)

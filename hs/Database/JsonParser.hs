@@ -22,7 +22,7 @@ import Data.Maybe
 import Database.Tables
 
 dbStr :: T.Text
-dbStr = "database.sqlite3"
+dbStr = "database1.sqlite3"
 
 courseDirectory :: String
 courseDirectory = "../../res/courses/"
