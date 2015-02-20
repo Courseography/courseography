@@ -178,37 +178,9 @@ nodeCSS = "g" ? do
         "data-active" @= "unlit" & do
             wideStroke
             strokeRed
-        "data-group" @= "theory" & do
-            "rect" <? do
-                fill theoryDark
-        "data-group" @= "core" & do
-            "rect" <? do
-                fill coreDark
-        "data-group" @= "se" & do
-            "rect" <? do
-                fill seDark
-        "data-group" @= "systems" & do
-            "rect" <? do
-                fill systemsDark
-        "data-group" @= "graphics" & do
-            "rect" <? do
-                fill graphicsDark
-        "data-group" @= "dbweb" & do
-            "rect" <? do
-                fill dbwebDark
-        "data-group" @= "num" & do
-            "rect" <? do
-                fill numDark
-        "data-group" @= "ai" & do
-            "rect" <? do
-                fill aiDark
-        "data-group" @= "hci" & do
-            "rect" <? do
-                fill hciDark
         -- Since groups are missing right now
         "rect" <? do
             stroke "black"
-            fill systemsDark
     ".hybrid" & do
         cursor cursorDefault
         "rect" <? do

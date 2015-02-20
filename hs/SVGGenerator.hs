@@ -24,26 +24,43 @@ import SVGBuilder
 import Text.Blaze.Internal (stringValue)
 import Text.Blaze (toMarkup)
 import qualified Data.Map as M
+import CssGen
 
-areaMap :: [(String, [String])]
-areaMap = [("theory", ["CSC165", "CSC236", "CSC240", "CSC263", "CSC265",
+areaMap :: [(String, String, [String])]
+areaMap = [("theory", theoryDark, ["CSC165", "CSC236", "CSC240", "CSC263", "CSC265",
                        "CSC310", "CSC324", "CSC373", "CSC438", "CSC448",
                        "CSC463"]),
-           ("core", ["CSC108", "CSC148", "CSC104", "CSC120", "CSC490",
-                     "CSC491", "CSC494", "CSC495"]),
-           ("se", ["CSC207", "CSC301", "CSC302", "CSC410", "CSC465"]),
-           ("systems", ["CSC209", "CSC258", "CSC358", "CSC369", "CSC372",
-                        "CSC458", "CSC469", "CSC488", "ECE385", "ECE489"]),
-           ("hci", ["CSC200", "CSC300",  "CSC318", "CSC404", "CSC428",
-                    "CSC454"]),
-           ("graphics", ["CSC320", "CSC418", "CSC420"]),
-           ("num", ["CSC336", "CSC436", "CSC446", "CSC456"]),
-           ("ai", ["CSC321", "CSC384", "CSC401", "CSC411", "CSC412",
-                   "CSC485", "CSC486"]),
-           ("ai", ["CSC309", "CSC343", "CSC443"])]
+           ("core", coreDark, ["Calc1", "Sta1", "Sta2", "Lin1", "CSC108", "CSC148", "CSC104", "CSC120", "CSC490",
+                               "CSC491", "CSC494", "CSC495"]),
+           ("se", seDark, ["CSC207", "CSC301", "CSC302", "CSC410", "CSC465"]),
+           ("systems", systemsDark, ["CSC209", "CSC258", "CSC358", "CSC369", "CSC372",
+                                     "CSC458", "CSC469", "CSC488", "ECE385", "ECE489"]),
+           ("hci", hciDark, ["CSC200", "CSC300",  "CSC318", "CSC404", "CSC428",
+                             "CSC454"]),
+           ("graphics", graphicsDark,["CSC320", "CSC418", "CSC420"]),
+           ("num", numDark, ["CSC336", "CSC436", "CSC446", "CSC456"]),
+           ("ai", aiDark, ["CSC321", "CSC384", "CSC401", "CSC411", "CSC412",
+                          "CSC485", "CSC486"]),
+           ("dbweb", dbwebDark , ["CSC309", "CSC343", "CSC443"])]
+
+fst3 :: (a, b, c) -> a
+fst3 (a, b, c) = a
+
+snd3 :: (a, b, c) -> b
+snd3 (a,b,c) = b
+
+
+thrd3 :: (a, b, c) -> c
+thrd3 (a,b,c) = c
+
+getTuple :: String -> (String, String, [String])
+getTuple id_ = head $ (filter (\x -> elem id_ (thrd3 x)) areaMap) ++ [("", "", [])]
 
 getArea :: String -> String
-getArea id_ = fst $ head $ (filter (\x -> elem id_ (snd x)) areaMap) ++ [("", [])]
+getArea id_ = fst3 $ getTuple id_
+
+getFill :: String -> String
+getFill id_ = snd3 $ getTuple id_
 
 -- | Builds an SVG document.
 makeSVGDoc :: [Shape] -> [Shape] -> [Path] -> [Path] -> S.Svg
@@ -101,7 +118,8 @@ convertRectToSVG rect = if shapeFill rect == "none" then S.rect else
                                       ! A.y (stringValue $ show $ fromRational $ shapeYPos rect)
                                       ! A.width (stringValue $ show $ fromRational $ shapeWidth rect)
                                       ! A.height (stringValue $ show $ fromRational $ shapeHeight rect)
-                                      ! A.style (stringValue $ "stroke:#000000;")
+                                      ! A.style (stringValue $ "stroke:#000000;fill:" ++
+                                                               (getFill (shapeId rect)) ++ ";")
                                concatSVG $ map convertTextToSVG (shapeText rect)
 
 -- | Converts a `Text` to SVG.
