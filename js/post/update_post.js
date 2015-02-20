@@ -175,20 +175,29 @@ function updateAllCategories() {
 
     // Update Extra
 
-    i = 0; 
+    countMaj = 0; 
+    countSpec = 0;
     var specExtra = $('#spec_extra')[0].getElementsByTagName('input');
+    var majExtra = $('#maj_extra')[0].getElementsByTagName('input');
     for (var l = 0; l < 4; l++) {
         if (specExtra[l].value != '') {
-            i += 1;
+            countSpec += 1;
+        } if (l < 3) {
+            if (majExtra[l].value != '') {
+                countMaj += 1;
+            }
         }
     }
 
-    if (i === 4) {
+    if (countSpec === 4) {
         updateCategory($('#spec_extra')[0].getElementsByClassName('code')[0], 'fulfilled');
-    } else {
+    } if (countMaj === 3) {
+        updateCategory($('#maj_extra')[0].getElementsByClassName('code')[0], 'fulfilled');
+    } if (countSpec < 4) {
         updateCategory($('#spec_extra')[0].getElementsByClassName('code')[0], 'not fulfilled');
+    } if (countMaj < 3) {
+        updateCategory($('#maj_extra')[0].getElementsByClassName('code')[0], 'not fulfilled');
     }
-
 
 }
 
@@ -255,7 +264,9 @@ function fill300s() {
         var course = spec300s[k].value;
         if (getCookie(course) === 'inactive' || getCookie(course) === 'takeable') {
             spec300s[k].value = '';
-            maj300s[k].value = '';
+            if (k < 2) {
+                maj300s[k].value = '';
+            }
             min300s[k].value = '';
         }
     }
@@ -267,7 +278,9 @@ function fill300s() {
             break;
         }
         spec300s[i].value = active300s[index300];
-        maj300s[i].value = active300s[index300];
+        if (i < 2) {
+            maj300s[i].value = active300s[index300];
+        }
         min300s[i].value = active300s[index300];
         i += 1; 
         index300 += 1;
@@ -279,7 +292,9 @@ function fill300s() {
                 break;
             }
             spec300s[i].value = active400s[index400];
-            maj300s[i].value = active400s[index400];
+            if (i < 2) {
+                maj300s[i].value = active400s[index400];
+            }
             min300s[i].value = active400s[index400]; 
             i += 1;
             index400 += 1;
@@ -303,7 +318,9 @@ function fill400s() {
     // clear textboxes
     for (k = 0; k < 3; k++) {
         spec400s[k].value = '';
-        maj400s[k].value = '';
+        if (k < 1) {
+            maj400s[k].value = '';
+        }
         min400s[k].value = '';
     }
     
@@ -314,7 +331,9 @@ function fill400s() {
             break;
         }
         spec400s[i].value = active400s[index400];
-        maj400s[i].value = active400s[index400];
+        if (i < 1) {
+            maj400s[i].value = active400s[index400];
+        }
         min400s[i].value = active400s[index400]; 
         i += 1;
         index400 += 1;
@@ -327,17 +346,15 @@ function fillExtra() {
 
     var i = 0;
     var spec_extra = $('#spec_extra')[0].getElementsByTagName('input');
-    var count = 0
-
-    for (var k = 0; k < 4; k++) {
-        if (spec_extra[k].value.indexOf) {
-            count += 1;
-        }
-    }
+    var maj_extra = $('#maj_extra')[0].getElementsByTagName('input');
 
     for (var k = 0; k < 4; k++) {
         if (spec_extra[k].value.indexOf('MAT') === -1 && spec_extra[k].value.indexOf('STA') === -1) {
             spec_extra[k].value = '';
+        } if (k < 3) {
+            if (maj_extra[k].value.indexOf('MAT') === -1 && maj_extra[k].value.indexOf('STA') === -1) {
+                maj_extra[k].value = '';
+            }
         }
     }
 
@@ -346,10 +363,13 @@ function fillExtra() {
         if ((index300 === active300s.length) || (i === 4)) {
             break;
         }
+        if ((i < 2) && (maj_extra[i].value === '')) {
+            maj_extra[i].value = active300s[index300];
+        }
         if (spec_extra[i].value === '') {
             spec_extra[i].value = active300s[index300];
             index300 += 1;
-        }
+        } 
         i += 1;
     }
 
@@ -357,6 +377,9 @@ function fillExtra() {
         for (m = 0; m < active400s.length; m++) {
             if ((index400 === active400s.length) || (i === 4)) {
                 break;
+            }
+            if ((i < 2) && (maj_extra[i].value === '')) {
+                maj_extra[i].value = active400s[index400];
             }
             if (spec_extra[i].value === '') {
                 spec_extra[i].value = active400s[index400];

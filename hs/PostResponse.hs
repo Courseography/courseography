@@ -11,10 +11,16 @@ import MasterTemplate
 import Scripts
 import SVGGen
 
-str :: String
-str = "Any 300+ level CSC course, BCB/ECE/MAT/STA course (2.0 FCEs) - " ++
+strSpec :: String
+strSpec = "Any 300+ level CSC course, BCB/ECE/MAT/STA course (2.0 FCEs) - " ++
         "MAT: 224, 235, 237, 237, 257, 300+ except for 320, 390, & 391" ++
         "; STA: 249, 261, any 300+" 
+
+strMaj :: String
+strMaj = "Any 300+ level CSC course, BCB/ECE/MAT/STA course (1.5 FCEs) - " ++
+        "MAT: 224, 235, 237, 237, 257, 300+ except for 320, 390, & 391" ++
+        "; STA: 249, 261, any 300+" 
+
 
 postResponse :: ServerPart Response
 postResponse =
@@ -124,7 +130,7 @@ checkPost =  do
                     H.input ! A.type_ "text" ! A.class_ "lvl300spec"
                     H.input ! A.type_ "text" ! A.class_ "lvl300spec"
             H.div ! A.id "spec_extra" $ do
-                H.p ! A.class_ "code" $ H.toHtml $ str
+                H.p ! A.class_ "code" $ H.toHtml $ strSpec
                 H.div ! A.class_ "more-info" $ do
                     H.input ! A.type_ "text"
                     H.input ! A.type_ "text"
@@ -187,17 +193,20 @@ checkPost =  do
                     H.p ! A.class_ "full_name Sta1" $ "STA257H (Probability and Statistics 1)"
             H.h2 "Later Years"
             H.div ! A.id "maj_400" $ do
-                H.p ! A.class_ "code" $ "Any 400-level CSC course, BCB410H, BCB420H, BCB430Y (1.5 FCEs)"
+                H.p ! A.class_ "code" $ "Any 400-level CSC course, BCB410H, BCB420H, BCB430Y (0.5 FCEs)"
                 H.div ! A.class_ "more-info" $ do
-                    H.input ! A.type_ "text" ! A.class_ "lvl400maj" 
-                    H.input ! A.type_ "text" ! A.class_ "lvl400maj" 
-                    H.input ! A.type_ "text" ! A.class_ "lvl400maj" 
+                    H.input ! A.type_ "text" ! A.class_ "lvl400maj"  
             H.div ! A.id "maj_300" $ do
-                H.p ! A.class_ "code" $ "Any 300+ level CSC course, BCB410H, BCB420H, BCB430Y, ECE385H, ECE489H (1.5 FCEs)"
+                H.p ! A.class_ "code" $ "Any 300+ level CSC course, BCB410H, BCB420H, BCB430Y, ECE385H, ECE489H (1.0 FCEs)"
                 H.div ! A.class_ "more-info" $ do
                     H.input ! A.type_ "text" ! A.class_ "lvl300maj" 
                     H.input ! A.type_ "text" ! A.class_ "lvl300maj"
-                    H.input ! A.type_ "text" ! A.class_ "lvl300maj"
+            H.div ! A.id "maj_extra" $ do
+                H.p ! A.class_ "code" $ H.toHtml $ strMaj
+                H.div ! A.class_ "more-info" $ do
+                    H.input ! A.type_ "text"
+                    H.input ! A.type_ "text"
+                    H.input ! A.type_ "text"
             H.div ! A.id "maj_misc" $ do
                 H.p ! A.class_ "code" $ H.em "Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H, CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H (2.0 FCEs)"
                 H.div ! A.class_ "more-info" $ do
