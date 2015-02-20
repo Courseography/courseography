@@ -22,6 +22,7 @@ var level400 = {'CSC401': 0, 'CSC404': 0, 'CSC411': 0, 'CSC412': 0, 'CSC418': 0,
 activeInq = [];
 active400s = [];
 active300s = [];
+var index300 = 0;
 var index400 = 0;
 creditCountSpec = 0;
 creditCountMaj = 0;
@@ -35,6 +36,8 @@ creditCount400 = 0;
 $('#update').click(function (e) {
     'use-strict';
 
+    index300 = 0;
+    index400 = 0;
     updateAllCategories();
 });
 
@@ -224,7 +227,7 @@ function fill300s() {
     'use-strict';
 
     var i = 0; 
-    var index300 = 0;
+
     var spec300s = $('.lvl300spec');
     var maj300s = $('.lvl300maj');
     var min300s = $('.lvl300min');
@@ -290,11 +293,12 @@ function fill400s() {
 
     // fill courses that have been selected
     for (var m = 0; m < active400s.length; m++) {
-        spec400s[i].value = active400s[i];
-        maj400s[i].value = active400s[i];
-        min400s[i].value = active400s[i]; 
+        spec400s[i].value = active400s[index400];
+        maj400s[i].value = active400s[index400];
+        min400s[i].value = active400s[index400]; 
         i += 1;
-        if (i === 3) {
+        index400 += 1;
+        if ((index400 == active400s.length) || (i === 3)) {
             break;
         }
     }
