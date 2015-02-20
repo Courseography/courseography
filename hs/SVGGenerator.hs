@@ -23,18 +23,19 @@ import SVGBuilder
 import Text.Blaze.Internal (stringValue)
 import Text.Blaze (toMarkup)
 
+-- | Builds an SVG document.
 makeSVGDoc :: [Shape] -> [Shape] -> [Path] -> [Path] -> S.Svg
 makeSVGDoc rects ellipses edges regions =
     S.docTypeSvg ! A.width "1052.3622"
                  ! A.height "744.09448"
                  ! A.version "1.1" $ do
                       makeSVGDefs
-                      S.g ! A.id_ "nodes" $ do
-                          concatSVG $ map convertRegionToSVG regions
-                          concatSVG $ map convertRectToSVG rects
-                          concatSVG $ map convertEllipseToSVG ellipses
-                          S.g ! A.style "stroke:#000000" $ concatSVG $ map convertEdgeToSVG edges
+                      S.g ! A.id_ "regions" $ concatSVG $ map convertRegionToSVG regions
+                      S.g ! A.id_ "nodes" $ concatSVG $ map convertRectToSVG rects
+                      S.g ! A.id_ "bools" $ concatSVG $ map convertEllipseToSVG ellipses
+                      S.g ! A.id_ "edges" ! A.style "stroke:#000000" $ concatSVG $ map convertEdgeToSVG edges
 
+-- | Builds the SVG defs.
 makeSVGDefs :: S.Svg
 makeSVGDefs = S.defs $ do
               S.marker ! A.id_ "arrow"
@@ -57,15 +58,13 @@ buildSVG =
         sqlEllipses :: [Entity Ellipses] <- selectList [] []
 
         let texts      = map (buildText . entityVal) sqlTexts
-        let paths      = buildPaths 0 $ map entityVal sqlPaths
-        let regions    = filter pathIsRegion paths
-        let edges      = filter (not . pathIsRegion) paths
         let rects      = map (buildRect texts . entityVal) sqlRects
         let ellipses   = buildEllipses texts 0 $ map entityVal sqlEllipses
+        let paths = zipWith (buildPath rects ellipses) (map entityVal sqlPaths) [1..length sqlPaths]
+        let regions    = filter pathIsRegion paths
+        let edges      = filter (not . pathIsRegion) paths
 
-        let processedEdges = map (processPath rects ellipses) edges
-
-        let stringSVG = renderSvg $ makeSVGDoc rects ellipses processedEdges regions
+        let stringSVG = renderSvg $ makeSVGDoc rects ellipses edges regions
         liftIO $ writeFile "Testfile.svg.2" stringSVG
 
 -- | Converts a `Rect` to SVG.
@@ -98,7 +97,7 @@ convertTextToSVG text =
                       ";")
             $ toMarkup $ textText text
 
--- | Converts a `Path` to XML.
+-- | Converts a `Path` to SVG.
 convertEdgeToSVG :: Path -> S.Svg
 convertEdgeToSVG path =
     S.path ! A.id_ (stringValue $ "path" ++ (pathId path))
@@ -113,7 +112,7 @@ convertEdgeToSVG path =
                       pathFillOpacity path ++
                       ";")
 
--- | Converts a `Path` to XML.
+-- | Converts a `Path` to SVG.
 convertRegionToSVG :: Path -> S.Svg
 convertRegionToSVG path =
     S.path ! A.id_ (stringValue $ "region" ++ (pathId path))
@@ -125,8 +124,7 @@ convertRegionToSVG path =
                       pathFillOpacity path ++
                       ";")
 
-
--- | Converts an `Ellipse` to XML.
+-- | Converts an `Ellipse` to SVG.
 convertEllipseToSVG :: Shape -> S.Svg
 convertEllipseToSVG ellipse = S.g ! A.id_ (stringValue (shapeId ellipse))
                                   ! A.class_ "bool" $ do

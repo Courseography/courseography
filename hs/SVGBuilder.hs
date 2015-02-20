@@ -14,20 +14,6 @@ import Data.List
 import JsonParser
 import ParserUtil
 
--- | Builds a Path from a database entry in the paths table.
-buildPaths :: Int -> [Paths] -> [Path]
-buildPaths _ [] = [] 
-buildPaths idCounter entities = do
-    let entity = head entities
-    Path ('p' : show idCounter)
-         (map point $ pathsD entity)
-         (pathsFill entity)
-         (pathsFillOpacity entity)
-         (pathsStroke entity)
-         (pathsIsRegion entity)
-         ""
-         "" : buildPaths (idCounter + 1) (tail entities)
-
 -- | Builds a Rect from a database entry in the rects table.
 buildRect :: [Text] -> Rects -> Shape
 buildRect texts entity = do
@@ -55,10 +41,20 @@ buildRect texts entity = do
           9
 
 -- | Determines the source and target nodes of the path.
-processPath :: [Shape] -> [Shape] -> Path -> Path
-processPath rects ellipses edge = 
-    let coords = points edge
-        xStart = fromRational $ fst $ head coords
+buildPath :: [Shape] -> [Shape] -> Paths -> Int -> Path
+buildPath rects ellipses entity idCounter =
+    let coords = map point $ pathsD entity in
+    if pathsIsRegion entity then
+        Path ('p' : show idCounter)
+             coords
+             (pathsFill entity)
+             (pathsFillOpacity entity)
+             (pathsStroke entity)
+             (pathsIsRegion entity)
+             ""
+             ""
+    else
+    let xStart = fromRational $ fst $ head coords
         yStart = fromRational $ snd $ head coords
         xEnd = fromRational $ fst $ last coords
         yEnd = fromRational $ snd $ last coords
@@ -68,12 +64,12 @@ processPath rects ellipses edge =
         intersectingTargetBool = getIntersectingShape xEnd yEnd ellipses
         sourceNode = if null intersectingSourceRect then intersectingSourceBool else intersectingSourceRect
         targetNode = if null intersectingTargetRect then intersectingTargetBool else intersectingTargetRect in
-        Path (pathId edge)
-             (points edge)
-             (pathFill edge)
-             (pathFillOpacity edge)
-             (pathStroke edge)
-             (pathIsRegion edge)
+        Path ('p' : show idCounter)
+             coords
+             (pathsFill entity)
+             (pathsFillOpacity entity)
+             (pathsStroke entity)
+             (pathsIsRegion entity)
              sourceNode
              targetNode
 
