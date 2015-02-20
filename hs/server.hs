@@ -24,8 +24,10 @@ main = do
                --dir "about" $ aboutResponse contents,
                dir "static" $ serveDirectory EnableBrowsing [] staticDir,
                dir "course" $ look "name" >>= retrieveCourse 
+               dir "all-courses" $ liftIO allCourses
                ]
 
 retrieveCourse :: String -> ServerPart Response
 retrieveCourse course = do
    liftIO $ queryCourse (T.pack course)
+
