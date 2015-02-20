@@ -388,6 +388,7 @@ function fillInquiries() {
     
     for (m = 0; m < activeInq.length; m++) {
         spec_inq[m].value = activeInq[m];
+        maj_inq[m].value = activeInq[m];
         i += 1;
         if (i == 4) {
             break;
@@ -396,8 +397,10 @@ function fillInquiries() {
 
     if (activeInq.length >= 4) {
         updateCategory($('#spec_misc')[0].getElementsByClassName('code')[0], 'fulfilled'); 
+        updateCategory($('#maj_misc')[0].getElementsByClassName('code')[0], 'fulfilled'); 
     } else {
         updateCategory($('#spec_misc')[0].getElementsByClassName('code')[0], 'not fulfilled');
+        updateCategory($('#maj_misc')[0].getElementsByClassName('code')[0], 'not fulfilled');
     }
 
 }
