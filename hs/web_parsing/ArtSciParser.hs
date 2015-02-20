@@ -105,7 +105,8 @@ parseArtSci = do
     body <- getResponseBody rsp
     let depts = getDeptList $ parseTags  body
     --print "parsing Arts and Science Calendar:\n"
-    mapM_ getCalendar depts
+    --mapM_ getCalendar depts
+    getCalendar "crs_csc.htm"
 
 
 main :: IO ()

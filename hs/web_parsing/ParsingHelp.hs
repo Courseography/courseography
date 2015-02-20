@@ -94,6 +94,7 @@ replaceBetweenAll start end rep lst =
   in  if (or [(rest == []), (after == [])])
       then lst 
       else (concat [before, rep, (replaceBetweenAll start end rep (drop 1 after))])
+
 {------------------------------------------------------------------------------
 DROPBETWEEN removes all elements between the first element satisfying start, 
 and the first element satisfying end inclusive. 

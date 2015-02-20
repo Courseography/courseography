@@ -126,6 +126,7 @@ fill = (-:) "fill"
 wideStroke = "stroke-width" -: "3"
 faded = opacity 0.4
 semiVisible = opacity 0.7
+fullyVisible = opacity 1.0
 strokeRed = do
     "stroke" -: "#CC0011"
     "stroke-width" -: "2px"
@@ -138,10 +139,10 @@ coreDark = "#C9C9C9"
 seDark = "#E68080"
 systemsDark = "#C285FF"
 graphicsDark = "#66A366"
-dbwebDark = "#FFE680"
-numDark = "#DBB8FF"
+dbwebDark = "#C42B97"
+numDark = "#B8FF70"
 aiDark = "#80B2FF"
-hciDark = "#B8FF70"
+hciDark = "#91F27A"
 titleColour = "#072D68"
 
 lightGrey = "#CCCCCC"
@@ -162,13 +163,18 @@ nodeCSS = "g" ? do
         cursor pointer
         "text" ? do
             fontSize (pt 12)
+            faded
         "data-active" @= "active" & do
             "rect" <? do
                 wideStroke
+            "text" <? do
+                fullyVisible
         "data-active" @= "overridden" & do
             "rect" <? do
                 wideStroke
                 strokeRed
+            "text" <? do
+                fullyVisible
         "data-active" @= "inactive" & do
             "rect" <? do
                 faded
@@ -176,10 +182,14 @@ nodeCSS = "g" ? do
         "data-active" @= "takeable" & do
             "rect" <? do
                 semiVisible
+            "text" <? do
+                semiVisible
         "data-active" @= "missing" & do
             "rect" <> "ellipse" <? do
                 wideStroke
                 strokeRed
+            "text" <? do
+                fullyVisible
         "data-active" @= "unlit" & do
             wideStroke
             strokeRed
@@ -382,7 +392,9 @@ searchCSS = do
         padding (px 10) (px 10) (px 10) (px 10)
         height (pct 10)
         form <? do
+            background ((url "/static/res/ico/search.png", noRepeat), placed sideRight sideCenter)
             margin0
+            paddingRight (px 34)
     "#search-container" ? do
         alignCenter
         color white
@@ -535,6 +547,10 @@ courseSelectCSS = do
             width (px 18)
             height (px 20)
             padding (px 1) 0 (px 1) 0
+            cursor pointer
+            opacity 0.8
+            ":hover" & do
+                opacity 1.0
         ".icon-div" ? do
             width (px 20)
             minHeight (px 40)

@@ -17,5 +17,5 @@ import ArtSciParser
 parseAll :: IO()
 parseAll = do
 	parseArtSci
-	--parseUTSC
+	parseUTSC
 	

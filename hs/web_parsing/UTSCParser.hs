@@ -37,7 +37,6 @@ getCalendar str = do
   let courses = map (filter (tagText (\x -> True))) $ partitions isCourseTitle coursesSoup
   let course = map processCourseToData courses
   mapM_ insertCourse course
-  --print "parsed " ++ str
   where
       isntComment (TagComment _) = False
       isntComment _ = True
