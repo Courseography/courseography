@@ -128,7 +128,15 @@ Section.prototype.removeTimes = function () {
     'use strict';
 
     var tmp = this;
+    var m;
+
     $.each(this.times, function (i, time) {
+
+        m = time.indexOf('E');
+        if (m != -1) {
+            time = time.slice(0,m) + time.charAt(m+1);
+        }
+
         if ($(time).data("conflicts").length > 0) {
             tmp.removeConflict(time);
         } else {

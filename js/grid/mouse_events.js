@@ -86,14 +86,6 @@ function alertUserOfConflict() {
  */
 function renderClearTime(time) {
     'use strict';
-    
-    var m;
-    
-    m= time.indexOf('E');
-    
-    if (m != -1) {
-        time = time.slice(0,m) + time.charAt(m+1);
-    }
 
     $(time).html('')
            .attr('clicked', 'false')
@@ -113,22 +105,27 @@ function renderClearHover(time) {
 
     var n;
     var m;
+    var ctime;
 
     n = time.indexOf('H');
     m = time.indexOf('E');
         
     if (n != -1 && $(time).attr('clicked') !== 'true') {
-        compressCell(time.slice(2,n), time.charAt(1), time.charAt(n+1));
+        compressRow(time.slice(2,n), time.charAt(n+1));
     }
     
     if (m != -1) {
-        compressCell(time.slice(2,m), time.charAt(1), time.charAt(m+1));
+        ctime = time.slice(0);
         time = time.slice(0,m) + time.charAt(m+1);
+        if ($(time).attr('clicked') !== 'true') {
+            compressRow(ctime.slice(2,m), ctime.charAt(m+1));
+        }
     }
     
     if ($(time).attr('clicked') !== 'true') {
         $(time).html('');
     }
+
     $(time).attr('hover', 'off');
 
 }
@@ -143,53 +140,71 @@ function renderAddHover(time, section) {
 
     var n;
     var m;
+    var ptime;
+    var htime;
 
     n = time.indexOf('H');
     m = time.indexOf('E');
-
+    
     if (n != -1) {
-        extendCell(time.slice(2,n), time.charAt(1), time.charAt(n+1));
+
+        extendRow(time.slice(2,n), time.charAt(n+1));
         ptime = time.slice(0,n) + time.charAt(n+1);
-        
+
         if ($(time).attr('clicked') !== 'true') {
             $(time).html(section.courseName)
                    .attr('hover', 'good');
         } else if ($(time).html() === section.courseName &&
-                   $(time).attr('type') === section.type) {
+                       $(time).attr('type') === section.type) {
             $(time).attr('hover', 'remove');
         } else if ($(ptime).attr('clicked') === 'true') {
             $(time).attr('hover', 'conflict');
         } else {
             $(time).attr('hover', 'conflict');
         }
-        
+
     } else if (m != -1) {
-        extendCell(time.slice(2,m), time.charAt(1), time.charAt(m+1));
-        ptime = time.slice(0,m) + time.charAt(m+1);
-        
-        if ($(ptime).attr('clicked') !== 'true') {
-            $(ptime).html(section.courseName)
-                   .attr('hover', 'good');
-        } else if ($(ptime).html() === section.courseName &&
-                   $(ptime).attr('type') === section.type) {
-            $(ptime).attr('hover', 'remove');
-        } else {
-            $(ptime).attr('hover', 'conflict');
-        }
-        
-    } else {
-        
+        extendRow(time.slice(2,m), time.charAt(m+1));
+        time = time.slice(0,m) + time.charAt(m+1);
         if ($(time).attr('clicked') !== 'true') {
-            $(time).html(section.courseName)
-                   .attr('hover', 'good');
+                $(time).html(section.courseName)
+                       .attr('hover', 'good');
         } else if ($(time).html() === section.courseName &&
-                   $(time).attr('type') === section.type) {
-            $(time).attr('hover', 'remove');
+                       $(time).attr('type') === section.type) {
+                $(time).attr('hover', 'remove');
         } else {
-            $(time).attr('hover', 'conflict');
+                $(time).attr('hover', 'conflict');
+        }
+
+    } else {
+
+        if ($(time).attr('clicked') !== 'true') {
+                    $(time).html(section.courseName)
+                           .attr('hover', 'good');
+        } else if ($(time).html() === section.courseName &&
+                           $(time).attr('type') === section.type) {
+                    $(time).attr('hover', 'remove');
+        } else {
+                    $(time).attr('hover', 'conflict');
         }
         
+        if ($(time).attr('rowspan') !== '2') {
+
+            htime = time.slice(0, time.length-2) + 'H' + time.charAt(time.length-1);
+
+            if ($(htime).attr('clicked') !== 'true') {
+                    $(htime).html(section.courseName)
+                           .attr('hover', 'good');
+            } else if ($(htime).html() === section.courseName &&
+                           $(htime).attr('type') === section.type) {
+                    $(htime).attr('hover', 'remove');
+            } else {
+                    $(htime).attr('hover', 'conflict');
+            }
+
+        }
     }
+        
 }
 
 /**
@@ -205,10 +220,59 @@ function extendCell(time, week, term) {
     var ccell;
 
     pcell = '#' + week + time + term;
-    ccell = '#' + week + time + term;
+    ccell = '#' + week + time + "H"+ term;
 
-    $(pcell).attr('rowspan', '1');
     $(ccell).attr('display', 'table-cell');
+    $(pcell).attr('rowspan', '1');
+
+}
+
+/**
+ * Extends a given row to display half hour sections.
+ * @param {string} time The full hour time of the row.
+ * @param {string} term The term of the timetable row.
+ */
+function extendRow(time, term) {
+    'use strict';
+
+    var weekPrefixArray = ['M', 'T', 'W', 'R', 'F'];
+    var pcells = [];
+    var ccells = [];
+
+    for (var k = 0; k < 5; k++) {
+        pcells[pcells.length] = '#' + weekPrefixArray[k] + time + term;
+        ccells[ccells.length] = '#' + weekPrefixArray[k] + time +'H' + term;
+    }
+
+    for (var i = 0; i < 5; i++) {
+        $(ccells[i]).attr('display', 'table-cell');
+        $(pcells[i]).attr('rowspan', '1');
+    }
+
+}
+
+/**
+ * Compress a given cell to hide half hour sections.
+ * @param {string} time The full hour time of the row.
+ * @param {string} week The week of the timetable cell.
+ * @param {string} term The term of the timetable cell.
+ */
+function compressRow(time, term) {
+    'use strict';
+
+    var weekPrefixArray = ['M', 'T', 'W', 'R', 'F'];
+    var pcells = [];
+    var ccells = [];
+
+    for (var k = 0; k < 5; k++) {
+        pcells[pcells.length] = '#' + weekPrefixArray[k] + time + term;
+        ccells[ccells.length] = '#' + weekPrefixArray[k] + time +'H' + term;
+    }
+
+    for (var i = 0; i < 5; i++) {
+        $(pcells[i]).attr('rowspan', '2');
+        $(ccells[i]).attr('display', 'none');
+    }
 
 }
 
@@ -225,7 +289,7 @@ function compressCell(time, week, term) {
     var ccell;
 
     pcell = '#' + week + time + term;
-    ccell = '#' + week + time + term;
+    ccell = '#' + week + time + "H"+ term;
 
     $(pcell).attr('rowspan', '2');
     $(ccell).attr('display', 'none');

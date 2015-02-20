@@ -116,6 +116,7 @@ function appendTableData(trFall, trSpring, time) {
         
         trFall.append($('<td></td>')
            .addClass('timetable-time')
+           .attr('rowspan', '2')
            .html(adjustedTime));
 
         for (var k = 0; k < 5; k++) {
@@ -135,14 +136,11 @@ function appendTableData(trFall, trSpring, time) {
         
         trSpring.append($('<td></td>')
             .addClass('timetable-time')
+            .attr('rowspan', '2')
             .html(adjustedTime));
 
     } else {
         var adjustedTime = '';
-
-        trFall.append($('<td></td>')
-           .addClass('timetable-time')
-           .html(adjustedTime));
 
         for (var k = 0; k < 5; k++) {
             trFall.append($('<td></td>')
@@ -158,11 +156,7 @@ function appendTableData(trFall, trSpring, time) {
                 .attr('display', 'none')
                 .addClass('timetable-cell'));
         }
-        
-        trSpring.append($('<td></td>')
-            .addClass('timetable-time')
-            .html(adjustedTime));
-        
+
     }
 
 }
