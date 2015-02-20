@@ -91,25 +91,27 @@ function update300s() {
 
     for (var courseCode in level300) {
         if (level300.hasOwnProperty(courseCode)) {
-            if (getCookie(courseCode) === 'active' || getCookie(courseCode) === 'overridden') {
-                if (level300[courseCode] < 1) {
-                    level300[courseCode] += 1;
-                    creditCount300 += 0.5;
+            if ((getCookie(courseCode) === 'active' || getCookie(courseCode) === 'overridden') 
+                && (active300s.indexOf(courseCode) === -1)) {
+                active300s.push(courseCode);
+                creditCount300 += 0.5;
                 } if ((CSCinq.indexOf(courseCode) > -1) && (activeInq.indexOf(courseCode) === -1)) { // check if Inquiry Course
                     activeInq.push(courseCode);
                 }
             } else if ((getCookie(courseCode) === 'inactive' || getCookie(courseCode) === 'takeable') 
-                       && (level300[courseCode] > 0)) {
-                level300[courseCode] -= 1;
+                       && (active300s.indexOf(courseCode) > -1)) {
+                var index300 = active300s.indexOf(courseCode);
+                active300s.splice(index300, 1);
                 creditCount300 -= 0.5;
-                var index = activeInq.indexOf(courseCode);
-                if (index > -1) {
-                    activeInq.splice(index, 1);
+                var indexInq = activeInq.indexOf(courseCode);
+                if (indexInq > -1) {
+                    activeInq.splice(indexInq, 1);
                 }
             }
-        }       
-    }
-}
+        }
+    }       
+
+
 
 
 /**
@@ -120,25 +122,26 @@ function update400s() {
 
     for (var courseCode in level400) {
         if (level400.hasOwnProperty(courseCode)) {
-            if (getCookie(courseCode) === 'active' || getCookie(courseCode) === 'overridden') {
-                if (level400[courseCode] < 1) {
-                    level400[courseCode] += 1;
+            if ((getCookie(courseCode) === 'active' || getCookie(courseCode) === 'overridden') 
+                && (active400s.indexOf(courseCode) === -1)) {
+                    active400s.push(courseCode);
                     creditCount400 += 0.5;
                 } if ((CSCinq.indexOf(courseCode) > -1) && (activeInq.indexOf(courseCode) === -1)) { // check if Inquiry Course
                     activeInq.push(courseCode);
                 }
             } else if ((getCookie(courseCode) === 'inactive' || getCookie(courseCode) === 'takeable') 
-                       && (level400[courseCode] > 0)) {
-                level400[courseCode] -= 1;
+                       && (active400s.indexOf(courseCode) > -1)) {
+                var index400 = active400s.indexOf(courseCode);
                 creditCount400 -= 0.5;
-                var index = activeInq.indexOf(courseCode);
-                if (index > -1) {
-                    activeInq.splice(index, 1);
+                var indexInq = activeInq.indexOf(courseCode);
+                active400s.splice(index400, 1);
+                if (indexInq > -1) {
+                    activeInq.splice(indexInq, 1);
                 }
             }
         }       
     }
-}
+
 
 
 /**

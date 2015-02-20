@@ -20,6 +20,8 @@ var level400 = {'CSC401': 0, 'CSC404': 0, 'CSC411': 0, 'CSC412': 0, 'CSC418': 0,
                 'BCB420': 0, 'BCB430': 0, 'CSC410': 0};
 
 activeInq = [];
+active400s = [];
+active300s = [];
 creditCountSpec = 0;
 creditCountMaj = 0;
 creditCountMin = 0;
@@ -238,17 +240,26 @@ function fill300s() {
     
 
     // fill courses that have been selected
-    for (course in level300) {
-        if (level300.hasOwnProperty(course)) {
-            if (level300[course] === 1) {
-                spec300s[i].value = course;
-                maj300s[i].value = course;
-                min300s[i].value = course; 
-                i += 1;
-            } if (i === 3) {
-                break;
-            }
+    for (var m = 0; m < active300s.length; m++) {
+        spec300s[i].value = active300s[i];
+        maj300s[i].value = active300s[i];
+        min300s[i].value = active300s[i]; 
+        i += 1;
+        if (i === 3) {
+            break;
         }
+    }
+
+    if (i < 3) {
+        for (var m = 0; m < active400s.length; m++) {
+        spec300s[i].value = active400s[i];
+        maj300s[i].value = active400s[i];
+        min300s[i].value = active400s[i]; 
+        i += 1;
+        if (i === 3) {
+            break;
+        }
+    }
     }
 }  
 
@@ -274,19 +285,17 @@ function fill400s() {
     
 
     // fill courses that have been selected
-    for (course in level400) {
-        if (level400.hasOwnProperty(course)) {
-            if (level400[course] === 1) {
-                spec400s[i].value = course;
-                maj400s[i].value = course;
-                min400s[i].value = course; 
-                i += 1;
-            } if (i === 3) {
-                break;
-            }
+    for (var m = 0; m < active400s.length; m++) {
+        spec400s[i].value = active400s[i];
+        maj400s[i].value = active400s[i];
+        min400s[i].value = active400s[i]; 
+        i += 1;
+        if (i === 3) {
+            break;
         }
     }
-} 
+}
+ 
 
 
 /**

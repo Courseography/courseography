@@ -113,7 +113,7 @@ checkPost =  do
                     H.input ! A.type_ "text" ! A.class_ "lvl400spec" 
                     H.input ! A.type_ "text" ! A.class_ "lvl400spec" 
             H.div ! A.id "spec_300" $ do 
-                H.p ! A.class_ "code" $ "Any 300-level CSC course, BCB410H, BCB420H, BCB430Y, ECE385H, ECE489H (1.5 FCEs)"
+                H.p ! A.class_ "code" $ "Any 300+ level CSC course, BCB410H, BCB420H, BCB430Y, ECE385H, ECE489H (1.5 FCEs)"
                 H.div ! A.class_ "more-info" $ do
                     H.input ! A.type_ "text" ! A.class_ "lvl300spec" 
                     H.input ! A.type_ "text" ! A.class_ "lvl300spec"
@@ -181,7 +181,7 @@ checkPost =  do
                     H.input ! A.type_ "text" ! A.class_ "lvl400maj" 
                     H.input ! A.type_ "text" ! A.class_ "lvl400maj" 
             H.div ! A.id "maj_300" $ do
-                H.p ! A.class_ "code" $ "Any 300-level CSC course, BCB410H, BCB420H, BCB430Y, ECE385H, ECE489H (1.5 FCEs)"
+                H.p ! A.class_ "code" $ "Any 300+ level CSC course, BCB410H, BCB420H, BCB430Y, ECE385H, ECE489H (1.5 FCEs)"
                 H.div ! A.class_ "more-info" $ do
                     H.input ! A.type_ "text" ! A.class_ "lvl300maj" 
                     H.input ! A.type_ "text" ! A.class_ "lvl300maj"
