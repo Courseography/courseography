@@ -173,6 +173,22 @@ function updateAllCategories() {
         updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'not fulfilled');
     }
 
+    // Update Extra
+
+    i = 0; 
+    var specExtra = $('#spec_extra')[0].getElementsByTagName('input');
+    for (var l = 0; l < 4; l++) {
+        if (specExtra[l].value != '') {
+            i += 1;
+        }
+    }
+
+    if (i === 4) {
+        updateCategory($('#spec_extra')[0].getElementsByClassName('code')[0], 'fulfilled');
+    } else {
+        updateCategory($('#spec_extra')[0].getElementsByClassName('code')[0], 'not fulfilled');
+    }
+
 
 }
 
@@ -311,10 +327,18 @@ function fillExtra() {
 
     var i = 0;
     var spec_extra = $('#spec_extra')[0].getElementsByTagName('input');
+    var count = 0
 
-     // clear textboxes
-    for (k = 0; k < 4; k++) {
-        spec_extra[k].value = '';
+    for (var k = 0; k < 4; k++) {
+        if (spec_extra[k].value.indexOf) {
+            count += 1;
+        }
+    }
+
+    for (var k = 0; k < 4; k++) {
+        if (spec_extra[k].value.indexOf('MAT') === -1 && spec_extra[k].value.indexOf('STA') === -1) {
+            spec_extra[k].value = '';
+        }
     }
 
     // fill courses that have been selected
@@ -322,9 +346,11 @@ function fillExtra() {
         if ((index300 === active300s.length) || (i === 4)) {
             break;
         }
-        spec_extra[i].value = active300s[index300];
+        if (spec_extra[i].value === '') {
+            spec_extra[i].value = active300s[index300];
+            index300 += 1;
+        }
         i += 1;
-        index300 += 1
     }
 
     if (i < 4) {
@@ -332,9 +358,11 @@ function fillExtra() {
             if ((index400 === active400s.length) || (i === 4)) {
                 break;
             }
-            spec_extra[i].value = active400s[index400];
+            if (spec_extra[i].value === '') {
+                spec_extra[i].value = active400s[index400];
+                index400 += 1;
+            }
             i += 1;
-            index400 += 1;
         }
     }
 
