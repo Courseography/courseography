@@ -1,4 +1,4 @@
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE OverloadedStrings, DataKinds #-}
 
 module PostResponse where
 import Data.List
@@ -10,6 +10,11 @@ import MakeElements
 import MasterTemplate
 import Scripts
 import SVGGen
+
+str :: String
+str = "Any 300+ level CSC course, BCB/ECE/MAT/STA course (2.0 FCEs) - " ++
+        "MAT: 224, 235, 237, 237, 257, 300+ except for 320, 390, & 391" ++
+        "; STA: 249, 261, any 300+" 
 
 postResponse :: ServerPart Response
 postResponse =
@@ -119,7 +124,7 @@ checkPost =  do
                     H.input ! A.type_ "text" ! A.class_ "lvl300spec"
                     H.input ! A.type_ "text" ! A.class_ "lvl300spec"
             H.div ! A.id "spec_extra" $ do
-                H.p ! A.class_ "code" $ "Any 300+ level CSC course, BCB/ECE/MAT/STA course (2.0 FCEs)"
+                H.p ! A.class_ "code" $ H.toHtml $ str
                 H.div ! A.class_ "more-info" $ do
                     H.input ! A.type_ "text"
                     H.input ! A.type_ "text"

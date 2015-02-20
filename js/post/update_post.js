@@ -88,6 +88,7 @@ function updateAllCategories() {
     fill300s();
     fill400s();
     fillMisc();
+    fillExtra();
     updateCreditCount();
 
     // Update Specialist 
@@ -246,26 +247,26 @@ function fill300s() {
 
     // fill courses that have been selected
     for (var m = 0; m < 3; m++) {
+        if (index300 === active300s.length) {
+            break;
+        }
         spec300s[i].value = active300s[index300];
         maj300s[i].value = active300s[index300];
         min300s[i].value = active300s[index300];
         i += 1; 
         index300 += 1;
-        if (index300 === active300s.length) {
-            break;
-        }
     }
 
     if (i < 3) {
         for (var m = 0; m < 3; m++) {
+            if ((index400 === active400s.length) || (i === 3)) {
+                break;
+            }
             spec300s[i].value = active400s[index400];
             maj300s[i].value = active400s[index400];
             min300s[i].value = active400s[index400]; 
             i += 1;
             index400 += 1;
-            if ((index400 === active400s.length) || (i === 3)) {
-                break;
-            }
         }
     }
 }  
@@ -293,17 +294,51 @@ function fill400s() {
 
     // fill courses that have been selected
     for (var m = 0; m < active400s.length; m++) {
+        if ((index400 == active400s.length) || (i === 3)) {
+            break;
+        }
         spec400s[i].value = active400s[index400];
         maj400s[i].value = active400s[index400];
         min400s[i].value = active400s[index400]; 
         i += 1;
         index400 += 1;
-        if ((index400 == active400s.length) || (i === 3)) {
-            break;
-        }
     }
 }
  
+
+function fillExtra() {
+    'use-strict'
+
+    var i = 0;
+    var spec_extra = $('#spec_extra')[0].getElementsByTagName('input');
+
+     // clear textboxes
+    for (k = 0; k < 4; k++) {
+        spec_extra[k].value = '';
+    }
+
+    // fill courses that have been selected
+    for (m = 0; m < active300s.length; m++) {
+        if ((index300 === active300s.length) || (i === 4)) {
+            break;
+        }
+        spec_extra[i].value = active300s[index300];
+        i += 1;
+        index300 += 1
+    }
+
+    if (i < 4) {
+        for (m = 0; m < active400s.length; m++) {
+            if ((index400 === active400s.length) || (i === 4)) {
+                break;
+            }
+            spec_extra[i].value = active400s[index400];
+            i += 1;
+            index400 += 1;
+        }
+    }
+
+}
 
 
 /**
