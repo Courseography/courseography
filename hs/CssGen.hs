@@ -432,7 +432,7 @@ timetableCSS = do
                 paddingLeft (px 10) -- important
         td <> th ? do
             width (pct 18)
-            height (px 35)
+            height (px 18)
             padding0 -- !important
             margin0 -- !important
             alignCenter
