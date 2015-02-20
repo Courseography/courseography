@@ -116,7 +116,7 @@ function getRemote() {
 
     var SVG = $.ajax({
         type: 'GET',
-        url: 'static/hs/Testfile.svg.2',
+        url: 'static/hs/Testfile.svg',
         async: false
     }).responseText;
     $('#graph').append(SVG);

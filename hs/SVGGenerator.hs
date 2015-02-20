@@ -123,11 +123,12 @@ buildSVG =
             edges       = filter (not . pathIsRegion) paths
             regionTexts = filter (not . intersectsWithShape (rects ++ ellipses)) texts
             stringSVG = renderSvg $ makeSVGDoc rects ellipses edges regions regionTexts
-        liftIO $ writeFile "Testfile.svg.2" stringSVG
+        liftIO $ writeFile "Testfile.svg" stringSVG
 
+-- | Determines if a text intersects with a shape.
 intersectsWithShape :: [Shape] -> Text -> Bool
 intersectsWithShape shapes text =
-    not (any (intersectsWithPoint (fromRational $ textXPos text) (fromRational $ textYPos text)) shapes)
+    not $ null (filter (intersectsWithPoint (fromRational $ textXPos text) (fromRational $ textYPos text)) shapes)
 
 -- | Converts a `Rect` to SVG.
 convertRectToSVG :: Shape -> S.Svg
