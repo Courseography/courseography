@@ -29,7 +29,7 @@ getRoot doc = head $ parseDocument (tag "svg") doc
 getStyleAttr :: String -> String -> String
 getStyleAttr attr style =
     drop (length attr + 1) $
-    head $ filter (isPrefixOf (attr ++ ":"))     (splitOn ";" style) ++ [""]
+    head $ filter (isPrefixOf $ attr ++ ":") (splitOn ";" style) ++ [""]
 
 -- | Gets a style attribute from a style String. If the style attribute is "",
 -- then this function defaults to the previous style attribute, 'parent'.
