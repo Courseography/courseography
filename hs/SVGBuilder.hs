@@ -57,25 +57,25 @@ buildRect texts entity = do
 -- | Determines the source and target nodes of the path.
 processPath :: [Shape] -> [Shape] -> Path -> Path
 processPath rects ellipses edge = 
-    do let coords = points edge
-       let xStart = fromRational $ fst $ head coords
-       let yStart = fromRational $ snd $ head coords
-       let xEnd = fromRational $ fst $ last coords
-       let yEnd = fromRational $ snd $ last coords
-       let intersectingSourceRect = getIntersectingShape xStart yStart rects
-       let intersectingTargetRect = getIntersectingShape xEnd yEnd rects
-       let intersectingSourceBool = getIntersectingShape xStart yStart ellipses
-       let intersectingTargetBool = getIntersectingShape xEnd yEnd ellipses
-       let sourceNode = if null intersectingSourceRect then intersectingSourceBool else intersectingSourceRect
-       let targetNode = if null intersectingTargetRect then intersectingTargetBool else intersectingTargetRect
-       Path (pathId edge)
-            (points edge)
-            (pathFill edge)
-            (pathFillOpacity edge)
-            (pathStroke edge)
-            (pathIsRegion edge)
-            sourceNode
-            targetNode
+    let coords = points edge
+        xStart = fromRational $ fst $ head coords
+        yStart = fromRational $ snd $ head coords
+        xEnd = fromRational $ fst $ last coords
+        yEnd = fromRational $ snd $ last coords
+        intersectingSourceRect = getIntersectingShape xStart yStart rects
+        intersectingTargetRect = getIntersectingShape xEnd yEnd rects
+        intersectingSourceBool = getIntersectingShape xStart yStart ellipses
+        intersectingTargetBool = getIntersectingShape xEnd yEnd ellipses
+        sourceNode = if null intersectingSourceRect then intersectingSourceBool else intersectingSourceRect
+        targetNode = if null intersectingTargetRect then intersectingTargetBool else intersectingTargetRect in
+        Path (pathId edge)
+             (points edge)
+             (pathFill edge)
+             (pathFillOpacity edge)
+             (pathStroke edge)
+             (pathIsRegion edge)
+             sourceNode
+             targetNode
 
 -- | Gets the first rect that intersects with the given coordinates.
 getIntersectingShape :: Float -> Float -> [Shape] -> String
