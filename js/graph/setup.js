@@ -81,7 +81,7 @@ var nodes = [];               // List of all nodes
 $(document).ready(function () {
     'use strict';
 
-    $("#graph").append(getRemote());
+    getRemote();
 
     buildGraph();
 
@@ -114,9 +114,10 @@ $(document).ready(function () {
 function getRemote() {
     'use strict';
 
-    return $.ajax({
+    var SVG = $.ajax({
         type: 'GET',
-        url: 'static/hs/Testfile.svg',
+        url: 'static/hs/Testfile.svg.2',
         async: false
     }).responseText;
+    $('#graph').append(SVG);
 }
