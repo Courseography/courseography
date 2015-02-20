@@ -11,15 +11,20 @@ import MasterTemplate
 import Scripts
 import SVGGen
 
-strSpec :: String
-strSpec = "Any 300+ level CSC course, BCB/ECE/MAT/STA course (2.0 FCEs) - " ++
+spec300Str :: String
+spec300Str = "Any 300+ level CSC course, BCB/ECE/MAT/STA course (2.0 FCEs) - " ++
         "MAT: 224, 235, 237, 237, 257, 300+ except for 320, 390, & 391" ++
         "; STA: 249, 261, any 300+" 
 
-strMaj :: String
-strMaj = "Any 300+ level CSC course, BCB/ECE/MAT/STA course (1.5 FCEs) - " ++
+maj300Str :: String
+maj300Str = "Any 300+ level CSC course, BCB/ECE/MAT/STA course (1.5 FCEs) - " ++
         "MAT: 224, 235, 237, 237, 257, 300+ except for 320, 390, & 391" ++
         "; STA: 249, 261, any 300+" 
+
+inqStr :: String 
+inqStr = "Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H, " ++
+         "CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H, or PEY (0.5 FCEs) " ++ 
+         " \n ** Note: Type 'PEY' for Check my POSt to recognize it **"
 
 
 postResponse :: ServerPart Response
@@ -130,19 +135,16 @@ checkPost =  do
                     H.input ! A.type_ "text" ! A.class_ "lvl300spec"
                     H.input ! A.type_ "text" ! A.class_ "lvl300spec"
             H.div ! A.id "spec_extra" $ do
-                H.p ! A.class_ "code" $ H.toHtml $ strSpec
+                H.p ! A.class_ "code" $ H.toHtml $ spec300Str
                 H.div ! A.class_ "more-info" $ do
                     H.input ! A.type_ "text"
                     H.input ! A.type_ "text"
                     H.input ! A.type_ "text"
                     H.input ! A.type_ "text"
             H.div ! A.id "spec_misc" $ do 
-                H.p ! A.class_ "code" $ H.em "Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H, CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H (2.0 FCEs)"
+                H.p ! A.class_ "code" $ H.em $ H.toHtml $ inqStr
                 H.div ! A.class_ "more-info" $ do
                     H.input ! A.type_ "text" 
-                    H.input ! A.type_ "text"
-                    H.input ! A.type_ "text"
-                    H.input ! A.type_ "text"
             H.p ! A.class_ "code" $ H.em "No more than 1.0 FCEs from CSC490H, CSC491H, CSC494H, CSC495H, BCB430Y"
         H.div ! A.id "div_major" $ do
             H.h2 "First Year"
@@ -202,18 +204,15 @@ checkPost =  do
                     H.input ! A.type_ "text" ! A.class_ "lvl300maj" 
                     H.input ! A.type_ "text" ! A.class_ "lvl300maj"
             H.div ! A.id "maj_extra" $ do
-                H.p ! A.class_ "code" $ H.toHtml $ strMaj
+                H.p ! A.class_ "code" $ H.toHtml $ maj300Str
                 H.div ! A.class_ "more-info" $ do
                     H.input ! A.type_ "text"
                     H.input ! A.type_ "text"
                     H.input ! A.type_ "text"
             H.div ! A.id "maj_misc" $ do
-                H.p ! A.class_ "code" $ H.em "Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H, CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H (2.0 FCEs)"
+                H.p ! A.class_ "code" $ H.em $ H.toHtml $ inqStr
                 H.div ! A.class_ "more-info" $ do
                     H.input ! A.type_ "text" 
-                    H.input ! A.type_ "text"
-                    H.input ! A.type_ "text"
-                    H.input ! A.type_ "text"
             H.p ! A.class_ "code" $ H.em "No more than 1.0 FCEs from CSC490H, CSC491H, CSC494H, CSC495H, BCB430Y"
         H.div ! A.id "div_minor" $ do
             H.h2 "First Year"

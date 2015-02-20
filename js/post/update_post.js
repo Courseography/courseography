@@ -398,31 +398,31 @@ function fillExtra() {
 function fillMisc() {
     'use-strict';
 
-    var i = 0;
-
     var spec_inq = $('#spec_misc')[0].getElementsByTagName('input');
     var maj_inq = $('#maj_misc')[0].getElementsByTagName('input');
 
     // clear textboxes
-    for (k = 0; k < 4; k++) {
-        spec_inq[k].value = '';
-        maj_inq[k].value = '';
-    }
-    
-    for (m = 0; m < activeInq.length; m++) {
-        spec_inq[m].value = activeInq[m];
-        maj_inq[m].value = activeInq[m];
-        i += 1;
-        if (i == 4) {
-            break;
-        }
+    if (spec_inq[0].value.indexOf('PEY') === -1) {
+        spec_inq[0].value = '';
+    } if (maj_inq[0].value.indexOf('PEY') === -1) {
+        maj_inq[0].value = '';
     }
 
-    if (activeInq.length >= 4) {
-        updateCategory($('#spec_misc')[0].getElementsByClassName('code')[0], 'fulfilled'); 
+    // fill textboxes
+    if (activeInq.length > 0) {
+        spec_inq[0].value = activeInq[0];
+    } if (activeInq.length > 0){
+        maj_inq[0].value = activeInq[0];
+    }
+    
+    // update category
+    if (spec_inq[0].value != '') {
+        updateCategory($('#spec_misc')[0].getElementsByClassName('code')[0], 'fulfilled');
+    } if (maj_inq[0].value != '') {    
         updateCategory($('#maj_misc')[0].getElementsByClassName('code')[0], 'fulfilled'); 
-    } else {
+    } if (spec_inq[0].value === '') {
         updateCategory($('#spec_misc')[0].getElementsByClassName('code')[0], 'not fulfilled');
+    } if (maj_inq[0].value === '') {
         updateCategory($('#maj_misc')[0].getElementsByClassName('code')[0], 'not fulfilled');
     }
 

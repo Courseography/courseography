@@ -95,9 +95,9 @@ function update300s() {
                 && (active300s.indexOf(courseCode) === -1)) {
                 active300s.push(courseCode);
                 creditCount300 += 0.5;
-                } if ((CSCinq.indexOf(courseCode) > -1) && (activeInq.indexOf(courseCode) === -1)) { // check if Inquiry Course
+                if ((CSCinq.indexOf(courseCode) > -1) && (activeInq.indexOf(courseCode) === -1)) { // check if Inquiry Course
                     activeInq.push(courseCode);
-                }
+                }  
             } else if ((getCookie(courseCode) === 'inactive' || getCookie(courseCode) === 'takeable') 
                        && (active300s.indexOf(courseCode) > -1)) {
                 var index300 = active300s.indexOf(courseCode);
@@ -110,7 +110,7 @@ function update300s() {
             }
         }
     }       
-
+}
 
 
 
@@ -126,9 +126,9 @@ function update400s() {
                 && (active400s.indexOf(courseCode) === -1)) {
                     active400s.push(courseCode);
                     creditCount400 += 0.5;
-                } if ((CSCinq.indexOf(courseCode) > -1) && (activeInq.indexOf(courseCode) === -1)) { // check if Inquiry Course
-                    activeInq.push(courseCode);
-                }
+                    if ((CSCinq.indexOf(courseCode) > -1) && (activeInq.indexOf(courseCode) === -1)) { // check if Inquiry Course
+                        activeInq.push(courseCode);
+                    }
             } else if ((getCookie(courseCode) === 'inactive' || getCookie(courseCode) === 'takeable') 
                        && (active400s.indexOf(courseCode) > -1)) {
                 var index400 = active400s.indexOf(courseCode);
@@ -141,7 +141,7 @@ function update400s() {
             }
         }       
     }
-
+}
 
 
 /**
