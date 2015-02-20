@@ -88,7 +88,7 @@ makeSVGDoc rects ellipses edges regions regionTexts =
                  ! A.version "1.1" $ do
                       makeSVGDefs
                       S.g ! A.id_ "regions" $ concatSVG $ map convertRegionToSVG regions
-                      S.g ! A.id_ "nodes" $ concatSVG $ map convertRectToSVG rects
+                      S.g ! A.id_ "nodes" ! A.style "stroke:#000000;" $ concatSVG $ map convertRectToSVG rects
                       S.g ! A.id_ "bools" $ concatSVG $ map convertEllipseToSVG ellipses
                       S.g ! A.id_ "edges" ! A.style "stroke:#000000" $ concatSVG $ map convertEdgeToSVG edges
                       S.g ! A.id_ "region-labels" $ concatSVG $ map (convertTextToSVG False False True) regionTexts
@@ -151,7 +151,7 @@ convertTextToSVG isHybrid isBool isRegion text =
     S.text_ ! A.x (stringValue $ show $ fromRational $ textXPos text)
             ! A.y (stringValue $ show $ fromRational $ textYPos text)
             ! A.style (stringValue $
-                      (if isHybrid then hybridTextStyle else (if isBool then ellipseTextStyle else (if isRegion then regionTextStyle else ""))) ++ "font-family:sans-serif;")
+                      (if isHybrid then hybridTextStyle else (if isBool then ellipseTextStyle else (if isRegion then regionTextStyle else ""))) ++ "font-family:sans-serif;stroke:none;")
             $ toMarkup $ textText text
 
 -- | Converts a `Path` to SVG.
