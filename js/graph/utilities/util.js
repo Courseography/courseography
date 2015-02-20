@@ -116,7 +116,7 @@ function initializeGraphSettings() {
     // Set initial node status
     $.each(nodes, function (i, node) {
 
-        var nodeStatus = getCookie(window[node].name);
+        var nodeStatus = getCookie(window[node].id);
 
         if (nodeStatus.length === 0) {
             nodeStatus = 'inactive';
