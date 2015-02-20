@@ -16,8 +16,6 @@ var nodeY = -1;             // for movement
 var nodeSelected = null;    // for adding text
 var startNode = null;       // for making paths
 var curPath = null;         // for making paths with elbow joints
-var curElbow = null;        // for remembering the last elbow
-
 
 function setupSVGCanvas() {
     'use-strict';
@@ -131,21 +129,52 @@ function makeNode(e) {
     } else if (mode === 'path-mode') {
         // make elbow joint, only if the dummy point is outside the starting node
         if (startNode !== null && (position.x < startNode.getAttribute('x') || 
-                                    position.x > parseFloat(startNode.getAttribute('x')) + nodeWidth) &&
-                    (position.y < startNode.getAttribute('y') || 
-                                    position.y > parseFloat(startNode.getAttribute('y')) + nodeHeight)) {
-            if (curPath === null) {
-                findClosest({x: parseFloat(startNode.getAttribute('x')), 
+                                   position.x > parseFloat(startNode.getAttribute('x')) + nodeWidth) &&
+                                  (position.y < startNode.getAttribute('y') || 
+                                   position.y > parseFloat(startNode.getAttribute('y')) + nodeHeight)) {            
+            if (curPath === null) { // start node to first elbow
+                var pathString = findClosest({x: parseFloat(startNode.getAttribute('x')), 
                              y: parseFloat(startNode.getAttribute('y'))},
                             'node', position, 'elbow');
-            } else {
-                curPath += 'L' + position.x + ',' + position.y + ' ';   
+
+                curPath = document.createElementNS(xmlns, 'path'); // note: id will get set when the path is complete
+                curPath.setAttributeNS(null, 'd', pathString); // curPath will get modified until path is complete
+                curPath.setAttributeNS(null, 'fill', 'none');
+                curPath.setAttributeNS(null, 'stroke', 'black');
+                curPath.setAttributeNS(null, 'data-active', 'drawn'); // also marker will be set at completion
+                // thePath.setAttributeNS(null, 'marker-end', 'url(#arrow)');
+                curPath.elbows = [];
+                curPath.addEventListener('click', pathClicked, false);
+                document.getElementById('mySVG').appendChild(curPath);
+
+            } else { // elbow to elbow path
+                curPath.setAttributeNS(null, 'd', curPath.getAttribute('d') + 'L' + position.x + ',' + position.y + ' ');   
             }
-            curElbow = position;
+            var elbow = document.createElementNS(xmlns, 'circle');
+
+            elbow.setAttributeNS(null, 'cx', position.x);
+            elbow.setAttributeNS(null, 'cy', position.y);
+            elbow.setAttributeNS(null, 'r', 2);
+            elbow.setAttributeNS(null, 'stroke', 'black');
+            elbow.setAttributeNS(null, 'stroke-width', "1");
+
+            elbow.addEventListener('mousedown', selectElbow, false);
+            elbow.addEventListener('mouseup', deselectElbow, false);
+            document.getElementById('mySVG').appendChild(elbow);
+
+            curPath.elbows.push(elbow);
         }
     }
 }
 
+
+function selectElbow() {
+
+}
+
+function deselectElbow() {
+
+}
 
 function nodeClicked(e) {
     'use-strict';
@@ -189,55 +218,76 @@ function nodeClicked(e) {
         select(e.currentTarget);
 
     } else if (mode === 'path-mode') {
-        if (startNode === null || startNode === e.currentTarget) {
-            // this is the start node of the path about to be created
+        if (startNode === null) {
+            // this is the start node of the path about to be created, can't do that
             startNode = e.currentTarget;
             select(e.currentTarget);
-            curPath = null;
-            curElbow = null;
+        } else if (startNode === e.currentTarget) {
+            if (curPath !== null) {
+                curPath.elbows.map(function (item) { // modify last node in path
+                        document.getElementById('mySVG').removeChild(item);
+                });
+                document.getElementById('mySVG').removeChild(curPath);
+                curPath = null;
+            }
         } else {
             // make the path from startNode to current node then make startNode Null
-            if (curPath === null) {
-                // later we can call findClosest with 'node', 'node'
-                /*curPath = 'M' + (parseFloat(startNode.getAttribute('x')) + nodeWidth/2) + 
-                                ',' + parseFloat(startNode.getAttribute('y')) +
-                    ' L' + (parseFloat(e.currentTarget.getAttribute('x')) + nodeWidth/2) + 
-                        ',' + (parseFloat(e.currentTarget.getAttribute('y')));*/
-                findClosest( {x: parseFloat(startNode.getAttribute('x')), 
-                              y: parseFloat(startNode.getAttribute('y'))},
-                            'node', 
-                            {x: parseFloat(e.currentTarget.getAttribute('x')), 
-                             y: parseFloat(e.currentTarget.getAttribute('y'))},
-                            'node');
+            var pathId = 'n' + startNode.id + 'n' + e.currentTarget.id;
+            if (document.getElementById(pathId) === null) {
+                if (curPath === null) { // create a new path
+                    var pathString = findClosest( {x: parseFloat(startNode.getAttribute('x')), 
+                                  y: parseFloat(startNode.getAttribute('y'))},
+                                'node', 
+                                {x: parseFloat(e.currentTarget.getAttribute('x')), 
+                                 y: parseFloat(e.currentTarget.getAttribute('y'))},
+                                'node');
+
+                    curPath = document.createElementNS(xmlns, 'path');
+                    curPath.setAttributeNS(null, 'd', pathString);
+                    curPath.setAttributeNS(null, 'fill', 'none');
+                    curPath.setAttributeNS(null, 'stroke', 'black');
+                    curPath.setAttributeNS(null, 'data-active', 'drawn');
+                    curPath.addEventListener('click', pathClicked, false);
+                    curPath.elbows = [];
+                    document.getElementById('mySVG').appendChild(curPath);
+                } else {
+                    var curElbow = {x: parseFloat(curPath.elbows[curPath.elbows.length - 1].getAttribute('cx')), 
+                                  y: parseFloat(curPath.elbows[curPath.elbows.length - 1].getAttribute('cy'))}
+                    var pathString = findClosest(curElbow, 'elbow', 
+                                {x: parseFloat(e.currentTarget.getAttribute('x')), 
+                                 y: parseFloat(e.currentTarget.getAttribute('y'))},
+                                'node'); 
+                    curPath.setAttributeNS(null, 'd', curPath.getAttribute('d') + pathString);
+                }
+
+                select(e.currentTarget);
+                curPath.elbows.map(function (item) {
+                    item.path = pathId; 
+                });
+                curPath.setAttributeNS(null, 'id', pathId);
+                curPath.setAttributeNS(null, 'marker-end', 'url(#arrow)');
+
+//                thePath.parents = startNode;
+//                thePath.kids = e.currentTarget;
+
+                // update relationships
+                startNode.kids.push(e.currentTarget);
+                e.currentTarget.parents.push(startNode);
+                startNode.outEdges.push(curPath);
+                e.currentTarget.inEdges.push(curPath);
+                startNode = null;
+                curPath = null;
             } else {
-                findClosest( curElbow, 'elbow', 
-                            {x: parseFloat(e.currentTarget.getAttribute('x')), 
-                             y: parseFloat(e.currentTarget.getAttribute('y'))},
-                            'node'); 
+                // A path between these two nodes already exists so don't create it!
+                startNode = null;
+                if (curPath !== null) {
+                    curPath.elbows.map(function (item) { // modify last node in path
+                    document.getElementById('mySVG').removeChild(item);
+                });
+                document.getElementById('mySVG').removeChild(curPath);
+                curPath = null;
+                }
             }
-            select(e.currentTarget);
-              
-            var thePath = document.createElementNS(xmlns, 'path');
-            thePath.setAttributeNS(null, 'id', 'n' + startNode.id + 'n' + e.currentTarget.id);
-            thePath.setAttributeNS(null, 'd', curPath);
-            thePath.setAttributeNS(null, 'fill', 'none');
-            thePath.setAttributeNS(null, 'stroke', 'black');
-            thePath.setAttributeNS(null, 'data-active', 'drawn');
-            thePath.setAttributeNS(null, 'marker-end', 'url(#arrow)');
-            thePath.addEventListener('click', pathClicked, false);
-            document.getElementById('mySVG').appendChild(thePath);
-
-            thePath.parents = startNode;
-            thePath.kids = e.currentTarget;
-
-            // update relationships
-            startNode.kids.push(e.currentTarget);
-            e.currentTarget.parents.push(startNode);
-            startNode.outEdges.push(thePath);
-            e.currentTarget.inEdges.push(thePath);
-            startNode = null;
-            curPath = null;
-            curElbow = null;
         }
     }
 }
@@ -252,6 +302,7 @@ function findClosest(beg, typeB, end, typeE) {
 
     var theNode = null;
     var theElbow = null;
+    var thePath = null;
 
     if (typeB === 'node' && typeE === 'elbow') {
         theNode = beg;
@@ -280,8 +331,9 @@ function findClosest(beg, typeB, end, typeE) {
                 } 
             }
         }
-        curPath = 'M' + best_edges[0].x + ',' + best_edges[0].y + ' L' +
+        thePath = 'M' + best_edges[0].x + ',' + best_edges[0].y + ' L' +
                 best_edges[1].x + ',' + best_edges[1].y ;
+        return thePath;
     }
 
     var nodeCoord = '';
@@ -308,12 +360,15 @@ function findClosest(beg, typeB, end, typeE) {
             nodeCoord = theNode.x + ',' + (theNode.y + nodeHeight/2);
         }
     }
+
     if (typeB === 'node' && typeE === 'elbow') {
-        curPath = 'M' + nodeCoord + ' L' + end.x + ',' + end.y + ' ';
+        thePath = 'M' + nodeCoord + ' L' + end.x + ',' + end.y + ' ';
     } else if (typeB === 'elbow' && typeE === 'node') {
         // only need to add end point to curPath
-        curPath += 'L' + nodeCoord;
+        thePath = 'L' + nodeCoord;
     }
+
+    return thePath;
 }
 
 
@@ -347,7 +402,7 @@ function moveNode(e) {
         nodeMoving.setAttribute('x', rectX);
         nodeMoving.setAttribute('y', rectY);
 
-        if (nodeMoving.parentNode.childNodes.length > 1){
+        if (nodeMoving.parentNode.childNodes.length > 1) {
             var textX = parseFloat(nodeMoving.parentNode.childNodes[1].getAttribute('x'));
             var textY = parseFloat(nodeMoving.parentNode.childNodes[1].getAttribute('y'));
             textX += (position.x - nodeX);
@@ -500,16 +555,14 @@ $('#add-text').click(function (){
 
 // TODO:
 /*
-- node type buttons
+6. node type buttons
 - add paths with elbow joints
-    x fix relationships and multiple elbows (?)
-    ? don't allow elbow points in end node
-    x pick best side of start node and end node to make line, so no overlap
-    x moving path when start or end point of path move
-    5. moving elbow points
-    6. Show partial paths
-    x delete path if start or end node deleted
-    
+    1. moving elbow points
+    5. Show partial paths
+2. regions
+3. shortcuts
+4. deselecting
+
 https://www.dashingd3js.com/svg-paths-and-d3js
 
 */
