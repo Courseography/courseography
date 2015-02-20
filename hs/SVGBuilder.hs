@@ -14,43 +14,6 @@ import Data.List
 import JsonParser
 import ParserUtil
 
--- | Adds intersecting paths to the rect's inEdges and outEdges.
--- | Note: This is one step that may be completely unnecessary.
-processRect :: [Path] -> Rect -> Rect
-processRect edges rect = do
-    let id_ = rectId rect
-    let inEdges = map pathId $ filter (\x -> target x == id_) edges
-    let outEdges = map pathId $ filter (\x -> source x == id_) edges
-    Rect id_
-         (width rect)
-         (height rect)
-         (xPos rect)
-         (yPos rect)
-         (rectFill rect)
-         (rectStroke rect)
-         (rectFillOpacity rect)
-         (rectIsHybrid rect)
-         (rectText rect)
-         inEdges
-         outEdges
-
--- | Adds intersecting paths to the ellipse's inEdges and outEdges.
--- | Note: This is one step that may be completely unneccessary.
-processEllipse :: [Path] -> Ellipse -> Ellipse
-processEllipse edges ellipse = do
-    let id_ = ellipseId ellipse
-    let inEdges = map pathId $ filter (\x -> target x == id_) edges
-    let outEdges = map pathId $ filter (\x -> source x == id_) edges
-    Ellipse (ellipseId ellipse)
-            (ellipseXPos ellipse)
-            (ellipseYPos ellipse)
-            (ellipseRx ellipse)
-            (ellipseRy ellipse)
-            (ellipseStroke ellipse)
-            (ellipseText ellipse)
-            inEdges
-            outEdges
-
 -- | Builds a Path from a database entry in the paths table.
 buildPaths :: Int -> [Paths] -> [Path]
 buildPaths _ [] = [] 
@@ -90,8 +53,6 @@ buildRect texts entity = do
          (rectsFillOpacity entity)
          (rectsIsHybrid entity)
          rectTexts
-         []
-         []
 
 -- | Determines the source and target nodes of the path.
 processPath :: [Rect] -> [Ellipse] -> Path -> Path
@@ -172,9 +133,7 @@ buildEllipses texts idCounter entities = do
             (ellipsesRx entity)
             (ellipsesRy entity)
             (ellipsesStroke entity)
-            ellipseText
-            []
-            [] : buildEllipses texts (idCounter + 1) (tail entities)
+            ellipseText : buildEllipses texts (idCounter + 1) (tail entities)
 
 -- | Rebuilds a path's `d` attribute based on a list of Rational tuples.
 buildPathString :: [(Rational, Rational)] -> String

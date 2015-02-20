@@ -57,15 +57,13 @@ buildSVG =
         let ellipses   = buildEllipses texts 0 $ map entityVal sqlEllipses
 
         let processedEdges = map (processPath rects ellipses) edges
-        let processedRects = map (processRect processedEdges) rects
-        let processedEllipses = map (processEllipse processedEdges) ellipses
 
-        let rectXml    = map convertRectToXML processedRects
+        let rectXml    = map convertRectToXML rects
 
         let textXml    = map (convertTextToXML . buildText . entityVal) sqlTexts
         let edgeXml    = map convertPathToXML processedEdges
         let regionXml  = map convertRegionToXML regions
-        let ellipseXml = map convertEllipseToXML processedEllipses
+        let ellipseXml = map convertEllipseToXML ellipses
 
         liftIO $ writeHeader
         liftIO $ writeRegions $ unwords regionXml
@@ -118,10 +116,6 @@ convertRectToXML rect =
     rectId rect ++ 
     "\" class=\"" ++
     (if rectIsHybrid rect then "hybrid" else "node") ++
-    "\" in-edges=\"" ++ 
-    unwords (rectInEdges rect) ++
-    "\" out-edges=\"" ++ 
-    unwords (rectOutEdges rect) ++ 
     "\"><rect rx=\"4\" ry=\"4\"  x=\"" ++ 
     show (fromRational $ xPos rect) ++
     "\" y=\"" ++
@@ -194,11 +188,7 @@ convertEllipseToXML :: Ellipse -> String
 convertEllipseToXML ellipse = 
     "<g id=\"" ++ 
     ellipseId ellipse ++ 
-    "\" class=\"bool\" in-edges=\"" ++
-    unwords (ellipseInEdges ellipse) ++
-    "\" out-edges=\"" ++ 
-    unwords (ellipseOutEdges ellipse) ++ 
-    "\">" ++
+    "\" class=\"bool\">" ++
     "<ellipse cx=\"" ++ 
     show (fromRational $ ellipseXPos ellipse) ++
     "\" cy=\"" ++
