@@ -131,6 +131,8 @@ Course.prototype.parseLectures = function (session, timeSuffix) {
             });
         }
 
+        sectionTimes = cleanUpTimes(sectionTimes);
+
         sections.push(makeLecture(lecture, tmp, id, sectionTimes));
     })
 
@@ -175,6 +177,9 @@ Course.prototype.parseTutorials = function (session, timeSuffix) {
             }
 
             var id = tmp.name + '-' + tutorial[0] + '-' + timeSuffix;
+
+            sectionTimes = cleanUpTimes(sectionTimes);
+
             return makeTutorial(tutorial, tmp, id, sectionTimes);
         });
     }
@@ -224,10 +229,30 @@ Course.prototype.addSection = function (section) {
  */
 Course.prototype.selectTimes = function (section) {
     'use strict';
-
+    
+    var n;
+        
     $.each(section.times, function (i, time) {
+
+        n = time.charAt(time.length-1);
+
+        if (n === 'H') {
+            extendRow(parseInt(time.slice(2)), time.charAt(time.length-2));
+        }
+
+        if (n === 'E') {
+            extendRow(parseInt(time.slice(2)), time.charAt(time.length-2));
+            time = time.slice(0, time.length-1)
+        }
+
         if ($(time).attr('clicked') !== 'true') {
             section.setTime(time);
+
+            if ($(time).attr('rowspan') !== '2' && n !== 'H' && n !== 'E') {
+                htime = time.slice(0) + 'H';
+                section.setTime(time);
+            }
+
         } else {
             section.setConflictTime(time);
         }

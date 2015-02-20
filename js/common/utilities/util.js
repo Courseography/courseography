@@ -117,11 +117,54 @@ function convertTimes(times) {
 
     var timeList = [];
     var time;
+    var stime;
 
     for (var i = 0; i < times.length; i++) {
         var timeString = 'MTWRF'.charAt(times[i][0]);
         time = times[i][1];
-        timeString = timeString + time;
+        if (time > 21) {
+            stime = time.toString();
+            if (stime.charAt(stime.length - 1) === '0') {
+                stime = stime.slice(0, -1) + 'E';
+            } else {
+                stime = stime.slice(0, -1) + 'H';
+            }
+            timeString = timeString + stime;
+        } else {
+            timeString = timeString + time;
+        }
+
+        timeList.push(timeString);
+    }
+    return timeList;
+}
+
+/**
+ * Extracts the optional time codes to be at the end.
+ * @param {string[]} times The times to be converted.
+ * @returns {string[]} The converted times.
+ */
+function cleanUpTimes(times) {
+    'use strict';
+
+    var timeList = [];
+    var timeString;
+    var n;
+    var m;
+
+    for (var i = 0; i < times.length; i++) {
+        
+        n = times[i].indexOf('H');
+        m = times[i].indexOf('E');
+
+        if (n !== -1) {
+            timeString = times[i].slice(0,n) + times[i].slice(n+1) + 'H';
+        } else if (m !== -1) {
+            timeString = times[i].slice(0,m) + times[i].slice(m+1) + 'E';
+        } else {
+            timeString = times[i];
+        }
+        
         timeList.push(timeString);
     }
 

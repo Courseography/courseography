@@ -103,12 +103,38 @@ function renderClearTime(time) {
 function renderClearHover(time) {
     'use strict';
 
-    if ($(time).attr('clicked') !== 'true') {
-            $(time).html('');
-        }
-    $(time).attr('hover', 'off');
-}
+    var n;
+    var ctime;
 
+    n = time.charAt(time.length-1);
+        
+    if (n === 'H' && $(time).attr('clicked') !== 'true') {
+        compressRow(parseInt(time.slice(2)), time.charAt(time.length-2));
+    }
+    
+    if (n === 'E') {
+        ctime = time.slice(0);
+        time = time.slice(0, time.length-1);
+        if ($(time).attr('clicked') !== 'true') {
+            compressRow(parseInt(ctime.slice(2)), ctime.charAt(ctime.length-2));
+        }
+    }
+    
+    if ($(time).attr('clicked') !== 'true') {
+        $(time).html('');
+    }
+
+    $(time).attr('hover', 'off');
+
+    if ($(time).attr('rowspan') !== '2'&& n !== 'H' && n !== 'E') {
+        htime = time.slice(0) + 'H';
+        if ($(htime).attr('clicked') !== 'true') {
+            $(htime).html('');
+        }
+        $(htime).attr('hover', 'off');
+    }
+
+}
 
 /**
  * Renders a cell on hover.
@@ -118,13 +144,108 @@ function renderClearHover(time) {
 function renderAddHover(time, section) {
     'use strict';
 
+
+    var n;
+    var htime;
+    var ptime;
+
+    n = time.charAt(time.length-1);
+
+
+    if (n === 'H') {
+        extendRow(parseInt(time.slice(2)), time.charAt(time.length-2));
+        ptime = time.slice(0, time.length-1);
+
+        if ($(ptime).attr('clicked') === 'true') {
+            $(time).attr('hover', 'conflict');
+        }
+    }
+
+    if (n === 'E') {
+        extendRow(parseInt(time.slice(2)), time.charAt(time.length-2));
+        time = time.slice(0, time.length-1);
+    } 
+    
     if ($(time).attr('clicked') !== 'true') {
-        $(time).html(section.courseName.substring(0,6) + ' (' + section.type + ')')
-               .attr('hover', 'good');
+        if ($(time).attr('rowspan') !== '1') {
+            $(time).html(section.courseName.substring(0,6) + ' (' + section.type + ')')
+                    .attr('hover', 'good');
+        } else {
+            $(time).html(section.courseName.substring(0,6) + ' (' + section.type + ')')
+                    .attr('hover', 'good')
+                    .css('font-size', '0');
+        }
     } else if ($(time).html() === section.courseName &&
-               $(time).attr('type') === section.type) {
+            $(time).attr('type') === section.type) {
         $(time).attr('hover', 'remove');
     } else {
         $(time).attr('hover', 'conflict');
     }
+
+    if ($(time).attr('rowspan') !== '2'&& n !== 'H' && n !== 'E') {
+        htime = time.slice(0) + 'H';
+        if ($(htime).attr('clicked') !== 'true') {
+            $(htime).html(section.courseName)
+                .attr('hover', 'good');
+        } else if ($(htime).html() === section.courseName &&
+            $(htime).attr('type') === section.type) {
+            $(htime).attr('hover', 'remove');
+        } else {
+            $(htime).attr('hover', 'conflict');
+        }
+    }
+        
 }
+
+
+/**
+ * Extends a given row to display half hour sections.
+ * @param {Int} time The full hour time of the row.
+ * @param {string} term The term of the timetable row.
+ */
+function extendRow(timeInt, term) {
+    'use strict';
+
+    var weekPrefixArray = ['M', 'T', 'W', 'R', 'F'];
+    var pcells = [];
+    var ccells = [];
+    var time = timeInt.toString();
+
+    for (var k = 0; k < 5; k++) {
+        pcells[pcells.length] = '#' + weekPrefixArray[k] + time + term;
+        ccells[ccells.length] = '#' + weekPrefixArray[k] + time +'H' + term;
+    }
+
+    for (var i = 0; i < 5; i++) {
+        $(ccells[i]).attr('display', 'table-cell');
+        $(pcells[i]).attr('rowspan', '1');
+    }
+
+}
+
+/**
+ * Compress a given row to hide half hour sections.
+ * @param {Int} timeInt The full hour time of the row.
+ * @param {string} week The week of the timetable cell.
+ * @param {string} term The term of the timetable cell.
+ */
+function compressRow(timeInt, term) {
+    'use strict';
+
+    var weekPrefixArray = ['M', 'T', 'W', 'R', 'F'];
+    var pcells = [];
+    var ccells = [];
+    var time = timeInt.toString();
+
+    for (var k = 0; k < 5; k++) {
+        pcells[pcells.length] = '#' + weekPrefixArray[k] + time + term;
+        ccells[ccells.length] = '#' + weekPrefixArray[k] + time +'H' + term;
+    }
+
+    for (var i = 0; i < 5; i++) {
+        $(pcells[i]).attr('rowspan', '2');
+        $(ccells[i]).attr('display', 'none');
+    }
+
+}
+
