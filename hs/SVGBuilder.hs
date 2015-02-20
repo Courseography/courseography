@@ -29,7 +29,7 @@ buildPaths idCounter entities = do
          "" : buildPaths (idCounter + 1) (tail entities)
 
 -- | Builds a Rect from a database entry in the rects table.
-buildRect :: [Text] -> Rects -> Rect
+buildRect :: [Text] -> Rects -> Shape
 buildRect texts entity = do
     let rectTexts = filter (\x -> intersects
                             (fromRational (rectsWidth entity))
@@ -43,19 +43,19 @@ buildRect texts entity = do
     let textString = concat $ map textText rectTexts
     let id_ = (if rectsIsHybrid entity then "h" else "") ++ 
               (if isDigit $ head textString then "CSC" else "") ++ dropSlash textString
-    Rect id_
-         (rectsWidth entity)
-         (rectsHeight entity)
-         (rectsXPos entity)
-         (rectsYPos entity)
-         (rectsFill entity)
-         (rectsStroke entity)
-         (rectsFillOpacity entity)
-         (rectsIsHybrid entity)
-         rectTexts
+    Shape id_
+          (rectsXPos entity)
+          (rectsYPos entity)
+          (rectsWidth entity)
+          (rectsHeight entity)
+          (rectsFill entity)
+          (rectsStroke entity)
+          rectTexts
+          (rectsIsHybrid entity)
+          9
 
 -- | Determines the source and target nodes of the path.
-processPath :: [Rect] -> [Ellipse] -> Path -> Path
+processPath :: [Shape] -> [Shape] -> Path -> Path
 processPath rects ellipses edge = 
     do let coords = points edge
        let xStart = fromRational $ fst $ head coords
@@ -78,21 +78,21 @@ processPath rects ellipses edge =
             targetNode
 
 -- | Gets the first rect that intersects with the given coordinates.
-getIntersectingShape :: Shape a => Float -> Float -> [a] -> String
+getIntersectingShape :: Float -> Float -> [Shape] -> String
 getIntersectingShape xpos ypos shapes = do
     let intersectingShapes = filter (intersectsWithPoint xpos ypos) shapes
     if null intersectingShapes
     then ""
-    else getId $ head intersectingShapes
+    else shapeId $ head intersectingShapes
 
 -- | Determines if a rect intersects with the given coordinates.
-intersectsWithPoint :: Shape a => Float -> Float -> a -> Bool
+intersectsWithPoint :: Float -> Float -> Shape -> Bool
 intersectsWithPoint xpos ypos shape =
-    intersects (getWidth shape)
-               (getHeight shape)
-               (getX shape)
-               (getY shape)
-               (getTolerance shape)
+    intersects (fromRational $ shapeWidth shape)
+               (fromRational $ shapeHeight shape)
+               (fromRational $ shapeXPos shape)
+               (fromRational $ shapeYPos shape)
+               (shapeTolerance shape)
                xpos
                ypos
 
@@ -113,7 +113,7 @@ buildText entity =
          (textsFontFamily entity)
 
 -- | Builds a Path from a database entry in the paths table.
-buildEllipses :: [Text] -> Int -> [Ellipses] -> [Ellipse]
+buildEllipses :: [Text] -> Int -> [Ellipses] -> [Shape]
 buildEllipses _ _ [] = []
 buildEllipses texts idCounter entities = do
     let entity = head entities
@@ -127,13 +127,16 @@ buildEllipses texts idCounter entities = do
                                   (fromRational (textXPos x))
                                   (fromRational (textYPos x))
                                   ) texts
-    Ellipse ("bool" ++ show idCounter)
+    Shape ("bool" ++ show idCounter)
             (ellipsesXPos entity)
             (ellipsesYPos entity)
-            (ellipsesRx entity)
-            (ellipsesRy entity)
+            ((ellipsesRx entity) * 2)
+            ((ellipsesRy entity) * 2)
+            ""
             (ellipsesStroke entity)
-            ellipseText : buildEllipses texts (idCounter + 1) (tail entities)
+            ellipseText
+            False
+            20 : buildEllipses texts (idCounter + 1) (tail entities)
 
 -- | Rebuilds a path's `d` attribute based on a list of Rational tuples.
 buildPathString :: [(Rational, Rational)] -> String

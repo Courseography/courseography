@@ -7,23 +7,6 @@ data Graph =
             title :: String
           } deriving Show
 
--- | A Rect.
-data Rect =
-    Rect {
-           rectId :: String,
-           width :: Rational,
-           height :: Rational,
-           xPos :: Rational,
-           yPos :: Rational,
-           rectFill :: String,
-           rectStroke :: String,
-           rectFillOpacity :: String,
-           rectIsHybrid :: Bool,
-           rectText :: [Text],
-           rectInEdges :: [String],
-           rectOutEdges :: [String]
-         } deriving Show
-
 -- | A Text.
 data Text =
     Text {
@@ -48,19 +31,19 @@ data Path =
            target :: String
          } deriving Show
 
--- | A Ellipse.
-data Ellipse =
-    Ellipse { 
-              ellipseId :: String,
-              ellipseXPos :: Rational,
-              ellipseYPos :: Rational,
-              ellipseRx :: Rational,
-              ellipseRy :: Rational,
-              ellipseStroke :: String,
-              ellipseText :: [Text],
-              ellipseInEdges :: [String],
-              ellipseOutEdges :: [String]
-            } deriving Show
+data Shape =
+    Shape {
+        shapeId :: String,
+        shapeXPos :: Rational,
+        shapeYPos :: Rational,
+        shapeWidth :: Rational,
+        shapeHeight :: Rational,
+        shapeFill :: String,
+        shapeStroke :: String,
+        shapeText :: [Text],
+        shapeIsHybrid :: Bool,
+        shapeTolerance :: Float
+         } deriving Show
 
 data Style =
     Style {
@@ -72,23 +55,3 @@ data Style =
             fontWeight :: String,
             fontFamily :: String
           } deriving Show
-
-class Shape a where
-    getX, getY, getWidth, getHeight, getTolerance :: a -> Float
-    getId :: a -> String
-
-instance Shape Rect where
-    getX a = fromRational $ xPos a
-    getY a = fromRational $ yPos a
-    getWidth a = fromRational $ width a
-    getHeight a = fromRational $ height a
-    getId a = rectId a
-    getTolerance a = 9
-
-instance Shape Ellipse where
-    getX a = fromRational $ ellipseXPos a
-    getY a = fromRational $ ellipseYPos a
-    getWidth a = 5
-    getHeight a = 5
-    getId a = ellipseId a
-    getTolerance a = 20

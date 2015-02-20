@@ -109,28 +109,26 @@ writeEdges edgeXml = do
     appendFile "Testfile.svg" "</g>"
 
 -- | Converts a `Rect` to XML. 
-convertRectToXML :: Rect -> String
+convertRectToXML :: Shape -> String
 convertRectToXML rect = 
-    if rectFill rect == "none" then "" else
+    if shapeFill rect == "none" then "" else
     "<g id=\"" ++ 
-    rectId rect ++ 
+    shapeId rect ++
     "\" class=\"" ++
-    (if rectIsHybrid rect then "hybrid" else "node") ++
+    (if shapeIsHybrid rect then "hybrid" else "node") ++
     "\"><rect rx=\"4\" ry=\"4\"  x=\"" ++ 
-    show (fromRational $ xPos rect) ++
+    show (fromRational $ shapeXPos rect) ++
     "\" y=\"" ++
-    show (fromRational $ yPos rect) ++
+    show (fromRational $ shapeYPos rect) ++
     "\" width=\"" ++
-    show (fromRational $ width rect) ++
+    show (fromRational $ shapeWidth rect) ++
     "\" height=\"" ++
-    show (fromRational $ height rect) ++
+    show (fromRational $ shapeHeight rect) ++
     "\" style=\"fill:" ++
-    rectFill rect ++
+    shapeFill rect ++
     ";stroke:#000000" ++ 
-    ";fill-opacity:" ++ 
-    rectFillOpacity rect ++ 
-    ";\"/>" ++ 
-    unwords (map convertTextToXML (rectText rect)) ++
+    ";\"/>" ++
+    unwords (map convertTextToXML (shapeText rect)) ++
     "</g>"
 
 -- | Converts a `Text` to XML.
@@ -184,19 +182,19 @@ convertRegionToXML path =
     "\"/>"
 
 -- | Converts an `Ellipse` to XML.
-convertEllipseToXML :: Ellipse -> String
+convertEllipseToXML :: Shape -> String
 convertEllipseToXML ellipse = 
     "<g id=\"" ++ 
-    ellipseId ellipse ++ 
+    shapeId ellipse ++
     "\" class=\"bool\">" ++
     "<ellipse cx=\"" ++ 
-    show (fromRational $ ellipseXPos ellipse) ++
+    show (fromRational $ shapeXPos ellipse) ++
     "\" cy=\"" ++
-    show (fromRational $ ellipseYPos ellipse) ++
+    show (fromRational $ shapeYPos ellipse) ++
     "\" rx=\"" ++ 
-    show (fromRational $ ellipseRx ellipse) ++
+    show ((fromRational $ shapeWidth ellipse) / 2) ++
     "\" ry=\"" ++
-    show (fromRational $ ellipseRy ellipse) ++
+    show ((fromRational $ shapeHeight ellipse) / 2) ++
     "\" style=\"stroke:#000000;fill:none\"/>" ++ 
-    unwords (map convertTextToXML (ellipseText ellipse)) ++
+    unwords (map convertTextToXML (shapeText ellipse)) ++
     "</g>"
