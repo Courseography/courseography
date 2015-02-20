@@ -23,7 +23,7 @@ main = do
                dir "graph" graphResponse,
                --dir "about" $ aboutResponse contents,
                dir "static" $ serveDirectory EnableBrowsing [] staticDir,
-               dir "course" $ look "name" >>= retrieveCourse 
+               dir "course" $ look "name" >>= retrieveCourse, 
                dir "all-courses" $ liftIO allCourses
                ]
 

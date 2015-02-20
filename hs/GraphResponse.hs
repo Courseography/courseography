@@ -9,6 +9,7 @@ import Happstack.Server
 import MakeElements
 import MasterTemplate
 import Scripts
+import SVGGen
 
 graphResponse :: ServerPart Response
 graphResponse =
