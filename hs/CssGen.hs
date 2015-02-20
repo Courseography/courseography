@@ -661,6 +661,8 @@ fceCountCSS = "#FCECountDiv" ? do
 roundCorners = "border-radius" -: "8px"
 
 drawStyles = do
+    mainCSS
+    canvasBackground
     canvasCSS
     panelCSS
     modeButtonsCSS
@@ -673,12 +675,26 @@ drawStyles = do
     inputCSS
     textButtonCSS
 
-canvasCSS = "#mySVG" ? do
+mainCSS = "#main" ? do
     height (pct 85)
-    width (pct 85)
+    width  (pct 85)
+    float floatRight
+    position relative
     "border-radius" -: "8px"
-    backgroundColor $ parse "#D3D3D3"
     border solid (px 2) "#000000"
+
+canvasBackground = "#background" ? do
+    height100
+    width100
+    "background-image" -: "url(http://www.emba.uvm.edu/~jtl/gimpdoc-html/plugab17.gif)"
+    opacity 0.3
+
+canvasCSS = "#mySVG" ? do
+    height100
+    width100
+    position absolute
+    top nil
+    left nil
 
 panelCSS = "#mode-panel" ? do
     height (pct 85)
