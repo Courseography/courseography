@@ -4,9 +4,9 @@ module CourseQueries (queryCourse) where
 
 import Database.Persist
 import Database.Persist.Sqlite
-import Database.Tables as Tables
+import Tables as Tables
 import JsonResponse
-import Database.JsonParser
+import JsonParser
 import Happstack.Server
 import qualified Data.Text as T
 import qualified Data.Aeson as Aeson

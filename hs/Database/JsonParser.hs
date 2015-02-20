@@ -23,7 +23,7 @@ import Control.Monad
 import Control.Monad.Trans.Reader
 import Control.Applicative
 import Data.Maybe
-import Database.Tables
+import Tables
 
 dbStr :: T.Text
 dbStr = "database1.sqlite3"

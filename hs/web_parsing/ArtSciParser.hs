@@ -3,6 +3,8 @@ module ArtSciParser (parseArtSci) where
 import Network.HTTP
 import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Match
+import Database.Persist
+import Database.Persist.Sqlite
 import Data.List
 import qualified Data.Text as T
 import qualified Data.Text.IO as B
@@ -52,7 +54,9 @@ getCalendar str = do
     let coursesSoup = lastH2 tags
     let courses = map (filter (tagText (\x -> True))) $ partitions isCourseTitle coursesSoup
     let course = map processCourseToData courses
-    mapM_ insertCourse course
+    runSqlite dbStr $ do
+      runMigration migrateAll
+      mapM_ insertCourse course
     --print "parsed " + "str" 
     where
         isComment (TagComment _) = False

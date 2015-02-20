@@ -10,7 +10,7 @@
              TemplateHaskell,
              TypeFamilies #-}
 
-module Database.Tables where
+module Tables where
 
 import Database.Persist.TH
 import qualified Data.Text as T
