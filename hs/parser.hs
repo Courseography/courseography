@@ -33,7 +33,6 @@ main = do graphFile <- readFile "../res/graphs/graph_regions.svg"
           runSqlite dbStr $ do
               runMigration migrateAll
               parseLevel False (Style (0,0) "" "" "" "" "" "") (getRoot graphDoc)
-              --buildInteractive
               liftIO $ print "Parsing complete"
           buildSVG
 
