@@ -20,7 +20,11 @@ var level400 = {'CSC401': 0, 'CSC404': 0, 'CSC411': 0, 'CSC412': 0, 'CSC418': 0,
                 'BCB420': 0, 'BCB430': 0, 'CSC410': 0};
 
 activeInq = [];
-
+creditCountSpec = 0;
+creditCountMaj = 0;
+creditCountMin = 0;
+creditCount300 = 0;
+creditCount400 = 0;
 
 /**
  * Updates POSts when button is clicked.
@@ -46,6 +50,7 @@ function updateAllCategories() {
     fill300s();
     fill400s();
     fillInquiries();
+    updateCreditCount();
 
     // Update Specialist 
     for (var property in completed_spec) {
@@ -144,10 +149,20 @@ function updateCompletedSpecCourses () {
             if (getCookie(courseCode) === 'active' || getCookie(courseCode) === 'overridden') {
                 if (completed_spec[courseCode] < 1) {
                     completed_spec[courseCode] += 1;
+                    if (courseCode === 'Calc1') {
+                        creditCountSpec += 1;
+                    } else {
+                        creditCountSpec += 0.5;
+                    }
                 } 
             } else if ((getCookie(courseCode) === 'inactive' || getCookie(courseCode) === 'takeable')
                        && (completed_spec[courseCode] > 0)) {
                     completed_spec[courseCode] -= 1;
+                    if (courseCode === 'Calc1') {
+                        creditCountSpec -= 1;
+                    } else {
+                        creditCountSpec -= 0.5;
+                    }
             }      
         }
     }
@@ -165,10 +180,20 @@ function updateCompletedMajCourses () {
             if (getCookie(courseCode) === 'active' || getCookie(courseCode) === 'overridden') {
                 if (completed_maj[courseCode] < 1) {
                     completed_maj[courseCode] += 1;
+                    if (courseCode === 'Calc1') {
+                        creditCountMaj += 1.0;
+                    } else {
+                        creditCountMaj += 0.5;
+                    }
                 } 
             } else if ((getCookie(courseCode) === 'inactive' || getCookie(courseCode) === 'takeable')
                         && (completed_maj[courseCode] > 0)) {
                 completed_maj[courseCode] -= 1;
+                if (courseCode === 'Calc1') {
+                    creditCountMaj -= 1.0;
+                } else {
+                    creditCountMaj -= 0.5;
+                }
             }
         }       
     }
@@ -186,10 +211,12 @@ function updateCompletedMinCourses() {
             if (getCookie(courseCode) === 'active' || getCookie(courseCode) === 'overridden') {
                 if (completed_min[courseCode] < 1) {
                     completed_min[courseCode] += 1;
+                    creditCountMin += 0.5;
                 } 
             } else if ((getCookie(courseCode) === 'inactive' || getCookie(courseCode) === 'takeable')
                            && (completed_min[courseCode] > 0)) {
                 completed_min[courseCode] -= 1;
+                creditCountMin -= 0.5;
             }
         }       
     }
@@ -253,12 +280,14 @@ function update300s() {
             if (getCookie(courseCode) === 'active' || getCookie(courseCode) === 'overridden') {
                 if (level300[courseCode] < 1) {
                     level300[courseCode] += 1;
+                    creditCount300 += 0.5;
                 } if ((CSCinq.indexOf(courseCode) > -1) && (activeInq.indexOf(courseCode) === -1)) { // check if Inquiry Course
                     activeInq.push(courseCode);
                 }
             } else if ((getCookie(courseCode) === 'inactive' || getCookie(courseCode) === 'takeable') 
                        && (level300[courseCode] > 0)) {
                 level300[courseCode] -= 1;
+                creditCount300 -= 0.5;
                 var index = activeInq.indexOf(courseCode);
                 if (index > -1) {
                     activeInq.splice(index, 1);
@@ -281,12 +310,14 @@ function update400s() {
             if (getCookie(courseCode) === 'active' || getCookie(courseCode) === 'overridden') {
                 if (level400[courseCode] < 1) {
                     level400[courseCode] += 1;
+                    creditCount400 += 0.5;
                 } if ((CSCinq.indexOf(courseCode) > -1) && (activeInq.indexOf(courseCode) === -1)) { // check if Inquiry Course
                     activeInq.push(courseCode);
                 }
             } else if ((getCookie(courseCode) === 'inactive' || getCookie(courseCode) === 'takeable') 
                        && (level400[courseCode] > 0)) {
                 level400[courseCode] -= 1;
+                creditCount400 -= 0.5;
                 var index = activeInq.indexOf(courseCode);
                 if (index > -1) {
                     activeInq.splice(index, 1);
@@ -336,6 +367,7 @@ function fill300s() {
     }
 }  
 
+
 /**
  * Autofills textboxes for 400 level courses. 
 **/
@@ -372,6 +404,9 @@ function fill400s() {
 } 
 
 
+/**
+ * Autofills textboxes and updates category for Inquiry courses
+**/
 function fillInquiries() {
     'use-strict';
 
@@ -403,6 +438,39 @@ function fillInquiries() {
         updateCategory($('#maj_misc')[0].getElementsByClassName('code')[0], 'not fulfilled');
     }
 
+}
+
+
+/**
+ * Updates Credit Count for each POSt.
+ * TODO: Fix credit count to account for all constraints
+ **/
+function updateCreditCount() {
+    'use-strict';
+
+    // account for not needing to take CSC108
+    specCount = creditCountSpec - (completed_spec['CSC108'] * 0.5) + creditCount300 + creditCount400;
+    majCount = creditCountMaj - (completed_maj['CSC108'] * 0.5) + creditCount300 + creditCount400;
+    minCount = creditCountMin - (completed_min['CSC108'] * 0.5) + creditCount300 + creditCount400;
+
+
+    if (creditCountSpec >= 12) {
+        $('#spec_creds')[0].innerHTML = '(12/12.0)';
+        $('#maj_creds')[0].innerHTML = '(8/8.0)';
+        $('#min_creds')[0].innerHTML = '(4/4.0)';
+    } else if (creditCountSpec >= 8) {
+        $('#spec_creds')[0].innerHTML = '(' + creditCountSpec + '/12.0)';
+        $('#maj_creds')[0].innerHTML = '(8/8.0)';
+        $('#min_creds')[0].innerHTML = '(4/4.0)';
+    } else if (creditCountSpec >= 4) {
+        $('#spec_creds')[0].innerHTML = '(' + creditCountSpec + '/12.0)';
+        $('#maj_creds')[0].innerHTML = '(' + creditCountSpec + '/8.0)';
+        $('#min_creds')[0].innerHTML = '(4/4.0)';
+    } else {
+        $('#spec_creds')[0].innerHTML = '(' + creditCountSpec + '/12.0)';
+        $('#maj_creds')[0].innerHTML = '(' + creditCountSpec + '/8.0)';
+        $('#min_creds')[0].innerHTML = '(' + creditCountSpec + '/4.0)';
+    }
 }
 
 
