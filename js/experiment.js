@@ -525,6 +525,8 @@ function movePath(path, xBy, yBy, partOfPath, elbowNum) {
 
 
 function selectElbow(e) {
+    'use-strict';
+
     if (mode === 'change-mode') {
         var position = getClickPosition(e, e.currentTarget);
         elbowMoving = e.currentTarget;
