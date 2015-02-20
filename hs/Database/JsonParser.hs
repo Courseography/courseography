@@ -1,7 +1,7 @@
  {-# LANGUAGE FlexibleContexts, GADTs, MultiParamTypeClasses,
     OverloadedStrings, TypeFamilies #-}
 
-module JsonParser where
+module Database.JsonParser where
 
 import qualified Data.ByteString.Lazy as B
 import qualified Data.ByteString.Lazy.Char8 as BSL
@@ -14,11 +14,12 @@ import GHC.Generics
 import System.Directory
 import Database.Persist
 import Database.Persist.Sqlite
-import Control.Monad.IO.Class  (liftIO)
+import Control.Monad.IO.Class  (liftIO, MonadIO)
 import Control.Monad
+import Control.Monad.Trans.Reader
 import Control.Applicative
 import Data.Maybe
-import Tables
+import Database.Tables
 
 dbStr :: T.Text
 dbStr = "database.sqlite3"
@@ -39,10 +40,13 @@ printFile courseFile =
     do d <- eitherDecode <$> getJSON courseFile
        case d of
            Left err -> print $ courseFile ++ " " ++ err
-           Right course -> do insertCourse course
-                              insertLectures course
-                              insertTutorials course
-                              print $ "Inserted " ++ show (name course)
+           Right course -> do
+                runSqlite dbStr $ do
+                    runMigration migrateAll
+                    insertCourse course
+                    insertLectures course
+                    insertTutorials course
+                    liftIO $ print $ "Inserted " ++ show (name course)
 
 -- | Opens and reads the file contained in `jsonFile`. File contents are returned, surrounded by
 -- | square brackets.
@@ -50,10 +54,8 @@ getJSON :: String -> IO B.ByteString
 getJSON jsonFile = B.readFile jsonFile
 
 -- | Inserts course into the Courses table.
-insertCourse :: Course -> IO ()
-insertCourse course = 
-    runSqlite dbStr $ do
-    runMigration migrateAll
+insertCourse :: MonadIO m => Course -> ReaderT SqlBackend m ()
+insertCourse course =
     insert_ $ Courses (name course)
                       (title course)
                       (description course)
@@ -65,25 +67,23 @@ insertCourse course =
                       (prereqString course)
 
 -- | Inserts the lectures from course into the Lectures table.
-insertLectures :: Course -> IO ()
+insertLectures :: MonadIO m => Course -> ReaderT SqlBackend m ()
 insertLectures course = 
     insertSessionLectures (f course) "F" course >>
     insertSessionLectures (s course) "S" course >>
     insertSessionLectures (y course) "Y" course
 
 -- | Inserts the lectures from a specified section into the Lectures table.
-insertSessionLectures :: Maybe Session -> T.Text -> Course -> IO ()
+insertSessionLectures :: MonadIO m => Maybe Session -> T.Text -> Course -> ReaderT SqlBackend m ()
 insertSessionLectures Nothing sessionStr course = return ()
 insertSessionLectures (Just session) sessionStr course =
-    liftIO $ mapM_ (insertLecture sessionStr course) (lectures session)
+    mapM_ (insertLecture sessionStr course) (lectures session)
 
 -- | Inserts a lecture into the Lectures table.
-insertLecture :: T.Text -> Course -> Lecture -> IO ()
-insertLecture session course lecture = 
-    runSqlite dbStr $ do
-    runMigration migrateAll
+insertLecture :: MonadIO m => T.Text -> Course -> Lecture -> ReaderT SqlBackend m ()
+insertLecture session course lecture =
     insert_ $ Lectures (name course)
-                        session
+                       session
                        (section lecture)
                        (map Time (time lecture))
                        (cap lecture)
@@ -94,29 +94,27 @@ insertLecture session course lecture =
                        (time_str lecture)
 
 -- | Inserts the tutorials from course into the Tutorials table.
-insertTutorials :: Course -> IO ()
+insertTutorials :: MonadIO m => Course -> ReaderT SqlBackend m ()
 insertTutorials course =  
     insertSessionTutorials (f course) "F" course >>
     insertSessionTutorials (s course) "S" course >>
     insertSessionTutorials (y course) "Y" course
 
 -- | Inserts the tutorials from a specified section into the Tutorials table.
-insertSessionTutorials :: Maybe Session -> T.Text -> Course -> IO ()
+insertSessionTutorials :: MonadIO m => Maybe Session -> T.Text -> Course -> ReaderT SqlBackend m ()
 insertSessionTutorials Nothing sessionStr course = return ()
 insertSessionTutorials (Just session) sessionStr course = 
     (unless $ null (tutorials session)) $ 
-    liftIO $ mapM_ (insertTutorial sessionStr course) (tutorials session)
+    mapM_ (insertTutorial sessionStr course) (tutorials session)
 
 -- | Inserts a tutorial into the Tutorials table.
-insertTutorial :: T.Text -> Course -> Tutorial -> IO ()
+insertTutorial :: MonadIO m => T.Text -> Course -> Tutorial -> ReaderT SqlBackend m ()
 insertTutorial session course tutorial = 
-  runSqlite dbStr $ do
-      runMigration migrateAll
-      insert_ $ Tutorials (name course)
-                          (tutorialSection tutorial)
-                           session
-                          (map Time (times tutorial))
-                          (timeStr tutorial)
+    insert_ $ Tutorials (name course)
+                        (tutorialSection tutorial)
+                        session
+                        (map Time (times tutorial))
+                        (timeStr tutorial)
 
 -- | Gets the corresponding numeric requirement from a breadth requirement description.
 -- | 6 indicates a parsing error.

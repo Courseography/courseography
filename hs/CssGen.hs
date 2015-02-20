@@ -30,13 +30,3 @@ generateCSS = do
     createDirectoryIfMissing True "../style/graph"
     createDirectoryIfMissing True "../style/grid"
     Prelude.foldl1 (>>) $ Prelude.map renderStyleFile styleFiles
-
--- Currently not used
-fceCountCSS = "#FCECountDiv" ? do
-    backgroundColor fceCountColor
-    float floatRight
-    padding0
-    lineHeight (px 40)
-    "vertical-align" -: "middle"
-    fontSize (em 1.35)
-    alignCenter

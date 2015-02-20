@@ -1,11 +1,11 @@
 {-# LANGUAGE ScopedTypeVariables, OverloadedStrings #-}
-module CourseQueries where
+module Database.CourseQueries where
 
 import Database.Persist
 import Database.Persist.Sqlite
-import Tables
+import Database.Tables as Tables
 import JsonResponse
-import JsonParser
+import Database.JsonParser
 import Happstack.Server
 import qualified Data.Text as T
 import qualified Data.Aeson as Aeson
