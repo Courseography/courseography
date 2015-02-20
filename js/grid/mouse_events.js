@@ -104,21 +104,19 @@ function renderClearHover(time) {
     'use strict';
 
     var n;
-    var m;
     var ctime;
 
-    n = time.indexOf('H');
-    m = time.indexOf('E');
+    n = time.charAt(time.length-1);
         
-    if (n != -1 && $(time).attr('clicked') !== 'true') {
-        compressRow(time.slice(2,n), time.charAt(n+1));
+    if (n === 'H' && $(time).attr('clicked') !== 'true') {
+        compressRow(parseInt(time.slice(2)), time.charAt(time.length-2));
     }
     
-    if (m != -1) {
+    if (n === 'E') {
         ctime = time.slice(0);
-        time = time.slice(0,m) + time.charAt(m+1);
+        time = time.slice(0, time.length-1);
         if ($(time).attr('clicked') !== 'true') {
-            compressRow(ctime.slice(2,m), ctime.charAt(m+1));
+            compressRow(parseInt(ctime.slice(2)), ctime.charAt(ctime.length-2));
         }
     }
     
@@ -127,6 +125,14 @@ function renderClearHover(time) {
     }
 
     $(time).attr('hover', 'off');
+
+    if ($(time).attr('rowspan') !== '2'&& n !== 'H' && n !== 'E') {
+        htime = time.slice(0) + 'H';
+        if ($(htime).attr('clicked') !== 'true') {
+            $(htime).html('');
+        }
+        $(htime).attr('hover', 'off');
+    }
 
 }
 
@@ -138,106 +144,66 @@ function renderClearHover(time) {
 function renderAddHover(time, section) {
     'use strict';
 
+
     var n;
-    var m;
-    var ptime;
     var htime;
+    var ptime;
 
-    n = time.indexOf('H');
-    m = time.indexOf('E');
+    n = time.charAt(time.length-1);
+
+
+    if (n === 'H') {
+        extendRow(parseInt(time.slice(2)), time.charAt(time.length-2));
+        ptime = time.slice(0, time.length-1);
+
+        if ($(ptime).attr('clicked') === 'true') {
+            $(time).attr('hover', 'conflict');
+        }
+    }
+
+    if (n === 'E') {
+        extendRow(parseInt(time.slice(2)), time.charAt(time.length-2));
+        time = time.slice(0, time.length-1);
+    } 
     
-    if (n != -1) {
-
-        extendRow(time.slice(2,n), time.charAt(n+1));
-        ptime = time.slice(0,n) + time.charAt(n+1);
-
-        if ($(time).attr('clicked') !== 'true') {
-            $(time).html(section.courseName)
-                   .attr('hover', 'good');
-        } else if ($(time).html() === section.courseName &&
-                       $(time).attr('type') === section.type) {
-            $(time).attr('hover', 'remove');
-        } else if ($(ptime).attr('clicked') === 'true') {
-            $(time).attr('hover', 'conflict');
-        } else {
-            $(time).attr('hover', 'conflict');
-        }
-
-    } else if (m != -1) {
-        extendRow(time.slice(2,m), time.charAt(m+1));
-        time = time.slice(0,m) + time.charAt(m+1);
-        if ($(time).attr('clicked') !== 'true') {
-                $(time).html(section.courseName)
-                       .attr('hover', 'good');
-        } else if ($(time).html() === section.courseName &&
-                       $(time).attr('type') === section.type) {
-                $(time).attr('hover', 'remove');
-        } else {
-                $(time).attr('hover', 'conflict');
-        }
-
+    if ($(time).attr('clicked') !== 'true') {
+        $(time).html(section.courseName)
+                .attr('hover', 'good');
+    } else if ($(time).html() === section.courseName &&
+            $(time).attr('type') === section.type) {
+        $(time).attr('hover', 'remove');
     } else {
+        $(time).attr('hover', 'conflict');
+    }
 
-        if ($(time).attr('clicked') !== 'true') {
-                    $(time).html(section.courseName)
-                           .attr('hover', 'good');
-        } else if ($(time).html() === section.courseName &&
-                           $(time).attr('type') === section.type) {
-                    $(time).attr('hover', 'remove');
+    if ($(time).attr('rowspan') !== '2'&& n !== 'H' && n !== 'E') {
+        htime = time.slice(0) + 'H';
+        if ($(htime).attr('clicked') !== 'true') {
+            $(htime).html(section.courseName)
+                .attr('hover', 'good');
+        } else if ($(htime).html() === section.courseName &&
+            $(htime).attr('type') === section.type) {
+            $(htime).attr('hover', 'remove');
         } else {
-                    $(time).attr('hover', 'conflict');
-        }
-        
-        if ($(time).attr('rowspan') !== '2') {
-
-            htime = time.slice(0, time.length-2) + 'H' + time.charAt(time.length-1);
-
-            if ($(htime).attr('clicked') !== 'true') {
-                    $(htime).html(section.courseName)
-                           .attr('hover', 'good');
-            } else if ($(htime).html() === section.courseName &&
-                           $(htime).attr('type') === section.type) {
-                    $(htime).attr('hover', 'remove');
-            } else {
-                    $(htime).attr('hover', 'conflict');
-            }
-
+            $(htime).attr('hover', 'conflict');
         }
     }
         
 }
 
-/**
- * Extends a given cell to display half hour sections.
- * @param {string} time The full hour time of the row.
- * @param {string} week The week of the timetable cell.
- * @param {string} term The term of the timetable cell.
- */
-function extendCell(time, week, term) {
-    'use strict';
-
-    var pcell;
-    var ccell;
-
-    pcell = '#' + week + time + term;
-    ccell = '#' + week + time + "H"+ term;
-
-    $(ccell).attr('display', 'table-cell');
-    $(pcell).attr('rowspan', '1');
-
-}
 
 /**
  * Extends a given row to display half hour sections.
- * @param {string} time The full hour time of the row.
+ * @param {Int} time The full hour time of the row.
  * @param {string} term The term of the timetable row.
  */
-function extendRow(time, term) {
+function extendRow(timeInt, term) {
     'use strict';
 
     var weekPrefixArray = ['M', 'T', 'W', 'R', 'F'];
     var pcells = [];
     var ccells = [];
+    var time = timeInt.toString();
 
     for (var k = 0; k < 5; k++) {
         pcells[pcells.length] = '#' + weekPrefixArray[k] + time + term;
@@ -252,17 +218,18 @@ function extendRow(time, term) {
 }
 
 /**
- * Compress a given cell to hide half hour sections.
- * @param {string} time The full hour time of the row.
+ * Compress a given row to hide half hour sections.
+ * @param {Int} timeInt The full hour time of the row.
  * @param {string} week The week of the timetable cell.
  * @param {string} term The term of the timetable cell.
  */
-function compressRow(time, term) {
+function compressRow(timeInt, term) {
     'use strict';
 
     var weekPrefixArray = ['M', 'T', 'W', 'R', 'F'];
     var pcells = [];
     var ccells = [];
+    var time = timeInt.toString();
 
     for (var k = 0; k < 5; k++) {
         pcells[pcells.length] = '#' + weekPrefixArray[k] + time + term;
@@ -276,22 +243,3 @@ function compressRow(time, term) {
 
 }
 
-/**
- * Compress a given cell to hide half hour sections.
- * @param {string} time The full hour time of the row.
- * @param {string} week The week of the timetable cell.
- * @param {string} term The term of the timetable cell.
- */
-function compressCell(time, week, term) {
-    'use strict';
-
-    var pcell;
-    var ccell;
-
-    pcell = '#' + week + time + term;
-    ccell = '#' + week + time + "H"+ term;
-
-    $(pcell).attr('rowspan', '2');
-    $(ccell).attr('display', 'none');
-
-}

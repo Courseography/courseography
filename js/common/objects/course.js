@@ -131,6 +131,8 @@ Course.prototype.parseLectures = function (session, timeSuffix) {
             });
         }
 
+        sectionTimes = cleanUpTimes(sectionTimes);
+
         sections.push(makeLecture(lecture, tmp, id, sectionTimes));
     })
 
@@ -175,6 +177,9 @@ Course.prototype.parseTutorials = function (session, timeSuffix) {
             }
 
             var id = tmp.name + '-' + tutorial[0] + '-' + timeSuffix;
+
+            sectionTimes = cleanUpTimes(sectionTimes);
+
             return makeTutorial(tutorial, tmp, id, sectionTimes);
         });
     }
@@ -226,27 +231,25 @@ Course.prototype.selectTimes = function (section) {
     'use strict';
     
     var n;
-    var m;
         
     $.each(section.times, function (i, time) {
 
-        n = time.indexOf('H');
-        m = time.indexOf('E');
+        n = time.charAt(time.length-1);
 
-        if (n != -1) {
-            extendRow(time.slice(2,n), time.charAt(n+1));
+        if (n === 'H') {
+            extendRow(parseInt(time.slice(2)), time.charAt(time.length-2));
         }
 
-        if (m != -1) {
-            extendRow(time.slice(2,m), time.charAt(m+1));
-            time = time.slice(0,m) + time.charAt(m+1);
+        if (n === 'E') {
+            extendRow(parseInt(time.slice(2)), time.charAt(time.length-2));
+            time = time.slice(0, time.length-1)
         }
 
         if ($(time).attr('clicked') !== 'true') {
             section.setTime(time);
 
-            if ($(time).attr('rowspan') !== '2' && n == -1 && m == -1) {
-                htime = time.slice(0, time.length-2) + 'H' + time.charAt(time.length-1);
+            if ($(time).attr('rowspan') !== '2' && n !== 'H' && n !== 'E') {
+                htime = time.slice(0) + 'H';
                 section.setTime(time);
             }
 

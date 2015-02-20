@@ -65,6 +65,7 @@ Section.prototype.mouseover = function () {
     var tmp = this;
     $.each(this.times, function (i, time) {
         renderAddHover(time, tmp);
+
     });
     renderDisplayCourseInformation(this.course);
     renderDisplaySectionInformation(this);
@@ -129,18 +130,16 @@ Section.prototype.removeTimes = function () {
 
     var tmp = this;
     var n;
-    var m;
 
     $.each(this.times, function (i, time) {
-        n = time.indexOf('H');
-        m = time.indexOf('E');
+        n = time.charAt(time.length-1);
 
-        if (n != -1) {
-            compressRow(time.slice(2,n), time.charAt(n+1));
+        if (n === 'H') {
+            compressRow(parseInt(time.slice(2)), time.charAt(time.length-2));
         }
-        if (m != -1) {
-            compressRow(time.slice(2,m), time.charAt(m+1));
-            time = time.slice(0,m) + time.charAt(m+1);
+        if (n === 'E') {
+            compressRow(parseInt(time.slice(2)), time.charAt(time.length-2));
+            time = time.slice(0, time.length-1);
         }
 
         if ($(time).data("conflicts").length > 0) {
