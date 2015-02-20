@@ -19,6 +19,8 @@ var level400 = {'CSC401': 0, 'CSC404': 0, 'CSC411': 0, 'CSC412': 0, 'CSC418': 0,
                 'CSC490': 0, 'CSC491': 0, 'CSC494': 0, 'CSC495': 0, 'BCB410': 0, 
                 'BCB420': 0, 'BCB430': 0, 'CSC410': 0};
 
+activeInq = [];
+
 
 /**
  * Updates POSts when button is clicked.
@@ -43,6 +45,7 @@ function updateAllCategories() {
     update400s();
     fill300s();
     fill400s();
+    fillInquiries();
 
     // Update Specialist 
     for (var property in completed_spec) {
@@ -250,10 +253,16 @@ function update300s() {
             if (getCookie(courseCode) === 'active' || getCookie(courseCode) === 'overridden') {
                 if (level300[courseCode] < 1) {
                     level300[courseCode] += 1;
-                } 
+                } if ((CSCinq.indexOf(courseCode) > -1) && (activeInq.indexOf(courseCode) === -1)) { // check if Inquiry Course
+                    activeInq.push(courseCode);
+                }
             } else if ((getCookie(courseCode) === 'inactive' || getCookie(courseCode) === 'takeable') 
                        && (level300[courseCode] > 0)) {
                 level300[courseCode] -= 1;
+                var index = activeInq.indexOf(courseCode);
+                if (index > -1) {
+                    activeInq.splice(index, 1);
+                }
             }
         }       
     }
@@ -272,10 +281,16 @@ function update400s() {
             if (getCookie(courseCode) === 'active' || getCookie(courseCode) === 'overridden') {
                 if (level400[courseCode] < 1) {
                     level400[courseCode] += 1;
-                } 
+                } if ((CSCinq.indexOf(courseCode) > -1) && (activeInq.indexOf(courseCode) === -1)) { // check if Inquiry Course
+                    activeInq.push(courseCode);
+                }
             } else if ((getCookie(courseCode) === 'inactive' || getCookie(courseCode) === 'takeable') 
                        && (level400[courseCode] > 0)) {
                 level400[courseCode] -= 1;
+                var index = activeInq.indexOf(courseCode);
+                if (index > -1) {
+                    activeInq.splice(index, 1);
+                }
             }
         }       
     }
@@ -335,7 +350,6 @@ function fill400s() {
     
     // clear textboxes
     for (k = 0; k < 3; k++) {
-        var course = spec400s[k].value;
         spec400s[k].value = '';
         maj400s[k].value = '';
         min400s[k].value = '';
@@ -356,5 +370,36 @@ function fill400s() {
         }
     }
 } 
+
+
+function fillInquiries() {
+    'use-strict';
+
+    var i = 0;
+
+    var spec_inq = $('#spec_misc')[0].getElementsByTagName('input');
+    var maj_inq = $('#maj_misc')[0].getElementsByTagName('input');
+
+    // clear textboxes
+    for (k = 0; k < 4; k++) {
+        spec_inq[k].value = '';
+        maj_inq[k].value = '';
+    }
+    
+    for (m = 0; m < activeInq.length; m++) {
+        spec_inq[m].value = activeInq[m];
+        i += 1;
+        if (i == 4) {
+            break;
+        }
+    }
+
+    if (activeInq.length >= 4) {
+        updateCategory($('#spec_misc')[0].getElementsByClassName('code')[0], 'fulfilled'); 
+    } else {
+        updateCategory($('#spec_misc')[0].getElementsByClassName('code')[0], 'not fulfilled');
+    }
+
+}
 
 
