@@ -72,7 +72,6 @@ function getCourseObject(courseName, courseArray) {
  */
 function getCourse(name) {
     'use strict';
-
     var course = getCourseObject(name, courseCache);
     if (course === undefined) {
         course = fetchCourse(name);
