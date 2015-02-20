@@ -17,7 +17,7 @@ var level400 = {'CSC401': 0, 'CSC404': 0, 'CSC411': 0, 'CSC412': 0, 'CSC418': 0,
                 'CSC446': 0, 'CSC448': 0, 'CSC454': 0, 'CSC456': 0, 'CSC458': 0,
                 'CSC463': 0, 'CSC465': 0, 'CSC469': 0, 'CSC486': 0, 'CSC488': 0,
                 'CSC490': 0, 'CSC491': 0, 'CSC494': 0, 'CSC495': 0, 'BCB410': 0, 
-                'BCB420': 0, 'BCB430': 0};
+                'BCB420': 0, 'BCB430': 0, 'CSC410': 0};
 
 
 /**
@@ -85,6 +85,48 @@ function updateAllCategories() {
             }
         }
     }
+
+    // Update 300s
+    var i = 0; 
+    var spec300s = $('.300lvlspec');
+    for (var m = 0; m < 3; m++) {
+        if (spec300s[m].value != '') {
+            i += 1;
+        }
+    }
+    if (i === 3) {
+        updateCategory($('#spec_300')[0].getElementsByClassName('code')[0], 'fulfilled');
+        updateCategory($('#maj_300')[0].getElementsByClassName('code')[0], 'fulfilled');
+        updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'fulfilled');
+
+    } else {
+        updateCategory($('#spec_300')[0].getElementsByClassName('code')[0], 'not fulfilled');
+        updateCategory($('#maj_300')[0].getElementsByClassName('code')[0], 'not fulfilled');
+        updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'not fulfilled');
+        
+    }
+
+    // Update 400s
+
+    i = 0; 
+    var spec400s = $('.400lvlspec');
+    for (var l = 0; l < 3; l++) {
+        if (spec400s[l].value != '') {
+            i += 1;
+        }
+    }
+
+    if (i === 3) {
+        updateCategory($('#spec_400')[0].getElementsByClassName('code')[0], 'fulfilled');
+        updateCategory($('#maj_400')[0].getElementsByClassName('code')[0], 'fulfilled');
+        updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'fulfilled');
+    } else {
+        updateCategory($('#spec_400')[0].getElementsByClassName('code')[0], 'not fulfilled');
+        updateCategory($('#maj_400')[0].getElementsByClassName('code')[0], 'not fulfilled');
+        updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'not fulfilled');
+    }
+
+
 }
 
 
