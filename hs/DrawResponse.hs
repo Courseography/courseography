@@ -40,5 +40,5 @@ modePanel = createTag H.div "mode-panel" "" $ do
   createTag H.div "purple" "colour" "PURPLE"
   createTag H.div "path-mode" "mode" "PATH" 
   createTag H.div "region-mode" "mode" "REGION" 
-  createTag H.div "change-mode" "mode" "MOVE/SELECT" 
+  createTag H.div "change-mode" "mode" "SELECT/MOVE" 
   createTag H.div "erase-mode" "mode" "ERASE" 

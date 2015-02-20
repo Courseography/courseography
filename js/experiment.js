@@ -11,11 +11,13 @@ var colours = {
      'purple': '#46364A'
 };
 var nodeMoving = null;      // for movement and path creation
-var nodeX = -1;             // for movement
-var nodeY = -1;             // for movement
-var nodeSelected = null;    // for adding text
+var prevX = -1;             // for movement
+var prevY = -1;             // for movement
+var nodeSelected = null;    // for adding text or changing colour
 var startNode = null;       // for making paths
-var curPath = null;         // for making paths with elbow joints
+var curPath = null;         // the path currently being created
+var elbowMoving = null;     // for movement of elbow joints
+var elbowNumber = -1;       // for when you want to modify
 
 function setupSVGCanvas() {
     'use-strict';
@@ -29,8 +31,8 @@ function setupSVGCanvas() {
     svg.setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xlink', 'http://www.w3.org/1999/xlink');
     
     svg.addEventListener('mousedown', makeNode, false);
-    svg.addEventListener('mousemove', moveNode, false);
-    svg.addEventListener('mouseup', nodeUnclicked, false);
+    svg.addEventListener('mousemove', move, false);
+    svg.addEventListener('mouseup', unclickAll, false);
 
     svg.appendChild(setupMarker());
     div.appendChild(bgdiv);
@@ -154,12 +156,12 @@ function makeNode(e) {
 
             elbow.setAttributeNS(null, 'cx', position.x);
             elbow.setAttributeNS(null, 'cy', position.y);
-            elbow.setAttributeNS(null, 'r', 2);
-            elbow.setAttributeNS(null, 'stroke', 'black');
-            elbow.setAttributeNS(null, 'stroke-width', "1");
+            elbow.setAttributeNS(null, 'r', 4);
+            elbow.setAttributeNS(null, 'style', 'opacity:0');
+            elbow.pathPosition = elbowNumber + 1; // the first elbow will be 0
+            elbowNumber += 1;
 
             elbow.addEventListener('mousedown', selectElbow, false);
-            elbow.addEventListener('mouseup', deselectElbow, false);
             document.getElementById('mySVG').appendChild(elbow);
 
             curPath.elbows.push(elbow);
@@ -167,14 +169,6 @@ function makeNode(e) {
     }
 }
 
-
-function selectElbow() {
-
-}
-
-function deselectElbow() {
-
-}
 
 function nodeClicked(e) {
     'use-strict';
@@ -211,8 +205,8 @@ function nodeClicked(e) {
     } else if (mode === 'change-mode') {
         var position = getClickPosition(e, e.currentTarget);
         nodeMoving = e.currentTarget;
-        nodeX = position.x;
-        nodeY = position.y;
+        prevX = position.x;
+        prevY = position.y;
         
         // show which node has been selected
         select(e.currentTarget);
@@ -228,6 +222,7 @@ function nodeClicked(e) {
                         document.getElementById('mySVG').removeChild(item);
                 });
                 document.getElementById('mySVG').removeChild(curPath);
+                elbowNumber = -1;
                 curPath = null;
             }
         } else {
@@ -249,6 +244,7 @@ function nodeClicked(e) {
                     curPath.setAttributeNS(null, 'data-active', 'drawn');
                     curPath.addEventListener('click', pathClicked, false);
                     curPath.elbows = [];
+                    elbowNumber = -1;
                     document.getElementById('mySVG').appendChild(curPath);
                 } else {
                     var curElbow = {x: parseFloat(curPath.elbows[curPath.elbows.length - 1].getAttribute('cx')), 
@@ -282,8 +278,9 @@ function nodeClicked(e) {
                 startNode = null;
                 if (curPath !== null) {
                     curPath.elbows.map(function (item) { // modify last node in path
-                    document.getElementById('mySVG').removeChild(item);
-                });
+                        document.getElementById('mySVG').removeChild(item);
+                    });
+                elbowNumber = -1;
                 document.getElementById('mySVG').removeChild(curPath);
                 curPath = null;
                 }
@@ -308,7 +305,6 @@ function findClosest(beg, typeB, end, typeE) {
         theNode = beg;
         theElbow = end;
     } else if (typeB === 'elbow' && typeE === 'node') {
-        // only need to add end point to curPath
         theNode = end;
         theElbow = beg;
     } else {
@@ -390,48 +386,68 @@ function select(newNode) {
 }
 
 
-function moveNode(e) {
+function move(e) {
     'use-strict';
 
-    if (mode === 'change-mode' && nodeMoving !== null) {
-        var position = getClickPosition(e, nodeMoving);
-        var rectX = parseFloat(nodeMoving.getAttribute('x'));
-        var rectY = parseFloat(nodeMoving.getAttribute('y'));
-        rectX += (position.x - nodeX);
-        rectY += (position.y - nodeY);
-        nodeMoving.setAttribute('x', rectX);
-        nodeMoving.setAttribute('y', rectY);
+    if (mode === 'change-mode') {
+        if (nodeMoving !== null) {
+            var position = getClickPosition(e, nodeMoving);
+            var rectX = parseFloat(nodeMoving.getAttribute('x'));
+            var rectY = parseFloat(nodeMoving.getAttribute('y'));
+            rectX += (position.x - prevX);
+            rectY += (position.y - prevY);
+            nodeMoving.setAttribute('x', rectX);
+            nodeMoving.setAttribute('y', rectY);
 
-        if (nodeMoving.parentNode.childNodes.length > 1) {
-            var textX = parseFloat(nodeMoving.parentNode.childNodes[1].getAttribute('x'));
-            var textY = parseFloat(nodeMoving.parentNode.childNodes[1].getAttribute('y'));
-            textX += (position.x - nodeX);
-            textY += (position.y - nodeY);
-            nodeMoving.parentNode.childNodes[1].setAttribute('x', textX);
-            nodeMoving.parentNode.childNodes[1].setAttribute('y', textY);
+            if (nodeMoving.parentNode.childNodes.length > 1) {
+                var textX = parseFloat(nodeMoving.parentNode.childNodes[1].getAttribute('x'));
+                var textY = parseFloat(nodeMoving.parentNode.childNodes[1].getAttribute('y'));
+                textX += (position.x - prevX);
+                textY += (position.y - prevY);
+                nodeMoving.parentNode.childNodes[1].setAttribute('x', textX);
+                nodeMoving.parentNode.childNodes[1].setAttribute('y', textY);
+            }
+            
+            // move in and out edges by the same amount
+            nodeMoving.inEdges.map(function (item) { // modify last node in path
+                movePath(item, (position.x - prevX), (position.y - prevY), 'end', -1);
+            });
+            nodeMoving.outEdges.map(function (item) { // modify the first node in path
+                movePath(item, (position.x - prevX), (position.y - prevY), 'start', -1);
+            });   
+
+            prevX = position.x;
+            prevY = position.y;
+        } else if (elbowMoving !== null) {
+            var position = getClickPosition(e, elbowMoving);
+            // get position of this elbow 
+            var elbowX = parseFloat(elbowMoving.getAttribute('cx'));
+            var elbowY = parseFloat(elbowMoving.getAttribute('cy'));
+            elbowX += (position.x - prevX);
+            elbowY += (position.y - prevY);
+            elbowMoving.setAttribute('cx', elbowX);
+            elbowMoving.setAttribute('cy', elbowY);
+            // the number of elbow in the path
+            console.log(elbowMoving.pathPosition);
+            movePath(document.getElementById(elbowMoving.path), 
+                    (position.x - prevX), (position.y - prevY), 'elbow',
+                    elbowMoving.pathPosition);
+
+            prevX = position.x;
+            prevY = position.y;
         }
-        
-        // move in and out edges by the same amount
-        nodeMoving.inEdges.map(function (item) { // modify last node in path
-            movePath(item, (position.x - nodeX), (position.y - nodeY), 'end');
-        });
-        nodeMoving.outEdges.map(function (item) { // modify the first node in path
-            movePath(item, (position.x - nodeX), (position.y - nodeY), 'start');
-        });   
-
-        nodeX = position.x;
-        nodeY = position.y;
     }
 }
 
 
-function nodeUnclicked(e) {
+function unclickAll(e) {
     'use-strict';
 
     if (mode === 'change-mode') {
         nodeMoving = null;
-        nodeX = -1;
-        nodeY = -1;
+        prevX = -1;
+        prevY = -1;
+        elbowMoving = null;
     }
 }
 
@@ -439,7 +455,7 @@ function nodeUnclicked(e) {
 function pathClicked(e) {
     'use-strict';
 
-    if (mode === 'erase-mode') { // need to remove path from node lists!
+    if (mode === 'erase-mode') {
         var index = -1;
         var pathId = e.currentTarget.getAttribute('id');
         var beg = document.getElementById(pathId.slice(1, pathId.indexOf('n', 1)));
@@ -463,29 +479,56 @@ function pathClicked(e) {
         if (index > -1) {
             end.inEdges.splice(index, 1);
         }
+        curPath.elbows.map(function (item) {
+            document.getElementById('mySVG').removeChild(item);
+        });
         document.getElementById('mySVG').removeChild(e.currentTarget);
     }
 
 }
 
 
-function movePath(path, xBy, yBy, startOrEnd) {
+function movePath(path, xBy, yBy, partOfPath, elbowNum) {
     'use-strict';
 
     var thePath = path.getAttribute('d');
     var theX = null;
     var theY = null;
-    if (startOrEnd === 'start') {
+    if (partOfPath === 'start') {
         theX = parseFloat(thePath.slice(1, thePath.indexOf(','))) + xBy; // exclude the M
-        theY = parseFloat(thePath.slice(thePath.indexOf(',') + 1, thePath.indexOf('L'))) + yBy;
+        theY = parseFloat(thePath.slice(thePath.indexOf(',') + 1, 
+                                        thePath.indexOf('L'))) + yBy;
         thePath = 'M' + theX + ',' + theY + thePath.slice(thePath.indexOf('L'));
-    } else if (startOrEnd === 'end') {
+    } else if (partOfPath === 'end') {
         theX = parseFloat(thePath.slice(thePath.lastIndexOf('L') + 1, 
                                         thePath.lastIndexOf(','))) + xBy;
         theY = parseFloat(thePath.slice(thePath.lastIndexOf(',') + 1)) + yBy;
         thePath = thePath.slice(0, thePath.lastIndexOf('L') + 1) + theX + ',' + theY;
+        console.log(thePath);
+    } else if (partOfPath === 'elbow') {
+        var indexOfElbow = 0;
+        var indexOfNext;
+        // look for elbowNum-th occurance of L
+        for (var i = 0; i <= elbowNum; i++) {
+            indexOfElbow = thePath.indexOf('L', indexOfElbow + 1);
+        }
+        indexOfNext = thePath.indexOf('L', indexOfElbow + 1);
+        console.log(indexOfElbow + ' ' + indexOfNext);
+        theX = parseFloat(thePath.slice(indexOfElbow + 1, indexOfNext)) + xBy;
+        theY = parseFloat(thePath.slice(thePath.indexOf(',' , indexOfElbow) + 1,
+                                        indexOfNext)) + yBy;
+        thePath = thePath.slice(0, indexOfElbow + 1) + theX + ',' + theY + thePath.slice(indexOfNext);
     }
+
     path.setAttribute('d', thePath); 
+}
+
+
+function selectElbow(e) {
+    var position = getClickPosition(e, e.currentTarget);
+    elbowMoving = e.currentTarget;
+    prevX = position.x;
+    prevY = position.y;
 }
 
 
