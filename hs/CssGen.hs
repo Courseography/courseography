@@ -115,7 +115,6 @@ graphStyles = do
     titleCSS
     modalCSS
     regionCSS
-    regionShapeCSS
 
 alignCenter = textAlign $ alignSide sideCenter
 
@@ -183,11 +182,6 @@ nodeCSS = "g" ? do
             stroke "black"
     ".hybrid" & do
         cursor cursorDefault
-        "rect" <? do
-            fill "grey"
-        "text" <? do
-            fontSize (em 0.45)
-            fill "white"
     ".bool" & do
         cursor cursorDefault
         "data-active" @= "active" & do
@@ -214,13 +208,8 @@ nodeCSS = "g" ? do
             wideStroke
             strokeRed
         "text" <? do
-            fontSize (em 0.45)
             fontFamily ["Comic Sans MS"] [sansSerif]
             fontWeight bold
-    -- TODO: get rid of this style
-    "ellipse" ? do
-        fill "none"
-        stroke "black"
     ".spotlight" & do
         semiVisible
         fill "white"
@@ -265,7 +254,6 @@ graphContainer = do
         "stroke-miterlimit" -: "10"
         "shape-rendering" -: "geometricPrecision"
 
-
 titleCSS = "#svgTitle" ? do
     fontSize $ em 2.5
     fontWeight bold
@@ -275,11 +263,7 @@ titleCSS = "#svgTitle" ? do
 
 
 regionCSS = ".region-label" ? do
-    fontSize (em 0.65)
     "text-anchor" -: "start"
-
-regionShapeCSS = ".region" ? do
-    faded
 
 -- Course Modal
 modalColor = parse "#374AA1"
