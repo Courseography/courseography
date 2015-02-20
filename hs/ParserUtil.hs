@@ -41,7 +41,7 @@ getNewStyleAttr newStyle attr parent =
 
 -- | Converts a tuple of Float to a tuple of Rational.
 convertFloatTupToRationalTup :: (Float, Float) -> (Rational, Rational)
-convertFloatTupToRationalTup tup = (toRational (fst tup), toRational (snd tup))
+convertFloatTupToRationalTup (a,b) = (toRational a, toRational b)
 
 -- | Applys a CFilter to a Document and produces a list of Content filtered
 -- by the CFilter.
