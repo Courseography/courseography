@@ -525,10 +525,27 @@ function movePath(path, xBy, yBy, partOfPath, elbowNum) {
 
 
 function selectElbow(e) {
-    var position = getClickPosition(e, e.currentTarget);
-    elbowMoving = e.currentTarget;
-    prevX = position.x;
-    prevY = position.y;
+    if (mode === 'change-mode') {
+        var position = getClickPosition(e, e.currentTarget);
+        elbowMoving = e.currentTarget;
+        prevX = position.x;
+        prevY = position.y;
+    } else if (mode === 'erase-mode') {
+        var indexOfElbow = 0;
+        var indexOfNext;
+        var elbowNum = e.currentTarget.pathPosition;
+        var thePath = document.getElementById(e.currentTarget.path).getAttribute('d');
+
+        // look for elbowNum-th occurance of L
+        for (var i = 0; i <= elbowNum; i++) {
+            indexOfElbow = thePath.indexOf('L', indexOfElbow + 1);
+        }
+        indexOfNext = thePath.indexOf('L', indexOfElbow + 1);
+        console.log(indexOfElbow, indexOfNext);
+        thePath = thePath.slice(0, indexOfElbow - 1) + thePath.slice(indexOfNext);
+        console.log(thePath);
+        document.getElementById(e.currentTarget.path).setAttributeNS(null, 'd', thePath);
+    }
 }
 
 
