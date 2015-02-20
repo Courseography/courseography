@@ -106,7 +106,7 @@ parseArtSci = do
     let depts = getDeptList $ parseTags  body
     --print "parsing Arts and Science Calendar:\n"
     --mapM_ getCalendar depts
-    getCalendar "crs_csc.htm"
+    mapM_ getCalendar depts
 
 
 main :: IO ()
