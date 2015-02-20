@@ -461,6 +461,10 @@ function changeColour(id) {
     $('#' + nodeColourId).toggleClass('clicked');
     nodeColourId = id;
     $('#' + nodeColourId).toggleClass('clicked');
+
+    if (mode === 'change-mode') {
+        nodeSelected.parentNode.setAttribute('data-group', id);
+    }
 }
 
 
