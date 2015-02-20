@@ -2,6 +2,7 @@ $(document).ready(function () {
     'use-strict';
 	
     $('#div_specialist').show();
+    updateAllCategories();
 });
 
 
