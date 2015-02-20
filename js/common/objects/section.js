@@ -128,12 +128,18 @@ Section.prototype.removeTimes = function () {
     'use strict';
 
     var tmp = this;
+    var n;
     var m;
 
     $.each(this.times, function (i, time) {
-
+        n = time.indexOf('H');
         m = time.indexOf('E');
+
+        if (n != -1) {
+            compressRow(time.slice(2,n), time.charAt(n+1));
+        }
         if (m != -1) {
+            compressRow(time.slice(2,m), time.charAt(m+1));
             time = time.slice(0,m) + time.charAt(m+1);
         }
 
