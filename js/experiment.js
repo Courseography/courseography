@@ -6,9 +6,9 @@ var mode = 'node-mode';
 var nodeColourId = 'red';
 var colours = { 
      'red': '#D77546', 
-     'green':'#2E8B57', 
-     'blue':'#437699',
-     'purple':'#46364A'
+     'green': '#2E8B57', 
+     'blue': '#437699',
+     'purple': '#46364A'
 };
 var nodeMoving = null;      // for movement and path creation
 var nodeX = -1;             // for movement
@@ -115,10 +115,12 @@ function makeNode(e) {
         node.setAttribute('width', nodeWidth);
         node.setAttribute('height', nodeHeight);
         node.setAttribute('class', 'node');
-        /*node.parents = []; */ node.attributes['parents'] = [];
-        /*node.children = []; */ node.attributes['children'] = [];
-        /*node.inEdges = []; */ node.attributes['inEdges'] = [];
-        /*node.outEdges = []; */ node.attributes['outEdges'] = [];
+        node.parents = [];
+        node.kids = []; 
+        // note: children doesn't work because javascript objects already have a children attribute
+        node.inEdges = [];
+        node.outEdges = [];
+        
         g.appendChild(node);
         document.getElementById('mySVG').appendChild(g);
         document.getElementById(nodeId).addEventListener('mousedown', nodeClicked, false);
@@ -155,25 +157,25 @@ function nodeClicked(e) {
     if (mode  === 'erase-mode') { 
         // remove any paths leading to and from this node from the other node's 
         // list of paths and remove this node from the other nodes' adjacency lists
-        e.currentTarget.attributes['inEdges'].map(function (item) {
-            index = item.attributes['parents'].attributes['outEdges'].indexOf(item);
+        e.currentTarget.inEdges.map(function (item) {
+            index = item.parents.outEdges.indexOf(item);
             if (index > -1) {
-                (item.attributes['parents'].attributes['outEdges']).splice(index, 1);
+                (item.parents.outEdges).splice(index, 1);
             }
-            index = item.attributes['parents'].attributes['children'].indexOf(e.currentTarget);
+            index = item.parents.kids.indexOf(e.currentTarget);
             if (index > -1) {
-                (item.attributes['parents'].attributes['children']).splice(index, 1);
+                (item.parents.kids).splice(index, 1);
             }
             svgDoc.removeChild(item);
         });
-        e.currentTarget.attributes['outEdges'].map(function (item) {
-            index = item.attributes['children'].attributes['inEdges'].indexOf(item);
+        e.currentTarget.outEdges.map(function (item) {
+            index = item.kids.inEdges.indexOf(item);
             if (index > -1) {
-                item.attributes['children'].attributes['inEdges'].splice(index, 1);
+                item.kids.inEdges.splice(index, 1);
             }
-            index = item.attributes['children'].attributes['parents'].indexOf(e.currentTarget);
+            index = item.kids.parents.indexOf(e.currentTarget);
             if (index > -1) {
-                (item.attributes['children'].attributes['parents']).splice(index, 1);
+                (item.kids.parents).splice(index, 1);
             }
             svgDoc.removeChild(item);
         });
@@ -228,14 +230,14 @@ function nodeClicked(e) {
             console.log('creating it ' + curPath);
             document.getElementById('mySVG').appendChild(thePath);
 
-            thePath.attributes['parents'] = startNode;
-            thePath.attributes['children'] = e.currentTarget;
+            thePath.parents = startNode;
+            thePath.kids = e.currentTarget;
 
             // update relationships
-            startNode.attributes['children'].push(e.currentTarget);
-            e.currentTarget.attributes['parents'].push(startNode);
-            startNode.attributes['outEdges'].push(thePath);
-            e.currentTarget.attributes['inEdges'].push(thePath);
+            startNode.kids.push(e.currentTarget);
+            e.currentTarget.parents.push(startNode);
+            startNode.outEdges.push(thePath);
+            e.currentTarget.inEdges.push(thePath);
             startNode = null;
             curPath = null;
             curElbow = null;
@@ -333,8 +335,8 @@ function select(newNode) {
     }
     nodeSelected = newNode;
     nodeSelected.parentNode.setAttribute('data-active', 'active');
-    // console.log('parents: ', nodeSelected.attributes['parents']);
-    // console.log('children: ', nodeSelected.attributes['children']);
+    // console.log('parents: ', nodeSelected.parents);
+    // console.log('kids: ', nodeSelected.kids);
 }
 
 
@@ -360,10 +362,10 @@ function moveNode(e) {
         }
         
         // move in and out edges by the same amount
-        nodeMoving.attributes['inEdges'].map(function (item) { // modify last node in path
+        nodeMoving.inEdges.map(function (item) { // modify last node in path
             movePath(item, (position.x - nodeX), (position.y - nodeY), 'end');
         });
-        nodeMoving.attributes['outEdges'].map(function (item) { // modify the first node in path
+        nodeMoving.outEdges.map(function (item) { // modify the first node in path
             movePath(item, (position.x - nodeX), (position.y - nodeY), 'start');
         });   
 
@@ -396,22 +398,22 @@ function pathClicked(e) {
         var end = document.getElementById(pathId.slice(pathId.indexOf('n', 1) + 1));
         
         // delete the nodes from each others' list
-        index = beg.attributes['children'].indexOf(end);
+        index = beg.kids.indexOf(end);
         if (index > -1) {
-            beg.attributes['children'].splice(index, 1);
+            beg.kids.splice(index, 1);
         }
-        index = end.attributes['parents'].indexOf(beg);
+        index = end.parents.indexOf(beg);
         if (index > -1) {
-            end.attributes['parents'].splice(index, 1);
+            end.parents.splice(index, 1);
         }
         // delete this path from the nodes' list
-        index = beg.attributes['outEdges'].indexOf(e.currentTarget);
+        index = beg.outEdges.indexOf(e.currentTarget);
         if (index > -1) {
-            beg.attributes['outEdges'].splice(index, 1);
+            beg.outEdges.splice(index, 1);
         }
-        index = end.attributes['inEdges'].indexOf(e.currentTarget);
+        index = end.inEdges.indexOf(e.currentTarget);
         if (index > -1) {
-            end.attributes['inEdges'].splice(index, 1);
+            end.inEdges.splice(index, 1);
         }
         document.getElementById('mySVG').removeChild(e.currentTarget);
     }
