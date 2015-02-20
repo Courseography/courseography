@@ -1,4 +1,4 @@
-{-# LANGUAGE OverloadedStrings, FlexibleContexts, GADTs, ScopedTypeVariables #-}
+{-# LANGUAGE OverloadedStrings, GADTs, ScopedTypeVariables #-}
 module SVGGenerator where
 
 import SVGTypes
@@ -10,35 +10,42 @@ import Database.Persist.Sqlite
 import Data.Char
 import Data.Conduit
 import Data.List.Split
-import Data.List
+import Data.List hiding (map, filter)
 import JsonParser
 import ParserUtil
+import MakeElements
+import qualified Data.Text as T
+import Text.Blaze.Svg11 ((!), mkPath, rotate, l, m)
+import qualified Text.Blaze.Svg11 as S
+import qualified Text.Blaze.Svg11.Attributes as A
+import Text.Blaze.Svg.Renderer.String (renderSvg)
 import SVGBuilder
+import Text.Blaze.Internal (stringValue)
+import Text.Blaze (toMarkup)
 
--- | The SVG tag for an SVG document, along with an opening 'g' tag.
-svgHeader :: String
-svgHeader = 
-    "<svg" ++
-    " xmlns:dc=\"http://purl.org/dc/elements/1.1/\"" ++
-    " xmlns:cc=\"http://creativecommons.org/ns#\"" ++
-    " xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"" ++
-    " xmlns:svg=\"http://www.w3.org/2000/svg\"" ++
-    " xmlns=\"http://www.w3.org/2000/svg\"" ++
-    " xmlns:xlink=\"http://www.w3.org/1999/xlink\"" ++
-    " xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\"" ++
-    " xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\"" ++
-    " width=\"1052.3622\"" ++
-    " height=\"744.09448\"" ++
-    " version=\"1.1\"" ++
-    " sodipodi:docname=\"graph_regions.svg\"><defs>" ++
-    "     <marker id=\"arrow\" viewBox=\"0 0 10 10\" refX=\"1\" refY=\"5\" markerUnits=\"strokeWidth\" orient=\"auto\" markerWidth=\"7\" markerHeight=\"7\">" ++
-    "       <polyline points=\"0,1 10,5 0,9\" fill=\"black\"></polyline>" ++
-    "     </marker>" ++
-    "   </defs><g>"
+makeSVGDoc :: [Shape] -> [Shape] -> [Path] -> [Path] -> S.Svg
+makeSVGDoc rects ellipses edges regions =
+    S.docTypeSvg ! A.width "1052.3622"
+                 ! A.height "744.09448"
+                 ! A.version "1.1" $ do
+                      makeSVGDefs
+                      S.g ! A.id_ "nodes" $ do
+                          concatSVG $ map convertRectToSVG rects
+                          concatSVG $ map convertEllipseToSVG ellipses
+                          concatSVG $ map convertEdgeToSVG edges
+                          concatSVG $ map convertRegionToSVG regions
 
--- | A closing 'g' tag followed by a closing 'svg' tag.
-svgFooter :: String
-svgFooter = "</g></svg>"
+makeSVGDefs :: S.Svg
+makeSVGDefs = S.defs $ do
+              S.marker ! A.id_ "arrow"
+                       ! A.viewbox "0 0 10 10"
+                       ! A.refx "1"
+                       ! A.refy "5"
+                       ! A.markerunits "strokeWidth"
+                       ! A.orient "auto"
+                       ! A.markerwidth "4.5"
+                       ! A.markerheight "4.5" $ do
+                S.polyline ! A.points "0,1 10,5 0,9" ! A.fill "black"
 
 -- | Builds an SVG document.
 buildSVG :: IO ()
@@ -58,143 +65,98 @@ buildSVG =
 
         let processedEdges = map (processPath rects ellipses) edges
 
-        let rectXml    = map convertRectToXML rects
+        --let rectXml    = map convertRectToXML rects
 
-        let textXml    = map (convertTextToXML . buildText . entityVal) sqlTexts
-        let edgeXml    = map convertPathToXML processedEdges
-        let regionXml  = map convertRegionToXML regions
-        let ellipseXml = map convertEllipseToXML ellipses
-
-        liftIO $ writeHeader
-        liftIO $ writeRegions $ unwords regionXml
-        liftIO $ writeEdges $ unwords edgeXml
-        liftIO $ writeRects $ unwords rectXml
-        liftIO $ writeEllipses $ unwords ellipseXml
-        liftIO $ writeFooter
-
--- | Writes the SVG header to the output file.
-writeHeader :: IO ()
-writeHeader = writeFile "Testfile.svg" svgHeader
-
--- | Writes the SVG footer to the output file.
-writeFooter :: IO ()
-writeFooter = appendFile "Testfile.svg" svgFooter
-
--- | Writes the `rect` section to the output file.
-writeRects :: String -> IO ()
-writeRects rectXml = do
-    appendFile "Testfile.svg" "<g>"
-    appendFile "Testfile.svg" rectXml
-    appendFile "Testfile.svg" "</g>"
-
--- | Writes the `ellipse` section to the output file.
-writeEllipses :: String -> IO ()
-writeEllipses ellipseXml = do
-    appendFile "Testfile.svg" "<g>"
-    appendFile "Testfile.svg" ellipseXml
-    appendFile "Testfile.svg" "</g>"
-
--- | Writes the `region` section to the output file.
-writeRegions :: String -> IO ()
-writeRegions regionXml = do
-    appendFile "Testfile.svg" "<g>"
-    appendFile "Testfile.svg" regionXml
-    appendFile "Testfile.svg" "</g>"
-
--- | Writes the `edge` section to the output file.
-writeEdges :: String -> IO ()
-writeEdges edgeXml = do
-    appendFile "Testfile.svg" "<g style=\"stroke:#000000\">"
-    appendFile "Testfile.svg" edgeXml 
-    appendFile "Testfile.svg" "</g>"
+        --let textXml    = map (convertTextToXML . buildText . entityVal) sqlTexts
+        --let edgeXml    = map convertPathToXML processedEdges
+        --let regionXml  = map convertRegionToXML regions
+        --let ellipseXml = map convertEllipseToXML ellipses
+        let stringSVG = renderSvg $ makeSVGDoc rects ellipses processedEdges regions
+        liftIO $ writeFile "Testfile.svg.2" stringSVG
 
 -- | Converts a `Rect` to XML. 
-convertRectToXML :: Shape -> String
-convertRectToXML rect = 
-    if shapeFill rect == "none" then "" else
-    "<g id=\"" ++ 
-    shapeId rect ++
-    "\" class=\"" ++
-    (if shapeIsHybrid rect then "hybrid" else "node") ++
-    "\"><rect rx=\"4\" ry=\"4\"  x=\"" ++ 
-    show (fromRational $ shapeXPos rect) ++
-    "\" y=\"" ++
-    show (fromRational $ shapeYPos rect) ++
-    "\" width=\"" ++
-    show (fromRational $ shapeWidth rect) ++
-    "\" height=\"" ++
-    show (fromRational $ shapeHeight rect) ++
-    "\" style=\"fill:" ++
-    shapeFill rect ++
-    ";stroke:#000000" ++ 
-    ";\"/>" ++
-    unwords (map convertTextToXML (shapeText rect)) ++
-    "</g>"
+convertRectToSVG :: Shape -> S.Svg
+convertRectToSVG rect = if shapeFill rect == "none" then S.rect else
+                        S.g ! A.id_ (stringValue $ shapeId rect)
+                            ! A.class_ (stringValue $ if shapeIsHybrid rect then "hybrid" else "node") $
+                            do S.rect ! A.rx "4"
+                                      ! A.ry "4"
+                                      ! A.x (stringValue $ show $ fromRational $ shapeXPos rect)
+                                      ! A.y (stringValue $ show $ fromRational $ shapeYPos rect)
+                                      ! A.width (stringValue $ show $ fromRational $ shapeWidth rect)
+                                      ! A.height (stringValue $ show $ fromRational $ shapeHeight rect)
+                                      ! A.style (stringValue $ "fill:" ++
+                                                 shapeFill rect ++
+                                                 ";stroke:#000000;")
+                               concatSVG $ map convertTextToSVG (shapeText rect)
 
 -- | Converts a `Text` to XML.
-convertTextToXML :: Text -> String
-convertTextToXML text = 
-    "<text xml:space=\"preserve\" x=\"" ++ 
-    show (fromRational $ textXPos text) ++
-    "\" y=\"" ++
-    show (fromRational $ textYPos text) ++
-    "\" style=\"font-size:" ++
-    textFontSize text ++
-    ";font-weight:" ++ 
-    textFontWeight text ++ 
-    ";font-family:" ++
-    textFontFamily text ++
-    "\">" ++
-    textText text ++
-    "</text>"
+convertTextToSVG :: Text -> S.Svg
+convertTextToSVG text =
+    S.text_ ! A.x (stringValue $ show $ fromRational $ textXPos text)
+            ! A.y (stringValue $ show $ fromRational $ textYPos text)
+            ! A.style (stringValue $ "font-size:" ++
+                      textFontSize text ++
+                      ";font-weight:" ++
+                      textFontWeight text ++
+                      ";font-family:" ++
+                      textFontFamily text ++
+                      ";")
+            $ toMarkup $ textText text
 
 -- | Converts a `Path` to XML.
-convertPathToXML :: Path -> String
-convertPathToXML path = 
-    "<path id=\"" ++ 
-    pathId path ++ 
-    "\" class=\"path\" style=\"" ++
-    "fill:" ++
-    pathFill path ++ 
-    ";fill-opacity:" ++ 
-    pathFillOpacity path ++ 
-    ";\" d=\"M " ++
-    buildPathString (points path) ++
-    "\" marker-end=\"url(#arrow)\" " ++
-    "source-node=\"" ++ 
-    source path ++ 
-    "\" target-node=\"" ++ 
-    target path ++ 
-    "\"/>"
+convertEdgeToSVG :: Path -> S.Svg
+convertEdgeToSVG path =
+    S.path ! A.id_ (stringValue $ "path" ++ (pathId path))
+           ! A.class_ (stringValue $ "path")
+           ! A.d (stringValue $ buildPathString $ points path)
+           ! A.markerEnd (stringValue $ "url(#arrow)")
+           ! S.customAttribute "source-node" (stringValue $ source path)
+           ! S.customAttribute "target-node" (stringValue $ target path)
+           ! A.style (stringValue $ "fill:" ++
+                      pathFill path ++
+                      ";fill-opacity:" ++
+                      pathFillOpacity path ++
+                      ";")
 
 -- | Converts a `Path` to XML.
-convertRegionToXML :: Path -> String
-convertRegionToXML path = 
-    "<path id=\"region" ++ 
-    pathId path ++ 
-    "\" class=\"region\" style=\"" ++
-    "fill:" ++
-    pathFill path ++ 
-    ";fill-opacity:" ++ 
-    pathFillOpacity path ++ 
-    ";\" d=\"M " ++
-    buildPathString (points path) ++
-    "\"/>"
+convertRegionToSVG :: Path -> S.Svg
+convertRegionToSVG path =
+    S.path ! A.id_ (stringValue $ "region" ++ (pathId path))
+           ! A.class_ (stringValue $ "region")
+           ! A.d (stringValue $ buildPathString $ points path)
+           ! A.markerEnd (stringValue $ "url(#arrow)")
+           ! S.customAttribute "source-node" (stringValue $ source path)
+           ! S.customAttribute "target-node" (stringValue $ target path)
+           ! A.style (stringValue $ "fill:" ++
+                      pathFill path ++
+                      ";fill-opacity:" ++
+                      pathFillOpacity path ++
+                      ";")
+
 
 -- | Converts an `Ellipse` to XML.
-convertEllipseToXML :: Shape -> String
-convertEllipseToXML ellipse = 
-    "<g id=\"" ++ 
-    shapeId ellipse ++
-    "\" class=\"bool\">" ++
-    "<ellipse cx=\"" ++ 
-    show (fromRational $ shapeXPos ellipse) ++
-    "\" cy=\"" ++
-    show (fromRational $ shapeYPos ellipse) ++
-    "\" rx=\"" ++ 
-    show ((fromRational $ shapeWidth ellipse) / 2) ++
-    "\" ry=\"" ++
-    show ((fromRational $ shapeHeight ellipse) / 2) ++
-    "\" style=\"stroke:#000000;fill:none\"/>" ++ 
-    unwords (map convertTextToXML (shapeText ellipse)) ++
-    "</g>"
+convertEllipseToSVG :: Shape -> S.Svg
+convertEllipseToSVG ellipse = S.g ! A.id_ (stringValue (shapeId ellipse))
+                                  ! A.class_ "bool" $ do
+                                      S.ellipse ! A.rx "4"
+                                                ! A.ry "4"
+                                                ! A.cx (stringValue $ show $ fromRational $ shapeXPos ellipse)
+                                                ! A.cy (stringValue $ show $ fromRational $ shapeYPos ellipse)
+                                                ! A.rx (stringValue $ show $ (fromRational $ shapeWidth ellipse) / 2)
+                                                ! A.ry (stringValue $ show $ (fromRational $ shapeHeight ellipse) / 2)
+                                                ! A.style "stroke:#000000;fill:none;"
+                                      concatSVG $ map convertTextToSVG (shapeText ellipse)
+--
+---- | The SVG tag for an SVG document, along with an opening 'g' tag.
+--svgHeader :: String
+--svgHeader =
+--    " xmlns:dc=\"http://purl.org/dc/elements/1.1/\"" ++
+--    " xmlns:cc=\"http://creativecommons.org/ns#\"" ++
+--    " xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"" ++
+--    " xmlns:svg=\"http://www.w3.org/2000/svg\"" ++
+--    " xmlns=\"http://www.w3.org/2000/svg\"" ++
+--    " xmlns:xlink=\"http://www.w3.org/1999/xlink\"" ++
+--    " xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\"" ++
+--    " xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\"" ++
+--    " sodipodi:docname=\"graph_regions.svg\"><defs>"
