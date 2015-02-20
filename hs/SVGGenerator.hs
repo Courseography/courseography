@@ -14,6 +14,7 @@ import Data.List hiding (map, filter)
 import JsonParser
 import ParserUtil
 import MakeElements
+import Data.Maybe
 import qualified Data.Text as T
 import Text.Blaze.Svg11 ((!), mkPath, rotate, l, m)
 import qualified Text.Blaze.Svg11 as S
@@ -22,6 +23,27 @@ import Text.Blaze.Svg.Renderer.String (renderSvg)
 import SVGBuilder
 import Text.Blaze.Internal (stringValue)
 import Text.Blaze (toMarkup)
+import qualified Data.Map as M
+
+areaMap :: [(String, [String])]
+areaMap = [("theory", ["CSC165", "CSC236", "CSC240", "CSC263", "CSC265",
+                       "CSC310", "CSC324", "CSC373", "CSC438", "CSC448",
+                       "CSC463"]),
+           ("core", ["CSC108", "CSC148", "CSC104", "CSC120", "CSC490",
+                     "CSC491", "CSC494", "CSC495"]),
+           ("se", ["CSC207", "CSC301", "CSC302", "CSC410", "CSC465"]),
+           ("systems", ["CSC209", "CSC258", "CSC358", "CSC369", "CSC372",
+                        "CSC458", "CSC469", "CSC488", "ECE385", "ECE489"]),
+           ("hci", ["CSC200", "CSC300",  "CSC318", "CSC404", "CSC428",
+                    "CSC454"]),
+           ("graphics", ["CSC320", "CSC418", "CSC420"]),
+           ("num", ["CSC336", "CSC436", "CSC446", "CSC456"]),
+           ("ai", ["CSC321", "CSC384", "CSC401", "CSC411", "CSC412",
+                   "CSC485", "CSC486"]),
+           ("ai", ["CSC309", "CSC343", "CSC443"])]
+
+getArea :: String -> String
+getArea id_ = fst $ head $ (filter (\x -> elem id_ (snd x)) areaMap) ++ [("", [])]
 
 -- | Builds an SVG document.
 makeSVGDoc :: [Shape] -> [Shape] -> [Path] -> [Path] -> S.Svg
@@ -71,16 +93,15 @@ buildSVG =
 convertRectToSVG :: Shape -> S.Svg
 convertRectToSVG rect = if shapeFill rect == "none" then S.rect else
                         S.g ! A.id_ (stringValue $ shapeId rect)
-                            ! A.class_ (stringValue $ if shapeIsHybrid rect then "hybrid" else "node") $
+                            ! A.class_ (stringValue $ if shapeIsHybrid rect then "hybrid" else "node")
+                            ! S.customAttribute "data-group" (stringValue (getArea (shapeId rect))) $
                             do S.rect ! A.rx "4"
                                       ! A.ry "4"
                                       ! A.x (stringValue $ show $ fromRational $ shapeXPos rect)
                                       ! A.y (stringValue $ show $ fromRational $ shapeYPos rect)
                                       ! A.width (stringValue $ show $ fromRational $ shapeWidth rect)
                                       ! A.height (stringValue $ show $ fromRational $ shapeHeight rect)
-                                      ! A.style (stringValue $ "fill:" ++
-                                                 shapeFill rect ++
-                                                 ";stroke:#000000;")
+                                      ! A.style (stringValue $ "stroke:#000000;")
                                concatSVG $ map convertTextToSVG (shapeText rect)
 
 -- | Converts a `Text` to SVG.
