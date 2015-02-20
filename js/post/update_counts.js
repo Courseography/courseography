@@ -155,20 +155,20 @@ function updateCreditCount() {
 
 
     if (creditCountSpec >= 12) {
-        $('#spec_creds')[0].innerHTML = '(12/12.0)';
-        $('#maj_creds')[0].innerHTML = '(8/8.0)';
-        $('#min_creds')[0].innerHTML = '(4/4.0)';
+        $('#spec_creds').html('(12/12.0)');
+        $('#maj_creds').html('(8/8.0)');
+        $('#min_creds').html('(4/4.0)');
     } else if (creditCountSpec >= 8) {
-        $('#spec_creds')[0].innerHTML = '(' + creditCountSpec + '/12.0)';
-        $('#maj_creds')[0].innerHTML = '(8/8.0)';
-        $('#min_creds')[0].innerHTML = '(4/4.0)';
+        $('#spec_creds').html('(' + creditCountSpec + '/12.0)');
+        $('#maj_creds').html('(8/8.0)');
+        $('#min_creds').html('(4/4.0)');
     } else if (creditCountSpec >= 4) {
-        $('#spec_creds')[0].innerHTML = '(' + creditCountSpec + '/12.0)';
-        $('#maj_creds')[0].innerHTML = '(' + creditCountSpec + '/8.0)';
-        $('#min_creds')[0].innerHTML = '(4/4.0)';
+        $('#spec_creds').html('(' + creditCountSpec + '/12.0)');
+        $('#maj_creds').html('(' + creditCountSpec + '/8.0)');
+        $('#min_creds').html('(4/4.0)');
     } else {
-        $('#spec_creds')[0].innerHTML = '(' + creditCountSpec + '/12.0)';
-        $('#maj_creds')[0].innerHTML = '(' + creditCountSpec + '/8.0)';
-        $('#min_creds')[0].innerHTML = '(' + creditCountSpec + '/4.0)';
+        $('#spec_creds').html('(' + creditCountSpec + '/12.0)');
+        $('#maj_creds').html('(' + creditCountSpec + '/8.0)');
+        $('#min_creds').html('(' + creditCountSpec + '/4.0)');
     }
 }
