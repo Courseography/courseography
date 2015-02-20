@@ -28,7 +28,7 @@ Courses json
     title T.Text Maybe
     description T.Text Maybe
     manualTutorialEnrolment Bool Maybe
-    prebreqs T.Text Maybe
+    prereqs T.Text Maybe
     exclusions T.Text Maybe
     breadth T.Text Maybe
     distribution T.Text Maybe

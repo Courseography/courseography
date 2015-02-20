@@ -58,7 +58,6 @@ getCalendar str = do
     runSqlite dbStr $ do
       runMigration migrateAll
       mapM_ insertCourse course
-    --print "parsed " + "str" 
     where
         isComment (TagComment _) = False
         isComment _ = True
@@ -67,22 +66,22 @@ getCalendar str = do
         isCourseTitle _ = False
 
 parseTitleFAS :: CoursePart -> CoursePart
-parseTitleFAS (tags, course) =  
+parseTitleFAS (tags, course) =
     let courseNames = T.splitAt 8 $ removeTitleGarbage $ removeLectureSection $ head tags
-  in (tail tags, course {title  = Just (snd courseNames), 
-                    name =  fst courseNames})
+  in (tail tags, course {title = Just (snd courseNames),
+                         name =  fst courseNames})
   where removeLectureSection (TagText s) = T.takeWhile (/= '[') s
         removeTitleGarbage s = replaceAll ["\160"] "" s
 {----------------------------------------------------------------------------------------
-INPUT: a list of tags representing a single course, 
+INPUT: a list of tags representing a single course,
 OUTPUT: Course 'record' containing course info
 ----------------------------------------------------------------------------------------}
 processCourseToData :: [Tag T.Text] -> Course
 processCourseToData tags  =
-    let course = 
+    let course =
           Course {
-            breadth = Nothing, 
-            description = Nothing, 
+            breadth = Nothing,
+            description = Nothing,
             title  = Nothing,
             prereqString = Nothing,
             f = Nothing,
@@ -90,27 +89,26 @@ processCourseToData tags  =
             y = Nothing,
             name = T.empty,
             exclusions = Nothing,
-            manualTutorialEnrol = Nothing ,
+            manualTutorialEnrol = Nothing,
             distribution = Nothing,
             prereqs = Nothing
         }
     in snd $ (tags, course) ~:
-             preProcess -: 
+             preProcess -:
              parseTitleFAS -:
-            parseDescription -:
-            parsePrerequisite -:
-            parseCorequisite -:
-            parseExclusion -:
-            parseRecommendedPrep -:  
-            parseDistAndBreadth     
+             parseDescription -:
+             parsePrerequisite -:
+             parseCorequisite -:
+             parseExclusion -:
+             parseRecommendedPrep -:
+             parseDistAndBreadth
 
 parseArtSci :: IO ()
 parseArtSci = do
     rsp <- simpleHTTP (getRequest fasCalendarURL)
     body <- getResponseBody rsp
     let depts = getDeptList $ parseTags  body
-    --print "parsing Arts and Science Calendar:\n"
-    --mapM_ getCalendar depts
+    putStrLn "Parsing Arts and Science Calendar..."
     mapM_ getCalendar depts
 
 
