@@ -23,7 +23,6 @@ import Text.Blaze.Svg.Renderer.String (renderSvg)
 import SVGBuilder
 import Text.Blaze.Internal (stringValue)
 import Text.Blaze (toMarkup)
-import qualified Data.Map as M
 import CssGen
 
 areaMap :: [(String, String, [String])]
@@ -43,22 +42,27 @@ areaMap = [("theory", theoryDark, ["CSC165", "CSC236", "CSC240", "CSC263", "CSC2
                           "CSC485", "CSC486"]),
            ("dbweb", dbwebDark , ["CSC309", "CSC343", "CSC443"])]
 
+-- | Gets the first element of a tuple with length 3.
 fst3 :: (a, b, c) -> a
 fst3 (a, b, c) = a
 
+-- | Gets the second element of a tuple with length 3.
 snd3 :: (a, b, c) -> b
 snd3 (a,b,c) = b
 
-
+-- | Gets the third element of a tuple with length 3.
 thrd3 :: (a, b, c) -> c
 thrd3 (a,b,c) = c
 
+-- | Gets a tuple from areaMap where id_ is in the list of courses for that tuple.
 getTuple :: String -> (String, String, [String])
 getTuple id_ = head $ (filter (\x -> elem id_ (thrd3 x)) areaMap) ++ [("", "", [])]
 
+-- | Gets an area from areaMap where id_ is in the list of courses for the corresponding tuple.
 getArea :: String -> String
 getArea id_ = fst3 $ getTuple id_
 
+-- | Gets the fill from areaMap where id_ is in the list of courses for the corresponding tuple.
 getFill :: String -> String
 getFill id_ = snd3 $ getTuple id_
 
