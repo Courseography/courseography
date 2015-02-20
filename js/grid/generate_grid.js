@@ -147,12 +147,14 @@ function appendTableData(trFall, trSpring, time) {
                 .attr('id', weekPrefixArray[k] + (time - 0.5) + 'F' + 'H')
                 .attr('in-conflict', 'false')
                 .attr('satisfied', 'true')
+                .attr('rowspan', '1')
                 .attr('display', 'none')
                 .addClass('timetable-cell'));
             trSpring.append($('<td></td>')
                 .attr('id', weekPrefixArray[k] + (time - 0.5) + 'S' + 'H')
                 .attr('in-conflict', 'false')
                 .attr('satisfied', 'true')
+                .attr('rowspan', '1')
                 .attr('display', 'none')
                 .addClass('timetable-cell'));
         }

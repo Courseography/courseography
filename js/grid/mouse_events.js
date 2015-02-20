@@ -167,8 +167,14 @@ function renderAddHover(time, section) {
     } 
     
     if ($(time).attr('clicked') !== 'true') {
-        $(time).html(section.courseName)
-                .attr('hover', 'good');
+        if ($(time).attr('rowspan') !== '1') {
+            $(time).html(section.courseName)
+                    .attr('hover', 'good');
+        } else {
+            $(time).html(section.courseName)
+                    .attr('hover', 'good')
+                    .css('font-size', '0');
+        }
     } else if ($(time).html() === section.courseName &&
             $(time).attr('type') === section.type) {
         $(time).attr('hover', 'remove');
