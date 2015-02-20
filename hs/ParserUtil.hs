@@ -13,12 +13,13 @@ import Database.Persist
 import Database.Persist.Sqlite
 import Text.XML.HaXml.Namespaces
 import Data.Conduit
-import Data.List.Split
+import Data.List.Split hiding (startsWith)
 import Data.List
 import Data.Text as T (pack, unpack)
 import Tables
 import JsonParser
 import SVGTypes
+import Data.List
 
 -- | Gets the root element of the document.
 getRoot :: Document i -> Content i
@@ -28,9 +29,7 @@ getRoot doc = head $ parseDocument (tag "svg") doc
 getStyleAttr :: String -> String -> String
 getStyleAttr attr style =
     drop (length attr + 1) $
-    head $ filter
-            (\x -> take (length attr + 1) x == (attr ++ ":"))
-            (splitOn ";" style) ++ [""]
+    head $ filter (isPrefixOf (attr ++ ":"))     (splitOn ";" style) ++ [""]
 
 -- | Gets a style attribute from a style String. If the style attribute is "",
 -- then this function defaults to the previous style attribute, 'parent'.
