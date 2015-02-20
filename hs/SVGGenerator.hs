@@ -70,7 +70,7 @@ thrd3 (a,b,c) = c
 
 -- | Gets a tuple from areaMap where id_ is in the list of courses for that tuple.
 getTuple :: String -> (String, String, [String])
-getTuple id_ = head $ (filter (\x -> elem id_ (thrd3 x)) areaMap) ++ [("", "grey", [])]
+getTuple id_ = head $ filter (\x -> id_ `elem` thrd3 x) areaMap ++ [("", "grey", [])]
 
 -- | Gets an area from areaMap where id_ is in the list of courses for the corresponding tuple.
 getArea :: String -> String
@@ -95,7 +95,7 @@ makeSVGDoc rects ellipses edges regions regionTexts =
 
 -- | Builds the SVG defs.
 makeSVGDefs :: S.Svg
-makeSVGDefs = S.defs $ do
+makeSVGDefs = S.defs $
               S.marker ! A.id_ "arrow"
                        ! A.viewbox "0 0 10 10"
                        ! A.refx "1"
@@ -103,7 +103,7 @@ makeSVGDefs = S.defs $ do
                        ! A.markerunits "strokeWidth"
                        ! A.orient "auto"
                        ! A.markerwidth "7"
-                       ! A.markerheight "7" $ do
+                       ! A.markerheight "7" $
                 S.polyline ! A.points "0,1 10,5 0,9" ! A.fill "black"
 
 -- | Builds an SVG document.
@@ -116,25 +116,24 @@ buildSVG =
         sqlEllipses :: [Entity Ellipses] <- selectList [] []
 
         let texts       = map (buildText . entityVal) sqlTexts
-        let rects       = map (buildRect texts . entityVal) sqlRects
-        let ellipses    = buildEllipses texts 0 $ map entityVal sqlEllipses
-        let paths       = zipWith (buildPath rects ellipses) (map entityVal sqlPaths) [1..length sqlPaths]
-        let regions     = filter pathIsRegion paths
-        let edges       = filter (not . pathIsRegion) paths
-        let regionTexts = filter (not . intersectsWithShape (rects ++ ellipses)) texts
-
-        let stringSVG = renderSvg $ makeSVGDoc rects ellipses edges regions regionTexts
+            rects       = map (buildRect texts . entityVal) sqlRects
+            ellipses    = buildEllipses texts 0 $ map entityVal sqlEllipses
+            paths       = zipWith (buildPath rects ellipses) (map entityVal sqlPaths) [1..length sqlPaths]
+            regions     = filter pathIsRegion paths
+            edges       = filter (not . pathIsRegion) paths
+            regionTexts = filter (not . intersectsWithShape (rects ++ ellipses)) texts
+            stringSVG = renderSvg $ makeSVGDoc rects ellipses edges regions regionTexts
         liftIO $ writeFile "Testfile.svg.2" stringSVG
 
 intersectsWithShape :: [Shape] -> Text -> Bool
-intersectsWithShape shapes text = do
-    length (filter (intersectsWithPoint (fromRational $ textXPos text) (fromRational $ textYPos text)) shapes) > 0
+intersectsWithShape shapes text =
+    not (any (intersectsWithPoint (fromRational $ textXPos text) (fromRational $ textYPos text)) shapes)
 
 -- | Converts a `Rect` to SVG.
 convertRectToSVG :: Shape -> S.Svg
 convertRectToSVG rect = if shapeFill rect == "none" then S.rect else
                         S.g ! A.id_ (stringValue $ shapeId rect)
-                            ! A.class_ (stringValue $ if shapeIsHybrid rect then "hybrid" else "node")
+                            ! A.class_ (if shapeIsHybrid rect then "hybrid" else "node")
                             ! S.customAttribute "data-group" (stringValue (getArea (shapeId rect))) $
                             do S.rect ! A.rx "4"
                                       ! A.ry "4"
@@ -142,7 +141,7 @@ convertRectToSVG rect = if shapeFill rect == "none" then S.rect else
                                       ! A.y (stringValue $ show $ fromRational $ shapeYPos rect)
                                       ! A.width (stringValue $ show $ fromRational $ shapeWidth rect)
                                       ! A.height (stringValue $ show $ fromRational $ shapeHeight rect)
-                                      ! A.style (stringValue $ "fill:" ++ (getFill (shapeId rect)) ++ ";")
+                                      ! A.style (stringValue $ "fill:" ++ getFill (shapeId rect) ++ ";")
                                concatSVG $ map (convertTextToSVG (shapeIsHybrid rect) False False) (shapeText rect)
 
 -- | Converts a `Text` to SVG.
@@ -157,10 +156,10 @@ convertTextToSVG isHybrid isBool isRegion text =
 -- | Converts a `Path` to SVG.
 convertEdgeToSVG :: Path -> S.Svg
 convertEdgeToSVG path =
-    S.path ! A.id_ (stringValue $ "path" ++ (pathId path))
-           ! A.class_ (stringValue $ "path")
-           ! A.d (stringValue $ "M" ++ (buildPathString $ points path))
-           ! A.markerEnd (stringValue $ "url(#arrow)")
+    S.path ! A.id_ (stringValue $ "path" ++ pathId path)
+           ! A.class_ "path"
+           ! A.d (stringValue $ 'M' : buildPathString (points path))
+           ! A.markerEnd "url(#arrow)"
            ! S.customAttribute "source-node" (stringValue $ source path)
            ! S.customAttribute "target-node" (stringValue $ target path)
            ! A.style (stringValue $ "fill:" ++
@@ -172,9 +171,9 @@ convertEdgeToSVG path =
 -- | Converts a `Path` to SVG.
 convertRegionToSVG :: Path -> S.Svg
 convertRegionToSVG path =
-    S.path ! A.id_ (stringValue $ "region" ++ (pathId path))
-           ! A.class_ (stringValue $ "region")
-           ! A.d (stringValue $ "M" ++ (buildPathString $ points path))
+    S.path ! A.id_ (stringValue $ "region" ++ pathId path)
+           ! A.class_ "region"
+           ! A.d (stringValue $ 'M' : buildPathString (points path))
            ! A.style (stringValue $ "fill:" ++
                       pathFill path ++
                       ";opacity:0.7;fill-opacity:0.58;")
@@ -185,7 +184,7 @@ convertEllipseToSVG ellipse = S.g ! A.id_ (stringValue (shapeId ellipse))
                                   ! A.class_ "bool" $ do
                                       S.ellipse ! A.cx (stringValue $ show $ fromRational $ shapeXPos ellipse)
                                                 ! A.cy (stringValue $ show $ fromRational $ shapeYPos ellipse)
-                                                ! A.rx (stringValue $ show $ (fromRational $ shapeWidth ellipse) / 2)
-                                                ! A.ry (stringValue $ show $ (fromRational $ shapeHeight ellipse) / 2)
+                                                ! A.rx (stringValue $ show $ fromRational $ shapeWidth ellipse / 2)
+                                                ! A.ry (stringValue $ show $ fromRational $ shapeHeight ellipse / 2)
                                                 ! A.style "stroke:#000000;fill:none;"
                                       concatSVG $ map (convertTextToSVG False True False) (shapeText ellipse)
