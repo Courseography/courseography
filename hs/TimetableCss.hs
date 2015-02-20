@@ -5,7 +5,7 @@ module TimetableCss where
 import Clay
 import Prelude hiding ((**))
 import Data.Monoid
-import Consts
+import Constants
 
 {- timetableStyles
  - Generates all CSS required for the timetable page. -}

@@ -7,7 +7,7 @@ import Prelude hiding ((**))
 import Data.Monoid
 import Data.Text.Lazy
 import System.Directory
-import Consts
+import Constants
 import CommonCss
 import GraphCss
 import TimetableCss

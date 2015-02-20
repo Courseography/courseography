@@ -5,7 +5,7 @@ module AboutCss where
 import Clay
 import Prelude hiding ((**))
 import Data.Monoid
-import Consts
+import Constants
 
 {- aboutStyles
  - Generates CSS for the about page. -}

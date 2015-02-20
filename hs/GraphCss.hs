@@ -5,7 +5,7 @@ module GraphCss where
 import Clay
 import Prelude hiding ((**))
 import Data.Monoid
-import Consts
+import Constants
 
 {- graphStyles
  - Generates all CSS for the graph page. -}

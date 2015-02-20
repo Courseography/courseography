@@ -5,7 +5,7 @@ module CommonCss where
 import Clay
 import Prelude hiding ((**))
 import Data.Monoid
-import Consts
+import Constants
 
 {- common
  - Generates CSS common to all pages. -}
