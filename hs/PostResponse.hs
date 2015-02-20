@@ -118,6 +118,13 @@ checkPost =  do
                     H.input ! A.type_ "text" ! A.class_ "lvl300spec" 
                     H.input ! A.type_ "text" ! A.class_ "lvl300spec"
                     H.input ! A.type_ "text" ! A.class_ "lvl300spec"
+            H.div ! A.id "spec_extra" $ do
+                H.p ! A.class_ "code" $ "Any 300+ level CSC course, BCB/ECE/MAT/STA course (2.0 FCEs)"
+                H.div ! A.class_ "more-info" $ do
+                    H.input ! A.type_ "text"
+                    H.input ! A.type_ "text"
+                    H.input ! A.type_ "text"
+                    H.input ! A.type_ "text"
             H.div ! A.id "spec_misc" $ do 
                 H.p ! A.class_ "code" $ H.em "Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H, CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H (2.0 FCEs)"
                 H.div ! A.class_ "more-info" $ do

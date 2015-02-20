@@ -22,6 +22,7 @@ var level400 = {'CSC401': 0, 'CSC404': 0, 'CSC411': 0, 'CSC412': 0, 'CSC418': 0,
 activeInq = [];
 active400s = [];
 active300s = [];
+var index400 = 0;
 creditCountSpec = 0;
 creditCountMaj = 0;
 creditCountMin = 0;
@@ -83,7 +84,7 @@ function updateAllCategories() {
     update400s();
     fill300s();
     fill400s();
-    fillInquiries();
+    fillMisc();
     updateCreditCount();
 
     // Update Specialist 
@@ -223,6 +224,7 @@ function fill300s() {
     'use-strict';
 
     var i = 0; 
+    var index300 = 0;
     var spec300s = $('.lvl300spec');
     var maj300s = $('.lvl300maj');
     var min300s = $('.lvl300min');
@@ -240,26 +242,28 @@ function fill300s() {
     
 
     // fill courses that have been selected
-    for (var m = 0; m < active300s.length; m++) {
-        spec300s[i].value = active300s[i];
-        maj300s[i].value = active300s[i];
-        min300s[i].value = active300s[i]; 
-        i += 1;
-        if (i === 3) {
+    for (var m = 0; m < 3; m++) {
+        spec300s[i].value = active300s[index300];
+        maj300s[i].value = active300s[index300];
+        min300s[i].value = active300s[index300];
+        i += 1; 
+        index300 += 1;
+        if (index300 === active300s.length) {
             break;
         }
     }
 
     if (i < 3) {
-        for (var m = 0; m < active400s.length; m++) {
-        spec300s[i].value = active400s[i];
-        maj300s[i].value = active400s[i];
-        min300s[i].value = active400s[i]; 
-        i += 1;
-        if (i === 3) {
-            break;
+        for (var m = 0; m < 3; m++) {
+            spec300s[i].value = active400s[index400];
+            maj300s[i].value = active400s[index400];
+            min300s[i].value = active400s[index400]; 
+            i += 1;
+            index400 += 1;
+            if ((index400 === active400s.length) || (i === 3)) {
+                break;
+            }
         }
-    }
     }
 }  
 
@@ -301,7 +305,7 @@ function fill400s() {
 /**
  * Autofills textboxes and updates category for Inquiry courses
 **/
-function fillInquiries() {
+function fillMisc() {
     'use-strict';
 
     var i = 0;
