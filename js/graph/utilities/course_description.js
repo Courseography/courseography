@@ -55,7 +55,6 @@ function formatCourseName(id) {
  */
 function readCalendarEntry(name) {
     'use strict';
-
     var course = new Course(name);
     return formatCourseDescription(course);
 }
@@ -103,7 +102,7 @@ function getCourseTitle(id) {
 
     var name = formatCourseName(id);
     if (name.length === 1) {
-        var course = new Course(name);
+        var course = new Course(name[0]);
         name = course.title;
     }
     return id + ': ' + name;
