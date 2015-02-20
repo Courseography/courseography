@@ -755,6 +755,7 @@ postCSS = do
         marginLeft nil 
         color red
     ".more-info" ? do
+        cursor pointer
         border solid (px 2) grey3
         "border-radius" -: "4px"
         backgroundColor grey4

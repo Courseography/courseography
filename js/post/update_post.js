@@ -37,6 +37,37 @@ $('#update').click(function (e) {
 
 
 /**
+ * Sets cookie when clicking on a course in Check My POSt
+ * TODO: Check prereqs properly
+**/
+/*
+$('.full_name').click(function (e) {
+    'use-strict';
+
+    var index = 0;
+    if (this.className.indexOf('CSC') > -1) {
+        index = this.className.indexOf('CSC'); 
+    } else if (this.className.indexOf('Calc') > -1) {
+        index = this.className.indexOf('Calc'); 
+    } else if (this.className.indexOf('Lin') > -1) {
+        index = this.className.indexOf('Lin'); 
+    } else if (this.className.indexOf('Sta') > -1) {
+        index = this.className.indexOf('Sta'); 
+    }
+    
+
+    var courseCode = this.className.substring(index, this.className.length);
+    if (getCookie(courseCode) === 'inactive' || getCookie(courseCode) === 'takeable') {
+            setCookie(courseCode, 'active');
+    } if (getCookie(courseCode) === 'active' || getCookie(courseCode) === 'overriden') {
+            setCookie(courseCode, 'inactive');
+    }
+    updateAllCategories();
+});
+*/
+
+
+/**
  * Updates all categories to see if they are fulfilled or not.
 **/
 // TODO: Add CSC240 and CSC265
