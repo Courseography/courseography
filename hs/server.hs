@@ -7,11 +7,13 @@ import GridResponse
 import GraphResponse
 import DrawResponse
 import PostResponse
+import ImageResponse
 --import AboutResponse
 import Database.CourseQueries
 import CssGen
 import Filesystem.Path.CurrentOS
 import System.Directory
+import CourseographyFacebook
 import qualified Data.Text as T
 
 main :: IO ()
@@ -27,8 +29,8 @@ main = do
         msum [ dir "grid" gridResponse,
                dir "graph" graphResponse,
                dir "image" $ imageResponse,
-               dir "graph-fb" $ seeOther redirectUrlGraphEmail $ toResponse post,
-               dir "post-fb" $ seeOther redirectUrlGraphPost $ toResponse test,
+               dir "graph-fb" $ seeOther redirectUrlGraphEmail $ toResponse "",
+               dir "post-fb" $ seeOther redirectUrlGraphPost $ toResponse "",
                dir "test" $ look "code" >>= getEmail,
                dir "test-post" $ look "code" >>= postToFacebook,
                dir "draw" $ drawResponse,
