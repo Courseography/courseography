@@ -116,5 +116,12 @@ dBlue = "#437699"
 dPurple :: T.Text
 dPurple = "#46364A"
 
+grey1 = parse "#222"
+grey2 = parse "#dedede"
+grey3 = parse "#949494"
+grey4 = parse "#BABABA"
+
+beige1 = parse "#EBE8E4"
+
 {- FCE count color. Currently unused. -}
 fceCountColor = parse "#66C2FF"

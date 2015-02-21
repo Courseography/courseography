@@ -50,3 +50,13 @@ timetableScripts = do jQuery
 --drawScripts :: H.Html
 --drawScripts = do jQuery 
 --                  concatHtml (map makeScript ["static/js/experiment.js"])
+
+postScripts :: H.Html
+postScripts = concatHtml (map makeScript ["https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js",
+                                          "https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js",
+                                          "static/js/post/change_div.js",
+                                          "static/js/common/cookieHandler.js",
+                                          "static/js/post/update_post.js",
+                                          "static/js/graph/create_data.js",
+                                          "static/js/post/update_counts.js",
+                                          "static/js/graph/objects/node.js"])

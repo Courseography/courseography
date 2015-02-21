@@ -58,5 +58,9 @@ drawLinks = concatHtml (map stylesheet ["//netdna.bootstrapcdn.com/bootstrap/3.1
                                        "static/style/draw/draw_styles.css"])
 
 
+postLinks :: H.Html
+postLinks = concatHtml (map stylesheet ["static/style/post/post_styles.css",
+                                        "static/style/common/common.css"])
+
 concatHtml :: [H.Html] -> H.Html
 concatHtml html = sequence_ html
