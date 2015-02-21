@@ -14,17 +14,44 @@ import Data.List
 import JsonParser
 import ParserUtil
 
+-- | Determines the source and target nodes of the path.
+buildPath :: [Shape] -> [Shape] -> Paths -> Int -> Path
+buildPath rects ellipses entity idCounter =
+    let coords = map point $ pathsD entity in
+    if pathsIsRegion entity then
+        Path ('p' : show idCounter)
+             coords
+             (pathsFill entity)
+             (pathsFillOpacity entity)
+             (pathsStroke entity)
+             (pathsIsRegion entity)
+             ""
+             ""
+    else
+    let xStart = fst $ head coords
+        yStart = snd $ head coords
+        xEnd = fst $ last coords
+        yEnd = snd $ last coords
+        sourceNode = getIntersectingShape xStart yStart (rects ++ ellipses)
+        targetNode = getIntersectingShape xEnd yEnd (rects ++ ellipses) in
+        Path ('p' : show idCounter)
+             coords
+             (pathsFill entity)
+             (pathsFillOpacity entity)
+             (pathsStroke entity)
+             (pathsIsRegion entity)
+             sourceNode
+             targetNode
+
 -- | Builds a Rect from a database entry in the rects table.
 buildRect :: [Text] -> Rects -> Shape
 buildRect texts entity = do
     let rectTexts = filter (\x -> intersects
-                            (fromRational (rectsWidth entity))
-                            (fromRational (rectsHeight entity))
-                            (fromRational (rectsXPos entity))
-                            (fromRational (rectsYPos entity))
+                            (rectsWidth entity)
+                            (rectsHeight entity)
+                            (rectsXPos entity, rectsYPos entity)
                             9
-                            (fromRational (textXPos x))
-                            (fromRational (textYPos x))
+                            (textXPos x, textYPos x)
                             ) texts
     let textString = concat $ map textText rectTexts
     let id_ = (if rectsIsHybrid entity then "h" else "") ++ 
@@ -40,41 +67,8 @@ buildRect texts entity = do
           (rectsIsHybrid entity)
           9
 
--- | Determines the source and target nodes of the path.
-buildPath :: [Shape] -> [Shape] -> Paths -> Int -> Path
-buildPath rects ellipses entity idCounter =
-    let coords = map point $ pathsD entity in
-    if pathsIsRegion entity then
-        Path ('p' : show idCounter)
-             coords
-             (pathsFill entity)
-             (pathsFillOpacity entity)
-             (pathsStroke entity)
-             (pathsIsRegion entity)
-             ""
-             ""
-    else
-    let xStart = fromRational $ fst $ head coords
-        yStart = fromRational $ snd $ head coords
-        xEnd = fromRational $ fst $ last coords
-        yEnd = fromRational $ snd $ last coords
-        intersectingSourceRect = getIntersectingShape xStart yStart rects
-        intersectingTargetRect = getIntersectingShape xEnd yEnd rects
-        intersectingSourceBool = getIntersectingShape xStart yStart ellipses
-        intersectingTargetBool = getIntersectingShape xEnd yEnd ellipses
-        sourceNode = if null intersectingSourceRect then intersectingSourceBool else intersectingSourceRect
-        targetNode = if null intersectingTargetRect then intersectingTargetBool else intersectingTargetRect in
-        Path ('p' : show idCounter)
-             coords
-             (pathsFill entity)
-             (pathsFillOpacity entity)
-             (pathsStroke entity)
-             (pathsIsRegion entity)
-             sourceNode
-             targetNode
-
 -- | Gets the first rect that intersects with the given coordinates.
-getIntersectingShape :: Float -> Float -> [Shape] -> String
+getIntersectingShape :: Rational -> Rational -> [Shape] -> String
 getIntersectingShape xpos ypos shapes = do
     let intersectingShapes = filter (intersectsWithPoint xpos ypos) shapes
     if null intersectingShapes
@@ -82,15 +76,13 @@ getIntersectingShape xpos ypos shapes = do
     else shapeId $ head intersectingShapes
 
 -- | Determines if a rect intersects with the given coordinates.
-intersectsWithPoint :: Float -> Float -> Shape -> Bool
+intersectsWithPoint :: Rational -> Rational -> Shape -> Bool
 intersectsWithPoint xpos ypos shape =
-    intersects (fromRational $ shapeWidth shape)
-               (fromRational $ shapeHeight shape)
-               (fromRational $ shapeXPos shape)
-               (fromRational $ shapeYPos shape)
+    intersects (shapeWidth shape)
+               (shapeHeight shape)
+               (shapeXPos shape, shapeYPos shape)
                (shapeTolerance shape)
-               xpos
-               ypos
+               (xpos, ypos)
 
 -- | Prints the database table 'rects'.
 printDB :: IO ()
@@ -115,13 +107,11 @@ buildEllipses texts idCounter entities = do
     let entity = head entities
     let ellipseText = filter (\x -> 
                                   intersects
-                                  5
-                                  5
-                                  (fromRational (ellipsesXPos entity))
-                                  (fromRational (ellipsesYPos entity))
+                                  ((ellipsesRx entity) * 2)
+                                  ((ellipsesRy entity) * 2)
+                                  (ellipsesXPos entity, ellipsesYPos entity)
                                   9
-                                  (fromRational (textXPos x))
-                                  (fromRational (textYPos x))
+                                  (textXPos x, textYPos x)
                                   ) texts
     Shape ("bool" ++ show idCounter)
             (ellipsesXPos entity)

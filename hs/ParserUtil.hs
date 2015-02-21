@@ -19,7 +19,6 @@ import Data.Text as T (pack, unpack)
 import Tables
 import JsonParser
 import SVGTypes
-import Data.List
 
 -- | Gets the root element of the document.
 getRoot :: Document i -> Content i
@@ -86,8 +85,8 @@ getAttribute _ _ = ""
 parseTransform :: String -> (Float, Float)
 parseTransform transform =
     do let parsedTransform = splitOn "," $ drop 10 transform
-       let xPos = read $ parsedTransform!!0 :: Float
-       let yPos = read $ init $ parsedTransform!!1 :: Float
+           xPos = read $ parsedTransform!!0 :: Float
+           yPos = read $ init $ parsedTransform!!1 :: Float
        (xPos, yPos)
 
 -- | Parses a path's `d` attribute.
@@ -118,11 +117,12 @@ addTuples :: (Float, Float) -> (Float, Float) -> (Float, Float)
 addTuples (a,b) (c,d) = (a + c, b + d)
 
 -- | Determines if a point intersects with a shape.
-intersects :: Float -> Float -> Float -> Float -> Float -> Float -> Float -> Bool
-intersects width height rx ry offset px py = do
+intersects :: Rational -> Rational -> (Rational, Rational) -> Float -> (Rational, Rational) -> Bool
+intersects width height (rx, ry) offset (px, py) = do
     let dx = px - rx
     let dy = py - ry
-    dx >= -1 * offset && dx <= width + offset && dy >= -1 * offset && dy <= height + offset;
+    let rationalOffset = toRational offset
+    dx >= -1 * rationalOffset && dx <= width + rationalOffset && dy >= -1 * rationalOffset && dy <= height + rationalOffset;
 
 -- | Removes the part of a string after the first forward slash.
 dropSlash :: String -> String
