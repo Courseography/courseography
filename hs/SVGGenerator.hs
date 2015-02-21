@@ -2,7 +2,7 @@
 module SVGGenerator where
 
 import SVGTypes
-import Tables
+import Database.Tables
 import Control.Monad.IO.Class  (liftIO)
 import qualified Data.Conduit.List as CL
 import Database.Persist
@@ -11,7 +11,7 @@ import Data.Char
 import Data.Conduit
 import Data.List.Split
 import Data.List hiding (map, filter)
-import JsonParser
+import Database.JsonParser
 import ParserUtil
 import MakeElements
 import Data.Maybe
@@ -23,11 +23,11 @@ import Text.Blaze.Svg.Renderer.String (renderSvg)
 import SVGBuilder
 import Text.Blaze.Internal (stringValue)
 import Text.Blaze (toMarkup)
-import CssGen
+import Constants
 
 -- | A list of tuples that contain disciplines (areas), fill values, and courses
 --- that are in the areas.
-areaMap :: [(String, String, [String])]
+areaMap :: [(String, T.Text, [String])]
 areaMap = [("theory", theoryDark, ["CSC165", "CSC236", "CSC240", "CSC263", "CSC265",
                        "CSC310", "CSC324", "CSC373", "CSC438", "CSC448",
                        "CSC463"]),
@@ -69,7 +69,7 @@ thrd3 :: (a, b, c) -> c
 thrd3 (a,b,c) = c
 
 -- | Gets a tuple from areaMap where id_ is in the list of courses for that tuple.
-getTuple :: String -> (String, String, [String])
+getTuple :: String -> (String, T.Text, [String])
 getTuple id_ = head $ filter (\x -> id_ `elem` thrd3 x) areaMap ++ [("", "grey", [])]
 
 -- | Gets an area from areaMap where id_ is in the list of courses for the corresponding tuple.
@@ -78,7 +78,7 @@ getArea id_ = fst3 $ getTuple id_
 
 -- | Gets the fill from areaMap where id_ is in the list of courses for the corresponding tuple.
 getFill :: String -> String
-getFill id_ = snd3 $ getTuple id_
+getFill id_ = T.unpack $ snd3 $ getTuple id_
 
 -- | Builds an SVG document.
 makeSVGDoc :: [Shape] -> [Shape] -> [Path] -> [Path] -> [Text] -> S.Svg

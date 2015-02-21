@@ -19,8 +19,8 @@ import Data.Conduit
 import Data.List.Split
 import Data.List
 import Data.Text as T (pack, unpack)
-import Tables
-import JsonParser
+import Database.Tables
+import Database.JsonParser
 import SVGGenerator
 import SVGBuilder
 import SVGTypes

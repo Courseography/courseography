@@ -16,8 +16,8 @@ import Data.Conduit
 import Data.List.Split hiding (startsWith)
 import Data.List
 import Data.Text as T (pack, unpack)
-import Tables
-import JsonParser
+import Database.Tables
+import Database.JsonParser
 import SVGTypes
 
 -- | Gets the root element of the document.

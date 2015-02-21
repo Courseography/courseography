@@ -2,7 +2,7 @@
 module SVGBuilder where
 
 import SVGTypes
-import Tables
+import Database.Tables
 import Control.Monad.IO.Class  (liftIO)
 import qualified Data.Conduit.List as CL
 import Database.Persist
@@ -11,7 +11,7 @@ import Data.Char
 import Data.Conduit
 import Data.List.Split
 import Data.List
-import JsonParser
+import Database.JsonParser
 import ParserUtil
 
 -- | Determines the source and target nodes of the path.
