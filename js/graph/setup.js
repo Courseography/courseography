@@ -81,6 +81,8 @@ var nodes = [];               // List of all nodes
 $(document).ready(function () {
     'use strict';
 
+    getRemote();
+
     buildGraph();
 
     FCEPrerequisiteCourses = [CSC318, CSC454];
@@ -103,3 +105,19 @@ $(document).ready(function () {
     // Uncomment to enable graph dragging
     // enableGraphDragging();
 });
+
+
+/**
+ * Retrieves an SVG file.
+ * @returns {string} An SVG string representing a graph. 
+ */
+function getRemote() {
+    'use strict';
+
+    var SVG = $.ajax({
+        type: 'GET',
+        url: 'static/hs/Testfile.svg',
+        async: false
+    }).responseText;
+    $('#graph').append(SVG);
+}

@@ -82,7 +82,10 @@ Rects
     height Rational
     xPos Rational
     yPos Rational
-    style String
+    fill String
+    stroke String
+    fillOpacity String
+    isHybrid Bool
     deriving Show
 
 Texts
@@ -91,13 +94,25 @@ Texts
     xPos Rational
     yPos Rational
     text String
-    style String
+    fontSize String
+    fontWeight String
+    fontFamily String
     deriving Show
 
 Paths
     d [Point]
-    style String
+    fill String
+    fillOpacity String
+    stroke String
+    isRegion Bool
     deriving Show
+
+Ellipses
+    xPos Rational
+    yPos Rational
+    rx Rational
+    ry Rational
+    stroke String
 |]
 
 -- | A Lecture.
