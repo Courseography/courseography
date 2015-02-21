@@ -625,6 +625,9 @@ $('#add-text').click(function (){
 3. shortcuts
 4. deselecting
 
+FIRE FOX!! node ids are numbers
+edges comming from bottom
+
 https://www.dashingd3js.com/svg-paths-and-d3js
 
 */
