@@ -49,6 +49,8 @@ nodeCSS = "g" ? do
             "rect" <? do
                 wideStroke
                 strokeRed
+            "text" <? do
+                fullyVisible
         "data-active" @= "inactive" & do
             "rect" <? do
                 faded
@@ -57,7 +59,7 @@ nodeCSS = "g" ? do
             "rect" <? do
                 semiVisible
             "text" <? do
-                fullyVisible
+                semiVisible
         "data-active" @= "missing" & do
             "rect" <> "ellipse" <? do
                 wideStroke
