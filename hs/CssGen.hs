@@ -11,6 +11,7 @@ import Constants
 import CommonCss
 import GraphCss
 import TimetableCss
+import DrawCss
 import AboutCss
 
 styleFiles :: [(String, Css)]

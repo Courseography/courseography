@@ -104,9 +104,16 @@ red2 = parse "#B91333"
 red3 = rgb 215 117 70
 red4 = rgb 195 97 50
 
+dRed :: T.Text
 dRed = "#D77546"
+
+dGreen :: T.Text
 dGreen = "#2E8B57"
+
+dBlue :: T.Text
 dBlue = "#437699"
+
+dPurple :: T.Text
 dPurple = "#46364A"
 
 {- FCE count color. Currently unused. -}

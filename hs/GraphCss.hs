@@ -105,7 +105,6 @@ nodeCSS = "g" ? do
             "rect" <? do
                 fill dPurple
         -- Since groups are missing right now
-        -- Since groups are missing right now
         "rect" <? do
             stroke "black"
             fill systemsDark
@@ -172,6 +171,9 @@ pathCSS = "path" ? do
         faded
         strokeRed
         strokeDashed
+    "data-active" @= "drawn" & do
+        faded
+        wideStroke
 
 {- resetCSS
  - Generates CSS for the reset feature
