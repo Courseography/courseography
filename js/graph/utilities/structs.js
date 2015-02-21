@@ -4,12 +4,11 @@
 
 // Global variables
 var nodes = []; // List of all nodes
-var edges = []; // List of all edges, Edges is never used.
-
 
 // Data Structures
 function makeNode(type, name) {
     'use strict';
+
     try {
         window[name] = new Node(type, name);
 
@@ -30,6 +29,7 @@ function makeHybrid(type, name) {
 
 function makeEdge(parent, child, name) {
     'use strict';
+
     try {
         window[name] = new Edge(parent, child, name);
         parent.outEdges.push(window[name]);
@@ -39,7 +39,7 @@ function makeEdge(parent, child, name) {
         child.parents.push(parent);
     } catch (err) {
         console.log('Encountered an error for: ' + name);
-        console.log(err)
+        console.log(err);
     }
 }
 
