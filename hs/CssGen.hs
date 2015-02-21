@@ -36,4 +36,3 @@ generateCSS = do
     createDirectoryIfMissing True "../style/draw"
     createDirectoryIfMissing True "../style/post"
     Prelude.foldl1 (>>) $ Prelude.map renderStyleFile styleFiles
-    

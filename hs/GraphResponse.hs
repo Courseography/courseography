@@ -13,17 +13,17 @@ import SVGGen
 
 graphResponse :: ServerPart Response
 graphResponse =
-    ok $ toResponse $
-        masterTemplate "Courseography - Graph"
-            [H.meta ! A.name "keywords"
-                    ! A.content "",
-             plannerLinks
-            ]
-            (do header "graph"
-                H.div ! A.id "graph" ! A.class_ "graph" $ svgDoc
-                disclaimer
-            )
-            plannerScripts
+   ok $ toResponse $
+    masterTemplate "Courseography - Graph"
+                [H.meta ! A.name "keywords"
+                        ! A.content "",
+                 plannerLinks
+                ]
+                (do header "graph"
+                    H.div ! A.id "graph" ! A.class_ "graph" $   ""
+                    disclaimer
+                )
+                plannerScripts
 
 
 fceCountDiv :: H.Html

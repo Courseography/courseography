@@ -4,6 +4,7 @@ module MakeElements where
 import           Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
+import qualified Text.Blaze.Svg11 as S
 import Control.Monad    (msum)
 
 insertSVG :: H.AttributeValue -> H.Html
@@ -64,3 +65,7 @@ postLinks = concatHtml (map stylesheet ["static/style/post/post_styles.css",
 
 concatHtml :: [H.Html] -> H.Html
 concatHtml html = sequence_ html
+
+
+concatSVG :: [S.Svg] -> S.Svg
+concatSVG svg = sequence_ svg

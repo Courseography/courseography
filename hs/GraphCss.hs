@@ -18,23 +18,18 @@ graphStyles = do
     titleCSS
     modalCSS
     regionCSS
-    regionShapeCSS
 
 {- nodeCSS
  - Generates CSS for nodes in the graph. -}
 
 nodeCSS = "g" ? do
     "text" ? do
-        alignCenter
-        "stroke" -: "none"
         userSelect none
         "-webkit-touch-callout" -: "none"
         "-webkit-user-select" -: "none"
         "-khtml-user-select" -: "none"
         "-moz-user-select" -: "none"
         "-ms-user-select" -: "none"
-        "text-anchor" -: "middle"
-        "dominant-baseline" -: "central"
     ".node" & do
         cursor pointer
         "text" ? do
@@ -69,61 +64,10 @@ nodeCSS = "g" ? do
         "data-active" @= "unlit" & do
             wideStroke
             strokeRed
-        "data-active" @= "unselected" & do
-            "rect" <? do
-                wideStroke
-                faded
-        "data-group" @= "theory" & do
-            "rect" <? do
-                fill theoryDark
-        "data-group" @= "core" & do
-            "rect" <? do
-                fill coreDark
-        "data-group" @= "se" & do
-            "rect" <? do
-                fill seDark
-        "data-group" @= "systems" & do
-            "rect" <? do
-                fill systemsDark
-        "data-group" @= "graphics" & do
-            "rect" <? do
-                fill graphicsDark
-        "data-group" @= "dbweb" & do
-            "rect" <? do
-                fill dbwebDark
-        "data-group" @= "num" & do
-            "rect" <? do
-                fill numDark
-        "data-group" @= "ai" & do
-            "rect" <? do
-                fill aiDark
-        "data-group" @= "hci" & do
-            "rect" <? do
-                fill hciDark
-        -- For nodes in draw tab
-        "data-group" @= "red" & do
-            "rect" <? do
-                fill dRed
-        "data-group" @= "blue" & do
-            "rect" <? do
-                fill dBlue
-        "data-group" @= "green" & do
-            "rect" <? do
-                fill dGreen
-        "data-group" @= "purple" & do
-            "rect" <? do
-                fill dPurple
-        -- Since groups are missing right now
         "rect" <? do
             stroke "black"
-            fill systemsDark
     ".hybrid" & do
         cursor cursorDefault
-        "rect" <? do
-            fill "grey"
-        "text" <? do
-            fontSize (em 0.45)
-            fill "white"
     ".bool" & do
         cursor cursorDefault
         "data-active" @= "active" & do
@@ -150,13 +94,8 @@ nodeCSS = "g" ? do
             wideStroke
             strokeRed
         "text" <? do
-            fontSize (em 0.45)
             fontFamily ["Comic Sans MS"] [sansSerif]
             fontWeight bold
-    -- TODO: get rid of this style
-    "ellipse" ? do
-        fill "none"
-        stroke "black"
     ".spotlight" & do
         semiVisible
         fill "white"
@@ -230,15 +169,7 @@ titleCSS = "#svgTitle" ? do
  - Generates CSS for focus regions in the graph. -}
 
 regionCSS = ".region-label" ? do
-    fontSize (em 0.65)
     "text-anchor" -: "start"
-
-{- regionShapeCSS
- - Generates CSS for the shapes of focus
- - regions in the graph. -}
-
-regionShapeCSS = ".region" ? do
-    faded
 
 {- modalCSS
  - Generates CSS for the modal that appears

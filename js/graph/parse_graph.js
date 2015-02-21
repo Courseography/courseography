@@ -11,11 +11,6 @@
 function buildGraph() {
     'use strict';
 
-    var xStart;
-    var yStart;
-    var yEnd;
-    var xEnd;
-
     $('.node').each(function () {
         makeNode('AND', $(this).attr('id'));
     });
@@ -49,69 +44,7 @@ function buildGraph() {
     });
 
     $('.path').each(function () {
-        var coords = $(this).attr('d').split(' ');
-        coords = coords.filter(function (str) {return str !== 'M' &&
-            str !== 'L' && str !== ''; });
-
-        // Do something for internet explorer
-        xStart = parseFloat(coords[0].split(",")[0]);
-        yStart = parseFloat(coords[0].split(",")[1]);
-        var end = coords.pop();
-        xEnd = parseFloat(end.split(",")[0]);
-        yEnd = parseFloat(end.split(",")[1]);
-
-        var startNode = '';
-        var endNode = '';
-
-        $('.node, .hybrid').each(function () {
-            // Check intersection
-            var r = $(this).children('rect');
-            var xRect = parseFloat(r.attr('x'));
-            var yRect = parseFloat(r.attr('y'));
-            var width = parseFloat(r.attr('width'));
-            var height = parseFloat(r.attr('height'));
-
-            if (intersects(xStart, yStart, xRect, yRect, width, height, 1)) {
-                startNode = $(this).attr('id');
-            }
-
-            if (intersects(xEnd, yEnd, xRect, yRect, width, height, 9)) {
-                endNode = $(this).attr('id');
-            }
-
-            if (startNode !== '' && endNode !== '') {
-                return false;
-            }
-        });
-
-        $('.bool').each(function () {
-            // Check intersection
-            var el = $(this).children('ellipse');
-            var cx = parseFloat(el.attr('cx'));
-            var cy = parseFloat(el.attr('cy'));
-            var rx = parseFloat(el.attr('rx'));
-            var ry = parseFloat(el.attr('ry'));
-
-            if (Math.abs(xStart - cx) <= rx + 1 && Math.abs(yStart - cy) <= ry + 1) {
-                startNode = $(this).attr('id');
-            }
-
-            if (Math.abs(xEnd - cx) <= rx + 9 && Math.abs(yEnd - cy) <= ry + 9) {
-                endNode = $(this).attr('id');
-            }
-
-            if (startNode !== '' && endNode !== '') {
-                return false;
-            }
-        });
-
-        if (startNode === '' && endNode === '') {
-            console.log("Could not make edge, diagnose:");
-            console.log("Start: " + startNode);
-            console.log("End: " + endNode);
-        }
-
-        makeEdge(window[startNode], window[endNode], $(this).attr('id'));
+        makeEdge(window[$(this).attr('source-node')], window[$(this).attr('target-node')], $(this).attr('id'));
     });
 }
 
