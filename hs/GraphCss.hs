@@ -39,9 +39,12 @@ nodeCSS = "g" ? do
         cursor pointer
         "text" ? do
             fontSize (pt 12)
+            faded
         "data-active" @= "active" & do
             "rect" <? do
                 wideStroke
+            "text" <? do
+                fullyVisible
         "data-active" @= "overridden" & do
             "rect" <? do
                 wideStroke
@@ -53,10 +56,14 @@ nodeCSS = "g" ? do
         "data-active" @= "takeable" & do
             "rect" <? do
                 semiVisible
+            "text" <? do
+                fullyVisible
         "data-active" @= "missing" & do
             "rect" <> "ellipse" <? do
                 wideStroke
                 strokeRed
+            "text" <? do
+                fullyVisible
         "data-active" @= "unlit" & do
             wideStroke
             strokeRed
