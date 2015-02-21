@@ -20,6 +20,10 @@ var level400 = {'CSC401': 0, 'CSC404': 0, 'CSC411': 0, 'CSC412': 0, 'CSC418': 0,
                 'BCB420': 0, 'BCB430': 0, 'CSC410': 0};
 
 activeInq = [];
+active400s = [];
+active300s = [];
+var index300 = 0;
+var index400 = 0;
 creditCountSpec = 0;
 creditCountMaj = 0;
 creditCountMin = 0;
@@ -32,6 +36,8 @@ creditCount400 = 0;
 $('#update').click(function (e) {
     'use-strict';
 
+    index300 = 0;
+    index400 = 0;
     updateAllCategories();
 });
 
@@ -81,7 +87,8 @@ function updateAllCategories() {
     update400s();
     fill300s();
     fill400s();
-    fillInquiries();
+    fillMisc();
+    fillExtra();
     updateCreditCount();
 
     // Update Specialist 
@@ -128,7 +135,7 @@ function updateAllCategories() {
 
     // Update 300s
     var i = 0; 
-    var spec300s = $('.300lvlspec');
+    var spec300s = $('.lvl300spec');
     for (var m = 0; m < 3; m++) {
         if (spec300s[m].value != '') {
             i += 1;
@@ -149,7 +156,7 @@ function updateAllCategories() {
     // Update 400s
 
     i = 0; 
-    var spec400s = $('.400lvlspec');
+    var spec400s = $('.lvl400spec');
     for (var l = 0; l < 3; l++) {
         if (spec400s[l].value != '') {
             i += 1;
@@ -166,6 +173,31 @@ function updateAllCategories() {
         updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'not fulfilled');
     }
 
+    // Update Extra
+
+    countMaj = 0; 
+    countSpec = 0;
+    var specExtra = $('#spec_extra')[0].getElementsByTagName('input');
+    var majExtra = $('#maj_extra')[0].getElementsByTagName('input');
+    for (var l = 0; l < 4; l++) {
+        if (specExtra[l].value != '') {
+            countSpec += 1;
+        } if (l < 3) {
+            if (majExtra[l].value != '') {
+                countMaj += 1;
+            }
+        }
+    }
+
+    if (countSpec === 4) {
+        updateCategory($('#spec_extra')[0].getElementsByClassName('code')[0], 'fulfilled');
+    } if (countMaj === 3) {
+        updateCategory($('#maj_extra')[0].getElementsByClassName('code')[0], 'fulfilled');
+    } if (countSpec < 4) {
+        updateCategory($('#spec_extra')[0].getElementsByClassName('code')[0], 'not fulfilled');
+    } if (countMaj < 3) {
+        updateCategory($('#maj_extra')[0].getElementsByClassName('code')[0], 'not fulfilled');
+    }
 
 }
 
@@ -221,9 +253,10 @@ function fill300s() {
     'use-strict';
 
     var i = 0; 
-    var spec300s = $('.300lvlspec');
-    var maj300s = $('.300lvlmaj');
-    var min300s = $('.300lvlmin');
+
+    var spec300s = $('.lvl300spec');
+    var maj300s = $('.lvl300maj');
+    var min300s = $('.lvl300min');
 
     
     // clear textboxes
@@ -231,23 +264,40 @@ function fill300s() {
         var course = spec300s[k].value;
         if (getCookie(course) === 'inactive' || getCookie(course) === 'takeable') {
             spec300s[k].value = '';
-            maj300s[k].value = '';
+            if (k < 2) {
+                maj300s[k].value = '';
+            }
             min300s[k].value = '';
         }
     }
     
 
     // fill courses that have been selected
-    for (course in level300) {
-        if (level300.hasOwnProperty(course)) {
-            if (level300[course] === 1) {
-                spec300s[i].value = course;
-                maj300s[i].value = course;
-                min300s[i].value = course; 
-                i += 1;
-            } if (i === 3) {
+    for (var m = 0; m < 3; m++) {
+        if (index300 === active300s.length) {
+            break;
+        }
+        spec300s[i].value = active300s[index300];
+        if (i < 2) {
+            maj300s[i].value = active300s[index300];
+        }
+        min300s[i].value = active300s[index300];
+        i += 1; 
+        index300 += 1;
+    }
+
+    if (i < 3) {
+        for (var m = 0; m < 3; m++) {
+            if ((index400 === active400s.length) || (i === 3)) {
                 break;
             }
+            spec300s[i].value = active400s[index400];
+            if (i < 2) {
+                maj300s[i].value = active400s[index400];
+            }
+            min300s[i].value = active400s[index400]; 
+            i += 1;
+            index400 += 1;
         }
     }
 }  
@@ -260,66 +310,119 @@ function fill400s() {
     'use-strict';
 
     var i = 0; 
-    var spec400s = $('.400lvlspec');
-    var maj400s = $('.400lvlmaj');
-    var min400s = $('.400lvlmin');
+    var spec400s = $('.lvl400spec');
+    var maj400s = $('.lvl400maj');
+    var min400s = $('.lvl400min');
 
     
     // clear textboxes
     for (k = 0; k < 3; k++) {
         spec400s[k].value = '';
-        maj400s[k].value = '';
+        if (k < 1) {
+            maj400s[k].value = '';
+        }
         min400s[k].value = '';
     }
     
 
     // fill courses that have been selected
-    for (course in level400) {
-        if (level400.hasOwnProperty(course)) {
-            if (level400[course] === 1) {
-                spec400s[i].value = course;
-                maj400s[i].value = course;
-                min400s[i].value = course; 
-                i += 1;
-            } if (i === 3) {
-                break;
+    for (var m = 0; m < active400s.length; m++) {
+        if ((index400 == active400s.length) || (i === 3)) {
+            break;
+        }
+        spec400s[i].value = active400s[index400];
+        if (i < 1) {
+            maj400s[i].value = active400s[index400];
+        }
+        min400s[i].value = active400s[index400]; 
+        i += 1;
+        index400 += 1;
+    }
+}
+ 
+
+function fillExtra() {
+    'use-strict'
+
+    var i = 0;
+    var spec_extra = $('#spec_extra')[0].getElementsByTagName('input');
+    var maj_extra = $('#maj_extra')[0].getElementsByTagName('input');
+
+    for (var k = 0; k < 4; k++) {
+        if (spec_extra[k].value.indexOf('MAT') === -1 && spec_extra[k].value.indexOf('STA') === -1) {
+            spec_extra[k].value = '';
+        } if (k < 3) {
+            if (maj_extra[k].value.indexOf('MAT') === -1 && maj_extra[k].value.indexOf('STA') === -1) {
+                maj_extra[k].value = '';
             }
         }
     }
-} 
+
+    // fill courses that have been selected
+    for (m = 0; m < active300s.length; m++) {
+        if ((index300 === active300s.length) || (i === 4)) {
+            break;
+        }
+        if ((i < 2) && (maj_extra[i].value === '')) {
+            maj_extra[i].value = active300s[index300];
+        }
+        if (spec_extra[i].value === '') {
+            spec_extra[i].value = active300s[index300];
+            index300 += 1;
+        } 
+        i += 1;
+    }
+
+    if (i < 4) {
+        for (m = 0; m < active400s.length; m++) {
+            if ((index400 === active400s.length) || (i === 4)) {
+                break;
+            }
+            if ((i < 2) && (maj_extra[i].value === '')) {
+                maj_extra[i].value = active400s[index400];
+            }
+            if (spec_extra[i].value === '') {
+                spec_extra[i].value = active400s[index400];
+                index400 += 1;
+            }
+            i += 1;
+        }
+    }
+
+}
 
 
 /**
  * Autofills textboxes and updates category for Inquiry courses
 **/
-function fillInquiries() {
+function fillMisc() {
     'use-strict';
-
-    var i = 0;
 
     var spec_inq = $('#spec_misc')[0].getElementsByTagName('input');
     var maj_inq = $('#maj_misc')[0].getElementsByTagName('input');
 
     // clear textboxes
-    for (k = 0; k < 4; k++) {
-        spec_inq[k].value = '';
-        maj_inq[k].value = '';
-    }
-    
-    for (m = 0; m < activeInq.length; m++) {
-        spec_inq[m].value = activeInq[m];
-        maj_inq[m].value = activeInq[m];
-        i += 1;
-        if (i == 4) {
-            break;
-        }
+    if (spec_inq[0].value.indexOf('PEY') === -1) {
+        spec_inq[0].value = '';
+    } if (maj_inq[0].value.indexOf('PEY') === -1) {
+        maj_inq[0].value = '';
     }
 
-    if (activeInq.length >= 4) {
-        updateCategory($('#spec_misc')[0].getElementsByClassName('code')[0], 'fulfilled'); 
+    // fill textboxes
+    if (activeInq.length > 0) {
+        spec_inq[0].value = activeInq[0];
+    } if (activeInq.length > 0){
+        maj_inq[0].value = activeInq[0];
+    }
+    
+    // update category
+    if (spec_inq[0].value != '') {
+        updateCategory($('#spec_misc')[0].getElementsByClassName('code')[0], 'fulfilled');
+    } if (maj_inq[0].value != '') {    
         updateCategory($('#maj_misc')[0].getElementsByClassName('code')[0], 'fulfilled'); 
-    } else {
+    } if (spec_inq[0].value === '') {
         updateCategory($('#spec_misc')[0].getElementsByClassName('code')[0], 'not fulfilled');
+    } if (maj_inq[0].value === '') {
         updateCategory($('#maj_misc')[0].getElementsByClassName('code')[0], 'not fulfilled');
     }
 

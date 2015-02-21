@@ -1,4 +1,4 @@
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE OverloadedStrings, DataKinds #-}
 
 module PostResponse where
 import Data.List
@@ -10,6 +10,22 @@ import MakeElements
 import MasterTemplate
 import Scripts
 import SVGGen
+
+spec300Str :: String
+spec300Str = "Any 300+ level CSC course, BCB/ECE/MAT/STA course (2.0 FCEs) - " ++
+        "MAT: 224, 235, 237, 237, 257, 300+ except for 320, 390, & 391" ++
+        "; STA: 249, 261, any 300+" 
+
+maj300Str :: String
+maj300Str = "Any 300+ level CSC course, BCB/ECE/MAT/STA course (1.5 FCEs) - " ++
+        "MAT: 224, 235, 237, 237, 257, 300+ except for 320, 390, & 391" ++
+        "; STA: 249, 261, any 300+" 
+
+inqStr :: String 
+inqStr = "Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H, " ++
+         "CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H, or PEY (0.5 FCEs) " ++ 
+         " \n ** Note: Type 'PEY' for Check my POSt to recognize it **"
+
 
 postResponse :: ServerPart Response
 postResponse =
@@ -109,22 +125,26 @@ checkPost =  do
             H.div ! A.id "spec_400" $ do
                 H.p ! A.class_ "code" $ "Any 400-level CSC course, BCB410H, BCB420H, BCB430Y (1.5 FCEs)"
                 H.div ! A.class_ "more-info" $ do
-                    H.input ! A.type_ "text" ! A.class_ "400lvlspec" 
-                    H.input ! A.type_ "text" ! A.class_ "400lvlspec" 
-                    H.input ! A.type_ "text" ! A.class_ "400lvlspec" 
+                    H.input ! A.type_ "text" ! A.class_ "lvl400spec" 
+                    H.input ! A.type_ "text" ! A.class_ "lvl400spec" 
+                    H.input ! A.type_ "text" ! A.class_ "lvl400spec" 
             H.div ! A.id "spec_300" $ do 
-                H.p ! A.class_ "code" $ "Any 300-level CSC course, BCB410H, BCB420H, BCB430Y, ECE385H, ECE489H (1.5 FCEs)"
+                H.p ! A.class_ "code" $ "Any 300+ level CSC course, BCB410H, BCB420H, BCB430Y, ECE385H, ECE489H (1.5 FCEs)"
                 H.div ! A.class_ "more-info" $ do
-                    H.input ! A.type_ "text" ! A.class_ "300lvlspec" 
-                    H.input ! A.type_ "text" ! A.class_ "300lvlspec"
-                    H.input ! A.type_ "text" ! A.class_ "300lvlspec"
+                    H.input ! A.type_ "text" ! A.class_ "lvl300spec" 
+                    H.input ! A.type_ "text" ! A.class_ "lvl300spec"
+                    H.input ! A.type_ "text" ! A.class_ "lvl300spec"
+            H.div ! A.id "spec_extra" $ do
+                H.p ! A.class_ "code" $ H.toHtml $ spec300Str
+                H.div ! A.class_ "more-info" $ do
+                    H.input ! A.type_ "text"
+                    H.input ! A.type_ "text"
+                    H.input ! A.type_ "text"
+                    H.input ! A.type_ "text"
             H.div ! A.id "spec_misc" $ do 
-                H.p ! A.class_ "code" $ H.em "Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H, CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H (2.0 FCEs)"
+                H.p ! A.class_ "code" $ H.em $ H.toHtml $ inqStr
                 H.div ! A.class_ "more-info" $ do
                     H.input ! A.type_ "text" 
-                    H.input ! A.type_ "text"
-                    H.input ! A.type_ "text"
-                    H.input ! A.type_ "text"
             H.p ! A.class_ "code" $ H.em "No more than 1.0 FCEs from CSC490H, CSC491H, CSC494H, CSC495H, BCB430Y"
         H.div ! A.id "div_major" $ do
             H.h2 "First Year"
@@ -175,24 +195,24 @@ checkPost =  do
                     H.p ! A.class_ "full_name Sta1" $ "STA257H (Probability and Statistics 1)"
             H.h2 "Later Years"
             H.div ! A.id "maj_400" $ do
-                H.p ! A.class_ "code" $ "Any 400-level CSC course, BCB410H, BCB420H, BCB430Y (1.5 FCEs)"
+                H.p ! A.class_ "code" $ "Any 400-level CSC course, BCB410H, BCB420H, BCB430Y (0.5 FCEs)"
                 H.div ! A.class_ "more-info" $ do
-                    H.input ! A.type_ "text" ! A.class_ "400lvlmaj" 
-                    H.input ! A.type_ "text" ! A.class_ "400lvlmaj" 
-                    H.input ! A.type_ "text" ! A.class_ "400lvlmaj" 
+                    H.input ! A.type_ "text" ! A.class_ "lvl400maj"  
             H.div ! A.id "maj_300" $ do
-                H.p ! A.class_ "code" $ "Any 300-level CSC course, BCB410H, BCB420H, BCB430Y, ECE385H, ECE489H (1.5 FCEs)"
+                H.p ! A.class_ "code" $ "Any 300+ level CSC course, BCB410H, BCB420H, BCB430Y, ECE385H, ECE489H (1.0 FCEs)"
                 H.div ! A.class_ "more-info" $ do
-                    H.input ! A.type_ "text" ! A.class_ "300lvlmaj" 
-                    H.input ! A.type_ "text" ! A.class_ "300lvlmaj"
-                    H.input ! A.type_ "text" ! A.class_ "300lvlmaj"
+                    H.input ! A.type_ "text" ! A.class_ "lvl300maj" 
+                    H.input ! A.type_ "text" ! A.class_ "lvl300maj"
+            H.div ! A.id "maj_extra" $ do
+                H.p ! A.class_ "code" $ H.toHtml $ maj300Str
+                H.div ! A.class_ "more-info" $ do
+                    H.input ! A.type_ "text"
+                    H.input ! A.type_ "text"
+                    H.input ! A.type_ "text"
             H.div ! A.id "maj_misc" $ do
-                H.p ! A.class_ "code" $ H.em "Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H, CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H (2.0 FCEs)"
+                H.p ! A.class_ "code" $ H.em $ H.toHtml $ inqStr
                 H.div ! A.class_ "more-info" $ do
                     H.input ! A.type_ "text" 
-                    H.input ! A.type_ "text"
-                    H.input ! A.type_ "text"
-                    H.input ! A.type_ "text"
             H.p ! A.class_ "code" $ H.em "No more than 1.0 FCEs from CSC490H, CSC491H, CSC494H, CSC495H, BCB430Y"
         H.div ! A.id "div_minor" $ do
             H.h2 "First Year"
@@ -218,9 +238,9 @@ checkPost =  do
             H.div ! A.id "min_misc" $ do
                 H.p ! A.class_ "code" $ "Any 300/400-level CSC course (atleast 1.0 FCE), CSC209H, CSC258H, CSC263H/CSC265H (1.5 FCEs)"  
                 H.div ! A.class_ "more-info" $ do
-                    H.input ! A.type_ "text" ! A.class_ "300lvlmin 400lvlmin"
-                    H.input ! A.type_ "text" ! A.class_ "300lvlmin 400lvlmin"
-                    H.input ! A.type_ "text" ! A.class_ "300lvlmin 400lvlmin"
+                    H.input ! A.type_ "text" ! A.class_ "lvl300min lvl400min"
+                    H.input ! A.type_ "text" ! A.class_ "lvl300min lvl400min"
+                    H.input ! A.type_ "text" ! A.class_ "lvl300min lvl400min"
                 
 
                    

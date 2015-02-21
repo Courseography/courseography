@@ -5,7 +5,6 @@
  */
 function Course(name) {
     'use strict';
-
     var course = getCourse(name);
     // Copy attributes
     this.F = course.F;
