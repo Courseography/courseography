@@ -69,6 +69,10 @@ nodeCSS = "g" ? do
         "data-active" @= "unlit" & do
             wideStroke
             strokeRed
+        "data-active" @= "unselected" & do
+            "rect" <? do
+                wideStroke
+                faded
         "data-group" @= "theory" & do
             "rect" <? do
                 fill theoryDark
@@ -96,6 +100,19 @@ nodeCSS = "g" ? do
         "data-group" @= "hci" & do
             "rect" <? do
                 fill hciDark
+        -- For nodes in draw tab
+        "data-group" @= "red" & do
+            "rect" <? do
+                fill dRed
+        "data-group" @= "blue" & do
+            "rect" <? do
+                fill dBlue
+        "data-group" @= "green" & do
+            "rect" <? do
+                fill dGreen
+        "data-group" @= "purple" & do
+            "rect" <? do
+                fill dPurple
         -- Since groups are missing right now
         "rect" <? do
             stroke "black"
@@ -163,6 +180,9 @@ pathCSS = "path" ? do
         faded
         strokeRed
         strokeDashed
+    "data-active" @= "drawn" & do
+        faded
+        wideStroke
 
 {- resetCSS
  - Generates CSS for the reset feature

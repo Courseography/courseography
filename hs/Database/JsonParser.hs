@@ -1,4 +1,4 @@
- {-# LANGUAGE FlexibleContexts, GADTs, MultiParamTypeClasses,
+{-# LANGUAGE FlexibleContexts, GADTs, MultiParamTypeClasses,
     OverloadedStrings, TypeFamilies #-}
 
 
