@@ -223,7 +223,7 @@ function createG(nodeId) {
         .click(function () {
             openModal(nodeId);
         });
-    $('.nodes').append(g);
+    $('#nodes').append(g);
     return g;
 }
 
