@@ -20,7 +20,7 @@ graphResponse =
                  plannerLinks
                 ]
                 (do header "graph"
-                    H.div ! A.id "graph" ! A.class_ "graph" $ do ""
+                    H.div ! A.id "graph" ! A.class_ "graph" $   ""
                     disclaimer
                 )
                 plannerScripts

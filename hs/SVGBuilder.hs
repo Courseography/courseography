@@ -105,24 +105,23 @@ buildEllipses :: [Text] -> Int -> [Ellipses] -> [Shape]
 buildEllipses _ _ [] = []
 buildEllipses texts idCounter entities = do
     let entity = head entities
-    let ellipseText = filter (\x -> 
-                                  intersects
-                                  ((ellipsesRx entity) * 2)
-                                  ((ellipsesRy entity) * 2)
-                                  (ellipsesXPos entity, ellipsesYPos entity)
-                                  9
-                                  (textXPos x, textYPos x)
-                                  ) texts
+    let ellipseText = filter (\x ->  intersects
+                                     ((ellipsesRx entity) * 2)
+                                     ((ellipsesRy entity) * 2)
+                                     (ellipsesXPos entity, ellipsesYPos entity)
+                                     9
+                                     (textXPos x, textYPos x)
+                             ) texts
     Shape ("bool" ++ show idCounter)
-            (ellipsesXPos entity)
-            (ellipsesYPos entity)
-            ((ellipsesRx entity) * 2)
-            ((ellipsesRy entity) * 2)
-            ""
-            (ellipsesStroke entity)
-            ellipseText
-            False
-            20 : buildEllipses texts (idCounter + 1) (tail entities)
+          (ellipsesXPos entity)
+          (ellipsesYPos entity)
+          ((ellipsesRx entity) * 2)
+          ((ellipsesRy entity) * 2)
+          ""
+          (ellipsesStroke entity)
+          ellipseText
+          False
+          20 : buildEllipses texts (idCounter + 1) (tail entities)
 
 -- | Rebuilds a path's `d` attribute based on a list of Rational tuples.
 buildPathString :: [(Rational, Rational)] -> String
