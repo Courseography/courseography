@@ -12,6 +12,7 @@ import CommonCss
 import GraphCss
 import PostCss
 import TimetableCss
+import DrawCss
 import AboutCss
 
 styleFiles :: [(String, Css)]
@@ -19,8 +20,9 @@ styleFiles = [
     ("../style/common/common.css", common),
     ("../style/graph/graph_styles.css", graphStyles),
     ("../style/grid/timetable_styles.css", timetableStyles),
-    ("../style/common/about.css", aboutStyles),
-    ("../style/post/post_styles.css", postStyles)
+    ("../style/draw/draw_styles.css", drawStyles),
+    ("../style/post/post_styles.css", postStyles),
+    ("../style/common/about.css", aboutStyles)
     ]
 
 renderStyleFile :: (String, Css) -> IO ()
@@ -31,9 +33,7 @@ generateCSS = do
     createDirectoryIfMissing True "../style/common"
     createDirectoryIfMissing True "../style/graph"
     createDirectoryIfMissing True "../style/grid"
+    createDirectoryIfMissing True "../style/draw"
     createDirectoryIfMissing True "../style/post"
     Prelude.foldl1 (>>) $ Prelude.map renderStyleFile styleFiles
-
-
-
-   
+    

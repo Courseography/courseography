@@ -5,6 +5,7 @@ import Control.Monad.IO.Class  (liftIO)
 import Happstack.Server
 import GridResponse
 import GraphResponse
+import DrawResponse
 import PostResponse
 --import AboutResponse
 import Database.CourseQueries
@@ -27,6 +28,7 @@ main = do
 
         msum [ dir "grid" gridResponse,
                dir "graph" graphResponse,
+               dir "draw" $ drawResponse,
                --dir "about" $ aboutResponse contents,
                dir "post" $ postResponse,
                dir "static" $ serveDirectory EnableBrowsing [] staticDir,
@@ -36,6 +38,5 @@ main = do
 
 retrieveCourse :: String -> ServerPart Response
 retrieveCourse course = do
+
    liftIO $ queryCourse (T.pack course)
-
-
