@@ -102,6 +102,13 @@ red2 = parse "#B91333"
 red3 = rgb 215 117 70
 red4 = rgb 195 97 50
 
+grey1 = parse "#222"
+grey2 = parse "#dedede"
+grey3 = parse "#949494"
+grey4 = parse "#BABABA"
+
+beige1 = parse "#EBE8E4"
+
 {- FCE count color. Currently unused. -}
 fceCountColor = parse "#66C2FF"
 
