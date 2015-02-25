@@ -14,10 +14,6 @@ import Filesystem.Path.CurrentOS
 import System.Directory
 import qualified Data.Text as T
 
-
-post :: String
-post = "post"
-
 main :: IO ()
 main = do
     generateCSS
@@ -38,5 +34,4 @@ main = do
 
 retrieveCourse :: String -> ServerPart Response
 retrieveCourse course = do
-
    liftIO $ queryCourse (T.pack course)
