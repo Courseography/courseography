@@ -6,7 +6,6 @@ module Database.JsonParser (insertCourse,
                     dbStr,
                     encodeJSON) where
 
-
 import qualified Data.ByteString.Lazy as B
 import qualified Data.ByteString.Lazy.Char8 as BSL
 import qualified Data.Vector as V
