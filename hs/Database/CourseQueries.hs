@@ -5,7 +5,7 @@ module Database.CourseQueries (queryCourse, allCourses) where
 import Database.Persist
 import Database.Persist.Sqlite
 import Database.Tables as Tables
-import JsonResponse
+import Response.JsonResponse
 import Database.JsonParser
 import Happstack.Server
 import qualified Data.Text as T

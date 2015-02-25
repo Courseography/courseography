@@ -1,13 +1,13 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module AboutResponse where
+module Response.AboutResponse where
 import           Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 import Happstack.Server
-import MakeElements
+import Response.MakeElements
 import Text.Pandoc
-import MasterTemplate
+import Response.MasterTemplate
 
 aboutResponse :: String -> ServerPart Response
 aboutResponse aboutContents =

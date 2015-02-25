@@ -1,10 +1,10 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module MasterTemplate where
+module Response.MasterTemplate where
 import           Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
-import MakeElements
+import Response.MakeElements
 
 masterTemplate :: String -> [H.Html] -> H.Html -> H.Html -> H.Html
 masterTemplate title headers body scripts =
