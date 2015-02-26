@@ -63,22 +63,30 @@ function openFBPostModal() {
 function createFBModalDiv() {
     'use strict';
 
-    var img =getImage();
-    postPhoto(img);
+    var img = getImage();
+
     var contentDiv = $('<div></div>');
     contentDiv.attr('id', 'modal-content-container');
     var postButton = $('<a></a>');
-    postButton.attr('href', 'post-fb');
+
+    postButton.click(function () {
+        var val = $('#fb-message').attr('value');
+        postImage(authToken, img, val);
+        contentDiv.dialog('close');
+    });
+
+    var authToken = FB.getAuthResponse()['accessToken'];
     postButton.html('Post Image To Facebook');
     contentDiv.append(postButton);
 
     var p = $('<p></p>').html('Post to Facebook');
-
+    var input = $('<input name="message" type="text" maxlength="1000" id="fb-message"/>');
     var bottomContentDiv = $('<div></div>');
     bottomContentDiv.attr('id', 'bottom-content-container');
-    bottomContentDiv.html('<img height="500" width="500" src="data:image/png;base64,'+img+'" />');
+    bottomContentDiv.html('<img height="500" width="500" src="data:image/png;base64,' + img + '" />');
 
     contentDiv.append(p);
+    contentDiv.append(input);
     contentDiv.append(bottomContentDiv);
     return contentDiv;
 }
@@ -131,33 +139,34 @@ function removeNameFromNavBar() {
 
 
 /**
- * Posts a photograph to facebook.
+ * Posts an image to facebook.
+ * @param authToken The user's access token.
  * @param img A Base 64 encoded string of an image.
+ * @param message A message to be passed to facebook.
  */
-function postPhoto(img) {
-    var access_token = FB.getAuthResponse()['accessToken'];
+function postImage(authToken, img, message) {
     blob = dataURItoBlob(img);
 
     /* When uploading images to Facebook, the data needs to be encoded as
      * form data/multipart.
      */
     var fd = new FormData();
-    fd.append("access_token",img);
+    fd.append("access_token", authToken);
     fd.append("source", blob);
-    fd.append("message","New Photo Text");
+    fd.append("message", message);
 
     /* Note: Under normal circumstances, it would be preferable to use the FB.api call.
      * Using FB.api() has proved to be a difficult task. This function accomplishes
      * the same task as the FB.api() call would, but does it with an ajax call.
      */
     $.ajax({
-        url:"https://graph.facebook.com/me/photos?access_token=" + authToken,
-        type:"POST",
-        data:fd,
-        processData:false,
-        contentType:false,
-        cache:false,
-        success:function(data){
+        url: 'https://graph.facebook.com/me/photos?',
+        type: 'POST',
+        data: fd,
+        processData: false,
+        contentType: false,
+        cache: false,
+        success: function(data) {
             console.log("Image posted");
 
             // TODO: Interact with user to let them know that all is well.
