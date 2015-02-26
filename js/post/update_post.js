@@ -157,13 +157,13 @@ function updateAllCategories() {
 
     i = 0; 
     var spec400s = $('.lvl400spec');
-    for (var l = 0; l < 3; l++) {
+    for (var l = 0; l < 1; l++) {
         if (spec400s[l].value != '') {
             i += 1;
         }
     }
 
-    if (i === 3) {
+    if (i === 1) {
         updateCategory($('#spec_400')[0].getElementsByClassName('code')[0], 'fulfilled');
         updateCategory($('#maj_400')[0].getElementsByClassName('code')[0], 'fulfilled');
         updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'fulfilled');
