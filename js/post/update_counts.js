@@ -2,7 +2,7 @@
  * Updates number of completed courses in Specialist.
 **/
 function updateCompletedSpecCourses () {
-    'use-strict';
+    'use-strict'
 
     for (var courseCode in completed_spec) {
         if (completed_spec.hasOwnProperty(courseCode)) {
@@ -33,7 +33,7 @@ function updateCompletedSpecCourses () {
  * Updates number of completed courses in Major.
 **/
 function updateCompletedMajCourses () {
-    'use-strict';
+    'use-strict'
 
     for (var courseCode in completed_maj) {
         if (completed_maj.hasOwnProperty(courseCode)) {
@@ -64,7 +64,7 @@ function updateCompletedMajCourses () {
  * Updates number of completed courses in Minor.
 **/
 function updateCompletedMinCourses() {
-    'use-strict';
+    'use-strict'
 
     for (var courseCode in completed_min) {
         if (completed_min.hasOwnProperty(courseCode)) {
@@ -87,7 +87,7 @@ function updateCompletedMinCourses() {
  * Updates number of 300 level category completed courses.
  **/
 function update300s() {
-    'use-strict';
+    'use-strict'
 
     for (var courseCode in level300) {
         if (level300.hasOwnProperty(courseCode)) {
@@ -118,7 +118,7 @@ function update300s() {
  * Updates number of 400 level category completed courses.
 **/
 function update400s() {
-    'use-strict';
+    'use-strict'
 
     for (var courseCode in level400) {
         if (level400.hasOwnProperty(courseCode)) {
@@ -149,7 +149,7 @@ function update400s() {
  * TODO: Fix credit count to account for all constraints
  **/
 function updateCreditCount() {
-    'use-strict';
+    'use-strict'
 
     // account for not needing to take CSC108
     specCount = creditCountSpec - (completed_spec['CSC108'] * 0.5) + creditCount300 + creditCount400;

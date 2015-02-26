@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    'use-strict';
+    'use-strict'
 	
     $('#div_specialist').show();
     updateAllCategories();
@@ -7,7 +7,7 @@ $(document).ready(function () {
 
 
 $('#specialist').click(function (e) {
-    'use-strict';
+    'use-strict'
 	
     e.preventDefault();
     resetAttributes();
@@ -17,7 +17,7 @@ $('#specialist').click(function (e) {
 
 
 $('#major').click(function (e) {
-    'use-strict';
+    'use-strict'
 	
     e.preventDefault();
     resetAttributes();
@@ -27,7 +27,7 @@ $('#major').click(function (e) {
 
 
 $('#minor').click (function (e) {
-    'use-strict';
+    'use-strict'
 	
     e.preventDefault();
     resetAttributes();
@@ -36,7 +36,7 @@ $('#minor').click (function (e) {
 });
 
 $('.code').click (function (e) {
-    'use-strict';
+    'use-strict'
     
     e.preventDefault();
     $(this).parent().find('.more-info').toggle();
@@ -46,6 +46,8 @@ $('.code').click (function (e) {
     Hides all currently open divs and resets navbar to display none of the links as clicked.
 **/
 function resetAttributes() {
+    'use-strict'
+
     document.getElementById('div_specialist').style.display = 'none';
     document.getElementById('div_major').style.display = 'none';
     document.getElementById('div_minor').style.display = 'none';

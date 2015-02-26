@@ -34,7 +34,7 @@ creditCount400 = 0;
  * Updates POSts when button is clicked.
 **/
 $('#update').click(function (e) {
-    'use-strict';
+    'use-strict'
 
     index300 = 0;
     index400 = 0;
@@ -78,7 +78,7 @@ $('.full_name').click(function (e) {
 **/
 // TODO: Add CSC240 and CSC265
 function updateAllCategories() {
-    'use-strict';
+    'use-strict'
 
     updateCompletedMinCourses();
     updateCompletedMajCourses();
@@ -207,7 +207,7 @@ function updateAllCategories() {
  * @param {string} courseCode The course code
 **/
 function activateCourse(courseCode) {
-    'use-strict';
+    'use-strict'
     
     var elements = document.getElementsByClassName(courseCode);
     for (i = 0; i < elements.length; i++) {
@@ -221,7 +221,7 @@ function activateCourse(courseCode) {
  * @param {string} courseCode The course code
 **/
 function deactivateCourse(courseCode) {
-    'use-strict';
+    'use-strict'
     
     var elements = document.getElementsByClassName(courseCode);
     for (i = 0; i < elements.length; i++) {
@@ -236,7 +236,7 @@ function deactivateCourse(courseCode) {
  * @param {string} status Whether it is 'fulfilled' or 'not fulfilled'
 **/
 function updateCategory(category, status) {
-    'use-strict';
+    'use-strict'
 
     if (status === 'fulfilled') {
         category.style.backgroundColor = "#3CB371";
@@ -250,7 +250,7 @@ function updateCategory(category, status) {
  * Autofills textboxes for 300 level courses. 
 **/
 function fill300s() {
-    'use-strict';
+    'use-strict'
 
     var i = 0; 
 
@@ -307,7 +307,7 @@ function fill300s() {
  * Autofills textboxes for 400 level courses. 
 **/
 function fill400s() {
-    'use-strict';
+    'use-strict'
 
     var i = 0; 
     var spec400s = $('.lvl400spec');
@@ -396,8 +396,8 @@ function fillExtra() {
  * Autofills textboxes and updates category for Inquiry courses
 **/
 function fillMisc() {
-    'use-strict';
-
+    'use-strict'
+    
     var spec_inq = $('#spec_misc')[0].getElementsByTagName('input');
     var maj_inq = $('#maj_misc')[0].getElementsByTagName('input');
 
