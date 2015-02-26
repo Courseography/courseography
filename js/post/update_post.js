@@ -85,8 +85,8 @@ function updateAllCategories() {
     updateCompletedSpecCourses();
     update300s();
     update400s();
-    fill300s();
     fill400s();
+    fill300s();
     fillMisc();
     fillExtra();
     updateCreditCount();
