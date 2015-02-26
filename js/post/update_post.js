@@ -264,10 +264,13 @@ function fill300s() {
         var course = spec300s[k].value;
         if (getCookie(course) === 'inactive' || getCookie(course) === 'takeable') {
             spec300s[k].value = '';
+            spec300s[k].readOnly = false;
             if (k < 2) {
                 maj300s[k].value = '';
+                maj300s[k].readOnly = false;
             }
             min300s[k].value = '';
+            min300s[k].readOnly = false;
         }
     }
     
@@ -278,10 +281,13 @@ function fill300s() {
             break;
         }
         spec300s[i].value = active300s[index300];
+        spec300s[i].readOnly = true;
         if (i < 2) {
             maj300s[i].value = active300s[index300];
+            maj300s[i].readOnly = true;
         }
         min300s[i].value = active300s[index300];
+        min300s[i].readOnly = true;
         i += 1; 
         index300 += 1;
     }
@@ -292,10 +298,13 @@ function fill300s() {
                 break;
             }
             spec300s[i].value = active400s[index400];
+            spec300s[i].readOnly = true;
             if (i < 2) {
                 maj300s[i].value = active400s[index400];
+                maj300s[i].readOnly = true;
             }
             min300s[i].value = active400s[index400]; 
+            min300s[i].readOnly = true;
             i += 1;
             index400 += 1;
         }
@@ -318,10 +327,13 @@ function fill400s() {
     // clear textboxes
     for (k = 0; k < 3; k++) {
         spec400s[k].value = '';
+        spec400s[k].readOnly = false;
         if (k < 1) {
             maj400s[k].value = '';
+            maj400s[k].readOnly = false;
         }
         min400s[k].value = '';
+        min400s[k].readOnly = false;
     }
     
 
@@ -331,10 +343,13 @@ function fill400s() {
             break;
         }
         spec400s[i].value = active400s[index400];
+        spec400s[i].readOnly = true;
         if (i < 1) {
             maj400s[i].value = active400s[index400];
+            maj400s[i].readOnly = true;
         }
         min400s[i].value = active400s[index400]; 
+        min400s[i].readOnly = true;
         i += 1;
         index400 += 1;
     }
@@ -351,9 +366,11 @@ function fillExtra() {
     for (var k = 0; k < 4; k++) {
         if (spec_extra[k].value.indexOf('MAT') === -1 && spec_extra[k].value.indexOf('STA') === -1) {
             spec_extra[k].value = '';
+            spec_extra[k].readOnly = false;
         } if (k < 3) {
             if (maj_extra[k].value.indexOf('MAT') === -1 && maj_extra[k].value.indexOf('STA') === -1) {
                 maj_extra[k].value = '';
+                maj_extra[k].readOnly = false;
             }
         }
     }
@@ -365,9 +382,11 @@ function fillExtra() {
         }
         if ((i < 2) && (maj_extra[i].value === '')) {
             maj_extra[i].value = active300s[index300];
+            maj_extra[i].readOnly = true;
         }
         if (spec_extra[i].value === '') {
             spec_extra[i].value = active300s[index300];
+            spec_extra[i].readOnly = true;
             index300 += 1;
         } 
         i += 1;
@@ -380,9 +399,11 @@ function fillExtra() {
             }
             if ((i < 2) && (maj_extra[i].value === '')) {
                 maj_extra[i].value = active400s[index400];
+                maj_extra[i].readOnly = true;
             }
             if (spec_extra[i].value === '') {
                 spec_extra[i].value = active400s[index400];
+                spec_extra[i].readOnly = true;
                 index400 += 1;
             }
             i += 1;
@@ -397,22 +418,26 @@ function fillExtra() {
 **/
 function fillMisc() {
     'use-strict'
-    
+
     var spec_inq = $('#spec_misc')[0].getElementsByTagName('input');
     var maj_inq = $('#maj_misc')[0].getElementsByTagName('input');
 
     // clear textboxes
     if (spec_inq[0].value.indexOf('PEY') === -1) {
         spec_inq[0].value = '';
+        spec_inq[0].readOnly = false;
     } if (maj_inq[0].value.indexOf('PEY') === -1) {
         maj_inq[0].value = '';
+        maj_inq[0].readOnly = false;
     }
 
     // fill textboxes
     if (activeInq.length > 0) {
         spec_inq[0].value = activeInq[0];
+        spec_inq[0].readOnly = true;
     } if (activeInq.length > 0){
         maj_inq[0].value = activeInq[0];
+        maj_inq[0].readOnly = true;
     }
     
     // update category
