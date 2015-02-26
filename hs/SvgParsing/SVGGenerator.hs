@@ -13,7 +13,7 @@ import Data.List.Split
 import Data.List hiding (map, filter)
 import Database.JsonParser
 import SvgParsing.ParserUtil
-import Response.MakeElements
+import MakeElements
 import Data.Maybe
 import qualified Data.Text as T
 import Text.Blaze.Svg11 ((!), mkPath, rotate, l, m)
