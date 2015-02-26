@@ -9,7 +9,6 @@ import Happstack.Server
 import MakeElements
 import MasterTemplate
 import Scripts
-import SVGGen
 
 spec300Str :: String
 spec300Str = "Any 300+ level CSC course, BCB/ECE/MAT/STA course (2.0 FCEs) - " ++
@@ -145,7 +144,6 @@ checkPost =  do
                 H.p ! A.class_ "code" $ H.em $ H.toHtml $ inqStr
                 H.div ! A.class_ "more-info" $ do
                     H.input ! A.type_ "text" 
-            H.p ! A.class_ "code" $ H.em "No more than 1.0 FCEs from CSC490H, CSC491H, CSC494H, CSC495H, BCB430Y"
         H.div ! A.id "div_major" $ do
             H.h2 "First Year"
             H.div ! A.id "maj_csc108" $ do
@@ -213,7 +211,6 @@ checkPost =  do
                 H.p ! A.class_ "code" $ H.em $ H.toHtml $ inqStr
                 H.div ! A.class_ "more-info" $ do
                     H.input ! A.type_ "text" 
-            H.p ! A.class_ "code" $ H.em "No more than 1.0 FCEs from CSC490H, CSC491H, CSC494H, CSC495H, BCB430Y"
         H.div ! A.id "div_minor" $ do
             H.h2 "First Year"
             H.div ! A.id "min_csc108" $ do
