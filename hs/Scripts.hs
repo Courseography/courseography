@@ -1,14 +1,14 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Response.Scripts where
+module Scripts where
 
 import Data.List
 import           Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 import Happstack.Server
-import Response.MakeElements
-import Response.MasterTemplate
+import MakeElements
+import MasterTemplate
 
 plannerScripts :: H.Html
 plannerScripts = concatHtml (map makeScript["https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js",

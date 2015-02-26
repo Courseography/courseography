@@ -3,10 +3,10 @@ module Main where
 import Control.Monad    (msum)
 import Control.Monad.IO.Class  (liftIO)
 import Happstack.Server
-import Response.GridResponse
-import Response.GraphResponse
-import Response.DrawResponse
-import Response.PostResponse
+import GridResponse
+import GraphResponse
+import DrawResponse
+import PostResponse
 --import AboutResponse
 import Database.CourseQueries
 import Css.CssGen

@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Response.MakeElements where
+module MakeElements where
 
 import           Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H

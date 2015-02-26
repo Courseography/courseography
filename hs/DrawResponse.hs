@@ -1,14 +1,14 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Response.DrawResponse where
+module DrawResponse where
 
 import           Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 import Happstack.Server
-import Response.MakeElements
-import Response.MasterTemplate
-import Response.Scripts
+import MakeElements
+import MasterTemplate
+import Scripts
 
 drawResponse :: ServerPart Response
 drawResponse =

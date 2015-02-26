@@ -1,15 +1,15 @@
 {-# LANGUAGE OverloadedStrings, DataKinds #-}
 
-module Response.PostResponse where
+module PostResponse where
 
 import Data.List
 import           Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 import Happstack.Server
-import Response.MakeElements
-import Response.MasterTemplate
-import Response.Scripts
+import MakeElements
+import MasterTemplate
+import Scripts
 
 spec300Str :: String
 spec300Str = "Any 300+ level CSC course, BCB/ECE/MAT/STA course (2.0 FCEs) - " ++
