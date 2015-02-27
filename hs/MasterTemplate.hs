@@ -30,6 +30,14 @@ header page = createTag H.nav "" "row header" $ do
     H.li $ makeA "" "" "draw" "" $ "Draw"
     H.li $ makeA "" "" "post" "" $ "Check My POSt!"
     H.li $ makeA "" "" "about" "" $ "About"
+    H.li $ makeA "post-fb" "" "#" "" $ "Post to Facebook!"
+    H.li ! A.id "facebook-name" $ ""
+    H.li ! A.class_ "fb-login-button" 
+         ! H.customAttribute "data-max-rows" "1" 
+         ! H.customAttribute "data-size" "medium"
+         ! H.customAttribute "autologoutlink" "true"
+         ! H.customAttribute "data-show-faces" "false"
+         ! H.customAttribute "data-auto-logout-link" "false" $ ""
 
 -- Disclaimer. This will be the same for both pages, I guess?
 disclaimer :: H.Html

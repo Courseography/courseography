@@ -4,6 +4,7 @@
 
 module Database.JsonParser (insertCourse, 
                     dbStr,
+                    fbdbStr,
                     encodeJSON) where
 
 
@@ -24,6 +25,9 @@ import Control.Monad.Trans.Reader
 import Control.Applicative
 import Data.Maybe
 import Database.Tables
+
+fbdbStr :: T.Text
+fbdbStr = "fdatabase1.sqlite3"
 
 dbStr :: T.Text
 dbStr = "database1.sqlite3"

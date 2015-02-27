@@ -70,6 +70,11 @@ Distribution
     description String
     deriving Show
 
+FacebookTest
+    fId String
+    testString String
+    deriving Show
+
 Graphs
     gId Int
     title String
