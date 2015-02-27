@@ -25,7 +25,7 @@ import Data.Maybe
 import Database.Tables
 
 dbStr :: T.Text
-dbStr = "database1.sqlite3"
+dbStr = "Database/database1.sqlite3"
 
 courseDirectory :: String
 courseDirectory = "../../res/courses/"

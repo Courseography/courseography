@@ -15,7 +15,7 @@ import qualified Data.Aeson as Aeson
 -- | representing the course and returns the appropriate JSON response.
 queryCourse :: T.Text -> IO Response
 queryCourse courseStr =
-    runSqlite (T.pack ("database/" ++ T.unpack dbStr)) $ do
+    runSqlite dbStr $ do
         sqlCourse :: [Entity Courses] <- selectList [CoursesCode ==. courseStr] []
         sqlLecturesFall :: [Entity Lectures]  <- selectList [LecturesCode  ==. courseStr,
                                                              LecturesSession ==. "F"] []
@@ -82,7 +82,7 @@ buildSession lectures tutorials =
 -- | Build a list of all course codes in the database
 allCourses :: IO Response
 allCourses = do
-  response <- runSqlite (T.pack ("database/" ++ T.unpack dbStr)) $ do
+  response <- runSqlite dbStr $ do
       courses :: [Entity Courses] <- selectList [] []
       let codes = map (coursesCode . entityVal) courses
       return $ T.unlines codes
