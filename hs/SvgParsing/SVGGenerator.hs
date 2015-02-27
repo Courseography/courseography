@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings, GADTs, ScopedTypeVariables #-}
-module SVGGenerator where
+module SvgParsing.SVGGenerator where
 
-import SVGTypes
+import SvgParsing.SVGTypes
 import Database.Tables
 import Control.Monad.IO.Class  (liftIO)
 import qualified Data.Conduit.List as CL
@@ -12,7 +12,7 @@ import Data.Conduit
 import Data.List.Split
 import Data.List hiding (map, filter)
 import Database.JsonParser
-import ParserUtil
+import SvgParsing.ParserUtil
 import MakeElements
 import Data.Maybe
 import qualified Data.Text as T
@@ -20,10 +20,10 @@ import Text.Blaze.Svg11 ((!), mkPath, rotate, l, m)
 import qualified Text.Blaze.Svg11 as S
 import qualified Text.Blaze.Svg11.Attributes as A
 import Text.Blaze.Svg.Renderer.String (renderSvg)
-import SVGBuilder
+import SvgParsing.SVGBuilder
 import Text.Blaze.Internal (stringValue)
 import Text.Blaze (toMarkup)
-import Constants
+import Css.Constants
 
 -- | A list of tuples that contain disciplines (areas), fill values, and courses
 --- that are in the areas.

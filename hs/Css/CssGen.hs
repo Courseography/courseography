@@ -1,19 +1,19 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module CssGen where
+module Css.CssGen where
 
 import Clay
 import Prelude hiding ((**))
 import Data.Monoid
 import Data.Text.Lazy
 import System.Directory
-import Constants
-import CommonCss
-import GraphCss
-import PostCss
-import TimetableCss
-import DrawCss
-import AboutCss
+import Css.Constants
+import Css.CommonCss
+import Css.GraphCss
+import Css.PostCss
+import Css.TimetableCss
+import Css.DrawCss
+import Css.AboutCss
 
 styleFiles :: [(String, Css)]
 styleFiles = [
