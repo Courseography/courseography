@@ -55,16 +55,18 @@ function createFBModalDiv() {
     });
 
     var authToken = FB.getAuthResponse()['accessToken'];
-    postButton.html('Post Image To Facebook').css("margin-bottom", "10px")
-                                             .attr("display", "inline");
+    postButton.html('Post Image To Facebook').css("margin-bottom", "10px");
 
     var input = $('<input class="form-control" placeholder="Enter a message" name="message" type="text" maxlength="1000" id="fb-message"/>');
     var leftContentDiv = $('<div></div>');
     var rightContentDiv = $('<div></div>');
-    input.attr("display", "inline");
+
     rightContentDiv.append(postButton);
-    leftContentDiv.attr('id', 'bott').css("float", "left");
-    rightContentDiv.attr('id', 'right').css("float", "right").css("width", "40%");
+    leftContentDiv.attr('id', 'left-modal-div')
+                  .css('float', 'left');
+    rightContentDiv.attr('id', 'right-modal-div')
+                   .css('float', 'right')
+                   .css('width', '40%');
     leftContentDiv.html('<img style="border-radius:15px;" height="500" width="500" src="data:image/png;base64,' + img + '" />');
 
     rightContentDiv.append(input);
