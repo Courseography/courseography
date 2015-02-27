@@ -40,7 +40,6 @@ main = do
                dir "static" $ serveDirectory EnableBrowsing [] staticDir,
                dir "course" $ look "name" >>= retrieveCourse, 
                dir "all-courses" $ liftIO allCourses
---               dir "cookies" getCookies
              ]
 
 retrieveCourse :: String -> ServerPart Response
