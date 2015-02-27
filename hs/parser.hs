@@ -30,11 +30,11 @@ main :: IO ()
 main = do graphFile <- readFile "../res/graphs/graph_regions.svg"
           let graphDoc = xmlParse "output.error" graphFile
           print "Parsing SVG file..."
-          runSqlite dbStr $ do
-              runMigration migrateAll
-              parseLevel False (Style (0,0) "" "" "" "" "" "") (getRoot graphDoc)
-              liftIO $ print "Parsing complete"
-          buildSVG
+--          runSqlite dbStr $ do
+--              runMigration migrateAll
+--              parseLevel False (Style (0,0) "" "" "" "" "" "") (getRoot graphDoc)
+--              liftIO $ print "Parsing complete"
+          buildSVG [("","")] "Testfile.svg"
 
 -- | Parses a level.
 parseLevel :: MonadIO m0 =>  Bool -> Style -> Content i -> ReaderT SqlBackend m0 ()

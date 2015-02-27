@@ -107,8 +107,8 @@ makeSVGDefs = S.defs $
                 S.polyline ! A.points "0,1 10,5 0,9" ! A.fill "black"
 
 -- | Builds an SVG document.
-buildSVG :: IO ()
-buildSVG = 
+buildSVG :: [(String, String)] -> String -> IO ()
+buildSVG courseMap filename =
     runSqlite dbStr $ do
         sqlRects    :: [Entity Rects]    <- selectList [] []
         sqlTexts    :: [Entity Texts]    <- selectList [] []
@@ -122,26 +122,8 @@ buildSVG =
             regions     = filter pathIsRegion paths
             edges       = filter (not . pathIsRegion) paths
             regionTexts = filter (not . intersectsWithShape (rects ++ ellipses)) texts
-            stringSVG = renderSvg $ makeSVGDoc [("","")] rects ellipses edges regions regionTexts
-        liftIO $ writeFile "Testfile.svg" stringSVG
-
-buildCustomSVG :: [(String, String)] -> IO ()
-buildCustomSVG courseMap =
-    runSqlite dbStr $ do
-        sqlRects    :: [Entity Rects]    <- selectList [] []
-        sqlTexts    :: [Entity Texts]    <- selectList [] []
-        sqlPaths    :: [Entity Paths]    <- selectList [] []
-        sqlEllipses :: [Entity Ellipses] <- selectList [] []
-
-        let texts        = map (buildText . entityVal) sqlTexts
-            rects        = map (buildRect texts . entityVal) sqlRects
-            ellipses     = buildEllipses texts 0 $ map entityVal sqlEllipses
-            paths        = zipWith (buildPath rects ellipses) (map entityVal sqlPaths) [1..length sqlPaths]
-            regions      = filter pathIsRegion paths
-            edges        = filter (not . pathIsRegion) paths
-            regionTexts  = filter (not . intersectsWithShape (rects ++ ellipses)) texts
-            stringSVG    = renderSvg $ makeSVGDoc courseMap rects ellipses edges regions regionTexts
-        liftIO $ writeFile "Testfile2.svg" stringSVG
+            stringSVG = renderSvg $ makeSVGDoc courseMap rects ellipses edges regions regionTexts
+        liftIO $ writeFile filename stringSVG
 
 -- | Determines if a text intersects with a shape.
 intersectsWithShape :: [Shape] -> Text -> Bool
@@ -162,7 +144,7 @@ convertRectToSVG courseMap rect = if shapeFill rect == "none" then S.rect else
                                       ! A.height (stringValue $ show $ fromRational $ shapeHeight rect)
                                       ! A.style (stringValue $ "fill:" ++ getFill (shapeId rect) ++ ";" ++
                                         (if ((length $ getCourse (shapeId rect) courseMap) > 0 &&
-                                         (isSelectedCourse (shapeId rect) courseMap)) then "stroke-width:5;" else "opacity:0.5;"))
+                                         (isSelectedCourse (shapeId rect) courseMap)) then "stroke-width:5;" else ""))
                                concatSVG $ map (convertTextToSVG (shapeIsHybrid rect) False False) (shapeText rect)
 
 getCourse :: String -> [(String, String)] -> [(String, String)]

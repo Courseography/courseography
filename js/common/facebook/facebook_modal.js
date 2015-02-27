@@ -48,8 +48,9 @@ function createFBModalDiv() {
     var postButton = $('<a></a>');
 
     postButton.click(function () {
-        var val = $('#fb-message').attr('value');
+        var val = $('#fb-message').val();
         postImage(authToken, img, val);
+        console.log(val);
         contentDiv.dialog('close');
     });
 
