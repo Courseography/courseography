@@ -12,17 +12,16 @@ import qualified Data.Conduit.List as CL
 import Data.Conduit
 import Database.Persist
 import ConvertSVGToPNG
-import JsonParser
+import Database.JsonParser
 import System.Process
 import GraphResponse
-import Tables
+import Database.Tables
 import qualified Data.ByteString.Char8 as BS
 import qualified Data.ByteString.Lazy as BL
 import Database.Persist.Sqlite
 import Network.HTTP.Client.MultipartFormData
 import Network.HTTP.Client (RequestBody(..))
 import Network (withSocketsDo)
-
 
 courseographyUrl :: T.Text
 courseographyUrl = "http://localhost:8000"

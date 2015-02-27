@@ -51,7 +51,6 @@ function renderConflicts(time, conflicts) {
            .attr('status', conflicts.length > 0 ? 'conflict' : 'occupied')
            .attr('satisfied', getCourseObject($(time).html(),
                                               courseObjects).satisfied);
-
 }
 
 
@@ -119,7 +118,7 @@ function renderAddHover(time, section) {
     'use strict';
 
     if ($(time).attr('clicked') !== 'true') {
-        $(time).html(section.courseName)
+        $(time).html(section.courseName.substring(0,6) + ' (' + section.type + ')')
                .attr('hover', 'good');
     } else if ($(time).html() === section.courseName &&
                $(time).attr('type') === section.type) {

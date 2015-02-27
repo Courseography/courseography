@@ -18,7 +18,7 @@ function getVeryLargeCourseArray() {
     'use strict';
 
     $.ajax({
-        url: "static/res/courses.txt",
+        url: "all-courses",
         dataType: "text",
         async: false,
         success: function (data) {
