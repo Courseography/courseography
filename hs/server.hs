@@ -15,6 +15,7 @@ import Filesystem.Path.CurrentOS
 import System.Directory
 import CourseographyFacebook
 import qualified Data.Text as T
+import Data.Map as M
 
 main :: IO ()
 main = do
@@ -39,6 +40,7 @@ main = do
                dir "static" $ serveDirectory EnableBrowsing [] staticDir,
                dir "course" $ look "name" >>= retrieveCourse, 
                dir "all-courses" $ liftIO allCourses
+--               dir "cookies" getCookies
              ]
 
 retrieveCourse :: String -> ServerPart Response
