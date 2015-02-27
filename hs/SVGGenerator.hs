@@ -161,12 +161,17 @@ convertRectToSVG courseMap rect = if shapeFill rect == "none" then S.rect else
                                       ! A.width (stringValue $ show $ fromRational $ shapeWidth rect)
                                       ! A.height (stringValue $ show $ fromRational $ shapeHeight rect)
                                       ! A.style (stringValue $ "fill:" ++ getFill (shapeId rect) ++ ";" ++
-                                        (if (length (filter (\x -> fst x == shapeId rect) courseMap)) > 0 &&
-                                            (isSelectedCourse $ snd $ head (filter (\x -> fst x == shapeId rect) courseMap)) then "stroke-width:5;" else "opacity:0.5;"))
+                                        (if ((length $ getCourse (shapeId rect) courseMap) > 0 &&
+                                         (isSelectedCourse (shapeId rect) courseMap)) then "stroke-width:5;" else "opacity:0.5;"))
                                concatSVG $ map (convertTextToSVG (shapeIsHybrid rect) False False) (shapeText rect)
 
-isSelectedCourse :: String -> Bool
-isSelectedCourse course = isPrefixOf "active" course || isPrefixOf "overridden" course
+getCourse :: String -> [(String, String)] -> [(String, String)]
+getCourse id_ courseMap = (filter (\x -> fst x == id_) courseMap)
+
+isSelectedCourse :: String -> [(String, String)] -> Bool
+isSelectedCourse id_ courseMap = let course = snd $ head $ getCourse id_ courseMap in
+                                     isPrefixOf "active" course ||
+                                     isPrefixOf "overridden" course
 
 -- | Converts a `Text` to SVG.
 convertTextToSVG :: Bool -> Bool -> Bool -> Text -> S.Svg
