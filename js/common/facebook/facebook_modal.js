@@ -45,7 +45,7 @@ function createFBModalDiv() {
 
     var contentDiv = $('<div></div>');
     contentDiv.attr('id', 'modal-content-container');
-    var postButton = $('<a></a>');
+    var postButton = $('<button type="button" class="btn btn-primary">Post to Facebook</button>');
 
     postButton.click(function () {
         var val = $('#fb-message').val();
@@ -58,8 +58,8 @@ function createFBModalDiv() {
     postButton.html('Post Image To Facebook');
     contentDiv.append(postButton);
 
-    var p = $('<p></p>').html('Post to Facebook');
-    var input = $('<input name="message" type="text" maxlength="1000" id="fb-message"/>');
+    var p = $('<p></p>').html('Enter your favourite message.');
+    var input = $('<input class="form-control" name="message" type="text" maxlength="1000" id="fb-message"/>');
     var bottomContentDiv = $('<div></div>');
     bottomContentDiv.attr('id', 'bottom-content-container');
     bottomContentDiv.html('<img height="500" width="500" src="data:image/png;base64,' + img + '" />');
