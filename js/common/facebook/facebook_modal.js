@@ -55,17 +55,20 @@ function createFBModalDiv() {
     });
 
     var authToken = FB.getAuthResponse()['accessToken'];
-    postButton.html('Post Image To Facebook');
-    contentDiv.append(postButton);
+    postButton.html('Post Image To Facebook').css("margin-bottom", "10px")
+                                             .attr("display", "inline");
 
-    var p = $('<p></p>').html('Enter your favourite message.');
-    var input = $('<input class="form-control" name="message" type="text" maxlength="1000" id="fb-message"/>');
-    var bottomContentDiv = $('<div></div>');
-    bottomContentDiv.attr('id', 'bottom-content-container');
-    bottomContentDiv.html('<img height="500" width="500" src="data:image/png;base64,' + img + '" />');
+    var input = $('<input class="form-control" placeholder="Enter a message" name="message" type="text" maxlength="1000" id="fb-message"/>');
+    var leftContentDiv = $('<div></div>');
+    var rightContentDiv = $('<div></div>');
+    input.attr("display", "inline");
+    rightContentDiv.append(postButton);
+    leftContentDiv.attr('id', 'bott').css("float", "left");
+    rightContentDiv.attr('id', 'right').css("float", "right").css("width", "40%");
+    leftContentDiv.html('<img style="border-radius:15px;" height="500" width="500" src="data:image/png;base64,' + img + '" />');
 
-    contentDiv.append(p);
-    contentDiv.append(input);
-    contentDiv.append(bottomContentDiv);
+    rightContentDiv.append(input);
+    contentDiv.append(leftContentDiv);
+    contentDiv.append(rightContentDiv);
     return contentDiv;
 }
