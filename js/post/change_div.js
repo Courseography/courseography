@@ -1,7 +1,7 @@
 $(document).ready(function () {
     'use-strict'
 	
-    $('#div_specialist').show();
+    openLastActiveTab();
     updateAllCategories();
 });
 
@@ -10,9 +10,7 @@ $('#specialist').click(function (e) {
     'use-strict'
 	
     e.preventDefault();
-    resetAttributes();
-    $('#div_specialist').show();
-    $('#specialist').css('background-color', '#9C9C9C');	
+    openTab('specialist');
 });
 
 
@@ -20,9 +18,7 @@ $('#major').click(function (e) {
     'use-strict'
 	
     e.preventDefault();
-    resetAttributes();
-    $('#div_major').show();
-    $('#major').css('background-color', '#9C9C9C');
+    openTab('major');
 });
 
 
@@ -30,9 +26,7 @@ $('#minor').click (function (e) {
     'use-strict'
 	
     e.preventDefault();
-    resetAttributes();
-    $('#div_minor').show();
-    $('#minor').css('background-color', '#9C9C9C');
+    openTab('minor');
 });
 
 $('.code').click (function (e) {
@@ -43,7 +37,7 @@ $('.code').click (function (e) {
 });
 
 /**
-    Hides all currently open divs and resets navbar to display none of the links as clicked.
+ * Hides all currently open divs and resets navbar to display none of the links as clicked.
 **/
 function resetAttributes() {
     'use-strict'
@@ -53,3 +47,55 @@ function resetAttributes() {
     document.getElementById('div_minor').style.display = 'none';
     $('#specialist, #major, #minor').css('background-color', 'white');
 };
+
+/**
+ * Resets cookies of all tabs to 'inactive' - not open
+**/
+function resetTabCookies() {
+    'use-strict'
+
+    setCookie('specialist', 'inactive');
+    setCookie('major', 'inactive');
+    setCookie('minor', 'inactive');
+}
+
+/**
+ * Opens a specific tab.
+ * @param {string} tab The tab that we want to open
+**/
+function openTab(tab) {
+    'use-strict'
+
+    resetAttributes();
+    resetTabCookies();
+
+    if (tab == 'specialist') {
+        $('#div_specialist').show();
+        $('#specialist').css('background-color', '#9C9C9C');
+        setCookie('specialist', 'active');
+    } else if (tab === 'major') {
+        $('#div_major').show();
+        $('#major').css('background-color', '#9C9C9C');
+        setCookie('major', 'active');
+    } else if (tab === 'minor') {
+         $('#div_minor').show();
+        $('#minor').css('background-color', '#9C9C9C');
+        setCookie('minor', 'active');
+    }
+}
+
+/**
+ * Opens the tab that was last opened. 
+**/
+function openLastActiveTab() {
+    'use-strict'
+
+
+    if (getCookie('minor') === 'active') {
+       openTab('minor');
+    } else if (getCookie('major') === 'active') {
+        openTab('major');
+    } else {
+        openTab('specialist');
+    }
+}
