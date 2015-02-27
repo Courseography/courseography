@@ -143,8 +143,9 @@ convertRectToSVG courseMap rect = if shapeFill rect == "none" then S.rect else
                                       ! A.width (stringValue $ show $ fromRational $ shapeWidth rect)
                                       ! A.height (stringValue $ show $ fromRational $ shapeHeight rect)
                                       ! A.style (stringValue $ "fill:" ++ getFill (shapeId rect) ++ ";" ++
-                                        (if not (null (getCourse (shapeId rect) courseMap)) &&
-                                         isSelectedCourse (shapeId rect) courseMap then "stroke-width:5;" else ""))
+                                        (if not (shapeIsHybrid rect) &&
+                                            not (null (getCourse (shapeId rect) courseMap)) &&
+                                            isSelectedCourse (shapeId rect) courseMap then "stroke-width:5;" else ""))
                                concatSVG $ map (convertTextToSVG (shapeIsHybrid rect) False False) (shapeText rect)
 
 getCourse :: String -> [(String, String)] -> [(String, String)]
