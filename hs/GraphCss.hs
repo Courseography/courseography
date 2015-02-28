@@ -64,6 +64,23 @@ nodeCSS = "g" ? do
         "data-active" @= "unlit" & do
             wideStroke
             strokeRed
+        "data-active" @= "unselected" & do
+            "rect" <? do
+                wideStroke
+                faded
+        -- For nodes in draw tab
+        "data-group" @= "red" & do
+            "rect" <? do
+                fill dRed
+        "data-group" @= "blue" & do
+            "rect" <? do
+                fill dBlue
+        "data-group" @= "green" & do
+            "rect" <? do
+                fill dGreen
+        "data-group" @= "purple" & do
+            "rect" <? do
+                fill dPurple
         "rect" <? do
             stroke "black"
     ".hybrid" & do

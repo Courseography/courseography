@@ -618,15 +618,13 @@ $('#add-text').click(function (){
 // TODO:
 /*
 6. node type buttons
-- add paths with elbow joints
-    1. moving elbow points
-    5. Show partial paths
 2. regions
 3. shortcuts
 4. deselecting
 
 FIRE FOX!! node ids are numbers
 edges comming from bottom
+styling
 
 https://www.dashingd3js.com/svg-paths-and-d3js
 
