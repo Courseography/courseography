@@ -1,11 +1,11 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module CommonCss where
+module Css.CommonCss where
 
 import Clay
 import Prelude hiding ((**))
 import Data.Monoid
-import Constants
+import Css.Constants
 
 {- common
  - Generates CSS common to all pages. -}

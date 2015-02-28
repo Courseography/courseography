@@ -1,11 +1,11 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module GraphCss where
+module Css.GraphCss where
 
 import Clay
 import Prelude hiding ((**))
 import Data.Monoid
-import Constants
+import Css.Constants
 
 {- graphStyles
  - Generates all CSS for the graph page. -}

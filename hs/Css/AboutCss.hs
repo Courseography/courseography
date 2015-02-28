@@ -1,11 +1,11 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module AboutCss where
+module Css.AboutCss where
 
 import Clay
 import Prelude hiding ((**))
 import Data.Monoid
-import Constants
+import Css.Constants
 
 {- aboutStyles
  - Generates CSS for the about page. -}
