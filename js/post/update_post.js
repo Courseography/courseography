@@ -19,11 +19,14 @@ var level400 = {'CSC401': 0, 'CSC404': 0, 'CSC411': 0, 'CSC412': 0, 'CSC418': 0,
                 'CSC490': 0, 'CSC491': 0, 'CSC494': 0, 'CSC495': 0, 'BCB410': 0, 
                 'BCB420': 0, 'BCB430': 0, 'CSC410': 0};
 
+var additional_min_200s = ['CSC209', 'CSC258', 'CSC263'];
+
 activeInq = [];
 active400s = [];
 active300s = [];
 var index300 = 0;
 var index400 = 0;
+var index200 = 0;
 creditCountSpec = 0;
 creditCountMaj = 0;
 creditCountMin = 0;
@@ -177,26 +180,35 @@ function updateAllCategories() {
 
     countMaj = 0; 
     countSpec = 0;
+    countMin = 0;
     var specExtra = $('#spec_extra')[0].getElementsByTagName('input');
     var majExtra = $('#maj_extra')[0].getElementsByTagName('input');
+    var minExtra = $('#min_misc')[0].getElementsByTagName('input');
     for (var l = 0; l < 4; l++) {
         if (specExtra[l].value != '') {
             countSpec += 1;
         } if (l < 3) {
             if (majExtra[l].value != '') {
                 countMaj += 1;
+            } if (minExtra[l].value != '') {
+                countMin += 1;
             }
         }
     }
+
 
     if (countSpec === 4) {
         updateCategory($('#spec_extra')[0].getElementsByClassName('code')[0], 'fulfilled');
     } if (countMaj === 3) {
         updateCategory($('#maj_extra')[0].getElementsByClassName('code')[0], 'fulfilled');
+    } if (countMin === 3) {
+        updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'fulfilled');
     } if (countSpec < 4) {
         updateCategory($('#spec_extra')[0].getElementsByClassName('code')[0], 'not fulfilled');
     } if (countMaj < 3) {
         updateCategory($('#maj_extra')[0].getElementsByClassName('code')[0], 'not fulfilled');
+    } if (countMin < 3) {
+        updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'not fulfilled');
     }
 
 }
@@ -308,6 +320,11 @@ function fill300s() {
             i += 1;
             index400 += 1;
         }
+    }
+
+    // add extra 200 level courses for min
+    if (i < 3) {
+        addExtraMinCourses(i, min300s);
     }
 }  
 
@@ -453,4 +470,16 @@ function fillMisc() {
 
 }
 
+
+function addExtraMinCourses(index, min300s) {
+    for (var m = 0; m < 3; m++) {
+        if((index === 3)) {
+            break;      
+        } if (getCookie(additional_min_200s[m]) === 'active') {
+            min300s[index].value = additional_min_200s[m];
+            index += 1;
+        }
+        
+    }
+}
 
