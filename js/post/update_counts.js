@@ -155,10 +155,9 @@ function update400s() {
 function updateCreditCount() {
     'use-strict'
 
-    // account for not needing to take CSC108
-    specCount = creditCountSpec - (completed_spec['CSC108'] * 0.5) + creditCount300 + creditCount400;
-    majCount = creditCountMaj - (completed_maj['CSC108'] * 0.5) + creditCount300 + creditCount400;
-    minCount = creditCountMin - (completed_min['CSC108'] * 0.5) + creditCount300 + creditCount400;
+    specCount = creditCountSpec  + creditCount300 + creditCount400;
+    majCount = creditCountMaj + creditCount300 + creditCount400;
+    minCount = creditCountMin + creditCount300 + creditCount400;
 
 
     updateSpecCreditCount(specCount);
