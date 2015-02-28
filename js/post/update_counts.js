@@ -1,3 +1,7 @@
+creditCountSpec = 0;
+creditCountMaj = 0;
+creditCountMin = 0;
+
 /**
  * Updates number of completed courses in Specialist.
 **/
@@ -157,21 +161,31 @@ function updateCreditCount() {
     minCount = creditCountMin - (completed_min['CSC108'] * 0.5) + creditCount300 + creditCount400;
 
 
-    if (creditCountSpec >= 12) {
-        $('#spec_creds').html('(12/12.0)');
-        $('#maj_creds').html('(8/8.0)');
-        $('#min_creds').html('(4/4.0)');
-    } else if (creditCountSpec >= 8) {
-        $('#spec_creds').html('(' + creditCountSpec + '/12.0)');
-        $('#maj_creds').html('(8/8.0)');
-        $('#min_creds').html('(4/4.0)');
-    } else if (creditCountSpec >= 4) {
-        $('#spec_creds').html('(' + creditCountSpec + '/12.0)');
-        $('#maj_creds').html('(' + creditCountSpec + '/8.0)');
-        $('#min_creds').html('(4/4.0)');
+    updateSpecCreditCount(specCount);
+    updateMajCreditCount(majCount);
+    updateMinCreditCount(minCount);
+}
+
+function updateSpecCreditCount(specCount) {
+    if (specCount >= 12) {
+        $('#spec_creds').html('(12.0/12.0)');
     } else {
-        $('#spec_creds').html('(' + creditCountSpec + '/12.0)');
-        $('#maj_creds').html('(' + creditCountSpec + '/8.0)');
-        $('#min_creds').html('(' + creditCountSpec + '/4.0)');
+        $('#spec_creds').html('(' + specCount + '/12.0)');
+    }
+}
+
+function updateMajCreditCount(majCount) {
+    if (majCount >= 8) {
+        $('#maj_creds').html('(8.0/8.0)')
+    } else {
+        $('#maj_creds').html('(' + majCount + '/8.0)');
+    }
+}
+
+function updateMinCreditCount(minCount) {
+    if (minCount >= 4) {
+        $('#min_creds').html('(4.0/4.0)')
+    } else {
+        $('#min_creds').html('(' + minCount + '/4.0)');
     }
 }
