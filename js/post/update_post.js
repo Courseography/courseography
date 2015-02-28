@@ -5,7 +5,7 @@ var completed_spec = {'CSC108': 0, 'CSC148': 0, 'CSC165': 0, 'Calc1': 0, 'CSC207
 var completed_maj = {'CSC108': 0, 'CSC148': 0, 'CSC165': 0, 'Calc1': 0, 'CSC207': 0, 'CSC236': 0, 
                      'CSC258': 0, 'CSC263': 0, 'Sta1': 0};
 
-var completed_min = {'CSC108': 0, 'CSC148': 0, 'CSC165': 0, 'CSC236': 0}; 
+var completed_min = {'CSC108': 0, 'CSC148': 0, 'CSC165': 0, 'CSC236': 0, 'CSC207': 0}; 
 
 var level300 = {'CSC300': 0, 'CSC301': 0, 'CSC302': 0, 'CSC309': 0, 'CSC310': 0, 
                 'CSC318': 0, 'CSC320': 0, 'CSC321': 0, 'CSC324': 0, 'CSC336': 0,
@@ -27,9 +27,6 @@ active300s = [];
 var index300 = 0;
 var index400 = 0;
 var index200 = 0;
-creditCountSpec = 0;
-creditCountMaj = 0;
-creditCountMin = 0;
 creditCount300 = 0;
 creditCount400 = 0;
 

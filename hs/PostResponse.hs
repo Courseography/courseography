@@ -227,6 +227,10 @@ checkPost =  do
                     H.p ! A.class_ "full_name CSC165" $ "CSC165H (Mathematical Expression and Reasoning for Computer Science)"
                     H.p ! A.class_ "full_name CSC165" $ "CSC240H (Enriched Intro to the Theory of Computation)"
             H.h2 "Later Years"
+            H.div ! A.id "min_csc207" $ do
+                H.p ! A.class_ "code" $ "CSC207H"
+                H.div ! A.class_ "more-info" $ do
+                    H.p ! A.class_ "full_name CSC207" $ "CSC207H (Software Design)"
             H.div ! A.id "min_csc236" $ do
                 H.p ! A.class_ "code" $ "CSC236H or CSC240H"
                 H.div ! A.class_ "more-info" $ do
