@@ -70,10 +70,10 @@ function setupMarker() {
 function getClickPosition(e, elem) {
     'use-strict';
 
+    console.log(e.clientX, e.clientY);
     var parentPosition = getPosition(elem);
     var xPosition = e.clientX - parentPosition.x;
     var yPosition = e.clientY - parentPosition.y;
-
     return { x: xPosition, y: yPosition };
 }
 
@@ -85,8 +85,14 @@ function getPosition(elem) {
     var yPosition = 0;
       
     while (elem) {
-        xPosition += elem.offsetLeft - elem.scrollLeft + elem.clientLeft;
-        yPosition += elem.offsetTop - elem.scrollTop + elem.clientTop;
+        // || 0 -> for mozilla compatability 
+        xPosition += (elem.offsetLeft || 0) - elem.scrollLeft + elem.clientLeft;
+        yPosition += (elem.offsetTop || 0) - elem.scrollTop + elem.clientTop;
+        console.log(elem.offsetLeft, elem.scrollLeft, elem.clientLeft);
+        console.log(elem.offsetTop, elem.scrollTop, elem.clientTop);
+        console.log(elem.offsetLeft, elem.offsetTop);
+        console.log(elem);
+        console.log(elem.offsetParent);
         elem = elem.offsetParent;
     }
     return { x: xPosition, y: yPosition };
@@ -110,7 +116,7 @@ function makeNode(e) {
         node.setAttribute('y', position.y);
         node.setAttribute('rx', 4);
         node.setAttribute('ry', 4);
-        node.setAttribute('id', nodeId);
+        node.setAttribute('id', 'n' + nodeId);
         node.setAttribute('width', nodeWidth);
         node.setAttribute('height', nodeHeight);
         node.setAttribute('class', 'node');
@@ -122,9 +128,9 @@ function makeNode(e) {
         
         g.appendChild(node);
         document.getElementById('mySVG').appendChild(g);
-        document.getElementById(nodeId).addEventListener('mousedown', nodeClicked, false);
+        document.getElementById('n' + nodeId).addEventListener('mousedown', nodeClicked, false);
 
-        select(document.getElementById(nodeId));
+        select(document.getElementById('n' + nodeId));
 
         nodeId += 1;
     } else if (mode === 'path-mode') {
@@ -178,7 +184,7 @@ function nodeClicked(e) {
         // list of paths and remove this node from the other nodes' adjacency lists
         e.currentTarget.inEdges.map(function (edge) { 
             // !! Remove edge from parent's outEdges and current node from parent's kids list
-            var edgeParent = document.getElementById(edge.id.slice(1, edge.id.lastIndexOf('n')));
+            var edgeParent = document.getElementById(edge.id.slice(0, edge.id.lastIndexOf('n')));
             index = edgeParent.outEdges.indexOf(edge);
             if (index > -1) {
                 edgeParent.outEdges.splice(index, 1);
@@ -191,7 +197,7 @@ function nodeClicked(e) {
         });
         e.currentTarget.outEdges.map(function (edge) {
             // !! Remove edge from parent's outEdges and current node from parent's kids list
-            var edgeChild = document.getElementById(edge.id.slice(edge.id.lastIndexOf('n') + 1));
+            var edgeChild = document.getElementById(edge.id.slice(edge.id.lastIndexOf('n')));
             index = edgeChild.inEdges.indexOf(edge);
             if (index > -1) {
                 edgeChild.inEdges.splice(index, 1);
@@ -227,7 +233,7 @@ function nodeClicked(e) {
             }
         } else {
             // make the path from startNode to current node then make startNode Null
-            var pathId = 'n' + startNode.id + 'n' + e.currentTarget.id;
+            var pathId = startNode.id + e.currentTarget.id;
             if (document.getElementById(pathId) === null) {
                 if (curPath === null) { // create a new path
                     var pathString = findClosest( {x: parseFloat(startNode.getAttribute('x')), 
@@ -445,8 +451,8 @@ function pathClicked(e) {
 function erasePath(path) {
         var index = -1;
         var pathId = path.getAttribute('id');
-        var beg = document.getElementById(pathId.slice(1, pathId.lastIndexOf('n')));
-        var end = document.getElementById(pathId.slice(pathId.lastIndexOf('n') + 1));
+        var beg = document.getElementById(pathId.slice(0, pathId.lastIndexOf('n')));
+        var end = document.getElementById(pathId.slice(pathId.lastIndexOf('n')));
         
         // delete the nodes from each others' list
         index = beg.kids.indexOf(end);
@@ -543,7 +549,7 @@ function changeMode(id) {
     //}
     mode = id;
     $('#' + mode).toggleClass('clicked');
-    startNode = null; // necessary?
+    startNode = null;
 }
 
 
@@ -569,14 +575,13 @@ function addText() {
         if (g.childNodes.length > 1) {
             g.removeChild(g.childNodes[1]); 
         }
-    //    createText(g, nodeSelected.getAttribute('id'), 't' + nodeSelected.getAttribute('id'), nodeSelected.getAttribute('x'), 
-    //                nodeSelected.getAttribute('y'), nodeSelected.getAttribute('width'), nodeSelected.getAttribute('height'), 'black');
         var code = document.createElementNS(xmlns, 'text');
-        code.setAttributeNS(null, 'id', 't' + nodeSelected.getAttribute('id'));
+        code.setAttributeNS(null, 'id', 't' + nodeSelected.getAttribute('id').slice(1));
         code.setAttributeNS(null, 'x', parseFloat(nodeSelected.getAttribute('x')) + 
                                         nodeWidth/2);
-        code.setAttributeNS(null, 'y', parseFloat(nodeSelected.getAttribute('y')) + 
+        code.setAttributeNS(null, 'y', parseFloat(nodeSelected.getAttribute('y')) +
                                         nodeHeight/2);
+        code.setAttributeNS(null, 'class', 'mylabel'); // note: label is a class in bootstrap
         var textNode = document.createTextNode(courseCode);
         code.appendChild(textNode);
         g.appendChild(code);
@@ -603,7 +608,7 @@ $('#add-text').click(function (){
 /*
 6. node type buttons
 2. regions
-3. shortcuts
+3. shortcuts: http://javascript.info/tutorial/keyboard-events
 4. deselecting
 
 FIRE FOX!! node ids are numbers
