@@ -547,9 +547,9 @@ function selectElbow(e) {
     } else if (mode === 'erase-mode') {
         var indexOfElbow = 0;
         var indexOfNext;
-        var elbowNum = e.currentTarget.pathPosition;
         var thePath = document.getElementById(e.currentTarget.path);
         var thePathString = thePath.getAttribute('d');
+        var elbowNum = thePath.elbows.indexOf(e.currentTarget);
 
         // look for elbowNum-th occurance of L !!
         for (var i = 0; i <= elbowNum; i++) {
