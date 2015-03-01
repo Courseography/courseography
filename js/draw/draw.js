@@ -17,7 +17,6 @@ var nodeSelected = null;    // for adding text or changing colour
 var startNode = null;       // for making paths
 var curPath = null;         // the path currently being created
 var elbowMoving = null;     // for movement of elbow joints
-var elbowNumber = -1;       // for when you want to modify
 
 function setupSVGCanvas() {
     'use-strict';
@@ -158,8 +157,6 @@ function makeNode(e) {
             elbow.setAttributeNS(null, 'cy', position.y);
             elbow.setAttributeNS(null, 'r', 4);
             elbow.setAttributeNS(null, 'style', 'opacity:0');
-            elbow.pathPosition = elbowNumber + 1; // the first elbow will be 0
-            elbowNumber += 1;
 
             elbow.addEventListener('mousedown', selectElbow, false);
             document.getElementById('mySVG').appendChild(elbow);
@@ -228,7 +225,6 @@ function nodeClicked(e) {
                         document.getElementById('mySVG').removeChild(item);
                 });
                 document.getElementById('mySVG').removeChild(curPath);
-                elbowNumber = -1;
                 curPath = null;
             }
         } else {
@@ -250,7 +246,6 @@ function nodeClicked(e) {
                     curPath.setAttributeNS(null, 'data-active', 'drawn');
                     curPath.addEventListener('click', pathClicked, false);
                     curPath.elbows = [];
-                    elbowNumber = -1;
                     document.getElementById('mySVG').appendChild(curPath);
                 } else {
                     var curElbow = {x: parseFloat(curPath.elbows[curPath.elbows.length - 1].getAttribute('cx')), 
@@ -277,7 +272,6 @@ function nodeClicked(e) {
                 e.currentTarget.parents.push(startNode);
                 startNode.outEdges.push(curPath);
                 e.currentTarget.inEdges.push(curPath);
-                elbowNumber = -1;
                 startNode = null;
                 curPath = null;
             } else {
@@ -286,8 +280,7 @@ function nodeClicked(e) {
                 if (curPath !== null) {
                     curPath.elbows.map(function (item) { // modify last node in path
                         document.getElementById('mySVG').removeChild(item);
-                    });
-                elbowNumber = -1;
+                });
                 document.getElementById('mySVG').removeChild(curPath);
                 curPath = null;
                 }
