@@ -1,4 +1,4 @@
-module SVGTypes where
+module SvgParsing.SVGTypes where
 
 -- | A Graph.
 data Graph =

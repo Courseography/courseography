@@ -118,7 +118,7 @@ function renderAddHover(time, section) {
     'use strict';
 
     if ($(time).attr('clicked') !== 'true') {
-        $(time).html(section.courseName.substring(0,6) + ' (' + section.type + ')')
+        $(time).html(section.courseName.substring(0, 6) + ' (' + section.type + ')')
                .attr('hover', 'good');
     } else if ($(time).html() === section.courseName &&
                $(time).attr('type') === section.type) {
