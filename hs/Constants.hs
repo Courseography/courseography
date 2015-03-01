@@ -120,6 +120,7 @@ grey1 = parse "#222"
 grey2 = parse "#dedede"
 grey3 = parse "#949494"
 grey4 = parse "#BABABA"
+grey5 = parse "#DCDCDC"
 
 beige1 = parse "#EBE8E4"
 

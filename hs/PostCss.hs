@@ -76,6 +76,7 @@ postCSS = do
             paddingLeft (px 20)
             "cursor" -: "pointer"
             "box-shadow" -: "0 2px 2px -1px rgba(0, 0, 0, 0.055)"
+            borderBottom solid (px 1) "#DCDCDC"
             lineHeight (px 50)
             "list-style-type" -: "none"
             textAlign $ alignSide sideCenter
