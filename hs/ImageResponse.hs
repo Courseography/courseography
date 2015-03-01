@@ -10,8 +10,8 @@ import Control.Monad.IO.Class  (liftIO)
 import qualified Data.ByteString.Base64.Lazy as BEnc
 import ImageConversion
 import Data.List.Split
-import SVGGenerator
-import ParserUtil
+import SvgParsing.SVGGenerator
+import SvgParsing.ParserUtil
 
 -- | Returns an image requested by the user.
 imageResponse :: ServerPart Response
