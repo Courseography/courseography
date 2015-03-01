@@ -41,7 +41,7 @@ function openFBPostModal() {
 function createFBModalDiv() {
     'use strict';
 
-    var img = getImage();
+    var img = getGraphImage();
 
     var contentDiv = $('<div></div>');
     contentDiv.attr('id', 'modal-content-container');

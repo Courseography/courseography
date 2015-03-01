@@ -17,6 +17,11 @@ import System.Directory
 import CourseographyFacebook
 import qualified Data.Text as T
 import Diagram
+<<<<<<< HEAD
+=======
+
+--instance (MonadIO m) => MonadIO (ServerPartT m)
+>>>>>>> 92b62f9d2c292d7fe4330466a7e7255ad7d47567
 
 main :: IO ()
 main = do
@@ -31,6 +36,7 @@ main = do
         msum [ dir "grid" gridResponse,
                dir "graph" graphResponse,
                dir "image" $ imageResponse,
+               dir "timetable-image" $ timetableImageResponse,
                dir "graph-fb" $ seeOther redirectUrlGraphEmail $ toResponse "",
                dir "post-fb" $ seeOther redirectUrlGraphPost $ toResponse "",
                dir "test" $ look "code" >>= getEmail,

@@ -19,6 +19,9 @@ imageResponse = do req <- askRq
                    let cookie = getHeader "cookie" $ rqHeaders req
                    liftIO $ getImage cookie
 
+imageResponse :: String -> ServerPart Response
+imageResponse = liftIO $ getTimetableImage cookie
+
 -- | Creates an image, and returns the base64 representation of that image.
 getImage :: Maybe B.ByteString -> IO Response
 getImage (Just cookie) = do
@@ -26,6 +29,17 @@ getImage (Just cookie) = do
 	buildSVG True courseMap "Testfile2.svg"
 	liftIO $ print courseMap
 	liftIO $ createImageFile "Testfile2.svg" "INSERT_ID-graph.png"
+	imageData <- BS.readFile "INSERT_ID-graph.png"
+	liftIO $ removeImage "INSERT_ID-graph.png"
+	let encodedData = BEnc.encode imageData
+	return $ toResponse encodedData
+-- TODO: add Nothing case.
+
+-- | Creates an image, and returns the base64 representation of that image.
+getTimetableImage :: String -> IO Response
+getTimetableImage courseStr = do
+    renderTable "circle.svg" courseStr
+	liftIO $ createImageFile "circle.svg" "INSERT_ID-graph.png"
 	imageData <- BS.readFile "INSERT_ID-graph.png"
 	liftIO $ removeImage "INSERT_ID-graph.png"
 	let encodedData = BEnc.encode imageData

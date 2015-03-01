@@ -49,7 +49,10 @@ timetableScripts = do jQuery
                                                 "/static/js/common/objects/course.js",
                                                 "/static/js/common/objects/section.js",
                                                 "/static/js/common/utilities/util.js",
-                                                "/static/js/common/facebook_login.js",
+                                                "/static/js/common/facebook/facebook_login.js",
+                                                "/static/js/common/facebook/facebook_image.js",
+                                                "/static/js/common/facebook/facebook_modal.js",
+                                                "/static/js/common/graph_image.js",
                                                 "/static/js/draw/draw.js"])
 
 --drawScripts :: H.Html
