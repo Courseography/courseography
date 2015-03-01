@@ -1,6 +1,8 @@
 creditCountSpec = 0;
 creditCountMaj = 0;
 creditCountMin = 0;
+creditCount300and400 = {'Spec': 0, 'Maj': 0, 'Min': 0};
+
 
 /**
  * Updates number of completed courses in Specialist.
@@ -93,12 +95,12 @@ function updateCompletedMinCourses() {
 function update300s() {
     'use-strict'
 
+
     for (var courseCode in level300) {
         if (level300.hasOwnProperty(courseCode)) {
             if ((getCookie(courseCode) === 'active' || getCookie(courseCode) === 'overridden') 
                 && (active300s.indexOf(courseCode) === -1)) {
                 active300s.push(courseCode);
-                creditCount300 += 0.5;
                 if ((CSCinq.indexOf(courseCode) > -1) && (activeInq.indexOf(courseCode) === -1)) { // check if Inquiry Course
                     activeInq.push(courseCode);
                 }  
@@ -106,7 +108,6 @@ function update300s() {
                        && (active300s.indexOf(courseCode) > -1)) {
                 var index300 = active300s.indexOf(courseCode);
                 active300s.splice(index300, 1);
-                creditCount300 -= 0.5;
                 var indexInq = activeInq.indexOf(courseCode);
                 if (indexInq > -1) {
                     activeInq.splice(indexInq, 1);
@@ -115,7 +116,6 @@ function update300s() {
         }
     }       
 }
-
 
 
 /**
@@ -129,14 +129,12 @@ function update400s() {
             if ((getCookie(courseCode) === 'active' || getCookie(courseCode) === 'overridden') 
                 && (active400s.indexOf(courseCode) === -1)) {
                     active400s.push(courseCode);
-                    creditCount400 += 0.5;
                     if ((CSCinq.indexOf(courseCode) > -1) && (activeInq.indexOf(courseCode) === -1)) { // check if Inquiry Course
                         activeInq.push(courseCode);
                     }
             } else if ((getCookie(courseCode) === 'inactive' || getCookie(courseCode) === 'takeable') 
                        && (active400s.indexOf(courseCode) > -1)) {
                 var index400 = active400s.indexOf(courseCode);
-                creditCount400 -= 0.5;
                 var indexInq = activeInq.indexOf(courseCode);
                 active400s.splice(index400, 1);
                 if (indexInq > -1) {
@@ -147,44 +145,3 @@ function update400s() {
     }
 }
 
-
-/**
- * Updates Credit Count for each POSt.
- * TODO: Fix credit count to account for all constraints
- **/
-function updateCreditCount() {
-    'use-strict'
-
-    specCount = creditCountSpec  + creditCount300 + creditCount400;
-    majCount = creditCountMaj + creditCount300 + creditCount400;
-    minCount = creditCountMin + creditCount300 + creditCount400;
-
-
-    updateSpecCreditCount(specCount);
-    updateMajCreditCount(majCount);
-    updateMinCreditCount(minCount);
-}
-
-function updateSpecCreditCount(specCount) {
-    if (specCount >= 12) {
-        $('#spec_creds').html('(12.0/12.0)');
-    } else {
-        $('#spec_creds').html('(' + specCount + '/12.0)');
-    }
-}
-
-function updateMajCreditCount(majCount) {
-    if (majCount >= 8) {
-        $('#maj_creds').html('(8.0/8.0)')
-    } else {
-        $('#maj_creds').html('(' + majCount + '/8.0)');
-    }
-}
-
-function updateMinCreditCount(minCount) {
-    if (minCount >= 4) {
-        $('#min_creds').html('(4.0/4.0)')
-    } else {
-        $('#min_creds').html('(' + minCount + '/4.0)');
-    }
-}

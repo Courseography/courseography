@@ -27,8 +27,6 @@ active300s = [];
 var index300 = 0;
 var index400 = 0;
 var index200 = 0;
-creditCount300 = 0;
-creditCount400 = 0;
 
 /**
  * Updates POSts when button is clicked.
@@ -80,6 +78,11 @@ $('.full_name').click(function (e) {
 function updateAllCategories() {
     'use-strict'
 
+    creditCount300and400['Maj'] = 0;
+    creditCount300and400['Spec'] = 0;
+    creditCount300and400['Min'] = 0;
+
+
     updateCompletedMinCourses();
     updateCompletedMajCourses();
     updateCompletedSpecCourses();
@@ -89,7 +92,8 @@ function updateAllCategories() {
     fill300s();
     fillMisc();
     fillExtra();
-    updateCreditCount();
+    // updateCreditCount();
+    fillCreditCount();
 
     // Update Specialist 
     for (var property in completed_spec) {
@@ -291,12 +295,15 @@ function fill300s() {
         }
         spec300s[i].value = active300s[index300];
         spec300s[i].readOnly = true;
+        creditCount300and400['Spec'] += 0.5;
         if (i < 2) {
             maj300s[i].value = active300s[index300];
             maj300s[i].readOnly = true;
+            creditCount300and400['Maj'] += 0.5;
         }
         min300s[i].value = active300s[index300];
         min300s[i].readOnly = true;
+        creditCount300and400['Min'] += 0.5;
         i += 1; 
         index300 += 1;
     }
@@ -308,12 +315,15 @@ function fill300s() {
             }
             spec300s[i].value = active400s[index400];
             spec300s[i].readOnly = true;
+            creditCount300and400['Spec'] += 0.5;
             if (i < 2) {
                 maj300s[i].value = active400s[index400];
                 maj300s[i].readOnly = true;
+                creditCount300and400['Maj'] += 0.5;
             }
             min300s[i].value = active400s[index400]; 
             min300s[i].readOnly = true;
+            creditCount300and400['Min'] += 0.5;
             i += 1;
             index400 += 1;
         }
@@ -358,12 +368,15 @@ function fill400s() {
         }
         spec400s[i].value = active400s[index400];
         spec400s[i].readOnly = true;
+        creditCount300and400['Spec'] += 0.5;
         if (i < 1) {
             maj400s[i].value = active400s[index400];
             maj400s[i].readOnly = true;
+            creditCount300and400['Maj'] += 0.5;
         }
         min400s[i].value = active400s[index400]; 
         min400s[i].readOnly = true;
+        creditCount300and400['Min'] += 0.5;
         i += 1;
         index400 += 1;
     }
@@ -397,10 +410,12 @@ function fillExtra() {
         if ((i < 2) && (maj_extra[i].value === '')) {
             maj_extra[i].value = active300s[index300];
             maj_extra[i].readOnly = true;
+            creditCount300and400['Maj'] += 0.5;
         }
         if (spec_extra[i].value === '') {
             spec_extra[i].value = active300s[index300];
             spec_extra[i].readOnly = true;
+            creditCount300and400['Spec'] += 0.5;
             index300 += 1;
         } 
         i += 1;
@@ -414,10 +429,12 @@ function fillExtra() {
             if ((i < 2) && (maj_extra[i].value === '')) {
                 maj_extra[i].value = active400s[index400];
                 maj_extra[i].readOnly = true;
+                creditCount300and400['Maj'] += 0.5;
             }
             if (spec_extra[i].value === '') {
                 spec_extra[i].value = active400s[index400];
                 spec_extra[i].readOnly = true;
+                creditCount300and400['Spec'] += 0.5;
                 index400 += 1;
             }
             i += 1;
@@ -467,13 +484,66 @@ function fillMisc() {
 
 }
 
+/**
+ * Updates Credit Count for each POSt.
+ **/
+function fillCreditCount() {
+    'use-strict'
 
+    specCount = creditCountSpec  + creditCount300and400['Spec'];
+    majCount = creditCountMaj + creditCount300and400['Maj'];
+    minCount = creditCountMin + creditCount300and400['Min'];
+
+
+    fillSpecCreditCount(specCount);
+    fillMajCreditCount(majCount);
+    fillMinCreditCount(minCount);
+}
+
+/**
+ *
+**/
+function fillSpecCreditCount(specCount) {
+    if (specCount >= 12) {
+        $('#spec_creds').html('(12.0/12.0)');
+    } else {
+        $('#spec_creds').html('(' + specCount + '/12.0)');
+    }
+}
+
+/**
+ *
+**/
+function fillMajCreditCount(majCount) {
+    if (majCount >= 8) {
+        $('#maj_creds').html('(8.0/8.0)')
+    } else {
+        $('#maj_creds').html('(' + majCount + '/8.0)');
+    }
+}
+
+/**
+ *
+**/
+function fillMinCreditCount(minCount) {
+    if (minCount >= 4) {
+        $('#min_creds').html('(4.0/4.0)')
+    } else {
+        $('#min_creds').html('(' + minCount + '/4.0)');
+    }
+}
+
+/**
+ *
+**/
 function addExtraMinCourses(index, min300s) {
     for (var m = 0; m < 3; m++) {
-        if((index === 3)) {
+        if(index === 3) {
             break;      
         } if (getCookie(additional_min_200s[m]) === 'active') {
             min300s[index].value = additional_min_200s[m];
+            min300s[index].readOnly = true;
+            creditCount300and400['Min'] += 0.5;
             index += 1;
         }
         
