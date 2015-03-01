@@ -24,8 +24,8 @@ var additional_min_200s = ['CSC209', 'CSC258', 'CSC263'];
 activeInq = [];
 active400s = [];
 active300s = [];
-var index300 = 0;
-var index400 = 0;
+var index300 = {'Spec': 0, 'Maj': 0, 'Min': 0};
+var index400 = {'Spec': 0, 'Maj': 0, 'Min': 0};
 var index200 = 0;
 
 /**
@@ -34,8 +34,6 @@ var index200 = 0;
 $('#update').click(function (e) {
     'use-strict'
 
-    index300 = 0;
-    index400 = 0;
     updateAllCategories();
 });
 
@@ -77,6 +75,10 @@ $('.full_name').click(function (e) {
 // TODO: Add CSC240 and CSC265
 function updateAllCategories() {
     'use-strict'
+
+    index300 = {'Spec': 0, 'Maj': 0, 'Min': 0};
+    index400 = {'Spec': 0, 'Maj': 0, 'Min': 0};
+    index200 = 0;
 
     creditCount300and400['Maj'] = 0;
     creditCount300and400['Spec'] = 0;
@@ -145,11 +147,12 @@ function updateAllCategories() {
             i += 1;
         }
     }
+
+    console.log(i);
     if (i === 3) {
         updateCategory($('#spec_300')[0].getElementsByClassName('code')[0], 'fulfilled');
-        updateCategory($('#maj_300')[0].getElementsByClassName('code')[0], 'fulfilled');
         updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'fulfilled');
-
+        updateCategory($('#maj_300')[0].getElementsByClassName('code')[0], 'fulfilled');
     } else {
         updateCategory($('#spec_300')[0].getElementsByClassName('code')[0], 'not fulfilled');
         updateCategory($('#maj_300')[0].getElementsByClassName('code')[0], 'not fulfilled');
@@ -274,58 +277,59 @@ function fill300s() {
     
     // clear textboxes
     for (k = 0; k < 3; k++) {
-        var course = spec300s[k].value;
-        if (getCookie(course) === 'inactive' || getCookie(course) === 'takeable') {
-            spec300s[k].value = '';
-            spec300s[k].readOnly = false;
-            if (k < 2) {
-                maj300s[k].value = '';
-                maj300s[k].readOnly = false;
-            }
-            min300s[k].value = '';
-            min300s[k].readOnly = false;
+        spec300s[k].value = '';
+        spec300s[k].readOnly = false;
+        if (k < 2) {
+            maj300s[k].value = '';
+            maj300s[k].readOnly = false;
         }
+        min300s[k].value = '';
+        min300s[k].readOnly = false;
     }
     
 
     // fill courses that have been selected
     for (var m = 0; m < 3; m++) {
-        if (index300 === active300s.length) {
+        if (index300['Spec'] === active300s.length) {
             break;
         }
-        spec300s[i].value = active300s[index300];
+        spec300s[i].value = active300s[index300['Spec']];
         spec300s[i].readOnly = true;
+        index300['Spec'] += 1;
         creditCount300and400['Spec'] += 0.5;
         if (i < 2) {
-            maj300s[i].value = active300s[index300];
+            maj300s[i].value = active300s[index300['Maj']];
             maj300s[i].readOnly = true;
+            index300['Maj'] += 1;
             creditCount300and400['Maj'] += 0.5;
         }
-        min300s[i].value = active300s[index300];
+        min300s[i].value = active300s[index300['Min']];
         min300s[i].readOnly = true;
+        index300['Min'] += 1;
         creditCount300and400['Min'] += 0.5;
         i += 1; 
-        index300 += 1;
     }
 
     if (i < 3) {
         for (var m = 0; m < 3; m++) {
-            if ((index400 === active400s.length) || (i === 3)) {
+            if ((index400['Spec'] === active400s.length) || (i === 3)) {
                 break;
             }
-            spec300s[i].value = active400s[index400];
+            spec300s[i].value = active400s[index400['Spec']];
             spec300s[i].readOnly = true;
+            index400['Spec'] += 1;
             creditCount300and400['Spec'] += 0.5;
             if (i < 2) {
-                maj300s[i].value = active400s[index400];
+                maj300s[i].value = active400s[index400['Maj']];
                 maj300s[i].readOnly = true;
+                index400['Maj'] += 1;
                 creditCount300and400['Maj'] += 0.5;
             }
-            min300s[i].value = active400s[index400]; 
+            min300s[i].value = active400s[index400['Min']]; 
             min300s[i].readOnly = true;
+            index400['Min'] += 1;
             creditCount300and400['Min'] += 0.5;
             i += 1;
-            index400 += 1;
         }
     }
 
@@ -363,23 +367,26 @@ function fill400s() {
 
     // fill courses that have been selected
     for (var m = 0; m < active400s.length; m++) {
-        if ((index400 == active400s.length) || (i === 3)) {
+        if ((index400['Spec'] == active400s.length) || (i === 3)) {
             break;
         }
-        spec400s[i].value = active400s[index400];
+        spec400s[i].value = active400s[index400['Spec']];
         spec400s[i].readOnly = true;
+        index400['Spec'] += 1;
         creditCount300and400['Spec'] += 0.5;
         if (i < 1) {
-            maj400s[i].value = active400s[index400];
+            maj400s[i].value = active400s[index400['Maj']];
             maj400s[i].readOnly = true;
+            index400['Maj'] += 1;
             creditCount300and400['Maj'] += 0.5;
         }
-        min400s[i].value = active400s[index400]; 
+        min400s[i].value = active400s[index400['Min']]; 
         min400s[i].readOnly = true;
+        index400['Min'] += 1;
         creditCount300and400['Min'] += 0.5;
         i += 1;
-        index400 += 1;
     }
+
 }
  
 
@@ -404,38 +411,40 @@ function fillExtra() {
 
     // fill courses that have been selected
     for (m = 0; m < active300s.length; m++) {
-        if ((index300 === active300s.length) || (i === 4)) {
+        if ((index300['Spec'] === active300s.length) || (i === 4)) {
             break;
         }
         if ((i < 2) && (maj_extra[i].value === '')) {
-            maj_extra[i].value = active300s[index300];
+            maj_extra[i].value = active300s[index300['Maj']];
             maj_extra[i].readOnly = true;
+            index300['Maj'] += 1;
             creditCount300and400['Maj'] += 0.5;
         }
         if (spec_extra[i].value === '') {
-            spec_extra[i].value = active300s[index300];
+            spec_extra[i].value = active300s[index300['Spec']];
             spec_extra[i].readOnly = true;
+            index300['Spec'] += 1;
             creditCount300and400['Spec'] += 0.5;
-            index300 += 1;
         } 
         i += 1;
     }
 
     if (i < 4) {
         for (m = 0; m < active400s.length; m++) {
-            if ((index400 === active400s.length) || (i === 4)) {
+            if (((index400['Spec'] === active400s.length) && (index400['Maj'] === active400s.length)) || (i === 4)) {
                 break;
             }
-            if ((i < 2) && (maj_extra[i].value === '')) {
-                maj_extra[i].value = active400s[index400];
+            if ((i < 3) && (maj_extra[i].value === '')) {
+                maj_extra[i].value = active400s[index400['Maj']];
                 maj_extra[i].readOnly = true;
+                index400['Maj'] += 1;
                 creditCount300and400['Maj'] += 0.5;
             }
-            if (spec_extra[i].value === '') {
-                spec_extra[i].value = active400s[index400];
+            if ((spec_extra[i].value === '') && (index400['Spec'] < active400s.length)){
+                spec_extra[i].value = active400s[index400['Spec']];
                 spec_extra[i].readOnly = true;
+                index400['Spec'] += 1;
                 creditCount300and400['Spec'] += 0.5;
-                index400 += 1;
             }
             i += 1;
         }
