@@ -129,10 +129,10 @@ function makeNode(e) {
         nodeId += 1;
     } else if (mode === 'path-mode') {
         // make elbow joint, only if the dummy point is outside the starting node
-        if (startNode !== null && (position.x < startNode.getAttribute('x') || 
-                                   position.x > parseFloat(startNode.getAttribute('x')) + nodeWidth) &&
-                                  (position.y < startNode.getAttribute('y') || 
-                                   position.y > parseFloat(startNode.getAttribute('y')) + nodeHeight)) {            
+        if (startNode !== null && ((position.x < parseFloat(startNode.getAttribute('x'))) || 
+                                  (position.x > parseFloat(startNode.getAttribute('x')) + nodeWidth) ||
+                                  (position.y < parseFloat(startNode.getAttribute('y'))) || 
+                                  (position.y > parseFloat(startNode.getAttribute('y')) + nodeHeight))) {           
             if (curPath === null) { // start node to first elbow
                 var pathString = findClosest({x: parseFloat(startNode.getAttribute('x')), 
                              y: parseFloat(startNode.getAttribute('y'))},
@@ -156,7 +156,7 @@ function makeNode(e) {
             elbow.setAttributeNS(null, 'cx', position.x);
             elbow.setAttributeNS(null, 'cy', position.y);
             elbow.setAttributeNS(null, 'r', 4);
-            elbow.setAttributeNS(null, 'style', 'opacity:0');
+            elbow.setAttributeNS(null, 'class', 'elbow')
 
             elbow.addEventListener('mousedown', selectElbow, false);
             document.getElementById('mySVG').appendChild(elbow);
@@ -178,7 +178,6 @@ function nodeClicked(e) {
         // list of paths and remove this node from the other nodes' adjacency lists
         e.currentTarget.inEdges.map(function (edge) { 
             // !! Remove edge from parent's outEdges and current node from parent's kids list
-            console.log(edge.id.slice(1, edge.id.lastIndexOf('n')));
             var edgeParent = document.getElementById(edge.id.slice(1, edge.id.lastIndexOf('n')));
             index = edgeParent.outEdges.indexOf(edge);
             if (index > -1) {
@@ -192,7 +191,6 @@ function nodeClicked(e) {
         });
         e.currentTarget.outEdges.map(function (edge) {
             // !! Remove edge from parent's outEdges and current node from parent's kids list
-            console.log(edge.id.slice(1, edge.id.lastIndexOf('n')));
             var edgeChild = document.getElementById(edge.id.slice(edge.id.lastIndexOf('n') + 1));
             index = edgeChild.inEdges.indexOf(edge);
             if (index > -1) {
@@ -300,38 +298,54 @@ function findClosest(beg, typeB, end, typeE) {
     var theNode = null;
     var theElbow = null;
     var thePath = null;
+    var node1Edges;
+    var node2Edges 
 
     if (typeB === 'node' && typeE === 'elbow') {
         theNode = beg;
         theElbow = end;
-    } else if (typeB === 'elbow' && typeE === 'node') {
-        theNode = end;
-        theElbow = beg;
-    } else {
-        // top, bottom, left, right
-        var node1Edges = [{x: beg.x + nodeWidth/2, y: beg.y}, 
+        node1Edges = [{x: beg.x + nodeWidth/2, y: beg.y}, 
                           {x: beg.x + nodeWidth/2, y: beg.y + nodeHeight}, 
                           {x: beg.x + nodeWidth, y: beg.y + nodeHeight/2},
                           {x: beg.x, y: beg.y + nodeHeight/2}];
-        var node2Edges = [{x: end.x + nodeWidth/2, y: end.y}, 
+        node2Edges = [end];
+    } else if (typeB === 'elbow' && typeE === 'node') {
+        theNode = end;
+        theElbow = beg;
+
+        node1Edges = [beg];
+        node2Edges = [{x: end.x + nodeWidth/2, y: end.y}, 
                           {x: end.x + nodeWidth/2, y: end.y + nodeHeight}, 
                           {x: end.x + nodeWidth, y: end.y + nodeHeight/2},
                           {x: end.x, y: end.y + nodeHeight/2}];
-        var best_edges = [node1Edges[0], node2Edges[0]];
-        var best_dist = dist(node1Edges[0], node2Edges[0]);
-        for (var i = 0; i < 4; i++) {
-            for (var j = 0; j < 4; j++) {
-                if (dist(node1Edges[i], node2Edges[j]) < best_dist) {
-                    best_edges = [node1Edges[i], node2Edges[j]];
-                    best_dist = dist(node1Edges[i], node2Edges[j]);
-                } 
-            }
-        }
-        thePath = 'M' + best_edges[0].x + ',' + best_edges[0].y + ' L' +
-                best_edges[1].x + ',' + best_edges[1].y ;
-        return thePath;
+
+    } else {
+        // top, bottom, left, right
+        node1Edges = [{x: beg.x + nodeWidth/2, y: beg.y}, 
+                          {x: beg.x + nodeWidth/2, y: beg.y + nodeHeight}, 
+                          {x: beg.x + nodeWidth, y: beg.y + nodeHeight/2},
+                          {x: beg.x, y: beg.y + nodeHeight/2}];
+        node2Edges = [{x: end.x + nodeWidth/2, y: end.y}, 
+                          {x: end.x + nodeWidth/2, y: end.y + nodeHeight}, 
+                          {x: end.x + nodeWidth, y: end.y + nodeHeight/2},
+                          {x: end.x, y: end.y + nodeHeight/2}];
+        
+        
     }
 
+    var best_edges = [node1Edges[0], node2Edges[0]];
+    var best_dist = dist(node1Edges[0], node2Edges[0]);
+    for (var i = 0; i < node1Edges.length; i++) {
+        for (var j = 0; j < node2Edges.length; j++) {
+            if (dist(node1Edges[i], node2Edges[j]) < best_dist) {
+                best_edges = [node1Edges[i], node2Edges[j]];
+                best_dist = dist(node1Edges[i], node2Edges[j]);
+            } 
+        }
+    }
+
+
+/*
     var nodeCoord = '';
     if (theNode && theNode.x < theElbow.x) { // elbow is to the right of theNode
         if (theNode.x + nodeWidth > theElbow.x || 
@@ -357,11 +371,14 @@ function findClosest(beg, typeB, end, typeE) {
         }
     }
 
-    if (typeB === 'node' && typeE === 'elbow') {
-        thePath = 'M' + nodeCoord + ' L' + end.x + ',' + end.y + ' ';
-    } else if (typeB === 'elbow' && typeE === 'node') {
+    */
+
+    if (typeB === 'elbow' && typeE === 'node') {
         // only need to add end point to curPath
-        thePath = 'L' + nodeCoord;
+        thePath = 'L' + best_edges[1].x + ',' + best_edges[1].y ;
+    } else {
+        thePath = 'M' + best_edges[0].x + ',' + best_edges[0].y + ' L' +
+                best_edges[1].x + ',' + best_edges[1].y ;
     }
 
     return thePath;
@@ -428,7 +445,6 @@ function move(e) {
             elbowMoving.setAttribute('cx', elbowX);
             elbowMoving.setAttribute('cy', elbowY);
             // the number of elbow in the path
-            console.log(document.getElementById(elbowMoving.path).elbows.indexOf(elbowMoving));
             movePath(document.getElementById(elbowMoving.path), 
                     (position.x - prevX), (position.y - prevY), 'elbow',
                     document.getElementById(elbowMoving.path).elbows.indexOf(elbowMoving));
@@ -509,7 +525,6 @@ function movePath(path, xBy, yBy, partOfPath, elbowNum) {
                                         thePath.lastIndexOf(','))) + xBy;
         theY = parseFloat(thePath.slice(thePath.lastIndexOf(',') + 1)) + yBy;
         thePath = thePath.slice(0, thePath.lastIndexOf('L') + 1) + theX + ',' + theY;
-        console.log(thePath);
     } else if (partOfPath === 'elbow') {
         var indexOfElbow = 0; // !! elbowNum is not valid 
         var indexOfNext;
@@ -518,7 +533,6 @@ function movePath(path, xBy, yBy, partOfPath, elbowNum) {
             indexOfElbow = thePath.indexOf('L', indexOfElbow + 1);
         }
         indexOfNext = thePath.indexOf('L', indexOfElbow + 1);
-        console.log(indexOfElbow + ' ' + indexOfNext);
         theX = parseFloat(thePath.slice(indexOfElbow + 1, indexOfNext)) + xBy;
         theY = parseFloat(thePath.slice(thePath.indexOf(',' , indexOfElbow) + 1,
                                         indexOfNext)) + yBy;
@@ -549,10 +563,8 @@ function selectElbow(e) {
             indexOfElbow = thePathString.indexOf('L', indexOfElbow + 1);
         }
         indexOfNext = thePathString.indexOf('L', indexOfElbow + 1);
-        console.log(indexOfElbow, indexOfNext);
         thePathString = thePathString.slice(0, indexOfElbow - 1) + thePathString.slice(indexOfNext);
         thePath.elbows.splice(thePath.elbows.indexOf(e.currentTarget), 1);
-        console.log(thePath);
         thePath.setAttributeNS(null, 'd', thePathString);
     }
 }

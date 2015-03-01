@@ -24,6 +24,7 @@ drawStyles = do
     purpleCSS
     inputCSS
     textButtonCSS
+    elbowCss
 
 mainCSS = "#main" ? do
     height (pct 85)
@@ -113,5 +114,10 @@ textButtonCSS = ".button" ? do
     alignCenter
     fontSize (px 16)
     border solid (px 2) "#dcdcdc"
+    ":hover" & do
+        cursor pointer
+
+elbowCss = ".elbow" ? do
+    opacity 0
     ":hover" & do
         cursor pointer
