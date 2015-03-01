@@ -16,12 +16,12 @@ drawStyles = do
     canvasCSS
     panelCSS
     modeButtonsCSS
-    clickedButtonsCSS 
     colourButtonsCSS
     redCSS
     greenCSS
     blueCSS
     purpleCSS
+    clickedButtonsCSS 
     inputCSS
     textButtonCSS
     elbowCss
@@ -57,24 +57,30 @@ panelCSS = "#mode-panel" ? do
     backgroundColor $ parse "#008080"
     float floatLeft
     "border-radius" -: "8px"
+    border solid (px 2) "#000000"
 
 {- The mode buttons. -}
 modeButtonsCSS = ".mode" ? do
     width (pct 93)
     margin (px 5) (px 5) (px 5) (px 5)
-    padding 0 (px 155) 0 (px 5)
+    padding 0 0 0 (px 5)
     roundCorners
-    fontSize (em 1.5)
+    fontSize (em 0.75)
     border solid (px 2) "#008080"
+    "-webkit-transition" -: "all 0.2s"
+    "-moz-transition" -: "all 0.2s"
+    "-ms-transition" -: "all 0.2s"
+    "-o-transition" -: "all 0.2s"
+    "transition" -: "all 0.2s"
     ":hover" & do
-        fontWeight bold
+        "background-color" -: "#28B0A2 !important"
+        "color" -: "#DCDCDC !important"
         cursor pointer
-        textDecoration underline
 
 clickedButtonsCSS = ".clicked" ? do
-        fontWeight bold
-        textDecoration underline
-        border solid (px 2) "#000000"
+    "background-color" -: "#28B0A2 !important"
+    "color" -: "#DCDCDC !important"
+    border solid (px 2) "#000000"
 
 {- The colour buttons. -}
 colourButtonsCSS = ".colour" ? do
@@ -83,12 +89,17 @@ colourButtonsCSS = ".colour" ? do
     padding0
     roundCorners
     alignCenter
-    fontSize (em 1.5)
+    fontSize (em 0.75)
     border solid (px 2) "#008080"
+    "-webkit-transition" -: "all 0.2s"
+    "-moz-transition" -: "all 0.2s"
+    "-ms-transition" -: "all 0.2s"
+    "-o-transition" -: "all 0.2s"
+    "transition" -: "all 0.2s"
     ":hover" & do
-        fontWeight bold
+        "background-color" -: "black !important"
+        "color" -: "#DCDCDC !important"
         cursor pointer
-        textDecoration underline
 
 {- Background colours for colour buttons. -}
 redCSS = "#red" ? do
@@ -106,23 +117,24 @@ purpleCSS = "#purple"? do
 {- The input field. -}
 inputCSS = "input" ? do
     fontSize (px 16)
-    border solid (px 2) "#dcdcdc"
+    border solid (px 2) "#DCDCDC"
     roundCorners
     margin (px 5) (px 0) (px 5) (px 5)
     padding0
     ":focus" & do
-        border solid (px 2) "#FFD700"
-        "box-shadow" -: "0 0 5px 1px #FFD700"
+        {-border solid (px 2) "#FFD700"-}
+        "box-shadow" -: "0 0 3px 1px #FFD700"
 
 {- The add button. -}
 textButtonCSS = ".button" ? do
     "display" -: "inline"
     margin (px 5) (px 5) (px 5) (px 5)
-    padding (px 2) (px 20) (px 2) (px 20)
+    padding (px 2) (px 2) (px 2) (px 2)
+    width (pct 40)
     roundCorners
     alignCenter
-    fontSize (px 16)
-    border solid (px 2) "#dcdcdc"
+    fontSize (em 0.75)
+    border solid (px 2) "#000000"
     ":hover" & do
         cursor pointer
 
