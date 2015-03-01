@@ -156,7 +156,7 @@ function makeNode(e) {
             elbow.setAttributeNS(null, 'cx', position.x);
             elbow.setAttributeNS(null, 'cy', position.y);
             elbow.setAttributeNS(null, 'r', 4);
-            elbow.setAttributeNS(null, 'class', 'elbow')
+            elbow.setAttributeNS(null, 'class', 'elbow');
 
             elbow.addEventListener('mousedown', selectElbow, false);
             document.getElementById('mySVG').appendChild(elbow);
@@ -295,24 +295,17 @@ be a node or an elbow. At least one of beg and end must be a node.
 function findClosest(beg, typeB, end, typeE) {
     'use-strict';
 
-    var theNode = null;
-    var theElbow = null;
     var thePath = null;
     var node1Edges;
     var node2Edges 
 
     if (typeB === 'node' && typeE === 'elbow') {
-        theNode = beg;
-        theElbow = end;
         node1Edges = [{x: beg.x + nodeWidth/2, y: beg.y}, 
                           {x: beg.x + nodeWidth/2, y: beg.y + nodeHeight}, 
                           {x: beg.x + nodeWidth, y: beg.y + nodeHeight/2},
                           {x: beg.x, y: beg.y + nodeHeight/2}];
         node2Edges = [end];
     } else if (typeB === 'elbow' && typeE === 'node') {
-        theNode = end;
-        theElbow = beg;
-
         node1Edges = [beg];
         node2Edges = [{x: end.x + nodeWidth/2, y: end.y}, 
                           {x: end.x + nodeWidth/2, y: end.y + nodeHeight}, 
@@ -344,41 +337,12 @@ function findClosest(beg, typeB, end, typeE) {
         }
     }
 
-
-/*
-    var nodeCoord = '';
-    if (theNode && theNode.x < theElbow.x) { // elbow is to the right of theNode
-        if (theNode.x + nodeWidth > theElbow.x || 
-            theNode.y - nodeHeight > theElbow.y) {
-            // elbow is above theNode, pick top edge
-            nodeCoord = (theNode.x + nodeWidth/2) +  ',' + theNode.y;
-        } else if (theNode.x + nodeWidth > theElbow.x || 
-            theNode.y + 2 * nodeHeight < theElbow.y) {
-            // elbow is below theNode, pick bottom edge
-            nodeCoord = (theNode.x + nodeWidth/2) + ',' + (theNode.y + nodeHeight);
-        } else { // pick right edge
-            nodeCoord = (theNode.x + nodeWidth) + ',' + (theNode.y + nodeHeight/2);
-        }
-    } else if (theNode) { // theNode.x >= theElbow.x, elbow is to the left of theNode
-        if (theNode.y - nodeHeight > theElbow.y) {
-            // elbow is above theNode, pick top edge
-            nodeCoord = (theNode.x + nodeWidth/2) + ',' + theNode.y;
-        } else if (theNode.y + 2 * nodeHeight < theElbow.y) {
-            // elbow is below theNode, pick bottom edge
-            nodeCoord = (theNode.x + nodeWidth/2) + ',' + (theNode.y + nodeHeight);
-        } else { // pick left edge
-            nodeCoord = theNode.x + ',' + (theNode.y + nodeHeight/2);
-        }
-    }
-
-    */
-
     if (typeB === 'elbow' && typeE === 'node') {
         // only need to add end point to curPath
-        thePath = 'L' + best_edges[1].x + ',' + best_edges[1].y ;
+        thePath = 'L' + best_edges[1].x + ',' + best_edges[1].y + ' ';
     } else {
         thePath = 'M' + best_edges[0].x + ',' + best_edges[0].y + ' L' +
-                best_edges[1].x + ',' + best_edges[1].y ;
+                best_edges[1].x + ',' + best_edges[1].y + ' ';
     }
 
     return thePath;
@@ -558,14 +522,15 @@ function selectElbow(e) {
         var thePathString = thePath.getAttribute('d');
         var elbowNum = thePath.elbows.indexOf(e.currentTarget);
 
-        // look for elbowNum-th occurance of L !!
+        // look for elbowNum-th occurance of L
         for (var i = 0; i <= elbowNum; i++) {
             indexOfElbow = thePathString.indexOf('L', indexOfElbow + 1);
         }
         indexOfNext = thePathString.indexOf('L', indexOfElbow + 1);
-        thePathString = thePathString.slice(0, indexOfElbow - 1) + thePathString.slice(indexOfNext);
+        thePathString = thePathString.slice(0, indexOfElbow) + thePathString.slice(indexOfNext);
         thePath.elbows.splice(thePath.elbows.indexOf(e.currentTarget), 1);
         thePath.setAttributeNS(null, 'd', thePathString);
+        document.getElementById('mySVG').removeChild(e.currentTarget);
     }
 }
 
