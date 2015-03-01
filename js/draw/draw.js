@@ -51,7 +51,7 @@ function setupMarker() {
     marker.setAttributeNS(null, 'id', 'arrow');
     marker.setAttributeNS(null, 'class', 'path');
     marker.setAttributeNS(null, 'viewBox', '0 0 10 10');
-    marker.setAttributeNS(null, 'refX', '10');
+    marker.setAttributeNS(null, 'refX', '8');
     marker.setAttributeNS(null, 'refY', '5');
     marker.setAttributeNS(null, 'markerunits', 'strokeWidth');
     marker.setAttributeNS(null, 'orient', 'auto');
@@ -179,27 +179,33 @@ function nodeClicked(e) {
     if (mode  === 'erase-mode') { 
         // remove any paths leading to and from this node from the other node's 
         // list of paths and remove this node from the other nodes' adjacency lists
-        e.currentTarget.inEdges.map(function (item) {
-            index = item.parents.outEdges.indexOf(item);
+        e.currentTarget.inEdges.map(function (edge) { 
+            // !! Remove edge from parent's outEdges and current node from parent's kids list
+            console.log(edge.id.slice(1, edge.id.lastIndexOf('n')));
+            var edgeParent = document.getElementById(edge.id.slice(1, edge.id.lastIndexOf('n')));
+            index = edgeParent.outEdges.indexOf(edge);
             if (index > -1) {
-                (item.parents.outEdges).splice(index, 1);
+                edgeParent.outEdges.splice(index, 1);
             }
-            index = item.parents.kids.indexOf(e.currentTarget);
+            index = edgeParent.kids.indexOf(e.currentTarget);
             if (index > -1) {
-                (item.parents.kids).splice(index, 1);
+                edgeParent.kids.splice(index, 1);
             }
-            svgDoc.removeChild(item);
+            erasePath(edge);
         });
-        e.currentTarget.outEdges.map(function (item) {
-            index = item.kids.inEdges.indexOf(item);
+        e.currentTarget.outEdges.map(function (edge) {
+            // !! Remove edge from parent's outEdges and current node from parent's kids list
+            console.log(edge.id.slice(1, edge.id.lastIndexOf('n')));
+            var edgeChild = document.getElementById(edge.id.slice(edge.id.lastIndexOf('n') + 1));
+            index = edgeChild.inEdges.indexOf(edge);
             if (index > -1) {
-                item.kids.inEdges.splice(index, 1);
+                edgeChild.inEdges.splice(index, 1);
             }
-            index = item.kids.parents.indexOf(e.currentTarget);
+            index = edgeChild.parents.indexOf(e.currentTarget);
             if (index > -1) {
-                (item.kids.parents).splice(index, 1);
+                edgeChild.parents.splice(index, 1);
             }
-            svgDoc.removeChild(item);
+            erasePath(edge);
         });
         svgDoc.removeChild(e.currentTarget.parentNode);
     } else if (mode === 'change-mode') {
@@ -271,6 +277,7 @@ function nodeClicked(e) {
                 e.currentTarget.parents.push(startNode);
                 startNode.outEdges.push(curPath);
                 e.currentTarget.inEdges.push(curPath);
+                elbowNumber = -1;
                 startNode = null;
                 curPath = null;
             } else {
@@ -428,10 +435,10 @@ function move(e) {
             elbowMoving.setAttribute('cx', elbowX);
             elbowMoving.setAttribute('cy', elbowY);
             // the number of elbow in the path
-            console.log(elbowMoving.pathPosition);
+            console.log(document.getElementById(elbowMoving.path).elbows.indexOf(elbowMoving));
             movePath(document.getElementById(elbowMoving.path), 
                     (position.x - prevX), (position.y - prevY), 'elbow',
-                    elbowMoving.pathPosition);
+                    document.getElementById(elbowMoving.path).elbows.indexOf(elbowMoving));
 
             prevX = position.x;
             prevY = position.y;
@@ -456,10 +463,17 @@ function pathClicked(e) {
     'use-strict';
 
     if (mode === 'erase-mode') {
+        erasePath(e.currentTarget);
+    }
+
+}
+
+
+function erasePath(path) {
         var index = -1;
-        var pathId = e.currentTarget.getAttribute('id');
-        var beg = document.getElementById(pathId.slice(1, pathId.indexOf('n', 1)));
-        var end = document.getElementById(pathId.slice(pathId.indexOf('n', 1) + 1));
+        var pathId = path.getAttribute('id');
+        var beg = document.getElementById(pathId.slice(1, pathId.lastIndexOf('n')));
+        var end = document.getElementById(pathId.slice(pathId.lastIndexOf('n') + 1));
         
         // delete the nodes from each others' list
         index = beg.kids.indexOf(end);
@@ -471,20 +485,18 @@ function pathClicked(e) {
             end.parents.splice(index, 1);
         }
         // delete this path from the nodes' list
-        index = beg.outEdges.indexOf(e.currentTarget);
+        index = beg.outEdges.indexOf(path);
         if (index > -1) {
             beg.outEdges.splice(index, 1);
         }
-        index = end.inEdges.indexOf(e.currentTarget);
+        index = end.inEdges.indexOf(path);
         if (index > -1) {
             end.inEdges.splice(index, 1);
         }
-        curPath.elbows.map(function (item) {
+        path.elbows.map(function (item) {
             document.getElementById('mySVG').removeChild(item);
         });
-        document.getElementById('mySVG').removeChild(e.currentTarget);
-    }
-
+        document.getElementById('mySVG').removeChild(path);
 }
 
 
@@ -506,7 +518,7 @@ function movePath(path, xBy, yBy, partOfPath, elbowNum) {
         thePath = thePath.slice(0, thePath.lastIndexOf('L') + 1) + theX + ',' + theY;
         console.log(thePath);
     } else if (partOfPath === 'elbow') {
-        var indexOfElbow = 0;
+        var indexOfElbow = 0; // !! elbowNum is not valid 
         var indexOfNext;
         // look for elbowNum-th occurance of L
         for (var i = 0; i <= elbowNum; i++) {
@@ -536,17 +548,19 @@ function selectElbow(e) {
         var indexOfElbow = 0;
         var indexOfNext;
         var elbowNum = e.currentTarget.pathPosition;
-        var thePath = document.getElementById(e.currentTarget.path).getAttribute('d');
+        var thePath = document.getElementById(e.currentTarget.path);
+        var thePathString = thePath.getAttribute('d');
 
-        // look for elbowNum-th occurance of L
+        // look for elbowNum-th occurance of L !!
         for (var i = 0; i <= elbowNum; i++) {
-            indexOfElbow = thePath.indexOf('L', indexOfElbow + 1);
+            indexOfElbow = thePathString.indexOf('L', indexOfElbow + 1);
         }
-        indexOfNext = thePath.indexOf('L', indexOfElbow + 1);
+        indexOfNext = thePathString.indexOf('L', indexOfElbow + 1);
         console.log(indexOfElbow, indexOfNext);
-        thePath = thePath.slice(0, indexOfElbow - 1) + thePath.slice(indexOfNext);
+        thePathString = thePathString.slice(0, indexOfElbow - 1) + thePathString.slice(indexOfNext);
+        thePath.elbows.splice(thePath.elbows.indexOf(e.currentTarget), 1);
         console.log(thePath);
-        document.getElementById(e.currentTarget.path).setAttributeNS(null, 'd', thePath);
+        thePath.setAttributeNS(null, 'd', thePathString);
     }
 }
 
