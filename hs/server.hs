@@ -6,6 +6,7 @@ import Happstack.Server
 import GridResponse
 import GraphResponse
 import DrawResponse
+import ImageResponse
 import PostResponse
 --import AboutResponse
 import Database.CourseQueries
@@ -21,10 +22,10 @@ main = do
     let staticDir = encodeString $ parent $ decodeString cwd
     contents <- readFile "../README.md"
     simpleHTTP nullConf $
-
         msum [ dir "grid" gridResponse,
                dir "graph" graphResponse,
                dir "draw" drawResponse,
+               dir "image" $ imageResponse,
                --dir "about" $ aboutResponse contents,
                dir "post" postResponse,
                dir "static" $ serveDirectory EnableBrowsing [] staticDir,
