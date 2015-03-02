@@ -11,7 +11,6 @@
              TypeFamilies #-}
 
 module Database.Tables where
-
 import Database.Persist.TH
 import qualified Data.Text as T
 import qualified Data.Vector as V
@@ -28,7 +27,7 @@ Courses json
     title T.Text Maybe
     description T.Text Maybe
     manualTutorialEnrolment Bool Maybe
-    prebreqs T.Text Maybe
+    prereqs T.Text Maybe
     exclusions T.Text Maybe
     breadth T.Text Maybe
     distribution T.Text Maybe

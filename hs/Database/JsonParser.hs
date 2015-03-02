@@ -2,7 +2,9 @@
     OverloadedStrings, TypeFamilies #-}
 
 
-module Database.JsonParser (insertCourse, 
+module Database.JsonParser (insertCourse,
+                    insertLec,
+                    insertTut, 
                     dbStr,
                     encodeJSON) where
 
@@ -69,6 +71,31 @@ insertCourse course =
                       (breadth course)
                       (distribution course)
                       (prereqString course)
+
+-- | USED BY HASKELL TIMETABLE PARSING identical to insertLecture but takes T.Text
+-- | course code instead of entire course record
+insertLec :: MonadIO m => T.Text -> T.Text -> Lecture -> ReaderT SqlBackend m ()
+insertLec session code lecture =
+    insert_ $ Lectures code
+                       session
+                       (section lecture)
+                       (map Time (time lecture))
+                       (cap lecture)
+                       (instructor lecture)
+                       (fromMaybe 0 (enrol lecture))
+                       (fromMaybe 0 (wait lecture))
+                       (extra lecture)
+                       (time_str lecture)
+
+-- | USED BY HASKELL TIMETABLE PARSING. identical to inserTutorial but takes T.Text 
+-- | course code instead of entire course record
+insertTut :: MonadIO m => T.Text -> T.Text-> Tutorial -> ReaderT SqlBackend m ()
+insertTut session code tutorial = 
+    insert_ $ Tutorials code
+                        (tutorialSection tutorial)
+                        session
+                        (map Time (times tutorial))
+                        (timeStr tutorial)
 
 -- | Inserts the lectures from course into the Lectures table.
 insertLectures :: MonadIO m => Course -> ReaderT SqlBackend m ()
