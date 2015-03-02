@@ -33,7 +33,7 @@ mainCSS = "#main" ? do
     float floatRight
     position relative
     "border-radius" -: "8px"
-    border solid (px 2) "#000000"
+    border solid (px 2) black
 
 {- The grid background for SVG canvas. -}
 canvasBackground = "#background" ? do
@@ -57,7 +57,7 @@ panelCSS = "#mode-panel" ? do
     backgroundColor $ parse "#008080"
     float floatLeft
     "border-radius" -: "8px"
-    border solid (px 2) "#000000"
+    border solid (px 2) black
 
 {- The mode buttons. -}
 modeButtonsCSS = ".mode" ? do
@@ -80,7 +80,7 @@ modeButtonsCSS = ".mode" ? do
 clickedButtonsCSS = ".clicked" ? do
     "background-color" -: "#28B0A2 !important"
     "color" -: "#DCDCDC !important"
-    border solid (px 2) "#000000"
+    border solid (px 2) black
 
 {- The colour buttons. -}
 colourButtonsCSS = ".colour" ? do
@@ -134,7 +134,7 @@ textButtonCSS = ".button" ? do
     roundCorners
     alignCenter
     fontSize (em 0.75)
-    border solid (px 2) "#000000"
+    border solid (px 2) black
     ":hover" & do
         cursor pointer
 

@@ -301,27 +301,27 @@ function findClosest(beg, typeB, end, typeE) {
 
     if (typeB === 'node' && typeE === 'elbow') {
         node1Edges = [{x: beg.x + nodeWidth/2, y: beg.y}, 
-                          {x: beg.x + nodeWidth/2, y: beg.y + nodeHeight}, 
-                          {x: beg.x + nodeWidth, y: beg.y + nodeHeight/2},
-                          {x: beg.x, y: beg.y + nodeHeight/2}];
+                      {x: beg.x + nodeWidth/2, y: beg.y + nodeHeight}, 
+                      {x: beg.x + nodeWidth, y: beg.y + nodeHeight/2},
+                      {x: beg.x, y: beg.y + nodeHeight/2}];
         node2Edges = [end];
     } else if (typeB === 'elbow' && typeE === 'node') {
         node1Edges = [beg];
         node2Edges = [{x: end.x + nodeWidth/2, y: end.y}, 
-                          {x: end.x + nodeWidth/2, y: end.y + nodeHeight}, 
-                          {x: end.x + nodeWidth, y: end.y + nodeHeight/2},
-                          {x: end.x, y: end.y + nodeHeight/2}];
+                      {x: end.x + nodeWidth/2, y: end.y + nodeHeight}, 
+                      {x: end.x + nodeWidth, y: end.y + nodeHeight/2},
+                      {x: end.x, y: end.y + nodeHeight/2}];
 
     } else {
         // top, bottom, left, right
         node1Edges = [{x: beg.x + nodeWidth/2, y: beg.y}, 
-                          {x: beg.x + nodeWidth/2, y: beg.y + nodeHeight}, 
-                          {x: beg.x + nodeWidth, y: beg.y + nodeHeight/2},
-                          {x: beg.x, y: beg.y + nodeHeight/2}];
+                      {x: beg.x + nodeWidth/2, y: beg.y + nodeHeight}, 
+                      {x: beg.x + nodeWidth, y: beg.y + nodeHeight/2},
+                      {x: beg.x, y: beg.y + nodeHeight/2}];
         node2Edges = [{x: end.x + nodeWidth/2, y: end.y}, 
-                          {x: end.x + nodeWidth/2, y: end.y + nodeHeight}, 
-                          {x: end.x + nodeWidth, y: end.y + nodeHeight/2},
-                          {x: end.x, y: end.y + nodeHeight/2}];
+                      {x: end.x + nodeWidth/2, y: end.y + nodeHeight}, 
+                      {x: end.x + nodeWidth, y: end.y + nodeHeight/2},
+                      {x: end.x, y: end.y + nodeHeight/2}];
         
         
     }
@@ -601,14 +601,18 @@ $('#add-text').click(function (){
 function keyboard(e) {
     'use-strict';
     
-    if (e.which == 81 && e.ctrlKey && e.shiftKey) {
-        changeMode("node-mode"); // q
-    } else if (e.which == 87 && e.ctrlKey && e.shiftKey) {
-        changeMode("path-mode"); // w
-    } else if (e.which == 90 && e.ctrlKey && e.shiftKey){
-        changeMode("move-mode"); // z
-    } else if (e.which == 88 && e.ctrlKey && e.shiftKey){
-        changeMode("erase-mode"); // x
+    if (! $("#course-code").is(":focus")) {
+        if (e.which == 78) {
+            changeMode("node-mode"); // n
+        } else if (e.which == 80) {
+            changeMode("path-mode"); // p
+        } else if (e.which == 77){
+            changeMode("change-mode"); // m
+        } else if (e.which == 69){
+            changeMode("erase-mode"); // e
+        } else if (e.which == 82){
+            changeMode("region-mode"); // r
+        }
     }
 }
 
@@ -617,17 +621,20 @@ document.addEventListener('keydown', keyboard, false);
 
 // TODO:
 /*
-6. node type buttons
-2. regions
-3. shortcuts: http://javascript.info/tutorial/keyboard-events
-              http://unixpapa.com/js/key.html
-4. deselecting
-https://www.dashingd3js.com/svg-paths-and-d3js
+
+1. regions creation
+2. get substantial work done with saving graph 
+3. node type buttons
+
+- deselecting
+- use https://www.dashingd3js.com/svg-paths-and-d3js
 
 */
 
 // RANDOM
 /*
+- shortcuts: http://javascript.info/tutorial/keyboard-events
+              http://unixpapa.com/js/key.html
 - change mode to node-mode when colour changed ?
 - document ready method ?
 - when path created should end node be selected?
