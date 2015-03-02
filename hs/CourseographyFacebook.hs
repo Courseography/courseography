@@ -19,6 +19,7 @@ import Database.Tables
 import qualified Data.ByteString.Char8 as BS
 import qualified Data.ByteString.Lazy as BL
 import Database.Persist.Sqlite
+import Network.HTTP.Client.MultipartFormData
 import Network (withSocketsDo)
 
 courseographyUrl :: T.Text
