@@ -46,7 +46,6 @@ $('#update').click(function (e) {
 /**
  * Updates all categories to see if they are fulfilled or not.
 **/
-// TODO: Add CSC240 and CSC265
 function updateAllCategories() {
     'use strict';
 
@@ -107,14 +106,14 @@ function updateAllCategories() {
     } if (filled_textboxes_extra['maj'] === 3) {
         updateCategory($('#maj_extra')[0].getElementsByClassName('code')[0], 'fulfilled');
         categories_completed['maj'] += 1;
-    } if (filled_textboxes_extra['min'] === 3) {
+    } if ((filled_textboxes_300['min'] + filled_textboxes_400['min']) === 3) {
         updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'fulfilled');
         categories_completed['min'] += 1;
     } if (filled_textboxes_extra['spec'] < 4) {
         updateCategory($('#spec_extra')[0].getElementsByClassName('code')[0], 'not fulfilled');
     } if (filled_textboxes_extra['maj'] < 3) {
         updateCategory($('#maj_extra')[0].getElementsByClassName('code')[0], 'not fulfilled');
-    } if (filled_textboxes_extra['min'] < 3) {
+    } if ((filled_textboxes_300['min'] + filled_textboxes_400['min']) < 3) {
         updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'not fulfilled');
     }
 
@@ -211,6 +210,52 @@ function updateCategory(category, status) {
 
 
 /**
+ * Fills textboxes for each POSt for 300 and 400 level categories
+ *
+ * @param {number} specBound Number of textboxes for specialist
+ * @param {number} majBound Number of textboxes for major
+ * @param {string} textboxLevel Level of textboxes we are filling
+ * @param {string} activeLevel Level of courses we are filling textboxes with
+ * @param {number} i The textbox we are at now
+ * @param {HTMLElement} specElement The textboxes for Specilist to fill
+ * @param {HTMLElement} majElement The textboxes for Major to fill
+ * @param {HTMLElement} minElement The textboxes for Minor to fill
+ * @return {number} The next textbox that has not been filled 
+**/
+function fill300and400Textboxes(specBound, majBound, textboxLevel, activeLevel, i, specElement, majElement, minElement) {
+    var index = 'index' + activeLevel;
+
+    for (var m = 0; m < specBound; m++) {
+        if (index['spec'] === window['active' + activeLevel + 's'].length || i === specBound) {
+            break;
+        }
+        specElement[i].value = window['active' + activeLevel + 's'][window[index]['spec']];
+        specElement[i].readOnly = true;
+        window[index]['spec'] += 1;
+        window['filled_textboxes_' + textboxLevel]['spec'] += 1;
+        creditCount300and400['spec'] += 0.5;
+        if (i < majBound) {
+            majElement[i].value = window['active' + activeLevel + 's'][window[index]['maj']];
+            majElement[i].readOnly = true;
+            window[index]['maj'] += 1;
+            window['filled_textboxes_' + textboxLevel]['maj'] += 1;
+            creditCount300and400['maj'] += 0.5;
+        }
+        if (minElement[i].value === '') {
+            minElement[i].value = window['active' + activeLevel + 's'][window[index]['min']];
+            minElement[i].readOnly = true;
+            window[index]['min'] += 1;
+            window['filled_textboxes_' + textboxLevel]['min'] += 1;
+            creditCount300and400['min'] += 0.5;
+        }
+        i += 1; 
+    }
+
+    return i;
+}
+
+
+/**
  * Autofills textboxes for 300 level courses. 
 **/
 function fill300s() {
@@ -239,62 +284,15 @@ function fill300s() {
     
 
     // fill courses that have been selected
-    for (var m = 0; m < 3; m++) {
-        if (index300['spec'] === active300s.length) {
-            break;
-        }
-        spec300s[i].value = active300s[index300['spec']];
-        spec300s[i].readOnly = true;
-        index300['spec'] += 1;
-        filled_textboxes_300['spec'] += 1;
-        creditCount300and400['spec'] += 0.5;
-        if (i < 2) {
-            maj300s[i].value = active300s[index300['maj']];
-            maj300s[i].readOnly = true;
-            index300['maj'] += 1;
-            filled_textboxes_300['maj'] += 1;
-            creditCount300and400['maj'] += 0.5;
-        }
-        if (min300s[i].value === '') {
-            min300s[i].value = active300s[index300['min']];
-            min300s[i].readOnly = true;
-            index300['min'] += 1;
-            filled_textboxes_300['min'] += 1;
-            creditCount300and400['min'] += 0.5;
-        }
-        i += 1; 
-
-    }
+    i = fill300and400Textboxes(3, 2, '300', '300', i, spec300s, maj300s, min300s);
 
     if (i < 3) {
-        for (var m = 0; m < 3; m++) {
-            if ((index400['spec'] === active400s.length) || (i === 3)) {
-                break;
-            }
-            spec300s[i].value = active400s[index400['spec']];
-            spec300s[i].readOnly = true;
-            index400['spec'] += 1;
-            filled_textboxes_300['spec'] += 1;
-            creditCount300and400['spec'] += 0.5;
-            if (i < 2) {
-                maj300s[i].value = active400s[index400['maj']];
-                maj300s[i].readOnly = true;
-                index400['maj'] += 1;
-                filled_textboxes_300['maj'] += 1;
-                creditCount300and400['maj'] += 0.5;
-            }
-            min300s[i].value = active400s[index400['min']]; 
-            min300s[i].readOnly = true;
-            index400['min'] += 1;
-            filled_textboxes_300['min'] += 1;
-            creditCount300and400['min'] += 0.5;
-            i += 1;
-        }
+        i = fill300and400Textboxes(3, 2, '300', '400', i, spec300s, maj300s, min300s);
     }
 
     // add extra 200 level courses for min
     if (i < 3) {
-        addExtraminCourses(i, min300s);
+        addExtraMinCourses(i, min300s);
     }
 }  
 
@@ -323,31 +321,8 @@ function fill400s() {
         min400s[k].readOnly = false;
     }
     
-
     // fill courses that have been selected
-    for (var m = 0; m < active400s.length; m++) {
-        if ((index400['spec'] == active400s.length) || (i === 3)) {
-            break;
-        }
-        spec400s[i].value = active400s[index400['spec']];
-        spec400s[i].readOnly = true;
-        index400['spec'] += 1;
-        filled_textboxes_400['spec'] += 1;
-        creditCount300and400['spec'] += 0.5;
-        if (i < 1) {
-            maj400s[i].value = active400s[index400['maj']];
-            maj400s[i].readOnly = true;
-            index400['maj'] += 1;
-            filled_textboxes_400['maj'] += 1;
-            creditCount300and400['maj'] += 0.5;
-        }
-        min400s[i].value = active400s[index400['min']]; 
-        min400s[i].readOnly = true;
-        index400['min'] += 1;
-        filled_textboxes_400['min'] += 1;
-        creditCount300and400['min'] += 0.5;
-        i += 1;
-    } 
+    fill300and400Textboxes(active400s.length, 1, '400', '400', i, spec400s, maj400s, min400s);
 
 }
  
