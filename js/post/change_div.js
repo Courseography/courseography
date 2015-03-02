@@ -3,6 +3,7 @@ $(document).ready(function () {
 	
     openLastActiveTab();
     updateAllCategories();
+    updateNav();
 });
 
 
@@ -11,6 +12,7 @@ $('#specialist').click(function (e) {
 	
     e.preventDefault();
     openTab('specialist');
+    updateNav();
 });
 
 
@@ -19,6 +21,7 @@ $('#major').click(function (e) {
 	
     e.preventDefault();
     openTab('major');
+    updateNav();
 });
 
 
@@ -27,6 +30,7 @@ $('#minor').click (function (e) {
 	
     e.preventDefault();
     openTab('minor');
+    updateNav();
 });
 
 $('.code').click (function (e) {
@@ -89,7 +93,6 @@ function openTab(tab) {
 **/
 function openLastActiveTab() {
     'use-strict'
-
 
     if (getCookie('minor') === 'active') {
        openTab('minor');

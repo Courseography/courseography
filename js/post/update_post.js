@@ -36,6 +36,7 @@ $('#update').click(function (e) {
     'use-strict'
 
     updateAllCategories();
+    updateNav();
 });
 
 
@@ -597,5 +598,20 @@ function checkPostCompleted() {
     } else {
         $('#min_creds').css('color', 'red');
     }
+}
+
+/**
+ *
+**/
+function updateNav() {
+    var nav_post = $('#nav-links')[0].getElementsByTagName('li')[3].getElementsByTagName('a')[0];
+
+    if (getCookie('specialist') === 'active') {
+        nav_post.innerHTML = 'Check My POSt! (' + (specCount).toFixed(1) + '/12.0)';
+    } if (getCookie('major') === 'active') {
+        nav_post.innerHTML = 'Check My POSt! (' + (majCount).toFixed(1) + '/8.0)';
+    } if (getCookie('minor') === 'active') {
+        nav_post.innerHTML = 'Check My POSt! (' + (minCount).toFixed(1) + '/4.0)';
+    } 
 }
 
