@@ -1,211 +1,57 @@
-{-# LANGUAGE OverloadedStrings, GADTs, ScopedTypeVariables #-}
-module SvgParsing.SVGGenerator where
+{-# LANGUAGE OverloadedStrings #-}
 
-import SvgParsing.SVGTypes
-import Database.Tables
+module ImageResponse where
+
+import Data.List
+import Happstack.Server
+import qualified Data.ByteString.Lazy as BS
+import qualified Data.ByteString as B
 import Control.Monad.IO.Class  (liftIO)
-import qualified Data.Conduit.List as CL
-import Database.Persist
-import Database.Persist.Sqlite
-import Data.Char
-import Data.Conduit
+import qualified Data.ByteString.Base64.Lazy as BEnc
+import ImageConversion
 import Data.List.Split
-import Data.List hiding (map, filter)
-import Database.JsonParser
+import SvgParsing.SVGGenerator
 import SvgParsing.ParserUtil
-import MakeElements
-import Data.Maybe
-import qualified Data.Text as T
-import Text.Blaze.Svg11 ((!), mkPath, rotate, l, m)
-import qualified Text.Blaze.Svg11 as S
-import qualified Text.Blaze.Svg11.Attributes as A
-import Text.Blaze.Svg.Renderer.String (renderSvg)
-import SvgParsing.SVGBuilder
-import Text.Blaze.Internal (stringValue)
-import Text.Blaze (toMarkup)
-import Css.Constants
+import Diagram (renderTable)
 
--- | A list of tuples that contain disciplines (areas), fill values, and courses
---- that are in the areas.
-areaMap :: [(String, T.Text, [String])]
-areaMap = [("theory", theoryDark, ["CSC165", "CSC236", "CSC240", "CSC263", "CSC265",
-                       "CSC310", "CSC324", "CSC373", "CSC438", "CSC448",
-                       "CSC463"]),
-           ("core", coreDark, ["Calc1", "Sta1", "Sta2", "Lin1", "CSC108", "CSC148", "CSC104", "CSC120", "CSC490",
-                               "CSC491", "CSC494", "CSC495"]),
-           ("se", seDark, ["CSC207", "CSC301", "CSC302", "CSC410", "CSC465"]),
-           ("systems", systemsDark, ["CSC209", "CSC258", "CSC358", "CSC369", "CSC372",
-                                     "CSC458", "CSC469", "CSC488", "ECE385", "ECE489"]),
-           ("hci", hciDark, ["CSC200", "CSC300",  "CSC318", "CSC404", "CSC428",
-                             "CSC454"]),
-           ("graphics", graphicsDark,["CSC320", "CSC418", "CSC420"]),
-           ("num", numDark, ["CSC336", "CSC436", "CSC446", "CSC456"]),
-           ("ai", aiDark, ["CSC321", "CSC384", "CSC401", "CSC411", "CSC412",
-                          "CSC485", "CSC486"]),
-           ("dbweb", dbwebDark , ["CSC309", "CSC343", "CSC443"])]
+-- | Returns an image requested by the user.
+imageResponse :: ServerPart Response
+imageResponse = do req <- askRq
+                   let cookies = getHeader "cookie" $ rqHeaders req
+                   liftIO $ getImage cookies
 
--- | The style for Text elements of hybrids.
-hybridTextStyle :: String
-hybridTextStyle = "font-size:7.5pt;fill:white;"
+timetableImageResponse :: String -> ServerPart Response
+timetableImageResponse courses = liftIO $ getTimetableImage courses
 
--- | The style for Text elements of ellipses.
-ellipseTextStyle :: String
-ellipseTextStyle = "font-size:7.5pt;"
+-- | Creates an image, and returns the base64 representation of that image.
+getImage :: Maybe B.ByteString -> IO Response
+getImage (Just cookie) = do
+	let courseMap = map (\x -> (dropSlash $ replaceEscapedQuotation $ fst x, snd x)) $ parseCookies $ show cookie
+	buildSVG courseMap "Testfile2.svg"
+	liftIO $ print courseMap
+	liftIO $ createImageFile "Testfile2.svg" "INSERT_ID-graph.png"
+	imageData <- BS.readFile "INSERT_ID-graph.png"
+	liftIO $ removeImage "INSERT_ID-graph.png"
+	let encodedData = BEnc.encode imageData
+	return $ toResponse encodedData
+-- TODO: add Nothing case.
 
--- | The style for Text elements of ellipses.
-regionTextStyle :: String
-regionTextStyle = "font-size:9pt;"
+-- | Creates an image, and returns the base64 representation of that image.
+getTimetableImage :: String -> IO Response
+getTimetableImage courses =
+    do liftIO $ renderTable "circle.svg" courses
+       liftIO $ createImageFile "circle.svg" "INSERT_ID-graph.png"
+       imageData <- BS.readFile "INSERT_ID-graph.png"
+       liftIO $ removeImage "INSERT_ID-graph.png"
+       let encodedData = BEnc.encode imageData
+       return $ toResponse encodedData
+-- TODO: add Nothing case.
 
--- | Gets the first element of a tuple with length 3.
-fst3 :: (a, b, c) -> a
-fst3 (a, b, c) = a
+-- | Parses the cookie string into a series of tuples of course code and
+-- node value pairs, where node value is either overridden, active, inactive
+-- or takeable.
+parseCookies :: String -> [(String, String)]
+parseCookies cookies = map (\x -> let y = splitOn "=" x in (head y, last y)) $ splitOn " " cookies
 
--- | Gets the second element of a tuple with length 3.
-snd3 :: (a, b, c) -> b
-snd3 (a,b,c) = b
-
--- | Gets the third element of a tuple with length 3.
-thrd3 :: (a, b, c) -> c
-thrd3 (a,b,c) = c
-
--- | Gets a tuple from areaMap where id_ is in the list of courses for that tuple.
-getTuple :: String -> (String, T.Text, [String])
-getTuple id_ = head $ filter (\x -> id_ `elem` thrd3 x) areaMap ++ [("", "grey", [])]
-
--- | Gets an area from areaMap where id_ is in the list of courses for the corresponding tuple.
-getArea :: String -> String
-getArea id_ = fst3 $ getTuple id_
-
--- | Gets the fill from areaMap where id_ is in the list of courses for the corresponding tuple.
-getFill :: String -> String
-getFill id_ = T.unpack $ snd3 $ getTuple id_
-
--- | Builds an SVG document.
-makeSVGDoc :: Bool -> [(String, String)] -> [Shape] -> [Shape] -> [Path] -> [Path] -> [Text] -> S.Svg
-makeSVGDoc customize courseMap rects ellipses edges regions regionTexts =
-    S.docTypeSvg ! A.width "1052.3622"
-                 ! A.height "744.09448"
-                 ! S.customAttribute "xmlns:svg" "http://www.w3.org/2000/svg"
-                 ! S.customAttribute "xmlns:dc" "http://purl.org/dc/elements/1.1/"
-                 ! S.customAttribute "xmlns:cc" "http://creativecommons.org/ns#"
-                 ! S.customAttribute "xmlns:rdf" "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-                 ! A.version "1.1" $ do
-                      makeSVGDefs
-                      S.g ! A.id_ "regions" $ concatSVG $ map convertRegionToSVG regions
-                      S.g ! A.id_ "nodes" ! A.style "stroke:#000000;" $ concatSVG $ map (convertRectToSVG customize courseMap) rects
-                      S.g ! A.id_ "bools" $ concatSVG $ map convertEllipseToSVG ellipses
-                      S.g ! A.id_ "edges" ! A.style "stroke:#000000" $ concatSVG $ map convertEdgeToSVG edges
-                      S.g ! A.id_ "region-labels" $ concatSVG $ map (convertTextToSVG False False True) regionTexts
-
--- | Builds the SVG defs.
-makeSVGDefs :: S.Svg
-makeSVGDefs = S.defs $
-              S.marker ! A.id_ "arrow"
-                       ! A.viewbox "0 0 10 10"
-                       ! A.refx "1"
-                       ! A.refy "5"
-                       ! A.markerunits "strokeWidth"
-                       ! A.orient "auto"
-                       ! A.markerwidth "7"
-                       ! A.markerheight "7" $
-                S.polyline ! A.points "0,1 10,5 0,9" ! A.fill "black"
-
--- | Builds an SVG document.
-buildSVG :: Bool -> [(String, String)] -> String -> IO ()
-buildSVG customize courseMap filename =
-    runSqlite dbStr $ do
-        sqlRects    :: [Entity Rects]    <- selectList [] []
-        sqlTexts    :: [Entity Texts]    <- selectList [] []
-        sqlPaths    :: [Entity Paths]    <- selectList [] []
-        sqlEllipses :: [Entity Ellipses] <- selectList [] []
-
-        let texts       = map (buildText . entityVal) sqlTexts
-            rects       = map (buildRect texts . entityVal) sqlRects
-            ellipses    = buildEllipses texts 0 $ map entityVal sqlEllipses
-            paths       = zipWith (buildPath rects ellipses) (map entityVal sqlPaths) [1..length sqlPaths]
-            regions     = filter pathIsRegion paths
-            edges       = filter (not . pathIsRegion) paths
-            regionTexts = filter (not . intersectsWithShape (rects ++ ellipses)) texts
-            stringSVG = renderSvg $ makeSVGDoc customize courseMap rects ellipses edges regions regionTexts
-        liftIO $ writeFile filename stringSVG
-
--- | Determines if a text intersects with a shape.
-intersectsWithShape :: [Shape] -> Text -> Bool
-intersectsWithShape shapes text =
-    not $ null (filter (intersectsWithPoint (fromRational $ textXPos text) (fromRational $ textYPos text)) shapes)
-
--- | Converts a `Rect` to SVG.
-convertRectToSVG :: Bool -> [(String, String)] -> Shape -> S.Svg
-convertRectToSVG customize courseMap rect = if shapeFill rect == "none" then S.rect else
-                        S.g ! A.id_ (stringValue $ shapeId rect)
-                            ! A.class_ (if shapeIsHybrid rect then "hybrid" else "node")
-                            ! S.customAttribute "data-group" (stringValue (getArea (shapeId rect)))
-                            ! S.customAttribute "text-rendering" "geometricPrecision"
-                            ! S.customAttribute "shape-rendering" "geometricPrecision"
-                            ! A.style (if customize then
-                                       (if not (shapeIsHybrid rect) &&
-                                           not (null (getCourse (shapeId rect) courseMap)) &&
-                                           isSelectedCourse (shapeId rect) courseMap
-                                        then "stroke-width:4;" else "opacity:0.5;stroke-dasharray:8,5;")
-                                       else "") $
-                            do S.rect ! A.rx "4"
-                                      ! A.ry "4"
-                                      ! A.x (stringValue $ show $ fromRational $ shapeXPos rect)
-                                      ! A.y (stringValue $ show $ fromRational $ shapeYPos rect)
-                                      ! A.width (stringValue $ show $ fromRational $ shapeWidth rect)
-                                      ! A.height (stringValue $ show $ fromRational $ shapeHeight rect)
-                                      ! A.style (stringValue $ "fill:" ++ getFill (shapeId rect) ++ ";")
-                               concatSVG $ map (convertTextToSVG (shapeIsHybrid rect) False False) (shapeText rect)
-
-getCourse :: String -> [(String, String)] -> [(String, String)]
-getCourse id_ courseMap = filter (\x -> fst x == id_) courseMap
-
-isSelectedCourse :: String -> [(String, String)] -> Bool
-isSelectedCourse id_ courseMap = let course = snd $ head $ getCourse id_ courseMap in
-                                     isPrefixOf "active" course ||
-                                     isPrefixOf "overridden" course
-
--- | Converts a `Text` to SVG.
-convertTextToSVG :: Bool -> Bool -> Bool -> Text -> S.Svg
-convertTextToSVG isHybrid isBool isRegion text =
-    S.text_ ! A.x (stringValue $ show $ fromRational $ textXPos text)
-            ! A.y (stringValue $ show $ fromRational $ textYPos text)
-            ! A.style (stringValue $
-                      (if isHybrid then hybridTextStyle else (if isBool then ellipseTextStyle else (if isRegion then regionTextStyle else "font-size:12pt;line-height:1.42857143;"))) ++ "font-family:Arial;stroke:none;")
-            $ toMarkup $ textText text
-
--- | Converts a `Path` to SVG.
-convertEdgeToSVG :: Path -> S.Svg
-convertEdgeToSVG path =
-    S.path ! A.id_ (stringValue $ "path" ++ pathId path)
-           ! A.class_ "path"
-           ! A.d (stringValue $ 'M' : buildPathString (points path))
-           ! A.markerEnd "url(#arrow)"
-           ! S.customAttribute "source-node" (stringValue $ source path)
-           ! S.customAttribute "target-node" (stringValue $ target path)
-           ! A.style (stringValue $ "fill:" ++
-                      pathFill path ++
-                      ";fill-opacity:" ++
-                      pathFillOpacity path ++
-                      ";")
-
--- | Converts a `Path` to SVG.
-convertRegionToSVG :: Path -> S.Svg
-convertRegionToSVG path =
-    S.path ! A.id_ (stringValue $ "region" ++ pathId path)
-           ! A.class_ "region"
-           ! A.d (stringValue $ 'M' : buildPathString (points path))
-           ! A.style (stringValue $ "fill:" ++
-                      pathFill path ++
-                      ";opacity:0.7;fill-opacity:0.58;")
-
--- | Converts an `Ellipse` to SVG.
-convertEllipseToSVG :: Shape -> S.Svg
-convertEllipseToSVG ellipse = S.g ! A.id_ (stringValue (shapeId ellipse))
-                                  ! A.class_ "bool" $ do
-                                      S.ellipse ! A.cx (stringValue $ show $ fromRational $ shapeXPos ellipse)
-                                                ! A.cy (stringValue $ show $ fromRational $ shapeYPos ellipse)
-                                                ! A.rx (stringValue $ show $ fromRational $ shapeWidth ellipse / 2)
-                                                ! A.ry (stringValue $ show $ fromRational $ shapeHeight ellipse / 2)
-                                                ! A.style "stroke:#000000;fill:none;"
-                                      concatSVG $ map (convertTextToSVG False True False) (shapeText ellipse)
+replaceEscapedQuotation :: String -> String
+replaceEscapedQuotation str = filter (\x -> x /= '\"') str
