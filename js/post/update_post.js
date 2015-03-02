@@ -487,16 +487,16 @@ function fillCreditCount() {
     minCount = creditCountMin + creditCount300and400['min'];
 
 
-    fillspecCreditCount(specCount);
-    fillmajCreditCount(majCount);
-    fillminCreditCount(minCount);
+    fillSpecCreditCount(specCount);
+    fillMajCreditCount(majCount);
+    fillMinCreditCount(minCount);
 }
 
 /**
  * Autofills the credit count for specialist
  * @param {number} specCount The credit count for specialist
 **/
-function fillspecCreditCount(specCount) {
+function fillSpecCreditCount(specCount) {
     'use strict';
 
     if (specCount >= 12) {
@@ -510,7 +510,7 @@ function fillspecCreditCount(specCount) {
  * Autofills the credit count for major
  * @param {number} majCount The credit count for major
 **/
-function fillmajCreditCount(majCount) {
+function fillMajCreditCount(majCount) {
     'use strict';
 
     if (majCount >= 8) {
@@ -520,11 +520,12 @@ function fillmajCreditCount(majCount) {
     }
 }
 
+
 /**
  * Autofills the credit count for minor.
  * @param {number} minCount The credit count for minor
 **/
-function fillminCreditCount(minCount) {
+function fillMinCreditCount(minCount) {
     'use strict';
 
     if (minCount >= 4) {
@@ -534,12 +535,13 @@ function fillminCreditCount(minCount) {
     }
 }
 
+
 /**
  * Autofills extra 200-level courses for last minor constraint.
  * @param {number} index The textbox number we are at
  * @param HTMLElement} min300s Array of textbox elements to fill
 **/
-function addExtraminCourses(index, min300s) {
+function addExtraMinCourses(index, min300s) {
     'use strict';
 
     for (var m = 0; m < 3; m++) {
