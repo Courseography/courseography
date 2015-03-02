@@ -41,37 +41,6 @@ $('#update').click(function (e) {
 
 
 /**
- * Sets cookie when clicking on a course in Check My POSt
- * TODO: Check prereqs properly
-**/
-/*
-$('.full_name').click(function (e) {
-    'use-strict';
-
-    var index = 0;
-    if (this.className.indexOf('CSC') > -1) {
-        index = this.className.indexOf('CSC'); 
-    } else if (this.className.indexOf('Calc') > -1) {
-        index = this.className.indexOf('Calc'); 
-    } else if (this.className.indexOf('Lin') > -1) {
-        index = this.className.indexOf('Lin'); 
-    } else if (this.className.indexOf('Sta') > -1) {
-        index = this.className.indexOf('Sta'); 
-    }
-    
-
-    var courseCode = this.className.substring(index, this.className.length);
-    if (getCookie(courseCode) === 'inactive' || getCookie(courseCode) === 'takeable') {
-            setCookie(courseCode, 'active');
-    } if (getCookie(courseCode) === 'active' || getCookie(courseCode) === 'overriden') {
-            setCookie(courseCode, 'inactive');
-    }
-    updateAllCategories();
-});
-*/
-
-
-/**
  * Updates all categories to see if they are fulfilled or not.
 **/
 // TODO: Add CSC240 and CSC265
@@ -405,7 +374,9 @@ function fill400s() {
 
 }
  
-
+/**
+ * Autofills the textboxes for the extra 300+ credits category
+**/
 function fillExtra() {
     'use-strict'
 
@@ -539,7 +510,8 @@ function fillCreditCount() {
 }
 
 /**
- *
+ * Autofills the credit count for Specialist
+ * @param {number} specCount The credit count for Specialist
 **/
 function fillSpecCreditCount(specCount) {
     if (specCount >= 12) {
@@ -550,7 +522,8 @@ function fillSpecCreditCount(specCount) {
 }
 
 /**
- *
+ * Autofills the credit count for Major
+ * @param {number} majCount The credit count for Major
 **/
 function fillMajCreditCount(majCount) {
     if (majCount >= 8) {
@@ -561,7 +534,8 @@ function fillMajCreditCount(majCount) {
 }
 
 /**
- *
+ * Autofills the credit count for Minor.
+ * @param {number} minCount The credit count for Minor
 **/
 function fillMinCreditCount(minCount) {
     if (minCount >= 4) {
@@ -572,7 +546,9 @@ function fillMinCreditCount(minCount) {
 }
 
 /**
- *
+ * Autofills extra 200-level courses for last Minor constraint.
+ * @param {number} index The textbox number we are at
+ * @param HTMLElement} min300s Array of textbox elements to fill
 **/
 function addExtraMinCourses(index, min300s) {
     for (var m = 0; m < 3; m++) {
@@ -589,7 +565,7 @@ function addExtraMinCourses(index, min300s) {
 }
 
 /**
- *
+ * Checks whether a POSt is completed and updates credit count colour if it is.
 **/
 function checkPostCompleted() {
     if (categories_completed['Spec'] === 17) {
@@ -612,7 +588,7 @@ function checkPostCompleted() {
 }
 
 /**
- *
+ * Updates the Nav Bar on the Check My Post! page
 **/
 function updateNavPost() {
     var nav_post = $('#nav-links')[0].getElementsByTagName('li')[3].getElementsByTagName('a')[0];
@@ -630,7 +606,7 @@ function updateNavPost() {
 }
 
 /**
- *
+ * Updates the Nav Bar on the Graph page.
 **/
 function updateNavGraph() {
     var nav_graph = $('#nav-links')[0].getElementsByTagName('li')[3].getElementsByTagName('a')[0];
