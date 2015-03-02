@@ -26,6 +26,7 @@ active400s = [];
 active300s = [];
 var index300 = {'Spec': 0, 'Maj': 0, 'Min': 0};
 var index400 = {'Spec': 0, 'Maj': 0, 'Min': 0};
+var categories_completed = {'Spec': 0, 'Maj': 0, 'Min': 0};
 var index200 = 0;
 
 /**
@@ -78,6 +79,7 @@ function updateAllCategories() {
 
     index300 = {'Spec': 0, 'Maj': 0, 'Min': 0};
     index400 = {'Spec': 0, 'Maj': 0, 'Min': 0};
+    categories_completed = {'Spec': 0, 'Maj': 0, 'Min': 0};
     index200 = 0;
 
     creditCount300and400['Maj'] = 0;
@@ -104,6 +106,7 @@ function updateAllCategories() {
             if (completed_spec[property] === 1) { // if the category is completed
                 activateCourse(property);
                 updateCategory(category, 'fulfilled');
+                categories_completed['Spec'] += 1;
             } else { // if the category is not completed
                 deactivateCourse(property);
                 updateCategory(category, 'not fulfilled');
@@ -118,12 +121,14 @@ function updateAllCategories() {
             if (completed_maj[property] === 1) { // if the category is completed
                 activateCourse(property);
                 updateCategory(category, 'fulfilled');
+                categories_completed['Maj'] += 1;
             } else { // if the category is not completed
                 deactivateCourse(property);
                 updateCategory(category, 'not fulfilled');
             }
         }
     }
+
 
     // Update Minor
     for (var property in completed_min) {
@@ -132,12 +137,14 @@ function updateAllCategories() {
             if (completed_min[property] === 1) { // if the category is completed
                 activateCourse(property);
                 updateCategory(category, 'fulfilled');
+                categories_completed['Min'] += 1;
             } else { // if the category is not completed
                 deactivateCourse(property);
                 updateCategory(category, 'not fulfilled');
             }
         }
     }
+
 
     // Update 300s
     var i = 0; 
@@ -148,17 +155,18 @@ function updateAllCategories() {
         }
     }
 
-    console.log(i);
     if (i === 3) {
         updateCategory($('#spec_300')[0].getElementsByClassName('code')[0], 'fulfilled');
         updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'fulfilled');
         updateCategory($('#maj_300')[0].getElementsByClassName('code')[0], 'fulfilled');
+        categories_completed['Spec'] += 1;
+        categories_completed['Maj'] += 1;
     } else {
         updateCategory($('#spec_300')[0].getElementsByClassName('code')[0], 'not fulfilled');
         updateCategory($('#maj_300')[0].getElementsByClassName('code')[0], 'not fulfilled');
         updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'not fulfilled');
-        
     }
+
 
     // Update 400s
 
@@ -174,6 +182,8 @@ function updateAllCategories() {
         updateCategory($('#spec_400')[0].getElementsByClassName('code')[0], 'fulfilled');
         updateCategory($('#maj_400')[0].getElementsByClassName('code')[0], 'fulfilled');
         updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'fulfilled');
+        categories_completed['Spec'] += 1;
+        categories_completed['Maj'] += 1;
     } else {
         updateCategory($('#spec_400')[0].getElementsByClassName('code')[0], 'not fulfilled');
         updateCategory($('#maj_400')[0].getElementsByClassName('code')[0], 'not fulfilled');
@@ -203,10 +213,13 @@ function updateAllCategories() {
 
     if (countSpec === 4) {
         updateCategory($('#spec_extra')[0].getElementsByClassName('code')[0], 'fulfilled');
+        categories_completed['Spec'] += 1;
     } if (countMaj === 3) {
         updateCategory($('#maj_extra')[0].getElementsByClassName('code')[0], 'fulfilled');
+        categories_completed['Maj'] += 1;
     } if (countMin === 3) {
         updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'fulfilled');
+        categories_completed['Min'] += 1;
     } if (countSpec < 4) {
         updateCategory($('#spec_extra')[0].getElementsByClassName('code')[0], 'not fulfilled');
     } if (countMaj < 3) {
@@ -214,6 +227,8 @@ function updateAllCategories() {
     } if (countMin < 3) {
         updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'not fulfilled');
     }
+
+    checkPostCompleted();
 
 }
 
@@ -483,8 +498,10 @@ function fillMisc() {
     // update category
     if (spec_inq[0].value != '') {
         updateCategory($('#spec_misc')[0].getElementsByClassName('code')[0], 'fulfilled');
+        categories_completed['Spec'] += 1;
     } if (maj_inq[0].value != '') {    
         updateCategory($('#maj_misc')[0].getElementsByClassName('code')[0], 'fulfilled'); 
+        categories_completed['Maj'] += 1;
     } if (spec_inq[0].value === '') {
         updateCategory($('#spec_misc')[0].getElementsByClassName('code')[0], 'not fulfilled');
     } if (maj_inq[0].value === '') {
@@ -501,7 +518,7 @@ function fillCreditCount() {
 
     specCount = creditCountSpec  + creditCount300and400['Spec'];
     majCount = creditCountMaj + creditCount300and400['Maj'];
-    minCount = creditCountMin + creditCount300and400['Min'];
+    minCount = creditCountMin + (creditCount300and400['Min'] * 0.5);
 
 
     fillSpecCreditCount(specCount);
@@ -516,7 +533,7 @@ function fillSpecCreditCount(specCount) {
     if (specCount >= 12) {
         $('#spec_creds').html('(12.0/12.0)');
     } else {
-        $('#spec_creds').html('(' + specCount + '/12.0)');
+        $('#spec_creds').html('(' + (specCount).toFixed(1) + '/12.0)');
     }
 }
 
@@ -527,7 +544,7 @@ function fillMajCreditCount(majCount) {
     if (majCount >= 8) {
         $('#maj_creds').html('(8.0/8.0)')
     } else {
-        $('#maj_creds').html('(' + majCount + '/8.0)');
+        $('#maj_creds').html('(' + (majCount).toFixed(1) + '/8.0)');
     }
 }
 
@@ -538,7 +555,7 @@ function fillMinCreditCount(minCount) {
     if (minCount >= 4) {
         $('#min_creds').html('(4.0/4.0)')
     } else {
-        $('#min_creds').html('(' + minCount + '/4.0)');
+        $('#min_creds').html('(' + (minCount).toFixed(1) + '/4.0)');
     }
 }
 
@@ -556,6 +573,29 @@ function addExtraMinCourses(index, min300s) {
             index += 1;
         }
         
+    }
+}
+
+/**
+ *
+**/
+function checkPostCompleted() {
+    if (categories_completed['Spec'] === 17) {
+        $('#spec_creds').css('color', 'green');
+    } else {
+        $('#spec_creds').css('color', 'red');
+    }
+    
+    if (categories_completed['Maj'] === 13) {
+        $('#maj_creds').css('color', 'green');
+    } else {
+        $('#maj_creds').css('color', 'red');
+    } 
+
+    if (categories_completed['Min'] === 6) {
+        $('#min_creds').css('color', 'green');
+    } else {
+        $('#min_creds').css('color', 'red');
     }
 }
 
