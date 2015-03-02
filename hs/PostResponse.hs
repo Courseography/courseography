@@ -143,7 +143,10 @@ checkPost =  do
             H.div ! A.id "spec_misc" $ do 
                 H.p ! A.class_ "code" $ H.em $ H.toHtml $ inqStr
                 H.div ! A.class_ "more-info" $ do
-                    H.input ! A.type_ "text" 
+                    H.input ! A.type_ "text"
+            H.h3 "Notes"
+            H.div ! A.id "notes" $ do
+                H.p "- You may take no more than 1.0 FCE of CSC490H1, CSC491H1, CSC494H1, CSC495H1, BCB430Y1" 
         H.div ! A.id "div_major" $ do
             H.h2 "First Year"
             H.div ! A.id "maj_csc108" $ do
@@ -211,6 +214,9 @@ checkPost =  do
                 H.p ! A.class_ "code" $ H.em $ H.toHtml $ inqStr
                 H.div ! A.class_ "more-info" $ do
                     H.input ! A.type_ "text" 
+            H.h3 "Notes"
+            H.div ! A.id "notes" $ do
+                H.p "- You may take no more than 1.0 FCE of CSC490H1, CSC491H1, CSC494H1, CSC495H1, BCB430Y1"
         H.div ! A.id "div_minor" $ do
             H.h2 "First Year"
             H.div ! A.id "min_csc108" $ do
@@ -242,6 +248,9 @@ checkPost =  do
                     H.input ! A.type_ "text" ! A.class_ "lvl300min lvl400min"
                     H.input ! A.type_ "text" ! A.class_ "lvl300min lvl400min"
                     H.input ! A.type_ "text" ! A.class_ "lvl300min lvl400min"
+            H.h3 "Notes"
+            H.div ! A.id "notes" $ do
+                H.p "- You may take no more than three 300/400 level CSC/ECE courses"
                 
 
                    

@@ -93,6 +93,7 @@ postCSS = do
     "#div_specialist, #div_major, #div_minor" ? do
         position absolute
         "margin-above" -: "30px"
+        paddingBottom (px 30)
         display none
         height (pct 70)
         marginLeft (px 25)
@@ -125,4 +126,6 @@ postCSS = do
     "input" ? do
         textAlign $ alignSide sideCenter
         height $ (px 40)
+    "#notes" ? do
+        textAlign $ alignSide sideCenter
     
