@@ -4,12 +4,6 @@ var nodeHeight = 32;
 var xmlns = 'http://www.w3.org/2000/svg';
 var mode = 'node-mode';
 var nodeColourId = 'red';
-var colours = { 
-     'red': '#D77546', 
-     'green': '#2E8B57', 
-     'blue': '#437699',
-     'purple': '#46364A'
-};
 var nodeMoving = null;      // for movement and path creation
 var prevX = -1;             // for movement
 var prevY = -1;             // for movement
@@ -85,7 +79,7 @@ function getPosition(elem) {
     var yPosition = 0;
       
     while (elem) {
-        // || 0 -> for mozilla compatability 
+        // || 0 -> for mozilla firefox compatability !!
         xPosition += (elem.offsetLeft || 0) - elem.scrollLeft + elem.clientLeft;
         yPosition += (elem.offsetTop || 0) - elem.scrollTop + elem.clientTop;
         console.log(elem.offsetLeft, elem.scrollLeft, elem.clientLeft);
@@ -183,7 +177,7 @@ function nodeClicked(e) {
         // remove any paths leading to and from this node from the other node's 
         // list of paths and remove this node from the other nodes' adjacency lists
         e.currentTarget.inEdges.map(function (edge) { 
-            // !! Remove edge from parent's outEdges and current node from parent's kids list
+            // Remove edge from parent's outEdges and current node from parent's kids list
             var edgeParent = document.getElementById(edge.id.slice(0, edge.id.lastIndexOf('n')));
             index = edgeParent.outEdges.indexOf(edge);
             if (index > -1) {
@@ -196,7 +190,7 @@ function nodeClicked(e) {
             erasePath(edge);
         });
         e.currentTarget.outEdges.map(function (edge) {
-            // !! Remove edge from parent's outEdges and current node from parent's kids list
+            // Remove edge from children's inEdges and current node from child's parents list
             var edgeChild = document.getElementById(edge.id.slice(edge.id.lastIndexOf('n')));
             index = edgeChild.inEdges.indexOf(edge);
             if (index > -1) {
@@ -604,17 +598,30 @@ $('#add-text').click(function (){
 });
 
 
+function keyboard(e) {
+    'use-strict';
+    
+    if (e.which == 77 && e.ctrlKey && e.shiftKey) {
+        changeMode("move-mode"); // m
+    } else if (e.which == 78 && e.ctrlKey && e.shiftKey) {
+        changeMode("node-mode"); // n !!
+    } else if (e.which == 80 && e.ctrlKey && e.shiftKey){
+        changeMode("path-mode"); // p !!
+    } else if (e.which == 69 && e.ctrlKey && e.shiftKey){
+        changeMode("erase-mode"); // e
+    }
+}
+
+document.addEventListener('keydown', keyboard, false);
+
+
 // TODO:
 /*
 6. node type buttons
 2. regions
 3. shortcuts: http://javascript.info/tutorial/keyboard-events
+              http://unixpapa.com/js/key.html
 4. deselecting
-
-FIRE FOX!! node ids are numbers
-edges comming from bottom
-styling
-
 https://www.dashingd3js.com/svg-paths-and-d3js
 
 */
@@ -626,5 +633,5 @@ https://www.dashingd3js.com/svg-paths-and-d3js
 - when path created should end node be selected?
 - key board shortcuts to switch modes
 - make grid background optional
-- colour picker for choosing colour of node: <input type='color'/>
+- colour picker for choosing colour of node
 */
