@@ -36,6 +36,7 @@ main = do
                dir "post-fb" $ seeOther redirectUrlGraphPost $ toResponse "",
                dir "test" $ look "code" >>= getEmail,
                dir "test-post" $ look "code" >>= postToFacebook,
+               dir "post" $ postResponse,
                dir "draw" $ drawResponse,
                --dir "about" $ aboutResponse contents,
                dir "static" $ serveDirectory EnableBrowsing [] staticDir,
