@@ -28,12 +28,15 @@ var index300 = {'Spec': 0, 'Maj': 0, 'Min': 0};
 var index400 = {'Spec': 0, 'Maj': 0, 'Min': 0};
 var categories_completed = {'Spec': 0, 'Maj': 0, 'Min': 0};
 var index200 = 0;
+var minCount = 0;
+var majCount = 0;
+var specCount = 0;
 
 /**
  * Updates POSts when button is clicked.
 **/
 $('#update').click(function (e) {
-    'use-strict'
+    'use strict';
 
     updateAllCategories();
     updateNavPost();
@@ -45,7 +48,7 @@ $('#update').click(function (e) {
 **/
 // TODO: Add CSC240 and CSC265
 function updateAllCategories() {
-    'use-strict'
+    'use strict';
 
     index300 = {'Spec': 0, 'Maj': 0, 'Min': 0};
     index400 = {'Spec': 0, 'Maj': 0, 'Min': 0};
@@ -162,9 +165,9 @@ function updateAllCategories() {
 
     // Update Extra
 
-    countMaj = 0; 
-    countSpec = 0;
-    countMin = 0;
+    var countMaj = 0; 
+    var countSpec = 0;
+    var countMin = 0;
     var specExtra = $('#spec_extra')[0].getElementsByTagName('input');
     var majExtra = $('#maj_extra')[0].getElementsByTagName('input');
     var minExtra = $('#min_misc')[0].getElementsByTagName('input');
@@ -211,7 +214,7 @@ function activateCourse(courseCode) {
     'use-strict'
     
     var elements = document.getElementsByClassName(courseCode);
-    for (i = 0; i < elements.length; i++) {
+    for (var i = 0; i < elements.length; i++) {
         elements[i].style.backgroundColor = '#99ff99';
     }
 }
@@ -225,7 +228,7 @@ function deactivateCourse(courseCode) {
     'use-strict'
     
     var elements = document.getElementsByClassName(courseCode);
-    for (i = 0; i < elements.length; i++) {
+    for (var i = 0; i < elements.length; i++) {
             elements[i].style.backgroundColor = '#BABABA';
     }
 }
@@ -251,7 +254,7 @@ function updateCategory(category, status) {
  * Autofills textboxes for 300 level courses. 
 **/
 function fill300s() {
-    'use-strict'
+    'use strict';
 
     var i = 0; 
 
@@ -261,7 +264,7 @@ function fill300s() {
 
     
     // clear textboxes
-    for (k = 0; k < 3; k++) {
+    for (var k = 0; k < 3; k++) {
         spec300s[k].value = '';
         spec300s[k].readOnly = false;
         if (k < 2) {
@@ -293,6 +296,7 @@ function fill300s() {
         index300['Min'] += 1;
         creditCount300and400['Min'] += 0.5;
         i += 1; 
+
     }
 
     if (i < 3) {
@@ -329,7 +333,7 @@ function fill300s() {
  * Autofills textboxes for 400 level courses. 
 **/
 function fill400s() {
-    'use-strict'
+    'use strict';
 
     var i = 0; 
     var spec400s = $('.lvl400spec');
@@ -338,7 +342,7 @@ function fill400s() {
 
     
     // clear textboxes
-    for (k = 0; k < 3; k++) {
+    for (var k = 0; k < 3; k++) {
         spec400s[k].value = '';
         spec400s[k].readOnly = false;
         if (k < 1) {
@@ -370,7 +374,7 @@ function fill400s() {
         index400['Min'] += 1;
         creditCount300and400['Min'] += 0.5;
         i += 1;
-    }
+    } 
 
 }
  
@@ -378,7 +382,7 @@ function fill400s() {
  * Autofills the textboxes for the extra 300+ credits category
 **/
 function fillExtra() {
-    'use-strict'
+    'use strict';
 
     var i = 0;
     var spec_extra = $('#spec_extra')[0].getElementsByTagName('input');
@@ -408,7 +412,7 @@ function fillExtra() {
     }
 
     // fill courses that have been selected
-    for (m = 0; m < active300s.length; m++) {
+    for (var m = 0; m < active300s.length; m++) {
         if ((index300['Spec'] === active300s.length) || (i === 4)) {
             break;
         }
@@ -428,7 +432,7 @@ function fillExtra() {
     }
 
     if (i < 4) {
-        for (m = 0; m < active400s.length; m++) {
+        for (var m = 0; m < active400s.length; m++) {
             if (((index400['Spec'] === active400s.length) && (index400['Maj'] === active400s.length)) || (i === 4)) {
                 break;
             }
@@ -455,7 +459,7 @@ function fillExtra() {
  * Autofills textboxes and updates category for Inquiry courses
 **/
 function fillMisc() {
-    'use-strict'
+    'use strict';
 
     var spec_inq = $('#spec_misc')[0].getElementsByTagName('input');
     var maj_inq = $('#maj_misc')[0].getElementsByTagName('input');
@@ -497,7 +501,7 @@ function fillMisc() {
  * Updates Credit Count for each POSt.
  **/
 function fillCreditCount() {
-    'use-strict'
+    'use strict';
 
     specCount = creditCountSpec  + creditCount300and400['Spec'];
     majCount = creditCountMaj + creditCount300and400['Maj'];
@@ -514,6 +518,8 @@ function fillCreditCount() {
  * @param {number} specCount The credit count for Specialist
 **/
 function fillSpecCreditCount(specCount) {
+    'use strict';
+
     if (specCount >= 12) {
         $('#spec_creds').html('(12.0/12.0)');
     } else {
@@ -526,6 +532,8 @@ function fillSpecCreditCount(specCount) {
  * @param {number} majCount The credit count for Major
 **/
 function fillMajCreditCount(majCount) {
+    'use strict';
+
     if (majCount >= 8) {
         $('#maj_creds').html('(8.0/8.0)')
     } else {
@@ -538,6 +546,8 @@ function fillMajCreditCount(majCount) {
  * @param {number} minCount The credit count for Minor
 **/
 function fillMinCreditCount(minCount) {
+    'use strict';
+
     if (minCount >= 4) {
         $('#min_creds').html('(4.0/4.0)')
     } else {
@@ -551,6 +561,8 @@ function fillMinCreditCount(minCount) {
  * @param HTMLElement} min300s Array of textbox elements to fill
 **/
 function addExtraMinCourses(index, min300s) {
+    'use strict';
+
     for (var m = 0; m < 3; m++) {
         if(index === 3) {
             break;      
@@ -568,6 +580,8 @@ function addExtraMinCourses(index, min300s) {
  * Checks whether a POSt is completed and updates credit count colour if it is.
 **/
 function checkPostCompleted() {
+    'use strict';
+
     if (categories_completed['Spec'] === 17) {
         $('#spec_creds').css('color', 'green');
     } else {
@@ -591,6 +605,8 @@ function checkPostCompleted() {
  * Updates the Nav Bar on the Check My Post! page
 **/
 function updateNavPost() {
+    'use strict';
+
     var nav_post = $('#nav-links')[0].getElementsByTagName('li')[3].getElementsByTagName('a')[0];
 
     if (getCookie('specialist') === 'active') {
@@ -609,6 +625,8 @@ function updateNavPost() {
  * Updates the Nav Bar on the Graph page.
 **/
 function updateNavGraph() {
+    'use strict';
+
     var nav_graph = $('#nav-links')[0].getElementsByTagName('li')[3].getElementsByTagName('a')[0];
 
     if (getCookie('specialist') === 'active') {

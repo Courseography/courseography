@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    'use-strict'
+    'use strict';
 	
     openLastActiveTab();
     updateAllCategories();
@@ -8,7 +8,7 @@ $(document).ready(function () {
 
 
 $('#specialist').click(function (e) {
-    'use-strict'
+    'use strict';
 	
     e.preventDefault();
     openTab('specialist');
@@ -17,7 +17,7 @@ $('#specialist').click(function (e) {
 
 
 $('#major').click(function (e) {
-    'use-strict'
+    'use strict';
 	
     e.preventDefault();
     openTab('major');
@@ -26,7 +26,7 @@ $('#major').click(function (e) {
 
 
 $('#minor').click (function (e) {
-    'use-strict'
+    'use strict';
 	
     e.preventDefault();
     openTab('minor');
@@ -34,7 +34,7 @@ $('#minor').click (function (e) {
 });
 
 $('.code').click (function (e) {
-    'use-strict'
+    'use strict';
     
     e.preventDefault();
     $(this).parent().find('.more-info').toggle();
@@ -44,7 +44,7 @@ $('.code').click (function (e) {
  * Hides all currently open divs and resets navbar to display none of the links as clicked.
 **/
 function resetAttributes() {
-    'use-strict'
+    'use strict';
 
     document.getElementById('div_specialist').style.display = 'none';
     document.getElementById('div_major').style.display = 'none';
@@ -56,7 +56,7 @@ function resetAttributes() {
  * Resets cookies of all tabs to 'inactive' - not open
 **/
 function resetTabCookies() {
-    'use-strict'
+    'use strict';
 
     setCookie('specialist', 'inactive');
     setCookie('major', 'inactive');
@@ -68,7 +68,7 @@ function resetTabCookies() {
  * @param {string} tab The tab that we want to open
 **/
 function openTab(tab) {
-    'use-strict'
+    'use strict';
 
     resetAttributes();
     resetTabCookies();
@@ -92,7 +92,7 @@ function openTab(tab) {
  * Opens the tab that was last opened. 
 **/
 function openLastActiveTab() {
-    'use-strict'
+    'use strict';
 
     if (getCookie('minor') === 'active') {
        openTab('minor');
