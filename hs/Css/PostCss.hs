@@ -1,11 +1,11 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module PostCss where
+module Css.PostCss where
 
 import Clay
 import Prelude hiding ((**))
 import Data.Monoid
-import Constants
+import Css.Constants
 
 -- Post Styles
 postStyles = do

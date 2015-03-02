@@ -1,4 +1,4 @@
-module ConvertSVGToPNG where
+module ImageConversion where
 
 import System.Process
 import GHC.IO.Handle.Types
@@ -7,14 +7,17 @@ import GHC.IO.Exception
 
 -- | Converts an SVG file to a PNG file. Note that image magik's 'convert' command
 -- can take in file descriptors.
-convertSVGToPNG :: String -> String -> IO
+convertToImage :: String -> String -> IO
                      (Maybe Handle,
                       Maybe Handle,
                       Maybe Handle,
                       ProcessHandle)
 
-convertSVGToPNG inName outName = createProcess $ CreateProcess
-                                  (ShellCommand $ "convert Testfile2.svg INSERT_ID-graph.png"
+convertToImage inName outName = createProcess $ CreateProcess
+                                  (ShellCommand $ "convert " ++
+                                                  inName ++
+                                                  " " ++
+                                                  outName
                                    )
                                   Nothing
                                   Nothing
@@ -23,15 +26,14 @@ convertSVGToPNG inName outName = createProcess $ CreateProcess
                                   CreatePipe
                                   False
                                   False
-                                  False
 -- | Removes a file.
-removePNG :: String -> IO
+removeImage :: String -> IO
                      (Maybe Handle,
                       Maybe Handle,
                       Maybe Handle,
                       ProcessHandle)
 
-removePNG name = createProcess $ CreateProcess
+removeImage name = createProcess $ CreateProcess
                                   (ShellCommand $ "rm " ++ name)
                                   Nothing
                                   Nothing
@@ -40,11 +42,12 @@ removePNG name = createProcess $ CreateProcess
                                   CreatePipe
                                   False
                                   False
-                                  False
 
 -- Note: hGetContents can be used to read Handles. Useful when trying to read from
 -- stdout.
-createPNGFile :: String -> IO ExitCode
-createPNGFile uniqueName = do (inp, out, err, pid) <- convertSVGToPNG uniqueName "../res/graphs/graph_regions.svg"
-                              liftIO $ print "Waiting for process..."
-                              liftIO $ waitForProcess pid
+createImageFile :: String -> String -> IO ()
+createImageFile inName outName =
+    do (inp, out, err, pid) <- convertToImage inName outName
+       liftIO $ print "Waiting for process..."
+       liftIO $ waitForProcess pid
+       liftIO $ print "Process Complete"

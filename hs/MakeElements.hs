@@ -1,6 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module MakeElements where
+
 import           Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
@@ -40,6 +41,7 @@ jQuery = makeScript "https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.
 timetableLinks :: H.Html
 timetableLinks = concatHtml (map stylesheet ["//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css",
                                          "static/style/grid/timetable_styles.css",
+                                         "static/style/graph/graph_styles.css",
                                          "static/style/common/common.css"])
 
 plannerLinks :: H.Html

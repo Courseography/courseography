@@ -1,11 +1,11 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module DrawCss where
+module Css.DrawCss where
 
 import Clay
 import Prelude hiding ((**))
 import Data.Monoid
-import Constants
+import Css.Constants
 
 {- drawStyles
  - Generates all CSS for the draw page. -}
