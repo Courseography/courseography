@@ -226,7 +226,7 @@ function fill300and400Textboxes(specBound, majBound, textboxLevel, activeLevel, 
     var index = 'index' + activeLevel;
 
     for (var m = 0; m < specBound; m++) {
-        if (index['spec'] === window['active' + activeLevel + 's'].length || i === specBound) {
+        if (window[index]['spec'] === window['active' + activeLevel + 's'].length || i === specBound) {
             break;
         }
         specElement[i].value = window['active' + activeLevel + 's'][window[index]['spec']];
