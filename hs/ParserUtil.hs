@@ -127,3 +127,11 @@ intersects width height (rx, ry) offset (px, py) = do
 -- | Removes the part of a string after the first forward slash.
 dropSlash :: String -> String
 dropSlash str = head $ splitOn "/" str
+
+-- | Removes the character \" from a string.
+replaceEscapedQuotation :: String -> String
+replaceEscapedQuotation [] = []
+replaceEscapedQuotation (x:xs) =
+     if x == '\"'
+     then replaceEscapedQuotation xs
+     else x : replaceEscapedQuotation xs

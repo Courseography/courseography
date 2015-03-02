@@ -15,6 +15,7 @@ import Filesystem.Path.CurrentOS
 import System.Directory
 import CourseographyFacebook
 import qualified Data.Text as T
+import Data.Map as M
 
 main :: IO ()
 main = do
