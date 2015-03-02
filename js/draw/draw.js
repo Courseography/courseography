@@ -601,14 +601,14 @@ $('#add-text').click(function (){
 function keyboard(e) {
     'use-strict';
     
-    if (e.which == 77 && e.ctrlKey && e.shiftKey) {
-        changeMode("move-mode"); // m
-    } else if (e.which == 78 && e.ctrlKey && e.shiftKey) {
-        changeMode("node-mode"); // n !!
-    } else if (e.which == 80 && e.ctrlKey && e.shiftKey){
-        changeMode("path-mode"); // p !!
-    } else if (e.which == 69 && e.ctrlKey && e.shiftKey){
-        changeMode("erase-mode"); // e
+    if (e.which == 81 && e.ctrlKey && e.shiftKey) {
+        changeMode("node-mode"); // q
+    } else if (e.which == 87 && e.ctrlKey && e.shiftKey) {
+        changeMode("path-mode"); // w
+    } else if (e.which == 90 && e.ctrlKey && e.shiftKey){
+        changeMode("move-mode"); // z
+    } else if (e.which == 88 && e.ctrlKey && e.shiftKey){
+        changeMode("erase-mode"); // x
     }
 }
 

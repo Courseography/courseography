@@ -32,14 +32,14 @@ drawHtml = H.div ! A.id "aboutDiv" $ do
 
 modePanel :: H.Html
 modePanel = createTag H.div "mode-panel" "" $ do 
-  createTag H.div "node-mode" "mode clicked" "NODE"
+  createTag H.div "node-mode" "mode clicked" "NODE(Q)"
   H.input ! A.id "course-code" ! A.class_ "course-code" ! A.name "course-code" ! A.placeholder "Course Code" ! A.autocomplete "off" ! A.type_ "text" ! A.size "10"
   createTag H.div "add-text" "button" "ADD"
   createTag H.div "red" "colour clicked" "RED"
   createTag H.div "green" "colour" "GREEN"
   createTag H.div "blue" "colour" "BLUE"
   createTag H.div "purple" "colour" "PURPLE"
-  createTag H.div "path-mode" "mode" "PATH" 
+  createTag H.div "path-mode" "mode" "PATH(W)" 
   createTag H.div "region-mode" "mode" "REGION" 
-  createTag H.div "change-mode" "mode" "SELECT/MOVE" 
-  createTag H.div "erase-mode" "mode" "ERASE" 
+  createTag H.div "change-mode" "mode" "SELECT/MOVE(Z)" 
+  createTag H.div "erase-mode" "mode" "ERASE(X)" 
