@@ -202,7 +202,6 @@ function updateAllCategories() {
     }
 
     checkPostCompleted();
-
 }
 
 
@@ -564,7 +563,7 @@ function addExtraMinCourses(index, min300s) {
     'use strict';
 
     for (var m = 0; m < 3; m++) {
-        if(index === 3) {
+        if (index === 3) {
             break;      
         } if (getCookie(additional_min_200s[m]) === 'active') {
             min300s[index].value = additional_min_200s[m];

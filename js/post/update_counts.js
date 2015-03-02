@@ -95,7 +95,6 @@ function updateCompletedMinCourses() {
 function update300s() {
     'use strict';
 
-
     for (var courseCode in level300) {
         if (level300.hasOwnProperty(courseCode)) {
             if ((getCookie(courseCode) === 'active' || getCookie(courseCode) === 'overridden') 
