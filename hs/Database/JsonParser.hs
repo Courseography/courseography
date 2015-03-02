@@ -7,7 +7,6 @@ module Database.JsonParser (insertCourse,
                     fbdbStr,
                     encodeJSON) where
 
-
 import qualified Data.ByteString.Lazy as B
 import qualified Data.ByteString.Lazy.Char8 as BSL
 import qualified Data.Vector as V
@@ -30,7 +29,7 @@ fbdbStr :: T.Text
 fbdbStr = "fdatabase1.sqlite3"
 
 dbStr :: T.Text
-dbStr = "database1.sqlite3"
+dbStr = "Database/database1.sqlite3"
 
 courseDirectory :: String
 courseDirectory = "../../res/courses/"

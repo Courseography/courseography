@@ -1,4 +1,4 @@
-module ParserUtil where
+module SvgParsing.ParserUtil where
 
 import Text.XML.HaXml
 import Text.XML.HaXml.ByteStringPP
@@ -18,7 +18,7 @@ import Data.List
 import Data.Text as T (pack, unpack)
 import Database.Tables
 import Database.JsonParser
-import SVGTypes
+import SvgParsing.SVGTypes
 
 -- | Gets the root element of the document.
 getRoot :: Document i -> Content i

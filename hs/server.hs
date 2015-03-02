@@ -10,12 +10,13 @@ import PostResponse
 import ImageResponse
 --import AboutResponse
 import Database.CourseQueries
-import CssGen
+import Css.CssGen
 import Filesystem.Path.CurrentOS
 import System.Directory
 import CourseographyFacebook
 import qualified Data.Text as T
 import Data.Map as M
+
 
 main :: IO ()
 main = do
@@ -29,19 +30,19 @@ main = do
     simpleHTTP nullConf $
         msum [ dir "grid" gridResponse,
                dir "graph" graphResponse,
-               dir "image" $ imageResponse,
+               dir "image" imageResponse,
                dir "graph-fb" $ seeOther redirectUrlGraphEmail $ toResponse "",
                dir "post-fb" $ seeOther redirectUrlGraphPost $ toResponse "",
                dir "test" $ look "code" >>= getEmail,
                dir "test-post" $ look "code" >>= postToFacebook,
-               dir "draw" $ drawResponse,
+               dir "draw" drawResponse,
                --dir "about" $ aboutResponse contents,
-               dir "post" $ postResponse,
+               dir "post" postResponse,
                dir "static" $ serveDirectory EnableBrowsing [] staticDir,
-               dir "course" $ look "name" >>= retrieveCourse, 
+               dir "course" $ look "name" >>= retrieveCourse,
                dir "all-courses" $ liftIO allCourses
              ]
 
 retrieveCourse :: String -> ServerPart Response
-retrieveCourse course = do
+retrieveCourse course =
    liftIO $ queryCourse (T.pack course)

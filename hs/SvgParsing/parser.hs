@@ -21,10 +21,10 @@ import Data.List
 import Data.Text as T (pack, unpack)
 import Database.Tables
 import Database.JsonParser
-import SVGGenerator
-import SVGBuilder
-import SVGTypes
-import ParserUtil
+import SvgParsing.SVGGenerator
+import SvgParsing.SVGBuilder
+import SvgParsing.SVGTypes
+import SvgParsing.ParserUtil
 
 main :: IO ()
 main = do graphFile <- readFile "../res/graphs/graph_regions.svg"

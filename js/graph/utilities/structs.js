@@ -6,6 +6,12 @@
 var nodes = []; // List of all nodes
 
 // Data Structures
+
+/**
+ * Makes a Node.
+ * @param {string} type The Node's type.
+ * @param {string} name The Node's name.
+**/
 function makeNode(type, name) {
     'use strict';
 
@@ -19,6 +25,11 @@ function makeNode(type, name) {
 }
 
 
+/**
+ * Makes a Hybrid.
+ * @param {string} type The Hybrid's type.
+ * @param {string} id The hybrid's name.
+**/
 function makeHybrid(type, name) {
     'use strict';
 
@@ -27,6 +38,12 @@ function makeHybrid(type, name) {
 }
 
 
+/**
+ * Makes an Edge.
+ * @param {Node} source The source Node of the Edge.
+ * @param {Node} target The target Node of the Edge.
+ * @param {string} id The name of the Edge.
+**/
 function makeEdge(parent, child, name) {
     'use strict';
 
