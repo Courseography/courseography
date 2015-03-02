@@ -7,17 +7,14 @@ var completed_maj = {'CSC108': 0, 'CSC148': 0, 'CSC165': 0, 'Calc1': 0, 'CSC207'
 
 var completed_min = {'CSC108': 0, 'CSC148': 0, 'CSC165': 0, 'CSC236': 0, 'CSC207': 0}; 
 
-var level300 = {'CSC300': 0, 'CSC301': 0, 'CSC302': 0, 'CSC309': 0, 'CSC310': 0, 
-                'CSC318': 0, 'CSC320': 0, 'CSC321': 0, 'CSC324': 0, 'CSC336': 0,
-                'CSC343': 0, 'CSC358': 0, 'CSC372': 0, 'CSC384': 0, 'ECE385': 0,
-                'ECE489': 0, 'BCB410': 0, 'BCB420': 0, 'BCB430': 0};
+var level300 = ['CSC300', 'CSC301', 'CSC302', 'CSC309', 'CSC310', 'CSC318', 'CSC320', 'CSC321', 
+                'CSC324', 'CSC336','CSC343', 'CSC358', 'CSC372', 'CSC384', 'ECE385', 'ECE489', 
+                'BCB410', 'BCB420', 'BCB430'];
 
-var level400 = {'CSC401': 0, 'CSC404': 0, 'CSC411': 0, 'CSC412': 0, 'CSC418': 0,
-                'CSC420': 0, 'CSC428': 0, 'CSC436': 0, 'CSC438': 0, 'CSC443': 0, 
-                'CSC446': 0, 'CSC448': 0, 'CSC454': 0, 'CSC456': 0, 'CSC458': 0,
-                'CSC463': 0, 'CSC465': 0, 'CSC469': 0, 'CSC486': 0, 'CSC488': 0,
-                'CSC490': 0, 'CSC491': 0, 'CSC494': 0, 'CSC495': 0, 'BCB410': 0, 
-                'BCB420': 0, 'BCB430': 0, 'CSC410': 0};
+var level400 = ['CSC401', 'CSC404', 'CSC411', 'CSC412', 'CSC418', 'CSC420', 'CSC428', 'CSC436',
+                'CSC438', 'CSC443', 'CSC446', 'CSC448', 'CSC454', 'CSC456', 'CSC458', 'CSC463', 
+                'CSC465', 'CSC469', 'CSC486', 'CSC488', 'CSC490', 'CSC491', 'CSC494', 'CSC495', 
+                'BCB410', 'BCB420', 'BCB430', 'CSC410'];
 
 var additional_min_200s = ['CSC209', 'CSC258', 'CSC263'];
 

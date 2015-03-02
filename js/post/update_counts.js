@@ -95,22 +95,21 @@ function updateCompletedMinCourses() {
 function update300s() {
     'use strict';
 
-    for (var courseCode in level300) {
-        if (level300.hasOwnProperty(courseCode)) {
-            if ((getCookie(courseCode) === 'active' || getCookie(courseCode) === 'overridden') 
-                && (active300s.indexOf(courseCode) === -1)) {
-                active300s.push(courseCode);
-                if ((CSCinq.indexOf(courseCode) > -1) && (activeInq.indexOf(courseCode) === -1)) { // check if Inquiry Course
-                    activeInq.push(courseCode);
-                }  
-            } else if ((getCookie(courseCode) === 'inactive' || getCookie(courseCode) === 'takeable') 
-                       && (active300s.indexOf(courseCode) > -1)) {
-                var index300 = active300s.indexOf(courseCode);
-                active300s.splice(index300, 1);
-                var indexInq = activeInq.indexOf(courseCode);
-                if (indexInq > -1) {
-                    activeInq.splice(indexInq, 1);
-                }
+    for (var i = 0; i < level300.length; i++) {
+        var courseCode = level300[i];
+        if ((getCookie(courseCode) === 'active' || getCookie(courseCode) === 'overridden') 
+            && (active300s.indexOf(courseCode) === -1)) {
+            active300s.push(courseCode);
+            if ((CSCinq.indexOf(courseCode) > -1) && (activeInq.indexOf(courseCode) === -1)) { // check if Inquiry Course
+                activeInq.push(courseCode);
+            }  
+        } else if ((getCookie(courseCode) === 'inactive' || getCookie(courseCode) === 'takeable') 
+                   && (active300s.indexOf(courseCode) > -1)) {
+            var index300 = active300s.indexOf(courseCode);
+            active300s.splice(index300, 1);
+            var indexInq = activeInq.indexOf(courseCode);
+            if (indexInq > -1) {
+                activeInq.splice(indexInq, 1);
             }
         }
     }       
@@ -123,24 +122,23 @@ function update300s() {
 function update400s() {
     'use strict';
 
-    for (var courseCode in level400) {
-        if (level400.hasOwnProperty(courseCode)) {
-            if ((getCookie(courseCode) === 'active' || getCookie(courseCode) === 'overridden') 
-                && (active400s.indexOf(courseCode) === -1)) {
-                    active400s.push(courseCode);
-                    if ((CSCinq.indexOf(courseCode) > -1) && (activeInq.indexOf(courseCode) === -1)) { // check if Inquiry Course
-                        activeInq.push(courseCode);
-                    }
-            } else if ((getCookie(courseCode) === 'inactive' || getCookie(courseCode) === 'takeable') 
-                       && (active400s.indexOf(courseCode) > -1)) {
-                var index400 = active400s.indexOf(courseCode);
-                var indexInq = activeInq.indexOf(courseCode);
-                active400s.splice(index400, 1);
-                if (indexInq > -1) {
-                    activeInq.splice(indexInq, 1);
+    for (var i = 0; i < level400.length; i++) {
+        var courseCode = level400[i];
+        if ((getCookie(courseCode) === 'active' || getCookie(courseCode) === 'overridden') 
+            && (active400s.indexOf(courseCode) === -1)) {
+                active400s.push(courseCode);
+                if ((CSCinq.indexOf(courseCode) > -1) && (activeInq.indexOf(courseCode) === -1)) { // check if Inquiry Course
+                    activeInq.push(courseCode);
                 }
+        } else if ((getCookie(courseCode) === 'inactive' || getCookie(courseCode) === 'takeable') 
+                   && (active400s.indexOf(courseCode) > -1)) {
+            var index400 = active400s.indexOf(courseCode);
+            var indexInq = activeInq.indexOf(courseCode);
+            active400s.splice(index400, 1);
+            if (indexInq > -1) {
+                activeInq.splice(indexInq, 1);
             }
-        }       
+        }      
     }
 }
 
