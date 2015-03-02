@@ -565,7 +565,7 @@ function addExtraMinCourses(index, min300s) {
     for (var m = 0; m < 3; m++) {
         if (index === 3) {
             break;      
-        } if (getCookie(additional_min_200s[m]) === 'active') {
+        } else if (getCookie(additional_min_200s[m]) === 'active') {
             min300s[index].value = additional_min_200s[m];
             min300s[index].readOnly = true;
             creditCount300and400['Min'] += 0.5;
@@ -611,10 +611,10 @@ function updateNavPost() {
     if (getCookie('specialist') === 'active') {
         nav_post.innerHTML = 'Check My POSt! (' + (specCount).toFixed(1) + '/12.0)';
         setCookie('activecount', (specCount).toFixed(1));
-    } if (getCookie('major') === 'active') {
+    } else if (getCookie('major') === 'active') {
         nav_post.innerHTML = 'Check My POSt! (' + (majCount).toFixed(1) + '/8.0)';
         setCookie('activecount', (majCount).toFixed(1));
-    } if (getCookie('minor') === 'active') {
+    } else if (getCookie('minor') === 'active') {
         nav_post.innerHTML = 'Check My POSt! (' + (minCount).toFixed(1) + '/4.0)';
         setCookie('activecount', (minCount).toFixed(1));
     } 
@@ -630,9 +630,9 @@ function updateNavGraph() {
 
     if (getCookie('specialist') === 'active') {
         nav_graph.innerHTML = 'Check My POSt! (' + getCookie('activecount') + '/12.0)';
-    } if (getCookie('major') === 'active') {
+    } else if (getCookie('major') === 'active') {
         nav_graph.innerHTML = 'Check My POSt! (' + getCookie('activecount') + '/8.0)';
-    } if (getCookie('minor') === 'active') {
+    } else if (getCookie('minor') === 'active') {
         nav_graph.innerHTML = 'Check My POSt! (' + getCookie('activecount') + '/4.0)';
     } 
 }
