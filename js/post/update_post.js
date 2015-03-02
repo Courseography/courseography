@@ -21,9 +21,9 @@ var additional_min_200s = ['CSC209', 'CSC258', 'CSC263'];
 activeInq = [];
 active400s = [];
 active300s = [];
-var index300 = {'Spec': 0, 'Maj': 0, 'Min': 0};
-var index400 = {'Spec': 0, 'Maj': 0, 'Min': 0};
-var categories_completed = {'Spec': 0, 'Maj': 0, 'Min': 0};
+var index300 = {'spec': 0, 'maj': 0, 'min': 0};
+var index400 = {'spec': 0, 'maj': 0, 'min': 0};
+var categories_completed = {'spec': 0, 'maj': 0, 'min': 0};
 var index200 = 0;
 var minCount = 0;
 var majCount = 0;
@@ -47,14 +47,14 @@ $('#update').click(function (e) {
 function updateAllCategories() {
     'use strict';
 
-    index300 = {'Spec': 0, 'Maj': 0, 'Min': 0};
-    index400 = {'Spec': 0, 'Maj': 0, 'Min': 0};
-    categories_completed = {'Spec': 0, 'Maj': 0, 'Min': 0};
+    index300 = {'spec': 0, 'maj': 0, 'min': 0};
+    index400 = {'spec': 0, 'maj': 0, 'min': 0};
+    categories_completed = {'spec': 0, 'maj': 0, 'min': 0};
     index200 = 0;
 
-    creditCount300and400['Maj'] = 0;
-    creditCount300and400['Spec'] = 0;
-    creditCount300and400['Min'] = 0;
+    creditCount300and400['maj'] = 0;
+    creditCount300and400['spec'] = 0;
+    creditCount300and400['min'] = 0;
 
     updateCompletedMinCourses();
     updateCompletedMajCourses();
@@ -65,57 +65,12 @@ function updateAllCategories() {
     fill300s();
     fillMisc();
     fillExtra();
-    // updateCreditCount();
     fillCreditCount();
 
 
-
-    // Update Specialist 
-    for (var property in completed_spec) {
-        if (completed_spec.hasOwnProperty(property)) {
-            var category = $('#spec_' + property.toLowerCase())[0].getElementsByClassName('code')[0];
-            if (completed_spec[property] === 1) { // if the category is completed
-                activateCourse(property);
-                updateCategory(category, 'fulfilled');
-                categories_completed['Spec'] += 1;
-            } else { // if the category is not completed
-                deactivateCourse(property);
-                updateCategory(category, 'not fulfilled');
-            }
-        }
-    }
-
-    // Update Major
-    for (var property in completed_maj) {
-        if (completed_maj.hasOwnProperty(property)) {
-            var category = $('#maj_' + property.toLowerCase())[0].getElementsByClassName('code')[0];
-            if (completed_maj[property] === 1) { // if the category is completed
-                activateCourse(property);
-                updateCategory(category, 'fulfilled');
-                categories_completed['Maj'] += 1;
-            } else { // if the category is not completed
-                deactivateCourse(property);
-                updateCategory(category, 'not fulfilled');
-            }
-        }
-    }
-
-
-    // Update Minor
-    for (var property in completed_min) {
-        if (completed_min.hasOwnProperty(property)) {
-            var category = $('#min_' + property.toLowerCase())[0].getElementsByClassName('code')[0];
-            if (completed_min[property] === 1) { // if the category is completed
-                activateCourse(property);
-                updateCategory(category, 'fulfilled');
-                categories_completed['Min'] += 1;
-            } else { // if the category is not completed
-                deactivateCourse(property);
-                updateCategory(category, 'not fulfilled');
-            }
-        }
-    }
-
+    updateReqsCategory('spec');
+    updateReqsCategory('maj');
+    updateReqsCategory('min');
 
 
     // Update 300s
@@ -131,8 +86,8 @@ function updateAllCategories() {
         updateCategory($('#spec_300')[0].getElementsByClassName('code')[0], 'fulfilled');
         updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'fulfilled');
         updateCategory($('#maj_300')[0].getElementsByClassName('code')[0], 'fulfilled');
-        categories_completed['Spec'] += 1;
-        categories_completed['Maj'] += 1;
+        categories_completed['spec'] += 1;
+        categories_completed['maj'] += 1;
     } else {
         updateCategory($('#spec_300')[0].getElementsByClassName('code')[0], 'not fulfilled');
         updateCategory($('#maj_300')[0].getElementsByClassName('code')[0], 'not fulfilled');
@@ -161,7 +116,7 @@ function updateAllCategories() {
     if (i === 3) {
         updateCategory($('#spec_400')[0].getElementsByClassName('code')[0], 'fulfilled');
         updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'fulfilled');
-        categories_completed['Spec'] += 1;
+        categories_completed['spec'] += 1;
     } else {
         updateCategory($('#spec_400')[0].getElementsByClassName('code')[0], 'not fulfilled');
         updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'not fulfilled');
@@ -169,52 +124,72 @@ function updateAllCategories() {
 
     if (k === 1) {
         updateCategory($('#maj_400')[0].getElementsByClassName('code')[0], 'fulfilled');
-        categories_completed['Maj'] += 1;
+        categories_completed['maj'] += 1;
     } else {    
         updateCategory($('#maj_400')[0].getElementsByClassName('code')[0], 'not fulfilled'); 
     }
 
     // Update Extra
 
-    var countMaj = 0; 
-    var countSpec = 0;
-    var countMin = 0;
+    var countmaj = 0; 
+    var countspec = 0;
+    var countmin = 0;
     var specExtra = $('#spec_extra')[0].getElementsByTagName('input');
     var majExtra = $('#maj_extra')[0].getElementsByTagName('input');
     var minExtra = $('#min_misc')[0].getElementsByTagName('input');
     for (var l = 0; l < 4; l++) {
         if (specExtra[l].value != '') {
-            countSpec += 1;
+            countspec += 1;
         } if (l < 3) {
             if (majExtra[l].value != '') {
-                countMaj += 1;
+                countmaj += 1;
             } if (minExtra[l].value != '') {
-                countMin += 1;
+                countmin += 1;
             }
         }
     }
 
 
-    if (countSpec === 4) {
+    if (countspec === 4) {
         updateCategory($('#spec_extra')[0].getElementsByClassName('code')[0], 'fulfilled');
-        categories_completed['Spec'] += 1;
-    } if (countMaj === 3) {
+        categories_completed['spec'] += 1;
+    } if (countmaj === 3) {
         updateCategory($('#maj_extra')[0].getElementsByClassName('code')[0], 'fulfilled');
-        categories_completed['Maj'] += 1;
-    } if (countMin === 3) {
+        categories_completed['maj'] += 1;
+    } if (countmin === 3) {
         updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'fulfilled');
-        categories_completed['Min'] += 1;
-    } if (countSpec < 4) {
+        categories_completed['min'] += 1;
+    } if (countspec < 4) {
         updateCategory($('#spec_extra')[0].getElementsByClassName('code')[0], 'not fulfilled');
-    } if (countMaj < 3) {
+    } if (countmaj < 3) {
         updateCategory($('#maj_extra')[0].getElementsByClassName('code')[0], 'not fulfilled');
-    } if (countMin < 3) {
+    } if (countmin < 3) {
         updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'not fulfilled');
     }
 
     checkPostCompleted();
 }
 
+/**
+ * Updates categories for required courses in each POSt
+ * @param {string} post The POSt that you are updating categories for.
+**/
+function updateReqsCategory(post) {
+    var array = 'completed_' + post;
+    for (var property in window[array]) {
+        if (window[array].hasOwnProperty(property)) {
+            var category = $('#' + post + '_' + property.toLowerCase())[0].getElementsByClassName('code')[0];
+            if (window[array][property] === 1) { // if the category is completed
+                activateCourse(property);
+                updateCategory(category, 'fulfilled');
+                categories_completed[post] += 1;
+            } else { // if the category is not completed
+                deactivateCourse(property);
+                updateCategory(category, 'not fulfilled');
+            }
+        }
+    }
+}
 
 /**
  * Records a course as clicked. 
@@ -290,24 +265,24 @@ function fill300s() {
 
     // fill courses that have been selected
     for (var m = 0; m < 3; m++) {
-        if (index300['Spec'] === active300s.length) {
+        if (index300['spec'] === active300s.length) {
             break;
         }
-        spec300s[i].value = active300s[index300['Spec']];
+        spec300s[i].value = active300s[index300['spec']];
         spec300s[i].readOnly = true;
-        index300['Spec'] += 1;
-        creditCount300and400['Spec'] += 0.5;
+        index300['spec'] += 1;
+        creditCount300and400['spec'] += 0.5;
         if (i < 2) {
-            maj300s[i].value = active300s[index300['Maj']];
+            maj300s[i].value = active300s[index300['maj']];
             maj300s[i].readOnly = true;
-            index300['Maj'] += 1;
-            creditCount300and400['Maj'] += 0.5;
+            index300['maj'] += 1;
+            creditCount300and400['maj'] += 0.5;
         }
         if (min300s[i].value === '') {
-            min300s[i].value = active300s[index300['Min']];
+            min300s[i].value = active300s[index300['min']];
             min300s[i].readOnly = true;
-            index300['Min'] += 1;
-            creditCount300and400['Min'] += 0.5;
+            index300['min'] += 1;
+            creditCount300and400['min'] += 0.5;
         }
         i += 1; 
 
@@ -315,30 +290,30 @@ function fill300s() {
 
     if (i < 3) {
         for (var m = 0; m < 3; m++) {
-            if ((index400['Spec'] === active400s.length) || (i === 3)) {
+            if ((index400['spec'] === active400s.length) || (i === 3)) {
                 break;
             }
-            spec300s[i].value = active400s[index400['Spec']];
+            spec300s[i].value = active400s[index400['spec']];
             spec300s[i].readOnly = true;
-            index400['Spec'] += 1;
-            creditCount300and400['Spec'] += 0.5;
+            index400['spec'] += 1;
+            creditCount300and400['spec'] += 0.5;
             if (i < 2) {
-                maj300s[i].value = active400s[index400['Maj']];
+                maj300s[i].value = active400s[index400['maj']];
                 maj300s[i].readOnly = true;
-                index400['Maj'] += 1;
-                creditCount300and400['Maj'] += 0.5;
+                index400['maj'] += 1;
+                creditCount300and400['maj'] += 0.5;
             }
-            min300s[i].value = active400s[index400['Min']]; 
+            min300s[i].value = active400s[index400['min']]; 
             min300s[i].readOnly = true;
-            index400['Min'] += 1;
-            creditCount300and400['Min'] += 0.5;
+            index400['min'] += 1;
+            creditCount300and400['min'] += 0.5;
             i += 1;
         }
     }
 
     // add extra 200 level courses for min
     if (i < 3) {
-        addExtraMinCourses(i, min300s);
+        addExtraminCourses(i, min300s);
     }
 }  
 
@@ -370,23 +345,23 @@ function fill400s() {
 
     // fill courses that have been selected
     for (var m = 0; m < active400s.length; m++) {
-        if ((index400['Spec'] == active400s.length) || (i === 3)) {
+        if ((index400['spec'] == active400s.length) || (i === 3)) {
             break;
         }
-        spec400s[i].value = active400s[index400['Spec']];
+        spec400s[i].value = active400s[index400['spec']];
         spec400s[i].readOnly = true;
-        index400['Spec'] += 1;
-        creditCount300and400['Spec'] += 0.5;
+        index400['spec'] += 1;
+        creditCount300and400['spec'] += 0.5;
         if (i < 1) {
-            maj400s[i].value = active400s[index400['Maj']];
+            maj400s[i].value = active400s[index400['maj']];
             maj400s[i].readOnly = true;
-            index400['Maj'] += 1;
-            creditCount300and400['Maj'] += 0.5;
+            index400['maj'] += 1;
+            creditCount300and400['maj'] += 0.5;
         }
-        min400s[i].value = active400s[index400['Min']]; 
+        min400s[i].value = active400s[index400['min']]; 
         min400s[i].readOnly = true;
-        index400['Min'] += 1;
-        creditCount300and400['Min'] += 0.5;
+        index400['min'] += 1;
+        creditCount300and400['min'] += 0.5;
         i += 1;
     } 
 
@@ -417,50 +392,50 @@ function fillExtra() {
 
         // add credit count for MAT and STA courses
         if (spec_extra[k].value.indexOf('MAT') > -1 || spec_extra[k].value.indexOf('STA') > -1) {
-            creditCount300and400['Spec'] += 0.5;
+            creditCount300and400['spec'] += 0.5;
         } if (k < 3) {
             if (maj_extra[k].value.indexOf('MAT') > -1 || maj_extra[k].value.indexOf('STA') > -1) {
-                creditCount300and400['Maj'] += 0.5;
+                creditCount300and400['maj'] += 0.5;
             }
         }
     }
 
     // fill courses that have been selected
     for (var m = 0; m < active300s.length; m++) {
-        if ((index300['Spec'] === active300s.length) || (i === 4)) {
+        if ((index300['spec'] === active300s.length) || (i === 4)) {
             break;
         }
         if ((i < 2) && (maj_extra[i].value === '')) {
-            maj_extra[i].value = active300s[index300['Maj']];
+            maj_extra[i].value = active300s[index300['maj']];
             maj_extra[i].readOnly = true;
-            index300['Maj'] += 1;
-            creditCount300and400['Maj'] += 0.5;
+            index300['maj'] += 1;
+            creditCount300and400['maj'] += 0.5;
         }
         if (spec_extra[i].value === '') {
-            spec_extra[i].value = active300s[index300['Spec']];
+            spec_extra[i].value = active300s[index300['spec']];
             spec_extra[i].readOnly = true;
-            index300['Spec'] += 1;
-            creditCount300and400['Spec'] += 0.5;
+            index300['spec'] += 1;
+            creditCount300and400['spec'] += 0.5;
         } 
         i += 1;
     }
 
     if (i < 4) {
         for (var m = 0; m < active400s.length; m++) {
-            if (((index400['Spec'] === active400s.length) && (index400['Maj'] === active400s.length)) || (i === 4)) {
+            if (((index400['spec'] === active400s.length) && (index400['maj'] === active400s.length)) || (i === 4)) {
                 break;
             }
             if ((i < 3) && (maj_extra[i].value === '')) {
-                maj_extra[i].value = active400s[index400['Maj']];
+                maj_extra[i].value = active400s[index400['maj']];
                 maj_extra[i].readOnly = true;
-                index400['Maj'] += 1;
-                creditCount300and400['Maj'] += 0.5;
+                index400['maj'] += 1;
+                creditCount300and400['maj'] += 0.5;
             }
-            if ((spec_extra[i].value === '') && (index400['Spec'] < active400s.length)){
-                spec_extra[i].value = active400s[index400['Spec']];
+            if ((spec_extra[i].value === '') && (index400['spec'] < active400s.length)){
+                spec_extra[i].value = active400s[index400['spec']];
                 spec_extra[i].readOnly = true;
-                index400['Spec'] += 1;
-                creditCount300and400['Spec'] += 0.5;
+                index400['spec'] += 1;
+                creditCount300and400['spec'] += 0.5;
             }
             i += 1;
         }
@@ -499,10 +474,10 @@ function fillMisc() {
     // update category
     if (spec_inq[0].value != '') {
         updateCategory($('#spec_misc')[0].getElementsByClassName('code')[0], 'fulfilled');
-        categories_completed['Spec'] += 1;
+        categories_completed['spec'] += 1;
     } if (maj_inq[0].value != '') {    
         updateCategory($('#maj_misc')[0].getElementsByClassName('code')[0], 'fulfilled'); 
-        categories_completed['Maj'] += 1;
+        categories_completed['maj'] += 1;
     } if (spec_inq[0].value === '') {
         updateCategory($('#spec_misc')[0].getElementsByClassName('code')[0], 'not fulfilled');
     } if (maj_inq[0].value === '') {
@@ -517,21 +492,21 @@ function fillMisc() {
 function fillCreditCount() {
     'use strict';
 
-    specCount = creditCountSpec  + creditCount300and400['Spec'];
-    majCount = creditCountMaj + creditCount300and400['Maj'];
-    minCount = creditCountMin + creditCount300and400['Min'];
+    specCount = creditCountSpec  + creditCount300and400['spec'];
+    majCount = creditCountMaj + creditCount300and400['maj'];
+    minCount = creditCountMin + creditCount300and400['min'];
 
 
-    fillSpecCreditCount(specCount);
-    fillMajCreditCount(majCount);
-    fillMinCreditCount(minCount);
+    fillspecCreditCount(specCount);
+    fillmajCreditCount(majCount);
+    fillminCreditCount(minCount);
 }
 
 /**
- * Autofills the credit count for Specialist
- * @param {number} specCount The credit count for Specialist
+ * Autofills the credit count for specialist
+ * @param {number} specCount The credit count for specialist
 **/
-function fillSpecCreditCount(specCount) {
+function fillspecCreditCount(specCount) {
     'use strict';
 
     if (specCount >= 12) {
@@ -542,10 +517,10 @@ function fillSpecCreditCount(specCount) {
 }
 
 /**
- * Autofills the credit count for Major
- * @param {number} majCount The credit count for Major
+ * Autofills the credit count for major
+ * @param {number} majCount The credit count for major
 **/
-function fillMajCreditCount(majCount) {
+function fillmajCreditCount(majCount) {
     'use strict';
 
     if (majCount >= 8) {
@@ -556,10 +531,10 @@ function fillMajCreditCount(majCount) {
 }
 
 /**
- * Autofills the credit count for Minor.
- * @param {number} minCount The credit count for Minor
+ * Autofills the credit count for minor.
+ * @param {number} minCount The credit count for minor
 **/
-function fillMinCreditCount(minCount) {
+function fillminCreditCount(minCount) {
     'use strict';
 
     if (minCount >= 4) {
@@ -570,11 +545,11 @@ function fillMinCreditCount(minCount) {
 }
 
 /**
- * Autofills extra 200-level courses for last Minor constraint.
+ * Autofills extra 200-level courses for last minor constraint.
  * @param {number} index The textbox number we are at
  * @param HTMLElement} min300s Array of textbox elements to fill
 **/
-function addExtraMinCourses(index, min300s) {
+function addExtraminCourses(index, min300s) {
     'use strict';
 
     for (var m = 0; m < 3; m++) {
@@ -583,7 +558,7 @@ function addExtraMinCourses(index, min300s) {
         } else if (getCookie(additional_min_200s[m]) === 'active') {
             min300s[index].value = additional_min_200s[m];
             min300s[index].readOnly = true;
-            creditCount300and400['Min'] += 0.5;
+            creditCount300and400['min'] += 0.5;
             index += 1;
         }
         
@@ -596,19 +571,19 @@ function addExtraMinCourses(index, min300s) {
 function checkPostCompleted() {
     'use strict';
 
-    if (categories_completed['Spec'] === 17) {
+    if (categories_completed['spec'] === 17) {
         $('#spec_creds').css('color', 'green');
     } else {
         $('#spec_creds').css('color', 'red');
     }
     
-    if (categories_completed['Maj'] === 13) {
+    if (categories_completed['maj'] === 13) {
         $('#maj_creds').css('color', 'green');
     } else {
         $('#maj_creds').css('color', 'red');
     } 
 
-    if (categories_completed['Min'] === 6) {
+    if (categories_completed['min'] === 6) {
         $('#min_creds').css('color', 'green');
     } else {
         $('#min_creds').css('color', 'red');

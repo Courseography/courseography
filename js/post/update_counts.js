@@ -1,7 +1,7 @@
 creditCountSpec = 0;
 creditCountMaj = 0;
 creditCountMin = 0;
-creditCount300and400 = {'Spec': 0, 'Maj': 0, 'Min': 0};
+creditCount300and400 = {'spec': 0, 'maj': 0, 'min': 0};
 
 
 /**
