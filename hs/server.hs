@@ -51,6 +51,6 @@ retrieveCourse course =
 
 svgResponse :: String -> ServerPart Response
 svgResponse courses = do
-  liftIO $ renderTableTT "circle.svg" courses
+  liftIO $ renderTable "circle.svg" courses
   -- Right now serving the file, but the client isn't doing anthing with it
   serveFile (asContentType "image/svg+xml") "circle.svg"

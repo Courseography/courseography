@@ -81,8 +81,8 @@ getFill :: String -> String
 getFill id_ = T.unpack $ snd3 $ getTuple id_
 
 -- | Builds an SVG document.
-makeSVGDoc :: Bool -> [(String, String)] -> [Shape] -> [Shape] -> [Path] -> [Path] -> [Text] -> S.Svg
-makeSVGDoc customize courseMap rects ellipses edges regions regionTexts =
+makeSVGDoc :: [(String, String)] -> [Shape] -> [Shape] -> [Path] -> [Path] -> [Text] -> S.Svg
+makeSVGDoc courseMap rects ellipses edges regions regionTexts =
     S.docTypeSvg ! A.width "1052.3622"
                  ! A.height "744.09448"
                  ! S.customAttribute "xmlns:svg" "http://www.w3.org/2000/svg"
@@ -92,7 +92,7 @@ makeSVGDoc customize courseMap rects ellipses edges regions regionTexts =
                  ! A.version "1.1" $ do
                       makeSVGDefs
                       S.g ! A.id_ "regions" $ concatSVG $ map convertRegionToSVG regions
-                      S.g ! A.id_ "nodes" ! A.style "stroke:#000000;" $ concatSVG $ map (convertRectToSVG customize courseMap) rects
+                      S.g ! A.id_ "nodes" ! A.style "stroke:#000000;" $ concatSVG $ map (convertRectToSVG courseMap) rects
                       S.g ! A.id_ "bools" $ concatSVG $ map convertEllipseToSVG ellipses
                       S.g ! A.id_ "edges" ! A.style "stroke:#000000" $ concatSVG $ map convertEdgeToSVG edges
                       S.g ! A.id_ "region-labels" $ concatSVG $ map (convertTextToSVG False False True) regionTexts
@@ -111,14 +111,14 @@ makeSVGDefs = S.defs $
                 S.polyline ! A.points "0,1 10,5 0,9" ! A.fill "black"
 
 -- | Builds an SVG document.
-buildSVG :: Bool -> [(String, String)] -> String -> IO ()
-buildSVG customize courseMap filename =
+buildSVG :: [(String, String)] -> String -> IO ()
+buildSVG courseMap filename =
     runSqlite dbStr $ do
         sqlRects    :: [Entity Rects]    <- selectList [] []
         sqlTexts    :: [Entity Texts]    <- selectList [] []
         sqlPaths    :: [Entity Paths]    <- selectList [] []
         sqlEllipses :: [Entity Ellipses] <- selectList [] []
-
+        let courseStyleMap = map convertSelectionToStyle courseMap
         let texts       = map (buildText . entityVal) sqlTexts
             rects       = map (buildRect texts . entityVal) sqlRects
             ellipses    = buildEllipses texts 0 $ map entityVal sqlEllipses
@@ -126,7 +126,7 @@ buildSVG customize courseMap filename =
             regions     = filter pathIsRegion paths
             edges       = filter (not . pathIsRegion) paths
             regionTexts = filter (not . intersectsWithShape (rects ++ ellipses)) texts
-            stringSVG = renderSvg $ makeSVGDoc customize courseMap rects ellipses edges regions regionTexts
+            stringSVG = renderSvg $ makeSVGDoc courseStyleMap rects ellipses edges regions regionTexts
         liftIO $ writeFile filename stringSVG
 
 -- | Determines if a text intersects with a shape.
@@ -135,19 +135,18 @@ intersectsWithShape shapes text =
     not $ null (filter (intersectsWithPoint (fromRational $ textXPos text) (fromRational $ textYPos text)) shapes)
 
 -- | Converts a `Rect` to SVG.
-convertRectToSVG :: Bool -> [(String, String)] -> Shape -> S.Svg
-convertRectToSVG customize courseMap rect = if shapeFill rect == "none" then S.rect else
+convertRectToSVG :: [(String, String)] -> Shape -> S.Svg
+convertRectToSVG courseMap rect = if shapeFill rect == "none" then S.rect else
                         S.g ! A.id_ (stringValue $ shapeId rect)
                             ! A.class_ (if shapeIsHybrid rect then "hybrid" else "node")
                             ! S.customAttribute "data-group" (stringValue (getArea (shapeId rect)))
                             ! S.customAttribute "text-rendering" "geometricPrecision"
                             ! S.customAttribute "shape-rendering" "geometricPrecision"
-                            ! A.style (if customize then
-                                       (if not (shapeIsHybrid rect) &&
-                                           not (null (getCourse (shapeId rect) courseMap)) &&
-                                           isSelectedCourse (shapeId rect) courseMap
-                                        then "stroke-width:4;" else "opacity:0.5;stroke-dasharray:8,5;")
-                                       else "") $
+                            ! A.style (stringValue (
+                                       if not (null (getCourse (shapeId rect) courseMap)) &&
+                                          not (shapeIsHybrid rect)
+                                        then snd $ head $ getCourse (shapeId rect) courseMap
+                                        else "")) $
                             do S.rect ! A.rx "4"
                                       ! A.ry "4"
                                       ! A.x (stringValue $ show $ fromRational $ shapeXPos rect)
@@ -160,10 +159,16 @@ convertRectToSVG customize courseMap rect = if shapeFill rect == "none" then S.r
 getCourse :: String -> [(String, String)] -> [(String, String)]
 getCourse id_ courseMap = filter (\x -> fst x == id_) courseMap
 
-isSelectedCourse :: String -> [(String, String)] -> Bool
-isSelectedCourse id_ courseMap = let course = snd $ head $ getCourse id_ courseMap in
-                                     isPrefixOf "active" course ||
-                                     isPrefixOf "overridden" course
+convertSelectionToStyle :: (String, String) -> (String, String)
+convertSelectionToStyle (courseName, courseStatus) =
+    if isSelected courseStatus
+    then (courseName, "stroke-width:4;")
+    else (courseName, "opacity:0.5;stroke-dasharray:8,5;")
+
+isSelected :: String -> Bool
+isSelected courseStatus =
+    isPrefixOf "active" courseStatus ||
+    isPrefixOf "overridden" courseStatus
 
 -- | Converts a `Text` to SVG.
 convertTextToSVG :: Bool -> Bool -> Bool -> Text -> S.Svg

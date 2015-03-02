@@ -1,6 +1,6 @@
 {-# LANGUAGE NoMonomorphismRestriction #-}
 
-module Diagram (renderTableTT) where
+module Diagram (renderTable) where
 
 import Diagrams.Prelude
 import Diagrams.Backend.SVG.CmdLine
@@ -54,8 +54,8 @@ rowBorder = hrule 12 # lw thin # lc grey
 makeTable :: [[String]] -> Diagram B R2
 makeTable s = vcat $ header : intersperse rowBorder (map makeRow s)
 
-renderTableTT :: String -> String -> IO ()
-renderTableTT fileName courses = do
+renderTable :: String -> String -> IO ()
+renderTable fileName courses = do
     let courseTable = partition5 $ lines courses
     print courseTable
     let g = makeTable $ zipWith (:) times courseTable
