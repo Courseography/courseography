@@ -23,7 +23,7 @@ imageResponse = do req <- askRq
 getImage :: Maybe B.ByteString -> IO Response
 getImage (Just cookie) = do
 	let courseMap = map (\x -> (dropSlash $ replaceEscapedQuotation $ fst x, snd x)) $ parseCookies $ show cookie
-	buildSVG courseMap "Testfile2.svg"
+	buildSVG True courseMap "Testfile2.svg"
 	liftIO $ print courseMap
 	liftIO $ createPNGFile "INSERT_ID-graph.png"
 	imageData <- BS.readFile "INSERT_ID-graph.png"
