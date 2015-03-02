@@ -7,13 +7,13 @@ function getGraphImage() {
     'use strict';
 
     var img;
-    var str = "";
+    var str = '';
 
     $('td').each(function (i, elem) {
-        if ($(elem).attr("class") !== "timetable-time" &&
-            !($(elem).attr("id").indexOf('.') > -1) &&
-            !($(elem).attr("id").indexOf('S') > -1)) {
-            str = str + $(elem).html() + "%0A";
+        if ($(elem).attr('class') !== 'timetable-time' &&
+            !($(elem).attr('id').indexOf('.') > -1) &&
+            !($(elem).attr('id').indexOf('S') > -1)) {
+            str = str + $(elem).html() + '%0A';
         }
     });
 
