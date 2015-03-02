@@ -7,7 +7,7 @@ import Diagrams.Backend.SVG.CmdLine
 import Diagrams.Backend.SVG
 import Data.List
 
-textFontSize = fontSize 20
+textFontSize = fontSize (Global 20)
 -- Note: Only 'fontSizeG' works with ImageMagick.
 
 timetableStrings :: [[String]]
