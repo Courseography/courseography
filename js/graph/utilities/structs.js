@@ -24,6 +24,7 @@ function makeNode(type, name) {
     nodes.push(name);
 }
 
+
 /**
  * Makes a Hybrid.
  * @param {string} type The Hybrid's type.
@@ -35,6 +36,7 @@ function makeHybrid(type, name) {
     makeNode(type, name);
     window[name].hybrid = true;
 }
+
 
 /**
  * Makes an Edge.
