@@ -24,6 +24,9 @@ active300s = [];
 var index300 = {'spec': 0, 'maj': 0, 'min': 0};
 var index400 = {'spec': 0, 'maj': 0, 'min': 0};
 var categories_completed = {'spec': 0, 'maj': 0, 'min': 0};
+var filled_textboxes_300 = {'spec': 0, 'maj': 0, 'min': 0};
+var filled_textboxes_400 = {'spec': 0, 'maj': 0, 'min': 0};
+var filled_textboxes_extra = {'spec': 0, 'maj': 0, 'min': 0};
 var index200 = 0;
 var minCount = 0;
 var majCount = 0;
@@ -47,14 +50,7 @@ $('#update').click(function (e) {
 function updateAllCategories() {
     'use strict';
 
-    index300 = {'spec': 0, 'maj': 0, 'min': 0};
-    index400 = {'spec': 0, 'maj': 0, 'min': 0};
-    categories_completed = {'spec': 0, 'maj': 0, 'min': 0};
-    index200 = 0;
-
-    creditCount300and400['maj'] = 0;
-    creditCount300and400['spec'] = 0;
-    creditCount300and400['min'] = 0;
+    resetValues();
 
     updateCompletedMinCourses();
     updateCompletedMajCourses();
@@ -74,15 +70,7 @@ function updateAllCategories() {
 
 
     // Update 300s
-    var i = 0; 
-    var spec300s = $('.lvl300spec');
-    for (var m = 0; m < 3; m++) {
-        if (spec300s[m].value != '') {
-            i += 1;
-        }
-    }
-
-    if (i === 3) {
+    if (filled_textboxes_300['spec'] === 3) {
         updateCategory($('#spec_300')[0].getElementsByClassName('code')[0], 'fulfilled');
         updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'fulfilled');
         updateCategory($('#maj_300')[0].getElementsByClassName('code')[0], 'fulfilled');
@@ -96,24 +84,7 @@ function updateAllCategories() {
 
 
     // Update 400s
-
-    var i = 0;
-    var k = 0; 
-    var spec400s = $('.lvl400spec');
-    var maj400s = $('.lvl400maj');
-
-    for (var l = 0; l < 3; l++) {
-        if (spec400s[l].value != '') {
-            i += 1;
-        }
-    }
-
-    if (maj400s[0].value != '') {
-        k = 1;
-    }
-
-
-    if (i === 3) {
+    if (filled_textboxes_400['spec'] === 3) {
         updateCategory($('#spec_400')[0].getElementsByClassName('code')[0], 'fulfilled');
         updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'fulfilled');
         categories_completed['spec'] += 1;
@@ -122,7 +93,7 @@ function updateAllCategories() {
         updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'not fulfilled');
     }
 
-    if (k === 1) {
+    if (filled_textboxes_400['maj'] === 1) {
         updateCategory($('#maj_400')[0].getElementsByClassName('code')[0], 'fulfilled');
         categories_completed['maj'] += 1;
     } else {    
@@ -130,40 +101,20 @@ function updateAllCategories() {
     }
 
     // Update Extra
-
-    var countmaj = 0; 
-    var countspec = 0;
-    var countmin = 0;
-    var specExtra = $('#spec_extra')[0].getElementsByTagName('input');
-    var majExtra = $('#maj_extra')[0].getElementsByTagName('input');
-    var minExtra = $('#min_misc')[0].getElementsByTagName('input');
-    for (var l = 0; l < 4; l++) {
-        if (specExtra[l].value != '') {
-            countspec += 1;
-        } if (l < 3) {
-            if (majExtra[l].value != '') {
-                countmaj += 1;
-            } if (minExtra[l].value != '') {
-                countmin += 1;
-            }
-        }
-    }
-
-
-    if (countspec === 4) {
+    if (filled_textboxes_extra['spec'] === 4) {
         updateCategory($('#spec_extra')[0].getElementsByClassName('code')[0], 'fulfilled');
         categories_completed['spec'] += 1;
-    } if (countmaj === 3) {
+    } if (filled_textboxes_extra['maj'] === 3) {
         updateCategory($('#maj_extra')[0].getElementsByClassName('code')[0], 'fulfilled');
         categories_completed['maj'] += 1;
-    } if (countmin === 3) {
+    } if (filled_textboxes_extra['min'] === 3) {
         updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'fulfilled');
         categories_completed['min'] += 1;
-    } if (countspec < 4) {
+    } if (filled_textboxes_extra['spec'] < 4) {
         updateCategory($('#spec_extra')[0].getElementsByClassName('code')[0], 'not fulfilled');
-    } if (countmaj < 3) {
+    } if (filled_textboxes_extra['maj'] < 3) {
         updateCategory($('#maj_extra')[0].getElementsByClassName('code')[0], 'not fulfilled');
-    } if (countmin < 3) {
+    } if (filled_textboxes_extra['min'] < 3) {
         updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'not fulfilled');
     }
 
@@ -171,10 +122,33 @@ function updateAllCategories() {
 }
 
 /**
+ * Resets all values to initial starting values
+**/
+function resetValues() {
+    'use strict';
+
+    index300 = {'spec': 0, 'maj': 0, 'min': 0};
+    index400 = {'spec': 0, 'maj': 0, 'min': 0};
+    categories_completed = {'spec': 0, 'maj': 0, 'min': 0};
+    index200 = 0;
+
+    creditCount300and400['maj'] = 0;
+    creditCount300and400['spec'] = 0;
+    creditCount300and400['min'] = 0;
+
+    filled_textboxes_300 = {'spec': 0, 'maj': 0, 'min': 0};
+    filled_textboxes_400 = {'spec': 0, 'maj': 0, 'min': 0};
+    filled_textboxes_extra = {'spec': 0, 'maj': 0, 'min': 0};
+}
+
+
+/**
  * Updates categories for required courses in each POSt
  * @param {string} post The POSt that you are updating categories for.
 **/
 function updateReqsCategory(post) {
+    'use strict';
+
     var array = 'completed_' + post;
     for (var property in window[array]) {
         if (window[array].hasOwnProperty(property)) {
@@ -190,6 +164,7 @@ function updateReqsCategory(post) {
         }
     }
 }
+
 
 /**
  * Records a course as clicked. 
@@ -271,17 +246,20 @@ function fill300s() {
         spec300s[i].value = active300s[index300['spec']];
         spec300s[i].readOnly = true;
         index300['spec'] += 1;
+        filled_textboxes_300['spec'] += 1;
         creditCount300and400['spec'] += 0.5;
         if (i < 2) {
             maj300s[i].value = active300s[index300['maj']];
             maj300s[i].readOnly = true;
             index300['maj'] += 1;
+            filled_textboxes_300['maj'] += 1;
             creditCount300and400['maj'] += 0.5;
         }
         if (min300s[i].value === '') {
             min300s[i].value = active300s[index300['min']];
             min300s[i].readOnly = true;
             index300['min'] += 1;
+            filled_textboxes_300['min'] += 1;
             creditCount300and400['min'] += 0.5;
         }
         i += 1; 
@@ -296,16 +274,19 @@ function fill300s() {
             spec300s[i].value = active400s[index400['spec']];
             spec300s[i].readOnly = true;
             index400['spec'] += 1;
+            filled_textboxes_300['spec'] += 1;
             creditCount300and400['spec'] += 0.5;
             if (i < 2) {
                 maj300s[i].value = active400s[index400['maj']];
                 maj300s[i].readOnly = true;
                 index400['maj'] += 1;
+                filled_textboxes_300['maj'] += 1;
                 creditCount300and400['maj'] += 0.5;
             }
             min300s[i].value = active400s[index400['min']]; 
             min300s[i].readOnly = true;
             index400['min'] += 1;
+            filled_textboxes_300['min'] += 1;
             creditCount300and400['min'] += 0.5;
             i += 1;
         }
@@ -351,16 +332,19 @@ function fill400s() {
         spec400s[i].value = active400s[index400['spec']];
         spec400s[i].readOnly = true;
         index400['spec'] += 1;
+        filled_textboxes_400['spec'] += 1;
         creditCount300and400['spec'] += 0.5;
         if (i < 1) {
             maj400s[i].value = active400s[index400['maj']];
             maj400s[i].readOnly = true;
             index400['maj'] += 1;
+            filled_textboxes_400['maj'] += 1;
             creditCount300and400['maj'] += 0.5;
         }
         min400s[i].value = active400s[index400['min']]; 
         min400s[i].readOnly = true;
         index400['min'] += 1;
+        filled_textboxes_400['min'] += 1;
         creditCount300and400['min'] += 0.5;
         i += 1;
     } 
@@ -393,9 +377,11 @@ function fillExtra() {
         // add credit count for MAT and STA courses
         if (spec_extra[k].value.indexOf('MAT') > -1 || spec_extra[k].value.indexOf('STA') > -1) {
             creditCount300and400['spec'] += 0.5;
+            filled_textboxes_extra['spec'] += 1;
         } if (k < 3) {
             if (maj_extra[k].value.indexOf('MAT') > -1 || maj_extra[k].value.indexOf('STA') > -1) {
                 creditCount300and400['maj'] += 0.5;
+                filled_textboxes_extra['maj'] += 1;
             }
         }
     }
@@ -409,12 +395,14 @@ function fillExtra() {
             maj_extra[i].value = active300s[index300['maj']];
             maj_extra[i].readOnly = true;
             index300['maj'] += 1;
+            filled_textboxes_extra['maj'] += 1;
             creditCount300and400['maj'] += 0.5;
         }
         if (spec_extra[i].value === '') {
             spec_extra[i].value = active300s[index300['spec']];
             spec_extra[i].readOnly = true;
             index300['spec'] += 1;
+            filled_textboxes_extra['spec'] += 1;
             creditCount300and400['spec'] += 0.5;
         } 
         i += 1;
@@ -429,12 +417,14 @@ function fillExtra() {
                 maj_extra[i].value = active400s[index400['maj']];
                 maj_extra[i].readOnly = true;
                 index400['maj'] += 1;
+                filled_textboxes_extra['maj'] += 1;
                 creditCount300and400['maj'] += 0.5;
             }
             if ((spec_extra[i].value === '') && (index400['spec'] < active400s.length)){
                 spec_extra[i].value = active400s[index400['spec']];
                 spec_extra[i].readOnly = true;
                 index400['spec'] += 1;
+                filled_textboxes_extra['spec'] += 1;
                 creditCount300and400['spec'] += 0.5;
             }
             i += 1;
@@ -565,6 +555,7 @@ function addExtraminCourses(index, min300s) {
     }
 }
 
+
 /**
  * Checks whether a POSt is completed and updates credit count colour if it is.
 **/
@@ -590,6 +581,7 @@ function checkPostCompleted() {
     }
 }
 
+
 /**
  * Updates the Nav Bar on the Check My Post! page
 **/
@@ -609,6 +601,7 @@ function updateNavPost() {
         setCookie('activecount', (minCount).toFixed(1));
     } 
 }
+
 
 /**
  * Updates the Nav Bar on the Graph page.
