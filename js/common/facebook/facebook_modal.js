@@ -41,7 +41,8 @@ function openFBPostModal() {
 function createFBModalDiv() {
     'use strict';
 
-    var img = getGraphImage();
+    var img = ($("#courseography-header").attr("context") === "graph") ? getGraphImage() :
+                                                                         getGridImage() ;
 
     var contentDiv = $('<div></div>');
     contentDiv.attr('id', 'modal-content-container');

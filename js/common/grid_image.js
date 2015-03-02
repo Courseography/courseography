@@ -3,7 +3,7 @@
  * image.
  * @returns {String} The base64 representation of an image.
  */
-function getGraphImage() {
+function getGridImage() {
     'use strict';
 
     var img;
@@ -18,7 +18,7 @@ function getGraphImage() {
     });
 
     $.ajax({
-        url: 'image' + str,
+        url: 'timetable-image?courses=' + str,
         async: false,
         success: function (data) {
             img = data;

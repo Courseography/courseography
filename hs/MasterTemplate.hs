@@ -5,6 +5,7 @@ module MasterTemplate where
 import           Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
+import Text.Blaze.Internal (stringValue)
 import MakeElements
 
 masterTemplate :: String -> [H.Html] -> H.Html -> H.Html -> H.Html
@@ -25,7 +26,8 @@ masterTemplate title headers body scripts =
 header :: String -> H.Html
 header page =
   createTag H.nav "" "row header" $ do
-      H.h2 "Courseography"
+      H.h2 ! A.id "courseography-header"
+           ! H.customAttribute "context" (stringValue page) $ "Courseography"
       H.ul ! A.id "nav-links" $ do
           H.li $ makeA "" "" "graph" "" "Graph"
           H.li $ makeA "" "" "grid" "" "Grid"
