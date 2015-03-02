@@ -28,6 +28,7 @@ var filled_textboxes_300 = {'spec': 0, 'maj': 0, 'min': 0};
 var filled_textboxes_400 = {'spec': 0, 'maj': 0, 'min': 0};
 var filled_textboxes_extra = {'spec': 0, 'maj': 0, 'min': 0};
 var index200 = 0;
+var filled_textboxes_200 = 0;
 var minCount = 0;
 var majCount = 0;
 var specCount = 0;
@@ -106,14 +107,14 @@ function updateAllCategories() {
     } if (filled_textboxes_extra['maj'] === 3) {
         updateCategory($('#maj_extra')[0].getElementsByClassName('code')[0], 'fulfilled');
         categories_completed['maj'] += 1;
-    } if ((filled_textboxes_300['min'] + filled_textboxes_400['min']) === 3) {
+    } if ((filled_textboxes_300['min'] + filled_textboxes_400['min'] + filled_textboxes_200) === 3) {
         updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'fulfilled');
         categories_completed['min'] += 1;
     } if (filled_textboxes_extra['spec'] < 4) {
         updateCategory($('#spec_extra')[0].getElementsByClassName('code')[0], 'not fulfilled');
     } if (filled_textboxes_extra['maj'] < 3) {
         updateCategory($('#maj_extra')[0].getElementsByClassName('code')[0], 'not fulfilled');
-    } if ((filled_textboxes_300['min'] + filled_textboxes_400['min']) < 3) {
+    } if ((filled_textboxes_300['min'] + filled_textboxes_400['min'] + filled_textboxes_200) < 3) {
         updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'not fulfilled');
     }
 
@@ -138,6 +139,7 @@ function resetValues() {
     filled_textboxes_300 = {'spec': 0, 'maj': 0, 'min': 0};
     filled_textboxes_400 = {'spec': 0, 'maj': 0, 'min': 0};
     filled_textboxes_extra = {'spec': 0, 'maj': 0, 'min': 0};
+    filled_textboxes_200 = 0;
 }
 
 
@@ -284,15 +286,15 @@ function fill300s() {
     
 
     // fill courses that have been selected
-    i = fill300and400Textboxes(3, 2, '300', '300', i, spec300s, maj300s, min300s);
+    var k = fill300and400Textboxes(3, 2, '300', '300', i, spec300s, maj300s, min300s);
 
-    if (i < 3) {
-        i = fill300and400Textboxes(3, 2, '300', '400', i, spec300s, maj300s, min300s);
+    if (k < 3) {
+        var m = fill300and400Textboxes(3, 2, '300', '400', k, spec300s, maj300s, min300s);
     }
 
     // add extra 200 level courses for min
-    if (i < 3) {
-        addExtraMinCourses(i, min300s);
+    if (m < 3) {
+        addExtraMinCourses(m, min300s);
     }
 }  
 
@@ -526,6 +528,7 @@ function addExtraMinCourses(index, min300s) {
             min300s[index].value = additional_min_200s[m];
             min300s[index].readOnly = true;
             creditCount300and400['min'] += 0.5;
+            filled_textboxes_200 += 1;
             index += 1;
         }
         
