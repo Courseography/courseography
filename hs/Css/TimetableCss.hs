@@ -1,11 +1,11 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module TimetableCss where
+module Css.TimetableCss where
 
 import Clay
 import Prelude hiding ((**))
 import Data.Monoid
-import Constants
+import Css.Constants
 
 {- timetableStyles
  - Generates all CSS required for the timetable page. -}

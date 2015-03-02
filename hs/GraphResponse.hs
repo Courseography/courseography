@@ -1,6 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module GraphResponse where
+
 import Data.List
 import           Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
@@ -9,7 +10,6 @@ import Happstack.Server
 import MakeElements
 import MasterTemplate
 import Scripts
-import SVGGen
 
 graphResponse :: ServerPart Response
 graphResponse =

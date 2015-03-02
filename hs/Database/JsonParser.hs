@@ -6,7 +6,6 @@ module Database.JsonParser (insertCourse,
                     dbStr,
                     encodeJSON) where
 
-
 import qualified Data.ByteString.Lazy as B
 import qualified Data.ByteString.Lazy.Char8 as BSL
 import qualified Data.Vector as V
@@ -26,7 +25,7 @@ import Data.Maybe
 import Database.Tables
 
 dbStr :: T.Text
-dbStr = "database1.sqlite3"
+dbStr = "Database/database1.sqlite3"
 
 courseDirectory :: String
 courseDirectory = "../../res/courses/"
