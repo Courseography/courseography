@@ -143,24 +143,36 @@ function updateAllCategories() {
 
     // Update 400s
 
-    i = 0; 
+    var i = 0;
+    var k = 0; 
     var spec400s = $('.lvl400spec');
-    for (var l = 0; l < 1; l++) {
+    var maj400s = $('.lvl400maj');
+
+    for (var l = 0; l < 3; l++) {
         if (spec400s[l].value != '') {
             i += 1;
         }
     }
 
-    if (i === 1) {
+    if (maj400s[0].value != '') {
+        k = 1;
+    }
+
+
+    if (i === 3) {
         updateCategory($('#spec_400')[0].getElementsByClassName('code')[0], 'fulfilled');
-        updateCategory($('#maj_400')[0].getElementsByClassName('code')[0], 'fulfilled');
         updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'fulfilled');
         categories_completed['Spec'] += 1;
-        categories_completed['Maj'] += 1;
     } else {
         updateCategory($('#spec_400')[0].getElementsByClassName('code')[0], 'not fulfilled');
-        updateCategory($('#maj_400')[0].getElementsByClassName('code')[0], 'not fulfilled');
         updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'not fulfilled');
+    }
+
+    if (k === 1) {
+        updateCategory($('#maj_400')[0].getElementsByClassName('code')[0], 'fulfilled');
+        categories_completed['Maj'] += 1;
+    } else {    
+        updateCategory($('#maj_400')[0].getElementsByClassName('code')[0], 'not fulfilled'); 
     }
 
     // Update Extra
