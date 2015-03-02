@@ -3,7 +3,7 @@ $(document).ready(function () {
 	
     openLastActiveTab();
     updateAllCategories();
-    updateNav();
+    updateNavPost();
 });
 
 
@@ -12,7 +12,7 @@ $('#specialist').click(function (e) {
 	
     e.preventDefault();
     openTab('specialist');
-    updateNav();
+    updateNavPost();
 });
 
 
@@ -21,7 +21,7 @@ $('#major').click(function (e) {
 	
     e.preventDefault();
     openTab('major');
-    updateNav();
+    updateNavPost();
 });
 
 
@@ -30,7 +30,7 @@ $('#minor').click (function (e) {
 	
     e.preventDefault();
     openTab('minor');
-    updateNav();
+    updateNavPost();
 });
 
 $('.code').click (function (e) {

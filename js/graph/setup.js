@@ -87,6 +87,7 @@ $(document).ready(function () {
 
     FCEPrerequisiteCourses = [CSC318, CSC454];
 
+
     // Set width of FCE count
     var w = $('.infoTabs').width() - $('.tabList').outerWidth() - 1;
     $('#FCECountDiv').width(w + 'px');
@@ -99,6 +100,8 @@ $(document).ready(function () {
 
     // Initialize interface
     initializeGraphSettings();
+    
+    updateNavGraph();
 
     // Uncomment to enable the feedback form (must also be displayed in html)
     // activateFeedbackForm();

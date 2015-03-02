@@ -36,7 +36,7 @@ $('#update').click(function (e) {
     'use-strict'
 
     updateAllCategories();
-    updateNav();
+    updateNavPost();
 });
 
 
@@ -603,15 +603,32 @@ function checkPostCompleted() {
 /**
  *
 **/
-function updateNav() {
+function updateNavPost() {
     var nav_post = $('#nav-links')[0].getElementsByTagName('li')[3].getElementsByTagName('a')[0];
 
     if (getCookie('specialist') === 'active') {
         nav_post.innerHTML = 'Check My POSt! (' + (specCount).toFixed(1) + '/12.0)';
+        setCookie('activecount', (specCount).toFixed(1));
     } if (getCookie('major') === 'active') {
         nav_post.innerHTML = 'Check My POSt! (' + (majCount).toFixed(1) + '/8.0)';
+        setCookie('activecount', (majCount).toFixed(1));
     } if (getCookie('minor') === 'active') {
         nav_post.innerHTML = 'Check My POSt! (' + (minCount).toFixed(1) + '/4.0)';
+        setCookie('activecount', (minCount).toFixed(1));
     } 
 }
 
+/**
+ *
+**/
+function updateNavGraph() {
+    var nav_graph = $('#nav-links')[0].getElementsByTagName('li')[3].getElementsByTagName('a')[0];
+
+    if (getCookie('specialist') === 'active') {
+        nav_graph.innerHTML = 'Check My POSt! (' + getCookie('activecount') + '/12.0)';
+    } if (getCookie('major') === 'active') {
+        nav_graph.innerHTML = 'Check My POSt! (' + getCookie('activecount') + '/8.0)';
+    } if (getCookie('minor') === 'active') {
+        nav_graph.innerHTML = 'Check My POSt! (' + getCookie('activecount') + '/4.0)';
+    } 
+}
