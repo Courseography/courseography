@@ -59,7 +59,6 @@ function updateAllCategories() {
     creditCount300and400['Spec'] = 0;
     creditCount300and400['Min'] = 0;
 
-
     updateCompletedMinCourses();
     updateCompletedMajCourses();
     updateCompletedSpecCourses();
@@ -71,6 +70,8 @@ function updateAllCategories() {
     fillExtra();
     // updateCreditCount();
     fillCreditCount();
+
+
 
     // Update Specialist 
     for (var property in completed_spec) {
@@ -117,6 +118,7 @@ function updateAllCategories() {
             }
         }
     }
+
 
 
     // Update 300s
@@ -282,8 +284,10 @@ function fill300s() {
             maj300s[k].value = '';
             maj300s[k].readOnly = false;
         }
-        min300s[k].value = '';
-        min300s[k].readOnly = false;
+        if (min300s[k].value.indexOf('CSC4') === -1) {
+            min300s[k].value = '';
+            min300s[k].readOnly = false;
+        }
     }
     
 
@@ -302,10 +306,12 @@ function fill300s() {
             index300['Maj'] += 1;
             creditCount300and400['Maj'] += 0.5;
         }
-        min300s[i].value = active300s[index300['Min']];
-        min300s[i].readOnly = true;
-        index300['Min'] += 1;
-        creditCount300and400['Min'] += 0.5;
+        if (min300s[i].value === '') {
+            min300s[i].value = active300s[index300['Min']];
+            min300s[i].readOnly = true;
+            index300['Min'] += 1;
+            creditCount300and400['Min'] += 0.5;
+        }
         i += 1; 
 
     }
@@ -516,7 +522,7 @@ function fillCreditCount() {
 
     specCount = creditCountSpec  + creditCount300and400['Spec'];
     majCount = creditCountMaj + creditCount300and400['Maj'];
-    minCount = creditCountMin + (creditCount300and400['Min'] * 0.5);
+    minCount = creditCountMin + creditCount300and400['Min'];
 
 
     fillSpecCreditCount(specCount);
