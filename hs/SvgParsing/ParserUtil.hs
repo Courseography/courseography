@@ -33,9 +33,10 @@ getStyleAttr attr style =
 -- | Gets a style attribute from a style String. If the style attribute is "",
 -- then this function defaults to the previous style attribute, 'parent'.
 getNewStyleAttr :: String -> String -> String -> String
-getNewStyleAttr newStyle attr parent
-    | null (getStyleAttr attr newStyle) = parent
-    | otherwise =  getStyleAttr attr newStyle
+getNewStyleAttr newStyle attr parentStyle
+    | null newAttrStyle = parentStyle
+    | otherwise = newAttrStyle
+    where newAttrStyle = getStyleAttr attr newStyle
 
 -- | Converts a tuple of Float to a tuple of Rational.
 convertFloatTupToRationalTup :: (Float, Float) -> (Rational, Rational)
