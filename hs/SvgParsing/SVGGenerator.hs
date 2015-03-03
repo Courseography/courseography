@@ -137,15 +137,15 @@ convertRectToSVG rect =
     S.g ! A.id_ (stringValue $ shapeId rect)
         ! A.class_ (if shapeIsHybrid rect then "hybrid" else "node")
         ! S.customAttribute "data-group" (stringValue (getArea (shapeId rect))) $
-    do S.rect ! A.rx "4"
-              ! A.ry "4"
-              ! A.x (stringValue $ show $ fromRational $ shapeXPos rect)
-              ! A.y (stringValue $ show $ fromRational $ shapeYPos rect)
-              ! A.width (stringValue $ show $ fromRational $ shapeWidth rect)
-              ! A.height (stringValue $ show $ fromRational $ shapeHeight rect)
-              ! A.style (stringValue $ "fill:" ++ getFill (shapeId rect) ++ ";")
-       concatSVG $ map (convertTextToSVG (shapeIsHybrid rect) False False)
-                               (shapeText rect)
+        do S.rect ! A.rx "4"
+                  ! A.ry "4"
+                  ! A.x (stringValue $ show $ fromRational $ shapeXPos rect)
+                  ! A.y (stringValue $ show $ fromRational $ shapeYPos rect)
+                  ! A.width (stringValue $ show $ fromRational $ shapeWidth rect)
+                  ! A.height (stringValue $ show $ fromRational $ shapeHeight rect)
+                  ! A.style (stringValue $ "fill:" ++ getFill (shapeId rect) ++ ";")
+           concatSVG $ map (convertTextToSVG (shapeIsHybrid rect) False False)
+                           (shapeText rect)
 
 -- | Converts a `Text` to SVG.
 convertTextToSVG :: Bool -> Bool -> Bool -> Text -> S.Svg

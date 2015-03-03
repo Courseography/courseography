@@ -127,5 +127,7 @@ joinPathTuple :: (String, String) -> String
 joinPathTuple (a, b) = a ++ "," ++ b
 
 -- | Converts a tuple of Rationals to a tuple of String.
+-- NOTE: `convertRationalTupToString (a, b) = (show $ fromRational a, show $ fromRational a)`
+-- will not work.
 convertRationalTupToString :: (Rational, Rational) -> (String, String)
-convertRationalTupToString (a, b) = (show $ fromRational a, show $ fromRational a)
+convertRationalTupToString tup = (show $ fromRational (fst tup), show $ fromRational (snd tup))
