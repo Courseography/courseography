@@ -32,7 +32,7 @@ main = do graphFile <- readFile "../res/graphs/graph_regions.svg"
           print "Parsing SVG file..."
           runSqlite dbStr $ do
               runMigration migrateAll
-              parseLevel False (Style (0,0) "" "" "" "" "" "") (getRoot graphDoc)
+              parseLevel False (Style (0,0) "" "" "") (getRoot graphDoc)
               liftIO $ print "Parsing complete"
           buildSVG
           liftIO $ print "SVG Built"
@@ -54,21 +54,15 @@ parseLevel currentlyInRegion style content =
            let newTransform   = getAttribute "transform" content
            let newStyle       = getAttribute "style" content
            let newFill        = getNewStyleAttr newStyle "fill" (fill style)
-           let newFontSize    = getNewStyleAttr newStyle "font-size" (fontSize style)
            let newStroke      = getNewStyleAttr newStyle "stroke" (stroke style)
            let newFillOpacity = getNewStyleAttr newStyle "fill-opacity" (fillOpacity style)
-           let newFontWeight  = getNewStyleAttr newStyle "font-weight" (fontWeight style)
-           let newFontFamily  = getNewStyleAttr newStyle "font-family" (fontFamily style)
            let x = if null newTransform then (0,0) else parseTransform newTransform
            let adjustedTransform = (fst (transform style) + fst x,
                                     snd (transform style) + snd x)
            let parentStyle = Style adjustedTransform 
                                    newFill  
-                                   newFontSize
                                    newStroke
-                                   newFillOpacity 
-                                   newFontWeight
-                                   newFontFamily
+                                   newFillOpacity
            parseElements (parseRect parentStyle) rects
            parseElements (parseText parentStyle) texts
            parseElements (parsePath (currentlyInRegion || isRegion) parentStyle) paths
@@ -155,9 +149,6 @@ insertTextIntoDB id_ xPos yPos text style =
                         (toRational xPos)
                         (toRational yPos)
                         text
-                        (fontSize style)
-                        (fontWeight style)
-                        (fontFamily style)
 
 -- | Inserts a tex entry into the texts table.
 insertPathIntoDB :: MonadIO m0 => [(Float, Float)] -> Style -> Bool -> ReaderT SqlBackend m0 ()

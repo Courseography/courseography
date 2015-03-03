@@ -94,9 +94,6 @@ Texts
     xPos Rational
     yPos Rational
     text String
-    fontSize String
-    fontWeight String
-    fontFamily String
     deriving Show
 
 Paths

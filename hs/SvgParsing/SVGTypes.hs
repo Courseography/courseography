@@ -46,9 +46,6 @@ data Style =
     Style {
             transform :: (Float,Float),
             fill :: String,
-            fontSize :: String,
             stroke :: String,
-            fillOpacity :: String,
-            fontWeight :: String,
-            fontFamily :: String
+            fillOpacity :: String
           } deriving Show
