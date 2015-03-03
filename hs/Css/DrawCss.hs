@@ -39,7 +39,8 @@ mainCSS = "#main" ? do
 canvasBackground = "#background" ? do
     height100
     width100
-    "background-image" -: "url(http://www.emba.uvm.edu/~jtl/gimpdoc-html/plugab17.gif)"
+    "background-image" -: "url(/static/res/grid.gif)"
+    "background-size" -: "128px"
     opacity 0.3
 
 {- The SVG canvas. -}
@@ -76,9 +77,10 @@ modeButtonsCSS = ".mode" ? do
         "background-color" -: "#28B0A2 !important"
         "color" -: "#DCDCDC !important"
         cursor pointer
+    ".clicked" & do
+        "background-color" -: "#28B0A2 !important"
 
 clickedButtonsCSS = ".clicked" ? do
-    "background-color" -: "#28B0A2 !important"
     "color" -: "#DCDCDC !important"
     border solid (px 2) black
 
@@ -143,6 +145,7 @@ elbowCss = ".elbow" ? do
     opacity 0
     ":hover" & do
         cursor pointer
+        opacity 1
 
 {- The labels for a node. -}
 textCSS = ".mylabel" ? do

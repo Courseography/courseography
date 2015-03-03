@@ -69,7 +69,7 @@ function getClickPosition(e, elem) {
     var xPosition = e.clientX - parentPosition.x;
     var yPosition = e.clientY - parentPosition.y;
     xPosition = Math.round(xPosition / 4) * 4; // for snapping!!
-    yPosition = Math.round(yPosition / 4) * 4; // note: problem nodeHeight?
+    yPosition = Math.round(yPosition / 4) * 4;
 
     return { x: xPosition, y: yPosition };
 }
