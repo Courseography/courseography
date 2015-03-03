@@ -5,6 +5,7 @@ module MasterTemplate where
 import           Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
+import Text.Blaze.Internal (stringValue)
 import MakeElements
 
 masterTemplate :: String -> [H.Html] -> H.Html -> H.Html -> H.Html
@@ -23,22 +24,25 @@ masterTemplate title headers body scripts =
 -- Insert the header of the Grid and Graph. This contains the year of the timetable, and
 -- a link back to the Graph.
 header :: String -> H.Html
-header page = createTag H.nav "" "row header" $ do
-  H.h2 "Courseography"
-  H.ul ! A.id "nav-links" $ do
-    H.li $ makeA "" "" "graph" "" $ "Graph"
-    H.li $ makeA "" "" "grid" "" $ "Grid"
-    H.li $ makeA "" "" "draw" "" $ "Draw"
-    H.li $ makeA "" "" "post" "" $ "Check My POSt!"
-    H.li $ makeA "" "" "about" "" $ "About"
-    H.li $ makeA "post-fb" "" "#" "" $ "Post to Facebook!"
-    H.li ! A.id "facebook-name" $ ""
-    H.li ! A.class_ "fb-login-button" 
-         ! H.customAttribute "data-max-rows" "1" 
-         ! H.customAttribute "data-size" "medium"
-         ! H.customAttribute "autologoutlink" "true"
-         ! H.customAttribute "data-show-faces" "false"
-         ! H.customAttribute "data-auto-logout-link" "false" $ ""
+header page =
+  createTag H.nav "" "row header" $ do
+      H.h2 ! A.id "courseography-header"
+           ! H.customAttribute "context" (stringValue page) $ "Courseography"
+      H.ul ! A.id "nav-links" $ do
+          H.li $ makeA "" "" "graph" "" "Graph"
+          H.li $ makeA "" "" "grid" "" "Grid"
+          H.li $ makeA "" "" "draw" "" $ "Draw"
+          H.li $ makeA "" "" "" "" "Check My POSt!"
+          H.li $ makeA "" "" "about" "" "About"
+          H.li ! A.onclick "getTable();" $ "SVG"
+          H.li $ makeA "post-fb" "" "#" "" $ "Post to Facebook!"
+          H.li ! A.id "facebook-name" $ ""
+          H.li ! A.class_ "fb-login-button"
+               ! H.customAttribute "data-max-rows" "1"
+               ! H.customAttribute "data-size" "medium"
+               ! H.customAttribute "autologoutlink" "true"
+               ! H.customAttribute "data-show-faces" "false"
+               ! H.customAttribute "data-auto-logout-link" "false" $ ""
 
 -- Disclaimer. This will be the same for both pages, I guess?
 disclaimer :: H.Html

@@ -11,7 +11,7 @@ import Control.Monad.Trans.Resource
 import qualified Data.Conduit.List as CL
 import Data.Conduit
 import Database.Persist
-import ConvertSVGToPNG
+import ImageConversion
 import Database.JsonParser
 import System.Process
 import GraphResponse
@@ -20,7 +20,6 @@ import qualified Data.ByteString.Char8 as BS
 import qualified Data.ByteString.Lazy as BL
 import Database.Persist.Sqlite
 import Network.HTTP.Client.MultipartFormData
-import Network.HTTP.Client (RequestBody(..))
 import Network (withSocketsDo)
 
 courseographyUrl :: T.Text
@@ -105,9 +104,9 @@ performPost code =
         token <- getToken testPostUrl code
         user <- FB.getUser "me" [] (Just token)
         let id_ = FB.userId user
-        liftIO $ createPNGFile ("INSERT_ID-graph.png")
+        liftIO $ createImageFile "" "INSERT_ID-graph.png"
         liftIO $ postPhoto token id_
-        liftIO $ removePNG ("INSERT_ID-graph.png")
+        liftIO $ removeImage "INSERT_ID-graph.png"
         return $ toResponse postFB
 
 -- | Gets a user access token.

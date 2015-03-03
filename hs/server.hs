@@ -1,11 +1,12 @@
 module Main where
 
 import Control.Monad    (msum)
-import Control.Monad.IO.Class  (liftIO)
+import Control.Monad.IO.Class (liftIO)
 import Happstack.Server
 import GridResponse
 import GraphResponse
 import DrawResponse
+import ImageResponse
 import PostResponse
 import ImageResponse
 --import AboutResponse
@@ -15,8 +16,7 @@ import Filesystem.Path.CurrentOS
 import System.Directory
 import CourseographyFacebook
 import qualified Data.Text as T
-import Data.Map as M
-
+import Diagram
 
 main :: IO ()
 main = do
@@ -30,19 +30,27 @@ main = do
     simpleHTTP nullConf $
         msum [ dir "grid" gridResponse,
                dir "graph" graphResponse,
-               dir "image" imageResponse,
+               dir "image" $ imageResponse,
+               dir "timetable-image" $ look "courses" >>= timetableImageResponse,
                dir "graph-fb" $ seeOther redirectUrlGraphEmail $ toResponse "",
                dir "post-fb" $ seeOther redirectUrlGraphPost $ toResponse "",
                dir "test" $ look "code" >>= getEmail,
                dir "test-post" $ look "code" >>= postToFacebook,
-               dir "draw" drawResponse,
+               dir "post" $ postResponse,
+               dir "draw" $ drawResponse,
                --dir "about" $ aboutResponse contents,
-               dir "post" postResponse,
                dir "static" $ serveDirectory EnableBrowsing [] staticDir,
                dir "course" $ look "name" >>= retrieveCourse,
-               dir "all-courses" $ liftIO allCourses
+               dir "all-courses" $ liftIO allCourses,
+               dir "svg" $ look "courses" >>= svgResponse
              ]
 
 retrieveCourse :: String -> ServerPart Response
 retrieveCourse course =
    liftIO $ queryCourse (T.pack course)
+
+svgResponse :: String -> ServerPart Response
+svgResponse courses = do
+  liftIO $ renderTable "circle.svg" courses
+  -- Right now serving the file, but the client isn't doing anthing with it
+  serveFile (asContentType "image/svg+xml") "circle.svg"
