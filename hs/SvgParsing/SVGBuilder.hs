@@ -96,9 +96,6 @@ buildText entity =
     Text (textsXPos entity)
          (textsYPos entity)
          (textsText entity)
-         (textsFontSize entity)
-         (textsFontWeight entity)
-         (textsFontFamily entity)
 
 -- | Builds a Path from a database entry in the paths table.
 buildEllipses :: [Text] -> Int -> [Ellipses] -> [Shape]
@@ -129,8 +126,8 @@ buildPathString d = unwords $ map (joinPathTuple . convertRationalTupToString) d
 
 -- | Joins two String values in a tuple with a comma.
 joinPathTuple :: (String, String) -> String
-joinPathTuple tup = fst tup ++ "," ++ snd tup
+joinPathTuple (a, b) = a ++ "," ++ b
 
 -- | Converts a tuple of Rationals to a tuple of String.
 convertRationalTupToString :: (Rational, Rational) -> (String, String)
-convertRationalTupToString tup = (show $ fromRational (fst tup), show $ fromRational (snd tup))
+convertRationalTupToString (a, b) = (show $ fromRational a, show $ fromRational a)

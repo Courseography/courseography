@@ -35,6 +35,8 @@ main = do graphFile <- readFile "../res/graphs/graph_regions.svg"
               parseLevel False (Style (0,0) "" "" "" "" "" "") (getRoot graphDoc)
               liftIO $ print "Parsing complete"
           buildSVG
+          liftIO $ print "SVG Built"
+
 
 -- | Parses a level.
 parseLevel :: MonadIO m0 =>  Bool -> Style -> Content i -> ReaderT SqlBackend m0 ()
@@ -62,8 +64,8 @@ parseLevel currentlyInRegion style content =
                                     snd (transform style) + snd x)
            let parentStyle = Style adjustedTransform 
                                    newFill  
-                                   newFontSize  
-                                   newStroke 
+                                   newFontSize
+                                   newStroke
                                    newFillOpacity 
                                    newFontWeight
                                    newFontFamily
@@ -82,7 +84,7 @@ parseChildren currentlyInRegion style (x:xs) =
 
 -- | Applies a parser to a list of Content.
 parseElements :: MonadIO m0 => (Content i ->  ReaderT SqlBackend m0 ()) -> [Content i] -> ReaderT SqlBackend m0 ()
-parseElements f [] = return ()
+parseElements _ [] = return ()
 parseElements f (x:xs) = do f x
                             parseElements f xs
 

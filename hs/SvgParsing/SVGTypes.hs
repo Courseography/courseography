@@ -12,10 +12,7 @@ data Text =
     Text {
            textXPos :: Rational,
            textYPos :: Rational,
-           textText :: String,
-           textFontSize :: String,
-           textFontWeight :: String,
-           textFontFamily :: String
+           textText :: String
          } deriving Show
 
 -- | A Path.
