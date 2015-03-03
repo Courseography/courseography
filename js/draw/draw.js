@@ -68,6 +68,9 @@ function getClickPosition(e, elem) {
     var parentPosition = getPosition(elem);
     var xPosition = e.clientX - parentPosition.x;
     var yPosition = e.clientY - parentPosition.y;
+    // xPosition = Math.round(xPosition / 5) * 5; // for snapping!!
+    // yPosition = Math.round(yPosition / 5) * 5; // note: problem nodeHeight
+
     return { x: xPosition, y: yPosition };
 }
 
@@ -129,13 +132,13 @@ function makeNode(e) {
         nodeId += 1;
     } else if (mode === 'path-mode') {
         // make elbow joint, only if the dummy point is outside the starting node
-        if (startNode !== null && ((position.x < parseFloat(startNode.getAttribute('x'))) || 
-                                  (position.x > parseFloat(startNode.getAttribute('x')) + nodeWidth) ||
-                                  (position.y < parseFloat(startNode.getAttribute('y'))) || 
-                                  (position.y > parseFloat(startNode.getAttribute('y')) + nodeHeight))) {           
+        if (startNode !== null && ((position.x < parseFloat(startNode.getAttribute('x'), 10)) || 
+                                  (position.x > parseFloat(startNode.getAttribute('x'), 10) + nodeWidth) ||
+                                  (position.y < parseFloat(startNode.getAttribute('y'), 10)) || 
+                                  (position.y > parseFloat(startNode.getAttribute('y'), 10) + nodeHeight))) {           
             if (curPath === null) { // start node to first elbow
-                var pathString = findClosest({x: parseFloat(startNode.getAttribute('x')), 
-                             y: parseFloat(startNode.getAttribute('y'))},
+                var pathString = findClosest({x: parseFloat(startNode.getAttribute('x'), 10), 
+                             y: parseFloat(startNode.getAttribute('y'), 10)},
                             'node', position, 'elbow');
 
                 curPath = document.createElementNS(xmlns, 'path'); // note: id will get set when the path is complete
@@ -230,11 +233,11 @@ function nodeClicked(e) {
             var pathId = startNode.id + e.currentTarget.id;
             if (document.getElementById(pathId) === null) {
                 if (curPath === null) { // create a new path
-                    var pathString = findClosest( {x: parseFloat(startNode.getAttribute('x')), 
-                                  y: parseFloat(startNode.getAttribute('y'))},
+                    var pathString = findClosest( {x: parseFloat(startNode.getAttribute('x'), 10), 
+                                  y: parseFloat(startNode.getAttribute('y'), 10)},
                                 'node', 
-                                {x: parseFloat(e.currentTarget.getAttribute('x')), 
-                                 y: parseFloat(e.currentTarget.getAttribute('y'))},
+                                {x: parseFloat(e.currentTarget.getAttribute('x'), 10), 
+                                 y: parseFloat(e.currentTarget.getAttribute('y'), 10)},
                                 'node');
 
                     curPath = document.createElementNS(xmlns, 'path');
@@ -246,11 +249,11 @@ function nodeClicked(e) {
                     curPath.elbows = [];
                     document.getElementById('mySVG').appendChild(curPath);
                 } else {
-                    var curElbow = {x: parseFloat(curPath.elbows[curPath.elbows.length - 1].getAttribute('cx')), 
-                                  y: parseFloat(curPath.elbows[curPath.elbows.length - 1].getAttribute('cy'))}
+                    var curElbow = {x: parseFloat(curPath.elbows[curPath.elbows.length - 1].getAttribute('cx'), 10), 
+                                  y: parseFloat(curPath.elbows[curPath.elbows.length - 1].getAttribute('cy'), 10)}
                     var pathString = findClosest(curElbow, 'elbow', 
-                                {x: parseFloat(e.currentTarget.getAttribute('x')), 
-                                 y: parseFloat(e.currentTarget.getAttribute('y'))},
+                                {x: parseFloat(e.currentTarget.getAttribute('x'), 10), 
+                                 y: parseFloat(e.currentTarget.getAttribute('y'), 10)},
                                 'node'); 
                     curPath.setAttributeNS(null, 'd', curPath.getAttribute('d') + pathString);
                 }
@@ -373,16 +376,16 @@ function move(e) {
     if (mode === 'change-mode') {
         if (nodeMoving !== null) {
             var position = getClickPosition(e, nodeMoving);
-            var rectX = parseFloat(nodeMoving.getAttribute('x'));
-            var rectY = parseFloat(nodeMoving.getAttribute('y'));
+            var rectX = parseFloat(nodeMoving.getAttribute('x'), 10);
+            var rectY = parseFloat(nodeMoving.getAttribute('y'), 10);
             rectX += (position.x - prevX);
             rectY += (position.y - prevY);
             nodeMoving.setAttribute('x', rectX);
             nodeMoving.setAttribute('y', rectY);
 
             if (nodeMoving.parentNode.childNodes.length > 1) {
-                var textX = parseFloat(nodeMoving.parentNode.childNodes[1].getAttribute('x'));
-                var textY = parseFloat(nodeMoving.parentNode.childNodes[1].getAttribute('y'));
+                var textX = parseFloat(nodeMoving.parentNode.childNodes[1].getAttribute('x'), 10);
+                var textY = parseFloat(nodeMoving.parentNode.childNodes[1].getAttribute('y'), 10);
                 textX += (position.x - prevX);
                 textY += (position.y - prevY);
                 nodeMoving.parentNode.childNodes[1].setAttribute('x', textX);
@@ -402,8 +405,8 @@ function move(e) {
         } else if (elbowMoving !== null) {
             var position = getClickPosition(e, elbowMoving);
             // get position of this elbow 
-            var elbowX = parseFloat(elbowMoving.getAttribute('cx'));
-            var elbowY = parseFloat(elbowMoving.getAttribute('cy'));
+            var elbowX = parseFloat(elbowMoving.getAttribute('cx'), 10);
+            var elbowY = parseFloat(elbowMoving.getAttribute('cy'), 10);
             elbowX += (position.x - prevX);
             elbowY += (position.y - prevY);
             elbowMoving.setAttribute('cx', elbowX);
@@ -480,14 +483,14 @@ function movePath(path, xBy, yBy, partOfPath, elbowNum) {
     var theX = null;
     var theY = null;
     if (partOfPath === 'start') {
-        theX = parseFloat(thePath.slice(1, thePath.indexOf(','))) + xBy; // exclude the M
+        theX = parseFloat(thePath.slice(1, thePath.indexOf(',')), 10) + xBy; // exclude the M
         theY = parseFloat(thePath.slice(thePath.indexOf(',') + 1, 
-                                        thePath.indexOf('L'))) + yBy;
+                                        thePath.indexOf('L')), 10) + yBy;
         thePath = 'M' + theX + ',' + theY + thePath.slice(thePath.indexOf('L'));
     } else if (partOfPath === 'end') {
         theX = parseFloat(thePath.slice(thePath.lastIndexOf('L') + 1, 
-                                        thePath.lastIndexOf(','))) + xBy;
-        theY = parseFloat(thePath.slice(thePath.lastIndexOf(',') + 1)) + yBy;
+                                        thePath.lastIndexOf(',')), 10) + xBy;
+        theY = parseFloat(thePath.slice(thePath.lastIndexOf(',') + 1), 10) + yBy;
         thePath = thePath.slice(0, thePath.lastIndexOf('L') + 1) + theX + ',' + theY;
     } else if (partOfPath === 'elbow') {
         var indexOfElbow = 0; // !! elbowNum is not valid 
@@ -497,10 +500,10 @@ function movePath(path, xBy, yBy, partOfPath, elbowNum) {
             indexOfElbow = thePath.indexOf('L', indexOfElbow + 1);
         }
         indexOfNext = thePath.indexOf('L', indexOfElbow + 1);
-        theX = parseFloat(thePath.slice(indexOfElbow + 1, indexOfNext)) + xBy;
+        theX = parseFloat(thePath.slice(indexOfElbow + 1, indexOfNext), 10) + xBy;
         theY = parseFloat(thePath.slice(thePath.indexOf(',' , indexOfElbow) + 1,
-                                        indexOfNext)) + yBy;
-        thePath = thePath.slice(0, indexOfElbow + 1) + theX + ',' + theY + thePath.slice(indexOfNext);
+                                        indexOfNext), 10) + yBy;
+        thePath = thePath.slice(0, indexOfElbow + 1) + theX + ',' + theY + thePath.slice(indexOfNext - 1);
     }
 
     path.setAttribute('d', thePath); 
@@ -571,9 +574,9 @@ function addText() {
         }
         var code = document.createElementNS(xmlns, 'text');
         code.setAttributeNS(null, 'id', 't' + nodeSelected.getAttribute('id').slice(1));
-        code.setAttributeNS(null, 'x', parseFloat(nodeSelected.getAttribute('x')) + 
+        code.setAttributeNS(null, 'x', parseFloat(nodeSelected.getAttribute('x'), 10) + 
                                         nodeWidth/2);
-        code.setAttributeNS(null, 'y', parseFloat(nodeSelected.getAttribute('y')) +
+        code.setAttributeNS(null, 'y', parseFloat(nodeSelected.getAttribute('y'), 10) +
                                         nodeHeight/2);
         code.setAttributeNS(null, 'class', 'mylabel'); // note: label is a class in bootstrap
         var textNode = document.createTextNode(courseCode);
@@ -600,7 +603,7 @@ $('#add-text').click(function (){
 
 function keyboard(e) {
     'use-strict';
-    
+
     if (! $("#course-code").is(":focus")) {
         if (e.which == 78) {
             changeMode("node-mode"); // n
