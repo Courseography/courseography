@@ -7,15 +7,6 @@ function getGraphImage() {
     'use strict';
 
     var img;
-    var str = '';
-
-    $('td').each(function (i, elem) {
-        if ($(elem).attr('class') !== 'timetable-time' &&
-            !($(elem).attr('id').indexOf('.') > -1) &&
-            !($(elem).attr('id').indexOf('S') > -1)) {
-            str = str + $(elem).html() + '%0A';
-        }
-    });
 
     $.ajax({
         url: 'image' + str,

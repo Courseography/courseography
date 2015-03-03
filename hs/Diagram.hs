@@ -9,22 +9,6 @@ import Data.List
 
 textFontSize = fontSize (Global 20)
 
-timetableStrings = [
-    ["","","","",""],
-    ["CSC148","","CSC148","","CSC148"],
-    ["","","","",""],
-    ["","","","",""],
-    ["","","","",""],
-    ["","","","CSC165",""],
-    ["","","","CSC165",""],
-    ["","","","CSC165",""],
-    ["","","","",""],
-    ["","","","",""],
-    ["","","","",""],
-    ["","","","",""],
-    ["","","","",""]
-    ]
-
 days :: [String]
 days = ["Mon", "Tue", "Wed", "Thu", "Fri"]
 
@@ -75,8 +59,3 @@ renderTable fileName courses = do
     where
         partition5 [] = []
         partition5 lst = take 5 lst : partition5 (drop 5 lst)
-
-main :: IO ()
-main = 
- let g = makeTable $ zipWith (:) times timetableStrings
- in renderSVG "circle.svg" (Width 1000) g
