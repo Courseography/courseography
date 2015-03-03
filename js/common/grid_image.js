@@ -18,7 +18,8 @@ function getGridImage() {
     });
 
     $.ajax({
-        url: 'timetable-image?courses=' + str,
+        url: 'timetable-image',
+        data: 'courses=' + str,
         async: false,
         success: function (data) {
             img = data;
