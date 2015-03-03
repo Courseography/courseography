@@ -21,7 +21,6 @@ data Path =
            pathId :: String,
            points :: [(Rational, Rational)],
            pathFill :: String,
-           pathFillOpacity :: String,
            pathStroke :: String,
            pathIsRegion :: Bool,
            source :: String,
@@ -46,6 +45,5 @@ data Style =
     Style {
             transform :: (Float,Float),
             fill :: String,
-            stroke :: String,
-            fillOpacity :: String
+            stroke :: String
           } deriving Show

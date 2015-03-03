@@ -132,18 +132,20 @@ intersectsWithShape shapes text =
 
 -- | Converts a `Rect` to SVG.
 convertRectToSVG :: Shape -> S.Svg
-convertRectToSVG rect = if shapeFill rect == "none" then S.rect else
-                        S.g ! A.id_ (stringValue $ shapeId rect)
-                            ! A.class_ (if shapeIsHybrid rect then "hybrid" else "node")
-                            ! S.customAttribute "data-group" (stringValue (getArea (shapeId rect))) $
-                            do S.rect ! A.rx "4"
-                                      ! A.ry "4"
-                                      ! A.x (stringValue $ show $ fromRational $ shapeXPos rect)
-                                      ! A.y (stringValue $ show $ fromRational $ shapeYPos rect)
-                                      ! A.width (stringValue $ show $ fromRational $ shapeWidth rect)
-                                      ! A.height (stringValue $ show $ fromRational $ shapeHeight rect)
-                                      ! A.style (stringValue $ "fill:" ++ getFill (shapeId rect) ++ ";")
-                               concatSVG $ map (convertTextToSVG (shapeIsHybrid rect) False False) (shapeText rect)
+convertRectToSVG rect =
+    if shapeFill rect == "none" then S.rect else
+    S.g ! A.id_ (stringValue $ shapeId rect)
+        ! A.class_ (if shapeIsHybrid rect then "hybrid" else "node")
+        ! S.customAttribute "data-group" (stringValue (getArea (shapeId rect))) $
+    do S.rect ! A.rx "4"
+              ! A.ry "4"
+              ! A.x (stringValue $ show $ fromRational $ shapeXPos rect)
+              ! A.y (stringValue $ show $ fromRational $ shapeYPos rect)
+              ! A.width (stringValue $ show $ fromRational $ shapeWidth rect)
+              ! A.height (stringValue $ show $ fromRational $ shapeHeight rect)
+              ! A.style (stringValue $ "fill:" ++ getFill (shapeId rect) ++ ";")
+       concatSVG $ map (convertTextToSVG (shapeIsHybrid rect) False False)
+                               (shapeText rect)
 
 -- | Converts a `Text` to SVG.
 convertTextToSVG :: Bool -> Bool -> Bool -> Text -> S.Svg
@@ -151,7 +153,8 @@ convertTextToSVG isHybrid isBool isRegion text =
     S.text_ ! A.x (stringValue $ show $ fromRational $ textXPos text)
             ! A.y (stringValue $ show $ fromRational $ textYPos text)
             ! A.style (stringValue $
-                      (if isHybrid then hybridTextStyle else (if isBool then ellipseTextStyle else (if isRegion then regionTextStyle else ""))) ++ "font-family:sans-serif;stroke:none;")
+                       (getTextStyle isHybrid isBool isRegion) ++
+                       "font-family:sans-serif;stroke:none;")
             $ toMarkup $ textText text
 
 -- | Converts a `Path` to SVG.
@@ -165,9 +168,7 @@ convertEdgeToSVG path =
            ! S.customAttribute "target-node" (stringValue $ target path)
            ! A.style (stringValue $ "fill:" ++
                       pathFill path ++
-                      ";fill-opacity:" ++
-                      pathFillOpacity path ++
-                      ";")
+                      ";fill-opacity:1;")
 
 -- | Converts a `Path` to SVG.
 convertRegionToSVG :: Path -> S.Svg
@@ -189,3 +190,10 @@ convertEllipseToSVG ellipse = S.g ! A.id_ (stringValue (shapeId ellipse))
                                                 ! A.ry (stringValue $ show $ fromRational $ shapeHeight ellipse / 2)
                                                 ! A.style "stroke:#000000;fill:none;"
                                       concatSVG $ map (convertTextToSVG False True False) (shapeText ellipse)
+
+getTextStyle :: Bool -> Bool -> Bool -> String
+getTextStyle isHybrid isBool isRegion
+    | isHybrid  = hybridTextStyle
+    | isBool    = ellipseTextStyle
+    | isRegion  = regionTextStyle
+    | otherwise = ""

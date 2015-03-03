@@ -22,7 +22,6 @@ buildPath rects ellipses entity idCounter =
         Path ('p' : show idCounter)
              coords
              (pathsFill entity)
-             (pathsFillOpacity entity)
              (pathsStroke entity)
              (pathsIsRegion entity)
              ""
@@ -37,7 +36,6 @@ buildPath rects ellipses entity idCounter =
         Path ('p' : show idCounter)
              coords
              (pathsFill entity)
-             (pathsFillOpacity entity)
              (pathsStroke entity)
              (pathsIsRegion entity)
              sourceNode
@@ -102,12 +100,12 @@ buildEllipses :: [Text] -> Int -> [Ellipses] -> [Shape]
 buildEllipses _ _ [] = []
 buildEllipses texts idCounter entities = do
     let entity = head entities
-    let ellipseText = filter (\x ->  intersects
-                                     ((ellipsesRx entity) * 2)
-                                     ((ellipsesRy entity) * 2)
-                                     (ellipsesXPos entity, ellipsesYPos entity)
-                                     9
-                                     (textXPos x, textYPos x)
+    let ellipseText = filter (\x -> intersects
+                                    ((ellipsesRx entity) * 2)
+                                    ((ellipsesRy entity) * 2)
+                                    (ellipsesXPos entity, ellipsesYPos entity)
+                                    9
+                                    (textXPos x, textYPos x)
                              ) texts
     Shape ("bool" ++ show idCounter)
           (ellipsesXPos entity)
