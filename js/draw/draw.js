@@ -68,8 +68,8 @@ function getClickPosition(e, elem) {
     var parentPosition = getPosition(elem);
     var xPosition = e.clientX - parentPosition.x;
     var yPosition = e.clientY - parentPosition.y;
-    // xPosition = Math.round(xPosition / 5) * 5; // for snapping!!
-    // yPosition = Math.round(yPosition / 5) * 5; // note: problem nodeHeight
+    xPosition = Math.round(xPosition / 4) * 4; // for snapping!!
+    yPosition = Math.round(yPosition / 4) * 4; // note: problem nodeHeight?
 
     return { x: xPosition, y: yPosition };
 }
@@ -89,7 +89,6 @@ function getPosition(elem) {
         console.log(elem.offsetTop, elem.scrollTop, elem.clientTop);
         console.log(elem.offsetLeft, elem.offsetTop);
         console.log(elem);
-        console.log(elem.offsetParent);
         elem = elem.offsetParent;
     }
     return { x: xPosition, y: yPosition };
