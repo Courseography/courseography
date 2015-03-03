@@ -33,10 +33,9 @@ getStyleAttr attr style =
 -- | Gets a style attribute from a style String. If the style attribute is "",
 -- then this function defaults to the previous style attribute, 'parent'.
 getNewStyleAttr :: String -> String -> String -> String
-getNewStyleAttr newStyle attr parent =
-    if null (getStyleAttr attr newStyle)
-    then parent
-    else getStyleAttr attr newStyle
+getNewStyleAttr newStyle attr parent
+    | null (getStyleAttr attr newStyle) = parent
+    | otherwise =  getStyleAttr attr newStyle
 
 -- | Converts a tuple of Float to a tuple of Rational.
 convertFloatTupToRationalTup :: (Float, Float) -> (Rational, Rational)
@@ -74,27 +73,27 @@ getChildren = path [children]
 
 -- | Gets the value of the attribute with the corresponding key.
 getAttribute :: String -> Content i -> String
-getAttribute attr (CElem content undefined) =
-    let matchingAttrs = filter (\x -> getAttrName x == attr) $ getAttrs content
-    in if null matchingAttrs
-       then ""
-       else getAttrVal $ head matchingAttrs
+getAttribute attr (CElem content undefined)
+    | null matchingAttrs = ""
+    | otherwise = getAttrVal $ head matchingAttrs
+    where matchingAttrs = filter (\x -> getAttrName x == attr) $
+                                 getAttrs content
 getAttribute _ _ = ""
 
 -- | Parses a transform String into a tuple of Float.
 parseTransform :: String -> (Float, Float)
 parseTransform transform =
-    do let parsedTransform = splitOn "," $ drop 10 transform
-           xPos = read $ parsedTransform!!0 :: Float
-           yPos = read $ init $ parsedTransform!!1 :: Float
-       (xPos, yPos)
+    let parsedTransform = splitOn "," $ drop 10 transform
+        xPos = read $ parsedTransform!!0 :: Float
+        yPos = read $ init $ parsedTransform!!1 :: Float in
+    (xPos, yPos)
 
 -- | Parses a path's `d` attribute.
 parsePathD :: String -> [(Float, Float)]
-parsePathD d =
-    if head d == 'm'
-    then foldCoordsRel $ filter (\x -> length x > 1) $ map (splitOn ",") $ splitOn " " d
-    else processAbsCoords $ filter (\x -> length x > 1) $ map (splitOn ",") $ splitOn " " d
+parsePathD d
+    | head d == 'm' = foldCoordsRel $ filter lengthMoreThanOne $ map (splitOn ",") $ splitOn " " d
+    | otherwise =  processAbsCoords $ filter lengthMoreThanOne $ map (splitOn ",") $ splitOn " " d
+    where lengthMoreThanOne = (\x -> length x > 1)
 
 -- | Converts a relative coordinate structure into an absolute one.
 foldCoordsRel :: [[String]] -> [(Float, Float)]
@@ -118,10 +117,10 @@ addTuples (a,b) (c,d) = (a + c, b + d)
 
 -- | Determines if a point intersects with a shape.
 intersects :: Rational -> Rational -> (Rational, Rational) -> Float -> (Rational, Rational) -> Bool
-intersects width height (rx, ry) offset (px, py) = do
+intersects width height (rx, ry) offset (px, py) =
     let dx = px - rx
-    let dy = py - ry
-    let rationalOffset = toRational offset
+        dy = py - ry
+        rationalOffset = toRational offset in
     dx >= -1 * rationalOffset && dx <= width + rationalOffset && dy >= -1 * rationalOffset && dy <= height + rationalOffset;
 
 -- | Removes the part of a string after the first forward slash.
