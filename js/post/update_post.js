@@ -265,8 +265,6 @@ function fill300and400Textboxes(specBound, majBound, textboxLevel, activeLevel, 
 function fill300s() {
     'use strict';
 
-    var i = 0; 
-
     var spec300s = $('.lvl300spec');
     var maj300s = $('.lvl300maj');
     var min300s = $('.lvl300min');
@@ -288,7 +286,7 @@ function fill300s() {
     
 
     // fill courses that have been selected
-    var k = fill300and400Textboxes(3, 2, '300', '300', i, spec300s, maj300s, min300s);
+    var k = fill300and400Textboxes(3, 2, '300', '300', 0, spec300s, maj300s, min300s);
 
     var m;
 
@@ -309,7 +307,6 @@ function fill300s() {
 function fill400s() {
     'use strict';
 
-    var i = 0; 
     var spec400s = $('.lvl400spec');
     var maj400s = $('.lvl400maj');
     var min400s = $('.lvl400min');
@@ -328,7 +325,7 @@ function fill400s() {
     }
     
     // fill courses that have been selected
-    fill300and400Textboxes(active400s.length, 1, '400', '400', i, spec400s, maj400s, min400s);
+    fill300and400Textboxes(active400s.length, 1, '400', '400', 0, spec400s, maj400s, min400s);
 
 }
  
