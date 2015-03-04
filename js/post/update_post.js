@@ -172,7 +172,7 @@ function updateReqsCategory(post) {
  * @param {string} courseCode The course code
 **/
 function activateCourse(courseCode) {
-    'use-strict'
+    'use strict';
     
     var elements = document.getElementsByClassName(courseCode);
     for (var i = 0; i < elements.length; i++) {
@@ -186,7 +186,7 @@ function activateCourse(courseCode) {
  * @param {string} courseCode The course code
 **/
 function deactivateCourse(courseCode) {
-    'use-strict'
+    'use strict';
     
     var elements = document.getElementsByClassName(courseCode);
     for (var i = 0; i < elements.length; i++) {
@@ -201,7 +201,7 @@ function deactivateCourse(courseCode) {
  * @param {string} status Whether it is 'fulfilled' or 'not fulfilled'
 **/
 function updateCategory(category, status) {
-    'use-strict'
+    'use strict';
 
     if (status === 'fulfilled') {
         category.style.backgroundColor = "#3CB371";
