@@ -46,9 +46,9 @@ $('.code').click (function (e) {
 function resetAttributes() {
     'use strict';
 
-    document.getElementById('div_specialist').style.display = 'none';
-    document.getElementById('div_major').style.display = 'none';
-    document.getElementById('div_minor').style.display = 'none';
+    $('#div_specialist').css('display', 'none');
+    $('#div_major').css('display', 'none');
+    $('#div_minor').css('display', 'none');
     $('#specialist, #major, #minor').css('background-color', 'white');
 };
 
