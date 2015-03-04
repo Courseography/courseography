@@ -23,7 +23,7 @@ drawResponse =
                     drawHtml
                     modePanel
                 )
-                timetableScripts
+                drawScripts
 
 
 drawHtml :: H.Html
