@@ -84,7 +84,6 @@ Rects
     yPos Rational
     fill String
     stroke String
-    fillOpacity String
     isHybrid Bool
     deriving Show
 
@@ -94,15 +93,11 @@ Texts
     xPos Rational
     yPos Rational
     text String
-    fontSize String
-    fontWeight String
-    fontFamily String
     deriving Show
 
 Paths
     d [Point]
     fill String
-    fillOpacity String
     stroke String
     isRegion Bool
     deriving Show
