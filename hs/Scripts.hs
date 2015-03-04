@@ -62,4 +62,5 @@ postScripts = concatHtml (map makeScript ["https://ajax.googleapis.com/ajax/libs
                                           "static/js/post/update_post.js",
                                           "static/js/graph/create_data.js",
                                           "static/js/post/update_counts.js",
-                                          "static/js/graph/objects/node.js"])
+                                          "static/js/graph/objects/node.js",
+                                          "static/js/post/fill_textboxes.js"])
