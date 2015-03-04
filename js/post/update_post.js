@@ -73,14 +73,18 @@ function updateAllCategories() {
     if (filledTextboxes300.spec === 3) {
         updateCategory($('#spec_300')[0].getElementsByClassName('code')[0], 'fulfilled');
         updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'fulfilled');
-        updateCategory($('#maj_300')[0].getElementsByClassName('code')[0], 'fulfilled');
         categoriesCompleted.spec += 1;
-        categoriesCompleted.maj += 1;
     } else {
         updateCategory($('#spec_300')[0].getElementsByClassName('code')[0], 'not fulfilled');
-        updateCategory($('#maj_300')[0].getElementsByClassName('code')[0], 'not fulfilled');
         updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'not fulfilled');
     }
+
+    if (filledTextboxes300.maj === 2) {
+        updateCategory($('#maj_300')[0].getElementsByClassName('code')[0], 'fulfilled');
+        categoriesCompleted.maj += 1;
+     } else {
+        updateCategory($('#maj_300')[0].getElementsByClassName('code')[0], 'not fulfilled');
+     }
 
 
     // Update 400s
