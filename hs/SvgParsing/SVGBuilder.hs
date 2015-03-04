@@ -31,14 +31,14 @@ buildPath rects ellipses entity idCounter
             xEnd = fst $ last coords
             yEnd = snd $ last coords
             sourceNode = getIntersectingShape xStart yStart (rects ++ ellipses)
-            targetNode = getIntersectingShape xEnd yEnd (rects ++ ellipses) in
-            Path ('p' : show idCounter)
-                 coords
-                 (pathsFill entity)
-                 (pathsStroke entity)
-                 (pathsIsRegion entity)
-                 sourceNode
-                 targetNode
+            targetNode = getIntersectingShape xEnd yEnd (rects ++ ellipses)
+            in Path ('p' : show idCounter)
+                    coords
+                    (pathsFill entity)
+                    (pathsStroke entity)
+                    (pathsIsRegion entity)
+                    sourceNode
+                    targetNode
     where coords = map point $ pathsD entity
 
 -- | Builds a Rect from a database entry in the rects table.
@@ -70,7 +70,8 @@ getIntersectingShape :: Rational -> Rational -> [Shape] -> String
 getIntersectingShape xpos ypos shapes
     | null intersectingShapes = ""
     | otherwise = shapeId $ head intersectingShapes
-    where intersectingShapes = filter (intersectsWithPoint xpos ypos) shapes
+    where intersectingShapes = filter (intersectsWithPoint xpos ypos)
+                                      shapes
 
 -- | Determines if a rect intersects with the given coordinates.
 intersectsWithPoint :: Rational -> Rational -> Shape -> Bool
@@ -126,7 +127,5 @@ joinPathTuple :: (String, String) -> String
 joinPathTuple (a, b) = a ++ "," ++ b
 
 -- | Converts a tuple of Rationals to a tuple of String.
--- NOTE: `convertRationalTupToString (a, b) = (show $ fromRational a, show $ fromRational a)`
--- will not work.
 convertRationalTupToString :: (Rational, Rational) -> (String, String)
-convertRationalTupToString tup = (show $ fromRational (fst tup), show $ fromRational (snd tup))
+convertRationalTupToString (a, b) = (show $ fromRational a, show $ fromRational b)

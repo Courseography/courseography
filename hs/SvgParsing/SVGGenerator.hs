@@ -193,8 +193,7 @@ convertEllipseToSVG ellipse = S.g ! A.id_ (stringValue (shapeId ellipse))
                                       concatSVG $ map (convertTextToSVG False True False) (shapeText ellipse)
 
 getTextStyle :: Bool -> Bool -> Bool -> String
-getTextStyle isHybrid isBool isRegion
-    | isHybrid  = hybridTextStyle
-    | isBool    = ellipseTextStyle
-    | isRegion  = regionTextStyle
-    | otherwise = ""
+getTextStyle True _ _ = hybridTextStyle
+getTextStyle _ True _ = ellipseTextStyle
+getTextStyle _ _ True = regionTextStyle
+getTextStyle _ _ _     = ""

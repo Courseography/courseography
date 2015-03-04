@@ -77,8 +77,8 @@ getAttribute :: String -> Content i -> String
 getAttribute attr (CElem content undefined)
     | null matchingAttrs = ""
     | otherwise = getAttrVal $ head matchingAttrs
-    where matchingAttrs = filter (\x -> getAttrName x == attr) $
-                                 getAttrs content
+    where matchingAttrs = filter (\x -> getAttrName x == attr)
+                                 (getAttrs content)
 getAttribute _ _ = ""
 
 -- | Parses a transform String into a tuple of Float.
@@ -86,15 +86,17 @@ parseTransform :: String -> (Float, Float)
 parseTransform transform =
     let parsedTransform = splitOn "," $ drop 10 transform
         xPos = read $ parsedTransform!!0 :: Float
-        yPos = read $ init $ parsedTransform!!1 :: Float in
-    (xPos, yPos)
+        yPos = read $ init $ parsedTransform!!1 :: Float
+    in (xPos, yPos)
 
 -- | Parses a path's `d` attribute.
 parsePathD :: String -> [(Float, Float)]
 parsePathD d
-    | head d == 'm' = foldCoordsRel $ filter lengthMoreThanOne $ map (splitOn ",") $ splitOn " " d
-    | otherwise =  processAbsCoords $ filter lengthMoreThanOne $ map (splitOn ",") $ splitOn " " d
-    where lengthMoreThanOne = (\x -> length x > 1)
+    | head d == 'm' = foldCoordsRel coordList
+    | otherwise =  processAbsCoords coordList
+    where
+      lengthMoreThanOne = (\x -> length x > 1)
+      coordList = filter lengthMoreThanOne $ map (splitOn ",") $ splitOn " " d
 
 -- | Converts a relative coordinate structure into an absolute one.
 foldCoordsRel :: [[String]] -> [(Float, Float)]
@@ -121,8 +123,8 @@ intersects :: Rational -> Rational -> (Rational, Rational) -> Float -> (Rational
 intersects width height (rx, ry) offset (px, py) =
     let dx = px - rx
         dy = py - ry
-        rationalOffset = toRational offset in
-    dx >= -1 * rationalOffset && dx <= width + rationalOffset && dy >= -1 * rationalOffset && dy <= height + rationalOffset;
+        rationalOffset = toRational offset
+    in dx >= -1 * rationalOffset && dx <= width + rationalOffset && dy >= -1 * rationalOffset && dy <= height + rationalOffset;
 
 -- | Removes the part of a string after the first forward slash.
 dropSlash :: String -> String
