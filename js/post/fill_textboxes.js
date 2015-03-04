@@ -71,19 +71,16 @@ function fill300s() {
         }
     }
     
-
     // fill courses that have been selected
     var k = fill300and400Textboxes(3, 2, '300', '300', 0, spec300s, maj300s, min300s);
 
     if (k < 3) {
         var m = fill300and400Textboxes(3, 2, '300', '400', k, spec300s, maj300s, min300s);
         if (m < 3) {
+            // add extra 200 level courses for min
             addExtraMinCourses(m, min300s);
         }
     }
-    
-
-    // add extra 200 level courses for min
     
 }  
 
