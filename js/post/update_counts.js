@@ -84,7 +84,7 @@ function updateCompletedMinCourses() {
                 completedMin[courseCode] -= 1;
                 creditCountMin -= 0.5;
             }
-        }       
+        }
     }
 }
 
@@ -97,8 +97,8 @@ function update300s() {
 
     for (var i = 0; i < level300.length; i++) {
         var courseCode = level300[i];
-        if ((getCookie(courseCode) === 'active' || getCookie(courseCode) === 'overridden') 
-            && (active300s.indexOf(courseCode) === -1)) {
+        if ((getCookie(courseCode) === 'active' || getCookie(courseCode) === 'overridden') && 
+            (active300s.indexOf(courseCode) === -1)) {
             active300s.push(courseCode);
             if ((CSCinq.indexOf(courseCode) > -1) && (activeInq.indexOf(courseCode) === -1)) { // check if Inquiry Course
                 activeInq.push(courseCode);

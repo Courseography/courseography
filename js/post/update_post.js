@@ -3,7 +3,7 @@ var completedSpec = {'CSC108': 0, 'CSC148': 0, 'CSC165': 0, 'Calc1': 0, 'CSC207'
                       'CSC236': 0, 'CSC258': 0, 'CSC263': 0, 'Sta1': 0, 'Lin1': 0, 'CSC369': 0, 'CSC373': 0};
 
 var completedMaj = {'CSC108': 0, 'CSC148': 0, 'CSC165': 0, 'Calc1': 0, 'CSC207': 0, 'CSC236': 0, 
-                     'CSC258': 0, 'CSC263': 0, 'Sta1': 0};
+                    'CSC258': 0, 'CSC263': 0, 'Sta1': 0};
 
 var completedMin = {'CSC108': 0, 'CSC148': 0, 'CSC165': 0, 'CSC236': 0, 'CSC207': 0}; 
 
@@ -221,6 +221,23 @@ function updateCategory(category, status) {
 
 
 /**
+ * Updates Credit Count for each POSt.
+ **/
+function fillCreditCount() {
+    'use strict';
+
+    specCount = creditCountSpec  + creditCount300and400.spec;
+    majCount = creditCountMaj + creditCount300and400.maj;
+    minCount = creditCountMin + creditCount300and400.min;
+
+
+    fillSpecCreditCount(specCount);
+    fillMajCreditCount(majCount);
+    fillMinCreditCount(minCount);
+}
+
+
+/**
  * Autofills the credit count for specialist
  * @param {number} specCount The credit count for specialist
 **/
@@ -323,14 +340,14 @@ function updateNavPost() {
     var nav_post = $('#nav-links')[0].getElementsByTagName('li')[3].getElementsByTagName('a')[0];
 
     if (getCookie('specialist') === 'active') {
-        nav_post.innerHTML = 'Check My POSt! (' + (specCount).toFixed(1) + '/12.0)';
-        setCookie('activecount', (specCount).toFixed(1));
+        nav_post.innerHTML = 'Check My POSt! (' + specCount.toFixed(1) + '/12.0)';
+        setCookie('activecount', specCount.toFixed(1));
     } else if (getCookie('major') === 'active') {
-        nav_post.innerHTML = 'Check My POSt! (' + (majCount).toFixed(1) + '/8.0)';
-        setCookie('activecount', (majCount).toFixed(1));
+        nav_post.innerHTML = 'Check My POSt! (' + majCount.toFixed(1) + '/8.0)';
+        setCookie('activecount', majCount.toFixed(1));
     } else if (getCookie('minor') === 'active') {
-        nav_post.innerHTML = 'Check My POSt! (' + (minCount).toFixed(1) + '/4.0)';
-        setCookie('activecount', (minCount).toFixed(1));
+        nav_post.innerHTML = 'Check My POSt! (' + minCount.toFixed(1) + '/4.0)';
+        setCookie('activecount', minCount.toFixed(1));
     } 
 }
 

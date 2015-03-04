@@ -75,16 +75,16 @@ function fill300s() {
     // fill courses that have been selected
     var k = fill300and400Textboxes(3, 2, '300', '300', 0, spec300s, maj300s, min300s);
 
-    var m;
-
     if (k < 3) {
-        m = fill300and400Textboxes(3, 2, '300', '400', k, spec300s, maj300s, min300s);
+        var m = fill300and400Textboxes(3, 2, '300', '400', k, spec300s, maj300s, min300s);
+        if (m < 3) {
+            addExtraMinCourses(m, min300s);
+        }
     }
+    
 
     // add extra 200 level courses for min
-    if (m < 3) {
-        addExtraMinCourses(m, min300s);
-    }
+    
 }  
 
 
@@ -155,7 +155,7 @@ function fillExtra() {
 
     // fill courses that have been selected
     for (var m = 0; m < active300s.length; m++) {
-        if ((index300.spec === active300s.length) || (i === 4)) {
+        if (index300.spec === active300s.length || i === 4) {
             break;
         }
         if ((i < 2) && (maj_extra[i].value === '')) {
@@ -241,20 +241,4 @@ function fillMisc() {
         updateCategory($('#maj_misc')[0].getElementsByClassName('code')[0], 'not fulfilled');
     }
 
-}
-
-/**
- * Updates Credit Count for each POSt.
- **/
-function fillCreditCount() {
-    'use strict';
-
-    specCount = creditCountSpec  + creditCount300and400.spec;
-    majCount = creditCountMaj + creditCount300and400.maj;
-    minCount = creditCountMin + creditCount300and400.min;
-
-
-    fillSpecCreditCount(specCount);
-    fillMajCreditCount(majCount);
-    fillMinCreditCount(minCount);
 }

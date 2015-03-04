@@ -73,7 +73,7 @@ function openTab(tab) {
     resetAttributes();
     resetTabCookies();
 
-    if (tab == 'specialist') {
+    if (tab === 'specialist') {
         $('#div_specialist').show();
         $('#specialist').css('background-color', '#9C9C9C');
         setCookie('specialist', 'active');
