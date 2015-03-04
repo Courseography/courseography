@@ -225,6 +225,8 @@ function updateCategory(category, status) {
  * @return {number} The next textbox that has not been filled 
 **/
 function fill300and400Textboxes(specBound, majBound, textboxLevel, activeLevel, i, specElement, majElement, minElement) {
+    'use strict';
+
     var index = 'index' + activeLevel;
 
     for (var m = 0; m < specBound; m++) {
