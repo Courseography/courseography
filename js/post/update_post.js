@@ -350,7 +350,8 @@ function fillExtra() {
         if (spec_extra[k].value.indexOf('MAT') === -1 && spec_extra[k].value.indexOf('STA') === -1) {
             spec_extra[k].value = '';
             spec_extra[k].readOnly = false;
-        } if (k < 3) {
+        } 
+        if (k < 3) {
             if (maj_extra[k].value.indexOf('MAT') === -1 && maj_extra[k].value.indexOf('STA') === -1) {
                 maj_extra[k].value = '';
                 maj_extra[k].readOnly = false;
@@ -361,7 +362,8 @@ function fillExtra() {
         if (spec_extra[k].value.indexOf('MAT') > -1 || spec_extra[k].value.indexOf('STA') > -1) {
             creditCount300and400.spec += 0.5;
             filledTextboxesExtra.spec += 1;
-        } if (k < 3) {
+        } 
+        if (k < 3) {
             if (maj_extra[k].value.indexOf('MAT') > -1 || maj_extra[k].value.indexOf('STA') > -1) {
                 creditCount300and400.maj += 0.5;
                 filledTextboxesExtra.maj += 1;
