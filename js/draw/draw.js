@@ -1,3 +1,10 @@
+
+/**
+ * Calculates the position of the click in relation to the page.
+ * @param {} e The click event.
+ * @param {HTMLElement} elem The target of the click event.
+ * @return The position of the click.
+ */
 function getClickPosition(e, elem) {
     'use-strict';
 
@@ -11,7 +18,11 @@ function getClickPosition(e, elem) {
     return { x: xPosition, y: yPosition };
 }
 
-
+/**
+ * Calculates the position of elem in relation to the page.
+ * @param {HTMLElement} elem The target of the click event.
+ * @return The position of elem on the page.
+ */
 function getPosition(elem) {
     'use-strict';
 
@@ -31,7 +42,12 @@ function getPosition(elem) {
     return { x: xPosition, y: yPosition };
 }
 
-
+/**
+ * In node-mode creates a new node at the position of the click event on the SVG canvas.
+ * In path-mode creates an elbow at the position of the click event on the SVG canvas,
+                if the startNode is defined.
+ * @param {} e The click event.
+ */
 function makeNodePath(e) {
     'use-strict';
 
