@@ -58,15 +58,15 @@ regionTextStyle = "font-size:9pt;"
 
 -- | Gets the first element of a tuple with length 3.
 fst3 :: (a, b, c) -> a
-fst3 (a, b, c) = a
+fst3 (a, _, _) = a
 
 -- | Gets the second element of a tuple with length 3.
 snd3 :: (a, b, c) -> b
-snd3 (a,b,c) = b
+snd3 (_, b, _) = b
 
 -- | Gets the third element of a tuple with length 3.
 thrd3 :: (a, b, c) -> c
-thrd3 (a,b,c) = c
+thrd3 (_, _, c) = c
 
 -- | Gets a tuple from areaMap where id_ is in the list of courses for that tuple.
 getTuple :: String -> (String, T.Text, [String])
@@ -87,24 +87,38 @@ makeSVGDoc rects ellipses edges regions regionTexts =
                  ! A.height "744.09448"
                  ! A.version "1.1" $ do
                       makeSVGDefs
-                      S.g ! A.id_ "regions" $ concatSVG $ map convertRegionToSVG regions
-                      S.g ! A.id_ "nodes" ! A.style "stroke:#000000;" $ concatSVG $ map convertRectToSVG rects
-                      S.g ! A.id_ "bools" $ concatSVG $ map convertEllipseToSVG ellipses
-                      S.g ! A.id_ "edges" ! A.style "stroke:#000000" $ concatSVG $ map convertEdgeToSVG edges
-                      S.g ! A.id_ "region-labels" $ concatSVG $ map (convertTextToSVG False False True) regionTexts
+                      S.g ! A.id_ "regions" $
+                          concatSVG $ map convertRegionToSVG
+                                          regions
+                      S.g ! A.id_ "nodes"
+                          ! A.style "stroke:#000000;" $
+                              concatSVG $ map convertRectToSVG
+                                              rects
+                      S.g ! A.id_ "bools" $
+                          concatSVG $ map convertEllipseToSVG
+                                          ellipses
+                      S.g ! A.id_ "edges"
+                          ! A.style "stroke:#000000" $
+                              concatSVG $ map convertEdgeToSVG
+                                              edges
+                      S.g ! A.id_ "region-labels" $
+                          concatSVG $ map (convertTextToSVG False False True)
+                                          regionTexts
 
 -- | Builds the SVG defs.
 makeSVGDefs :: S.Svg
-makeSVGDefs = S.defs $
-              S.marker ! A.id_ "arrow"
-                       ! A.viewbox "0 0 10 10"
-                       ! A.refx "1"
-                       ! A.refy "5"
-                       ! A.markerunits "strokeWidth"
-                       ! A.orient "auto"
-                       ! A.markerwidth "7"
-                       ! A.markerheight "7" $
-                S.polyline ! A.points "0,1 10,5 0,9" ! A.fill "black"
+makeSVGDefs =
+    S.defs $
+    S.marker ! A.id_ "arrow"
+             ! A.viewbox "0 0 10 10"
+             ! A.refx "1"
+             ! A.refy "5"
+             ! A.markerunits "strokeWidth"
+             ! A.orient "auto"
+             ! A.markerwidth "7"
+             ! A.markerheight "7" $
+                 S.polyline ! A.points "0,1 10,5 0,9"
+                            ! A.fill "black"
 
 -- | Builds an SVG document.
 buildSVG :: IO ()
@@ -132,18 +146,21 @@ intersectsWithShape shapes text =
 
 -- | Converts a `Rect` to SVG.
 convertRectToSVG :: Shape -> S.Svg
-convertRectToSVG rect = if shapeFill rect == "none" then S.rect else
-                        S.g ! A.id_ (stringValue $ shapeId rect)
-                            ! A.class_ (if shapeIsHybrid rect then "hybrid" else "node")
-                            ! S.customAttribute "data-group" (stringValue (getArea (shapeId rect))) $
-                            do S.rect ! A.rx "4"
-                                      ! A.ry "4"
-                                      ! A.x (stringValue $ show $ fromRational $ shapeXPos rect)
-                                      ! A.y (stringValue $ show $ fromRational $ shapeYPos rect)
-                                      ! A.width (stringValue $ show $ fromRational $ shapeWidth rect)
-                                      ! A.height (stringValue $ show $ fromRational $ shapeHeight rect)
-                                      ! A.style (stringValue $ "fill:" ++ getFill (shapeId rect) ++ ";")
-                               concatSVG $ map (convertTextToSVG (shapeIsHybrid rect) False False) (shapeText rect)
+convertRectToSVG rect
+    | shapeFill rect == "none" = S.rect
+    | otherwise =
+        S.g ! A.id_ (stringValue $ shapeId rect)
+            ! A.class_ (if shapeIsHybrid rect then "hybrid" else "node")
+            ! S.customAttribute "data-group" (stringValue (getArea (shapeId rect))) $
+            do S.rect ! A.rx "4"
+                      ! A.ry "4"
+                      ! A.x (stringValue $ show $ fromRational $ shapeXPos rect)
+                      ! A.y (stringValue $ show $ fromRational $ shapeYPos rect)
+                      ! A.width (stringValue $ show $ fromRational $ shapeWidth rect)
+                      ! A.height (stringValue $ show $ fromRational $ shapeHeight rect)
+                      ! A.style (stringValue $ "fill:" ++ getFill (shapeId rect) ++ ";")
+               concatSVG $ map (convertTextToSVG (shapeIsHybrid rect) False False)
+                               (shapeText rect)
 
 -- | Converts a `Text` to SVG.
 convertTextToSVG :: Bool -> Bool -> Bool -> Text -> S.Svg
@@ -151,7 +168,8 @@ convertTextToSVG isHybrid isBool isRegion text =
     S.text_ ! A.x (stringValue $ show $ fromRational $ textXPos text)
             ! A.y (stringValue $ show $ fromRational $ textYPos text)
             ! A.style (stringValue $
-                      (if isHybrid then hybridTextStyle else (if isBool then ellipseTextStyle else (if isRegion then regionTextStyle else ""))) ++ "font-family:sans-serif;stroke:none;")
+                       (getTextStyle isHybrid isBool isRegion) ++
+                       "font-family:sans-serif;stroke:none;")
             $ toMarkup $ textText text
 
 -- | Converts a `Path` to SVG.
@@ -165,9 +183,7 @@ convertEdgeToSVG path =
            ! S.customAttribute "target-node" (stringValue $ target path)
            ! A.style (stringValue $ "fill:" ++
                       pathFill path ++
-                      ";fill-opacity:" ++
-                      pathFillOpacity path ++
-                      ";")
+                      ";fill-opacity:1;")
 
 -- | Converts a `Path` to SVG.
 convertRegionToSVG :: Path -> S.Svg
@@ -181,11 +197,18 @@ convertRegionToSVG path =
 
 -- | Converts an `Ellipse` to SVG.
 convertEllipseToSVG :: Shape -> S.Svg
-convertEllipseToSVG ellipse = S.g ! A.id_ (stringValue (shapeId ellipse))
-                                  ! A.class_ "bool" $ do
-                                      S.ellipse ! A.cx (stringValue $ show $ fromRational $ shapeXPos ellipse)
-                                                ! A.cy (stringValue $ show $ fromRational $ shapeYPos ellipse)
-                                                ! A.rx (stringValue $ show $ fromRational $ shapeWidth ellipse / 2)
-                                                ! A.ry (stringValue $ show $ fromRational $ shapeHeight ellipse / 2)
-                                                ! A.style "stroke:#000000;fill:none;"
-                                      concatSVG $ map (convertTextToSVG False True False) (shapeText ellipse)
+convertEllipseToSVG ellipse =
+    S.g ! A.id_ (stringValue (shapeId ellipse))
+        ! A.class_ "bool" $ do
+            S.ellipse ! A.cx (stringValue $ show $ fromRational $ shapeXPos ellipse)
+                      ! A.cy (stringValue $ show $ fromRational $ shapeYPos ellipse)
+                      ! A.rx (stringValue $ show $ fromRational $ shapeWidth ellipse / 2)
+                      ! A.ry (stringValue $ show $ fromRational $ shapeHeight ellipse / 2)
+                      ! A.style "stroke:#000000;fill:none;"
+            concatSVG $ map (convertTextToSVG False True False) (shapeText ellipse)
+
+getTextStyle :: Bool -> Bool -> Bool -> String
+getTextStyle True _ _ = hybridTextStyle
+getTextStyle _ True _ = ellipseTextStyle
+getTextStyle _ _ True = regionTextStyle
+getTextStyle _ _ _     = ""

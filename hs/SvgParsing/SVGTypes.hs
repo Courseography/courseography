@@ -12,10 +12,7 @@ data Text =
     Text {
            textXPos :: Rational,
            textYPos :: Rational,
-           textText :: String,
-           textFontSize :: String,
-           textFontWeight :: String,
-           textFontFamily :: String
+           textText :: String
          } deriving Show
 
 -- | A Path.
@@ -24,7 +21,6 @@ data Path =
            pathId :: String,
            points :: [(Rational, Rational)],
            pathFill :: String,
-           pathFillOpacity :: String,
            pathStroke :: String,
            pathIsRegion :: Bool,
            source :: String,
@@ -49,9 +45,5 @@ data Style =
     Style {
             transform :: (Float,Float),
             fill :: String,
-            fontSize :: String,
-            stroke :: String,
-            fillOpacity :: String,
-            fontWeight :: String,
-            fontFamily :: String
+            stroke :: String
           } deriving Show
