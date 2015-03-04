@@ -517,7 +517,7 @@ function fillMinCreditCount(minCount) {
 /**
  * Autofills extra 200-level courses for last minor constraint.
  * @param {number} index The textbox number we are at
- * @param HTMLElement} min300s Array of textbox elements to fill
+ * @param {HTMLElement} min300s Array of textbox elements to fill
 **/
 function addExtraMinCourses(index, min300s) {
     'use strict';
