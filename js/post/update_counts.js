@@ -1,8 +1,14 @@
+creditCountSpec = 0;
+creditCountMaj = 0;
+creditCountMin = 0;
+creditCount300and400 = {'Spec': 0, 'Maj': 0, 'Min': 0};
+
+
 /**
  * Updates number of completed courses in Specialist.
 **/
 function updateCompletedSpecCourses () {
-    'use-strict';
+    'use strict';
 
     for (var courseCode in completed_spec) {
         if (completed_spec.hasOwnProperty(courseCode)) {
@@ -33,7 +39,7 @@ function updateCompletedSpecCourses () {
  * Updates number of completed courses in Major.
 **/
 function updateCompletedMajCourses () {
-    'use-strict';
+    'use strict';
 
     for (var courseCode in completed_maj) {
         if (completed_maj.hasOwnProperty(courseCode)) {
@@ -64,7 +70,7 @@ function updateCompletedMajCourses () {
  * Updates number of completed courses in Minor.
 **/
 function updateCompletedMinCourses() {
-    'use-strict';
+    'use strict';
 
     for (var courseCode in completed_min) {
         if (completed_min.hasOwnProperty(courseCode)) {
@@ -87,14 +93,13 @@ function updateCompletedMinCourses() {
  * Updates number of 300 level category completed courses.
  **/
 function update300s() {
-    'use-strict';
+    'use strict';
 
     for (var courseCode in level300) {
         if (level300.hasOwnProperty(courseCode)) {
             if ((getCookie(courseCode) === 'active' || getCookie(courseCode) === 'overridden') 
                 && (active300s.indexOf(courseCode) === -1)) {
                 active300s.push(courseCode);
-                creditCount300 += 0.5;
                 if ((CSCinq.indexOf(courseCode) > -1) && (activeInq.indexOf(courseCode) === -1)) { // check if Inquiry Course
                     activeInq.push(courseCode);
                 }  
@@ -102,7 +107,6 @@ function update300s() {
                        && (active300s.indexOf(courseCode) > -1)) {
                 var index300 = active300s.indexOf(courseCode);
                 active300s.splice(index300, 1);
-                creditCount300 -= 0.5;
                 var indexInq = activeInq.indexOf(courseCode);
                 if (indexInq > -1) {
                     activeInq.splice(indexInq, 1);
@@ -113,26 +117,23 @@ function update300s() {
 }
 
 
-
 /**
  * Updates number of 400 level category completed courses.
 **/
 function update400s() {
-    'use-strict';
+    'use strict';
 
     for (var courseCode in level400) {
         if (level400.hasOwnProperty(courseCode)) {
             if ((getCookie(courseCode) === 'active' || getCookie(courseCode) === 'overridden') 
                 && (active400s.indexOf(courseCode) === -1)) {
                     active400s.push(courseCode);
-                    creditCount400 += 0.5;
                     if ((CSCinq.indexOf(courseCode) > -1) && (activeInq.indexOf(courseCode) === -1)) { // check if Inquiry Course
                         activeInq.push(courseCode);
                     }
             } else if ((getCookie(courseCode) === 'inactive' || getCookie(courseCode) === 'takeable') 
                        && (active400s.indexOf(courseCode) > -1)) {
                 var index400 = active400s.indexOf(courseCode);
-                creditCount400 -= 0.5;
                 var indexInq = activeInq.indexOf(courseCode);
                 active400s.splice(index400, 1);
                 if (indexInq > -1) {
@@ -143,35 +144,3 @@ function update400s() {
     }
 }
 
-
-/**
- * Updates Credit Count for each POSt.
- * TODO: Fix credit count to account for all constraints
- **/
-function updateCreditCount() {
-    'use-strict';
-
-    // account for not needing to take CSC108
-    specCount = creditCountSpec - (completed_spec['CSC108'] * 0.5) + creditCount300 + creditCount400;
-    majCount = creditCountMaj - (completed_maj['CSC108'] * 0.5) + creditCount300 + creditCount400;
-    minCount = creditCountMin - (completed_min['CSC108'] * 0.5) + creditCount300 + creditCount400;
-
-
-    if (creditCountSpec >= 12) {
-        $('#spec_creds').html('(12/12.0)');
-        $('#maj_creds').html('(8/8.0)');
-        $('#min_creds').html('(4/4.0)');
-    } else if (creditCountSpec >= 8) {
-        $('#spec_creds').html('(' + creditCountSpec + '/12.0)');
-        $('#maj_creds').html('(8/8.0)');
-        $('#min_creds').html('(4/4.0)');
-    } else if (creditCountSpec >= 4) {
-        $('#spec_creds').html('(' + creditCountSpec + '/12.0)');
-        $('#maj_creds').html('(' + creditCountSpec + '/8.0)');
-        $('#min_creds').html('(4/4.0)');
-    } else {
-        $('#spec_creds').html('(' + creditCountSpec + '/12.0)');
-        $('#maj_creds').html('(' + creditCountSpec + '/8.0)');
-        $('#min_creds').html('(' + creditCountSpec + '/4.0)');
-    }
-}

@@ -99,6 +99,9 @@ $(document).ready(function () {
 
     // Initialize interface
     initializeGraphSettings();
+    
+    // Update credit count in nav bar
+    updateNavGraph();
 
     // Uncomment to enable the feedback form (must also be displayed in html)
     // activateFeedbackForm();
