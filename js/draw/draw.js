@@ -1,7 +1,9 @@
-var nodeId = 0;
 var nodeWidth = 40;
 var nodeHeight = 32;
 var xmlns = 'http://www.w3.org/2000/svg';
+var svgDoc = null;
+
+var nodeId = 0;
 var mode = 'node-mode';
 var nodeColourId = 'red';
 var nodeMoving = null;      // for movement and path creation
@@ -12,25 +14,28 @@ var startNode = null;       // for making paths
 var curPath = null;         // the path currently being created
 var elbowMoving = null;     // for movement of elbow joints
 
+
 function setupSVGCanvas() {
     'use-strict';
 
     var div = document.createElement('div');
     div.setAttribute('id', 'main');
+    // bgdiv as sibling necessary to decrease grid opacity without effecting svg objects
     var bgdiv = document.createElement('div');
-    bgdiv.setAttribute('id', 'background');
+    bgdiv.setAttribute('id', 'background'); 
     var svg = document.createElementNS(xmlns, 'svg');
     svg.setAttribute('id', 'mySVG');
     svg.setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xlink', 'http://www.w3.org/1999/xlink');
     
-    svg.addEventListener('mousedown', makeNode, false);
-    svg.addEventListener('mousemove', move, false);
+    svg.addEventListener('mousedown', makeNodePathElbow, false);
+    svg.addEventListener('mousemove', moveNodeElbow, false);
     svg.addEventListener('mouseup', unclickAll, false);
 
     svg.appendChild(setupMarker());
     div.appendChild(bgdiv);
     div.appendChild(svg);
     document.body.appendChild(div);
+    svgDoc = document.getElementById('mySVG');
 }
 
 
@@ -64,7 +69,7 @@ function setupMarker() {
 function getClickPosition(e, elem) {
     'use-strict';
 
-    console.log(e.clientX, e.clientY);
+    // console.log(e.clientX, e.clientY);
     var parentPosition = getPosition(elem);
     var xPosition = e.clientX - parentPosition.x;
     var yPosition = e.clientY - parentPosition.y;
@@ -85,17 +90,17 @@ function getPosition(elem) {
         // || 0 -> for mozilla firefox compatability !!
         xPosition += (elem.offsetLeft || 0) - elem.scrollLeft + elem.clientLeft;
         yPosition += (elem.offsetTop || 0) - elem.scrollTop + elem.clientTop;
-        console.log(elem.offsetLeft, elem.scrollLeft, elem.clientLeft);
-        console.log(elem.offsetTop, elem.scrollTop, elem.clientTop);
-        console.log(elem.offsetLeft, elem.offsetTop);
-        console.log(elem);
+        // console.log(elem.offsetLeft, elem.scrollLeft, elem.clientLeft);
+        // console.log(elem.offsetTop, elem.scrollTop, elem.clientTop);
+        // console.log(elem.offsetLeft, elem.offsetTop);
+        // console.log(elem);
         elem = elem.offsetParent;
     }
     return { x: xPosition, y: yPosition };
 }
 
 
-function makeNode(e) {
+function makeNodePathElbow(e) {
     'use-strict';
 
     var position = getClickPosition(e, e.currentTarget);
@@ -123,7 +128,7 @@ function makeNode(e) {
         node.outEdges = [];
         
         g.appendChild(node);
-        document.getElementById('mySVG').appendChild(g);
+        svgDoc.appendChild(g);
         document.getElementById('n' + nodeId).addEventListener('mousedown', nodeClicked, false);
 
         select(document.getElementById('n' + nodeId));
@@ -148,7 +153,7 @@ function makeNode(e) {
                 // thePath.setAttributeNS(null, 'marker-end', 'url(#arrow)');
                 curPath.elbows = [];
                 curPath.addEventListener('click', pathClicked, false);
-                document.getElementById('mySVG').appendChild(curPath);
+                svgDoc.appendChild(curPath);
 
             } else { // elbow to elbow path
                 curPath.setAttributeNS(null, 'd', curPath.getAttribute('d') + 'L' + position.x + ',' + position.y + ' ');   
@@ -161,7 +166,7 @@ function makeNode(e) {
             elbow.setAttributeNS(null, 'class', 'elbow');
 
             elbow.addEventListener('mousedown', selectElbow, false);
-            document.getElementById('mySVG').appendChild(elbow);
+            svgDoc.appendChild(elbow);
 
             curPath.elbows.push(elbow);
         }
@@ -172,7 +177,7 @@ function makeNode(e) {
 function nodeClicked(e) {
     'use-strict';
 
-    var svgDoc = document.getElementById('mySVG');
+    
     var index = null;
 
     if (mode  === 'erase-mode') { 
@@ -222,9 +227,9 @@ function nodeClicked(e) {
         } else if (startNode === e.currentTarget) {
             if (curPath !== null) {
                 curPath.elbows.map(function (item) { // modify last node in path
-                        document.getElementById('mySVG').removeChild(item);
+                        svgDoc.removeChild(item);
                 });
-                document.getElementById('mySVG').removeChild(curPath);
+                svgDoc.removeChild(curPath);
                 curPath = null;
             }
         } else {
@@ -233,11 +238,11 @@ function nodeClicked(e) {
             if (document.getElementById(pathId) === null) {
                 if (curPath === null) { // create a new path
                     var pathString = findClosest( {x: parseFloat(startNode.getAttribute('x'), 10), 
-                                  y: parseFloat(startNode.getAttribute('y'), 10)},
-                                'node', 
-                                {x: parseFloat(e.currentTarget.getAttribute('x'), 10), 
-                                 y: parseFloat(e.currentTarget.getAttribute('y'), 10)},
-                                'node');
+                                                   y: parseFloat(startNode.getAttribute('y'), 10)},
+                                                   'node', 
+                                                  {x: parseFloat(e.currentTarget.getAttribute('x'), 10), 
+                                                   y: parseFloat(e.currentTarget.getAttribute('y'), 10)},
+                                                   'node');
 
                     curPath = document.createElementNS(xmlns, 'path');
                     curPath.setAttributeNS(null, 'd', pathString);
@@ -246,14 +251,14 @@ function nodeClicked(e) {
                     curPath.setAttributeNS(null, 'data-active', 'drawn');
                     curPath.addEventListener('click', pathClicked, false);
                     curPath.elbows = [];
-                    document.getElementById('mySVG').appendChild(curPath);
+                    svgDoc.appendChild(curPath);
                 } else {
                     var curElbow = {x: parseFloat(curPath.elbows[curPath.elbows.length - 1].getAttribute('cx'), 10), 
-                                  y: parseFloat(curPath.elbows[curPath.elbows.length - 1].getAttribute('cy'), 10)}
+                                    y: parseFloat(curPath.elbows[curPath.elbows.length - 1].getAttribute('cy'), 10)}
                     var pathString = findClosest(curElbow, 'elbow', 
-                                {x: parseFloat(e.currentTarget.getAttribute('x'), 10), 
-                                 y: parseFloat(e.currentTarget.getAttribute('y'), 10)},
-                                'node'); 
+                                                 {x: parseFloat(e.currentTarget.getAttribute('x'), 10), 
+                                                  y: parseFloat(e.currentTarget.getAttribute('y'), 10)},
+                                                 'node'); 
                     curPath.setAttributeNS(null, 'd', curPath.getAttribute('d') + pathString);
                 }
 
@@ -263,9 +268,6 @@ function nodeClicked(e) {
                 });
                 curPath.setAttributeNS(null, 'id', pathId);
                 curPath.setAttributeNS(null, 'marker-end', 'url(#arrow)');
-
-//                thePath.parents = startNode;
-//                thePath.kids = e.currentTarget;
 
                 // update relationships
                 startNode.kids.push(e.currentTarget);
@@ -279,9 +281,9 @@ function nodeClicked(e) {
                 startNode = null;
                 if (curPath !== null) {
                     curPath.elbows.map(function (item) { // modify last node in path
-                        document.getElementById('mySVG').removeChild(item);
+                        svgDoc.removeChild(item);
                 });
-                document.getElementById('mySVG').removeChild(curPath);
+                svgDoc.removeChild(curPath);
                 curPath = null;
                 }
             }
@@ -313,7 +315,6 @@ function findClosest(beg, typeB, end, typeE) {
                       {x: end.x + nodeWidth/2, y: end.y + nodeHeight}, 
                       {x: end.x + nodeWidth, y: end.y + nodeHeight/2},
                       {x: end.x, y: end.y + nodeHeight/2}];
-
     } else {
         // top, bottom, left, right
         node1Edges = [{x: beg.x + nodeWidth/2, y: beg.y}, 
@@ -324,17 +325,17 @@ function findClosest(beg, typeB, end, typeE) {
                       {x: end.x + nodeWidth/2, y: end.y + nodeHeight}, 
                       {x: end.x + nodeWidth, y: end.y + nodeHeight/2},
                       {x: end.x, y: end.y + nodeHeight/2}];
-        
-        
     }
 
     var best_edges = [node1Edges[0], node2Edges[0]];
     var best_dist = dist(node1Edges[0], node2Edges[0]);
+    console.log(best_dist);
     for (var i = 0; i < node1Edges.length; i++) {
         for (var j = 0; j < node2Edges.length; j++) {
             if (dist(node1Edges[i], node2Edges[j]) < best_dist) {
                 best_edges = [node1Edges[i], node2Edges[j]];
                 best_dist = dist(node1Edges[i], node2Edges[j]);
+                console.log(best_dist);
             } 
         }
     }
@@ -344,7 +345,7 @@ function findClosest(beg, typeB, end, typeE) {
         thePath = 'L' + best_edges[1].x + ',' + best_edges[1].y + ' ';
     } else {
         thePath = 'M' + best_edges[0].x + ',' + best_edges[0].y + ' L' +
-                best_edges[1].x + ',' + best_edges[1].y + ' ';
+                    best_edges[1].x + ',' + best_edges[1].y + ' ';
     }
 
     return thePath;
@@ -354,7 +355,7 @@ function findClosest(beg, typeB, end, typeE) {
 function dist(a, b) {
     'use-strict';
 
-    return Math.sqrt((b.x - a.x) * (b.x - a.x) + (b.y - a.y) * (b.y - a.y))
+    return Math.sqrt(((b.x - a.x) * (b.x - a.x)) + ((b.y - a.y) * (b.y - a.y)));
 }
 
 
@@ -369,7 +370,7 @@ function select(newNode) {
 }
 
 
-function move(e) {
+function moveNodeElbow(e) {
     'use-strict';
 
     if (mode === 'change-mode') {
@@ -383,12 +384,14 @@ function move(e) {
             nodeMoving.setAttribute('y', rectY);
 
             if (nodeMoving.parentNode.childNodes.length > 1) {
-                var textX = parseFloat(nodeMoving.parentNode.childNodes[1].getAttribute('x'), 10);
-                var textY = parseFloat(nodeMoving.parentNode.childNodes[1].getAttribute('y'), 10);
+                // move text
+                var textNode = nodeMoving.parentNode.childNodes[1];
+                var textX = parseFloat(textNode.getAttribute('x'), 10);
+                var textY = parseFloat(textNode.getAttribute('y'), 10);
                 textX += (position.x - prevX);
                 textY += (position.y - prevY);
-                nodeMoving.parentNode.childNodes[1].setAttribute('x', textX);
-                nodeMoving.parentNode.childNodes[1].setAttribute('y', textY);
+                textNode.setAttribute('x', textX);
+                textNode.setAttribute('y', textY);
             }
             
             // move in and out edges by the same amount
@@ -403,17 +406,18 @@ function move(e) {
             prevY = position.y;
         } else if (elbowMoving !== null) {
             var position = getClickPosition(e, elbowMoving);
-            // get position of this elbow 
+            // move dummy node 
             var elbowX = parseFloat(elbowMoving.getAttribute('cx'), 10);
             var elbowY = parseFloat(elbowMoving.getAttribute('cy'), 10);
             elbowX += (position.x - prevX);
             elbowY += (position.y - prevY);
             elbowMoving.setAttribute('cx', elbowX);
             elbowMoving.setAttribute('cy', elbowY);
-            // the number of elbow in the path
+
+            // move actual elbow in path
             movePath(document.getElementById(elbowMoving.path), 
-                    (position.x - prevX), (position.y - prevY), 'elbow',
-                    document.getElementById(elbowMoving.path).elbows.indexOf(elbowMoving));
+                     (position.x - prevX), (position.y - prevY), 'elbow',
+                     document.getElementById(elbowMoving.path).elbows.indexOf(elbowMoving));
 
             prevX = position.x;
             prevY = position.y;
@@ -446,7 +450,7 @@ function pathClicked(e) {
 
 function erasePath(path) {
         var index = -1;
-        var pathId = path.getAttribute('id');
+        var pathId = path.id;
         var beg = document.getElementById(pathId.slice(0, pathId.lastIndexOf('n')));
         var end = document.getElementById(pathId.slice(pathId.lastIndexOf('n')));
         
@@ -469,9 +473,9 @@ function erasePath(path) {
             end.inEdges.splice(index, 1);
         }
         path.elbows.map(function (item) {
-            document.getElementById('mySVG').removeChild(item);
+            svgDoc.removeChild(item);
         });
-        document.getElementById('mySVG').removeChild(path);
+        svgDoc.removeChild(path);
 }
 
 
@@ -532,7 +536,7 @@ function selectElbow(e) {
         thePathString = thePathString.slice(0, indexOfElbow) + thePathString.slice(indexOfNext);
         thePath.elbows.splice(thePath.elbows.indexOf(e.currentTarget), 1);
         thePath.setAttributeNS(null, 'd', thePathString);
-        document.getElementById('mySVG').removeChild(e.currentTarget);
+        svgDoc.removeChild(e.currentTarget);
     }
 }
 
@@ -543,6 +547,16 @@ function changeMode(id) {
     //if (mode !== '') {
       $('#' + mode).toggleClass('clicked');
     //}
+    if (mode === "path-mode") { // clean up temp path
+        startNode = null;
+        if (curPath !== null) {
+            curPath.elbows.map(function (item) { // modify last node in path
+                svgDoc.removeChild(item);
+            });
+            svgDoc.removeChild(curPath);
+            curPath = null;
+        }
+    }
     mode = id;
     $('#' + mode).toggleClass('clicked');
     startNode = null;
@@ -572,7 +586,7 @@ function addText() {
             g.removeChild(g.childNodes[1]); 
         }
         var code = document.createElementNS(xmlns, 'text');
-        code.setAttributeNS(null, 'id', 't' + nodeSelected.getAttribute('id').slice(1));
+        code.setAttributeNS(null, 'id', 't' + nodeSelected.id.slice(1));
         code.setAttributeNS(null, 'x', parseFloat(nodeSelected.getAttribute('x'), 10) + 
                                         nodeWidth/2);
         code.setAttributeNS(null, 'y', parseFloat(nodeSelected.getAttribute('y'), 10) +
@@ -595,7 +609,7 @@ $('.colour').each(function() {
     $(this). click(function () {
         changeColour(this.id);});
     });
-$('#add-text').click(function (){
+$('#add-text').click(function () {
     addText();
 });
 
@@ -623,24 +637,19 @@ document.addEventListener('keydown', keyboard, false);
 
 // TODO:
 /*
+ 1. regions creation
+ 2. get substantial work done with saving graph 
+ 3. node type buttons
 
-1. regions creation
-2. get substantial work done with saving graph 
-3. node type buttons
-
-- deselecting
-- use https://www.dashingd3js.com/svg-paths-and-d3js
-
-*/
+ * deselecting
+ * look into https://www.dashingd3js.com/svg-paths-and-d3js
+ */
 
 // RANDOM
 /*
-- shortcuts: http://javascript.info/tutorial/keyboard-events
+ * shortcuts: http://javascript.info/tutorial/keyboard-events
               http://unixpapa.com/js/key.html
-- change mode to node-mode when colour changed ?
-- document ready method ?
-- when path created should end node be selected?
-- key board shortcuts to switch modes
-- make grid background optional
-- colour picker for choosing colour of node
-*/
+ * document ready method ?
+ * make grid background optional
+ * colour picker for choosing colour of node
+ */
