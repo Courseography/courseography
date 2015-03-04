@@ -104,17 +104,22 @@ function updateAllCategories() {
     if (filledTextboxesExtra.spec === 4) {
         updateCategory($('#spec_extra')[0].getElementsByClassName('code')[0], 'fulfilled');
         categoriesCompleted.spec += 1;
-    } if (filledTextboxesExtra.maj === 3) {
+    } 
+    if (filledTextboxesExtra.maj === 3) {
         updateCategory($('#maj_extra')[0].getElementsByClassName('code')[0], 'fulfilled');
         categoriesCompleted.maj += 1;
-    } if ((filledTextboxes300.min + filledTextboxes400.min + filledTextboxes200) === 3) {
+    } 
+    if ((filledTextboxes300.min + filledTextboxes400.min + filledTextboxes200) === 3) {
         updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'fulfilled');
         categoriesCompleted.min += 1;
-    } if (filledTextboxesExtra.spec < 4) {
+    } 
+    if (filledTextboxesExtra.spec < 4) {
         updateCategory($('#spec_extra')[0].getElementsByClassName('code')[0], 'not fulfilled');
-    } if (filledTextboxesExtra.maj < 3) {
+    } 
+    if (filledTextboxesExtra.maj < 3) {
         updateCategory($('#maj_extra')[0].getElementsByClassName('code')[0], 'not fulfilled');
-    } if ((filledTextboxes300.min + filledTextboxes400.min + filledTextboxes200) < 3) {
+    } 
+    if ((filledTextboxes300.min + filledTextboxes400.min + filledTextboxes200) < 3) {
         updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'not fulfilled');
     }
 
