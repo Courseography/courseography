@@ -95,7 +95,7 @@ parsePathD d
     | head d == 'm' = foldCoordsRel coordList
     | otherwise =  processAbsCoords coordList
     where
-      lengthMoreThanOne = (\x -> length x > 1)
+      lengthMoreThanOne = \x -> length x > 1
       coordList = filter lengthMoreThanOne $ map (splitOn ",") $ splitOn " " d
 
 -- | Converts a relative coordinate structure into an absolute one.
