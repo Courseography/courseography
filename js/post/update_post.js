@@ -70,12 +70,12 @@ function updateAllCategories() {
 
 
     // Update 300s
-    if (filledTextboxes300['spec'] === 3) {
+    if (filledTextboxes300.spec === 3) {
         updateCategory($('#spec_300')[0].getElementsByClassName('code')[0], 'fulfilled');
         updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'fulfilled');
         updateCategory($('#maj_300')[0].getElementsByClassName('code')[0], 'fulfilled');
-        categoriesCompleted['spec'] += 1;
-        categoriesCompleted['maj'] += 1;
+        categoriesCompleted.spec += 1;
+        categoriesCompleted.maj += 1;
     } else {
         updateCategory($('#spec_300')[0].getElementsByClassName('code')[0], 'not fulfilled');
         updateCategory($('#maj_300')[0].getElementsByClassName('code')[0], 'not fulfilled');
@@ -84,37 +84,37 @@ function updateAllCategories() {
 
 
     // Update 400s
-    if (filledTextboxes400['spec'] === 3) {
+    if (filledTextboxes400.spec === 3) {
         updateCategory($('#spec_400')[0].getElementsByClassName('code')[0], 'fulfilled');
         updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'fulfilled');
-        categoriesCompleted['spec'] += 1;
+        categoriesCompleted.spec += 1;
     } else {
         updateCategory($('#spec_400')[0].getElementsByClassName('code')[0], 'not fulfilled');
         updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'not fulfilled');
     }
 
-    if (filledTextboxes400['maj'] === 1) {
+    if (filledTextboxes400.maj === 1) {
         updateCategory($('#maj_400')[0].getElementsByClassName('code')[0], 'fulfilled');
-        categoriesCompleted['maj'] += 1;
+        categoriesCompleted.maj += 1;
     } else {    
         updateCategory($('#maj_400')[0].getElementsByClassName('code')[0], 'not fulfilled'); 
     }
 
     // Update Extra
-    if (filledTextboxesExtra['spec'] === 4) {
+    if (filledTextboxesExtra.spec === 4) {
         updateCategory($('#spec_extra')[0].getElementsByClassName('code')[0], 'fulfilled');
-        categoriesCompleted['spec'] += 1;
-    } if (filledTextboxesExtra['maj'] === 3) {
+        categoriesCompleted.spec += 1;
+    } if (filledTextboxesExtra.maj === 3) {
         updateCategory($('#maj_extra')[0].getElementsByClassName('code')[0], 'fulfilled');
-        categoriesCompleted['maj'] += 1;
-    } if ((filledTextboxes300['min'] + filledTextboxes400['min'] + filledTextboxes200) === 3) {
+        categoriesCompleted.maj += 1;
+    } if ((filledTextboxes300.min + filledTextboxes400.min + filledTextboxes200) === 3) {
         updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'fulfilled');
-        categoriesCompleted['min'] += 1;
-    } if (filledTextboxesExtra['spec'] < 4) {
+        categoriesCompleted.min += 1;
+    } if (filledTextboxesExtra.spec < 4) {
         updateCategory($('#spec_extra')[0].getElementsByClassName('code')[0], 'not fulfilled');
-    } if (filledTextboxesExtra['maj'] < 3) {
+    } if (filledTextboxesExtra.maj < 3) {
         updateCategory($('#maj_extra')[0].getElementsByClassName('code')[0], 'not fulfilled');
-    } if ((filledTextboxes300['min'] + filledTextboxes400['min'] + filledTextboxes200) < 3) {
+    } if ((filledTextboxes300.min + filledTextboxes400.min + filledTextboxes200) < 3) {
         updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'not fulfilled');
     }
 
@@ -132,9 +132,9 @@ function resetValues() {
     categoriesCompleted = {'spec': 0, 'maj': 0, 'min': 0};
     index200 = 0;
 
-    creditCount300and400['maj'] = 0;
-    creditCount300and400['spec'] = 0;
-    creditCount300and400['min'] = 0;
+    creditCount300and400.maj = 0;
+    creditCount300and400.spec = 0;
+    creditCount300and400.min = 0;
 
     filledTextboxes300 = {'spec': 0, 'maj': 0, 'min': 0};
     filledTextboxes400 = {'spec': 0, 'maj': 0, 'min': 0};
@@ -230,27 +230,27 @@ function fill300and400Textboxes(specBound, majBound, textboxLevel, activeLevel, 
     var index = 'index' + activeLevel;
 
     for (var m = 0; m < specBound; m++) {
-        if (window[index]['spec'] === window['active' + activeLevel + 's'].length || i === specBound) {
+        if (window[index].spec === window['active' + activeLevel + 's'].length || i === specBound) {
             break;
         }
-        specElement[i].value = window['active' + activeLevel + 's'][window[index]['spec']];
+        specElement[i].value = window['active' + activeLevel + 's'][window[index].spec];
         specElement[i].readOnly = true;
-        window[index]['spec'] += 1;
-        window['filledTextboxes' + textboxLevel]['spec'] += 1;
-        creditCount300and400['spec'] += 0.5;
+        window[index].spec += 1;
+        window['filledTextboxes' + textboxLevel].spec += 1;
+        creditCount300and400.spec += 0.5;
         if (i < majBound) {
-            majElement[i].value = window['active' + activeLevel + 's'][window[index]['maj']];
+            majElement[i].value = window['active' + activeLevel + 's'][window[index].maj];
             majElement[i].readOnly = true;
-            window[index]['maj'] += 1;
-            window['filledTextboxes' + textboxLevel]['maj'] += 1;
-            creditCount300and400['maj'] += 0.5;
+            window[index].maj += 1;
+            window['filledTextboxes' + textboxLevel].maj += 1;
+            creditCount300and400.maj += 0.5;
         }
         if (minElement[i].value === '') {
-            minElement[i].value = window['active' + activeLevel + 's'][window[index]['min']];
+            minElement[i].value = window['active' + activeLevel + 's'][window[index].min];
             minElement[i].readOnly = true;
-            window[index]['min'] += 1;
-            window['filledTextboxes' + textboxLevel]['min'] += 1;
-            creditCount300and400['min'] += 0.5;
+            window[index].min += 1;
+            window['filledTextboxes' + textboxLevel].min += 1;
+            creditCount300and400.min += 0.5;
         }
         i += 1; 
     }
@@ -354,56 +354,56 @@ function fillExtra() {
 
         // add credit count for MAT and STA courses
         if (spec_extra[k].value.indexOf('MAT') > -1 || spec_extra[k].value.indexOf('STA') > -1) {
-            creditCount300and400['spec'] += 0.5;
-            filledTextboxesExtra['spec'] += 1;
+            creditCount300and400.spec += 0.5;
+            filledTextboxesExtra.spec += 1;
         } if (k < 3) {
             if (maj_extra[k].value.indexOf('MAT') > -1 || maj_extra[k].value.indexOf('STA') > -1) {
-                creditCount300and400['maj'] += 0.5;
-                filledTextboxesExtra['maj'] += 1;
+                creditCount300and400.maj += 0.5;
+                filledTextboxesExtra.maj += 1;
             }
         }
     }
 
     // fill courses that have been selected
     for (var m = 0; m < active300s.length; m++) {
-        if ((index300['spec'] === active300s.length) || (i === 4)) {
+        if ((index300.spec === active300s.length) || (i === 4)) {
             break;
         }
         if ((i < 2) && (maj_extra[i].value === '')) {
-            maj_extra[i].value = active300s[index300['maj']];
+            maj_extra[i].value = active300s[index300.maj];
             maj_extra[i].readOnly = true;
-            index300['maj'] += 1;
-            filledTextboxesExtra['maj'] += 1;
-            creditCount300and400['maj'] += 0.5;
+            index300.maj += 1;
+            filledTextboxesExtra.maj += 1;
+            creditCount300and400.maj += 0.5;
         }
         if (spec_extra[i].value === '') {
-            spec_extra[i].value = active300s[index300['spec']];
+            spec_extra[i].value = active300s[index300.spec];
             spec_extra[i].readOnly = true;
-            index300['spec'] += 1;
-            filledTextboxesExtra['spec'] += 1;
-            creditCount300and400['spec'] += 0.5;
+            index300.spec += 1;
+            filledTextboxesExtra.spec += 1;
+            creditCount300and400.spec += 0.5;
         } 
         i += 1;
     }
 
     if (i < 4) {
         for (var m = 0; m < active400s.length; m++) {
-            if (((index400['spec'] === active400s.length) && (index400['maj'] === active400s.length)) || (i === 4)) {
+            if (((index400.spec === active400s.length) && (index400.maj === active400s.length)) || (i === 4)) {
                 break;
             }
             if ((i < 3) && (maj_extra[i].value === '')) {
-                maj_extra[i].value = active400s[index400['maj']];
+                maj_extra[i].value = active400s[index400.maj];
                 maj_extra[i].readOnly = true;
-                index400['maj'] += 1;
-                filledTextboxesExtra['maj'] += 1;
-                creditCount300and400['maj'] += 0.5;
+                index400.maj += 1;
+                filledTextboxesExtra.maj += 1;
+                creditCount300and400.maj += 0.5;
             }
-            if ((spec_extra[i].value === '') && (index400['spec'] < active400s.length)){
-                spec_extra[i].value = active400s[index400['spec']];
+            if ((spec_extra[i].value === '') && (index400.spec < active400s.length)){
+                spec_extra[i].value = active400s[index400.spec];
                 spec_extra[i].readOnly = true;
-                index400['spec'] += 1;
-                filledTextboxesExtra['spec'] += 1;
-                creditCount300and400['spec'] += 0.5;
+                index400.spec += 1;
+                filledTextboxesExtra.spec += 1;
+                creditCount300and400.spec += 0.5;
             }
             i += 1;
         }
@@ -442,10 +442,10 @@ function fillMisc() {
     // update category
     if (spec_inq[0].value != '') {
         updateCategory($('#spec_misc')[0].getElementsByClassName('code')[0], 'fulfilled');
-        categoriesCompleted['spec'] += 1;
+        categoriesCompleted.spec += 1;
     } if (maj_inq[0].value != '') {    
         updateCategory($('#maj_misc')[0].getElementsByClassName('code')[0], 'fulfilled'); 
-        categoriesCompleted['maj'] += 1;
+        categoriesCompleted.spec += 1;
     } if (spec_inq[0].value === '') {
         updateCategory($('#spec_misc')[0].getElementsByClassName('code')[0], 'not fulfilled');
     } if (maj_inq[0].value === '') {
@@ -460,9 +460,9 @@ function fillMisc() {
 function fillCreditCount() {
     'use strict';
 
-    specCount = creditCountSpec  + creditCount300and400['spec'];
-    majCount = creditCountMaj + creditCount300and400['maj'];
-    minCount = creditCountMin + creditCount300and400['min'];
+    specCount = creditCountSpec  + creditCount300and400.spec;
+    majCount = creditCountMaj + creditCount300and400.maj;
+    minCount = creditCountMin + creditCount300and400.min;
 
 
     fillSpecCreditCount(specCount);
@@ -528,7 +528,7 @@ function addExtraMinCourses(index, min300s) {
         } else if (getCookie(additionMin200s[m]) === 'active') {
             min300s[index].value = additionMin200s[m];
             min300s[index].readOnly = true;
-            creditCount300and400['min'] += 0.5;
+            creditCount300and400.min += 0.5;
             filledTextboxes200 += 1;
             index += 1;
         }
@@ -543,19 +543,19 @@ function addExtraMinCourses(index, min300s) {
 function checkPostCompleted() {
     'use strict';
 
-    if (categoriesCompleted['spec'] === 17) {
+    if (categoriesCompleted.spec === 17) {
         $('#spec_creds').css('color', 'green');
     } else {
         $('#spec_creds').css('color', 'red');
     }
     
-    if (categoriesCompleted['maj'] === 13) {
+    if (categoriesCompleted.maj === 13) {
         $('#maj_creds').css('color', 'green');
     } else {
         $('#maj_creds').css('color', 'red');
     } 
 
-    if (categoriesCompleted['min'] === 6) {
+    if (categoriesCompleted.min === 6) {
         $('#min_creds').css('color', 'green');
     } else {
         $('#min_creds').css('color', 'red');
