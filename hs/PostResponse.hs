@@ -147,7 +147,7 @@ checkPost =
                     H.input ! A.type_ "text"
             H.h3 "Notes"
             H.div ! A.id "notes" $ 
-                H.p "- You may take no more than 1.0 FCE of CSC490H1, CSC491H1, CSC494H1, CSC495H1, BCB430Y1" 
+                H.p "- No more than 1.0 FCE from CSC490H1, CSC491H1, CSC494H1, CSC495H1, BCB430Y1 may be used to fulfill program requirements" 
         H.div ! A.id "div_major" $ do
             H.h2 "First Year"
             H.div ! A.id "maj_csc108" $ do
@@ -217,7 +217,7 @@ checkPost =
                     H.input ! A.type_ "text" 
             H.h3 "Notes"
             H.div ! A.id "notes" $ 
-                H.p "- You may take no more than 1.0 FCE of CSC490H1, CSC491H1, CSC494H1, CSC495H1, BCB430Y1"
+                H.p "- No more than 1.0 FCE from CSC490H1, CSC491H1, CSC494H1, CSC495H1, BCB430Y1 may be used to fulfill program requirements"
         H.div ! A.id "div_minor" $ do
             H.h2 "First Year"
             H.div ! A.id "min_csc108" $ do
