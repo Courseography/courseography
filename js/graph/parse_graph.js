@@ -22,7 +22,7 @@ function buildGraph() {
         makeHybrid('AND', id);
         $.each(reqs, function (index, elem) {
             if ($.isArray(elem)) {
-                var orNode = id + elem.join();
+                var orNode = id + elem.join('');
                 makeHybrid('OR', orNode);
                 $.each(elem, function (i, e) {
                     window[orNode].parents.push(window[e]);
