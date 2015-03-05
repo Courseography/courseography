@@ -7,23 +7,6 @@ import Diagrams.Backend.SVG.CmdLine
 import Diagrams.Backend.SVG
 import Data.List
 
-timetableStrings :: [[String]]
-timetableStrings = [
-    ["","","","",""],
-    ["CSC148","","CSC148","","CSC148"],
-    ["","","","",""],
-    ["","","","",""],
-    ["","","","",""],
-    ["","","","CSC165",""],
-    ["","","","CSC165",""],
-    ["","","","CSC165",""],
-    ["","","","",""],
-    ["","","","",""],
-    ["","","","",""],
-    ["","","","",""],
-    ["","","","",""]
-    ]
-
 days :: [String]
 days = ["Mon", "Tue", "Wed", "Thu", "Fri"]
 
@@ -74,8 +57,3 @@ renderTable courses = do
     where
         partition5 [] = []
         partition5 lst = take 5 lst : partition5 (drop 5 lst)
-
-main :: IO ()
-main = 
- let g = makeTable $ zipWith (:) times timetableStrings
- in renderSVG "circle.svg" (Width 600) g

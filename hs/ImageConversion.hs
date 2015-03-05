@@ -18,7 +18,7 @@ convertToImage inName outName = createProcess $ CreateProcess
                                                   inName ++
                                                   " " ++
                                                   outName
-                                   )
+                                  )
                                   Nothing
                                   Nothing
                                   CreatePipe
