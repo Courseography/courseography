@@ -105,10 +105,7 @@ function initializeGraphSettings() {
 
     // Clear 'My Courses' tab
     $('#courseGrid').empty();
-
-    active200s = [];
-    active300s = [];
-    active400s = [];
+    
     projectCourses = [];
     $('input:checkbox').attr('checked', false);
     $('input:text').attr('value', '');
