@@ -173,7 +173,9 @@ convertRectToSVG courseMap rect
                concatSVG $ map (convertTextToSVG (shapeIsHybrid rect) False False) (shapeText rect)
 
 getCourse :: String -> [(String, String)] -> [(String, String)]
-getCourse id_ courseMap = filter (\x -> fst x == id_) courseMap
+getCourse id_ courseMap =
+    let lowerId_ = map toLower id_
+    in filter (\x -> fst x == lowerId_) courseMap
 
 convertSelectionToStyle :: (String, String) -> (String, String)
 convertSelectionToStyle (courseName, courseStatus) =

@@ -120,6 +120,7 @@ function initializeGraphSettings() {
 
         if (nodeStatus.length === 0) {
             nodeStatus = 'inactive';
+            setCookie(node, nodeStatus);
         }
 
         if (initiallyTakeable.indexOf(node) > -1 && nodeStatus === 'inactive') {
