@@ -105,7 +105,7 @@ function initializeGraphSettings() {
 
     // Clear 'My Courses' tab
     $('#courseGrid').empty();
-    
+
     projectCourses = [];
     $('input:checkbox').attr('checked', false);
     $('input:text').attr('value', '');
@@ -195,16 +195,10 @@ function reset() {
     clickedCourses = [];
     $('#FCEcount').html('0.0');
 
-    active200s = [];
-    active300s = [];
-    active400s = [];
     projectCourses = [];
     $('input:checkbox').attr('checked', false);
     $('input:text').attr('value', '');
 
-    updatePostInterface();
-    updateMajorPostInterface();
-    updateMinorPostInterface();
 }
 
 
