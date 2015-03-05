@@ -52,8 +52,8 @@ buildRect texts entity =
                             (textXPos x, textYPos x)
                             ) texts
         textString = concat $ map textText rectTexts
-        id_ = (if rectsIsHybrid entity then "h" else "") ++
-              (if isDigit $ head textString then "CSC" else "") ++ dropSlash textString
+        id_ = map toLower $ (if rectsIsHybrid entity then "h" else "") ++
+                            (if isDigit $ head textString then "CSC" else "") ++ dropSlash textString
     in Shape id_
              (rectsXPos entity)
              (rectsYPos entity)

@@ -24,6 +24,7 @@ import SvgParsing.SVGBuilder
 import Text.Blaze.Internal (stringValue)
 import Text.Blaze (toMarkup)
 import Css.Constants
+import qualified Data.Map as M
 
 -- | A list of tuples that contain disciplines (areas), fill values, and courses
 --- that are in the areas.
@@ -70,7 +71,7 @@ thrd3 (_, _, c) = c
 
 -- | Gets a tuple from areaMap where id_ is in the list of courses for that tuple.
 getTuple :: String -> (String, T.Text, [String])
-getTuple id_ = head $ filter (\x -> id_ `elem` thrd3 x) areaMap ++ [("", "grey", [])]
+getTuple id_ = head $ filter (\x -> id_ `elem` (map (map toLower) (thrd3 x))) areaMap ++ [("", "grey", [])]
 
 -- | Gets an area from areaMap where id_ is in the list of courses for the corresponding tuple.
 getArea :: String -> String
@@ -81,7 +82,7 @@ getFill :: String -> String
 getFill id_ = T.unpack $ snd3 $ getTuple id_
 
 -- | Builds an SVG document.
-makeSVGDoc :: [(String, String)] -> [Shape] -> [Shape] -> [Path] -> [Path] -> [Text] -> S.Svg
+makeSVGDoc :: M.Map String String -> [Shape] -> [Shape] -> [Path] -> [Path] -> [Text] -> S.Svg
 makeSVGDoc courseMap rects ellipses edges regions regionTexts =
     S.docTypeSvg ! A.width "1052.3622"
                  ! A.height "744.09448"
@@ -125,15 +126,15 @@ makeSVGDefs =
                             ! A.fill "black"
 
 -- | Builds an SVG document.
-buildSVG :: [(String, String)] -> String -> IO ()
+buildSVG :: M.Map String String -> String -> IO ()
 buildSVG courseMap filename =
     runSqlite dbStr $ do
         sqlRects    :: [Entity Rects]    <- selectList [] []
         sqlTexts    :: [Entity Texts]    <- selectList [] []
         sqlPaths    :: [Entity Paths]    <- selectList [] []
         sqlEllipses :: [Entity Ellipses] <- selectList [] []
-        let courseStyleMap = map convertSelectionToStyle courseMap
-        let texts       = map (buildText . entityVal) sqlTexts
+        let courseStyleMap = M.map convertSelectionToStyle courseMap
+            texts       = map (buildText . entityVal) sqlTexts
             rects       = map (buildRect texts . entityVal) sqlRects
             ellipses    = buildEllipses texts 0 $ map entityVal sqlEllipses
             paths       = zipWith (buildPath rects ellipses) (map entityVal sqlPaths) [1..length sqlPaths]
@@ -149,7 +150,7 @@ intersectsWithShape shapes text =
     not $ null (filter (intersectsWithPoint (fromRational $ textXPos text) (fromRational $ textYPos text)) shapes)
 
 -- | Converts a `Rect` to SVG.
-convertRectToSVG :: [(String, String)] -> Shape -> S.Svg
+convertRectToSVG :: M.Map String String -> Shape -> S.Svg
 convertRectToSVG courseMap rect
     | shapeFill rect == "none" = S.rect
     | otherwise =
@@ -159,9 +160,10 @@ convertRectToSVG courseMap rect
             ! S.customAttribute "text-rendering" "geometricPrecision"
             ! S.customAttribute "shape-rendering" "geometricPrecision"
             ! A.style (stringValue (
-                       if not (null (getCourse (shapeId rect) courseMap)) &&
-                          not (shapeIsHybrid rect)
-                        then snd $ head $ getCourse (shapeId rect) courseMap
+                       if not (shapeIsHybrid rect)
+                        then case M.lookup (shapeId rect) courseMap of
+                                  Just style -> style
+                                  Nothing    -> ""
                         else "")) $
             do S.rect ! A.rx "4"
                       ! A.ry "4"
@@ -173,15 +175,13 @@ convertRectToSVG courseMap rect
                concatSVG $ map (convertTextToSVG (shapeIsHybrid rect) False False) (shapeText rect)
 
 getCourse :: String -> [(String, String)] -> [(String, String)]
-getCourse id_ courseMap =
-    let lowerId_ = map toLower id_
-    in filter (\x -> fst x == lowerId_) courseMap
+getCourse id_ courseMap = filter (\x -> fst x == id_) courseMap
 
-convertSelectionToStyle :: (String, String) -> (String, String)
-convertSelectionToStyle (courseName, courseStatus) =
+convertSelectionToStyle :: String -> String
+convertSelectionToStyle courseStatus =
     if isSelected courseStatus
-    then (courseName, "stroke-width:4;")
-    else (courseName, "opacity:0.5;stroke-dasharray:8,5;")
+    then "stroke-width:4;"
+    else "opacity:0.5;stroke-dasharray:8,5;"
 
 isSelected :: String -> Bool
 isSelected courseStatus =
