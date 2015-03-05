@@ -1,204 +1,178 @@
 // Objects to store how many courses in each category have been completed
-var completed_spec = {'CSC108': 0, 'CSC148': 0, 'CSC165': 0, 'Calc1': 0, 'CSC207': 0, 'CSC209': 0, 
+var completedSpec = {'CSC108': 0, 'CSC148': 0, 'CSC165': 0, 'Calc1': 0, 'CSC207': 0, 'CSC209': 0, 
                       'CSC236': 0, 'CSC258': 0, 'CSC263': 0, 'Sta1': 0, 'Lin1': 0, 'CSC369': 0, 'CSC373': 0};
 
-var completed_maj = {'CSC108': 0, 'CSC148': 0, 'CSC165': 0, 'Calc1': 0, 'CSC207': 0, 'CSC236': 0, 
-                     'CSC258': 0, 'CSC263': 0, 'Sta1': 0};
+var completedMaj = {'CSC108': 0, 'CSC148': 0, 'CSC165': 0, 'Calc1': 0, 'CSC207': 0, 'CSC236': 0, 
+                    'CSC258': 0, 'CSC263': 0, 'Sta1': 0};
 
-var completed_min = {'CSC108': 0, 'CSC148': 0, 'CSC165': 0, 'CSC236': 0}; 
+var completedMin = {'CSC108': 0, 'CSC148': 0, 'CSC165': 0, 'CSC236': 0, 'CSC207': 0}; 
 
-var level300 = {'CSC300': 0, 'CSC301': 0, 'CSC302': 0, 'CSC309': 0, 'CSC310': 0, 
-                'CSC318': 0, 'CSC320': 0, 'CSC321': 0, 'CSC324': 0, 'CSC336': 0,
-                'CSC343': 0, 'CSC358': 0, 'CSC372': 0, 'CSC384': 0, 'ECE385': 0,
-                'ECE489': 0, 'BCB410': 0, 'BCB420': 0, 'BCB430': 0};
+var level300 = ['CSC300', 'CSC301', 'CSC302', 'CSC309', 'CSC310', 'CSC318', 'CSC320', 'CSC321', 
+                'CSC324', 'CSC336','CSC343', 'CSC358', 'CSC372', 'CSC384', 'ECE385', 'ECE489', 
+                'BCB410', 'BCB420', 'BCB430'];
 
-var level400 = {'CSC401': 0, 'CSC404': 0, 'CSC411': 0, 'CSC412': 0, 'CSC418': 0,
-                'CSC420': 0, 'CSC428': 0, 'CSC436': 0, 'CSC438': 0, 'CSC443': 0, 
-                'CSC446': 0, 'CSC448': 0, 'CSC454': 0, 'CSC456': 0, 'CSC458': 0,
-                'CSC463': 0, 'CSC465': 0, 'CSC469': 0, 'CSC486': 0, 'CSC488': 0,
-                'CSC490': 0, 'CSC491': 0, 'CSC494': 0, 'CSC495': 0, 'BCB410': 0, 
-                'BCB420': 0, 'BCB430': 0, 'CSC410': 0};
+var level400 = ['CSC401', 'CSC404', 'CSC411', 'CSC412', 'CSC418', 'CSC420', 'CSC428', 'CSC436',
+                'CSC438', 'CSC443', 'CSC446', 'CSC448', 'CSC454', 'CSC456', 'CSC458', 'CSC463', 
+                'CSC465', 'CSC469', 'CSC486', 'CSC488', 'CSC490', 'CSC491', 'CSC494', 'CSC495', 
+                'BCB410', 'BCB420', 'BCB430', 'CSC410'];
+
+var additionMin200s = ['CSC209', 'CSC258', 'CSC263'];
 
 activeInq = [];
 active400s = [];
 active300s = [];
-var index300 = 0;
-var index400 = 0;
-creditCountSpec = 0;
-creditCountMaj = 0;
-creditCountMin = 0;
-creditCount300 = 0;
-creditCount400 = 0;
+var index300 = {'spec': 0, 'maj': 0, 'min': 0};
+var index400 = {'spec': 0, 'maj': 0, 'min': 0};
+var categoriesCompleted = {'spec': 0, 'maj': 0, 'min': 0};
+var filledTextboxes300 = {'spec': 0, 'maj': 0, 'min': 0};
+var filledTextboxes400 = {'spec': 0, 'maj': 0, 'min': 0};
+var filledTextboxesExtra = {'spec': 0, 'maj': 0, 'min': 0};
+var index200 = 0;
+var filledTextboxes200 = 0;
+var minCount = 0;
+var majCount = 0;
+var specCount = 0;
 
 /**
  * Updates POSts when button is clicked.
 **/
 $('#update').click(function (e) {
-    'use-strict';
+    'use strict';
 
-    index300 = 0;
-    index400 = 0;
     updateAllCategories();
+    updateNavPost();
 });
-
-
-/**
- * Sets cookie when clicking on a course in Check My POSt
- * TODO: Check prereqs properly
-**/
-/*
-$('.full_name').click(function (e) {
-    'use-strict';
-
-    var index = 0;
-    if (this.className.indexOf('CSC') > -1) {
-        index = this.className.indexOf('CSC'); 
-    } else if (this.className.indexOf('Calc') > -1) {
-        index = this.className.indexOf('Calc'); 
-    } else if (this.className.indexOf('Lin') > -1) {
-        index = this.className.indexOf('Lin'); 
-    } else if (this.className.indexOf('Sta') > -1) {
-        index = this.className.indexOf('Sta'); 
-    }
-    
-
-    var courseCode = this.className.substring(index, this.className.length);
-    if (getCookie(courseCode) === 'inactive' || getCookie(courseCode) === 'takeable') {
-            setCookie(courseCode, 'active');
-    } if (getCookie(courseCode) === 'active' || getCookie(courseCode) === 'overriden') {
-            setCookie(courseCode, 'inactive');
-    }
-    updateAllCategories();
-});
-*/
 
 
 /**
  * Updates all categories to see if they are fulfilled or not.
 **/
-// TODO: Add CSC240 and CSC265
 function updateAllCategories() {
-    'use-strict';
+    'use strict';
+
+    resetValues();
 
     updateCompletedMinCourses();
     updateCompletedMajCourses();
     updateCompletedSpecCourses();
     update300s();
     update400s();
-    fill300s();
     fill400s();
+    fill300s();
     fillMisc();
     fillExtra();
-    updateCreditCount();
+    fillCreditCount();
 
-    // Update Specialist 
-    for (var property in completed_spec) {
-        if (completed_spec.hasOwnProperty(property)) {
-            var category = $('#spec_' + property.toLowerCase())[0].getElementsByClassName('code')[0];
-            if (completed_spec[property] === 1) { // if the category is completed
-                activateCourse(property);
-                updateCategory(category, 'fulfilled');
-            } else { // if the category is not completed
-                deactivateCourse(property);
-                updateCategory(category, 'not fulfilled');
-            }
-        }
-    }
 
-    // Update Major
-    for (var property in completed_maj) {
-        if (completed_maj.hasOwnProperty(property)) {
-            var category = $('#maj_' + property.toLowerCase())[0].getElementsByClassName('code')[0];
-            if (completed_maj[property] === 1) { // if the category is completed
-                activateCourse(property);
-                updateCategory(category, 'fulfilled');
-            } else { // if the category is not completed
-                deactivateCourse(property);
-                updateCategory(category, 'not fulfilled');
-            }
-        }
-    }
+    updateReqsCategory('Spec');
+    updateReqsCategory('Maj');
+    updateReqsCategory('Min');
 
-    // Update Minor
-    for (var property in completed_min) {
-        if (completed_min.hasOwnProperty(property)) {
-            var category = $('#min_' + property.toLowerCase())[0].getElementsByClassName('code')[0];
-            if (completed_min[property] === 1) { // if the category is completed
-                activateCourse(property);
-                updateCategory(category, 'fulfilled');
-            } else { // if the category is not completed
-                deactivateCourse(property);
-                updateCategory(category, 'not fulfilled');
-            }
-        }
-    }
 
     // Update 300s
-    var i = 0; 
-    var spec300s = $('.lvl300spec');
-    for (var m = 0; m < 3; m++) {
-        if (spec300s[m].value != '') {
-            i += 1;
-        }
-    }
-    if (i === 3) {
+    if (filledTextboxes300.spec === 3) {
         updateCategory($('#spec_300')[0].getElementsByClassName('code')[0], 'fulfilled');
-        updateCategory($('#maj_300')[0].getElementsByClassName('code')[0], 'fulfilled');
         updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'fulfilled');
-
+        categoriesCompleted.spec += 1;
     } else {
         updateCategory($('#spec_300')[0].getElementsByClassName('code')[0], 'not fulfilled');
-        updateCategory($('#maj_300')[0].getElementsByClassName('code')[0], 'not fulfilled');
         updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'not fulfilled');
-        
     }
+
+    if (filledTextboxes300.maj === 2) {
+        updateCategory($('#maj_300')[0].getElementsByClassName('code')[0], 'fulfilled');
+        categoriesCompleted.maj += 1;
+     } else {
+        updateCategory($('#maj_300')[0].getElementsByClassName('code')[0], 'not fulfilled');
+     }
+
 
     // Update 400s
-
-    i = 0; 
-    var spec400s = $('.lvl400spec');
-    for (var l = 0; l < 3; l++) {
-        if (spec400s[l].value != '') {
-            i += 1;
-        }
-    }
-
-    if (i === 3) {
+    if (filledTextboxes400.spec === 3) {
         updateCategory($('#spec_400')[0].getElementsByClassName('code')[0], 'fulfilled');
-        updateCategory($('#maj_400')[0].getElementsByClassName('code')[0], 'fulfilled');
         updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'fulfilled');
+        categoriesCompleted.spec += 1;
     } else {
         updateCategory($('#spec_400')[0].getElementsByClassName('code')[0], 'not fulfilled');
-        updateCategory($('#maj_400')[0].getElementsByClassName('code')[0], 'not fulfilled');
         updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'not fulfilled');
+    }
+
+    if (filledTextboxes400.maj === 1) {
+        updateCategory($('#maj_400')[0].getElementsByClassName('code')[0], 'fulfilled');
+        categoriesCompleted.maj += 1;
+    } else {    
+        updateCategory($('#maj_400')[0].getElementsByClassName('code')[0], 'not fulfilled'); 
     }
 
     // Update Extra
+    if (filledTextboxesExtra.spec === 4) {
+        updateCategory($('#spec_extra')[0].getElementsByClassName('code')[0], 'fulfilled');
+        categoriesCompleted.spec += 1;
+    } 
+    if (filledTextboxesExtra.maj === 3) {
+        updateCategory($('#maj_extra')[0].getElementsByClassName('code')[0], 'fulfilled');
+        categoriesCompleted.maj += 1;
+    } 
+    if ((filledTextboxes300.min + filledTextboxes400.min + filledTextboxes200) === 3) {
+        updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'fulfilled');
+        categoriesCompleted.min += 1;
+    } 
+    if (filledTextboxesExtra.spec < 4) {
+        updateCategory($('#spec_extra')[0].getElementsByClassName('code')[0], 'not fulfilled');
+    } 
+    if (filledTextboxesExtra.maj < 3) {
+        updateCategory($('#maj_extra')[0].getElementsByClassName('code')[0], 'not fulfilled');
+    } 
+    if ((filledTextboxes300.min + filledTextboxes400.min + filledTextboxes200) < 3) {
+        updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'not fulfilled');
+    }
 
-    countMaj = 0; 
-    countSpec = 0;
-    var specExtra = $('#spec_extra')[0].getElementsByTagName('input');
-    var majExtra = $('#maj_extra')[0].getElementsByTagName('input');
-    for (var l = 0; l < 4; l++) {
-        if (specExtra[l].value != '') {
-            countSpec += 1;
-        } if (l < 3) {
-            if (majExtra[l].value != '') {
-                countMaj += 1;
+    checkPostCompleted();
+}
+
+/**
+ * Resets all values to initial starting values
+**/
+function resetValues() {
+    'use strict';
+
+    index300 = {'spec': 0, 'maj': 0, 'min': 0};
+    index400 = {'spec': 0, 'maj': 0, 'min': 0};
+    categoriesCompleted = {'spec': 0, 'maj': 0, 'min': 0};
+    index200 = 0;
+
+    creditCount300and400.maj = 0;
+    creditCount300and400.spec = 0;
+    creditCount300and400.min = 0;
+
+    filledTextboxes300 = {'spec': 0, 'maj': 0, 'min': 0};
+    filledTextboxes400 = {'spec': 0, 'maj': 0, 'min': 0};
+    filledTextboxesExtra = {'spec': 0, 'maj': 0, 'min': 0};
+    filledTextboxes200 = 0;
+}
+
+
+/**
+ * Updates categories for required courses in each POSt
+ * @param {string} post The POSt that you are updating categories for.
+**/
+function updateReqsCategory(post) {
+    'use strict';
+
+    var array = 'completed' + post;
+    for (var property in window[array]) {
+        if (window[array].hasOwnProperty(property)) {
+            var category = $('#' + post.toLowerCase() + '_' + property.toLowerCase())[0].getElementsByClassName('code')[0];
+            if (window[array][property] === 1) { // if the category is completed
+                activateCourse(property);
+                updateCategory(category, 'fulfilled');
+                categoriesCompleted[post.toLowerCase()] += 1;
+            } else { // if the category is not completed
+                deactivateCourse(property);
+                updateCategory(category, 'not fulfilled');
             }
         }
     }
-
-    if (countSpec === 4) {
-        updateCategory($('#spec_extra')[0].getElementsByClassName('code')[0], 'fulfilled');
-    } if (countMaj === 3) {
-        updateCategory($('#maj_extra')[0].getElementsByClassName('code')[0], 'fulfilled');
-    } if (countSpec < 4) {
-        updateCategory($('#spec_extra')[0].getElementsByClassName('code')[0], 'not fulfilled');
-    } if (countMaj < 3) {
-        updateCategory($('#maj_extra')[0].getElementsByClassName('code')[0], 'not fulfilled');
-    }
-
 }
 
 
@@ -207,10 +181,10 @@ function updateAllCategories() {
  * @param {string} courseCode The course code
 **/
 function activateCourse(courseCode) {
-    'use-strict';
+    'use strict';
     
     var elements = document.getElementsByClassName(courseCode);
-    for (i = 0; i < elements.length; i++) {
+    for (var i = 0; i < elements.length; i++) {
         elements[i].style.backgroundColor = '#99ff99';
     }
 }
@@ -221,10 +195,10 @@ function activateCourse(courseCode) {
  * @param {string} courseCode The course code
 **/
 function deactivateCourse(courseCode) {
-    'use-strict';
+    'use strict';
     
     var elements = document.getElementsByClassName(courseCode);
-    for (i = 0; i < elements.length; i++) {
+    for (var i = 0; i < elements.length; i++) {
             elements[i].style.backgroundColor = '#BABABA';
     }
 }
@@ -236,7 +210,7 @@ function deactivateCourse(courseCode) {
  * @param {string} status Whether it is 'fulfilled' or 'not fulfilled'
 **/
 function updateCategory(category, status) {
-    'use-strict';
+    'use strict';
 
     if (status === 'fulfilled') {
         category.style.backgroundColor = "#3CB371";
@@ -247,185 +221,150 @@ function updateCategory(category, status) {
 
 
 /**
- * Autofills textboxes for 300 level courses. 
+ * Updates Credit Count for each POSt.
+ **/
+function fillCreditCount() {
+    'use strict';
+
+    specCount = creditCountSpec  + creditCount300and400.spec;
+    majCount = creditCountMaj + creditCount300and400.maj;
+    minCount = creditCountMin + creditCount300and400.min;
+
+
+    fillSpecCreditCount(specCount);
+    fillMajCreditCount(majCount);
+    fillMinCreditCount(minCount);
+}
+
+
+/**
+ * Autofills the credit count for specialist
+ * @param {number} specCount The credit count for specialist
 **/
-function fill300s() {
-    'use-strict';
+function fillSpecCreditCount(specCount) {
+    'use strict';
 
-    var i = 0; 
-
-    var spec300s = $('.lvl300spec');
-    var maj300s = $('.lvl300maj');
-    var min300s = $('.lvl300min');
-
-    
-    // clear textboxes
-    for (k = 0; k < 3; k++) {
-        var course = spec300s[k].value;
-        if (getCookie(course) === 'inactive' || getCookie(course) === 'takeable') {
-            spec300s[k].value = '';
-            if (k < 2) {
-                maj300s[k].value = '';
-            }
-            min300s[k].value = '';
-        }
+    if (specCount >= 12) {
+        $('#spec_creds').html('(12.0/12.0)');
+    } else {
+        $('#spec_creds').html('(' + (specCount).toFixed(1) + '/12.0)');
     }
-    
+}
 
-    // fill courses that have been selected
+
+/**
+ * Autofills the credit count for major
+ * @param {number} majCount The credit count for major
+**/
+function fillMajCreditCount(majCount) {
+    'use strict';
+
+    if (majCount >= 8) {
+        $('#maj_creds').html('(8.0/8.0)')
+    } else {
+        $('#maj_creds').html('(' + (majCount).toFixed(1) + '/8.0)');
+    }
+}
+
+
+/**
+ * Autofills the credit count for minor.
+ * @param {number} minCount The credit count for minor
+**/
+function fillMinCreditCount(minCount) {
+    'use strict';
+
+    if (minCount >= 4) {
+        $('#min_creds').html('(4.0/4.0)')
+    } else {
+        $('#min_creds').html('(' + (minCount).toFixed(1) + '/4.0)');
+    }
+}
+
+
+/**
+ * Autofills extra 200-level courses for last minor constraint.
+ * @param {number} index The textbox number we are at
+ * @param {HTMLElement} min300s Array of textbox elements to fill
+**/
+function addExtraMinCourses(index, min300s) {
+    'use strict';
+
     for (var m = 0; m < 3; m++) {
-        if (index300 === active300s.length) {
-            break;
+        if (index === 3) {
+            break;      
+        } else if (getCookie(additionMin200s[m]) === 'active') {
+            min300s[index].value = additionMin200s[m];
+            min300s[index].readOnly = true;
+            creditCount300and400.min += 0.5;
+            filledTextboxes200 += 1;
+            index += 1;
         }
-        spec300s[i].value = active300s[index300];
-        if (i < 2) {
-            maj300s[i].value = active300s[index300];
-        }
-        min300s[i].value = active300s[index300];
-        i += 1; 
-        index300 += 1;
+        
     }
-
-    if (i < 3) {
-        for (var m = 0; m < 3; m++) {
-            if ((index400 === active400s.length) || (i === 3)) {
-                break;
-            }
-            spec300s[i].value = active400s[index400];
-            if (i < 2) {
-                maj300s[i].value = active400s[index400];
-            }
-            min300s[i].value = active400s[index400]; 
-            i += 1;
-            index400 += 1;
-        }
-    }
-}  
-
-
-/**
- * Autofills textboxes for 400 level courses. 
-**/
-function fill400s() {
-    'use-strict';
-
-    var i = 0; 
-    var spec400s = $('.lvl400spec');
-    var maj400s = $('.lvl400maj');
-    var min400s = $('.lvl400min');
-
-    
-    // clear textboxes
-    for (k = 0; k < 3; k++) {
-        spec400s[k].value = '';
-        if (k < 1) {
-            maj400s[k].value = '';
-        }
-        min400s[k].value = '';
-    }
-    
-
-    // fill courses that have been selected
-    for (var m = 0; m < active400s.length; m++) {
-        if ((index400 == active400s.length) || (i === 3)) {
-            break;
-        }
-        spec400s[i].value = active400s[index400];
-        if (i < 1) {
-            maj400s[i].value = active400s[index400];
-        }
-        min400s[i].value = active400s[index400]; 
-        i += 1;
-        index400 += 1;
-    }
-}
- 
-
-function fillExtra() {
-    'use-strict'
-
-    var i = 0;
-    var spec_extra = $('#spec_extra')[0].getElementsByTagName('input');
-    var maj_extra = $('#maj_extra')[0].getElementsByTagName('input');
-
-    for (var k = 0; k < 4; k++) {
-        if (spec_extra[k].value.indexOf('MAT') === -1 && spec_extra[k].value.indexOf('STA') === -1) {
-            spec_extra[k].value = '';
-        } if (k < 3) {
-            if (maj_extra[k].value.indexOf('MAT') === -1 && maj_extra[k].value.indexOf('STA') === -1) {
-                maj_extra[k].value = '';
-            }
-        }
-    }
-
-    // fill courses that have been selected
-    for (m = 0; m < active300s.length; m++) {
-        if ((index300 === active300s.length) || (i === 4)) {
-            break;
-        }
-        if ((i < 2) && (maj_extra[i].value === '')) {
-            maj_extra[i].value = active300s[index300];
-        }
-        if (spec_extra[i].value === '') {
-            spec_extra[i].value = active300s[index300];
-            index300 += 1;
-        } 
-        i += 1;
-    }
-
-    if (i < 4) {
-        for (m = 0; m < active400s.length; m++) {
-            if ((index400 === active400s.length) || (i === 4)) {
-                break;
-            }
-            if ((i < 2) && (maj_extra[i].value === '')) {
-                maj_extra[i].value = active400s[index400];
-            }
-            if (spec_extra[i].value === '') {
-                spec_extra[i].value = active400s[index400];
-                index400 += 1;
-            }
-            i += 1;
-        }
-    }
-
 }
 
 
 /**
- * Autofills textboxes and updates category for Inquiry courses
+ * Checks whether a POSt is completed and updates credit count colour if it is.
 **/
-function fillMisc() {
-    'use-strict';
+function checkPostCompleted() {
+    'use strict';
 
-    var spec_inq = $('#spec_misc')[0].getElementsByTagName('input');
-    var maj_inq = $('#maj_misc')[0].getElementsByTagName('input');
-
-    // clear textboxes
-    if (spec_inq[0].value.indexOf('PEY') === -1) {
-        spec_inq[0].value = '';
-    } if (maj_inq[0].value.indexOf('PEY') === -1) {
-        maj_inq[0].value = '';
-    }
-
-    // fill textboxes
-    if (activeInq.length > 0) {
-        spec_inq[0].value = activeInq[0];
-    } if (activeInq.length > 0){
-        maj_inq[0].value = activeInq[0];
+    if (categoriesCompleted.spec === 17) {
+        $('#spec_creds').css('color', 'green');
+    } else {
+        $('#spec_creds').css('color', 'red');
     }
     
-    // update category
-    if (spec_inq[0].value != '') {
-        updateCategory($('#spec_misc')[0].getElementsByClassName('code')[0], 'fulfilled');
-    } if (maj_inq[0].value != '') {    
-        updateCategory($('#maj_misc')[0].getElementsByClassName('code')[0], 'fulfilled'); 
-    } if (spec_inq[0].value === '') {
-        updateCategory($('#spec_misc')[0].getElementsByClassName('code')[0], 'not fulfilled');
-    } if (maj_inq[0].value === '') {
-        updateCategory($('#maj_misc')[0].getElementsByClassName('code')[0], 'not fulfilled');
-    }
+    if (categoriesCompleted.maj === 13) {
+        $('#maj_creds').css('color', 'green');
+    } else {
+        $('#maj_creds').css('color', 'red');
+    } 
 
+    if (categoriesCompleted.min === 6) {
+        $('#min_creds').css('color', 'green');
+    } else {
+        $('#min_creds').css('color', 'red');
+    }
 }
 
 
+/**
+ * Updates the Nav Bar on the Check My Post! page
+**/
+function updateNavPost() {
+    'use strict';
+
+    var nav_post = $('#nav-links')[0].getElementsByTagName('li')[3].getElementsByTagName('a')[0];
+
+    if (getCookie('specialist') === 'active') {
+        nav_post.innerHTML = 'Check My POSt! (' + specCount.toFixed(1) + '/12.0)';
+        setCookie('activecount', specCount.toFixed(1));
+    } else if (getCookie('major') === 'active') {
+        nav_post.innerHTML = 'Check My POSt! (' + majCount.toFixed(1) + '/8.0)';
+        setCookie('activecount', majCount.toFixed(1));
+    } else if (getCookie('minor') === 'active') {
+        nav_post.innerHTML = 'Check My POSt! (' + minCount.toFixed(1) + '/4.0)';
+        setCookie('activecount', minCount.toFixed(1));
+    } 
+}
+
+
+/**
+ * Updates the Nav Bar on the Graph page.
+**/
+function updateNavGraph() {
+    'use strict';
+
+    var nav_graph = $('#nav-links')[0].getElementsByTagName('li')[3].getElementsByTagName('a')[0];
+
+    if (getCookie('specialist') === 'active') {
+        nav_graph.innerHTML = 'Check My POSt! (' + getCookie('activecount') + '/12.0)';
+    } else if (getCookie('major') === 'active') {
+        nav_graph.innerHTML = 'Check My POSt! (' + getCookie('activecount') + '/8.0)';
+    } else if (getCookie('minor') === 'active') {
+        nav_graph.innerHTML = 'Check My POSt! (' + getCookie('activecount') + '/4.0)';
+    } 
+}

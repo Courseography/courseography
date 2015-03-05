@@ -33,16 +33,9 @@ main = do
                dir "post" postResponse,
                dir "static" $ serveDirectory EnableBrowsing [] staticDir,
                dir "course" $ look "name" >>= retrieveCourse,
-               dir "all-courses" $ liftIO allCourses,
-               dir "svg" $ look "courses" >>= svgResponse
+               dir "all-courses" $ liftIO allCourses
                ]
 
 retrieveCourse :: String -> ServerPart Response
 retrieveCourse course =
    liftIO $ queryCourse (T.pack course)
-
-svgResponse :: String -> ServerPart Response
-svgResponse courses = do
-  liftIO $ renderTable courses
-  -- Right now serving the file, but the client isn't doing anthing with it
-  serveFile (asContentType "image/svg+xml") "circle.svg"

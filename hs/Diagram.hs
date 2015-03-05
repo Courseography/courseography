@@ -48,12 +48,12 @@ rowBorder = hrule 12 # lw thin # lc grey
 makeTable :: [[String]] -> Diagram B R2
 makeTable s = vcat $ header : intersperse rowBorder (map makeRow s)
 
-renderTable :: String -> IO ()
-renderTable courses = do
+renderTable :: String -> String -> IO ()
+renderTable filename courses = do
     let courseTable = partition5 $ lines courses
     print courseTable
     let g = makeTable $ zipWith (:) times courseTable
-    renderSVG "circle.svg" (Width 600) g
+    renderSVG filename (Width 600) g
     where
         partition5 [] = []
         partition5 lst = take 5 lst : partition5 (drop 5 lst)
