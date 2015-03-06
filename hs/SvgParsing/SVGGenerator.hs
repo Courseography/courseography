@@ -30,8 +30,8 @@ import qualified Data.Map as M
 --- that are in the areas.
 areaMap :: [(String, T.Text, [String])]
 areaMap = [("theory", theoryDark, ["csc165", "csc236", "csc240", "csc263", "csc265",
-                       "csc310", "csc324", "csc373", "csc438", "csc448",
-                       "csc463"]),
+                                   "csc310", "csc324", "csc373", "csc438", "csc448",
+                                   "csc463"]),
            ("core", coreDark, ["Calc1", "Sta1", "Sta2", "Lin1", "csc108", "csc148", "csc104", "csc120", "csc490",
                                "csc491", "csc494", "csc495"]),
            ("se", seDark, ["csc207", "csc301", "csc302", "csc410", "csc465"]),
@@ -42,7 +42,7 @@ areaMap = [("theory", theoryDark, ["csc165", "csc236", "csc240", "csc263", "csc2
            ("graphics", graphicsDark,["csc320", "csc418", "csc420"]),
            ("num", numDark, ["csc336", "csc436", "csc446", "csc456"]),
            ("ai", aiDark, ["csc321", "csc384", "csc401", "csc411", "csc412",
-                          "csc485", "csc486"]),
+                           "csc485", "csc486"]),
            ("dbweb", dbwebDark , ["csc309", "csc343", "csc443"])]
 
 -- | The style for Text elements of hybrids.
