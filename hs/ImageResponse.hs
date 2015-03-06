@@ -57,4 +57,3 @@ getTimetableImage counter courses =
        liftIO $ removeImage svgFilename
        let encodedData = BEnc.encode imageData
        return $ toResponse encodedData
-       
