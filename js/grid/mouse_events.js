@@ -194,32 +194,12 @@ function renderAddHover(time, section) {
 }
 
 /**
- * Extends a given row to display half hour sections.
- * @param {Int} time The full hour time of the row.
- * @param {string} term The term of the timetable row.
+ * Returns the id of the timetable cell above.
+ * @param {string} time The id of the current timetable cell.
  */
-function extendRow(timeInt, term) {
-    'use strict';
-
-    var weekPrefixArray = ['M', 'T', 'W', 'R', 'F'];
-    var pcells = [];
-    var ccells = [];
-    var time = timeInt.toString();
-
-    for (var k = 0; k < 5; k++) {
-        pcells[pcells.length] = '#' + weekPrefixArray[k] + time + term;
-        ccells[ccells.length] = '#' + weekPrefixArray[k] + time + term + 'H';
-    }
-
-    for (var i = 0; i < 5; i++) {
-        $(ccells[i]).toggle();
-        $(pcells[i]).attr('rowspan', '1');
-    }
-
-}
-
 function previousCell(time) {
-
+    'use strict';
+    
     var n;
     var ptime;
 
@@ -280,30 +260,3 @@ function compressCell(timeInt, day, term) {
     $(pcell).attr('rowspan', '2');
     $(ccell).css('display', 'none');
 }
-
-/**
- * Compress a given row to hide half hour sections.
- * @param {Int} timeInt The full hour time of the row.
- * @param {string} week The week of the timetable cell.
- * @param {string} term The term of the timetable cell.
- */
-function compressRow(timeInt, term) {
-    'use strict';
-
-    var weekPrefixArray = ['M', 'T', 'W', 'R', 'F'];
-    var pcells = [];
-    var ccells = [];
-    var time = timeInt.toString();
-
-    for (var k = 0; k < 5; k++) {
-        pcells[pcells.length] = '#' + weekPrefixArray[k] + time + term;
-        ccells[ccells.length] = '#' + weekPrefixArray[k] + time +'H' + term;
-    }
-
-    for (var i = 0; i < 5; i++) {
-        $(pcells[i]).attr('rowspan', '2');
-        $(ccells[i]).css('display', 'none');
-    }
-
-}
-
