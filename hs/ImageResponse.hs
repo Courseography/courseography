@@ -21,7 +21,6 @@ graphImageResponse :: MVar Integer -> ServerPart Response
 graphImageResponse counter =
     do req <- askRq
        let cookies = rqCookies req
-       liftIO $ addCounter counter
        liftIO $ getGraphImage counter (M.map cookieValue $ M.fromList cookies)
 
 -- | Returns an image of the timetable requested by the user.
@@ -32,11 +31,12 @@ timetableImageResponse counter courses =
 -- | Creates an image, and returns the base64 representation of that image.
 getGraphImage :: MVar Integer -> M.Map String String -> IO Response
 getGraphImage counter courseMap =
-    do c <- liftIO $ readMVar counter
+    do c <- takeMVar counter
        let svgFilename = (show c ++ "-graph-svg-file.svg")
            imageFilename = (show c ++ "-graph.png")
        buildSVG courseMap svgFilename
        liftIO $ createImageFile svgFilename imageFilename
+       liftIO $ (putMVar counter . (+) 1) c
        imageData <- BS.readFile imageFilename
        liftIO $ removeImage imageFilename
        liftIO $ removeImage svgFilename
@@ -46,17 +46,14 @@ getGraphImage counter courseMap =
 -- | Creates an image, and returns the base64 representation of that image.
 getTimetableImage :: MVar Integer -> String -> IO Response
 getTimetableImage counter courses =
-    do c <- liftIO $ readMVar counter
+    do c <- takeMVar counter
        let svgFilename = (show c ++ "--timetable-svg-file.svg")
            imageFilename = (show c ++ "-timetable.png")
        liftIO $ renderTable svgFilename courses
        liftIO $ createImageFile svgFilename imageFilename
+       liftIO $ (putMVar counter . (+) 1) c
        imageData <- BS.readFile imageFilename
        liftIO $ removeImage imageFilename
        liftIO $ removeImage svgFilename
        let encodedData = BEnc.encode imageData
        return $ toResponse encodedData
-
-addCounter :: MVar Integer -> IO ()
-addCounter counter = do
-    liftIO $ (putMVar counter . (+) 1) =<< takeMVar counter
