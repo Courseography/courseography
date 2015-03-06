@@ -18,6 +18,16 @@ var level400 = ['CSC401', 'CSC404', 'CSC411', 'CSC412', 'CSC418', 'CSC420', 'CSC
 
 var additionMin200s = ['CSC209', 'CSC258', 'CSC263'];
 
+var activeCourses = [];
+var specialist = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0, 'filledTextboxes400': 0, 
+                  'filledTextboxesExtra': 0, 'specCount': 0, 'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC209', 'CSC236',
+                  'CSC258', 'CSC263', 'Sta1', 'Lin1', 'CSC369', 'CSC373']};
+var major = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0, 'filledTextboxes400': 0, 
+             'filledTextboxesExtra': 0, 'majCount': 0, 'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC236',
+                  'CSC258', 'CSC263', 'Sta1', 'Lin1']};
+var minor = {'index300': 0, 'index400': 0, 'index200': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0, 'filledTextboxes400': 0, 
+             'filledTextboxesExtra': 0, 'filledTextboxes200': 0, 'minCount': 0, 'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC236']};
+
 activeInq = [];
 active400s = [];
 active300s = [];
@@ -62,6 +72,9 @@ function updateAllCategories() {
     fillMisc();
     fillExtra();
     fillCreditCount();
+
+    updateActiveCourses();
+
 
 
     updateReqsCategory('Spec');

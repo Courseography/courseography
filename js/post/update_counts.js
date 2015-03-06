@@ -142,3 +142,28 @@ function update400s() {
     }
 }
 
+
+function updateActiveCourses() {
+    'use strict';
+
+    activeCourses = [];
+    
+    // check for active CSC courses
+    for (var areaName in areas) {
+        if (areas.hasOwnProperty(areaName)) {
+            for (var i = 0; i < areas[areaName].length; i++) {
+                if (getCookie(areas[areaName][i]) === 'active') {
+                    activeCourses.push(areas[areaName][i]);
+                }
+            }
+        }
+    }
+
+    // check for active math courses
+    for (var i = 0; i < math.length; i++) {
+        if (getCookie(math[i]) === 'active') {
+            activeCourses.push(math[i]);
+        }
+    }
+}
+
