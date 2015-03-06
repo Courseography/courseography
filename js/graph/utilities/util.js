@@ -106,9 +106,6 @@ function initializeGraphSettings() {
     // Clear 'My Courses' tab
     $('#courseGrid').empty();
 
-    active200s = [];
-    active300s = [];
-    active400s = [];
     projectCourses = [];
     $('input:checkbox').attr('checked', false);
     $('input:text').attr('value', '');
@@ -131,7 +128,6 @@ function initializeGraphSettings() {
 
         // Check the courses with FCE reqs
         if (window[node].hybrid === false) {
-            updatePOSt(node, window[node].isSelected());
             if (window[node].status === 'active' || window[node].status === 'overridden') {
                 updateClickedCourses(node, true);
             }
@@ -146,10 +142,6 @@ function initializeGraphSettings() {
     });
 
     updateFCECount();
-
-    updatePostInterface();
-    updateMajorPostInterface();
-    updateMinorPostInterface();
 
     // Clear any active focus
     if (activeFocus !== '') {
@@ -204,16 +196,10 @@ function reset() {
     clickedCourses = [];
     $('#FCEcount').html('0.0');
 
-    active200s = [];
-    active300s = [];
-    active400s = [];
     projectCourses = [];
     $('input:checkbox').attr('checked', false);
     $('input:text').attr('value', '');
 
-    updatePostInterface();
-    updateMajorPostInterface();
-    updateMinorPostInterface();
 }
 
 
