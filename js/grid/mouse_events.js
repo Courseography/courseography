@@ -107,32 +107,32 @@ function renderClearHover(time) {
     var ctime;
 
     n = time.charAt(time.length-1);
-        
-    if (n === 'H' && $(time).attr('clicked') !== 'true') {
-        compressRow(parseInt(time.slice(2)), time.charAt(time.length-2));
-    }
-    
+
     if (n === 'E') {
         ctime = time.slice(0);
         time = time.slice(0, time.length-1);
         if ($(time).attr('clicked') !== 'true') {
-            compressRow(parseInt(ctime.slice(2)), ctime.charAt(ctime.length-2));
+            compressCell(parseInt(ctime.slice(2)), ctime.charAt(1), ctime.charAt(ctime.length-2));
         }
+    }
+
+    if ($(time).attr('clicked') !== 'true') {
+        $(time).removeAttr('style');
+    }
+        
+    if (n === 'H' && $(time).attr('clicked') !== 'true') {
+        compressCell(parseInt(time.slice(2)), time.charAt(1), time.charAt(time.length-2));
     }
     
     if ($(time).attr('clicked') !== 'true') {
         $(time).html('');
     }
 
-    $(time).attr('hover', 'off');
-
-    if ($(time).attr('rowspan') !== '2'&& n !== 'H' && n !== 'E') {
-        htime = time.slice(0) + 'H';
-        if ($(htime).attr('clicked') !== 'true') {
-            $(htime).html('');
-        }
-        $(htime).attr('hover', 'off');
+    if ($(time).attr('rowspan') === '1') {
+        $(time).css('font-size', '0');
     }
+
+    $(time).attr('hover', 'off');
 
 }
 
@@ -153,8 +153,8 @@ function renderAddHover(time, section) {
 
 
     if (n === 'H') {
-        extendRow(parseInt(time.slice(2)), time.charAt(time.length-2));
-        ptime = time.slice(0, time.length-1);
+        extendCell(parseInt(time.slice(2)), time.charAt(1), time.charAt(time.length-2));
+        ptime = previousCell(time);
 
         if ($(ptime).attr('clicked') === 'true') {
             $(time).attr('hover', 'conflict');
@@ -162,7 +162,7 @@ function renderAddHover(time, section) {
     }
 
     if (n === 'E') {
-        extendRow(parseInt(time.slice(2)), time.charAt(time.length-2));
+        extendCell(parseInt(time.slice(2)), time.charAt(1), time.charAt(time.length-2));
         time = time.slice(0, time.length-1);
     } 
     
@@ -183,20 +183,15 @@ function renderAddHover(time, section) {
     }
 
     if ($(time).attr('rowspan') !== '2'&& n !== 'H' && n !== 'E') {
-        htime = time.slice(0) + 'H';
-        if ($(htime).attr('clicked') !== 'true') {
-            $(htime).html(section.courseName)
-                .attr('hover', 'good');
-        } else if ($(htime).html() === section.courseName &&
-            $(htime).attr('type') === section.type) {
-            $(htime).attr('hover', 'remove');
-        } else {
-            $(htime).attr('hover', 'conflict');
-        }
+        $(time).attr('hover', 'conflict');
+    }
+
+    ptime = previousCell(time);
+    if ($(ptime).html() !== '') {
+        $(time).css('border-top-style', 'hidden');
     }
         
 }
-
 
 /**
  * Extends a given row to display half hour sections.
@@ -213,14 +208,77 @@ function extendRow(timeInt, term) {
 
     for (var k = 0; k < 5; k++) {
         pcells[pcells.length] = '#' + weekPrefixArray[k] + time + term;
-        ccells[ccells.length] = '#' + weekPrefixArray[k] + time +'H' + term;
+        ccells[ccells.length] = '#' + weekPrefixArray[k] + time + term + 'H';
     }
 
     for (var i = 0; i < 5; i++) {
-        $(ccells[i]).attr('display', 'table-cell');
+        $(ccells[i]).toggle();
         $(pcells[i]).attr('rowspan', '1');
     }
 
+}
+
+function previousCell(time) {
+
+    var n;
+    var ptime;
+
+    n = time.charAt(time.length-1);
+
+    if (n === 'H') {
+        ptime = time.slice(0, time.length-1);
+        return ptime;
+
+    } else if (n === 'E') {
+        ptime = time.slice(0, 2) + String(parseInt(time.slice(2))-1) + time.charAt(time.length-2) + 'H'
+
+        if ($(ptime).css('display') == 'none') {
+            ptime = ptime.slice(0, ptime.length-1);
+        }
+        return ptime;
+
+    } else {
+        ptime = time.slice(0, 2) + String(parseInt(time.slice(2))-1) + time.charAt(time.length-1) + 'H'
+        
+        if ($(ptime).css('display') == 'none') {
+            ptime = ptime.slice(0, ptime.length-1);
+        }
+        return ptime;
+    }
+}
+
+/**
+ * Extends a given cell to display half hour section.
+ * @param {Int} time The full hour time of the row.
+ * @param {string} day The day of the time.
+ * @param {string} term The term of the timetable row.
+ */
+function extendCell(timeInt, day, term) {
+    'use strict';
+
+    var pcell = '#' + day + timeInt + term;
+    var ccell = '#' + day + timeInt + term + 'H';
+
+    $(ccell).css('display', 'table-cell');
+    $(pcell).attr('rowspan', '1');
+
+}
+
+/**
+ * Compress a given cell to hide half hour section.
+ * @param {Int} timeInt The full hour time of the row.
+ * @param {string} week The week of the timetable cell.
+ * @param {string} day The day of the time.
+ * @param {string} term The term of the timetable cell.
+ */
+function compressCell(timeInt, day, term) {
+    'use strict';
+
+    var pcell = '#' + day + timeInt + term;
+    var ccell = '#' + day + timeInt + term + 'H';
+
+    $(pcell).attr('rowspan', '2');
+    $(ccell).css('display', 'none');
 }
 
 /**
@@ -244,7 +302,7 @@ function compressRow(timeInt, term) {
 
     for (var i = 0; i < 5; i++) {
         $(pcells[i]).attr('rowspan', '2');
-        $(ccells[i]).attr('display', 'none');
+        $(ccells[i]).css('display', 'none');
     }
 
 }

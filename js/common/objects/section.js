@@ -134,12 +134,15 @@ Section.prototype.removeTimes = function () {
     $.each(this.times, function (i, time) {
         n = time.charAt(time.length-1);
 
-        if (n === 'H') {
-            compressRow(parseInt(time.slice(2)), time.charAt(time.length-2));
-        }
         if (n === 'E') {
-            compressRow(parseInt(time.slice(2)), time.charAt(time.length-2));
+            compressCell(parseInt(time.slice(2)), time.charAt(1), time.charAt(time.length-2));
             time = time.slice(0, time.length-1);
+        }
+
+        $(time).removeAttr('style');
+
+        if (n === 'H') {
+            compressCell(parseInt(time.slice(2)), time.charAt(1), time.charAt(time.length-2));
         }
 
         if ($(time).data("conflicts").length > 0) {
@@ -147,6 +150,8 @@ Section.prototype.removeTimes = function () {
         } else {
             renderClearTime(time);
         }
+
+
     });
 };
 
