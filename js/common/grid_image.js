@@ -33,4 +33,6 @@ function getCoursesTable() {
             courses += "\n";
         }
     }
+
+    return courses
 }
