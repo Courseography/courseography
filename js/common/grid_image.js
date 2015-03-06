@@ -7,19 +7,12 @@ function getGridImage() {
     'use strict';
 
     var img;
-    var str = "";
-
-    $('td').each(function (i, elem) {
-        if ($(elem).attr("class") !== "timetable-time" &&
-            !($(elem).attr("id").indexOf('.') > -1) &&
-            !($(elem).attr("id").indexOf('S') > -1)) {
-            str = str + $(elem).html() + "%0A";
-        }
-    });
+    var courses = getCoursesTable();
 
     $.ajax({
-        url: 'timetable-image?courses=' + str,
+        url: 'timetable-image',
         async: false,
+        data: "courses=" + courses,
         success: function (data) {
             img = data;
         },
@@ -29,4 +22,15 @@ function getGridImage() {
     });
 
     return img;
+}
+
+function getCoursesTable() {
+    var days = ["M", "T", "W", "R", "F"];
+    var courses = "";
+    for (var i = 8; i < 22; i++) {
+        for (var j = 0; j < 5; j++) {
+            courses += $("#" + days[j] + i + "F").text();
+            courses += "\n";
+        }
+    }
 }

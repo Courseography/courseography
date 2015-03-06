@@ -16,8 +16,6 @@ import System.Directory
 import qualified Data.Text as T
 import Diagram
 
---instance (MonadIO m) => MonadIO (ServerPartT m)
-
 main :: IO ()
 main = do
     generateCSS
@@ -28,7 +26,8 @@ main = do
         msum [ dir "grid" gridResponse,
                dir "graph" graphResponse,
                dir "draw" drawResponse,
-               dir "image" $ imageResponse,
+               dir "image" $ graphImageResponse,
+               dir "timetable-image" $ look "courses" >>= timetableImageResponse,
                --dir "about" $ aboutResponse contents,
                dir "post" postResponse,
                dir "static" $ serveDirectory EnableBrowsing [] staticDir,
@@ -38,4 +37,4 @@ main = do
 
 retrieveCourse :: String -> ServerPart Response
 retrieveCourse course =
-   liftIO $ queryCourse (T.pack course)
+    liftIO $ queryCourse (T.pack course)

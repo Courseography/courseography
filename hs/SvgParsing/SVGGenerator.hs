@@ -161,10 +161,10 @@ convertRectToSVG courseMap rect
             ! S.customAttribute "shape-rendering" "geometricPrecision"
             ! A.style (stringValue (
                        if not (shapeIsHybrid rect)
-                        then case M.lookup (shapeId rect) courseMap of
-                                  Just style -> style
-                                  Nothing    -> ""
-                        else "")) $
+                       then case M.lookup (shapeId rect) courseMap of
+                                 Just style -> style
+                                 Nothing    -> ""
+                       else "")) $
             do S.rect ! A.rx "4"
                       ! A.ry "4"
                       ! A.x (stringValue $ show $ fromRational $ shapeXPos rect)
@@ -173,9 +173,6 @@ convertRectToSVG courseMap rect
                       ! A.height (stringValue $ show $ fromRational $ shapeHeight rect)
                       ! A.style (stringValue $ "fill:" ++ getFill (shapeId rect) ++ ";")
                concatSVG $ map (convertTextToSVG (shapeIsHybrid rect) False False) (shapeText rect)
-
-getCourse :: String -> [(String, String)] -> [(String, String)]
-getCourse id_ courseMap = filter (\x -> fst x == id_) courseMap
 
 convertSelectionToStyle :: String -> String
 convertSelectionToStyle courseStatus =

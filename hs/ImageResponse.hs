@@ -16,19 +16,20 @@ import Diagram (renderTable)
 import qualified Data.Map as M
 
 -- | Returns an image of the graph requested by the user.
-imageResponse :: ServerPart Response
-imageResponse = do req <- askRq
-                   let cookies = rqCookies req
-                   liftIO $ getImage $
-                            M.fromList $ map (\(a,b) -> (a, cookieValue b)) cookies
+graphImageResponse :: ServerPart Response
+graphImageResponse =
+    do req <- askRq
+       let cookies = rqCookies req
+       liftIO $ getGraphImage $
+                M.fromList $ map (\(a,b) -> (a, cookieValue b)) cookies
 
 -- | Returns an image of the timetable requested by the user.
 timetableImageResponse :: String -> ServerPart Response
 timetableImageResponse courses = liftIO $ getTimetableImage courses
 
 -- | Creates an image, and returns the base64 representation of that image.
-getImage :: M.Map String String -> IO Response
-getImage courseMap = do
+getGraphImage :: M.Map String String -> IO Response
+getGraphImage courseMap = do
 	buildSVG courseMap "Testfile2.svg"
 	liftIO $ print courseMap
 	liftIO $ createImageFile "Testfile2.svg" "INSERT_ID-graph.png"
