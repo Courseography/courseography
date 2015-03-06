@@ -57,7 +57,6 @@ getTimetableImage counter courses =
        let encodedData = BEnc.encode imageData
        return $ toResponse encodedData
 
-
 addCounter :: MVar Integer -> IO ()
 addCounter counter = do
     liftIO $ (putMVar counter . (+) 1) =<< takeMVar counter
