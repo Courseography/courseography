@@ -21,22 +21,23 @@ graphImageResponse :: MVar Integer -> ServerPart Response
 graphImageResponse counter =
     do req <- askRq
        let cookies = rqCookies req
-       liftIO $ getGraphImage counter (M.map cookieValue $ M.fromList cookies)
+       let c = addCounter counter
+       liftIO $ getGraphImage c (M.map cookieValue $ M.fromList cookies)
 
 -- | Returns an image of the timetable requested by the user.
 timetableImageResponse :: MVar Integer -> String -> ServerPart Response
 timetableImageResponse counter courses =
-    liftIO $ getTimetableImage counter courses
+    do let c = addCounter counter
+       liftIO $ getTimetableImage c courses
 
 -- | Creates an image, and returns the base64 representation of that image.
-getGraphImage :: MVar Integer -> M.Map String String -> IO Response
+getGraphImage :: IO Integer -> M.Map String String -> IO Response
 getGraphImage counter courseMap =
-    do c <- takeMVar counter
+    do c <- counter
        let svgFilename = (show c ++ "-graph-svg-file.svg")
            imageFilename = (show c ++ "-graph.png")
        buildSVG courseMap svgFilename
        liftIO $ createImageFile svgFilename imageFilename
-       liftIO $ (putMVar counter . (+) 1) c
        imageData <- BS.readFile imageFilename
        liftIO $ removeImage imageFilename
        liftIO $ removeImage svgFilename
@@ -44,16 +45,21 @@ getGraphImage counter courseMap =
        return $ toResponse encodedData
 
 -- | Creates an image, and returns the base64 representation of that image.
-getTimetableImage :: MVar Integer -> String -> IO Response
+getTimetableImage :: IO Integer -> String -> IO Response
 getTimetableImage counter courses =
-    do c <- takeMVar counter
+    do c <- counter
        let svgFilename = (show c ++ "--timetable-svg-file.svg")
            imageFilename = (show c ++ "-timetable.png")
        liftIO $ renderTable svgFilename courses
        liftIO $ createImageFile svgFilename imageFilename
-       liftIO $ (putMVar counter . (+) 1) c
        imageData <- BS.readFile imageFilename
        liftIO $ removeImage imageFilename
        liftIO $ removeImage svgFilename
        let encodedData = BEnc.encode imageData
        return $ toResponse encodedData
+
+addCounter :: MVar Integer -> IO Integer
+addCounter counter = do
+    c <- takeMVar counter
+    liftIO $ (putMVar counter . (+) 1) c
+    return c
