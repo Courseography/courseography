@@ -21,7 +21,7 @@ graphImageResponse =
     do req <- askRq
        let cookies = rqCookies req
        liftIO $ getGraphImage $
-                M.fromList $ map (\(a,b) -> (a, cookieValue b)) cookies
+                M.map cookieValue $ M.fromList cookies
 
 -- | Returns an image of the timetable requested by the user.
 timetableImageResponse :: String -> ServerPart Response
@@ -34,7 +34,7 @@ getGraphImage courseMap = do
 	liftIO $ print courseMap
 	liftIO $ createImageFile "Testfile2.svg" "INSERT_ID-graph.png"
 	imageData <- BS.readFile "INSERT_ID-graph.png"
-	--liftIO $ removeImage "INSERT_ID-graph.png"
+	liftIO $ removeImage "INSERT_ID-graph.png"
 	let encodedData = BEnc.encode imageData
 	return $ toResponse encodedData
 
