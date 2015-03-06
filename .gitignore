@@ -16,4 +16,4 @@ out/
 *.sqlite3
 style/
 SVGGen.hs
-res/csc_graph.svg
+res/graphs/CSC/csc_graph.svg
