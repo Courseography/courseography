@@ -25,6 +25,7 @@ import SvgParsing.SVGGenerator
 import SvgParsing.SVGBuilder
 import SvgParsing.SVGTypes
 import SvgParsing.ParserUtil
+import qualified Data.Map as M
 
 main :: IO ()
 main = do graphFile <- readFile "../res/graphs/graph_regions.svg"
@@ -34,7 +35,7 @@ main = do graphFile <- readFile "../res/graphs/graph_regions.svg"
               runMigration migrateAll
               parseLevel False (Style (0,0) "" "") (getRoot graphDoc)
               liftIO $ print "Parsing complete"
-          buildSVG [] "Testfile.svg"
+          buildSVG M.empty "Testfile.svg"
           liftIO $ print "SVG Built"
 
 -- | Parses a level.
