@@ -77,9 +77,9 @@ function updateAllCategories() {
 
 
 
-    updateReqsCategory('Spec');
-    updateReqsCategory('Maj');
-    updateReqsCategory('Min');
+    updateReqsCategory(specialist, 'spec');
+    updateReqsCategory(major, 'maj');
+    updateReqsCategory(minor, 'min');
 
 
     // Update 300s
@@ -149,19 +149,15 @@ function updateAllCategories() {
 function resetValues() {
     'use strict';
 
-    index300 = {'spec': 0, 'maj': 0, 'min': 0};
-    index400 = {'spec': 0, 'maj': 0, 'min': 0};
-    categoriesCompleted = {'spec': 0, 'maj': 0, 'min': 0};
-    index200 = 0;
-
-    creditCount300and400.maj = 0;
-    creditCount300and400.spec = 0;
-    creditCount300and400.min = 0;
-
-    filledTextboxes300 = {'spec': 0, 'maj': 0, 'min': 0};
-    filledTextboxes400 = {'spec': 0, 'maj': 0, 'min': 0};
-    filledTextboxesExtra = {'spec': 0, 'maj': 0, 'min': 0};
-    filledTextboxes200 = 0;
+    activeCourses = [];
+    specialist = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0, 'filledTextboxes400': 0, 
+                  'filledTextboxesExtra': 0, 'specCount': 0, 'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC209', 'CSC236',
+                  'CSC258', 'CSC263', 'Sta1', 'Lin1', 'CSC369', 'CSC373']};
+    major = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0, 'filledTextboxes400': 0, 
+             'filledTextboxesExtra': 0, 'majCount': 0, 'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC236',
+                  'CSC258', 'CSC263', 'Sta1', 'Lin1']};
+    minor = {'index300': 0, 'index400': 0, 'index200': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0, 'filledTextboxes400': 0, 
+             'filledTextboxesExtra': 0, 'filledTextboxes200': 0, 'minCount': 0, 'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC236']};
 }
 
 
@@ -169,19 +165,17 @@ function resetValues() {
  * Updates categories for required courses in each POSt
  * @param {string} post The POSt that you are updating categories for.
 **/
-function updateReqsCategory(post) {
+function updateReqsCategory(post, name) {
     'use strict';
 
-    var array = 'completed' + post;
-    for (var property in window[array]) {
-        if (window[array].hasOwnProperty(property)) {
-            var category = $('#' + post.toLowerCase() + '_' + property.toLowerCase())[0].getElementsByClassName('code')[0];
-            if (window[array][property] === 1) { // if the category is completed
-                activateCourse(property);
-                updateCategory(category, 'fulfilled');
-                categoriesCompleted[post.toLowerCase()] += 1;
+    for (i = 0; i < activeCourses.length; i++) {
+        if (activeCourses[i] in post.reqs) {
+            var category = $('#' + name + '_' + activeCourses[i].toLowerCase())[0].getElementsByClassName('code')[0];
+            activateCourse(activeCourses[i]);
+            updateCategory(category, 'fulfilled');
+            post.categoriesCompleted += 1;
             } else { // if the category is not completed
-                deactivateCourse(property);
+                deactivateCourse(activeCourses[i]);
                 updateCategory(category, 'not fulfilled');
             }
         }
