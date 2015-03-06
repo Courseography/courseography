@@ -29,21 +29,21 @@ import qualified Data.Map as M
 -- | A list of tuples that contain disciplines (areas), fill values, and courses
 --- that are in the areas.
 areaMap :: [(String, T.Text, [String])]
-areaMap = [("theory", theoryDark, ["CSC165", "CSC236", "CSC240", "CSC263", "CSC265",
-                       "CSC310", "CSC324", "CSC373", "CSC438", "CSC448",
-                       "CSC463"]),
-           ("core", coreDark, ["Calc1", "Sta1", "Sta2", "Lin1", "CSC108", "CSC148", "CSC104", "CSC120", "CSC490",
-                               "CSC491", "CSC494", "CSC495"]),
-           ("se", seDark, ["CSC207", "CSC301", "CSC302", "CSC410", "CSC465"]),
-           ("systems", systemsDark, ["CSC209", "CSC258", "CSC358", "CSC369", "CSC372",
-                                     "CSC458", "CSC469", "CSC488", "ECE385", "ECE489"]),
-           ("hci", hciDark, ["CSC200", "CSC300",  "CSC318", "CSC404", "CSC428",
-                             "CSC454"]),
-           ("graphics", graphicsDark,["CSC320", "CSC418", "CSC420"]),
-           ("num", numDark, ["CSC336", "CSC436", "CSC446", "CSC456"]),
-           ("ai", aiDark, ["CSC321", "CSC384", "CSC401", "CSC411", "CSC412",
-                          "CSC485", "CSC486"]),
-           ("dbweb", dbwebDark , ["CSC309", "CSC343", "CSC443"])]
+areaMap = [("theory", theoryDark, ["csc165", "csc236", "csc240", "csc263", "csc265",
+                       "csc310", "csc324", "csc373", "csc438", "csc448",
+                       "csc463"]),
+           ("core", coreDark, ["Calc1", "Sta1", "Sta2", "Lin1", "csc108", "csc148", "csc104", "csc120", "csc490",
+                               "csc491", "csc494", "csc495"]),
+           ("se", seDark, ["csc207", "csc301", "csc302", "csc410", "csc465"]),
+           ("systems", systemsDark, ["csc209", "csc258", "csc358", "csc369", "csc372",
+                                     "csc458", "csc469", "csc488", "ECE385", "ECE489"]),
+           ("hci", hciDark, ["csc200", "csc300",  "csc318", "csc404", "csc428",
+                             "csc454"]),
+           ("graphics", graphicsDark,["csc320", "csc418", "csc420"]),
+           ("num", numDark, ["csc336", "csc436", "csc446", "csc456"]),
+           ("ai", aiDark, ["csc321", "csc384", "csc401", "csc411", "csc412",
+                          "csc485", "csc486"]),
+           ("dbweb", dbwebDark , ["csc309", "csc343", "csc443"])]
 
 -- | The style for Text elements of hybrids.
 hybridTextStyle :: String
@@ -71,7 +71,7 @@ thrd3 (_, _, c) = c
 
 -- | Gets a tuple from areaMap where id_ is in the list of courses for that tuple.
 getTuple :: String -> (String, T.Text, [String])
-getTuple id_ = head $ filter (\x -> id_ `elem` (map (map toLower) (thrd3 x))) areaMap ++ [("", "grey", [])]
+getTuple id_ = head $ filter (\x -> id_ `elem` thrd3 x) areaMap ++ [("", "grey", [])]
 
 -- | Gets an area from areaMap where id_ is in the list of courses for the corresponding tuple.
 getArea :: String -> String
