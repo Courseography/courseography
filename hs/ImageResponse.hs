@@ -36,7 +36,6 @@ getGraphImage counter courseMap =
        let svgFilename = (show c ++ "-graph-svg-file.svg")
            imageFilename = (show c ++ "-graph.png")
        buildSVG courseMap svgFilename
-       liftIO $ print courseMap
        liftIO $ createImageFile svgFilename imageFilename
        imageData <- BS.readFile imageFilename
        liftIO $ removeImage imageFilename
