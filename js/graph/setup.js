@@ -119,7 +119,7 @@ function getRemote() {
 
     var SVG = $.ajax({
         type: 'GET',
-        url: 'static/res/csc_graph.svg',
+        url: 'static/res/graphs/CSC/csc_graph.svg',
         async: false
     }).responseText;
     $('#graph').append(SVG);
