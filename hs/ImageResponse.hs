@@ -31,7 +31,6 @@ timetableImageResponse courses = liftIO $ getTimetableImage courses
 getGraphImage :: M.Map String String -> IO Response
 getGraphImage courseMap = do
 	buildSVG courseMap "Testfile2.svg"
-	liftIO $ print courseMap
 	liftIO $ createImageFile "Testfile2.svg" "INSERT_ID-graph.png"
 	imageData <- BS.readFile "INSERT_ID-graph.png"
 	liftIO $ removeImage "INSERT_ID-graph.png"
