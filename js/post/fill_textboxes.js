@@ -47,7 +47,7 @@ function fill300s() {
 
     var spec300s = $('#spec300')[0].getElementsByTagName('input');
     var maj300s = $('#maj300')[0].getElementsByTagName('input');
-    var min300s = $('#minextra')[0].getElementsByTagName('input');
+    //var min300s = $('#minextra')[0].getElementsByTagName('input');
 
     
     // clear textboxes
@@ -58,16 +58,18 @@ function fill300s() {
             maj300s[k].value = '';
             maj300s[k].disabled = true;
         }
+        /*
         if (min300s[k].value.indexOf('CSC4') === -1) {
             min300s[k].value = '';
             min300s[k].disabled = true;
         }
+        */
     }
     
     // fill courses that have been selected
     fill300Textboxes('specialist', spec300s, '300');
     fill300Textboxes('major', maj300s, '300');
-    fill300Textboxes('minor', min300s, '300');
+    //fill300Textboxes('minor', min300s, '300');
 
     if (specialist.filledTextboxes300 < specialist.textboxes300) {
         fill400Textboxes('specialist', spec300s, '300');
@@ -75,9 +77,9 @@ function fill300s() {
     if (major.filledTextboxes300 < major.textboxes300) {
         fill400Textboxes('major', maj300s, '300');
     }
-    if (minor.filledTextboxesExtra < specialist.textboxesExtra) {
+    /*if (minor.filledTextboxesExtra < specialist.textboxesExtra) {
         fill400Textboxes('minor', min300s, 'Extra');
-    }
+    }*/
     
     // add extra 200 courses for minor if extra space
     if (minor.filledTextboxesExtra < specialist.textboxesExtra) {
@@ -94,7 +96,7 @@ function fill400s() {
 
     var spec400s = $('#spec400')[0].getElementsByTagName('input');
     var maj400s = $('#maj400')[0].getElementsByTagName('input');
-    var min400s = $('#minextra')[0].getElementsByTagName('input');
+    //var min400s = $('#minextra')[0].getElementsByTagName('input');
 
     
     // clear textboxes
@@ -105,14 +107,16 @@ function fill400s() {
             maj400s[k].value = '';
             maj400s[k].disabled = true;
         }
+        /*
         min400s[k].value = '';
         min400s[k].disabled = true;
+        */
     }
     
     // fill courses that have been selected
     fill400Textboxes('specialist', spec400s, '400');
     fill400Textboxes('major', maj400s, '400');
-    fill400Textboxes('minor', min400s, '400');
+    //fill400Textboxes('minor', min400s, '400');
 
 }
  
@@ -142,6 +146,7 @@ function fillExtra() {
     var i = 0;
     var spec_extra = $('#specextra')[0].getElementsByTagName('input');
     var maj_extra = $('#majextra')[0].getElementsByTagName('input');
+    var min_extra = $('#minextra')[0].getElementsByTagName('input');
 
     for (var k = 0; k < 4; k++) {
 
@@ -155,6 +160,8 @@ function fillExtra() {
                 maj_extra[k].value = '';
                 maj_extra[k].disabled = false;
             }
+            min_extra[k].value = '';
+            min_extra[k].disabled = true;
         } 
 
         // add credit count for MAT and STA courses
@@ -173,12 +180,16 @@ function fillExtra() {
     // fill courses that have been selected
     fillExtraTextboxes('specialist', spec_extra, '300');
     fillExtraTextboxes('major', maj_extra, '300');
+    fillExtraTextboxes('minor', min_extra, '300')
 
     if (specialist.filledTextboxesExtra < specialist.textboxesExtra) {
         fillExtraTextboxes('specialist', spec_extra, '400');
     } 
     if (major.filledTextboxesExtra < major.textboxesExtra) {
         fillExtraTextboxes('major', maj_extra, '400');
+    }
+    if (minor.filledTextboxesExtra < minor.textboxesExtra) {
+        fillExtraTextboxes('minor', min_extra, '400');
     }
 
 }

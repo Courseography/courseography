@@ -41,67 +41,14 @@ function updateAllCategories() {
     updateReqsCategory(major, 'maj');
     updateReqsCategory(minor, 'min');
 
-    /*
-    // Update 300s
-    if (filledTextboxes300.spec === 3) {
-        updateCategory($('#spec_300')[0].getElementsByClassName('code')[0], 'fulfilled');
-        updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'fulfilled');
-        categoriesCompleted.spec += 1;
-    } else {
-        updateCategory($('#spec_300')[0].getElementsByClassName('code')[0], 'not fulfilled');
-        updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'not fulfilled');
-    }
-
-    if (filledTextboxes300.maj === 2) {
-        updateCategory($('#maj_300')[0].getElementsByClassName('code')[0], 'fulfilled');
-        categoriesCompleted.maj += 1;
-     } else {
-        updateCategory($('#maj_300')[0].getElementsByClassName('code')[0], 'not fulfilled');
-     }
-
-
-    // Update 400s
-    if (filledTextboxes400.spec === 3) {
-        updateCategory($('#spec_400')[0].getElementsByClassName('code')[0], 'fulfilled');
-        updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'fulfilled');
-        categoriesCompleted.spec += 1;
-    } else {
-        updateCategory($('#spec_400')[0].getElementsByClassName('code')[0], 'not fulfilled');
-        updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'not fulfilled');
-    }
-
-    if (filledTextboxes400.maj === 1) {
-        updateCategory($('#maj_400')[0].getElementsByClassName('code')[0], 'fulfilled');
-        categoriesCompleted.maj += 1;
-    } else {    
-        updateCategory($('#maj_400')[0].getElementsByClassName('code')[0], 'not fulfilled'); 
-    }
-
-    // Update Extra
-    if (filledTextboxesExtra.spec === 4) {
-        updateCategory($('#spec_extra')[0].getElementsByClassName('code')[0], 'fulfilled');
-        categoriesCompleted.spec += 1;
-    } 
-    if (filledTextboxesExtra.maj === 3) {
-        updateCategory($('#maj_extra')[0].getElementsByClassName('code')[0], 'fulfilled');
-        categoriesCompleted.maj += 1;
-    } 
-    if ((filledTextboxes300.min + filledTextboxes400.min + filledTextboxes200) === 3) {
-        updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'fulfilled');
-        categoriesCompleted.min += 1;
-    } 
-    if (filledTextboxesExtra.spec < 4) {
-        updateCategory($('#spec_extra')[0].getElementsByClassName('code')[0], 'not fulfilled');
-    } 
-    if (filledTextboxesExtra.maj < 3) {
-        updateCategory($('#maj_extra')[0].getElementsByClassName('code')[0], 'not fulfilled');
-    } 
-    if ((filledTextboxes300.min + filledTextboxes400.min + filledTextboxes200) < 3) {
-        updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'not fulfilled');
-    }
+    update300Categories();
+    console.log('300 done!')
+    update400Categories();
+     console.log('400 done!')
+    updateExtraCategories();
+     console.log('300 done!')
 
     checkPostCompleted();
-    */
 }
 
 /**
@@ -117,7 +64,7 @@ function resetValues() {
     major = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0, 'filledTextboxes400': 0, 
              'filledTextboxesExtra': 0, 'majCount': 0, 'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC236',
              'CSC258', 'CSC263', 'Sta1', 'Calc1'], 'textboxes300': 2, 'textboxes400': 1, 'textboxesExtra': 3};
-    minor = {'index300': 0, 'index400': 0, 'index200': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0, 'filledTextboxes400': 0, 
+    minor = {'index300': 0, 'index400': 0, 'index200': 0, 'categoriesCompleted': 0, 
              'filledTextboxesExtra': 0, 'filledTextboxes200': 0, 'minCount': 0, 'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC236'],
              'textboxesExtra': 3};
 }
@@ -257,6 +204,7 @@ function fillMinCreditCount(minCount) {
  * @param {number} index The textbox number we are at
  * @param {HTMLElement} min300s Array of textbox elements to fill
 **/
+
 function addExtraMinCourses(index, min300s) {
     'use strict';
 
@@ -273,6 +221,7 @@ function addExtraMinCourses(index, min300s) {
         
     }
 }
+
 
 
 /**
