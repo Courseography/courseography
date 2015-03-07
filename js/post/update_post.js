@@ -21,12 +21,13 @@ var additionMin200s = ['CSC209', 'CSC258', 'CSC263'];
 var activeCourses = [];
 var specialist = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0, 'filledTextboxes400': 0, 
                   'filledTextboxesExtra': 0, 'specCount': 0, 'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC209', 'CSC236',
-                  'CSC258', 'CSC263', 'Sta1', 'Lin1', 'CSC369', 'CSC373']};
+                  'CSC258', 'CSC263', 'Sta1', 'Lin1', 'Calc1', 'CSC369', 'CSC373'], 'texboxes300': 3, 'textboxes400': 3, 'textboxesExtra': 4};
 var major = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0, 'filledTextboxes400': 0, 
              'filledTextboxesExtra': 0, 'majCount': 0, 'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC236',
-                  'CSC258', 'CSC263', 'Sta1', 'Lin1']};
+             'CSC258', 'CSC263', 'Sta1', 'Calc1'], 'texboxes300': 2, 'textboxes400': 1, 'textboxesExtra': 4};
 var minor = {'index300': 0, 'index400': 0, 'index200': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0, 'filledTextboxes400': 0, 
-             'filledTextboxesExtra': 0, 'filledTextboxes200': 0, 'minCount': 0, 'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC236']};
+             'filledTextboxesExtra': 0, 'filledTextboxes200': 0, 'minCount': 0, 'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC236'],
+             'textboxesExtra': 3};
 
 activeInq = [];
 active400s = [];
@@ -62,9 +63,8 @@ function updateAllCategories() {
 
     resetValues();
 
-    updateCompletedMinCourses();
-    updateCompletedMajCourses();
-    updateCompletedSpecCourses();
+    updateActiveCourses();
+
     update300s();
     update400s();
     fill400s();
@@ -73,15 +73,11 @@ function updateAllCategories() {
     fillExtra();
     fillCreditCount();
 
-    updateActiveCourses();
-
-
-
     updateReqsCategory(specialist, 'spec');
     updateReqsCategory(major, 'maj');
     updateReqsCategory(minor, 'min');
 
-
+    /*
     // Update 300s
     if (filledTextboxes300.spec === 3) {
         updateCategory($('#spec_300')[0].getElementsByClassName('code')[0], 'fulfilled');
@@ -141,6 +137,7 @@ function updateAllCategories() {
     }
 
     checkPostCompleted();
+    */
 }
 
 /**
@@ -152,12 +149,13 @@ function resetValues() {
     activeCourses = [];
     specialist = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0, 'filledTextboxes400': 0, 
                   'filledTextboxesExtra': 0, 'specCount': 0, 'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC209', 'CSC236',
-                  'CSC258', 'CSC263', 'Sta1', 'Lin1', 'CSC369', 'CSC373']};
+                  'CSC258', 'CSC263', 'Sta1', 'Lin1', 'Calc1', 'CSC369', 'CSC373'], 'texboxes300': 3, 'textboxes400': 3, 'textboxesExtra': 4};
     major = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0, 'filledTextboxes400': 0, 
              'filledTextboxesExtra': 0, 'majCount': 0, 'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC236',
-                  'CSC258', 'CSC263', 'Sta1', 'Lin1']};
+             'CSC258', 'CSC263', 'Sta1', 'Calc1'], 'textboxes300': 2, 'textboxes400': 1, 'textboxesExtra': 4};
     minor = {'index300': 0, 'index400': 0, 'index200': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0, 'filledTextboxes400': 0, 
-             'filledTextboxesExtra': 0, 'filledTextboxes200': 0, 'minCount': 0, 'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC236']};
+             'filledTextboxesExtra': 0, 'filledTextboxes200': 0, 'minCount': 0, 'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC236'],
+             'textboxesExtra': 3};
 }
 
 
@@ -168,16 +166,15 @@ function resetValues() {
 function updateReqsCategory(post, name) {
     'use strict';
 
-    for (i = 0; i < activeCourses.length; i++) {
-        if (activeCourses[i] in post.reqs) {
-            var category = $('#' + name + '_' + activeCourses[i].toLowerCase())[0].getElementsByClassName('code')[0];
-            activateCourse(activeCourses[i]);
+    for (var i = 0; i < post.reqs.length; i++) {
+        var category = $('#' + name + '_' + post.reqs[i].toLowerCase())[0].getElementsByClassName('code')[0];
+        if (activeCourses.indexOf(post.reqs[i]) != -1) {
+            activateCourse(post.reqs[i]);
             updateCategory(category, 'fulfilled');
             post.categoriesCompleted += 1;
-            } else { // if the category is not completed
-                deactivateCourse(activeCourses[i]);
-                updateCategory(category, 'not fulfilled');
-            }
+        } else { // if the category is not completed
+            deactivateCourse(post.reqs[i]);
+            updateCategory(category, 'not fulfilled');
         }
     }
 }

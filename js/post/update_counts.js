@@ -147,12 +147,13 @@ function updateActiveCourses() {
     'use strict';
 
     activeCourses = [];
-    
+
     // check for active CSC courses
     for (var areaName in areas) {
         if (areas.hasOwnProperty(areaName)) {
             for (var i = 0; i < areas[areaName].length; i++) {
-                if (getCookie(areas[areaName][i]) === 'active') {
+                if ((getCookie(areas[areaName][i]) === 'active' || getCookie(areas[areaName][i]) === 'overridden') && 
+                    areas[areaName][i] != 'CSC104') {
                     activeCourses.push(areas[areaName][i]);
                 }
             }
