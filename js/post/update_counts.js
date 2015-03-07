@@ -7,6 +7,7 @@ creditCount300and400 = {'spec': 0, 'maj': 0, 'min': 0};
 /**
  * Updates number of completed courses in Specialist.
 **/
+/*
 function updateCompletedSpecCourses () {
     'use strict';
 
@@ -38,6 +39,7 @@ function updateCompletedSpecCourses () {
 /**
  * Updates number of completed courses in Major.
 **/
+/*
 function updateCompletedMajCourses () {
     'use strict';
 
@@ -69,6 +71,7 @@ function updateCompletedMajCourses () {
 /**
  * Updates number of completed courses in Minor.
 **/
+/*
 function updateCompletedMinCourses() {
     'use strict';
 
@@ -92,6 +95,7 @@ function updateCompletedMinCourses() {
 /**
  * Updates number of 300 level category completed courses.
  **/
+ /*
 function update300s() {
     'use strict';
 
@@ -119,6 +123,7 @@ function update300s() {
 /**
  * Updates number of 400 level category completed courses.
 **/
+/*
 function update400s() {
     'use strict';
 
@@ -141,7 +146,7 @@ function update400s() {
         }      
     }
 }
-
+*/
 
 function updateActiveCourses() {
     'use strict';

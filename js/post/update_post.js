@@ -1,23 +1,3 @@
-// Objects to store how many courses in each category have been completed
-var completedSpec = {'CSC108': 0, 'CSC148': 0, 'CSC165': 0, 'Calc1': 0, 'CSC207': 0, 'CSC209': 0, 
-                      'CSC236': 0, 'CSC258': 0, 'CSC263': 0, 'Sta1': 0, 'Lin1': 0, 'CSC369': 0, 'CSC373': 0};
-
-var completedMaj = {'CSC108': 0, 'CSC148': 0, 'CSC165': 0, 'Calc1': 0, 'CSC207': 0, 'CSC236': 0, 
-                    'CSC258': 0, 'CSC263': 0, 'Sta1': 0};
-
-var completedMin = {'CSC108': 0, 'CSC148': 0, 'CSC165': 0, 'CSC236': 0, 'CSC207': 0}; 
-
-var level300 = ['CSC300', 'CSC301', 'CSC302', 'CSC309', 'CSC310', 'CSC318', 'CSC320', 'CSC321', 
-                'CSC324', 'CSC336','CSC343', 'CSC358', 'CSC372', 'CSC384', 'ECE385', 'ECE489', 
-                'BCB410', 'BCB420', 'BCB430'];
-
-var level400 = ['CSC401', 'CSC404', 'CSC411', 'CSC412', 'CSC418', 'CSC420', 'CSC428', 'CSC436',
-                'CSC438', 'CSC443', 'CSC446', 'CSC448', 'CSC454', 'CSC456', 'CSC458', 'CSC463', 
-                'CSC465', 'CSC469', 'CSC486', 'CSC488', 'CSC490', 'CSC491', 'CSC494', 'CSC495', 
-                'BCB410', 'BCB420', 'BCB430', 'CSC410'];
-
-var additionMin200s = ['CSC209', 'CSC258', 'CSC263'];
-
 var activeCourses = [];
 var specialist = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0, 'filledTextboxes400': 0, 
                   'filledTextboxesExtra': 0, 'specCount': 0, 'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC209', 'CSC236',
@@ -29,20 +9,6 @@ var minor = {'index300': 0, 'index400': 0, 'index200': 0, 'categoriesCompleted':
              'filledTextboxesExtra': 0, 'filledTextboxes200': 0, 'minCount': 0, 'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC236'],
              'textboxesExtra': 3};
 
-activeInq = [];
-active400s = [];
-active300s = [];
-var index300 = {'spec': 0, 'maj': 0, 'min': 0};
-var index400 = {'spec': 0, 'maj': 0, 'min': 0};
-var categoriesCompleted = {'spec': 0, 'maj': 0, 'min': 0};
-var filledTextboxes300 = {'spec': 0, 'maj': 0, 'min': 0};
-var filledTextboxes400 = {'spec': 0, 'maj': 0, 'min': 0};
-var filledTextboxesExtra = {'spec': 0, 'maj': 0, 'min': 0};
-var index200 = 0;
-var filledTextboxes200 = 0;
-var minCount = 0;
-var majCount = 0;
-var specCount = 0;
 
 /**
  * Updates POSts when button is clicked.
@@ -51,7 +17,7 @@ $('#update').click(function (e) {
     'use strict';
 
     updateAllCategories();
-    updateNavPost();
+    //updateNavPost();
 });
 
 
@@ -65,13 +31,11 @@ function updateAllCategories() {
 
     updateActiveCourses();
 
-    update300s();
-    update400s();
     fill400s();
     fill300s();
-    fillMisc();
+    //fillMisc();
     fillExtra();
-    fillCreditCount();
+    //fillCreditCount();
 
     updateReqsCategory(specialist, 'spec');
     updateReqsCategory(major, 'maj');
@@ -149,10 +113,10 @@ function resetValues() {
     activeCourses = [];
     specialist = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0, 'filledTextboxes400': 0, 
                   'filledTextboxesExtra': 0, 'specCount': 0, 'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC209', 'CSC236',
-                  'CSC258', 'CSC263', 'Sta1', 'Lin1', 'Calc1', 'CSC369', 'CSC373'], 'texboxes300': 3, 'textboxes400': 3, 'textboxesExtra': 4};
+                  'CSC258', 'CSC263', 'Sta1', 'Lin1', 'Calc1', 'CSC369', 'CSC373'], 'textboxes300': 3, 'textboxes400': 3, 'textboxesExtra': 4};
     major = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0, 'filledTextboxes400': 0, 
              'filledTextboxesExtra': 0, 'majCount': 0, 'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC236',
-             'CSC258', 'CSC263', 'Sta1', 'Calc1'], 'textboxes300': 2, 'textboxes400': 1, 'textboxesExtra': 4};
+             'CSC258', 'CSC263', 'Sta1', 'Calc1'], 'textboxes300': 2, 'textboxes400': 1, 'textboxesExtra': 3};
     minor = {'index300': 0, 'index400': 0, 'index200': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0, 'filledTextboxes400': 0, 
              'filledTextboxesExtra': 0, 'filledTextboxes200': 0, 'minCount': 0, 'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC236'],
              'textboxesExtra': 3};
@@ -227,6 +191,7 @@ function updateCategory(category, status) {
 /**
  * Updates Credit Count for each POSt.
  **/
+ /*
 function fillCreditCount() {
     'use strict';
 
@@ -239,6 +204,7 @@ function fillCreditCount() {
     fillMajCreditCount(majCount);
     fillMinCreditCount(minCount);
 }
+
 
 
 /**
