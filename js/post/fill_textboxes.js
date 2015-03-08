@@ -130,6 +130,8 @@ function fillExtraTextboxes(post, postElement, level) {
             post['index' + level] = i;
             post.filledTextboxesExtra += 1;
             post.creditCount += 0.5;
+        } else if (postElement[post.filledTextboxesExtra].value != '') {
+            post.filledTextboxesExtra += 1;
         }
     }
 }
@@ -161,18 +163,6 @@ function fillExtra() {
             min_extra[k].value = '';
             min_extra[k].disabled = true;
         } 
-
-        // add credit count for MAT and STA courses
-        if (spec_extra[k].value.indexOf('MAT') > -1 || spec_extra[k].value.indexOf('STA') > -1) {
-            specialist.creditCount += 0.5;
-            specialist.filledTextboxesExtra += 1;
-        } 
-        if (k < 3) {
-            if (maj_extra[k].value.indexOf('MAT') > -1 || maj_extra[k].value.indexOf('STA') > -1) {
-                major.creditCount += 0.5;
-                major.filledTextboxesExtra += 1;
-            }
-        }
     }
 
     // fill courses that have been selected
@@ -189,6 +179,7 @@ function fillExtra() {
     if (minor.filledTextboxesExtra < minor.textboxesExtra) {
         fillExtraTextboxes(minor, min_extra, '400');
     }
+
 }
 
 

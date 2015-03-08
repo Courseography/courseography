@@ -45,6 +45,7 @@ function updateAllCategories() {
     update300Categories();
     update400Categories();
     updateExtraCategories();
+    updateMatCreditCount();
 
     fillCreditCount();
     checkPostCompleted();
@@ -285,6 +286,25 @@ function updateActiveCourses() {
     for (var i = 0; i < math.length; i++) {
         if (getCookie(math[i]) === 'active') {
             activeCourses.push(math[i]);
+        }
+    }
+}
+
+
+function updateMatCreditCount() {
+    var spec_extra = $('#specextra')[0].getElementsByTagName('input');
+    var maj_extra = $('#majextra')[0].getElementsByTagName('input');
+
+    for (var k = 0; k < 4; k++) {
+        if (spec_extra[k].value.indexOf('MAT') > -1 || spec_extra[k].value.indexOf('STA') > -1) {
+            specialist.creditCount += 0.5;
+            specialist.filledTextboxesExtra += 1;
+        } 
+        if (k < 3) {
+            if (maj_extra[k].value.indexOf('MAT') > -1 || maj_extra[k].value.indexOf('STA') > -1) {
+                major.creditCount += 0.5;
+                major.filledTextboxesExtra += 1;
+            }
         }
     }
 }
