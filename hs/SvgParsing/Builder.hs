@@ -38,28 +38,29 @@ buildPath rects ellipses entity idCounter
     where coords = pathPoints entity
 
 -- | Builds a Rect from a database entry in the rects table.
-buildRect :: [Text] -> Rects -> Shape
+buildRect :: [Text] -> Shape -> Shape
 buildRect texts entity =
     let rectTexts = filter (\x -> intersects
-                            (rectsWidth entity)
-                            (rectsHeight entity)
-                            (rectsXPos entity, rectsYPos entity)
+                            (shapeWidth entity)
+                            (shapeHeight entity)
+                            (shapeXPos entity, shapeYPos entity)
                             9
                             (textXPos x, textYPos x)
                             ) texts
         textString = concatMap textText rectTexts
-        id_ = map toLower $ (if rectsIsHybrid entity then "h" else "") ++
+        id_ = map toLower $ (if shapeIsHybrid entity then "h" else "") ++
                             (if isDigit $ head textString then "CSC" else "") ++ dropSlash textString
     in Shape id_
-             (rectsXPos entity)
-             (rectsYPos entity)
-             (rectsWidth entity)
-             (rectsHeight entity)
-             (rectsFill entity)
-             (rectsStroke entity)
+             (shapeXPos entity)
+             (shapeYPos entity)
+             (shapeWidth entity)
+             (shapeHeight entity)
+             (shapeFill entity)
+             (shapeStroke entity)
              rectTexts
-             (rectsIsHybrid entity)
+             (shapeIsHybrid entity)
              9
+             False
 
 -- | Gets the first rect that intersects with the given coordinates.
 getIntersectingShape :: Double -> Double -> [Shape] -> String
@@ -79,27 +80,29 @@ intersectsWithPoint xpos ypos shape =
                (xpos, ypos)
 
 -- | Builds a Path from a database entry in the paths table.
-buildEllipses :: [Text] -> Int -> [Ellipses] -> [Shape]
+buildEllipses :: [Text] -> Int -> [Shape] -> [Shape]
 buildEllipses _ _ [] = []
 buildEllipses texts idCounter entities =
     let entity = head entities
         ellipseText = filter (\x -> intersects
-                                    (ellipsesRx entity * 2)
-                                    (ellipsesRy entity * 2)
-                                    (ellipsesXPos entity, ellipsesYPos entity)
+                                    (shapeWidth entity)
+                                    (shapeHeight entity)
+                                    (shapeXPos entity,
+                                     shapeYPos entity)
                                     9
                                     (textXPos x, textYPos x)
                              ) texts
     in Shape ("bool" ++ show idCounter)
-             (ellipsesXPos entity)
-             (ellipsesYPos entity)
-             (ellipsesRx entity * 2)
-             (ellipsesRy entity * 2)
+             (shapeXPos entity)
+             (shapeYPos entity)
+             (shapeWidth entity)
+             (shapeHeight entity)
              ""
-             (ellipsesStroke entity)
+             (shapeStroke entity)
              ellipseText
              False
-             20 : buildEllipses texts (idCounter + 1) (tail entities)
+             20
+             True : buildEllipses texts (idCounter + 1) (tail entities)
 
 -- | Rebuilds a path's `d` attribute based on a list of Rational tuples.
 buildPathString :: [Point] -> String

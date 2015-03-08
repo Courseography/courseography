@@ -70,25 +70,13 @@ Distribution
     description String
     deriving Show
 
-Graphs
+Graph
     gId Int
     title String
     deriving Show
 
-Rects
-    gId Int
-    rId String
-    width Double
-    height Double
-    xPos Double
-    yPos Double
-    fill String
-    stroke String
-    isHybrid Bool
-    deriving Show
-
 Text
-    gId Int
+--    gId Int
     rId String
     xPos Double
     yPos Double
@@ -106,6 +94,7 @@ Shape
     text [Text]
     isHybrid Bool
     tolerance Double
+    isBool Bool
 
 Path
     id_ String
@@ -116,13 +105,6 @@ Path
     source String
     target String
     deriving Show
-
-Ellipses
-    xPos Double
-    yPos Double
-    rx Double
-    ry Double
-    stroke String
 |]
 
 -- | A Lecture.

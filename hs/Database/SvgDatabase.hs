@@ -13,50 +13,18 @@ import qualified Data.Conduit.List as CL
 import Data.Conduit
 import Database.JsonParser
 
--- | Inserts an ellipse entry into the rects table.
-insertEllipse :: MonadIO m0 => Double -> Double -> Double -> Double -> String -> ReaderT SqlBackend m0 ()
-insertEllipse xPos yPos rx ry stroke =
-        insert_ $ Ellipses xPos
-                           yPos
-                           rx
-                           ry
-                           stroke
+insertShapes :: MonadIO m0 => ([Path],[Shape],[Text]) -> ReaderT SqlBackend m0 ()
+insertShapes (a,b,c) = foldl (>>) (return ()) $ map insert_ b
 
--- | Inserts a rect entry into the rects table.
-insertRect :: MonadIO m0 => String -> Double -> Double -> Double -> Double -> Style -> ReaderT SqlBackend m0 ()
-insertRect id_ width height xPos yPos style =
-        insert_ $ Rects 1
-                        id_
-                        width
-                        height
-                        xPos
-                        yPos
-                        (fill style)
-                        (stroke style)
-                        (fill style == "#a14c3a")
+insertPaths :: MonadIO m0 => ([Path],[Shape],[Text]) -> ReaderT SqlBackend m0 ()
+insertPaths (a,b,c) = foldl (>>) (return ()) $ map insert_ a
 
--- | Inserts a text entry into the texts table.
-insertText :: MonadIO m0 => String -> Double -> Double -> String -> Style -> ReaderT SqlBackend m0 ()
-insertText id_ xPos yPos text style =
-        insert_ $ Text 1
-                       id_
-                       xPos
-                       yPos
-                       text
+insertTexts :: MonadIO m0 => ([Path],[Shape],[Text]) -> ReaderT SqlBackend m0 ()
+insertTexts (a,b,c) = foldl (>>) (return ()) $ map insert_ c
 
--- | Inserts a tex entry into the texts table.
-insertPath :: MonadIO m0 => [Point] -> Style -> Bool -> ReaderT SqlBackend m0 ()
-insertPath d style isRegion =
-        insert_ $ Path "p"
-                       d
-                       (fill style)
-                       (stroke style)
-                       isRegion
-                       ""
-                       ""
-
+--
 -- | Prints the database table 'rects'.
 printDB :: IO ()
 printDB = runSqlite dbStr $ do
-              let sql = "SELECT * FROM rects"
+              let sql = "SELECT * FROM path"
               rawQuery sql [] $$ CL.mapM_ (liftIO . print)
