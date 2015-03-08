@@ -129,18 +129,18 @@ makeSVGDefs =
 buildSVG :: M.Map String String -> String -> IO ()
 buildSVG courseMap filename =
     runSqlite dbStr $ do
-        sqlRects    :: [Entity Rects]    <- selectList [] []
-        sqlText    :: [Entity Text]    <- selectList [] []
-        sqlPaths    :: [Entity Path]    <- selectList [] []
-        sqlEllipses :: [Entity Ellipses] <- selectList [] []
+        sqlRects    :: [Entity Shape]    <- selectList [ShapeIsBool ==. False] []
+        sqlText     :: [Entity Text]     <- selectList [] []
+        sqlPaths    :: [Entity Path]     <- selectList [] []
+        sqlEllipses :: [Entity Shape] <- selectList [ShapeIsBool ==. True] []
         let courseStyleMap = M.map convertSelectionToStyle courseMap
-            texts       = map entityVal sqlText
-            rects       = map (buildRect texts . entityVal) sqlRects
-            ellipses    = buildEllipses texts 0 $ map entityVal sqlEllipses
-            paths       = zipWith (buildPath rects ellipses) (map entityVal sqlPaths) [1..length sqlPaths]
-            regions     = filter pathIsRegion paths
-            edges       = filter (not . pathIsRegion) paths
-            regionTexts = filter (not . intersectsWithShape (rects ++ ellipses)) texts
+            texts          = map entityVal sqlText
+            rects          = map (buildRect texts . entityVal) sqlRects
+            ellipses       = buildEllipses texts 0 $ map entityVal sqlEllipses
+            paths          = zipWith (buildPath rects ellipses) (map entityVal sqlPaths) [1..length sqlPaths]
+            regions        = filter pathIsRegion paths
+            edges          = filter (not . pathIsRegion) paths
+            regionTexts    = filter (not . intersectsWithShape (rects ++ ellipses)) texts
             stringSVG = renderSvg $ makeSVGDoc courseStyleMap rects ellipses edges regions regionTexts
         liftIO $ writeFile filename stringSVG
 

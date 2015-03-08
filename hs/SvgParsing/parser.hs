@@ -17,6 +17,7 @@ import Control.Monad.Trans.Reader
 import Text.XML.HaXml.Namespaces
 import Data.Conduit
 import Data.List.Split
+import Data.Maybe
 import Data.List
 import Data.Text as T (pack, unpack)
 import Database.Tables
@@ -32,24 +33,28 @@ main :: IO ()
 main = do graphFile <- readFile "../res/graphs/graph_regions.svg"
           let graphDoc = xmlParse "output.error" graphFile
           print "Parsing SVG file..."
+          let elements = parseNode False (Style (0,0) "" "") (getRoot graphDoc)
+          print "Parsing complete"
           runSqlite dbStr $ do
               runMigration migrateAll
-              parseNode False (Style (0,0) "" "") (getRoot graphDoc)
-              liftIO $ print "Parsing complete"
+              insertShapes elements
+              insertPaths elements
+              insertTexts elements
+          printDB
           buildSVG M.empty "../res/graphs/CSC/csc_graph.svg"
           print "SVG Built"
 
 -- | Parses a level.
-parseNode :: MonadIO m0 =>  Bool -> Style -> Content i -> ReaderT SqlBackend m0 ()
+parseNode :: Bool
+          -> Style
+          -> Content i
+          -> ([Path],[Shape],[Text])
 parseNode currentlyInRegion style content =
-    unless (getAttribute "id" content == "layer2" ||
-            getName content == "defs")
-    $ do let isRegion       = getAttribute "id" content == "layer3"
-             rects          = tag "rect" content
-             texts          = tag "text" content
-             paths          = tag "path" content
-             ellipses       = tag "ellipse" content
-             children       = getChildren content
+    if getAttribute "id" content == "layer2" ||
+       getName content == "defs"
+    then ([],[],[])
+    else
+      do let isRegion       = getAttribute "id" content == "layer3"
              newTransform   = getAttribute "transform" content
              newStyle       = getAttribute "style" content
              newFill        = getNewStyleAttr newStyle "fill" (fill style)
@@ -60,53 +65,86 @@ parseNode currentlyInRegion style content =
                                  newFill
                                  newStroke
 
-         parseElements (parseRect parentStyle) rects
-         parseElements (parseText parentStyle) texts
-         parseElements (parsePath (currentlyInRegion || isRegion) parentStyle) paths
-         parseElements (parseEllipse parentStyle) ellipses
-         parseChildren (currentlyInRegion || isRegion) parentStyle children
+         let x1= map (parseRect parentStyle) (tag "rect" content)
+         let x2= map (parseText parentStyle) (tag "text" content)
+         let x3= mapMaybe (parsePath (currentlyInRegion || isRegion) parentStyle) (tag "path" content)
+         let x4= map (parseEllipse parentStyle) (tag "ellipse" content)
+         addThree (x3,x1++x4,x2) $ parseChildren (currentlyInRegion || isRegion)
+                               parentStyle (getChildren content)
 
 -- | Parses a list of Content.
-parseChildren :: MonadIO m0 => Bool -> Style -> [Content i] -> ReaderT SqlBackend m0 ()
+parseChildren :: Bool
+              -> Style
+              -> [Content i]
+              -> ([Path],[Shape],[Text])
 parseChildren currentlyInRegion style x =
-     foldl (>>) (return ()) $ map (parseNode currentlyInRegion style) x
+     foldl addThree ([],[],[]) $ map (parseNode currentlyInRegion style) x
 
--- | Applies a parser to a list of Content.
-parseElements :: MonadIO m0 => (Content i ->  ReaderT SqlBackend m0 ()) -> [Content i] -> ReaderT SqlBackend m0 ()
-parseElements f x = foldl (>>) (return ()) $ map f x
+
+-- TODO: Can't find way to zip tuples.
+addThree :: ([Path],[Shape],[Text])
+         -> ([Path],[Shape],[Text])
+         -> ([Path],[Shape],[Text])
+addThree (a,b,c) (d,e,f) = (a ++ d, b ++ e, c ++f)
 
 -- | Parses a rect.
-parseRect :: MonadIO m0 => Style -> Content i -> ReaderT SqlBackend m0 ()
-parseRect style content = 
-    insertRect (getAttribute "id" content)
-               (read $ getAttribute "width" content)
-               (read $ getAttribute "height" content)
-               (read (getAttribute "x" content) + fst (transform style))
-               (read (getAttribute "y" content) + snd (transform style))
-               style
+parseRect :: Style
+          -> Content i
+          -> Shape
+parseRect style content =
+    Shape ""
+          (read (getAttribute "x" content) + fst (transform style))
+          (read (getAttribute "y" content) + snd (transform style))
+          (read $ getAttribute "width" content)
+          (read $ getAttribute "height" content)
+          (fill style)
+          (stroke style)
+          []
+          (fill style == "#a14c3a")
+          9
+          False
 
 -- | Parses a path.
-parsePath :: MonadIO m0 => Bool -> Style -> Content i -> ReaderT SqlBackend m0 ()
+parsePath :: Bool
+          -> Style
+          -> Content i
+          -> Maybe Path
 parsePath isRegion style content =
-    unless (last (getAttribute "d" content) == 'z' && not isRegion) $
-        insertPath (map (addTuples (transform style)) $ parsePathD $ getAttribute "d" content)
-                   style
-                   isRegion
+    if last (getAttribute "d" content) == 'z' && not isRegion
+    then Nothing
+    else Just (Path "p"
+                    d
+                    (fill style)
+                    (stroke style)
+                    isRegion
+                    ""
+                    "")
+    where d = map (addTuples (transform style)) $ parsePathD $ getAttribute "d" content
+
 
 -- | Parses a text.
-parseText :: MonadIO m0 => Style -> Content i -> ReaderT SqlBackend m0 ()
-parseText style content = 
-    insertText (getAttribute "id" content)
-               (read (getAttribute "x" content) + fst (transform style))
-               (read (getAttribute "y" content) + snd (transform style))
-               (tagTextContent content)
-               style
+parseText :: Style
+          -> Content i
+          -> Text
+parseText style content =
+    Text (getAttribute "id" content)
+         (read (getAttribute "x" content) + fst (transform style))
+         (read (getAttribute "y" content) + snd (transform style))
+         (tagTextContent content)
 
 -- | Parses a text.
-parseEllipse :: MonadIO m0 => Style -> Content i -> ReaderT SqlBackend m0 ()
-parseEllipse style content = 
-    insertEllipse (read (getAttribute "cx" content) + fst (transform style))
-                  (read (getAttribute "cy" content) + snd (transform style))
-                  (read (getAttribute "rx" content))
-                  (read (getAttribute "ry" content))
-                  (fill style)
+parseEllipse :: Style
+             -> Content i
+             -> Shape
+parseEllipse style content =
+    Shape ""
+          (read (getAttribute "cx" content) + fst (transform style))
+          (read (getAttribute "cy" content) + snd (transform style))
+          (read (getAttribute "rx" content) * 2)
+          (read (getAttribute "ry" content) * 2)
+          ""
+          (stroke style)
+          []
+          False
+          20
+          True
