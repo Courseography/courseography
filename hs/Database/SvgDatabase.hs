@@ -1,11 +1,17 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Database.SvgDatabase where
 
 import Control.Monad.IO.Class  (liftIO, MonadIO)
 import Database.Persist.Sqlite
+import Database.Persist
 import Control.Monad.Trans.Reader
 import Database.Tables
 import SvgParsing.Types
 import SvgParsing.ParserUtil
+import qualified Data.Conduit.List as CL
+import Data.Conduit
+import Database.JsonParser
 
 -- | Inserts an ellipse entry into the rects table.
 insertEllipse :: MonadIO m0 => Double -> Double -> Double -> Double -> String -> ReaderT SqlBackend m0 ()
@@ -45,3 +51,9 @@ insertPath d style isRegion =
                         (fill style)
                         (stroke style)
                         isRegion
+
+-- | Prints the database table 'rects'.
+printDB :: IO ()
+printDB = runSqlite dbStr $ do
+              let sql = "SELECT * FROM rects"
+              rawQuery sql [] $$ CL.mapM_ (liftIO . print)

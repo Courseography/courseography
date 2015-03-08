@@ -4,11 +4,9 @@ module SvgParsing.Builder where
 import SvgParsing.Types
 import SvgParsing.ParserUtil
 import Control.Monad.IO.Class  (liftIO)
-import qualified Data.Conduit.List as CL
 import Database.Persist
 import Database.Persist.Sqlite
 import Data.Char
-import Data.Conduit
 import Data.List.Split
 import Data.List
 import Database.JsonParser
@@ -67,7 +65,7 @@ buildRect texts entity =
 getIntersectingShape :: Double -> Double -> [Shape] -> String
 getIntersectingShape xpos ypos shapes
     | null intersectingShapes = ""
-    | otherwise = shapeId $ head intersectingShapes
+    | otherwise = shapeId_ $ head intersectingShapes
     where intersectingShapes = filter (intersectsWithPoint xpos ypos)
                                       shapes
 
@@ -79,12 +77,6 @@ intersectsWithPoint xpos ypos shape =
                (shapeXPos shape, shapeYPos shape)
                (shapeTolerance shape)
                (xpos, ypos)
-
--- | Prints the database table 'rects'.
-printDB :: IO ()
-printDB = runSqlite dbStr $ do
-              let sql = "SELECT * FROM rects"
-              rawQuery sql [] $$ CL.mapM_ (liftIO . print)
 
 -- | Builds a Text from a database entry in the texts table.
 --buildText :: Texts -> Text

@@ -34,14 +34,14 @@ main = do graphFile <- readFile "../res/graphs/graph_regions.svg"
           print "Parsing SVG file..."
           runSqlite dbStr $ do
               runMigration migrateAll
-              parseLevel False (Style (0,0) "" "") (getRoot graphDoc)
+              parseNode False (Style (0,0) "" "") (getRoot graphDoc)
               liftIO $ print "Parsing complete"
           buildSVG M.empty "../res/graphs/CSC/csc_graph.svg"
           print "SVG Built"
 
 -- | Parses a level.
-parseLevel :: MonadIO m0 =>  Bool -> Style -> Content i -> ReaderT SqlBackend m0 ()
-parseLevel currentlyInRegion style content =
+parseNode :: MonadIO m0 =>  Bool -> Style -> Content i -> ReaderT SqlBackend m0 ()
+parseNode currentlyInRegion style content =
     unless (getAttribute "id" content == "layer2" ||
             getName content == "defs")
     $ do let isRegion       = getAttribute "id" content == "layer3"
@@ -68,17 +68,12 @@ parseLevel currentlyInRegion style content =
 
 -- | Parses a list of Content.
 parseChildren :: MonadIO m0 => Bool -> Style -> [Content i] -> ReaderT SqlBackend m0 ()
-parseChildren _ _ [] = return ()
-parseChildren currentlyInRegion style (x:xs) =
-    do parseLevel currentlyInRegion style x
-       parseChildren currentlyInRegion style xs
+parseChildren currentlyInRegion style x =
+     foldl (>>) (return ()) $ map (parseNode currentlyInRegion style) x
 
 -- | Applies a parser to a list of Content.
 parseElements :: MonadIO m0 => (Content i ->  ReaderT SqlBackend m0 ()) -> [Content i] -> ReaderT SqlBackend m0 ()
-parseElements _ [] = return ()
-parseElements f (x:xs) =
-    do f x
-       parseElements f xs
+parseElements f x = foldl (>>) (return ()) $ map f x
 
 -- | Parses a rect.
 parseRect :: MonadIO m0 => Style -> Content i -> ReaderT SqlBackend m0 ()

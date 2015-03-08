@@ -21,20 +21,6 @@ data Path =
            target :: String
          } deriving Show
 
-data Shape =
-    Shape {
-        shapeId :: String,
-        shapeXPos :: Double,
-        shapeYPos :: Double,
-        shapeWidth :: Double,
-        shapeHeight :: Double,
-        shapeFill :: String,
-        shapeStroke :: String,
-        shapeText :: [Text],
-        shapeIsHybrid :: Bool,
-        shapeTolerance :: Double
-         } deriving Show
-
 data Style =
     Style {
             transform :: (Double, Double),

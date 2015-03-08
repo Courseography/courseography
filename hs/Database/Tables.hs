@@ -95,6 +95,18 @@ Text
     text String
     deriving Show
 
+Shape
+    id_ String
+    xPos Double
+    yPos Double
+    width Double
+    height Double
+    fill String
+    stroke String
+    text [Text]
+    isHybrid Bool
+    tolerance Double
+
 Paths
     d [Point]
     fill String
