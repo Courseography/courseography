@@ -6,10 +6,7 @@
 function fill300Textboxes(post, postElement) {
     'use strict';
 
-    for (var m = post.index300 + 1; m < activeCourses.length; m++) {
-        if (post.filledTextboxes300 === post.textboxes300) {
-            break;
-        }
+    for (var m = post.index300 + 1; m < activeCourses.length && post.filledTextboxes300 !== post.textboxes300; m++) {
         var course = activeCourses[m];
         if (course.indexOf('CSC3') !== -1 && course.indexOf('CSC373') === -1 && 
             course.indexOf('CSC369') === - 1) {
@@ -31,10 +28,8 @@ function fill300Textboxes(post, postElement) {
 function fill400Textboxes(post, postElement, category) {
     'use strict';
 
-    for (var m = post.index400 + 1; m < activeCourses.length; m++) {
-        if (post['filledTextboxes' + category] === post['textboxes' + category]) {
-            break;
-        }
+    for (var m = post.index400 + 1; m < activeCourses.length && 
+        post['filledTextboxes' + category] !== post['textboxes' + category]; m++) {
         var course = activeCourses[m];
         if (course.indexOf('CSC4') !== -1) {
             postElement[post['filledTextboxes' + category]].value = activeCourses[m];
@@ -114,10 +109,8 @@ function fill400s() {
 function fillExtraTextboxes(post, postElement, level) {
     'use strict';
 
-    for (var i = post['index' + level] + 1; i < activeCourses.length; i++) {
-        if (post['index' + level] === activeCourses.length || post.filledTextboxesExtra === post.textboxesExtra) {
-            break;
-        }
+    for (var i = post['index' + level] + 1; i < activeCourses.length && 
+        post.filledTextboxesExtra !== post.textboxesExtra; i++) {
         var course = activeCourses[i];
         if (postElement[post.filledTextboxesExtra].value === '' && course.indexOf('CSC' + level.charAt(0)) != -1 
             && course.indexOf('CSC373') === -1 && course.indexOf('CSC369') === - 1) {
