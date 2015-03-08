@@ -50,6 +50,7 @@ function updateAllCategories() {
     checkPostCompleted();
 }
 
+
 /**
  * Resets all values to initial starting values
 **/
@@ -69,6 +70,7 @@ function resetValues() {
              'minCount': 0, 'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC236'], 'textboxesExtra': 3, 'categories': 6,
              'creditCount': 0};
 }
+
 
 /**
  * Records a course as clicked. 
@@ -259,6 +261,9 @@ function updateNavGraph() {
 }
 
 
+/**
+ * Updates list of current active (selected) courses in Graph.
+**/
 function updateActiveCourses() {
     'use strict';
 

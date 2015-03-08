@@ -1,6 +1,8 @@
 /**
  * Fills textboxes in 300 level category,
- * @param {string} 
+ * @param {object} post Object corresponding to the POSt being dealt with
+ * @param {HTMLElement[]} postElement Array of textboxes to fill
+ * @param {string} category Level of course that we are filling textbox with 
 **/
 function fill300Textboxes(post, postElement, category) {
     'use strict';
@@ -20,6 +22,12 @@ function fill300Textboxes(post, postElement, category) {
 }
 
 
+/**
+ * Fills textboxes in 400 level category,
+ * @param {object} post Object corresponding to the POSt being dealt with
+ * @param {HTMLElement[]} postElement Array of textboxes to fill
+ * @param {string} category Level of course that we are filling textbox with 
+**/
 function fill400Textboxes(post, postElement, category) {
     'use strict';
 
@@ -37,6 +45,7 @@ function fill400Textboxes(post, postElement, category) {
         }
     }
 }
+
 
 /**
  * Autofills textboxes for 300 level courses. 
@@ -76,6 +85,7 @@ function fill300s() {
 }  
 
 
+
 /**
  * Autofills textboxes for 400 level courses. 
 **/
@@ -84,9 +94,7 @@ function fill400s() {
 
     var spec400s = $('#spec400')[0].getElementsByTagName('input');
     var maj400s = $('#maj400')[0].getElementsByTagName('input');
-    //var min400s = $('#minextra')[0].getElementsByTagName('input');
-
-    
+ 
     // clear textboxes
     for (var k = 0; k < 3; k++) {
         spec400s[k].value = '';
@@ -101,7 +109,14 @@ function fill400s() {
     fill400Textboxes(specialist, spec400s, '400');
     fill400Textboxes(major, maj400s, '400');
 }
- 
+
+
+/**
+ * Fills textboxes in Extra level category,
+ * @param {object} post Object corresponding to the POSt being dealt with
+ * @param {HTMLElement[]} postElement Array of textboxes to fill
+ * @param {string} level Level of course that we are filling textbox with 
+**/ 
 function fillExtraTextboxes(post, postElement, level) {
     for (var i = post['index' + level] + 1; i < activeCourses.length; i++) {
         if (post['index' + level] === activeCourses.length || post.filledTextboxesExtra === post.textboxesExtra) {
@@ -118,6 +133,7 @@ function fillExtraTextboxes(post, postElement, level) {
         }
     }
 }
+
 
 /**
  * Autofills the textboxes for the extra 300+ credits category
@@ -161,7 +177,6 @@ function fillExtra() {
 
     // fill courses that have been selected
     fillExtraTextboxes(specialist, spec_extra, '300');
-
     fillExtraTextboxes(major, maj_extra, '300');
     fillExtraTextboxes(minor, min_extra, '300')
 
@@ -174,14 +189,12 @@ function fillExtra() {
     if (minor.filledTextboxesExtra < minor.textboxesExtra) {
         fillExtraTextboxes(minor, min_extra, '400');
     }
-
 }
 
 
 /**
  * Autofills textboxes and updates category for Inquiry courses
 **/
-
 function fillMisc() {
     'use strict';
 
@@ -209,7 +222,6 @@ function fillMisc() {
     }
     
     // update category
-    updateMiscCategory();
-
+    updateInqCategory();
 }
 
