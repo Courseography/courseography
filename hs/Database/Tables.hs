@@ -24,8 +24,6 @@ derivePersistField "Time"
 
 type Point = (Double, Double)
 
-derivePersistField "Point"
-
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 Courses json
     code T.Text
@@ -78,15 +76,13 @@ Graph
 Text
 --    gId Int
     rId String
-    xPos Double
-    yPos Double
+    coord Point
     text String
     deriving Show
 
 Shape
     id_ String
-    xPos Double
-    yPos Double
+    coord Point
     width Double
     height Double
     fill String

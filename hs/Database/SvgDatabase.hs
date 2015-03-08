@@ -22,7 +22,6 @@ insertPaths (a,b,c) = foldl (>>) (return ()) $ map insert_ a
 insertTexts :: MonadIO m0 => ([Path],[Shape],[Text]) -> ReaderT SqlBackend m0 ()
 insertTexts (a,b,c) = foldl (>>) (return ()) $ map insert_ c
 
---
 -- | Prints the database table 'rects'.
 printDB :: IO ()
 printDB = runSqlite dbStr $ do

@@ -54,11 +54,11 @@ getAttrs (Elem _ b _) = b
 
 -- | Gets an Attribute's name.
 getAttrName :: Attribute -> String
-getAttrName ((a,_)) = printableName a
+getAttrName (a, _) = printableName a
 
 -- | Gets an Attribute's value.
 getAttrVal :: Attribute -> String
-getAttrVal ((_,b)) = show b
+getAttrVal (_, b) = show b
 
 -- | Converts an Attribute into a more parsable form.
 convertAttributeToTuple :: Attribute -> (String, String)
@@ -88,27 +88,18 @@ parseTransform transform =
 -- | Parses a path's `d` attribute.
 parsePathD :: String -> [Point]
 parsePathD d
-    | head d == 'm' = foldCoordsRel coordList
-    | otherwise =  processAbsCoords coordList
+    | head d == 'm' = relCoords
+    | otherwise = absCoords
     where
       lengthMoreThanOne = \x -> length x > 1
       coordList = filter lengthMoreThanOne $ map (splitOn ",") $ splitOn " " d
-
--- | Converts a relative coordinate structure into an absolute one.
-foldCoordsRel :: [[String]] -> [Point]
-foldCoordsRel dCoords =
-    tail $
-    foldl (\x y -> x ++ [addTuples (convertToFloatTuple y) (last x)])
-          [(0,0)]
-          dCoords
-
--- | Converts a relative coordinate structure into an absolute one.
-processAbsCoords :: [[String]] -> [Point]
-processAbsCoords = map convertToFloatTuple
-
--- | Converts a list of String of length 2 into a tuple of Float.
-convertToFloatTuple :: [String] -> Point
-convertToFloatTuple y = (read (head y), read (last y))
+      -- Converts a relative coordinate structure into an absolute one.
+      relCoords = tail $ foldl (\x y -> x ++ [addTuples (convertToPoint y) (last x)])
+                               [(0,0)]
+                               coordList
+      -- Converts a relative coordinate structure into an absolute one.
+      absCoords = map convertToPoint coordList
+      convertToPoint y = (read (head y), read (last y))
 
 -- | Adds two tuples together.
 addTuples :: Point -> Point -> Point
@@ -123,7 +114,3 @@ intersects width height (rx, ry) offset (px, py) =
        dx <= width + offset &&
        dy >= -1 * offset &&
        dy <= height + offset;
-
--- | Removes the part of a string after the first forward slash.
-dropSlash :: String -> String
-dropSlash str = takeWhile (/='/') str
