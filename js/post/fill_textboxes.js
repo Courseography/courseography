@@ -1,7 +1,6 @@
 
 function fill300Textboxes(post, postElement, category) {
     'use strict';
-    //var postObject = window[post];
 
     for (var m = window[post].index300 + 1; m < activeCourses.length; m++) {
         if (window[post].index300 === activeCourses.length || window[post].filledTextboxes300 === window[post].textboxes300) {
@@ -13,7 +12,7 @@ function fill300Textboxes(post, postElement, category) {
             //postElement[i].disabled = true;
             window[post].index300 = m;
             window[post]['filledTextboxes' + category] += 1;
-            creditCount300and400.spec += 0.5;
+            window[post].creditCount += 0.5;
         }
     }
 }
@@ -21,8 +20,6 @@ function fill300Textboxes(post, postElement, category) {
 
 function fill400Textboxes(post, postElement, category) {
     'use strict';
-
-    //var postObject = window[post];
 
     for (var m = window[post].index400 + 1; m < activeCourses.length; m++) {
         if (window[post].index400 === activeCourses.length || window[post].filledTextboxes400 === window[post].textboxes400) {
@@ -34,7 +31,7 @@ function fill400Textboxes(post, postElement, category) {
             //postElement[i].disabled = true;
             window[post].index400 = m;
             window[post]['filledTextboxes' + category] += 1;
-            creditCount300and400.spec += 0.5;
+            window[post].creditCount += 0.5;
         }
     }
 }
@@ -47,7 +44,6 @@ function fill300s() {
 
     var spec300s = $('#spec300')[0].getElementsByTagName('input');
     var maj300s = $('#maj300')[0].getElementsByTagName('input');
-    //var min300s = $('#minextra')[0].getElementsByTagName('input');
 
     
     // clear textboxes
@@ -58,18 +54,11 @@ function fill300s() {
             maj300s[k].value = '';
             maj300s[k].disabled = true;
         }
-        /*
-        if (min300s[k].value.indexOf('CSC4') === -1) {
-            min300s[k].value = '';
-            min300s[k].disabled = true;
-        }
-        */
     }
     
     // fill courses that have been selected
     fill300Textboxes('specialist', spec300s, '300');
     fill300Textboxes('major', maj300s, '300');
-    //fill300Textboxes('minor', min300s, '300');
 
     if (specialist.filledTextboxes300 < specialist.textboxes300) {
         fill400Textboxes('specialist', spec300s, '300');
@@ -77,9 +66,6 @@ function fill300s() {
     if (major.filledTextboxes300 < major.textboxes300) {
         fill400Textboxes('major', maj300s, '300');
     }
-    /*if (minor.filledTextboxesExtra < specialist.textboxesExtra) {
-        fill400Textboxes('minor', min300s, 'Extra');
-    }*/
     
     // add extra 200 courses for minor if extra space
     if (minor.filledTextboxesExtra < specialist.textboxesExtra) {
@@ -107,17 +93,11 @@ function fill400s() {
             maj400s[k].value = '';
             maj400s[k].disabled = true;
         }
-        /*
-        min400s[k].value = '';
-        min400s[k].disabled = true;
-        */
     }
     
     // fill courses that have been selected
     fill400Textboxes('specialist', spec400s, '400');
     fill400Textboxes('major', maj400s, '400');
-    //fill400Textboxes('minor', min400s, '400');
-
 }
  
 function fillExtraTextboxes(post, postElement, level) {
@@ -132,7 +112,7 @@ function fillExtraTextboxes(post, postElement, level) {
             postElement[window[post].filledTextboxesExtra].disabled = true;
             window[post]['index' + level] = i;
             window[post].filledTextboxesExtra += 1;
-            creditCount300and400.maj += 0.5;
+            window[post].creditCount += 0.5;
         }
     }
 }
@@ -166,12 +146,12 @@ function fillExtra() {
 
         // add credit count for MAT and STA courses
         if (spec_extra[k].value.indexOf('MAT') > -1 || spec_extra[k].value.indexOf('STA') > -1) {
-            creditCount300and400.spec += 0.5;
+            specialist.creditCount += 0.5;
             specialist.filledTextboxesExtra += 1;
         } 
         if (k < 3) {
             if (maj_extra[k].value.indexOf('MAT') > -1 || maj_extra[k].value.indexOf('STA') > -1) {
-                creditCount300and400.maj += 0.5;
+                major.creditCount += 0.5;
                 major.filledTextboxesExtra += 1;
             }
         }

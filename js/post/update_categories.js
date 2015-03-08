@@ -1,23 +1,45 @@
+/**
+ * Updates categories for required courses in each POSt
+ * @param {string} post The POSt that you are updating categories for.
+**/
+function updateReqsCategory(post, name) {
+    'use strict';
+
+    for (var i = 0; i < post.reqs.length; i++) {
+        var category = $('#' + name + '_' + post.reqs[i].toLowerCase())[0].getElementsByClassName('code')[0];
+        if (activeCourses.indexOf(post.reqs[i]) != -1) {
+            activateCourse(post.reqs[i]);
+            updateCategory(category, 'fulfilled');
+            post.categoriesCompleted += 1;
+            if (post.reqs[i] === 'Calc1') {
+            	post.creditCount += 1;
+            } else {
+            	post.creditCount += 0.5;
+            }
+        } else { // if the category is not completed
+            deactivateCourse(post.reqs[i]);
+            updateCategory(category, 'not fulfilled');
+        }
+    }
+}
+
+
 function update300Categories() {
 	'use strict';
 
 	 if (specialist.filledTextboxes300 === specialist.textboxes300) {
-	 	console.log('fulfilled!');
         updateCategory($('#spec_300')[0].getElementsByClassName('code')[0], 'fulfilled');
         updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'fulfilled');
         specialist.categoriesCompleted += 1;
     } else {
-    	console.log('not fulfilled!');
         updateCategory($('#spec_300')[0].getElementsByClassName('code')[0], 'not fulfilled');
         updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'not fulfilled');
     }
 
     if (major.filledTextboxes300 === major.textboxes300) {
-    	console.log('fulfilled!');
         updateCategory($('#maj_300')[0].getElementsByClassName('code')[0], 'fulfilled');
         major.categoriesCompleted += 1;
      } else {
-     	console.log('not fulfilled!');
         updateCategory($('#maj_300')[0].getElementsByClassName('code')[0], 'not fulfilled');
      }
 }
@@ -61,7 +83,7 @@ function updateExtraCategories() {
 
     if (minor.filledTextboxesExtra === minor.textboxesExtra) {
         updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'fulfilled');
-        categoriesCompleted.min += 1;
+        minor.categoriesCompleted += 1;
     } else {
 		updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'not fulfilled');
     }
