@@ -26,10 +26,8 @@ buildPath rects ellipses entity idCounter
              ""
              ""
     | otherwise =
-        let xStart = fst $ head coords
-            yStart = snd $ head coords
-            xEnd = fst $ last coords
-            yEnd = snd $ last coords
+        let (xStart, yStart) = head coords
+            (xEnd, yEnd) = last coords
             sourceNode = getIntersectingShape xStart yStart (rects ++ ellipses)
             targetNode = getIntersectingShape xEnd yEnd (rects ++ ellipses)
             in Path ('p' : show idCounter)
