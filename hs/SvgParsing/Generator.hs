@@ -154,14 +154,14 @@ convertRectToSVG :: M.Map String String -> Shape -> S.Svg
 convertRectToSVG courseMap rect
     | shapeFill rect == "none" = S.rect
     | otherwise =
-        S.g ! A.id_ (stringValue $ shapeId rect)
+        S.g ! A.id_ (stringValue $ shapeId_ rect)
             ! A.class_ (if shapeIsHybrid rect then "hybrid" else "node")
-            ! S.customAttribute "data-group" (stringValue (getArea (shapeId rect)))
+            ! S.customAttribute "data-group" (stringValue (getArea (shapeId_ rect)))
             ! S.customAttribute "text-rendering" "geometricPrecision"
             ! S.customAttribute "shape-rendering" "geometricPrecision"
             ! A.style (stringValue (
                        if not (shapeIsHybrid rect)
-                       then fromMaybe "" $ M.lookup (shapeId rect) courseMap
+                       then fromMaybe "" $ M.lookup (shapeId_ rect) courseMap
                        else "")) $
             do S.rect ! A.rx "4"
                       ! A.ry "4"
@@ -169,7 +169,7 @@ convertRectToSVG courseMap rect
                       ! A.y (stringValue $ show $ shapeYPos rect)
                       ! A.width (stringValue $ show $ shapeWidth rect)
                       ! A.height (stringValue $ show $ shapeHeight rect)
-                      ! A.style (stringValue $ "fill:" ++ getFill (shapeId rect) ++ ";")
+                      ! A.style (stringValue $ "fill:" ++ getFill (shapeId_ rect) ++ ";")
                concatSVG $ map (convertTextToSVG (shapeIsHybrid rect) False False) (shapeText rect)
 
 convertSelectionToStyle :: String -> String
@@ -219,7 +219,7 @@ convertRegionToSVG path =
 -- | Converts an `Ellipse` to SVG.
 convertEllipseToSVG :: Shape -> S.Svg
 convertEllipseToSVG ellipse =
-    S.g ! A.id_ (stringValue (shapeId ellipse))
+    S.g ! A.id_ (stringValue (shapeId_ ellipse))
         ! A.class_ "bool" $ do
             S.ellipse ! A.cx (stringValue $ show $ shapeXPos ellipse)
                       ! A.cy (stringValue $ show $ shapeYPos ellipse)
