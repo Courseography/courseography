@@ -7,9 +7,8 @@ var major = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledText
              'filledTextboxesExtra': 0, 'majCount': 0, 'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC236',
              'CSC258', 'CSC263', 'Sta1', 'Calc1'], 'textboxes300': 2, 'textboxes400': 1, 'textboxesExtra': 3, 'categories': 13,
              'creditCount': 0};
-var minor = {'index300': 0, 'index400': 0, 'index200': 0, 'categoriesCompleted': 0, 'filledTextboxesExtra': 0, 'filledTextboxes200': 0, 
-             'minCount': 0, 'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC236'], 'textboxesExtra': 3, 'categories': 6,
-             'creditCount': 0};
+var minor = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxesExtra': 0, 'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC236'], 
+             'textboxesExtra': 3, 'categories': 6, 'creditCount': 0, 'additionalMin200': ['CSC209', 'CSC258', 'CSC263']};
 
 
 /**
@@ -67,9 +66,8 @@ function resetValues() {
              'filledTextboxesExtra': 0, 'majCount': 0, 'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC236',
              'CSC258', 'CSC263', 'Sta1', 'Calc1'], 'textboxes300': 2, 'textboxes400': 1, 'textboxesExtra': 3, 'categories': 13,
              'creditCount': 0};
-    minor = {'index300': 0, 'index400': 0, 'index200': 0, 'categoriesCompleted': 0, 'filledTextboxesExtra': 0, 'filledTextboxes200': 0, 
-             'minCount': 0, 'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC236'], 'textboxesExtra': 3, 'categories': 6,
-             'creditCount': 0};
+    minor = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxesExtra': 0, 'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC236'], 
+             'textboxesExtra': 3, 'categories': 6, 'creditCount': 0, 'additionalMin200': ['CSC209', 'CSC258', 'CSC263']};
 }
 
 
@@ -175,22 +173,21 @@ function fillMinCreditCount() {
 
 /**
  * Autofills extra 200-level courses for last minor constraint.
- * @param {number} index The textbox number we are at
- * @param {HTMLElement} min300s Array of textbox elements to fill
 **/
 
-function addExtraMinCourses(index, min300s) {
+function addExtraMinCourses() {
     'use strict';
 
+    var minExtra = $('#minextra')[0].getElementsByTagName('input');
+
     for (var m = 0; m < 3; m++) {
-        if (index === 3) {
+        if (minor.filledTextboxesExtra === minor.textboxesExtra) {
             break;      
-        } else if (getCookie(additionMin200s[m]) === 'active') {
-            min300s[index].value = additionMin200s[m];
-            min300s[index].readOnly = true;
-            creditCount300and400.min += 0.5;
-            filledTextboxes200 += 1;
-            index += 1;
+        } else if (getCookie(minor.additionalMin200[m]) === 'active' || getCookie(minor.additionalMin200[m]) === 'overriden') {
+            minExtra[minor.filledTextboxesExtra].value = minor.additionalMin200[m];
+            minExtra[minor.filledTextboxesExtra].disabled = true;
+            minor.creditCount += 0.5;
+            minor.filledTextboxesExtra += 1;
         }
         
     }

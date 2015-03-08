@@ -77,13 +77,8 @@ function fill300s() {
     if (major.filledTextboxes300 < major.textboxes300) {
         fill400Textboxes(major, maj300s, '300');
     }
-    
-    // add extra 200 courses for minor if extra space
-    if (minor.filledTextboxesExtra < specialist.textboxesExtra) {
 
-    }
 }  
-
 
 
 /**
@@ -178,6 +173,11 @@ function fillExtra() {
     }
     if (minor.filledTextboxesExtra < minor.textboxesExtra) {
         fillExtraTextboxes(minor, min_extra, '400');
+    }
+
+    // add extra 200 courses for minor if extra space
+    if (minor.filledTextboxesExtra < specialist.textboxesExtra) {
+        addExtraMinCourses();
     }
 
 }
