@@ -35,10 +35,10 @@ getGraphImage counter courseMap =
        let svgFilename = (show c ++ "-graph-svg-file.svg")
            imageFilename = (show c ++ "-graph.png")
        buildSVG courseMap svgFilename
-       liftIO $ createImageFile svgFilename imageFilename
+       createImageFile svgFilename imageFilename
        imageData <- BS.readFile imageFilename
-       liftIO $ removeImage imageFilename
-       liftIO $ removeImage svgFilename
+       removeImage imageFilename
+       removeImage svgFilename
        let encodedData = BEnc.encode imageData
        return $ toResponse encodedData
 
@@ -48,16 +48,17 @@ getTimetableImage counter courses =
     do c <- addCounter counter
        let svgFilename = (show c ++ "--timetable-svg-file.svg")
            imageFilename = (show c ++ "-timetable.png")
-       liftIO $ renderTable svgFilename courses
-       liftIO $ createImageFile svgFilename imageFilename
+       renderTable svgFilename courses
+       createImageFile svgFilename imageFilename
        imageData <- BS.readFile imageFilename
-       liftIO $ removeImage imageFilename
-       liftIO $ removeImage svgFilename
+       removeImage imageFilename
+       removeImage svgFilename
        let encodedData = BEnc.encode imageData
        return $ toResponse encodedData
 
+-- | Adds 1 to the input MVar Integer.
 addCounter :: MVar Integer -> IO Integer
 addCounter counter = do
     c <- takeMVar counter
-    liftIO $ (putMVar counter . (+) 1) c
+    (putMVar counter . (+) 1) c
     return c
