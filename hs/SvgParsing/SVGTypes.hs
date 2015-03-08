@@ -1,5 +1,7 @@
 module SvgParsing.SVGTypes where
 
+import Database.Tables
+
 -- | A Graph.
 data Graph =
     Graph { 
@@ -19,7 +21,7 @@ data Text =
 data Path =
     Path { 
            pathId :: String,
-           points :: [(Double, Double)],
+           points :: [Point],
            pathFill :: String,
            pathStroke :: String,
            pathIsRegion :: Bool,

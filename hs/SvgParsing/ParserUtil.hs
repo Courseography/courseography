@@ -78,15 +78,15 @@ getAttribute attr (CElem content undefined)
 getAttribute _ _ = ""
 
 -- | Parses a transform String into a tuple of Float.
-parseTransform :: String -> (Double, Double)
+parseTransform :: String -> Point
 parseTransform transform =
     let parsedTransform = splitOn "," $ drop 10 transform
-        xPos = read $ parsedTransform !! 0 :: Double
-        yPos = read $ init $ parsedTransform !! 1 :: Double
+        xPos = read $ parsedTransform !! 0
+        yPos = read $ init $ parsedTransform !! 1
     in (xPos, yPos)
 
 -- | Parses a path's `d` attribute.
-parsePathD :: String -> [(Double, Double)]
+parsePathD :: String -> [Point]
 parsePathD d
     | head d == 'm' = foldCoordsRel coordList
     | otherwise =  processAbsCoords coordList
@@ -95,7 +95,7 @@ parsePathD d
       coordList = filter lengthMoreThanOne $ map (splitOn ",") $ splitOn " " d
 
 -- | Converts a relative coordinate structure into an absolute one.
-foldCoordsRel :: [[String]] -> [(Double, Double)]
+foldCoordsRel :: [[String]] -> [Point]
 foldCoordsRel dCoords =
     tail $
     foldl (\x y -> x ++ [addTuples (convertToFloatTuple y) (last x)])
@@ -103,24 +103,26 @@ foldCoordsRel dCoords =
           dCoords
 
 -- | Converts a relative coordinate structure into an absolute one.
-processAbsCoords :: [[String]] -> [(Double, Double)]
+processAbsCoords :: [[String]] -> [Point]
 processAbsCoords = map convertToFloatTuple
 
 -- | Converts a list of String of length 2 into a tuple of Float.
-convertToFloatTuple :: [String] -> (Double, Double)
-convertToFloatTuple y = (read (head y) :: Double, read (last y) :: Double)
+convertToFloatTuple :: [String] -> Point
+convertToFloatTuple y = (read (head y), read (last y))
 
 -- | Adds two tuples together.
-addTuples :: (Double, Double) -> (Double, Double) -> (Double, Double)
+addTuples :: Point -> Point -> Point
 addTuples (a,b) (c,d) = (a + c, b + d)
 
 -- | Determines if a point intersects with a shape.
-intersects :: Double -> Double -> (Double, Double) -> Double -> (Double, Double) -> Bool
+intersects :: Double -> Double -> Point -> Double -> Point -> Bool
 intersects width height (rx, ry) offset (px, py) =
     let dx = px - rx
         dy = py - ry
-        rationalOffset = offset
-    in dx >= -1 * rationalOffset && dx <= width + rationalOffset && dy >= -1 * rationalOffset && dy <= height + rationalOffset;
+    in dx >= -1 * offset &&
+       dx <= width + offset &&
+       dy >= -1 * offset &&
+       dy <= height + offset;
 
 -- | Removes the part of a string after the first forward slash.
 dropSlash :: String -> String
