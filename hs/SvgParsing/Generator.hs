@@ -161,7 +161,7 @@ convertRectToSVG courseMap rect
             ! S.customAttribute "shape-rendering" "geometricPrecision"
             ! A.style (stringValue (
                        if not (shapeIsHybrid rect)
-                       then fromMaybe "" M.lookup (shapeId rect) courseMap
+                       then fromMaybe "" $ M.lookup (shapeId rect) courseMap
                        else "")) $
             do S.rect ! A.rx "4"
                       ! A.ry "4"
