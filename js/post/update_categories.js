@@ -111,10 +111,14 @@ function updateInqCategory () {
     if (specialist.activeInq === 1) {
         updateCategory($('#spec_misc')[0].getElementsByClassName('code')[0], 'fulfilled');
         specialist.categoriesCompleted += 1;
+    } else {
+        updateCategory($('#spec_misc')[0].getElementsByClassName('code')[0], 'not fulfilled');
+    }
+
+    if (major.activeInq === 1) {
         updateCategory($('#maj_misc')[0].getElementsByClassName('code')[0], 'fulfilled'); 
         major.categoriesCompleted += 1;
     } else {
-        updateCategory($('#spec_misc')[0].getElementsByClassName('code')[0], 'not fulfilled');
         updateCategory($('#maj_misc')[0].getElementsByClassName('code')[0], 'not fulfilled'); 
     }
 }

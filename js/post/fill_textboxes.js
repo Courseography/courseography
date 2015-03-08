@@ -195,10 +195,16 @@ function fillMisc() {
     // clear textboxes
     if (spec_inq[0].value.indexOf('PEY') === -1) {
         spec_inq[0].value = '';
-        spec_inq[0].disabled = true;
-    } if (maj_inq[0].value.indexOf('PEY') === -1) {
+        spec_inq[0].disabled = false;
+    } else {
+        specialist.activeInq = 1;
+    }
+
+    if (maj_inq[0].value.indexOf('PEY') === -1) {
         maj_inq[0].value = '';
-        maj_inq[0].disabled = true;
+        maj_inq[0].disabled = false;
+    } else {
+        major.activeInq = 1;
     }
 
     // fill active inquiry course
@@ -206,8 +212,10 @@ function fillMisc() {
         if (CSCinq.indexOf(activeCourses[i]) != -1) {
             spec_inq[0].value = activeCourses[i];
             specialist.activeInq = 1;
+            spec_inq[0].disabled = true;
             maj_inq[0].value = activeCourses[i];
             major.activeInq = 1;
+            maj_inq[0].disabled = true;
             break;
         }
     }
