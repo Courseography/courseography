@@ -66,7 +66,7 @@ buildRect texts entity =
              9
 
 -- | Gets the first rect that intersects with the given coordinates.
-getIntersectingShape :: Rational -> Rational -> [Shape] -> String
+getIntersectingShape :: Double -> Double -> [Shape] -> String
 getIntersectingShape xpos ypos shapes
     | null intersectingShapes = ""
     | otherwise = shapeId $ head intersectingShapes
@@ -74,7 +74,7 @@ getIntersectingShape xpos ypos shapes
                                       shapes
 
 -- | Determines if a rect intersects with the given coordinates.
-intersectsWithPoint :: Rational -> Rational -> Shape -> Bool
+intersectsWithPoint :: Double -> Double -> Shape -> Bool
 intersectsWithPoint xpos ypos shape =
     intersects (shapeWidth shape)
                (shapeHeight shape)
@@ -119,7 +119,7 @@ buildEllipses texts idCounter entities =
              20 : buildEllipses texts (idCounter + 1) (tail entities)
 
 -- | Rebuilds a path's `d` attribute based on a list of Rational tuples.
-buildPathString :: [(Rational, Rational)] -> String
+buildPathString :: [(Double, Double)] -> String
 buildPathString d = unwords $ map (joinPathTuple . convertRationalTupToString) d
 
 -- | Joins two String values in a tuple with a comma.
@@ -127,5 +127,5 @@ joinPathTuple :: (String, String) -> String
 joinPathTuple (a, b) = a ++ "," ++ b
 
 -- | Converts a tuple of Rationals to a tuple of String.
-convertRationalTupToString :: (Rational, Rational) -> (String, String)
-convertRationalTupToString (a, b) = (show $ fromRational a, show $ fromRational b)
+convertRationalTupToString :: (Double, Double) -> (String, String)
+convertRationalTupToString (a, b) = (show $ a, show $ b)

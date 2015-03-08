@@ -38,10 +38,6 @@ getNewStyleAttr newStyle attr parentStyle
     | otherwise = newAttrStyle
     where newAttrStyle = getStyleAttr attr newStyle
 
--- | Converts a tuple of Float to a tuple of Rational.
-convertFloatTupToRationalTup :: (Float, Float) -> (Rational, Rational)
-convertFloatTupToRationalTup (a,b) = (toRational a, toRational b)
-
 -- | Applys a CFilter to a Document and produces a list of Content filtered
 -- by the CFilter.
 parseDocument :: CFilter i -> Document i -> [Content i]
@@ -82,15 +78,15 @@ getAttribute attr (CElem content undefined)
 getAttribute _ _ = ""
 
 -- | Parses a transform String into a tuple of Float.
-parseTransform :: String -> (Float, Float)
+parseTransform :: String -> (Double, Double)
 parseTransform transform =
     let parsedTransform = splitOn "," $ drop 10 transform
-        xPos = read $ parsedTransform!!0 :: Float
-        yPos = read $ init $ parsedTransform!!1 :: Float
+        xPos = read $ parsedTransform !! 0 :: Double
+        yPos = read $ init $ parsedTransform !! 1 :: Double
     in (xPos, yPos)
 
 -- | Parses a path's `d` attribute.
-parsePathD :: String -> [(Float, Float)]
+parsePathD :: String -> [(Double, Double)]
 parsePathD d
     | head d == 'm' = foldCoordsRel coordList
     | otherwise =  processAbsCoords coordList
@@ -99,7 +95,7 @@ parsePathD d
       coordList = filter lengthMoreThanOne $ map (splitOn ",") $ splitOn " " d
 
 -- | Converts a relative coordinate structure into an absolute one.
-foldCoordsRel :: [[String]] -> [(Float, Float)]
+foldCoordsRel :: [[String]] -> [(Double, Double)]
 foldCoordsRel dCoords =
     tail $
     foldl (\x y -> x ++ [addTuples (convertToFloatTuple y) (last x)])
@@ -107,25 +103,25 @@ foldCoordsRel dCoords =
           dCoords
 
 -- | Converts a relative coordinate structure into an absolute one.
-processAbsCoords :: [[String]] -> [(Float, Float)]
+processAbsCoords :: [[String]] -> [(Double, Double)]
 processAbsCoords = map convertToFloatTuple
 
 -- | Converts a list of String of length 2 into a tuple of Float.
-convertToFloatTuple :: [String] -> (Float, Float)
-convertToFloatTuple y = (read (head y) :: Float, read (last y) :: Float)
+convertToFloatTuple :: [String] -> (Double, Double)
+convertToFloatTuple y = (read (head y) :: Double, read (last y) :: Double)
 
 -- | Adds two tuples together.
-addTuples :: (Float, Float) -> (Float, Float) -> (Float, Float)
+addTuples :: (Double, Double) -> (Double, Double) -> (Double, Double)
 addTuples (a,b) (c,d) = (a + c, b + d)
 
 -- | Determines if a point intersects with a shape.
-intersects :: Rational -> Rational -> (Rational, Rational) -> Float -> (Rational, Rational) -> Bool
+intersects :: Double -> Double -> (Double, Double) -> Double -> (Double, Double) -> Bool
 intersects width height (rx, ry) offset (px, py) =
     let dx = px - rx
         dy = py - ry
-        rationalOffset = toRational offset
+        rationalOffset = offset
     in dx >= -1 * rationalOffset && dx <= width + rationalOffset && dy >= -1 * rationalOffset && dy <= height + rationalOffset;
 
 -- | Removes the part of a string after the first forward slash.
 dropSlash :: String -> String
-dropSlash str = head $ splitOn "/" str
+dropSlash str = takeWhile (/='/') str
