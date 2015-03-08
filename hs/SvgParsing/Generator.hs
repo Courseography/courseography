@@ -131,7 +131,7 @@ buildSVG courseMap filename =
     runSqlite dbStr $ do
         sqlRects    :: [Entity Rects]    <- selectList [] []
         sqlText    :: [Entity Text]    <- selectList [] []
-        sqlPaths    :: [Entity Paths]    <- selectList [] []
+        sqlPaths    :: [Entity Path]    <- selectList [] []
         sqlEllipses :: [Entity Ellipses] <- selectList [] []
         let courseStyleMap = M.map convertSelectionToStyle courseMap
             texts       = map entityVal sqlText
@@ -196,12 +196,12 @@ convertTextToSVG isHybrid isBool isRegion text =
 -- | Converts a `Path` to SVG.
 convertEdgeToSVG :: Path -> S.Svg
 convertEdgeToSVG path =
-    S.path ! A.id_ (stringValue $ "path" ++ pathId path)
+    S.path ! A.id_ (stringValue $ "path" ++ pathId_ path)
            ! A.class_ "path"
-           ! A.d (stringValue $ 'M' : buildPathString (points path))
+           ! A.d (stringValue $ 'M' : buildPathString (pathPoints path))
            ! A.markerEnd "url(#arrow)"
-           ! S.customAttribute "source-node" (stringValue $ source path)
-           ! S.customAttribute "target-node" (stringValue $ target path)
+           ! S.customAttribute "source-node" (stringValue $ pathSource path)
+           ! S.customAttribute "target-node" (stringValue $ pathTarget path)
            ! A.style (stringValue $ "fill:" ++
                       pathFill path ++
                       ";fill-opacity:1;")
@@ -209,9 +209,9 @@ convertEdgeToSVG path =
 -- | Converts a `Path` to SVG.
 convertRegionToSVG :: Path -> S.Svg
 convertRegionToSVG path =
-    S.path ! A.id_ (stringValue $ "region" ++ pathId path)
+    S.path ! A.id_ (stringValue $ "region" ++ pathId_ path)
            ! A.class_ "region"
-           ! A.d (stringValue $ 'M' : buildPathString (points path))
+           ! A.d (stringValue $ 'M' : buildPathString (pathPoints path))
            ! A.style (stringValue $ "fill:" ++
                       pathFill path ++
                       ";opacity:0.7;fill-opacity:0.58;")

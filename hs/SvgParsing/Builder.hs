@@ -13,14 +13,14 @@ import Database.JsonParser
 import Database.Tables
 
 -- | Determines the source and target nodes of the path.
-buildPath :: [Shape] -> [Shape] -> Paths -> Int -> Path
+buildPath :: [Shape] -> [Shape] -> Path -> Int -> Path
 buildPath rects ellipses entity idCounter
-    | pathsIsRegion entity =
+    | pathIsRegion entity =
         Path ('p' : show idCounter)
              coords
-             (pathsFill entity)
-             (pathsStroke entity)
-             (pathsIsRegion entity)
+             (pathFill entity)
+             (pathStroke entity)
+             (pathIsRegion entity)
              ""
              ""
     | otherwise =
@@ -30,12 +30,12 @@ buildPath rects ellipses entity idCounter
             targetNode = getIntersectingShape xEnd yEnd (rects ++ ellipses)
             in Path ('p' : show idCounter)
                     coords
-                    (pathsFill entity)
-                    (pathsStroke entity)
-                    (pathsIsRegion entity)
+                    (pathFill entity)
+                    (pathStroke entity)
+                    (pathIsRegion entity)
                     sourceNode
                     targetNode
-    where coords = pathsD entity
+    where coords = pathPoints entity
 
 -- | Builds a Rect from a database entry in the rects table.
 buildRect :: [Text] -> Rects -> Shape
@@ -77,13 +77,6 @@ intersectsWithPoint xpos ypos shape =
                (shapeXPos shape, shapeYPos shape)
                (shapeTolerance shape)
                (xpos, ypos)
-
--- | Builds a Text from a database entry in the texts table.
---buildText :: Texts -> Text
---buildText entity =
---    Text (textsXPos entity)
---         (textsYPos entity)
---         (textsText entity)
 
 -- | Builds a Path from a database entry in the paths table.
 buildEllipses :: [Text] -> Int -> [Ellipses] -> [Shape]
