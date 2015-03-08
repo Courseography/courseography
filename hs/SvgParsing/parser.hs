@@ -93,8 +93,8 @@ parseRect :: Style
           -> Shape
 parseRect style content =
     Shape ""
-          (read (getAttribute "x" content) + fst (transform style))
-          (read (getAttribute "y" content) + snd (transform style))
+          (read (getAttribute "x" content) + fst (transform style),
+           read (getAttribute "y" content) + snd (transform style))
           (read $ getAttribute "width" content)
           (read $ getAttribute "height" content)
           (fill style)
@@ -128,8 +128,8 @@ parseText :: Style
           -> Text
 parseText style content =
     Text (getAttribute "id" content)
-         (read (getAttribute "x" content) + fst (transform style))
-         (read (getAttribute "y" content) + snd (transform style))
+         (read (getAttribute "x" content) + fst (transform style),
+          read (getAttribute "y" content) + snd (transform style))
          (tagTextContent content)
 
 -- | Parses a text.
@@ -138,8 +138,8 @@ parseEllipse :: Style
              -> Shape
 parseEllipse style content =
     Shape ""
-          (read (getAttribute "cx" content) + fst (transform style))
-          (read (getAttribute "cy" content) + snd (transform style))
+          (read (getAttribute "cx" content) + fst (transform style),
+           read (getAttribute "cy" content) + snd (transform style))
           (read (getAttribute "rx" content) * 2)
           (read (getAttribute "ry" content) * 2)
           ""

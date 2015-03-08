@@ -147,7 +147,7 @@ buildSVG courseMap filename =
 -- | Determines if a text intersects with a shape.
 intersectsWithShape :: [Shape] -> Text -> Bool
 intersectsWithShape shapes text =
-    any (intersectsWithPoint (textXPos text) (textYPos text)) shapes
+    any (intersectsWithPoint (textCoord text)) shapes
 
 -- | Converts a `Rect` to SVG.
 convertRectToSVG :: M.Map String String -> Shape -> S.Svg
@@ -165,10 +165,10 @@ convertRectToSVG courseMap rect
                        else "")) $
             do S.rect ! A.rx "4"
                       ! A.ry "4"
-                      ! A.x (stringValue $ show $ shapeXPos rect)
-                      ! A.y (stringValue $ show $ shapeYPos rect)
-                      ! A.width (stringValue $ show $ shapeWidth rect)
-                      ! A.height (stringValue $ show $ shapeHeight rect)
+                      ! A.x (stringValue . show . fst $ shapeCoord rect)
+                      ! A.y (stringValue . show . snd $ shapeCoord rect)
+                      ! A.width (stringValue . show $ shapeWidth rect)
+                      ! A.height (stringValue . show $ shapeHeight rect)
                       ! A.style (stringValue $ "fill:" ++ getFill (shapeId_ rect) ++ ";")
                concatSVG $ map (convertTextToSVG (shapeIsHybrid rect) False False) (shapeText rect)
 
@@ -186,12 +186,14 @@ isSelected courseStatus =
 -- | Converts a `Text` to SVG.
 convertTextToSVG :: Bool -> Bool -> Bool -> Text -> S.Svg
 convertTextToSVG isHybrid isBool isRegion text =
-    S.text_ ! A.x (stringValue $ show $ textXPos text)
-            ! A.y (stringValue $ show $ textYPos text)
+    S.text_ ! A.x (stringValue $ show xPos)
+            ! A.y (stringValue $ show yPos)
             ! A.style (stringValue $
                        getTextStyle isHybrid isBool isRegion ++
                        "font-family:sans-serif;stroke:none;")
             $ toMarkup $ textText text
+    where (xPos, yPos) = textCoord text
+
 
 -- | Converts a `Path` to SVG.
 convertEdgeToSVG :: Path -> S.Svg
@@ -221,10 +223,10 @@ convertEllipseToSVG :: Shape -> S.Svg
 convertEllipseToSVG ellipse =
     S.g ! A.id_ (stringValue (shapeId_ ellipse))
         ! A.class_ "bool" $ do
-            S.ellipse ! A.cx (stringValue $ show $ shapeXPos ellipse)
-                      ! A.cy (stringValue $ show $ shapeYPos ellipse)
-                      ! A.rx (stringValue $ show $ shapeWidth ellipse / 2)
-                      ! A.ry (stringValue $ show $ shapeHeight ellipse / 2)
+            S.ellipse ! A.cx (stringValue . show . fst $ shapeCoord ellipse)
+                      ! A.cy (stringValue . show . snd $ shapeCoord ellipse)
+                      ! A.rx (stringValue . show $ shapeWidth ellipse / 2)
+                      ! A.ry (stringValue . show $ shapeHeight ellipse / 2)
                       ! A.style "stroke:#000000;fill:none;"
             concatSVG $ map (convertTextToSVG False True False) (shapeText ellipse)
 
