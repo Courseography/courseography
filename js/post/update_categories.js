@@ -31,7 +31,7 @@ function updateReqsCategory(post, name) {
 function update300Categories() {
     'use strict';
 
-	if (specialist.filledTextboxes300 === specialist.textboxes300) {
+    if (specialist.filledTextboxes300 === specialist.textboxes300) {
         updateCategory($('#spec_300')[0].getElementsByClassName('code')[0], 'fulfilled');
         updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'fulfilled');
         specialist.categoriesCompleted += 1;
