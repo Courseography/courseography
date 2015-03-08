@@ -21,6 +21,7 @@ import Data.List
 import Data.Text as T (pack, unpack)
 import Database.Tables
 import Database.JsonParser
+import Database.SvgDatabase
 import SvgParsing.Generator
 import SvgParsing.Builder
 import SvgParsing.Types
@@ -41,8 +42,8 @@ main = do graphFile <- readFile "../res/graphs/graph_regions.svg"
 -- | Parses a level.
 parseLevel :: MonadIO m0 =>  Bool -> Style -> Content i -> ReaderT SqlBackend m0 ()
 parseLevel currentlyInRegion style content =
-    unless getAttribute "id" content == "layer2" ||
-       (getName content == "defs")
+    unless (getAttribute "id" content == "layer2" ||
+            getName content == "defs")
     $ do let isRegion       = getAttribute "id" content == "layer3"
              rects          = tag "rect" content
              texts          = tag "text" content
@@ -111,45 +112,6 @@ parseEllipse :: MonadIO m0 => Style -> Content i -> ReaderT SqlBackend m0 ()
 parseEllipse style content = 
     insertEllipse (read (getAttribute "cx" content) + fst (transform style))
                   (read (getAttribute "cy" content) + snd (transform style))
-                  read (getAttribute "rx" content)
-                  read (getAttribute "ry" content)
+                  (read (getAttribute "rx" content))
+                  (read (getAttribute "ry" content))
                   (fill style)
-
--- | Inserts an ellipse entry into the rects table.
-insertEllipse :: MonadIO m0 => Double -> Double -> Double -> Double -> String -> ReaderT SqlBackend m0 ()
-insertEllipse xPos yPos rx ry stroke =
-        insert_ $ Ellipses xPos
-                           yPos
-                           rx
-                           ry
-                           stroke
-
--- | Inserts a rect entry into the rects table.
-insertRect :: MonadIO m0 => String -> Double -> Double -> Double -> Double -> Style -> ReaderT SqlBackend m0 ()
-insertRect id_ width height xPos yPos style =
-        insert_ $ Rects 1
-                        id_
-                        width
-                        height
-                        xPos
-                        yPos
-                        (fill style)
-                        (stroke style)
-                        (fill style == "#a14c3a")
-
--- | Inserts a text entry into the texts table.
-insertText :: MonadIO m0 => String -> Double -> Double -> String -> Style -> ReaderT SqlBackend m0 ()
-insertText id_ xPos yPos text style =
-        insert_ $ Text 1
-                       id_
-                       xPos
-                       yPos
-                       text
-
--- | Inserts a tex entry into the texts table.
-insertPath :: MonadIO m0 => [Point] -> Style -> Bool -> ReaderT SqlBackend m0 ()
-insertPath d style isRegion =
-        insert_ $ Paths d
-                        (fill style)
-                        (stroke style)
-                        isRegion
