@@ -22,8 +22,8 @@ import Control.Applicative
 data Time = Time { timeField :: [Int] } deriving (Show, Read, Eq)
 derivePersistField "Time"
 
+type Point = (Double, Double)
 
-data Point = Point { point :: (Double, Double) } deriving (Show, Read, Eq)
 derivePersistField "Point"
 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|

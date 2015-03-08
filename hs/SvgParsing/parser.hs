@@ -86,8 +86,8 @@ parseRect style content =
     insertRectIntoDB (getAttribute "id" content)
                      (read $ getAttribute "width" content)
                      (read $ getAttribute "height" content)
-                     ((read $ getAttribute "x" content :: Double) + fst (transform style))
-                     ((read $ getAttribute "y" content :: Double) + snd (transform style))
+                     ((read $ getAttribute "x" content) + fst (transform style))
+                     ((read $ getAttribute "y" content) + snd (transform style))
                      style
 
 -- | Parses a path.
@@ -102,18 +102,18 @@ parsePath isRegion style content =
 parseText :: MonadIO m0 => Style -> Content i -> ReaderT SqlBackend m0 ()
 parseText style content = 
     insertTextIntoDB (getAttribute "id" content)
-                     ((read $ getAttribute "x" content :: Double) + fst (transform style))
-                     ((read $ getAttribute "y" content :: Double) + snd (transform style))
+                     ((read $ getAttribute "x" content) + fst (transform style))
+                     ((read $ getAttribute "y" content) + snd (transform style))
                      (tagTextContent content)
                      style
 
 -- | Parses a text.
 parseEllipse :: MonadIO m0 => Style -> Content i -> ReaderT SqlBackend m0 ()
 parseEllipse style content = 
-    insertEllipseIntoDB ((read $ getAttribute "cx" content :: Double) + fst (transform style))
-                        ((read $ getAttribute "cy" content :: Double) + snd (transform style))
-                        (read $ getAttribute "rx" content :: Double)
-                        (read $ getAttribute "ry" content :: Double)
+    insertEllipseIntoDB ((read $ getAttribute "cx" content) + fst (transform style))
+                        ((read $ getAttribute "cy" content) + snd (transform style))
+                        (read $ getAttribute "rx" content)
+                        (read $ getAttribute "ry" content)
                         (fill style)
 
 -- | Inserts an ellipse entry into the rects table.
@@ -148,9 +148,9 @@ insertTextIntoDB id_ xPos yPos text style =
                         text
 
 -- | Inserts a tex entry into the texts table.
-insertPathIntoDB :: MonadIO m0 => [(Double, Double)] -> Style -> Bool -> ReaderT SqlBackend m0 ()
+insertPathIntoDB :: MonadIO m0 => [Point] -> Style -> Bool -> ReaderT SqlBackend m0 ()
 insertPathIntoDB d style isRegion =
-        insert_ $ Paths (map (Point) d)
+        insert_ $ Paths d
                         (fill style)
                         (stroke style)
                         isRegion

@@ -39,7 +39,7 @@ buildPath rects ellipses entity idCounter
                     (pathsIsRegion entity)
                     sourceNode
                     targetNode
-    where coords = map point $ pathsD entity
+    where coords = pathsD entity
 
 -- | Builds a Rect from a database entry in the rects table.
 buildRect :: [Text] -> Rects -> Shape
@@ -119,7 +119,7 @@ buildEllipses texts idCounter entities =
              20 : buildEllipses texts (idCounter + 1) (tail entities)
 
 -- | Rebuilds a path's `d` attribute based on a list of Rational tuples.
-buildPathString :: [(Double, Double)] -> String
+buildPathString :: [Point] -> String
 buildPathString d = unwords $ map (joinPathTuple . convertRationalTupToString) d
 
 -- | Joins two String values in a tuple with a comma.
@@ -127,5 +127,5 @@ joinPathTuple :: (String, String) -> String
 joinPathTuple (a, b) = a ++ "," ++ b
 
 -- | Converts a tuple of Rationals to a tuple of String.
-convertRationalTupToString :: (Double, Double) -> (String, String)
+convertRationalTupToString :: Point -> (String, String)
 convertRationalTupToString (a, b) = (show $ a, show $ b)
