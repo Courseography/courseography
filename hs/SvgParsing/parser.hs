@@ -38,7 +38,7 @@ main = do graphFile <- readFile "../res/graphs/graph_regions.svg"
           createDirectoryIfMissing True "../res/graphs/CSC"
           buildSVG
           liftIO $ print "SVG Built"
-    
+
 -- | Parses a level.
 parseLevel :: MonadIO m0 =>  Bool -> Style -> Content i -> ReaderT SqlBackend m0 ()
 parseLevel currentlyInRegion style content =
