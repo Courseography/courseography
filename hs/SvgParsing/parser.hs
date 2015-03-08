@@ -22,9 +22,9 @@ import Data.List
 import Data.Text as T (pack, unpack)
 import Database.Tables
 import Database.JsonParser
-import SvgParsing.SVGGenerator
-import SvgParsing.SVGBuilder
-import SvgParsing.SVGTypes
+import SvgParsing.Generator
+import SvgParsing.Builder
+import SvgParsing.Types
 import SvgParsing.ParserUtil
 import qualified Data.Map as M
 

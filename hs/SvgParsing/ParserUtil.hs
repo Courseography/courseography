@@ -18,7 +18,7 @@ import Data.List
 import Data.Text as T (pack, unpack)
 import Database.Tables
 import Database.JsonParser
-import SvgParsing.SVGTypes
+import SvgParsing.Types
 
 -- | Gets the root element of the document.
 getRoot :: Document i -> Content i

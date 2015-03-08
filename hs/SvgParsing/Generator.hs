@@ -1,7 +1,9 @@
 {-# LANGUAGE OverloadedStrings, GADTs, ScopedTypeVariables #-}
 module SvgParsing.SVGGenerator where
 
-import SvgParsing.SVGTypes
+import SvgParsing.Types
+import SvgParsing.Builder
+import SvgParsing.ParserUtil
 import Database.Tables
 import Control.Monad.IO.Class  (liftIO)
 import qualified Data.Conduit.List as CL
@@ -12,7 +14,6 @@ import Data.Conduit
 import Data.List.Split
 import Data.List hiding (map, filter)
 import Database.JsonParser
-import SvgParsing.ParserUtil
 import MakeElements
 import Data.Maybe
 import qualified Data.Text as T
@@ -20,7 +21,6 @@ import Text.Blaze.Svg11 ((!), mkPath, rotate, l, m)
 import qualified Text.Blaze.Svg11 as S
 import qualified Text.Blaze.Svg11.Attributes as A
 import Text.Blaze.Svg.Renderer.String (renderSvg)
-import SvgParsing.SVGBuilder
 import Text.Blaze.Internal (stringValue)
 import Text.Blaze (toMarkup)
 import Css.Constants
