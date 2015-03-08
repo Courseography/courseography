@@ -48,6 +48,7 @@ buildRect texts entity =
                             (textCoord x)
                             ) texts
         textString = concatMap textText rectTexts
+        dropSlash = takeWhile (/='/')
         id_ = map toLower $ (if shapeIsHybrid entity then "h" else "") ++
                             (if isDigit $ head textString then "CSC" else "") ++ dropSlash textString
     in Shape id_
