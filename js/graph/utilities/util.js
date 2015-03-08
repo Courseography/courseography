@@ -150,8 +150,8 @@ function initializeGraphSettings() {
         clearFocus();
     }
 
-    CSC318.updateStatus();
-    CSC454.updateStatus();
+    csc318.updateStatus();
+    csc454.updateStatus();
 }
 
 
