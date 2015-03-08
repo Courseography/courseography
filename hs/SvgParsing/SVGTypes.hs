@@ -10,8 +10,8 @@ data Graph =
 -- | A Text.
 data Text =
     Text {
-           textXPos :: Rational,
-           textYPos :: Rational,
+           textXPos :: Double,
+           textYPos :: Double,
            textText :: String
          } deriving Show
 
@@ -19,7 +19,7 @@ data Text =
 data Path =
     Path { 
            pathId :: String,
-           points :: [(Rational, Rational)],
+           points :: [(Double, Double)],
            pathFill :: String,
            pathStroke :: String,
            pathIsRegion :: Bool,
@@ -30,20 +30,20 @@ data Path =
 data Shape =
     Shape {
         shapeId :: String,
-        shapeXPos :: Rational,
-        shapeYPos :: Rational,
-        shapeWidth :: Rational,
-        shapeHeight :: Rational,
+        shapeXPos :: Double,
+        shapeYPos :: Double,
+        shapeWidth :: Double,
+        shapeHeight :: Double,
         shapeFill :: String,
         shapeStroke :: String,
         shapeText :: [Text],
         shapeIsHybrid :: Bool,
-        shapeTolerance :: Float
+        shapeTolerance :: Double
          } deriving Show
 
 data Style =
     Style {
-            transform :: (Float,Float),
+            transform :: (Double, Double),
             fill :: String,
             stroke :: String
           } deriving Show

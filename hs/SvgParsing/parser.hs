@@ -86,10 +86,10 @@ parseElements f (x:xs) = do f x
 parseRect :: MonadIO m0 => Style -> Content i -> ReaderT SqlBackend m0 ()
 parseRect style content = 
     insertRectIntoDB (getAttribute "id" content)
-                     (read $ getAttribute "width" content :: Float)
-                     (read $ getAttribute "height" content :: Float)
-                     ((read $ getAttribute "x" content :: Float) + fst (transform style))
-                     ((read $ getAttribute "y" content :: Float) + snd (transform style))
+                     (read $ getAttribute "width" content)
+                     (read $ getAttribute "height" content)
+                     ((read $ getAttribute "x" content :: Double) + fst (transform style))
+                     ((read $ getAttribute "y" content :: Double) + snd (transform style))
                      style
 
 -- | Parses a path.
@@ -104,55 +104,55 @@ parsePath isRegion style content =
 parseText :: MonadIO m0 => Style -> Content i -> ReaderT SqlBackend m0 ()
 parseText style content = 
     insertTextIntoDB (getAttribute "id" content)
-                     ((read $ getAttribute "x" content :: Float) + fst (transform style))
-                     ((read $ getAttribute "y" content :: Float) + snd (transform style))
+                     ((read $ getAttribute "x" content :: Double) + fst (transform style))
+                     ((read $ getAttribute "y" content :: Double) + snd (transform style))
                      (tagTextContent content)
                      style
 
 -- | Parses a text.
 parseEllipse :: MonadIO m0 => Style -> Content i -> ReaderT SqlBackend m0 ()
 parseEllipse style content = 
-    insertEllipseIntoDB ((read $ getAttribute "cx" content :: Float) + fst (transform style))
-                        ((read $ getAttribute "cy" content :: Float) + snd (transform style))
-                        (read $ getAttribute "rx" content :: Float)
-                        (read $ getAttribute "ry" content :: Float)
+    insertEllipseIntoDB ((read $ getAttribute "cx" content :: Double) + fst (transform style))
+                        ((read $ getAttribute "cy" content :: Double) + snd (transform style))
+                        (read $ getAttribute "rx" content :: Double)
+                        (read $ getAttribute "ry" content :: Double)
                         (fill style)
 
 -- | Inserts an ellipse entry into the rects table.
-insertEllipseIntoDB :: MonadIO m0 => Float -> Float -> Float -> Float -> String -> ReaderT SqlBackend m0 ()
+insertEllipseIntoDB :: MonadIO m0 => Double -> Double -> Double -> Double -> String -> ReaderT SqlBackend m0 ()
 insertEllipseIntoDB xPos yPos rx ry stroke =
-        insert_ $ Ellipses (toRational xPos)
-                           (toRational yPos)
-                           (toRational rx)
-                           (toRational ry)
+        insert_ $ Ellipses xPos
+                           yPos
+                           rx
+                           ry
                            stroke
 
 -- | Inserts a rect entry into the rects table.
-insertRectIntoDB :: MonadIO m0 => String -> Float -> Float -> Float -> Float -> Style -> ReaderT SqlBackend m0 ()
+insertRectIntoDB :: MonadIO m0 => String -> Double -> Double -> Double -> Double -> Style -> ReaderT SqlBackend m0 ()
 insertRectIntoDB id_ width height xPos yPos style =
         insert_ $ Rects 1
                         id_
-                        (toRational width)
-                        (toRational height)
-                        (toRational xPos)
-                        (toRational yPos)
+                        width
+                        height
+                        xPos
+                        yPos
                         (fill style)
                         (stroke style)
                         (fill style == "#a14c3a")
 
 -- | Inserts a text entry into the texts table.
-insertTextIntoDB :: MonadIO m0 => String -> Float -> Float -> String -> Style -> ReaderT SqlBackend m0 ()
+insertTextIntoDB :: MonadIO m0 => String -> Double -> Double -> String -> Style -> ReaderT SqlBackend m0 ()
 insertTextIntoDB id_ xPos yPos text style =
         insert_ $ Texts 1
                         id_
-                        (toRational xPos)
-                        (toRational yPos)
+                        xPos
+                        yPos
                         text
 
 -- | Inserts a tex entry into the texts table.
-insertPathIntoDB :: MonadIO m0 => [(Float, Float)] -> Style -> Bool -> ReaderT SqlBackend m0 ()
+insertPathIntoDB :: MonadIO m0 => [(Double, Double)] -> Style -> Bool -> ReaderT SqlBackend m0 ()
 insertPathIntoDB d style isRegion =
-        insert_ $ Paths (map (Point . convertFloatTupToRationalTup) d)
+        insert_ $ Paths (map (Point) d)
                         (fill style)
                         (stroke style)
                         isRegion
