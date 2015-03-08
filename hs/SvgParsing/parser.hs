@@ -36,7 +36,7 @@ main = do graphFile <- readFile "../res/graphs/graph_regions.svg"
               parseLevel False (Style (0,0) "" "") (getRoot graphDoc)
               liftIO $ print "Parsing complete"
           buildSVG M.empty "../res/graphs/CSC/csc_graph.svg"
-          liftIO $ print "SVG Built"
+          print "SVG Built"
 
 -- | Parses a level.
 parseLevel :: MonadIO m0 =>  Bool -> Style -> Content i -> ReaderT SqlBackend m0 ()
