@@ -200,23 +200,11 @@ function addExtraMinCourses() {
 function checkPostCompleted() {
     'use strict';
 
-    if (specialist.categoriesCompleted === specialist.categories) {
-        $('#spec_creds').css('color', 'green');
-    } else {
-        $('#spec_creds').css('color', 'red');
-    }
+    $('#spec_creds').css('color', specialist.categoriesCompleted === specialist.categories ? 'green' : 'red');
     
-    if (major.categoriesCompleted === major.categories) {
-        $('#maj_creds').css('color', 'green');
-    } else {
-        $('#maj_creds').css('color', 'red');
-    } 
+    $('#maj_creds').css('color', major.categoriesCompleted === major.categories ? 'green' : 'red');
 
-    if (minor.categoriesCompleted === minor.categories) {
-        $('#min_creds').css('color', 'green');
-    } else {
-        $('#min_creds').css('color', 'red');
-    }
+    $('#min_creds').css('color', minor.categoriesCompleted === minor.categories ? 'green' : 'red');
 }
 
 

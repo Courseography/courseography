@@ -148,12 +148,12 @@ function fillExtra() {
     for (var k = 0; k < 4; k++) {
 
         // clear text boxes
-        if (specExtra[k].value.indexOf('MAT') === -1 && spec_extra[k].value.indexOf('STA') === -1) {
+        if (specExtra[k].value.indexOf('MAT') === -1 && specExtra[k].value.indexOf('STA') === -1) {
             specExtra[k].value = '';
             specExtra[k].disabled = false;
         } 
         if (k < 3) {
-            if (majExtra[k].value.indexOf('MAT') === -1 && maj_extra[k].value.indexOf('STA') === -1) {
+            if (majExtra[k].value.indexOf('MAT') === -1 && majExtra[k].value.indexOf('STA') === -1) {
                 majExtra[k].value = '';
                 majExtra[k].disabled = false;
             }
