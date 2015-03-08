@@ -127,14 +127,14 @@ makeSVGDefs =
 
 -- | Builds an SVG document.
 buildSVG :: M.Map String String -> String -> IO ()
-buildSVG courseMap filename = do
+buildSVG courseMap filename =
     runSqlite dbStr $ do
         sqlRects    :: [Entity Rects]    <- selectList [] []
         sqlText    :: [Entity Text]    <- selectList [] []
         sqlPaths    :: [Entity Paths]    <- selectList [] []
         sqlEllipses :: [Entity Ellipses] <- selectList [] []
         let courseStyleMap = M.map convertSelectionToStyle courseMap
-            texts       = map (entityVal) sqlText
+            texts       = map entityVal sqlText
             rects       = map (buildRect texts . entityVal) sqlRects
             ellipses    = buildEllipses texts 0 $ map entityVal sqlEllipses
             paths       = zipWith (buildPath rects ellipses) (map entityVal sqlPaths) [1..length sqlPaths]
@@ -161,9 +161,7 @@ convertRectToSVG courseMap rect
             ! S.customAttribute "shape-rendering" "geometricPrecision"
             ! A.style (stringValue (
                        if not (shapeIsHybrid rect)
-                       then case M.lookup (shapeId rect) courseMap of
-                                 Just style -> style
-                                 Nothing    -> ""
+                       then fromMaybe "" M.lookup (shapeId rect) courseMap
                        else "")) $
             do S.rect ! A.rx "4"
                       ! A.ry "4"
@@ -191,7 +189,7 @@ convertTextToSVG isHybrid isBool isRegion text =
     S.text_ ! A.x (stringValue $ show $ textXPos text)
             ! A.y (stringValue $ show $ textYPos text)
             ! A.style (stringValue $
-                       (getTextStyle isHybrid isBool isRegion) ++
+                       getTextStyle isHybrid isBool isRegion ++
                        "font-family:sans-serif;stroke:none;")
             $ toMarkup $ textText text
 
