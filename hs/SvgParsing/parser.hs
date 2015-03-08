@@ -35,14 +35,10 @@ main = do graphFile <- readFile "../res/graphs/graph_regions.svg"
               runMigration migrateAll
               parseLevel False (Style (0,0) "" "") (getRoot graphDoc)
               liftIO $ print "Parsing complete"
-          generateFolder
+          createDirectoryIfMissing True "../res/graphs/CSC"
           buildSVG
           liftIO $ print "SVG Built"
-
-generateFolder :: IO ()
-generateFolder = do
-    createDirectoryIfMissing True "../res/graphs/CSC"
-
+    
 -- | Parses a level.
 parseLevel :: MonadIO m0 =>  Bool -> Style -> Content i -> ReaderT SqlBackend m0 ()
 parseLevel currentlyInRegion style content =
