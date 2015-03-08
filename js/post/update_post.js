@@ -183,7 +183,8 @@ function addExtraMinCourses() {
     for (var m = 0; m < 3; m++) {
         if (minor.filledTextboxesExtra === minor.textboxesExtra) {
             break;      
-        } else if (getCookie(minor.additionalMin200[m]) === 'active' || getCookie(minor.additionalMin200[m]) === 'overriden') {
+        } else if (getCookie(minor.additionalMin200[m]) === 'active' || 
+            getCookie(minor.additionalMin200[m]) === 'overriden') {
             minExtra[minor.filledTextboxesExtra].value = minor.additionalMin200[m];
             minExtra[minor.filledTextboxesExtra].disabled = true;
             minor.creditCount += 0.5;
