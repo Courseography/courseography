@@ -15,6 +15,7 @@ import Database.Persist.Sqlite
 import Control.Monad
 import Control.Monad.Trans.Reader
 import Text.XML.HaXml.Namespaces
+import System.Directory
 import Data.Conduit
 import Data.List.Split
 import Data.Maybe
@@ -42,7 +43,8 @@ main = do graphFile <- readFile "../res/graphs/graph_regions.svg"
               insertTexts elements
           printDB
           buildSVG M.empty "../res/graphs/CSC/csc_graph.svg"
-          print "SVG Built"
+          createDirectoryIfMissing True "../res/graphs/CSC"
+          liftIO $ print "SVG Built"
 
 -- | Parses a level.
 parseNode :: Bool
