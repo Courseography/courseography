@@ -11,22 +11,6 @@ import MakeElements
 import MasterTemplate
 import Scripts
 
-spec300Str :: String
-spec300Str = "Any 300+ level CSC course, BCB/ECE/MAT/STA course (2.0 FCEs) - " ++
-        "MAT: 224, 235, 237, 237, 257, 300+ except for 320, 390, & 391" ++
-        "; STA: 249, 261, any 300+" 
-
-maj300Str :: String
-maj300Str = "Any 300+ level CSC course, BCB/ECE/MAT/STA course (1.5 FCEs) - " ++
-        "MAT: 224, 235, 237, 237, 257, 300+ except for 320, 390, & 391" ++
-        "; STA: 249, 261, any 300+" 
-
-inqStr :: String 
-inqStr = "Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H, " ++
-         "CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H, or PEY (0.5 FCEs) " ++ 
-         " \n ** Note: Type 'PEY' for Check my POSt to recognize it **"
-
-
 postResponse :: ServerPart Response
 postResponse =
     ok $ toResponse $
@@ -135,14 +119,18 @@ checkPost =
                     H.input ! A.type_ "text"
                     H.input ! A.type_ "text" 
             H.div ! A.id "spec_extra" $ do
-                H.p ! A.class_ "code" $ H.toHtml spec300Str
+                H.p ! A.class_ "code" $ "Any 300+ level CSC course, BCB/ECE/MAT/STA course (2.0 FCEs) - \
+                                         \MAT: 224, 235, 237, 237, 257, 300+ except for 320, 390, & 391 \
+                                         \; STA: 249, 261, any 300+" 
                 H.div ! A.id "specextra" ! A.class_ "more-info" $ do
                     H.input ! A.type_ "text"
                     H.input ! A.type_ "text"
                     H.input ! A.type_ "text"
                     H.input ! A.type_ "text"
             H.div ! A.id "spec_misc" $ do 
-                H.p ! A.class_ "code" $ H.em $ H.toHtml inqStr
+                H.p ! A.class_ "code" $ H.em $ "Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H, \
+                                                \CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H, or PEY (0.5 FCEs) \  
+                                                \ ** Note: Type 'PEY' for Check my POSt to recognize it **" 
                 H.div ! A.class_ "more-info" $ 
                     H.input ! A.type_ "text"
             H.h3 "Notes"
@@ -206,13 +194,17 @@ checkPost =
                     H.input ! A.type_ "text"  
                     H.input ! A.type_ "text" 
             H.div ! A.id "maj_extra" $ do
-                H.p ! A.class_ "code" $ H.toHtml maj300Str
+                H.p ! A.class_ "code" $ "Any 300+ level CSC course, BCB/ECE/MAT/STA course (1.5 FCEs) - \ 
+                                         \MAT: 224, 235, 237, 237, 257, 300+ except for 320, 390, & 391 \ 
+                                         \; STA: 249, 261, any 300+" 
                 H.div ! A.id "majextra" ! A.class_ "more-info" $ do
                     H.input ! A.type_ "text"
                     H.input ! A.type_ "text"
                     H.input ! A.type_ "text"
             H.div ! A.id "maj_misc" $ do
-                H.p ! A.class_ "code" $ H.em $ H.toHtml inqStr
+                H.p ! A.class_ "code" $ H.em $ "Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H, \
+                                                \CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H, or PEY (0.5 FCEs) \  
+                                                \ ** Note: Type 'PEY' for Check my POSt to recognize it **" 
                 H.div ! A.class_ "more-info" $ 
                     H.input ! A.type_ "text" 
             H.h3 "Notes"
