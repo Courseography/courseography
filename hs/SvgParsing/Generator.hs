@@ -130,11 +130,11 @@ buildSVG :: M.Map String String -> String -> IO ()
 buildSVG courseMap filename = do
     runSqlite dbStr $ do
         sqlRects    :: [Entity Rects]    <- selectList [] []
-        sqlTexts    :: [Entity Texts]    <- selectList [] []
+        sqlText    :: [Entity Text]    <- selectList [] []
         sqlPaths    :: [Entity Paths]    <- selectList [] []
         sqlEllipses :: [Entity Ellipses] <- selectList [] []
         let courseStyleMap = M.map convertSelectionToStyle courseMap
-            texts       = map (buildText . entityVal) sqlTexts
+            texts       = map (entityVal) sqlText
             rects       = map (buildRect texts . entityVal) sqlRects
             ellipses    = buildEllipses texts 0 $ map entityVal sqlEllipses
             paths       = zipWith (buildPath rects ellipses) (map entityVal sqlPaths) [1..length sqlPaths]

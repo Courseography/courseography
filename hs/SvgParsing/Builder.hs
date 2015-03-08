@@ -87,11 +87,11 @@ printDB = runSqlite dbStr $ do
               rawQuery sql [] $$ CL.mapM_ (liftIO . print)
 
 -- | Builds a Text from a database entry in the texts table.
-buildText :: Texts -> Text
-buildText entity = 
-    Text (textsXPos entity)
-         (textsYPos entity)
-         (textsText entity)
+--buildText :: Texts -> Text
+--buildText entity =
+--    Text (textsXPos entity)
+--         (textsYPos entity)
+--         (textsText entity)
 
 -- | Builds a Path from a database entry in the paths table.
 buildEllipses :: [Text] -> Int -> [Ellipses] -> [Shape]

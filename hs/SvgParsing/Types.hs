@@ -9,14 +9,6 @@ data Graph =
             title :: String
           } deriving Show
 
--- | A Text.
-data Text =
-    Text {
-           textXPos :: Double,
-           textYPos :: Double,
-           textText :: String
-         } deriving Show
-
 -- | A Path.
 data Path =
     Path { 
