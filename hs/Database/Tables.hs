@@ -107,11 +107,14 @@ Shape
     isHybrid Bool
     tolerance Double
 
-Paths
-    d [Point]
+Path
+    id_ String
+    points [Point]
     fill String
     stroke String
     isRegion Bool
+    source String
+    target String
     deriving Show
 
 Ellipses

@@ -47,10 +47,13 @@ insertText id_ xPos yPos text style =
 -- | Inserts a tex entry into the texts table.
 insertPath :: MonadIO m0 => [Point] -> Style -> Bool -> ReaderT SqlBackend m0 ()
 insertPath d style isRegion =
-        insert_ $ Paths d
-                        (fill style)
-                        (stroke style)
-                        isRegion
+        insert_ $ Path "p"
+                       d
+                       (fill style)
+                       (stroke style)
+                       isRegion
+                       ""
+                       ""
 
 -- | Prints the database table 'rects'.
 printDB :: IO ()
