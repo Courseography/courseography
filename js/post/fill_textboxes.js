@@ -12,7 +12,8 @@ function fill300Textboxes(post, postElement, category) {
             break;
         }
         var course = activeCourses[m];
-        if (course.indexOf('CSC3') != -1 && course.indexOf('CSC373') === -1 && course.indexOf('CSC369') === - 1) {
+        if (course.indexOf('CSC3') !== -1 && course.indexOf('CSC373') === -1 && 
+            course.indexOf('CSC369') === - 1) {
             postElement[post.filledTextboxes300].value = activeCourses[m];
             post.index300 = m;
             post['filledTextboxes' + category] += 1;
@@ -36,7 +37,7 @@ function fill400Textboxes(post, postElement, category) {
             break;
         }
         var course = activeCourses[m];
-        if (course.indexOf('CSC4') != -1) {
+        if (course.indexOf('CSC4') !== -1) {
             postElement[post.filledTextboxes400].value = activeCourses[m];
             //postElement[i].disabled = true;
             post.index400 = m;
@@ -113,6 +114,8 @@ function fill400s() {
  * @param {string} level Level of course that we are filling textbox with 
 **/ 
 function fillExtraTextboxes(post, postElement, level) {
+    'use strict';
+
     for (var i = post['index' + level] + 1; i < activeCourses.length; i++) {
         if (post['index' + level] === activeCourses.length || post.filledTextboxesExtra === post.textboxesExtra) {
             break;
@@ -125,7 +128,7 @@ function fillExtraTextboxes(post, postElement, level) {
             post['index' + level] = i;
             post.filledTextboxesExtra += 1;
             post.creditCount += 0.5;
-        } else if (postElement[post.filledTextboxesExtra].value != '') {
+        } else if (postElement[post.filledTextboxesExtra].value !== '') {
             post.filledTextboxesExtra += 1;
         }
     }
@@ -138,41 +141,40 @@ function fillExtraTextboxes(post, postElement, level) {
 function fillExtra() {
     'use strict';
 
-    var i = 0;
-    var spec_extra = $('#specextra')[0].getElementsByTagName('input');
-    var maj_extra = $('#majextra')[0].getElementsByTagName('input');
-    var min_extra = $('#minextra')[0].getElementsByTagName('input');
+    var specExtra = $('#specextra')[0].getElementsByTagName('input');
+    var majExtra = $('#majextra')[0].getElementsByTagName('input');
+    var minExtra = $('#minextra')[0].getElementsByTagName('input');
 
     for (var k = 0; k < 4; k++) {
 
         // clear text boxes
-        if (spec_extra[k].value.indexOf('MAT') === -1 && spec_extra[k].value.indexOf('STA') === -1) {
-            spec_extra[k].value = '';
-            spec_extra[k].disabled = false;
+        if (specExtra[k].value.indexOf('MAT') === -1 && spec_extra[k].value.indexOf('STA') === -1) {
+            specExtra[k].value = '';
+            specExtra[k].disabled = false;
         } 
         if (k < 3) {
-            if (maj_extra[k].value.indexOf('MAT') === -1 && maj_extra[k].value.indexOf('STA') === -1) {
-                maj_extra[k].value = '';
-                maj_extra[k].disabled = false;
+            if (majExtra[k].value.indexOf('MAT') === -1 && maj_extra[k].value.indexOf('STA') === -1) {
+                majExtra[k].value = '';
+                majExtra[k].disabled = false;
             }
-            min_extra[k].value = '';
-            min_extra[k].disabled = true;
+            minExtra[k].value = '';
+            minExtra[k].disabled = true;
         } 
     }
 
     // fill courses that have been selected
-    fillExtraTextboxes(specialist, spec_extra, '300');
-    fillExtraTextboxes(major, maj_extra, '300');
-    fillExtraTextboxes(minor, min_extra, '300')
+    fillExtraTextboxes(specialist, specExtra, '300');
+    fillExtraTextboxes(major, majExtra, '300');
+    fillExtraTextboxes(minor, minExtra, '300');
 
     if (specialist.filledTextboxesExtra < specialist.textboxesExtra) {
-        fillExtraTextboxes(specialist, spec_extra, '400');
+        fillExtraTextboxes(specialist, specExtra, '400');
     } 
     if (major.filledTextboxesExtra < major.textboxesExtra) {
-        fillExtraTextboxes(major, maj_extra, '400');
+        fillExtraTextboxes(major, majExtra, '400');
     }
     if (minor.filledTextboxesExtra < minor.textboxesExtra) {
-        fillExtraTextboxes(minor, min_extra, '400');
+        fillExtraTextboxes(minor, minExtra, '400');
     }
 
     // add extra 200 courses for minor if extra space
@@ -189,33 +191,33 @@ function fillExtra() {
 function fillMisc() {
     'use strict';
 
-    var spec_inq = $('#spec_misc')[0].getElementsByTagName('input');
-    var maj_inq = $('#maj_misc')[0].getElementsByTagName('input');
+    var specInq = $('#spec_misc')[0].getElementsByTagName('input');
+    var majInq = $('#maj_misc')[0].getElementsByTagName('input');
 
     // clear textboxes
-    if (spec_inq[0].value.indexOf('PEY') === -1) {
-        spec_inq[0].value = '';
-        spec_inq[0].disabled = false;
+    if (specInq[0].value.indexOf('PEY') === -1) {
+        specInq[0].value = '';
+        specInq[0].disabled = false;
     } else {
         specialist.activeInq = 1;
     }
 
-    if (maj_inq[0].value.indexOf('PEY') === -1) {
-        maj_inq[0].value = '';
-        maj_inq[0].disabled = false;
+    if (majInq[0].value.indexOf('PEY') === -1) {
+        majInq[0].value = '';
+        majInq[0].disabled = false;
     } else {
         major.activeInq = 1;
     }
 
     // fill active inquiry course
     for (var i = 0; i < activeCourses.length; i++) {
-        if (CSCinq.indexOf(activeCourses[i]) != -1) {
-            spec_inq[0].value = activeCourses[i];
+        if (CSCinq.indexOf(activeCourses[i]) !== -1) {
+            specInq[0].value = activeCourses[i];
             specialist.activeInq = 1;
-            spec_inq[0].disabled = true;
-            maj_inq[0].value = activeCourses[i];
+            specInq[0].disabled = true;
+            majInq[0].value = activeCourses[i];
             major.activeInq = 1;
-            maj_inq[0].disabled = true;
+            majInq[0].disabled = true;
             break;
         }
     }

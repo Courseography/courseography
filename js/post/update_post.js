@@ -1,14 +1,16 @@
 var activeCourses = [];
-var specialist = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0, 'filledTextboxes400': 0, 
-                  'filledTextboxesExtra': 0, 'specCount': 0, 'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC209', 'CSC236',
-                  'CSC258', 'CSC263', 'Sta1', 'Lin1', 'Calc1', 'CSC369', 'CSC373'], 'textboxes300': 3, 'textboxes400': 3, 'textboxesExtra': 4,
-                  'categories': 17, 'creditCount': 0};
-var major = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0, 'filledTextboxes400': 0, 
-             'filledTextboxesExtra': 0, 'majCount': 0, 'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC236',
-             'CSC258', 'CSC263', 'Sta1', 'Calc1'], 'textboxes300': 2, 'textboxes400': 1, 'textboxesExtra': 3, 'categories': 13,
-             'creditCount': 0};
-var minor = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxesExtra': 0, 'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC236'], 
-             'textboxesExtra': 3, 'categories': 6, 'creditCount': 0, 'additionalMin200': ['CSC209', 'CSC258', 'CSC263']};
+var specialist = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0, 
+                  'filledTextboxes400': 0, 'filledTextboxesExtra': 0, 'specCount': 0, 
+                  'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC209', 'CSC236', 'CSC258', 'CSC263', 
+                  'Sta1', 'Lin1', 'Calc1', 'CSC369', 'CSC373'], 'textboxes300': 3, 'textboxes400': 3, 
+                  'textboxesExtra': 4, 'categories': 17, 'creditCount': 0};
+var major = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0, 
+             'filledTextboxes400': 0, 'filledTextboxesExtra': 0, 'majCount': 0, 'reqs': ['CSC108', 
+             'CSC148', 'CSC165', 'CSC207', 'CSC236', 'CSC258', 'CSC263', 'Sta1', 'Calc1'], 'textboxes300': 2, 
+             'textboxes400': 1, 'textboxesExtra': 3, 'categories': 13, 'creditCount': 0};
+var minor = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxesExtra': 0, 
+             'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC236'], 'textboxesExtra': 3, 'categories': 6, 
+             'creditCount': 0, 'additionalMin200': ['CSC209', 'CSC258', 'CSC263']};
 
 
 /**
@@ -118,7 +120,6 @@ function updateCategory(category, status) {
 /**
  * Updates Credit Count for each POSt.
  **/
- 
 function fillCreditCount() {
     'use strict';
 
@@ -150,7 +151,7 @@ function fillMajCreditCount() {
     'use strict';
 
     if (major.creditCount >= 8) {
-        $('#maj_creds').html('(8.0/8.0)')
+        $('#maj_creds').html('(8.0/8.0)');
     } else {
         $('#maj_creds').html('(' + major.creditCount.toFixed(1) + '/8.0)');
     }
@@ -164,7 +165,7 @@ function fillMinCreditCount() {
     'use strict';
 
     if (minor.creditCount >= 4) {
-        $('#min_creds').html('(4.0/4.0)')
+        $('#min_creds').html('(4.0/4.0)');
     } else {
         $('#min_creds').html('(' + minor.creditCount.toFixed(1) + '/4.0)');
     }
@@ -174,7 +175,6 @@ function fillMinCreditCount() {
 /**
  * Autofills extra 200-level courses for last minor constraint.
 **/
-
 function addExtraMinCourses() {
     'use strict';
 
@@ -272,7 +272,7 @@ function updateActiveCourses() {
         if (areas.hasOwnProperty(areaName)) {
             for (var i = 0; i < areas[areaName].length; i++) {
                 if ((getCookie(areas[areaName][i]) === 'active' || getCookie(areas[areaName][i]) === 'overridden') && 
-                    areas[areaName][i] != 'CSC104') {
+                    areas[areaName][i] !== 'CSC104') {
                     activeCourses.push(areas[areaName][i]);
                 }
             }
@@ -287,21 +287,23 @@ function updateActiveCourses() {
     }
 }
 
-
+/**
+ * Updates Credit count for MAT and STA courses.
+**/
 function updateMatCreditCount() {
-    var spec_extra = $('#specextra')[0].getElementsByTagName('input');
-    var maj_extra = $('#majextra')[0].getElementsByTagName('input');
+    'use strict';
+
+    var specExtra = $('#specextra')[0].getElementsByTagName('input');
+    var majExtra = $('#majextra')[0].getElementsByTagName('input');
 
     for (var k = 0; k < 4; k++) {
-        if (spec_extra[k].value.indexOf('MAT') > -1 || spec_extra[k].value.indexOf('STA') > -1) {
+        if (specExtra[k].value.indexOf('MAT') > -1 || specExtra[k].value.indexOf('STA') > -1) {
             specialist.creditCount += 0.5;
             specialist.filledTextboxesExtra += 1;
         } 
-        if (k < 3) {
-            if (maj_extra[k].value.indexOf('MAT') > -1 || maj_extra[k].value.indexOf('STA') > -1) {
+        if (k < 3 && (majExtra[k].value.indexOf('MAT') > -1 || majExtra[k].value.indexOf('STA') > -1)) {
                 major.creditCount += 0.5;
                 major.filledTextboxesExtra += 1;
-            }
         }
     }
 }

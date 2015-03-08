@@ -1,6 +1,6 @@
 /**
  * Updates categories for required courses in each POSt
- * @param {string} post The POSt that you are updating categories for.
+ * @param {object} post The POSt that you are updating categories for.
  * @param {string} name Name of course
 **/
 function updateReqsCategory(post, name) {
@@ -8,7 +8,7 @@ function updateReqsCategory(post, name) {
 
     for (var i = 0; i < post.reqs.length; i++) {
         var category = $('#' + name + '_' + post.reqs[i].toLowerCase())[0].getElementsByClassName('code')[0];
-        if (activeCourses.indexOf(post.reqs[i]) != -1) {
+        if (activeCourses.indexOf(post.reqs[i]) !== -1) {
             activateCourse(post.reqs[i]);
             updateCategory(category, 'fulfilled');
             post.categoriesCompleted += 1;
@@ -29,9 +29,9 @@ function updateReqsCategory(post, name) {
  * Updates 300 level category
 **/
 function update300Categories() {
-	'use strict';
+    'use strict';
 
-	 if (specialist.filledTextboxes300 === specialist.textboxes300) {
+	if (specialist.filledTextboxes300 === specialist.textboxes300) {
         updateCategory($('#spec_300')[0].getElementsByClassName('code')[0], 'fulfilled');
         updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'fulfilled');
         specialist.categoriesCompleted += 1;
@@ -43,9 +43,9 @@ function update300Categories() {
     if (major.filledTextboxes300 === major.textboxes300) {
         updateCategory($('#maj_300')[0].getElementsByClassName('code')[0], 'fulfilled');
         major.categoriesCompleted += 1;
-     } else {
+    } else {
         updateCategory($('#maj_300')[0].getElementsByClassName('code')[0], 'not fulfilled');
-     }
+    }
 }
 
 
@@ -53,7 +53,7 @@ function update300Categories() {
  * Updates 400 level category
 **/
 function update400Categories() {
-	'use strict';
+    'use strict';
 
 	if (specialist.filledTextboxes400 === specialist.textboxes400) {
         updateCategory($('#spec_400')[0].getElementsByClassName('code')[0], 'fulfilled');
@@ -90,7 +90,7 @@ function updateExtraCategories() {
         updateCategory($('#maj_extra')[0].getElementsByClassName('code')[0], 'fulfilled');
         major.categoriesCompleted += 1;
     } else {
-    	 updateCategory($('#maj_extra')[0].getElementsByClassName('code')[0], 'not fulfilled');
+    	updateCategory($('#maj_extra')[0].getElementsByClassName('code')[0], 'not fulfilled');
     }
 
     if (minor.filledTextboxesExtra === minor.textboxesExtra) {
