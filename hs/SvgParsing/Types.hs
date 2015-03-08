@@ -1,4 +1,4 @@
-module SvgParsing.SVGTypes where
+module SvgParsing.Types where
 
 import Database.Tables
 

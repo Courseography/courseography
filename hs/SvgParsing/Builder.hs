@@ -1,8 +1,8 @@
 {-# LANGUAGE OverloadedStrings, FlexibleContexts, GADTs, ScopedTypeVariables #-}
-module SvgParsing.SVGBuilder where
+module SvgParsing.Builder where
 
-import SvgParsing.SVGTypes
-import Database.Tables
+import SvgParsing.Types
+import SvgParsing.ParserUtil
 import Control.Monad.IO.Class  (liftIO)
 import qualified Data.Conduit.List as CL
 import Database.Persist
@@ -12,7 +12,7 @@ import Data.Conduit
 import Data.List.Split
 import Data.List
 import Database.JsonParser
-import SvgParsing.ParserUtil
+import Database.Tables
 
 -- | Determines the source and target nodes of the path.
 buildPath :: [Shape] -> [Shape] -> Paths -> Int -> Path

@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings, GADTs, ScopedTypeVariables #-}
-module SvgParsing.SVGGenerator where
+module SvgParsing.Generator where
 
 import SvgParsing.Types
 import SvgParsing.Builder
@@ -127,7 +127,7 @@ makeSVGDefs =
 
 -- | Builds an SVG document.
 buildSVG :: M.Map String String -> String -> IO ()
-buildSVG courseMap filename =
+buildSVG courseMap filename = do
     runSqlite dbStr $ do
         sqlRects    :: [Entity Rects]    <- selectList [] []
         sqlTexts    :: [Entity Texts]    <- selectList [] []
@@ -147,7 +147,7 @@ buildSVG courseMap filename =
 -- | Determines if a text intersects with a shape.
 intersectsWithShape :: [Shape] -> Text -> Bool
 intersectsWithShape shapes text =
-    not $ null (filter (intersectsWithPoint (textXPos text) (textYPos text)) shapes)
+    any (intersectsWithPoint (textXPos text) (textYPos text)) shapes
 
 -- | Converts a `Rect` to SVG.
 convertRectToSVG :: M.Map String String -> Shape -> S.Svg
