@@ -49,7 +49,7 @@ buildRect texts entity =
                             9
                             (textXPos x, textYPos x)
                             ) texts
-        textString = concat $ map textText rectTexts
+        textString = concatMap textText rectTexts
         id_ = map toLower $ (if rectsIsHybrid entity then "h" else "") ++
                             (if isDigit $ head textString then "CSC" else "") ++ dropSlash textString
     in Shape id_
@@ -99,8 +99,8 @@ buildEllipses _ _ [] = []
 buildEllipses texts idCounter entities =
     let entity = head entities
         ellipseText = filter (\x -> intersects
-                                    ((ellipsesRx entity) * 2)
-                                    ((ellipsesRy entity) * 2)
+                                    (ellipsesRx entity * 2)
+                                    (ellipsesRy entity * 2)
                                     (ellipsesXPos entity, ellipsesYPos entity)
                                     9
                                     (textXPos x, textYPos x)
@@ -108,8 +108,8 @@ buildEllipses texts idCounter entities =
     in Shape ("bool" ++ show idCounter)
              (ellipsesXPos entity)
              (ellipsesYPos entity)
-             ((ellipsesRx entity) * 2)
-             ((ellipsesRy entity) * 2)
+             (ellipsesRx entity * 2)
+             (ellipsesRy entity * 2)
              ""
              (ellipsesStroke entity)
              ellipseText
@@ -126,4 +126,4 @@ joinPathTuple (a, b) = a ++ "," ++ b
 
 -- | Converts a tuple of Rationals to a tuple of String.
 convertRationalTupToString :: Point -> (String, String)
-convertRationalTupToString (a, b) = (show $ a, show $ b)
+convertRationalTupToString (a, b) = (show a, show b)
