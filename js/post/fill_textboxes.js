@@ -159,6 +159,7 @@ function fillExtra() {
 
     // fill courses that have been selected
     fillExtraTextboxes('specialist', spec_extra, '300');
+    
     fillExtraTextboxes('major', maj_extra, '300');
     fillExtraTextboxes('minor', min_extra, '300')
 
@@ -188,33 +189,25 @@ function fillMisc() {
     // clear textboxes
     if (spec_inq[0].value.indexOf('PEY') === -1) {
         spec_inq[0].value = '';
-        spec_inq[0].readOnly = false;
+        spec_inq[0].disabled = true;
     } if (maj_inq[0].value.indexOf('PEY') === -1) {
         maj_inq[0].value = '';
-        maj_inq[0].readOnly = false;
+        maj_inq[0].disabled = true;
     }
 
-    // fill textboxes
-    if (activeInq.length > 0) {
-        spec_inq[0].value = activeInq[0];
-        spec_inq[0].readOnly = true;
-    } if (activeInq.length > 0){
-        maj_inq[0].value = activeInq[0];
-        maj_inq[0].readOnly = true;
+    // fill active inquiry course
+    for (var i = 0; i < activeCourses.length; i++) {
+        if (CSCinq.indexOf(activeCourses[i]) != -1) {
+            spec_inq[0].value = activeCourses[i];
+            specialist.activeInq = 1;
+            maj_inq[0].value = activeCourses[i];
+            major.activeInq = 1;
+            break;
+        }
     }
     
     // update category
-    if (spec_inq[0].value != '') {
-        updateCategory($('#spec_misc')[0].getElementsByClassName('code')[0], 'fulfilled');
-        categoriesCompleted.spec += 1;
-    } if (maj_inq[0].value != '') {    
-        updateCategory($('#maj_misc')[0].getElementsByClassName('code')[0], 'fulfilled'); 
-        categoriesCompleted.spec += 1;
-    } if (spec_inq[0].value === '') {
-        updateCategory($('#spec_misc')[0].getElementsByClassName('code')[0], 'not fulfilled');
-    } if (maj_inq[0].value === '') {
-        updateCategory($('#maj_misc')[0].getElementsByClassName('code')[0], 'not fulfilled');
-    }
+    updateMiscCategory();
 
 }
 

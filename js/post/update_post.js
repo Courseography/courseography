@@ -5,7 +5,7 @@ var specialist = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'fille
                   'categories': 17, 'creditCount': 0};
 var major = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0, 'filledTextboxes400': 0, 
              'filledTextboxesExtra': 0, 'majCount': 0, 'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC236',
-             'CSC258', 'CSC263', 'Sta1', 'Calc1'], 'textboxes300': 2, 'textboxes400': 1, 'textboxesExtra': 4, 'categories': 13,
+             'CSC258', 'CSC263', 'Sta1', 'Calc1'], 'textboxes300': 2, 'textboxes400': 1, 'textboxesExtra': 3, 'categories': 13,
              'creditCount': 0};
 var minor = {'index300': 0, 'index400': 0, 'index200': 0, 'categoriesCompleted': 0, 'filledTextboxesExtra': 0, 'filledTextboxes200': 0, 
              'minCount': 0, 'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC236'], 'textboxesExtra': 3, 'categories': 6,
@@ -35,7 +35,7 @@ function updateAllCategories() {
 
     fill400s();
     fill300s();
-    //fillMisc();
+    fillMisc();
     fillExtra();
 
     updateReqsCategory(specialist, 'spec');
@@ -63,7 +63,7 @@ function resetValues() {
                   'categories': 17, 'creditCount': 0};
     major = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0, 'filledTextboxes400': 0, 
              'filledTextboxesExtra': 0, 'majCount': 0, 'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC236',
-             'CSC258', 'CSC263', 'Sta1', 'Calc1'], 'textboxes300': 2, 'textboxes400': 1, 'textboxesExtra': 4, 'categories': 13,
+             'CSC258', 'CSC263', 'Sta1', 'Calc1'], 'textboxes300': 2, 'textboxes400': 1, 'textboxesExtra': 3, 'categories': 13,
              'creditCount': 0};
     minor = {'index300': 0, 'index400': 0, 'index200': 0, 'categoriesCompleted': 0, 'filledTextboxesExtra': 0, 'filledTextboxes200': 0, 
              'minCount': 0, 'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC236'], 'textboxesExtra': 3, 'categories': 6,
