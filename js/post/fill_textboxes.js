@@ -1,14 +1,13 @@
 /**
- * Fills textboxes in 300 level category,
+ * Fills textboxes with 300 level courses
  * @param {object} post Object corresponding to the POSt being dealt with
  * @param {HTMLElement[]} postElement Array of textboxes to fill
- * @param {string} category Level of course that we are filling textbox with 
 **/
-function fill300Textboxes(post, postElement, category) {
+function fill300Textboxes(post, postElement) {
     'use strict';
 
     for (var m = post.index300 + 1; m < activeCourses.length; m++) {
-        if (post.index300 === activeCourses.length || post.filledTextboxes300 === post.textboxes300) {
+        if (post.filledTextboxes300 === post.textboxes300) {
             break;
         }
         var course = activeCourses[m];
@@ -16,7 +15,7 @@ function fill300Textboxes(post, postElement, category) {
             course.indexOf('CSC369') === - 1) {
             postElement[post.filledTextboxes300].value = activeCourses[m];
             post.index300 = m;
-            post['filledTextboxes' + category] += 1;
+            post.filledTextboxes300 += 1;
             post.creditCount += 0.5;
         }
     }
@@ -24,22 +23,21 @@ function fill300Textboxes(post, postElement, category) {
 
 
 /**
- * Fills textboxes in 400 level category,
+ * Fills textboxes with 400 level courses
  * @param {object} post Object corresponding to the POSt being dealt with
  * @param {HTMLElement[]} postElement Array of textboxes to fill
- * @param {string} category Level of course that we are filling textbox with 
+ * @param {string} category Level of category we are filling
 **/
 function fill400Textboxes(post, postElement, category) {
     'use strict';
 
     for (var m = post.index400 + 1; m < activeCourses.length; m++) {
-        if (post.index400 === activeCourses.length || post.filledTextboxes400 === post.textboxes400) {
+        if (post['filledTextboxes' + category] === post['textboxes' + category]) {
             break;
         }
         var course = activeCourses[m];
         if (course.indexOf('CSC4') !== -1) {
-            postElement[post.filledTextboxes400].value = activeCourses[m];
-            //postElement[i].disabled = true;
+            postElement[post['filledTextboxes' + category]].value = activeCourses[m];
             post.index400 = m;
             post['filledTextboxes' + category] += 1;
             post.creditCount += 0.5;
@@ -69,8 +67,8 @@ function fill300s() {
     }
     
     // fill courses that have been selected
-    fill300Textboxes(specialist, spec300s, '300');
-    fill300Textboxes(major, maj300s, '300');
+    fill300Textboxes(specialist, spec300s);
+    fill300Textboxes(major, maj300s);
 
     if (specialist.filledTextboxes300 < specialist.textboxes300) {
         fill400Textboxes(specialist, spec300s, '300');
