@@ -179,11 +179,10 @@ function addExtraMinCourses() {
     'use strict';
 
     var minExtra = $('#minextra')[0].getElementsByTagName('input');
+    var textboxesLeft = minor.textboxesExtra - minor.filledTextboxesExtra;
 
-    for (var m = 0; m < 3; m++) {
-        if (minor.filledTextboxesExtra === minor.textboxesExtra) {
-            break;      
-        } else if (getCookie(minor.additionalMin200[m]) === 'active' || 
+    for (var m = 0; m < Math.min(textboxesLeft, 3); m++) {
+        if (getCookie(minor.additionalMin200[m]) === 'active' || 
             getCookie(minor.additionalMin200[m]) === 'overriden') {
             minExtra[minor.filledTextboxesExtra].value = minor.additionalMin200[m];
             minExtra[minor.filledTextboxesExtra].disabled = true;
