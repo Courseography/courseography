@@ -37,7 +37,7 @@ main = do graphFile <- readFile "../res/graphs/graph_regions.svg"
               runMigration migrateAll
               parseLevel False (Style (0,0) "" "") (getRoot graphDoc)
               liftIO $ print "Parsing complete"
-          generateFolder
+          createDirectoryIfMissing True "../res/graphs/CSC"
           buildSVG
           print "SVG Built"
 
