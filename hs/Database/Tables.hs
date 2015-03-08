@@ -23,7 +23,7 @@ data Time = Time { timeField :: [Int] } deriving (Show, Read, Eq)
 derivePersistField "Time"
 
 
-data Point = Point { point :: (Rational, Rational) } deriving (Show, Read, Eq)
+data Point = Point { point :: (Double, Double) } deriving (Show, Read, Eq)
 derivePersistField "Point"
 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
@@ -78,10 +78,10 @@ Graphs
 Rects
     gId Int
     rId String
-    width Rational
-    height Rational
-    xPos Rational
-    yPos Rational
+    width Double
+    height Double
+    xPos Double
+    yPos Double
     fill String
     stroke String
     isHybrid Bool
@@ -90,8 +90,8 @@ Rects
 Texts
     gId Int
     rId String
-    xPos Rational
-    yPos Rational
+    xPos Double
+    yPos Double
     text String
     deriving Show
 
@@ -103,10 +103,10 @@ Paths
     deriving Show
 
 Ellipses
-    xPos Rational
-    yPos Rational
-    rx Rational
-    ry Rational
+    xPos Double
+    yPos Double
+    rx Double
+    ry Double
     stroke String
 |]
 
