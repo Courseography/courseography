@@ -143,11 +143,11 @@ insertRect id_ width height xPos yPos style =
 -- | Inserts a text entry into the texts table.
 insertText :: MonadIO m0 => String -> Double -> Double -> String -> Style -> ReaderT SqlBackend m0 ()
 insertText id_ xPos yPos text style =
-        insert_ $ Texts 1
-                        id_
-                        xPos
-                        yPos
-                        text
+        insert_ $ Text 1
+                       id_
+                       xPos
+                       yPos
+                       text
 
 -- | Inserts a tex entry into the texts table.
 insertPath :: MonadIO m0 => [Point] -> Style -> Bool -> ReaderT SqlBackend m0 ()

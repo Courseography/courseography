@@ -87,7 +87,7 @@ Rects
     isHybrid Bool
     deriving Show
 
-Texts
+Text
     gId Int
     rId String
     xPos Double
