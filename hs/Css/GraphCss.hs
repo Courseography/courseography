@@ -198,7 +198,7 @@ sidebarCSS = do
         float floatLeft
         backgroundColor purple1
         position absolute
-    "#focuses, #graph" ? do
+    "#focuses-nav, #graph-nav" ? do
         cursor pointer
     "#sidebar-nav" ? do
         width (pct 100)
@@ -234,6 +234,11 @@ sidebarCSS = do
                     textAlign $ alignSide sideCenter
                     width (pct 95)
                     textDecoration none
+    "#focuses, #graphs" ? do 
+        height (pct 100)
+        width (pct 100)
+        display none
+        marginLeft (px 25)
 
 
 {- titleCSS
