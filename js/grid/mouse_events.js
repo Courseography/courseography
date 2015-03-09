@@ -51,7 +51,6 @@ function renderConflicts(time, conflicts) {
            .attr('status', conflicts.length > 0 ? 'conflict' : 'occupied')
            .attr('satisfied', getCourseObject($(time).html(),
                                               courseObjects).satisfied);
-
 }
 
 
@@ -117,7 +116,9 @@ function renderClearHover(time) {
     }
 
     if ($(time).attr('clicked') !== 'true') {
-        $(time).removeAttr('style');
+        $(time).css('border-top-style', 'default')
+               .css('border-left-style', 'default')
+               .css('border-right-style', 'default');
     }
         
     if (n === 'H' && $(time).attr('clicked') !== 'true') {
@@ -133,7 +134,6 @@ function renderClearHover(time) {
     }
 
     $(time).attr('hover', 'off');
-
 }
 
 /**
@@ -144,13 +144,10 @@ function renderClearHover(time) {
 function renderAddHover(time, section) {
     'use strict';
 
-
     var n;
     var htime;
     var ptime;
-
     n = time.charAt(time.length-1);
-
 
     if (n === 'H') {
         extendCell(parseInt(time.slice(2)), time.charAt(1), time.charAt(time.length-2));
@@ -169,11 +166,19 @@ function renderAddHover(time, section) {
     if ($(time).attr('clicked') !== 'true') {
         if ($(time).attr('rowspan') !== '1') {
             $(time).html(section.courseName.substring(0,6) + ' (' + section.type + ')')
-                    .attr('hover', 'good');
+                    .attr('hover', 'good')
+                    .css('border-left-style', 'solid')
+                    .css('border-left-width', '1px')
+                    .css('border-right-style', 'solid')
+                    .css('border-right-width', '1px');
         } else {
             $(time).html(section.courseName.substring(0,6) + ' (' + section.type + ')')
                     .attr('hover', 'good')
-                    .css('font-size', '0');
+                    .css('font-size', '0')
+                    .css('border-left-style', 'solid')
+                    .css('border-left-width', '1px')
+                    .css('border-right-style', 'solid')
+                    .css('border-right-width', '1px');
         }
     } else if ($(time).html() === section.courseName &&
             $(time).attr('type') === section.type) {
@@ -190,7 +195,6 @@ function renderAddHover(time, section) {
     if ($(ptime).html() !== '') {
         $(time).css('border-top-style', 'hidden');
     }
-        
 }
 
 /**
@@ -208,7 +212,6 @@ function previousCell(time) {
     if (n === 'H') {
         ptime = time.slice(0, time.length-1);
         return ptime;
-
     } else if (n === 'E') {
         ptime = time.slice(0, 2) + String(parseInt(time.slice(2))-1) + time.charAt(time.length-2) + 'H'
 
@@ -216,7 +219,6 @@ function previousCell(time) {
             ptime = ptime.slice(0, ptime.length-1);
         }
         return ptime;
-
     } else {
         ptime = time.slice(0, 2) + String(parseInt(time.slice(2))-1) + time.charAt(time.length-1) + 'H'
         
@@ -241,7 +243,6 @@ function extendCell(timeInt, day, term) {
 
     $(ccell).css('display', 'table-cell');
     $(pcell).attr('rowspan', '1');
-
 }
 
 /**

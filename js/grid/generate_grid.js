@@ -67,8 +67,10 @@ function appendHeaders(fallThead, springThead) {
         .html('Fall'));
 
     for (var j = 0; j < 5; j++) {
-        fallThead.append($('<th></th>').html(days[j]));
-        springThead.append($('<th></th>').html(days[j]));
+        fallThead.append($('<th></th>').html(days[j])
+                                       .height(35));
+        springThead.append($('<th></th>').html(days[j])
+                                         .height(35));
     }
 
     springThead.append($('<th></th>')
@@ -170,7 +172,6 @@ function appendTableData(trFall, trSpring, time) {
             .attr('rowspan', '1')
             .html(adjustedTime)
             .css('border-style', 'none'));
-
     }
 
 }
