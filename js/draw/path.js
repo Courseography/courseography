@@ -1,4 +1,9 @@
 /* CREATE PATHS */
+
+/** 
+ * Make the dummy elbow node with center at position position.
+ * @position {object} position The x and y position of the dummy node being created.
+ **/
 function makeElbow(position) {
     'use-strict';
 
@@ -16,21 +21,32 @@ function makeElbow(position) {
 }
 
 
+/**
+ * Creates an SVG path that has the coordinates specified by pathString. 
+ * @param {string} pathString The coordinates of the new path to be created.
+ **/
 function startPath(pathString) {
     'use-strict';
 
-    curPath = document.createElementNS(xmlns, 'path'); // note: id will get set when the path is complete
-    curPath.setAttributeNS(null, 'd', pathString); // curPath will get modified until path is complete
+    // note: id will get set when the path is complete, also marker (arrowhead)
+    // curPath will get modified until path is complete
+    curPath = document.createElementNS(xmlns, 'path'); 
+    curPath.setAttributeNS(null, 'd', pathString); 
     curPath.setAttributeNS(null, 'fill', 'none');
     curPath.setAttributeNS(null, 'stroke', 'black');
-    curPath.setAttributeNS(null, 'data-active', 'drawn'); // also marker will be set at completion
-    // thePath.setAttributeNS(null, 'marker-end', 'url(#arrow)');
+    curPath.setAttributeNS(null, 'data-active', 'drawn');
     curPath.elbows = [];
     curPath.addEventListener('click', pathClicked, false);
     svgDoc.appendChild(curPath);
 }
 
 
+/**
+ * Creates a new path or completes curPath by ending it at endNode and giving it
+ * the id pathID.
+ * @param{string} pathId The id of the now complete path.
+ * @param{SVGElement} endNode The last coordinate for the path.
+ **/
 function finishPath(pathId, endNode) {
     'use-strict';
 
@@ -68,10 +84,14 @@ function finishPath(pathId, endNode) {
 }
 
 
-/*
-Return the best coordinates for the start and end of a edge. theNode and end could
-be a node or an elbow. At least one of beg and end must be a node.
-*/
+/**
+ * Return the best coordinates for the start and end of a path. 
+ * Pre-Requisites: At least one of beg and end must be a node.
+ * @param {SVGElement} beg A node or an elbow element.
+ * @param {string} The type of beg, elbow or node.
+ * @param {SVGElement} end A node or an elbow element.
+ * @param {string} The type of end, elbow or node.
+ **/
 function findClosest(beg, typeB, end, typeE) {
     'use-strict';
 
@@ -128,7 +148,12 @@ function findClosest(beg, typeB, end, typeE) {
     return thePath;
 }
 
-
+/**
+ * Returns the distance between point a and point b.
+ * @param {object} a The coordinates of point a.
+ * @param {object} b The coordinates of point b.
+ * @return {number} The distance between a and b.
+ **/
 function dist(a, b) {
     'use-strict';
 
@@ -137,6 +162,10 @@ function dist(a, b) {
 
 
 /* MODIFY PATHS */
+/**
+ * In change mode, moves target of event e (the elbow) . In erase-mode, erases elbow. 
+ * @param {object} e The mousedown event.
+ **/
 function selectElbow(e) {
     'use-strict';
 
@@ -165,6 +194,14 @@ function selectElbow(e) {
 }
 
 
+/**
+ * Move the partOfPath of the path by xBy and yBy units.  // !! FIX DESCRIPTION
+ * @param {SVGElement} path The path being modified.
+ * @param {number} xBy The amount of movement in the x direction.
+ * @param {number} yBy The amount of movement in the y direction.
+ * @param {string} partOfPath The part of the path (start, end or elbow) path being moved.
+ * @param {number} elbowNum The number of the elbow being moved if partOfPath is elbow.
+ **/
 function movePath(path, xBy, yBy, partOfPath, elbowNum) {
     'use-strict';
 
@@ -199,6 +236,10 @@ function movePath(path, xBy, yBy, partOfPath, elbowNum) {
 }
 
 
+/**
+ * In erase mode, delete the target of event e (a path).
+ * @param {object} e The mousedown event.
+ **/
 function pathClicked(e) {
     'use-strict';
 
@@ -209,6 +250,10 @@ function pathClicked(e) {
 }
 
 
+/**
+ * Delete the path path.                // !! FIX? 
+ * @param {SVGElement} path 
+ **/
 function erasePath(path) {
         var index = -1;
         var pathId = path.id;
@@ -224,6 +269,7 @@ function erasePath(path) {
         if (index > -1) {
             end.parents.splice(index, 1);
         }
+
         // delete this path from the nodes' list
         index = beg.outEdges.indexOf(path);
         if (index > -1) {
@@ -233,6 +279,8 @@ function erasePath(path) {
         if (index > -1) {
             end.inEdges.splice(index, 1);
         }
+
+        // delete the dummy nodes and the path itself
         path.elbows.map(function (item) {
             svgDoc.removeChild(item);
         });

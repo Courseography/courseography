@@ -17,6 +17,10 @@ var elbowMoving = null;     // for movement of elbow joints
 
 
 /* SET UP SVG CANVAS */
+
+/**
+ * Initializes the SVG Canvas and its background.
+ **/
 function setupSVGCanvas() {
     'use-strict';
 
@@ -40,7 +44,9 @@ function setupSVGCanvas() {
     svgDoc = document.getElementById('mySVG');
 }
 
-
+/**
+ * Create the arrowhead marker to be used for paths.
+ **/
 function setupMarker() {
     'use-strict';
 
@@ -70,6 +76,7 @@ function setupMarker() {
 setupSVGCanvas();
 
 /* SET UP SIDEBAR AND ONCLICKS FOR BUTTONS */
+
 $('.mode').each(function() {
     $(this). click(function () {
         changeMode(this.id);}); 
@@ -83,6 +90,10 @@ $('#add-text').click(function () {
 });
 
 
+/**
+ * Handles keydown event e, possibly switching modes.
+ * @param {object} e The keydown event.
+ **/
 function keyboard(e) {
     'use-strict';
 
@@ -104,6 +115,10 @@ function keyboard(e) {
 document.addEventListener('keydown', keyboard, false);
 
 
+/**
+ * Changes the current mode mode to the new mode with id id.
+ * @param {object} id The id of the new mode to be selected.
+ **/
 function changeMode(id) {
     'use-strict';
 
@@ -127,6 +142,10 @@ function changeMode(id) {
 }
 
 
+/**
+ * Changes the current colour to the new colour with id id.
+ * @param {object} id The id of the new colour to be selected.
+ **/
 function changeColour(id) {
     'use-strict';
 
@@ -140,6 +159,9 @@ function changeColour(id) {
 }
 
 
+/**
+ * Adds the text from the input box to the currently selected node.
+ **/
 function addText() {
     'use-strict';
 

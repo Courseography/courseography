@@ -1,7 +1,7 @@
 
 /**
  * Calculates the position of the click in relation to the page.
- * @param {} e The click event.
+ * @param {object} e The click event.
  * @param {HTMLElement} elem The target of the click event.
  * @return The position of the click.
  */
@@ -46,7 +46,7 @@ function getPosition(elem) {
  * In node-mode creates a new node at the position of the click event on the SVG canvas.
  * In path-mode creates an elbow at the position of the click event on the SVG canvas,
                 if the startNode is defined.
- * @param {} e The click event.
+ * @param {object} e The mousedown event.
  */
 function makeNodePath(e) {
     'use-strict';
@@ -102,7 +102,13 @@ function makeNodePath(e) {
     }
 }
 
-
+/**
+ * Handles the clicking of the target of the event (a node) in different modes. 
+ * In erase-mode, erases the node, and all edges in and out of the node. 
+ * In change-mode, moves the node, and in path-mode, marks it a start node 
+ * or creates a path if valid.                                                          // !! FIX DESCRIPTION
+ * @param {object} e The mousedown event.
+ **/
 function nodeClicked(e) {
     'use-strict';
 
@@ -184,6 +190,10 @@ function nodeClicked(e) {
 }
 
 
+/**
+ * Selects the node newNode and unselects the old node nodeSelected.
+ * @param {SVGElement} newNode The node to be selected.
+ **/
 function select(newNode) {
     'use-strict';
 
@@ -194,7 +204,10 @@ function select(newNode) {
     nodeSelected.parentNode.setAttribute('data-active', 'active');
 }
 
-
+/**
+ * In change-mode, moves the node or elbow that is currently being moved.
+ * @param {object} e The mousemove Event.
+ **/
 function moveNodeElbow(e) {
     'use-strict';
 
@@ -250,7 +263,10 @@ function moveNodeElbow(e) {
     }
 }
 
-
+/**
+ * Reinitializes global variables associated with mousedown and mousemove event.
+ * @param {object} e The mouseup event.
+ **/
 function unclickAll(e) {
     'use-strict';
 
