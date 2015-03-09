@@ -36,8 +36,8 @@ main = do graphFile <- readFile "../res/graphs/graph_regions.svg"
               runMigration migrateAll
               parseLevel False (Style (0,0) "" "") (getRoot graphDoc)
               liftIO $ print "Parsing complete"
-          buildSVG M.empty "../res/graphs/CSC/csc_graph.svg"
           createDirectoryIfMissing True "../res/graphs/CSC"
+          buildSVG M.empty "../res/graphs/CSC/csc_graph.svg"
           liftIO $ print "SVG Built"
 
 -- | Parses a level.
@@ -60,7 +60,7 @@ parseLevel currentlyInRegion style content =
                x = if null newTransform then (0,0) else parseTransform newTransform
                adjustedTransform = addTuples (transform style) x
                parentStyle = Style adjustedTransform
-                                   newFill  
+                                   newFill
                                    newStroke
 
            parseElements (parseRect parentStyle) rects
@@ -84,7 +84,7 @@ parseElements f (x:xs) = do f x
 
 -- | Parses a rect.
 parseRect :: MonadIO m0 => Style -> Content i -> ReaderT SqlBackend m0 ()
-parseRect style content = 
+parseRect style content =
     insertRectIntoDB (getAttribute "id" content)
                      (read $ getAttribute "width" content :: Float)
                      (read $ getAttribute "height" content :: Float)
@@ -102,7 +102,7 @@ parsePath isRegion style content =
 
 -- | Parses a text.
 parseText :: MonadIO m0 => Style -> Content i -> ReaderT SqlBackend m0 ()
-parseText style content = 
+parseText style content =
     insertTextIntoDB (getAttribute "id" content)
                      ((read $ getAttribute "x" content :: Float) + fst (transform style))
                      ((read $ getAttribute "y" content :: Float) + snd (transform style))
@@ -111,7 +111,7 @@ parseText style content =
 
 -- | Parses a text.
 parseEllipse :: MonadIO m0 => Style -> Content i -> ReaderT SqlBackend m0 ()
-parseEllipse style content = 
+parseEllipse style content =
     insertEllipseIntoDB ((read $ getAttribute "cx" content :: Float) + fst (transform style))
                         ((read $ getAttribute "cy" content :: Float) + snd (transform style))
                         (read $ getAttribute "rx" content :: Float)
