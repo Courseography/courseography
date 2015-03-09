@@ -14,7 +14,8 @@ var nodeSelected = null;    // for adding text or changing colour
 var startNode = null;       // for making paths
 var curPath = null;         // the path currently being created
 var elbowMoving = null;     // for movement of elbow joints
-
+var regionId = 0;
+var startPoint = null;
 
 /* SET UP SVG CANVAS */
 
@@ -89,6 +90,9 @@ $('#add-text').click(function () {
     addText();
 });
 
+$('#finish-region').click(function () {
+    finishRegion();
+});
 
 /**
  * Handles keydown event e, possibly switching modes.
@@ -108,6 +112,8 @@ function keyboard(e) {
             changeMode("erase-mode"); // e
         } else if (e.which == 82){
             changeMode("region-mode"); // r
+        } else if (e.which == 70){
+            finishRegion(); // f
         }
     }
 }

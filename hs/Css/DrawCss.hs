@@ -28,6 +28,7 @@ drawStyles = do
     textCSS
     elbowCSS
     scrollBar
+    finishRegionCSS
 
 {- The wrapping around the canvas elements. -}
 mainCSS = "#main" ? do
@@ -188,3 +189,22 @@ elbowCSS = ".elbow" ? do
     ":hover" & do
         cursor pointer
         opacity 1
+
+finishRegionCSS = "#finish-region" ? do
+    width (pct 40)
+    margin (px 5) (px 5) (px 5) (px 5)
+    padding0
+    roundCorners
+    alignCenter
+    fontSize (em 0.75)
+    backgroundColor $ parse "#DCDCDC"
+    -- border solid (px 2) black
+    "-webkit-transition" -: "all 0.2s"
+    "-moz-transition" -: "all 0.2s"
+    "-ms-transition" -: "all 0.2s"
+    "-o-transition" -: "all 0.2s"
+    "transition" -: "all 0.2s"
+    ":hover" & do
+        "background-color" -: "black !important"
+        "color" -: "#DCDCDC !important"
+        cursor pointer

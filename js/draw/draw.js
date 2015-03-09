@@ -18,6 +18,7 @@ function getClickPosition(e, elem) {
     return { x: xPosition, y: yPosition };
 }
 
+
 /**
  * Calculates the position of elem in relation to the page.
  * @param {HTMLElement} elem The target of the click event.
@@ -41,6 +42,7 @@ function getPosition(elem) {
     }
     return { x: xPosition, y: yPosition };
 }
+
 
 /**
  * In node-mode creates a new node at the position of the click event on the SVG canvas.
@@ -99,8 +101,30 @@ function makeNodePath(e) {
 
             makeElbow(position);
         }
+    } else if (mode === 'region-mode') {
+        if (startPoint === null) {
+                startPoint = document.createElementNS(xmlns, 'circle');
+
+                startPoint.setAttributeNS(null, 'cx', position.x);
+                startPoint.setAttributeNS(null, 'cy', position.y);
+                startPoint.setAttributeNS(null, 'r', 4);
+                startPoint.setAttributeNS(null, 'class', 'elbow'); // !! CHANGE CLASS
+
+                startPoint.addEventListener('mousedown', selectElbow, false);
+                svgDoc.appendChild(startPoint);
+
+        } else if (curPath === null) { // first elbow
+            startPath('M' + startPoint.getAttribute('cx') + ',' + startPoint.getAttribute('cy') + ' L' + position.x + ',' + position.y + ' ');
+            curPath.setAttributeNS(null, 'class', 'region');
+            curPath.setAttributeNS(null, 'id', 'r' + regionId);
+            regionId += 1;
+        } else { 
+            curPath.setAttributeNS(null, 'd', curPath.getAttribute('d') + 'L' + position.x + ',' + position.y + ' ');
+            makeElbow(position);
+        }
     }
 }
+
 
 /**
  * Handles the clicking of the target of the event (a node) in different modes. 
@@ -204,6 +228,7 @@ function select(newNode) {
     nodeSelected.parentNode.setAttribute('data-active', 'active');
 }
 
+
 /**
  * In change-mode, moves the node or elbow that is currently being moved.
  * @param {object} e The mousemove Event.
@@ -263,6 +288,7 @@ function moveNodeElbow(e) {
     }
 }
 
+
 /**
  * Reinitializes global variables associated with mousedown and mousemove event.
  * @param {object} e The mouseup event.
@@ -278,7 +304,13 @@ function unclickAll(e) {
     }
 }
 
-
+function finishRegion() {
+    if (curPath !== null) {
+        curPath.setAttributeNS(null, 'd', curPath.getAttribute('d') + 'Z');
+        curPath = null;
+        startPoint = null;
+    }
+}
 
 // TODO:
 /*
