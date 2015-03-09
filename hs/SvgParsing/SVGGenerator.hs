@@ -137,7 +137,7 @@ buildSVG =
             edges       = filter (not . pathIsRegion) paths
             regionTexts = filter (not . intersectsWithShape (rects ++ ellipses)) texts
             stringSVG = renderSvg $ makeSVGDoc rects ellipses edges regions regionTexts
-        liftIO $ writeFile "../res/graphs/CSC/csc_graph.svg" stringSVG
+        liftIO $ writeFile "../public/res/graphs/CSC/csc_graph.svg" stringSVG
 
 -- | Determines if a text intersects with a shape.
 intersectsWithShape :: [Shape] -> Text -> Bool

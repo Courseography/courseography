@@ -27,7 +27,7 @@ import SvgParsing.SVGTypes
 import SvgParsing.ParserUtil
 
 main :: IO ()
-main = do graphFile <- readFile "../res/graphs/graph_regions.svg"
+main = do graphFile <- readFile "../public/res/graphs/graph_regions.svg"
           let graphDoc = xmlParse "output.error" graphFile
           print "Parsing SVG file..."
           runSqlite dbStr $ do
