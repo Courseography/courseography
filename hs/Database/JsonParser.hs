@@ -88,7 +88,7 @@ insertLecture session course lecture =
     insert_ $ Lectures (name course)
                        session
                        (section lecture)
-                       (map Time (time lecture))
+                       (time lecture)
                        (cap lecture)
                        (instructor lecture)
                        (fromMaybe 0 (enrol lecture))
@@ -116,7 +116,7 @@ insertTutorial session course tutorial =
     insert_ $ Tutorials (name course)
                         (tutorialSection tutorial)
                         session
-                        (map Time (times tutorial))
+                        (times tutorial)
                         (timeStr tutorial)
 
 -- | Gets the corresponding numeric requirement from a breadth requirement description.
