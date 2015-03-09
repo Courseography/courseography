@@ -32,15 +32,15 @@ import qualified Data.Map as M
 
 main :: IO ()
 main = do graphFile <- readFile "../res/graphs/graph_regions.svg"
-          let graphDoc = xmlParse "output.error" graphFile
           print "Parsing SVG file..."
-          let elements = parseNode False (Style (0,0) "" "") (getRoot graphDoc)
+          let graphDoc = xmlParse "output.error" graphFile
+              (shapes, paths, texts) = parseNode False (Style (0,0) "" "") (getRoot graphDoc)
           print "Parsing complete"
           runSqlite dbStr $ do
               runMigration migrateAll
-              insertShapes elements
-              insertPaths elements
-              insertTexts elements
+              mapM_ insert_ shapes
+              mapM_ insert_ paths
+              mapM_ insert_ texts
           printDB
           generateFolder
           buildSVG M.empty "../res/graphs/CSC/csc_graph.svg"
