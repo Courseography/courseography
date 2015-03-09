@@ -20,7 +20,9 @@ graphResponse =
                  plannerLinks
                 ]
                 (do header "graph"
-                    H.div ! A.id "graph" ! A.class_ "graph" $   ""
+                    H.div ! A.id "container" $ do
+                        H.div ! A.id "graph" ! A.class_ "graph" $   ""
+                        sideBar
                     disclaimer
                 )
                 plannerScripts
@@ -46,5 +48,11 @@ timetableTab =
                 makeA "" "" "timetable_creator.html" "" "Plan your timetable here!"
             makeInput "filter" "text-input" "" "" "text"
         createTag H.div "timetableContainer" "" ""
+
+sideBar :: H.Html
+sideBar = 
+    H.div ! A.id "sidebar" $ do
+    H.div ! A.id "sidebar-button" $ ""
+
 
 

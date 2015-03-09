@@ -12,6 +12,7 @@ import Css.Constants
 
 graphStyles = do
     graphContainer
+    sidebarCSS
     nodeCSS
     pathCSS
     resetCSS
@@ -164,6 +165,9 @@ graphContainer = do
         overflow hidden
         margin nil auto nil auto
         clear both
+        float floatLeft
+        display inlineBlock
+        position absolute
     "#graphRootSVG" ? do
         width100
         height100
@@ -171,6 +175,29 @@ graphContainer = do
         "stroke-linecap" -: "square"
         "stroke-miterlimit" -: "10"
         "shape-rendering" -: "geometricPrecision"
+
+sidebarCSS = do
+    "#container" ? do
+        width (pct 100)
+        height (px 700)
+        position relative
+    "#sidebar" ? do 
+        "border-radius" -: "4px"
+        display inlineBlock
+        width (px 20)
+        height (pct 100)
+        float floatLeft
+        "background" -: "rgba(128,0,128,0.8)"
+        position absolute
+    "#sidebar-button" ? do
+        cursor pointer
+        "border-radius" -: "4px"
+        display inlineBlock
+        width (px 20)
+        height (pct 100)
+        float floatLeft
+        backgroundColor purple
+        position absolute
 
 {- titleCSS
  - Generates CSS for the title. -}
