@@ -1,4 +1,4 @@
- {-# LANGUAGE FlexibleContexts, GADTs, MultiParamTypeClasses,
+{-# LANGUAGE FlexibleContexts, GADTs, MultiParamTypeClasses,
     OverloadedStrings, TypeFamilies #-}
 
 module Database.JsonParser (insertCourse,
@@ -27,7 +27,7 @@ import System.Directory
 import GHC.Generics
 
 dbStr :: T.Text
-dbStr = "database1.sqlite3"
+dbStr = "Database/database1.sqlite3"
 
 courseDirectory :: String
 courseDirectory = "../../res/courses/"

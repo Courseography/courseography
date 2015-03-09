@@ -1,9 +1,11 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module MakeElements where
+
 import           Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
+import qualified Text.Blaze.Svg11 as S
 import Control.Monad    (msum)
 
 insertSVG :: H.AttributeValue -> H.Html
@@ -51,6 +53,20 @@ aboutLinks :: H.Html
 aboutLinks = concatHtml (map stylesheet ["//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css",
                                        "static/style/common/about.css",
                                        "static/style/common/common.css"])
+drawLinks :: H.Html
+drawLinks = concatHtml (map stylesheet ["//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css",
+                                       "static/style/graph/graph_styles.css",
+                                       "static/style/common/common.css",
+                                       "static/style/draw/draw_styles.css"])
+
+
+postLinks :: H.Html
+postLinks = concatHtml (map stylesheet ["static/style/post/post_styles.css",
+                                        "static/style/common/common.css"])
 
 concatHtml :: [H.Html] -> H.Html
 concatHtml html = sequence_ html
+
+
+concatSVG :: [S.Svg] -> S.Svg
+concatSVG svg = sequence_ svg

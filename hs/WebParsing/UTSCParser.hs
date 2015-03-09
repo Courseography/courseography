@@ -20,7 +20,7 @@ utscCalendarUrl = "http://www.utsc.utoronto.ca/~registrar/calendars/calendar/"
 
 getDeptList :: [Tag String] -> [String]
 getDeptList tags =
-	let 
+	let
     beforeList = dropWhile (/= TagText "\nPrograms and Courses\n") tags
     removeUls = dropBetweenAll (== TagOpen "ul" [("class", "circle")]) (== TagClose "ul") beforeList
     hrefs = filter (tagOpen (== "a") isHref) removeUls
@@ -50,21 +50,21 @@ getCalendar str = do
       isCourseTitle _ = False
 
 parseTitleUTSC :: CoursePart -> CoursePart
-parseTitleUTSC (tags, course) = 
+parseTitleUTSC (tags, course) =
   let nme = fromTagText $tags !! 0
       ttle = fromTagText $ tags !! 1
   in (drop 2 tags, course {name = nme, title = Just ttle})
 
 {----------------------------------------------------------------------------------------
-INPUT: a list of tags representing a single course, 
+INPUT: a list of tags representing a single course,
 OUTPUT: Course 'record' containing course info
 ----------------------------------------------------------------------------------------}
 processCourseToData :: [Tag T.Text] -> Course
 processCourseToData tags  =
-    let course = 
+    let course =
           Course {
-            breadth = Nothing, 
-            description = Nothing, 
+            breadth = Nothing,
+            description = Nothing,
             title  = Nothing,
             prereqString = Nothing,
             f = Nothing,
@@ -77,27 +77,26 @@ processCourseToData tags  =
             prereqs = Nothing
         }
     in snd $ (tags, course) ~:
-             preProcess -: 
+             preProcess -:
              parseTitleUTSC -:
             parseDescription -:
             parsePrerequisite -:
             parseCorequisite -:
             parseExclusion -:
-            parseRecommendedPrep -:  
-            parseDistAndBreadth     
+            parseRecommendedPrep -:
+            parseDistAndBreadth
 
 parseUTSC :: IO ()
 parseUTSC = do
-	rsp <- simpleHTTP (getRequest (utscCalendarUrl ++ "Table_of_Contents.html"))
-	body <- getResponseBody rsp
-	let depts = getDeptList $ parseTags body
-  --print "parsing UTSC Calendar: \n"
-	mapM_ getCalendar depts
+  rsp <- simpleHTTP (getRequest (utscCalendarUrl ++ "Table_of_Contents.html"))
+  body <- getResponseBody rsp
+  let depts = getDeptList $ parseTags body
+  putStrLn "Parsing UTSC Calendar..."
+  mapM_ getCalendar depts
 
 main :: IO ()
 main = do
   rsp <- simpleHTTP (getRequest (utscCalendarUrl ++ "Table_of_Contents.html"))
   body <- getResponseBody rsp
   let depts = getDeptList $ parseTags body
-  --print "parsing UTSC Calendar: \n"
   mapM_ getCalendar depts

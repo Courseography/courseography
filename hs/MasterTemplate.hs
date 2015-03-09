@@ -1,6 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module MasterTemplate where
+
 import           Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
@@ -22,14 +23,14 @@ masterTemplate title headers body scripts =
 -- Insert the header of the Grid and Graph. This contains the year of the timetable, and
 -- a link back to the Graph.
 header :: String -> H.Html
-header page = 
-  createTag H.nav "" "row header" $ do
-      H.h2 "Courseography"
-      H.ul ! A.id "nav-links" $ do
-          H.li $ makeA "" "" "graph" "" "Graph"
-          H.li $ makeA "" "" "grid" "" "Grid"
-          H.li $ makeA "" "" "" "" "Check My POSt!"
-          H.li $ makeA "" "" "about" "" "About"
+header page = createTag H.nav "" "row header" $ do
+  H.h2 "Courseography"
+  H.ul ! A.id "nav-links" $ do
+    H.li $ makeA "" "" "graph" "" $ "Graph"
+    H.li $ makeA "" "" "grid" "" $ "Grid"
+    H.li $ makeA "" "" "draw" "" $ "Draw"
+    H.li $ makeA "" "" "post" "" $ "Check My POSt!"
+    H.li $ makeA "" "" "about" "" $ "About"
 
 -- Disclaimer. This will be the same for both pages, I guess?
 disclaimer :: H.Html
