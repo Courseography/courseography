@@ -55,7 +55,7 @@ function update300Categories() {
 function update400Categories() {
     'use strict';
 
-	if (specialist.filledTextboxes400 === specialist.textboxes400) {
+    if (specialist.filledTextboxes400 === specialist.textboxes400) {
         updateCategory($('#spec_400')[0].getElementsByClassName('code')[0], 'fulfilled');
         updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'fulfilled');
         specialist.categoriesCompleted += 1;
@@ -97,7 +97,7 @@ function updateExtraCategories() {
         updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'fulfilled');
         minor.categoriesCompleted += 1;
     } else {
-		updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'not fulfilled');
+        updateCategory($('#min_misc')[0].getElementsByClassName('code')[0], 'not fulfilled');
     }
 }
 
