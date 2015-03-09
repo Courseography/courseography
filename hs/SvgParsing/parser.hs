@@ -15,6 +15,7 @@ import Database.Persist.Sqlite
 import Control.Monad
 import Control.Monad.Trans.Reader
 import Text.XML.HaXml.Namespaces
+import System.Directory
 import Data.Conduit
 import Data.List.Split
 import Data.List
@@ -32,41 +33,35 @@ main = do graphFile <- readFile "../res/graphs/graph_regions.svg"
           print "Parsing SVG file..."
           runSqlite dbStr $ do
               runMigration migrateAll
-              parseLevel False (Style (0,0) "" "" "" "" "" "") (getRoot graphDoc)
+              parseLevel False (Style (0,0) "" "") (getRoot graphDoc)
               liftIO $ print "Parsing complete"
+          createDirectoryIfMissing True "../res/graphs/CSC"
           buildSVG
+          liftIO $ print "SVG Built"
 
 -- | Parses a level.
 parseLevel :: MonadIO m0 =>  Bool -> Style -> Content i -> ReaderT SqlBackend m0 ()
 parseLevel currentlyInRegion style content =
     if getAttribute "id" content == "layer2" ||
        (getName content == "defs")
-      then liftIO $ print "Abort"
+      then return ()
       else do
            let isRegion       = getAttribute "id" content == "layer3"
-           let rects          = (tag "rect") content
-           let texts          = (tag "text") content
-           let paths          = (tag "path") content
-           let ellipses       = (tag "ellipse") content
-           let children       = getChildren content
-           let newTransform   = getAttribute "transform" content
-           let newStyle       = getAttribute "style" content
-           let newFill        = getNewStyleAttr newStyle "fill" (fill style)
-           let newFontSize    = getNewStyleAttr newStyle "font-size" (fontSize style)
-           let newStroke      = getNewStyleAttr newStyle "stroke" (stroke style)
-           let newFillOpacity = getNewStyleAttr newStyle "fill-opacity" (fillOpacity style)
-           let newFontWeight  = getNewStyleAttr newStyle "font-weight" (fontWeight style)
-           let newFontFamily  = getNewStyleAttr newStyle "font-family" (fontFamily style)
-           let x = if null newTransform then (0,0) else parseTransform newTransform
-           let adjustedTransform = (fst (transform style) + fst x,
-                                    snd (transform style) + snd x)
-           let parentStyle = Style adjustedTransform 
+               rects          = (tag "rect") content
+               texts          = (tag "text") content
+               paths          = (tag "path") content
+               ellipses       = (tag "ellipse") content
+               children       = getChildren content
+               newTransform   = getAttribute "transform" content
+               newStyle       = getAttribute "style" content
+               newFill        = getNewStyleAttr newStyle "fill" (fill style)
+               newStroke      = getNewStyleAttr newStyle "stroke" (stroke style)
+               x = if null newTransform then (0,0) else parseTransform newTransform
+               adjustedTransform = addTuples (transform style) x
+               parentStyle = Style adjustedTransform
                                    newFill  
-                                   newFontSize  
-                                   newStroke 
-                                   newFillOpacity 
-                                   newFontWeight
-                                   newFontFamily
+                                   newStroke
+
            parseElements (parseRect parentStyle) rects
            parseElements (parseText parentStyle) texts
            parseElements (parsePath (currentlyInRegion || isRegion) parentStyle) paths
@@ -82,7 +77,7 @@ parseChildren currentlyInRegion style (x:xs) =
 
 -- | Applies a parser to a list of Content.
 parseElements :: MonadIO m0 => (Content i ->  ReaderT SqlBackend m0 ()) -> [Content i] -> ReaderT SqlBackend m0 ()
-parseElements f [] = return ()
+parseElements _ [] = return ()
 parseElements f (x:xs) = do f x
                             parseElements f xs
 
@@ -142,7 +137,6 @@ insertRectIntoDB id_ width height xPos yPos style =
                         (toRational yPos)
                         (fill style)
                         (stroke style)
-                        (fillOpacity style)
                         (fill style == "#a14c3a")
 
 -- | Inserts a text entry into the texts table.
@@ -153,15 +147,11 @@ insertTextIntoDB id_ xPos yPos text style =
                         (toRational xPos)
                         (toRational yPos)
                         text
-                        (fontSize style)
-                        (fontWeight style)
-                        (fontFamily style)
 
 -- | Inserts a tex entry into the texts table.
 insertPathIntoDB :: MonadIO m0 => [(Float, Float)] -> Style -> Bool -> ReaderT SqlBackend m0 ()
 insertPathIntoDB d style isRegion =
         insert_ $ Paths (map (Point . convertFloatTupToRationalTup) d)
                         (fill style)
-                        (fillOpacity style)
                         (stroke style)
                         isRegion

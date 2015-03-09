@@ -22,7 +22,6 @@ plannerScripts = concatHtml (map makeScript["https://ajax.googleapis.com/ajax/li
                                            "static/js/graph/utilities/course_description.js",
                                            "static/js/graph/tabs/feedback_form.js",
                                            "static/js/graph/tabs/focuses.js",
-                                           "static/js/graph/tabs/post.js",
                                            "static/js/graph/tabs/timetable.js",
                                            "static/js/graph/tabs/fce_count.js",
                                            "static/js/common/objects/section.js",
@@ -64,4 +63,5 @@ postScripts = concatHtml (map makeScript ["https://ajax.googleapis.com/ajax/libs
                                           "static/js/post/update_post.js",
                                           "static/js/graph/create_data.js",
                                           "static/js/post/update_counts.js",
-                                          "static/js/graph/objects/node.js"])
+                                          "static/js/graph/objects/node.js",
+                                          "static/js/post/fill_textboxes.js"])

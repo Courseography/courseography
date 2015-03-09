@@ -66,9 +66,5 @@ function turnNode(event) {
         CSC318.updateStatus();
         CSC454.updateStatus();
 
-        updatePOSt(id, window[id].isSelected());
-        updatePostInterface();
-        updateMajorPostInterface();
-        updateMinorPostInterface();
     }
 }
