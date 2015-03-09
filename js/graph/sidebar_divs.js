@@ -48,6 +48,8 @@ function resetDivs() {
 }
 
 function fillFCECount() {
+	'use strict';
+	
 	$("#fcecount").show();
 	$('#fcecount').html("FCE Count: " + FCEs);
 }
