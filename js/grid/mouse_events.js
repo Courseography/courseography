@@ -120,11 +120,11 @@ function renderClearHover(time) {
                .css('border-left-style', 'default')
                .css('border-right-style', 'default');
     }
-        
+
     if (n === 'H' && $(time).attr('clicked') !== 'true') {
         compressCell(parseInt(time.slice(2)), time.charAt(1), time.charAt(time.length-2));
     }
-    
+
     if ($(time).attr('clicked') !== 'true') {
         $(time).html('');
     }
@@ -161,8 +161,8 @@ function renderAddHover(time, section) {
     if (n === 'E') {
         extendCell(parseInt(time.slice(2)), time.charAt(1), time.charAt(time.length-2));
         time = time.slice(0, time.length-1);
-    } 
-    
+    }
+
     if ($(time).attr('clicked') !== 'true') {
         if ($(time).attr('rowspan') !== '1') {
             $(time).html(section.courseName.substring(0,6) + ' (' + section.type + ')')
@@ -203,7 +203,7 @@ function renderAddHover(time, section) {
  */
 function previousCell(time) {
     'use strict';
-    
+
     var n;
     var ptime;
 
@@ -221,7 +221,7 @@ function previousCell(time) {
         return ptime;
     } else {
         ptime = time.slice(0, 2) + String(parseInt(time.slice(2))-1) + time.charAt(time.length-1) + 'H'
-        
+
         if ($(ptime).css('display') == 'none') {
             ptime = ptime.slice(0, ptime.length-1);
         }

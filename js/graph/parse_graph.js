@@ -11,23 +11,19 @@
 function buildGraph() {
     'use strict';
 
-    var xStart;
-    var yStart;
-    var yEnd;
-    var xEnd;
-
     $('.node').each(function () {
         makeNode('AND', $(this).attr('id'));
     });
 
     $('.hybrid').each(function () {
         var id = $(this).attr('id');
-        var course = $(this).children('text').text();
+        var course = $(this).children('text').text().toLowerCase();
         var reqs = parseAnd(course)[0];
         makeHybrid('AND', id);
+        console.log(reqs);
         $.each(reqs, function (index, elem) {
             if ($.isArray(elem)) {
-                var orNode = id + elem.join();
+                var orNode = id + elem.join('');
                 makeHybrid('OR', orNode);
                 $.each(elem, function (i, e) {
                     window[orNode].parents.push(window[e]);
@@ -44,74 +40,12 @@ function buildGraph() {
 
     $('.bool').each(function () {
         var id = $(this).attr('id');
-        var type = $(this).children('text').text().toUpperCase();
+        var type = $(this).children('text').text();
         makeHybrid(type, id);
     });
 
     $('.path').each(function () {
-        var coords = $(this).attr('d').split(' ');
-        coords = coords.filter(function (str) {return str !== 'M' &&
-            str !== 'L' && str !== ''; });
-
-        // Do something for internet explorer
-        xStart = parseFloat(coords[0].split(",")[0]);
-        yStart = parseFloat(coords[0].split(",")[1]);
-        var end = coords.pop();
-        xEnd = parseFloat(end.split(",")[0]);
-        yEnd = parseFloat(end.split(",")[1]);
-
-        var startNode = '';
-        var endNode = '';
-
-        $('.node, .hybrid').each(function () {
-            // Check intersection
-            var r = $(this).children('rect');
-            var xRect = parseFloat(r.attr('x'));
-            var yRect = parseFloat(r.attr('y'));
-            var width = parseFloat(r.attr('width'));
-            var height = parseFloat(r.attr('height'));
-
-            if (intersects(xStart, yStart, xRect, yRect, width, height, 1)) {
-                startNode = $(this).attr('id');
-            }
-
-            if (intersects(xEnd, yEnd, xRect, yRect, width, height, 9)) {
-                endNode = $(this).attr('id');
-            }
-
-            if (startNode !== '' && endNode !== '') {
-                return false;
-            }
-        });
-
-        $('.bool').each(function () {
-            // Check intersection
-            var el = $(this).children('ellipse');
-            var cx = parseFloat(el.attr('cx'));
-            var cy = parseFloat(el.attr('cy'));
-            var rx = parseFloat(el.attr('rx'));
-            var ry = parseFloat(el.attr('ry'));
-
-            if (Math.abs(xStart - cx) <= rx + 1 && Math.abs(yStart - cy) <= ry + 1) {
-                startNode = $(this).attr('id');
-            }
-
-            if (Math.abs(xEnd - cx) <= rx + 9 && Math.abs(yEnd - cy) <= ry + 9) {
-                endNode = $(this).attr('id');
-            }
-
-            if (startNode !== '' && endNode !== '') {
-                return false;
-            }
-        });
-
-        if (startNode === '' && endNode === '') {
-            console.log("Could not make edge, diagnose:");
-            console.log("Start: " + startNode);
-            console.log("End: " + endNode);
-        }
-
-        makeEdge(window[startNode], window[endNode], $(this).attr('id'));
+        makeEdge(window[$(this).attr('source-node')], window[$(this).attr('target-node')], $(this).attr('id'));
     });
 }
 
@@ -200,39 +134,14 @@ function parseCourse(s) {
     var start = s.search(/[,/]/);
 
     if (start === 3) {
-        return ['CSC' + s.substr(0, start), s.substr(start)];
+        return ['csc' + s.substr(0, start), s.substr(start)];
     } else if (start > 0) {
         return [s.substr(0, start), s.substr(start)];
     }
 
     if (s.length === 3) {
-        return ['CSC' + s, ''];
+        return ['csc' + s, ''];
     }
 
     return [s, ''];
-}
-
-
-/**
- * Returns whether point (px,py) intersects with
- * the rectangle whose top left corner is at (rx,ry) with width
- * width, height height and an offset of offset.
- * @param {number} px The point's x position.
- * @param {number} py The point's y position.
- * @param {number} rx The rectangle's x position.
- * @param {number} ry The rectangle's y position.
- * @param {number} width The rectangle's width.
- * @param {number} height The rectangle's height.
- * @param {number} offset The offset.
- * @returns {boolean} Whether the point intersects with the rectangle + offset.
- */
-function intersects(px, py, rx, ry, width, height, offset) {
-    'use strict';
-
-    var dx = px - rx;
-    var dy = py - ry;
-    return dx >= -1 * offset &&
-        dx <= width + offset &&
-        dy >= -1 * offset &&
-        dy <= height + offset;
 }

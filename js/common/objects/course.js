@@ -5,7 +5,6 @@
  */
 function Course(name) {
     'use strict';
-
     var course = getCourse(name);
     // Copy attributes
     this.F = course.F;
@@ -102,8 +101,8 @@ Course.prototype.parseLectures = function (session, timeSuffix) {
     var sections = [];
 
     session.lectures.forEach(function (lecture, i, arr) {
-        if (lecture.section.charAt(1) == '2' ||
-            lecture.time == 'Online Web Version') {
+        if (lecture.section.charAt(1) === '2' ||
+            lecture.time === 'Online Web Version') {
             return;
         }
 
@@ -134,7 +133,7 @@ Course.prototype.parseLectures = function (session, timeSuffix) {
         sectionTimes = cleanUpTimes(sectionTimes);
 
         sections.push(makeLecture(lecture, tmp, id, sectionTimes));
-    })
+    });
 
     return sections;
 };
@@ -151,38 +150,36 @@ Course.prototype.parseTutorials = function (session, timeSuffix) {
 
     if (!this.manualTutorialEnrolment) {
         return [];
-    } else {
-        var tmp = this;
-        var tutorials = []
-        var i;
-        for (i = 0; i < session.tutorials.length; i++) {
-            if (!inArray(session.tutorials[i], tutorials)) {
-                tutorials.push(session.tutorials[i])
-            }
-        }
-        return tutorials.map(function (tutorial) {
-            var sectionTimes = convertTimes(tutorial[1]);
-            if (timeSuffix === 'Y') {
-                sectionTimes = sectionTimes.map(function (t) {
-                                                  return '#' + t + 'F';
-                                           })
-                                           .concat(sectionTimes.map(
-                                           function (t) {
-                                                  return "#" + t + "S";
-                                           }));
-            } else {
-                sectionTimes = sectionTimes.map(function (time) {
-                    return '#' + time + timeSuffix;
-                });
-            }
-
-            var id = tmp.name + '-' + tutorial[0] + '-' + timeSuffix;
-
-            sectionTimes = cleanUpTimes(sectionTimes);
-
-            return makeTutorial(tutorial, tmp, id, sectionTimes);
-        });
     }
+
+    var tmp = this;
+    var tutorials = [];
+    var i;
+    for (i = 0; i < session.tutorials.length; i++) {
+        if (!inArray(session.tutorials[i], tutorials)) {
+            tutorials.push(session.tutorials[i]);
+        }
+    }
+    return tutorials.map(function (tutorial) {
+        var sectionTimes = convertTimes(tutorial[1]);
+        if (timeSuffix === 'Y') {
+            sectionTimes = sectionTimes.map(function (t) {
+                                              return '#' + t + 'F';
+                                       })
+                                       .concat(sectionTimes.map(
+                                       function (t) {
+                                              return "#" + t + "S";
+                                       }));
+        } else {
+            sectionTimes = sectionTimes.map(function (time) {
+                return '#' + time + timeSuffix;
+            });
+        }
+
+        var id = tmp.name + '-' + tutorial[0] + '-' + timeSuffix;
+        sectionTimes = cleanUpTimes(sectionTimes);
+        return makeTutorial(tutorial, tmp, id, sectionTimes);
+    });
 };
 
 
@@ -214,7 +211,6 @@ Course.prototype.activateSection = function (section) {
 Course.prototype.addSection = function (section) {
     'use strict';
 
-    var type = section.type; // Not used.
     this.selected[section.type] = section;
 
     section.clicked = true;
@@ -229,10 +225,10 @@ Course.prototype.addSection = function (section) {
  */
 Course.prototype.selectTimes = function (section) {
     'use strict';
-    
+
     var n;
     var ptime;
-        
+
     $.each(section.times, function (i, time) {
 
         n = time.charAt(time.length-1);
@@ -253,7 +249,7 @@ Course.prototype.selectTimes = function (section) {
         if ($(time).attr('rowspan') !== '2' && n !== 'H' && n !== 'E') {
             section.setConflictTime(time);
         }
-        
+
         if ($(time).attr('clicked') !== 'true') {
             section.setTime(time);
         } else {

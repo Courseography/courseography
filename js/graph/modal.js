@@ -124,7 +124,7 @@ function displayTooltip(nodeId) {
     'use strict';
 
     var rectObject = $('#' + nodeId).find('rect');
-
+    var xPos, yPos;
     // The tooltip displays with a width of 222. If the node has an x
     // position of less than 222, the tooltip will be cut off by the svg
     // boundaries. In this case, we display the tooltip on the left.
@@ -132,19 +132,19 @@ function displayTooltip(nodeId) {
 
     // The tooltip is offset with a 'padding' of 5.
     if (rightSide) {
-        var xPos = parseFloat(rectObject.attr('x')) - 65;
+        xPos = parseFloat(rectObject.attr('x')) - 65;
     } else {
-        var xPos = parseFloat(rectObject.attr('x')) +
+        xPos = parseFloat(rectObject.attr('x')) +
                    parseFloat($('#' + nodeId).children('rect').attr('width')) + 5;
     }
 
-    var yPos = parseFloat(rectObject.attr('y'));
+    yPos = parseFloat(rectObject.attr('y'));
 
     var g = createG(nodeId);
     createRect(g, 'node-tooltip', nodeId + '-tooltip', xPos, yPos,
                60, 30, 'black');
     createText(g, nodeId, 'node-tooltip', nodeId + '-tooltip', xPos, yPos,
-               60, 30, 'black');
+               60, 30);
 }
 
 
@@ -195,9 +195,8 @@ function createRect(g, rectClass, rectId, posX, posY, width, height, color) {
  * @param {number} posY The y position of the text element.
  * @param {number} width The width of the text element.
  * @param {number} height The height of the text element.
- * @param {string} color The fill and stroke color of the text element.
  */
-function createText(g, nodeId, textClass, textId, posX, posY, width, height, color) {
+function createText(g, nodeId, textClass, textId, posX, posY, width, height) {
     'use strict';
 
     var text = $(document.createElementNS('http://www.w3.org/2000/svg', 'text'))
@@ -224,7 +223,7 @@ function createG(nodeId) {
         .click(function () {
             openModal(nodeId);
         });
-    $('.nodes').append(g);
+    $('#nodes').append(g);
     return g;
 }
 
