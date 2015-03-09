@@ -14,8 +14,9 @@ import qualified Data.Aeson as Aeson
 -- | Queries the database for all information about `course`, constructs a JSON object
 -- | representing the course and returns the appropriate JSON response.
 queryCourse :: T.Text -> IO Response
-queryCourse courseStr =
+queryCourse lowerStr =
     runSqlite dbStr $ do
+        let courseStr = T.toUpper lowerStr
         sqlCourse :: [Entity Courses] <- selectList [CoursesCode ==. courseStr] []
         sqlLecturesFall :: [Entity Lectures]  <- selectList [LecturesCode  ==. courseStr,
                                                              LecturesSession ==. "F"] []

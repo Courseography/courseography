@@ -55,6 +55,7 @@ getCalendar str = do
     let coursesSoup = lastH2 tags
     let courses = map (filter (tagText (\x -> True))) $ partitions isCourseTitle coursesSoup
     let course = map processCourseToData courses
+    print ("parsing " ++ str )
     runSqlite dbStr $ do
       runMigration migrateAll
       mapM_ insertCourse course

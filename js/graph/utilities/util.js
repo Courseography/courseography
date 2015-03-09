@@ -106,7 +106,6 @@ function initializeGraphSettings() {
     // Clear 'My Courses' tab
     $('#courseGrid').empty();
 
-    projectCourses = [];
     $('input:checkbox').attr('checked', false);
     $('input:text').attr('value', '');
 
@@ -117,6 +116,7 @@ function initializeGraphSettings() {
 
         if (nodeStatus.length === 0) {
             nodeStatus = 'inactive';
+            setCookie(node, nodeStatus);
         }
 
         if (initiallyTakeable.indexOf(node) > -1 && nodeStatus === 'inactive') {
@@ -149,8 +149,8 @@ function initializeGraphSettings() {
         clearFocus();
     }
 
-    CSC318.updateStatus();
-    CSC454.updateStatus();
+    csc318.updateStatus();
+    csc454.updateStatus();
 }
 
 
@@ -195,7 +195,6 @@ function reset() {
     clickedCourses = [];
     $('#FCEcount').html('0.0');
 
-    projectCourses = [];
     $('input:checkbox').attr('checked', false);
     $('input:text').attr('value', '');
 
