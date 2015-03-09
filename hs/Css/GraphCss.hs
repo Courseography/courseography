@@ -165,7 +165,6 @@ graphContainer = do
         overflow hidden
         margin nil auto nil auto
         clear both
-        float floatLeft
         display inlineBlock
         position absolute
     "#graphRootSVG" ? do
@@ -177,6 +176,13 @@ graphContainer = do
         "shape-rendering" -: "geometricPrecision"
 
 sidebarCSS = do
+    "#fcecount" ? do
+        width (pct 100)
+        height (px 30)
+        backgroundColor purple4
+        border solid (px 1) black
+        textAlign $ alignSide sideCenter
+        display none
     "#container" ? do
         width (pct 100)
         height (px 700)
