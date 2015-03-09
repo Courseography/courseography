@@ -18,7 +18,7 @@ main :: IO ()
 main = do
     generateCSS
     cwd <- getCurrentDirectory
-    let staticDir = encodeString $ parent $ decodeString cwd
+    let staticDir = (encodeString $ parent $ decodeString cwd) ++ "public/"
     contents <- readFile "../README.md"
     simpleHTTP nullConf $
 
