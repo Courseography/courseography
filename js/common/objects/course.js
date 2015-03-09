@@ -231,30 +231,42 @@ Course.prototype.selectTimes = function (section) {
     'use strict';
     
     var n;
+    var ptime;
         
     $.each(section.times, function (i, time) {
 
         n = time.charAt(time.length-1);
 
         if (n === 'H') {
-            extendRow(parseInt(time.slice(2)), time.charAt(time.length-2));
+            extendCell(parseInt(time.slice(2)), time.charAt(1), time.charAt(time.length-2));
+            ptime = previousCell(time);
+            if ($(ptime).attr('clicked') === 'true') {
+                section.setConflictTime(time);
+            }
         }
 
         if (n === 'E') {
-            extendRow(parseInt(time.slice(2)), time.charAt(time.length-2));
+            extendCell(parseInt(time.slice(2)), time.charAt(1), time.charAt(time.length-2));
             time = time.slice(0, time.length-1)
         }
 
+        if ($(time).attr('rowspan') !== '2' && n !== 'H' && n !== 'E') {
+            section.setConflictTime(time);
+        }
+        
         if ($(time).attr('clicked') !== 'true') {
             section.setTime(time);
-
-            if ($(time).attr('rowspan') !== '2' && n !== 'H' && n !== 'E') {
-                htime = time.slice(0) + 'H';
-                section.setTime(time);
-            }
-
         } else {
             section.setConflictTime(time);
+        }
+
+        ptime = previousCell(time);
+        if ($(ptime).html() !== '') {
+            $(time).css('border-top-style', 'hidden');
+        }
+
+        if ($(time).attr('rowspan') === '1') {
+            $(time).css('font-size', '0');
         }
     });
 };

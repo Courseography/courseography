@@ -67,8 +67,10 @@ function appendHeaders(fallThead, springThead) {
         .html('Fall'));
 
     for (var j = 0; j < 5; j++) {
-        fallThead.append($('<th></th>').html(days[j]));
-        springThead.append($('<th></th>').html(days[j]));
+        fallThead.append($('<th></th>').html(days[j])
+                                       .height(35));
+        springThead.append($('<th></th>').html(days[j])
+                                         .height(35));
     }
 
     springThead.append($('<th></th>')
@@ -116,7 +118,7 @@ function appendTableData(trFall, trSpring, time) {
         
         trFall.append($('<td></td>')
            .addClass('timetable-time')
-           .attr('rowspan', '2')
+           .attr('rowspan', '1')
            .html(adjustedTime));
 
         for (var k = 0; k < 5; k++) {
@@ -136,11 +138,17 @@ function appendTableData(trFall, trSpring, time) {
         
         trSpring.append($('<td></td>')
             .addClass('timetable-time')
-            .attr('rowspan', '2')
+            .attr('rowspan', '1')
             .html(adjustedTime));
 
     } else {
         var adjustedTime = '';
+
+        trFall.append($('<td></td>')
+           .addClass('timetable-time')
+           .attr('rowspan', '1')
+           .html(adjustedTime)
+           .css('border-style', 'none'));
 
         for (var k = 0; k < 5; k++) {
             trFall.append($('<td></td>')
@@ -148,17 +156,22 @@ function appendTableData(trFall, trSpring, time) {
                 .attr('in-conflict', 'false')
                 .attr('satisfied', 'true')
                 .attr('rowspan', '1')
-                .attr('display', 'none')
+                .css('display', 'none')
                 .addClass('timetable-cell'));
             trSpring.append($('<td></td>')
                 .attr('id', weekPrefixArray[k] + (time - 0.5) + 'S' + 'H')
                 .attr('in-conflict', 'false')
                 .attr('satisfied', 'true')
                 .attr('rowspan', '1')
-                .attr('display', 'none')
+                .css('display', 'none')
                 .addClass('timetable-cell'));
         }
 
+        trSpring.append($('<td></td>')
+            .addClass('timetable-time')
+            .attr('rowspan', '1')
+            .html(adjustedTime)
+            .css('border-style', 'none'));
     }
 
 }

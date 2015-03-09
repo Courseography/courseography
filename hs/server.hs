@@ -6,7 +6,7 @@ import Happstack.Server
 import GridResponse
 import GraphResponse
 --import AboutResponse
-import CourseQueries
+import Database.CourseQueries
 import CssGen
 import Filesystem.Path.CurrentOS
 import System.Directory

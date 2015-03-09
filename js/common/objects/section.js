@@ -104,7 +104,11 @@ Section.prototype.setTime = function (time) {
 
     $(time).html(this.courseName.substring(0, 6) + ' (' + this.type + ')')
            .attr("clicked", "true")
-           .attr("type", this.type);
+           .attr("type", this.type)
+           .css('border-left-style', 'solid')
+           .css('border-left-width', '1px')
+           .css('border-right-style', 'solid')
+           .css('border-right-width', '1px');
 };
 
 
@@ -134,12 +138,17 @@ Section.prototype.removeTimes = function () {
     $.each(this.times, function (i, time) {
         n = time.charAt(time.length-1);
 
-        if (n === 'H') {
-            compressRow(parseInt(time.slice(2)), time.charAt(time.length-2));
-        }
         if (n === 'E') {
-            compressRow(parseInt(time.slice(2)), time.charAt(time.length-2));
+            compressCell(parseInt(time.slice(2)), time.charAt(1), time.charAt(time.length-2));
             time = time.slice(0, time.length-1);
+        }
+
+        $(time).css('border-top-style', 'default')
+               .css('border-left-style', 'default')
+               .css('border-right-style', 'default');
+
+        if (n === 'H') {
+            compressCell(parseInt(time.slice(2)), time.charAt(1), time.charAt(time.length-2));
         }
 
         if ($(time).data("conflicts").length > 0) {
