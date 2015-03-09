@@ -214,16 +214,16 @@ function checkPostCompleted() {
 function updateNavPost() {
     'use strict';
 
-    var nav_post = $('#nav-links')[0].getElementsByTagName('li')[3].getElementsByTagName('a')[0];
+    var navPost = $('#nav-links')[0].getElementsByTagName('li')[3].getElementsByTagName('a')[0];
 
     if (getCookie('specialist') === 'active') {
-        nav_post.innerHTML = 'Check My POSt! (' + specialist.creditCount.toFixed(1) + '/12.0)';
+        navPost.innerHTML = 'Check My POSt! (' + specialist.creditCount.toFixed(1) + '/12.0)';
         setCookie('activecount', specialist.creditCount.toFixed(1));
     } else if (getCookie('major') === 'active') {
-        nav_post.innerHTML = 'Check My POSt! (' + major.creditCount.toFixed(1) + '/8.0)';
+        navPost.innerHTML = 'Check My POSt! (' + major.creditCount.toFixed(1) + '/8.0)';
         setCookie('activecount', major.creditCount.toFixed(1));
     } else if (getCookie('minor') === 'active') {
-        nav_post.innerHTML = 'Check My POSt! (' + minor.creditCount.toFixed(1) + '/4.0)';
+        navPost.innerHTML = 'Check My POSt! (' + minor.creditCount.toFixed(1) + '/4.0)';
         setCookie('activecount', minor.creditCount.toFixed(1));
     } 
 }
