@@ -18,7 +18,7 @@ import Data.Aeson
 import Control.Monad
 import Control.Applicative
 
-data Time = Time { timeField :: [Int] } deriving (Show, Read, Eq)
+data Time = Time { timeField :: [Double] } deriving (Show, Read, Eq)
 derivePersistField "Time"
 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
@@ -72,7 +72,7 @@ data Lecture =
               section :: T.Text,
               cap :: Int,
               time_str :: T.Text,
-              time :: [[Int]],
+              time :: [[Double]],
               instructor :: T.Text,
               enrol :: Maybe Int,
               wait :: Maybe Int
@@ -81,7 +81,7 @@ data Lecture =
 -- | A Tutorial.
 data Tutorial =
     Tutorial { tutorialSection :: Maybe T.Text,
-               times :: [[Int]],
+               times :: [[Double]],
                timeStr :: T.Text
              } deriving Show
 

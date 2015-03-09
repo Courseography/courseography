@@ -13,9 +13,11 @@ import Database.Tables
 import WebParsing.ParsingHelp
 import WebParsing.UTSCParser
 import WebParsing.ArtSciParser
+import WebParsing.TimeTableParser
 
 parseAll :: IO()
 parseAll = do
-	parseArtSci
-	parseUTSC
+	--parseArtSci
+	--parseUTSC
+	parseTT
 	

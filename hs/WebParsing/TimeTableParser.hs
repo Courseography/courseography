@@ -15,54 +15,25 @@ import Data.Maybe
 import Database.Tables as Tables
 import Database.JsonParser
 import WebParsing.ParsingHelp
+import WebParsing.TimeConverter
 import Control.Monad.IO.Class
-
-type Table = [[Tag T.Text]]
+import Data.Text.Read 
 
 {--------------------------------------------------------------------------------------
--obtain list of department urls with getDeptList
--foreach department page, extract table and partition by course
-  (getDeptTimeTable, toCells)
--foreach course, create a Session Record of all lectures and tutorials
-  (updateSession, updateSLot, processCourseTable)
--foreach Session Record, add all lectures and tutorials into tables
+used as an intermediate container while extracting lecture and tutorial information 
+from the table. Is is later converted into lecture or tutorial records by examinig the
+first letter of the section.
 --------------------------------------------------------------------------------------}
+data CourseSlot = 
+  CourseSlot {
+              slotSection :: T.Text,
+              slotTime_str :: T.Text,
+              slotInstructor :: T.Text
+              }
+
 
 timetableUrl :: String
 timetableUrl = "http://www.artsandscience.utoronto.ca/ofr/timetable/winter/"
-{---------------------------------------------------------------------------------------
-A courseSlot is a temporary storage Record that is used to generalize the information
-stored in a lecture and a tutorial. Since the information of a single lecture or tutorial
-is represented in a series of  
-----------------------------------------------------------------------------------------}
-data CourseSlot = 
-  CourseSlot {
-              --shared information
-              slotSection :: T.Text,
-              slotTime_str :: T.Text,
-              --Lecture
-              slotExtra :: Int,
-              slotCap :: Int,
-              slotTime :: [[Int]],
-              slotInstructor :: T.Text,
-              slotEnrol :: Maybe Int,
-              slotWait :: Maybe Int
-              }
-
-{----------------------------------------------------------------------------------------
-insantiates an 'empty' courseSLot
-----------------------------------------------------------------------------------------}
-emptySlot :: CourseSlot
-emptySlot = CourseSlot {
-  slotSection = "",
-  slotTime_str = "",
-  slotExtra = 0,
-  slotCap = 0,
-  slotTime = [],
-  slotInstructor = "",
-  slotEnrol = Nothing,
-  slotWait = Nothing
-}
 
 --csc.html, assem.html, online.html,
 {----------------------------------------------------------------------------------------
@@ -71,8 +42,8 @@ from main list.
 ----------------------------------------------------------------------------------------}
 specialCases :: [String]
 specialCases = ["assem.html",
-                "csc.html",
-                "online.html"]
+                "phl.html",
+                "academics-and-registration"]
 
 {----------------------------------------------------------------------------------------
 extracts a list of department page names from the main website
@@ -82,35 +53,43 @@ getDeptList tags =
   let deptList = filter (tagOpen (=="a") isHref) tags
       notDepts = filter (\s -> (length s) < 20) (map getAttribute deptList)
   in nub $ filter (\dept -> not (dept `elem` specialCases)) notDepts
-	where
-		isHref [("href", _)] = True
-		isHref _ = False
-		getAttribute (TagOpen _ [(_, link)]) = link
+  where
+    isHref [("href", _)] = True
+    isHref _ = False
+    getAttribute (TagOpen _ [(_, link)]) = link
 
-
+--if a row contains "NOTE" we add 3 empty 'cells' to the beginning
+--used to deal with corner case found in "csc.html" 
 expandNote :: [T.Text] -> [T.Text]
 expandNote row =  if ( (T.take 4 (head row)) == "NOTE" )
                   then ["", "", ""] ++ (tail row)
                   else row
+
+--converts all open and closing tags to lowercase.
+lowerTag :: Tag T.Text -> Tag T.Text
+lowerTag (TagOpen tag attrs) = 
+  TagOpen (T.toLower tag) (map (\(x, y) -> (T.toLower x, T.toLower y)) attrs)
+lowerTag (TagClose tag) = TagClose (T.toLower tag)
+lowerTag text = text
 
 {----------------------------------------------------------------------------------------
 takes in a department page name, extracts the html table, partitions into a list of all
 information related to a single course, and inserts the resulting tutorials and lectures
 into the database.
 ----------------------------------------------------------------------------------------}
-getDeptTimetable :: String -> IO()
+getDeptTimetable :: String -> IO ()
 getDeptTimetable url = do
   rsp <- simpleHTTP (getRequest $ timetableUrl ++ url)
   body <- getResponseBody rsp
   let rawSoup = map cleanTag (parseTags (T.pack body))
-      table = dropAround  (tagOpen (\x -> or [(x =="table"), (x=="TABLE")]) (\x -> True)) 
-                          (tagClose (\x -> or [(x=="table"), (x=="TABLE")])) 
-                          rawSoup
-      cells = filter (\x ->  and [(x /= []),(length x) > 4, notCancelled (x !! 4)])  (toCells table)
+      toLower = if (url == "online.html")
+                then map lowerTag rawSoup
+                else rawSoup
+      table = dropAround  (tagOpen (=="table") (\x -> True)) (tagClose (=="table")) toLower
+      cells = filter (\x ->  and [(x /= []), length x > 4, notCancelled (x !! 4)])  (toCells table)
       expandedNote = map expandNote cells
-      courseCells = partitions (\row -> ((head row) /= "")) expandedNote
+      courseCells = partitions (\row -> (head row) /= "") expandedNote
       sessions = map processCourseTable courseCells
-  print url
   mapM_ processCourseTable courseCells
   --print rawSoup
   where
@@ -126,147 +105,107 @@ up more than one row or column.
 toCells :: [Tag T.Text] -> [[T.Text]]
 toCells tags = 
   let row = partitions (tagOpen (=="tr") (\x -> True)) tags
-      rowsColumns =  map (partitions (tagOpen (== "td") (\x -> True))) row
+      rowsColumns =  map (partitions (tagOpen (== "td") (\_ -> True))) row
       filterCells = map (map (filter isTagText)) rowsColumns
       textCells = map (map (map fromTagText)) filterCells
   in  map (map T.concat) textCells
 
+--adds a tutorial to the given session
+addTutorial :: Session -> Tutorial -> Session
+addTutorial sesh tut = sesh {tutorials = tut:tutorials sesh}
 
-{----------------------------------------------------------------------------------------
-creates a tutorial from the information currently residing in the CourseSlot
-----------------------------------------------------------------------------------------}
-makeTutorial :: CourseSlot -> Maybe Tutorial -> Tutorial
-makeTutorial slot Nothing =
-  Tutorial {  tutorialSection = Just (slotSection slot),
-              times = [],
-              timeStr = (slotTime_str slot)
-            }
-makeTutorial slot (Just tutorial) =
-  tutorial {timeStr = T.append (timeStr tutorial) (slotTime_str slot)}
+--adds a lecture to the given session
+addLecture :: Session -> Lecture -> Session
+addLecture sesh lec = sesh {lectures = lec:(lectures sesh)}
 
-{----------------------------------------------------------------------------------------
-makes a lecture from the information currently residing in the courseSlot
-----------------------------------------------------------------------------------------}
-makeLecture :: CourseSlot -> Maybe Lecture -> Lecture
-makeLecture slot Nothing = 
- Lecture { extra = (slotExtra slot),
-              section = (slotSection slot),
-              cap = (slotCap slot),
-              time_str = (slotTime_str slot),
-              time = (slotTime slot),
-              instructor = (slotInstructor slot),
-              enrol = (slotEnrol slot),
-              wait = (slotWait slot)
-            }
-makeLecture slot (Just lec) = lec {time_str = T.append (time_str lec) (slotTime_str slot)}
+--returns true if the the row contains a cancelled lecture or tutorial
+isCancelled :: [T.Text] -> Bool
+isCancelled row = 
+  foldl (\bool text -> bool || T.isPrefixOf "Cancel" text) False row
 
-{----------------------------------------------------------------------------------------
-updates the courseSlot record with information from a given row
-----------------------------------------------------------------------------------------}
-updateSlot :: [T.Text] -> CourseSlot -> CourseSlot
-updateSlot row slot =
-  let partialUpdate = slot {
-            slotTime_str = T.takeWhile (/= ' ') (row !! 5),
-            slotInstructor = (row !! 7)}
-  in  if (row !! 3) == "" --then no new section
-      then partialUpdate
-      else partialUpdate {slotSection = (row !! 3)}
-
-{----------------------------------------------------------------------------------------
-Takes in a 2-d list of 'cells' corresponding to a single course. Each lecture and tutori-
-al can span more than a single row if it has seperate timeslots. 
-
-we recurse over each 'row'. We check to see if the 4th cell contains the name of a lectu-
-re or tutorial section, in which case we consolidate the current lecture or tutorial into
-the session, and create a new lecture of tutorial.
-
-there are five cases, the last of which is useless and only in place for pattern complet-
-eness. 
-  1. no more information, with last block being a tutorial. 
-  2. no more information, with last block being a lecture.
-  3. moer information with last block being a lecture
-  4. more information with last block being a tutorial.
-within 3. and 4, if the current row is 
-----------------------------------------------------------------------------------------}
-updateSession :: [[T.Text]] -> CourseSlot -> Maybe Tutorial -> Maybe Lecture -> Session -> Session
-updateSession [] slot (Just tut) Nothing sesh = sesh {tutorials = tut:(tutorials sesh)}
-updateSession [] slot Nothing (Just lec) sesh = sesh {lectures = lec:(lectures sesh)}
-updateSession course slot (Just tut) Nothing sesh = 
+--extracts the required information from a row of cells and places it into a CourseSLot
+--if given a courseSlot as input, it updates the time only. otherwise updates time and
+--section
+updateSlot :: [T.Text] -> Maybe CourseSlot -> Maybe CourseSlot
+updateSlot row Nothing = 
+  if (isCancelled row) || length row < 8
+  then Nothing
+  else let timestr = T.takeWhile (/= ' ') (row !! 5)
+           in Just CourseSlot { slotSection    = (row !! 3), 
+                                slotTime_str   = timestr,
+                                slotInstructor = (row !! 7) }
+updateSlot row (Just slot) = 
+  if (isCancelled) row || length row < 8
+  then Just slot
+  else let newTime = T.takeWhile (/= ' ') (row !! 5)
+       in (Just slot {slotTime_str = (T.append newTime (T.append " " (slotTime_str slot)))})
+ 
+ --takes in cells representing a course, and recursively places lecture and tutorial info
+ --into courseSlots.
+parseCourse :: [[T.Text]] -> Maybe CourseSlot -> [Maybe CourseSlot] -> [Maybe CourseSlot]
+parseCourse [] slot slots = slot:slots
+parseCourse course Nothing slots =
   let row = head course
-      updatedSlot = updateSlot row slot
-  in  if (row !! 3) == ""
-      then 
-        updateSession (tail course)
-                      updatedSlot 
-                      (Just (makeTutorial updatedSlot (Just tut)))
-                      Nothing
-                      sesh
-      else  if (T.head (row !! 3)) == 'L' --tutorial
-            then
-              updateSession (tail course)
-                            updatedSlot
-                            Nothing
-                            (Just (makeLecture updatedSlot Nothing))
-                            (sesh {tutorials = tut:(tutorials sesh)}) 
-            else 
-              updateSession (tail course)
-                            updatedSlot
-                            (Just (makeTutorial updatedSlot Nothing))
-                            Nothing
-                            (sesh {tutorials = tut:(tutorials sesh)})-- lecture
-              
-updateSession course slot Nothing (Just lec) sesh = 
+      rest = tail course
+  in parseCourse rest (updateSlot row Nothing) slots
+parseCourse course slot slots =
   let row = head course
-      updatedSlot = updateSlot row slot
-  in  if (row !! 3) == ""
-      then 
-        updateSession (tail course)
-                      updatedSlot 
-                      Nothing
-                      (Just (makeLecture updatedSlot (Just lec)))
-                      sesh
-      else  if (T.head (row !! 3)) == 'L' --Lecture
-            then --lecture
-              updateSession (tail course)
-                            updatedSlot
-                            Nothing
-                            (Just (makeLecture updatedSlot Nothing))
-                            sesh {lectures =  lec : (lectures sesh)}
-              
-            else --tutorial or practical
-              updateSession (tail course)
-                            updatedSlot
-                            (Just (makeTutorial updatedSlot Nothing))
-                            Nothing
-                            sesh {lectures = lec:(lectures sesh)}
-              
-updateSession _ _  Nothing Nothing sesh = sesh
+      rest = tail course
+  in if ((row !! 3) == "")
+     then parseCourse rest (updateSlot row slot) slots
+     else parseCourse rest (updateSlot row Nothing) (slot:slots)
 
+--converts a courseSlot into a lecture
+makeLecture :: CourseSlot -> Lecture 
+makeLecture slot =
+  Lecture { extra = 0,
+            section = (slotSection slot),
+            cap = -1,
+            time_str = (slotTime_str slot),
+            time = concatMap makeTimeSlots (T.split (== ' ') (slotTime_str slot)),
+            instructor = (slotInstructor slot),
+            enrol = Nothing,
+            wait = Nothing }
 
-{----------------------------------------------------------------------------------------
-it is given a 2-d list of 'cells' representing all information for a single course.
-using updateSession, it converts this into a Session. Each lecture and tutorial within
-the session is then inserted into their respective tables. 
+--converts a single courseSlot into a tutorial
+makeTutorial :: CourseSlot -> Tutorial
+makeTutorial slot =
+  Tutorial {tutorialSection = Just (slotSection slot),
+            times = concatMap makeTimeSlots (T.split (== ' ') (slotTime_str slot)),
+            timeStr = (slotTime_str slot)}
 
-QUIRK: re-checking for 'Cancelled' courses, catching case where the first lecture sect-
-ion (same row that contains course name) is cancelled.
-----------------------------------------------------------------------------------------}
-processCourseTable :: [[T.Text]] -> IO ()
-processCourseTable course = do 
-  let  session = ((head course) !! 1)
-  let  code = T.take 8 ((head course) !! 0)
-  let  emptySesh = Session {lectures = [], tutorials = []}
-  let  finalSlot = if (head course) !! 5  == "Cancel"
-                   then updateSlot (head (tail course)) emptySlot
-                   else updateSlot (head course) emptySlot
-  let  sesh = if (head course) !! 5  == "Cancel"
-              then updateSession (tail (tail course)) finalSlot Nothing (Just (makeLecture finalSlot Nothing)) emptySesh   
-              else updateSession (tail course) finalSlot Nothing (Just (makeLecture finalSlot Nothing)) emptySesh   
+--returns true if the courseSlot is housing a lecture, false otherwise.
+isLecture :: CourseSlot -> Bool
+isLecture slot = T.head (slotSection slot) == 'L'
+
+--inserts a single courseSlot into a session
+insertSession :: Session -> CourseSlot -> Session
+insertSession sesh slot = 
+  if isLecture slot
+  then sesh {lectures = (makeLecture slot):(lectures sesh)}
+  else sesh {tutorials = (makeTutorial slot):(tutorials sesh)}
+
+--inserts a list of courseSlots into a session, first converting them into lectures
+--or tutorials.
+makeSession :: [CourseSlot] -> Session
+makeSession slots = 
+  let newSession = Session {lectures = [], tutorials = []}
+  in foldl insertSession newSession slots
+
+--takes in cells representing a single course, and inserts the lecture tutorial info
+--into the database
+processCourseTable :: [[T.Text]] => IO ()
+processCourseTable course = do
+  let session = (head course) !! 1
+  let code = T.take 8 ((head course) !! 0)
+  let slots = filter isJust (parseCourse course Nothing [])
+  let justSlots = map fromJust slots 
+  let sesh = makeSession justSlots
   print code
   runSqlite dbStr $ do
     runMigration migrateAll
     mapM_ (\l ->  insertLec session code l) (lectures sesh)
-    mapM_ (\t ->  insertTut session code t) (tutorials sesh)         
+    mapM_ (\t ->  insertTut session code t) (tutorials sesh)    
 
 {----------------------------------------------------------------------------------------
 
@@ -276,5 +215,16 @@ main = do
     rsp <- simpleHTTP (getRequest $ timetableUrl ++ "sponsors.htm")
     body <- getResponseBody rsp
     let depts = getDeptList $ parseTags body
-    --getDeptTimetable "online.html"
     mapM_ getDeptTimetable depts
+
+parseTT :: IO ()
+parseTT = do
+    rsp <- simpleHTTP (getRequest $ timetableUrl ++ "sponsors.htm")
+    body <- getResponseBody rsp
+    let depts = getDeptList $ parseTags body
+    mapM_ getDeptTimetable depts
+
+
+
+
+
