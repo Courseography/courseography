@@ -30,6 +30,6 @@ fourOhFourHtml = H.div ! A.id "aboutDiv" $ do
   H.h2 "404 Page Not Found!"
   H.p "Sorry, the path you have traversed has no destination node."
   H.p "The page might have been moved or deleted, or the little dragon running our server might have gone to have smores."
-  H.p "You can use the links above to get back on the grid(, graph etc.)"
+  H.p "You can use the links above to get back on the grid(, graph etc.)."
   createTag H.div "picDiv" "" ""
 
