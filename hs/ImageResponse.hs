@@ -13,38 +13,52 @@ import Data.List.Split
 import SvgParsing.SVGGenerator
 import SvgParsing.ParserUtil
 import Diagram (renderTable)
+import Control.Concurrent
 import qualified Data.Map as M
 
 -- | Returns an image of the graph requested by the user.
-graphImageResponse :: ServerPart Response
-graphImageResponse =
+graphImageResponse :: MVar Integer -> ServerPart Response
+graphImageResponse counter =
     do req <- askRq
        let cookies = rqCookies req
-       liftIO $ getGraphImage $
-                M.map cookieValue $ M.fromList cookies
+       liftIO $ getGraphImage counter (M.map cookieValue $ M.fromList cookies)
 
 -- | Returns an image of the timetable requested by the user.
-timetableImageResponse :: String -> ServerPart Response
-timetableImageResponse courses = liftIO $ getTimetableImage courses
+timetableImageResponse :: MVar Integer -> String -> ServerPart Response
+timetableImageResponse counter courses =
+   liftIO $ getTimetableImage counter courses
 
 -- | Creates an image, and returns the base64 representation of that image.
-getGraphImage :: M.Map String String -> IO Response
-getGraphImage courseMap = do
-	buildSVG courseMap "Testfile2.svg"
-	liftIO $ createImageFile "Testfile2.svg" "INSERT_ID-graph.png"
-	imageData <- BS.readFile "INSERT_ID-graph.png"
-	liftIO $ removeImage "INSERT_ID-graph.png"
-	liftIO $ removeImage "Testfile2.svg"
-	let encodedData = BEnc.encode imageData
-	return $ toResponse encodedData
-
--- | Creates an image, and returns the base64 representation of that image.
-getTimetableImage :: String -> IO Response
-getTimetableImage courses =
-    do liftIO $ renderTable "circle.svg" courses
-       liftIO $ createImageFile "circle.svg" "INSERT_ID-graph.png"
-       imageData <- BS.readFile "INSERT_ID-graph.png"
-       liftIO $ removeImage "INSERT_ID-graph.png"
-       liftIO $ removeImage "Testfile2.svg"
+getGraphImage :: MVar Integer -> M.Map String String -> IO Response
+getGraphImage counter courseMap =
+    do c <- addCounter counter
+       let svgFilename = (show c ++ "-graph-svg-file.svg")
+           imageFilename = (show c ++ "-graph.png")
+       buildSVG courseMap svgFilename
+       createImageFile svgFilename imageFilename
+       imageData <- BS.readFile imageFilename
+       removeImage imageFilename
+       removeImage svgFilename
        let encodedData = BEnc.encode imageData
        return $ toResponse encodedData
+
+-- | Creates an image, and returns the base64 representation of that image.
+getTimetableImage :: MVar Integer -> String -> IO Response
+getTimetableImage counter courses =
+    do c <- addCounter counter
+       let svgFilename = (show c ++ "--timetable-svg-file.svg")
+           imageFilename = (show c ++ "-timetable.png")
+       renderTable svgFilename courses
+       createImageFile svgFilename imageFilename
+       imageData <- BS.readFile imageFilename
+       removeImage imageFilename
+       removeImage svgFilename
+       let encodedData = BEnc.encode imageData
+       return $ toResponse encodedData
+
+-- | Adds 1 to the input MVar Integer.
+addCounter :: MVar Integer -> IO Integer
+addCounter counter = do
+    c <- takeMVar counter
+    (putMVar counter . (+) 1) c
+    return c

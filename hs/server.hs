@@ -15,6 +15,7 @@ import Filesystem.Path.CurrentOS
 import System.Directory
 import qualified Data.Text as T
 import Diagram
+import Control.Concurrent
 
 main :: IO ()
 main = do
@@ -22,12 +23,13 @@ main = do
     cwd <- getCurrentDirectory
     let staticDir = encodeString $ parent $ decodeString cwd
     contents <- readFile "../README.md"
+    counter <- (newMVar 0) :: IO (MVar Integer)
     simpleHTTP nullConf $
         msum [ dir "grid" gridResponse,
                dir "graph" graphResponse,
                dir "draw" drawResponse,
-               dir "image" $ graphImageResponse,
-               dir "timetable-image" $ look "courses" >>= timetableImageResponse,
+               dir "image" $ graphImageResponse counter,
+               dir "timetable-image" $ look "courses" >>= (timetableImageResponse counter),
                --dir "about" $ aboutResponse contents,
                dir "post" postResponse,
                dir "static" $ serveDirectory EnableBrowsing [] staticDir,
