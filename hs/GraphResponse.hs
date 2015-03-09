@@ -50,8 +50,13 @@ timetableTab =
         createTag H.div "timetableContainer" "" ""
 
 sideBar :: H.Html
-sideBar = 
+sideBar = do
     H.div ! A.id "sidebar" $ do
+        H.nav ! A.id "sidebar-nav" $ H.ul $ do
+            H.li ! A.id "focuses" $ do
+                H.a ! A.href "" $ "Focuses"
+            H.li ! A.id "graphs" $ do
+                H.a ! A.href "" $ "Graphs"
     H.div ! A.id "sidebar-button" $ ""
 
 

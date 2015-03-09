@@ -196,8 +196,45 @@ sidebarCSS = do
         width (px 20)
         height (pct 100)
         float floatLeft
-        backgroundColor purple
+        backgroundColor purple1
         position absolute
+    "#focuses, #graph" ? do
+        cursor pointer
+    "#sidebar-nav" ? do
+        width (pct 100)
+        fontSize (px 13)
+        backgroundColor purple3
+        border solid (px 1) grey2
+        "border-radius" -: "4px"
+        "box-shadow" -: "0 2px 2px -1px rgba(0, 0, 0, 0.055)"
+        display block
+        overflow hidden
+        ul ? do
+            width $ (pct 100)
+            margin0
+            li ? do
+                "list-style-type" -: "none"
+                display inlineBlock
+                width (pct 48)
+                --textAlign $ alignSide sideCenter
+                "-webkit-transition" -: "all 0.2s"
+                "-moz-transition" -: "all 0.2s"
+                "-ms-transition" -: "all 0.2s"
+                "-o-transition" -: "all 0.2s"
+                "transition" -: "all 0.2s"
+                ":hover" & do
+                    "background-color" -: "#46364A !important"
+                    a ? do
+                        "color" -: "white !important" 
+                a ? do
+                    color black
+                    display inlineBlock
+                    lineHeight (px 30)
+                    --paddingLeft (px 26)
+                    textAlign $ alignSide sideCenter
+                    width (pct 95)
+                    textDecoration none
+
 
 {- titleCSS
  - Generates CSS for the title. -}
