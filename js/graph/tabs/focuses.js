@@ -61,7 +61,7 @@ function spotlight(id) {
     var x = parseFloat(node.attr('x')) + width;
     var y = parseFloat(node.attr('y')) + height;
 
-    var ellipse = '<ellipse class="spotlight" cx="'.concat(String(x),
+    var ellipse = '<ellipse class="spotlight" style= "fill: white; opacity: 0.7; stroke: none" cx="'.concat(String(x),
                                                            '" cy = "',
                                                            String(y),
                                                            '" rx="',
@@ -72,5 +72,5 @@ function spotlight(id) {
     nodeObject.before(ellipse);
     nodeObject.attr('data-active', 'lit');
 
-    window[id].updateSVG();
+    // window[id].updateSVG();
 }
