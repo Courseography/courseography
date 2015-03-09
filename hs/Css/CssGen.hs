@@ -17,12 +17,12 @@ import Css.AboutCss
 
 styleFiles :: [(String, Css)]
 styleFiles = [
-    ("../style/common/common.css", common),
-    ("../style/graph/graph_styles.css", graphStyles),
-    ("../style/grid/timetable_styles.css", timetableStyles),
-    ("../style/draw/draw_styles.css", drawStyles),
-    ("../style/post/post_styles.css", postStyles),
-    ("../style/common/about.css", aboutStyles)
+    ("../public/style/common/common.css", common),
+    ("../public/style/graph/graph_styles.css", graphStyles),
+    ("../public/style/grid/timetable_styles.css", timetableStyles),
+    ("../public/style/draw/draw_styles.css", drawStyles),
+    ("../public/style/post/post_styles.css", postStyles),
+    ("../public/style/common/about.css", aboutStyles)
     ]
 
 renderStyleFile :: (String, Css) -> IO ()
@@ -30,9 +30,9 @@ renderStyleFile (path, css) = writeFile path $ unpack $ render css
 
 generateCSS :: IO ()
 generateCSS = do
-    createDirectoryIfMissing True "../style/common"
-    createDirectoryIfMissing True "../style/graph"
-    createDirectoryIfMissing True "../style/grid"
-    createDirectoryIfMissing True "../style/draw"
-    createDirectoryIfMissing True "../style/post"
+    createDirectoryIfMissing True "../public/style/common"
+    createDirectoryIfMissing True "../public/style/graph"
+    createDirectoryIfMissing True "../public/style/grid"
+    createDirectoryIfMissing True "../public/style/draw"
+    createDirectoryIfMissing True "../public/style/post"
     Prelude.foldl1 (>>) $ Prelude.map renderStyleFile styleFiles
