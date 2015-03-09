@@ -58,7 +58,16 @@ sideBar = do
                 H.a ! A.href "" $ "Focuses"
             H.li ! A.id "graphs-nav" $ do
                 H.a ! A.href "" $ "Graphs"
-        H.div ! A.id "focuses" $ "Focuses"
+        H.div ! A.id "focuses" $ do
+            H.p ! A.id "scientific-computing" ! A.class_ "focus" $ "Scientific Computing"
+            H.p ! A.id "ai" ! A.class_ "focus" $ "Artifical Intelligence"
+            H.p ! A.id "natural-language" ! A.class_ "focus" $ "Natural Language Processing"
+            H.p ! A.id "computer-vision" ! A.class_ "focus" $ "Computer Vision"
+            H.p ! A.id "computer-systems" ! A.class_ "focus" $ "Computer Systems"
+            H.p ! A.id "video-games" ! A.class_ "focus" $ "Video Games"
+            H.p ! A.id "hci" ! A.class_ "focus" $ "Human Computer Interaction"
+            H.p ! A.id "theory-comp" ! A.class_ "focus" $ "Theory of Computation"
+            H.p ! A.id "web" ! A.class_ "focus" $ "Web Technologies"
         H.div ! A.id "graphs" $ "Graph"
     H.div ! A.id "sidebar-button" $ ""
 

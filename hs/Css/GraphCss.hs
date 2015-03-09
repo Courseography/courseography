@@ -193,7 +193,7 @@ sidebarCSS = do
         width (px 20)
         height (pct 100)
         float floatLeft
-        "background" -: "rgba(128,0,128,0.8)"
+        "background" -: "rgba(128, 0, 128, 0.8)"
         position absolute
     "#sidebar-button" ? do
         cursor pointer
@@ -240,11 +240,20 @@ sidebarCSS = do
                     textAlign $ alignSide sideCenter
                     width (pct 95)
                     textDecoration none
-    "#focuses, #graphs" ? do 
+    "#focuses, #graphs" ? do
+        marginTop (px 25) 
         height (pct 100)
         width (pct 100)
         display none
         marginLeft (px 25)
+    ".focus" ? do
+        display block
+        cursor pointer
+        fontSize (px 20)
+        border solid (px 1) black
+        textAlign $ alignSide sideCenter
+        width (pct 90)
+        backgroundColor white
 
 
 {- titleCSS
