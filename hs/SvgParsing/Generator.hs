@@ -130,11 +130,11 @@ buildSVG :: M.Map String String -> String -> IO ()
 buildSVG courseMap filename =
     runSqlite dbStr $ do
         sqlRects    :: [Entity Shape]    <- selectList [ShapeIsBool ==. False] []
-        sqlText     :: [Entity Text]     <- selectList [] []
+        sqlTexts    :: [Entity Text]     <- selectList [] []
         sqlPaths    :: [Entity Path]     <- selectList [] []
-        sqlEllipses :: [Entity Shape] <- selectList [ShapeIsBool ==. True] []
+        sqlEllipses :: [Entity Shape]    <- selectList [ShapeIsBool ==. True] []
         let courseStyleMap = M.map convertSelectionToStyle courseMap
-            texts          = map entityVal sqlText
+            texts          = map entityVal sqlTexts
             rects          = map (buildRect texts . entityVal) sqlRects
             ellipses       = buildEllipses texts 0 $ map entityVal sqlEllipses
             paths          = zipWith (buildPath rects ellipses) (map entityVal sqlPaths) [1..length sqlPaths]
@@ -193,7 +193,6 @@ convertTextToSVG isHybrid isBool isRegion text =
                        "font-family:sans-serif;stroke:none;")
             $ toMarkup $ textText text
     where (xPos, yPos) = textCoord text
-
 
 -- | Converts a `Path` to SVG.
 convertEdgeToSVG :: Path -> S.Svg

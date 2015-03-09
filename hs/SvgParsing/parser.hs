@@ -51,10 +51,7 @@ generateFolder = do
     createDirectoryIfMissing True "../res/graphs/CSC"
 
 -- | Parses a level.
-parseNode :: Bool
-          -> Style
-          -> Content i
-          -> ([Path],[Shape],[Text])
+parseNode :: Bool -> Style -> Content i -> ([Path],[Shape],[Text])
 parseNode currentlyInRegion style content =
     if getAttribute "id" content == "layer2" ||
        getName content == "defs"
@@ -79,10 +76,7 @@ parseNode currentlyInRegion style content =
                                parentStyle (getChildren content)
 
 -- | Parses a list of Content.
-parseChildren :: Bool
-              -> Style
-              -> [Content i]
-              -> ([Path],[Shape],[Text])
+parseChildren :: Bool -> Style -> [Content i] -> ([Path],[Shape],[Text])
 parseChildren currentlyInRegion style x =
      foldl addThree ([],[],[]) $ map (parseNode currentlyInRegion style) x
 
@@ -94,9 +88,7 @@ addThree :: ([Path],[Shape],[Text])
 addThree (a,b,c) (d,e,f) = (a ++ d, b ++ e, c ++f)
 
 -- | Parses a rect.
-parseRect :: Style
-          -> Content i
-          -> Shape
+parseRect :: Style -> Content i -> Shape
 parseRect style content =
     Shape ""
           (read (getAttribute "x" content) + fst (transform style),
@@ -111,10 +103,7 @@ parseRect style content =
           False
 
 -- | Parses a path.
-parsePath :: Bool
-          -> Style
-          -> Content i
-          -> Maybe Path
+parsePath :: Bool -> Style -> Content i -> Maybe Path
 parsePath isRegion style content =
     if last (getAttribute "d" content) == 'z' && not isRegion
     then Nothing
@@ -129,9 +118,7 @@ parsePath isRegion style content =
 
 
 -- | Parses a text.
-parseText :: Style
-          -> Content i
-          -> Text
+parseText :: Style -> Content i -> Text
 parseText style content =
     Text (getAttribute "id" content)
          (read (getAttribute "x" content) + fst (transform style),
@@ -139,9 +126,7 @@ parseText style content =
          (tagTextContent content)
 
 -- | Parses a text.
-parseEllipse :: Style
-             -> Content i
-             -> Shape
+parseEllipse :: Style -> Content i -> Shape
 parseEllipse style content =
     Shape ""
           (read (getAttribute "cx" content) + fst (transform style),
