@@ -254,6 +254,14 @@ sidebarCSS = do
         textAlign $ alignSide sideCenter
         width (pct 90)
         backgroundColor white
+    "#close-focus" ? do
+        display block
+        cursor pointer
+        backgroundColor purple3
+        fontSize (px 20)
+        border solid (px 1) black
+        textAlign $ alignSide sideCenter
+        width (pct 90)
 
 
 {- titleCSS
