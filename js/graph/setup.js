@@ -9,8 +9,6 @@ var FCEs300 = 0;
 var FCEs400 = 0;
 var FCEsMAT = 0;
 
-var projectCourses = [];      // Active project courses (CSC49*)
-
 var activeFocus = '';         // The active focus from the 'Focuses' tab.
 var timeouts = [];            // All timeouts. Used to remove timeouts later on
 var FCEPrerequisiteCourses;   // Courses that have FCE based prerequisites,
