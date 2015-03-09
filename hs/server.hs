@@ -7,6 +7,7 @@ import GridResponse
 import GraphResponse
 import DrawResponse
 import PostResponse
+import FourOhFourResponse
 --import AboutResponse
 import Database.CourseQueries
 import Css.CssGen
@@ -29,7 +30,8 @@ main = do
                dir "post" postResponse,
                dir "static" $ serveDirectory EnableBrowsing [] staticDir,
                dir "course" $ look "name" >>= retrieveCourse, 
-               dir "all-courses" $ liftIO allCourses
+               dir "all-courses" $ liftIO allCourses,
+               fourOhFourResponse
                ]
 
 retrieveCourse :: String -> ServerPart Response
