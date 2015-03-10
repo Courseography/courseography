@@ -45,6 +45,6 @@ getTimetableImage courses =
        liftIO $ createImageFile "circle.svg" "INSERT_ID-graph.png"
        imageData <- BS.readFile "INSERT_ID-graph.png"
        liftIO $ removeImage "INSERT_ID-graph.png"
-       liftIO $ removeImage "Testfile2.svg"
+	   liftIO $ removeImage "Testfile2.svg"
        let encodedData = BEnc.encode imageData
        return $ toResponse encodedData
