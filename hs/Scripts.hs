@@ -46,6 +46,7 @@ timetableScripts = do jQuery
                                                 "static/js/common/objects/course.js",
                                                 "static/js/common/objects/section.js",
                                                 "static/js/common/utilities/util.js",
+                                                "static/js/common/grid_image.js",
                                                 "static/js/draw/draw.js"])
 
 --drawScripts :: H.Html
