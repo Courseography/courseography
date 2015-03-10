@@ -20,7 +20,9 @@ graphResponse =
                  plannerLinks
                 ]
                 (do header "graph"
-                    H.div ! A.id "graph" ! A.class_ "graph" $   ""
+                    H.div ! A.id "container" $ do
+                        H.div ! A.id "graph" ! A.class_ "graph" $   ""
+                        sideBar
                     disclaimer
                 )
                 plannerScripts
@@ -46,5 +48,30 @@ timetableTab =
                 makeA "" "" "timetable_creator.html" "" "Plan your timetable here!"
             makeInput "filter" "text-input" "" "" "text"
         createTag H.div "timetableContainer" "" ""
+
+sideBar :: H.Html
+sideBar = do
+    H.div ! A.id "sidebar" $ do
+        H.div ! A.id "fcecount" $ ""
+        H.nav ! A.id "sidebar-nav" $ H.ul $ do
+            H.li ! A.id "focuses-nav" $ do
+                H.a ! A.href "" $ "Focuses"
+            H.li ! A.id "graphs-nav" $ do
+                H.a ! A.href "" $ "Graphs"
+        H.div ! A.id "focuses" $ do
+            H.p ! A.id "sci" ! A.class_ "focus" $ "Scientific Computing"
+            H.p ! A.id "AI" ! A.class_ "focus" $ "Artifical Intelligence"
+            H.p ! A.id "NLP" ! A.class_ "focus" $ "Natural Language Processing"
+            H.p ! A.id "vision" ! A.class_ "focus" $ "Computer Vision"
+            H.p ! A.id "systems" ! A.class_ "focus" $ "Computer Systems"
+            H.p ! A.id "game" ! A.class_ "focus" $ "Video Games"
+            H.p ! A.id "HCI" ! A.class_ "focus" $ "Human Computer Interaction"
+            H.p ! A.id "theory" ! A.class_ "focus" $ "Theory of Computation"
+            H.p ! A.id "web" ! A.class_ "focus" $ "Web Technologies"
+            H.div ! A.id "close-focus" $ "Close Focus"
+        H.div ! A.id "graphs" $ "Graph"
+    H.div ! A.id "sidebar-button" $ ""
+
+
 
 

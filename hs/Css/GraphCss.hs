@@ -12,6 +12,7 @@ import Css.Constants
 
 graphStyles = do
     graphContainer
+    sidebarCSS
     nodeCSS
     pathCSS
     resetCSS
@@ -164,6 +165,8 @@ graphContainer = do
         overflow hidden
         margin nil auto nil auto
         clear both
+        display inlineBlock
+        position absolute
     "#graphRootSVG" ? do
         width100
         height100
@@ -171,6 +174,95 @@ graphContainer = do
         "stroke-linecap" -: "square"
         "stroke-miterlimit" -: "10"
         "shape-rendering" -: "geometricPrecision"
+
+sidebarCSS = do
+    "#fcecount" ? do
+        width (pct 100)
+        height (px 30)
+        backgroundColor purple4
+        border solid (px 1) black
+        textAlign $ alignSide sideCenter
+        display none
+    "#container" ? do
+        width (pct 100)
+        height (px 700)
+        position relative
+    "#sidebar" ? do 
+        "border-radius" -: "4px"
+        display inlineBlock
+        width (px 20)
+        height (pct 100)
+        float floatLeft
+        "background" -: "rgba(128, 0, 128, 0.8)"
+        position absolute
+    "#sidebar-button" ? do
+        cursor pointer
+        "border-radius" -: "4px"
+        display inlineBlock
+        width (px 20)
+        height (pct 100)
+        float floatLeft
+        backgroundColor purple1
+        position absolute
+    "#focuses-nav, #graph-nav" ? do
+        cursor pointer
+    "#sidebar-nav" ? do
+        width (pct 100)
+        fontSize (px 13)
+        backgroundColor purple3
+        border solid (px 1) grey2
+        "border-radius" -: "4px"
+        "box-shadow" -: "0 2px 2px -1px rgba(0, 0, 0, 0.055)"
+        display block
+        overflow hidden
+        ul ? do
+            width $ (pct 100)
+            margin0
+            li ? do
+                "list-style-type" -: "none"
+                display inlineBlock
+                width (pct 48)
+                --textAlign $ alignSide sideCenter
+                "-webkit-transition" -: "all 0.2s"
+                "-moz-transition" -: "all 0.2s"
+                "-ms-transition" -: "all 0.2s"
+                "-o-transition" -: "all 0.2s"
+                "transition" -: "all 0.2s"
+                ":hover" & do
+                    "background-color" -: "#46364A !important"
+                    a ? do
+                        "color" -: "white !important" 
+                a ? do
+                    color black
+                    display inlineBlock
+                    lineHeight (px 30)
+                    --paddingLeft (px 26)
+                    textAlign $ alignSide sideCenter
+                    width (pct 95)
+                    textDecoration none
+    "#focuses, #graphs" ? do
+        marginTop (px 25) 
+        height (pct 100)
+        width (pct 100)
+        display none
+        marginLeft (px 25)
+    ".focus" ? do
+        display block
+        cursor pointer
+        fontSize (px 20)
+        border solid (px 1) black
+        textAlign $ alignSide sideCenter
+        width (pct 90)
+        backgroundColor white
+    "#close-focus" ? do
+        display block
+        cursor pointer
+        backgroundColor purple3
+        fontSize (px 20)
+        border solid (px 1) black
+        textAlign $ alignSide sideCenter
+        width (pct 90)
+
 
 {- titleCSS
  - Generates CSS for the title. -}
