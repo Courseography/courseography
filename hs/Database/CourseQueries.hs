@@ -60,7 +60,7 @@ buildLecture entity =
             (lecturesSection entity)
             (lecturesCapacity entity)
             (lecturesTimeStr entity)
-            (map timeField (lecturesTimes entity))
+            (lecturesTimes entity)
             (lecturesInstructor entity)
             (Just (lecturesEnrolled entity))
             (Just (lecturesWaitlist entity))
@@ -69,7 +69,7 @@ buildLecture entity =
 buildTutorial :: Tutorials -> Tutorial
 buildTutorial entity =
     Tutorial (tutorialsSection entity)
-             (map timeField (tutorialsTimes entity))
+             (tutorialsTimes entity)
              (tutorialsTimeStr entity)
 
 -- | Builds a Session structure from a list of tuples from the Lectures table, and a list of tuples from the Tutorials table.
