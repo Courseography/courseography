@@ -195,7 +195,7 @@ makeSession slots =
 
 --takes in cells representing a single course, and inserts the lecture tutorial info
 --into the database
-processCourseTable :: [[T.Text]] => IO ()
+processCourseTable :: [[T.Text]] -> IO ()
 processCourseTable course = do
   let session = (head course) !! 1
   let code = T.take 8 ((head course) !! 0)

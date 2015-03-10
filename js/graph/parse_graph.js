@@ -17,9 +17,10 @@ function buildGraph() {
 
     $('.hybrid').each(function () {
         var id = $(this).attr('id');
-        var course = $(this).children('text').text();
+        var course = $(this).children('text').text().toLowerCase();
         var reqs = parseAnd(course)[0];
         makeHybrid('AND', id);
+        console.log(reqs);
         $.each(reqs, function (index, elem) {
             if ($.isArray(elem)) {
                 var orNode = id + elem.join('');
@@ -39,7 +40,7 @@ function buildGraph() {
 
     $('.bool').each(function () {
         var id = $(this).attr('id');
-        var type = $(this).children('text').text().toUpperCase();
+        var type = $(this).children('text').text();
         makeHybrid(type, id);
     });
 
@@ -133,13 +134,13 @@ function parseCourse(s) {
     var start = s.search(/[,/]/);
 
     if (start === 3) {
-        return ['CSC' + s.substr(0, start), s.substr(start)];
+        return ['csc' + s.substr(0, start), s.substr(start)];
     } else if (start > 0) {
         return [s.substr(0, start), s.substr(start)];
     }
 
     if (s.length === 3) {
-        return ['CSC' + s, ''];
+        return ['csc' + s, ''];
     }
 
     return [s, ''];
