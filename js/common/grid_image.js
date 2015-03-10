@@ -8,7 +8,6 @@ function getGridImage() {
 
     var img;
     var courses = getCoursesTable();
-
     $.ajax({
         url: 'timetable-image',
         async: false,
@@ -30,7 +29,7 @@ function getCoursesTable() {
     for (var i = 8; i < 22; i++) {
         for (var j = 0; j < 5; j++) {
             courses += $("#" + days[j] + i + "F").text();
-            courses += "\n";
+            courses += "%0A";
         }
     }
 

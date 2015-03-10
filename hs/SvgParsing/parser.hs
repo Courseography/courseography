@@ -116,7 +116,6 @@ parsePath isRegion style content =
                     "")
     where d = map (addTuples (transform style)) $ parsePathD $ getAttribute "d" content
 
-
 -- | Parses a text.
 parseText :: Style -> Content i -> Text
 parseText style content =

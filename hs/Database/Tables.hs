@@ -11,7 +11,6 @@
              TypeFamilies #-}
 
 module Database.Tables where
-
 import Database.Persist.TH
 import qualified Data.Text as T
 import qualified Data.Vector as V
@@ -107,7 +106,7 @@ data Lecture =
               section :: T.Text,
               cap :: Int,
               time_str :: T.Text,
-              time :: [[Int]],
+              time :: [[Double]],
               instructor :: T.Text,
               enrol :: Maybe Int,
               wait :: Maybe Int
@@ -116,7 +115,7 @@ data Lecture =
 -- | A Tutorial.
 data Tutorial =
     Tutorial { tutorialSection :: Maybe T.Text,
-               times :: [[Int]],
+               times :: [[Double]],
                timeStr :: T.Text
              } deriving Show
 
