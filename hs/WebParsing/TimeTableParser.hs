@@ -14,6 +14,7 @@ import Data.List.Utils
 import Data.Maybe
 import Database.Tables as Tables
 import Database.JsonParser
+import WebParsing.HtmlTable
 import WebParsing.ParsingHelp
 import WebParsing.TimeConverter
 import Control.Monad.IO.Class
