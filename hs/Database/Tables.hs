@@ -18,7 +18,7 @@ import Data.Aeson
 import Control.Monad
 import Control.Applicative
 
-type Time = [Int]
+type Time = [Double]
 type Point = (Double, Double)
 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
@@ -73,13 +73,13 @@ Graph
 Text
 --    gId Int
     rId String
-    coord Point
+    pos Point
     text String
     deriving Show
 
 Shape
     id_ String
-    coord Point
+    pos Point
     width Double
     height Double
     fill String

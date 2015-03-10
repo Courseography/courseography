@@ -43,16 +43,16 @@ buildRect texts entity =
     let rectTexts = filter (\x -> intersects
                             (shapeWidth entity)
                             (shapeHeight entity)
-                            (shapeCoord entity)
+                            (shapePos entity)
                             9
-                            (textCoord x)
+                            (textPos x)
                             ) texts
         textString = concatMap textText rectTexts
         dropSlash = takeWhile (/='/')
         id_ = map toLower $ (if shapeIsHybrid entity then "h" else "") ++
                             (if isDigit $ head textString then "CSC" else "") ++ dropSlash textString
     in Shape id_
-             (shapeCoord entity)
+             (shapePos entity)
              (shapeWidth entity)
              (shapeHeight entity)
              (shapeFill entity)
@@ -75,7 +75,7 @@ intersectsWithPoint :: Point -> Shape -> Bool
 intersectsWithPoint point shape =
     intersects (shapeWidth shape)
                (shapeHeight shape)
-               (shapeCoord shape)
+               (shapePos shape)
                (shapeTolerance shape)
                point
 
@@ -87,12 +87,12 @@ buildEllipses texts idCounter entities =
         ellipseText = filter (\x -> intersects
                                     (shapeWidth entity)
                                     (shapeHeight entity)
-                                    (shapeCoord entity)
+                                    (shapePos entity)
                                     9
-                                    (textCoord x)
+                                    (textPos x)
                              ) texts
     in Shape ("bool" ++ show idCounter)
-             (shapeCoord entity)
+             (shapePos entity)
              (shapeWidth entity)
              (shapeHeight entity)
              ""

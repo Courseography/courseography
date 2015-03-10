@@ -78,7 +78,7 @@ insertLec session code lecture =
     insert_ $ Lectures code
                        session
                        (section lecture)
-                       (map Time (time lecture))
+                       (time lecture)
                        (cap lecture)
                        (instructor lecture)
                        (fromMaybe 0 (enrol lecture))
@@ -93,7 +93,7 @@ insertTut session code tutorial =
     insert_ $ Tutorials code
                         (tutorialSection tutorial)
                         session
-                        (map Time (times tutorial))
+                        (times tutorial)
                         (timeStr tutorial)
 
 -- | Inserts the lectures from course into the Lectures table.

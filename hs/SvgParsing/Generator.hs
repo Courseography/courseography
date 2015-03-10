@@ -147,7 +147,7 @@ buildSVG courseMap filename =
 -- | Determines if a text intersects with a shape.
 intersectsWithShape :: [Shape] -> Text -> Bool
 intersectsWithShape shapes text =
-    any (intersectsWithPoint (textCoord text)) shapes
+    any (intersectsWithPoint (textPos text)) shapes
 
 -- | Converts a `Rect` to SVG.
 convertRectToSVG :: M.Map String String -> Shape -> S.Svg
@@ -165,8 +165,8 @@ convertRectToSVG courseMap rect
                        else "")) $
             do S.rect ! A.rx "4"
                       ! A.ry "4"
-                      ! A.x (stringValue . show . fst $ shapeCoord rect)
-                      ! A.y (stringValue . show . snd $ shapeCoord rect)
+                      ! A.x (stringValue . show . fst $ shapePos rect)
+                      ! A.y (stringValue . show . snd $ shapePos rect)
                       ! A.width (stringValue . show $ shapeWidth rect)
                       ! A.height (stringValue . show $ shapeHeight rect)
                       ! A.style (stringValue $ "fill:" ++ getFill (shapeId_ rect) ++ ";")
@@ -192,7 +192,7 @@ convertTextToSVG isHybrid isBool isRegion text =
                        getTextStyle isHybrid isBool isRegion ++
                        "font-family:sans-serif;stroke:none;")
             $ toMarkup $ textText text
-    where (xPos, yPos) = textCoord text
+    where (xPos, yPos) = textPos text
 
 -- | Converts a `Path` to SVG.
 convertEdgeToSVG :: Path -> S.Svg
@@ -222,8 +222,8 @@ convertEllipseToSVG :: Shape -> S.Svg
 convertEllipseToSVG ellipse =
     S.g ! A.id_ (stringValue (shapeId_ ellipse))
         ! A.class_ "bool" $ do
-            S.ellipse ! A.cx (stringValue . show . fst $ shapeCoord ellipse)
-                      ! A.cy (stringValue . show . snd $ shapeCoord ellipse)
+            S.ellipse ! A.cx (stringValue . show . fst $ shapePos ellipse)
+                      ! A.cy (stringValue . show . snd $ shapePos ellipse)
                       ! A.rx (stringValue . show $ shapeWidth ellipse / 2)
                       ! A.ry (stringValue . show $ shapeHeight ellipse / 2)
                       ! A.style "stroke:#000000;fill:none;"
