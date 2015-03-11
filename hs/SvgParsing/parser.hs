@@ -42,13 +42,9 @@ main = do graphFile <- readFile "../res/graphs/graph_regions.svg"
               mapM_ insert_ paths
               mapM_ insert_ texts
           printDB
-          generateFolder
+          createDirectoryIfMissing True "../res/graphs/CSC"
           buildSVG M.empty "../res/graphs/CSC/csc_graph.svg"
           print "SVG Built"
-
-generateFolder :: IO ()
-generateFolder = do
-    createDirectoryIfMissing True "../res/graphs/CSC"
 
 -- | Parses a level.
 parseNode :: Bool -> Style -> Content i -> ([Path],[Shape],[Text])
@@ -57,23 +53,24 @@ parseNode currentlyInRegion style content =
        getName content == "defs"
     then ([],[],[])
     else
-      do let isRegion       = getAttribute "id" content == "layer3"
-             newTransform   = getAttribute "transform" content
-             newStyle       = getAttribute "style" content
-             newFill        = getNewStyleAttr newStyle "fill" (fill style)
-             newStroke      = getNewStyleAttr newStyle "stroke" (stroke style)
-             x = if null newTransform then (0,0) else parseTransform newTransform
-             adjustedTransform = addTuples (transform style) x
-             parentStyle = Style adjustedTransform
-                                 newFill
-                                 newStroke
-
-         let x1= map (parseRect parentStyle) (tag "rect" content)
-         let x2= map (parseText parentStyle) (tag "text" content)
-         let x3= mapMaybe (parsePath (currentlyInRegion || isRegion) parentStyle) (tag "path" content)
-         let x4= map (parseEllipse parentStyle) (tag "ellipse" content)
-         addThree (x3,x1++x4,x2) $ parseChildren (currentlyInRegion || isRegion)
-                               parentStyle (getChildren content)
+        let isRegion       = getAttribute "id" content == "layer3"
+            newTransform   = getAttribute "transform" content
+            newStyle       = getAttribute "style" content
+            newFill        = getNewStyleAttr newStyle "fill" (fill style)
+            newStroke      = getNewStyleAttr newStyle "stroke" (stroke style)
+            x = if null newTransform then (0,0) else parseTransform newTransform
+            adjustedTransform = addTuples (transform style) x
+            parentStyle = Style adjustedTransform
+                                newFill
+                                newStroke
+            x1 = map (parseRect parentStyle) (tag "rect" content)
+            x2 = map (parseText parentStyle) (tag "text" content)
+            x3 = mapMaybe (parsePath (currentlyInRegion || isRegion) parentStyle) (tag "path" content)
+            x4 = map (parseEllipse parentStyle) (tag "ellipse" content)
+        in
+            addThree (x3,x1++x4,x2) $ parseChildren (currentlyInRegion || isRegion)
+                                                    parentStyle
+                                                    (getChildren content)
 
 -- | Parses a list of Content.
 parseChildren :: Bool -> Style -> [Content i] -> ([Path],[Shape],[Text])
