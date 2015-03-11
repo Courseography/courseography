@@ -21,7 +21,6 @@ function updateActiveFocus(id) {
             spotlight(elem);
         });
         graphObject.html(graphObject.html()); // Hack to make spotlights appear
-        setMouseCallbacks();
         activeFocus = id;
 
         // Put in new icon.
