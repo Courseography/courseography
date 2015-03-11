@@ -11,7 +11,6 @@
              TypeFamilies #-}
 
 module Database.Tables where
-
 import Database.Persist.TH
 import qualified Data.Text as T
 import qualified Data.Vector as V
@@ -19,12 +18,10 @@ import Data.Aeson
 import Control.Monad
 import Control.Applicative
 
-data Time = Time { timeField :: [Int] } deriving (Show, Read, Eq)
+data Time = Time { timeField :: [Double] } deriving (Show, Read, Eq)
 derivePersistField "Time"
 
-
-data Point = Point { point :: (Rational, Rational) } deriving (Show, Read, Eq)
-derivePersistField "Point"
+type Point = (Double, Double)
 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 Courses json
@@ -70,44 +67,39 @@ Distribution
     description String
     deriving Show
 
-Graphs
+Graph
     gId Int
     title String
     deriving Show
 
-Rects
-    gId Int
+Text
+--    gId Int
     rId String
-    width Rational
-    height Rational
-    xPos Rational
-    yPos Rational
-    fill String
-    stroke String
-    isHybrid Bool
-    deriving Show
-
-Texts
-    gId Int
-    rId String
-    xPos Rational
-    yPos Rational
+    pos Point
     text String
     deriving Show
 
-Paths
-    d [Point]
+Shape
+    id_ String
+    pos Point
+    width Double
+    height Double
+    fill String
+    stroke String
+    text [Text]
+    isHybrid Bool
+    tolerance Double
+    isBool Bool
+
+Path
+    id_ String
+    points [Point]
     fill String
     stroke String
     isRegion Bool
+    source String
+    target String
     deriving Show
-
-Ellipses
-    xPos Rational
-    yPos Rational
-    rx Rational
-    ry Rational
-    stroke String
 |]
 
 -- | A Lecture.
@@ -116,7 +108,7 @@ data Lecture =
               section :: T.Text,
               cap :: Int,
               time_str :: T.Text,
-              time :: [[Int]],
+              time :: [[Double]],
               instructor :: T.Text,
               enrol :: Maybe Int,
               wait :: Maybe Int
@@ -125,7 +117,7 @@ data Lecture =
 -- | A Tutorial.
 data Tutorial =
     Tutorial { tutorialSection :: Maybe T.Text,
-               times :: [[Int]],
+               times :: [[Double]],
                timeStr :: T.Text
              } deriving Show
 

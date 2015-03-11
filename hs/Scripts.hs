@@ -32,8 +32,7 @@ plannerScripts = concatHtml (map makeScript["https://ajax.googleapis.com/ajax/li
                                            "static/js/graph/parse_graph.js",
                                            "static/js/graph/mouse_events.js",
                                            "static/js/graph/setup.js", 
-                                           "static/js/post/update_post.js",
-                                           "static/js/post/update_counts.js"])
+                                           "static/js/post/update_post.js"])
 
 timetableScripts :: H.Html
 timetableScripts = do jQuery
@@ -46,7 +45,13 @@ timetableScripts = do jQuery
                                                 "static/js/grid/generate_grid.js",
                                                 "static/js/common/objects/course.js",
                                                 "static/js/common/objects/section.js",
+<<<<<<< HEAD
                                                 "static/js/common/utilities/util.js"])
+=======
+                                                "static/js/common/utilities/util.js",
+                                                "static/js/common/grid_image.js",
+                                                "static/js/draw/draw.js"])
+>>>>>>> a269c4ef29729128fe47cac549f9a9c1b49bf021
 
 drawScripts :: H.Html
 drawScripts = do jQuery 
@@ -62,6 +67,7 @@ postScripts = concatHtml (map makeScript ["https://ajax.googleapis.com/ajax/libs
                                           "static/js/common/cookieHandler.js",
                                           "static/js/post/update_post.js",
                                           "static/js/graph/create_data.js",
-                                          "static/js/post/update_counts.js",
                                           "static/js/graph/objects/node.js",
-                                          "static/js/post/fill_textboxes.js"])
+                                          "static/js/post/fill_textboxes.js",
+                                          "static/js/graph/create_data.js",
+                                          "static/js/post/update_categories.js"])
