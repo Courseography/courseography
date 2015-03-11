@@ -16,15 +16,12 @@ function createModalDiv(id) {
     var video = setupVideoPlayer(id);
     var timetable = setupTimeslot(id);
     var relatedLinks = setupRelatedLinks(id);
-
     contentDiv.append(p);
     contentDiv.append(timetable);
     contentDiv.append(bottomContentDiv);
-
     if (video) {
         bottomContentDiv.append(video);
     }
-
     bottomContentDiv.append(relatedLinks);
 
     return contentDiv;
@@ -238,7 +235,6 @@ function openModal(id) {
 
     if ($('.modal').length === 0) {
         var div = createModalDiv(id);
-
         div.attr('title', getCourseTitle(id))
            .addClass('modal').dialog({
                 autoOpen: true,
