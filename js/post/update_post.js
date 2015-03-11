@@ -182,8 +182,8 @@ function addExtraMinCourses() {
     var textboxesLeft = minor.textboxesExtra - minor.filledTextboxesExtra;
 
     for (var m = 0; m < Math.min(textboxesLeft, 3); m++) {
-        if (getCookie(minor.additionalMin200[m]) === 'active' || 
-            getCookie(minor.additionalMin200[m]) === 'overriden') {
+        if (getCookie(minor.additionalMin200[m].toLowerCase()) === 'active' || 
+            getCookie(minor.additionalMin200[m].toLowerCase()) === 'overriden') {
             minExtra[minor.filledTextboxesExtra].value = minor.additionalMin200[m];
             minExtra[minor.filledTextboxesExtra].disabled = true;
             minor.creditCount += 0.5;
@@ -259,8 +259,8 @@ function updateActiveCourses() {
     for (var areaName in areas) {
         if (areas.hasOwnProperty(areaName)) {
             for (var i = 0; i < areas[areaName].length; i++) {
-                if ((getCookie(areas[areaName][i]) === 'active' || getCookie(areas[areaName][i]) === 'overridden') && 
-                    areas[areaName][i] !== 'CSC104') {
+                if ((getCookie(areas[areaName][i].toLowerCase()) === 'active' || getCookie(areas[areaName][i].toLowerCase()) === 'overridden') && 
+                    areas[areaName][i].toLowerCase() !== 'CSC104') {
                     activeCourses.push(areas[areaName][i]);
                 }
             }
@@ -269,7 +269,7 @@ function updateActiveCourses() {
 
     // check for active math courses
     for (var i = 0; i < math.length; i++) {
-        if (getCookie(math[i]) === 'active') {
+        if (getCookie(math[i].toLowerCase()) === 'active') {
             activeCourses.push(math[i]);
         }
     }
