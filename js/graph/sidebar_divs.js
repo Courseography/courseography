@@ -61,6 +61,10 @@ function toggleSidebar(location) {
     } else if (!toggled && location === 'button') {
         toggled = true;
         $('#sidebar').animate({width: "300px"}, "fast");
+
         fillFCECount();
+        $('#focuses').show();
+        $('#focuses-nav').css('background-color', '#46364A');
+
     }
 };

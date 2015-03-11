@@ -114,10 +114,6 @@ nodeCSS = "g" ? do
         "text" <? do
             fontFamily ["Comic Sans MS"] [sansSerif]
             fontWeight bold
-    ".spotlight" & do
-        semiVisible
-        fill "white"
-        stroke "none"
 
 {- pathCSS
  - Generates CSS for paths between nodes
@@ -262,6 +258,10 @@ sidebarCSS = do
         border solid (px 1) black
         textAlign $ alignSide sideCenter
         width (pct 90)
+    ".spotlight" & do
+        semiVisible
+        fill "white"
+        stroke "none"
 
 
 {- titleCSS
