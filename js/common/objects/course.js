@@ -149,7 +149,7 @@ Course.prototype.parseTutorials = function (session, timeSuffix) {
     if (!this.manualTutorialEnrolment) {
         return [];
     }
-    
+
     var tmp = this;
     var tutorials = [];
     var i;
@@ -368,7 +368,10 @@ Course.prototype.renderHeader = function () {
                 });
     var aboutImg = document.createElement('img');
     $(aboutImg).attr('src', 'static/res/ico/about.png')
-               .addClass('close-icon');
+               .addClass('close-icon')
+               .click(function () {
+                   openModal(tmp.name);
+               });
     iconDiv.appendChild(courseImg);
     iconDiv.appendChild(aboutImg);
     headerDiv.appendChild(iconDiv);

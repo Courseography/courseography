@@ -38,6 +38,8 @@ function formatCourseName(id) {
         names = 'STA247H1' + ' ' + 'STA255H1';
     } else if (id === 'Sta2') {
         names = 'STA248H1' + ' ' + 'STA261H1';
+    } else if (id.indexOf('H1', id.length - 2) !== -1) {
+        names = id;
     } else {
         names = id + 'H1';
     }
