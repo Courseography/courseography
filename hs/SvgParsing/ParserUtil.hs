@@ -18,7 +18,7 @@ import Data.List
 import Data.Text as T (pack, unpack)
 import Database.Tables
 import Database.JsonParser
-import SvgParsing.SVGTypes
+import SvgParsing.Types
 
 -- | Gets the root element of the document.
 getRoot :: Document i -> Content i
@@ -38,10 +38,6 @@ getNewStyleAttr newStyle attr parentStyle
     | otherwise = newAttrStyle
     where newAttrStyle = getStyleAttr attr newStyle
 
--- | Converts a tuple of Float to a tuple of Rational.
-convertFloatTupToRationalTup :: (Float, Float) -> (Rational, Rational)
-convertFloatTupToRationalTup (a,b) = (toRational a, toRational b)
-
 -- | Applys a CFilter to a Document and produces a list of Content filtered
 -- by the CFilter.
 parseDocument :: CFilter i -> Document i -> [Content i]
@@ -58,11 +54,11 @@ getAttrs (Elem _ b _) = b
 
 -- | Gets an Attribute's name.
 getAttrName :: Attribute -> String
-getAttrName ((a,_)) = printableName a
+getAttrName (a, _) = printableName a
 
 -- | Gets an Attribute's value.
 getAttrVal :: Attribute -> String
-getAttrVal ((_,b)) = show b
+getAttrVal (_, b) = show b
 
 -- | Converts an Attribute into a more parsable form.
 convertAttributeToTuple :: Attribute -> (String, String)
@@ -82,50 +78,39 @@ getAttribute attr (CElem content undefined)
 getAttribute _ _ = ""
 
 -- | Parses a transform String into a tuple of Float.
-parseTransform :: String -> (Float, Float)
+parseTransform :: String -> Point
 parseTransform transform =
     let parsedTransform = splitOn "," $ drop 10 transform
-        xPos = read $ parsedTransform!!0 :: Float
-        yPos = read $ init $ parsedTransform!!1 :: Float
+        xPos = read $ parsedTransform !! 0
+        yPos = read $ init $ parsedTransform !! 1
     in (xPos, yPos)
 
 -- | Parses a path's `d` attribute.
-parsePathD :: String -> [(Float, Float)]
+parsePathD :: String -> [Point]
 parsePathD d
-    | head d == 'm' = foldCoordsRel coordList
-    | otherwise =  processAbsCoords coordList
+    | head d == 'm' = relCoords
+    | otherwise = absCoords
     where
       lengthMoreThanOne = \x -> length x > 1
       coordList = filter lengthMoreThanOne $ map (splitOn ",") $ splitOn " " d
-
--- | Converts a relative coordinate structure into an absolute one.
-foldCoordsRel :: [[String]] -> [(Float, Float)]
-foldCoordsRel dCoords =
-    tail $
-    foldl (\x y -> x ++ [addTuples (convertToFloatTuple y) (last x)])
-          [(0,0)]
-          dCoords
-
--- | Converts a relative coordinate structure into an absolute one.
-processAbsCoords :: [[String]] -> [(Float, Float)]
-processAbsCoords = map convertToFloatTuple
-
--- | Converts a list of String of length 2 into a tuple of Float.
-convertToFloatTuple :: [String] -> (Float, Float)
-convertToFloatTuple y = (read (head y) :: Float, read (last y) :: Float)
+      -- Converts a relative coordinate structure into an absolute one.
+      relCoords = tail $ foldl (\x y -> x ++ [addTuples (convertToPoint y) (last x)])
+                               [(0,0)]
+                               coordList
+      -- Converts a relative coordinate structure into an absolute one.
+      absCoords = map convertToPoint coordList
+      convertToPoint y = (read (head y), read (last y))
 
 -- | Adds two tuples together.
-addTuples :: (Float, Float) -> (Float, Float) -> (Float, Float)
+addTuples :: Point -> Point -> Point
 addTuples (a,b) (c,d) = (a + c, b + d)
 
 -- | Determines if a point intersects with a shape.
-intersects :: Rational -> Rational -> (Rational, Rational) -> Float -> (Rational, Rational) -> Bool
+intersects :: Double -> Double -> Point -> Double -> Point -> Bool
 intersects width height (rx, ry) offset (px, py) =
     let dx = px - rx
         dy = py - ry
-        rationalOffset = toRational offset
-    in dx >= -1 * rationalOffset && dx <= width + rationalOffset && dy >= -1 * rationalOffset && dy <= height + rationalOffset;
-
--- | Removes the part of a string after the first forward slash.
-dropSlash :: String -> String
-dropSlash str = head $ splitOn "/" str
+    in dx >= -1 * offset &&
+       dx <= width + offset &&
+       dy >= -1 * offset &&
+       dy <= height + offset;
