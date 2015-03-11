@@ -10,6 +10,7 @@ import Database.JsonParser
 import Happstack.Server
 import qualified Data.Text as T
 import qualified Data.Aeson as Aeson
+import Control.Monad.IO.Class (liftIO)
 
 -- | Queries the database for all information about `course`, constructs a JSON object
 -- | representing the course and returns the appropriate JSON response.
@@ -61,7 +62,7 @@ buildLecture entity =
             (lecturesSection entity)
             (lecturesCapacity entity)
             (lecturesTimeStr entity)
-            (lecturesTimes entity)
+            (map timeField (lecturesTimes entity))
             (lecturesInstructor entity)
             (Just (lecturesEnrolled entity))
             (Just (lecturesWaitlist entity))
@@ -70,7 +71,7 @@ buildLecture entity =
 buildTutorial :: Tutorials -> Tutorial
 buildTutorial entity =
     Tutorial (tutorialsSection entity)
-             (tutorialsTimes entity)
+             (map timeField (tutorialsTimes entity))
              (tutorialsTimeStr entity)
 
 -- | Builds a Session structure from a list of tuples from the Lectures table, and a list of tuples from the Tutorials table.

@@ -78,7 +78,7 @@ insertLec session code lecture =
     insert_ $ Lectures code
                        session
                        (section lecture)
-                       (time lecture)
+                       (map Time (time lecture))
                        (cap lecture)
                        (instructor lecture)
                        (fromMaybe 0 (enrol lecture))
@@ -93,7 +93,7 @@ insertTut session code tutorial =
     insert_ $ Tutorials code
                         (tutorialSection tutorial)
                         session
-                        (times tutorial)
+                        (map Time (times tutorial))
                         (timeStr tutorial)
 
 -- | Inserts the lectures from course into the Lectures table.
@@ -115,7 +115,7 @@ insertLecture session course lecture =
     insert_ $ Lectures (name course)
                        session
                        (section lecture)
-                       (time lecture)
+                       (map Time (time lecture))
                        (cap lecture)
                        (instructor lecture)
                        (fromMaybe 0 (enrol lecture))
@@ -143,7 +143,7 @@ insertTutorial session course tutorial =
     insert_ $ Tutorials (name course)
                         (tutorialSection tutorial)
                         session
-                        (times tutorial)
+                        (map Time (times tutorial))
                         (timeStr tutorial)
 
 -- | Gets the corresponding numeric requirement from a breadth requirement description.

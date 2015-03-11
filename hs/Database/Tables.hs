@@ -18,7 +18,9 @@ import Data.Aeson
 import Control.Monad
 import Control.Applicative
 
-type Time = [Double]
+data Time = Time { timeField :: [Double] } deriving (Show, Read, Eq)
+derivePersistField "Time"
+
 type Point = (Double, Double)
 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
