@@ -260,7 +260,7 @@ function updateActiveCourses() {
         if (areas.hasOwnProperty(areaName)) {
             for (var i = 0; i < areas[areaName].length; i++) {
                 if ((getCookie(areas[areaName][i].toLowerCase()) === 'active' || getCookie(areas[areaName][i].toLowerCase()) === 'overridden') && 
-                    areas[areaName][i].toLowerCase() !== 'CSC104') {
+                    areas[areaName][i] !== 'CSC104') {
                     activeCourses.push(areas[areaName][i]);
                 }
             }
