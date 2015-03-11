@@ -22,7 +22,7 @@ var elbowMoving = null;     // for movement of elbow joints
  * Initializes the SVG Canvas and its background.
  **/
 function setupSVGCanvas() {
-    'use-strict';
+    'use strict';
 
     var div = document.createElement('div');
     div.setAttribute('id', 'main');
@@ -37,7 +37,7 @@ function setupSVGCanvas() {
     svg.addEventListener('mousemove', moveNodeElbow, false);
     svg.addEventListener('mouseup', unclickAll, false);
 
-    svg.appendChild(setupMarker());
+    
     div.appendChild(bgdiv);
     div.appendChild(svg);
     document.body.appendChild(div);
@@ -48,7 +48,7 @@ function setupSVGCanvas() {
  * Create the arrowhead marker to be used for paths.
  **/
 function setupMarker() {
-    'use-strict';
+    'use strict';
 
     var defs = document.createElementNS(xmlns, 'defs');
     var marker = document.createElementNS(xmlns, 'marker');
@@ -73,9 +73,13 @@ function setupMarker() {
     return defs;
 }
 
-setupSVGCanvas();
+$(document).ready(function () {
+    setupSVGCanvas();
+    svgDoc.appendChild(setupMarker());
+    // also append g section for all regions here? !!
+});
 
-/* SET UP SIDEBAR AND ONCLICKS FOR BUTTONS */
+/* SET UP SIDEBAR AND ONCLICKS FOR BUTTONS */ // !! Should these onclick definitions go inside setup? !!
 
 $('.mode').each(function() {
     $(this). click(function () {
@@ -95,7 +99,7 @@ $('#add-text').click(function () {
  * @param {object} e The keydown event.
  **/
 function keyboard(e) {
-    'use-strict';
+    'use strict';
 
     if (! $("#course-code").is(":focus")) {
         if (e.which == 78) {
@@ -120,7 +124,7 @@ document.addEventListener('keydown', keyboard, false);
  * @param {object} id The id of the new mode to be selected.
  **/
 function changeMode(id) {
-    'use-strict';
+    'use strict';
 
     //if (mode !== '') {
       $('#' + mode).toggleClass('clicked');
@@ -147,7 +151,7 @@ function changeMode(id) {
  * @param {object} id The id of the new colour to be selected.
  **/
 function changeColour(id) {
-    'use-strict';
+    'use strict';
 
     $('#' + nodeColourId).toggleClass('clicked');
     nodeColourId = id;
@@ -163,7 +167,7 @@ function changeColour(id) {
  * Adds the text from the input box to the currently selected node.
  **/
 function addText() {
-    'use-strict';
+    'use strict';
 
     var courseCode = document.getElementById('course-code').value;
     if (nodeSelected !== null && courseCode.length > 2) {

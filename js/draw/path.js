@@ -5,7 +5,7 @@
  * @position {object} position The x and y position of the dummy node being created.
  **/
 function makeElbow(position) {
-    'use-strict';
+    'use strict';
 
     var elbow = document.createElementNS(xmlns, 'circle');
 
@@ -26,7 +26,7 @@ function makeElbow(position) {
  * @param {string} pathString The coordinates of the new path to be created.
  **/
 function startPath(pathString) {
-    'use-strict';
+    'use strict';
 
     // note: id will get set when the path is complete, also marker (arrowhead)
     // curPath will get modified until path is complete
@@ -48,7 +48,7 @@ function startPath(pathString) {
  * @param{SVGElement} endNode The last coordinate for the path.
  **/
 function finishPath(pathId, endNode) {
-    'use-strict';
+    'use strict';
 
     if (curPath === null) { // create a new path, node to node
         var pathString = findClosest( {x: parseFloat(startNode.getAttribute('x'), 10), 
@@ -93,7 +93,7 @@ function finishPath(pathId, endNode) {
  * @param {string} The type of end, elbow or node.
  **/
 function findClosest(beg, typeB, end, typeE) {
-    'use-strict';
+    'use strict';
 
     var thePath = null;
     var node1Edges;
@@ -155,7 +155,7 @@ function findClosest(beg, typeB, end, typeE) {
  * @return {number} The distance between a and b.
  **/
 function dist(a, b) {
-    'use-strict';
+    'use strict';
 
     return Math.sqrt(((b.x - a.x) * (b.x - a.x)) + ((b.y - a.y) * (b.y - a.y)));
 }
@@ -167,7 +167,7 @@ function dist(a, b) {
  * @param {object} e The mousedown event.
  **/
 function selectElbow(e) {
-    'use-strict';
+    'use strict';
 
     if (mode === 'change-mode') {
         var position = getClickPosition(e, e.currentTarget);
@@ -203,7 +203,7 @@ function selectElbow(e) {
  * @param {number} elbowNum The number of the elbow being moved if partOfPath is elbow.
  **/
 function movePath(path, xBy, yBy, partOfPath, elbowNum) {
-    'use-strict';
+    'use strict';
 
     var thePath = path.getAttribute('d');
     var theX = null;
@@ -241,7 +241,7 @@ function movePath(path, xBy, yBy, partOfPath, elbowNum) {
  * @param {object} e The mousedown event.
  **/
 function pathClicked(e) {
-    'use-strict';
+    'use strict';
 
     if (mode === 'erase-mode') {
         erasePath(e.currentTarget);

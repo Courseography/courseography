@@ -43,4 +43,4 @@ modePanel = createTag H.div "side-panel-wrap" "" $ do
   createTag H.div "path-mode" "mode" "PATH (p)" 
   createTag H.div "region-mode" "mode" "REGION (r)" 
   createTag H.div "change-mode" "mode" "SELECT/MOVE (m)" 
-  createTag H.div "erase-mode" "mode" "ERASE (e)"   
+  createTag H.div "erase-mode" "mode" "ERASE (e)"

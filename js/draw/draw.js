@@ -6,7 +6,7 @@
  * @return The position of the click.
  */
 function getClickPosition(e, elem) {
-    'use-strict';
+    'use strict';
 
     // console.log(e.clientX, e.clientY);
     var parentPosition = getPosition(elem);
@@ -24,7 +24,7 @@ function getClickPosition(e, elem) {
  * @return The position of elem on the page.
  */
 function getPosition(elem) {
-    'use-strict';
+    'use strict';
 
     var xPosition = 0;
     var yPosition = 0;
@@ -49,7 +49,7 @@ function getPosition(elem) {
  * @param {object} e The mousedown event.
  */
 function makeNodePath(e) {
-    'use-strict';
+    'use strict';
 
     var position = getClickPosition(e, e.currentTarget);
     if (mode === 'node-mode') {
@@ -110,7 +110,7 @@ function makeNodePath(e) {
  * @param {object} e The mousedown event.
  **/
 function nodeClicked(e) {
-    'use-strict';
+    'use strict';
 
     
     var index = null;
@@ -195,7 +195,7 @@ function nodeClicked(e) {
  * @param {SVGElement} newNode The node to be selected.
  **/
 function select(newNode) {
-    'use-strict';
+    'use strict';
 
     if (nodeSelected !== null) {
         nodeSelected.parentNode.setAttribute('data-active', 'unselected');
@@ -209,7 +209,7 @@ function select(newNode) {
  * @param {object} e The mousemove Event.
  **/
 function moveNodeElbow(e) {
-    'use-strict';
+    'use strict';
 
     if (mode === 'change-mode') {
         if (nodeMoving !== null) {
@@ -268,7 +268,7 @@ function moveNodeElbow(e) {
  * @param {object} e The mouseup event.
  **/
 function unclickAll(e) {
-    'use-strict';
+    'use strict';
 
     if (mode === 'change-mode') {
         nodeMoving = null;
