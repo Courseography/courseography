@@ -9,7 +9,7 @@ function getGraphImage() {
     var img;
 
     $.ajax({
-        url: 'image' + str,
+        url: 'image',
         async: false,
         success: function (data) {
             img = data;

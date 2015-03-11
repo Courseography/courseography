@@ -106,10 +106,6 @@ function initializeGraphSettings() {
     // Clear 'My Courses' tab
     $('#courseGrid').empty();
 
-    active200s = [];
-    active300s = [];
-    active400s = [];
-    projectCourses = [];
     $('input:checkbox').attr('checked', false);
     $('input:text').attr('value', '');
 
@@ -120,6 +116,7 @@ function initializeGraphSettings() {
 
         if (nodeStatus.length === 0) {
             nodeStatus = 'inactive';
+            setCookie(node, nodeStatus);
         }
 
         if (initiallyTakeable.indexOf(node) > -1 && nodeStatus === 'inactive') {
@@ -130,7 +127,6 @@ function initializeGraphSettings() {
 
         // Check the courses with FCE reqs
         if (window[node].hybrid === false) {
-            updatePOSt(node, window[node].isSelected());
             if (window[node].status === 'active' || window[node].status === 'overridden') {
                 updateClickedCourses(node, true);
             }
@@ -146,10 +142,6 @@ function initializeGraphSettings() {
 
     updateFCECount();
 
-    updatePostInterface();
-    updateMajorPostInterface();
-    updateMinorPostInterface();
-
     // Clear any active focus
     if (activeFocus !== '') {
         $('.focusTabs').tabs('option', 'active', false);
@@ -157,8 +149,8 @@ function initializeGraphSettings() {
         clearFocus();
     }
 
-    CSC318.updateStatus();
-    CSC454.updateStatus();
+    csc318.updateStatus();
+    csc454.updateStatus();
 }
 
 
@@ -203,16 +195,9 @@ function reset() {
     clickedCourses = [];
     $('#FCEcount').html('0.0');
 
-    active200s = [];
-    active300s = [];
-    active400s = [];
-    projectCourses = [];
     $('input:checkbox').attr('checked', false);
     $('input:text').attr('value', '');
 
-    updatePostInterface();
-    updateMajorPostInterface();
-    updateMinorPostInterface();
 }
 
 

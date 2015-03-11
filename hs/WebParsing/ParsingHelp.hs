@@ -8,6 +8,7 @@ module WebParsing.ParsingHelp
     tagContains,
     dropBetween,
     dropBetweenAll,
+    dropAround, 
     parseDescription,
     parseCorequisite,
     parsePrerequisite,
@@ -106,6 +107,19 @@ dropBetween start end lst = replaceBetween start end [] lst
 
 dropBetweenAll :: Eq a => (a -> Bool) -> (a -> Bool) -> [a] -> [a]
 dropBetweenAll start end lst = replaceBetweenAll start end [] lst
+
+{------------------------------------------------------------------------------
+DROPAROUND 
+takes a list, returns all elements between the first element satisfies start,
+and first element after that satisfies end. 
+>>dropAround (== 'b') (=='d') "abcde"
+>>"c"
+------------------------------------------------------------------------------}
+dropAround :: Eq a => (a->Bool) -> (a-> Bool) -> [a] -> [a]
+dropAround start end lst = 
+    let dropBefore = tail $ dropWhile  (\x -> (not $ start x)) lst
+        takeBetween = takeWhile (\x -> (not $ end x)) dropBefore
+    in takeBetween
 
 -------------COURSE PARSING FUNCTIONS------------------------------------------
 -------------------------------------------------------------------------------

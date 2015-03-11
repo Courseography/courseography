@@ -1,8 +1,9 @@
 {-# LANGUAGE FlexibleContexts, GADTs, MultiParamTypeClasses,
     OverloadedStrings, TypeFamilies #-}
 
-
-module Database.JsonParser (insertCourse, 
+module Database.JsonParser (insertCourse,
+                    insertLec,
+                    insertTut, 
                     dbStr,
                     fbdbStr,
                     encodeJSON) where
@@ -12,18 +13,19 @@ import qualified Data.ByteString.Lazy.Char8 as BSL
 import qualified Data.Vector as V
 import qualified Data.Text as T
 import qualified Data.Conduit.List as CL
+
 import Data.Aeson
-import Data.List as L
-import GHC.Generics
-import System.Directory
-import Database.Persist
-import Database.Persist.Sqlite
-import Control.Monad.IO.Class  (liftIO, MonadIO)
-import Control.Monad
-import Control.Monad.Trans.Reader
 import Control.Applicative
+import Control.Monad
+import Control.Monad.IO.Class  (liftIO, MonadIO)
+import Control.Monad.Trans.Reader
 import Data.Maybe
+import Data.List as L
+import Database.Persist.Sqlite
+import Database.Persist
 import Database.Tables
+import System.Directory
+import GHC.Generics
 
 fbdbStr :: T.Text
 fbdbStr = "fdatabase1.sqlite3"
@@ -72,6 +74,31 @@ insertCourse course =
                       (breadth course)
                       (distribution course)
                       (prereqString course)
+
+-- | USED BY HASKELL TIMETABLE PARSING identical to insertLecture but takes T.Text
+-- | course code instead of entire course record
+insertLec :: MonadIO m => T.Text -> T.Text -> Lecture -> ReaderT SqlBackend m ()
+insertLec session code lecture =
+    insert_ $ Lectures code
+                       session
+                       (section lecture)
+                       (map Time (time lecture))
+                       (cap lecture)
+                       (instructor lecture)
+                       (fromMaybe 0 (enrol lecture))
+                       (fromMaybe 0 (wait lecture))
+                       (extra lecture)
+                       (time_str lecture)
+
+-- | USED BY HASKELL TIMETABLE PARSING. identical to inserTutorial but takes T.Text 
+-- | course code instead of entire course record
+insertTut :: MonadIO m => T.Text -> T.Text-> Tutorial -> ReaderT SqlBackend m ()
+insertTut session code tutorial = 
+    insert_ $ Tutorials code
+                        (tutorialSection tutorial)
+                        session
+                        (map Time (times tutorial))
+                        (timeStr tutorial)
 
 -- | Inserts the lectures from course into the Lectures table.
 insertLectures :: MonadIO m => Course -> ReaderT SqlBackend m ()

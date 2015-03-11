@@ -170,22 +170,3 @@ function appendTableData(trFall, trSpring, time) {
     }
 
 }
-
-function getTable() {
-    var days = ["M", "T", "W", "R", "F"];
-    var courses = "";
-    for (var i = 8; i < 22; i++) {
-        for (var j = 0; j < 5; j++) {
-            courses += $("#" + days[j] + i + "F").text();
-            courses += "\n";
-        }
-    }
-
-    $.get("svg",
-          {courses: courses}
-    ).done(function (response) {
-        // This really isn't the right way to do this!
-        window.location.replace('static/hs/circle.svg');
-        return false;
-    });
-}

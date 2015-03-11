@@ -18,12 +18,13 @@ convertToImage inName outName = createProcess $ CreateProcess
                                                   inName ++
                                                   " " ++
                                                   outName
-                                   )
+                                  )
                                   Nothing
                                   Nothing
                                   CreatePipe
                                   CreatePipe
                                   CreatePipe
+                                  False
                                   False
                                   False
 -- | Removes a file.
@@ -40,6 +41,7 @@ removeImage name = createProcess $ CreateProcess
                                   Inherit
                                   CreatePipe
                                   CreatePipe
+                                  False
                                   False
                                   False
 

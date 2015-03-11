@@ -6,8 +6,8 @@ import Diagrams.Prelude
 import Diagrams.Backend.SVG.CmdLine
 import Diagrams.Backend.SVG
 import Data.List
-
-textFontSize = fontSize (Global 20)
+import Text.Blaze.Svg.Renderer.String as Svg
+import Data.List.Utils (replace)
 
 days :: [String]
 days = ["Mon", "Tue", "Wed", "Thu", "Fri"]
@@ -19,8 +19,8 @@ cell :: Diagram B R2
 cell = rect 2 0.8
 
 makeCell :: String -> Diagram B R2
-makeCell s = 
-    (font "Trebuchet MS" $ text s # textFontSize) <>
+makeCell s =
+    (font "Trebuchet MS" $ text s # fontSizeO 16 # fc white) <>
     cell # fc (if null s then white else blue)
          # lw none
 
@@ -31,13 +31,13 @@ headerBorder :: Diagram B R2
 headerBorder = hrule 12 # lw medium # lc pink
 
 makeHeaderCell :: String -> Diagram B R2
-makeHeaderCell s = 
-    (font "Trebuchet MS" $ text s # textFontSize) <>
+makeHeaderCell s =
+    (font "Trebuchet MS" $ text s # fontSizeO 16) <>
     cell # lw none
 
 makeTimeCell :: String -> Diagram B R2
-makeTimeCell s = 
-    (font "Courier" $ text s # textFontSize) <>
+makeTimeCell s =
+    (font "Trebuchet MS" $ text s # fontSizeO 16) <>
     cell # lw none
 
 makeRow :: [String] -> Diagram B R2
@@ -51,11 +51,13 @@ makeTable :: [[String]] -> Diagram B R2
 makeTable s = vcat $ header : intersperse rowBorder (map makeRow s)
 
 renderTable :: String -> String -> IO ()
-renderTable fileName courses = do
+renderTable filename courses = do
     let courseTable = partition5 $ lines courses
     print courseTable
     let g = makeTable $ zipWith (:) times courseTable
-    renderSVG fileName (Width 900) g
+    let svg = renderDia SVG (SVGOptions (Width 600) Nothing) g
+    let txt = replace "16.0em" "16.0px" $ Svg.renderSvg svg
+    writeFile filename txt
     where
         partition5 [] = []
         partition5 lst = take 5 lst : partition5 (drop 5 lst)
