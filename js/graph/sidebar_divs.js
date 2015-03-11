@@ -4,17 +4,7 @@ var toggled = false;
 $("#sidebar-button").click(function(){
 	'use strict';
 
-    if (toggled) {
-        toggled = false;
-        resetDivs();
-    	$('#sidebar').animate({width: "20px"}, "fast", undefined, function() {
-    		$("#fcecount").html("");
-    	});
-    } else {
-        toggled = true;
-        $('#sidebar').animate({width: "300px"}, "fast");
-        fillFCECount();
-    }
+	toggleSidebar('button');
 });
 
 $('#focuses-nav').click(function (e) {
@@ -38,6 +28,12 @@ $('#graphs-nav').click(function (e) {
 
 });
 
+$('#graph').click(function (e) {
+	'use strict';
+
+	e.preventDefault();
+	toggleSidebar('graph');
+});
 
 function resetDivs() {
 	'use strict';
@@ -53,3 +49,18 @@ function fillFCECount() {
 	$("#fcecount").show();
 	$('#fcecount').html("FCE Count: " + FCEs);
 }
+
+function toggleSidebar(location) {
+
+    if (toggled) {
+        toggled = false;
+        resetDivs();
+    	$('#sidebar').animate({width: "20px"}, "fast", undefined, function() {
+    		$("#fcecount").html("");
+    	});
+    } else if (!toggled && location === 'button') {
+        toggled = true;
+        $('#sidebar').animate({width: "300px"}, "fast");
+        fillFCECount();
+    }
+};
