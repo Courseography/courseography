@@ -232,6 +232,7 @@ function createG(nodeId) {
  */
 function openModal(id) {
     'use strict';
+
     if ($('.modal').length === 0) {
         var div = createModalDiv(id);
         div.attr('title', getCourseTitle(id))
