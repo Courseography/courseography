@@ -151,3 +151,27 @@ function hasManualTutorial(section) {
 
     return (section[0].charAt(0) === 'T');
 }
+
+/**
+ * Returns whether the url exists.
+ * @param {string} url The URL.
+ * @returns {boolean} Whether the url exists.
+ */
+function urlExists(url) {
+    'use strict';
+
+    var exists;
+    $.ajax({
+        type: 'HEAD',
+        async: false,
+        url: url,
+        success: function (){
+            exists = true;
+        },
+        error: function () {
+            exists = false;
+        }
+    });
+
+    return exists;
+}
