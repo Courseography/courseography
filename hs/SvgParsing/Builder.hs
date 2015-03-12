@@ -3,7 +3,6 @@ module SvgParsing.Builder where
 
 import SvgParsing.Types
 import SvgParsing.ParserUtil
-import Control.Monad.IO.Class  (liftIO)
 import Database.Persist
 import Database.Persist.Sqlite
 import Data.Char

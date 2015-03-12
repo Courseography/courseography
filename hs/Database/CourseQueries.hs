@@ -10,7 +10,6 @@ import Database.JsonParser
 import Happstack.Server
 import qualified Data.Text as T
 import qualified Data.Aeson as Aeson
-import Control.Monad.IO.Class (liftIO)
 
 -- | Queries the database for all information about `course`, constructs a JSON object
 -- | representing the course and returns the appropriate JSON response.

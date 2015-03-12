@@ -6,7 +6,6 @@ import Text.XML.HaXml.ByteStringPP
 import Text.XML.HaXml.Wrappers
 import Text.XML.HaXml.Types
 import Text.XML.HaXml.Combinators
-import Control.Monad.IO.Class  (liftIO, MonadIO)
 import Text.XML.HaXml.Util
 import Text.XML.HaXml.XmlContent.Parser
 import qualified Data.Conduit.List as CL
