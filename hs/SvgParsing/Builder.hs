@@ -15,7 +15,8 @@ import Database.Tables
 buildPath :: [Shape] -> [Shape] -> Path -> Int -> Path
 buildPath rects ellipses entity idCounter
     | pathIsRegion entity =
-        Path ('p' : show idCounter)
+        Path (pathGId entity)
+             ('p' : show idCounter)
              coords
              (pathFill entity)
              (pathStroke entity)
@@ -27,7 +28,8 @@ buildPath rects ellipses entity idCounter
             end = last coords
             sourceNode = getIntersectingShape start (rects ++ ellipses)
             targetNode = getIntersectingShape end (rects ++ ellipses)
-            in Path ('p' : show idCounter)
+            in Path (pathGId entity)
+                    ('p' : show idCounter)
                     coords
                     (pathFill entity)
                     (pathStroke entity)
@@ -50,7 +52,8 @@ buildRect texts entity =
         dropSlash = takeWhile (/='/')
         id_ = map toLower $ (if shapeIsHybrid entity then "h" else "") ++
                             (if isDigit $ head textString then "CSC" else "") ++ dropSlash textString
-    in Shape id_
+    in Shape (shapeGId entity)
+             id_
              (shapePos entity)
              (shapeWidth entity)
              (shapeHeight entity)
@@ -90,7 +93,8 @@ buildEllipses texts idCounter entities =
                                     9
                                     (textPos x)
                              ) texts
-    in Shape ("bool" ++ show idCounter)
+    in Shape (shapeGId entity)
+             ("bool" ++ show idCounter)
              (shapePos entity)
              (shapeWidth entity)
              (shapeHeight entity)

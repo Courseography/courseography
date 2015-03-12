@@ -30,20 +30,31 @@ import SvgParsing.ParserUtil
 import qualified Data.Map as M
 
 main :: IO ()
-main = do graphFile <- readFile "../res/graphs/graph_regions.svg"
-          print "Parsing SVG file..."
-          let graphDoc = xmlParse "output.error" graphFile
-              (shapes, paths, texts) = parseNode False (Style (0,0) "" "") (getRoot graphDoc)
-          print "Parsing complete"
-          runSqlite dbStr $ do
-              runMigration migrateAll
-              mapM_ insert_ shapes
-              mapM_ insert_ paths
-              mapM_ insert_ texts
-          printDB
-          createDirectoryIfMissing True "../res/graphs/CSC"
-          buildSVG M.empty "../res/graphs/CSC/csc_graph.svg"
-          print "SVG Built"
+main = parseGraph "CSC"
+                  "graph_regions.svg"
+                  "csc_graph.svg"
+
+parseGraph :: String -> String -> String -> IO ()
+parseGraph dirLocation inputFilename outputFilename =
+    do graphFile <- readFile ("../res/graphs/" ++ inputFilename)
+       print "Parsing SVG file..."
+       let graphDoc = xmlParse "output.error" graphFile
+           (shapes, paths, texts) = parseNode False (Style (0,0) "" "") (getRoot graphDoc)
+       print "Parsing complete"
+       runSqlite dbStr $ do
+           runMigration migrateAll
+           deleteWhere [GraphGId ==. 1]
+           deleteWhere [ShapeGId ==. 1]
+           deleteWhere [PathGId  ==. 1]
+           deleteWhere [TextGId  ==. 1]
+           insert_ $ Graph 1 dirLocation
+           mapM_ insert_ shapes
+           mapM_ insert_ paths
+           mapM_ insert_ texts
+       printDB
+       createDirectoryIfMissing True ("../res/graphs/" ++ dirLocation)
+       buildSVG M.empty ("../res/graphs/" ++ dirLocation ++ "/" ++ outputFilename)
+       print "SVG Built"
 
 -- | Parses a level.
 parseNode :: Bool -> Style -> Content i -> ([Path],[Shape],[Text])
@@ -86,7 +97,8 @@ addThree (a,b,c) (d,e,f) = (a ++ d, b ++ e, c ++f)
 -- | Parses a rect.
 parseRect :: Style -> Content i -> Shape
 parseRect style content =
-    Shape ""
+    Shape 1
+          ""
           (read (getAttribute "x" content) + fst (transform style),
            read (getAttribute "y" content) + snd (transform style))
           (read $ getAttribute "width" content)
@@ -103,7 +115,8 @@ parsePath :: Bool -> Style -> Content i -> Maybe Path
 parsePath isRegion style content =
     if last (getAttribute "d" content) == 'z' && not isRegion
     then Nothing
-    else Just (Path "p"
+    else Just (Path 1
+                    "p"
                     d
                     (fill style)
                     (stroke style)
@@ -115,7 +128,8 @@ parsePath isRegion style content =
 -- | Parses a text.
 parseText :: Style -> Content i -> Text
 parseText style content =
-    Text (getAttribute "id" content)
+    Text 1
+         (getAttribute "id" content)
          (read (getAttribute "x" content) + fst (transform style),
           read (getAttribute "y" content) + snd (transform style))
          (tagTextContent content)
@@ -123,7 +137,8 @@ parseText style content =
 -- | Parses a text.
 parseEllipse :: Style -> Content i -> Shape
 parseEllipse style content =
-    Shape ""
+    Shape 1
+          ""
           (read (getAttribute "cx" content) + fst (transform style),
            read (getAttribute "cy" content) + snd (transform style))
           (read (getAttribute "rx" content) * 2)
