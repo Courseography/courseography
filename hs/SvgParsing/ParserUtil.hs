@@ -58,10 +58,6 @@ getAttrVal (Just (_, b)) = show b
 convertAttributeToTuple :: Attribute -> (String, String)
 convertAttributeToTuple at = (getAttrName at, getAttrVal (Just at))
 
--- | Gets the children of the current node.
-getChildren :: Content i -> [Content i]
-getChildren = path [children]
-
 -- | Gets the value of the attribute with the corresponding key.
 getAttribute :: String -> Content i -> String
 getAttribute attr (CElem content undefined) =

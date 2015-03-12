@@ -70,7 +70,7 @@ parseNode currentlyInRegion content =
             trans          = parseTransform $ getAttribute "transform" content
             style          = getAttribute "style" content
             fill           = getNewStyleAttr style "fill" ""
-            (chilrenPaths, childrenShapes, childrenTexts) = parseChildren (currentlyInRegion || isRegion) (getChildren content)
+            (chilrenPaths, childrenShapes, childrenTexts) = parseChildren (currentlyInRegion || isRegion) (path [children] content)
 
             rects    = map ((updateShape fill trans) . parseRect) (tag "rect" content)
             texts    = map ((updateText trans) . parseText) (tag "text" content)
