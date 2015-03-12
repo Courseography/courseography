@@ -78,6 +78,7 @@ getAttribute _ _ = ""
 
 -- | Parses a transform String into a tuple of Float.
 parseTransform :: String -> Point
+parseTransform "" = (0,0)
 parseTransform transform =
     let parsedTransform = splitOn "," $ drop 10 transform
         xPos = read $ parsedTransform !! 0

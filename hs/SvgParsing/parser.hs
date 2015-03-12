@@ -39,7 +39,7 @@ parseGraph dirLocation inputFilename outputFilename =
     do graphFile <- readFile ("../res/graphs/" ++ inputFilename)
        print "Parsing SVG file..."
        let graphDoc = xmlParse "output.error" graphFile
-           (shapes, paths, texts) = parseNode False (Style (0,0) "" "") (getRoot graphDoc)
+           (shapes, paths, texts) = parseNode False (getRoot graphDoc)
        print "Parsing complete"
        runSqlite dbStr $ do
            runMigration migrateAll
@@ -51,40 +51,35 @@ parseGraph dirLocation inputFilename outputFilename =
            mapM_ insert_ shapes
            mapM_ insert_ paths
            mapM_ insert_ texts
+       print "SVG Inserted"
        createDirectoryIfMissing True ("../res/graphs/" ++ dirLocation)
        buildSVG M.empty ("../res/graphs/" ++ dirLocation ++ "/" ++ outputFilename)
        print "SVG Built"
 
 -- | Parses a level.
-parseNode :: Bool -> Style -> Content i -> ([Path],[Shape],[Text])
-parseNode currentlyInRegion style content =
+parseNode :: Bool -> Content i -> ([Path],[Shape],[Text])
+parseNode currentlyInRegion content =
     if getAttribute "id" content == "layer2" ||
        getName content == "defs"
     then ([],[],[])
     else
         let isRegion       = getAttribute "id" content == "layer3"
-            newTransform   = getAttribute "transform" content
+            x   = parseTransform $ getAttribute "transform" content
             newStyle       = getAttribute "style" content
-            newFill        = getNewStyleAttr newStyle "fill" (fill style)
-            newStroke      = getNewStyleAttr newStyle "stroke" (stroke style)
-            x = if null newTransform then (0,0) else parseTransform newTransform
-            adjustedTransform = addTuples (transform style) x
-            parentStyle = Style adjustedTransform
-                                newFill
-                                newStroke
-            x1 = map (parseRect parentStyle) (tag "rect" content)
-            x2 = map (parseText parentStyle) (tag "text" content)
-            x3 = map (updatePathTransform adjustedTransform) $ mapMaybe (parsePath (currentlyInRegion || isRegion) parentStyle) (tag "path" content)
-            x4 = map (parseEllipse parentStyle) (tag "ellipse" content)
+            newFill        = getNewStyleAttr newStyle "fill" ""
+            (chilrenPaths, childrenShapes, childrenTexts) = parseChildren (currentlyInRegion || isRegion) (getChildren content)
+
+            x1 = map ((updateShape newFill x) . parseRect) (tag "rect" content)
+            x2 = map ((updateText x) . parseText) (tag "text" content)
+            x3 = map (updatePath newFill x) $ mapMaybe (parsePath (currentlyInRegion || isRegion)) (tag "path" content)
+            x4 = map ((updateShape newFill x) . parseEllipse) (tag "ellipse" content)
         in
-            addThree (x3,x1++x4,x2) $ parseChildren (currentlyInRegion || isRegion)
-                                                    parentStyle
-                                                    (getChildren content)
+            addThree (x3, x1++x4,x2) $ ((map (updatePath newFill x) chilrenPaths), (map (updateShape newFill x) childrenShapes), (map (updateText x) childrenTexts))
 
 -- | Parses a list of Content.
-parseChildren :: Bool -> Style -> [Content i] -> ([Path],[Shape],[Text])
-parseChildren currentlyInRegion style x =
-     foldl addThree ([],[],[]) $ map (parseNode currentlyInRegion style) x
+parseChildren :: Bool -> [Content i] -> ([Path],[Shape],[Text])
+parseChildren currentlyInRegion x =
+     foldl addThree ([],[],[]) $ map (parseNode currentlyInRegion) x
 
 
 -- TODO: Can't find way to zip tuples.
@@ -94,60 +89,72 @@ addThree :: ([Path],[Shape],[Text])
 addThree (a,b,c) (d,e,f) = (a ++ d, b ++ e, c ++f)
 
 -- | Parses a rect.
-parseRect :: Style -> Content i -> Shape
-parseRect style content =
+parseRect :: Content i -> Shape
+parseRect content =
     Shape 1
           ""
-          (read (getAttribute "x" content) + fst (transform style),
-           read (getAttribute "y" content) + snd (transform style))
+          (read (getAttribute "x" content),
+           read (getAttribute "y" content))
           (read $ getAttribute "width" content)
           (read $ getAttribute "height" content)
-          (fill style)
-          (stroke style)
+          ""
+          ""
           []
-          (fill style == "#a14c3a")
+          False
           9
           False
 
 -- | Parses a path.
-parsePath :: Bool -> Style -> Content i -> Maybe Path
-parsePath isRegion style content =
+parsePath :: Bool -> Content i -> Maybe Path
+parsePath isRegion content =
     if last (getAttribute "d" content) == 'z' && not isRegion
     then Nothing
     else Just (Path 1
                     "p"
                     d
-                    (fill style)
-                    (stroke style)
+                    ""
+                    ""
                     isRegion
                     ""
                     "")
     where d = parsePathD $ getAttribute "d" content
 
 -- | Parses a text.
-parseText :: Style -> Content i -> Text
-parseText style content =
+parseText :: Content i -> Text
+parseText content =
     Text 1
          (getAttribute "id" content)
-         (read (getAttribute "x" content) + fst (transform style),
-          read (getAttribute "y" content) + snd (transform style))
+         (read (getAttribute "x" content),
+          read (getAttribute "y" content))
          (tagTextContent content)
 
 -- | Parses a text.
-parseEllipse :: Style -> Content i -> Shape
-parseEllipse style content =
+parseEllipse :: Content i -> Shape
+parseEllipse content =
     Shape 1
           ""
-          (read (getAttribute "cx" content) + fst (transform style),
-           read (getAttribute "cy" content) + snd (transform style))
+          (read (getAttribute "cx" content),
+           read (getAttribute "cy" content))
           (read (getAttribute "rx" content) * 2)
           (read (getAttribute "ry" content) * 2)
           ""
-          (stroke style)
+          ""
           []
           False
           20
           True
 
-updatePathTransform :: Point -> Path -> Path
-updatePathTransform transform p = p { pathPoints = map (addTuples transform) (pathPoints p)}
+updatePath :: String -> Point -> Path -> Path
+updatePath fill transform p =
+    p { pathPoints = map (addTuples transform) (pathPoints p),
+        pathFill = if null (pathFill p) then fill else (pathFill p) }
+
+updateShape :: String -> Point -> Shape -> Shape
+updateShape fill transform r =
+    r { shapePos = addTuples transform (shapePos r),
+        shapeFill = if null (shapeFill r) then fill else (shapeFill r),
+        shapeIsHybrid = (shapeIsHybrid r) || (fill == "#a14c3a")}
+
+updateText :: Point -> Text -> Text
+updateText transform r =
+    r { textPos = addTuples transform (textPos r) }
