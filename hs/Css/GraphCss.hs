@@ -262,6 +262,12 @@ sidebarCSS = do
         semiVisible
         fill "white"
         stroke "none"
+    ".details" & do
+        border solid (px 1) black
+        width (pct 90)
+        height (px 0)
+        marginBottom (px 7)
+        overflow auto
 
 
 {- titleCSS
