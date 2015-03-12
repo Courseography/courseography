@@ -1,7 +1,6 @@
 {-# LANGUAGE OverloadedStrings, FlexibleContexts, GADTs, ScopedTypeVariables #-}
 module SvgParsing.Builder where
 
-import SvgParsing.Types
 import SvgParsing.ParserUtil
 import Database.Persist
 import Database.Persist.Sqlite

@@ -1,7 +1,6 @@
 {-# LANGUAGE OverloadedStrings, GADTs, ScopedTypeVariables #-}
 module SvgParsing.Generator where
 
-import SvgParsing.Types
 import SvgParsing.Builder
 import SvgParsing.ParserUtil
 import Database.Tables

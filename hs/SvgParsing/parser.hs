@@ -25,7 +25,6 @@ import Database.JsonParser
 import Database.SvgDatabase
 import SvgParsing.Generator
 import SvgParsing.Builder
-import SvgParsing.Types
 import SvgParsing.ParserUtil
 import qualified Data.Map as M
 
@@ -66,10 +65,10 @@ parseNode currentlyInRegion content =
         let isRegion       = getAttribute "id" content == "layer3"
             trans          = parseTransform $ getAttribute "transform" content
             style          = getAttribute "style" content
-            fill           = getNewStyleAttr newStyle "fill" ""
+            fill           = getNewStyleAttr style "fill" ""
             (chilrenPaths, childrenShapes, childrenTexts) = parseChildren (currentlyInRegion || isRegion) (getChildren content)
 
-            rects    = map ((updateShape newFill trans) . parseRect) (tag "rect" content)
+            rects    = map ((updateShape fill trans) . parseRect) (tag "rect" content)
             texts    = map ((updateText trans) . parseText) (tag "text" content)
             paths    = map (updatePath fill trans) $ mapMaybe (parsePath (currentlyInRegion || isRegion)) (tag "path" content)
             ellipses = map ((updateShape fill trans) . parseEllipse) (tag "ellipse" content)
