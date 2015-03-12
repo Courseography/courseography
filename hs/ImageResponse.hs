@@ -39,7 +39,7 @@ getGraphImage courseMap =
        createImageFile svgFilename imageFilename
        imageData <- BS.readFile imageFilename
        removeImage imageFilename
---       removeImage svgFilename
+       removeImage svgFilename
        let encodedData = BEnc.encode imageData
        return $ toResponse encodedData
 
