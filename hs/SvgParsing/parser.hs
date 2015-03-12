@@ -64,17 +64,20 @@ parseNode currentlyInRegion content =
     then ([],[],[])
     else
         let isRegion       = getAttribute "id" content == "layer3"
-            x   = parseTransform $ getAttribute "transform" content
-            newStyle       = getAttribute "style" content
-            newFill        = getNewStyleAttr newStyle "fill" ""
+            trans          = parseTransform $ getAttribute "transform" content
+            style          = getAttribute "style" content
+            fill           = getNewStyleAttr newStyle "fill" ""
             (chilrenPaths, childrenShapes, childrenTexts) = parseChildren (currentlyInRegion || isRegion) (getChildren content)
 
-            x1 = map ((updateShape newFill x) . parseRect) (tag "rect" content)
-            x2 = map ((updateText x) . parseText) (tag "text" content)
-            x3 = map (updatePath newFill x) $ mapMaybe (parsePath (currentlyInRegion || isRegion)) (tag "path" content)
-            x4 = map ((updateShape newFill x) . parseEllipse) (tag "ellipse" content)
+            rects    = map ((updateShape newFill trans) . parseRect) (tag "rect" content)
+            texts    = map ((updateText trans) . parseText) (tag "text" content)
+            paths    = map (updatePath fill trans) $ mapMaybe (parsePath (currentlyInRegion || isRegion)) (tag "path" content)
+            ellipses = map ((updateShape fill trans) . parseEllipse) (tag "ellipse" content)
         in
-            addThree (x3, x1++x4,x2) $ ((map (updatePath newFill x) chilrenPaths), (map (updateShape newFill x) childrenShapes), (map (updateText x) childrenTexts))
+            addThree (paths, rects ++ ellipses, texts) $
+             ((map (updatePath fill trans) chilrenPaths),
+              (map (updateShape fill trans) childrenShapes),
+              (map (updateText trans) childrenTexts))
 
 -- | Parses a list of Content.
 parseChildren :: Bool -> [Content i] -> ([Path],[Shape],[Text])
@@ -147,13 +150,13 @@ parseEllipse content =
 updatePath :: String -> Point -> Path -> Path
 updatePath fill transform p =
     p { pathPoints = map (addTuples transform) (pathPoints p),
-        pathFill = if null (pathFill p) then fill else (pathFill p) }
+        pathFill = if null (pathFill p) then fill else pathFill p }
 
 updateShape :: String -> Point -> Shape -> Shape
 updateShape fill transform r =
     r { shapePos = addTuples transform (shapePos r),
-        shapeFill = if null (shapeFill r) then fill else (shapeFill r),
-        shapeIsHybrid = (shapeIsHybrid r) || (fill == "#a14c3a")}
+        shapeFill = if null (shapeFill r) then fill else shapeFill r,
+        shapeIsHybrid = shapeIsHybrid r || fill == "#a14c3a" }
 
 updateText :: Point -> Text -> Text
 updateText transform r =
