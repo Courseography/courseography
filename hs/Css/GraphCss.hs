@@ -189,7 +189,7 @@ sidebarCSS = do
         width (px 20)
         height (pct 100)
         float floatLeft
-        "background" -: "rgba(128, 0, 128, 0.8)"
+        "background" -: "rgb(128, 0, 128)"
         position absolute
     "#sidebar-button" ? do
         cursor pointer
@@ -268,6 +268,8 @@ sidebarCSS = do
         height (px 0)
         marginBottom (px 7)
         overflow auto
+        fontSize (px 14)
+        fontColor white
 
 
 {- titleCSS

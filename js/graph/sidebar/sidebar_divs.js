@@ -60,7 +60,7 @@ function toggleSidebar(location) {
     	});
     } else if (!toggled && location === 'button') {
         toggled = true;
-        $('#sidebar').animate({width: "300px"}, "fast");
+        $('#sidebar').animate({width: "400px"}, "fast");
 
         fillFCECount();
         $('#focuses').show();
