@@ -73,13 +73,14 @@ Graph
     deriving Show
 
 Text
---    gId Int
+    gId Int
     rId String
     pos Point
     text String
     deriving Show
 
 Shape
+    gId Int
     id_ String
     pos Point
     width Double
@@ -92,6 +93,7 @@ Shape
     isBool Bool
 
 Path
+    gId Int
     id_ String
     points [Point]
     fill String
