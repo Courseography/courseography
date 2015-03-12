@@ -51,7 +51,6 @@ parseGraph dirLocation inputFilename outputFilename =
            mapM_ insert_ shapes
            mapM_ insert_ paths
            mapM_ insert_ texts
-       printDB
        createDirectoryIfMissing True ("../res/graphs/" ++ dirLocation)
        buildSVG M.empty ("../res/graphs/" ++ dirLocation ++ "/" ++ outputFilename)
        print "SVG Built"
@@ -75,7 +74,7 @@ parseNode currentlyInRegion style content =
                                 newStroke
             x1 = map (parseRect parentStyle) (tag "rect" content)
             x2 = map (parseText parentStyle) (tag "text" content)
-            x3 = mapMaybe (parsePath (currentlyInRegion || isRegion) parentStyle) (tag "path" content)
+            x3 = map (updatePathTransform adjustedTransform) $ mapMaybe (parsePath (currentlyInRegion || isRegion) parentStyle) (tag "path" content)
             x4 = map (parseEllipse parentStyle) (tag "ellipse" content)
         in
             addThree (x3,x1++x4,x2) $ parseChildren (currentlyInRegion || isRegion)
@@ -123,7 +122,7 @@ parsePath isRegion style content =
                     isRegion
                     ""
                     "")
-    where d = map (addTuples (transform style)) $ parsePathD $ getAttribute "d" content
+    where d = parsePathD $ getAttribute "d" content
 
 -- | Parses a text.
 parseText :: Style -> Content i -> Text
@@ -149,3 +148,6 @@ parseEllipse style content =
           False
           20
           True
+
+updatePathTransform :: Point -> Path -> Path
+updatePathTransform transform p = p { pathPoints = map (addTuples transform) (pathPoints p)}
