@@ -1,12 +1,6 @@
 module SvgParsing.ParserUtil where
 
-import Text.XML.HaXml
-import Text.XML.HaXml.ByteStringPP
-import Text.XML.HaXml.Wrappers
-import Text.XML.HaXml.Types
-import Text.XML.HaXml.Combinators
-import Text.XML.HaXml.Util
-import Text.XML.HaXml.XmlContent.Parser
+import Text.XML.HaXml hiding (find)
 import qualified Data.Conduit.List as CL
 import Database.Persist
 import Database.Persist.Sqlite
@@ -14,6 +8,7 @@ import Text.XML.HaXml.Namespaces
 import Data.Conduit
 import Data.List.Split hiding (startsWith)
 import Data.List
+import Data.Maybe
 import Data.Text as T (pack, unpack)
 import Database.Tables
 import Database.JsonParser
@@ -26,7 +21,7 @@ getRoot doc = head $ parseDocument (tag "svg") doc
 getStyleAttr :: String -> String -> String
 getStyleAttr attr style =
     drop (length attr + 1) $
-    head $ filter (isPrefixOf $ attr ++ ":") (splitOn ";" style) ++ [""]
+    fromMaybe "" (find (isPrefixOf $ attr ++ ":") (splitOn ";" style))
 
 -- | Gets a style attribute from a style String. If the style attribute is "",
 -- then this function defaults to the previous style attribute, 'parent'.
@@ -55,12 +50,13 @@ getAttrName :: Attribute -> String
 getAttrName (a, _) = printableName a
 
 -- | Gets an Attribute's value.
-getAttrVal :: Attribute -> String
-getAttrVal (_, b) = show b
+getAttrVal :: Maybe Attribute -> String
+getAttrVal Nothing = ""
+getAttrVal (Just (_, b)) = show b
 
 -- | Converts an Attribute into a more parsable form.
 convertAttributeToTuple :: Attribute -> (String, String)
-convertAttributeToTuple at = (getAttrName at, getAttrVal at)
+convertAttributeToTuple at = (getAttrName at, getAttrVal (Just at))
 
 -- | Gets the children of the current node.
 getChildren :: Content i -> [Content i]
@@ -68,11 +64,10 @@ getChildren = path [children]
 
 -- | Gets the value of the attribute with the corresponding key.
 getAttribute :: String -> Content i -> String
-getAttribute attr (CElem content undefined)
-    | null matchingAttrs = ""
-    | otherwise = getAttrVal $ head matchingAttrs
-    where matchingAttrs = filter (\x -> getAttrName x == attr)
-                                 (getAttrs content)
+getAttribute attr (CElem content undefined) =
+    let matchingAttrs = find (\x -> getAttrName x == attr)
+                             (getAttrs content)
+    in getAttrVal matchingAttrs
 getAttribute _ _ = ""
 
 -- | Parses a transform String into a tuple of Float.
@@ -91,7 +86,7 @@ parsePathD d
     | otherwise = absCoords
     where
       lengthMoreThanOne = \x -> length x > 1
-      coordList = filter lengthMoreThanOne $ map (splitOn ",") $ splitOn " " d
+      coordList = filter lengthMoreThanOne (map (splitOn ",") $ splitOn " " d)
       -- Converts a relative coordinate structure into an absolute one.
       relCoords = tail $ foldl (\x y -> x ++ [addTuples (convertToPoint y) (last x)])
                                [(0,0)]
