@@ -14,39 +14,46 @@ import SvgParsing.Generator
 import SvgParsing.ParserUtil
 import Diagram (renderTable)
 import qualified Data.Map as M
+import System.Random
 
 -- | Returns an image of the graph requested by the user.
 graphImageResponse :: ServerPart Response
 graphImageResponse =
     do req <- askRq
        let cookies = rqCookies req
-       liftIO $ getGraphImage $
-                M.map cookieValue $ M.fromList cookies
+       liftIO $ getGraphImage (M.map cookieValue $ M.fromList cookies)
 
 -- | Returns an image of the timetable requested by the user.
 timetableImageResponse :: String -> ServerPart Response
-timetableImageResponse courses = do
-  liftIO $ print courses
-  liftIO $ getTimetableImage courses
+timetableImageResponse courses =
+   liftIO $ getTimetableImage courses
 
 -- | Creates an image, and returns the base64 representation of that image.
 getGraphImage :: M.Map String String -> IO Response
-getGraphImage courseMap = do
-	buildSVG courseMap "Testfile2.svg"
-	liftIO $ createImageFile "Testfile2.svg" "INSERT_ID-graph.png"
-	imageData <- BS.readFile "INSERT_ID-graph.png"
-	liftIO $ removeImage "INSERT_ID-graph.png"
-	liftIO $ removeImage "Testfile2.svg"
-	let encodedData = BEnc.encode imageData
-	return $ toResponse encodedData
+getGraphImage courseMap =
+    do gen <- newStdGen
+       let (rand, _) = next gen
+           svgFilename = (show rand ++ "-graph-svg-file.svg")
+           imageFilename = (show rand ++ "-graph.png")
+       buildSVG courseMap svgFilename
+       createImageFile svgFilename imageFilename
+       imageData <- BS.readFile imageFilename
+       removeImage imageFilename
+--       removeImage svgFilename
+       let encodedData = BEnc.encode imageData
+       return $ toResponse encodedData
 
 -- | Creates an image, and returns the base64 representation of that image.
 getTimetableImage :: String -> IO Response
 getTimetableImage courses =
-    do liftIO $ renderTable "circle.svg" courses
-       liftIO $ createImageFile "circle.svg" "INSERT_ID-graph.png"
-       imageData <- BS.readFile "INSERT_ID-graph.png"
-       liftIO $ removeImage "INSERT_ID-graph.png"
-       liftIO $ removeImage "Testfile2.svg"
+    do gen <- newStdGen
+       let (rand, _) = next gen
+           svgFilename = (show rand ++ "--timetable-svg-file.svg")
+           imageFilename = (show rand ++ "-timetable.png")
+       renderTable svgFilename courses
+       createImageFile svgFilename imageFilename
+       imageData <- BS.readFile imageFilename
+       removeImage imageFilename
+       removeImage svgFilename
        let encodedData = BEnc.encode imageData
        return $ toResponse encodedData
