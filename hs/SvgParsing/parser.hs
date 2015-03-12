@@ -38,22 +38,26 @@ parseGraph dirLocation inputFilename outputFilename =
     do graphFile <- readFile ("../res/graphs/" ++ inputFilename)
        print "Parsing SVG file..."
        let graphDoc = xmlParse "output.error" graphFile
-           (shapes, paths, texts) = parseNode False (getRoot graphDoc)
+           parsedGraph = parseNode False (getRoot graphDoc)
        print "Parsing complete"
-       runSqlite dbStr $ do
-           runMigration migrateAll
-           deleteWhere [GraphGId ==. 1]
-           deleteWhere [ShapeGId ==. 1]
-           deleteWhere [PathGId  ==. 1]
-           deleteWhere [TextGId  ==. 1]
-           insert_ $ Graph 1 dirLocation
-           mapM_ insert_ shapes
-           mapM_ insert_ paths
-           mapM_ insert_ texts
+       insertGraph dirLocation parsedGraph
        print "SVG Inserted"
        createDirectoryIfMissing True ("../res/graphs/" ++ dirLocation)
        buildSVG M.empty ("../res/graphs/" ++ dirLocation ++ "/" ++ outputFilename)
        print "SVG Built"
+
+insertGraph :: String -> ([Path],[Shape],[Text]) -> IO ()
+insertGraph graphTitle (paths, shapes, texts) =
+    runSqlite dbStr $ do
+        runMigration migrateAll
+        deleteWhere [GraphGId ==. 1]
+        deleteWhere [ShapeGId ==. 1]
+        deleteWhere [PathGId  ==. 1]
+        deleteWhere [TextGId  ==. 1]
+        insert_ (Graph 1 graphTitle)
+        mapM_ insert_ shapes
+        mapM_ insert_ paths
+        mapM_ insert_ texts
 
 -- | Parses a level.
 parseNode :: Bool -> Content i -> ([Path],[Shape],[Text])
@@ -82,7 +86,6 @@ parseNode currentlyInRegion content =
 parseChildren :: Bool -> [Content i] -> ([Path],[Shape],[Text])
 parseChildren currentlyInRegion x =
      foldl addThree ([],[],[]) $ map (parseNode currentlyInRegion) x
-
 
 -- TODO: Can't find way to zip tuples.
 addThree :: ([Path],[Shape],[Text])
