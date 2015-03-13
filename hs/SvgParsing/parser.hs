@@ -159,7 +159,9 @@ updateShape fill transform r =
         shapeFill = if null (shapeFill r) then fill else shapeFill r,
         shapeShapeType = if fill == "#a14c3a" || shapeShapeType r == "hybrid"
                          then "hybrid"
-                         else "node"
+                         else if shapeShapeType r == "bool"
+                              then "bool"
+                              else "node"
       }
 
 updateText :: Point -> Text -> Text

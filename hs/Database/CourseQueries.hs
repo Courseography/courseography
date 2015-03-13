@@ -12,7 +12,6 @@ import Happstack.Server
 import qualified Data.Text as T
 import qualified Data.Aeson as Aeson
 
-
 retrieveCourse :: String -> ServerPart Response
 retrieveCourse course =
     liftIO $ queryCourse (T.pack course)

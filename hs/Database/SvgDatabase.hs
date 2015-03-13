@@ -13,5 +13,5 @@ import Database.JsonParser
 -- | Prints the database table 'rects'.
 printDB :: IO ()
 printDB = runSqlite dbStr $ do
-              let sql = "SELECT count(fill) FROM path"
+              let sql = "SELECT * FROM shape"
               rawQuery sql [] $$ CL.mapM_ (liftIO . print)
