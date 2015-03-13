@@ -10,7 +10,7 @@ import Control.Monad.IO.Class  (liftIO)
 import qualified Data.ByteString.Base64.Lazy as BEnc
 import ImageConversion
 import Data.List.Split
-import SvgParsing.SVGGenerator
+import SvgParsing.Generator
 import SvgParsing.ParserUtil
 import Diagram (renderTable)
 import qualified Data.Map as M
@@ -25,7 +25,9 @@ graphImageResponse =
 
 -- | Returns an image of the timetable requested by the user.
 timetableImageResponse :: String -> ServerPart Response
-timetableImageResponse courses = liftIO $ getTimetableImage courses
+timetableImageResponse courses = do
+  liftIO $ print courses
+  liftIO $ getTimetableImage courses
 
 -- | Creates an image, and returns the base64 representation of that image.
 getGraphImage :: M.Map String String -> IO Response

@@ -35,11 +35,11 @@ OUTPUT: a list of department html page names
 -----------------------------------------------------------------------------------------}
 getDeptList :: [Tag String] -> [String]
 getDeptList tags =
-    let lists = sections (== TagOpen "ul" [("class","simple")]) tags
-        contents = takeWhile (/= TagClose "ul") . head . tail $ lists
-        as = filter (tagOpen (== "a") (\x -> True)) contents
-        rawList = map (\x -> case x of TagOpen "a" [("href", link)] -> link) as
-    in nub $ filter (\dept -> not (dept `elem` toDelete)) rawList
+    let lists = sections (tagOpenAttrNameLit "ul" "class" (=="simple")) tags
+        contents = takeWhile (not. isTagCloseName "ul") . head . tail $ lists
+        as = filter (isTagOpenName "a") contents
+        rawList = nub $ map (fromAttrib "href") as
+    in rawList \\ toDelete
 
 {----------------------------------------------------------------------------------------
 INPUT: an html filename of a department (which are found from getDeptList)
@@ -51,28 +51,27 @@ getCalendar str = do
     let path = fasCalendarURL ++ str
     rsp <- simpleHTTP (getRequest path)
     body <- getResponseBody rsp
-    let tags = filter isComment $ parseTags (T.pack body)
+    let tags = filter isNotComment $ parseTags (T.pack body)
     let coursesSoup = lastH2 tags
-    let courses = map (filter (tagText (\x -> True))) $ partitions isCourseTitle coursesSoup
-    let course = map processCourseToData courses
-    print ("parsing " ++ str )
+    let course = map (processCourseToData . (filter isTagText)) $ partitions isCourseTitle coursesSoup
+    print $ "parsing " ++ str
     runSqlite dbStr $ do
-      runMigration migrateAll
-      mapM_ insertCourse course
+        runMigration migrateAll
+        mapM_ insertCourse course
     where
-        isComment (TagComment _) = False
-        isComment _ = True
-        lastH2 = last . sections (tagOpen (== "h2") (\x -> True))
+        isNotComment (TagComment _) = False
+        isNotComment _ = True
+        lastH2 = last . sections (isTagOpenName "h2")
         isCourseTitle (TagOpen _ attrs) = any (\x -> fst x == "name" && T.length (snd x) == 8) attrs
         isCourseTitle _ = False
 
 parseTitleFAS :: CoursePart -> CoursePart
-parseTitleFAS (tags, course) =
-    let courseNames = T.splitAt 8 $ removeTitleGarbage $ removeLectureSection $ head tags
-  in (tail tags, course {title = Just (snd courseNames),
-                         name =  fst courseNames})
-  where removeLectureSection (TagText s) = T.takeWhile (/= '[') s
-        removeTitleGarbage s = replaceAll ["\160"] "" s
+parseTitleFAS (tag:tags, course) =
+    let (n, t) = T.splitAt 8 $ removeTitleGarbage $ removeLectureSection tag
+    in (tags, course {title = Just t, name =  n})
+    where removeLectureSection (TagText s) = T.takeWhile (/= '[') s
+          removeTitleGarbage s = replaceAll ["\160"] "" s
+
 {----------------------------------------------------------------------------------------
 INPUT: a list of tags representing a single course,
 OUTPUT: Course 'record' containing course info
@@ -93,7 +92,7 @@ processCourseToData tags  =
             manualTutorialEnrol = Nothing,
             distribution = Nothing,
             prereqs = Nothing
-        }
+            }
     in snd $ (tags, course) ~:
              preProcess -:
              parseTitleFAS -:
@@ -108,15 +107,6 @@ parseArtSci :: IO ()
 parseArtSci = do
     rsp <- simpleHTTP (getRequest fasCalendarURL)
     body <- getResponseBody rsp
-    let depts = getDeptList $ parseTags  body
+    let depts = getDeptList $ parseTags body
     putStrLn "Parsing Arts and Science Calendar..."
     mapM_ getCalendar depts
-
-
-main :: IO ()
-main = do
-    rsp <- simpleHTTP (getRequest fasCalendarURL)
-    body <- getResponseBody rsp
-    let depts = getDeptList $ parseTags  body
-    mapM_ getCalendar depts
-

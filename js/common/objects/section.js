@@ -138,23 +138,25 @@ Section.prototype.removeTimes = function () {
     $.each(this.times, function (i, time) {
         n = time.charAt(time.length-1);
 
-        if (n === 'E') {
-            compressCell(parseInt(time.slice(2)), time.charAt(1), time.charAt(time.length-2));
-            time = time.slice(0, time.length-1);
-        }
+        if (time.indexOf('.') === -1 && $(time.length > 0)) {
+            if (n === 'E') {
+                compressCell(parseInt(time.slice(2)), time.charAt(1), time.charAt(time.length-2));
+                time = time.slice(0, time.length-1);
+            }
 
-        $(time).css('border-top-style', 'default')
-               .css('border-left-style', 'default')
-               .css('border-right-style', 'default');
+            $(time).css('border-top-style', 'default')
+                   .css('border-left-style', 'default')
+                   .css('border-right-style', 'default');
 
-        if (n === 'H') {
-            compressCell(parseInt(time.slice(2)), time.charAt(1), time.charAt(time.length-2));
-        }
+            if (n === 'H') {
+                compressCell(parseInt(time.slice(2)), time.charAt(1), time.charAt(time.length-2));
+            }
 
-        if ($(time).data("conflicts").length > 0) {
-            tmp.removeConflict(time);
-        } else {
-            renderClearTime(time);
+            if ($(time).data("conflicts").length > 0) {
+                tmp.removeConflict(time);
+            } else {
+                renderClearTime(time);
+            }
         }
     });
 };
