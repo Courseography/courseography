@@ -45,13 +45,13 @@ function renderConflicts(time, conflicts) {
     if (time.indexOf('-5') === -1) {
         $(time).data('conflicts', conflicts)
                .attr('title', conflicts.map(function (section) {
-                   return section.courseName;
-                   })
+                                  return section.courseName;
+                              })
                )
                .attr('in-conflict', String(conflicts.length > 0))
                .attr('status', conflicts.length > 0 ? 'conflict' : 'occupied')
                .attr('satisfied', getCourseObject($(time).html(),
-                     courseObjects).satisfied);
+                                                  courseObjects).satisfied);
     }
 }
 
