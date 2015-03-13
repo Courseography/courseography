@@ -128,10 +128,10 @@ makeSVGDefs =
 buildSVG :: M.Map String String -> String -> IO ()
 buildSVG courseMap filename =
     runSqlite dbStr $ do
-        sqlRects    :: [Entity Shape]    <- selectList [ShapeIsBool ==. False] []
+        sqlRects    :: [Entity Shape]    <- selectList [ShapeShapeType !=. "bool"] []
         sqlTexts    :: [Entity Text]     <- selectList [] []
         sqlPaths    :: [Entity Path]     <- selectList [] []
-        sqlEllipses :: [Entity Shape]    <- selectList [ShapeIsBool ==. True] []
+        sqlEllipses :: [Entity Shape]    <- selectList [ShapeShapeType ==. "bool"] []
         let courseStyleMap = M.map convertSelectionToStyle courseMap
             texts          = map entityVal sqlTexts
             rects          = map (buildRect texts . entityVal) sqlRects
@@ -154,12 +154,12 @@ convertRectToSVG courseMap rect
     | shapeFill rect == "none" = S.rect
     | otherwise =
         S.g ! A.id_ (stringValue $ shapeId_ rect)
-            ! A.class_ (if shapeIsHybrid rect then "hybrid" else "node")
+            ! A.class_ (stringValue $ shapeShapeType rect)
             ! S.customAttribute "data-group" (stringValue (getArea (shapeId_ rect)))
             ! S.customAttribute "text-rendering" "geometricPrecision"
             ! S.customAttribute "shape-rendering" "geometricPrecision"
             ! A.style (stringValue (
-                       if not (shapeIsHybrid rect)
+                       if not (shapeShapeType rect == "hybrid")
                        then fromMaybe "" $ M.lookup (shapeId_ rect) courseMap
                        else "")) $
             do S.rect ! A.rx "4"
@@ -169,7 +169,7 @@ convertRectToSVG courseMap rect
                       ! A.width (stringValue . show $ shapeWidth rect)
                       ! A.height (stringValue . show $ shapeHeight rect)
                       ! A.style (stringValue $ "fill:" ++ getFill (shapeId_ rect) ++ ";")
-               concatSVG $ map (convertTextToSVG (shapeIsHybrid rect) False False) (shapeText rect)
+               concatSVG $ map (convertTextToSVG (shapeShapeType rect == "hybrid") False False) (shapeText rect)
 
 convertSelectionToStyle :: String -> String
 convertSelectionToStyle courseStatus =

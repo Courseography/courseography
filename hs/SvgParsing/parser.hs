@@ -105,9 +105,8 @@ parseRect content =
           ""
           ""
           []
-          False
           9
-          False
+          "node"
 
 -- | Parses a path.
 parsePath :: Bool -> Content i -> Maybe Path
@@ -145,21 +144,24 @@ parseEllipse content =
           ""
           ""
           []
-          False
           20
-          True
+          "bool"
 
 updatePath :: String -> Point -> Path -> Path
 updatePath fill transform p =
     p { pathPoints = map (addTuples transform) (pathPoints p),
-        pathFill = if null (pathFill p) then fill else pathFill p }
+        pathFill = if null (pathFill p) then fill else pathFill p
+      }
 
 updateShape :: String -> Point -> Shape -> Shape
 updateShape fill transform r =
     r { shapePos = addTuples transform (shapePos r),
         shapeFill = if null (shapeFill r) then fill else shapeFill r,
-        shapeIsHybrid = shapeIsHybrid r || fill == "#a14c3a" }
+        shapeShapeType = if fill == "#a14c3a" || shapeShapeType r == "hybrid"
+                         then "hybrid"
+                         else "node"
+      }
 
 updateText :: Point -> Text -> Text
-updateText transform r =
-    r { textPos = addTuples transform (textPos r) }
+updateText transform t =
+    t { textPos = addTuples transform (textPos t) }

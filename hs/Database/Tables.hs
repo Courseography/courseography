@@ -88,9 +88,8 @@ Shape
     fill String
     stroke String
     text [Text]
-    isHybrid Bool
     tolerance Double
-    isBool Bool
+    shapeType String
 
 Path
     gId Int

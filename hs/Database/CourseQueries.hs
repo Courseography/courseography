@@ -1,10 +1,11 @@
 {-# LANGUAGE ScopedTypeVariables, OverloadedStrings #-}
 
-module Database.CourseQueries (queryCourse, allCourses) where
+module Database.CourseQueries (retrieveCourse, allCourses) where
 
 import Database.Persist
 import Database.Persist.Sqlite
 import Database.Tables as Tables
+import Control.Monad.IO.Class (liftIO)
 import JsonResponse
 import Database.JsonParser
 import Happstack.Server

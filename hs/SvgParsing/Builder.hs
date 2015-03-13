@@ -49,7 +49,7 @@ buildRect texts entity =
                             ) texts
         textString = concatMap textText rectTexts
         dropSlash = takeWhile (/='/')
-        id_ = map toLower $ (if shapeIsHybrid entity then "h" else "") ++
+        id_ = map toLower $ (if shapeShapeType entity == "hybrid" then "h" else "") ++
                             (if isDigit $ head textString then "CSC" else "") ++ dropSlash textString
     in Shape (shapeGId entity)
              id_
@@ -59,9 +59,8 @@ buildRect texts entity =
              (shapeFill entity)
              (shapeStroke entity)
              rectTexts
-             (shapeIsHybrid entity)
              9
-             False
+             (shapeShapeType entity)
 
 -- | Gets the first rect that intersects with the given coordinates.
 getIntersectingShape :: Point -> [Shape] -> String
@@ -100,9 +99,8 @@ buildEllipses texts idCounter entities =
              ""
              (shapeStroke entity)
              ellipseText
-             False
              20
-             True : buildEllipses texts (idCounter + 1) (tail entities)
+             (shapeShapeType entity) : buildEllipses texts (idCounter + 1) (tail entities)
 
 -- | Rebuilds a path's `d` attribute based on a list of Rational tuples.
 buildPathString :: [Point] -> String
