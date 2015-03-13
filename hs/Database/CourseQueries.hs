@@ -11,6 +11,11 @@ import Happstack.Server
 import qualified Data.Text as T
 import qualified Data.Aeson as Aeson
 
+
+retrieveCourse :: String -> ServerPart Response
+retrieveCourse course =
+    liftIO $ queryCourse (T.pack course)
+
 -- | Queries the database for all information about `course`, constructs a JSON object
 -- | representing the course and returns the appropriate JSON response.
 queryCourse :: T.Text -> IO Response
@@ -18,23 +23,23 @@ queryCourse lowerStr =
     runSqlite dbStr $ do
         let courseStr = T.toUpper lowerStr
         sqlCourse :: [Entity Courses] <- selectList [CoursesCode ==. courseStr] []
-        sqlLecturesFall :: [Entity Lectures]  <- selectList [LecturesCode  ==. courseStr,
-                                                             LecturesSession ==. "F"] []
-        sqlLecturesSpring :: [Entity Lectures]  <- selectList [LecturesCode  ==. courseStr,
-                                                               LecturesSession ==. "S"] []
-        sqlLecturesYear :: [Entity Lectures]  <- selectList [LecturesCode  ==. courseStr,
-                                                               LecturesSession ==. "Y"] []
-        sqlTutorialsFall :: [Entity Tutorials] <- selectList [TutorialsCode ==. courseStr,
-                                                              TutorialsSession ==. "F"] []
-        sqlTutorialsSpring :: [Entity Tutorials] <- selectList [TutorialsCode ==. courseStr,
-                                                                TutorialsSession ==. "S"] []
-        sqlTutorialsYear :: [Entity Tutorials] <- selectList [TutorialsCode ==. courseStr,
-                                                                TutorialsSession ==. "Y"] []
-        let course = entityVal $ head sqlCourse
-        let fallSession   = buildSession sqlLecturesFall sqlTutorialsFall
-        let springSession = buildSession sqlLecturesSpring sqlTutorialsSpring
-        let yearSession = buildSession sqlLecturesYear sqlTutorialsYear
-        let courseJSON = buildCourse fallSession springSession yearSession course
+        sqlLecturesFall    :: [Entity Lectures]   <- selectList [LecturesCode  ==. courseStr,
+                                                                 LecturesSession ==. "F"] []
+        sqlLecturesSpring  :: [Entity Lectures]   <- selectList [LecturesCode  ==. courseStr,
+                                                                 LecturesSession ==. "S"] []
+        sqlLecturesYear    :: [Entity Lectures]   <- selectList [LecturesCode  ==. courseStr,
+                                                                 LecturesSession ==. "Y"] []
+        sqlTutorialsFall   :: [Entity Tutorials]  <- selectList [TutorialsCode ==. courseStr,
+                                                                 TutorialsSession ==. "F"] []
+        sqlTutorialsSpring :: [Entity Tutorials]  <- selectList [TutorialsCode ==. courseStr,
+                                                                 TutorialsSession ==. "S"] []
+        sqlTutorialsYear   :: [Entity Tutorials]  <- selectList [TutorialsCode ==. courseStr,
+                                                                 TutorialsSession ==. "Y"] []
+        let course        = entityVal $ head sqlCourse
+            fallSession   = buildSession sqlLecturesFall sqlTutorialsFall
+            springSession = buildSession sqlLecturesSpring sqlTutorialsSpring
+            yearSession   = buildSession sqlLecturesYear sqlTutorialsYear
+            courseJSON    = buildCourse fallSession springSession yearSession course
         return $ toResponse $ createJSONResponse $ encodeJSON $ Aeson.toJSON courseJSON
 
 -- | Builds a Course structure from a tuple from the Courses table.
