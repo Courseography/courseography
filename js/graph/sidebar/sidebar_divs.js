@@ -2,39 +2,39 @@ var toggled = false;
 
 
 $("#sidebar-button").click(function(){
-	'use strict';
+    'use strict';
 
-	toggleSidebar('button');
+    toggleSidebar('button');
 });
 
 
 $('#focuses-nav').click(function (e) {
-	'use strict';
+    'use strict';
 
-	e.preventDefault();
-	resetDivs();
-	$('#focuses').show();
-	$('#focuses-nav').css('background-color', '#46364A');
+    e.preventDefault();
+    resetDivs();
+    $('#focuses').show();
+    $('#focuses-nav').css('background-color', '#46364A');
 
 });
 
 
 $('#graphs-nav').click(function (e) {
-	'use strict';
+    'use strict';
 
-	e.preventDefault();
-	resetDivs();
-	$('#graphs').show();
-	$('#graphs-nav').css('background-color', '#46364A');
+    e.preventDefault();
+    resetDivs();
+    $('#graphs').show();
+    $('#graphs-nav').css('background-color', '#46364A');
 
 });
 
 
 $('#graph').click(function (e) {
-	'use strict';
+    'use strict';
 
-	e.preventDefault();
-	toggleSidebar('graph');
+    e.preventDefault();
+    toggleSidebar('graph');
 });
 
 
@@ -42,11 +42,11 @@ $('#graph').click(function (e) {
  * Hides all currently open divs and resets navbar to display none of the links as clicked.
 **/
 function resetDivs() {
-	'use strict';
+    'use strict';
 
-	$('#focuses').css('display', 'none');
-	$('#graphs').css('display', 'none');
-	$('#graphs-nav, #focuses-nav').css('background-color', '#CD96CD');
+    $('#focuses').css('display', 'none');
+    $('#graphs').css('display', 'none');
+    $('#graphs-nav, #focuses-nav').css('background-color', '#CD96CD');
 }
 
 
@@ -54,10 +54,10 @@ function resetDivs() {
  * Fills the count of FCEs in the sidebar.
 **/
 function fillFCECount() {
-	'use strict';
-	
-	$("#fcecount").show();
-	$('#fcecount').html("FCE Count: " + FCEs);
+    'use strict';
+    
+    $("#fcecount").show();
+    $('#fcecount').html("FCE Count: " + FCEs);
 }
 
 
@@ -70,9 +70,9 @@ function toggleSidebar(location) {
     if (toggled) {
         toggled = false;
         resetDivs();
-    	$('#sidebar').animate({width: "20px"}, "fast", undefined, function() {
-    		$("#fcecount").html("");
-    	});
+        $('#sidebar').animate({width: "20px"}, "fast", undefined, function() {
+            $("#fcecount").html("");
+        });
     } else if (!toggled && location === 'button') {
         toggled = true;
         $('#sidebar').animate({width: "400px"}, "fast");

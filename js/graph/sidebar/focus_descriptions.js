@@ -10,7 +10,7 @@ var HCIDescription = 'Human-Computer Interaction (HCI) is the scientific study o
                      '<em>[2.]</em> SOC101Y1, SOC200H1, SOC202H1, SOC302H1 <br>' + 
                      '<em>[3.]</em> 1 FCE from the following: CSC309H1, CSC320H1, CSC321H1, CSC343H1, CSC384H1, CSC401H1, '+
                      'CSC404H1, CSC418H1, CSC485H1, CSC490H1/491H, PSY100H1, PSY270H1/PSY280H1 <br> <br>' +
-        			 'Suggested Related Courses: <br> <br>' +
+                     'Suggested Related Courses: <br> <br>' +
                      '<em>[1.]</em> CSC454H1, CSC290H1 <br>' +
                      '<em>[2.] </em> At least one half-course in Human Factors or Ergonomics offered by the Department of ' +
                      'Mechanical and Industrial Engineering, such as MIE240H, MIE343H, MIE344H, MIE448H, and ' +
