@@ -41,7 +41,7 @@ function setTdHover() {
  */
 function renderConflicts(time, conflicts) {
     'use strict';
-    console.log(time);
+
     if (time.indexOf('-5') === -1) {
         $(time).data('conflicts', conflicts)
                .attr('title', conflicts.map(function (section) {
