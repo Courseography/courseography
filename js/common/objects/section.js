@@ -129,7 +129,8 @@ Section.prototype.removeTimes = function () {
 
     var tmp = this;
     $.each(this.times, function (i, time) {
-        if (time.indexOf('.') === -1 && $(time.length > 0)) {
+        if (time.indexOf('-5') === -1 && $(time.length > 0)) {
+            console.log(time);
             if ($(time).data("conflicts").length > 0) {
                 tmp.removeConflict(time);
             } else {

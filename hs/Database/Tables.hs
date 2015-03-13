@@ -205,7 +205,7 @@ instance ToJSON Lecture where
                     "section" .= section,
                     "cap" .= cap,
                     "time_str" .= time_str,
-                    "time" .= time,
+                    "time" .= map convertTimesToStrings time,
                     "instructor" .= instructor,
                     "enrol" .= enrol,
                     "wait" .= wait
@@ -230,3 +230,7 @@ instance ToJSON Tutorial where
       Array $ V.fromList [toJSON times, toJSON timeStr]
   toJSON (Tutorial (Just value) times timeStr) =
       Array $ V.fromList [toJSON value, toJSON times, toJSON timeStr]
+
+convertTimesToStrings :: [Double] -> [T.Text]
+convertTimesToStrings times =
+    map (\x -> T.replace "." "-" (T.pack (show x))) times

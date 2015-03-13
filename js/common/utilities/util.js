@@ -54,7 +54,7 @@ function removeCourseObject(courseName) {
  */
 function getCourseObject(courseName, courseArray) {
     'use strict';
-
+    
     for (var i = 0; i < courseArray.length; i++) {
         if (courseArray[i].name === courseName) {
             return courseArray[i];

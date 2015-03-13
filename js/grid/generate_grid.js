@@ -121,13 +121,13 @@ function appendTableData(trFall, trSpring, time) {
 
         for (var k = 0; k < 5; k++) {
             trFall.append($('<td></td>')
-                .attr('id', weekPrefixArray[k] + time + 'F')
+                .attr('id', weekPrefixArray[k] + time + '-0F')
                 .attr('in-conflict', 'false')
                 .attr('satisfied', 'true')
                 .attr('rowspan', '2')
                 .addClass('timetable-cell'));
             trSpring.append($('<td></td>')
-                .attr('id', weekPrefixArray[k] + time + 'S')
+                .attr('id', weekPrefixArray[k] + time + '-0S')
                 .attr('in-conflict', 'false')
                 .attr('satisfied', 'true')
                 .attr('rowspan', '2')
@@ -149,13 +149,13 @@ function appendTableData(trFall, trSpring, time) {
 
         for (var k = 0; k < 5; k++) {
             trFall.append($('<td></td>')
-                .attr('id', weekPrefixArray[k] + time + 'F')
+                .attr('id', weekPrefixArray[k] + time.toString().replace('.', '-') + 'F')
                 .attr('in-conflict', 'false')
                 .attr('satisfied', 'true')
                 .attr('hidden', 'true')
                 .addClass('timetable-cell'));
             trSpring.append($('<td></td>')
-                .attr('id', weekPrefixArray[k] + time + 'S')
+                .attr('id', weekPrefixArray[k] + time.toString().replace('.', '-') + 'S')
                 .attr('in-conflict', 'false')
                 .attr('satisfied', 'true')
                 .attr('hidden', 'true')

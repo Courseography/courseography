@@ -41,16 +41,18 @@ function setTdHover() {
  */
 function renderConflicts(time, conflicts) {
     'use strict';
-
-    $(time).data('conflicts', conflicts)
-           .attr('title', conflicts.map(function (section) {
-                              return section.courseName;
-                          })
-            )
-           .attr('in-conflict', String(conflicts.length > 0))
-           .attr('status', conflicts.length > 0 ? 'conflict' : 'occupied')
-           .attr('satisfied', getCourseObject($(time).html(),
-                                              courseObjects).satisfied);
+    console.log(time);
+    if (time.indexOf('-5') === -1) {
+        $(time).data('conflicts', conflicts)
+               .attr('title', conflicts.map(function (section) {
+                   return section.courseName;
+                   })
+               )
+               .attr('in-conflict', String(conflicts.length > 0))
+               .attr('status', conflicts.length > 0 ? 'conflict' : 'occupied')
+               .attr('satisfied', getCourseObject($(time).html(),
+                     courseObjects).satisfied);
+    }
 }
 
 
