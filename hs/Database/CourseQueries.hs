@@ -14,7 +14,13 @@ import qualified Data.Aeson as Aeson
 -- | Queries the database for all information about `course`, constructs a JSON object
 -- | representing the course and returns the appropriate JSON response.
 queryCourse :: T.Text -> IO Response
-queryCourse lowerStr =
+queryCourse str = do
+  courseJSON <- returnCourse str
+  return $ toResponse $ createJSONResponse $ encodeJSON $ Aeson.toJSON courseJSON
+
+-- | Queries the database for all information about `course`, constructs and returns a Course Record.
+returnCourse :: T.Text -> IO Course
+returnCourse lowerStr =
     runSqlite dbStr $ do
         let courseStr = T.toUpper lowerStr
         sqlCourse :: [Entity Courses] <- selectList [CoursesCode ==. courseStr] []
@@ -34,8 +40,8 @@ queryCourse lowerStr =
         let fallSession   = buildSession sqlLecturesFall sqlTutorialsFall
         let springSession = buildSession sqlLecturesSpring sqlTutorialsSpring
         let yearSession = buildSession sqlLecturesYear sqlTutorialsYear
-        let courseJSON = buildCourse fallSession springSession yearSession course
-        return $ toResponse $ createJSONResponse $ encodeJSON $ Aeson.toJSON courseJSON
+        return $ buildCourse fallSession springSession yearSession course
+        --return $ toResponse $ createJSONResponse $ encodeJSON $ Aeson.toJSON courseJSON
 
 -- | Builds a Course structure from a tuple from the Courses table.
 -- Some fields still need to be added in.
