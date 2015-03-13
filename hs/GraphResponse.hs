@@ -61,7 +61,7 @@ sideBar = do
         H.div ! A.id "focuses" $ do
             H.p ! A.id "sci" ! A.class_ "focus" $ "Scientific Computing"
             H.div ! A.id "sci-details" ! A.class_ "details" $ ""
-            H.p ! A.id "AI" ! A.class_ "focus" $ "Artifical Intelligence"
+            H.p ! A.id "AI" ! A.class_ "focus" $ "Artificial Intelligence"
             H.div ! A.id "AI-details" ! A.class_ "details" $ ""
             H.p ! A.id "NLP" ! A.class_ "focus" $ "Natural Language Processing"
             H.div ! A.id "NLP-details" ! A.class_ "details" $ ""
