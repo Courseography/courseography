@@ -7,6 +7,7 @@ $("#sidebar-button").click(function(){
 	toggleSidebar('button');
 });
 
+
 $('#focuses-nav').click(function (e) {
 	'use strict';
 
@@ -28,6 +29,7 @@ $('#graphs-nav').click(function (e) {
 
 });
 
+
 $('#graph').click(function (e) {
 	'use strict';
 
@@ -35,6 +37,10 @@ $('#graph').click(function (e) {
 	toggleSidebar('graph');
 });
 
+
+/**
+ * Hides all currently open divs and resets navbar to display none of the links as clicked.
+**/
 function resetDivs() {
 	'use strict';
 
@@ -43,6 +49,10 @@ function resetDivs() {
 	$('#graphs-nav, #focuses-nav').css('background-color', '#CD96CD');
 }
 
+
+/**
+ * Fills the count of FCEs in the sidebar.
+**/
 function fillFCECount() {
 	'use strict';
 	
@@ -50,6 +60,11 @@ function fillFCECount() {
 	$('#fcecount').html("FCE Count: " + FCEs);
 }
 
+
+/**
+ * Opens and closes the sidebar.
+ * @param{string} location The location where you are clicking (either the sidebar button or the graph).
+**/
 function toggleSidebar(location) {
 
     if (toggled) {

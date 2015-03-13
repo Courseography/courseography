@@ -1,9 +1,11 @@
+/**
+ * The click function when a focus is clicked.
+**/
 $(".focus").click(function(e){
 	'use strict';
 
 	var id = $(this).attr('id');
 
-	console.log($('#' + id + '-details').css('height'));
 	if ($('#' + id + '-details').css('height') === '180px') {
 		clearFocus();
 		$('ellipse.spotlight').remove();
