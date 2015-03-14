@@ -205,7 +205,7 @@ instance ToJSON Lecture where
                     "section" .= section,
                     "cap" .= cap,
                     "time_str" .= time_str,
-                    "time" .= time,
+                    "time" .= map convertTimesToStrings time,
                     "instructor" .= instructor,
                     "enrol" .= enrol,
                     "wait" .= wait
@@ -230,3 +230,10 @@ instance ToJSON Tutorial where
       Array $ V.fromList [toJSON times, toJSON timeStr]
   toJSON (Tutorial (Just value) times timeStr) =
       Array $ V.fromList [toJSON value, toJSON times, toJSON timeStr]
+
+-- | Converts a Double to a T.Text.
+-- This removes the period from the double, as the JavaScript code,
+-- uses the output in an element's ID, which is then later used in
+-- jQuery. `.` is a jQuery meta-character, and must be removed from the ID.
+convertTimesToStrings :: [Double] -> [T.Text]
+convertTimesToStrings times = map (\x -> T.replace "." "-" (T.pack (show x))) times
