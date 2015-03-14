@@ -138,7 +138,7 @@ Section.prototype.removeTimes = function () {
     $.each(this.times, function (i, time) {
         n = time.charAt(time.length-1);
 
-        if (time.indexOf('.') === -1 && $(time.length > 0)) {
+        if (time.indexOf('-5') === -1 && $(time).length > 0) {
             if (n === 'E') {
                 compressCell(parseInt(time.slice(2)), time.charAt(1), time.charAt(time.length-2));
                 time = time.slice(0, time.length-1);

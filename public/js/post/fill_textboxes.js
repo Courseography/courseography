@@ -169,7 +169,7 @@ function fillExtra() {
     }
 
     // add extra 200 courses for minor if extra space
-    if (minor.filledTextboxesExtra < specialist.textboxesExtra) {
+    if (minor.filledTextboxesExtra < minor.textboxesExtra) {
         addExtraMinCourses();
     }
 
