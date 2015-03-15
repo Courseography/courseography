@@ -48,6 +48,8 @@ $('#graph-csc').click(function(e) {
     // Update credit count in nav bar
     updateNavGraph();
 
+    fillFCECount();
+
     // Uncomment to enable the feedback form (must also be displayed in html)
     // activateFeedbackForm();
     // Uncomment to enable graph dragging
