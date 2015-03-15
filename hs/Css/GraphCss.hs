@@ -274,6 +274,14 @@ sidebarCSS = do
         paddingRight (px 5)
     ".active" & do
         backgroundColor purple1
+    ".graph-button" & do
+        display block
+        cursor pointer
+        fontSize (px 20)
+        border solid (px 1) black
+        textAlign $ alignSide sideCenter
+        width (pct 90)
+        backgroundColor white
 
 
 {- titleCSS
