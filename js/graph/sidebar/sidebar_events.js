@@ -1,7 +1,7 @@
 /**
  * The click function when a focus is clicked.
 **/
-$(".focus").click(function(e){
+$('.focus').click(function(e){
     'use strict';
 
     var id = $(this).attr('id');
@@ -18,4 +18,38 @@ $(".focus").click(function(e){
         $('#' + id + '-details').animate({height: '180px'}, 'fast');
         $('#' + id + '-details').html(window[id + 'Description']);
     } 
+});
+
+/**
+ * Click function to load CSC graph
+**/
+$('#graph-csc').click(function(e) {
+    'use-strict';
+
+    getRemote();
+
+    buildGraph();
+
+    FCEPrerequisiteCourses = [CSC318, CSC454];
+
+    // Set width of FCE count
+    var w = $('.infoTabs').width() - $('.tabList').outerWidth() - 1;
+    $('#FCECountDiv').width(w + 'px');
+
+    // Create tabs
+    createTabs();
+
+    // Set mouse callbacks
+    setMouseCallbacks();
+
+    // Initialize interface
+    initializeGraphSettings();
+    
+    // Update credit count in nav bar
+    updateNavGraph();
+
+    // Uncomment to enable the feedback form (must also be displayed in html)
+    // activateFeedbackForm();
+    // Uncomment to enable graph dragging
+    // enableGraphDragging();
 });
