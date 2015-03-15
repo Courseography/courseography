@@ -13,30 +13,30 @@ import MasterTemplate
 plannerScripts :: H.Html
 plannerScripts = concatHtml (map makeScript["https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js",
                                            "https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js",
-                                           "/static/js/graph/modal.js",
-                                           "/static/js/graph/objects/edge.js",
-                                           "/static/js/graph/objects/node.js",
-                                           "/static/js/common/objects/course.js",
-                                           "/static/js/common/cookieHandler.js",
-                                           "/static/js/graph/tabs/setup_tabs.js",
-                                           "/static/js/graph/utilities/course_description.js",
-                                           "/static/js/graph/tabs/feedback_form.js",
-                                           "/static/js/graph/tabs/focuses.js",
-                                           "/static/js/graph/tabs/post.js",
-                                           "/static/js/graph/tabs/timetable.js",
-                                           "/static/js/graph/tabs/fce_count.js",
-                                           "/static/js/common/objects/section.js",
-                                           "/static/js/common/utilities/util.js",
-                                           "/static/js/graph/utilities/structs.js",
-                                           "/static/js/graph/utilities/util.js",
-                                           "/static/js/graph/create_data.js",
-                                           "/static/js/graph/parse_graph.js",
-                                           "/static/js/graph/mouse_events.js",
+                                           "static/js/common/modal.js",
+                                           "static/js/graph/objects/edge.js",
+                                           "static/js/graph/objects/node.js",
+                                           "static/js/common/objects/course.js",
+                                           "static/js/common/cookieHandler.js",
+                                           "static/js/graph/tabs/setup_tabs.js",
+                                           "static/js/common/course_description.js",
+                                           "static/js/graph/tabs/feedback_form.js",
+                                           "static/js/graph/tabs/focuses.js",
+                                           "static/js/graph/tabs/timetable.js",
+                                           "static/js/graph/tabs/fce_count.js",
+                                           "static/js/common/objects/section.js",
+                                           "static/js/common/utilities/util.js",
+                                           "static/js/graph/utilities/structs.js",
+                                           "static/js/graph/utilities/util.js",
+                                           "static/js/graph/create_data.js",
+                                           "static/js/graph/parse_graph.js",
+                                           "static/js/graph/mouse_events.js",
+                                           "/static/js/common/graph_image.js",
                                            "/static/js/common/facebook/facebook_login.js",
                                            "/static/js/common/facebook/facebook_image.js",
                                            "/static/js/common/facebook/facebook_modal.js",
-                                           "/static/js/common/graph_image.js",
-                                           "static/js/graph/setup.js"])
+                                           "static/js/graph/setup.js",
+                                           "static/js/post/update_post.js"])
 
 timetableScripts :: H.Html
 timetableScripts = do jQuery
@@ -54,18 +54,25 @@ timetableScripts = do jQuery
                                                 "/static/js/common/facebook/facebook_image.js",
                                                 "/static/js/common/facebook/facebook_modal.js",
                                                 "/static/js/common/grid_image.js",
-                                                "/static/js/draw/draw.js"])
+                                                "/static/js/draw/draw.js",
+                                                "static/js/common/modal.js",
+                                                "static/js/common/course_description.js"])
 
---drawScripts :: H.Html
---drawScripts = do jQuery 
---                  concatHtml (map makeScript ["static/js/experiment.js"])
+drawScripts :: H.Html
+drawScripts = do jQuery 
+                 concatHtml (map makeScript ["https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js",
+                                             "static/js/draw/draw.js",
+                                             "static/js/draw/path.js",
+                                             "static/js/draw/setup.js"])
 
 postScripts :: H.Html
 postScripts = concatHtml (map makeScript ["https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js",
                                           "https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js",
-                                          "/static/js/post/change_div.js",
-                                          "/static/js/common/cookieHandler.js",
-                                          "/static/js/post/update_post.js",
-                                          "/static/js/graph/create_data.js",
-                                          "/static/js/post/update_counts.js",
-                                          "/static/js/graph/objects/node.js"])
+                                          "static/js/post/change_div.js",
+                                          "static/js/common/cookieHandler.js",
+                                          "static/js/post/update_post.js",
+                                          "static/js/graph/create_data.js",
+                                          "static/js/graph/objects/node.js",
+                                          "static/js/post/fill_textboxes.js",
+                                          "static/js/graph/create_data.js",
+                                          "static/js/post/update_categories.js"])

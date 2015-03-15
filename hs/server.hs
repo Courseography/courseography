@@ -22,15 +22,15 @@ main :: IO ()
 main = do
     generateCSS
     cwd <- getCurrentDirectory
-    let staticDir = encodeString $ parent $ decodeString cwd
     redirectUrlGraphEmail <- retrieveAuthURL testUrl
     redirectUrlGraphPost <- retrieveAuthURL testPostUrl
+    let staticDir = (encodeString $ parent $ decodeString cwd) ++ "public/"
     contents <- readFile "../README.md"
     print "Server is running..."
     simpleHTTP nullConf $
         msum [ dir "grid" gridResponse,
                dir "graph" graphResponse,
-               dir "image" $ imageResponse,
+               dir "image" $ graphImageResponse,
                dir "timetable-image" $ look "courses" >>= timetableImageResponse,
                dir "graph-fb" $ seeOther redirectUrlGraphEmail $ toResponse "",
                dir "post-fb" $ seeOther redirectUrlGraphPost $ toResponse "",
@@ -41,16 +41,9 @@ main = do
                --dir "about" $ aboutResponse contents,
                dir "static" $ serveDirectory EnableBrowsing [] staticDir,
                dir "course" $ look "name" >>= retrieveCourse,
-               dir "all-courses" $ liftIO allCourses,
-               dir "svg" $ look "courses" >>= svgResponse
-             ]
+               dir "all-courses" $ liftIO allCourses
+               ]
 
 retrieveCourse :: String -> ServerPart Response
 retrieveCourse course =
-   liftIO $ queryCourse (T.pack course)
-
-svgResponse :: String -> ServerPart Response
-svgResponse courses = do
-  liftIO $ renderTable "circle.svg" courses
-  -- Right now serving the file, but the client isn't doing anthing with it
-  serveFile (asContentType "image/svg+xml") "circle.svg"
+    liftIO $ queryCourse (T.pack course)
