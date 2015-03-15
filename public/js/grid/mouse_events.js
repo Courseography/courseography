@@ -213,19 +213,20 @@ function previousCell(time) {
 
     if (n === 'H') {
         ptime = time.slice(0, time.length-1);
+        ptime = ptime.replace('-5', '-0');
         return ptime;
     } else if (n === 'E') {
-        ptime = time.slice(0, 2) + String(parseInt(time.slice(2))-1) + time.charAt(time.length-2) + 'H'
+        ptime = time.slice(0, 2) + String(parseInt(time.slice(2))-1) + '-5' + time.charAt(time.length-2) + 'H';
 
         if ($(ptime).css('display') == 'none') {
-            ptime = ptime.slice(0, ptime.length-1);
+            ptime = time.slice(0, 2) + String(parseInt(time.slice(2))-1) + '-0' + time.charAt(time.length-2);
         }
         return ptime;
     } else {
-        ptime = time.slice(0, 2) + String(parseInt(time.slice(2))-1) + time.charAt(time.length-1) + 'H'
+        ptime = time.slice(0, 2) + String(parseInt(time.slice(2))-1) + '-5' + time.charAt(time.length-1) + 'H';
 
         if ($(ptime).css('display') == 'none') {
-            ptime = ptime.slice(0, ptime.length-1);
+            ptime = time.slice(0, 2) + String(parseInt(time.slice(2))-1) + '-0' + time.charAt(time.length-1);
         }
         return ptime;
     }
@@ -240,8 +241,8 @@ function previousCell(time) {
 function extendCell(timeInt, day, term) {
     'use strict';
 
-    var pcell = '#' + day + timeInt + term;
-    var ccell = '#' + day + timeInt + term + 'H';
+    var pcell = '#' + day + timeInt + '-0' + term;
+    var ccell = '#' + day + timeInt + '-5' + term + 'H';
 
     $(ccell).css('display', 'table-cell');
     $(pcell).attr('rowspan', '1');
@@ -250,15 +251,14 @@ function extendCell(timeInt, day, term) {
 /**
  * Compress a given cell to hide half hour section.
  * @param {Int} timeInt The full hour time of the row.
- * @param {string} week The week of the timetable cell.
  * @param {string} day The day of the time.
  * @param {string} term The term of the timetable cell.
  */
 function compressCell(timeInt, day, term) {
     'use strict';
 
-    var pcell = '#' + day + timeInt + term;
-    var ccell = '#' + day + timeInt + term + 'H';
+    var pcell = '#' + day + timeInt + '-0' + term;
+    var ccell = '#' + day + timeInt + '-5' + term + 'H';
 
     $(pcell).attr('rowspan', '2');
     $(ccell).css('display', 'none');
