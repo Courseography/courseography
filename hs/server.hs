@@ -22,9 +22,9 @@ main :: IO ()
 main = do
     generateCSS
     cwd <- getCurrentDirectory
-    let staticDir = encodeString $ parent $ decodeString cwd
     redirectUrlGraphEmail <- retrieveAuthURL testUrl
     redirectUrlGraphPost <- retrieveAuthURL testPostUrl
+    let staticDir = (encodeString $ parent $ decodeString cwd) ++ "public/"
     contents <- readFile "../README.md"
     print "Server is running..."
     simpleHTTP nullConf $
