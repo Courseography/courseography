@@ -20,6 +20,9 @@ function openFBPostModal() {
                     }); },
                 close: function () {
                     $(this).remove();
+                    $.each(nodes, function (index, elem) {
+                        window[elem].updateSVG();
+                    });
                     $('body').css('background', 'rgb(255,255,255)');
                 }});
 
