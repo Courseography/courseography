@@ -41,8 +41,8 @@ function openFBPostModal() {
 function createFBModalDiv() {
     'use strict';
 
-    var context = $("#courseography-header").attr("context");
-    var session = "fall";
+    var context = $('#courseography-header').attr('context');
+    var session = 'fall';
     var img = (context === "graph") ? getGraphImage() : getGridImage(session) ;
 
     var contentDiv = $('<div></div>');
@@ -58,11 +58,10 @@ function createFBModalDiv() {
     });
 
     sessionButton.click(function () {
-        session = session === "fall" ? "spring" : "fall";
+        session = session === 'fall' ? 'spring' : 'fall';
         var sessionImage = getGridImage(session);
-        $("#post-image").attr("src",
+        $('#post-image').attr('src',
             'data:image/png;base64,' + sessionImage);
-        console.log("clol");
     });
 
     var authToken = FB.getAuthResponse()['accessToken'];
@@ -74,7 +73,7 @@ function createFBModalDiv() {
 
     rightContentDiv.append(postButton);
 
-    if (context === "grid") {
+    if (context === 'grid') {
         rightContentDiv.append(sessionButton);
     }
 
