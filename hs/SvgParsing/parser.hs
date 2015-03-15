@@ -21,6 +21,7 @@ import Data.Maybe
 import Data.List
 import Data.Text as T (pack, unpack)
 import Database.Tables
+import Database.DataType
 import Database.JsonParser
 import Database.SvgDatabase
 import SvgParsing.Generator
@@ -106,7 +107,7 @@ parseRect content =
           ""
           []
           9
-          "node"
+          Node
 
 -- | Parses a path.
 parsePath :: Bool -> Content i -> Maybe Path
@@ -145,7 +146,7 @@ parseEllipse content =
           ""
           []
           20
-          "bool"
+          BoolNode
 
 updatePath :: String -> Point -> Path -> Path
 updatePath fill transform p =
@@ -157,11 +158,11 @@ updateShape :: String -> Point -> Shape -> Shape
 updateShape fill transform r =
     r { shapePos = addTuples transform (shapePos r),
         shapeFill = if null (shapeFill r) then fill else shapeFill r,
-        shapeShapeType = if fill == "#a14c3a" || shapeShapeType r == "hybrid"
-                         then "hybrid"
-                         else if shapeShapeType r == "bool"
-                              then "bool"
-                              else "node"
+        shapeType_ = if fill == "#a14c3a" then Hybrid
+                     else case shapeType_ r of
+                              Hybrid   -> Hybrid
+                              BoolNode -> BoolNode
+                              Node     -> Node
       }
 
 updateText :: Point -> Text -> Text

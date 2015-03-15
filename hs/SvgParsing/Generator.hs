@@ -4,6 +4,7 @@ module SvgParsing.Generator where
 import SvgParsing.Builder
 import SvgParsing.ParserUtil
 import Database.Tables
+import Database.DataType
 import Control.Monad.IO.Class  (liftIO)
 import qualified Data.Conduit.List as CL
 import Database.Persist
@@ -25,7 +26,6 @@ import Text.Blaze (toMarkup)
 import Css.Constants
 import qualified Data.Map as M
 
-data ShapeType = BoolNode | Node | Hybrid | Region
 
 -- | A list of tuples that contain disciplines (areas), fill values, and courses
 --- that are in the areas.
@@ -130,10 +130,10 @@ makeSVGDefs =
 buildSVG :: M.Map String String -> String -> IO ()
 buildSVG courseMap filename =
     runSqlite dbStr $ do
-        sqlRects    :: [Entity Shape]    <- selectList [ShapeShapeType <-. ["node", "hybrid"]] []
+        sqlRects    :: [Entity Shape]    <- selectList [ShapeType_ <-. [Node, Hybrid]] []
         sqlTexts    :: [Entity Text]     <- selectList [] []
         sqlPaths    :: [Entity Path]     <- selectList [] []
-        sqlEllipses :: [Entity Shape]    <- selectList [ShapeShapeType ==. "bool"] []
+        sqlEllipses :: [Entity Shape]    <- selectList [ShapeType_ ==. BoolNode] []
         let courseStyleMap = M.map convertSelectionToStyle courseMap
             texts          = map entityVal sqlTexts
             rects          = map (buildRect texts . entityVal) sqlRects
@@ -155,23 +155,26 @@ convertRectToSVG :: M.Map String String -> Shape -> S.Svg
 convertRectToSVG courseMap rect
     | shapeFill rect == "none" = S.rect
     | otherwise =
-        S.g ! A.id_ (stringValue $ shapeId_ rect)
-            ! A.class_ (stringValue $ shapeShapeType rect)
-            ! S.customAttribute "data-group" (stringValue (getArea (shapeId_ rect)))
-            ! S.customAttribute "text-rendering" "geometricPrecision"
-            ! S.customAttribute "shape-rendering" "geometricPrecision"
-            ! A.style (stringValue (
-                       if not (shapeShapeType rect == "hybrid")
-                       then fromMaybe "" $ M.lookup (shapeId_ rect) courseMap
-                       else "")) $
-            do S.rect ! A.rx "4"
-                      ! A.ry "4"
-                      ! A.x (stringValue . show . fst $ shapePos rect)
-                      ! A.y (stringValue . show . snd $ shapePos rect)
-                      ! A.width (stringValue . show $ shapeWidth rect)
-                      ! A.height (stringValue . show $ shapeHeight rect)
-                      ! A.style (stringValue $ "fill:" ++ getFill (shapeId_ rect) ++ ";")
-               concatSVG $ map (convertTextToSVG (if shapeShapeType rect == "hybrid" then Hybrid else Node) ) (shapeText rect)
+        let style = case shapeType_ rect of
+                        Node -> fromMaybe "" $ M.lookup (shapeId_ rect) courseMap
+                        _    -> ""
+            class_ = case shapeType_ rect of
+                         Node -> "node"
+                         Hybrid -> "hybrid"
+        in S.g ! A.id_ (stringValue $ shapeId_ rect)
+              ! A.class_ (stringValue class_)
+              ! S.customAttribute "data-group" (stringValue (getArea (shapeId_ rect)))
+              ! S.customAttribute "text-rendering" "geometricPrecision"
+              ! S.customAttribute "shape-rendering" "geometricPrecision"
+              ! A.style (stringValue style) $
+              do S.rect ! A.rx "4"
+                        ! A.ry "4"
+                        ! A.x (stringValue . show . fst $ shapePos rect)
+                        ! A.y (stringValue . show . snd $ shapePos rect)
+                        ! A.width (stringValue . show $ shapeWidth rect)
+                        ! A.height (stringValue . show $ shapeHeight rect)
+                        ! A.style (stringValue $ "fill:" ++ getFill (shapeId_ rect) ++ ";")
+                 concatSVG $ map (convertTextToSVG (shapeType_ rect)) (shapeText rect)
 
 convertSelectionToStyle :: String -> String
 convertSelectionToStyle courseStatus =

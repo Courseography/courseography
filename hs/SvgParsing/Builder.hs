@@ -9,6 +9,7 @@ import Data.List.Split
 import Data.List
 import Database.JsonParser
 import Database.Tables
+import Database.DataType
 
 -- | Determines the source and target nodes of the path.
 buildPath :: [Shape] -> [Shape] -> Path -> Int -> Path
@@ -49,8 +50,12 @@ buildRect texts entity =
                             ) texts
         textString = concatMap textText rectTexts
         dropSlash = takeWhile (/='/')
-        id_ = map toLower $ (if shapeShapeType entity == "hybrid" then "h" else "") ++
-                            (if isDigit $ head textString then "CSC" else "") ++ dropSlash textString
+        prefix = case shapeType_ entity of
+                     Hybrid -> "h"
+                     _      -> ""
+        id_ = map toLower (prefix ++
+                          (if isDigit $ head textString then "CSC" else "") ++
+                          dropSlash textString)
     in Shape (shapeGId entity)
              id_
              (shapePos entity)
@@ -60,7 +65,7 @@ buildRect texts entity =
              (shapeStroke entity)
              rectTexts
              9
-             (shapeShapeType entity)
+             (shapeType_ entity)
 
 -- | Gets the first rect that intersects with the given coordinates.
 getIntersectingShape :: Point -> [Shape] -> String
@@ -100,7 +105,7 @@ buildEllipses texts idCounter entities =
              (shapeStroke entity)
              ellipseText
              20
-             (shapeShapeType entity) : buildEllipses texts (idCounter + 1) (tail entities)
+             (shapeType_ entity) : buildEllipses texts (idCounter + 1) (tail entities)
 
 -- | Rebuilds a path's `d` attribute based on a list of Rational tuples.
 buildPathString :: [Point] -> String

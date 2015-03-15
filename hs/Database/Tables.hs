@@ -12,6 +12,7 @@
 
 module Database.Tables where
 import Database.Persist.TH
+import Database.DataType
 import qualified Data.Text as T
 import qualified Data.Vector as V
 import Data.Aeson
@@ -22,6 +23,7 @@ data Time = Time { timeField :: [Double] } deriving (Show, Read, Eq)
 derivePersistField "Time"
 
 type Point = (Double, Double)
+
 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 Courses json
@@ -89,7 +91,7 @@ Shape
     stroke String
     text [Text]
     tolerance Double
-    shapeType String
+    type_ ShapeType
 
 Path
     gId Int
