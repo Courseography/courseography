@@ -72,15 +72,13 @@ parseNode content =
             fill           = getNewStyleAttr style "fill" ""
             (chilrenPaths, childrenShapes, childrenTexts) = parseChildren (path [children] content)
 
-            rects    = map ((updateShape fill trans) . parseRect) (tag "rect" content)
-            texts    = map ((updateText trans) . parseText) (tag "text" content)
-            paths    = map (updatePath fill trans) $ mapMaybe parsePath (tag "path" content)
-            ellipses = map ((updateShape fill trans) . parseEllipse) (tag "ellipse" content)
-        in
-            addThree (paths, rects ++ ellipses, texts) $
-             ((map (updatePath fill trans) chilrenPaths),
-              (map (updateShape fill trans) childrenShapes),
-              (map (updateText trans) childrenTexts))
+            rects    = map parseRect (tag "rect" content)
+            texts    = map parseText (tag "text" content)
+            paths    = mapMaybe parsePath (tag "path" content)
+            ellipses = map parseEllipse (tag "ellipse" content)
+        in ((map (updatePath fill trans) (paths ++ chilrenPaths)),
+            (map (updateShape fill trans) (rects ++ ellipses ++ childrenShapes)),
+            (map (updateText trans) (texts ++ childrenTexts)))
 
 -- | Parses a list of Content.
 parseChildren :: [Content i] -> ([Path],[Shape],[Text])
