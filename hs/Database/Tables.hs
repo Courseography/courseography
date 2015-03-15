@@ -67,16 +67,12 @@ Distribution
     description String
     deriving Show
 
-<<<<<<< HEAD
 FacebookTest
     fId String
     testString String
     deriving Show
 
-Graphs
-=======
 Graph
->>>>>>> a269c4ef29729128fe47cac549f9a9c1b49bf021
     gId Int
     title String
     deriving Show
