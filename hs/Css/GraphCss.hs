@@ -270,6 +270,8 @@ sidebarCSS = do
         overflow auto
         fontSize (px 14)
         fontColor white
+    ".active" & do
+        backgroundColor purple1
 
 
 {- titleCSS

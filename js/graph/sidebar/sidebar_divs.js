@@ -14,7 +14,7 @@ $('#focuses-nav').click(function (e) {
     e.preventDefault();
     resetDivs();
     $('#focuses').show();
-    $('#focuses-nav').css('background-color', '#46364A');
+    $('#focuses-nav').addClass('active');
 
 });
 
@@ -25,7 +25,7 @@ $('#graphs-nav').click(function (e) {
     e.preventDefault();
     resetDivs();
     $('#graphs').show();
-    $('#graphs-nav').css('background-color', '#46364A');
+    $('#graphs-nav').addClass('active');
 
 });
 
@@ -46,7 +46,7 @@ function resetDivs() {
 
     $('#focuses').css('display', 'none');
     $('#graphs').css('display', 'none');
-    $('#graphs-nav, #focuses-nav').css('background-color', '#CD96CD');
+    $('#graphs-nav, #focuses-nav').removeClass('active');
 }
 
 
@@ -79,7 +79,7 @@ function toggleSidebar(location) {
 
         fillFCECount();
         $('#focuses').show();
-        $('#focuses-nav').css('background-color', '#46364A');
+        $('#focuses-nav').addClass('active');
 
     }
 };
