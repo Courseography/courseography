@@ -31,26 +31,20 @@ import SvgParsing.ParserUtil
 import qualified Data.Map as M
 
 main :: IO ()
-main = do graphFile <- readFile "../res/graphs/graph_regions.svg"
+main = do graphFile <- readFile "../public/res/graphs/graph_regions.svg"
           print "Parsing SVG file..."
           let graphDoc = xmlParse "output.error" graphFile
               (shapes, paths, texts) = parseNode False (Style (0,0) "" "") (getRoot graphDoc)
           print "Parsing complete"
           runSqlite dbStr $ do
               runMigration migrateAll
-<<<<<<< HEAD
-              parseLevel False (Style (0,0) "" "" "" "" "" "") (getRoot graphDoc)
-              liftIO $ print "Parsing complete"
-          buildSVG [] "Testfile.svg"
-=======
               mapM_ insert_ shapes
               mapM_ insert_ paths
               mapM_ insert_ texts
           printDB
           createDirectoryIfMissing True "../res/graphs/CSC"
-          buildSVG M.empty "../res/graphs/CSC/csc_graph.svg"
+          buildSVG M.empty "../public/res/graphs/CSC/csc_graph.svg"
           print "SVG Built"
->>>>>>> a269c4ef29729128fe47cac549f9a9c1b49bf021
 
 -- | Parses a level.
 parseNode :: Bool -> Style -> Content i -> ([Path],[Shape],[Text])

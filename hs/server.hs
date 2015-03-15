@@ -30,7 +30,7 @@ main = do
     simpleHTTP nullConf $
         msum [ dir "grid" gridResponse,
                dir "graph" graphResponse,
-               dir "image" $ imageResponse,
+               dir "image" $ graphImageResponse,
                dir "timetable-image" $ look "courses" >>= timetableImageResponse,
                dir "graph-fb" $ seeOther redirectUrlGraphEmail $ toResponse "",
                dir "post-fb" $ seeOther redirectUrlGraphPost $ toResponse "",
