@@ -39,7 +39,7 @@ parseGraph dirLocation inputFilename outputFilename =
     do graphFile <- readFile ("../res/graphs/" ++ inputFilename)
        print "Parsing SVG file..."
        let graphDoc = xmlParse "output.error" graphFile
-           parsedGraph = parseNode False (getRoot graphDoc)
+           parsedGraph = parseNode (getRoot graphDoc)
        print "Parsing complete"
        insertGraph dirLocation parsedGraph
        print "SVG Inserted"
@@ -61,21 +61,20 @@ insertGraph graphTitle (paths, shapes, texts) =
         mapM_ insert_ texts
 
 -- | Parses a level.
-parseNode :: Bool -> Content i -> ([Path],[Shape],[Text])
-parseNode currentlyInRegion content =
+parseNode :: Content i -> ([Path],[Shape],[Text])
+parseNode content =
     if getAttribute "id" content == "layer2" ||
        getName content == "defs"
     then ([],[],[])
     else
-        let isRegion       = getAttribute "id" content == "layer3"
-            trans          = parseTransform $ getAttribute "transform" content
+        let trans          = parseTransform $ getAttribute "transform" content
             style          = getAttribute "style" content
             fill           = getNewStyleAttr style "fill" ""
-            (chilrenPaths, childrenShapes, childrenTexts) = parseChildren (currentlyInRegion || isRegion) (path [children] content)
+            (chilrenPaths, childrenShapes, childrenTexts) = parseChildren (path [children] content)
 
             rects    = map ((updateShape fill trans) . parseRect) (tag "rect" content)
             texts    = map ((updateText trans) . parseText) (tag "text" content)
-            paths    = map (updatePath fill trans) $ mapMaybe (parsePath (currentlyInRegion || isRegion)) (tag "path" content)
+            paths    = map (updatePath fill trans) $ mapMaybe parsePath (tag "path" content)
             ellipses = map ((updateShape fill trans) . parseEllipse) (tag "ellipse" content)
         in
             addThree (paths, rects ++ ellipses, texts) $
@@ -84,9 +83,8 @@ parseNode currentlyInRegion content =
               (map (updateText trans) childrenTexts))
 
 -- | Parses a list of Content.
-parseChildren :: Bool -> [Content i] -> ([Path],[Shape],[Text])
-parseChildren currentlyInRegion x =
-     foldl addThree ([],[],[]) $ map (parseNode currentlyInRegion) x
+parseChildren :: [Content i] -> ([Path],[Shape],[Text])
+parseChildren x = foldl addThree ([],[],[]) $ map parseNode x
 
 -- TODO: Can't find way to zip tuples.
 addThree :: ([Path],[Shape],[Text])
@@ -110,12 +108,12 @@ parseRect content =
           Node
 
 -- | Parses a path.
-parsePath :: Bool -> Content i -> Maybe Path
-parsePath isRegion content =
+parsePath :: Content i -> Maybe Path
+parsePath content =
     if last (getAttribute "d" content) == 'z' && not isRegion
     then Nothing
     else Just (Path 1
-                    "p"
+                    ""
                     d
                     ""
                     ""
@@ -123,6 +121,7 @@ parsePath isRegion content =
                     ""
                     "")
     where d = parsePathD $ getAttribute "d" content
+          isRegion = not $ null (getNewStyleAttr (getAttribute "style" content) "fill" "")
 
 -- | Parses a text.
 parseText :: Content i -> Text

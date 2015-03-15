@@ -16,7 +16,7 @@ buildPath :: [Shape] -> [Shape] -> Path -> Int -> Path
 buildPath rects ellipses entity idCounter
     | pathIsRegion entity =
         Path (pathGId entity)
-             ('p' : show idCounter)
+             (pathId_ entity ++ ('p' : show idCounter))
              coords
              (pathFill entity)
              (pathStroke entity)
