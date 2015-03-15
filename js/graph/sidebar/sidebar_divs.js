@@ -1,7 +1,7 @@
 var toggled = false;
 
 
-$("#sidebar-button").click(function(){
+$('#sidebar-button').click(function() {
     'use strict';
 
     toggleSidebar('button');
@@ -56,8 +56,8 @@ function resetDivs() {
 function fillFCECount() {
     'use strict';
     
-    $("#fcecount").show();
-    $('#fcecount').html("FCE Count: " + FCEs);
+    $('#fcecount').show();
+    $('#fcecount').html('FCE Count: ' + FCEs);
 }
 
 
@@ -70,12 +70,12 @@ function toggleSidebar(location) {
     if (toggled) {
         toggled = false;
         resetDivs();
-        $('#sidebar').animate({width: "20px"}, "fast", undefined, function() {
-            $("#fcecount").html("");
+        $('#sidebar').animate({width: '20px'}, 'fast', undefined, function() {
+            $('#fcecount').html('');
         });
     } else if (!toggled && location === 'button') {
         toggled = true;
-        $('#sidebar').animate({width: "400px"}, "fast");
+        $('#sidebar').animate({width: '400px'}, 'fast');
 
         fillFCECount();
         $('#focuses').show();
