@@ -20,9 +20,6 @@ function openFBPostModal() {
                     }); },
                 close: function () {
                     $(this).remove();
-                    $.each(nodes, function (index, elem) {
-                        window[elem].updateSVG();
-                    });
                     $('body').css('background', 'rgb(255,255,255)');
                 }});
 
@@ -41,18 +38,28 @@ function openFBPostModal() {
 function createFBModalDiv() {
     'use strict';
 
-    var img = ($("#courseography-header").attr("context") === "graph") ? getGraphImage() :
-                                                                         getGridImage() ;
+    var context = $("#courseography-header").attr("context");
+    var session = "fall";
+    var img = (context === "graph") ? getGraphImage() : getGridImage(session) ;
 
     var contentDiv = $('<div></div>');
     contentDiv.attr('id', 'modal-content-container');
     var postButton = $('<button type="button" class="btn btn-primary">Post to Facebook</button>');
+    var sessionButton =
+        $('<button type="button" class="btn btn-primary">Switch Sessions</button>');
 
     postButton.click(function () {
         var val = $('#fb-message').val();
         postImage(authToken, img, val);
-        console.log(val);
         contentDiv.dialog('close');
+    });
+
+    sessionButton.click(function () {
+        session = session === "fall" ? "spring" : "fall";
+        var sessionImage = getGridImage(session);
+        $("#post-image").attr("src",
+            'data:image/png;base64,' + sessionImage);
+        console.log("clol");
     });
 
     var authToken = FB.getAuthResponse()['accessToken'];
@@ -63,12 +70,17 @@ function createFBModalDiv() {
     var rightContentDiv = $('<div></div>');
 
     rightContentDiv.append(postButton);
+
+    if (context === "grid") {
+        rightContentDiv.append(sessionButton);
+    }
+
     leftContentDiv.attr('id', 'left-modal-div')
                   .css('float', 'left');
     rightContentDiv.attr('id', 'right-modal-div')
                    .css('float', 'right')
                    .css('width', '40%');
-    leftContentDiv.html('<img style="border-radius:15px;" height="500" width="500" src="data:image/png;base64,' + img + '" />');
+    leftContentDiv.html('<img id="post-image" style="border-radius:15px;" height="500" width="500" src="data:image/png;base64,' + img + '" />');
 
     rightContentDiv.append(input);
     contentDiv.append(leftContentDiv);
