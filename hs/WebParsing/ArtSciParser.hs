@@ -70,44 +70,10 @@ parseTitleFAS (tag:tags, course) =
     where removeLectureSection (TagText s) = T.takeWhile (/= '[') s
           removeTitleGarbage s = replaceAll ["\160"] "" s
 
-
-test :: IO ()
-test = do
-    let course = Course {
-                    breadth = Nothing,
-                    description = Nothing,
-                    title  = Nothing,
-                    prereqString = Nothing,
-                    f = Nothing,
-                    s = Nothing,
-                    y = Nothing,
-                    name = "TEST",
-                    exclusions = Nothing,
-                    manualTutorialEnrol = Nothing,
-                    distribution = Nothing,
-                    prereqs = Just "TEST"}
-    runSqlite dbStr $ do
-        runMigration migrateAll
-        insertCourse course
-
 -- |takes a list of tags representing a single course, and returns a course Record 
 processCourseToData :: [Tag T.Text] ->  Course
 processCourseToData tags  =
-    let course =
-          Course {
-            breadth = Nothing,
-            description = Nothing,
-            title  = Nothing,
-            prereqString = Nothing,
-            f = Nothing,
-            s = Nothing,
-            y = Nothing,
-            name = T.empty,
-            exclusions = Nothing,
-            manualTutorialEnrol = Nothing,
-            distribution = Nothing,
-            prereqs = Nothing
-            }
+    let course = emptyCourse
     in  snd $ (tags, course) ~:
              preProcess -: 
              parseTitleFAS -:

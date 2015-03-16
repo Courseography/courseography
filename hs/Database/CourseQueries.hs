@@ -10,9 +10,11 @@ import Database.Tables as Tables
 import JsonResponse
 import Database.JsonParser
 import Happstack.Server
+import Data.List
 import qualified Data.Text as T
 import qualified Data.Aeson as Aeson
 import Control.Monad.IO.Class (liftIO)
+import WebParsing.ParsingHelp
 
 -- | Queries the database for all information about `course`, constructs a JSON object
 -- | representing the course and returns the appropriate JSON response.
@@ -39,11 +41,13 @@ returnCourse lowerStr =
                                                                 TutorialsSession ==. "S"] []
         sqlTutorialsYear :: [Entity Tutorials] <- selectList [TutorialsCode ==. courseStr,
                                                                 TutorialsSession ==. "Y"] []
-        let course = entityVal $ head sqlCourse
-        let fallSession   = buildSession sqlLecturesFall sqlTutorialsFall
-        let springSession = buildSession sqlLecturesSpring sqlTutorialsSpring
-        let yearSession = buildSession sqlLecturesYear sqlTutorialsYear
-        return $ buildCourse fallSession springSession yearSession course
+        if (null sqlCourse) 
+        then (return emptyCourse) 
+        else do let course = entityVal $ head sqlCourse
+                let fallSession   = buildSession sqlLecturesFall sqlTutorialsFall
+                let springSession = buildSession sqlLecturesSpring sqlTutorialsSpring
+                let yearSession = buildSession sqlLecturesYear sqlTutorialsYear
+                return $ buildCourse fallSession springSession yearSession course
         --return $ toResponse $ createJSONResponse $ encodeJSON $ Aeson.toJSON courseJSON
 
 -- | Builds a Course structure from a tuple from the Courses table.

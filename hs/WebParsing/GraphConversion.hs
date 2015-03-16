@@ -139,6 +139,7 @@ insertPrereq name gpart prereq =
 -- Currently uses an unsafe method to develop dummy node names.
 -- tends to overcomplicate the graph so is currently not used. 
 insertPrereqDummy :: T.Text -> GraphPart -> [T.Text] -> GraphPart
+insertPrereqDummy name gpart prereq = 
   if (length prereq == 1)
   then insMapEdge' (head prereq, name, ()) gpart
   else  let nodename = T.concat [name, randomStr]
@@ -151,7 +152,8 @@ insertPrereqDummy :: T.Text -> GraphPart -> [T.Text] -> GraphPart
 -- | converts a list of Course Records into a Graph
 coursesToGraph :: [Course] -> IO (Gr T.Text ())
 coursesToGraph courses = 
-  return $ fst $ parseCoursesEdges courses $ (mkMapGraph (map name courses) [])
+  let noEmpty = filter (\c -> "" /= (name c)) courses
+  in return $ fst $ parseCoursesEdges noEmpty $ (mkMapGraph (map name noEmpty) [])
 
 -- | takes a list of course codes, extracts them from Database, converts them
 -- | into a graph. 

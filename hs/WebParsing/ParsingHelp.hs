@@ -9,6 +9,7 @@ module WebParsing.ParsingHelp
     dropBetween,
     dropBetweenAll,
     dropAround, 
+    emptyCourse,
     isCancelled,
     lowerTag,
     notCancelled,
@@ -38,6 +39,20 @@ coursepart -: fn = fn coursepart
 (~:) :: CoursePart -> ([Tag T.Text] -> [Tag T.Text]) -> CoursePart
 (tags, course) ~: fn =  (fn tags, course)
 
+emptyCourse :: Course 
+emptyCourse = Course {
+                    breadth = Nothing,
+                    description = Nothing,
+                    title  = Nothing,
+                    prereqString = Nothing,
+                    f = Nothing,
+                    s = Nothing,
+                    y = Nothing,
+                    name = "",
+                    exclusions = Nothing,
+                    manualTutorialEnrol = Nothing,
+                    distribution = Nothing,
+                    prereqs = Nothing}
 
 replaceAll :: [T.Text] -> T.Text -> T.Text -> T.Text
 replaceAll matches replacement str = 
