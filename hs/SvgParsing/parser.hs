@@ -31,7 +31,7 @@ import SvgParsing.ParserUtil
 import qualified Data.Map as M
 
 main :: IO ()
-main = do graphFile <- readFile "../res/graphs/graph_regions.svg"
+main = do graphFile <- readFile "../public/res/graphs/graph_regions.svg"
           print "Parsing SVG file..."
           let graphDoc = xmlParse "output.error" graphFile
               (shapes, paths, texts) = parseNode False (Style (0,0) "" "") (getRoot graphDoc)
@@ -42,8 +42,8 @@ main = do graphFile <- readFile "../res/graphs/graph_regions.svg"
               mapM_ insert_ paths
               mapM_ insert_ texts
           printDB
-          createDirectoryIfMissing True "../res/graphs/CSC"
-          buildSVG M.empty "../res/graphs/CSC/csc_graph.svg"
+          createDirectoryIfMissing True "../public/res/graphs/CSC"
+          buildSVG M.empty "../public/res/graphs/CSC/csc_graph.svg"
           print "SVG Built"
 
 -- | Parses a level.
