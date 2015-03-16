@@ -18,141 +18,120 @@ import Text.XML.HaXml.Namespaces
 import System.Directory
 import Data.Conduit
 import Data.List.Split
+import Data.Maybe
 import Data.List
 import Data.Text as T (pack, unpack)
 import Database.Tables
 import Database.JsonParser
-import SvgParsing.SVGGenerator
-import SvgParsing.SVGBuilder
-import SvgParsing.SVGTypes
+import Database.SvgDatabase
+import SvgParsing.Generator
+import SvgParsing.Builder
+import SvgParsing.Types
 import SvgParsing.ParserUtil
 import qualified Data.Map as M
 
 main :: IO ()
 main = do graphFile <- readFile "../res/graphs/graph_regions.svg"
-          let graphDoc = xmlParse "output.error" graphFile
           print "Parsing SVG file..."
+          let graphDoc = xmlParse "output.error" graphFile
+              (shapes, paths, texts) = parseNode False (Style (0,0) "" "") (getRoot graphDoc)
+          print "Parsing complete"
           runSqlite dbStr $ do
               runMigration migrateAll
-              parseLevel False (Style (0,0) "" "") (getRoot graphDoc)
-              liftIO $ print "Parsing complete"
+              mapM_ insert_ shapes
+              mapM_ insert_ paths
+              mapM_ insert_ texts
+          printDB
           createDirectoryIfMissing True "../res/graphs/CSC"
           buildSVG M.empty "../res/graphs/CSC/csc_graph.svg"
-          liftIO $ print "SVG Built"
+          print "SVG Built"
 
 -- | Parses a level.
-parseLevel :: MonadIO m0 =>  Bool -> Style -> Content i -> ReaderT SqlBackend m0 ()
-parseLevel currentlyInRegion style content =
+parseNode :: Bool -> Style -> Content i -> ([Path],[Shape],[Text])
+parseNode currentlyInRegion style content =
     if getAttribute "id" content == "layer2" ||
-       (getName content == "defs")
-      then return ()
-      else do
-           let isRegion       = getAttribute "id" content == "layer3"
-               rects          = (tag "rect") content
-               texts          = (tag "text") content
-               paths          = (tag "path") content
-               ellipses       = (tag "ellipse") content
-               children       = getChildren content
-               newTransform   = getAttribute "transform" content
-               newStyle       = getAttribute "style" content
-               newFill        = getNewStyleAttr newStyle "fill" (fill style)
-               newStroke      = getNewStyleAttr newStyle "stroke" (stroke style)
-               x = if null newTransform then (0,0) else parseTransform newTransform
-               adjustedTransform = addTuples (transform style) x
-               parentStyle = Style adjustedTransform
-                                   newFill
-                                   newStroke
-
-           parseElements (parseRect parentStyle) rects
-           parseElements (parseText parentStyle) texts
-           parseElements (parsePath (currentlyInRegion || isRegion) parentStyle) paths
-           parseElements (parseEllipse parentStyle) ellipses
-           parseChildren (currentlyInRegion || isRegion) parentStyle children
+       getName content == "defs"
+    then ([],[],[])
+    else
+        let isRegion       = getAttribute "id" content == "layer3"
+            newTransform   = getAttribute "transform" content
+            newStyle       = getAttribute "style" content
+            newFill        = getNewStyleAttr newStyle "fill" (fill style)
+            newStroke      = getNewStyleAttr newStyle "stroke" (stroke style)
+            x = if null newTransform then (0,0) else parseTransform newTransform
+            adjustedTransform = addTuples (transform style) x
+            parentStyle = Style adjustedTransform
+                                newFill
+                                newStroke
+            x1 = map (parseRect parentStyle) (tag "rect" content)
+            x2 = map (parseText parentStyle) (tag "text" content)
+            x3 = mapMaybe (parsePath (currentlyInRegion || isRegion) parentStyle) (tag "path" content)
+            x4 = map (parseEllipse parentStyle) (tag "ellipse" content)
+        in
+            addThree (x3,x1++x4,x2) $ parseChildren (currentlyInRegion || isRegion)
+                                                    parentStyle
+                                                    (getChildren content)
 
 -- | Parses a list of Content.
-parseChildren :: MonadIO m0 => Bool -> Style -> [Content i] -> ReaderT SqlBackend m0 ()
-parseChildren _ _ [] = return ()
-parseChildren currentlyInRegion style (x:xs) =
-    do parseLevel currentlyInRegion style x
-       parseChildren currentlyInRegion style xs
+parseChildren :: Bool -> Style -> [Content i] -> ([Path],[Shape],[Text])
+parseChildren currentlyInRegion style x =
+     foldl addThree ([],[],[]) $ map (parseNode currentlyInRegion style) x
 
--- | Applies a parser to a list of Content.
-parseElements :: MonadIO m0 => (Content i ->  ReaderT SqlBackend m0 ()) -> [Content i] -> ReaderT SqlBackend m0 ()
-parseElements _ [] = return ()
-parseElements f (x:xs) = do f x
-                            parseElements f xs
+
+-- TODO: Can't find way to zip tuples.
+addThree :: ([Path],[Shape],[Text])
+         -> ([Path],[Shape],[Text])
+         -> ([Path],[Shape],[Text])
+addThree (a,b,c) (d,e,f) = (a ++ d, b ++ e, c ++f)
 
 -- | Parses a rect.
-parseRect :: MonadIO m0 => Style -> Content i -> ReaderT SqlBackend m0 ()
+parseRect :: Style -> Content i -> Shape
 parseRect style content =
-    insertRectIntoDB (getAttribute "id" content)
-                     (read $ getAttribute "width" content :: Float)
-                     (read $ getAttribute "height" content :: Float)
-                     ((read $ getAttribute "x" content :: Float) + fst (transform style))
-                     ((read $ getAttribute "y" content :: Float) + snd (transform style))
-                     style
+    Shape ""
+          (read (getAttribute "x" content) + fst (transform style),
+           read (getAttribute "y" content) + snd (transform style))
+          (read $ getAttribute "width" content)
+          (read $ getAttribute "height" content)
+          (fill style)
+          (stroke style)
+          []
+          (fill style == "#a14c3a")
+          9
+          False
 
 -- | Parses a path.
-parsePath :: MonadIO m0 => Bool -> Style -> Content i -> ReaderT SqlBackend m0 ()
+parsePath :: Bool -> Style -> Content i -> Maybe Path
 parsePath isRegion style content =
-    unless (last (getAttribute "d" content) == 'z' && not isRegion) $
-        insertPathIntoDB (map (addTuples (transform style)) $ parsePathD $ getAttribute "d" content)
-                         style
-                         isRegion
+    if last (getAttribute "d" content) == 'z' && not isRegion
+    then Nothing
+    else Just (Path "p"
+                    d
+                    (fill style)
+                    (stroke style)
+                    isRegion
+                    ""
+                    "")
+    where d = map (addTuples (transform style)) $ parsePathD $ getAttribute "d" content
 
 -- | Parses a text.
-parseText :: MonadIO m0 => Style -> Content i -> ReaderT SqlBackend m0 ()
+parseText :: Style -> Content i -> Text
 parseText style content =
-    insertTextIntoDB (getAttribute "id" content)
-                     ((read $ getAttribute "x" content :: Float) + fst (transform style))
-                     ((read $ getAttribute "y" content :: Float) + snd (transform style))
-                     (tagTextContent content)
-                     style
+    Text (getAttribute "id" content)
+         (read (getAttribute "x" content) + fst (transform style),
+          read (getAttribute "y" content) + snd (transform style))
+         (tagTextContent content)
 
 -- | Parses a text.
-parseEllipse :: MonadIO m0 => Style -> Content i -> ReaderT SqlBackend m0 ()
+parseEllipse :: Style -> Content i -> Shape
 parseEllipse style content =
-    insertEllipseIntoDB ((read $ getAttribute "cx" content :: Float) + fst (transform style))
-                        ((read $ getAttribute "cy" content :: Float) + snd (transform style))
-                        (read $ getAttribute "rx" content :: Float)
-                        (read $ getAttribute "ry" content :: Float)
-                        (fill style)
-
--- | Inserts an ellipse entry into the rects table.
-insertEllipseIntoDB :: MonadIO m0 => Float -> Float -> Float -> Float -> String -> ReaderT SqlBackend m0 ()
-insertEllipseIntoDB xPos yPos rx ry stroke =
-        insert_ $ Ellipses (toRational xPos)
-                           (toRational yPos)
-                           (toRational rx)
-                           (toRational ry)
-                           stroke
-
--- | Inserts a rect entry into the rects table.
-insertRectIntoDB :: MonadIO m0 => String -> Float -> Float -> Float -> Float -> Style -> ReaderT SqlBackend m0 ()
-insertRectIntoDB id_ width height xPos yPos style =
-        insert_ $ Rects 1
-                        id_
-                        (toRational width)
-                        (toRational height)
-                        (toRational xPos)
-                        (toRational yPos)
-                        (fill style)
-                        (stroke style)
-                        (fill style == "#a14c3a")
-
--- | Inserts a text entry into the texts table.
-insertTextIntoDB :: MonadIO m0 => String -> Float -> Float -> String -> Style -> ReaderT SqlBackend m0 ()
-insertTextIntoDB id_ xPos yPos text style =
-        insert_ $ Texts 1
-                        id_
-                        (toRational xPos)
-                        (toRational yPos)
-                        text
-
--- | Inserts a tex entry into the texts table.
-insertPathIntoDB :: MonadIO m0 => [(Float, Float)] -> Style -> Bool -> ReaderT SqlBackend m0 ()
-insertPathIntoDB d style isRegion =
-        insert_ $ Paths (map (Point . convertFloatTupToRationalTup) d)
-                        (fill style)
-                        (stroke style)
-                        isRegion
+    Shape ""
+          (read (getAttribute "cx" content) + fst (transform style),
+           read (getAttribute "cy" content) + snd (transform style))
+          (read (getAttribute "rx" content) * 2)
+          (read (getAttribute "ry" content) * 2)
+          ""
+          (stroke style)
+          []
+          False
+          20
+          True
