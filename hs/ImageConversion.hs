@@ -26,7 +26,6 @@ convertToImage inName outName = createProcess $ CreateProcess
                                   CreatePipe
                                   False
                                   False
-                                  False
 -- | Removes a file.
 removeImage :: String -> IO
                      (Maybe Handle,
@@ -43,13 +42,12 @@ removeImage name = createProcess $ CreateProcess
                                   CreatePipe
                                   False
                                   False
-                                  False
 
 -- Note: hGetContents can be used to read Handles. Useful when trying to read from
 -- stdout.
 createImageFile :: String -> String -> IO ()
 createImageFile inName outName =
     do (inp, out, err, pid) <- convertToImage inName outName
-       liftIO $ print "Waiting for process..."
-       liftIO $ waitForProcess pid
-       liftIO $ print "Process Complete"
+       print "Waiting for process..."
+       waitForProcess pid
+       print "Process Complete"

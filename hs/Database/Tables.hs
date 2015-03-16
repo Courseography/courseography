@@ -12,6 +12,7 @@
 
 module Database.Tables where
 import Database.Persist.TH
+import Database.DataType
 import qualified Data.Text as T
 import qualified Data.Vector as V
 import Data.Aeson
@@ -73,13 +74,14 @@ Graph
     deriving Show
 
 Text
---    gId Int
+    gId Int
     rId String
     pos Point
     text String
     deriving Show
 
 Shape
+    gId Int
     id_ String
     pos Point
     width Double
@@ -87,11 +89,11 @@ Shape
     fill String
     stroke String
     text [Text]
-    isHybrid Bool
     tolerance Double
-    isBool Bool
+    type_ ShapeType
 
 Path
+    gId Int
     id_ String
     points [Point]
     fill String

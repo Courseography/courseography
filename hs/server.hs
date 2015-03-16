@@ -9,7 +9,7 @@ import DrawResponse
 import ImageResponse
 import PostResponse
 --import AboutResponse
-import Database.CourseQueries
+import Database.CourseQueries (retrieveCourse)
 import Css.CssGen
 import Filesystem.Path.CurrentOS
 import System.Directory
@@ -34,7 +34,3 @@ main = do
                dir "course" $ look "name" >>= retrieveCourse,
                dir "all-courses" $ liftIO allCourses
                ]
-
-retrieveCourse :: String -> ServerPart Response
-retrieveCourse course =
-    liftIO $ queryCourse (T.pack course)

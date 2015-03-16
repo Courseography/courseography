@@ -14,9 +14,6 @@ insertSVG src = H.object ! A.data_ src ! A.type_ "image/svg+xml" $ ""
 createTag :: (H.Html -> H.Html) ->  H.AttributeValue -> H.AttributeValue -> H.Html -> H.Html
 createTag tag id class_ content = tag ! A.id id ! A.class_ class_ $ content
 
-makeLink :: H.AttributeValue -> H.AttributeValue -> H.AttributeValue -> H.Html
-makeLink rel type_ href = H.link ! A.rel rel ! A.type_ type_ ! A.href href
-
 stylesheet :: H.AttributeValue -> H.Html
 stylesheet href = H.link ! A.rel "stylesheet" ! A.type_ "text/css" ! A.href href
 
@@ -31,9 +28,6 @@ makeInput id class_ placeholder autocomplete type_ = H.input ! A.id id ! A.class
 
 makeA :: H.AttributeValue -> H.AttributeValue -> H.AttributeValue -> H.AttributeValue -> H.Html -> H.Html
 makeA id class_ href target content = H.a ! A.id id ! A.class_ class_ ! A.href href ! A.target target $ content
-
-tabAnchor :: H.AttributeValue -> H.Html -> H.Html
-tabAnchor href content = H.a ! A.href href $ content
 
 jQuery :: H.Html
 jQuery = makeScript "https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"
