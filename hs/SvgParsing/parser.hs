@@ -41,8 +41,7 @@ main = do graphFile <- readFile "../public/res/graphs/graph_regions.svg"
               mapM_ insert_ shapes
               mapM_ insert_ paths
               mapM_ insert_ texts
-          printDB
-          createDirectoryIfMissing True "../res/graphs/CSC"
+          createDirectoryIfMissing True "../public/res/graphs/CSC"
           buildSVG M.empty "../public/res/graphs/CSC/csc_graph.svg"
           print "SVG Built"
 

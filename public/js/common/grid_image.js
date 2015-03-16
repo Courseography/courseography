@@ -3,11 +3,11 @@
  * image.
  * @returns {String} The base64 representation of an image.
  */
-function getGridImage() {
+function getGridImage(session) {
     'use strict';
 
     var img;
-    var courses = getCoursesTable();
+    var courses = getCoursesTable(session);
     $.ajax({
         url: 'timetable-image',
         async: false,
@@ -24,12 +24,13 @@ function getGridImage() {
 }
 
 
-function getCoursesTable() {
+function getCoursesTable(session) {
+    var sessionChar = session === "fall" ? "F" : "S";
     var days = ["M", "T", "W", "R", "F"];
     var courses = "";
     for (var i = 8; i < 22; i++) {
         for (var j = 0; j < 5; j++) {
-            courses += $("#" + days[j] + i + "F").text();
+            courses += $("#" + days[j] + i + "-0" + sessionChar).text();
             courses += "%0A";
         }
     }

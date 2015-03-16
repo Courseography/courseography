@@ -1,29 +1,4 @@
 /**
- * Requests an image from the server. The server automatically generates this
- * image.
- * @returns {String} The base64 representation of an image.
- */
-function getImage() {
-    'use strict';
-
-    var img;
-
-    $.ajax({
-        url: 'image',
-        async: false,
-        success: function (data) {
-            img = data;
-        },
-        error: function () {
-            throw 'No image generated';
-        }
-    });
-
-    return img;
-}
-
-
-/**
  * Posts an image to facebook.
  * @param authToken The user's access token.
  * @param img A Base 64 encoded string of an image.
@@ -59,23 +34,4 @@ function postImage(authToken, img, message) {
         }
     });
 
-}
-
-
-/**
- * Converts Base 64 encoded URI data to binary blob.
- * Base 64 encoded data is not accepted when uploading to Facebook.
- * This snippet of code has been adapted from this thread:
- * http://stackoverflow.com/questions/4998908/convert-data-uri-to-file-then-append-to-formdata
- * @param dataURI {string} Base 64 URI encoded data.
- * @returns A binary blob of the decoded URI data.
- */
-function dataURItoBlob(dataURI) {
-    var byteString = atob(dataURI);
-    var ab = new ArrayBuffer(byteString.length);
-    var ia = new Uint8Array(ab);
-    for (var i = 0; i < byteString.length; i++) {
-        ia[i] = byteString.charCodeAt(i);
-    }
-    return new Blob([ab], { type: 'image/png' });
 }

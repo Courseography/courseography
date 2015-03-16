@@ -31,6 +31,7 @@ plannerScripts = concatHtml (map makeScript["https://ajax.googleapis.com/ajax/li
                                            "static/js/graph/create_data.js",
                                            "static/js/graph/parse_graph.js",
                                            "static/js/graph/mouse_events.js",
+                                           "/static/js/common/image_conversion.js",
                                            "/static/js/common/graph_image.js",
                                            "/static/js/common/facebook/facebook_login.js",
                                            "/static/js/common/facebook/facebook_image.js",
@@ -54,6 +55,7 @@ timetableScripts = do jQuery
                                                 "/static/js/common/facebook/facebook_image.js",
                                                 "/static/js/common/facebook/facebook_modal.js",
                                                 "/static/js/common/grid_image.js",
+                                                "/static/js/common/image_conversion.js",
                                                 "/static/js/draw/draw.js",
                                                 "static/js/common/modal.js",
                                                 "static/js/common/course_description.js"])
