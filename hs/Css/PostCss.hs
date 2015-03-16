@@ -81,7 +81,7 @@ postCSS = do
             "list-style-type" -: "none"
             textAlign $ alignSide sideCenter
             margin0
-            width (pct 97)
+            width (pct 99)
             "margin-right" -: "10px"
             "-webkit-transition" -: "all 0.2s"
             "-moz-transition" -: "all 0.2s"
