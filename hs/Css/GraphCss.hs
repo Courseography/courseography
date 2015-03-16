@@ -114,10 +114,6 @@ nodeCSS = "g" ? do
         "text" <? do
             fontFamily ["Comic Sans MS"] [sansSerif]
             fontWeight bold
-    ".spotlight" & do
-        semiVisible
-        fill "white"
-        stroke "none"
 
 {- pathCSS
  - Generates CSS for paths between nodes
@@ -193,7 +189,7 @@ sidebarCSS = do
         width (px 20)
         height (pct 100)
         float floatLeft
-        "background" -: "rgba(128, 0, 128, 0.8)"
+        backgroundColor purple5
         position absolute
     "#sidebar-button" ? do
         cursor pointer
@@ -262,6 +258,22 @@ sidebarCSS = do
         border solid (px 1) black
         textAlign $ alignSide sideCenter
         width (pct 90)
+    ".spotlight" & do
+        semiVisible
+        fill "white"
+        stroke "none"
+    ".details" & do
+        border solid (px 1) black
+        width (pct 90)
+        height (px 0)
+        marginBottom (px 7)
+        overflow auto
+        fontSize (px 14)
+        fontColor white
+        paddingLeft (px 5)
+        paddingRight (px 5)
+    ".active" & do
+        backgroundColor purple1
 
 
 {- titleCSS

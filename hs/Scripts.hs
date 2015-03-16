@@ -33,8 +33,9 @@ plannerScripts = concatHtml (map makeScript["https://ajax.googleapis.com/ajax/li
                                            "static/js/graph/mouse_events.js",
                                            "static/js/graph/setup.js", 
                                            "static/js/post/update_post.js",
-                                           "static/js/graph/sidebar_divs.js",
-                                           "static/js/graph/sidebar_events.js"])
+                                           "static/js/graph/sidebar/sidebar_divs.js",
+                                           "static/js/graph/sidebar/sidebar_events.js",
+                                           "static/js/graph/sidebar/focus_descriptions.js"])
 
 timetableScripts :: H.Html
 timetableScripts = do jQuery

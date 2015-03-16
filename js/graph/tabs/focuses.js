@@ -8,8 +8,6 @@ function updateActiveFocus(id) {
     var graphObject = $('#graph');
 
     $('ellipse.spotlight').remove();
-    // Remove old icon
-    $('.focusList .statusIcon').remove();
 
     if (id === '') {
         clearFocus();
@@ -21,13 +19,7 @@ function updateActiveFocus(id) {
             spotlight(elem);
         });
         graphObject.html(graphObject.html()); // Hack to make spotlights appear
-        setMouseCallbacks();
         activeFocus = id;
-
-        // Put in new icon.
-        $('.focusList a[href="#' + id + 'Details"]').append(
-            "<img class='statusIcon' src='res/ico/close.ico' alt='Click to close!'/>"
-        );
     }
 }
 
@@ -61,7 +53,7 @@ function spotlight(id) {
     var x = parseFloat(node.attr('x')) + width;
     var y = parseFloat(node.attr('y')) + height;
 
-    var ellipse = '<ellipse class="spotlight" style= "fill: white; opacity: 0.7; stroke: none" cx="'.concat(String(x),
+    var ellipse = '<ellipse class="spotlight" cx="'.concat(String(x),
                                                            '" cy = "',
                                                            String(y),
                                                            '" rx="',
@@ -71,6 +63,4 @@ function spotlight(id) {
                                                            '"/>');
     nodeObject.before(ellipse);
     nodeObject.attr('data-active', 'lit');
-
-    // window[id].updateSVG();
 }
