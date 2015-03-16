@@ -11,7 +11,7 @@ function openFBPostModal() {
             .addClass('modal').dialog({
                 autoOpen: true,
                 modal: true,
-                minWidth: 1000,
+                minWidth: 850,
                 minHeight: 600,
                 closeText: 'X',
                 open: function(event, ui) {
@@ -77,14 +77,12 @@ function createFBModalDiv() {
         rightContentDiv.append(sessionButton);
     }
 
-    leftContentDiv.attr('id', 'left-modal-div')
-                  .css('float', 'left');
+    leftContentDiv.attr('id', 'left-modal-div');
     rightContentDiv.attr('id', 'right-modal-div')
-                   .css('float', 'right')
                    .css('width', '40%');
-    leftContentDiv.html('<img id="post-image" style="border-radius:15px;" height="500" width="500" src="data:image/png;base64,' + img + '" />');
+    leftContentDiv.html('<img id="post-image" style="border-radius:15px;" height="588" width="789" src="data:image/png;base64,' + img + '" />');
 
-    rightContentDiv.append(input);
+    leftContentDiv.append(input);
     contentDiv.append(leftContentDiv);
     contentDiv.append(rightContentDiv);
     return contentDiv;
