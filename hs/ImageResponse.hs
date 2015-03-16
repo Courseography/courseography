@@ -33,25 +33,26 @@ getGraphImage :: M.Map String String -> IO Response
 getGraphImage courseMap =
     do gen <- newStdGen
        let (rand, _) = next gen
-           svgFilename = (show rand ++ "-graph-svg-file.svg")
-           imageFilename = (show rand ++ "-graph.png")
+           svgFilename = (show rand ++ ".svg")
+           imageFilename = (show rand ++ ".png")
        buildSVG courseMap svgFilename
-       createImageFile svgFilename imageFilename
-       imageData <- BS.readFile imageFilename
-       removeImage imageFilename
-       removeImage svgFilename
-       let encodedData = BEnc.encode imageData
-       return $ toResponse encodedData
+       returnImageData svgFilename imageFilename
 
 -- | Creates an image, and returns the base64 representation of that image.
 getTimetableImage :: String -> IO Response
 getTimetableImage courses =
     do gen <- newStdGen
        let (rand, _) = next gen
-           svgFilename = (show rand ++ "--timetable-svg-file.svg")
-           imageFilename = (show rand ++ "-timetable.png")
+           svgFilename = (show rand ++ ".svg")
+           imageFilename = (show rand ++ ".png")
        renderTable svgFilename courses
-       createImageFile svgFilename imageFilename
+       returnImageData svgFilename imageFilename
+
+-- | Creates and converts an SVG file to an image file, deletes them both and
+-- returns the image data as a response.
+returnImageData :: String -> String -> IO Response
+returnImageData svgFilename imageFilename =
+    do createImageFile svgFilename imageFilename
        imageData <- BS.readFile imageFilename
        removeImage imageFilename
        removeImage svgFilename
