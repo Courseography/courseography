@@ -51,8 +51,8 @@ timetableScripts = do jQuery
 drawScripts :: H.Html
 drawScripts = do jQuery 
                  concatHtml (map makeScript ["https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js",
-                                              "static/js/draw/draw.js",
                                               "static/js/draw/path.js",
+                                              "static/js/draw/draw.js",
                                               "static/js/draw/setup.js"])
 
 postScripts :: H.Html

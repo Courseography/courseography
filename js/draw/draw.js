@@ -102,7 +102,7 @@ function makeNodePath(e) {
             makeElbow(position);
         }
     } else if (mode === 'region-mode') {
-        if (startPoint === null) {
+        if (startPoint === null) { // start a region
                 startPoint = document.createElementNS(xmlns, 'circle');
 
                 startPoint.setAttributeNS(null, 'cx', position.x);
@@ -304,11 +304,36 @@ function unclickAll(e) {
     }
 }
 
+
+/** 
+ *
+ * 
+ */
 function finishRegion() {
     if (curPath !== null) {
         curPath.setAttributeNS(null, 'd', curPath.getAttribute('d') + 'Z');
+        curPath.setAttributeNS(null, 'style', 'fill:#2fff2b;opacity:0.7;fill-opacity:0.58;');
+        curPath.addEventListener('click', regionClicked, false);
+        curPath.setAttributeNS(null, 'pointer-events','boundingBox');
         curPath = null;
         startPoint = null;
+    }
+}
+
+
+/** 
+ *
+ * 
+ */
+function regionClicked(e) {
+    if (mode === 'erase-mode') {
+        var index = -1;
+
+        // delete the dummy nodes and the path itself
+        e.currentTarget.elbows.map(function (item) {
+            svgDoc.removeChild(item);
+        });
+        svgDoc.removeChild(e.currentTarget);
     }
 }
 

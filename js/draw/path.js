@@ -32,11 +32,10 @@ function startPath(pathString) {
     // curPath will get modified until path is complete
     curPath = document.createElementNS(xmlns, 'path'); 
     curPath.setAttributeNS(null, 'd', pathString); 
-    curPath.setAttributeNS(null, 'fill', 'none');
+    //curPath.setAttributeNS(null, 'fill', 'none');
     curPath.setAttributeNS(null, 'stroke', 'black');
     curPath.setAttributeNS(null, 'data-active', 'drawn');
     curPath.elbows = [];
-    curPath.addEventListener('click', pathClicked, false);
     svgDoc.appendChild(curPath);
 }
 
@@ -75,6 +74,7 @@ function finishPath(pathId, endNode) {
     });
     curPath.setAttributeNS(null, 'id', pathId);
     curPath.setAttributeNS(null, 'marker-end', 'url(#arrow)');
+    curPath.addEventListener('click', pathClicked, false);
 
     // update relationships
     startNode.kids.push(endNode);
