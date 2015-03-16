@@ -62,8 +62,8 @@ function createFBModalDiv() {
 
     sessionButton.click(function () {
         session = session === 'fall' ? 'spring' : 'fall';
-        var sessionImage = getGridImage(session);
-        $('#post-image').attr('src', 'data:image/png;base64,' + sessionImage);
+        img = getGridImage(session);
+        $('#post-image').attr('src', 'data:image/png;base64,' + img);
     });
 
     postButton.css('padding', '0.5em');
