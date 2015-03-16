@@ -314,22 +314,6 @@ function finishRegion() {
         curPath.setAttributeNS(null, 'style', 'fill:#2fff2b;opacity:0.7;fill-opacity:0.58;');
         curPath.addEventListener('click', regionClicked, false);
         curPath.setAttributeNS(null, 'pointer-events','boundingBox');
-        curPath = null;
-        startPoint = null;
-    }
-}
-
-
-/** 
- *
- * 
- */
-function finishRegion() {
-    if (curPath !== null) {
-        curPath.setAttributeNS(null, 'd', curPath.getAttribute('d') + 'Z');
-        curPath.setAttributeNS(null, 'style', 'fill:#2fff2b;opacity:0.7;fill-opacity:0.58;');
-        curPath.addEventListener('click', regionClicked, false);
-        curPath.setAttributeNS(null, 'pointer-events','boundingBox');
         
         curPath.elbows.map(function (item) {
             item.path = regionId; 
