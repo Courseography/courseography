@@ -32,6 +32,10 @@ function setupSVGCanvas() {
     bgdiv.setAttribute('id', 'background'); 
     var svg = document.createElementNS(xmlns, 'svg');
     svg.setAttribute('id', 'mySVG');
+
+    var g = document.createElementNS(xmlns, 'g');
+    g.setAttribute('id', 'regions');
+
     svg.setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xlink', 'http://www.w3.org/1999/xlink');
     
     svg.addEventListener('mousedown', makeNodePath, false);
@@ -41,6 +45,7 @@ function setupSVGCanvas() {
     
     div.appendChild(bgdiv);
     div.appendChild(svg);
+    svg.appendChild(g);
     document.body.appendChild(div);
     svgDoc = document.getElementById('mySVG');
 }

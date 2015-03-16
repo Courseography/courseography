@@ -94,7 +94,7 @@ function makeNodePath(e) {
                 var pathString = findClosest({x: parseFloat(startNode.getAttribute('x'), 10), 
                                   y: parseFloat(startNode.getAttribute('y'), 10)},
                                   'node', position, 'elbow');
-                startPath(pathString);
+                startPath(pathString, 'path');
             } else { // elbow to elbow path
                 curPath.setAttributeNS(null, 'd', curPath.getAttribute('d') + 'L' + position.x + ',' + position.y + ' ');   
             }
@@ -114,10 +114,9 @@ function makeNodePath(e) {
                 svgDoc.appendChild(startPoint);
 
         } else if (curPath === null) { // first elbow
-            startPath('M' + startPoint.getAttribute('cx') + ',' + startPoint.getAttribute('cy') + ' L' + position.x + ',' + position.y + ' ');
+            startPath('M' + startPoint.getAttribute('cx') + ',' + startPoint.getAttribute('cy') + ' L' + position.x + ',' + position.y + ' ', 'region');
             curPath.setAttributeNS(null, 'class', 'region');
             curPath.setAttributeNS(null, 'id', 'r' + regionId);
-            regionId += 1;
         } else { 
             curPath.setAttributeNS(null, 'd', curPath.getAttribute('d') + 'L' + position.x + ',' + position.y + ' ');
             makeElbow(position);
@@ -315,6 +314,27 @@ function finishRegion() {
         curPath.setAttributeNS(null, 'style', 'fill:#2fff2b;opacity:0.7;fill-opacity:0.58;');
         curPath.addEventListener('click', regionClicked, false);
         curPath.setAttributeNS(null, 'pointer-events','boundingBox');
+        curPath = null;
+        startPoint = null;
+    }
+}
+
+
+/** 
+ *
+ * 
+ */
+function finishRegion() {
+    if (curPath !== null) {
+        curPath.setAttributeNS(null, 'd', curPath.getAttribute('d') + 'Z');
+        curPath.setAttributeNS(null, 'style', 'fill:#2fff2b;opacity:0.7;fill-opacity:0.58;');
+        curPath.addEventListener('click', regionClicked, false);
+        curPath.setAttributeNS(null, 'pointer-events','boundingBox');
+        
+        curPath.elbows.map(function (item) {
+            item.path = regionId; 
+        });
+        regionId += 1;
         curPath = null;
         startPoint = null;
     }

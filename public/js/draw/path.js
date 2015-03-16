@@ -25,7 +25,7 @@ function makeElbow(position) {
  * Creates an SVG path that has the coordinates specified by pathString. 
  * @param {string} pathString The coordinates of the new path to be created.
  **/
-function startPath(pathString) {
+function startPath(pathString, type) {
     'use strict';
 
     // note: id will get set when the path is complete, also marker (arrowhead)
@@ -36,7 +36,11 @@ function startPath(pathString) {
     curPath.setAttributeNS(null, 'stroke', 'black');
     curPath.setAttributeNS(null, 'data-active', 'drawn');
     curPath.elbows = [];
-    svgDoc.appendChild(curPath);
+    if (type === 'path') {
+       svgDoc.appendChild(curPath);
+    } else { // curPath is a region
+        document.getElementById('regions').appendChild(curPath);
+    }
 }
 
 
@@ -57,7 +61,7 @@ function finishPath(pathId, endNode) {
                                        y: parseFloat(endNode.getAttribute('y'), 10)},
                                        'node');
 
-        startPath(pathString);
+        startPath(pathString, 'path');
     } else { // finish curPath, elbow to node
         var curElbow = {x: parseFloat(curPath.elbows[curPath.elbows.length - 1].getAttribute('cx'), 10), 
                         y: parseFloat(curPath.elbows[curPath.elbows.length - 1].getAttribute('cy'), 10)}
