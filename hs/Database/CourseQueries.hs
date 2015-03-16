@@ -1,6 +1,8 @@
 {-# LANGUAGE ScopedTypeVariables, OverloadedStrings #-}
 
-module Database.CourseQueries (queryCourse, allCourses) where
+module Database.CourseQueries (queryCourse, 
+                              returnCourse,
+                              allCourses) where
 
 import Database.Persist
 import Database.Persist.Sqlite
@@ -50,7 +52,7 @@ buildCourse fallSession springSession yearSession course =
     Course (coursesBreadth course)
            (coursesDescription course)
            (coursesTitle course)
-           Nothing
+           (coursesPrereqString course)
            fallSession
            springSession
            yearSession
@@ -58,7 +60,7 @@ buildCourse fallSession springSession yearSession course =
            (coursesExclusions course)
            (coursesManualTutorialEnrolment course)
            (coursesDistribution course)
-           Nothing
+           (coursesPrereqs course)
 
 -- | Builds a Lecture structure from a tuple from the Lectures table.
 buildLecture :: Lectures -> Lecture

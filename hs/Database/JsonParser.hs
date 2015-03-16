@@ -65,7 +65,7 @@ insertCourse course =
                       (title course)
                       (description course)
                       (manualTutorialEnrol course)
-                      (prereqString course)
+                      (prereqs course)
                       (exclusions course)
                       (breadth course)
                       (distribution course)
