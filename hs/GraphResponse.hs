@@ -77,7 +77,9 @@ sideBar = do
             H.div ! A.id "theory-details" ! A.class_ "details" $ ""
             H.p ! A.id "web" ! A.class_ "focus" $ "Web Technologies"
             H.div ! A.id "web-details" ! A.class_ "details" $ ""
-        H.div ! A.id "graphs" $ "Graph"
+        H.div ! A.id "graphs" $ do
+            H.div ! A.id "graph-csc" ! A.class_ "graph-button" $ "Computer Science"
+            H.div ! A.id "graph-sta" ! A.class_ "graph-button" $ "Statistics"
     H.div ! A.id "sidebar-button" $ ""
 
 
