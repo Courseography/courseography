@@ -44,12 +44,15 @@ function createFBModalDiv() {
     var context = $('#courseography-header').attr('context');
     var session = 'fall';
     var img = (context === "graph") ? getGraphImage() : getGridImage(session) ;
-
     var contentDiv = $('<div></div>');
+    var topContentDiv = $('<div></div>');
+    var bottomContentDiv = $('<div></div>');
+    var authToken = FB.getAuthResponse()['accessToken'];
+    var input = $('<input class="form-control" placeholder="Enter a message" name="message" type="text" maxlength="1000" id="fb-message"/>');
+    var postButton = $('<button type="button" class="btn btn-primary">Post To Facebook</button>');
+    var sessionButton = $('<button type="button" class="btn btn-primary">Switch Sessions</button>');
+
     contentDiv.attr('id', 'modal-content-container');
-    var postButton = $('<button type="button" class="btn btn-primary">Post to Facebook</button>');
-    var sessionButton =
-        $('<button type="button" class="btn btn-primary">Switch Sessions</button>');
 
     postButton.click(function () {
         var val = $('#fb-message').val();
@@ -60,30 +63,24 @@ function createFBModalDiv() {
     sessionButton.click(function () {
         session = session === 'fall' ? 'spring' : 'fall';
         var sessionImage = getGridImage(session);
-        $('#post-image').attr('src',
-            'data:image/png;base64,' + sessionImage);
+        $('#post-image').attr('src', 'data:image/png;base64,' + sessionImage);
     });
 
-    var authToken = FB.getAuthResponse()['accessToken'];
-    postButton.html('Post Image To Facebook').css("margin-bottom", "10px");
+    postButton.css("padding", "0.5em");
+    sessionButton.css("padding", "0.5em");
 
-    var input = $('<input class="form-control" placeholder="Enter a message" name="message" type="text" maxlength="1000" id="fb-message"/>');
-    var leftContentDiv = $('<div></div>');
-    var rightContentDiv = $('<div></div>');
 
-    rightContentDiv.append(postButton);
+    bottomContentDiv.append(postButton);
+
+    bottomContentDiv.css('width', '40%');
+    topContentDiv.html('<img id="post-image" style="border-radius:15px;" height="588" width="789" src="data:image/png;base64,' + img + '" />');
 
     if (context === 'grid') {
-        rightContentDiv.append(sessionButton);
+        bottomContentDiv.append(sessionButton);
     }
 
-    leftContentDiv.attr('id', 'left-modal-div');
-    rightContentDiv.attr('id', 'right-modal-div')
-                   .css('width', '40%');
-    leftContentDiv.html('<img id="post-image" style="border-radius:15px;" height="588" width="789" src="data:image/png;base64,' + img + '" />');
-
-    leftContentDiv.append(input);
-    contentDiv.append(leftContentDiv);
-    contentDiv.append(rightContentDiv);
+    topContentDiv.append(input);
+    contentDiv.append(topContentDiv);
+    contentDiv.append(bottomContentDiv);
     return contentDiv;
 }
