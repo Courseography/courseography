@@ -43,7 +43,7 @@ function createFBModalDiv() {
 
     var context = $('#courseography-header').attr('context');
     var session = 'fall';
-    var img = (context === "graph") ? getGraphImage() : getGridImage(session) ;
+    var img = (context === 'graph') ? getGraphImage() : getGridImage(session) ;
     var contentDiv = $('<div></div>');
     var topContentDiv = $('<div></div>');
     var bottomContentDiv = $('<div></div>');
@@ -66,8 +66,8 @@ function createFBModalDiv() {
         $('#post-image').attr('src', 'data:image/png;base64,' + sessionImage);
     });
 
-    postButton.css("padding", "0.5em");
-    sessionButton.css("padding", "0.5em");
+    postButton.css('padding', '0.5em');
+    sessionButton.css('padding', '0.5em');
 
 
     bottomContentDiv.append(postButton);
