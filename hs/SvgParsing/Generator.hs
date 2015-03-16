@@ -127,8 +127,8 @@ makeSVGDefs =
                             ! A.fill "black"
 
 -- | Builds an SVG document.
-buildSVG :: M.Map String String -> String -> IO ()
-buildSVG courseMap filename =
+buildSVG :: Int -> M.Map String String -> String -> IO ()
+buildSVG gId courseMap filename =
     runSqlite dbStr $ do
         sqlRects    :: [Entity Shape]    <- selectList [ShapeType_ <-. [Node, Hybrid]] []
         sqlTexts    :: [Entity Text]     <- selectList [] []

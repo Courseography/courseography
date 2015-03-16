@@ -9,7 +9,7 @@ import DrawResponse
 import ImageResponse
 import PostResponse
 --import AboutResponse
-import Database.CourseQueries
+import Database.CourseQueries (retrieveCourse)
 import Css.CssGen
 import Filesystem.Path.CurrentOS
 import System.Directory

@@ -10,6 +10,7 @@ import Text.XML.HaXml.Util
 import Text.XML.HaXml.XmlContent.Parser
 import qualified Data.Conduit.List as CL
 import Database.Persist
+import Control.Monad.IO.Class (liftIO)
 import Database.Persist.Sqlite
 import Control.Monad
 import Control.Monad.Trans.Reader
@@ -30,32 +31,33 @@ import SvgParsing.ParserUtil
 import qualified Data.Map as M
 
 main :: IO ()
-main = parseGraph "CSC"
-                  "graph_regions.svg"
-                  "csc_graph.svg"
+main = performParse "CSC" "graph_regions.svg" "csc_graph.svg"
 
-parseGraph :: String -> String -> String -> IO ()
-parseGraph dirLocation inputFilename outputFilename =
-    do graphFile <- readFile ("../res/graphs/" ++ inputFilename)
-       print "Parsing SVG file..."
-       let graphDoc = xmlParse "output.error" graphFile
-           parsedGraph = parseNode (getRoot graphDoc)
-       print "Parsing complete"
-       insertGraph dirLocation parsedGraph
-       print "SVG Inserted"
-       createDirectoryIfMissing True ("../res/graphs/" ++ dirLocation)
-       buildSVG M.empty ("../res/graphs/" ++ dirLocation ++ "/" ++ outputFilename)
-       print "SVG Built"
+performParse :: String -> String -> String -> IO ()
+performParse dirLocation inputFilename outputFilename =
+   do graphFile <- readFile ("../res/graphs/" ++ inputFilename)
+      let parsedGraph = parseGraph graphFile
+      print "Graph Parsed"
+      insertGraph 1 dirLocation parsedGraph
+      print "Graph Inserted"
+      createDirectoryIfMissing True ("../res/graphs/" ++ dirLocation)
+      buildSVG 1 M.empty ("../res/graphs/" ++ dirLocation ++ "/" ++ outputFilename)
+      print "Success"
 
-insertGraph :: String -> ([Path],[Shape],[Text]) -> IO ()
-insertGraph graphTitle (paths, shapes, texts) =
+parseGraph :: String -> ([Path],[Shape],[Text])
+parseGraph graphFile =
+    let graphDoc = xmlParse "output.error" graphFile
+    in parseNode (getRoot graphDoc)
+
+insertGraph :: Int -> String -> ([Path],[Shape],[Text]) -> IO ()
+insertGraph gId graphTitle (paths, shapes, texts) =
     runSqlite dbStr $ do
         runMigration migrateAll
-        deleteWhere [GraphGId ==. 1]
-        deleteWhere [ShapeGId ==. 1]
-        deleteWhere [PathGId  ==. 1]
-        deleteWhere [TextGId  ==. 1]
-        insert_ (Graph 1 graphTitle)
+        deleteWhere [GraphGId ==. gId]
+        deleteWhere [ShapeGId ==. gId]
+        deleteWhere [PathGId  ==. gId]
+        deleteWhere [TextGId  ==. gId]
+        insert_ (Graph gId graphTitle)
         mapM_ insert_ shapes
         mapM_ insert_ paths
         mapM_ insert_ texts
@@ -66,19 +68,17 @@ parseNode content =
     if getAttribute "id" content == "layer2" ||
        getName content == "defs"
     then ([],[],[])
-    else
-        let trans          = parseTransform $ getAttribute "transform" content
-            style          = getAttribute "style" content
-            fill           = getNewStyleAttr style "fill" ""
-            (chilrenPaths, childrenShapes, childrenTexts) = parseChildren (path [children] content)
-
-            rects    = map parseRect (tag "rect" content)
-            texts    = map parseText (tag "text" content)
-            paths    = mapMaybe parsePath (tag "path" content)
-            ellipses = map parseEllipse (tag "ellipse" content)
-        in ((map (updatePath fill trans) (paths ++ chilrenPaths)),
-            (map (updateShape fill trans) (rects ++ ellipses ++ childrenShapes)),
-            (map (updateText trans) (texts ++ childrenTexts)))
+    else let trans          = parseTransform $ getAttribute "transform" content
+             style          = getAttribute "style" content
+             fill           = getNewStyleAttr style "fill" ""
+             (chilrenPaths, childrenShapes, childrenTexts) = parseChildren (path [children] content)
+             rects    = map parseRect (tag "rect" content)
+             texts    = map parseText (tag "text" content)
+             paths    = mapMaybe parsePath (tag "path" content)
+             ellipses = map parseEllipse (tag "ellipse" content)
+         in ((map (updatePath fill trans) (paths ++ chilrenPaths)),
+             (map (updateShape fill trans) (rects ++ ellipses ++ childrenShapes)),
+             (map (updateText trans) (texts ++ childrenTexts)))
 
 -- | Parses a list of Content.
 parseChildren :: [Content i] -> ([Path],[Shape],[Text])
@@ -95,8 +95,8 @@ parseRect :: Content i -> Shape
 parseRect content =
     Shape 1
           ""
-          (read (getAttribute "x" content),
-           read (getAttribute "y" content))
+          (read $ getAttribute "x" content,
+           read $ getAttribute "y" content)
           (read $ getAttribute "width" content)
           (read $ getAttribute "height" content)
           ""
@@ -126,17 +126,17 @@ parseText :: Content i -> Text
 parseText content =
     Text 1
          (getAttribute "id" content)
-         (read (getAttribute "x" content),
-          read (getAttribute "y" content))
+         (read $ getAttribute "x" content,
+          read $ getAttribute "y" content)
          (tagTextContent content)
 
--- | Parses a text.
+-- | Parses an ellipse.
 parseEllipse :: Content i -> Shape
 parseEllipse content =
     Shape 1
           ""
-          (read (getAttribute "cx" content),
-           read (getAttribute "cy" content))
+          (read $ getAttribute "cx" content,
+           read $ getAttribute "cy" content)
           (read (getAttribute "rx" content) * 2)
           (read (getAttribute "ry" content) * 2)
           ""

@@ -8,10 +8,9 @@ import Database.Persist
 import Control.Monad.Trans.Reader
 import qualified Data.Conduit.List as CL
 import Data.Conduit
+import Data.Text.Internal as TI
 import Database.JsonParser
 
--- | Prints the database table 'rects'.
-printDB :: IO ()
-printDB = runSqlite dbStr $ do
-              let sql = "SELECT * FROM shape"
-              rawQuery sql [] $$ CL.mapM_ (liftIO . print)
+-- | Performs a query on the database.
+queryDatabase :: TI.Text -> IO ()
+queryDatabase sql = runSqlite dbStr $ rawQuery sql [] $$ CL.mapM_ (liftIO . print)
