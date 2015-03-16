@@ -65,7 +65,6 @@ postLinks = concatHtml (map stylesheet ["static/style/post/post_styles.css",
 
 fourOhFourLinks :: H.Html
 fourOhFourLinks = concatHtml (map stylesheet ["//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css",
-                                              "static/style/common/about.css",
                                               "static/style/common/common.css",
                                               "static/style/common/four_oh_four.css"])
 

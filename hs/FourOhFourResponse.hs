@@ -15,19 +15,25 @@ fourOhFourResponse =
    ok $ toResponse $
     H.html $ do
         H.head $ do
-            H.title (H.toHtml "Courseography - 404!")
+            H.title "Courseography - 404!" -- took out H.toHtml, okay?
             H.meta ! A.httpEquiv "Content-Type"
                    ! A.content "text/html;charset=utf-8"
             sequence_  [fourOhFourLinks]
         H.body $ do
             fourOhFourHtml
             fourOhFourScripts
+            dragon
 
 fourOhFourHtml :: H.Html
-fourOhFourHtml = H.div ! A.id "aboutDiv" $ do
+fourOhFourHtml = H.div ! A.id "contentDiv" $ do
   H.h2 "404 Page Not Found!"
   H.p "Sorry, the path you have traversed has no destination node."
   H.p "The page might have been moved or deleted, or the little dragon running our server might have gone to have smores."
-  H.p "You can use the links above to get back on the grid(, graph etc.)."
-  createTag H.div "picDiv" "" "" -- dragon
+  H.p "You can use the links below to get back on the grid or graph."
+  H.ul ! A.id "links" $ do
+    H.li $ makeA "" "" "graph" "" $ "Graph"
+    H.li $ makeA "" "" "grid" "" $ "Grid"
+
+dragon :: H.Html
+dragon = createTag H.div "picDiv" "" ""
 
