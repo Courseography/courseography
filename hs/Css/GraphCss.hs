@@ -282,6 +282,7 @@ sidebarCSS = do
         textAlign $ alignSide sideCenter
         width (pct 90)
         backgroundColor white
+        marginBottom (px 20)
 
 
 {- titleCSS
