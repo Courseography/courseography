@@ -22,14 +22,15 @@ var nodes = [];               // List of all nodes
 
 /**
  * Retrieves an SVG file.
+ * @param {string} The relative filepath of the graph
  * @returns {string} An SVG string representing a graph. 
  */
-function getRemote() {
+function getRemote(filepath) {
     'use strict';
 
     var SVG = $.ajax({
         type: 'GET',
-        url: 'static/res/graphs/CSC/csc_graph.svg',
+        url: 'static/res/graphs/' + filepath,
         async: false
     }).responseText;
     $('#graph').append(SVG);

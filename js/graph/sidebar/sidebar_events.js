@@ -20,24 +20,21 @@ $('.focus').click(function(e){
     } 
 });
 
+
 /**
  * Click function to load CSC graph
 **/
 $('#graph-csc').click(function(e) {
     'use-strict';
 
-    getRemote();
+    // Remove current graph
+    $('#graph').empty();
+
+    getRemote('CSC/csc_graph.svg');
 
     buildGraph();
 
     FCEPrerequisiteCourses = [CSC318, CSC454];
-
-    // Set width of FCE count
-    var w = $('.infoTabs').width() - $('.tabList').outerWidth() - 1;
-    $('#FCECountDiv').width(w + 'px');
-
-    // Create tabs
-    createTabs();
 
     // Set mouse callbacks
     setMouseCallbacks();
@@ -54,4 +51,25 @@ $('#graph-csc').click(function(e) {
     // activateFeedbackForm();
     // Uncomment to enable graph dragging
     // enableGraphDragging();
+});
+
+
+/**
+ * Click function to load Statistics Graph
+ * NOTE: A dummy graph is loaded at the moment
+**/
+$('#graph-sta').click(function(e) {
+    'use strict';
+
+    // Remove current graph
+    $('#graph').empty();
+
+    getRemote('dummygraph.svg');
+
+    buildGraph();
+
+    //setMouseCallbacks();
+
+    //initializeGraphSettings();
+
 });
