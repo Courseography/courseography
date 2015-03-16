@@ -124,18 +124,30 @@ function convertTimes(times) {
         time = times[i][1];
 
         if (time.charAt(time.length - 1) === '0') {
-            if (i !== times.length-1) {
-                timeString = timeString + time;
-                timeList.push(timeString);
-            }
-            else {
+            if (i === times.length-1) {
                 timeString = timeString + time + 'E';
                 timeList.push(timeString);
+            } else {
+                stime = time.replace('-0', '-5');
+                if (times[i+1][1] === stime) {
+                    timeString = timeString + time;
+                    timeList.push(timeString);
+                } else {
+                    timeString = timeString + time + 'E';
+                    timeList.push(timeString);
+                }
+
             }
         } else {
             if (i === 0) {
                 timeString = timeString + time + 'H';
                 timeList.push(timeString);
+            } else {
+                stime = time.replace('-5', '-0');
+                if (times[i-1][1] !== stime) {
+                    timeString = timeString + time + 'H';
+                    timeList.push(timeString);
+                }
             }
         }
     }
