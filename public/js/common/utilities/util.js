@@ -122,20 +122,36 @@ function convertTimes(times) {
     for (var i = 0; i < times.length; i++) {
         var timeString = 'MTWRF'.charAt(times[i][0]);
         time = times[i][1];
-        if (time > 21) {
-            stime = time.toString();
-            if (stime.charAt(stime.length - 1) === '0') {
-                stime = stime.slice(0, -1) + 'E';
-            } else {
-                stime = stime.slice(0, -1) + 'H';
-            }
-            timeString = timeString + stime;
-        } else {
-            timeString = timeString + time;
-        }
 
-        timeList.push(timeString);
+        if (time.charAt(time.length - 1) === '0') {
+            if (i === times.length-1) {
+                timeString = timeString + time + 'E';
+                timeList.push(timeString);
+            } else {
+                stime = time.replace('-0', '-5');
+                if (times[i+1][1] === stime) {
+                    timeString = timeString + time;
+                    timeList.push(timeString);
+                } else {
+                    timeString = timeString + time + 'E';
+                    timeList.push(timeString);
+                }
+
+            }
+        } else {
+            if (i === 0) {
+                timeString = timeString + time + 'H';
+                timeList.push(timeString);
+            } else {
+                stime = time.replace('-5', '-0');
+                if (times[i-1][1] !== stime) {
+                    timeString = timeString + time + 'H';
+                    timeList.push(timeString);
+                }
+            }
+        }
     }
+
     return timeList;
 }
 
