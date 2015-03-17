@@ -14,6 +14,7 @@ drawStyles = do
     mainCSS
     canvasBackground
     canvasCSS
+    panelWrap
     panelCSS
     modeButtonsCSS
     colourButtonsCSS
@@ -24,9 +25,11 @@ drawStyles = do
     clickedButtonsCSS 
     inputCSS
     textButtonCSS
-    elbowCss
     textCSS
+    elbowCSS
+    scrollBar
 
+{- The wrapping around the canvas elements. -}
 mainCSS = "#main" ? do
     height (pct 85)
     width  (pct 85)
@@ -39,7 +42,8 @@ mainCSS = "#main" ? do
 canvasBackground = "#background" ? do
     height100
     width100
-    "background-image" -: "url(http://www.emba.uvm.edu/~jtl/gimpdoc-html/plugab17.gif)"
+    "background-image" -: "url(/static/res/grid.gif)"
+    "background-size" -: "128px"
     opacity 0.3
 
 {- The SVG canvas. -}
@@ -50,20 +54,46 @@ canvasCSS = "#mySVG" ? do
     top nil
     left nil
 
-{- The side panel. -}
-panelCSS = "#mode-panel" ? do
+{- The side panel wrapping. -}
+panelWrap = "#side-panel-wrap" ? do
     height (pct 85)
     width (pct 15)
-    backgroundColor $ parse "#008080"
     float floatLeft
-    "border-radius" -: "8px"
+    padding (px 5) 0 (px 5) 0
     border solid (px 2) black
+    roundCorners
+    backgroundColor $ parse "#008080"
+
+{- The side panel. -}
+panelCSS = "#mode-panel" ? do
+    height (pct 100)
+    width (pct 100)
+    "overflow-y" -: "auto"
+
+{- Override the default scrollbar styling for side panel -}
+scrollBar = do
+    scroll1 
+    scroll2 
+    scroll3
+
+scroll1 = "::-webkit-scrollbar" ? do
+        width (px 10)
+        height (px 10)
+ 
+scroll2 = "::-webkit-scrollbar-track" ? do
+        "-webkit-box-shadow" -: "inset 0 0 6px rgba(0,0,0,1)"
+        "border-radius" -: "10px"
+
+scroll3 = "::-webkit-scrollbar-thumb" ? do 
+        "border-radius" -: "10px";
+        "-webkit-box-shadow" -: "inset 0 0 6px rgba(0,0,0,0.5)"
+        "background-color" -: "#28B0A2"  
 
 {- The mode buttons. -}
 modeButtonsCSS = ".mode" ? do
     width (pct 93)
-    margin (px 5) (px 5) (px 5) (px 5)
     padding 0 0 0 (px 5)
+    margin 0 0 0 (px 5)
     roundCorners
     fontSize (em 0.75)
     border solid (px 2) "#008080"
@@ -76,9 +106,10 @@ modeButtonsCSS = ".mode" ? do
         "background-color" -: "#28B0A2 !important"
         "color" -: "#DCDCDC !important"
         cursor pointer
+    ".clicked" & do
+        "background-color" -: "#28B0A2 !important"
 
 clickedButtonsCSS = ".clicked" ? do
-    "background-color" -: "#28B0A2 !important"
     "color" -: "#DCDCDC !important"
     border solid (px 2) black
 
@@ -130,17 +161,11 @@ textButtonCSS = ".button" ? do
     "display" -: "inline"
     margin (px 5) (px 5) (px 5) (px 5)
     padding (px 2) (px 2) (px 2) (px 2)
-    width (pct 40)
+    width (pct 45)
     roundCorners
     alignCenter
     fontSize (em 0.75)
     border solid (px 2) black
-    ":hover" & do
-        cursor pointer
-
-{- The invisible elbow nodes. -}
-elbowCss = ".elbow" ? do
-    opacity 0
     ":hover" & do
         cursor pointer
 
@@ -156,3 +181,10 @@ textCSS = ".mylabel" ? do
     "-ms-user-select" -: "none"
     "text-anchor" -: "middle"
     "dominant-baseline" -: "central"
+
+{- The invisible elbow nodes. -}
+elbowCSS = ".elbow" ? do
+    opacity 0
+    ":hover" & do
+        cursor pointer
+        opacity 1

@@ -23,7 +23,7 @@ drawResponse =
                     drawHtml
                     modePanel
                 )
-                timetableScripts
+                drawScripts
 
 
 drawHtml :: H.Html
@@ -31,7 +31,8 @@ drawHtml = H.div ! A.id "aboutDiv" $ do
   H.h2 "Draw a Graph"
 
 modePanel :: H.Html
-modePanel = createTag H.div "mode-panel" "" $ do 
+modePanel = createTag H.div "side-panel-wrap" "" $ do
+  createTag H.div "mode-panel" "" $ do 
   createTag H.div "node-mode" "mode clicked" "NODE (n)"
   H.input ! A.id "course-code" ! A.class_ "course-code" ! A.name "course-code" ! A.placeholder "Course Code" ! A.autocomplete "off" ! A.type_ "text" ! A.size "10"
   createTag H.div "add-text" "button" "ADD"
@@ -42,4 +43,4 @@ modePanel = createTag H.div "mode-panel" "" $ do
   createTag H.div "path-mode" "mode" "PATH (p)" 
   createTag H.div "region-mode" "mode" "REGION (r)" 
   createTag H.div "change-mode" "mode" "SELECT/MOVE (m)" 
-  createTag H.div "erase-mode" "mode" "ERASE (e)" 
+  createTag H.div "erase-mode" "mode" "ERASE (e)"

@@ -11,20 +11,18 @@
              TypeFamilies #-}
 
 module Database.Tables where
-
 import Database.Persist.TH
+import Database.DataType
 import qualified Data.Text as T
 import qualified Data.Vector as V
 import Data.Aeson
 import Control.Monad
 import Control.Applicative
 
-data Time = Time { timeField :: [Int] } deriving (Show, Read, Eq)
+data Time = Time { timeField :: [Double] } deriving (Show, Read, Eq)
 derivePersistField "Time"
 
-
-data Point = Point { point :: (Rational, Rational) } deriving (Show, Read, Eq)
-derivePersistField "Point"
+type Point = (Double, Double)
 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 Courses json
@@ -70,44 +68,40 @@ Distribution
     description String
     deriving Show
 
-Graphs
+Graph
     gId Int
     title String
     deriving Show
 
-Rects
+Text
     gId Int
     rId String
-    width Rational
-    height Rational
-    xPos Rational
-    yPos Rational
-    fill String
-    stroke String
-    isHybrid Bool
-    deriving Show
-
-Texts
-    gId Int
-    rId String
-    xPos Rational
-    yPos Rational
+    pos Point
     text String
     deriving Show
 
-Paths
-    d [Point]
+Shape
+    gId Int
+    id_ String
+    pos Point
+    width Double
+    height Double
+    fill String
+    stroke String
+    text [Text]
+    tolerance Double
+    type_ ShapeType
+
+Path
+    gId Int
+    id_ String
+    points [Point]
     fill String
     stroke String
     isRegion Bool
+    source String
+    target String
     deriving Show
-
-Ellipses
-    xPos Rational
-    yPos Rational
-    rx Rational
-    ry Rational
-    stroke String
 |]
 
 -- | A Lecture.
@@ -116,7 +110,7 @@ data Lecture =
               section :: T.Text,
               cap :: Int,
               time_str :: T.Text,
-              time :: [[Int]],
+              time :: [[Double]],
               instructor :: T.Text,
               enrol :: Maybe Int,
               wait :: Maybe Int
@@ -125,7 +119,7 @@ data Lecture =
 -- | A Tutorial.
 data Tutorial =
     Tutorial { tutorialSection :: Maybe T.Text,
-               times :: [[Int]],
+               times :: [[Double]],
                timeStr :: T.Text
              } deriving Show
 
@@ -213,7 +207,7 @@ instance ToJSON Lecture where
                     "section" .= section,
                     "cap" .= cap,
                     "time_str" .= time_str,
-                    "time" .= time,
+                    "time" .= map convertTimeToString time,
                     "instructor" .= instructor,
                     "enrol" .= enrol,
                     "wait" .= wait
@@ -238,3 +232,18 @@ instance ToJSON Tutorial where
       Array $ V.fromList [toJSON times, toJSON timeStr]
   toJSON (Tutorial (Just value) times timeStr) =
       Array $ V.fromList [toJSON value, toJSON times, toJSON timeStr]
+
+-- | Converts a Double to a T.Text.
+-- This removes the period from the double, as the JavaScript code,
+-- uses the output in an element's ID, which is then later used in
+-- jQuery. `.` is a jQuery meta-character, and must be removed from the ID.
+convertTimeToString :: [Double] -> [T.Text]
+convertTimeToString [day, time] =
+  [T.pack . show . floor $ day,
+   T.replace "." "-" . T.pack . show $ time]
+
+instance ToJSON Graph where
+    toJSON (Graph id_ title)
+        = object ["graph_title" .= title,
+                  "graph_id" .= id_
+                 ]
