@@ -30,6 +30,7 @@ import SvgParsing.Builder
 import SvgParsing.ParserUtil
 import qualified Data.Map as M
 
+main :: IO ()
 main = performParse "CSC" "graph_regions.svg" "csc_graph.svg"
 
 performParse :: String -> String -> String -> IO ()
