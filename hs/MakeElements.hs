@@ -40,7 +40,7 @@ timetableLinks = concatHtml (map stylesheet ["//netdna.bootstrapcdn.com/bootstra
 plannerLinks :: H.Html
 plannerLinks = concatHtml (map stylesheet ["//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css",
                                        "static/style/graph/graph_styles.css",
-                                       "static/res/video-js/video-js.css",
+                                       "//vjs.zencdn.net/4.12/video-js.css",
                                        "static/style/common/common.css"])
 
 aboutLinks :: H.Html
@@ -55,7 +55,8 @@ drawLinks = concatHtml (map stylesheet ["//netdna.bootstrapcdn.com/bootstrap/3.1
 
 
 postLinks :: H.Html
-postLinks = concatHtml (map stylesheet ["static/style/post/post_styles.css",
+postLinks = concatHtml (map stylesheet ["//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css",
+                                        "static/style/post/post_styles.css",
                                         "static/style/common/common.css"])
 
 concatHtml :: [H.Html] -> H.Html

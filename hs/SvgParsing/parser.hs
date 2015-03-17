@@ -35,13 +35,13 @@ main = performParse "CSC" "graph_regions.svg" "csc_graph.svg"
 
 performParse :: String -> String -> String -> IO ()
 performParse dirLocation inputFilename outputFilename =
-   do graphFile <- readFile ("../res/graphs/" ++ inputFilename)
+   do graphFile <- readFile ("../public/res/graphs/" ++ inputFilename)
       let parsedGraph = parseGraph graphFile
       print "Graph Parsed"
       insertGraph 1 dirLocation parsedGraph
       print "Graph Inserted"
-      createDirectoryIfMissing True ("../res/graphs/" ++ dirLocation)
-      buildSVG 1 M.empty ("../res/graphs/" ++ dirLocation ++ "/" ++ outputFilename)
+      createDirectoryIfMissing True ("../public/res/graphs/" ++ dirLocation)
+      buildSVG 1 M.empty ("../public/res/graphs/" ++ dirLocation ++ "/" ++ outputFilename)
       print "Success"
 
 parseGraph :: String -> ([Path],[Shape],[Text])
