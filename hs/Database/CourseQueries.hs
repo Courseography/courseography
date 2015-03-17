@@ -1,6 +1,6 @@
 {-# LANGUAGE ScopedTypeVariables, OverloadedStrings #-}
 
-module Database.CourseQueries (retrieveCourse, allCourses) where
+module Database.CourseQueries (retrieveCourse, allCourses, queryGraphs) where
 
 import Database.Persist
 import Database.Persist.Sqlite
@@ -93,3 +93,10 @@ allCourses = do
       return $ T.unlines codes
   return $ toResponse response
 
+-- | Queries the graphs table and returns a JSON response of Graph JSON
+-- objects.
+queryGraphs :: IO Response
+queryGraphs =
+    runSqlite dbStr $
+        do graphs :: [Entity Graph] <- selectList [] []
+           return $ toResponse $ createJSONResponse $ encodeJSON $ Aeson.toJSON $ map (Aeson.toJSON . entityVal) graphs
