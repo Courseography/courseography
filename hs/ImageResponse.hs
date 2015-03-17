@@ -32,7 +32,7 @@ timetableImageResponse courses = do
 -- | Creates an image, and returns the base64 representation of that image.
 getGraphImage :: M.Map String String -> IO Response
 getGraphImage courseMap = do
-	buildSVG courseMap "Testfile2.svg"
+	buildSVG 1 courseMap "Testfile2.svg"
 	liftIO $ createImageFile "Testfile2.svg" "INSERT_ID-graph.png"
 	imageData <- BS.readFile "INSERT_ID-graph.png"
 	liftIO $ removeImage "INSERT_ID-graph.png"

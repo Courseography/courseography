@@ -22,7 +22,7 @@ queryCourse :: T.Text -> IO Response
 queryCourse lowerStr =
     runSqlite dbStr $ do
         let courseStr = T.toUpper lowerStr
-        sqlCourse :: [Entity Courses] <- selectFirst [CoursesCode ==. courseStr] []
+        sqlCourse :: [Entity Courses] <- selectList [CoursesCode ==. courseStr] []
         sqlLecturesFall    :: [Entity Lectures]   <- selectList [LecturesCode  ==. courseStr,
                                                                  LecturesSession ==. "F"] []
         sqlLecturesSpring  :: [Entity Lectures]   <- selectList [LecturesCode  ==. courseStr,
@@ -35,7 +35,7 @@ queryCourse lowerStr =
                                                                  TutorialsSession ==. "S"] []
         sqlTutorialsYear   :: [Entity Tutorials]  <- selectList [TutorialsCode ==. courseStr,
                                                                  TutorialsSession ==. "Y"] []
-        let course        = entityVal sqlCourse
+        let course        = entityVal $ head sqlCourse
             fallSession   = buildSession sqlLecturesFall sqlTutorialsFall
             springSession = buildSession sqlLecturesSpring sqlTutorialsSpring
             yearSession   = buildSession sqlLecturesYear sqlTutorialsYear

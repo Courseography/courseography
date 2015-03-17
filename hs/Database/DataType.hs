@@ -1,14 +1,4 @@
-{-# LANGUAGE EmptyDataDecls,
-             FlexibleContexts,
-             FlexibleInstances,
-             GADTs,
-             GeneralizedNewtypeDeriving,
-             MultiParamTypeClasses,
-             OverloadedStrings,
-             DeriveGeneric,
-             QuasiQuotes,
-             TemplateHaskell,
-             TypeFamilies #-}
+{-# LANGUAGE TemplateHaskell #-}
 module Database.DataType where
 
 import Database.Persist.TH
