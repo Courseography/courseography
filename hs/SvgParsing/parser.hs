@@ -119,7 +119,9 @@ parsePath content =
                     ""
                     "")
     where d = parsePathD $ getAttribute "d" content
-          isRegion = not $ null (getNewStyleAttr (getAttribute "style" content) "fill" "")
+          fillAttr = getNewStyleAttr (getAttribute "style" content) "fill" ""
+          isRegion = not $
+              null fillAttr || fillAttr == "none"
 
 -- | Parses a text.
 parseText :: Content i -> Text
