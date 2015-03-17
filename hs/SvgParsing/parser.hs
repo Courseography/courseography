@@ -70,7 +70,7 @@ parseNode content =
     then ([],[],[])
     else let trans          = parseTransform $ getAttribute "transform" content
              style          = getAttribute "style" content
-             fill           = getNewStyleAttr style "fill" ""
+             fill           = getStyleAttr style "fill"
              (chilrenPaths, childrenShapes, childrenTexts) = parseChildren (path [children] content)
              rects    = map parseRect (tag "rect" content)
              texts    = map parseText (tag "text" content)
@@ -119,7 +119,7 @@ parsePath content =
                     ""
                     "")
     where d = parsePathD $ getAttribute "d" content
-          fillAttr = getNewStyleAttr (getAttribute "style" content) "fill" ""
+          fillAttr = getStyleAttr (getAttribute "style" content) "fill"
           isRegion = not $
               null fillAttr || fillAttr == "none"
 
