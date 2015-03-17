@@ -246,4 +246,4 @@ instance ToJSON Graph where
     toJSON (Graph id_ title)
         = object ["graph_title" .= title,
                   "graph_id" .= id_
-                  ]
+                 ]

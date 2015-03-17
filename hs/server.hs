@@ -35,4 +35,3 @@ main = do
                dir "all-courses" $ liftIO allCourses,
                dir "graphs" $ liftIO queryGraphs
                ]
-
