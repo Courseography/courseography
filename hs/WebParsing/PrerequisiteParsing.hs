@@ -34,7 +34,7 @@ matchDelim prereqs =
 --      isntDelim "(STA247, STA248)" == False
 isntDelim :: String -> Bool
 isntDelim rest = 
-  let pat = "^.*)" :: String
+  let pat = "^.[^(]*\\)" :: String
   in rest =~ pat 
 
 -- |Splits a PrereqString by delimeters ';'' ','. 
