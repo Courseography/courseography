@@ -40,7 +40,7 @@ queryCourse lowerStr =
             springSession = buildSession sqlLecturesSpring sqlTutorialsSpring
             yearSession   = buildSession sqlLecturesYear sqlTutorialsYear
             courseJSON    = buildCourse fallSession springSession yearSession course
-        return $ toResponse $ createJSONResponse $ encodeJSON $ Aeson.toJSON courseJSON
+        return $ createJSONResponse $ encodeJSON $ Aeson.toJSON courseJSON
 
 -- | Builds a Course structure from a tuple from the Courses table.
 -- Some fields still need to be added in.
@@ -99,4 +99,4 @@ queryGraphs :: IO Response
 queryGraphs =
     runSqlite dbStr $
         do graphs :: [Entity Graph] <- selectList [] []
-           return $ toResponse $ createJSONResponse $ encodeJSON $ Aeson.toJSON $ map (Aeson.toJSON . entityVal) graphs
+           return $ createJSONResponse $ encodeJSON $ Aeson.toJSON $ map (Aeson.toJSON . entityVal) graphs
