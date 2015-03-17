@@ -96,3 +96,7 @@ intersects width height (rx, ry) offset (px, py) =
        dx <= width + offset &&
        dy >= -1 * offset &&
        dy <= height + offset;
+
+-- | Reads an attribute.
+readAttr :: Read a => String -> Content i -> a
+readAttr attr content = read $ getAttribute attr content

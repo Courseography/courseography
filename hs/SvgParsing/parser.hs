@@ -70,7 +70,7 @@ parseNode content =
     then ([],[],[])
     else let trans          = parseTransform $ getAttribute "transform" content
              style          = getAttribute "style" content
-             fill           = getStyleAttr style "fill"
+             fill           = getStyleAttr "fill" style
              (chilrenPaths, childrenShapes, childrenTexts) = parseChildren (path [children] content)
              rects    = map parseRect (tag "rect" content)
              texts    = map parseText (tag "text" content)
@@ -95,10 +95,10 @@ parseRect :: Content i -> Shape
 parseRect content =
     Shape 1
           ""
-          (read $ getAttribute "x" content,
-           read $ getAttribute "y" content)
-          (read $ getAttribute "width" content)
-          (read $ getAttribute "height" content)
+          (readAttr "x" content,
+           readAttr "y" content)
+          (readAttr "width" content)
+          (readAttr "height" content)
           ""
           ""
           []
@@ -119,7 +119,7 @@ parsePath content =
                     ""
                     "")
     where d = parsePathD $ getAttribute "d" content
-          fillAttr = getStyleAttr (getAttribute "style" content) "fill"
+          fillAttr = getStyleAttr "fill" (getAttribute "style" content)
           isRegion = not $
               null fillAttr || fillAttr == "none"
 
@@ -128,8 +128,8 @@ parseText :: Content i -> Text
 parseText content =
     Text 1
          (getAttribute "id" content)
-         (read $ getAttribute "x" content,
-          read $ getAttribute "y" content)
+         (readAttr "x" content,
+          readAttr "y" content)
          (tagTextContent content)
 
 -- | Parses an ellipse.
@@ -137,10 +137,10 @@ parseEllipse :: Content i -> Shape
 parseEllipse content =
     Shape 1
           ""
-          (read $ getAttribute "cx" content,
-           read $ getAttribute "cy" content)
-          (read (getAttribute "rx" content) * 2)
-          (read (getAttribute "ry" content) * 2)
+          (readAttr "cx" content,
+           readAttr "cy" content)
+          ((readAttr "rx" content) * 2)
+          ((readAttr "ry" content) * 2)
           ""
           ""
           []
