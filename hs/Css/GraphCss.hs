@@ -17,7 +17,6 @@ graphStyles = do
     pathCSS
     resetCSS
     titleCSS
-    modalCSS
     regionCSS
 
 {- nodeCSS
@@ -300,45 +299,3 @@ titleCSS = "#svgTitle" ? do
 
 regionCSS = ".region-label" ? do
     "text-anchor" -: "start"
-
-{- modalCSS
- - Generates CSS for the modal that appears
- - when nodes in the graph are clicked. -}
-
-modalCSS = do
-    ".ui-dialog" ? do
-        outline solid (px 0) black
-    ".ui-widget-overlay" ? do
-        height100
-        width100
-        position fixed
-        left nil
-        top nil
-    ".modal" ? do
-        backgroundColor modalColor
-        padding (px 20) (px 20) (px 20) (px 20)
-        width (pct 70)
-        height (pct 70)
-        overflow auto
-        position static
-        p ? do
-            color white
-    ".ui-dialog-titlebar" ? do
-        backgroundColor $ parse "#222266"
-        color white
-        fontSize (em 2)
-        cursor move
-        alignCenter
-    ".ui-dialog-titlebar-close" ? do
-        display none
-    "#bottom-content-container" ? do
-        paddingTop (em 1)
-    ".ui-width-overlay" ? do
-        height100
-        width100
-        left nil
-        position fixed
-        top nil
-    ".ui-dialog" ? do
-        tr ? do
-            margin nil auto nil auto
