@@ -34,7 +34,7 @@ $('#graph-csc').click(function(e) {
 
     buildGraph();
 
-    FCEPrerequisiteCourses = [CSC318, CSC454];
+    FCEPrerequisiteCourses = [csc318, csc454];
 
     // Set mouse callbacks
     setMouseCallbacks();
