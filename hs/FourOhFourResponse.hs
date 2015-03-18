@@ -35,5 +35,5 @@ fourOhFourHtml = H.div ! A.id "contentDiv" $ do
     H.li $ makeA "" "" "grid" "" $ "Grid"
 
 dragon :: H.Html
-dragon = createTag H.div "picDiv" "" ""
+dragon = createTag H.div "picDiv" "" "Imagine dragons making smores ..."
 
