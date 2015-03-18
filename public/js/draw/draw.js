@@ -313,11 +313,11 @@ function finishRegion() {
         curPath.setAttributeNS(null, 'd', curPath.getAttribute('d') + 'Z');
         curPath.setAttributeNS(null, 'style', 'fill:#2fff2b;opacity:0.7;fill-opacity:0.58;');
         curPath.addEventListener('click', regionClicked, false);
-        curPath.setAttributeNS(null, 'pointer-events','boundingBox');
+        curPath.setAttributeNS(null, 'pointer-events','boundingBox'); // necessary?
         
         curPath.elbows.map(function (item) {
             item.path = regionId; 
-        });
+        }
         regionId += 1;
         curPath = null;
         startPoint = null;
@@ -337,7 +337,7 @@ function regionClicked(e) {
         e.currentTarget.elbows.map(function (item) {
             svgDoc.removeChild(item);
         });
-        svgDoc.removeChild(e.currentTarget);
+        document.getElementById('regions').removeChild(e.currentTarget);
     }
 }
 
