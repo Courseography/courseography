@@ -10,6 +10,7 @@ import Text.XML.HaXml.Util
 import Text.XML.HaXml.XmlContent.Parser
 import qualified Data.Conduit.List as CL
 import Database.Persist
+import Database.Persist.Types
 import Control.Monad.IO.Class (liftIO)
 import Database.Persist.Sqlite
 import Control.Monad
@@ -19,7 +20,7 @@ import System.Directory
 import Data.Conduit
 import Data.List.Split
 import Data.Maybe
-import Data.List
+import Data.List hiding (insert)
 import Data.Text as T (pack, unpack)
 import Database.Tables
 import Database.DataType
@@ -38,7 +39,9 @@ performParse dirLocation inputFilename outputFilename =
    do graphFile <- readFile ("../public/res/graphs/" ++ inputFilename)
       let parsedGraph = parseGraph graphFile
       print "Graph Parsed"
-      insertGraph 1 dirLocation parsedGraph
+      str <- insertGraph dirLocation
+      insertElements parsedGraph
+      print str
       print "Graph Inserted"
       createDirectoryIfMissing True ("../public/res/graphs/" ++ dirLocation)
       buildSVG 1 M.empty ("../public/res/graphs/" ++ dirLocation ++ "/" ++ outputFilename)
@@ -49,15 +52,18 @@ parseGraph graphFile =
     let graphDoc = xmlParse "output.error" graphFile
     in parseNode (getRoot graphDoc)
 
-insertGraph :: Int -> String -> ([Path],[Shape],[Text]) -> IO ()
-insertGraph gId graphTitle (paths, shapes, texts) =
+insertGraph :: String -> IO String
+insertGraph graphTitle =
     runSqlite dbStr $ do
         runMigration migrateAll
-        deleteWhere [GraphGId ==. gId]
-        deleteWhere [ShapeGId ==. gId]
-        deleteWhere [PathGId  ==. gId]
-        deleteWhere [TextGId  ==. gId]
-        insert_ (Graph gId graphTitle)
+        key <- insert (Graph "" graphTitle)
+        let keyId = show $ unSqlBackendKey $ unGraphKey key
+        update key [GraphGId =. keyId]
+        return keyId
+
+insertElements :: ([Path], [Shape], [Text]) -> IO ()
+insertElements (paths, shapes, texts) =
+    runSqlite dbStr $ do
         mapM_ insert_ shapes
         mapM_ insert_ paths
         mapM_ insert_ texts
@@ -93,7 +99,7 @@ addThree (a,b,c) (d,e,f) = (a ++ d, b ++ e, c ++f)
 -- | Parses a rect.
 parseRect :: Content i -> Shape
 parseRect content =
-    Shape 1
+    Shape "1"
           ""
           (read $ getAttribute "x" content,
            read $ getAttribute "y" content)
@@ -110,7 +116,7 @@ parsePath :: Content i -> Maybe Path
 parsePath content =
     if last (getAttribute "d" content) == 'z' && not isRegion
     then Nothing
-    else Just (Path 1
+    else Just (Path "1"
                     ""
                     d
                     ""
@@ -126,7 +132,7 @@ parsePath content =
 -- | Parses a text.
 parseText :: Content i -> Text
 parseText content =
-    Text 1
+    Text "1"
          (getAttribute "id" content)
          (read $ getAttribute "x" content,
           read $ getAttribute "y" content)
@@ -135,7 +141,7 @@ parseText content =
 -- | Parses an ellipse.
 parseEllipse :: Content i -> Shape
 parseEllipse content =
-    Shape 1
+    Shape "1"
           ""
           (read $ getAttribute "cx" content,
            read $ getAttribute "cy" content)

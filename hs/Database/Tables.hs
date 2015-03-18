@@ -69,19 +69,19 @@ Distribution
     deriving Show
 
 Graph
-    gId Int
+    gId String
     title String
     deriving Show
 
 Text
-    gId Int
+    gId String
     rId String
     pos Point
     text String
     deriving Show
 
 Shape
-    gId Int
+    gId String
     id_ String
     pos Point
     width Double
@@ -93,7 +93,7 @@ Shape
     type_ ShapeType
 
 Path
-    gId Int
+    gId String
     id_ String
     points [Point]
     fill String
