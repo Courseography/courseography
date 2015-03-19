@@ -4,41 +4,10 @@
 function openFBPostModal() {
     'use strict';
 
-    var context = $("#courseography-header").attr("context");
+    var div = createFBModalDiv();
 
-    if ($('.modal').length === 0) {
-        var div = createFBModalDiv();
-
-        div.attr('title', 'Post To Facebook')
-            .addClass('modal').dialog({
-                autoOpen: true,
-                modal: true,
-                minWidth: 850,
-                minHeight: 600,
-                closeText: 'X',
-                open: function(event, ui) {
-                    $('.ui-widget-overlay').bind('click', function () {
-                        div.dialog('close');
-                    }); },
-                close: function () {
-                    $(this).remove();
-                    if (context === 'graph') {
-                        $.each(nodes, function (index, elem) {
-                            window[elem].updateSVG();
-                        });
-                        $('body').css('background', 'rgb(255,255,255)');
-                    }
-                }});
-
-        if (context === 'graph') {
-            $('.node, .hybrid').attr('data-active', 'unlit');
-            $('body').css('background', 'rgb(40,40,40)');
-
-            $('.tooltip-group').remove();
-        }
-    }
+    openModal('Post To Facebook', div);
 }
-
 
 /**
  * Creates and returns the Facebook modal content div.
@@ -49,7 +18,7 @@ function createFBModalDiv() {
 
     var context = $('#courseography-header').attr('context');
     var session = 'fall';
-    var img = (context === 'graph') ? getGraphImage() : getGridImage(session) ;
+    var img = (context === 'graph') ? getGraphImage() : getGridImage(session);
     var contentDiv = $('<div></div>');
     var topContentDiv = $('<div></div>');
     var bottomContentDiv = $('<div></div>');

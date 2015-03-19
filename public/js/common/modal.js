@@ -218,7 +218,7 @@ function createG(nodeId) {
     g.attr('class', 'tooltip-group')
         .css('cursor', 'pointer')
         .click(function () {
-            openModal(nodeId);
+            openCourseModal(nodeId);
         });
     $('#nodes').append(g);
     return g;
@@ -230,38 +230,52 @@ function createG(nodeId) {
  * @param {string} id The course code.
  * TODO: Needs to be cleaned up.
  */
-function openModal(id) {
+function openCourseModal(id) {
     'use strict';
 
-    if ($('.modal').length === 0) {
-        var div = createModalDiv(id);
-        div.attr('title', getCourseTitle(id))
-           .addClass('modal').dialog({
-                autoOpen: true,
-                modal: true,
-                minWidth: 1000,
-                minHeight: 600,
-                closeText: 'X',
-                open: function(event, ui) {
-                        $('.ui-widget-overlay').bind('click', function () {
-                                                                  div.dialog('close');
-                                                              }); },
-                close: function () {
-                    $(this).remove();
-                    $.each(nodes, function (index, elem) {
-                        window[elem].updateSVG();
-                    });
-                    $('body').css('background', 'rgb(255,255,255)');
-                }});
-
-        $('.node, .hybrid').attr('data-active', 'unlit');
-        $('body').css('background', 'rgb(40,40,40)');
-
-        enableVideoJS();
-        $('.tooltip-group').remove();
-    }
+    openModal(getCourseTitle(id), createModalDiv(id));
 }
 
+
+/**
+ * Opens a modal.
+ * @param {String} title The title of the modal.
+ * @param {jQuery} modalDiv The title of the modal.
+ */
+function openModal(title, modalDiv) {
+
+    var context = $('#courseography-header').attr('context');
+
+    if ($('.modal').length === 0) {
+        modalDiv.attr('title', title)
+                .addClass('modal').dialog({
+                    autoOpen: true,
+                    modal: true,
+                    minWidth: 850,
+                    minHeight: 600,
+                    closeText: 'X',
+                    open: function(event, ui) {
+                        $('.ui-widget-overlay').bind('click', function () {
+                            modalDiv.dialog('close');
+                        }); },
+                    close: function () {
+                        $(this).remove();
+                        if (context === 'graph') {
+                            $.each(nodes, function (index, elem) {
+                                window[elem].updateSVG();
+                            });
+                            $('body').css('background', 'rgb(255,255,255)');
+                        }
+                    }});
+
+        if (context === 'graph') {
+            $('.node, .hybrid').attr('data-active', 'unlit');
+            $('body').css('background', 'rgb(40,40,40)');
+
+            $('.tooltip-group').remove();
+        }
+    }
+}
 
 /**
  * Enables VideoJS.
