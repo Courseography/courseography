@@ -41,10 +41,19 @@ function createGraphButtons() {
 /**
  * Click function to load graph, based on button clicked in sidebar.
 **/
-$('div').on('click', 'div.graph-button', function(e) {
-    'use-strict';
-
+$('div').on('click', 'div.graph-button', function() {
     var id = $(this).attr('id');
+    loadGraph(id);
+});
+
+
+/**
+ * Loads a Graph
+ * @param{string} id ID name of graph button clicked
+**/
+function loadGraph(id) {
+    'use-strict';
+    
     var graph = id.substring(6, id.length);
 
     // Remove current graph
@@ -52,9 +61,9 @@ $('div').on('click', 'div.graph-button', function(e) {
 
     getRemote(graph.toUpperCase() + '/' + graph + '_graph.svg');
 
-    buildGraph();
-
     FCEPrerequisiteCourses = [csc318, csc454];
+
+    buildGraph();
 
     // Set mouse callbacks
     setMouseCallbacks();
@@ -71,4 +80,4 @@ $('div').on('click', 'div.graph-button', function(e) {
     // activateFeedbackForm();
     // Uncomment to enable graph dragging
     // enableGraphDragging();
-});
+};
