@@ -10,7 +10,6 @@ import Text.XML.HaXml.Util
 import Text.XML.HaXml.XmlContent.Parser
 import qualified Data.Conduit.List as CL
 import Database.Persist
-import Database.Persist.Types
 import Control.Monad.IO.Class (liftIO)
 import Database.Persist.Sqlite
 import Control.Monad
