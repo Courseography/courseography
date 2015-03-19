@@ -24,8 +24,10 @@ $('#graphs-nav').click(function (e) {
 
     e.preventDefault();
     resetDivs();
+    $('#graphs').empty();
     $('#graphs').show();
     $('#graphs-nav').addClass('active');
+    createGraphButtons();
 
 });
 

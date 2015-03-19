@@ -1,3 +1,6 @@
+var filenames = {'CSC': 'CSC/csc_graph.svg', 'STA': 'STA/sta_graph.svg'};
+var gIDs = {'CSC': 1, 'STA': 2};
+
 /**
  * The click function when a focus is clicked.
 **/
@@ -20,6 +23,15 @@ $('.focus').click(function(e){
     } 
 });
 
+function createGraphButtons() {
+    for (graph in filenames) {
+        if (filenames.hasOwnProperty(graph)) {
+            var graphButton = '<div id = "graph-' + graph.toLowerCase() +'" class = "graph-button">';
+            $('#graphs').append(graphButton);
+            $('#graph-' + graph.toLowerCase()).html(graph);
+        }
+    }
+}
 
 /**
  * Click function to load CSC graph
@@ -64,7 +76,7 @@ $('#graph-sta').click(function(e) {
     // Remove current graph
     $('#graph').empty();
 
-    getRemote('dummygraph.svg');
+    getRemote('STA/dummy_graph.svg');
 
     buildGraph();
 
