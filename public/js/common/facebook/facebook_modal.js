@@ -9,6 +9,7 @@ function openFBPostModal() {
     openModal('Post To Facebook', div);
 }
 
+
 /**
  * Creates and returns the Facebook modal content div.
  * @returns {jQuery} The Facebook modal content div.

@@ -240,7 +240,7 @@ function openCourseModal(id) {
 /**
  * Opens a modal.
  * @param {String} title The title of the modal.
- * @param {jQuery} modalDiv The title of the modal.
+ * @param {jQuery} modalDiv The div that is opened as a modal.
  */
 function openModal(title, modalDiv) {
 
@@ -276,6 +276,7 @@ function openModal(title, modalDiv) {
         }
     }
 }
+
 
 /**
  * Enables VideoJS.
