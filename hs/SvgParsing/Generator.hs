@@ -154,7 +154,7 @@ convertRectToSVG :: M.Map String String -> Shape -> S.Svg
 convertRectToSVG courseMap rect
     | shapeFill rect == "none" = S.rect
     | otherwise =
-        S.g ! A.id_ (stringValue $ shapeId_ rect)
+        S.g ! A.id_ (stringValue $ filter (/=',') $ shapeId_ rect)
             ! A.class_ (if shapeIsHybrid rect then "hybrid" else "node")
             ! S.customAttribute "data-group" (stringValue (getArea (shapeId_ rect)))
             ! S.customAttribute "text-rendering" "geometricPrecision"
