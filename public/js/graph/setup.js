@@ -21,7 +21,7 @@ var nodes = [];               // List of all nodes
 $(document).ready(function () {
     loadGraph('graph-csc');
     $('#fcecount').hide();
-})
+});
 
 /**
  * Retrieves an SVG file.
