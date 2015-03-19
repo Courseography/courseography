@@ -23,6 +23,10 @@ $('.focus').click(function(e){
     } 
 });
 
+
+/**
+ * Dynamically creates buttons for each graph in the sidebar.
+**/
 function createGraphButtons() {
     for (graph in filenames) {
         if (filenames.hasOwnProperty(graph)) {
@@ -33,16 +37,20 @@ function createGraphButtons() {
     }
 }
 
+
 /**
- * Click function to load CSC graph
+ * Click function to load graph, based on button clicked in sidebar.
 **/
-$('#graph-csc').click(function(e) {
+$('div').on('click', 'div.graph-button', function(e) {
     'use-strict';
+
+    var id = $(this).attr('id');
+    var graph = id.substring(6, id.length);
 
     // Remove current graph
     $('#graph').empty();
 
-    getRemote('CSC/csc_graph.svg');
+    getRemote(graph.toUpperCase() + '/' + graph + '_graph.svg');
 
     buildGraph();
 
@@ -63,25 +71,4 @@ $('#graph-csc').click(function(e) {
     // activateFeedbackForm();
     // Uncomment to enable graph dragging
     // enableGraphDragging();
-});
-
-
-/**
- * Click function to load Statistics Graph
- * NOTE: A dummy graph is loaded at the moment
-**/
-$('#graph-sta').click(function(e) {
-    'use strict';
-
-    // Remove current graph
-    $('#graph').empty();
-
-    getRemote('STA/dummy_graph.svg');
-
-    buildGraph();
-
-    //setMouseCallbacks();
-
-    //initializeGraphSettings();
-
 });
