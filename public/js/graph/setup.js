@@ -18,6 +18,11 @@ var courseCache = [];         // Cached Courses. Courses are cached to
 
 var nodes = [];               // List of all nodes
 
+$(document).ready(function () {
+    loadGraph('graph-csc');
+    $('#fcecount').hide();
+})
+
 /**
  * Retrieves an SVG file.
  * @param {string} The relative filepath of the graph
