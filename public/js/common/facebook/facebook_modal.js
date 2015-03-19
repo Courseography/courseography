@@ -4,6 +4,8 @@
 function openFBPostModal() {
     'use strict';
 
+    var context = $("#courseography-header").attr("context");
+
     if ($('.modal').length === 0) {
         var div = createFBModalDiv();
 
@@ -20,16 +22,20 @@ function openFBPostModal() {
                     }); },
                 close: function () {
                     $(this).remove();
-                    $.each(nodes, function (index, elem) {
-                        window[elem].updateSVG();
-                    });
-                    $('body').css('background', 'rgb(255,255,255)');
+                    if (context === 'graph') {
+                        $.each(nodes, function (index, elem) {
+                            window[elem].updateSVG();
+                        });
+                        $('body').css('background', 'rgb(255,255,255)');
+                    }
                 }});
 
-        $('.node, .hybrid').attr('data-active', 'unlit');
-        $('body').css('background', 'rgb(40,40,40)');
+        if (context === 'graph') {
+            $('.node, .hybrid').attr('data-active', 'unlit');
+            $('body').css('background', 'rgb(40,40,40)');
 
-        $('.tooltip-group').remove();
+            $('.tooltip-group').remove();
+        }
     }
 }
 
