@@ -43,7 +43,7 @@ getGraphImage courseMap = do
 -- | Creates an image, and returns the base64 representation of that image.
 getTimetableImage :: String -> String -> IO Response
 getTimetableImage courses session =
-    do liftIO $ (renderTable "circle.svg" courses session)
+    do liftIO $ renderTable "circle.svg" courses session
        liftIO $ createImageFile "circle.svg" "INSERT_ID-graph.png"
        imageData <- BS.readFile "INSERT_ID-graph.png"
        liftIO $ removeImage "INSERT_ID-graph.png"

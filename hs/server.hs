@@ -31,7 +31,7 @@ main = do
         msum [ dir "grid" gridResponse,
                dir "graph" graphResponse,
                dir "image" $ graphImageResponse,
-               dir "timetable-image" $ look "courses" >>= \x -> look "session" >>= (timetableImageResponse x),
+               dir "timetable-image" $ look "courses" >>= \x -> look "session" >>= timetableImageResponse x,
                dir "graph-fb" $ seeOther redirectUrlGraphEmail $ toResponse "",
                dir "post-fb" $ seeOther redirectUrlGraphPost $ toResponse "",
                dir "test" $ look "code" >>= getEmail,
