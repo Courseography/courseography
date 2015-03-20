@@ -118,6 +118,8 @@ timetableCSS = do
             fontSize (em 0.9)
         ".timetable-time" ? do
             width (pct 12)
+        ".timetable-dummy-cell" ? do
+            width (pct 1)
     -- Overriding bootstrap
     ".col-md-2" ? do
         width (pct 14)

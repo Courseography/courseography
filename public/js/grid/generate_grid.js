@@ -64,8 +64,7 @@ function appendHeaders(fallThead, springThead) {
     var days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
 
     fallThead.append($('<th></th>')
-        .addClass('term-name')
-        .css('width', '1px'));   
+        .addClass('timetable-dummy-cell'));   
 
     fallThead.append($('<th></th>')
         .addClass('term-name')
@@ -83,8 +82,7 @@ function appendHeaders(fallThead, springThead) {
         .html('Spring'));
 
     springThead.append($('<th></th>')
-        .addClass('term-name')
-        .css('width', '1px'));  
+        .addClass('timetable-dummy-cell'));  
 }
 
 
@@ -126,9 +124,7 @@ function appendTableData(trFall, trSpring, time) {
         var adjustedTime = (time === 12 ? 12 : time % 12) + ':00';
 
         trFall.append($('<td></td>')
-            .addClass('timetable-cell')
-            .css('border-style', 'none')
-            .css('width', '1px'));
+            .addClass('timetable-dummy-cell'));
         
         trFall.append($('<td></td>')
            .addClass('timetable-time')
@@ -156,17 +152,14 @@ function appendTableData(trFall, trSpring, time) {
             .html(adjustedTime));
 
         trSpring.append($('<td></td>')
-            .addClass('timetable-cell')
-            .css('border-style', 'none')
-            .css('width', '1px'));
+            .addClass('timetable-dummy-cell'));
 
     } else {
         var adjustedTime = '';
 
         trFall.append($('<td></td>')
-            .addClass('timetable-cell')
-            .css('border-style', 'none')
-            .css('width', '1px'));
+            .addClass('timetable-dummy-cell')
+            .css('border-style', 'none'));
 
         for (var k = 0; k < 5; k++) {
             trFall.append($('<td></td>')
@@ -186,9 +179,8 @@ function appendTableData(trFall, trSpring, time) {
         }
 
         trSpring.append($('<td></td>')
-            .addClass('timetable-cell')
-            .css('border-style', 'none')
-            .css('width', '1px'));
+            .addClass('timetable-dummy-cell')
+            .css('border-style', 'none'));
     }
 
 }

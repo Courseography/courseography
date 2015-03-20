@@ -228,9 +228,9 @@ instance FromJSON Tutorial where
 
 instance ToJSON Tutorial where
   toJSON (Tutorial Nothing times timeStr) =
-      Array $ V.fromList [toJSON times, toJSON timeStr]
+      Array $ V.fromList [toJSON (map convertTimeToString times), toJSON timeStr]
   toJSON (Tutorial (Just value) times timeStr) =
-      Array $ V.fromList [toJSON value, toJSON times, toJSON timeStr]
+      Array $ V.fromList [toJSON value, toJSON (map convertTimeToString times), toJSON timeStr]
 
 -- | Converts a Double to a T.Text.
 -- This removes the period from the double, as the JavaScript code,
