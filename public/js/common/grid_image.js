@@ -8,10 +8,11 @@ function getGridImage(session) {
 
     var img;
     var courses = getCoursesTable(session);
+    session = session.charAt(0).toUpperCase() + session.slice(1);
     $.ajax({
         url: 'timetable-image',
         async: false,
-        data: "courses=" + courses,
+        data: "courses=" + courses + "&session=" + session,
         success: function (data) {
             img = data;
         },

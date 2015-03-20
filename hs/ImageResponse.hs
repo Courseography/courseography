@@ -24,10 +24,10 @@ graphImageResponse =
                 M.map cookieValue $ M.fromList cookies
 
 -- | Returns an image of the timetable requested by the user.
-timetableImageResponse :: String -> ServerPart Response
-timetableImageResponse courses = do
+timetableImageResponse :: String -> String -> ServerPart Response
+timetableImageResponse courses session = do
   liftIO $ print courses
-  liftIO $ getTimetableImage courses
+  liftIO $ getTimetableImage courses session
 
 -- | Creates an image, and returns the base64 representation of that image.
 getGraphImage :: M.Map String String -> IO Response
@@ -41,9 +41,9 @@ getGraphImage courseMap = do
 	return $ toResponse encodedData
 
 -- | Creates an image, and returns the base64 representation of that image.
-getTimetableImage :: String -> IO Response
-getTimetableImage courses =
-    do liftIO $ renderTable "circle.svg" courses
+getTimetableImage :: String -> String -> IO Response
+getTimetableImage courses session =
+    do liftIO $ (renderTable "circle.svg" courses session)
        liftIO $ createImageFile "circle.svg" "INSERT_ID-graph.png"
        imageData <- BS.readFile "INSERT_ID-graph.png"
        liftIO $ removeImage "INSERT_ID-graph.png"
