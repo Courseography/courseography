@@ -69,3 +69,6 @@ postScripts = concatHtml (map makeScript ["https://ajax.googleapis.com/ajax/libs
                                           "static/js/post/fill_textboxes.js",
                                           "static/js/graph/create_data.js",
                                           "static/js/post/update_categories.js"])
+
+fourOhFourScripts :: H.Html
+fourOhFourScripts = jQuery
