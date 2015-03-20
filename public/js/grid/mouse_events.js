@@ -135,10 +135,6 @@ function renderClearHover(time) {
         $(time).css('font-size', '0');
     }
 
-    if ($(time).attr('rowspan') === '2') {
-        $(time).css('font-size', '0.9em');
-    }
-
     $(time).attr('hover', 'off');
 }
 

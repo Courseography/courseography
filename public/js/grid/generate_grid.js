@@ -158,8 +158,7 @@ function appendTableData(trFall, trSpring, time) {
         var adjustedTime = '';
 
         trFall.append($('<td></td>')
-            .addClass('timetable-dummy-cell')
-            .css('border-style', 'none'));
+            .addClass('timetable-dummy-cell'));
 
         for (var k = 0; k < 5; k++) {
             trFall.append($('<td></td>')
@@ -179,8 +178,7 @@ function appendTableData(trFall, trSpring, time) {
         }
 
         trSpring.append($('<td></td>')
-            .addClass('timetable-dummy-cell')
-            .css('border-style', 'none'));
+            .addClass('timetable-dummy-cell'));
     }
 
 }

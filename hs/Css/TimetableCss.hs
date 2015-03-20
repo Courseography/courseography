@@ -119,7 +119,8 @@ timetableCSS = do
         ".timetable-time" ? do
             width (pct 12)
         ".timetable-dummy-cell" ? do
-            width (pct 1)
+            width (pct 0.1)
+            "border-style" -: "none"
     -- Overriding bootstrap
     ".col-md-2" ? do
         width (pct 14)
