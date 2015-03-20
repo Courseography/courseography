@@ -12,7 +12,7 @@ function getGridImage(session) {
     $.ajax({
         url: 'timetable-image',
         async: false,
-        data: "courses=" + courses + "&session=" + session,
+        data: 'courses=' + courses + '&session=' + session,
         success: function (data) {
             img = data;
         },
@@ -26,13 +26,13 @@ function getGridImage(session) {
 
 
 function getCoursesTable(session) {
-    var sessionChar = session === "fall" ? "F" : "S";
-    var days = ["M", "T", "W", "R", "F"];
-    var courses = "";
+    var sessionChar = session === 'fall' ? 'F' : 'S';
+    var days = ['M', 'T', 'W', 'R', 'F'];
+    var courses = '';
     for (var i = 8; i < 22; i++) {
         for (var j = 0; j < 5; j++) {
-            courses += $("#" + days[j] + i + "-0" + sessionChar).text();
-            courses += "%0A";
+            courses += $('#' + days[j] + i + '-0' + sessionChar).text();
+            courses += '%0A';
         }
     }
 
