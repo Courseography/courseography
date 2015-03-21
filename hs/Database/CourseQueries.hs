@@ -1,6 +1,6 @@
 {-# LANGUAGE ScopedTypeVariables, OverloadedStrings #-}
 
-module Database.CourseQueries (retrieveCourse, allCourses, queryGraphs) where
+module Database.CourseQueries (retrieveCourse, allCourses, queryGraphs, courseInfo) where
 
 import Database.Persist
 import Database.Persist.Sqlite
@@ -11,6 +11,7 @@ import Database.JsonParser
 import Happstack.Server
 import qualified Data.Text as T
 import qualified Data.Aeson as Aeson
+import Data.String.Utils
 
 retrieveCourse :: String -> ServerPart Response
 retrieveCourse course =
@@ -92,6 +93,15 @@ allCourses = do
       let codes = map (coursesCode . entityVal) courses
       return $ T.unlines codes
   return $ toResponse response
+
+-- | Return all course info
+courseInfo :: IO Response
+courseInfo = do
+    response <- runSqlite dbStr $ do
+        courses :: [Entity Courses] <- selectList [] []
+        let csc = filter (startswith "CSC" . T.unpack . coursesCode) $ map entityVal courses
+        return csc
+    return $ createJSONResponse $ encodeJSON $ Aeson.toJSON $ map Aeson.toJSON response
 
 -- | Queries the graphs table and returns a JSON response of Graph JSON
 -- objects.

@@ -10,7 +10,7 @@ import ImageResponse
 import PostResponse
 import FourOhFourResponse
 --import AboutResponse
-import Database.CourseQueries (retrieveCourse, allCourses, queryGraphs)
+import Database.CourseQueries (retrieveCourse, allCourses, queryGraphs, courseInfo)
 import Css.CssGen
 import Filesystem.Path.CurrentOS
 import System.Directory
@@ -35,5 +35,6 @@ main = do
                dir "course" $ look "name" >>= retrieveCourse,
                dir "all-courses" $ liftIO allCourses,
                dir "graphs" $ liftIO queryGraphs,
+               dir "course-info" $ liftIO courseInfo,
                fourOhFourResponse
                ]
