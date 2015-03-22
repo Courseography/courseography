@@ -17,7 +17,7 @@ searchResponse =
         masterTemplate "Courseography - Timetable Search"
                     [H.meta ! A.name "keywords"
                             ! A.content "",
-                            postLinks
+                            searchLinks
                     ]
                     (do header "search"
                         H.div ! A.id "timetableSearch" $ do

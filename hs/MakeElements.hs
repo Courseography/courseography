@@ -63,6 +63,11 @@ fourOhFourLinks = concatHtml (map stylesheet ["//netdna.bootstrapcdn.com/bootstr
                                               "static/style/common/common.css",
                                               "static/style/common/four_oh_four.css"])
 
+searchLinks :: H.Html
+searchLinks = concatHtml (map stylesheet ["//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css",
+                                          "static/style/common/common.css",
+                                          "static/style/search/search_styles.css"])
+
 concatHtml :: [H.Html] -> H.Html
 concatHtml html = sequence_ html
 

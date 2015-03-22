@@ -101,7 +101,7 @@ courseInfo = do
         courses :: [Entity Courses] <- selectList [] []
         lecs    :: [Entity Lectures]   <- selectList [] []
         tuts  :: [Entity Tutorials]   <- selectList [] []
-        let csc = filter (startswith "CSC1" . T.unpack . coursesCode) $ map entityVal courses
+        let csc = filter (startswith "CSC" . T.unpack . coursesCode) $ map entityVal courses
         return $ map (buildTimes (map entityVal lecs) (map entityVal tuts)) csc
 
     return $ createJSONResponse $ encodeJSON $ Aeson.toJSON $ map Aeson.toJSON response

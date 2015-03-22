@@ -24,11 +24,11 @@ var Timetable = React.createClass({
                 fallLec = course.F.lectures.map(function (lec) {
                     return (
                         <tr>
-                        <td class="timetableSection">{lec.section}</td>
-                        <td class="timetableTime">{lec.timeStr}</td>
-                        <td class="timetableInstructor">{lec.instructor}</td>
-                        <td class="timetableCap">{lec.cap}</td>
-                        <td class="timetableWait">{lec.wait}</td>
+                        <td className="timetableSection">{lec.section}</td>
+                        <td className="timetableTime">{lec.timeStr}</td>
+                        <td className="timetableInstructor">{lec.instructor}</td>
+                        <td className="timetableCap">{lec.cap}</td>
+                        <td className="timetableWait">{lec.wait}</td>
                         </tr>);
                 });
             }
@@ -37,48 +37,48 @@ var Timetable = React.createClass({
                 springLec = course.S.lectures.map(function (lec) {
                     return (
                         <tr>
-                        <td class="timetableSection">{lec.section}</td>
-                        <td class="timetableTime">{lec.timeStr}</td>
-                        <td class="timetableInstructor">{lec.instructor}</td>
-                        <td class="timetableCap">{lec.cap}</td>
-                        <td class="timetableWait">{lec.wait}</td>
+                        <td className="timetableSection">{lec.section}</td>
+                        <td className="timetableTime">{lec.timeStr}</td>
+                        <td className="timetableInstructor">{lec.instructor}</td>
+                        <td className="timetableCap">{lec.cap}</td>
+                        <td className="timetableWait">{lec.wait}</td>
                         </tr>);
                 });
             }
 
             return (
                 <tr>
-                    <td class="timetableCourseName">{course.name}</td>
-                    <td class="FOffering"><table class="courseTable">{fallLec}</table></td>
-                    <td class="SOffering"><table class="courseTable">{springLec}</table></td>
+                    <td className="timetableCourseName">{course.name}</td>
+                    <td className="FOffering"><table className="courseTable">{fallLec}</table></td>
+                    <td className="SOffering"><table className="courseTable">{springLec}</table></td>
                 </tr>
             );
         });
         return (
-            <table>
+            <table id="timetableMain">
             <tr>
-            <th class="timetableCourseName">Courses</th>
-            <th class="sessionHeader FOffering">Fall</th>
-            <th class="sessionHeader SOffering">Spring</th>
+            <th className="timetableCourseName">Courses</th>
+            <th className="sessionHeader FOffering">Fall</th>
+            <th className="sessionHeader SOffering">Spring</th>
             </tr>
             <tr>
-            <td class="timetableCourseName"></td>
-            <td class="FOffering">
-                <table class="courseTable"><tbody><tr>
-                    <th class="timetableSection">Sec</th>
-                    <th class="timetableTime">Time</th>
-                    <th class="timetableInstructor">Instructor</th>
-                    <th class="timetableCap">Cap</th>
-                    <th class="timetableWait">Wait</th>
+            <td className="timetableCourseName"></td>
+            <td className="FOffering">
+                <table className="courseTable"><tbody><tr>
+                    <th className="timetableSection">Sec</th>
+                    <th className="timetableTime">Time</th>
+                    <th className="timetableInstructor">Instructor</th>
+                    <th className="timetableCap">Cap</th>
+                    <th className="timetableWait">Wait</th>
                 </tr></tbody></table>
             </td>
-            <td class="SOffering">
-                <table class="courseTable"><tbody><tr>
-                    <th class="timetableSection">Sec</th>
-                    <th class="timetableTime">Time</th>
-                    <th class="timetableInstructor">Instructor</th>
-                    <th class="timetableCap">Cap</th>
-                    <th class="timetableWait">Wait</th>
+            <td className="SOffering">
+                <table className="courseTable"><tbody><tr>
+                    <th className="timetableSection">Sec</th>
+                    <th className="timetableTime">Time</th>
+                    <th className="timetableInstructor">Instructor</th>
+                    <th className="timetableCap">Cap</th>
+                    <th className="timetableWait">Wait</th>
                 </tr></tbody></table>
             </td>
             </tr>
