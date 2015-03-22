@@ -16,6 +16,7 @@ import Database.DataType
 import qualified Data.Text as T
 import qualified Data.Vector as V
 import Data.Aeson
+import Data.Int
 import Control.Monad
 import Control.Applicative
 
@@ -69,19 +70,19 @@ Distribution
     deriving Show
 
 Graph
-    gId Int
+    gId Int64
     title String
     deriving Show
 
 Text
-    gId Int
+    gId Int64
     rId String
     pos Point
     text String
     deriving Show
 
 Shape
-    gId Int
+    gId Int64
     id_ String
     pos Point
     width Double
@@ -93,7 +94,7 @@ Shape
     type_ ShapeType
 
 Path
-    gId Int
+    gId Int64
     id_ String
     points [Point]
     fill String
