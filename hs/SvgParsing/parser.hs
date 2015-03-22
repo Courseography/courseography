@@ -21,6 +21,7 @@ import Data.List.Split
 import Data.Maybe
 import Data.List hiding (insert)
 import Data.Text as T (pack, unpack)
+import Data.Int
 import Database.Tables
 import Database.DataType
 import Database.JsonParser
@@ -38,9 +39,9 @@ performParse dirLocation inputFilename outputFilename =
    do graphFile <- readFile ("../public/res/graphs/" ++ inputFilename)
       let parsedGraph = parseGraph graphFile
       print "Graph Parsed"
-      str <- insertGraph dirLocation
+      key <- insertGraph dirLocation
       insertElements parsedGraph
-      print str
+      print key
       print "Graph Inserted"
       createDirectoryIfMissing True ("../public/res/graphs/" ++ dirLocation)
       buildSVG 1 M.empty ("../public/res/graphs/" ++ dirLocation ++ "/" ++ outputFilename)
@@ -51,12 +52,12 @@ parseGraph graphFile =
     let graphDoc = xmlParse "output.error" graphFile
     in parseNode (getRoot graphDoc)
 
-insertGraph :: String -> IO String
+insertGraph :: String -> IO Int64
 insertGraph graphTitle =
     runSqlite dbStr $ do
         runMigration migrateAll
-        key <- insert (Graph "" graphTitle)
-        let keyId = show $ unSqlBackendKey $ unGraphKey key
+        key <- insert (Graph 0 graphTitle)
+        let (PersistInt64 keyId) = toPersistValue key
         update key [GraphGId =. keyId]
         return keyId
 
@@ -98,7 +99,7 @@ addThree (a,b,c) (d,e,f) = (a ++ d, b ++ e, c ++f)
 -- | Parses a rect.
 parseRect :: Content i -> Shape
 parseRect content =
-    Shape "1"
+    Shape 1
           ""
           (read $ getAttribute "x" content,
            read $ getAttribute "y" content)
@@ -115,7 +116,7 @@ parsePath :: Content i -> Maybe Path
 parsePath content =
     if last (getAttribute "d" content) == 'z' && not isRegion
     then Nothing
-    else Just (Path "1"
+    else Just (Path 1
                     ""
                     d
                     ""
@@ -131,7 +132,7 @@ parsePath content =
 -- | Parses a text.
 parseText :: Content i -> Text
 parseText content =
-    Text "1"
+    Text 1
          (getAttribute "id" content)
          (read $ getAttribute "x" content,
           read $ getAttribute "y" content)
@@ -140,7 +141,7 @@ parseText content =
 -- | Parses an ellipse.
 parseEllipse :: Content i -> Shape
 parseEllipse content =
-    Shape "1"
+    Shape 1
           ""
           (read $ getAttribute "cx" content,
            read $ getAttribute "cy" content)
