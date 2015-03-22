@@ -99,9 +99,30 @@ courseInfo :: IO Response
 courseInfo = do
     response <- runSqlite dbStr $ do
         courses :: [Entity Courses] <- selectList [] []
-        let csc = filter (startswith "CSC" . T.unpack . coursesCode) $ map entityVal courses
-        return csc
+        lecs    :: [Entity Lectures]   <- selectList [] []
+        tuts  :: [Entity Tutorials]   <- selectList [] []
+        let csc = filter (startswith "CSC1" . T.unpack . coursesCode) $ map entityVal courses
+        return $ map (buildTimes (map entityVal lecs) (map entityVal tuts)) csc
+
     return $ createJSONResponse $ encodeJSON $ Aeson.toJSON $ map Aeson.toJSON response
+    where
+        lecByCode course = filter (\lec -> lecturesCode lec == coursesCode course)
+        tutByCode course = filter (\tut -> tutorialsCode tut == coursesCode course)
+        buildTimes lecs tuts course =
+            let fallLectures = filter (\lec -> lecturesSession lec == "F") lecs
+                springLectures = filter (\lec -> lecturesSession lec == "S") lecs
+                yearLectures = filter (\lec -> lecturesSession lec == "Y") lecs
+                fallTutorials = filter (\tut -> tutorialsSession tut == "F") tuts
+                springTutorials = filter (\tut -> tutorialsSession tut == "S") tuts
+                yearTutorials = filter (\tut -> tutorialsSession tut == "Y") tuts
+                fallSession   = buildSession' (lecByCode course fallLectures) (tutByCode course fallTutorials)
+                springSession = buildSession' (lecByCode course springLectures) (tutByCode course springTutorials)
+                yearSession   = buildSession' (lecByCode course yearLectures) (tutByCode course yearTutorials)
+            in
+                buildCourse fallSession springSession yearSession course
+        buildSession' lectures tutorials =
+            Just $ Tables.Session (map buildLecture lectures)
+                                  (map buildTutorial tutorials)
 
 -- | Queries the graphs table and returns a JSON response of Graph JSON
 -- objects.

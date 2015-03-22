@@ -9,6 +9,7 @@ import DrawResponse
 import ImageResponse
 import PostResponse
 import FourOhFourResponse
+import SearchResponse
 --import AboutResponse
 import Database.CourseQueries (retrieveCourse, allCourses, queryGraphs, courseInfo)
 import Css.CssGen
@@ -36,5 +37,6 @@ main = do
                dir "all-courses" $ liftIO allCourses,
                dir "graphs" $ liftIO queryGraphs,
                dir "course-info" $ liftIO courseInfo,
+               dir "timesearch" $ searchResponse,
                fourOhFourResponse
                ]
