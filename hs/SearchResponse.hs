@@ -23,7 +23,7 @@ searchResponse =
                         H.div ! A.id "timetableSearch" $ do
                             H.h2 "2014-2015 Timetable"
                             H.p "Search through the timetable for a course or instructor."
-                            H.input ! A.type_ "text" ! A.class_ "text-input" ! A.id "filter" ! A.value ""
+                            H.input ! A.type_ "text" ! A.class_ "text-input" ! A.id "filter" ! A.placeholder "Search..."
                         H.div ! A.id "timetableContainer" $ ""
                     )
                     searchScripts
