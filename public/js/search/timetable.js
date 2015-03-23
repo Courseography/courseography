@@ -27,7 +27,7 @@ var Timetable = React.createClass({
     render: function() {
         var search = this.state.search;
         var courseRows = this.state.courses.filter(function (course) {
-            return course.name.indexOf(search) > -1 || 
+            return course.name.indexOf(search) > -1 ||
                    (course.F !== null && course.F.lectures.some(function (lec) {
                        return lec.instructor.indexOf(search) > -1; })) ||
                    (course.S !== null && course.S.lectures.some(function (lec) {
@@ -47,7 +47,7 @@ var Timetable = React.createClass({
                     return (
                         <tr>
                         <td className="timetableSection">{lec.section}</td>
-                        <td className="timetableTime">{lec.timeStr}</td>
+                        <td className="timetableTime">{lec.time_str}</td>
                         <td className="timetableInstructor">{lec.instructor}</td>
                         <td className="timetableCap">{lec.cap}</td>
                         <td className="timetableWait">{lec.wait}</td>
@@ -62,7 +62,7 @@ var Timetable = React.createClass({
                     return (
                         <tr>
                         <td className="timetableSection">{lec.section}</td>
-                        <td className="timetableTime">{lec.timeStr}</td>
+                        <td className="timetableTime">{lec.time_str}</td>
                         <td className="timetableInstructor">{lec.instructor}</td>
                         <td className="timetableCap">{lec.cap}</td>
                         <td className="timetableWait">{lec.wait}</td>
