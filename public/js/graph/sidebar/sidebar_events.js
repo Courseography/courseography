@@ -28,12 +28,15 @@ $('.focus').click(function(e){
  * Dynamically creates buttons for each graph in the sidebar.
 **/
 function createGraphButtons() {
-    for (graph in filenames) {
-        if (filenames.hasOwnProperty(graph)) {
-            var graphButton = '<div id = "graph-' + graph.toLowerCase() +'" class = "graph-button">';
-            $('#graphs').append(graphButton);
-            $('#graph-' + graph.toLowerCase()).html(graph);
-        }
+    'use strict';
+
+    var graphs = getGraphsInDatabase();
+
+    for (var i = 0; i < graphs.length; i++) {
+        var graphTitle = graphs[i].graph_title.toLowerCase();
+        var graphButton = '<div id = "graph-' + graphTitle +'" class = "graph-button">';
+        $('#graphs').append(graphButton);
+        $('#graph-' + graphTitle).html(graphTitle.toUpperCase());
     }
 }
 
@@ -42,6 +45,8 @@ function createGraphButtons() {
  * Click function to load graph, based on button clicked in sidebar.
 **/
 $('div').on('click', 'div.graph-button', function() {
+    'use strict';
+
     var id = $(this).attr('id');
     loadGraph(id);
 });
@@ -88,6 +93,7 @@ function loadGraph(id) {
  * @return @returns{JSON[]} A list of JSON objects representing each graph in the database
 **/
 function getGraphsInDatabase() {
+    'use strict';
 
     var graphs;
     $.ajax({
