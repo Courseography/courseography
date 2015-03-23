@@ -15,3 +15,4 @@ var curPath = null;         // the path currently being created
 var elbowMoving = null;     // for movement of elbow joints
 var regionId = 0;
 var startPoint = null;
+var regionMoving = null;

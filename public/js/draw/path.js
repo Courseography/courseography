@@ -188,19 +188,28 @@ function selectElbow(e) {
         var thePath = document.getElementById(e.currentTarget.path);
         var thePathString = thePath.getAttribute('d');
         var elbowNum = thePath.elbows.indexOf(e.currentTarget);
-        if (thePathString[thePathString.length-1] === 'Z') {
-            elbowNum -= 1;
-        }
 
-        // look for elbowNum-th occurance of L
-        for (var i = 0; i <= elbowNum; i++) {
-            indexOfElbow = thePathString.indexOf('L', indexOfElbow + 1);
-        }
-        indexOfNext = thePathString.indexOf('L', indexOfElbow + 1);
-        thePathString = thePathString.slice(0, indexOfElbow) + thePathString.slice(indexOfNext);
-        thePath.elbows.splice(thePath.elbows.indexOf(e.currentTarget), 1);
-        thePath.setAttributeNS(null, 'd', thePathString);
-        svgDoc.removeChild(e.currentTarget);
+        if (thePath.class === 'region' & thePath.elbows.length <= 3) {
+            // remove the whole region, can't have only 2 points in shape
+            thePath.elbows.map(function (item) {
+                svgDoc.removeChild(item);
+            });
+            document.getElementById('regions').removeChild(thePath);
+        } else {
+            if (thePath.class === 'region') {
+                elbowNum -= 1;
+            }
+
+            // look for elbowNum-th occurance of L
+            for (var i = 0; i <= elbowNum; i++) {
+                indexOfElbow = thePathString.indexOf('L', indexOfElbow + 1);
+            }
+            indexOfNext = thePathString.indexOf('L', indexOfElbow + 1);
+            thePathString = thePathString.slice(0, indexOfElbow) + thePathString.slice(indexOfNext);
+            thePath.elbows.splice(thePath.elbows.indexOf(e.currentTarget), 1);
+            thePath.setAttributeNS(null, 'd', thePathString);
+            svgDoc.removeChild(e.currentTarget);
+        } 
     }
 }
 

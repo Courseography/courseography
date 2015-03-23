@@ -273,30 +273,44 @@ function moveNodeElbow(e) {
             prevY = position.y;
         } else if (elbowMoving !== null) {
             var position = getClickPosition(e, elbowMoving);
-            // move dummy node 
-            var elbowX = parseFloat(elbowMoving.getAttribute('cx'), 10);
-            var elbowY = parseFloat(elbowMoving.getAttribute('cy'), 10);
-            elbowX += (position.x - prevX);
-            elbowY += (position.y - prevY);
-            elbowMoving.setAttribute('cx', elbowX);
-            elbowMoving.setAttribute('cy', elbowY);
-
-            // move actual elbow in path
-            var partOfPath = 'elbow';
-            if (elbowMoving.class === 'rElbow') {
-                partOfPath = elbowmoving.partOfPath;
-            }
-
-            console.log(document.getElementById(elbowMoving.path).elbows.indexOf(elbowMoving));
-            movePath(document.getElementById(elbowMoving.path), 
-                     (position.x - prevX), (position.y - prevY), 'elbow',
-                     document.getElementById(elbowMoving.path).elbows.indexOf(elbowMoving));
-
+            moveElbow(elbowMoving, position);
+            prevX = position.x;
+            prevY = position.y;
+        } else if (regionMoving !== null) {
+            // move each elbow
+            var position = getClickPosition(e, elbowMoving);
+            regionMoving.elbows.map(function (elbow) {
+                //console.log(document.getElementById(elbowMoving.path).elbows.indexOf(elbowMoving));
+                moveElbow(elbow, position);
+            });
             prevX = position.x;
             prevY = position.y;
         }
     }
 }
+
+
+function moveElbow(elbow, position) {
+    // move dummy node 
+    var elbowX = parseFloat(elbow.getAttribute('cx'), 10);
+    var elbowY = parseFloat(elbow.getAttribute('cy'), 10);
+    elbowX += (position.x - prevX);
+    elbowY += (position.y - prevY);
+    elbow.setAttribute('cx', elbowX);
+    elbow.setAttribute('cy', elbowY);
+
+    // move actual elbow in path
+    var partOfPath = 'elbow';
+    if (elbow.class === 'rElbow') {
+        partOfPath = elbow.partOfPath;
+    }
+
+    //console.log(document.getElementById(elbow.path).elbows.indexOf(elbow));
+    movePath(document.getElementById(elbow.path), 
+             (position.x - prevX), (position.y - prevY), 'elbow',
+             document.getElementById(elbow.path).elbows.indexOf(elbow));
+}
+
 
 
 /**
@@ -311,6 +325,7 @@ function unclickAll(e) {
         prevX = -1;
         prevY = -1;
         elbowMoving = null;
+        regionMoving = null;
     }
 }
 
@@ -322,15 +337,15 @@ function unclickAll(e) {
 function finishRegion() {
     'use strict';
 
-    if (curPath !== null) {
+    if (curPath !== null & curPath.elbows.length >= 3) {
         curPath.setAttributeNS(null, 'd', curPath.getAttribute('d') + 'Z');
         //curPath.setAttributeNS(null, 'style', 'opacity:0.7;fill-opacity:0.58;border-width:0px');
         curPath.setAttributeNS(null, 'data-group', nodeColourId);
-        curPath.addEventListener('click', regionClicked, false);
+        curPath.addEventListener('mousedown', regionClicked, false);
         curPath.setAttributeNS(null, 'pointer-events','boundingBox'); // necessary?
         curPath.setAttributeNS(null, 'class', 'region');
         curPath.setAttributeNS(null, 'data-active', 'region');
-        
+
         curPath.elbows.map(function (item) {
             item.path = 'r' + regionId; 
             item.setAttributeNS(null, 'class', 'rElbow');
@@ -339,6 +354,11 @@ function finishRegion() {
         regionId += 1;
         curPath = null;
         startPoint = null;
+    } else if (curPath !== null & curPath.elbows.length < 3) {
+        curPath.elbows.map(function (item) {
+            svgDoc.removeChild(item);
+        });
+        document.getElementById('regions').removeChild(curPath);
     }
 }
 
@@ -349,13 +369,16 @@ function finishRegion() {
  */
 function regionClicked(e) {
     if (mode === 'erase-mode') {
-        var index = -1;
-
         // delete the dummy nodes and the path itself
         e.currentTarget.elbows.map(function (item) {
             svgDoc.removeChild(item);
         });
         document.getElementById('regions').removeChild(e.currentTarget);
+    } else if (mode === 'change-mode') {
+        var position = getClickPosition(e, e.currentTarget);
+        regionMoving = e.currentTarget;
+        prevX = position.x;
+        prevY = position.y;
     }
 }
 
