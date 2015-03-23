@@ -162,6 +162,8 @@ graphContainer = do
         clear both
         display inlineBlock
         position absolute
+        textAlign $ alignSide sideCenter
+        "left" -: "20%"
     "#graphRootSVG" ? do
         width100
         height100
