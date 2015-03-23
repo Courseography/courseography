@@ -27,13 +27,23 @@ var Timetable = React.createClass({
     render: function() {
         var search = this.state.search;
         var courseRows = this.state.courses.filter(function (course) {
-            return course.name.indexOf(search) > -1;
-            }).map(function (course) {
+            return course.name.indexOf(search) > -1 || 
+                   (course.F !== null && course.F.lectures.some(function (lec) {
+                       return lec.instructor.indexOf(search) > -1; })) ||
+                   (course.S !== null && course.S.lectures.some(function (lec) {
+                       return lec.instructor.indexOf(search) > -1; })) ||
+                   (course.Y !== null && course.Y.lectures.some(function (lec) {
+                       return lec.instructor.indexOf(search) > -1; }));
+        }).map(function (course) {
             var fallLec = "";
             var springLec = "";
 
+            var inName = course.name.indexOf(search) > -1;
+
             if (course.F !== null) {
-                fallLec = course.F.lectures.map(function (lec) {
+                fallLec = course.F.lectures.filter(function (lec) {
+                    return inName || lec.instructor.indexOf(search) > -1;
+                }).map(function (lec) {
                     return (
                         <tr>
                         <td className="timetableSection">{lec.section}</td>
@@ -46,7 +56,9 @@ var Timetable = React.createClass({
             }
 
             if (course.S !== null) {
-                springLec = course.S.lectures.map(function (lec) {
+                springLec = course.S.lectures.filter(function (lec) {
+                    return inName || lec.instructor.indexOf(search) > -1;
+                }).map(function (lec) {
                     return (
                         <tr>
                         <td className="timetableSection">{lec.section}</td>
