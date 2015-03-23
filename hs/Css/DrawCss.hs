@@ -18,10 +18,7 @@ drawStyles = do
     panelCSS
     modeButtonsCSS
     colourButtonsCSS
-    redCSS
-    greenCSS
-    blueCSS
-    purpleCSS
+    colourCSS
     clickedButtonsCSS 
     inputCSS
     textButtonCSS
@@ -30,6 +27,7 @@ drawStyles = do
     scrollBar
     regionCSS 
     finishRegionCSS
+    saveCSS
 
 {- The wrapping around the canvas elements. -}
 mainCSS = "#main" ? do
@@ -74,19 +72,13 @@ panelCSS = "#mode-panel" ? do
 
 {- Override the default scrollbar styling for side panel -}
 scrollBar = do
-    scroll1 
-    scroll2 
-    scroll3
-
-scroll1 = "::-webkit-scrollbar" ? do
+    "::-webkit-scrollbar" ? do
         width (px 10)
         height (px 10)
- 
-scroll2 = "::-webkit-scrollbar-track" ? do
+    "::-webkit-scrollbar-track" ? do
         "-webkit-box-shadow" -: "inset 0 0 6px rgba(0,0,0,1)"
         "border-radius" -: "10px"
-
-scroll3 = "::-webkit-scrollbar-thumb" ? do 
+    "::-webkit-scrollbar-thumb" ? do 
         "border-radius" -: "10px";
         "-webkit-box-shadow" -: "inset 0 0 6px rgba(0,0,0,0.5)"
         "background-color" -: "#28B0A2"  
@@ -135,17 +127,15 @@ colourButtonsCSS = ".colour" ? do
         cursor pointer
 
 {- Background colours for colour buttons. -}
-redCSS = "#red" ? do
-    backgroundColor $ parse dRed
-    
-greenCSS = "#green" ? do
-    backgroundColor $ parse dGreen
-
-blueCSS = "#blue"? do
-    backgroundColor $ parse dBlue
-
-purpleCSS = "#purple"? do
-    backgroundColor $ parse dPurple
+colourCSS = do
+    "#red" ? do
+        backgroundColor $ parse dRed
+    "#green" ? do
+        backgroundColor $ parse dGreen
+    "#blue"? do
+        backgroundColor $ parse dBlue
+    "#purple"? do
+        backgroundColor $ parse dPurple
 
 {- The input field. -}
 inputCSS = "input" ? do
@@ -218,6 +208,24 @@ finishRegionCSS = "#finish-region" ? do
     fontSize (em 0.75)
     backgroundColor $ parse "#DCDCDC"
     -- border solid (px 2) black
+    "-webkit-transition" -: "all 0.2s"
+    "-moz-transition" -: "all 0.2s"
+    "-ms-transition" -: "all 0.2s"
+    "-o-transition" -: "all 0.2s"
+    "transition" -: "all 0.2s"
+    ":hover" & do
+        "background-color" -: "black !important"
+        "color" -: "#DCDCDC !important"
+        cursor pointer
+
+saveCSS = "#save" ? do
+    width (pct 40)
+    "margin" -: "15px auto 5px auto"
+    padding0
+    roundCorners
+    alignCenter
+    fontSize (em 0.75)
+    border solid (px 2) black
     "-webkit-transition" -: "all 0.2s"
     "-moz-transition" -: "all 0.2s"
     "-ms-transition" -: "all 0.2s"
