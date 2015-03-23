@@ -8,6 +8,7 @@ import GraphResponse
 import DrawResponse
 import ImageResponse
 import PostResponse
+import FourOhFourResponse
 --import AboutResponse
 import Database.CourseQueries (retrieveCourse, allCourses, queryGraphs)
 import Css.CssGen
@@ -33,5 +34,6 @@ main = do
                dir "static" $ serveDirectory EnableBrowsing [] staticDir,
                dir "course" $ look "name" >>= retrieveCourse,
                dir "all-courses" $ liftIO allCourses,
-               dir "graphs" $ liftIO queryGraphs
+               dir "graphs" $ liftIO queryGraphs,
+               fourOhFourResponse
                ]
