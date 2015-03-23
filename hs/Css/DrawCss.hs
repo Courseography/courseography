@@ -28,6 +28,7 @@ drawStyles = do
     textCSS
     elbowCSS
     scrollBar
+    regionCSS 
     finishRegionCSS
 
 {- The wrapping around the canvas elements. -}
@@ -184,12 +185,30 @@ textCSS = ".mylabel" ? do
     "dominant-baseline" -: "central"
 
 {- The invisible elbow nodes. -}
-elbowCSS = ".elbow" ? do
-    opacity 0
-    ":hover" & do
-        cursor pointer
-        opacity 1
+elbowCSS = do 
+    ".elbow" ? do
+        opacity 0
+        ":hover" & do
+            cursor pointer
+            opacity 1
+    ".rElbow" ? do
+        opacity 0
+        ":hover" & do
+            cursor pointer
+            opacity 1
 
+{- The actual region svg elements. -}
+regionCSS = ".region" ? do
+    "data-group" @= "red" & do
+        fill dRed
+    "data-group" @= "blue" & do
+        fill dBlue
+    "data-group" @= "green" & do
+        fill dGreen
+    "data-group" @= "purple" & do
+        fill dPurple
+
+{- The finish button -}
 finishRegionCSS = "#finish-region" ? do
     width (pct 40)
     margin (px 5) (px 5) (px 5) (px 5)

@@ -108,18 +108,23 @@ function makeNodePath(e) {
                 startPoint.setAttributeNS(null, 'cx', position.x);
                 startPoint.setAttributeNS(null, 'cy', position.y);
                 startPoint.setAttributeNS(null, 'r', 4);
-                startPoint.setAttributeNS(null, 'class', 'elbow'); // !! CHANGE CLASS
+                startPoint.setAttributeNS(null, 'class', 'rElbow'); // !! CHANGE CLASS
 
                 startPoint.addEventListener('mousedown', selectElbow, false);
                 svgDoc.appendChild(startPoint);
 
+                startPoint.partOfPath = 'start';
+
         } else if (curPath === null) { // first elbow
             startPath('M' + startPoint.getAttribute('cx') + ',' + startPoint.getAttribute('cy') + ' L' + position.x + ',' + position.y + ' ', 'region');
-            curPath.setAttributeNS(null, 'class', 'region');
+            //curPath.setAttributeNS(null, 'class', 'region');
             curPath.setAttributeNS(null, 'id', 'r' + regionId);
+            var elbow = makeElbow(position);
+            elbow.partOfPath = 'elbow';
         } else { 
             curPath.setAttributeNS(null, 'd', curPath.getAttribute('d') + 'L' + position.x + ',' + position.y + ' ');
-            makeElbow(position);
+            var elbow = makeElbow(position);
+            elbow.partOfPath = 'elbow';
         }
     }
 }
@@ -277,6 +282,12 @@ function moveNodeElbow(e) {
             elbowMoving.setAttribute('cy', elbowY);
 
             // move actual elbow in path
+            var partOfPath = 'elbow';
+            if (elbowMoving.class === 'rElbow') {
+                partOfPath = elbowmoving.partOfPath;
+            }
+
+            console.log(document.getElementById(elbowMoving.path).elbows.indexOf(elbowMoving));
             movePath(document.getElementById(elbowMoving.path), 
                      (position.x - prevX), (position.y - prevY), 'elbow',
                      document.getElementById(elbowMoving.path).elbows.indexOf(elbowMoving));
@@ -309,15 +320,22 @@ function unclickAll(e) {
  * 
  */
 function finishRegion() {
+    'use strict';
+
     if (curPath !== null) {
         curPath.setAttributeNS(null, 'd', curPath.getAttribute('d') + 'Z');
-        curPath.setAttributeNS(null, 'style', 'fill:#2fff2b;opacity:0.7;fill-opacity:0.58;');
+        //curPath.setAttributeNS(null, 'style', 'opacity:0.7;fill-opacity:0.58;border-width:0px');
+        curPath.setAttributeNS(null, 'data-group', nodeColourId);
         curPath.addEventListener('click', regionClicked, false);
         curPath.setAttributeNS(null, 'pointer-events','boundingBox'); // necessary?
+        curPath.setAttributeNS(null, 'class', 'region');
+        curPath.setAttributeNS(null, 'data-active', 'region');
         
         curPath.elbows.map(function (item) {
-            item.path = regionId; 
-        }
+            item.path = 'r' + regionId; 
+            item.setAttributeNS(null, 'class', 'rElbow');
+        });
+
         regionId += 1;
         curPath = null;
         startPoint = null;
