@@ -8,8 +8,9 @@ import GraphResponse
 import DrawResponse
 import ImageResponse
 import PostResponse
+import FourOhFourResponse
 --import AboutResponse
-import Database.CourseQueries
+import Database.CourseQueries (retrieveCourse, allCourses, queryGraphs)
 import Css.CssGen
 import Filesystem.Path.CurrentOS
 import System.Directory
@@ -32,9 +33,7 @@ main = do
                dir "post" postResponse,
                dir "static" $ serveDirectory EnableBrowsing [] staticDir,
                dir "course" $ look "name" >>= retrieveCourse,
-               dir "all-courses" $ liftIO allCourses
+               dir "all-courses" $ liftIO allCourses,
+               dir "graphs" $ liftIO queryGraphs,
+               fourOhFourResponse
                ]
-
-retrieveCourse :: String -> ServerPart Response
-retrieveCourse course =
-    liftIO $ queryCourse (T.pack course)

@@ -14,6 +14,7 @@ import Css.PostCss
 import Css.TimetableCss
 import Css.DrawCss
 import Css.AboutCss
+import Css.FourOhFourCss
 
 styleFiles :: [(String, Css)]
 styleFiles = [
@@ -22,7 +23,8 @@ styleFiles = [
     ("../public/style/grid/timetable_styles.css", timetableStyles),
     ("../public/style/draw/draw_styles.css", drawStyles),
     ("../public/style/post/post_styles.css", postStyles),
-    ("../public/style/common/about.css", aboutStyles)
+    ("../public/style/common/about.css", aboutStyles),
+    ("../public/style/common/four_oh_four.css", fourOhFourStyles)
     ]
 
 renderStyleFile :: (String, Css) -> IO ()
