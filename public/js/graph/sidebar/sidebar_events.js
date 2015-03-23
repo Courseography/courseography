@@ -1,5 +1,4 @@
 var filenames = {'CSC': 'CSC/csc_graph.svg', 'STA': 'STA/sta_graph.svg'};
-var gIDs = {'CSC': 1, 'STA': 2};
 
 /**
  * The click function when a focus is clicked.
