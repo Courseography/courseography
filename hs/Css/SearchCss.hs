@@ -69,33 +69,13 @@ searchStyles = do
             minWidth (px 90)
             alignCenter
             backgroundColor blue5
-        ".FOffering" <> ".SOffering" ? do
+        ".FOffering" <> ".SOffering" <> ".YOffering" ? do
             width (px 460)
             table <? do
                 width (px 460)
                 margin0
                 padding0
                 borderStyle none
-
-{-
-/* Timetable tab */
-
-
-.YOffering {
-  width: 100%;
-}
-.YOffering .courseTable {
-  width: 425px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.timetableInstructor a,
-.timetableInstructor a:hover,
-.timetableInstructor a:visited,
-.timetableInstructor a:active {
-  color: black;
-  font-weight: normal;
-  outline: none;
-}
--}
+        ".YOffering .courseTable" ? do
+            marginLeft auto
+            marginRight auto

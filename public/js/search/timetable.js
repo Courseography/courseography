@@ -35,48 +35,70 @@ var Timetable = React.createClass({
                    (course.Y !== null && course.Y.lectures.some(function (lec) {
                        return lec.instructor.indexOf(search) > -1; }));
         }).map(function (course) {
-            var fallLec = "";
-            var springLec = "";
-
             var inName = course.name.indexOf(search) > -1;
 
-            if (course.F !== null) {
-                fallLec = course.F.lectures.filter(function (lec) {
-                    return inName || lec.instructor.indexOf(search) > -1;
-                }).map(function (lec) {
-                    return (
-                        <tr>
-                        <td className="timetableSection">{lec.section}</td>
-                        <td className="timetableTime">{lec.time_str}</td>
-                        <td className="timetableInstructor">{lec.instructor}</td>
-                        <td className="timetableCap">{lec.cap}</td>
-                        <td className="timetableWait">{lec.wait}</td>
-                        </tr>);
-                });
-            }
+            if (course.Y.lectures.length === 0) {
+                var fallLec = "";
+                var springLec = "";
+            
+                if (course.F !== null) {
+                    fallLec = course.F.lectures.filter(function (lec) {
+                        return inName || lec.instructor.indexOf(search) > -1;
+                    }).map(function (lec) {
+                        return (
+                            <tr>
+                            <td className="timetableSection">{lec.section}</td>
+                            <td className="timetableTime">{lec.time_str}</td>
+                            <td className="timetableInstructor">{lec.instructor}</td>
+                            <td className="timetableCap">{lec.cap}</td>
+                            <td className="timetableWait">{lec.wait}</td>
+                            </tr>);
+                    });
+                }
 
-            if (course.S !== null) {
-                springLec = course.S.lectures.filter(function (lec) {
-                    return inName || lec.instructor.indexOf(search) > -1;
-                }).map(function (lec) {
-                    return (
-                        <tr>
-                        <td className="timetableSection">{lec.section}</td>
-                        <td className="timetableTime">{lec.time_str}</td>
-                        <td className="timetableInstructor">{lec.instructor}</td>
-                        <td className="timetableCap">{lec.cap}</td>
-                        <td className="timetableWait">{lec.wait}</td>
-                        </tr>);
-                });
-            }
+                if (course.S !== null) {
+                    springLec = course.S.lectures.filter(function (lec) {
+                        return inName || lec.instructor.indexOf(search) > -1;
+                    }).map(function (lec) {
+                        return (
+                            <tr>
+                            <td className="timetableSection">{lec.section}</td>
+                            <td className="timetableTime">{lec.time_str}</td>
+                            <td className="timetableInstructor">{lec.instructor}</td>
+                            <td className="timetableCap">{lec.cap}</td>
+                            <td className="timetableWait">{lec.wait}</td>
+                            </tr>);
+                    });
+                }
 
-            return (
-                <tr>
-                    <td className="timetableCourseName">{course.name}</td>
-                    <td className="FOffering"><table className="courseTable"><tbody>{fallLec}</tbody></table></td>
-                    <td className="SOffering"><table className="courseTable"><tbody>{springLec}</tbody></table></td>
-                </tr>
-            );
+                return (
+                    <tr>
+                        <td className="timetableCourseName">{course.name}</td>
+                        <td className="FOffering"><table className="courseTable"><tbody>{fallLec}</tbody></table></td>
+                        <td className="SOffering"><table className="courseTable"><tbody>{springLec}</tbody></table></td>
+                    </tr>
+                );
+            } else {
+                var yearLec = course.Y.lectures.filter(function (lec) {
+                        return inName || lec.instructor.indexOf(search) > -1;
+                    }).map(function (lec) {
+                        return (
+                            <tr>
+                            <td className="timetableSection">{lec.section}</td>
+                            <td className="timetableTime">{lec.time_str}</td>
+                            <td className="timetableInstructor">{lec.instructor}</td>
+                            <td className="timetableCap">{lec.cap}</td>
+                            <td className="timetableWait">{lec.wait}</td>
+                            </tr>);
+                    });
+
+                return (
+                    <tr>
+                        <td className="timetableCourseName">{course.name}</td>
+                        <td colSpan="2" className="YOffering"><table className="courseTable"><tbody>{yearLec}</tbody></table></td>
+                    </tr>
+                );
+            }
         });
 
         return (
