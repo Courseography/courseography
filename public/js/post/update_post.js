@@ -256,14 +256,9 @@ function updateActiveCourses() {
     activeCourses = [];
 
     // check for active CSC courses
-    for (var areaName in areas) {
-        if (areas.hasOwnProperty(areaName)) {
-            for (var i = 0; i < areas[areaName].length; i++) {
-                if ((getCookie(areas[areaName][i].toLowerCase()) === 'active' || getCookie(areas[areaName][i].toLowerCase()) === 'overridden') && 
-                    areas[areaName][i] !== 'CSC104') {
-                    activeCourses.push(areas[areaName][i]);
-                }
-            }
+    for (var i = 0; i < allCourses.length; i++) {
+        if (getCookie(allCourses[i].toLowerCase()) === 'active' || getCookie(allCourses[i].toLowerCase()) === 'overridden') {
+            activeCourses.push(allCourses[i]);
         }
     }
 
