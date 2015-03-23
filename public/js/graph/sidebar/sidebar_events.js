@@ -81,3 +81,26 @@ function loadGraph(id) {
     // Uncomment to enable graph dragging
     // enableGraphDragging();
 };
+
+
+/**
+ * Grabs all the graphs currently parsed into the database
+ * @return @returns{JSON[]} A list of JSON objects representing each graph in the database
+**/
+function getGraphsInDatabase() {
+
+    var graphs;
+    $.ajax({
+        url: 'graphs',
+        dataType: 'json',
+        async: false,
+        success: function (data) {
+            graphs = data;
+        },
+        error: function () {
+            throw 'No graphs in database';
+        }
+    });
+
+    return graphs;
+}
