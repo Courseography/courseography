@@ -62,8 +62,6 @@ function spotlight(id) {
                                                            String(height + 8.5),
                                                            '"/>');
 
-    console.log(ellipse);
-    console.log(nodeObject);
     nodeObject.before(ellipse);
     nodeObject.attr('data-active', 'lit');
 }
