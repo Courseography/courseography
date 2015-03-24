@@ -101,7 +101,7 @@ processCourseToData tags  =
              parseCorequisite -:
              parseExclusion -:
              parseRecommendedPrep -:
-             parseDistAndBreadth 
+             parseDistAndBreadth
 
 parseArtSci :: IO ()
 parseArtSci = do
