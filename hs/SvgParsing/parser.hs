@@ -43,7 +43,7 @@ performParse dirLocation inputFilename outputFilename =
       insertElements parsedGraph
       print "Graph Inserted"
       createDirectoryIfMissing True ("../public/res/graphs/" ++ dirLocation)
-      buildSVG 1 M.empty ("../public/res/graphs/" ++ dirLocation ++ "/" ++ outputFilename)
+      buildSVG key M.empty ("../public/res/graphs/" ++ dirLocation ++ "/" ++ outputFilename)
       print "Success"
 
 parseGraph ::  Int64 -> String -> ([Path],[Shape],[Text])
