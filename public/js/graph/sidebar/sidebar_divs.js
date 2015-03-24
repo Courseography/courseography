@@ -1,4 +1,5 @@
 var toggled = false;
+var graphs;
 
 
 $('#sidebar-button').click(function() {
@@ -27,8 +28,7 @@ $('#graphs-nav').click(function (e) {
     $('#graphs').empty();
     $('#graphs').show();
     $('#graphs-nav').addClass('active');
-    createGraphButtons();
-
+    getGraphsInDatabase();
 });
 
 

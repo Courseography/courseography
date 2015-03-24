@@ -26,11 +26,10 @@ $('.focus').click(function(e){
 
 /**
  * Dynamically creates buttons for each graph in the sidebar.
+ * @param {JSON[]} An array of JSON objects representing graphs in the database
 **/
-function createGraphButtons() {
+function createGraphButtons(graphs) {
     'use strict';
-
-    var graphs = getGraphsInDatabase();
 
     for (var i = 0; i < graphs.length; i++) {
         var graphTitle = graphs[i].graph_title.toLowerCase();
@@ -90,7 +89,6 @@ function loadGraph(id) {
 
 /**
  * Grabs all the graphs currently parsed into the database
- * @return @returns{JSON[]} A list of JSON objects representing each graph in the database
 **/
 function getGraphsInDatabase() {
     'use strict';
@@ -102,11 +100,10 @@ function getGraphsInDatabase() {
         async: false,
         success: function (data) {
             graphs = data;
+            createGraphButtons(graphs);
         },
         error: function () {
             throw 'No graphs in database';
         }
     });
-
-    return graphs;
 }
