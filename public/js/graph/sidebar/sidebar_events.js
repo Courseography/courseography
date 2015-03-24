@@ -98,7 +98,7 @@ function getGraphsInDatabase() {
         dataType: 'json',
         async: false,
         success: function (data) {
-            graphs = data;
+            var graphs = data;
             createGraphButtons(graphs);
         },
         error: function () {
