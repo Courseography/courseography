@@ -71,5 +71,12 @@ postScripts = concatHtml (map makeScript ["https://ajax.googleapis.com/ajax/libs
                                           "static/js/graph/create_data.js",
                                           "static/js/post/update_categories.js"])
 
+searchScripts :: H.Html
+searchScripts = do
+    concatHtml (map makeScript ["https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js",
+                                          "https://cdnjs.cloudflare.com/ajax/libs/react/0.13.1/react.js",
+                                          "https://cdnjs.cloudflare.com/ajax/libs/react/0.13.1/JSXTransformer.js"])
+    H.script ! A.type_ "text/jsx" ! A.src "static/js/search/timetable.js" $ ""
+
 fourOhFourScripts :: H.Html
 fourOhFourScripts = jQuery
