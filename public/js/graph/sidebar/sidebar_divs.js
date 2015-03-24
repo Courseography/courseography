@@ -1,6 +1,4 @@
 var toggled = false;
-var graphs;
-
 
 $('#sidebar-button').click(function() {
     'use strict';
