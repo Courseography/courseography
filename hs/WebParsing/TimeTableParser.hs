@@ -14,6 +14,7 @@ import Data.List.Utils
 import Data.Maybe
 import Database.Tables as Tables
 import Database.JsonParser
+import Database.Tables
 import WebParsing.ParsingHelp
 import WebParsing.TimeConverter
 import Control.Monad.IO.Class
@@ -204,8 +205,12 @@ processCourseTable course = do
   print code
   runSqlite dbStr $ do
     runMigration migrateAll
+    setTutEnrol code (containsTut sesh)
+    --setPracEnrol code (containsPractical sesh)
     mapM_ (\l ->  insertLec session code l) (lectures sesh)
-    mapM_ (\t ->  insertTut session code t) (tutorials sesh)    
+    mapM_ (\t ->  insertTut session code t) (tutorials sesh)
+  where
+    containsTut sesh = foldl (\bool tut-> maybe False (T.isPrefixOf "T") (tutorialSection tut) || bool ) False (tutorials sesh)   
 
 {----------------------------------------------------------------------------------------
 
@@ -226,5 +231,9 @@ parseTT = do
 
 
 
+test code = 
+  runSqlite dbStr $ do
+    runMigration migrateAll
+    setTutEnrol code True
 
 

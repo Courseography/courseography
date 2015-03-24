@@ -3,7 +3,8 @@
 
 module Database.JsonParser (insertCourse,
                     insertLec,
-                    insertTut, 
+                    insertTut,
+                    setTutEnrol, 
                     dbStr,
                     encodeJSON) where
 
@@ -71,6 +72,16 @@ insertCourse course =
                       (distribution course)
                       (prereqString course)
 
+-- | updates the manualtutorialenrolment field of all courses with course code course
+setTutEnrol :: MonadIO m => T.Text -> Bool -> ReaderT SqlBackend m ()
+setTutEnrol course val = do
+   updateWhere [CoursesCode ==. course] [CoursesManualTutorialEnrolment =. Just val] 
+
+{-} 
+setPracEnrol :: MonadIO m => T.Text -> Bool -> ReaderT SqlBackend m ()
+setPracEnrol course val = do 
+  updateWhere [CoursesCode ==. course] [CoursesManualPracticalEnrolment =. Just val] 
+-}
 -- | USED BY HASKELL TIMETABLE PARSING identical to insertLecture but takes T.Text
 -- | course code instead of entire course record
 insertLec :: MonadIO m => T.Text -> T.Text -> Lecture -> ReaderT SqlBackend m ()
