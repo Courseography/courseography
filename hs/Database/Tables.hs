@@ -69,7 +69,7 @@ Distribution
     description String
     deriving Show
 
-Graph
+Graph json
     gId Int64
     title String
     deriving Show
@@ -242,9 +242,3 @@ convertTimeToString :: [Double] -> [T.Text]
 convertTimeToString [day, time] =
   [T.pack . show . floor $ day,
    T.replace "." "-" . T.pack . show $ time]
-
-instance ToJSON Graph where
-    toJSON (Graph id_ title)
-        = object ["graph_title" .= title,
-                  "graph_id" .= id_
-                 ]
