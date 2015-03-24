@@ -1,6 +1,5 @@
 var toggled = false;
 
-
 $('#sidebar-button').click(function() {
     'use strict';
 
@@ -24,9 +23,10 @@ $('#graphs-nav').click(function (e) {
 
     e.preventDefault();
     resetDivs();
+    $('#graphs').empty();
     $('#graphs').show();
     $('#graphs-nav').addClass('active');
-
+    getGraphsInDatabase();
 });
 
 

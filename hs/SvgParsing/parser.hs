@@ -19,8 +19,9 @@ import System.Directory
 import Data.Conduit
 import Data.List.Split
 import Data.Maybe
-import Data.List
+import Data.List hiding (insert)
 import Data.Text as T (pack, unpack)
+import Data.Int
 import Database.Tables
 import Database.DataType
 import Database.JsonParser
@@ -38,7 +39,9 @@ performParse dirLocation inputFilename outputFilename =
    do graphFile <- readFile ("../public/res/graphs/" ++ inputFilename)
       let parsedGraph = parseGraph graphFile
       print "Graph Parsed"
-      insertGraph 1 dirLocation parsedGraph
+      key <- insertGraph dirLocation
+      insertElements parsedGraph
+      print key
       print "Graph Inserted"
       createDirectoryIfMissing True ("../public/res/graphs/" ++ dirLocation)
       buildSVG 1 M.empty ("../public/res/graphs/" ++ dirLocation ++ "/" ++ outputFilename)
@@ -49,15 +52,18 @@ parseGraph graphFile =
     let graphDoc = xmlParse "output.error" graphFile
     in parseNode (getRoot graphDoc)
 
-insertGraph :: Int -> String -> ([Path],[Shape],[Text]) -> IO ()
-insertGraph gId graphTitle (paths, shapes, texts) =
+insertGraph :: String -> IO Int64
+insertGraph graphTitle =
     runSqlite dbStr $ do
         runMigration migrateAll
-        deleteWhere [GraphGId ==. gId]
-        deleteWhere [ShapeGId ==. gId]
-        deleteWhere [PathGId  ==. gId]
-        deleteWhere [TextGId  ==. gId]
-        insert_ (Graph gId graphTitle)
+        key <- insert (Graph 0 graphTitle)
+        let (PersistInt64 keyId) = toPersistValue key
+        update key [GraphGId =. keyId]
+        return keyId
+
+insertElements :: ([Path], [Shape], [Text]) -> IO ()
+insertElements (paths, shapes, texts) =
+    runSqlite dbStr $ do
         mapM_ insert_ shapes
         mapM_ insert_ paths
         mapM_ insert_ texts

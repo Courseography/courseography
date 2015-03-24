@@ -45,7 +45,7 @@ function clearFocus() {
 function spotlight(id) {
     'use strict';
 
-    var nodeObject = $('#' + id);
+    var nodeObject = $('#' + id.toLowerCase());
 
     var node = $('#' + id + ' > rect');
     var width = parseFloat(node.attr('width')) / 2;
@@ -61,6 +61,7 @@ function spotlight(id) {
                                                            '" ry="',
                                                            String(height + 8.5),
                                                            '"/>');
+
     nodeObject.before(ellipse);
     nodeObject.attr('data-active', 'lit');
 }
