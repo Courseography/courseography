@@ -206,11 +206,12 @@ processCourseTable course = do
   runSqlite dbStr $ do
     runMigration migrateAll
     setTutEnrol code (containsTut sesh)
-    --setPracEnrol code (containsPractical sesh)
-    mapM_ (\l ->  insertLec session code l) (lectures sesh)
-    mapM_ (\t ->  insertTut session code t) (tutorials sesh)
+    setPracEnrol code (containsPrac sesh)
+    mapM_ (insertLec session code) (lectures sesh)
+    mapM_ (insertTut session code) (tutorials sesh)
   where
     containsTut sesh = foldl (\bool tut-> maybe False (T.isPrefixOf "T") (tutorialSection tut) || bool ) False (tutorials sesh)   
+    containsPrac sesh = foldl (\bool tut-> maybe False (T.isPrefixOf "P") (tutorialSection tut) || bool ) False (tutorials sesh)   
 
 {----------------------------------------------------------------------------------------
 

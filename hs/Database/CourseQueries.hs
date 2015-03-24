@@ -57,6 +57,7 @@ buildCourse fallSession springSession yearSession course =
            (coursesCode course)
            (coursesExclusions course)
            (coursesManualTutorialEnrolment course)
+           (coursesManualPracticalEnrolment course)
            (coursesDistribution course)
            Nothing
 
