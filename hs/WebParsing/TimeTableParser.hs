@@ -111,20 +111,20 @@ toCells tags =
       textCells = map (map (map fromTagText)) filterCells
   in  map (map T.concat) textCells
 
---adds a tutorial to the given session
+-- | adds a tutorial to the given session
 addTutorial :: Session -> Tutorial -> Session
 addTutorial sesh tut = sesh {tutorials = tut:tutorials sesh}
 
---adds a lecture to the given session
+-- | adds a lecture to the given session
 addLecture :: Session -> Lecture -> Session
 addLecture sesh lec = sesh {lectures = lec:(lectures sesh)}
 
---returns true if the the row contains a cancelled lecture or tutorial
+-- | returns true if the the row contains a cancelled lecture or tutorial
 isCancelled :: [T.Text] -> Bool
 isCancelled row =
   foldl (\bool text -> bool || T.isPrefixOf "Cancel" text) False row
 
---extracts the required information from a row of cells and places it into a CourseSLot
+-- | extracts the required information from a row of cells and places it into a CourseSLot
 --if given a courseSlot as input, it updates the time only. otherwise updates time and
 --section
 updateSlot :: [T.Text] -> Maybe CourseSlot -> Maybe CourseSlot
@@ -141,7 +141,7 @@ updateSlot row (Just slot) =
   else let newTime = T.takeWhile (/= ' ') (row !! 5)
        in (Just slot {slotTime_str = (T.append newTime (T.append " " (slotTime_str slot)))})
 
- --takes in cells representing a course, and recursively places lecture and tutorial info
+ -- | takes in cells representing a course, and recursively places lecture and tutorial info
  --into courseSlots.
 parseCourse :: [[T.Text]] -> Maybe CourseSlot -> [Maybe CourseSlot] -> [Maybe CourseSlot]
 parseCourse [] slot slots = slot:slots
@@ -156,7 +156,7 @@ parseCourse course slot slots =
      then parseCourse rest (updateSlot row slot) slots
      else parseCourse rest (updateSlot row Nothing) (slot:slots)
 
---converts a courseSlot into a lecture
+-- | converts a courseSlot into a lecture
 makeLecture :: CourseSlot -> Lecture
 makeLecture slot =
   Lecture { extra = 0,
@@ -168,32 +168,32 @@ makeLecture slot =
             enrol = Nothing,
             wait = Nothing }
 
---converts a single courseSlot into a tutorial
+-- | converts a single courseSlot into a tutorial
 makeTutorial :: CourseSlot -> Tutorial
 makeTutorial slot =
   Tutorial {tutorialSection = Just (slotSection slot),
             times = concatMap makeTimeSlots (T.split (== ' ') (slotTime_str slot)),
             timeStr = (slotTime_str slot)}
 
---returns true if the courseSlot is housing a lecture, false otherwise.
+-- | returns true if the courseSlot is housing a lecture, false otherwise.
 isLecture :: CourseSlot -> Bool
 isLecture slot = T.head (slotSection slot) == 'L'
 
---inserts a single courseSlot into a session
+-- | inserts a single courseSlot into a session
 insertSession :: Session -> CourseSlot -> Session
 insertSession sesh slot =
   if isLecture slot
   then sesh {lectures = (makeLecture slot):(lectures sesh)}
   else sesh {tutorials = (makeTutorial slot):(tutorials sesh)}
 
---inserts a list of courseSlots into a session, first converting them into lectures
+-- | inserts a list of courseSlots into a session, first converting them into lectures
 --or tutorials.
 makeSession :: [CourseSlot] -> Session
 makeSession slots =
   let newSession = Session {lectures = [], tutorials = []}
   in foldl insertSession newSession slots
 
---takes in cells representing a single course, and inserts the lecture tutorial info
+-- | takes in cells representing a single course, and inserts the lecture tutorial info
 --into the database
 processCourseTable :: [[T.Text]] -> IO ()
 processCourseTable course = do
@@ -206,13 +206,12 @@ processCourseTable course = do
   runSqlite dbStr $ do
     runMigration migrateAll
     setTutEnrol code (containsTut sesh)
-
     setPracEnrol code (containsPrac sesh)
     mapM_ (insertLec session code) (lectures sesh)
     mapM_ (insertTut session code) (tutorials sesh)
   where
-    containsTut sesh = foldl (\bool tut-> maybe False (T.isPrefixOf "T") (tutorialSection tut) || bool ) False (tutorials sesh)
-    containsPrac sesh = foldl (\bool tut-> maybe False (T.isPrefixOf "P") (tutorialSection tut) || bool ) False (tutorials sesh)
+    containsTut sesh = any (maybe False (T.isPrefixOf "T") . tutorialSection) $ tutorials sesh
+    containsPrac sesh = any (maybe False (T.isPrefixOf "P") . tutorialSection) $ tutorials sesh
 
 {----------------------------------------------------------------------------------------
 
