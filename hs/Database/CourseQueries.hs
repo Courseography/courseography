@@ -42,7 +42,7 @@ queryCourse lowerStr =
             springSession = buildSession sqlLecturesSpring sqlTutorialsSpring
             yearSession   = buildSession sqlLecturesYear sqlTutorialsYear
             courseJSON    = buildCourse fallSession springSession yearSession course
-        return $ createJSONResponse $ encodeJSON $ Aeson.toJSON courseJSON
+        return $ createJSONResponse courseJSON
 
 -- | Builds a Course structure from a tuple from the Courses table.
 -- Some fields still need to be added in.
@@ -105,7 +105,7 @@ courseInfo dept = do
         let c = filter (startswith dept . T.unpack . coursesCode) $ map entityVal courses
         return $ map (buildTimes (map entityVal lecs) (map entityVal tuts)) c
 
-    return $ createJSONResponse $ encodeJSON $ Aeson.toJSON $ map Aeson.toJSON response
+    return $ createJSONResponse response
     where
         lecByCode course = filter (\lec -> lecturesCode lec == coursesCode course)
         tutByCode course = filter (\tut -> tutorialsCode tut == coursesCode course)
@@ -131,7 +131,7 @@ deptList = do
     depts <- runSqlite dbStr $ do
         courses :: [Entity Courses] <- selectList [] []
         return $ sort . nub $ map f courses
-    return $ createJSONResponse $ encodeJSON $ Aeson.toJSON depts
+    return $ createJSONResponse depts
     where
         f = take 3 . T.unpack . coursesCode . entityVal
 
@@ -141,4 +141,4 @@ queryGraphs :: IO Response
 queryGraphs =
     runSqlite dbStr $
         do graphs :: [Entity Graph] <- selectList [] []
-           return $ createJSONResponse $ encodeJSON $ Aeson.toJSON $ map (Aeson.toJSON . entityVal) graphs
+           return $ createJSONResponse $ map entityVal graphs
