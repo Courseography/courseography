@@ -43,7 +43,7 @@ processDirectory = do
 
 -- | Opens and reads a files contents, and decodes JSON content into a Course data structure.
 printFile :: String -> IO ()
-printFile courseFile = 
+printFile courseFile =
     do d <- eitherDecode <$> getJSON courseFile
        case d of
            Left err -> print $ courseFile ++ " " ++ err
@@ -74,16 +74,25 @@ insertCourse course =
                       (distribution course)
                       (prereqString course)
 
--- | updates the manualtutorialenrolment field of all courses with course code course
+-- | Updates the manualTutorialEnrolment field of all courses with course code course
 setTutEnrol :: MonadIO m => T.Text -> Bool -> ReaderT SqlBackend m ()
-setTutEnrol course val = do
-   updateWhere [CoursesCode ==. course] [CoursesManualTutorialEnrolment =. Just val] 
+setTutEnrol course val =
+   updateWhere [CoursesCode ==. course]
+   [CoursesManualTutorialEnrolment =. Just val]
 
+<<<<<<< HEAD
 -- | updates the manualPracticalEnrolment field of all courses with course code course
 setPracEnrol :: MonadIO m => T.Text -> Bool -> ReaderT SqlBackend m ()
 setPracEnrol course val = do 
   updateWhere [CoursesCode ==. course] [CoursesManualPracticalEnrolment =. Just val] 
 
+=======
+{-}
+setPracEnrol :: MonadIO m => T.Text -> Bool -> ReaderT SqlBackend m ()
+setPracEnrol course val = do
+  updateWhere [CoursesCode ==. course] [CoursesManualPracticalEnrolment =. Just val]
+-}
+>>>>>>> 23bf644734440bde4ebbc0fc4c463d2869c5f426
 -- | USED BY HASKELL TIMETABLE PARSING identical to insertLecture but takes T.Text
 -- | course code instead of entire course record
 insertLec :: MonadIO m => T.Text -> T.Text -> Lecture -> ReaderT SqlBackend m ()
@@ -99,10 +108,10 @@ insertLec session code lecture =
                        (extra lecture)
                        (time_str lecture)
 
--- | USED BY HASKELL TIMETABLE PARSING. identical to inserTutorial but takes T.Text 
+-- | USED BY HASKELL TIMETABLE PARSING. identical to inserTutorial but takes T.Text
 -- | course code instead of entire course record
 insertTut :: MonadIO m => T.Text -> T.Text-> Tutorial -> ReaderT SqlBackend m ()
-insertTut session code tutorial = 
+insertTut session code tutorial =
     insert_ $ Tutorials code
                         (tutorialSection tutorial)
                         session
@@ -111,7 +120,7 @@ insertTut session code tutorial =
 
 -- | Inserts the lectures from course into the Lectures table.
 insertLectures :: MonadIO m => Course -> ReaderT SqlBackend m ()
-insertLectures course = 
+insertLectures course =
     insertSessionLectures (f course) "F" course >>
     insertSessionLectures (s course) "S" course >>
     insertSessionLectures (y course) "Y" course
@@ -138,7 +147,7 @@ insertLecture session course lecture =
 
 -- | Inserts the tutorials from course into the Tutorials table.
 insertTutorials :: MonadIO m => Course -> ReaderT SqlBackend m ()
-insertTutorials course =  
+insertTutorials course =
     insertSessionTutorials (f course) "F" course >>
     insertSessionTutorials (s course) "S" course >>
     insertSessionTutorials (y course) "Y" course
@@ -146,13 +155,13 @@ insertTutorials course =
 -- | Inserts the tutorials from a specified section into the Tutorials table.
 insertSessionTutorials :: MonadIO m => Maybe Session -> T.Text -> Course -> ReaderT SqlBackend m ()
 insertSessionTutorials Nothing sessionStr course = return ()
-insertSessionTutorials (Just session) sessionStr course = 
-    (unless $ null (tutorials session)) $ 
+insertSessionTutorials (Just session) sessionStr course =
+    (unless $ null (tutorials session)) $
     mapM_ (insertTutorial sessionStr course) (tutorials session)
 
 -- | Inserts a tutorial into the Tutorials table.
 insertTutorial :: MonadIO m => T.Text -> Course -> Tutorial -> ReaderT SqlBackend m ()
-insertTutorial session course tutorial = 
+insertTutorial session course tutorial =
     insert_ $ Tutorials (name course)
                         (tutorialSection tutorial)
                         session

@@ -37,20 +37,19 @@ main = performParse "CSC" "graph_regions.svg" "csc_graph.svg"
 performParse :: String -> String -> String -> IO ()
 performParse dirLocation inputFilename outputFilename =
    do graphFile <- readFile ("../public/res/graphs/" ++ inputFilename)
-      let parsedGraph = parseGraph graphFile
-      print "Graph Parsed"
       key <- insertGraph dirLocation
+      let parsedGraph = parseGraph key graphFile
+      print "Graph Parsed"
       insertElements parsedGraph
-      print key
       print "Graph Inserted"
       createDirectoryIfMissing True ("../public/res/graphs/" ++ dirLocation)
-      buildSVG 1 M.empty ("../public/res/graphs/" ++ dirLocation ++ "/" ++ outputFilename)
+      buildSVG key M.empty ("../public/res/graphs/" ++ dirLocation ++ "/" ++ outputFilename)
       print "Success"
 
-parseGraph :: String -> ([Path],[Shape],[Text])
-parseGraph graphFile =
+parseGraph ::  Int64 -> String -> ([Path],[Shape],[Text])
+parseGraph key graphFile =
     let graphDoc = xmlParse "output.error" graphFile
-    in parseNode (getRoot graphDoc)
+    in parseNode key (getRoot graphDoc)
 
 insertGraph :: String -> IO Int64
 insertGraph graphTitle =
@@ -69,26 +68,26 @@ insertElements (paths, shapes, texts) =
         mapM_ insert_ texts
 
 -- | Parses a level.
-parseNode :: Content i -> ([Path],[Shape],[Text])
-parseNode content =
+parseNode :: Int64 -> Content i -> ([Path],[Shape],[Text])
+parseNode key content =
     if getAttribute "id" content == "layer2" ||
        getName content == "defs"
     then ([],[],[])
     else let trans          = parseTransform $ getAttribute "transform" content
              style          = getAttribute "style" content
              fill           = getNewStyleAttr style "fill" ""
-             (chilrenPaths, childrenShapes, childrenTexts) = parseChildren (path [children] content)
-             rects    = map parseRect (tag "rect" content)
-             texts    = map parseText (tag "text" content)
-             paths    = mapMaybe parsePath (tag "path" content)
-             ellipses = map parseEllipse (tag "ellipse" content)
+             (chilrenPaths, childrenShapes, childrenTexts) = parseChildren key (path [children] content)
+             rects    = map (parseRect key) (tag "rect" content)
+             texts    = map (parseText key) (tag "text" content)
+             paths    = mapMaybe (parsePath key) (tag "path" content)
+             ellipses = map (parseEllipse key) (tag "ellipse" content)
          in ((map (updatePath fill trans) (paths ++ chilrenPaths)),
              (map (updateShape fill trans) (rects ++ ellipses ++ childrenShapes)),
              (map (updateText trans) (texts ++ childrenTexts)))
 
 -- | Parses a list of Content.
-parseChildren :: [Content i] -> ([Path],[Shape],[Text])
-parseChildren x = foldl addThree ([],[],[]) $ map parseNode x
+parseChildren :: Int64 -> [Content i] -> ([Path],[Shape],[Text])
+parseChildren key x = foldl addThree ([],[],[]) $ map (parseNode key) x
 
 -- TODO: Can't find way to zip tuples.
 addThree :: ([Path],[Shape],[Text])
@@ -97,9 +96,9 @@ addThree :: ([Path],[Shape],[Text])
 addThree (a,b,c) (d,e,f) = (a ++ d, b ++ e, c ++f)
 
 -- | Parses a rect.
-parseRect :: Content i -> Shape
-parseRect content =
-    Shape 1
+parseRect :: Int64 -> Content i -> Shape
+parseRect key content =
+    Shape key
           ""
           (read $ getAttribute "x" content,
            read $ getAttribute "y" content)
@@ -112,11 +111,11 @@ parseRect content =
           Node
 
 -- | Parses a path.
-parsePath :: Content i -> Maybe Path
-parsePath content =
+parsePath :: Int64 -> Content i -> Maybe Path
+parsePath key content =
     if last (getAttribute "d" content) == 'z' && not isRegion
     then Nothing
-    else Just (Path 1
+    else Just (Path key
                     ""
                     d
                     ""
@@ -130,18 +129,18 @@ parsePath content =
               null fillAttr || fillAttr == "none"
 
 -- | Parses a text.
-parseText :: Content i -> Text
-parseText content =
-    Text 1
+parseText :: Int64 -> Content i -> Text
+parseText key content =
+    Text key
          (getAttribute "id" content)
          (read $ getAttribute "x" content,
           read $ getAttribute "y" content)
          (tagTextContent content)
 
 -- | Parses an ellipse.
-parseEllipse :: Content i -> Shape
-parseEllipse content =
-    Shape 1
+parseEllipse :: Int64 -> Content i -> Shape
+parseEllipse key content =
+    Shape key
           ""
           (read $ getAttribute "cx" content,
            read $ getAttribute "cy" content)
