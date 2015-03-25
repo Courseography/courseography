@@ -146,22 +146,6 @@ data Course =
              prereqs :: Maybe Array
            } deriving Show
 
-instance FromJSON Course where
-    parseJSON (Object v) =
-        Course <$> v .:? "breadth"
-               <*> v .:? "description"
-               <*> v .:? "title"
-               <*> v .:? "prereqString"
-               <*> v .:? "F"
-               <*> v .:? "S"
-               <*> v .:? "Y"
-               <*> v .:  "name"
-               <*> v .:? "exclusions"
-               <*> v .:? "manualTutorialEnrolment"
-               <*> v .:? "distribution"
-               <*> v .:? "prereqs"
-    parseJSON _ = mzero
-
 instance ToJSON Course where
   toJSON (Course breadth description title prereqString f s y name exclusions manualTutorialEnrol distribution prereqs)
           = object ["breadth" .= breadth,
@@ -178,29 +162,11 @@ instance ToJSON Course where
                     "prereqs" .= prereqs
                    ]
 
-instance FromJSON Session where
-    parseJSON (Object v) =
-        Session <$> v .: "lectures"
-                <*> v .: "tutorials"
-    parseJSON _ = mzero
-
 instance ToJSON Session where
   toJSON (Session lectures tutorials)
           = object ["lectures" .= lectures,
                     "tutorials" .= tutorials
                    ]
-
-instance FromJSON Lecture where
-    parseJSON (Object v) =
-        Lecture <$> v .:  "extra"
-                <*> v .:  "section"
-                <*> v .:  "cap"
-                <*> v .:  "time_str"
-                <*> v .:  "time"
-                <*> v .:  "instructor"
-                <*> v .:? "enrol"
-                <*> v .:? "wait"
-    parseJSON _ = mzero
 
 instance ToJSON Lecture where
   toJSON (Lecture extra section cap time_str time instructor enrol wait)
@@ -213,20 +179,6 @@ instance ToJSON Lecture where
                     "enrol" .= enrol,
                     "wait" .= wait
                    ]
-
-instance FromJSON Tutorial where
-    parseJSON (Array v)
-        | V.length v == 2 = do
-            times <- parseJSON $ v V.! 0
-            timeStr <- parseJSON $ v V.! 1
-            return $ Tutorial Nothing times timeStr
-        | V.length v == 3 = do
-            tutorialSection <- parseJSON $ v V.! 0
-            times <- parseJSON $ v V.! 1
-            timeStr <- parseJSON $ v V.! 2
-            return $ Tutorial tutorialSection times timeStr
-        | otherwise = mzero
-    parseJSON _ = mzero
 
 instance ToJSON Tutorial where
   toJSON (Tutorial Nothing times timeStr) =
