@@ -50,6 +50,6 @@ removeImage name = createProcess $ CreateProcess
 createImageFile :: String -> String -> IO ()
 createImageFile inName outName =
     do (inp, out, err, pid) <- convertToImage inName outName
-       liftIO $ print "Waiting for process..."
-       liftIO $ waitForProcess pid
-       liftIO $ print "Process Complete"
+       print "Waiting for process..."
+       waitForProcess pid
+       print "Process Complete"

@@ -54,8 +54,9 @@ timetableScripts = do jQuery
 drawScripts :: H.Html
 drawScripts = do jQuery 
                  concatHtml (map makeScript ["https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js",
-                                             "static/js/draw/draw.js",
+                                             "static/js/draw/variables.js",
                                              "static/js/draw/path.js",
+                                             "static/js/draw/draw.js",
                                              "static/js/draw/setup.js"])
 
 postScripts :: H.Html
@@ -69,3 +70,13 @@ postScripts = concatHtml (map makeScript ["https://ajax.googleapis.com/ajax/libs
                                           "static/js/post/fill_textboxes.js",
                                           "static/js/graph/create_data.js",
                                           "static/js/post/update_categories.js"])
+
+searchScripts :: H.Html
+searchScripts = do
+    concatHtml (map makeScript ["https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js",
+                                          "https://cdnjs.cloudflare.com/ajax/libs/react/0.13.1/react.js",
+                                          "https://cdnjs.cloudflare.com/ajax/libs/react/0.13.1/JSXTransformer.js"])
+    H.script ! A.type_ "text/jsx" ! A.src "static/js/search/timetable.js" $ ""
+
+fourOhFourScripts :: H.Html
+fourOhFourScripts = jQuery
