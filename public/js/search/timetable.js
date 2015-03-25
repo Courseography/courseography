@@ -123,35 +123,31 @@ var Timetable = React.createClass({
                 var fallLec = '';
                 var springLec = '';
             
-                if (course.F !== null) {
-                    fallLec = course.F.lectures.filter(function (lec) {
-                        return filterCourse(state.instSearch, state.timeSearch, lec);
-                    }).map(function (lec) {
-                        return (
-                            <tr>
-                            <td className="timetableSection">{lec.section}</td>
-                            <td className="timetableTime">{lec.time_str}</td>
-                            <td className="timetableInstructor">{lec.instructor}</td>
-                            <td className="timetableCap">{lec.cap}</td>
-                            <td className="timetableWait">{lec.wait}</td>
-                            </tr>);
-                    });
-                }
+                fallLec = course.F.lectures.filter(function (lec) {
+                    return filterCourse(state.instSearch, state.timeSearch, lec);
+                }).map(function (lec) {
+                    return (
+                        <tr>
+                        <td className="timetableSection">{lec.section}</td>
+                        <td className="timetableTime">{lec.time_str}</td>
+                        <td className="timetableInstructor">{lec.instructor}</td>
+                        <td className="timetableCap">{lec.cap}</td>
+                        <td className="timetableWait">{lec.wait}</td>
+                        </tr>);
+                });
 
-                if (course.S !== null) {
-                    springLec = course.S.lectures.filter(function (lec) {
-                        return filterCourse(state.instSearch, state.timeSearch, lec);
-                    }).map(function (lec) {
-                        return (
-                            <tr>
-                            <td className="timetableSection">{lec.section}</td>
-                            <td className="timetableTime">{lec.time_str}</td>
-                            <td className="timetableInstructor">{lec.instructor}</td>
-                            <td className="timetableCap">{lec.cap}</td>
-                            <td className="timetableWait">{lec.wait}</td>
-                            </tr>);
-                    });
-                }
+                springLec = course.S.lectures.filter(function (lec) {
+                    return filterCourse(state.instSearch, state.timeSearch, lec);
+                }).map(function (lec) {
+                    return (
+                        <tr>
+                        <td className="timetableSection">{lec.section}</td>
+                        <td className="timetableTime">{lec.time_str}</td>
+                        <td className="timetableInstructor">{lec.instructor}</td>
+                        <td className="timetableCap">{lec.cap}</td>
+                        <td className="timetableWait">{lec.wait}</td>
+                        </tr>);
+                });
 
                 return (
                     <tr>
