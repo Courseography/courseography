@@ -17,8 +17,9 @@ var Search = React.createClass({
     },
 
     updateDept: function () {
-        console.log(React.findDOMNode(this.refs.deptSelect).value);
-        this.setState({curDept: React.findDOMNode(this.refs.deptSelect).value});
+        var selectedDept = React.findDOMNode(this.refs.deptSelect).value;
+        this.setState({curDept: selectedDept});
+        this.refs.timetable.populateTable(selectedDept);
     },
 
     render: function () {
@@ -68,6 +69,19 @@ var Timetable = React.createClass({
         }.bind(this));
     },
 
+    populateTable: function(dept) {
+        $.ajax({
+            url: 'course-info',
+            data: {dept: dept},
+            dataType: 'json',
+            success: function(data) {
+                this.setState({courses: data});
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error('course-info', status, err.toString());
+            }.bind(this)
+        });
+    },
 
     updateFilter: function(filter) {
         this.setState({search: filter});

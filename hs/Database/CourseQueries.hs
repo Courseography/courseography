@@ -95,15 +95,15 @@ allCourses = do
       return $ T.unlines codes
   return $ toResponse response
 
--- | Return all course info
-courseInfo :: IO Response
-courseInfo = do
-    response <- runSqlite dbStr $ do
+-- | Return all course info for a given department
+courseInfo :: String -> ServerPart Response
+courseInfo dept = do
+    response <- liftIO $ runSqlite dbStr $ do
         courses :: [Entity Courses] <- selectList [] []
         lecs    :: [Entity Lectures]   <- selectList [] []
         tuts  :: [Entity Tutorials]   <- selectList [] []
-        let csc = filter (startswith "CSC" . T.unpack . coursesCode) $ map entityVal courses
-        return $ map (buildTimes (map entityVal lecs) (map entityVal tuts)) csc
+        let c = filter (startswith dept . T.unpack . coursesCode) $ map entityVal courses
+        return $ map (buildTimes (map entityVal lecs) (map entityVal tuts)) c
 
     return $ createJSONResponse $ encodeJSON $ Aeson.toJSON $ map Aeson.toJSON response
     where
