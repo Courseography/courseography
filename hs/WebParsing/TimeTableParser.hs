@@ -211,8 +211,8 @@ processCourseTable course = do
     mapM_ (insertLec session code) (lectures sesh)
     mapM_ (insertTut session code) (tutorials sesh)
   where
-    containsTut sesh = foldl (\bool tut-> maybe False (T.isPrefixOf "T") (tutorialSection tut) || bool ) False (tutorials sesh)   
-    containsPrac sesh = foldl (\bool tut-> maybe False (T.isPrefixOf "P") (tutorialSection tut) || bool ) False (tutorials sesh)   
+    containsTut sesh = foldl (\bool tut-> maybe False (T.isPrefixOf "T") (tutorialSection tut) || bool ) False (tutorials sesh)
+    containsPrac sesh = foldl (\bool tut-> maybe False (T.isPrefixOf "P") (tutorialSection tut) || bool ) False (tutorials sesh)
 
 {----------------------------------------------------------------------------------------
 
