@@ -1,10 +1,58 @@
+var Search = React.createClass({
+    getInitialState: function () {
+        return {curDept: "", depts: []};
+    },
+
+    componentDidMount: function () {
+        $.ajax({
+            url: 'depts',
+            dataType: 'json',
+            success: function(data) {
+                this.setState({depts: data});
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error('course-info', status, err.toString());
+            }.bind(this)
+        });
+    },
+
+    updateDept: function () {
+        console.log(React.findDOMNode(this.refs.deptSelect).value);
+        this.setState({curDept: React.findDOMNode(this.refs.deptSelect).value});
+    },
+
+    render: function () {
+        var options = this.state.depts.map(function(dept) {
+            return (<option value={dept}>{dept}</option>);
+        });
+
+        return (
+            <div id="search">
+            <div id="timetableSearch">
+                <h2>2014-2015 Timetable Search</h2>
+                <p>Search through the timetable for a course or instructor.</p>
+                <select ref="deptSelect" name="dept" onChange={this.updateDept} >
+                    <option value="none">Select a department</option>
+                    {options}
+                </select>
+                <input type="text" className="text-input" id="filter" placeholder="Search..." />
+            </div>
+            <div id="timetableContainer">
+                <Timetable dept={this.state.curDept} ref="timetable" />
+            </div>
+            </div>
+        );
+    }
+});
+
+
 var Timetable = React.createClass({
     getInitialState: function () {
         return {courses: [], search: ""};
     },
 
     componentDidMount: function() {
-        $.ajax({
+        /*$.ajax({
             url: 'course-info',
             dataType: 'json',
             success: function(data) {
@@ -14,11 +62,12 @@ var Timetable = React.createClass({
                 console.error('course-info', status, err.toString());
             }.bind(this)
         });
-
+        */
         $('#filter').keyup(function() {
             this.updateFilter($('#filter').val());
         }.bind(this));
     },
+
 
     updateFilter: function(filter) {
         this.setState({search: filter});
@@ -140,5 +189,5 @@ var Timetable = React.createClass({
 });
 
 React.render(
-    <Timetable />,
-    document.getElementById('timetableContainer'));
+    <Search />,
+    document.getElementById('content'));
