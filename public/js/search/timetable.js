@@ -31,12 +31,16 @@ var Search = React.createClass({
             <div id="search">
             <div id="timetableSearch">
                 <h2>2014-2015 Timetable Search</h2>
-                <p>Search through the timetable for a course or instructor.</p>
-                <select ref="deptSelect" name="dept" onChange={this.updateDept} >
-                    <option value="none">Select a department</option>
+                <div id="searchOptions">
+                <label htmlFor="deptSelect">Dept:</label>
+                <select ref="deptSelect" name="dept" onChange={this.updateDept} id="deptSelect">
+                    <option value="none" selected="selected">---</option>
                     {options}
                 </select>
-                <input type="text" className="text-input" id="filter" placeholder="Search..." />
+                <br />
+                <label htmlFor="filter">Code/Instructor:</label>
+                <input type="text" className="text-input" id="filter" placeholder="..." />
+                </div>
             </div>
             <div id="timetableContainer">
                 <Timetable dept={this.state.curDept} ref="timetable" />

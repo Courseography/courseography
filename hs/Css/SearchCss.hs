@@ -13,6 +13,11 @@ searchStyles = do
         width (px 200)
         border solid (px 1) black
         fontFamily ["Trebuchet MS", "Arial"] [sansSerif]
+        marginLeft (px 10)
+        alignCenter
+    "#deptSelect" ? do
+        marginLeft (px 10)
+        alignCenter
     "#timetableContainer" ? do
         width (px 1016)
         height100
