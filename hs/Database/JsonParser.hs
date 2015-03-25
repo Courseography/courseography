@@ -30,35 +30,6 @@ import GHC.Generics
 dbStr :: T.Text
 dbStr = "Database/database1.sqlite3"
 
-courseDirectory :: String
-courseDirectory = "../../res/courses/"
-
--- | Opens a directory contained in dir, and processes every file in that directory.
-processDirectory :: IO ()
-processDirectory = do
-    contents <- getDirectoryContents courseDirectory
-    let formattedContents = map (courseDirectory ++) (L.sort contents)
-    filterM doesFileExist formattedContents >>= mapM_ printFile
-
--- | Opens and reads a files contents, and decodes JSON content into a Course data structure.
-printFile :: String -> IO ()
-printFile courseFile =
-    do d <- eitherDecode <$> getJSON courseFile
-       case d of
-           Left err -> print $ courseFile ++ " " ++ err
-           Right course -> do
-                runSqlite dbStr $ do
-                    runMigration migrateAll
-                    insertCourse course
-                    insertLectures course
-                    insertTutorials course
-                    liftIO $ print $ "Inserted " ++ show (name course)
-
--- | Opens and reads the file contained in `jsonFile`. File contents are returned, surrounded by
--- | square brackets.
-getJSON :: String -> IO B.ByteString
-getJSON jsonFile = B.readFile jsonFile
-
 -- | Inserts course into the Courses table.
 insertCourse :: MonadIO m => Course -> ReaderT SqlBackend m ()
 insertCourse course =
