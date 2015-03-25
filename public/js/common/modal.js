@@ -217,23 +217,9 @@ function createG(nodeId) {
     var g = $(document.createElementNS('http://www.w3.org/2000/svg', 'g'));
     g.attr('class', 'tooltip-group')
         .css('cursor', 'pointer')
-        .click(function () {
-            openCourseModal(nodeId);
-        });
+        .click(openModal(getCourseTitle(nodeId), createModalDiv(nodeId)));
     $('#nodes').append(g);
     return g;
-}
-
-
-/**
- * Opens the course information modal.
- * @param {string} id The course code.
- * TODO: Needs to be cleaned up.
- */
-function openCourseModal(id) {
-    'use strict';
-
-    openModal(getCourseTitle(id), createModalDiv(id));
 }
 
 
