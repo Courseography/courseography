@@ -1,12 +1,14 @@
-var filterCourse = function(inst, time, lec) {
+var filterCourse = function (inst, time, lec) {
+    'use strict';
     return lec.instructor.indexOf(inst) > -1 && 
            (time.length < 2 || hasTime(time, lec.time));
 };
 
-var hasTime = function(timeStr, times) {
-    var time = ["MTWRF".indexOf(timeStr[0]) + "",
-                timeStr.substr(1) + "-0"];
-    console.log(time);
+
+var hasTime = function (timeStr, times) {
+    'use strict';
+    var time = ['MTWRF'.indexOf(timeStr[0]) + '',
+                timeStr.substr(1) + '-0'];
     for (var i = 0; i < times.length; i++) {
         if (time[0] === times[i][0] && time[1] === times[i][1]) {
             return true;
@@ -15,9 +17,10 @@ var hasTime = function(timeStr, times) {
     return false;
 };
 
+
 var Search = React.createClass({
     getInitialState: function () {
-        return {curDept: "", depts: []};
+        return {curDept: '', depts: []};
     },
 
     componentDidMount: function () {
@@ -76,21 +79,10 @@ var Search = React.createClass({
 
 var Timetable = React.createClass({
     getInitialState: function () {
-        return {courses: [], codeSearch: "", instSearch: "", timeSearch: ""};
+        return {courses: [], codeSearch: '', instSearch: '', timeSearch: ''};
     },
 
     componentDidMount: function() {
-        /*$.ajax({
-            url: 'course-info',
-            dataType: 'json',
-            success: function(data) {
-                this.setState({courses: data});
-            }.bind(this),
-            error: function(xhr, status, err) {
-                console.error('course-info', status, err.toString());
-            }.bind(this)
-        });
-        */
         $('#codeFilter').keyup(function() {
             this.setState({codeSearch: $('#codeFilter').val()});
         }.bind(this));
@@ -128,8 +120,8 @@ var Timetable = React.createClass({
                    });
         }).map(function (course) {
             if (course.Y.lectures.length === 0) {
-                var fallLec = "";
-                var springLec = "";
+                var fallLec = '';
+                var springLec = '';
             
                 if (course.F !== null) {
                     fallLec = course.F.lectures.filter(function (lec) {
@@ -228,6 +220,7 @@ var Timetable = React.createClass({
         );
     }
 });
+
 
 React.render(
     <Search />,
