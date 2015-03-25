@@ -1,3 +1,20 @@
+var filterCourse = function(inst, time, lec) {
+    return lec.instructor.indexOf(inst) > -1 && 
+           (time.length < 2 || hasTime(time, lec.time));
+};
+
+var hasTime = function(timeStr, times) {
+    var time = ["MTWRF".indexOf(timeStr[0]) + "",
+                timeStr.substr(1) + "-0"];
+    console.log(time);
+    for (var i = 0; i < times.length; i++) {
+        if (time[0] === times[i][0] && time[1] === times[i][1]) {
+            return true;
+        }
+    }
+    return false;
+};
+
 var Search = React.createClass({
     getInitialState: function () {
         return {curDept: "", depts: []};
@@ -38,8 +55,14 @@ var Search = React.createClass({
                     {options}
                 </select>
                 <br />
-                <label htmlFor="filter">Code/Instructor:</label>
-                <input type="text" className="text-input" id="filter" placeholder="..." />
+                <label htmlFor="codeFilter">Code:</label>
+                <input type="text" className="text-input" id="codeFilter" placeholder="CSC108" />
+                <br />
+                <label htmlFor="instFilter">Instructor:</label>
+                <input type="text" className="text-input" id="instFilter" placeholder="Liu" />
+                <br />
+                <label htmlFor="timeFilter">Time:</label>
+                <input type="text" className="text-input" id="timeFilter" placeholder="M10" />
                 </div>
             </div>
             <div id="timetableContainer">
@@ -53,7 +76,7 @@ var Search = React.createClass({
 
 var Timetable = React.createClass({
     getInitialState: function () {
-        return {courses: [], search: ""};
+        return {courses: [], codeSearch: "", instSearch: "", timeSearch: ""};
     },
 
     componentDidMount: function() {
@@ -68,8 +91,14 @@ var Timetable = React.createClass({
             }.bind(this)
         });
         */
-        $('#filter').keyup(function() {
-            this.updateFilter($('#filter').val());
+        $('#codeFilter').keyup(function() {
+            this.setState({codeSearch: $('#codeFilter').val()});
+        }.bind(this));
+        $('#instFilter').keyup(function() {
+            this.setState({instSearch: $('#instFilter').val()});
+        }.bind(this));
+        $('#timeFilter').keyup(function() {
+            this.setState({timeSearch: $('#timeFilter').val()});
         }.bind(this));
     },
 
@@ -87,30 +116,24 @@ var Timetable = React.createClass({
         });
     },
 
-    updateFilter: function(filter) {
-        this.setState({search: filter});
-    },
-
     render: function() {
-        var search = this.state.search;
+        var state = this.state;
         var courseRows = this.state.courses.filter(function (course) {
-            return course.name.indexOf(search) > -1 ||
-                   (course.F !== null && course.F.lectures.some(function (lec) {
-                       return lec.instructor.indexOf(search) > -1; })) ||
-                   (course.S !== null && course.S.lectures.some(function (lec) {
-                       return lec.instructor.indexOf(search) > -1; })) ||
-                   (course.Y !== null && course.Y.lectures.some(function (lec) {
-                       return lec.instructor.indexOf(search) > -1; }));
-        }).map(function (course) {
-            var inName = course.name.indexOf(search) > -1;
+            var lecs = course.F.lectures.concat(course.S.lectures)
+                                        .concat(course.Y.lectures);
 
+            return course.name.indexOf(state.codeSearch) > -1 &&
+                   lecs.some(function (lec) {
+                       return filterCourse(state.instSearch, state.timeSearch, lec);
+                   });
+        }).map(function (course) {
             if (course.Y.lectures.length === 0) {
                 var fallLec = "";
                 var springLec = "";
             
                 if (course.F !== null) {
                     fallLec = course.F.lectures.filter(function (lec) {
-                        return inName || lec.instructor.indexOf(search) > -1;
+                        return filterCourse(state.instSearch, state.timeSearch, lec);
                     }).map(function (lec) {
                         return (
                             <tr>
@@ -125,7 +148,7 @@ var Timetable = React.createClass({
 
                 if (course.S !== null) {
                     springLec = course.S.lectures.filter(function (lec) {
-                        return inName || lec.instructor.indexOf(search) > -1;
+                        return filterCourse(state.instSearch, state.timeSearch, lec);
                     }).map(function (lec) {
                         return (
                             <tr>
@@ -147,7 +170,7 @@ var Timetable = React.createClass({
                 );
             } else {
                 var yearLec = course.Y.lectures.filter(function (lec) {
-                        return inName || lec.instructor.indexOf(search) > -1;
+                        return filterCourse(state.instSearch, state.timeSearch, lec);
                     }).map(function (lec) {
                         return (
                             <tr>
