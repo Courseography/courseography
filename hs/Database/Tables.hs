@@ -12,18 +12,18 @@
 
 module Database.Tables where
 import Database.Persist.TH
+import Database.DataType
 import qualified Data.Text as T
 import qualified Data.Vector as V
 import Data.Aeson
+import Data.Int
 import Control.Monad
 import Control.Applicative
 
 data Time = Time { timeField :: [Double] } deriving (Show, Read, Eq)
 derivePersistField "Time"
 
-
-data Point = Point { point :: (Rational, Rational) } deriving (Show, Read, Eq)
-derivePersistField "Point"
+type Point = (Double, Double)
 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 Courses json
@@ -31,6 +31,7 @@ Courses json
     title T.Text Maybe
     description T.Text Maybe
     manualTutorialEnrolment Bool Maybe
+    manualPracticalEnrolment Bool Maybe 
     prereqs T.Text Maybe
     exclusions T.Text Maybe
     breadth T.Text Maybe
@@ -69,44 +70,40 @@ Distribution
     description String
     deriving Show
 
-Graphs
-    gId Int
+Graph json
+    gId Int64
     title String
     deriving Show
 
-Rects
-    gId Int
+Text
+    gId Int64
     rId String
-    width Rational
-    height Rational
-    xPos Rational
-    yPos Rational
-    fill String
-    stroke String
-    isHybrid Bool
-    deriving Show
-
-Texts
-    gId Int
-    rId String
-    xPos Rational
-    yPos Rational
+    pos Point
     text String
     deriving Show
 
-Paths
-    d [Point]
+Shape
+    gId Int64
+    id_ String
+    pos Point
+    width Double
+    height Double
+    fill String
+    stroke String
+    text [Text]
+    tolerance Double
+    type_ ShapeType
+
+Path
+    gId Int64
+    id_ String
+    points [Point]
     fill String
     stroke String
     isRegion Bool
+    source String
+    target String
     deriving Show
-
-Ellipses
-    xPos Rational
-    yPos Rational
-    rx Rational
-    ry Rational
-    stroke String
 |]
 
 -- | A Lecture.
@@ -146,6 +143,7 @@ data Course =
              name :: !T.Text,
              exclusions :: Maybe T.Text,
              manualTutorialEnrol :: Maybe Bool,
+             manualPracticalEnrol :: Maybe Bool, 
              distribution :: Maybe T.Text,
              prereqs :: Maybe Array
            } deriving Show
@@ -162,12 +160,13 @@ instance FromJSON Course where
                <*> v .:  "name"
                <*> v .:? "exclusions"
                <*> v .:? "manualTutorialEnrolment"
+               <*> v .:? "manualPracticalEnrolment"
                <*> v .:? "distribution"
                <*> v .:? "prereqs"
     parseJSON _ = mzero
 
 instance ToJSON Course where
-  toJSON (Course breadth description title prereqString f s y name exclusions manualTutorialEnrol distribution prereqs)
+  toJSON (Course breadth description title prereqString f s y name exclusions manualTutorialEnrol manualPracticalEnrol distribution prereqs)
           = object ["breadth" .= breadth,
                     "description" .= description,
                     "title" .= title,
@@ -178,6 +177,7 @@ instance ToJSON Course where
                     "name" .= name,
                     "exclusions" .= exclusions,
                     "manualTutorialEnrolment" .= manualTutorialEnrol,
+                    "manualPracticalEnrolment" .= manualPracticalEnrol,
                     "distribution" .= distribution,
                     "prereqs" .= prereqs
                    ]
@@ -212,7 +212,7 @@ instance ToJSON Lecture where
                     "section" .= section,
                     "cap" .= cap,
                     "time_str" .= time_str,
-                    "time" .= time,
+                    "time" .= map convertTimeToString time,
                     "instructor" .= instructor,
                     "enrol" .= enrol,
                     "wait" .= wait
@@ -237,3 +237,12 @@ instance ToJSON Tutorial where
       Array $ V.fromList [toJSON times, toJSON timeStr]
   toJSON (Tutorial (Just value) times timeStr) =
       Array $ V.fromList [toJSON value, toJSON times, toJSON timeStr]
+
+-- | Converts a Double to a T.Text.
+-- This removes the period from the double, as the JavaScript code,
+-- uses the output in an element's ID, which is then later used in
+-- jQuery. `.` is a jQuery meta-character, and must be removed from the ID.
+convertTimeToString :: [Double] -> [T.Text]
+convertTimeToString [day, time] =
+  [T.pack . show . floor $ day,
+   T.replace "." "-" . T.pack . show $ time]
