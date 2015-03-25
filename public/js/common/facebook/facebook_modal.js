@@ -4,33 +4,9 @@
 function openFBPostModal() {
     'use strict';
 
-    if ($('.modal').length === 0) {
-        var div = createFBModalDiv();
+    var div = createFBModalDiv();
 
-        div.attr('title', 'Post To Facebook')
-            .addClass('modal').dialog({
-                autoOpen: true,
-                modal: true,
-                minWidth: 850,
-                minHeight: 600,
-                closeText: 'X',
-                open: function(event, ui) {
-                    $('.ui-widget-overlay').bind('click', function () {
-                        div.dialog('close');
-                    }); },
-                close: function () {
-                    $(this).remove();
-                    $.each(nodes, function (index, elem) {
-                        window[elem].updateSVG();
-                    });
-                    $('body').css('background', 'rgb(255,255,255)');
-                }});
-
-        $('.node, .hybrid').attr('data-active', 'unlit');
-        $('body').css('background', 'rgb(40,40,40)');
-
-        $('.tooltip-group').remove();
-    }
+    openModal('Post To Facebook', div);
 }
 
 
@@ -43,7 +19,7 @@ function createFBModalDiv() {
 
     var context = $('#courseography-header').attr('context');
     var session = 'fall';
-    var img = (context === 'graph') ? getGraphImage() : getGridImage(session) ;
+    var img = (context === 'graph') ? getGraphImage() : getGridImage(session);
     var contentDiv = $('<div></div>');
     var topContentDiv = $('<div></div>');
     var bottomContentDiv = $('<div></div>');

@@ -217,48 +217,49 @@ function createG(nodeId) {
     var g = $(document.createElementNS('http://www.w3.org/2000/svg', 'g'));
     g.attr('class', 'tooltip-group')
         .css('cursor', 'pointer')
-        .click(function () {
-            openModal(nodeId);
-        });
+        .click(openModal(getCourseTitle(nodeId), createModalDiv(nodeId)));
     $('#nodes').append(g);
     return g;
 }
 
 
 /**
- * Opens the course information modal.
- * @param {string} id The course code.
- * TODO: Needs to be cleaned up.
+ * Opens a modal.
+ * @param {String} title The title of the modal.
+ * @param {jQuery} modalDiv The div that is opened as a modal.
  */
-function openModal(id) {
-    'use strict';
+function openModal(title, modalDiv) {
+
+    var context = $('#courseography-header').attr('context');
 
     if ($('.modal').length === 0) {
-        var div = createModalDiv(id);
-        div.attr('title', getCourseTitle(id))
-           .addClass('modal').dialog({
-                autoOpen: true,
-                modal: true,
-                minWidth: 1000,
-                minHeight: 600,
-                closeText: 'X',
-                open: function(event, ui) {
+        modalDiv.attr('title', title)
+                .addClass('modal').dialog({
+                    autoOpen: true,
+                    modal: true,
+                    minWidth: 850,
+                    minHeight: 600,
+                    closeText: 'X',
+                    open: function(event, ui) {
                         $('.ui-widget-overlay').bind('click', function () {
-                                                                  div.dialog('close');
-                                                              }); },
-                close: function () {
-                    $(this).remove();
-                    $.each(nodes, function (index, elem) {
-                        window[elem].updateSVG();
-                    });
-                    $('body').css('background', 'rgb(255,255,255)');
-                }});
+                            modalDiv.dialog('close');
+                        }); },
+                    close: function () {
+                        $(this).remove();
+                        if (context === 'graph') {
+                            $.each(nodes, function (index, elem) {
+                                window[elem].updateSVG();
+                            });
+                            $('body').css('background', 'rgb(255,255,255)');
+                        }
+                    }});
 
-        $('.node, .hybrid').attr('data-active', 'unlit');
-        $('body').css('background', 'rgb(40,40,40)');
+        if (context === 'graph') {
+            $('.node, .hybrid').attr('data-active', 'unlit');
+            $('body').css('background', 'rgb(40,40,40)');
 
-        enableVideoJS();
-        $('.tooltip-group').remove();
+            $('.tooltip-group').remove();
+        }
     }
 }
 
