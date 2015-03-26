@@ -2,22 +2,10 @@
 module Main where
 
 import Text.XML.HaXml
-import Text.XML.HaXml.ByteStringPP
-import Text.XML.HaXml.Wrappers
-import Text.XML.HaXml.Types
-import Text.XML.HaXml.Combinators
 import Text.XML.HaXml.Util
-import Text.XML.HaXml.XmlContent.Parser
-import qualified Data.Conduit.List as CL
-import Database.Persist
 import Control.Monad.IO.Class (liftIO)
 import Database.Persist.Sqlite
-import Control.Monad
-import Control.Monad.Trans.Reader
-import Text.XML.HaXml.Namespaces
 import System.Directory
-import Data.Conduit
-import Data.List.Split
 import Data.Maybe
 import Data.List hiding (insert)
 import Data.Text as T (pack, unpack)
