@@ -34,7 +34,10 @@ import qualified Data.Map as M
 main :: IO ()
 main = performParse "CSC" "graph_regions.svg" "csc_graph.svg"
 
-performParse :: String -> String -> String -> IO ()
+performParse :: String -- ^ The directory location that the file will be written to.
+             -> String -- ^ The filename of the file that will be parsed.
+             -> String -- ^ The filename of the file that will be written to.
+             -> IO ()
 performParse dirLocation inputFilename outputFilename =
    do graphFile <- readFile ("../public/res/graphs/" ++ inputFilename)
       key <- insertGraph dirLocation
@@ -46,12 +49,15 @@ performParse dirLocation inputFilename outputFilename =
       buildSVG key M.empty ("../public/res/graphs/" ++ dirLocation ++ "/" ++ outputFilename)
       print "Success"
 
-parseGraph ::  Int64 -> String -> ([Path],[Shape],[Text])
+parseGraph ::  Int64  -- ^ The unique identifier of the graph.
+            -> String -- ^ The file contents of the graph that will be parsed.
+            -> ([Path],[Shape],[Text])
 parseGraph key graphFile =
     let graphDoc = xmlParse "output.error" graphFile
     in parseNode key (getRoot graphDoc)
 
-insertGraph :: String -> IO Int64
+insertGraph :: String   -- ^ The title of the graph that is being inserted.
+            -> IO Int64 -- ^ The unique identifier of the inserted graph.
 insertGraph graphTitle =
     runSqlite dbStr $ do
         runMigration migrateAll
@@ -68,7 +74,9 @@ insertElements (paths, shapes, texts) =
         mapM_ insert_ texts
 
 -- | Parses a level.
-parseNode :: Int64 -> Content i -> ([Path],[Shape],[Text])
+parseNode :: Int64 -- ^ The Path's corresponding graph identifier.
+          -> Content i
+          -> ([Path],[Shape],[Text])
 parseNode key content =
     if getAttribute "id" content == "layer2" ||
        getName content == "defs"
@@ -86,7 +94,9 @@ parseNode key content =
              (map (updateText trans) (texts ++ childrenTexts)))
 
 -- | Parses a list of Content.
-parseChildren :: Int64 -> [Content i] -> ([Path],[Shape],[Text])
+parseChildren :: Int64 -- ^ The corresponding graph identifier.
+              -> [Content i]
+              -> ([Path],[Shape],[Text])
 parseChildren key x = foldl addThree ([],[],[]) $ map (parseNode key) x
 
 -- TODO: Can't find way to zip tuples.
@@ -96,7 +106,9 @@ addThree :: ([Path],[Shape],[Text])
 addThree (a,b,c) (d,e,f) = (a ++ d, b ++ e, c ++f)
 
 -- | Parses a rect.
-parseRect :: Int64 -> Content i -> Shape
+parseRect :: Int64 -- ^ The Rect's corresponding graph identifier.
+          -> Content i
+          -> Shape
 parseRect key content =
     Shape key
           ""
@@ -111,7 +123,9 @@ parseRect key content =
           Node
 
 -- | Parses a path.
-parsePath :: Int64 -> Content i -> Maybe Path
+parsePath :: Int64 -- ^ The Path's corresponding graph identifier.
+          -> Content i
+          -> Maybe Path
 parsePath key content =
     if last (getAttribute "d" content) == 'z' && not isRegion
     then Nothing
@@ -129,7 +143,9 @@ parsePath key content =
               null fillAttr || fillAttr == "none"
 
 -- | Parses a text.
-parseText :: Int64 -> Content i -> Text
+parseText :: Int64 -- ^ The Text's corresponding graph identifier.
+          -> Content i
+          -> Text
 parseText key content =
     Text key
          (getAttribute "id" content)
@@ -138,7 +154,9 @@ parseText key content =
          (tagTextContent content)
 
 -- | Parses an ellipse.
-parseEllipse :: Int64 -> Content i -> Shape
+parseEllipse :: Int64 -- ^ The Ellipse's corresponding graph identifier.
+             -> Content i
+             -> Shape
 parseEllipse key content =
     Shape key
           ""
@@ -152,13 +170,21 @@ parseEllipse key content =
           20
           BoolNode
 
-updatePath :: String -> Point -> Path -> Path
+updatePath :: String -- ^ The fill that may be added to the Path.
+           -> Point  -- ^ Transform that will be added to the Shape's
+                     --   current transform value.
+           -> Path
+           -> Path
 updatePath fill transform p =
     p { pathPoints = map (addTuples transform) (pathPoints p),
         pathFill = if null (pathFill p) then fill else pathFill p
       }
 
-updateShape :: String -> Point -> Shape -> Shape
+updateShape :: String -- ^ The fill that may be added to the Shape.
+            -> Point  -- ^ Transform that will be added to the Shape's
+                      --   current transform value.
+            -> Shape
+            -> Shape
 updateShape fill transform r =
     r { shapePos = addTuples transform (shapePos r),
         shapeFill = if null (shapeFill r) then fill else shapeFill r,
@@ -169,6 +195,9 @@ updateShape fill transform r =
                               Node     -> Node
       }
 
-updateText :: Point -> Text -> Text
+updateText :: Point -- ^ Transform that will be added to the input Shape's
+                    --   current transform value.
+           -> Text
+           -> Text
 updateText transform t =
     t { textPos = addTuples transform (textPos t) }
