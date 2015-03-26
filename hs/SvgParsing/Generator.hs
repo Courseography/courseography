@@ -62,7 +62,8 @@ regionTextStyle :: String
 regionTextStyle = "font-size:9pt;"
 
 -- | Gets a tuple from areaMap where id_ is in the list of courses for that tuple.
-getTuple :: String -> Maybe (T.Text, String)
+getTuple :: String -- ^ The course's ID.
+         -> Maybe (T.Text, String)
 getTuple id_
     | M.null tuples = Nothing
     | otherwise   = Just $ snd $ M.elemAt 0 tuples
@@ -75,13 +76,26 @@ getArea id_ = case getTuple id_ of
                   _          -> ""
 
 -- | Gets the fill from areaMap where id_ is in the list of courses for the corresponding tuple.
-getFill :: String -> String
+getFill :: String -- ^ The course's ID.
+        -> String -- ^ The course's allocated fill value.
 getFill id_ = case getTuple id_ of
                   Just tuple -> T.unpack $ fst $ tuple
                   _          -> "grey"
 
 -- | Builds an SVG document.
-makeSVGDoc :: M.Map String String -> [Shape] -> [Shape] -> [Path] -> [Path] -> [Text] -> S.Svg
+makeSVGDoc :: M.Map String String
+           -> [Shape] -- ^ A list of the Nodes that will be included
+                      -- in the graph. This includes both Hybrids and
+                      -- course nodes.
+           -> [Shape] -- ^ A list of the Ellipses that will be included
+                      -- in the graph.
+           -> [Path]  -- ^ A list of the Edges that will be included
+                      -- in the graph.
+           -> [Path]  -- ^ A list of the Regions that will be included
+                      -- in the graph.
+           -> [Text]  -- ^ A list of the 'Text' elements that will be included
+                      -- in the graph.
+           -> S.Svg   -- ^ The completed SVG document.
 makeSVGDoc courseMap rects ellipses edges regions regionTexts =
     S.docTypeSvg ! A.width "1052.3622"
                  ! A.height "744.09448"
@@ -125,7 +139,15 @@ makeSVGDefs =
                             ! A.fill "black"
 
 -- | Builds an SVG document.
-buildSVG :: Int64 -> M.Map String String -> String -> IO ()
+buildSVG :: Int64                -- ^ The ID of the graph that is being built.
+         -> M.Map String String  -- ^ A map of courses that holds the course
+                                 --   ID as a key, and the data-active attribute
+                                 --   as the course's value.
+                                 --   The data-active attribute is used in the
+                                 --   interactive graph to indicate which courses
+                                 --   the user has selected.
+         -> String               -- ^ The filename that this graph will be written to.
+         -> IO ()
 buildSVG gId courseMap filename =
     runSqlite dbStr $ do
         sqlRects    :: [Entity Shape]    <- selectList [ShapeType_ <-. [Node, Hybrid], ShapeGId ==. gId] []
@@ -180,7 +202,8 @@ convertSelectionToStyle courseStatus =
     then "stroke-width:4;"
     else "opacity:0.5;stroke-dasharray:8,5;"
 
-isSelected :: String -> Bool
+isSelected :: String -- ^ The selected status of a course.
+           -> Bool
 isSelected courseStatus =
     isPrefixOf "active" courseStatus ||
     isPrefixOf "overridden" courseStatus
@@ -231,7 +254,8 @@ convertEllipseToSVG ellipse =
                       ! A.style "stroke:#000000;fill:none;"
             concatSVG $ map (convertTextToSVG BoolNode) (shapeText ellipse)
 
-getTextStyle :: ShapeType -> String
+getTextStyle :: ShapeType -- ^ The parent element of the Text element in question.
+             -> String
 getTextStyle Hybrid    = hybridTextStyle
 getTextStyle BoolNode  = ellipseTextStyle
 getTextStyle Region    = regionTextStyle
