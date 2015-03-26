@@ -138,6 +138,10 @@ pathCSS = "path" ? do
     "data-active" @= "drawn" & do
         faded
         wideStroke
+    "data-active" @= "region" & do
+        faded
+        "stroke-width" -: "0"
+
 
 {- resetCSS
  - Generates CSS for the reset feature

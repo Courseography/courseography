@@ -105,10 +105,7 @@ Section.prototype.setTime = function (time) {
     $(time).html(this.courseName.substring(0, 6) + ' (' + this.type + ')')
            .attr("clicked", "true")
            .attr("type", this.type)
-           .css('border-left-style', 'solid')
-           .css('border-left-width', '1px')
-           .css('border-right-style', 'solid')
-           .css('border-right-width', '1px');
+           .addClass('timetable-edge');
 };
 
 
@@ -143,9 +140,8 @@ Section.prototype.removeTimes = function () {
             time = time.slice(0, time.length-1);
         }
 
-        $(time).css('border-top-style', 'default')
-               .css('border-left-style', 'default')
-               .css('border-right-style', 'default');
+        $(time).removeClass('timetable-edge')
+               .removeClass('timetable-middle');
 
         if (n === 'H') {
             compressCell(parseInt(time.slice(2)), time.charAt(1), time.charAt(time.length-2));
@@ -154,7 +150,7 @@ Section.prototype.removeTimes = function () {
         if ($(time).data("conflicts").length > 0) {
             tmp.removeConflict(time);
         } else {
-             renderClearTime(time);
+            renderClearTime(time);
         }
     });
 };

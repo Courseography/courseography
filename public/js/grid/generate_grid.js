@@ -166,15 +166,15 @@ function appendTableData(trFall, trSpring, time) {
                 .attr('in-conflict', 'false')
                 .attr('satisfied', 'true')
                 .attr('rowspan', '1')
-                .css('display', 'none')
-                .addClass('timetable-cell'));
+                .addClass('timetable-cell')
+                .addClass('timetable-half-cell'));
             trSpring.append($('<td></td>')
                 .attr('id', weekPrefixArray[k] + time.toString().replace('.', '-') + 'S' + 'H')
                 .attr('in-conflict', 'false')
                 .attr('satisfied', 'true')
                 .attr('rowspan', '1')
-                .css('display', 'none')
-                .addClass('timetable-cell'));
+                .addClass('timetable-cell')
+                .addClass('timetable-half-cell'));
         }
 
         trSpring.append($('<td></td>')

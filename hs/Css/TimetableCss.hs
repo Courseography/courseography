@@ -115,12 +115,35 @@ timetableCSS = do
                 width (pct 10)
                 fontWeight bold
         td ? do
-            fontSize (em 0.9)
+            "rowspan" *= "1" & do
+                fontSize (em 0)
+            "rowspan" *= "2" & do
+                fontSize (em 0.9)
         ".timetable-time" ? do
             width (pct 12)
         ".timetable-dummy-cell" ? do
-            width (pct 0.1)
-            "border-style" -: "none"
+            width (pct 0.00000000001) -- arbitary size of as small as possible
+            border none (px 0) pink1
+        ".timetable-half-cell" ? do
+            display none
+        ".timetable-half-cell-display" ? do
+            display tableCell
+        ".timetable-cell" ? do
+            borderBottom solid (px 1) pink1
+            borderTop solid (px 1) pink1
+            borderLeft solid (px 0) pink1
+            borderRight solid (px 0) pink1
+        ".timetable-edge" ? do
+            borderTop solid (px 1) pink1
+            borderBottom solid (px 0) pink1
+            borderLeft solid (px 1) pink1
+            borderRight solid (px 1) pink1
+        ".timetable-middle" ? do
+            borderBottom solid (px 0) pink1
+            borderTop solid (px 0) pink1
+            borderLeft solid (px 1) pink1
+            borderRight solid (px 1) pink1
+
     -- Overriding bootstrap
     ".col-md-2" ? do
         width (pct 14)
