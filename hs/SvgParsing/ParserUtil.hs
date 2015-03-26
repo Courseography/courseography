@@ -68,7 +68,8 @@ parseTransform transform =
     in (xPos, yPos)
 
 -- | Parses a path's `d` attribute.
-parsePathD :: String -> [Point]
+parsePathD :: String -- ^ The 'd' attribute of an SVG path.
+           -> [Point]
 parsePathD d
     | head d == 'm' = relCoords
     | otherwise = absCoords
@@ -88,7 +89,12 @@ addTuples :: Point -> Point -> Point
 addTuples (a,b) (c,d) = (a + c, b + d)
 
 -- | Determines if a point intersects with a shape.
-intersects :: Double -> Double -> Point -> Double -> Point -> Bool
+intersects :: Double -- ^ The shape's width.
+           -> Double -- ^ The shape's height.
+           -> Point  -- ^ The shape's coordinate.
+           -> Double -- ^ The offset.
+           -> Point  -- ^ The point's coordinate.
+           -> Bool
 intersects width height (rx, ry) offset (px, py) =
     let dx = px - rx
         dy = py - ry
@@ -97,6 +103,8 @@ intersects width height (rx, ry) offset (px, py) =
        dy >= -1 * offset &&
        dy <= height + offset;
 
--- | Reads an attribute.
-readAttr :: Read a => String -> Content i -> a
+-- | Reads an attribute of an element.
+readAttr :: Read a => String    -- ^ The attribute's name.
+                   -> Content i -- ^ The element that contains the attribute.
+                   -> a
 readAttr attr content = read $ getAttribute attr content
