@@ -79,7 +79,7 @@ getArea id_ = case getTuple id_ of
 getFill :: String -- ^ The course's ID.
         -> String -- ^ The course's allocated fill value.
 getFill id_ = case getTuple id_ of
-                  Just tuple -> T.unpack $ fst $ tuple
+                  Just tuple -> T.unpack $ fst tuple
                   _          -> "grey"
 
 -- | Builds an SVG document.

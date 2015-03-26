@@ -47,12 +47,12 @@ buildRect :: [Text] -- ^ A list of shapes that may intersect with the given node
           -> Shape  -- ^ A node.
           -> Shape
 buildRect texts entity =
-    let rectTexts = filter (\x -> intersects
+    let rectTexts = filter (intersects
                             (shapeWidth entity)
                             (shapeHeight entity)
                             (shapePos entity)
                             9
-                            (textPos x)
+                            . textPos
                             ) texts
         textString = concatMap textText rectTexts
         dropSlash = takeWhile (/='/')
@@ -96,13 +96,13 @@ buildEllipses :: [Text] -- ^ A list of Text elements that may or may not interse
               -> Int    -- ^ A number to use in the ID of the ellipse.
               -> Shape
 buildEllipses texts entity idCounter =
-    let ellipseText = filter (\x -> intersects
-                                    (shapeWidth entity)
-                                    (shapeHeight entity)
-                                    (shapePos entity)
-                                    9
-                                    (textPos x)
-                             ) texts
+    let ellipseText = filter (intersects
+                              (shapeWidth entity)
+                              (shapeHeight entity)
+                              (shapePos entity)
+                              9
+                              . textPos
+                              ) texts
     in Shape (shapeGId entity)
              ("bool" ++ show idCounter)
              (shapePos entity)
