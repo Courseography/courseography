@@ -259,12 +259,10 @@ Course.prototype.selectTimes = function (section) {
 
         ptime = previousCell(time);
         if ($(ptime).html() !== '') {
-            $(time).css('border-top-style', 'hidden');
+            $(time).removeClass('timetable-edge')
+                   .addClass('timetable-middle');
         }
 
-        if ($(time).attr('rowspan') === '1') {
-            $(time).css('font-size', '0');
-        }
     });
 };
 

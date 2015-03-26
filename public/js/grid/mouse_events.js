@@ -118,9 +118,8 @@ function renderClearHover(time) {
     }
 
     if ($(time).attr('clicked') !== 'true') {
-        $(time).css('border-top-style', 'default')
-               .css('border-left-style', 'default')
-               .css('border-right-style', 'default');
+        $(time).removeClass('timetable-edge')
+               .removeClass('timetable-middle');
     }
 
     if (n === 'H' && $(time).attr('clicked') !== 'true') {
@@ -129,14 +128,6 @@ function renderClearHover(time) {
 
     if ($(time).attr('clicked') !== 'true') {
         $(time).html('');
-    }
-
-    if ($(time).attr('rowspan') === '1') {
-        $(time).css('font-size', '0');
-    }
-
-    if ($(time).attr('rowspan') === '2') {
-        $(time).css('font-size', '0.9em');
     }
 
     $(time).attr('hover', 'off');
@@ -170,23 +161,10 @@ function renderAddHover(time, section) {
     }
 
     if ($(time).attr('clicked') !== 'true') {
-        if ($(time).attr('rowspan') !== '1') {
-            $(time).html(section.courseName.substring(0,6) + ' (' + section.type + ')')
-                    .attr('hover', 'good')
-                    .css('border-left-style', 'solid')
-                    .css('border-left-width', '1px')
-                    .css('border-right-style', 'solid')
-                    .css('border-right-width', '1px');
-        } else {
-            $(time).html(section.courseName.substring(0,6) + ' (' + section.type + ')')
-                    .attr('hover', 'good')
-                    .css('font-size', '0')
-                    .css('border-left-style', 'solid')
-                    .css('border-left-width', '1px')
-                    .css('border-right-style', 'solid')
-                    .css('border-right-width', '1px');
-        }
-    } else if ($(time).html() === section.courseName &&
+        $(time).html(section.courseName.substring(0,6) + ' (' + section.type + ')')
+                .attr('hover', 'good')
+                .addClass('timetable-edge');
+    } else if ($(time).html() === section.courseName.substring(0,6) + ' (' + section.type + ')' &&
             $(time).attr('type') === section.type) {
         $(time).attr('hover', 'remove');
     } else {
@@ -199,7 +177,8 @@ function renderAddHover(time, section) {
 
     ptime = previousCell(time);
     if ($(ptime).html() !== '') {
-        $(time).css('border-top-style', 'hidden');
+        $(time).removeClass('timetable-edge')
+               .addClass('timetable-middle');
     }
 }
 
@@ -222,14 +201,14 @@ function previousCell(time) {
     } else if (n === 'E') {
         ptime = time.slice(0, 2) + String(parseInt(time.slice(2))-1) + '-5' + time.charAt(time.length-2) + 'H';
 
-        if ($(ptime).css('display') == 'none') {
+        if ($(ptime).html() === '') {
             ptime = time.slice(0, 2) + String(parseInt(time.slice(2))-1) + '-0' + time.charAt(time.length-2);
         }
         return ptime;
     } else {
         ptime = time.slice(0, 2) + String(parseInt(time.slice(2))-1) + '-5' + time.charAt(time.length-1) + 'H';
 
-        if ($(ptime).css('display') == 'none') {
+        if ($(ptime).html() === '') {
             ptime = time.slice(0, 2) + String(parseInt(time.slice(2))-1) + '-0' + time.charAt(time.length-1);
         }
         return ptime;
@@ -248,7 +227,7 @@ function extendCell(timeInt, day, term) {
     var pcell = '#' + day + timeInt + '-0' + term;
     var ccell = '#' + day + timeInt + '-5' + term + 'H';
 
-    $(ccell).css('display', 'table-cell');
+    $(ccell).addClass('timetable-half-cell-display');
     $(pcell).attr('rowspan', '1');
 }
 
@@ -265,5 +244,5 @@ function compressCell(timeInt, day, term) {
     var ccell = '#' + day + timeInt + '-5' + term + 'H';
 
     $(pcell).attr('rowspan', '2');
-    $(ccell).css('display', 'none');
+    $(ccell).removeClass('timetable-half-cell-display');
 }

@@ -158,8 +158,7 @@ function appendTableData(trFall, trSpring, time) {
         var adjustedTime = '';
 
         trFall.append($('<td></td>')
-            .addClass('timetable-dummy-cell')
-            .css('border-style', 'none'));
+            .addClass('timetable-dummy-cell'));
 
         for (var k = 0; k < 5; k++) {
             trFall.append($('<td></td>')
@@ -167,20 +166,19 @@ function appendTableData(trFall, trSpring, time) {
                 .attr('in-conflict', 'false')
                 .attr('satisfied', 'true')
                 .attr('rowspan', '1')
-                .css('display', 'none')
-                .addClass('timetable-cell'));
+                .addClass('timetable-cell')
+                .addClass('timetable-half-cell'));
             trSpring.append($('<td></td>')
                 .attr('id', weekPrefixArray[k] + time.toString().replace('.', '-') + 'S' + 'H')
                 .attr('in-conflict', 'false')
                 .attr('satisfied', 'true')
                 .attr('rowspan', '1')
-                .css('display', 'none')
-                .addClass('timetable-cell'));
+                .addClass('timetable-cell')
+                .addClass('timetable-half-cell'));
         }
 
         trSpring.append($('<td></td>')
-            .addClass('timetable-dummy-cell')
-            .css('border-style', 'none'));
+            .addClass('timetable-dummy-cell'));
     }
 
 }
