@@ -3,23 +3,17 @@ var math = [
     'Calc1', 'Lin1', 'Sta1', 'Sta2'
 ];
 
-// Course disciplines
-var areas = {
-    'theory': ['CSC165', 'CSC236', 'CSC240', 'CSC263', 'CSC265',
-               'CSC310', 'CSC324', 'CSC373', 'CSC438', 'CSC448',
-               'CSC463'],
-    'core': ['CSC108', 'CSC148', 'CSC104', 'CSC120'],
-    'se': ['CSC207', 'CSC301', 'CSC302', 'CSC410', 'CSC465'],
-    'systems': ['CSC209', 'CSC258', 'CSC358', 'CSC369', 'CSC372',
-                'CSC458', 'CSC469', 'CSC488', 'ECE385', 'ECE489'],
-    'hci': ['CSC200', 'CSC300',  'CSC318', 'CSC404', 'CSC428',
-            'CSC454'],
-    'graphics': ['CSC320', 'CSC418', 'CSC420'],
-    'num': ['CSC336', 'CSC436', 'CSC446', 'CSC456'],
-    'ai': ['CSC321', 'CSC384', 'CSC401', 'CSC411', 'CSC412',
-           'CSC485', 'CSC486'],
-    'dbweb': ['CSC309', 'CSC343', 'CSC443']
-};
+// All CSC Courses
+var allCourses = ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC236',
+                  'CSC209', 'CSC258', 'CSC263', 'CSC300', 'CSC301',
+                  'CSC302', 'CSC309', 'CSC310', 'CSC318', 'CSC320',
+                  'CSC321', 'CSC324', 'CSC336', 'CSC343', 'CSC358',
+                  'CSC369', 'CSC372', 'CSC348', 'ECE385', 'CSC401',
+                  'CSC404', 'CSC410', 'CSC411', 'CSC412', 'CSC418',
+                  'CSC420', 'CSC428', 'CSC386', 'CSC438', 'CSC443',
+                  'CSC446', 'CSC448', 'CSC454', 'CSC456', 'CSC458',
+                  'CSC463', 'CSC465', 'CSC469', 'CSC486', 'CSC488', 
+                  'ECE489'];
 
 var areaNames = ['theory', 'core', 'se', 'systems', 'hci',
                  'graphics', 'num', 'ai', 'dbweb'];

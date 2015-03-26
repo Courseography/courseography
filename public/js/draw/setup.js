@@ -1,21 +1,3 @@
-/* GLOBAL VARIABLES */
-var nodeWidth = 40;
-var nodeHeight = 32;
-var xmlns = 'http://www.w3.org/2000/svg';
-var svgDoc = null;
-
-var nodeId = 0;
-var mode = 'node-mode';
-var nodeColourId = 'red';
-var nodeMoving = null;      // for movement and path creation
-var prevX = -1;             // for movement
-var prevY = -1;             // for movement
-var nodeSelected = null;    // for adding text or changing colour
-var startNode = null;       // for making paths
-var curPath = null;         // the path currently being created
-var elbowMoving = null;     // for movement of elbow joints
-
-
 /* SET UP SVG CANVAS */
 
 /**
@@ -31,6 +13,10 @@ function setupSVGCanvas() {
     bgdiv.setAttribute('id', 'background'); 
     var svg = document.createElementNS(xmlns, 'svg');
     svg.setAttribute('id', 'mySVG');
+
+    var g = document.createElementNS(xmlns, 'g');
+    g.setAttribute('id', 'regions');
+
     svg.setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xlink', 'http://www.w3.org/1999/xlink');
     
     svg.addEventListener('mousedown', makeNodePath, false);
@@ -40,6 +26,7 @@ function setupSVGCanvas() {
     
     div.appendChild(bgdiv);
     div.appendChild(svg);
+    svg.appendChild(g);
     document.body.appendChild(div);
     svgDoc = document.getElementById('mySVG');
 }
@@ -76,7 +63,6 @@ function setupMarker() {
 $(document).ready(function () {
     setupSVGCanvas();
     svgDoc.appendChild(setupMarker());
-    // also append g section for all regions here? !!
 });
 
 /* SET UP SIDEBAR AND ONCLICKS FOR BUTTONS */ // !! Should these onclick definitions go inside setup? !!
@@ -85,14 +71,21 @@ $('.mode').each(function() {
     $(this). click(function () {
         changeMode(this.id);}); 
     });
+
 $('.colour').each(function() {
     $(this). click(function () {
         changeColour(this.id);});
     });
+
 $('#add-text').click(function () {
     addText();
-});
+    });
 
+$('#finish-region').click(function () {
+    finishRegion();
+    });
+
+document.addEventListener('keydown', keyboard, false);
 
 /**
  * Handles keydown event e, possibly switching modes.
@@ -112,11 +105,11 @@ function keyboard(e) {
             changeMode("erase-mode"); // e
         } else if (e.which == 82){
             changeMode("region-mode"); // r
+        } else if (e.which == 70){
+            finishRegion(); // f
         }
     }
 }
-
-document.addEventListener('keydown', keyboard, false);
 
 
 /**
@@ -129,7 +122,7 @@ function changeMode(id) {
     //if (mode !== '') {
       $('#' + mode).toggleClass('clicked');
     //}
-    if (mode === "path-mode") { 
+    if (mode === 'path-mode') { 
         // clean up partial temp path
         if (curPath !== null) {
             startNode = null;
@@ -138,7 +131,22 @@ function changeMode(id) {
             });
             svgDoc.removeChild(curPath);
             curPath = null;
+            
         }
+    } else if (mode === 'region-mode') {
+        //svgDoc.removeChild(startPoint);
+        if (curPath !== null) {
+            curPath.elbows.map(function (item) {
+                    svgDoc.removeChild(item);
+                });
+            document.getElementById('regions').removeChild(curPath);
+            curPath = null;
+            startPoint = null;
+        } else if (startPoint !== null) {
+            svgDoc.removeChild(startPoint);
+            startPoint = null;
+        }   
+
     }
 
     mode = id;

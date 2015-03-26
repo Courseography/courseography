@@ -14,6 +14,8 @@ import Css.PostCss
 import Css.TimetableCss
 import Css.DrawCss
 import Css.AboutCss
+import Css.FourOhFourCss
+import Css.SearchCss
 
 styleFiles :: [(String, Css)]
 styleFiles = [
@@ -22,7 +24,9 @@ styleFiles = [
     ("../public/style/grid/timetable_styles.css", timetableStyles),
     ("../public/style/draw/draw_styles.css", drawStyles),
     ("../public/style/post/post_styles.css", postStyles),
-    ("../public/style/common/about.css", aboutStyles)
+    ("../public/style/common/about.css", aboutStyles),
+    ("../public/style/common/four_oh_four.css", fourOhFourStyles),
+    ("../public/style/search/search_styles.css", searchStyles)
     ]
 
 renderStyleFile :: (String, Css) -> IO ()
@@ -35,4 +39,5 @@ generateCSS = do
     createDirectoryIfMissing True "../public/style/grid"
     createDirectoryIfMissing True "../public/style/draw"
     createDirectoryIfMissing True "../public/style/post"
+    createDirectoryIfMissing True "../public/style/search"
     Prelude.foldl1 (>>) $ Prelude.map renderStyleFile styleFiles

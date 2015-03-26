@@ -13,6 +13,7 @@ import Data.Char
 import Data.Conduit
 import Data.List.Split
 import Data.List hiding (map, filter)
+import Data.Int
 import Database.JsonParser
 import MakeElements
 import Data.Maybe
@@ -127,13 +128,13 @@ makeSVGDefs =
                             ! A.fill "black"
 
 -- | Builds an SVG document.
-buildSVG :: Int -> M.Map String String -> String -> IO ()
+buildSVG :: Int64 -> M.Map String String -> String -> IO ()
 buildSVG gId courseMap filename =
     runSqlite dbStr $ do
-        sqlRects    :: [Entity Shape]    <- selectList [ShapeType_ <-. [Node, Hybrid]] []
-        sqlTexts    :: [Entity Text]     <- selectList [] []
-        sqlPaths    :: [Entity Path]     <- selectList [] []
-        sqlEllipses :: [Entity Shape]    <- selectList [ShapeType_ ==. BoolNode] []
+        sqlRects    :: [Entity Shape]    <- selectList [ShapeType_ <-. [Node, Hybrid], ShapeGId ==. gId] []
+        sqlTexts    :: [Entity Text]     <- selectList [TextGId ==. gId] []
+        sqlPaths    :: [Entity Path]     <- selectList [PathGId ==. gId] []
+        sqlEllipses :: [Entity Shape]    <- selectList [ShapeType_ ==. BoolNode, ShapeGId ==. gId] []
         let courseStyleMap = M.map convertSelectionToStyle courseMap
             texts          = map entityVal sqlTexts
             rects          = map (buildRect texts . entityVal) sqlRects
