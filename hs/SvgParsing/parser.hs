@@ -77,9 +77,9 @@ parseNode key content =
              texts    = map (parseText key) (tag "text" content)
              paths    = mapMaybe (parsePath key) (tag "path" content)
              ellipses = map (parseEllipse key) (tag "ellipse" content)
-         in ((map (updatePath fill trans) (paths ++ chilrenPaths)),
-             (map (updateShape fill trans) (rects ++ ellipses ++ childrenShapes)),
-             (map (updateText trans) (texts ++ childrenTexts)))
+         in (map (updatePath fill trans) (paths ++ chilrenPaths),
+             map (updateShape fill trans) (rects ++ ellipses ++ childrenShapes),
+             map (updateText trans) (texts ++ childrenTexts))
 
 -- | Parses a list of Content.
 parseChildren :: Int64 -- ^ The corresponding graph identifier.
@@ -150,8 +150,8 @@ parseEllipse key content =
           ""
           (readAttr "cx" content,
            readAttr "cy" content)
-          ((readAttr "rx" content) * 2)
-          ((readAttr "ry" content) * 2)
+          (readAttr "rx" content * 2)
+          (readAttr "ry" content * 2)
           ""
           ""
           []
