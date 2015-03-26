@@ -12,7 +12,11 @@ import Database.Tables
 import Database.DataType
 
 -- | Determines the source and target nodes of the path.
-buildPath :: [Shape] -> [Shape] -> Path -> Int -> Path
+buildPath :: [Shape] -- ^ Node elements.
+          -> [Shape] -- ^ Ellipses.
+          -> Path    -- A path.
+          -> Int     -- A number to use in the ID of the path.
+          -> Path
 buildPath rects ellipses entity idCounter
     | pathIsRegion entity =
         Path (pathGId entity)
@@ -39,7 +43,9 @@ buildPath rects ellipses entity idCounter
     where coords = pathPoints entity
 
 -- | Builds a Rect from a database entry in the rects table.
-buildRect :: [Text] -> Shape -> Shape
+buildRect :: [Text] -- ^ A list of shapes that may intersect with the given node.
+          -> Shape  -- ^ A node.
+          -> Shape
 buildRect texts entity =
     let rectTexts = filter (\x -> intersects
                             (shapeWidth entity)
@@ -84,7 +90,11 @@ intersectsWithPoint point shape =
                point
 
 -- | Builds a Path from a database entry in the paths table.
-buildEllipses :: [Text] ->  Shape -> Int -> Shape
+buildEllipses :: [Text] -- ^ A list of Text elements that may or may not intersect
+                        --   with the given ellipse.
+              -> Shape  -- ^ An ellipse.
+              -> Int    -- ^ A number to use in the ID of the ellipse.
+              -> Shape
 buildEllipses texts entity idCounter =
     let ellipseText = filter (\x -> intersects
                                     (shapeWidth entity)
