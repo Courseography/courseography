@@ -20,6 +20,8 @@ function Course(name) {
     this.exclusions = course.exclusions;
     this.distribution = course.distribution;
     this.manualTutorialEnrolment = course.manualTutorialEnrolment;
+    this.manualPracticalEnrolment = course.manualPracticalEnrolment;
+
     // Create sections
     this.parseSessions(course);
 
@@ -27,29 +29,7 @@ function Course(name) {
 
     this.status = 'inactive';
 
-    if (course.manualTutorialEnrolment !== false) {
-        if (course.Y !== undefined) {
-            this.practicalEnrolment = course.Y
-                                            .tutorials.some(hasManualPractical);
-            this.tutorialEnrolment = course.Y
-                                           .tutorials.some(hasManualTutorial);
-        } else if (course.F !== undefined) {
-            this.practicalEnrolment = course.F
-                                            .tutorials.some(hasManualPractical);
-            this.tutorialEnrolment = course.F
-                                           .tutorials.some(hasManualTutorial);
-        } else {
-            this.practicalEnrolment = course.S
-                                            .tutorials.some(hasManualPractical);
-            this.tutorialEnrolment = course.S
-                                           .tutorials.some(hasManualTutorial);
-        }
-    } else {
-        this.practicalEnrolment = false;
-        this.tutorialEnrolment = false;
-    }
-
-    this.manual = {'T': this.tutorialEnrolment, 'P': this.practicalEnrolment};
+    this.manual = {'T': this.manualTutorialEnrolment, 'P': this.manualPracticalEnrolment};
 }
 
 
@@ -111,12 +91,6 @@ Course.prototype.parseLectures = function (session, timeSuffix) {
         var id = tmp.name + '-' + lecture.section + '-' + timeSuffix;
         sectionTimes = sectionTimes.concat(convertTimes(lecture.time));
 
-        if (tmp.manualTutorialEnrolment === false &&
-            session.tutorials.length > 0) {
-            sectionTimes = sectionTimes.concat(
-                convertTimes(session.tutorials[i][0]));
-        }
-
         if (timeSuffix === 'Y') {
             sectionTimes = sectionTimes.map(function (t) {
                                               return '#' + t + 'F';
@@ -149,7 +123,7 @@ Course.prototype.parseLectures = function (session, timeSuffix) {
 Course.prototype.parseTutorials = function (session, timeSuffix) {
     'use strict';
 
-    if (this.manualTutorialEnrolment === false) {
+    if (this.manualTutorialEnrolment === false && this.manualPractialEnrolment === false) {
         return [];
     }
 
@@ -161,6 +135,7 @@ Course.prototype.parseTutorials = function (session, timeSuffix) {
             tutorials.push(session.tutorials[i]);
         }
     }
+
     return tutorials.map(function (tutorial) {
         var sectionTimes = convertTimes(tutorial[1]);
         if (timeSuffix === 'Y') {
