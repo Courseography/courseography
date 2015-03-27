@@ -214,7 +214,7 @@ function checkPostCompleted() {
 function updateNavPost() {
     'use strict';
 
-    var navPost = $('#nav-links')[0].getElementsByTagName('li')[3].getElementsByTagName('a')[0];
+    var navPost = $('#nav-links')[0].getElementsByTagName('li')[4].getElementsByTagName('a')[0];
 
     if (getCookie('specialist') === 'active') {
         navPost.innerHTML = 'Check My POSt! (' + specialist.creditCount.toFixed(1) + '/12.0)';
