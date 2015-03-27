@@ -64,17 +64,15 @@ function appendHeaders(fallThead, springThead) {
     var days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
 
     fallThead.append($('<th></th>')
-        .addClass('timetable-dummy-cell'));   
+        .addClass('timetable-dummy-cell'));
 
     fallThead.append($('<th></th>')
         .addClass('term-name')
         .html('Fall'));
 
     for (var j = 0; j < 5; j++) {
-        fallThead.append($('<th></th>').html(days[j])
-                                       .height(35));
-        springThead.append($('<th></th>').html(days[j])
-                                         .height(35));
+        fallThead.append($('<th></th>').html(days[j]));
+        springThead.append($('<th></th>').html(days[j]));
     }
 
     springThead.append($('<th></th>')
@@ -82,7 +80,7 @@ function appendHeaders(fallThead, springThead) {
         .html('Spring'));
 
     springThead.append($('<th></th>')
-        .addClass('timetable-dummy-cell'));  
+        .addClass('timetable-dummy-cell'));
 }
 
 
@@ -125,7 +123,7 @@ function appendTableData(trFall, trSpring, time) {
 
         trFall.append($('<td></td>')
             .addClass('timetable-dummy-cell'));
-        
+
         trFall.append($('<td></td>')
            .addClass('timetable-time')
            .attr('rowspan', '2')
@@ -145,7 +143,7 @@ function appendTableData(trFall, trSpring, time) {
                 .attr('rowspan', '2')
                 .addClass('timetable-cell'));
         }
-        
+
         trSpring.append($('<td></td>')
             .addClass('timetable-time')
             .attr('rowspan', '2')

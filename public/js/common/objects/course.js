@@ -202,12 +202,9 @@ Course.prototype.addSection = function (section) {
 Course.prototype.selectTimes = function (section) {
     'use strict';
 
-    var n;
-    var ptime;
-
     $.each(section.times, function (i, time) {
 
-        n = time.charAt(time.length-1);
+        var n = time.charAt(time.length-1);
 
         if (n === 'H') {
             extendCell(parseInt(time.slice(2)), time.charAt(1), time.charAt(time.length-2));
@@ -232,7 +229,7 @@ Course.prototype.selectTimes = function (section) {
             section.setConflictTime(time);
         }
 
-        ptime = previousCell(time);
+        var ptime = previousCell(time);
         if ($(ptime).html() !== '') {
             $(time).removeClass('timetable-edge')
                    .addClass('timetable-middle');
