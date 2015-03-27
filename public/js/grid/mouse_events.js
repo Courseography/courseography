@@ -7,7 +7,7 @@ function setTdHover() {
 
     $('td').mouseover(function () {
         var courseName = $(this).data('courseName');
-        if (courseName !== '') {
+        if (courseName !== '' && courseName !== undefined) {
             var course = getCourseObject(courseName, courseObjects);
             if (course !== undefined) {
                 $.each(course.getSectionTimes(), function (i, time) {
@@ -89,7 +89,7 @@ function renderClearTime(time) {
     'use strict';
 
     $(time).html('')
-           .removeData()
+           .removeData('courseName')
            .attr('clicked', 'false')
            .attr('satisfied', 'true')
            .attr('type', '')
@@ -129,7 +129,7 @@ function renderClearHover(time) {
 
     if ($(time).attr('clicked') !== 'true') {
         $(time).html('')
-               .removeData();
+               .removeData('courseName');
     }
 
     $(time).attr('hover', 'off');
