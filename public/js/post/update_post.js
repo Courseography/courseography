@@ -228,25 +228,6 @@ function updateNavPost() {
     } 
 }
 
-
-/**
- * Updates the Nav Bar on the Graph page.
-**/
-function updateNavGraph() {
-    'use strict';
-
-    var nav_graph = $('#nav-links')[0].getElementsByTagName('li')[3].getElementsByTagName('a')[0];
-
-    if (getCookie('specialist') === 'active') {
-        nav_graph.innerHTML = 'Check My POSt! (' + getCookie('activecount') + '/12.0)';
-    } else if (getCookie('major') === 'active') {
-        nav_graph.innerHTML = 'Check My POSt! (' + getCookie('activecount') + '/8.0)';
-    } else if (getCookie('minor') === 'active') {
-        nav_graph.innerHTML = 'Check My POSt! (' + getCookie('activecount') + '/4.0)';
-    } 
-}
-
-
 /**
  * Updates list of current active (selected) courses in Graph.
 **/
