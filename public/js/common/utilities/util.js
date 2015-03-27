@@ -187,30 +187,6 @@ function cleanUpTimes(times) {
     return timeList;
 }
 
-
-/**
- * Returns whether section has manual practical enrolment. (P sections).
- * @param {JSON} section The section.
- * @returns {boolean} Whether section has manual practical enrolment.
- */
-function hasManualPractical(section) {
-    'use strict';
-
-    return (section[0].charAt(0) === 'P');
-}
-
-
-/**
- * Returns whether section has manual tutorial enrolment. (T sections).
- * @param {JSON} section The section.
- * @returns {boolean} Whether section has manual tutorial enrolment.
- */
-function hasManualTutorial(section) {
-    'use strict';
-
-    return (section[0].charAt(0) === 'T');
-}
-
 /**
  * Returns whether the url exists.
  * @param {string} url The URL.
