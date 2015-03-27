@@ -73,6 +73,7 @@ processCourseToData tags  =
             name = T.empty,
             exclusions = Nothing,
             manualTutorialEnrol = Nothing ,
+            manualPracticalEnrol = Nothing,
             distribution = Nothing,
             prereqs = Nothing
         }
