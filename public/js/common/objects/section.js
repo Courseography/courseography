@@ -103,6 +103,7 @@ Section.prototype.setTime = function (time) {
     'use strict';
 
     $(time).html(this.courseName.substring(0, 6) + ' (' + this.type + ')')
+           .data('courseName', this.courseName)
            .attr("clicked", "true")
            .attr("type", this.type)
            .addClass('timetable-edge');

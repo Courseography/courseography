@@ -6,8 +6,8 @@ function setTdHover() {
     'use strict';
 
     $('td').mouseover(function () {
-        var courseName = $(this).html();
-        if (courseName !== '') {
+        var courseName = $(this).data('courseName');
+        if (courseName !== '' && courseName !== undefined) {
             var course = getCourseObject(courseName, courseObjects);
             if (course !== undefined) {
                 $.each(course.getSectionTimes(), function (i, time) {
@@ -21,7 +21,7 @@ function setTdHover() {
         }
 
     }).mouseout(function () {
-        var course = getCourseObject($(this).html(), courseObjects);
+        var course = getCourseObject($(this).data('courseName'), courseObjects);
         if (course !== undefined) {
             $.each(course.getSectionTimes(), function (i, time) {
                 $(time).removeClass('hover-time');
@@ -50,7 +50,7 @@ function renderConflicts(time, conflicts) {
                )
                .attr('in-conflict', String(conflicts.length > 0))
                .attr('status', conflicts.length > 0 ? 'conflict' : 'occupied')
-               .attr('satisfied', getCourseObject($(time).html(),
+               .attr('satisfied', getCourseObject($(this).data('courseName'),
                                                   courseObjects).satisfied);
     }
 }
@@ -89,6 +89,7 @@ function renderClearTime(time) {
     'use strict';
 
     $(time).html('')
+           .removeData('courseName')
            .attr('clicked', 'false')
            .attr('satisfied', 'true')
            .attr('type', '')
@@ -127,7 +128,8 @@ function renderClearHover(time) {
     }
 
     if ($(time).attr('clicked') !== 'true') {
-        $(time).html('');
+        $(time).html('')
+               .removeData('courseName');
     }
 
     $(time).attr('hover', 'off');
@@ -162,8 +164,9 @@ function renderAddHover(time, section) {
 
     if ($(time).attr('clicked') !== 'true') {
         $(time).html(section.courseName.substring(0,6) + ' (' + section.type + ')')
-                .attr('hover', 'good')
-                .addClass('timetable-edge');
+               .data('courseName', section.courseName)
+               .attr('hover', 'good')
+               .addClass('timetable-edge');
     } else if ($(time).html() === section.courseName.substring(0,6) + ' (' + section.type + ')' &&
             $(time).attr('type') === section.type) {
         $(time).attr('hover', 'remove');
