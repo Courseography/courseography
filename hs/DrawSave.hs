@@ -92,27 +92,8 @@ insertSessionTutorials (Just session) sessionStr course =
     (unless $ null (tutorials session)) $ 
     mapM_ (insertTutorial sessionStr course) (tutorials session)
 
-insertTutorial :: MonadIO m => T.Text -> Course -> Tutorial -> ReaderT SqlBackend m ()
-insertTutorial session course tutorial = 
-    insert_ $ Tutorials (name course)
-                        (tutorialSection tutorial)
-                        session
-                        (map Time (times tutorial))
-                        (timeStr tutorial) 
 
-insertLec :: MonadIO m => T.Text -> T.Text -> Lecture -> ReaderT SqlBackend m ()
-insertLec session code lecture =
-    insert_ $ Lectures code
-                       session
-                       (section lecture)
-                       (map Time (time lecture))
-                       (cap lecture)
-                       (instructor lecture)
-                       (fromMaybe 0 (enrol lecture))
-                       (fromMaybe 0 (wait lecture))
-                       (extra lecture)
-                       (time_str lecture)
-
+-- for debugging?
 -- SvgDatabase.hs
 queryDatabase sql = runSqlite dbStr $ rawQuery sql [] $$ CL.mapM_ (liftIO . print)
 

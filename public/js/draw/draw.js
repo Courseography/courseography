@@ -324,7 +324,6 @@ function finishRegion() {
 
     if (curPath !== null) {
         curPath.setAttributeNS(null, 'd', curPath.getAttribute('d') + 'Z');
-        //curPath.setAttributeNS(null, 'style', 'opacity:0.7;fill-opacity:0.58;border-width:0px');
         curPath.setAttributeNS(null, 'data-group', nodeColourId);
         curPath.addEventListener('click', regionClicked, false);
         curPath.setAttributeNS(null, 'pointer-events','boundingBox'); // necessary?
