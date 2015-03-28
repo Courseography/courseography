@@ -65,6 +65,7 @@ Section.prototype.mouseover = function () {
     var tmp = this;
     $.each(this.times, function (i, time) {
         renderAddHover(time, tmp);
+
     });
     renderDisplayCourseInformation(this.course);
     renderDisplaySectionInformation(this);
@@ -102,8 +103,10 @@ Section.prototype.setTime = function (time) {
     'use strict';
 
     $(time).html(this.courseName.substring(0, 6) + ' (' + this.type + ')')
+           .data('courseName', this.courseName)
            .attr("clicked", "true")
-           .attr("type", this.type);
+           .attr("type", this.type)
+           .addClass('timetable-edge');
 };
 
 
@@ -129,12 +132,24 @@ Section.prototype.removeTimes = function () {
 
     var tmp = this;
     $.each(this.times, function (i, time) {
-        if (time.indexOf('-5') === -1 && $(time).length > 0) {
-            if ($(time).data("conflicts").length > 0) {
-                tmp.removeConflict(time);
-            } else {
-                renderClearTime(time);
-            }
+        var n = time.charAt(time.length-1);
+
+        if (n === 'E') {
+            compressCell(parseInt(time.slice(2)), time.charAt(1), time.charAt(time.length-2));
+            time = time.slice(0, time.length-1);
+        }
+
+        $(time).removeClass('timetable-edge')
+               .removeClass('timetable-middle');
+
+        if (n === 'H') {
+            compressCell(parseInt(time.slice(2)), time.charAt(1), time.charAt(time.length-2));
+        }
+
+        if ($(time).data("conflicts").length > 0) {
+            tmp.removeConflict(time);
+        } else {
+            renderClearTime(time);
         }
     });
 };

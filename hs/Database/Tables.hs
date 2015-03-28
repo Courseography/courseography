@@ -11,6 +11,7 @@
              TypeFamilies #-}
 
 module Database.Tables where
+
 import Database.Persist.TH
 import Database.DataType
 import qualified Data.Text as T
@@ -31,6 +32,7 @@ Courses json
     title T.Text Maybe
     description T.Text Maybe
     manualTutorialEnrolment Bool Maybe
+    manualPracticalEnrolment Bool Maybe 
     prereqs T.Text Maybe
     exclusions T.Text Maybe
     breadth T.Text Maybe
@@ -69,7 +71,7 @@ Distribution
     description String
     deriving Show
 
-Graph
+Graph json
     gId Int64
     title String
     deriving Show
@@ -142,28 +144,13 @@ data Course =
              name :: !T.Text,
              exclusions :: Maybe T.Text,
              manualTutorialEnrol :: Maybe Bool,
+             manualPracticalEnrol :: Maybe Bool, 
              distribution :: Maybe T.Text,
              prereqs :: Maybe Array
            } deriving Show
 
-instance FromJSON Course where
-    parseJSON (Object v) =
-        Course <$> v .:? "breadth"
-               <*> v .:? "description"
-               <*> v .:? "title"
-               <*> v .:? "prereqString"
-               <*> v .:? "F"
-               <*> v .:? "S"
-               <*> v .:? "Y"
-               <*> v .:  "name"
-               <*> v .:? "exclusions"
-               <*> v .:? "manualTutorialEnrolment"
-               <*> v .:? "distribution"
-               <*> v .:? "prereqs"
-    parseJSON _ = mzero
-
 instance ToJSON Course where
-  toJSON (Course breadth description title prereqString f s y name exclusions manualTutorialEnrol distribution prereqs)
+  toJSON (Course breadth description title prereqString f s y name exclusions manualTutorialEnrol manualPracticalEnrol distribution prereqs)
           = object ["breadth" .= breadth,
                     "description" .= description,
                     "title" .= title,
@@ -174,33 +161,16 @@ instance ToJSON Course where
                     "name" .= name,
                     "exclusions" .= exclusions,
                     "manualTutorialEnrolment" .= manualTutorialEnrol,
+                    "manualPracticalEnrolment" .= manualPracticalEnrol,
                     "distribution" .= distribution,
                     "prereqs" .= prereqs
                    ]
-
-instance FromJSON Session where
-    parseJSON (Object v) =
-        Session <$> v .: "lectures"
-                <*> v .: "tutorials"
-    parseJSON _ = mzero
 
 instance ToJSON Session where
   toJSON (Session lectures tutorials)
           = object ["lectures" .= lectures,
                     "tutorials" .= tutorials
                    ]
-
-instance FromJSON Lecture where
-    parseJSON (Object v) =
-        Lecture <$> v .:  "extra"
-                <*> v .:  "section"
-                <*> v .:  "cap"
-                <*> v .:  "time_str"
-                <*> v .:  "time"
-                <*> v .:  "instructor"
-                <*> v .:? "enrol"
-                <*> v .:? "wait"
-    parseJSON _ = mzero
 
 instance ToJSON Lecture where
   toJSON (Lecture extra section cap time_str time instructor enrol wait)
@@ -214,25 +184,11 @@ instance ToJSON Lecture where
                     "wait" .= wait
                    ]
 
-instance FromJSON Tutorial where
-    parseJSON (Array v)
-        | V.length v == 2 = do
-            times <- parseJSON $ v V.! 0
-            timeStr <- parseJSON $ v V.! 1
-            return $ Tutorial Nothing times timeStr
-        | V.length v == 3 = do
-            tutorialSection <- parseJSON $ v V.! 0
-            times <- parseJSON $ v V.! 1
-            timeStr <- parseJSON $ v V.! 2
-            return $ Tutorial tutorialSection times timeStr
-        | otherwise = mzero
-    parseJSON _ = mzero
-
 instance ToJSON Tutorial where
   toJSON (Tutorial Nothing times timeStr) =
-      Array $ V.fromList [toJSON times, toJSON timeStr]
+      Array $ V.fromList [toJSON (map convertTimeToString times), toJSON timeStr]
   toJSON (Tutorial (Just value) times timeStr) =
-      Array $ V.fromList [toJSON value, toJSON times, toJSON timeStr]
+      Array $ V.fromList [toJSON value, toJSON (map convertTimeToString times), toJSON timeStr]
 
 -- | Converts a Double to a T.Text.
 -- This removes the period from the double, as the JavaScript code,
@@ -242,9 +198,3 @@ convertTimeToString :: [Double] -> [T.Text]
 convertTimeToString [day, time] =
   [T.pack . show . floor $ day,
    T.replace "." "-" . T.pack . show $ time]
-
-instance ToJSON Graph where
-    toJSON (Graph id_ title)
-        = object ["graph_title" .= title,
-                  "graph_id" .= id_
-                 ]
