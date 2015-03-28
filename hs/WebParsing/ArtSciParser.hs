@@ -51,7 +51,7 @@ getCalendar str = do
     let coursesSoup = lastH2 tags
     let course = map (processCourseToData . (filter isTagText)) $ partitions isCourseTitle coursesSoup
     print $ "parsing " ++ str
-    mapM_ (\x -> print (prereqs x)) course 
+    mapM_ (\x -> print (prereqs x)) course
     runSqlite dbStr $ do
         runMigration migrateAll
         mapM_ insertCourse course
@@ -70,12 +70,27 @@ parseTitleFAS (tag:tags, course) =
     where removeLectureSection (TagText s) = T.takeWhile (/= '[') s
           removeTitleGarbage s = replaceAll ["\160"] "" s
 
--- |takes a list of tags representing a single course, and returns a course Record 
+-- |takes a list of tags representing a single course, and returns a course Record
 processCourseToData :: [Tag T.Text] ->  Course
 processCourseToData tags  =
-    let course = emptyCourse
-    in  snd $ (tags, course) ~:
-             preProcess -: 
+    let course =
+          Course {
+            breadth = Nothing,
+            description = Nothing,
+            title  = Nothing,
+            prereqString = Nothing,
+            f = Nothing,
+            s = Nothing,
+            y = Nothing,
+            name = T.empty,
+            exclusions = Nothing,
+            manualTutorialEnrol = Nothing,
+            manualPracticalEnrol = Nothing,
+            distribution = Nothing,
+            prereqs = Nothing
+            }
+    in snd $ (tags, course) ~:
+             preProcess -:
              parseTitleFAS -:
              parseDescription -:
              parsePrerequisite -:

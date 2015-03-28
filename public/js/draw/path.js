@@ -3,6 +3,7 @@
 /** 
  * Make the dummy elbow node with center at position position.
  * @position {object} position The x and y position of the dummy node being created.
+ * @returns
  **/
 function makeElbow(position) {
     'use strict';
@@ -18,6 +19,8 @@ function makeElbow(position) {
     svgDoc.appendChild(elbow);
 
     curPath.elbows.push(elbow);
+
+    return elbow;
 }
 
 
@@ -25,19 +28,23 @@ function makeElbow(position) {
  * Creates an SVG path that has the coordinates specified by pathString. 
  * @param {string} pathString The coordinates of the new path to be created.
  **/
-function startPath(pathString) {
+function startPath(pathString, type) {
     'use strict';
 
     // note: id will get set when the path is complete, also marker (arrowhead)
     // curPath will get modified until path is complete
     curPath = document.createElementNS(xmlns, 'path'); 
     curPath.setAttributeNS(null, 'd', pathString); 
-    curPath.setAttributeNS(null, 'fill', 'none');
     curPath.setAttributeNS(null, 'stroke', 'black');
-    curPath.setAttributeNS(null, 'data-active', 'drawn');
+    curPath.setAttributeNS(null, 'class', 'path');
     curPath.elbows = [];
-    curPath.addEventListener('click', pathClicked, false);
-    svgDoc.appendChild(curPath);
+    if (type === 'path') {
+        curPath.setAttributeNS(null, 'data-active', 'drawn');
+       svgDoc.appendChild(curPath);
+    } else { // curPath is a region
+        curPath.elbows.push(startPoint);
+        document.getElementById('regions').appendChild(curPath);
+    }
 }
 
 
@@ -58,7 +65,7 @@ function finishPath(pathId, endNode) {
                                        y: parseFloat(endNode.getAttribute('y'), 10)},
                                        'node');
 
-        startPath(pathString);
+        startPath(pathString, 'path');
     } else { // finish curPath, elbow to node
         var curElbow = {x: parseFloat(curPath.elbows[curPath.elbows.length - 1].getAttribute('cx'), 10), 
                         y: parseFloat(curPath.elbows[curPath.elbows.length - 1].getAttribute('cy'), 10)}
@@ -74,7 +81,9 @@ function finishPath(pathId, endNode) {
         item.path = pathId; 
     });
     curPath.setAttributeNS(null, 'id', pathId);
+    curPath.setAttributeNS(null, 'class', 'path');
     curPath.setAttributeNS(null, 'marker-end', 'url(#arrow)');
+    curPath.addEventListener('click', pathClicked, false);
 
     // update relationships
     startNode.kids.push(endNode);
@@ -126,7 +135,6 @@ function findClosest(beg, typeB, end, typeE) {
     // find best alignment
     var best_edges = [node1Edges[0], node2Edges[0]];
     var best_dist = dist(node1Edges[0], node2Edges[0]);
-    console.log(best_dist);
     for (var i = 0; i < node1Edges.length; i++) {
         for (var j = 0; j < node2Edges.length; j++) {
             if (dist(node1Edges[i], node2Edges[j]) < best_dist) {
@@ -181,15 +189,27 @@ function selectElbow(e) {
         var thePathString = thePath.getAttribute('d');
         var elbowNum = thePath.elbows.indexOf(e.currentTarget);
 
-        // look for elbowNum-th occurance of L
-        for (var i = 0; i <= elbowNum; i++) {
-            indexOfElbow = thePathString.indexOf('L', indexOfElbow + 1);
-        }
-        indexOfNext = thePathString.indexOf('L', indexOfElbow + 1);
-        thePathString = thePathString.slice(0, indexOfElbow) + thePathString.slice(indexOfNext);
-        thePath.elbows.splice(thePath.elbows.indexOf(e.currentTarget), 1);
-        thePath.setAttributeNS(null, 'd', thePathString);
-        svgDoc.removeChild(e.currentTarget);
+        if (thePath.class === 'region' & thePath.elbows.length <= 3) {
+            // remove the whole region, can't have only 2 points in shape
+            thePath.elbows.map(function (item) {
+                svgDoc.removeChild(item);
+            });
+            document.getElementById('regions').removeChild(thePath);
+        } else {
+            if (thePath.class === 'region') {
+                elbowNum -= 1;
+            }
+
+            // look for elbowNum-th occurance of L
+            for (var i = 0; i <= elbowNum; i++) {
+                indexOfElbow = thePathString.indexOf('L', indexOfElbow + 1);
+            }
+            indexOfNext = thePathString.indexOf('L', indexOfElbow + 1);
+            thePathString = thePathString.slice(0, indexOfElbow) + thePathString.slice(indexOfNext);
+            thePath.elbows.splice(thePath.elbows.indexOf(e.currentTarget), 1);
+            thePath.setAttributeNS(null, 'd', thePathString);
+            svgDoc.removeChild(e.currentTarget);
+        } 
     }
 }
 
@@ -220,6 +240,9 @@ function movePath(path, xBy, yBy, partOfPath, elbowNum) {
         thePath = thePath.slice(0, thePath.lastIndexOf('L') + 1) + theX + ',' + theY;
     } else if (partOfPath === 'elbow') {
         var indexOfElbow = 0; // !! elbowNum is not valid 
+        if (thePath[thePath.length-1] === 'Z') {
+            elbowNum -= 1; // first elbow starts with M not L
+        }
         var indexOfNext;
         // look for elbowNum-th occurance of L
         for (var i = 0; i <= elbowNum; i++) {

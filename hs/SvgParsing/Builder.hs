@@ -1,9 +1,7 @@
 {-# LANGUAGE OverloadedStrings, FlexibleContexts, GADTs, ScopedTypeVariables #-}
 module SvgParsing.Builder where
 
-import SvgParsing.Types
 import SvgParsing.ParserUtil
-import Control.Monad.IO.Class  (liftIO)
 import Database.Persist
 import Database.Persist.Sqlite
 import Data.Char
@@ -11,12 +9,14 @@ import Data.List.Split
 import Data.List
 import Database.JsonParser
 import Database.Tables
+import Database.DataType
 
 -- | Determines the source and target nodes of the path.
 buildPath :: [Shape] -> [Shape] -> Path -> Int -> Path
 buildPath rects ellipses entity idCounter
     | pathIsRegion entity =
-        Path ('p' : show idCounter)
+        Path (pathGId entity)
+             (pathId_ entity ++ ('p' : show idCounter))
              coords
              (pathFill entity)
              (pathStroke entity)
@@ -28,7 +28,8 @@ buildPath rects ellipses entity idCounter
             end = last coords
             sourceNode = getIntersectingShape start (rects ++ ellipses)
             targetNode = getIntersectingShape end (rects ++ ellipses)
-            in Path ('p' : show idCounter)
+            in Path (pathGId entity)
+                    ('p' : show idCounter)
                     coords
                     (pathFill entity)
                     (pathStroke entity)
@@ -49,18 +50,22 @@ buildRect texts entity =
                             ) texts
         textString = concatMap textText rectTexts
         dropSlash = takeWhile (/='/')
-        id_ = map toLower $ (if shapeIsHybrid entity then "h" else "") ++
-                            (if isDigit $ head textString then "CSC" else "") ++ dropSlash textString
-    in Shape id_
+        prefix = case shapeType_ entity of
+                     Hybrid -> "h"
+                     _      -> ""
+        id_ = map toLower (prefix ++
+                          (if isDigit $ head textString then "CSC" else "") ++
+                          dropSlash textString)
+    in Shape (shapeGId entity)
+             id_
              (shapePos entity)
              (shapeWidth entity)
              (shapeHeight entity)
              (shapeFill entity)
              (shapeStroke entity)
              rectTexts
-             (shapeIsHybrid entity)
              9
-             False
+             (shapeType_ entity)
 
 -- | Gets the first rect that intersects with the given coordinates.
 getIntersectingShape :: Point -> [Shape] -> String
@@ -91,16 +96,16 @@ buildEllipses texts idCounter entities =
                                     9
                                     (textPos x)
                              ) texts
-    in Shape ("bool" ++ show idCounter)
+    in Shape (shapeGId entity)
+             ("bool" ++ show idCounter)
              (shapePos entity)
              (shapeWidth entity)
              (shapeHeight entity)
              ""
              (shapeStroke entity)
              ellipseText
-             False
              20
-             True : buildEllipses texts (idCounter + 1) (tail entities)
+             (shapeType_ entity) : buildEllipses texts (idCounter + 1) (tail entities)
 
 -- | Rebuilds a path's `d` attribute based on a list of Rational tuples.
 buildPathString :: [Point] -> String

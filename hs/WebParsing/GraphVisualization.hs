@@ -6,6 +6,7 @@ import Data.Text
 import qualified Data.Text.Lazy as L
 import Data.Graph.Inductive.Graph
 import Data.GraphViz
+import Data.GraphViz.Attributes.Complete
 import Data.GraphViz.Printing
 import Data.GraphViz.Commands
 import System.Process
@@ -13,9 +14,11 @@ import WebParsing.GraphConversion
 
 -- | simple GraphViz parameters for a deparment graph: labels nodes.
 graphParams :: GraphvizParams n Text el () Text
-graphParams = nonClusteredParams {fmtNode = fn}
+graphParams = nonClusteredParams {    globalAttributes = [GraphAttrs [Splines Ortho]],
+                                      fmtNode = fn
+                                    }
               where fn (_,l) = [toLabel (unpack l)]
-              
+
 --takes in a String representation of a dot graph and creates an SVG file.
 graphVizProcess :: PrintDotRepr dg n => FilePath  -> dg n -> IO FilePath
 graphVizProcess name graph = runGraphvizCommand Dot graph Svg name
@@ -24,12 +27,12 @@ graphVizProcess name graph = runGraphvizCommand Dot graph Svg name
 makeGraph :: [String] -> String -> IO FilePath
 makeGraph courses filename =
   let courses' = Prelude.map pack courses
-  in (toGraph courses') >>= 
-     (\g -> graphVizProcess filename (graphToDot graphParams g)) 
+  in (toGraph courses') >>=
+     (\g -> graphVizProcess filename (graphToDot graphParams g))
 
 main :: IO FilePath
-main = 
-  compsci >>= 
+main =
+  compsci >>=
   (\x -> return (graphToDot graphParams x)) >>=
   graphVizProcess "compsci"
 

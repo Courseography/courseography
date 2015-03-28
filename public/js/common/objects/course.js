@@ -20,6 +20,8 @@ function Course(name) {
     this.exclusions = course.exclusions;
     this.distribution = course.distribution;
     this.manualTutorialEnrolment = course.manualTutorialEnrolment;
+    this.manualPracticalEnrolment = course.manualPracticalEnrolment;
+
     // Create sections
     this.parseSessions(course);
 
@@ -27,29 +29,7 @@ function Course(name) {
 
     this.status = 'inactive';
 
-    if (course.manualTutorialEnrolment) {
-        if (course.Y !== undefined) {
-            this.practicalEnrolment = course.Y
-                                            .tutorials.some(hasManualPractical);
-            this.tutorialEnrolment = course.Y
-                                           .tutorials.some(hasManualTutorial);
-        } else if (course.F !== undefined) {
-            this.practicalEnrolment = course.F
-                                            .tutorials.some(hasManualPractical);
-            this.tutorialEnrolment = course.F
-                                           .tutorials.some(hasManualTutorial);
-        } else {
-            this.practicalEnrolment = course.S
-                                            .tutorials.some(hasManualPractical);
-            this.tutorialEnrolment = course.S
-                                           .tutorials.some(hasManualTutorial);
-        }
-    } else {
-        this.practicalEnrolment = false;
-        this.tutorialEnrolment = false;
-    }
-
-    this.manual = {'T': this.tutorialEnrolment, 'P': this.practicalEnrolment};
+    this.manual = {'T': this.manualTutorialEnrolment, 'P': this.manualPracticalEnrolment};
 }
 
 
@@ -110,11 +90,6 @@ Course.prototype.parseLectures = function (session, timeSuffix) {
 
         var id = tmp.name + '-' + lecture.section + '-' + timeSuffix;
         sectionTimes = sectionTimes.concat(convertTimes(lecture.time));
-        if (!tmp.manualTutorialEnrolment &&
-            session.tutorials.length > 0) {
-            sectionTimes = sectionTimes.concat(
-                convertTimes(session.tutorials[i][0]));
-        }
 
         if (timeSuffix === 'Y') {
             sectionTimes = sectionTimes.map(function (t) {
@@ -129,6 +104,8 @@ Course.prototype.parseLectures = function (session, timeSuffix) {
                 return '#' + time + timeSuffix;
             });
         }
+
+        sectionTimes = cleanUpTimes(sectionTimes);
 
         sections.push(makeLecture(lecture, tmp, id, sectionTimes));
     });
@@ -146,7 +123,7 @@ Course.prototype.parseLectures = function (session, timeSuffix) {
 Course.prototype.parseTutorials = function (session, timeSuffix) {
     'use strict';
 
-    if (!this.manualTutorialEnrolment) {
+    if (this.manualTutorialEnrolment === false && this.manualPractialEnrolment === false) {
         return [];
     }
 
@@ -158,6 +135,7 @@ Course.prototype.parseTutorials = function (session, timeSuffix) {
             tutorials.push(session.tutorials[i]);
         }
     }
+
     return tutorials.map(function (tutorial) {
         var sectionTimes = convertTimes(tutorial[1]);
         if (timeSuffix === 'Y') {
@@ -175,6 +153,7 @@ Course.prototype.parseTutorials = function (session, timeSuffix) {
         }
 
         var id = tmp.name + '-' + tutorial[0] + '-' + timeSuffix;
+        sectionTimes = cleanUpTimes(sectionTimes);
         return makeTutorial(tutorial, tmp, id, sectionTimes);
     });
 };
@@ -224,11 +203,38 @@ Course.prototype.selectTimes = function (section) {
     'use strict';
 
     $.each(section.times, function (i, time) {
+
+        var n = time.charAt(time.length-1);
+
+        if (n === 'H') {
+            extendCell(parseInt(time.slice(2)), time.charAt(1), time.charAt(time.length-2));
+            ptime = previousCell(time);
+            if ($(ptime).attr('clicked') === 'true') {
+                section.setConflictTime(time);
+            }
+        }
+
+        if (n === 'E') {
+            extendCell(parseInt(time.slice(2)), time.charAt(1), time.charAt(time.length-2));
+            time = time.slice(0, time.length-1)
+        }
+
+        if ($(time).attr('rowspan') !== '2' && n !== 'H' && n !== 'E') {
+            section.setConflictTime(time);
+        }
+
         if ($(time).attr('clicked') !== 'true') {
             section.setTime(time);
         } else {
             section.setConflictTime(time);
         }
+
+        var ptime = previousCell(time);
+        if ($(ptime).html() !== '') {
+            $(time).removeClass('timetable-edge')
+                   .addClass('timetable-middle');
+        }
+
     });
 };
 

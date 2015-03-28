@@ -1,10 +1,10 @@
 {-# LANGUAGE OverloadedStrings, GADTs, ScopedTypeVariables #-}
 module SvgParsing.Generator where
 
-import SvgParsing.Types
 import SvgParsing.Builder
 import SvgParsing.ParserUtil
 import Database.Tables
+import Database.DataType
 import Control.Monad.IO.Class  (liftIO)
 import qualified Data.Conduit.List as CL
 import Database.Persist
@@ -13,6 +13,7 @@ import Data.Char
 import Data.Conduit
 import Data.List.Split
 import Data.List hiding (map, filter)
+import Data.Int
 import Database.JsonParser
 import MakeElements
 import Data.Maybe
@@ -25,6 +26,7 @@ import Text.Blaze.Internal (stringValue)
 import Text.Blaze (toMarkup)
 import Css.Constants
 import qualified Data.Map as M
+
 
 -- | A list of tuples that contain disciplines (areas), fill values, and courses
 --- that are in the areas.
@@ -107,7 +109,7 @@ makeSVGDoc courseMap rects ellipses edges regions regionTexts =
                               concatSVG $ map convertEdgeToSVG
                                               edges
                       S.g ! A.id_ "region-labels" $
-                          concatSVG $ map (convertTextToSVG False False True)
+                          concatSVG $ map (convertTextToSVG Region)
                                           regionTexts
 
 -- | Builds the SVG defs.
@@ -126,13 +128,13 @@ makeSVGDefs =
                             ! A.fill "black"
 
 -- | Builds an SVG document.
-buildSVG :: M.Map String String -> String -> IO ()
-buildSVG courseMap filename =
+buildSVG :: Int64 -> M.Map String String -> String -> IO ()
+buildSVG gId courseMap filename =
     runSqlite dbStr $ do
-        sqlRects    :: [Entity Shape]    <- selectList [ShapeIsBool ==. False] []
-        sqlTexts    :: [Entity Text]     <- selectList [] []
-        sqlPaths    :: [Entity Path]     <- selectList [] []
-        sqlEllipses :: [Entity Shape]    <- selectList [ShapeIsBool ==. True] []
+        sqlRects    :: [Entity Shape]    <- selectList [ShapeType_ <-. [Node, Hybrid], ShapeGId ==. gId] []
+        sqlTexts    :: [Entity Text]     <- selectList [TextGId ==. gId] []
+        sqlPaths    :: [Entity Path]     <- selectList [PathGId ==. gId] []
+        sqlEllipses :: [Entity Shape]    <- selectList [ShapeType_ ==. BoolNode, ShapeGId ==. gId] []
         let courseStyleMap = M.map convertSelectionToStyle courseMap
             texts          = map entityVal sqlTexts
             rects          = map (buildRect texts . entityVal) sqlRects
@@ -154,23 +156,26 @@ convertRectToSVG :: M.Map String String -> Shape -> S.Svg
 convertRectToSVG courseMap rect
     | shapeFill rect == "none" = S.rect
     | otherwise =
-        S.g ! A.id_ (stringValue $ shapeId_ rect)
-            ! A.class_ (if shapeIsHybrid rect then "hybrid" else "node")
-            ! S.customAttribute "data-group" (stringValue (getArea (shapeId_ rect)))
-            ! S.customAttribute "text-rendering" "geometricPrecision"
-            ! S.customAttribute "shape-rendering" "geometricPrecision"
-            ! A.style (stringValue (
-                       if not (shapeIsHybrid rect)
-                       then fromMaybe "" $ M.lookup (shapeId_ rect) courseMap
-                       else "")) $
-            do S.rect ! A.rx "4"
-                      ! A.ry "4"
-                      ! A.x (stringValue . show . fst $ shapePos rect)
-                      ! A.y (stringValue . show . snd $ shapePos rect)
-                      ! A.width (stringValue . show $ shapeWidth rect)
-                      ! A.height (stringValue . show $ shapeHeight rect)
-                      ! A.style (stringValue $ "fill:" ++ getFill (shapeId_ rect) ++ ";")
-               concatSVG $ map (convertTextToSVG (shapeIsHybrid rect) False False) (shapeText rect)
+        let style = case shapeType_ rect of
+                        Node -> fromMaybe "" $ M.lookup (shapeId_ rect) courseMap
+                        _    -> ""
+            class_ = case shapeType_ rect of
+                         Node -> "node"
+                         Hybrid -> "hybrid"
+        in S.g ! A.id_ (stringValue $ shapeId_ rect)
+              ! A.class_ (stringValue class_)
+              ! S.customAttribute "data-group" (stringValue (getArea (shapeId_ rect)))
+              ! S.customAttribute "text-rendering" "geometricPrecision"
+              ! S.customAttribute "shape-rendering" "geometricPrecision"
+              ! A.style (stringValue style) $
+              do S.rect ! A.rx "4"
+                        ! A.ry "4"
+                        ! A.x (stringValue . show . fst $ shapePos rect)
+                        ! A.y (stringValue . show . snd $ shapePos rect)
+                        ! A.width (stringValue . show $ shapeWidth rect)
+                        ! A.height (stringValue . show $ shapeHeight rect)
+                        ! A.style (stringValue $ "fill:" ++ getFill (shapeId_ rect) ++ ";")
+                 concatSVG $ map (convertTextToSVG (shapeType_ rect)) (shapeText rect)
 
 convertSelectionToStyle :: String -> String
 convertSelectionToStyle courseStatus =
@@ -184,12 +189,12 @@ isSelected courseStatus =
     isPrefixOf "overridden" courseStatus
 
 -- | Converts a `Text` to SVG.
-convertTextToSVG :: Bool -> Bool -> Bool -> Text -> S.Svg
-convertTextToSVG isHybrid isBool isRegion text =
+convertTextToSVG :: ShapeType -> Text -> S.Svg
+convertTextToSVG type_ text =
     S.text_ ! A.x (stringValue $ show xPos)
             ! A.y (stringValue $ show yPos)
             ! A.style (stringValue $
-                       getTextStyle isHybrid isBool isRegion ++
+                       getTextStyle type_ ++
                        "font-family:sans-serif;stroke:none;")
             $ toMarkup $ textText text
     where (xPos, yPos) = textPos text
@@ -227,10 +232,10 @@ convertEllipseToSVG ellipse =
                       ! A.rx (stringValue . show $ shapeWidth ellipse / 2)
                       ! A.ry (stringValue . show $ shapeHeight ellipse / 2)
                       ! A.style "stroke:#000000;fill:none;"
-            concatSVG $ map (convertTextToSVG False True False) (shapeText ellipse)
+            concatSVG $ map (convertTextToSVG BoolNode) (shapeText ellipse)
 
-getTextStyle :: Bool -> Bool -> Bool -> String
-getTextStyle True _ _ = hybridTextStyle
-getTextStyle _ True _ = ellipseTextStyle
-getTextStyle _ _ True = regionTextStyle
-getTextStyle _ _ _     = ""
+getTextStyle :: ShapeType -> String
+getTextStyle Hybrid    = hybridTextStyle
+getTextStyle BoolNode  = ellipseTextStyle
+getTextStyle Region    = regionTextStyle
+getTextStyle _         = ""
