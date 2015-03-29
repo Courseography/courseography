@@ -76,9 +76,6 @@ function loadGraph(name, id) {
 
     // Initialize interface
     initializeGraphSettings();
-    
-    // Update credit count in nav bar
-    updateNavGraph();
 
     fillFCECount();
 
