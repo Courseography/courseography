@@ -7,6 +7,7 @@ module Database.JsonParser (insertCourse,
                     setTutEnrol,
                     setPracEnrol,
                     dbStr,
+                    fbdbStr,
                     encodeJSON) where
 
 
@@ -28,6 +29,9 @@ import Database.Persist
 import Database.Tables
 import System.Directory
 import GHC.Generics
+
+fbdbStr :: T.Text
+fbdbStr = "fdatabase1.sqlite3"
 
 dbStr :: T.Text
 dbStr = "Database/database1.sqlite3"

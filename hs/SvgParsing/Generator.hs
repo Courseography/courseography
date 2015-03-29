@@ -162,7 +162,7 @@ convertRectToSVG courseMap rect
             class_ = case shapeType_ rect of
                          Node -> "node"
                          Hybrid -> "hybrid"
-        in S.g ! A.id_ (stringValue $ shapeId_ rect)
+        in S.g ! A.id_ (stringValue $ filter (/=',') $ shapeId_ rect)
               ! A.class_ (stringValue class_)
               ! S.customAttribute "data-group" (stringValue (getArea (shapeId_ rect)))
               ! S.customAttribute "text-rendering" "geometricPrecision"
