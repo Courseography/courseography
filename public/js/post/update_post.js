@@ -20,7 +20,6 @@ $('#update').click(function (e) {
     'use strict';
 
     updateAllCategories();
-    updateNavPost();
 });
 
 
