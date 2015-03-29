@@ -230,6 +230,7 @@ function updateActiveCourses() {
     }
 }
 
+
 /**
  * Updates Credit count for MAT and STA courses.
 **/
