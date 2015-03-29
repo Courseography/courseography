@@ -29,6 +29,4 @@ function createTabs() {
         }
     });
 
-    createTimetable();
-    createTimetableSearch();
 }

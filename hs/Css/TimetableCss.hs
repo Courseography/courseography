@@ -90,14 +90,15 @@ timetableCSS = do
             ".timetable-time" ? do
                 textAlign $ alignSide sideRight
                 paddingRight (px 10) -- important
+                borderPink borderBottom
         "#timetable-S" & do
             borderLeft solid (px 2) black
             ".timetable-time" ? do
                 textAlign $ alignSide sideLeft
                 paddingLeft (px 10) -- important
+                borderPink borderBottom
         tbody |> tr |> td <> thead |> th ? do
             width (pct 13.5)
-            height (px 35)
             padding0 -- !important
             margin0 -- !important
             alignCenter
@@ -114,10 +115,38 @@ timetableCSS = do
                 padding0
                 width (pct 10)
                 fontWeight bold
+            height (px 35)
         td ? do
-            fontSize (em 0.9)
+            "rowspan" *= "1" & do
+                fontSize (em 0)
+            "rowspan" *= "2" & do
+                fontSize (em 0.9)
+            height (px 18)
         ".timetable-time" ? do
             width (pct 12)
+        ".timetable-dummy-cell" ? do
+            width (pct 0.00000000001) -- arbitary size of as small as possible
+            borderStyle none
+        ".timetable-half-cell" ? do
+            display none
+        ".timetable-half-cell-display" ? do
+            display tableCell
+        ".timetable-cell" ? do
+            borderPink borderBottom
+            borderPink borderTop
+            borderLeftStyle none
+            borderRightStyle none
+        ".timetable-edge" ? do
+            borderPink borderTop
+            borderBottomStyle none
+            borderPink borderLeft
+            borderPink borderRight
+        ".timetable-middle" ? do
+            borderBottomStyle none
+            borderTopStyle none
+            borderPink borderLeft
+            borderPink borderRight
+
     -- Overriding bootstrap
     ".col-md-2" ? do
         width (pct 14)
@@ -259,7 +288,7 @@ tdColours = ".timetable " ?  do
         backgroundColor blue3
         Clay.empty & do
             backgroundColor white
-            
+
 {- infoCSS
  - Generates CSS for the info block that describes
  - the currently selected course in the timetable. -}

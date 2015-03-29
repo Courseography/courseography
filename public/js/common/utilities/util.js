@@ -117,39 +117,74 @@ function convertTimes(times) {
 
     var timeList = [];
     var time;
+    var stime;
 
     for (var i = 0; i < times.length; i++) {
         var timeString = 'MTWRF'.charAt(times[i][0]);
         time = times[i][1];
-        timeString = timeString + time;
-        timeList.push(timeString);
+
+        if (time.charAt(time.length - 1) === '0') {
+            if (i === times.length-1) {
+                timeString = timeString + time + 'E';
+                timeList.push(timeString);
+            } else {
+                stime = time.replace('-0', '-5');
+                if (times[i+1][1] === stime) {
+                    timeString = timeString + time;
+                    timeList.push(timeString);
+                } else {
+                    timeString = timeString + time + 'E';
+                    timeList.push(timeString);
+                }
+
+            }
+        } else {
+            if (i === 0) {
+                timeString = timeString + time + 'H';
+                timeList.push(timeString);
+            } else {
+                stime = time.replace('-5', '-0');
+                if (times[i-1][1] !== stime) {
+                    timeString = timeString + time + 'H';
+                    timeList.push(timeString);
+                }
+            }
+        }
     }
 
     return timeList;
 }
 
-
 /**
- * Returns whether section has manual practical enrolment. (P sections).
- * @param {JSON} section The section.
- * @returns {boolean} Whether section has manual practical enrolment.
+ * Extracts the optional time codes to be at the end.
+ * @param {string[]} times The times to be converted.
+ * @returns {string[]} The converted times.
  */
-function hasManualPractical(section) {
+function cleanUpTimes(times) {
     'use strict';
 
-    return (section[0].charAt(0) === 'P');
-}
+    var timeList = [];
+    var timeString;
+    var n;
+    var m;
 
+    for (var i = 0; i < times.length; i++) {
+        
+        n = times[i].indexOf('H');
+        m = times[i].indexOf('E');
 
-/**
- * Returns whether section has manual tutorial enrolment. (T sections).
- * @param {JSON} section The section.
- * @returns {boolean} Whether section has manual tutorial enrolment.
- */
-function hasManualTutorial(section) {
-    'use strict';
+        if (n !== -1) {
+            timeString = times[i].slice(0,n) + times[i].slice(n+1) + 'H';
+        } else if (m !== -1) {
+            timeString = times[i].slice(0,m) + times[i].slice(m+1) + 'E';
+        } else {
+            timeString = times[i];
+        }
+        
+        timeList.push(timeString);
+    }
 
-    return (section[0].charAt(0) === 'T');
+    return timeList;
 }
 
 /**

@@ -19,7 +19,9 @@ var courseCache = [];         // Cached Courses. Courses are cached to
 var nodes = [];               // List of all nodes
 
 $(document).ready(function () {
-    loadGraph('graph-csc');
+    'use strict';
+
+    loadGraph('graph-csc', 1);
     $('#fcecount').hide();
 });
 
