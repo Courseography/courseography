@@ -86,10 +86,15 @@ purple2 = parse "#7E4D66"
 purple3 = parse "#CD96CD"
 purple4 = parse "#9C6B98"
 purple5 = parse "#800080"
+
 pink1 = parse "#DB94B8"
+pink2 = rgb 236 189 210
 
 {- Empty/null border. Makes for a flat look. -}
 borderNone = border solid (px 0) white
+
+{- Timetable border -}
+borderPink border = border solid (px 1) pink1
 
 {- More node colours! -}
 teal1 = parse "#737A99"
@@ -98,14 +103,18 @@ orange1 = parse "#1E7FCC"
 blue1 = parse "#261B2A"
 blue2 = parse "#336685"
 blue3 = parse "#437699"
-
 blue4 = parse "#5566F5"
+blue5 = parse "#A5A6F5"
+blue6 = rgb 184 231 249
 
 red1 = parse "#C92343"
 red2 = parse "#B91333"
 
 red3 = rgb 215 117 70
 red4 = rgb 195 97 50
+red5 = rgb 221 189 189
+
+green1 = rgb 170 228 164
 
 dRed :: T.Text
 dRed = "#D77546"

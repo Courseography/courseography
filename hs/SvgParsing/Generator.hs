@@ -13,6 +13,7 @@ import Data.Char
 import Data.Conduit
 import Data.List.Split
 import Data.List hiding (map, filter)
+import Data.Int
 import Database.JsonParser
 import MakeElements
 import Data.Maybe
@@ -24,66 +25,22 @@ import Text.Blaze.Svg.Renderer.String (renderSvg)
 import Text.Blaze.Internal (stringValue)
 import Text.Blaze (toMarkup)
 import Css.Constants
-import qualified Data.Map as M
-
-
--- | A list of tuples that contain disciplines (areas), fill values, and courses
---- that are in the areas.
-areaMap :: [(String, T.Text, [String])]
-areaMap = [("theory", theoryDark, ["csc165", "csc236", "csc240", "csc263", "csc265",
-                                   "csc310", "csc324", "csc373", "csc438", "csc448",
-                                   "csc463"]),
-           ("core", coreDark, ["calc1", "sta1", "sta2", "lin1", "csc108", "csc148", "csc104", "csc120", "csc490",
-                               "csc491", "csc494", "csc495"]),
-           ("se", seDark, ["csc207", "csc301", "csc302", "csc410", "csc465"]),
-           ("systems", systemsDark, ["csc209", "csc258", "csc358", "csc369", "csc372",
-                                     "csc458", "csc469", "csc488", "ece385", "ece489"]),
-           ("hci", hciDark, ["csc200", "csc300",  "csc318", "csc404", "csc428",
-                             "csc454"]),
-           ("graphics", graphicsDark,["csc320", "csc418", "csc420"]),
-           ("num", numDark, ["csc336", "csc436", "csc446", "csc456"]),
-           ("ai", aiDark, ["csc321", "csc384", "csc401", "csc411", "csc412",
-                           "csc485", "csc486"]),
-           ("dbweb", dbwebDark , ["csc309", "csc343", "csc443"])]
-
--- | The style for Text elements of hybrids.
-hybridTextStyle :: String
-hybridTextStyle = "font-size:7.5pt;fill:white;"
-
--- | The style for Text elements of ellipses.
-ellipseTextStyle :: String
-ellipseTextStyle = "font-size:7.5pt;"
-
--- | The style for Text elements of ellipses.
-regionTextStyle :: String
-regionTextStyle = "font-size:9pt;"
-
--- | Gets the first element of a tuple with length 3.
-fst3 :: (a, b, c) -> a
-fst3 (a, _, _) = a
-
--- | Gets the second element of a tuple with length 3.
-snd3 :: (a, b, c) -> b
-snd3 (_, b, _) = b
-
--- | Gets the third element of a tuple with length 3.
-thrd3 :: (a, b, c) -> c
-thrd3 (_, _, c) = c
-
--- | Gets a tuple from areaMap where id_ is in the list of courses for that tuple.
-getTuple :: String -> (String, T.Text, [String])
-getTuple id_ = head $ filter (\x -> id_ `elem` thrd3 x) areaMap ++ [("", "grey", [])]
-
--- | Gets an area from areaMap where id_ is in the list of courses for the corresponding tuple.
-getArea :: String -> String
-getArea id_ = fst3 $ getTuple id_
-
--- | Gets the fill from areaMap where id_ is in the list of courses for the corresponding tuple.
-getFill :: String -> String
-getFill id_ = T.unpack $ snd3 $ getTuple id_
+import qualified Data.Map.Strict as M
 
 -- | Builds an SVG document.
-makeSVGDoc :: M.Map String String -> [Shape] -> [Shape] -> [Path] -> [Path] -> [Text] -> S.Svg
+makeSVGDoc :: M.Map String String
+           -> [Shape] -- ^ A list of the Nodes that will be included
+                      --   in the graph. This includes both Hybrids and
+                      --   course nodes.
+           -> [Shape] -- ^ A list of the Ellipses that will be included
+                      --   in the graph.
+           -> [Path]  -- ^ A list of the Edges that will be included
+                      --   in the graph.
+           -> [Path]  -- ^ A list of the Regions that will be included
+                      --   in the graph.
+           -> [Text]  -- ^ A list of the 'Text' elements that will be included
+                      --   in the graph.
+           -> S.Svg   -- ^ The completed SVG document.
 makeSVGDoc courseMap rects ellipses edges regions regionTexts =
     S.docTypeSvg ! A.width "1052.3622"
                  ! A.height "744.09448"
@@ -111,6 +68,54 @@ makeSVGDoc courseMap rects ellipses edges regions regionTexts =
                           concatSVG $ map (convertTextToSVG Region)
                                           regionTexts
 
+-- | Builds an SVG document.
+buildSVG :: Int64                -- ^ The ID of the graph that is being built.
+         -> M.Map String String  -- ^ A map of courses that holds the course
+                                 --   ID as a key, and the data-active attribute
+                                 --   as the course's value.
+                                 --   The data-active attribute is used in the
+                                 --   interactive graph to indicate which courses
+                                 --   the user has selected.
+         -> String               -- ^ The filename that this graph will be written to.
+         -> IO ()
+buildSVG gId courseMap filename =
+    runSqlite dbStr $ do
+        sqlRects    :: [Entity Shape]    <- selectList [ShapeType_ <-. [Node, Hybrid], ShapeGId ==. gId] []
+        sqlTexts    :: [Entity Text]     <- selectList [TextGId ==. gId] []
+        sqlPaths    :: [Entity Path]     <- selectList [PathGId ==. gId] []
+        sqlEllipses :: [Entity Shape]    <- selectList [ShapeType_ ==. BoolNode, ShapeGId ==. gId] []
+        let courseStyleMap = M.map convertSelectionToStyle courseMap
+            texts          = map entityVal sqlTexts
+            rects          = map (buildRect texts . entityVal) sqlRects
+            ellipses       = zipWith (buildEllipses texts) (map entityVal sqlEllipses) [1..length sqlEllipses]
+            paths          = zipWith (buildPath rects ellipses) (map entityVal sqlPaths) [1..length sqlPaths]
+            regions        = filter pathIsRegion paths
+            edges          = filter (not . pathIsRegion) paths
+            regionTexts    = filter (not . intersectsWithShape (rects ++ ellipses)) texts
+            stringSVG = renderSvg $ makeSVGDoc courseStyleMap rects ellipses edges regions regionTexts
+        liftIO $ writeFile filename stringSVG
+
+-- | Gets a tuple from areaMap where id_ is in the list of courses for that tuple.
+getTuple :: String -- ^ The course's ID.
+         -> Maybe (T.Text, String)
+getTuple id_
+    | M.null tuples = Nothing
+    | otherwise   = Just $ snd $ M.elemAt 0 tuples
+    where tuples = M.filterWithKey (\k _ -> id_ `elem` k) areaMap
+
+-- | Gets an area from areaMap where id_ is in the list of courses for the corresponding tuple.
+getArea :: String -> String
+getArea id_ = case getTuple id_ of
+                  Just tuple -> snd tuple
+                  _          -> ""
+
+-- | Gets the fill from areaMap where id_ is in the list of courses for the corresponding tuple.
+getFill :: String -- ^ The course's ID.
+        -> String -- ^ The course's allocated fill value.
+getFill id_ = case getTuple id_ of
+                  Just tuple -> T.unpack $ fst tuple
+                  _          -> "grey"
+
 -- | Builds the SVG defs.
 makeSVGDefs :: S.Svg
 makeSVGDefs =
@@ -125,25 +130,6 @@ makeSVGDefs =
              ! A.markerheight "7" $
                  S.polyline ! A.points "0,1 10,5 0,9"
                             ! A.fill "black"
-
--- | Builds an SVG document.
-buildSVG :: Int -> M.Map String String -> String -> IO ()
-buildSVG gId courseMap filename =
-    runSqlite dbStr $ do
-        sqlRects    :: [Entity Shape]    <- selectList [ShapeType_ <-. [Node, Hybrid]] []
-        sqlTexts    :: [Entity Text]     <- selectList [] []
-        sqlPaths    :: [Entity Path]     <- selectList [] []
-        sqlEllipses :: [Entity Shape]    <- selectList [ShapeType_ ==. BoolNode] []
-        let courseStyleMap = M.map convertSelectionToStyle courseMap
-            texts          = map entityVal sqlTexts
-            rects          = map (buildRect texts . entityVal) sqlRects
-            ellipses       = buildEllipses texts 0 $ map entityVal sqlEllipses
-            paths          = zipWith (buildPath rects ellipses) (map entityVal sqlPaths) [1..length sqlPaths]
-            regions        = filter pathIsRegion paths
-            edges          = filter (not . pathIsRegion) paths
-            regionTexts    = filter (not . intersectsWithShape (rects ++ ellipses)) texts
-            stringSVG = renderSvg $ makeSVGDoc courseStyleMap rects ellipses edges regions regionTexts
-        liftIO $ writeFile filename stringSVG
 
 -- | Determines if a text intersects with a shape.
 intersectsWithShape :: [Shape] -> Text -> Bool
@@ -162,19 +148,19 @@ convertRectToSVG courseMap rect
                          Node -> "node"
                          Hybrid -> "hybrid"
         in S.g ! A.id_ (stringValue $ shapeId_ rect)
-              ! A.class_ (stringValue class_)
-              ! S.customAttribute "data-group" (stringValue (getArea (shapeId_ rect)))
-              ! S.customAttribute "text-rendering" "geometricPrecision"
-              ! S.customAttribute "shape-rendering" "geometricPrecision"
-              ! A.style (stringValue style) $
-              do S.rect ! A.rx "4"
-                        ! A.ry "4"
-                        ! A.x (stringValue . show . fst $ shapePos rect)
-                        ! A.y (stringValue . show . snd $ shapePos rect)
-                        ! A.width (stringValue . show $ shapeWidth rect)
-                        ! A.height (stringValue . show $ shapeHeight rect)
-                        ! A.style (stringValue $ "fill:" ++ getFill (shapeId_ rect) ++ ";")
-                 concatSVG $ map (convertTextToSVG (shapeType_ rect)) (shapeText rect)
+               ! A.class_ (stringValue class_)
+               ! S.customAttribute "data-group" (stringValue (getArea (shapeId_ rect)))
+               ! S.customAttribute "text-rendering" "geometricPrecision"
+               ! S.customAttribute "shape-rendering" "geometricPrecision"
+               ! A.style (stringValue style) $
+               do S.rect ! A.rx "4"
+                         ! A.ry "4"
+                         ! A.x (stringValue . show . fst $ shapePos rect)
+                         ! A.y (stringValue . show . snd $ shapePos rect)
+                         ! A.width (stringValue . show $ shapeWidth rect)
+                         ! A.height (stringValue . show $ shapeHeight rect)
+                         ! A.style (stringValue $ "fill:" ++ getFill (shapeId_ rect) ++ ";")
+                  concatSVG $ map (convertTextToSVG (shapeType_ rect)) (shapeText rect)
 
 convertSelectionToStyle :: String -> String
 convertSelectionToStyle courseStatus =
@@ -182,7 +168,8 @@ convertSelectionToStyle courseStatus =
     then "stroke-width:4;"
     else "opacity:0.5;stroke-dasharray:8,5;"
 
-isSelected :: String -> Bool
+isSelected :: String -- ^ The selected status of a course.
+           -> Bool
 isSelected courseStatus =
     isPrefixOf "active" courseStatus ||
     isPrefixOf "overridden" courseStatus
@@ -233,8 +220,42 @@ convertEllipseToSVG ellipse =
                       ! A.style "stroke:#000000;fill:none;"
             concatSVG $ map (convertTextToSVG BoolNode) (shapeText ellipse)
 
-getTextStyle :: ShapeType -> String
+getTextStyle :: ShapeType -- ^ The parent element of the Text element in question.
+             -> String
 getTextStyle Hybrid    = hybridTextStyle
 getTextStyle BoolNode  = ellipseTextStyle
 getTextStyle Region    = regionTextStyle
 getTextStyle _         = ""
+
+-- | A list of tuples that contain disciplines (areas), fill values, and courses
+---  that are in the areas.
+areaMap :: M.Map [String] (T.Text, String)
+areaMap =  M.fromList
+           [
+           (["csc165", "csc236", "csc240", "csc263", "csc265",
+             "csc310", "csc324", "csc373", "csc438", "csc448",
+             "csc463"], (theoryDark, "theory")),
+           (["calc1", "sta1", "sta2", "lin1", "csc108", "csc148", "csc104", "csc120", "csc490",
+             "csc491", "csc494", "csc495"], (coreDark, "core")),
+           (["csc207", "csc301", "csc302", "csc410", "csc465"], (seDark, "se")),
+           (["csc209", "csc258", "csc358", "csc369", "csc372",
+             "csc458", "csc469", "csc488", "ece385", "ece489"], (systemsDark, "systems")),
+           (["csc200", "csc300",  "csc318", "csc404", "csc428",
+             "csc454"], (hciDark, "hci")),
+           (["csc320", "csc418", "csc420"], (graphicsDark, "graphics")),
+           (["csc336", "csc436", "csc446", "csc456"], (numDark, "num")),
+           (["csc321", "csc384", "csc401", "csc411", "csc412",
+             "csc485", "csc486"], (aiDark, "ai")),
+           (["csc309", "csc343", "csc443"], (dbwebDark, "dbweb"))]
+
+-- | The style for Text elements of hybrids.
+hybridTextStyle :: String
+hybridTextStyle = "font-size:7.5pt;fill:white;"
+
+-- | The style for Text elements of ellipses.
+ellipseTextStyle :: String
+ellipseTextStyle = "font-size:7.5pt;"
+
+-- | The style for Text elements of ellipses.
+regionTextStyle :: String
+regionTextStyle = "font-size:9pt;"
