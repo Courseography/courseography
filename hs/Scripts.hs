@@ -22,7 +22,6 @@ plannerScripts = concatHtml (map makeScript["https://ajax.googleapis.com/ajax/li
                                            "static/js/common/course_description.js",
                                            "static/js/graph/tabs/feedback_form.js",
                                            "static/js/graph/tabs/focuses.js",
-                                           "static/js/graph/tabs/timetable.js",
                                            "static/js/graph/tabs/fce_count.js",
                                            "static/js/common/objects/section.js",
                                            "static/js/common/utilities/util.js",

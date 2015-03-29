@@ -217,7 +217,9 @@ function createG(nodeId) {
     var g = $(document.createElementNS('http://www.w3.org/2000/svg', 'g'));
     g.attr('class', 'tooltip-group')
         .css('cursor', 'pointer')
-        .click(openModal(getCourseTitle(nodeId), createModalDiv(nodeId)));
+        .click(function () {
+            openModal(getCourseTitle(nodeId), createModalDiv(nodeId))
+        });
     $('#nodes').append(g);
     return g;
 }
