@@ -14,8 +14,8 @@ import Database.DataType
 -- | Determines the source and target nodes of the path.
 buildPath :: [Shape] -- ^ Node elements.
           -> [Shape] -- ^ Ellipses.
-          -> Path    -- A path.
-          -> Int     -- A number to use in the ID of the path.
+          -> Path    -- ^ A path.
+          -> Int     -- ^ A number to use in the ID of the path.
           -> Path
 buildPath rects ellipses entity idCounter
     | pathIsRegion entity =

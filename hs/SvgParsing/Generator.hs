@@ -29,7 +29,7 @@ import qualified Data.Map.Strict as M
 
 
 -- | A list of tuples that contain disciplines (areas), fill values, and courses
---- that are in the areas.
+---  that are in the areas.
 areaMap :: M.Map [String] (T.Text, String)
 areaMap =  M.fromList
            [
@@ -85,16 +85,16 @@ getFill id_ = case getTuple id_ of
 -- | Builds an SVG document.
 makeSVGDoc :: M.Map String String
            -> [Shape] -- ^ A list of the Nodes that will be included
-                      -- in the graph. This includes both Hybrids and
-                      -- course nodes.
+                      --   in the graph. This includes both Hybrids and
+                      --   course nodes.
            -> [Shape] -- ^ A list of the Ellipses that will be included
-                      -- in the graph.
+                      --   in the graph.
            -> [Path]  -- ^ A list of the Edges that will be included
-                      -- in the graph.
+                      --   in the graph.
            -> [Path]  -- ^ A list of the Regions that will be included
-                      -- in the graph.
+                      --   in the graph.
            -> [Text]  -- ^ A list of the 'Text' elements that will be included
-                      -- in the graph.
+                      --   in the graph.
            -> S.Svg   -- ^ The completed SVG document.
 makeSVGDoc courseMap rects ellipses edges regions regionTexts =
     S.docTypeSvg ! A.width "1052.3622"
