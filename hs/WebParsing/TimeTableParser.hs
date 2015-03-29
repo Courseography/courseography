@@ -32,11 +32,9 @@ data CourseSlot =
               slotInstructor :: T.Text
               }
 
-
 timetableUrl :: String
 timetableUrl = "http://www.artsandscience.utoronto.ca/ofr/timetable/winter/"
 
---csc.html, assem.html, online.html,
 {----------------------------------------------------------------------------------------
 a list of pages that contain special formatting, are dealt with seperately and removed
 from main list.
@@ -66,12 +64,6 @@ expandNote row =  if ( (T.take 4 (head row)) == "NOTE" )
                   then ["", "", ""] ++ (tail row)
                   else row
 
---converts all open and closing tags to lowercase.
-lowerTag :: Tag T.Text -> Tag T.Text
-lowerTag (TagOpen tag attrs) =
-  TagOpen (T.toLower tag) (map (\(x, y) -> (T.toLower x, T.toLower y)) attrs)
-lowerTag (TagClose tag) = TagClose (T.toLower tag)
-lowerTag text = text
 
 {----------------------------------------------------------------------------------------
 takes in a department page name, extracts the html table, partitions into a list of all
@@ -83,21 +75,16 @@ getDeptTimetable url = do
   rsp <- simpleHTTP (getRequest $ timetableUrl ++ url)
   body <- getResponseBody rsp
   let rawSoup = map cleanTag (parseTags (T.pack body))
-      toLower = if (url == "online.html")
-                then map lowerTag rawSoup
-                else rawSoup
+      toLower = if (url == "online.html") then map lowerTag rawSoup else rawSoup
       table = dropAround  (tagOpen (=="table") (\x -> True)) (tagClose (=="table")) toLower
-      cells = filter (\x ->  and [(x /= []), length x > 4, notCancelled (x !! 4)])  (toCells table)
+      cells = filter (\x ->  and [(x /= []), length x > 4])  (toCells table)
       expandedNote = map expandNote cells
       courseCells = partitions (\row -> (head row) /= "") expandedNote
-      sessions = map processCourseTable courseCells
   mapM_ processCourseTable courseCells
-  --print rawSoup
   where
     cleanTag (TagText s) = TagText (T.strip (replaceAll ["\r\n"] "" s))
     cleanTag s = s
-    notCancelled "" = True
-    notCancelled str = (T.head str) /= 'C'
+    
 
 {----------------------------------------------------------------------------------------
 partitions the html table into a 2d list of cells. Does not account for cells that take
@@ -119,14 +106,9 @@ addTutorial sesh tut = sesh {tutorials = tut:tutorials sesh}
 addLecture :: Session -> Lecture -> Session
 addLecture sesh lec = sesh {lectures = lec:(lectures sesh)}
 
--- | returns true if the the row contains a cancelled lecture or tutorial
-isCancelled :: [T.Text] -> Bool
-isCancelled row =
-  foldl (\bool text -> bool || T.isPrefixOf "Cancel" text) False row
-
--- | extracts the required information from a row of cells and places it into a CourseSLot
---if given a courseSlot as input, it updates the time only. otherwise updates time and
---section
+-- | extracts the required information from a row of cells and places it into a CourseSlot
+--   if given a CourseSlot as input, it updates the time only. Otherwise updates time and
+--   section
 updateSlot :: [T.Text] -> Maybe CourseSlot -> Maybe CourseSlot
 updateSlot row Nothing =
   if (isCancelled row) || length row < 8
