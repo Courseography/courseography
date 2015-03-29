@@ -101,7 +101,6 @@ function getGraphsInDatabase() {
         async: false,
         success: function (data) {
             var graphs = data;
-            console.log(graphs);
             createGraphButtons(graphs);
         },
         error: function () {
