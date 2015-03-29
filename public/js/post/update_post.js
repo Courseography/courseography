@@ -20,7 +20,6 @@ $('#update').click(function (e) {
     'use strict';
 
     updateAllCategories();
-    updateNavPost();
 });
 
 
@@ -209,45 +208,6 @@ function checkPostCompleted() {
 
 
 /**
- * Updates the Nav Bar on the Check My Post! page
-**/
-function updateNavPost() {
-    'use strict';
-
-    var navPost = $('#nav-links')[0].getElementsByTagName('li')[3].getElementsByTagName('a')[0];
-
-    if (getCookie('specialist') === 'active') {
-        navPost.innerHTML = 'Check My POSt! (' + specialist.creditCount.toFixed(1) + '/12.0)';
-        setCookie('activecount', specialist.creditCount.toFixed(1));
-    } else if (getCookie('major') === 'active') {
-        navPost.innerHTML = 'Check My POSt! (' + major.creditCount.toFixed(1) + '/8.0)';
-        setCookie('activecount', major.creditCount.toFixed(1));
-    } else if (getCookie('minor') === 'active') {
-        navPost.innerHTML = 'Check My POSt! (' + minor.creditCount.toFixed(1) + '/4.0)';
-        setCookie('activecount', minor.creditCount.toFixed(1));
-    } 
-}
-
-
-/**
- * Updates the Nav Bar on the Graph page.
-**/
-function updateNavGraph() {
-    'use strict';
-
-    var nav_graph = $('#nav-links')[0].getElementsByTagName('li')[3].getElementsByTagName('a')[0];
-
-    if (getCookie('specialist') === 'active') {
-        nav_graph.innerHTML = 'Check My POSt! (' + getCookie('activecount') + '/12.0)';
-    } else if (getCookie('major') === 'active') {
-        nav_graph.innerHTML = 'Check My POSt! (' + getCookie('activecount') + '/8.0)';
-    } else if (getCookie('minor') === 'active') {
-        nav_graph.innerHTML = 'Check My POSt! (' + getCookie('activecount') + '/4.0)';
-    } 
-}
-
-
-/**
  * Updates list of current active (selected) courses in Graph.
 **/
 function updateActiveCourses() {
@@ -256,14 +216,9 @@ function updateActiveCourses() {
     activeCourses = [];
 
     // check for active CSC courses
-    for (var areaName in areas) {
-        if (areas.hasOwnProperty(areaName)) {
-            for (var i = 0; i < areas[areaName].length; i++) {
-                if ((getCookie(areas[areaName][i].toLowerCase()) === 'active' || getCookie(areas[areaName][i].toLowerCase()) === 'overridden') && 
-                    areas[areaName][i] !== 'CSC104') {
-                    activeCourses.push(areas[areaName][i]);
-                }
-            }
+    for (var i = 0; i < allCourses.length; i++) {
+        if (getCookie(allCourses[i].toLowerCase()) === 'active' || getCookie(allCourses[i].toLowerCase()) === 'overridden') {
+            activeCourses.push(allCourses[i]);
         }
     }
 
@@ -274,6 +229,7 @@ function updateActiveCourses() {
         }
     }
 }
+
 
 /**
  * Updates Credit count for MAT and STA courses.

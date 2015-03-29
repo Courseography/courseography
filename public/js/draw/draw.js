@@ -18,6 +18,7 @@ function getClickPosition(e, elem) {
     return { x: xPosition, y: yPosition };
 }
 
+
 /**
  * Calculates the position of elem in relation to the page.
  * @param {HTMLElement} elem The target of the click event.
@@ -41,6 +42,7 @@ function getPosition(elem) {
     }
     return { x: xPosition, y: yPosition };
 }
+
 
 /**
  * In node-mode creates a new node at the position of the click event on the SVG canvas.
@@ -92,15 +94,41 @@ function makeNodePath(e) {
                 var pathString = findClosest({x: parseFloat(startNode.getAttribute('x'), 10), 
                                   y: parseFloat(startNode.getAttribute('y'), 10)},
                                   'node', position, 'elbow');
-                startPath(pathString);
+                startPath(pathString, 'path');
             } else { // elbow to elbow path
                 curPath.setAttributeNS(null, 'd', curPath.getAttribute('d') + 'L' + position.x + ',' + position.y + ' ');   
             }
 
             makeElbow(position);
         }
+    } else if (mode === 'region-mode') {
+        if (startPoint === null) { // start a region
+                startPoint = document.createElementNS(xmlns, 'circle');
+
+                startPoint.setAttributeNS(null, 'cx', position.x);
+                startPoint.setAttributeNS(null, 'cy', position.y);
+                startPoint.setAttributeNS(null, 'r', 4);
+                startPoint.setAttributeNS(null, 'class', 'rElbow'); // !! CHANGE CLASS
+
+                startPoint.addEventListener('mousedown', selectElbow, false);
+                svgDoc.appendChild(startPoint);
+
+                startPoint.partOfPath = 'start';
+
+        } else if (curPath === null) { // first elbow
+            startPath('M' + startPoint.getAttribute('cx') + ',' + startPoint.getAttribute('cy') + ' L' + position.x + ',' + position.y + ' ', 'region');
+            //curPath.setAttributeNS(null, 'class', 'region');
+            curPath.setAttributeNS(null, 'id', 'r' + regionId);
+            var elbow = makeElbow(position);
+            elbow.partOfPath = 'elbow';
+        } else { 
+            curPath.setAttributeNS(null, 'd', curPath.getAttribute('d') + 'L' + position.x + ',' + position.y + ' ');
+            var elbow = makeElbow(position);
+            elbow.partOfPath = 'elbow';
+        }
     }
 }
+
 
 /**
  * Handles the clicking of the target of the event (a node) in different modes. 
@@ -204,6 +232,7 @@ function select(newNode) {
     nodeSelected.parentNode.setAttribute('data-active', 'active');
 }
 
+
 /**
  * In change-mode, moves the node or elbow that is currently being moved.
  * @param {object} e The mousemove Event.
@@ -244,24 +273,45 @@ function moveNodeElbow(e) {
             prevY = position.y;
         } else if (elbowMoving !== null) {
             var position = getClickPosition(e, elbowMoving);
-            // move dummy node 
-            var elbowX = parseFloat(elbowMoving.getAttribute('cx'), 10);
-            var elbowY = parseFloat(elbowMoving.getAttribute('cy'), 10);
-            elbowX += (position.x - prevX);
-            elbowY += (position.y - prevY);
-            elbowMoving.setAttribute('cx', elbowX);
-            elbowMoving.setAttribute('cy', elbowY);
-
-            // move actual elbow in path
-            movePath(document.getElementById(elbowMoving.path), 
-                     (position.x - prevX), (position.y - prevY), 'elbow',
-                     document.getElementById(elbowMoving.path).elbows.indexOf(elbowMoving));
-
+            moveElbow(elbowMoving, position);
+            prevX = position.x;
+            prevY = position.y;
+        } else if (regionMoving !== null) {
+            // move each elbow
+            var position = getClickPosition(e, elbowMoving);
+            regionMoving.elbows.map(function (elbow) {
+                //console.log(document.getElementById(elbowMoving.path).elbows.indexOf(elbowMoving));
+                moveElbow(elbow, position);
+            });
             prevX = position.x;
             prevY = position.y;
         }
     }
 }
+
+
+function moveElbow(elbow, position) {
+    // move dummy node 
+    var elbowX = parseFloat(elbow.getAttribute('cx'), 10);
+    var elbowY = parseFloat(elbow.getAttribute('cy'), 10);
+    elbowX += (position.x - prevX);
+    elbowY += (position.y - prevY);
+    elbow.setAttribute('cx', elbowX);
+    elbow.setAttribute('cy', elbowY);
+
+    // move actual elbow in path
+    var partOfPath = 'elbow';
+    if (elbow.class === 'rElbow') {
+        partOfPath = elbow.partOfPath;
+    }
+
+    //console.log(document.getElementById(elbow.path).elbows.indexOf(elbow));
+    movePath(document.getElementById(elbow.path), 
+             (position.x - prevX), (position.y - prevY), 'elbow',
+             document.getElementById(elbow.path).elbows.indexOf(elbow));
+}
+
+
 
 /**
  * Reinitializes global variables associated with mousedown and mousemove event.
@@ -275,10 +325,62 @@ function unclickAll(e) {
         prevX = -1;
         prevY = -1;
         elbowMoving = null;
+        regionMoving = null;
     }
 }
 
 
+/** 
+ *
+ * 
+ */
+function finishRegion() {
+    'use strict';
+
+    if (curPath !== null & curPath.elbows.length >= 3) {
+        curPath.setAttributeNS(null, 'd', curPath.getAttribute('d') + 'Z');
+        //curPath.setAttributeNS(null, 'style', 'opacity:0.7;fill-opacity:0.58;border-width:0px');
+        curPath.setAttributeNS(null, 'data-group', nodeColourId);
+        curPath.addEventListener('mousedown', regionClicked, false);
+        curPath.setAttributeNS(null, 'pointer-events','boundingBox'); // necessary?
+        curPath.setAttributeNS(null, 'class', 'region');
+        curPath.setAttributeNS(null, 'data-active', 'region');
+
+        curPath.elbows.map(function (item) {
+            item.path = 'r' + regionId; 
+            item.setAttributeNS(null, 'class', 'rElbow');
+        });
+
+        regionId += 1;
+        curPath = null;
+        startPoint = null;
+    } else if (curPath !== null & curPath.elbows.length < 3) {
+        curPath.elbows.map(function (item) {
+            svgDoc.removeChild(item);
+        });
+        document.getElementById('regions').removeChild(curPath);
+    }
+}
+
+
+/** 
+ *
+ * 
+ */
+function regionClicked(e) {
+    if (mode === 'erase-mode') {
+        // delete the dummy nodes and the path itself
+        e.currentTarget.elbows.map(function (item) {
+            svgDoc.removeChild(item);
+        });
+        document.getElementById('regions').removeChild(e.currentTarget);
+    } else if (mode === 'change-mode') {
+        var position = getClickPosition(e, e.currentTarget);
+        regionMoving = e.currentTarget;
+        prevX = position.x;
+        prevY = position.y;
+    }
+}
 
 // TODO:
 /*
