@@ -12,7 +12,11 @@ import Database.Tables
 import Database.DataType
 
 -- | Determines the source and target nodes of the path.
-buildPath :: [Shape] -> [Shape] -> Path -> Int -> Path
+buildPath :: [Shape] -- ^ Node elements.
+          -> [Shape] -- ^ Ellipses.
+          -> Path    -- ^ A path.
+          -> Int     -- ^ A number to use in the ID of the path.
+          -> Path
 buildPath rects ellipses entity idCounter
     | pathIsRegion entity =
         Path (pathGId entity)
@@ -39,14 +43,16 @@ buildPath rects ellipses entity idCounter
     where coords = pathPoints entity
 
 -- | Builds a Rect from a database entry in the rects table.
-buildRect :: [Text] -> Shape -> Shape
+buildRect :: [Text] -- ^ A list of shapes that may intersect with the given node.
+          -> Shape  -- ^ A node.
+          -> Shape
 buildRect texts entity =
-    let rectTexts = filter (\x -> intersects
+    let rectTexts = filter (intersects
                             (shapeWidth entity)
                             (shapeHeight entity)
                             (shapePos entity)
                             9
-                            (textPos x)
+                            . textPos
                             ) texts
         textString = concatMap textText rectTexts
         dropSlash = takeWhile (/='/')
@@ -69,11 +75,10 @@ buildRect texts entity =
 
 -- | Gets the first rect that intersects with the given coordinates.
 getIntersectingShape :: Point -> [Shape] -> String
-getIntersectingShape point shapes
-    | null intersectingShapes = ""
-    | otherwise = shapeId_ $ head intersectingShapes
-    where intersectingShapes = filter (intersectsWithPoint point)
-                                      shapes
+getIntersectingShape point shapes =
+    case find (intersectsWithPoint point) shapes of
+        Just intersectingShape -> shapeId_ intersectingShape
+        _                      -> ""
 
 -- | Determines if a rect intersects with the given coordinates.
 intersectsWithPoint :: Point -> Shape -> Bool
@@ -85,17 +90,19 @@ intersectsWithPoint point shape =
                point
 
 -- | Builds a Path from a database entry in the paths table.
-buildEllipses :: [Text] -> Int -> [Shape] -> [Shape]
-buildEllipses _ _ [] = []
-buildEllipses texts idCounter entities =
-    let entity = head entities
-        ellipseText = filter (\x -> intersects
-                                    (shapeWidth entity)
-                                    (shapeHeight entity)
-                                    (shapePos entity)
-                                    9
-                                    (textPos x)
-                             ) texts
+buildEllipses :: [Text] -- ^ A list of Text elements that may or may not intersect
+                        --   with the given ellipse.
+              -> Shape  -- ^ An ellipse.
+              -> Int    -- ^ A number to use in the ID of the ellipse.
+              -> Shape
+buildEllipses texts entity idCounter =
+    let ellipseText = filter (intersects
+                              (shapeWidth entity)
+                              (shapeHeight entity)
+                              (shapePos entity)
+                              9
+                              . textPos
+                              ) texts
     in Shape (shapeGId entity)
              ("bool" ++ show idCounter)
              (shapePos entity)
@@ -105,7 +112,7 @@ buildEllipses texts idCounter entities =
              (shapeStroke entity)
              ellipseText
              20
-             (shapeType_ entity) : buildEllipses texts (idCounter + 1) (tail entities)
+             (shapeType_ entity)
 
 -- | Rebuilds a path's `d` attribute based on a list of Rational tuples.
 buildPathString :: [Point] -> String

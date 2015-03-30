@@ -61,31 +61,16 @@ OUTPUT: Course 'record' containing course info
 ----------------------------------------------------------------------------------------}
 processCourseToData :: [Tag T.Text] -> Course
 processCourseToData tags  =
-    let course =
-          Course {
-            breadth = Nothing,
-            description = Nothing,
-            title  = Nothing,
-            prereqString = Nothing,
-            f = Nothing,
-            s = Nothing,
-            y = Nothing,
-            name = T.empty,
-            exclusions = Nothing,
-            manualTutorialEnrol = Nothing ,
-            manualPracticalEnrol = Nothing,
-            distribution = Nothing,
-            prereqs = Nothing
-        }
+    let course = emptyCourse
     in snd $ (tags, course) ~:
              preProcess -:
              parseTitleUTSC -:
-            parseDescription -:
-            parsePrerequisite -:
-            parseCorequisite -:
-            parseExclusion -:
-            parseRecommendedPrep -:
-            parseDistAndBreadth
+             parseDescription -:
+             parsePrerequisite -:
+             parseCorequisite -:
+             parseExclusion -:
+             parseRecommendedPrep -:
+             parseDistAndBreadth
 
 parseUTSC :: IO ()
 parseUTSC = do

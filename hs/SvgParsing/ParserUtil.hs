@@ -23,14 +23,6 @@ getStyleAttr attr style =
     drop (length attr + 1) $
     fromMaybe "" (find (isPrefixOf $ attr ++ ":") (splitOn ";" style))
 
--- | Gets a style attribute from a style String. If the style attribute is "",
--- then this function defaults to the previous style attribute, 'parent'.
-getNewStyleAttr :: String -> String -> String -> String
-getNewStyleAttr newStyle attr parentStyle
-    | null newAttrStyle = parentStyle
-    | otherwise = newAttrStyle
-    where newAttrStyle = getStyleAttr attr newStyle
-
 -- | Applys a CFilter to a Document and produces a list of Content filtered
 -- by the CFilter.
 parseDocument :: CFilter i -> Document i -> [Content i]
@@ -76,12 +68,13 @@ parseTransform transform =
     in (xPos, yPos)
 
 -- | Parses a path's `d` attribute.
-parsePathD :: String -> [Point]
+parsePathD :: String -- ^ The 'd' attribute of an SVG path.
+           -> [Point]
 parsePathD d
     | head d == 'm' = relCoords
     | otherwise = absCoords
     where
-      lengthMoreThanOne = \x -> length x > 1
+      lengthMoreThanOne x = length x > 1
       coordList = filter lengthMoreThanOne (map (splitOn ",") $ splitOn " " d)
       -- Converts a relative coordinate structure into an absolute one.
       relCoords = tail $ foldl (\x y -> x ++ [addTuples (convertToPoint y) (last x)])
@@ -96,7 +89,12 @@ addTuples :: Point -> Point -> Point
 addTuples (a,b) (c,d) = (a + c, b + d)
 
 -- | Determines if a point intersects with a shape.
-intersects :: Double -> Double -> Point -> Double -> Point -> Bool
+intersects :: Double -- ^ The shape's width.
+           -> Double -- ^ The shape's height.
+           -> Point  -- ^ The shape's coordinate.
+           -> Double -- ^ The offset.
+           -> Point  -- ^ The point's coordinate.
+           -> Bool
 intersects width height (rx, ry) offset (px, py) =
     let dx = px - rx
         dy = py - ry
@@ -104,3 +102,9 @@ intersects width height (rx, ry) offset (px, py) =
        dx <= width + offset &&
        dy >= -1 * offset &&
        dy <= height + offset;
+
+-- | Reads an attribute of an element.
+readAttr :: Read a => String    -- ^ The attribute's name.
+                   -> Content i -- ^ The element that contains the attribute.
+                   -> a
+readAttr attr content = read $ getAttribute attr content

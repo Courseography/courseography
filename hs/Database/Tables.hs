@@ -138,6 +138,10 @@ data Session =
             } deriving Show
 
 -- | A Course.
+-- each element of prereqs can be one of three things:
+--    * a one-element list containing a course code
+--    * a list starting with "and", and 2 or more course codes
+--    * a list starting with "or", and 2 or more course codes
 data Course =
     Course { breadth :: Maybe T.Text,
              description :: Maybe T.Text,
@@ -151,7 +155,7 @@ data Course =
              manualTutorialEnrol :: Maybe Bool,
              manualPracticalEnrol :: Maybe Bool, 
              distribution :: Maybe T.Text,
-             prereqs :: Maybe Array
+             prereqs :: Maybe T.Text
            } deriving Show
 
 instance ToJSON Course where
