@@ -63,8 +63,8 @@ function turnNode(event) {
         updateFCECount();
 
         // Check the courses with FCE reqs
-        CSC318.updateStatus();
-        CSC454.updateStatus();
+        csc318.updateStatus();
+        csc454.updateStatus();
 
     }
 }
