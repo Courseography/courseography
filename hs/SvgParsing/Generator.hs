@@ -147,7 +147,7 @@ convertRectToSVG courseMap rect
             class_ = case shapeType_ rect of
                          Node -> "node"
                          Hybrid -> "hybrid"
-        in S.g ! A.id_ (stringValue $ shapeId_ rect)
+        in S.g ! A.id_ (stringValue $ filter (/=',') $ shapeId_ rect)
                ! A.class_ (stringValue class_)
                ! S.customAttribute "data-group" (stringValue (getArea (shapeId_ rect)))
                ! S.customAttribute "text-rendering" "geometricPrecision"
@@ -192,8 +192,8 @@ convertEdgeToSVG path =
            ! A.class_ "path"
            ! A.d (stringValue $ 'M' : buildPathString (pathPoints path))
            ! A.markerEnd "url(#arrow)"
-           ! S.customAttribute "source-node" (stringValue $ pathSource path)
-           ! S.customAttribute "target-node" (stringValue $ pathTarget path)
+           ! S.customAttribute "source-node" (stringValue $ filter (/=',') $ pathSource path)
+           ! S.customAttribute "target-node" (stringValue $ filter (/=',') $ pathTarget path)
            ! A.style (stringValue $ "fill:" ++
                       pathFill path ++
                       ";fill-opacity:1;")
