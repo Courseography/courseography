@@ -42,7 +42,7 @@ function createGraphButtons(graphs) {
 /**
  * Click function to load graph, based on button clicked in sidebar.
 **/
-$('div').on('click', 'div.graph-button', function() {
+$(document).on('click', '.graph-button', function() {
     'use strict';
 
     var id = $(this).attr('id');
