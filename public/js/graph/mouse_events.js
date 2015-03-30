@@ -3,6 +3,8 @@
  * Click function to reset graph to initial state
 **/
 $('#reset').click(function() {
+    'use strict';
+    
     reset();
 });
 
