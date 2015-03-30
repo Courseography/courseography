@@ -29,7 +29,7 @@ function getPosition(elem) {
     var xPosition = 0;
     var yPosition = 0;
       
-    while (elem) { 
+    while (elem) {
         // || 0 -> for mozilla firefox compatability
         xPosition += (elem.offsetLeft || 0) - elem.scrollLeft + elem.clientLeft;
         yPosition += (elem.offsetTop || 0) - elem.scrollTop + elem.clientTop;
@@ -279,7 +279,6 @@ function moveNodeElbow(e) {
             // move each elbow
             var position = getClickPosition(e, elbowMoving);
             regionMoving.elbows.map(function (elbow) {
-                // console.log(document.getElementById(elbowMoving.path).elbows.indexOf(elbowMoving));
                 moveElbow(elbow, position);
             });
             prevX = position.x;
