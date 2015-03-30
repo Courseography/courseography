@@ -73,9 +73,6 @@ function loadGraph(id) {
 
     // Initialize interface
     initializeGraphSettings();
-    
-    // Update credit count in nav bar
-    updateNavGraph();
 
     fillFCECount();
 
@@ -92,7 +89,6 @@ function loadGraph(id) {
 function getGraphsInDatabase() {
     'use strict';
 
-    var graphs;
     $.ajax({
         url: 'graphs',
         dataType: 'json',
