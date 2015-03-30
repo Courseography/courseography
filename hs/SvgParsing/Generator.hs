@@ -206,8 +206,8 @@ convertEdgeToSVG path =
            ! A.class_ "path"
            ! A.d (stringValue $ 'M' : buildPathString (pathPoints path))
            ! A.markerEnd "url(#arrow)"
-           ! S.customAttribute "source-node" (filter (/=',') $ stringValue $ pathSource path)
-           ! S.customAttribute "target-node" (filter (/=',') $ stringValue $ pathTarget path)
+           ! S.customAttribute "source-node" (stringValue $ filter (/=',') $ pathSource path)
+           ! S.customAttribute "target-node" (stringValue $ filter (/=',') $ pathTarget path)
            ! A.style (stringValue $ "fill:" ++
                       pathFill path ++
                       ";fill-opacity:1;")
