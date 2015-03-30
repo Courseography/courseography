@@ -31,7 +31,7 @@ function createGraphButtons(graphs) {
     'use strict';
 
     for (var i = 0; i < graphs.length; i++) {
-        var graphTitle = graphs[i].graph_title.toLowerCase();
+        var graphTitle = graphs[i].title.toLowerCase();
         var graphButton = '<div id = "graph-' + graphTitle +'" class = "graph-button">';
         $('#graphs').append(graphButton);
         $('#graph-' + graphTitle).html(graphTitle.toUpperCase());
