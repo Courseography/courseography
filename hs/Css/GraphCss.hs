@@ -178,7 +178,12 @@ graphContainer = do
         textAlign $ alignSide sideRight
         float floatRight
         display inlineBlock
-        marginTop (px 20)
+        fontColor white
+        backgroundColor red
+        --"border-radius" -: "50%"
+        border solid (px 1) black
+        fontSize (px 30)
+        margin (px 20) (px 5) (px 5) (px 5)
 
 {- titleCSS
  - Generates CSS for the title. -}
