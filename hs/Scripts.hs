@@ -65,6 +65,7 @@ drawScripts = do jQuery
                                              "static/js/draw/variables.js",
                                              "static/js/draw/path.js",
                                              "static/js/draw/draw.js",
+                                             "static/js/draw/save.js",
                                              "static/js/draw/setup.js"])
 
 postScripts :: H.Html

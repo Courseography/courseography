@@ -85,6 +85,10 @@ $('#finish-region').click(function () {
     finishRegion();
     });
 
+$('#save').click(function () {
+    saveClicked();
+    });
+
 document.addEventListener('keydown', keyboard, false);
 
 /**
@@ -94,19 +98,21 @@ document.addEventListener('keydown', keyboard, false);
 function keyboard(e) {
     'use strict';
 
-    if (! $("#course-code").is(":focus")) {
+    if (! $('#course-code').is(':focus') && ! $('#save-name').is(':focus')) {
         if (e.which == 78) {
-            changeMode("node-mode"); // n
+            changeMode('node-mode'); // n
         } else if (e.which == 80) {
-            changeMode("path-mode"); // p
+            changeMode('path-mode'); // p
         } else if (e.which == 77){
-            changeMode("change-mode"); // m
+            changeMode('change-mode'); // m
         } else if (e.which == 69){
-            changeMode("erase-mode"); // e
+            changeMode('erase-mode'); // e
         } else if (e.which == 82){
-            changeMode("region-mode"); // r
+            changeMode('region-mode'); // r
         } else if (e.which == 70){
             finishRegion(); // f
+        } else if (e.which == 83){  // s
+            saveClicked();
         }
     }
 }

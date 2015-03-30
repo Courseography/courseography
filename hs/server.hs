@@ -47,5 +47,6 @@ main = do
                dir "course-info" $ look "dept" >>= courseInfo,
                dir "depts" $ liftIO deptList,
                dir "timesearch" $ searchResponse,
+               --dir "save" look "objs" >>= save -- add save response courseography use IO any type final thing must be IO Response
                fourOhFourResponse
                ]
