@@ -1,4 +1,4 @@
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE OverloadedStrings, DeriveDataTypeable #-}
 
 module DrawResponse where
 
@@ -9,6 +9,20 @@ import Happstack.Server
 import MakeElements
 import MasterTemplate
 import Scripts
+import Data.Aeson
+import Data.Maybe
+import Data.List as L
+import Database.Persist.Sqlite
+import Database.Persist
+import Database.Tables
+import System.Directory
+import GHC.Generics
+import qualified Data.ByteString.Lazy.Char8 as L
+import Happstack.Server
+import Happstack.Server.Types
+import Control.Monad.IO.Class (liftIO)
+
+import Data.Data (Data, Typeable)
 
 drawResponse :: ServerPart Response
 drawResponse =
@@ -45,4 +59,44 @@ modePanel = createTag H.div "side-panel-wrap" "" $ do
   createTag H.div "finish-region" "button" "finish (f)" 
   createTag H.div "change-mode" "mode" "SELECT/MOVE (m)" 
   createTag H.div "erase-mode" "mode" "ERASE (e)"
-  createTag H.div "save" "button" "SAVE"
+  createTag H.div "save" "button" "SAVE (s)"
+
+{-
+-- code from: http://stackoverflow.com/questions/8865793/how-to-create-json-rest-api-with-happstack-json-body
+-- put this function in a library somewhere
+getBody :: ServerPart L.ByteString
+getBody = do
+    req  <- askRq 
+    body <- liftIO $ takeRequestBody req 
+    case body of 
+        Just rqbody -> return . unBody $ rqbody 
+        Nothing     -> return ""
+
+save :: String -> ServerPart Response
+save objs = do
+  d <- (eitherDecode <$> getJSON) :: IO (Either String [Person])
+  case d of
+  Left err -> putStrLn err
+  Right ps -> print ps
+
+instance FromJSON Person where
+ parseJSON (Object v) =
+    Point <$> v .: "x"
+           <*> v .: "y"
+ parseJSON _ = mzero
+
+
+data Point = Point { x :: Int, y :: Int } deriving (Show, Generic)
+
+instance FromJSON Person
+instance ToJSON Person
+
+-- | Returns an image of the timetable requested by the user.
+save :: ServerPart Response
+save = do
+    body <- getBody -- it's a ByteString
+    let unit = fromJust $ decode body :: Unit -- how to parse json
+    ok $ toResponse $ encode unit -- how to send json back.
+
+    -- liftIO $ getTimetableImage courses 
+-}

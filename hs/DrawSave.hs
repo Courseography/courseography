@@ -42,9 +42,6 @@ Path
 -- convert svg elements that need to be saved into JSON
 -- read JSON objects into haskell, 
 -- insert into Graph values gId?, "draw"
--- map the insert functions to the arrays of JSON objects
--- insert functions for single graph
---                  - for 
 
 -}
 
@@ -77,6 +74,7 @@ import Database.Tables
 import System.Directory
 import GHC.Generics
 
+-- need res?
 import Control.Monad.IO.Class  (liftIO, MonadIO)
 import Control.Monad.Trans.Reader
 import qualified Data.Conduit.List as CL
@@ -84,18 +82,12 @@ import Data.Conduit
 import Data.Text.Internal as TI
 import Database.JsonParser
 
--- JsonParser.hs
--- | Inserts the tutorials from a specified section into the Tutorials table.
-insertSessionTutorials :: MonadIO m => Maybe Session -> T.Text -> Course -> ReaderT SqlBackend m ()
-insertSessionTutorials Nothing sessionStr course = return ()
-insertSessionTutorials (Just session) sessionStr course = 
-    (unless $ null (tutorials session)) $ 
-    mapM_ (insertTutorial sessionStr course) (tutorials session)
-
-
 -- for debugging?
 -- SvgDatabase.hs
 queryDatabase sql = runSqlite dbStr $ rawQuery sql [] $$ CL.mapM_ (liftIO . print)
+
+
+
 
 -- parser.hs
 insertElements :: ([Path], [Shape], [Text]) -> IO ()
@@ -104,3 +96,17 @@ insertElements (paths, shapes, texts) =
         mapM_ insert_ shapes
         mapM_ insert_ paths
         mapM_ insert_ texts
+
+
+-- | Type of each JSON entry in record syntax.
+data Person =
+  Person { firstName  :: !Text
+         , lastName   :: !Text
+         , age        :: Int
+         , likesPizza :: Bool
+           } deriving (Show,Generic)
+
+-- Instances to convert our type to/from JSON.
+
+instance FromJSON Person
+instance ToJSON Person
