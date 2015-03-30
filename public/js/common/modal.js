@@ -220,7 +220,7 @@ function createG(nodeId) {
         .click(function () {
             openModal(nodeId);
         });
-    $('#nodes').append(g);
+    $('svg').append(g);
     return g;
 }
 
