@@ -167,16 +167,13 @@ function reset() {
         } else {
             window[node].status = 'inactive';
         }
-        setCookie(window[node].name, window[node].status);
+        setCookie(window[node].id, window[node].status);
 
         window[node].updateSVG();
     });
 
     // Edges
     $('path').attr('data-active', 'inactive');
-
-    // Clear 'My Courses' tab
-    $('#courseGrid').empty();
 
     // Clear any active focus
     if (activeFocus !== '') {
@@ -193,10 +190,6 @@ function reset() {
     FCEs400 = 0;
     FCEsMAT = 0;
     clickedCourses = [];
-    $('#FCEcount').html('0.0');
-
-    $('input:checkbox').attr('checked', false);
-    $('input:text').attr('value', '');
 
 }
 
