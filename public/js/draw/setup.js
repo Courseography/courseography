@@ -112,7 +112,7 @@ function keyboard(e) {
         } else if (e.which == 70){
             finishRegion(); // f
         } else if (e.which == 83){  // s
-            saveGraph();
+            saveClicked();
         }
     }
 }

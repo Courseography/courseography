@@ -140,7 +140,6 @@ function findClosest(beg, typeB, end, typeE) {
             if (dist(node1Edges[i], node2Edges[j]) < best_dist) {
                 best_edges = [node1Edges[i], node2Edges[j]];
                 best_dist = dist(node1Edges[i], node2Edges[j]);
-                console.log(best_dist);
             } 
         }
     }
@@ -188,15 +187,14 @@ function selectElbow(e) {
         var thePath = document.getElementById(e.currentTarget.path);
         var thePathString = thePath.getAttribute('d');
         var elbowNum = thePath.elbows.indexOf(e.currentTarget);
-
-        if (thePath.class === 'region' & thePath.elbows.length <= 3) {
+        if (thePath.getAttribute('class') === 'region' & thePath.elbows.length <= 3) {
             // remove the whole region, can't have only 2 points in shape
             thePath.elbows.map(function (item) {
                 svgDoc.removeChild(item);
             });
             document.getElementById('regions').removeChild(thePath);
         } else {
-            if (thePath.class === 'region') {
+            if (thePath.getAttribute('class') === 'region') {
                 elbowNum -= 1;
             }
 
@@ -205,7 +203,12 @@ function selectElbow(e) {
                 indexOfElbow = thePathString.indexOf('L', indexOfElbow + 1);
             }
             indexOfNext = thePathString.indexOf('L', indexOfElbow + 1);
+            
             thePathString = thePathString.slice(0, indexOfElbow) + thePathString.slice(indexOfNext);
+            if (thePathString[0] !== 'M') { 
+                // for the case when the first elbow of a region
+                thePathString = 'M' + thePathString.slice(1);
+            }
             thePath.elbows.splice(thePath.elbows.indexOf(e.currentTarget), 1);
             thePath.setAttributeNS(null, 'd', thePathString);
             svgDoc.removeChild(e.currentTarget);
