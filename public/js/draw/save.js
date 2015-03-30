@@ -61,6 +61,7 @@ function saveGraph() {
 
 		// convert svg elems to json
 		var rectAndText = getRect();
+		var paths = getPath();
 		// make request
 		$.ajax({
 			url: 'save',
@@ -68,7 +69,8 @@ function saveGraph() {
 			method: 'get',
 			data: 'objs=' + JSON.stringify({'graph': {'gId': 100, 'title': savedAs}, 
 											'rects': rectAndText.rects, 
-											'texts': rectAndText.texts}),
+											'texts': rectAndText.texts,
+											'paths': paths}),
 			success: function () { console.log('Ajax request sent!'); },
 			error: function (xhr, status, error) {
 						console.log('Error with Ajax request!');
