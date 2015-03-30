@@ -200,8 +200,8 @@ function createText(g, nodeId, textClass, textId, posX, posY, width, height) {
         .text('Info')
         .attr('class', textClass + '-text ' + textId + '-text')
         .attr('id', textId + '-text')
-        .attr('x', parseFloat(posX) + width / 2)
-        .attr('y', parseFloat(posY) + height / 2);
+        .attr('x', parseFloat(posX) + width / 2 - 18)
+        .attr('y', parseFloat(posY) + height / 2 + 6);
     g.append(text);
 }
 
