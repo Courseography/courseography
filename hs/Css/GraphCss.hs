@@ -174,6 +174,11 @@ graphContainer = do
         "stroke-linecap" -: "square"
         "stroke-miterlimit" -: "10"
         "shape-rendering" -: "geometricPrecision"
+    "#reset" ? do
+        textAlign $ alignSide sideRight
+        float floatRight
+        display inlineBlock
+        marginTop (px 20)
 
 {- titleCSS
  - Generates CSS for the title. -}
