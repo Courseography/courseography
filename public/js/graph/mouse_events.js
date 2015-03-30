@@ -1,3 +1,11 @@
+
+/**
+ * Click function to reset graph to initial state
+**/
+$('#reset').click(function() {
+    reset();
+});
+
 /**
  * Sets all mouse callbacks.
  */
