@@ -11,6 +11,7 @@
              TypeFamilies #-}
 
 module Database.Tables where
+
 import Database.Persist.TH
 import Database.DataType
 import qualified Data.Text as T
@@ -104,6 +105,11 @@ Path
     source String
     target String
     deriving Show
+
+FacebookTest
+    fId String
+    testString String
+    deriving Show
 |]
 
 -- | A Lecture.
@@ -132,6 +138,10 @@ data Session =
             } deriving Show
 
 -- | A Course.
+-- each element of prereqs can be one of three things:
+--    * a one-element list containing a course code
+--    * a list starting with "and", and 2 or more course codes
+--    * a list starting with "or", and 2 or more course codes
 data Course =
     Course { breadth :: Maybe T.Text,
              description :: Maybe T.Text,
@@ -145,7 +155,7 @@ data Course =
              manualTutorialEnrol :: Maybe Bool,
              manualPracticalEnrol :: Maybe Bool, 
              distribution :: Maybe T.Text,
-             prereqs :: Maybe Array
+             prereqs :: Maybe T.Text
            } deriving Show
 
 instance ToJSON Course where
@@ -185,9 +195,9 @@ instance ToJSON Lecture where
 
 instance ToJSON Tutorial where
   toJSON (Tutorial Nothing times timeStr) =
-      Array $ V.fromList [toJSON times, toJSON timeStr]
+      Array $ V.fromList [toJSON (map convertTimeToString times), toJSON timeStr]
   toJSON (Tutorial (Just value) times timeStr) =
-      Array $ V.fromList [toJSON value, toJSON times, toJSON timeStr]
+      Array $ V.fromList [toJSON value, toJSON (map convertTimeToString times), toJSON timeStr]
 
 -- | Converts a Double to a T.Text.
 -- This removes the period from the double, as the JavaScript code,

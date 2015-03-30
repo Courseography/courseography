@@ -19,24 +19,24 @@ cell :: Diagram B R2
 cell = rect 2 0.8
 
 makeCell :: String -> Diagram B R2
-makeCell s = 
+makeCell s =
     (font "Trebuchet MS" $ text s # fontSizeO 16 # fc white) <>
     cell # fc (if null s then white else blue)
          # lw none
 
-header :: Diagram B R2
-header = (hcat $ map makeHeaderCell $ "Fall":days) # centerX === headerBorder
+header :: String -> Diagram B R2
+header session = (hcat $ map makeHeaderCell $ session:days) # centerX === headerBorder
 
 headerBorder :: Diagram B R2
 headerBorder = hrule 12 # lw medium # lc pink
 
 makeHeaderCell :: String -> Diagram B R2
-makeHeaderCell s = 
+makeHeaderCell s =
     (font "Trebuchet MS" $ text s # fontSizeO 16) <>
     cell # lw none
 
 makeTimeCell :: String -> Diagram B R2
-makeTimeCell s = 
+makeTimeCell s =
     (font "Trebuchet MS" $ text s # fontSizeO 16) <>
     cell # lw none
 
@@ -47,14 +47,14 @@ makeRow (x:xs) = (# centerX) . hcat $
 rowBorder :: Diagram B R2
 rowBorder = hrule 12 # lw thin # lc grey
 
-makeTable :: [[String]] -> Diagram B R2
-makeTable s = vcat $ header : intersperse rowBorder (map makeRow s)
+makeTable :: [[String]] -> String -> Diagram B R2
+makeTable s session = vcat $ (header session): intersperse rowBorder (map makeRow s)
 
-renderTable :: String -> String -> IO ()
-renderTable filename courses = do
+renderTable :: String -> String -> String -> IO ()
+renderTable filename courses session = do
     let courseTable = partition5 $ lines courses
     print courseTable
-    let g = makeTable $ zipWith (:) times courseTable
+    let g = makeTable (zipWith (:) times courseTable) session
     let svg = renderDia SVG (SVGOptions (Width 600) Nothing) g
     let txt = replace "16.0em" "16.0px" $ Svg.renderSvg svg
     writeFile filename txt

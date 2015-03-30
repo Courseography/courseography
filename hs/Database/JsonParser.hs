@@ -7,7 +7,9 @@ module Database.JsonParser (insertCourse,
                     setTutEnrol,
                     setPracEnrol,
                     dbStr,
+                    fbdbStr,
                     encodeJSON) where
+
 
 import qualified Data.ByteString.Lazy as B
 import qualified Data.ByteString.Lazy.Char8 as BSL
@@ -28,6 +30,9 @@ import Database.Tables
 import System.Directory
 import GHC.Generics
 
+fbdbStr :: T.Text
+fbdbStr = "fdatabase1.sqlite3"
+
 dbStr :: T.Text
 dbStr = "Database/database1.sqlite3"
 
@@ -39,7 +44,7 @@ insertCourse course =
                       (description course)
                       (manualTutorialEnrol course)
                       (manualPracticalEnrol course)
-                      (prereqString course)
+                      (prereqs course)
                       (exclusions course)
                       (breadth course)
                       (distribution course)
