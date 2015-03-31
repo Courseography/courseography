@@ -3,7 +3,7 @@ $(document).ready(function() {
     $.getScript('//connect.facebook.net/en_UK/all.js', function() {
 
         FB.init({
-            appId      : '442286309258193',
+            appId      : '432140593606098',
             xfbml      : true,
             version    : 'v2.1'
         });

@@ -35,12 +35,12 @@ postFB :: T.Text
 postFB = "post-fb"
 
 appId :: T.Text
-appId = "442286309258193"
+appId = "432140593606098"
 
 -- In order to access information as the Courseography application, the secret needs
 -- to be declared in the third string below that has the place holder 'INSERT_SECRET'.
 -- The secret should NEVER be committed to GitHub.
--- The secret can be found here: https://developers.facebook.com/apps/442286309258193/dashboard/
+-- The secret can be found here: https://developers.facebook.com/apps/432140593606098/dashboard/
 -- Should the secret be committed to GitHub, it needs to be reset immediately. If you find
 -- yourself in this pickle, please contact someone who can do this.
 appSecret :: T.Text
