@@ -175,14 +175,14 @@ function saveCookies(courses, sections) {
     'use strict';
 
     if (courses !== undefined) {
-        setCookie("selected-courses", JSON.stringify(courses).replace(/,/g, '_').replace(/[\"\[\]]/g, ''));
+        setCookie("selected-courses", courses.split('_').replace(/[\"\[\]]/g, ''));
     } else {
         setCookie("selected-courses", "");
     }
 
     if (sections !== undefined) {
         console.log(JSON.stringify(sections));
-        setCookie("selected-lectures", JSON.stringify(sections).replace(/,/g, '_').replace(/[\"\[\]]/g, ''));
+        setCookie("selected-lectures", sections.split('_').replace(/[\"\[\]]/g, ''));
     } else {
         setCookie("selected-lectures", "");
     }
