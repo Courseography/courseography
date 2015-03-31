@@ -84,7 +84,7 @@ performFBAction action = withManager $ \manager -> FB.runFacebookT credentials m
 -- | Posts a message to the user's Facebook feed, with the code 'code'. GraphResponse
 -- is then sent back to the user.
 postToFacebook :: String -> ServerPart Response
-postToFacebook code = liftIO $ performPost (BS.pack code) >> graphResponse
+postToFacebook code = (liftIO $ performPost (BS.pack code)) >> graphResponse
 
 -- | Performs the posting to facebook.
 performPost :: BS.ByteString -> IO Response
