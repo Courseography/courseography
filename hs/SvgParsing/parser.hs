@@ -25,7 +25,7 @@ main = performParse "CSC" "graph_regions.svg"
 performParse :: String -- ^ The title of the graph.
              -> String -- ^ The filename of the file that will be parsed.
              -> IO ()
-performParse dirLocation inputFilename outputFilename =
+performParse graphTitle inputFilename =
    do graphFile <- readFile ("../public/res/graphs/" ++ inputFilename)
       key <- insertGraph graphTitle
       let parsedGraph = parseGraph key graphFile
