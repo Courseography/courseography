@@ -57,7 +57,7 @@ postPhoto (FB.UserAccessToken _ b _) id_ = withSocketsDo $ withManager $ \m -> d
     fbpost <- parseUrl $ "https://graph.facebook.com/v2.2/me/photos?access_token=" ++ T.unpack b
     flip httpLbs m =<<
         formDataBody [partBS "message" "Test Message",
-                      partFileSource "graph" $ "INSERT_ID-graph.png"]
+                      partFileSource "graph" "INSERT_ID-graph.png"]
                       fbpost
     return $ toResponse postFB
 
@@ -95,7 +95,7 @@ performFBAction action = withManager $ \manager -> FB.runFacebookT credentials m
 -- | Posts a message to the user's Facebook feed, with the code 'code'. GraphResponse
 -- is then sent back to the user.
 postToFacebook :: String -> ServerPart Response
-postToFacebook code = (liftIO $ performPost (BS.pack code)) >> graphResponse
+postToFacebook code = liftIO $ performPost (BS.pack code) >> graphResponse
 
 -- | Performs the posting to facebook.
 performPost :: BS.ByteString -> IO Response
