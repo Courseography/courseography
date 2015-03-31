@@ -35,7 +35,7 @@ postFB :: T.Text
 postFB = "post-fb"
 
 appId :: T.Text
-appId = "442286309258193"
+appId = "432140593606098"
 
 -- In order to access information as the Courseography application, the secret needs
 -- to be declared in the third string below that has the place holder 'INSERT_SECRET'.
