@@ -65,9 +65,8 @@ postPhoto (FB.UserAccessToken _ b _) id_ = withSocketsDo $ withManager $ \m -> d
 -- interact with Facebook.
 retrieveAuthURL :: T.Text -> IO T.Text
 retrieveAuthURL url = 
-    performFBAction $ do
-        fbAuthUrl <- FB.getUserAccessTokenStep1 url perms
-        return fbAuthUrl
+    performFBAction $ FB.getUserAccessTokenStep1 url perms
+        
 
 -- | Retrieves the user's email.
 retrieveFBData :: BS.ByteString -> IO Response
