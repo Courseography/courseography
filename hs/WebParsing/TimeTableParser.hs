@@ -114,7 +114,7 @@ updateSlot row Nothing =
   if (isCancelled row) || length row < 8
   then Nothing
   else let timestr = T.takeWhile (/= ' ') (row !! 5)
-           in Just CourseSlot { slotSection    = (row !! 3),
+           in Just CourseSlot { slotSection    = T.take 5 (row !! 3),
                                 slotTime_str   = timestr,
                                 slotInstructor = (row !! 7) }
 updateSlot row (Just slot) =
@@ -143,7 +143,7 @@ makeLecture :: CourseSlot -> Lecture
 makeLecture slot =
   Lecture { extra = 0,
             section = (slotSection slot),
-            cap = -1,
+            cap = 0,
             time_str = (slotTime_str slot),
             time = concatMap makeTimeSlots (T.split (== ' ') (slotTime_str slot)),
             instructor = (slotInstructor slot),

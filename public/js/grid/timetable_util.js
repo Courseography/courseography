@@ -181,7 +181,6 @@ function saveCookies(courses, sections) {
     }
 
     if (sections !== undefined) {
-        console.log(JSON.stringify(sections));
         setCookie("selected-lectures", JSON.stringify(sections).replace(/,/g, '_').replace(/[\"\[\]]/g, ''));
     } else {
         setCookie("selected-lectures", "");
