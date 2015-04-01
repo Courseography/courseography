@@ -22,7 +22,13 @@ $(document).ready(function () {
     'use strict';
 
     var active = getCookie('active-graph');
-    loadGraph(active);
+
+    if (active !== '') {
+        loadGraph(active);
+    } else {
+        loadGraph('1');
+    }
+    
     $('#fcecount').hide();
 });
 
