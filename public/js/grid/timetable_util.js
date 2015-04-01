@@ -122,21 +122,21 @@ function restoreFromCookies() {
     var selectedSectionCookie = getCookie('selected-lectures');
 
     if (selectedCourseCookie === undefined || selectedCourseCookie.length === 0) {
-        selectedCourseCookie = '[]';
+        selectedCourseCookie = [];
     } else {
-        selectedCourseCookie = '["' + selectedCourseCookie.split('_').join('","') + '"]';
+        selectedCourseCookie = selectedCourseCookie.split('_');
     }
 
     if (selectedSectionCookie === undefined || selectedSectionCookie.length === 0) {
-        selectedSectionCookie = '[]';
+        selectedSectionCookie = [];
     } else {
-        selectedSectionCookie = '["' + selectedSectionCookie.split('_').join('","') + '"]';
+        selectedSectionCookie = selectedSectionCookie.split('_');
     }
 
+
     if (selectedCourseCookie.length > 0) {
-        var selectedCoursesTemp = $.parseJSON(selectedCourseCookie);
         var newCourses = [];
-        $.each(selectedCoursesTemp, function (i, course) {
+        $.each(selectedCourseCookie, function (i, course) {
             try {
                 addCourseToList(course);
                 newCourses.push(course);
@@ -148,9 +148,8 @@ function restoreFromCookies() {
     }
 
     if (selectedSectionCookie.length > 0) {
-        selectedSections = $.parseJSON(selectedSectionCookie);
         var newSections = [];
-        $.each(selectedSections, function (i, section) {
+        $.each(selectedSectionCookie, function (i, section) {
             try {
                 $('#' + section).click();
                 newSections.push(section);
@@ -175,13 +174,13 @@ function saveCookies(courses, sections) {
     'use strict';
 
     if (courses !== undefined) {
-        setCookie("selected-courses", JSON.stringify(courses).replace(/,/g, '_').replace(/[\"\[\]]/g, ''));
+        setCookie("selected-courses", courses.join('_'));
     } else {
         setCookie("selected-courses", "");
     }
 
     if (sections !== undefined) {
-        setCookie("selected-lectures", JSON.stringify(sections).replace(/,/g, '_').replace(/[\"\[\]]/g, ''));
+        setCookie("selected-lectures", sections.join('_'));
     } else {
         setCookie("selected-lectures", "");
     }

@@ -57,7 +57,7 @@ postPhoto (FB.UserAccessToken _ b _) id_ = withSocketsDo $ withManager $ \m -> d
     fbpost <- parseUrl $ "https://graph.facebook.com/v2.2/me/photos?access_token=" ++ T.unpack b
     flip httpLbs m =<<
         formDataBody [partBS "message" "Test Message",
-                      partFileSource "graph" $ "INSERT_ID-graph.png"]
+                      partFileSource "graph" "INSERT_ID-graph.png"]
                       fbpost
     return $ toResponse postFB
 
@@ -65,9 +65,8 @@ postPhoto (FB.UserAccessToken _ b _) id_ = withSocketsDo $ withManager $ \m -> d
 -- interact with Facebook.
 retrieveAuthURL :: T.Text -> IO T.Text
 retrieveAuthURL url = 
-    performFBAction $ do
-        fbAuthUrl <- FB.getUserAccessTokenStep1 url perms
-        return fbAuthUrl
+    performFBAction $ FB.getUserAccessTokenStep1 url perms
+        
 
 -- | Retrieves the user's email.
 retrieveFBData :: BS.ByteString -> IO Response
@@ -77,16 +76,6 @@ retrieveFBData code =
         user <- FB.getUser "me" [] (Just token)
         liftIO $ insertIdIntoDb (FB.userId user)
         return $ toResponse (FB.userEmail user)
-
--- | Inserts a string into the database along with the current user's Facebook ID.
-insertIdIntoDb :: FB.Id -> IO ()
-insertIdIntoDb id_ = 
-    runSqlite fbdbStr $ do
-        runMigration migrateAll
-        insert_ $ FacebookTest (show id_) "Test String"
-        liftIO $ print "Inserted..."
-        let sql = "SELECT * FROM facebook_test"
-        rawQuery sql [] $$ CL.mapM_ (liftIO . print)
 
 -- | Performs a Facebook action.
 performFBAction :: FB.FacebookT FB.Auth (ResourceT IO) a -> IO a
@@ -116,3 +105,15 @@ getToken url code = FB.getUserAccessTokenStep2 url [("code", code)]
 -- | Gets a user's Facebook email.
 getEmail :: String -> ServerPart Response
 getEmail code = liftIO $ retrieveFBData (BS.pack code)
+
+-- | Inserts a string into the database along with the current user's Facebook ID.
+-- Note: Meant as an experimental function for inserting user information into the database.
+--       This function is not used.
+insertIdIntoDb :: FB.Id -> IO ()
+insertIdIntoDb id_ = 
+    runSqlite fbdbStr $ do
+        runMigration migrateAll
+        insert_ $ FacebookTest (show id_) "Test String"
+        liftIO $ print "Inserted..."
+        let sql = "SELECT * FROM facebook_test"
+        rawQuery sql [] $$ CL.mapM_ (liftIO . print)
