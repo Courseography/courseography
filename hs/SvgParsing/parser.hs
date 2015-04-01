@@ -20,21 +20,19 @@ import SvgParsing.ParserUtil
 import qualified Data.Map as M
 
 main :: IO ()
-main = performParse "CSC" "graph_regions.svg" "csc_graph.svg"
+main = performParse "CSC" "graph_regions.svg"
 
-performParse :: String -- ^ The directory location that the file will be written to.
+performParse :: String -- ^ The title of the graph.
              -> String -- ^ The filename of the file that will be parsed.
-             -> String -- ^ The filename of the file that will be written to.
              -> IO ()
-performParse dirLocation inputFilename outputFilename =
+performParse graphTitle inputFilename =
    do graphFile <- readFile ("../public/res/graphs/" ++ inputFilename)
-      key <- insertGraph dirLocation
+      key <- insertGraph graphTitle
       let parsedGraph = parseGraph key graphFile
       print "Graph Parsed"
       insertElements parsedGraph
       print "Graph Inserted"
-      createDirectoryIfMissing True ("../public/res/graphs/" ++ dirLocation)
-      buildSVG key M.empty ("../public/res/graphs/" ++ dirLocation ++ "/" ++ outputFilename)
+      buildSVG key M.empty ("../public/res/graphs/" ++ show key ++ ".svg")
       print "Success"
 
 parseGraph ::  Int64  -- ^ The unique identifier of the graph.
