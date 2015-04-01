@@ -57,7 +57,8 @@ $('div').on('click', 'div.graph-button', function() {
 function loadGraph(id) {
     'use-strict';
     
-
+    setCookie('active-graph', id);
+    
     // Remove current graph
     $('#graph').empty();
 
@@ -77,8 +78,6 @@ function loadGraph(id) {
     initializeGraphSettings();
 
     fillFCECount();
-
-    setCookie('active-graph', id);
 
     // Uncomment to enable the feedback form (must also be displayed in html)
     // activateFeedbackForm();
