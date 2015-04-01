@@ -63,7 +63,10 @@ function loadGraph(id) {
 
     getRemote('static/res/graphs/' + id + '.svg');
 
-    FCEPrerequisiteCourses = [csc318, csc454];
+    // Only create this if CSC graph loaded
+    if ('undefined' !== typeof csc318) {
+        FCEPrerequisiteCourses = [csc318, csc454];
+    }
 
     buildGraph();
 

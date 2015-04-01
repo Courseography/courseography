@@ -149,8 +149,11 @@ function initializeGraphSettings() {
         clearFocus();
     }
 
-    csc318.updateStatus();
-    csc454.updateStatus();
+    // only run this if the CSC graph is loaded
+    if ('undefined' !== typeof csc318){
+        csc318.updateStatus();
+        csc454.updateStatus();
+    }
 }
 
 

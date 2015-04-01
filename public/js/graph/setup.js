@@ -21,7 +21,8 @@ var nodes = [];               // List of all nodes
 $(document).ready(function () {
     'use strict';
 
-    loadGraph('1');
+    var active = getCookie('active-graph');
+    loadGraph(active);
     $('#fcecount').hide();
 });
 
