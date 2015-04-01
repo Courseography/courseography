@@ -39,7 +39,7 @@ function buildGraph() {
 
     $('.bool').each(function () {
         var id = $(this).attr('id');
-        var type = $(this).children('text').text().toUpperCase();
+        var type = $(this).children('text').text();
         makeHybrid(type, id);
     });
 
