@@ -21,7 +21,7 @@ var nodes = [];               // List of all nodes
 $(document).ready(function () {
     'use strict';
 
-    loadGraph('graph-csc', 1);
+    loadGraph(1);
     $('#fcecount').hide();
 });
 
@@ -35,7 +35,7 @@ function getRemote(filepath) {
 
     var SVG = $.ajax({
         type: 'GET',
-        url: 'static/res/graphs/1.svg',
+        url: filepath,
         async: false
     }).responseText;
     $('#graph').append(SVG);

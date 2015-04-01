@@ -34,8 +34,7 @@ function createGraphButtons(graphs) {
         var graphButton = '<div id = "graph-' + graphTitle +'" class = "graph-button">';
         $('#graphs').append(graphButton);
         $('#graph-' + graphTitle).html(graphTitle.toUpperCase());
-        $('#graph-' + graphTitle).data('id', graphs[i].gID);
-        $('#graph-' + graphTitle).data('title', graphs[i].title);
+        $('#graph-' + graphTitle).data('id', graphs[i].gId);
     }
 }
 
@@ -47,26 +46,22 @@ $('div').on('click', 'div.graph-button', function() {
     'use strict';
 
     var id = $(this).data('id');
-    var name = $(this).data('name');
-    loadGraph(name, id);
+    loadGraph(id);
 });
 
 
 /**
  * Loads a Graph
- * @param{string} name ID name of graph button clicked
  * @param{string} id ID of graph in database
 **/
-function loadGraph(name, id) {
+function loadGraph(id) {
     'use-strict';
     
 
     // Remove current graph
     $('#graph').empty();
 
-    console.log(name + '/' + id + '.svg');
-
-    getRemote(name + '/' + id + '.svg');
+    getRemote('static/res/graphs/' + id + '.svg');
 
     FCEPrerequisiteCourses = [csc318, csc454];
 
@@ -77,7 +72,7 @@ function loadGraph(name, id) {
 
     // Initialize interface
     initializeGraphSettings();
-    
+
     fillFCECount();
 
     // Uncomment to enable the feedback form (must also be displayed in html)
