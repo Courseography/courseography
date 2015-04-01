@@ -64,7 +64,7 @@ function loadGraph(id) {
     getRemote('static/res/graphs/' + id + '.svg');
 
     // Only create this if CSC graph loaded
-    if (getCookie('active-graph' === '1')) {
+    if (getCookie('active-graph') === '1') {
         FCEPrerequisiteCourses = [csc318, csc454];
     }
 
