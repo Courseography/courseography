@@ -174,13 +174,13 @@ function saveCookies(courses, sections) {
     'use strict';
 
     if (courses !== undefined) {
-        setCookie("selected-courses", courses.join('_').replace(/[\"\[\]]/g, ''));
+        setCookie("selected-courses", courses.join('_'));
     } else {
         setCookie("selected-courses", "");
     }
 
     if (sections !== undefined) {
-        setCookie("selected-lectures", sections.join('_').replace(/[\"\[\]]/g, ''));
+        setCookie("selected-lectures", sections.join('_'));
     } else {
         setCookie("selected-lectures", "");
     }
