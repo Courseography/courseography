@@ -21,7 +21,7 @@ var nodes = [];               // List of all nodes
 $(document).ready(function () {
     'use strict';
 
-    loadGraph(1);
+    loadGraph('1');
     $('#fcecount').hide();
 });
 
