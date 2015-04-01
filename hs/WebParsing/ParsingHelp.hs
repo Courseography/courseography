@@ -9,6 +9,7 @@ module WebParsing.ParsingHelp
     dropBetween,
     dropBetweenAll,
     dropAround,
+    isCourse,
     parseDescription,
     parseCorequisite,
     parsePrerequisite,
@@ -167,4 +168,8 @@ parseDistAndBreadth (tags, course) =
       brdth = makeEntry (Just (filter (tagContains ["Breadth"]) tags)) (Just ["Breadth Requirement: "])
   in (tail $ tail tags, course {distribution = dist, breadth = brdth})
 
-
+-- | returns true if text is a valid course code.
+isCourse :: T.Text -> Bool
+isCourse text =
+  let pat = "[A-Z]{3}[0-9]{3}[HY][0-9]" :: String
+  in (T.unpack text) =~ pat

@@ -39,7 +39,7 @@ timetableUrl = "http://www.artsandscience.utoronto.ca/ofr/timetable/winter/"
 -- from main list.
 specialCases :: [String]
 specialCases = ["assem.html",
-                "phl.html",
+                "online.html",
                 "academics-and-registration"]
 
 
@@ -80,12 +80,10 @@ getDeptTimetable url = do
                 then map lowerTag rawSoup
                 else rawSoup
       table = dropAround  (tagOpen (=="table") (\x -> True)) (tagClose (=="table")) toLower
-      row = partitions (tagOpen (=="tr") (\x -> True)) table
-      rowsColumns =  map (partitions (tagOpen (== "td") (\_ -> True))) row
-      cells = filter (\x ->  and [(x /= []), length x > 4, notCancelled (x !! 4)])  (toCells table)
-      courseCells = partitions (\row -> (head row) /= "") cells
-      sessions = map processCourseTable courseCells
-  mapM_ print rowsColumns
+      row = partitions (tagOpen (=="tr") (\_ -> True)) table
+      rowsColumns  =  map (partitions (tagOpen (== "td") (\_ -> True))) row
+  mapM_ (\(pos, course) -> processCourseTable (foldl (\c p -> expandTable c "" p) course pos)) (toCells table)
+  --print toLower--were running into an empty list while printing out the final results-- look into this tomorrow
   where
     cleanTag (TagText s) = TagText (T.strip (replaceAll ["\r\n"] "" s))
     cleanTag s = s
@@ -94,14 +92,20 @@ getDeptTimetable url = do
 
 -- | partitions the html table into a 2d list of cells. Does not account for cells that take
 -- up more than one row or column.
-toCells :: [Tag T.Text] -> [[T.Text]]
+toCells :: [Tag T.Text] -> [ ([Pos], [[T.Text]] ) ]
 toCells tags =
-  let row = partitions (tagOpen (=="tr") (\x -> True)) tags
-      rowsColumns =  map (partitions (tagOpen (== "td") (\_ -> True))) row
-      filterCells = map (map (filter isTagText)) rowsColumns
-      textCells = map (map (map fromTagText)) filterCells
-      courses = map (\c -> extractSpans [c]) rowsColumns
-  in  foldr (\pos t -> expandTable t "" pos) (map (map T.concat) textCells) (extractSpans rowsColumns)
+  let row = partitions (tagOpen (=="tr") (\_ -> True)) tags
+      rowsColumns  =  map (partitions (tagOpen (== "td") (\_ -> True))) row
+      --courseRows groups cells by the courses they are contained in.
+      removedEmpty = filter (not . null) rowsColumns
+      dropLastCell = map init removedEmpty
+      courseRows = partitions (\row -> any (isCourse . fromTagText) (filter isTagText (head row))) dropLastCell
+      --foreach group of cells rep. courses, extracts the spans.
+      courseSpans = map extractSpans courseRows -- [[Pos]]
+      --following two lines takes out everything but text in each cell.
+      filterCells = map (map (map (filter isTagText))) courseRows
+      textCells =   map (map (map (\x -> T.concat (map fromTagText x))))  filterCells
+  in (zip courseSpans textCells)
 
 -- | adds a tutorial to the given session
 addTutorial :: Session -> Tutorial -> Session
@@ -195,13 +199,14 @@ processCourseTable course = do
   let slots = filter isJust (parseCourse course Nothing [])
   let justSlots = map fromJust slots
   let sesh = makeSession justSlots
-  print code
+
   runSqlite dbStr $ do
     runMigration migrateAll
     setTutEnrol code (containsTut sesh)
     setPracEnrol code (containsPrac sesh)
     mapM_ (insertLec session code) (lectures sesh)
     mapM_ (insertTut session code) (tutorials sesh)
+  print code
   where
     containsTut sesh = any (maybe False (T.isPrefixOf "T") . tutorialSection) $ tutorials sesh
     containsPrac sesh = any (maybe False (T.isPrefixOf "P") . tutorialSection) $ tutorials sesh
@@ -211,8 +216,8 @@ main = do
     rsp <- simpleHTTP (getRequest $ timetableUrl ++ "sponsors.htm")
     body <- getResponseBody rsp
     let depts = getDeptList $ parseTags body
-    --getDeptTimetable "phl.html"
-    mapM_ getDeptTimetable depts
+    getDeptTimetable "glaf.html"
+    --mapM_ getDeptTimetable depts
 
 parseTT :: IO ()
 parseTT = do
