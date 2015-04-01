@@ -121,12 +121,16 @@ function restoreFromCookies() {
     var selectedCourseCookie = getCookie('selected-courses');
     var selectedSectionCookie = getCookie('selected-lectures');
 
-    if (selectedCourseCookie.length === 0) {
-        selectedCourseCookie = [];
+    if (selectedCourseCookie === undefined || selectedCourseCookie.length === 0) {
+        selectedCourseCookie = '[]';
+    } else {
+        selectedCourseCookie = '["' + selectedCourseCookie.split('_').join('","') + '"]';
     }
 
-    if (selectedSectionCookie.length === 0) {
-        selectedSectionCookie = [];
+    if (selectedSectionCookie === undefined || selectedSectionCookie.length === 0) {
+        selectedSectionCookie = '[]';
+    } else {
+        selectedSectionCookie = '["' + selectedSectionCookie.split('_').join('","') + '"]';
     }
 
     if (selectedCourseCookie.length > 0) {
@@ -171,15 +175,16 @@ function saveCookies(courses, sections) {
     'use strict';
 
     if (courses !== undefined) {
-        setCookie("selected-courses", JSON.stringify(courses));
+        setCookie("selected-courses", JSON.stringify(courses).replace(/,/g, '_').replace(/[\"\[\]]/g, ''));
     } else {
-        setCookie("selected-courses", "[]");
+        setCookie("selected-courses", "");
     }
 
     if (sections !== undefined) {
-        setCookie("selected-lectures", JSON.stringify(sections));
+        console.log(JSON.stringify(sections));
+        setCookie("selected-lectures", JSON.stringify(sections).replace(/,/g, '_').replace(/[\"\[\]]/g, ''));
     } else {
-        setCookie("selected-lectures", "[]");
+        setCookie("selected-lectures", "");
     }
 }
 

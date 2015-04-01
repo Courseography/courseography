@@ -103,6 +103,7 @@ disclaimerCSS = "#disclaimerDiv" ? do
 modalCSS = do
     ".ui-dialog" ? do
         outline solid (px 0) black
+        position absolute
     ".ui-widget-overlay" ? do
         height100
         width100
