@@ -1,4 +1,3 @@
-var filenames = {'CSC': 'CSC/csc_graph.svg', 'STA': 'STA/sta_graph.svg'};
 
 /**
  * The click function when a focus is clicked.
@@ -31,10 +30,11 @@ function createGraphButtons(graphs) {
     'use strict';
 
     for (var i = 0; i < graphs.length; i++) {
-        var graphTitle = graphs[i].graph_title.toLowerCase();
+        var graphTitle = graphs[i].title;
         var graphButton = '<div id = "graph-' + graphTitle +'" class = "graph-button">';
         $('#graphs').append(graphButton);
-        $('#graph-' + graphTitle).html(graphTitle.toUpperCase());
+        $('#graph-' + graphTitle).html(graphTitle);
+        $('#graph-' + graphTitle).data('id', graphs[i].gId);
     }
 }
 
@@ -45,26 +45,29 @@ function createGraphButtons(graphs) {
 $('div').on('click', 'div.graph-button', function() {
     'use strict';
 
-    var id = $(this).attr('id');
+    var id = $(this).data('id');
     loadGraph(id);
 });
 
 
 /**
  * Loads a Graph
- * @param{string} id ID name of graph button clicked
+ * @param{string} id ID of graph in database
 **/
 function loadGraph(id) {
     'use-strict';
-    
-    var graph = id.substring(6, id.length);
+
+    setCookie('active-graph', id);
 
     // Remove current graph
     $('#graph').empty();
 
-    getRemote(graph.toUpperCase() + '/' + graph + '_graph.svg');
+    getRemote('static/res/graphs/' + id + '.svg');
 
-    FCEPrerequisiteCourses = [csc318, csc454];
+    // Only create this if CSC graph loaded
+    if (getCookie('active-graph') === '1') {
+        FCEPrerequisiteCourses = [csc318, csc454];
+    }
 
     buildGraph();
 
@@ -73,9 +76,6 @@ function loadGraph(id) {
 
     // Initialize interface
     initializeGraphSettings();
-    
-    // Update credit count in nav bar
-    updateNavGraph();
 
     fillFCECount();
 
@@ -92,7 +92,6 @@ function loadGraph(id) {
 function getGraphsInDatabase() {
     'use strict';
 
-    var graphs;
     $.ajax({
         url: 'graphs',
         dataType: 'json',

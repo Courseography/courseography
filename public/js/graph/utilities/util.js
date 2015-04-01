@@ -149,8 +149,11 @@ function initializeGraphSettings() {
         clearFocus();
     }
 
-    csc318.updateStatus();
-    csc454.updateStatus();
+    // only run this if the CSC graph is loaded
+    if (getCookie('active-graph') === '1') {
+        csc318.updateStatus();
+        csc454.updateStatus();
+    }
 }
 
 

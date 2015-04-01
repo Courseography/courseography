@@ -21,7 +21,14 @@ var nodes = [];               // List of all nodes
 $(document).ready(function () {
     'use strict';
 
-    loadGraph('graph-csc');
+    var active = getCookie('active-graph');
+
+    if (active !== '') {
+        loadGraph(active);
+    } else {
+        loadGraph('1');
+    }
+
     $('#fcecount').hide();
 });
 
@@ -35,7 +42,7 @@ function getRemote(filepath) {
 
     var SVG = $.ajax({
         type: 'GET',
-        url: 'static/res/graphs/1.svg',
+        url: filepath,
         async: false
     }).responseText;
     $('#graph').append(SVG);
