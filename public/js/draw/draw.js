@@ -8,7 +8,6 @@
 function getClickPosition(e, elem) {
     'use strict';
 
-    // console.log(e.clientX, e.clientY);
     var parentPosition = getPosition(elem);
     var xPosition = e.clientX - parentPosition.x;
     var yPosition = e.clientY - parentPosition.y;
@@ -300,7 +299,7 @@ function moveElbow(elbow, position) {
 
     // move actual elbow in path
     var partOfPath = 'elbow';
-    if (elbow.class === 'rElbow') {
+    if (elbow.getAttribute('class') === 'rElbow') {
         partOfPath = elbow.partOfPath;
     }
 
@@ -335,7 +334,7 @@ function unclickAll(e) {
 function finishRegion() {
     'use strict';
 
-    if (curPath !== null & curPath.elbows.length >= 3) {
+    if (mode === 'region-mode' && curPath !== null && curPath.elbows.length >= 3) {
         curPath.setAttributeNS(null, 'd', curPath.getAttribute('d') + 'Z');
         curPath.setAttributeNS(null, 'data-group', nodeColourId);
         curPath.addEventListener('mousedown', regionClicked, false);
@@ -351,7 +350,7 @@ function finishRegion() {
         regionId += 1;
         curPath = null;
         startPoint = null;
-    } else if (curPath !== null & curPath.elbows.length < 3) {
+    } else if (curPath !== null && curPath.elbows.length < 3) {
         curPath.elbows.map(function (item) {
             svgDoc.removeChild(item);
         });
