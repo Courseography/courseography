@@ -8,7 +8,6 @@
 function getClickPosition(e, elem) {
     'use strict';
 
-    // console.log(e.clientX, e.clientY);
     var parentPosition = getPosition(elem);
     var xPosition = e.clientX - parentPosition.x;
     var yPosition = e.clientY - parentPosition.y;
@@ -276,7 +275,6 @@ function moveNodeElbow(e) {
             // move each elbow
             var position = getClickPosition(e, elbowMoving);
             regionMoving.elbows.map(function (elbow) {
-                //console.log(document.getElementById(elbowMoving.path).elbows.indexOf(elbowMoving));
                 moveElbow(elbow, position);
             });
             prevX = position.x;
@@ -287,6 +285,8 @@ function moveNodeElbow(e) {
 
 
 function moveElbow(elbow, position) {
+    'use strict';
+
     // move dummy node 
     var elbowX = parseFloat(elbow.getAttribute('cx'), 10);
     var elbowY = parseFloat(elbow.getAttribute('cy'), 10);
@@ -297,11 +297,10 @@ function moveElbow(elbow, position) {
 
     // move actual elbow in path
     var partOfPath = 'elbow';
-    if (elbow.class === 'rElbow') {
+    if (elbow.getAttribute('class') === 'rElbow') {
         partOfPath = elbow.partOfPath;
     }
 
-    //console.log(document.getElementById(elbow.path).elbows.indexOf(elbow));
     movePath(document.getElementById(elbow.path), 
              (position.x - prevX), (position.y - prevY), 'elbow',
              document.getElementById(elbow.path).elbows.indexOf(elbow));
@@ -333,12 +332,11 @@ function unclickAll(e) {
 function finishRegion() {
     'use strict';
 
-    if (curPath !== null & curPath.elbows.length >= 3) {
+    if (mode === 'region-mode' && curPath !== null && curPath.elbows.length >= 3) {
         curPath.setAttributeNS(null, 'd', curPath.getAttribute('d') + 'Z');
-        //curPath.setAttributeNS(null, 'style', 'opacity:0.7;fill-opacity:0.58;border-width:0px');
         curPath.setAttributeNS(null, 'data-group', nodeColourId);
         curPath.addEventListener('mousedown', regionClicked, false);
-        curPath.setAttributeNS(null, 'pointer-events','boundingBox'); // necessary?
+        curPath.setAttributeNS(null, 'pointer-events','boundingBox'); // to solve point in polygon problem
         curPath.setAttributeNS(null, 'class', 'region');
         curPath.setAttributeNS(null, 'data-active', 'region');
 
@@ -350,7 +348,7 @@ function finishRegion() {
         regionId += 1;
         curPath = null;
         startPoint = null;
-    } else if (curPath !== null & curPath.elbows.length < 3) {
+    } else if (curPath !== null && curPath.elbows.length < 3) {
         curPath.elbows.map(function (item) {
             svgDoc.removeChild(item);
         });
@@ -377,22 +375,3 @@ function regionClicked(e) {
         prevY = position.y;
     }
 }
-
-// TODO:
-/*
- 1. regions creation
- 2. get substantial work done with saving graph 
- 3. node type buttons
-
- * deselecting
- * look into https://www.dashingd3js.com/svg-paths-and-d3js
- */
-
-// RANDOM
-/*
- * shortcuts: http://javascript.info/tutorial/keyboard-events
-              http://unixpapa.com/js/key.html
- * document ready method ?
- * make grid background optional
- * colour picker for choosing colour of node
- */
