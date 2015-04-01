@@ -75,6 +75,8 @@ function loadGraph(id) {
 
     fillFCECount();
 
+    setCookie('active-graph', id);
+
     // Uncomment to enable the feedback form (must also be displayed in html)
     // activateFeedbackForm();
     // Uncomment to enable graph dragging
