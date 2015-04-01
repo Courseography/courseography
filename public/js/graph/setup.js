@@ -35,7 +35,7 @@ function getRemote(filepath) {
 
     var SVG = $.ajax({
         type: 'GET',
-        url: 'static/res/graphs/' + filepath,
+        url: 'static/res/graphs/1.svg',
         async: false
     }).responseText;
     $('#graph').append(SVG);
