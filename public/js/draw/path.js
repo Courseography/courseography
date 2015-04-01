@@ -205,6 +205,10 @@ function selectElbow(e) {
             }
             indexOfNext = thePathString.indexOf('L', indexOfElbow + 1);
             thePathString = thePathString.slice(0, indexOfElbow) + thePathString.slice(indexOfNext);
+            if (thePathString[0] !== 'M') { 
+                // for the case when the first elbow of a region
+                thePathString = 'M' + thePathString.slice(1);
+            }
             thePath.elbows.splice(thePath.elbows.indexOf(e.currentTarget), 1);
             thePath.setAttributeNS(null, 'd', thePathString);
             svgDoc.removeChild(e.currentTarget);
