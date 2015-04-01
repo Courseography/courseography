@@ -12,7 +12,7 @@ function getGridImage(session) {
     $.ajax({
         url: 'timetable-image',
         async: false,
-        data: 'courses=' + courses + '&session=' + session,
+        data: {courses: courses, session: session},
         success: function (data) {
             img = data;
         },
