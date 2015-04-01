@@ -28,7 +28,6 @@ toDelete = ["199299398399Big_Ideas_(Faculty_of_Arts_&_Science_Programs).html",
             "crs_bio.htm",
             "Life_Sciences.html"]
 
-
 -- | converts the processed main page and extracts a list of department html pages
 getDeptList :: [Tag String] -> [String]
 getDeptList tags =
@@ -37,7 +36,6 @@ getDeptList tags =
         as = filter (isTagOpenName "a") contents
         rawList = nub $ map (fromAttrib "href") as
     in rawList \\ toDelete
-
 
 -- | Takes an html filename of a department (which are found from getDeptList) and returns
 --  a list, where each element is a list of strings and tags relating to a single
@@ -51,7 +49,6 @@ getCalendar str = do
     let coursesSoup = lastH2 tags
     let course = map (processCourseToData . (filter isTagText)) $ partitions isCourseTitle coursesSoup
     print $ "parsing " ++ str
-    mapM_ (\x -> print (prereqs x)) course
     runSqlite dbStr $ do
         runMigration migrateAll
         mapM_ insertCourse course

@@ -34,6 +34,9 @@ import qualified Data.Map as M
 main :: IO ()
 main = performParse "CSC" "graph_regions.svg" "csc_graph.svg"
 
+test :: IO ()
+test = performParse "TEST" "compsci" "compsci_test.svg"
+
 performParse :: String -> String -> String -> IO ()
 performParse dirLocation inputFilename outputFilename =
    do graphFile <- readFile ("../public/res/graphs/" ++ inputFilename)

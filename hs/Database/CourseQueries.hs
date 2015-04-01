@@ -1,9 +1,15 @@
 {-# LANGUAGE ScopedTypeVariables, OverloadedStrings #-}
 
 
-module Database.CourseQueries (retrieveCourse, allCourses, queryGraphs, courseInfo, deptList) where
+module Database.CourseQueries (retrieveCourse,
+  returnCourse,
+  allCourses,
+  courseInfo,
+  getDepartment,
+  queryGraphs,
+  deptList) where
 
-
+import Happstack.Server.SimpleHTTP
 import Database.Persist
 import Database.Persist.Sqlite
 import Database.Tables as Tables
@@ -16,6 +22,8 @@ import qualified Data.Text as T
 import qualified Data.Aeson as Aeson
 import Data.String.Utils
 import Data.List
+import WebParsing.ParsingHelp
+import Control.Monad.IO.Class
 
 retrieveCourse :: String -> ServerPart Response
 retrieveCourse course =
@@ -26,7 +34,7 @@ retrieveCourse course =
 queryCourse :: T.Text -> IO Response
 queryCourse str = do
   courseJSON <- returnCourse str
-  return $ toResponse $ createJSONResponse $ encodeJSON $ Aeson.toJSON courseJSON
+  return $ toResponse $ createJSONResponse $ courseJSON
 
 -- | Queries the database for all information about `course`, constructs and returns a Course Record.
 returnCourse :: T.Text -> IO Course
@@ -47,12 +55,12 @@ returnCourse lowerStr =
                                                                  TutorialsSession ==. "S"] []
         sqlTutorialsYear   :: [Entity Tutorials]  <- selectList [TutorialsCode ==. courseStr,
                                                                  TutorialsSession ==. "Y"] []
-        let course        = entityVal $ head sqlCourse
-            fallSession   = buildSession sqlLecturesFall sqlTutorialsFall
+        let fallSession   = buildSession sqlLecturesFall sqlTutorialsFall
             springSession = buildSession sqlLecturesSpring sqlTutorialsSpring
             yearSession   = buildSession sqlLecturesYear sqlTutorialsYear
-            courseJSON    = buildCourse fallSession springSession yearSession course
-        return $ createJSONResponse courseJSON
+        if null sqlCourse
+        then return emptyCourse
+        else return (buildCourse fallSession springSession yearSession (entityVal $ head sqlCourse))
 
 -- | Builds a Course structure from a tuple from the Courses table.
 -- Some fields still need to be added in.
@@ -109,14 +117,23 @@ allCourses = do
 -- | Return all course info for a given department
 courseInfo :: String -> ServerPart Response
 courseInfo dept = do
+      (getDeptCourses dept) >>=
+        (\courses -> return $ createJSONResponse courses)
+
+-- | returns all courses for a given department
+getDepartment :: String -> IO [Course]
+getDepartment str = getDeptCourses str
+
+-- | Return all course info for a given department
+getDeptCourses :: MonadIO m => String -> m [Course]
+getDeptCourses dept = do
     response <- liftIO $ runSqlite dbStr $ do
         courses :: [Entity Courses] <- selectList [] []
         lecs    :: [Entity Lectures]   <- selectList [] []
         tuts  :: [Entity Tutorials]   <- selectList [] []
         let c = filter (startswith dept . T.unpack . coursesCode) $ map entityVal courses
         return $ map (buildTimes (map entityVal lecs) (map entityVal tuts)) c
-
-    return $ createJSONResponse response
+    return response
     where
         lecByCode course = filter (\lec -> lecturesCode lec == coursesCode course)
         tutByCode course = filter (\tut -> tutorialsCode tut == coursesCode course)

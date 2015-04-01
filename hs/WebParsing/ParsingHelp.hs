@@ -3,6 +3,7 @@ module WebParsing.ParsingHelp
   ( CoursePart,
     (-:),
     (~:),
+    emptyCourse,
     preProcess,
     replaceAll,
     tagContains,
@@ -106,7 +107,7 @@ makeEntry Nothing _ = Nothing
 makeEntry (Just []) _ = Nothing
 makeEntry (Just tags) Nothing = Just (T.concat (map fromTagText tags))
 makeEntry (Just tags) (Just str) =
-  Just (replaceAll str "" (T.concat (map fromTagText tags)))
+  Just $ T.strip $ (replaceAll str "" (T.concat (map fromTagText tags)))
 
 {------------------------------------------------------------------------------
 ------------------------------------------------------------------------------}
