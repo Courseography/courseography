@@ -64,6 +64,8 @@ function loadGraph(name, id) {
     // Remove current graph
     $('#graph').empty();
 
+    console.log(name + '/' + id + '.svg');
+
     getRemote(name + '/' + id + '.svg');
 
     FCEPrerequisiteCourses = [csc318, csc454];
@@ -76,9 +78,6 @@ function loadGraph(name, id) {
     // Initialize interface
     initializeGraphSettings();
     
-    // Update credit count in nav bar
-    updateNavGraph();
-
     fillFCECount();
 
     // Uncomment to enable the feedback form (must also be displayed in html)
