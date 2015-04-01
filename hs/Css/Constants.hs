@@ -92,7 +92,7 @@ pink2 = rgb 236 189 210
 borderNone = border solid (px 0) white
 
 {- Timetable border -}
-borderPink border = border solid (px 1) pink1
+borderPink border = border solid (px 2) pink1
 
 {- More node colours! -}
 teal1 = parse "#737A99"

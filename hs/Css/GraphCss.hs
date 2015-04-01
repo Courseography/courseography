@@ -132,7 +132,6 @@ pathCSS = "path" ? do
         opacity 1
         "stroke-width" -: "2px"
     "data-active" @= "missing" & do
-        faded
         strokeRed
         strokeDashed
     "data-active" @= "drawn" & do

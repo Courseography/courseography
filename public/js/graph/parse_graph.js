@@ -20,7 +20,6 @@ function buildGraph() {
         var course = $(this).children('text').text().toLowerCase();
         var reqs = parseAnd(course)[0];
         makeHybrid('AND', id);
-        console.log(reqs);
         $.each(reqs, function (index, elem) {
             if ($.isArray(elem)) {
                 var orNode = id + elem.join('');
