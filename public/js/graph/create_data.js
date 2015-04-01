@@ -87,6 +87,6 @@ var webFocusList = [
 
 // Courses that can be taken with no other prerequisites
 var initiallyTakeable = [
-    'CSC104', 'CSC120', 'CSC108', 'CSC165',
-    'Calc1', 'Lin1', 'CSC200', 'CSC300'
+    'csc104', 'csc120', 'csc108', 'csc165',
+    'calc1', 'lin1', 'csc200', 'csc300'
 ];

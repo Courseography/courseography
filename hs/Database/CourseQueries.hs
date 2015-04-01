@@ -1,6 +1,6 @@
 {-# LANGUAGE ScopedTypeVariables, OverloadedStrings #-}
 
-module Database.CourseQueries (retrieveCourse, allCourses, queryGraphs, courseInfo) where
+module Database.CourseQueries (retrieveCourse, allCourses, queryGraphs, courseInfo, deptList, returnCourse) where
 
 import Database.Persist
 import Database.Persist.Sqlite
@@ -9,18 +9,27 @@ import Control.Monad.IO.Class (liftIO)
 import JsonResponse
 import Database.JsonParser
 import Happstack.Server
+import Data.List
 import qualified Data.Text as T
 import qualified Data.Aeson as Aeson
+import WebParsing.ParsingHelp
 import Data.String.Utils
 
 retrieveCourse :: String -> ServerPart Response
 retrieveCourse course =
     liftIO $ queryCourse (T.pack course)
 
+
 -- | Queries the database for all information about `course`, constructs a JSON object
 -- | representing the course and returns the appropriate JSON response.
 queryCourse :: T.Text -> IO Response
-queryCourse lowerStr =
+queryCourse str = do
+  courseJSON <- returnCourse str
+  return $ createJSONResponse courseJSON
+
+-- | Queries the database for all information about `course`, constructs and returns a Course Record.
+returnCourse :: T.Text -> IO Course
+returnCourse lowerStr =
     runSqlite dbStr $ do
         let courseStr = T.toUpper lowerStr
         sqlCourse :: [Entity Courses] <- selectList [CoursesCode ==. courseStr] []
@@ -36,12 +45,16 @@ queryCourse lowerStr =
                                                                  TutorialsSession ==. "S"] []
         sqlTutorialsYear   :: [Entity Tutorials]  <- selectList [TutorialsCode ==. courseStr,
                                                                  TutorialsSession ==. "Y"] []
-        let course        = entityVal $ head sqlCourse
-            fallSession   = buildSession sqlLecturesFall sqlTutorialsFall
-            springSession = buildSession sqlLecturesSpring sqlTutorialsSpring
-            yearSession   = buildSession sqlLecturesYear sqlTutorialsYear
-            courseJSON    = buildCourse fallSession springSession yearSession course
-        return $ createJSONResponse $ encodeJSON $ Aeson.toJSON courseJSON
+        
+        if null sqlCourse
+        then return emptyCourse
+        else do
+            let course        = entityVal $ head sqlCourse
+                fallSession   = buildSession sqlLecturesFall sqlTutorialsFall
+                springSession = buildSession sqlLecturesSpring sqlTutorialsSpring
+                yearSession   = buildSession sqlLecturesYear sqlTutorialsYear
+                courseJSON    = buildCourse fallSession springSession yearSession course
+            return courseJSON
 
 -- | Builds a Course structure from a tuple from the Courses table.
 -- Some fields still need to be added in.
@@ -50,7 +63,7 @@ buildCourse fallSession springSession yearSession course =
     Course (coursesBreadth course)
            (coursesDescription course)
            (coursesTitle course)
-           Nothing
+           (coursesPrereqString course)
            fallSession
            springSession
            yearSession
@@ -59,7 +72,7 @@ buildCourse fallSession springSession yearSession course =
            (coursesManualTutorialEnrolment course)
            (coursesManualPracticalEnrolment course)
            (coursesDistribution course)
-           Nothing
+           (coursesPrereqs course)
 
 -- | Builds a Lecture structure from a tuple from the Lectures table.
 buildLecture :: Lectures -> Lecture
@@ -95,17 +108,17 @@ allCourses = do
       return $ T.unlines codes
   return $ toResponse response
 
--- | Return all course info
-courseInfo :: IO Response
-courseInfo = do
-    response <- runSqlite dbStr $ do
+-- | Return all course info for a given department
+courseInfo :: String -> ServerPart Response
+courseInfo dept = do
+    response <- liftIO $ runSqlite dbStr $ do
         courses :: [Entity Courses] <- selectList [] []
         lecs    :: [Entity Lectures]   <- selectList [] []
         tuts  :: [Entity Tutorials]   <- selectList [] []
-        let csc = filter (startswith "CSC" . T.unpack . coursesCode) $ map entityVal courses
-        return $ map (buildTimes (map entityVal lecs) (map entityVal tuts)) csc
+        let c = filter (startswith dept . T.unpack . coursesCode) $ map entityVal courses
+        return $ map (buildTimes (map entityVal lecs) (map entityVal tuts)) c
 
-    return $ createJSONResponse $ encodeJSON $ Aeson.toJSON $ map Aeson.toJSON response
+    return $ createJSONResponse response
     where
         lecByCode course = filter (\lec -> lecturesCode lec == coursesCode course)
         tutByCode course = filter (\tut -> tutorialsCode tut == coursesCode course)
@@ -125,10 +138,20 @@ courseInfo = do
             Just $ Tables.Session (map buildLecture lectures)
                                   (map buildTutorial tutorials)
 
+-- | Return a list of all departments
+deptList :: IO Response
+deptList = do
+    depts <- runSqlite dbStr $ do
+        courses :: [Entity Courses] <- selectList [] []
+        return $ sort . nub $ map f courses
+    return $ createJSONResponse depts
+    where
+        f = take 3 . T.unpack . coursesCode . entityVal
+
 -- | Queries the graphs table and returns a JSON response of Graph JSON
 -- objects.
 queryGraphs :: IO Response
 queryGraphs =
     runSqlite dbStr $
         do graphs :: [Entity Graph] <- selectList [] []
-           return $ createJSONResponse $ encodeJSON $ Aeson.toJSON $ map (Aeson.toJSON . entityVal) graphs
+           return $ createJSONResponse $ map entityVal graphs

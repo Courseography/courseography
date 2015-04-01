@@ -14,7 +14,10 @@ import Data.List.Utils
 import Data.Maybe
 import Database.Tables as Tables
 import Database.JsonParser
+<<<<<<< HEAD
 import WebParsing.HtmlTable
+=======
+>>>>>>> 56796331e6134ec3ae9d4f05bc23059e371fc890
 import Database.Tables
 import WebParsing.ParsingHelp
 import WebParsing.TimeConverter
@@ -76,19 +79,14 @@ getDeptTimetable url = do
   rsp <- simpleHTTP (getRequest $ timetableUrl ++ url)
   body <- getResponseBody rsp
   let rawSoup = map cleanTag (parseTags (T.pack body))
-      toLower = if (url == "online.html")
-                then map lowerTag rawSoup
-                else rawSoup
+      toLower = if (url == "online.html") then map lowerTag rawSoup else rawSoup
       table = dropAround  (tagOpen (=="table") (\x -> True)) (tagClose (=="table")) toLower
-      row = partitions (tagOpen (=="tr") (\_ -> True)) table
-      rowsColumns  =  map (partitions (tagOpen (== "td") (\_ -> True))) row
   mapM_ (\(pos, course) -> processCourseTable (foldl (\c p -> expandTable c "" p) course pos)) (toCells table)
   --print toLower--were running into an empty list while printing out the final results-- look into this tomorrow
   where
     cleanTag (TagText s) = TagText (T.strip (replaceAll ["\r\n"] "" s))
     cleanTag s = s
-    notCancelled "" = True
-    notCancelled str = (T.head str) /= 'C'
+
 
 -- | partitions the html table into a 2d list of cells. Does not account for cells that take
 -- up more than one row or column.
@@ -115,20 +113,15 @@ addTutorial sesh tut = sesh {tutorials = tut:tutorials sesh}
 addLecture :: Session -> Lecture -> Session
 addLecture sesh lec = sesh {lectures = lec:(lectures sesh)}
 
--- | returns true if the the row contains a cancelled lecture or tutorial
-isCancelled :: [T.Text] -> Bool
-isCancelled row =
-  foldl (\bool text -> bool || T.isPrefixOf "Cancel" text) False row
-
--- | extracts the required information from a row of cells and places it into a CourseSLot
---if given a courseSlot as input, it updates the time only. otherwise updates time and
---section
+-- | extracts the required information from a row of cells and places it into a CourseSlot
+--   if given a CourseSlot as input, it updates the time only. Otherwise updates time and
+--   section
 updateSlot :: [T.Text] -> Maybe CourseSlot -> Maybe CourseSlot
 updateSlot row Nothing =
   if (isCancelled row) || length row < 8
   then Nothing
   else let timestr = T.takeWhile (/= ' ') (row !! 5)
-           in Just CourseSlot { slotSection    = (row !! 3),
+           in Just CourseSlot { slotSection    = T.take 5 (row !! 3),
                                 slotTime_str   = timestr,
                                 slotInstructor = (row !! 7) }
 updateSlot row (Just slot) =
@@ -158,7 +151,7 @@ makeLecture :: CourseSlot -> Lecture
 makeLecture slot =
   Lecture { extra = 0,
             section = (slotSection slot),
-            cap = -1,
+            cap = 0,
             time_str = (slotTime_str slot),
             time = concatMap makeTimeSlots (T.split (== ' ') (slotTime_str slot)),
             instructor = (slotInstructor slot),

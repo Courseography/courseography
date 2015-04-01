@@ -10,6 +10,10 @@ module WebParsing.ParsingHelp
     dropBetweenAll,
     dropAround,
     isCourse,
+    emptyCourse,
+    isCancelled,
+    lowerTag,
+    notCancelled,
     parseDescription,
     parseCorequisite,
     parsePrerequisite,
@@ -17,7 +21,6 @@ module WebParsing.ParsingHelp
     parseRecommendedPrep,
     parseDistAndBreadth,
     ) where
-import Text.Regex.Posix
 import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Match
 import Data.List
@@ -25,17 +28,33 @@ import qualified Data.Text as T
 import Data.List.Utils
 import Data.Maybe
 import Database.Tables
+import WebParsing.PrerequisiteParsing
 
 type CoursePart = ([Tag T.Text], Course)
 type TagParser = (Maybe [Tag T.Text], [Tag T.Text])
 
 
-(-:) :: CoursePart -> (CoursePart -> CoursePart) -> CoursePart
+(-:) :: a -> (a -> a) -> a
 coursepart -: fn = fn coursepart
 
 (~:) :: CoursePart -> ([Tag T.Text] -> [Tag T.Text]) -> CoursePart
 (tags, course) ~: fn =  (fn tags, course)
 
+emptyCourse :: Course
+emptyCourse = Course {
+                    breadth = Nothing,
+                    description = Nothing,
+                    title  = Nothing,
+                    prereqString = Nothing,
+                    f = Nothing,
+                    s = Nothing,
+                    y = Nothing,
+                    name = "",
+                    exclusions = Nothing,
+                    manualTutorialEnrol = Nothing,
+                    manualPracticalEnrol = Nothing,
+                    distribution = Nothing,
+                    prereqs = Nothing}
 
 replaceAll :: [T.Text] -> T.Text -> T.Text -> T.Text
 replaceAll matches replacement str =
@@ -48,6 +67,22 @@ OUTPUT: True if reg can match tagtext
 tagContains :: [T.Text] -> Tag T.Text -> Bool
 tagContains matches (TagText tagtext) =
   True == foldl (\bool match -> or [(T.isInfixOf match tagtext), bool]) False matches
+
+
+--converts all open and closing tags to lowercase.
+lowerTag :: Tag T.Text -> Tag T.Text
+lowerTag (TagOpen tag attrs) =
+  TagOpen (T.toLower tag) (map (\(x, y) -> (T.toLower x, T.toLower y)) attrs)
+lowerTag (TagClose tag) = TagClose (T.toLower tag)
+lowerTag text = text
+
+--returns true if the the row contains a cancelled lecture or tutorial
+isCancelled :: [T.Text] -> Bool
+isCancelled row =
+  foldl (\bool text -> bool || T.isPrefixOf "Cancel" text) False row
+
+notCancelled :: [T.Text] -> Bool
+notCancelled row = not (isCancelled row)
 
 {------------------------------------------------------------------------------
 splits a list of tags into two pieces at the first matching instance of reg.
@@ -73,7 +108,7 @@ If nothing needs to be removed, pass Nothing as the Text
 ------------------------------------------------------------------------------}
 makeEntry :: Maybe [Tag T.Text] -> Maybe [T.Text] -> Maybe T.Text
 makeEntry Nothing _ = Nothing
-makeEntry (Just []) _ = Nothing
+makeEntry (Just []) _ = Just "test"
 makeEntry (Just tags) Nothing = Just (T.concat (map fromTagText tags))
 makeEntry (Just tags) (Just str) =
   Just (replaceAll str "" (T.concat (map fromTagText tags)))
@@ -136,7 +171,7 @@ preProcess tags =
 
 parseDescription :: CoursePart -> CoursePart
 parseDescription (tags, course) =
-  let (parsed, rest) = tagBreak ["Corequisite","Prerequisite","Exclusion","Recommended","Distribution","Breadth"] tags
+  let (parsed, rest) = tagBreak ["Prerequisite","Corequisite","Exclusion","Recommended","Distribution","Breadth"] tags
       descriptn = makeEntry parsed Nothing
   in (rest, course {description = descriptn})
 
@@ -144,7 +179,8 @@ parsePrerequisite :: CoursePart -> CoursePart
 parsePrerequisite (tags, course) =
   let (parsed, rest) = tagBreak ["Corequisite","Exclusion","Recommended","Distribution","Breadth"] tags
       prereqstr = makeEntry parsed (Just ["Prerequisite:"])
-  in  (rest, course {prereqString = prereqstr})
+      prereq = parsePrerequisites prereqstr
+  in  (rest, course {prereqString = prereqstr, prereqs = prereq})
 
 parseCorequisite :: CoursePart -> CoursePart
 parseCorequisite (tags, course)  =

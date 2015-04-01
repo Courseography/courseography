@@ -151,17 +151,17 @@ Node.prototype.arePrereqsSatisfied = function () {
     'use strict';
 
     var sat = this.checkFCEBasedPrerequisites();
-    if (this.logicalType === 'AND') {
+    if (this.logicalType === 'and' || this.logicalType === 'AND') {
         for (var i = 0; i < this.parents.length; i++) {
             sat = sat && this.parents[i].isSelected();
         }
-    } else if (this.logicalType === 'OR') {
+    } else if (this.logicalType === 'or' || this.logicalType === 'OR') {
         sat = false;
         for (var i = 0; i < this.parents.length; i++) {
             sat = sat || this.parents[i].isSelected();
         }
     } else {
-        console.log('Error: invalid node logicalType ' + this.type +
+        console.log('Error: invalid node logicalType ' + this.logicalType +
                     ' for node ' + this.id);
     }
     return sat;

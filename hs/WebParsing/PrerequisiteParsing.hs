@@ -56,8 +56,6 @@ matchCourse prereqs =
   let pat = "[A-Z]{3}[0-9]{3}[HY][0-9]" :: String
   in prereqs =~ pat
 
-
-
 -- | converts a string representing a prerequisite expression into a prerequisite
 -- expression. Extracts all course names found within the string, and returns them
 -- in a string.

@@ -1,11 +1,103 @@
+var filterCourse = function (inst, time, lec) {
+    'use strict';
+    return lec.instructor.indexOf(inst) > -1 && 
+           (time.length < 2 || hasTime(time, lec.time));
+};
+
+
+var hasTime = function (timeStr, times) {
+    'use strict';
+    var time = ['MTWRF'.indexOf(timeStr[0]) + '',
+                timeStr.substr(1) + '-0'];
+    for (var i = 0; i < times.length; i++) {
+        if (time[0] === times[i][0] && time[1] === times[i][1]) {
+            return true;
+        }
+    }
+    return false;
+};
+
+
+var Search = React.createClass({
+    getInitialState: function () {
+        return {curDept: '', depts: []};
+    },
+
+    componentDidMount: function () {
+        $.ajax({
+            url: 'depts',
+            dataType: 'json',
+            success: function(data) {
+                this.setState({depts: data});
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error('course-info', status, err.toString());
+            }.bind(this)
+        });
+    },
+
+    updateDept: function () {
+        var selectedDept = React.findDOMNode(this.refs.deptSelect).value;
+        this.setState({curDept: selectedDept});
+        this.refs.timetable.populateTable(selectedDept);
+    },
+
+    render: function () {
+        var options = this.state.depts.map(function(dept) {
+            return (<option value={dept}>{dept}</option>);
+        });
+
+        return (
+            <div id="search">
+            <div id="timetableSearch">
+                <h2>2014-2015 Timetable Search</h2>
+                <div id="searchOptions">
+                <label htmlFor="deptSelect">Dept:</label>
+                <select ref="deptSelect" name="dept" onChange={this.updateDept} id="deptSelect">
+                    <option value="none" selected="selected">---</option>
+                    {options}
+                </select>
+                <br />
+                <label htmlFor="codeFilter">Code:</label>
+                <input type="text" className="text-input" id="codeFilter" placeholder="CSC108" />
+                <br />
+                <label htmlFor="instFilter">Instructor:</label>
+                <input type="text" className="text-input" id="instFilter" placeholder="Liu" />
+                <br />
+                <label htmlFor="timeFilter">Time:</label>
+                <input type="text" className="text-input" id="timeFilter" placeholder="M10" />
+                </div>
+            </div>
+            <div id="timetableContainer">
+                <Timetable dept={this.state.curDept} ref="timetable" />
+            </div>
+            </div>
+        );
+    }
+});
+
+
 var Timetable = React.createClass({
     getInitialState: function () {
-        return {courses: [], search: ""};
+        return {courses: [], codeSearch: '', instSearch: '', timeSearch: ''};
     },
 
     componentDidMount: function() {
+        $('#codeFilter').keyup(function() {
+            this.setState({codeSearch: $('#codeFilter').val()});
+        }.bind(this));
+        $('#instFilter').keyup(function() {
+            this.setState({instSearch: $('#instFilter').val()});
+        }.bind(this));
+        $('#timeFilter').keyup(function() {
+            this.setState({timeSearch: $('#timeFilter').val()});
+        }.bind(this));
+    },
+
+    populateTable: function(dept) {
         $.ajax({
             url: 'course-info',
+            data: {dept: dept},
             dataType: 'json',
             success: function(data) {
                 this.setState({courses: data});
@@ -14,62 +106,48 @@ var Timetable = React.createClass({
                 console.error('course-info', status, err.toString());
             }.bind(this)
         });
-
-        $('#filter').keyup(function() {
-            this.updateFilter($('#filter').val());
-        }.bind(this));
-    },
-
-    updateFilter: function(filter) {
-        this.setState({search: filter});
     },
 
     render: function() {
-        var search = this.state.search;
+        var state = this.state;
         var courseRows = this.state.courses.filter(function (course) {
-            return course.name.indexOf(search) > -1 ||
-                   (course.F !== null && course.F.lectures.some(function (lec) {
-                       return lec.instructor.indexOf(search) > -1; })) ||
-                   (course.S !== null && course.S.lectures.some(function (lec) {
-                       return lec.instructor.indexOf(search) > -1; })) ||
-                   (course.Y !== null && course.Y.lectures.some(function (lec) {
-                       return lec.instructor.indexOf(search) > -1; }));
+            var lecs = course.F.lectures.concat(course.S.lectures)
+                                        .concat(course.Y.lectures);
+
+            return course.name.indexOf(state.codeSearch) > -1 &&
+                   lecs.some(function (lec) {
+                       return filterCourse(state.instSearch, state.timeSearch, lec);
+                   });
         }).map(function (course) {
-            var inName = course.name.indexOf(search) > -1;
-
             if (course.Y.lectures.length === 0) {
-                var fallLec = "";
-                var springLec = "";
+                var fallLec = '';
+                var springLec = '';
             
-                if (course.F !== null) {
-                    fallLec = course.F.lectures.filter(function (lec) {
-                        return inName || lec.instructor.indexOf(search) > -1;
-                    }).map(function (lec) {
-                        return (
-                            <tr>
-                            <td className="timetableSection">{lec.section}</td>
-                            <td className="timetableTime">{lec.time_str}</td>
-                            <td className="timetableInstructor">{lec.instructor}</td>
-                            <td className="timetableCap">{lec.cap}</td>
-                            <td className="timetableWait">{lec.wait}</td>
-                            </tr>);
-                    });
-                }
+                fallLec = course.F.lectures.filter(function (lec) {
+                    return filterCourse(state.instSearch, state.timeSearch, lec);
+                }).map(function (lec) {
+                    return (
+                        <tr>
+                        <td className="timetableSection">{lec.section}</td>
+                        <td className="timetableTime">{lec.time_str}</td>
+                        <td className="timetableInstructor">{lec.instructor}</td>
+                        <td className="timetableCap">{lec.cap}</td>
+                        <td className="timetableWait">{lec.wait}</td>
+                        </tr>);
+                });
 
-                if (course.S !== null) {
-                    springLec = course.S.lectures.filter(function (lec) {
-                        return inName || lec.instructor.indexOf(search) > -1;
-                    }).map(function (lec) {
-                        return (
-                            <tr>
-                            <td className="timetableSection">{lec.section}</td>
-                            <td className="timetableTime">{lec.time_str}</td>
-                            <td className="timetableInstructor">{lec.instructor}</td>
-                            <td className="timetableCap">{lec.cap}</td>
-                            <td className="timetableWait">{lec.wait}</td>
-                            </tr>);
-                    });
-                }
+                springLec = course.S.lectures.filter(function (lec) {
+                    return filterCourse(state.instSearch, state.timeSearch, lec);
+                }).map(function (lec) {
+                    return (
+                        <tr>
+                        <td className="timetableSection">{lec.section}</td>
+                        <td className="timetableTime">{lec.time_str}</td>
+                        <td className="timetableInstructor">{lec.instructor}</td>
+                        <td className="timetableCap">{lec.cap}</td>
+                        <td className="timetableWait">{lec.wait}</td>
+                        </tr>);
+                });
 
                 return (
                     <tr>
@@ -80,7 +158,7 @@ var Timetable = React.createClass({
                 );
             } else {
                 var yearLec = course.Y.lectures.filter(function (lec) {
-                        return inName || lec.instructor.indexOf(search) > -1;
+                        return filterCourse(state.instSearch, state.timeSearch, lec);
                     }).map(function (lec) {
                         return (
                             <tr>
@@ -139,6 +217,7 @@ var Timetable = React.createClass({
     }
 });
 
+
 React.render(
-    <Timetable />,
-    document.getElementById('timetableContainer'));
+    <Search />,
+    document.getElementById('content'));
