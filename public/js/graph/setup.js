@@ -28,7 +28,7 @@ $(document).ready(function () {
     } else {
         loadGraph('1');
     }
-    
+
     $('#fcecount').hide();
 });
 

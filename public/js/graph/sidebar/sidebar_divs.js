@@ -55,7 +55,7 @@ function resetDivs() {
 **/
 function fillFCECount() {
     'use strict';
-    
+
     $('#fcecount').show();
     $('#fcecount').html('FCE Count: ' + FCEs);
 }
@@ -66,6 +66,7 @@ function fillFCECount() {
  * @param{string} location The location where you are clicking (either the sidebar button or the graph).
 **/
 function toggleSidebar(location) {
+    'use strict';
 
     if (toggled) {
         toggled = false;

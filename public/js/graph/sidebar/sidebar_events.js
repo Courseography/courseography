@@ -56,9 +56,9 @@ $('div').on('click', 'div.graph-button', function() {
 **/
 function loadGraph(id) {
     'use-strict';
-    
+
     setCookie('active-graph', id);
-    
+
     // Remove current graph
     $('#graph').empty();
 
