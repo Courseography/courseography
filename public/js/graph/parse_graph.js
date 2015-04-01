@@ -40,14 +40,14 @@ function buildGraph() {
 
     $('.bool').each(function () {
         var id = $(this).attr('id');
-        var type = $(this).children('text').text();
+        var type = $(this).children('text').text().toUpperCase();
         makeHybrid(type, id);
     });
 
     $('.path').each(function () {
-        makeEdge(window[$(this).attr('source-node'),
-                 window[$(this).attr('target-node'),
-                 $(this).attr('id').replace(',', ''));
+        makeEdge(window[$(this).attr('source-node')],
+                 window[$(this).attr('target-node')],
+                 $(this).attr('id'));
     });
 }
 
