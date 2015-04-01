@@ -12,6 +12,7 @@ import Css.Constants
 
 drawStyles = do
     mainCSS
+    titleDiv
     canvasCSS
     panelCSS
     modeButtonsCSS
@@ -34,6 +35,10 @@ mainCSS = "#main" ? do
     position relative
     "border-radius" -: "8px"
     border solid (px 2) black
+
+titleDiv = "#about-div" ? do
+    fontSize (em 1.2)
+    margin 0 0 0 (px 10)
 
 {- The SVG canvas and the grid background. -}
 canvasCSS = do 
