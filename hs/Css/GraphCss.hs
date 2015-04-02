@@ -167,7 +167,7 @@ graphContainer = do
         display inlineBlock
         position absolute
         textAlign $ alignSide sideCenter
-        "left" -: "20%"
+        --"left" -: "20%"
     "#graphRootSVG" ? do
         width100
         height100
@@ -191,7 +191,7 @@ sidebarCSS = do
     "#sidebar" ? do 
         "border-radius" -: "4px"
         display inlineBlock
-        width (px 20)
+        width (px 30)
         height (pct 100)
         float floatLeft
         backgroundColor purple5
@@ -200,11 +200,13 @@ sidebarCSS = do
         cursor pointer
         "border-radius" -: "4px"
         display inlineBlock
-        width (px 20)
+        width (px 30)
         height (pct 100)
         float floatLeft
         backgroundColor purple1
         position absolute
+        ":hover" & do
+            backgroundColor pink1
     "#focuses-nav, #graph-nav" ? do
         cursor pointer
     "#sidebar-nav" ? do

@@ -71,7 +71,7 @@ function toggleSidebar(location) {
     if (toggled) {
         toggled = false;
         resetDivs();
-        $('#sidebar').animate({width: '20px'}, 'fast', undefined, function() {
+        $('#sidebar').animate({width: '30px'}, 'fast', undefined, function() {
             $('#fcecount').html('');
         });
     } else if (!toggled && location === 'button') {
