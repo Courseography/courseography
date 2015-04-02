@@ -29,7 +29,7 @@ graphParams =
 
 --takes in a String representation of a dot graph and creates an SVG file.
 graphVizProcess :: PrintDotRepr dg n => FilePath  -> dg n -> IO FilePath
-graphVizProcess name graph = runGraphvizCommand Dot graph Svg name
+graphVizProcess name graph = runGraphvizCommand Dot graph Canon name
 
 -- | outputs an SVG file with name filename containing a graph of nodes in courses
 makeGraph' :: [String] -> String -> IO FilePath
@@ -45,9 +45,9 @@ makeGraph code = do
     toGraph >>=
      (\g -> graphVizProcess code (graphToDot graphParams g))
 
-main :: IO ()
+main :: IO (DotGraph Node)
 main =
   do
   getDepartment "CSC" >>=
     toGraph >>=
-      (\g -> print $ graphToDot graphParams g)
+      (return . graphToDot graphParams)
