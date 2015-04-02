@@ -177,11 +177,11 @@ graphContainer = do
 
 sidebarCSS = do
     "#fcecount" ? do
-        width (pct 100)
+        width100
         height (px 30)
         backgroundColor purple4
         border solid (px 1) black
-        textAlign $ alignSide sideCenter
+        alignCenter
         display none
     "#container" ? do
         width (pct 100)
@@ -199,7 +199,7 @@ sidebarCSS = do
         cursor pointer
         display inlineBlock
         width (px 40)
-        height (pct 100)
+        height100
         float floatLeft
         backgroundColor purple2
         position absolute
@@ -216,7 +216,7 @@ sidebarCSS = do
     "#focuses-nav, #graph-nav" ? do
         cursor pointer
     "#sidebar-nav" ? do
-        width (pct 100)
+        width100
         fontSize (px 13)
         backgroundColor purple3
         border solid (px 1) grey2
@@ -224,13 +224,12 @@ sidebarCSS = do
         display block
         overflow hidden
         ul ? do
-            width $ (pct 100)
+            width100
             margin0
             li ? do
                 "list-style-type" -: "none"
                 display inlineBlock
                 width (pct 48)
-                --textAlign $ alignSide sideCenter
                 "-webkit-transition" -: "all 0.2s"
                 "-moz-transition" -: "all 0.2s"
                 "-ms-transition" -: "all 0.2s"
@@ -244,22 +243,21 @@ sidebarCSS = do
                     color black
                     display inlineBlock
                     lineHeight (px 30)
-                    --paddingLeft (px 26)
-                    textAlign $ alignSide sideCenter
+                    alignCenter
                     width (pct 95)
                     textDecoration none
     "#focuses, #graphs" ? do
         marginTop (px 25)
-        height (pct 100)
-        width (pct 100)
-        display none
         marginLeft (px 25)
+        height100
+        width100
+        display none
     ".focus" ? do
         display block
         cursor pointer
         fontSize (px 20)
         border solid (px 1) black
-        textAlign $ alignSide sideCenter
+        alignCenter
         width (pct 90)
         backgroundColor white
         "border-radius" -: "6px"

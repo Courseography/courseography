@@ -21,7 +21,7 @@ graphResponse =
                 ]
                 (do header "graph"
                     H.div ! A.id "container" $ do
-                        H.div ! A.id "graph" ! A.class_ "graph" $   ""
+                        H.div ! A.id "graph" ! A.class_ "graph" $ ""
                         sideBar
                     disclaimer
                 )
@@ -29,7 +29,7 @@ graphResponse =
 
 
 fceCountDiv :: H.Html
-fceCountDiv = 
+fceCountDiv =
     createTag H.div "FCECountDiv" "" $ do
         createTag H.span "FCEcount" "" "0.0"
         "FCEs" -- Being difficult. Won't show up correctly.
@@ -38,7 +38,7 @@ focusesTab :: H.Html
 focusesTab = ""
 
 timetableTab :: H.Html
-timetableTab = 
+timetableTab =
     createTag H.div "timetable" "infoTab" $ do
         createTag H.div "timetableSearch" "infoTabContent" $ do
             createTag H.h2 "" "" "2014-2015 Timetable"
@@ -78,6 +78,5 @@ sideBar = do
             H.p ! A.id "web" ! A.class_ "focus" $ "Web Technologies"
             H.div ! A.id "web-details" ! A.class_ "details" $ ""
         H.div ! A.id "graphs" $ ""
-    H.div ! A.id "sidebar-button" $ 
-        H.img ! A.id "sidebar-icon" ! A.src "static/res/ico/sidebar.png" 
-        
+    H.div ! A.id "sidebar-button" $
+        H.img ! A.id "sidebar-icon" ! A.src "static/res/ico/sidebar.png"
