@@ -21,42 +21,28 @@ var nodes = [];               // List of all nodes
 $(document).ready(function () {
     'use strict';
 
-    getRemote();
+    var active = getCookie('active-graph');
 
-    buildGraph();
+    if (active !== '') {
+        loadGraph(active);
+    } else {
+        loadGraph('1');
+    }
 
-    FCEPrerequisiteCourses = [csc318, csc454];
-
-    // Set width of FCE count
-    var w = $('.infoTabs').width() - $('.tabList').outerWidth() - 1;
-    $('#FCECountDiv').width(w + 'px');
-
-    // Create tabs
-    createTabs();
-
-    // Set mouse callbacks
-    setMouseCallbacks();
-
-    // Initialize interface
-    initializeGraphSettings();
-    
-    // Uncomment to enable the feedback form (must also be displayed in html)
-    // activateFeedbackForm();
-    // Uncomment to enable graph dragging
-    // enableGraphDragging();
+    $('#fcecount').hide();
 });
-
 
 /**
  * Retrieves an SVG file.
+ * @param {string} The relative filepath of the graph
  * @returns {string} An SVG string representing a graph. 
  */
-function getRemote() {
+function getRemote(filepath) {
     'use strict';
 
     var SVG = $.ajax({
         type: 'GET',
-        url: 'static/res/graphs/1.svg',
+        url: filepath,
         async: false
     }).responseText;
     $('#graph').append(SVG);

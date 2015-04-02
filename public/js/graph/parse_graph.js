@@ -11,6 +11,8 @@
 function buildGraph() {
     'use strict';
 
+    nodes = []; 
+    
     $('.node').each(function () {
         makeNode('AND', $(this).attr('id'));
     });

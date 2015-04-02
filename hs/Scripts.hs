@@ -21,8 +21,8 @@ plannerScripts = concatHtml (map makeScript["https://ajax.googleapis.com/ajax/li
                                            "static/js/graph/tabs/setup_tabs.js",
                                            "static/js/common/course_description.js",
                                            "static/js/graph/tabs/feedback_form.js",
-                                           "static/js/graph/tabs/focuses.js",
-                                           "static/js/graph/tabs/fce_count.js",
+                                           "static/js/graph/sidebar/focuses.js",
+                                           "static/js/graph/sidebar/fce_count.js",
                                            "static/js/common/objects/section.js",
                                            "static/js/common/utilities/util.js",
                                            "static/js/graph/utilities/structs.js",
@@ -36,7 +36,10 @@ plannerScripts = concatHtml (map makeScript["https://ajax.googleapis.com/ajax/li
                                            "/static/js/common/facebook/facebook_image.js",
                                            "/static/js/common/facebook/facebook_modal.js",
                                            "static/js/graph/setup.js",
-                                           "static/js/post/update_post.js"])
+                                           "static/js/post/update_post.js",
+                                           "static/js/graph/sidebar/sidebar_divs.js",
+                                           "static/js/graph/sidebar/sidebar_events.js",
+                                           "static/js/graph/sidebar/focus_descriptions.js"])
 
 timetableScripts :: H.Html
 timetableScripts = do jQuery
