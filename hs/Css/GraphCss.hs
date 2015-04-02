@@ -258,6 +258,9 @@ sidebarCSS = do
         textAlign $ alignSide sideCenter
         width (pct 90)
         backgroundColor white
+        "border-radius" -: "6px"
+        ":hover" & do
+            backgroundColor grey2
     "#close-focus" ? do
         display block
         cursor pointer
@@ -287,10 +290,13 @@ sidebarCSS = do
         cursor pointer
         fontSize (px 20)
         border solid (px 1) black
+        "border-radius" -: "6px"
         textAlign $ alignSide sideCenter
         width (pct 90)
         backgroundColor white
         marginBottom (px 20)
+        ":hover" & do
+            backgroundColor grey2
 
 
 {- titleCSS
