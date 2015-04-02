@@ -184,6 +184,11 @@ sidebarCSS = do
         border solid (px 1) black
         textAlign $ alignSide sideCenter
         display none
+    "#reset" ? do
+        position absolute
+        textAlign $ alignSide sideCenter
+        bottom (px 10)
+        right (pct 31)
     "#container" ? do
         width (pct 100)
         height (px 700)
