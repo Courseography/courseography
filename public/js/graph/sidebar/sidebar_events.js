@@ -1,5 +1,12 @@
 
 /**
+ * The click function when we click the reset button.
+**/
+$('#reset').click(function () {
+    reset();
+})
+
+/**
  * The click function when a focus is clicked.
 **/
 $('.focus').click(function(e){
