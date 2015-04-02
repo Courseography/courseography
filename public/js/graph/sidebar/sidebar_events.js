@@ -4,6 +4,7 @@
 **/
 $('#reset').click(function () {
     reset();
+    enableReset()
 })
 
 /**
@@ -111,4 +112,19 @@ function getGraphsInDatabase() {
             throw 'No graphs in database';
         }
     });
+}
+
+/**
+ * Determines whether Reset button should be greyed out or not
+ * (If there are active FCEs or not)
+**/
+function enableReset() {
+    'use strict'; 
+
+    if (FCEs > 0) {
+        $('#reset').attr('disabled', false);
+    } else {
+        $('#reset').attr('disabled', true);  
+    }
+
 }
