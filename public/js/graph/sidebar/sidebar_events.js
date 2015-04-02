@@ -127,4 +127,6 @@ function enableReset() {
         $('#reset').attr('disabled', true);  
     }
 
+    fillFCECount();
+
 }
