@@ -78,8 +78,6 @@ sideBar = do
             H.p ! A.id "web" ! A.class_ "focus" $ "Web Technologies"
             H.div ! A.id "web-details" ! A.class_ "details" $ ""
         H.div ! A.id "graphs" $ ""
-    H.div ! A.id "sidebar-button" $ ""
-
-
-
-
+    H.div ! A.id "sidebar-button" $ 
+        H.img ! A.id "sidebar-icon" ! A.src "static/res/ico/sidebar.png" 
+        
