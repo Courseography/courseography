@@ -196,7 +196,7 @@ sidebarCSS = do
         float floatLeft
         backgroundColor purple5
         position absolute
-        paddingLeft (px 20)
+        paddingLeft (px 23)
     "#sidebar-button" ? do
         cursor pointer
         "border-radius" -: "4px"
