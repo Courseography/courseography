@@ -7,7 +7,7 @@ $('.focus').click(function(e){
 
     var id = $(this).attr('id');
 
-    if ($('#' + id + '-details').css('height') === '180px') {
+    if ($('#' + id + '-details').css('height') === '128px') {
         clearFocus();
         $('ellipse.spotlight').remove();
         setMouseCallbacks();
@@ -16,7 +16,7 @@ $('.focus').click(function(e){
     } else {
         $('.details').css('height', '2px');
         updateActiveFocus(id);
-        $('#' + id + '-details').animate({height: '180px'}, 'fast');
+        $('#' + id + '-details').animate({height: '128px'}, 'fast');
         $('#' + id + '-details').html(window[id + 'Description']);
     } 
 });
