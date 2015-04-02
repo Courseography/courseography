@@ -191,7 +191,7 @@ sidebarCSS = do
     "#sidebar" ? do 
         "border-radius" -: "4px"
         display inlineBlock
-        width (px 30)
+        width (px 40)
         height (pct 100)
         float floatLeft
         backgroundColor purple5
@@ -201,13 +201,18 @@ sidebarCSS = do
         cursor pointer
         "border-radius" -: "4px"
         display inlineBlock
-        width (px 30)
+        width (px 40)
         height (pct 100)
         float floatLeft
         backgroundColor purple1
         position absolute
         ":hover" & do
             backgroundColor purple4
+    "#sidebar-icon" ? do
+        width (px 35)
+        height (px 40)
+        paddingTop (px 20)
+        paddingLeft (px 2)
     "#focuses-nav, #graph-nav" ? do
         cursor pointer
     "#sidebar-nav" ? do
