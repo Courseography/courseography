@@ -3,6 +3,8 @@
  * The click function when we click the reset button.
 **/
 $('#reset').click(function () {
+    'use strict';
+    
     reset();
     enableReset()
 })
