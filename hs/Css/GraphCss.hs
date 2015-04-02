@@ -204,15 +204,18 @@ sidebarCSS = do
         width (px 40)
         height (pct 100)
         float floatLeft
-        backgroundColor purple1
+        backgroundColor purple2
         position absolute
         ":hover" & do
             backgroundColor purple4
     "#sidebar-icon" ? do
-        width (px 35)
-        height (px 40)
+        width (px 30)
+        height (px 35)
         paddingTop (px 20)
         paddingLeft (px 2)
+        position absolute
+        top (pct 40)
+        left (px 4)
     "#focuses-nav, #graph-nav" ? do
         cursor pointer
     "#sidebar-nav" ? do
