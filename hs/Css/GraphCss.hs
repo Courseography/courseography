@@ -196,6 +196,7 @@ sidebarCSS = do
         float floatLeft
         backgroundColor purple5
         position absolute
+        paddingLeft (px 20)
     "#sidebar-button" ? do
         cursor pointer
         "border-radius" -: "4px"
@@ -206,7 +207,7 @@ sidebarCSS = do
         backgroundColor purple1
         position absolute
         ":hover" & do
-            backgroundColor pink1
+            backgroundColor purple4
     "#focuses-nav, #graph-nav" ? do
         cursor pointer
     "#sidebar-nav" ? do
