@@ -188,8 +188,7 @@ sidebarCSS = do
         width (pct 100)
         height (px 700)
         position relative
-    "#sidebar" ? do 
-        "border-radius" -: "4px"
+    "#sidebar" ? do
         display inlineBlock
         width (px 40)
         height (pct 100)
@@ -199,7 +198,6 @@ sidebarCSS = do
         paddingLeft (px 23)
     "#sidebar-button" ? do
         cursor pointer
-        "border-radius" -: "4px"
         display inlineBlock
         width (px 40)
         height (pct 100)
@@ -223,7 +221,6 @@ sidebarCSS = do
         fontSize (px 13)
         backgroundColor purple3
         border solid (px 1) grey2
-        "border-radius" -: "4px"
         "box-shadow" -: "0 2px 2px -1px rgba(0, 0, 0, 0.055)"
         display block
         overflow hidden
@@ -243,7 +240,7 @@ sidebarCSS = do
                 ":hover" & do
                     "background-color" -: "#46364A !important"
                     a ? do
-                        "color" -: "white !important" 
+                        "color" -: "white !important"
                 a ? do
                     color black
                     display inlineBlock
@@ -253,7 +250,7 @@ sidebarCSS = do
                     width (pct 95)
                     textDecoration none
     "#focuses, #graphs" ? do
-        marginTop (px 25) 
+        marginTop (px 25)
         height (pct 100)
         width (pct 100)
         display none
