@@ -1,22 +1,22 @@
 var activeCourses = [];
-var specialist = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0, 
-                  'filledTextboxes400': 0, 'filledTextboxesExtra': 0, 'specCount': 0, 
-                  'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC209', 'CSC236', 'CSC258', 'CSC263', 
-                  'Sta1', 'Lin1', 'Calc1', 'CSC369', 'CSC373'], 'textboxes300': 3, 'textboxes400': 3, 
+var specialist = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0,
+                  'filledTextboxes400': 0, 'filledTextboxesExtra': 0, 'specCount': 0,
+                  'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC209', 'CSC236', 'CSC258', 'CSC263',
+                  'Sta1', 'Lin1', 'Calc1', 'CSC369', 'CSC373'], 'textboxes300': 3, 'textboxes400': 3,
                   'textboxesExtra': 4, 'categories': 17, 'creditCount': 0};
-var major = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0, 
-             'filledTextboxes400': 0, 'filledTextboxesExtra': 0, 'majCount': 0, 'reqs': ['CSC108', 
-             'CSC148', 'CSC165', 'CSC207', 'CSC236', 'CSC258', 'CSC263', 'Sta1', 'Calc1'], 'textboxes300': 2, 
+var major = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0,
+             'filledTextboxes400': 0, 'filledTextboxesExtra': 0, 'majCount': 0, 'reqs': ['CSC108',
+             'CSC148', 'CSC165', 'CSC207', 'CSC236', 'CSC258', 'CSC263', 'Sta1', 'Calc1'], 'textboxes300': 2,
              'textboxes400': 1, 'textboxesExtra': 3, 'categories': 13, 'creditCount': 0};
-var minor = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxesExtra': 0, 
-             'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC236'], 'textboxesExtra': 3, 'categories': 6, 
+var minor = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxesExtra': 0,
+             'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC236'], 'textboxesExtra': 3, 'categories': 6,
              'creditCount': 0, 'additionalMin200': ['CSC209', 'CSC258', 'CSC263']};
 
 
 /**
  * Updates POSts when button is clicked.
 **/
-$('#update').click(function (e) {
+$('#update').click(function () {
     'use strict';
 
     updateAllCategories();
@@ -59,15 +59,15 @@ function resetValues() {
     'use strict';
 
     activeCourses = [];
-    specialist = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0, 'filledTextboxes400': 0, 
+    specialist = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0, 'filledTextboxes400': 0,
                   'filledTextboxesExtra': 0, 'specCount': 0, 'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC209', 'CSC236',
                   'CSC258', 'CSC263', 'Sta1', 'Lin1', 'Calc1', 'CSC369', 'CSC373'], 'textboxes300': 3, 'textboxes400': 3, 'textboxesExtra': 4,
                   'categories': 17, 'creditCount': 0};
-    major = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0, 'filledTextboxes400': 0, 
+    major = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0, 'filledTextboxes400': 0,
              'filledTextboxesExtra': 0, 'majCount': 0, 'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC236',
              'CSC258', 'CSC263', 'Sta1', 'Calc1'], 'textboxes300': 2, 'textboxes400': 1, 'textboxesExtra': 3, 'categories': 13,
              'creditCount': 0};
-    minor = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxesExtra': 0, 'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC236'], 
+    minor = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxesExtra': 0, 'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC236'],
              'textboxesExtra': 3, 'categories': 6, 'creditCount': 0, 'additionalMin200': ['CSC209', 'CSC258', 'CSC263']};
 }
 
@@ -78,7 +78,7 @@ function resetValues() {
 **/
 function activateCourse(courseCode) {
     'use strict';
-    
+
     var elements = document.getElementsByClassName(courseCode);
     for (var i = 0; i < elements.length; i++) {
         elements[i].style.backgroundColor = '#99ff99';
