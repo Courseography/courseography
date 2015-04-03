@@ -15,7 +15,7 @@ var minor = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledText
 
 /**
  * Updates POSts when button is clicked.
-**/
+ */
 $('#update').click(function () {
     'use strict';
 
@@ -25,7 +25,7 @@ $('#update').click(function () {
 
 /**
  * Updates all categories to see if they are fulfilled or not.
-**/
+ */
 function updateAllCategories() {
     'use strict';
 
@@ -54,7 +54,7 @@ function updateAllCategories() {
 
 /**
  * Resets all values to initial starting values
-**/
+ */
 function resetValues() {
     'use strict';
 
@@ -75,7 +75,7 @@ function resetValues() {
 /**
  * Records a course as clicked. 
  * @param {string} courseCode The course code
-**/
+ */
 function activateCourse(courseCode) {
     'use strict';
 
@@ -89,7 +89,7 @@ function activateCourse(courseCode) {
 /**
  * Records a course as not clicked. 
  * @param {string} courseCode The course code
-**/
+ */
 function deactivateCourse(courseCode) {
     'use strict';
     
@@ -104,7 +104,7 @@ function deactivateCourse(courseCode) {
  * Records a category as fulfilled or not fulfilled
  * @param {Element} category Element of category
  * @param {string} status Whether it is 'fulfilled' or 'not fulfilled'
-**/
+ */
 function updateCategory(category, status) {
     'use strict';
 
@@ -118,7 +118,7 @@ function updateCategory(category, status) {
 
 /**
  * Updates Credit Count for each POSt.
- **/
+ */
 function fillCreditCount() {
     'use strict';
 
@@ -131,7 +131,7 @@ function fillCreditCount() {
 
 /**
  * Autofills the credit count for specialist
-**/
+ */
 function fillSpecCreditCount() {
     'use strict';
 
@@ -145,7 +145,7 @@ function fillSpecCreditCount() {
 
 /**
  * Autofills the credit count for major
-**/
+ */
 function fillMajCreditCount() {
     'use strict';
 
@@ -159,7 +159,7 @@ function fillMajCreditCount() {
 
 /**
  * Autofills the credit count for minor.
-**/
+ */
 function fillMinCreditCount() {
     'use strict';
 
@@ -173,7 +173,7 @@ function fillMinCreditCount() {
 
 /**
  * Autofills extra 200-level courses for last minor constraint.
-**/
+ */
 function addExtraMinCourses() {
     'use strict';
 
@@ -195,7 +195,7 @@ function addExtraMinCourses() {
 
 /**
  * Checks whether a POSt is completed and updates credit count colour if it is.
-**/
+ */
 function checkPostCompleted() {
     'use strict';
 
@@ -209,7 +209,7 @@ function checkPostCompleted() {
 
 /**
  * Updates list of current active (selected) courses in Graph.
-**/
+ */
 function updateActiveCourses() {
     'use strict';
 
@@ -233,7 +233,7 @@ function updateActiveCourses() {
 
 /**
  * Updates Credit count for MAT and STA courses.
-**/
+ */
 function updateMatCreditCount() {
     'use strict';
 
@@ -251,4 +251,3 @@ function updateMatCreditCount() {
         }
     }
 }
-

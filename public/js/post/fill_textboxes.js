@@ -2,7 +2,7 @@
  * Fills textboxes with 300 level courses
  * @param {object} post Object corresponding to the POSt being dealt with
  * @param {HTMLElement[]} postElement Array of textboxes to fill
-**/
+ */
 function fill300Textboxes(post, postElement) {
     'use strict';
 
@@ -24,7 +24,7 @@ function fill300Textboxes(post, postElement) {
  * @param {object} post Object corresponding to the POSt being dealt with
  * @param {HTMLElement[]} postElement Array of textboxes to fill
  * @param {string} category Level of category we are filling
-**/
+ */
 function fill400Textboxes(post, postElement, category) {
     'use strict';
 
@@ -43,7 +43,7 @@ function fill400Textboxes(post, postElement, category) {
 
 /**
  * Autofills textboxes for 300 level courses. 
-**/
+ */
 function fill300s() {
     'use strict';
 
@@ -71,13 +71,12 @@ function fill300s() {
     if (major.filledTextboxes300 < major.textboxes300) {
         fill400Textboxes(major, maj300s, '300');
     }
-
 }  
 
 
 /**
- * Autofills textboxes for 400 level courses. 
-**/
+ * Autofills textboxes for 400 level courses.
+ */
 function fill400s() {
     'use strict';
 
@@ -105,7 +104,7 @@ function fill400s() {
  * @param {object} post Object corresponding to the POSt being dealt with
  * @param {HTMLElement[]} postElement Array of textboxes to fill
  * @param {string} level Level of course that we are filling textbox with 
-**/ 
+ */
 function fillExtraTextboxes(post, postElement, level) {
     'use strict';
 
@@ -128,7 +127,7 @@ function fillExtraTextboxes(post, postElement, level) {
 
 /**
  * Autofills the textboxes for the extra 300+ credits category
-**/
+ */
 function fillExtra() {
     'use strict';
 
@@ -178,7 +177,7 @@ function fillExtra() {
 
 /**
  * Autofills textboxes and updates category for Inquiry courses
-**/
+ */
 function fillMisc() {
     'use strict';
 
@@ -216,4 +215,3 @@ function fillMisc() {
     // update category
     updateInqCategory();
 }
-
