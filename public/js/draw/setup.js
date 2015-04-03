@@ -2,7 +2,7 @@
 
 /**
  * Initializes the SVG Canvas and its background.
- **/
+ */
 function setupSVGCanvas() {
     'use strict';
 
@@ -18,12 +18,11 @@ function setupSVGCanvas() {
     g.setAttribute('id', 'regions');
 
     svg.setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xlink', 'http://www.w3.org/1999/xlink');
-    
+
     svg.addEventListener('mousedown', makeNodePath, false);
     svg.addEventListener('mousemove', moveNodeElbow, false);
     svg.addEventListener('mouseup', unclickAll, false);
 
-    
     div.appendChild(bgdiv);
     div.appendChild(svg);
     svg.appendChild(g);
@@ -33,14 +32,14 @@ function setupSVGCanvas() {
 
 /**
  * Create the arrowhead marker to be used for paths.
- **/
+ */
 function setupMarker() {
     'use strict';
 
     var defs = document.createElementNS(xmlns, 'defs');
     var marker = document.createElementNS(xmlns, 'marker');
     var polyline = document.createElementNS(xmlns, 'polyline');
-    
+
     marker.setAttributeNS(null, 'id', 'arrow');
     marker.setAttributeNS(null, 'class', 'path');
     marker.setAttributeNS(null, 'viewBox', '0 0 10 10');
@@ -67,13 +66,15 @@ $(document).ready(function () {
 
 /* SET UP SIDEBAR AND ONCLICKS FOR BUTTONS */ // !! Should these onclick definitions go inside setup? !!
 
-$('.mode').each(function() {
-    $(this). click(function () {
-        changeMode(this.id);}); 
+$('.mode').each(function () {
+    'use strict';
+
+    $(this).click(function () {
+        changeMode(this.id);});
     });
 
-$('.colour').each(function() {
-    $(this). click(function () {
+$('.colour').each(function () {
+    $(this).click(function () {
         changeColour(this.id);});
     });
 
@@ -90,22 +91,22 @@ document.addEventListener('keydown', keyboard, false);
 /**
  * Handles keydown event e, possibly switching modes.
  * @param {object} e The keydown event.
- **/
+ */
 function keyboard(e) {
     'use strict';
 
     if (! $("#course-code").is(":focus")) {
         if (e.which == 78) {
             changeMode("node-mode"); // n
-        } else if (e.which == 80) {
+        } else if (e.which === 80) {
             changeMode("path-mode"); // p
-        } else if (e.which == 77){
+        } else if (e.which === 77){
             changeMode("change-mode"); // m
-        } else if (e.which == 69){
+        } else if (e.which === 69){
             changeMode("erase-mode"); // e
-        } else if (e.which == 82){
+        } else if (e.which === 82){
             changeMode("region-mode"); // r
-        } else if (e.which == 70){
+        } else if (e.which === 70){
             finishRegion(); // f
         }
     }
@@ -115,14 +116,13 @@ function keyboard(e) {
 /**
  * Changes the current mode mode to the new mode with id id.
  * @param {object} id The id of the new mode to be selected.
- **/
+ */
 function changeMode(id) {
     'use strict';
 
-    //if (mode !== '') {
-      $('#' + mode).toggleClass('clicked');
-    //}
-    if (mode === 'path-mode') { 
+    $('#' + mode).toggleClass('clicked');
+
+    if (mode === 'path-mode') {
         // clean up partial temp path
         if (curPath !== null) {
             startNode = null;
@@ -157,7 +157,7 @@ function changeMode(id) {
 /**
  * Changes the current colour to the new colour with id id.
  * @param {object} id The id of the new colour to be selected.
- **/
+ */
 function changeColour(id) {
     'use strict';
 
@@ -173,7 +173,7 @@ function changeColour(id) {
 
 /**
  * Adds the text from the input box to the currently selected node.
- **/
+ */
 function addText() {
     'use strict';
 
