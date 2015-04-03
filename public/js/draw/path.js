@@ -57,8 +57,10 @@ function startPath(pathString, type) {
 function finishPath(pathId, endNode) {
     'use strict';
 
+    var pathString;
+
     if (curPath === null) { // create a new path, node to node
-        var pathString = findClosest( {x: parseFloat(startNode.getAttribute('x'), 10), 
+        pathString = findClosest( {x: parseFloat(startNode.getAttribute('x'), 10),
                                        y: parseFloat(startNode.getAttribute('y'), 10)},
                                        'node', 
                                       {x: parseFloat(endNode.getAttribute('x'), 10), 
@@ -67,9 +69,9 @@ function finishPath(pathId, endNode) {
 
         startPath(pathString, 'path');
     } else { // finish curPath, elbow to node
-        var curElbow = {x: parseFloat(curPath.elbows[curPath.elbows.length - 1].getAttribute('cx'), 10), 
-                        y: parseFloat(curPath.elbows[curPath.elbows.length - 1].getAttribute('cy'), 10)}
-        var pathString = findClosest(curElbow, 'elbow', 
+        var curElbow = {x: parseFloat(curPath.elbows[curPath.elbows.length - 1].getAttribute('cx'), 10),
+                        y: parseFloat(curPath.elbows[curPath.elbows.length - 1].getAttribute('cy'), 10)};
+        pathString = findClosest(curElbow, 'elbow',
                                      {x: parseFloat(endNode.getAttribute('x'), 10), 
                                       y: parseFloat(endNode.getAttribute('y'), 10)},
                                      'node'); 
@@ -106,7 +108,7 @@ function findClosest(beg, typeB, end, typeE) {
 
     var thePath = null;
     var node1Edges;
-    var node2Edges 
+    var node2Edges;
 
     if (typeB === 'node' && typeE === 'elbow') {
         node1Edges = [{x: beg.x + nodeWidth/2, y: beg.y}, 

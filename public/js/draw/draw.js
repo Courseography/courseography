@@ -67,7 +67,7 @@ function makeNodePath(e) {
         node.setAttribute('height', nodeHeight);
         node.setAttribute('class', 'node');
         node.parents = [];
-        node.kids = []; 
+        node.kids = [];
         // note: children doesn't work because javascript objects already have a children attribute
         node.inEdges = [];
         node.outEdges = [];
@@ -97,6 +97,8 @@ function makeNodePath(e) {
             makeElbow(position);
         }
     } else if (mode === 'region-mode') {
+        var elbow;
+
         if (startPoint === null) { // start a region
                 startPoint = document.createElementNS(xmlns, 'circle');
 
@@ -114,11 +116,11 @@ function makeNodePath(e) {
             startPath('M' + startPoint.getAttribute('cx') + ',' + startPoint.getAttribute('cy') + ' L' + position.x + ',' + position.y + ' ', 'region');
             //curPath.setAttributeNS(null, 'class', 'region');
             curPath.setAttributeNS(null, 'id', 'r' + regionId);
-            var elbow = makeElbow(position);
+            elbow = makeElbow(position);
             elbow.partOfPath = 'elbow';
         } else { 
             curPath.setAttributeNS(null, 'd', curPath.getAttribute('d') + 'L' + position.x + ',' + position.y + ' ');
-            var elbow = makeElbow(position);
+            elbow = makeElbow(position);
             elbow.partOfPath = 'elbow';
         }
     }
@@ -235,8 +237,10 @@ function moveNodeElbow(e) {
     'use strict';
 
     if (mode === 'change-mode') {
+        var position;
+
         if (nodeMoving !== null) {
-            var position = getClickPosition(e, nodeMoving);
+            position = getClickPosition(e, nodeMoving);
             var rectX = parseFloat(nodeMoving.getAttribute('x'), 10);
             var rectY = parseFloat(nodeMoving.getAttribute('y'), 10);
             rectX += (position.x - prevX);
@@ -266,13 +270,13 @@ function moveNodeElbow(e) {
             prevX = position.x;
             prevY = position.y;
         } else if (elbowMoving !== null) {
-            var position = getClickPosition(e, elbowMoving);
+            position = getClickPosition(e, elbowMoving);
             moveElbow(elbowMoving, position);
             prevX = position.x;
             prevY = position.y;
         } else if (regionMoving !== null) {
             // move each elbow
-            var position = getClickPosition(e, elbowMoving);
+            position = getClickPosition(e, elbowMoving);
             regionMoving.elbows.map(function (elbow) {
                 moveElbow(elbow, position);
             });
