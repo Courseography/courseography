@@ -1,4 +1,6 @@
-$(document).ready(function() {
+$(document).ready(function () {
+    'use strict';
+
     $.ajaxSetup({ cache: true });
     $.getScript('//connect.facebook.net/en_UK/all.js', function() {
 
@@ -28,7 +30,7 @@ $(document).ready(function() {
  */
 function addNameToNavBar() {
     'use strict';
-    
+
     FB.api('/me', function (response) {
         $('#facebook-name').html(response.name);
     });
@@ -40,6 +42,6 @@ function addNameToNavBar() {
  */
 function removeNameFromNavBar() {
     'use strict';
-    
+
     $('#facebook-name').empty();
 }

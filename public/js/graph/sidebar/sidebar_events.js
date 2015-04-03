@@ -55,7 +55,7 @@ $(document).on('click', '.graph-button', function() {
  * @param{string} id ID of graph in database
 **/
 function loadGraph(id) {
-    'use-strict';
+    'use strict';
 
     setCookie('active-graph', id);
 
@@ -97,8 +97,7 @@ function getGraphsInDatabase() {
         dataType: 'json',
         async: false,
         success: function (data) {
-            var graphs = data;
-            createGraphButtons(graphs);
+            createGraphButtons(data);
         },
         error: function () {
             throw 'No graphs in database';

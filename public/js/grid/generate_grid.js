@@ -117,9 +117,9 @@ function appendTableData(trFall, trSpring, time) {
     'use strict';
 
     var weekPrefixArray = ['M', 'T', 'W', 'R', 'F'];
-
+    var adjustedTime;
     if (time % 1 === 0) {
-        var adjustedTime = (time === 12 ? 12 : time % 12) + ':00';
+        adjustedTime = (time === 12 ? 12 : time % 12) + ':00';
 
         trFall.append($('<td></td>')
             .addClass('timetable-dummy-cell'));
@@ -153,7 +153,7 @@ function appendTableData(trFall, trSpring, time) {
             .addClass('timetable-dummy-cell'));
 
     } else {
-        var adjustedTime = '';
+        adjustedTime = '';
 
         trFall.append($('<td></td>')
             .addClass('timetable-dummy-cell'));
