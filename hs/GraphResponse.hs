@@ -52,7 +52,9 @@ timetableTab =
 sideBar :: H.Html
 sideBar = do
     H.div ! A.id "sidebar" $ do
-        H.div ! A.id "fcecount" $ ""
+        H.div ! A.id "fce" $ do
+            H.div ! A.id "fcecount" $ ""
+            H.button ! A.id "reset" $ "Reset Graphs"
         H.nav ! A.id "sidebar-nav" $ H.ul $ do
             H.li ! A.id "focuses-nav" $ do
                 H.a ! A.href "" $ "Focuses"
@@ -77,7 +79,6 @@ sideBar = do
             H.div ! A.id "theory-details" ! A.class_ "details" $ ""
             H.p ! A.id "web" ! A.class_ "focus" $ "Web Technologies"
             H.div ! A.id "web-details" ! A.class_ "details" $ ""
-            H.button ! A.id "reset" $ "Reset FCEs"
         H.div ! A.id "graphs" $ ""
     H.div ! A.id "sidebar-button" $ 
         H.img ! A.id "sidebar-icon" ! A.src "static/res/ico/sidebar.png" 

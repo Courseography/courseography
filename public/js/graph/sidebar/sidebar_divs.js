@@ -82,6 +82,8 @@ function toggleSidebar(location) {
         $('#focuses').show();
         $('#focuses-nav').addClass('active');
 
+        $('#reset').show();
+
         enableReset();
     }
 };

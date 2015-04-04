@@ -177,18 +177,29 @@ graphContainer = do
         "shape-rendering" -: "geometricPrecision"
 
 sidebarCSS = do
-    "#fcecount" ? do
+    "#fce" ? do
+        height (px 40)
         width (pct 100)
-        height (px 30)
-        backgroundColor purple4
         border solid (px 1) black
-        textAlign $ alignSide sideCenter
+    "#fcecount" ? do
+        width (pct 53)
+        float floatLeft
+        backgroundColor purple4
         display none
+        height (px 40)
+        paddingLeft (pct 12)
+        paddingTop (px 5)
     "#reset" ? do
-        position absolute
         textAlign $ alignSide sideCenter
-        bottom (px 10)
-        right (pct 31)
+        float floatLeft
+        width (pct 47)
+        height (px 40)
+        display none
+        border solid (px 1) black
+        cursor pointer
+        ":hover" & do
+            backgroundColor grey1
+            fontColor white
     "#container" ? do
         width (pct 100)
         height (px 700)
