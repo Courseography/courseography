@@ -222,6 +222,7 @@ sidebarCSS = do
         float floatLeft
         backgroundColor purple1
         position absolute
+        border solid (px 1) black
         ":hover" & do
             backgroundColor purple4
     "#sidebar-icon" ? do
