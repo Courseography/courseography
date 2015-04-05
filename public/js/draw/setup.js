@@ -96,7 +96,7 @@ function keyboard(e) {
     'use strict';
 
     if (! $("#course-code").is(":focus")) {
-        if (e.which == 78) {
+        if (e.which === 78) {
             changeMode("node-mode"); // n
         } else if (e.which === 80) {
             changeMode("path-mode"); // p
