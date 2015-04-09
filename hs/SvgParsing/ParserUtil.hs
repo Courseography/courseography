@@ -77,7 +77,8 @@ parsePathD d
       lengthMoreThanOne x = length x > 1
       coordList = filter lengthMoreThanOne (map (splitOn ",") $ splitOn " " d)
       -- Converts a relative coordinate structure into an absolute one.
-      relCoords = tail $ foldl (\x y -> x ++ [addTuples (convertToPoint y) (last x)])
+      relCoords = tail $ foldl (\x y -> x ++ [addTuples (convertToPoint y)
+                                                        (last x)])
                                [(0,0)]
                                coordList
       -- Converts a relative coordinate structure into an absolute one.

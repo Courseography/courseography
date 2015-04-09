@@ -70,7 +70,9 @@ parseNode key content =
     else let trans          = parseTransform $ getAttribute "transform" content
              style          = getAttribute "style" content
              fill           = getStyleAttr "fill" style
-             (chilrenPaths, childrenShapes, childrenTexts) = parseChildren key (path [children] content)
+             (chilrenPaths, 
+              childrenShapes, 
+              childrenTexts) = parseChildren key (path [children] content)
              rects    = map (parseRect key) (tag "rect" content)
              texts    = map (parseText key) (tag "text" content)
              paths    = mapMaybe (parsePath key) (tag "path" content)
