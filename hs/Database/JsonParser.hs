@@ -15,18 +15,12 @@ import qualified Data.Vector as V
 import qualified Data.Text as T
 import qualified Data.Conduit.List as CL
 
-import Data.Aeson
-import Control.Applicative
 import Control.Monad
 import Control.Monad.IO.Class (liftIO, MonadIO)
-import Control.Monad.Trans.Reader
-import Data.Maybe
-import Data.List as L
+import Control.Monad.Trans.Reader (ReaderT)
+import Data.Maybe (fromMaybe)
 import Database.Persist.Sqlite
-import Database.Persist
 import Database.Tables
-import System.Directory
-import GHC.Generics
 
 fbdbStr :: T.Text
 fbdbStr = "fdatabase1.sqlite3"

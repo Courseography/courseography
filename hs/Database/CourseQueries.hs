@@ -2,7 +2,6 @@
 
 module Database.CourseQueries (retrieveCourse, allCourses, queryGraphs, courseInfo, deptList, returnCourse) where
 
-import Database.Persist
 import Database.Persist.Sqlite
 import Database.Tables as Tables
 import Control.Monad.IO.Class (liftIO)
@@ -11,7 +10,6 @@ import Database.JsonParser
 import Happstack.Server
 import Data.List
 import qualified Data.Text as T
-import qualified Data.Aeson as Aeson
 import WebParsing.ParsingHelp
 import Data.String.Utils
 
@@ -23,8 +21,8 @@ retrieveCourse course =
 --   representing the course and returns the appropriate JSON response.
 queryCourse :: T.Text -> IO Response
 queryCourse str = do
-  courseJSON <- returnCourse str
-  return $ createJSONResponse courseJSON
+    courseJSON <- returnCourse str
+    return $ createJSONResponse courseJSON
 
 -- | Queries the database for all information about `course`, constructs and returns a Course Record.
 returnCourse :: T.Text -> IO Course
