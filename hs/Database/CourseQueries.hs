@@ -19,9 +19,8 @@ retrieveCourse :: String -> ServerPart Response
 retrieveCourse course =
     liftIO $ queryCourse (T.pack course)
 
-
 -- | Queries the database for all information about `course`, constructs a JSON object
--- | representing the course and returns the appropriate JSON response.
+--   representing the course and returns the appropriate JSON response.
 queryCourse :: T.Text -> IO Response
 queryCourse str = do
   courseJSON <- returnCourse str
@@ -57,7 +56,7 @@ returnCourse lowerStr =
             return courseJSON
 
 -- | Builds a Course structure from a tuple from the Courses table.
--- Some fields still need to be added in.
+--   Some fields still need to be added in.
 buildCourse :: Maybe Session -> Maybe Session -> Maybe Session -> Courses -> Course
 buildCourse fallSession springSession yearSession course =
     Course (coursesBreadth course)
@@ -112,9 +111,9 @@ allCourses = do
 courseInfo :: String -> ServerPart Response
 courseInfo dept = do
     response <- liftIO $ runSqlite dbStr $ do
-        courses :: [Entity Courses] <- selectList [] []
-        lecs    :: [Entity Lectures]   <- selectList [] []
-        tuts  :: [Entity Tutorials]   <- selectList [] []
+        courses :: [Entity Courses]   <- selectList [] []
+        lecs    :: [Entity Lectures]  <- selectList [] []
+        tuts    :: [Entity Tutorials] <- selectList [] []
         let c = filter (startswith dept . T.unpack . coursesCode) $ map entityVal courses
         return $ map (buildTimes (map entityVal lecs) (map entityVal tuts)) c
 
@@ -149,7 +148,7 @@ deptList = do
         f = take 3 . T.unpack . coursesCode . entityVal
 
 -- | Queries the graphs table and returns a JSON response of Graph JSON
--- objects.
+--   objects.
 queryGraphs :: IO Response
 queryGraphs =
     runSqlite dbStr $
