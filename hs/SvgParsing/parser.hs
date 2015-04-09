@@ -1,23 +1,17 @@
 {-# LANGUAGE OverloadedStrings, FlexibleContexts, GADTs, ScopedTypeVariables #-}
 module Main where
 
-import Text.XML.HaXml
-import Text.XML.HaXml.Util
+import Text.XML.HaXml (Content, path, tag, children, xmlParse)
+import Text.XML.HaXml.Util (tagTextContent)
 import Control.Monad.IO.Class (liftIO)
-import Database.Persist.Sqlite
-import System.Directory
-import Data.Maybe
-import Data.List hiding (insert)
-import Data.Text as T (pack, unpack)
+import Data.Maybe (mapMaybe)
 import Data.Int
 import Database.Tables
 import Database.DataType
-import Database.JsonParser
 import Database.SvgDatabase
 import SvgParsing.Generator
-import SvgParsing.Builder
 import SvgParsing.ParserUtil
-import qualified Data.Map as M
+import qualified Data.Map as M (empty)
 
 main :: IO ()
 main = performParse "CSC" "graph_regions.svg"

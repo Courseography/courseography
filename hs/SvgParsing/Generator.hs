@@ -5,18 +5,13 @@ import SvgParsing.Builder
 import SvgParsing.ParserUtil
 import Database.Tables
 import Database.DataType
-import Control.Monad.IO.Class  (liftIO)
-import qualified Data.Conduit.List as CL
-import Database.Persist
+import Control.Monad.IO.Class (liftIO)
 import Database.Persist.Sqlite
-import Data.Char
-import Data.Conduit
-import Data.List.Split
 import Data.List hiding (map, filter)
 import Data.Int
 import Database.JsonParser
 import MakeElements
-import Data.Maybe
+import Data.Maybe (fromMaybe)
 import qualified Data.Text as T
 import Text.Blaze.Svg11 ((!), mkPath, rotate, l, m)
 import qualified Text.Blaze.Svg11 as S
