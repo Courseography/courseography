@@ -105,16 +105,12 @@ getTuple id_
 
 -- | Gets an area from areaMap where id_ is in the list of courses for the corresponding tuple.
 getArea :: String -> String
-getArea id_ = case getTuple id_ of
-                  Just tuple -> snd tuple
-                  _          -> ""
+getArea id_ = maybe "" snd $ getTuple id_
 
 -- | Gets the fill from areaMap where id_ is in the list of courses for the corresponding tuple.
 getFill :: String -- ^ The course's ID.
         -> String -- ^ The course's allocated fill value.
-getFill id_ = case getTuple id_ of
-                  Just tuple -> T.unpack $ fst tuple
-                  _          -> "grey"
+getFill id_ = maybe "grey" (T.unpack . fst) $ getTuple id_
 
 -- | Builds the SVG defs.
 makeSVGDefs :: S.Svg
