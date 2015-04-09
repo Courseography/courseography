@@ -129,8 +129,7 @@ makeSVGDefs =
 
 -- | Determines if a text intersects with a shape.
 intersectsWithShape :: [Shape] -> Text -> Bool
-intersectsWithShape shapes text =
-    any (intersectsWithPoint (textPos text)) shapes
+intersectsWithShape shapes text = any (intersectsWithPoint (textPos text)) shapes
 
 -- | Converts a `Rect` to SVG.
 convertRectToSVG :: M.Map String String -> Shape -> S.Svg
@@ -158,12 +157,14 @@ convertRectToSVG courseMap rect
                          ! A.style (stringValue $ "fill:" ++ getFill (shapeId_ rect) ++ ";")
                   concatSVG $ map (convertTextToSVG (shapeType_ rect)) (shapeText rect)
 
+-- | Maps styles to courses based on the courses status.
 convertSelectionToStyle :: String -> String
 convertSelectionToStyle courseStatus =
     if isSelected courseStatus
     then "stroke-width:4;"
     else "opacity:0.5;stroke-dasharray:8,5;"
 
+-- | Determines whether a course is 'selected'.
 isSelected :: String -- ^ The selected status of a course.
            -> Bool
 isSelected courseStatus =
@@ -252,6 +253,6 @@ hybridTextStyle = "font-size:7.5pt;fill:white;"
 ellipseTextStyle :: String
 ellipseTextStyle = "font-size:7.5pt;"
 
--- | The style for Text elements of ellipses.
+-- | The style for Text elements of regions.
 regionTextStyle :: String
 regionTextStyle = "font-size:9pt;"
