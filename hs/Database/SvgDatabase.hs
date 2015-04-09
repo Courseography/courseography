@@ -4,11 +4,13 @@ module Database.SvgDatabase where
 
 import Control.Monad.IO.Class  (liftIO, MonadIO)
 import Database.Persist.Sqlite
+import Database.Tables
 import Database.Persist
 import Control.Monad.Trans.Reader
 import qualified Data.Conduit.List as CL
+import Data.Int
 import Data.Conduit
-import Data.Text.Internal as TI
+import qualified Data.Text.Internal as TI
 import Database.JsonParser
 
 -- | Performs a query on the database.
