@@ -42,23 +42,6 @@ parseGraph key graphFile =
     let graphDoc = xmlParse "output.error" graphFile
     in parseNode key (getRoot graphDoc)
 
-insertGraph :: String   -- ^ The title of the graph that is being inserted.
-            -> IO Int64 -- ^ The unique identifier of the inserted graph.
-insertGraph graphTitle =
-    runSqlite dbStr $ do
-        runMigration migrateAll
-        key <- insert (Graph 0 graphTitle)
-        let (PersistInt64 keyId) = toPersistValue key
-        update key [GraphGId =. keyId]
-        return keyId
-
-insertElements :: ([Path], [Shape], [Text]) -> IO ()
-insertElements (paths, shapes, texts) =
-    runSqlite dbStr $ do
-        mapM_ insert_ shapes
-        mapM_ insert_ paths
-        mapM_ insert_ texts
-
 -- | Parses a level.
 parseNode :: Int64 -- ^ The Path's corresponding graph identifier.
           -> Content i
