@@ -7,9 +7,7 @@ module Database.JsonParser (insertCourse,
                     setTutEnrol,
                     setPracEnrol,
                     dbStr,
-                    fbdbStr,
-                    encodeJSON) where
-
+                    fbdbStr) where
 
 import qualified Data.ByteString.Lazy as B
 import qualified Data.ByteString.Lazy.Char8 as BSL
@@ -20,7 +18,7 @@ import qualified Data.Conduit.List as CL
 import Data.Aeson
 import Control.Applicative
 import Control.Monad
-import Control.Monad.IO.Class  (liftIO, MonadIO)
+import Control.Monad.IO.Class (liftIO, MonadIO)
 import Control.Monad.Trans.Reader
 import Data.Maybe
 import Data.List as L
@@ -53,13 +51,13 @@ insertCourse course =
 -- | Updates the manualTutorialEnrolment field of all courses with course code course
 setTutEnrol :: MonadIO m => T.Text -> Bool -> ReaderT SqlBackend m ()
 setTutEnrol course val =
-   updateWhere [CoursesCode ==. course]
-   [CoursesManualTutorialEnrolment =. Just val]
+    updateWhere [CoursesCode ==. course]
+    [CoursesManualTutorialEnrolment =. Just val]
 
 -- | updates the manualPracticalEnrolment field of all courses with course code course
 setPracEnrol :: MonadIO m => T.Text -> Bool -> ReaderT SqlBackend m ()
 setPracEnrol course val = do
-  updateWhere [CoursesCode ==. course] [CoursesManualPracticalEnrolment =. Just val]
+    updateWhere [CoursesCode ==. course] [CoursesManualPracticalEnrolment =. Just val]
 
 -- | USED BY HASKELL TIMETABLE PARSING identical to insertLecture but takes T.Text
 -- | course code instead of entire course record
@@ -155,7 +153,3 @@ getDistributionRequirement reqString
     | T.isInfixOf "This is a Social Science course" reqString = 2
     | T.isInfixOf "This is a Humanities course" reqString = 1
     | otherwise = 6
-
--- | Encodes an Aeson Value into a ByteString.
-encodeJSON :: Value -> BSL.ByteString
-encodeJSON json = BSL.filter (\c -> c /= '\\') $ encode json
