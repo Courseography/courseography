@@ -43,6 +43,7 @@ function renderConflicts(time, conflicts) {
     'use strict';
 
     if (time.indexOf('-5') === -1) {
+        console.log($(time).data());
         $(time).data('conflicts', conflicts)
                .attr('title', conflicts.map(function (section) {
                                   return section.courseName;
@@ -50,7 +51,7 @@ function renderConflicts(time, conflicts) {
                )
                .attr('in-conflict', String(conflicts.length > 0))
                .attr('status', conflicts.length > 0 ? 'conflict' : 'occupied')
-               .attr('satisfied', getCourseObject($(this).data('courseName'),
+               .attr('satisfied', getCourseObject($(time).data('courseName'),
                                                   courseObjects).satisfied);
     }
 }
