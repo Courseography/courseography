@@ -43,7 +43,6 @@ function renderConflicts(time, conflicts) {
     'use strict';
 
     if (time.indexOf('-5') === -1) {
-        console.log($(time).data());
         $(time).data('conflicts', conflicts)
                .attr('title', conflicts.map(function (section) {
                                   return section.courseName;
