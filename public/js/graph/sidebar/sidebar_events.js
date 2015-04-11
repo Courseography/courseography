@@ -1,22 +1,32 @@
 
 /**
+ * The click function when we click the reset button.
+**/
+$('#reset').click(function () {
+    'use strict';
+    
+    reset();
+    enableReset();
+})
+
+/**
  * The click function when a focus is clicked.
 **/
-$('.focus').click(function(e){
+$('.focus').click(function(e) {
     'use strict';
 
     var id = $(this).attr('id');
 
-    if ($('#' + id + '-details').css('height') === '180px') {
+    if ($('#' + id + '-details').css('height') === '128px') {
         clearFocus();
         $('ellipse.spotlight').remove();
         setMouseCallbacks();
         $('#' + id + '-details').animate({height: '2px'}, 'fast');
-        $('#' + id + '-details').html("");
+        $('#' + id + '-details').html('');
     } else {
         $('.details').css('height', '2px');
         updateActiveFocus(id);
-        $('#' + id + '-details').animate({height: '180px'}, 'fast');
+        $('#' + id + '-details').animate({height: '128px'}, 'fast');
         $('#' + id + '-details').html(window[id + 'Description']);
     } 
 });
@@ -104,4 +114,21 @@ function getGraphsInDatabase() {
             throw 'No graphs in database';
         }
     });
+}
+
+/**
+ * Determines whether Reset button should be greyed out or not
+ * (If there are active FCEs or not)
+**/
+function enableReset() {
+    'use strict'; 
+
+    if (FCEs > 0) {
+        $('#reset').attr('disabled', false);
+    } else {
+        $('#reset').attr('disabled', true);  
+    }
+
+    fillFCECount();
+
 }
