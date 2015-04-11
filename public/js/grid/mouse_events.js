@@ -50,7 +50,7 @@ function renderConflicts(time, conflicts) {
                )
                .attr('in-conflict', String(conflicts.length > 0))
                .attr('status', conflicts.length > 0 ? 'conflict' : 'occupied')
-               .attr('satisfied', getCourseObject($(this).data('courseName'),
+               .attr('satisfied', getCourseObject($(time).data('courseName'),
                                                   courseObjects).satisfied);
     }
 }
