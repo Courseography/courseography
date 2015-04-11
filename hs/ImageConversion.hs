@@ -2,8 +2,6 @@ module ImageConversion where
 
 import System.Process
 import GHC.IO.Handle.Types
-import Control.Monad.IO.Class  (liftIO)
-import GHC.IO.Exception
 
 -- | Converts an SVG file to a PNG file. Note that image magik's 'convert' command
 -- can take in file descriptors.
