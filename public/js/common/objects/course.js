@@ -247,7 +247,7 @@ Course.prototype.removeSection = function (section) {
     'use strict';
 
     section.removeTimes();
-    removeFromArray(section, selectedSections);
+    removeFromArray(section.id, selectedSections);
     this.selected[section.type] = undefined;
     section.clicked = false;
 };
