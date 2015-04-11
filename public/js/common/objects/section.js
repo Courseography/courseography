@@ -164,7 +164,7 @@ Section.prototype.removeConflict = function (time) {
     'use strict';
 
     var conflicts = $(time).data("conflicts");
-    var index = $.inArray(this, conflicts);
+    var index = $.inArray(this.name, conflicts);
 
     if (index === -1) {
         $(time).html(conflicts[0].courseName)
