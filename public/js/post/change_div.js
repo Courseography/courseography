@@ -1,6 +1,6 @@
 $(document).ready(function () {
     'use strict';
-	
+
     openLastActiveTab();
     updateAllCategories();
 });
@@ -8,7 +8,7 @@ $(document).ready(function () {
 
 $('#specialist').click(function (e) {
     'use strict';
-	
+
     e.preventDefault();
     openTab('specialist');
 });
@@ -16,7 +16,7 @@ $('#specialist').click(function (e) {
 
 $('#major').click(function (e) {
     'use strict';
-	
+
     e.preventDefault();
     openTab('major');
 });
@@ -24,21 +24,23 @@ $('#major').click(function (e) {
 
 $('#minor').click (function (e) {
     'use strict';
-	
+
     e.preventDefault();
     openTab('minor');
 });
 
+
 $('.code').click (function (e) {
     'use strict';
-    
+
     e.preventDefault();
     $(this).parent().find('.more-info').toggle();
 });
 
+
 /**
  * Hides all currently open divs and resets navbar to display none of the links as clicked.
-**/
+ */
 function resetAttributes() {
     'use strict';
 
@@ -46,11 +48,12 @@ function resetAttributes() {
     $('#div_major').css('display', 'none');
     $('#div_minor').css('display', 'none');
     $('#specialist, #major, #minor').css('background-color', 'white');
-};
+}
+
 
 /**
  * Resets cookies of all tabs to 'inactive' - not open
-**/
+ */
 function resetTabCookies() {
     'use strict';
 
@@ -59,10 +62,11 @@ function resetTabCookies() {
     setCookie('minor', 'inactive');
 }
 
+
 /**
  * Opens a specific tab.
  * @param {string} tab The tab that we want to open
-**/
+ */
 function openTab(tab) {
     'use strict';
 
@@ -86,7 +90,7 @@ function openTab(tab) {
 
 /**
  * Opens the tab that was last opened. 
-**/
+ */
 function openLastActiveTab() {
     'use strict';
 

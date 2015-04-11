@@ -2,7 +2,7 @@
  * Updates categories for required courses in each POSt
  * @param {object} post The POSt that you are updating categories for.
  * @param {string} name Name of course
-**/
+ */
 function updateReqsCategory(post, name) {
     'use strict';
 
@@ -27,7 +27,7 @@ function updateReqsCategory(post, name) {
 
 /**
  * Updates 300 level category
-**/
+ */
 function update300Categories() {
     'use strict';
 
@@ -51,7 +51,7 @@ function update300Categories() {
 
 /**
  * Updates 400 level category
-**/
+ */
 function update400Categories() {
     'use strict';
 
@@ -75,11 +75,11 @@ function update400Categories() {
 
 /**
  * Updates Extra level category
-**/
+ */
 function updateExtraCategories() {
 	'use strict'; 
 
-	if (specialist.filledTextboxesExtra === specialist.textboxesExtra) {
+    if (specialist.filledTextboxesExtra === specialist.textboxesExtra) {
         updateCategory($('#spec_extra')[0].getElementsByClassName('code')[0], 'fulfilled');
         specialist.categoriesCompleted += 1;
     } else {
@@ -104,7 +104,7 @@ function updateExtraCategories() {
 
 /**
  * Updates Inquiry category
-**/
+ */
 function updateInqCategory () {
     'use strict';
     

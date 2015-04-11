@@ -7,6 +7,8 @@
  * @returns A binary blob of the decoded URI data.
  */
 function dataURItoBlob(dataURI) {
+    'use strict';
+
     var byteString = atob(dataURI);
     var ab = new ArrayBuffer(byteString.length);
     var ia = new Uint8Array(ab);

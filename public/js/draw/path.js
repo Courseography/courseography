@@ -4,7 +4,7 @@
  * Make the dummy elbow node with center at position position.
  * @position {object} position The x and y position of the dummy node being created.
  * @returns
- **/
+ */
 function makeElbow(position) {
     'use strict';
 
@@ -27,7 +27,7 @@ function makeElbow(position) {
 /**
  * Creates an SVG path that has the coordinates specified by pathString. 
  * @param {string} pathString The coordinates of the new path to be created.
- **/
+ */
 function startPath(pathString, type) {
     'use strict';
 
@@ -53,12 +53,14 @@ function startPath(pathString, type) {
  * the id pathID.
  * @param{string} pathId The id of the now complete path.
  * @param{SVGElement} endNode The last coordinate for the path.
- **/
+ */
 function finishPath(pathId, endNode) {
     'use strict';
 
+    var pathString;
+
     if (curPath === null) { // create a new path, node to node
-        var pathString = findClosest( {x: parseFloat(startNode.getAttribute('x'), 10), 
+        pathString = findClosest( {x: parseFloat(startNode.getAttribute('x'), 10),
                                        y: parseFloat(startNode.getAttribute('y'), 10)},
                                        'node', 
                                       {x: parseFloat(endNode.getAttribute('x'), 10), 
@@ -67,9 +69,9 @@ function finishPath(pathId, endNode) {
 
         startPath(pathString, 'path');
     } else { // finish curPath, elbow to node
-        var curElbow = {x: parseFloat(curPath.elbows[curPath.elbows.length - 1].getAttribute('cx'), 10), 
-                        y: parseFloat(curPath.elbows[curPath.elbows.length - 1].getAttribute('cy'), 10)}
-        var pathString = findClosest(curElbow, 'elbow', 
+        var curElbow = {x: parseFloat(curPath.elbows[curPath.elbows.length - 1].getAttribute('cx'), 10),
+                        y: parseFloat(curPath.elbows[curPath.elbows.length - 1].getAttribute('cy'), 10)};
+        pathString = findClosest(curElbow, 'elbow',
                                      {x: parseFloat(endNode.getAttribute('x'), 10), 
                                       y: parseFloat(endNode.getAttribute('y'), 10)},
                                      'node'); 
@@ -100,13 +102,13 @@ function finishPath(pathId, endNode) {
  * @param {string} The type of beg, elbow or node.
  * @param {SVGElement} end A node or an elbow element.
  * @param {string} The type of end, elbow or node.
- **/
+ */
 function findClosest(beg, typeB, end, typeE) {
     'use strict';
 
     var thePath = null;
     var node1Edges;
-    var node2Edges 
+    var node2Edges;
 
     if (typeB === 'node' && typeE === 'elbow') {
         node1Edges = [{x: beg.x + nodeWidth/2, y: beg.y}, 
@@ -160,7 +162,7 @@ function findClosest(beg, typeB, end, typeE) {
  * @param {object} a The coordinates of point a.
  * @param {object} b The coordinates of point b.
  * @return {number} The distance between a and b.
- **/
+ */
 function dist(a, b) {
     'use strict';
 
@@ -172,7 +174,7 @@ function dist(a, b) {
 /**
  * In change mode, moves target of event e (the elbow) . In erase-mode, erases elbow. 
  * @param {object} e The mousedown event.
- **/
+ */
 function selectElbow(e) {
     'use strict';
 
@@ -224,7 +226,7 @@ function selectElbow(e) {
  * @param {number} yBy The amount of movement in the y direction.
  * @param {string} partOfPath The part of the path (start, end or elbow) path being moved.
  * @param {number} elbowNum The number of the elbow being moved if partOfPath is elbow.
- **/
+ */
 function movePath(path, xBy, yBy, partOfPath, elbowNum) {
     'use strict';
 
@@ -265,7 +267,7 @@ function movePath(path, xBy, yBy, partOfPath, elbowNum) {
 /**
  * In erase mode, delete the target of event e (a path).
  * @param {object} e The mousedown event.
- **/
+ */
 function pathClicked(e) {
     'use strict';
 
@@ -279,7 +281,7 @@ function pathClicked(e) {
 /**
  * Delete the path path.                // !! FIX? 
  * @param {SVGElement} path 
- **/
+ */
 function erasePath(path) {
         var index = -1;
         var pathId = path.id;
