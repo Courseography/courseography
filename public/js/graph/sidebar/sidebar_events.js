@@ -17,7 +17,7 @@ $('.focus').click(function(e) {
 
     var id = $(this).attr('id');
 
-    if ($('#' + id + '-details').css('height') === '128px') {
+    if ($('#' + id + '-details').text() !== '') {
         clearFocus();
         $('ellipse.spotlight').remove();
         setMouseCallbacks();
