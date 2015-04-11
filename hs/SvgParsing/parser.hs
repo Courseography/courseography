@@ -44,15 +44,14 @@ parseNode key content =
     if getAttribute "id" content == "layer2" ||
        getName content == "defs"
     then ([],[],[])
-    else let trans          = parseTransform $ getAttribute "transform" content
-             style          = getAttribute "style" content
-             fill           = getStyleAttr "fill" style
-             (chilrenPaths, 
-              childrenShapes, 
-              childrenTexts) = parseChildren key (path [children] content)
-             rects    = map (parseRect key) (tag "rect" content)
-             texts    = map (parseText key) (tag "text" content)
-             paths    = mapMaybe (parsePath key) (tag "path" content)
+    else let trans = parseTransform $ getAttribute "transform" content
+             style = getAttribute "style" content
+             fill = getStyleAttr "fill" style
+             (chilrenPaths, childrenShapes, childrenTexts) =
+                 parseChildren key (path [children] content)
+             rects = map (parseRect key) (tag "rect" content)
+             texts = map (parseText key) (tag "text" content)
+             paths = mapMaybe (parsePath key) (tag "path" content)
              ellipses = map (parseEllipse key) (tag "ellipse" content)
          in (map (updatePath fill trans) (paths ++ chilrenPaths),
              map (updateShape fill trans) (rects ++ ellipses ++ childrenShapes),
