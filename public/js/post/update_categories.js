@@ -77,7 +77,7 @@ function update400Categories() {
  * Updates Extra level category
  */
 function updateExtraCategories() {
-	'use strict'; 
+    'use strict'; 
 
     if (specialist.filledTextboxesExtra === specialist.textboxesExtra) {
         updateCategory($('#spec_extra')[0].getElementsByClassName('code')[0], 'fulfilled');
