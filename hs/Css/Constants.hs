@@ -106,6 +106,7 @@ blue3 = parse "#437699"
 blue4 = parse "#5566F5"
 blue5 = parse "#A5A6F5"
 blue6 = rgb 184 231 249
+blueFb = rgb 59 89 152
 
 red1 = parse "#C92343"
 red2 = parse "#B91333"
