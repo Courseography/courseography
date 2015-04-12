@@ -46,7 +46,7 @@ header page =
 
 -- Disclaimer. This will be the same for both pages, I guess?
 disclaimer :: H.Html
-disclaimer = do
+disclaimer =
     H.div ! A.id "disclaimerDiv" $ do
         "DISCLAIMER: Both the "
         H.a ! A.href "http://www.artsandscience.utoronto.ca/ofr/timetable/winter/csc.html"
