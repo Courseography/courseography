@@ -1,13 +1,12 @@
 {-# LANGUAGE ScopedTypeVariables, OverloadedStrings #-}
 
-
 module Database.CourseQueries (retrieveCourse,
-  returnCourse,
-  allCourses,
-  courseInfo,
-  getDepartment,
-  queryGraphs,
-  deptList) where
+                                returnCourse,
+                                allCourses,
+                                courseInfo,
+                                getDepartment,
+                                queryGraphs,
+                                deptList) where
 
 import Happstack.Server.SimpleHTTP
 import Database.Persist
@@ -25,9 +24,11 @@ import Data.List
 import WebParsing.ParsingHelp
 import Control.Monad.IO.Class
 
+
 retrieveCourse :: String -> ServerPart Response
 retrieveCourse course =
     liftIO $ queryCourse (T.pack course)
+
 
 -- | Queries the database for all information about `course`, constructs a JSON object
 -- | representing the course and returns the appropriate JSON response.
@@ -35,6 +36,7 @@ queryCourse :: T.Text -> IO Response
 queryCourse str = do
   courseJSON <- returnCourse str
   return $ toResponse $ createJSONResponse $ courseJSON
+  --return $ createJSONResponse courseJSON
 
 -- | Queries the database for all information about `course`, constructs and returns a Course Record.
 returnCourse :: T.Text -> IO Course
@@ -61,6 +63,7 @@ returnCourse lowerStr =
         if null sqlCourse
         then return emptyCourse
         else return (buildCourse fallSession springSession yearSession (entityVal $ head sqlCourse))
+
 
 -- | Builds a Course structure from a tuple from the Courses table.
 -- Some fields still need to be added in.

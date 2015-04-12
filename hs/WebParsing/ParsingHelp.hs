@@ -10,6 +10,11 @@ module WebParsing.ParsingHelp
     dropBetween,
     dropBetweenAll,
     dropAround,
+    isCourse,
+    emptyCourse,
+    isCancelled,
+    lowerTag,
+    notCancelled,
     parseDescription,
     parseCorequisite,
     parsePrerequisite,
@@ -17,6 +22,8 @@ module WebParsing.ParsingHelp
     parseRecommendedPrep,
     parseDistAndBreadth,
     ) where
+
+import Text.Regex.Posix
 import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Match
 import Data.List
@@ -109,6 +116,7 @@ makeEntry (Just tags) Nothing = Just (T.concat (map fromTagText tags))
 makeEntry (Just tags) (Just str) =
   Just $ T.strip $ (replaceAll str "" (T.concat (map fromTagText tags)))
 
+
 {------------------------------------------------------------------------------
 ------------------------------------------------------------------------------}
 replaceBetween :: Eq a =>  (a -> Bool) -> (a -> Bool) -> [a] -> [a]-> [a]
@@ -167,7 +175,7 @@ preProcess tags =
 
 parseDescription :: CoursePart -> CoursePart
 parseDescription (tags, course) =
-  let (parsed, rest) = tagBreak ["Corequisite","Prerequisite","Exclusion","Recommended","Distribution","Breadth"] tags
+  let (parsed, rest) = tagBreak ["Prerequisite","Corequisite","Exclusion","Recommended","Distribution","Breadth"] tags
       descriptn = makeEntry parsed Nothing
   in (rest, course {description = descriptn})
 
@@ -200,17 +208,9 @@ parseDistAndBreadth (tags, course) =
       brdth = makeEntry (Just (filter (tagContains ["Breadth"]) tags)) (Just ["Breadth Requirement: "])
   in (tail $ tail tags, course {distribution = dist, breadth = brdth})
 
-{-}
-convertPrereqs :: String -> Maybe [String] -> Maybe [[String]]
-convertPrereqs "" [] Nothing = Nothing
-convertPrereqs str curReq prereqs =
-  let (before,course,after) = matchCourse str
-  in case (before, course, after) of
-      (_, "", "") -> concatM curReq prereqs  --no match occured
-      --guaranteed match
-      (_, course, "") -> concatM course:curReq after -- end of string
-      [(head after)] =~ "[,;]" -> convertPrereqs after Nothing (concatM curReq prereqs)
-      [(head after)] = "/" -> convertPrereqs after (addM course curReq) prereqs
 
-    then concatM curReq prereqs
--}
+-- | returns true if text is a valid course code.
+isCourse :: T.Text -> Bool
+isCourse text =
+  let pat = "[A-Z]{3}[0-9]{3}[HY][0-9]" :: String
+  in (T.unpack text) =~ pat

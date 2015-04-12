@@ -59,7 +59,6 @@ getCalendar str = do
         isCourseTitle (TagOpen _ attrs) = any (\x -> fst x == "name" && T.length (snd x) == 8) attrs
         isCourseTitle _ = False
 
-
 parseTitleFAS :: CoursePart -> CoursePart
 parseTitleFAS (tag:tags, course) =
     let (n, t) = T.splitAt 8 $ removeTitleGarbage $ removeLectureSection tag
@@ -70,31 +69,17 @@ parseTitleFAS (tag:tags, course) =
 -- |takes a list of tags representing a single course, and returns a course Record
 processCourseToData :: [Tag T.Text] ->  Course
 processCourseToData tags  =
-    let course =
-          Course {
-            breadth = Nothing,
-            description = Nothing,
-            title  = Nothing,
-            prereqString = Nothing,
-            f = Nothing,
-            s = Nothing,
-            y = Nothing,
-            name = T.empty,
-            exclusions = Nothing,
-            manualTutorialEnrol = Nothing,
-            manualPracticalEnrol = Nothing,
-            distribution = Nothing,
-            prereqs = Nothing
-            }
-    in snd $ (tags, course) ~:
-             preProcess -:
-             parseTitleFAS -:
-             parseDescription -:
-             parsePrerequisite -:
-             parseCorequisite -:
-             parseExclusion -:
-             parseRecommendedPrep -:
-             parseDistAndBreadth
+    let course = emptyCourse
+    in  snd $ (tags, course) ~:
+              preProcess -:
+              parseTitleFAS -:
+              parseDescription -:
+              parsePrerequisite -:
+              parseCorequisite -:
+              parseExclusion -:
+              parseRecommendedPrep -:
+              parseDistAndBreadth
+
 -- | parses the entire Arts & Science Course Calendar and inserts courses
 -- into the database.
 parseArtSci :: IO ()

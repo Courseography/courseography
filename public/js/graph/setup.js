@@ -40,9 +40,6 @@ $(document).ready(function () {
     // Initialize interface
     initializeGraphSettings();
     
-    // Update credit count in nav bar
-    updateNavGraph();
-
     // Uncomment to enable the feedback form (must also be displayed in html)
     // activateFeedbackForm();
     // Uncomment to enable graph dragging
@@ -59,7 +56,7 @@ function getRemote() {
 
     var SVG = $.ajax({
         type: 'GET',
-        url: 'static/res/graphs/CSC/csc_graph.svg',
+        url: 'static/res/graphs/1.svg',
         async: false
     }).responseText;
     $('#graph').append(SVG);

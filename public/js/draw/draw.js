@@ -31,14 +31,10 @@ function getPosition(elem) {
     var yPosition = 0;
       
     while (elem) {
-        // || 0 -> for mozilla firefox compatability !!
+        // || 0 for firefox compatability
         xPosition += (elem.offsetLeft || 0) - elem.scrollLeft + elem.clientLeft;
         yPosition += (elem.offsetTop || 0) - elem.scrollTop + elem.clientTop;
-        // console.log(elem.offsetLeft, elem.scrollLeft, elem.clientLeft);
-        // console.log(elem.offsetTop, elem.scrollTop, elem.clientTop);
-        // console.log(elem.offsetLeft, elem.offsetTop);
-        // console.log(elem);
-        elem = elem.offsetParent;
+        elem = elem.parentElement; // offsetParent undefined in mozilla
     }
     return { x: xPosition, y: yPosition };
 }

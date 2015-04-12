@@ -18,11 +18,12 @@ graphParams :: GraphvizParams n Text el () Text
 graphParams =
                 nonClusteredParams {  globalAttributes = [GraphAttrs [Splines Ortho,
                                                           Ratio FillRatio,
-                                                          RankSep [1.0],
-                                                          Size (GSize 10 (Just 6) False)],
+
+                                                          Size (GSize 8 (Just 4.8) False)],
                                                           NodeAttrs [ Shape BoxShape,
-                                                                      FontSize 40],
-                                                          EdgeAttrs []],
+                                                                      FontSize 80,
+                                                                      Style [SItem Bold []]],
+                                                          EdgeAttrs [Style [SItem Bold []]]],
                                       fmtNode = fn
                                     }
               where fn (_,l) = [toLabel (unpack l)]
@@ -39,11 +40,14 @@ makeGraph' codes filename =
      (\g -> graphVizProcess filename (graphToDot graphParams g))
 
 -- | constructs a graph of all courses starting with code.
-makeGraph :: String ->  IO FilePath
+makeGraph :: String ->  IO ProcessHandle
 makeGraph code = do
   getDepartment code >>=
     toGraph >>=
-     (\g -> graphVizProcess code (graphToDot graphParams g))
+     (\g -> graphVizProcess code (graphToDot graphParams g)) >>=
+        (\_ -> runCommand $ "unflatten -f -l50 -c 4 -o out.dot " ++ code) >>=
+          (\_ -> runCommand $ "dot -Tsvg -o graphs/" ++ code ++".svg" ++ " out.dot")
+
 
 main :: IO (DotGraph Node)
 main =

@@ -20,7 +20,6 @@ function buildGraph() {
         var course = $(this).children('text').text().toLowerCase();
         var reqs = parseAnd(course)[0];
         makeHybrid('AND', id);
-        console.log(reqs);
         $.each(reqs, function (index, elem) {
             if ($.isArray(elem)) {
                 var orNode = id + elem.join('');
@@ -45,7 +44,9 @@ function buildGraph() {
     });
 
     $('.path').each(function () {
-        makeEdge(window[$(this).attr('source-node')], window[$(this).attr('target-node')], $(this).attr('id'));
+        makeEdge(window[$(this).attr('source-node').replace(',', '')],
+                 window[$(this).attr('target-node').replace(',', '')],
+                 $(this).attr('id').replace(',', ''));
     });
 }
 

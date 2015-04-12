@@ -105,6 +105,11 @@ Path
     source String
     target String
     deriving Show
+
+FacebookTest
+    fId String
+    testString String
+    deriving Show
 |]
 
 -- | A Lecture.
