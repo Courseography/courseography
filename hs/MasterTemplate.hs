@@ -42,7 +42,6 @@ header page =
                  ! H.customAttribute "autologoutlink" "true"
                  ! H.customAttribute "data-show-faces" "false"
                  ! H.customAttribute "data-auto-logout-link" "false" $ ""
-            H.li $ makeA "" "" "privacy" "" "Privacy"
 
 -- Disclaimer. This will be the same for both pages, I guess?
 disclaimer :: H.Html

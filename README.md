@@ -11,3 +11,5 @@ One of our main goals for Courseography is to keep it a student-driven project. 
 If you're coming from outside of the Department of Computer Science, we'd love to hear from you! We welcome help on making new graphs, understanding department- or program-specific policies, pointing out bugs or incorrect information, and general thoughts on the design of our tools. You don't need to be a programmer to get involved.
 
 We can be reached at courseography@cs.toronto.edu, and look forward to hearing from you!
+
+Click [here](/privacy) to learn about our Privacy Policy.
