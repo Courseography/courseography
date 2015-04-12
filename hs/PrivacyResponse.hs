@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module AboutResponse where
+module PrivacyResponse where
 
 import           Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
@@ -20,7 +20,7 @@ privacyResponse privacyContents =
                 ]
                 (do
                     header "privacy"
-                    privacyHtml privacyResponse
+                    privacyHtml privacyContents
                 )
                 ""
 

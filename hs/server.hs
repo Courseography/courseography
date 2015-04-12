@@ -11,6 +11,7 @@ import PostResponse
 import FourOhFourResponse
 import SearchResponse
 --import AboutResponse
+import PrivacyResponse
 import Database.CourseQueries (retrieveCourse, allCourses, queryGraphs, courseInfo, deptList)
 import Css.CssGen
 import Filesystem.Path.CurrentOS
@@ -40,6 +41,7 @@ main = do
                dir "post" postResponse,
                dir "draw" drawResponse,
                --dir "about" $ aboutResponse aboutContents,
+               dir "privacy" $ privacyResponse privacyContents,
                dir "static" $ serveDirectory EnableBrowsing [] staticDir,
                dir "course" $ look "name" >>= retrieveCourse,
                dir "all-courses" $ liftIO allCourses,
@@ -47,6 +49,5 @@ main = do
                dir "course-info" $ look "dept" >>= courseInfo,
                dir "depts" $ liftIO deptList,
                dir "timesearch" searchResponse,
-               dir "privacy" $ privacyResponse privacyContents,
                fourOhFourResponse
                ]
