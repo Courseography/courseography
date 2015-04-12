@@ -3,7 +3,7 @@
  * Calculates the position of the click in relation to the page.
  * @param {object} e The click event.
  * @param {HTMLElement} elem The target of the click event.
- * @return The position of the click.
+ * @return {object} The position of the click.
  */
 function getClickPosition(e, elem) {
     'use strict';
@@ -21,14 +21,14 @@ function getClickPosition(e, elem) {
 /**
  * Calculates the position of elem in relation to the page.
  * @param {HTMLElement} elem The target of the click event.
- * @return The position of elem on the page.
+ * @return {object} The position of elem on the page.
  */
 function getPosition(elem) {
     'use strict';
 
     var xPosition = 0;
     var yPosition = 0;
-      
+
     while (elem) {
         // || 0 for firefox compatability
         xPosition += (elem.offsetLeft || 0) - elem.scrollLeft + elem.clientLeft;
@@ -57,7 +57,7 @@ function makeNodePath(e) {
         g.setAttribute('id', 'g' + nodeId);
         g.setAttribute('data-active', 'active');
         g.setAttribute('data-group', nodeColourId);
-    
+
         node.setAttribute('x', position.x);
         node.setAttribute('y', position.y);
         node.setAttribute('rx', 4);
@@ -67,11 +67,11 @@ function makeNodePath(e) {
         node.setAttribute('height', nodeHeight);
         node.setAttribute('class', 'node');
         node.parents = [];
-        node.kids = []; 
+        node.kids = [];
         // note: children doesn't work because javascript objects already have a children attribute
         node.inEdges = [];
         node.outEdges = [];
-        
+
         g.appendChild(node);
         svgDoc.appendChild(g);
         document.getElementById('n' + nodeId).addEventListener('mousedown', nodeClicked, false);
@@ -81,22 +81,24 @@ function makeNodePath(e) {
         nodeId += 1;
     } else if (mode === 'path-mode') {
         // make elbow joint, only if the dummy point is outside the starting node
-        if (startNode !== null && ((position.x < parseFloat(startNode.getAttribute('x'), 10)) || 
+        if (startNode !== null && ((position.x < parseFloat(startNode.getAttribute('x'), 10)) ||
                                   (position.x > parseFloat(startNode.getAttribute('x'), 10) + nodeWidth) ||
-                                  (position.y < parseFloat(startNode.getAttribute('y'), 10)) || 
-                                  (position.y > parseFloat(startNode.getAttribute('y'), 10) + nodeHeight))) {           
+                                  (position.y < parseFloat(startNode.getAttribute('y'), 10)) ||
+                                  (position.y > parseFloat(startNode.getAttribute('y'), 10) + nodeHeight))) {
             if (curPath === null) { // node to elbow path
-                var pathString = findClosest({x: parseFloat(startNode.getAttribute('x'), 10), 
+                var pathString = findClosest({x: parseFloat(startNode.getAttribute('x'), 10),
                                   y: parseFloat(startNode.getAttribute('y'), 10)},
                                   'node', position, 'elbow');
                 startPath(pathString, 'path');
             } else { // elbow to elbow path
-                curPath.setAttributeNS(null, 'd', curPath.getAttribute('d') + 'L' + position.x + ',' + position.y + ' ');   
+                curPath.setAttributeNS(null, 'd', curPath.getAttribute('d') + 'L' + position.x + ',' + position.y + ' ');
             }
 
             makeElbow(position);
         }
     } else if (mode === 'region-mode') {
+        var elbow;
+
         if (startPoint === null) { // start a region
                 startPoint = document.createElementNS(xmlns, 'circle');
 
@@ -114,11 +116,11 @@ function makeNodePath(e) {
             startPath('M' + startPoint.getAttribute('cx') + ',' + startPoint.getAttribute('cy') + ' L' + position.x + ',' + position.y + ' ', 'region');
             //curPath.setAttributeNS(null, 'class', 'region');
             curPath.setAttributeNS(null, 'id', 'r' + regionId);
-            var elbow = makeElbow(position);
+            elbow = makeElbow(position);
             elbow.partOfPath = 'elbow';
         } else { 
             curPath.setAttributeNS(null, 'd', curPath.getAttribute('d') + 'L' + position.x + ',' + position.y + ' ');
-            var elbow = makeElbow(position);
+            elbow = makeElbow(position);
             elbow.partOfPath = 'elbow';
         }
     }
@@ -131,14 +133,13 @@ function makeNodePath(e) {
  * In change-mode, moves the node, and in path-mode, marks it a start node 
  * or creates a path if valid.                                                          // !! FIX DESCRIPTION
  * @param {object} e The mousedown event.
- **/
+ */
 function nodeClicked(e) {
     'use strict';
 
-    
     var index = null;
 
-    if (mode  === 'erase-mode') { 
+    if (mode === 'erase-mode') {
         // remove any paths leading to and from this node from the other node's 
         // list of paths and remove this node from the other nodes' adjacency lists
         e.currentTarget.inEdges.map(function (edge) { 
@@ -216,7 +217,7 @@ function nodeClicked(e) {
 /**
  * Selects the node newNode and unselects the old node nodeSelected.
  * @param {SVGElement} newNode The node to be selected.
- **/
+ */
 function select(newNode) {
     'use strict';
 
@@ -231,13 +232,15 @@ function select(newNode) {
 /**
  * In change-mode, moves the node or elbow that is currently being moved.
  * @param {object} e The mousemove Event.
- **/
+ */
 function moveNodeElbow(e) {
     'use strict';
 
     if (mode === 'change-mode') {
+        var position;
+
         if (nodeMoving !== null) {
-            var position = getClickPosition(e, nodeMoving);
+            position = getClickPosition(e, nodeMoving);
             var rectX = parseFloat(nodeMoving.getAttribute('x'), 10);
             var rectY = parseFloat(nodeMoving.getAttribute('y'), 10);
             rectX += (position.x - prevX);
@@ -267,13 +270,13 @@ function moveNodeElbow(e) {
             prevX = position.x;
             prevY = position.y;
         } else if (elbowMoving !== null) {
-            var position = getClickPosition(e, elbowMoving);
+            position = getClickPosition(e, elbowMoving);
             moveElbow(elbowMoving, position);
             prevX = position.x;
             prevY = position.y;
         } else if (regionMoving !== null) {
             // move each elbow
-            var position = getClickPosition(e, elbowMoving);
+            position = getClickPosition(e, elbowMoving);
             regionMoving.elbows.map(function (elbow) {
                 moveElbow(elbow, position);
             });
@@ -284,6 +287,11 @@ function moveNodeElbow(e) {
 }
 
 
+/**
+ *
+ * @param elbow
+ * @param position
+ */
 function moveElbow(elbow, position) {
     'use strict';
 
@@ -307,11 +315,10 @@ function moveElbow(elbow, position) {
 }
 
 
-
 /**
  * Reinitializes global variables associated with mousedown and mousemove event.
  * @param {object} e The mouseup event.
- **/
+ */
 function unclickAll(e) {
     'use strict';
 
@@ -325,9 +332,8 @@ function unclickAll(e) {
 }
 
 
-/** 
+/**
  *
- * 
  */
 function finishRegion() {
     'use strict';
@@ -357,9 +363,9 @@ function finishRegion() {
 }
 
 
-/** 
+/**
  *
- * 
+ * @param e
  */
 function regionClicked(e) {
     if (mode === 'erase-mode') {

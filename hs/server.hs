@@ -1,6 +1,6 @@
 module Main where
 
-import Control.Monad    (msum)
+import Control.Monad (msum)
 import Control.Monad.IO.Class (liftIO)
 import Happstack.Server
 import GridResponse
@@ -17,7 +17,6 @@ import Filesystem.Path.CurrentOS
 import System.Directory
 import CourseographyFacebook
 import qualified Data.Text as T
-import Diagram
 
 main :: IO ()
 main = do

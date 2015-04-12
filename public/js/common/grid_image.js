@@ -26,6 +26,8 @@ function getGridImage(session) {
 
 
 function getCoursesTable(session) {
+    'use strict';
+
     var sessionChar = session === 'fall' ? 'F' : 'S';
     var days = ['M', 'T', 'W', 'R', 'F'];
     var courses = '';

@@ -2,12 +2,8 @@
 module SvgParsing.Builder where
 
 import SvgParsing.ParserUtil
-import Database.Persist
-import Database.Persist.Sqlite
 import Data.Char
-import Data.List.Split
 import Data.List
-import Database.JsonParser
 import Database.Tables
 import Database.DataType
 

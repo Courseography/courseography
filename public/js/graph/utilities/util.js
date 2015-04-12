@@ -170,7 +170,7 @@ function reset() {
         } else {
             window[node].status = 'inactive';
         }
-        setCookie(window[node].name, window[node].status);
+        setCookie(window[node].id, window[node].status);
 
         window[node].updateSVG();
     });

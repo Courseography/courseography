@@ -1,10 +1,6 @@
 {-# LANGUAGE FlexibleContexts, GADTs, MultiParamTypeClasses,
  OverloadedStrings, TypeFamilies #-}
 
-
-import Control.Monad.IO.Class  (liftIO)
-import Control.Monad.Trans.Resource (runResourceT)
-import Database.Persist
 import Database.Persist.Sqlite
 import Database.JsonParser
 import Database.Tables
