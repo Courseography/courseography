@@ -3,7 +3,6 @@ $(document).ready(function () {
 
     $.ajaxSetup({ cache: true });
     $.getScript('//connect.facebook.net/en_UK/all.js', function() {
-
         FB.init({
             appId      : '432140593606098',
             xfbml      : true,
@@ -12,9 +11,9 @@ $(document).ready(function () {
         FB.Event.subscribe('auth.statusChange', function (response) {
             FB.getLoginStatus(function (response) {
                 if (response.status === 'connected') {
-                    addNameToNavBar();
+                    $('#nav-fb-post').css('display', 'inline-block');
                 } else {
-                    removeNameFromNavBar();
+                    $('#nav-fb-post').hide();
                 }
             });
         });

@@ -45,10 +45,11 @@ headerCSS = do
                 width $ px 200
                 display inlineBlock
                 margin (px 10) 0 (px 5) 0
+           height (px 50)
     "#nav-links" ?
         do
             "list-style" -: "none"
-            width $ pct 70
+            minWidth $ pct 50
             margin nil nil nil nil
             display inlineBlock
             a ?
@@ -61,6 +62,27 @@ headerCSS = do
                     color white
                     hover & do
                         color gray
+            height (px 50)
+    "#nav-fb" ? do
+        float floatRight
+        height (px 50)
+        "#nav-fb-post" ? do
+            backgroundColor blueFb
+            height (px 40)
+            margin (px 5) (px 10) (px 5) (px 10)
+            padding nil (px 5) nil (px 5)
+            lineHeight (px 40)
+            verticalAlign middle
+            display none
+            a <? do
+                color white
+            borderRadius (px 3) (px 3) (px 3) (px 3)
+        ".fb-login-button" ? do
+            height (px 40)
+            verticalAlign middle
+            width (px 140)
+            overflow hidden
+            margin (px 5) nil (px 5) nil
 
 {- aDefaultCSS
  - Generates default CSS. -}
