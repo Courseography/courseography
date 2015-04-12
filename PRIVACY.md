@@ -26,4 +26,4 @@ We may amend this Privacy Statement from time to time. Use of information we col
 
 If you have any questions or concerns regarding privacy on our website, please send us a detailed message at courseography@cs.toronto.edu. We will make every effort to resolve your concerns.
 
-Effective Date: April 13, 2015
+Effective Date: April 12, 2015
