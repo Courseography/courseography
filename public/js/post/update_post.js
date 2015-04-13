@@ -251,3 +251,18 @@ function updateMatCreditCount() {
         }
     }
 }
+
+/**
+ * Returns whether course is a specialist course or not
+ * @param {string} Name of course
+ * @return {boolean} True if course is a specialist, False otherwise
+**/
+function notSpecialistCourse(course) {
+    'use strict';
+
+    if (specialistCourses.indexOf(course) === -1) {
+        return true
+    } else {
+        return false
+    }
+}
