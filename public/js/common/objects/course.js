@@ -204,10 +204,10 @@ Course.prototype.selectTimes = function (section) {
 
     $.each(section.times, function (i, time) {
 
-        var n = time.charAt(time.length-1);
+        var n = time.charAt(time.length - 1);
 
         if (n === 'H') {
-            extendCell(parseInt(time.slice(2)), time.charAt(1), time.charAt(time.length-2));
+            extendCell(parseInt(time.slice(2)), time.charAt(1), time.charAt(time.length - 2));
             ptime = previousCell(time);
             if ($(ptime).attr('clicked') === 'true') {
                 section.setConflictTime(time);
@@ -215,8 +215,8 @@ Course.prototype.selectTimes = function (section) {
         }
 
         if (n === 'E') {
-            extendCell(parseInt(time.slice(2)), time.charAt(1), time.charAt(time.length-2));
-            time = time.slice(0, time.length-1)
+            extendCell(parseInt(time.slice(2)), time.charAt(1), time.charAt(time.length - 2));
+            time = time.slice(0, time.length - 1);
         }
 
         if ($(time).attr('rowspan') !== '2' && n !== 'H' && n !== 'E') {
@@ -247,7 +247,7 @@ Course.prototype.removeSection = function (section) {
     'use strict';
 
     section.removeTimes();
-    removeFromArray(section, selectedSections);
+    removeFromArray(section.id, selectedSections);
     this.selected[section.type] = undefined;
     section.clicked = false;
 };

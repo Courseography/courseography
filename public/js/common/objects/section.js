@@ -132,18 +132,18 @@ Section.prototype.removeTimes = function () {
 
     var tmp = this;
     $.each(this.times, function (i, time) {
-        var n = time.charAt(time.length-1);
+        var n = time.charAt(time.length - 1);
 
         if (n === 'E') {
-            compressCell(parseInt(time.slice(2)), time.charAt(1), time.charAt(time.length-2));
-            time = time.slice(0, time.length-1);
+            compressCell(parseInt(time.slice(2)), time.charAt(1), time.charAt(time.length - 2));
+            time = time.slice(0, time.length - 1);
         }
 
         $(time).removeClass('timetable-edge')
                .removeClass('timetable-middle');
 
         if (n === 'H') {
-            compressCell(parseInt(time.slice(2)), time.charAt(1), time.charAt(time.length-2));
+            compressCell(parseInt(time.slice(2)), time.charAt(1), time.charAt(time.length - 2));
         }
 
         if ($(time).data("conflicts").length > 0) {
@@ -164,7 +164,7 @@ Section.prototype.removeConflict = function (time) {
     'use strict';
 
     var conflicts = $(time).data("conflicts");
-    var index = $.inArray(this, conflicts);
+    var index = $.inArray(this.name, conflicts);
 
     if (index === -1) {
         $(time).html(conflicts[0].courseName)

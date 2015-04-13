@@ -12,6 +12,7 @@ import Css.Constants
 
 graphStyles = do
     graphContainer
+    sidebarCSS
     nodeCSS
     pathCSS
     resetCSS
@@ -112,10 +113,6 @@ nodeCSS = "g" ? do
         "text" <? do
             fontFamily ["Comic Sans MS"] [sansSerif]
             fontWeight bold
-    ".spotlight" & do
-        semiVisible
-        fill "white"
-        stroke "none"
 
 {- pathCSS
  - Generates CSS for paths between nodes
@@ -166,6 +163,10 @@ graphContainer = do
         overflow hidden
         margin nil auto nil auto
         clear both
+        display inlineBlock
+        position absolute
+        textAlign $ alignSide sideCenter
+        "left" -: "10%"
     "#graphRootSVG" ? do
         width100
         height100
@@ -173,6 +174,149 @@ graphContainer = do
         "stroke-linecap" -: "square"
         "stroke-miterlimit" -: "10"
         "shape-rendering" -: "geometricPrecision"
+
+sidebarCSS = do
+    "#fce" ? do
+        height (px 40)
+        width (pct 100)
+        border solid (px 1) black
+    "#fcecount" ? do
+        width (pct 53)
+        height (px 40)
+        float floatLeft
+        backgroundColor purple4
+        display none
+        paddingLeft (pct 12)
+        paddingTop (px 5)
+    "#reset" ? do
+        textAlign $ alignSide sideCenter
+        float floatLeft
+        width (pct 47)
+        height (px 40)
+        display none
+        border solid (px 1) black
+        cursor pointer
+        ":hover" & do
+            backgroundColor grey1
+            fontColor white
+    "#container" ? do
+        width (pct 100)
+        height (px 700)
+        position relative
+    "#sidebar" ? do
+        display inlineBlock
+        width (px 40)
+        height (pct 100)
+        float floatLeft
+        backgroundColor purple5
+        position absolute
+        paddingLeft (px 23)
+    "#sidebar-button" ? do
+        cursor pointer
+        display inlineBlock
+        width (px 40)
+        height100
+        float floatLeft
+        backgroundColor purple2
+        position absolute
+        border solid (px 1) black
+        ":hover" & do
+            backgroundColor purple4
+    "#sidebar-icon" ? do
+        width (px 30)
+        height (px 35)
+        paddingTop (px 20)
+        paddingLeft (px 2)
+        position absolute
+        top (pct 40)
+        left (px 4)
+    "#focuses-nav, #graph-nav" ? do
+        cursor pointer
+    "#sidebar-nav" ? do
+        width100
+        fontSize (px 13)
+        backgroundColor purple3
+        border solid (px 1) grey2
+        "box-shadow" -: "0 2px 2px -1px rgba(0, 0, 0, 0.055)"
+        display block
+        overflow hidden
+        ul ? do
+            width100
+            margin0
+            li ? do
+                "list-style-type" -: "none"
+                display inlineBlock
+                width (pct 48)
+                "-webkit-transition" -: "all 0.2s"
+                "-moz-transition" -: "all 0.2s"
+                "-ms-transition" -: "all 0.2s"
+                "-o-transition" -: "all 0.2s"
+                "transition" -: "all 0.2s"
+                ":hover" & do
+                    "background-color" -: "#46364A !important"
+                    a ? do
+                        "color" -: "white !important"
+                a ? do
+                    color black
+                    display inlineBlock
+                    lineHeight (px 30)
+                    alignCenter
+                    width (pct 95)
+                    textDecoration none
+    "#focuses, #graphs" ? do
+        marginTop (px 25)
+        marginLeft (px 25)
+        height100
+        width100
+        display none
+    ".focus" ? do
+        display block
+        cursor pointer
+        fontSize (px 20)
+        border solid (px 1) black
+        alignCenter
+        width (pct 90)
+        backgroundColor white
+        "border-radius" -: "6px"
+        ":hover" & do
+            backgroundColor grey2
+    "#close-focus" ? do
+        display block
+        cursor pointer
+        backgroundColor purple3
+        fontSize (px 20)
+        border solid (px 1) black
+        textAlign $ alignSide sideCenter
+        width (pct 90)
+    ".spotlight" & do
+        semiVisible
+        fill "white"
+        stroke "none"
+    ".details" & do
+        border solid (px 1) black
+        width (pct 90)
+        height (px 0)
+        marginBottom (px 7)
+        overflow auto
+        fontSize (px 14)
+        fontColor white
+        paddingLeft (px 5)
+        paddingRight (px 5)
+    ".active" & do
+        backgroundColor purple1
+    ".graph-button" & do
+        display block
+        cursor pointer
+        fontSize (px 20)
+        border solid (px 1) black
+        "border-radius" -: "6px"
+        textAlign $ alignSide sideCenter
+        width (pct 90)
+        backgroundColor white
+        marginBottom (px 20)
+        ":hover" & do
+            backgroundColor grey2
+
 
 {- titleCSS
  - Generates CSS for the title. -}

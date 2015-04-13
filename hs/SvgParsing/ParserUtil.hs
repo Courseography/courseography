@@ -1,17 +1,12 @@
 module SvgParsing.ParserUtil where
 
 import Text.XML.HaXml hiding (find)
-import qualified Data.Conduit.List as CL
-import Database.Persist
-import Database.Persist.Sqlite
-import Text.XML.HaXml.Namespaces
-import Data.Conduit
-import Data.List.Split hiding (startsWith)
+import Text.XML.HaXml.Namespaces (printableName)
+import Data.List.Split (splitOn)
 import Data.List
-import Data.Maybe
+import Data.Maybe (fromMaybe)
 import Data.Text as T (pack, unpack)
-import Database.Tables
-import Database.JsonParser
+import Database.Tables (Point)
 
 -- | Gets the root element of the document.
 getRoot :: Document i -> Content i
@@ -77,7 +72,8 @@ parsePathD d
       lengthMoreThanOne x = length x > 1
       coordList = filter lengthMoreThanOne (map (splitOn ",") $ splitOn " " d)
       -- Converts a relative coordinate structure into an absolute one.
-      relCoords = tail $ foldl (\x y -> x ++ [addTuples (convertToPoint y) (last x)])
+      relCoords = tail $ foldl (\x y -> x ++ [addTuples (convertToPoint y)
+                                                        (last x)])
                                [(0,0)]
                                coordList
       -- Converts a relative coordinate structure into an absolute one.

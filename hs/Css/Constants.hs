@@ -83,7 +83,9 @@ modalColor = parse "#374AA1"
 
 purple1 = parse "#46364A"
 purple2 = parse "#7E4D66"
-purple3 = rgb 209 194 222
+purple3 = parse "#CD96CD"
+purple4 = parse "#9C6B98"
+purple5 = parse "#800080"
 
 pink1 = parse "#DB94B8"
 pink2 = rgb 236 189 210
@@ -104,6 +106,7 @@ blue3 = parse "#437699"
 blue4 = parse "#5566F5"
 blue5 = parse "#A5A6F5"
 blue6 = rgb 184 231 249
+blueFb = rgb 59 89 152
 
 red1 = parse "#C92343"
 red2 = parse "#B91333"

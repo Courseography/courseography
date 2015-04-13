@@ -5,7 +5,9 @@
  * @param message A message to be passed to facebook.
  */
 function postImage(authToken, img, message) {
-    blob = dataURItoBlob(img);
+    'use strict';
+
+    var blob = dataURItoBlob(img);
 
     /* When uploading images to Facebook, the data needs to be encoded as
      * form data/multipart.

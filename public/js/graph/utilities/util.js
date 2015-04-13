@@ -149,8 +149,11 @@ function initializeGraphSettings() {
         clearFocus();
     }
 
-    csc318.updateStatus();
-    csc454.updateStatus();
+    // only run this if the CSC graph is loaded
+    if (getCookie('active-graph') === '1') {
+        csc318.updateStatus();
+        csc454.updateStatus();
+    }
 }
 
 
@@ -167,7 +170,7 @@ function reset() {
         } else {
             window[node].status = 'inactive';
         }
-        setCookie(window[node].name, window[node].status);
+        setCookie(window[node].id, window[node].status);
 
         window[node].updateSVG();
     });

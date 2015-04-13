@@ -39,7 +39,7 @@ searchCSS = do
         height (pct 10)
         form <? do
             background ((url "/static/res/ico/search.png", noRepeat), placed sideRight sideCenter)
-            margin0
+            margin (em 1) 0 0 0
             paddingRight (px 34)
     "#search-container" ? do
         alignCenter
@@ -271,23 +271,24 @@ tdColours = ".timetable " ?  do
             backgroundColor blue4 -- important
         "hover" *= "good" & do
             backgroundColor blue3
-        "hover" *= "conflict" & do
-            backgroundColor red1
         "hover" *= "remove" & do
             opacity 0.5
             transition "all" (sec 0.5) easeInOut (sec 0)
-        "in-conflict" *= "true" & do
-            backgroundColor red1
-            ":hover" & do
-                backgroundColor red2
         "satisfied" *= "false" & do
             backgroundColor red3
             ":hover" & do
                 backgroundColor red4
+        "in-conflict" *= "true" & do
+            backgroundColor red1
+            ":hover" & do
+                backgroundColor red2
     td # ("in-conflict" *= "false") # ("satisfied" *= "true") ? do
         backgroundColor blue3
         Clay.empty & do
             backgroundColor white
+    td # ("hover" *= "conflict") # ("satisfied" *= "true") <>
+        td # ("hover" *= "conflict") # ("satisfied" *= "false") ? do
+        backgroundColor red1
 
 {- infoCSS
  - Generates CSS for the info block that describes
