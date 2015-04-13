@@ -16,7 +16,6 @@ import qualified Data.Map as M (empty)
 main :: IO ()
 main = performParse "CSC" "graph_regions.svg"
 
-
 performParse :: String -- ^ The title of the graph.
              -> String -- ^ The filename of the file that will be parsed.
              -> IO ()

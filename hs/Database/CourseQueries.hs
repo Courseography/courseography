@@ -8,7 +8,6 @@ module Database.CourseQueries (retrieveCourse,
                                 queryGraphs,
                                 deptList) where
 
-
 import Happstack.Server.SimpleHTTP
 import Database.Persist
 import Database.Persist.Sqlite
@@ -17,15 +16,11 @@ import Control.Monad.IO.Class (liftIO)
 import JsonResponse
 import Database.JsonParser
 import Happstack.Server
-import Data.List
 import qualified Data.Text as T
-import qualified Data.Aeson as Aeson
 import WebParsing.ParsingHelp
 import Data.String.Utils
 import Data.List
 import WebParsing.ParsingHelp
-import Control.Monad.IO.Class
-
 
 retrieveCourse :: String -> ServerPart Response
 retrieveCourse course =
@@ -63,7 +58,6 @@ returnCourse lowerStr =
         if null sqlCourse
         then return emptyCourse
         else return (buildCourse fallSession springSession yearSession (entityVal $ head sqlCourse))
-
 
 -- | Builds a Course structure from a tuple from the Courses table.
 --   Some fields still need to be added in.

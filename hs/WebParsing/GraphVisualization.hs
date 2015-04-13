@@ -2,9 +2,7 @@
 
 module WebParsing.GraphVisualization (makeGraph) where
 
-import Network.HTTP
-import Text.HTML.TagSoup
-import Text.HTML.TagSoup.Match
+import Data.Char
 import qualified Data.Text as T
 import qualified Data.Text.Lazy as L
 import Data.Graph.Inductive.Graph
@@ -13,11 +11,13 @@ import Data.GraphViz.Attributes.Complete
 import Data.GraphViz.Printing
 import Data.GraphViz.Commands
 import Data.List
-import System.Process
-import WebParsing.GraphConversion
 import Database.CourseQueries
+import Network.HTTP
+import System.Process
+import Text.HTML.TagSoup
+import Text.HTML.TagSoup.Match
+import WebParsing.GraphConversion
 import WebParsing.ArtSciParser
-import Data.Char
 
 -- | simple GraphViz parameters for a deparment graph: labels nodes.
 graphParams :: GraphvizParams n T.Text el () T.Text
@@ -63,6 +63,6 @@ main = do
   rsp <- simpleHTTP (getRequest fasCalendarURL)
   body <- getResponseBody rsp
   let depts = filter (isPrefixOf "crs_")  (getDeptList $ parseTags body)
-  let codes = (map ((drop 4) . (takeWhile (/= '.')) . (map toUpper))  depts ) \\ junkCodes
+  let codes = map (drop 4 . takeWhile (/= '.') . map toUpper)  depts\\ junkCodes
   mapM_ makeGraph codes
   mapM_ (\x -> (runCommand $ "rm " ++ (map toUpper x))) codes
