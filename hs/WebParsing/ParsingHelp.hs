@@ -11,7 +11,6 @@ module WebParsing.ParsingHelp
     dropBetweenAll,
     dropAround,
     isCourse,
-    emptyCourse,
     isCancelled,
     lowerTag,
     notCancelled,
@@ -115,7 +114,6 @@ makeEntry (Just []) _ = Nothing
 makeEntry (Just tags) Nothing = Just (T.concat (map fromTagText tags))
 makeEntry (Just tags) (Just str) =
   Just $ T.strip $ (replaceAll str "" (T.concat (map fromTagText tags)))
-
 
 {------------------------------------------------------------------------------
 ------------------------------------------------------------------------------}

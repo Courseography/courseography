@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module WebParsing.ArtSciParser (parseArtSci) where
+module WebParsing.ArtSciParser (parseArtSci, getDeptList, fasCalendarURL) where
 
 import Network.HTTP
 import Text.HTML.TagSoup
