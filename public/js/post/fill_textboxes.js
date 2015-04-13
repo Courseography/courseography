@@ -2,14 +2,15 @@
  * Fills textboxes with 300 level courses
  * @param {object} post Object corresponding to the POSt being dealt with
  * @param {HTMLElement[]} postElement Array of textboxes to fill
+ * @param {string} postName Name of post
  */
-function fill300Textboxes(post, postElement) {
+function fill300Textboxes(post, postElement, postName) {
     'use strict';
 
     for (var m = post.index300 + 1; m < activeCourses.length && post.filledTextboxes300 !== post.textboxes300; m++) {
         var course = activeCourses[m];
-        if (course.indexOf('CSC3') !== -1 && course.indexOf('CSC373') === -1 && 
-            course.indexOf('CSC369') === - 1) {
+        if (course.indexOf('CSC3') !== -1 && (postName == 'major' ||  (postName === 'specialist' && 
+            notSpecialistCourse(course) === true))) {
             postElement[post.filledTextboxes300].value = activeCourses[m];
             post.index300 = m;
             post.filledTextboxes300 += 1;
@@ -62,8 +63,8 @@ function fill300s() {
     }
     
     // fill courses that have been selected
-    fill300Textboxes(specialist, spec300s);
-    fill300Textboxes(major, maj300s);
+    fill300Textboxes(specialist, spec300s, 'specialist');
+    fill300Textboxes(major, maj300s, 'major');
 
     if (specialist.filledTextboxes300 < specialist.textboxes300) {
         fill400Textboxes(specialist, spec300s, '300');
@@ -104,15 +105,16 @@ function fill400s() {
  * @param {object} post Object corresponding to the POSt being dealt with
  * @param {HTMLElement[]} postElement Array of textboxes to fill
  * @param {string} level Level of course that we are filling textbox with 
+ * @param {string} postName Name of post
  */
-function fillExtraTextboxes(post, postElement, level) {
+function fillExtraTextboxes(post, postElement, level, postName) {
     'use strict';
 
     for (var i = post['index' + level] + 1; i < activeCourses.length && 
         post.filledTextboxesExtra !== post.textboxesExtra; i++) {
         var course = activeCourses[i];
-        if (postElement[post.filledTextboxesExtra].value === '' && course.indexOf('CSC' + level.charAt(0)) != -1 
-            && course.indexOf('CSC373') === -1 && course.indexOf('CSC369') === - 1) {
+        if (postElement[post.filledTextboxesExtra].value === '' && course.indexOf('CSC' + level.charAt(0)) != -1 &&
+            (postName === 'major' || postName === 'minor' || (postName === 'specialist' && notSpecialistCourse(course) === true))) {
             postElement[post.filledTextboxesExtra].value = activeCourses[i];
             postElement[post.filledTextboxesExtra].disabled = true;
             post['index' + level] = i;
@@ -153,18 +155,18 @@ function fillExtra() {
     }
 
     // fill courses that have been selected
-    fillExtraTextboxes(specialist, specExtra, '300');
-    fillExtraTextboxes(major, majExtra, '300');
-    fillExtraTextboxes(minor, minExtra, '300');
+    fillExtraTextboxes(specialist, specExtra, '300', 'specialist');
+    fillExtraTextboxes(major, majExtra, '300', 'major');
+    fillExtraTextboxes(minor, minExtra, '300', 'minor');
 
     if (specialist.filledTextboxesExtra < specialist.textboxesExtra) {
-        fillExtraTextboxes(specialist, specExtra, '400');
+        fillExtraTextboxes(specialist, specExtra, '400', 'specialist');
     } 
     if (major.filledTextboxesExtra < major.textboxesExtra) {
-        fillExtraTextboxes(major, majExtra, '400');
+        fillExtraTextboxes(major, majExtra, '400', 'major');
     }
     if (minor.filledTextboxesExtra < minor.textboxesExtra) {
-        fillExtraTextboxes(minor, minExtra, '400');
+        fillExtraTextboxes(minor, minExtra, '400', 'minor');
     }
 
     // add extra 200 courses for minor if extra space
