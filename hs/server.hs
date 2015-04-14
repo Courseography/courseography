@@ -11,6 +11,7 @@ import PostResponse
 import FourOhFourResponse
 import SearchResponse
 import AboutResponse
+import PrivacyResponse
 import Database.CourseQueries (retrieveCourse, allCourses, queryGraphs, courseInfo, deptList)
 import Css.CssGen
 import Filesystem.Path.CurrentOS
@@ -25,7 +26,8 @@ main = do
     redirectUrlGraphEmail <- retrieveAuthURL testUrl
     redirectUrlGraphPost <- retrieveAuthURL testPostUrl
     let staticDir = encodeString (parent $ decodeString cwd) ++ "public/"
-    contents <- readFile "../README.md"
+    aboutContents <- readFile "../README.md"
+    privacyContents <- readFile "../PRIVACY.md"
     print "Server is running..."
     simpleHTTP nullConf $
         msum [ dir "grid" gridResponse,
@@ -38,7 +40,8 @@ main = do
                dir "test-post" $ look "code" >>= postToFacebook,
                dir "post" postResponse,
                dir "draw" drawResponse,
-               dir "about" $ aboutResponse contents,
+               dir "about" $ aboutResponse aboutContents,
+               dir "privacy" $ privacyResponse privacyContents,
                dir "static" $ serveDirectory EnableBrowsing [] staticDir,
                dir "course" $ look "name" >>= retrieveCourse,
                dir "all-courses" $ liftIO allCourses,
