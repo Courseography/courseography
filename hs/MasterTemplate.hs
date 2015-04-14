@@ -15,6 +15,8 @@ masterTemplate title headers body scripts =
             H.title (H.toHtml title)
             H.meta ! A.httpEquiv "Content-Type"
                    ! A.content "text/html;charset=utf-8"
+            H.link ! A.rel "icon" ! A.type_ "image/png"
+                   ! A.href "static/res/ico/courseography.ico"
             sequence_ headers
         H.body $ do
             body
