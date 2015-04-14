@@ -73,7 +73,7 @@ function resetValues() {
 
 
 /**
- * Records a course as clicked. 
+ * Records a course as clicked.
  * @param {string} courseCode The course code
  */
 function activateCourse(courseCode) {
@@ -87,12 +87,12 @@ function activateCourse(courseCode) {
 
 
 /**
- * Records a course as not clicked. 
+ * Records a course as not clicked.
  * @param {string} courseCode The course code
  */
 function deactivateCourse(courseCode) {
     'use strict';
-    
+
     var elements = document.getElementsByClassName(courseCode);
     for (var i = 0; i < elements.length; i++) {
             elements[i].style.backgroundColor = '#BABABA';
@@ -181,14 +181,14 @@ function addExtraMinCourses() {
     var textboxesLeft = minor.textboxesExtra - minor.filledTextboxesExtra;
 
     for (var m = 0; m < Math.min(textboxesLeft, 3); m++) {
-        if (getCookie(minor.additionalMin200[m].toLowerCase()) === 'active' || 
+        if (getCookie(minor.additionalMin200[m].toLowerCase()) === 'active' ||
             getCookie(minor.additionalMin200[m].toLowerCase()) === 'overriden') {
             minExtra[minor.filledTextboxesExtra].value = minor.additionalMin200[m];
             minExtra[minor.filledTextboxesExtra].disabled = true;
             minor.creditCount += 0.5;
             minor.filledTextboxesExtra += 1;
         }
-        
+
     }
 }
 
@@ -200,7 +200,7 @@ function checkPostCompleted() {
     'use strict';
 
     $('#spec_creds').css('color', specialist.categoriesCompleted === specialist.categories ? 'green' : 'red');
-    
+
     $('#maj_creds').css('color', major.categoriesCompleted === major.categories ? 'green' : 'red');
 
     $('#min_creds').css('color', minor.categoriesCompleted === minor.categories ? 'green' : 'red');
@@ -244,7 +244,7 @@ function updateMatCreditCount() {
         if (specExtra[k].value.indexOf('MAT') > -1 || specExtra[k].value.indexOf('STA') > -1) {
             specialist.creditCount += 0.5;
             specialist.filledTextboxesExtra += 1;
-        } 
+        }
         if (k < 3 && (majExtra[k].value.indexOf('MAT') > -1 || majExtra[k].value.indexOf('STA') > -1)) {
                 major.creditCount += 0.5;
                 major.filledTextboxesExtra += 1;
@@ -260,9 +260,5 @@ function updateMatCreditCount() {
 function notSpecialistCourse(course) {
     'use strict';
 
-    if (specialistCourses.indexOf(course) === -1) {
-        return true
-    } else {
-        return false
-    }
+    return specialistCourses.indexOf(course) === -1;
 }

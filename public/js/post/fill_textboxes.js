@@ -8,8 +8,9 @@ function fill300Textboxes(post, postElement) {
 
     for (var m = post.index300 + 1; m < activeCourses.length && post.filledTextboxes300 !== post.textboxes300; m++) {
         var course = activeCourses[m];
-        if (course.indexOf('CSC3') !== -1 && (post.name === 'major' ||  (post.name === 'specialist' && 
-            notSpecialistCourse(course) === true))) {
+        if (course.indexOf('CSC3') !== -1 &&
+            (post.name === 'major' ||
+             (post.name === 'specialist' && notSpecialistCourse(course)))) {
             postElement[post.filledTextboxes300].value = activeCourses[m];
             post.index300 = m;
             post.filledTextboxes300 += 1;
@@ -28,7 +29,7 @@ function fill300Textboxes(post, postElement) {
 function fill400Textboxes(post, postElement, category) {
     'use strict';
 
-    for (var m = post.index400 + 1; m < activeCourses.length && 
+    for (var m = post.index400 + 1; m < activeCourses.length &&
         post['filledTextboxes' + category] !== post['textboxes' + category]; m++) {
         var course = activeCourses[m];
         if (course.indexOf('CSC4') !== -1) {
@@ -42,7 +43,7 @@ function fill400Textboxes(post, postElement, category) {
 
 
 /**
- * Autofills textboxes for 300 level courses. 
+ * Autofills textboxes for 300 level courses.
  */
 function fill300s() {
     'use strict';
@@ -50,7 +51,7 @@ function fill300s() {
     var spec300s = $('#spec300')[0].getElementsByTagName('input');
     var maj300s = $('#maj300')[0].getElementsByTagName('input');
 
-    
+
     // clear textboxes
     for (var k = 0; k < 3; k++) {
         spec300s[k].value = '';
@@ -60,7 +61,7 @@ function fill300s() {
             maj300s[k].disabled = true;
         }
     }
-    
+
     // fill courses that have been selected
     fill300Textboxes(specialist, spec300s);
     fill300Textboxes(major, maj300s);
@@ -71,7 +72,7 @@ function fill300s() {
     if (major.filledTextboxes300 < major.textboxes300) {
         fill400Textboxes(major, maj300s, '300');
     }
-}  
+}
 
 
 /**
@@ -82,7 +83,7 @@ function fill400s() {
 
     var spec400s = $('#spec400')[0].getElementsByTagName('input');
     var maj400s = $('#maj400')[0].getElementsByTagName('input');
- 
+
     // clear textboxes
     for (var k = 0; k < 3; k++) {
         spec400s[k].value = '';
@@ -92,7 +93,7 @@ function fill400s() {
             maj400s[k].disabled = true;
         }
     }
-    
+
     // fill courses that have been selected
     fill400Textboxes(specialist, spec400s, '400');
     fill400Textboxes(major, maj400s, '400');
@@ -103,16 +104,18 @@ function fill400s() {
  * Fills textboxes in Extra level category,
  * @param {object} post Object corresponding to the POSt being dealt with
  * @param {HTMLElement[]} postElement Array of textboxes to fill
- * @param {string} level Level of course that we are filling textbox with 
+ * @param {string} level Level of course that we are filling textbox with
  */
 function fillExtraTextboxes(post, postElement, level) {
     'use strict';
 
-    for (var i = post['index' + level] + 1; i < activeCourses.length && 
+    for (var i = post['index' + level] + 1; i < activeCourses.length &&
         post.filledTextboxesExtra !== post.textboxesExtra; i++) {
         var course = activeCourses[i];
-        if (postElement[post.filledTextboxesExtra].value === '' && course.indexOf('CSC' + level.charAt(0)) != -1 &&
-            (post.name === 'major' || post.name === 'minor' || (post.name === 'specialist' && notSpecialistCourse(course) === true))) {
+        if (postElement[post.filledTextboxesExtra].value === '' &&
+            course.indexOf('CSC' + level.charAt(0)) != -1 &&
+            (post.name === 'major' || post.name === 'minor' ||
+             (post.name === 'specialist' && notSpecialistCourse(course)))) {
             postElement[post.filledTextboxesExtra].value = activeCourses[i];
             postElement[post.filledTextboxesExtra].disabled = true;
             post['index' + level] = i;
@@ -141,7 +144,7 @@ function fillExtra() {
         if (specExtra[k].value.indexOf('MAT') === -1 && specExtra[k].value.indexOf('STA') === -1) {
             specExtra[k].value = '';
             specExtra[k].disabled = false;
-        } 
+        }
         if (k < 3) {
             if (majExtra[k].value.indexOf('MAT') === -1 && majExtra[k].value.indexOf('STA') === -1) {
                 majExtra[k].value = '';
@@ -149,7 +152,7 @@ function fillExtra() {
             }
             minExtra[k].value = '';
             minExtra[k].disabled = true;
-        } 
+        }
     }
 
     // fill courses that have been selected
@@ -159,7 +162,7 @@ function fillExtra() {
 
     if (specialist.filledTextboxesExtra < specialist.textboxesExtra) {
         fillExtraTextboxes(specialist, specExtra, '400');
-    } 
+    }
     if (major.filledTextboxesExtra < major.textboxesExtra) {
         fillExtraTextboxes(major, majExtra, '400');
     }
@@ -211,7 +214,7 @@ function fillMisc() {
             break;
         }
     }
-    
+
     // update category
     updateInqCategory();
 }
