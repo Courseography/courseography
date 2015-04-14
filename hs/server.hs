@@ -10,7 +10,7 @@ import ImageResponse
 import PostResponse
 import FourOhFourResponse
 import SearchResponse
---import AboutResponse
+import AboutResponse
 import Database.CourseQueries (retrieveCourse, allCourses, queryGraphs, courseInfo, deptList)
 import Css.CssGen
 import Filesystem.Path.CurrentOS
@@ -38,7 +38,7 @@ main = do
                dir "test-post" $ look "code" >>= postToFacebook,
                dir "post" postResponse,
                dir "draw" drawResponse,
-               --dir "about" $ aboutResponse contents,
+               dir "about" $ aboutResponse contents,
                dir "static" $ serveDirectory EnableBrowsing [] staticDir,
                dir "course" $ look "name" >>= retrieveCourse,
                dir "all-courses" $ liftIO allCourses,
