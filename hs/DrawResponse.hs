@@ -32,7 +32,7 @@ drawHtml = createTag H.div "about-div" "" "Draw a Graph"
 
 modePanel :: H.Html
 modePanel = createTag H.div "side-panel-wrap" "" $ do
-    createTag H.div "mode-panel" "" $ do 
+    createTag H.div "mode-panel" "" ""
     createTag H.div "node-mode" "mode clicked" "NODE (n)"
     H.input ! A.id "course-code" ! A.class_ "course-code" ! A.name "course-code" ! A.placeholder "Course Code" ! A.autocomplete "off" ! A.type_ "text" ! A.size "10"
     createTag H.div "add-text" "button" "ADD"
