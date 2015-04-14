@@ -17,3 +17,4 @@ out/
 style/
 SVGGen.hs
 res/graphs/CSC/csc_graph.svg
+hs/dist/
