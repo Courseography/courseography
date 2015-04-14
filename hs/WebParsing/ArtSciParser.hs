@@ -51,14 +51,21 @@ getCalendar str = do
     let coursesSoup = lastH2 tags
     let course = map (processCourseToData . (filter isTagText)) $ partitions isCourseTitle coursesSoup
     print $ "parsing " ++ str
-    mapM_ (\x -> print (prereqs x)) course 
     runSqlite dbStr $ do
         runMigration migrateAll
         mapM_ insertCourse course
     where
         isNotComment (TagComment _) = False
         isNotComment _ = True
-        lastH2 = last . sections (isTagOpenName "h2")
+        -- Changed this function - wasn't parsing for crs_cjs (or the next one)
+        lastH2 tags =
+            let s = sections (isTagOpenName "h2") tags
+            in
+                if null s
+                then
+                    []
+                else
+                    last s
         isCourseTitle (TagOpen _ attrs) = any (\x -> fst x == "name" && T.length (snd x) == 8) attrs
         isCourseTitle _ = False
 
