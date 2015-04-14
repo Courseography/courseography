@@ -3,14 +3,14 @@ var specialist = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'fille
                   'filledTextboxes400': 0, 'filledTextboxesExtra': 0, 'specCount': 0,
                   'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC209', 'CSC236', 'CSC258', 'CSC263',
                   'Sta1', 'Lin1', 'Calc1', 'CSC369', 'CSC373'], 'textboxes300': 3, 'textboxes400': 3,
-                  'textboxesExtra': 4, 'categories': 17, 'creditCount': 0};
+                  'textboxesExtra': 4, 'categories': 17, 'creditCount': 0, 'name': 'specialist'};
 var major = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0,
              'filledTextboxes400': 0, 'filledTextboxesExtra': 0, 'majCount': 0, 'reqs': ['CSC108',
              'CSC148', 'CSC165', 'CSC207', 'CSC236', 'CSC258', 'CSC263', 'Sta1', 'Calc1'], 'textboxes300': 2,
-             'textboxes400': 1, 'textboxesExtra': 3, 'categories': 13, 'creditCount': 0};
+             'textboxes400': 1, 'textboxesExtra': 3, 'categories': 13, 'creditCount': 0, 'name': 'major'};
 var minor = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxesExtra': 0,
              'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC236'], 'textboxesExtra': 3, 'categories': 6,
-             'creditCount': 0, 'additionalMin200': ['CSC209', 'CSC258', 'CSC263']};
+             'creditCount': 0, 'additionalMin200': ['CSC209', 'CSC258', 'CSC263'], 'name': 'minor'};
 
 
 /**
@@ -62,13 +62,13 @@ function resetValues() {
     specialist = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0, 'filledTextboxes400': 0,
                   'filledTextboxesExtra': 0, 'specCount': 0, 'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC209', 'CSC236',
                   'CSC258', 'CSC263', 'Sta1', 'Lin1', 'Calc1', 'CSC369', 'CSC373'], 'textboxes300': 3, 'textboxes400': 3, 'textboxesExtra': 4,
-                  'categories': 17, 'creditCount': 0};
+                  'categories': 17, 'creditCount': 0, 'name': 'specialist'};
     major = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0, 'filledTextboxes400': 0,
              'filledTextboxesExtra': 0, 'majCount': 0, 'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC236',
              'CSC258', 'CSC263', 'Sta1', 'Calc1'], 'textboxes300': 2, 'textboxes400': 1, 'textboxesExtra': 3, 'categories': 13,
-             'creditCount': 0};
+             'creditCount': 0, 'name': 'major'};
     minor = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxesExtra': 0, 'reqs': ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC236'],
-             'textboxesExtra': 3, 'categories': 6, 'creditCount': 0, 'additionalMin200': ['CSC209', 'CSC258', 'CSC263']};
+             'textboxesExtra': 3, 'categories': 6, 'creditCount': 0, 'additionalMin200': ['CSC209', 'CSC258', 'CSC263'], 'name': 'minor'};
 }
 
 
@@ -249,5 +249,20 @@ function updateMatCreditCount() {
                 major.creditCount += 0.5;
                 major.filledTextboxesExtra += 1;
         }
+    }
+}
+
+/**
+ * Returns whether course is a specialist course or not
+ * @param {string} Name of course
+ * @return {boolean} True if course is a specialist, False otherwise
+**/
+function notSpecialistCourse(course) {
+    'use strict';
+
+    if (specialistCourses.indexOf(course) === -1) {
+        return true
+    } else {
+        return false
     }
 }

@@ -15,6 +15,8 @@ var allCourses = ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC236',
                   'CSC463', 'CSC465', 'CSC469', 'CSC486', 'CSC488', 
                   'ECE489', 'CSC373'];
 
+specialistCourses = ['CSC373', 'CSC369', 'Lin1'];
+
 var areaNames = ['theory', 'core', 'se', 'systems', 'hci',
                  'graphics', 'num', 'ai', 'dbweb'];
 
