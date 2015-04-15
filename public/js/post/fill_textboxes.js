@@ -12,7 +12,7 @@ function fill300Textboxes(post, postElement) {
             (post.name === 'major' ||
              (post.name === 'specialist' && notSpecialistCourse(course)))) {
             postElement[post.filledTextboxes300].value = activeCourses[m];
-            post.index300 = m;
+            post.index300 = m + 1;
             post.filledTextboxes300 += 1;
             post.creditCount += 0.5;
         }
@@ -109,7 +109,7 @@ function fill400s() {
 function fillExtraTextboxes(post, postElement, level) {
     'use strict';
 
-    for (var i = post['index' + level] + 1; i < activeCourses.length &&
+    for (var i = post['index' + level]; i < activeCourses.length &&
         post.filledTextboxesExtra !== post.textboxesExtra; i++) {
         var course = activeCourses[i];
         if (postElement[post.filledTextboxesExtra].value === '' &&
