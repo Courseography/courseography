@@ -168,7 +168,7 @@ convertRectToSVG styled courseMap rect
                ! S.customAttribute "text-rendering" "geometricPrecision"
                ! S.customAttribute "shape-rendering" "geometricPrecision"
                -- TODO: Remove the reliance on the colours here
-               ! (if class_ /= "hybrid"
+               ! (if styled || class_ /= "hybrid"
                   then
                       A.style (stringValue style)
                   else
@@ -180,7 +180,7 @@ convertRectToSVG styled courseMap rect
                          ! A.y (stringValue . show . snd $ shapePos rect)
                          ! A.width (stringValue . show $ shapeWidth rect)
                          ! A.height (stringValue . show $ shapeHeight rect)
-                         ! if class_ /= "hybrid"
+                         ! if styled || class_ /= "hybrid"
                            then A.style (stringValue $ "fill:" ++
                                          getFill (shapeId_ rect) ++
                                          ";")
