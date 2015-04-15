@@ -178,15 +178,16 @@ function addExtraMinCourses() {
     'use strict';
 
     var minExtra = $('#minextra')[0].getElementsByTagName('input');
-    var textboxesLeft = minor.textboxesExtra - minor.filledTextboxesExtra;
+    var current = minor.filledTextboxesExtra;
 
-    for (var m = 0; m < Math.min(textboxesLeft, 3); m++) {
+    for (var m = 0; m < 3 && minor.filledTextboxesExtra < 3; m++) {
         if (getCookie(minor.additionalMin200[m].toLowerCase()) === 'active' ||
-            getCookie(minor.additionalMin200[m].toLowerCase()) === 'overriden') {
-            minExtra[minor.filledTextboxesExtra].value = minor.additionalMin200[m];
-            minExtra[minor.filledTextboxesExtra].disabled = true;
+            getCookie(minor.additionalMin200[m].toLowerCase()) === 'overridden') {
+            minExtra[current].value = minor.additionalMin200[m];
+            minExtra[current].disabled = true;
             minor.creditCount += 0.5;
             minor.filledTextboxesExtra += 1;
+            current += 1;
         }
 
     }
