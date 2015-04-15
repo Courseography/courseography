@@ -166,7 +166,8 @@ modalCSS = do
 fbModalCSS = do
     "#post-image" ? do
         borderRadius (px 5) (px 5) (px 5) (px 5)
-        margin nil nil (px 10) nil
+        margin nil auto (px 10) auto
+        maxWidth (pct 100)
     "#modal-buttons" ? do
         width (pct 40)
         margin (px 10) auto nil auto
