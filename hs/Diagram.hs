@@ -8,6 +8,7 @@ import Diagrams.Backend.SVG
 import Data.List
 import Text.Blaze.Svg.Renderer.String as Svg
 import Data.List.Utils (replace)
+import Data.List.Split (splitOn)
 
 days :: [String]
 days = ["Mon", "Tue", "Wed", "Thu", "Fri"]
@@ -52,7 +53,7 @@ makeTable s session = vcat $ (header session): intersperse rowBorder (map makeRo
 
 renderTable :: String -> String -> String -> IO ()
 renderTable filename courses session = do
-    let courseTable = partition5 $ lines courses
+    let courseTable = partition5 $ splitOn "_" courses
     print courseTable
     let g = makeTable (zipWith (:) times courseTable) session
     let svg = renderDia SVG (SVGOptions (Width 600) Nothing) g
