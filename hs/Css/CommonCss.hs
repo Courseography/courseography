@@ -77,6 +77,7 @@ headerCSS = do
             a <? do
                 color white
             borderRadius (px 3) (px 3) (px 3) (px 3)
+            cursor pointer
         ".fb-login-button" ? do
             height (px 40)
             verticalAlign middle
