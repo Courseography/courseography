@@ -180,7 +180,7 @@ function addExtraMinCourses() {
     var minExtra = $('#minextra')[0].getElementsByTagName('input');
     var current = minor.filledTextboxesExtra;
 
-    for (var m = 0; m < 3 && minor.filledTextboxesExtra < 3; m++) {
+    for (var m = 0; m < 3 && current < 3; m++) {
         if (getCookie(minor.additionalMin200[m].toLowerCase()) === 'active' ||
             getCookie(minor.additionalMin200[m].toLowerCase()) === 'overridden') {
             minExtra[current].value = minor.additionalMin200[m];
