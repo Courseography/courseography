@@ -22,6 +22,7 @@ import Data.Text.Read
 --and a list of number representations of days
 convertTime :: (T.Text, [Double]) -> (T.Text, [Double])
 convertTime (str, times)
+   |T.null str = ("", times)
    |T.head str == 'M' = convertTime (T.drop 1 str, 0:times)
    |T.head str == 'T' = convertTime (T.drop 1 str, 1:times)
    |T.head str == 'W' = convertTime (T.drop 1 str, 2:times)

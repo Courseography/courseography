@@ -30,7 +30,7 @@ data CourseSlot =
               slotSection :: T.Text,
               slotTime_str :: T.Text,
               slotInstructor :: T.Text
-              }
+              } deriving Show
 
 timetableUrl :: String
 timetableUrl = "http://www.artsandscience.utoronto.ca/ofr/timetable/winter/"
@@ -207,7 +207,7 @@ main = do
 
 parseTT :: IO ()
 parseTT = do
-    rsp <- simpleHTTP (getRequest $ timetableUrl ++ "sponsors.htm")
+    rsp <- simpleHTTP (getRequest timetableUrl)
     body <- getResponseBody rsp
     let depts = getDeptList $ parseTags body
     mapM_ getDeptTimetable depts

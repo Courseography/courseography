@@ -6,6 +6,6 @@ import WebParsing.TimeTableParser
 
 parseAll :: IO ()
 parseAll = do
-	parseArtSci
-	parseUTSC
-	parseTT
+    parseArtSci
+    --parseUTSC
+    parseTT
