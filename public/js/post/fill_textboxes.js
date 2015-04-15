@@ -6,7 +6,7 @@
 function fill300Textboxes(post, postElement) {
     'use strict';
 
-    for (var m = post.index300 + 1; m < activeCourses.length && post.filledTextboxes300 !== post.textboxes300; m++) {
+    for (var m = post.index300; m < activeCourses.length && post.filledTextboxes300 !== post.textboxes300; m++) {
         var course = activeCourses[m];
         if (course.indexOf('CSC3') !== -1 &&
             (post.name === 'major' ||
