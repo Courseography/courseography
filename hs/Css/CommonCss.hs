@@ -161,3 +161,12 @@ modalCSS = do
     ".ui-dialog" ? do
         tr ? do
             margin nil auto nil auto
+    fbModalCSS
+
+fbModalCSS = do
+    "#post-image" ? do
+        borderRadius (px 5) (px 5) (px 5) (px 5)
+        margin nil nil (px 10) nil
+    "#modal-buttons" ? do
+        width (pct 40)
+        margin (px 10) auto nil auto

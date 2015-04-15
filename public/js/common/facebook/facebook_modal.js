@@ -22,7 +22,7 @@ function createFBModalDiv() {
     var img = (context === 'graph') ? getGraphImage() : getGridImage(session);
     var contentDiv = $('<div></div>');
     var topContentDiv = $('<div></div>');
-    var bottomContentDiv = $('<div></div>');
+    var bottomContentDiv = $('<div id="modal-buttons"></div>');
     var authToken = FB.getAuthResponse()['accessToken'];
     var input = $('<input class="form-control" placeholder="Enter a message" name="message" type="text" maxlength="1000" id="fb-message"/>');
     var postButton = $('<button type="button" class="btn btn-primary">Post To Facebook</button>');
@@ -48,8 +48,7 @@ function createFBModalDiv() {
 
     bottomContentDiv.append(postButton);
 
-    bottomContentDiv.css('width', '40%');
-    topContentDiv.html('<img id="post-image" style="border-radius:15px;" height="588" width="789" src="data:image/png;base64,' + img + '" />');
+    topContentDiv.html('<img id="post-image" src="data:image/png;base64,' + img + '" />');
 
     if (context === 'grid') {
         bottomContentDiv.append(sessionButton);
