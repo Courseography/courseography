@@ -65,10 +65,7 @@ panelCSS = do
         border solid (px 2) black
         roundCorners
         backgroundColor $ parse "#008080"
-    "#mode-panel" ? do
-        height (pct 100)
-        width (pct 100)
-        "overflow-y" -: "auto"
+        overflowY auto
 
 {- Override the default scrollbar styling for side panel -}
 scrollBar = do
