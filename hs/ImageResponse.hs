@@ -35,7 +35,7 @@ getGraphImage courseMap =
        let (rand, _) = next gen
            svgFilename = (show rand ++ ".svg")
            imageFilename = (show rand ++ ".png")
-       buildSVG 1 courseMap svgFilename
+       buildSVG 1 courseMap svgFilename True
        returnImageData svgFilename imageFilename
 
 -- | Creates an image, and returns the base64 representation of that image.

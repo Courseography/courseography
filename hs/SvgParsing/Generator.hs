@@ -21,6 +21,7 @@ import Text.Blaze.Internal (stringValue)
 import Text.Blaze (toMarkup)
 import Css.Constants
 import qualified Data.Map.Strict as M
+import Data.Monoid (mempty)
 
 -- | Builds an SVG document.
 makeSVGDoc :: M.Map String String
@@ -35,8 +36,9 @@ makeSVGDoc :: M.Map String String
                       --   in the graph.
            -> [Text]  -- ^ A list of the 'Text' elements that will be included
                       --   in the graph.
+           -> Bool    -- ^ Whether to include inline styles in the graph.
            -> S.Svg   -- ^ The completed SVG document.
-makeSVGDoc courseMap rects ellipses edges regions regionTexts =
+makeSVGDoc courseMap rects ellipses edges regions regionTexts styled =
     S.docTypeSvg ! A.width "1052.3622"
                  ! A.height "744.09448"
                  ! S.customAttribute "xmlns:svg" "http://www.w3.org/2000/svg"
@@ -47,21 +49,21 @@ makeSVGDoc courseMap rects ellipses edges regions regionTexts =
                  ! A.version "1.1" $ do
                       makeSVGDefs
                       S.g ! A.id_ "regions" $
-                          concatSVG $ map convertRegionToSVG
+                          concatSVG $ map (convertRegionToSVG styled)
                                           regions
                       S.g ! A.id_ "nodes"
                           ! A.style "stroke:#000000;" $
-                              concatSVG $ map (convertRectToSVG courseMap)
+                              concatSVG $ map (convertRectToSVG styled courseMap)
                                               rects
                       S.g ! A.id_ "bools" $
-                          concatSVG $ map convertEllipseToSVG
+                          concatSVG $ map (convertEllipseToSVG styled)
                                           ellipses
                       S.g ! A.id_ "edges"
                           ! A.style "stroke:#000000" $
-                              concatSVG $ map convertEdgeToSVG
+                              concatSVG $ map (convertEdgeToSVG styled)
                                               edges
                       S.g ! A.id_ "region-labels" $
-                          concatSVG $ map (convertTextToSVG Region)
+                          concatSVG $ map (convertTextToSVG styled Region)
                                           regionTexts
 
 -- | Builds an SVG document.
@@ -74,8 +76,9 @@ buildSVG :: Int64                -- ^ The ID of the graph that is being built.
                                  --   courses the user has selected.
          -> String               -- ^ The filename that this graph will be 
                                  --   written to.
+         -> Bool                 -- ^ Whether to include inline styles.
          -> IO ()
-buildSVG gId courseMap filename =
+buildSVG gId courseMap filename styled =
     runSqlite dbStr $ do
         sqlRects    :: [Entity Shape] <- selectList 
                                              [ShapeType_ <-. [Node, Hybrid],
@@ -103,6 +106,7 @@ buildSVG gId courseMap filename =
                                                     edges
                                                     regions
                                                     regionTexts
+                                                    styled
         liftIO $ writeFile filename stringSVG
 
 -- | Gets a tuple from areaMap where id_ is in the list of courses for that
@@ -146,8 +150,8 @@ intersectsWithShape shapes text =
     any (intersectsWithPoint (textPos text)) shapes
 
 -- | Converts a `Rect` to SVG.
-convertRectToSVG :: M.Map String String -> Shape -> S.Svg
-convertRectToSVG courseMap rect
+convertRectToSVG :: Bool -> M.Map String String -> Shape -> S.Svg
+convertRectToSVG styled courseMap rect
     | shapeFill rect == "none" = S.rect
     | otherwise =
         let style = case shapeType_ rect of
@@ -163,17 +167,26 @@ convertRectToSVG courseMap rect
                                                  (getArea (shapeId_ rect)))
                ! S.customAttribute "text-rendering" "geometricPrecision"
                ! S.customAttribute "shape-rendering" "geometricPrecision"
-               ! A.style (stringValue style) $
+               -- TODO: Remove the reliance on the colours here
+               ! (if class_ /= "hybrid"
+                  then
+                      A.style (stringValue style)
+                  else
+                      mempty)
+               $
                do S.rect ! A.rx "4"
                          ! A.ry "4"
                          ! A.x (stringValue . show . fst $ shapePos rect)
                          ! A.y (stringValue . show . snd $ shapePos rect)
                          ! A.width (stringValue . show $ shapeWidth rect)
                          ! A.height (stringValue . show $ shapeHeight rect)
-                         ! A.style (stringValue $ "fill:" ++
-                                    getFill (shapeId_ rect) ++
-                                    ";")
-                  concatSVG $ map (convertTextToSVG (shapeType_ rect))
+                         ! if class_ /= "hybrid"
+                           then A.style (stringValue $ "fill:" ++
+                                         getFill (shapeId_ rect) ++
+                                         ";")
+                           else
+                               mempty
+                  concatSVG $ map (convertTextToSVG styled (shapeType_ rect))
                                   (shapeText rect)
 
 -- | Maps styles to courses based on the courses status.
@@ -191,19 +204,23 @@ isSelected courseStatus =
     isPrefixOf "overridden" courseStatus
 
 -- | Converts a `Text` to SVG.
-convertTextToSVG :: ShapeType -> Text -> S.Svg
-convertTextToSVG type_ text =
+convertTextToSVG :: Bool -> ShapeType -> Text -> S.Svg
+convertTextToSVG styled type_ text =
     S.text_ ! A.x (stringValue $ show xPos)
             ! A.y (stringValue $ show yPos)
-            ! A.style (stringValue $
-                       getTextStyle type_ ++
-                       "font-family:sans-serif;stroke:none;")
+            ! (if styled
+              then
+                  A.style (stringValue $
+                           getTextStyle type_ ++
+                           "font-family:sans-serif;stroke:none;")
+              else
+                  mempty)
             $ toMarkup $ textText text
     where (xPos, yPos) = textPos text
 
 -- | Converts a `Path` to SVG.
-convertEdgeToSVG :: Path -> S.Svg
-convertEdgeToSVG path =
+convertEdgeToSVG :: Bool -> Path -> S.Svg
+convertEdgeToSVG styled path =
     S.path ! A.id_ (stringValue $ "path" ++ pathId_ path)
            ! A.class_ "path"
            ! A.d (stringValue $ 'M' : buildPathString (pathPoints path))
@@ -212,31 +229,40 @@ convertEdgeToSVG path =
                                                           $ pathSource path)
            ! S.customAttribute "target-node" (stringValue $ filter (/=',') 
                                                           $ pathTarget path)
-           ! A.style (stringValue $ "fill:" ++
-                      pathFill path ++
-                      ";fill-opacity:1;")
+           ! if styled
+             then
+                 A.style (stringValue $ "fill:" ++
+                          pathFill path ++
+                          ";fill-opacity:1;")
+             else
+                 mempty
 
 -- | Converts a `Path` to SVG.
-convertRegionToSVG :: Path -> S.Svg
-convertRegionToSVG path =
+convertRegionToSVG :: Bool -> Path -> S.Svg
+convertRegionToSVG styled path =
     S.path ! A.id_ (stringValue $ "region" ++ pathId_ path)
            ! A.class_ "region"
            ! A.d (stringValue $ 'M' : buildPathString (pathPoints path))
-           ! A.style (stringValue $ "fill:" ++
-                      pathFill path ++
-                      ";opacity:0.7;fill-opacity:0.58;")
+           ! A.style (stringValue $ "fill:" ++ pathFill path ++ ";" ++
+                      if styled
+                      then
+                          ";opacity:0.7;fill-opacity:0.58;"
+                      else "")
 
 -- | Converts an `Ellipse` to SVG.
-convertEllipseToSVG :: Shape -> S.Svg
-convertEllipseToSVG ellipse =
+convertEllipseToSVG :: Bool -> Shape -> S.Svg
+convertEllipseToSVG styled ellipse =
     S.g ! A.id_ (stringValue (shapeId_ ellipse))
         ! A.class_ "bool" $ do
             S.ellipse ! A.cx (stringValue . show . fst $ shapePos ellipse)
                       ! A.cy (stringValue . show . snd $ shapePos ellipse)
                       ! A.rx (stringValue . show $ shapeWidth ellipse / 2)
                       ! A.ry (stringValue . show $ shapeHeight ellipse / 2)
-                      ! A.style "stroke:#000000;fill:none;"
-            concatSVG $ map (convertTextToSVG BoolNode) (shapeText ellipse)
+                      ! if styled
+                        then
+                            A.style "stroke:#000000;fill:none;"
+                        else mempty
+            concatSVG $ map (convertTextToSVG styled BoolNode) (shapeText ellipse)
 
 getTextStyle :: ShapeType -- ^ The parent element of the Text element in 
                           --   question.

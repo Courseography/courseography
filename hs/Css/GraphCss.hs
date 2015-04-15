@@ -35,6 +35,7 @@ nodeCSS = "g" ? do
         "text" ? do
             fontSize (pt 12)
             faded
+            stroke "none"
         "data-active" @= "active" & do
             "rect" <? do
                 wideStroke
@@ -85,11 +86,18 @@ nodeCSS = "g" ? do
             stroke "black"
     ".hybrid" & do
         cursor cursorDefault
+        "text" <? do
+            stroke "none"
+            fill "white"
+            fontSize (pt 7)
+        "rect" <? do
+            fill "#888888"
+            stroke "black"
     ".bool" & do
         cursor cursorDefault
         "data-active" @= "active" & do
             "ellipse" <? do
-                fill "white"
+                fill "none"
                 stroke "black"
         "data-active" @= "overridden" & do
             "ellipse" <? do
@@ -100,9 +108,11 @@ nodeCSS = "g" ? do
                 fill lightGrey
                 faded
                 strokeDashed
+                stroke "black"
         "data-active" @= "takeable" & do
             "ellipse" <? do
                 fill lightGrey
+                stroke "black"
         "data-active" @= "missing" & do
             "ellipse" <? do
                 fill "white"
@@ -112,7 +122,8 @@ nodeCSS = "g" ? do
             strokeRed
         "text" <? do
             fontFamily ["Comic Sans MS"] [sansSerif]
-            fontWeight bold
+            stroke "none"
+            fontSize (pt 6)
 
 {- pathCSS
  - Generates CSS for paths between nodes
@@ -134,9 +145,6 @@ pathCSS = "path" ? do
     "data-active" @= "drawn" & do
         faded
         wideStroke
-    "data-active" @= "region" & do
-        faded
-        "stroke-width" -: "0"
 
 
 {- resetCSS
@@ -331,5 +339,10 @@ titleCSS = "#svgTitle" ? do
 {- regionCSS
  - Generates CSS for focus regions in the graph. -}
 
-regionCSS = ".region-label" ? do
-    "text-anchor" -: "start"
+regionCSS = do
+    "#region-labels > text" ? do
+        "text-anchor" -: "start"
+        fontSize (pt 9)
+    ".region" ? do
+        opacity 0.7
+        "fill-opacity" -: "0.58"
