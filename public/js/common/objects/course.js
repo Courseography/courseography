@@ -376,7 +376,7 @@ Course.prototype.renderHeader = function () {
     $(aboutImg).attr('src', 'static/res/ico/about.png')
                .addClass('close-icon')
                .click(function () {
-                   openModal(tmp.name);
+                   openModal(tmp.name, createModalDiv(tmp.name));
                });
     iconDiv.appendChild(courseImg);
     iconDiv.appendChild(aboutImg);
