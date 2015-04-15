@@ -50,7 +50,7 @@ var Search = React.createClass({
         return (
             <div id="search">
             <div id="timetableSearch">
-                <h2>2014-2015 Timetable Search</h2>
+                <h2>2015-2016 Timetable Search</h2>
                 <div id="searchOptions">
                 <label htmlFor="deptSelect">Dept:</label>
                 <select ref="deptSelect" name="dept" onChange={this.updateDept} id="deptSelect">
