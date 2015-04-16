@@ -311,7 +311,7 @@ sidebarCSS = do
         paddingLeft (px 5)
         paddingRight (px 5)
     ".active" & do
-        backgroundColor purple1
+        backgroundColor purple2
     ".graph-button" & do
         display block
         cursor pointer
