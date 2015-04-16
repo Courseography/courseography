@@ -29,12 +29,12 @@ function fill300Textboxes(post, postElement) {
 function fill400Textboxes(post, postElement, category) {
     'use strict';
 
-    for (var m = post.index400 + 1; m < activeCourses.length &&
+    for (var m = post.index400; m < activeCourses.length &&
         post['filledTextboxes' + category] !== post['textboxes' + category]; m++) {
         var course = activeCourses[m];
         if (course.indexOf('CSC4') !== -1) {
             postElement[post['filledTextboxes' + category]].value = activeCourses[m];
-            post.index400 = m;
+            post.index400 = m + 1;
             post['filledTextboxes' + category] += 1;
             post.creditCount += 0.5;
         }
