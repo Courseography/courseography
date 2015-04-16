@@ -178,6 +178,8 @@ function reset() {
     // Edges
     $('path').attr('data-active', 'inactive');
 
+    $('.region').attr('data-active', '');
+
     // Clear 'My Courses' tab
     $('#courseGrid').empty();
 
