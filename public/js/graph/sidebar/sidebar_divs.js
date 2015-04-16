@@ -47,6 +47,7 @@ function resetDivs() {
     $('#focuses').css('display', 'none');
     $('#graphs').css('display', 'none');
     $('#graphs-nav, #focuses-nav').removeClass('active');
+    $('#reset').css('display', 'none');
 }
 
 
