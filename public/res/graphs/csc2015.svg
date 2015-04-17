@@ -4518,16 +4518,9 @@
        id="path4972"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="ccccc" />
-  </g>
-  <g
-     inkscape:groupmode="layer"
-     id="layer2"
-     inkscape:label="region_labels"
-     sodipodi:insensitive="true"
-     transform="translate(-95.686275,-33.294118)">
     <text
        xml:space="preserve"
-       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       style="font-size:40px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Sans;display:inline;line-height:125%;letter-spacing:0px;word-spacing:0px"
        x="490.14081"
        y="579.56683"
        id="text4342"
@@ -4544,7 +4537,7 @@
          style="font-size:19px">Computing</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       style="font-size:40px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Sans;display:inline;line-height:125%;letter-spacing:0px;word-spacing:0px"
        x="249.4202"
        y="438.90198"
        id="text4342-6"
@@ -4555,28 +4548,12 @@
          id="tspan4346-7"
          style="font-size:19px">Graphics</tspan></text>
   </g>
-  <text
-     xml:space="preserve"
-     style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-     x="247.13324"
-     y="301.10785"
-     id="text4342-1"
-     sodipodi:linespacing="125%"><tspan
-       sodipodi:role="line"
-       x="247.13324"
-       y="301.10785"
-       id="tspan4346-2"
-       style="font-size:19px;text-align:end;text-anchor:end">Humans</tspan><tspan
-       sodipodi:role="line"
-       x="247.13324"
-       y="324.85785"
-       style="font-size:19px;text-align:end;text-anchor:end"
-       id="tspan4387">and</tspan><tspan
-       sodipodi:role="line"
-       x="247.13324"
-       y="348.60785"
-       style="font-size:19px;text-align:end;text-anchor:end"
-       id="tspan4389">Computing</tspan></text>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="region_labels"
+     transform="translate(-95.686275,-33.294118)"
+     style="display:inline" />
   <text
      xml:space="preserve"
      style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
@@ -4659,4 +4636,40 @@
        y="221.44875"
        style="font-size:19px"
        id="tspan4471">Statistics</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+     x="177.8669"
+     y="303.10342"
+     id="text4342-60-6"
+     sodipodi:linespacing="125%"><tspan
+       sodipodi:role="line"
+       x="177.8669"
+       y="303.10342"
+       style="font-size:19px"
+       id="tspan4471-4">Humans</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+     x="214.10217"
+     y="325.69171"
+     id="text4342-60-8"
+     sodipodi:linespacing="125%"><tspan
+       sodipodi:role="line"
+       x="214.10217"
+       y="325.69171"
+       style="font-size:19px"
+       id="tspan4471-1">and</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+     x="155.27866"
+     y="346.80933"
+     id="text4342-60-85"
+     sodipodi:linespacing="125%"><tspan
+       sodipodi:role="line"
+       x="155.27866"
+       y="346.80933"
+       style="font-size:19px"
+       id="tspan4471-6">Computing</tspan></text>
 </svg>

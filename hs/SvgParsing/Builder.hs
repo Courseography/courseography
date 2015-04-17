@@ -47,7 +47,7 @@ buildRect texts entity =
                             (shapeWidth entity)
                             (shapeHeight entity)
                             (shapePos entity)
-                            9
+                            5
                             . textPos
                             ) texts
         textString = concatMap textText rectTexts
@@ -66,7 +66,7 @@ buildRect texts entity =
              (shapeFill entity)
              (shapeStroke entity)
              rectTexts
-             9
+             5
              (shapeType_ entity)
 
 -- | Gets the first rect that intersects with the given coordinates.
