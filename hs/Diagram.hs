@@ -14,7 +14,7 @@ days :: [String]
 days = ["Mon", "Tue", "Wed", "Thu", "Fri"]
 
 times :: [String]
-times = map (\x -> show x ++ ":00") ([8..12] ++ [1..8])
+times = map (\x -> show x ++ ":00") ([8..12] ++ [1..8] :: [Int])
 
 cell :: Diagram B R2
 cell = rect 2 0.8
