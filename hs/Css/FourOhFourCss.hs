@@ -3,9 +3,6 @@
 module Css.FourOhFourCss where
 
 import Clay
-import Prelude hiding ((**))
-import Data.Monoid
-import Css.Constants
 
 {- aboutStyles
  - Generates CSS for the about page. -}

@@ -6,7 +6,6 @@ import           Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 import qualified Text.Blaze.Svg11 as S
-import Control.Monad    (msum)
 
 insertSVG :: H.AttributeValue -> H.Html
 insertSVG src = H.object ! A.data_ src ! A.type_ "image/svg+xml" $ ""

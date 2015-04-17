@@ -4,7 +4,6 @@ module Css.PostCss where
 
 import Clay
 import Prelude hiding ((**))
-import Data.Monoid
 import Css.Constants
 
 -- Post Styles
