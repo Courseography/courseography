@@ -278,22 +278,24 @@ areaMap :: M.Map [String] (T.Text, String)
 areaMap =  M.fromList
            [
            (["csc165", "csc236", "csc240", "csc263", "csc265",
-             "csc310", "csc324", "csc373", "csc438", "csc448",
+             "csc310", "csc373", "csc438", "csc448",
              "csc463"], (theoryDark, "theory")),
            (["calc1", "sta1", "sta2", "lin1", "csc108", "csc148", "csc104",
              "csc120", "csc490", "csc491", "csc494", "csc495"],
              (coreDark, "core")),
-           (["csc207", "csc301", "csc302", "csc410", "csc465"], (seDark, "se")),
+           (["csc207", "csc301", "csc302", "csc410", "csc465",
+             "csc324"], (seDark, "se")),
            (["csc209", "csc258", "csc358", "csc369", "csc372",
-             "csc458", "csc469", "csc488", "ece385", "ece489"],
+             "csc458", "csc469", "csc488", "ece385", "ece489",
+             "csc309", "csc343", "csc443"],
              (systemsDark, "systems")),
            (["csc200", "csc300",  "csc318", "csc404", "csc428",
              "csc454"], (hciDark, "hci")),
            (["csc320", "csc418", "csc420"], (graphicsDark, "graphics")),
-           (["csc336", "csc436", "csc446", "csc456"], (numDark, "num")),
+           (["csc336", "csc436", "csc446", "csc456", "csc466"],
+            (numDark, "num")),
            (["csc321", "csc384", "csc401", "csc411", "csc412",
-             "csc485", "csc486"], (aiDark, "ai")),
-           (["csc309", "csc343", "csc443"], (dbwebDark, "dbweb"))]
+             "csc485", "csc486"], (aiDark, "ai"))]
 
 -- | The style for Text elements of hybrids.
 hybridTextStyle :: String

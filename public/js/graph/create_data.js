@@ -12,13 +12,13 @@ var allCourses = ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC236',
                   'CSC404', 'CSC410', 'CSC411', 'CSC412', 'CSC418',
                   'CSC420', 'CSC428', 'CSC386', 'CSC438', 'CSC443',
                   'CSC446', 'CSC448', 'CSC454', 'CSC456', 'CSC458',
-                  'CSC463', 'CSC465', 'CSC469', 'CSC486', 'CSC488', 
-                  'ECE489', 'CSC373'];
+                  'CSC463', 'CSC465', 'CSC469', 'CSC486', 'CSC488',
+                  'ECE489', 'CSC373', 'CSC466'];
 
 specialistCourses = ['CSC373', 'CSC369', 'Lin1'];
 
 var areaNames = ['theory', 'core', 'se', 'systems', 'hci',
-                 'graphics', 'num', 'ai', 'dbweb'];
+                 'graphics', 'num', 'ai'];
 
 
 // Required for specialist

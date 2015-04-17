@@ -84,7 +84,7 @@ parseRect key content =
           ""
           ""
           []
-          5
+          9
           Node
 
 -- | Parses a path.
