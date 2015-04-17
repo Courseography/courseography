@@ -29,25 +29,28 @@ main = do
     aboutContents <- readFile "../README.md"
     privacyContents <- readFile "../PRIVACY.md"
     print "Server is running..."
-    simpleHTTP nullConf $
-        msum [ dir "grid" gridResponse,
-               dir "graph" graphResponse,
-               dir "image" graphImageResponse,
-               dir "timetable-image" $ look "courses" >>= \x -> look "session" >>= timetableImageResponse x,
-               dir "graph-fb" $ seeOther redirectUrlGraphEmail $ toResponse "",
-               dir "post-fb" $ seeOther redirectUrlGraphPost $ toResponse "",
-               dir "test" $ look "code" >>= getEmail,
-               dir "test-post" $ look "code" >>= postToFacebook,
-               dir "post" postResponse,
-               dir "draw" drawResponse,
-               dir "about" $ aboutResponse aboutContents,
-               dir "privacy" $ privacyResponse privacyContents,
-               dir "static" $ serveDirectory EnableBrowsing [] staticDir,
-               dir "course" $ look "name" >>= retrieveCourse,
-               dir "all-courses" $ liftIO allCourses,
-               dir "graphs" $ liftIO queryGraphs,
-               dir "course-info" $ look "dept" >>= courseInfo,
-               dir "depts" $ liftIO deptList,
-               dir "timesearch" searchResponse,
-               fourOhFourResponse
-               ]
+    simpleHTTP nullConf $ msum
+        [ do
+              nullDir
+              seeOther "graph" (toResponse "Redirecting to /graph"),
+          dir "grid" gridResponse,
+          dir "graph" graphResponse,
+          dir "image" graphImageResponse,
+          dir "timetable-image" $ look "courses" >>= \x -> look "session" >>= timetableImageResponse x,
+          dir "graph-fb" $ seeOther redirectUrlGraphEmail $ toResponse "",
+          dir "post-fb" $ seeOther redirectUrlGraphPost $ toResponse "",
+          dir "test" $ look "code" >>= getEmail,
+          dir "test-post" $ look "code" >>= postToFacebook,
+          dir "post" postResponse,
+          dir "draw" drawResponse,
+          dir "about" $ aboutResponse aboutContents,
+          dir "privacy" $ privacyResponse privacyContents,
+          dir "static" $ serveDirectory EnableBrowsing [] staticDir,
+          dir "course" $ look "name" >>= retrieveCourse,
+          dir "all-courses" $ liftIO allCourses,
+          dir "graphs" $ liftIO queryGraphs,
+          dir "course-info" $ look "dept" >>= courseInfo,
+          dir "depts" $ liftIO deptList,
+          dir "timesearch" searchResponse,
+          fourOhFourResponse
+        ]
