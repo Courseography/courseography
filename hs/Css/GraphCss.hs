@@ -165,16 +165,15 @@ resetCSS = "#resetButton" ? do
 
 graphContainer = do
     "#graph" ? do
-        width (px 1100)
+        width (px 1195)
         minHeight (px 700)
         height (px 700)
         overflow hidden
-        margin nil auto nil auto
-        clear both
+        margin (px 10) (px 10) (px 10) (px 10)
         display inlineBlock
         position absolute
         textAlign $ alignSide sideCenter
-        "left" -: "10%"
+        "left" -: "40px"
     "#graphRootSVG" ? do
         width100
         height100
@@ -342,7 +341,6 @@ titleCSS = "#svgTitle" ? do
 regionCSS = do
     "#region-labels > text" ? do
         "text-anchor" -: "start"
-        fontSize (pt 9)
+        fontSize (pt 14)
     ".region" ? do
-        opacity 0.7
-        "fill-opacity" -: "0.58"
+        "fill-opacity" -: "0.25"

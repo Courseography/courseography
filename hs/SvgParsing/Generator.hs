@@ -135,7 +135,7 @@ makeSVGDefs =
     S.defs $
     S.marker ! A.id_ "arrow"
              ! A.viewbox "0 0 10 10"
-             ! A.refx "1"
+             ! A.refx "4"
              ! A.refy "5"
              ! A.markerunits "strokeWidth"
              ! A.orient "auto"
