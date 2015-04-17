@@ -30,7 +30,10 @@ main = do
     privacyContents <- readFile "../PRIVACY.md"
     print "Server is running..."
     simpleHTTP nullConf $
-        msum [ dir "grid" gridResponse,
+        msum [ do 
+                   nullDir
+                   seeOther "graph" (toResponse "What you are looking for is now at /graph"),
+               dir "grid" gridResponse,
                dir "graph" graphResponse,
                dir "image" graphImageResponse,
                dir "timetable-image" $ look "courses" >>= \x -> look "session" >>= timetableImageResponse x,
