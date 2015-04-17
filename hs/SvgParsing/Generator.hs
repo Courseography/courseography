@@ -39,12 +39,12 @@ makeSVGDoc :: M.Map String String
            -> Bool    -- ^ Whether to include inline styles in the graph.
            -> S.Svg   -- ^ The completed SVG document.
 makeSVGDoc courseMap rects ellipses edges regions regionTexts styled =
-    S.docTypeSvg ! A.width "1052.3622"
-                 ! A.height "744.09448"
+    S.docTypeSvg ! A.width "1195"
+                 ! A.height "650"
                  ! S.customAttribute "xmlns:svg" "http://www.w3.org/2000/svg"
                  ! S.customAttribute "xmlns:dc" "http://purl.org/dc/elements/1.1/"
                  ! S.customAttribute "xmlns:cc" "http://creativecommons.org/ns#"
-                 ! S.customAttribute "xmlns:rdf" 
+                 ! S.customAttribute "xmlns:rdf"
                                      "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
                  ! A.version "1.1" $ do
                       makeSVGDefs
@@ -69,23 +69,23 @@ makeSVGDoc courseMap rects ellipses edges regions regionTexts styled =
 -- | Builds an SVG document.
 buildSVG :: Int64                -- ^ The ID of the graph that is being built.
          -> M.Map String String  -- ^ A map of courses that holds the course
-                                 --   ID as a key, and the data-active 
+                                 --   ID as a key, and the data-active
                                  --   attribute as the course's value.
                                  --   The data-active attribute is used in the
-                                 --   interactive graph to indicate which 
+                                 --   interactive graph to indicate which
                                  --   courses the user has selected.
-         -> String               -- ^ The filename that this graph will be 
+         -> String               -- ^ The filename that this graph will be
                                  --   written to.
          -> Bool                 -- ^ Whether to include inline styles.
          -> IO ()
 buildSVG gId courseMap filename styled =
     runSqlite dbStr $ do
-        sqlRects    :: [Entity Shape] <- selectList 
+        sqlRects    :: [Entity Shape] <- selectList
                                              [ShapeType_ <-. [Node, Hybrid],
                                               ShapeGId ==. gId] []
         sqlTexts    :: [Entity Text]  <- selectList [TextGId ==. gId] []
         sqlPaths    :: [Entity Path]  <- selectList [PathGId ==. gId] []
-        sqlEllipses :: [Entity Shape] <- selectList 
+        sqlEllipses :: [Entity Shape] <- selectList
                                              [ShapeType_ ==. BoolNode,
                                               ShapeGId ==. gId] []
         let courseStyleMap = M.map convertSelectionToStyle courseMap
@@ -93,7 +93,7 @@ buildSVG gId courseMap filename styled =
             rects          = map (buildRect texts . entityVal) sqlRects
             ellipses       = zipWith (buildEllipses texts)
                                      (map entityVal sqlEllipses) [1..]
-            paths          = zipWith (buildPath rects ellipses) 
+            paths          = zipWith (buildPath rects ellipses)
                                      (map entityVal sqlPaths) [1..]
             regions        = filter pathIsRegion paths
             edges          = filter (not . pathIsRegion) paths
@@ -163,7 +163,7 @@ convertRectToSVG styled courseMap rect
                          Hybrid -> "hybrid"
         in S.g ! A.id_ (stringValue $ filter (/=',') $ shapeId_ rect)
                ! A.class_ (stringValue class_)
-               ! S.customAttribute "data-group" (stringValue 
+               ! S.customAttribute "data-group" (stringValue
                                                  (getArea (shapeId_ rect)))
                ! S.customAttribute "text-rendering" "geometricPrecision"
                ! S.customAttribute "shape-rendering" "geometricPrecision"
@@ -225,9 +225,9 @@ convertEdgeToSVG styled path =
            ! A.class_ "path"
            ! A.d (stringValue $ 'M' : buildPathString (pathPoints path))
            ! A.markerEnd "url(#arrow)"
-           ! S.customAttribute "source-node" (stringValue $ filter (/=',') 
+           ! S.customAttribute "source-node" (stringValue $ filter (/=',')
                                                           $ pathSource path)
-           ! S.customAttribute "target-node" (stringValue $ filter (/=',') 
+           ! S.customAttribute "target-node" (stringValue $ filter (/=',')
                                                           $ pathTarget path)
            ! if styled
              then
@@ -264,7 +264,7 @@ convertEllipseToSVG styled ellipse =
                         else mempty
             concatSVG $ map (convertTextToSVG styled BoolNode) (shapeText ellipse)
 
-getTextStyle :: ShapeType -- ^ The parent element of the Text element in 
+getTextStyle :: ShapeType -- ^ The parent element of the Text element in
                           --   question.
              -> String
 getTextStyle Hybrid    = hybridTextStyle

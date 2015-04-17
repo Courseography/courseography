@@ -26,7 +26,8 @@ fbdbStr :: T.Text
 fbdbStr = "fdatabase1.sqlite3"
 
 dbStr :: T.Text
-dbStr = "Database/database2015.sqlite3"
+--dbStr = "Database/database2015.sqlite3"
+dbStr = "Database/database2015test.sqlite3"
 
 -- | Inserts course into the Courses table.
 insertCourse :: MonadIO m => Course -> ReaderT SqlBackend m ()
