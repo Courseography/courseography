@@ -4,7 +4,6 @@ module Css.DrawCss where
 
 import Clay
 import Prelude hiding ((**))
-import Data.Monoid
 import Css.Constants
 
 {- drawStyles

@@ -4,7 +4,6 @@ module Css.Constants where
 
 import Clay
 import Prelude hiding ((**))
-import Data.Monoid
 import Data.Text as T
 
 

@@ -2,7 +2,6 @@
 
 module GraphResponse where
 
-import Data.List
 import           Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A

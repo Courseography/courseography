@@ -4,10 +4,8 @@ module Css.CssGen where
 
 import Clay
 import Prelude hiding ((**))
-import Data.Monoid
 import Data.Text.Lazy
 import System.Directory
-import Css.Constants
 import Css.CommonCss
 import Css.GraphCss
 import Css.PostCss
