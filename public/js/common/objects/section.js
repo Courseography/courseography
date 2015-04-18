@@ -164,10 +164,11 @@ Section.prototype.removeConflict = function (time) {
     'use strict';
 
     var conflicts = $(time).data("conflicts");
-    var index = $.inArray(this.name, conflicts);
+    var index = $.inArray(this, conflicts);
 
     if (index === -1) {
-        $(time).html(conflicts[0].courseName)
+        $(time).html(conflicts[0].courseName.substring(0,6) +
+                     ' (' + conflicts[0].type + ')')
                .attr("type", conflicts[0].type);
         conflicts.splice(0, 1);
     } else {
