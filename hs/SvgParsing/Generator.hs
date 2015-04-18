@@ -280,9 +280,6 @@ areaMap =  M.fromList
            (["csc165", "csc236", "csc240", "csc263", "csc265",
              "csc310", "csc373", "csc438", "csc448",
              "csc463"], (theoryDark, "theory")),
-           (["calc1", "sta1", "sta2", "lin1", "csc108", "csc148", "csc104",
-             "csc120", "csc490", "csc491", "csc494", "csc495"],
-             (coreDark, "core")),
            (["csc207", "csc301", "csc302", "csc410", "csc465",
              "csc324"], (seDark, "se")),
            (["csc209", "csc258", "csc358", "csc369", "csc372",
@@ -295,7 +292,9 @@ areaMap =  M.fromList
            (["csc336", "csc436", "csc446", "csc456", "csc466"],
             (numDark, "num")),
            (["csc321", "csc384", "csc401", "csc411", "csc412",
-             "csc485", "csc486"], (aiDark, "ai"))]
+             "csc485", "csc486"], (aiDark, "ai")),
+           (["csc104", "csc120", "csc108", "csc148"], (introDark, "intro")),
+           (["calc1", "lin1", "sta1", "sta2"], (mathDark, "math"))]
 
 -- | The style for Text elements of hybrids.
 hybridTextStyle :: String
