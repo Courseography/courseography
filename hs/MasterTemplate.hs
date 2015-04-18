@@ -20,7 +20,7 @@ masterTemplate title headers body scripts =
             sequence_ headers
         H.body $ do
             body
-            scripts
+            concatHtml [scripts, makeScript "static/js/common/google_analytics.js"]
 
 -- Insert the header of the Grid and Graph. This contains the year of the timetable, and
 -- a link back to the Graph.
@@ -36,8 +36,6 @@ header page =
             H.li $ makeA "" "" "draw" "" "Draw"
             H.li $ makeA "" "" "post" "" "Check My POSt!"
             H.li $ makeA "" "" "about" "" "About"
-        if page `elem` ["graph", "grid"]
-        then
             H.div ! A.id "nav-fb" $ do
                 H.span ! A.id "nav-fb-post" $ do
                     H.a ! A.id "post-fb" $ "Post to Facebook"
@@ -47,8 +45,7 @@ header page =
                        ! H.customAttribute "data-show-faces" "false"
                        ! H.customAttribute "data-auto-logout-link" "true"
                        $ ""
-        else
-            ""
+
 -- Disclaimer. This will be the same for both pages, I guess?
 disclaimer :: H.Html
 disclaimer =
