@@ -20,6 +20,6 @@ executable courseography
   main-is:             server.hs
   -- other-modules:
   other-extensions:    OverloadedStrings, DataKinds, NoMonomorphismRestriction, FlexibleContexts, GADTs, ScopedTypeVariables, EmptyDataDecls, FlexibleInstances, GeneralizedNewtypeDeriving, MultiParamTypeClasses, DeriveGeneric, QuasiQuotes, TemplateHaskell, TypeFamilies
-  build-depends:       base, blaze-markup, blaze-html, happstack-server, blaze-svg, bytestring, aeson, transformers, base64-bytestring, split, containers, random, process, diagrams-lib, diagrams-svg, MissingH, fb, text, http-conduit, resourcet, conduit, persistent, persistent-sqlite, http-client, network, HTTP, tagsoup, regex-posix, mtl, HaXml, persistent-template, vector, clay, directory, pandoc, system-filepath
+  build-depends:       base, blaze-markup, blaze-html, happstack-server, blaze-svg, bytestring, aeson, transformers, base64-bytestring, split, containers, random, process, diagrams-lib, diagrams-svg, MissingH, fb, text, http-conduit, resourcet, conduit, persistent >= 2.1.2, persistent-sqlite, http-client, network, HTTP, tagsoup, regex-posix, mtl, HaXml, persistent-template, vector, clay, directory, pandoc, system-filepath
   -- hs-source-dirs:
   default-language:    Haskell2010

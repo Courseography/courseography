@@ -69,6 +69,12 @@ aiDark = "#80B2FF"
 hciDark :: T.Text
 hciDark = "#91F27A"
 
+mathDark :: T.Text
+mathDark = "#8A67BE"
+
+introDark :: T.Text
+introDark = "#5DD5B8"
+
 titleColour :: T.Text
 titleColour = "#072D68"
 

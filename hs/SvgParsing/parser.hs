@@ -14,7 +14,8 @@ import SvgParsing.ParserUtil
 import qualified Data.Map as M (empty)
 
 main :: IO ()
-main = performParse "CSC" "graph_regions.svg"
+--main = performParse "CSC" "graph_regions.svg"
+main = performParse "CSC2015" "csc2015.svg"
 
 performParse :: String -- ^ The title of the graph.
              -> String -- ^ The filename of the file that will be parsed.
@@ -50,7 +51,7 @@ parseNode key content =
              (chilrenPaths, childrenShapes, childrenTexts) =
                  parseChildren key (path [children] content)
              rects = map (parseRect key) (tag "rect" content)
-             texts = map (parseText key) (tag "text" content)
+             texts = concatMap (parseText key) (tag "text" content)
              paths = mapMaybe (parsePath key) (tag "path" content)
              ellipses = map (parseEllipse key) (tag "ellipse" content)
          in (map (updatePath fill trans) (paths ++ chilrenPaths),
@@ -109,13 +110,18 @@ parsePath key content =
 -- | Parses a text.
 parseText :: Int64 -- ^ The Text's corresponding graph identifier.
           -> Content i
-          -> Text
+          -> [Text]
 parseText key content =
-    Text key
-         (getAttribute "id" content)
-         (readAttr "x" content,
-          readAttr "y" content)
-         (tagTextContent content)
+    if null (concatMap (tag "tspan") (children content))
+    then
+        [Text key
+              (getAttribute "id" content)
+              (readAttr "x" content,
+               readAttr "y" content)
+              (tagTextContent content)]
+    else
+        concatMap (parseText key)
+            (concatMap (tag "tspan") (children content))
 
 -- | Parses an ellipse.
 parseEllipse :: Int64 -- ^ The Ellipse's corresponding graph identifier.
