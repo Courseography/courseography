@@ -36,6 +36,8 @@ header page =
             H.li $ makeA "" "" "draw" "" "Draw"
             H.li $ makeA "" "" "post" "" "Check My POSt!"
             H.li $ makeA "" "" "about" "" "About"
+        if page `elem` ["graph", "grid"]
+        then
             H.div ! A.id "nav-fb" $ do
                 H.span ! A.id "nav-fb-post" $ do
                     H.a ! A.id "post-fb" $ "Post to Facebook"
@@ -45,6 +47,8 @@ header page =
                        ! H.customAttribute "data-show-faces" "false"
                        ! H.customAttribute "data-auto-logout-link" "true"
                        $ ""
+        else
+            ""
 
 -- Disclaimer. This will be the same for both pages, I guess?
 disclaimer :: H.Html
