@@ -15,5 +15,3 @@ cabal.sandbox.config
 
 # generated resources
 /public/res/graphs/
-/public/res/courses/
-/public/res/courses-copy/
