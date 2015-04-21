@@ -13,3 +13,11 @@ If you're coming from outside of the Department of Computer Science, we'd love t
 We can be reached at courseography@cs.toronto.edu, and look forward to hearing from you!
 
 Click [here](/privacy) to learn about our Privacy Policy.
+
+#Development
+
+Courseography is powered by [Haskell](https://www.haskell.org/).
+
+Learn more about setting up and installing Courseography on your local machine for development [here](https://github.com/Courseography/courseography/wiki/Installing-Courseography).
+
+More information about the project, including code and commit style guides, can be found in the [wiki](https://github.com/Courseography/courseography/wiki).
