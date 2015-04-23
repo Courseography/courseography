@@ -3,13 +3,14 @@ module WebParsing.ParsingHelp
   ( CoursePart,
     (-:),
     (~:),
+    emptyCourse,
     preProcess,
     replaceAll,
     tagContains,
     dropBetween,
     dropBetweenAll,
     dropAround,
-    emptyCourse,
+    isCourse,
     isCancelled,
     lowerTag,
     notCancelled,
@@ -20,6 +21,8 @@ module WebParsing.ParsingHelp
     parseRecommendedPrep,
     parseDistAndBreadth,
     ) where
+
+import Text.Regex.Posix
 import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Match
 import Data.List
@@ -39,7 +42,7 @@ coursepart -: fn = fn coursepart
 (~:) :: CoursePart -> ([Tag T.Text] -> [Tag T.Text]) -> CoursePart
 (tags, course) ~: fn =  (fn tags, course)
 
-emptyCourse :: Course 
+emptyCourse :: Course
 emptyCourse = Course {
                     breadth = Nothing,
                     description = Nothing,
@@ -70,14 +73,14 @@ tagContains matches (TagText tagtext) =
 
 --converts all open and closing tags to lowercase.
 lowerTag :: Tag T.Text -> Tag T.Text
-lowerTag (TagOpen tag attrs) = 
+lowerTag (TagOpen tag attrs) =
   TagOpen (T.toLower tag) (map (\(x, y) -> (T.toLower x, T.toLower y)) attrs)
 lowerTag (TagClose tag) = TagClose (T.toLower tag)
 lowerTag text = text
 
 --returns true if the the row contains a cancelled lecture or tutorial
 isCancelled :: [T.Text] -> Bool
-isCancelled row = 
+isCancelled row =
   foldl (\bool text -> bool || T.isPrefixOf "Cancel" text) False row
 
 notCancelled :: [T.Text] -> Bool
@@ -107,10 +110,10 @@ If nothing needs to be removed, pass Nothing as the Text
 ------------------------------------------------------------------------------}
 makeEntry :: Maybe [Tag T.Text] -> Maybe [T.Text] -> Maybe T.Text
 makeEntry Nothing _ = Nothing
-makeEntry (Just []) _ = Just "test"
+makeEntry (Just []) _ = Nothing
 makeEntry (Just tags) Nothing = Just (T.concat (map fromTagText tags))
 makeEntry (Just tags) (Just str) =
-  Just (replaceAll str "" (T.concat (map fromTagText tags)))
+  Just $ T.strip $ (replaceAll str "" (T.concat (map fromTagText tags)))
 
 {------------------------------------------------------------------------------
 ------------------------------------------------------------------------------}
@@ -203,17 +206,9 @@ parseDistAndBreadth (tags, course) =
       brdth = makeEntry (Just (filter (tagContains ["Breadth"]) tags)) (Just ["Breadth Requirement: "])
   in (tail $ tail tags, course {distribution = dist, breadth = brdth})
 
-{-
-convertPrereqs :: String -> Maybe [String] -> Maybe [[String]]
-convertPrereqs "" [] Nothing = Nothing
-convertPrereqs str curReq prereqs = 
-  let (before,course,after) = matchCourse str  
-  in case (before, course, after) of
-      (_, "", "") -> concatM curReq prereqs  --no match occured
-      --guaranteed match
-      (_, course, "") -> concatM course:curReq after -- end of string
-      [(head after)] =~ "[,;]" -> convertPrereqs after Nothing (concatM curReq prereqs)
-      [(head after)] = "/" -> convertPrereqs after (addM course curReq) prereqs
 
-    then concatM curReq prereqs
--}
+-- | returns true if text is a valid course code.
+isCourse :: T.Text -> Bool
+isCourse text =
+  let pat = "[A-Z]{3}[0-9]{3}[HY][0-9]" :: String
+  in (T.unpack text) =~ pat
