@@ -9,6 +9,8 @@ Courseography was envisioned in late 2013 by [David Liu](http://www.cs.toronto.e
 
 See [CONTRIBUTING.md](https://github.com/Courseography/courseography/blob/master/CONTRIBUTING.md).
 
+Click [here](/privacy) to learn about our Privacy Policy.
+
 ### Development
 
 Courseography is powered by [Haskell](https://www.haskell.org/).
