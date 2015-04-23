@@ -7,7 +7,7 @@ Courseography was envisioned in late 2013 by [David Liu](http://www.cs.toronto.e
 
 ### Get Involved
 
-See [CONTRIBUTING.md](CONTRIBUTING.md).
+See [CONTRIBUTING.md](https://github.com/Courseography/courseography/blob/master/CONTRIBUTING.md).
 
 ### Development
 
