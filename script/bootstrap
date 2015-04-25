@@ -29,6 +29,14 @@ test_command() {
   command -v "${cmd}" 2>&1 > /dev/null || return 1
 }
 
+handle_failure() {
+  echo
+  head "Bootstrapping failed! See above for errors."
+}
+
+# Run handle_failure upon exiting prematurely
+trap handle_failure EXIT
+
 head "Checking directory..."
 if [ ! -d ".git" ] || [ ! -d "hs" ] || [ ! -e "package.json" ]; then
   info "Error: you must run this script from the root of the repository."
@@ -38,59 +46,53 @@ fi
 head "Detecting Haskell..."
 echo
 
-test_command runhaskell && {
-  info "Found runhaskell: $(command -v runhaskell)";
-  info "Version:          $(runhaskell --version)"
-} || {
-  info "Failed to find runhaskell on your PATH. Is The Haskell Platform installed correctly?";
+haskell_failure() {
+  info "Failed to find ${1} on your PATH. Is The Haskell Platform installed correctly?";
   info "Install the Haskell Platform from:"
   echo
   info "    https://www.haskell.org/platform/"
   echo
   exit 1
 }
+
+test_command runhaskell && {
+  info "Found runhaskell: $(command -v runhaskell)";
+  info "Version:          $(runhaskell --version)"
+} || haskell_failure runhaskell
 echo
 
 test_command cabal && {
   info "Found cabal:      $(command -v cabal)";
   info "Version:          $(cabal --numeric-version)"
-} || {
-  info "Failed to find cabal on your PATH. Is The Haskell Platform installed correctly?";
-  info "Install the Haskell Platform from:"
-  echo
-  info "    https://www.haskell.org/platform/"
-  echo
-  exit 1
-}
+} || {haskell_failure cabal
 echo
 
 head "Detecting Node.js..."
 echo
 
-test_command node && {
-  info "Found node:       $(command -v node)";
-  info "Version:          $(cabal --numeric-version)"
-} || {
-  info "Failed to find node on your PATH. Is Node.js installed correctly?";
+node_failure() {
+  info "Failed to find ${1} on your PATH. Is Node.js installed correctly?";
   info "Install Node.js using nvm:"
   echo
   info "    https://github.com/creationix/nvm"
   echo
+  info "Once nvm is installed, install the most recent stable release of Node.js:"
+  echo
+  info "    $ nvm install stable"
+  info "    $ nvm alias default stable"
   exit 1
 }
+
+test_command node && {
+  info "Found node:       $(command -v node)";
+  info "Version:          $(cabal --numeric-version)"
+} || node_failure node
 echo
 
 test_command npm && {
   info "Found npm:        $(command -v npm)";
   info "Version:          $(npm --version)"
-} || {
-  info "Failed to find npm on your PATH. Is Node.js installed correctly?";
-  info "Install Node.js using nvm:"
-  echo
-  info "    https://github.com/creationix/nvm"
-  echo
-  exit 1
-}
+} || node_failure npm
 echo
 
 (cd hs && {
@@ -112,7 +114,10 @@ echo
 
 head "Installing npm dependencies"
 echo
-npm install 2>&1 | indent
+npm install --loglevel info --color always 2>&1 | indent
 echo
 
-head "Success!"
+# Disable failure trap
+trap - EXIT
+
+head "Bootstrapping successful!"
