@@ -1,0 +1,24 @@
+{
+  "name": "courseography",
+  "version": "0.1.0",
+  "description": "Courseography is a tool created by David Liu and Ian Stewart-Binks to guide students through their undergraduate careers.",
+  "main": "js/index.js",
+  "scripts": {
+    "test": "jest ./js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Courseography/courseography.git"
+  },
+  "author": "David Liu <liudavid@cs.toronto.edu>",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/Courseography/courseography/issues"
+  },
+  "homepage": "https://courseography.cdf.toronto.edu",
+  "dependencies": {
+    "jquery": "^2.1.3",
+    "lodash": "^3.7.0",
+    "react": "^0.13.2"
+  }
+}
