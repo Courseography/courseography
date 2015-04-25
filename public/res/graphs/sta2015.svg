@@ -7,24 +7,33 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   fill-opacity="1"
    color-rendering="auto"
    color-interpolation="auto"
    text-rendering="auto"
-   width="1081"
+   stroke="black"
+   stroke-linecap="square"
+   width="1070"
    stroke-miterlimit="10"
    shape-rendering="auto"
+   stroke-opacity="1"
+   fill="black"
+   stroke-dasharray="none"
    font-weight="normal"
+   stroke-width="1"
    height="579"
+   font-family="'Dialog'"
    font-style="normal"
+   stroke-linejoin="miter"
    font-size="12"
+   stroke-dashoffset="0"
    image-rendering="auto"
    id="svg2"
    version="1.1"
    inkscape:version="0.48.5 r10040"
-   sodipodi:docname="sta2015.svg"
-   style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog">
+   sodipodi:docname="sta2015new.svg">
   <metadata
-     id="metadata562">
+     id="metadata582">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
@@ -45,11 +54,11 @@
      inkscape:pageshadow="2"
      inkscape:window-width="1280"
      inkscape:window-height="697"
-     id="namedview560"
+     id="namedview580"
      showgrid="false"
-     inkscape:zoom="1.0582794"
-     inkscape:cx="772.79419"
-     inkscape:cy="508.42487"
+     inkscape:zoom="1.0691589"
+     inkscape:cx="759.31135"
+     inkscape:cy="261.2243"
      inkscape:window-x="2125"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
@@ -65,169 +74,175 @@
          clipPathUnits="userSpaceOnUse"
          id="clipPath1">
         <path
-           d="M 0,0 1081,0 1081,579 0,579 0,0 z"
-           id="path9"
-           inkscape:connector-curvature="0" />
+           d="M0 0 L1070 0 L1070 579 L0 579 L0 0 Z"
+           id="path9" />
       </clipPath>
       <clipPath
          clipPathUnits="userSpaceOnUse"
          id="clipPath2">
         <path
-           d="M 17,-66 1098,-66 1098,513 17,513 17,-66 z"
-           id="path12"
-           inkscape:connector-curvature="0" />
+           d="M28 -66 L1098 -66 L1098 513 L28 513 L28 -66 Z"
+           id="path12" />
       </clipPath>
     </defs>
     <g
+       fill="white"
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
-       transform="translate(-17,66)"
-       id="g14"
-       style="fill:#ffffff;stroke:#ffffff">
+       transform="translate(-28,66)"
+       stroke="white"
+       id="g14">
       <rect
-         x="17"
-         width="1081"
+         x="28"
+         width="1070"
          height="579"
          y="-66"
          clip-path="url(#clipPath2)"
-         id="rect16"
-         style="stroke:none" />
+         stroke="none"
+         id="rect16" />
     </g>
     <g
+       fill="rgb(255,153,0)"
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
-       transform="translate(-17,66)"
-       id="g18"
-       style="fill:#ff9900;stroke:#ff9900">
+       transform="matrix(1,0,0,1,-28,66)"
+       stroke="rgb(255,153,0)"
+       id="g18">
       <rect
-         x="461.51001"
+         x="461.51"
          y="113.5"
          clip-path="url(#clipPath2)"
          width="65"
          rx="4"
          ry="4"
          height="35"
-         id="rect20"
-         style="stroke:none" />
+         stroke="none"
+         id="rect20" />
     </g>
     <g
        font-size="16"
-       transform="translate(-17,66)"
+       stroke-linecap="butt"
+       transform="matrix(1,0,0,1,-28,66)"
        text-rendering="geometricPrecision"
+       font-family="sans-serif"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g22"
-       style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
+       id="g22">
       <text
-         x="465.10379"
+         x="465.1038"
          xml:space="preserve"
          y="137.2852"
          clip-path="url(#clipPath2)"
-         id="text24"
-         style="stroke:none">STA247</text>
+         stroke="none"
+         id="text24">STA247</text>
       <rect
-         x="461.51001"
+         x="461.51"
          y="113.5"
          clip-path="url(#clipPath2)"
+         fill="none"
          width="65"
          rx="4"
          ry="4"
          height="35"
-         id="rect26"
-         style="fill:none" />
+         id="rect26" />
     </g>
     <g
+       fill="rgb(255,236,122)"
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
-       transform="translate(-17,66)"
-       id="g28"
-       style="fill:#ffcc00;stroke:#ffcc00">
+       transform="matrix(1,0,0,1,-28,66)"
+       stroke="rgb(255,236,122)"
+       id="g28">
       <rect
-         x="563.51001"
+         x="563.51"
          y="113.5"
          clip-path="url(#clipPath2)"
          width="65"
          rx="4"
          ry="4"
          height="35"
-         id="rect30"
-         style="stroke:none" />
+         stroke="none"
+         id="rect30" />
     </g>
     <g
        font-size="16"
-       transform="translate(-17,66)"
+       stroke-linecap="butt"
+       transform="matrix(1,0,0,1,-28,66)"
        text-rendering="geometricPrecision"
+       font-family="sans-serif"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g32"
-       style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
+       id="g32">
       <text
-         x="567.10382"
+         x="567.1038"
          xml:space="preserve"
          y="137.2852"
          clip-path="url(#clipPath2)"
-         id="text34"
-         style="stroke:none">STA248</text>
+         stroke="none"
+         id="text34">STA248</text>
       <rect
-         x="563.51001"
+         x="563.51"
          y="113.5"
          clip-path="url(#clipPath2)"
+         fill="none"
          width="65"
          rx="4"
          ry="4"
          height="35"
-         id="rect36"
-         style="fill:none" />
+         id="rect36" />
     </g>
     <g
+       fill="rgb(255,236,122)"
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
-       transform="translate(-17,66)"
-       id="g38"
-       style="fill:#ffcc00;stroke:#ffcc00">
+       transform="matrix(1,0,0,1,-28,66)"
+       stroke="rgb(255,236,122)"
+       id="g38">
       <rect
-         x="262.5"
+         x="216.5"
          y="247.647"
          clip-path="url(#clipPath2)"
          width="65"
          rx="4"
          ry="4"
          height="35"
-         id="rect40"
-         style="stroke:none" />
+         stroke="none"
+         id="rect40" />
     </g>
     <g
        font-size="16"
-       transform="translate(-17,66)"
+       stroke-linecap="butt"
+       transform="matrix(1,0,0,1,-28,66)"
        text-rendering="geometricPrecision"
+       font-family="sans-serif"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g42"
-       style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
+       id="g42">
       <text
-         x="266.09381"
+         x="220.0938"
          xml:space="preserve"
          y="271.4321"
          clip-path="url(#clipPath2)"
-         id="text44"
-         style="stroke:none">STA221</text>
+         stroke="none"
+         id="text44">STA221</text>
       <rect
-         x="262.5"
+         x="216.5"
          y="247.647"
          clip-path="url(#clipPath2)"
+         fill="none"
          width="65"
          rx="4"
          ry="4"
          height="35"
-         id="rect46"
-         style="fill:none" />
+         id="rect46" />
     </g>
     <g
+       fill="rgb(255,102,0)"
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
-       transform="translate(-17,66)"
-       id="g48"
-       style="fill:#ff6600;stroke:#ff6600">
+       transform="matrix(1,0,0,1,-28,66)"
+       stroke="rgb(255,102,0)"
+       id="g48">
       <rect
          x="316.5"
          y="116.26"
@@ -236,41 +251,43 @@
          rx="4"
          ry="4"
          height="35"
-         id="rect50"
-         style="stroke:none" />
+         stroke="none"
+         id="rect50" />
     </g>
     <g
        font-size="16"
-       transform="translate(-17,66)"
+       stroke-linecap="butt"
+       transform="matrix(1,0,0,1,-28,66)"
        text-rendering="geometricPrecision"
+       font-family="sans-serif"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g52"
-       style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
+       id="g52">
       <text
-         x="320.09381"
+         x="320.0938"
          xml:space="preserve"
          y="140.0452"
          clip-path="url(#clipPath2)"
-         id="text54"
-         style="stroke:none">STA255</text>
+         stroke="none"
+         id="text54">STA255</text>
       <rect
          x="316.5"
          y="116.26"
          clip-path="url(#clipPath2)"
+         fill="none"
          width="65"
          rx="4"
          ry="4"
          height="35"
-         id="rect56"
-         style="fill:none" />
+         id="rect56" />
     </g>
     <g
+       fill="rgb(255,236,122)"
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
-       transform="translate(-17,66)"
-       id="g58"
-       style="fill:#ffcc00;stroke:#ffcc00">
+       transform="matrix(1,0,0,1,-28,66)"
+       stroke="rgb(255,236,122)"
+       id="g58">
       <rect
          x="216.5"
          y="116.26"
@@ -279,41 +296,43 @@
          rx="4"
          ry="4"
          height="35"
-         id="rect60"
-         style="stroke:none" />
+         stroke="none"
+         id="rect60" />
     </g>
     <g
        font-size="16"
-       transform="translate(-17,66)"
+       stroke-linecap="butt"
+       transform="matrix(1,0,0,1,-28,66)"
        text-rendering="geometricPrecision"
+       font-family="sans-serif"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g62"
-       style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
+       id="g62">
       <text
          x="220.0938"
          xml:space="preserve"
          y="140.0452"
          clip-path="url(#clipPath2)"
-         id="text64"
-         style="stroke:none">STA220</text>
+         stroke="none"
+         id="text64">STA220</text>
       <rect
          x="216.5"
          y="116.26"
          clip-path="url(#clipPath2)"
+         fill="none"
          width="65"
          rx="4"
          ry="4"
          height="35"
-         id="rect66"
-         style="fill:none" />
+         id="rect66" />
     </g>
     <g
+       fill="rgb(255,153,0)"
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
-       transform="translate(-17,66)"
-       id="g68"
-       style="fill:#ff9900;stroke:#ff9900">
+       transform="matrix(1,0,0,1,-28,66)"
+       stroke="rgb(255,153,0)"
+       id="g68">
       <rect
          x="699.5"
          y="113.5"
@@ -322,41 +341,43 @@
          rx="4"
          ry="4"
          height="35"
-         id="rect70"
-         style="stroke:none" />
+         stroke="none"
+         id="rect70" />
     </g>
     <g
        font-size="16"
-       transform="translate(-17,66)"
+       stroke-linecap="butt"
+       transform="matrix(1,0,0,1,-28,66)"
        text-rendering="geometricPrecision"
+       font-family="sans-serif"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g72"
-       style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
+       id="g72">
       <text
-         x="703.09381"
+         x="703.0938"
          xml:space="preserve"
          y="137.2852"
          clip-path="url(#clipPath2)"
-         id="text74"
-         style="stroke:none">STA257</text>
+         stroke="none"
+         id="text74">STA257</text>
       <rect
          x="699.5"
          y="113.5"
          clip-path="url(#clipPath2)"
+         fill="none"
          width="65"
          rx="4"
          ry="4"
          height="35"
-         id="rect76"
-         style="fill:none" />
+         id="rect76" />
     </g>
     <g
+       fill="rgb(230,128,128)"
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
-       transform="translate(-17,66)"
-       id="g78"
-       style="fill:#ff0000;stroke:#ff0000">
+       transform="matrix(1,0,0,1,-28,66)"
+       stroke="rgb(230,128,128)"
+       id="g78">
       <rect
          x="801.5"
          y="113.5"
@@ -365,84 +386,88 @@
          rx="4"
          ry="4"
          height="35"
-         id="rect80"
-         style="stroke:none" />
+         stroke="none"
+         id="rect80" />
     </g>
     <g
        font-size="16"
-       transform="translate(-17,66)"
+       stroke-linecap="butt"
+       transform="matrix(1,0,0,1,-28,66)"
        text-rendering="geometricPrecision"
+       font-family="sans-serif"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g82"
-       style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
+       id="g82">
       <text
-         x="805.09381"
+         x="805.0938"
          xml:space="preserve"
          y="137.2852"
          clip-path="url(#clipPath2)"
-         id="text84"
-         style="stroke:none">STA261</text>
+         stroke="none"
+         id="text84">STA261</text>
       <rect
          x="801.5"
          y="113.5"
          clip-path="url(#clipPath2)"
+         fill="none"
          width="65"
          rx="4"
          ry="4"
          height="35"
-         id="rect86"
-         style="fill:none" />
+         id="rect86" />
     </g>
     <g
+       fill="rgb(128,178,255)"
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
-       transform="translate(-17,66)"
-       id="g88"
-       style="fill:#3366ff;stroke:#3366ff">
+       transform="matrix(1,0,0,1,-28,66)"
+       stroke="rgb(128,178,255)"
+       id="g88">
       <rect
-         x="567.5"
+         x="563.51"
          y="252.5"
          clip-path="url(#clipPath2)"
          width="65"
          rx="4"
          ry="4"
          height="35"
-         id="rect90"
-         style="stroke:none" />
+         stroke="none"
+         id="rect90" />
     </g>
     <g
        font-size="16"
-       transform="translate(-17,66)"
+       stroke-linecap="butt"
+       transform="matrix(1,0,0,1,-28,66)"
        text-rendering="geometricPrecision"
+       font-family="sans-serif"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g92"
-       style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
+       id="g92">
       <text
-         x="571.09381"
+         x="567.1038"
          xml:space="preserve"
-         y="276.28519"
+         y="276.2852"
          clip-path="url(#clipPath2)"
-         id="text94"
-         style="stroke:none">STA302</text>
+         stroke="none"
+         id="text94">STA302</text>
       <rect
-         x="567.5"
+         x="563.51"
          y="252.5"
          clip-path="url(#clipPath2)"
+         fill="none"
          width="65"
          rx="4"
          ry="4"
          height="35"
-         id="rect96"
-         style="fill:none" />
+         id="rect96" />
     </g>
     <g
+       fill="rgb(128,178,255)"
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
-       transform="translate(-17,66)"
-       id="g98"
-       style="fill:#3366ff;stroke:#3366ff">
+       transform="matrix(1,0,0,1,-28,66)"
+       stroke="rgb(128,178,255)"
+       id="g98">
       <rect
          x="357.5"
          y="316.2291"
@@ -451,127 +476,133 @@
          rx="4"
          ry="4"
          height="35"
-         id="rect100"
-         style="stroke:none" />
+         stroke="none"
+         id="rect100" />
     </g>
     <g
        font-size="16"
-       transform="translate(-17,66)"
+       stroke-linecap="butt"
+       transform="matrix(1,0,0,1,-28,66)"
        text-rendering="geometricPrecision"
+       font-family="sans-serif"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g102"
-       style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
+       id="g102">
       <text
-         x="361.09381"
+         x="361.0938"
          xml:space="preserve"
-         y="340.01431"
+         y="340.0143"
          clip-path="url(#clipPath2)"
-         id="text104"
-         style="stroke:none">STA304</text>
+         stroke="none"
+         id="text104">STA304</text>
       <rect
          x="357.5"
          y="316.2291"
          clip-path="url(#clipPath2)"
+         fill="none"
          width="65"
          rx="4"
          ry="4"
          height="35"
-         id="rect106"
-         style="fill:none" />
+         id="rect106" />
     </g>
     <g
+       fill="rgb(230,128,128)"
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
-       transform="translate(-17,66)"
-       id="g108"
-       style="fill:#ff0000;stroke:#ff0000">
+       transform="matrix(1,0,0,1,-28,66)"
+       stroke="rgb(230,128,128)"
+       id="g108">
       <rect
          x="801.5"
-         y="304.64001"
+         y="304.64"
          clip-path="url(#clipPath2)"
          width="65"
          rx="4"
          ry="4"
          height="35"
-         id="rect110"
-         style="stroke:none" />
+         stroke="none"
+         id="rect110" />
     </g>
     <g
        font-size="16"
-       transform="translate(-17,66)"
+       stroke-linecap="butt"
+       transform="matrix(1,0,0,1,-28,66)"
        text-rendering="geometricPrecision"
+       font-family="sans-serif"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g112"
-       style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
+       id="g112">
       <text
-         x="805.09381"
+         x="805.0938"
          xml:space="preserve"
          y="328.4252"
          clip-path="url(#clipPath2)"
-         id="text114"
-         style="stroke:none">STA355</text>
+         stroke="none"
+         id="text114">STA355</text>
       <rect
          x="801.5"
-         y="304.64001"
+         y="304.64"
          clip-path="url(#clipPath2)"
+         fill="none"
          width="65"
          rx="4"
          ry="4"
          height="35"
-         id="rect116"
-         style="fill:none" />
+         id="rect116" />
     </g>
     <g
+       fill="rgb(255,153,0)"
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
-       transform="translate(-17,66)"
-       id="g118"
-       style="fill:#ff9900;stroke:#ff9900">
+       transform="matrix(1,0,0,1,-28,66)"
+       stroke="rgb(255,153,0)"
+       id="g118">
       <rect
          x="1017.5"
-         y="304.64001"
+         y="304.64"
          clip-path="url(#clipPath2)"
          width="65"
          rx="4"
          ry="4"
          height="35"
-         id="rect120"
-         style="stroke:none" />
+         stroke="none"
+         id="rect120" />
     </g>
     <g
        font-size="16"
-       transform="translate(-17,66)"
+       stroke-linecap="butt"
+       transform="matrix(1,0,0,1,-28,66)"
        text-rendering="geometricPrecision"
+       font-family="sans-serif"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g122"
-       style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
+       id="g122">
       <text
          x="1021.0938"
          xml:space="preserve"
          y="328.4252"
          clip-path="url(#clipPath2)"
-         id="text124"
-         style="stroke:none">STA347</text>
+         stroke="none"
+         id="text124">STA347</text>
       <rect
          x="1017.5"
-         y="304.64001"
+         y="304.64"
          clip-path="url(#clipPath2)"
+         fill="none"
          width="65"
          rx="4"
          ry="4"
          height="35"
-         id="rect126"
-         style="fill:none" />
+         id="rect126" />
     </g>
     <g
+       fill="rgb(255,153,0)"
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
-       transform="translate(-17,66)"
-       id="g128"
-       style="fill:#ff9900;stroke:#ff9900">
+       transform="matrix(1,0,0,1,-28,66)"
+       stroke="rgb(255,153,0)"
+       id="g128">
       <rect
          x="1017.5"
          y="402.5"
@@ -580,127 +611,133 @@
          rx="4"
          ry="4"
          height="35"
-         id="rect130"
-         style="stroke:none" />
+         stroke="none"
+         id="rect130" />
     </g>
     <g
        font-size="16"
-       transform="translate(-17,66)"
+       stroke-linecap="butt"
+       transform="matrix(1,0,0,1,-28,66)"
        text-rendering="geometricPrecision"
+       font-family="sans-serif"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g132"
-       style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
+       id="g132">
       <text
          x="1021.0938"
          xml:space="preserve"
-         y="426.28519"
+         y="426.2852"
          clip-path="url(#clipPath2)"
-         id="text134"
-         style="stroke:none">STA447</text>
+         stroke="none"
+         id="text134">STA447</text>
       <rect
          x="1017.5"
          y="402.5"
          clip-path="url(#clipPath2)"
+         fill="none"
          width="65"
          rx="4"
          ry="4"
          height="35"
-         id="rect136"
-         style="fill:none" />
+         id="rect136" />
     </g>
     <g
+       fill="rgb(128,178,255)"
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
-       transform="translate(-17,66)"
-       id="g138"
-       style="fill:#3366ff;stroke:#3366ff">
+       transform="matrix(1,0,0,1,-28,66)"
+       stroke="rgb(128,178,255)"
+       id="g138">
       <rect
-         x="656.28967"
+         x="656.2897"
          y="316.2291"
          clip-path="url(#clipPath2)"
          width="65"
          rx="4"
          ry="4"
          height="35"
-         id="rect140"
-         style="stroke:none" />
+         stroke="none"
+         id="rect140" />
     </g>
     <g
        font-size="16"
-       transform="translate(-17,66)"
+       stroke-linecap="butt"
+       transform="matrix(1,0,0,1,-28,66)"
        text-rendering="geometricPrecision"
+       font-family="sans-serif"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g142"
-       style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
+       id="g142">
       <text
-         x="659.88342"
+         x="659.8834"
          xml:space="preserve"
-         y="340.01431"
+         y="340.0143"
          clip-path="url(#clipPath2)"
-         id="text144"
-         style="stroke:none">STA303</text>
+         stroke="none"
+         id="text144">STA303</text>
       <rect
-         x="656.28967"
+         x="656.2897"
          y="316.2291"
          clip-path="url(#clipPath2)"
+         fill="none"
          width="65"
          rx="4"
          ry="4"
          height="35"
-         id="rect146"
-         style="fill:none" />
+         id="rect146" />
     </g>
     <g
+       fill="rgb(128,178,255)"
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
-       transform="translate(-17,66)"
-       id="g148"
-       style="fill:#3366ff;stroke:#3366ff">
+       transform="matrix(1,0,0,1,-28,66)"
+       stroke="rgb(128,178,255)"
+       id="g148">
       <rect
-         x="485.69061"
+         x="485.6906"
          y="316.2291"
          clip-path="url(#clipPath2)"
          width="65"
          rx="4"
          ry="4"
          height="35"
-         id="rect150"
-         style="stroke:none" />
+         stroke="none"
+         id="rect150" />
     </g>
     <g
        font-size="16"
-       transform="translate(-17,66)"
+       stroke-linecap="butt"
+       transform="matrix(1,0,0,1,-28,66)"
        text-rendering="geometricPrecision"
+       font-family="sans-serif"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g152"
-       style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
+       id="g152">
       <text
-         x="489.28439"
+         x="489.2844"
          xml:space="preserve"
-         y="340.01431"
+         y="340.0143"
          clip-path="url(#clipPath2)"
-         id="text154"
-         style="stroke:none">STA305</text>
+         stroke="none"
+         id="text154">STA305</text>
       <rect
-         x="485.69061"
+         x="485.6906"
          y="316.2291"
          clip-path="url(#clipPath2)"
+         fill="none"
          width="65"
          rx="4"
          ry="4"
          height="35"
-         id="rect156"
-         style="fill:none" />
+         id="rect156" />
     </g>
     <g
+       fill="rgb(93,213,184)"
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
-       transform="translate(-17,66)"
-       id="g158"
-       style="fill:#00ccff;stroke:#00ccff">
+       transform="matrix(1,0,0,1,-28,66)"
+       stroke="rgb(93,213,184)"
+       id="g158">
       <rect
          x="699.5"
          y="402.5"
@@ -709,84 +746,89 @@
          rx="4"
          ry="4"
          height="35"
-         id="rect160"
-         style="stroke:none" />
+         stroke="none"
+         id="rect160" />
     </g>
     <g
        font-size="16"
-       transform="translate(-17,66)"
+       stroke-linecap="butt"
+       transform="matrix(1,0,0,1,-28,66)"
        text-rendering="geometricPrecision"
+       font-family="sans-serif"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g162"
-       style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
+       id="g162">
       <text
-         x="703.09381"
+         x="703.0938"
          xml:space="preserve"
-         y="426.28519"
+         y="426.2852"
          clip-path="url(#clipPath2)"
-         id="text164"
-         style="stroke:none">STA490</text>
+         stroke="none"
+         id="text164">STA490</text>
       <rect
          x="699.5"
          y="402.5"
          clip-path="url(#clipPath2)"
+         fill="none"
          width="65"
+         stroke-dasharray="6,2"
          rx="4"
          ry="4"
          height="35"
-         id="rect166"
-         style="fill:none;stroke-dasharray:6, 2" />
+         id="rect166" />
     </g>
     <g
+       fill="rgb(128,178,255)"
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
-       transform="translate(-17,66)"
-       id="g168"
-       style="fill:#3366ff;stroke:#3366ff">
+       transform="matrix(1,0,0,1,-28,66)"
+       stroke="rgb(128,178,255)"
+       id="g168">
       <rect
-         x="615.73279"
+         x="615.7328"
          y="402.5"
          clip-path="url(#clipPath2)"
          width="65"
          rx="4"
          ry="4"
          height="35"
-         id="rect170"
-         style="stroke:none" />
+         stroke="none"
+         id="rect170" />
     </g>
     <g
        font-size="16"
-       transform="translate(-17,66)"
+       stroke-linecap="butt"
+       transform="matrix(1,0,0,1,-28,66)"
        text-rendering="geometricPrecision"
+       font-family="sans-serif"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g172"
-       style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
+       id="g172">
       <text
-         x="619.32648"
+         x="619.3265"
          xml:space="preserve"
-         y="426.28519"
+         y="426.2852"
          clip-path="url(#clipPath2)"
-         id="text174"
-         style="stroke:none">STA480</text>
+         stroke="none"
+         id="text174">STA480</text>
       <rect
-         x="615.73279"
+         x="615.7328"
          y="402.5"
          clip-path="url(#clipPath2)"
+         fill="none"
          width="65"
          rx="4"
          ry="4"
          height="35"
-         id="rect176"
-         style="fill:none" />
+         id="rect176" />
     </g>
     <g
+       fill="rgb(230,128,128)"
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
-       transform="translate(-17,66)"
-       id="g178"
-       style="fill:#ff0000;stroke:#ff0000">
+       transform="matrix(1,0,0,1,-28,66)"
+       stroke="rgb(230,128,128)"
+       id="g178">
       <rect
          x="909.5"
          y="402.5"
@@ -795,67 +837,43 @@
          rx="4"
          ry="4"
          height="35"
-         id="rect180"
-         style="stroke:none" />
+         stroke="none"
+         id="rect180" />
     </g>
     <g
        font-size="16"
-       transform="translate(-17,66)"
+       stroke-linecap="butt"
+       transform="matrix(1,0,0,1,-28,66)"
        text-rendering="geometricPrecision"
+       font-family="sans-serif"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g182"
-       style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
+       id="g182">
       <text
-         x="913.09381"
+         x="913.0938"
          xml:space="preserve"
-         y="426.28519"
+         y="426.2852"
          clip-path="url(#clipPath2)"
-         id="text184"
-         style="stroke:none">STA452</text>
+         stroke="none"
+         id="text184">STA452</text>
       <rect
          x="909.5"
          y="402.5"
          clip-path="url(#clipPath2)"
+         fill="none"
          width="65"
          rx="4"
          ry="4"
          height="35"
-         id="rect186"
-         style="fill:none" />
+         id="rect186" />
     </g>
     <g
+       fill="rgb(230,128,128)"
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
-       transform="translate(-17,66)"
-       id="g188"
-       style="fill:#ff0000;stroke:#ff0000">
-      <rect
-         x="909.5"
-         y="462.5"
-         clip-path="url(#clipPath2)"
-         width="65"
-         rx="4"
-         ry="4"
-         height="35"
-         id="rect190"
-         style="stroke:none" />
-    </g>
-    <g
-       font-size="16"
-       transform="translate(-17,66)"
-       text-rendering="geometricPrecision"
-       shape-rendering="geometricPrecision"
-       stroke-miterlimit="1.45"
-       id="g192"
-       style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
-      <text
-         x="913.09381"
-         xml:space="preserve"
-         y="486.28519"
-         clip-path="url(#clipPath2)"
-         id="text194"
-         style="stroke:none">STA453</text>
+       transform="matrix(1,0,0,1,-28,66)"
+       stroke="rgb(230,128,128)"
+       id="g188">
       <rect
          x="909.5"
          y="462.5"
@@ -864,15 +882,43 @@
          rx="4"
          ry="4"
          height="35"
-         id="rect196"
-         style="fill:none" />
+         stroke="none"
+         id="rect190" />
     </g>
     <g
+       font-size="16"
+       stroke-linecap="butt"
+       transform="matrix(1,0,0,1,-28,66)"
+       text-rendering="geometricPrecision"
+       font-family="sans-serif"
+       shape-rendering="geometricPrecision"
+       stroke-miterlimit="1.45"
+       id="g192">
+      <text
+         x="913.0938"
+         xml:space="preserve"
+         y="486.2852"
+         clip-path="url(#clipPath2)"
+         stroke="none"
+         id="text194">STA453</text>
+      <rect
+         x="909.5"
+         y="462.5"
+         clip-path="url(#clipPath2)"
+         fill="none"
+         width="65"
+         rx="4"
+         ry="4"
+         height="35"
+         id="rect196" />
+    </g>
+    <g
+       fill="rgb(230,128,128)"
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
-       transform="translate(-17,66)"
-       id="g198"
-       style="fill:#ff0000;stroke:#ff0000">
+       transform="matrix(1,0,0,1,-28,66)"
+       stroke="rgb(230,128,128)"
+       id="g198">
       <rect
          x="801.5"
          y="402.5"
@@ -881,84 +927,88 @@
          rx="4"
          ry="4"
          height="35"
-         id="rect200"
-         style="stroke:none" />
+         stroke="none"
+         id="rect200" />
     </g>
     <g
        font-size="16"
-       transform="translate(-17,66)"
+       stroke-linecap="butt"
+       transform="matrix(1,0,0,1,-28,66)"
        text-rendering="geometricPrecision"
+       font-family="sans-serif"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g202"
-       style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
+       id="g202">
       <text
-         x="805.09381"
+         x="805.0938"
          xml:space="preserve"
-         y="426.28519"
+         y="426.2852"
          clip-path="url(#clipPath2)"
-         id="text204"
-         style="stroke:none">STA422</text>
+         stroke="none"
+         id="text204">STA422</text>
       <rect
          x="801.5"
          y="402.5"
          clip-path="url(#clipPath2)"
+         fill="none"
          width="65"
          rx="4"
          ry="4"
          height="35"
-         id="rect206"
-         style="fill:none" />
+         id="rect206" />
     </g>
     <g
+       fill="rgb(145,242,122)"
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
-       transform="translate(-17,66)"
-       id="g208"
-       style="fill:#99cc00;stroke:#99cc00">
+       transform="matrix(1,0,0,1,-28,66)"
+       stroke="rgb(145,242,122)"
+       id="g208">
       <rect
-         x="32.670101"
+         x="43.6406"
          y="402.5"
          clip-path="url(#clipPath2)"
          width="65"
          rx="4"
          ry="4"
          height="35"
-         id="rect210"
-         style="stroke:none" />
+         stroke="none"
+         id="rect210" />
     </g>
     <g
        font-size="16"
-       transform="translate(-17,66)"
+       stroke-linecap="butt"
+       transform="matrix(1,0,0,1,-28,66)"
        text-rendering="geometricPrecision"
+       font-family="sans-serif"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g212"
-       style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
+       id="g212">
       <text
-         x="36.263901"
+         x="47.2344"
          xml:space="preserve"
-         y="426.28519"
+         y="426.2852"
          clip-path="url(#clipPath2)"
-         id="text214"
-         style="stroke:none">STA410</text>
+         stroke="none"
+         id="text214">STA410</text>
       <rect
-         x="32.670101"
+         x="43.6406"
          y="402.5"
          clip-path="url(#clipPath2)"
+         fill="none"
          width="65"
          rx="4"
          ry="4"
          height="35"
-         id="rect216"
-         style="fill:none" />
+         id="rect216" />
     </g>
     <g
+       fill="rgb(128,178,255)"
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
-       transform="translate(-17,66)"
-       id="g218"
-       style="fill:#3366ff;stroke:#3366ff">
+       transform="matrix(1,0,0,1,-28,66)"
+       stroke="rgb(128,178,255)"
+       id="g218">
       <rect
          x="136.9337"
          y="402.5"
@@ -967,41 +1017,43 @@
          rx="4"
          ry="4"
          height="35"
-         id="rect220"
-         style="stroke:none" />
+         stroke="none"
+         id="rect220" />
     </g>
     <g
        font-size="16"
-       transform="translate(-17,66)"
+       stroke-linecap="butt"
+       transform="matrix(1,0,0,1,-28,66)"
        text-rendering="geometricPrecision"
+       font-family="sans-serif"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g222"
-       style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
+       id="g222">
       <text
          x="140.5275"
          xml:space="preserve"
-         y="426.28519"
+         y="426.2852"
          clip-path="url(#clipPath2)"
-         id="text224"
-         style="stroke:none">STA414</text>
+         stroke="none"
+         id="text224">STA414</text>
       <rect
          x="136.9337"
          y="402.5"
          clip-path="url(#clipPath2)"
+         fill="none"
          width="65"
          rx="4"
          ry="4"
          height="35"
-         id="rect226"
-         style="fill:none" />
+         id="rect226" />
     </g>
     <g
+       fill="rgb(128,178,255)"
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
-       transform="translate(-17,66)"
-       id="g228"
-       style="fill:#3366ff;stroke:#3366ff">
+       transform="matrix(1,0,0,1,-28,66)"
+       stroke="rgb(128,178,255)"
+       id="g228">
       <rect
          x="230.2269"
          y="402.5"
@@ -1010,1216 +1062,1256 @@
          rx="4"
          ry="4"
          height="35"
-         id="rect230"
-         style="stroke:none" />
+         stroke="none"
+         id="rect230" />
     </g>
     <g
        font-size="16"
-       transform="translate(-17,66)"
+       stroke-linecap="butt"
+       transform="matrix(1,0,0,1,-28,66)"
        text-rendering="geometricPrecision"
+       font-family="sans-serif"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g232"
-       style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
+       id="g232">
       <text
          x="233.8206"
          xml:space="preserve"
-         y="426.28519"
+         y="426.2852"
          clip-path="url(#clipPath2)"
-         id="text234"
-         style="stroke:none">STA437</text>
+         stroke="none"
+         id="text234">STA437</text>
       <rect
          x="230.2269"
          y="402.5"
          clip-path="url(#clipPath2)"
+         fill="none"
          width="65"
          rx="4"
          ry="4"
          height="35"
-         id="rect236"
-         style="fill:none" />
+         id="rect236" />
     </g>
     <g
+       fill="rgb(128,178,255)"
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
-       transform="translate(-17,66)"
-       id="g238"
-       style="fill:#3366ff;stroke:#3366ff">
+       transform="matrix(1,0,0,1,-28,66)"
+       stroke="rgb(128,178,255)"
+       id="g238">
       <rect
-         x="323.51999"
+         x="323.52"
          y="402.5"
          clip-path="url(#clipPath2)"
          width="65"
          rx="4"
          ry="4"
          height="35"
-         id="rect240"
-         style="stroke:none" />
+         stroke="none"
+         id="rect240" />
     </g>
     <g
        font-size="16"
-       transform="translate(-17,66)"
+       stroke-linecap="butt"
+       transform="matrix(1,0,0,1,-28,66)"
        text-rendering="geometricPrecision"
+       font-family="sans-serif"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g242"
-       style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
+       id="g242">
       <text
-         x="327.11371"
+         x="327.1137"
          xml:space="preserve"
-         y="426.28519"
+         y="426.2852"
          clip-path="url(#clipPath2)"
-         id="text244"
-         style="stroke:none">STA442</text>
+         stroke="none"
+         id="text244">STA442</text>
       <rect
-         x="323.51999"
+         x="323.52"
          y="402.5"
          clip-path="url(#clipPath2)"
+         fill="none"
          width="65"
          rx="4"
          ry="4"
          height="35"
-         id="rect246"
-         style="fill:none" />
+         id="rect246" />
     </g>
     <g
+       fill="rgb(255,236,122)"
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
-       transform="translate(-17,66)"
-       id="g248"
-       style="fill:#ffcc00;stroke:#ffcc00">
+       transform="matrix(1,0,0,1,-28,66)"
+       stroke="rgb(255,236,122)"
+       id="g248">
       <rect
-         x="79.613998"
+         x="79.614"
          y="116.26"
          clip-path="url(#clipPath2)"
          width="65"
          rx="4"
          ry="4"
          height="35"
-         id="rect250"
-         style="stroke:none" />
+         stroke="none"
+         id="rect250" />
     </g>
     <g
        font-size="16"
-       transform="translate(-17,66)"
+       stroke-linecap="butt"
+       transform="matrix(1,0,0,1,-28,66)"
        text-rendering="geometricPrecision"
+       font-family="sans-serif"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g252"
-       style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
+       id="g252">
       <text
-         x="83.207802"
+         x="83.2078"
          xml:space="preserve"
          y="140.0452"
          clip-path="url(#clipPath2)"
-         id="text254"
-         style="stroke:none">STA201</text>
+         stroke="none"
+         id="text254">STA201</text>
       <rect
-         x="79.613998"
+         x="79.614"
          y="116.26"
          clip-path="url(#clipPath2)"
+         fill="none"
          width="65"
          rx="4"
          ry="4"
          height="35"
-         id="rect256"
-         style="fill:none" />
+         id="rect256" />
     </g>
     <g
-       transform="translate(-17,66)"
+       fill="rgb(138,103,190)"
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
-       id="g258"
-       style="fill:#a14c3a;fill-opacity:0.59609997;stroke:#a14c3a;stroke-opacity:0.59609997">
+       transform="matrix(1,0,0,1,-28,66)"
+       stroke="rgb(138,103,190)"
+       id="g258">
       <rect
-         x="314"
-         width="85.542702"
-         height="38.414101"
-         y="-6.4408998"
+         x="308.4"
+         y="-6.4409"
          clip-path="url(#clipPath2)"
-         id="rect260"
-         style="stroke:none" />
-    </g>
-    <g
-       text-rendering="geometricPrecision"
-       stroke-miterlimit="1.45"
-       shape-rendering="geometricPrecision"
-       transform="translate(-17,66)"
-       id="g262"
-       style="stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
-      <text
-         x="320.75079"
-         xml:space="preserve"
-         y="10.1294"
-         clip-path="url(#clipPath2)"
-         id="text264"
-         style="stroke:none">MAT135,136/</text>
-      <text
-         x="335.08289"
-         xml:space="preserve"
-         y="24.830601"
-         clip-path="url(#clipPath2)"
-         id="text266"
-         style="stroke:none">137/157</text>
-      <rect
-         x="314"
-         width="85.542702"
-         height="38.414101"
-         y="-6.4408998"
-         clip-path="url(#clipPath2)"
-         id="rect268"
-         style="fill:none" />
-    </g>
-    <g
-       transform="translate(-17,66)"
-       text-rendering="geometricPrecision"
-       shape-rendering="geometricPrecision"
-       id="g270"
-       style="fill:#a14c3a;fill-opacity:0.59609997;stroke:#a14c3a;stroke-opacity:0.59609997">
-      <rect
-         x="731.74402"
          width="101.9072"
-         height="37.565899"
-         y="-6.4408998"
-         clip-path="url(#clipPath2)"
-         id="rect272"
-         style="stroke:none" />
+         rx="4"
+         ry="4"
+         height="38.4141"
+         stroke="none"
+         id="rect260" />
     </g>
     <g
+       font-size="15"
+       stroke-linecap="butt"
+       transform="matrix(1,0,0,1,-28,66)"
        text-rendering="geometricPrecision"
-       stroke-miterlimit="1.45"
+       font-family="sans-serif"
        shape-rendering="geometricPrecision"
-       transform="translate(-17,66)"
-       id="g274"
-       style="stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
+       stroke-miterlimit="1.45"
+       id="g262">
       <text
-         x="746.67712"
+         x="314.328"
          xml:space="preserve"
-         y="12.0739"
+         y="9.4702"
          clip-path="url(#clipPath2)"
-         id="text276"
-         style="stroke:none">MAT223/240,</text>
+         stroke="none"
+         id="text264">MAT135,136/</text>
       <text
-         x="736.66638"
+         x="332.243"
          xml:space="preserve"
-         y="26.775101"
+         y="27.8467"
          clip-path="url(#clipPath2)"
-         id="text278"
-         style="stroke:none">MAT235/237/257</text>
+         stroke="none"
+         id="text266">137/157</text>
       <rect
-         x="731.74402"
+         x="308.4"
+         y="-6.4409"
+         clip-path="url(#clipPath2)"
+         fill="none"
          width="101.9072"
-         height="37.565899"
-         y="-6.4408998"
-         clip-path="url(#clipPath2)"
-         id="rect280"
-         style="fill:none" />
+         rx="4"
+         ry="4"
+         height="38.4141"
+         id="rect268" />
     </g>
     <g
-       transform="translate(-17,66)"
+       fill="rgb(138,103,190)"
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
-       id="g282"
-       style="fill:#a14c3a;fill-opacity:0.59609997;stroke:#a14c3a;stroke-opacity:0.59609997">
+       transform="matrix(1,0,0,1,-28,66)"
+       stroke="rgb(138,103,190)"
+       id="g270">
       <rect
-         x="442.74371"
-         width="102.5325"
-         height="39.262299"
-         y="-7.2891002"
+         x="449.2337"
+         y="-7.2891"
          clip-path="url(#clipPath2)"
-         id="rect284"
-         style="stroke:none" />
+         width="121.5325"
+         rx="4"
+         ry="4"
+         height="39.2623"
+         stroke="none"
+         id="rect272" />
     </g>
     <g
+       font-size="15"
+       stroke-linecap="butt"
+       transform="matrix(1,0,0,1,-28,66)"
        text-rendering="geometricPrecision"
+       font-family="sans-serif"
+       shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       shape-rendering="geometricPrecision"
-       transform="translate(-17,66)"
-       id="g286"
-       style="stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
+       id="g274">
       <text
-         x="447.9758"
+         x="452.4573"
          xml:space="preserve"
-         y="17.055901"
+         y="18.2343"
          clip-path="url(#clipPath2)"
-         id="text288"
-         style="stroke:none">CSC108/120/148</text>
+         stroke="none"
+         id="text276">CSC108/120/148</text>
       <rect
-         x="442.74371"
-         width="102.5325"
-         height="39.262299"
-         y="-7.2891002"
+         x="449.2337"
+         y="-7.2891"
          clip-path="url(#clipPath2)"
-         id="rect290"
-         style="fill:none" />
+         fill="none"
+         width="121.5325"
+         rx="4"
+         ry="4"
+         height="39.2623"
+         id="rect278" />
       <text
-         x="592.45343"
+         x="592.4534"
          xml:space="preserve"
          font-size="8"
-         y="202.97279"
+         y="202.9728"
          clip-path="url(#clipPath2)"
-         id="text292"
-         style="font-size:8px;stroke:none">or</text>
+         stroke="none"
+         id="text280">or</text>
       <ellipse
          rx="10"
+         fill="none"
          ry="7.5"
          clip-path="url(#clipPath2)"
-         cx="596.01001"
+         cx="596.01"
          cy="199.8302"
-         id="ellipse294"
-         d="M 606.01001,199.8302 C 606.01001,203.97234 601.53286,207.3302 596.01001,207.3302 590.48716,207.3302 586.01001,203.97234 586.01001,199.8302 586.01001,195.68806 590.48716,192.3302 596.01001,192.3302 601.53286,192.3302 606.01001,195.68806 606.01001,199.8302 z"
-         sodipodi:cx="596.01001"
-         sodipodi:cy="199.8302"
-         sodipodi:rx="10"
-         sodipodi:ry="7.5"
-         style="fill:none" />
+         id="ellipse282"
+         d="M 606.01001,199.8302 C 606.01001,203.97234 601.53286,207.3302 596.01001,207.3302 590.48716,207.3302 586.01001,203.97234 586.01001,199.8302 586.01001,195.68806 590.48716,192.3302 596.01001,192.3302 601.53286,192.3302 606.01001,195.68806 606.01001,199.8302 z" />
       <text
-         x="386.44339"
+         x="386.4434"
          xml:space="preserve"
          font-size="8"
-         y="268.28961"
+         y="268.2896"
          clip-path="url(#clipPath2)"
-         id="text296"
-         style="font-size:8px;stroke:none">or</text>
+         stroke="none"
+         id="text284">or</text>
       <ellipse
          rx="10"
+         fill="none"
          ry="7.5"
          clip-path="url(#clipPath2)"
          cx="390"
          cy="265.147"
-         id="ellipse298"
-         d="M 400,265.147 C 400,269.28914 395.52285,272.647 390,272.647 384.47715,272.647 380,269.28914 380,265.147 380,261.00487 384.47715,257.647 390,257.647 395.52285,257.647 400,261.00487 400,265.147 z"
-         sodipodi:cx="390"
-         sodipodi:cy="265.147"
-         sodipodi:rx="10"
-         sodipodi:ry="7.5"
-         style="fill:none" />
+         id="ellipse286"
+         d="M 400,265.147 C 400,269.28914 395.52285,272.647 390,272.647 384.47715,272.647 380,269.28914 380,265.147 380,261.00487 384.47715,257.647 390,257.647 395.52285,257.647 400,261.00487 400,265.147 z" />
     </g>
     <g
-       transform="translate(-17,66)"
+       fill="rgb(136,136,136)"
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
-       id="g300"
-       style="fill:#a14c3a;fill-opacity:0.59609997;stroke:#a14c3a;stroke-opacity:0.59609997">
+       transform="matrix(1,0,0,1,-28,66)"
+       stroke="rgb(136,136,136)"
+       id="g288">
       <rect
-         x="63.363998"
+         x="74.0372"
          width="97.5"
          height="30"
          y="465"
          clip-path="url(#clipPath2)"
-         id="rect302"
-         style="stroke:none" />
+         stroke="none"
+         id="rect290" />
     </g>
     <g
+       stroke-linecap="butt"
+       transform="matrix(1,0,0,1,-28,66)"
+       fill="white"
        text-rendering="geometricPrecision"
-       stroke-miterlimit="1.45"
+       font-family="sans-serif"
        shape-rendering="geometricPrecision"
-       transform="translate(-17,66)"
-       id="g304"
-       style="stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
+       stroke="white"
+       stroke-miterlimit="1.45"
+       id="g292">
       <text
-         x="66.079903"
+         x="76.753"
          xml:space="preserve"
          y="484.7139"
          clip-path="url(#clipPath2)"
-         id="text306"
-         style="stroke:none">CSC108/120/148</text>
+         stroke="none"
+         id="text294">CSC108/120/148</text>
       <rect
-         x="63.363998"
-         width="97.5"
-         height="30"
+         x="74.0372"
          y="465"
          clip-path="url(#clipPath2)"
-         id="rect308"
-         style="fill:none" />
+         fill="none"
+         width="97.5"
+         height="30"
+         stroke="black"
+         id="rect296" />
     </g>
     <g
+       fill="rgb(128,178,255)"
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
-       transform="translate(-17,66)"
-       id="g310"
-       style="fill:#3366ff;stroke:#3366ff">
+       transform="matrix(1,0,0,1,-28,66)"
+       stroke="rgb(128,178,255)"
+       id="g298">
       <rect
-         x="416.81311"
+         x="416.8131"
          y="402.5"
          clip-path="url(#clipPath2)"
          width="65"
          rx="4"
          ry="4"
          height="35"
-         id="rect312"
-         style="stroke:none" />
-    </g>
-    <g
-       font-size="16"
-       transform="translate(-17,66)"
-       text-rendering="geometricPrecision"
-       shape-rendering="geometricPrecision"
-       stroke-miterlimit="1.45"
-       id="g314"
-       style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
-      <text
-         x="420.40689"
-         xml:space="preserve"
-         y="426.28519"
-         clip-path="url(#clipPath2)"
-         id="text316"
-         style="stroke:none">STA457</text>
-      <rect
-         x="416.81311"
-         y="402.5"
-         clip-path="url(#clipPath2)"
-         width="65"
-         rx="4"
-         ry="4"
-         height="35"
-         id="rect318"
-         style="fill:none" />
-    </g>
-    <g
-       text-rendering="geometricPrecision"
-       shape-rendering="geometricPrecision"
-       transform="translate(-17,66)"
-       id="g320"
-       style="fill:#3366ff;stroke:#3366ff">
-      <rect
-         x="510.10629"
-         y="402.5"
-         clip-path="url(#clipPath2)"
-         width="65"
-         rx="4"
-         ry="4"
-         height="35"
-         id="rect322"
-         style="stroke:none" />
+         stroke="none"
+         id="rect300" />
     </g>
     <g
        font-size="16"
-       transform="translate(-17,66)"
+       stroke-linecap="butt"
+       transform="matrix(1,0,0,1,-28,66)"
        text-rendering="geometricPrecision"
+       font-family="sans-serif"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g324"
-       style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
+       id="g302">
       <text
-         x="513.70001"
+         x="420.4069"
          xml:space="preserve"
-         y="426.28519"
+         y="426.2852"
          clip-path="url(#clipPath2)"
-         id="text326"
-         style="stroke:none">STA465</text>
+         stroke="none"
+         id="text304">STA457</text>
       <rect
-         x="510.10629"
+         x="416.8131"
+         y="402.5"
+         clip-path="url(#clipPath2)"
+         fill="none"
+         width="65"
+         rx="4"
+         ry="4"
+         height="35"
+         id="rect306" />
+    </g>
+    <g
+       fill="rgb(128,178,255)"
+       text-rendering="geometricPrecision"
+       shape-rendering="geometricPrecision"
+       transform="matrix(1,0,0,1,-28,66)"
+       stroke="rgb(128,178,255)"
+       id="g308">
+      <rect
+         x="510.1063"
          y="402.5"
          clip-path="url(#clipPath2)"
          width="65"
          rx="4"
          ry="4"
          height="35"
-         id="rect328"
-         style="fill:none" />
+         stroke="none"
+         id="rect310" />
+    </g>
+    <g
+       font-size="16"
+       stroke-linecap="butt"
+       transform="matrix(1,0,0,1,-28,66)"
+       text-rendering="geometricPrecision"
+       font-family="sans-serif"
+       shape-rendering="geometricPrecision"
+       stroke-miterlimit="1.45"
+       id="g312">
       <text
-         x="938.44342"
+         x="513.7"
+         xml:space="preserve"
+         y="426.2852"
+         clip-path="url(#clipPath2)"
+         stroke="none"
+         id="text314">STA465</text>
+      <rect
+         x="510.1063"
+         y="402.5"
+         clip-path="url(#clipPath2)"
+         fill="none"
+         width="65"
+         rx="4"
+         ry="4"
+         height="35"
+         id="rect316" />
+      <text
+         x="938.4434"
          xml:space="preserve"
          font-size="8"
-         y="360.28259"
+         y="360.2826"
          clip-path="url(#clipPath2)"
-         id="text330"
-         style="font-size:8px;stroke:none">or</text>
+         stroke="none"
+         id="text318">or</text>
       <ellipse
          rx="10"
+         fill="none"
          ry="7.5"
          clip-path="url(#clipPath2)"
          cx="942"
-         cy="357.14001"
-         id="ellipse332"
-         d="M 952,357.14001 C 952,361.28215 947.52285,364.64001 942,364.64001 936.47715,364.64001 932,361.28215 932,357.14001 932,352.99788 936.47715,349.64001 942,349.64001 947.52285,349.64001 952,352.99788 952,357.14001 z"
-         sodipodi:cx="942"
-         sodipodi:cy="357.14001"
-         sodipodi:rx="10"
-         sodipodi:ry="7.5"
-         style="fill:none" />
+         cy="357.14"
+         id="ellipse320"
+         d="M 952,357.14001 C 952,361.28215 947.52285,364.64001 942,364.64001 936.47715,364.64001 932,361.28215 932,357.14001 932,352.99788 936.47715,349.64001 942,349.64001 947.52285,349.64001 952,352.99788 952,357.14001 z" />
     </g>
     <g
-       transform="translate(-17,66)"
+       fill="rgb(136,136,136)"
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
-       id="g334"
-       style="fill:#a14c3a;fill-opacity:0.59609997;stroke:#a14c3a;stroke-opacity:0.59609997">
+       transform="matrix(1,0,0,1,-28,66)"
+       stroke="rgb(136,136,136)"
+       id="g322">
       <rect
          x="398.3595"
          width="101.9072"
          height="30"
          y="465"
          clip-path="url(#clipPath2)"
-         id="rect336"
-         style="stroke:none" />
+         stroke="none"
+         id="rect324" />
     </g>
     <g
+       stroke-linecap="butt"
+       transform="matrix(1,0,0,1,-28,66)"
+       fill="white"
        text-rendering="geometricPrecision"
-       stroke-miterlimit="1.45"
+       font-family="sans-serif"
        shape-rendering="geometricPrecision"
-       transform="translate(-17,66)"
-       id="g338"
-       style="stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
+       stroke="white"
+       stroke-miterlimit="1.45"
+       id="g326">
       <text
-         x="403.28189"
+         x="403.2819"
          xml:space="preserve"
          y="484.7139"
          clip-path="url(#clipPath2)"
-         id="text340"
-         style="stroke:none">MAT235/237/257</text>
+         stroke="none"
+         id="text328">MAT235/237/257</text>
       <rect
          x="398.3595"
-         width="101.9072"
-         height="30"
          y="465"
          clip-path="url(#clipPath2)"
-         id="rect342"
-         style="fill:none" />
+         fill="none"
+         width="101.9072"
+         height="30"
+         stroke="black"
+         id="rect330" />
     </g>
     <g
-       transform="translate(-17,66)"
+       fill="rgb(138,103,190)"
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
-       id="g344"
-       style="fill:#a14c3a;fill-opacity:0.59609997;stroke:#a14c3a;stroke-opacity:0.59609997">
+       transform="matrix(1,0,0,1,-28,66)"
+       stroke="rgb(138,103,190)"
+       id="g332">
       <rect
          x="191.507"
-         width="70"
-         height="38.414101"
-         y="-6.4408998"
+         y="-6.4409"
          clip-path="url(#clipPath2)"
-         id="rect346"
-         style="stroke:none" />
+         width="70"
+         rx="4"
+         ry="4"
+         height="38.4141"
+         stroke="none"
+         id="rect334" />
     </g>
     <g
+       font-size="15"
+       stroke-linecap="butt"
+       transform="matrix(1,0,0,1,-28,66)"
        text-rendering="geometricPrecision"
+       font-family="sans-serif"
+       shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       shape-rendering="geometricPrecision"
-       transform="translate(-17,66)"
-       id="g348"
-       style="stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
+       id="g336">
       <text
-         x="203.8313"
+         x="198.1623"
          xml:space="preserve"
-         y="10.1294"
+         y="9.4702"
          clip-path="url(#clipPath2)"
-         id="text350"
-         style="stroke:none">MAT133</text>
+         stroke="none"
+         id="text338">MAT133</text>
       <text
-         x="210.9944"
+         x="207.1162"
          xml:space="preserve"
-         y="24.830601"
+         y="27.8467"
          clip-path="url(#clipPath2)"
-         id="text352"
-         style="stroke:none">&gt;70%</text>
+         stroke="none"
+         id="text340">&gt;70%</text>
       <rect
          x="191.507"
-         width="70"
-         height="38.414101"
-         y="-6.4408998"
+         y="-6.4409"
          clip-path="url(#clipPath2)"
-         id="rect354"
-         style="fill:none" />
+         fill="none"
+         width="70"
+         rx="4"
+         ry="4"
+         height="38.4141"
+         id="rect342" />
       <text
-         x="345.44339"
+         x="345.4434"
          xml:space="preserve"
          font-size="8"
-         y="73.509201"
+         y="73.5092"
          clip-path="url(#clipPath2)"
-         id="text356"
-         style="font-size:8px;stroke:none">or</text>
+         stroke="none"
+         id="text344">or</text>
       <ellipse
          rx="10"
+         fill="none"
          ry="7.5"
          clip-path="url(#clipPath2)"
          cx="349"
          cy="70.3666"
-         id="ellipse358"
-         d="M 359,70.3666 C 359,74.508736 354.52285,77.8666 349,77.8666 343.47715,77.8666 339,74.508736 339,70.3666 339,66.224464 343.47715,62.8666 349,62.8666 354.52285,62.8666 359,66.224464 359,70.3666 z"
-         sodipodi:cx="349"
-         sodipodi:cy="70.3666"
-         sodipodi:rx="10"
-         sodipodi:ry="7.5"
-         style="fill:none" />
+         id="ellipse346"
+         d="M 359,70.3666 C 359,74.508736 354.52285,77.8666 349,77.8666 343.47715,77.8666 339,74.508736 339,70.3666 339,66.224464 343.47715,62.8666 349,62.8666 354.52285,62.8666 359,66.224464 359,70.3666 z" />
     </g>
     <g
-       transform="translate(-17,66)"
+       fill="rgb(136,136,136)"
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
-       id="g360"
-       style="fill:#a14c3a;fill-opacity:0.59609997;stroke:#a14c3a;stroke-opacity:0.59609997">
+       transform="matrix(1,0,0,1,-28,66)"
+       stroke="rgb(136,136,136)"
+       id="g348">
       <rect
-         x="961.13141"
-         width="102.5325"
+         x="985"
+         width="97.5"
          height="30"
-         y="197.77299"
+         y="184.8302"
          clip-path="url(#clipPath2)"
-         id="rect362"
-         style="stroke:none" />
+         stroke="none"
+         id="rect350" />
     </g>
     <g
+       stroke-linecap="butt"
+       transform="matrix(1,0,0,1,-28,66)"
+       fill="white"
        text-rendering="geometricPrecision"
+       font-family="sans-serif"
+       shape-rendering="geometricPrecision"
+       stroke="white"
        stroke-miterlimit="1.45"
-       shape-rendering="geometricPrecision"
-       transform="translate(-17,66)"
-       id="g364"
-       style="stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
+       id="g352">
       <text
-         x="967.36249"
+         x="988.7148"
          xml:space="preserve"
-         y="217.48689"
+         y="204.5441"
          clip-path="url(#clipPath2)"
-         id="text366"
-         style="stroke:none">STA247/255/257</text>
+         stroke="none"
+         id="text354">STA247/255/257</text>
       <rect
-         x="961.13141"
-         width="102.5325"
-         height="30"
-         y="197.77299"
+         x="985"
+         y="184.8302"
          clip-path="url(#clipPath2)"
-         id="rect368"
-         style="fill:none" />
+         fill="none"
+         width="97.5"
+         height="30"
+         stroke="black"
+         id="rect356" />
     </g>
     <g
+       fill="rgb(255,236,122)"
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
-       transform="translate(-17,66)"
-       id="g370"
-       style="fill:#ffcc00;stroke:#ffcc00">
+       transform="matrix(1,0,0,1,-28,66)"
+       stroke="rgb(255,236,122)"
+       id="g358">
       <rect
-         x="79.613998"
-         y="-4.7339001"
+         x="79.614"
+         y="-4.7339"
          clip-path="url(#clipPath2)"
          width="65"
          rx="4"
          ry="4"
          height="35"
-         id="rect372"
-         style="stroke:none" />
+         stroke="none"
+         id="rect360" />
     </g>
     <g
        font-size="16"
-       transform="translate(-17,66)"
+       stroke-linecap="butt"
+       transform="matrix(1,0,0,1,-28,66)"
        text-rendering="geometricPrecision"
+       font-family="sans-serif"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g374"
-       style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
+       id="g362">
       <text
-         x="83.207802"
+         x="83.2078"
          xml:space="preserve"
          y="19.0513"
          clip-path="url(#clipPath2)"
-         id="text376"
-         style="stroke:none">STA130</text>
+         stroke="none"
+         id="text364">STA130</text>
       <rect
-         x="79.613998"
-         y="-4.7339001"
+         x="79.614"
+         y="-4.7339"
          clip-path="url(#clipPath2)"
+         fill="none"
          width="65"
          rx="4"
          ry="4"
          height="35"
-         id="rect378"
-         style="fill:none" />
+         id="rect366" />
+      <text
+         x="765.2325"
+         xml:space="preserve"
+         font-size="8"
+         y="72.6157"
+         clip-path="url(#clipPath2)"
+         stroke="none"
+         id="text368">and</text>
+      <ellipse
+         rx="10"
+         fill="none"
+         ry="7.5"
+         clip-path="url(#clipPath2)"
+         cx="771.9063"
+         cy="69.4731"
+         id="ellipse370"
+         d="M 781.90631,69.473099 C 781.90631,73.615234 777.42916,76.973099 771.90631,76.973099 766.38346,76.973099 761.90631,73.615234 761.90631,69.473099 761.90631,65.330963 766.38346,61.973099 771.90631,61.973099 777.42916,61.973099 781.90631,65.330963 781.90631,69.473099 z" />
+    </g>
+    <g
+       fill="rgb(138,103,190)"
+       text-rendering="geometricPrecision"
+       shape-rendering="geometricPrecision"
+       transform="matrix(1,0,0,1,-28,66)"
+       stroke="rgb(138,103,190)"
+       id="g372">
+      <rect
+         x="662.5928"
+         y="-7.2891"
+         clip-path="url(#clipPath2)"
+         width="101.9072"
+         rx="4"
+         ry="4"
+         height="39.2623"
+         stroke="none"
+         id="rect374" />
+    </g>
+    <g
+       font-size="15"
+       stroke-linecap="butt"
+       transform="matrix(1,0,0,1,-28,66)"
+       text-rendering="geometricPrecision"
+       font-family="sans-serif"
+       shape-rendering="geometricPrecision"
+       stroke-miterlimit="1.45"
+       id="g376">
+      <text
+         x="670.6045"
+         xml:space="preserve"
+         y="18.2343"
+         clip-path="url(#clipPath2)"
+         stroke="none"
+         id="text378">MAT223/240</text>
+      <rect
+         x="662.5928"
+         y="-7.2891"
+         clip-path="url(#clipPath2)"
+         fill="none"
+         width="101.9072"
+         rx="4"
+         ry="4"
+         height="39.2623"
+         id="rect380" />
+    </g>
+    <g
+       fill="rgb(138,103,190)"
+       text-rendering="geometricPrecision"
+       shape-rendering="geometricPrecision"
+       transform="matrix(1,0,0,1,-28,66)"
+       stroke="rgb(138,103,190)"
+       id="g382">
+      <rect
+         x="779.3127"
+         y="-7.2891"
+         clip-path="url(#clipPath2)"
+         width="121.5325"
+         rx="4"
+         ry="4"
+         height="39.2623"
+         stroke="none"
+         id="rect384" />
+    </g>
+    <g
+       font-size="15"
+       stroke-linecap="butt"
+       transform="matrix(1,0,0,1,-28,66)"
+       text-rendering="geometricPrecision"
+       font-family="sans-serif"
+       shape-rendering="geometricPrecision"
+       stroke-miterlimit="1.45"
+       id="g386">
+      <text
+         x="782.5399"
+         xml:space="preserve"
+         y="18.2343"
+         clip-path="url(#clipPath2)"
+         stroke="none"
+         id="text388">MAT235/237/257</text>
+      <rect
+         x="779.3127"
+         y="-7.2891"
+         clip-path="url(#clipPath2)"
+         fill="none"
+         width="121.5325"
+         rx="4"
+         ry="4"
+         height="39.2623"
+         id="rect390" />
+      <path
+         fill="none"
+         d="M526.5325 131 L555.4763 131"
+         clip-path="url(#clipPath2)"
+         id="path392" />
+      <path
+         d="M563.4763 131 L551.4763 126 L554.4763 131 L551.4763 136 Z"
+         stroke="none"
+         clip-path="url(#clipPath2)"
+         id="path394" />
+      <path
+         fill="none"
+         d="M249 151.2419 L249 239.6552"
+         clip-path="url(#clipPath2)"
+         id="path396" />
+      <path
+         d="M249 247.6552 L254 235.6552 L249 238.6552 L244 235.6552 Z"
+         stroke="none"
+         clip-path="url(#clipPath2)"
+         id="path398" />
       <path
-         d="M 526.5325,131 555.4763,131"
+         fill="none"
+         d="M281.4712 133.76 L308.4934 133.76"
          clip-path="url(#clipPath2)"
-         id="path380"
-         inkscape:connector-curvature="0"
-         style="fill:none" />
+         id="path400" />
       <path
-         d="M 563.4763,131 551.4763,126 554.4763,131 551.4763,136 z"
+         d="M316.4934 133.76 L304.4934 128.76 L307.4934 133.76 L304.4934 138.76 Z"
+         stroke="none"
          clip-path="url(#clipPath2)"
-         id="path382"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
+         id="path402" />
       <path
-         d="M 255.1206,151.2419 286.2324,240.1046"
+         fill="none"
+         d="M764.5225 131 L793.4663 131"
          clip-path="url(#clipPath2)"
-         id="path384"
-         inkscape:connector-curvature="0"
-         style="fill:none" />
+         id="path404" />
       <path
-         d="M 288.8759,247.6552 289.6298,234.677 285.9019,239.1608 280.1915,237.9815 z"
+         d="M801.4663 131 L789.4663 126 L792.4663 131 L789.4663 136 Z"
+         stroke="none"
          clip-path="url(#clipPath2)"
-         id="path386"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
+         id="path406" />
       <path
-         d="M 281.4712,133.76 308.4934,133.76"
+         fill="none"
+         d="M1050 339.6764 L1050 394.4684"
          clip-path="url(#clipPath2)"
-         id="path388"
-         inkscape:connector-curvature="0"
-         style="fill:none" />
+         id="path408" />
       <path
-         d="M 316.4934,133.76 304.4934,128.76 307.4934,133.76 304.4934,138.76 z"
+         d="M1050 402.4684 L1055 390.4684 L1050 393.4684 L1045 390.4684 Z"
+         stroke="none"
          clip-path="url(#clipPath2)"
-         id="path390"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
+         id="path410" />
       <path
-         d="M 764.5225,131 793.4663,131"
+         fill="none"
+         d="M608.4667 287.5193 L608.4667 333.7291 L648.2761 333.7291"
          clip-path="url(#clipPath2)"
-         id="path392"
-         inkscape:connector-curvature="0"
-         style="fill:none" />
+         id="path412" />
       <path
-         d="M 801.4663,131 789.4663,126 792.4663,131 789.4663,136 z"
+         d="M656.2761 333.7291 L644.2761 328.7291 L647.2761 333.7291 L644.2761 338.7291 Z"
+         stroke="none"
          clip-path="url(#clipPath2)"
-         id="path394"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
+         id="path414" />
       <path
-         d="M 1050,339.6764 1050,394.4684"
+         fill="none"
+         d="M584.4349 287.5217 L584.4349 333.7291 L558.6982 333.7291"
          clip-path="url(#clipPath2)"
-         id="path396"
-         inkscape:connector-curvature="0"
-         style="fill:none" />
+         id="path416" />
       <path
-         d="M 1050,402.4684 1055,390.4684 1050,393.4684 1045,390.4684 z"
+         d="M550.6982 333.7291 L562.6982 338.7291 L559.6982 333.7291 L562.6982 328.7291 Z"
+         stroke="none"
          clip-path="url(#clipPath2)"
-         id="path398"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
+         id="path418" />
       <path
-         d="M 612.4567,287.5193 612.4567,333.7291 648.3258,333.7291"
+         fill="none"
+         d="M697.5457 351.2108 L719.6523 395.3475"
          clip-path="url(#clipPath2)"
-         id="path400"
-         inkscape:connector-curvature="0"
-         style="fill:none" />
+         id="path420" />
       <path
-         d="M 656.3258,333.7291 644.3258,328.7291 647.3258,333.7291 644.3258,338.7291 z"
+         d="M723.235 402.5004 L722.3316 389.5319 L719.2045 394.4534 L713.3904 394.0102 Z"
+         stroke="none"
          clip-path="url(#clipPath2)"
-         id="path402"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
+         id="path422" />
       <path
-         d="M 600,287.5193 600,333.7291 558.6667,333.7291"
+         fill="none"
+         d="M680.5714 351.2108 L659.8631 395.2605"
          clip-path="url(#clipPath2)"
-         id="path404"
-         inkscape:connector-curvature="0"
-         style="fill:none" />
+         id="path424" />
       <path
-         d="M 550.6667,333.7291 562.6667,338.7291 559.6667,333.7291 562.6667,328.7291 z"
+         d="M656.4595 402.5004 L666.0898 393.7678 L660.2885 394.3555 L657.0399 389.5133 Z"
+         stroke="none"
          clip-path="url(#clipPath2)"
-         id="path406"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
+         id="path426" />
       <path
-         d="M 697.5457,351.2108 719.6523,395.3475"
+         fill="none"
+         d="M942 437.4902 L942 454.5228"
          clip-path="url(#clipPath2)"
-         id="path408"
-         inkscape:connector-curvature="0"
-         style="fill:none" />
+         id="path428" />
       <path
-         d="M 723.235,402.5004 722.3316,389.5319 719.2045,394.4534 713.3904,394.0102 z"
+         d="M942 462.5228 L947 450.5228 L942 453.5228 L937 450.5228 Z"
+         stroke="none"
          clip-path="url(#clipPath2)"
-         id="path410"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
+         id="path430" />
       <path
-         d="M 680.5714,351.2108 659.8631,395.2605"
+         fill="none"
+         d="M834 339.6764 L834 394.4684"
          clip-path="url(#clipPath2)"
-         id="path412"
-         inkscape:connector-curvature="0"
-         style="fill:none" />
+         id="path432" />
       <path
-         d="M 656.4595,402.5004 666.0898,393.7678 660.2885,394.3555 657.0399,389.5133 z"
+         d="M834 402.4684 L839 390.4684 L834 393.4684 L829 390.4684 Z"
+         stroke="none"
          clip-path="url(#clipPath2)"
-         id="path414"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
+         id="path434" />
       <path
-         d="M 942,437.4902 942,454.5228"
+         fill="none"
+         d="M584.4349 287.52 L584.4349 376.3881 L76.1406 376.3881 L76.1406 394.4956"
          clip-path="url(#clipPath2)"
-         id="path416"
-         inkscape:connector-curvature="0"
-         style="fill:none" />
+         id="path436" />
       <path
-         d="M 942,462.5228 947,450.5228 942,453.5228 937,450.5228 z"
+         d="M76.1406 402.4956 L81.1406 390.4956 L76.1406 393.4956 L71.1406 390.4956 Z"
+         stroke="none"
          clip-path="url(#clipPath2)"
-         id="path418"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
+         id="path438" />
       <path
-         d="M 834,339.6764 834,394.4684"
+         fill="none"
+         d="M584.5581 287.5178 L584.5581 376.8316 L169.4337 376.8316 L169.4337 394.505"
          clip-path="url(#clipPath2)"
-         id="path420"
-         inkscape:connector-curvature="0"
-         style="fill:none" />
+         id="path440" />
       <path
-         d="M 834,402.4684 839,390.4684 834,393.4684 829,390.4684 z"
+         d="M169.4337 402.505 L174.4337 390.505 L169.4337 393.505 L164.4337 390.505 Z"
+         stroke="none"
          clip-path="url(#clipPath2)"
-         id="path422"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
+         id="path442" />
       <path
-         d="M 600,287.4803 600,376.3881 65.1701,376.3881 65.1701,394.4956"
+         fill="none"
+         d="M584.01 287.5234 L584.01 376.8646 L262.7269 376.8646 L262.7269 394.5183"
          clip-path="url(#clipPath2)"
-         id="path424"
-         inkscape:connector-curvature="0"
-         style="fill:none" />
+         id="path444" />
       <path
-         d="M 65.1701,402.4956 70.1701,390.4956 65.1701,393.4956 60.1701,390.4956 z"
+         d="M262.7269 402.5183 L267.7269 390.5183 L262.7269 393.5183 L257.7269 390.5183 Z"
+         stroke="none"
          clip-path="url(#clipPath2)"
-         id="path426"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
+         id="path446" />
       <path
-         d="M 600,287.501 600,376.8316 169.4337,376.8316 169.4337,394.505"
+         fill="none"
+         d="M584.01 287.5078 L584.01 376.8646 L356.02 376.8646 L356.02 394.5183"
          clip-path="url(#clipPath2)"
-         id="path428"
-         inkscape:connector-curvature="0"
-         style="fill:none" />
+         id="path448" />
       <path
-         d="M 169.4337,402.505 174.4337,390.505 169.4337,393.505 164.4337,390.505 z"
+         d="M356.02 402.5183 L361.02 390.5183 L356.02 393.5183 L351.02 390.5183 Z"
+         stroke="none"
          clip-path="url(#clipPath2)"
-         id="path430"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
+         id="path450" />
       <path
-         d="M 600,287.5064 600,376.8646 262.7269,376.8646 262.7269,394.5183"
+         fill="none"
+         d="M381.2156 31.9618 L468.0887 108.24"
          clip-path="url(#clipPath2)"
-         id="path432"
-         inkscape:connector-curvature="0"
-         style="fill:none" />
+         id="path452" />
       <path
-         d="M 262.7269,402.5183 267.7269,390.5183 262.7269,393.5183 257.7269,390.5183 z"
+         d="M474.1003 113.5184 L468.3819 101.8436 L467.3372 107.5802 L461.7839 109.3581 Z"
+         stroke="none"
          clip-path="url(#clipPath2)"
-         id="path434"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
+         id="path454" />
       <path
-         d="M 600,287.5064 600,376.8646 356.02,376.8646 356.02,394.5183"
+         fill="none"
+         d="M375.3676 -6.4303 L375.3676 -50.9523 L648.2328 -50.9523 L648.2328 131 L691.483 131"
          clip-path="url(#clipPath2)"
-         id="path436"
-         inkscape:connector-curvature="0"
-         style="fill:none" />
+         id="path456" />
       <path
-         d="M 356.02,402.5183 361.02,390.5183 356.02,393.5183 351.02,390.5183 z"
+         d="M699.483 131 L687.483 126 L690.483 131 L687.483 136 Z"
+         stroke="none"
          clip-path="url(#clipPath2)"
-         id="path438"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
+         id="path458" />
       <path
-         d="M 379.0657,31.9731 467.6598,108.2988"
+         fill="none"
+         d="M510 31.9759 L510 105.5099"
          clip-path="url(#clipPath2)"
-         id="path440"
-         inkscape:connector-curvature="0"
-         style="fill:none" />
+         id="path460" />
       <path
-         d="M 473.7208,113.5204 467.8929,101.8999 466.9022,107.6461 461.3659,109.4761 z"
+         d="M510 113.5099 L515 101.5099 L510 104.5099 L505 101.5099 Z"
+         stroke="none"
          clip-path="url(#clipPath2)"
-         id="path442"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
+         id="path462" />
       <path
-         d="M 370.2138,-6.4303 370.2138,-50.9523 660,-50.9523 660,131 691.4805,131"
+         fill="none"
+         d="M570.7698 12.342 L596.01 12.342 L596.01 105.4736"
          clip-path="url(#clipPath2)"
-         id="path444"
-         inkscape:connector-curvature="0"
-         style="fill:none" />
+         id="path464" />
       <path
-         d="M 699.4805,131 687.4805,126 690.4805,131 687.4805,136 z"
+         d="M596.01 113.4736 L601.01 101.4736 L596.01 104.4736 L591.01 101.4736 Z"
+         stroke="none"
          clip-path="url(#clipPath2)"
-         id="path446"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
+         id="path466" />
       <path
-         d="M 773.2857,31.1249 735.6041,106.3246"
+         fill="none"
+         d="M834 148.51 L834 199.8302 L614.01 199.8302"
          clip-path="url(#clipPath2)"
-         id="path448"
-         inkscape:connector-curvature="0"
-         style="fill:none;stroke-dasharray:6, 2" />
+         id="path468" />
       <path
-         d="M 732.0201,113.4769 741.8662,104.9883 736.0521,105.4305 732.9258,100.5084 z"
+         d="M606.01 199.8302 L618.01 204.8302 L615.01 199.8302 L618.01 194.8302 Z"
+         stroke="none"
          clip-path="url(#clipPath2)"
-         id="path450"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
+         id="path470" />
       <path
-         d="M 792.2218,31.1249 830.3616,106.3417"
+         fill="none"
+         d="M596.01 148.51 L596.01 184.3302"
          clip-path="url(#clipPath2)"
-         id="path452"
-         inkscape:connector-curvature="0"
-         style="fill:none;stroke-dasharray:6, 2" />
+         id="path472" />
       <path
-         d="M 833.9796,113.4769 833.0121,100.5129 829.9094,105.4498 824.0932,105.0354 z"
+         d="M596.01 192.3302 L601.01 180.3302 L596.01 183.3302 L591.01 180.3302 Z"
+         stroke="none"
          clip-path="url(#clipPath2)"
-         id="path454"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
+         id="path474" />
       <path
-         d="M 803.5055,31.1249 882.9285,102.8189 882.9285,226.57 860.709,296.9954"
+         fill="none"
+         d="M349 151.2776 L349 199.8302 L578.01 199.8302"
          clip-path="url(#clipPath2)"
-         id="path456"
-         inkscape:connector-curvature="0"
-         style="fill:none" />
+         id="path476" />
       <path
-         d="M 858.3019,304.6247 866.6808,294.6852 861.0099,296.0418 857.1442,291.6764 z"
+         d="M586.01 199.8302 L574.01 194.8302 L577.01 199.8302 L574.01 204.8302 Z"
+         stroke="none"
          clip-path="url(#clipPath2)"
-         id="path458"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
+         id="path478" />
       <path
-         d="M 803.4256,31.1249 882.5438,102.8189 882.5438,226.7978 1011.0919,302.6501"
+         fill="none"
+         d="M596.01 207.3302 L596.01 244.5271"
          clip-path="url(#clipPath2)"
-         id="path460"
-         inkscape:connector-curvature="0"
-         style="fill:none" />
+         id="path480" />
       <path
-         d="M 1017.9818,306.7157 1010.1879,296.3111 1010.2307,302.1419 1005.106,304.9236 z"
+         d="M596.01 252.5271 L601.01 240.5271 L596.01 243.5271 L591.01 240.5271 Z"
+         stroke="none"
          clip-path="url(#clipPath2)"
-         id="path462"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
+         id="path482" />
       <path
-         d="M 496.9257,31.9731 507.8607,105.5965"
+         fill="none"
+         d="M596.01 207.3302 L596.01 226.7978 L834 226.7978 L834 296.6823"
          clip-path="url(#clipPath2)"
-         id="path464"
-         inkscape:connector-curvature="0"
-         style="fill:none" />
+         id="path484" />
       <path
-         d="M 509.036,113.5097 512.2188,100.9054 507.7138,104.6074 502.3273,102.3745 z"
+         d="M834 304.6823 L839 292.6823 L834 295.6823 L829 292.6823 Z"
+         stroke="none"
          clip-path="url(#clipPath2)"
-         id="path466"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
+         id="path486" />
       <path
-         d="M 545.2762,12.342 596.01,12.342 596.01,105.4736"
+         fill="none"
+         d="M267.761 151.2419 L377.8771 253.8505"
          clip-path="url(#clipPath2)"
-         id="path468"
-         inkscape:connector-curvature="0"
-         style="fill:none" />
+         id="path488" />
       <path
-         d="M 596.01,113.4736 601.01,101.4736 596.01,104.4736 591.01,101.4736 z"
+         d="M383.7299 259.3044 L378.3593 247.4656 L377.1454 253.1688 L371.542 254.7817 Z"
+         stroke="none"
          clip-path="url(#clipPath2)"
-         id="path470"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
+         id="path490" />
       <path
-         d="M 834,148.51 834,199.8302 614.01,199.8302"
+         fill="none"
+         d="M596.01 207.3302 L596.01 226.7978 L390 226.7978 L390 249.647"
          clip-path="url(#clipPath2)"
-         id="path472"
-         inkscape:connector-curvature="0"
-         style="fill:none" />
+         id="path492" />
       <path
-         d="M 606.01,199.8302 618.01,204.8302 615.01,199.8302 618.01,194.8302 z"
+         d="M390 257.647 L395 245.647 L390 248.647 L385 245.647 Z"
+         stroke="none"
          clip-path="url(#clipPath2)"
-         id="path474"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
+         id="path494" />
       <path
-         d="M 596.01,148.51 596.01,184.3302"
+         fill="none"
+         d="M390 272.647 L390 308.2217"
          clip-path="url(#clipPath2)"
-         id="path476"
-         inkscape:connector-curvature="0"
-         style="fill:none" />
+         id="path496" />
       <path
-         d="M 596.01,192.3302 601.01,180.3302 596.01,183.3302 591.01,180.3302 z"
+         d="M390 316.2217 L395 304.2217 L390 307.2217 L385 304.2217 Z"
+         stroke="none"
          clip-path="url(#clipPath2)"
-         id="path478"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
+         id="path498" />
       <path
-         d="M 349,151.2776 349,199.8302 578.01,199.8302"
+         fill="none"
+         d="M111.1255 465 L94.6656 443.8281"
          clip-path="url(#clipPath2)"
-         id="path480"
-         inkscape:connector-curvature="0"
-         style="fill:none" />
+         id="path500" />
       <path
-         d="M 586.01,199.8302 574.01,194.8302 577.01,199.8302 574.01,204.8302 z"
+         d="M89.7554 437.5122 L93.1733 450.0549 L95.2793 444.6176 L101.0681 443.9171 Z"
+         stroke="none"
          clip-path="url(#clipPath2)"
-         id="path482"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
+         id="path502" />
       <path
-         d="M 596.01,207.3302 596.01,244.5271"
+         fill="none"
+         d="M134.4488 465 L150.9088 443.8281"
          clip-path="url(#clipPath2)"
-         id="path484"
-         inkscape:connector-curvature="0"
-         style="fill:none" />
+         id="path504" />
       <path
-         d="M 596.01,252.5271 601.01,240.5271 596.01,243.5271 591.01,240.5271 z"
+         d="M155.819 437.5122 L144.5063 443.9171 L150.295 444.6176 L152.4011 450.0549 Z"
+         stroke="none"
          clip-path="url(#clipPath2)"
-         id="path486"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
+         id="path506" />
       <path
-         d="M 596.01,207.3302 596.01,224.7342 834,224.7342 834,296.685"
+         fill="none"
+         d="M171.5372 480 L356.02 480 L356.02 445.4902"
          clip-path="url(#clipPath2)"
-         id="path488"
-         inkscape:connector-curvature="0"
-         style="fill:none" />
+         id="path508" />
       <path
-         d="M 834,304.685 839,292.685 834,295.685 829,292.685 z"
+         d="M356.02 437.4902 L351.02 449.4902 L356.02 446.4902 L361.02 449.4902 Z"
+         stroke="none"
          clip-path="url(#clipPath2)"
-         id="path490"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
+         id="path510" />
       <path
-         d="M 267.761,151.2419 377.8771,253.8505"
+         fill="none"
+         d="M584.2795 287.5055 L584.2795 376.3881 L449.3131 376.3881 L449.3131 394.4956"
          clip-path="url(#clipPath2)"
-         id="path492"
-         inkscape:connector-curvature="0"
-         style="fill:none" />
+         id="path512" />
       <path
-         d="M 383.7299,259.3044 378.3593,247.4656 377.1454,253.1688 371.542,254.7817 z"
+         d="M449.3131 402.4956 L454.3131 390.4956 L449.3131 393.4956 L444.3131 390.4956 Z"
+         stroke="none"
          clip-path="url(#clipPath2)"
-         id="path494"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
+         id="path514" />
       <path
-         d="M 596.01,207.3302 596.01,224.7342 390,224.7342 390,249.647"
+         fill="none"
+         d="M584.4349 287.5078 L584.4349 333.3333 L584.4349 376.8646 L542.6063 376.8646 L542.6063 394.5183"
          clip-path="url(#clipPath2)"
-         id="path496"
-         inkscape:connector-curvature="0"
-         style="fill:none" />
+         id="path516" />
       <path
-         d="M 390,257.647 395,245.647 390,248.647 385,245.647 z"
+         d="M542.6063 402.5183 L547.6063 390.5183 L542.6063 393.5183 L537.6063 390.5183 Z"
+         stroke="none"
          clip-path="url(#clipPath2)"
-         id="path498"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
+         id="path518" />
       <path
-         d="M 390,272.647 390,308.2217"
+         fill="none"
+         d="M866.5344 322.1571 L926.2356 349.8322"
          clip-path="url(#clipPath2)"
-         id="path500"
-         inkscape:connector-curvature="0"
-         style="fill:none" />
+         id="path520" />
       <path
-         d="M 390,316.2217 395,304.2217 390,307.2217 385,304.2217 z"
+         d="M933.4937 353.1968 L924.7094 343.6136 L925.3283 349.4117 L920.5037 352.6862 Z"
+         stroke="none"
          clip-path="url(#clipPath2)"
-         id="path502"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
+         id="path522" />
       <path
-         d="M 100.3781,465 83.8013,443.8129"
+         fill="none"
+         d="M1017.4656 322.1571 L957.7644 349.8322"
          clip-path="url(#clipPath2)"
-         id="path504"
-         inkscape:connector-curvature="0"
-         style="fill:none" />
+         id="path524" />
       <path
-         d="M 78.8716,437.5122 82.3282,450.0443 84.4175,444.6005 90.204,443.8822 z"
+         d="M950.5063 353.1968 L963.4963 352.6862 L958.6717 349.4117 L959.2906 343.6136 Z"
+         stroke="none"
          clip-path="url(#clipPath2)"
-         id="path506"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
+         id="path526" />
       <path
-         d="M 126.444,465 147.1777,443.2968"
+         fill="none"
+         d="M942 364.64 L942 394.5108"
          clip-path="url(#clipPath2)"
-         id="path508"
-         inkscape:connector-curvature="0"
-         style="fill:none" />
+         id="path528" />
       <path
-         d="M 152.7038,437.5122 140.7992,442.7352 146.4869,444.0199 148.0299,449.6429 z"
+         d="M942 402.5108 L947 390.5108 L942 393.5108 L937 390.5108 Z"
+         stroke="none"
          clip-path="url(#clipPath2)"
-         id="path510"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
+         id="path530" />
       <path
-         d="M 160.864,480 352.1816,480 352.8785,445.5258"
+         fill="none"
+         d="M449.3131 465 L449.3131 445.5342"
          clip-path="url(#clipPath2)"
-         id="path512"
-         inkscape:connector-curvature="0"
-         style="fill:none" />
+         id="path532" />
       <path
-         d="M 353.0402,437.5275 347.7986,449.424 352.8583,446.5257 357.7966,449.6261 z"
+         d="M449.3131 437.5342 L444.3131 449.5342 L449.3131 446.5342 L454.3131 449.5342 Z"
+         stroke="none"
          clip-path="url(#clipPath2)"
-         id="path514"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
+         id="path534" />
       <path
-         d="M 600,287.4803 600,376.3881 449.3131,376.3881 449.3131,394.4956"
+         fill="none"
+         d="M355.9008 31.9756 L351.7513 55.06"
          clip-path="url(#clipPath2)"
-         id="path516"
-         inkscape:connector-curvature="0"
-         style="fill:none" />
+         id="path536" />
       <path
-         d="M 449.3131,402.4956 454.3131,390.4956 449.3131,393.4956 444.3131,390.4956 z"
+         d="M350.336 62.9338 L357.3801 52.0077 L351.9283 54.0758 L347.5379 50.2385 Z"
+         stroke="none"
          clip-path="url(#clipPath2)"
-         id="path518"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
+         id="path538" />
       <path
-         d="M 600,287.5064 600,376.8646 542.6063,376.8646 542.6063,394.5183"
+         fill="none"
+         d="M261.4874 31.3546 L333.097 63.2772"
          clip-path="url(#clipPath2)"
-         id="path520"
-         inkscape:connector-curvature="0"
-         style="fill:none" />
+         id="path540" />
       <path
-         d="M 542.6063,402.5183 547.6063,390.5183 542.6063,393.5183 537.6063,390.5183 z"
+         d="M340.4038 66.5345 L331.4794 57.0818 L332.1836 62.8701 L327.4077 66.2153 Z"
+         stroke="none"
          clip-path="url(#clipPath2)"
-         id="path522"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
+         id="path542" />
       <path
-         d="M 869,322.14 926.3608,349.6417"
+         fill="none"
+         d="M349 77.8666 L349 108.266"
          clip-path="url(#clipPath2)"
-         id="path524"
-         inkscape:connector-curvature="0"
-         style="fill:none" />
+         id="path544" />
       <path
-         d="M 933.5745,353.1004 924.9155,343.4038 925.459,349.2094 920.5922,352.421 z"
+         d="M349 116.266 L354 104.266 L349 107.266 L344 104.266 Z"
+         stroke="none"
          clip-path="url(#clipPath2)"
-         id="path526"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
+         id="path546" />
       <path
-         d="M 1015,322.14 957.6392,349.6417"
+         fill="none"
+         d="M1050 214.8465 L1050 296.6158"
          clip-path="url(#clipPath2)"
-         id="path528"
-         inkscape:connector-curvature="0"
-         style="fill:none" />
+         id="path548" />
       <path
-         d="M 950.4255,353.1004 963.4078,352.421 958.541,349.2094 959.0845,343.4038 z"
+         d="M1050 304.6158 L1055 292.6158 L1050 295.6158 L1045 292.6158 Z"
+         stroke="none"
          clip-path="url(#clipPath2)"
-         id="path530"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
+         id="path550" />
       <path
-         d="M 942,364.64 942,394.5108"
+         fill="none"
+         stroke-dasharray="6,2"
+         d="M345.0361 -6.4517 L345.0361 -50.9523 L112.114 -50.9523 L112.114 -12.7502"
          clip-path="url(#clipPath2)"
-         id="path532"
-         inkscape:connector-curvature="0"
-         style="fill:none" />
+         id="path552" />
       <path
-         d="M 942,402.5108 947,390.5108 942,393.5108 937,390.5108 z"
+         stroke-dasharray="6,2"
+         d="M112.114 -4.7502 L117.114 -16.7502 L112.114 -13.7502 L107.114 -16.7502 Z"
          clip-path="url(#clipPath2)"
-         id="path534"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
+         stroke="none"
+         id="path554" />
       <path
-         d="M 449.3131,465 449.3131,445.5342"
+         fill="none"
+         d="M781.9063 69.4731 L882.5438 69.4731 L882.5438 226.7978 L1018.0148 226.7978 L1018.0148 298.6962"
          clip-path="url(#clipPath2)"
-         id="path536"
-         inkscape:connector-curvature="0"
-         style="fill:none" />
+         id="path556" />
       <path
-         d="M 449.3131,437.5342 444.3131,449.5342 449.3131,446.5342 454.3131,449.5342 z"
+         d="M1018.0148 306.6962 L1023.0148 294.6962 L1018.0148 297.6962 L1013.0148 294.6962 Z"
+         stroke="none"
          clip-path="url(#clipPath2)"
-         id="path538"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
+         id="path558" />
       <path
-         d="M 354.18,31.9731 351.0764,54.9765"
+         fill="none"
+         d="M781.9063 69.4731 L882.9285 69.4731 L882.9285 226.57 L858.3019 226.57 L858.3019 296.6247"
          clip-path="url(#clipPath2)"
-         id="path540"
-         inkscape:connector-curvature="0"
-         style="fill:none" />
+         id="path560" />
       <path
-         d="M 350.0067,62.9047 356.5663,51.681 351.2101,53.9855 346.6561,50.3439 z"
+         d="M858.3019 304.6247 L863.3019 292.6247 L858.3019 295.6247 L853.3019 292.6247 Z"
+         stroke="none"
          clip-path="url(#clipPath2)"
-         id="path542"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
+         id="path562" />
       <path
-         d="M 261.5302,31.3736 333.097,63.2772"
+         fill="none"
+         stroke-dasharray="6,2"
+         d="M779.1717 74.6266 L827.4481 108.8697"
          clip-path="url(#clipPath2)"
-         id="path544"
-         inkscape:connector-curvature="0"
-         style="fill:none" />
+         id="path564" />
       <path
-         d="M 340.4038,66.5345 331.4794,57.0818 332.1836,62.8701 327.4077,66.2153 z"
+         stroke-dasharray="6,2"
+         d="M833.9732 113.4981 L827.0782 102.4773 L826.6324 108.2911 L821.2927 110.6337 Z"
          clip-path="url(#clipPath2)"
-         id="path546"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
+         stroke="none"
+         id="path566" />
       <path
-         d="M 349,77.8666 349,108.266"
+         fill="none"
+         stroke-dasharray="6,2"
+         d="M766.2858 75.6764 L737.405 107.5517"
          clip-path="url(#clipPath2)"
-         id="path548"
-         inkscape:connector-curvature="0"
-         style="fill:none" />
+         id="path568" />
       <path
-         d="M 349,116.266 354,104.266 349,107.266 344,104.266 z"
+         stroke-dasharray="6,2"
+         d="M732.0335 113.4801 L743.7961 107.9446 L738.0765 106.8106 L736.3855 101.2302 Z"
          clip-path="url(#clipPath2)"
-         id="path550"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
+         stroke="none"
+         id="path570" />
       <path
-         d="M 1017.5549,227.773 1041.3947,297.1112"
+         fill="none"
+         d="M733.5791 31.9529 L760.108 57.9232"
          clip-path="url(#clipPath2)"
-         id="path552"
-         inkscape:connector-curvature="0"
-         style="fill:none" />
+         id="path572" />
       <path
-         d="M 1043.9957,304.6766 1044.8225,291.7029 1041.0695,296.1656 1035.3657,294.9542 z"
+         d="M765.8247 63.5196 L760.7473 51.5521 L759.3934 57.2237 L753.7519 58.698 Z"
+         stroke="none"
          clip-path="url(#clipPath2)"
-         id="path554"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
+         id="path574" />
       <path
-         d="M 344.7529,-6.4517 344.7529,-50.9523 112.114,-50.9523 112.114,-12.7502"
+         fill="none"
+         d="M816.6779 31.9529 L784.7067 58.7459"
          clip-path="url(#clipPath2)"
-         id="path556"
-         inkscape:connector-curvature="0"
-         style="fill:none;stroke-dasharray:6, 2" />
+         id="path576" />
       <path
-         d="M 112.114,-4.7502 117.114,-16.7502 112.114,-13.7502 107.114,-16.7502 z"
+         d="M778.5751 63.8844 L790.984 60.0089 L785.4731 58.1036 L784.561 52.3445 Z"
+         stroke="none"
          clip-path="url(#clipPath2)"
-         id="path558"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
+         id="path578" />
     </g>
   </g>
   <text
      xml:space="preserve"
-     style="font-size:24px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
-     x="868.61639"
-     y="36.448833"
+     style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ffd57a;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+     x="949.12628"
+     y="44.548954"
      id="text3539"
      sodipodi:linespacing="125%"><tspan
        sodipodi:role="line"
        id="tspan3541"
-       x="868.61639"
-       y="36.448833"
-       style="font-size:24px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ffcc00;fill-opacity:1;font-family:Sans;-inkscape-font-specification:Sans">Introductory</tspan></text>
+       x="949.12628"
+       y="44.548954"
+       style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ffd57a;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans">Introductory</tspan></text>
   <text
      xml:space="preserve"
-     style="font-size:24px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ff9900;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
-     x="868.69745"
-     y="64.903221"
+     style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ff9900;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+     x="963.0802"
+     y="71.71241"
      id="text4311"
      sodipodi:linespacing="125%"><tspan
        sodipodi:role="line"
        id="tspan4313"
-       x="868.69745"
-       y="64.903221">Probability</tspan></text>
+       x="963.0802"
+       y="71.71241">Probability</tspan></text>
   <text
      xml:space="preserve"
-     style="font-size:24px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ff0000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
-     x="868.60742"
-     y="91.91114"
+     style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#e68080;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+     x="896.98059"
+     y="99.979477"
      id="text4315"
      sodipodi:linespacing="125%"><tspan
        sodipodi:role="line"
        id="tspan4317"
-       x="868.60742"
-       y="91.91114">Statistical Theory</tspan></text>
+       x="896.98059"
+       y="99.979477">Statistical Theory</tspan></text>
   <text
      xml:space="preserve"
-     style="font-size:24px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#3366ff;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
-     x="869.27106"
-     y="119.97414"
+     style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#80b2ff;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+     x="881.64423"
+     y="128.04245"
      id="text4319"
      sodipodi:linespacing="125%"><tspan
        sodipodi:role="line"
        id="tspan4321"
-       x="869.27106"
-       y="119.97414">Statistical Methods</tspan></text>
+       x="881.64423"
+       y="128.04245">Statistical Methods</tspan></text>
   <text
      xml:space="preserve"
-     style="font-size:24px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#99cc00;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
-     x="869.55237"
-     y="148.22833"
+     style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#91f27a;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+     x="941.92554"
+     y="156.29665"
      id="text4323"
      sodipodi:linespacing="125%"><tspan
        sodipodi:role="line"
        id="tspan4325"
-       x="869.55237"
-       y="148.22833">Computation</tspan></text>
+       x="941.92554"
+       y="156.29665">Computation</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#5dd5b8;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+     x="971.39539"
+     y="183.96037"
+     id="text4323-1"
+     sodipodi:linespacing="125%"><tspan
+       sodipodi:role="line"
+       id="tspan4325-7"
+       x="971.39539"
+       y="183.96037">Capstone</tspan></text>
 </svg>
