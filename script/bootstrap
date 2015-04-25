@@ -52,19 +52,26 @@ haskell_failure() {
   echo
   info "    https://www.haskell.org/platform/"
   echo
-  exit 1
+  return 1
 }
 
 test_command runhaskell && {
-  info "Found runhaskell: $(command -v runhaskell)";
-  info "Version:          $(runhaskell --version)"
+  info "Found runhaskell: $(command -v runhaskell)"
+  info "Version:          ${VERSION}"
 } || haskell_failure runhaskell
 echo
 
 test_command cabal && {
+  CABAL_VERSION=$(cabal --numeric-version)
   info "Found cabal:      $(command -v cabal)";
-  info "Version:          $(cabal --numeric-version)"
-} || {haskell_failure cabal
+  info "Version:          ${CABAL_VERSION}"
+  if [[ ! $CABAL_VERSION =~ ^1\.22\..\..$ ]]; then
+    echo
+    info "Error: cabal version must be 1.22.x.x"
+    echo
+    exit 1
+  fi
+} || haskell_failure cabal
 echo
 
 head "Detecting Node.js..."
