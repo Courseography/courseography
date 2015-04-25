@@ -1,0 +1,118 @@
+#!/usr/bin/env bash
+
+set -e
+set -o pipefail
+
+# Stolen from https://github.com/heroku/heroku-buildpack-nodejs/blob/master/lib/common.sh:
+
+head() {
+  echo "==> $*"
+}
+
+info() {
+  echo "    $*"
+}
+
+# sed -l basically makes sed replace and buffer through stdin to stdout
+# so you get updates while the command runs and dont wait for the end
+# e.g. npm install | indent
+indent() {
+  c='s/^/    /'
+  case $(uname) in
+    Darwin) sed -l "$c";; # mac/bsd sed: -l buffers on line boundaries
+    *)      sed -u "$c";; # unix/gnu sed: -u unbuffered (arbitrary) chunks of data
+  esac
+}
+
+test_command() {
+  local cmd=$1
+  command -v "${cmd}" 2>&1 > /dev/null || return 1
+}
+
+head "Checking directory..."
+if [ ! -d ".git" ] || [ ! -d "hs" ] || [ ! -e "package.json" ]; then
+  info "Error: you must run this script from the root of the repository."
+  exit 1
+fi
+
+head "Detecting Haskell..."
+echo
+
+test_command runhaskell && {
+  info "Found runhaskell: $(command -v runhaskell)";
+  info "Version:          $(runhaskell --version)"
+} || {
+  info "Failed to find runhaskell on your PATH. Is The Haskell Platform installed correctly?";
+  info "Install the Haskell Platform from:"
+  echo
+  info "    https://www.haskell.org/platform/"
+  echo
+  exit 1
+}
+echo
+
+test_command cabal && {
+  info "Found cabal:      $(command -v cabal)";
+  info "Version:          $(cabal --numeric-version)"
+} || {
+  info "Failed to find cabal on your PATH. Is The Haskell Platform installed correctly?";
+  info "Install the Haskell Platform from:"
+  echo
+  info "    https://www.haskell.org/platform/"
+  echo
+  exit 1
+}
+echo
+
+head "Detecting Node.js..."
+echo
+
+test_command node && {
+  info "Found node:       $(command -v node)";
+  info "Version:          $(cabal --numeric-version)"
+} || {
+  info "Failed to find node on your PATH. Is Node.js installed correctly?";
+  info "Install Node.js using nvm:"
+  echo
+  info "    https://github.com/creationix/nvm"
+  echo
+  exit 1
+}
+echo
+
+test_command npm && {
+  info "Found npm:        $(command -v npm)";
+  info "Version:          $(npm --version)"
+} || {
+  info "Failed to find npm on your PATH. Is Node.js installed correctly?";
+  info "Install Node.js using nvm:"
+  echo
+  info "    https://github.com/creationix/nvm"
+  echo
+  exit 1
+}
+echo
+
+(cd hs && {
+  head "Creating cabal sandbox"
+  echo
+  cabal sandbox init 2>&1 | indent
+  echo
+
+  head "Updating cabal package list"
+  echo
+  cabal update 2>&1 | indent
+  echo
+
+  head "Installing cabal dependencies"
+  echo
+  cabal install --only-dependencies 2>&1 | indent
+  echo
+})
+
+head "Installing npm dependencies"
+echo
+npm install 2>&1 | indent
+echo
+
+head "Success!"
