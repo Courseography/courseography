@@ -1,6 +1,6 @@
 {
   "name": "courseography",
-  "version": "0.1.0.0",
+  "version": "0.1.0",
   "description": "Courseography is a tool created by David Liu and Ian Stewart-Binks to guide students through their undergraduate careers.",
   "main": "js/index.js",
   "scripts": {
