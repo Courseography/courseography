@@ -1,0 +1,2 @@
+server: npm run nodemon-server
+webpack: npm run bundle-dev
