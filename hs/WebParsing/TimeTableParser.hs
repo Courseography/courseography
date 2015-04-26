@@ -14,17 +14,16 @@ import Data.List.Utils
 import Data.Maybe
 import Database.Tables as Tables
 import Database.JsonParser
+import WebParsing.HtmlTable
 import Database.Tables
 import WebParsing.ParsingHelp
 import WebParsing.TimeConverter
 import Control.Monad.IO.Class
 import Data.Text.Read
 
-{--------------------------------------------------------------------------------------
-used as an intermediate container while extracting lecture and tutorial information
-from the table. Is is later converted into lecture or tutorial records by examinig the
-first letter of the section.
---------------------------------------------------------------------------------------}
+-- | used as an intermediate container while extracting lecture and tutorial information
+-- from the table. Is is later converted into lecture or tutorial records by examinig the
+-- first letter of the section.
 data CourseSlot =
   CourseSlot {
               slotSection :: T.Text,
@@ -35,18 +34,15 @@ data CourseSlot =
 timetableUrl :: String
 timetableUrl = "http://www.artsandscience.utoronto.ca/ofr/timetable/winter/"
 
-{----------------------------------------------------------------------------------------
-a list of pages that contain special formatting, are dealt with seperately and removed
-from main list.
-----------------------------------------------------------------------------------------}
+-- | a list of pages that contain special formatting, are dealt with seperately and removed
+-- from main list.
 specialCases :: [String]
 specialCases = ["assem.html",
-                "phl.html",
+                "online.html",
                 "academics-and-registration"]
 
-{----------------------------------------------------------------------------------------
-extracts a list of department page names from the main website
-----------------------------------------------------------------------------------------}
+
+-- | extracts a list of department page names from the main website
 getDeptList :: [Tag String] -> [String]
 getDeptList tags =
   let deptList = filter (tagOpen (=="a") isHref) tags
@@ -57,7 +53,7 @@ getDeptList tags =
     isHref _ = False
     getAttribute (TagOpen _ [(_, link)]) = link
 
---if a row contains "NOTE" we add 3 empty 'cells' to the beginning
+-- | if a row contains "NOTE" we add 3 empty 'cells' to the beginning
 --used to deal with corner case found in "csc.html"
 expandNote :: [T.Text] -> [T.Text]
 expandNote row =  if ( (T.take 4 (head row)) == "NOTE" )
@@ -65,11 +61,9 @@ expandNote row =  if ( (T.take 4 (head row)) == "NOTE" )
                   else row
 
 
-{----------------------------------------------------------------------------------------
-takes in a department page name, extracts the html table, partitions into a list of all
-information related to a single course, and inserts the resulting tutorials and lectures
-into the database.
-----------------------------------------------------------------------------------------}
+-- | takes in a department pagversace versaceversace versacee name, extracts the html table, partitions into a list of all
+-- information related to a single course, and inserts the resulting tutorials and lectures
+-- into the database.
 getDeptTimetable :: String -> IO ()
 getDeptTimetable url = do
   rsp <- simpleHTTP (getRequest $ timetableUrl ++ url)
@@ -77,26 +71,28 @@ getDeptTimetable url = do
   let rawSoup = map cleanTag (parseTags (T.pack body))
       toLower = if (url == "online.html") then map lowerTag rawSoup else rawSoup
       table = dropAround  (tagOpen (=="table") (\x -> True)) (tagClose (=="table")) toLower
-      cells = filter (\x ->  and [(x /= []), length x > 4])  (toCells table)
-      expandedNote = map expandNote cells
-      courseCells = partitions (\row -> (head row) /= "") expandedNote
-  mapM_ processCourseTable courseCells
+  mapM_ (\(pos, course) -> processCourseTable (foldl (\c p -> expandTable c "" p) course pos)) (toCells table)
+  --print toLower--were running into an empty list while printing out the final results-- look into this tomorrow
   where
     cleanTag (TagText s) = TagText (T.strip (replaceAll ["\r\n"] "" s))
     cleanTag s = s
-    
 
-{----------------------------------------------------------------------------------------
-partitions the html table into a 2d list of cells. Does not account for cells that take
-up more than one row or column.
-----------------------------------------------------------------------------------------}
-toCells :: [Tag T.Text] -> [[T.Text]]
+-- | partitions the html table into a 2d list of cells. Does not account for cells that take
+-- up more than one row or column.
+toCells :: [Tag T.Text] -> [ ([Pos], [[T.Text]] ) ]
 toCells tags =
-  let row = partitions (tagOpen (=="tr") (\x -> True)) tags
-      rowsColumns =  map (partitions (tagOpen (== "td") (\_ -> True))) row
-      filterCells = map (map (filter isTagText)) rowsColumns
-      textCells = map (map (map fromTagText)) filterCells
-  in  map (map T.concat) textCells
+  let row = partitions (tagOpen (=="tr") (\_ -> True)) tags
+      rowsColumns  =  map (partitions (tagOpen (== "td") (\_ -> True))) row
+      --courseRows groups cells by the courses they are contained in.
+      removedEmpty = filter (not . null) rowsColumns
+      dropLastCell = map init removedEmpty
+      courseRows = partitions (\row -> any (isCourse . fromTagText) (filter isTagText (head row))) dropLastCell
+      --foreach group of cells rep. courses, extracts the spans.
+      courseSpans = map extractSpans courseRows -- [[Pos]]
+      --following two lines takes out everything but text in each cell.
+      filterCells = map (map (map (filter isTagText))) courseRows
+      textCells =   map (map (map (\x -> T.concat (map fromTagText x))))  filterCells
+  in (zip courseSpans textCells)
 
 -- | adds a tutorial to the given session
 addTutorial :: Session -> Tutorial -> Session
@@ -105,6 +101,7 @@ addTutorial sesh tut = sesh {tutorials = tut:tutorials sesh}
 -- | adds a lecture to the given session
 addLecture :: Session -> Lecture -> Session
 addLecture sesh lec = sesh {lectures = lec:(lectures sesh)}
+
 
 -- | extracts the required information from a row of cells and places it into a CourseSlot
 --   if given a CourseSlot as input, it updates the time only. Otherwise updates time and
@@ -123,8 +120,9 @@ updateSlot row (Just slot) =
   else let newTime = T.takeWhile (/= ' ') (row !! 5)
        in (Just slot {slotTime_str = (T.append newTime (T.append " " (slotTime_str slot)))})
 
+
  -- | takes in cells representing a course, and recursively places lecture and tutorial info
- --into courseSlots.
+ -- into courseSlots.
 parseCourse :: [[T.Text]] -> Maybe CourseSlot -> [Maybe CourseSlot] -> [Maybe CourseSlot]
 parseCourse [] slot slots = slot:slots
 parseCourse course Nothing slots =
@@ -184,26 +182,25 @@ processCourseTable course = do
   let slots = filter isJust (parseCourse course Nothing [])
   let justSlots = map fromJust slots
   let sesh = makeSession justSlots
-  print code
+
   runSqlite dbStr $ do
     runMigration migrateAll
     setTutEnrol code (containsTut sesh)
     setPracEnrol code (containsPrac sesh)
     mapM_ (insertLec session code) (lectures sesh)
     mapM_ (insertTut session code) (tutorials sesh)
+  print code
   where
     containsTut sesh = any (maybe False (T.isPrefixOf "T") . tutorialSection) $ tutorials sesh
     containsPrac sesh = any (maybe False (T.isPrefixOf "P") . tutorialSection) $ tutorials sesh
 
-{----------------------------------------------------------------------------------------
-
-----------------------------------------------------------------------------------------}
 main :: IO ()
 main = do
     rsp <- simpleHTTP (getRequest $ timetableUrl ++ "sponsors.htm")
     body <- getResponseBody rsp
     let depts = getDeptList $ parseTags body
-    mapM_ getDeptTimetable depts
+    getDeptTimetable "glaf.html"
+    --mapM_ getDeptTimetable depts
 
 parseTT :: IO ()
 parseTT = do

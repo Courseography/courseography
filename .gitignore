@@ -1,20 +1,18 @@
-res/courses/
-res/fastimetable2014.csv
-timetable.html
-timetable2014.csv
-__pycache__/*
-*.xlsx
-res/courses/*
-enrol.txt
-res/courses-copy/
-*.pyc
-courses.tar.gz
-out/
-*.exe
-*.hi
-*.o
+# cabal sandbox
+.cabal-sandbox/
+cabal.sandbox.config
+
+# local database
 *.sqlite3
-style/
-SVGGen.hs
-res/graphs/CSC/csc_graph.svg
-hs/dist/
+*.sqlite3-shm
+*.sqlite3-wal
+
+# generated build files
+/hs/dist/
+
+# generated CSS
+/public/style/
+
+# generated resources
+/public/res/graphs/1.svg
+/public/res/graphs/2.svg
