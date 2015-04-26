@@ -19,7 +19,7 @@ module.exports = {
   context: __dirname,
 
   // Efficiently evaluate modules with source maps
-  devtool: "eval",
+  devtool: 'source-map',
 
   // Set entry points for individual pages
   entry: {
