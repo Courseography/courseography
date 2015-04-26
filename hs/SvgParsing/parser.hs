@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings, FlexibleContexts, GADTs, ScopedTypeVariables #-}
 module Main where
 
-import Text.XML.HaXml (Content, path, tag, children, xmlParse)
+import Text.XML.HaXml (Content, path, tag, children, childrenBy, xmlParse)
 import Text.XML.HaXml.Util (tagTextContent)
 import Control.Monad.IO.Class (liftIO)
 import Data.Maybe (mapMaybe)
@@ -12,6 +12,7 @@ import Database.SvgDatabase
 import SvgParsing.Generator
 import SvgParsing.ParserUtil
 import qualified Data.Map as M (empty)
+import Data.String.Utils (replace)
 
 main :: IO ()
 main = do
@@ -36,15 +37,17 @@ parseGraph ::  Int64  -- ^ The unique identifier of the graph.
             -> ([Path],[Shape],[Text])
 parseGraph key graphFile =
     let graphDoc = xmlParse "output.error" graphFile
-    in parseNode key (getRoot graphDoc)
+        (paths, shapes, texts) = parseNode key (getRoot graphDoc)
+    in (paths, filter small shapes, texts)
+    where
+        small shape = shapeWidth shape < 300
 
 -- | Parses a level.
 parseNode :: Int64 -- ^ The Path's corresponding graph identifier.
           -> Content i
           -> ([Path],[Shape],[Text])
 parseNode key content =
-    if getAttribute "id" content == "layer2" ||
-       getName content == "defs"
+    if getName content == "defs"
     then ([],[],[])
     else let trans = parseTransform $ getAttribute "transform" content
              style = getAttribute "style" content
@@ -69,7 +72,7 @@ parseChildren key x = foldl addThree ([],[],[]) $ map (parseNode key) x
 addThree :: ([Path],[Shape],[Text])
          -> ([Path],[Shape],[Text])
          -> ([Path],[Shape],[Text])
-addThree (a,b,c) (d,e,f) = (a ++ d, b ++ e, c ++f)
+addThree (a,b,c) (d,e,f) = (a ++ d, b ++ e, c ++ f)
 
 -- | Parses a rect.
 parseRect :: Int64 -- ^ The Rect's corresponding graph identifier.
@@ -113,16 +116,15 @@ parseText :: Int64 -- ^ The Text's corresponding graph identifier.
           -> Content i
           -> [Text]
 parseText key content =
-    if null (concatMap (tag "tspan") (children content))
+    if null (childrenBy (tag "tspan") content)
     then
         [Text key
               (getAttribute "id" content)
               (readAttr "x" content,
                readAttr "y" content)
-              (tagTextContent content)]
+              (replace "&gt;" ">" $ tagTextContent content)]
     else
-        concatMap (parseText key)
-            (concatMap (tag "tspan") (children content))
+        concatMap (parseText key) (childrenBy (tag "tspan") content)
 
 -- | Parses an ellipse.
 parseEllipse :: Int64 -- ^ The Ellipse's corresponding graph identifier.
@@ -159,7 +161,7 @@ updateShape :: String -- ^ The fill that may be added to the Shape.
 updateShape fill transform r =
     r { shapePos = addTuples transform (shapePos r),
         shapeFill = if null (shapeFill r) then fill else shapeFill r,
-        shapeType_ = if fill == "#a14c3a" then Hybrid
+        shapeType_ = if fill == "#888888" then Hybrid
                      else case shapeType_ r of
                               Hybrid   -> Hybrid
                               BoolNode -> BoolNode

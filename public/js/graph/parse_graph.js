@@ -11,8 +11,8 @@
 function buildGraph() {
     'use strict';
 
-    nodes = []; 
-    
+    nodes = [];
+
     $('.node').each(function () {
         makeNode('AND', $(this).attr('id'));
     });
@@ -27,12 +27,14 @@ function buildGraph() {
                 var orNode = id + elem.join('');
                 makeHybrid('OR', orNode);
                 $.each(elem, function (i, e) {
-                    window[orNode].parents.push(window[e]);
-                    window[e].children.push(window[orNode]);
+                    if (typeof(window[e]) !== 'undefined') {
+                        window[orNode].parents.push(window[e]);
+                        window[e].children.push(window[orNode]);
+                    }
                 });
                 window[id].parents.push(window[orNode]);
                 window[orNode].children.push(window[id]);
-            } else {
+            } else if (typeof(window[elem]) !== 'undefined') {
                 window[id].parents.push(window[elem]);
                 window[elem].children.push(window[id]);
             }
