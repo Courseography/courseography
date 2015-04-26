@@ -63,7 +63,7 @@ makeSVGDoc courseMap rects ellipses edges regions regionTexts styled =
                               concatSVG $ map (convertEdgeToSVG styled)
                                               edges
                       S.g ! A.id_ "region-labels" $
-                          concatSVG $ map (convertTextToSVG styled Region)
+                          concatSVG $ map (convertTextToSVG styled Region 0)
                                           regionTexts
 
 -- | Builds an SVG document.
@@ -186,8 +186,12 @@ convertRectToSVG styled courseMap rect
                                          ";")
                            else
                                mempty
-                  concatSVG $ map (convertTextToSVG styled (shapeType_ rect))
-                                  (shapeText rect)
+                  concatSVG $ map
+                      (convertTextToSVG
+                          styled
+                          (shapeType_ rect)
+                          (fst (shapePos rect) + (shapeWidth rect / 2)))
+                      (shapeText rect)
 
 -- | Maps styles to courses based on the courses status.
 convertSelectionToStyle :: String -> String
@@ -204,9 +208,11 @@ isSelected courseStatus =
     isPrefixOf "overridden" courseStatus
 
 -- | Converts a `Text` to SVG.
-convertTextToSVG :: Bool -> ShapeType -> Text -> S.Svg
-convertTextToSVG styled type_ text =
-    S.text_ ! A.x (stringValue $ show xPos)
+convertTextToSVG :: Bool -> ShapeType -> Double -> Text -> S.Svg
+convertTextToSVG styled type_ xPos' text =
+    S.text_ ! A.x (stringValue $ show (case type_ of
+                                            Region -> xPos
+                                            _ -> xPos'))
             ! A.y (stringValue $ show yPos)
             ! (if styled
               then
@@ -262,7 +268,9 @@ convertEllipseToSVG styled ellipse =
                         then
                             A.style "stroke:#000000;fill:none;"
                         else mempty
-            concatSVG $ map (convertTextToSVG styled BoolNode) (shapeText ellipse)
+            concatSVG $ map
+                (convertTextToSVG styled BoolNode (fst $ shapePos ellipse))
+                (shapeText ellipse)
 
 getTextStyle :: ShapeType -- ^ The parent element of the Text element in
                           --   question.
