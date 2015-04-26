@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "description": "Courseography is a tool created by David Liu and Ian Stewart-Binks to guide students through their undergraduate careers.",
   "scripts": {
-    "bundle-dev": "webpack --config js/webpack.local.config.js",
-    "bundle-prod": "webpack --config js/webpack.production.config.js",
+    "bundle-dev": "webpack --config js/webpack.local.config.js --colors",
+    "bundle-prod": "webpack --config js/webpack.production.config.js --colors",
     "foreman-dev": "nf --procfile Procfile.dev start",
     "nodemon-server": "cd hs && nodemon --exec 'cabal exec runhaskell' server.hs",
     "test": "jest ./js"
