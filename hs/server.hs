@@ -18,11 +18,19 @@ import Css.CssGen
 import Filesystem.Path.CurrentOS
 import System.Directory
 import System.Environment (lookupEnv)
+import System.IO (hSetBuffering, stdout, stderr, BufferMode(LineBuffering))
+import System.Log.Logger (updateGlobalLogger, rootLoggerName, setLevel, Priority(INFO))
 import CourseographyFacebook
 import qualified Data.Text as T
 
 main :: IO ()
 main = do
+    -- Use line buffering to ensure logging messages are printed correctly
+    hSetBuffering stdout LineBuffering
+    hSetBuffering stderr LineBuffering
+    -- Set log level to INFO so requests are logged to stdout
+    updateGlobalLogger rootLoggerName $ setLevel INFO
+
     generateCSS
     cwd <- getCurrentDirectory
     redirectUrlGraphEmail <- retrieveAuthURL testUrl
@@ -35,8 +43,7 @@ main = do
     portStr <- lookupEnv "PORT"
     let port = read (fromMaybe "8000" portStr) :: Int
 
-    print "Server is running..."
-    simpleHTTP config { port = port } $ msum
+    -- Start the HTTP server
         [ do
               nullDir
               seeOther "graph" (toResponse "Redirecting to /graph"),
