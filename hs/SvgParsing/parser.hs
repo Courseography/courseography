@@ -85,7 +85,7 @@ parseRect key content =
            readAttr "y" content)
           (readAttr "width" content)
           (readAttr "height" content)
-          ""
+          (getStyleAttr "fill" (getAttribute "style" content))
           ""
           []
           9

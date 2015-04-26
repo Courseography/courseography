@@ -180,12 +180,7 @@ convertRectToSVG styled courseMap rect
                          ! A.y (stringValue . show . snd $ shapePos rect)
                          ! A.width (stringValue . show $ shapeWidth rect)
                          ! A.height (stringValue . show $ shapeHeight rect)
-                         ! if styled || class_ /= "hybrid"
-                           then A.style (stringValue $ "fill:" ++
-                                         getFill (shapeId_ rect) ++
-                                         ";")
-                           else
-                               mempty
+                         ! A.style (stringValue $ "fill:" ++ shapeFill rect ++ ";")
                   concatSVG $ map
                       (convertTextToSVG
                           styled
@@ -282,6 +277,7 @@ getTextStyle _         = ""
 
 -- | A list of tuples that contain disciplines (areas), fill values, and courses
 ---  that are in the areas.
+--   TODO: Remove colour dependencies, and probably the whole map.
 areaMap :: M.Map [String] (T.Text, String)
 areaMap =  M.fromList
            [
