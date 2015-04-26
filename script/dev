@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+# Launch processes defined in Procfile.dev via node-foreman
+npm run foreman-dev
