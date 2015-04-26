@@ -3,6 +3,7 @@ module Main where
 import Control.Monad (msum)
 import Control.Monad.IO.Class (liftIO)
 import Data.Maybe (fromMaybe)
+import Data.Time.Format (FormatTime)
 import Happstack.Server
 import GridResponse
 import GraphResponse
@@ -19,9 +20,21 @@ import Filesystem.Path.CurrentOS
 import System.Directory
 import System.Environment (lookupEnv)
 import System.IO (hSetBuffering, stdout, stderr, BufferMode(LineBuffering))
-import System.Log.Logger (updateGlobalLogger, rootLoggerName, setLevel, Priority(INFO))
+import System.Log.Logger (logM, updateGlobalLogger, rootLoggerName, setLevel, Priority(INFO))
 import CourseographyFacebook
 import qualified Data.Text as T
+
+-- | log access requests using hslogger and a condensed log formatting
+--
+logMAccessShort :: FormatTime t => LogAccess t
+logMAccessShort host user time requestLine responseCode size referer userAgent =
+    logM "Happstack.Server.AccessLog.Combined" INFO $ unwords
+        [ host
+        , user
+        , requestLine
+        , show responseCode
+        , referer
+        ]
 
 main :: IO ()
 main = do
@@ -44,6 +57,10 @@ main = do
     let port = read (fromMaybe "8000" portStr) :: Int
 
     -- Start the HTTP server
+    simpleHTTP nullConf {
+        port      = port
+      , logAccess = Just logMAccessShort
+    } $ msum
         [ do
               nullDir
               seeOther "graph" (toResponse "Redirecting to /graph"),
