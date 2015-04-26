@@ -32,7 +32,7 @@ timetableScripts = do jQuery
                                                 "static/js/common/course_description.js"])
 
 drawScripts :: H.Html
-drawScripts = do jQuery 
+drawScripts = do jQuery
                  concatHtml (map makeScript ["https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js",
                                              "static/js/draw/variables.js",
                                              "static/js/draw/path.js",

@@ -12,7 +12,7 @@ import Scripts
 
 graphResponse :: ServerPart Response
 graphResponse =
-   ok $ toResponse $
+    ok $ toResponse $
     masterTemplate "Courseography - Graph"
                 [H.meta ! A.name "keywords"
                         ! A.content "",
