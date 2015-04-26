@@ -14,8 +14,9 @@ import SvgParsing.ParserUtil
 import qualified Data.Map as M (empty)
 
 main :: IO ()
---main = performParse "CSC" "graph_regions.svg"
-main = performParse "CSC2015" "csc2015.svg"
+main = do
+    performParse "ComputerScience" "csc2015.svg"
+    performParse "Statistics" "sta2015.svg"
 
 performParse :: String -- ^ The title of the graph.
              -> String -- ^ The filename of the file that will be parsed.
