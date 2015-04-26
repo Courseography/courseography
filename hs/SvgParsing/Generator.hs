@@ -161,7 +161,7 @@ convertRectToSVG styled courseMap rect
             class_ = case shapeType_ rect of
                          Node -> "node"
                          Hybrid -> "hybrid"
-        in S.g ! A.id_ (stringValue $ filter (\c -> not $ elem c ",()/") $ shapeId_ rect)
+        in S.g ! A.id_ (stringValue $ toId $ shapeId_ rect)
                ! A.class_ (stringValue class_)
                ! S.customAttribute "data-group" (stringValue
                                                  (getArea (shapeId_ rect)))
@@ -225,9 +225,9 @@ convertEdgeToSVG styled path =
            ! A.class_ "path"
            ! A.d (stringValue $ 'M' : buildPathString (pathPoints path))
            ! A.markerEnd "url(#arrow)"
-           ! S.customAttribute "source-node" (stringValue $ filter (/=',')
+           ! S.customAttribute "source-node" (stringValue $ toId
                                                           $ pathSource path)
-           ! S.customAttribute "target-node" (stringValue $ filter (/=',')
+           ! S.customAttribute "target-node" (stringValue $ toId
                                                           $ pathTarget path)
            ! if styled
              then
@@ -307,3 +307,7 @@ ellipseTextStyle = "font-size:7.5pt;"
 -- | The style for Text elements of regions.
 regionTextStyle :: String
 regionTextStyle = "font-size:9pt;"
+
+-- | Strip disallowed characters from string for DOM id
+toId :: String -> String
+toId = filter (\c -> not $ elem c ",()/<>%")
