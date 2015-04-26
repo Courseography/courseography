@@ -2,6 +2,7 @@ module Main where
 
 import Control.Monad (msum)
 import Control.Monad.IO.Class (liftIO)
+import Data.Maybe (fromMaybe)
 import Happstack.Server
 import GridResponse
 import GraphResponse
@@ -16,6 +17,7 @@ import Database.CourseQueries (retrieveCourse, allCourses, queryGraphs, courseIn
 import Css.CssGen
 import Filesystem.Path.CurrentOS
 import System.Directory
+import System.Environment (lookupEnv)
 import CourseographyFacebook
 import qualified Data.Text as T
 
@@ -28,8 +30,13 @@ main = do
     let staticDir = encodeString (parent $ decodeString cwd) ++ "public/"
     aboutContents <- readFile "../README.md"
     privacyContents <- readFile "../PRIVACY.md"
+
+    -- Bind server to PORT environment variable if provided
+    portStr <- lookupEnv "PORT"
+    let port = read (fromMaybe "8000" portStr) :: Int
+
     print "Server is running..."
-    simpleHTTP nullConf $ msum
+    simpleHTTP config { port = port } $ msum
         [ do
               nullDir
               seeOther "graph" (toResponse "Redirecting to /graph"),
