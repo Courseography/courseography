@@ -28,7 +28,8 @@ buildPath rects ellipses entity idCounter
         let start = head coords
             end = last coords
             sourceNode = getIntersectingShape start (rects ++ ellipses)
-            targetNode = getIntersectingShape end (rects ++ ellipses)
+            targetNode = getIntersectingShape end
+                             (filter (\r -> shapeId_ r /= sourceNode) rects ++ ellipses)
             in Path (pathGId entity)
                     ('p' : show idCounter)
                     coords
