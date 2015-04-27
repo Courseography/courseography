@@ -55,7 +55,7 @@ parseNode key content =
              (chilrenPaths, childrenShapes, childrenTexts) =
                  parseChildren key (path [children] content)
              rects = map (parseRect key) (tag "rect" content)
-             texts = concatMap (parseText key) (tag "text" content)
+             texts = concatMap (parseText key style) (tag "text" content)
              paths = mapMaybe (parsePath key) (tag "path" content)
              ellipses = map (parseEllipse key) (tag "ellipse" content)
          in (map (updatePath fill trans) (paths ++ chilrenPaths),
@@ -113,18 +113,29 @@ parsePath key content =
 
 -- | Parses a text.
 parseText :: Int64 -- ^ The Text's corresponding graph identifier.
+          -> String
           -> Content i
           -> [Text]
-parseText key content =
+parseText key style content =
     if null (childrenBy (tag "tspan") content)
     then
         [Text key
               (getAttribute "id" content)
               (readAttr "x" content,
                readAttr "y" content)
-              (replace "&gt;" ">" $ tagTextContent content)]
+              (replace "&gt;" ">" $ tagTextContent content)
+              align
+              fill]
     else
-        concatMap (parseText key) (childrenBy (tag "tspan") content)
+        concatMap (parseText key $ getAttribute "style" content)
+                  (childrenBy (tag "tspan") content)
+    where
+        newStyle = style ++ getAttribute "style" content
+        alignAttr = getStyleAttr "text-anchor" newStyle
+        align = if null alignAttr
+                then "begin"
+                else alignAttr
+        fill = getStyleAttr "fill" newStyle
 
 -- | Parses an ellipse.
 parseEllipse :: Int64 -- ^ The Ellipse's corresponding graph identifier.

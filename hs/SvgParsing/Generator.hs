@@ -205,19 +205,28 @@ isSelected courseStatus =
 -- | Converts a `Text` to SVG.
 convertTextToSVG :: Bool -> ShapeType -> Double -> Text -> S.Svg
 convertTextToSVG styled type_ xPos' text =
-    S.text_ ! A.x (stringValue $ show (case type_ of
-                                            Region -> xPos
-                                            _ -> xPos'))
+    S.text_ ! A.x (stringValue $ show $
+                      if type_ == Region
+                      then xPos
+                      else xPos')
             ! A.y (stringValue $ show yPos)
-            ! (if styled
-              then
-                  A.style (stringValue $
-                           getTextStyle type_ ++
-                           "font-family:sans-serif;stroke:none;")
-              else
-                  mempty)
+            ! A.style (stringValue $ align ++ fontStyle ++ fill)
             $ toMarkup $ textText text
-    where (xPos, yPos) = textPos text
+    where
+        (xPos, yPos) = textPos text
+        alignVal = case type_ of
+                       Region -> textAlign text
+                       _ -> "middle"
+        align = "text-anchor:" ++ alignVal ++ ";"
+        fill = case textFill text of
+               "" -> ""
+               colour -> "fill:" ++ colour ++ ";"
+        fontStyle = if styled
+                    then
+                        getTextStyle type_ ++
+                        "font-family:sans-serif;stroke:none;"
+                    else
+                        ""
 
 -- | Converts a `Path` to SVG.
 convertEdgeToSVG :: Bool -> Path -> S.Svg

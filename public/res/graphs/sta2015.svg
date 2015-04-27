@@ -14,7 +14,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.5 r10040"
-   sodipodi:docname="drawing.svg">
+   sodipodi:docname="sta2015.svg">
   <defs
      id="defs4" />
   <sodipodi:namedview
@@ -24,11 +24,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.49497475"
-     inkscape:cx="547.14286"
-     inkscape:cy="235.21429"
+     inkscape:zoom="1.4"
+     inkscape:cx="955.48818"
+     inkscape:cy="443.38509"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="g4501"
      showgrid="false"
      inkscape:window-width="1280"
      inkscape:window-height="697"
@@ -47,7 +47,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -2273,68 +2273,68 @@
       <text
          sodipodi:linespacing="125%"
          id="text3539"
-         y="44.548954"
-         x="949.12628"
-         style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ffd57a;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         y="44.549118"
+         x="1061.1787"
+         style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:end;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:end;fill:#ffd57a;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
          xml:space="preserve"><tspan
-           style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ffd57a;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
-           y="44.548954"
-           x="949.12628"
+           style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:end;line-height:125%;writing-mode:lr-tb;text-anchor:end;fill:#ffd57a;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+           y="44.549118"
+           x="1061.1787"
            id="tspan3541"
            sodipodi:role="line">Introductory</tspan></text>
       <text
          sodipodi:linespacing="125%"
          id="text4311"
          y="71.71241"
-         x="963.0802"
-         style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#ff9900;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         x="1060.627"
+         style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:end;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:end;fill:#ff9900;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
          xml:space="preserve"><tspan
            y="71.71241"
-           x="963.0802"
+           x="1060.627"
            id="tspan4313"
            sodipodi:role="line">Probability</tspan></text>
       <text
          sodipodi:linespacing="125%"
          id="text4315"
-         y="99.979477"
-         x="896.98059"
-         style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#e68080;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         y="99.999779"
+         x="1060.3486"
+         style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:end;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:end;fill:#e68080;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
          xml:space="preserve"><tspan
-           y="99.979477"
-           x="896.98059"
+           y="99.999779"
+           x="1060.3486"
            id="tspan4317"
            sodipodi:role="line">Statistical Theory</tspan></text>
       <text
          sodipodi:linespacing="125%"
          id="text4319"
          y="128.04245"
-         x="881.64423"
-         style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#80b2ff;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         x="1059.6443"
+         style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:end;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:end;fill:#80b2ff;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
          xml:space="preserve"><tspan
            y="128.04245"
-           x="881.64423"
+           x="1059.6443"
            id="tspan4321"
            sodipodi:role="line">Statistical Methods</tspan></text>
       <text
          sodipodi:linespacing="125%"
          id="text4323"
          y="156.29665"
-         x="941.92554"
-         style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#91f27a;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         x="1059.9255"
+         style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:end;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:end;fill:#91f27a;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
          xml:space="preserve"><tspan
            y="156.29665"
-           x="941.92554"
+           x="1059.9255"
            id="tspan4325"
            sodipodi:role="line">Computation</tspan></text>
       <text
          sodipodi:linespacing="125%"
          id="text4323-1"
          y="183.96037"
-         x="971.39539"
-         style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#5dd5b8;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+         x="1059.3954"
+         style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:end;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:end;fill:#5dd5b8;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
          xml:space="preserve"><tspan
            y="183.96037"
-           x="971.39539"
+           x="1059.3954"
            id="tspan4325-7"
            sodipodi:role="line">Capstone</tspan></text>
     </g>
