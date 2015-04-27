@@ -11,7 +11,7 @@ import Scripts
 
 fourOhFourResponse :: ServerPart Response
 fourOhFourResponse =
-  ok $ toResponse $
+  notFound $ toResponse $
     H.html $ do
         H.head $ do
             H.title "Courseography - 404!"
