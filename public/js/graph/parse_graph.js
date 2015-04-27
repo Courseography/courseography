@@ -8,7 +8,7 @@
  * Generates Node and Edge objects based on geometric relationships.
  * TODO: This function is too long.
  */
-function buildGraph() {
+function buildGraph(gId) {
     'use strict';
 
     nodes = [];
@@ -40,6 +40,48 @@ function buildGraph() {
             }
         });
     });
+
+    // Hard-coded hybrid relationships.
+    // This should be generated on the server.
+    if (gId === '1') { // CSC graph
+        h91.parents.push(mat135136137157calc1);
+        mat135136137157calc1.children.push(h91);
+        h133csc165calc1.parents.push(csc165240);
+        csc165240.children.push(h133csc165calc1);
+        h133csc165calc1.parents.push(mat135136137157calc1); // Auto-generated OR node
+        mat135136137157calc1.children.push(h133csc165calc1);
+        h101.parents.push(mat221223240lin1);
+        mat221223240lin1.children.push(h101);
+        h99.parents.push(sta247255257sta1);
+        sta247255257sta1.children.push(h99);
+        h142.parents.push(sta247255257sta1);
+        sta247255257sta1.children.push(h142);
+        h103.parents.push(sta247255257sta1);
+        sta247255257sta1.children.push(h103);
+        h89.parents.push(csc263265);
+        csc263265.children.push(h89);
+        h121.parents.push(csc263265);
+        csc263265.children.push(h121);
+        h131.parents.push(csc263265);
+        csc263265.children.push(h131);
+        h123.parents.push(csc236240);
+        csc236240.children.push(h123);
+    } else if (gId === '2') { // STA graph
+        // Because of naming conventions, we re-write the prereqs manually
+        h211.logicalType = 'OR';
+        h211.parents = [sta247, sta255, sta257];
+        sta247.children.push(h211);
+        sta255.children.push(h211);
+        sta257.children.push(h211);
+
+        h206.logicalType = 'AND';
+        h206.parents = [mat235237257];
+        mat235237257.children.push(h206);
+
+        h199.logicalType = 'AND';
+        h199.parents = [csc108120148];
+        csc108120148.children.push(h199);
+    }
 
     $('.bool').each(function () {
         var id = $(this).attr('id');

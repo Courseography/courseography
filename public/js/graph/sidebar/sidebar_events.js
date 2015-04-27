@@ -4,7 +4,7 @@
 **/
 $('#reset').click(function () {
     'use strict';
-    
+
     reset();
     enableReset();
 })
@@ -28,7 +28,7 @@ $('.focus').click(function(e) {
         updateActiveFocus(id);
         $('#' + id + '-details').animate({height: '128px'}, 'fast');
         $('#' + id + '-details').html(window[id + 'Description']);
-    } 
+    }
 });
 
 
@@ -79,7 +79,7 @@ function loadGraph(id) {
         FCEPrerequisiteCourses = [csc318, csc454];
     }
 
-    buildGraph();
+    buildGraph(id);
 
     // Set mouse callbacks
     setMouseCallbacks();
@@ -120,12 +120,12 @@ function getGraphsInDatabase() {
  * (If there are active FCEs or not)
 **/
 function enableReset() {
-    'use strict'; 
+    'use strict';
 
     if (FCEs > 0) {
         $('#reset').attr('disabled', false);
     } else {
-        $('#reset').attr('disabled', true);  
+        $('#reset').attr('disabled', true);
     }
 
     fillFCECount();
