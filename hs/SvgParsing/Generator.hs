@@ -90,11 +90,15 @@ buildSVG gId courseMap filename styled =
                                               ShapeGId ==. gId] []
         let courseStyleMap = M.map convertSelectionToStyle courseMap
             texts          = map entityVal sqlTexts
-            rects          = map (buildRect texts . entityVal) sqlRects
+            rects          = zipWith (buildRect texts)
+                                     (map entityVal sqlRects)
+                                     (map keyAsInt sqlRects)
             ellipses       = zipWith (buildEllipses texts)
-                                     (map entityVal sqlEllipses) [1..]
+                                     (map entityVal sqlEllipses)
+                                     (map keyAsInt sqlEllipses)
             paths          = zipWith (buildPath rects ellipses)
-                                     (map entityVal sqlPaths) [1..]
+                                     (map entityVal sqlPaths)
+                                     (map keyAsInt sqlPaths)
             regions        = filter pathIsRegion paths
             edges          = filter (not . pathIsRegion) paths
             regionTexts    = filter (not .
@@ -108,6 +112,9 @@ buildSVG gId courseMap filename styled =
                                                     regionTexts
                                                     styled
         liftIO $ writeFile filename stringSVG
+        where
+            keyAsInt :: PersistEntity a => Entity a -> Int64
+            keyAsInt = (\(PersistInt64 x) -> x) . head . keyToValues . entityKey
 
 -- | Gets a tuple from areaMap where id_ is in the list of courses for that
 --   tuple.
