@@ -40,11 +40,12 @@ function createGraphButtons(graphs) {
     'use strict';
 
     for (var i = 0; i < graphs.length; i++) {
+        var graphId = graphs[i].gId;
         var graphTitle = graphs[i].title;
-        var graphButton = '<div id = "graph-' + graphTitle +'" class = "graph-button">';
+        var graphButton = '<div id = "graph-' + graphId +'" class = "graph-button">';
         $('#graphs').append(graphButton);
-        $('#graph-' + graphTitle).html(graphTitle);
-        $('#graph-' + graphTitle).data('id', graphs[i].gId);
+        $('#graph-' + graphId).html(graphTitle);
+        $('#graph-' + graphId).data('id', graphs[i].gId);
     }
 }
 
