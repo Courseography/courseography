@@ -17,13 +17,13 @@ drawStyles = do
     modeButtonsCSS
     colourButtonsCSS
     clickedButtonsCSS
-    simpleButton 
+    simpleButton
     inputCSS
     textButtonCSS
     nodeLabelCSS
     elbowCSS
     scrollBar
-    regionCSS 
+    regionCSS
     finishRegionCSS
 
 {- The wrapping around the canvas elements. -}
@@ -40,12 +40,12 @@ titleDiv = "#about-div" ? do
     margin 0 0 0 (px 10)
 
 {- The SVG canvas and the grid background. -}
-canvasCSS = do 
+canvasCSS = do
     "#background" ? do
         height100
         width100
-        "background-image" -: "url(/static/res/grid.gif)"
-        "background-size" -: "128px"
+        "background-image" -: "url(/static/res/grid.png)"
+        "background-size" -: "8px"
         opacity 0.3
     "#mySVG" ? do
         height100
@@ -74,10 +74,10 @@ scrollBar = do
     "::-webkit-scrollbar-track" ? do
         "-webkit-box-shadow" -: "inset 0 0 6px rgba(0,0,0,1)"
         "border-radius" -: "10px"
-    "::-webkit-scrollbar-thumb" ? do 
+    "::-webkit-scrollbar-thumb" ? do
         "border-radius" -: "10px";
         "-webkit-box-shadow" -: "inset 0 0 6px rgba(0,0,0,0.5)"
-        "background-color" -: "#28B0A2"  
+        "background-color" -: "#28B0A2"
 
 {- The mode buttons. -}
 modeButtonsCSS = ".mode" ? do
@@ -185,7 +185,7 @@ nodeLabelCSS = ".mylabel" ? do
     "dominant-baseline" -: "central"
 
 {- The invisible elbow nodes. -}
-elbowCSS = do 
+elbowCSS = do
     ".elbow" ? do
         opacity 0
         ":hover" & do
