@@ -4,7 +4,7 @@
 function updateFCECount() {
     'use strict';
 
-    var FCEs = FCEs100 + FCEs200 + FCEs300 + FCEs400 + FCEsMAT;
+    FCEs = FCEs100 + FCEs200 + FCEs300 + FCEs400 + FCEsMAT;
     $('#FCEcount').html(FCEs.toFixed(1));
 }
 
