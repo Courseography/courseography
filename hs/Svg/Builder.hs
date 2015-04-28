@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings, FlexibleContexts, GADTs, ScopedTypeVariables #-}
-module SvgParsing.Builder where
+module Svg.Builder where
 
-import SvgParsing.ParserUtil
+import Svg.ParserUtil
 import Data.Char
 import Data.List
 import Database.Tables

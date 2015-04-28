@@ -1,4 +1,4 @@
-module SvgParsing.ParserUtil where
+module Svg.ParserUtil where
 
 import Text.XML.HaXml hiding (find)
 import Text.XML.HaXml.Namespaces (printableName)

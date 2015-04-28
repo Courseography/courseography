@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Database.SvgDatabase where
+module Svg.Database where
 
 import Control.Monad.IO.Class  (liftIO, MonadIO)
 import Database.Persist.Sqlite

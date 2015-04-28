@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings, FlexibleContexts, GADTs, ScopedTypeVariables #-}
-module Main where
+module Svg.Parser where
 
 import Text.XML.HaXml (Content, path, tag, children, childrenBy, xmlParse)
 import Text.XML.HaXml.Util (tagTextContent)
@@ -8,9 +8,9 @@ import Data.Maybe (mapMaybe)
 import Data.Int
 import Database.Tables
 import Database.DataType
-import Database.SvgDatabase
-import SvgParsing.Generator
-import SvgParsing.ParserUtil
+import Svg.Database
+import Svg.Generator
+import Svg.ParserUtil
 import qualified Data.Map as M (empty)
 import Data.String.Utils (replace)
 

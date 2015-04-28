@@ -1,8 +1,8 @@
 {-# LANGUAGE OverloadedStrings, GADTs, ScopedTypeVariables #-}
-module SvgParsing.Generator where
+module Svg.Generator where
 
-import SvgParsing.Builder
-import SvgParsing.ParserUtil
+import Svg.Builder
+import Svg.ParserUtil
 import Database.Tables
 import Database.DataType
 import Control.Monad.IO.Class (liftIO)
