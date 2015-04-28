@@ -123,6 +123,7 @@ parseText key style content =
               (getAttribute "id" content)
               (readAttr "x" content,
                readAttr "y" content)
+              -- TODO: do a more general conversion
               (replace "&gt;" ">" $ tagTextContent content)
               align
               fill]
