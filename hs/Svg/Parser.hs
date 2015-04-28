@@ -6,18 +6,21 @@
 --  application.
 module Svg.Parser where
 
-import Text.XML.HaXml (Content, path, tag, children, childrenBy, xmlParse)
-import Text.XML.HaXml.Util (tagTextContent)
-import Control.Monad.IO.Class (liftIO)
-import Data.Maybe (mapMaybe)
+import Data.Maybe (mapMaybe, catMaybes, fromMaybe)
 import Data.Int
+import Data.List.Split (splitOn)
+import Data.List (find)
+import qualified Data.Map as M (empty)
+import Control.Monad.IO.Class (liftIO)
+import Data.String.Utils (replace)
+import Text.XML.HaXml hiding (find)
+import Text.XML.HaXml.Util (tagTextContent)
+import Text.XML.HaXml.Namespaces (printableName)
 import Database.Tables
 import Database.DataType
 import Svg.Database
 import Svg.Generator
 import Svg.ParserUtil
-import qualified Data.Map as M (empty)
-import Data.String.Utils (replace)
 
 main :: IO ()
 main = do
@@ -37,71 +40,91 @@ performParse graphTitle inputFilename =
       buildSVG key M.empty ("../public/res/graphs/" ++ show key ++ ".svg") False
       print "Success"
 
+-- *Main parsing functions
+
+-- |These functions traverse the raw SVG tree and return three lists, each
+--  containing values corresponding to different graph elements
+--  (edges, nodes, and text).
+
+-- |Parses an SVG file.
 parseGraph ::  Int64  -- ^ The unique identifier of the graph.
             -> String -- ^ The file contents of the graph that will be parsed.
             -> ([Path],[Shape],[Text])
 parseGraph key graphFile =
-    let graphDoc = xmlParse "output.error" graphFile
-        (paths, shapes, texts) = parseNode key (getRoot graphDoc)
+    let Document _ _ root _ = xmlParse "output.error" graphFile
+        svgRoot = head $ (tag "svg") $ CElem root undefined
+        (paths, shapes, texts) = parseNode key svgRoot
     in (paths, filter small shapes, texts)
     where
+        -- Raw SVG seems to have a rectangle the size of the whole image
         small shape = shapeWidth shape < 300
 
--- | Parses a level.
+-- |The main parsing function. Parses an SVG element,
+--  and then recurses on its children.
 parseNode :: Int64 -- ^ The Path's corresponding graph identifier.
           -> Content i
           -> ([Path],[Shape],[Text])
 parseNode key content =
     if getName content == "defs"
     then ([],[],[])
-    else let trans = parseTransform $ getAttribute "transform" content
-             style = getAttribute "style" content
-             fill = getStyleAttr "fill" style
-             (chilrenPaths, childrenShapes, childrenTexts) =
-                 parseChildren key (path [children] content)
-             rects = map (parseRect key) (tag "rect" content)
-             texts = concatMap (parseText key style) (tag "text" content)
-             paths = mapMaybe (parsePath key) (tag "path" content)
-             ellipses = map (parseEllipse key) (tag "ellipse" content)
-         in (map (updatePath fill trans) (paths ++ chilrenPaths),
-             map (updateShape fill trans) (rects ++ ellipses ++ childrenShapes),
-             map (updateText trans) (texts ++ childrenTexts))
+    else let attrs = contentAttrs content
+             trans = parseTransform $ lookupAttr "transform" attrs
+             styles' = styles (contentAttrs content)
+             fill = styleVal "fill" styles'
+             -- TODO: These 'tag "_"' conditions are mutually exclusive (I think).
+             rects = map (parseRect key . contentAttrs) (tag "rect" content)
+             texts = concatMap (parseText key styles') (tag "text" content)
+             paths = mapMaybe (parsePath key . contentAttrs) (tag "path" content)
+             ellipses = map (parseEllipse key . contentAttrs) (tag "ellipse" content)
+             concatThree (a1, b1, c1) (a2, b2, c2) =
+                 (a1 ++ a2, b1 ++ b2, c1 ++ c2)
+             (newPaths, newShapes, newTexts) =
+                foldl concatThree (paths, rects ++ ellipses, texts)
+                                  (map (parseNode key) (path [children] content))
+         in (map (updatePath fill trans) (newPaths),
+             map (updateShape fill trans) (newShapes),
+             map (updateText trans) (newTexts))
 
--- | Parses a list of Content.
-parseChildren :: Int64 -- ^ The corresponding graph identifier.
-              -> [Content i]
-              -> ([Path],[Shape],[Text])
-parseChildren key x = foldl addThree ([],[],[]) $ map (parseNode key) x
-
--- TODO: Can't find way to zip tuples.
-addThree :: ([Path],[Shape],[Text])
-         -> ([Path],[Shape],[Text])
-         -> ([Path],[Shape],[Text])
-addThree (a,b,c) (d,e,f) = (a ++ d, b ++ e, c ++ f)
-
--- | Parses a rect.
+-- |Create a rectangle from a list of attributes.
 parseRect :: Int64 -- ^ The Rect's corresponding graph identifier.
-          -> Content i
+          -> [Attribute]
           -> Shape
-parseRect key content =
+parseRect key attrs =
     Shape key
           ""
-          (readAttr "x" content,
-           readAttr "y" content)
-          (readAttr "width" content)
-          (readAttr "height" content)
-          (getStyleAttr "fill" (getAttribute "style" content))
+          (readAttr "x" attrs,
+           readAttr "y" attrs)
+          (readAttr "width" attrs)
+          (readAttr "height" attrs)
+          (styleVal "fill" (styles attrs))
           ""
           []
           9
           Node
 
--- | Parses a path.
+-- |Create an ellipse from a list of attributes.
+parseEllipse :: Int64 -- ^ The Ellipse's corresponding graph identifier.
+             -> [Attribute]
+             -> Shape
+parseEllipse key attrs =
+    Shape key
+          ""
+          (readAttr "cx" attrs,
+           readAttr "cy" attrs)
+          (readAttr "rx" attrs * 2)
+          (readAttr "ry" attrs * 2)
+          ""
+          ""
+          []
+          20
+          BoolNode
+
+-- |Create a path from a list of attributes.
 parsePath :: Int64 -- ^ The Path's corresponding graph identifier.
-          -> Content i
+          -> [Attribute]
           -> Maybe Path
-parsePath key content =
-    if last (getAttribute "d" content) == 'z' && not isRegion
+parsePath key attrs =
+    if last (lookupAttr "d" attrs) == 'z' && not isRegion
     then Nothing
     else Just (Path key
                     ""
@@ -111,53 +134,123 @@ parsePath key content =
                     isRegion
                     ""
                     "")
-    where d = parsePathD $ getAttribute "d" content
-          fillAttr = getStyleAttr "fill" (getAttribute "style" content)
-          isRegion = not $
-              null fillAttr || fillAttr == "none"
+    where
+        d = parsePathD $ lookupAttr "d" attrs
+        fillAttr = styleVal "fill" (styles attrs)
+        isRegion = not $
+            null fillAttr || fillAttr == "none"
 
--- | Parses a text.
+-- |Create text values from content.
+--  It is necessary to pass in the content because we need to search
+--  for nested tspan elements.
 parseText :: Int64 -- ^ The Text's corresponding graph identifier.
-          -> String
+          -> [(String, String)]
           -> Content i
           -> [Text]
 parseText key style content =
     if null (childrenBy (tag "tspan") content)
     then
         [Text key
-              (getAttribute "id" content)
-              (readAttr "x" content,
-               readAttr "y" content)
+              (lookupAttr "id" (contentAttrs content))
+              (readAttr "x" (contentAttrs content),
+               readAttr "y" (contentAttrs content))
               (replace "&gt;" ">" $ tagTextContent content)
               align
               fill]
     else
-        concatMap (parseText key $ getAttribute "style" content)
+        concatMap (parseText key $ styles $ contentAttrs content)
                   (childrenBy (tag "tspan") content)
     where
-        newStyle = style ++ getAttribute "style" content
-        alignAttr = getStyleAttr "text-anchor" newStyle
+        newStyle = style ++ styles (contentAttrs content)
+        alignAttr = styleVal "text-anchor" newStyle
         align = if null alignAttr
                 then "begin"
                 else alignAttr
-        fill = getStyleAttr "fill" newStyle
+        fill = styleVal "fill" newStyle
 
--- | Parses an ellipse.
-parseEllipse :: Int64 -- ^ The Ellipse's corresponding graph identifier.
-             -> Content i
-             -> Shape
-parseEllipse key content =
-    Shape key
-          ""
-          (readAttr "cx" content,
-           readAttr "cy" content)
-          (readAttr "rx" content * 2)
-          (readAttr "ry" content * 2)
-          ""
-          ""
-          []
-          20
-          BoolNode
+
+-- *Helpers for manipulating attributes
+
+-- |Gets the tag name of a Content Element.
+getName :: Content i -> String
+getName (CElem (Elem a _ _) _) = printableName a
+getName _ = ""
+
+contentAttrs :: Content i -> [Attribute]
+contentAttrs (CElem (Elem _ attrs _) _) = attrs
+contentAttrs _ = []
+
+-- |Gets an Attribute's name.
+attrName :: Attribute -> String
+attrName (qname, _) = printableName qname
+
+-- |Gets an Attribute's value.
+attrVal :: Attribute -> String
+attrVal (_, val) = show val
+
+-- |Looks up the (string) value of the attribute with the corresponding name.
+--  Returns the empty string if the attribute isn't found.
+lookupAttr :: String -> [Attribute] -> String
+lookupAttr name attrs =
+    maybe "" (show . snd) $ find (\x -> attrName x == name) attrs
+
+-- |Looks up an attribute value and convert to another type.
+readAttr :: Read a => String    -- ^ The attribute's name.
+                   -> [Attribute] -- ^ The element that contains the attribute.
+                   -> a
+readAttr attr attrs = read $ lookupAttr attr attrs
+
+-- |Return a list of styles from the style attribute of an element.
+--  Every style has the form (name, value).
+styles :: [Attribute] -> [(String, String)]
+styles attrs =
+    let styleStr = lookupAttr "style" attrs
+    in map toStyle $ splitOn ";" styleStr
+    where
+        toStyle s =
+            case splitOn ":" s of
+            [n,v] -> (n,v)
+            _ -> ("","")
+
+-- |Gets a style attribute from a style string.
+styleVal :: String -> [(String, String)] -> String
+styleVal name styles = fromMaybe "" $ lookup name styles
+
+-- | Parses a transform String into a tuple of Float.
+parseTransform :: String -> Point
+parseTransform "" = (0,0)
+parseTransform transform =
+    let parsedTransform = splitOn "," $ drop 10 transform
+        xPos = read $ parsedTransform !! 0
+        yPos = read $ init $ parsedTransform !! 1
+    in (xPos, yPos)
+
+-- | Parses a path's `d` attribute.
+parsePathD :: String -- ^ The 'd' attribute of an SVG path.
+           -> [Point]
+parsePathD d
+    | head d == 'm' = relCoords
+    | otherwise = absCoords
+    where
+      lengthMoreThanOne x = length x > 1
+      coordList = filter lengthMoreThanOne (map (splitOn ",") $ splitOn " " d)
+      -- Converts a relative coordinate structure into an absolute one.
+      relCoords = tail $ foldl (\x y -> x ++ [addTuples (convertToPoint y)
+                                                        (last x)])
+                               [(0,0)]
+                               coordList
+      -- Converts a relative coordinate structure into an absolute one.
+      absCoords = map convertToPoint coordList
+      convertToPoint y = (read (head y), read (last y))
+
+
+-- *Other helpers
+
+-- |These functions are used to update the parsed values
+--  with styles (transform and fill) inherited from their parents.
+--
+--  Eventually, it would be nice if we removed these functions and
+--  Simply passed everything down when making the recursive calls.
 
 updatePath :: String -- ^ The fill that may be added to the Path.
            -> Point  -- ^ Transform that will be added to the Shape's
