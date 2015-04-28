@@ -20,6 +20,7 @@ function hoverFocus(event) {
 
     if ($(".modal").length === 0 && activeFocus === '') {
         var id = event.target.parentNode.id;
+
         // Highlight missing prerequisites
         window[id].focus();
 
@@ -43,6 +44,7 @@ function hoverUnfocus(event) {
         var timeout = setTimeout(function () {
             $('.tooltip-group').hide('slow', function () { $(this).remove();});
         }, 100);
+
         timeouts.push(timeout);
     }
 }
@@ -57,6 +59,7 @@ function turnNode(event) {
 
     if (activeFocus === '' && $('.modal').length === 0) {
         var id = event.target.parentNode.id;
+
         // Update this node
         window[id].turn();
         updateClickedCourses(id, window[id].isSelected());
@@ -65,6 +68,5 @@ function turnNode(event) {
         // Check the courses with FCE reqs
         csc318.updateStatus();
         csc454.updateStatus();
-
     }
 }

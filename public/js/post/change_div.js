@@ -22,7 +22,7 @@ $('#major').click(function (e) {
 });
 
 
-$('#minor').click (function (e) {
+$('#minor').click(function (e) {
     'use strict';
 
     e.preventDefault();
@@ -30,7 +30,7 @@ $('#minor').click (function (e) {
 });
 
 
-$('.code').click (function (e) {
+$('.code').click(function (e) {
     'use strict';
 
     e.preventDefault();
@@ -44,15 +44,15 @@ $('.code').click (function (e) {
 function resetAttributes() {
     'use strict';
 
-    $('#div_specialist').css('display', 'none');
-    $('#div_major').css('display', 'none');
-    $('#div_minor').css('display', 'none');
+    $('#div_specialist').hide();
+    $('#div_major').hide();
+    $('#div_minor').hide();
     $('#specialist, #major, #minor').css('background-color', 'white');
 }
 
 
 /**
- * Resets cookies of all tabs to 'inactive' - not open
+ * Resets cookies of all tabs to 'inactive' - not open.
  */
 function resetTabCookies() {
     'use strict';
@@ -65,7 +65,7 @@ function resetTabCookies() {
 
 /**
  * Opens a specific tab.
- * @param {string} tab The tab that we want to open
+ * @param {string} tab The tab that we want to open.
  */
 function openTab(tab) {
     'use strict';
@@ -82,14 +82,15 @@ function openTab(tab) {
         $('#major').css('background-color', '#9C9C9C');
         setCookie('major', 'active');
     } else if (tab === 'minor') {
-         $('#div_minor').show();
+        $('#div_minor').show();
         $('#minor').css('background-color', '#9C9C9C');
         setCookie('minor', 'active');
     }
 }
 
+
 /**
- * Opens the tab that was last opened. 
+ * Opens the tab that was last opened.
  */
 function openLastActiveTab() {
     'use strict';

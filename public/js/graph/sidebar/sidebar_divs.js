@@ -14,7 +14,6 @@ $('#focuses-nav').click(function (e) {
     resetDivs();
     $('#focuses').show();
     $('#focuses-nav').addClass('active');
-
 });
 
 
@@ -44,8 +43,8 @@ $('#graph').click(function (e) {
 function resetDivs() {
     'use strict';
 
-    $('#focuses').css('display', 'none');
-    $('#graphs').css('display', 'none');
+    $('#focuses').hide();
+    $('#graphs').hide();
     $('#graphs-nav, #focuses-nav').removeClass('active');
 }
 
@@ -74,7 +73,7 @@ function toggleSidebar(location) {
         $('#sidebar').animate({width: '40px'}, 'fast', undefined, function() {
             $('#fcecount').html('');
         });
-        $('#reset').css('display', 'none');
+        $('#reset').hide();
     } else if (!toggled && location === 'button') {
         toggled = true;
         $('#sidebar').animate({width: '400px'}, 'fast');

@@ -35,6 +35,7 @@ function getVeryLargeCourseArray() {
  */
 function enableSearch() {
     'use strict';
+
     $('#course-filter').keyup(function() {
         resetSearchList();
     });
@@ -100,11 +101,7 @@ function refreshSelectedCourses() {
 
     $('#search-list').find('li').each(function (index) {
         var course = $(this).text();
-        if (inArray(course, selectedCourses)) {
-            $(this).addClass('starred-course');
-        } else {
-            $(this).removeClass('starred-course');
-        }
+        $(this).toggleClass('starred-course', inArray(course, selectedCourses));
     });
 }
 
@@ -157,7 +154,6 @@ function restoreFromCookies() {
                 console.log('Removed bad section from cookie: ' + section);
                 console.log(e);
             }
-
         });
     }
 
