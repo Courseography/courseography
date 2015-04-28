@@ -2357,7 +2357,7 @@
            clip-path="url(#clipPath2)"
            id="rect4637" />
         <text
-           style="font-size:8px;font-weight:bold;stroke:none;font-family:Comic Sans MS"
+           style="font-size:8px;font-weight:bold;stroke:none;font-family:Arial"
            x="620.50989"
            font-size="8"
            y="-100.1747"
@@ -2457,7 +2457,7 @@
            clip-path="url(#clipPath2)"
            id="rect4661" />
         <text
-           style="font-size:8px;font-weight:bold;stroke:none;font-family:Comic Sans MS"
+           style="font-size:8px;font-weight:bold;stroke:none;font-family:Arial"
            x="982.10327"
            font-size="8"
            y="-40.535801"
@@ -2479,7 +2479,7 @@
            cy="-43.778"
            id="ellipse4665" />
         <text
-           style="font-size:8px;font-weight:bold;stroke:none;font-family:Comic Sans MS"
+           style="font-size:8px;font-weight:bold;stroke:none;font-family:Arial"
            x="494.1463"
            font-size="8"
            y="241.5316"
@@ -3233,7 +3233,7 @@
            height="32"
            id="rect4845" />
         <text
-           style="font-size:8px;font-weight:bold;stroke:none;font-family:Comic Sans MS"
+           style="font-size:8px;font-weight:bold;stroke:none;font-family:Arial"
            x="614.14203"
            font-size="8"
            y="-2.2497001"
@@ -3411,7 +3411,7 @@
            clip-path="url(#clipPath2)"
            id="rect4889" />
         <text
-           style="font-size:8px;font-weight:bold;stroke:none;font-family:Comic Sans MS"
+           style="font-size:8px;font-weight:bold;stroke:none;font-family:Arial"
            x="341.11389"
            font-size="8"
            y="-49.1674"

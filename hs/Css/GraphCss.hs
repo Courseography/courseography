@@ -123,7 +123,8 @@ nodeCSS = "g" ? do
             wideStroke
             strokeRed
         "text" <? do
-            fontFamily ["Comic Sans MS"] [sansSerif]
+            fontFamily ["Arial"] [sansSerif]
+            fontWeight bold
             stroke "none"
             fontSize (pt 6)
             "text-anchor" -: "middle"
