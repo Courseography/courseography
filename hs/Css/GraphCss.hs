@@ -123,7 +123,7 @@ nodeCSS = "g" ? do
             wideStroke
             strokeRed
         "text" <? do
-            fontFamily ["Arial"] [sansSerif]
+            fontFamily ["Trebuchet MS", "Arial"] [sansSerif]
             fontWeight bold
             stroke "none"
             fontSize (pt 6)

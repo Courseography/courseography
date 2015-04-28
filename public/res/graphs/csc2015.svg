@@ -2300,7 +2300,7 @@
          font-weight="bold"
          xml:space="preserve"
          id="text532"
-         style="font-size:8px;font-weight:bold;stroke:none;font-family:Arial">and</text>
+         style="font-size:8px;font-weight:bold;stroke:none;font-family:sans-serif">and</text>
       <ellipse
          rx="9.8800001"
          ry="7.3684001"
@@ -2322,7 +2322,7 @@
          font-weight="bold"
          xml:space="preserve"
          id="text536"
-         style="font-size:8px;font-weight:bold;stroke:none;font-family:Arial">or</text>
+         style="font-size:8px;font-weight:bold;stroke:none;font-family:sans-serif">or</text>
       <ellipse
          rx="9.8800001"
          ry="7.3684001"
@@ -3199,7 +3199,7 @@
          font-weight="bold"
          xml:space="preserve"
          id="text748"
-         style="font-size:8px;font-weight:bold;stroke:none;font-family:Arial">and</text>
+         style="font-size:8px;font-weight:bold;stroke:none;font-family:sans-serif">and</text>
       <ellipse
          rx="9.8800001"
          ry="7.3684001"
@@ -3397,7 +3397,7 @@
          font-weight="bold"
          xml:space="preserve"
          id="text794"
-         style="font-size:8px;font-weight:bold;stroke:none;font-family:Arial">or</text>
+         style="font-size:8px;font-weight:bold;stroke:none;font-family:sans-serif">or</text>
       <ellipse
          rx="9.8800001"
          ry="7.3684001"
