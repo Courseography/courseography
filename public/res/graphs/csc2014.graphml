@@ -871,7 +871,7 @@ CALC1<y:LabelModel>
           <y:Geometry height="14.736891489208404" width="19.75999999999999" x="617.2959292247651" y="-110.7853681568375"/>
           <y:Fill hasColor="false" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Arial" fontSize="8" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="15.1484375" modelName="custom" textColor="#000000" visible="true" width="17.33203125" x="1.2139843749999955" y="-0.20577300539579824">and<y:LabelModel>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Comic Sans MS" fontSize="8" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="15.1484375" modelName="custom" textColor="#000000" visible="true" width="17.33203125" x="1.2139843749999955" y="-0.20577300539579824">and<y:LabelModel>
               <y:SmartNodeLabelModel distance="4.0"/>
             </y:LabelModel>
             <y:ModelParameter>
@@ -925,7 +925,7 @@ CALC1<y:LabelModel>
           <y:Geometry height="14.736891489208404" width="19.75999999999999" x="978.8892667256509" y="-51.14645579790749"/>
           <y:Fill hasColor="false" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Arial" fontSize="8" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="15.1484375" modelName="custom" textColor="#000000" visible="true" width="17.33203125" x="1.2139843750001091" y="-0.20577300539576981">and<y:LabelModel>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Comic Sans MS" fontSize="8" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="15.1484375" modelName="custom" textColor="#000000" visible="true" width="17.33203125" x="1.2139843750001091" y="-0.20577300539576981">and<y:LabelModel>
               <y:SmartNodeLabelModel distance="4.0"/>
             </y:LabelModel>
             <y:ModelParameter>
@@ -943,7 +943,7 @@ CALC1<y:LabelModel>
           <y:Geometry height="14.736891489208404" width="19.75999999999999" x="488.2917176873236" y="230.9209541352517"/>
           <y:Fill hasColor="false" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Arial" fontSize="8" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="15.1484375" modelName="custom" textColor="#000000" visible="true" width="12.05078125" x="3.8546093749999955" y="-0.20577300539582666">or<y:LabelModel>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Comic Sans MS" fontSize="8" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="15.1484375" modelName="custom" textColor="#000000" visible="true" width="12.05078125" x="3.8546093749999955" y="-0.20577300539582666">or<y:LabelModel>
               <y:SmartNodeLabelModel distance="4.0"/>
             </y:LabelModel>
             <y:ModelParameter>
@@ -1483,7 +1483,7 @@ CALC1<y:LabelModel>
           <y:Geometry height="14.736891489208404" width="19.75999999999999" x="615.4954602030188" y="-12.860309743353469"/>
           <y:Fill hasColor="false" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Arial" fontSize="8" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="15.1484375" modelName="custom" textColor="#000000" visible="true" width="17.33203125" x="1.2139843749999955" y="-0.20577300539576981">and<y:LabelModel>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Comic Sans MS" fontSize="8" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="15.1484375" modelName="custom" textColor="#000000" visible="true" width="17.33203125" x="1.2139843749999955" y="-0.20577300539576981">and<y:LabelModel>
               <y:SmartNodeLabelModel distance="4.0"/>
             </y:LabelModel>
             <y:ModelParameter>
@@ -1573,7 +1573,7 @@ CALC1<y:LabelModel>
           <y:Geometry height="14.736891489208404" width="19.75999999999999" x="337.8999519700674" y="-59.77801005330326"/>
           <y:Fill hasColor="false" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Arial" fontSize="8" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="15.1484375" modelName="custom" textColor="#000000" visible="true" width="17.33203125" x="1.2139843749999955" y="-0.20577300539579824">and<y:LabelModel>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Comic Sans MS" fontSize="8" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="15.1484375" modelName="custom" textColor="#000000" visible="true" width="17.33203125" x="1.2139843749999955" y="-0.20577300539579824">and<y:LabelModel>
               <y:SmartNodeLabelModel distance="4.0"/>
             </y:LabelModel>
             <y:ModelParameter>
