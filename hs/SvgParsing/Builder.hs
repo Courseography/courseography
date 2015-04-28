@@ -6,12 +6,13 @@ import Data.Char
 import Data.List
 import Database.Tables
 import Database.DataType
+import Data.Int (Int64)
 
 -- | Determines the source and target nodes of the path.
 buildPath :: [Shape] -- ^ Node elements.
           -> [Shape] -- ^ Ellipses.
           -> Path    -- ^ A path.
-          -> Int     -- ^ A number to use in the ID of the path.
+          -> Int64   -- ^ A number to use in the ID of the path.
           -> Path
 buildPath rects ellipses entity idCounter
     | pathIsRegion entity =
@@ -27,7 +28,8 @@ buildPath rects ellipses entity idCounter
         let start = head coords
             end = last coords
             sourceNode = getIntersectingShape start (rects ++ ellipses)
-            targetNode = getIntersectingShape end (rects ++ ellipses)
+            targetNode = getIntersectingShape end
+                             (filter (\r -> shapeId_ r /= sourceNode) rects ++ ellipses)
             in Path (pathGId entity)
                     ('p' : show idCounter)
                     coords
@@ -41,8 +43,9 @@ buildPath rects ellipses entity idCounter
 -- | Builds a Rect from a database entry in the rects table.
 buildRect :: [Text] -- ^ A list of shapes that may intersect with the given node.
           -> Shape  -- ^ A node.
+          -> Int64    -- ^ An integer to uniquely identify the shape
           -> Shape
-buildRect texts entity =
+buildRect texts entity idCounter =
     let rectTexts = filter (intersects
                             (shapeWidth entity)
                             (shapeHeight entity)
@@ -51,13 +54,11 @@ buildRect texts entity =
                             . textPos
                             ) texts
         textString = concatMap textText rectTexts
-        dropSlash = takeWhile (/='/')
-        prefix = case shapeType_ entity of
-                     Hybrid -> "h"
-                     _      -> ""
-        id_ = map toLower (prefix ++
-                          (if isDigit $ head textString then "CSC" else "") ++
-                          dropSlash textString)
+        -- TODO: consolidate with toId in Generator.hs
+        sanitize = filter (\c -> not $ elem c ",()/<>%")
+        id_ = case shapeType_ entity of
+              Hybrid -> "h" ++ show idCounter
+              Node -> map toLower $ sanitize textString
     in Shape (shapeGId entity)
              id_
              (shapePos entity)
@@ -89,7 +90,7 @@ intersectsWithPoint point shape =
 buildEllipses :: [Text] -- ^ A list of Text elements that may or may not intersect
                         --   with the given ellipse.
               -> Shape  -- ^ An ellipse.
-              -> Int    -- ^ A number to use in the ID of the ellipse.
+              -> Int64  -- ^ A number to use in the ID of the ellipse.
               -> Shape
 buildEllipses texts entity idCounter =
     let ellipseText = filter (intersects
