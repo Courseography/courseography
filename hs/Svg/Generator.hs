@@ -1,4 +1,10 @@
 {-# LANGUAGE OverloadedStrings, GADTs, ScopedTypeVariables #-}
+
+-- |This module is responsible for taking the database representation
+--  of a graph and creating a new SVG file.
+--
+--  This functionality is used both to create SVG for the Graph component,
+--  as well as generating images on the fly for Facebook posting.
 module Svg.Generator where
 
 import Svg.Builder

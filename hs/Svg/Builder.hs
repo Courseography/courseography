@@ -1,4 +1,11 @@
 {-# LANGUAGE OverloadedStrings, FlexibleContexts, GADTs, ScopedTypeVariables #-}
+
+-- |This module takes the raw data parsed from the SVG files and computes
+--  prerequisite relationships based on the geometry.
+--
+--  This is currently done after the data is first inserted, when the new
+--  SVG is generated. This work should really be done immediately after
+--  parsing, before anything is inserted into the database.
 module Svg.Builder where
 
 import Svg.ParserUtil

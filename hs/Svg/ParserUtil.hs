@@ -1,3 +1,4 @@
+-- |Provide some utility functions for the SVG parsing.
 module Svg.ParserUtil where
 
 import Text.XML.HaXml hiding (find)

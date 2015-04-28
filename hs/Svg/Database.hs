@@ -1,5 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
+-- |This module is responsible for inserting the graph into the database.
 module Svg.Database where
 
 import Control.Monad.IO.Class  (liftIO, MonadIO)

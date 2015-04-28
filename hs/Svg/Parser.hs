@@ -1,4 +1,9 @@
 {-# LANGUAGE OverloadedStrings, FlexibleContexts, GADTs, ScopedTypeVariables #-}
+
+-- |This module is reponsible for parsing the SVG files exported from Inkscape.
+--  It is also currently responsible for the process of inserting the files
+--  into the database and generating new SVG files to be rendered in the
+--  application.
 module Svg.Parser where
 
 import Text.XML.HaXml (Content, path, tag, children, childrenBy, xmlParse)
