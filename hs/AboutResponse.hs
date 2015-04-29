@@ -35,3 +35,4 @@ aboutHtml contents = H.div ! A.id "aboutDiv" $ mdToHTML contents
 -- blaze-HTML.
 mdToHTML :: String -> H.Html
 mdToHTML contents = markdown def $ pack contents
+

@@ -35,3 +35,4 @@ privacyHtml contents = H.div $ mdToHTML contents
 -- blaze-HTML.
 mdToHTML :: String -> H.Html
 mdToHTML contents = markdown def $ pack contents
+
