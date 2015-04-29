@@ -14,14 +14,20 @@ import SvgParsing.Generator
 import SvgParsing.ParserUtil
 import Diagram (renderTable)
 import qualified Data.Map as M
+import Data.Maybe (maybe)
 import System.Random
+import GHC.Int (Int64)
 
 -- | Returns an image of the graph requested by the user.
 graphImageResponse :: ServerPart Response
 graphImageResponse =
     do req <- askRq
-       let cookies = rqCookies req
-       liftIO $ getGraphImage (M.map cookieValue $ M.fromList cookies)
+       -- TODO: Look into using an association list [(_,_)] rather than
+       -- a map. Not sure if a map is necessary or not.
+       let cookies = M.fromList $ rqCookies req
+           gId = maybe 1 (\x -> (read . cookieValue) x :: Int64)
+                         (M.lookup "active-graph" cookies)
+       liftIO $ getGraphImage gId (M.map cookieValue cookies)
 
 -- | Returns an image of the timetable requested by the user.
 timetableImageResponse :: String -> String -> ServerPart Response
@@ -29,14 +35,14 @@ timetableImageResponse courses session =
     liftIO $ getTimetableImage courses session
 
 -- | Creates an image, and returns the base64 representation of that image.
-getGraphImage :: M.Map String String -> IO Response
-getGraphImage courseMap =
-    do gen <- newStdGen
-       let (rand, _) = next gen
-           svgFilename = (show rand ++ ".svg")
-           imageFilename = (show rand ++ ".png")
-       buildSVG 1 courseMap svgFilename True
-       returnImageData svgFilename imageFilename
+getGraphImage :: Int64 -> M.Map String String -> IO Response
+getGraphImage gId courseMap = do
+    gen <- newStdGen
+    let (rand, _) = next gen
+        svgFilename = (show rand ++ ".svg")
+        imageFilename = (show rand ++ ".png")
+    buildSVG gId courseMap svgFilename True
+    returnImageData svgFilename imageFilename
 
 -- | Creates an image, and returns the base64 representation of that image.
 getTimetableImage :: String -> String -> IO Response

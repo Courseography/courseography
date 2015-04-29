@@ -218,7 +218,8 @@ function createG(nodeId) {
     g.attr('class', 'tooltip-group')
         .css('cursor', 'pointer')
         .click(function () {
-            openModal(getCourseTitle(nodeId), createModalDiv(nodeId));
+            var id = nodeId.substring(0, 6);
+            openModal(getCourseTitle(id), createModalDiv(id));
         });
     $('svg').append(g);
     return g;

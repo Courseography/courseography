@@ -36,6 +36,7 @@ nodeCSS = "g" ? do
             fontSize (pt 12)
             faded
             stroke "none"
+            "text-anchor" -: "middle"
         "data-active" @= "active" & do
             "rect" <? do
                 wideStroke
@@ -90,6 +91,7 @@ nodeCSS = "g" ? do
             stroke "none"
             fill "white"
             fontSize (pt 7)
+            "text-anchor" -: "middle"
         "rect" <? do
             fill "#888888"
             stroke "black"
@@ -124,6 +126,7 @@ nodeCSS = "g" ? do
             fontFamily ["Comic Sans MS"] [sansSerif]
             stroke "none"
             fontSize (pt 6)
+            "text-anchor" -: "middle"
 
 {- pathCSS
  - Generates CSS for paths between nodes

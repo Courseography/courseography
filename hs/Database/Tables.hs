@@ -32,7 +32,7 @@ Courses json
     title T.Text Maybe
     description T.Text Maybe
     manualTutorialEnrolment Bool Maybe
-    manualPracticalEnrolment Bool Maybe 
+    manualPracticalEnrolment Bool Maybe
     prereqs T.Text Maybe
     exclusions T.Text Maybe
     breadth T.Text Maybe
@@ -81,6 +81,8 @@ Text
     rId String
     pos Point
     text String
+    align String
+    fill String
     deriving Show
 
 Shape
@@ -153,7 +155,7 @@ data Course =
              name :: !T.Text,
              exclusions :: Maybe T.Text,
              manualTutorialEnrol :: Maybe Bool,
-             manualPracticalEnrol :: Maybe Bool, 
+             manualPracticalEnrol :: Maybe Bool,
              distribution :: Maybe T.Text,
              prereqs :: Maybe T.Text
            } deriving Show
