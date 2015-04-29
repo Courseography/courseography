@@ -16,3 +16,5 @@ cabal.sandbox.config
 # generated resources
 /public/res/graphs/1.svg
 /public/res/graphs/2.svg
+/public/res/graphs/3.svg
+/public/res/graphs/4.svg
