@@ -127,3 +127,8 @@ intersectsWithPoint point shape =
 getIntersectingShape :: Point -> [Shape] -> String
 getIntersectingShape point shapes =
     maybe "" shapeId_ $ find (intersectsWithPoint point) shapes
+
+-- |Determines if a text intersects with any shape in a list.
+intersectsWithShape :: [Shape] -> Text -> Bool
+intersectsWithShape shapes text =
+    any (intersectsWithPoint (textPos text)) shapes
