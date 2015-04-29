@@ -8,9 +8,8 @@
 --  parsing, before anything is inserted into the database.
 module Svg.Builder where
 
-import Svg.ParserUtil
-import Data.Char
-import Data.List
+import Data.Char (toLower)
+import Data.List (find)
 import Database.Tables
 import Database.DataType
 import Data.Int (Int64)

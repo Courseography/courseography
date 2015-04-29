@@ -8,7 +8,6 @@
 module Svg.Generator where
 
 import Svg.Builder
-import Svg.ParserUtil
 import Database.Tables
 import Database.DataType
 import Control.Monad.IO.Class (liftIO)

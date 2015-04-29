@@ -20,7 +20,6 @@ import Database.Tables
 import Database.DataType
 import Svg.Database
 import Svg.Generator
-import Svg.ParserUtil
 
 main :: IO ()
 main = do
@@ -283,3 +282,7 @@ updateText :: Point -- ^ Transform that will be added to the input Shape's
            -> Text
 updateText transform t =
     t { textPos = addTuples transform (textPos t) }
+
+-- |Adds two tuples together.
+addTuples :: Point -> Point -> Point
+addTuples (a,b) (c,d) = (a + c, b + d)

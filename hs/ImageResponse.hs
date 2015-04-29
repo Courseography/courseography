@@ -11,7 +11,6 @@ import qualified Data.ByteString.Base64.Lazy as BEnc
 import ImageConversion
 import Data.List.Split
 import Svg.Generator
-import Svg.ParserUtil
 import Diagram (renderTable)
 import qualified Data.Map as M
 import Data.Maybe (maybe)
