@@ -15,7 +15,11 @@ import Database.Tables
 import Database.DataType
 import Data.Int (Int64)
 
--- | Determines the source and target nodes of the path.
+-- *Builder functions
+
+-- |Fills in the id and source and target nodes of the path.
+--  It is debateable whether the id is necessary, but the source
+--  and targets must be set after the rectangles have been parsed.
 buildPath :: [Shape] -- ^ Node elements.
           -> [Shape] -- ^ Ellipses.
           -> Path    -- ^ A path.
@@ -23,34 +27,27 @@ buildPath :: [Shape] -- ^ Node elements.
           -> Path
 buildPath rects ellipses entity idCounter
     | pathIsRegion entity =
-        Path (pathGId entity)
-             (pathId_ entity ++ ('p' : show idCounter))
-             coords
-             (pathFill entity)
-             (pathStroke entity)
-             (pathIsRegion entity)
-             ""
-             ""
+          entity {pathId_ = pathId_ entity ++ ('p' : show idCounter),
+                  pathSource = "",
+                  pathTarget = ""}
     | otherwise =
-        let start = head coords
-            end = last coords
-            sourceNode = getIntersectingShape start (rects ++ ellipses)
-            targetNode = getIntersectingShape end
-                             (filter (\r -> shapeId_ r /= sourceNode) rects ++ ellipses)
-            in Path (pathGId entity)
-                    ('p' : show idCounter)
-                    coords
-                    (pathFill entity)
-                    (pathStroke entity)
-                    (pathIsRegion entity)
-                    sourceNode
-                    targetNode
-    where coords = pathPoints entity
+          let coords = pathPoints entity
+              start = head coords
+              end = last coords
+              sourceNode = getIntersectingShape start (rects ++ ellipses)
+              targetNode = getIntersectingShape end
+                               (filter (\r -> shapeId_ r /= sourceNode) rects ++
+                                ellipses)
+          in
+              entity {pathId_ = 'p' : show idCounter,
+                      pathSource = sourceNode,
+                      pathTarget = targetNode}
 
--- | Builds a Rect from a database entry in the rects table.
-buildRect :: [Text] -- ^ A list of shapes that may intersect with the given node.
-          -> Shape  -- ^ A node.
-          -> Int64    -- ^ An integer to uniquely identify the shape
+-- |Builds a Rect from a database entry.
+--  Fills in the text association(s) and ID.
+buildRect :: [Text]  -- ^ A list of shapes that may intersect with the given node.
+          -> Shape   -- ^ A node.
+          -> Int64   -- ^ An integer to uniquely identify the shape
           -> Shape
 buildRect texts entity idCounter =
     let rectTexts = filter (intersects
@@ -66,34 +63,14 @@ buildRect texts entity idCounter =
         id_ = case shapeType_ entity of
               Hybrid -> "h" ++ show idCounter
               Node -> map toLower $ sanitize textString
-    in Shape (shapeGId entity)
-             id_
-             (shapePos entity)
-             (shapeWidth entity)
-             (shapeHeight entity)
-             (shapeFill entity)
-             (shapeStroke entity)
-             rectTexts
-             9
-             (shapeType_ entity)
+    in
+        entity {shapeId_ = id_,
+                shapeText = rectTexts,
+                -- TODO: check if already set this one during parsing
+                shapeTolerance = 9}
 
--- | Gets the first rect that intersects with the given coordinates.
-getIntersectingShape :: Point -> [Shape] -> String
-getIntersectingShape point shapes =
-    case find (intersectsWithPoint point) shapes of
-        Just intersectingShape -> shapeId_ intersectingShape
-        _                      -> ""
-
--- | Determines if a rect intersects with the given coordinates.
-intersectsWithPoint :: Point -> Shape -> Bool
-intersectsWithPoint point shape =
-    intersects (shapeWidth shape)
-               (shapeHeight shape)
-               (shapePos shape)
-               (shapeTolerance shape)
-               point
-
--- | Builds a Path from a database entry in the paths table.
+-- |Builds an ellipse from a database entry.
+--  Fills in the text association and ID.
 buildEllipses :: [Text] -- ^ A list of Text elements that may or may not intersect
                         --   with the given ellipse.
               -> Shape  -- ^ An ellipse.
@@ -104,28 +81,50 @@ buildEllipses texts entity idCounter =
                               (shapeWidth entity)
                               (shapeHeight entity)
                               (shapePos entity)
-                              9
+                              9 -- TODO: Should this be 9 or 20?
                               . textPos
                               ) texts
-    in Shape (shapeGId entity)
-             ("bool" ++ show idCounter)
-             (shapePos entity)
-             (shapeWidth entity)
-             (shapeHeight entity)
-             ""
-             (shapeStroke entity)
-             ellipseText
-             20
-             (shapeType_ entity)
+    in
+        entity {shapeId_ = "bool" ++ show idCounter,
+                shapeFill = "", -- TODO: necessary?
+                shapeText = ellipseText,
+                shapeTolerance = 20} -- TODO: necessary?
 
--- | Rebuilds a path's `d` attribute based on a list of Rational tuples.
+-- |Rebuilds a path's `d` attribute based on a list of Rational tuples.
 buildPathString :: [Point] -> String
-buildPathString d = unwords $ map (joinPathTuple . convertRationalTupToString) d
+buildPathString d = unwords $ map toString d
+    where
+        toString (a, b) = show a ++ "," ++ show b
 
--- | Joins two String values in a tuple with a comma.
-joinPathTuple :: (String, String) -> String
-joinPathTuple (a, b) = a ++ "," ++ b
 
--- | Converts a tuple of Rationals to a tuple of String.
-convertRationalTupToString :: Point -> (String, String)
-convertRationalTupToString (a, b) = (show a, show b)
+-- *Intersection helpers
+
+-- |Determines if a point is contained in a given rectangular region.
+intersects :: Double -- ^ The region's width.
+           -> Double -- ^ The region's height.
+           -> Point  -- ^ The region's bottom-left coordinate.
+           -> Double -- ^ The tolerance for the point being outside the boundary.
+           -> Point  -- ^ The point's coordinate.
+           -> Bool
+intersects width height (rx, ry) offset (px, py) =
+    let dx = px - rx
+        dy = py - ry
+    in  dx >= -1 * offset &&
+        dx <= width + offset &&
+        dy >= -1 * offset &&
+        dy <= height + offset;
+
+-- |Determines if a point is contained in a shape.
+intersectsWithPoint :: Point -> Shape -> Bool
+intersectsWithPoint point shape =
+    intersects (shapeWidth shape)
+               (shapeHeight shape)
+               (shapePos shape)
+               (shapeTolerance shape)
+               point
+
+-- |Returns the ID of the first shape in a list that intersects
+--  with the given point.
+getIntersectingShape :: Point -> [Shape] -> String
+getIntersectingShape point shapes =
+    maybe "" shapeId_ $ find (intersectsWithPoint point) shapes
