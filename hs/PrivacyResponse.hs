@@ -5,9 +5,8 @@ module PrivacyResponse where
 import           Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
-import           Text.Blaze.Html.Renderer.Text (renderHtml)
-import Data.Text.Lazy
-import Text.Markdown
+import Data.Text.Lazy (pack)
+import Text.Markdown (markdown, def)
 import Happstack.Server
 import MakeElements
 import MasterTemplate
