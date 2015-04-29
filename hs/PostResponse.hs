@@ -107,20 +107,20 @@ checkPost =
                 H.div ! A.class_ "more-info" $ 
                         H.p ! A.class_ "full_name CSC373" $ "CSC373H (Algorithm Design, Analysis, and Complexity)"
             H.div ! A.id "spec_400" $ do
-                H.p ! A.class_ "code" $ "Any 400-level CSC course, BCB410H, BCB420H, BCB430Y, ECE489 (1.5 FCEs)"
+                H.p ! A.class_ "code" $ "Any 400-level CSC course, BCB410H, BCB420H, BCB430Y, ECE489H (1.5 FCEs)"
                 H.div ! A.id "spec400" ! A.class_ "more-info" $ do
                     H.input ! A.type_ "text" 
                     H.input ! A.type_ "text"  
                     H.input ! A.type_ "text" 
             H.div ! A.id "spec_300" $ do 
-                H.p ! A.class_ "code" $ "Any 300+ level CSC course, BCB410H, BCB420H, BCB430Y, ECE385H (1.5 FCEs)"
+                H.p ! A.class_ "code" $ "Any 300+ level CSC course, BCB410H, BCB420H, BCB430Y, ECE385H, ECE489H (1.5 FCEs)"
                 H.div ! A.id "spec300" ! A.class_ "more-info" $ do
                     H.input ! A.type_ "text" 
                     H.input ! A.type_ "text"
                     H.input ! A.type_ "text" 
             H.div ! A.id "spec_extra" $ do
                 H.p ! A.class_ "code" $ "Any 300+ level CSC course, BCB/ECE/MAT/STA course (2.0 FCEs) - \
-                                         \MAT: 224, 235, 237, 237, 257, 300+ except for 320, 390, & 391 \
+                                         \MAT: 224, 235/237/257, any 300+ except for 329, 390, & 391 \
                                          \; STA: 248, 261, any 300+" 
                 H.div ! A.id "specextra" ! A.class_ "more-info" $ do
                     H.input ! A.type_ "text"
@@ -195,7 +195,7 @@ checkPost =
                     H.input ! A.type_ "text" 
             H.div ! A.id "maj_extra" $ do
                 H.p ! A.class_ "code" $ "Any 300+ level CSC course, BCB/ECE/MAT/STA course (1.5 FCEs) - \ 
-                                         \MAT: 221, 223, 240, 224, 235, 237, 237, 257, 300+ except for 320, 390, & 391 \ 
+                                         \MAT: 221/223/240, 224, 235/237/257, any 300+ except for 329, 390, & 391 \ 
                                          \; STA: 248, 261, any 300+" 
                 H.div ! A.id "majextra" ! A.class_ "more-info" $ do
                     H.input ! A.type_ "text"
