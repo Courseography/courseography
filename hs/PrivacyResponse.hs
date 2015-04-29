@@ -5,9 +5,11 @@ module PrivacyResponse where
 import           Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
+import           Text.Blaze.Html.Renderer.Text (renderHtml)
+import Data.Text.Lazy
+import Text.Markdown
 import Happstack.Server
 import MakeElements
-import Text.Pandoc
 import MasterTemplate
 
 privacyResponse :: String -> ServerPart Response
@@ -32,4 +34,4 @@ privacyHtml contents = H.div $ mdToHTML contents
 -- | mdToHTML takes in the contents of a file written in Mark Down and converts it to 
 -- blaze-HTML.
 mdToHTML :: String -> H.Html
-mdToHTML contents = writeHtml def $ readMarkdown def contents
+mdToHTML contents = markdown def $ pack contents
