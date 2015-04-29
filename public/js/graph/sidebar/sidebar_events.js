@@ -73,7 +73,7 @@ function loadGraph(id) {
     // Remove current graph
     $('#graph').empty();
 
-    getRemote('static/res/graphs/' + id + '.svg');
+    getRemote('static/res/graphs/gen/' + id + '.svg');
 
     // Only create this if CSC graph loaded
     if (getCookie('active-graph') === '1') {
