@@ -367,7 +367,7 @@ Course.prototype.renderHeader = function () {
     var iconDiv = document.createElement('div');
     $(iconDiv).addClass('icon-div');
     var courseImg = document.createElement('img');
-    $(courseImg).attr('src', 'static/res/ico/delete.ico')
+    $(courseImg).attr('src', 'static/res/ico/delete.png')
                 .addClass('close-icon')
                 .click(function () {
                     removeCourseFromList(tmp.name);

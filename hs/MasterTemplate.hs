@@ -12,11 +12,11 @@ masterTemplate :: String -> [H.Html] -> H.Html -> H.Html -> H.Html
 masterTemplate title headers body scripts =
     H.html $ do
         H.head $ do
-            H.title (H.toHtml title)
             H.meta ! A.httpEquiv "Content-Type"
                    ! A.content "text/html;charset=utf-8"
+            H.title (H.toHtml title)
             H.link ! A.rel "icon" ! A.type_ "image/png"
-                   ! A.href "static/res/ico/courseography.ico"
+                   ! A.href "static/res/ico/favicon.png"
             sequence_ headers
         H.body $ do
             body
