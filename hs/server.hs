@@ -18,6 +18,7 @@ import Filesystem.Path.CurrentOS
 import System.Directory
 import CourseographyFacebook
 import qualified Data.Text as T
+import qualified Data.Text.Lazy.IO as LazyIO
 
 main :: IO ()
 main = do
@@ -26,8 +27,8 @@ main = do
     redirectUrlGraphEmail <- retrieveAuthURL testUrl
     redirectUrlGraphPost <- retrieveAuthURL testPostUrl
     let staticDir = encodeString (parent $ decodeString cwd) ++ "public/"
-    aboutContents <- readFile "../README.md"
-    privacyContents <- readFile "../PRIVACY.md"
+    aboutContents <- LazyIO.readFile "../README.md"
+    privacyContents <- LazyIO.readFile "../PRIVACY.md"
     print "Server is running..."
     simpleHTTP nullConf $ msum
         [ do
