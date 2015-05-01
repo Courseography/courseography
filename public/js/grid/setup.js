@@ -20,8 +20,8 @@ $(document).ready(function () {
     generateGrid();
     var tdObjects = $('td');
     tdObjects.each(function () {
-            $(this).data('conflicts', []);
-        });
+        $(this).data('conflicts', []);
+    });
 
     restoreFromCookies();
     renderClearAllButton();

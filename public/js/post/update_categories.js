@@ -1,23 +1,23 @@
 /**
- * Updates categories for required courses in each POSt
+ * Updates categories for required courses in each POSt.
  * @param {object} post The POSt that you are updating categories for.
- * @param {string} name Name of course
+ * @param {string} name Name of course.
  */
 function updateReqsCategory(post, name) {
     'use strict';
 
     for (var i = 0; i < post.reqs.length; i++) {
         var category = $('#' + name + '_' + post.reqs[i].toLowerCase())[0].getElementsByClassName('code')[0];
+
         if (activeCourses.indexOf(post.reqs[i]) !== -1) {
             activateCourse(post.reqs[i]);
             updateCategory(category, 'fulfilled');
             post.categoriesCompleted += 1;
-            if (post.reqs[i] === 'Calc1') {
-            	post.creditCount += 1;
-            } else {
-            	post.creditCount += 0.5;
-            }
-        } else { // if the category is not completed
+            post.creditCount += (post.reqs[i] === 'Calc1') ? 1 : 0.5;
+        }
+
+        // If the category is not completed
+        else {
             deactivateCourse(post.reqs[i]);
             updateCategory(category, 'not fulfilled');
         }
@@ -26,7 +26,7 @@ function updateReqsCategory(post, name) {
 
 
 /**
- * Updates 300 level category
+ * Updates 300 level category.
  */
 function update300Categories() {
     'use strict';
@@ -50,7 +50,7 @@ function update300Categories() {
 
 
 /**
- * Updates 400 level category
+ * Updates 400 level category.
  */
 function update400Categories() {
     'use strict';
@@ -67,30 +67,30 @@ function update400Categories() {
     if (major.filledTextboxes400 === major.textboxes400) {
         updateCategory($('#maj_400')[0].getElementsByClassName('code')[0], 'fulfilled');
         major.categoriesCompleted += 1;
-    } else {    
-        updateCategory($('#maj_400')[0].getElementsByClassName('code')[0], 'not fulfilled'); 
+    } else {
+        updateCategory($('#maj_400')[0].getElementsByClassName('code')[0], 'not fulfilled');
     }
 }
 
 
 /**
- * Updates Extra level category
+ * Updates Extra level category.
  */
 function updateExtraCategories() {
-    'use strict'; 
+    'use strict';
 
     if (specialist.filledTextboxesExtra === specialist.textboxesExtra) {
         updateCategory($('#spec_extra')[0].getElementsByClassName('code')[0], 'fulfilled');
         specialist.categoriesCompleted += 1;
     } else {
-    	updateCategory($('#spec_extra')[0].getElementsByClassName('code')[0], 'not fulfilled');
+        updateCategory($('#spec_extra')[0].getElementsByClassName('code')[0], 'not fulfilled');
     }
 
     if (major.filledTextboxesExtra === major.textboxesExtra) {
         updateCategory($('#maj_extra')[0].getElementsByClassName('code')[0], 'fulfilled');
         major.categoriesCompleted += 1;
     } else {
-    	updateCategory($('#maj_extra')[0].getElementsByClassName('code')[0], 'not fulfilled');
+        updateCategory($('#maj_extra')[0].getElementsByClassName('code')[0], 'not fulfilled');
     }
 
     if (minor.filledTextboxesExtra === minor.textboxesExtra) {
@@ -103,11 +103,11 @@ function updateExtraCategories() {
 
 
 /**
- * Updates Inquiry category
+ * Updates Inquiry category.
  */
 function updateInqCategory () {
     'use strict';
-    
+
     if (specialist.activeInq === 1) {
         updateCategory($('#spec_misc')[0].getElementsByClassName('code')[0], 'fulfilled');
         specialist.categoriesCompleted += 1;
@@ -116,9 +116,9 @@ function updateInqCategory () {
     }
 
     if (major.activeInq === 1) {
-        updateCategory($('#maj_misc')[0].getElementsByClassName('code')[0], 'fulfilled'); 
+        updateCategory($('#maj_misc')[0].getElementsByClassName('code')[0], 'fulfilled');
         major.categoriesCompleted += 1;
     } else {
-        updateCategory($('#maj_misc')[0].getElementsByClassName('code')[0], 'not fulfilled'); 
+        updateCategory($('#maj_misc')[0].getElementsByClassName('code')[0], 'not fulfilled');
     }
 }
