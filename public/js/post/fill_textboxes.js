@@ -1,13 +1,16 @@
 /**
- * Fills textboxes with 300 level courses
- * @param {object} post Object corresponding to the POSt being dealt with
- * @param {HTMLElement[]} postElement Array of textboxes to fill
+ * Fills textboxes with 300 level courses.
+ * @param {object} post Object corresponding to the POSt being dealt with.
+ * @param {HTMLElement[]} postElement Array of textboxes to fill.
  */
 function fill300Textboxes(post, postElement) {
     'use strict';
 
-    for (var m = post.index300; m < activeCourses.length && post.filledTextboxes300 !== post.textboxes300; m++) {
+    for (var m = post.index300; m < activeCourses.length &&
+        post.filledTextboxes300 !== post.textboxes300; m++) {
+
         var course = activeCourses[m];
+
         if (course.indexOf('CSC3') !== -1 &&
             (post.name === 'major' ||
              (post.name === 'specialist' && notSpecialistCourse(course)))) {
@@ -21,10 +24,10 @@ function fill300Textboxes(post, postElement) {
 
 
 /**
- * Fills textboxes with 400 level courses
- * @param {object} post Object corresponding to the POSt being dealt with
- * @param {HTMLElement[]} postElement Array of textboxes to fill
- * @param {string} category Level of category we are filling
+ * Fills textboxes with 400 level courses.
+ * @param {object} post Object corresponding to the POSt being dealt with.
+ * @param {HTMLElement[]} postElement Array of textboxes to fill.
+ * @param {string} category Level of category we are filling.
  */
 function fill400Textboxes(post, postElement, category) {
     'use strict';
@@ -51,18 +54,17 @@ function fill300s() {
     var spec300s = $('#spec300')[0].getElementsByTagName('input');
     var maj300s = $('#maj300')[0].getElementsByTagName('input');
 
-
-    // clear textboxes
-    for (var k = 0; k < 3; k++) {
-        spec300s[k].value = '';
-        spec300s[k].disabled = true;
-        if (k < 2) {
-            maj300s[k].value = '';
-            maj300s[k].disabled = true;
+    // Clear textboxes
+    for (var i = 0; i < 3; i++) {
+        spec300s[i].value = '';
+        spec300s[i].disabled = true;
+        if (i < 2) {
+            maj300s[i].value = '';
+            maj300s[i].disabled = true;
         }
     }
 
-    // fill courses that have been selected
+    // Fill courses that have been selected
     fill300Textboxes(specialist, spec300s);
     fill300Textboxes(major, maj300s);
 
@@ -84,38 +86,41 @@ function fill400s() {
     var spec400s = $('#spec400')[0].getElementsByTagName('input');
     var maj400s = $('#maj400')[0].getElementsByTagName('input');
 
-    // clear textboxes
-    for (var k = 0; k < 3; k++) {
-        spec400s[k].value = '';
-        spec400s[k].disabled = true;
-        if (k < 1) {
-            maj400s[k].value = '';
-            maj400s[k].disabled = true;
+    // Clear textboxes
+    for (var i = 0; i < 3; i++) {
+        spec400s[i].value = '';
+        spec400s[i].disabled = true;
+        if (i < 1) {
+            maj400s[i].value = '';
+            maj400s[i].disabled = true;
         }
     }
 
-    // fill courses that have been selected
+    // Fill courses that have been selected
     fill400Textboxes(specialist, spec400s, '400');
     fill400Textboxes(major, maj400s, '400');
 }
 
 
 /**
- * Fills textboxes in Extra level category,
- * @param {object} post Object corresponding to the POSt being dealt with
- * @param {HTMLElement[]} postElement Array of textboxes to fill
- * @param {string} level Level of course that we are filling textbox with
+ * Fills textboxes in Extra level category.
+ * @param {object} post Object corresponding to the POSt being dealt with.
+ * @param {HTMLElement[]} postElement Array of textboxes to fill.
+ * @param {string} level Level of course that we are filling textbox with.
  */
 function fillExtraTextboxes(post, postElement, level) {
     'use strict';
 
     for (var i = post['index' + level]; i < activeCourses.length &&
         post.filledTextboxesExtra !== post.textboxesExtra; i++) {
+
         var course = activeCourses[i];
+
         if (postElement[post.filledTextboxesExtra].value === '' &&
             course.indexOf('CSC' + level.charAt(0)) != -1 &&
             (post.name === 'major' || post.name === 'minor' ||
              (post.name === 'specialist' && notSpecialistCourse(course)))) {
+
             postElement[post.filledTextboxesExtra].value = activeCourses[i];
             postElement[post.filledTextboxesExtra].disabled = true;
             post['index' + level] = i;
@@ -140,7 +145,7 @@ function fillExtra() {
 
     for (var k = 0; k < 4; k++) {
 
-        // clear text boxes
+        // Clear text boxes
         if (specExtra[k].value.indexOf('MAT') === -1 && specExtra[k].value.indexOf('STA') === -1) {
             specExtra[k].value = '';
             specExtra[k].disabled = false;
@@ -155,7 +160,7 @@ function fillExtra() {
         }
     }
 
-    // fill courses that have been selected
+    // Fill courses that have been selected
     fillExtraTextboxes(specialist, specExtra, '300');
     fillExtraTextboxes(major, majExtra, '300');
     fillExtraTextboxes(minor, minExtra, '300');
@@ -174,12 +179,11 @@ function fillExtra() {
     if (minor.filledTextboxesExtra < minor.textboxesExtra) {
         addExtraMinCourses();
     }
-
 }
 
 
 /**
- * Autofills textboxes and updates category for Inquiry courses
+ * Autofills textboxes and updates category for Inquiry courses.
  */
 function fillMisc() {
     'use strict';
@@ -187,7 +191,7 @@ function fillMisc() {
     var specInq = $('#spec_misc')[0].getElementsByTagName('input');
     var majInq = $('#maj_misc')[0].getElementsByTagName('input');
 
-    // clear textboxes
+    // Clear textboxes
     if (specInq[0].value.indexOf('PEY') === -1) {
         specInq[0].value = '';
         specInq[0].disabled = false;
@@ -202,7 +206,7 @@ function fillMisc() {
         major.activeInq = 1;
     }
 
-    // fill active inquiry course
+    // Fill active inquiry course
     for (var i = 0; i < activeCourses.length; i++) {
         if (CSCinq.indexOf(activeCourses[i]) !== -1) {
             specInq[0].value = activeCourses[i];
@@ -215,6 +219,6 @@ function fillMisc() {
         }
     }
 
-    // update category
+    // Update category
     updateInqCategory();
 }

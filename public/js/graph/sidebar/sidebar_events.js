@@ -123,12 +123,7 @@ function getGraphsInDatabase() {
 function enableReset() {
     'use strict';
 
-    if (FCEs > 0) {
-        $('#reset').attr('disabled', false);
-    } else {
-        $('#reset').attr('disabled', true);
-    }
+    $('#reset').attr('disabled', FCEs <= 0);
 
     fillFCECount();
-
 }

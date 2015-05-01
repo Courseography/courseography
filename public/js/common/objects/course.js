@@ -5,6 +5,7 @@
  */
 function Course(name) {
     'use strict';
+
     var course = getCourse(name);
     // Copy attributes
     this.F = course.F;
@@ -234,7 +235,6 @@ Course.prototype.selectTimes = function (section) {
             $(time).removeClass('timetable-edge')
                    .addClass('timetable-middle');
         }
-
     });
 };
 
