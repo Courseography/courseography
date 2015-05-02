@@ -8,8 +8,13 @@ function updateFCECount() {
 
     FCEs = FCEs100 + FCEs200 + FCEs300 + FCEs400 + FCEsMAT;
     setCookie(getCookie('active-graph') + '-fce', FCEs);
+
     for (var i = 0; i < graphs.length; i++) {
-        totalFCEs += parseFloat(getCookie(graphs[i].gId + '-fce'));
+        var fce = getCookie(graphs[i].gId + '-fce');
+        if (fce === '') {
+            fce = 0.0;
+        }
+        totalFCEs += parseFloat(fce);
     }
 
     $('#FCEcount').html(totalFCEs.toFixed(1));
