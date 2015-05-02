@@ -101,7 +101,6 @@ function initializeGraphSettings() {
     FCEs400 = 0;
     FCEsMAT = 0;
     clickedCourses = [];
-    $('#FCEcount').html('0.0');
 
     // Clear 'My Courses' tab
     $('#courseGrid').empty();

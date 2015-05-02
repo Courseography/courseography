@@ -56,7 +56,7 @@ function fillFCECount() {
     'use strict';
 
     $('#fcecount').show();
-    $('#fcecount').html('FCE Count: ' + FCEs);
+    $('#fcecount').html('FCE Count: ' + totalFCEs);
 }
 
 
@@ -77,7 +77,6 @@ function toggleSidebar(location) {
     } else if (!toggled && location === 'button') {
         toggled = true;
         $('#sidebar').animate({width: '400px'}, 'fast');
-
         fillFCECount();
         $('#focuses').show();
         $('#focuses-nav').addClass('active');

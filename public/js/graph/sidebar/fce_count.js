@@ -4,8 +4,16 @@
 function updateFCECount() {
     'use strict';
 
+    totalFCEs = 0; 
+
     FCEs = FCEs100 + FCEs200 + FCEs300 + FCEs400 + FCEsMAT;
-    $('#FCEcount').html(FCEs.toFixed(1));
+    setCookie(getCookie('active-graph') + '-fce', FCEs);
+    for (var i = 0; i < graphIds.length; i++) {
+        totalFCEs += parseInt(getCookie(graphIds[i] + '-fce'));
+    }
+
+    $('#FCEcount').html(totalFCEs.toFixed(1));
+
 }
 
 
