@@ -1,4 +1,3 @@
-
 /**
  * The click function when we click the reset button.
 **/
@@ -39,7 +38,10 @@ $('.focus').click(function(e) {
 function createGraphButtons(graphs) {
     'use strict';
 
+    graphIds = [];
+
     for (var i = 0; i < graphs.length; i++) {
+        graphIds.push(graphs[i].gId);
         var graphId = graphs[i].gId;
         var graphTitle = graphs[i].title;
         var graphButton = '<div id = "graph-' + graphId +'" class = "graph-button">';
