@@ -22,7 +22,7 @@ var courseCache = [];         // Cached Courses. Courses are cached to
 
 var nodes = [];               // List of all nodes
 
-var graphs = [];            // List of graph ids that are parsed in the database
+var graphs = [];            // List of graphs (jsons) that are parsed in the database
 
 $(document).ready(function () {
     'use strict';
