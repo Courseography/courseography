@@ -1,5 +1,13 @@
 var toggled = false;
 
+$(document).ready (function () {
+    'use strict';
+
+    getGraphsInDatabase();
+    updateFCECount();
+});
+
+
 $('#sidebar-button').click(function() {
     'use strict';
 
@@ -25,7 +33,7 @@ $('#graphs-nav').click(function (e) {
     $('#graphs').empty();
     $('#graphs').show();
     $('#graphs-nav').addClass('active');
-    getGraphsInDatabase();
+    createGraphButtons();
 });
 
 

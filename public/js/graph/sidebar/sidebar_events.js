@@ -35,13 +35,10 @@ $('.focus').click(function(e) {
  * Dynamically creates buttons for each graph in the sidebar.
  * @param {JSON[]} An array of JSON objects representing graphs in the database
 **/
-function createGraphButtons(graphs) {
+function createGraphButtons() {
     'use strict';
 
-    graphIds = [];
-
     for (var i = 0; i < graphs.length; i++) {
-        graphIds.push(graphs[i].gId);
         var graphId = graphs[i].gId;
         var graphTitle = graphs[i].title;
         var graphButton = '<div id = "graph-' + graphId +'" class = "graph-button">';
@@ -110,7 +107,7 @@ function getGraphsInDatabase() {
         dataType: 'json',
         async: false,
         success: function (data) {
-            createGraphButtons(data);
+            graphs = data;
         },
         error: function () {
             throw 'No graphs in database';
