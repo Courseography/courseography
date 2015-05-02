@@ -64,8 +64,8 @@ nodeCSS = "g" ? do
             "text" <? do
                 fullyVisible
         "data-active" @= "unlit" & do
-            wideStroke
-            strokeRed
+            "rect" <?
+                faded
         "data-active" @= "unselected" & do
             "rect" <? do
                 wideStroke
