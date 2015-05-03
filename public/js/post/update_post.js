@@ -95,7 +95,7 @@ function deactivateCourse(courseCode) {
 
     var elements = document.getElementsByClassName(courseCode);
     for (var i = 0; i < elements.length; i++) {
-            elements[i].style.backgroundColor = '#BABABA';
+        elements[i].style.backgroundColor = '#BABABA';
     }
 }
 
@@ -108,11 +108,7 @@ function deactivateCourse(courseCode) {
 function updateCategory(category, status) {
     'use strict';
 
-    if (status === 'fulfilled') {
-        category.style.backgroundColor = "#3CB371";
-    } else if (status === 'not fulfilled') {
-        category.style.backgroundColor = '#ebe8e4';
-    }
+    category.style.backgroundColor = (status === 'fulfilled') ? "#3Cb371" : '#ebe8e4';
 }
 
 
@@ -128,9 +124,8 @@ function fillCreditCount() {
 }
 
 
-
 /**
- * Autofills the credit count for specialist
+ * Autofills the credit count for specialist.
  */
 function fillSpecCreditCount() {
     'use strict';
@@ -189,7 +184,6 @@ function addExtraMinCourses() {
             minor.filledTextboxesExtra += 1;
             current += 1;
         }
-
     }
 }
 
@@ -201,9 +195,7 @@ function checkPostCompleted() {
     'use strict';
 
     $('#spec_creds').css('color', specialist.categoriesCompleted === specialist.categories ? 'green' : 'red');
-
     $('#maj_creds').css('color', major.categoriesCompleted === major.categories ? 'green' : 'red');
-
     $('#min_creds').css('color', minor.categoriesCompleted === minor.categories ? 'green' : 'red');
 }
 
@@ -216,14 +208,15 @@ function updateActiveCourses() {
 
     activeCourses = [];
 
-    // check for active CSC courses
+    // Check for active CSC courses
     for (var i = 0; i < allCourses.length; i++) {
-        if (getCookie(allCourses[i].toLowerCase()) === 'active' || getCookie(allCourses[i].toLowerCase()) === 'overridden') {
+        if (getCookie(allCourses[i].toLowerCase()) === 'active' ||
+            getCookie(allCourses[i].toLowerCase()) === 'overridden') {
             activeCourses.push(allCourses[i]);
         }
     }
 
-    // check for active math courses
+    // Check for active math courses
     for (var i = 0; i < math.length; i++) {
         if (getCookie(math[i].toLowerCase()) === 'active') {
             activeCourses.push(math[i]);
@@ -247,8 +240,8 @@ function updateMatCreditCount() {
             specialist.filledTextboxesExtra += 1;
         }
         if (k < 3 && (majExtra[k].value.indexOf('MAT') > -1 || majExtra[k].value.indexOf('STA') > -1)) {
-                major.creditCount += 0.5;
-                major.filledTextboxesExtra += 1;
+            major.creditCount += 0.5;
+            major.filledTextboxesExtra += 1;
         }
     }
 }
@@ -257,7 +250,7 @@ function updateMatCreditCount() {
  * Returns whether course is a specialist course or not
  * @param {string} Name of course
  * @return {boolean} True if course is a specialist, False otherwise
-**/
+ */
 function notSpecialistCourse(course) {
     'use strict';
 

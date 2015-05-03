@@ -47,7 +47,7 @@ performParse graphTitle inputFilename =
       print "Graph Parsed"
       insertElements parsedGraph
       print "Graph Inserted"
-      buildSVG key M.empty ("../public/res/graphs/" ++ show key ++ ".svg") False
+      buildSVG key M.empty ("../public/res/graphs/gen" ++ show key ++ ".svg") False
       print "Success"
 
 -- * Parsing functions

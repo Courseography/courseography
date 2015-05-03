@@ -21,6 +21,8 @@ import GHC.Int (Int64)
 graphImageResponse :: ServerPart Response
 graphImageResponse =
     do req <- askRq
+       -- TODO: Look into using an association list [(_,_)] rather than
+       -- a map. Not sure if a map is necessary or not.
        let cookies = M.fromList $ rqCookies req
            gId = maybe 1 (\x -> (read . cookieValue) x :: Int64)
                          (M.lookup "active-graph" cookies)

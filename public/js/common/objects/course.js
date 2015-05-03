@@ -5,6 +5,7 @@
  */
 function Course(name) {
     'use strict';
+
     var course = getCourse(name);
     // Copy attributes
     this.F = course.F;
@@ -234,7 +235,6 @@ Course.prototype.selectTimes = function (section) {
             $(time).removeClass('timetable-edge')
                    .addClass('timetable-middle');
         }
-
     });
 };
 
@@ -367,7 +367,7 @@ Course.prototype.renderHeader = function () {
     var iconDiv = document.createElement('div');
     $(iconDiv).addClass('icon-div');
     var courseImg = document.createElement('img');
-    $(courseImg).attr('src', 'static/res/ico/delete.ico')
+    $(courseImg).attr('src', 'static/res/ico/delete.png')
                 .addClass('close-icon')
                 .click(function () {
                     removeCourseFromList(tmp.name);

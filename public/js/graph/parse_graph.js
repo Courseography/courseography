@@ -42,7 +42,7 @@ function buildGraph(gId) {
     });
 
     // Hard-coded hybrid relationships.
-    // This should be generated on the server.
+    // TODO: This should be automatically generated.
     if (gId === '1') { // CSC graph
         h91.parents.push(mat135136137157calc1);
         mat135136137157calc1.children.push(h91);

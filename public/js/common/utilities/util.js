@@ -72,6 +72,7 @@ function getCourseObject(courseName, courseArray) {
  */
 function getCourse(name) {
     'use strict';
+
     var course = getCourseObject(name, courseCache);
     if (course === undefined) {
         course = fetchCourse(name);
@@ -169,7 +170,7 @@ function cleanUpTimes(times) {
     var m;
 
     for (var i = 0; i < times.length; i++) {
-        
+
         n = times[i].indexOf('H');
         m = times[i].indexOf('E');
 
@@ -180,7 +181,7 @@ function cleanUpTimes(times) {
         } else {
             timeString = times[i];
         }
-        
+
         timeList.push(timeString);
     }
 

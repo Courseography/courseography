@@ -56,7 +56,7 @@ checkPost =
                     H.p ! A.class_ "full_name CSC165" $ "CSC165H (Mathematical Expression and Reasoning for Computer Science)"
                     H.p ! A.class_ "full_name CSC165" $ "CSC240H (Enriched Introduction to the Theory of Computation)"
             H.div ! A.id "spec_calc1" $ do
-                H.p ! A.class_ "code" $ "(MAT135H and MAT136H) or MAT137H or MAT157H"
+                H.p ! A.class_ "code" $ "(MAT135H and MAT136H) or MAT137Y or MAT157Y"
                 H.div ! A.class_ "more-info" $ do
                     H.p ! A.class_ "full_name Calc1" $ "MAT135H (Calculus 1(A))"
                     H.p ! A.class_ "full_name Calc1" $ "MAT136H (Calculus 1(B))"
@@ -86,10 +86,11 @@ checkPost =
                     H.p ! A.class_ "full_name CSC263" $ "CSC263H (Data Structures and Analysis)"
                     H.p ! A.class_ "full_name CSC263" $ "CSC265H (Enriched Data Structures and Analysis)"
             H.div ! A.id "spec_lin1" $ do
-                H.p ! A.class_ "code" $ "MAT221H or MAT223H"
+                H.p ! A.class_ "code" $ "MAT221H or MAT223H or MAT240H"
                 H.div ! A.class_ "more-info" $ do
                     H.p ! A.class_ "full_name Lin1" $ "MAT221H (Applied Linear Algebra)"
                     H.p ! A.class_ "full_name Lin1" $ "MAT223H (Linear Algebra 1)"
+                    H.p ! A.class_ "full_name Lin1" $ "MAT240H (Algebra 1)"
             H.div ! A.id "spec_sta1" $ do
                 H.p ! A.class_ "code" $ "STA247H or STA255H or STA257H"
                 H.div ! A.class_ "more-info" $ do
@@ -106,7 +107,7 @@ checkPost =
                 H.div ! A.class_ "more-info" $ 
                         H.p ! A.class_ "full_name CSC373" $ "CSC373H (Algorithm Design, Analysis, and Complexity)"
             H.div ! A.id "spec_400" $ do
-                H.p ! A.class_ "code" $ "Any 400-level CSC course, BCB410H, BCB420H, BCB430Y (1.5 FCEs)"
+                H.p ! A.class_ "code" $ "Any 400-level CSC course, BCB410H, BCB420H, BCB430Y, ECE489H (1.5 FCEs)"
                 H.div ! A.id "spec400" ! A.class_ "more-info" $ do
                     H.input ! A.type_ "text" 
                     H.input ! A.type_ "text"  
@@ -119,8 +120,8 @@ checkPost =
                     H.input ! A.type_ "text" 
             H.div ! A.id "spec_extra" $ do
                 H.p ! A.class_ "code" $ "Any 300+ level CSC course, BCB/ECE/MAT/STA course (2.0 FCEs) - \
-                                         \MAT: 224, 235, 237, 237, 257, 300+ except for 320, 390, & 391 \
-                                         \; STA: 249, 261, any 300+" 
+                                         \MAT: 224, 235/237/257, any 300+ except for 329, 390, & 391 \
+                                         \; STA: 248, 261, any 300+" 
                 H.div ! A.id "specextra" ! A.class_ "more-info" $ do
                     H.input ! A.type_ "text"
                     H.input ! A.type_ "text"
@@ -151,7 +152,7 @@ checkPost =
                     H.p ! A.class_ "full_name CSC165" $ "CSC165H (Mathematical Expression and Reasoning for Computer Science)"
                     H.p ! A.class_ "full_name CSC165" $ "CSC240H (Enriched Introduction to the Theory of Computation)"
             H.div ! A.id "maj_calc1" $ do
-                H.p ! A.class_ "code" $ "(MAT135H and MAT136H) or MAT137H or MAT157H"
+                H.p ! A.class_ "code" $ "(MAT135H and MAT136H) or MAT137Y or MAT157Y"
                 H.div ! A.class_ "more-info" $ do
                     H.p ! A.class_ "full_name Lin1" $ "MAT135H (Calculus 1(A))"
                     H.p ! A.class_ "full_name Lin1" $ "MAT136H (Calculus 1(B))"
@@ -194,8 +195,8 @@ checkPost =
                     H.input ! A.type_ "text" 
             H.div ! A.id "maj_extra" $ do
                 H.p ! A.class_ "code" $ "Any 300+ level CSC course, BCB/ECE/MAT/STA course (1.5 FCEs) - \ 
-                                         \MAT: 224, 235, 237, 237, 257, 300+ except for 320, 390, & 391 \ 
-                                         \; STA: 249, 261, any 300+" 
+                                         \MAT: 221/223/240, 224, 235/237/257, any 300+ except for 329, 390, & 391 \ 
+                                         \; STA: 248, 261, any 300+" 
                 H.div ! A.id "majextra" ! A.class_ "more-info" $ do
                     H.input ! A.type_ "text"
                     H.input ! A.type_ "text"
