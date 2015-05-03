@@ -1,9 +1,20 @@
 {-# LANGUAGE OverloadedStrings, FlexibleContexts, GADTs, ScopedTypeVariables #-}
 
--- |This module is reponsible for parsing the SVG files exported from Inkscape.
---  It is also currently responsible for the process of inserting the files
---  into the database and generating new SVG files to be rendered in the
---  application.
+{-|
+Description: The main graph module. __Start here__.
+
+This module is reponsible for parsing the SVG files exported from Inkscape.
+It also currently acts as a main driver for the whole graph pipeline:
+
+1. Parsing the raw SVG files
+2. Inserting them into the database (see "Svg.Database")
+3. Retrieving the database values and generating a new SVG file
+   (See "Svg.Builder" and "Svg.Generator")
+
+The final svg files are output in @public\/res\/graphs\/gen@ and are sent
+directly to the client when viewing the @/graph@ page.
+-}
+
 module Svg.Parser where
 
 import Data.Maybe (mapMaybe, catMaybes, fromMaybe)
@@ -39,13 +50,13 @@ performParse graphTitle inputFilename =
       buildSVG key M.empty ("../public/res/graphs/" ++ show key ++ ".svg") False
       print "Success"
 
--- *Main parsing functions
+-- * Parsing functions
 
--- |These functions traverse the raw SVG tree and return three lists, each
---  containing values corresponding to different graph elements
---  (edges, nodes, and text).
-
--- |Parses an SVG file.
+-- | Parses an SVG file.
+--
+-- This and the following functions traverse the raw SVG tree and return
+-- three lists, each containing values corresponding to different graph elements
+-- (edges, nodes, and text).
 parseGraph ::  Int64  -- ^ The unique identifier of the graph.
             -> String -- ^ The file contents of the graph that will be parsed.
             -> ([Path],[Shape],[Text])
@@ -58,8 +69,8 @@ parseGraph key graphFile =
         -- Raw SVG seems to have a rectangle the size of the whole image
         small shape = shapeWidth shape < 300
 
--- |The main parsing function. Parses an SVG element,
---  and then recurses on its children.
+-- | The main parsing function. Parses an SVG element,
+-- and then recurses on its children.
 parseNode :: Int64 -- ^ The Path's corresponding graph identifier.
           -> Content i
           -> ([Path],[Shape],[Text])
@@ -84,7 +95,7 @@ parseNode key content =
              map (updateShape fill trans) (newShapes),
              map (updateText trans) (newTexts))
 
--- |Create a rectangle from a list of attributes.
+-- | Create a rectangle from a list of attributes.
 parseRect :: Int64 -- ^ The Rect's corresponding graph identifier.
           -> [Attribute]
           -> Shape
@@ -101,7 +112,7 @@ parseRect key attrs =
           9
           Node
 
--- |Create an ellipse from a list of attributes.
+-- | Create an ellipse from a list of attributes.
 parseEllipse :: Int64 -- ^ The Ellipse's corresponding graph identifier.
              -> [Attribute]
              -> Shape
@@ -118,7 +129,7 @@ parseEllipse key attrs =
           20
           BoolNode
 
--- |Create a path from a list of attributes.
+-- | Create a path from a list of attributes.
 parsePath :: Int64 -- ^ The Path's corresponding graph identifier.
           -> [Attribute]
           -> Maybe Path
@@ -139,9 +150,9 @@ parsePath key attrs =
         isRegion = not $
             null fillAttr || fillAttr == "none"
 
--- |Create text values from content.
---  It is necessary to pass in the content because we need to search
---  for nested tspan elements.
+-- | Create text values from content.
+-- It is necessary to pass in the content because we need to search
+-- for nested tspan elements.
 parseText :: Int64 -- ^ The Text's corresponding graph identifier.
           -> [(String, String)]
           -> Content i
@@ -168,9 +179,9 @@ parseText key style content =
         fill = styleVal "fill" newStyle
 
 
--- *Helpers for manipulating attributes
+-- * Helpers for manipulating attributes
 
--- |Gets the tag name of a Content Element.
+-- | Gets the tag name of a Content Element.
 getName :: Content i -> String
 getName (CElem (Elem a _ _) _) = printableName a
 getName _ = ""
@@ -179,28 +190,28 @@ contentAttrs :: Content i -> [Attribute]
 contentAttrs (CElem (Elem _ attrs _) _) = attrs
 contentAttrs _ = []
 
--- |Gets an Attribute's name.
+-- | Gets an Attribute's name.
 attrName :: Attribute -> String
 attrName (qname, _) = printableName qname
 
--- |Gets an Attribute's value.
+-- | Gets an Attribute's value.
 attrVal :: Attribute -> String
 attrVal (_, val) = show val
 
--- |Looks up the (string) value of the attribute with the corresponding name.
---  Returns the empty string if the attribute isn't found.
+-- | Looks up the (string) value of the attribute with the corresponding name.
+-- Returns the empty string if the attribute isn't found.
 lookupAttr :: String -> [Attribute] -> String
 lookupAttr name attrs =
     maybe "" (show . snd) $ find (\x -> attrName x == name) attrs
 
--- |Looks up an attribute value and convert to another type.
+-- | Looks up an attribute value and convert to another type.
 readAttr :: Read a => String    -- ^ The attribute's name.
                    -> [Attribute] -- ^ The element that contains the attribute.
                    -> a
 readAttr attr attrs = read $ lookupAttr attr attrs
 
--- |Return a list of styles from the style attribute of an element.
---  Every style has the form (name, value).
+-- | Return a list of styles from the style attribute of an element.
+-- Every style has the form (name, value).
 styles :: [Attribute] -> [(String, String)]
 styles attrs =
     let styleStr = lookupAttr "style" attrs
@@ -211,7 +222,7 @@ styles attrs =
             [n,v] -> (n,v)
             _ -> ("","")
 
--- |Gets a style attribute from a style string.
+-- | Gets a style attribute from a style string.
 styleVal :: String -> [(String, String)] -> String
 styleVal name styles = fromMaybe "" $ lookup name styles
 
@@ -243,13 +254,13 @@ parsePathD d
       convertToPoint y = (read (head y), read (last y))
 
 
--- *Other helpers
+-- * Other helpers
 
--- |These functions are used to update the parsed values
---  with styles (transform and fill) inherited from their parents.
+-- | These functions are used to update the parsed values
+-- with styles (transform and fill) inherited from their parents.
 --
---  Eventually, it would be nice if we removed these functions and
---  Simply passed everything down when making the recursive calls.
+-- Eventually, it would be nice if we removed these functions and
+-- simply passed everything down when making the recursive calls.
 
 updatePath :: String -- ^ The fill that may be added to the Path.
            -> Point  -- ^ Transform that will be added to the Shape's
@@ -277,12 +288,12 @@ updateShape fill transform r =
       }
 
 updateText :: Point -- ^ Transform that will be added to the input Shape's
-                    --   current transform value.
+                    -- current transform value.
            -> Text
            -> Text
 updateText transform t =
     t { textPos = addTuples transform (textPos t) }
 
--- |Adds two tuples together.
+-- | Adds two tuples together.
 addTuples :: Point -> Point -> Point
 addTuples (a,b) (c,d) = (a + c, b + d)

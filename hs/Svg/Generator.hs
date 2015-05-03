@@ -1,10 +1,15 @@
 {-# LANGUAGE OverloadedStrings, GADTs, ScopedTypeVariables #-}
 
--- |This module is responsible for taking the database representation
---  of a graph and creating a new SVG file.
---
---  This functionality is used both to create SVG for the Graph component,
---  as well as generating images on the fly for Facebook posting.
+{-|
+Description: Generate a new SVG file from the database graph representation.
+
+This module is responsible for taking the database representation of a graph
+and creating a new SVG file.
+
+This functionality is used both to create SVG for the Graph component,
+as well as generating images on the fly for Facebook posting.
+-}
+
 module Svg.Generator where
 
 import Svg.Builder
@@ -28,8 +33,8 @@ import Css.Constants
 import qualified Data.Map.Strict as M
 import Data.Monoid (mempty)
 
--- |This is the main function that retrieves a stored graph
---  from the database and creates a new SVG file for it.
+-- | This is the main function that retrieves a stored graph
+-- from the database and creates a new SVG file for it.
 buildSVG :: Int64                -- ^ The ID of the graph that is being built.
          -> M.Map String String  -- ^ A map of courses that holds the course
                                  --   ID as a key, and the data-active
@@ -91,10 +96,10 @@ buildSVG gId courseMap filename styled =
             isPrefixOf "active" courseStatus ||
             isPrefixOf "overridden" courseStatus
 
--- *SVG Creation
+-- * SVG Creation
 
--- |This function does the heavy lifting to actually create
---  a new SVG value given the graph components.
+-- | This function does the heavy lifting to actually create
+-- a new SVG value given the graph components.
 makeSVGDoc :: M.Map String String
            -> [Shape] -- ^ A list of the Nodes that will be included
                       --   in the graph. This includes both Hybrids and
@@ -137,8 +142,7 @@ makeSVGDoc courseMap rects ellipses edges regions regionTexts styled =
                           concatSVG $ map (textToSVG styled Region 0)
                                           regionTexts
 
--- |Builds the SVG defs.
---  Currently, we only use a single one, for the arrowheads.
+-- | Builds the SVG defs. Currently, we only use a single one, for the arrowheads.
 makeSVGDefs :: S.Svg
 makeSVGDefs =
     S.defs $
@@ -153,7 +157,7 @@ makeSVGDefs =
                  S.polyline ! A.points "0,1 10,5 0,9"
                             ! A.fill "black"
 
--- |Converts a node to SVG.
+-- | Converts a node to SVG.
 rectToSVG :: Bool -> M.Map String String -> Shape -> S.Svg
 rectToSVG styled courseMap rect
     | shapeFill rect == "none" = S.rect
@@ -192,7 +196,7 @@ rectToSVG styled courseMap rect
                           (fst (shapePos rect) + (shapeWidth rect / 2)))
                       (shapeText rect)
 
--- |Converts an ellipse to SVG.
+-- | Converts an ellipse to SVG.
 ellipseToSVG :: Bool -> Shape -> S.Svg
 ellipseToSVG styled ellipse =
     S.g ! A.id_ (stringValue (shapeId_ ellipse))
@@ -209,7 +213,7 @@ ellipseToSVG styled ellipse =
                 (textToSVG styled BoolNode (fst $ shapePos ellipse))
                 (shapeText ellipse)
 
--- |Converts a text value to SVG.
+-- | Converts a text value to SVG.
 textToSVG :: Bool -> ShapeType -> Double -> Text -> S.Svg
 textToSVG styled type_ xPos' text =
     S.text_ ! A.x (stringValue $ show $
@@ -246,7 +250,7 @@ textToSVG styled type_ xPos' text =
                     else
                         ""
 
--- |Converts a path to SVG.
+-- | Converts a path to SVG.
 edgeToSVG :: Bool -> Path -> S.Svg
 edgeToSVG styled path =
     S.path ! A.id_ (stringValue $ "path" ++ pathId_ path)
@@ -265,7 +269,7 @@ edgeToSVG styled path =
              else
                  mempty
 
--- |Converts a region to SVG.
+-- | Converts a region to SVG.
 regionToSVG :: Bool -> Path -> S.Svg
 regionToSVG styled path =
     S.path ! A.id_ (stringValue $ "region" ++ pathId_ path)
@@ -278,10 +282,10 @@ regionToSVG styled path =
                       else "")
 
 
--- **Hard-coded map definitions (should be removed, eventually)
+-- ** Hard-coded map definitions (should be removed, eventually)
 
 -- | Gets a tuple from areaMap where id_ is in the list of courses for that
---   tuple.
+-- tuple.
 getTuple :: String -- ^ The course's ID.
          -> Maybe (T.Text, String)
 getTuple id_
@@ -290,13 +294,13 @@ getTuple id_
     where tuples = M.filterWithKey (\k _ -> id_ `elem` k) areaMap
 
 -- | Gets an area from areaMap where id_ is in the list of courses for the
---   corresponding tuple.
+-- corresponding tuple.
 getArea :: String -> String
 getArea id_ = maybe "" snd $ getTuple id_
 
 -- | A list of tuples that contain disciplines (areas), fill values, and courses
----  that are in the areas.
---   TODO: Remove colour dependencies, and probably the whole map.
+-- that are in the areas.
+-- TODO: Remove colour dependencies, and probably the whole map.
 areaMap :: M.Map [String] (T.Text, String)
 areaMap =  M.fromList
            [
@@ -319,7 +323,7 @@ areaMap =  M.fromList
            (["csc104", "csc120", "csc108", "csc148"], (introDark, "intro")),
            (["calc1", "lin1", "sta1", "sta2"], (mathDark, "math"))]
 
--- **Other helpers
+-- ** Other helpers
 
 -- | Strip disallowed characters from string for DOM id
 toId :: String -> String
