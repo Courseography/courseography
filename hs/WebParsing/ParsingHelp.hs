@@ -56,7 +56,8 @@ emptyCourse = Course {
                     manualTutorialEnrol = Nothing,
                     manualPracticalEnrol = Nothing,
                     distribution = Nothing,
-                    prereqs = Nothing}
+                    prereqs = Nothing,
+                    coreqs = Nothing}
 
 replaceAll :: [T.Text] -> T.Text -> T.Text -> T.Text
 replaceAll matches replacement str =
@@ -187,7 +188,8 @@ parsePrerequisite (tags, course) =
 parseCorequisite :: CoursePart -> CoursePart
 parseCorequisite (tags, course)  =
   let (parsed, rest) = tagBreak ["Exclusion","Recommended","Distribution","Breadth"] tags
-  in (rest, course)
+      coreqs = makeEntry parsed (Just ["Corequisite:"])
+  in (rest, course {coreqs = coreqs})
 
 parseExclusion :: CoursePart -> CoursePart
 parseExclusion (tags, course) =

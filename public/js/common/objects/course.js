@@ -15,6 +15,7 @@ function Course(name) {
     this.title = course.title;
     this.prereqs = course.prereqs;
     this.prereqString = course.prereqString;
+    this.coreqs = course.coreqs;
     this.breadth = course.breadth;
     this.prep = course.prep;
     this.description = course.description;

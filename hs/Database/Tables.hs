@@ -38,6 +38,7 @@ Courses json
     breadth T.Text Maybe
     distribution T.Text Maybe
     prereqString T.Text Maybe
+    coreqs T.Text Maybe
     deriving Show
 
 Lectures
@@ -157,11 +158,12 @@ data Course =
              manualTutorialEnrol :: Maybe Bool,
              manualPracticalEnrol :: Maybe Bool,
              distribution :: Maybe T.Text,
-             prereqs :: Maybe T.Text
+             prereqs :: Maybe T.Text,
+             coreqs :: Maybe T.Text
            } deriving Show
 
 instance ToJSON Course where
-  toJSON (Course breadth description title prereqString f s y name exclusions manualTutorialEnrol manualPracticalEnrol distribution prereqs)
+  toJSON (Course breadth description title prereqString f s y name exclusions manualTutorialEnrol manualPracticalEnrol distribution prereqs coreqs)
           = object ["breadth" .= breadth,
                     "description" .= description,
                     "title" .= title,
@@ -174,7 +176,8 @@ instance ToJSON Course where
                     "manualTutorialEnrolment" .= manualTutorialEnrol,
                     "manualPracticalEnrolment" .= manualPracticalEnrol,
                     "distribution" .= distribution,
-                    "prereqs" .= prereqs
+                    "prereqs" .= prereqs,
+                    "coreqs" .= coreqs
                    ]
 
 instance ToJSON Session where
