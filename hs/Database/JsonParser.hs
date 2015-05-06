@@ -41,6 +41,7 @@ insertCourse course =
                       (breadth course)
                       (distribution course)
                       (prereqString course)
+                      (coreqs course)
 
 -- | Updates the manualTutorialEnrolment field of all courses with course code course
 setTutEnrol :: MonadIO m => T.Text -> Bool -> ReaderT SqlBackend m ()

@@ -77,6 +77,10 @@ function formatCourseDescription(course) {
         courseDescription += '<p><strong>Prerequisite:</strong> ' +
                              course.prereqString + '</p>';
     }
+    if (course.coreqs !== undefined && course.coreqs !== null) {
+        courseDescription += '<p><strong>Corequisites:</strong> ' +
+                             course.coreqs + '</p>';
+    }
     if (course.prep !== undefined && course.prep !== null) {
         courseDescription += '<p><strong>Recommended Preparation:</strong> ' +
                              course.prep + '</p>';
