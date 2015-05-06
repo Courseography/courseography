@@ -27,6 +27,7 @@ import Data.String.Utils (replace)
 import Text.XML.HaXml hiding (find)
 import Text.XML.HaXml.Util (tagTextContent)
 import Text.XML.HaXml.Namespaces (printableName)
+import System.Directory
 import Database.Tables
 import Database.DataType
 import Svg.Database
@@ -47,7 +48,8 @@ performParse graphTitle inputFilename =
       print "Graph Parsed"
       insertElements parsedGraph
       print "Graph Inserted"
-      buildSVG key M.empty ("../public/res/graphs/gen" ++ show key ++ ".svg") False
+      createDirectoryIfMissing True "../public/res/graphs/gen"
+      buildSVG key M.empty ("../public/res/graphs/gen/" ++ show key ++ ".svg") False
       print "Success"
 
 -- * Parsing functions
