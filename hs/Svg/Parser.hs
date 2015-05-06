@@ -35,7 +35,7 @@ import Svg.Generator
 
 main :: IO ()
 main = do
-    performParse "ComputerScience" "csc2015.svg"
+    performParse "Computer Science" "csc2015.svg"
     performParse "Statistics" "sta2015.svg"
 
 performParse :: String -- ^ The title of the graph.
