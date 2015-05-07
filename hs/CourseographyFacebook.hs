@@ -5,7 +5,6 @@ import qualified Facebook as FB
 import Control.Monad.IO.Class  (liftIO)
 import qualified Data.Text as T
 import Happstack.Server
-import Happstack.Server.Internal.Multipart
 import Network.HTTP.Conduit (withManager, parseUrl, httpLbs)
 import Control.Monad.Trans.Resource
 import qualified Data.Conduit.List as CL
@@ -13,11 +12,9 @@ import Data.Conduit
 import Database.Persist
 import ImageConversion
 import Database.JsonParser
-import System.Process
 import GraphResponse
 import Database.Tables
 import qualified Data.ByteString.Char8 as BS
-import qualified Data.ByteString.Lazy as BL
 import Database.Persist.Sqlite
 import Network.HTTP.Client.MultipartFormData
 import Network (withSocketsDo)
@@ -53,7 +50,7 @@ perms :: [FB.Permission]
 perms = ["publish_actions"]
 
 postPhoto :: FB.UserAccessToken -> FB.UserId -> IO Response
-postPhoto (FB.UserAccessToken _ b _) id_ = withSocketsDo $ withManager $ \m -> do
+postPhoto (FB.UserAccessToken _ b _) _ = withSocketsDo $ withManager $ \m -> do
     fbpost <- parseUrl $ "https://graph.facebook.com/v2.2/me/photos?access_token=" ++ T.unpack b
     flip httpLbs m =<<
         formDataBody [partBS "message" "Test Message",

@@ -15,7 +15,6 @@ import Database.Tables as Tables
 import Control.Monad.IO.Class (liftIO, MonadIO)
 import JsonResponse
 import Database.JsonParser
-import Happstack.Server
 import qualified Data.Text as T
 import WebParsing.ParsingHelp
 import Data.String.Utils

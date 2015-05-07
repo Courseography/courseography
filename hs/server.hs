@@ -22,12 +22,11 @@ import System.Environment (lookupEnv)
 import System.IO (hSetBuffering, stdout, stderr, BufferMode(LineBuffering))
 import System.Log.Logger (logM, updateGlobalLogger, rootLoggerName, setLevel, Priority(INFO))
 import CourseographyFacebook
-import qualified Data.Text as T
 import qualified Data.Text.Lazy.IO as LazyIO
 
 -- | log access requests using hslogger and a condensed log formatting
 logMAccessShort :: FormatTime t => LogAccess t
-logMAccessShort host user time requestLine responseCode size referer userAgent =
+logMAccessShort host user _ requestLine responseCode _ referer _ =
     logM "Happstack.Server.AccessLog.Combined" INFO $ unwords
         [ host
         , user

@@ -23,7 +23,7 @@ import Database.JsonParser
 import MakeElements
 import Data.Maybe (fromMaybe)
 import qualified Data.Text as T
-import Text.Blaze.Svg11 ((!), mkPath, rotate, l, m)
+import Text.Blaze.Svg11 ((!))
 import qualified Text.Blaze.Svg11 as S
 import qualified Text.Blaze.Svg11.Attributes as A
 import Text.Blaze.Svg.Renderer.String (renderSvg)

@@ -18,8 +18,6 @@ import qualified Data.Text as T
 import qualified Data.Vector as V
 import Data.Aeson
 import Data.Int
-import Control.Monad
-import Control.Applicative
 
 data Time = Time { timeField :: [Double] } deriving (Show, Read, Eq)
 derivePersistField "Time"

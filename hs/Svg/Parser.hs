@@ -17,12 +17,11 @@ directly to the client when viewing the @/graph@ page.
 
 module Svg.Parser (parsePrebuiltSvgs) where
 
-import Data.Maybe (mapMaybe, catMaybes, fromMaybe)
+import Data.Maybe (mapMaybe, fromMaybe)
 import Data.Int
 import Data.List.Split (splitOn)
 import Data.List (find)
 import qualified Data.Map as M (empty)
-import Control.Monad.IO.Class (liftIO)
 import Data.String.Utils (replace)
 import Text.XML.HaXml hiding (find)
 import Text.XML.HaXml.Util (tagTextContent)
@@ -197,8 +196,8 @@ attrName :: Attribute -> String
 attrName (qname, _) = printableName qname
 
 -- | Gets an Attribute's value.
-attrVal :: Attribute -> String
-attrVal (_, val) = show val
+--attrVal :: Attribute -> String
+--attrVal (_, val) = show val
 
 -- | Looks up the (string) value of the attribute with the corresponding name.
 -- Returns the empty string if the attribute isn't found.

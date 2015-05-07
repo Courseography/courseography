@@ -24,16 +24,12 @@ module WebParsing.ParsingHelp
 
 import Text.Regex.Posix
 import Text.HTML.TagSoup
-import Text.HTML.TagSoup.Match
-import Data.List
 import qualified Data.Text as T
-import Data.List.Utils
-import Data.Maybe
 import Database.Tables
 import WebParsing.PrerequisiteParsing
 
 type CoursePart = ([Tag T.Text], Course)
-type TagParser = (Maybe [Tag T.Text], [Tag T.Text])
+--type TagParser = (Maybe [Tag T.Text], [Tag T.Text])
 
 
 (-:) :: a -> (a -> a) -> a
@@ -121,7 +117,7 @@ makeEntry (Just tags) (Just str) =
 replaceBetween :: Eq a =>  (a -> Bool) -> (a -> Bool) -> [a] -> [a]-> [a]
 replaceBetween start end rep lst =
   let (before, rest) = break start lst
-      (between, after) = break end rest
+      (_, after) = break end rest
   in if (after == [])
      then before
      else (concat [before, rep, (drop 1 after)])
@@ -130,7 +126,7 @@ replaceBetweenAll :: Eq a =>  (a -> Bool) -> (a -> Bool) -> [a] -> [a]-> [a]
 replaceBetweenAll _ _ _ [] = []
 replaceBetweenAll start end rep lst =
   let (before, rest) = break start lst
-      (between, after) = break end rest
+      (_, after) = break end rest
   in  if (or [(rest == []), (after == [])])
       then lst
       else (concat [before, rep, (replaceBetweenAll start end rep (drop 1 after))])
@@ -199,7 +195,7 @@ parseExclusion (tags, course) =
 
 parseRecommendedPrep :: CoursePart -> CoursePart
 parseRecommendedPrep (tags, course) =
-  let (parsed, rest) = tagBreak ["Distribution","Breadth"] tags
+  let (_, rest) = tagBreak ["Distribution","Breadth"] tags
   in (rest, course)
 
 parseDistAndBreadth :: CoursePart -> CoursePart
