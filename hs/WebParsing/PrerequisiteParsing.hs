@@ -14,7 +14,6 @@ module WebParsing.PrerequisiteParsing (parsePrerequisites) where
 
 import Text.Regex.Posix
 import qualified Data.Text as T
-import Data.List
 
 {- Signatures:
 
