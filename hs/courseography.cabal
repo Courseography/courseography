@@ -15,7 +15,60 @@ cabal-version:       >=1.22
 executable courseography
   main-is:             server.hs
   other-modules:       Svg.Parser
-  other-extensions:    OverloadedStrings, DataKinds, NoMonomorphismRestriction, FlexibleContexts, GADTs, ScopedTypeVariables, EmptyDataDecls, FlexibleInstances, GeneralizedNewtypeDeriving, MultiParamTypeClasses, DeriveGeneric, QuasiQuotes, TemplateHaskell, TypeFamilies
-  build-depends:       base, blaze-markup, blaze-html, happstack-server, blaze-svg, bytestring, aeson, transformers, base64-bytestring, split, containers, random, process, diagrams-lib >= 1.3, diagrams-svg >= 1.3.1, lucid, MissingH, fb, text, http-conduit, resourcet, conduit, persistent >= 2.1.2, persistent-sqlite, http-client, network, HTTP, tagsoup, regex-posix, mtl, HaXml, persistent-template, vector, clay, directory, markdown, system-filepath, hslogger, time
+  other-extensions:
+    OverloadedStrings,
+    DataKinds,
+    NoMonomorphismRestriction,
+    FlexibleContexts,
+    GADTs,
+    ScopedTypeVariables,
+    EmptyDataDecls,
+    FlexibleInstances,
+    GeneralizedNewtypeDeriving,
+    MultiParamTypeClasses,
+    DeriveGeneric,
+    QuasiQuotes,
+    TemplateHaskell,
+    TypeFamilies
+  build-depends:
+    base,
+    blaze-markup,
+    blaze-html,
+    happstack-server,
+    blaze-svg,
+    bytestring,
+    aeson,
+    transformers,
+    base64-bytestring,
+    split,
+    containers,
+    random,
+    process,
+    diagrams-lib >= 1.3,
+    diagrams-svg >= 1.3.1,
+    lucid,
+    MissingH,
+    fb,
+    text,
+    http-conduit,
+    resourcet,
+    conduit,
+    persistent >= 2.1.2,
+    persistent-sqlite,
+    http-client,
+    network,
+    HTTP,
+    tagsoup,
+    regex-posix,
+    mtl,
+    HaXml,
+    persistent-template,
+    vector,
+    clay,
+    directory,
+    markdown,
+    system-filepath,
+    hslogger,
+    time
   default-language:    Haskell2010
   ghc-options: -Wall -fwarn-tabs
