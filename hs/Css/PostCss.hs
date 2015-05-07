@@ -15,7 +15,7 @@ postStyles = do
     tabsCSS
     postCSS
 
-
+tabsCSS :: Css
 tabsCSS = do
     "#posts" & do 
         fontFamily ["HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", "Lucida Grande"][sansSerif]

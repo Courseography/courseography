@@ -9,7 +9,7 @@ import Css.Constants
 
 {- aboutStyles
  - Generates CSS for the about page. -}
-
+aboutStyles :: Css
 aboutStyles = "#aboutDiv" ? do
     maxWidth (px 1000)
     padding 0 (em 1) 0 (em 1)

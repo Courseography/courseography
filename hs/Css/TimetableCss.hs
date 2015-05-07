@@ -160,7 +160,7 @@ timetableCSS = do
 {- conflictNotificationStyle
  - Generates CSS when a conflict arises
  - in the timetable. -}
-
+conflictNotificationStyle :: Css
 conflictNotificationStyle = "#dialog" ? do
     position fixed
     backgroundColor white
@@ -264,7 +264,7 @@ courseSelectCSS = do
 
 {- tdColours
  - Generates CSS to colour the timetable. -}
-
+tdColours :: Css
 tdColours = ".timetable " ?  do
     td ? do
         ".hover-time" & do
@@ -293,7 +293,7 @@ tdColours = ".timetable " ?  do
 {- infoCSS
  - Generates CSS for the info block that describes
  - the currently selected course in the timetable. -}
-
+infoCSS :: Css
 infoCSS = "#info-layout" ? do
     padding0
     margin0

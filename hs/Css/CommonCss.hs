@@ -87,7 +87,7 @@ headerCSS = do
 
 {- aDefaultCSS
  - Generates default CSS. -}
-
+aDefaultCSS :: Css
 aDefaultCSS = do
     a <> a # hover <> a # visited <> a # active ? do
         fontWeight bold
@@ -114,7 +114,7 @@ headers = do
 {- disclaimerCSS
  - Generates CSS for the disclaimer located at the foot
  - of all pages. -}
-
+disclaimerCSS :: Css
 disclaimerCSS = "#disclaimerDiv" ? do
     padding 0 (em 1) 0 (em 1)
     fontSize (pt 11)

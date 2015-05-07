@@ -21,7 +21,7 @@ graphStyles = do
 
 {- nodeCSS
  - Generates CSS for nodes in the graph. -}
-
+nodeCSS :: Css
 nodeCSS = "g" ? do
     "text" ? do
         userSelect none
@@ -132,7 +132,7 @@ nodeCSS = "g" ? do
 {- pathCSS
  - Generates CSS for paths between nodes
  - in the graph. -}
-
+pathCSS :: Css
 pathCSS = "path" ? do
     fill "none"
     "data-active" @= "takeable" & do
@@ -154,7 +154,7 @@ pathCSS = "path" ? do
 {- resetCSS
  - Generates CSS for the reset feature
  - in the graph. -}
-
+resetCSS :: Css
 resetCSS = "#resetButton" ? do
     fill "#990000"
     cursor pointer
@@ -331,7 +331,7 @@ sidebarCSS = do
 
 {- titleCSS
  - Generates CSS for the title. -}
-
+titleCSS :: Css
 titleCSS = "#svgTitle" ? do
     fontSize $ em 2.5
     fontWeight bold

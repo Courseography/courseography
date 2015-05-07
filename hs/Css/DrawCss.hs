@@ -27,6 +27,7 @@ drawStyles = do
     finishRegionCSS
 
 {- The wrapping around the canvas elements. -}
+mainCSS :: Css
 mainCSS = "#main" ? do
     height (pct 85)
     width  (pct 85)
@@ -35,6 +36,7 @@ mainCSS = "#main" ? do
     "border-radius" -: "8px"
     border solid (px 2) black
 
+titleDiv :: Css
 titleDiv = "#about-div" ? do
     fontSize (em 1.2)
     margin 0 0 0 (px 10)
@@ -55,6 +57,7 @@ canvasCSS = do
         left nil
 
 {- The side panel. -}
+panelCSS :: Css
 panelCSS = do
     "#side-panel-wrap" ? do
         height (pct 85)
@@ -80,6 +83,7 @@ scrollBar = do
         "background-color" -: "#28B0A2"
 
 {- The mode buttons. -}
+modeButtonsCSS :: Css
 modeButtonsCSS = ".mode" ? do
     width (pct 93)
     padding 0 0 0 (px 5)
@@ -99,6 +103,7 @@ modeButtonsCSS = ".mode" ? do
     ".clicked" & do
         "background-color" -: "#28B0A2 !important"
 
+clickedButtonsCSS :: Css
 clickedButtonsCSS = ".clicked" ? do
     "color" -: "#DCDCDC !important"
     border solid (px 2) black
@@ -132,6 +137,7 @@ colourButtonsCSS = do
         backgroundColor $ parse dPurple
 
 {- The input field. -}
+inputCSS :: Css
 inputCSS = "input" ? do
     fontSize (px 16)
     border solid (px 2) "#DCDCDC"
@@ -143,6 +149,7 @@ inputCSS = "input" ? do
         "box-shadow" -: "0 0 3px 1px #FFD700"
 
 {- Style for simple buttons. -}
+simpleButton :: Css
 simpleButton = ".button" ? do
     width (pct 40)
     margin (px 5) (px 5) (px 5) (px 5)
@@ -164,6 +171,7 @@ simpleButton = ".button" ? do
 
 
 {- The add button. -}
+textButtonCSS :: Css
 textButtonCSS = "#add-text" ? do
     "display" -: "inline"
     margin (px 5) (px 5) (px 5) (px 5)
@@ -172,6 +180,7 @@ textButtonCSS = "#add-text" ? do
 
 
 {- The labels for a node. -}
+nodeLabelCSS :: Css
 nodeLabelCSS = ".mylabel" ? do
     alignCenter
     "stroke" -: "none"
@@ -198,6 +207,7 @@ elbowCSS = do
             opacity 1
 
 {- The actual region svg elements. -}
+regionCSS :: Css
 regionCSS = ".region" ? do
     "data-group" @= "red" & do
         fill dRed
@@ -209,6 +219,7 @@ regionCSS = ".region" ? do
         fill dPurple
 
 {- The finish button -}
+finishRegionCSS :: Css
 finishRegionCSS = "#finish-region" ? do
     width (pct 40)
     margin (px 5) (px 5) (px 5) (px 5)
