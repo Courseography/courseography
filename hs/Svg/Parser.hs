@@ -15,7 +15,7 @@ The final svg files are output in @public\/res\/graphs\/gen@ and are sent
 directly to the client when viewing the @/graph@ page.
 -}
 
-module Svg.Parser where
+module Svg.Parser (parsePrebuiltSvgs) where
 
 import Data.Maybe (mapMaybe, catMaybes, fromMaybe)
 import Data.Int
@@ -33,8 +33,8 @@ import Database.DataType
 import Svg.Database
 import Svg.Generator
 
-main :: IO ()
-main = do
+parsePrebuiltSvgs :: IO ()
+parsePrebuiltSvgs = do
     performParse "Computer Science" "csc2015.svg"
     performParse "Statistics" "sta2015.svg"
 

@@ -1,17 +1,19 @@
 {-# LANGUAGE FlexibleContexts, GADTs, MultiParamTypeClasses,
  OverloadedStrings, TypeFamilies #-}
 
+module Database.Database (setupDatabase) where
+
 import Database.Persist.Sqlite
 import Database.JsonParser
 import Database.Tables
 import WebParsing.ParseAll
 
-main :: IO ()
-main = do setupDistributionTable
-          print "Distribution table set up"
-          setupBreadthTable
-          print "breadth table set up"
-          parseAll
+setupDatabase :: IO ()
+setupDatabase = do setupDistributionTable
+                   print "Distribution table set up"
+                   setupBreadthTable
+                   print "breadth table set up"
+                   parseAll
 
 -- | Sets up the Distribution table.
 setupDistributionTable :: IO ()

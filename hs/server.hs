@@ -1,4 +1,4 @@
-module Main where
+module Server (runServer) where
 
 import Control.Monad (msum)
 import Control.Monad.IO.Class (liftIO)
@@ -36,8 +36,8 @@ logMAccessShort host user time requestLine responseCode size referer userAgent =
         , referer
         ]
 
-main :: IO ()
-main = do
+runServer :: IO ()
+runServer = do
     -- Use line buffering to ensure logging messages are printed correctly
     hSetBuffering stdout LineBuffering
     hSetBuffering stderr LineBuffering
