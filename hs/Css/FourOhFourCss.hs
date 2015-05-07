@@ -6,7 +6,7 @@ import Clay
 
 {- aboutStyles
  - Generates CSS for the about page. -}
-
+fourOhFourStyles :: Css
 fourOhFourStyles = do
     "#contentDiv" ? do
         margin nil (px 25) nil (px 25) 

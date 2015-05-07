@@ -121,6 +121,7 @@ borderNone :: Css
 borderNone = border solid (px 0) white
 
 {- Timetable border -}
+borderPink :: (Stroke -> Size Abs -> Color -> Css) -> Css
 borderPink border = border solid (px 2) pink1
 
 {- More node colours! -}

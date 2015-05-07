@@ -15,8 +15,6 @@ module WebParsing.PrerequisiteParsing (parsePrerequisites) where
 import Text.Regex.Posix
 import qualified Data.Text as T
 import Data.List
-import Data.List.Utils
-import Data.Maybe
 
 {- Signatures:
 
@@ -63,9 +61,9 @@ toPrereq :: String -> T.Text
 toPrereq expr =
   let (before, course, after) = matchCourse expr
   in case (before, course, after) of
-     (before, "", "") -> ""
+     (_, "", "") -> ""
      --guaranteed match
-     (before, course, "") -> T.pack course
+     (_, course, "") -> T.pack course
      (_, course, after) ->  T.concat [(T.pack course), " ", (toPrereq after)]
 
 -- | converts a text representation of Course prerequisites into type of prereqs field
