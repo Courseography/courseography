@@ -15,3 +15,6 @@ cabal.sandbox.config
 
 # generated resources
 /public/res/graphs/gen/*.svg
+
+# IDE project files
+.idea
