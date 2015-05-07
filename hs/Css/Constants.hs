@@ -42,9 +42,11 @@ semiVisible = opacity 0.7
 fullyVisible :: Css
 fullyVisible = opacity 1.0
 
+strokeRed :: Css
 strokeRed = do
     "stroke" -: "#CC0011"
     "stroke-width" -: "2px"
+strokeDashed :: Css
 strokeDashed = do
     "stroke-dasharray" -: "8,5"
     "stroke-width" -: "2px"

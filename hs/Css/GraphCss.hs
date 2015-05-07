@@ -9,7 +9,7 @@ import Css.Constants
 
 {- graphStyles
  - Generates all CSS for the graph page. -}
-
+graphStyles :: Css
 graphStyles = do
     graphContainer
     sidebarCSS
@@ -166,7 +166,7 @@ resetCSS = "#resetButton" ? do
 {- graphContainer
  - Generates CSS for the main division of
  - the page containing the graph. -}
-
+graphContainer :: Css
 graphContainer = do
     "#graph" ? do
         width (px 1195)
@@ -186,6 +186,7 @@ graphContainer = do
         "stroke-miterlimit" -: "10"
         "shape-rendering" -: "geometricPrecision"
 
+sidebarCSS :: Css
 sidebarCSS = do
     "#fce" ? do
         height (px 40)
@@ -341,7 +342,7 @@ titleCSS = "#svgTitle" ? do
 
 {- regionCSS
  - Generates CSS for focus regions in the graph. -}
-
+regionCSS :: Css
 regionCSS = do
     "#region-labels > text" ? do
         "text-anchor" -: "start"

@@ -8,7 +8,7 @@ import Css.Constants
 
 {- drawStyles
  - Generates all CSS for the draw page. -}
-
+drawStyles :: Css
 drawStyles = do
     mainCSS
     titleDiv
@@ -42,6 +42,7 @@ titleDiv = "#about-div" ? do
     margin 0 0 0 (px 10)
 
 {- The SVG canvas and the grid background. -}
+canvasCSS :: Css
 canvasCSS = do
     "#background" ? do
         height100
@@ -70,6 +71,7 @@ panelCSS = do
         overflowY auto
 
 {- Override the default scrollbar styling for side panel -}
+scrollBar :: Css
 scrollBar = do
     "::-webkit-scrollbar" ? do
         width (px 10)
@@ -109,6 +111,7 @@ clickedButtonsCSS = ".clicked" ? do
     border solid (px 2) black
 
 {- The colour buttons. -}
+colourButtonsCSS :: Css
 colourButtonsCSS = do
     ".colour" ? do
         width (pct 40)
@@ -194,6 +197,7 @@ nodeLabelCSS = ".mylabel" ? do
     "dominant-baseline" -: "central"
 
 {- The invisible elbow nodes. -}
+elbowCSS :: Css
 elbowCSS = do
     ".elbow" ? do
         opacity 0

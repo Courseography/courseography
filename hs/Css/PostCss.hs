@@ -7,6 +7,7 @@ import Prelude hiding ((**))
 import Css.Constants
 
 -- Post Styles
+postStyles :: Css
 postStyles = do
     body ?
         do backgroundColor beige1
@@ -53,7 +54,7 @@ tabsCSS = do
                     width (pct 70)
                     textDecoration none
 
-                
+postCSS :: Css   
 postCSS = do
     "input" ? do
         fontSize (px 14)

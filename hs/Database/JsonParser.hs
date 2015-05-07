@@ -11,7 +11,6 @@ module Database.JsonParser (insertCourse,
 
 import qualified Data.Text as T
 
-import Control.Monad
 import Control.Monad.IO.Class (MonadIO)
 import Control.Monad.Trans.Reader (ReaderT)
 import Data.Maybe (fromMaybe)

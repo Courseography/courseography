@@ -12,7 +12,6 @@ import Data.Maybe
 import Database.Tables as Tables
 import Database.JsonParser
 import WebParsing.HtmlTable
-import Database.Tables
 import WebParsing.ParsingHelp
 import WebParsing.TimeConverter
 
