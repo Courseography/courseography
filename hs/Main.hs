@@ -22,7 +22,7 @@ getTask taskName = Map.lookup taskName taskNamesToTasks
 main :: IO ()
 main = do
     args <- getArgs
-    let taskName = if length args == 0 then "server" else args !! 0
+    let taskName = if null args then "server" else args !! 0
 
     -- extract and perform the task we want to run
     let taskNames = Map.keys taskNamesToTasks
