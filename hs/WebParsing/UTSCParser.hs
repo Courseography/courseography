@@ -3,16 +3,10 @@ module WebParsing.UTSCParser (parseUTSC) where
 import Network.HTTP
 import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Match
-import Database.Persist
 import Database.Persist.Sqlite
-import Data.List
 import qualified Data.Text as T
-import qualified Data.Text.IO as B
-import Data.List.Utils
-import Data.Maybe
 import Database.Tables as Tables
 import Database.JsonParser as JsonParser
-import Database.CourseQueries as CourseQueries
 import WebParsing.ParsingHelp
 
 utscCalendarUrl :: String
@@ -36,7 +30,7 @@ getCalendar str = do
   body <- getResponseBody rsp
   let tags = filter isntComment $ parseTags (T.pack body)
   let coursesSoup =  takeWhile (/= TagOpen "div" [("id", "pdf_files")]) $ lastH2 tags
-  let courses = map (filter (tagText (\x -> True))) $ partitions isCourseTitle coursesSoup
+  let courses = map (filter (tagText (\_ -> True))) $ partitions isCourseTitle coursesSoup
   let course = map processCourseToData courses
   print ("parsing: " ++ str)
   runSqlite dbStr $ do
@@ -45,7 +39,7 @@ getCalendar str = do
   where
       isntComment (TagComment _) = False
       isntComment _ = True
-      lastH2 = last . sections (tagOpen (== "h2") (\x -> True))
+      lastH2 = last . sections (tagOpen (== "h2") (\_ -> True))
       isCourseTitle (TagOpen _ attrs) = any (\x -> fst x == "name" && T.length (snd x) == 8) attrs
       isCourseTitle _ = False
 
@@ -78,11 +72,4 @@ parseUTSC = do
   body <- getResponseBody rsp
   let depts = getDeptList $ parseTags body
   putStrLn "Parsing UTSC Calendar..."
-  mapM_ getCalendar depts
-
-main :: IO ()
-main = do
-  rsp <- simpleHTTP (getRequest (utscCalendarUrl ++ "Table_of_Contents.html"))
-  body <- getResponseBody rsp
-  let depts = getDeptList $ parseTags body
   mapM_ getCalendar depts

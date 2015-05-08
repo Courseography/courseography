@@ -47,7 +47,7 @@ removeImage name = createProcess $ CreateProcess
 -- stdout.
 createImageFile :: String -> String -> IO ()
 createImageFile inName outName =
-    do (inp, out, err, pid) <- convertToImage inName outName
+    do (_, _, _, pid) <- convertToImage inName outName
        print "Waiting for process..."
        waitForProcess pid
        print "Process Complete"

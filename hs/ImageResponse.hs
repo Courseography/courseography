@@ -2,18 +2,14 @@
 
 module ImageResponse where
 
-import Data.List
 import Happstack.Server
 import qualified Data.ByteString.Lazy as BS
-import qualified Data.ByteString as B
 import Control.Monad.IO.Class  (liftIO)
 import qualified Data.ByteString.Base64.Lazy as BEnc
 import ImageConversion
-import Data.List.Split
 import Svg.Generator
 import Diagram (renderTable)
 import qualified Data.Map as M
-import Data.Maybe (maybe)
 import System.Random
 import GHC.Int (Int64)
 

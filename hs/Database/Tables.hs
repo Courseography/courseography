@@ -30,8 +30,6 @@ import qualified Data.Text as T
 import qualified Data.Vector as V
 import Data.Aeson
 import Data.Int
-import Control.Monad
-import Control.Applicative
 
 -- | A data type representing a list of times for a course.
 data Time = Time { timeField :: [Double] } deriving (Show, Read, Eq)
