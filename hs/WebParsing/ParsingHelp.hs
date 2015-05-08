@@ -29,7 +29,6 @@ import Database.Tables
 import WebParsing.PrerequisiteParsing
 
 type CoursePart = ([Tag T.Text], Course)
---type TagParser = (Maybe [Tag T.Text], [Tag T.Text])
 
 
 (-:) :: a -> (a -> a) -> a

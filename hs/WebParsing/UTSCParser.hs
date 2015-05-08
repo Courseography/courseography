@@ -73,10 +73,3 @@ parseUTSC = do
   let depts = getDeptList $ parseTags body
   putStrLn "Parsing UTSC Calendar..."
   mapM_ getCalendar depts
-
---main :: IO ()
---main = do
---  rsp <- simpleHTTP (getRequest (utscCalendarUrl ++ "Table_of_Contents.html"))
---  body <- getResponseBody rsp
---  let depts = getDeptList $ parseTags body
---  mapM_ getCalendar depts
