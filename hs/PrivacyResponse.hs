@@ -17,7 +17,7 @@ privacyResponse privacyContents =
     masterTemplate "Courseography - Privacy Policy"
                 [H.meta ! A.name "keywords"
                         ! A.content "",
-                 aboutLinks
+                 privacyLinks
                 ]
                 (do
                     header "privacy"
@@ -25,10 +25,10 @@ privacyResponse privacyContents =
                 )
                 ""
 
--- | AboutHtml takes in the contents of the README.md file (the GitHub README file) and translates
+-- | privacyHtml takes in the contents of the PRIVACY.md file (the GitHub README file) and translates
 --   the markdown to blaze-HTML.
 privacyHtml :: Text -> H.Html
-privacyHtml contents = H.div $ mdToHTML contents
+privacyHtml contents = H.div ! A.id "privacyDiv" $ mdToHTML contents
 
 -- | mdToHTML takes in the contents of a file written in Mark Down and converts it to 
 -- blaze-HTML.
