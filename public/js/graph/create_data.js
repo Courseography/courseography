@@ -1,11 +1,11 @@
 // Math courses
 var math = [
-    'Calc1', 'Lin1', 'Sta1', 'Sta2'
+    'MAT135136137157Calc1', 'MAT221223240Lin1', 'STA247255257Sta1', 'Sta248261'
 ];
 
 // All CSC Courses
-var allCourses = ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC236',
-                  'CSC209', 'CSC258', 'CSC263', 'CSC300', 'CSC301',
+var allCourses = ['CSC108', 'CSC148', 'CSC165240', 'CSC207', 'CSC236240',
+                  'CSC209', 'CSC258', 'CSC236265265', 'CSC300', 'CSC301',
                   'CSC302', 'CSC309', 'CSC310', 'CSC318', 'CSC320',
                   'CSC321', 'CSC324', 'CSC336', 'CSC343', 'CSC358',
                   'CSC369', 'CSC372', 'CSC348', 'ECE385', 'CSC401',
@@ -15,7 +15,7 @@ var allCourses = ['CSC108', 'CSC148', 'CSC165', 'CSC207', 'CSC236',
                   'CSC463', 'CSC465', 'CSC469', 'CSC486', 'CSC488',
                   'ECE489', 'CSC373', 'CSC466'];
 
-specialistCourses = ['CSC373', 'CSC369', 'Lin1'];
+specialistCourses = ['CSC373', 'CSC369', 'MAT221223240Lin1'];
 
 var areaNames = ['theory', 'core', 'se', 'systems', 'hci',
                  'graphics', 'num', 'ai'];
@@ -23,9 +23,9 @@ var areaNames = ['theory', 'core', 'se', 'systems', 'hci',
 
 // Required for specialist
 var reqs = [
-    'CSC108', 'CSC148', 'CSC165', 'CSC207',
-    'CSC209', 'CSC236', 'CSC258', 'CSC263',
-    'CSC369', 'CSC373', 'Calc1', 'Lin1', 'Sta1'
+    'CSC108', 'CSC148', 'CSC165240', 'CSC207',
+    'CSC209', 'CSC236240', 'CSC258', 'CSC236265',
+    'CSC369', 'CSC373', 'MAT135136137157Calc1', 'MAT221223240Lin1', 'STA247255257Sta1'
 ];
 
 // 'Inquiry' courses
@@ -79,16 +79,16 @@ var HCIFocusList = [
 
 var theoryFocusList = [
     'CSC336', 'CSC463', 'CSC310', 'CSC438',
-    'CSC448', 'Sta2'
+    'CSC448', 'Sta248261'
 ];
 
 var webFocusList = [
-    'Sta2', 'CSC309', 'CSC343', 'CSC358',
+    'Sta248261', 'CSC309', 'CSC343', 'CSC358',
     'CSC458', 'CSC411', 'CSC310', 'CSC443', 'CSC469'
 ];
 
 // Courses that can be taken with no other prerequisites
 var initiallyTakeable = [
-    'csc104', 'csc120', 'csc108', 'csc165',
-    'calc1', 'lin1', 'csc200', 'csc300'
+    'csc104', 'csc120', 'csc108', 'CSC165240',
+    'MAT135136137157Calc1', 'MAT221223240Lin1', 'csc200', 'csc300'
 ];
