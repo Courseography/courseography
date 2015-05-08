@@ -121,8 +121,8 @@ updateSlot row (Just slot) =
        in (Just slot {slotTime_str = (T.append newTime (T.append " " (slotTime_str slot)))})
 
 
- -- | takes in cells representing a course, and recursively places lecture and tutorial info
- -- into courseSlots.
+-- | takes in cells representing a course, and recursively places lecture and tutorial info
+-- into courseSlots.
 parseCourse :: [[T.Text]] -> Maybe CourseSlot -> [Maybe CourseSlot] -> [Maybe CourseSlot]
 parseCourse [] slot slots = slot:slots
 parseCourse course Nothing slots =

@@ -18,7 +18,7 @@ import WebParsing.ParseAll (parseAll)
 -- | Main function for setting up the database with course information.
 --
 -- TODO: Probably combine seeding of Distribution and Breadth tables,
--- and split off from "parseAll".
+-- and split off from @parseAll@.
 setupDatabase :: IO ()
 setupDatabase = do setupDistributionTable
                    print "Distribution table set up"

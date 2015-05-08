@@ -30,7 +30,7 @@ import Data.List
 
 -- ** Querying a single course
 
--- | Takes a course code (e.g. "CSC108H1") and sends a JSON representation
+-- | Takes a course code (e.g. \"CSC108H1\") and sends a JSON representation
 -- of the course as a response.
 retrieveCourse :: String -> ServerPart Response
 retrieveCourse course =
