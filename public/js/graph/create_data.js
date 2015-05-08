@@ -5,7 +5,7 @@ var math = [
 
 // All CSC Courses
 var allCourses = ['CSC108', 'CSC148', 'CSC165240', 'CSC207', 'CSC236240',
-                  'CSC209', 'CSC258', 'CSC236265265', 'CSC300', 'CSC301',
+                  'CSC209', 'CSC258', 'CSC236265', 'CSC300', 'CSC301',
                   'CSC302', 'CSC309', 'CSC310', 'CSC318', 'CSC320',
                   'CSC321', 'CSC324', 'CSC336', 'CSC343', 'CSC358',
                   'CSC369', 'CSC372', 'CSC348', 'ECE385', 'CSC401',
