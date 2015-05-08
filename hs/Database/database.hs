@@ -1,13 +1,24 @@
 {-# LANGUAGE FlexibleContexts, GADTs, MultiParamTypeClasses,
  OverloadedStrings, TypeFamilies #-}
 
+{-|
+Description: Main module for database course seeding.
+
+The main module for parsing course information from the web and
+inserting it into the database. Run when @cabal run database@ is executed.
+-}
+
 module Database.Database (setupDatabase) where
 
-import Database.Persist.Sqlite
-import Database.JsonParser
+import Database.Persist.Sqlite (runSqlite, runMigration, insert_)
 import Database.Tables
-import WebParsing.ParseAll
+import Database.JsonParser (dbStr)
+import WebParsing.ParseAll (parseAll)
 
+-- | Main function for setting up the database with course information.
+--
+-- TODO: Probably combine seeding of Distribution and Breadth tables,
+-- and split off from "parseAll".
 setupDatabase :: IO ()
 setupDatabase = do setupDistributionTable
                    print "Distribution table set up"
