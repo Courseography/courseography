@@ -1,7 +1,7 @@
 /**
  * Updates categories for required courses in each POSt.
  * @param {object} post The POSt that you are updating categories for.
- * @param {string} name Name of course.
+ * @param {string} name Name of post.
  */
 function updateReqsCategory(post, name) {
     'use strict';
