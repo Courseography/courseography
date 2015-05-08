@@ -86,7 +86,6 @@ function activateCourse(courseCode) {
     'use strict';
 
     var elements = document.getElementsByClassName(courseCode);
-    console.log(elements);
     for (var i = 0; i < elements.length; i++) {
         elements[i].style.backgroundColor = '#99ff99';
     }
