@@ -180,5 +180,4 @@ queryGraphs :: IO Response
 queryGraphs =
     runSqlite dbStr $
         do graphs :: [Entity Graph] <- selectList [] []
-           --return $ createJSONResponse $ map entityVal graphs
            return $ createJSONResponse graphs

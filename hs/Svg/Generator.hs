@@ -35,16 +35,16 @@ import Data.Monoid (mempty)
 
 -- | This is the main function that retrieves a stored graph
 -- from the database and creates a new SVG file for it.
-buildSVG :: GraphId                -- ^ The ID of the graph that is being built.
-         -> M.Map String String    -- ^ A map of courses that holds the course
-                                   --   ID as a key, and the data-active
-                                   --   attribute as the course's value.
-                                   --   The data-active attribute is used in the
-                                   --   interactive graph to indicate which
-                                   --   courses the user has selected.
-         -> String                 -- ^ The filename that this graph will be
-                                   --   written to.
-         -> Bool                   -- ^ Whether to include inline styles.
+buildSVG :: GraphId              -- ^ The ID of the graph that is being built.
+         -> M.Map String String  -- ^ A map of courses that holds the course
+                                 --   ID as a key, and the data-active
+                                 --   attribute as the course's value.
+                                 --   The data-active attribute is used in the
+                                 --   interactive graph to indicate which
+                                 --   courses the user has selected.
+         -> String               -- ^ The filename that this graph will be
+                                 --   written to.
+         -> Bool                 -- ^ Whether to include inline styles.
          -> IO ()
 buildSVG gId courseMap filename styled =
     runSqlite dbStr $ do
