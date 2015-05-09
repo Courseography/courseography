@@ -85,12 +85,11 @@ Distribution
     deriving Show
 
 Graph json
-    gId Int64
     title String
     deriving Show
 
 Text
-    gId Int64
+    graph GraphId
     rId String
     pos Point
     text String
@@ -99,7 +98,7 @@ Text
     deriving Show
 
 Shape
-    gId Int64
+    graph GraphId
     id_ String
     pos Point
     width Double
@@ -111,7 +110,7 @@ Shape
     type_ ShapeType
 
 Path
-    gId Int64
+    graph GraphId
     id_ String
     points [Point]
     fill String

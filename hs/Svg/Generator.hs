@@ -35,27 +35,27 @@ import Data.Monoid (mempty)
 
 -- | This is the main function that retrieves a stored graph
 -- from the database and creates a new SVG file for it.
-buildSVG :: Int64                -- ^ The ID of the graph that is being built.
-         -> M.Map String String  -- ^ A map of courses that holds the course
-                                 --   ID as a key, and the data-active
-                                 --   attribute as the course's value.
-                                 --   The data-active attribute is used in the
-                                 --   interactive graph to indicate which
-                                 --   courses the user has selected.
-         -> String               -- ^ The filename that this graph will be
-                                 --   written to.
-         -> Bool                 -- ^ Whether to include inline styles.
+buildSVG :: GraphId                -- ^ The ID of the graph that is being built.
+         -> M.Map String String    -- ^ A map of courses that holds the course
+                                   --   ID as a key, and the data-active
+                                   --   attribute as the course's value.
+                                   --   The data-active attribute is used in the
+                                   --   interactive graph to indicate which
+                                   --   courses the user has selected.
+         -> String                 -- ^ The filename that this graph will be
+                                   --   written to.
+         -> Bool                   -- ^ Whether to include inline styles.
          -> IO ()
 buildSVG gId courseMap filename styled =
     runSqlite dbStr $ do
         sqlRects    :: [Entity Shape] <- selectList
                                              [ShapeType_ <-. [Node, Hybrid],
-                                              ShapeGId ==. gId] []
-        sqlTexts    :: [Entity Text]  <- selectList [TextGId ==. gId] []
-        sqlPaths    :: [Entity Path]  <- selectList [PathGId ==. gId] []
+                                              ShapeGraph ==. gId] []
+        sqlTexts    :: [Entity Text]  <- selectList [TextGraph ==. gId] []
+        sqlPaths    :: [Entity Path]  <- selectList [PathGraph ==. gId] []
         sqlEllipses :: [Entity Shape] <- selectList
                                              [ShapeType_ ==. BoolNode,
-                                              ShapeGId ==. gId] []
+                                              ShapeGraph ==. gId] []
         let courseStyleMap = M.map convertSelectionToStyle courseMap
             texts          = map entityVal sqlTexts
             -- TODO: Ideally, we would do these "build" steps *before*

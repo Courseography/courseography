@@ -31,6 +31,7 @@ import Database.Tables
 import Database.DataType
 import Svg.Database
 import Svg.Generator
+import Database.Persist.Sqlite hiding (replace)
 
 parsePrebuiltSvgs :: IO ()
 parsePrebuiltSvgs = do
@@ -44,12 +45,14 @@ performParse graphTitle inputFilename =
    do graphFile <- readFile ("../public/res/graphs/" ++ inputFilename)
       key <- insertGraph graphTitle
       let parsedGraph = parseGraph key graphFile
+          PersistInt64 keyVal = toPersistValue key
       print "Graph Parsed"
       insertElements parsedGraph
       print "Graph Inserted"
       createDirectoryIfMissing True "../public/res/graphs/gen"
-      buildSVG key M.empty ("../public/res/graphs/gen/" ++ show key ++ ".svg") False
+      buildSVG key M.empty ("../public/res/graphs/gen/" ++ show keyVal ++ ".svg") False
       print "Success"
+
 
 -- * Parsing functions
 
@@ -58,8 +61,8 @@ performParse graphTitle inputFilename =
 -- This and the following functions traverse the raw SVG tree and return
 -- three lists, each containing values corresponding to different graph elements
 -- (edges, nodes, and text).
-parseGraph ::  Int64  -- ^ The unique identifier of the graph.
-            -> String -- ^ The file contents of the graph that will be parsed.
+parseGraph ::  GraphId  -- ^ The unique identifier of the graph.
+            -> String   -- ^ The file contents of the graph that will be parsed.
             -> ([Path],[Shape],[Text])
 parseGraph key graphFile =
     let Document _ _ root _ = xmlParse "output.error" graphFile
@@ -72,7 +75,7 @@ parseGraph key graphFile =
 
 -- | The main parsing function. Parses an SVG element,
 -- and then recurses on its children.
-parseNode :: Int64 -- ^ The Path's corresponding graph identifier.
+parseNode :: GraphId  -- ^ The Path's corresponding graph identifier.
           -> Content i
           -> ([Path],[Shape],[Text])
 parseNode key content =
@@ -97,7 +100,7 @@ parseNode key content =
              map (updateText trans) (newTexts))
 
 -- | Create a rectangle from a list of attributes.
-parseRect :: Int64 -- ^ The Rect's corresponding graph identifier.
+parseRect :: GraphId -- ^ The Rect's corresponding graph identifier.
           -> [Attribute]
           -> Shape
 parseRect key attrs =
@@ -114,7 +117,7 @@ parseRect key attrs =
           Node
 
 -- | Create an ellipse from a list of attributes.
-parseEllipse :: Int64 -- ^ The Ellipse's corresponding graph identifier.
+parseEllipse :: GraphId -- ^ The Ellipse's corresponding graph identifier.
              -> [Attribute]
              -> Shape
 parseEllipse key attrs =
@@ -131,7 +134,7 @@ parseEllipse key attrs =
           BoolNode
 
 -- | Create a path from a list of attributes.
-parsePath :: Int64 -- ^ The Path's corresponding graph identifier.
+parsePath :: GraphId -- ^ The Path's corresponding graph identifier.
           -> [Attribute]
           -> Maybe Path
 parsePath key attrs =
@@ -154,7 +157,7 @@ parsePath key attrs =
 -- | Create text values from content.
 -- It is necessary to pass in the content because we need to search
 -- for nested tspan elements.
-parseText :: Int64 -- ^ The Text's corresponding graph identifier.
+parseText :: GraphId -- ^ The Text's corresponding graph identifier.
           -> [(String, String)]
           -> Content i
           -> [Text]

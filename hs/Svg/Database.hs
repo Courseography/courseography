@@ -20,14 +20,11 @@ import Database.JsonParser
 
 -- | Insert a new graph into the database, returning the key of the new graph.
 insertGraph :: String   -- ^ The title of the graph that is being inserted.
-            -> IO Int64 -- ^ The unique identifier of the inserted graph.
+            -> IO GraphId -- ^ The unique identifier of the inserted graph.
 insertGraph graphTitle =
     runSqlite dbStr $ do
         runMigration migrateAll
-        key <- insert (Graph 0 graphTitle)
-        let (PersistInt64 keyId) = toPersistValue key
-        update key [GraphGId =. keyId]
-        return keyId
+        insert (Graph graphTitle)
 
 -- | Insert graph components into the database.
 insertElements :: ([Path], [Shape], [Text]) -> IO ()
