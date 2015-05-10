@@ -236,7 +236,7 @@ checkPost =
                     H.p ! A.class_ "full_name CSC236240" $ "CSC236H (Introduction to the Theory of Computation)"
                     H.p ! A.class_ "full_name CSC236240" $ "CSC240H (Enriched Introduction to the Theory of Computation)"
             H.div ! A.id "min_misc" $ do
-                H.p ! A.class_ "code" $ "Any 300/400-level CSC course (atleast 1.0 FCE), CSC209H, CSC258H, CSC263H/CSC265H (1.5 FCEs)"  
+                H.p ! A.class_ "code" $ "Any 200/300/400-level CSC course (atleast 1.0 FCE), CSC209H, CSC258H, CSC263H/CSC265H (1.5 FCEs)"  
                 H.div ! A.id "minextra" ! A.class_ "more-info" $ do
                     H.input ! A.type_ "text" 
                     H.input ! A.type_ "text"
