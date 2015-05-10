@@ -6,15 +6,13 @@
 function fill300Textboxes(post, postElement) {
     'use strict';
 
-    updateBCBCount(post, postElement, '300');
-
     for (var m = post.index300; m < activeCourses.length &&
         post.filledTextboxes300 !== post.textboxes300; m++) {
 
         var course = activeCourses[m];
 
-        if ((course.indexOf('CSC3') !== -1 || course.indexOf('ECE3') !== -1) &&
-            (post.name === 'major' ||
+        if ((course.indexOf('CSC3') !== -1 || course.indexOf('ECE3') !== -1 ||
+            course.indexOf('BCB') !== -1) && (post.name === 'major' ||
              (post.name === 'specialist' && notSpecialistCourse(course)))) {
             postElement[post.filledTextboxes300].value = activeCourses[m];
             postElement[post.filledTextboxes300].disabled = true;
@@ -23,6 +21,8 @@ function fill300Textboxes(post, postElement) {
             post.creditCount += 0.5;
         }
     }
+
+    updateBCBCount(post, postElement, '300');
 }
 
 
@@ -35,21 +35,22 @@ function fill300Textboxes(post, postElement) {
 function fill400Textboxes(post, postElement, category) {
     'use strict';
 
-    if (category === '400') {
-        updateBCBCount(post, postElement, '400');
-    }
-
     for (var m = post.index400; m < activeCourses.length &&
         post['filledTextboxes' + category] !== post['textboxes' + category]; m++) {
         var course = activeCourses[m];
 
-        if (course.indexOf('CSC4') !== -1 || course.indexOf('ECE4') !== -1) {
+        if (course.indexOf('CSC4') !== -1 || course.indexOf('ECE4') !== -1 ||
+            course.indexOf('BCB') !== -1) {
             postElement[post['filledTextboxes' + category]].value = activeCourses[m];
             postElement[post['filledTextboxes' + category]].disabled = true;
             post.index400 = m + 1;
             post['filledTextboxes' + category] += 1;
             post.creditCount += 0.5;
         }
+    }
+
+    if (category === '400') {
+        updateBCBCount(post, postElement, '400');
     }
 }
 
