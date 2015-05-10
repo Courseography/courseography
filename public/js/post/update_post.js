@@ -222,12 +222,14 @@ function updateTypedCreditCount() {
     for (var k = specialist.extraTypedNextBox; k < 4; k++) {
         if (specExtra[k].value.indexOf('MAT') > -1 || specExtra[k].value.indexOf('STA') > -1 ||
             specExtra[k].value.indexOf('CSC49') > -1 || specExtra[k].value.indexOf('BCB') > -1) {
+            specExtra[k].disabled = true;
             specialist.creditCount += 0.5;
             specialist.extraTypedNextBox = k + 1;
             specialist.filledTextboxesExtra += 1;
         }
         if (k < 3 && (majExtra[k].value.indexOf('MAT') > -1 || majExtra[k].value.indexOf('STA') > -1 ||
             majExtra[k].value.indexOf('CSC49') > -1 || specExtra[k].value.indexOf('BCB') > -1)) {
+            majExtra[k].disabled = true;
             major.creditCount += 0.5;
             major.extraTypedNextBox = k + 1;
             major.filledTextboxesExtra += 1;
@@ -273,7 +275,7 @@ function updateBCBCount(post, postElement, level) {
         if (value.indexOf('BCB') > -1) { // A BCB course was typed
             post['filledTextboxes' + level] += 1;
             post.creditCount += (value.charAt(6) === 'Y') ? 1 : 0.5;
-            // postElement[post.filledTextboxes300].disabled = true;
+            postElement[i].disabled = true;
         }
     }
 }

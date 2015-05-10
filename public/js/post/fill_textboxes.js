@@ -128,7 +128,6 @@ function fillExtraTextboxes(post, postElement, level) {
 
         if (postElement[post.filledTextboxesExtra].value === '' &&
             (course.indexOf('CSC' + level.charAt(0)) !== -1 ||
-            //course.indexOf('Lin1') !== -1 ||
             course.indexOf('ECE' + level.charAt(0)) !== -1) &&
             ((post.name === 'major' && notMajReqCourse(course)) || 
              post.name === 'minor' ||
