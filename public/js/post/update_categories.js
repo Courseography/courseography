@@ -14,7 +14,6 @@ function updateReqsCategory(post, name) {
             updateCategory(category, 'fulfilled');
             post.categoriesCompleted += 1;
             post.creditCount += (post.reqs[i] === 'MAT135136137157Calc1') ? 1 : 0.5;
-            console.log(post.creditCount);
         }
 
         // If the category is not completed
