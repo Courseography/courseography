@@ -11,7 +11,7 @@ function fill300Textboxes(post, postElement) {
 
         var course = activeCourses[m];
 
-        if (course.indexOf('CSC3') !== -1 &&
+        if ((course.indexOf('CSC3') !== -1 || course.indexOf('ECE3') !== -1) &&
             (post.name === 'major' ||
              (post.name === 'specialist' && notSpecialistCourse(course)))) {
             postElement[post.filledTextboxes300].value = activeCourses[m];
@@ -35,7 +35,7 @@ function fill400Textboxes(post, postElement, category) {
     for (var m = post.index400; m < activeCourses.length &&
         post['filledTextboxes' + category] !== post['textboxes' + category]; m++) {
         var course = activeCourses[m];
-        if (course.indexOf('CSC4') !== -1) {
+        if (course.indexOf('CSC4') !== -1 || course.indexOf('ECE4') !== -1) {
             postElement[post['filledTextboxes' + category]].value = activeCourses[m];
             post.index400 = m + 1;
             post['filledTextboxes' + category] += 1;
@@ -117,7 +117,8 @@ function fillExtraTextboxes(post, postElement, level) {
         var course = activeCourses[i];
 
         if (postElement[post.filledTextboxesExtra].value === '' &&
-            course.indexOf('CSC' + level.charAt(0)) != -1 &&
+            (course.indexOf('CSC' + level.charAt(0)) !== -1 ||
+            course.indexOf('ECE' + level.charAt(0)) !== -1) &&
             (post.name === 'major' || post.name === 'minor' ||
              (post.name === 'specialist' && notSpecialistCourse(course)))) {
 
