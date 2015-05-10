@@ -525,7 +525,7 @@
           <y:Geometry height="32.0" width="155.74748098495104" x="503.3188272650705" y="33.62276079626602"/>
           <y:Fill color="#5DD5B8" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="22.84375" modelName="custom" textColor="#000000" visible="true" width="160.5859375" x="-2.4192282575244803" y="4.578125">CHM(139, 139)/151<y:LabelModel>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="22.84375" modelName="custom" textColor="#000000" visible="true" width="160.5859375" x="-2.4192282575244803" y="4.578125">CHM(138, 139)/151<y:LabelModel>
               <y:SmartNodeLabelModel distance="4.0"/>
             </y:LabelModel>
             <y:ModelParameter>
