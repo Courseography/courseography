@@ -21,8 +21,6 @@ function fill300Textboxes(post, postElement) {
             post.creditCount += 0.5;
         }
     }
-
-    updateBCBCount(post, postElement, '300');
 }
 
 
@@ -47,10 +45,6 @@ function fill400Textboxes(post, postElement, category) {
             post['filledTextboxes' + category] += 1;
             post.creditCount += 0.5;
         }
-    }
-
-    if (category === '400') {
-        updateBCBCount(post, postElement, '400');
     }
 }
 
@@ -84,6 +78,9 @@ function fill300s() {
     if (major.filledTextboxes300 < major.textboxes300) {
         fill400Textboxes(major, maj300s, '300');
     }
+
+    updateBCBCount(specialist, spec300s, '300');
+    updateBCBCount(major, maj300s, '300');
 }
 
 
@@ -109,6 +106,9 @@ function fill400s() {
     // Fill courses that have been selected
     fill400Textboxes(specialist, spec400s, '400');
     fill400Textboxes(major, maj400s, '400');
+
+    updateBCBCount(specialist, spec400s, '400');
+    updateBCBCount(major, maj400s, '400');
 }
 
 
@@ -175,6 +175,7 @@ function fillExtra() {
     }
 
     // Fill courses that have been selected
+
     fillExtraTextboxes(specialist, specExtra, '300');
     fillExtraTextboxes(major, majExtra, '300');
     fillExtraTextboxes(minor, minExtra, '300');
@@ -190,6 +191,9 @@ function fillExtra() {
     if (minor.filledTextboxesExtra < minor.textboxesExtra) {
         fillExtraTextboxes(minor, minExtra, '400');
     }
+
+    updateBCBCount(specialist, specExtra, '300');
+    updateBCBCount(major, majExtra, '300');
 }
 
 
