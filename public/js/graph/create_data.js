@@ -21,11 +21,10 @@ var areaNames = ['theory', 'core', 'se', 'systems', 'hci',
                  'graphics', 'num', 'ai'];
 
 
-// Required for specialist
-var reqs = [
+// CSC courses required for major
+var majReqs = [
     'CSC108', 'CSC148', 'CSC165240', 'CSC207',
-    'CSC209', 'CSC236240', 'CSC258', 'CSC263265',
-    'CSC369', 'CSC373', 'MAT135136137157Calc1', 'MAT221223240Lin1', 'STA247255257Sta1'
+    'CSC236240', 'CSC258', 'CSC263265'
 ];
 
 // 'Inquiry' courses

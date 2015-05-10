@@ -130,7 +130,8 @@ function fillExtraTextboxes(post, postElement, level) {
             (course.indexOf('CSC' + level.charAt(0)) !== -1 ||
             //course.indexOf('Lin1') !== -1 ||
             course.indexOf('ECE' + level.charAt(0)) !== -1) &&
-            (post.name === 'major' || post.name === 'minor' ||
+            ((post.name === 'major' && notMajReqCourse(course)) || 
+             post.name === 'minor' ||
              (post.name === 'specialist' && notSpecialistCourse(course)))) {
 
             postElement[post.filledTextboxesExtra].value = activeCourses[i];
@@ -178,6 +179,7 @@ function fillExtra() {
     fillExtraTextboxes(specialist, specExtra, '300');
     fillExtraTextboxes(major, majExtra, '300');
     fillExtraTextboxes(minor, minExtra, '300');
+    fillExtraTextboxes(major, majExtra, '200');
     fillExtraTextboxes(minor, minExtra, '200');
 
     if (specialist.filledTextboxesExtra < specialist.textboxesExtra) {

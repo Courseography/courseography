@@ -71,7 +71,7 @@ function resetValues() {
     major = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0,
              'filledTextboxes400': 0, 'filledTextboxesExtra': 0, 'majCount': 0, 'reqs': ['CSC108',
              'CSC148', 'CSC165240', 'CSC207', 'CSC236240', 'CSC258', 'CSC263265', 'STA247255257Sta1', 
-             'MAT135136137157Calc1'], 'textboxes300': 2, 'textboxes400': 1, 'textboxesExtra': 3, 'categories': 13, 
+             'MAT135136137157Calc1'], 'index200': 0, 'textboxes300': 2, 'textboxes400': 1, 'textboxesExtra': 3, 'categories': 13, 
              'creditCount': 0, 'name': 'major', 'extraTypedNextBox': 0};
     minor = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxesExtra': 0,
              'reqs': ['CSC108', 'CSC148', 'CSC165240', 'CSC207', 'CSC236240'], 'textboxesExtra': 3, 'categories': 6,
@@ -245,6 +245,19 @@ function notSpecialistCourse(course) {
 
     return specialistCourses.indexOf(course) === -1;
 }
+
+
+/**
+ * Returns whether course is a required course for the Major or not
+ * @param {string} Name of course
+ * @return {boolean} True if course is a required for major, False otherwise
+ */
+function notMajReqCourse(course) {
+    'use strict';
+
+    return majReqs.indexOf(course) === -1;
+}
+
 
 /**
  * Updates Credit Count for typed BCB Courses
