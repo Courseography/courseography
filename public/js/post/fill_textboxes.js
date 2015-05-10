@@ -6,6 +6,8 @@
 function fill300Textboxes(post, postElement) {
     'use strict';
 
+    updateBCBCount(post, postElement, '300');
+
     for (var m = post.index300; m < activeCourses.length &&
         post.filledTextboxes300 !== post.textboxes300; m++) {
 
@@ -15,6 +17,7 @@ function fill300Textboxes(post, postElement) {
             (post.name === 'major' ||
              (post.name === 'specialist' && notSpecialistCourse(course)))) {
             postElement[post.filledTextboxes300].value = activeCourses[m];
+            postElement[post.filledTextboxes300].disabled = true;
             post.index300 = m + 1;
             post.filledTextboxes300 += 1;
             post.creditCount += 0.5;
@@ -32,11 +35,17 @@ function fill300Textboxes(post, postElement) {
 function fill400Textboxes(post, postElement, category) {
     'use strict';
 
+    if (category === '400') {
+        updateBCBCount(post, postElement, '400');
+    }
+
     for (var m = post.index400; m < activeCourses.length &&
         post['filledTextboxes' + category] !== post['textboxes' + category]; m++) {
         var course = activeCourses[m];
+
         if (course.indexOf('CSC4') !== -1 || course.indexOf('ECE4') !== -1) {
             postElement[post['filledTextboxes' + category]].value = activeCourses[m];
+            postElement[post['filledTextboxes' + category]].disabled = true;
             post.index400 = m + 1;
             post['filledTextboxes' + category] += 1;
             post.creditCount += 0.5;
@@ -56,11 +65,11 @@ function fill300s() {
 
     // Clear textboxes
     for (var i = 0; i < 3; i++) {
-        spec300s[i].value = '';
-        spec300s[i].disabled = true;
-        if (i < 2) {
-            maj300s[i].value = '';
-            maj300s[i].disabled = true;
+        if (spec300s[i].value.indexOf('BCB') === -1) {
+            spec300s[i].value = '';
+            if (i < 2 && maj300s[i].value.indexOf('BCB') === -1) {
+                maj300s[i].value = '';
+            }
         }
     }
 
@@ -88,11 +97,11 @@ function fill400s() {
 
     // Clear textboxes
     for (var i = 0; i < 3; i++) {
-        spec400s[i].value = '';
-        spec400s[i].disabled = true;
-        if (i < 1) {
-            maj400s[i].value = '';
-            maj400s[i].disabled = true;
+        if (spec400s[i].value.indexOf('BCB') === -1) {
+            spec400s[i].value = '';
+            if (i < 1 && maj400s[i].value.indexOf('BCB') === -1) {
+                maj400s[i].value = '';
+            }
         }
     }
 
