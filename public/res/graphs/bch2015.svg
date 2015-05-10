@@ -10,7 +10,7 @@
    color-rendering="auto"
    color-interpolation="auto"
    text-rendering="auto"
-   width="1128.1356"
+   width="1128.1355"
    stroke-miterlimit="10"
    shape-rendering="auto"
    font-weight="normal"
@@ -18,20 +18,19 @@
    font-style="normal"
    font-size="12"
    image-rendering="auto"
-   id="svg3671"
+   id="svg2985"
    version="1.1"
    inkscape:version="0.48.5 r10040"
    sodipodi:docname="bch2015.svg"
    style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog">
   <metadata
-     id="metadata4355">
+     id="metadata3677">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -46,15 +45,15 @@
      inkscape:pageshadow="2"
      inkscape:window-width="1280"
      inkscape:window-height="738"
-     id="namedview4353"
+     id="namedview3675"
      showgrid="false"
-     inkscape:zoom="0.61439114"
-     inkscape:cx="625.51671"
-     inkscape:cy="361.65849"
+     inkscape:zoom="0.61439115"
+     inkscape:cx="657.51201"
+     inkscape:cy="405.47393"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
-     inkscape:current-layer="svg3671"
+     inkscape:current-layer="svg2985"
      fit-margin-top="0"
      fit-margin-left="0"
      fit-margin-right="0"
@@ -63,8 +62,8 @@
   <defs
      id="genericDefs" />
   <g
-     id="g3674"
-     transform="translate(28.0084,15.269534)">
+     id="g2988"
+     transform="translate(27.883676,15.308005)">
     <defs
        id="defs1">
       <clipPath
@@ -72,7 +71,7 @@
          id="clipPath1">
         <path
            d="M 0,0 1084,0 1084,457 0,457 0,0 z"
-           id="path3678"
+           id="path2992"
            inkscape:connector-curvature="0" />
       </clipPath>
       <clipPath
@@ -80,7 +79,7 @@
          id="clipPath2">
         <path
            d="M 106,6 1190,6 1190,463 106,463 106,6 z"
-           id="path3681"
+           id="path2995"
            inkscape:connector-curvature="0" />
       </clipPath>
     </defs>
@@ -88,7 +87,7 @@
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        transform="translate(-106,-6)"
-       id="g3683"
+       id="g2997"
        style="fill:#ffffff;stroke:#ffffff">
       <rect
          x="106"
@@ -96,14 +95,14 @@
          height="457"
          y="6"
          clip-path="url(#clipPath2)"
-         id="rect3685"
+         id="rect2999"
          style="stroke:none" />
     </g>
     <g
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        transform="translate(-106,-6)"
-       id="g3687"
+       id="g3001"
        style="fill:#b1c8d1;stroke:#b1c8d1">
       <rect
          x="398.6626"
@@ -113,7 +112,7 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3689"
+         id="rect3003"
          style="stroke:none" />
     </g>
     <g
@@ -122,14 +121,14 @@
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g3691"
+       id="g3005"
        style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
       <text
          x="399.97119"
          xml:space="preserve"
          y="334.03809"
          clip-path="url(#clipPath2)"
-         id="text3693"
+         id="text3007"
          style="stroke:none">BCH445</text>
       <rect
          x="398.6626"
@@ -139,14 +138,14 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3695"
+         id="rect3009"
          style="fill:none" />
     </g>
     <g
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        transform="translate(-106,-6)"
-       id="g3697"
+       id="g3011"
        style="fill:#b1c8d1;stroke:#b1c8d1">
       <rect
          x="493.6626"
@@ -156,7 +155,7 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3699"
+         id="rect3013"
          style="stroke:none" />
     </g>
     <g
@@ -165,14 +164,14 @@
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g3701"
+       id="g3015"
        style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
       <text
          x="494.97119"
          xml:space="preserve"
          y="334.03809"
          clip-path="url(#clipPath2)"
-         id="text3703"
+         id="text3017"
          style="stroke:none">BCH422</text>
       <rect
          x="493.6626"
@@ -182,14 +181,14 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3705"
+         id="rect3019"
          style="fill:none" />
     </g>
     <g
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        transform="translate(-106,-6)"
-       id="g3707"
+       id="g3021"
        style="fill:#b1c8d1;stroke:#b1c8d1">
       <rect
          x="603.7226"
@@ -199,7 +198,7 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3709"
+         id="rect3023"
          style="stroke:none" />
     </g>
     <g
@@ -208,14 +207,14 @@
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g3711"
+       id="g3025"
        style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
       <text
          x="605.03119"
          xml:space="preserve"
          y="334.03809"
          clip-path="url(#clipPath2)"
-         id="text3713"
+         id="text3027"
          style="stroke:none">BCH426</text>
       <rect
          x="603.7226"
@@ -225,14 +224,14 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3715"
+         id="rect3029"
          style="fill:none" />
     </g>
     <g
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        transform="translate(-106,-6)"
-       id="g3717"
+       id="g3031"
        style="fill:#b1c8d1;stroke:#b1c8d1">
       <rect
          x="493.6626"
@@ -242,7 +241,7 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3719"
+         id="rect3033"
          style="stroke:none" />
     </g>
     <g
@@ -251,14 +250,14 @@
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g3721"
+       id="g3035"
        style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
       <text
          x="494.97119"
          xml:space="preserve"
          y="394.03809"
          clip-path="url(#clipPath2)"
-         id="text3723"
+         id="text3037"
          style="stroke:none">BCH440</text>
       <rect
          x="493.6626"
@@ -268,14 +267,14 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3725"
+         id="rect3039"
          style="fill:none" />
     </g>
     <g
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        transform="translate(-106,-6)"
-       id="g3727"
+       id="g3041"
        style="fill:#b1c8d1;stroke:#b1c8d1">
       <rect
          x="603.7226"
@@ -285,7 +284,7 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3729"
+         id="rect3043"
          style="stroke:none" />
     </g>
     <g
@@ -294,14 +293,14 @@
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g3731"
+       id="g3045"
        style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
       <text
          x="605.03119"
          xml:space="preserve"
          y="394.03809"
          clip-path="url(#clipPath2)"
-         id="text3733"
+         id="text3047"
          style="stroke:none">BCH444</text>
       <rect
          x="603.7226"
@@ -311,14 +310,14 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3735"
+         id="rect3049"
          style="fill:none" />
     </g>
     <g
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        transform="translate(-106,-6)"
-       id="g3737"
+       id="g3051"
        style="fill:#b1c8d1;stroke:#b1c8d1">
       <rect
          x="493.6026"
@@ -328,7 +327,7 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3739"
+         id="rect3053"
          style="stroke:none" />
     </g>
     <g
@@ -337,14 +336,14 @@
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g3741"
+       id="g3055"
        style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
       <text
          x="494.91119"
          xml:space="preserve"
          y="454.03809"
          clip-path="url(#clipPath2)"
-         id="text3743"
+         id="text3057"
          style="stroke:none">BCH447</text>
       <rect
          x="493.6026"
@@ -354,14 +353,14 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3745"
+         id="rect3059"
          style="fill:none" />
     </g>
     <g
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        transform="translate(-106,-6)"
-       id="g3747"
+       id="g3061"
        style="fill:#b1c8d1;stroke:#b1c8d1">
       <rect
          x="603.6626"
@@ -371,7 +370,7 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3749"
+         id="rect3063"
          style="stroke:none" />
     </g>
     <g
@@ -380,14 +379,14 @@
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g3751"
+       id="g3065"
        style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
       <text
          x="604.97119"
          xml:space="preserve"
          y="454.03809"
          clip-path="url(#clipPath2)"
-         id="text3753"
+         id="text3067"
          style="stroke:none">BCH448</text>
       <rect
          x="603.6626"
@@ -397,14 +396,14 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3755"
+         id="rect3069"
          style="fill:none" />
     </g>
     <g
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        transform="translate(-106,-6)"
-       id="g3757"
+       id="g3071"
        style="fill:#66a366;stroke:#66a366">
       <rect
          x="202.12289"
@@ -414,7 +413,7 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3759"
+         id="rect3073"
          style="stroke:none" />
     </g>
     <g
@@ -423,14 +422,14 @@
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g3761"
+       id="g3075"
        style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
       <text
          x="203.4315"
          xml:space="preserve"
          y="274.03809"
          clip-path="url(#clipPath2)"
-         id="text3763"
+         id="text3077"
          style="stroke:none">BCH441</text>
       <rect
          x="202.12289"
@@ -440,14 +439,14 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3765"
+         id="rect3079"
          style="fill:none" />
     </g>
     <g
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        transform="translate(-106,-6)"
-       id="g3767"
+       id="g3081"
        style="fill:#66a366;stroke:#66a366">
       <rect
          x="202.12289"
@@ -457,7 +456,7 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3769"
+         id="rect3083"
          style="stroke:none" />
     </g>
     <g
@@ -466,14 +465,14 @@
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g3771"
+       id="g3085"
        style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
       <text
          x="204.7088"
          xml:space="preserve"
          y="334.03809"
          clip-path="url(#clipPath2)"
-         id="text3773"
+         id="text3087"
          style="stroke:none">BCB420</text>
       <rect
          x="202.12289"
@@ -483,14 +482,14 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3775"
+         id="rect3089"
          style="fill:none" />
     </g>
     <g
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        transform="translate(-106,-6)"
-       id="g3777"
+       id="g3091"
        style="fill:#66a366;stroke:#66a366">
       <rect
          x="202.12289"
@@ -500,7 +499,7 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3779"
+         id="rect3093"
          style="stroke:none" />
     </g>
     <g
@@ -509,14 +508,14 @@
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g3781"
+       id="g3095"
        style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
       <text
          x="204.7088"
          xml:space="preserve"
          y="394.03809"
          clip-path="url(#clipPath2)"
-         id="text3783"
+         id="text3097"
          style="stroke:none">BCB330</text>
       <rect
          x="202.12289"
@@ -526,14 +525,14 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3785"
+         id="rect3099"
          style="fill:none" />
     </g>
     <g
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        transform="translate(-106,-6)"
-       id="g3787"
+       id="g3101"
        style="fill:#66a366;stroke:#66a366">
       <rect
          x="202.0629"
@@ -543,7 +542,7 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3789"
+         id="rect3103"
          style="stroke:none" />
     </g>
     <g
@@ -552,14 +551,14 @@
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g3791"
+       id="g3105"
        style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
       <text
          x="204.6488"
          xml:space="preserve"
          y="454.03809"
          clip-path="url(#clipPath2)"
-         id="text3793"
+         id="text3107"
          style="stroke:none">BCB430</text>
       <rect
          x="202.0629"
@@ -569,14 +568,14 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3795"
+         id="rect3109"
          style="fill:none" />
     </g>
     <g
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        transform="translate(-106,-6)"
-       id="g3797"
+       id="g3111"
        style="fill:#66a366;stroke:#66a366">
       <rect
          x="297.12289"
@@ -586,7 +585,7 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3799"
+         id="rect3113"
          style="stroke:none" />
     </g>
     <g
@@ -595,14 +594,14 @@
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g3801"
+       id="g3115"
        style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
       <text
          x="299.7088"
          xml:space="preserve"
          y="334.03809"
          clip-path="url(#clipPath2)"
-         id="text3803"
+         id="text3117"
          style="stroke:none">BCB410</text>
       <rect
          x="297.12289"
@@ -612,14 +611,14 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3805"
+         id="rect3119"
          style="fill:none" />
     </g>
     <g
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        transform="translate(-106,-6)"
-       id="g3807"
+       id="g3121"
        style="fill:#e68080;stroke:#e68080">
       <rect
          x="434.5029"
@@ -629,7 +628,7 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3809"
+         id="rect3123"
          style="stroke:none" />
     </g>
     <g
@@ -638,14 +637,14 @@
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g3811"
+       id="g3125"
        style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
       <text
          x="435.81149"
          xml:space="preserve"
          y="124.0381"
          clip-path="url(#clipPath2)"
-         id="text3813"
+         id="text3127"
          style="stroke:none">BCH210</text>
       <rect
          x="434.5029"
@@ -655,14 +654,14 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3815"
+         id="rect3129"
          style="fill:none" />
     </g>
     <g
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        transform="translate(-106,-6)"
-       id="g3817"
+       id="g3131"
        style="fill:#e68080;stroke:#e68080">
       <rect
          x="339.5029"
@@ -672,7 +671,7 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3819"
+         id="rect3133"
          style="stroke:none" />
     </g>
     <g
@@ -681,14 +680,14 @@
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g3821"
+       id="g3135"
        style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
       <text
          x="340.81149"
          xml:space="preserve"
          y="124.0381"
          clip-path="url(#clipPath2)"
-         id="text3823"
+         id="text3137"
          style="stroke:none">BCH311</text>
       <rect
          x="339.5029"
@@ -698,14 +697,14 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3825"
+         id="rect3139"
          style="fill:none" />
     </g>
     <g
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        transform="translate(-106,-6)"
-       id="g3827"
+       id="g3141"
        style="fill:#e68080;stroke:#e68080">
       <rect
          x="662.8822"
@@ -715,7 +714,7 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3829"
+         id="rect3143"
          style="stroke:none" />
     </g>
     <g
@@ -724,14 +723,14 @@
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g3831"
+       id="g3145"
        style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
       <text
          x="664.1908"
          xml:space="preserve"
          y="124.0381"
          clip-path="url(#clipPath2)"
-         id="text3833"
+         id="text3147"
          style="stroke:none">BCH242</text>
       <rect
          x="662.8822"
@@ -741,14 +740,14 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3835"
+         id="rect3149"
          style="fill:none" />
     </g>
     <g
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        transform="translate(-106,-6)"
-       id="g3837"
+       id="g3151"
        style="fill:#5dd5b8;stroke:#5dd5b8">
       <rect
          x="1009.7729"
@@ -758,7 +757,7 @@
          rx="4"
          ry="4"
          height="32"
-         id="rect3839"
+         id="rect3153"
          style="stroke:none" />
     </g>
     <g
@@ -767,14 +766,14 @@
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g3841"
+       id="g3155"
        style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
       <text
          x="1008.611"
          xml:space="preserve"
          y="55.669601"
          clip-path="url(#clipPath2)"
-         id="text3843"
+         id="text3157"
          style="stroke:none">CHM247/249</text>
       <rect
          x="1009.7729"
@@ -784,14 +783,14 @@
          rx="4"
          ry="4"
          height="32"
-         id="rect3845"
+         id="rect3159"
          style="fill:none" />
     </g>
     <g
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        transform="translate(-106,-6)"
-       id="g3847"
+       id="g3161"
        style="fill:#91f27a;stroke:#91f27a">
       <rect
          x="107.1229"
@@ -801,7 +800,7 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3849"
+         id="rect3163"
          style="stroke:none" />
     </g>
     <g
@@ -810,14 +809,14 @@
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g3851"
+       id="g3165"
        style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
       <text
          x="108.4315"
          xml:space="preserve"
          y="334.03809"
          clip-path="url(#clipPath2)"
-         id="text3853"
+         id="text3167"
          style="stroke:none">BCH427</text>
       <rect
          x="107.1229"
@@ -827,14 +826,14 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3855"
+         id="rect3169"
          style="fill:none" />
     </g>
     <g
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        transform="translate(-106,-6)"
-       id="g3857"
+       id="g3171"
        style="fill:#91f27a;stroke:#91f27a">
       <rect
          x="107.1229"
@@ -844,7 +843,7 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3859"
+         id="rect3173"
          style="stroke:none" />
     </g>
     <g
@@ -853,14 +852,14 @@
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g3861"
+       id="g3175"
        style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
       <text
          x="108.4315"
          xml:space="preserve"
          y="274.03809"
          clip-path="url(#clipPath2)"
-         id="text3863"
+         id="text3177"
          style="stroke:none">BCH425</text>
       <rect
          x="107.1229"
@@ -870,14 +869,14 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3865"
+         id="rect3179"
          style="fill:none" />
     </g>
     <g
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        transform="translate(-106,-6)"
-       id="g3867"
+       id="g3181"
        style="fill:#80b2ff;stroke:#80b2ff">
       <rect
          x="786.2226"
@@ -887,7 +886,7 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3869"
+         id="rect3183"
          style="stroke:none" />
     </g>
     <g
@@ -896,14 +895,14 @@
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g3871"
+       id="g3185"
        style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
       <text
          x="787.53119"
          xml:space="preserve"
          y="94.038101"
          clip-path="url(#clipPath2)"
-         id="text3873"
+         id="text3187"
          style="stroke:none">BCH372</text>
       <rect
          x="786.2226"
@@ -913,14 +912,14 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3875"
+         id="rect3189"
          style="fill:none" />
     </g>
     <g
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        transform="translate(-106,-6)"
-       id="g3877"
+       id="g3191"
        style="fill:#80b2ff;stroke:#80b2ff">
       <rect
          x="698.7226"
@@ -930,7 +929,7 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3879"
+         id="rect3193"
          style="stroke:none" />
     </g>
     <g
@@ -939,14 +938,14 @@
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g3881"
+       id="g3195"
        style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
       <text
          x="700.03119"
          xml:space="preserve"
          y="274.03809"
          clip-path="url(#clipPath2)"
-         id="text3883"
+         id="text3197"
          style="stroke:none">BCH370</text>
       <rect
          x="698.7226"
@@ -956,14 +955,14 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3885"
+         id="rect3199"
          style="fill:none" />
     </g>
     <g
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        transform="translate(-106,-6)"
-       id="g3887"
+       id="g3201"
        style="fill:#80b2ff;stroke:#80b2ff">
       <rect
          x="881.2226"
@@ -973,7 +972,7 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3889"
+         id="rect3203"
          style="stroke:none" />
     </g>
     <g
@@ -982,14 +981,14 @@
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g3891"
+       id="g3205"
        style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
       <text
          x="882.53119"
          xml:space="preserve"
          y="154.0381"
          clip-path="url(#clipPath2)"
-         id="text3893"
+         id="text3207"
          style="stroke:none">BCH378</text>
       <rect
          x="881.2226"
@@ -999,14 +998,14 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3895"
+         id="rect3209"
          style="fill:none" />
     </g>
     <g
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        transform="translate(-106,-6)"
-       id="g3897"
+       id="g3211"
        style="fill:#80b2ff;stroke:#80b2ff">
       <rect
          x="881.2226"
@@ -1016,7 +1015,7 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3899"
+         id="rect3213"
          style="stroke:none" />
     </g>
     <g
@@ -1025,14 +1024,14 @@
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g3901"
+       id="g3215"
        style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
       <text
          x="882.53119"
          xml:space="preserve"
          y="94.038101"
          clip-path="url(#clipPath2)"
-         id="text3903"
+         id="text3217"
          style="stroke:none">BCH299</text>
       <rect
          x="881.2226"
@@ -1042,14 +1041,14 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3905"
+         id="rect3219"
          style="fill:none" />
     </g>
     <g
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        transform="translate(-106,-6)"
-       id="g3907"
+       id="g3221"
        style="fill:#80b2ff;stroke:#80b2ff">
       <rect
          x="786.2226"
@@ -1059,7 +1058,7 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3909"
+         id="rect3223"
          style="stroke:none" />
     </g>
     <g
@@ -1068,14 +1067,14 @@
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g3911"
+       id="g3225"
        style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
       <text
          x="787.53119"
          xml:space="preserve"
          y="154.0381"
          clip-path="url(#clipPath2)"
-         id="text3913"
+         id="text3227"
          style="stroke:none">BCH377</text>
       <rect
          x="786.2226"
@@ -1085,14 +1084,14 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3915"
+         id="rect3229"
          style="fill:none" />
     </g>
     <g
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        transform="translate(-106,-6)"
-       id="g3917"
+       id="g3231"
        style="fill:#80b2ff;stroke:#80b2ff">
       <rect
          x="1028.9626"
@@ -1102,7 +1101,7 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3919"
+         id="rect3233"
          style="stroke:none" />
     </g>
     <g
@@ -1111,14 +1110,14 @@
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g3921"
+       id="g3235"
        style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
       <text
          x="1030.2711"
          xml:space="preserve"
          y="391.03809"
          clip-path="url(#clipPath2)"
-         id="text3923"
+         id="text3237"
          style="stroke:none">BCH478</text>
       <rect
          x="1028.9626"
@@ -1128,14 +1127,14 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3925"
+         id="rect3239"
          style="fill:none" />
     </g>
     <g
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        transform="translate(-106,-6)"
-       id="g3927"
+       id="g3241"
        style="fill:#c285ff;stroke:#c285ff">
       <rect
          x="1123.9626"
@@ -1145,7 +1144,7 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3929"
+         id="rect3243"
          style="stroke:none" />
     </g>
     <g
@@ -1154,14 +1153,14 @@
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g3931"
+       id="g3245"
        style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
       <text
          x="1125.2711"
          xml:space="preserve"
          y="391.03809"
          clip-path="url(#clipPath2)"
-         id="text3933"
+         id="text3247"
          style="stroke:none">BCH479</text>
       <rect
          x="1123.9626"
@@ -1171,14 +1170,14 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3935"
+         id="rect3249"
          style="fill:none" />
     </g>
     <g
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        transform="translate(-106,-6)"
-       id="g3937"
+       id="g3251"
        style="fill:#80b2ff;stroke:#80b2ff">
       <rect
          x="933.96259"
@@ -1188,7 +1187,7 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3939"
+         id="rect3253"
          style="stroke:none" />
     </g>
     <g
@@ -1197,14 +1196,14 @@
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g3941"
+       id="g3255"
        style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
       <text
          x="935.27118"
          xml:space="preserve"
          y="391.03809"
          clip-path="url(#clipPath2)"
-         id="text3943"
+         id="text3257"
          style="stroke:none">BCH472</text>
       <rect
          x="933.96259"
@@ -1214,14 +1213,14 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3945"
+         id="rect3259"
          style="fill:none" />
     </g>
     <g
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        transform="translate(-106,-6)"
-       id="g3947"
+       id="g3261"
        style="fill:#80b2ff;stroke:#80b2ff">
       <rect
          x="786.1626"
@@ -1231,7 +1230,7 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3949"
+         id="rect3263"
          style="stroke:none" />
     </g>
     <g
@@ -1240,14 +1239,14 @@
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g3951"
+       id="g3265"
        style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
       <text
          x="787.47119"
          xml:space="preserve"
          y="454.03809"
          clip-path="url(#clipPath2)"
-         id="text3953"
+         id="text3267"
          style="stroke:none">BCH473</text>
       <rect
          x="786.1626"
@@ -1257,14 +1256,14 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3955"
+         id="rect3269"
          style="fill:none" />
     </g>
     <g
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        transform="translate(-106,-6)"
-       id="g3957"
+       id="g3271"
        style="fill:#80b2ff;stroke:#80b2ff">
       <rect
          x="1123.9626"
@@ -1274,7 +1273,7 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3959"
+         id="rect3273"
          style="stroke:none" />
     </g>
     <g
@@ -1283,14 +1282,14 @@
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g3961"
+       id="g3275"
        style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
       <text
          x="1125.2711"
          xml:space="preserve"
          y="274.03809"
          clip-path="url(#clipPath2)"
-         id="text3963"
+         id="text3277"
          style="stroke:none">BCH375</text>
       <rect
          x="1123.9626"
@@ -1300,7 +1299,7 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3965"
+         id="rect3279"
          style="fill:none" />
       <text
          x="1053.8336"
@@ -1309,7 +1308,7 @@
          clip-path="url(#clipPath2)"
          font-weight="bold"
          xml:space="preserve"
-         id="text3967"
+         id="text3281"
          style="font-size:8px;font-weight:bold;stroke:none;font-family:Dialog">and</text>
       <ellipse
          rx="9.8800001"
@@ -1317,7 +1316,7 @@
          clip-path="url(#clipPath2)"
          cx="1061.4626"
          cy="182.9912"
-         id="ellipse3969"
+         id="ellipse3283"
          d="M 1071.3426,182.9912 C 1071.3426,187.06065 1066.9192,190.3596 1061.4626,190.3596 1056.0061,190.3596 1051.5826,187.06065 1051.5826,182.9912 1051.5826,178.92174 1056.0061,175.6228 1061.4626,175.6228 1066.9192,175.6228 1071.3426,178.92174 1071.3426,182.9912 z"
          sodipodi:cx="1061.4626"
          sodipodi:cy="182.9912"
@@ -1329,7 +1328,7 @@
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        transform="translate(-106,-6)"
-       id="g3971"
+       id="g3285"
        style="fill:#888888;stroke:#888888">
       <rect
          x="1123.9626"
@@ -1337,7 +1336,7 @@
          height="24"
          y="135.9912"
          clip-path="url(#clipPath2)"
-         id="rect3973"
+         id="rect3287"
          style="stroke:none" />
     </g>
     <g
@@ -1346,14 +1345,14 @@
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g3975"
+       id="g3289"
        style="font-size:10px;fill:#ffffff;stroke:#ffffff;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
       <text
          x="1131.277"
          xml:space="preserve"
          y="151.77049"
          clip-path="url(#clipPath2)"
-         id="text3977"
+         id="text3291"
          style="stroke:none">BIO230</text>
     </g>
     <g
@@ -1361,7 +1360,7 @@
        stroke-miterlimit="1.45"
        shape-rendering="geometricPrecision"
        transform="translate(-106,-6)"
-       id="g3979"
+       id="g3293"
        style="stroke-linecap:butt;stroke-miterlimit:1.45000005">
       <rect
          x="1123.9626"
@@ -1369,14 +1368,14 @@
          height="24"
          y="135.9912"
          clip-path="url(#clipPath2)"
-         id="rect3981"
+         id="rect3295"
          style="fill:none" />
     </g>
     <g
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        transform="translate(-106,-6)"
-       id="g3983"
+       id="g3297"
        style="fill:#80b2ff;stroke:#80b2ff">
       <rect
          x="933.96259"
@@ -1386,7 +1385,7 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3985"
+         id="rect3299"
          style="stroke:none" />
     </g>
     <g
@@ -1395,14 +1394,14 @@
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g3987"
+       id="g3301"
        style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
       <text
          x="935.27118"
          xml:space="preserve"
          y="274.03809"
          clip-path="url(#clipPath2)"
-         id="text3989"
+         id="text3303"
          style="stroke:none">BCH340</text>
       <rect
          x="933.96259"
@@ -1412,14 +1411,14 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3991"
+         id="rect3305"
          style="fill:none" />
     </g>
     <g
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        transform="translate(-106,-6)"
-       id="g3993"
+       id="g3307"
        style="fill:#80b2ff;stroke:#80b2ff">
       <rect
          x="1028.9626"
@@ -1429,7 +1428,7 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect3995"
+         id="rect3309"
          style="stroke:none" />
     </g>
     <g
@@ -1438,14 +1437,14 @@
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g3997"
+       id="g3311"
        style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
       <text
          x="1030.2711"
          xml:space="preserve"
          y="274.03809"
          clip-path="url(#clipPath2)"
-         id="text3999"
+         id="text3313"
          style="stroke:none">BCH373</text>
       <rect
          x="1028.9626"
@@ -1455,7 +1454,7 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect4001"
+         id="rect3315"
          style="fill:none" />
       <text
          x="916.45367"
@@ -1464,7 +1463,7 @@
          clip-path="url(#clipPath2)"
          font-weight="bold"
          xml:space="preserve"
-         id="text4003"
+         id="text3317"
          style="font-size:8px;font-weight:bold;stroke:none;font-family:Dialog">and</text>
       <ellipse
          rx="9.8800001"
@@ -1472,7 +1471,7 @@
          clip-path="url(#clipPath2)"
          cx="924.08258"
          cy="327.99121"
-         id="ellipse4005"
+         id="ellipse3319"
          d="M 933.96258,327.99121 C 933.96258,332.06067 929.53915,335.35961 924.08258,335.35961 918.62601,335.35961 914.20258,332.06067 914.20258,327.99121 914.20258,323.92176 918.62601,320.62281 924.08258,320.62281 929.53915,320.62281 933.96258,323.92176 933.96258,327.99121 z"
          sodipodi:cx="924.08258"
          sodipodi:cy="327.99121"
@@ -1486,7 +1485,7 @@
          clip-path="url(#clipPath2)"
          font-weight="bold"
          xml:space="preserve"
-         id="text4007"
+         id="text3321"
          style="font-size:8px;font-weight:bold;stroke:none;font-family:Dialog">and</text>
       <ellipse
          rx="9.8800001"
@@ -1494,7 +1493,7 @@
          clip-path="url(#clipPath2)"
          cx="731.2226"
          cy="384.99121"
-         id="ellipse4009"
+         id="ellipse3323"
          d="M 741.1026,384.99121 C 741.1026,389.06067 736.67917,392.35961 731.2226,392.35961 725.76602,392.35961 721.3426,389.06067 721.3426,384.99121 721.3426,380.92176 725.76602,377.62281 731.2226,377.62281 736.67917,377.62281 741.1026,380.92176 741.1026,384.99121 z"
          sodipodi:cx="731.2226"
          sodipodi:cy="384.99121"
@@ -1506,7 +1505,7 @@
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        transform="translate(-106,-6)"
-       id="g4011"
+       id="g3325"
        style="fill:#888888;stroke:#888888">
       <rect
          x="706.2226"
@@ -1514,7 +1513,7 @@
          height="24"
          y="435.99121"
          clip-path="url(#clipPath2)"
-         id="rect4013"
+         id="rect3327"
          style="stroke:none" />
     </g>
     <g
@@ -1523,14 +1522,14 @@
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g4015"
+       id="g3329"
        style="font-size:10px;fill:#ffffff;stroke:#ffffff;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
       <text
          x="711.72803"
          xml:space="preserve"
          y="451.77051"
          clip-path="url(#clipPath2)"
-         id="text4017"
+         id="text3331"
          style="stroke:none">BCH311</text>
     </g>
     <g
@@ -1538,7 +1537,7 @@
        stroke-miterlimit="1.45"
        shape-rendering="geometricPrecision"
        transform="translate(-106,-6)"
-       id="g4019"
+       id="g3333"
        style="stroke-linecap:butt;stroke-miterlimit:1.45000005">
       <rect
          x="706.2226"
@@ -1546,7 +1545,7 @@
          height="24"
          y="435.99121"
          clip-path="url(#clipPath2)"
-         id="rect4021"
+         id="rect3335"
          style="fill:none" />
       <text
          x="814.34949"
@@ -1555,7 +1554,7 @@
          clip-path="url(#clipPath2)"
          font-weight="bold"
          xml:space="preserve"
-         id="text4023"
+         id="text3337"
          style="font-size:8px;font-weight:bold;stroke:none">or</text>
       <ellipse
          rx="9.8800001"
@@ -1563,7 +1562,7 @@
          clip-path="url(#clipPath2)"
          cx="818.7226"
          cy="384.99121"
-         id="ellipse4025"
+         id="ellipse3339"
          d="M 828.6026,384.99121 C 828.6026,389.06067 824.17917,392.35961 818.7226,392.35961 813.26602,392.35961 808.8426,389.06067 808.8426,384.99121 808.8426,380.92176 813.26602,377.62281 818.7226,377.62281 824.17917,377.62281 828.6026,380.92176 828.6026,384.99121 z"
          sodipodi:cx="818.7226"
          sodipodi:cy="384.99121"
@@ -1575,54 +1574,7 @@
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        transform="translate(-106,-6)"
-       id="g4027"
-       style="fill:#888888;stroke:#888888">
-      <rect
-         x="398.6626"
-         width="65"
-         height="19.368401"
-         y="378.30701"
-         clip-path="url(#clipPath2)"
-         id="rect4029"
-         style="stroke:none" />
-    </g>
-    <g
-       font-size="10"
-       transform="translate(-106,-6)"
-       text-rendering="geometricPrecision"
-       shape-rendering="geometricPrecision"
-       stroke-miterlimit="1.45"
-       id="g4031"
-       style="font-size:10px;fill:#ffffff;stroke:#ffffff;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
-      <text
-         x="404.6626"
-         xml:space="preserve"
-         y="391.77051"
-         clip-path="url(#clipPath2)"
-         id="text4033"
-         style="stroke:none">BIO230/255</text>
-    </g>
-    <g
-       text-rendering="geometricPrecision"
-       stroke-miterlimit="1.45"
-       shape-rendering="geometricPrecision"
-       transform="translate(-106,-6)"
-       id="g4035"
-       style="stroke-linecap:butt;stroke-miterlimit:1.45000005">
-      <rect
-         x="398.6626"
-         width="65"
-         height="19.368401"
-         y="378.30701"
-         clip-path="url(#clipPath2)"
-         id="rect4037"
-         style="fill:none" />
-    </g>
-    <g
-       text-rendering="geometricPrecision"
-       shape-rendering="geometricPrecision"
-       transform="translate(-106,-6)"
-       id="g4039"
+       id="g3341"
        style="fill:#888888;stroke:#888888">
       <rect
          x="793.7226"
@@ -1630,7 +1582,7 @@
          height="24"
          y="315.99121"
          clip-path="url(#clipPath2)"
-         id="rect4041"
+         id="rect3343"
          style="stroke:none" />
     </g>
     <g
@@ -1639,14 +1591,14 @@
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g4043"
+       id="g3345"
        style="font-size:10px;fill:#ffffff;stroke:#ffffff;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
       <text
          x="798.20258"
          xml:space="preserve"
          y="331.77051"
          clip-path="url(#clipPath2)"
-         id="text4045"
+         id="text3347"
          style="stroke:none">MGY311</text>
     </g>
     <g
@@ -1654,7 +1606,7 @@
        stroke-miterlimit="1.45"
        shape-rendering="geometricPrecision"
        transform="translate(-106,-6)"
-       id="g4047"
+       id="g3349"
        style="stroke-linecap:butt;stroke-miterlimit:1.45000005">
       <rect
          x="793.7226"
@@ -1662,14 +1614,14 @@
          height="24"
          y="315.99121"
          clip-path="url(#clipPath2)"
-         id="rect4049"
+         id="rect3351"
          style="fill:none" />
     </g>
     <g
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        transform="translate(-106,-6)"
-       id="g4051"
+       id="g3353"
        style="fill:#888888;stroke:#888888">
       <rect
          x="793.7226"
@@ -1677,7 +1629,7 @@
          height="24"
          y="255.9912"
          clip-path="url(#clipPath2)"
-         id="rect4053"
+         id="rect3355"
          style="stroke:none" />
     </g>
     <g
@@ -1686,14 +1638,14 @@
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g4055"
+       id="g3357"
        style="font-size:10px;fill:#ffffff;stroke:#ffffff;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
       <text
          x="799.22803"
          xml:space="preserve"
          y="271.77051"
          clip-path="url(#clipPath2)"
-         id="text4057"
+         id="text3359"
          style="stroke:none">BCH210</text>
     </g>
     <g
@@ -1701,7 +1653,7 @@
        stroke-miterlimit="1.45"
        shape-rendering="geometricPrecision"
        transform="translate(-106,-6)"
-       id="g4059"
+       id="g3361"
        style="stroke-linecap:butt;stroke-miterlimit:1.45000005">
       <rect
          x="793.7226"
@@ -1709,7 +1661,7 @@
          height="24"
          y="255.9912"
          clip-path="url(#clipPath2)"
-         id="rect4061"
+         id="rect3363"
          style="fill:none" />
       <text
          x="573.56372"
@@ -1718,7 +1670,7 @@
          clip-path="url(#clipPath2)"
          font-weight="bold"
          xml:space="preserve"
-         id="text4063"
+         id="text3365"
          style="font-size:8px;font-weight:bold;stroke:none">and</text>
       <ellipse
          rx="9.8800001"
@@ -1726,7 +1678,7 @@
          clip-path="url(#clipPath2)"
          cx="581.19263"
          cy="267.99121"
-         id="ellipse4065"
+         id="ellipse3367"
          d="M 591.07263,267.99121 C 591.07263,272.06067 586.6492,275.35961 581.19263,275.35961 575.73605,275.35961 571.31263,272.06067 571.31263,267.99121 571.31263,263.92176 575.73605,260.62281 581.19263,260.62281 586.6492,260.62281 591.07263,263.92176 591.07263,267.99121 z"
          sodipodi:cx="581.19263"
          sodipodi:cy="267.99121"
@@ -1740,7 +1692,7 @@
          clip-path="url(#clipPath2)"
          font-weight="bold"
          xml:space="preserve"
-         id="text4067"
+         id="text3369"
          style="font-size:8px;font-weight:bold;stroke:none">or</text>
       <ellipse
          rx="9.8800001"
@@ -1748,7 +1700,7 @@
          clip-path="url(#clipPath2)"
          cx="581.19263"
          cy="117.9912"
-         id="ellipse4069"
+         id="ellipse3371"
          d="M 591.07263,117.9912 C 591.07263,122.06066 586.6492,125.3596 581.19263,125.3596 575.73605,125.3596 571.31263,122.06066 571.31263,117.9912 571.31263,113.92175 575.73605,110.6228 581.19263,110.6228 586.6492,110.6228 591.07263,113.92175 591.07263,117.9912 z"
          sodipodi:cx="581.19263"
          sodipodi:cy="117.9912"
@@ -1762,7 +1714,7 @@
          clip-path="url(#clipPath2)"
          font-weight="bold"
          xml:space="preserve"
-         id="text4071"
+         id="text3373"
          style="font-size:8px;font-weight:bold;stroke:none">or</text>
       <ellipse
          rx="9.8800001"
@@ -1770,7 +1722,7 @@
          clip-path="url(#clipPath2)"
          cx="329.62289"
          cy="267.99121"
-         id="ellipse4073"
+         id="ellipse3375"
          d="M 339.50289,267.99121 C 339.50289,272.06067 335.07947,275.35961 329.62289,275.35961 324.16632,275.35961 319.74289,272.06067 319.74289,267.99121 319.74289,263.92176 324.16632,260.62281 329.62289,260.62281 335.07947,260.62281 339.50289,263.92176 339.50289,267.99121 z"
          sodipodi:cx="329.62289"
          sodipodi:cy="267.99121"
@@ -1782,7 +1734,7 @@
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        transform="translate(-106,-6)"
-       id="g4075"
+       id="g3377"
        style="fill:#e68080;stroke:#e68080">
       <rect
          x="254.7429"
@@ -1792,7 +1744,7 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect4077"
+         id="rect3379"
          style="stroke:none" />
     </g>
     <g
@@ -1801,14 +1753,14 @@
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g4079"
+       id="g3381"
        style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
       <text
          x="254.4109"
          xml:space="preserve"
          y="124.0381"
          clip-path="url(#clipPath2)"
-         id="text4081"
+         id="text3383"
          style="stroke:none">MGY311</text>
       <rect
          x="254.7429"
@@ -1818,7 +1770,7 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect4083"
+         id="rect3385"
          style="fill:none" />
       <text
          x="279.61401"
@@ -1827,7 +1779,7 @@
          clip-path="url(#clipPath2)"
          font-weight="bold"
          xml:space="preserve"
-         id="text4085"
+         id="text3387"
          style="font-size:8px;font-weight:bold;stroke:none;font-family:Dialog">and</text>
       <ellipse
          rx="9.8800001"
@@ -1835,7 +1787,7 @@
          clip-path="url(#clipPath2)"
          cx="287.24289"
          cy="49.622799"
-         id="ellipse4087"
+         id="ellipse3389"
          d="M 297.12289,49.622799 C 297.12289,53.692254 292.69946,56.991199 287.24289,56.991199 281.78632,56.991199 277.36289,53.692254 277.36289,49.622799 277.36289,45.553344 281.78632,42.254399 287.24289,42.254399 292.69946,42.254399 297.12289,45.553344 297.12289,49.622799 z"
          sodipodi:cx="287.24289"
          sodipodi:cy="49.622799"
@@ -1847,7 +1799,7 @@
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        transform="translate(-106,-6)"
-       id="g4089"
+       id="g3391"
        style="fill:#888888;stroke:#888888">
       <rect
          x="347.0029"
@@ -1855,7 +1807,7 @@
          height="24"
          y="37.622799"
          clip-path="url(#clipPath2)"
-         id="rect4091"
+         id="rect3393"
          style="stroke:none" />
     </g>
     <g
@@ -1864,14 +1816,14 @@
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g4093"
+       id="g3395"
        style="font-size:10px;fill:#ffffff;stroke:#ffffff;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
       <text
          x="352.5083"
          xml:space="preserve"
          y="53.4021"
          clip-path="url(#clipPath2)"
-         id="text4095"
+         id="text3397"
          style="stroke:none">BCH242</text>
     </g>
     <g
@@ -1879,7 +1831,7 @@
        stroke-miterlimit="1.45"
        shape-rendering="geometricPrecision"
        transform="translate(-106,-6)"
-       id="g4097"
+       id="g3399"
        style="stroke-linecap:butt;stroke-miterlimit:1.45000005">
       <rect
          x="347.0029"
@@ -1887,14 +1839,14 @@
          height="24"
          y="37.622799"
          clip-path="url(#clipPath2)"
-         id="rect4099"
+         id="rect3401"
          style="fill:none" />
     </g>
     <g
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        transform="translate(-106,-6)"
-       id="g4101"
+       id="g3403"
        style="fill:#8a67be;stroke:#8a67be">
       <rect
          x="124.1036"
@@ -1904,7 +1856,7 @@
          rx="4"
          ry="4"
          height="31"
-         id="rect4103"
+         id="rect3405"
          style="stroke:none" />
     </g>
     <g
@@ -1913,14 +1865,14 @@
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g4105"
+       id="g3407"
        style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
       <text
          x="128.12531"
          xml:space="preserve"
          y="56.169601"
          clip-path="url(#clipPath2)"
-         id="text4107"
+         id="text3409"
          style="stroke:none">BIO230/255</text>
       <rect
          x="124.1036"
@@ -1930,14 +1882,14 @@
          rx="4"
          ry="4"
          height="31"
-         id="rect4109"
+         id="rect3411"
          style="fill:none" />
     </g>
     <g
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        transform="translate(-106,-6)"
-       id="g4111"
+       id="g3413"
        style="fill:#b8ff70;stroke:#b8ff70">
       <rect
          x="297.0629"
@@ -1947,7 +1899,7 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect4113"
+         id="rect3415"
          style="stroke:none" />
     </g>
     <g
@@ -1956,14 +1908,14 @@
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g4115"
+       id="g3417"
        style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
       <text
          x="299.00821"
          xml:space="preserve"
          y="454.03809"
          clip-path="url(#clipPath2)"
-         id="text4117"
+         id="text3419"
          style="stroke:none">CSC324</text>
       <rect
          x="297.0629"
@@ -1973,14 +1925,14 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect4119"
+         id="rect3421"
          style="fill:none" />
     </g>
     <g
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        transform="translate(-106,-6)"
-       id="g4121"
+       id="g3423"
        style="fill:#b8ff70;stroke:#b8ff70">
       <rect
          x="398.6026"
@@ -1990,7 +1942,7 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect4123"
+         id="rect3425"
          style="stroke:none" />
     </g>
     <g
@@ -1999,14 +1951,14 @@
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g4125"
+       id="g3427"
        style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
       <text
          x="400.54791"
          xml:space="preserve"
          y="454.03809"
          clip-path="url(#clipPath2)"
-         id="text4127"
+         id="text3429"
          style="stroke:none">CSC373</text>
       <rect
          x="398.6026"
@@ -2016,7 +1968,7 @@
          rx="4"
          ry="4"
          height="30"
-         id="rect4129"
+         id="rect3431"
          style="fill:none" />
       <text
          x="325.18979"
@@ -2025,7 +1977,7 @@
          clip-path="url(#clipPath2)"
          font-weight="bold"
          xml:space="preserve"
-         id="text4131"
+         id="text3433"
          style="font-size:8px;font-weight:bold;stroke:none;font-family:Dialog">or</text>
       <ellipse
          rx="9.8800001"
@@ -2033,7 +1985,7 @@
          clip-path="url(#clipPath2)"
          cx="329.5629"
          cy="387.99121"
-         id="ellipse4133"
+         id="ellipse3435"
          d="M 339.4429,387.99121 C 339.4429,392.06067 335.01947,395.35961 329.5629,395.35961 324.10632,395.35961 319.6829,392.06067 319.6829,387.99121 319.6829,383.92176 324.10632,380.62281 329.5629,380.62281 335.01947,380.62281 339.4429,383.92176 339.4429,387.99121 z"
          sodipodi:cx="329.5629"
          sodipodi:cy="387.99121"
@@ -2045,7 +1997,7 @@
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        transform="translate(-106,-6)"
-       id="g4135"
+       id="g3437"
        style="fill:#5dd5b8;stroke:#5dd5b8">
       <rect
          x="505.8714"
@@ -2055,7 +2007,7 @@
          rx="4"
          ry="4"
          height="31"
-         id="rect4137"
+         id="rect3439"
          style="stroke:none" />
     </g>
     <g
@@ -2064,14 +2016,14 @@
        text-rendering="geometricPrecision"
        shape-rendering="geometricPrecision"
        stroke-miterlimit="1.45"
-       id="g4139"
+       id="g3441"
        style="font-size:16px;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
       <text
          x="505.43079"
          xml:space="preserve"
          y="55.669601"
          clip-path="url(#clipPath2)"
-         id="text4141"
+         id="text3443"
          style="stroke:none">CHM(138,139)/151</text>
       <rect
          x="505.8714"
@@ -2081,786 +2033,867 @@
          rx="4"
          ry="4"
          height="31"
-         id="rect4143"
+         id="rect3445"
+         style="fill:none" />
+    </g>
+    <g
+       text-rendering="geometricPrecision"
+       shape-rendering="geometricPrecision"
+       transform="translate(-106,-6)"
+       id="g3447"
+       style="fill:#888888;stroke:#888888">
+      <rect
+         x="398.6626"
+         width="65"
+         height="24"
+         y="375.99121"
+         clip-path="url(#clipPath2)"
+         id="rect3449"
+         style="stroke:none" />
+    </g>
+    <g
+       font-size="10"
+       transform="translate(-106,-6)"
+       text-rendering="geometricPrecision"
+       shape-rendering="geometricPrecision"
+       stroke-miterlimit="1.45"
+       id="g3451"
+       style="font-size:10px;fill:#ffffff;stroke:#ffffff;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
+      <text
+         x="401.37009"
+         xml:space="preserve"
+         y="391.77051"
+         clip-path="url(#clipPath2)"
+         id="text3453"
+         style="stroke:none">BIO230/255</text>
+    </g>
+    <g
+       text-rendering="geometricPrecision"
+       stroke-miterlimit="1.45"
+       shape-rendering="geometricPrecision"
+       transform="translate(-106,-6)"
+       id="g3455"
+       style="stroke-linecap:butt;stroke-miterlimit:1.45000005">
+      <rect
+         x="398.6626"
+         width="65"
+         height="24"
+         y="375.99121"
+         clip-path="url(#clipPath2)"
+         id="rect3457"
+         style="fill:none" />
+      <text
+         x="873.65369"
+         font-size="8"
+         y="388.01459"
+         clip-path="url(#clipPath2)"
+         font-weight="bold"
+         xml:space="preserve"
+         id="text3459"
+         style="font-size:8px;font-weight:bold;stroke:none">and</text>
+      <ellipse
+         rx="9.8800001"
+         ry="7.3684001"
+         clip-path="url(#clipPath2)"
+         cx="881.28259"
+         cy="384.99121"
+         id="ellipse3461"
+         d="M 891.16259,384.99121 C 891.16259,389.06067 886.73917,392.35961 881.28259,392.35961 875.82602,392.35961 871.40259,389.06067 871.40259,384.99121 871.40259,380.92176 875.82602,377.62281 881.28259,377.62281 886.73917,377.62281 891.16259,380.92176 891.16259,384.99121 z"
+         sodipodi:cx="881.28259"
+         sodipodi:cy="384.99121"
+         sodipodi:rx="9.8800001"
+         sodipodi:ry="7.3684001"
          style="fill:none" />
       <path
          d="M 234.6229,282.9619 234.6229,304.9961"
          clip-path="url(#clipPath2)"
-         id="path4145"
+         id="path3463"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 234.6229,312.9961 239.6229,300.9961 234.6229,303.9961 229.6229,300.9961 z"
          clip-path="url(#clipPath2)"
-         id="path4147"
+         id="path3465"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 434.4858,117.9912 412.4952,117.9912"
          clip-path="url(#clipPath2)"
-         id="path4149"
+         id="path3467"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 404.4952,117.9912 416.4952,122.9912 413.4952,117.9912 416.4952,112.9912 z"
          clip-path="url(#clipPath2)"
-         id="path4151"
+         id="path3469"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 727.8879,117.9912 755.4108,117.9912 755.4108,87.9912 778.232,87.9912"
          clip-path="url(#clipPath2)"
-         id="path4153"
+         id="path3471"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 786.232,87.9912 774.232,82.9912 777.232,87.9912 774.232,92.9912 z"
          clip-path="url(#clipPath2)"
-         id="path4155"
+         id="path3473"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 727.8879,117.9912 755.4108,117.9912 755.4108,147.9912 778.232,147.9912"
          clip-path="url(#clipPath2)"
-         id="path4157"
+         id="path3475"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 786.232,147.9912 774.232,142.9912 777.232,147.9912 774.232,152.9912 z"
          clip-path="url(#clipPath2)"
-         id="path4159"
+         id="path3477"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 851.2397,147.9912 873.2302,147.9912"
          clip-path="url(#clipPath2)"
-         id="path4161"
+         id="path3479"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 881.2302,147.9912 869.2302,142.9912 872.2302,147.9912 869.2302,152.9912 z"
          clip-path="url(#clipPath2)"
-         id="path4163"
+         id="path3481"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 1061.4625,65.61 1061.4625,167.6228"
          clip-path="url(#clipPath2)"
-         id="path4165"
+         id="path3483"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 1061.4625,175.6228 1066.4625,163.6228 1061.4625,166.6228 1056.4625,163.6228 z"
          clip-path="url(#clipPath2)"
-         id="path4167"
+         id="path3485"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 1061.4625,190.3596 1061.4625,213.0452 1156.4625,213.0452 1156.4625,244.9937"
          clip-path="url(#clipPath2)"
-         id="path4169"
+         id="path3487"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 1156.4625,252.9937 1161.4625,240.9937 1156.4625,243.9937 1151.4625,240.9937 z"
          clip-path="url(#clipPath2)"
-         id="path4171"
+         id="path3489"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 1123.9625,157.9912 1077.5972,176.5374"
          clip-path="url(#clipPath2)"
-         id="path4173"
+         id="path3491"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 1070.1693,179.5085 1083.168,179.6942 1078.5256,176.166 1079.4541,170.4094 z"
          clip-path="url(#clipPath2)"
-         id="path4175"
+         id="path3493"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 1061.4625,190.3596 1061.4625,245.0183"
          clip-path="url(#clipPath2)"
-         id="path4177"
+         id="path3495"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 1061.4625,253.0183 1066.4625,241.0183 1061.4625,244.0183 1056.4625,241.0183 z"
          clip-path="url(#clipPath2)"
-         id="path4179"
+         id="path3497"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 914.5851,162.9766 923.1992,312.6428"
          clip-path="url(#clipPath2)"
-         id="path4181"
+         id="path3499"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 923.6589,320.6295 927.9611,308.3621 923.1417,311.6444 917.9775,308.9367 z"
          clip-path="url(#clipPath2)"
-         id="path4183"
+         id="path3501"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 827.5068,162.9985 916.0885,314.334"
          clip-path="url(#clipPath2)"
-         id="path4185"
+         id="path3503"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 920.1298,321.2382 918.383,308.356 915.5833,313.4709 909.7527,313.4076 z"
          clip-path="url(#clipPath2)"
-         id="path4187"
+         id="path3505"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 955.8882,282.9619 933.3027,314.9376"
          clip-path="url(#clipPath2)"
-         id="path4189"
+         id="path3507"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 928.6873,321.472 939.6944,314.5551 933.8796,314.1208 931.5265,308.7858 z"
          clip-path="url(#clipPath2)"
-         id="path4191"
+         id="path3509"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 933.9626,327.9912 1156.4625,327.9912 1156.4625,361.9897"
          clip-path="url(#clipPath2)"
-         id="path4193"
+         id="path3511"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 1156.4625,369.9897 1161.4625,357.9897 1156.4625,360.9897 1151.4625,357.9897 z"
          clip-path="url(#clipPath2)"
-         id="path4195"
+         id="path3513"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 933.9626,327.9912 966.4626,327.9912 966.4626,361.9897"
          clip-path="url(#clipPath2)"
-         id="path4197"
+         id="path3515"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 966.4626,369.9897 971.4626,357.9897 966.4626,360.9897 961.4626,357.9897 z"
          clip-path="url(#clipPath2)"
-         id="path4199"
+         id="path3517"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 933.9626,327.9912 1061.4625,327.9912 1061.4625,361.9897"
          clip-path="url(#clipPath2)"
-         id="path4201"
+         id="path3519"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 1061.4625,369.9897 1066.4625,357.9897 1061.4625,360.9897 1056.4625,357.9897 z"
          clip-path="url(#clipPath2)"
-         id="path4203"
+         id="path3521"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 731.2226,282.9875 731.2226,369.6228"
          clip-path="url(#clipPath2)"
-         id="path4205"
+         id="path3523"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 731.2226,377.6228 736.2226,365.6228 731.2226,368.6228 726.2226,365.6228 z"
          clip-path="url(#clipPath2)"
-         id="path4207"
+         id="path3525"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 731.2226,435.9912 731.2226,400.3596"
          clip-path="url(#clipPath2)"
-         id="path4209"
+         id="path3527"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 731.2226,392.3596 726.2226,404.3596 731.2226,401.3596 736.2226,404.3596 z"
          clip-path="url(#clipPath2)"
-         id="path4211"
+         id="path3529"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 741.1025,384.9912 800.8426,384.9912"
          clip-path="url(#clipPath2)"
-         id="path4213"
+         id="path3531"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 808.8426,384.9912 796.8426,379.9912 799.8426,384.9912 796.8426,389.9912 z"
          clip-path="url(#clipPath2)"
-         id="path4215"
+         id="path3533"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 818.7156,392.3596 818.6845,424.9696"
          clip-path="url(#clipPath2)"
-         id="path4217"
+         id="path3535"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 818.6769,432.9696 823.6883,420.9744 818.6855,423.9696 813.6884,420.9648 z"
          clip-path="url(#clipPath2)"
-         id="path4219"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
-      <path
-         d="M 431.1626,378.307 431.1626,350.9778"
-         clip-path="url(#clipPath2)"
-         id="path4221"
-         inkscape:connector-curvature="0"
-         style="fill:none" />
-      <path
-         d="M 431.1626,342.9778 426.1626,354.9778 431.1626,351.9778 436.1626,354.9778 z"
-         clip-path="url(#clipPath2)"
-         id="path4223"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
-      <path
-         d="M 914.2026,327.9912 851.7226,327.9912"
-         clip-path="url(#clipPath2)"
-         id="path4225"
-         inkscape:connector-curvature="0"
-         style="fill:none" />
-      <path
-         d="M 843.7226,327.9912 855.7226,332.9912 852.7226,327.9912 855.7226,322.9912 z"
-         clip-path="url(#clipPath2)"
-         id="path4227"
-         inkscape:connector-curvature="0"
-         style="stroke:none" />
-      <path
-         d="M 818.7226,339.9912 818.7226,369.6228"
-         clip-path="url(#clipPath2)"
-         id="path4229"
-         inkscape:connector-curvature="0"
-         style="fill:none" />
-      <path
-         d="M 818.7226,377.6228 823.7226,365.6228 818.7226,368.6228 813.7226,365.6228 z"
-         clip-path="url(#clipPath2)"
-         id="path4231"
+         id="path3537"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 793.7226,267.9912 771.7238,267.9912"
          clip-path="url(#clipPath2)"
-         id="path4233"
+         id="path3539"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 763.7238,267.9912 775.7238,272.9912 772.7238,267.9912 775.7238,262.9912 z"
          clip-path="url(#clipPath2)"
-         id="path4235"
+         id="path3541"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 572.4854,271.4734 470.6436,312.202"
          clip-path="url(#clipPath2)"
-         id="path4237"
+         id="path3543"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 463.2155,315.1726 476.2142,315.3592 471.5721,311.8306 472.5009,306.0742 z"
          clip-path="url(#clipPath2)"
-         id="path4239"
+         id="path3545"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 581.2142,275.3596 581.7197,447.9912 595.651,447.9912"
          clip-path="url(#clipPath2)"
-         id="path4241"
+         id="path3547"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 603.651,447.9912 591.651,442.9912 594.651,447.9912 591.651,452.9912 z"
          clip-path="url(#clipPath2)"
-         id="path4243"
+         id="path3549"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 581.2646,275.3595 581.7797,327.9912 595.711,327.9912"
          clip-path="url(#clipPath2)"
-         id="path4245"
+         id="path3551"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 603.711,327.9912 591.711,322.9912 594.711,327.9912 591.711,332.9912 z"
          clip-path="url(#clipPath2)"
-         id="path4247"
+         id="path3553"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 581.2646,275.3595 581.7797,327.9912 566.6693,327.9912"
          clip-path="url(#clipPath2)"
-         id="path4249"
+         id="path3555"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 558.6693,327.9912 570.6693,332.9912 567.6693,327.9912 570.6693,322.9912 z"
          clip-path="url(#clipPath2)"
-         id="path4251"
+         id="path3557"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 581.2284,275.3596 581.7797,388.807 566.6684,388.5853"
          clip-path="url(#clipPath2)"
-         id="path4253"
+         id="path3559"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 558.6693,388.468 570.5947,393.6434 567.6683,388.6 570.7413,383.6445 z"
          clip-path="url(#clipPath2)"
-         id="path4255"
+         id="path3561"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 581.2284,275.3596 581.7797,388.807 595.7119,388.5982"
          clip-path="url(#clipPath2)"
-         id="path4257"
+         id="path3563"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 603.711,388.4784 591.6375,383.6587 594.712,388.6132 591.7873,393.6576 z"
          clip-path="url(#clipPath2)"
-         id="path4259"
+         id="path3565"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 581.2142,275.3596 581.7197,447.9912 566.6093,447.9912"
          clip-path="url(#clipPath2)"
-         id="path4261"
+         id="path3567"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 558.6093,447.9912 570.6093,452.9912 567.6093,447.9912 570.6093,442.9912 z"
          clip-path="url(#clipPath2)"
-         id="path4263"
+         id="path3569"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 499.4812,117.9912 563.3126,117.9912"
          clip-path="url(#clipPath2)"
-         id="path4265"
+         id="path3571"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 571.3126,117.9912 559.3126,112.9912 562.3126,117.9912 559.3126,122.9912 z"
          clip-path="url(#clipPath2)"
-         id="path4267"
+         id="path3573"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 662.904,117.9912 599.0726,117.9912"
          clip-path="url(#clipPath2)"
-         id="path4269"
+         id="path3575"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 591.0726,117.9912 603.0726,122.9912 600.0726,117.9912 603.0726,112.9912 z"
          clip-path="url(#clipPath2)"
-         id="path4271"
+         id="path3577"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 581.1926,125.3596 581.1926,182.9912 1043.5825,182.9912"
          clip-path="url(#clipPath2)"
-         id="path4273"
+         id="path3579"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 1051.5825,182.9912 1039.5825,177.9912 1042.5825,182.9912 1039.5825,187.9912 z"
          clip-path="url(#clipPath2)"
-         id="path4275"
+         id="path3581"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 581.1926,125.3596 581.1926,182.9912 235.5595,182.9912 140.6074,182.9912 139.8891,245.0088"
          clip-path="url(#clipPath2)"
-         id="path4277"
+         id="path3583"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 139.7964,253.0083 144.9351,241.067 139.9007,244.0089 134.9357,240.9512 z"
          clip-path="url(#clipPath2)"
-         id="path4279"
+         id="path3585"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 581.1926,125.3596 581.1926,252.6228"
          clip-path="url(#clipPath2)"
-         id="path4281"
+         id="path3587"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 581.1926,260.6227 586.1926,248.6227 581.1926,251.6227 576.1926,248.6227 z"
          clip-path="url(#clipPath2)"
-         id="path4283"
+         id="path3589"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 581.1926,125.3596 581.1926,183.0392 235.6074,183.0392 234.8891,245.0173"
          clip-path="url(#clipPath2)"
-         id="path4285"
+         id="path3591"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 234.7964,253.0168 239.9352,241.0755 234.9007,244.0174 229.9358,240.9596 z"
          clip-path="url(#clipPath2)"
-         id="path4287"
+         id="path3593"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 581.1926,125.3596 581.1926,182.9912 966.4626,182.9912 966.4626,245.0083"
          clip-path="url(#clipPath2)"
-         id="path4289"
+         id="path3595"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 966.4626,253.0083 971.4626,241.0083 966.4626,244.0083 961.4626,241.0083 z"
          clip-path="url(#clipPath2)"
-         id="path4291"
+         id="path3597"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 367.7711,132.9692 333.8351,253.0825"
          clip-path="url(#clipPath2)"
-         id="path4293"
+         id="path3599"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 331.66,260.7811 339.7343,250.5926 334.107,252.1201 330.111,247.8737 z"
          clip-path="url(#clipPath2)"
-         id="path4295"
+         id="path3601"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 339.5029,267.9912 563.3126,267.9912"
          clip-path="url(#clipPath2)"
-         id="path4297"
+         id="path3603"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 571.3126,267.9912 559.3126,262.9912 562.3126,267.9912 559.3126,272.9912 z"
          clip-path="url(#clipPath2)"
-         id="path4299"
+         id="path3605"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 329.6229,275.3596 329.6229,305.0087"
          clip-path="url(#clipPath2)"
-         id="path4301"
+         id="path3607"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 329.6229,313.0087 334.6229,301.0087 329.6229,304.0087 324.6229,301.0087 z"
          clip-path="url(#clipPath2)"
-         id="path4303"
+         id="path3609"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 319.7429,267.9912 275.0832,267.9912"
          clip-path="url(#clipPath2)"
-         id="path4305"
+         id="path3611"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 267.0832,267.9912 279.0832,272.9912 276.0832,267.9912 279.0832,262.9912 z"
          clip-path="url(#clipPath2)"
-         id="path4307"
+         id="path3613"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 291.4747,132.9692 325.4107,253.0825"
          clip-path="url(#clipPath2)"
-         id="path4309"
+         id="path3615"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 327.5858,260.7811 329.1348,247.8737 325.1388,252.1201 319.5115,250.5926 z"
          clip-path="url(#clipPath2)"
-         id="path4311"
+         id="path3617"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 287.2429,56.9912 287.2429,95.0093"
          clip-path="url(#clipPath2)"
-         id="path4313"
+         id="path3619"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 287.2429,103.0093 292.2429,91.0093 287.2429,94.0093 282.2429,91.0093 z"
          clip-path="url(#clipPath2)"
-         id="path4315"
+         id="path3621"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 347.0029,49.6228 305.1229,49.6228"
          clip-path="url(#clipPath2)"
-         id="path4317"
+         id="path3623"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 297.1229,49.6228 309.1229,54.6228 306.1229,49.6228 309.1229,44.6228 z"
          clip-path="url(#clipPath2)"
-         id="path4319"
+         id="path3625"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 227.4639,49.8909 269.3632,49.703"
          clip-path="url(#clipPath2)"
-         id="path4321"
+         id="path3627"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 277.3631,49.6671 265.3408,44.721 268.3632,49.7075 265.3856,54.7209 z"
          clip-path="url(#clipPath2)"
-         id="path4323"
+         id="path3629"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 405.6929,432.9766 344.1943,396.6369"
          clip-path="url(#clipPath2)"
-         id="path4325"
+         id="path3631"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 337.3069,392.5671 345.0944,402.9764 345.0552,397.1456 350.1816,394.3672 z"
          clip-path="url(#clipPath2)"
-         id="path4327"
+         id="path3633"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 329.5629,432.9619 329.5629,403.3596"
          clip-path="url(#clipPath2)"
-         id="path4329"
+         id="path3635"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 329.5629,395.3596 324.5629,407.3596 329.5629,404.3596 334.5629,407.3596 z"
          clip-path="url(#clipPath2)"
-         id="path4331"
+         id="path3637"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 329.5703,380.6228 329.5999,350.9737"
          clip-path="url(#clipPath2)"
-         id="path4333"
+         id="path3639"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 329.6079,342.9737 324.5959,354.9687 329.5989,351.9737 334.5959,354.9787 z"
          clip-path="url(#clipPath2)"
-         id="path4335"
+         id="path3641"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 581.0869,34.0838 581.1926,6.5012 175.7932,6.5012 175.7932,26.6593"
          clip-path="url(#clipPath2)"
-         id="path4337"
+         id="path3643"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 175.7932,34.6592 180.7932,22.6592 175.7932,25.6592 170.7932,22.6592 z"
          clip-path="url(#clipPath2)"
-         id="path4339"
+         id="path3645"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 656.4986,49.6228 1001.804,49.6228"
          clip-path="url(#clipPath2)"
-         id="path4341"
+         id="path3647"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 1009.804,49.6228 997.804,44.6228 1000.804,49.6228 997.804,54.6228 z"
          clip-path="url(#clipPath2)"
-         id="path4343"
+         id="path3649"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 607.0916,65.1292 663.4496,98.8723"
          clip-path="url(#clipPath2)"
-         id="path4345"
+         id="path3651"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 670.3134,102.9818 662.5861,92.5276 662.5916,98.3586 657.4492,101.1074 z"
          clip-path="url(#clipPath2)"
-         id="path4347"
+         id="path3653"
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
          d="M 555.2936,65.1292 498.9356,98.8723"
          clip-path="url(#clipPath2)"
-         id="path4349"
+         id="path3655"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
          d="M 492.0718,102.9818 504.9359,101.1074 499.7935,98.3586 499.799,92.5276 z"
          clip-path="url(#clipPath2)"
-         id="path4351"
+         id="path3657"
+         inkscape:connector-curvature="0"
+         style="stroke:none" />
+      <path
+         d="M 431.1626,375.9912 431.1626,351.0381"
+         clip-path="url(#clipPath2)"
+         id="path3659"
+         inkscape:connector-curvature="0"
+         style="fill:none" />
+      <path
+         d="M 431.1626,343.0381 426.1626,355.0381 431.1626,352.0381 436.1626,355.0381 z"
+         clip-path="url(#clipPath2)"
+         id="path3661"
+         inkscape:connector-curvature="0"
+         style="stroke:none" />
+      <path
+         d="M 919.2552,334.4202 890.9136,372.1649"
+         clip-path="url(#clipPath2)"
+         id="path3663"
+         inkscape:connector-curvature="0"
+         style="fill:none" />
+      <path
+         d="M 886.11,378.5622 897.3137,371.9685 891.514,371.3652 889.3171,365.964 z"
+         clip-path="url(#clipPath2)"
+         id="path3665"
+         inkscape:connector-curvature="0"
+         style="stroke:none" />
+      <path
+         d="M 831.8931,339.9912 869.111,373.9014"
+         clip-path="url(#clipPath2)"
+         id="path3667"
+         inkscape:connector-curvature="0"
+         style="fill:none" />
+      <path
+         d="M 875.0245,379.2894 869.5217,367.5115 868.3718,373.2279 862.7867,374.9034 z"
+         clip-path="url(#clipPath2)"
+         id="path3669"
+         inkscape:connector-curvature="0"
+         style="stroke:none" />
+      <path
+         d="M 871.4026,384.9912 836.6025,384.9912"
+         clip-path="url(#clipPath2)"
+         id="path3671"
+         inkscape:connector-curvature="0"
+         style="fill:none" />
+      <path
+         d="M 828.6025,384.9912 840.6025,389.9912 837.6025,384.9912 840.6025,379.9912 z"
+         clip-path="url(#clipPath2)"
+         id="path3673"
          inkscape:connector-curvature="0"
          style="stroke:none" />
     </g>
   </g>
   <path
      style="font-size:12px;font-style:normal;font-weight:normal;fill:#6276b9;fill-opacity:0.14901961;stroke:none;display:inline;font-family:Dialog"
-     d="M 0.01764,191.97798 0.30873,0.098724 163.95608,0.098783 163.9563,191.97798 z"
+     d="M 0.017635,191.97799 0.308727,0.09873 163.95609,0.09879 163.95631,191.97799 z"
      id="path4964"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="ccccc" />
   <path
      style="font-size:12px;font-style:normal;font-weight:normal;fill:#5ac0ca;fill-opacity:0.14814812;stroke:none;display:inline;font-family:Dialog"
-     d="M 302.6821,277.39688 428.97596,277.17178 429.08973,192.26724 606.14028,191.86213 606.12727,518.48257 400.02151,518.5275 400.00397,424.04473 302.96259,424.10766 z"
+     d="M 302.68211,277.39688 428.97597,277.17178 429.08974,192.26725 606.14029,191.86214 606.12728,518.48257 400.02152,518.5275 400.00398,424.04473 302.9626,424.10766 z"
      id="path4966"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="ccccccccc" />
   <path
      style="font-size:12px;font-style:normal;font-weight:normal;fill:#708a23;fill-opacity:0.14814812;stroke:none;display:inline;font-family:Dialog"
-     d="M 204.41253,518.53246 204.74776,397.20788 302.9531,397.11512 302.75889,277.26994 429.06441,277.42155 429.06441,192.06894 109.68841,192.22054 109.75121,518.58446 z"
+     d="M 204.41254,518.53246 204.74777,397.20788 302.95311,397.11512 302.7589,277.26994 429.06442,277.42155 429.06442,192.06895 109.68841,192.22055 109.75121,518.58446 z"
      id="path4960"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="ccccccccc" />
   <path
      style="font-size:12px;font-style:normal;font-weight:normal;fill:#3520ca;fill-opacity:0.14814812;stroke:none;display:inline;font-family:Dialog"
-     d="M 1128.1051,78.604056 1128.0843,337.15493 1031.2265,337.10692 1031.2901,518.50198 606.03659,518.54375 606.00725,192.14476 677.27487,192.83401 677.17433,78.617936 z"
+     d="M 1128.105,78.604059 1128.0842,337.15493 1031.2264,337.10692 1031.29,518.50198 606.0366,518.54375 606.00726,192.14477 677.27488,192.83402 677.17434,78.617937 z"
      id="path4974"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="ccccccccc" />
   <path
      style="font-size:12px;font-style:normal;font-weight:normal;fill:#c2f0b3;fill-opacity:0.14814812;stroke:none;display:inline;font-family:Dialog"
-     d="M 365.15502,0.152037 1128.081,0 1128.0846,78.728766 687.925,78.553996 687.925,78.553996 364.71114,79.204746 z"
+     d="M 365.15503,0.15204 1128.0809,0 1128.0845,78.72877 687.92501,78.553994 687.92501,78.553994 364.71115,79.20475 z"
      id="path4968"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="ccccccc" />
   <path
      style="font-size:12px;font-style:normal;font-weight:normal;fill:#dc0c33;fill-opacity:0.14814812;stroke:none;display:inline;font-family:Dialog"
-     d="M 163.88338,0.190926 163.88338,192.19311 677.33728,192.65477 677.20369,78.578576 364.82708,79.041036 365.11577,0.059395 z"
+     d="M 163.88339,0.19093 163.88339,192.19312 677.33729,192.65478 677.2037,78.578575 364.82709,79.041038 365.11578,0.0594 z"
      id="path4970"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="ccccccc" />
   <path
      style="font-size:12px;font-style:normal;font-weight:normal;fill:#c200b3;fill-opacity:0.14814812;stroke:none;display:inline;font-family:Dialog"
-     d="M 1031.2509,337.1442 1128.1356,337.14414 1128.0972,518.5403 1031.2509,518.54034 z"
+     d="M 1031.2508,337.1442 1128.1355,337.14414 1128.0971,518.5403 1031.2508,518.54034 z"
      id="path4972"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="ccccc" />
   <path
      style="font-size:12px;font-style:normal;font-weight:normal;fill:#00ff00;fill-opacity:0.14901961;stroke:none;display:inline;font-family:Dialog"
-     d="M 0,191.93794 109.79272,191.86214 109.79272,518.51331 0.0758,518.50914 z"
+     d="M 0,191.93795 109.79272,191.86215 109.79272,518.51331 0.075801,518.50914 z"
      id="path4966-3"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="ccccc" />
   <path
      style="font-size:12px;font-style:normal;font-weight:normal;fill:#c2f013;fill-opacity:0.14814812;stroke:none;display:inline;font-family:Dialog"
-     d="M 204.40879,518.53746 204.40879,518.53746 400.02659,518.52065 400.01482,424.03675 302.97119,424.08608 302.83743,397.11184 204.6852,397.11184 z"
+     d="M 204.4088,518.53746 204.4088,518.53746 400.0266,518.52065 400.01483,424.03675 302.9712,424.08608 302.83744,397.11184 204.68521,397.11184 z"
      id="path4962"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="cccccccc" />
   <text
      xml:space="preserve"
      style="font-size:16px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Sans"
-     x="270.82898"
-     y="233.07523"
+     x="270.82895"
+     y="233.07524"
      id="text3699-17"
      sodipodi:linespacing="125%"><tspan
        sodipodi:role="line"
        id="tspan3701-4"
-       x="270.82898"
-       y="233.07523"
+       x="270.82895"
+       y="233.07524"
        style="font-size:18px">Bioinformatics and</tspan><tspan
        sodipodi:role="line"
-       x="270.82898"
-       y="255.57523"
+       x="270.82895"
+       y="255.57524"
        style="font-size:18px"
        id="tspan3380">Computational Bio</tspan></text>
   <text
      xml:space="preserve"
      style="font-size:16px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Sans"
-     x="67.613304"
-     y="133.02341"
+     x="67.613297"
+     y="133.02342"
      id="text3675"
      sodipodi:linespacing="125%"><tspan
        sodipodi:role="line"
-       x="67.613304"
-       y="133.02341"
+       x="67.613297"
+       y="133.02342"
        id="tspan3679"
        style="font-size:18px">Biology</tspan></text>
   <text
      xml:space="preserve"
      style="font-size:16px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Sans"
      x="535.7478"
-     y="167.25343"
+     y="167.25345"
      id="text3683"
      sodipodi:linespacing="125%"><tspan
        sodipodi:role="line"
        id="tspan3685"
        x="535.7478"
-       y="167.25343"
+       y="167.25345"
        style="font-size:18px">Introductory</tspan></text>
   <text
      xml:space="preserve"
      style="font-size:16px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Sans"
      x="705.49182"
-     y="41.190624"
+     y="41.19062"
      id="text3687"
      sodipodi:linespacing="125%"><tspan
        sodipodi:role="line"
        id="tspan3689"
        x="705.49182"
-       y="41.190624"
+       y="41.19062"
        style="font-size:18px">Chemistry</tspan></text>
   <text
      xml:space="preserve"
      style="font-size:16px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Sans"
      x="1044.3363"
-     y="463.2594"
+     y="463.25943"
      id="text3691"
      sodipodi:linespacing="125%"><tspan
        sodipodi:role="line"
        id="tspan3693"
        x="1044.3363"
-       y="463.2594"
+       y="463.25943"
        style="font-size:18px">Seminar</tspan></text>
   <text
      xml:space="preserve"
      style="font-size:18px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Sans"
      x="844.76508"
-     y="463.08054"
+     y="463.08057"
      id="text3695"
      sodipodi:linespacing="125%"><tspan
        sodipodi:role="line"
        id="tspan3697"
        x="844.76508"
-       y="463.08054">Laboratory</tspan></text>
+       y="463.08057">Laboratory</tspan></text>
   <text
      xml:space="preserve"
      style="font-size:16px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Sans"
-     x="17.932787"
-     y="402.54169"
+     x="17.932793"
+     y="402.54172"
      id="text3699"
      sodipodi:linespacing="125%"><tspan
        sodipodi:role="line"
        id="tspan3701"
-       x="17.932787"
-       y="402.54169"
+       x="17.932793"
+       y="402.54172"
        style="font-size:18px">Biophysics</tspan></text>
   <text
      xml:space="preserve"
      style="font-size:16px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Sans"
-     x="228.03632"
-     y="499.36029"
+     x="228.0363"
+     y="499.36035"
      id="text3699-1"
      sodipodi:linespacing="125%"><tspan
        sodipodi:role="line"
        id="tspan3701-7"
-       x="228.03632"
-       y="499.36029"
+       x="228.0363"
+       y="499.36035"
        style="font-size:18px">Computer Science</tspan></text>
 </svg>
