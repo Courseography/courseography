@@ -12,7 +12,7 @@ var major = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledText
              'creditCount': 0, 'name': 'major', 'extraTypedNextBox': 0};
 var minor = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxesExtra': 0,
              'reqs': ['CSC108', 'CSC148', 'CSC165240', 'CSC207', 'CSC236240'], 'textboxesExtra': 3, 'categories': 6,
-             'creditCount': 0, 'additionalMin200': ['CSC209', 'CSC258', 'CSC263265'], 'name': 'minor'};
+             'creditCount': 0, 'index200' : 0, 'name': 'minor'};
 
 
 /**
@@ -75,7 +75,7 @@ function resetValues() {
              'creditCount': 0, 'name': 'major', 'extraTypedNextBox': 0};
     minor = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxesExtra': 0,
              'reqs': ['CSC108', 'CSC148', 'CSC165240', 'CSC207', 'CSC236240'], 'textboxesExtra': 3, 'categories': 6,
-             'creditCount': 0, 'additionalMin200': ['CSC209', 'CSC258', 'CSC263265'], 'name': 'minor'};
+             'creditCount': 0, 'index200': 0, 'name': 'minor'};
 }
 
 
@@ -169,28 +169,6 @@ function fillMinCreditCount() {
         $('#min_creds').html('(4.0/4.0)');
     } else {
         $('#min_creds').html('(' + minor.creditCount.toFixed(1) + '/4.0)');
-    }
-}
-
-
-/**
- * Autofills extra 200-level courses for last minor constraint.
- */
-function addExtraMinCourses() {
-    'use strict';
-
-    var minExtra = $('#minextra')[0].getElementsByTagName('input');
-    var current = minor.filledTextboxesExtra;
-
-    for (var m = 0; m < 3 && current < 3; m++) {
-        if (getCookie(minor.additionalMin200[m].toLowerCase()) === 'active' ||
-            getCookie(minor.additionalMin200[m].toLowerCase()) === 'overridden') {
-            minExtra[current].value = minor.additionalMin200[m];
-            minExtra[current].disabled = true;
-            minor.creditCount += 0.5;
-            minor.filledTextboxesExtra += 1;
-            current += 1;
-        }
     }
 }
 
