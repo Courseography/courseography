@@ -47,7 +47,7 @@ function updateAllCategories() {
     update300Categories();
     update400Categories();
     updateExtraCategories();
-    updateMatCreditCount();
+    updateTypedCreditCount();
 
     fillCreditCount();
     checkPostCompleted();
@@ -235,7 +235,7 @@ function updateActiveCourses() {
 /**
  * Updates Credit count for MAT and STA courses.
  */
-function updateMatCreditCount() {
+function updateTypedCreditCount() {
     'use strict';
 
     var specExtra = $('#specextra')[0].getElementsByTagName('input');
