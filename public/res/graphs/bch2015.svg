@@ -47,9 +47,9 @@
      inkscape:window-height="738"
      id="namedview3675"
      showgrid="false"
-     inkscape:zoom="1"
-     inkscape:cx="1027.1541"
-     inkscape:cy="143.53271"
+     inkscape:zoom="256"
+     inkscape:cx="396.9871"
+     inkscape:cy="0.26888021"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
@@ -2752,7 +2752,7 @@
      sodipodi:nodetypes="ccccc" />
   <path
      style="font-size:12px;font-style:normal;font-weight:normal;fill:#5ac0ca;fill-opacity:0.14814812;stroke:none;display:inline;font-family:Dialog"
-     d="M 303.18339,276.8198 429.47729,276.5947 429.59109,202.9319 688.82348,202.9057 688.82066,522.90709 400.5267,522.89926 400.51701,419.57075 303.4717,419.62196 z"
+     d="M 303.18339,276.8198 429.47729,276.5947 429.59109,202.9319 688.82348,202.9057 688.82066,522.90709 395.74591,522.91879 395.74404,419.57075 303.4717,419.62196 z"
      id="path4966"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="ccccccccc" />
@@ -2788,7 +2788,7 @@
      sodipodi:nodetypes="ccccc" />
   <path
      style="font-size:12px;font-style:normal;font-weight:normal;fill:#c2f013;fill-opacity:0.14814812;stroke:none;display:inline;font-family:Dialog"
-     d="M 204.62103,522.89933 204.6217,522.89753 400.52398,522.90805 400.51609,419.57059 303.47249,419.61992 303.40119,396.53475 204.62303,396.6121 z"
+     d="M 204.62103,522.89933 204.6217,522.89753 395.7471,522.92368 395.75093,419.57059 303.47249,419.61992 303.40119,396.53475 204.62303,396.6121 z"
      id="path4962"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="cccccccc" />
@@ -2883,13 +2883,13 @@
   <text
      xml:space="preserve"
      style="font-size:16px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Sans"
-     x="228.53766"
+     x="225.886"
      y="498.78326"
      id="text3699-1"
      sodipodi:linespacing="125%"><tspan
        sodipodi:role="line"
        id="tspan3701-7"
-       x="228.53766"
+       x="225.886"
        y="498.78326"
        style="font-size:18px">Computer Science</tspan></text>
   <path
