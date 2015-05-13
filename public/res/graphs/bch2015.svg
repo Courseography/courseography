@@ -24,7 +24,7 @@
    sodipodi:docname="bch2015.svg"
    style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;font-family:Dialog">
   <metadata
-     id="metadata3673">
+     id="metadata3677">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
@@ -45,15 +45,17 @@
      inkscape:pageshadow="2"
      inkscape:window-width="1280"
      inkscape:window-height="738"
-     id="namedview3671"
+     id="namedview3675"
      showgrid="false"
      inkscape:zoom="1"
-     inkscape:cx="657.54062"
-     inkscape:cy="380.69289"
+     inkscape:cx="1027.1541"
+     inkscape:cy="143.53271"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2985"
+     showguides="true"
+     inkscape:guide-bbox="true"
      fit-margin-top="0"
      fit-margin-left="0"
      fit-margin-right="0"
@@ -63,7 +65,7 @@
      id="genericDefs" />
   <g
      id="g2988"
-     transform="translate(29.61097,20.276579)">
+     transform="translate(29.485444,20.279242)">
     <defs
        id="defs1">
       <clipPath
@@ -2717,15 +2719,27 @@
          inkscape:connector-curvature="0"
          style="stroke:none" />
       <path
-         d="M 752.8853,280.1388 813.6671,280.1388 896.027,331.2117"
+         d="M 572.5228,136.823 572.5228,205.807 720.4227,205.807 720.4227,257.149"
          clip-path="url(#clipPath2)"
          id="path3667"
          inkscape:connector-curvature="0"
          style="fill:none" />
       <path
-         d="M 902.8258,335.4278 895.2626,324.8544 895.1771,330.6847 889.9924,333.3529 z"
+         d="M 720.4227,265.149 725.4227,253.149 720.4227,256.149 715.4227,253.149 z"
          clip-path="url(#clipPath2)"
          id="path3669"
+         inkscape:connector-curvature="0"
+         style="stroke:none" />
+      <path
+         d="M 752.8853,280.1388 813.6671,280.1388 896.027,331.2117"
+         clip-path="url(#clipPath2)"
+         id="path3671"
+         inkscape:connector-curvature="0"
+         style="fill:none" />
+      <path
+         d="M 902.8258,335.4278 895.2626,324.8544 895.1771,330.6847 889.9924,333.3529 z"
+         clip-path="url(#clipPath2)"
+         id="path3673"
          inkscape:connector-curvature="0"
          style="stroke:none" />
     </g>
@@ -2750,13 +2764,13 @@
      sodipodi:nodetypes="ccccccccc" />
   <path
      style="font-size:12px;font-style:normal;font-weight:normal;fill:#3520ca;fill-opacity:0.14814812;stroke:none;display:inline;font-family:Dialog"
-     d="M 1175.2827,95.955465 1175.2826,337.25733 1071.1596,337.25649 1071.1606,522.92069 688.81458,522.90382 688.82447,95.946235 688.81632,95.957625 688.81798,95.951345 z"
+     d="M 1175.2827,95.955461 1175.2826,337.25733 1071.1596,337.25649 1071.1606,522.92069 688.81458,522.90382 688.82447,95.946231 688.81632,95.957621 688.81798,95.951341 z"
      id="path4974"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="ccccccccc" />
   <path
      style="font-size:12px;font-style:normal;font-weight:normal;fill:#dc0c33;fill-opacity:0.14814812;stroke:none;display:inline;font-family:Dialog"
-     d="M 164.7109,0 164.70699,203.08125 688.82579,203.1581 688.82478,95.952525 365.1958,95.944665 365.17241,0.004518 z"
+     d="M 164.7109,0 164.70699,203.08125 688.82579,203.1581 688.82478,95.952521 365.1958,95.944661 365.17241,0.004518 z"
      id="path4970"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="ccccccc" />
@@ -2782,17 +2796,17 @@
      xml:space="preserve"
      style="font-size:16px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Sans"
      x="272.39099"
-     y="232.49818"
+     y="232.49817"
      id="text3699-17"
      sodipodi:linespacing="125%"><tspan
        sodipodi:role="line"
        id="tspan3701-4"
        x="272.39099"
-       y="232.49818"
+       y="232.49817"
        style="font-size:18px">Bioinformatics and</tspan><tspan
        sodipodi:role="line"
        x="272.39099"
-       y="254.99818"
+       y="254.99817"
        style="font-size:18px"
        id="tspan3380">Computational Bio</tspan></text>
   <text
@@ -2822,65 +2836,65 @@
   <text
      xml:space="preserve"
      style="font-size:16px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Sans"
-     x="705.9931"
-     y="38.845753"
+     x="705.99316"
+     y="38.845749"
      id="text3687"
      sodipodi:linespacing="125%"><tspan
        sodipodi:role="line"
        id="tspan3689"
-       x="705.9931"
-       y="38.845753"
+       x="705.99316"
+       y="38.845749"
        style="font-size:18px">Chemistry</tspan></text>
   <text
      xml:space="preserve"
      style="font-size:16px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Sans"
      x="1087.9708"
-     y="462.6824"
+     y="462.68237"
      id="text3691"
      sodipodi:linespacing="125%"><tspan
        sodipodi:role="line"
        id="tspan3693"
        x="1087.9708"
-       y="462.6824"
+       y="462.68237"
        style="font-size:18px">Seminar</tspan></text>
   <text
      xml:space="preserve"
      style="font-size:18px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Sans"
-     x="803.01642"
-     y="178.60651"
+     x="803.01648"
+     y="178.60649"
      id="text3695"
      sodipodi:linespacing="125%"><tspan
        sodipodi:role="line"
        id="tspan3697"
-       x="803.01642"
-       y="178.60651">Laboratory</tspan></text>
+       x="803.01648"
+       y="178.60649">Laboratory</tspan></text>
   <text
      xml:space="preserve"
      style="font-size:16px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Sans"
      x="18.434071"
-     y="401.96463"
+     y="401.9646"
      id="text3699"
      sodipodi:linespacing="125%"><tspan
        sodipodi:role="line"
        id="tspan3701"
        x="18.434071"
-       y="401.96463"
+       y="401.9646"
        style="font-size:18px">Biophysics</tspan></text>
   <text
      xml:space="preserve"
      style="font-size:16px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Sans"
      x="228.53766"
-     y="498.78329"
+     y="498.78326"
      id="text3699-1"
      sodipodi:linespacing="125%"><tspan
        sodipodi:role="line"
        id="tspan3701-7"
        x="228.53766"
-       y="498.78329"
+       y="498.78326"
        style="font-size:18px">Computer Science</tspan></text>
   <path
      style="font-size:12px;font-style:normal;font-weight:normal;fill:#c2f0b3;fill-opacity:0.14901961;stroke:none;display:inline;font-family:Dialog"
-     d="M 365.17412,0.001594 1175.2676,0.001563 1175.2805,95.950385 365.17412,95.950415 z"
+     d="M 365.17412,0.001594 1175.2676,0.001563 1175.2805,95.950381 365.17412,95.950411 z"
      id="path4972-1"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="ccccc" />
