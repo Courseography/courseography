@@ -10,11 +10,11 @@
    color-rendering="auto"
    color-interpolation="auto"
    text-rendering="auto"
-   width="1193.2601"
+   width="1175.2683"
    stroke-miterlimit="10"
    shape-rendering="auto"
    font-weight="normal"
-   height="522.17169"
+   height="522.89685"
    font-style="normal"
    font-size="12"
    image-rendering="auto"
@@ -47,13 +47,13 @@
      inkscape:window-height="738"
      id="namedview3675"
      showgrid="false"
-     fit-margin-top="0"
-     fit-margin-bottom="0"
-     fit-margin-right="0"
-     fit-margin-left="0"
-     inkscape:zoom="256"
-     inkscape:cx="400.09281"
-     inkscape:cy="231.05238"
+     fit-margin-top="0.21"
+     fit-margin-bottom="0.25"
+     fit-margin-right="-17.75"
+     fit-margin-left="-0.25"
+     inkscape:zoom="32"
+     inkscape:cx="157.5772"
+     inkscape:cy="316.28556"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
@@ -63,7 +63,7 @@
      id="genericDefs" />
   <g
      id="g2988"
-     transform="translate(30.13005,20.085855)">
+     transform="translate(29.875784,20.29881)">
     <defs
        id="defs1">
       <clipPath
@@ -2744,155 +2744,155 @@
   </g>
   <path
      style="font-size:12px;font-style:normal;font-weight:normal;fill:#6276b9;fill-opacity:0.14901961;stroke:none;display:inline;font-family:Dialog"
-     d="M 0.004266,202.92101 0.01568267,-0.0017325 164.96246,0.00499799 164.96269,202.92101 z"
+     d="M 0,202.95719 0.01139937,-0.00193587 164.70819,0.00479583 164.70842,202.95719 z"
      id="path4964"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="ccccc" />
   <path
      style="font-size:12px;font-style:normal;font-weight:normal;fill:#5ac0ca;fill-opacity:0.14814812;stroke:none;display:inline;font-family:Dialog"
-     d="M 303.43339,276.60435 429.72729,276.37925 429.84109,202.71645 597.16852,202.68634 597.17741,522.17212 400.7767,522.17209 400.76701,419.3553 303.7217,419.40651 z"
+     d="M 303.17912,276.81731 429.47302,276.59221 429.58682,202.92941 596.92206,202.90321 596.91924,522.9046 400.52243,522.89677 400.51274,419.56826 303.46743,419.61947 z"
      id="path4966"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="ccccccccc" />
   <path
      style="font-size:12px;font-style:normal;font-weight:normal;fill:#708a23;fill-opacity:0.14814812;stroke:none;display:inline;font-family:Dialog"
-     d="M 204.87544,522.17248 204.88036,396.41534 303.67319,396.32258 303.51019,276.47741 429.81569,276.62902 429.81569,202.89314 110.51326,202.77959 110.52793,522.1717 z"
+     d="M 204.62117,522.90496 204.62609,396.6283 303.41892,396.53554 303.25592,276.69037 429.56142,276.84198 429.56142,203.0436 110.28243,202.96521 110.27366,522.90419 z"
      id="path4960"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="ccccccccc" />
   <path
      style="font-size:12px;font-style:normal;font-weight:normal;fill:#3520ca;fill-opacity:0.14814812;stroke:none;display:inline;font-family:Dialog"
-     d="M 1193.265,95.740009 1193.2591,337.04188 1071.4128,337.02541 1071.4093,522.17009 597.17526,522.17274 597.16209,202.81745 669.50012,202.83663 669.5,95.739797 z"
+     d="M 1175.2783,95.952964 1175.2782,337.25484 1071.1585,337.23837 1071.155,522.90648 596.91317,522.90132 596.91563,203.03432 669.24585,203.04959 669.24573,95.952752 z"
      id="path4974"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="ccccccccc" />
   <path
      style="font-size:12px;font-style:normal;font-weight:normal;fill:#dc0c33;fill-opacity:0.14814812;stroke:none;display:inline;font-family:Dialog"
-     d="M 164.9609,0.003295 164.95699,202.8658 669.50229,202.9739 669.50128,95.737077 365.4458,95.729217 365.42241,0 z"
+     d="M 164.70663,-0.0025 164.70272,203.07876 669.24802,203.15561 669.24701,95.950032 365.19153,95.942172 365.16814,0.0020175 z"
      id="path4970"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="ccccccc" />
   <path
      style="font-size:12px;font-style:normal;font-weight:normal;fill:#c200b3;fill-opacity:0.14814812;stroke:none;display:inline;font-family:Dialog"
-     d="M 1071.4092,337.04013 1193.261,337.04008 1193.2602,522.16859 1071.4092,522.17644 z"
+     d="M 1071.1549,337.25309 1175.2762,337.25304 1175.2755,522.89715 1071.1549,522.90502 z"
      id="path4972"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="ccccc" />
   <path
      style="font-size:12px;font-style:normal;font-weight:normal;fill:#00ff00;fill-opacity:0.14901961;stroke:none;display:inline;font-family:Dialog"
-     d="M 0,202.913 110.52838,202.9092 110.52838,522.17221 0.00383183,522.16814 z"
+     d="M -0.004266,202.94919 110.27411,202.94538 110.27411,522.90469 -4.4283e-4,522.90063 z"
      id="path4966-3"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="ccccc" />
   <path
      style="font-size:12px;font-style:normal;font-weight:normal;fill:#c2f013;fill-opacity:0.14814812;stroke:none;display:inline;font-family:Dialog"
-     d="M 204.87494,522.16825 204.87561,522.17035 400.77789,522.16134 400.76609,419.35514 303.72249,419.40447 303.65119,396.3193 204.87303,396.39665 z"
+     d="M 204.61676,522.89683 204.61743,522.89503 400.51971,522.90555 400.51182,419.5681 303.46822,419.61743 303.39692,396.53226 204.61876,396.60961 z"
      id="path4962"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="cccccccc" />
   <text
      xml:space="preserve"
      style="font-size:16px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Sans"
-     x="272.64099"
-     y="232.28271"
+     x="272.38672"
+     y="232.49568"
      id="text3699-17"
      sodipodi:linespacing="125%"><tspan
        sodipodi:role="line"
        id="tspan3701-4"
-       x="272.64099"
-       y="232.28271"
+       x="272.38672"
+       y="232.49568"
        style="font-size:18px">Bioinformatics and</tspan><tspan
        sodipodi:role="line"
-       x="272.64099"
-       y="254.78271"
+       x="272.38672"
+       y="254.99568"
        style="font-size:18px"
        id="tspan3380">Computational Bio</tspan></text>
   <text
      xml:space="preserve"
      style="font-size:16px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Sans"
-     x="61.550758"
-     y="132.23083"
+     x="61.296494"
+     y="132.4438"
      id="text3675"
      sodipodi:linespacing="125%"><tspan
        sodipodi:role="line"
-       x="61.550758"
-       y="132.23083"
+       x="61.296494"
+       y="132.4438"
        id="tspan3679"
        style="font-size:18px">Biology</tspan></text>
   <text
      xml:space="preserve"
      style="font-size:16px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Sans"
-     x="517.76074"
-     y="177.4211"
+     x="517.50647"
+     y="177.63406"
      id="text3683"
      sodipodi:linespacing="125%"><tspan
        sodipodi:role="line"
        id="tspan3685"
-       x="517.76074"
-       y="177.4211"
+       x="517.50647"
+       y="177.63406"
        style="font-size:18px">Introductory</tspan></text>
   <text
      xml:space="preserve"
      style="font-size:16px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Sans"
-     x="706.2431"
-     y="38.63031"
+     x="705.98883"
+     y="38.843266"
      id="text3687"
      sodipodi:linespacing="125%"><tspan
        sodipodi:role="line"
        id="tspan3689"
-       x="706.2431"
-       y="38.63031"
+       x="705.98883"
+       y="38.843266"
        style="font-size:18px">Chemistry</tspan></text>
   <text
      xml:space="preserve"
      style="font-size:16px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Sans"
-     x="1088.2209"
-     y="462.46689"
+     x="1087.9667"
+     y="462.67984"
      id="text3691"
      sodipodi:linespacing="125%"><tspan
        sodipodi:role="line"
        id="tspan3693"
-       x="1088.2209"
-       y="462.46689"
+       x="1087.9667"
+       y="462.67984"
        style="font-size:18px">Seminar</tspan></text>
   <text
      xml:space="preserve"
      style="font-size:18px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Sans"
-     x="845.51642"
-     y="462.28799"
+     x="845.26215"
+     y="462.50095"
      id="text3695"
      sodipodi:linespacing="125%"><tspan
        sodipodi:role="line"
        id="tspan3697"
-       x="845.51642"
-       y="462.28799">Laboratory</tspan></text>
+       x="845.26215"
+       y="462.50095">Laboratory</tspan></text>
   <text
      xml:space="preserve"
      style="font-size:16px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Sans"
-     x="18.684074"
-     y="401.74918"
+     x="18.429808"
+     y="401.96213"
      id="text3699"
      sodipodi:linespacing="125%"><tspan
        sodipodi:role="line"
        id="tspan3701"
-       x="18.684074"
-       y="401.74918"
+       x="18.429808"
+       y="401.96213"
        style="font-size:18px">Biophysics</tspan></text>
   <text
      xml:space="preserve"
      style="font-size:16px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Sans"
-     x="228.78766"
-     y="498.56778"
+     x="228.53339"
+     y="498.78073"
      id="text3699-1"
      sodipodi:linespacing="125%"><tspan
        sodipodi:role="line"
        id="tspan3701-7"
-       x="228.78766"
-       y="498.56778"
+       x="228.53339"
+       y="498.78073"
        style="font-size:18px">Computer Science</tspan></text>
   <path
      style="font-size:12px;font-style:normal;font-weight:normal;fill:#c2f0b3;fill-opacity:0.14901961;stroke:none;display:inline;font-family:Dialog"
-     d="M 365.42412,-0.00292399 1193.2594,-0.002955 1193.2726,95.734938 365.42412,95.734964 z"
+     d="M 365.16985,-9.0642246e-4 1175.2632,-9.3750078e-4 1175.2761,95.947893 365.16985,95.947919 z"
      id="path4972-1"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="ccccc" />
