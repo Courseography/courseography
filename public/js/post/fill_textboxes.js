@@ -11,10 +11,11 @@ function fill300Textboxes(post, postElement) {
 
         var course = activeCourses[m];
 
-        if (course.indexOf('CSC3') !== -1 &&
-            (post.name === 'major' ||
+        if ((course.indexOf('CSC3') !== -1 || course.indexOf('ECE3') !== -1 ||
+            course.indexOf('BCB') !== -1) && (post.name === 'major' ||
              (post.name === 'specialist' && notSpecialistCourse(course)))) {
             postElement[post.filledTextboxes300].value = activeCourses[m];
+            postElement[post.filledTextboxes300].disabled = true;
             post.index300 = m + 1;
             post.filledTextboxes300 += 1;
             post.creditCount += 0.5;
@@ -35,8 +36,11 @@ function fill400Textboxes(post, postElement, category) {
     for (var m = post.index400; m < activeCourses.length &&
         post['filledTextboxes' + category] !== post['textboxes' + category]; m++) {
         var course = activeCourses[m];
-        if (course.indexOf('CSC4') !== -1) {
+
+        if (course.indexOf('CSC4') !== -1 || course.indexOf('ECE4') !== -1 ||
+            course.indexOf('BCB') !== -1) {
             postElement[post['filledTextboxes' + category]].value = activeCourses[m];
+            postElement[post['filledTextboxes' + category]].disabled = true;
             post.index400 = m + 1;
             post['filledTextboxes' + category] += 1;
             post.creditCount += 0.5;
@@ -56,11 +60,11 @@ function fill300s() {
 
     // Clear textboxes
     for (var i = 0; i < 3; i++) {
-        spec300s[i].value = '';
-        spec300s[i].disabled = true;
-        if (i < 2) {
-            maj300s[i].value = '';
-            maj300s[i].disabled = true;
+        if (spec300s[i].value.indexOf('BCB') === -1) {
+            spec300s[i].value = '';
+            if (i < 2 && maj300s[i].value.indexOf('BCB') === -1) {
+                maj300s[i].value = '';
+            }
         }
     }
 
@@ -74,6 +78,9 @@ function fill300s() {
     if (major.filledTextboxes300 < major.textboxes300) {
         fill400Textboxes(major, maj300s, '300');
     }
+
+    updateBCBCount(specialist, spec300s, '300');
+    updateBCBCount(major, maj300s, '300');
 }
 
 
@@ -88,17 +95,20 @@ function fill400s() {
 
     // Clear textboxes
     for (var i = 0; i < 3; i++) {
-        spec400s[i].value = '';
-        spec400s[i].disabled = true;
-        if (i < 1) {
-            maj400s[i].value = '';
-            maj400s[i].disabled = true;
+        if (spec400s[i].value.indexOf('BCB') === -1) {
+            spec400s[i].value = '';
+            if (i < 1 && maj400s[i].value.indexOf('BCB') === -1) {
+                maj400s[i].value = '';
+            }
         }
     }
 
     // Fill courses that have been selected
     fill400Textboxes(specialist, spec400s, '400');
     fill400Textboxes(major, maj400s, '400');
+
+    updateBCBCount(specialist, spec400s, '400');
+    updateBCBCount(major, maj400s, '400');
 }
 
 
@@ -117,8 +127,10 @@ function fillExtraTextboxes(post, postElement, level) {
         var course = activeCourses[i];
 
         if (postElement[post.filledTextboxesExtra].value === '' &&
-            course.indexOf('CSC' + level.charAt(0)) != -1 &&
-            (post.name === 'major' || post.name === 'minor' ||
+            (course.indexOf('CSC' + level.charAt(0)) !== -1 ||
+            course.indexOf('ECE' + level.charAt(0)) !== -1) &&
+            ((post.name === 'major' && notMajReqCourse(course)) || 
+             post.name === 'minor' ||
              (post.name === 'specialist' && notSpecialistCourse(course)))) {
 
             postElement[post.filledTextboxesExtra].value = activeCourses[i];
@@ -146,12 +158,14 @@ function fillExtra() {
     for (var k = 0; k < 4; k++) {
 
         // Clear text boxes
-        if (specExtra[k].value.indexOf('MAT') === -1 && specExtra[k].value.indexOf('STA') === -1) {
+        if (specExtra[k].value.indexOf('MAT') === -1 && specExtra[k].value.indexOf('STA') === -1
+            && specExtra[k].value.indexOf('CSC49') === -1 && specExtra[k].value.indexOf('BCB') === -1) {
             specExtra[k].value = '';
             specExtra[k].disabled = false;
         }
         if (k < 3) {
-            if (majExtra[k].value.indexOf('MAT') === -1 && majExtra[k].value.indexOf('STA') === -1) {
+            if (majExtra[k].value.indexOf('MAT') === -1 && majExtra[k].value.indexOf('STA') === -1
+                && specExtra[k].value.indexOf('CSC49') === -1 && majExtra[k].value.indexOf('BCB') === -1) {
                 majExtra[k].value = '';
                 majExtra[k].disabled = false;
             }
@@ -161,9 +175,12 @@ function fillExtra() {
     }
 
     // Fill courses that have been selected
+
     fillExtraTextboxes(specialist, specExtra, '300');
     fillExtraTextboxes(major, majExtra, '300');
     fillExtraTextboxes(minor, minExtra, '300');
+    fillExtraTextboxes(major, majExtra, '200');
+    fillExtraTextboxes(minor, minExtra, '200');
 
     if (specialist.filledTextboxesExtra < specialist.textboxesExtra) {
         fillExtraTextboxes(specialist, specExtra, '400');
@@ -175,10 +192,8 @@ function fillExtra() {
         fillExtraTextboxes(minor, minExtra, '400');
     }
 
-    // add extra 200 courses for minor if extra space
-    if (minor.filledTextboxesExtra < minor.textboxesExtra) {
-        addExtraMinCourses();
-    }
+    updateBCBCount(specialist, specExtra, '300');
+    updateBCBCount(major, majExtra, '300');
 }
 
 
@@ -192,14 +207,14 @@ function fillMisc() {
     var majInq = $('#maj_misc')[0].getElementsByTagName('input');
 
     // Clear textboxes
-    if (specInq[0].value.indexOf('PEY') === -1) {
+    if (specInq[0].value.indexOf('PEY') === -1 && specInq[0].value.indexOf('CSC49') ) {
         specInq[0].value = '';
         specInq[0].disabled = false;
     } else {
         specialist.activeInq = 1;
     }
 
-    if (majInq[0].value.indexOf('PEY') === -1) {
+    if (majInq[0].value.indexOf('PEY') === -1 && majInq[0].value.indexOf('CSC49') ) {
         majInq[0].value = '';
         majInq[0].disabled = false;
     } else {

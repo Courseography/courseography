@@ -113,15 +113,15 @@ checkPost =
                     H.input ! A.type_ "text"  
                     H.input ! A.type_ "text" 
             H.div ! A.id "spec_300" $ do 
-                H.p ! A.class_ "code" $ "Any 300+ level CSC course, BCB410H, BCB420H, BCB430Y, ECE385H, ECE489H (1.5 FCEs)"
+                H.p ! A.class_ "code" $ "Any 300+ level CSC course, BCB410H, BCB420H, BCB430Y, ECE385H (1.5 FCEs)"
                 H.div ! A.id "spec300" ! A.class_ "more-info" $ do
                     H.input ! A.type_ "text" 
                     H.input ! A.type_ "text"
                     H.input ! A.type_ "text" 
             H.div ! A.id "spec_extra" $ do
-                H.p ! A.class_ "code" $ "Any 300+ level CSC course, BCB/ECE/MAT/STA course (2.0 FCEs) - \
-                                         \MAT: 224, 235/237/257, any 300+ except for 329, 390, & 391 \
-                                         \; STA: 248, 261, any 300+" 
+                H.p ! A.class_ "code" $ "Any 300+ level CSC course; \ 
+                                         \MAT: 221/223/240, 224, 235/237/257, any 300+ except for 329, 390, & 391 \ 
+                                         \; STA: 248, 261, any 300+; ECE385H/489H; BCB410H/420H/430Y (1.5 FCEs)" 
                 H.div ! A.id "specextra" ! A.class_ "more-info" $ do
                     H.input ! A.type_ "text"
                     H.input ! A.type_ "text"
@@ -185,18 +185,18 @@ checkPost =
                     H.p ! A.class_ "full_name STA247255257Sta1" $ "STA257H (Probability and Statistics 1)"
             H.h2 "Later Years"
             H.div ! A.id "maj_400" $ do
-                H.p ! A.class_ "code" $ "Any 400-level CSC course, BCB410H, BCB420H, BCB430Y (0.5 FCEs)"
+                H.p ! A.class_ "code" $ "Any 400-level CSC course, BCB410H, BCB420H, BCB430Y, ECE489H (0.5 FCEs)"
                 H.div ! A.id "maj400" ! A.class_ "more-info" $ 
                     H.input ! A.type_ "text" 
             H.div ! A.id "maj_300" $ do
-                H.p ! A.class_ "code" $ "Any 300+ level CSC course, BCB410H, BCB420H, BCB430Y, ECE385H, ECE489H (1.0 FCEs)"
+                H.p ! A.class_ "code" $ "Any 300+ level CSC course, BCB410H, BCB420H, BCB430Y, ECE385H (1.0 FCEs)"
                 H.div ! A.id "maj300" ! A.class_ "more-info" $ do
                     H.input ! A.type_ "text"  
                     H.input ! A.type_ "text" 
             H.div ! A.id "maj_extra" $ do
-                H.p ! A.class_ "code" $ "Any 300+ level CSC course, BCB/ECE/MAT/STA course (1.5 FCEs) - \ 
+                H.p ! A.class_ "code" $ "Any 300+ level CSC course; \ 
                                          \MAT: 221/223/240, 224, 235/237/257, any 300+ except for 329, 390, & 391 \ 
-                                         \; STA: 248, 261, any 300+" 
+                                         \; STA: 248, 261, any 300+; ECE385H/489H; BCB410H/420H/430Y (1.5 FCEs)" 
                 H.div ! A.id "majextra" ! A.class_ "more-info" $ do
                     H.input ! A.type_ "text"
                     H.input ! A.type_ "text"
@@ -236,7 +236,7 @@ checkPost =
                     H.p ! A.class_ "full_name CSC236240" $ "CSC236H (Introduction to the Theory of Computation)"
                     H.p ! A.class_ "full_name CSC236240" $ "CSC240H (Enriched Introduction to the Theory of Computation)"
             H.div ! A.id "min_misc" $ do
-                H.p ! A.class_ "code" $ "Any 300/400-level CSC course (atleast 1.0 FCE), CSC209H, CSC258H, CSC263H/CSC265H (1.5 FCEs)"  
+                H.p ! A.class_ "code" $ "Any 200/300/400-level CSC course (atleast 1.0 FCE of 300/400-level) (1.5 FCEs)"  
                 H.div ! A.id "minextra" ! A.class_ "more-info" $ do
                     H.input ! A.type_ "text" 
                     H.input ! A.type_ "text"

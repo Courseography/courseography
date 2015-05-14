@@ -3,16 +3,16 @@ var specialist = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'fille
                   'filledTextboxes400': 0, 'filledTextboxesExtra': 0, 'specCount': 0,
                   'reqs': ['CSC108', 'CSC148', 'CSC165240', 'CSC207', 'CSC209', 'CSC236240', 'CSC258', 
                   'CSC263265', 'STA247255257Sta1', 'MAT221223240Lin1', 'MAT135136137157Calc1', 'CSC369', 
-                  'CSC373'], 'textboxes300': 3, 'textboxes400': 3,
-                  'textboxesExtra': 4, 'categories': 17, 'creditCount': 0, 'name': 'specialist'};
+                  'CSC373'], 'textboxes300': 3, 'textboxes400': 3,'textboxesExtra': 4, 'categories': 17, 
+                  'creditCount': 0, 'name': 'specialist', 'extraTypedNextBox': 0};
 var major = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0,
              'filledTextboxes400': 0, 'filledTextboxesExtra': 0, 'majCount': 0, 'reqs': ['CSC108',
              'CSC148', 'CSC165240', 'CSC207', 'CSC236240', 'CSC258', 'CSC263265', 'STA247255257Sta1', 
-             'MAT135136137157Calc1'], 'textboxes300': 2,
-             'textboxes400': 1, 'textboxesExtra': 3, 'categories': 13, 'creditCount': 0, 'name': 'major'};
+             'MAT135136137157Calc1'], 'textboxes300': 2, 'textboxes400': 1, 'textboxesExtra': 3, 'categories': 13, 
+             'creditCount': 0, 'name': 'major', 'extraTypedNextBox': 0};
 var minor = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxesExtra': 0,
              'reqs': ['CSC108', 'CSC148', 'CSC165240', 'CSC207', 'CSC236240'], 'textboxesExtra': 3, 'categories': 6,
-             'creditCount': 0, 'additionalMin200': ['CSC209', 'CSC258', 'CSC263253'], 'name': 'minor'};
+             'creditCount': 0, 'index200' : 0, 'name': 'minor'};
 
 
 /**
@@ -47,10 +47,11 @@ function updateAllCategories() {
     update300Categories();
     update400Categories();
     updateExtraCategories();
-    updateMatCreditCount();
+    updateTypedCreditCount();
 
     fillCreditCount();
     checkPostCompleted();
+
 }
 
 
@@ -61,20 +62,20 @@ function resetValues() {
     'use strict';
 
     activeCourses = [];
-    var specialist = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0,
+    specialist = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0,
                   'filledTextboxes400': 0, 'filledTextboxesExtra': 0, 'specCount': 0,
                   'reqs': ['CSC108', 'CSC148', 'CSC165240', 'CSC207', 'CSC209', 'CSC236240', 'CSC258', 
                   'CSC263265', 'STA247255257Sta1', 'MAT221223240Lin1', 'MAT135136137157Calc1', 'CSC369', 
-                  'CSC373'], 'textboxes300': 3, 'textboxes400': 3,
-                  'textboxesExtra': 4, 'categories': 17, 'creditCount': 0, 'name': 'specialist'};
-    var major = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0,
-                 'filledTextboxes400': 0, 'filledTextboxesExtra': 0, 'majCount': 0, 'reqs': ['CSC108',
-                 'CSC148', 'CSC165240', 'CSC207', 'CSC236240', 'CSC258', 'CSC263265', 'STA247255257Sta1', 
-                 'MAT135136137157Calc1'], 'textboxes300': 2,
-                 'textboxes400': 1, 'textboxesExtra': 3, 'categories': 13, 'creditCount': 0, 'name': 'major'};
-    var minor = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxesExtra': 0,
-                 'reqs': ['CSC108', 'CSC148', 'CSC165240', 'CSC207', 'CSC236240'], 'textboxesExtra': 3, 'categories': 6,
-                 'creditCount': 0, 'additionalMin200': ['CSC209', 'CSC258', 'CSC263253'], 'name': 'minor'};
+                  'CSC373'], 'textboxes300': 3, 'textboxes400': 3,'textboxesExtra': 4, 'categories': 17, 
+                  'creditCount': 0, 'name': 'specialist', 'extraTypedNextBox': 0};
+    major = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0,
+             'filledTextboxes400': 0, 'filledTextboxesExtra': 0, 'majCount': 0, 'reqs': ['CSC108',
+             'CSC148', 'CSC165240', 'CSC207', 'CSC236240', 'CSC258', 'CSC263265', 'STA247255257Sta1', 
+             'MAT135136137157Calc1'], 'index200': 0, 'textboxes300': 2, 'textboxes400': 1, 'textboxesExtra': 3, 'categories': 13, 
+             'creditCount': 0, 'name': 'major', 'extraTypedNextBox': 0};
+    minor = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxesExtra': 0,
+             'reqs': ['CSC108', 'CSC148', 'CSC165240', 'CSC207', 'CSC236240'], 'textboxesExtra': 3, 'categories': 6,
+             'creditCount': 0, 'index200': 0, 'name': 'minor'};
 }
 
 
@@ -173,28 +174,6 @@ function fillMinCreditCount() {
 
 
 /**
- * Autofills extra 200-level courses for last minor constraint.
- */
-function addExtraMinCourses() {
-    'use strict';
-
-    var minExtra = $('#minextra')[0].getElementsByTagName('input');
-    var current = minor.filledTextboxesExtra;
-
-    for (var m = 0; m < 3 && current < 3; m++) {
-        if (getCookie(minor.additionalMin200[m].toLowerCase()) === 'active' ||
-            getCookie(minor.additionalMin200[m].toLowerCase()) === 'overridden') {
-            minExtra[current].value = minor.additionalMin200[m];
-            minExtra[current].disabled = true;
-            minor.creditCount += 0.5;
-            minor.filledTextboxesExtra += 1;
-            current += 1;
-        }
-    }
-}
-
-
-/**
  * Checks whether a POSt is completed and updates credit count colour if it is.
  */
 function checkPostCompleted() {
@@ -234,19 +213,25 @@ function updateActiveCourses() {
 /**
  * Updates Credit count for MAT and STA courses.
  */
-function updateMatCreditCount() {
+function updateTypedCreditCount() {
     'use strict';
 
     var specExtra = $('#specextra')[0].getElementsByTagName('input');
     var majExtra = $('#majextra')[0].getElementsByTagName('input');
 
-    for (var k = 0; k < 4; k++) {
-        if (specExtra[k].value.indexOf('MAT') > -1 || specExtra[k].value.indexOf('STA') > -1) {
+    for (var k = specialist.extraTypedNextBox; k < 4; k++) {
+        if (specExtra[k].value.indexOf('MAT') > -1 || specExtra[k].value.indexOf('STA') > -1 ||
+            specExtra[k].value.indexOf('CSC49') > -1 || specExtra[k].value.indexOf('BCB') > -1) {
+            specExtra[k].disabled = true;
             specialist.creditCount += 0.5;
+            specialist.extraTypedNextBox = k + 1;
             specialist.filledTextboxesExtra += 1;
         }
-        if (k < 3 && (majExtra[k].value.indexOf('MAT') > -1 || majExtra[k].value.indexOf('STA') > -1)) {
+        if (k < 3 && (majExtra[k].value.indexOf('MAT') > -1 || majExtra[k].value.indexOf('STA') > -1 ||
+            majExtra[k].value.indexOf('CSC49') > -1 || specExtra[k].value.indexOf('BCB') > -1)) {
+            majExtra[k].disabled = true;
             major.creditCount += 0.5;
+            major.extraTypedNextBox = k + 1;
             major.filledTextboxesExtra += 1;
         }
     }
@@ -262,3 +247,36 @@ function notSpecialistCourse(course) {
 
     return specialistCourses.indexOf(course) === -1;
 }
+
+
+/**
+ * Returns whether course is a required course for the Major or not
+ * @param {string} Name of course
+ * @return {boolean} True if course is a required for major, False otherwise
+ */
+function notMajReqCourse(course) {
+    'use strict';
+
+    return majReqs.indexOf(course) === -1;
+}
+
+
+/**
+ * Updates Credit Count for typed BCB Courses
+ * @param {object} post Object corresponding to the POSt being dealt with.
+ * @param {HTMLElement[]} postElement Array of textboxes to fill.
+ * @param {string} level Level of category we are dealing with (300 or 400 level)
+ */
+function updateBCBCount(post, postElement, level) {
+
+    for (var i = 0; i < postElement.length; i++) {
+        var value =  postElement[i].value;
+
+        if (value.indexOf('BCB') > -1) { // A BCB course was typed
+            post['filledTextboxes' + level] += 1;
+            post.creditCount += (value.charAt(6) === 'Y') ? 1 : 0.5;
+            postElement[i].disabled = true;
+        }
+    }
+}
+
