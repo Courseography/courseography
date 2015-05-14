@@ -19,14 +19,10 @@ import Control.Monad
 import Control.Monad.IO.Class (liftIO, MonadIO)
 import Control.Monad.Trans.Reader (ReaderT)
 import Data.Maybe (fromMaybe)
+
 import Database.Persist.Sqlite
 import Database.Tables
-
-fbdbStr :: T.Text
-fbdbStr = "fdatabase1.sqlite3"
-
-dbStr :: T.Text
-dbStr = "Database/database2015.sqlite3"
+import Config (fbdbStr, dbStr)
 
 -- | Inserts course into the Courses table.
 insertCourse :: MonadIO m => Course -> ReaderT SqlBackend m ()
