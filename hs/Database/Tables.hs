@@ -10,6 +10,18 @@
              TemplateHaskell,
              TypeFamilies #-}
 
+{-|
+Description: The database schema (and some helpers).
+
+This module defines the database schema. It uses Template Haskell to also
+create new types for these values so that they can be used in the rest of
+the application.
+
+Though types and typeclass instances are created automatically, we currently
+have a few manually-generated spots to clean up. This should be rather
+straightforward.
+-}
+
 module Database.Tables where
 
 import Database.Persist.TH
@@ -18,12 +30,12 @@ import qualified Data.Text as T
 import qualified Data.Vector as V
 import Data.Aeson
 import Data.Int
-import Control.Monad
-import Control.Applicative
 
+-- | A data type representing a list of times for a course.
 data Time = Time { timeField :: [Double] } deriving (Show, Read, Eq)
 derivePersistField "Time"
 
+-- | A two-dimensional point.
 type Point = (Double, Double)
 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
@@ -115,6 +127,9 @@ FacebookTest
     deriving Show
 |]
 
+
+-- ** TODO: Remove these extra types and class instances
+
 -- | A Lecture.
 data Lecture =
     Lecture { extra :: Int,
@@ -142,9 +157,10 @@ data Session =
 
 -- | A Course.
 -- each element of prereqs can be one of three things:
---    * a one-element list containing a course code
---    * a list starting with "and", and 2 or more course codes
---    * a list starting with "or", and 2 or more course codes
+--
+--     * a one-element list containing a course code
+--     * a list starting with "and", and 2 or more course codes
+--     * a list starting with "or", and 2 or more course codes
 data Course =
     Course { breadth :: Maybe T.Text,
              description :: Maybe T.Text,
@@ -207,7 +223,7 @@ instance ToJSON Tutorial where
 -- | Converts a Double to a T.Text.
 -- This removes the period from the double, as the JavaScript code,
 -- uses the output in an element's ID, which is then later used in
--- jQuery. `.` is a jQuery meta-character, and must be removed from the ID.
+-- jQuery. @.@ is a jQuery meta-character, and must be removed from the ID.
 convertTimeToString :: [Double] -> [T.Text]
 convertTimeToString [day, time] =
   [T.pack . show . floor $ day,

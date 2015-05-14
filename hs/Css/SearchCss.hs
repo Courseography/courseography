@@ -6,6 +6,7 @@ import Clay
 import Css.Constants
 import Data.Monoid
 
+searchStyles :: Css
 searchStyles = do
     "#timetableSearch" ? do
         alignCenter

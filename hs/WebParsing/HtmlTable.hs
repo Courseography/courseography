@@ -3,14 +3,10 @@
 module WebParsing.HtmlTable  where
 
 import qualified Data.Text as T
-import Network.HTTP
 import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Match
 import Data.List
-import Data.List.Utils
 import Data.Maybe
-import WebParsing.ParsingHelp
-import WebParsing.PrerequisiteParsing
 
 type Pos = (Maybe Int, Maybe Int, Maybe Int, Maybe Int)
 
@@ -37,7 +33,7 @@ toInt (Just text)  =
      else Nothing
 
 maybeFromAttrib :: T.Text -> Maybe [Tag T.Text] -> Maybe T.Text
-maybeFromAttrib str Nothing = Nothing
+maybeFromAttrib _ Nothing = Nothing
 maybeFromAttrib str (Just tag) = Just $ fromAttrib str (head tag)
 
 -- | Finds the first rowspan and/or colspan, and returns a 4-element list where

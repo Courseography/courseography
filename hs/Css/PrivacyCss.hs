@@ -1,16 +1,16 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Css.AboutCss where
+module Css.PrivacyCss where
 
 import Clay
 import Prelude hiding ((**))
 import Data.Monoid
 import Css.Constants
 
-{- aboutStyles
- - Generates CSS for the about page. -}
-aboutStyles :: Css
-aboutStyles = "#aboutDiv" ? do
+{- privacyStyles
+ - Generates CSS for the Privacy page. -}
+privacyStyles :: Css
+privacyStyles = "#privacyDiv" ? do
     maxWidth (px 1000)
     padding 0 (em 1) 0 (em 1)
     margin nil auto nil auto

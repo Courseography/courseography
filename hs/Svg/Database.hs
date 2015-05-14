@@ -9,16 +9,15 @@ here as well at some point in the future.
 
 module Svg.Database where
 
-import Control.Monad.IO.Class  (liftIO, MonadIO)
+import Control.Monad.IO.Class  (liftIO)
 import Database.Persist.Sqlite
 import Database.Tables
-import Database.Persist
-import Control.Monad.Trans.Reader
 import qualified Data.Conduit.List as CL
 import Data.Int
 import Data.Conduit
 import qualified Data.Text.Internal as TI
 import Database.JsonParser
+import Config (dbStr)
 
 -- | Insert a new graph into the database, returning the key of the new graph.
 insertGraph :: String   -- ^ The title of the graph that is being inserted.

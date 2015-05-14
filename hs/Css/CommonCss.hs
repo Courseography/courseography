@@ -9,7 +9,7 @@ import Css.Constants
 
 {- common
  - Generates CSS common to all pages. -}
-
+common :: Css
 common = do
     html ?
         do margin0
@@ -32,7 +32,7 @@ common = do
 {- headerCSS
  - Generates the CSS for the header located at the top
  - of every page -}
-
+headerCSS :: Css
 headerCSS = do
     ".header" ?
         do margin0
@@ -87,7 +87,7 @@ headerCSS = do
 
 {- aDefaultCSS
  - Generates default CSS. -}
-
+aDefaultCSS :: Css
 aDefaultCSS = do
     a <> a # hover <> a # visited <> a # active ? do
         fontWeight bold
@@ -97,7 +97,7 @@ aDefaultCSS = do
 {- headers
  - Generates CSS for the header located at the top of
  - all pages. -}
-
+headers :: Css
 headers = do
     h1 ? do
         alignCenter
@@ -114,7 +114,7 @@ headers = do
 {- disclaimerCSS
  - Generates CSS for the disclaimer located at the foot
  - of all pages. -}
-
+disclaimerCSS :: Css
 disclaimerCSS = "#disclaimerDiv" ? do
     padding 0 (em 1) 0 (em 1)
     fontSize (pt 11)
@@ -122,7 +122,7 @@ disclaimerCSS = "#disclaimerDiv" ? do
 {- modalCSS
  - Generates CSS for the modal that appears
  - when nodes in the graph are clicked. -}
-
+modalCSS :: Css
 modalCSS = do
     ".ui-dialog" ? do
         outline solid (px 0) black
@@ -163,6 +163,7 @@ modalCSS = do
             margin nil auto nil auto
     fbModalCSS
 
+fbModalCSS :: Css
 fbModalCSS = do
     "#post-image" ? do
         borderRadius (px 5) (px 5) (px 5) (px 5)

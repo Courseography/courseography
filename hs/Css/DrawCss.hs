@@ -8,7 +8,7 @@ import Css.Constants
 
 {- drawStyles
  - Generates all CSS for the draw page. -}
-
+drawStyles :: Css
 drawStyles = do
     mainCSS
     titleDiv
@@ -27,6 +27,7 @@ drawStyles = do
     finishRegionCSS
 
 {- The wrapping around the canvas elements. -}
+mainCSS :: Css
 mainCSS = "#main" ? do
     height (pct 85)
     width  (pct 85)
@@ -35,11 +36,13 @@ mainCSS = "#main" ? do
     "border-radius" -: "8px"
     border solid (px 2) black
 
+titleDiv :: Css
 titleDiv = "#about-div" ? do
     fontSize (em 1.2)
     margin 0 0 0 (px 10)
 
 {- The SVG canvas and the grid background. -}
+canvasCSS :: Css
 canvasCSS = do
     "#background" ? do
         height100
@@ -55,6 +58,7 @@ canvasCSS = do
         left nil
 
 {- The side panel. -}
+panelCSS :: Css
 panelCSS = do
     "#side-panel-wrap" ? do
         height (pct 85)
@@ -67,6 +71,7 @@ panelCSS = do
         overflowY auto
 
 {- Override the default scrollbar styling for side panel -}
+scrollBar :: Css
 scrollBar = do
     "::-webkit-scrollbar" ? do
         width (px 10)
@@ -80,6 +85,7 @@ scrollBar = do
         "background-color" -: "#28B0A2"
 
 {- The mode buttons. -}
+modeButtonsCSS :: Css
 modeButtonsCSS = ".mode" ? do
     width (pct 93)
     padding 0 0 0 (px 5)
@@ -99,11 +105,13 @@ modeButtonsCSS = ".mode" ? do
     ".clicked" & do
         "background-color" -: "#28B0A2 !important"
 
+clickedButtonsCSS :: Css
 clickedButtonsCSS = ".clicked" ? do
     "color" -: "#DCDCDC !important"
     border solid (px 2) black
 
 {- The colour buttons. -}
+colourButtonsCSS :: Css
 colourButtonsCSS = do
     ".colour" ? do
         width (pct 40)
@@ -132,6 +140,7 @@ colourButtonsCSS = do
         backgroundColor $ parse dPurple
 
 {- The input field. -}
+inputCSS :: Css
 inputCSS = "input" ? do
     fontSize (px 16)
     border solid (px 2) "#DCDCDC"
@@ -143,6 +152,7 @@ inputCSS = "input" ? do
         "box-shadow" -: "0 0 3px 1px #FFD700"
 
 {- Style for simple buttons. -}
+simpleButton :: Css
 simpleButton = ".button" ? do
     width (pct 40)
     margin (px 5) (px 5) (px 5) (px 5)
@@ -164,6 +174,7 @@ simpleButton = ".button" ? do
 
 
 {- The add button. -}
+textButtonCSS :: Css
 textButtonCSS = "#add-text" ? do
     "display" -: "inline"
     margin (px 5) (px 5) (px 5) (px 5)
@@ -172,6 +183,7 @@ textButtonCSS = "#add-text" ? do
 
 
 {- The labels for a node. -}
+nodeLabelCSS :: Css
 nodeLabelCSS = ".mylabel" ? do
     alignCenter
     "stroke" -: "none"
@@ -185,6 +197,7 @@ nodeLabelCSS = ".mylabel" ? do
     "dominant-baseline" -: "central"
 
 {- The invisible elbow nodes. -}
+elbowCSS :: Css
 elbowCSS = do
     ".elbow" ? do
         opacity 0
@@ -198,6 +211,7 @@ elbowCSS = do
             opacity 1
 
 {- The actual region svg elements. -}
+regionCSS :: Css
 regionCSS = ".region" ? do
     "data-group" @= "red" & do
         fill dRed
@@ -209,6 +223,7 @@ regionCSS = ".region" ? do
         fill dPurple
 
 {- The finish button -}
+finishRegionCSS :: Css
 finishRegionCSS = "#finish-region" ? do
     width (pct 40)
     margin (px 5) (px 5) (px 5) (px 5)
