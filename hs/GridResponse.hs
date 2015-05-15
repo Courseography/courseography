@@ -15,8 +15,7 @@ gridResponse =
     ok $ toResponse $
         masterTemplate "Courseography - Grid"
             [H.meta ! A.name "keywords"
-                    ! A.content "",
-                    timetableLinks
+                    ! A.content ""
             ]
             (do  header "grid"
                  conflictDialog
@@ -33,14 +32,14 @@ conflictDialog :: H.Html
 conflictDialog = createTag H.div "dialog" "" "Conflicting courses are difficult to manage. Make sure you understand the added responsibility of having two or more conflicting courses."
 
 coursePanel :: H.Html
-coursePanel = 
+coursePanel =
     createTag H.div "course-select-wrapper" "col-md-2 col-xs-6" $
         createTag H.ul "course-select" "trapScroll-enabled" $
             createTag H.li "clear-all" "" $
                 createTag H.h3 "" "" "Clear All"
 
 searchPanel :: H.Html
-searchPanel = 
+searchPanel =
     createTag H.div "search-layout" "col-md-2 col-xs-6 col-md-push-8" $ do
         createTag H.div "filter-container" "" $
             makeForm "" "" "return false;" $
@@ -49,7 +48,7 @@ searchPanel =
             createTag H.div "search-list" "" ""
 
 infoPanel :: H.Html
-infoPanel = 
+infoPanel =
     createTag H.div "" "col-md-8 col-xs-12 col-md-pull-2" $
         createTag H.div "info" "row" ""
                             {-createTag H.div "info" "row" $ do

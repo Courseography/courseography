@@ -16,8 +16,7 @@ aboutResponse aboutContents =
    ok $ toResponse $
     masterTemplate "Courseography - About"
                 [H.meta ! A.name "keywords"
-                        ! A.content "",
-                 aboutLinks
+                        ! A.content ""
                 ]
                 (do
                     header "about"
@@ -30,7 +29,7 @@ aboutResponse aboutContents =
 aboutHtml :: Text -> H.Html
 aboutHtml contents = H.div ! A.id "aboutDiv" $ mdToHTML contents
 
--- | mdToHTML takes in the contents of a file written in Mark Down and converts it to 
+-- | mdToHTML takes in the contents of a file written in Mark Down and converts it to
 -- blaze-HTML.
 mdToHTML :: Text -> H.Html
 mdToHTML contents = markdown def contents

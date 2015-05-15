@@ -16,8 +16,7 @@ privacyResponse privacyContents =
    ok $ toResponse $
     masterTemplate "Courseography - Privacy Policy"
                 [H.meta ! A.name "keywords"
-                        ! A.content "",
-                 privacyLinks
+                        ! A.content ""
                 ]
                 (do
                     header "privacy"
@@ -30,7 +29,7 @@ privacyResponse privacyContents =
 privacyHtml :: Text -> H.Html
 privacyHtml contents = H.div ! A.id "privacyDiv" $ mdToHTML contents
 
--- | mdToHTML takes in the contents of a file written in Mark Down and converts it to 
+-- | mdToHTML takes in the contents of a file written in Mark Down and converts it to
 -- blaze-HTML.
 mdToHTML :: Text -> H.Html
 mdToHTML contents = markdown def contents

@@ -15,8 +15,7 @@ graphResponse =
    ok $ toResponse $
     masterTemplate "Courseography - Graph"
                 [H.meta ! A.name "keywords"
-                        ! A.content "",
-                 plannerLinks
+                        ! A.content ""
                 ]
                 (do header "graph"
                     H.div ! A.id "container" $ do

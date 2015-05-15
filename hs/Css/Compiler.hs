@@ -2,43 +2,33 @@
 
 module Css.Compiler where
 
-import Clay
-import Prelude hiding ((**))
-import Data.Text.Lazy
-import System.Directory
-import Css.Common
-import Css.Graph
-import Css.Post
-import Css.Timetable
-import Css.Draw
-import Css.About
-import Css.Privacy
-import Css.FourOhFour
-import Css.Search
+import Prelude hiding ((**), writeFile)
+import Clay (renderWith, compact)
+import Data.Text.Lazy.IO (writeFile)
+import Css.Common (common)
+import Css.Graph (graphStyles)
+import Css.Post (postStyles)
+import Css.Timetable (timetableStyles)
+import Css.Draw (drawStyles)
+import Css.About (aboutStyles)
+import Css.Privacy (privacyStyles)
+import Css.FourOhFour (fourOhFourStyles)
+import Css.Search (searchStyles)
 import Config (genCssPath)
-
-styleFiles :: [(String, Css)]
-styleFiles = [
-    (genCssPath ++ "common/common.css", common),
-    (genCssPath ++ "graph/graph_styles.css", graphStyles),
-    (genCssPath ++ "grid/timetable_styles.css", timetableStyles),
-    (genCssPath ++ "draw/draw_styles.css", drawStyles),
-    (genCssPath ++ "post/post_styles.css", postStyles),
-    (genCssPath ++ "common/about.css", aboutStyles),
-    (genCssPath ++ "common/privacy.css", privacyStyles),
-    (genCssPath ++ "common/four_oh_four.css", fourOhFourStyles),
-    (genCssPath ++ "search/search_styles.css", searchStyles)
-    ]
-
-renderStyleFile :: (String, Css) -> IO ()
-renderStyleFile (path, css) = writeFile path $ unpack $ render css
+import System.Directory (createDirectoryIfMissing)
 
 compileCSS :: IO ()
 compileCSS = do
-    createDirectoryIfMissing True $ genCssPath ++ "common"
-    createDirectoryIfMissing True $ genCssPath ++ "graph"
-    createDirectoryIfMissing True $ genCssPath ++ "grid"
-    createDirectoryIfMissing True $ genCssPath ++ "draw"
-    createDirectoryIfMissing True $ genCssPath ++ "post"
-    createDirectoryIfMissing True $ genCssPath ++ "search"
-    Prelude.foldl1 (>>) $ Prelude.map renderStyleFile styleFiles
+    createDirectoryIfMissing True genCssPath
+    let cssText = renderWith compact [] $ foldl1 (>>) [
+                      common,
+                      graphStyles,
+                      timetableStyles,
+                      drawStyles,
+                      postStyles,
+                      aboutStyles,
+                      privacyStyles,
+                      fourOhFourStyles,
+                      searchStyles
+                      ]
+    writeFile (genCssPath ++ "app.css") cssText

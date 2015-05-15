@@ -15,8 +15,7 @@ searchResponse =
     ok $ toResponse $
         masterTemplate "Courseography - Timetable Search"
                     [H.meta ! A.name "keywords"
-                            ! A.content "",
-                            searchLinks
+                            ! A.content ""
                     ]
                     (do header "search"
                         H.div ! A.id "content" $ ""
