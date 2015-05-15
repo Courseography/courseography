@@ -17,7 +17,6 @@ import qualified Data.ByteString.Char8 as BS
 import Database.Persist.Sqlite
 import Network.HTTP.Client.MultipartFormData
 import Network (withSocketsDo)
-import Config (fbdbStr)
 
 courseographyUrl :: T.Text
 courseographyUrl = "http://localhost:8000"
@@ -30,6 +29,10 @@ testPostUrl = T.append courseographyUrl "/test-post"
 
 postFB :: T.Text
 postFB = "post-fb"
+
+-- | The name of the \'fbdatabase\' that isn't actually used anymore.
+fbdbStr :: T.Text
+fbdbStr = "fdatabase1.sqlite3"
 
 appId :: T.Text
 appId = "432140593606098"
