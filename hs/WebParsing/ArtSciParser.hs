@@ -5,11 +5,12 @@ import Network.HTTP
 import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Match
 import Database.Persist.Sqlite
+import Database.JsonParser
 import Data.List
 import qualified Data.Text as T
 import Database.Tables
 import WebParsing.ParsingHelp
-import Database.JsonParser
+import Config (dbStr)
 
 fasCalendarURL :: String
 fasCalendarURL = "http://www.artsandscience.utoronto.ca/ofr/calendar/"

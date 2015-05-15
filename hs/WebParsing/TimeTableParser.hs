@@ -14,6 +14,7 @@ import Database.JsonParser
 import WebParsing.HtmlTable
 import WebParsing.ParsingHelp
 import WebParsing.TimeConverter
+import Config (dbStr)
 
 -- | used as an intermediate container while extracting lecture and tutorial information
 -- from the table. Is is later converted into lecture or tutorial records by examinig the

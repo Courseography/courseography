@@ -15,25 +15,16 @@ module Database.JsonParser (insertCourse,
                     insertLec,
                     insertTut,
                     setTutEnrol,
-                    setPracEnrol,
-                    dbStr,
-                    fbdbStr) where
+                    setPracEnrol) where
 
 import qualified Data.Text as T
 
 import Control.Monad.IO.Class (MonadIO)
 import Control.Monad.Trans.Reader (ReaderT)
 import Data.Maybe (fromMaybe)
+
 import Database.Persist.Sqlite (insert_, SqlBackend, (=.), (==.), updateWhere)
 import Database.Tables
-
--- | The name of the \'fbdatabase\' that isn't actually used anymore.
-fbdbStr :: T.Text
-fbdbStr = "fdatabase1.sqlite3"
-
--- | The path to the database file, relative to @hs/@.
-dbStr :: T.Text
-dbStr = "Database/database2015.sqlite3"
 
 -- | Inserts course into the Courses table.
 insertCourse :: MonadIO m => Course -> ReaderT SqlBackend m ()

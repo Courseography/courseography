@@ -11,7 +11,6 @@ import qualified Data.Conduit.List as CL
 import Data.Conduit
 import Database.Persist
 import ImageConversion
-import Database.JsonParser
 import GraphResponse
 import Database.Tables
 import qualified Data.ByteString.Char8 as BS
@@ -30,6 +29,10 @@ testPostUrl = T.append courseographyUrl "/test-post"
 
 postFB :: T.Text
 postFB = "post-fb"
+
+-- | The name of the \'fbdatabase\' that isn't actually used anymore.
+fbdbStr :: T.Text
+fbdbStr = "fdatabase1.sqlite3"
 
 appId :: T.Text
 appId = "432140593606098"

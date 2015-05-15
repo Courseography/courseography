@@ -16,7 +16,7 @@ import qualified Data.Conduit.List as CL
 import Data.Int
 import Data.Conduit
 import qualified Data.Text.Internal as TI
-import Database.JsonParser
+import Config (dbStr)
 
 -- | Insert a new graph into the database, returning the key of the new graph.
 insertGraph :: String   -- ^ The title of the graph that is being inserted.

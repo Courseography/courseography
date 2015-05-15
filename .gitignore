@@ -7,6 +7,9 @@ cabal.sandbox.config
 *.sqlite3-shm
 *.sqlite3-wal
 
+# chosen configuration file
+/hs/Config.hs
+
 # generated build files
 /hs/dist/
 
