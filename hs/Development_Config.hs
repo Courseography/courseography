@@ -8,7 +8,10 @@ When the project is deployed to the production environment, this file should be 
 containing the production values.
 -}
 
-module Config (dbStr, markdownPath, graphPath, genCssPath) where
+module Config (dbStr,
+               markdownPath,
+               graphPath,
+               genCssPath) where
 
 import Data.Text (Text)
 
