@@ -37,6 +37,7 @@ parsePrebuiltSvgs :: IO ()
 parsePrebuiltSvgs = do
     performParse "Computer Science" "csc2015.svg"
     performParse "Statistics" "sta2015.svg"
+    performParse "Biochemistry" "bch2015.svg"
 
 performParse :: String -- ^ The title of the graph.
              -> String -- ^ The filename of the file that will be parsed.
