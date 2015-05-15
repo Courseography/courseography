@@ -22,6 +22,7 @@ import System.Environment (lookupEnv)
 import System.IO (hSetBuffering, stdout, stderr, BufferMode(LineBuffering))
 import System.Log.Logger (logM, updateGlobalLogger, rootLoggerName, setLevel, Priority(INFO))
 import CourseographyFacebook
+import Config (markdownPath)
 import qualified Data.Text.Lazy.IO as LazyIO
 
 -- | log access requests using hslogger and a condensed log formatting
@@ -48,8 +49,8 @@ runServer = do
     redirectUrlGraphEmail <- retrieveAuthURL testUrl
     redirectUrlGraphPost <- retrieveAuthURL testPostUrl
     let staticDir = encodeString (parent $ decodeString cwd) ++ "public/"
-    aboutContents <- LazyIO.readFile "../README.md"
-    privacyContents <- LazyIO.readFile "../PRIVACY.md"
+    aboutContents <- LazyIO.readFile $ markdownPath ++ "README.md"
+    privacyContents <- LazyIO.readFile $ markdownPath ++ "PRIVACY.md"
 
     -- Bind server to PORT environment variable if provided
     portStr <- lookupEnv "PORT"
