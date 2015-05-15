@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Css.DrawCss where
+module Css.Draw where
 
 import Clay
 import Prelude hiding ((**))

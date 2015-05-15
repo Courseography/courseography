@@ -1,20 +1,20 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Css.CssGen where
+module Css.Compiler where
 
 import Clay
 import Prelude hiding ((**))
 import Data.Text.Lazy
 import System.Directory
-import Css.CommonCss
-import Css.GraphCss
-import Css.PostCss
-import Css.TimetableCss
-import Css.DrawCss
-import Css.AboutCss
-import Css.PrivacyCss
-import Css.FourOhFourCss
-import Css.SearchCss
+import Css.Common
+import Css.Graph
+import Css.Post
+import Css.Timetable
+import Css.Draw
+import Css.About
+import Css.Privacy
+import Css.FourOhFour
+import Css.Search
 import Config (genCssPath)
 
 styleFiles :: [(String, Css)]
@@ -33,8 +33,8 @@ styleFiles = [
 renderStyleFile :: (String, Css) -> IO ()
 renderStyleFile (path, css) = writeFile path $ unpack $ render css
 
-generateCSS :: IO ()
-generateCSS = do
+compileCSS :: IO ()
+compileCSS = do
     createDirectoryIfMissing True $ genCssPath ++ "common"
     createDirectoryIfMissing True $ genCssPath ++ "graph"
     createDirectoryIfMissing True $ genCssPath ++ "grid"

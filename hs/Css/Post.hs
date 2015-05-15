@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Css.PostCss where
+module Css.Post where
 
 import Clay
 import Prelude hiding ((**))
@@ -18,11 +18,11 @@ postStyles = do
 
 tabsCSS :: Css
 tabsCSS = do
-    "#posts" & do 
+    "#posts" & do
         fontFamily ["HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", "Lucida Grande"][sansSerif]
         fontSize $ (px 17)
         width $ pct 97
-        backgroundColor white 
+        backgroundColor white
         border solid (px 1) grey2
         "border-radius" -: "4px"
         "box-shadow" -: "0 2px 2px -1px rgba(0, 0, 0, 0.055)"
@@ -45,7 +45,7 @@ tabsCSS = do
                 ":hover" & do
                     "background-color" -: "#9C9C9C !important"
                     a ? do
-                        "color" -: "white !important" 
+                        "color" -: "white !important"
                 a ? do
                     color black
                     display inlineBlock
@@ -54,7 +54,7 @@ tabsCSS = do
                     width (pct 70)
                     textDecoration none
 
-postCSS :: Css   
+postCSS :: Css
 postCSS = do
     "input" ? do
         fontSize (px 14)
@@ -62,7 +62,7 @@ postCSS = do
         textAlign $ alignSide sideCenter
         height (px 50)
         paddingLeft (px 20)
-    "#update" ? do 
+    "#update" ? do
         height (px 40)
         fontSize (px 14)
         cursor pointer
@@ -100,7 +100,7 @@ postCSS = do
         width (pct 97)
     "#spec_creds, #maj_creds, #min_creds" ? do
         display inlineBlock
-        marginLeft nil 
+        marginLeft nil
         color red
     ".more-info" ? do
         cursor pointer
@@ -128,4 +128,4 @@ postCSS = do
         height $ (px 40)
     "#notes" ? do
         textAlign $ alignSide sideCenter
-    
+

@@ -4,7 +4,7 @@ import System.IO (stderr, hPutStrLn)
 import System.Environment (getArgs)
 import Data.Maybe (fromMaybe)
 import Data.List (intercalate)
-import Css.CssGen (generateCSS)
+import Css.Compiler (compileCSS)
 import qualified Data.Map.Strict as Map
 
 -- internal dependencies
@@ -17,7 +17,7 @@ taskNamesToTasks = Map.fromList [
     ("server", runServer),
     ("database", setupDatabase),
     ("graphs", parsePrebuiltSvgs),
-    ("css", generateCSS)]
+    ("css", compileCSS)]
 
 getTask :: String -> Maybe (IO ())
 getTask taskName = Map.lookup taskName taskNamesToTasks
