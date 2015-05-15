@@ -47,9 +47,9 @@
      inkscape:window-height="738"
      id="namedview3675"
      showgrid="false"
-     inkscape:zoom="256"
-     inkscape:cx="396.9871"
-     inkscape:cy="0.26888021"
+     inkscape:zoom="8"
+     inkscape:cx="569.02645"
+     inkscape:cy="339.84609"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
@@ -2824,13 +2824,13 @@
   <text
      xml:space="preserve"
      style="font-size:16px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Sans"
-     x="525.51074"
+     x="523.60541"
      y="178.34361"
      id="text3683"
      sodipodi:linespacing="125%"><tspan
        sodipodi:role="line"
        id="tspan3685"
-       x="525.51074"
+       x="523.60541"
        y="178.34361"
        style="font-size:18px">Introductory</tspan></text>
   <text
@@ -2898,4 +2898,21 @@
      id="path4972-1"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="ccccc" />
+  <text
+     xml:space="preserve"
+     style="font-size:16px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;display:inline;font-family:Sans"
+     x="538.27026"
+     y="232.61636"
+     id="text3699-17-1"
+     sodipodi:linespacing="125%"><tspan
+       sodipodi:role="line"
+       x="538.27026"
+       y="232.61636"
+       style="font-size:18px"
+       id="tspan3380-4">Lecture</tspan><tspan
+       sodipodi:role="line"
+       x="538.27026"
+       y="255.11636"
+       style="font-size:18px"
+       id="tspan3386">Courses</tspan></text>
 </svg>
