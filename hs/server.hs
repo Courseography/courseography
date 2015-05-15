@@ -15,7 +15,6 @@ import SearchResponse
 import AboutResponse
 import PrivacyResponse
 import Database.CourseQueries (retrieveCourse, allCourses, queryGraphs, courseInfo, deptList)
-import Css.CssGen
 import Filesystem.Path.CurrentOS
 import System.Directory
 import System.Environment (lookupEnv)
@@ -44,7 +43,6 @@ runServer = do
     -- Set log level to INFO so requests are logged to stdout
     updateGlobalLogger rootLoggerName $ setLevel INFO
 
-    generateCSS
     cwd <- getCurrentDirectory
     redirectUrlGraphEmail <- retrieveAuthURL testUrl
     redirectUrlGraphPost <- retrieveAuthURL testPostUrl
