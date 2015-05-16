@@ -11,9 +11,11 @@ containing the production values.
 module Config (dbStr,
                markdownPath,
                graphPath,
-               genCssPath) where
+               genCssPath,
+               cssStyle) where
 
 import Data.Text (Text)
+import qualified Clay.Render as Clay
 
 -- DATABASE CONNECTION STRINGS
 
@@ -34,3 +36,10 @@ graphPath = "../public/res/graphs/"
 -- | The relative path to the directory containing all of the generated CSS files.
 genCssPath :: String
 genCssPath = "../public/style/"
+
+-- ASSET COMPILATION
+
+-- | Output css style. Either @Clay.pretty@ for human-readable output or
+-- @Clay.compact@ for minified output.
+cssStyle :: Clay.Config
+cssStyle = Clay.pretty

@@ -14,13 +14,13 @@ import Css.About (aboutStyles)
 import Css.Privacy (privacyStyles)
 import Css.FourOhFour (fourOhFourStyles)
 import Css.Search (searchStyles)
-import Config (genCssPath)
+import Config (genCssPath, cssStyle)
 import System.Directory (createDirectoryIfMissing)
 
 compileCSS :: IO ()
 compileCSS = do
     createDirectoryIfMissing True genCssPath
-    let cssText = renderWith compact [] $ foldl1 (>>) [
+    let cssText = renderWith cssStyle [] $ foldl1 (>>) [
                       common,
                       graphStyles,
                       timetableStyles,
