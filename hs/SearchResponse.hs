@@ -14,9 +14,7 @@ searchResponse :: ServerPart Response
 searchResponse =
     ok $ toResponse $
         masterTemplate "Courseography - Timetable Search"
-                    [H.meta ! A.name "keywords"
-                            ! A.content ""
-                    ]
+                    []
                     (do header "search"
                         H.div ! A.id "content" $ ""
                     )

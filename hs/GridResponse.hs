@@ -14,9 +14,7 @@ gridResponse :: ServerPart Response
 gridResponse =
     ok $ toResponse $
         masterTemplate "Courseography - Grid"
-            [H.meta ! A.name "keywords"
-                    ! A.content ""
-            ]
+            []
             (do  header "grid"
                  conflictDialog
                  createTag H.div "" "row main" $ do

@@ -14,9 +14,7 @@ postResponse :: ServerPart Response
 postResponse =
     ok $ toResponse $
         masterTemplate "Courseography - Check My POSt!"
-                    [H.meta ! A.name "keywords"
-                            ! A.content ""
-                    ]
+                    []
                     (do header "post"
                         checkPost
                     )

@@ -14,9 +14,7 @@ drawResponse :: ServerPart Response
 drawResponse =
    ok $ toResponse $
     masterTemplate "Courseography - Draw!"
-                [H.meta ! A.name "keywords"
-                        ! A.content ""
-                ]
+                []
                 (do
                     header "draw"
                     drawHtml

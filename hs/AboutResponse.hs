@@ -15,9 +15,7 @@ aboutResponse :: Text -> ServerPart Response
 aboutResponse aboutContents =
    ok $ toResponse $
     masterTemplate "Courseography - About"
-                [H.meta ! A.name "keywords"
-                        ! A.content ""
-                ]
+                []
                 (do
                     header "about"
                     aboutHtml aboutContents

@@ -15,9 +15,7 @@ privacyResponse :: Text -> ServerPart Response
 privacyResponse privacyContents =
    ok $ toResponse $
     masterTemplate "Courseography - Privacy Policy"
-                [H.meta ! A.name "keywords"
-                        ! A.content ""
-                ]
+                []
                 (do
                     header "privacy"
                     privacyHtml privacyContents
