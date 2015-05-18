@@ -12,7 +12,7 @@ var major = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledText
              'textboxes400': 1, 'textboxesExtra': 3, 'categories': 13, 'creditCount': 0, 'name': 'major'};
 var minor = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxesExtra': 0,
              'reqs': ['CSC108', 'CSC148', 'CSC165240', 'CSC207', 'CSC236240'], 'textboxesExtra': 3, 'categories': 6,
-             'creditCount': 0, 'additionalMin200': ['CSC209', 'CSC258', 'CSC263253'], 'name': 'minor'};
+             'creditCount': 0, 'additionalMin200': ['CSC209', 'CSC258', 'CSC263265'], 'name': 'minor'};
 
 
 /**
@@ -74,7 +74,7 @@ function resetValues() {
                  'textboxes400': 1, 'textboxesExtra': 3, 'categories': 13, 'creditCount': 0, 'name': 'major'};
     var minor = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxesExtra': 0,
                  'reqs': ['CSC108', 'CSC148', 'CSC165240', 'CSC207', 'CSC236240'], 'textboxesExtra': 3, 'categories': 6,
-                 'creditCount': 0, 'additionalMin200': ['CSC209', 'CSC258', 'CSC263253'], 'name': 'minor'};
+                 'creditCount': 0, 'additionalMin200': ['CSC209', 'CSC258', 'CSC263265'], 'name': 'minor'};
 }
 
 
