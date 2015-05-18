@@ -228,3 +228,4 @@ convertTimeToString :: [Double] -> [T.Text]
 convertTimeToString [day, time] =
   [T.pack . show . floor $ day,
    T.replace "." "-" . T.pack . show $ time]
+convertTimeToString [_, _] = error "Pattern matching convertTimeToString"

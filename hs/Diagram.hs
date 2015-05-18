@@ -45,6 +45,7 @@ makeTimeCell s =
 makeRow :: [String] -> Diagram B
 makeRow (x:xs) = (# centerX) . hcat $
     makeTimeCell x : vrule 0.8 # lw thin : map makeCell xs
+makeRow [] = error "Pattern matching makeRow []"
 
 rowBorder :: Diagram B
 rowBorder = hrule 12 # lw thin # lc grey

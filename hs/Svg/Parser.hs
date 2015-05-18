@@ -286,6 +286,7 @@ updateShape fill transform r =
                               Hybrid   -> Hybrid
                               BoolNode -> BoolNode
                               Node     -> Node
+                              Region   -> error "Pattern matching updateShape Region"
       }
 
 updateText :: Point -- ^ Transform that will be added to the input Shape's

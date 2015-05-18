@@ -67,6 +67,8 @@ buildRect texts entity idCounter =
         id_ = case shapeType_ entity of
               Hybrid -> "h" ++ show idCounter
               Node -> map toLower $ sanitize textString
+              BoolNode -> error "Pattern matching buildRect BoolNode"
+              Region -> error "Pattern matching buildRect Region"
     in
         entity {shapeId_ = id_,
                 shapeText = rectTexts,
