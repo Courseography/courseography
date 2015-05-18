@@ -47,6 +47,7 @@ getDeptList tags =
     isHref [("href", _)] = True
     isHref _ = False
     getAttribute (TagOpen _ [(_, link)]) = link
+    getAttribute _ = error "Pattern matching getDeptList getAttribute"
 
 -- | if a row contains "NOTE" we add 3 empty 'cells' to the beginning
 --used to deal with corner case found in "csc.html"

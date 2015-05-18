@@ -169,6 +169,8 @@ rectToSVG styled courseMap rect
             class_ = case shapeType_ rect of
                          Node -> "node"
                          Hybrid -> "hybrid"
+                         BoolNode -> error "Pattern matching rectToSVG BoolNode"
+                         Region -> error "Pattern matching rectToSVG Region"
         in S.g ! A.id_ (stringValue $ toId $ shapeId_ rect)
                ! A.class_ (stringValue class_)
                ! S.customAttribute "data-group" (stringValue

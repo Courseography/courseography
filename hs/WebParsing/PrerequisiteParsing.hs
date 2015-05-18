@@ -45,6 +45,7 @@ toPreExprs str expr  =
                             then toPreExprs after (expr ++ before)
                             else (expr++before):(toPreExprs after "")
     (before, ";", after) -> (expr++before):(toPreExprs after "")
+    (_, _, _) -> error "Pattern matching toPreExprs case"
 
 -- | attempts to match a course in given string. returns (before, course, after)
 -- if no match occurs (input, "", "")

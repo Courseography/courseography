@@ -65,6 +65,7 @@ OUTPUT: True if reg can match tagtext
 tagContains :: [T.Text] -> Tag T.Text -> Bool
 tagContains matches (TagText tagtext) =
   True == foldl (\bool match -> or [(T.isInfixOf match tagtext), bool]) False matches
+tagContains _ _ = error "Pattern matching tagContains"
 
 
 --converts all open and closing tags to lowercase.
@@ -165,7 +166,9 @@ preProcess tags =
   in map cleanText removeEnrol
   where
     cleanText (TagText s) = TagText (replaceAll ["\r\n                    ", "\n                    ","\160","\194","\r\n"] "" s)
+    cleanText _ = error "Pattern matching preProcess cleanText"
     isntUseless (TagText s) = not $ T.all (\c -> or [(c == ' '), (c =='\n')]) s
+    isntUseless _ = error "Pattern matching preProcess isntUseless"
 
 parseDescription :: CoursePart -> CoursePart
 parseDescription (tags, course) =

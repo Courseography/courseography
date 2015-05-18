@@ -68,7 +68,9 @@ parseTitleFAS (tag:tags, course) =
     let (n, t) = T.splitAt 8 $ removeTitleGarbage $ removeLectureSection tag
     in (tags, course {title = Just t, name =  n})
     where removeLectureSection (TagText s) = T.takeWhile (/= '[') s
+          removeLectureSection _ = error "Pattern matching parseTitleFAS removeLectureSection"
           removeTitleGarbage s = replaceAll ["\160"] "" s
+parseTitleFAS ([], _) = error "Pattern matching parseTitleFAS ([], _)"
 
 -- |takes a list of tags representing a single course, and returns a course Record
 processCourseToData :: [Tag T.Text] ->  Course
