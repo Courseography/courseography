@@ -31,52 +31,8 @@ makeA id class_ href target content = H.a ! A.id id ! A.class_ class_ ! A.href h
 jQuery :: H.Html
 jQuery = makeScript "https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"
 
-timetableLinks :: H.Html
-timetableLinks = concatHtml (map stylesheet ["//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css",
-                                         "static/style/grid/timetable_styles.css",
-                                         "static/style/graph/graph_styles.css",
-                                         "static/style/common/common.css"])
-
-plannerLinks :: H.Html
-plannerLinks = concatHtml (map stylesheet ["//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css",
-                                       "static/style/graph/graph_styles.css",
-                                       "//vjs.zencdn.net/4.12/video-js.css",
-                                       "static/style/common/common.css"])
-
-aboutLinks :: H.Html
-aboutLinks = concatHtml (map stylesheet ["//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css",
-                                       "static/style/common/about.css",
-                                       "static/style/common/common.css"])
-
-privacyLinks :: H.Html
-privacyLinks = concatHtml (map stylesheet ["//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css",
-                                       "static/style/common/privacy.css",
-                                       "static/style/common/common.css"])
-
-drawLinks :: H.Html
-drawLinks = concatHtml (map stylesheet ["//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css",
-                                       "static/style/graph/graph_styles.css",
-                                       "static/style/common/common.css",
-                                       "static/style/draw/draw_styles.css"])
-
-postLinks :: H.Html
-postLinks = concatHtml (map stylesheet ["//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css",
-                                        "static/style/post/post_styles.css",
-                                        "static/style/common/common.css"])
-
-fourOhFourLinks :: H.Html
-fourOhFourLinks = concatHtml (map stylesheet ["//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css",
-                                              "static/style/common/common.css",
-                                              "static/style/common/four_oh_four.css"])
-
-searchLinks :: H.Html
-searchLinks = concatHtml (map stylesheet ["//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css",
-                                          "static/style/common/common.css",
-                                          "static/style/search/search_styles.css"])
-
 concatHtml :: [H.Html] -> H.Html
 concatHtml html = sequence_ html
-
 
 concatSVG :: [S.Svg] -> S.Svg
 concatSVG svg = sequence_ svg
