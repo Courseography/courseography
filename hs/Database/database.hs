@@ -12,8 +12,8 @@ module Database.Database (setupDatabase) where
 
 import Database.Persist.Sqlite (runSqlite, runMigration, insert_)
 import Database.Tables
-import Database.JsonParser (dbStr)
 import WebParsing.ParseAll (parseAll)
+import Config (dbStr)
 
 -- | Main function for setting up the database with course information.
 --

@@ -31,25 +31,28 @@ import Database.DataType
 import Svg.Database
 import Svg.Generator
 import Database.Persist.Sqlite hiding (replace)
+import Config (graphPath)
 
 parsePrebuiltSvgs :: IO ()
 parsePrebuiltSvgs = do
     performParse "Computer Science" "csc2015.svg"
     performParse "Statistics" "sta2015.svg"
+    performParse "Biochemistry" "bch2015.svg"
 
 performParse :: String -- ^ The title of the graph.
              -> String -- ^ The filename of the file that will be parsed.
              -> IO ()
 performParse graphTitle inputFilename =
-   do graphFile <- readFile ("../public/res/graphs/" ++ inputFilename)
+   do graphFile <- readFile (graphPath ++ inputFilename)
       key <- insertGraph graphTitle
       let parsedGraph = parseGraph key graphFile
           PersistInt64 keyVal = toPersistValue key
       print "Graph Parsed"
       insertElements parsedGraph
       print "Graph Inserted"
-      createDirectoryIfMissing True "../public/res/graphs/gen"
-      buildSVG key M.empty ("../public/res/graphs/gen/" ++ show keyVal ++ ".svg") False
+      let genGraphPath = graphPath ++ "gen/"
+      createDirectoryIfMissing True genGraphPath
+      buildSVG key M.empty (genGraphPath ++ show keyVal ++ ".svg") False
       print "Success"
 
 

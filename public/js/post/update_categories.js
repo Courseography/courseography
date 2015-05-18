@@ -13,7 +13,7 @@ function updateReqsCategory(post, name) {
             activateCourse(post.reqs[i]);
             updateCategory(category, 'fulfilled');
             post.categoriesCompleted += 1;
-            post.creditCount += (post.reqs[i] === 'Calc1') ? 1 : 0.5;
+            post.creditCount += (post.reqs[i] === 'MAT135136137157Calc1') ? 1 : 0.5;
         }
 
         // If the category is not completed

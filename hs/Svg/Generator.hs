@@ -18,7 +18,6 @@ import Database.DataType
 import Control.Monad.IO.Class (liftIO)
 import Database.Persist.Sqlite
 import Data.List hiding (map, filter)
-import Database.JsonParser
 import MakeElements
 import Data.Maybe (fromMaybe)
 import qualified Data.Text as T
@@ -31,6 +30,7 @@ import Text.Blaze (toMarkup)
 import Css.Constants
 import qualified Data.Map.Strict as M
 import Data.Monoid (mempty)
+import Config (dbStr)
 
 -- | This is the main function that retrieves a stored graph
 -- from the database and creates a new SVG file for it.

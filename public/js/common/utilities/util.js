@@ -27,6 +27,15 @@ function removeFromArray(item, array) {
     return index;
 }
 
+/* URL Utilities */
+/**
+ * Gets the value of a parameter in the query string by name.
+ * @param name The name of the parameter to retrieve.
+ * @returns {string|null} The value of the parameter as a string, or null if it does not exist.
+ */
+function getURLParameter(name) {
+    return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null
+}
 
 /* These specifically manipulate the two global arrays,
 courseObjects and selectedSections. */
