@@ -241,11 +241,13 @@ function updateMatCreditCount() {
     var majExtra = $('#majextra')[0].getElementsByTagName('input');
 
     for (var k = 0; k < 4; k++) {
-        if (specExtra[k].value.indexOf('MAT') > -1 || specExtra[k].value.indexOf('STA') > -1) {
+        if (specExtra[k].value.indexOf('MAT') > -1 || specExtra[k].value.indexOf('STA') > -1
+            || specExtra[k].value.indexOf('CSC49') > -1) {
             specialist.creditCount += 0.5;
             specialist.filledTextboxesExtra += 1;
         }
-        if (k < 3 && (majExtra[k].value.indexOf('MAT') > -1 || majExtra[k].value.indexOf('STA') > -1)) {
+        if (k < 3 && (majExtra[k].value.indexOf('MAT') > -1 || majExtra[k].value.indexOf('STA') > -1
+            || majExtra[k].value.indexOf('CSC49') > -1)) {
             major.creditCount += 0.5;
             major.filledTextboxesExtra += 1;
         }

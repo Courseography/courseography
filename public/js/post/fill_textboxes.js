@@ -146,12 +146,14 @@ function fillExtra() {
     for (var k = 0; k < 4; k++) {
 
         // Clear text boxes
-        if (specExtra[k].value.indexOf('MAT') === -1 && specExtra[k].value.indexOf('STA') === -1) {
+        if (specExtra[k].value.indexOf('MAT') === -1 && specExtra[k].value.indexOf('STA') === -1
+            && specExtra[k].value.indexOf('CSC49') === -1) {
             specExtra[k].value = '';
             specExtra[k].disabled = false;
         }
         if (k < 3) {
-            if (majExtra[k].value.indexOf('MAT') === -1 && majExtra[k].value.indexOf('STA') === -1) {
+            if (majExtra[k].value.indexOf('MAT') === -1 && majExtra[k].value.indexOf('STA') === -1
+                && majExtra[k].value.indexOf('CSC49') === -1) {
                 majExtra[k].value = '';
                 majExtra[k].disabled = false;
             }
@@ -192,14 +194,14 @@ function fillMisc() {
     var majInq = $('#maj_misc')[0].getElementsByTagName('input');
 
     // Clear textboxes
-    if (specInq[0].value.indexOf('PEY') === -1) {
+    if (specInq[0].value.indexOf('PEY') === -1 && specInq[0].value.indexOf('CSC49') === -1) {
         specInq[0].value = '';
         specInq[0].disabled = false;
     } else {
         specialist.activeInq = 1;
     }
 
-    if (majInq[0].value.indexOf('PEY') === -1) {
+    if (majInq[0].value.indexOf('PEY') === -1 && majInq[0].value.indexOf('CSC49') === -1) {
         majInq[0].value = '';
         majInq[0].disabled = false;
     } else {
