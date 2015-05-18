@@ -13,7 +13,6 @@ import Control.Monad.IO.Class  (liftIO)
 import Database.Persist.Sqlite
 import Database.Tables
 import qualified Data.Conduit.List as CL
-import Data.Int
 import Data.Conduit
 import qualified Data.Text.Internal as TI
 import Database.JsonParser

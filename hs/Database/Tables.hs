@@ -29,7 +29,6 @@ import Database.DataType
 import qualified Data.Text as T
 import qualified Data.Vector as V
 import Data.Aeson
-import Data.Int
 
 -- | A data type representing a list of times for a course.
 data Time = Time { timeField :: [Double] } deriving (Show, Read, Eq)

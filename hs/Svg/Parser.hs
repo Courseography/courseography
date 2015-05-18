@@ -18,7 +18,6 @@ directly to the client when viewing the @/graph@ page.
 module Svg.Parser (parsePrebuiltSvgs) where
 
 import Data.Maybe (mapMaybe, fromMaybe)
-import Data.Int
 import Data.List.Split (splitOn)
 import Data.List (find)
 import qualified Data.Map as M (empty)

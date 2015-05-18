@@ -18,7 +18,6 @@ import Database.DataType
 import Control.Monad.IO.Class (liftIO)
 import Database.Persist.Sqlite
 import Data.List hiding (map, filter)
-import Data.Int
 import Database.JsonParser
 import MakeElements
 import Data.Maybe (fromMaybe)
@@ -83,8 +82,8 @@ buildSVG gId courseMap filename styled =
                                                     styled
         liftIO $ writeFile filename stringSVG
     where
-        keyAsInt :: PersistEntity a => Entity a -> Int64
-        keyAsInt = (\(PersistInt64 x) -> x) . head . keyToValues . entityKey
+        keyAsInt :: PersistEntity a => Entity a -> Integer
+        keyAsInt = fromIntegral . (\(PersistInt64 x) -> x) . head . keyToValues . entityKey
 
         convertSelectionToStyle :: String -> String
         convertSelectionToStyle courseStatus =
