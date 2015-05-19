@@ -88,13 +88,15 @@ function fill400s() {
 
     // Clear textboxes
     for (var i = 0; i < 3; i++) {
-        if (spec400s[i].value.indexOf('CSC49') === -1) {
-            spec400s[i].value = '';
-            if (i < 1 && maj400s[i].value.indexOf('CSC49') === -1) {
-                maj400s[i].value = '';
-            }
-        } else {
+        if (spec400s[i].value.indexOf('CSC49') !== -1) {
             activeCourses.push(spec400s[i].value);
+        }
+        spec400s[i].value = '';
+        if (i < 1) {
+            if (maj400s[i].value.indexOf('CSC49') !== -1) {
+                activeCourses.push(spec400s[i].value);
+            }  
+            maj400s[i].value = '';
         }
     }
 
