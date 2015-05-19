@@ -3,12 +3,12 @@ var specialist = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'fille
                   'filledTextboxes400': 0, 'filledTextboxesExtra': 0, 'specCount': 0,
                   'reqs': ['CSC108', 'CSC148', 'CSC165240', 'CSC207', 'CSC209', 'CSC236240', 'CSC258', 
                   'CSC263265', 'STA247255257Sta1', 'MAT221223240Lin1', 'MAT135136137157Calc1', 'CSC369', 
-                  'CSC373'], 'textboxes300': 3, 'textboxes400': 3,
+                  'CSC373'], 'textboxes300': 3, 'textboxes400': 3, 'extraTypedNextBox': 0,
                   'textboxesExtra': 4, 'categories': 17, 'creditCount': 0, 'name': 'specialist'};
 var major = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0,
              'filledTextboxes400': 0, 'filledTextboxesExtra': 0, 'majCount': 0, 'reqs': ['CSC108',
              'CSC148', 'CSC165240', 'CSC207', 'CSC236240', 'CSC258', 'CSC263265', 'STA247255257Sta1', 
-             'MAT135136137157Calc1'], 'textboxes300': 2,
+             'MAT135136137157Calc1'], 'textboxes300': 2, 'extraTypedNextBox': 0,
              'textboxes400': 1, 'textboxesExtra': 3, 'categories': 13, 'creditCount': 0, 'name': 'major'};
 var minor = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxesExtra': 0,
              'reqs': ['CSC108', 'CSC148', 'CSC165240', 'CSC207', 'CSC236240'], 'textboxesExtra': 3, 'categories': 6,
@@ -61,20 +61,20 @@ function resetValues() {
     'use strict';
 
     activeCourses = [];
-    var specialist = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0,
+    specialist = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0,
                   'filledTextboxes400': 0, 'filledTextboxesExtra': 0, 'specCount': 0,
                   'reqs': ['CSC108', 'CSC148', 'CSC165240', 'CSC207', 'CSC209', 'CSC236240', 'CSC258', 
                   'CSC263265', 'STA247255257Sta1', 'MAT221223240Lin1', 'MAT135136137157Calc1', 'CSC369', 
-                  'CSC373'], 'textboxes300': 3, 'textboxes400': 3,
+                  'CSC373'], 'textboxes300': 3, 'textboxes400': 3, 'extraTypedNextBox': 0,
                   'textboxesExtra': 4, 'categories': 17, 'creditCount': 0, 'name': 'specialist'};
-    var major = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0,
-                 'filledTextboxes400': 0, 'filledTextboxesExtra': 0, 'majCount': 0, 'reqs': ['CSC108',
-                 'CSC148', 'CSC165240', 'CSC207', 'CSC236240', 'CSC258', 'CSC263265', 'STA247255257Sta1', 
-                 'MAT135136137157Calc1'], 'textboxes300': 2,
-                 'textboxes400': 1, 'textboxesExtra': 3, 'categories': 13, 'creditCount': 0, 'name': 'major'};
-    var minor = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxesExtra': 0,
-                 'reqs': ['CSC108', 'CSC148', 'CSC165240', 'CSC207', 'CSC236240'], 'textboxesExtra': 3, 'categories': 6,
-                 'creditCount': 0, 'additionalMin200': ['CSC209', 'CSC258', 'CSC263253'], 'name': 'minor'};
+    major = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0,
+             'filledTextboxes400': 0, 'filledTextboxesExtra': 0, 'majCount': 0, 'reqs': ['CSC108',
+             'CSC148', 'CSC165240', 'CSC207', 'CSC236240', 'CSC258', 'CSC263265', 'STA247255257Sta1', 
+             'MAT135136137157Calc1'], 'textboxes300': 2, 'extraTypedNextBox': 0,
+             'textboxes400': 1, 'textboxesExtra': 3, 'categories': 13, 'creditCount': 0, 'name': 'major'};
+    minor = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxesExtra': 0,
+             'reqs': ['CSC108', 'CSC148', 'CSC165240', 'CSC207', 'CSC236240'], 'textboxesExtra': 3, 'categories': 6,
+             'creditCount': 0, 'additionalMin200': ['CSC209', 'CSC258', 'CSC263253'], 'name': 'minor'};
 }
 
 
@@ -240,7 +240,7 @@ function updateMatCreditCount() {
     var specExtra = $('#specextra')[0].getElementsByTagName('input');
     var majExtra = $('#majextra')[0].getElementsByTagName('input');
 
-    for (var k = 0; k < 4; k++) {
+    for (var k = specialist.extraTypedNextBox; k < 4; k++) {
         if (specExtra[k].value.indexOf('MAT') > -1 || specExtra[k].value.indexOf('STA') > -1
             || specExtra[k].value.indexOf('CSC49') > -1) {
             specialist.creditCount += 0.5;
