@@ -56,11 +56,17 @@ function fill300s() {
 
     // Clear textboxes
     for (var i = 0; i < 3; i++) {
+         if (spec300s[i].value.indexOf('CSC49') !== -1 
+            && activeCourses.indexOf(spec300s[i].value) === -1) {
+            activeCourses.push(spec300s[i].value);
+        }
         spec300s[i].value = '';
-        spec300s[i].disabled = true;
         if (i < 2) {
+            if (maj300s[i].value.indexOf('CSC49') !== -1
+                && activeCourses.indexOf(maj300s[i].value) === -1) {
+                activeCourses.push(maj300s[i].value);
+            }  
             maj300s[i].value = '';
-            maj300s[i].disabled = true;
         }
     }
 
