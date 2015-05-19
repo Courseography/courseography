@@ -88,11 +88,13 @@ function fill400s() {
 
     // Clear textboxes
     for (var i = 0; i < 3; i++) {
-        spec400s[i].value = '';
-        spec400s[i].disabled = true;
-        if (i < 1) {
-            maj400s[i].value = '';
-            maj400s[i].disabled = true;
+        if (spec400s[i].value.indexOf('CSC49') === -1) {
+            spec400s[i].value = '';
+            if (i < 1 && maj400s[i].value.indexOf('CSC49') === -1) {
+                maj400s[i].value = '';
+            }
+        } else {
+            activeCourses.push(spec400s[i].value);
         }
     }
 
