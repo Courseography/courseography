@@ -6,8 +6,8 @@ function updateFCECount() {
 
     totalFCEs = 0; 
 
-    FCEs = FCEs100 + FCEs200 + FCEs300 + FCEs400 + FCEsMAT;
-    setCookie(getCookie('active-graph') + '-fce', FCEs);
+    currentFCEs = currentFCEs100 + currentFCEs200 + currentFCEs300 + currentFCEs400 + currentFCEsMAT;
+    setCookie(getCookie('active-graph') + '-fce', currentFCEs);
 
     for (var i = 0; i < graphs.length; i++) {
         var fce = getCookie(graphs[i].gId + '-fce');
@@ -38,14 +38,14 @@ function updateClickedCourses(name, active) {
     }
 
     if (math.indexOf(name) > -1) {
-        FCEsMAT += diff;
+        currentFCEsMAT += diff;
     } else if (name.charAt(3) === '1') {
-        FCEs100 += diff;
+        currentFCEs100 += diff;
     } else if (name.charAt(3) === '2') {
-        FCEs200 += diff;
+        currentFCEs200 += diff;
     } else if (name.charAt(3) === '3') {
-        FCEs300 += diff;
+        currentFCEs300 += diff;
     } else if (name.charAt(3) === '4') {
-        FCEs400 += diff;
+        currentFCEs400 += diff;
     }
 }
