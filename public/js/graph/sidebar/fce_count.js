@@ -17,8 +17,6 @@ function updateFCECount() {
         totalFCEs += parseFloat(fce);
     }
 
-    $('#FCEcount').html(totalFCEs.toFixed(1));
-
 }
 
 

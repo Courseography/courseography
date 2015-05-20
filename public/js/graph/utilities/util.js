@@ -190,14 +190,15 @@ function reset() {
     }
 
     // Clear FCE count and 'Check My POSt!' tab
-    FCEs = 0;
-    FCEs100 = 0;
-    FCEs200 = 0;
-    FCEs300 = 0;
-    FCEs400 = 0;
-    FCEsMAT = 0;
+    currentFCEs = 0;
+    currentFCEs100 = 0;
+    currentFCEs200 = 0;
+    currentFCEs300 = 0;
+    currentFCEs400 = 0;
+    currentFCEsMAT = 0;
     clickedCourses = [];
-    $('#FCEcount').html('0.0');
+    updateFCECount();
+    fillFCECount();
 
     $('input:checkbox').attr('checked', false);
     $('input:text').attr('value', '');
