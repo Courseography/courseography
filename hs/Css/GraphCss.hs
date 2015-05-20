@@ -9,7 +9,7 @@ import Css.Constants
 
 {- graphStyles
  - Generates all CSS for the graph page. -}
-
+graphStyles :: Css
 graphStyles = do
     graphContainer
     sidebarCSS
@@ -21,7 +21,7 @@ graphStyles = do
 
 {- nodeCSS
  - Generates CSS for nodes in the graph. -}
-
+nodeCSS :: Css
 nodeCSS = "g" ? do
     "text" ? do
         userSelect none
@@ -64,8 +64,8 @@ nodeCSS = "g" ? do
             "text" <? do
                 fullyVisible
         "data-active" @= "unlit" & do
-            wideStroke
-            strokeRed
+            "rect" <?
+                faded
         "data-active" @= "unselected" & do
             "rect" <? do
                 wideStroke
@@ -132,7 +132,7 @@ nodeCSS = "g" ? do
 {- pathCSS
  - Generates CSS for paths between nodes
  - in the graph. -}
-
+pathCSS :: Css
 pathCSS = "path" ? do
     fill "none"
     "data-active" @= "takeable" & do
@@ -154,7 +154,7 @@ pathCSS = "path" ? do
 {- resetCSS
  - Generates CSS for the reset feature
  - in the graph. -}
-
+resetCSS :: Css
 resetCSS = "#resetButton" ? do
     fill "#990000"
     cursor pointer
@@ -166,7 +166,7 @@ resetCSS = "#resetButton" ? do
 {- graphContainer
  - Generates CSS for the main division of
  - the page containing the graph. -}
-
+graphContainer :: Css
 graphContainer = do
     "#graph" ? do
         width (px 1195)
@@ -186,6 +186,7 @@ graphContainer = do
         "stroke-miterlimit" -: "10"
         "shape-rendering" -: "geometricPrecision"
 
+sidebarCSS :: Css
 sidebarCSS = do
     "#fce" ? do
         height (px 40)
@@ -331,7 +332,7 @@ sidebarCSS = do
 
 {- titleCSS
  - Generates CSS for the title. -}
-
+titleCSS :: Css
 titleCSS = "#svgTitle" ? do
     fontSize $ em 2.5
     fontWeight bold
@@ -341,7 +342,7 @@ titleCSS = "#svgTitle" ? do
 
 {- regionCSS
  - Generates CSS for focus regions in the graph. -}
-
+regionCSS :: Css
 regionCSS = do
     "#region-labels > text" ? do
         "text-anchor" -: "start"

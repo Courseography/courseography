@@ -12,19 +12,22 @@ import Css.PostCss
 import Css.TimetableCss
 import Css.DrawCss
 import Css.AboutCss
+import Css.PrivacyCss
 import Css.FourOhFourCss
 import Css.SearchCss
+import Config (genCssPath)
 
 styleFiles :: [(String, Css)]
 styleFiles = [
-    ("../public/style/common/common.css", common),
-    ("../public/style/graph/graph_styles.css", graphStyles),
-    ("../public/style/grid/timetable_styles.css", timetableStyles),
-    ("../public/style/draw/draw_styles.css", drawStyles),
-    ("../public/style/post/post_styles.css", postStyles),
-    ("../public/style/common/about.css", aboutStyles),
-    ("../public/style/common/four_oh_four.css", fourOhFourStyles),
-    ("../public/style/search/search_styles.css", searchStyles)
+    (genCssPath ++ "common/common.css", common),
+    (genCssPath ++ "graph/graph_styles.css", graphStyles),
+    (genCssPath ++ "grid/timetable_styles.css", timetableStyles),
+    (genCssPath ++ "draw/draw_styles.css", drawStyles),
+    (genCssPath ++ "post/post_styles.css", postStyles),
+    (genCssPath ++ "common/about.css", aboutStyles),
+    (genCssPath ++ "common/privacy.css", privacyStyles),
+    (genCssPath ++ "common/four_oh_four.css", fourOhFourStyles),
+    (genCssPath ++ "search/search_styles.css", searchStyles)
     ]
 
 renderStyleFile :: (String, Css) -> IO ()
@@ -32,10 +35,10 @@ renderStyleFile (path, css) = writeFile path $ unpack $ render css
 
 generateCSS :: IO ()
 generateCSS = do
-    createDirectoryIfMissing True "../public/style/common"
-    createDirectoryIfMissing True "../public/style/graph"
-    createDirectoryIfMissing True "../public/style/grid"
-    createDirectoryIfMissing True "../public/style/draw"
-    createDirectoryIfMissing True "../public/style/post"
-    createDirectoryIfMissing True "../public/style/search"
+    createDirectoryIfMissing True $ genCssPath ++ "common"
+    createDirectoryIfMissing True $ genCssPath ++ "graph"
+    createDirectoryIfMissing True $ genCssPath ++ "grid"
+    createDirectoryIfMissing True $ genCssPath ++ "draw"
+    createDirectoryIfMissing True $ genCssPath ++ "post"
+    createDirectoryIfMissing True $ genCssPath ++ "search"
     Prelude.foldl1 (>>) $ Prelude.map renderStyleFile styleFiles

@@ -63,3 +63,4 @@ disclaimer =
         " take precedence over the information presented here. "
         "It's important that you double-check your course selection, "
         "prerequisites, and your program plans."
+        "Some graph edges may represent a corequisite rather than a prerequisite."

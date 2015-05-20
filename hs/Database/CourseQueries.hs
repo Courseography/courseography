@@ -1,5 +1,12 @@
 {-# LANGUAGE ScopedTypeVariables, OverloadedStrings #-}
 
+{-|
+Description: Respond to various requests involving database course information.
+
+This module contains the functions that perform different database queries
+and serve the information back to the client.
+-}
+
 module Database.CourseQueries (retrieveCourse,
                                returnCourse,
                                allCourses,
@@ -14,52 +21,56 @@ import Database.Persist.Sqlite
 import Database.Tables as Tables
 import Control.Monad.IO.Class (liftIO, MonadIO)
 import JsonResponse
-import Database.JsonParser
-import Happstack.Server
 import qualified Data.Text as T
 import WebParsing.ParsingHelp
 import Data.String.Utils
 import Data.List
+import Config (dbStr)
 
+-- ** Querying a single course
+
+-- | Takes a course code (e.g. \"CSC108H1\") and sends a JSON representation
+-- of the course as a response.
 retrieveCourse :: String -> ServerPart Response
 retrieveCourse course =
     liftIO $ queryCourse (T.pack course)
 
--- | Queries the database for all information about `course`, constructs a JSON object
---   representing the course and returns the appropriate JSON response.
+-- | Queries the database for all information about @course@, constructs a JSON object
+-- representing the course and returns the appropriate JSON response.
 queryCourse :: T.Text -> IO Response
 queryCourse str = do
     courseJSON <- returnCourse str
     return $ createJSONResponse courseJSON
 
--- | Queries the database for all information about `course`, constructs and returns a Course Record.
+-- | Queries the database for all information about @course@,
+-- constructs and returns a Course value.
 returnCourse :: T.Text -> IO Course
-returnCourse lowerStr =
-    runSqlite dbStr $ do
-        let courseStr = T.toUpper lowerStr
-        sqlCourse :: [Entity Courses] <- selectList [CoursesCode ==. courseStr] []
-
-        sqlLecturesFall    :: [Entity Lectures]   <- selectList [LecturesCode  ==. courseStr,
-                                                                 LecturesSession ==. "F"] []
-        sqlLecturesSpring  :: [Entity Lectures]   <- selectList [LecturesCode  ==. courseStr,
-                                                                 LecturesSession ==. "S"] []
-        sqlLecturesYear    :: [Entity Lectures]   <- selectList [LecturesCode  ==. courseStr,
-                                                                 LecturesSession ==. "Y"] []
-        sqlTutorialsFall   :: [Entity Tutorials]  <- selectList [TutorialsCode ==. courseStr,
-                                                                 TutorialsSession ==. "F"] []
-        sqlTutorialsSpring :: [Entity Tutorials]  <- selectList [TutorialsCode ==. courseStr,
-                                                                 TutorialsSession ==. "S"] []
-        sqlTutorialsYear   :: [Entity Tutorials]  <- selectList [TutorialsCode ==. courseStr,
-                                                                 TutorialsSession ==. "Y"] []
-        let fallSession   = buildSession sqlLecturesFall sqlTutorialsFall
-            springSession = buildSession sqlLecturesSpring sqlTutorialsSpring
-            yearSession   = buildSession sqlLecturesYear sqlTutorialsYear
-        if null sqlCourse
-        then return emptyCourse
-        else return (buildCourse fallSession springSession yearSession (entityVal $ head sqlCourse))
+returnCourse lowerStr = runSqlite dbStr $ do
+    let courseStr = T.toUpper lowerStr
+    sqlCourse :: [Entity Courses] <- selectList [CoursesCode ==. courseStr] []
+    -- TODO: Just make one query for all lectures, then partition later.
+    -- Same for tutorials.
+    sqlLecturesFall    :: [Entity Lectures]   <- selectList
+        [LecturesCode  ==. courseStr, LecturesSession ==. "F"] []
+    sqlLecturesSpring  :: [Entity Lectures]   <- selectList
+        [LecturesCode  ==. courseStr, LecturesSession ==. "S"] []
+    sqlLecturesYear    :: [Entity Lectures]   <- selectList
+        [LecturesCode  ==. courseStr, LecturesSession ==. "Y"] []
+    sqlTutorialsFall   :: [Entity Tutorials]  <- selectList
+        [TutorialsCode ==. courseStr, TutorialsSession ==. "F"] []
+    sqlTutorialsSpring :: [Entity Tutorials]  <- selectList
+        [TutorialsCode ==. courseStr, TutorialsSession ==. "S"] []
+    sqlTutorialsYear   :: [Entity Tutorials]  <- selectList
+        [TutorialsCode ==. courseStr, TutorialsSession ==. "Y"] []
+    let fallSession   = buildSession sqlLecturesFall sqlTutorialsFall
+        springSession = buildSession sqlLecturesSpring sqlTutorialsSpring
+        yearSession   = buildSession sqlLecturesYear sqlTutorialsYear
+    if null sqlCourse
+    then return emptyCourse
+    else return (buildCourse fallSession springSession yearSession (entityVal $ head sqlCourse))
 
 -- | Builds a Course structure from a tuple from the Courses table.
---   Some fields still need to be added in.
+-- Some fields still need to be added in.
 buildCourse :: Maybe Session -> Maybe Session -> Maybe Session -> Courses -> Course
 buildCourse fallSession springSession yearSession course =
     Course (coursesBreadth course)
@@ -75,6 +86,7 @@ buildCourse fallSession springSession yearSession course =
            (coursesManualPracticalEnrolment course)
            (coursesDistribution course)
            (coursesPrereqs course)
+           (coursesCoreqs course)
 
 -- | Builds a Lecture structure from a tuple from the Lectures table.
 buildLecture :: Lectures -> Lecture
@@ -95,13 +107,16 @@ buildTutorial entity =
              (map timeField (tutorialsTimes entity))
              (tutorialsTimeStr entity)
 
--- | Builds a Session structure from a list of tuples from the Lectures table, and a list of tuples from the Tutorials table.
+-- | Builds a Session structure from a list of tuples from the Lectures table,
+-- and a list of tuples from the Tutorials table.
 buildSession :: [Entity Lectures] -> [Entity Tutorials] -> Maybe Tables.Session
 buildSession lectures tutorials =
     Just $ Tables.Session (map (buildLecture . entityVal) lectures)
                           (map (buildTutorial . entityVal) tutorials)
 
--- | Build a list of all course codes in the database
+-- ** Other queries
+
+-- | Builds a list of all course codes in the database.
 allCourses :: IO Response
 allCourses = do
   response <- runSqlite dbStr $ do
@@ -110,17 +125,17 @@ allCourses = do
       return $ T.unlines codes
   return $ toResponse response
 
--- | Return all course info for a given department
+-- | Returns all course info for a given department.
 courseInfo :: String -> ServerPart Response
 courseInfo dept = do
       (getDeptCourses dept) >>=
         (\courses -> return $ createJSONResponse courses)
 
--- | returns all courses for a given department
+-- | Returns all courses for a given department.
 getDepartment :: String -> IO [Course]
 getDepartment str = getDeptCourses str
 
--- | Return all course info for a given department
+-- | Returns all course info for a given department.
 getDeptCourses :: MonadIO m => String -> m [Course]
 getDeptCourses dept = do
     response <- liftIO $ runSqlite dbStr $ do
@@ -149,7 +164,7 @@ getDeptCourses dept = do
             Just $ Tables.Session (map buildLecture lectures)
                                   (map buildTutorial tutorials)
 
--- | Return a list of all departments
+-- | Return a list of all departments.
 deptList :: IO Response
 deptList = do
     depts <- runSqlite dbStr $ do
@@ -160,7 +175,7 @@ deptList = do
         f = take 3 . T.unpack . coursesCode . entityVal
 
 -- | Queries the graphs table and returns a JSON response of Graph JSON
---   objects.
+-- objects.
 queryGraphs :: IO Response
 queryGraphs =
     runSqlite dbStr $

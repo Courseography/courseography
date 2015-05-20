@@ -4,17 +4,13 @@ module WebParsing.ArtSciParser (parseArtSci, getDeptList, fasCalendarURL) where
 import Network.HTTP
 import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Match
-import Database.Persist
 import Database.Persist.Sqlite
+import Database.JsonParser
 import Data.List
 import qualified Data.Text as T
-import qualified Data.Text.IO as B
-import Data.List.Utils
-import Data.Maybe
 import Database.Tables
 import WebParsing.ParsingHelp
-import Database.JsonParser
-import Database.CourseQueries
+import Config (dbStr)
 
 fasCalendarURL :: String
 fasCalendarURL = "http://www.artsandscience.utoronto.ca/ofr/calendar/"

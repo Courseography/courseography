@@ -47,6 +47,12 @@ aboutLinks :: H.Html
 aboutLinks = concatHtml (map stylesheet ["//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css",
                                        "static/style/common/about.css",
                                        "static/style/common/common.css"])
+
+privacyLinks :: H.Html
+privacyLinks = concatHtml (map stylesheet ["//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css",
+                                       "static/style/common/privacy.css",
+                                       "static/style/common/common.css"])
+
 drawLinks :: H.Html
 drawLinks = concatHtml (map stylesheet ["//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css",
                                        "static/style/graph/graph_styles.css",

@@ -9,7 +9,7 @@ import Css.Constants
 
 {- timetableStyles
  - Generates all CSS required for the timetable page. -}
-
+timetableStyles :: Css
 timetableStyles = do
     body ? do
         overflowX hidden
@@ -26,7 +26,7 @@ timetableStyles = do
 {- searchCss
  - Generates CSS for the search box on
  - the timetable page. -}
-
+searchCSS :: Css
 searchCSS = do
     "#search-layout" ? do
         backgroundColor purple1
@@ -70,7 +70,7 @@ searchCSS = do
 
 {- timetableCSS
  - Generates CSS for the timetable. -}
-
+timetableCSS :: Css
 timetableCSS = do
     ".timetable-container" ? do
         backgroundColor white -- purple2
@@ -160,7 +160,7 @@ timetableCSS = do
 {- conflictNotificationStyle
  - Generates CSS when a conflict arises
  - in the timetable. -}
-
+conflictNotificationStyle :: Css
 conflictNotificationStyle = "#dialog" ? do
     position fixed
     backgroundColor white
@@ -174,7 +174,7 @@ conflictNotificationStyle = "#dialog" ? do
 {- courseSelectCSS
  - Generates CSS for the course selection
  - sidebar. -}
-
+courseSelectCSS :: Css
 courseSelectCSS = do
     "#course-select-wrapper" ? do
         margin0
@@ -264,7 +264,7 @@ courseSelectCSS = do
 
 {- tdColours
  - Generates CSS to colour the timetable. -}
-
+tdColours :: Css
 tdColours = ".timetable " ?  do
     td ? do
         ".hover-time" & do
@@ -293,7 +293,7 @@ tdColours = ".timetable " ?  do
 {- infoCSS
  - Generates CSS for the info block that describes
  - the currently selected course in the timetable. -}
-
+infoCSS :: Css
 infoCSS = "#info-layout" ? do
     padding0
     margin0

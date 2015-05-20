@@ -6,7 +6,6 @@ import Diagrams.Prelude
 import Diagrams.Backend.SVG.CmdLine
 import Diagrams.Backend.SVG
 import Data.List
-import Text.Blaze.Svg.Renderer.String as Svg
 import Data.List.Utils (replace)
 import Data.List.Split (splitOn)
 import Lucid (renderText)
@@ -58,7 +57,7 @@ renderTable filename courses session = do
     let courseTable = partition5 $ splitOn "_" courses
     print courseTable
     let g = makeTable (zipWith (:) times courseTable) session
-    let svg = renderDia SVG (SVGOptions (mkWidth 600) [] "") g
+    let svg = renderDia SVG (SVGOptions (mkWidth 600) Nothing "") g
     let txt = replace "16.0em" "16.0px" $ unpack $ renderText svg
     writeFile filename txt
     where
