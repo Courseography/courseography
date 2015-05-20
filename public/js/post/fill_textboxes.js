@@ -56,8 +56,8 @@ function fill300s() {
 
     // Clear textboxes
     for (var i = 0; i < 3; i++) {
-         if (spec300s[i].value.indexOf('CSC49') !== -1 
-            && activeCourses.indexOf(spec300s[i].value) === -1) {
+         if (spec300s[i].value.indexOf('CSC49') !== -1 && 
+            activeCourses.indexOf(spec300s[i].value) === -1) {
             activeCourses.push(spec300s[i].value);
         }
         spec300s[i].value = '';
@@ -94,14 +94,14 @@ function fill400s() {
 
     // Clear textboxes
     for (var i = 0; i < 3; i++) {
-        if (spec400s[i].value.indexOf('CSC49') !== -1 
-            && activeCourses.indexOf(spec400s[i].value) === -1) {
+        if (spec400s[i].value.indexOf('CSC49') !== -1 && 
+            activeCourses.indexOf(spec400s[i].value) === -1) {
             activeCourses.push(spec400s[i].value);
         }
         spec400s[i].value = '';
         if (i < 1) {
-            if (maj400s[i].value.indexOf('CSC49') !== -1
-                && activeCourses.indexOf(maj400s[i].value) === -1) {
+            if (maj400s[i].value.indexOf('CSC49') !== -1 && 
+                activeCourses.indexOf(maj400s[i].value) === -1) {
                 activeCourses.push(maj400s[i].value);
             }  
             maj400s[i].value = '';
@@ -158,14 +158,14 @@ function fillExtra() {
     for (var k = 0; k < 4; k++) {
 
         // Clear text boxes
-        if (specExtra[k].value.indexOf('MAT') === -1 && specExtra[k].value.indexOf('STA') === -1
-            && specExtra[k].value.indexOf('CSC49') === -1) {
+        if (specExtra[k].value.indexOf('MAT') === -1 && specExtra[k].value.indexOf('STA') === -1 && 
+            specExtra[k].value.indexOf('CSC49') === -1) {
             specExtra[k].value = '';
             specExtra[k].disabled = false;
         }
         if (k < 3) {
-            if (majExtra[k].value.indexOf('MAT') === -1 && majExtra[k].value.indexOf('STA') === -1
-                && majExtra[k].value.indexOf('CSC49') === -1) {
+            if (majExtra[k].value.indexOf('MAT') === -1 && majExtra[k].value.indexOf('STA') === -1 && 
+                majExtra[k].value.indexOf('CSC49') === -1) {
                 majExtra[k].value = '';
                 majExtra[k].disabled = false;
             }
