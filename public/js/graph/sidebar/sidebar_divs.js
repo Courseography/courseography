@@ -64,8 +64,7 @@ function fillFCECount() {
     'use strict';
 
     $('#fcecount').show();
-    $('#fcecount').html('FCE Count: ' + totalFCEs.toFixed(1) + ' (' + 
-        currentFCEs.toFixed(1) + ')');
+    $('#fcecount').html('FCE Count: ' + currentFCEs.toFixed(1));
 }
 
 
