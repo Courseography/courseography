@@ -130,7 +130,7 @@ checkPost =
             H.div ! A.id "spec_misc" $ do 
                 H.p ! A.class_ "code" $ H.em $ "Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H, \
                                                 \CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H, or PEY (0.5 FCEs) \  
-                                                \ ** Note: Type 'PEY' for Check my POSt to recognize it **" 
+                                                \ ** Note: Type 'PEY' or 'CSC49*' for Check my POSt to recognize it **" 
                 H.div ! A.class_ "more-info" $ 
                     H.input ! A.type_ "text"
             H.h3 "Notes"
@@ -204,7 +204,7 @@ checkPost =
             H.div ! A.id "maj_misc" $ do
                 H.p ! A.class_ "code" $ H.em $ "Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H, \
                                                 \CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H, or PEY (0.5 FCEs) \  
-                                                \ ** Note: Type 'PEY' for Check my POSt to recognize it **" 
+                                                \ ** Note: Type 'PEY' or 'CSC49*' for Check my POSt to recognize it **" 
                 H.div ! A.class_ "more-info" $ 
                     H.input ! A.type_ "text" 
             H.h3 "Notes"
