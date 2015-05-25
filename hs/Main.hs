@@ -4,6 +4,7 @@ import System.IO (stderr, hPutStrLn)
 import System.Environment (getArgs)
 import Data.Maybe (fromMaybe)
 import Data.List (intercalate)
+import Css.Compiler (compileCSS)
 import qualified Data.Map.Strict as Map
 
 -- internal dependencies
@@ -12,9 +13,11 @@ import Database.Database (setupDatabase)
 import Svg.Parser (parsePrebuiltSvgs)
 
 taskNamesToTasks :: Map.Map String (IO ())
-taskNamesToTasks = Map.fromList [("server", runServer),
-                                 ("database", setupDatabase),
-                                 ("graphs", parsePrebuiltSvgs)]
+taskNamesToTasks = Map.fromList [
+    ("server", runServer),
+    ("database", setupDatabase),
+    ("graphs", parsePrebuiltSvgs),
+    ("css", compileCSS)]
 
 getTask :: String -> Maybe (IO ())
 getTask taskName = Map.lookup taskName taskNamesToTasks

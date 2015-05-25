@@ -14,19 +14,16 @@ postResponse :: ServerPart Response
 postResponse =
     ok $ toResponse $
         masterTemplate "Courseography - Check My POSt!"
-                    [H.meta ! A.name "keywords"
-                            ! A.content "",
-                            postLinks
-                    ]
+                    []
                     (do header "post"
                         checkPost
                     )
                     postScripts
 
 checkPost :: H.Html
-checkPost = 
+checkPost =
     H.html $ do
-        H.head $ 
+        H.head $
             H.title "Check My Post!"
         H.nav ! A.id "posts" $ H.ul $ do
             H.li ! A.id "specialist" $ do
@@ -38,17 +35,17 @@ checkPost =
             H.li ! A.id "minor" $ do
                 H.a ! A.href "" $ "Minor"
                 H.div ! A.id "min_creds" $ "(0/4.0)"
-        H.div ! A.id "button_wrapper" $ 
+        H.div ! A.id "button_wrapper" $
             H.button ! A.id "update" $ "Update POSts"
         H.div ! A.id "div_specialist" $ do
             H.h2 "First Year"
             H.div ! A.id "spec_csc108" $ do
                 H.p ! A.class_ "code" $ "CSC108H"
-                H.div ! A.class_ "more-info" $ 
+                H.div ! A.class_ "more-info" $
                     H.p ! A.class_ "full_name CSC108" $ "CSC108H (Introduction to Computer Programming)"
             H.div ! A.id "spec_csc148" $ do
                 H.p ! A.class_ "code" $ "CSC148H"
-                H.div ! A.class_ "more-info" $ 
+                H.div ! A.class_ "more-info" $
                     H.p ! A.class_ "full_name CSC148" $ "CSC148H (Introduction to Computer Science)"
             H.div ! A.id "spec_csc165240" $ do
                 H.p ! A.class_ "code" $ "CSC165H or CSC240H"
@@ -65,15 +62,15 @@ checkPost =
             H.h2 "Second Year"
             H.div ! A.id "spec_csc207" $ do
                 H.p ! A.class_ "code" $ "CSC207H"
-                H.div ! A.class_ "more-info" $ 
+                H.div ! A.class_ "more-info" $
                     H.p ! A.class_ "full_name CSC207" $ "CSC207H (Software Design)"
             H.div ! A.id "spec_csc209" $ do
                 H.p ! A.class_ "code" $ "CSC209H"
-                H.div ! A.class_ "more-info" $ 
+                H.div ! A.class_ "more-info" $
                     H.p ! A.class_ "full_name CSC209" $ "CSC209H (Software Tools And System Programming)"
             H.div ! A.id "spec_csc258" $ do
                 H.p ! A.class_ "code" $ "CSC258H"
-                H.div ! A.class_ "more-info" $ 
+                H.div ! A.class_ "more-info" $
                     H.p ! A.class_ "full_name CSC258" $ "CSC258H (Computer Organization)"
             H.div ! A.id "spec_csc236240" $ do
                 H.p ! A.class_ "code" $ "CSC236H or CSC240H"
@@ -100,51 +97,51 @@ checkPost =
             H.h2 "Later Years"
             H.div ! A.id "spec_csc369" $ do
                 H.p ! A.class_ "code" $ "CSC369H"
-                H.div ! A.class_ "more-info" $ 
+                H.div ! A.class_ "more-info" $
                     H.p ! A.class_ "full_name CSC369" $ "CSC369H (Operating Systems)"
             H.div ! A.id "spec_csc373" $ do
                 H.p ! A.class_ "code" $ "CSC373H"
-                H.div ! A.class_ "more-info" $ 
+                H.div ! A.class_ "more-info" $
                         H.p ! A.class_ "full_name CSC373" $ "CSC373H (Algorithm Design, Analysis, and Complexity)"
             H.div ! A.id "spec_400" $ do
                 H.p ! A.class_ "code" $ "Any 400-level CSC course, BCB410H, BCB420H, BCB430Y, ECE489H (1.5 FCEs)"
                 H.div ! A.id "spec400" ! A.class_ "more-info" $ do
-                    H.input ! A.type_ "text" 
-                    H.input ! A.type_ "text"  
-                    H.input ! A.type_ "text" 
-            H.div ! A.id "spec_300" $ do 
+                    H.input ! A.type_ "text"
+                    H.input ! A.type_ "text"
+                    H.input ! A.type_ "text"
+            H.div ! A.id "spec_300" $ do
                 H.p ! A.class_ "code" $ "Any 300+ level CSC course, BCB410H, BCB420H, BCB430Y, ECE385H, ECE489H (1.5 FCEs)"
                 H.div ! A.id "spec300" ! A.class_ "more-info" $ do
-                    H.input ! A.type_ "text" 
                     H.input ! A.type_ "text"
-                    H.input ! A.type_ "text" 
+                    H.input ! A.type_ "text"
+                    H.input ! A.type_ "text"
             H.div ! A.id "spec_extra" $ do
                 H.p ! A.class_ "code" $ "Any 300+ level CSC course, BCB/ECE/MAT/STA course (2.0 FCEs) - \
                                          \MAT: 224, 235/237/257, any 300+ except for 329, 390, & 391 \
-                                         \; STA: 248, 261, any 300+" 
+                                         \; STA: 248, 261, any 300+"
                 H.div ! A.id "specextra" ! A.class_ "more-info" $ do
                     H.input ! A.type_ "text"
                     H.input ! A.type_ "text"
                     H.input ! A.type_ "text"
                     H.input ! A.type_ "text"
-            H.div ! A.id "spec_misc" $ do 
+            H.div ! A.id "spec_misc" $ do
                 H.p ! A.class_ "code" $ H.em $ "Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H, \
-                                                \CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H, or PEY (0.5 FCEs) \  
-                                                \ ** Note: Type 'PEY' for Check my POSt to recognize it **" 
-                H.div ! A.class_ "more-info" $ 
+                                                \CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H, or PEY (0.5 FCEs) \
+                                                \ ** Note: Type 'PEY' for Check my POSt to recognize it **"
+                H.div ! A.class_ "more-info" $
                     H.input ! A.type_ "text"
             H.h3 "Notes"
-            H.div ! A.id "notes" $ 
-                H.p "- No more than 1.0 FCE from CSC490H1, CSC491H1, CSC494H1, CSC495H1, BCB430Y1 may be used to fulfill program requirements" 
+            H.div ! A.id "notes" $
+                H.p "- No more than 1.0 FCE from CSC490H1, CSC491H1, CSC494H1, CSC495H1, BCB430Y1 may be used to fulfill program requirements"
         H.div ! A.id "div_major" $ do
             H.h2 "First Year"
             H.div ! A.id "maj_csc108" $ do
                 H.p ! A.class_ "code" $ "CSC108H"
-                H.div ! A.class_ "more-info" $ 
+                H.div ! A.class_ "more-info" $
                     H.p ! A.class_ "full_name CSC108" $ "CSC108H (Introduction to Computer Programming)"
             H.div ! A.id "maj_csc148" $ do
                 H.p ! A.class_ "code" $ "CSC148H"
-                H.div ! A.class_ "more-info" $ 
+                H.div ! A.class_ "more-info" $
                     H.p ! A.class_ "full_name CSC148" $ "CSC148H (Introduction to Computer Science)"
             H.div ! A.id "maj_csc165240" $ do
                 H.p ! A.class_ "code" $ "CSC165H or CSC240H"
@@ -161,11 +158,11 @@ checkPost =
             H.h2 "Second Year"
             H.div ! A.id "maj_csc207" $ do
                 H.p ! A.class_ "code" $ "CSC207H"
-                H.div ! A.class_ "more-info" $ 
+                H.div ! A.class_ "more-info" $
                     H.p ! A.class_ "full_name CSC207" $ "CSC207H (Software Design)"
             H.div ! A.id "maj_csc258" $ do
                 H.p ! A.class_ "code" $ "CSC258H"
-                H.div ! A.class_ "more-info" $ 
+                H.div ! A.class_ "more-info" $
                     H.p ! A.class_ "full_name CSC258" $ "CSC258H (Computer Organization)"
             H.div ! A.id "maj_csc236240" $ do
                 H.p ! A.class_ "code" $ "CSC236H or CSC240H"
@@ -186,39 +183,39 @@ checkPost =
             H.h2 "Later Years"
             H.div ! A.id "maj_400" $ do
                 H.p ! A.class_ "code" $ "Any 400-level CSC course, BCB410H, BCB420H, BCB430Y (0.5 FCEs)"
-                H.div ! A.id "maj400" ! A.class_ "more-info" $ 
-                    H.input ! A.type_ "text" 
+                H.div ! A.id "maj400" ! A.class_ "more-info" $
+                    H.input ! A.type_ "text"
             H.div ! A.id "maj_300" $ do
                 H.p ! A.class_ "code" $ "Any 300+ level CSC course, BCB410H, BCB420H, BCB430Y, ECE385H, ECE489H (1.0 FCEs)"
                 H.div ! A.id "maj300" ! A.class_ "more-info" $ do
-                    H.input ! A.type_ "text"  
-                    H.input ! A.type_ "text" 
+                    H.input ! A.type_ "text"
+                    H.input ! A.type_ "text"
             H.div ! A.id "maj_extra" $ do
-                H.p ! A.class_ "code" $ "Any 300+ level CSC course, BCB/ECE/MAT/STA course (1.5 FCEs) - \ 
-                                         \MAT: 221/223/240, 224, 235/237/257, any 300+ except for 329, 390, & 391 \ 
-                                         \; STA: 248, 261, any 300+" 
+                H.p ! A.class_ "code" $ "Any 300+ level CSC course, BCB/ECE/MAT/STA course (1.5 FCEs) - \
+                                         \MAT: 221/223/240, 224, 235/237/257, any 300+ except for 329, 390, & 391 \
+                                         \; STA: 248, 261, any 300+"
                 H.div ! A.id "majextra" ! A.class_ "more-info" $ do
                     H.input ! A.type_ "text"
                     H.input ! A.type_ "text"
                     H.input ! A.type_ "text"
             H.div ! A.id "maj_misc" $ do
                 H.p ! A.class_ "code" $ H.em $ "Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H, \
-                                                \CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H, or PEY (0.5 FCEs) \  
-                                                \ ** Note: Type 'PEY' for Check my POSt to recognize it **" 
-                H.div ! A.class_ "more-info" $ 
-                    H.input ! A.type_ "text" 
+                                                \CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H, or PEY (0.5 FCEs) \
+                                                \ ** Note: Type 'PEY' for Check my POSt to recognize it **"
+                H.div ! A.class_ "more-info" $
+                    H.input ! A.type_ "text"
             H.h3 "Notes"
-            H.div ! A.id "notes" $ 
+            H.div ! A.id "notes" $
                 H.p "- No more than 1.0 FCE from CSC490H1, CSC491H1, CSC494H1, CSC495H1, BCB430Y1 may be used to fulfill program requirements"
         H.div ! A.id "div_minor" $ do
             H.h2 "First Year"
             H.div ! A.id "min_csc108" $ do
                 H.p ! A.class_ "code" $ "CSC108H"
-                H.div ! A.class_ "more-info" $ 
+                H.div ! A.class_ "more-info" $
                     H.p ! A.class_ "full_name CSC108" $ "CSC108H (Introduction to Computer Programming)"
             H.div ! A.id "min_csc148" $ do
                 H.p ! A.class_ "code" $ "CSC148H"
-                H.div ! A.class_ "more-info" $ 
+                H.div ! A.class_ "more-info" $
                     H.p ! A.class_ "full_name CSC148" $ "CSC148H (Introduction to Computer Science)"
             H.div ! A.id "min_csc165240" $ do
                 H.p ! A.class_ "code" $ "CSC165H or CSC240H"
@@ -228,7 +225,7 @@ checkPost =
             H.h2 "Later Years"
             H.div ! A.id "min_csc207" $ do
                 H.p ! A.class_ "code" $ "CSC207H"
-                H.div ! A.class_ "more-info" $ 
+                H.div ! A.class_ "more-info" $
                     H.p ! A.class_ "full_name CSC207" $ "CSC207H (Software Design)"
             H.div ! A.id "min_csc236240" $ do
                 H.p ! A.class_ "code" $ "CSC236H or CSC240H"
@@ -236,14 +233,13 @@ checkPost =
                     H.p ! A.class_ "full_name CSC236240" $ "CSC236H (Introduction to the Theory of Computation)"
                     H.p ! A.class_ "full_name CSC236240" $ "CSC240H (Enriched Introduction to the Theory of Computation)"
             H.div ! A.id "min_misc" $ do
-                H.p ! A.class_ "code" $ "Any 300/400-level CSC course (atleast 1.0 FCE), CSC209H, CSC258H, CSC263H/CSC265H (1.5 FCEs)"  
+                H.p ! A.class_ "code" $ "Any 300/400-level CSC course (atleast 1.0 FCE), CSC209H, CSC258H, CSC263H/CSC265H (1.5 FCEs)"
                 H.div ! A.id "minextra" ! A.class_ "more-info" $ do
-                    H.input ! A.type_ "text" 
                     H.input ! A.type_ "text"
-                    H.input ! A.type_ "text" 
+                    H.input ! A.type_ "text"
+                    H.input ! A.type_ "text"
             H.h3 "Notes"
-            H.div ! A.id "notes" $ 
+            H.div ! A.id "notes" $
                 H.p "- You may take no more than three 300/400 level CSC/ECE courses"
-                
 
-                   
+

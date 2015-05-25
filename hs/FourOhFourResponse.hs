@@ -17,7 +17,10 @@ fourOhFourResponse =
             H.title "Courseography - 404!"
             H.meta ! A.httpEquiv "Content-Type"
                    ! A.content "text/html;charset=utf-8"
-            sequence_  [fourOhFourLinks]
+            sequence_  $ map stylesheet [
+                "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css",
+                "static/style/app.css"]
+
         H.body $ do
             fourOhFourHtml
             fourOhFourScripts
