@@ -164,6 +164,8 @@ function fillExtra() {
     fillExtraTextboxes(specialist, specExtra, '300');
     fillExtraTextboxes(major, majExtra, '300');
     fillExtraTextboxes(minor, minExtra, '300');
+    fillExtraTextboxes(major, majExtra, '200');
+    fillExtraTextboxes(minor, minExtra, '200');
 
     if (specialist.filledTextboxesExtra < specialist.textboxesExtra) {
         fillExtraTextboxes(specialist, specExtra, '400');
