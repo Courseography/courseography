@@ -13,21 +13,17 @@ import Control.Monad.IO.Class  (liftIO)
 import Database.Persist.Sqlite
 import Database.Tables
 import qualified Data.Conduit.List as CL
-import Data.Int
 import Data.Conduit
 import qualified Data.Text.Internal as TI
 import Config (dbStr)
 
 -- | Insert a new graph into the database, returning the key of the new graph.
 insertGraph :: String   -- ^ The title of the graph that is being inserted.
-            -> IO Int64 -- ^ The unique identifier of the inserted graph.
+            -> IO GraphId -- ^ The unique identifier of the inserted graph.
 insertGraph graphTitle =
     runSqlite dbStr $ do
         runMigration migrateAll
-        key <- insert (Graph 0 graphTitle)
-        let (PersistInt64 keyId) = toPersistValue key
-        update key [GraphGId =. keyId]
-        return keyId
+        insert (Graph graphTitle)
 
 -- | Insert graph components into the database.
 insertElements :: ([Path], [Shape], [Text]) -> IO ()

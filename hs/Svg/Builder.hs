@@ -17,7 +17,6 @@ import Data.Char (toLower)
 import Data.List (find)
 import Database.Tables
 import Database.DataType
-import Data.Int (Int64)
 
 -- * Builder functions
 
@@ -27,7 +26,7 @@ import Data.Int (Int64)
 buildPath :: [Shape] -- ^ Node elements.
           -> [Shape] -- ^ Ellipses.
           -> Path    -- ^ A path.
-          -> Int64   -- ^ A number to use in the ID of the path.
+          -> Integer -- ^ A number to use in the ID of the path.
           -> Path
 buildPath rects ellipses entity idCounter
     | pathIsRegion entity =
@@ -51,7 +50,7 @@ buildPath rects ellipses entity idCounter
 -- Fills in the text association(s) and ID.
 buildRect :: [Text]  -- ^ A list of shapes that may intersect with the given node.
           -> Shape   -- ^ A node.
-          -> Int64   -- ^ An integer to uniquely identify the shape
+          -> Integer -- ^ An integer to uniquely identify the shape
           -> Shape
 buildRect texts entity idCounter =
     let rectTexts = filter (intersects
@@ -75,10 +74,10 @@ buildRect texts entity idCounter =
 
 -- | Builds an ellipse from a database entry.
 -- Fills in the text association and ID.
-buildEllipses :: [Text] -- ^ A list of Text elements that may or may not intersect
-                        --   with the given ellipse.
-              -> Shape  -- ^ An ellipse.
-              -> Int64  -- ^ A number to use in the ID of the ellipse.
+buildEllipses :: [Text]  -- ^ A list of Text elements that may or may not intersect
+                         --   with the given ellipse.
+              -> Shape   -- ^ An ellipse.
+              -> Integer -- ^ A number to use in the ID of the ellipse.
               -> Shape
 buildEllipses texts entity idCounter =
     let ellipseText = filter (intersects
