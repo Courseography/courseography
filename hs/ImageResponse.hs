@@ -11,7 +11,6 @@ import Svg.Generator
 import Diagram (renderTable)
 import qualified Data.Map as M
 import System.Random
-import GHC.Int (Int64)
 import Database.Tables (GraphId)
 
 -- | Returns an image of the graph requested by the user.
