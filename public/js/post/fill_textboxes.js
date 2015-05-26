@@ -132,6 +132,33 @@ function fillExtraTextboxes(post, postElement, level) {
     }
 }
 
+/**
+ * Fills textboxes with non-CSC courses in Extra level category.
+ * @param {object} post Object corresponding to the POSt being dealt with.
+ * @param {HTMLElement[]} postElement Array of textboxes to fill.
+ */
+function addnonCSCExtraTextboxes(post, postElement) {
+    'use strict';
+
+    for (var i = post.indexNonCSC; i < activeCourses.length && 
+        post.filledTextboxesExtra !== post.textboxesExtra; i++) {
+
+        var course = activeCourses[i];
+
+        if (postElement[post.filledTextboxesExtra].value === '' &&
+            course.indexOf('ECE') === 0) {
+
+            postElement[post.filledTextboxesExtra].value = activeCourses[i];
+            postElement[post.filledTextboxesExtra].disabled = true;
+            post.indexNonCSC = i;
+            post.filledTextboxesExtra += 1;
+            post.creditCount += 0.5;
+        } else if (postElement[post.filledTextboxesExtra].value !== '') {
+            post.filledTextboxesExtra += 1;
+        }
+    }
+}
+
 
 /**
  * Autofills the textboxes for the extra 300+ credits category
@@ -177,9 +204,15 @@ function fillExtra() {
         fillExtraTextboxes(minor, minExtra, '400');
     }
 
-    // add extra 200 courses for minor if extra space
+    // add extra non CSC courses if there is space
+    if (specialist.filledTextboxesExtra < specialist.textboxesExtra) {
+        addnonCSCExtraTextboxes(specialist, specExtra);
+    }
+    if (major.filledTextboxesExtra < major.textboxesExtra) {
+        addnonCSCExtraTextboxes(major, majExtra);
+    }
     if (minor.filledTextboxesExtra < minor.textboxesExtra) {
-        addExtraMinCourses();
+        addnonCSCExtraTextboxes(minor, minExtra);
     }
 }
 

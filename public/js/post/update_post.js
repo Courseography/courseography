@@ -3,16 +3,16 @@ var specialist = {'index300': 0, 'index400': 0, 'index200': 0, 'categoriesComple
                   'filledTextboxes400': 0, 'filledTextboxesExtra': 0, 'specCount': 0,
                   'reqs': ['CSC108', 'CSC148', 'CSC165240', 'CSC207', 'CSC209', 'CSC236240', 'CSC258', 
                   'CSC263265', 'STA247255257Sta1', 'MAT221223240Lin1', 'MAT135136137157Calc1', 'CSC369', 
-                  'CSC373'], 'textboxes300': 3, 'textboxes400': 3,
+                  'CSC373'], 'textboxes300': 3, 'textboxes400': 3, 'indexNonCSC': 0, 
                   'textboxesExtra': 4, 'categories': 17, 'creditCount': 0, 'name': 'specialist'};
 var major = {'index300': 0, 'index400': 0, 'index200': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0,
              'filledTextboxes400': 0, 'filledTextboxesExtra': 0, 'majCount': 0, 'reqs': ['CSC108',
              'CSC148', 'CSC165240', 'CSC207', 'CSC236240', 'CSC258', 'CSC263265', 'STA247255257Sta1', 
-             'MAT135136137157Calc1'], 'textboxes300': 2,
+             'MAT135136137157Calc1'], 'textboxes300': 2, 'indexNonCSC': 0, 
              'textboxes400': 1, 'textboxesExtra': 3, 'categories': 13, 'creditCount': 0, 'name': 'major'};
 var minor = {'index300': 0, 'index400': 0, 'index200': 0, 'categoriesCompleted': 0, 'filledTextboxesExtra': 0,
              'reqs': ['CSC108', 'CSC148', 'CSC165240', 'CSC207', 'CSC236240'], 'textboxesExtra': 3, 'categories': 6,
-             'creditCount': 0, 'additionalMin200': ['CSC209', 'CSC258', 'CSC263253'], 'name': 'minor'};
+             'creditCount': 0, 'additionalMin200': ['CSC209', 'CSC258', 'CSC263253'], 'name': 'minor', 'indexNonCSC': 0};
 
 
 /**
@@ -65,16 +65,16 @@ function resetValues() {
                       'filledTextboxes400': 0, 'filledTextboxesExtra': 0, 'specCount': 0,
                       'reqs': ['CSC108', 'CSC148', 'CSC165240', 'CSC207', 'CSC209', 'CSC236240', 'CSC258', 
                       'CSC263265', 'STA247255257Sta1', 'MAT221223240Lin1', 'MAT135136137157Calc1', 'CSC369', 
-                      'CSC373'], 'textboxes300': 3, 'textboxes400': 3,
+                      'CSC373'], 'textboxes300': 3, 'textboxes400': 3, 'indexNonCSC': 0, 
                       'textboxesExtra': 4, 'categories': 17, 'creditCount': 0, 'name': 'specialist'};
     var major = {'index300': 0, 'index400': 0, 'index200': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0,
                  'filledTextboxes400': 0, 'filledTextboxesExtra': 0, 'majCount': 0, 'reqs': ['CSC108',
                  'CSC148', 'CSC165240', 'CSC207', 'CSC236240', 'CSC258', 'CSC263265', 'STA247255257Sta1', 
-                 'MAT135136137157Calc1'], 'textboxes300': 2,
+                 'MAT135136137157Calc1'], 'textboxes300': 2, 'indexNonCSC': 0, 
                  'textboxes400': 1, 'textboxesExtra': 3, 'categories': 13, 'creditCount': 0, 'name': 'major'};
     var minor = {'index300': 0, 'index400': 0, 'index200': 0, 'categoriesCompleted': 0, 'filledTextboxesExtra': 0,
                  'reqs': ['CSC108', 'CSC148', 'CSC165240', 'CSC207', 'CSC236240'], 'textboxesExtra': 3, 'categories': 6,
-                 'creditCount': 0, 'additionalMin200': ['CSC209', 'CSC258', 'CSC263253'], 'name': 'minor'};
+                 'creditCount': 0, 'additionalMin200': ['CSC209', 'CSC258', 'CSC263253'], 'name': 'minor', 'indexNonCSC': 0};
 }
 
 
@@ -168,28 +168,6 @@ function fillMinCreditCount() {
         $('#min_creds').html('(4.0/4.0)');
     } else {
         $('#min_creds').html('(' + minor.creditCount.toFixed(1) + '/4.0)');
-    }
-}
-
-
-/**
- * Autofills extra 200-level courses for last minor constraint.
- */
-function addExtraMinCourses() {
-    'use strict';
-
-    var minExtra = $('#minextra')[0].getElementsByTagName('input');
-    var current = minor.filledTextboxesExtra;
-
-    for (var m = 0; m < 3 && current < 3; m++) {
-        if (getCookie(minor.additionalMin200[m].toLowerCase()) === 'active' ||
-            getCookie(minor.additionalMin200[m].toLowerCase()) === 'overridden') {
-            minExtra[current].value = minor.additionalMin200[m];
-            minExtra[current].disabled = true;
-            minor.creditCount += 0.5;
-            minor.filledTextboxesExtra += 1;
-            current += 1;
-        }
     }
 }
 
