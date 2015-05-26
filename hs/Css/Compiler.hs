@@ -2,7 +2,7 @@
 
 module Css.Compiler where
 
-import Prelude hiding ((**), writeFile)
+import Prelude hiding (writeFile)
 import Clay (renderWith, compact)
 import Data.Text.Lazy.IO (writeFile)
 import Css.Common (common)
