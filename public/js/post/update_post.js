@@ -14,17 +14,6 @@ var minor = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledText
              'reqs': ['CSC108', 'CSC148', 'CSC165240', 'CSC207', 'CSC236240'], 'textboxesExtra': 3, 'categories': 6,
              'creditCount': 0, 'additionalMin200': ['CSC209', 'CSC258', 'CSC263265'], 'name': 'minor'};
 
-
-/**
- * Updates POSts when button is clicked.
- */
-$('#update').click(function () {
-    'use strict';
-
-    updateAllCategories();
-});
-
-
 /**
  * Updates all categories to see if they are fulfilled or not.
  */
