@@ -49,11 +49,6 @@ eventsByCourse start end date =  [fst start ++ "," ++ format byDate ++ "," ++ sn
 format :: Day -> String
 format date = formatTime defaultTimeLocale "%D" date
 
-test :: [[String]] -> String
-test courses = toCSV(matchData (startTimes courses) (endTimes courses) (startDate courses))
-
-calendar = test testString
-
 {- Output file:
 "Subject, start time, end time
 MAT137,8:00:00 AM,9:00:00 AM
@@ -122,3 +117,13 @@ generateDates "F" = take 30 [addDays i firstFriday | i <- [0,7..]]
 
 endDate :: [[String]] -> [[Day]]
 endDate courses = startDate courses
+
+test :: [[String]] -> String
+test courses = toCSV(matchData (startTimes courses) (endTimes courses) (startDate courses))
+
+getCalendar courses session = test testString
+
+-- | Returns a CSV file of events as requested by the user.
+calendar :: String -> String -> ServerPart Response
+calendar courses session =
+    liftIO $ getCalendar courses session
