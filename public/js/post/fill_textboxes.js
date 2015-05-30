@@ -74,6 +74,14 @@ function fill300s() {
     if (major.filledTextboxes300 < major.textboxes300) {
         fill400Textboxes(major, maj300s, '300');
     }
+
+     // add extra non CSC courses if there is space
+    if (specialist.filledTextboxes300 < specialist.textboxes300) {
+        addnonCSCTextboxes(specialist, spec300s, '300');
+    }
+    if (major.filledTextboxes300 < major.textboxes300) {
+        addnonCSCTextboxes(major, maj300s, '300');
+    }
 }
 
 
@@ -99,6 +107,14 @@ function fill400s() {
     // Fill courses that have been selected
     fill400Textboxes(specialist, spec400s, '400');
     fill400Textboxes(major, maj400s, '400');
+
+    // add extra non CSC courses if there is space
+    if (specialist.filledTextboxes400 < specialist.textboxes400) {
+        addnonCSCTextboxes(specialist, spec400s, '400');
+    }
+    if (major.filledTextboxes400 < major.textboxes400) {
+        addnonCSCTextboxes(major, maj400s, '400');
+    }
 }
 
 
@@ -136,26 +152,27 @@ function fillExtraTextboxes(post, postElement, level) {
  * Fills textboxes with non-CSC courses in Extra level category.
  * @param {object} post Object corresponding to the POSt being dealt with.
  * @param {HTMLElement[]} postElement Array of textboxes to fill.
+ * @param {String} category The post category we are filling.
  */
-function addnonCSCExtraTextboxes(post, postElement) {
+function addnonCSCTextboxes(post, postElement, category) {
     'use strict';
 
     for (var i = post.indexNonCSC; i < activeCourses.length && 
-        post.filledTextboxesExtra !== post.textboxesExtra; i++) {
-
+        post['filledTextboxes' + category] < post['textboxes' + category]; i++) {
+   
         var course = activeCourses[i];
 
-        if (postElement[post.filledTextboxesExtra].value === '' &&
+        if (postElement[post['filledTextboxes' + category]].value === '' &&
             course.indexOf('ECE') === 0) {
-
-            postElement[post.filledTextboxesExtra].value = activeCourses[i];
-            postElement[post.filledTextboxesExtra].disabled = true;
-            post.indexNonCSC = i;
-            post.filledTextboxesExtra += 1;
+            postElement[post['filledTextboxes' + category]].value = activeCourses[i];
+            postElement[post['filledTextboxes' + category]].disabled = true;
+            post.indexNonCSC = i + 1;
+            post['filledTextboxes' + category] += 1;
             post.creditCount += 0.5;
-        } else if (postElement[post.filledTextboxesExtra].value !== '') {
-            post.filledTextboxesExtra += 1;
         }
+        // } else if (postElement[post.filledTextboxesExtra].value !== '') {
+        //     post.filledTextboxesExtra += 1;
+        // }
     }
 }
 
@@ -206,13 +223,10 @@ function fillExtra() {
 
     // add extra non CSC courses if there is space
     if (specialist.filledTextboxesExtra < specialist.textboxesExtra) {
-        addnonCSCExtraTextboxes(specialist, specExtra);
+        addnonCSCTextboxes(specialist, specExtra, 'Extra');
     }
     if (major.filledTextboxesExtra < major.textboxesExtra) {
-        addnonCSCExtraTextboxes(major, majExtra);
-    }
-    if (minor.filledTextboxesExtra < minor.textboxesExtra) {
-        addnonCSCExtraTextboxes(minor, minExtra);
+        addnonCSCTextboxes(major, majExtra, 'Extra');
     }
 }
 
