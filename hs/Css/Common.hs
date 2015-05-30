@@ -154,8 +154,6 @@ modalCSS = do
         alignCenter
     ".ui-dialog-titlebar-close" ? do
         display none
-    "#bottom-content-container" ? do
-        paddingTop (em 1)
     ".ui-width-overlay" ? do
         height100
         width100
@@ -165,7 +163,15 @@ modalCSS = do
     ".ui-dialog" ? do
         tr ? do
             margin nil auto nil auto
+    "#course-video-div" ? do
+        margin (pt 5) 0 (pt 5) 0
+        width100
+        height100
+    "#course-video" ? do
+        width100
     fbModalCSS
+
+
 
 fbModalCSS :: Css
 fbModalCSS = do

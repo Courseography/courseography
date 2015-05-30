@@ -11,12 +11,9 @@ function createModalDiv(id) {
 
     var courseDescription = fetchCourseDescription(id);
     var p = $('<p></p>').html(courseDescription);
-    var bottomContentDiv = $('<div></div>');
-    bottomContentDiv.attr('id', 'bottom-content-container');
     var timetable = setupTimeslot(id);
     contentDiv.append(p);
     contentDiv.append(timetable);
-    contentDiv.append(bottomContentDiv);
     var names = formatCourseName(id);
     var videos = [];
     $.each(names, function (i, name) {
@@ -25,8 +22,8 @@ function createModalDiv(id) {
     });
     if (videos.length > 0) {
         // Only display first video right now
-        var video = setupVideoPlayer(videos[0]);
-        bottomContentDiv.append(video);
+        var videoDiv = setupVideoPlayer(videos[0]);
+        contentDiv.append(videoDiv);
     }
 
     return contentDiv;
@@ -44,12 +41,9 @@ function setupVideoPlayer(url) {
 
     // Not divided up into 'attr' yet because 'controls preload'
     // cannot be added that way...
-    var videoDiv = $('<div></div>');
-    videoDiv.css('display', 'inline')
-            .css('float', 'left')
-            .css('width', '100%');
-    var video = $('<video id="course_video" class="video-js vjs-default-skin"' +
-                  'controls preload="auto" width="100%" height="400"></video>');
+    var videoDiv = $('<div id="course-video-div"></div>');
+    var video = $('<video id="course-video" class="video-js vjs-default-skin"' +
+                  'controls preload="auto"></video>');
     var src = $('<source></source>').attr('src', url)
                                     .attr('type', 'video/mp4');
 
