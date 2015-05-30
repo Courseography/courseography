@@ -240,8 +240,8 @@ function openModal(title, modalDiv) {
                 .addClass('modal').dialog({
                     autoOpen: true,
                     modal: true,
-                    minWidth: 850,
-                    minHeight: 600,
+                    width: 600,
+                    height: 400,
                     closeText: 'X',
                     open: function(event, ui) {
                         $('.ui-widget-overlay').bind('click', function () {

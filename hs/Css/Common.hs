@@ -127,6 +127,8 @@ modalCSS = do
     ".ui-dialog" ? do
         outline solid (px 0) black
         position absolute
+        width (px 600)
+        height (px 400)
     ".ui-widget-overlay" ? do
         height100
         width100
@@ -136,9 +138,8 @@ modalCSS = do
     ".modal" ? do
         backgroundColor modalColor
         padding (px 20) (px 20) (px 20) (px 20)
-        width (pct 70)
-        height (pct 70)
-        overflow auto
+        overflowX hidden
+        overflowY auto
         position static
         p ? do
             color white
@@ -148,7 +149,7 @@ modalCSS = do
     ".ui-dialog-titlebar" ? do
         backgroundColor $ parse "#222266"
         color white
-        fontSize (em 1.2)
+        fontSize (em 1)
         cursor move
         alignCenter
     ".ui-dialog-titlebar-close" ? do
