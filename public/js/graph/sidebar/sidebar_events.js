@@ -1,4 +1,3 @@
-
 /**
  * The click function when we click the reset button.
 **/
@@ -36,16 +35,16 @@ $('.focus').click(function(e) {
  * Dynamically creates buttons for each graph in the sidebar.
  * @param {JSON[]} An array of JSON objects representing graphs in the database
 **/
-function createGraphButtons(graphs) {
+function createGraphButtons() {
     'use strict';
 
     for (var i = 0; i < graphs.length; i++) {
-        var graphId = graphs[i].gId;
+        var graphId = graphs[i].id;
         var graphTitle = graphs[i].title;
         var graphButton = '<div id = "graph-' + graphId +'" class = "graph-button">';
         $('#graphs').append(graphButton);
         $('#graph-' + graphId).html(graphTitle);
-        $('#graph-' + graphId).data('id', graphs[i].gId);
+        $('#graph-' + graphId).data('id', graphs[i].id);
     }
 }
 
@@ -108,7 +107,7 @@ function getGraphsInDatabase() {
         dataType: 'json',
         async: false,
         success: function (data) {
-            createGraphButtons(data);
+            graphs = data;
         },
         error: function () {
             throw 'No graphs in database';
@@ -123,7 +122,7 @@ function getGraphsInDatabase() {
 function enableReset() {
     'use strict';
 
-    $('#reset').attr('disabled', FCEs <= 0);
+    $('#reset').attr('disabled', totalFCEs <= 0);
 
     fillFCECount();
 }

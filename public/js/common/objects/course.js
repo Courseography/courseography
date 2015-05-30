@@ -23,6 +23,7 @@ function Course(name) {
     this.distribution = course.distribution;
     this.manualTutorialEnrolment = course.manualTutorialEnrolment;
     this.manualPracticalEnrolment = course.manualPracticalEnrolment;
+    this.videoUrls = course.videoUrls;
 
     // Create sections
     this.parseSessions(course);

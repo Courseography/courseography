@@ -11,7 +11,7 @@ import Svg.Generator
 import Diagram (renderTable)
 import qualified Data.Map as M
 import System.Random
-import GHC.Int (Int64)
+import Database.Tables (GraphId)
 
 -- | Returns an image of the graph requested by the user.
 graphImageResponse :: ServerPart Response
@@ -20,9 +20,10 @@ graphImageResponse =
        -- TODO: Look into using an association list [(_,_)] rather than
        -- a map. Not sure if a map is necessary or not.
        let cookies = M.fromList $ rqCookies req
-           gId = maybe 1 (\x -> (read . cookieValue) x :: Int64)
+           gId = maybe "1" cookieValue
                          (M.lookup "active-graph" cookies)
-       liftIO $ getGraphImage gId (M.map cookieValue cookies)
+           graphKey = read gId :: GraphId
+       liftIO $ getGraphImage graphKey (M.map cookieValue cookies)
 
 -- | Returns an image of the timetable requested by the user.
 timetableImageResponse :: String -> String -> ServerPart Response
@@ -30,7 +31,7 @@ timetableImageResponse courses session =
     liftIO $ getTimetableImage courses session
 
 -- | Creates an image, and returns the base64 representation of that image.
-getGraphImage :: Int64 -> M.Map String String -> IO Response
+getGraphImage :: GraphId -> M.Map String String -> IO Response
 getGraphImage gId courseMap = do
     gen <- newStdGen
     let (rand, _) = next gen

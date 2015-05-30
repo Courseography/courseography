@@ -52,7 +52,8 @@ emptyCourse = Course {
                     manualPracticalEnrol = Nothing,
                     distribution = Nothing,
                     prereqs = Nothing,
-                    coreqs = Nothing}
+                    coreqs = Nothing,
+                    videoUrls = []}
 
 replaceAll :: [T.Text] -> T.Text -> T.Text -> T.Text
 replaceAll matches replacement str =

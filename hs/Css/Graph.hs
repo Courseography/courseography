@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Css.GraphCss where
+module Css.Graph where
 
 import Clay
 import Prelude hiding ((**))
@@ -198,8 +198,10 @@ sidebarCSS = do
         float floatLeft
         backgroundColor purple4
         display none
-        paddingLeft (pct 12)
+        textAlign $ alignSide sideCenter
+        paddingLeft (px 15)
         paddingTop (px 5)
+        fontSize (px 18)
     "#reset" ? do
         textAlign $ alignSide sideCenter
         float floatLeft

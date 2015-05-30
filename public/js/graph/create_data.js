@@ -5,7 +5,7 @@ var math = [
 
 // All Courses
 var allCourses = ['CSC108', 'CSC148', 'CSC165240', 'CSC207', 'CSC236240',
-                  'CSC209', 'CSC258', 'CSC236265', 'CSC300', 'CSC301',
+                  'CSC209', 'CSC258', 'CSC263265', 'CSC300', 'CSC301',
                   'CSC302', 'CSC309', 'CSC310', 'CSC318', 'CSC320',
                   'CSC321', 'CSC324', 'CSC336', 'CSC343', 'CSC358',
                   'CSC369', 'CSC372', 'CSC348', 'ECE385', 'CSC401',
@@ -25,7 +25,7 @@ var nonCscCourses = ['ECE489', 'ECE385', 'Sta248261'];
 // Required for specialist
 var reqs = [
     'CSC108', 'CSC148', 'CSC165240', 'CSC207',
-    'CSC209', 'CSC236240', 'CSC258', 'CSC236265',
+    'CSC209', 'CSC236240', 'CSC258', 'CSC263265',
     'CSC369', 'CSC373', 'MAT135136137157Calc1', 'MAT221223240Lin1', 'STA247255257Sta1'
 ];
 

@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Css.PrivacyCss where
+module Css.Privacy where
 
 import Clay
 import Prelude hiding ((**))
