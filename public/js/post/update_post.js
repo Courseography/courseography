@@ -255,5 +255,5 @@ function notReqCourse(course) {
 function notCscCourse(course) {
     'use strict';
 
-    return course.indexOf('ECE') === 0 || course.indexOf('STA248') !== -1;
+    return nonCscCourses.indexOf(course) !== -1;
 }

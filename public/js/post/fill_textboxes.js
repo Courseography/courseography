@@ -163,7 +163,8 @@ function fillNonCSCExtraTextboxes(post, postElement, category) {
         var course = activeCourses[i];
 
         if (postElement[post['filledTextboxes' + category]].value === '' &&
-            nonCscCourses.indexOf(course) !== 1 && notReqCourse(course)) {
+            (notCscCourse(course) && notReqCourse(course) 
+            || (course.indexOf('Lin1') !== -1 && post === major))) { // Lin1 extra case because its only Extra for the major
             postElement[post['filledTextboxes' + category]].value = activeCourses[i];
             postElement[post['filledTextboxes' + category]].disabled = true;
             post.indexNonCSC = i + 1;
