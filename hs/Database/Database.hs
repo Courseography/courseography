@@ -13,6 +13,7 @@ module Database.Database (setupDatabase) where
 import Database.Persist.Sqlite (runSqlite, runMigration, insert_)
 import Database.Tables
 import WebParsing.ParseAll (parseAll)
+import Database.CourseVideoSeed (seedVideos)
 import Config (dbStr)
 
 -- | Main function for setting up the database with course information.
@@ -25,6 +26,7 @@ setupDatabase = do setupDistributionTable
                    setupBreadthTable
                    print "breadth table set up"
                    parseAll
+                   seedVideos
 
 -- | Sets up the Distribution table.
 setupDistributionTable :: IO ()
