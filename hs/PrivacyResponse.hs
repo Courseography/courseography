@@ -8,7 +8,6 @@ import qualified Text.Blaze.Html5.Attributes as A
 import Data.Text.Lazy (Text)
 import Text.Markdown (markdown, def)
 import Happstack.Server
-import MakeElements
 import MasterTemplate
 
 privacyResponse :: Text -> ServerPart Response

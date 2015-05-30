@@ -22,7 +22,7 @@ import Data.List.Split (splitOn)
 import Data.List (find)
 import qualified Data.Map as M (empty)
 import Data.String.Utils (replace)
-import Text.XML.HaXml hiding (find)
+import Text.XML.HaXml hiding (find, qname, x, attr)
 import Text.XML.HaXml.Util (tagTextContent)
 import Text.XML.HaXml.Namespaces (printableName)
 import System.Directory

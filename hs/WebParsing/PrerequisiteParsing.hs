@@ -12,7 +12,7 @@ is either:  1) a 1-element list containig a course name
 -}
 module WebParsing.PrerequisiteParsing (parsePrerequisites) where
 
-import Text.Regex.Posix
+import Text.Regex.Posix((=~))
 import qualified Data.Text as T
 
 {- Signatures:

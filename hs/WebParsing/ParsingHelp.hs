@@ -22,7 +22,7 @@ module WebParsing.ParsingHelp
     parseDistAndBreadth,
     ) where
 
-import Text.Regex.Posix
+import Text.Regex.Posix ((=~))
 import Text.HTML.TagSoup
 import qualified Data.Text as T
 import Database.Tables

@@ -4,7 +4,7 @@ import Control.Monad (msum)
 import Control.Monad.IO.Class (liftIO)
 import Data.Maybe (fromMaybe)
 import Data.Time.Format (FormatTime)
-import Happstack.Server
+import Happstack.Server hiding (host)
 import GridResponse
 import GraphResponse
 import DrawResponse

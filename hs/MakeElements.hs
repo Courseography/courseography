@@ -11,7 +11,7 @@ insertSVG :: H.AttributeValue -> H.Html
 insertSVG src = H.object ! A.data_ src ! A.type_ "image/svg+xml" $ ""
 
 createTag :: (H.Html -> H.Html) ->  H.AttributeValue -> H.AttributeValue -> H.Html -> H.Html
-createTag tag id class_ content = tag ! A.id id ! A.class_ class_ $ content
+createTag tag identity class_ content = tag ! A.id identity ! A.class_ class_ $ content
 
 stylesheet :: H.AttributeValue -> H.Html
 stylesheet href = H.link ! A.rel "stylesheet" ! A.type_ "text/css" ! A.href href
@@ -20,13 +20,13 @@ makeScript :: H.AttributeValue -> H.Html
 makeScript src = H.script ! A.src src $ ""
 
 makeForm :: H.AttributeValue -> H.AttributeValue -> H.AttributeValue -> H.Html -> H.Html
-makeForm id class_ onSubmit content = H.form ! A.id id ! A.class_ class_ ! A.onsubmit onSubmit $ content
+makeForm identity class_ onSubmit content = H.form ! A.id identity ! A.class_ class_ ! A.onsubmit onSubmit $ content
 
 makeInput :: H.AttributeValue -> H.AttributeValue -> H.AttributeValue -> H.AttributeValue -> H.AttributeValue -> H.Html
-makeInput id class_ placeholder autocomplete type_ = H.input ! A.id id ! A.class_ class_ ! A.placeholder placeholder ! A.autocomplete autocomplete ! A.type_ type_
+makeInput identity class_ placeholder autocomplete type_ = H.input ! A.id identity ! A.class_ class_ ! A.placeholder placeholder ! A.autocomplete autocomplete ! A.type_ type_
 
 makeA :: H.AttributeValue -> H.AttributeValue -> H.AttributeValue -> H.AttributeValue -> H.Html -> H.Html
-makeA id class_ href target content = H.a ! A.id id ! A.class_ class_ ! A.href href ! A.target target $ content
+makeA identity class_ href target content = H.a ! A.id identity ! A.class_ class_ ! A.href href ! A.target target $ content
 
 jQuery :: H.Html
 jQuery = makeScript "https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"
