@@ -37,7 +37,7 @@ isntDelim rest =
 -- |Splits a PrereqString by delimeters ';'' ','.
 toPreExprs :: String -> String -> [String]
 toPreExprs str expr  =
-  let (beforeStr, delimStr, matchStr) = matchDelim str
+  let (beforeStr, delimStr, afterStr) = matchDelim str
   in case (beforeStr, delimStr, afterStr) of
     ("","","") -> [] --if (expr == "") then [] else [expr]
     (before, "", "") -> [before++expr]

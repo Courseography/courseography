@@ -20,10 +20,10 @@ import Config (dbStr)
 -- | Insert a new graph into the database, returning the key of the new graph.
 insertGraph :: String   -- ^ The title of the graph that is being inserted.
             -> IO GraphId -- ^ The unique identifier of the inserted graph.
-insertGraph graphTitle =
+insertGraph graphName =
     runSqlite dbStr $ do
         runMigration migrateAll
-        insert (Graph graphTitle)
+        insert (Graph graphName)
 
 -- | Insert graph components into the database.
 insertElements :: ([Path], [Shape], [Text]) -> IO ()

@@ -52,11 +52,11 @@ runServer = do
 
     -- Bind server to PORT environment variable if provided
     portStr <- lookupEnv "PORT"
-    let port = read (fromMaybe "8000" portStr) :: Int
+    let portEnv = read (fromMaybe "8000" portStr) :: Int
 
     -- Start the HTTP server
     simpleHTTP nullConf {
-        port      = port
+        port      = portEnv
       , logAccess = Just logMAccessShort
     } $ msum
         [ do

@@ -57,7 +57,7 @@ emptyCourse = Course {
 
 replaceAll :: [T.Text] -> T.Text -> T.Text -> T.Text
 replaceAll matches replacement str =
-  foldl (\str match-> T.replace match replacement str) str matches
+  foldl (\foldStr match-> T.replace match replacement foldStr) str matches
 
 {------------------------------------------------------------------------------
 INPUT: a tag containing string tagtext, and reg, a regex string

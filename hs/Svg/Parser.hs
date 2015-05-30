@@ -42,9 +42,9 @@ parsePrebuiltSvgs = do
 performParse :: String -- ^ The title of the graph.
              -> String -- ^ The filename of the file that will be parsed.
              -> IO ()
-performParse graphTitle inputFilename =
+performParse graphName inputFilename =
    do graphFile <- readFile (graphPath ++ inputFilename)
-      key <- insertGraph graphTitle
+      key <- insertGraph graphName
       let parsedGraph = parseGraph key graphFile
           PersistInt64 keyVal = toPersistValue key
       print "Graph Parsed"
@@ -226,7 +226,7 @@ styles attrs =
 
 -- | Gets a style attribute from a style string.
 styleVal :: String -> [(String, String)] -> String
-styleVal name styles = fromMaybe "" $ lookup name styles
+styleVal name style = fromMaybe "" $ lookup name style
 
 -- | Parses a transform String into a tuple of Float.
 parseTransform :: String -> Point

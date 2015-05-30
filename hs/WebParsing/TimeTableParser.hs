@@ -81,7 +81,7 @@ toCells tags =
       --courseRows groups cells by the courses they are contained in.
       removedEmpty = filter (not . null) rowsColumns
       dropLastCell = map init removedEmpty
-      courseRows = partitions (\row -> any (isCourse . fromTagText) (filter isTagText (head row))) dropLastCell
+      courseRows = partitions (\courseRow -> any (isCourse . fromTagText) (filter isTagText (head courseRow))) dropLastCell
       --foreach group of cells rep. courses, extracts the spans.
       courseSpans = map extractSpans courseRows -- [[Pos]]
       --following two lines takes out everything but text in each cell.
