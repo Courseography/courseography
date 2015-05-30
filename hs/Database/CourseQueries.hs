@@ -87,6 +87,7 @@ buildCourse fallSession springSession yearSession course =
            (coursesDistribution course)
            (coursesPrereqs course)
            (coursesCoreqs course)
+           (coursesVideoUrls course)
 
 -- | Builds a Lecture structure from a tuple from the Lectures table.
 buildLecture :: Lectures -> Lecture
