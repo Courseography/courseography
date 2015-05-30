@@ -5,6 +5,7 @@ import Data.List
 import Data.List
 import Data.Time
 import Happstack.Server
+import Control.Monad.IO.Class  (liftIO)
 import System.Locale
 
 testString1 = [["MAT137","","","",""],["","","CSC148","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","CSC165","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","","ECO100"]]
