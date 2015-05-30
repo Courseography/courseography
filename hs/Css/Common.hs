@@ -142,10 +142,13 @@ modalCSS = do
         position static
         p ? do
             color white
+            fontSize (pt 12)
+            margin (pt 5) 0 (pt 5) 0
+            lineHeight (em 1.3)
     ".ui-dialog-titlebar" ? do
         backgroundColor $ parse "#222266"
         color white
-        fontSize (em 2)
+        fontSize (em 1.2)
         cursor move
         alignCenter
     ".ui-dialog-titlebar-close" ? do
