@@ -3,7 +3,7 @@ var math = [
     'MAT135136137157Calc1', 'MAT221223240Lin1', 'STA247255257Sta1', 'Sta248261'
 ];
 
-// All CSC Courses
+// All Courses
 var allCourses = ['CSC108', 'CSC148', 'CSC165240', 'CSC207', 'CSC236240',
                   'CSC209', 'CSC258', 'CSC263265', 'CSC300', 'CSC301',
                   'CSC302', 'CSC309', 'CSC310', 'CSC318', 'CSC320',
@@ -13,13 +13,14 @@ var allCourses = ['CSC108', 'CSC148', 'CSC165240', 'CSC207', 'CSC236240',
                   'CSC420', 'CSC428', 'CSC386', 'CSC438', 'CSC443',
                   'CSC446', 'CSC448', 'CSC454', 'CSC456', 'CSC458',
                   'CSC463', 'CSC465', 'CSC469', 'CSC486', 'CSC488',
-                  'ECE489', 'CSC373', 'CSC466'];
+                  'ECE489', 'CSC373', 'CSC466', 'CSC200', 'Sta248261'];
 
 specialistCourses = ['CSC373', 'CSC369', 'MAT221223240Lin1'];
 
 var areaNames = ['theory', 'core', 'se', 'systems', 'hci',
                  'graphics', 'num', 'ai'];
 
+var nonCscCourses = ['ECE489', 'ECE385', 'Sta248261'];
 
 // Required for specialist
 var reqs = [

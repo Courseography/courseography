@@ -74,6 +74,14 @@ function fill300s() {
     if (major.filledTextboxes300 < major.textboxes300) {
         fill400Textboxes(major, maj300s, '300');
     }
+
+     // add extra non CSC courses if there is space
+    if (specialist.filledTextboxes300 < specialist.textboxes300) {
+        fillECETextboxes(specialist, spec300s, '300');
+    }
+    if (major.filledTextboxes300 < major.textboxes300) {
+        fillECETextboxes(major, maj300s, '300');
+    }
 }
 
 
@@ -99,6 +107,14 @@ function fill400s() {
     // Fill courses that have been selected
     fill400Textboxes(specialist, spec400s, '400');
     fill400Textboxes(major, maj400s, '400');
+
+    // add extra non CSC courses if there is space
+    if (specialist.filledTextboxes400 < specialist.textboxes400) {
+        fillECETextboxes(specialist, spec400s, '400');
+    }
+    if (major.filledTextboxes400 < major.textboxes400) {
+        fillECETextboxes(major, maj400s, '400');
+    }
 }
 
 
@@ -118,10 +134,10 @@ function fillExtraTextboxes(post, postElement, level) {
 
         if (postElement[post.filledTextboxesExtra].value === '' &&
             course.indexOf('CSC' + level.charAt(0)) != -1 &&
-            (post.name === 'major' || post.name === 'minor' ||
+            ((post.name === 'major' && notReqCourse(course)) || post.name === 'minor' ||
              (post.name === 'specialist' && notSpecialistCourse(course)))) {
 
-            postElement[post.filledTextboxesExtra].value = activeCourses[i];
+            postElement[post.filledTextboxesExtra].value = activeCourses[i].substring(0, 6);
             postElement[post.filledTextboxesExtra].disabled = true;
             post['index' + level] = i;
             post.filledTextboxesExtra += 1;
@@ -132,6 +148,56 @@ function fillExtraTextboxes(post, postElement, level) {
     }
 }
 
+/**
+ * Fills textboxes with non-CSC courses in Extra level category.
+ * @param {object} post Object corresponding to the POSt being dealt with.
+ * @param {HTMLElement[]} postElement Array of textboxes to fill.
+ * @param {String} category The post category we are filling.
+ */
+function fillNonCSCExtraTextboxes(post, postElement, category) {
+    'use strict';
+
+    for (var i = post.indexNonCSC; i < activeCourses.length && 
+        post['filledTextboxes' + category] < post['textboxes' + category]; i++) {
+   
+        var course = activeCourses[i];
+
+        if (postElement[post['filledTextboxes' + category]].value === '' &&
+            (notCscCourse(course) && notReqCourse(course) 
+            || (course.indexOf('Lin1') !== -1 && post === major))) { // Lin1 extra case because its only Extra for the major
+            postElement[post['filledTextboxes' + category]].value = activeCourses[i].substring(0, 6);
+            postElement[post['filledTextboxes' + category]].disabled = true;
+            post.indexNonCSC = i + 1;
+            post['filledTextboxes' + category] += 1;
+            post.creditCount += 0.5;
+        }
+    }
+}
+
+/**
+ * Fills textboxes with ECE courses in  the 300/400 level category.
+ * @param {object} post Object corresponding to the POSt being dealt with.
+ * @param {HTMLElement[]} postElement Array of textboxes to fill.
+ * @param {String} category The post category we are filling.
+ */
+function fillECETextboxes(post, postElement, category) {
+    'use strict';
+
+    for (var i = post.indexNonCSC; i < activeCourses.length && 
+        post['filledTextboxes' + category] < post['textboxes' + category]; i++) {
+   
+        var course = activeCourses[i];
+
+        if (postElement[post['filledTextboxes' + category]].value === '' &&
+            course.indexOf('ECE') !== -1) {
+            postElement[post['filledTextboxes' + category]].value = activeCourses[i];
+            postElement[post['filledTextboxes' + category]].disabled = true;
+            post.indexNonCSC = i + 1;
+            post['filledTextboxes' + category] += 1;
+            post.creditCount += 0.5;
+        }
+    }
+}
 
 /**
  * Autofills the textboxes for the extra 300+ credits category
@@ -164,6 +230,8 @@ function fillExtra() {
     fillExtraTextboxes(specialist, specExtra, '300');
     fillExtraTextboxes(major, majExtra, '300');
     fillExtraTextboxes(minor, minExtra, '300');
+    fillExtraTextboxes(major, majExtra, '200');
+    fillExtraTextboxes(minor, minExtra, '200');
 
     if (specialist.filledTextboxesExtra < specialist.textboxesExtra) {
         fillExtraTextboxes(specialist, specExtra, '400');
@@ -175,9 +243,12 @@ function fillExtra() {
         fillExtraTextboxes(minor, minExtra, '400');
     }
 
-    // add extra 200 courses for minor if extra space
-    if (minor.filledTextboxesExtra < minor.textboxesExtra) {
-        addExtraMinCourses();
+    // add extra non CSC courses if there is space
+    if (specialist.filledTextboxesExtra < specialist.textboxesExtra) {
+        fillNonCSCExtraTextboxes(specialist, specExtra, 'Extra');
+    }
+    if (major.filledTextboxesExtra < major.textboxesExtra) {
+        fillNonCSCExtraTextboxes(major, majExtra, 'Extra');
     }
 }
 

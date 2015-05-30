@@ -1,16 +1,16 @@
 var activeCourses = [];
-var specialist = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0,
+var specialist = {'index300': 0, 'index400': 0, 'index200': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0,
                   'filledTextboxes400': 0, 'filledTextboxesExtra': 0, 'specCount': 0,
                   'reqs': ['CSC108', 'CSC148', 'CSC165240', 'CSC207', 'CSC209', 'CSC236240', 'CSC258', 
                   'CSC263265', 'STA247255257Sta1', 'MAT221223240Lin1', 'MAT135136137157Calc1', 'CSC369', 
-                  'CSC373'], 'textboxes300': 3, 'textboxes400': 3,
+                  'CSC373'], 'textboxes300': 3, 'textboxes400': 3, 'indexNonCSC': 0, 
                   'textboxesExtra': 4, 'categories': 17, 'creditCount': 0, 'name': 'specialist'};
-var major = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0,
+var major = {'index300': 0, 'index400': 0, 'index200': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0,
              'filledTextboxes400': 0, 'filledTextboxesExtra': 0, 'majCount': 0, 'reqs': ['CSC108',
              'CSC148', 'CSC165240', 'CSC207', 'CSC236240', 'CSC258', 'CSC263265', 'STA247255257Sta1', 
-             'MAT135136137157Calc1'], 'textboxes300': 2,
+             'MAT135136137157Calc1'], 'textboxes300': 2, 'indexNonCSC': 0, 
              'textboxes400': 1, 'textboxesExtra': 3, 'categories': 13, 'creditCount': 0, 'name': 'major'};
-var minor = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxesExtra': 0,
+var minor = {'index300': 0, 'index400': 0, 'index200': 0, 'categoriesCompleted': 0, 'filledTextboxesExtra': 0,
              'reqs': ['CSC108', 'CSC148', 'CSC165240', 'CSC207', 'CSC236240'], 'textboxesExtra': 3, 'categories': 6,
              'creditCount': 0, 'additionalMin200': ['CSC209', 'CSC258', 'CSC263265'], 'name': 'minor'};
 
@@ -50,18 +50,18 @@ function resetValues() {
     'use strict';
 
     activeCourses = [];
-    var specialist = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0,
-                  'filledTextboxes400': 0, 'filledTextboxesExtra': 0, 'specCount': 0,
-                  'reqs': ['CSC108', 'CSC148', 'CSC165240', 'CSC207', 'CSC209', 'CSC236240', 'CSC258', 
-                  'CSC263265', 'STA247255257Sta1', 'MAT221223240Lin1', 'MAT135136137157Calc1', 'CSC369', 
-                  'CSC373'], 'textboxes300': 3, 'textboxes400': 3,
-                  'textboxesExtra': 4, 'categories': 17, 'creditCount': 0, 'name': 'specialist'};
-    var major = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0,
+    var specialist = {'index300': 0, 'index400': 0, 'index200': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0,
+                      'filledTextboxes400': 0, 'filledTextboxesExtra': 0, 'specCount': 0,
+                      'reqs': ['CSC108', 'CSC148', 'CSC165240', 'CSC207', 'CSC209', 'CSC236240', 'CSC258', 
+                      'CSC263265', 'STA247255257Sta1', 'MAT221223240Lin1', 'MAT135136137157Calc1', 'CSC369', 
+                      'CSC373'], 'textboxes300': 3, 'textboxes400': 3, 'indexNonCSC': 0, 
+                      'textboxesExtra': 4, 'categories': 17, 'creditCount': 0, 'name': 'specialist'};
+    var major = {'index300': 0, 'index400': 0, 'index200': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0,
                  'filledTextboxes400': 0, 'filledTextboxesExtra': 0, 'majCount': 0, 'reqs': ['CSC108',
                  'CSC148', 'CSC165240', 'CSC207', 'CSC236240', 'CSC258', 'CSC263265', 'STA247255257Sta1', 
-                 'MAT135136137157Calc1'], 'textboxes300': 2,
+                 'MAT135136137157Calc1'], 'textboxes300': 2, 'indexNonCSC': 0, 
                  'textboxes400': 1, 'textboxesExtra': 3, 'categories': 13, 'creditCount': 0, 'name': 'major'};
-    var minor = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxesExtra': 0,
+    var minor = {'index300': 0, 'index400': 0, 'index200': 0, 'categoriesCompleted': 0, 'filledTextboxesExtra': 0,
                  'reqs': ['CSC108', 'CSC148', 'CSC165240', 'CSC207', 'CSC236240'], 'textboxesExtra': 3, 'categories': 6,
                  'creditCount': 0, 'additionalMin200': ['CSC209', 'CSC258', 'CSC263265'], 'name': 'minor'};
 }
@@ -162,28 +162,6 @@ function fillMinCreditCount() {
 
 
 /**
- * Autofills extra 200-level courses for last minor constraint.
- */
-function addExtraMinCourses() {
-    'use strict';
-
-    var minExtra = $('#minextra')[0].getElementsByTagName('input');
-    var current = minor.filledTextboxesExtra;
-
-    for (var m = 0; m < 3 && current < 3; m++) {
-        if (getCookie(minor.additionalMin200[m].toLowerCase()) === 'active' ||
-            getCookie(minor.additionalMin200[m].toLowerCase()) === 'overridden') {
-            minExtra[current].value = minor.additionalMin200[m];
-            minExtra[current].disabled = true;
-            minor.creditCount += 0.5;
-            minor.filledTextboxesExtra += 1;
-            current += 1;
-        }
-    }
-}
-
-
-/**
  * Checks whether a POSt is completed and updates credit count colour if it is.
  */
 function checkPostCompleted() {
@@ -250,4 +228,26 @@ function notSpecialistCourse(course) {
     'use strict';
 
     return specialistCourses.indexOf(course) === -1;
+}
+
+/**
+ * Returns whether course is a required course or not
+ * @param {string} Name of course
+ * @return {boolean} True if course is required, False otherwise
+ */
+function notReqCourse(course) {
+    'use strict';
+
+    return reqs.indexOf(course) === -1;
+}
+
+/**
+ * Returns whether course is a CSC course or not
+ * @param {string} Name of course
+ * @return {boolean} True if course is a CSC course, False otherwise
+ */
+function notCscCourse(course) {
+    'use strict';
+
+    return nonCscCourses.indexOf(course) !== -1;
 }
