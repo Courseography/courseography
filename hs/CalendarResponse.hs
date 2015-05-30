@@ -4,7 +4,7 @@ import Data.List.Split (splitOn)
 import Data.List
 import Data.List
 import Data.Time
-import Happstack.Server
+import Happstack.Server (nullConf, simpleHTTP, toResponse, ok)
 import Control.Monad.IO.Class  (liftIO)
 import System.Locale
 
@@ -126,8 +126,7 @@ test :: [[String]] -> String
 test courses = toCSV(matchData (startTimes courses) (endTimes courses) (startDate courses))
 
 getCalendar :: String -> String -> IO Response
-getCalendar courses session = 
-    $ ok (toResponse(test testString))
+getCalendar courses session = simpleHTTP nullConf $ ok (toResponse(test testString))
 {- do return $ createJSONResponse(getCalendar courses session)
 ok $ toResponse $
 notFound $ toResponse $
