@@ -13,13 +13,20 @@ function createModalDiv(id) {
     var p = $('<p></p>').html(courseDescription);
     var bottomContentDiv = $('<div></div>');
     bottomContentDiv.attr('id', 'bottom-content-container');
-    var video = setupVideoPlayer(id);
     var timetable = setupTimeslot(id);
     var relatedLinks = setupRelatedLinks(id);
     contentDiv.append(p);
     contentDiv.append(timetable);
     contentDiv.append(bottomContentDiv);
-    if (video) {
+    var names = formatCourseName(id);
+    var videos = [];
+    $.each(names, function (i, name) {
+        var course = getCourse(name);
+        videos = videos.concat(course.videoUrls);
+    });
+    if (videos.length > 0) {
+        // Only display first video right now
+        var video = setupVideoPlayer(videos[0]);
         bottomContentDiv.append(video);
     }
     bottomContentDiv.append(relatedLinks);
@@ -34,15 +41,8 @@ function createModalDiv(id) {
  * @param {string} id The course code.
  * @returns {boolean|jQuery}
  */
-function setupVideoPlayer(id) {
+function setupVideoPlayer(url) {
     'use strict';
-
-    var url = 'http://www.cs.toronto.edu/~liudavid/' + id.toLowerCase() + '.mp4';
-    var exists = urlExists(url);
-
-    if (!exists) {
-        return false;
-    }
 
     // Not divided up into 'attr' yet because 'controls preload'
     // cannot be added that way...
