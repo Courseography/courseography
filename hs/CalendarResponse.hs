@@ -127,8 +127,8 @@ endDate courses = startDate courses
 test :: [[String]] -> String
 test courses = toCSV(matchData (startTimes courses) (endTimes courses) (startDate courses))
 
-getCalendar :: IO Response
-getCalendar = return $ toResponse(test testString)
+getCalendar :: String -> String -> IO Response
+getCalendar courses session = return $ toResponse(test testString)
 {- do return $ createJSONResponse(getCalendar courses session)
 ok $ toResponse $
 notFound $ toResponse $
@@ -138,9 +138,9 @@ ServerPartT IO ()
 -}
 
 -- | Returns a CSV file of events as requested by the user.
-calendar :: ServerPart Response
-calendar =
-    liftIO $ getCalendar
+calendarResponse :: String -> String -> ServerPart Response
+calendarResponse courses session =
+    liftIO $ getCalendar courses session
 
 
 

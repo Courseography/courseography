@@ -84,6 +84,6 @@ main = do
           dir "course-info" $ look "dept" >>= courseInfo,
           dir "depts" $ liftIO deptList,
           dir "timesearch" searchResponse,
-          dir "calendar" $ calendar,
+          dir "calendar" $ look "courses" >>= \x -> look "session" >>= calendarResponse x,
           fourOhFourResponse
         ]
