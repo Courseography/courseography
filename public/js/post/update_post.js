@@ -252,6 +252,11 @@ function notReqCourse(course) {
     return reqs.indexOf(course) === -1;
 }
 
+/**
+ * Returns whether course is a CSC course or not
+ * @param {string} Name of course
+ * @return {boolean} True if course is a CSC course, False otherwise
+ */
 function notCscCourse(course) {
     'use strict';
 

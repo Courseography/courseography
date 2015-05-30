@@ -137,7 +137,7 @@ function fillExtraTextboxes(post, postElement, level) {
             ((post.name === 'major' && notReqCourse(course)) || post.name === 'minor' ||
              (post.name === 'specialist' && notSpecialistCourse(course)))) {
 
-            postElement[post.filledTextboxesExtra].value = activeCourses[i];
+            postElement[post.filledTextboxesExtra].value = activeCourses[i].substring(0, 6);
             postElement[post.filledTextboxesExtra].disabled = true;
             post['index' + level] = i;
             post.filledTextboxesExtra += 1;
@@ -165,7 +165,7 @@ function fillNonCSCExtraTextboxes(post, postElement, category) {
         if (postElement[post['filledTextboxes' + category]].value === '' &&
             (notCscCourse(course) && notReqCourse(course) 
             || (course.indexOf('Lin1') !== -1 && post === major))) { // Lin1 extra case because its only Extra for the major
-            postElement[post['filledTextboxes' + category]].value = activeCourses[i];
+            postElement[post['filledTextboxes' + category]].value = activeCourses[i].substring(0, 6);
             postElement[post['filledTextboxes' + category]].disabled = true;
             post.indexNonCSC = i + 1;
             post['filledTextboxes' + category] += 1;
