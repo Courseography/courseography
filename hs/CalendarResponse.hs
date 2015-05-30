@@ -126,7 +126,9 @@ test :: [[String]] -> String
 test courses = toCSV(matchData (startTimes courses) (endTimes courses) (startDate courses))
 
 getCalendar :: String -> String -> IO Response
-getCalendar courses session = $ ok(test testString)
+getCalendar courses session = 
+    ok $ toResponse $
+        test testString
 {- do return $ createJSONResponse(getCalendar courses session)
 ok $ toResponse $
 notFound $ toResponse $
