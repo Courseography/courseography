@@ -12,18 +12,19 @@ import Diagram (renderTable)
 import qualified Data.Map as M
 import System.Random
 import Database.Tables (GraphId)
+import Database.Persist.Sql (toSqlKey)
+import Data.Int(Int64)
 
 -- | Returns an image of the graph requested by the user.
 graphImageResponse :: ServerPart Response
 graphImageResponse =
     do req <- askRq
-       -- TODO: Look into using an association list [(_,_)] rather than
-       -- a map. Not sure if a map is necessary or not.
        let cookies = M.fromList $ rqCookies req
            gId = maybe "1" cookieValue
                          (M.lookup "active-graph" cookies)
-           graphKey = read gId :: GraphId
-       liftIO $ getGraphImage graphKey (M.map cookieValue cookies)
+           graphKey = read gId :: Int64
+       liftIO $ print graphKey
+       liftIO $ getGraphImage (toSqlKey graphKey) (M.map cookieValue cookies)
 
 -- | Returns an image of the timetable requested by the user.
 timetableImageResponse :: String -> String -> ServerPart Response
