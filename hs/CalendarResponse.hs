@@ -4,7 +4,7 @@ import Data.List.Split (splitOn)
 import Data.List
 import Data.List
 import Data.Time
-import Happstack.Server (nullConf, simpleHTTP, toResponse, ok)
+import Happstack.Server (nullConf, simpleHTTP, toResponse, ok, Response, ServerPart, IO Response)
 import Control.Monad.IO.Class  (liftIO)
 import System.Locale
 
