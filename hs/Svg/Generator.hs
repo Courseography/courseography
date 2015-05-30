@@ -27,7 +27,15 @@ import qualified Text.Blaze.Svg11.Attributes as A
 import Text.Blaze.Svg.Renderer.String (renderSvg)
 import Text.Blaze.Internal (stringValue)
 import Text.Blaze (toMarkup)
-import Css.Constants
+import Css.Constants (theoryDark,
+                      seDark,
+                      systemsDark,
+                      hciDark,
+                      graphicsDark,
+                      numDark,
+                      aiDark,
+                      introDark,
+                      mathDark)
 import qualified Data.Map.Strict as M
 import Data.Monoid (mempty)
 import Config (dbStr)
