@@ -5,7 +5,7 @@ import Data.List
 import Data.List
 import Data.Time
 import Happstack.Server (nullConf, simpleHTTP, toResponse, ok, Response, ServerPart)
-import Happstack.Internal.Monads.ServerPart
+import Happstack.Server.Monads
 import Control.Monad.IO.Class  (liftIO)
 import System.Locale
 
@@ -134,6 +134,6 @@ notFound $ toResponse $
 -}
 
 -- | Returns a CSV file of events as requested by the user.
-calendar :: String -> String -> ServerPart Response
+calendar :: String -> String -> ServerPart IO()
 calendar courses session =
     liftIO $ getCalendar courses session
