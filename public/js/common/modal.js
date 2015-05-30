@@ -214,7 +214,7 @@ function openModal(title, modalDiv) {
                 .addClass('modal').dialog({
                     autoOpen: true,
                     modal: true,
-                    width: 600,
+                    width: 750,
                     height: 400,
                     closeText: 'X',
                     open: function(event, ui) {
