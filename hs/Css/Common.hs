@@ -181,5 +181,7 @@ fbModalCSS = do
         margin nil auto (px 10) auto
         maxWidth (pct 100)
     "#modal-buttons" ? do
-        width (pct 40)
-        margin (px 10) auto nil auto
+        float floatRight
+        margin (px 20) auto (px 20) auto
+        ".btn" ? do
+            margin nil (px 5) nil (px 5)
