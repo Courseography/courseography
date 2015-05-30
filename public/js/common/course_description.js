@@ -113,5 +113,5 @@ function getCourseTitle(id) {
         name = course.title;
     }
 
-    return id + ': ' + name;
+    return id.toUpperCase() + ': ' + name;
 }
