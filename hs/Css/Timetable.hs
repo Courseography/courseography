@@ -11,8 +11,6 @@ import Css.Constants
  - Generates all CSS required for the timetable page. -}
 timetableStyles :: Css
 timetableStyles = do
-    body ? do
-        overflowX hidden
     ".main" ? do -- TODO: change to id, and pick better name
         height (pct 84)
         margin0
