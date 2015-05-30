@@ -14,7 +14,6 @@ function createModalDiv(id) {
     var bottomContentDiv = $('<div></div>');
     bottomContentDiv.attr('id', 'bottom-content-container');
     var timetable = setupTimeslot(id);
-    var relatedLinks = setupRelatedLinks(id);
     contentDiv.append(p);
     contentDiv.append(timetable);
     contentDiv.append(bottomContentDiv);
@@ -29,7 +28,6 @@ function createModalDiv(id) {
         var video = setupVideoPlayer(videos[0]);
         bottomContentDiv.append(video);
     }
-    bottomContentDiv.append(relatedLinks);
 
     return contentDiv;
 }
@@ -92,24 +90,6 @@ function setupTimeslot(id) {
     timeslot.children('.searchClass').children('td').first().remove();
     timeslot.children('tr').children('td').first().remove();
     return timeslot;
-}
-
-
-/**
- * Sets up and returns the related links HTML div element.
- * @param id The course code.
- * @returns {jQuery}
- */
-function setupRelatedLinks(id) {
-    'use strict';
-
-    var relatedLinksDiv = $('<div></div>').css('display', 'inline')
-                                          .css('float', 'right')
-                                          .css('width', '45%')
-                                          .css('height', '250');
-    var title = $('<h3></h3>');
-    relatedLinksDiv.append(title);
-    return relatedLinksDiv;
 }
 
 
