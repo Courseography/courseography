@@ -1,3 +1,5 @@
+module CalendarResponse where
+
 import Data.List.Split (splitOn)
 import Data.List
 import Data.List
