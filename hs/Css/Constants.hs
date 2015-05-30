@@ -95,10 +95,6 @@ titleColour = "#072D68"
 lightGrey :: T.Text
 lightGrey = "#CCCCCC"
 
-{- Color for the course modal. -}
-modalColor :: Color
-modalColor = parse "#374AA1"
-
 {- Background colors. -}
 purple1 :: Color
 purple1 = parse "#46364A"

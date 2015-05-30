@@ -126,7 +126,11 @@ modalCSS :: Css
 modalCSS = do
     ".ui-dialog" ? do
         outline solid (px 0) black
-        position absolute
+        color black
+        overflowX hidden
+        overflowY auto
+        backgroundColor white
+        boxShadow (px 8) (px 8) (px 8) black
     ".ui-widget-overlay" ? do
         height100
         width100
@@ -134,24 +138,22 @@ modalCSS = do
         left nil
         top nil
     ".modal" ? do
-        backgroundColor modalColor
-        padding (px 20) (px 20) (px 20) (px 20)
-        width (pct 70)
-        height (pct 70)
-        overflow auto
+        padding (px 10) (px 25) (px 25) (px 25)
         position static
         p ? do
-            color white
+            fontSize (pt 12)
+            margin (pt 5) 0 (pt 5) 0
+            lineHeight (em 1.3)
     ".ui-dialog-titlebar" ? do
-        backgroundColor $ parse "#222266"
-        color white
-        fontSize (em 2)
+        color blue3
         cursor move
-        alignCenter
+        paddingLeft (px 25)
+        height (em 1.8)
+        lineHeight (em 1.8)
+        fontSize (em 1)
+        borderBottom solid (px 1) black
     ".ui-dialog-titlebar-close" ? do
         display none
-    "#bottom-content-container" ? do
-        paddingTop (em 1)
     ".ui-width-overlay" ? do
         height100
         width100
@@ -161,7 +163,16 @@ modalCSS = do
     ".ui-dialog" ? do
         tr ? do
             margin nil auto nil auto
+    "#course-video-div" ? do
+        margin (pt 5) 0 (pt 5) 0
+        width100
+        height100
+    "#course-video" ? do
+        width100
+        height100
     fbModalCSS
+
+
 
 fbModalCSS :: Css
 fbModalCSS = do
@@ -170,5 +181,7 @@ fbModalCSS = do
         margin nil auto (px 10) auto
         maxWidth (pct 100)
     "#modal-buttons" ? do
-        width (pct 40)
-        margin (px 10) auto nil auto
+        float floatRight
+        margin (px 20) auto (px 20) auto
+        ".btn" ? do
+            margin nil (px 5) nil (px 5)
