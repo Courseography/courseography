@@ -134,7 +134,7 @@ function fillExtraTextboxes(post, postElement, level) {
 
         if (postElement[post.filledTextboxesExtra].value === '' &&
             course.indexOf('CSC' + level.charAt(0)) != -1 &&
-            (post.name === 'major' || post.name === 'minor' ||
+            ((post.name === 'major' && notReqCourse(course)) || post.name === 'minor' ||
              (post.name === 'specialist' && notSpecialistCourse(course)))) {
 
             postElement[post.filledTextboxesExtra].value = activeCourses[i];

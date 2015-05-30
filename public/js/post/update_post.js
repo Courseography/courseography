@@ -240,3 +240,14 @@ function notSpecialistCourse(course) {
 
     return specialistCourses.indexOf(course) === -1;
 }
+
+/**
+ * Returns whether course is a required course or not
+ * @param {string} Name of course
+ * @return {boolean} True if course is required, False otherwise
+ */
+function notReqCourse(course) {
+    'use strict';
+
+    return reqs.indexOf(course) === -1;
+}
