@@ -41,7 +41,7 @@ specialCases = ["assem.html",
 getDeptList :: [Tag String] -> [String]
 getDeptList tags =
   let deptList = filter (tagOpen (=="a") isHref) tags
-      notDepts = filter (\s -> (length s) < 20) (map getAttribute deptList)
+      notDepts = filter (\str -> (length str) < 20) (map getAttribute deptList)
   in nub $ filter (\dept -> not (dept `elem` specialCases)) notDepts
   where
     isHref [("href", _)] = True
@@ -69,8 +69,8 @@ getDeptTimetable url = do
   mapM_ (\(pos, course) -> processCourseTable (foldl (\c p -> expandTable c "" p) course pos)) (toCells table)
   --print toLower--were running into an empty list while printing out the final results-- look into this tomorrow
   where
-    cleanTag (TagText s) = TagText (T.strip (replaceAll ["\r\n"] "" s))
-    cleanTag s = s
+    cleanTag (TagText str) = TagText (T.strip (replaceAll ["\r\n"] "" str))
+    cleanTag str = str
 
 -- | partitions the html table into a 2d list of cells. Does not account for cells that take
 -- up more than one row or column.

@@ -203,8 +203,8 @@ attrName (qname, _) = printableName qname
 -- | Looks up the (string) value of the attribute with the corresponding name.
 -- Returns the empty string if the attribute isn't found.
 lookupAttr :: String -> [Attribute] -> String
-lookupAttr name attrs =
-    maybe "" (show . snd) $ find (\x -> attrName x == name) attrs
+lookupAttr nameStr attrs =
+    maybe "" (show . snd) $ find (\x -> attrName x == nameStr) attrs
 
 -- | Looks up an attribute value and convert to another type.
 readAttr :: Read a => String    -- ^ The attribute's name.
@@ -219,14 +219,14 @@ styles attrs =
     let styleStr = lookupAttr "style" attrs
     in map toStyle $ splitOn ";" styleStr
     where
-        toStyle s =
-            case splitOn ":" s of
+        toStyle split =
+            case splitOn ":" split of
             [n,v] -> (n,v)
             _ -> ("","")
 
 -- | Gets a style attribute from a style string.
 styleVal :: String -> [(String, String)] -> String
-styleVal name style = fromMaybe "" $ lookup name style
+styleVal nameStr style = fromMaybe "" $ lookup nameStr style
 
 -- | Parses a transform String into a tuple of Float.
 parseTransform :: String -> Point
@@ -247,13 +247,13 @@ parsePathD d
       lengthMoreThanOne x = length x > 1
       coordList = filter lengthMoreThanOne (map (splitOn ",") $ splitOn " " d)
       -- Converts a relative coordinate structure into an absolute one.
-      relCoords = tail $ foldl (\x y -> x ++ [addTuples (convertToPoint y)
+      relCoords = tail $ foldl (\x z -> x ++ [addTuples (convertToPoint z)
                                                         (last x)])
                                [(0,0)]
                                coordList
       -- Converts a relative coordinate structure into an absolute one.
       absCoords = map convertToPoint coordList
-      convertToPoint y = (read (head y), read (last y))
+      convertToPoint z = (read (head z), read (last z))
 
 
 -- * Other helpers

@@ -3,7 +3,7 @@
 module Css.Compiler where
 
 import Prelude hiding (writeFile)
-import Clay (renderWith, compact)
+import Clay (renderWith)
 import Data.Text.Lazy.IO (writeFile)
 import Css.Common (common)
 import Css.Graph (graphStyles)

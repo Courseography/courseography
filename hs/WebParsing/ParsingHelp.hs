@@ -57,7 +57,7 @@ emptyCourse = Course {
 
 replaceAll :: [T.Text] -> T.Text -> T.Text -> T.Text
 replaceAll matches replacement str =
-  foldl (\foldStr match-> T.replace match replacement foldStr) str matches
+  foldl (\foldstr match-> T.replace match replacement foldstr) str matches
 
 {------------------------------------------------------------------------------
 INPUT: a tag containing string tagtext, and reg, a regex string
@@ -71,7 +71,7 @@ tagContains matches (TagText tagtext) =
 --converts all open and closing tags to lowercase.
 lowerTag :: Tag T.Text -> Tag T.Text
 lowerTag (TagOpen tag attrs) =
-  TagOpen (T.toLower tag) (map (\(x, y) -> (T.toLower x, T.toLower y)) attrs)
+  TagOpen (T.toLower tag) (map (\(x, z) -> (T.toLower x, T.toLower z)) attrs)
 lowerTag (TagClose tag) = TagClose (T.toLower tag)
 lowerTag text = text
 
@@ -165,8 +165,8 @@ preProcess tags =
       removeEnrol = filter (\t -> not $ tagContains ["Enrolment Limits:"] t) removeUseless
   in map cleanText removeEnrol
   where
-    cleanText (TagText s) = TagText (replaceAll ["\r\n                    ", "\n                    ","\160","\194","\r\n"] "" s)
-    isntUseless (TagText s) = not $ T.all (\c -> or [(c == ' '), (c =='\n')]) s
+    cleanText (TagText str) = TagText (replaceAll ["\r\n                    ", "\n                    ","\160","\194","\r\n"] "" str)
+    isntUseless (TagText str) = not $ T.all (\c -> or [(c == ' '), (c =='\n')]) str
 
 parseDescription :: CoursePart -> CoursePart
 parseDescription (tags, course) =
@@ -184,8 +184,8 @@ parsePrerequisite (tags, course) =
 parseCorequisite :: CoursePart -> CoursePart
 parseCorequisite (tags, course)  =
   let (parsed, rest) = tagBreak ["Exclusion","Recommended","Distribution","Breadth"] tags
-      coreqs = makeEntry parsed (Just ["Corequisite:"])
-  in (rest, course {coreqs = coreqs})
+      coreq = makeEntry parsed (Just ["Corequisite:"])
+  in (rest, course {coreqs = coreq})
 
 parseExclusion :: CoursePart -> CoursePart
 parseExclusion (tags, course) =

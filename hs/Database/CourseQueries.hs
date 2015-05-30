@@ -111,9 +111,9 @@ buildTutorial entity =
 -- | Builds a Session structure from a list of tuples from the Lectures table,
 -- and a list of tuples from the Tutorials table.
 buildSession :: [Entity Lectures] -> [Entity Tutorials] -> Maybe Tables.Session
-buildSession lectures tutorials =
-    Just $ Tables.Session (map (buildLecture . entityVal) lectures)
-                          (map (buildTutorial . entityVal) tutorials)
+buildSession lecture tutorial =
+    Just $ Tables.Session (map (buildLecture . entityVal) lecture)
+                          (map (buildTutorial . entityVal) tutorial)
 
 -- ** Other queries
 
@@ -161,19 +161,19 @@ getDeptCourses dept = do
                 yearSession   = buildSession' (lecByCode course yearLectures) (tutByCode course yearTutorials)
             in
                 buildCourse fallSession springSession yearSession course
-        buildSession' lectures tutorials =
-            Just $ Tables.Session (map buildLecture lectures)
-                                  (map buildTutorial tutorials)
+        buildSession' lecture tutorial =
+            Just $ Tables.Session (map buildLecture lecture)
+                                  (map buildTutorial tutorial)
 
 -- | Return a list of all departments.
 deptList :: IO Response
 deptList = do
     depts <- runSqlite dbStr $ do
         courses :: [Entity Courses] <- selectList [] []
-        return $ sort . nub $ map f courses
+        return $ sort . nub $ map g courses
     return $ createJSONResponse depts
     where
-        f = take 3 . T.unpack . coursesCode . entityVal
+        g = take 3 . T.unpack . coursesCode . entityVal
 
 -- | Queries the graphs table and returns a JSON response of Graph JSON
 -- objects.

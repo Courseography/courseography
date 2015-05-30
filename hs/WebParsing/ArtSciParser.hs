@@ -53,13 +53,13 @@ getCalendar str = do
         isNotComment _ = True
         -- Changed this function - wasn't parsing for crs_cjs (or the next one)
         lastH2 tags =
-            let s = sections (isTagOpenName "h2") tags
+            let sec = sections (isTagOpenName "h2") tags
             in
-                if null s
+                if null sec
                 then
                     []
                 else
-                    last s
+                    last sec
         isCourseTitle (TagOpen _ attrs) = any (\x -> fst x == "name" && T.length (snd x) == 8) attrs
         isCourseTitle _ = False
 
@@ -67,8 +67,8 @@ parseTitleFAS :: CoursePart -> CoursePart
 parseTitleFAS (tag:tags, course) =
     let (n, t) = T.splitAt 8 $ removeTitleGarbage $ removeLectureSection tag
     in (tags, course {title = Just t, name =  n})
-    where removeLectureSection (TagText s) = T.takeWhile (/= '[') s
-          removeTitleGarbage s = replaceAll ["\160"] "" s
+    where removeLectureSection (TagText str) = T.takeWhile (/= '[') str
+          removeTitleGarbage str = replaceAll ["\160"] "" str
 
 -- |takes a list of tags representing a single course, and returns a course Record
 processCourseToData :: [Tag T.Text] ->  Course
