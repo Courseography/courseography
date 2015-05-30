@@ -14,6 +14,7 @@ import FourOhFourResponse
 import SearchResponse
 import AboutResponse
 import PrivacyResponse
+import CalendarResponse
 import Database.CourseQueries (retrieveCourse, allCourses, queryGraphs, courseInfo, deptList)
 import Css.CssGen
 import Filesystem.Path.CurrentOS
