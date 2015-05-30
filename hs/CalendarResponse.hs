@@ -134,6 +134,6 @@ notFound $ toResponse $
 -}
 
 -- | Returns a CSV file of events as requested by the user.
-calendar :: String -> String -> ServerPart IO()
+calendar :: String -> String -> ServerPart
 calendar courses session =
     liftIO $ getCalendar courses session
