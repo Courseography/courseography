@@ -53,13 +53,13 @@ getCalendar str = do
         isNotComment _ = True
         -- Changed this function - wasn't parsing for crs_cjs (or the next one)
         lastH2 tags =
-            let sec = sections (isTagOpenName "h2") tags
+            let sect = sections (isTagOpenName "h2") tags
             in
-                if null sec
+                if null sect
                 then
                     []
                 else
-                    last sec
+                    last sect
         isCourseTitle (TagOpen _ attrs) = any (\x -> fst x == "name" && T.length (snd x) == 8) attrs
         isCourseTitle _ = False
 
