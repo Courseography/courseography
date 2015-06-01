@@ -36,7 +36,7 @@ header page =
             H.li $ makeA "" "" "draw" "" "Draw"
             H.li $ makeA "" "" "post" "" "Check My POSt!"
             H.li $ makeA "" "" "about" "" "About"
-            H.li $ makeA "" "" "calendar" "" "Calendar"
+            (H.li $ makeA "calendar" "" "calendar" "" "Calendar").addEventListener('click', getCalendarEvents())
         if page `elem` ["graph", "grid"]
         then
             H.div ! A.id "nav-fb" $ do
