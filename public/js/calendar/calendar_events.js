@@ -3,27 +3,13 @@
  * file.
  */
 
-/*document.addEventListener('calendar', function() {
-    var calendar = document.getElementById('calendar');
-    // onClick's logic below:
-    calendar.addEventListener('click', function() {
-        getCalendarEvents;
-    });
-});
-
-//.addEventListener('click', getCalendarEvents())
-*/
-
-var calendarTag = document.getElementsByTagName('calendar');
-//calendarTag.onclick=getCalendarEvents("fall"){"hs/MasterTemplate.hs"};
-//calendarTag.onclick=getCalendarEvents("fall"){"/hs/MasterTemplate.hs"};
-//calendarTag.onclick=getCalendarEvents("fall"){"courseography/hs/MasterTemplate.hs"};
-//calendarTag.onclick=getCalendarEvents("fall"){"static/hs/MasterTemplate.hs"};
-calendarTag.onclick=function(){getCalendarEvents('fall')};
+var calendarDoc = document.getElementById('calendarlink');
+calendarDoc.onclick=function(){getCalendarEvents('fall')};
 //calendarTag.onclick=function(){myscript};
 
 //calendar.addEventListener('click', function() {
 //      getCalendarEvents;
+//.addEventListener('click', getCalendarEvents())
 
 function getCalendarEvents(session) {
     'use strict';
