@@ -4,8 +4,8 @@
  */
 
 var calendarDoc = document.getElementById('calendarlink');
-//calendarDoc.onclick=function(){getCalendarEvents('fall')};
-calendarDoc.onclick=getCalendarEvents('fall'){"http://localhost:8000/calendar"};
+calendarDoc.onclick=function(){getCalendarEvents('fall')};
+//calendarDoc.onclick=getCalendarEvents('fall'){"http://localhost:8000/calendar"};
 //calendarTag.onclick=function(){myscript};
 
 //calendar.addEventListener('click', function() {
