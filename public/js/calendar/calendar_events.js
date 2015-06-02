@@ -3,8 +3,10 @@
  * file.
  */
 
-var calendarDoc = document.getElementById('calendarlink');
-calendarDoc.onclick=function(){getCalendarEvents('fall')};
+var calendarRefer = document.getElementById('calendarlink');
+calendarRefer.addEventListener('click', function() {getCalendarEvents('fall')}, false);
+// $('calendar').click(function({getCalendarEvents('fall')}));
+//calendarDoc.onclick=function(){getCalendarEvents('fall')};
 //calendarDoc.onclick=getCalendarEvents('fall'){"http://localhost:8000/calendar"};
 //calendarTag.onclick=function(){myscript};
 
