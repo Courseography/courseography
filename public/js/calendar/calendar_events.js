@@ -15,9 +15,9 @@
 */
 
 var calendarTag = document.getElementsByTagName('calendar');
-calendarTag.onclick=getCalendarEvents("fall"){"hs/MasterTemplate.hs"};
+//calendarTag.onclick=getCalendarEvents("fall"){"hs/MasterTemplate.hs"};
 //calendarTag.onclick=getCalendarEvents("fall"){"/hs/MasterTemplate.hs"};
-//calendarTag.onclick=getCalendarEvents("fall"){"courseography/hs/MasterTemplate.hs"};
+calendarTag.onclick=getCalendarEvents("fall"){"courseography/hs/MasterTemplate.hs"};
 //calendarTag.onclick=getCalendarEvents("fall"){"static/hs/MasterTemplate.hs"};
 //calendarTag.onclick=function(){getCalendarEvents('fall')};
 //calendarTag.onclick=function(){myscript};
