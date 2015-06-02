@@ -3,7 +3,7 @@
  * file.
  */
 
-var calendarDoc = document.getElementById('calendar');
+var calendarDoc = document.getElementById('calendarlink');
 calendarDoc.onclick=function(){getCalendarEvents('fall')};
 //calendarTag.onclick=function(){myscript};
 
