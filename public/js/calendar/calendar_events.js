@@ -3,8 +3,8 @@
  * file.
  */
 
-var calendarDoc = document.getElementById('calendarlink');
-calendarDoc.onclick=function(){getCalendarEvents('fall')};
+//var calendarDoc = document.getElementById('calendarlink');
+//calendarDoc.onclick=function(){getCalendarEvents('fall')};
 //calendarTag.onclick=function(){myscript};
 
 //calendar.addEventListener('click', function() {
@@ -16,6 +16,8 @@ function getCalendarEvents(session) {
 
     var events;
     var courses = getCoursesTable(session);
+    var calendarDoc = document.getElementById('calendarlink');
+    calendarDoc.onclick=function(){getCalendarEvents('fall')};
     session = session.charAt(0).toUpperCase() + session.slice(1);
     $.ajax({
         url: 'calendar',
