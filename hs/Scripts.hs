@@ -88,24 +88,24 @@ searchScripts = do
 calendarScripts :: H.Html
 calendarScripts = do jQuery
                       concatHtml (map makeScript ["static/js/grid/timetable_util.js",
-                                                "/static/js/grid/setup.js",
-                                                "/static/js/grid/mouse_events.js",
-                                                "//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js",
-                                                "https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js",
-                                                "/static/js/common/cookie_handler.js",
-                                                "/static/js/grid/generate_grid.js",
-                                                "/static/js/common/objects/course.js",
-                                                "/static/js/common/objects/section.js",
-                                                "/static/js/common/utilities/util.js",
-                                                "/static/js/common/facebook/facebook_login.js",
-                                                "/static/js/common/facebook/facebook_image.js",
-                                                "/static/js/common/facebook/facebook_modal.js",
-                                                "/static/js/common/grid_image.js",
-                                                "/static/js/common/image_conversion.js",
-                                                "/static/js/draw/draw.js",
-                                                "static/js/common/modal.js",
-                                                "static/js/common/course_description.js",
-                                                "static/js/calendar/calendar_events.js"])
+                        "/static/js/grid/setup.js",
+                        "/static/js/grid/mouse_events.js",
+                        "//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js",
+                        "https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js",
+                        "/static/js/common/cookie_handler.js",
+                        "/static/js/grid/generate_grid.js",
+                        "/static/js/common/objects/course.js",
+                        "/static/js/common/objects/section.js",
+                        "/static/js/common/utilities/util.js",
+                        "/static/js/common/facebook/facebook_login.js",
+                        "/static/js/common/facebook/facebook_image.js",
+                        "/static/js/common/facebook/facebook_modal.js",
+                        "/static/js/common/grid_image.js",
+                        "/static/js/common/image_conversion.js",
+                        "/static/js/draw/draw.js",
+                        "static/js/common/modal.js",
+                        "static/js/common/course_description.js",
+                        "static/js/calendar/calendar_events.js"])
 
 fourOhFourScripts :: H.Html
 fourOhFourScripts = jQuery
