@@ -22,7 +22,7 @@ function getCalendarEvents(session) {
     session = session.charAt(0).toUpperCase() + session.slice(1);
     $.ajax({
         url: 'calendar',
-        //async: false,
+        async: false,
         data: {courses: courses, session: session},
         success: function (data) {
             events = data;
@@ -32,7 +32,7 @@ function getCalendarEvents(session) {
             throw 'No CSV file generated';
         }
     });
-
+    system.out.println(data)
     return events;
 }
 
