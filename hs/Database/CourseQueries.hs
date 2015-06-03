@@ -161,9 +161,9 @@ getDeptCourses dept = do
                 yearSession   = buildSession' (lecByCode course yearLectures) (tutByCode course yearTutorials)
             in
                 buildCourse fallSession springSession yearSession course
-        buildSession' lecture tutorial =
-            Just $ Tables.Session (map buildLecture lecture)
-                                  (map buildTutorial tutorial)
+        buildSession' lecs tuts =
+            Just $ Tables.Session (map buildLecture lecs)
+                                  (map buildTutorial tuts)
 
 -- | Return a list of all departments.
 deptList :: IO Response
