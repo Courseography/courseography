@@ -56,8 +56,7 @@ timetableScripts = do jQuery
                                                 "/static/js/draw/draw.js",
                                                 "static/js/common/modal.js",
                                                 "static/js/common/course_description.js",
-                                                "static/js/calendar/calendar_events.js",
-                                                "http://localhost:8000/calendar"])
+                                                "static/js/calendar/calendar_events.js"])
 
 drawScripts :: H.Html
 drawScripts = do jQuery 
