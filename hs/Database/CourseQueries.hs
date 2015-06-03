@@ -111,9 +111,9 @@ buildTutorial entity =
 -- | Builds a Session structure from a list of tuples from the Lectures table,
 -- and a list of tuples from the Tutorials table.
 buildSession :: [Entity Lectures] -> [Entity Tutorials] -> Maybe Tables.Session
-buildSession lecture tutorial =
-    Just $ Tables.Session (map (buildLecture . entityVal) lecture)
-                          (map (buildTutorial . entityVal) tutorial)
+buildSession lecs tuts =
+    Just $ Tables.Session (map (buildLecture . entityVal) lecs)
+                          (map (buildTutorial . entityVal) tuts)
 
 -- ** Other queries
 

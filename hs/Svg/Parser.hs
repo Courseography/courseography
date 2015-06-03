@@ -226,7 +226,7 @@ styles attrs =
 
 -- | Gets a style attribute from a style string.
 styleVal :: String -> [(String, String)] -> String
-styleVal nameStr style = fromMaybe "" $ lookup nameStr style
+styleVal nameStr styleMap = fromMaybe "" $ lookup nameStr styleMap
 
 -- | Parses a transform String into a tuple of Float.
 parseTransform :: String -> Point
