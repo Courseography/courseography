@@ -22,6 +22,7 @@ function getCalendarEvents(session) {
     session = session.charAt(0).toUpperCase() + session.slice(1);
     $.ajax({
         url: 'calendar',
+        async: false,
         data: {courses: courses, session: session},
         success: function (data) {
             events = data;
