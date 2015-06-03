@@ -130,13 +130,13 @@ test courses = toCSV(matchData (startTimes courses) (endTimes courses) (startDat
 getCsvFile :: String -> String -> String
 getCsvFile courses session = toCSV(matchData (startTimes coursesWeekly) (endTimes coursesWeekly))
     where
-        coursesWeekly = splitCourses courses session
+    coursesWeekly = splitCourses courses session
 
 splitCourses :: String -> String -> [[String]]
 splitCourses courses session = partition5 $ splitOn "_" courses
     where
-        partition5 [] = []
-        partition5 lst = take 5 lst : partition5(drop 5 lst)
+    partition5 [] = []
+    partition5 lst = take 5 lst : partition5(drop 5 lst)
 
 getCalendar :: String -> String -> IO Response
 getCalendar courses session = return $ toResponse(getCsvFile courses session)
