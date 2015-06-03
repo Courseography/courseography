@@ -55,29 +55,6 @@ eventsByCourse start end date =  [fst start ++ "," ++ format byDate ++ "," ++ sn
 format :: Day -> String
 format date = formatTime defaultTimeLocale "%D" date
 
-{- Output file:
-"Subject, start time, end time
-MAT137,8:00:00 AM,9:00:00 AM
-CSC148,9:00:00 AM,10:00:00 AM
-CSC165,4:00:00 PM,5:00:00 PM
-ECO100,9:00:00 PM,10:00:00 PM"
--}
-toCSV :: [String] -> String
-toCSV eventsData = unlines ([title] ++ eventsData)
-    where
-    title = "Subject,Start Date,Start Time,End Date,End Time,All Day Event,Description,Location,Private"
-
-getCsvFile :: String -> String -> String
-getCsvFile courses session = toCSV(matchData (startTimes coursesWeekly) (endTimes coursesWeekly) (startDate coursesWeekly))
-    where
-    coursesWeekly = splitCourses courses session
-
-splitCourses :: String -> String -> [[String]]
-splitCourses courses session = partition5 $ splitOn "_" courses
-    where
-    partition5 [] = []
-    partition5 lst = take 5 lst : partition5(drop 5 lst)
-
 -- EVENTS START END DATE
 
 -- First day of classes will be on September, September 14.
@@ -127,8 +104,20 @@ endDate courses = startDate courses
 test :: [[String]] -> String
 test courses = toCSV(matchData (startTimes courses) (endTimes courses) (startDate courses))
 
+{- Output file:
+"Subject, start time, end time
+MAT137,8:00:00 AM,9:00:00 AM
+CSC148,9:00:00 AM,10:00:00 AM
+CSC165,4:00:00 PM,5:00:00 PM
+ECO100,9:00:00 PM,10:00:00 PM"
+-}
+toCSV :: [String] -> String
+toCSV eventsData = unlines ([title] ++ eventsData)
+    where
+    title = "Subject,Start Date,Start Time,End Date,End Time,All Day Event,Description,Location,Private"
+
 getCsvFile :: String -> String -> String
-getCsvFile courses session = toCSV(matchData (startTimes coursesWeekly) (endTimes coursesWeekly))
+getCsvFile courses session = toCSV(matchData (startTimes coursesWeekly) (endTimes coursesWeekly) (startDate coursesWeekly))
     where
     coursesWeekly = splitCourses courses session
 
@@ -140,23 +129,11 @@ splitCourses courses session = partition5 $ splitOn "_" courses
 
 getCalendar :: String -> String -> IO Response
 getCalendar courses session = return $ toResponse(getCsvFile courses session)
-{- do return $ createJSONResponse(getCalendar courses session)
-ok $ toResponse $
-notFound $ toResponse $
-
-IO ()
-ServerPartT IO ()
--}
 
 -- | Returns a CSV file of events as requested by the user.
 calendarResponse :: String -> String -> ServerPart Response
 calendarResponse courses session =
     liftIO $ getCalendar courses session
-
-
-
-
-
 
 
 {-getCalendar :: String -> String -> IO Response IO ()
