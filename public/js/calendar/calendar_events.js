@@ -14,6 +14,36 @@ calendarRefer.onclick=function(){getCalendarEvents('fall')};
 //      getCalendarEvents;
 //.addEventListener('click', getCalendarEvents())
 
+function getCalendarEvents(session) 
+{
+var courses = getCoursesTable(session);
+// fall turns into Fall
+session = session.charAt(0).toUpperCase() + session.slice(1);
+// Using link
+$("calendarlink").click(function()        //calendarlink is the bottom reference
+{
+    // Ajax call
+    $.ajax(
+    {url: "calendar",
+        beforeSend: function()
+        {
+        alert("My ajax got called")
+        },
+    data: {courses: courses, session: session},  //key:value
+       //data sent to the server
+        success: function(data)         //result data is what I should return
+        {
+        alert("CSV file generated");
+        //return courses.  THIS MAY BE DIFFERENT
+        },
+        error: function()
+        {
+        alert("Error. No CSV file generated");
+        }
+    });
+});
+}
+/*
 function getCalendarEvents(session) {
     'use strict';
 
@@ -21,7 +51,6 @@ function getCalendarEvents(session) {
     var courses = getCoursesTable(session);
     session = session.charAt(0).toUpperCase() + session.slice(1);
     system.out.println("about to enter ajax call");
-
     $.ajax({
         url: 'calendar',
         async: false,
@@ -36,7 +65,7 @@ function getCalendarEvents(session) {
     });
     return events;
 }
-
+*/
 
 function getCoursesTable(session) {
     'use strict';
