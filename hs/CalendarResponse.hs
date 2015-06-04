@@ -11,6 +11,9 @@ import Control.Monad.IO.Class  (liftIO)
 import System.Locale
 import MasterTemplate
 import MakeElements
+import Text.Blaze ((!))
+import qualified Text.Blaze.Html5 as H
+import qualified Text.Blaze.Html5.Attributes as A
 import Scripts
 
 testString1 = [["MAT137","","","",""],["","","CSC148","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","CSC165","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","","ECO100"]]
