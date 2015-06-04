@@ -3,7 +3,7 @@ var specialist = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'fille
                   'filledTextboxes400': 0, 'filledTextboxesExtra': 0, 'specCount': 0,
                   'reqs': ['CSC108', 'CSC148', 'CSC165240', 'CSC207', 'CSC209', 'CSC236240', 'CSC258', 
                   'CSC263265', 'STA247255257Sta1', 'MAT221223240Lin1', 'MAT135136137157Calc1', 'CSC369', 
-                  'CSC373'], 'textboxes300': 3, 'textboxes400': 3, 'index200': 0,
+                  'CSC373'], 'textboxes300': 3, 'textboxes400': 3, 
                   'textboxesExtra': 4, 'categories': 17, 'creditCount': 0, 'name': 'specialist'};
 var major = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0,
              'filledTextboxes400': 0, 'filledTextboxesExtra': 0, 'majCount': 0, 'reqs': ['CSC108',
@@ -55,7 +55,7 @@ function resetValues() {
                   'filledTextboxes400': 0, 'filledTextboxesExtra': 0, 'specCount': 0,
                   'reqs': ['CSC108', 'CSC148', 'CSC165240', 'CSC207', 'CSC209', 'CSC236240', 'CSC258', 
                   'CSC263265', 'STA247255257Sta1', 'MAT221223240Lin1', 'MAT135136137157Calc1', 'CSC369', 
-                  'CSC373'], 'textboxes300': 3, 'textboxes400': 3, 'index200': 0,
+                  'CSC373'], 'textboxes300': 3, 'textboxes400': 3, 
                   'textboxesExtra': 4, 'categories': 17, 'creditCount': 0, 'name': 'specialist'};
     var major = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0,
                  'filledTextboxes400': 0, 'filledTextboxesExtra': 0, 'majCount': 0, 'reqs': ['CSC108',
