@@ -9,6 +9,8 @@ import Data.Time
 import Happstack.Server
 import Control.Monad.IO.Class  (liftIO)
 import System.Locale
+import MasterTemplate
+import MakeElements
 import Scripts
 
 testString1 = [["MAT137","","","",""],["","","CSC148","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","CSC165","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","","ECO100"]]
