@@ -137,15 +137,20 @@ getCalendar :: String -> String -> IO Response
 getCalendar courses session = return $ toResponse(getCsvFile courses session)
 
 -- | Returns a CSV file of events as requested by the user.
+{-calendarResponse :: String -> String -> ServerPart Response
+calendarResponse courses session =
+    liftIO $ getCalendar courses session-}
 calendarResponse :: String -> String -> ServerPart Response
 calendarResponse courses session =
-    liftIO $ getCalendar courses session
     ok $ toResponse $
-        masterTemplate "Courseography - Calendar"
+        masterTemplate "Courseography - Calendar!"
                     [H.meta ! A.name "keywords"
                             ! A.content "",
                             timetableLinks
                     ]
+                    (do header "calendar"
+                        liftIO $ getCalendar courses session
+                    )
                     timetableScripts
 
 {-getCalendar :: String -> String -> IO Response IO ()
