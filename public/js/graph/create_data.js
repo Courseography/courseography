@@ -13,7 +13,7 @@ var allCourses = ['CSC108', 'CSC148', 'CSC165240', 'CSC207', 'CSC236240',
                   'CSC420', 'CSC428', 'CSC386', 'CSC438', 'CSC443',
                   'CSC446', 'CSC448', 'CSC454', 'CSC456', 'CSC458',
                   'CSC463', 'CSC465', 'CSC469', 'CSC486', 'CSC488',
-                  'ECE489', 'CSC373', 'CSC466'];
+                  'ECE489', 'CSC373', 'CSC466', 'CSC200'];
 
 specialistCourses = ['CSC373', 'CSC369', 'MAT221223240Lin1'];
 
