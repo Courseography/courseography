@@ -9,6 +9,7 @@ import Data.Time
 import Happstack.Server
 import Control.Monad.IO.Class  (liftIO)
 import System.Locale
+import Scripts
 
 testString1 = [["MAT137","","","",""],["","","CSC148","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","CSC165","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","","ECO100"]]
 testString2 = [["M","","W","","F"],["M","","","",""],["","","W","","F"],["","","","","F"]]
@@ -134,7 +135,13 @@ getCalendar courses session = return $ toResponse(getCsvFile courses session)
 calendarResponse :: String -> String -> ServerPart Response
 calendarResponse courses session =
     liftIO $ getCalendar courses session
-
+    ok $ toResponse $
+        masterTemplate "Courseography - Calendar"
+                    [H.meta ! A.name "keywords"
+                            ! A.content "",
+                            timetableLinks
+                    ]
+                    timetableScripts
 
 {-getCalendar :: String -> String -> IO Response IO ()
 getCalendar courses session = simpleHTTP nullConf $ ok (toResponse(test testString))
