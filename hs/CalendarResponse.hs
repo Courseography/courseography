@@ -149,7 +149,7 @@ calendarResponse courses session =
                             timetableLinks
                     ]
                     (do header "calendar"
-                        liftIO $ getCalendar courses session
+                        getCalendar courses session
                     )
                     timetableScripts
 
