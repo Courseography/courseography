@@ -83,10 +83,11 @@ day 2 = "W"
 day 3 = "R"
 day 4 = "F"
 
--- Takes data from event days
+-- Takes data from event days to generate all the dates given the specific days
 startDate :: [[String]] -> [[Day]]
 startDate courses = [generateDates days | days <- eventDays courses]
 
+-- Generate all the dates given the specific days
 generateDates :: String -> [Day]
 generateDates "M" = take 30 [addDays i firstMonday | i <- [0,7..]]
     where 
@@ -104,6 +105,7 @@ generateDates "F" = take 30 [addDays i firstFriday | i <- [0,7..]]
     where 
     firstFriday = fromGregorian 2015 09 18
 
+-- Same as startDate, since our events do not happen in more than one day
 endDate :: [[String]] -> [[Day]]
 endDate courses = startDate courses
 
@@ -136,24 +138,23 @@ splitCourses courses session = partition5 $ splitOn "_" courses
 getCalendar :: String -> String -> IO Response
 getCalendar courses session = return $ toResponse(getCsvFile courses session)
 
--- | Returns a CSV file of events as requested by the user.
-calendarResponse :: String -> String -> ServerPart Response
-calendarResponse courses session =
-    liftIO $ getCalendar courses session
 
+-- | Returns a CSV file of events as requested by the user.
 {-calendarResponse :: String -> String -> ServerPart Response
 calendarResponse courses session =
+    liftIO $ getCalendar courses session-}
+
+calendarResponse :: String -> String -> ServerPart Response
+calendarResponse courses session =
     ok $ toResponse $
-        masterTemplate "Courseography - Calendar"
-                    [H.meta ! A.name "keywords"
-                            ! A.content "",
-                            timetableLinks
-                    ]
-                    (do
-                    H.p $ span $ (liftIO $ getCalendar courses session) -- I have to make it html
-                    )
-                    timetableScripts
--}
+        H.html $ do
+            H.head $ do
+                H.meta ! A.name "keywords"
+                       ! A.content "CSV file"
+                H.title "Calendar" 
+            H.body $ do   
+                liftIO $ getCalendar courses session
+            concatHtml [timetableScripts, makeScript "static/js/common/google_analytics.js"]
 
 {-getCalendar :: String -> String -> IO Response IO ()
 getCalendar courses session = simpleHTTP nullConf $ ok (toResponse(test testString))

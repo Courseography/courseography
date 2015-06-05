@@ -2,8 +2,7 @@
  * Requests a CSV file from the server. The server automatically generates this
  * file.
  */
-
-window.alert("Looked this file", getCalendarEvents('fall'))
+//window.alert("clicked it")
 var calendarRefer = document.getElementById('calendarlink');
 calendarRefer.onclick=function(){getCalendarEvents('fall')};
 
@@ -56,6 +55,7 @@ function getCalendarEvents(session) {
     var events;
     var courses = getCoursesTable(session);
     session = session.charAt(0).toUpperCase() + session.slice(1);
+    window.alert("clicked it and called my function")
     $.ajax({
         url: 'calendar',
         async: false,
