@@ -2,9 +2,11 @@
  * Requests a CSV file from the server. The server automatically generates this
  * file.
  */
+
+window.alert("Looked this file", getCalendarEvents('fall'))
 var calendarRefer = document.getElementById('calendarlink');
 calendarRefer.onclick=function(){getCalendarEvents('fall')};
-window.alert("Looked this file", getCalendarEvents('fall'))
+
 //calendarRefer.onclick=function(){getCalendarEvents('fall')};
 
 //calendarRefer.addEventListener('click', function() {getCalendarEvents('fall')}, false);
