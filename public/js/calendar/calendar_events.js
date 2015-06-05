@@ -4,9 +4,11 @@
  */
 window.alert("I looked at this file")
 var calendarRefer = document.getElementById('calendarlink');
+calendarRefer.onclick=function(){getCalendarEvents('fall')};
+//calendarRefer.onclick=function(){getCalendarEvents('fall')};
+
 //calendarRefer.addEventListener('click', function() {getCalendarEvents('fall')}, false);
 // $('calendar').click(function({getCalendarEvents('fall')}));
-calendarRefer.onclick=function(){getCalendarEvents('fall')};
 //calendarDoc.onclick=getCalendarEvents('fall'){"http://localhost:8000/calendar"};
 //calendarTag.onclick=function(){myscript};
 
@@ -14,6 +16,7 @@ calendarRefer.onclick=function(){getCalendarEvents('fall')};
 //      getCalendarEvents;
 //.addEventListener('click', getCalendarEvents())
 
+/*
 function getCalendarEvents(session) 
 {
 var courses = getCoursesTable(session);
@@ -43,7 +46,8 @@ $("calendarlink").click(function()        //calendarlink is the bottom reference
     });
 });
 }
-/*
+*/
+
 function getCalendarEvents(session) {
     'use strict';
 
@@ -57,7 +61,6 @@ function getCalendarEvents(session) {
         data: {courses: courses, session: session},
         success: function (data) {
             events = data;
-            //MMM call back data
         },
         error: function () {
             throw 'No CSV file generated';
@@ -65,7 +68,7 @@ function getCalendarEvents(session) {
     });
     return events;
 }
-*/
+
 
 function getCoursesTable(session) {
     'use strict';
