@@ -143,13 +143,13 @@ calendarResponse courses session =
 calendarResponse :: String -> String -> ServerPart Response
 calendarResponse courses session =
     ok $ toResponse $
-        masterTemplate "Courseography - Calendar!"
+        masterTemplate "Courseography - Calendar"
                     [H.meta ! A.name "keywords"
                             ! A.content "",
-                    timetableLinks
+                            timetableLinks
                     ]
                     (do
-                    (H.p $ span $ (liftIO $ getCalendar courses session))  -- I have to make it html
+                    H.p $ span $ (liftIO $ getCalendar courses session) -- I have to make it html
                     )
                     timetableScripts
 
