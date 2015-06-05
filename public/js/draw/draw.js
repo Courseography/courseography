@@ -146,8 +146,6 @@ function nodeClicked(e) {
         targetNode = e.currentTarget
     }
 
-    console.log(targetNode);
-
     if (mode === 'erase-mode') {
         // remove any paths leading to and from this node from the other node's 
         // list of paths and remove this node from the other nodes' adjacency lists
