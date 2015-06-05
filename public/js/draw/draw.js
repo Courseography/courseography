@@ -138,51 +138,61 @@ function nodeClicked(e) {
     'use strict';
 
     var index = null;
+    var targetNode = null;
+
+    if (e.currentTarget.id[0] === 't') {
+        targetNode = document.getElementById('n' + e.currentTarget.id.slice(1));
+    } else {
+        targetNode = e.currentTarget
+    }
+
+    console.log(targetNode);
 
     if (mode === 'erase-mode') {
         // remove any paths leading to and from this node from the other node's 
         // list of paths and remove this node from the other nodes' adjacency lists
-        e.currentTarget.inEdges.map(function (edge) { 
+        targetNode.inEdges.map(function (edge) { 
             // Remove edge from parent's outEdges and current node from parent's kids list
             var edgeParent = document.getElementById(edge.id.slice(0, edge.id.lastIndexOf('n')));
             index = edgeParent.outEdges.indexOf(edge);
             if (index > -1) {
                 edgeParent.outEdges.splice(index, 1);
             }
-            index = edgeParent.kids.indexOf(e.currentTarget);
+            index = edgeParent.kids.indexOf(targetNode);
             if (index > -1) {
                 edgeParent.kids.splice(index, 1);
             }
             erasePath(edge);
         });
-        e.currentTarget.outEdges.map(function (edge) {
+        targetNode.outEdges.map(function (edge) {
             // Remove edge from children's inEdges and current node from child's parents list
             var edgeChild = document.getElementById(edge.id.slice(edge.id.lastIndexOf('n')));
             index = edgeChild.inEdges.indexOf(edge);
             if (index > -1) {
                 edgeChild.inEdges.splice(index, 1);
             }
-            index = edgeChild.parents.indexOf(e.currentTarget);
+            index = edgeChild.parents.indexOf(targetNode);
             if (index > -1) {
                 edgeChild.parents.splice(index, 1);
             }
             erasePath(edge);
         });
-        svgDoc.removeChild(e.currentTarget.parentNode);
+        svgDoc.removeChild(targetNode.parentNode);
     } else if (mode === 'change-mode') {
-        var position = getClickPosition(e, e.currentTarget);
-        nodeMoving = e.currentTarget;
+        var position = getClickPosition(e, targetNode);
+
+        nodeMoving = targetNode;
         prevX = position.x;
         prevY = position.y;
         
         // show which node has been selected
-        select(e.currentTarget);
+        select(targetNode);
 
     } else if (mode === 'path-mode') {
         if (startNode === null) {
-            startNode = e.currentTarget;
-            select(e.currentTarget);
-        } else if (startNode === e.currentTarget) {
+            startNode = targetNode;
+            select(targetNode);
+        } else if (startNode === targetNode) {
             // this is the start node of the path about to be created, self loops not allowed
             if (curPath !== null) {
                 curPath.elbows.map(function (item) {
@@ -193,9 +203,9 @@ function nodeClicked(e) {
             }
         } else {
             // make the path from startNode to current node then make startNode Null
-            var pathId = startNode.id + e.currentTarget.id;
+            var pathId = startNode.id + targetNode.id;
             if (document.getElementById(pathId) === null) {
-                finishPath(pathId, e.currentTarget);
+                finishPath(pathId, targetNode);
                 startNode = null;
                 curPath = null;
             } else {
@@ -224,6 +234,7 @@ function select(newNode) {
     if (nodeSelected !== null) {
         nodeSelected.parentNode.setAttribute('data-active', 'unselected');
     }
+
     nodeSelected = newNode;
     nodeSelected.parentNode.setAttribute('data-active', 'active');
 }
@@ -260,6 +271,7 @@ function moveNodeElbow(e) {
             }
             
             // move in and out edges by the same amount
+            console.log(nodeMoving);
             nodeMoving.inEdges.map(function (item) { // modify last node in path
                 movePath(item, (position.x - prevX), (position.y - prevY), 'end', -1);
             });

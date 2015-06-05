@@ -193,5 +193,7 @@ function addText() {
         var textNode = document.createTextNode(courseCode);
         code.appendChild(textNode);
         g.appendChild(code);
+
+        document.getElementById('t' + nodeSelected.id.slice(1)).addEventListener('mousedown', nodeClicked, false);
     }
 }
