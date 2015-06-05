@@ -148,7 +148,7 @@ calendarResponse courses session =
                             ! A.content "",
                     timetableLinks
                     ]
-                    (do header "calendar
+                    (do header "calendar"
                     H.meta ! A.name "keywords"
                            ! A.content "",
                     liftIO $ getCalendar courses session  -- I have to make it html
