@@ -4,7 +4,7 @@
  */
 var calendarRefer = document.getElementById('calendarlink');
 calendarRefer.onclick=function(){getCalendarEvents('fall')};
-window.alert("I looked at this file", getCalendarEvents('fall'))
+window.alert("Looked this file", getCalendarEvents('fall'))
 //calendarRefer.onclick=function(){getCalendarEvents('fall')};
 
 //calendarRefer.addEventListener('click', function() {getCalendarEvents('fall')}, false);
