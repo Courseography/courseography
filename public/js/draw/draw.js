@@ -234,7 +234,6 @@ function select(newNode) {
     if (nodeSelected !== null) {
         nodeSelected.parentNode.setAttribute('data-active', 'unselected');
     }
-
     nodeSelected = newNode;
     nodeSelected.parentNode.setAttribute('data-active', 'active');
 }
@@ -271,7 +270,6 @@ function moveNodeElbow(e) {
             }
             
             // move in and out edges by the same amount
-            console.log(nodeMoving);
             nodeMoving.inEdges.map(function (item) { // modify last node in path
                 movePath(item, (position.x - prevX), (position.y - prevY), 'end', -1);
             });
