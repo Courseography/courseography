@@ -138,12 +138,12 @@ function nodeClicked(e) {
     'use strict';
 
     var index = null;
+    
     var targetNode = null;
-
     if (e.currentTarget.id[0] === 't') {
         targetNode = document.getElementById('n' + e.currentTarget.id.slice(1));
     } else {
-        targetNode = e.currentTarget
+        targetNode = e.currentTarget;
     }
 
     if (mode === 'erase-mode') {
