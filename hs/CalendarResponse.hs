@@ -149,7 +149,7 @@ calendarResponse courses session =
                     timetableLinks
                     ]
                     (do header "calendar"
-                    H.html $ ! H.head $ ! H.title "Calendar" ! H.p $ span $ text (liftIO $ getCalendar courses session)  -- I have to make it html
+                    H.title "Calendar" ! H.p $ span $ text (liftIO $ getCalendar courses session)  -- I have to make it html
                     )
                     timetableScripts
 
