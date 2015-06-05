@@ -149,7 +149,7 @@ calendarResponse courses session =
                     timetableLinks
                     ]
                     (do
-                    (H.p $ span $ text (liftIO $ getCalendar courses session))  -- I have to make it html
+                    (H.p $ span $ (liftIO $ getCalendar courses session))  -- I have to make it html
                     )
                     timetableScripts
 
