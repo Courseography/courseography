@@ -146,10 +146,12 @@ calendarResponse courses session =
         masterTemplate "Courseography - Calendar!"
                     [H.meta ! A.name "keywords"
                             ! A.content "",
-                            timetableLinks
+                    timetableLinks
                     ]
-                    (do header "calendar"
-                        getCalendar courses session
+                    (do header "calendar
+                    H.meta ! A.name "keywords"
+                           ! A.content "",
+                    liftIO $ getCalendar courses session  -- I have to make it html
                     )
                     timetableScripts
 
