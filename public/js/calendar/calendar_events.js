@@ -54,7 +54,6 @@ function getCalendarEvents(session) {
     var events;
     var courses = getCoursesTable(session);
     session = session.charAt(0).toUpperCase() + session.slice(1);
-    system.out.println("about to enter ajax call");
     $.ajax({
         url: 'calendar',
         async: false,
