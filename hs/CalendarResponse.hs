@@ -137,10 +137,11 @@ getCalendar :: String -> String -> IO Response
 getCalendar courses session = return $ toResponse(getCsvFile courses session)
 
 -- | Returns a CSV file of events as requested by the user.
-{-calendarResponse :: String -> String -> ServerPart Response
-calendarResponse courses session =
-    liftIO $ getCalendar courses session-}
 calendarResponse :: String -> String -> ServerPart Response
+calendarResponse courses session =
+    liftIO $ getCalendar courses session
+
+{-calendarResponse :: String -> String -> ServerPart Response
 calendarResponse courses session =
     ok $ toResponse $
         masterTemplate "Courseography - Calendar"
@@ -152,6 +153,7 @@ calendarResponse courses session =
                     H.p $ span $ (liftIO $ getCalendar courses session) -- I have to make it html
                     )
                     timetableScripts
+-}
 
 {-getCalendar :: String -> String -> IO Response IO ()
 getCalendar courses session = simpleHTTP nullConf $ ok (toResponse(test testString))
