@@ -12,6 +12,7 @@ import System.Locale
 import MasterTemplate
 import MakeElements
 import Text.Blaze ((!))
+import Text.Blaze
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 import Scripts
@@ -149,12 +150,24 @@ calendarResponse courses session =
     ok $ toResponse $
         H.html $ do
             H.head $ do
+                H.meta ! A.name (stringValue "keywords") 
+                       ! A.content (stringValue "CSV file")
+                H.title (string "Calendar") 
+            H.body $ do   
+                liftIO $ getCalendar courses session
+            concatHtml [timetableScripts, makeScript (stringValue "static/js/common/google_analytics.js")]
+
+{-calendarResponse :: String -> String -> ServerPart Response
+calendarResponse courses session =
+    ok $ toResponse $
+        H.html $ do
+            H.head $ do
                 H.meta ! A.name "keywords"
                        ! A.content "CSV file"
                 H.title "Calendar" 
             H.body $ do   
                 liftIO $ getCalendar courses session
-            concatHtml [timetableScripts, makeScript "static/js/common/google_analytics.js"]
+            concatHtml [timetableScripts, makeScript "static/js/common/google_analytics.js"]-}
 
 {-getCalendar :: String -> String -> IO Response IO ()
 getCalendar courses session = simpleHTTP nullConf $ ok (toResponse(test testString))
