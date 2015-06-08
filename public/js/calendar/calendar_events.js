@@ -2,52 +2,10 @@
  * Requests a CSV file from the server. The server automatically generates this
  * file.
  */
-//window.alert("clicked it")
+
 var calendarRefer = document.getElementById('calendarlink');
-calendarRefer.onclick=function(){getCalendarEvents('fall')};
+calendarRefer.onclick = function() {getCalendarEvents('fall')};
 
-//calendarRefer.onclick=function(){getCalendarEvents('fall')};
-
-//calendarRefer.addEventListener('click', function() {getCalendarEvents('fall')}, false);
-// $('calendar').click(function({getCalendarEvents('fall')}));
-//calendarDoc.onclick=getCalendarEvents('fall'){"http://localhost:8000/calendar"};
-//calendarTag.onclick=function(){myscript};
-
-//calendar.addEventListener('click', function() {
-//      getCalendarEvents;
-//.addEventListener('click', getCalendarEvents())
-
-/*
-function getCalendarEvents(session) 
-{
-var courses = getCoursesTable(session);
-// fall turns into Fall
-session = session.charAt(0).toUpperCase() + session.slice(1);
-// Using link
-$("calendarlink").click(function()        //calendarlink is the bottom reference
-{
-    // Ajax call
-    $.ajax(
-    {url: "calendar",
-        beforeSend: function()
-        {
-        alert("My ajax got called")
-        },
-    data: {courses: courses, session: session},  //key:value
-       //data sent to the server
-        success: function(data)         //result data is what I should return
-        {
-        alert("CSV file generated");
-        //return courses.  THIS MAY BE DIFFERENT
-        },
-        error: function()
-        {
-        alert("Error. No CSV file generated");
-        }
-    });
-});
-}
-*/
 
 function getCalendarEvents(session) {
     'use strict';
@@ -55,7 +13,6 @@ function getCalendarEvents(session) {
     var events;
     var courses = getCoursesTable(session);
     session = session.charAt(0).toUpperCase() + session.slice(1);
-    //window.alert("clicked it and called my function")
     $.ajax({
         url: 'calendar',
         async: false,
