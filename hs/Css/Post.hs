@@ -10,8 +10,7 @@ import Css.Constants
 postStyles :: Css
 postStyles = do
     body ?
-        do backgroundColor beige1
-           color grey1
+        do color grey1
            fontWeight $ normal
     tabsCSS
     postCSS
