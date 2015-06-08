@@ -119,7 +119,8 @@ function fillExtraTextboxes(post, postElement, level) {
         if (postElement[post.filledTextboxesExtra].value === '' &&
             course.indexOf('CSC' + level.charAt(0)) != -1 &&
             (post.name === 'major' || post.name === 'minor' ||
-             (post.name === 'specialist' && notSpecialistCourse(course)))) {
+             (post.name === 'specialist' && notSpecialistCourse(course))) &&
+             notReqCourse(course)) {
 
             postElement[post.filledTextboxesExtra].value = activeCourses[i];
             postElement[post.filledTextboxesExtra].disabled = true;
@@ -175,9 +176,12 @@ function fillExtra() {
         fillExtraTextboxes(minor, minExtra, '400');
     }
 
-    // add extra 200 courses for minor if extra space
+    // add 200-level extra courses if there is extra space
+    if (major.filledTextboxesExtra < major.textboxesExtra) {
+        fillExtraTextboxes(major, majExtra, '200');
+    }
     if (minor.filledTextboxesExtra < minor.textboxesExtra) {
-        addExtraMinCourses();
+        fillExtraTextboxes(minor, minExtra, '200');
     }
 }
 
