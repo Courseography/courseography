@@ -136,14 +136,17 @@ splitCourses courses session = partition5 $ splitOn "_" courses
     partition5 [] = []
     partition5 lst = take 5 lst : partition5(drop 5 lst)
 
-getCalendar :: String -> String -> IO Response
-getCalendar courses session = return $ toResponse(getCsvFile courses session)
-
-
 -- | Returns a CSV file of events as requested by the user.
 {-calendarResponse :: String -> String -> ServerPart Response
 calendarResponse courses session =
-    liftIO $ getCalendar courses session-}
+    liftIO $ getCalendar courses session
+
+getCalendar :: String -> String -> IO Response
+getCalendar courses session = return $ toResponse(getCsvFile courses session)-}
+
+
+getCalendar :: String -> String -> String
+getCalendar courses session = getCsvFile courses session
 
 calendarResponse :: String -> String -> ServerPart Response
 calendarResponse courses session =
@@ -154,20 +157,8 @@ calendarResponse courses session =
                        ! A.content (stringValue "CSV file")
                 H.title (string "Calendar") 
             H.body $ do   
-                liftIO $ getCalendar courses session
+                string(getCalendar courses session)
             concatHtml [timetableScripts, makeScript (stringValue "static/js/common/google_analytics.js")]
-
-{-calendarResponse :: String -> String -> ServerPart Response
-calendarResponse courses session =
-    ok $ toResponse $
-        H.html $ do
-            H.head $ do
-                H.meta ! A.name "keywords"
-                       ! A.content "CSV file"
-                H.title "Calendar" 
-            H.body $ do   
-                liftIO $ getCalendar courses session
-            concatHtml [timetableScripts, makeScript "static/js/common/google_analytics.js"]-}
 
 {-getCalendar :: String -> String -> IO Response IO ()
 getCalendar courses session = simpleHTTP nullConf $ ok (toResponse(test testString))

@@ -55,7 +55,7 @@ function getCalendarEvents(session) {
     var events;
     var courses = getCoursesTable(session);
     session = session.charAt(0).toUpperCase() + session.slice(1);
-    window.alert("clicked it and called my function")
+    //window.alert("clicked it and called my function")
     $.ajax({
         url: 'calendar',
         async: false,
