@@ -122,9 +122,9 @@ checkPost =
                     H.input ! A.type_ "text"
                     H.input ! A.type_ "text"
             H.div ! A.id "spec_misc" $ do
-                H.p ! A.class_ "code" $ H.em $ "Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H, \
-                                                \CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H, or PEY (0.5 FCEs) \
-                                                \ ** Note: Type 'PEY' for Check my POSt to recognize it **"
+                H.p ! A.class_ "code" $ "Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H, \
+                    \CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H, or PEY (0.5 FCEs) \
+                    \ ** Note: Type 'PEY' for Check my POSt to recognize it **"
                 H.div ! A.class_ "more-info" $
                     H.input ! A.type_ "text"
             H.h3 "Notes"
@@ -196,7 +196,7 @@ checkPost =
                     H.input ! A.type_ "text"
                     H.input ! A.type_ "text"
             H.div ! A.id "maj_misc" $ do
-                H.p ! A.class_ "code" $ H.em $ "Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H, \
+                H.p ! A.class_ "code" $ "Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H, \
                     \CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H, or PEY (0.5 FCEs) \
                     \ ** Note: Type 'PEY' for Check my POSt to recognize it **"
                 H.div ! A.class_ "more-info" $
@@ -230,11 +230,11 @@ checkPost =
                     H.p ! A.class_ "full_name CSC236240" $ "CSC236H (Introduction to the Theory of Computation)"
                     H.p ! A.class_ "full_name CSC236240" $ "CSC240H (Enriched Introduction to the Theory of Computation)"
             H.div ! A.id "min_misc" $ do
-                H.p ! A.class_ "code" $ "Any 200/300/400-level CSC course (1.5 FCEs, with at least 1.0 FCEs in the 300+ level)"
+                H.p ! A.class_ "code" $ "200+ CSC courses (1.5 FCEs, with at least 1.0 FCE in the 300+ levels)"
                 H.div ! A.id "minextra" ! A.class_ "more-info" $ do
                     H.input ! A.type_ "text"
                     H.input ! A.type_ "text"
                     H.input ! A.type_ "text"
             H.h3 "Notes"
             H.div ! A.id "notes" $
-                H.p "- You may take no more than three 300/400 level CSC/ECE courses"
+                H.p "- You may take no more than three 300+ CSC/ECE courses"
