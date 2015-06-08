@@ -2,16 +2,10 @@ module CalendarResponse where
 
 import Data.List.Split (splitOn)
 import Data.List
-import Data.List
 import Data.Time
 import Happstack.Server
 import Control.Monad.IO.Class (liftIO)
 import System.Locale
-import Text.Blaze ((!))
-import Text.Blaze
-import qualified Text.Blaze.Html5 as H
-import qualified Text.Blaze.Html5.Attributes as A
-import Scripts
 
 -- EVENTS' NAME, START/END TIME
 
