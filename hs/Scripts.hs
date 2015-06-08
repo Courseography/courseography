@@ -34,7 +34,8 @@ plannerScripts = concatHtml (map makeScript["https://ajax.googleapis.com/ajax/li
                                            "static/js/post/update_post.js",
                                            "static/js/graph/sidebar/sidebar_divs.js",
                                            "static/js/graph/sidebar/sidebar_events.js",
-                                           "static/js/graph/sidebar/focus_descriptions.js"])
+                                           "static/js/graph/sidebar/focus_descriptions.js",
+                                           "static/js/common/export/export.js"])
 
 timetableScripts :: H.Html
 timetableScripts = do jQuery
@@ -55,10 +56,11 @@ timetableScripts = do jQuery
                                                 "/static/js/common/image_conversion.js",
                                                 "/static/js/draw/draw.js",
                                                 "static/js/common/modal.js",
-                                                "static/js/common/course_description.js"])
+                                                "static/js/common/course_description.js",
+                                                "static/js/common/export/export.js"])
 
 drawScripts :: H.Html
-drawScripts = do jQuery 
+drawScripts = do jQuery
                  concatHtml (map makeScript ["https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js",
                                              "static/js/draw/variables.js",
                                              "static/js/draw/path.js",

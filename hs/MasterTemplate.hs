@@ -38,6 +38,7 @@ header page =
             H.li $ makeA "" "" "draw" "" "Draw"
             H.li $ makeA "" "" "post" "" "Check My POSt!"
             H.li $ makeA "" "" "about" "" "About"
+            H.li $ H.a ! A.id "nav-export" $ "Export"
         if page `elem` ["graph", "grid"]
         then
             H.div ! A.id "nav-fb" $ do
