@@ -114,9 +114,9 @@ checkPost =
                     H.input ! A.type_ "text"
                     H.input ! A.type_ "text"
             H.div ! A.id "spec_extra" $ do
-                H.p ! A.class_ "code" $ "Any 300+ level CSC course, BCB/ECE/MAT/STA course (2.0 FCEs) - \
-                                         \MAT: 224, 235/237/257, any 300+ except for 329, 390, & 391 \
-                                         \; STA: 248, 261, any 300+"
+                H.p ! A.class_ "code" $ "Any of the following: 300+ level CSC course; MAT: 221/223/240, 235/237/257, any 300+\
+                                        \ except for 329, 390, & 391; STA: 248, 261, any 300+; ECE: 385H/489H;\
+                                        \ BCB: 410H/420H/430Y (1.5 FCEs)"
                 H.div ! A.id "specextra" ! A.class_ "more-info" $ do
                     H.input ! A.type_ "text"
                     H.input ! A.type_ "text"
@@ -189,9 +189,9 @@ checkPost =
                     H.input ! A.type_ "text"
                     H.input ! A.type_ "text"
             H.div ! A.id "maj_extra" $ do
-                H.p ! A.class_ "code" $ "Any 300+ level CSC course, BCB/ECE/MAT/STA course (1.5 FCEs) - \
-                                         \MAT: 221/223/240, 224, 235/237/257, any 300+ except for 329, 390, & 391 \
-                                         \; STA: 248, 261, any 300+"
+                H.p ! A.class_ "code" $ "Any of the following: 200+ level CSC course; MAT: 221/223/240, 235/237/257,\
+                                        \ any 300+ except for 329, 390, & 391; STA: 248, 261, any 300+; ECE: 385H/489H;\
+                                        \ BCB: 410H/420H/430Y (1.5 FCEs, with atleast 0.5 FCEs in the 300+ level)"
                 H.div ! A.id "majextra" ! A.class_ "more-info" $ do
                     H.input ! A.type_ "text"
                     H.input ! A.type_ "text"
@@ -231,7 +231,7 @@ checkPost =
                     H.p ! A.class_ "full_name CSC236240" $ "CSC236H (Introduction to the Theory of Computation)"
                     H.p ! A.class_ "full_name CSC236240" $ "CSC240H (Enriched Introduction to the Theory of Computation)"
             H.div ! A.id "min_misc" $ do
-                H.p ! A.class_ "code" $ "Any 300/400-level CSC course (atleast 1.0 FCE), CSC209H, CSC258H, CSC263H/CSC265H (1.5 FCEs)"
+                H.p ! A.class_ "code" $ "Any 200/300/400-level CSC course (1.5 FCEs, with atleast 1.0 FCEs in the 300+ level)"
                 H.div ! A.id "minextra" ! A.class_ "more-info" $ do
                     H.input ! A.type_ "text"
                     H.input ! A.type_ "text"
