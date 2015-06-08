@@ -1,18 +1,18 @@
 var activeCourses = [];
 var specialist = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0,
                   'filledTextboxes400': 0, 'filledTextboxesExtra': 0, 'specCount': 0,
-                  'reqs': ['CSC108', 'CSC148', 'CSC165240', 'CSC207', 'CSC209', 'CSC236240', 'CSC258', 
-                  'CSC263265', 'STA247255257Sta1', 'MAT221223240Lin1', 'MAT135136137157Calc1', 'CSC369', 
-                  'CSC373'], 'textboxes300': 3, 'textboxes400': 3, 
+                  'reqs': ['CSC108', 'CSC148', 'CSC165240', 'CSC207', 'CSC209', 'CSC236240', 'CSC258',
+                  'CSC263265', 'STA247255257Sta1', 'MAT221223240Lin1', 'MAT135136137157Calc1', 'CSC369',
+                  'CSC373'], 'textboxes300': 3, 'textboxes400': 3,
                   'textboxesExtra': 4, 'categories': 17, 'creditCount': 0, 'name': 'specialist'};
 var major = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0,
              'filledTextboxes400': 0, 'filledTextboxesExtra': 0, 'majCount': 0, 'reqs': ['CSC108',
-             'CSC148', 'CSC165240', 'CSC207', 'CSC236240', 'CSC258', 'CSC263265', 'STA247255257Sta1', 
+             'CSC148', 'CSC165240', 'CSC207', 'CSC236240', 'CSC258', 'CSC263265', 'STA247255257Sta1',
              'MAT135136137157Calc1'], 'textboxes300': 2, 'index200': 0,
              'textboxes400': 1, 'textboxesExtra': 3, 'categories': 13, 'creditCount': 0, 'name': 'major'};
 var minor = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxesExtra': 0,
              'reqs': ['CSC108', 'CSC148', 'CSC165240', 'CSC207', 'CSC236240'], 'textboxesExtra': 3, 'categories': 6,
-             'creditCount': 0, 'additionalMin200': ['CSC209', 'CSC258', 'CSC263265'], 'name': 'minor', 
+             'creditCount': 0, 'additionalMin200': ['CSC209', 'CSC258', 'CSC263265'], 'name': 'minor',
              'index200': 0};
 
 /**
@@ -53,18 +53,18 @@ function resetValues() {
     activeCourses = [];
     var specialist = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0,
                   'filledTextboxes400': 0, 'filledTextboxesExtra': 0, 'specCount': 0,
-                  'reqs': ['CSC108', 'CSC148', 'CSC165240', 'CSC207', 'CSC209', 'CSC236240', 'CSC258', 
-                  'CSC263265', 'STA247255257Sta1', 'MAT221223240Lin1', 'MAT135136137157Calc1', 'CSC369', 
-                  'CSC373'], 'textboxes300': 3, 'textboxes400': 3, 
+                  'reqs': ['CSC108', 'CSC148', 'CSC165240', 'CSC207', 'CSC209', 'CSC236240', 'CSC258',
+                  'CSC263265', 'STA247255257Sta1', 'MAT221223240Lin1', 'MAT135136137157Calc1', 'CSC369',
+                  'CSC373'], 'textboxes300': 3, 'textboxes400': 3,
                   'textboxesExtra': 4, 'categories': 17, 'creditCount': 0, 'name': 'specialist'};
     var major = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxes300': 0,
                  'filledTextboxes400': 0, 'filledTextboxesExtra': 0, 'majCount': 0, 'reqs': ['CSC108',
-                 'CSC148', 'CSC165240', 'CSC207', 'CSC236240', 'CSC258', 'CSC263265', 'STA247255257Sta1', 
+                 'CSC148', 'CSC165240', 'CSC207', 'CSC236240', 'CSC258', 'CSC263265', 'STA247255257Sta1',
                  'MAT135136137157Calc1'], 'textboxes300': 2, 'index200': 0,
                  'textboxes400': 1, 'textboxesExtra': 3, 'categories': 13, 'creditCount': 0, 'name': 'major'};
     var minor = {'index300': 0, 'index400': 0, 'categoriesCompleted': 0, 'filledTextboxesExtra': 0,
                  'reqs': ['CSC108', 'CSC148', 'CSC165240', 'CSC207', 'CSC236240'], 'textboxesExtra': 3, 'categories': 6,
-                 'creditCount': 0, 'additionalMin200': ['CSC209', 'CSC258', 'CSC263265'], 'name': 'minor', 
+                 'creditCount': 0, 'additionalMin200': ['CSC209', 'CSC258', 'CSC263265'], 'name': 'minor',
                  'index200': 0};
 }
 
@@ -256,11 +256,12 @@ function notSpecialistCourse(course) {
 
 /**
  * Returns whether course is a required course or not
+ * @param {object} POSt
  * @param {string} Name of course
  * @return {boolean} True if course is a required course, False otherwise
  */
-function notReqCourse(course) {
+function notReqCourse(post, course) {
     'use strict';
 
-    return reqs.indexOf(course) === -1;
+    return post.reqs.indexOf(course) === -1;
 }

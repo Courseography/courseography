@@ -120,7 +120,7 @@ function fillExtraTextboxes(post, postElement, level) {
             course.indexOf('CSC' + level.charAt(0)) != -1 &&
             (post.name === 'major' || post.name === 'minor' ||
              (post.name === 'specialist' && notSpecialistCourse(course))) &&
-             notReqCourse(course)) {
+            notReqCourse(post, course)) {
 
             postElement[post.filledTextboxesExtra].value = activeCourses[i];
             postElement[post.filledTextboxesExtra].disabled = true;
