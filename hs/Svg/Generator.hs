@@ -16,6 +16,7 @@ import Svg.Builder
 import Database.Tables
 import Database.DataType
 import Control.Monad.IO.Class (liftIO)
+import Data.Monoid (mappend)
 import Database.Persist.Sqlite
 import Data.List hiding (map, filter)
 import MakeElements
@@ -228,6 +229,8 @@ textToSVG styled type_ xPos' text =
                       then xPos
                       else xPos')
             ! A.y (stringValue $ show yPos)
+            ! A.fontFamily "'Trebuchet MS', 'Arial', sans-serif"
+            ! A.stroke "none"
             ! A.style (stringValue $ align ++ fontStyle ++ fill)
             $ toMarkup $ textText text
     where
@@ -243,17 +246,17 @@ textToSVG styled type_ xPos' text =
         getTextStyle Hybrid    = hybridTextStyle
         getTextStyle BoolNode  = ellipseTextStyle
         getTextStyle Region    = regionTextStyle
-        getTextStyle _         = ""
+        getTextStyle _         = nodeTextStyle
 
         -- TODO: Possibly move this closer to the CSS
-        hybridTextStyle = "font-size:7.5pt;fill:white;"
-        ellipseTextStyle = "font-size:7.5pt;"
-        regionTextStyle = "font-size:9pt;"
+        hybridTextStyle = "font-size:7pt;fill:white;"
+        ellipseTextStyle = "font-size:6pt;"
+        regionTextStyle = "font-size:14pt;"
+        nodeTextStyle = "font-size:12pt;"
 
         fontStyle = if styled
                     then
-                        getTextStyle type_ ++
-                        "font-family:sans-serif;stroke:none;"
+                        getTextStyle type_
                     else
                         ""
 
@@ -270,7 +273,9 @@ edgeToSVG styled path =
                                                           $ pathTarget path)
            ! if styled
              then
-                 A.style (stringValue $ "fill:" ++
+                 mappend
+                     (A.strokeWidth "2px") $
+                     A.style (stringValue $ "fill:" ++
                           pathFill path ++
                           ";fill-opacity:1;")
              else
