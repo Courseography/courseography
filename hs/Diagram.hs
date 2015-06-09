@@ -6,7 +6,6 @@ import Diagrams.Prelude
 import Diagrams.Backend.SVG.CmdLine
 import Diagrams.Backend.SVG
 import Data.List
-import Text.Blaze.Svg.Renderer.String as Svg
 import Data.List.Utils (replace)
 import Data.List.Split (splitOn)
 import Lucid (renderText)

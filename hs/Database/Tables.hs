@@ -10,6 +10,18 @@
              TemplateHaskell,
              TypeFamilies #-}
 
+{-|
+Description: The database schema (and some helpers).
+
+This module defines the database schema. It uses Template Haskell to also
+create new types for these values so that they can be used in the rest of
+the application.
+
+Though types and typeclass instances are created automatically, we currently
+have a few manually-generated spots to clean up. This should be rather
+straightforward.
+-}
+
 module Database.Tables where
 
 import Database.Persist.TH
@@ -17,13 +29,12 @@ import Database.DataType
 import qualified Data.Text as T
 import qualified Data.Vector as V
 import Data.Aeson
-import Data.Int
-import Control.Monad
-import Control.Applicative
 
+-- | A data type representing a list of times for a course.
 data Time = Time { timeField :: [Double] } deriving (Show, Read, Eq)
 derivePersistField "Time"
 
+-- | A two-dimensional point.
 type Point = (Double, Double)
 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
@@ -39,6 +50,7 @@ Courses json
     distribution T.Text Maybe
     prereqString T.Text Maybe
     coreqs T.Text Maybe
+    videoUrls [T.Text]
     deriving Show
 
 Lectures
@@ -73,12 +85,11 @@ Distribution
     deriving Show
 
 Graph json
-    gId Int64
     title String
     deriving Show
 
 Text
-    gId Int64
+    graph GraphId
     rId String
     pos Point
     text String
@@ -87,7 +98,7 @@ Text
     deriving Show
 
 Shape
-    gId Int64
+    graph GraphId
     id_ String
     pos Point
     width Double
@@ -99,7 +110,7 @@ Shape
     type_ ShapeType
 
 Path
-    gId Int64
+    graph GraphId
     id_ String
     points [Point]
     fill String
@@ -114,6 +125,9 @@ FacebookTest
     testString String
     deriving Show
 |]
+
+
+-- ** TODO: Remove these extra types and class instances
 
 -- | A Lecture.
 data Lecture =
@@ -142,9 +156,10 @@ data Session =
 
 -- | A Course.
 -- each element of prereqs can be one of three things:
---    * a one-element list containing a course code
---    * a list starting with "and", and 2 or more course codes
---    * a list starting with "or", and 2 or more course codes
+--
+--     * a one-element list containing a course code
+--     * a list starting with "and", and 2 or more course codes
+--     * a list starting with "or", and 2 or more course codes
 data Course =
     Course { breadth :: Maybe T.Text,
              description :: Maybe T.Text,
@@ -159,56 +174,58 @@ data Course =
              manualPracticalEnrol :: Maybe Bool,
              distribution :: Maybe T.Text,
              prereqs :: Maybe T.Text,
-             coreqs :: Maybe T.Text
+             coreqs :: Maybe T.Text,
+             videoUrls :: [T.Text]
            } deriving Show
 
 instance ToJSON Course where
-  toJSON (Course breadth description title prereqString f s y name exclusions manualTutorialEnrol manualPracticalEnrol distribution prereqs coreqs)
-          = object ["breadth" .= breadth,
-                    "description" .= description,
-                    "title" .= title,
-                    "prereqString" .= prereqString,
-                    "F" .= f,
-                    "S" .= s,
-                    "Y" .= y,
-                    "name" .= name,
-                    "exclusions" .= exclusions,
-                    "manualTutorialEnrolment" .= manualTutorialEnrol,
-                    "manualPracticalEnrolment" .= manualPracticalEnrol,
-                    "distribution" .= distribution,
-                    "prereqs" .= prereqs,
-                    "coreqs" .= coreqs
+  toJSON (Course courseBreadth courseDescription courseTitle coursePrereqString courseF courseS courseY courseName courseExclusions courseManualTutorialEnrol courseManualPracticalEnrol courseDistribution coursePrereqs courseCoreqs courseVideoUrls)
+          = object ["breadth" .= courseBreadth,
+                    "description" .= courseDescription,
+                    "title" .= courseTitle,
+                    "prereqString" .= coursePrereqString,
+                    "F" .= courseF,
+                    "S" .= courseS,
+                    "Y" .= courseY,
+                    "name" .= courseName,
+                    "exclusions" .= courseExclusions,
+                    "manualTutorialEnrolment" .= courseManualTutorialEnrol,
+                    "manualPracticalEnrolment" .= courseManualPracticalEnrol,
+                    "distribution" .= courseDistribution,
+                    "prereqs" .= coursePrereqs,
+                    "coreqs" .= courseCoreqs,
+                    "videoUrls" .= courseVideoUrls
                    ]
 
 instance ToJSON Session where
-  toJSON (Session lectures tutorials)
-          = object ["lectures" .= lectures,
-                    "tutorials" .= tutorials
+  toJSON (Session sessionLectures sessionTutorials)
+          = object ["lectures" .= sessionLectures,
+                    "tutorials" .= sessionTutorials
                    ]
 
 instance ToJSON Lecture where
-  toJSON (Lecture extra section cap time_str time instructor enrol wait)
-          = object ["extra" .= extra,
-                    "section" .= section,
-                    "cap" .= cap,
-                    "time_str" .= time_str,
-                    "time" .= map convertTimeToString time,
-                    "instructor" .= instructor,
-                    "enrol" .= enrol,
-                    "wait" .= wait
+  toJSON (Lecture lectureExtra lectureSection lectureCap lectureTimeStr lectureTime lectureInstructor lectureEnrol lectureWait)
+          = object ["extra" .= lectureExtra,
+                    "section" .= lectureSection,
+                    "cap" .= lectureCap,
+                    "time_str" .= lectureTimeStr,
+                    "time" .= map convertTimeToString lectureTime,
+                    "instructor" .= lectureInstructor,
+                    "enrol" .= lectureEnrol,
+                    "wait" .= lectureWait
                    ]
 
 instance ToJSON Tutorial where
-  toJSON (Tutorial Nothing times timeStr) =
-      Array $ V.fromList [toJSON (map convertTimeToString times), toJSON timeStr]
-  toJSON (Tutorial (Just value) times timeStr) =
-      Array $ V.fromList [toJSON value, toJSON (map convertTimeToString times), toJSON timeStr]
+  toJSON (Tutorial Nothing tutorialTimes tutorialTimeStr) =
+      Array $ V.fromList [toJSON (map convertTimeToString tutorialTimes), toJSON tutorialTimeStr]
+  toJSON (Tutorial (Just value) tutorialTimes tutorialTimeStr) =
+      Array $ V.fromList [toJSON value, toJSON (map convertTimeToString tutorialTimes), toJSON tutorialTimeStr]
 
 -- | Converts a Double to a T.Text.
 -- This removes the period from the double, as the JavaScript code,
 -- uses the output in an element's ID, which is then later used in
--- jQuery. `.` is a jQuery meta-character, and must be removed from the ID.
+-- jQuery. @.@ is a jQuery meta-character, and must be removed from the ID.
 convertTimeToString :: [Double] -> [T.Text]
-convertTimeToString [day, time] =
+convertTimeToString [day, timeNum] =
   [T.pack . show . floor $ day,
-   T.replace "." "-" . T.pack . show $ time]
+   T.replace "." "-" . T.pack . show $ timeNum]

@@ -2,21 +2,7 @@
 
 module WebParsing.TimeConverter (makeTimeSlots) where
 
-import Network.HTTP
-import Text.HTML.TagSoup
-import Text.HTML.TagSoup.Match
-import Database.Persist
-import Database.Persist.Sqlite
-import Data.List
 import qualified Data.Text as T
-import qualified Data.Text.IO as B
-import Data.List.Utils
-import Data.Maybe
-import Database.Tables as Tables
-import Database.JsonParser
-import WebParsing.ParsingHelp
-import Control.Monad.IO.Class
-import Data.Text.Read 
 
 --converts days into numbers, returns a tuple of the rest of the string (the times)
 --and a list of number representations of days

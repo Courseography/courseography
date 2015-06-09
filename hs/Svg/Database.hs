@@ -9,27 +9,21 @@ here as well at some point in the future.
 
 module Svg.Database where
 
-import Control.Monad.IO.Class  (liftIO, MonadIO)
+import Control.Monad.IO.Class  (liftIO)
 import Database.Persist.Sqlite
 import Database.Tables
-import Database.Persist
-import Control.Monad.Trans.Reader
 import qualified Data.Conduit.List as CL
-import Data.Int
 import Data.Conduit
 import qualified Data.Text.Internal as TI
-import Database.JsonParser
+import Config (dbStr)
 
 -- | Insert a new graph into the database, returning the key of the new graph.
 insertGraph :: String   -- ^ The title of the graph that is being inserted.
-            -> IO Int64 -- ^ The unique identifier of the inserted graph.
-insertGraph graphTitle =
+            -> IO GraphId -- ^ The unique identifier of the inserted graph.
+insertGraph graphName =
     runSqlite dbStr $ do
         runMigration migrateAll
-        key <- insert (Graph 0 graphTitle)
-        let (PersistInt64 keyId) = toPersistValue key
-        update key [GraphGId =. keyId]
-        return keyId
+        insert (Graph graphName)
 
 -- | Insert graph components into the database.
 insertElements :: ([Path], [Shape], [Text]) -> IO ()

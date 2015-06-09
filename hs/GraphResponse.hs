@@ -14,10 +14,7 @@ graphResponse :: ServerPart Response
 graphResponse =
    ok $ toResponse $
     masterTemplate "Courseography - Graph"
-                [H.meta ! A.name "keywords"
-                        ! A.content "",
-                 plannerLinks
-                ]
+                []
                 (do header "graph"
                     H.div ! A.id "container" $ do
                         H.div ! A.id "graph" ! A.class_ "graph" $ ""
@@ -53,7 +50,7 @@ sideBar = do
     H.div ! A.id "sidebar" $ do
         H.div ! A.id "fce" $ do
             H.div ! A.id "fcecount" $ ""
-            H.button ! A.id "reset" $ "Reset Graphs"
+            H.button ! A.id "reset" $ "Reset Graph"
         H.nav ! A.id "sidebar-nav" $ H.ul $ do
             H.li ! A.id "focuses-nav" $ do
                 H.a ! A.href "" $ "Focuses"

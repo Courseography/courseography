@@ -1,5 +1,13 @@
 var toggled = false;
 
+$(document).ready (function () {
+    'use strict';
+
+    getGraphsInDatabase();
+    updateFCECount();
+});
+
+
 $('#sidebar-button').click(function() {
     'use strict';
 
@@ -25,7 +33,7 @@ $('#graphs-nav').click(function (e) {
     $('#graphs').empty();
     $('#graphs').show();
     $('#graphs-nav').addClass('active');
-    getGraphsInDatabase();
+    createGraphButtons();
 });
 
 
@@ -56,7 +64,7 @@ function fillFCECount() {
     'use strict';
 
     $('#fcecount').show();
-    $('#fcecount').html('FCE Count: ' + FCEs);
+    $('#fcecount').html('FCE Count: ' + currentFCEs.toFixed(1));
 }
 
 
@@ -77,7 +85,6 @@ function toggleSidebar(location) {
     } else if (!toggled && location === 'button') {
         toggled = true;
         $('#sidebar').animate({width: '400px'}, 'fast');
-
         fillFCECount();
         $('#focuses').show();
         $('#focuses-nav').addClass('active');

@@ -276,7 +276,7 @@ function moveNodeElbow(e) {
             prevY = position.y;
         } else if (regionMoving !== null) {
             // move each elbow
-            position = getClickPosition(e, elbowMoving);
+            position = getClickPosition(e, regionMoving);
             regionMoving.elbows.map(function (elbow) {
                 moveElbow(elbow, position);
             });

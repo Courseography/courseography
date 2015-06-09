@@ -5,21 +5,16 @@ module WebParsing.TimeTableParser where
 import Network.HTTP
 import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Match
-import Database.Persist
 import Database.Persist.Sqlite
 import Data.List
 import qualified Data.Text as T
-import qualified Data.Text.IO as B
-import Data.List.Utils
 import Data.Maybe
 import Database.Tables as Tables
 import Database.JsonParser
 import WebParsing.HtmlTable
-import Database.Tables
 import WebParsing.ParsingHelp
 import WebParsing.TimeConverter
-import Control.Monad.IO.Class
-import Data.Text.Read
+import Config (dbStr)
 
 -- | used as an intermediate container while extracting lecture and tutorial information
 -- from the table. Is is later converted into lecture or tutorial records by examinig the
@@ -46,7 +41,7 @@ specialCases = ["assem.html",
 getDeptList :: [Tag String] -> [String]
 getDeptList tags =
   let deptList = filter (tagOpen (=="a") isHref) tags
-      notDepts = filter (\s -> (length s) < 20) (map getAttribute deptList)
+      notDepts = filter (\str -> (length str) < 20) (map getAttribute deptList)
   in nub $ filter (\dept -> not (dept `elem` specialCases)) notDepts
   where
     isHref [("href", _)] = True
@@ -70,12 +65,12 @@ getDeptTimetable url = do
   body <- getResponseBody rsp
   let rawSoup = map cleanTag (parseTags (T.pack body))
       toLower = if (url == "online.html") then map lowerTag rawSoup else rawSoup
-      table = dropAround  (tagOpen (=="table") (\x -> True)) (tagClose (=="table")) toLower
+      table = dropAround  (tagOpen (=="table") (\_ -> True)) (tagClose (=="table")) toLower
   mapM_ (\(pos, course) -> processCourseTable (foldl (\c p -> expandTable c "" p) course pos)) (toCells table)
   --print toLower--were running into an empty list while printing out the final results-- look into this tomorrow
   where
-    cleanTag (TagText s) = TagText (T.strip (replaceAll ["\r\n"] "" s))
-    cleanTag s = s
+    cleanTag (TagText str) = TagText (T.strip (replaceAll ["\r\n"] "" str))
+    cleanTag str = str
 
 -- | partitions the html table into a 2d list of cells. Does not account for cells that take
 -- up more than one row or column.
@@ -86,7 +81,7 @@ toCells tags =
       --courseRows groups cells by the courses they are contained in.
       removedEmpty = filter (not . null) rowsColumns
       dropLastCell = map init removedEmpty
-      courseRows = partitions (\row -> any (isCourse . fromTagText) (filter isTagText (head row))) dropLastCell
+      courseRows = partitions (\courseRow -> any (isCourse . fromTagText) (filter isTagText (head courseRow))) dropLastCell
       --foreach group of cells rep. courses, extracts the spans.
       courseSpans = map extractSpans courseRows -- [[Pos]]
       --following two lines takes out everything but text in each cell.
@@ -121,8 +116,8 @@ updateSlot row (Just slot) =
        in (Just slot {slotTime_str = (T.append newTime (T.append " " (slotTime_str slot)))})
 
 
- -- | takes in cells representing a course, and recursively places lecture and tutorial info
- -- into courseSlots.
+-- | takes in cells representing a course, and recursively places lecture and tutorial info
+-- into courseSlots.
 parseCourse :: [[T.Text]] -> Maybe CourseSlot -> [Maybe CourseSlot] -> [Maybe CourseSlot]
 parseCourse [] slot slots = slot:slots
 parseCourse course Nothing slots =
@@ -198,7 +193,7 @@ main :: IO ()
 main = do
     rsp <- simpleHTTP (getRequest $ timetableUrl ++ "sponsors.htm")
     body <- getResponseBody rsp
-    let depts = getDeptList $ parseTags body
+    let _ = getDeptList $ parseTags body
     getDeptTimetable "glaf.html"
     --mapM_ getDeptTimetable depts
 

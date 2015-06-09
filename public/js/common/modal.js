@@ -11,18 +11,20 @@ function createModalDiv(id) {
 
     var courseDescription = fetchCourseDescription(id);
     var p = $('<p></p>').html(courseDescription);
-    var bottomContentDiv = $('<div></div>');
-    bottomContentDiv.attr('id', 'bottom-content-container');
-    var video = setupVideoPlayer(id);
     var timetable = setupTimeslot(id);
-    var relatedLinks = setupRelatedLinks(id);
     contentDiv.append(p);
     contentDiv.append(timetable);
-    contentDiv.append(bottomContentDiv);
-    if (video) {
-        bottomContentDiv.append(video);
+    var names = formatCourseName(id);
+    var videos = [];
+    $.each(names, function (i, name) {
+        var course = getCourse(name);
+        videos = videos.concat(course.videoUrls);
+    });
+    if (videos.length > 0) {
+        // Only display first video right now
+        var videoDiv = setupVideoPlayer(videos[0]);
+        contentDiv.append(videoDiv);
     }
-    bottomContentDiv.append(relatedLinks);
 
     return contentDiv;
 }
@@ -34,24 +36,14 @@ function createModalDiv(id) {
  * @param {string} id The course code.
  * @returns {boolean|jQuery}
  */
-function setupVideoPlayer(id) {
+function setupVideoPlayer(url) {
     'use strict';
-
-    var url = 'http://www.cs.toronto.edu/~liudavid/' + id.toLowerCase() + '.mp4';
-    var exists = urlExists(url);
-
-    if (!exists) {
-        return false;
-    }
 
     // Not divided up into 'attr' yet because 'controls preload'
     // cannot be added that way...
-    var videoDiv = $('<div></div>');
-    videoDiv.css('display', 'inline')
-            .css('float', 'left')
-            .css('width', '100%');
-    var video = $('<video id="course_video" class="video-js vjs-default-skin"' +
-                  'controls preload="auto" width="100%" height="400"></video>');
+    var videoDiv = $('<div id="course-video-div"></div>');
+    var video = $('<video id="course-video" class="video-js vjs-default-skin"' +
+                  'controls preload="auto"></video>');
     var src = $('<source></source>').attr('src', url)
                                     .attr('type', 'video/mp4');
 
@@ -92,24 +84,6 @@ function setupTimeslot(id) {
     timeslot.children('.searchClass').children('td').first().remove();
     timeslot.children('tr').children('td').first().remove();
     return timeslot;
-}
-
-
-/**
- * Sets up and returns the related links HTML div element.
- * @param id The course code.
- * @returns {jQuery}
- */
-function setupRelatedLinks(id) {
-    'use strict';
-
-    var relatedLinksDiv = $('<div></div>').css('display', 'inline')
-                                          .css('float', 'right')
-                                          .css('width', '45%')
-                                          .css('height', '250');
-    var title = $('<h3></h3>');
-    relatedLinksDiv.append(title);
-    return relatedLinksDiv;
 }
 
 
@@ -240,8 +214,8 @@ function openModal(title, modalDiv) {
                 .addClass('modal').dialog({
                     autoOpen: true,
                     modal: true,
-                    minWidth: 850,
-                    minHeight: 600,
+                    width: 750,
+                    height: 400,
                     closeText: 'X',
                     open: function(event, ui) {
                         $('.ui-widget-overlay').bind('click', function () {

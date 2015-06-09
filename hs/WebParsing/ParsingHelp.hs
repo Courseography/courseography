@@ -22,18 +22,13 @@ module WebParsing.ParsingHelp
     parseDistAndBreadth,
     ) where
 
-import Text.Regex.Posix
+import Text.Regex.Posix ((=~))
 import Text.HTML.TagSoup
-import Text.HTML.TagSoup.Match
-import Data.List
 import qualified Data.Text as T
-import Data.List.Utils
-import Data.Maybe
 import Database.Tables
 import WebParsing.PrerequisiteParsing
 
 type CoursePart = ([Tag T.Text], Course)
-type TagParser = (Maybe [Tag T.Text], [Tag T.Text])
 
 
 (-:) :: a -> (a -> a) -> a
@@ -57,11 +52,12 @@ emptyCourse = Course {
                     manualPracticalEnrol = Nothing,
                     distribution = Nothing,
                     prereqs = Nothing,
-                    coreqs = Nothing}
+                    coreqs = Nothing,
+                    videoUrls = []}
 
 replaceAll :: [T.Text] -> T.Text -> T.Text -> T.Text
 replaceAll matches replacement str =
-  foldl (\str match-> T.replace match replacement str) str matches
+  foldl (\foldStr match-> T.replace match replacement foldStr) str matches
 
 {------------------------------------------------------------------------------
 INPUT: a tag containing string tagtext, and reg, a regex string
@@ -75,7 +71,7 @@ tagContains matches (TagText tagtext) =
 --converts all open and closing tags to lowercase.
 lowerTag :: Tag T.Text -> Tag T.Text
 lowerTag (TagOpen tag attrs) =
-  TagOpen (T.toLower tag) (map (\(x, y) -> (T.toLower x, T.toLower y)) attrs)
+  TagOpen (T.toLower tag) (map (\(x, z) -> (T.toLower x, T.toLower z)) attrs)
 lowerTag (TagClose tag) = TagClose (T.toLower tag)
 lowerTag text = text
 
@@ -121,7 +117,7 @@ makeEntry (Just tags) (Just str) =
 replaceBetween :: Eq a =>  (a -> Bool) -> (a -> Bool) -> [a] -> [a]-> [a]
 replaceBetween start end rep lst =
   let (before, rest) = break start lst
-      (between, after) = break end rest
+      (_, after) = break end rest
   in if (after == [])
      then before
      else (concat [before, rep, (drop 1 after)])
@@ -130,7 +126,7 @@ replaceBetweenAll :: Eq a =>  (a -> Bool) -> (a -> Bool) -> [a] -> [a]-> [a]
 replaceBetweenAll _ _ _ [] = []
 replaceBetweenAll start end rep lst =
   let (before, rest) = break start lst
-      (between, after) = break end rest
+      (_, after) = break end rest
   in  if (or [(rest == []), (after == [])])
       then lst
       else (concat [before, rep, (replaceBetweenAll start end rep (drop 1 after))])
@@ -169,8 +165,8 @@ preProcess tags =
       removeEnrol = filter (\t -> not $ tagContains ["Enrolment Limits:"] t) removeUseless
   in map cleanText removeEnrol
   where
-    cleanText (TagText s) = TagText (replaceAll ["\r\n                    ", "\n                    ","\160","\194","\r\n"] "" s)
-    isntUseless (TagText s) = not $ T.all (\c -> or [(c == ' '), (c =='\n')]) s
+    cleanText (TagText str) = TagText (replaceAll ["\r\n                    ", "\n                    ","\160","\194","\r\n"] "" str)
+    isntUseless (TagText str) = not $ T.all (\c -> or [(c == ' '), (c =='\n')]) str
 
 parseDescription :: CoursePart -> CoursePart
 parseDescription (tags, course) =
@@ -188,8 +184,8 @@ parsePrerequisite (tags, course) =
 parseCorequisite :: CoursePart -> CoursePart
 parseCorequisite (tags, course)  =
   let (parsed, rest) = tagBreak ["Exclusion","Recommended","Distribution","Breadth"] tags
-      coreqs = makeEntry parsed (Just ["Corequisite:"])
-  in (rest, course {coreqs = coreqs})
+      coreq = makeEntry parsed (Just ["Corequisite:"])
+  in (rest, course {coreqs = coreq})
 
 parseExclusion :: CoursePart -> CoursePart
 parseExclusion (tags, course) =
@@ -199,7 +195,7 @@ parseExclusion (tags, course) =
 
 parseRecommendedPrep :: CoursePart -> CoursePart
 parseRecommendedPrep (tags, course) =
-  let (parsed, rest) = tagBreak ["Distribution","Breadth"] tags
+  let (_, rest) = tagBreak ["Distribution","Breadth"] tags
   in (rest, course)
 
 parseDistAndBreadth :: CoursePart -> CoursePart

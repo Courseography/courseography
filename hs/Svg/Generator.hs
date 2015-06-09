@@ -18,24 +18,31 @@ import Database.DataType
 import Control.Monad.IO.Class (liftIO)
 import Database.Persist.Sqlite
 import Data.List hiding (map, filter)
-import Data.Int
-import Database.JsonParser
 import MakeElements
 import Data.Maybe (fromMaybe)
 import qualified Data.Text as T
-import Text.Blaze.Svg11 ((!), mkPath, rotate, l, m)
+import Text.Blaze.Svg11 ((!))
 import qualified Text.Blaze.Svg11 as S
 import qualified Text.Blaze.Svg11.Attributes as A
 import Text.Blaze.Svg.Renderer.String (renderSvg)
 import Text.Blaze.Internal (stringValue)
 import Text.Blaze (toMarkup)
-import Css.Constants
+import Css.Constants (theoryDark,
+                      seDark,
+                      systemsDark,
+                      hciDark,
+                      graphicsDark,
+                      numDark,
+                      aiDark,
+                      introDark,
+                      mathDark)
 import qualified Data.Map.Strict as M
 import Data.Monoid (mempty)
+import Config (dbStr)
 
 -- | This is the main function that retrieves a stored graph
 -- from the database and creates a new SVG file for it.
-buildSVG :: Int64                -- ^ The ID of the graph that is being built.
+buildSVG :: GraphId              -- ^ The ID of the graph that is being built.
          -> M.Map String String  -- ^ A map of courses that holds the course
                                  --   ID as a key, and the data-active
                                  --   attribute as the course's value.
@@ -50,12 +57,12 @@ buildSVG gId courseMap filename styled =
     runSqlite dbStr $ do
         sqlRects    :: [Entity Shape] <- selectList
                                              [ShapeType_ <-. [Node, Hybrid],
-                                              ShapeGId ==. gId] []
-        sqlTexts    :: [Entity Text]  <- selectList [TextGId ==. gId] []
-        sqlPaths    :: [Entity Path]  <- selectList [PathGId ==. gId] []
+                                              ShapeGraph ==. gId] []
+        sqlTexts    :: [Entity Text]  <- selectList [TextGraph ==. gId] []
+        sqlPaths    :: [Entity Path]  <- selectList [PathGraph ==. gId] []
         sqlEllipses :: [Entity Shape] <- selectList
                                              [ShapeType_ ==. BoolNode,
-                                              ShapeGId ==. gId] []
+                                              ShapeGraph ==. gId] []
         let courseStyleMap = M.map convertSelectionToStyle courseMap
             texts          = map entityVal sqlTexts
             -- TODO: Ideally, we would do these "build" steps *before*
@@ -83,8 +90,8 @@ buildSVG gId courseMap filename styled =
                                                     styled
         liftIO $ writeFile filename stringSVG
     where
-        keyAsInt :: PersistEntity a => Entity a -> Int64
-        keyAsInt = (\(PersistInt64 x) -> x) . head . keyToValues . entityKey
+        keyAsInt :: PersistEntity a => Entity a -> Integer
+        keyAsInt = fromIntegral . (\(PersistInt64 x) -> x) . head . keyToValues . entityKey
 
         convertSelectionToStyle :: String -> String
         convertSelectionToStyle courseStatus =

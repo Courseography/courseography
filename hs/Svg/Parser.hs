@@ -15,16 +15,14 @@ The final svg files are output in @public\/res\/graphs\/gen@ and are sent
 directly to the client when viewing the @/graph@ page.
 -}
 
-module Svg.Parser where
+module Svg.Parser (parsePrebuiltSvgs) where
 
-import Data.Maybe (mapMaybe, catMaybes, fromMaybe)
-import Data.Int
+import Data.Maybe (mapMaybe, fromMaybe)
 import Data.List.Split (splitOn)
 import Data.List (find)
 import qualified Data.Map as M (empty)
-import Control.Monad.IO.Class (liftIO)
 import Data.String.Utils (replace)
-import Text.XML.HaXml hiding (find)
+import Text.XML.HaXml hiding (find, qname, x, attr)
 import Text.XML.HaXml.Util (tagTextContent)
 import Text.XML.HaXml.Namespaces (printableName)
 import System.Directory
@@ -32,25 +30,31 @@ import Database.Tables
 import Database.DataType
 import Svg.Database
 import Svg.Generator
+import Database.Persist.Sqlite hiding (replace)
+import Config (graphPath)
 
-main :: IO ()
-main = do
+parsePrebuiltSvgs :: IO ()
+parsePrebuiltSvgs = do
     performParse "Computer Science" "csc2015.svg"
     performParse "Statistics" "sta2015.svg"
+    performParse "Biochemistry" "bch2015.svg"
 
 performParse :: String -- ^ The title of the graph.
              -> String -- ^ The filename of the file that will be parsed.
              -> IO ()
-performParse graphTitle inputFilename =
-   do graphFile <- readFile ("../public/res/graphs/" ++ inputFilename)
-      key <- insertGraph graphTitle
+performParse graphName inputFilename =
+   do graphFile <- readFile (graphPath ++ inputFilename)
+      key <- insertGraph graphName
       let parsedGraph = parseGraph key graphFile
+          PersistInt64 keyVal = toPersistValue key
       print "Graph Parsed"
       insertElements parsedGraph
       print "Graph Inserted"
-      createDirectoryIfMissing True "../public/res/graphs/gen"
-      buildSVG key M.empty ("../public/res/graphs/gen/" ++ show key ++ ".svg") False
+      let genGraphPath = graphPath ++ "gen/"
+      createDirectoryIfMissing True genGraphPath
+      buildSVG key M.empty (genGraphPath ++ show keyVal ++ ".svg") False
       print "Success"
+
 
 -- * Parsing functions
 
@@ -59,8 +63,8 @@ performParse graphTitle inputFilename =
 -- This and the following functions traverse the raw SVG tree and return
 -- three lists, each containing values corresponding to different graph elements
 -- (edges, nodes, and text).
-parseGraph ::  Int64  -- ^ The unique identifier of the graph.
-            -> String -- ^ The file contents of the graph that will be parsed.
+parseGraph ::  GraphId  -- ^ The unique identifier of the graph.
+            -> String   -- ^ The file contents of the graph that will be parsed.
             -> ([Path],[Shape],[Text])
 parseGraph key graphFile =
     let Document _ _ root _ = xmlParse "output.error" graphFile
@@ -73,7 +77,7 @@ parseGraph key graphFile =
 
 -- | The main parsing function. Parses an SVG element,
 -- and then recurses on its children.
-parseNode :: Int64 -- ^ The Path's corresponding graph identifier.
+parseNode :: GraphId  -- ^ The Path's corresponding graph identifier.
           -> Content i
           -> ([Path],[Shape],[Text])
 parseNode key content =
@@ -98,7 +102,7 @@ parseNode key content =
              map (updateText trans) (newTexts))
 
 -- | Create a rectangle from a list of attributes.
-parseRect :: Int64 -- ^ The Rect's corresponding graph identifier.
+parseRect :: GraphId -- ^ The Rect's corresponding graph identifier.
           -> [Attribute]
           -> Shape
 parseRect key attrs =
@@ -115,7 +119,7 @@ parseRect key attrs =
           Node
 
 -- | Create an ellipse from a list of attributes.
-parseEllipse :: Int64 -- ^ The Ellipse's corresponding graph identifier.
+parseEllipse :: GraphId -- ^ The Ellipse's corresponding graph identifier.
              -> [Attribute]
              -> Shape
 parseEllipse key attrs =
@@ -132,7 +136,7 @@ parseEllipse key attrs =
           BoolNode
 
 -- | Create a path from a list of attributes.
-parsePath :: Int64 -- ^ The Path's corresponding graph identifier.
+parsePath :: GraphId -- ^ The Path's corresponding graph identifier.
           -> [Attribute]
           -> Maybe Path
 parsePath key attrs =
@@ -155,7 +159,7 @@ parsePath key attrs =
 -- | Create text values from content.
 -- It is necessary to pass in the content because we need to search
 -- for nested tspan elements.
-parseText :: Int64 -- ^ The Text's corresponding graph identifier.
+parseText :: GraphId -- ^ The Text's corresponding graph identifier.
           -> [(String, String)]
           -> Content i
           -> [Text]
@@ -196,15 +200,11 @@ contentAttrs _ = []
 attrName :: Attribute -> String
 attrName (qname, _) = printableName qname
 
--- | Gets an Attribute's value.
-attrVal :: Attribute -> String
-attrVal (_, val) = show val
-
 -- | Looks up the (string) value of the attribute with the corresponding name.
 -- Returns the empty string if the attribute isn't found.
 lookupAttr :: String -> [Attribute] -> String
-lookupAttr name attrs =
-    maybe "" (show . snd) $ find (\x -> attrName x == name) attrs
+lookupAttr nameStr attrs =
+    maybe "" (show . snd) $ find (\x -> attrName x == nameStr) attrs
 
 -- | Looks up an attribute value and convert to another type.
 readAttr :: Read a => String    -- ^ The attribute's name.
@@ -219,14 +219,14 @@ styles attrs =
     let styleStr = lookupAttr "style" attrs
     in map toStyle $ splitOn ";" styleStr
     where
-        toStyle s =
-            case splitOn ":" s of
+        toStyle split =
+            case splitOn ":" split of
             [n,v] -> (n,v)
             _ -> ("","")
 
 -- | Gets a style attribute from a style string.
 styleVal :: String -> [(String, String)] -> String
-styleVal name styles = fromMaybe "" $ lookup name styles
+styleVal nameStr styleMap = fromMaybe "" $ lookup nameStr styleMap
 
 -- | Parses a transform String into a tuple of Float.
 parseTransform :: String -> Point
@@ -247,13 +247,13 @@ parsePathD d
       lengthMoreThanOne x = length x > 1
       coordList = filter lengthMoreThanOne (map (splitOn ",") $ splitOn " " d)
       -- Converts a relative coordinate structure into an absolute one.
-      relCoords = tail $ foldl (\x y -> x ++ [addTuples (convertToPoint y)
+      relCoords = tail $ foldl (\x z -> x ++ [addTuples (convertToPoint z)
                                                         (last x)])
                                [(0,0)]
                                coordList
       -- Converts a relative coordinate structure into an absolute one.
       absCoords = map convertToPoint coordList
-      convertToPoint y = (read (head y), read (last y))
+      convertToPoint z = (read (head z), read (last z))
 
 
 -- * Other helpers

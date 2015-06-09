@@ -12,11 +12,8 @@ is either:  1) a 1-element list containig a course name
 -}
 module WebParsing.PrerequisiteParsing (parsePrerequisites) where
 
-import Text.Regex.Posix
+import Text.Regex.Posix ((=~))
 import qualified Data.Text as T
-import Data.List
-import Data.List.Utils
-import Data.Maybe
 
 {- Signatures:
 
@@ -40,8 +37,8 @@ isntDelim rest =
 -- |Splits a PrereqString by delimeters ';'' ','.
 toPreExprs :: String -> String -> [String]
 toPreExprs str expr  =
-  let (before, delim, after) = matchDelim str
-  in case (before, delim, after) of
+  let (beforeStr, delimStr, afterStr) = matchDelim str
+  in case (beforeStr, delimStr, afterStr) of
     ("","","") -> [] --if (expr == "") then [] else [expr]
     (before, "", "") -> [before++expr]
     (before, ",", after) -> if (isntDelim after)
@@ -61,11 +58,11 @@ matchCourse prereqs =
 -- in a string.
 toPrereq :: String -> T.Text
 toPrereq expr =
-  let (before, course, after) = matchCourse expr
-  in case (before, course, after) of
-     (before, "", "") -> ""
+  let (beforeExpr, courseExpr, afterExpr) = matchCourse expr
+  in case (beforeExpr, courseExpr, afterExpr) of
+     (_, "", "") -> ""
      --guaranteed match
-     (before, course, "") -> T.pack course
+     (_, course, "") -> T.pack course
      (_, course, after) ->  T.concat [(T.pack course), " ", (toPrereq after)]
 
 -- | converts a text representation of Course prerequisites into type of prereqs field
