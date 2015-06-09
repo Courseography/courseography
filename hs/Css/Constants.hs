@@ -185,3 +185,18 @@ beige1 = parse "#EBE8E4"
 {- FCE count color. Currently unused. -}
 fceCountColor :: Color
 fceCountColor = parse "#66C2FF"
+
+{- Graph styles -}
+
+-- Node font size, in pixels
+nodeFontSize :: Num a => a
+nodeFontSize = 12
+
+hybridFontSize :: Num a => a
+hybridFontSize = 7
+
+boolFontSize :: Num a => a
+boolFontSize = 6
+
+regionFontSize :: Num a => a
+regionFontSize = 14

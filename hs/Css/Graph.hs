@@ -33,7 +33,7 @@ nodeCSS = "g" ? do
     ".node" & do
         cursor pointer
         "text" ? do
-            fontSize (pt 12)
+            fontSize (pt nodeFontSize)
             faded
             stroke "none"
             "text-anchor" -: "middle"
@@ -90,7 +90,7 @@ nodeCSS = "g" ? do
         "text" <? do
             stroke "none"
             fill "white"
-            fontSize (pt 7)
+            fontSize (pt hybridFontSize)
             "text-anchor" -: "middle"
         "rect" <? do
             fill "#888888"
@@ -126,7 +126,7 @@ nodeCSS = "g" ? do
             fontFamily ["Trebuchet MS", "Arial"] [sansSerif]
             fontWeight bold
             stroke "none"
-            fontSize (pt 6)
+            fontSize (pt boolFontSize)
             "text-anchor" -: "middle"
 
 {- pathCSS
@@ -348,6 +348,6 @@ regionCSS :: Css
 regionCSS = do
     "#region-labels > text" ? do
         "text-anchor" -: "start"
-        fontSize (pt 14)
+        fontSize (pt regionFontSize)
     ".region" ? do
         "fill-opacity" -: "0.25"
