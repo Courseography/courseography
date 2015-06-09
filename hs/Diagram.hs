@@ -95,9 +95,13 @@ renderTable filename courses session = do
     let courseTable = partition5 $ splitOn "_" courses
     print courseTable
     let g = makeTable (zipWith (:) times courseTable) session
-    let svg = renderDia SVG (SVGOptions (mkWidth 600) Nothing "") g
-    let txt = replace (show fs ++ "em") (show fs ++ "px") $ unpack $ renderText svg
+    let svg = renderDia SVG (SVGOptions (mkWidth 1024) Nothing "") g
+    let txt = replace (show (fs :: Double) ++ "px") (show fs' ++ "px") $
+              unpack $ renderText svg
     writeFile filename txt
     where
         partition5 [] = []
         partition5 lst = take 5 lst : partition5 (drop 5 lst)
+
+        -- relative fonts don't play well with ImageMagick, apparently
+        fs' = round $ 1024 / 600 * fs
