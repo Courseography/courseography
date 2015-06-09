@@ -5,7 +5,7 @@ module Diagram (renderTable) where
 import Diagrams.Prelude
 import Diagrams.Backend.SVG.CmdLine
 import Diagrams.Backend.SVG
-import Data.List
+import Data.List (intersperse)
 import Data.List.Utils (replace)
 import Data.List.Split (splitOn)
 import Lucid (renderText)
@@ -17,40 +17,78 @@ days = ["Mon", "Tue", "Wed", "Thu", "Fri"]
 times :: [String]
 times = map (\x -> show x ++ ":00") ([8..12] ++ [1..8] :: [Int])
 
+blue3 :: Colour Double
+blue3 = sRGB24read "#437699"
+
+pink1 :: Colour Double
+pink1 = sRGB24read "#DB94B8"
+
+cellWidth :: Double
+cellWidth = 2
+
+timeCellWidth :: Double
+timeCellWidth = 1.2
+
+cellHeight :: Double
+cellHeight = 0.4
+
+cellPaddingHeight :: Double
+cellPaddingHeight = 0.2
+
+fs :: Double
+fs = 16
+
 cell :: Diagram B
-cell = rect 2 0.8
+cell = rect cellWidth cellHeight
+
+cellPadding :: Diagram B
+cellPadding = rect cellWidth cellPaddingHeight
+
+timeCell :: Diagram B
+timeCell = rect timeCellWidth cellHeight # lw none
+
+timeCellPadding :: Diagram B
+timeCellPadding = rect timeCellWidth cellPaddingHeight # lw none
+
+cellText :: String -> Diagram B
+cellText s = font "Trebuchet MS" $ text s # fontSizeO fs
 
 makeCell :: String -> Diagram B
-makeCell s =
-    (font "Trebuchet MS" $ text s # fontSizeO 16 # fc white) <>
-    cell # fc (if null s then white else blue)
-         # lw none
+makeCell s = vsep 0.025
+    [cellPadding # fc background # lc background,
+     cellText s # fc white <>
+     cell # fc background # lc background]
+    where
+        background = if null s then white else blue3
 
 header :: String -> Diagram B
-header session = (hcat $ map makeHeaderCell $ session:days) # centerX === headerBorder
+header session = (hcat $ (makeSessionCell session) : map makeHeaderCell days) # centerX === headerBorder
 
-headerBorder :: Diagram B
-headerBorder = hrule 12 # lw medium # lc pink
+makeSessionCell :: String -> Diagram B
+makeSessionCell s =
+    timeCellPadding === (cellText s <> timeCell)
 
 makeHeaderCell :: String -> Diagram B
 makeHeaderCell s =
-    (font "Trebuchet MS" $ text s # fontSizeO 16) <>
-    cell # lw none
+    cellPadding # lw none === (cellText s <> cell # lw none)
 
 makeTimeCell :: String -> Diagram B
 makeTimeCell s =
-    (font "Trebuchet MS" $ text s # fontSizeO 16) <>
-    cell # lw none
+    timeCellPadding === (cellText s <> timeCell # lw none)
 
 makeRow :: [String] -> Diagram B
 makeRow (x:xs) = (# centerX) . hcat $
-    makeTimeCell x : vrule 0.8 # lw thin : map makeCell xs
+    makeTimeCell x : map makeCell xs
+makeRow [] = error "invalid timetable format"
+
+headerBorder :: Diagram B
+headerBorder = hrule 11.2 # lw medium # lc pink1
 
 rowBorder :: Diagram B
-rowBorder = hrule 12 # lw thin # lc grey
+rowBorder = hrule 11.2 # lw thin # lc pink1
 
 makeTable :: [[String]] -> String -> Diagram B
-makeTable s session = vcat $ (header session): intersperse rowBorder (map makeRow s)
+makeTable s session = vsep 0.04 $ (header session): intersperse rowBorder (map makeRow s)
 
 renderTable :: String -> String -> String -> IO ()
 renderTable filename courses session = do
@@ -58,7 +96,7 @@ renderTable filename courses session = do
     print courseTable
     let g = makeTable (zipWith (:) times courseTable) session
     let svg = renderDia SVG (SVGOptions (mkWidth 600) Nothing "") g
-    let txt = replace "16.0em" "16.0px" $ unpack $ renderText svg
+    let txt = replace (show fs ++ "em") (show fs ++ "px") $ unpack $ renderText svg
     writeFile filename txt
     where
         partition5 [] = []
