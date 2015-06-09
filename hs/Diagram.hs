@@ -5,11 +5,17 @@ module Diagram (renderTable) where
 import Diagrams.Prelude
 import Diagrams.Backend.SVG.CmdLine
 import Diagrams.Backend.SVG
-import Data.List
+import Data.List (intersperse)
 import Data.List.Utils (replace)
 import Data.List.Split (splitOn)
 import Lucid (renderText)
 import Data.Text.Lazy (unpack)
+
+blue3 :: Colour Double
+blue3 = sRGB24read "#437699"
+
+pink1 :: Colour Double
+pink1 = sRGB24read "#DB94B8"
 
 days :: [String]
 days = ["Mon", "Tue", "Wed", "Thu", "Fri"]
@@ -18,39 +24,52 @@ times :: [String]
 times = map (\x -> show x ++ ":00") ([8..12] ++ [1..8] :: [Int])
 
 cell :: Diagram B
-cell = rect 2 0.8
+cell = rect 2 0.4
+
+cellPadding :: Diagram B
+cellPadding = rect 2 0.2
 
 makeCell :: String -> Diagram B
-makeCell s =
+makeCell s = vsep 0.025
+    [(cellPadding # fc (if null s then white else blue3)
+                  # lc (if null s then white else blue3)),
     (font "Trebuchet MS" $ text s # fontSizeO 16 # fc white) <>
-    cell # fc (if null s then white else blue)
-         # lw none
+    cell # fc (if null s then white else blue3)
+         # lc (if null s then white else blue3)]
 
 header :: String -> Diagram B
-header session = (hcat $ map makeHeaderCell $ session:days) # centerX === headerBorder
+header session = (hcat $ (makeSessionCell session) : map makeHeaderCell days) # centerX === headerBorder
 
 headerBorder :: Diagram B
-headerBorder = hrule 12 # lw medium # lc pink
+headerBorder = hrule 11.2 # lw medium # lc pink1
+
+makeSessionCell :: String -> Diagram B
+makeSessionCell s = vcat
+    [rect 1.2 0.2 # lw none,
+     (font "Trebuchet MS" $ text s # fontSizeO 16) <>
+     rect 1.2 0.4 # lw none]
 
 makeHeaderCell :: String -> Diagram B
-makeHeaderCell s =
-    (font "Trebuchet MS" $ text s # fontSizeO 16) <>
-    cell # lw none
+makeHeaderCell s = vcat
+    [cellPadding # lw none,
+    (font "Trebuchet MS" $ text s # fontSizeO 16) <> cell # lw none]
 
 makeTimeCell :: String -> Diagram B
-makeTimeCell s =
-    (font "Trebuchet MS" $ text s # fontSizeO 16) <>
-    cell # lw none
+makeTimeCell s = vcat
+    [rect 1.2 0.2 # lw none,
+     (font "Trebuchet MS" $ text s # fontSizeO 16) <>
+     rect 1.2 0.4 # lw none]
 
 makeRow :: [String] -> Diagram B
 makeRow (x:xs) = (# centerX) . hcat $
-    makeTimeCell x : vrule 0.8 # lw thin : map makeCell xs
+    makeTimeCell x : map makeCell xs
+makeRow [] = error "invalid timetable format"
 
 rowBorder :: Diagram B
-rowBorder = hrule 12 # lw thin # lc grey
+rowBorder = hrule 11.2 # lw thin # lc pink1
 
 makeTable :: [[String]] -> String -> Diagram B
-makeTable s session = vcat $ (header session): intersperse rowBorder (map makeRow s)
+makeTable s session = vsep 0.04 $ (header session): intersperse rowBorder (map makeRow s)
 
 renderTable :: String -> String -> String -> IO ()
 renderTable filename courses session = do
