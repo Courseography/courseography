@@ -4,19 +4,20 @@
  */
 
 var calendarRefer = document.getElementById('calendarlink');
-calendarRefer.onclick = function() {getCalendarEvents('fall')};
+calendarRefer.onclick = function() {getCalendarEvents()};
 
 
-function getCalendarEvents(session) {
+function getCalendarEvents() {
     'use strict';
 
     var events;
-    var courses = getCoursesTable(session);
-    session = session.charAt(0).toUpperCase() + session.slice(1);
+    var coursesFall = getCoursesTable('fall');
+    var coursesWinter = getCoursesTable('winter');
+    
     $.ajax({
         url: 'calendar',
         async: false,
-        data: {courses: courses, session: session},
+        data: {coursesFall: coursesFall, coursesWinter: coursesWinter},
         success: function (data) {
             events = data;
         },

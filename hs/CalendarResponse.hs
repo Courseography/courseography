@@ -57,25 +57,42 @@ day 3 = "R"
 day 4 = "F"
 
 -- Takes data from event days to generate all the dates given the specific days
-startDate :: [[String]] -> [[Day]]
-startDate courses = [generateDates days | days <- eventDays courses]
+startDate :: [[String]] -> String -> [[Day]]
+startDate courses session = [if session == "Fall" then generateDatesFall days else generateDatesWinter days | days <- eventDays courses]
 
 -- Generate all the dates given the specific days
 -- First day of classes will be on September, September 14.
-generateDates :: String -> [Day]
-generateDates "M" = take 30 [addDays i firstMonday | i <- [0,7..]]
+generateDatesFall :: String -> Int -> [Day]
+generateDatesFall "M" = take 30 [addDays i firstMonday | i <- [0,7..]]
     where 
     firstMonday = fromGregorian 2015 09 14
-generateDates "T" = take 30 [addDays i firstTuesday | i <- [0,7..]]
+generateDatesFall "T" = take 30 [addDays i firstTuesday | i <- [0,7..]]
     where 
     firstTuesday = fromGregorian 2015 09 15
-generateDates "W" = take 30 [addDays i firstWednesday | i <- [0,7..]]
+generateDatesFall "W" = take 30 [addDays i firstWednesday | i <- [0,7..]]
     where 
     firstWednesday = fromGregorian 2015 09 16
-generateDates "R" = take 30 [addDays i firstThursday | i <- [0,7..]]
+generateDatesFall "R" = take 30 [addDays i firstThursday | i <- [0,7..]]
     where 
     firstThursday = fromGregorian 2015 09 17
-generateDates "F" = take 30 [addDays i firstFriday | i <- [0,7..]]
+generateDatesFall "F" = take 30 [addDays i firstFriday | i <- [0,7..]]
+    where 
+    firstFriday = fromGregorian 2015 09 18
+
+generateDatesWinter :: String -> Int -> [Day]
+generateDatesWinter "M" = take 30 [addDays i firstMonday | i <- [0,7..]]
+    where 
+    firstMonday = fromGregorian 2015 09 14
+generateDatesWinter "T" = take 30 [addDays i firstTuesday | i <- [0,7..]]
+    where 
+    firstTuesday = fromGregorian 2015 09 15
+generateDatesWinter "W" = take 30 [addDays i firstWednesday | i <- [0,7..]]
+    where 
+    firstWednesday = fromGregorian 2015 09 16
+generateDatesWinter "R" = take 30 [addDays i firstThursday | i <- [0,7..]]
+    where 
+    firstThursday = fromGregorian 2015 09 17
+generateDatesWinter "F" = take 30 [addDays i firstFriday | i <- [0,7..]]
     where 
     firstFriday = fromGregorian 2015 09 18
 
@@ -88,20 +105,20 @@ endDate courses = startDate courses
 "Subject, start date, start time, end date, end time, all day event, description, location, private
 MAT137,09/14/15,8:00:00 AM,09/14/15,9:00:00 AM,False,MAT137,tba,True" 
 -}
-getCsvFile :: String -> String -> String
-getCsvFile courses session = toCSV(matchData (startTimes coursesWeekly) (endTimes coursesWeekly) (startDate coursesWeekly))
+getAllevents :: String -> String ->[String]
+getAllevents courses session= (matchData (startTimes coursesWeekly) (endTimes coursesWeekly) (startDate coursesWeekly session))
     where
-    coursesWeekly = splitCourses courses session
+    coursesWeekly = splitCourses courses
 
-splitCourses :: String -> String -> [[String]]
-splitCourses courses session = partition5 $ splitOn "_" courses
+splitCourses :: String -> [[String]]
+splitCourses courses = partition5 $ splitOn "_" courses
     where
     partition5 [] = []
     partition5 lst = take 5 lst : partition5(drop 5 lst)
 
 -- Generate the string that represents a CSV file
-toCSV :: [String] -> String
-toCSV eventsData = unlines ([title] ++ eventsData)
+toCSV :: String -> String -> String
+toCSV coursesFall coursesWinter = unlines ([title] ++ getAllevents coursesFall "Fall" ++ getAllevents coursesWinter "Winter")
     where
     title = "Subject,Start Date,Start Time,End Date,End Time,All Day Event,Description,Location,Private"
 
@@ -117,9 +134,9 @@ eventsByCourse start end date =  [fst start ++ "," ++ format byDate ++ "," ++ sn
 
 -- | Returns a CSV file of events as requested by the user.
 calendarResponse :: String -> String -> ServerPart Response
-calendarResponse courses session =
-    liftIO $ getCalendar courses session
+calendarResponse coursesFall coursesWinter =
+    liftIO $ getCalendar coursesFall coursesWinter
 
 -- Generates a response, which is a CSV file
 getCalendar :: String -> String -> IO Response
-getCalendar courses session = return $ toResponse(getCsvFile courses session)
+getCalendar coursesFall coursesWinter = return $ toResponse(toCSV coursesFall coursesWinter)
