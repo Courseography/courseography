@@ -61,7 +61,8 @@ startDate :: [[String]] -> String -> [[Day]]
 startDate courses session = [if session == "Fall" then generateDatesFall days else generateDatesWinter days | days <- eventDays courses]
 
 -- Generate all the dates given the specific days
--- First day of classes will be on September, September 14.
+-- First day of classes will be on September 14.
+-- Last day of classes will be on December 8
 generateDatesFall :: String -> [Day]
 generateDatesFall "M" = take 13 [addDays i firstMonday | i <- [0,7..]]
     where 
@@ -79,6 +80,9 @@ generateDatesFall "F" = take 12 [addDays i firstFriday | i <- [0,7..]]
     where 
     firstFriday = fromGregorian 2015 09 18
 
+-- Generate all the dates given the specific days
+-- First day of classes will be on January 11.
+-- Last day of classes will be on April 8
 generateDatesWinter :: String -> [Day]
 generateDatesWinter "M" = take 13 [addDays i firstMonday | i <- [0,7..]]
     where 
@@ -105,24 +109,26 @@ endDate courses session = startDate courses session
 "Subject, start date, start time, end date, end time, all day event, description, location, private
 MAT137,09/14/15,8:00:00 AM,09/14/15,9:00:00 AM,False,MAT137,tba,True" 
 -}
-getAllevents :: String -> String ->[String]
-getAllevents courses session= (matchData (startTimes coursesWeekly) (endTimes coursesWeekly) (startDate coursesWeekly session))
-    where
-    coursesWeekly = splitCourses courses
-
-splitCourses :: String -> [[String]]
-splitCourses courses = partition5 $ splitOn "_" courses
-    where
-    partition5 [] = []
-    partition5 lst = take 5 lst : partition5(drop 5 lst)
-
 -- Generate the string that represents a CSV file
 toCSV :: String -> String -> String
 toCSV coursesFall coursesWinter = unlines ([title] ++ getAllevents coursesFall "Fall" ++ getAllevents coursesWinter "Winter")
     where
     title = "Subject,Start Date,Start Time,End Date,End Time,All Day Event,Description,Location,Private"
 
--- Put together all the information in the corresponding order given by the lists
+-- Generate all the events based on the string courses given
+getAllevents :: String -> String ->[String]
+getAllevents courses session= (matchData (startTimes coursesWeekly) (endTimes coursesWeekly) (startDate coursesWeekly session))
+    where
+    coursesWeekly = splitCourses courses
+
+-- Divide the string courses into weekly portions
+splitCourses :: String -> [[String]]
+splitCourses courses = partition5 $ splitOn "_" courses
+    where
+    partition5 [] = []
+    partition5 lst = take 5 lst : partition5(drop 5 lst)
+
+-- Put together all the information in the corresponding order given by start, end and date
 matchData :: [(String,String)] -> [(String,String)] -> [[Day]] -> [String]
 matchData start end date = concat [eventsByCourse (start !! i) (end !! i) (date !! i) | i <- [0..x]]
     where
