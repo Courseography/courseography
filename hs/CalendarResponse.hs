@@ -62,43 +62,43 @@ startDate courses session = [if session == "Fall" then generateDatesFall days el
 
 -- Generate all the dates given the specific days
 -- First day of classes will be on September, September 14.
-generateDatesFall :: String -> Int -> [Day]
-generateDatesFall "M" = take 30 [addDays i firstMonday | i <- [0,7..]]
+generateDatesFall :: String -> [Day]
+generateDatesFall "M" = take 13 [addDays i firstMonday | i <- [0,7..]]
     where 
     firstMonday = fromGregorian 2015 09 14
-generateDatesFall "T" = take 30 [addDays i firstTuesday | i <- [0,7..]]
+generateDatesFall "T" = take 13 [addDays i firstTuesday | i <- [0,7..]]
     where 
     firstTuesday = fromGregorian 2015 09 15
-generateDatesFall "W" = take 30 [addDays i firstWednesday | i <- [0,7..]]
+generateDatesFall "W" = take 12 [addDays i firstWednesday | i <- [0,7..]]
     where 
     firstWednesday = fromGregorian 2015 09 16
-generateDatesFall "R" = take 30 [addDays i firstThursday | i <- [0,7..]]
+generateDatesFall "R" = take 12 [addDays i firstThursday | i <- [0,7..]]
     where 
     firstThursday = fromGregorian 2015 09 17
-generateDatesFall "F" = take 30 [addDays i firstFriday | i <- [0,7..]]
+generateDatesFall "F" = take 12 [addDays i firstFriday | i <- [0,7..]]
     where 
     firstFriday = fromGregorian 2015 09 18
 
-generateDatesWinter :: String -> Int -> [Day]
-generateDatesWinter "M" = take 30 [addDays i firstMonday | i <- [0,7..]]
+generateDatesWinter :: String -> [Day]
+generateDatesWinter "M" = take 13 [addDays i firstMonday | i <- [0,7..]]
     where 
-    firstMonday = fromGregorian 2015 09 14
-generateDatesWinter "T" = take 30 [addDays i firstTuesday | i <- [0,7..]]
+    firstMonday = fromGregorian 2016 01 11
+generateDatesWinter "T" = take 13 [addDays i firstTuesday | i <- [0,7..]]
     where 
-    firstTuesday = fromGregorian 2015 09 15
-generateDatesWinter "W" = take 30 [addDays i firstWednesday | i <- [0,7..]]
+    firstTuesday = fromGregorian 2016 01 12
+generateDatesWinter "W" = take 13 [addDays i firstWednesday | i <- [0,7..]]
     where 
-    firstWednesday = fromGregorian 2015 09 16
-generateDatesWinter "R" = take 30 [addDays i firstThursday | i <- [0,7..]]
+    firstWednesday = fromGregorian 2016 01 13
+generateDatesWinter "R" = take 13 [addDays i firstThursday | i <- [0,7..]]
     where 
-    firstThursday = fromGregorian 2015 09 17
-generateDatesWinter "F" = take 30 [addDays i firstFriday | i <- [0,7..]]
+    firstThursday = fromGregorian 2016 01 14
+generateDatesWinter "F" = take 13 [addDays i firstFriday | i <- [0,7..]]
     where 
-    firstFriday = fromGregorian 2015 09 18
+    firstFriday = fromGregorian 2016 01 15
 
 -- Same as startDate, since our events do not happen in more than one day
-endDate :: [[String]] -> [[Day]]
-endDate courses = startDate courses
+endDate :: [[String]] -> String -> [[Day]]
+endDate courses session = startDate courses session
 
 
 {- Output file:
