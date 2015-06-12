@@ -6,6 +6,7 @@ import Data.Time
 import Happstack.Server
 import Control.Monad.IO.Class (liftIO)
 import System.Locale
+import Config (dbStr, markdownPath, graphPath, genCssPath, cssStyle)
 
 -- EVENTS' NAME, START/END TIME
 
@@ -64,41 +65,37 @@ startDate courses session = [if session == "Fall" then generateDatesFall days el
 -- First day of classes will be on September 14.
 -- Last day of classes will be on December 8
 generateDatesFall :: String -> [Day]
-generateDatesFall "M" = take 13 [addDays i firstMonday | i <- [0,7..]]
-    where 
-    firstMonday = fromGregorian 2015 09 14
+generateDatesFall "M" = take 13 [addDays i firstMondayFall | i <- [0,7..]]
 generateDatesFall "T" = take 13 [addDays i firstTuesday | i <- [0,7..]]
     where 
-    firstTuesday = fromGregorian 2015 09 15
+    firstTuesday = addDays 1 firstMondayFall
 generateDatesFall "W" = take 12 [addDays i firstWednesday | i <- [0,7..]]
     where 
-    firstWednesday = fromGregorian 2015 09 16
+    firstWednesday = addDays 2 firstMondayFall
 generateDatesFall "R" = take 12 [addDays i firstThursday | i <- [0,7..]]
     where 
-    firstThursday = fromGregorian 2015 09 17
+    firstThursday = addDays 3 firstMondayFall
 generateDatesFall "F" = take 12 [addDays i firstFriday | i <- [0,7..]]
     where 
-    firstFriday = fromGregorian 2015 09 18
+    firstFriday = addDays 4 firstMondayFall
 
 -- Generate all the dates given the specific days
 -- First day of classes will be on January 11.
 -- Last day of classes will be on April 8
 generateDatesWinter :: String -> [Day]
-generateDatesWinter "M" = take 13 [addDays i firstMonday | i <- [0,7..]]
-    where 
-    firstMonday = fromGregorian 2016 01 11
+generateDatesWinter "M" = take 13 [addDays i firstMondayWinter | i <- [0,7..]]
 generateDatesWinter "T" = take 13 [addDays i firstTuesday | i <- [0,7..]]
     where 
-    firstTuesday = fromGregorian 2016 01 12
+    firstTuesday = addDays 1 firstMondayWinter 
 generateDatesWinter "W" = take 13 [addDays i firstWednesday | i <- [0,7..]]
     where 
-    firstWednesday = fromGregorian 2016 01 13
+    firstWednesday = addDays 2 firstMondayWinter 
 generateDatesWinter "R" = take 13 [addDays i firstThursday | i <- [0,7..]]
     where 
-    firstThursday = fromGregorian 2016 01 14
+    firstThursday = addDays 3 firstMondayWinter 
 generateDatesWinter "F" = take 13 [addDays i firstFriday | i <- [0,7..]]
     where 
-    firstFriday = fromGregorian 2016 01 15
+    firstFriday = addDays 4 firstMondayWinter 
 
 -- Same as startDate, since our events do not happen in more than one day
 endDate :: [[String]] -> String -> [[Day]]

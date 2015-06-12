@@ -16,6 +16,7 @@ module Config (dbStr,
 
 import Data.Text (Text)
 import qualified Clay.Render as Clay
+import Data.Time
 
 -- DATABASE CONNECTION STRINGS
 
@@ -43,3 +44,9 @@ genCssPath = "../public/style/"
 -- @Clay.compact@ for minified output.
 cssStyle :: Clay.Config
 cssStyle = Clay.pretty
+
+firstMondayFall :: Day
+firstMondayFall = fromGregorian 2015 09 14
+
+firstMondayWinter :: Day
+firstMondayWinter = fromGregorian 2016 01 11
