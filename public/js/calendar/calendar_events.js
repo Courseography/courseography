@@ -2,7 +2,7 @@
  * Requests a CSV file from the server. The server automatically generates this
  * file.
  */
-
+ 
 var calendarRefer = document.getElementById('calendarlink');
 calendarRefer.onclick = function() {getCalendarEvents()};
 

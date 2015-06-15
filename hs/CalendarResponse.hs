@@ -6,7 +6,7 @@ import Data.Time
 import Happstack.Server
 import Control.Monad.IO.Class (liftIO)
 import System.Locale
-import Config (dbStr, markdownPath, graphPath, genCssPath, cssStyle)
+import Config (firstMondayFall, firstMondayWinter)
 
 -- EVENTS' NAME, START/END TIME
 

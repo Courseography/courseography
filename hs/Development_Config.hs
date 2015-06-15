@@ -12,7 +12,9 @@ module Config (dbStr,
                markdownPath,
                graphPath,
                genCssPath,
-               cssStyle) where
+               cssStyle,
+               firstMondayFall,
+               firstMondayWinter) where
 
 import Data.Text (Text)
 import qualified Clay.Render as Clay
