@@ -4,9 +4,13 @@ import Data.List.Split (splitOn)
 import Data.List
 import Data.Time
 import Happstack.Server
-import Control.Monad.IO.Class (liftIO)
+--import Control.Monad.IO.Class (liftIO)
+import Control.Monad.IO.Class (liftIO, MonadIO)
 import System.Locale
 import Config (firstMondayFall, firstMondayWinter)
+import Database.CourseQueries (returnCourse)-- For  returnCourse
+import Data.Text (pack) -- For unpack
+import Database.Tables as Tables --  For the IO Course response issue
 
 -- EVENTS' NAME, START/END TIME
 
@@ -136,10 +140,45 @@ eventsByCourse :: (String,String) -> (String,String) -> [Day] -> [String]
 eventsByCourse start end date =  [fst start ++ "," ++ format byDate ++ "," ++ snd start ++ "," ++ format byDate ++ "," ++ snd end ++ ",False," ++ fst end ++ ",tba,True"| byDate <- date] 
 
 -- | Returns a CSV file of events as requested by the user.
-calendarResponse :: String -> String -> ServerPart Response
+{-calendarResponse :: String -> String -> ServerPart Response
 calendarResponse coursesFall coursesWinter =
     liftIO $ getCalendar coursesFall coursesWinter
 
 -- Generates a response, which is a CSV file
 getCalendar :: String -> String -> IO Response
 getCalendar coursesFall coursesWinter = return $ toResponse(toCSV coursesFall coursesWinter)
+
+calendarResponse :: String -> String -> String -> ServerPart Response
+calendarResponse coursesFall coursesWinter cookie =
+    liftIO $ getCalendar coursesFall coursesWinter cookie
+
+getCalendar :: String -> String -> String -> IO Response
+getCalendar coursesFall coursesWinter cookie = return $ toResponse(cookie)
+
+
+
+calendarResponse :: String -> String -> ServerPart Response
+calendarResponse courses lectures =
+    liftIO $ getCalendar courses lectures
+
+-}
+-- courses: MAT137Y1   lectures: MAT137Y1-L5101-Y
+getCalendar :: String -> String -> IO Response
+getCalendar courses lectures = return $ toResponse(returnCourse (pack "MAT137Y1-L5101-Y"))
+
+
+calendarResponse :: String -> String -> ServerPart Response
+calendarResponse courses lectures =
+    liftIO $ getCalendar courses lectures
+
+{-getInfoDatabase :: String -> String -> String 
+getInfoDatabase courses lectures =  $ do
+    basic <- selectList [Lecturescode ==. "MAT137Y1-L5101-Y"] [] --Second list is an ouput option
+    returnCourse (unpack "MAT137Y1-L5101-Y")
+    liftIO $ print basic
+
+
+
+getInfoDatabase :: String -> String -> IO Course
+getInfoDatabase courses lectures =  returnCourse (unpack "MAT137Y1-L5101-Y")
+-}

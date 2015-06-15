@@ -24,6 +24,7 @@ import System.Log.Logger (logM, updateGlobalLogger, rootLoggerName, setLevel, Pr
 import CourseographyFacebook
 import Config (markdownPath)
 import qualified Data.Text.Lazy.IO as LazyIO
+import Network.HTTP.Cookie
 
 -- | log access requests using hslogger and a condensed log formatting
 logMAccessShort :: FormatTime t => LogAccess t
@@ -82,6 +83,7 @@ runServer = do
           dir "course-info" $ look "dept" >>= courseInfo,
           dir "depts" $ liftIO deptList,
           dir "timesearch" searchResponse,
-          dir "calendar" $ look "coursesFall" >>= \x -> look "coursesWinter" >>= calendarResponse x,
+          --dir "calendar" $ look "coursesFall" >>= \x -> look "coursesWinter" >>= calendarResponse x,
+          dir "calendar" $ lookCookieValue "selected-courses" >>= \x -> lookCookieValue "selected-lectures" >>= calendarResponse x,
           fourOhFourResponse
         ]

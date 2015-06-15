@@ -2,7 +2,18 @@
  * Requests a CSV file from the server. The server automatically generates this
  * file.
  */
- 
+
+// cookie approach
+function myCookie(){
+    var x = document.cookie
+    var y = getCookie("code")
+    var cookie = document.cookie
+    window.alert(cookie)
+}
+//var calendarRefer = document.getElementById('calendarlink');
+//calendarRefer.onclick = function() {myCookie()};
+
+
 var calendarRefer = document.getElementById('calendarlink');
 calendarRefer.onclick = function() {getCalendarEvents()};
 
