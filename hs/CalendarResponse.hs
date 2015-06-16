@@ -11,6 +11,7 @@ import Config (firstMondayFall, firstMondayWinter)
 import Database.CourseQueries (returnCourse)-- For  returnCourse
 import Data.Text (pack) -- For unpack
 import Database.Tables as Tables --  For the IO Course response issue
+import JsonResponse
 
 -- EVENTS' NAME, START/END TIME
 
@@ -160,13 +161,19 @@ getCalendar coursesFall coursesWinter cookie = return $ toResponse(cookie)
 calendarResponse :: String -> String -> ServerPart Response
 calendarResponse courses lectures =
     liftIO $ getCalendar courses lectures
-
 -}
+
 -- courses: MAT137Y1   lectures: MAT137Y1-L5101-Y
 getCalendar :: String -> String -> IO Response
-getCalendar courses lectures = return $ toResponse(returnCourse (pack "MAT137Y1-L5101-Y"))
+getCalendar courses lectures = do
+    courseJSON <- returnCourse (pack "MAT137Y1-L5101-Y")
+    return $ toResponse (createJSONResponse courseJSON)
+-- getCalendar courses lectures = return $ toResponse(returnCourse (pack "MAT137Y1"))
 
-
+{-
+getCalendar :: String -> String -> IO Response
+getCalendar courses lectures = return $ toResponse ("courses: " ++ courses ++ " Lectures: " ++ lectures)
+-}
 calendarResponse :: String -> String -> ServerPart Response
 calendarResponse courses lectures =
     liftIO $ getCalendar courses lectures
