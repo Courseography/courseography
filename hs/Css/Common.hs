@@ -37,7 +37,8 @@ headerCSS = do
     ".header" ?
         do margin0
            padding 0 (em 0.5) 0 (em 0.5)
-           backgroundColor $ blue1
+           backgroundColor $ parse "#EED2EE"
+           border solid (px 1) black
            color white
            img ?
              do display inlineBlock
@@ -58,6 +59,7 @@ headerCSS = do
                 padding 0 (px 10) 0 (px 10)
                 a <? do
                     color white
+                    "text-shadow" -: "-2px 2px 2px #000, 2px 2px 2px #000, -2px -2px 2px #000, 2px -2px 2px #000" 
                     hover & do
                         color gray
             height (px 50)

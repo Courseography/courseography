@@ -249,7 +249,7 @@ sidebarCSS = do
     "#sidebar-nav" ? do
         width100
         fontSize (px 13)
-        backgroundColor purple3
+        backgroundColor $ parse "#683A5E"
         border solid (px 1) grey2
         "box-shadow" -: "0 2px 2px -1px rgba(0, 0, 0, 0.055)"
         display block
