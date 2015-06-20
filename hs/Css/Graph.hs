@@ -267,7 +267,7 @@ sidebarCSS = do
                 "-o-transition" -: "all 0.2s"
                 "transition" -: "all 0.2s"
                 ":hover" & do
-                    "background-color" -: "#455A64 !important"
+                    "background-color" -: "#4C527F !important"
                     a ? do
                         "color" -: "white !important"
                 a ? do
