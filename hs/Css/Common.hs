@@ -37,7 +37,7 @@ headerCSS = do
     ".header" ?
         do margin0
            padding 0 (em 0.5) 0 (em 0.5)
-           backgroundColor $ parse "#8A79A1"
+           backgroundColor $ parse "#6D7297"
            border solid (px 1) black
            color white
            img ?
