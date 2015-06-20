@@ -22,7 +22,7 @@ common = do
            padding0
            width100
            minHeight $ pct 100
-           fontSize $ pt 18
+           fontSize $ pt 17
            fontFamily ["Trebuchet MS", "Arial"] [sansSerif]
     headerCSS
     aDefaultCSS
@@ -58,7 +58,6 @@ headerCSS = do
                 display inlineBlock
                 padding 0 (px 10) 0 (px 10)
                 a <? do
-                    fontSize $ pt 17.9
                     color white
                     "text-shadow" -: "0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000;" 
                     hover & do
