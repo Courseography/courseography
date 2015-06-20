@@ -109,13 +109,13 @@ purple5 = parse "#800080"
 
 
 bluegray1 :: Color
-bluegray1 = parse "#607D8B"
+bluegray1 = parse "#B0BEC5"
 bluegray2 :: Color
-bluegray2 = parse "#263238"
-gray1 :: Color
-gray1 = "#990000"
-accent :: Color
-accent = parse "#78909C"
+bluegray2 = parse "#90A4AE"
+bluegray3 :: Color
+bluegray3 = parse "#607D8B"
+bluegray4 :: Color
+bluegray4 = parse "#263238"
 
 pink1 :: Color
 pink1 = parse "#DB94B8"

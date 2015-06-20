@@ -196,7 +196,7 @@ sidebarCSS = do
         width (pct 53)
         height (px 40)
         float floatLeft
-        backgroundColor bluegray1
+        backgroundColor bluegray2
         display none
         textAlign $ alignSide sideCenter
         paddingLeft (px 15)
@@ -222,7 +222,7 @@ sidebarCSS = do
         width (px 40)
         height (pct 100)
         float floatLeft
-        backgroundColor bluegray2
+        backgroundColor bluegray4
         position absolute
         paddingLeft (px 23)
     "#sidebar-button" ? do
@@ -231,11 +231,11 @@ sidebarCSS = do
         width (px 40)
         height100
         float floatLeft
-        backgroundColor bluegray1
+        backgroundColor bluegray3
         position absolute
         border solid (px 1) black
         ":hover" & do
-            backgroundColor accent
+            backgroundColor bluegray2
     "#sidebar-icon" ? do
         width (px 30)
         height (px 35)
@@ -249,7 +249,7 @@ sidebarCSS = do
     "#sidebar-nav" ? do
         width100
         fontSize (px 13)
-        backgroundColor $ parse "#B0BEC5"
+        backgroundColor bluegray1
         border solid (px 1) grey2
         "box-shadow" -: "0 2px 2px -1px rgba(0, 0, 0, 0.055)"
         display block
@@ -297,7 +297,7 @@ sidebarCSS = do
     "#close-focus" ? do
         display block
         cursor pointer
-        backgroundColor gray1
+        backgroundColor bluegray1
         fontSize (px 20)
         border solid (px 1) black
         textAlign $ alignSide sideCenter
@@ -317,7 +317,7 @@ sidebarCSS = do
         paddingLeft (px 5)
         paddingRight (px 5)
     ".active" & do
-        backgroundColor accent
+        backgroundColor bluegray3
     ".graph-button" & do
         display block
         cursor pointer
