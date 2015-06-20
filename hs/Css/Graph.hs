@@ -196,7 +196,7 @@ sidebarCSS = do
         width (pct 53)
         height (px 40)
         float floatLeft
-        backgroundColor steelblue2
+        backgroundColor purple7
         display none
         textAlign $ alignSide sideCenter
         paddingLeft (px 15)
@@ -222,7 +222,7 @@ sidebarCSS = do
         width (px 40)
         height (pct 100)
         float floatLeft
-        backgroundColor steelblue4
+        backgroundColor purple9
         position absolute
         paddingLeft (px 23)
     "#sidebar-button" ? do
@@ -231,11 +231,11 @@ sidebarCSS = do
         width (px 40)
         height100
         float floatLeft
-        backgroundColor steelblue3
+        backgroundColor purple8
         position absolute
         border solid (px 1) black
         ":hover" & do
-            backgroundColor steelblue2
+            backgroundColor purple7
     "#sidebar-icon" ? do
         width (px 30)
         height (px 35)
@@ -249,7 +249,7 @@ sidebarCSS = do
     "#sidebar-nav" ? do
         width100
         fontSize (px 13)
-        backgroundColor steelblue1
+        backgroundColor purple6
         border solid (px 1) grey2
         "box-shadow" -: "0 2px 2px -1px rgba(0, 0, 0, 0.055)"
         display block
@@ -267,7 +267,7 @@ sidebarCSS = do
                 "-o-transition" -: "all 0.2s"
                 "transition" -: "all 0.2s"
                 ":hover" & do
-                    "background-color" -: "#4C527F !important"
+                    "background-color" -: "#5C497E !important"
                     a ? do
                         "color" -: "white !important"
                 a ? do
@@ -297,7 +297,7 @@ sidebarCSS = do
     "#close-focus" ? do
         display block
         cursor pointer
-        backgroundColor steelblue1
+        backgroundColor purple6
         fontSize (px 20)
         border solid (px 1) black
         textAlign $ alignSide sideCenter
@@ -317,7 +317,7 @@ sidebarCSS = do
         paddingLeft (px 5)
         paddingRight (px 5)
     ".active" & do
-        backgroundColor steelblue3
+        backgroundColor purple8
     ".graph-button" & do
         display block
         cursor pointer

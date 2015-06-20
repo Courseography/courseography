@@ -107,15 +107,14 @@ purple4 = parse "#9C6B98"
 purple5 :: Color
 purple5 = parse "#800080"
 
-
-steelblue1 :: Color
-steelblue1 = parse "#C5C7D5"
-steelblue2 :: Color
-steelblue2 = parse "#9397B2"
-steelblue3 :: Color
-steelblue3 = parse "#6D7297"
-steelblue4 :: Color
-steelblue4 = parse "#323865"
+purple6 :: Color
+purple6 = parse "#CAC4D4"
+purple7 :: Color
+purple7 = parse "#9C91B0"
+purple8 :: Color
+purple8 = parse "#7A6A96"
+purple9 :: Color
+purple9 = parse "#433063"
 
 pink1 :: Color
 pink1 = parse "#DB94B8"

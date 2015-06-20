@@ -37,7 +37,7 @@ headerCSS = do
     ".header" ?
         do margin0
            padding 0 (em 0.5) 0 (em 0.5)
-           "background" -: "linear-gradient(90deg, #5C497E, #9C91B0);"
+           backgroundColor $ parse "#5C497E"
            border solid (px 1) black
            color white
            img ?
