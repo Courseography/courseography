@@ -22,7 +22,7 @@ common = do
            padding0
            width100
            minHeight $ pct 100
-           fontSize $ pt 18
+           fontSize $ pt 17
            fontFamily ["Trebuchet MS", "Arial"] [sansSerif]
     headerCSS
     aDefaultCSS
@@ -37,7 +37,7 @@ headerCSS = do
     ".header" ?
         do margin0
            padding 0 (em 0.5) 0 (em 0.5)
-           backgroundColor $ parse "#EED2EE"
+           backgroundColor $ parse "#8A79A1"
            border solid (px 1) black
            color white
            img ?
@@ -59,9 +59,9 @@ headerCSS = do
                 padding 0 (px 10) 0 (px 10)
                 a <? do
                     color white
-                    "text-shadow" -: "-2px 2px 2px #000, 2px 2px 2px #000, -2px -2px 2px #000, 2px -2px 2px #000" 
+                    "text-shadow" -: "0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000;" 
                     hover & do
-                        color gray
+                        color lightgray
             height (px 50)
     "#nav-fb" ? do
         float floatRight
