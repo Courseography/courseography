@@ -37,7 +37,7 @@ headerCSS = do
     ".header" ?
         do margin0
            padding 0 (em 0.5) 0 (em 0.5)
-           backgroundColor $ parse "#8A79A1"
+           backgroundColor purple8
            border solid (px 1) black
            color white
            img ?
@@ -61,7 +61,7 @@ headerCSS = do
                     color white
                     "text-shadow" -: "0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000;" 
                     hover & do
-                        color lightgray
+                        color darkgray
             height (px 50)
     "#nav-fb" ? do
         float floatRight

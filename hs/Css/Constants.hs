@@ -99,13 +99,22 @@ lightGrey = "#CCCCCC"
 purple1 :: Color
 purple1 = parse "#46364A"
 purple2 :: Color
-purple2 = parse "#6B5588"
+purple2 = parse "#7E4D66"
 purple3 :: Color
 purple3 = parse "#CD96CD"
 purple4 :: Color
 purple4 = parse "#9C6B98"
 purple5 :: Color
 purple5 = parse "#800080"
+
+purple6 :: Color
+purple6 = parse "#CAC4D4"
+purple7 :: Color
+purple7 = parse "#9C91B0"
+purple8 :: Color
+purple8 = parse "#7A6A96"
+purple9 :: Color
+purple9 = parse "#433063"
 
 pink1 :: Color
 pink1 = parse "#DB94B8"
