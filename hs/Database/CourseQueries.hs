@@ -13,7 +13,8 @@ module Database.CourseQueries (retrieveCourse,
                                courseInfo,
                                getDepartment,
                                queryGraphs,
-                               deptList) where
+                               deptList,
+                               returnTutorial) where
 
 import Happstack.Server.SimpleHTTP
 import Database.Persist
@@ -26,6 +27,7 @@ import WebParsing.ParsingHelp
 import Data.String.Utils
 import Data.List
 import Config (dbStr)
+
 
 -- ** Querying a single course
 
@@ -68,6 +70,13 @@ returnCourse lowerStr = runSqlite dbStr $ do
     if null sqlCourse
     then return emptyCourse
     else return (buildCourse fallSession springSession yearSession (entityVal $ head sqlCourse))
+
+returnTutorial :: T.Text -> IO [Time]
+returnTutorial lowerStr = runSqlite dbStr $ do
+    let courseStr = T.toUpper lowerStr
+    entT <- selectList [TutorialsCode ==. courseStr, TutorialsSession ==. "S"] []
+    return $ tutorialsTimes (entityVal $ head entT)
+
 
 -- | Builds a Course structure from a tuple from the Courses table.
 -- Some fields still need to be added in.

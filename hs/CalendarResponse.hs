@@ -1,17 +1,22 @@
+--Aeson, Aeson lens, Record representation 
 module CalendarResponse where
 
 import Data.List.Split (splitOn)
 import Data.List
 import Data.Time
 import Happstack.Server
---import Control.Monad.IO.Class (liftIO)
-import Control.Monad.IO.Class (liftIO, MonadIO)
+import Control.Monad.IO.Class (liftIO)
+--import Control.Monad.IO.Class (liftIO, MonadIO)
 import System.Locale
 import Config (firstMondayFall, firstMondayWinter)
-import Database.CourseQueries (returnCourse)-- For  returnCourse
-import Data.Text (pack) -- For unpack
+import Database.CourseQueries (returnCourse, returnTutorial)-- For  returnCourse
+import Data.Text (pack, toLower) -- For unpack
 import Database.Tables as Tables --  For the IO Course response issue
 import JsonResponse
+import Data.Aeson (encode, decode)
+-- import Text.JSON
+import Database.Persist
+import Data.Text.Internal
 
 -- EVENTS' NAME, START/END TIME
 
@@ -163,20 +168,92 @@ calendarResponse courses lectures =
     liftIO $ getCalendar courses lectures
 -}
 
--- courses: MAT137Y1   lectures: MAT137Y1-L5101-Y
+
+-- 2222222222222222222222222222222222222222222222
+-- ________________________________________MAT135 (T)______________________________
+-- Using return course
 getCalendar :: String -> String -> IO Response
 getCalendar courses lectures = do
-    courseJSON <- returnCourse (pack "MAT137Y1-L5101-Y")
-    return $ toResponse (createJSONResponse courseJSON)
+    courseJSON <- (returnTutorial (pack "MAT135H1"))
+    return $ toResponse (show courseJSON)
+-- courseJSON <- returnCourse (pack "MAT137Y1-L5101-Y")
 -- getCalendar courses lectures = return $ toResponse(returnCourse (pack "MAT137Y1"))
 
+
 {-
+-- 33333 
 getCalendar :: String -> String -> IO Response
-getCalendar courses lectures = return $ toResponse ("courses: " ++ courses ++ " Lectures: " ++ lectures)
+getCalendar courses lectures = do
+    courseJSON <- description (createCourse (pack "mat135h1"))
+    return $ toResponse (courseJSON)
 -}
+{-
+--Transfrorm to lower case every course given
+allCourses :: String -> [IO Course]
+allCourses courses = [returnCourse course | course <- toLowerCourse courses]
+-}
+
+{-
+pullDatabase :: Text -> IO Response
+pullDatabase course = do
+    courseJSON <- returnCourse course
+-}   
+{-
+toLowerCourse :: String -> [Text]
+toLowerCourse courses = [toLower (pack course) | course <- splitted]
+    where
+    splitted = splitOn "_" courses
+-}
+
+-- Call returnCourse on that Data
+-- Look for the lecture/tutorial and tutorial/lecture time
+
+{-
+-- courses: MAT137Y1   lectures: MAT137Y1-L5101-Y        MAT135H1 MAT135H1-L0101-F 
+-- Just getting the response
+-- 111111111111111111111111111111111111111
+getCalendar :: String -> String -> IO Response
+getCalendar courses lectures = return $ toResponse (courses)
+-}
+
 calendarResponse :: String -> String -> ServerPart Response
 calendarResponse courses lectures =
     liftIO $ getCalendar courses lectures
+
+{-
+getCalendar :: String -> String -> IO Response
+getCalendar courses lectures = do
+    lecture <- selectList [LecturesCode ==. (pack "MAT135H1")] [] -- I am getting a lecture here
+    return $ toResponse (course)
+--lecture <- selectList [LecturesCode ==. (pack "MAT135H1"), LecturesTimes !=. []] []
+-}
+
+{-
+-- maybePerson <- getBy $ code "MAT135H1-L0101-F"
+getCalendar :: String -> String -> IO Response
+getCalendar courses lecture = do
+    maybeLectures <- getBy $ LecturesCode (pack "MAT135H1-L0101-F")
+    case maybeLectures of
+        Nothing -> return $ toResponse "There is no such a course"
+        Just (Entity (LecturesCode "MAT135H1-L0101-F") lectures) -> return $ toResponse lectures
+-}
+
+-- Just (Entity LecturesCode lectures) -> return $ toResponse lectures
+
+{-
+-- Doing just selectList
+getCalendar:: String -> String -> IO Response
+getCalendar courses lectures = do
+    course <- selectList [CoursesCode ==. (pack "MAT135H1")] []
+    liftIO $ print course
+    return $ toResponse course
+    course <- getBy $ CourseCodeKey "MAT135H1"
+    case course of
+        Nothing -> liftIO $ print "This course is not in the database."
+        Just row -> do
+            lecture <- selectList [LectureCode ==. entityKey row] []
+            liftIO $ print tuts
+-}
 
 {-getInfoDatabase :: String -> String -> String 
 getInfoDatabase courses lectures =  $ do
