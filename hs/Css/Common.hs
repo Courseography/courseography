@@ -88,7 +88,9 @@ headerCSS = do
         width (px 280)
         height (px 50)
         paddingBottom (px 3)
-
+    "#nav-export" ? do
+        cursor pointer
+        
 {- aDefaultCSS
  - Generates default CSS. -}
 aDefaultCSS :: Css
