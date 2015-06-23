@@ -330,6 +330,12 @@ sidebarCSS = do
         marginBottom (px 20)
         ":hover" & do
             backgroundColor grey2
+    ".flip" & do
+        "-webkit-transform" -: "scaleX(-1)"
+        "-moz-transform" -: "scaleX(-1)"
+        "-ms-transform" -: "scaleX(-1)"
+        "-o-transform" -: "scaleX(-1)"
+        "transform" -: "scaleX(-1)"
 
 
 {- titleCSS
