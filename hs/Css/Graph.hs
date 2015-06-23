@@ -222,7 +222,7 @@ sidebarCSS = do
         width (px 40)
         height (pct 100)
         float floatLeft
-        backgroundColor purple9
+        backgroundColor purple8
         position absolute
         paddingLeft (px 23)
     "#sidebar-button" ? do
@@ -231,11 +231,11 @@ sidebarCSS = do
         width (px 40)
         height100
         float floatLeft
-        backgroundColor purple8
+        backgroundColor $ purple10
         position absolute
         border solid (px 1) black
         ":hover" & do
-            backgroundColor purple7
+            backgroundColor purple6
     "#sidebar-icon" ? do
         width (px 30)
         height (px 35)

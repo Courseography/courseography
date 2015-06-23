@@ -115,6 +115,8 @@ purple8 :: Color
 purple8 = parse "#7A6A96"
 purple9 :: Color
 purple9 = parse "#433063"
+purple10 :: Color
+purple10 = parse "#5C497E"
 
 pink1 :: Color
 pink1 = parse "#DB94B8"

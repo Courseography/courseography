@@ -37,7 +37,7 @@ headerCSS = do
     ".header" ?
         do margin0
            padding 0 (em 0.5) 0 (em 0.5)
-           backgroundColor purple8
+           backgroundColor $ purple10
            border solid (px 1) black
            color white
            img ?
@@ -87,7 +87,7 @@ headerCSS = do
     "#courseography-header" ? do
         width (px 280)
         height (px 50)
-        paddingBottom (px 5)
+        paddingBottom (px 3)
 
 {- aDefaultCSS
  - Generates default CSS. -}
