@@ -7,9 +7,11 @@ var HCIDescription = 'Human-Computer Interaction (HCI) is the scientific study o
                      'SOC and PSY are in addition to the 12.0 FCEs required to complete the Specialist program] <br> <br>' +
                      'Required Courses: <br> <br>' +
                      '<em>[1.]</em> CSC300H1, CSC301H1, CSC318H1, CSC428H1 <br>' +
-                     '<em>[2.]</em> SOC101Y1, SOC200H1, SOC202H1, SOC302H1 <br>' + 
+                     '<em>[2.]</em> SOC101Y1, SOC200H1, SOC202H1, SOC302H1  [To enrol in restricted SOC courses, ' +
+                     'please contact the CS Undergraduate Office in the July preceeding the academic year in which you plan to take the course] <br>' + 
                      '<em>[3.]</em> 1 FCE from the following: CSC309H1, CSC320H1, CSC321H1, CSC343H1, CSC384H1, CSC401H1, '+
-                     'CSC404H1, CSC418H1, CSC485H1, CSC490H1/491H, PSY100H1, PSY270H1/PSY280H1 <br> <br>' +
+                     'CSC404H1, CSC418H1, CSC485H1, CSC490H1/491H <br>' +
+                     '<em>[4.]</em> PSY100H1, PSY270H1/PSY280H1 <br> <br>' +
                      'Suggested Related Courses: <br> <br>' +
                      '<em>[1.]</em> CSC454H1, CSC290H1 <br>' +
                      '<em>[2.] </em> At least one half-course in Human Factors or Ergonomics offered by the Department of ' +
@@ -31,7 +33,7 @@ var sciDescription = 'Scientific computing studies the world around us. Known an
                      'programming, and have a good understanding of data structures and algorithm design. <br> <br>' +
                      'Required Courses: <br><br>' +
                      '<em>[1.]</em> MAT235Y1/MAT237Y1/MAT257Y1 <br>' +
-                     '<em>[2.]</em> 1.5 FCE from the following: CSC336H1, CSC350H1, CSC351H1, CSC446H1, 456H1 <br>' +
+                     '<em>[2.]</em> 1.5 FCE from the following: CSC336H1, CSC346H1, CSC446H1, CSC456H1, CSC466H1 <br>' +
                      '<em>[3.]</em> 1 FCE from the following: CSC320H1/418H1, CSC321H1/411H1, CSC343H1, CSC384H1, CSC358H1/CSC458H1 <br> <br>' +
                      'Suggested Related Courses: <br> <br>' +
                      '<em>[1.]</em> MAT224H1/MAT240H1, MAT244H1, MAT334H1/MAT354H1, MAT337H1/MAT357H1 <br> <br>' +
@@ -49,8 +51,8 @@ var AIDescription = 'Artificial Intelligence (AI) is aimed at understanding and 
                     'techniques. Students wanting to achieve this focus are required to take courses from at least two of ' +
                     'these sub-areas. <br> <br>' +
                     'Required Courses: <br> <br>' +
-                    '<em>[1.]</em> 1 FCE from the following: MAT235Y1/237Y1/257Y1, APM236H1/MIE262H1/STA248/261H1, CSC350H1, CSC310H1, ' +
-                    'CSC330H1, CSC438H1, CSC448H1, CSC463H1 <br>' +
+                    '<em>[1.]</em> 1 FCE from the following: MAT235Y1/237Y1/257Y1, APM236H1/MIE262H1/STA248H1/STA261H1, CSC336H1, ' +
+                    'CSC310H1, CSC330H1, CSC438H1, CSC448H1, CSC463H1 <br>' +
                     '<em>[2.]</em> 2.5 FCEs from the following covering at least two of the four areas <br>' +
                     'a) CSC401H1, CSC485H1 <br>' +
                     'b) CSC320H1, CSC420H1 <br>' +
@@ -68,7 +70,7 @@ var NLPDescription = 'How can we build and analyze systems for enabling users to
                      'Required Courses: <br> <br>' +
                      '<em>[1.]</em> CSC318H1 <br>' +
                      '<em>[2.]</em> CSC401H1, CSC485H1 <br>' +
-                     '<em>[3.]</em> LIN200H1 <br>' +
+                     '<em>[3.]</em> LIN100Y1/LIN200H1 <br>' +
                      '<em>[4.]</em> 1.5 FCE from the following: CSC309H1, CSC321H1, CSC330H1, CSC411H1, CSC428H1, CSC486H <br>' +
                      '<em>[5.]</em> 0.5 FCE from the following: PSY100H1, COG250Y1 <br> <br>' +
                      'Suggested Related Courses: <br> <br>' +
@@ -90,16 +92,15 @@ var visionDescription = 'Computer vision is the science and technology of machin
                         'to first pose computational vision problems, and then develop and test algorithms for their ' +
                         'solution. <br> <br>' +
                         'Required Courses: <br> <br>' +
-                        '<em>[1.]</em> MAT235Y1/MAT237Y1/MAT257Y1, CSC320H1, CSC350H1, CSC411H1, CSC420H1 <br>' +
+                        '<em>[1.]</em> MAT235Y1/MAT237Y1/MAT257Y1, CSC320H1, CSC336H1, CSC411H1, CSC420H1 <br>' +
                         '<em>[2.]</em> 0.5 FCE from the following: CSC418H1, CSC412H1, CSC2503H (Note: students ' +
                         ' must petition to take this course.) <br> <br>' +
                         'Suggested Related Courses: <br> <br>' +
-                        '<em>[1.]</em> ECE216H1 <br> <br>' +
                         'The following are examples of topics and courses that fit naturally with a study ' +
                         'of computational vision. The list is meant to be illustrative of the range of cognate topics, ' +
                         'but is not necessarily complete. The ordering is alphabetical and not indicative of importance. ' +
                         'Note: there are prerequisites for many of these courses that we do not list here. <br> <br>' +
-                        'APM462H1, COG250Y1, CSC384H, CSC485H1, CSC486H1, PHL232H1, PHY385H1, PSL440Y1, PSY270H1, ' + 
+                        'APM462H1, COG250Y1, CSC384H, CSC485H1, CSC486H1, ECE216H, PHL232H1, PHY385H1, PSL440Y1, PSY270H1, ' + 
                         'PSY280H1, STA257H1/STA261H1';
 
 var systemsDescription = 'Software systems are complex and interesting. Poorly done systems can be incredibly expensive: ' +
@@ -127,9 +128,9 @@ var gameDescription = 'Video game design combines several disciplines within com
                       'Required Courses: <br> <br> ' +
                       '<em>[1.]</em> CSC300H1, CSC301H1, CSC318H1, CSC324H1, CSC384H1, CSC418H1, CSC404H1 <br> <br>' +
                       'Suggested Related Courses: <br> <br> ' +
-                      '<em>[1.]</em> CSC358H1, CSC458H1, CSC428H1 <br> ' +
-                      '<em>[2.]</em> MUS300H1, INI222H1, INI465H1, ENG235H1 <br> ' +
-                      '<em>[3.]</em> ECO326H1, MGT2056H';
+                      '<em>[1.]</em> CSC358H1, CSC458H1, CSC428H1, CSC428H1 <br> ' +
+                      '<em>[2.]</em> MUS300H1, CIN212H/INI222H1, CIN432H1/INI465H1, ENG235H1 <br> ' +
+                      '<em>[3.]</em> ECO326H1, RSM482H1/MGT2056H';
 
 var theoryDescription = 'Why is it easy to sort a list of numbers, but hard to break Internet encryption schemes? ' +
                         'Is finding a solution to a problem harder than checking that a solution is correct? Can we ' +
@@ -157,15 +158,15 @@ var theoryDescription = 'Why is it easy to sort a list of numbers, but hard to b
                         '<em>[2.]</em> CSC336H1/CSC350H1 <br>' +
                         '<em>[3.]</em> CSC463H1 <br>' +
                         '<em>[4.]</em> 1.5 FCEs from the following: CSC310H1, CSC438H1, CSC448H1, MAT332H1, MAT344H1, MAT443H1, At UTM: ' +
-                        'CSC322H5/MAT302H5, CSC422H5; An appropriate CSC494H1/CSC495 project supervised by a faculty member ' +
-                        'from the Theory group or a relevant introductory graduate course in theory may also be used to ' +
-                        'satisfy this requirement.  (Note that students must petition to take a graduate course.) <br>' +
+                        'At UTM: CSC322H5/MAT302H5, CSC422H5; CSC494H1/CSC495 project supervised by a faculty member ' +
+                        'from the Theory group or a relevant introductory graduate course in theory ' +
+                        '(Note that students must petition to take a graduate course.) <br>' +
                         '<em>[5.]</em> 2 FCEs from the following: APM236H1/MIE262H1, MIE263H1, APM421H1, APM461H1, MAT224H1/247H1, ' + 
                         'MAT237Y1/257Y1, MAT244H1/267H1, MAT301H1/347Y1, MAT315H1, MAT327H1, MAT334H1/MAT354H1, MAT337H1/357H1, ' +
                         'any 400 level MAT course (except MAT443H1), STA248H1/261H1, STA347H1 <br> <br>' +
                         'Recommended Courses: <br> <br>' +
-                        '<em>[1.]</em> Students are strongly encouraged to take the enriched theory courses: CSC240H1, CSC265H1, and ' +
-                        'CSC375H1, rather than their regular counterparts: CSC165H1/CSC236H1, CSC263H1, and CSC373H1, ' +
+                        '<em>[1.]</em> Students are strongly encouraged to take the enriched theory courses: CSC240H1, and CSC265H1, ' +
+                        'rather than their regular counterparts: CSC165H1/CSC236H1, and CSC263H1 ' +
                         'respectively. <br> <br>' +
                         'Suggested Related Courses: <br> <br>' +
                         '<em>[1.]</em> BCB410H1 <br>' +
