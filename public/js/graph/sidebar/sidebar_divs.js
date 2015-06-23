@@ -80,13 +80,13 @@ function toggleSidebar(location) {
         resetDivs();
         $('#sidebar').animate({width: '40px'}, 'fast', undefined, function() {
             $('#fcecount').html('');
-            $('#sidebar-icon').attr('src', 'static/res/ico/sidebar_forward.png');
+            $('#sidebar-icon').removeClass('flip');
         });
         $('#reset').hide();
     } else if (!toggled && location === 'button') {
         toggled = true;
         $('#sidebar').animate({width: '400px'}, 'fast', undefined, function() {
-            $('#sidebar-icon').attr('src', 'static/res/ico/sidebar_backward.png');
+            $('#sidebar-icon').addClass('flip');
         });
         fillFCECount();
         $('#focuses').show();
