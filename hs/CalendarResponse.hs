@@ -9,14 +9,13 @@ import Control.Monad.IO.Class (liftIO)
 --import Control.Monad.IO.Class (liftIO, MonadIO)
 import System.Locale
 import Config (firstMondayFall, firstMondayWinter)
-import Database.CourseQueries (returnCourse, returnTutorial)-- For  returnCourse
-import Data.Text (pack, toLower) -- For unpack
+import Database.CourseQueries (returnCourse, returnTutorialTimes, returnLectureTimes)-- For  returnCourse
+import qualified Data.Text as T
 import Database.Tables as Tables --  For the IO Course response issue
 import JsonResponse
 import Data.Aeson (encode, decode)
 -- import Text.JSON
 import Database.Persist
-import Data.Text.Internal
 
 -- EVENTS' NAME, START/END TIME
 
@@ -168,42 +167,66 @@ calendarResponse courses lectures =
     liftIO $ getCalendar courses lectures
 -}
 
-
+{-
 -- 2222222222222222222222222222222222222222222222
 -- ________________________________________MAT135 (T)______________________________
 -- Using return course
 getCalendar :: String -> String -> IO Response
 getCalendar courses lectures = do
-    courseJSON <- (returnTutorial (pack "MAT135H1"))
-    return $ toResponse (show courseJSON)
+    courseJSON <- (returnTutorialTimes (T.pack "MAT135H1") (T.pack "F") (T.pack "T0501"))
+    return $ toResponse ((show (ft courseJSON)) ++ (show (sd courseJSON)) ++ (show (thr courseJSON)))
+
+ft:: (T.Text, [Time], T.Text) -> T.Text
+ft (x,_,_) = x
+
+sd :: (T.Text, [Time], T.Text) -> [Time]
+sd (_,x,_) = x
+
+thr :: (T.Text, [Time], T.Text) -> T.Text
+thr (_,_,x) = x
 -- courseJSON <- returnCourse (pack "MAT137Y1-L5101-Y")
 -- getCalendar courses lectures = return $ toResponse(returnCourse (pack "MAT137Y1"))
-
+-}
 
 {-
 -- 33333 
 getCalendar :: String -> String -> IO Response
 getCalendar courses lectures = do
-    courseJSON <- description (createCourse (pack "mat135h1"))
-    return $ toResponse (courseJSON)
+    courseJSON <- (returnCourse (T.pack "mat135h1"))
+    return $ toResponse (createJSONResponse courseJSON)
 -}
+
 {-
 --Transfrorm to lower case every course given
 allCourses :: String -> [IO Course]
 allCourses courses = [returnCourse course | course <- toLowerCourse courses]
 -}
 
-{-
-pullDatabase :: Text -> IO Response
-pullDatabase course = do
-    courseJSON <- returnCourse course
--}   
-{-
-toLowerCourse :: String -> [Text]
-toLowerCourse courses = [toLower (pack course) | course <- splitted]
+-- Obtain the information for all courses from the database
+allInfo :: [[String]] -> [IO T.Text]
+allInfo courses = [pullDatabase code section session| [code, section, session] <- courses]
+
+-- Pull out the information (Time string, Time fields, code) for each course from the database
+pullDatabase :: String -> String -> String -> IO T.Text
+pullDatabase code section session =
+    if (section !! 0) == "L"
+    then (returnLectureTimes (T.pack code) (T.pack section) (T.pack session))
+    else (returnTutorialTimes (T.pack code) (T.pack section) (T.pack session))
+
+-- Obtain a list with all the information about the courses obtained from the cookies
+getCoursesInfo :: String -> [[String]]
+getCoursesInfo lectures = [splitOn "-" course| course <- byCourse]
     where
-    splitted = splitOn "_" courses
+    byCourse = splitOn "_" lectures
+{-
+startDate :: 
+startDate =
 -}
+
+
+-- Final getCalendar
+getCalendar :: String -> String -> IO Response
+getCalendar courses lectures = return $ toResponse (allInfo (getCoursesInfo lectures))
 
 -- Call returnCourse on that Data
 -- Look for the lecture/tutorial and tutorial/lecture time

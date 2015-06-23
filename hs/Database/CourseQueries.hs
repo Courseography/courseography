@@ -14,7 +14,8 @@ module Database.CourseQueries (retrieveCourse,
                                getDepartment,
                                queryGraphs,
                                deptList,
-                               returnTutorial) where
+                               returnTutorialTimes,
+                               returnLectureTimes) where
 
 import Happstack.Server.SimpleHTTP
 import Database.Persist
@@ -70,13 +71,32 @@ returnCourse lowerStr = runSqlite dbStr $ do
     if null sqlCourse
     then return emptyCourse
     else return (buildCourse fallSession springSession yearSession (entityVal $ head sqlCourse))
-
-returnTutorial :: T.Text -> IO [Time]
-returnTutorial lowerStr = runSqlite dbStr $ do
+{-
+returnTutorialTimes :: T.Text -> T.Text -> Maybe T.Text -> IO [Time]
+returnTutorialTimes lowerStr session section = runSqlite dbStr $ do
     let courseStr = T.toUpper lowerStr
-    entT <- selectList [TutorialsCode ==. courseStr, TutorialsSession ==. "S"] []
-    return $ tutorialsTimes (entityVal $ head entT)
+    entityTutorials <- selectList [TutorialsCode ==. courseStr, TutorialsSession ==. session, TutorialsSection ==. (section)] []
+    return $ tutorialsTimes (entityVal $ head entityTutorials)
 
+
+returnTutorialTimes :: T.Text -> T.Text -> T.Text -> IO (T.Text, [Time], T.Text)
+returnTutorialTimes lowerStr section session = runSqlite dbStr $ do
+    let courseStr = T.toUpper lowerStr
+    entityTutorials <- selectList [TutorialsCode ==. courseStr, TutorialsSection ==. (Just section), TutorialsSession ==. session] []
+    return $ (tutorialsTimeStr (entityVal $ head entityTutorials), tutorialsTimes (entityVal $ head entityTutorials), tutorialsCode (entityVal $ head entityTutorials))
+    -}
+
+returnTutorialTimes :: T.Text -> T.Text -> T.Text -> IO T.Text
+returnTutorialTimes lowerStr section session = runSqlite dbStr $ do
+    let courseStr = T.toUpper lowerStr
+    entityTutorials <- selectList [TutorialsCode ==. courseStr, TutorialsSection ==. (Just section), TutorialsSession ==. session] []
+    return $ tutorialsTimeStr (entityVal $ head entityTutorials)
+
+returnLectureTimes :: T.Text -> T.Text -> T.Text -> IO T.Text
+returnLectureTimes lowerStr section session = runSqlite dbStr $ do
+    let courseStr = T.toUpper lowerStr
+    entityLectures <- selectList [LecturesCode ==. courseStr, LecturesSection ==. section, LecturesSession ==. session] []
+    return $ lecturesTimeStr (entityVal $ head entityLectures)
 
 -- | Builds a Course structure from a tuple from the Courses table.
 -- Some fields still need to be added in.
