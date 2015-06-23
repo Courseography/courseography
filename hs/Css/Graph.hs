@@ -238,7 +238,7 @@ sidebarCSS = do
             backgroundColor purple6
     "#sidebar-icon" ? do
         width (px 30)
-        height (px 35)
+        height (px 50)
         paddingTop (px 20)
         paddingLeft (px 2)
         position absolute
