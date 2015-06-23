@@ -17,6 +17,7 @@ import Data.Aeson (encode, decode)
 -- import Text.JSON
 import Database.Persist
 
+{-
 -- EVENTS' NAME, START/END TIME
 
 -- List of the subjects
@@ -69,6 +70,8 @@ day 4 = "F"
 -- Takes data from event days to generate all the dates given the specific days
 startDate :: [[String]] -> String -> [[Day]]
 startDate courses session = [if session == "Fall" then generateDatesFall days else generateDatesWinter days | days <- eventDays courses]
+-}
+
 
 -- Generate all the dates given the specific days
 -- First day of classes will be on September 14.
@@ -106,6 +109,7 @@ generateDatesWinter "F" = take 13 [addDays i firstFriday | i <- [0,7..]]
     where 
     firstFriday = addDays 4 firstMondayWinter 
 
+{-
 -- Same as startDate, since our events do not happen in more than one day
 endDate :: [[String]] -> String -> [[Day]]
 endDate courses session = startDate courses session
@@ -166,6 +170,8 @@ calendarResponse :: String -> String -> ServerPart Response
 calendarResponse courses lectures =
     liftIO $ getCalendar courses lectures
 -}
+-}
+
 
 {-
 -- 2222222222222222222222222222222222222222222222
@@ -209,7 +215,7 @@ allInfo courses = [pullDatabase code section session| [code, section, session] <
 -- Pull out the information (Time string, Time fields, code) for each course from the database
 pullDatabase :: String -> String -> String -> IO T.Text
 pullDatabase code section session =
-    if (section !! 0) == "L"
+    if (take 1 section) == "L" --Tried !! but did not work
     then (returnLectureTimes (T.pack code) (T.pack section) (T.pack session))
     else (returnTutorialTimes (T.pack code) (T.pack section) (T.pack session))
 
@@ -218,11 +224,19 @@ getCoursesInfo :: String -> [[String]]
 getCoursesInfo lectures = [splitOn "-" course| course <- byCourse]
     where
     byCourse = splitOn "_" lectures
-{-
-startDate :: 
-startDate =
--}
 
+-- Takes data from event days to generate all the dates given the specific days
+startDate :: [IO T.Text] -> String -> [[Day]]
+startDate courses session = [if session == "Fall" then generateDatesFall days else generateDatesWinter days | days <- eventDays courses]
+
+-- Days in which courses take place
+eventDays :: [IO T.Text] -> [IO String] 
+eventDays courses = [getDay course| course <- courses]
+
+getDay :: IO T.Text -> IO String
+getDay courses = do
+    course <- courses
+    return $ head (unpack course)
 
 -- Final getCalendar
 getCalendar :: String -> String -> IO Response
