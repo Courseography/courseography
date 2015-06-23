@@ -231,7 +231,7 @@ sidebarCSS = do
         width (px 40)
         height100
         float floatLeft
-        backgroundColor $ purple10
+        backgroundColor purple10
         position absolute
         border solid (px 1) black
         ":hover" & do
