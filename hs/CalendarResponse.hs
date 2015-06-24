@@ -73,41 +73,7 @@ startDate courses session = [if session == "Fall" then generateDatesFall days el
 -}
 
 
--- Generate all the dates given the specific days
--- First day of classes will be on September 14.
--- Last day of classes will be on December 8
-generateDatesFall :: String -> [Day]
-generateDatesFall "M" = take 13 [addDays i firstMondayFall | i <- [0,7..]]
-generateDatesFall "T" = take 13 [addDays i firstTuesday | i <- [0,7..]]
-    where 
-    firstTuesday = addDays 1 firstMondayFall
-generateDatesFall "W" = take 12 [addDays i firstWednesday | i <- [0,7..]]
-    where 
-    firstWednesday = addDays 2 firstMondayFall
-generateDatesFall "R" = take 12 [addDays i firstThursday | i <- [0,7..]]
-    where 
-    firstThursday = addDays 3 firstMondayFall
-generateDatesFall "F" = take 12 [addDays i firstFriday | i <- [0,7..]]
-    where 
-    firstFriday = addDays 4 firstMondayFall
 
--- Generate all the dates given the specific days
--- First day of classes will be on January 11.
--- Last day of classes will be on April 8
-generateDatesWinter :: String -> [Day]
-generateDatesWinter "M" = take 13 [addDays i firstMondayWinter | i <- [0,7..]]
-generateDatesWinter "T" = take 13 [addDays i firstTuesday | i <- [0,7..]]
-    where 
-    firstTuesday = addDays 1 firstMondayWinter 
-generateDatesWinter "W" = take 13 [addDays i firstWednesday | i <- [0,7..]]
-    where 
-    firstWednesday = addDays 2 firstMondayWinter 
-generateDatesWinter "R" = take 13 [addDays i firstThursday | i <- [0,7..]]
-    where 
-    firstThursday = addDays 3 firstMondayWinter 
-generateDatesWinter "F" = take 13 [addDays i firstFriday | i <- [0,7..]]
-    where 
-    firstFriday = addDays 4 firstMondayWinter 
 
 {-
 -- Same as startDate, since our events do not happen in more than one day
@@ -173,7 +139,7 @@ calendarResponse courses lectures =
 -}
 
 
-{-
+{-}
 -- 2222222222222222222222222222222222222222222222
 -- ________________________________________MAT135 (T)______________________________
 -- Using return course
@@ -192,6 +158,13 @@ thr :: (T.Text, [Time], T.Text) -> T.Text
 thr (_,_,x) = x
 -- courseJSON <- returnCourse (pack "MAT137Y1-L5101-Y")
 -- getCalendar courses lectures = return $ toResponse(returnCourse (pack "MAT137Y1"))
+-}
+{-
+-- Using returnTutorials returning just timeStr
+getCalendar :: String -> String -> IO Response
+getCalendar courses lectures = do
+    courseJSON <- (returnTutorialTimes (T.pack "MAT135H1") (T.pack "T0501") (T.pack "F"))
+    return $ toResponse (show courseJSON)
 -}
 
 {-
@@ -221,26 +194,91 @@ pullDatabase code section session =
 
 -- Obtain a list with all the information about the courses obtained from the cookies
 getCoursesInfo :: String -> [[String]]
-getCoursesInfo lectures = [splitOn "-" course| course <- byCourse]
+getCoursesInfo lectures = map (splitOn "-") byCourse -- [splitOn "-" course| course <- byCourse]
     where
     byCourse = splitOn "_" lectures
 
 -- Takes data from event days to generate all the dates given the specific days
-startDate :: [IO T.Text] -> String -> [[Day]]
-startDate courses session = [if session == "Fall" then generateDatesFall days else generateDatesWinter days | days <- eventDays courses]
+startDate :: [IO T.Text] -> String -> [IO [Day]]
+startDate courses session = [if session == "Fall" then fmap generateDatesFall day else fmap generateDatesWinter day | day <- eventDays courses]
 
 -- Days in which courses take place
 eventDays :: [IO T.Text] -> [IO String] 
-eventDays courses = [getDay course| course <- courses]
+eventDays courses = map (fmap getDay) courses
 
-getDay :: IO T.Text -> IO String
-getDay courses = do
-    course <- courses
-    return $ head (unpack course)
+getDay :: T.Text -> String
+getDay courses = T.head courses
+
+-- Generate all the dates given the specific days
+-- First day of classes will be on September 14.
+-- Last day of classes will be on December 8
+generateDatesFall :: String -> [Day]
+generateDatesFall "M" = take 13 [addDays i firstMondayFall | i <- [0,7..]]
+generateDatesFall "T" = take 13 [addDays i firstTuesday | i <- [0,7..]]
+    where 
+    firstTuesday = addDays 1 firstMondayFall
+generateDatesFall "W" = take 12 [addDays i firstWednesday | i <- [0,7..]]
+    where 
+    firstWednesday = addDays 2 firstMondayFall
+generateDatesFall "R" = take 12 [addDays i firstThursday | i <- [0,7..]]
+    where 
+    firstThursday = addDays 3 firstMondayFall
+generateDatesFall "F" = take 12 [addDays i firstFriday | i <- [0,7..]]
+    where 
+    firstFriday = addDays 4 firstMondayFall
+
+-- Generate all the dates given the specific days
+-- First day of classes will be on January 11.
+-- Last day of classes will be on April 8
+generateDatesWinter :: String -> [Day]
+generateDatesWinter "M" = take 13 [addDays i firstMondayWinter | i <- [0,7..]]
+generateDatesWinter "T" = take 13 [addDays i firstTuesday | i <- [0,7..]]
+    where 
+    firstTuesday = addDays 1 firstMondayWinter 
+generateDatesWinter "W" = take 13 [addDays i firstWednesday | i <- [0,7..]]
+    where 
+    firstWednesday = addDays 2 firstMondayWinter 
+generateDatesWinter "R" = take 13 [addDays i firstThursday | i <- [0,7..]]
+    where 
+    firstThursday = addDays 3 firstMondayWinter 
+generateDatesWinter "F" = take 13 [addDays i firstFriday | i <- [0,7..]]
+    where 
+    firstFriday = addDays 4 firstMondayWinter
+
+-- START TIME
+
+-- The start time for each subject "F3" "M2-5" "T1:30-4:30" IO Text
+startTimes :: [IO T.Text] -> [IO String]
+startTimes courses = map (fmap startTime) courses
+
+-- The ending time for each subject
+endTimes :: [IO T.Text] -> [IO String]
+endTimes courses = map (fmap endTime) courses
+
+startTime :: T.Text -> String
+startTime course = fst $ getTime course
+
+endTime :: T.Text -> String
+startTime course = snd $ getTime course
+
+endTime :: T.Text -> (String, String)
+getTime courseText = if length course == 1 then (course, endTimeHour) else (startTime, endTimeHours) 
+    where
+    course = T.pack $ T.tail courseText
+    endTimeHour = show (read course + 1)
+    times = splitOn "-" course
+    startTime = times !! 0
+    endTimeHours = times !! 1
+-- To do: merge all data, check google format for hours like 2:30
+
+
+-- MatchData
+-- starTimes, endTimes [IO String]; startDate [IO [Day]]
 
 -- Final getCalendar
-getCalendar :: String -> String -> IO Response
-getCalendar courses lectures = return $ toResponse (allInfo (getCoursesInfo lectures))
+getCalendar :: String -> String -> Response
+getCalendar courses lectures = return $ toResponse (startDate (allInfo (getCoursesInfo lectures)))
+--liftIO $ print (startDate (allInfo (getCoursesInfo lectures)))
 
 -- Call returnCourse on that Data
 -- Look for the lecture/tutorial and tutorial/lecture time
@@ -253,7 +291,7 @@ getCalendar :: String -> String -> IO Response
 getCalendar courses lectures = return $ toResponse (courses)
 -}
 
-calendarResponse :: String -> String -> ServerPart Response
+calendarResponse :: String -> String -> ServerPartT Response
 calendarResponse courses lectures =
     liftIO $ getCalendar courses lectures
 
