@@ -182,11 +182,17 @@ allCourses courses = [returnCourse course | course <- toLowerCourse courses]
 -}
 
 -- Obtain the information for all courses from the database
-allInfo :: [[String]] -> [IO T.Text]
-allInfo courses = [pullDatabase code section session| [code, section, session] <- courses]
+allInfo :: String -> [IO (T.Text, [Time])]
+allInfo courses = [pullDatabase code section session| [code, section, session] <- getCoursesInfo courses]
+
+allInfoTimes :: String -> [[Time]]
+allInfoTimes courses = map snd (allInfo courses)
+
+allInfoDates :: String -> [IO T.Text]
+allInfoDates courses = map fst (allInfo courses) 
 
 -- Pull out the information (Time string, Time fields, code) for each course from the database
-pullDatabase :: String -> String -> String -> IO T.Text
+pullDatabase :: String -> String -> String -> IO (T.Text, T.Text)
 pullDatabase code section session =
     if (take 1 section) == "L" --Tried !! but did not work
     then (returnLectureTimes (T.pack code) (T.pack section) (T.pack session))
@@ -199,8 +205,10 @@ getCoursesInfo lectures = map (splitOn "-") byCourse -- [splitOn "-" course| cou
     byCourse = splitOn "_" lectures
 
 -- Takes data from event days to generate all the dates given the specific days
-startDate :: [IO T.Text] -> String -> [IO [Day]]
-startDate courses session = [if session == "Fall" then fmap generateDatesFall day else fmap generateDatesWinter day | day <- eventDays courses]
+startDate :: String -> String -> [IO [Day]]
+startDate courses session = [if session == "Fall" then fmap generateDatesFall day else fmap generateDatesWinter day | day <- eventDays coursesInfo]
+    where
+    coursesInfo = allInfoDates courses
 
 -- Days in which courses take place
 eventDays :: [IO T.Text] -> [IO String] 
@@ -248,12 +256,18 @@ generateDatesWinter "F" = take 13 [addDays i firstFriday | i <- [0,7..]]
 -- START TIME
 
 -- The start time for each subject "F3" "M2-5" "T1:30-4:30" IO Text
-startTimes :: [IO T.Text] -> [IO String]
-startTimes courses = map (fmap startTime) courses
+startTimes :: String -> [IO String]
+startTimes courses = map (fmap startTime) infoDates
+    where
+    infoDates = allInfoDates courses
+    infoTimes = allInfoTimes courses
 
 -- The ending time for each subject
-endTimes :: [IO T.Text] -> [IO String]
-endTimes courses = map (fmap endTime) courses
+endTimes :: String -> [IO String]
+endTimes courses = map (fmap endTime) infoDates
+    where
+    infoDates = allInfoDates courses
+    infoTimes = allInfoTimes courses
 
 startTime :: T.Text -> String
 startTime course = fst $ getTime course
