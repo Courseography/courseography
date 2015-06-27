@@ -33,9 +33,10 @@ function createFBModalDiv() {
     contentDiv.attr('id', 'modal-content-container');
 
     postButton.click(function () {
+        postButton.prop('disabled', true);
+        postButton.text('Posting Image...');
         var val = $('#fb-message').val();
         postImage(authToken, img, val);
-        contentDiv.dialog('close');
     });
 
     sessionButton.click(function () {
