@@ -51,7 +51,8 @@ header page =
                        ! H.customAttribute "data-max-rows" "1"
                        ! H.customAttribute "data-size" "xlarge"
                        ! H.customAttribute "data-show-faces" "false"
-                       ! H.customAttribute "data-auto-logout-link" "true"
+                       ! H.customAttribute "data-auto-logout-link" "false"
+                       ! H.customAttribute "data-default-audience" "friends"
                        $ ""
         else
             ""
