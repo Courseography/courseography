@@ -5,7 +5,6 @@ function openFBPostModal() {
     'use strict';
 
     var div = createFBModalDiv();
-
     openModal('Post To Facebook', div);
 }
 
@@ -22,9 +21,12 @@ function createFBModalDiv() {
     var img = (context === 'graph') ? getGraphImage() : getGridImage(session);
     var contentDiv = $('<div></div>');
     var topContentDiv = $('<div></div>');
+    var instructions = $('<p>Post your graph/grid selections as images on ' +
+        'Facebook. (You can also right-click and select "Save Image As..." ' +
+        'to download the image to your computer.)</p>');
     var bottomContentDiv = $('<div id="modal-buttons"></div>');
     var authToken = FB.getAuthResponse()['accessToken'];
-    var input = $('<textarea class="form-control" placeholder="Enter a message" name="message" rows="2" cols="200" id="fb-message"/>');
+    var input = $('<textarea class="form-control" placeholder="Photo description (optional)" name="message" rows="2" cols="200" id="fb-message"/>');
     var postButton = $('<button type="button" class="btn btn-primary">Post To Facebook</button>');
     var sessionButton = $('<button type="button" class="btn btn-primary">Switch Sessions</button>');
 
@@ -45,10 +47,11 @@ function createFBModalDiv() {
     postButton.css('padding', '0.5em');
     sessionButton.css('padding', '0.5em');
 
-
     bottomContentDiv.append(postButton);
 
-    topContentDiv.html('<img id="post-image" src="data:image/png;base64,' + img + '" />');
+    topContentDiv.append(instructions);
+    topContentDiv.append(
+        $('<img id="post-image" src="data:image/png;base64,' + img + '" />'));
 
     if (context === 'grid') {
         bottomContentDiv.append(sessionButton);
