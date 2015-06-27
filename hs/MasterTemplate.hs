@@ -46,7 +46,7 @@ header page =
         then
             H.div ! A.id "nav-fb" $ do
                 H.span ! A.id "nav-fb-post" $ do
-                    H.a ! A.id "post-fb" $ "Post to Facebook"
+                    H.a ! A.id "post-fb" $ "Post..."
                 H.span ! A.class_ "fb-login-button"
                        ! H.customAttribute "data-max-rows" "1"
                        ! H.customAttribute "data-size" "xlarge"
