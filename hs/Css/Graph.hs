@@ -335,7 +335,7 @@ sidebarCSS = do
         "-moz-transform" -: "scaleX(-1)"
         "-ms-transform" -: "scaleX(-1)"
         "-o-transform" -: "scaleX(-1)"
-        "transform" -: "scaleX(-1)"
+        transform $ scaleX (-1)
 
 
 {- titleCSS
