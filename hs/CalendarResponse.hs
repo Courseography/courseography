@@ -17,6 +17,8 @@ import Data.Aeson (encode, decode)
 -- import Text.JSON
 import Database.Persist
 
+lecturesStr = "CHM138H1-P0101-F_MAT136H1-T0201-S"
+coursesStr = ""
 {-
 -- EVENTS' NAME, START/END TIME
 
@@ -72,14 +74,10 @@ startDate :: [[String]] -> String -> [[Day]]
 startDate courses session = [if session == "Fall" then generateDatesFall days else generateDatesWinter days | days <- eventDays courses]
 -}
 
-
-
-
 {-
 -- Same as startDate, since our events do not happen in more than one day
 endDate :: [[String]] -> String -> [[Day]]
 endDate courses session = startDate courses session
-
 
 {- Output file:
 "Subject, start date, start time, end date, end time, all day event, description, location, private
@@ -204,16 +202,21 @@ getCoursesInfo lectures = map (splitOn "-") byCourse -- [splitOn "-" course| cou
     where
     byCourse = splitOn "_" lectures
 
--- Takes data from event days to generate all the dates given the specific days
-startDate :: String -> [IO [Day]]
-startDate courses = [date (coursesInfo !! i) ((sessions !! i) !! 2) | i <- [0 .. l]]
+-- start dates in the right format month/day/year
+startDate :: String -> [IO [String]]
+startDate courses = [fmap (map format) bydate  | bydate <- date courses] 
+
+--  start dates in the format year-month-day
+date :: String -> [IO [Day]]
+date courses = [generateDate (coursesInfo !! i) ((sessions !! i) !! 2) | i <- [0 .. l]]
     where
-    coursesInfo = allInfoDates courses
-    sessions = getCoursesInfo courses
+    coursesInfo = allInfoDates courses -- [IO T.Text]
+    sessions = getCoursesInfo courses -- [[String]]
     l = (length coursesInfo) - 1
 
-date :: IO T.Text -> String -> IO [Day]
-date course session = if session == "Fall" then fmap generateDatesFall day else fmap generateDatesWinter day
+-- Takes data from event days to generate all the dates given the specific days
+generateDate :: IO T.Text -> String -> IO [Day]
+generateDate course session = if session == "F" then fmap generateDatesFall day else fmap generateDatesWinter day
     where
     day = eventDays course
 
@@ -222,9 +225,16 @@ eventDays :: IO T.Text -> IO String
 eventDays course = fmap getDay course
 
 getDay :: T.Text -> String
-getDay course = show $ T.head course
+getDay course = toStr $ T.head course
 
--- Generate all the dates given the specific days
+toStr :: Char -> String
+toStr item = [item] 
+
+-- Format the date in the following way: month/day/year
+format :: Day -> String
+format date = formatTime defaultTimeLocale "%D" date
+
+-- Generate all the dates given the specific days (T.pack "F") "\"T\""
 -- First day of classes will be on September 14.
 -- Last day of classes will be on December 8
 generateDatesFall :: String -> [Day]
@@ -267,7 +277,6 @@ startTimes :: String -> [IO String]
 startTimes courses = map (fmap startTime) infoDatesTimes
     where
     infoDatesTimes = allInfo courses
-    
 
 -- The ending time for each subject
 endTimes :: String -> [IO String]
@@ -289,47 +298,68 @@ getTime courseText times = if (T.length $ T.pack course) == 1 then (course, endT
     times = splitOn "-" course
     startTime = times !! 0
     endTimeHours = times !! 1
--- To do: merge all data, check google format for hours like 2:30
 
-
--- MatchData
--- starTimes, endTimes [IO String]; startDate [IO [Day]]
-getCalendar :: String -> String -> IO Response -- startDate :: String -> String -> [IO [Day]]
-getCalendar coursesCode courses = fmap new2 ((startDate courses) !! 0)
-
-{-
--- Final getCalendar
-getCalendar :: String -> String -> IO Response
-getCalendar courses lectures = fmap new ((allInfoTimes lectures) !! 0)
--}
-
--- toResponse (startDate (allInfo (getCoursesInfo lectures)))
---liftIO $ print (startDate (allInfo (getCoursesInfo lectures)))
-
+new0 :: String -> Response
+new0 day = toResponse day
 
 new2 :: [Day] -> Response
-new2 courseJSON = createJSONResponse $ show $ courseJSON !! 0
+new2 courseJSON = toResponse $ show $ courseJSON !! 0
 
 new :: [Time] -> Response
 new courseJSON = createJSONResponse $ show $ courseJSON !! 0
+
+response :: [String] -> Response
+response dates = toResponse $ dates !! 0 
+
+
+-- Contructor type that I do not know
+getCalendar :: String -> String -> IO Response -- startDate :: String -> String -> [IO [Day]]
+getCalendar coursesCode courses = fmap new4 ((allInfoTimes courses) !! 0)
+
+new4 :: [Time] -> Response
+new4 course = toResponse $ show $ timeTimeField $ course !! 0
+
+
 {-
-foo :: Time
-foo = time timeField = [0.0,14.0]
+-- Response for startTimes
+getCalendar :: String -> String -> IO Response
+getCalendar courses lectures = fmap new0 ((startTimes lectures) !! 0)
 -}
--- Call returnCourse on that Data
--- Look for the lecture/tutorial and tutorial/lecture time
+
+{-
+-- Response for endTimes
+getCalendar :: String -> String -> IO Response
+getCalendar courses lectures = fmap new0 ((endTimes lectures) !! 0)
+-}
+
+{-
+-- Response for the dates
+getCalendar :: String -> String -> IO Response -- startDate :: String -> String -> [IO [Day]]
+getCalendar coursesCode courses = fmap response ((startDate courses) !! 0)
+-}
+
+calendarResponse :: String -> String -> ServerPart Response
+calendarResponse coursesCode courses =
+    liftIO $ getCalendar coursesCode courses
 
 {-
 -- courses: MAT137Y1   lectures: MAT137Y1-L5101-Y        MAT135H1 MAT135H1-L0101-F 
 -- Just getting the response
 -- 111111111111111111111111111111111111111
 getCalendar :: String -> String -> IO Response
-getCalendar courses lectures = return $ toResponse (courses)
+getCalendar courses lectures = return $ toResponse (lectures)
+-}
+{-
+getCalendar :: String -> String -> IO Response -- startDate :: String -> String -> [IO [Day]]
+getCalendar coursesCode courses = fmap new2 ((startDate courses) !! 0)
 -}
 
-calendarResponse :: String -> String -> ServerPart Response
-calendarResponse coursesCode courses =
-    liftIO $ getCalendar coursesCode courses
+{-
+foo :: Time
+foo = time timeField = [0.0,14.0]
+-}
+-- Call returnCourse on that Data
+-- Look for the lecture/tutorial and tutorial/lecture time
 
 {-
 getCalendar :: String -> String -> IO Response
@@ -372,8 +402,88 @@ getInfoDatabase courses lectures =  $ do
     returnCourse (unpack "MAT137Y1-L5101-Y")
     liftIO $ print basic
 
-
-
 getInfoDatabase :: String -> String -> IO Course
 getInfoDatabase courses lectures =  returnCourse (unpack "MAT137Y1-L5101-Y")
 -}
+
+-- To do: merge all d}ata, check google format for hours like 2:30
+{-
+--lengths
+getCalendar :: String -> String -> IO Response -- startDate :: String -> String -> [IO [Day]]
+getCalendar coursesCode courses = return $ toResponse ("len1: " ++ len1 ++ "  %  len2: " ++ len2)
+    where
+    len1 = show $ length $ allInfoDates courses
+    len2 = show $ length $ getCoursesInfo courses
+
+new7 :: String -> Response
+new7 course = toResponse course
+-}
+
+{-
+-- Getting a day code
+getCalendar :: String -> String -> IO Response -- startDate :: String -> String -> [IO [Day]]
+getCalendar coursesCode courses = fmap new6 (eventDays ((allInfoDates courses) !! 0))
+
+new6 :: String -> Response
+new6 course = toResponse course
+-}
+
+{- 
+-- Not working non-exhaustive pattern in generateDatesFall
+getCalendar :: String -> String -> IO Response -- startDate :: String -> String -> [IO [Day]]
+getCalendar coursesCode courses = fmap new5 (date ((allInfoDates courses) !! 0) "Fall")
+
+new5 :: [Day] -> Response
+new5 course = toResponse $ show $ course !! 0
+-}
+
+{-
+-- allInfoDates testing
+getCalendar :: String -> String -> IO Response -- startDate :: String -> String -> [IO [Day]]
+getCalendar coursesCode courses = fmap new3 ((allInfoDates courses) !! 0)
+
+new3 :: T.Text -> Response
+new3 course = toResponse $ show course
+-} 
+
+-- MatchData
+-- starTimes, endTimes [IO String]; startDate [IO [Day]]
+
+
+{-
+-- Fails becuase of generateDatesFall
+getCalendar :: String -> String -> IO Response -- startDate :: String -> String -> [IO [Day]]
+getCalendar coursesCode courses = fmap new2 (fmap generateDatesFall (eventDays $ (allInfoDates courses) !! 0))
+-}
+{-
+getCalendar :: String -> String -> IO Response -- startDate :: String -> String -> [IO [Day]]
+getCalendar coursesCode courses = do
+    [fmap new8 day | day <- [eventDays code| code <- allInfoDates courses]]
+    return $ toResponse accumstr
+
+accumstr = ""
+
+new8 :: String -> String
+new8 dayStr = accumstr ++ dayStr
+ -}
+
+{-
+-- Getting just the code
+getCalendar :: String -> String -> IO Response -- startDate :: String -> String -> [IO [Day]]
+getCalendar coursesCode courses = fmap new0 (eventDays $ (allInfoDates courses) !! 0)
+-}
+
+{-
+-- Generating the non-exhaustive error
+getCalendar :: String -> String -> IO Response -- startDate :: String -> String -> [IO [Day]]
+getCalendar coursesCode courses = return $ new2 (generateDatesFall "m")
+-}
+
+{-
+-- Final getCalendar
+getCalendar :: String -> String -> IO Response
+getCalendar courses lectures = fmap new ((allInfoTimes lectures) !! 0)
+-}
+
+-- toResponse (startDate (allInfo (getCoursesInfo lectures)))
+--liftIO $ print (startDate (allInfo (getCoursesInfo lectures)))
