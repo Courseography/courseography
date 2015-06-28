@@ -39,19 +39,21 @@ var CSCinq = [
 var sciFocusList = [
     'CSC336', 'CSC446', 'CSC456', 'CSC320',
     'CSC418', 'CSC321', 'CSC411', 'CSC343',
-    'CSC384', 'CSC358', 'CSC458'
+    'CSC384', 'CSC358', 'CSC458', 'CSC436',
+    'CSC446',
 ];
 
 var AIFocusList = [
     'CSC310', 'CSC438', 'CSC448',
     'CSC463', 'CSC401', 'CSC485', 'CSC320',
     'CSC420', 'CSC321', 'CSC411', 'CSC412',
-    'CSC384', 'CSC486'
+    'CSC384', 'CSC486', 'CSC336'
 ];
 
 var NLPFocusList = [
     'CSC318', 'CSC401', 'CSC485', 'CSC309',
-    'CSC321', 'CSC411', 'CSC428', 'CSC486'
+    'CSC321', 'CSC411', 'CSC428', 'CSC486',
+    'CSC336'
 ];
 
 var visionFocusList = [
