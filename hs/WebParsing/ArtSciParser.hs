@@ -5,7 +5,7 @@ import Network.HTTP
 import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Match
 import Database.Persist.Sqlite
-import Database.JsonParser
+import Database.CourseInsertion
 import Data.List
 import qualified Data.Text as T
 import Database.Tables
