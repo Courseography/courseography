@@ -8,7 +8,7 @@ var HCIDescription = 'Human-Computer Interaction (HCI) is the scientific study o
                      'Required Courses: <br> <br>' +
                      '<em>[1.]</em> CSC300H1, CSC301H1, CSC318H1, CSC428H1 <br>' +
                      '<em>[2.]</em> SOC101Y1, SOC200H1, SOC202H1, SOC302H1  [To enrol in restricted SOC courses, ' +
-                     'please contact the CS Undergraduate Office in the July preceeding the academic year in which you plan to take the course] <br>' + 
+                     'please contact the CS Undergraduate Office in the July preceding the academic year in which you plan to take the course] <br>' + 
                      '<em>[3.]</em> 1 FCE from the following: CSC309H1, CSC320H1, CSC321H1, CSC343H1, CSC384H1, CSC401H1, '+
                      'CSC404H1, CSC418H1, CSC485H1, CSC490H1/491H <br>' +
                      '<em>[4.]</em> PSY100H1, PSY270H1/PSY280H1 <br> <br>' +
@@ -33,7 +33,7 @@ var sciDescription = 'Scientific computing studies the world around us. Known an
                      'programming, and have a good understanding of data structures and algorithm design. <br> <br>' +
                      'Required Courses: <br><br>' +
                      '<em>[1.]</em> MAT235Y1/MAT237Y1/MAT257Y1 <br>' +
-                     '<em>[2.]</em> 1.5 FCE from the following: CSC336H1, CSC346H1, CSC446H1, CSC456H1, CSC466H1 <br>' +
+                     '<em>[2.]</em> 1.5 FCE from the following: CSC336H1, CSC436H1, CSC446H1, CSC456H1, CSC466H1 <br>' +
                      '<em>[3.]</em> 1 FCE from the following: CSC320H1/418H1, CSC321H1/411H1, CSC343H1, CSC384H1, CSC358H1/CSC458H1 <br> <br>' +
                      'Suggested Related Courses: <br> <br>' +
                      '<em>[1.]</em> MAT224H1/MAT240H1, MAT244H1, MAT334H1/MAT354H1, MAT337H1/MAT357H1 <br> <br>' +
@@ -157,7 +157,7 @@ var theoryDescription = 'Why is it easy to sort a list of numbers, but hard to b
                         'list below. <br>' +
                         '<em>[2.]</em> CSC336H1/CSC350H1 <br>' +
                         '<em>[3.]</em> CSC463H1 <br>' +
-                        '<em>[4.]</em> 1.5 FCEs from the following: CSC310H1, CSC438H1, CSC448H1, MAT332H1, MAT344H1, MAT443H1, At UTM: ' +
+                        '<em>[4.]</em> 1.5 FCEs from the following: CSC310H1, CSC438H1, CSC448H1, MAT332H1, MAT344H1, MAT443H1, ' +
                         'At UTM: CSC322H5/MAT302H5, CSC422H5; CSC494H1/CSC495 project supervised by a faculty member ' +
                         'from the Theory group or a relevant introductory graduate course in theory ' +
                         '(Note that students must petition to take a graduate course.) <br>' +
