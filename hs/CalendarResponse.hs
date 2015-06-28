@@ -186,15 +186,15 @@ allInfo courses = [pullDatabase code section session| [code, section, session] <
 infoTimes :: String -> [IO [Time]]
 infoTimes courses = map (fmap snd) (allInfo courses) -- This was allInfoTimes
 
-fieldsInfoTimes :: String -> [IO [Double]]
+fieldsInfoTimes :: String -> [IO [[Double]]]
 fieldsInfoTimes courses = [fmap (map timeField) time | time <- times]
     where
     times = infoTimes courses -- [IO [Time]]
 
-allInfoTimes :: String -> [IO [String]] -- This string has the times as double. I need to make them look like GCalendar time
-allInfoTimes courses = [fmap (map !! 1) timeField | timeField <- timeFields]
+allInfoTimes :: String -> [IO [Double]] -- This string has the times as double. I need to make them look like GCalendar time
+allInfoTimes courses = [fmap (map (!! 1)) timeField | timeField <- timeFields]
     where
-    timeFields = fieldsInfoTimes courses -- [IO [[no,need],[no,need],[], .. ]]
+    timeFields = fieldsInfoTimes courses -- [IO [ [no,need],[no,need],[], .. ]]
 
 allInfoDates :: String -> [IO T.Text]
 allInfoDates courses = map (fmap fst) (allInfo courses) 
@@ -320,15 +320,21 @@ new courseJSON = createJSONResponse $ show $ courseJSON !! 0
 
 response :: [String] -> Response
 response dates = toResponse $ dates !! 0 
+--Last try
+getCalendar :: String -> String -> IO Response -- startDate :: String -> String -> [IO [Day]]
+getCalendar coursesCode courses = fmap new4 ((allInfoTimes courses) !! 0)
 
+new4 :: [Double] -> Response
+new4 course = toResponse $ show $ course !! 0
 
--- Contructor type that I do not know
+{-
+-- Contructor type that I did not know
 getCalendar :: String -> String -> IO Response -- startDate :: String -> String -> [IO [Day]]
 getCalendar coursesCode courses = fmap new4 ((allInfoTimes courses) !! 0)
 
 new4 :: [Time] -> Response
 new4 course = toResponse $ show $ (timeField $ course !! 0) !! 1
-
+-}
 
 {-
 -- Response for startTimes
