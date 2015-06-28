@@ -1,6 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Css.Compiler where
+module Css.Compiler
+    (compileCSS) where
 
 import Prelude hiding (writeFile)
 import Clay (renderWith)

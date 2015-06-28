@@ -11,11 +11,12 @@ TODO: This module should be renamed, possibly put in a different location,
 and/or split up.
 -}
 
-module Database.JsonParser (insertCourse,
-                    insertLec,
-                    insertTut,
-                    setTutEnrol,
-                    setPracEnrol) where
+module Database.JsonParser
+    (insertCourse,
+     insertLec,
+     insertTut,
+     setTutEnrol,
+     setPracEnrol) where
 
 import qualified Data.Text as T
 

@@ -1,6 +1,7 @@
 {-# LANGUAGE OverloadedStrings, DataKinds #-}
 
-module PostResponse where
+module PostResponse
+    (postResponse) where
 
 import           Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H

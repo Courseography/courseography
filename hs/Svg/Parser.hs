@@ -15,7 +15,8 @@ The final svg files are output in @public\/res\/graphs\/gen@ and are sent
 directly to the client when viewing the @/graph@ page.
 -}
 
-module Svg.Parser (parsePrebuiltSvgs) where
+module Svg.Parser
+    (parsePrebuiltSvgs) where
 
 import Data.Maybe (mapMaybe, fromMaybe)
 import Data.List.Split (splitOn)
@@ -43,17 +44,17 @@ performParse :: String -- ^ The title of the graph.
              -> String -- ^ The filename of the file that will be parsed.
              -> IO ()
 performParse graphName inputFilename =
-   do graphFile <- readFile (graphPath ++ inputFilename)
-      key <- insertGraph graphName
-      let parsedGraph = parseGraph key graphFile
-          PersistInt64 keyVal = toPersistValue key
-      print "Graph Parsed"
-      insertElements parsedGraph
-      print "Graph Inserted"
-      let genGraphPath = graphPath ++ "gen/"
-      createDirectoryIfMissing True genGraphPath
-      buildSVG key M.empty (genGraphPath ++ show keyVal ++ ".svg") False
-      print "Success"
+    do graphFile <- readFile (graphPath ++ inputFilename)
+       key <- insertGraph graphName
+       let parsedGraph = parseGraph key graphFile
+           PersistInt64 keyVal = toPersistValue key
+       print "Graph Parsed"
+       insertElements parsedGraph
+       print "Graph Inserted"
+       let genGraphPath = graphPath ++ "gen/"
+       createDirectoryIfMissing True genGraphPath
+       buildSVG key M.empty (genGraphPath ++ show keyVal ++ ".svg") False
+       print "Success"
 
 
 -- * Parsing functions

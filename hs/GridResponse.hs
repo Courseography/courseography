@@ -1,10 +1,11 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module GridResponse where
+module GridResponse
+    (gridResponse) where
 
 import qualified Text.Blaze.Html5 as H
 import Happstack.Server
-import MakeElements
+import Utilities
 import MasterTemplate
 import Scripts
 
@@ -13,19 +14,20 @@ gridResponse =
     ok $ toResponse $
         masterTemplate "Courseography - Grid"
             []
-            (do  header "grid"
-                 conflictDialog
-                 createTag H.div "" "row main" $ do
-                      coursePanel
-                      searchPanel
-                      infoPanel
-                 disclaimer
+            (do header "grid"
+                conflictDialog
+                createTag H.div "" "row main" $ do
+                     coursePanel
+                     searchPanel
+                     infoPanel
+                disclaimer
             )
             timetableScripts
 
 
 conflictDialog :: H.Html
-conflictDialog = createTag H.div "dialog" "" "Conflicting courses are difficult to manage. Make sure you understand the added responsibility of having two or more conflicting courses."
+conflictDialog =
+    createTag H.div "dialog" "" "Conflicting courses are difficult to manage. Make sure you understand the added responsibility of having two or more conflicting courses."
 
 coursePanel :: H.Html
 coursePanel =
@@ -47,15 +49,3 @@ infoPanel :: H.Html
 infoPanel =
     createTag H.div "" "col-md-8 col-xs-12 col-md-pull-2" $
         createTag H.div "info" "row" ""
-                            {-createTag H.div "info" "row" $ do
-                                    createTag H.div "info-layout" "" $ do
-                                            H.div $ do
-                                                   createTag H.span "course-info-code" "" ""
-                                                   createTag H.span "course-info-title" "" ""
-
-                                            H.h4 $ do
-                                                   createTag H.span "section-stats-section" "" ""
-                                                   createTag H.span "section-stats-instructor" "" ""
-
-                                            createTag H.p "section-stats-enrol" "" ""
-                            -}

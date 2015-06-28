@@ -1,11 +1,12 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Database.CourseVideoSeed where
+module Database.CourseVideoSeed
+    (courseVideos, seedVideos) where
 
 import Data.Text (Text)
 import Database.Tables hiding (Text)
 import Database.Persist.Sqlite (runSqlite, updateWhere, (=.), (==.))
-import Config (dbStr)
+import Config (databasePath)
 
 courseVideos :: [(Text, [Text])]
 courseVideos = [
@@ -21,5 +22,5 @@ seedVideo (code, videos) = do
 
 
 seedVideos :: IO ()
-seedVideos = runSqlite dbStr $ do
+seedVideos = runSqlite databasePath $ do
     mapM_ seedVideo courseVideos

@@ -1,6 +1,7 @@
 {-# LANGUAGE NoMonomorphismRestriction, OverloadedStrings #-}
 
-module Diagram (renderTable) where
+module TimetableImageCreator
+    (renderTable) where
 
 import Diagrams.Prelude
 import Diagrams.Backend.SVG.CmdLine
@@ -91,17 +92,18 @@ makeTable :: [[String]] -> String -> Diagram B
 makeTable s session = vsep 0.04 $ (header session): intersperse rowBorder (map makeRow s)
 
 renderTable :: String -> String -> String -> IO ()
-renderTable filename courses session = do
-    let courseTable = partition5 $ splitOn "_" courses
-    print courseTable
-    let g = makeTable (zipWith (:) times courseTable) session
-    let svg = renderDia SVG (SVGOptions (mkWidth 1024) Nothing "") g
-    let txt = replace (show (fs :: Double) ++ "px") (show fs' ++ "px") $
-              unpack $ renderText svg
-    writeFile filename txt
-    where
-        partition5 [] = []
-        partition5 lst = take 5 lst : partition5 (drop 5 lst)
+renderTable filename courses session =
+    do
+        let courseTable = partition5 $ splitOn "_" courses
+        print courseTable
+        let g = makeTable (zipWith (:) times courseTable) session
+            svg = renderDia SVG (SVGOptions (mkWidth 1024) Nothing "") g
+            txt = replace (show (fs :: Double) ++ "px") (show fs' ++ "px") $
+                  unpack $ renderText svg
+        writeFile filename txt
+        where
+            partition5 [] = []
+            partition5 lst = take 5 lst : partition5 (drop 5 lst)
 
-        -- relative fonts don't play well with ImageMagick, apparently
-        fs' = round $ 1024 / 600 * fs
+            -- relative fonts don't play well with ImageMagick, apparently
+            fs' = round $ 1024 / 600 * fs

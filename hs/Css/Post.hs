@@ -1,6 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Css.Post where
+module Css.Post
+    (postStyles) where
 
 import Clay
 import Prelude hiding ((**))
@@ -127,4 +128,3 @@ postCSS = do
         height $ (px 40)
     "#notes" ? do
         textAlign $ alignSide sideCenter
-

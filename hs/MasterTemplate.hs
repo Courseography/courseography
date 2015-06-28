@@ -1,13 +1,14 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module MasterTemplate where
+module MasterTemplate
+    (masterTemplate, header, disclaimer) where
 
 import           Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 import Text.Blaze.Internal (stringValue)
-import MakeElements
 import Config (enableFb)
+import Utilities
 
 masterTemplate :: String -> [H.Html] -> H.Html -> H.Html -> H.Html
 masterTemplate title headers body scripts =
@@ -57,7 +58,6 @@ header page =
         else
             ""
 
--- Disclaimer. This will be the same for both pages, I guess?
 disclaimer :: H.Html
 disclaimer =
     H.div ! A.id "disclaimerDiv" $ do

@@ -8,12 +8,13 @@ When the project is deployed to the production environment, this file should be 
 containing the production values.
 -}
 
-module Config (dbStr,
-               markdownPath,
-               graphPath,
-               genCssPath,
-               cssStyle,
-               enableFb) where
+module Config
+    (databasePath,
+     markdownPath,
+     graphPath,
+     genCssPath,
+     cssStyle,
+     enableFb) where
 
 import Data.Text (Text)
 import qualified Clay.Render as Clay
@@ -21,8 +22,8 @@ import qualified Clay.Render as Clay
 -- DATABASE CONNECTION STRINGS
 
 -- | The path to the database file, relative to @hs/@.
-dbStr :: Text
-dbStr = "Database/database2015.sqlite3"
+databasePath :: Text
+databasePath = "Database/database2015.sqlite3"
 
 -- FILE PATH STRINGS
 

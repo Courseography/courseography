@@ -23,14 +23,15 @@ getTask :: String -> Maybe (IO ())
 getTask taskName = Map.lookup taskName taskNamesToTasks
 
 main :: IO ()
-main = do
-    args <- getArgs
-    let taskName = if null args then "server" else head args
+main =
+    do
+        args <- getArgs
+        let taskName = if null args then "server" else head args
 
-    -- extract and perform the task we want to run
-    let taskNames = Map.keys taskNamesToTasks
-    let availableTasksStr = "[" ++ (intercalate ", " taskNames) ++ "]"
-    let lookupFailedMsg = "No task named " ++ taskName ++
-                          ", available tasks are " ++ availableTasksStr
+        -- extract and perform the task we want to run
+        let taskNames = Map.keys taskNamesToTasks
+            availableTasksStr = "[" ++ (intercalate ", " taskNames) ++ "]"
+            lookupFailedMsg = "No task named " ++ taskName ++
+                              ", available tasks are " ++ availableTasksStr
 
-    fromMaybe (hPutStrLn stderr lookupFailedMsg) (getTask taskName)
+        fromMaybe (hPutStrLn stderr lookupFailedMsg) (getTask taskName)

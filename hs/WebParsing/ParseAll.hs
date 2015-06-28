@@ -1,4 +1,5 @@
-module WebParsing.ParseAll (parseAll) where
+module WebParsing.ParseAll
+     (parseAll) where
 
 import WebParsing.ArtSciParser
 import WebParsing.TimeTableParser
