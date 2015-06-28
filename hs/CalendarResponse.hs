@@ -183,8 +183,18 @@ allCourses courses = [returnCourse course | course <- toLowerCourse courses]
 allInfo :: String -> [IO (T.Text, [Time])]
 allInfo courses = [pullDatabase code section session| [code, section, session] <- getCoursesInfo courses]
 
-allInfoTimes :: String -> [IO [Time]]
-allInfoTimes courses = map (fmap snd) (allInfo courses)
+infoTimes :: String -> [IO [Time]]
+infoTimes courses = map (fmap snd) (allInfo courses) -- This was allInfoTimes
+
+fieldsInfoTimes :: String -> [IO [Double]]
+fieldsInfoTimes courses = [fmap (map timeField) time | time <- times]
+    where
+    times = infoTimes courses -- [IO [Time]]
+
+allInfoTimes :: String -> [IO [String]] -- This string has the times as double. I need to make them look like GCalendar time
+allInfoTimes courses = [fmap (map !! 1) timeField | timeField <- timeFields]
+    where
+    timeFields = fieldsInfoTimes courses -- [IO [[no,need],[no,need],[], .. ]]
 
 allInfoDates :: String -> [IO T.Text]
 allInfoDates courses = map (fmap fst) (allInfo courses) 
@@ -317,7 +327,7 @@ getCalendar :: String -> String -> IO Response -- startDate :: String -> String 
 getCalendar coursesCode courses = fmap new4 ((allInfoTimes courses) !! 0)
 
 new4 :: [Time] -> Response
-new4 course = toResponse $ show $ timeTimeField $ course !! 0
+new4 course = toResponse $ show $ (timeField $ course !! 0) !! 1
 
 
 {-
