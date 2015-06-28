@@ -128,7 +128,7 @@ var gameDescription = 'Video game design combines several disciplines within com
                       'Required Courses: <br> <br> ' +
                       '<em>[1.]</em> CSC300H1, CSC301H1, CSC318H1, CSC324H1, CSC384H1, CSC418H1, CSC404H1 <br> <br>' +
                       'Suggested Related Courses: <br> <br> ' +
-                      '<em>[1.]</em> CSC358H1, CSC458H1, CSC428H1, CSC428H1 <br> ' +
+                      '<em>[1.]</em> CSC358H1, CSC458H1, CSC428H1 <br> ' +
                       '<em>[2.]</em> MUS300H1, CIN212H/INI222H1, CIN432H1/INI465H1, ENG235H1 <br> ' +
                       '<em>[3.]</em> ECO326H1, RSM482H1/MGT2056H';
 
