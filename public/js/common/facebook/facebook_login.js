@@ -12,8 +12,10 @@ $(document).ready(function () {
             FB.getLoginStatus(function (response) {
                 if (response.status === 'connected') {
                     $('#nav-fb-post').css('display', 'inline-block');
+                    $('.fb-login-button').hide();
                 } else {
                     $('#nav-fb-post').hide();
+                    $('.fb-login-button').show();
                 }
             });
         });
@@ -21,25 +23,3 @@ $(document).ready(function () {
 
     $('#post-fb').click(openFBPostModal);
 });
-
-
-/**
- * Adds the user's name to the navigation bar.
- */
-function addNameToNavBar() {
-    'use strict';
-
-    FB.api('/me', function (response) {
-        $('#facebook-name').html(response.name);
-    });
-}
-
-
-/**
- * Removes the name from the navigation bar.
- */
-function removeNameFromNavBar() {
-    'use strict';
-
-    $('#facebook-name').empty();
-}

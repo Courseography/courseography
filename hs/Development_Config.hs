@@ -12,7 +12,8 @@ module Config (dbStr,
                markdownPath,
                graphPath,
                genCssPath,
-               cssStyle) where
+               cssStyle,
+               enableFb) where
 
 import Data.Text (Text)
 import qualified Clay.Render as Clay
@@ -43,3 +44,9 @@ genCssPath = "../public/style/"
 -- @Clay.compact@ for minified output.
 cssStyle :: Clay.Config
 cssStyle = Clay.pretty
+
+-- FACEBOOK CONFIGURATION
+
+-- | Enable Facebook integration. Should only be true on the production server.
+enableFb :: Bool
+enableFb = False

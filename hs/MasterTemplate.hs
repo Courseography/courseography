@@ -7,6 +7,7 @@ import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 import Text.Blaze.Internal (stringValue)
 import MakeElements
+import Config (enableFb)
 
 masterTemplate :: String -> [H.Html] -> H.Html -> H.Html -> H.Html
 masterTemplate title headers body scripts =
@@ -41,16 +42,17 @@ header page =
             if page `elem` ["graph", "grid"]
             then H.li $ H.a ! A.id "nav-export" $ "Export"
             else ""
-        if page `elem` ["graph", "grid"]
+        if enableFb && page `elem` ["graph", "grid"]
         then
             H.div ! A.id "nav-fb" $ do
                 H.span ! A.id "nav-fb-post" $ do
-                    H.a ! A.id "post-fb" $ "Post to Facebook"
+                    H.a ! A.id "post-fb" $ "Post..."
                 H.span ! A.class_ "fb-login-button"
                        ! H.customAttribute "data-max-rows" "1"
                        ! H.customAttribute "data-size" "xlarge"
                        ! H.customAttribute "data-show-faces" "false"
-                       ! H.customAttribute "data-auto-logout-link" "true"
+                       ! H.customAttribute "data-auto-logout-link" "false"
+                       ! H.customAttribute "data-default-audience" "friends"
                        $ ""
         else
             ""
