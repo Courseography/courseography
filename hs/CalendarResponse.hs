@@ -196,6 +196,47 @@ allInfoTimes courses = [fmap (map (!! 1)) timeField | timeField <- timeFields]
     where
     timeFields = fieldsInfoTimes courses -- [IO [ [no,need],[no,need],[], .. ]]
 
+ -- Starting time
+startTimes1 :: String -> [IO String]
+startTimes1 courses = map (fmap getStr) startField -- ** to fill with from double to str -- Make it a string and use splitOn "."
+    where
+    startField = startTime1 courses 
+
+-- Getting the first time field which contains the starting time
+startTime1 :: String -> [IO Double]
+startTime1 courses = map (fmap (!! 0)) timesInfo
+    where
+    timesInfo = allInfoTimes courses
+
+-- Create the string time
+getStr :: Double -> String
+getStr time = if (length hours) == 1 then getStrTime (time , hours, ":00:00") else getStrTime (time , hours, (":" ++ (ratio (hours !! 1)) ++ ":00"))
+    where
+    hours = splitOn "." (show time) -- Other possible solution using truncate
+
+-- Determine whether the time is AM or PM
+getStrTime :: (Double, [String], String) -> String
+getStrTime (time, hours, ending) = if time >= 12.0 then (hours !! 0) ++ ending ++ " PM" else (hours !! 0) ++ ending ++ " AM"
+
+-- Get the time out of a decimal part of my time
+ratio :: String -> String
+ratio decimal = if minutes >= 10 then show minutes else "0" ++ (show minutes)
+    where
+    decimalDouble = read decimal :: Double
+    minutes = floor $ decimalDouble * 60
+
+endTimes1 :: String -> [IO String]
+endTimes1 courses = map (fmap getStr) endField
+    where
+    endField = endTime1 courses
+
+-- Getting the last time field which contains the ending time
+endTime1 :: String -> [IO Double]
+endTime1 courses = map (fmap(!! position)) timesInfo
+    where 
+    timesInfo = allInfoTimes courses
+    position = (length timesInfo) - 1 
+
 allInfoDates :: String -> [IO T.Text]
 allInfoDates courses = map (fmap fst) (allInfo courses) 
 
@@ -288,7 +329,7 @@ startTimes courses = map (fmap startTime) infoDatesTimes
     where
     infoDatesTimes = allInfo courses
 
--- The ending time for each subject
+-- The ending time for each subject --Be careful and add 0.5 to the last time field
 endTimes :: String -> [IO String]
 endTimes courses = map (fmap endTime) infoDatesTimes
     where
@@ -320,12 +361,17 @@ new courseJSON = createJSONResponse $ show $ courseJSON !! 0
 
 response :: [String] -> Response
 response dates = toResponse $ dates !! 0 
---Last try
+
+{-
+--Last try to get the times from the Time fields
 getCalendar :: String -> String -> IO Response -- startDate :: String -> String -> [IO [Day]]
-getCalendar coursesCode courses = fmap new4 ((allInfoTimes courses) !! 0)
+getCalendar coursesCode courses = fmap new4 ((allInfoTimes courses) !! position)
+    where
+    position = (length $ allInfoTimes courses) - 1
 
 new4 :: [Double] -> Response
-new4 course = toResponse $ show $ course !! 0
+new4 course = toResponse $ show $ course !! 1
+-}
 
 {-
 -- Contructor type that I did not know
@@ -337,26 +383,38 @@ new4 course = toResponse $ show $ (timeField $ course !! 0) !! 1
 -}
 
 {-
--- Response for startTimes
+-- Response for startTimes Prev
 getCalendar :: String -> String -> IO Response
 getCalendar courses lectures = fmap new0 ((startTimes lectures) !! 0)
 -}
 
 {-
--- Response for endTimes
+-- Response for endTimes Prev
 getCalendar :: String -> String -> IO Response
 getCalendar courses lectures = fmap new0 ((endTimes lectures) !! 0)
 -}
 
-{-
+
 -- Response for the dates
 getCalendar :: String -> String -> IO Response -- startDate :: String -> String -> [IO [Day]]
 getCalendar coursesCode courses = fmap response ((startDate courses) !! 0)
--}
+
 
 calendarResponse :: String -> String -> ServerPart Response
 calendarResponse coursesCode courses =
     liftIO $ getCalendar coursesCode courses
+
+{-
+-- Response for new startTime
+getCalendar :: String -> String -> IO Response
+getCalendar courses lectures = fmap new0 ((startTimes1 lectures) !! 0)
+-}
+
+{-
+-- Response for new endTime
+getCalendar :: String -> String -> IO Response
+getCalendar courses lectures = fmap new0 ((endTimes1 lectures) !! 0)
+-}
 
 {-
 -- courses: MAT137Y1   lectures: MAT137Y1-L5101-Y        MAT135H1 MAT135H1-L0101-F 
@@ -498,7 +556,9 @@ getCalendar coursesCode courses = return $ new2 (generateDatesFall "m")
 {-
 -- Final getCalendar
 getCalendar :: String -> String -> IO Response
-getCalendar courses lectures = fmap new ((allInfoTimes lectures) !! 0)
+getCalendar courses lectures = fmap new ((infoTimes lectures) !! position)
+    where
+    position = (length $ infoTimes courses) - 1
 -}
 
 -- toResponse (startDate (allInfo (getCoursesInfo lectures)))
