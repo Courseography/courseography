@@ -37,7 +37,7 @@ function createFBModalDiv() {
             postButton.prop('disabled', true);
             postButton.text('Posting Image...');
             var val = $('#fb-message').val();
-            postImage(authToken, img, val);
+            postImage(response.authResponse.accessToken, img, val);
         }, {scope: 'publish_actions'});
     });
 
