@@ -86,17 +86,17 @@ returnTutorialTimes lowerStr section session = runSqlite dbStr $ do
     return $ (tutorialsTimeStr (entityVal $ head entityTutorials), tutorialsTimes (entityVal $ head entityTutorials), tutorialsCode (entityVal $ head entityTutorials))
     -}
 
-returnTutorialTimes :: T.Text -> T.Text -> T.Text -> IO (T.Text, [Time])
+returnTutorialTimes :: T.Text -> T.Text -> T.Text -> IO [Time]
 returnTutorialTimes lowerStr section session = runSqlite dbStr $ do
     let courseStr = T.toUpper lowerStr
     entityTutorials <- selectList [TutorialsCode ==. courseStr, TutorialsSection ==. (Just section), TutorialsSession ==. session] []
-    return $ (tutorialsTimeStr (entityVal $ head entityTutorials), tutorialsTimes (entityVal $ head entityTutorials))
+    return $ tutorialsTimes (entityVal $ head entityTutorials)
 
-returnLectureTimes :: T.Text -> T.Text -> T.Text -> IO (T.Text, [Time])
+returnLectureTimes :: T.Text -> T.Text -> T.Text -> IO [Time]
 returnLectureTimes lowerStr section session = runSqlite dbStr $ do
     let courseStr = T.toUpper lowerStr
     entityLectures <- selectList [LecturesCode ==. courseStr, LecturesSection ==. section, LecturesSession ==. session] []
-    return $ (lecturesTimeStr (entityVal $ head entityLectures), lecturesTimes (entityVal $ head entityLectures))
+    return $ lecturesTimes (entityVal $ head entityLectures)
 
 -- | Builds a Course structure from a tuple from the Courses table.
 -- Some fields still need to be added in.
