@@ -64,7 +64,7 @@ $(document).ready(function () {
     svgDoc.appendChild(setupMarker());
 });
 
-/* SET UP SIDEBAR AND ONCLICKS FOR BUTTONS */ // !! Should these onclick definitions go inside setup? !!
+/* SET UP SIDEBAR AND ONCLICKS FOR BUTTONS */
 
 $('.mode').each(function () {
     'use strict';

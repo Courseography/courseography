@@ -25,8 +25,9 @@ function makeElbow(position) {
 
 
 /**
- * Creates an SVG path that has the coordinates specified by pathString. 
+ * Creates an SVG path that has the coordinates specified by pathString.
  * @param {string} pathString The coordinates of the new path to be created.
+ * @param {string} type The type of the path (could also be a region).
  */
 function startPath(pathString, type) {
     'use strict';
@@ -41,7 +42,7 @@ function startPath(pathString, type) {
     if (type === 'path') {
         curPath.setAttributeNS(null, 'data-active', 'drawn');
        svgDoc.appendChild(curPath);
-    } else { // curPath is a region
+    } else {
         curPath.elbows.push(startPoint);
         document.getElementById('regions').appendChild(curPath);
     }
@@ -63,7 +64,7 @@ function finishPath(pathId, endNode) {
         pathString = findClosest( {x: parseFloat(startNode.getAttribute('x'), 10),
                                        y: parseFloat(startNode.getAttribute('y'), 10)},
                                        'node', 
-                                      {x: parseFloat(endNode.getAttribute('x'), 10), 
+                                      {x: parseFloat(endNode.getAttribute('x'), 10),
                                        y: parseFloat(endNode.getAttribute('y'), 10)},
                                        'node');
 
@@ -72,7 +73,7 @@ function finishPath(pathId, endNode) {
         var curElbow = {x: parseFloat(curPath.elbows[curPath.elbows.length - 1].getAttribute('cx'), 10),
                         y: parseFloat(curPath.elbows[curPath.elbows.length - 1].getAttribute('cy'), 10)};
         pathString = findClosest(curElbow, 'elbow',
-                                     {x: parseFloat(endNode.getAttribute('x'), 10), 
+                                     {x: parseFloat(endNode.getAttribute('x'), 10),
                                       y: parseFloat(endNode.getAttribute('y'), 10)},
                                      'node'); 
         curPath.setAttributeNS(null, 'd', curPath.getAttribute('d') + pathString);
@@ -97,41 +98,41 @@ function finishPath(pathId, endNode) {
 
 /**
  * Return the best coordinates for the start and end of a path. 
- * Pre-Requisites: At least one of beg and end must be a node.
- * @param {SVGElement} beg A node or an elbow element.
- * @param {string} The type of beg, elbow or node.
- * @param {SVGElement} end A node or an elbow element.
- * @param {string} The type of end, elbow or node.
+ * Pre-Requisites: At least one of source and target must be a node.
+ * @param {SVGElement} source A node or an elbow element.
+ * @param {string} sourceType The type of source, elbow or node.
+ * @param {SVGElement} target A node or an elbow element.
+ * @param {string} targetType The type of target, elbow or node.
  */
-function findClosest(beg, typeB, end, typeE) {
+function findClosest(source, sourceType, target, targetType) {
     'use strict';
 
     var thePath = null;
     var node1Edges;
     var node2Edges;
 
-    if (typeB === 'node' && typeE === 'elbow') {
-        node1Edges = [{x: beg.x + nodeWidth/2, y: beg.y}, 
-                      {x: beg.x + nodeWidth/2, y: beg.y + nodeHeight}, 
-                      {x: beg.x + nodeWidth, y: beg.y + nodeHeight/2},
-                      {x: beg.x, y: beg.y + nodeHeight/2}];
-        node2Edges = [end];
-    } else if (typeB === 'elbow' && typeE === 'node') {
-        node1Edges = [beg];
-        node2Edges = [{x: end.x + nodeWidth/2, y: end.y}, 
-                      {x: end.x + nodeWidth/2, y: end.y + nodeHeight}, 
-                      {x: end.x + nodeWidth, y: end.y + nodeHeight/2},
-                      {x: end.x, y: end.y + nodeHeight/2}];
+    if (sourceType === 'node' && targetType === 'elbow') {
+        node1Edges = [{x: source.x + nodeWidth/2, y: source.y},
+                      {x: source.x + nodeWidth/2, y: source.y + nodeHeight},
+                      {x: source.x + nodeWidth, y: source.y + nodeHeight/2},
+                      {x: source.x, y: source.y + nodeHeight/2}];
+        node2Edges = [target];
+    } else if (sourceType === 'elbow' && targetType === 'node') {
+        node1Edges = [source];
+        node2Edges = [{x: target.x + nodeWidth/2, y: target.y},
+                      {x: target.x + nodeWidth/2, y: target.y + nodeHeight},
+                      {x: target.x + nodeWidth, y: target.y + nodeHeight/2},
+                      {x: target.x, y: target.y + nodeHeight/2}];
     } else {
         // top, bottom, left, right
-        node1Edges = [{x: beg.x + nodeWidth/2, y: beg.y}, 
-                      {x: beg.x + nodeWidth/2, y: beg.y + nodeHeight}, 
-                      {x: beg.x + nodeWidth, y: beg.y + nodeHeight/2},
-                      {x: beg.x, y: beg.y + nodeHeight/2}];
-        node2Edges = [{x: end.x + nodeWidth/2, y: end.y}, 
-                      {x: end.x + nodeWidth/2, y: end.y + nodeHeight}, 
-                      {x: end.x + nodeWidth, y: end.y + nodeHeight/2},
-                      {x: end.x, y: end.y + nodeHeight/2}];
+        node1Edges = [{x: source.x + nodeWidth/2, y: source.y},
+                      {x: source.x + nodeWidth/2, y: source.y + nodeHeight},
+                      {x: source.x + nodeWidth, y: source.y + nodeHeight/2},
+                      {x: source.x, y: source.y + nodeHeight/2}];
+        node2Edges = [{x: target.x + nodeWidth/2, y: target.y},
+                      {x: target.x + nodeWidth/2, y: target.y + nodeHeight},
+                      {x: target.x + nodeWidth, y: target.y + nodeHeight/2},
+                      {x: target.x, y: target.y + nodeHeight/2}];
     }
 
     // find best alignment
@@ -146,7 +147,7 @@ function findClosest(beg, typeB, end, typeE) {
         }
     }
 
-    if (typeB === 'elbow' && typeE === 'node') {
+    if (sourceType === 'elbow' && targetType === 'node') {
         // only need to add end point to curPath
         thePath = 'L' + best_edges[1].x + ',' + best_edges[1].y + ' ';
     } else {
@@ -279,7 +280,7 @@ function pathClicked(e) {
 
 
 /**
- * Delete the path path.                // !! FIX? 
+ * Delete the path path.
  * @param {SVGElement} path 
  */
 function erasePath(path) {

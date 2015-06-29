@@ -4,6 +4,7 @@ $(document).ready(function () {
   });
 });
 
+
 /**
  * Creates and returns the Facebook modal content div.
  * @returns {jQuery} The Facebook modal content div.

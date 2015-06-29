@@ -93,4 +93,5 @@ function toggleSidebar(location) {
 
         enableReset();
     }
-};
+}
+

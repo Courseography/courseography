@@ -33,14 +33,14 @@ function createModalDiv(id) {
 /**
  * Sets up and returns the video player, false if the video URL does not exist.
  * TODO: Function should be split up.
- * @param {string} id The course code.
- * @returns {boolean|jQuery}
+ * @param {string} url The video url.
+ * @returns {jQuery}
  */
 function setupVideoPlayer(url) {
     'use strict';
 
     // Not divided up into 'attr' yet because 'controls preload'
-    // cannot be added that way...
+    // cannot be added that way.
     var videoDiv = $('<div id="course-video-div"></div>');
     var video = $('<video id="course-video" class="video-js vjs-default-skin"' +
                   'controls preload="auto"></video>');
@@ -121,6 +121,7 @@ function displayTooltip(nodeId) {
 
 /**
  * Creates an svg rect object and appends it to #graphRootSVG.
+ * @param {jQuery} g The g element of the rect.
  * @param {string} rectClass Class(es) of the rect.
  * @param {string} rectId The ID of the rect.
  * @param {number} posX The x position of the rect.
@@ -159,6 +160,7 @@ function createRect(g, rectClass, rectId, posX, posY, width, height, color) {
 
 /**
  * Creates an svg text element and appends it to #graphRootSVG.
+ * @param {jQuery} g The g element of the text element.
  * @param {string} nodeId The Node's ID.
  * @param {string} textClass Class(es) of the text element.
  * @param {string} textId The ID of the text element.

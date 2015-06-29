@@ -189,7 +189,3 @@ var webDescription = 'The Web and Internet Technologies focus introduces student
                      'Suggested Related Courses: <br> <br>' +
                      '<em>[1.]</em> Courses offered at UTM: CSC347H5, CSC423H5, CSC427H5 <br>' +
                      '<em>[2.]</em> ECE568H1';
-
-
-
-
