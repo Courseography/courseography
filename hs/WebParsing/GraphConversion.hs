@@ -171,7 +171,28 @@ labNodes' graph = return (labNodes graph)
 
 main :: IO ()
 main =
-    toGraph' ["CSC104H1", "CSC108H1", "CSC120H1", "CSC148H1", "CSC165H1",
+    toGraph' [
+        "CSC104H1", "CSC108H1", "CSC120H1", "CSC148H1", "CSC165H1",
+        "CSC200Y1", "CSC207H1", "CSC209H1", "CSC236H1", "CSC240H1",
+        "CSC258H1", "CSC263H1", "CSC265H1", "CSC300H1", "CSC302H1",
+        "CSC309H1", "CSC310H1", "CSC318H1", "CSC320H1", "CSC321H1",
+        "CSC324H1", "CSC336H1", "CSC343H1", "CSC358H1", "CSC369H1",
+        "CSC372H1", "CSC373H1", "CSC384H1", "ECE385H1", "CSC401H1",
+        "CSC404H1", "CSC410H1", "CSC411H1", "CSC412H1", "CSC418H1",
+        "CSC420H1", "CSC428H1", "CSC436H1", "CSC438H1", "CSC443H1",
+        "CSC446H1", "CSC448H1", "CSC454H1", "CSC456H1", "CSC458H1",
+        "CSC463H1", "CSC465H1", "CSC469H1", "CSC485H1", "CSC486H1",
+        "CSC488H1", "ECE489H1", "CSC490H1",
+        "MAT135H1", "MAT136H1", "MAT137Y1", "MAT157Y1", "MAT221H1",
+        "MAT223H1", "MAT240H1", "MAT235Y1", "MAT237Y1", "MAT257Y1",
+        "STA247H1", "STA255H1", "STA257H1"
+        ] >>=
+    labNodes' >>=
+    print
+
+compsci :: IO (Gr T.Text ())
+compsci = toGraph' [
+              "CSC104H1", "CSC108H1", "CSC120H1", "CSC148H1", "CSC165H1",
               "CSC200Y1", "CSC207H1", "CSC209H1", "CSC236H1", "CSC240H1",
               "CSC258H1", "CSC263H1", "CSC265H1", "CSC300H1", "CSC302H1",
               "CSC309H1", "CSC310H1", "CSC318H1", "CSC320H1", "CSC321H1",
@@ -181,22 +202,5 @@ main =
               "CSC420H1", "CSC428H1", "CSC436H1", "CSC438H1", "CSC443H1",
               "CSC446H1", "CSC448H1", "CSC454H1", "CSC456H1", "CSC458H1",
               "CSC463H1", "CSC465H1", "CSC469H1", "CSC485H1", "CSC486H1",
-              "CSC488H1", "ECE489H1", "CSC490H1",
-              "MAT135H1", "MAT136H1", "MAT137Y1", "MAT157Y1", "MAT221H1",
-              "MAT223H1", "MAT240H1", "MAT235Y1", "MAT237Y1", "MAT257Y1",
-              "STA247H1", "STA255H1", "STA257H1"] >>=
-    labNodes' >>=
-    print
-
-compsci :: IO (Gr T.Text ())
-compsci = toGraph' ["CSC104H1", "CSC108H1", "CSC120H1", "CSC148H1", "CSC165H1",
-                    "CSC200Y1", "CSC207H1", "CSC209H1", "CSC236H1", "CSC240H1",
-                    "CSC258H1", "CSC263H1", "CSC265H1", "CSC300H1", "CSC302H1",
-                    "CSC309H1", "CSC310H1", "CSC318H1", "CSC320H1", "CSC321H1",
-                    "CSC324H1", "CSC336H1", "CSC343H1", "CSC358H1", "CSC369H1",
-                    "CSC372H1", "CSC373H1", "CSC384H1", "ECE385H1", "CSC401H1",
-                    "CSC404H1", "CSC410H1", "CSC411H1", "CSC412H1", "CSC418H1",
-                    "CSC420H1", "CSC428H1", "CSC436H1", "CSC438H1", "CSC443H1",
-                    "CSC446H1", "CSC448H1", "CSC454H1", "CSC456H1", "CSC458H1",
-                    "CSC463H1", "CSC465H1", "CSC469H1", "CSC485H1", "CSC486H1",
-                    "CSC488H1", "ECE489H1", "CSC490H1"]
+              "CSC488H1", "ECE489H1", "CSC490H1"
+              ]
