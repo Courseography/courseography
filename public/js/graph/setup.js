@@ -52,7 +52,7 @@ $(document).ready(function () {
 
 /**
  * Retrieves an SVG file.
- * @param {string} The relative filepath of the graph
+ * @param {string} filepath The relative filepath of the graph
  * @returns {string} An SVG string representing a graph. 
  */
 function getRemote(filepath) {

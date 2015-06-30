@@ -38,5 +38,5 @@ function getCoursesTable(session) {
         }
     }
 
-    return courses
+    return courses;
 }

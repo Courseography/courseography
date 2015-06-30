@@ -33,7 +33,7 @@ $(document).ready(function () {
 
 
 /**
- * Renders the button that allows the user to deselect
+ * Renders the button that allows the user to clear
  * all selected courses.
  */
 function renderClearAllButton() {

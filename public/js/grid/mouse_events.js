@@ -220,7 +220,7 @@ function previousCell(time) {
 
 /**
  * Extends a given cell to display half hour section.
- * @param {Int} time The full hour time of the row.
+ * @param {int} timeInt The full hour time of the row.
  * @param {string} day The day of the time.
  * @param {string} term The term of the timetable row.
  */
@@ -236,7 +236,7 @@ function extendCell(timeInt, day, term) {
 
 /**
  * Compress a given cell to hide half hour section.
- * @param {Int} timeInt The full hour time of the row.
+ * @param {int} timeInt The full hour time of the row.
  * @param {string} day The day of the time.
  * @param {string} term The term of the timetable cell.
  */
