@@ -73,19 +73,57 @@ getCalendar coursesCode courses = fmap new0 ((startTimes (allInfo courses)) !! 0
 getCalendar :: String -> String -> IO Response -- startDate :: String -> String -> [IO [Day]]
 getCalendar coursesCode courses = fmap new0 ((endTimes (allInfoTimes courses)) !! 0)
 -}
-
-
---Start dates Response
-getCalendar :: String -> String -> IO Response -- startDate :: String -> String -> [IO [Day]]
+{---Start dates Response
+getCalendar :: String -> String -> IO Response
 getCalendar coursesCode courses = fmap response ((startDates (allInfo courses)) !! 0)
+-}
 
-new0 :: String -> Response
-new0 time = toResponse time
+{-response :: [String] -> Response
+response dates = toResponse $ dates !! 0
 
-response :: [String] -> Response
-response dates = toResponse $ dates !! 0 
+new2 :: [Day] -> Response
+new2 courseJSON = toResponse $ show $ courseJSON !! 0
+
+new :: [Time] -> Response
+new courseJSON = createJSONResponse $ show $ courseJSON !! 0
+-}
+
+-- | Returns a CSV file of events as requested by the user.
+calendarResponse :: String -> String -> ServerPart Response
+calendarResponse coursesCode courses =
+    liftIO $ getCalendar coursesCode courses
+
+-- Generates the Response for the server which consists of a csv file
+getCalendar :: String -> String -> IO Response
+getCalendar coursesCode courses = fmap response (toCSV coursesCode courses)
+
+response :: String -> Response
+response events = toResponse events
+
+{- Output file:
+"Subject, start date, start time, end date, end time, all day event, description, location, private
+MAT137,09/14/15,8:00:00 AM,09/14/15,9:00:00 AM,False,MAT137,tba,True" 
+-}
+-- Generate the string that represents a CSV file
+toCSV :: String -> String -> IO String
+toCSV coursesCode courses = do 
+    allEvents <-  getAllevents coursesCode courses
+    return $ unlines ([title] ++ allEvents)
+    where
+    title = "Subject,Start Date,Start Time,End Date,End Time,All Day Event,Description,Location,Private"
+
+getAllevents :: String -> String -> IO [String]
+getAllEvents coursesCode courses = matchData name start end date
+    where
+    name = (getNames coursesCode)
+    start = (startTimes (allInfoTimes courses))
+    end = (endTimes (allInfoTimes courses))
+    date = (startDates (allInfo courses))
 
 --allInfoTimes is for start and end time, and allInfo is for startDate
+-- Obtain the name for all subjects
+getNames :: String -> [String]
+getNames coursesCode = splitOn "_" coursesCode 
 
 -- Obtain the information for all courses from the database
 allInfo :: String -> [(IO [Time], String)]
@@ -160,6 +198,7 @@ ratio decimal = if minutes >= 10 then show minutes else "0" ++ (show minutes)
 
 
 -- DEALING WITH DATES
+-- startDates (allInfoDates courses)
 
 startDates :: [(IO [Time], String)] -> [IO [String]]
 startDates coursesDates = map startDate coursesDates 
@@ -233,11 +272,70 @@ generateDatesWinter "F" = take 13 [addDays i firstFriday | i <- [0,7..]]
     where 
     firstFriday = addDays 4 firstMondayWinter
 
+-- COMBINE INFORMATION
+matchData :: [String] -> [IO String] -> [IO String] -> [IO [String]] -> IO [String]
+matchData names allStart allEnd allDates = matchInfo names (sequence allStart) (sequence allEnd) (sequence allDates)
+
+matchData1 :: [String] -> IO [String] -> IO [String] -> IO [[String]] -> IO [String]
+matchData1 names allStart allEnd allDates = matchData2 names (sequence [allStart, allEnd, allDates])
+
+matchData2 :: [String] -> IO [[String], [String], [[String]]] -> IO [String]
+matchData2 names allStartEndDates = fmap (matchInfo names) allStartEndDates
+
+matchInfo :: [String] -> [[String], [String], [[String]]] -> [String]
+matchInfo = names allStartEndDates = concat [eventsByCourse (names !! i) ((allStartEndDates !! 0) !! i) ((allStartEndDates !! 1) !! i) ((allStartEndDates !! 2) !! i)|  i <- [0 .. x]]
+    where
+    x = (length allStart) - 1
+
+-- Generate the string that represents the event for each course
+eventsByCourse :: String -> String -> String -> [String] -> [String]
+eventsByCourse name start end date =  [name ++ "," ++ date ++ "," ++ start ++ "," ++ date ++ "," ++ end ++ ",False," ++ name ++ ",tba,True"| byDate <- date] 
 
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-- | Returns a CSV file of events as requested by the user.
+{-calendarResponse :: String -> String -> ServerPart Response
+calendarResponse coursesFall coursesWinter =
+    liftIO $ getCalendar coursesFall coursesWinter
+-}
+
+
+
+
+{-
+matchData1 :: IO [String] -> IO [String] -> IO [[String]] -> IO [String]
+matchData1 allStart allEnd allDates = fmap (matchData2 (allStart,allEnd)) allDates
+
+matchData2 :: (IO [String], IO [String]) -> [[String]] -> IO [String]
+matchData2 allStartEnd allDates = fmap (matchData3 ((fst allStartEnd), allDates)) (snd allStartEnd))
+
+matchData3 :: (IO [String], [[String]]) -> [String] -> IO [String]
+matchData3 allStartDates allEnd = fmap (matchInfo ((snd allStartEnd), allEnd)) (fst allStartEnd))
+
+matchInfo :: ([String], [[String]]) -> [String] -> [String]
+matchInfo allEndDates allStart = [createEvent ((allStart !! i) ((fst allEndDates) !! i) ((snd allEndDates) !! i))| i <- [0 .. x]]
+    where
+    x = (length allStart) - 1
+-}
 
 
 
@@ -390,23 +488,13 @@ getCalendar :: String -> String -> IO Response -- startDate :: String -> String 
 getCalendar coursesCode courses = fmap response ((startDate courses) !! 0)
 
 -}
-calendarResponse :: String -> String -> ServerPart Response
-calendarResponse coursesCode courses =
-    liftIO $ getCalendar coursesCode courses
+
 
 {-
 -- Response for new startTime
 getCalendar :: String -> String -> IO Response
 getCalendar courses lectures = fmap new0 ((startTimes1 lectures) !! 0)
 -}
-
-new2 :: [Day] -> Response
-new2 courseJSON = toResponse $ show $ courseJSON !! 0
-
-new :: [Time] -> Response
-new courseJSON = createJSONResponse $ show $ courseJSON !! 0
-
-
 
 {-
 --Last try to get the times from the Time fields
