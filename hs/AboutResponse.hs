@@ -16,7 +16,8 @@ aboutResponse aboutContents =
    ok $ toResponse $
     masterTemplate "Courseography - About"
                 []
-                (do header "about"
+                (do
+                    header "about"
                     aboutHtml aboutContents
                 )
                 ""

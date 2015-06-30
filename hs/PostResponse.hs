@@ -15,7 +15,8 @@ postResponse =
     ok $ toResponse $
         masterTemplate "Courseography - Check My POSt!"
                     []
-                    (do header "post"
+                    (do
+                        header "post"
                         checkPost
                     )
                     postScripts
