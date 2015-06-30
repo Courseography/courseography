@@ -107,12 +107,10 @@ MAT137,09/14/15,8:00:00 AM,09/14/15,9:00:00 AM,False,MAT137,tba,True"
 -- Generate the string that represents a CSV file
 toCSV :: String -> String -> IO String
 toCSV coursesCode courses = do 
-    allEvents <-  getAllevents coursesCode courses
-    return $ unlines ([title] ++ allEvents)
-    where
-    title = "Subject,Start Date,Start Time,End Date,End Time,All Day Event,Description,Location,Private"
+    allEvents <-  getAllEvents coursesCode courses
+    return $ unlines (["Subject,Start Date,Start Time,End Date,End Time,All Day Event,Description,Location,Private"] ++ allEvents)
 
-getAllevents :: String -> String -> IO [String]
+getAllEvents :: String -> String -> IO [String]
 getAllEvents coursesCode courses = matchData name start end date
     where
     name = (getNames coursesCode)
@@ -283,9 +281,9 @@ matchData2 :: [String] -> IO [[String], [String], [[String]]] -> IO [String]
 matchData2 names allStartEndDates = fmap (matchInfo names) allStartEndDates
 
 matchInfo :: [String] -> [[String], [String], [[String]]] -> [String]
-matchInfo = names allStartEndDates = concat [eventsByCourse (names !! i) ((allStartEndDates !! 0) !! i) ((allStartEndDates !! 1) !! i) ((allStartEndDates !! 2) !! i)|  i <- [0 .. x]]
+matchInfo names allStartEndDates = concat [eventsByCourse (names !! i) ((allStartEndDates !! 0) !! i) ((allStartEndDates !! 1) !! i) ((allStartEndDates !! 2) !! i)|  i <- [0 .. x]]
     where
-    x = (length allStart) - 1
+    x = (length $ allStartEndDates !! 0) - 1
 
 -- Generate the string that represents the event for each course
 eventsByCourse :: String -> String -> String -> [String] -> [String]
@@ -293,31 +291,28 @@ eventsByCourse name start end date =  [name ++ "," ++ date ++ "," ++ start ++ ",
 
 
 
+{-
+matchData :: [String] -> [IO String] -> [IO String] -> [IO [String]] -> IO [String]
+matchData names allStart allEnd allDates = matchInfo names (sequence allStart) (sequence allEnd) (sequence allDates)
 
+matchData1 :: [String] -> IO [String] -> IO [String] -> IO [[String]] -> IO [String]
+matchData1 names allStart allEnd allDates = concat [matchData2 names (sequence [allStart, allEnd, fmap (!! i) allDates]) | i <- [0 .. x]]
+    where
+    x = (length allStart) - 1
 
+matchData2 :: [String] -> IO [[String], [String], [String]] -> IO [String]
+matchData2 names allDates allStartEnd = fmap (matchInfo (names, allDates)) allStartEndDates
 
+matchInfo :: ([String]) -> [[String], [String], [[String]]] -> [String]
+matchInfo names allStartEndDates = concat [eventsByCourse (names !! i) ((allStartEndDates !! 0) !! i) ((allStartEndDates !! 1) !! i) ((allStartEndDates !! 2) !! i)|  i <- [0 .. x]]
+    where
+    x = (length $ allStartEndDates !! 0) - 1
 
+-- Generate the string that represents the event for each course
+eventsByCourse :: String -> String -> String -> [String] -> [String]
+eventsByCourse name start end date =  [name ++ "," ++ date ++ "," ++ start ++ "," ++ date ++ "," ++ end ++ ",False," ++ name ++ ",tba,True"| byDate <- date] 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
--- | Returns a CSV file of events as requested by the user.
-{-calendarResponse :: String -> String -> ServerPart Response
-calendarResponse coursesFall coursesWinter =
-    liftIO $ getCalendar coursesFall coursesWinter
 -}
-
 
 
 
@@ -336,6 +331,21 @@ matchInfo allEndDates allStart = [createEvent ((allStart !! i) ((fst allEndDates
     where
     x = (length allStart) - 1
 -}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
