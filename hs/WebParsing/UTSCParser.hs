@@ -6,7 +6,6 @@ import Text.HTML.TagSoup.Match
 import Database.Persist.Sqlite
 import qualified Data.Text as T
 import Database.Tables as Tables
-import Database.JsonParser as JsonParser
 import WebParsing.ParsingHelp
 
 utscCalendarUrl :: String

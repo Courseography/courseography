@@ -10,7 +10,7 @@ import Data.List
 import qualified Data.Text as T
 import Data.Maybe
 import Database.Tables as Tables
-import Database.JsonParser
+import Database.CourseInsertion
 import WebParsing.HtmlTable
 import WebParsing.ParsingHelp
 import WebParsing.TimeConverter
@@ -180,10 +180,10 @@ processCourseTable course = do
 
   runSqlite dbStr $ do
     runMigration migrateAll
-    setTutEnrol code (containsTut sesh)
-    setPracEnrol code (containsPrac sesh)
-    mapM_ (insertLec session code) (lectures sesh)
-    mapM_ (insertTut session code) (tutorials sesh)
+    setTutorialEnrolment code (containsTut sesh)
+    setPracticalEnrolment code (containsPrac sesh)
+    mapM_ (insertLecture session code) (lectures sesh)
+    mapM_ (insertTutorial session code) (tutorials sesh)
   print code
   where
     containsTut sesh = any (maybe False (T.isPrefixOf "T") . tutorialSection) $ tutorials sesh

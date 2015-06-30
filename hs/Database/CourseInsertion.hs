@@ -2,20 +2,18 @@
     OverloadedStrings, TypeFamilies #-}
 
 {-|
-Description: Odd miscellany of functions related to the database.
+Description: Functions that insert/update course information in the database.
 
 This module contains a bunch of functions related to inserting information
 into the database. These functions are used as helpers for the WebParsing module.
-
-TODO: This module should be renamed, possibly put in a different location,
-and/or split up.
 -}
 
-module Database.JsonParser (insertCourse,
-                    insertLec,
-                    insertTut,
-                    setTutEnrol,
-                    setPracEnrol) where
+module Database.CourseInsertion
+    (insertCourse,
+     insertLecture,
+     insertTutorial,
+     setTutorialEnrolment,
+     setPracticalEnrolment) where
 
 import qualified Data.Text as T
 
@@ -43,21 +41,21 @@ insertCourse course =
                       []
 
 -- | Updates the manualTutorialEnrolment field of the given course.
-setTutEnrol :: MonadIO m => T.Text -> Bool -> ReaderT SqlBackend m ()
-setTutEnrol course val =
+setTutorialEnrolment :: MonadIO m => T.Text -> Bool -> ReaderT SqlBackend m ()
+setTutorialEnrolment course val =
     updateWhere [CoursesCode ==. course]
                 [CoursesManualTutorialEnrolment =. Just val]
 
 -- | Updates the manualPracticalEnrolment field of the given course.
-setPracEnrol :: MonadIO m => T.Text -> Bool -> ReaderT SqlBackend m ()
-setPracEnrol course val =
+setPracticalEnrolment :: MonadIO m => T.Text -> Bool -> ReaderT SqlBackend m ()
+setPracticalEnrolment course val =
     updateWhere [CoursesCode ==. course]
                 [CoursesManualPracticalEnrolment =. Just val]
 
 -- | Inserts a lecture into the Lectures table associated with a given
 -- session and course code.
-insertLec :: MonadIO m => T.Text -> T.Text -> Lecture -> ReaderT SqlBackend m ()
-insertLec session code lecture =
+insertLecture :: MonadIO m => T.Text -> T.Text -> Lecture -> ReaderT SqlBackend m ()
+insertLecture session code lecture =
     insert_ $ Lectures code
                        session
                        (section lecture)
@@ -71,8 +69,8 @@ insertLec session code lecture =
 
 -- | Inserts a tutorial into the Tutorials table associated with a given
 -- session and course code.
-insertTut :: MonadIO m => T.Text -> T.Text-> Tutorial -> ReaderT SqlBackend m ()
-insertTut session code tutorial =
+insertTutorial :: MonadIO m => T.Text -> T.Text-> Tutorial -> ReaderT SqlBackend m ()
+insertTutorial session code tutorial =
     insert_ $ Tutorials code
                         (tutorialSection tutorial)
                         session
