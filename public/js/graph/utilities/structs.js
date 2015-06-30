@@ -47,8 +47,8 @@ function makeEdge(source, target, id) {
     'use strict';
 
     try {
-        window[id] = new Edge(source, target, name);
-        parent.outEdges.push(window[id]);
+        window[id] = new Edge(source, target, id);
+        source.outEdges.push(window[id]);
         target.inEdges.push(window[id]);
 
         source.children.push(target);
