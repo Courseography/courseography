@@ -25,7 +25,6 @@ convertToImage inName outName = createProcess $ CreateProcess
                                   CreatePipe
                                   False
                                   False
-                                  False
 -- | Removes a file.
 removeImage :: String -> IO
                      (Maybe Handle,
@@ -40,7 +39,6 @@ removeImage name = createProcess $ CreateProcess
                                   Inherit
                                   CreatePipe
                                   CreatePipe
-                                  False
                                   False
                                   False
 

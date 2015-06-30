@@ -16,8 +16,8 @@ facebookScripts = [
     "/static/js/common/facebook/facebook_modal.js"
     ]
 
-plannerScripts :: H.Html
-plannerScripts = concatHtml (map makeScript $
+graphScripts :: H.Html
+graphScripts = concatHtml (map makeScript $
     ["https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js",
      "https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js",
      "static/js/common/modal.js",
