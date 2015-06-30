@@ -22,7 +22,7 @@ common = do
            padding0
            width100
            minHeight $ pct 100
-           fontSize $ pt 16
+           fontSize $ pt 17
            fontFamily ["Trebuchet MS", "Arial"] [sansSerif]
     headerCSS
     aDefaultCSS
@@ -37,19 +37,18 @@ headerCSS = do
     ".header" ?
         do margin0
            padding 0 (em 0.5) 0 (em 0.5)
-           backgroundColor $ blue1
+           backgroundColor $ purple10
+           border solid (px 1) black
            color white
-           h2 ?
-             do fontSize $ em 1.6
-                textAlign $ alignSide sideLeft
-                width $ px 200
-                display inlineBlock
-                margin (px 10) 0 (px 5) 0
+           img ?
+             do display inlineBlock
+                margin 0 0 (px 5) 0
            height (px 50)
     "#nav-links" ?
         do
             "list-style" -: "none"
             minWidth $ pct 50
+            paddingTop (px 10)
             margin nil nil nil nil
             display inlineBlock
             a ?
@@ -60,8 +59,9 @@ headerCSS = do
                 padding 0 (px 10) 0 (px 10)
                 a <? do
                     color white
+                    "text-shadow" -: "0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000;" 
                     hover & do
-                        color gray
+                        color darkgray
             height (px 50)
     "#nav-fb" ? do
         float floatRight
@@ -84,7 +84,13 @@ headerCSS = do
             width (px 140)
             overflow hidden
             margin (px 5) nil (px 5) nil
-
+    "#courseography-header" ? do
+        width (px 280)
+        height (px 50)
+        paddingBottom (px 3)
+    "#nav-export" ? do
+        cursor pointer
+        
 {- aDefaultCSS
  - Generates default CSS. -}
 aDefaultCSS :: Css

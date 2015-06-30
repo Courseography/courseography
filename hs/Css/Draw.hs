@@ -22,7 +22,6 @@ drawStyles = do
     textButtonCSS
     nodeLabelCSS
     elbowCSS
-    scrollBar
     regionCSS
     finishRegionCSS
 
@@ -69,20 +68,6 @@ panelCSS = do
         roundCorners
         backgroundColor $ parse "#008080"
         overflowY auto
-
-{- Override the default scrollbar styling for side panel -}
-scrollBar :: Css
-scrollBar = do
-    "::-webkit-scrollbar" ? do
-        width (px 10)
-        height (px 10)
-    "::-webkit-scrollbar-track" ? do
-        "-webkit-box-shadow" -: "inset 0 0 6px rgba(0,0,0,1)"
-        "border-radius" -: "10px"
-    "::-webkit-scrollbar-thumb" ? do
-        "border-radius" -: "10px";
-        "-webkit-box-shadow" -: "inset 0 0 6px rgba(0,0,0,0.5)"
-        "background-color" -: "#28B0A2"
 
 {- The mode buttons. -}
 modeButtonsCSS :: Css

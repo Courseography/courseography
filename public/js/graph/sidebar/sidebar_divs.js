@@ -80,11 +80,14 @@ function toggleSidebar(location) {
         resetDivs();
         $('#sidebar').animate({width: '40px'}, 'fast', undefined, function() {
             $('#fcecount').html('');
+            $('#sidebar-icon').removeClass('flip');
         });
         $('#reset').hide();
     } else if (!toggled && location === 'button') {
         toggled = true;
-        $('#sidebar').animate({width: '400px'}, 'fast');
+        $('#sidebar').animate({width: '400px'}, 'fast', undefined, function() {
+            $('#sidebar-icon').addClass('flip');
+        });
         fillFCECount();
         $('#focuses').show();
         $('#focuses-nav').addClass('active');

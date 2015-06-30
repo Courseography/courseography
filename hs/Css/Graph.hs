@@ -196,7 +196,7 @@ sidebarCSS = do
         width (pct 53)
         height (px 40)
         float floatLeft
-        backgroundColor purple4
+        backgroundColor purple7
         display none
         textAlign $ alignSide sideCenter
         paddingLeft (px 15)
@@ -222,7 +222,7 @@ sidebarCSS = do
         width (px 40)
         height (pct 100)
         float floatLeft
-        backgroundColor purple5
+        backgroundColor purple8
         position absolute
         paddingLeft (px 23)
     "#sidebar-button" ? do
@@ -231,14 +231,14 @@ sidebarCSS = do
         width (px 40)
         height100
         float floatLeft
-        backgroundColor purple2
+        backgroundColor purple10
         position absolute
         border solid (px 1) black
         ":hover" & do
-            backgroundColor purple4
+            backgroundColor purple6
     "#sidebar-icon" ? do
         width (px 30)
-        height (px 35)
+        height (px 50)
         paddingTop (px 20)
         paddingLeft (px 2)
         position absolute
@@ -249,7 +249,7 @@ sidebarCSS = do
     "#sidebar-nav" ? do
         width100
         fontSize (px 13)
-        backgroundColor purple3
+        backgroundColor purple6
         border solid (px 1) grey2
         "box-shadow" -: "0 2px 2px -1px rgba(0, 0, 0, 0.055)"
         display block
@@ -267,7 +267,7 @@ sidebarCSS = do
                 "-o-transition" -: "all 0.2s"
                 "transition" -: "all 0.2s"
                 ":hover" & do
-                    "background-color" -: "#46364A !important"
+                    "background-color" -: "#5C497E !important"
                     a ? do
                         "color" -: "white !important"
                 a ? do
@@ -297,7 +297,7 @@ sidebarCSS = do
     "#close-focus" ? do
         display block
         cursor pointer
-        backgroundColor purple3
+        backgroundColor purple6
         fontSize (px 20)
         border solid (px 1) black
         textAlign $ alignSide sideCenter
@@ -317,7 +317,7 @@ sidebarCSS = do
         paddingLeft (px 5)
         paddingRight (px 5)
     ".active" & do
-        backgroundColor purple2
+        backgroundColor purple8
     ".graph-button" & do
         display block
         cursor pointer
@@ -330,6 +330,8 @@ sidebarCSS = do
         marginBottom (px 20)
         ":hover" & do
             backgroundColor grey2
+    ".flip" & do
+        transform $ scaleX (-1)
 
 
 {- titleCSS

@@ -30,8 +30,8 @@ masterTemplate title headers body scripts =
 header :: String -> H.Html
 header page =
     createTag H.nav "" "row header" $ do
-        H.h2 ! A.id "courseography-header"
-             ! H.customAttribute "context" (stringValue page) $ "Courseography"
+        H.img ! A.id "courseography-header" ! A.src "static/res/img/logo.png"
+             ! H.customAttribute "context" (stringValue page) 
         H.ul ! A.id "nav-links" $ do
             H.li $ makeA "" "" "graph" "" "Graph"
             H.li $ makeA "" "" "grid" "" "Grid"

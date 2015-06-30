@@ -27,7 +27,7 @@ timetableStyles = do
 searchCSS :: Css
 searchCSS = do
     "#search-layout" ? do
-        backgroundColor purple1
+        backgroundColor purple8
         margin0
         padding0
         overflowY hidden
@@ -179,7 +179,7 @@ courseSelectCSS = do
         padding0
         height100
         overflow hidden
-        backgroundColor purple1
+        backgroundColor purple8
         color white
     "#course-select" ? do
         padding0
