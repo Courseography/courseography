@@ -1,7 +1,16 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Utilities
-    (createTag, stylesheet, makeScript, makeForm, makeInput, makeA, jQuery, concatHtml, concatSVG, mdToHTML) where
+    (createTag,
+     stylesheet,
+     makeScript,
+     makeForm,
+     makeInput,
+     makeA,
+     jQuery,
+     concatHtml,
+     concatSVG,
+     mdToHTML) where
 
 import           Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
@@ -12,8 +21,8 @@ import Data.Text.Lazy (Text)
 import Control.Monad.IO.Class  (liftIO)
 import qualified Data.Conduit.List as CL
 import qualified Data.Text.Internal as TI
-import Data.Conduit
-import Database.Persist.Sqlite
+import Data.Conduit (($$))
+import Database.Persist.Sqlite (runSqlite, rawQuery)
 import Config (databasePath)
 
 createTag :: (H.Html -> H.Html) ->  H.AttributeValue -> H.AttributeValue -> H.Html -> H.Html
