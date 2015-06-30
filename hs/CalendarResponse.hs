@@ -20,8 +20,10 @@ import Database.Persist
 lecturesStr = "CHM138H1-P0101-F_MAT136H1-T0201-S"
 coursesStr = ""
 
+-- | A data type representing a list of lists of start, end times; as well as, start date for all courses.
+data Triple = Triple {tripleStart :: [String], tripleEnd :: [String], tripleDates :: [[String]]} deriving (Show)
 
-{-}
+{-
 -- 2222222222222222222222222222222222222222222222
 -- ________________________________________MAT135 (T)______________________________
 -- Using return course
@@ -272,24 +274,48 @@ generateDatesWinter "F" = take 13 [addDays i firstFriday | i <- [0,7..]]
 
 -- COMBINE INFORMATION
 matchData :: [String] -> [IO String] -> [IO String] -> [IO [String]] -> IO [String]
-matchData names allStart allEnd allDates = matchInfo names (sequence allStart) (sequence allEnd) (sequence allDates)
+matchData names allStart allEnd allDates = matchData1 names (sequence allStart) (sequence allEnd) (sequence allDates)
 
 matchData1 :: [String] -> IO [String] -> IO [String] -> IO [[String]] -> IO [String]
-matchData1 names allStart allEnd allDates = matchData2 names (sequence [allStart, allEnd, allDates])
+matchData1 names allStart allEnd allDates = matchData2 names (sequenceMe (allStart, allEnd, allDates))
 
-matchData2 :: [String] -> IO [[String], [String], [[String]]] -> IO [String]
+matchData2 :: [String] -> IO ([String], [String], [[String]]) -> IO [String]
 matchData2 names allStartEndDates = fmap (matchInfo names) allStartEndDates
 
-matchInfo :: [String] -> [[String], [String], [[String]]] -> [String]
-matchInfo names allStartEndDates = concat [eventsByCourse (names !! i) ((allStartEndDates !! 0) !! i) ((allStartEndDates !! 1) !! i) ((allStartEndDates !! 2) !! i)|  i <- [0 .. x]]
+matchInfo :: [String] -> ([String], [String], [[String]]) -> [String]
+matchInfo names allStartEndDates = concat [eventsByCourse (names !! i) ((ft1 allStartEndDates) !! i) ((sd1 allStartEndDates) !! i) ((thr1 allStartEndDates) !! i)|  i <- [0 .. x]]
     where
-    x = (length $ allStartEndDates !! 0) - 1
+    x = (length $ ft1 allStartEndDates) - 1
 
 -- Generate the string that represents the event for each course
 eventsByCourse :: String -> String -> String -> [String] -> [String]
-eventsByCourse name start end date =  [name ++ "," ++ date ++ "," ++ start ++ "," ++ date ++ "," ++ end ++ ",False," ++ name ++ ",tba,True"| byDate <- date] 
+eventsByCourse name start end date =  [name ++ "," ++ byDate ++ "," ++ start ++ "," ++ byDate ++ "," ++ end ++ ",False," ++ name ++ ",tba,True"| byDate <- date] 
+
+sequenceMe :: (IO [String], IO [String], IO [[String]]) -> IO ([String], [String], [[String]])
+sequenceMe allStartEndDates = do
+    start <- ft allStartEndDates
+    end <- sd allStartEndDates
+    dates <- thr allStartEndDates
+    return (start, end, dates)
 
 
+ft:: (IO [String], IO [String], IO [[String]]) -> IO [String]
+ft (x,_,_) = x
+
+ft1:: ([String], [String], [[String]]) -> [String]
+ft1 (x,_,_) = x
+
+sd :: (IO [String], IO [String], IO [[String]]) -> IO [String]
+sd (_,x,_) = x
+
+sd1 :: ([String], [String], [[String]]) -> [String]
+sd1 (_,x,_) = x
+
+thr :: (IO [String], IO [String], IO [[String]]) -> IO [[String]]
+thr (_,_,x) = x
+
+thr1 :: ([String], [String], [[String]]) -> [[String]]
+thr1 (_,_,x) = x
 
 {-
 matchData :: [String] -> [IO String] -> [IO String] -> [IO [String]] -> IO [String]
