@@ -8,9 +8,9 @@ function Course(name) {
 
     var course = getCourse(name);
     // Copy attributes
-    this.F = course.F;
-    this.S = course.S;
-    this.Y = course.Y;
+    this.F = course.fallSession;
+    this.S = course.springSession;
+    this.Y = course.yearSession;
     this.name = course.name;
     this.title = course.title;
     this.prereqs = course.prereqs;
