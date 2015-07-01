@@ -43,7 +43,7 @@ function renderClearAllButton() {
     $(clearAllItem).click(function () {
         if (confirm('Clear all selected courses?')) {
             $.each(courseObjects.slice(0), function (i, course) {
-                removeCourseFromList(course.name);
+                deselectCourse(course.name);
             });
         }
     });

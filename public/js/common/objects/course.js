@@ -372,7 +372,7 @@ Course.prototype.renderHeader = function () {
     $(courseImg).attr('src', 'static/res/ico/delete.png')
                 .addClass('close-icon')
                 .click(function () {
-                    removeCourseFromList(tmp.name);
+                    deselectCourse(tmp.name);
                 });
     var aboutImg = document.createElement('img');
     $(aboutImg).attr('src', 'static/res/ico/about.png')
