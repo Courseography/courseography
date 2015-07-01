@@ -25,7 +25,6 @@ function createFBModalDiv() {
         'Facebook. (You can also right-click and select "Save Image As..." ' +
         'to download the image to your computer.)</p>');
     var bottomContentDiv = $('<div id="modal-buttons"></div>');
-    var authToken = FB.getAuthResponse()['accessToken'];
     var input = $('<textarea class="form-control" placeholder="Photo description (optional)" name="message" rows="2" cols="200" id="fb-message"/>');
     var postButton = $('<button type="button" class="btn btn-primary">Post To Facebook</button>');
     var sessionButton = $('<button type="button" class="btn btn-primary">Switch Terms</button>');
@@ -42,9 +41,7 @@ function createFBModalDiv() {
     });
 
     sessionButton.click(function () {
-        session = session === 'fall' ? 'spring' : 'fall';
-        img = getGridImage(session);
-        $('#post-image').attr('src', 'data:image/png;base64,' + img);
+        switchSessions(session);
     });
 
     postButton.css('padding', '0.5em');
@@ -64,4 +61,16 @@ function createFBModalDiv() {
     contentDiv.append(topContentDiv);
     contentDiv.append(bottomContentDiv);
     return contentDiv;
+}
+
+/**
+ * Switches the session of the grid image (loading the new image).
+ * @param session The current session.
+ */
+function switchSessions(session) {
+    'use strict';
+
+    session = session === 'fall' ? 'spring' : 'fall';
+    var img = getGridImage(session);
+    $('#post-image').attr('src', 'data:image/png;base64,' + img);
 }
