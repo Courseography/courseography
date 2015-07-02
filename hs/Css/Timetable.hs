@@ -176,7 +176,7 @@ courseSelectCSS :: Css
 courseSelectCSS = do
     "#course-select-wrapper" ? do
         margin0
-        padding 0 0 (px 2) 0
+        padding 0 0 (px 25) 0
         height100
         overflowY auto
         overflowX hidden
@@ -187,9 +187,9 @@ courseSelectCSS = do
         margin (px 18) 0 0 (px 17)
         width100
         height100
+        alignCenter
         overflowY auto
         overflowX hidden
-        alignCenter
         "list-style-type" -: "none"
         ".ui-accordion-header" ? do
             outline solid nil white
