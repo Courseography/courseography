@@ -84,6 +84,6 @@ runServer = do
           dir "depts" $ liftIO deptList,
           dir "timesearch" searchResponse,
           --dir "calendar" $ look "coursesFall" >>= \x -> look "coursesWinter" >>= calendarResponse x,
-          dir "calendar" $ lookCookieValue "selected-courses" >>= \x -> lookCookieValue "selected-lectures" >>= calendarResponse x,
+          dir "calendar" $ lookCookieValue "selected-lectures" >>= calendarResponse,
           fourOhFourResponse
         ]
