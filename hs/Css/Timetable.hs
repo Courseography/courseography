@@ -178,15 +178,15 @@ courseSelectCSS = do
         margin0
         padding0
         height100
-        overflowY auto
+        overflowY scroll
         overflowX hidden
         backgroundColor purple8
         color white
     "#course-select-wrapper::-webkit-scrollbar" ? do
         display none
     "#course-select" ? do
-        padding0
-        margin (px 18) 0 (px 2) (px 17)
+        padding (px 18) 0 0 0
+        margin 0 0 0 (px 17)
         height100
         alignCenter
         overflowY scroll
