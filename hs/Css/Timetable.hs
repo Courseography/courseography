@@ -187,7 +187,6 @@ courseSelectCSS = do
     "#course-select" ? do
         padding0
         margin (px 18) 0 (px 2) (px 17)
-        width100
         height100
         alignCenter
         overflowY scroll
