@@ -176,19 +176,21 @@ courseSelectCSS :: Css
 courseSelectCSS = do
     "#course-select-wrapper" ? do
         margin0
-        padding 0 0 (px 25) 0
+        padding0
         height100
         overflowY auto
         overflowX hidden
         backgroundColor purple8
         color white
+    "#course-select-wrapper::-webkit-scrollbar" ? do
+        display none
     "#course-select" ? do
         padding0
-        margin (px 18) 0 0 (px 17)
+        margin (px 18) 0 (px 2) (px 17)
         width100
         height100
         alignCenter
-        overflowY auto
+        overflowY scroll
         overflowX hidden
         "list-style-type" -: "none"
         ".ui-accordion-header" ? do
