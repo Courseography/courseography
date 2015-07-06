@@ -288,10 +288,10 @@ getDataEndTime :: (String, String) -> [Time] -> [String]
 getDataEndTime codeSession courseFields = getEndTime (orderData codeSession courseFields) codeSession --[[[Double]]]
 
 getEndTime :: [[[Double]]] -> (String, String) -> [String]
-getEndTime  weekFields codeSession = [checkTimeStart codeSession courseField |courseField <- weekFields, not $ null courseField]
+getEndTime  weekFields codeSession = [checkTimeEnd codeSession courseField |courseField <- weekFields, not $ null courseField]
 
 checkTimeEnd :: (String, String) -> [[Double]] -> String
-checkTimeEnd codeSession day = getStr $ last $ quicksort $ map (!! 1) day
+checkTimeEnd codeSession day = getStr $ (last $ quicksort $ map (!! 1) day) + 0.5
 
 -- A nlogn logarithm
 quicksort :: [Double] -> [Double]
