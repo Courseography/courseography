@@ -106,13 +106,9 @@ getCalendar courses = fmap genRes (sequence (startTimes $ allInfo courses)) -- [
 genRes :: [String] -> Response
 genRes start =  toResponse $ unlines start 
 -}
---[IO [Time]]
--- See the times
-getCalendar :: String -> IO Response
-getCalendar courses = fmap genRes (sequence $ allInfoTimes courses) -- [IO String] -- IO [String]
 
-genRes :: [[Time]] -> Response
-genRes start =  toResponse $ unlines $ map show (concat $ concat $ map (map timeField) start)
+
+
 {-
 --Names Response
 getCalendar :: String -> IO Response
@@ -156,6 +152,17 @@ new :: [Time] -> Response
 new courseJSON = createJSONResponse $ show $ courseJSON !! 0
 -}
 
+--[IO [Time]]
+-- See the times
+getCalendar :: String -> IO Response
+getCalendar courses = fmap (genRes) (matchData (getNames courses) (startTimes $ allInfo courses) (endTimes $ allInfo courses) (startDates $ allInfo courses))
+-- return $ toResponse $ courses
+--fmap genRes (sequence $ allInfoTimes courses) -- [IO String] -- IO [String]
+
+genRes :: [String] -> Response
+genRes events =  toResponse $ unlines events
+--toResponse $ unlines $ map show (concat $ concat $ map (map timeField) start)
+
 -- | Returns a CSV file of events as requested by the user.
 calendarResponse :: String -> ServerPart Response
 calendarResponse courses =
@@ -187,18 +194,20 @@ getAllEvents courses = matchData name start end date
     start = (startTimes (allInfo courses))
     end = (endTimes (allInfoTimes courses))
     date = (startDates (allInfo courses))
-
---allInfoTimes is for start and end time, and allInfo is for startDate
--- Obtain the name for all subjects
-getNames :: String -> [String]
-getNames courses = [code | [code, section, session] <- getCoursesInfo courses] 
 -}
+
+-- Obtain the name and session for all subjects
+getNames :: String -> [(String, String)]
+getNames courses = [(code, session) | [code, section, session] <- getCoursesInfo courses] 
+
 -- Obtain the information for all courses from the database
 allInfo :: String -> [(IO [Time], (String, String))]
 allInfo courses = [(pullDatabase code section session, (code, session))| [code, section, session] <- getCoursesInfo courses]
 
---allInfoTimes :: String -> [IO [Time]]
---allInfoTimes courses = map (fst) (allInfo courses)
+allInfoTimes :: String -> [IO [Time]]
+allInfoTimes courses = map (fst) (allInfo courses)
+
+
 -- BE CAREFUL YEAR LECTURES, TUTORIALS
 -- Obtain a list with all the information about the courses obtained from the cookies
 getCoursesInfo :: String -> [[String]]
@@ -212,23 +221,12 @@ pullDatabase code section session =
     if (take 1 section) == "L" --Tried !! but did not work
     then (returnLectureTimes (T.pack code) (T.pack section) (T.pack session))
     else (returnTutorialTimes (T.pack code) (T.pack section) (T.pack session))
-{-
-checkSessionLec :: String -> String -> String -> IO [Time]
-checkSessionLec code section session = if session == "Y" then fmap joinTimes year else year
-    where
-    year = (returnLectureTimes (T.pack code) (T.pack section) (T.pack session))
-
-checkSessionTut :: String -> String -> String -> IO [Time]
-checkSessionTut code section session = if session == "Y" then fmap joinTimes year else year
-    where
-    year = (returnTutorialTimes (T.pack code) (T.pack section) (T.pack session))
--}
 
 -- ORDERING DATA
 --Double check checking for a y course in orderData course. I may not need it for startDate
 -- Order the data for each course
 orderData :: (String, String) -> [Time] -> [[[Double]]]
-orderData codeSession courseFields = orderDataCourse codeSession (map timeField courseTime)
+orderData codeSession courseFields = orderDataCourse codeSession (map timeField courseFields)
 
 orderDataCourse :: (String, String) -> [[Double]] -> [[[Double]]]
 orderDataCourse codeSession courseFields = (filtering $ (groupDays courseFields))
@@ -263,67 +261,42 @@ joinList days = [monday, tuesday, wednesday, thursday, friday]
 --joinTimes :: [Time] -> [Time]
 --joinTimes year = year ++ year 
 
-startTimes :: [(IO [Time], (String, String))] -> [IO String]
-startTimes coursesTimes = map startTime coursesTimes 
+startTimes :: [(IO [Time], (String, String))] -> IO [[String]]
+startTimes coursesTimes = sequence $ map startTime coursesTimes 
 
 -- Obtain the starting time for each course
-startTime :: (IO [Time], (String, String)) -> IO String
-startTime courseTime =  fmap (getStartTime snd courseTime) (fst courseTime)
+startTime :: (IO [Time], (String, String)) -> IO [String]
+startTime courseTime =  fmap (getDataStartTime $ snd courseTime) (fst courseTime)
 
-getDataTime :: (String, String) -> [Time] -> String
-getDataTime codeSession courseFields = getStartTime $ orderData courseFields --[[[Double]]]
+getDataStartTime :: (String, String) -> [Time] -> [String]
+getDataStartTime codeSession courseFields = getStartTime (orderData codeSession courseFields) codeSession
 
-getStartTime :: [[[Double]]] -> String
-getStartTime  weekFields = 
+getStartTime :: [[[Double]]] -> (String, String) -> [String]
+getStartTime  weekFields codeSession = [checkTimeStart codeSession courseField |courseField <- weekFields, not $ null courseField]
 
--- Create the string time
-getStr :: Double -> String
-getStr time = if (length hours) == 1 then getStrTime (time , hours, ":00:00") else getStrTime (time , hours, (":" ++ (ratio (hours !! 1)) ++ ":00"))
-    where
-    hours = splitOn "." (show time)
+checkTimeStart :: (String, String) -> [[Double]] -> String
+checkTimeStart codeSession day = getStr $ head $ quicksort $ map (!! 1) day
 
--- Determine whether the time is AM or PM
-getStrTime :: (Double, [String], String) -> String
-getStrTime (time, hours, ending) = if time >= 12.0 then (hours !! 0) ++ ending ++ " PM" else (hours !! 0) ++ ending ++ " AM"
-
--- Get the time out of a decimal part of my time
-ratio :: String -> String
-ratio decimal = if minutes >= 10 then show minutes else "0" ++ (show minutes)
-    where
-    decimalDouble = read decimal :: Double
-    minutes = floor $ decimalDouble * 6
-  
-{-
--- Group them by day of the week and figure out consecutive blocks within that day
-groupDays :: [[Double]] -> [[Double]]
-groupDays courseFields = [assignDay (courseField) | courseField <- courseFields]
--}
-
-
-
-
-
--- Get the field that controls time
-fieldInfoTime :: [[[Double]]] -> (String, String) -> String
-fieldInfoTime courseFields codeSession = unlines $ map show (concat $ concat courseFields)
---show (((courseFields !! 0) !! 0) !! 0) 
-{-
-endTimes :: [IO [Time]] -> [IO String]
-endTimes coursesTimes = map endTime coursesTimes 
+endTimes :: [(IO [Time], (String, String))] -> IO [[String]]
+endTimes coursesTimes = sequence $ map endTime coursesTimes 
 
 -- Obtain the ending time for each course
-endTime :: IO [Time] -> IO String
-endTime courseTime = fmap getEndTime courseTime
+endTime :: (IO [Time], (String, String)) -> IO [String]
+endTime courseTime =  fmap (getDataEndTime $ snd courseTime) (fst courseTime)
 
--- Generate the string ending time
-getEndTime :: [Time] -> String
-getEndTime courseFields = fieldInfoEndTime $ courseFields !! position
-    where
-    position = (length courseFields) - 1
+getDataEndTime :: (String, String) -> [Time] -> [String]
+getDataEndTime codeSession courseFields = getEndTime (orderData codeSession courseFields) codeSession --[[[Double]]]
 
--- Get the field that controls time
-fieldInfoEndTime :: Time -> String
-fieldInfoEndTime courseField = getStr $ ((timeField courseField) !! 1) + 0.5
+getEndTime :: [[[Double]]] -> (String, String) -> [String]
+getEndTime  weekFields codeSession = [checkTimeStart codeSession courseField |courseField <- weekFields, not $ null courseField]
+
+checkTimeEnd :: (String, String) -> [[Double]] -> String
+checkTimeEnd codeSession day = getStr $ last $ quicksort $ map (!! 1) day
+
+-- A nlogn logarithm
+quicksort :: [Double] -> [Double]
+quicksort [] = []
+quicksort (x:xs) = quicksort [y | y <- xs, y < x] ++ [x] ++ quicksort [y |y <- xs , y >= x]
 
 -- Create the string time
 getStr :: Double -> String
@@ -341,17 +314,31 @@ ratio decimal = if minutes >= 10 then show minutes else "0" ++ (show minutes)
     where
     decimalDouble = read decimal :: Double
     minutes = floor $ decimalDouble * 6
--}
 
 -- DEALING WITH DATES. BE CAREFUL WITH ONE YEAR LECTURES AND TUTORIALS
 -- startDates (allInfoDates courses)
+{-
+startDates :: [(IO [Time], (String, String))] -> IO [[[String]]]
+startDates courseFields = do
+    dates <- startDatesAll courseFields
+    [if snd date == [["invalid"] then fst date ] |date <- dates]
+-}
+startDates :: [(IO [Time], (String, String))] -> IO [([[String]], [[String]])]
+startDates courseFields = sequence $ map (sequenceDates)  ([if (snd $ snd courseField) == "Y" then (halfFall courseField, halfWinter courseField) else (full courseField, return [["invalid"]])| courseField <- courseFields])
+    where
+    halfFall courseField = startDate (fst courseField, (fst $ snd courseField, "F"))
+    halfWinter courseField = startDate (fst courseField, (fst $ snd courseField, "S"))
+    full courseField = startDate courseField
 
-startDates :: [(IO [Time], (String, String))] -> [IO [[String]]]
-startDates courseFields = map startDate courseFields 
+sequenceDates :: (IO [[String]], IO [[String]]) -> IO ([[String]], [[String]])
+sequenceDates date = do
+    fall <- fst date
+    winter <- snd date
+    return (fall, winter)
 
 -- Obtain the starting time for each course
 startDate :: (IO [Time], (String, String)) -> IO [[String]]
-startDate courseFields = getStartDate (snd courseFields) (fmap orderData (fst courseFields)) -- [[[Double]]]
+startDate courseField = fmap (getStartDate $ snd courseField) (fmap (orderData $ snd courseField) (fst courseField)) -- [[[Double]]]
 
 -- Generate the string starting date
 getStartDate :: (String, String) -> [[[Double]]] -> [[String]]
@@ -359,17 +346,15 @@ getStartDate codeSession courseFields = [getDate (snd codeSession) courseField |
 --fieldInfoDate session (courseFields !! 0) 
 
 getDate :: String -> [[Double]] -> [String]
-getDate session week = map format (generateDate (day $ (concat week) !! 0) session)
-    where
-    dayStr = day dayValue
+getDate session week = map format (generateDate (getDay $ (concat week) !! 0) session)
 
 -- Give the appropriate day for the course given based on its position
-day :: Double -> String 
-day 0.0 = "M"
-day 1.0 = "T"
-day 2.0 = "W"
-day 3.0 = "R"
-day 4.0 = "F"
+getDay :: Double -> String 
+getDay 0.0 = "M"
+getDay 1.0 = "T"
+getDay 2.0 = "W"
+getDay 3.0 = "R"
+getDay 4.0 = "F"
 
 -- Format the date in the following way: month/day/year
 format :: Day -> String
@@ -379,7 +364,6 @@ format date = formatTime defaultTimeLocale "%D" date
 generateDate :: String -> String -> [Day]
 generateDate courseDay "F" = generateDatesFall courseDay
 generateDate courseDay "S" = generateDatesWinter courseDay
-generateDate courseDay "Y" = generateDatesFall courseDay ++ generateDatesWinter courseDay
 
 -- Generate all the dates given the specific days (T.pack "F") "\"T\""
 -- First day of classes will be on September 14.
@@ -417,6 +401,131 @@ generateDatesWinter "F" = take 13 [addDays i firstFriday | i <- [0,7..]]
     where 
     firstFriday = addDays 4 firstMondayWinter
 
+-- IO [[String]] IO [[String]] IO [([[String]], [[String]])]
+-- COMBINE INFORMATION
+matchData :: [(String, String)] -> IO [[String]] -> IO [[String]] -> IO [([[String]], [[String]])] -> IO [String]
+matchData namesSession allStart allEnd allDates = matchData1 namesSession (sequenceMatch ((allStart, allEnd), allDates))
+
+matchData1 :: [(String, String)] -> IO (([[String]], [[String]]), [([[String]], [[String]])]) -> IO [String]
+matchData1 namesSession allStartEndDates = fmap (matchInfo namesSession) allStartEndDates
+
+matchInfo :: [(String, String)] -> (([[String]], [[String]]), [([[String]], [[String]])]) -> [String]
+matchInfo namesSession allStartEndDates = matchInfo1 namesSession (fst $ fst allStartEndDates) (snd $ fst allStartEndDates) (snd allStartEndDates)
+
+matchInfo1 :: [(String, String)] -> [[String]] -> [[String]] -> [([[String]], [[String]])] -> [String]
+matchInfo1 namesSession start end dates = concat $ concat [eventsByCourse (namesSession !! i) (start !! i) (end !! i) (dates !! i)|  i <- [0 .. x]]
+    where
+    x = (length start) - 1
+
+eventsByCourse :: (String, String) -> [String] -> [String] -> ([[String]], [[String]]) -> [[String]]
+eventsByCourse namesSession starts ends dates = if snd namesSession == "Y" then year else half
+    where
+    year = halfFall ++ halfWinter
+    halfFall = [eventsByCourse1 (fst namesSession) (starts !! i) (ends !! i) ((fst dates) !! i) | i <- [0 .. l]]
+    halfWinter = [eventsByCourse1 (fst namesSession) (starts !! i) (ends !! i) ((snd dates) !! i) | i <- [0 .. l]]
+    half = [eventsByCourse1 (fst namesSession) (starts !! i) (ends !! i) ((fst dates) !! i) | i <- [0 .. l]]
+    l = (length starts) - 1
+
+-- Generate the string that represents the event for each course
+eventsByCourse1 :: String -> String -> String -> [String] -> [String]
+eventsByCourse1 name start end date =  [name ++ "," ++ byDate ++ "," ++ start ++ "," ++ byDate ++ "," ++ end ++ ",False," ++ name ++ ",tba,True"| byDate <- date] 
+
+sequenceMatch :: ((IO [[String]], IO [[String]]), IO [([[String]], [[String]])]) -> IO (([[String]], [[String]]), [([[String]], [[String]])])
+sequenceMatch allStartEndDates = do
+    start <- fst $ fst allStartEndDates
+    end <- snd $ fst allStartEndDates
+    dates <- snd allStartEndDates
+    return ((start, end), dates)
+
+
+
+{-
+-- Get the field that controls time
+fieldInfoTime :: [[[Double]]] -> (String, String) -> String
+fieldInfoTime courseFields codeSession = unlines $ map show (concat $ concat courseFields)
+--show (((courseFields !! 0) !! 0) !! 0)
+-}
+{-
+ft:: (IO [String], IO [String], IO [[String]]) -> IO [String]
+ft (x,_,_) = x
+
+ft1:: ([String], [String], [[String]]) -> [String]
+ft1 (x,_,_) = x
+
+sd :: (IO [String], IO [String], IO [[String]]) -> IO [String]
+sd (_,x,_) = x
+
+sd1 :: ([String], [String], [[String]]) -> [String]
+sd1 (_,x,_) = x
+
+thr :: (IO [String], IO [String], IO [[String]]) -> IO [[String]]
+thr (_,_,x) = x
+
+thr1 :: ([String], [String], [[String]]) -> [[String]]
+thr1 (_,_,x) = x
+-}
+
+{-
+matchData :: [String] -> [IO String] -> [IO String] -> [IO [String]] -> IO [String]
+matchData names allStart allEnd allDates = matchData1 names (sequence allStart) (sequence allEnd) (sequence allDates)
+
+matchData1 :: [String] -> IO [String] -> IO [String] -> IO [[String]] -> IO [String]
+matchData1 names allStart allEnd allDates = matchData2 names (sequenceMe (allStart, allEnd, allDates))
+
+matchData2 :: [String] -> IO ([String], [String], [[String]]) -> IO [String]
+matchData2 names allStartEndDates = fmap (matchInfo names) allStartEndDates
+-}
+
+{-
+checkTimeStart :: (String, String) -> [[Double]] -> String
+checkTimeStart codeSession day = show $ last $ [if (smallest < ((day1 !! i) !! 1)) then smallest else let smallest = ((day1 !! i) !! 1) | i <- [1 .. l]]
+    where
+    day1 = day ++ [[6.0, 30.0]]
+    smallest = ((day1 !! 0) !! 1)
+    l = (length day1) - 1
+-}
+
+{-
+-- Group them by day of the week and figure out consecutive blocks within that day
+groupDays :: [[Double]] -> [[Double]]
+groupDays courseFields = [assignDay (courseField) | courseField <- courseFields]
+-}
+ 
+{-
+endTimes :: [IO [Time]] -> [IO String]
+endTimes coursesTimes = map endTime coursesTimes 
+
+-- Obtain the ending time for each course
+endTime :: IO [Time] -> IO String
+endTime courseTime = fmap getEndTime courseTime
+
+-- Generate the string ending time
+getEndTime :: [Time] -> String
+getEndTime courseFields = fieldInfoEndTime $ courseFields !! position
+    where
+    position = (length courseFields) - 1
+
+-- Get the field that controls time
+fieldInfoEndTime :: Time -> String
+fieldInfoEndTime courseField = getStr $ ((timeField courseField) !! 1) + 0.5
+
+-- Create the string time
+getStr :: Double -> String
+getStr time = if (length hours) == 1 then getStrTime (time , hours, ":00:00") else getStrTime (time , hours, (":" ++ (ratio (hours !! 1)) ++ ":00"))
+    where
+    hours = splitOn "." (show time)
+
+-- Determine whether the time is AM or PM
+getStrTime :: (Double, [String], String) -> String
+getStrTime (time, hours, ending) = if time >= 12.0 then (hours !! 0) ++ ending ++ " PM" else (hours !! 0) ++ ending ++ " AM"
+
+-- Get the time out of a decimal part of my time
+ratio :: String -> String
+ratio decimal = if minutes >= 10 then show minutes else "0" ++ (show minutes)
+    where
+    decimalDouble = read decimal :: Double
+    minutes = floor $ decimalDouble * 6
+-}
 {-
 -- Get the field that controls the day
 fieldInfoDate :: String -> Time -> [String]
@@ -480,51 +589,6 @@ generateDatesWinter "F" = take 13 [addDays i firstFriday | i <- [0,7..]]
     firstFriday = addDays 4 firstMondayWinter
 -}
 
--- COMBINE INFORMATION
-matchData :: [String] -> [IO String] -> [IO String] -> [IO [String]] -> IO [String]
-matchData names allStart allEnd allDates = matchData1 names (sequence allStart) (sequence allEnd) (sequence allDates)
-
-matchData1 :: [String] -> IO [String] -> IO [String] -> IO [[String]] -> IO [String]
-matchData1 names allStart allEnd allDates = matchData2 names (sequenceMe (allStart, allEnd, allDates))
-
-matchData2 :: [String] -> IO ([String], [String], [[String]]) -> IO [String]
-matchData2 names allStartEndDates = fmap (matchInfo names) allStartEndDates
-
-matchInfo :: [String] -> ([String], [String], [[String]]) -> [String]
-matchInfo names allStartEndDates = concat [eventsByCourse (names !! i) ((ft1 allStartEndDates) !! i) ((sd1 allStartEndDates) !! i) ((thr1 allStartEndDates) !! i)|  i <- [0 .. x]]
-    where
-    x = (length $ ft1 allStartEndDates) - 1
-
--- Generate the string that represents the event for each course
-eventsByCourse :: String -> String -> String -> [String] -> [String]
-eventsByCourse name start end date =  [name ++ "," ++ byDate ++ "," ++ start ++ "," ++ byDate ++ "," ++ end ++ ",False," ++ name ++ ",tba,True"| byDate <- date] 
-
-sequenceMe :: (IO [String], IO [String], IO [[String]]) -> IO ([String], [String], [[String]])
-sequenceMe allStartEndDates = do
-    start <- ft allStartEndDates
-    end <- sd allStartEndDates
-    dates <- thr allStartEndDates
-    return (start, end, dates)
-
-
-ft:: (IO [String], IO [String], IO [[String]]) -> IO [String]
-ft (x,_,_) = x
-
-ft1:: ([String], [String], [[String]]) -> [String]
-ft1 (x,_,_) = x
-
-sd :: (IO [String], IO [String], IO [[String]]) -> IO [String]
-sd (_,x,_) = x
-
-sd1 :: ([String], [String], [[String]]) -> [String]
-sd1 (_,x,_) = x
-
-thr :: (IO [String], IO [String], IO [[String]]) -> IO [[String]]
-thr (_,_,x) = x
-
-thr1 :: ([String], [String], [[String]]) -> [[String]]
-thr1 (_,_,x) = x
-
 {-
 matchData :: [String] -> [IO String] -> [IO String] -> [IO [String]] -> IO [String]
 matchData names allStart allEnd allDates = matchInfo names (sequence allStart) (sequence allEnd) (sequence allDates)
@@ -547,8 +611,6 @@ eventsByCourse :: String -> String -> String -> [String] -> [String]
 eventsByCourse name start end date =  [name ++ "," ++ date ++ "," ++ start ++ "," ++ date ++ "," ++ end ++ ",False," ++ name ++ ",tba,True"| byDate <- date] 
 
 -}
-
-
 
 {-
 matchData1 :: IO [String] -> IO [String] -> IO [[String]] -> IO [String]
