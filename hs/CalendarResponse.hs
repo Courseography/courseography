@@ -22,138 +22,6 @@ import Database.Persist
 
 lecturesStr = "CHM138H1-P0101-F_MAT136H1-T0201-S"
 coursesStr = ""
-{-
-
-getStartTime :: (String, String) -> [[Double]] -> [[[Double]]] --String
-getStartTime codeSession courseFields = (filtering $ (groupDays courseFields))
--- Group them by day of the week and figure out consecutive blocks within that day
-groupDays :: [[Double]] -> [[[Double]]]
-groupDays courseFields = (joinList ([assignDay (courseField) (courseField !! 0)| courseField <- courseFields]))
-
-filtering :: [[[Double]]] -> [[[Double]]]
-filtering days = [filter p fields |fields <- days] 
-    where p x = length x == 2 
-
-assignDay :: [Double] -> Double -> [[[Double]]]
-assignDay courseField day
-    | day <= 0.0 = [[courseField], [[8.0]], [[8.0]], [[8.0]], [[8.0]]]
-    | day == 1.0 = [[[8.0]], [courseField], [[8.0]], [[8.0]], [[8.0]]]
-    | day == 2.0 = [[[8.0]], [[8.0]], [courseField], [[8.0]], [[8.0]]]
-    | day == 3.0 = [[[8.0]], [[8.0]], [[8.0]], [courseField], [[8.0]]]
-    | otherwise = [[[8.0]], [[8.0]], [[8.0]], [[8.0]], [courseField]] -- [[4.0,3.0],[5.0,6.0]]
-
-joinList :: [[[[Double]]]] -> [[[Double]]]
-joinList days = [monday, tuesday, wednesday, thursday, friday] 
-    where
-    monday = concat $ map (!! 0) days -- [ [ [[8.0]], [[8.0]], [[8.0]], [[8.0]], [[8.0]] ], [ [[8.0]], [[8.0]], [[8.0]], [[8.0]], [[8.0]] ],.. ] 
-    tuesday = concat $ map (!! 1) days
-    wednesday = concat $ map (!! 2) days
-    thursday = concat $ map (!! 3) days
-    friday = concat $ map (!! 4) days
-
--- Get the field that controls time
-fieldInfoTime :: [[[Double]]] -> (String, String) -> String
-fieldInfoTime courseFields codeSession = unlines $ map show (concat $ concat courseFields)
--}
-{-
--- 2222222222222222222222222222222222222222222222
--- ________________________________________MAT135 (T)______________________________
--- Using return course
-getCalendar :: String -> String -> IO Response
-getCalendar courses lectures = do
-    courseJSON <- (returnTutorialTimes (T.pack "MAT135H1") (T.pack "F") (T.pack "T0501"))
-    return $ toResponse ((show (ft courseJSON)) ++ (show (sd courseJSON)) ++ (show (thr courseJSON)))
-
-ft:: (T.Text, [Time], T.Text) -> T.Text
-ft (x,_,_) = x
-
-sd :: (T.Text, [Time], T.Text) -> [Time]
-sd (_,x,_) = x
-
-thr :: (T.Text, [Time], T.Text) -> T.Text
-thr (_,_,x) = x
--- courseJSON <- returnCourse (pack "MAT137Y1-L5101-Y")
--- getCalendar courses lectures = return $ toResponse(returnCourse (pack "MAT137Y1"))
--}
-
-{-
--- Using returnTutorials returning just timeStr
-getCalendar :: String -> String -> IO Response
-getCalendar courses lectures = do
-    courseJSON <- (returnTutorialTimes (T.pack "MAT135H1") (T.pack "T0501") (T.pack "F"))
-    return $ toResponse (show courseJSON)
--}
-
-{-
--- 33333 
-getCalendar :: String -> String -> IO Response
-getCalendar courses lectures = do
-    courseJSON <- (returnCourse (T.pack "mat135h1"))
-    return $ toResponse (createJSONResponse courseJSON)
--}
-
-{-
---Transfrorm to lower case every course given
-allCourses :: String -> [IO Course]
-allCourses courses = [returnCourse course | course <- toLowerCourse courses]
--}
-
-{-
---Start times Response
-getCalendar :: String -> IO Response
-getCalendar courses = fmap genRes (sequence (startTimes $ allInfo courses)) -- [IO String] -- IO [String]
-
-genRes :: [String] -> Response
-genRes start =  toResponse $ unlines start 
--}
-
-
-
-{-
---Names Response
-getCalendar :: String -> IO Response
-getCalendar courses = return $ genRes $ getNames courses
-
-genRes :: [String] -> Response
-genRes start =  toResponse $ unlines start
--}
-{- Final
-getCalendar :: String -> IO Response
-getCalendar courses = return $ fmap (sequence $ allInfoTimes courses) -- [IO [Time]]
-
-genRes :: [[Time]] -> Response
-genRes times =  toResponse $ unlines allTimes
-    where
-    allFields = map (map timeField) times
-    allTimes = map (map (map show)) allFields -- [[]]
--}    
-{-
---End times Response
-getCalendar :: String -> String -> IO Response -- startDate :: String -> String -> [IO [Day]]
-getCalendar coursesCode courses = fmap new0 ((endTimes (allInfoTimes courses)) !! 0)
--}
-{-
---Start dates Response
-getCalendar :: String -> String -> IO Response
-getCalendar coursesCode courses = fmap response ((startDates (allInfo courses)) !! 0)
--}
---(getNames courses)
---start = (startTimes (allInfoTimes courses))
---end = (endTimes (allInfoTimes courses))
---date = (startDates (allInfo courses))
-
-{-response :: [String] -> Response
-response dates = toResponse $ dates !! 0
-
-new2 :: [Day] -> Response
-new2 courseJSON = toResponse $ show $ courseJSON !! 0
-
-new :: [Time] -> Response
-new courseJSON = createJSONResponse $ show $ courseJSON !! 0
--}
-
---[IO [Time]]
--- See the times
 getCalendar :: String -> IO Response
 getCalendar courses = fmap (genRes) (matchData (getNames courses) (startTimes $ allInfo courses) (endTimes $ allInfo courses) (startDates $ allInfo courses))
 -- return $ toResponse $ courses
@@ -167,34 +35,6 @@ genRes events =  toResponse $ unlines events
 calendarResponse :: String -> ServerPart Response
 calendarResponse courses =
     liftIO $ getCalendar courses
-{-
--- Generates the Response for the server which consists of a csv file
-getCalendar :: String -> IO Response
-getCalendar courses = fmap response (toCSV courses)
-
-response :: String -> Response
-response events = toResponse events
--}
-
-{- Output file:
-"Subject, start date, start time, end date, end time, all day event, description, location, private
-MAT137,09/14/15,8:00:00 AM,09/14/15,9:00:00 AM,False,MAT137,tba,True" 
--}
-{-
--- Generate the string that represents a CSV file
-toCSV :: String -> IO String
-toCSV courses = do 
-    allEvents <-  getAllEvents courses
-    return $ unlines (["Subject,Start Date,Start Time,End Date,End Time,All Day Event,Description,Location,Private"] ++ allEvents)
-
-getAllEvents :: String -> IO [String]
-getAllEvents courses = matchData name start end date
-    where
-    name = (getNames courses)
-    start = (startTimes (allInfo courses))
-    end = (endTimes (allInfoTimes courses))
-    date = (startDates (allInfo courses))
--}
 
 -- Obtain the name and session for all subjects
 getNames :: String -> [(String, String)]
@@ -245,21 +85,18 @@ assignDay courseField day
     | day == 1.0 = [[[8.0]], [courseField], [[8.0]], [[8.0]], [[8.0]]]
     | day == 2.0 = [[[8.0]], [[8.0]], [courseField], [[8.0]], [[8.0]]]
     | day == 3.0 = [[[8.0]], [[8.0]], [[8.0]], [courseField], [[8.0]]]
-    | otherwise = [[[8.0]], [[8.0]], [[8.0]], [[8.0]], [courseField]] -- [[4.0,3.0],[5.0,6.0]]
+    | otherwise = [[[8.0]], [[8.0]], [[8.0]], [[8.0]], [courseField]]
 
 joinList :: [[[[Double]]]] -> [[[Double]]]
 joinList days = [monday, tuesday, wednesday, thursday, friday] 
     where
-    monday = concat $ map (!! 0) days -- [ [ [[8.0]], [[8.0]], [[8.0]], [[8.0]], [[8.0]] ], [ [[8.0]], [[8.0]], [[8.0]], [[8.0]], [[8.0]] ],.. ] 
+    monday = concat $ map (!! 0) days 
     tuesday = concat $ map (!! 1) days
     wednesday = concat $ map (!! 2) days
     thursday = concat $ map (!! 3) days
     friday = concat $ map (!! 4) days
 
 -- START TIME / END TIME
-
---joinTimes :: [Time] -> [Time]
---joinTimes year = year ++ year 
 
 startTimes :: [(IO [Time], (String, String))] -> IO [[String]]
 startTimes coursesTimes = sequence $ map startTime coursesTimes 
@@ -316,13 +153,7 @@ ratio decimal = if minutes >= 10 then show minutes else "0" ++ (show minutes)
     minutes = floor $ decimalDouble * 6
 
 -- DEALING WITH DATES. BE CAREFUL WITH ONE YEAR LECTURES AND TUTORIALS
--- startDates (allInfoDates courses)
-{-
-startDates :: [(IO [Time], (String, String))] -> IO [[[String]]]
-startDates courseFields = do
-    dates <- startDatesAll courseFields
-    [if snd date == [["invalid"] then fst date ] |date <- dates]
--}
+
 startDates :: [(IO [Time], (String, String))] -> IO [([[String]], [[String]])]
 startDates courseFields = sequence $ map (sequenceDates)  ([if (snd $ snd courseField) == "Y" then (halfFall courseField, halfWinter courseField) else (full courseField, return [["invalid"]])| courseField <- courseFields])
     where
@@ -474,6 +305,167 @@ matchData1 names allStart allEnd allDates = matchData2 names (sequenceMe (allSta
 
 matchData2 :: [String] -> IO ([String], [String], [[String]]) -> IO [String]
 matchData2 names allStartEndDates = fmap (matchInfo names) allStartEndDates
+-}
+{-
+
+getStartTime :: (String, String) -> [[Double]] -> [[[Double]]] --String
+getStartTime codeSession courseFields = (filtering $ (groupDays courseFields))
+-- Group them by day of the week and figure out consecutive blocks within that day
+groupDays :: [[Double]] -> [[[Double]]]
+groupDays courseFields = (joinList ([assignDay (courseField) (courseField !! 0)| courseField <- courseFields]))
+
+filtering :: [[[Double]]] -> [[[Double]]]
+filtering days = [filter p fields |fields <- days] 
+    where p x = length x == 2 
+
+assignDay :: [Double] -> Double -> [[[Double]]]
+assignDay courseField day
+    | day <= 0.0 = [[courseField], [[8.0]], [[8.0]], [[8.0]], [[8.0]]]
+    | day == 1.0 = [[[8.0]], [courseField], [[8.0]], [[8.0]], [[8.0]]]
+    | day == 2.0 = [[[8.0]], [[8.0]], [courseField], [[8.0]], [[8.0]]]
+    | day == 3.0 = [[[8.0]], [[8.0]], [[8.0]], [courseField], [[8.0]]]
+    | otherwise = [[[8.0]], [[8.0]], [[8.0]], [[8.0]], [courseField]] -- [[4.0,3.0],[5.0,6.0]]
+
+joinList :: [[[[Double]]]] -> [[[Double]]]
+joinList days = [monday, tuesday, wednesday, thursday, friday] 
+    where
+    monday = concat $ map (!! 0) days -- [ [ [[8.0]], [[8.0]], [[8.0]], [[8.0]], [[8.0]] ], [ [[8.0]], [[8.0]], [[8.0]], [[8.0]], [[8.0]] ],.. ] 
+    tuesday = concat $ map (!! 1) days
+    wednesday = concat $ map (!! 2) days
+    thursday = concat $ map (!! 3) days
+    friday = concat $ map (!! 4) days
+
+-- Get the field that controls time
+fieldInfoTime :: [[[Double]]] -> (String, String) -> String
+fieldInfoTime courseFields codeSession = unlines $ map show (concat $ concat courseFields)
+-}
+{-
+-- 2222222222222222222222222222222222222222222222
+-- ________________________________________MAT135 (T)______________________________
+-- Using return course
+getCalendar :: String -> String -> IO Response
+getCalendar courses lectures = do
+    courseJSON <- (returnTutorialTimes (T.pack "MAT135H1") (T.pack "F") (T.pack "T0501"))
+    return $ toResponse ((show (ft courseJSON)) ++ (show (sd courseJSON)) ++ (show (thr courseJSON)))
+
+ft:: (T.Text, [Time], T.Text) -> T.Text
+ft (x,_,_) = x
+
+sd :: (T.Text, [Time], T.Text) -> [Time]
+sd (_,x,_) = x
+
+thr :: (T.Text, [Time], T.Text) -> T.Text
+thr (_,_,x) = x
+-- courseJSON <- returnCourse (pack "MAT137Y1-L5101-Y")
+-- getCalendar courses lectures = return $ toResponse(returnCourse (pack "MAT137Y1"))
+-}
+
+{-
+-- Using returnTutorials returning just timeStr
+getCalendar :: String -> String -> IO Response
+getCalendar courses lectures = do
+    courseJSON <- (returnTutorialTimes (T.pack "MAT135H1") (T.pack "T0501") (T.pack "F"))
+    return $ toResponse (show courseJSON)
+-}
+
+{-
+-- 33333 
+getCalendar :: String -> String -> IO Response
+getCalendar courses lectures = do
+    courseJSON <- (returnCourse (T.pack "mat135h1"))
+    return $ toResponse (createJSONResponse courseJSON)
+-}
+
+{-
+--Transfrorm to lower case every course given
+allCourses :: String -> [IO Course]
+allCourses courses = [returnCourse course | course <- toLowerCourse courses]
+-}
+
+{-
+--Start times Response
+getCalendar :: String -> IO Response
+getCalendar courses = fmap genRes (sequence (startTimes $ allInfo courses)) -- [IO String] -- IO [String]
+
+genRes :: [String] -> Response
+genRes start =  toResponse $ unlines start 
+-}
+
+
+
+{-
+--Names Response
+getCalendar :: String -> IO Response
+getCalendar courses = return $ genRes $ getNames courses
+
+genRes :: [String] -> Response
+genRes start =  toResponse $ unlines start
+-}
+{- Final
+getCalendar :: String -> IO Response
+getCalendar courses = return $ fmap (sequence $ allInfoTimes courses) -- [IO [Time]]
+
+genRes :: [[Time]] -> Response
+genRes times =  toResponse $ unlines allTimes
+    where
+    allFields = map (map timeField) times
+    allTimes = map (map (map show)) allFields -- [[]]
+-}    
+{-
+--End times Response
+getCalendar :: String -> String -> IO Response -- startDate :: String -> String -> [IO [Day]]
+getCalendar coursesCode courses = fmap new0 ((endTimes (allInfoTimes courses)) !! 0)
+-}
+{-
+--Start dates Response
+getCalendar :: String -> String -> IO Response
+getCalendar coursesCode courses = fmap response ((startDates (allInfo courses)) !! 0)
+-}
+--(getNames courses)
+--start = (startTimes (allInfoTimes courses))
+--end = (endTimes (allInfoTimes courses))
+--date = (startDates (allInfo courses))
+
+{-response :: [String] -> Response
+response dates = toResponse $ dates !! 0
+
+new2 :: [Day] -> Response
+new2 courseJSON = toResponse $ show $ courseJSON !! 0
+
+new :: [Time] -> Response
+new courseJSON = createJSONResponse $ show $ courseJSON !! 0
+-}
+
+--[IO [Time]]
+-- See the times
+
+{-
+-- Generates the Response for the server which consists of a csv file
+getCalendar :: String -> IO Response
+getCalendar courses = fmap response (toCSV courses)
+
+response :: String -> Response
+response events = toResponse events
+-}
+
+{- Output file:
+"Subject, start date, start time, end date, end time, all day event, description, location, private
+MAT137,09/14/15,8:00:00 AM,09/14/15,9:00:00 AM,False,MAT137,tba,True" 
+-}
+{-
+-- Generate the string that represents a CSV file
+toCSV :: String -> IO String
+toCSV courses = do 
+    allEvents <-  getAllEvents courses
+    return $ unlines (["Subject,Start Date,Start Time,End Date,End Time,All Day Event,Description,Location,Private"] ++ allEvents)
+
+getAllEvents :: String -> IO [String]
+getAllEvents courses = matchData name start end date
+    where
+    name = (getNames courses)
+    start = (startTimes (allInfo courses))
+    end = (endTimes (allInfoTimes courses))
+    date = (startDates (allInfo courses))
 -}
 
 {-
