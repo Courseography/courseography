@@ -108,7 +108,7 @@ getStartTime  weekFields codeSession = [checkTimeStart codeSession courseField |
 
 -- Get the start time (Smallest of the TimeFields)
 checkTimeStart :: (String, String) -> [[Double]] -> [String]
-checkTimeStart codeSession day = map getStr (getEndConsecutives sortedList ++ [head sortedList])
+checkTimeStart codeSession day = map getStr ([head sortedList] ++ getEndConsecutives sortedList)
     where
     sortedList = quicksort $ map (!! 1) day
 
@@ -134,7 +134,7 @@ getEndTime  weekFields codeSession = [checkTimeEnd codeSession courseField |cour
 
 -- Get the start time (Largest of the TimeFields)
 checkTimeEnd :: (String, String) -> [[Double]] -> [String]
-checkTimeEnd codeSession day = map getStr (map (+ 0.5) (getEndConsecutives sortedList ++ [last sortedList]))
+checkTimeEnd codeSession day = map getStr (map (+ 0.5) ([last sortedList] ++ getEndConsecutives sortedList))
     where
     sortedList = quicksort $ map (!! 1) day
 
@@ -288,3 +288,13 @@ sequenceMatch allStartEndDates = do
     end <- snd $ fst allStartEndDates
     dates <- snd allStartEndDates
     return ((start, end), dates)
+
+{-Test
+ghci> let check = checkTimeStart ("my", "course") [[0.0,10.5],[0.0,11.5],[0.0,11
+.0],[0.0,12.0],[0.0,12.5],[0.0,13.0]]
+ghci> let check1 = checkTimeStart ("my", "course") [[0.0,10.5],[0.0,13.5],[0.0,1
+1.0],[0.0,12.0],[0.0,12.5],[0.0,13.0]]
+ghci> check
+["10:30:00 AM"]
+ghci> check1
+["10:30:00 AM","11:00:00 AM"]-}
