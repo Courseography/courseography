@@ -1,7 +1,3 @@
---Aeson, Aeson lens, Record representation 
--- Check 120. Be in any order time not the first and last Group them by day of the week and figure out consecutive blocks within that day
--- Do not look at selected courses.
--- I could use sequence at the beginning of start dates, start times, end times.
 module CalendarResponse where
 
 import Data.List.Split (splitOn)
@@ -9,15 +5,13 @@ import Data.List
 import Data.Time
 import Happstack.Server
 import Control.Monad.IO.Class (liftIO)
---import Control.Monad.IO.Class (liftIO, MonadIO)
 import System.Locale
 import Config (firstMondayFall, firstMondayWinter)
 import Database.CourseQueries (returnCourse, returnTutorialTimes, returnLectureTimes)-- For  returnCourse
 import qualified Data.Text as T
-import Database.Tables as Tables --  For the IO Course response issue
+import Database.Tables as Tables
 import JsonResponse
 import Data.Aeson (encode, decode)
--- import Text.JSON
 import Database.Persist
 
 lecturesStr = "CHM138H1-P0101-F_MAT136H1-T0201-S"
