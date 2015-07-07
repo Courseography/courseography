@@ -350,7 +350,6 @@ titleCSS = "#svgTitle" ? do
 regionCSS :: Css
 regionCSS = do
     "#region-labels > text" ? do
-        "text-anchor" -: "start"
         fontSize (pt regionFontSize)
     ".region" ? do
         "fill-opacity" -: "0.25"
