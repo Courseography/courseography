@@ -1,12 +1,13 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module GraphResponse where
+module GraphResponse
+    (graphResponse) where
 
 import           Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 import Happstack.Server
-import MakeElements
+import Utilities
 import MasterTemplate
 import Scripts
 
@@ -15,20 +16,21 @@ graphResponse =
    ok $ toResponse $
     masterTemplate "Courseography - Graph"
                 []
-                (do header "graph"
+                (do
+                    header "graph"
                     H.div ! A.id "container" $ do
                         H.div ! A.id "graph" ! A.class_ "graph" $ ""
                         sideBar
                     disclaimer
                 )
-                plannerScripts
+                graphScripts
 
 
 fceCountDiv :: H.Html
 fceCountDiv =
     createTag H.div "FCECountDiv" "" $ do
         createTag H.span "FCEcount" "" "0.0"
-        "FCEs" -- Being difficult. Won't show up correctly.
+        "FCEs" 
 
 focusesTab :: H.Html
 focusesTab = ""

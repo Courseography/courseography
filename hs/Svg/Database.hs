@@ -7,36 +7,25 @@ in "Svg.Parser", though it is possible to put all of the data retrieval code in
 here as well at some point in the future.
 -}
 
-module Svg.Database where
+module Svg.Database
+    (insertGraph, insertElements) where
 
-import Control.Monad.IO.Class  (liftIO)
 import Database.Persist.Sqlite
 import Database.Tables
-import qualified Data.Conduit.List as CL
-import Data.Conduit
-import qualified Data.Text.Internal as TI
-import Config (dbStr)
+import Config (databasePath)
 
 -- | Insert a new graph into the database, returning the key of the new graph.
 insertGraph :: String   -- ^ The title of the graph that is being inserted.
             -> IO GraphId -- ^ The unique identifier of the inserted graph.
 insertGraph graphName =
-    runSqlite dbStr $ do
+    runSqlite databasePath $ do
         runMigration migrateAll
         insert (Graph graphName)
 
 -- | Insert graph components into the database.
 insertElements :: ([Path], [Shape], [Text]) -> IO ()
 insertElements (paths, shapes, texts) =
-    runSqlite dbStr $ do
+    runSqlite databasePath $ do
         mapM_ insert_ shapes
         mapM_ insert_ paths
         mapM_ insert_ texts
-
--- | The last function is a generic helper function for running an arbitrary
--- query to the database. This should only be used for debugging purposes,
--- and in fact probably moved elsewhere.
-
--- | Performs a query on the database.
-queryDatabase :: TI.Text -> IO ()
-queryDatabase sql = runSqlite dbStr $ rawQuery sql [] $$ CL.mapM_ (liftIO . print)

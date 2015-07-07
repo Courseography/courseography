@@ -1,6 +1,7 @@
 {-# LANGUAGE NoMonomorphismRestriction, OverloadedStrings #-}
 
-module Diagram (renderTable) where
+module TimetableImageCreator
+    (renderTable) where
 
 import Diagrams.Prelude
 import Diagrams.Backend.SVG.CmdLine
@@ -95,8 +96,8 @@ renderTable filename courses session = do
     let courseTable = partition5 $ splitOn "_" courses
     print courseTable
     let g = makeTable (zipWith (:) times courseTable) session
-    let svg = renderDia SVG (SVGOptions (mkWidth 1024) Nothing "") g
-    let txt = replace (show (fs :: Double) ++ "px") (show fs' ++ "px") $
+        svg = renderDia SVG (SVGOptions (mkWidth 1024) Nothing "") g
+        txt = replace (show (fs :: Double) ++ "px") (show fs' ++ "px") $
               unpack $ renderText svg
     writeFile filename txt
     where

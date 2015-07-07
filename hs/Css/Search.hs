@@ -1,6 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Css.Search where
+module Css.Search
+    (searchStyles) where
 
 import Clay
 import Css.Constants

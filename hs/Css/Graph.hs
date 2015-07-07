@@ -1,6 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Css.Graph where
+module Css.Graph
+    (graphStyles) where
 
 import Clay
 import Prelude hiding ((**))

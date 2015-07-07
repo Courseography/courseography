@@ -1,6 +1,7 @@
 {-# LANGUAGE OverloadedStrings, DataKinds #-}
 
-module PostResponse where
+module PostResponse
+    (postResponse) where
 
 import           Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
@@ -14,7 +15,8 @@ postResponse =
     ok $ toResponse $
         masterTemplate "Courseography - Check My POSt!"
                     []
-                    (do header "post"
+                    (do
+                        header "post"
                         checkPost
                     )
                     postScripts

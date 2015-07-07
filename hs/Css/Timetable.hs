@@ -1,6 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Css.Timetable where
+module Css.Timetable
+    (timetableStyles) where
 
 import Clay
 import Prelude hiding ((**))
