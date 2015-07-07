@@ -1,6 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Css.Graph where
+module Css.Graph
+    (graphStyles) where
 
 import Clay
 import Prelude hiding ((**))
@@ -349,7 +350,6 @@ titleCSS = "#svgTitle" ? do
 regionCSS :: Css
 regionCSS = do
     "#region-labels > text" ? do
-        "text-anchor" -: "start"
         fontSize (pt regionFontSize)
     ".region" ? do
         "fill-opacity" -: "0.25"

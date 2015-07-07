@@ -29,8 +29,8 @@ main = do
 
     -- extract and perform the task we want to run
     let taskNames = Map.keys taskNamesToTasks
-    let availableTasksStr = "[" ++ (intercalate ", " taskNames) ++ "]"
-    let lookupFailedMsg = "No task named " ++ taskName ++
+        availableTasksStr = "[" ++ (intercalate ", " taskNames) ++ "]"
+        lookupFailedMsg = "No task named " ++ taskName ++
                           ", available tasks are " ++ availableTasksStr
 
     fromMaybe (hPutStrLn stderr lookupFailedMsg) (getTask taskName)

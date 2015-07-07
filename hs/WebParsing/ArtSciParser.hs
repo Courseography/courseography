@@ -1,5 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
-module WebParsing.ArtSciParser (parseArtSci, getDeptList, fasCalendarURL) where
+module WebParsing.ArtSciParser
+    (parseArtSci, getDeptList, fasCalendarURL) where
 
 import Network.HTTP
 import Text.HTML.TagSoup
@@ -10,7 +11,7 @@ import Data.List
 import qualified Data.Text as T
 import Database.Tables
 import WebParsing.ParsingHelp
-import Config (dbStr)
+import Config (databasePath)
 
 fasCalendarURL :: String
 fasCalendarURL = "http://www.artsandscience.utoronto.ca/ofr/calendar/"
@@ -45,7 +46,7 @@ getCalendar str = do
     let coursesSoup = lastH2 tags
     let course = map (processCourseToData . (filter isTagText)) $ partitions isCourseTitle coursesSoup
     print $ "parsing " ++ str
-    runSqlite dbStr $ do
+    runSqlite databasePath $ do
         runMigration migrateAll
         mapM_ insertCourse course
     where

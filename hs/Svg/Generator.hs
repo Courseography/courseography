@@ -10,7 +10,8 @@ This functionality is used both to create SVG for the Graph component,
 as well as generating images on the fly for Facebook posting.
 -}
 
-module Svg.Generator where
+module Svg.Generator
+    (buildSVG) where
 
 import Svg.Builder
 import Database.Tables
@@ -18,7 +19,7 @@ import Database.DataType
 import Control.Monad.IO.Class (liftIO)
 import Database.Persist.Sqlite
 import Data.List hiding (map, filter)
-import MakeElements
+import Utilities
 import Data.Maybe (fromMaybe)
 import qualified Data.Text as T
 import Text.Blaze.Svg11 ((!))
@@ -42,7 +43,7 @@ import Css.Constants (theoryDark,
                       regionFontSize)
 import qualified Data.Map.Strict as M
 import Data.Monoid (mempty, mappend, mconcat)
-import Config (dbStr)
+import Config (databasePath)
 
 -- | This is the main function that retrieves a stored graph
 -- from the database and creates a new SVG file for it.
@@ -58,7 +59,7 @@ buildSVG :: GraphId              -- ^ The ID of the graph that is being built.
          -> Bool                 -- ^ Whether to include inline styles.
          -> IO ()
 buildSVG gId courseMap filename styled =
-    runSqlite dbStr $ do
+    runSqlite databasePath $ do
         sqlRects    :: [Entity Shape] <- selectList
                                              [ShapeType_ <-. [Node, Hybrid],
                                               ShapeGraph ==. gId] []
@@ -180,7 +181,7 @@ rectToSVG styled courseMap rect
             class_ = case shapeType_ rect of
                          Node -> "node"
                          Hybrid -> "hybrid"
-        in S.g ! A.id_ (stringValue $ toId $ shapeId_ rect)
+        in S.g ! A.id_ (stringValue $ sanitizeId $ shapeId_ rect)
                ! A.class_ (stringValue class_)
                ! S.customAttribute "data-group" (stringValue
                                                  (getArea (shapeId_ rect)))
@@ -273,9 +274,9 @@ edgeToSVG styled path =
            ! A.class_ "path"
            ! A.d (stringValue $ 'M' : buildPathString (pathPoints path))
            ! A.markerEnd "url(#arrow)"
-           ! S.customAttribute "source-node" (stringValue $ toId
+           ! S.customAttribute "source-node" (stringValue $ sanitizeId
                                                           $ pathSource path)
-           ! S.customAttribute "target-node" (stringValue $ toId
+           ! S.customAttribute "target-node" (stringValue $ sanitizeId
                                                           $ pathTarget path)
            ! if styled
              then
@@ -340,9 +341,3 @@ areaMap =  M.fromList
              "csc485", "csc486"], (aiDark, "ai")),
            (["csc104", "csc120", "csc108", "csc148"], (introDark, "intro")),
            (["calc1", "lin1", "sta1", "sta2"], (mathDark, "math"))]
-
--- ** Other helpers
-
--- | Strip disallowed characters from string for DOM id
-toId :: String -> String
-toId = filter (\c -> not $ elem c ",()/<>%")

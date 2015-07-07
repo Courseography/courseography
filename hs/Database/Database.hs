@@ -8,13 +8,14 @@ The main module for parsing course information from the web and
 inserting it into the database. Run when @cabal run database@ is executed.
 -}
 
-module Database.Database (setupDatabase) where
+module Database.Database
+    (setupDatabase) where
 
 import Database.Persist.Sqlite (runSqlite, runMigration, insert_)
 import Database.Tables
 import WebParsing.ParseAll (parseAll)
 import Database.CourseVideoSeed (seedVideos)
-import Config (dbStr)
+import Config (databasePath)
 
 -- | Main function for setting up the database with course information.
 --
@@ -30,7 +31,7 @@ setupDatabase = do setupDistributionTable
 
 -- | Sets up the Distribution table.
 setupDistributionTable :: IO ()
-setupDistributionTable = runSqlite dbStr $ do
+setupDistributionTable = runSqlite databasePath $ do
     runMigration migrateAll
     insert_ $ Distribution 1 "Humanities"
     insert_ $ Distribution 2 "Social Sciences"
@@ -38,7 +39,7 @@ setupDistributionTable = runSqlite dbStr $ do
 
 -- | Sets up the Breadth table.
 setupBreadthTable :: IO ()
-setupBreadthTable = runSqlite dbStr $ do
+setupBreadthTable = runSqlite databasePath $ do
     runMigration migrateAll
     insert_ $ Breadth 1 "Creative and Cultural Representations"
     insert_ $ Breadth 2 "Thought, Belief, and Behaviour"

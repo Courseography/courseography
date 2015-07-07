@@ -8,7 +8,8 @@
              DeriveGeneric,
              QuasiQuotes,
              TemplateHaskell,
-             TypeFamilies #-}
+             TypeFamilies,
+             DeriveGeneric #-}
 
 {-|
 Description: The database schema (and some helpers).
@@ -29,6 +30,7 @@ import Database.DataType
 import qualified Data.Text as T
 import qualified Data.Vector as V
 import Data.Aeson
+import GHC.Generics
 
 -- | A data type representing a list of times for a course.
 data Time = Time { timeField :: [Double] } deriving (Show, Read, Eq)
@@ -152,7 +154,7 @@ data Tutorial =
 data Session =
     Session { lectures :: [Lecture],
               tutorials :: [Tutorial]
-            } deriving Show
+            } deriving (Show, Generic)
 
 -- | A Course.
 -- each element of prereqs can be one of three things:
@@ -165,43 +167,21 @@ data Course =
              description :: Maybe T.Text,
              title :: Maybe T.Text,
              prereqString :: Maybe T.Text,
-             f :: Maybe Session,
-             s :: Maybe Session,
-             y :: Maybe Session,
+             fallSession :: Maybe Session,
+             springSession :: Maybe Session,
+             yearSession :: Maybe Session,
              name :: !T.Text,
              exclusions :: Maybe T.Text,
-             manualTutorialEnrol :: Maybe Bool,
-             manualPracticalEnrol :: Maybe Bool,
+             manualTutorialEnrolment :: Maybe Bool,
+             manualPracticalEnrolment :: Maybe Bool,
              distribution :: Maybe T.Text,
              prereqs :: Maybe T.Text,
              coreqs :: Maybe T.Text,
              videoUrls :: [T.Text]
-           } deriving Show
+           } deriving (Show, Generic)
 
-instance ToJSON Course where
-  toJSON (Course courseBreadth courseDescription courseTitle coursePrereqString courseF courseS courseY courseName courseExclusions courseManualTutorialEnrol courseManualPracticalEnrol courseDistribution coursePrereqs courseCoreqs courseVideoUrls)
-          = object ["breadth" .= courseBreadth,
-                    "description" .= courseDescription,
-                    "title" .= courseTitle,
-                    "prereqString" .= coursePrereqString,
-                    "F" .= courseF,
-                    "S" .= courseS,
-                    "Y" .= courseY,
-                    "name" .= courseName,
-                    "exclusions" .= courseExclusions,
-                    "manualTutorialEnrolment" .= courseManualTutorialEnrol,
-                    "manualPracticalEnrolment" .= courseManualPracticalEnrol,
-                    "distribution" .= courseDistribution,
-                    "prereqs" .= coursePrereqs,
-                    "coreqs" .= courseCoreqs,
-                    "videoUrls" .= courseVideoUrls
-                   ]
-
-instance ToJSON Session where
-  toJSON (Session sessionLectures sessionTutorials)
-          = object ["lectures" .= sessionLectures,
-                    "tutorials" .= sessionTutorials
-                   ]
+instance ToJSON Course
+instance ToJSON Session
 
 instance ToJSON Lecture where
   toJSON (Lecture lectureExtra lectureSection lectureCap lectureTimeStr lectureTime lectureInstructor lectureEnrol lectureWait)

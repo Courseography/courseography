@@ -15,7 +15,8 @@ The final svg files are output in @public\/res\/graphs\/gen@ and are sent
 directly to the client when viewing the @/graph@ page.
 -}
 
-module Svg.Parser (parsePrebuiltSvgs) where
+module Svg.Parser
+    (parsePrebuiltSvgs) where
 
 import Data.Maybe (mapMaybe, fromMaybe)
 import Data.List.Split (splitOn)
@@ -34,26 +35,27 @@ import Database.Persist.Sqlite hiding (replace)
 import Config (graphPath)
 
 parsePrebuiltSvgs :: IO ()
-parsePrebuiltSvgs = do
-    performParse "Computer Science" "csc2015.svg"
-    performParse "Statistics" "sta2015.svg"
-    performParse "Biochemistry" "bch2015.svg"
+parsePrebuiltSvgs =
+    do
+        performParse "Computer Science" "csc2015.svg"
+        performParse "Statistics" "sta2015.svg"
+        performParse "Biochemistry" "bch2015.svg"
 
 performParse :: String -- ^ The title of the graph.
              -> String -- ^ The filename of the file that will be parsed.
              -> IO ()
-performParse graphName inputFilename =
-   do graphFile <- readFile (graphPath ++ inputFilename)
-      key <- insertGraph graphName
-      let parsedGraph = parseGraph key graphFile
-          PersistInt64 keyVal = toPersistValue key
-      print "Graph Parsed"
-      insertElements parsedGraph
-      print "Graph Inserted"
-      let genGraphPath = graphPath ++ "gen/"
-      createDirectoryIfMissing True genGraphPath
-      buildSVG key M.empty (genGraphPath ++ show keyVal ++ ".svg") False
-      print "Success"
+performParse graphName inputFilename = do
+    graphFile <- readFile (graphPath ++ inputFilename)
+    key <- insertGraph graphName
+    let parsedGraph = parseGraph key graphFile
+        PersistInt64 keyVal = toPersistValue key
+    print "Graph Parsed"
+    insertElements parsedGraph
+    print "Graph Inserted"
+    let genGraphPath = graphPath ++ "gen/"
+    createDirectoryIfMissing True genGraphPath
+    buildSVG key M.empty (genGraphPath ++ show keyVal ++ ".svg") False
+    print "Success"
 
 
 -- * Parsing functions
@@ -97,9 +99,10 @@ parseNode key content =
              (newPaths, newShapes, newTexts) =
                 foldl concatThree (paths, rects ++ ellipses, texts)
                                   (map (parseNode key) (path [children] content))
-         in (map (updatePath fill trans) (newPaths),
-             map (updateShape fill trans) (newShapes),
-             map (updateText trans) (newTexts))
+         in
+             (map (updatePath fill trans) (newPaths),
+              map (updateShape fill trans) (newShapes),
+              map (updateText trans) (newTexts))
 
 -- | Create a rectangle from a list of attributes.
 parseRect :: GraphId -- ^ The Rect's corresponding graph identifier.
