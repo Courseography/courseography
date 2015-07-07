@@ -179,16 +179,14 @@ courseSelectCSS = do
         margin0
         padding0
         height100
-        overflow hidden
         backgroundColor purple8
         color white
     "#course-select" ? do
-        padding0
-        margin (px 18) 0 0 (px 17)
-        width100
+        padding (px 18) 0 0 (px 17)
+        margin0
         height100
         alignCenter
-        overflowY scroll
+        overflowY auto
         overflowX hidden
         "list-style-type" -: "none"
         ".ui-accordion-header" ? do
