@@ -185,7 +185,7 @@ courseSelectCSS = do
         margin0
         height100
         alignCenter
-        overflowY scroll
+        overflowY auto
         overflowX hidden
         "list-style-type" -: "none"
         ".ui-accordion-header" ? do
