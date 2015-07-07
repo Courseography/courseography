@@ -6,7 +6,7 @@ import Data.Time
 import Happstack.Server
 import Control.Monad.IO.Class (liftIO)
 import System.Locale
-import Config (firstMondayFall, firstMondayWinter)
+import Config (firstMondayFall, firstMondayWinter, filler)
 import Database.CourseQueries (returnCourse, returnTutorialTimes, returnLectureTimes)
 import qualified Data.Text as T
 import Database.Tables as Tables
@@ -14,7 +14,6 @@ import JsonResponse
 import Data.Aeson (encode, decode)
 import Database.Persist
 
--- Deal with 30.0, 8.0 and "invalid"
 -- | Returns a CSV file of events as requested by the user.
 calendarResponse :: String -> ServerPart Response
 calendarResponse courses =
@@ -28,8 +27,9 @@ getCalendar courses = fmap (genRes) (matchData (getNames courses) (startTimes $ 
 genRes :: [String] -> Response
 genRes events =  toResponse $ take all str
     where
-    str = unlines events
-    all = (length str) - 1 
+    str = unlines $ title ++ events
+    all = (length str) - 1
+    title = ["Subject,Start Date,Start Time,End Date,End Time,All Day Event,Description,Location,Private"]
 
 -- Obtain the name and session for all subjects
 getNames :: String -> [(String, String)]
@@ -73,11 +73,11 @@ filtering days = [filter p fields |fields <- days]
 -- Assign a position, which in turn represents a day
 assignDay :: [Double] -> Double -> [[[Double]]]
 assignDay courseField day
-    | day <= 0.0 = [[courseField], [[8.0]], [[8.0]], [[8.0]], [[8.0]]]
-    | day == 1.0 = [[[8.0]], [courseField], [[8.0]], [[8.0]], [[8.0]]]
-    | day == 2.0 = [[[8.0]], [[8.0]], [courseField], [[8.0]], [[8.0]]]
-    | day == 3.0 = [[[8.0]], [[8.0]], [[8.0]], [courseField], [[8.0]]]
-    | otherwise = [[[8.0]], [[8.0]], [[8.0]], [[8.0]], [courseField]]
+    | day <= 0.0 = [[courseField], [[]], [[]], [[]], [[]]]
+    | day == 1.0 = [[[]], [courseField], [[]], [[]], [[]]]
+    | day == 2.0 = [[[]], [[]], [courseField], [[]], [[]]]
+    | day == 3.0 = [[[]], [[]], [[]], [courseField], [[]]]
+    | otherwise = [[[]], [[]], [[]], [[]], [courseField]]
 
 -- Create a final list that orderly contains the timeFields by day of the week
 joinList :: [[[[Double]]]] -> [[[Double]]]
@@ -113,7 +113,7 @@ checkTimeStart codeSession day = map getStr ([head sortedList] ++ getEndConsecut
     sortedList = quicksort $ map (!! 1) day
 
 getStartConsecutives :: [Double] -> [Double]
-getStartConsecutives lst = filter (/= 30.0) ([if lst !! i == (lst !! (i - 1)) + 0.5 then 30.0 else lst !! i|i <- [l .. 1]])
+getStartConsecutives lst = filter (/= filler) ([if lst !! i == (lst !! (i - 1)) + 0.5 then filler else lst !! i|i <- [l .. 1]])
     where
     l = (length lst) - 1
 
@@ -139,7 +139,7 @@ checkTimeEnd codeSession day = map getStr (map (+ 0.5) ([last sortedList] ++ get
     sortedList = quicksort $ map (!! 1) day
 
 getEndConsecutives :: [Double] -> [Double]
-getEndConsecutives lst = filter (/= 30.0) ([if lst !! i == (lst !! (i + 1)) - 0.5 then 30.0 else lst !! i|i <- [0 .. l]])
+getEndConsecutives lst = filter (/= filler) ([if lst !! i == (lst !! (i + 1)) - 0.5 then filler else lst !! i|i <- [0 .. l]])
     where
     l = (length lst) - 2
 
@@ -168,7 +168,7 @@ ratio decimal = if minutes >= 10 then show minutes else "0" ++ (show minutes)
 -- DEALING WITH DATES. BE CAREFUL WITH ONE YEAR LECTURES AND TUTORIALS
 
 startDates :: [(IO [Time], (String, String))] -> IO [([[String]], [[String]])]
-startDates courseFields = sequence $ map (sequenceDates)  ([if (snd $ snd courseField) == "Y" then (halfFall courseField, halfWinter courseField) else (full courseField, return [["invalid"]])| courseField <- courseFields])
+startDates courseFields = sequence $ map (sequenceDates)  ([if (snd $ snd courseField) == "Y" then (halfFall courseField, halfWinter courseField) else (full courseField, return [[show filler]])| courseField <- courseFields])
     where
     halfFall courseField = startDate (fst courseField, (fst $ snd courseField, "F"))
     halfWinter courseField = startDate (fst courseField, (fst $ snd courseField, "S"))
@@ -269,7 +269,7 @@ eventsByCourse namesSession starts ends dates = if snd namesSession == "Y" then 
     year = halfFall ++ halfWinter
     halfFall = [eventsByCourse1 (fst namesSession) (starts !! i) (ends !! i) ((fst dates) !! i) | i <- [0 .. l]]
     halfWinter = [eventsByCourse1 (fst namesSession) (starts !! i) (ends !! i) ((snd dates) !! i) | i <- [0 .. l]]
-    half = [eventsByCourse1 (fst namesSession) (starts !! i) (ends !! i) ((fst dates) !! i) | i <- [0 .. l]] -- a list of dates for each day
+    half = [eventsByCourse1 (fst namesSession) (starts !! i) (ends !! i) ((fst dates) !! i) | i <- [0 .. l]]
     l = (length starts) - 1
 
 eventsByCourse1 :: String -> [String] -> [String] -> [String] -> [[String]]

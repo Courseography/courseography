@@ -71,20 +71,6 @@ returnCourse lowerStr = runSqlite dbStr $ do
     if null sqlCourse
     then return emptyCourse
     else return (buildCourse fallSession springSession yearSession (entityVal $ head sqlCourse))
-{-
-returnTutorialTimes :: T.Text -> T.Text -> Maybe T.Text -> IO [Time]
-returnTutorialTimes lowerStr session section = runSqlite dbStr $ do
-    let courseStr = T.toUpper lowerStr
-    entityTutorials <- selectList [TutorialsCode ==. courseStr, TutorialsSession ==. session, TutorialsSection ==. (section)] []
-    return $ tutorialsTimes (entityVal $ head entityTutorials)
-
-
-returnTutorialTimes :: T.Text -> T.Text -> T.Text -> IO (T.Text, [Time], T.Text)
-returnTutorialTimes lowerStr section session = runSqlite dbStr $ do
-    let courseStr = T.toUpper lowerStr
-    entityTutorials <- selectList [TutorialsCode ==. courseStr, TutorialsSection ==. (Just section), TutorialsSession ==. session] []
-    return $ (tutorialsTimeStr (entityVal $ head entityTutorials), tutorialsTimes (entityVal $ head entityTutorials), tutorialsCode (entityVal $ head entityTutorials))
-    -}
 
 returnTutorialTimes :: T.Text -> T.Text -> T.Text -> IO [Time]
 returnTutorialTimes lowerStr section session = runSqlite dbStr $ do
