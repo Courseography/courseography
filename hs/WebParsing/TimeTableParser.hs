@@ -190,8 +190,7 @@ main = do
     body <- getResponseBody rsp
     let _ = getDeptList $ parseTags body
 
-    runSqlite databasePath $ do
-        runMigration migrateAll
+    runSqlite databasePath $
         getDeptTimetable "glaf.html"
     --mapM_ getDeptTimetable depts
 
@@ -201,6 +200,5 @@ parseTT = do
     body <- getResponseBody rsp
     let depts = getDeptList $ parseTags body
 
-    runSqlite databasePath $ do
-        runMigration migrateAll
+    runSqlite databasePath $
         mapM_ getDeptTimetable depts
