@@ -57,12 +57,12 @@ returnCourse lowerStr = runSqlite databasePath $ do
         [LectureCode  ==. courseStr, LectureSession ==. "S"] []
     sqlLecturesYear    :: [Entity Lecture]   <- selectList
         [LectureCode  ==. courseStr, LectureSession ==. "Y"] []
-    sqlTutorialsFall   :: [Entity Tutorials]  <- selectList
-        [TutorialsCode ==. courseStr, TutorialsSession ==. "F"] []
-    sqlTutorialsSpring :: [Entity Tutorials]  <- selectList
-        [TutorialsCode ==. courseStr, TutorialsSession ==. "S"] []
-    sqlTutorialsYear   :: [Entity Tutorials]  <- selectList
-        [TutorialsCode ==. courseStr, TutorialsSession ==. "Y"] []
+    sqlTutorialsFall   :: [Entity Tutorial]  <- selectList
+        [TutorialCode ==. courseStr, TutorialSession ==. "F"] []
+    sqlTutorialsSpring :: [Entity Tutorial]  <- selectList
+        [TutorialCode ==. courseStr, TutorialSession ==. "S"] []
+    sqlTutorialsYear   :: [Entity Tutorial]  <- selectList
+        [TutorialCode ==. courseStr, TutorialSession ==. "Y"] []
     let fallSession   = buildSession sqlLecturesFall sqlTutorialsFall
         springSession = buildSession sqlLecturesSpring sqlTutorialsSpring
         yearSession   = buildSession sqlLecturesYear sqlTutorialsYear
@@ -90,19 +90,12 @@ buildCourse fallSession springSession yearSession course =
            (coursesCoreqs course)
            (coursesVideoUrls course)
 
--- | Builds a Tutorial structure from a tuple from the Tutorials table.
-buildTutorial :: Tutorials -> Tutorial
-buildTutorial entity =
-    Tutorial (tutorialsSection entity)
-             (tutorialsTimes entity)
-             (tutorialsTimeStr entity)
-
 -- | Builds a Session structure from a list of tuples from the Lecture table,
--- and a list of tuples from the Tutorials table.
-buildSession :: [Entity Lecture] -> [Entity Tutorials] -> Maybe Tables.Session
+-- and a list of tuples from the Tutorial table.
+buildSession :: [Entity Lecture] -> [Entity Tutorial] -> Maybe Tables.Session
 buildSession lecs tuts =
     Just $ Tables.Session (map entityVal lecs)
-                          (map (buildTutorial . entityVal) tuts)
+                          (map entityVal tuts)
 
 -- ** Other queries
 
@@ -131,20 +124,20 @@ getDeptCourses dept = do
     response <- liftIO $ runSqlite databasePath $ do
         courses :: [Entity Courses]   <- selectList [] []
         lecs    :: [Entity Lecture]  <- selectList [] []
-        tuts    :: [Entity Tutorials] <- selectList [] []
+        tuts    :: [Entity Tutorial] <- selectList [] []
         let c = filter (startswith dept . T.unpack . coursesCode) $ map entityVal courses
         return $ map (buildTimes (map entityVal lecs) (map entityVal tuts)) c
     return response
     where
         lecByCode course = filter (\lec -> lectureCode lec == coursesCode course)
-        tutByCode course = filter (\tut -> tutorialsCode tut == coursesCode course)
+        tutByCode course = filter (\tut -> tutorialCode tut == coursesCode course)
         buildTimes lecs tuts course =
             let fallLectures = filter (\lec -> lectureSession lec == "F") lecs
                 springLectures = filter (\lec -> lectureSession lec == "S") lecs
                 yearLectures = filter (\lec -> lectureSession lec == "Y") lecs
-                fallTutorials = filter (\tut -> tutorialsSession tut == "F") tuts
-                springTutorials = filter (\tut -> tutorialsSession tut == "S") tuts
-                yearTutorials = filter (\tut -> tutorialsSession tut == "Y") tuts
+                fallTutorials = filter (\tut -> tutorialSession tut == "F") tuts
+                springTutorials = filter (\tut -> tutorialSession tut == "S") tuts
+                yearTutorials = filter (\tut -> tutorialSession tut == "Y") tuts
                 fallSession   = buildSession' (lecByCode course fallLectures) (tutByCode course fallTutorials)
                 springSession = buildSession' (lecByCode course springLectures) (tutByCode course springTutorials)
                 yearSession   = buildSession' (lecByCode course yearLectures) (tutByCode course yearTutorials)
@@ -152,7 +145,7 @@ getDeptCourses dept = do
                 buildCourse fallSession springSession yearSession course
         buildSession' lecs tuts =
             Just $ Tables.Session lecs
-                                  (map buildTutorial tuts)
+                                  tuts
 
 -- | Return a list of all departments.
 deptList :: IO Response

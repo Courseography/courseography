@@ -10,7 +10,6 @@ into the database. These functions are used as helpers for the WebParsing module
 
 module Database.CourseInsertion
     (insertCourse,
-     insertTutorial,
      setTutorialEnrolment,
      setPracticalEnrolment) where
 
@@ -51,12 +50,3 @@ setPracticalEnrolment course val =
     updateWhere [CoursesCode ==. course]
                 [CoursesManualPracticalEnrolment =. Just val]
 
--- | Inserts a tutorial into the Tutorials table associated with a given
--- session and course code.
-insertTutorial :: MonadIO m => T.Text -> T.Text-> Tutorial -> ReaderT SqlBackend m ()
-insertTutorial session code tutorial =
-    insert_ $ Tutorials code
-                        (tutorialSection tutorial)
-                        session
-                        (times tutorial)
-                        (timeStr tutorial)

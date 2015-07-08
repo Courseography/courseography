@@ -68,12 +68,11 @@ Lecture json
     timeStr T.Text
     deriving Show
 
-Tutorials
+Tutorial json
     code T.Text
     section T.Text Maybe
     session T.Text
     times [Time]
-    timeStr T.Text
     deriving Show
 
 Breadth
@@ -128,15 +127,7 @@ FacebookTest
     deriving Show
 |]
 
-
 -- ** TODO: Remove these extra types and class instances
-
--- | A Tutorial.
-data Tutorial =
-    Tutorial { tutorialSection :: Maybe T.Text,
-               times :: [Time],
-               timeStr :: T.Text
-             } deriving Show
 
 -- | A Session.
 data Session =
@@ -178,12 +169,6 @@ instance ToJSON Time where
 -- instance FromJSON required so that tables can be parsed into JSON,
 -- not necessary otherwise.
 instance FromJSON Time
-
-instance ToJSON Tutorial where
-  toJSON (Tutorial Nothing tutorialTimes tutorialTimeStr) =
-      Array $ V.fromList [toJSON (map convertTimeToString tutorialTimes), toJSON tutorialTimeStr]
-  toJSON (Tutorial (Just value) tutorialTimes tutorialTimeStr) =
-      Array $ V.fromList [toJSON value, toJSON (map convertTimeToString tutorialTimes), toJSON tutorialTimeStr]
 
 -- | Converts a Double to a T.Text.
 -- This removes the period from the double, as the JavaScript code,

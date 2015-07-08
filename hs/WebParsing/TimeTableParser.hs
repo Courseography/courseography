@@ -150,9 +150,10 @@ makeLecture slot =
 -- | converts a single courseSlot into a tutorial
 makeTutorial :: CourseSlot -> Tutorial
 makeTutorial slot =
-    Tutorial {tutorialSection = Just (slotSection slot),
-              times = concatMap makeTimeSlots (T.split (== ' ') (slotTimeStr slot)),
-              timeStr = (slotTimeStr slot)}
+    Tutorial { tutorialCode = slotCode slot,
+               tutorialSession = slotSession slot,
+               tutorialSection = Just (slotSection slot),
+               tutorialTimes = concatMap makeTimeSlots (T.split (== ' ') (slotTimeStr slot))}
 
 -- | returns true if the courseSlot is housing a lecture, false otherwise.
 isLecture :: CourseSlot -> Bool
@@ -187,7 +188,7 @@ processCourseTable course = do
         setTutorialEnrolment code (containsTut sesh)
         setPracticalEnrolment code (containsPrac sesh)
         mapM_ insert_ (lectures sesh)
-        mapM_ (insertTutorial session code) (tutorials sesh)
+        mapM_ insert_ (tutorials sesh)
     print code
     where
         containsTut sesh = any (maybe False (T.isPrefixOf "T") . tutorialSection) $ tutorials sesh
