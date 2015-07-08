@@ -21,7 +21,7 @@ import Config (databasePath)
 -- first letter of the section.
 data CourseSlot =
     CourseSlot { slotSection :: T.Text,
-                 slotTime_str :: T.Text,
+                 slotTimeStr :: T.Text,
                  slotInstructor :: T.Text
                } deriving Show
 
@@ -103,13 +103,13 @@ updateSlot row Nothing =
     then Nothing
     else let timestr = T.takeWhile (/= ' ') (row !! 5)
              in Just CourseSlot { slotSection    = T.take 5 (row !! 3),
-                                  slotTime_str   = timestr,
+                                  slotTimeStr   = timestr,
                                   slotInstructor = (row !! 7) }
 updateSlot row (Just slot) =
     if (isCancelled) row || length row < 8
     then Just slot
     else let newTime = T.takeWhile (/= ' ') (row !! 5)
-         in (Just slot {slotTime_str = (T.append newTime (T.append " " (slotTime_str slot)))})
+         in (Just slot {slotTimeStr = (T.append newTime (T.append " " (slotTimeStr slot)))})
 
 
 -- | takes in cells representing a course, and recursively places lecture and tutorial info
@@ -130,21 +130,23 @@ parseCourse course slot slots =
 -- | converts a courseSlot into a lecture
 makeLecture :: CourseSlot -> Lecture
 makeLecture slot =
-    Lecture { extra = 0,
-              section = (slotSection slot),
-              cap = 0,
-              time_str = (slotTime_str slot),
-              time = concatMap makeTimeSlots (T.split (== ' ') (slotTime_str slot)),
-              instructor = (slotInstructor slot),
-              enrol = Nothing,
-              wait = Nothing }
+    Lecture { lectureCode = "?",
+              lectureSession = "?",
+              lectureSection = (slotSection slot),
+              lectureTime = concatMap makeTimeSlots (T.split (== ' ') (slotTimeStr slot)),
+              lectureCap = 0,
+              lectureInstructor = (slotInstructor slot),
+              lectureEnrol = 0, -- Nothing
+              lectureWait = 0, -- Nothing
+              lectureExtra = 0,
+              lectureTimeStr = (slotTimeStr slot) }
 
 -- | converts a single courseSlot into a tutorial
 makeTutorial :: CourseSlot -> Tutorial
 makeTutorial slot =
     Tutorial {tutorialSection = Just (slotSection slot),
-              times = concatMap makeTimeSlots (T.split (== ' ') (slotTime_str slot)),
-              timeStr = (slotTime_str slot)}
+              times = concatMap makeTimeSlots (T.split (== ' ') (slotTimeStr slot)),
+              timeStr = (slotTimeStr slot)}
 
 -- | returns true if the courseSlot is housing a lecture, false otherwise.
 isLecture :: CourseSlot -> Bool

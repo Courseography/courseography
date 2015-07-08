@@ -129,7 +129,7 @@ var Timetable = React.createClass({
                     return (
                         <tr>
                         <td className="timetableSection">{lec.section}</td>
-                        <td className="timetableTime">{lec.time_str}</td>
+                        <td className="timetableTime">{lec.timeStr}</td>
                         <td className="timetableInstructor">{lec.instructor}</td>
                         <td className="timetableCap">{lec.cap}</td>
                         <td className="timetableWait">{lec.wait}</td>
@@ -142,7 +142,7 @@ var Timetable = React.createClass({
                     return (
                         <tr>
                         <td className="timetableSection">{lec.section}</td>
-                        <td className="timetableTime">{lec.time_str}</td>
+                        <td className="timetableTime">{lec.timeStr}</td>
                         <td className="timetableInstructor">{lec.instructor}</td>
                         <td className="timetableCap">{lec.cap}</td>
                         <td className="timetableWait">{lec.wait}</td>

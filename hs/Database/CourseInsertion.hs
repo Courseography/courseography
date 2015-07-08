@@ -56,16 +56,9 @@ setPracticalEnrolment course val =
 -- session and course code.
 insertLecture :: MonadIO m => T.Text -> T.Text -> Lecture -> ReaderT SqlBackend m ()
 insertLecture session code lecture =
-    insert_ $ Lectures code
-                       session
-                       (section lecture)
-                       (map Time (time lecture))
-                       (cap lecture)
-                       (instructor lecture)
-                       (fromMaybe 0 (enrol lecture))
-                       (fromMaybe 0 (wait lecture))
-                       (extra lecture)
-                       (time_str lecture)
+    insert_ $ lecture {lectureCode = code,
+                       lectureSession = session}
+-- TODO: Add in course code and session information when lecture is parsed (CourseSlot in TimetableParter.hs?)
 
 -- | Inserts a tutorial into the Tutorials table associated with a given
 -- session and course code.
@@ -74,5 +67,5 @@ insertTutorial session code tutorial =
     insert_ $ Tutorials code
                         (tutorialSection tutorial)
                         session
-                        (map Time (times tutorial))
+                        (times tutorial)
                         (timeStr tutorial)
