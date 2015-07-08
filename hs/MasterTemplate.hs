@@ -39,7 +39,6 @@ header page =
             H.li $ makeA "" "" "post" "" "Check My POSt!"
             H.li $ makeA "" "" "about" "" "About"
             H.li $ makeA "" "" "calendar" "" "Calendar"
-            --H.li $ H.button ! A.id "calendarlink" $ "Calendar"
         if page `elem` ["graph", "grid"]
         then
             H.div ! A.id "nav-fb" $ do
