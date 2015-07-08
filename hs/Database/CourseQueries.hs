@@ -48,7 +48,6 @@ queryCourse str = do
 returnCourse :: T.Text -> IO Course
 returnCourse lowerStr = runSqlite databasePath $ do
     let courseStr = T.toUpper lowerStr
-    liftIO $ print courseStr
     sqlCourse :: [Entity Courses] <- selectList [CoursesCode ==. courseStr] []
     -- TODO: Just make one query for all lectures, then partition later.
     -- Same for tutorials.

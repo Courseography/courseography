@@ -112,7 +112,7 @@ function fetchCourse(courseName) {
             throw 'No course file';
         }
     });
-    console.log(course);
+
     courseCache.push(course);
     return course;
 }
@@ -133,6 +133,7 @@ function convertTimes(times) {
     for (var i = 0; i < times.length; i++) {
         var timeString = 'MTWRF'.charAt(times[i][0]);
         time = times[i][1];
+
         if (time.charAt(time.length - 1) === '0') {
             if (i === times.length-1) {
                 timeString = timeString + time + 'E';
