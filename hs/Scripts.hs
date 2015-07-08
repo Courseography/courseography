@@ -20,6 +20,8 @@ graphScripts :: H.Html
 graphScripts = concatHtml (map makeScript $
     ["https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js",
      "https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js",
+     "static/js/graph/tooltip.js",
+     "static/js/common/course_videos.js",
      "static/js/common/modal.js",
      "static/js/graph/objects/edge.js",
      "static/js/graph/objects/node.js",
@@ -62,6 +64,7 @@ timetableScripts = do
          "/static/js/common/grid_image.js",
          "/static/js/common/image_conversion.js",
          "/static/js/draw/draw.js",
+         "static/js/common/course_videos.js",
          "static/js/common/modal.js",
          "static/js/common/course_description.js",
          "static/js/common/export/export.js"] ++
