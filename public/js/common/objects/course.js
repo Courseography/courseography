@@ -148,7 +148,7 @@ Course.prototype.parseTutorials = function (session, timeSuffix) {
             });
         }
 
-        var id = tmp.name + '-' + tutorial.tutorialSection + '-' + timeSuffix;
+        var id = tmp.name + '-' + tutorial.section + '-' + timeSuffix;
         sectionTimes = cleanUpTimes(sectionTimes);
         return makeTutorial(tutorial, tmp, id, sectionTimes);
     });
