@@ -10,7 +10,6 @@ into the database. These functions are used as helpers for the WebParsing module
 
 module Database.CourseInsertion
     (insertCourse,
-     insertLecture,
      insertTutorial,
      setTutorialEnrolment,
      setPracticalEnrolment) where
@@ -51,14 +50,6 @@ setPracticalEnrolment :: MonadIO m => T.Text -> Bool -> ReaderT SqlBackend m ()
 setPracticalEnrolment course val =
     updateWhere [CoursesCode ==. course]
                 [CoursesManualPracticalEnrolment =. Just val]
-
--- | Inserts a lecture into the Lectures table associated with a given
--- session and course code.
-insertLecture :: MonadIO m => T.Text -> T.Text -> Lecture -> ReaderT SqlBackend m ()
-insertLecture session code lecture =
-    insert_ $ lecture {lectureCode = code,
-                       lectureSession = session}
--- TODO: Add in course code and session information when lecture is parsed (CourseSlot in TimetableParter.hs?)
 
 -- | Inserts a tutorial into the Tutorials table associated with a given
 -- session and course code.

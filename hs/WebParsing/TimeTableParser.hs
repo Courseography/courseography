@@ -20,7 +20,9 @@ import Config (databasePath)
 -- from the table. Is is later converted into lecture or tutorial records by examinig the
 -- first letter of the section.
 data CourseSlot =
-    CourseSlot { slotSection :: T.Text,
+    CourseSlot { slotCode :: T.Text,
+                 slotSession :: T.Text,
+                 slotSection :: T.Text,
                  slotTimeStr :: T.Text,
                  slotInstructor :: T.Text
                } deriving Show
@@ -97,47 +99,51 @@ addLecture sesh lec = sesh {lectures = lec:(lectures sesh)}
 -- | extracts the required information from a row of cells and places it into a CourseSlot
 --   if given a CourseSlot as input, it updates the time only. Otherwise updates time and
 --   section
-updateSlot :: [T.Text] -> Maybe CourseSlot -> Maybe CourseSlot
-updateSlot row Nothing =
+updateSlot :: [T.Text] -> Maybe CourseSlot -> T.Text -> T.Text -> Maybe CourseSlot
+updateSlot row Nothing session code =
     if (isCancelled row) || length row < 8
     then Nothing
     else let timestr = T.takeWhile (/= ' ') (row !! 5)
-             in Just CourseSlot { slotSection    = T.take 5 (row !! 3),
-                                  slotTimeStr   = timestr,
+             in Just CourseSlot { slotCode       = code,
+                                  slotSession    = session,
+                                  slotSection    = T.take 5 (row !! 3),
+                                  slotTimeStr    = timestr,
                                   slotInstructor = (row !! 7) }
-updateSlot row (Just slot) =
+updateSlot row (Just slot) session code =
     if (isCancelled) row || length row < 8
     then Just slot
     else let newTime = T.takeWhile (/= ' ') (row !! 5)
-         in (Just slot {slotTimeStr = (T.append newTime (T.append " " (slotTimeStr slot)))})
+         in (Just slot { slotCode = code,
+                         slotSession = session,
+                         slotTimeStr = (T.append newTime (T.append " " (slotTimeStr slot)))})
 
 
 -- | takes in cells representing a course, and recursively places lecture and tutorial info
 -- into courseSlots.
-parseCourse :: [[T.Text]] -> Maybe CourseSlot -> [Maybe CourseSlot] -> [Maybe CourseSlot]
-parseCourse [] slot slots = slot:slots
-parseCourse course Nothing slots =
+parseCourse :: [[T.Text]] -> Maybe CourseSlot -> [Maybe CourseSlot] -> T.Text -> T.Text -> [Maybe CourseSlot]
+parseCourse [] slot slots _ _ = slot:slots
+parseCourse course Nothing slots session code =
     let row = head course
         rest = tail course
-    in parseCourse rest (updateSlot row Nothing) slots
-parseCourse course slot slots =
+    in parseCourse rest (updateSlot row Nothing session code) slots session code
+parseCourse course slot slots session code =
     let row = head course
         rest = tail course
     in if ((row !! 3) == "")
-       then parseCourse rest (updateSlot row slot) slots
-       else parseCourse rest (updateSlot row Nothing) (slot:slots)
+       then parseCourse rest (updateSlot row slot session code) slots session code
+       else parseCourse rest (updateSlot row Nothing session code) (slot:slots) session code
 
 -- | converts a courseSlot into a lecture
 makeLecture :: CourseSlot -> Lecture
 makeLecture slot =
-    Lecture { lectureCode = "?",
-              lectureSession = "?",
+    Lecture { lectureCode = slotCode slot,
+              lectureSession = slotSession slot,
               lectureSection = (slotSection slot),
               lectureTime = concatMap makeTimeSlots (T.split (== ' ') (slotTimeStr slot)),
               lectureCap = 0,
               lectureInstructor = (slotInstructor slot),
-              lectureEnrol = 0, -- Nothing
-              lectureWait = 0, -- Nothing
+              lectureEnrol = 0,
+              lectureWait = 0,
               lectureExtra = 0,
               lectureTimeStr = (slotTimeStr slot) }
 
@@ -172,7 +178,7 @@ processCourseTable :: [[T.Text]] -> IO ()
 processCourseTable course = do
     let session = (head course) !! 1
         code = T.take 8 ((head course) !! 0)
-        slots = filter isJust (parseCourse course Nothing [])
+        slots = filter isJust (parseCourse course Nothing [] session code)
         justSlots = map fromJust slots
         sesh = makeSession justSlots
 
@@ -180,7 +186,7 @@ processCourseTable course = do
         runMigration migrateAll
         setTutorialEnrolment code (containsTut sesh)
         setPracticalEnrolment code (containsPrac sesh)
-        mapM_ (insertLecture session code) (lectures sesh)
+        mapM_ insert_ (lectures sesh)
         mapM_ (insertTutorial session code) (tutorials sesh)
     print code
     where
