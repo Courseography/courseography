@@ -28,19 +28,23 @@ genRes events =  toResponse $ take strLen fullStr
     strLen = (length fullStr) - 1
     header = ["Subject,Start Date,Start Time,End Date,End Time,All Day Event,Description,Location,Private"]
 
--- Obtain the name and session for all subjects
-getNames :: String -> [(String, String)]
-getNames courses = [(code, session) | [code, _ , session] <- getCoursesInfo courses] 
-
--- Obtain the information for all courses from the database
-allInfo :: String -> [(IO [Time], (String, String))]
-allInfo courses = [(pullDatabase code sect session, (code, session))| [code, sect, session] <- getCoursesInfo courses]
+-- COOKIE INFORMATION
 
 -- Obtain a list with all the information about the courses obtained from the cookies
 getCoursesInfo :: String -> [[String]]
 getCoursesInfo courses = map (splitOn "-") byCourse
     where
     byCourse = splitOn "_" courses
+
+-- Obtain the name and session for all subjects
+getNames :: String -> [(String, String)]
+getNames courses = [(code, session) | [code, _ , session] <- getCoursesInfo courses] 
+
+-- DATABASE INFORMATION
+
+-- Obtain the information for all courses from the database
+allInfo :: String -> [(IO [Time], (String, String))]
+allInfo courses = [(pullDatabase code sect session, (code, session))| [code, sect, session] <- getCoursesInfo courses]
 
 -- Pull out the information for each course from the database
 pullDatabase :: String -> String -> String -> IO [Time]
@@ -64,7 +68,7 @@ assignDay lst = [monday, tuesday, wednesday, thursday, friday]
     thursday = [field | field <- lst, field !! 0 == 3.0]
     friday = [field | field <- lst, field !! 0 == 4.0]
 
--- START TIME / END TIME
+-- START TIME
 
 startTimes :: [(IO [Time], (String, String))] -> IO [[[String]]]
 startTimes coursesTimes = sequence $ map startTime coursesTimes 
@@ -92,6 +96,8 @@ getStartConsecutives lst = filter (/= filler) ([if lst !! i == (lst !! (i - 1)) 
     where
     l = (length lst) - 1
 
+-- END TIME
+
 endTimes :: [(IO [Time], (String, String))] -> IO [[[String]]]
 endTimes coursesTimes = sequence $ map endTime coursesTimes 
 
@@ -118,6 +124,8 @@ getEndConsecutives lst = filter (/= filler) ([if lst !! i == (lst !! (i + 1)) - 
     where
     l = (length lst) - 2
 
+-- TIMES
+
 -- Create the string time
 getStr :: Double -> String
 getStr fullTime = if (length hours) == 1 then getStrTime (fullTime , hours, ":00:00") else getStrTime (fullTime , hours, (":" ++ (ratio (hours !! 1)) ++ ":00"))
@@ -135,7 +143,7 @@ ratio decimal = if minutes >= 10 then show minutes else "0" ++ (show minutes)
     decimalDouble = read decimal :: Double
     minutes = floor $ decimalDouble * 6 :: Int
 
--- DEALING WITH DATES. BE CAREFUL WITH ONE YEAR LECTURES AND TUTORIALS
+-- START/END DATE
 
 startDates :: [(IO [Time], (String, String))] -> IO [([[String]], [[String]])]
 startDates courseFields = sequence $ map (sequenceDates)  ([if (snd $ snd courseField) == "Y" then (halfFall courseField, halfWinter courseField) else (full courseField, return [[show filler]])| courseField <- courseFields])
