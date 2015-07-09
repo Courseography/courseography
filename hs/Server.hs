@@ -24,7 +24,6 @@ import System.Log.Logger (logM, updateGlobalLogger, rootLoggerName, setLevel, Pr
 import CourseographyFacebook
 import Config (markdownPath)
 import qualified Data.Text.Lazy.IO as LazyIO
-import Network.HTTP.Cookie
 
 -- | log access requests using hslogger and a condensed log formatting
 logMAccessShort :: FormatTime t => LogAccess t
