@@ -128,23 +128,23 @@ getEndConsecutives lst = filter (/= filler) ([if lst !! i == (lst !! (i + 1)) - 
 
 -- Create the string time
 getStr :: Double -> String
-getStr fullTime = if minutes == 0 then getStrTime (fullTime , hours, ":00:00") else getStrTime (fullTime , hours, (":" ++ (ratio (hours !! 1)) ++ ":00"))
+getStr fullTime = if minutes == 0 then getStrTime (hour1, ":00:00") else getStrTime (hour1, (":" ++ ratio minutes ++ ":00"))
     where
     hours = splitOn "." (show fullTime)
+    hour1 = read (hours !! 0) :: Int 
     minutes = read (hours !! 1) :: Int 
 
 -- Determine whether the time is AM or PM
-getStrTime :: (Double, [String], String) -> String
-getStrTime (fullTime, hours, ending) = if fullTime >= 12.0 then afternoon (hours !! 0) ++ ending ++ " PM" else (hours !! 0) ++ ending ++ " AM"
+getStrTime :: (Int, String) -> String
+getStrTime (hour1, ending) = if hour1 >= 12 then (show $ afternoon hour1) ++ ending ++ " PM" else (show hour1) ++ ending ++ " AM"
     where
-    afternoon hour = if hour == "12" then hour else show $ (read hour :: Int) - 12 
+    afternoon hour1 = if hour1 == 12 then hour1 else hour1 - 12 
 
 -- Get the time out of a decimal part of my time
-ratio :: String -> String
+ratio :: Int -> String
 ratio decimal = if minutes >= 10 then show minutes else "0" ++ (show minutes)
     where
-    decimalDouble = read decimal :: Double
-    minutes = floor $ decimalDouble * 6 :: Int
+    minutes = decimal * 6
 
 -- START/END DATE
 
