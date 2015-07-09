@@ -56,12 +56,3 @@ concatSVG svg = sequence_ svg
 -- blaze-HTML.
 mdToHTML :: Text -> H.Html
 mdToHTML contents = markdown def contents
-
--- | The last function is a generic helper function for running an arbitrary
--- query to the database. This should only be used for debugging purposes,
--- and in fact probably moved elsewhere.
-
--- | Performs a query on the database.
-queryDatabase :: TI.Text -> IO ()
-queryDatabase sql = runSqlite databasePath $
-                        rawQuery sql [] $$ CL.mapM_ (liftIO . print)
