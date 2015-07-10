@@ -24,16 +24,6 @@ getCalendar courses = do
     let events = concat $ map getEvent databaseInfo
     return $ toResponse $ getCSV $ events
 
-{- Checking getCoursesInfo
-ft (x,_,_) = x
-sd (_,y,_) = y
-thr (_,_,z) = z
-getCalendar :: String -> IO Response
-getCalendar courses = do
-    let courseInfo = getCoursesInfo courses
-    return $ toResponse $ (ft (courseInfo !! 0)) ++ (sd (courseInfo !! 0)) ++ (thr (courseInfo !! 0)) ++ (show $ length courseInfo)
--}
-
 -- | Generates a string representing a CSV file.
 getCSV :: [String] -> String
 getCSV events =  unlines $ header : events
@@ -95,7 +85,9 @@ eventsByTime code start end date = [eventsByDate code (start !! i) (end !! i) da
 
 -- | Generates the string that represents the event for each course
 eventsByDate :: String -> String -> String -> [String] -> [String]
-eventsByDate code start end date =  [code ++ "," ++ byDate ++ "," ++ start ++ "," ++ byDate ++ "," ++ end ++ ",False," ++ code ++ ",tba,True"| byDate <- date] 
+eventsByDate code start end date = map str date
+    where
+    str byDate = code ++ "," ++ byDate ++ "," ++ start ++ "," ++ byDate ++ "," ++ end ++ ",False," ++ code ++ ",tba,True" 
 
 -- ** Ordering data
 
@@ -167,7 +159,7 @@ getStrTime (hour, ending) = if hour >= 12 then (show $ afternoon hour) ++ ending
     where
     afternoon hour1 = if hour1 == 12 then hour1 else hour1 - 12 
 
--- | Gets the time out of a decimal part of my time
+-- | Gets the minutes out of a decimal part of my time
 ratio :: Int -> String
 ratio decimal = if minutes >= 10 then show minutes else "0" ++ (show minutes)
     where
