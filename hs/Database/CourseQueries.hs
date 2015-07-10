@@ -72,22 +72,34 @@ returnCourse lowerStr = runSqlite dbStr $ do
     then return emptyCourse
     else return (buildCourse fallSession springSession yearSession (entityVal $ head sqlCourse))
 
+-- | Queries the database for all information regarding a specific tutorial for a @course@,
+-- returns a list of Time fields.
 returnTutorialTimes :: T.Text -> T.Text -> T.Text -> IO [Time]
-returnTutorialTimes lowerStr section session = runSqlite dbStr $ do
-    entityTutorials <- selectList [TutorialsCode ==. T.toUpper lowerStr,
-                                   TutorialsSection ==. Just section,
-                                   TutorialsSession ==. session]
-                                  []
-    return $ tutorialsTimes (entityVal $ head entityTutorials)
+returnTutorialTimes lowerStr sect session = runSqlite dbStr $ do
+    maybeEntityTutorials <- selectFirst [TutorialsCode ==. T.toUpper lowerStr,
+                                    TutorialsSection ==. Just sect,
+                                    TutorialsSession ==. session]
+                                   []
+    case maybeEntityTutorials of
+      Nothing -> return []
+      Just entityTutorials -> return $ tutorialsTimes $ entityVal entityTutorials
 
+-- | Queries the database for all information regarding a specific lecture for a @course@,
+-- returns a list of Time fields.
 returnLectureTimes :: T.Text -> T.Text -> T.Text -> IO [Time]
-returnLectureTimes lowerStr section session = runSqlite dbStr $ do 
-    entityLectures <- selectList [LecturesCode ==. T.toUpper lowerStr,
-                                  LecturesSection ==. section,
-                                  LecturesSession ==. session]
-                                 []
-    return $ lecturesTimes (entityVal $ head entityLectures)
-
+returnLectureTimes lowerStr sect session = runSqlite dbStr $ do 
+    maybeEntityLectures <- selectFirst [LecturesCode ==. T.toUpper lowerStr,
+                                   LecturesSection ==. sect,
+                                   LecturesSession ==. session]
+                                  []
+    return $ maybe [] (getLecture) maybeEntityLectures
+      where
+      getLecture entity = lecturesTimes $ entityVal entity
+  
+    {-case maybeEntityLectures of
+      Nothing -> return []
+      Just entityLectures -> return $ lecturesTimes $ entityVal entityLectures
+-}
 -- | Builds a Course structure from a tuple from the Courses table.
 -- Some fields still need to be added in.
 buildCourse :: Maybe Session -> Maybe Session -> Maybe Session -> Courses -> Course

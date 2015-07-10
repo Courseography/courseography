@@ -14,51 +14,70 @@ import Database.Tables as Tables
 -- | Returns a CSV file of events as requested by the user.
 calendarResponse :: String -> ServerPart Response
 calendarResponse courses =
-    liftIO $ getCalendar courses
+    liftIO $ toResponse $ getCalendar courses
 
--- Get together all the pieces of the program
+-- | Get together all the pieces of the program.
 getCalendar :: String -> IO Response
-getCalendar courses = fmap genRes $ matchData (getNames courses) (startTimes $ allInfo courses) (endTimes $ allInfo courses) (startDates $ allInfo courses)
+getCalendar courses = do
+    let courseInfo = getCoursesInfo courses
+    databaseInfo <- sequence $ map pullDatabase courseInfo
+    let events = map getEvent databaseInfo
+    return $ getCSV $ concat events
 
--- Generate a response
-genRes :: [String] -> Response
-genRes events =  toResponse $ take strLen fullStr
+-- | Generates a string representing a CSV file.
+getCSV :: [String] -> String
+getCSV events =  unlines $ header : events
     where
-    fullStr = unlines $ header ++ events
-    strLen = (length fullStr) - 1
-    header = ["Subject,Start Date,Start Time,End Date,End Time,All Day Event,Description,Location,Private"]
+    header = "Subject,Start Date,Start Time,End Date,End Time,All Day Event,Description,Location,Private"
 
--- COOKIE INFORMATION
+-- ** Cookie Information
 
--- Obtain a list with all the information about the courses obtained from the cookies
-getCoursesInfo :: String -> [[String]]
-getCoursesInfo courses = map (splitOn "-") byCourse
+-- | Obtain a list with all the information about the courses obtained from the cookies.
+getCoursesInfo :: String -> [(String, String, String)]
+getCoursesInfo courses = map courseInfo allCourses
     where
+    courseInfo course = (course !! 0, course !! 1, course !! 2)
+    allCourses = map (splitOn "-") byCourse
     byCourse = splitOn "_" courses
 
--- Obtain the name and session for all subjects
+-- ** Database Information
+
+-- | Pull out the information for each course from the database.
+pullDatabase :: (String, String, String) -> IO ([Time], String, String)
+pullDatabase (code, sect, session) =
+    if take 1 sect == "L"
+    then getData $ returnLectureTimes (T.pack code) (T.pack sect) (T.pack session)
+    else getData $ returnTutorialTimes (T.pack code) (T.pack sect) (T.pack session)
+    where
+    getData info = do
+        courseInfo <- info 
+        return (courseInfo, code, session)
+
+-- | Generates an event for each course.
+getEvent :: ([Time], String, String) -> [String]
+getEvent (timeFields, code, session) = eventsByCourse start end date
+    where
+    dataInOrder = orderData timeFields
+    start = startTime dataInOrder
+    end = endTime dataInOrder
+    date = startDate (dataInOrder, session)
+
+-- Generate the string that represents the event for each course
+eventsByCourse :: [[String]] -> [[String]] -> [[String]] -> [String]
+eventsByCourse courseName start end date =  [courseName ++ "," ++ byDate ++ "," ++ start ++ "," ++ byDate ++ "," ++ end ++ ",False," ++ courseName ++ ",tba,True"| byDate <- date] 
+{-
+-- Obtain the name and session for all subjects.
 getNames :: String -> [(String, String)]
 getNames courses = [(code, session) | [code, _ , session] <- getCoursesInfo courses] 
+-}
 
--- DATABASE INFORMATION
+-- ** Ordering data
 
--- Obtain the information for all courses from the database
-allInfo :: String -> [(IO [Time], (String, String))]
-allInfo courses = [(pullDatabase code sect session, (code, session))| [code, sect, session] <- getCoursesInfo courses]
-
--- Pull out the information for each course from the database
-pullDatabase :: String -> String -> String -> IO [Time]
-pullDatabase code sect session =
-    if (take 1 sect) == "L"
-    then (returnLectureTimes (T.pack code) (T.pack sect) (T.pack session))
-    else (returnTutorialTimes (T.pack code) (T.pack sect) (T.pack session))
-
--- ORDERING DATA
-
--- Order the data for each course
+-- | Order the data for each course.
 orderData :: [Time] -> [[[Double]]]
 orderData courseFields = assignDay $ map timeField courseFields
 
+-- | Organize the data by the day of the week, assigning a position based on the time field day.
 assignDay :: [[Double]] -> [[[Double]]]
 assignDay lst = [monday, tuesday, wednesday, thursday, friday]
     where
@@ -68,52 +87,37 @@ assignDay lst = [monday, tuesday, wednesday, thursday, friday]
     thursday = [field | field <- lst, field !! 0 == 3.0]
     friday = [field | field <- lst, field !! 0 == 4.0]
 
--- START TIME
+-- ** Start time
 
-startTimes :: [(IO [Time], (String, String))] -> IO [[[String]]]
-startTimes coursesTimes = sequence $ map startTime coursesTimes 
+-- | Obtaing a list of start times for each course
+startTime :: [[[Double]]] -> [[String]]
+startTime weekFields = map checkTimeStart filtered
+    where
+    filtered = filter notNull weekFields
+    notNull field = not $ null field
 
--- Obtain the starting time for each course
-startTime :: (IO [Time], (String, String)) -> IO [[String]]
-startTime courseTime =  fmap getDataStartTime $ fst courseTime
-
--- Obtain the data properly ordered
-getDataStartTime :: [Time] -> [[String]]
-getDataStartTime courseFields = getStartTime $ orderData courseFields
-
--- Obtaing a list of the startTimes for each day
-getStartTime :: [[[Double]]] -> [[String]]
-getStartTime  weekFields = [checkTimeStart courseField |courseField <- weekFields, not $ null courseField]
-
--- Get the start time
+-- | Get all the start times for each day
 checkTimeStart :: [[Double]] -> [String]
 checkTimeStart day = map getStr ([head sortedList] ++ getStartConsecutives sortedList)
     where
     sortedList = sort $ map (!! 1) day
 
+-- | Get the start times that are not the very first start time 
 getStartConsecutives :: [Double] -> [Double]
 getStartConsecutives lst = filter (/= filler) ([if lst !! i == (lst !! (i + 1)) - 0.5 then filler else (lst !! (i + 1))|i <- [0 .. l]])
     where
     l = (length lst) - 2
 
--- END TIME
+-- ** End time
 
-endTimes :: [(IO [Time], (String, String))] -> IO [[[String]]]
-endTimes coursesTimes = sequence $ map endTime coursesTimes 
+-- | Obtaing a list of end times for each course
+endTime :: [[[Double]]] -> [[String]]
+endTime weekFields = map checkTimeEnd filtered
+    where
+    filtered = filter notNull weekFields
+    notNull field = not $ null field
 
--- Obtain the ending time for each course
-endTime :: (IO [Time], (String, String)) -> IO [[String]]
-endTime courseTime =  fmap getDataEndTime $ fst courseTime
-
--- Obtain the data properly ordered
-getDataEndTime :: [Time] -> [[String]]
-getDataEndTime courseFields = getEndTime $ orderData courseFields
-
--- Obtaing a list of the startTimes for each day
-getEndTime :: [[[Double]]] -> [[String]]
-getEndTime  weekFields = [checkTimeEnd courseField |courseField <- weekFields, not $ null courseField]
-
--- Get the end time
+-- | Get all the end times for each day
 checkTimeEnd :: [[Double]] -> [String]
 checkTimeEnd day = map getStr (map (+ 0.5) (getEndConsecutives sortedList ++ [last sortedList]))
     where
@@ -124,23 +128,23 @@ getEndConsecutives lst = filter (/= filler) ([if lst !! i == (lst !! (i + 1)) - 
     where
     l = (length lst) - 2
 
--- TIMES
+-- ** Function that works for both start and end times
 
--- Create the string time
+-- | Create the string time
 getStr :: Double -> String
-getStr fullTime = if minutes == 0 then getStrTime (hour1, ":00:00") else getStrTime (hour1, (":" ++ ratio minutes ++ ":00"))
+getStr fullTime = if minutes == 0 then getStrTime (hr, ":00:00") else getStrTime (hr, (":" ++ ratio minutes ++ ":00"))
     where
     hours = splitOn "." (show fullTime)
-    hour1 = read (hours !! 0) :: Int 
+    hr = read (hours !! 0) :: Int 
     minutes = read (hours !! 1) :: Int 
 
--- Determine whether the time is AM or PM
+-- | Determine whether the time is AM or PM
 getStrTime :: (Int, String) -> String
-getStrTime (hour1, ending) = if hour1 >= 12 then (show $ afternoon hour1) ++ ending ++ " PM" else (show hour1) ++ ending ++ " AM"
+getStrTime (hr, ending) = if hr >= 12 then (show $ afternoon hr) ++ ending ++ " PM" else (show hr) ++ ending ++ " AM"
     where
-    afternoon hour1 = if hour1 == 12 then hour1 else hour1 - 12 
+    afternoon hr1 = if hr1 == 12 then hr1 else hr1 - 12 
 
--- Get the time out of a decimal part of my time
+-- | Get the time out of a decimal part of my time
 ratio :: Int -> String
 ratio decimal = if minutes >= 10 then show minutes else "0" ++ (show minutes)
     where
