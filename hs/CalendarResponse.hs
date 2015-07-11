@@ -55,7 +55,7 @@ pullDatabase (code, sect, session) =
 
 -- | Generates an event for each course.
 getEvent :: ([Time], String, String) -> [String]
-getEvent (timeFields, code, session) = concat $ eventsByCourse code session start end dates
+getEvent (timeFields, code, session) = concat $ concat $ eventsByCourse code session start end dates
     where
     dataInOrder = orderData timeFields
     start = startTime dataInOrder
@@ -63,14 +63,19 @@ getEvent (timeFields, code, session) = concat $ eventsByCourse code session star
     dates = startDates session dataInOrder
 
 -- | Creates an event for each course
-eventsByCourse :: String -> String -> [[String]] -> [[String]] -> [[[String]]] -> [[String]]
-eventsByCourse code session start end dates = [concat $ eventsByDay code session (start !! i) (end !! i) (dates !! i) | i <- [0 .. l]]
-    where
-    l = (length start) - 1
+eventsByCourse :: String -> String -> [[String]] -> [[String]] -> [[[String]]] -> [[[String]]]
+eventsByCourse code session start end dates = map (eventsByDay code session) (zip' start end dates)
+
+-- | Join three lists together in tuples of three elements
+zip' :: [a] -> [b] -> [c] -> [(a,b,c)]
+zip' _ _ [] = []
+zip' _ [] _ = []
+zip' [] _ _ = []
+zip' (x:xs) (y2:ys) (z:zs) = (x,y2,z):zip' xs ys zs
 
 -- | Creates an event for each day
-eventsByDay :: String -> String -> [String] -> [String] -> [[String]] -> [[String]]
-eventsByDay code session start end dates = if session == "Y" then year else half
+eventsByDay :: String -> String -> ([String], [String], [[String]]) -> [[String]]
+eventsByDay code session (start, end, dates) = if session == "Y" then year else half
     where
     year = halfFall ++ halfWinter
     halfFall = eventsByTime code start end (dates !! 0)
@@ -79,13 +84,11 @@ eventsByDay code session start end dates = if session == "Y" then year else half
 
 -- | Creates an event for each start/end time
 eventsByTime :: String -> [String] -> [String] -> [String] -> [[String]]
-eventsByTime code start end date = [eventsByDate code (start !! i) (end !! i) date | i <- [0 .. l]]
-    where
-    l = (length start) - 1
+eventsByTime code start end date = map (eventsByDate code date) (zip start end)
 
 -- | Generates the string that represents the event for each course
-eventsByDate :: String -> String -> String -> [String] -> [String]
-eventsByDate code start end date = map str date
+eventsByDate :: String -> [String] -> (String, String) -> [String]
+eventsByDate code date (start, end) = map str date
     where
     str byDate = code ++ "," ++ byDate ++ "," ++ start ++ "," ++ byDate ++ "," ++ end ++ ",False," ++ code ++ ",tba,True" 
 
@@ -101,11 +104,11 @@ orderData courseFields = filter notNull (assignDay $ map timeField courseFields)
 assignDay :: [[Double]] -> [[[Double]]]
 assignDay lst = [monday, tuesday, wednesday, thursday, friday]
     where
-    monday = [field | field <- lst, field !! 0 == 0.0]
-    tuesday = [field | field <- lst, field !! 0 == 1.0]
-    wednesday = [field | field <- lst, field !! 0 == 2.0]
-    thursday = [field | field <- lst, field !! 0 == 3.0]
-    friday = [field | field <- lst, field !! 0 == 4.0]
+    monday = let mon field = field !! 0 == 0.0 in filter mon lst
+    tuesday = let tues field = field !! 0 == 1.0 in filter tues lst
+    wednesday = let wed field = field !! 0 == 2.0 in filter wed lst
+    thursday = let thur field = field !! 0 == 3.0  in filter thur lst
+    friday = let fri field = field !! 0 == 4.0 in filter fri lst
 
 -- ** Start time
 
@@ -205,36 +208,48 @@ getDay _ = "That is not a valid representation of a day"
 -- First day of classes will be on September 14.
 -- Last day of classes will be on December 8
 generateDatesFall :: String -> [Day]
-generateDatesFall "M" = take 13 [addDays i firstMondayFall | i <- [0,7..]]
-generateDatesFall "T" = take 13 [addDays i firstTuesday | i <- [0,7..]]
-    where 
+generateDatesFall "M" = map add [0,7 .. 84]
+    where
+    add i = addDays i firstMondayFall
+generateDatesFall "T" = map add [0,7 .. 84]
+    where
     firstTuesday = addDays 1 firstMondayFall
-generateDatesFall "W" = take 12 [addDays i firstWednesday | i <- [0,7..]]
+    add i = addDays i firstTuesday
+generateDatesFall "W" = map add [0,7 .. 77]
     where 
     firstWednesday = addDays 2 firstMondayFall
-generateDatesFall "R" = take 12 [addDays i firstThursday | i <- [0,7..]]
+    add i = addDays i firstWednesday
+generateDatesFall "R" = map add [0,7 .. 77]
     where 
     firstThursday = addDays 3 firstMondayFall
-generateDatesFall "F" = take 12 [addDays i firstFriday | i <- [0,7..]]
+    add i = addDays i firstThursday
+generateDatesFall "F" = map add [0,7 .. 77]
     where 
     firstFriday = addDays 4 firstMondayFall
+    add i = addDays i firstFriday
 generateDatesFall _ = []
 
 -- Generate all the dates given the specific days
 -- First day of classes will be on January 11.
 -- Last day of classes will be on April 8
 generateDatesWinter :: String -> [Day]
-generateDatesWinter "M" = take 13 [addDays i firstMondayWinter | i <- [0,7..]]
-generateDatesWinter "T" = take 13 [addDays i firstTuesday | i <- [0,7..]]
+generateDatesWinter "M" = map add [0,7 .. 84]
+    where
+    add i = addDays i firstMondayWinter
+generateDatesWinter "T" = map add [0,7 .. 84]
     where 
-    firstTuesday = addDays 1 firstMondayWinter 
-generateDatesWinter "W" = take 13 [addDays i firstWednesday | i <- [0,7..]]
+    firstTuesday = addDays 1 firstMondayWinter
+    add i = addDays i firstTuesday
+generateDatesWinter "W" = map add [0,7 .. 84]
     where 
-    firstWednesday = addDays 2 firstMondayWinter 
-generateDatesWinter "R" = take 13 [addDays i firstThursday | i <- [0,7..]]
+    firstWednesday = addDays 2 firstMondayWinter
+    add i = addDays i firstWednesday
+generateDatesWinter "R" = map add [0,7 .. 84]
     where 
-    firstThursday = addDays 3 firstMondayWinter 
-generateDatesWinter "F" = take 13 [addDays i firstFriday | i <- [0,7..]]
+    firstThursday = addDays 3 firstMondayWinter
+    add i = addDays i firstThursday
+generateDatesWinter "F" = map add [0,7 .. 84]
     where 
     firstFriday = addDays 4 firstMondayWinter
+    add i = addDays i firstFriday
 generateDatesWinter _ = []
