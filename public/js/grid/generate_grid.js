@@ -1,3 +1,5 @@
+define(function () {
+
 /**
  * Generates the duplex timetable grid.
  */
@@ -179,3 +181,7 @@ function appendTableData(trFall, trSpring, time) {
             .addClass('timetable-dummy-cell'));
     }
 }
+
+return {generateGrid: generateGrid};
+
+});

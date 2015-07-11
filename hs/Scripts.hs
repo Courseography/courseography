@@ -50,14 +50,13 @@ graphScripts = concatHtml (map makeScript $
 timetableScripts :: H.Html
 timetableScripts = do
     jQuery
-    concatHtml (map makeScript $
+    concatHtml $ (map makeScript $
         ["static/js/grid/timetable_util.js",
          "/static/js/grid/setup.js",
          "/static/js/grid/mouse_events.js",
          "//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js",
          "https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js",
          "/static/js/common/cookie_handler.js",
-         "/static/js/grid/generate_grid.js",
          "/static/js/common/objects/course.js",
          "/static/js/common/objects/section.js",
          "/static/js/common/utilities/util.js",
@@ -68,7 +67,8 @@ timetableScripts = do
          "static/js/common/modal.js",
          "static/js/common/course_description.js",
          "static/js/common/export/export.js"] ++
-        if enableFb then facebookScripts else [])
+        if enableFb then facebookScripts else []) ++
+        [H.script ! H.dataAttribute "main" "static/js/grid" ! A.src "static/js/require.js" $ ""]
 
 drawScripts :: H.Html
 drawScripts = do

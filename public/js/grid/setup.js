@@ -7,31 +7,6 @@ var selectedCourses = [];   // All selected Courses.
 var selectedSections = [];  // All selected sections.
 var courseObjects = [];     // All selected course JSON files.
 
-
-/**
- * Sets up the page.
- */
-$(document).ready(function () {
-    'use strict';
-
-    $('#dialog').fadeOut()
-                .css('visibility', 'visible');
-
-    generateGrid();
-    var tdObjects = $('td');
-    tdObjects.each(function () {
-        $(this).data('conflicts', []);
-    });
-
-    restoreFromCookies();
-    renderClearAllButton();
-    enableSearch();
-    getVeryLargeCourseArray();
-    trapScroll();
-    setTdHover();
-});
-
-
 /**
  * Renders the button that allows the user to clear
  * all selected courses.
