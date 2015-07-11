@@ -77,9 +77,9 @@ returnCourse lowerStr = runSqlite dbStr $ do
 returnTutorialTimes :: T.Text -> T.Text -> T.Text -> IO [Time]
 returnTutorialTimes lowerStr sect session = runSqlite dbStr $ do
     maybeEntityTutorials <- selectFirst [TutorialsCode ==. T.toUpper lowerStr,
-                                    TutorialsSection ==. Just sect,
-                                    TutorialsSession ==. session]
-                                   []
+                                         TutorialsSection ==. Just sect,
+                                         TutorialsSession ==. session]
+                                        []
     case maybeEntityTutorials of
       Nothing -> return []
       Just entityTutorials -> return $ tutorialsTimes $ entityVal entityTutorials
@@ -89,9 +89,9 @@ returnTutorialTimes lowerStr sect session = runSqlite dbStr $ do
 returnLectureTimes :: T.Text -> T.Text -> T.Text -> IO [Time]
 returnLectureTimes lowerStr sect session = runSqlite dbStr $ do 
     maybeEntityLectures <- selectFirst [LecturesCode ==. T.toUpper lowerStr,
-                                   LecturesSection ==. sect,
-                                   LecturesSession ==. session]
-                                  []
+                                        LecturesSection ==. sect,
+                                        LecturesSession ==. session]
+                                       []
     return $ maybe [] (getLecture) maybeEntityLectures
       where
       getLecture entity = lecturesTimes $ entityVal entity

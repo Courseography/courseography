@@ -88,9 +88,9 @@ eventsByTime code start end date = map (eventsByDate code date) (zip start end)
 
 -- | Generates the string that represents the event for each course
 eventsByDate :: String -> [String] -> (String, String) -> [String]
-eventsByDate code date (start, end) = map str date
+eventsByDate code dates (start, end) = map str dates
     where
-    str byDate = code ++ "," ++ byDate ++ "," ++ start ++ "," ++ byDate ++ "," ++ end ++ ",False," ++ code ++ ",tba,True" 
+    str date = code ++ "," ++ date ++ "," ++ start ++ "," ++ date ++ "," ++ end ++ ",False," ++ code ++ ",tba,True" 
 
 -- ** Ordering data
 
@@ -124,7 +124,7 @@ checkTimeStart day = map getStr ([head sortedList] ++ getStartConsecutives sorte
 
 -- | Gets the start times that are not the very first start time 
 getStartConsecutives :: [Double] -> [Double]
-getStartConsecutives lst = filter (/= 30.0) ([if lst !! i == (lst !! (i + 1)) - 0.5 then 30.0 else (lst !! (i + 1))|i <- [0 .. l]])
+getStartConsecutives lst = filter (/= 30.0) ([if lst !! i == (lst !! (i + 1)) - 0.5 then 30.0 else (lst !! (i + 1))| i <- [0 .. l]])
     where
     l = (length lst) - 2
 
@@ -142,7 +142,7 @@ checkTimeEnd day = map getStr (map (+ 0.5) (getEndConsecutives sortedList ++ [la
 
 -- | Gets the end times that are not the very first end time 
 getEndConsecutives :: [Double] -> [Double]
-getEndConsecutives lst = filter (/= 30.0) ([if lst !! i == (lst !! (i + 1)) - 0.5 then 30.0 else lst !! i|i <- [0 .. l]])
+getEndConsecutives lst = filter (/= 30.0) ([if lst !! i == (lst !! (i + 1)) - 0.5 then 30.0 else lst !! i| i <- [0 .. l]])
     where
     l = (length lst) - 2
 
@@ -150,7 +150,9 @@ getEndConsecutives lst = filter (/= 30.0) ([if lst !! i == (lst !! (i + 1)) - 0.
 
 -- | Creates the string time
 getStr :: Double -> String
-getStr fullTime = if minutes == 0 then getStrTime (hour, ":00:00") else getStrTime (hour, (":" ++ ratio minutes ++ ":00"))
+getStr fullTime = if minutes == 0
+                  then getStrTime (hour, ":00:00")
+                  else getStrTime (hour, (":" ++ ratio minutes ++ ":00"))
     where
     hours = splitOn "." (show fullTime)
     hour = read (hours !! 0) :: Int 
@@ -158,7 +160,9 @@ getStr fullTime = if minutes == 0 then getStrTime (hour, ":00:00") else getStrTi
 
 -- | Determines whether the time is AM or PM
 getStrTime :: (Int, String) -> String
-getStrTime (hour, ending) = if hour >= 12 then (show $ afternoon hour) ++ ending ++ " PM" else (show hour) ++ ending ++ " AM"
+getStrTime (hour, ending) = if hour >= 12
+                            then (show $ afternoon hour) ++ ending ++ " PM"
+                            else (show hour) ++ ending ++ " AM"
     where
     afternoon hour1 = if hour1 == 12 then hour1 else hour1 - 12 
 
@@ -185,17 +189,17 @@ startDates session dataInOrder = map (checkSession session) dataInOrder
 startDate :: String -> [[Double]] -> [String]
 startDate session dayFields = map format (generateDate session (getDay $ (concat dayFields) !! 0))
 
--- Formats the date in the following way: month/day/year
+-- | Formats the date in the following way: month/day/year
 format :: Day -> String
 format date = formatTime defaultTimeLocale "%D" date
 
--- Generates all the dates given the specific day and session
+-- | Generates all the dates given the specific day and session
 generateDate :: String -> String -> [Day]
 generateDate "F" courseDay = generateDatesFall courseDay
 generateDate "S" courseDay = generateDatesWinter courseDay
 generateDate _ _  = []
 
--- Gives the appropriate day for the course
+-- | Gives the appropriate day for the course
 getDay :: Double -> String 
 getDay 0.0 = "M"
 getDay 1.0 = "T"
@@ -204,52 +208,28 @@ getDay 3.0 = "R"
 getDay 4.0 = "F"
 getDay _ = "That is not a valid representation of a day"
 
--- Generate all the dates given the specific days
--- First day of classes will be on September 14.
--- Last day of classes will be on December 8
+-- | Generate all the dates given the specific days
+-- | First day of classes will be on September 14.
+-- | Last day of classes will be on December 8
 generateDatesFall :: String -> [Day]
-generateDatesFall "M" = map add [0,7 .. 84]
-    where
-    add i = addDays i firstMondayFall
-generateDatesFall "T" = map add [0,7 .. 84]
-    where
-    firstTuesday = addDays 1 firstMondayFall
-    add i = addDays i firstTuesday
-generateDatesFall "W" = map add [0,7 .. 77]
-    where 
-    firstWednesday = addDays 2 firstMondayFall
-    add i = addDays i firstWednesday
-generateDatesFall "R" = map add [0,7 .. 77]
-    where 
-    firstThursday = addDays 3 firstMondayFall
-    add i = addDays i firstThursday
-generateDatesFall "F" = map add [0,7 .. 77]
-    where 
-    firstFriday = addDays 4 firstMondayFall
-    add i = addDays i firstFriday
+generateDatesFall "M" = map (add firstMondayFall) [0,7 .. 84]
+generateDatesFall "T" = map (add $ addDays 1 firstMondayFall) [0,7 .. 84]
+generateDatesFall "W" = map (add $ addDays 2 firstMondayFall) [0,7 .. 77]
+generateDatesFall "R" = map (add $ addDays 3 firstMondayFall) [0,7 .. 77]
+generateDatesFall "F" = map (add $ addDays 4 firstMondayFall) [0,7 .. 77]
 generateDatesFall _ = []
 
--- Generate all the dates given the specific days
--- First day of classes will be on January 11.
--- Last day of classes will be on April 8
+-- | Generate all the dates given the specific days
+-- | First day of classes will be on January 11.
+-- | Last day of classes will be on April 8
 generateDatesWinter :: String -> [Day]
-generateDatesWinter "M" = map add [0,7 .. 84]
-    where
-    add i = addDays i firstMondayWinter
-generateDatesWinter "T" = map add [0,7 .. 84]
-    where 
-    firstTuesday = addDays 1 firstMondayWinter
-    add i = addDays i firstTuesday
-generateDatesWinter "W" = map add [0,7 .. 84]
-    where 
-    firstWednesday = addDays 2 firstMondayWinter
-    add i = addDays i firstWednesday
-generateDatesWinter "R" = map add [0,7 .. 84]
-    where 
-    firstThursday = addDays 3 firstMondayWinter
-    add i = addDays i firstThursday
-generateDatesWinter "F" = map add [0,7 .. 84]
-    where 
-    firstFriday = addDays 4 firstMondayWinter
-    add i = addDays i firstFriday
+generateDatesWinter "M" = map (add firstMondayWinter) [0,7 .. 84]
+generateDatesWinter "T" = map (add $ addDays 1 firstMondayWinter) [0,7 .. 84]
+generateDatesWinter "W" = map (add $ addDays 2 firstMondayWinter) [0,7 .. 84]
+generateDatesWinter "R" = map (add $ addDays 3 firstMondayWinter) [0,7 .. 84]
+generateDatesWinter "F" = map (add $ addDays 4 firstMondayWinter) [0,7 .. 84]
 generateDatesWinter _ = []
+
+-- | Adds a given number of days to a given date
+add :: Day -> Integer -> Day
+add day num = addDays num day
