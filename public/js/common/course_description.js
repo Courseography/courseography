@@ -27,7 +27,7 @@ function formatCourseName(id) {
 
     var names;
 
-    if (id === 'CSC200') {
+    if (id === 'csc200') {
         names = id + 'Y1';
     } else if (id === 'Calc1') {
         names = 'MAT135H1' + ' ' + 'MAT136H1' + ' ' + 'MAT137Y1' + ' ' +
