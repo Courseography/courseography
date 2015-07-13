@@ -19,13 +19,13 @@ import Config (databasePath)
 -- | used as an intermediate container while extracting lecture and tutorial information
 -- from the table. Is is later converted into lecture or tutorial records by examinig the
 -- first letter of the section.
-data CourseSlot =
-    CourseSlot { slotCode :: T.Text,
-                 slotSession :: T.Text,
-                 slotSection :: T.Text,
-                 slotTimeStr :: T.Text,
-                 slotInstructor :: T.Text
-               } deriving Show
+data CourseSlot = CourseSlot {
+    slotCode :: T.Text,
+    slotSession :: T.Text,
+    slotSection :: T.Text,
+    slotTimeStr :: T.Text,
+    slotInstructor :: T.Text
+    } deriving Show
 
 timetableUrl :: String
 timetableUrl = "http://www.artsandscience.utoronto.ca/ofr/timetable/winter/"
@@ -135,25 +135,27 @@ parseCourse course slot slots session code =
 
 -- | converts a courseSlot into a lecture
 makeLecture :: CourseSlot -> Lecture
-makeLecture slot =
-    Lecture { lectureCode = slotCode slot,
-              lectureSession = slotSession slot,
-              lectureSection = (slotSection slot),
-              lectureTime = concatMap makeTimeSlots (T.split (== ' ') (slotTimeStr slot)),
-              lectureCap = 0,
-              lectureInstructor = (slotInstructor slot),
-              lectureEnrol = 0,
-              lectureWait = 0,
-              lectureExtra = 0,
-              lectureTimeStr = (slotTimeStr slot) }
+makeLecture slot = Lecture {
+    lectureCode = slotCode slot,
+    lectureSession = slotSession slot,
+    lectureSection = (slotSection slot),
+    lectureTime = concatMap makeTimeSlots (T.split (== ' ') (slotTimeStr slot)),
+    lectureCap = 0,
+    lectureInstructor = (slotInstructor slot),
+    lectureEnrol = 0,
+    lectureWait = 0,
+    lectureExtra = 0,
+    lectureTimeStr = (slotTimeStr slot)
+    }
 
 -- | converts a single courseSlot into a tutorial
 makeTutorial :: CourseSlot -> Tutorial
-makeTutorial slot =
-    Tutorial { tutorialCode = slotCode slot,
-               tutorialSession = slotSession slot,
-               tutorialSection = Just (slotSection slot),
-               tutorialTimes = concatMap makeTimeSlots (T.split (== ' ') (slotTimeStr slot))}
+makeTutorial slot = Tutorial {
+    tutorialCode = slotCode slot,
+    tutorialSession = slotSession slot,
+    tutorialSection = Just (slotSection slot),
+    tutorialTimes = concatMap makeTimeSlots (T.split (== ' ') (slotTimeStr slot))
+    }
 
 -- | returns true if the courseSlot is housing a lecture, false otherwise.
 isLecture :: CourseSlot -> Bool

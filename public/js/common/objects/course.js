@@ -84,14 +84,14 @@ Course.prototype.parseLectures = function (session, timeSuffix) {
 
     session.lectures.forEach(function (lecture, i, arr) {
         if (lecture.section.charAt(1) === '2' ||
-            lecture.time === 'Online Web Version') {
+            lecture.times === 'Online Web Version') {
             return;
         }
 
         sectionTimes = [];
 
         var id = tmp.name + '-' + lecture.section + '-' + timeSuffix;
-        sectionTimes = sectionTimes.concat(convertTimes(lecture.time));
+        sectionTimes = sectionTimes.concat(convertTimes(lecture.times));
 
         if (timeSuffix === 'Y') {
             sectionTimes = sectionTimes.map(function (t) {
