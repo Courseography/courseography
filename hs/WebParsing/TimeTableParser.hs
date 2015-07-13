@@ -139,7 +139,7 @@ makeLecture slot = Lecture {
     lectureCode = slotCode slot,
     lectureSession = slotSession slot,
     lectureSection = (slotSection slot),
-    lectureTime = concatMap makeTimeSlots (T.split (== ' ') (slotTimeStr slot)),
+    lectureTimes = concatMap makeTimeSlots (T.split (== ' ') (slotTimeStr slot)),
     lectureCap = 0,
     lectureInstructor = (slotInstructor slot),
     lectureEnrol = 0,
