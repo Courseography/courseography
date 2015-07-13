@@ -89,8 +89,9 @@ function toggleSidebar(location) {
             $('#sidebar-icon').addClass('flip');
         });
         fillFCECount();
-        $('#focuses').show();
-        $('#focuses-nav').addClass('active');
+        $('#graphs').show();
+        $('#graphs-nav').addClass('active');
+        createGraphButtons();
 
         $('#reset').show();
 
