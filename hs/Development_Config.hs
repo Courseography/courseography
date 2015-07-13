@@ -48,12 +48,12 @@ genCssPath = "../public/style/"
 cssStyle :: Clay.Config
 cssStyle = Clay.pretty
 
--- DATES FALL 2015/WINTER 2016
+-- CALENDAR RESPONSE DATES
 
--- | The first day of the Fall term.
+-- | The first Monday of the Fall term 2015-2016
 firstMondayFall :: Day
 firstMondayFall = fromGregorian 2015 09 14
 
--- | The first day of the Winter term.
+-- | The first Monday of the Winter term 2015-2016
 firstMondayWinter :: Day
 firstMondayWinter = fromGregorian 2016 01 11
