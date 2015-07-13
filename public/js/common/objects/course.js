@@ -130,9 +130,8 @@ Course.prototype.parseTutorials = function (session, timeSuffix) {
     }
 
     var tmp = this;
-    var tutorials = session.tutorials;
 
-    return tutorials.map(function (tutorial) {
+    return session.tutorials.map(function (tutorial) {
         var sectionTimes = convertTimes(tutorial.times);
         if (timeSuffix === 'Y') {
             sectionTimes = sectionTimes.map(function (t) {
