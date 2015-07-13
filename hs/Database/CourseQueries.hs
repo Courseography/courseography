@@ -76,7 +76,7 @@ returnCourse lowerStr = runSqlite databasePath $ do
 -- | Queries the database for all information regarding a specific tutorial for a @course@,
 -- returns a list of Time fields.
 returnTutorialTimes :: T.Text -> T.Text -> T.Text -> IO [Time]
-returnTutorialTimes lowerStr sect session = runSqlite dbStr $ do
+returnTutorialTimes lowerStr sect session = runSqlite databasePath $ do
     maybeEntityTutorials <- selectFirst [TutorialsCode ==. T.toUpper lowerStr,
                                          TutorialsSection ==. Just sect,
                                          TutorialsSession ==. session]
@@ -88,7 +88,7 @@ returnTutorialTimes lowerStr sect session = runSqlite dbStr $ do
 -- | Queries the database for all information regarding a specific lecture for a @course@,
 -- returns a list of Time fields.
 returnLectureTimes :: T.Text -> T.Text -> T.Text -> IO [Time]
-returnLectureTimes lowerStr sect session = runSqlite dbStr $ do 
+returnLectureTimes lowerStr sect session = runSqlite databasePath $ do 
     maybeEntityLectures <- selectFirst [LecturesCode ==. T.toUpper lowerStr,
                                         LecturesSection ==. sect,
                                         LecturesSession ==. session]
