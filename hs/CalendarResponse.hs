@@ -53,6 +53,8 @@ pullDatabase (code, sect, session) =
         courseInfo <- info 
         return (courseInfo, code, session)
 
+-- ** Event Creation
+
 -- | Generates an event for each course.
 getEvent :: ([Time], String, String) -> [String]
 getEvent (timeFields, code, session) = concat $ concat $ eventsByCourse code session start end dates

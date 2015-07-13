@@ -80,9 +80,9 @@ returnTutorialTimes lowerStr sect session = runSqlite dbStr $ do
                                          TutorialsSection ==. Just sect,
                                          TutorialsSession ==. session]
                                         []
-    case maybeEntityTutorials of
-      Nothing -> return []
-      Just entityTutorials -> return $ tutorialsTimes $ entityVal entityTutorials
+    return $ maybe [] getTutorial maybeEntityTutorials
+    where
+      getTutorial entity = tutorialsTimes $ entityVal entity
 
 -- | Queries the database for all information regarding a specific lecture for a @course@,
 -- returns a list of Time fields.
@@ -92,14 +92,10 @@ returnLectureTimes lowerStr sect session = runSqlite dbStr $ do
                                         LecturesSection ==. sect,
                                         LecturesSession ==. session]
                                        []
-    return $ maybe [] (getLecture) maybeEntityLectures
-      where
-      getLecture entity = lecturesTimes $ entityVal entity
-  
-    {-case maybeEntityLectures of
-      Nothing -> return []
-      Just entityLectures -> return $ lecturesTimes $ entityVal entityLectures
--}
+    return $ maybe [] getLecture maybeEntityLectures
+    where
+    getLecture entity = lecturesTimes $ entityVal entity
+
 -- | Builds a Course structure from a tuple from the Courses table.
 -- Some fields still need to be added in.
 buildCourse :: Maybe Session -> Maybe Session -> Maybe Session -> Courses -> Course
