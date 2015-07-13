@@ -92,6 +92,7 @@ function toggleSidebar(location) {
         $('#graphs').show();
         $('#graphs-nav').addClass('active');
         createGraphButtons();
+        changeFocusEnable(getCookie('active-graph'));
 
         $('#reset').show();
 

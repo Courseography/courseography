@@ -57,6 +57,7 @@ $(document).on('click', '.graph-button', function() {
 
     var id = $(this).data('id');
     loadGraph(id);
+    changeFocusEnable(id);
 });
 
 
@@ -123,4 +124,16 @@ function enableReset() {
     'use strict';
 
     fillFCECount();
+}
+
+function changeFocusEnable(id) {
+    var currentGraph = graphs[id - 1].title;
+    if (currentGraph.indexOf("Computer Science") >= 0)
+    {
+        $("#focuses-nav").removeClass('disabled');
+    }
+    else
+    {
+        $("#focuses-nav").addClass('disabled');
+    }
 }
