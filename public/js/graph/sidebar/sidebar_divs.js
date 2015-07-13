@@ -89,9 +89,12 @@ function toggleSidebar(location) {
             $('#sidebar-icon').addClass('flip');
         });
         fillFCECount();
+
+        $('#graphs').empty();
         $('#graphs').show();
         $('#graphs-nav').addClass('active');
         createGraphButtons();
+
         changeFocusEnable(getCookie('active-graph'));
 
         $('#reset').show();
