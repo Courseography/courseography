@@ -8,28 +8,19 @@ When the project is deployed to the production environment, this file should be 
 containing the production values.
 -}
 
-<<<<<<< HEAD:hs/Development_Config.hs
-module Config (dbStr,
-               markdownPath,
-               graphPath,
-               genCssPath,
-               cssStyle,
-               firstMondayFall,
-               firstMondayWinter,
-               filler) where
-=======
 module Config
     (databasePath,
      markdownPath,
      graphPath,
      genCssPath,
      cssStyle,
-     enableFb) where
->>>>>>> b998f069f282e5ec08ad641eed654686a14c0d8b:hs/DevelopmentConfig.hs
+     enableFb,
+     firstMondayFall,
+     firstMondayWinter) where
 
 import Data.Text (Text)
 import qualified Clay.Render as Clay
-import Data.Time
+import Data.Time (Day, fromGregorian)
 
 -- DATABASE CONNECTION STRINGS
 
@@ -58,19 +49,18 @@ genCssPath = "../public/style/"
 cssStyle :: Clay.Config
 cssStyle = Clay.pretty
 
-<<<<<<< HEAD:hs/Development_Config.hs
+-- CALENDAR RESPONSE DATES
+
+-- | First Monday of the Fall term.
 firstMondayFall :: Day
 firstMondayFall = fromGregorian 2015 09 14
 
+-- | First Monday of the Winter term.
 firstMondayWinter :: Day
 firstMondayWinter = fromGregorian 2016 01 11
 
-filler :: Double
-filler = 30.0
-=======
 -- FACEBOOK CONFIGURATION
 
 -- | Enable Facebook integration. Should only be true on the production server.
 enableFb :: Bool
 enableFb = False
->>>>>>> b998f069f282e5ec08ad641eed654686a14c0d8b:hs/DevelopmentConfig.hs
