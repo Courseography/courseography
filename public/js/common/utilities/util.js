@@ -34,7 +34,9 @@ function removeFromArray(item, array) {
  * @returns {string|null} The value of the parameter as a string, or null if it does not exist.
  */
 function getURLParameter(name) {
-    return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null
+    'use strict';
+
+    return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null;
 }
 
 /* These specifically manipulate the two global arrays,
@@ -77,7 +79,6 @@ function getCourseObject(courseName, courseArray) {
  * Gets a course.
  * @param {string} name The course's course code.
  * @returns {JSON} The course being retrieved.
- * TODO: Perhaps clean up this function a bit.
  */
 function getCourse(name) {
     'use strict';

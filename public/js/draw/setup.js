@@ -64,7 +64,7 @@ $(document).ready(function () {
     svgDoc.appendChild(setupMarker());
 });
 
-/* SET UP SIDEBAR AND ONCLICKS FOR BUTTONS */ // !! Should these onclick definitions go inside setup? !!
+/* SET UP SIDEBAR AND ONCLICKS FOR BUTTONS */
 
 $('.mode').each(function () {
     'use strict';
@@ -193,5 +193,7 @@ function addText() {
         var textNode = document.createTextNode(courseCode);
         code.appendChild(textNode);
         g.appendChild(code);
+
+        document.getElementById('t' + nodeSelected.id.slice(1)).addEventListener('mousedown', nodeClicked, false);
     }
 }

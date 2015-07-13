@@ -11,7 +11,13 @@ SVG is generated. This work should really be done immediately after
 parsing, before anything is inserted into the database.
 -}
 
-module Svg.Builder where
+module Svg.Builder
+    (buildPath,
+     buildRect,
+     buildEllipses,
+     intersectsWithShape,
+     buildPathString,
+     sanitizeId) where
 
 import Data.Char (toLower)
 import Data.List (find)
@@ -28,9 +34,9 @@ buildPath :: [Shape] -- ^ Node elements.
           -> Path    -- ^ A path.
           -> Integer -- ^ A number to use in the ID of the path.
           -> Path
-buildPath rects ellipses entity idCounter
+buildPath rects ellipses entity elementId
     | pathIsRegion entity =
-          entity {pathId_ = pathId_ entity ++ ('p' : show idCounter),
+          entity {pathId_ = pathId_ entity ++ ('p' : show elementId),
                   pathSource = "",
                   pathTarget = ""}
     | otherwise =
@@ -42,7 +48,7 @@ buildPath rects ellipses entity idCounter
                                (filter (\r -> shapeId_ r /= sourceNode) rects ++
                                 ellipses)
           in
-              entity {pathId_ = 'p' : show idCounter,
+              entity {pathId_ = 'p' : show elementId,
                       pathSource = sourceNode,
                       pathTarget = targetNode}
 
@@ -52,7 +58,7 @@ buildRect :: [Text]  -- ^ A list of shapes that may intersect with the given nod
           -> Shape   -- ^ A node.
           -> Integer -- ^ An integer to uniquely identify the shape
           -> Shape
-buildRect texts entity idCounter =
+buildRect texts entity elementId =
     let rectTexts = filter (intersects
                             (shapeWidth entity)
                             (shapeHeight entity)
@@ -61,11 +67,9 @@ buildRect texts entity idCounter =
                             . textPos
                             ) texts
         textString = concatMap textText rectTexts
-        -- TODO: consolidate with toId in Generator.hs
-        sanitize = filter (\c -> not $ elem c ",()/<>%")
         id_ = case shapeType_ entity of
-              Hybrid -> "h" ++ show idCounter
-              Node -> map toLower $ sanitize textString
+              Hybrid -> 'h' : show elementId
+              Node -> map toLower $ sanitizeId textString
     in
         entity {shapeId_ = id_,
                 shapeText = rectTexts,
@@ -79,7 +83,7 @@ buildEllipses :: [Text]  -- ^ A list of Text elements that may or may not inters
               -> Shape   -- ^ An ellipse.
               -> Integer -- ^ A number to use in the ID of the ellipse.
               -> Shape
-buildEllipses texts entity idCounter =
+buildEllipses texts entity elementId =
     let ellipseText = filter (intersects
                               (shapeWidth entity)
                               (shapeHeight entity)
@@ -88,7 +92,7 @@ buildEllipses texts entity idCounter =
                               . textPos
                               ) texts
     in
-        entity {shapeId_ = "bool" ++ show idCounter,
+        entity {shapeId_ = "bool" ++ show elementId,
                 shapeFill = "", -- TODO: necessary?
                 shapeText = ellipseText,
                 shapeTolerance = 20} -- TODO: necessary?
@@ -136,3 +140,9 @@ getIntersectingShape point shapes =
 intersectsWithShape :: [Shape] -> Text -> Bool
 intersectsWithShape shapes text =
     any (intersectsWithPoint (textPos text)) shapes
+
+-- ** Other helpers
+
+-- | Strips disallowed characters from string for DOM id
+sanitizeId :: String -> String
+sanitizeId = filter (\c -> not $ elem c ",()/<>%")

@@ -33,7 +33,7 @@ $(document).ready(function () {
 
 
 /**
- * Renders the button that allows the user to deselect
+ * Renders the button that allows the user to clear
  * all selected courses.
  */
 function renderClearAllButton() {
@@ -43,7 +43,7 @@ function renderClearAllButton() {
     $(clearAllItem).click(function () {
         if (confirm('Clear all selected courses?')) {
             $.each(courseObjects.slice(0), function (i, course) {
-                removeCourseFromList(course.name);
+                deselectCourse(course.name);
             });
         }
     });

@@ -10,7 +10,8 @@ This functionality is used both to create SVG for the Graph component,
 as well as generating images on the fly for Facebook posting.
 -}
 
-module Svg.Generator where
+module Svg.Generator
+    (buildSVG) where
 
 import Svg.Builder
 import Database.Tables
@@ -18,7 +19,7 @@ import Database.DataType
 import Control.Monad.IO.Class (liftIO)
 import Database.Persist.Sqlite
 import Data.List hiding (map, filter)
-import MakeElements
+import Utilities
 import Data.Maybe (fromMaybe)
 import qualified Data.Text as T
 import Text.Blaze.Svg11 ((!))
@@ -35,10 +36,14 @@ import Css.Constants (theoryDark,
                       numDark,
                       aiDark,
                       introDark,
-                      mathDark)
+                      mathDark,
+                      nodeFontSize,
+                      hybridFontSize,
+                      boolFontSize,
+                      regionFontSize)
 import qualified Data.Map.Strict as M
-import Data.Monoid (mempty)
-import Config (dbStr)
+import Data.Monoid (mempty, mappend, mconcat)
+import Config (databasePath)
 
 -- | This is the main function that retrieves a stored graph
 -- from the database and creates a new SVG file for it.
@@ -54,7 +59,7 @@ buildSVG :: GraphId              -- ^ The ID of the graph that is being built.
          -> Bool                 -- ^ Whether to include inline styles.
          -> IO ()
 buildSVG gId courseMap filename styled =
-    runSqlite dbStr $ do
+    runSqlite databasePath $ do
         sqlRects    :: [Entity Shape] <- selectList
                                              [ShapeType_ <-. [Node, Hybrid],
                                               ShapeGraph ==. gId] []
@@ -135,14 +140,14 @@ makeSVGDoc courseMap rects ellipses edges regions regionTexts styled =
                           concatSVG $ map (regionToSVG styled)
                                           regions
                       S.g ! A.id_ "nodes"
-                          ! A.style "stroke:#000000;" $
+                          ! A.stroke "black" $
                           concatSVG $ map (rectToSVG styled courseMap)
                                            rects
                       S.g ! A.id_ "bools" $
                           concatSVG $ map (ellipseToSVG styled)
                                           ellipses
                       S.g ! A.id_ "edges"
-                          ! A.style "stroke:#000000" $
+                          ! A.stroke "black" $
                               concatSVG $ map (edgeToSVG styled)
                                               edges
                       S.g ! A.id_ "region-labels" $
@@ -176,7 +181,7 @@ rectToSVG styled courseMap rect
             class_ = case shapeType_ rect of
                          Node -> "node"
                          Hybrid -> "hybrid"
-        in S.g ! A.id_ (stringValue $ toId $ shapeId_ rect)
+        in S.g ! A.id_ (stringValue $ sanitizeId $ shapeId_ rect)
                ! A.class_ (stringValue class_)
                ! S.customAttribute "data-group" (stringValue
                                                  (getArea (shapeId_ rect)))
@@ -214,7 +219,8 @@ ellipseToSVG styled ellipse =
                       ! A.ry (stringValue . show $ shapeHeight ellipse / 2)
                       ! if styled
                         then
-                            A.style "stroke:#000000;fill:none;"
+                            A.stroke "black" `mappend`
+                            A.fill "none"
                         else mempty
             concatSVG $ map
                 (textToSVG styled BoolNode (fst $ shapePos ellipse))
@@ -228,34 +234,38 @@ textToSVG styled type_ xPos' text =
                       then xPos
                       else xPos')
             ! A.y (stringValue $ show yPos)
-            ! A.style (stringValue $ align ++ fontStyle ++ fill)
+            ! (if styled then allStyles else baseStyles)
             $ toMarkup $ textText text
     where
         (xPos, yPos) = textPos text
-        alignVal = case type_ of
+        align = case type_ of
                        Region -> textAlign text
                        _ -> "middle"
-        align = "text-anchor:" ++ alignVal ++ ";"
-        fill = case textFill text of
-               "" -> ""
-               colour -> "fill:" ++ colour ++ ";"
 
-        getTextStyle Hybrid    = hybridTextStyle
-        getTextStyle BoolNode  = ellipseTextStyle
-        getTextStyle Region    = regionTextStyle
-        getTextStyle _         = ""
+        fontSize = case type_ of
+            Hybrid -> hybridFontSize
+            BoolNode -> boolFontSize
+            Region -> regionFontSize
+            _ -> nodeFontSize
 
-        -- TODO: Possibly move this closer to the CSS
-        hybridTextStyle = "font-size:7.5pt;fill:white;"
-        ellipseTextStyle = "font-size:7.5pt;"
-        regionTextStyle = "font-size:9pt;"
+        fill =
+            if type_ == Hybrid
+            then A.fill "white"
+            else
+                if null $ textFill text
+                then mempty
+                else A.fill $ stringValue $ textFill text
 
-        fontStyle = if styled
-                    then
-                        getTextStyle type_ ++
-                        "font-family:sans-serif;stroke:none;"
-                    else
-                        ""
+        baseStyles = mconcat
+            [A.stroke "none",
+             fill,
+             A.textAnchor $ stringValue align]
+
+        allStyles = mconcat
+            [A.fontFamily "'Trebuchet MS', 'Arial', sans-serif",
+             A.fontSize (stringValue $ show fontSize ++ "pt")] `mappend`
+            baseStyles
+
 
 -- | Converts a path to SVG.
 edgeToSVG :: Bool -> Path -> S.Svg
@@ -264,13 +274,15 @@ edgeToSVG styled path =
            ! A.class_ "path"
            ! A.d (stringValue $ 'M' : buildPathString (pathPoints path))
            ! A.markerEnd "url(#arrow)"
-           ! S.customAttribute "source-node" (stringValue $ toId
+           ! S.customAttribute "source-node" (stringValue $ sanitizeId
                                                           $ pathSource path)
-           ! S.customAttribute "target-node" (stringValue $ toId
+           ! S.customAttribute "target-node" (stringValue $ sanitizeId
                                                           $ pathTarget path)
            ! if styled
              then
-                 A.style (stringValue $ "fill:" ++
+                 mappend
+                     (A.strokeWidth "2px") $
+                     A.style (stringValue $ "fill:" ++
                           pathFill path ++
                           ";fill-opacity:1;")
              else
@@ -329,9 +341,3 @@ areaMap =  M.fromList
              "csc485", "csc486"], (aiDark, "ai")),
            (["csc104", "csc120", "csc108", "csc148"], (introDark, "intro")),
            (["calc1", "lin1", "sta1", "sta2"], (mathDark, "math"))]
-
--- ** Other helpers
-
--- | Strip disallowed characters from string for DOM id
-toId :: String -> String
-toId = filter (\c -> not $ elem c ",()/<>%")

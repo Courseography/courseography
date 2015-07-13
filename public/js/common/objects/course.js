@@ -8,9 +8,9 @@ function Course(name) {
 
     var course = getCourse(name);
     // Copy attributes
-    this.F = course.F;
-    this.S = course.S;
-    this.Y = course.Y;
+    this.F = course.fallSession;
+    this.S = course.springSession;
+    this.Y = course.yearSession;
     this.name = course.name;
     this.title = course.title;
     this.prereqs = course.prereqs;
@@ -26,7 +26,7 @@ function Course(name) {
     this.videoUrls = course.videoUrls;
 
     // Create sections
-    this.parseSessions(course);
+    this.parseSessions();
 
     this.selected = {'L': undefined, 'T': undefined, 'P': undefined};
 
@@ -39,17 +39,16 @@ function Course(name) {
 /* Section initialization */
 /**
  * Parses this Course's sessions.
- * @param {JSON} course The object from which the sessions are retrieved.
  */
-Course.prototype.parseSessions = function (course) {
+Course.prototype.parseSessions = function () {
     'use strict';
 
     // In the long run, maybe initialize to []
     this.sections = {'F': undefined, 'S': undefined, 'Y': undefined};
     var tmp = this;
     $.each(['F', 'S', 'Y'], function (i, s) {
-        if (course[s] !== undefined) {
-            tmp.sections[s] = tmp.parseSections(course[s], s);
+        if (tmp[s] !== undefined) {
+            tmp.sections[s] = tmp.parseSections(tmp[s], s);
         }
     });
 };
@@ -372,7 +371,7 @@ Course.prototype.renderHeader = function () {
     $(courseImg).attr('src', 'static/res/ico/delete.png')
                 .addClass('close-icon')
                 .click(function () {
-                    removeCourseFromList(tmp.name);
+                    deselectCourse(tmp.name);
                 });
     var aboutImg = document.createElement('img');
     $(aboutImg).attr('src', 'static/res/ico/about.png')

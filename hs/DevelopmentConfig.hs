@@ -8,6 +8,7 @@ When the project is deployed to the production environment, this file should be 
 containing the production values.
 -}
 
+<<<<<<< HEAD:hs/Development_Config.hs
 module Config (dbStr,
                markdownPath,
                graphPath,
@@ -16,6 +17,15 @@ module Config (dbStr,
                firstMondayFall,
                firstMondayWinter,
                filler) where
+=======
+module Config
+    (databasePath,
+     markdownPath,
+     graphPath,
+     genCssPath,
+     cssStyle,
+     enableFb) where
+>>>>>>> b998f069f282e5ec08ad641eed654686a14c0d8b:hs/DevelopmentConfig.hs
 
 import Data.Text (Text)
 import qualified Clay.Render as Clay
@@ -24,8 +34,8 @@ import Data.Time
 -- DATABASE CONNECTION STRINGS
 
 -- | The path to the database file, relative to @hs/@.
-dbStr :: Text
-dbStr = "Database/database2015.sqlite3"
+databasePath :: Text
+databasePath = "Database/database2015.sqlite3"
 
 -- FILE PATH STRINGS
 
@@ -48,12 +58,19 @@ genCssPath = "../public/style/"
 cssStyle :: Clay.Config
 cssStyle = Clay.pretty
 
--- DATES FALL 2015/WINTER 2016
-
--- | The first day of the Fall term.
+<<<<<<< HEAD:hs/Development_Config.hs
 firstMondayFall :: Day
 firstMondayFall = fromGregorian 2015 09 14
 
--- | The first day of the Winter term.
 firstMondayWinter :: Day
 firstMondayWinter = fromGregorian 2016 01 11
+
+filler :: Double
+filler = 30.0
+=======
+-- FACEBOOK CONFIGURATION
+
+-- | Enable Facebook integration. Should only be true on the production server.
+enableFb :: Bool
+enableFb = False
+>>>>>>> b998f069f282e5ec08ad641eed654686a14c0d8b:hs/DevelopmentConfig.hs

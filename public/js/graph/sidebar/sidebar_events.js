@@ -1,40 +1,40 @@
 /**
  * The click function when we click the reset button.
-**/
+ */
 $('#reset').click(function () {
     'use strict';
 
     reset();
     enableReset();
-})
+});
 
 /**
  * The click function when a focus is clicked.
-**/
+ */
 $('.focus').click(function(e) {
     'use strict';
 
     var id = $(this).attr('id');
+    var focusDetails = $('#' + id + '-details');
 
-    if ($('#' + id + '-details').text() !== '') {
+    if (focusDetails.text() !== '') {
         clearFocus();
         $('ellipse.spotlight').remove();
         setMouseCallbacks();
-        $('#' + id + '-details').animate({height: '2px'}, 'fast');
-        $('#' + id + '-details').html('');
+        focusDetails.animate({height: '2px'}, 'fast');
+        focusDetails.html('');
     } else {
         $('.details').css('height', '2px');
         updateActiveFocus(id);
-        $('#' + id + '-details').animate({height: '128px'}, 'fast');
-        $('#' + id + '-details').html(window[id + 'Description']);
+        focusDetails.animate({height: '128px'}, 'fast');
+        focusDetails.html(window[id + 'Description']);
     }
 });
 
 
 /**
  * Dynamically creates buttons for each graph in the sidebar.
- * @param {JSON[]} An array of JSON objects representing graphs in the database
-**/
+ */
 function createGraphButtons() {
     'use strict';
 
@@ -51,7 +51,7 @@ function createGraphButtons() {
 
 /**
  * Click function to load graph, based on button clicked in sidebar.
-**/
+ */
 $(document).on('click', '.graph-button', function() {
     'use strict';
 
@@ -63,7 +63,7 @@ $(document).on('click', '.graph-button', function() {
 /**
  * Loads a Graph
  * @param{string} id ID of graph in database
-**/
+ */
 function loadGraph(id) {
     'use strict';
 
@@ -93,12 +93,12 @@ function loadGraph(id) {
     // activateFeedbackForm();
     // Uncomment to enable graph dragging
     // enableGraphDragging();
-};
+}
 
 
 /**
  * Grabs all the graphs currently parsed into the database
-**/
+ */
 function getGraphsInDatabase() {
     'use strict';
 
@@ -118,7 +118,7 @@ function getGraphsInDatabase() {
 /**
  * Determines whether Reset button should be greyed out or not
  * (If there are active FCEs or not)
-**/
+ */
 function enableReset() {
     'use strict';
 

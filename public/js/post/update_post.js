@@ -245,7 +245,7 @@ function updateMatCreditCount() {
 
 /**
  * Returns whether course is a specialist course or not
- * @param {string} Name of course
+ * @param {string} course Name of course
  * @return {boolean} True if course is a specialist, False otherwise
  */
 function notSpecialistCourse(course) {
@@ -256,8 +256,8 @@ function notSpecialistCourse(course) {
 
 /**
  * Returns whether course is a required course or not
- * @param {object} POSt
- * @param {string} Name of course
+ * @param {object} post POSt
+ * @param {string} course Name of course
  * @return {boolean} True if course is a required course, False otherwise
  */
 function notReqCourse(post, course) {

@@ -29,11 +29,11 @@ function makeNode(type, name) {
  * @param {string} type The Hybrid's type.
  * @param {string} id The hybrid's name.
  */
-function makeHybrid(type, name) {
+function makeHybrid(type, id) {
     'use strict';
 
-    makeNode(type, name);
-    window[name].hybrid = true;
+    makeNode(type, id);
+    window[id].hybrid = true;
 }
 
 
@@ -41,20 +41,20 @@ function makeHybrid(type, name) {
  * Makes an Edge.
  * @param {Node} source The source Node of the Edge.
  * @param {Node} target The target Node of the Edge.
- * @param {string} id The name of the Edge.
+ * @param {string} id The id of the Edge.
  */
-function makeEdge(parent, child, name) {
+function makeEdge(source, target, id) {
     'use strict';
 
     try {
-        window[name] = new Edge(parent, child, name);
-        parent.outEdges.push(window[name]);
-        child.inEdges.push(window[name]);
+        window[id] = new Edge(source, target, id);
+        source.outEdges.push(window[id]);
+        target.inEdges.push(window[id]);
 
-        parent.children.push(child);
-        child.parents.push(parent);
+        source.children.push(target);
+        target.parents.push(source);
     } catch (err) {
-        console.log('Encountered an error for: ' + name);
+        console.log('Encountered an error for: ' + id);
         console.log(err);
     }
 }

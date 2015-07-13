@@ -1,12 +1,14 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module MasterTemplate where
+module MasterTemplate
+    (masterTemplate, header, disclaimer) where
 
 import           Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 import Text.Blaze.Internal (stringValue)
-import MakeElements
+import Config (enableFb)
+import Utilities
 
 masterTemplate :: String -> [H.Html] -> H.Html -> H.Html -> H.Html
 masterTemplate title headers body scripts =
@@ -29,8 +31,8 @@ masterTemplate title headers body scripts =
 header :: String -> H.Html
 header page =
     createTag H.nav "" "row header" $ do
-        H.h2 ! A.id "courseography-header"
-             ! H.customAttribute "context" (stringValue page) $ "Courseography"
+        H.img ! A.id "courseography-header" ! A.src "static/res/img/logo.png"
+             ! H.customAttribute "context" (stringValue page) 
         H.ul ! A.id "nav-links" $ do
             H.li $ makeA "" "" "graph" "" "Graph"
             H.li $ makeA "" "" "grid" "" "Grid"
@@ -39,21 +41,24 @@ header page =
             H.li $ makeA "" "" "post" "" "Check My POSt!"
             H.li $ makeA "" "" "about" "" "About"
             H.li $ makeA "" "" "calendar" "" "Calendar"
-        if page `elem` ["graph", "grid"]
+            if page `elem` ["graph", "grid"]
+            then H.li $ H.a ! A.id "nav-export" $ "Export"
+            else ""
+        if enableFb && page `elem` ["graph", "grid"]
         then
             H.div ! A.id "nav-fb" $ do
                 H.span ! A.id "nav-fb-post" $ do
-                    H.a ! A.id "post-fb" $ "Post to Facebook"
+                    H.a ! A.id "post-fb" $ "Post..."
                 H.span ! A.class_ "fb-login-button"
                        ! H.customAttribute "data-max-rows" "1"
                        ! H.customAttribute "data-size" "xlarge"
                        ! H.customAttribute "data-show-faces" "false"
-                       ! H.customAttribute "data-auto-logout-link" "true"
+                       ! H.customAttribute "data-auto-logout-link" "false"
+                       ! H.customAttribute "data-default-audience" "friends"
                        $ ""
         else
             ""
 
--- Disclaimer. This will be the same for both pages, I guess?
 disclaimer :: H.Html
 disclaimer =
     H.div ! A.id "disclaimerDiv" $ do

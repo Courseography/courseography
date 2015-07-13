@@ -7,15 +7,16 @@ This module contains the functions that perform different database queries
 and serve the information back to the client.
 -}
 
-module Database.CourseQueries (retrieveCourse,
-                               returnCourse,
-                               allCourses,
-                               courseInfo,
-                               getDepartment,
-                               queryGraphs,
-                               deptList,
-                               returnTutorialTimes,
-                               returnLectureTimes) where
+module Database.CourseQueries
+    (retrieveCourse,
+     returnCourse,
+     allCourses,
+     courseInfo,
+     getDepartment,
+     queryGraphs,
+     deptList,
+     returnTutorialTimes,
+     returnLectureTimes) where
 
 import Happstack.Server.SimpleHTTP
 import Database.Persist
@@ -27,7 +28,7 @@ import qualified Data.Text as T
 import WebParsing.ParsingHelp
 import Data.String.Utils
 import Data.List
-import Config (dbStr)
+import Config (databasePath)
 
 
 -- ** Querying a single course
@@ -48,7 +49,7 @@ queryCourse str = do
 -- | Queries the database for all information about @course@,
 -- constructs and returns a Course value.
 returnCourse :: T.Text -> IO Course
-returnCourse lowerStr = runSqlite dbStr $ do
+returnCourse lowerStr = runSqlite databasePath $ do
     let courseStr = T.toUpper lowerStr
     sqlCourse :: [Entity Courses] <- selectList [CoursesCode ==. courseStr] []
     -- TODO: Just make one query for all lectures, then partition later.
@@ -147,7 +148,7 @@ buildSession lecs tuts =
 -- | Builds a list of all course codes in the database.
 allCourses :: IO Response
 allCourses = do
-  response <- runSqlite dbStr $ do
+  response <- runSqlite databasePath $ do
       courses :: [Entity Courses] <- selectList [] []
       let codes = map (coursesCode . entityVal) courses
       return $ T.unlines codes
@@ -166,7 +167,7 @@ getDepartment str = getDeptCourses str
 -- | Returns all course info for a given department.
 getDeptCourses :: MonadIO m => String -> m [Course]
 getDeptCourses dept = do
-    response <- liftIO $ runSqlite dbStr $ do
+    response <- liftIO $ runSqlite databasePath $ do
         courses :: [Entity Courses]   <- selectList [] []
         lecs    :: [Entity Lectures]  <- selectList [] []
         tuts    :: [Entity Tutorials] <- selectList [] []
@@ -195,7 +196,7 @@ getDeptCourses dept = do
 -- | Return a list of all departments.
 deptList :: IO Response
 deptList = do
-    depts <- runSqlite dbStr $ do
+    depts <- runSqlite databasePath $ do
         courses :: [Entity Courses] <- selectList [] []
         return $ sort . nub $ map g courses
     return $ createJSONResponse depts
@@ -206,6 +207,6 @@ deptList = do
 -- objects.
 queryGraphs :: IO Response
 queryGraphs =
-    runSqlite dbStr $
+    runSqlite databasePath $
         do graphs :: [Entity Graph] <- selectList [] []
            return $ createJSONResponse graphs

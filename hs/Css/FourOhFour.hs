@@ -1,6 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Css.FourOhFour where
+module Css.FourOhFour
+    (fourOhFourStyles) where
 
 import Clay
 

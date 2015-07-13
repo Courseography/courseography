@@ -1,12 +1,13 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module DrawResponse where
+module DrawResponse
+    (drawResponse) where
 
 import           Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 import Happstack.Server
-import MakeElements
+import Utilities
 import MasterTemplate
 import Scripts
 
@@ -17,20 +18,26 @@ drawResponse =
                 []
                 (do
                     header "draw"
-                    drawHtml
+                    drawContent
                     modePanel
                 )
                 drawScripts
 
 
-drawHtml :: H.Html
-drawHtml = createTag H.div "about-div" "" "Draw a Graph"
+drawContent :: H.Html
+drawContent = createTag H.div "about-div" "" "Draw a Graph"
 
 
 modePanel :: H.Html
 modePanel = createTag H.div "side-panel-wrap" "" $ do
     createTag H.div "node-mode" "mode clicked" "NODE (n)"
-    H.input ! A.id "course-code" ! A.class_ "course-code" ! A.name "course-code" ! A.placeholder "Course Code" ! A.autocomplete "off" ! A.type_ "text" ! A.size "10"
+    H.input ! A.id "course-code"
+            ! A.class_ "course-code"
+            ! A.name "course-code"
+            ! A.placeholder "Course Code"
+            ! A.autocomplete "off"
+            ! A.type_ "text"
+            ! A.size "10"
     createTag H.div "add-text" "button" "ADD"
     createTag H.div "red" "colour clicked" "RED"
     createTag H.div "green" "colour" "GREEN"

@@ -1,6 +1,78 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Css.Constants where
+module Css.Constants
+    (margin0,
+     padding0,
+     width100,
+     height100,
+     fill,
+     stroke,
+     alignCenter,
+     wideStroke,
+     faded,
+     semiVisible,
+     fullyVisible,
+     strokeRed,
+     strokeDashed,
+     roundCorners,
+     theoryDark,
+     coreDark,
+     seDark,
+     systemsDark,
+     graphicsDark,
+     dbwebDark,
+     numDark,
+     aiDark,
+     hciDark,
+     mathDark,
+     introDark,
+     titleColour,
+     lightGrey,
+     purple1,
+     purple2,
+     purple3,
+     purple4,
+     purple5,
+     purple6,
+     purple7,
+     purple8,
+     purple9,
+     purple10,
+     pink1,
+     pink2,
+     borderNone,
+     borderPink,
+     teal1,
+     orange1,
+     blue1,
+     blue2,
+     blue3,
+     blue4,
+     blue5,
+     blue6,
+     blueFb,
+     red1,
+     red2,
+     red3,
+     red4,
+     red5,
+     green1,
+     dRed,
+     dGreen,
+     dBlue,
+     dPurple,
+     grey1,
+     grey2,
+     grey3,
+     grey4,
+     grey5,
+     beige1,
+     fceCountColor,
+     nodeFontSize,
+     hybridFontSize,
+     boolFontSize,
+     regionFontSize
+     ) where
 
 import Clay
 import Prelude hiding ((**))
@@ -107,6 +179,17 @@ purple4 = parse "#9C6B98"
 purple5 :: Color
 purple5 = parse "#800080"
 
+purple6 :: Color
+purple6 = parse "#CAC4D4"
+purple7 :: Color
+purple7 = parse "#9C91B0"
+purple8 :: Color
+purple8 = parse "#7A6A96"
+purple9 :: Color
+purple9 = parse "#433063"
+purple10 :: Color
+purple10 = parse "#5C497E"
+
 pink1 :: Color
 pink1 = parse "#DB94B8"
 pink2 :: Color
@@ -185,3 +268,18 @@ beige1 = parse "#EBE8E4"
 {- FCE count color. Currently unused. -}
 fceCountColor :: Color
 fceCountColor = parse "#66C2FF"
+
+{- Graph styles -}
+
+-- Node font size, in pixels
+nodeFontSize :: Num a => a
+nodeFontSize = 12
+
+hybridFontSize :: Num a => a
+hybridFontSize = 7
+
+boolFontSize :: Num a => a
+boolFontSize = 6
+
+regionFontSize :: Num a => a
+regionFontSize = 14

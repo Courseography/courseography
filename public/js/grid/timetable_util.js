@@ -50,17 +50,16 @@ function resetSearchList() {
     'use strict';
 
     var searchListObject = $('#search-list');
-
     var filter = $('#course-filter').val().toUpperCase();
-    searchListObject.empty();
     var courseList = document.createElement('ul');
+
+    searchListObject.empty();
+
     if (filter !== '') {
         $.each(courses, function(i, course) {
-            var counter = 0;
 
-            // If the course matches and if there are fewer than
-            // 100 courses in the list, add it to the list.
-            if (course.indexOf(filter) > -1 && counter < 100) {
+            // If the course matches the input text then add it to the list.
+            if (course.indexOf(filter) > -1) {
                 var courseEntry = document.createElement('li');
 
                 // Add an ID to the list so we can come back and select
@@ -70,9 +69,9 @@ function resetSearchList() {
                               .click(function() {
                                    $(this).toggleClass('starred-course');
                                    if (inArray(course, selectedCourses)) {
-                                       removeCourseFromList(course);
+                                       deselectCourse(course);
                                    } else {
-                                       addCourseToList(course);
+                                       selectCourse(course);
                                    }
                                })
                                .mouseover(function() {
@@ -82,8 +81,6 @@ function resetSearchList() {
                                .mouseout(function() {
                                    renderClearCourseInformation();
                                });
-
-                counter++;
                 courseList.appendChild(courseEntry);
             }
         });
@@ -118,13 +115,15 @@ function restoreFromCookies() {
     var selectedCourseCookie = getCookie('selected-courses');
     var selectedSectionCookie = getCookie('selected-lectures');
 
-    if (selectedCourseCookie === undefined || selectedCourseCookie.length === 0) {
+    if (selectedCourseCookie === undefined ||
+        selectedCourseCookie.length === 0) {
         selectedCourseCookie = [];
     } else {
         selectedCourseCookie = selectedCourseCookie.split('_');
     }
 
-    if (selectedSectionCookie === undefined || selectedSectionCookie.length === 0) {
+    if (selectedSectionCookie === undefined ||
+        selectedSectionCookie.length === 0) {
         selectedSectionCookie = [];
     } else {
         selectedSectionCookie = selectedSectionCookie.split('_');
@@ -135,7 +134,7 @@ function restoreFromCookies() {
         var newCourses = [];
         $.each(selectedCourseCookie, function (i, course) {
             try {
-                addCourseToList(course);
+                selectCourse(course);
                 newCourses.push(course);
             } catch (e) {
                 console.log('Removed bad course from cookie: ' + course);
@@ -185,31 +184,27 @@ function saveCookies(courses, sections) {
 
 /**
  * Selects a course.
- * TODO: Bad function name
- * TODO: Bad param name
- * @param {string} name The course code.
+ * @param {string} courseCode The course code.
  */
-function addCourseToList(name) {
+function selectCourse(courseCode) {
     'use strict';
 
-    var course = new Course(name);
+    var course = new Course(courseCode);
     $('#course-select').append(course.render());
     courseObjects.push(course);
-    selectedCourses.push(name);
+    selectedCourses.push(courseCode);
     saveCookies(selectedCourses, selectedSections);
 }
 
 
 /**
  * Deselects a course.
- * TODO: Bad function name
- * TODO: Bad param name
- * @param {string} name The course code.
+ * @param {string} courseCode The course code.
  */
-function removeCourseFromList(name) {
+function deselectCourse(courseCode) {
     'use strict';
 
-    var courseSelector = '#' + name + '-li';
+    var courseSelector = '#' + courseCode + '-li';
     var courseElement = $(courseSelector);
     $(courseSelector + ' li[clicked*="true"]').each(function() {
         $(this).click();
@@ -217,8 +212,8 @@ function removeCourseFromList(name) {
     courseElement.remove();
 
     // Remove course from memory
-    removeCourseObject(name);
-    removeFromArray(name, selectedCourses);
+    removeCourseObject(courseCode);
+    removeFromArray(courseCode, selectedCourses);
 
     saveCookies(selectedCourses, selectedSections);
 

@@ -1,4 +1,5 @@
-module JsonResponse where
+module JsonResponse
+    (createJSONResponse, encodeJSON) where
 
 import qualified Data.ByteString.Char8 as BS
 import qualified Data.ByteString.Lazy.Char8 as BSL

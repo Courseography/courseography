@@ -29,9 +29,8 @@ function postImage(authToken, img, message) {
         contentType: false,
         cache: false,
         success: function(data) {
-            console.log('Image posted');
-
-            // TODO: Interact with user to let them know that all is well.
+            $('.modal').dialog('close');
+            alert('Image posted - check it out on Facebook!');
             // TODO: Implement error handling.
         }
     });

@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings, FlexibleContexts, GADTs #-}
-module CourseographyFacebook where
+module FacebookUtilities where
 
 import qualified Facebook as FB
 import Control.Monad.IO.Class  (liftIO)
@@ -31,8 +31,8 @@ postFB :: T.Text
 postFB = "post-fb"
 
 -- | The name of the \'fbdatabase\' that isn't actually used anymore.
-fbdbStr :: T.Text
-fbdbStr = "fdatabase1.sqlite3"
+fbdatabasePath :: T.Text
+fbdatabasePath = "fdatabase1.sqlite3"
 
 appId :: T.Text
 appId = "432140593606098"
@@ -111,7 +111,7 @@ getEmail code = liftIO $ retrieveFBData (BS.pack code)
 --       This function is not used.
 insertIdIntoDb :: FB.Id -> IO ()
 insertIdIntoDb id_ = 
-    runSqlite fbdbStr $ do
+    runSqlite fbdatabasePath $ do
         runMigration migrateAll
         insert_ $ FacebookTest (show id_) "Test String"
         liftIO $ print "Inserted..."
