@@ -59,7 +59,7 @@ Lecture json
     code T.Text
     session T.Text
     section T.Text
-    time [Time]
+    times [Time]
     cap Int
     instructor T.Text
     enrol Int
