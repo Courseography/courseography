@@ -14,8 +14,7 @@ module Config (dbStr,
                genCssPath,
                cssStyle,
                firstMondayFall,
-               firstMondayWinter,
-               filler) where
+               firstMondayWinter) where
 
 import Data.Text (Text)
 import qualified Clay.Render as Clay
