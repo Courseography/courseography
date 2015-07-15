@@ -132,12 +132,10 @@ function enableReset() {
 **/
 function changeFocusEnable(id) {
     var currentGraph = graphs[id - 1].title;
-    if (currentGraph.indexOf("Computer Science") >= 0)
-    {
+    if (currentGraph.indexOf("Computer Science") >= 0) {
         $("#focuses-nav").removeClass('disabled');
     }
-    else
-    {
+    else {
         $("#focuses-nav").addClass('disabled');
     }
 }
