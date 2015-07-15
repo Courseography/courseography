@@ -321,7 +321,7 @@ sidebarCSS = do
         backgroundColor purple8
     ".disabled" & do
         backgroundColor grey2
-        "pointer-events" -: "none";
+        pointerEvents none
     ".graph-button" & do
         display block
         cursor pointer
