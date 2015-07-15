@@ -5,6 +5,7 @@ $(document).ready (function () {
 
     getGraphsInDatabase();
     updateFCECount();
+    createGraphButtons();
 });
 
 
@@ -30,10 +31,8 @@ $('#graphs-nav').click(function (e) {
 
     e.preventDefault();
     resetDivs();
-    $('#graphs').empty();
     $('#graphs').show();
     $('#graphs-nav').addClass('active');
-    createGraphButtons();
 });
 
 
@@ -90,10 +89,8 @@ function toggleSidebar(location) {
         });
         fillFCECount();
 
-        $('#graphs').empty();
         $('#graphs').show();
         $('#graphs-nav').addClass('active');
-        createGraphButtons();
 
         changeFocusEnable(getCookie('active-graph'));
 
