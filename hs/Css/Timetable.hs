@@ -286,21 +286,3 @@ tdColours = ".timetable " ?  do
     td # ("hover" *= "conflict") # ("satisfied" *= "true") <>
         td # ("hover" *= "conflict") # ("satisfied" *= "false") ? do
         backgroundColor red1
-
-{- infoCSS
- - Generates CSS for the info block that describes
- - the currently selected course in the timetable. -}
-infoCSS :: Css
-infoCSS = "#info-layout" ? do
-    padding0
-    margin0
-    width100
-    height (em 7)
-    alignCenter
-    h2 <? do
-        fontSize (em 1.3)
-        margin (em 0.5) (em 0.5) (em 0.5) (em 0.5)
-        fontWeight bold
-    h4 <? do
-        fontSize (em 1.15)
-        margin (em 0.5) (em 0.5) (em 0.5) (em 0.5)
