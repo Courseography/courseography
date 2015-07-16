@@ -111,19 +111,20 @@ var Timetable = React.createClass({
     render: function() {
         var state = this.state;
         var courseRows = this.state.courses.filter(function (course) {
-            var lecs = course.F.lectures.concat(course.S.lectures)
-                                        .concat(course.Y.lectures);
+            var lecs = course.fallSession.lectures
+                                         .concat(course.springSession.lectures)
+                                         .concat(course.yearSession.lectures);
 
             return course.name.indexOf(state.codeSearch) > -1 &&
                    lecs.some(function (lec) {
                        return filterCourse(state.instSearch, state.timeSearch, lec);
                    });
         }).map(function (course) {
-            if (course.Y.lectures.length === 0) {
+            if (course.yearSession.lectures.length === 0) {
                 var fallLec = '';
                 var springLec = '';
             
-                fallLec = course.F.lectures.filter(function (lec) {
+                fallLec = course.fallSession.lectures.filter(function (lec) {
                     return filterCourse(state.instSearch, state.timeSearch, lec);
                 }).map(function (lec) {
                     return (
@@ -136,7 +137,7 @@ var Timetable = React.createClass({
                         </tr>);
                 });
 
-                springLec = course.S.lectures.filter(function (lec) {
+                springLec = course.springSession.lectures.filter(function (lec) {
                     return filterCourse(state.instSearch, state.timeSearch, lec);
                 }).map(function (lec) {
                     return (
@@ -157,7 +158,7 @@ var Timetable = React.createClass({
                     </tr>
                 );
             } else {
-                var yearLec = course.Y.lectures.filter(function (lec) {
+                var yearLec = course.yearSession.lectures.filter(function (lec) {
                         return filterCourse(state.instSearch, state.timeSearch, lec);
                     }).map(function (lec) {
                         return (
