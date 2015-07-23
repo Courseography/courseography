@@ -67,7 +67,7 @@ firstMondayWinter = fromGregorian 2016 01 11
 
 -- | Last Monday of the Winter term.
 lastMondayWinter :: Day
-lastMondayWinter = fromGregorian 2015 04 04
+lastMondayWinter = fromGregorian 2016 04 04
 
 -- FACEBOOK CONFIGURATION
 
