@@ -16,7 +16,9 @@ module Config
      cssStyle,
      enableFb,
      firstMondayFall,
-     firstMondayWinter) where
+     lastWednesdayFall
+     firstMondayWinter,
+     lastMondayWinter) where
 
 import Data.Text (Text)
 import qualified Clay.Render as Clay
@@ -55,9 +57,17 @@ cssStyle = Clay.pretty
 firstMondayFall :: Day
 firstMondayFall = fromGregorian 2015 09 14
 
+-- | Last Wednesday of the Fall term.
+lastWednesdayFall :: Day
+lastWednesdayFall = fromGregorian 2015 12 02
+
 -- | First Monday of the Winter term.
 firstMondayWinter :: Day
 firstMondayWinter = fromGregorian 2016 01 11
+
+-- | Last Monday of the Winter term.
+lastMondayWinter :: Day
+lastMondayWinter = fromGregorian 2015 04 04
 
 -- FACEBOOK CONFIGURATION
 

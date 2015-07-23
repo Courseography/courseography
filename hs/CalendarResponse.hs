@@ -2,11 +2,11 @@ module CalendarResponse where
 
 import Data.List (sort)
 import Data.List.Split (splitOn)
-import Data.Time (Day, addDays, formatTime)
+import Data.Time (Day, UTCTime, addDays, formatTime, getCurrentTime, utctDay, utctDayTime)
 import Happstack.Server (ServerPart, Response, toResponse)
 import Control.Monad.IO.Class (liftIO)
 import System.Locale
-import Config (firstMondayFall, firstMondayWinter)
+import Config (firstMondayFall, lastWednesdayFall ,firstMondayWinter, lastMondayWinter)
 import Database.CourseQueries (returnTutorialTimes, returnLectureTimes)
 import qualified Data.Text as T
 import Database.Tables as Tables
@@ -21,14 +21,25 @@ getCalendar :: String -> IO Response
 getCalendar courses = do
     let courseInfo = getCoursesInfo courses
     databaseInfo <- sequence $ map pullDatabase courseInfo
-    let events = concat $ map getEvent databaseInfo
+    currentTime <- getCurrentTime
+    let timeSystem = getTime currentTime
+    let events = concat $ map (getEvent timeSystem) databaseInfo
     return $ toResponse $ getCSV $ events
+
+-- | Generates a properly formatted current date and time.
+getTime :: UTCTime -> String
+getTime currentTime = date ++ "T" ++ "HOUR" ++ "Z"
+    where
+    date = formatTime defaultTimeLocale "%y%m%d" (utctDay currentTime)
+    --hour = formatTime defaultTimeLocale "%H%M%S" (utctDayTime currentTime)
 
 -- | Generates a string representing a CSV file.
 getCSV :: [String] -> String
-getCSV events =  unlines $ header : events
+getCSV events =  unlines $ header ++ events ++ bottom
     where
-    header = "Subject,Start Date,Start Time,End Date,End Time,All Day Event,Description,Location,Private"
+    header = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID: Courseography"]
+    bottom = ["END:VCALENDAR"]
+
 
 -- ** Cookie Information
 
@@ -56,17 +67,17 @@ pullDatabase (code, sect, session) =
 -- ** Event Creation
 
 -- | Generates an event for each course.
-getEvent :: ([Time], String, String) -> [String]
-getEvent (timeFields, code, session) = concat $ concat $ eventsByCourse code session start end dates
+getEvent :: String -> ([Time], String, String) -> [String]
+getEvent timeSystem (timeFields, code, session) = concat $ eventsByCourse code session start end dates timeSystem
     where
     dataInOrder = orderData timeFields
     start = startTime dataInOrder
     end = endTime dataInOrder
-    dates = startDates session dataInOrder
+    dates = getDates session dataInOrder
 
 -- | Creates an event for each course
-eventsByCourse :: String -> String -> [[String]] -> [[String]] -> [[[String]]] -> [[[String]]]
-eventsByCourse code session start end dates = map (eventsByDay code session) (zip' start end dates)
+eventsByCourse :: String -> String -> [[String]] -> [[String]] -> [[(String, String)]] -> String -> [[String]]
+eventsByCourse code session start end dates timeSystem = map (eventsByDay code session timeSystem) (zip' start end dates)
 
 -- | Join three lists together in tuples of three elements
 zip' :: [a] -> [b] -> [c] -> [(a,b,c)]
@@ -76,23 +87,24 @@ zip' [] _ _ = []
 zip' (x:xs) (y2:ys) (z:zs) = (x,y2,z):zip' xs ys zs
 
 -- | Creates an event for each day
-eventsByDay :: String -> String -> ([String], [String], [[String]]) -> [[String]]
-eventsByDay code session (start, end, dates) = if session == "Y" then year else half
+eventsByDay :: String -> String -> String -> ([String], [String], [(String, String)]) -> [String]
+eventsByDay code session timeSystem (start, end, dates) = if session == "Y" then year else half
     where
     year = halfFall ++ halfWinter
-    halfFall = eventsByTime code start end (dates !! 0)
-    halfWinter = eventsByTime code start end (dates !! 1)
-    half = eventsByTime code start end (dates !! 0)
+    halfFall = eventsByTime code start end (dates !! 0) timeSystem
+    halfWinter = eventsByTime code start end (dates !! 1) timeSystem
+    half = eventsByTime code start end (dates !! 0) timeSystem
 
 -- | Creates an event for each start/end time
-eventsByTime :: String -> [String] -> [String] -> [String] -> [[String]]
-eventsByTime code start end date = map (eventsByDate code date) (zip start end)
+eventsByTime :: String -> [String] -> [String] -> (String, String) -> String -> [String]
+eventsByTime code start end date timeSystem = map (eventsByDate code date timeSystem) (zip start end)
 
 -- | Generates the string that represents the event for each course
-eventsByDate :: String -> [String] -> (String, String) -> [String]
-eventsByDate code dates (start, end) = map str dates
-    where
-    str date = code ++ "," ++ date ++ "," ++ start ++ "," ++ date ++ "," ++ end ++ ",False," ++ code ++ ",tba,True" 
+eventsByDate :: String -> (String, String) -> String -> (String, String) -> String
+eventsByDate code (startDate, endDate) timeSystem (start, end) =
+    "BEGIN:VEVENT\n" ++ "DTSTAMP:" ++ timeSystem ++ "\nORGANIZER: U of T\n" ++
+    "DTSTART:" ++ startDate ++ start ++ "\nDTEND:" ++ startDate ++ end ++ "\nRRULE:FREQ=WEEKLY;UNTIL=" ++
+    endDate ++ "\nSUMMARY:" ++ code ++ "\nCATEGORIES:SCHOOL\n" ++ "END:VEVENT"
 
 -- ** Ordering data
 
@@ -150,88 +162,67 @@ getEndConsecutives lst = filter (/= 30.0) ([if lst !! i == (lst !! (i + 1)) - 0.
 
 -- ** Function that works for both start and end times
 
--- | Creates the string time
+-- | Creates the string time in the following way HourMinutesSeccondsZ.
+-- For instance, 133500Z corresponds to 1:35 pm.
 getStr :: Double -> String
 getStr fullTime = if minutes == 0
-                  then getStrTime (hour, ":00:00")
-                  else getStrTime (hour, (":" ++ ratio minutes ++ ":00"))
+                  then hour ++ ":00:00Z"
+                  else hour ++ ":" ++ ratio minutes ++ ":00Z"
     where
     hours = splitOn "." (show fullTime)
-    hour = read (hours !! 0) :: Int 
-    minutes = read (hours !! 1) :: Int 
-
--- | Determines whether the time is AM or PM
-getStrTime :: (Int, String) -> String
-getStrTime (hour, ending) = if hour >= 12
-                            then (show $ afternoon hour) ++ ending ++ " PM"
-                            else (show hour) ++ ending ++ " AM"
-    where
-    afternoon hour1 = if hour1 == 12 then hour1 else hour1 - 12 
+    hour = hours !! 0
+    minutes = read (hours !! 1) :: Int
 
 -- | Gets the minutes out of a decimal part of my time
 ratio :: Int -> String
-ratio decimal = if minutes >= 10 then show minutes else "0" ++ (show minutes)
+ratio decimal = if minutes >= 10 then show minutes else "0" ++ show minutes
     where
     minutes = decimal * 6
 
 -- ** Start/End date
 
 -- | Obtains all the dates for each course depending on its session
-startDates :: String -> [[[Double]]] -> [[[String]]]
-startDates session dataInOrder = map (checkSession session) dataInOrder
+getDates :: String -> [[[Double]]] -> [[(String, String)]]
+getDates session dataInOrder = map (checkSession session) dataInOrder
     where
     checkSession session1 courseFields = if session1 == "Y" 
                                         then [halfFall courseFields, halfWinter courseFields]
                                         else [full session1 courseFields]
-    halfFall courseFields = startDate "F" courseFields
-    halfWinter courseFields = startDate "S" courseFields
-    full session1 courseFields = startDate session1 courseFields
+    halfFall courseFields = getDate "F" courseFields
+    halfWinter courseFields = getDate "S" courseFields
+    full session1 courseFields = getDate session1 courseFields
 
+-- | Gives the appropiate starting date for the course
 -- | Obtains the starting date for each day
-startDate :: String -> [[Double]] -> [String]
-startDate session dayFields = map format (generateDate session (getDay $ (concat dayFields) !! 0))
+getDate :: String -> [[Double]] -> (String, String)
+getDate session dayFields = if session == "F" then getFallStr else getWinterStr
+    where
+    getFallStr = format $ getDayFall $ (concat dayFields) !! 0
+    getWinterStr = format $ getDayWinter $ (concat dayFields) !! 0
 
--- | Formats the date in the following way: month/day/year
-format :: Day -> String
-format date = formatTime defaultTimeLocale "%D" date
+-- | Formats the date in the following way: YearMonthDayT.
+-- For instance, 20150720T corresponds to July 20th, 2015. 
 
--- | Generates all the dates given the specific day and session
-generateDate :: String -> String -> [Day]
-generateDate "F" courseDay = generateDatesFall courseDay
-generateDate "S" courseDay = generateDatesWinter courseDay
-generateDate _ _  = []
+format :: (Day, Day) -> (String, String)
+format (start, end) = (startStr , endStr)
+    where
+    startStr = formatTime defaultTimeLocale "%y%m%d" start ++ "T"
+    endStr = formatTime defaultTimeLocale "%y%m%d" end ++ "T"
 
--- | Gives the appropriate day for the course
-getDay :: Double -> String 
-getDay 0.0 = "M"
-getDay 1.0 = "T"
-getDay 2.0 = "W"
-getDay 3.0 = "R"
-getDay 4.0 = "F"
-getDay _ = "That is not a valid representation of a day"
+-- | Gives the appropriate day for courses in the Fall
+getDayFall :: Double -> (Day, Day) 
+getDayFall 0.0 = (firstMondayFall, addDays 5 lastWednesdayFall)
+getDayFall 1.0 = (addDays 1 firstMondayFall, addDays 6 lastWednesdayFall)
+getDayFall 2.0 = (addDays 2 firstMondayFall, lastWednesdayFall)
+getDayFall 3.0 = (addDays 3 firstMondayFall, addDays 1 lastWednesdayFall)
+getDayFall 4.0 = (addDays 4 firstMondayFall, addDays 2 lastWednesdayFall)
+-- To do Extra case may be added
 
--- | Generate all the dates given the specific days
--- | First day of classes will be on September 14.
--- | Last day of classes will be on December 8
-generateDatesFall :: String -> [Day]
-generateDatesFall "M" = map (add firstMondayFall) [0,7 .. 84]
-generateDatesFall "T" = map (add $ addDays 1 firstMondayFall) [0,7 .. 84]
-generateDatesFall "W" = map (add $ addDays 2 firstMondayFall) [0,7 .. 77]
-generateDatesFall "R" = map (add $ addDays 3 firstMondayFall) [0,7 .. 77]
-generateDatesFall "F" = map (add $ addDays 4 firstMondayFall) [0,7 .. 77]
-generateDatesFall _ = []
-
--- | Generate all the dates given the specific days
--- | First day of classes will be on January 11.
--- | Last day of classes will be on April 8
-generateDatesWinter :: String -> [Day]
-generateDatesWinter "M" = map (add firstMondayWinter) [0,7 .. 84]
-generateDatesWinter "T" = map (add $ addDays 1 firstMondayWinter) [0,7 .. 84]
-generateDatesWinter "W" = map (add $ addDays 2 firstMondayWinter) [0,7 .. 84]
-generateDatesWinter "R" = map (add $ addDays 3 firstMondayWinter) [0,7 .. 84]
-generateDatesWinter "F" = map (add $ addDays 4 firstMondayWinter) [0,7 .. 84]
-generateDatesWinter _ = []
-
--- | Adds a given number of days to a given date
-add :: Day -> Integer -> Day
-add day num = addDays num day
+-- | Gives the appropriate day for courses in the Winter
+getDayWinter :: Double -> (Day, Day) 
+getDayWinter 0.0 = (firstMondayWinter, lastMondayWinter)
+getDayWinter 1.0 = (addDays 1 firstMondayWinter, addDays 1 lastMondayWinter)
+getDayWinter 2.0 = (addDays 2 firstMondayWinter, addDays 2 lastMondayWinter)
+getDayWinter 3.0 = (addDays 3 firstMondayWinter, addDays 3 lastMondayWinter)
+getDayWinter 4.0 = (addDays 4 firstMondayWinter, addDays 4 lastMondayWinter)
+-- To do Extra case may be added
