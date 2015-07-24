@@ -105,8 +105,8 @@ eventsByDate :: String -> String -> (String, String) -> String -> (String, Strin
 eventsByDate code sect (startDate, endDate) timeSystem (start, end) = 
     "BEGIN:VEVENT\n" ++ "DTSTAMP:" ++ timeSystem ++ 
     "\nDTSTART;TZID=America/Toronto:" ++ startDate ++ start ++ "\nDTEND;TZID=America/Toronto:" ++
-    startDate ++ end ++ "\nRRULE:FREQ=WEEKLY;UNTIL=" ++ endDate ++ "000000Z" ++ "\nORGANIZER:U of T" ++
-    "\nSUMMARY:" ++ code ++ " " ++ sect ++ "\nCATEGORIES:SCHOOL\n" ++ "END:VEVENT"
+    startDate ++ end ++ "\nRRULE:FREQ=WEEKLY;UNTIL=" ++ endDate ++ "000000Z" ++ "\nORGANIZER:University of Toronto" ++
+    "\nSUMMARY:" ++ code ++ " " ++ sect ++ "\nCATEGORIES:EDUCATION\n" ++ "END:VEVENT"
 
 -- ** Ordering data
 
