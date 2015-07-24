@@ -34,10 +34,10 @@ cellHeight :: Double
 cellHeight = 0.4
 
 cellPaddingHeight :: Double
-cellPaddingHeight = 0.2
+cellPaddingHeight = 0.1
 
 fs :: Double
-fs = 16
+fs = 14
 
 cell :: Diagram B
 cell = rect cellWidth cellHeight
@@ -55,7 +55,7 @@ cellText :: String -> Diagram B
 cellText s = font "Trebuchet MS" $ text s # fontSizeO fs
 
 makeCell :: String -> Diagram B
-makeCell s = vsep 0.025
+makeCell s = vsep 0.030
     [cellPadding # fc background # lc background,
      cellText s # fc white <>
      cell # fc background # lc background]

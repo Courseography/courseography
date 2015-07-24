@@ -101,23 +101,6 @@ aDefaultCSS = do
         textDecoration none
         color $ parse "#4C004C"
 
-{- headers
- - Generates CSS for the header located at the top of
- - all pages. -}
-headers :: Css
-headers = do
-    h1 ? do
-        alignCenter
-    h2 ? do
-        alignCenter
-    h3 ? do
-        alignCenter
-    h4 ? do
-        width100
-        fontSize $ em 1.1
-        alignCenter
-        margin (em 0.3) 0 (em 0.3) 0
-
 {- disclaimerCSS
  - Generates CSS for the disclaimer located at the foot
  - of all pages. -}
