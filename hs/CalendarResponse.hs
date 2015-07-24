@@ -2,7 +2,7 @@ module CalendarResponse where
 
 import Data.List (sort)
 import Data.List.Split (splitOn)
-import Data.Time (Day, UTCTime, addDays, formatTime, getCurrentTime, utctDay, utctDayTime)
+import Data.Time (Day, UTCTime, addDays, formatTime, getCurrentTime, utctDay)
 import Happstack.Server (ServerPart, Response, toResponse)
 import Control.Monad.IO.Class (liftIO)
 import System.Locale
@@ -30,14 +30,14 @@ getCalendar courses = do
 getTime :: UTCTime -> String
 getTime currentTime = date ++ "T" ++ hour ++ "Z"
     where
-    date = formatTime defaultTimeLocale "%y%m%d" (utctDay currentTime)
+    date = formatTime defaultTimeLocale "%Y%m%d" (utctDay currentTime)
     hour = formatTime defaultTimeLocale "%H%M%S" currentTime
 
 -- | Generates a string representing a CSV file.
 getCSV :: [String] -> String
 getCSV events =  unlines $ header ++ events ++ bottom
     where
-    header = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID: Courseography"]
+    header = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Courseography//Calendar", "CALSCALE:GREGORIAN", "METHOD:PUBLISH"]
     bottom = ["END:VCALENDAR"]
 
 
@@ -103,9 +103,9 @@ eventsByTime code start end date timeSystem = map (eventsByDate code date timeSy
 -- | Generates the string that represents the event for each course
 eventsByDate :: String -> (String, String) -> String -> (String, String) -> String
 eventsByDate code (startDate, endDate) timeSystem (start, end) =
-    "BEGIN:VEVENT\n" ++ "DTSTAMP:" ++ timeSystem ++ "\nORGANIZER: U of T\n" ++
-    "DTSTART;TZID=America/Toronto:" ++ startDate ++ start ++ "\nDTEND;TZID=America/Toronto:" ++
-    startDate ++ end ++ "\nRRULE:FREQ=WEEKLY;UNTIL=" ++ endDate ++ "000000Z" ++
+    "BEGIN:VEVENT\n" ++ "DTSTAMP:" ++ timeSystem ++ 
+    "\nDTSTART;TZID=America/Toronto:" ++ startDate ++ start ++ "\nDTEND;TZID=America/Toronto:" ++
+    startDate ++ end ++ "\nRRULE:FREQ=WEEKLY;UNTIL=" ++ endDate ++ "000000Z" ++ "\nORGANIZER:U of T" ++
     "\nSUMMARY:" ++ code ++ "\nCATEGORIES:SCHOOL\n" ++ "END:VEVENT"
 
 -- ** Ordering data
@@ -168,8 +168,8 @@ getEndConsecutives lst = filter (/= 30.0) ([if lst !! i == (lst !! (i + 1)) - 0.
 -- For instance, 133500Z corresponds to 1:35 pm.
 getStr :: Double -> String
 getStr fullTime = if minutes == 0
-                  then hour ++ "0000Z"
-                  else hour ++ ratio minutes ++ "00Z"
+                  then hour ++ "0000"
+                  else hour ++ ratio minutes ++ "00"
     where
     hours = splitOn "." (show fullTime)
     hour = hours !! 0
@@ -208,8 +208,8 @@ getDate session dayFields = if session == "F" then getFallStr else getWinterStr
 format :: (Day, Day) -> (String, String)
 format (start, end) = (startStr , endStr)
     where
-    startStr = formatTime defaultTimeLocale "%y%m%d" start ++ "T"
-    endStr = formatTime defaultTimeLocale "%y%m%d" end ++ "T"
+    startStr = formatTime defaultTimeLocale "%Y%m%d" start ++ "T"
+    endStr = formatTime defaultTimeLocale "%Y%m%d" end ++ "T"
 
 -- | Gives the appropriate day for courses in the Fall
 getDayFall :: Double -> (Day, Day) 
