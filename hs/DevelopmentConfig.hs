@@ -18,7 +18,8 @@ module Config
      firstMondayFall,
      lastWednesdayFall
      firstMondayWinter,
-     lastMondayWinter) where
+     lastMondayWinter,
+     outDay) where
 
 import Data.Text (Text)
 import qualified Clay.Render as Clay
@@ -68,6 +69,10 @@ firstMondayWinter = fromGregorian 2016 01 11
 -- | Last Monday of the Winter term.
 lastMondayWinter :: Day
 lastMondayWinter = fromGregorian 2016 04 04
+
+-- | Out of date day.
+outDay :: Day
+outDay = fromGregorian 2014 01 01
 
 -- FACEBOOK CONFIGURATION
 

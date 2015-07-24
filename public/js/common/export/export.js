@@ -18,8 +18,8 @@ function createExportModalDiv() {
     var contentDiv = $('<div></div>');
     var topContentDiv = $('<div></div>');
     var calendarOption = $('<a href="http://localhost:8000/calendar">Download CSV</a>')
-    calendarOption.attr('target', '_blank');
     contentDiv.attr('id', 'modal-content-container');
+    calendarOption.attr('target', '_blank');
     topContentDiv.html('<img id="post-image" src="data:image/png;base64,' + img + '" />');
     contentDiv.append(calendarOption);
     contentDiv.append(topContentDiv);
