@@ -18,12 +18,6 @@ import qualified Text.Blaze.Html5.Attributes as A
 import qualified Text.Blaze.Svg11 as S
 import Text.Markdown (markdown, def)
 import Data.Text.Lazy (Text)
-import Control.Monad.IO.Class  (liftIO)
-import qualified Data.Conduit.List as CL
-import qualified Data.Text.Internal as TI
-import Data.Conduit (($$))
-import Database.Persist.Sqlite (runSqlite, rawQuery)
-import Config (databasePath)
 
 createTag :: (H.Html -> H.Html) ->  H.AttributeValue -> H.AttributeValue -> H.Html -> H.Html
 createTag tag id_ class_ content = tag ! A.id id_ ! A.class_ class_ $ content
@@ -56,12 +50,3 @@ concatSVG svg = sequence_ svg
 -- blaze-HTML.
 mdToHTML :: Text -> H.Html
 mdToHTML contents = markdown def contents
-
--- | The last function is a generic helper function for running an arbitrary
--- query to the database. This should only be used for debugging purposes,
--- and in fact probably moved elsewhere.
-
--- | Performs a query on the database.
-queryDatabase :: TI.Text -> IO ()
-queryDatabase sql = runSqlite databasePath $
-                        rawQuery sql [] $$ CL.mapM_ (liftIO . print)

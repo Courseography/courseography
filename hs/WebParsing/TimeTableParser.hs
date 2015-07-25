@@ -14,6 +14,8 @@ import Database.CourseInsertion
 import WebParsing.HtmlTable
 import WebParsing.ParsingHelp
 import WebParsing.TimeConverter
+import Control.Monad.IO.Class (liftIO, MonadIO)
+import Control.Monad.Trans.Reader (ReaderT)
 import Config (databasePath)
 
 -- | used as an intermediate container while extracting lecture and tutorial information
@@ -58,10 +60,10 @@ expandNote row =  if ( (T.take 4 (head row)) == "NOTE" )
 -- | takes in a department pagversace versaceversace versacee name, extracts the html table, partitions into a list of all
 -- information related to a single course, and inserts the resulting tutorials and lectures
 -- into the database.
-getDeptTimetable :: String -> IO ()
+getDeptTimetable :: MonadIO m => String -> ReaderT SqlBackend m ()
 getDeptTimetable url = do
-    rsp <- simpleHTTP (getRequest $ timetableUrl ++ url)
-    body <- getResponseBody rsp
+    rsp <- liftIO $ simpleHTTP (getRequest $ timetableUrl ++ url)
+    body <- liftIO $ getResponseBody rsp
     let rawSoup = map cleanTag (parseTags (T.pack body))
         toLower = if (url == "online.html") then map lowerTag rawSoup else rawSoup
         table = dropAround  (tagOpen (=="table") (\_ -> True)) (tagClose (=="table")) toLower
@@ -177,7 +179,7 @@ makeSession slots =
 
 -- | takes in cells representing a single course, and inserts the lecture tutorial info
 --into the database
-processCourseTable :: [[T.Text]] -> IO ()
+processCourseTable :: MonadIO m => [[T.Text]] -> ReaderT SqlBackend m ()
 processCourseTable course = do
     let session = (head course) !! 1
         code = T.take 8 ((head course) !! 0)
@@ -201,7 +203,9 @@ main = do
     rsp <- simpleHTTP (getRequest $ timetableUrl ++ "sponsors.htm")
     body <- getResponseBody rsp
     let _ = getDeptList $ parseTags body
-    getDeptTimetable "glaf.html"
+
+    runSqlite databasePath $
+        getDeptTimetable "glaf.html"
     --mapM_ getDeptTimetable depts
 
 parseTT :: IO ()
@@ -209,4 +213,6 @@ parseTT = do
     rsp <- simpleHTTP (getRequest timetableUrl)
     body <- getResponseBody rsp
     let depts = getDeptList $ parseTags body
-    mapM_ getDeptTimetable depts
+
+    runSqlite databasePath $
+        mapM_ getDeptTimetable depts

@@ -115,7 +115,7 @@ checkPost =
                     H.input ! A.type_ "text"
                     H.input ! A.type_ "text"
             H.div ! A.id "spec_extra" $ do
-                H.p ! A.class_ "code" $ "Any of the following: 300+ level CSC course; MAT: 221/223/240, 235/237/257, any 300+\
+                H.p ! A.class_ "code" $ "Any of the following: 300+ level CSC course; MAT: 235/237/257, any 300+\
                                         \ except for 329, 390, & 391; STA: 248, 261, any 300+; ECE: 385H/489H;\
                                         \ BCB: 410H/420H/430Y (1.5 FCEs)"
                 H.div ! A.id "specextra" ! A.class_ "more-info" $ do
