@@ -100,8 +100,5 @@ searchScripts = do
          "https://cdnjs.cloudflare.com/ajax/libs/react/0.13.1/JSXTransformer.js"])
     H.script ! A.type_ "text/jsx" ! A.src "static/js/search/timetable.js" $ ""
 
---calendarScripts :: H.Html
---calendarScripts =
-
 fourOhFourScripts :: H.Html
 fourOhFourScripts = jQuery

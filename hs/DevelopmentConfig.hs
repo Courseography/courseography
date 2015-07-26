@@ -54,23 +54,27 @@ cssStyle = Clay.pretty
 
 -- CALENDAR RESPONSE DATES
 
--- | First Monday of the Fall term.
+-- | First day of classes for the fall term. Also the first day to be 
+-- assigned for a course scheduled on a Monday.
 firstMondayFall :: Day
 firstMondayFall = fromGregorian 2015 09 14
 
--- | Last Wednesday of the Fall term.
+-- | Last Wednesday of the fall term. Used to generate the last
+-- event for all courses that take place during the fall.
 lastWednesdayFall :: Day
 lastWednesdayFall = fromGregorian 2015 12 02
 
--- | First Monday of the Winter term.
+-- | First day of classes for the winter term. Also the first day to be 
+-- assigned for a course scheduled on a Wednesday.
 firstMondayWinter :: Day
 firstMondayWinter = fromGregorian 2016 01 11
 
--- | Last Monday of the Winter term.
+-- | Last Monday of the winter term. Used to generate the last
+-- event for all courses that take place during the winter.
 lastMondayWinter :: Day
 lastMondayWinter = fromGregorian 2016 04 04
 
--- | Out of date day.
+-- | Out of date day. Used to control forbidden inputs for days.
 outDay :: Day
 outDay = fromGregorian 2014 01 01
 

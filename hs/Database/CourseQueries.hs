@@ -30,7 +30,6 @@ import Data.String.Utils
 import Data.List
 import Config (databasePath)
 
-
 -- ** Querying a single course
 
 -- | Takes a course code (e.g. \"CSC108H1\") and sends a JSON representation
@@ -83,7 +82,7 @@ returnTutorialTimes lowerStr sect session = runSqlite databasePath $ do
                                         []
     return $ maybe [] getTutorial maybeEntityTutorials
     where
-      getTutorial entity = tutorialsTimes $ entityVal entity
+        getTutorial entity = tutorialsTimes $ entityVal entity
 
 -- | Queries the database for all information regarding a specific lecture for a @course@,
 -- returns a list of Time fields.
@@ -95,7 +94,7 @@ returnLectureTimes lowerStr sect session = runSqlite databasePath $ do
                                        []
     return $ maybe [] getLecture maybeEntityLectures
     where
-    getLecture entity = lecturesTimes $ entityVal entity
+        getLecture entity = lecturesTimes $ entityVal entity
 
 -- | Builds a Course structure from a tuple from the Courses table.
 -- Some fields still need to be added in.
