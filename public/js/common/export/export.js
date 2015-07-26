@@ -18,12 +18,12 @@ function createExportModalDiv() {
     var contentDiv = $('<div></div>');
     var topContentDiv = $('<div></div>');
     var calendarOption = $('<a href="http://localhost:8000/calendar">Download ICS</a>')
-    contentDiv.attr('id', 'modal-content-container');
     calendarOption.attr('target', '_blank');
     topContentDiv.html('<img id="post-image" src="data:image/png;base64,' + img + '" />');
-    contentDiv.append(calendarOption);
-    contentDiv.append(topContentDiv);
-    contentDiv.attr('id', 'modal-content-container');
+    contentDiv.attr('id', 'modal-content-container')
+        .append(calendarOption)
+        .append(topContentDiv)
+        .attr('id', 'modal-content-container');
 
     if (context === 'grid') {
         var sessionButton = $('<button type="button" class="btn btn-primary">Switch Sessions</button>');
