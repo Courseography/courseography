@@ -15,7 +15,7 @@ import Config (firstMondayFall,
                lastMondayWinter,
                outDay)
 
--- | Returns a CSV file of events as requested by the user.
+-- | Returns an ICS file of events as requested by the user.
 calendarResponse :: String -> ServerPart Response
 calendarResponse courses =
     liftIO $ getCalendar courses
@@ -28,15 +28,15 @@ getCalendar courses = do
     currentTime <- getCurrentTime
     let timeSystem = getTime currentTime
     let events = concat $ map (getEvent timeSystem) databaseInfo
-    return $ toResponse $ getCSV events
+    return $ toResponse $ getICS events
 
 -- | Generates a properly formatted current date and time.
 getTime :: UTCTime -> String
 getTime currentTime = formatTime defaultTimeLocale "%Y%m%dT%H%M%SZ" currentTime
 
--- | Generates a string representing a CSV file.
-getCSV :: [String] -> String
-getCSV events =
+-- | Generates a string representing a ICS file.
+getICS :: [String] -> String
+getICS events =
     if null events
     then ""
     else unlines $ header ++ events ++ bottom
@@ -132,7 +132,7 @@ eventsByDate :: String -- ^ Course code.
 eventsByDate code sect timeSystem (start, end, dates) =
     concat $ map (eventsGenerator code sect timeSystem dates) (zip start end)
 
--- | Generates the string that represents the event for each course.
+-- | Generates the string that represents each event.
 eventsGenerator :: String -- ^ Course code.
                 -> String -- ^ Course section.
                 -> String -- ^ Current time.
@@ -248,8 +248,8 @@ getDatesByCourse session dataInOrder =
 -- | Gives the appropiate starting and ending dates for each day,in which the
 -- course takes place, depending on the course session.
 getDatesByDay :: String -- ^ Course session.
-             -> [[Double]] -- ^ Course session.
-             -> (String, String) -- ^ Time fields for only one day of the week.
+             -> [[Double]] -- ^ Time fields for only one day of the week.
+             -> (String, String)
 getDatesByDay session dataByDay =
     if session == "F" then getFallStr else getWinterStr
     where
