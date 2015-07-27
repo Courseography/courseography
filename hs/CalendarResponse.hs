@@ -27,7 +27,7 @@ getCalendar courses = do
     databaseInfo <- mapM pullDatabase courseInfo
     currentTime <- getCurrentTime
     let timeSystem = getTime currentTime
-    let events = concat $ map (getEvent timeSystem) databaseInfo
+    let events = databaseInfo >>= (getEvent timeSystem)
     return $ toResponse $ getICS events
 
 -- | Generates a properly formatted current date and time.
@@ -116,10 +116,8 @@ eventsByTime code sect start end dates timeSystem =
 
 -- | Join three lists together in tuples of three elements
 zip' :: [a] -> [b] -> [c] -> [(a,b,c)]
-zip' _ _ [] = []
-zip' _ [] _ = []
-zip' [] _ _ = []
 zip' (x:xs) (y2:ys) (z:zs) = (x,y2,z):zip' xs ys zs
+zip' _ _ _ = []
 
 -- | Creates an event for each start/end time.
 eventsByDate :: String -- ^ Course code.
@@ -130,7 +128,7 @@ eventsByDate :: String -- ^ Course code.
              (String, String)) -- ^ Start/End date.
              -> [String]
 eventsByDate code sect timeSystem (start, end, dates) =
-    concat $ map (eventsGenerator code sect timeSystem dates) (zip start end)
+    (zip start end) >>= (eventsGenerator code sect timeSystem dates)
 
 -- | Generates the string that represents each event.
 eventsGenerator :: String -- ^ Course code.
@@ -238,12 +236,9 @@ getDatesByCourse :: String -- ^ Course session.
                  -> [[(String, String)]]
 getDatesByCourse session dataInOrder =
     if session == "Y"
-    then [map halfFall dataInOrder, map halfWinter dataInOrder]
-    else [map (halfYearCourse session) dataInOrder]
-    where
-        halfFall dataByDay = getDatesByDay "F" dataByDay
-        halfWinter dataByDay = getDatesByDay "S" dataByDay
-        halfYearCourse session1 dataByDay = getDatesByDay session1 dataByDay
+    then [map (\ dataByDay -> getDatesByDay "F" dataByDay) dataInOrder,
+          map (\ dataByDay -> getDatesByDay "S" dataByDay) dataInOrder]
+    else [map (\ dataByDay -> getDatesByDay session dataByDay) dataInOrder]
 
 -- | Gives the appropiate starting and ending dates for each day,in which the
 -- course takes place, depending on the course session.
