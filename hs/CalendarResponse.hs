@@ -226,7 +226,7 @@ getStrTime fullTime = if minutes == 0
 
 -- | Creates a string for the minutes.
 ratio :: Int -> String
-ratio decimal = if minutes >= 10 then show minutes else "0" ++ show minutes
+ratio decimal = if minutes >= 10 then show minutes else '0' : show minutes
     where
         minutes = decimal * 6
 
