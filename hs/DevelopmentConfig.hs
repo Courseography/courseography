@@ -82,11 +82,12 @@ outDay = fromGregorian 2014 01 01
 
 -- Holidays for the fall term 2015/2016
 fallHolidays :: [String]
-fallHolidays = ["20151012T"]
+fallHolidays = ["20151012T", "20151109T", "20151110T"]
 
 -- Holidays for the fall term 2015/2016
 winterHolidays :: [String]
-winterHolidays = ["20160215T"]
+winterHolidays = ["20160215T", "20160216T", "20160217T",
+                  "20160218T", "20160219T", "20160325T"]
 
 -- FACEBOOK CONFIGURATION
 

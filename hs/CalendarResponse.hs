@@ -2,13 +2,14 @@ module CalendarResponse where
 
 import Data.List (sort)
 import Data.List.Split (splitOn)
-import Data.Time (Day, UTCTime, addDays, formatTime, getCurrentTime)
+import Data.Time (Day, addDays, formatTime, getCurrentTime)
 import Happstack.Server (ServerPart, Response, toResponse)
 import Control.Monad.IO.Class (liftIO)
 import System.Locale
 import Database.CourseQueries (returnTutorialTimes, returnLectureTimes)
 import qualified Data.Text as T
-import Database.Tables as Tables
+import Text.Read (readMaybe)
+import Database.Tables (Time, timeField)
 import Config (firstMondayFall,
                lastWednesdayFall,
                firstMondayWinter,
@@ -28,13 +29,9 @@ getCalendar courses = do
     let courseInfo = getCoursesInfo courses
     databaseInfo <- mapM pullDatabase courseInfo
     currentTime <- getCurrentTime
-    let systemTime = getTime currentTime
+    let systemTime = formatTime defaultTimeLocale "%Y%m%dT%H%M%SZ" currentTime
     let events = databaseInfo >>= getEvent systemTime
     return $ toResponse $ getICS events
-
--- | Generates a properly formatted current date and time.
-getTime :: UTCTime -> String
-getTime currentTime = formatTime defaultTimeLocale "%Y%m%dT%H%M%SZ" currentTime
 
 -- | Generates a string representing a ICS file.
 getICS :: [String] -> String
@@ -186,11 +183,12 @@ assignDay lst = [monday, tuesday, wednesday, thursday, friday]
 
 -- | Obtains a list of start times for each course.
 startTime :: [[[Double]]] -> [[String]]
-startTime dataInOrder = map checkTimeStart dataInOrder
-    where
-        checkTimeStart dataByDay = 
-            map getStrTime ([head (sortList dataByDay)] ++
-                        getStartConsecutives (sortList dataByDay))
+startTime dataInOrder = 
+    map (\dataByDay -> map getStrTime 
+                           (head (sortList dataByDay) :
+                                   getStartConsecutives (sortList dataByDay)))
+        dataInOrder
+    where      
         sortList dataDay = sort $ map (!! 1) dataDay
 
 -- | Gets the start times that are not the very first start time. 
@@ -198,47 +196,44 @@ getStartConsecutives :: [Double] -> [Double]
 getStartConsecutives listTimes = 
     filter (/= 30.0) [if listTimes !! i == listTimes !! (i + 1) - 0.5
                        then 30.0
-                       else listTimes !! (i + 1)| i <- [0 .. lenLstTimes]]
+                       else listTimes !! (i + 1)| i <- [0 .. lenForComparison]]
     where
-        lenLstTimes = length listTimes - 2
+        lenForComparison = length listTimes - 2
 
 -- ** End time
 
 -- | Obtains a list of end times for each course.
 endTime :: [[[Double]]] -> [[String]]
 endTime dataInOrder =
-    map ((getStrTime . (+ 0.5)))
-        (getEndConsecutives listTimesSorted ++ [last listTimesSorted])
+    map (\dataByDay -> map (getStrTime . (+ 0.5))
+                           (getEndConsecutives $ sortList dataByDay ++
+                            [last $ sortList dataByDay]))
+        dataInOrder
     where
-        listTimesSorted = sort $ dataInOrder >>= (map (!! 1))
---map checkTimeEnd dataInOrder
---    where
---        checkTimeEnd dataByDay =
---            map (getStrTime . (+ 0.5))
---                (getEndConsecutives $ sortList dataByDay ++ [last $ sortList dataByDay])
---        sortList dataDay = sort $ map (!! 1) dataDay
+        sortList dataDay = sort $ map (!! 1) dataDay
 
 -- | Gets the end times that are not the very first end time. 
 getEndConsecutives :: [Double] -> [Double]
 getEndConsecutives listTimes =
     filter (/= 30.0) [if listTimes !! i == listTimes !! (i + 1) - 0.5
                        then 30.0
-                       else listTimes !! i| i <- [0 .. lenLstTimes]]
+                       else listTimes !! i| i <- [0 .. lenForComparison]]
     where
-        lenLstTimes = length listTimes - 2
+        lenForComparison = length listTimes - 2
 
 -- ** Function that works for both start and end times
 
 -- | Creates a string time in the following way HourMinutesSeccondsZ.
 -- For instance, 133500Z corresponds to 1:35 pm.
 getStrTime :: Double -> String
-getStrTime fullTime = if minutes == 0
+getStrTime fullTime =
+                  if maybe True (== 0) minutes
                   then hour ++ "0000"
-                  else hour ++ getStrMinutes minutes ++ "00"
+                  else hour ++ maybe "0000" getStrMinutes minutes ++ "00"
     where
         hours = splitOn "." (show fullTime)
         hour = hours !! 0
-        minutes = read $ hours !! 1 :: Int
+        minutes = readMaybe $ hours !! 1
 
 -- | Creates a string for the minutes out of the decimal part given as a parameter.
 getStrMinutes :: Int -> String
