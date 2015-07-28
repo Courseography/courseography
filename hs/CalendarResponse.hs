@@ -45,7 +45,7 @@ getICS events = unlines $ header ++ events ++ bottom
 
 -- ** Cookie Information
 
--- | Obtains a list with all the information about the courses obtained from 
+-- | Obtains a list with all the information about the courses obtained from
 -- the cookies.
 getCoursesInfo :: String -> [(String, String, String)]
 getCoursesInfo courses = map courseInfo allCourses
@@ -58,24 +58,23 @@ getCoursesInfo courses = map courseInfo allCourses
 
 -- | Pulls out the information for each course from the database.
 pullDatabase :: (String, String, String) -> IO ([Time], String, String, String)
-pullDatabase (code, sect, session) =
-    if take 1 sect == "L"
-    then getData $ returnLectureTimes (T.pack code)
-                                      (T.pack sect)
-                                      (T.pack session)
-    else getData $ returnTutorialTimes (T.pack code)
-                                       (T.pack sect)
-                                       (T.pack session)
+pullDatabase (code, sect, session)
+    | take 1 sect == "L" = getData $ returnLectureTimes (T.pack code)
+                                                        (T.pack sect)
+                                                        (T.pack session)
+    | otherwise = getData $ returnTutorialTimes (T.pack code)
+                                                (T.pack sect)
+                                                (T.pack session)
     where
         getData info = do
-            courseInfo <- info 
+            courseInfo <- info
             return (courseInfo, code, session, sect)
 
 -- ** Event Creation
 
 -- | Generates an event for each course.
 getEvent :: String -> ([Time], String, String, String) -> [String]
-getEvent systemTime (timeFields, code, session, sect) = 
+getEvent systemTime (timeFields, code, session, sect) =
     concat $ eventsByCourse code session sect start end dates systemTime
     where
         dataInOrder = orderData timeFields
@@ -92,19 +91,18 @@ eventsByCourse :: String -- ^ Course code.
             -> [[(String, String)]] -- ^ Start/End dates.
             -> String -- ^ Current system time.
             -> [[String]]
-eventsByCourse code session sect start end dates systemTime =
-    if session == "Y" then year else halfCourse session
+eventsByCourse code session sect start end dates systemTime
+    | session == "Y" = halfFall ++ halfWinter
+    | otherwise = halfCourse session
     where
-        year = halfFall ++ halfWinter
         halfFall = eventsByTime code sect start end (dates !! 0)
                                 systemTime fallHolidays
         halfWinter = eventsByTime code sect start end (dates !! 1)
                                   systemTime winterHolidays
-        halfCourse session1 =
-            if session1 == "F"
-            then halfFall
-            else eventsByTime code sect start end (dates !! 0)
-                              systemTime winterHolidays
+        halfCourse session1
+            | session1 == "F" = halfFall
+            | otherwise = eventsByTime code sect start end (dates !! 0)
+                                       systemTime winterHolidays
 
 -- | Creates an event for each start/end time and date.
 eventsByTime :: String -- ^ Course code.
@@ -144,21 +142,18 @@ eventsStr :: String -- ^ Course code.
           -> [String] -- ^ Holidays dates.
           -> (String, String) -- ^ Start/End time.
           -> [String]
-eventsStr code sect systemTime (startDate, endDate) holidays (start, end) =
-    if startDate == "" || endDate == ""
-    then []
-    else ["BEGIN:VEVENT", "DTSTAMP:" ++ systemTime,
-          "DTSTART;TZID=America/Toronto:" ++ startDate ++ start,
-          "DTEND;TZID=America/Toronto:" ++ startDate ++ end,
-          "RRULE:FREQ=WEEKLY;UNTIL=" ++ endDate ++ "000000Z"] ++
-         getHolidays start holidays ++
-         ["ORGANIZER:University of Toronto",
-          "SUMMARY:" ++ code ++ " " ++ sect,
-          "CATEGORIES:EDUCATION", "END:VEVENT"]
-
-getHolidays :: String -> [String] -> [String] 
-getHolidays start holidays =
-    map (\date -> "EXDATE;TZID=America/Toronto:" ++ date ++ start) holidays
+eventsStr code sect systemTime (startDate, endDate) holidays (start, end)
+    | (startDate == "" || endDate == "") = []
+    | otherwise =
+        ["BEGIN:VEVENT", "DTSTAMP:" ++ systemTime,
+         "DTSTART;TZID=America/Toronto:" ++ startDate ++ start,
+         "DTEND;TZID=America/Toronto:" ++ startDate ++ end,
+         "RRULE:FREQ=WEEKLY;UNTIL=" ++ endDate ++ "000000Z"] ++
+         map (\date -> "EXDATE;TZID=America/Toronto:" ++ date ++ start)
+             holidays ++
+        ["ORGANIZER:University of Toronto",
+         "SUMMARY:" ++ code ++ " " ++ sect,
+         "CATEGORIES:EDUCATION", "END:VEVENT"]
 
 -- ** Ordering data
 
@@ -181,19 +176,19 @@ assignDay lst = [monday, tuesday, wednesday, thursday, friday]
 
 -- ** Start time
 
--- | Obtains a list of start times for each course.
+-- | Obtains the start times for each course by day.
 startTime :: [[[Double]]] -> [[String]]
-startTime dataInOrder = 
-    map (\dataByDay -> map getStrTime 
+startTime dataInOrder =
+    map (\dataByDay -> map getStrTime
                            (head (sortList dataByDay) :
                                    getStartConsecutives (sortList dataByDay)))
         dataInOrder
-    where      
+    where
         sortList dataDay = sort $ map (!! 1) dataDay
 
--- | Gets the start times that are not the very first start time. 
+-- | Gets the start times that are not the very first start time.
 getStartConsecutives :: [Double] -> [Double]
-getStartConsecutives listTimes = 
+getStartConsecutives listTimes =
     filter (/= 30.0) [if listTimes !! i == listTimes !! (i + 1) - 0.5
                        then 30.0
                        else listTimes !! (i + 1)| i <- [0 .. lenForComparison]]
@@ -202,7 +197,7 @@ getStartConsecutives listTimes =
 
 -- ** End time
 
--- | Obtains a list of end times for each course.
+-- | Obtains the end times for each course by day.
 endTime :: [[[Double]]] -> [[String]]
 endTime dataInOrder =
     map (\dataByDay -> map (getStrTime . (+ 0.5))
@@ -212,7 +207,7 @@ endTime dataInOrder =
     where
         sortList dataDay = sort $ map (!! 1) dataDay
 
--- | Gets the end times that are not the very first end time. 
+-- | Gets the end times that are not the very first end time.
 getEndConsecutives :: [Double] -> [Double]
 getEndConsecutives listTimes =
     filter (/= 30.0) [if listTimes !! i == listTimes !! (i + 1) - 0.5
@@ -247,36 +242,32 @@ getStrMinutes decimal = if minutes >= 10 then show minutes else '0' : show minut
 getDatesByCourse :: String -- ^ Course session.
                  -> [[[Double]]] -- ^ Time fields for the week ordered by day.
                  -> [[(String, String)]]
-getDatesByCourse session dataInOrder =
-    if session == "Y"
-    then [map (getDatesByDay "F") dataInOrder,
-          map (getDatesByDay "S") dataInOrder]
-    else [map (getDatesByDay session) dataInOrder]
+getDatesByCourse session dataInOrder
+    | session == "Y" = [map (getDatesByDay "F") dataInOrder,
+                        map (getDatesByDay "S") dataInOrder]
+    | otherwise = [map (getDatesByDay session) dataInOrder]
 
 -- | Gives the appropiate starting and ending dates for each day,in which the
 -- course takes place, depending on the course session.
 getDatesByDay :: String -- ^ Course session.
              -> [[Double]] -- ^ Time fields for only one day of the week.
              -> (String, String)
-getDatesByDay session dataByDay =
-    if session == "F" then getFallStr else getWinterStr
-    where
-        getFallStr = format $ getDayFall $ concat dataByDay !! 0
-        getWinterStr = format $ getDayWinter $ concat dataByDay !! 0
+getDatesByDay session dataByDay
+    | session ==  "F" = format $ getDayFall $ concat dataByDay !! 0
+    | otherwise = format $ getDayWinter $ concat dataByDay !! 0
 
 -- | Formats the date in the following way: YearMonthDayT.
--- For instance, 20150720T corresponds to July 20th, 2015. 
+-- For instance, 20150720T corresponds to July 20th, 2015.
 format :: (Day, Day) -> (String, String)
-format (start, end) = 
-    if start == outDay || end == outDay
-    then ("", "")
-    else (startStr , endStr)
+format (start, end)
+    | start == outDay || end == outDay = ("", "")
+    | otherwise = (startStr , endStr)
     where
         startStr = formatTime defaultTimeLocale "%Y%m%dT" start
         endStr = formatTime defaultTimeLocale "%Y%m%dT" end
 
 -- | Gives the appropriate starting and ending dates for courses in the Fall.
-getDayFall :: Double -> (Day, Day) 
+getDayFall :: Double -> (Day, Day)
 getDayFall 0.0 = (firstMondayFall, addDays 6 lastWednesdayFall)
 getDayFall 1.0 = (addDays 1 firstMondayFall, addDays 7 lastWednesdayFall)
 getDayFall 2.0 = (addDays 2 firstMondayFall, addDays 1 lastWednesdayFall)
@@ -285,7 +276,7 @@ getDayFall 4.0 = (addDays 4 firstMondayFall, addDays 3 lastWednesdayFall)
 getDayFall _ = (outDay, outDay)
 
 -- | Gives the appropriate starting and ending dates for courses in the Winter.
-getDayWinter :: Double -> (Day, Day) 
+getDayWinter :: Double -> (Day, Day)
 getDayWinter 0.0 = (firstMondayWinter, addDays 1 lastMondayWinter)
 getDayWinter 1.0 = (addDays 1 firstMondayWinter, addDays 2 lastMondayWinter)
 getDayWinter 2.0 = (addDays 2 firstMondayWinter, addDays 3 lastMondayWinter)
