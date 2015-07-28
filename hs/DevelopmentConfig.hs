@@ -19,7 +19,9 @@ module Config
      lastWednesdayFall
      firstMondayWinter,
      lastMondayWinter,
-     outDay) where
+     outDay,
+     fallHolidays,
+     winterHolidays) where
 
 import Data.Text (Text)
 import qualified Clay.Render as Clay
@@ -77,6 +79,14 @@ lastMondayWinter = fromGregorian 2016 04 04
 -- | Out of date day. Used to control forbidden inputs for days.
 outDay :: Day
 outDay = fromGregorian 2014 01 01
+
+-- Holidays for the fall term 2015/2016
+fallHolidays :: [String]
+fallHolidays = ["20151012T"]
+
+-- Holidays for the fall term 2015/2016
+winterHolidays :: [String]
+winterHolidays = ["20160215T"]
 
 -- FACEBOOK CONFIGURATION
 
