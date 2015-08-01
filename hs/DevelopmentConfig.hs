@@ -16,7 +16,7 @@ module Config
      cssStyle,
      enableFb,
      firstMondayFall,
-     lastWednesdayFall
+     lastWednesdayFall,
      firstMondayWinter,
      lastMondayWinter,
      outDay,
