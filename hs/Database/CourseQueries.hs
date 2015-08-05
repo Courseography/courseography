@@ -72,29 +72,25 @@ returnCourse lowerStr = runSqlite databasePath $ do
     then return emptyCourse
     else return (buildCourse fallSession springSession yearSession (entityVal $ head sqlCourse))
 
--- | Queries the database for all information regarding a specific tutorial for a @course@,
--- returns a list of Time fields.
+-- | Queries the database for all information regarding a specific tutorial for
+-- a @course@, returns a list of Time fields.
 returnTutorialTimes :: T.Text -> T.Text -> T.Text -> IO [Time]
 returnTutorialTimes lowerStr sect session = runSqlite databasePath $ do
     maybeEntityTutorials <- selectFirst [TutorialsCode ==. T.toUpper lowerStr,
                                          TutorialsSection ==. Just sect,
                                          TutorialsSession ==. session]
                                         []
-    return $ maybe [] getTutorial maybeEntityTutorials
-    where
-        getTutorial entity = tutorialsTimes $ entityVal entity
+    return $ maybe [] (tutorialsTimes . entityVal) maybeEntityTutorials
 
--- | Queries the database for all information regarding a specific lecture for a @course@,
--- returns a list of Time fields.
+-- | Queries the database for all information regarding a specific lecture for
+--  a @course@, returns a list of Time fields.
 returnLectureTimes :: T.Text -> T.Text -> T.Text -> IO [Time]
 returnLectureTimes lowerStr sect session = runSqlite databasePath $ do 
     maybeEntityLectures <- selectFirst [LecturesCode ==. T.toUpper lowerStr,
                                         LecturesSection ==. sect,
                                         LecturesSession ==. session]
                                        []
-    return $ maybe [] getLecture maybeEntityLectures
-    where
-        getLecture entity = lecturesTimes $ entityVal entity
+    return $ maybe [] (lecturesTimes . entityVal) maybeEntityLectures
 
 -- | Builds a Course structure from a tuple from the Courses table.
 -- Some fields still need to be added in.
