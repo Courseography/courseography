@@ -18,6 +18,62 @@ import Config (firstMondayFall,
                fallHolidays,
                winterHolidays)
 
+-- | A string representaion for an ICS file.
+type ICSFile = String
+
+-- | A list of all the events created for all courses.
+type Events = [String]
+
+-- | All the information for a course, including the
+-- time fields obtained from the database and the
+-- information from the cookies.
+type CourseInformation = (TimeFields, Code, Section, Session)
+
+-- | A list of all the time fields for a course as obtained
+-- from the database.
+type TimeFields = [Time]
+
+-- | The code for a course.
+type Code = String
+
+-- | The section for a course.
+type Section = String
+
+-- | The session for a course.
+type Session = String
+
+-- | The current date and time as obtained from the system.
+type SystemTime = String
+
+-- | A list of the information within the time fields
+-- ordered by day.
+type TimeFieldsByDay = [[TimeFieldInfo]]
+
+-- | The information contained in a time Field. The first
+-- Double represents the day and the second one the time.
+type TimeFieldInfo = [Double]
+
+-- | A list including all the times for a course ordered
+-- by day.
+type TimesByDay = [[String]]
+
+-- | The string representation for times 
+type TimeString = String
+
+-- | The string representaion for minutes
+type MinutesString = String
+
+-- | A list containing all the dates for an event
+type DatesByEvent = [[(StartDate, EndDate)]]
+
+-- | The string representation for a date in which an event
+-- occurs for the first time.
+type StartDate = String
+
+-- | String representation of a date after which no more events
+-- are created.
+type EndDate = String
+
 -- | Returns an ICS file of events as requested by the user.
 calendarResponse :: String -> ServerPart Response
 calendarResponse courses =
@@ -30,11 +86,11 @@ getCalendar courses = do
     databaseInfo <- mapM pullDatabase courseInfo
     currentTime <- getCurrentTime
     let systemTime = formatTime defaultTimeLocale "%Y%m%dT%H%M%SZ" currentTime
-    let events = databaseInfo >>= getEvent systemTime
+    let events = databaseInfo >>= getEvents systemTime
     return $ toResponse $ getICS events
 
 -- | Generates a string representing a ICS file.
-getICS :: [String] -> String
+getICS :: Events -> ICSFile
 getICS [] = ""
 getICS events = unlines $ header ++ events ++ bottom
     where
@@ -49,7 +105,7 @@ getICS events = unlines $ header ++ events ++ bottom
 
 -- | Obtains a list with all the information about the courses obtained from
 -- the cookies.
-getCoursesInfo :: String -> [(String, String, String)]
+getCoursesInfo :: String -> [(Code, Section, Session)]
 getCoursesInfo courses = map courseInfo allCourses
     where
         courseInfo [code, sect, session] = (code, sect, session)
@@ -59,28 +115,28 @@ getCoursesInfo courses = map courseInfo allCourses
 -- ** Database Information
 
 -- | Pulls out the information for each course from the database.
-pullDatabase :: (String, String, String) -> IO ([Time], String, String, String)
+pullDatabase :: (Code, Section, Session) -> IO CourseInformation
 pullDatabase (code, 'L':sectCode, session) =
-    fmap (getData code ('L':sectCode) session)
+    fmap (getDataCourse code ('L':sectCode) session)
          (returnLectureTimes (T.pack code)
                              (T.pack $ 'L':sectCode)
                              (T.pack session))
 pullDatabase (code, sect, session) =
-    fmap (getData code sect session)
+    fmap (getDataCourse code sect session)
          (returnTutorialTimes (T.pack code)
                               (T.pack sect)
                               (T.pack session))
 
 -- | Returns a tuple with a combination of the information needed from both
 -- the database and the cookies.
-getData :: String -> String -> String -> [Time] -> ([Time], String, String, String)
-getData code sect session timeFields = (timeFields, code, sect, session)
+getDataCourse :: Code -> Section -> Session -> TimeFields -> CourseInformation
+getDataCourse code sect session timeFields = (timeFields, code, sect, session)
 
 -- ** Event Creation
 
 -- | Generates an event for each course.
-getEvent :: String -> ([Time], String, String, String) -> [String]
-getEvent systemTime (timeFields, code, sect, session) =
+getEvents :: SystemTime -> CourseInformation -> Events
+getEvents systemTime (timeFields, code, sect, session) =
     concat $ eventsByCourse code sect session start end dates systemTime
     where
         dataInOrder = orderData timeFields
@@ -162,13 +218,13 @@ eventsStr code sect systemTime (startDate, endDate) holidays (start, end)
 
 -- | Orders the time fields for each course; which were obtained from the
 -- database
-orderData :: [Time] -> [[[Double]]]
-orderData courseFields = filter (not . null)
-                                (assignDay $ map timeField courseFields)
+orderData :: TimeFields -> TimeFieldsByDay
+orderData timeFields = filter (not . null)
+                                (assignDay $ map timeField timeFields)
 
 -- | Organizes the data by the day of the week, assigning a position based on
 -- the day in the time field.
-assignDay :: [[Double]] -> [[[Double]]]
+assignDay :: [TimeFieldInfo] -> TimeFieldsByDay
 assignDay lst = groupBy (\x y -> head x == head y) sortedList
     where
         sortedList = sortBy compare lst
@@ -176,14 +232,14 @@ assignDay lst = groupBy (\x y -> head x == head y) sortedList
 -- ** Start time
 
 -- | Obtains the start times for each course by day.
-startTime :: [[[Double]]] -> [[String]]
+startTime :: TimeFieldsByDay -> TimesByDay
 startTime dataInOrder =
-    map (\dataByDay -> map getStrTime
-                           (head (sortList dataByDay) :
-                                   getStartConsecutives (sortList dataByDay)))
+    map (\dataByDay -> map formatTimes
+                           (head (timesOrdered dataByDay) :
+                                   getStartConsecutives (timesOrdered dataByDay)))
         dataInOrder
     where
-        sortList dataDay = sort $ map (!! 1) dataDay
+        timesOrdered dataDay = sort $ map (!! 1) dataDay
 
 -- | Gets the start times that are not the very first start time.
 getStartConsecutives :: [Double] -> [Double]
@@ -197,14 +253,14 @@ getStartConsecutives listTimes =
 -- ** End time
 
 -- | Obtains the end times for each course by day.
-endTime :: [[[Double]]] -> [[String]]
+endTime :: TimeFieldsByDay -> TimesByDay
 endTime dataInOrder =
-    map (\dataByDay -> map (getStrTime . (+ 0.5))
-                           (getEndConsecutives $ sortList dataByDay ++
-                            [last $ sortList dataByDay]))
+    map (\dataByDay -> map (formatTimes . (+ 0.5))
+                           (getEndConsecutives $ timesOrdered dataByDay ++
+                            [last $ timesOrdered dataByDay]))
         dataInOrder
     where
-        sortList dataDay = sort $ map (!! 1) dataDay
+        timesOrdered dataDay = sort $ map (!! 1) dataDay
 
 -- | Gets the end times that are not the very first end time.
 getEndConsecutives :: [Double] -> [Double]
@@ -215,32 +271,30 @@ getEndConsecutives listTimes =
     where
         lenForComparison = length listTimes - 2
 
--- ** Function that works for both start and end times
+-- ** Functions that work for both start and end times
 
 -- | Creates a string time in the following way HourMinutesSeccondsZ.
--- For instance, 133500Z corresponds to 1:35 pm.
-getStrTime :: Double -> String
-getStrTime fullTime =
+-- For instance, 133500 corresponds to 1:35 pm.
+formatTimes :: Double -> TimeString
+formatTimes fullTime =
     if maybe True (== 0) minutes
     then hour ++ "0000"
-    else hour ++ maybe "0000" getStrMinutes minutes ++ "00"
+    else hour ++ maybe "0000" formatMinutes minutes ++ "00"
     where
         hours = splitOn "." (show fullTime)
         hour = hours !! 0
         minutes = readMaybe $ hours !! 1
 
 -- | Creates a string for the minutes out of the decimal part given as a parameter.
-getStrMinutes :: Int -> String
-getStrMinutes decimal = if minutes >= 10 then show minutes else '0' : show minutes
+formatMinutes :: Int -> MinutesString
+formatMinutes decimal = if minutes >= 10 then show minutes else '0' : show minutes
     where
         minutes = decimal * 6
 
 -- ** Start/End date
 
 -- | Obtains all the dates for each course depending on its session.
-getDatesByCourse :: String -- ^ Course session.
-                 -> [[[Double]]] -- ^ Time fields for the week ordered by day.
-                 -> [[(String, String)]]
+getDatesByCourse :: Session -> TimeFieldsByDay -> DatesByEvent
 getDatesByCourse session dataInOrder
     | session == "Y" = [map (getDatesByDay "F") dataInOrder,
                         map (getDatesByDay "S") dataInOrder]
@@ -248,17 +302,15 @@ getDatesByCourse session dataInOrder
 
 -- | Gives the appropiate starting and ending dates for each day,in which the
 -- course takes place, depending on the course session.
-getDatesByDay :: String -- ^ Course session.
-             -> [[Double]] -- ^ Time fields for only one day of the week.
-             -> (String, String)
+getDatesByDay :: Session -> [TimeFieldInfo] -> (StartDate, EndDate)
 getDatesByDay session dataByDay
-    | session ==  "F" = format $ getDayFall $ head $ concat dataByDay
-    | otherwise = format $ getDayWinter $ head $ concat dataByDay
+    | session ==  "F" = formatDates $ getDatesFall $ head $ concat dataByDay
+    | otherwise = formatDates $ getDatesWinter $ head $ concat dataByDay
 
 -- | Formats the date in the following way: YearMonthDayT.
 -- For instance, 20150720T corresponds to July 20th, 2015.
-format :: (Day, Day) -> (String, String)
-format (start, end)
+formatDates :: (Day, Day) -> (StartDate, EndDate)
+formatDates (start, end)
     | start == outDay || end == outDay = ("", "")
     | otherwise = (startStr , endStr)
     where
@@ -266,19 +318,19 @@ format (start, end)
         endStr = formatTime defaultTimeLocale "%Y%m%dT" end
 
 -- | Gives the appropriate starting and ending dates for courses in the Fall.
-getDayFall :: Double -> (Day, Day)
-getDayFall 0.0 = (firstMondayFall, addDays 6 lastWednesdayFall)
-getDayFall 1.0 = (addDays 1 firstMondayFall, addDays 7 lastWednesdayFall)
-getDayFall 2.0 = (addDays 2 firstMondayFall, addDays 1 lastWednesdayFall)
-getDayFall 3.0 = (addDays 3 firstMondayFall, addDays 2 lastWednesdayFall)
-getDayFall 4.0 = (addDays 4 firstMondayFall, addDays 3 lastWednesdayFall)
-getDayFall _ = (outDay, outDay)
+getDatesFall :: Double -> (Day, Day)
+getDatesFall 0.0 = (firstMondayFall, addDays 6 lastWednesdayFall)
+getDatesFall 1.0 = (addDays 1 firstMondayFall, addDays 7 lastWednesdayFall)
+getDatesFall 2.0 = (addDays 2 firstMondayFall, addDays 1 lastWednesdayFall)
+getDatesFall 3.0 = (addDays 3 firstMondayFall, addDays 2 lastWednesdayFall)
+getDatesFall 4.0 = (addDays 4 firstMondayFall, addDays 3 lastWednesdayFall)
+getDatesFall _ = (outDay, outDay)
 
 -- | Gives the appropriate starting and ending dates for courses in the Winter.
-getDayWinter :: Double -> (Day, Day)
-getDayWinter 0.0 = (firstMondayWinter, addDays 1 lastMondayWinter)
-getDayWinter 1.0 = (addDays 1 firstMondayWinter, addDays 2 lastMondayWinter)
-getDayWinter 2.0 = (addDays 2 firstMondayWinter, addDays 3 lastMondayWinter)
-getDayWinter 3.0 = (addDays 3 firstMondayWinter, addDays 4 lastMondayWinter)
-getDayWinter 4.0 = (addDays 4 firstMondayWinter, addDays 5 lastMondayWinter)
-getDayWinter _ = (outDay, outDay)
+getDatesWinter :: Double -> (Day, Day)
+getDatesWinter 0.0 = (firstMondayWinter, addDays 1 lastMondayWinter)
+getDatesWinter 1.0 = (addDays 1 firstMondayWinter, addDays 2 lastMondayWinter)
+getDatesWinter 2.0 = (addDays 2 firstMondayWinter, addDays 3 lastMondayWinter)
+getDatesWinter 3.0 = (addDays 3 firstMondayWinter, addDays 4 lastMondayWinter)
+getDatesWinter 4.0 = (addDays 4 firstMondayWinter, addDays 5 lastMondayWinter)
+getDatesWinter _ = (outDay, outDay)
