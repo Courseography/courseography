@@ -13,6 +13,7 @@ module Config
      markdownPath,
      graphPath,
      genCssPath,
+     timetableUrl,
      cssStyle,
      enableFb) where
 
@@ -38,6 +39,12 @@ graphPath = "../public/res/graphs/"
 -- | The relative path to the directory containing all of the generated CSS files.
 genCssPath :: String
 genCssPath = "../public/style/"
+
+-- URLs
+
+-- | The URL for U of T's official timetable.
+timetableUrl :: String
+timetableUrl = "http://www.artsandscience.utoronto.ca/ofr/timetable/winter/"
 
 -- ASSET COMPILATION
 
