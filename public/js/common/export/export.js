@@ -17,10 +17,13 @@ function createExportModalDiv() {
     var img = (context === 'graph') ? getGraphImage() : getGridImage(session);
     var contentDiv = $('<div></div>');
     var topContentDiv = $('<div></div>');
-    contentDiv.attr('id', 'modal-content-container');
+    var calendarOption = $('<a href="calendar">Download ICS</a>')
+    calendarOption.attr('target', '_blank');
     topContentDiv.html('<img id="post-image" src="data:image/png;base64,' + img + '" />');
-    contentDiv.append(topContentDiv);
-    contentDiv.attr('id', 'modal-content-container');
+    contentDiv.attr('id', 'modal-content-container')
+        .append(calendarOption)
+        .append(topContentDiv)
+        .attr('id', 'modal-content-container');
 
     if (context === 'grid') {
         var sessionButton = $('<button type="button" class="btn btn-primary">Switch Sessions</button>');
