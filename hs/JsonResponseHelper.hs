@@ -1,4 +1,4 @@
-module JsonResponse
+module JsonResponseHelper
     (createJSONResponse, encodeJSON) where
 
 import qualified Data.ByteString.Char8 as BS

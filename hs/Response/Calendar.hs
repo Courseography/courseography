@@ -1,4 +1,5 @@
-module CalendarResponse where
+module Response.Calendar
+    (calendarResponse) where
 
 import Data.List (sort, groupBy, sortBy)
 import Data.List.Split (splitOn)
@@ -171,7 +172,7 @@ fifth (_, _, _, _, dates) = dates
 -- | A list of the information within the time fields ordered by day.
 type InfoTimeFieldsByDay = [[[Double]]]
 
--- | Orders by day the time fields obtained from the database. 
+-- | Orders by day the time fields obtained from the database.
 orderTimeFields :: [Time] -> InfoTimeFieldsByDay
 orderTimeFields timeFields = groupBy (\x y -> head x == head y) sortedList
     where

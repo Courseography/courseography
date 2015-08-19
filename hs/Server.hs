@@ -6,16 +6,7 @@ import Control.Monad.IO.Class (liftIO)
 import Data.Maybe (fromMaybe)
 import Data.Time.Format (FormatTime)
 import Happstack.Server hiding (host)
-import GridResponse
-import GraphResponse
-import DrawResponse
-import ImageResponse
-import PostResponse
-import FourOhFourResponse
-import SearchResponse
-import AboutResponse
-import PrivacyResponse
-import CalendarResponse
+import Response
 import Database.CourseQueries (retrieveCourse, allCourses, queryGraphs, courseInfo, deptList)
 import Filesystem.Path.CurrentOS
 import System.Directory

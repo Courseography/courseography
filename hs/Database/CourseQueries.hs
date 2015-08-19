@@ -23,7 +23,7 @@ import Database.Persist
 import Database.Persist.Sqlite
 import Database.Tables as Tables
 import Control.Monad.IO.Class (liftIO, MonadIO)
-import JsonResponse
+import JsonResponseHelper (createJSONResponse)
 import qualified Data.Text as T
 import WebParsing.ParsingHelp
 import Data.String.Utils
@@ -85,7 +85,7 @@ returnTutorial lowerStr sect session = runSqlite databasePath $ do
 -- | Queries the database for all information regarding a specific lecture for
 --  a @course@, returns a Lecture.
 returnLecture :: T.Text -> T.Text -> T.Text -> IO (Maybe Lectures)
-returnLecture lowerStr sect session = runSqlite databasePath $ do 
+returnLecture lowerStr sect session = runSqlite databasePath $ do
     maybeEntityLectures <- selectFirst [LecturesCode ==. T.toUpper lowerStr,
                                         LecturesSection ==. sect,
                                         LecturesSession ==. session]

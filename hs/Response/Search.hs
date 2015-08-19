@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module SearchResponse
+module Response.Search
     (searchResponse) where
 
 import           Text.Blaze ((!))

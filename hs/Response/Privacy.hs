@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module PrivacyResponse
+module Response.Privacy
     (privacyResponse) where
 
 import           Text.Blaze ((!))
