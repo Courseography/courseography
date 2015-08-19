@@ -21,9 +21,8 @@ function createExportModalDiv() {
     calendarOption.attr('target', '_blank');
     topContentDiv.html('<img id="post-image" src="data:image/png;base64,' + img + '" />');
     contentDiv.attr('id', 'modal-content-container')
-        .append(calendarOption)
-        .append(topContentDiv)
-        .attr('id', 'modal-content-container');
+              .append(calendarOption)
+              .append(topContentDiv);
 
     if (context === 'grid') {
         var sessionButton = $('<button type="button" class="btn btn-primary">Switch Sessions</button>');
