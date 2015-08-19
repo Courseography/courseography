@@ -12,7 +12,7 @@ module Database.CourseQueries
      returnCourse,
      allCourses,
      courseInfo,
-     getDepartment,
+     getDeptCourses,
      queryGraphs,
      deptList) where
 
@@ -34,8 +34,7 @@ import Control.Monad (liftM)
 -- | Takes a course code (e.g. \"CSC108H1\") and sends a JSON representation
 -- of the course as a response.
 retrieveCourse :: String -> ServerPart Response
-retrieveCourse course =
-    liftIO $ queryCourse (T.pack course)
+retrieveCourse = liftIO . queryCourse . T.pack
 
 -- | Queries the database for all information about @course@, constructs a JSON object
 -- representing the course and returns the appropriate JSON response.
@@ -132,10 +131,6 @@ allCourses = do
 courseInfo :: String -> ServerPart Response
 courseInfo dept =
       liftM createJSONResponse (getDeptCourses dept)
-
--- | Gets all courses for a given department.
-getDepartment :: String -> IO [Course]
-getDepartment = getDeptCourses
 
 -- | Returns all course info for a given department.
 getDeptCourses :: MonadIO m => String -> m [Course]
