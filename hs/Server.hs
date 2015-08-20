@@ -75,5 +75,5 @@ runServer = do
               dir "depts" $ liftIO deptList,
               dir "timesearch" searchResponse,
               dir "calendar" $ lookCookieValue "selected-lectures" >>= calendarResponse,
-              fourOhFourResponse
+              notFoundResponse
         ]
