@@ -1,7 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Scripts
-    (graphScripts, timetableScripts, drawScripts, postScripts, searchScripts, fourOhFourScripts)where
+    (graphScripts, timetableScripts, drawScripts, postScripts, searchScripts, notFoundScripts)
+    where
 
 import           Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
@@ -100,5 +101,5 @@ searchScripts = do
          "https://cdnjs.cloudflare.com/ajax/libs/react/0.13.1/JSXTransformer.js"])
     H.script ! A.type_ "text/jsx" ! A.src "static/js/search/timetable.js" $ ""
 
-fourOhFourScripts :: H.Html
-fourOhFourScripts = jQuery
+notFoundScripts :: H.Html
+notFoundScripts = jQuery
