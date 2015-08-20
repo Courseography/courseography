@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Utilities
+module Util.Blaze
     (createTag,
      stylesheet,
      makeScript,

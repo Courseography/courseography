@@ -6,7 +6,7 @@ module Scripts
 import           Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
-import Utilities
+import Util.Blaze
 import Config (enableFb)
 
 facebookScripts :: [H.AttributeValue]

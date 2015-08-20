@@ -5,7 +5,7 @@ module Response.Grid
 
 import qualified Text.Blaze.Html5 as H
 import Happstack.Server
-import Utilities
+import Util.Blaze
 import MasterTemplate
 import Scripts
 
