@@ -57,6 +57,7 @@ $(document).on('click', '.graph-button', function() {
 
     var id = $(this).data('id');
     loadGraph(id);
+    changeFocusEnable(id);
 });
 
 
@@ -123,4 +124,18 @@ function enableReset() {
     'use strict';
 
     fillFCECount();
+}
+
+/**
+ * Enables the Focuses nav in the sidebar if the CS graph is selected.
+ * @param:{string} id ID of the graph we just selected
+**/
+function changeFocusEnable(id) {
+    var currentGraph = graphs[id - 1].title;
+    if (currentGraph.indexOf("Computer Science") >= 0) {
+        $("#focuses-nav").removeClass('disabled');
+    }
+    else {
+        $("#focuses-nav").addClass('disabled');
+    }
 }

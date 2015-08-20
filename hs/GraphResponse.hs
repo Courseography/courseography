@@ -7,7 +7,6 @@ import           Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 import Happstack.Server
-import Utilities
 import MasterTemplate
 import Scripts
 
@@ -25,28 +24,6 @@ graphResponse =
                 )
                 graphScripts
 
-
-fceCountDiv :: H.Html
-fceCountDiv =
-    createTag H.div "FCECountDiv" "" $ do
-        createTag H.span "FCEcount" "" "0.0"
-        "FCEs" 
-
-focusesTab :: H.Html
-focusesTab = ""
-
-timetableTab :: H.Html
-timetableTab =
-    createTag H.div "timetable" "infoTab" $ do
-        createTag H.div "timetableSearch" "infoTabContent" $ do
-            createTag H.h2 "" "" "2014-2015 Timetable"
-            H.p "Search through the timetable for a course or instructor."
-            H.p "The \"(+5)\" caps are extra reserved seats. See official timetable for details."
-            createTag H.p "timetable-creator-link" "" $
-                makeA "" "" "timetable_creator.html" "" "Plan your timetable here!"
-            makeInput "filter" "text-input" "" "" "text"
-        createTag H.div "timetableContainer" "" ""
-
 sideBar :: H.Html
 sideBar = do
     H.div ! A.id "sidebar" $ do
@@ -54,10 +31,10 @@ sideBar = do
             H.div ! A.id "fcecount" $ ""
             H.button ! A.id "reset" $ "Reset Graph"
         H.nav ! A.id "sidebar-nav" $ H.ul $ do
-            H.li ! A.id "focuses-nav" $ do
-                H.a ! A.href "" $ "Focuses"
             H.li ! A.id "graphs-nav" $ do
                 H.a ! A.href "" $ "Graphs"
+            H.li ! A.id "focuses-nav" $ do
+                H.a ! A.href "" $ "Focuses"
         H.div ! A.id "focuses" $ do
             H.p ! A.id "sci" ! A.class_ "focus" $ "Scientific Computing"
             H.div ! A.id "sci-details" ! A.class_ "details" $ ""

@@ -15,6 +15,7 @@ import FourOhFourResponse
 import SearchResponse
 import AboutResponse
 import PrivacyResponse
+import CalendarResponse
 import Database.CourseQueries (retrieveCourse, allCourses, queryGraphs, courseInfo, deptList)
 import Filesystem.Path.CurrentOS
 import System.Directory
@@ -82,5 +83,6 @@ runServer = do
               dir "course-info" $ look "dept" >>= courseInfo,
               dir "depts" $ liftIO deptList,
               dir "timesearch" searchResponse,
+              dir "calendar" $ lookCookieValue "selected-lectures" >>= calendarResponse,
               fourOhFourResponse
         ]

@@ -14,7 +14,9 @@ module Database.CourseQueries
      courseInfo,
      getDepartment,
      queryGraphs,
-     deptList) where
+     deptList,
+     returnTutorial,
+     returnLecture) where
 
 import Happstack.Server.SimpleHTTP
 import Database.Persist
@@ -69,6 +71,26 @@ returnCourse lowerStr = runSqlite databasePath $ do
     if null sqlCourse
     then return emptyCourse
     else return (buildCourse fallSession springSession yearSession (entityVal $ head sqlCourse))
+
+-- | Queries the database for all information regarding a specific tutorial for
+-- a @course@, returns a Tutorial.
+returnTutorial :: T.Text -> T.Text -> T.Text -> IO (Maybe Tutorials)
+returnTutorial lowerStr sect session = runSqlite databasePath $ do
+    maybeEntityTutorials <- selectFirst [TutorialsCode ==. T.toUpper lowerStr,
+                                         TutorialsSection ==. Just sect,
+                                         TutorialsSession ==. session]
+                                        []
+    return $ fmap entityVal maybeEntityTutorials
+
+-- | Queries the database for all information regarding a specific lecture for
+--  a @course@, returns a Lecture.
+returnLecture :: T.Text -> T.Text -> T.Text -> IO (Maybe Lectures)
+returnLecture lowerStr sect session = runSqlite databasePath $ do 
+    maybeEntityLectures <- selectFirst [LecturesCode ==. T.toUpper lowerStr,
+                                        LecturesSection ==. sect,
+                                        LecturesSession ==. session]
+                                       []
+    return $ fmap entityVal maybeEntityLectures
 
 -- | Builds a Course structure from a tuple from the Courses table.
 -- Some fields still need to be added in.

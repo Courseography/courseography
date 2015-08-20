@@ -47,7 +47,7 @@ var AIFocusList = [
     'CSC310', 'CSC438', 'CSC448',
     'CSC463', 'CSC401', 'CSC485', 'CSC320',
     'CSC420', 'CSC321', 'CSC411', 'CSC412',
-    'CSC384', 'CSC486', 'CSC336'
+    'CSC384', 'CSC486', 'CSC336', 'Sta248261'
 ];
 
 var NLPFocusList = [

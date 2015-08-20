@@ -10,6 +10,14 @@ import qualified Data.Text as T
 import Database.Tables as Tables
 import WebParsing.ParsingHelp
 
+parseUTSC :: IO ()
+parseUTSC = do
+    rsp <- simpleHTTP (getRequest (utscCalendarUrl ++ "Table_of_Contents.html"))
+    body <- getResponseBody rsp
+    let depts = getDeptList $ parseTags body
+    putStrLn "Parsing UTSC Calendar..."
+    mapM_ getCalendar depts
+
 utscCalendarUrl :: String
 utscCalendarUrl = "http://www.utsc.utoronto.ca/~registrar/calendars/calendar/"
 
@@ -30,16 +38,16 @@ getCalendar str = do
     body <- getResponseBody rsp
     let tags = filter isntComment $ parseTags (T.pack body)
         coursesSoup =  takeWhile (/= TagOpen "div" [("id", "pdf_files")]) $ lastH2 tags
-        courses = map (filter (tagText (\_ -> True))) $ partitions isCourseTitle coursesSoup
+        courses = map (filter (tagText (const True))) $ partitions isCourseTitle coursesSoup
         course = map processCourseToData courses
     print ("parsing: " ++ str)
     runSqlite databasePath $ do
-      runMigration migrateAll
-      mapM_ insertCourse course
+        runMigration migrateAll
+        mapM_ insertCourse course
     where
         isntComment (TagComment _) = False
         isntComment _ = True
-        lastH2 = last . sections (tagOpen (== "h2") (\_ -> True))
+        lastH2 = last . sections (tagOpen (== "h2") (const True))
         isCourseTitle (TagOpen _ attrs) = any (\x -> fst x == "name" && T.length (snd x) == 8) attrs
         isCourseTitle _ = False
 
@@ -65,11 +73,3 @@ processCourseToData tags  =
              parseExclusion -:
              parseRecommendedPrep -:
              parseDistAndBreadth
-
-parseUTSC :: IO ()
-parseUTSC = do
-    rsp <- simpleHTTP (getRequest (utscCalendarUrl ++ "Table_of_Contents.html"))
-    body <- getResponseBody rsp
-    let depts = getDeptList $ parseTags body
-    putStrLn "Parsing UTSC Calendar..."
-    mapM_ getCalendar depts

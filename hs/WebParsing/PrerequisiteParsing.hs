@@ -16,18 +16,14 @@ module WebParsing.PrerequisiteParsing
 import Text.Regex.Posix ((=~))
 import qualified Data.Text as T
 
-{- Signatures:
-
--}
-
--- | attempts to match characters used to delimit prerequisite expressions
+-- | Attempts to match characters used to delimit prerequisite expressions
 -- returns (before, delim, after). or (input, "","") if no match occurs
 matchDelim :: String -> (String, String, String)
 matchDelim prereqs =
     let pat = "[;,]" :: String
     in prereqs =~ pat
 
--- | returns true if the string begins inside a parenthesized expression.
+-- | Returns true if the string begins inside a parenthesized expression.
 -- e.g  isntDelim "CSC458)" == True
 --      isntDelim "(STA247, STA248)" == False
 isntDelim :: String -> Bool
@@ -35,27 +31,27 @@ isntDelim rest =
     let pat = "^.*\\)" :: String
     in rest =~ pat
 
--- |Splits a PrereqString by delimeters ';'' ','.
+-- | Splits a PrereqString by delimeters ';'' ','.
 toPreExprs :: String -> String -> [String]
 toPreExprs str expr  =
     let (beforeStr, delimStr, afterStr) = matchDelim str
     in
         case (beforeStr, delimStr, afterStr) of
-            ("","","") -> [] --if (expr == "") then [] else [expr]
-            (before, "", "") -> [before++expr]
-            (before, ",", after) -> if (isntDelim after)
+            ("","","")           -> [] --if (expr == "") then [] else [expr]
+            (before, "", "")     -> [before ++ expr]
+            (before, ",", after) -> if isntDelim after
                                     then toPreExprs after (expr ++ before)
-                                    else (expr++before):(toPreExprs after "")
-            (before, ";", after) -> (expr++before):(toPreExprs after "")
+                                    else (expr ++ before):toPreExprs after ""
+            (before, ";", after) -> (expr ++ before):toPreExprs after ""
 
--- | attempts to match a course in given string. returns (before, course, after)
+-- | Attempts to match a course in given string. returns (before, course, after)
 -- if no match occurs (input, "", "")
 matchCourse :: String -> (String, String, String)
 matchCourse prereqs =
     let pat = "[A-Z]{3}[0-9]{3}[HY][0-9]" :: String
     in prereqs =~ pat
 
--- | converts a string representing a prerequisite expression into a prerequisite
+-- | Converts a string representing a prerequisite expression into a prerequisite
 -- expression. Extracts all course names found within the string, and returns them
 -- in a string.
 toPrereq :: String -> T.Text
@@ -66,9 +62,9 @@ toPrereq expr =
             (_, "", "") -> ""
             --guaranteed match
             (_, course, "") -> T.pack course
-            (_, course, after) ->  T.concat [(T.pack course), " ", (toPrereq after)]
+            (_, course, after) ->  T.concat [T.pack course, " ", toPrereq after]
 
--- | converts a text representation of Course prerequisites into type of prereqs field
+-- | Converts a text representation of Course prerequisites into type of prereqs field
 -- in course record.
 parsePrerequisites :: Maybe T.Text -> Maybe T.Text
 parsePrerequisites Nothing = Nothing
