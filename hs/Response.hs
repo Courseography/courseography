@@ -1,25 +1,25 @@
 module Response
     (
         -- | @/about@
-        Response.About,
+        module Response.About,
         -- | @/calendar@
-        Response.Calendar,
+        module Response.Calendar,
         -- | @/draw@
-        Response.Draw,
+        module Response.Draw,
         -- | @/graph@
-        Response.Graph,
+        module Response.Graph,
         -- | @/grid@
-        Response.Grid,
+        module Response.Grid,
         -- | @/image@
-        Response.Image,
+        module Response.Image,
         -- | 404 errors
-        Response.NotFound,
+        module Response.NotFound,
         -- | @/post@
-        Response.Post,
+        module Response.Post,
         -- | @/privacy@
-        Response.Privacy,
+        module Response.Privacy,
         -- | @/timesearch@
-        Response.Search
+        module Response.Search
     )
     where
 
