@@ -51,8 +51,7 @@ timetableScripts :: H.Html
 timetableScripts = do
     jQuery
     concatHtml $ (map makeScript $
-        ["static/js/grid/timetable_util.js",
-         "/static/js/grid/setup.js",
+        ["/static/js/grid/setup.js",
          "/static/js/grid/mouse_events.js",
          "//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js",
          "https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js",

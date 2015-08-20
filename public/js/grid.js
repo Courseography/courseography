@@ -1,25 +1,30 @@
-requirejs(['grid/generate_grid'], function(g) {
-    //This function is called when scripts/helper/util.js is loaded.
-    //If util.js calls define(), then this function is not fired until
-    //util's dependencies have loaded, and the util argument will hold
-    //the module value for "helper/util".
+requirejs([
+    'grid/generate_grid',
+    'grid/timetable_util',
+    'common/utilities/trap_scroll'],
+    function(
+        generate_grid,
+        timetable_util,
+        trap_scroll
+    ) {
+
     $(document).ready(function () {
         'use strict';
 
         $('#dialog').fadeOut()
                     .css('visibility', 'visible');
 
-        g.generateGrid();
+        generate_grid.generateGrid();
         var tdObjects = $('td');
         tdObjects.each(function () {
             $(this).data('conflicts', []);
         });
 
-        restoreFromCookies();
-        renderClearAllButton();
-        enableSearch();
-        getVeryLargeCourseArray();
-        trapScroll();
+        timetable_util.restoreFromCookies();
+        timetable_util.renderClearAllButton();
+        timetable_util.enableSearch();
+        timetable_util.getVeryLargeCourseArray();
+        trap_scroll.trap_scroll();
         setTdHover();
     });
 });
