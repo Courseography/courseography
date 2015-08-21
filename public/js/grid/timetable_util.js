@@ -1,3 +1,7 @@
+var selectedCourses = [];   // All selected Courses.
+var selectedSections = [];  // All selected sections.
+
+
 /**
  * Updates selectedSections with sectionId.
  * @param {string} sectionId The ID of the lecture section being updated.
@@ -25,6 +29,9 @@ function refreshSelectedCourses() {
 
 
 define(function() {
+
+    // "Global" list of courses
+    var courses = [];
 
     /**
      * Populate the global list of courses.
@@ -175,6 +182,20 @@ define(function() {
         });
     }
 
+    /**
+     * Selects a course.
+     * @param {string} courseCode The course code.
+     */
+    function selectCourse(courseCode) {
+        'use strict';
+
+        var course = new Course(courseCode);
+        $('#course-select').append(course.render());
+        courseObjects.push(course);
+        selectedCourses.push(courseCode);
+        saveCookies(selectedCourses, selectedSections);
+    }
+
     return {
         getVeryLargeCourseArray: getVeryLargeCourseArray,
         enableSearch: enableSearch,
@@ -204,21 +225,6 @@ function saveCookies(courses, sections) {
     } else {
         setCookie("selected-lectures", "");
     }
-}
-
-
-/**
- * Selects a course.
- * @param {string} courseCode The course code.
- */
-function selectCourse(courseCode) {
-    'use strict';
-
-    var course = new Course(courseCode);
-    $('#course-select').append(course.render());
-    courseObjects.push(course);
-    selectedCourses.push(courseCode);
-    saveCookies(selectedCourses, selectedSections);
 }
 
 
