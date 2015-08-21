@@ -9,8 +9,8 @@ dependencies:
   override:
     - cabal update
     - cabal install --only-dependencies
-    
+
 test:
   pre:
-    - cabal --version
+    - cp DevelopmentConfig.hs Config.hs
 
