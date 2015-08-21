@@ -4,7 +4,6 @@ module Util.Blaze
     (toStylesheet,
      toScript,
      toLink,
-     jQuery,
      mdToHTML) where
 
 import           Text.Blaze ((!))
@@ -24,9 +23,6 @@ toScript src = H.script ! A.src (H.stringValue src) $ ""
 toLink :: String -> String -> H.Html
 toLink link content = H.a ! A.href (H.stringValue link)
                           $ (H.toHtml content)
-
-jQuery :: H.Html
-jQuery = toScript "https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"
 
 -- | mdToHTML takes in the contents of a file written in Mark Down and converts it to
 -- blaze-HTML.
