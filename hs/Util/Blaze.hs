@@ -1,50 +1,32 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Util.Blaze
-    (createTag,
-     stylesheet,
-     makeScript,
-     makeForm,
-     makeInput,
-     makeA,
+    (toStylesheet,
+     toScript,
+     toLink,
      jQuery,
-     concatHtml,
-     concatSVG,
      mdToHTML) where
 
 import           Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
-import qualified Text.Blaze.Svg11 as S
 import Text.Markdown (markdown, def)
 import Data.Text.Lazy (Text)
 
-createTag :: (H.Html -> H.Html) ->  H.AttributeValue -> H.AttributeValue -> H.Html -> H.Html
-createTag tag id_ class_ content = tag ! A.id id_ ! A.class_ class_ $ content
+toStylesheet :: String -> H.Html
+toStylesheet href = H.link ! A.rel "stylesheet"
+                         ! A.type_ "text/css"
+                         ! A.href (H.stringValue href)
 
-stylesheet :: H.AttributeValue -> H.Html
-stylesheet href = H.link ! A.rel "stylesheet" ! A.type_ "text/css" ! A.href href
+toScript :: String -> H.Html
+toScript src = H.script ! A.src (H.stringValue src) $ ""
 
-makeScript :: H.AttributeValue -> H.Html
-makeScript src = H.script ! A.src src $ ""
-
-makeForm :: H.AttributeValue -> H.AttributeValue -> H.AttributeValue -> H.Html -> H.Html
-makeForm id_ class_ onSubmit content = H.form ! A.id id_ ! A.class_ class_ ! A.onsubmit onSubmit $ content
-
-makeInput :: H.AttributeValue -> H.AttributeValue -> H.AttributeValue -> H.AttributeValue -> H.AttributeValue -> H.Html
-makeInput id_ class_ placeholder autocomplete type_ = H.input ! A.id id_ ! A.class_ class_ ! A.placeholder placeholder ! A.autocomplete autocomplete ! A.type_ type_
-
-makeA :: H.AttributeValue -> H.AttributeValue -> H.AttributeValue -> H.AttributeValue -> H.Html -> H.Html
-makeA id_ class_ href target content = H.a ! A.id id_ ! A.class_ class_ ! A.href href ! A.target target $ content
+toLink :: String -> String -> H.Html
+toLink link content = H.a ! A.href (H.stringValue link)
+                          $ (H.toHtml content)
 
 jQuery :: H.Html
-jQuery = makeScript "https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"
-
-concatHtml :: [H.Html] -> H.Html
-concatHtml html = sequence_ html
-
-concatSVG :: [S.Svg] -> S.Svg
-concatSVG svg = sequence_ svg
+jQuery = toScript "https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"
 
 -- | mdToHTML takes in the contents of a file written in Mark Down and converts it to
 -- blaze-HTML.

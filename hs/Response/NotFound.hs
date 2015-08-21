@@ -18,7 +18,7 @@ notFoundResponse =
             H.title "Courseography - 404!"
             H.meta ! A.httpEquiv "Content-Type"
                    ! A.content "text/html;charset=utf-8"
-            sequence_  $ map stylesheet [
+            sequence_  $ map toStylesheet [
                 "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css",
                 "static/style/app.css"]
 
@@ -34,5 +34,5 @@ notFoundContent =
         H.p "The page might have been moved or deleted, or the little dragon running our server might have gone to have smores."
         H.p "You can use the links below to get back on the grid or graph."
         H.ul ! A.id "links" $ do
-            H.li $ makeA "" "" "graph" "" $ "Graph"
-            H.li $ makeA "" "" "grid" "" $ "Grid"
+            H.li $ toLink "graph" "Graph"
+            H.li $ toLink "grid" "Grid"
