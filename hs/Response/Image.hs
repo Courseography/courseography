@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module ImageResponse
+module Response.Image
     (graphImageResponse, timetableImageResponse) where
 
 import Happstack.Server

@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module GridResponse
+module Response.Grid
     (gridResponse) where
 
 import qualified Text.Blaze.Html5 as H

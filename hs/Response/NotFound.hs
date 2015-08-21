@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module FourOhFourResponse
-    (fourOhFourResponse) where
+module Response.NotFound
+    (notFoundResponse) where
 
 import           Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
@@ -10,8 +10,8 @@ import Happstack.Server
 import Utilities
 import Scripts
 
-fourOhFourResponse :: ServerPart Response
-fourOhFourResponse =
+notFoundResponse :: ServerPart Response
+notFoundResponse =
   notFound $ toResponse $
     H.html $ do
         H.head $ do
@@ -23,11 +23,11 @@ fourOhFourResponse =
                 "static/style/app.css"]
 
         H.body $ do
-            fourOhFourContent
-            fourOhFourScripts
+            notFoundContent
+            notFoundScripts
 
-fourOhFourContent :: H.Html
-fourOhFourContent =
+notFoundContent :: H.Html
+notFoundContent =
     H.div ! A.id "contentDiv" $ do
         H.h2 "404 Page Not Found!"
         H.p "Sorry, the path you have traversed has no destination node."

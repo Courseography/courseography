@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module AboutResponse
+module Response.About
     (aboutResponse) where
 
 import           Text.Blaze ((!))

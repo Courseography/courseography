@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module GraphResponse
+module Response.Graph
     (graphResponse) where
 
 import           Text.Blaze ((!))
