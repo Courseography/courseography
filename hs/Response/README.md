@@ -4,7 +4,7 @@ Responses
 This directory contains all of the Haskell files responsible for creating server responses.
 These modules should all be exported by `hs/Response.hs`.
 
-All of the responses contain a value `???response` of type `ServerPart Response`,
+All of the responses contain a value `???Response` of type `ServerPart Response`,
 or a function that returns such a value.
 These are the values which are the actual responses sent to the client.
 Many use the [blaze-html](https://hackage.haskell.org/package/blaze-html)
