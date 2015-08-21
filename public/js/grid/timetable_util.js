@@ -1,3 +1,7 @@
+var selectedCourses = [];   // All selected Courses.
+var selectedSections = [];  // All selected sections.
+
+
 /**
  * Updates selectedSections with sectionId.
  * @param {string} sectionId The ID of the lecture section being updated.
@@ -8,85 +12,6 @@ function updateSelectedLectures(sectionId) {
     if (!inArray(sectionId, selectedSections)) {
         selectedSections.push(sectionId);
     }
-}
-
-
-/**
- * Populate the global list of courses.
- */
-function getVeryLargeCourseArray() {
-    'use strict';
-
-    $.ajax({
-        url: "all-courses",
-        dataType: "text",
-        async: false,
-        success: function (data) {
-            courses = data.split('\n').map(function (course) {
-                return course.substring(0, 8);
-            });
-        }
-    });
-}
-
-
-/**
- * Enables course search functionality.
- */
-function enableSearch() {
-    'use strict';
-
-    $('#course-filter').keyup(function() {
-        resetSearchList();
-    });
-}
-
-
-/**
- * Resets the course search list.
- * TODO: Function is a bit lengthy and convoluted.
- */
-function resetSearchList() {
-    'use strict';
-
-    var searchListObject = $('#search-list');
-    var filter = $('#course-filter').val().toUpperCase();
-    var courseList = document.createElement('ul');
-
-    searchListObject.empty();
-
-    if (filter !== '') {
-        $.each(courses, function(i, course) {
-
-            // If the course matches the input text then add it to the list.
-            if (course.indexOf(filter) > -1) {
-                var courseEntry = document.createElement('li');
-
-                // Add an ID to the list so we can come back and select
-                // it when it is clicked.
-                $(courseEntry).attr('id', course + '-search')
-                              .html(course)
-                              .click(function() {
-                                   $(this).toggleClass('starred-course');
-                                   if (inArray(course, selectedCourses)) {
-                                       deselectCourse(course);
-                                   } else {
-                                       selectCourse(course);
-                                   }
-                               })
-                               .mouseover(function() {
-                                   var courseResult = getCourse(course);
-                                   renderDisplayCourseTitle(courseResult);
-                               })
-                               .mouseout(function() {
-                                   renderClearCourseInformation();
-                               });
-                courseList.appendChild(courseEntry);
-            }
-        });
-    }
-    searchListObject.append(courseList);
-    refreshSelectedCourses();
 }
 
 
@@ -103,62 +28,183 @@ function refreshSelectedCourses() {
 }
 
 
+define(function() {
+
+    // "Global" list of courses
+    var courses = [];
+
+    /**
+     * Populate the global list of courses.
+     */
+    function getVeryLargeCourseArray() {
+        'use strict';
+
+        $.ajax({
+            url: "all-courses",
+            dataType: "text",
+            async: false,
+            success: function (data) {
+                courses = data.split('\n').map(function (course) {
+                    return course.substring(0, 8);
+                });
+            }
+        });
+    }
+
+    /**
+     * Enables course search functionality.
+     */
+    function enableSearch() {
+        'use strict';
+
+        $('#course-filter').keyup(function() {
+            resetSearchList();
+        });
+    }
+
+    /**
+     * Resets the course search list.
+     * TODO: Function is a bit lengthy and convoluted.
+     */
+    function resetSearchList() {
+        'use strict';
+
+        var searchListObject = $('#search-list');
+        var filter = $('#course-filter').val().toUpperCase();
+        var courseList = document.createElement('ul');
+
+        searchListObject.empty();
+
+        if (filter !== '') {
+            $.each(courses, function(i, course) {
+
+                // If the course matches the input text then add it to the list.
+                if (course.indexOf(filter) > -1) {
+                    var courseEntry = document.createElement('li');
+
+                    // Add an ID to the list so we can come back and select
+                    // it when it is clicked.
+                    $(courseEntry).attr('id', course + '-search')
+                                  .html(course)
+                                  .click(function() {
+                                       $(this).toggleClass('starred-course');
+                                       if (inArray(course, selectedCourses)) {
+                                           deselectCourse(course);
+                                       } else {
+                                           selectCourse(course);
+                                       }
+                                   })
+                                   .mouseover(function() {
+                                       var courseResult = getCourse(course);
+                                       renderDisplayCourseTitle(courseResult);
+                                   })
+                                   .mouseout(function() {
+                                       renderClearCourseInformation();
+                                   });
+                    courseList.appendChild(courseEntry);
+                }
+            });
+        }
+        searchListObject.append(courseList);
+        refreshSelectedCourses();
+    }
+
+
+    /* Cookie Interaction */
+
+    /**
+     * Restores selected courses and sections from a previous session.
+     */
+    function restoreFromCookies() {
+        'use strict';
+
+        var selectedCourseCookie = getCookie('selected-courses');
+        var selectedSectionCookie = getCookie('selected-lectures');
+
+        if (selectedCourseCookie === undefined ||
+            selectedCourseCookie.length === 0) {
+            selectedCourseCookie = [];
+        } else {
+            selectedCourseCookie = selectedCourseCookie.split('_');
+        }
+
+        if (selectedSectionCookie === undefined ||
+            selectedSectionCookie.length === 0) {
+            selectedSectionCookie = [];
+        } else {
+            selectedSectionCookie = selectedSectionCookie.split('_');
+        }
+
+
+        if (selectedCourseCookie.length > 0) {
+            var newCourses = [];
+            $.each(selectedCourseCookie, function (i, course) {
+                try {
+                    selectCourse(course);
+                    newCourses.push(course);
+                } catch (e) {
+                    console.log('Removed bad course from cookie: ' + course);
+                    console.log(e);
+                }
+            });
+        }
+
+        if (selectedSectionCookie.length > 0) {
+            var newSections = [];
+            $.each(selectedSectionCookie, function (i, section) {
+                try {
+                    $('#' + section).click();
+                    newSections.push(section);
+                } catch (e) {
+                    console.log('Removed bad section from cookie: ' + section);
+                    console.log(e);
+                }
+            });
+        }
+
+        saveCookies(newCourses, newSections);
+    }
+
+    /**
+     * Renders the button that allows the user to clear
+     * all selected courses.
+     */
+    function renderClearAllButton() {
+        'use strict';
+
+        var clearAllItem = document.getElementById('clear-all');
+        $(clearAllItem).click(function () {
+            if (confirm('Clear all selected courses?')) {
+                $.each(courseObjects.slice(0), function (i, course) {
+                    deselectCourse(course.name);
+                });
+            }
+        });
+    }
+
+    /**
+     * Selects a course.
+     * @param {string} courseCode The course code.
+     */
+    function selectCourse(courseCode) {
+        'use strict';
+
+        var course = new Course(courseCode);
+        $('#course-select').append(course.render());
+        courseObjects.push(course);
+        selectedCourses.push(courseCode);
+        saveCookies(selectedCourses, selectedSections);
+    }
+
+    return {
+        getVeryLargeCourseArray: getVeryLargeCourseArray,
+        enableSearch: enableSearch,
+        restoreFromCookies: restoreFromCookies,
+        renderClearAllButton: renderClearAllButton
+    };
+});
+
 /* Cookie Interaction */
-
-
-/**
- * Restores selected courses and sections from a previous session.
- */
-function restoreFromCookies() {
-    'use strict';
-
-    var selectedCourseCookie = getCookie('selected-courses');
-    var selectedSectionCookie = getCookie('selected-lectures');
-
-    if (selectedCourseCookie === undefined ||
-        selectedCourseCookie.length === 0) {
-        selectedCourseCookie = [];
-    } else {
-        selectedCourseCookie = selectedCourseCookie.split('_');
-    }
-
-    if (selectedSectionCookie === undefined ||
-        selectedSectionCookie.length === 0) {
-        selectedSectionCookie = [];
-    } else {
-        selectedSectionCookie = selectedSectionCookie.split('_');
-    }
-
-
-    if (selectedCourseCookie.length > 0) {
-        var newCourses = [];
-        $.each(selectedCourseCookie, function (i, course) {
-            try {
-                selectCourse(course);
-                newCourses.push(course);
-            } catch (e) {
-                console.log('Removed bad course from cookie: ' + course);
-                console.log(e);
-            }
-        });
-    }
-
-    if (selectedSectionCookie.length > 0) {
-        var newSections = [];
-        $.each(selectedSectionCookie, function (i, section) {
-            try {
-                $('#' + section).click();
-                newSections.push(section);
-            } catch (e) {
-                console.log('Removed bad section from cookie: ' + section);
-                console.log(e);
-            }
-        });
-    }
-
-    saveCookies(newCourses, newSections);
-}
-
 
 /**
  * Stores courses and sections in cookies.
@@ -179,21 +225,6 @@ function saveCookies(courses, sections) {
     } else {
         setCookie("selected-lectures", "");
     }
-}
-
-
-/**
- * Selects a course.
- * @param {string} courseCode The course code.
- */
-function selectCourse(courseCode) {
-    'use strict';
-
-    var course = new Course(courseCode);
-    $('#course-select').append(course.render());
-    courseObjects.push(course);
-    selectedCourses.push(courseCode);
-    saveCookies(selectedCourses, selectedSections);
 }
 
 
