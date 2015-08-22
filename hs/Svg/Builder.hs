@@ -154,4 +154,4 @@ intersectsWithShape shapes text =
 
 -- | Strips disallowed characters from string for DOM id
 sanitizeId :: String -> String
-sanitizeId = filter (\c -> not $ elem c ",()/<>%")
+sanitizeId = filter (\c -> not $ elem c ",()/<>% ")
