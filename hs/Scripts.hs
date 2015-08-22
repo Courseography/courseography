@@ -69,8 +69,8 @@ timetableScripts = do
          "static/js/common/modal.js",
          "static/js/common/course_description.js",
          "static/js/common/export/export.js"] ++
-        if enableFb then facebookScripts else []) ++
-        [H.script ! H.dataAttribute "main" "static/js/grid" ! A.src "static/js/require.js" $ ""]
+        if enableFb then facebookScripts else [])
+    H.script ! H.dataAttribute "main" "static/js/grid" ! A.src "static/js/require.js" $ ""
 
 drawScripts :: H.Html
 drawScripts = do
