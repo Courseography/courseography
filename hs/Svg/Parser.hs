@@ -18,7 +18,7 @@ directly to the client when viewing the @/graph@ page.
 module Svg.Parser
     (parsePrebuiltSvgs) where
 
-import Data.Maybe (mapMaybe, fromMaybe)
+import Data.Maybe (mapMaybe, fromMaybe, fromJust)
 import Data.List.Split (splitOn)
 import Data.List (find)
 import qualified Data.Map as M (empty)
@@ -33,6 +33,7 @@ import Svg.Database
 import Svg.Generator
 import Database.Persist.Sqlite hiding (replace)
 import Config (graphPath)
+import Text.Read (readMaybe)
 
 parsePrebuiltSvgs :: IO ()
 parsePrebuiltSvgs =
@@ -70,9 +71,15 @@ parseGraph ::  GraphId  -- ^ The unique identifier of the graph.
             -> ([Path],[Shape],[Text])
 parseGraph key graphFile =
     let Document _ _ root _ = xmlParse "output.error" graphFile
-        svgRoot = head $ (tag "svg") $ CElem root undefined
+        svgElems = tag "svg" $ CElem root undefined
+        svgRoot = head svgElems
         (paths, shapes, texts) = parseNode key svgRoot
-    in (paths, filter small shapes, texts)
+    in
+        if null svgElems
+        then
+            error "No svg element detected"
+        else
+            (paths, filter small shapes, texts)
     where
         -- Raw SVG seems to have a rectangle the size of the whole image
         small shape = shapeWidth shape < 300
@@ -236,9 +243,14 @@ parseTransform :: String -> Point
 parseTransform "" = (0,0)
 parseTransform transform =
     let parsedTransform = splitOn "," $ drop 10 transform
-        xPos = read $ parsedTransform !! 0
-        yPos = read $ init $ parsedTransform !! 1
-    in (xPos, yPos)
+        xPos = readMaybe $ parsedTransform !! 0
+        yPos = readMaybe $ init $ parsedTransform !! 1
+    in
+        if xPos == Nothing || yPos == Nothing
+        then
+            error transform
+        else
+            (fromJust xPos, fromJust yPos)
 
 -- | Parses a path's `d` attribute.
 parsePathD :: String -- ^ The 'd' attribute of an SVG path.
