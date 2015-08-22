@@ -8,24 +8,51 @@ When the project is deployed to the production environment, this file should be 
 containing the production values.
 -}
 
-module Config
-    (databasePath,
-     markdownPath,
-     graphPath,
-     genCssPath,
-     timetableUrl,
-     cssStyle,
-     enableFb,
-     firstMondayFall,
-     lastWednesdayFall,
-     firstMondayWinter,
-     lastMondayWinter,
-     outDay,
-     holidays) where
+module Config (
+    serverConf,
+    databasePath,
+    markdownPath,
+    graphPath,
+    genCssPath,
+    timetableUrl,
+    cssStyle,
+    enableFb,
+    firstMondayFall,
+    lastWednesdayFall,
+    firstMondayWinter,
+    lastMondayWinter,
+    outDay,
+    holidays
+    ) where
 
 import Data.Text (Text)
 import qualified Clay.Render as Clay
 import Data.Time (Day, fromGregorian)
+import Data.Time.Format (FormatTime)
+import Happstack.Server (Conf(..), LogAccess, nullConf)
+import System.Log.Logger (logM, Priority(INFO))
+
+-- SERVER CONFIGURATION
+
+-- | Server configuration settings.
+serverConf :: Conf
+serverConf = nullConf {
+        port      = 8000,
+        logAccess = Just logMAccessShort
+    }
+
+-- | Server log configuration. Default is to log access requests using hslogger
+-- and a condensed log formatting.
+logMAccessShort :: FormatTime t => LogAccess t
+logMAccessShort host user _ requestLine responseCode _ referer _ =
+    logM "Happstack.Server.AccessLog.Combined" INFO $ unwords [
+        host,
+        user,
+        requestLine,
+        show responseCode,
+        referer
+        ]
+
 
 -- DATABASE CONNECTION STRINGS
 

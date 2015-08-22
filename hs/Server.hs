@@ -1,57 +1,41 @@
+
+{-|
+Description: Configure and run the server for Courseography.
+
+This module defines the configuration for the server, including logging.
+It also defines all of the allowed server routes, and the corresponding
+responses.
+-}
 module Server
     (runServer) where
 
 import Control.Monad (msum)
 import Control.Monad.IO.Class (liftIO)
-import Data.Maybe (fromMaybe)
-import Data.Time.Format (FormatTime)
 import Happstack.Server hiding (host)
 import Response
 import Database.CourseQueries (retrieveCourse, allCourses, queryGraphs, courseInfo, deptList)
-import Filesystem.Path.CurrentOS
-import System.Directory
-import System.Environment (lookupEnv)
+import Filesystem.Path.CurrentOS as Path
+import System.Directory (getCurrentDirectory)
 import System.IO (hSetBuffering, stdout, stderr, BufferMode(LineBuffering))
-import System.Log.Logger (logM, updateGlobalLogger, rootLoggerName, setLevel, Priority(INFO))
+import System.Log.Logger (updateGlobalLogger, rootLoggerName, setLevel,
+    Priority(INFO))
+import Data.String (fromString)
 import FacebookUtilities
-import Config (markdownPath)
+import Config (markdownPath, serverConf)
 import qualified Data.Text.Lazy.IO as LazyIO
-
--- | log access requests using hslogger and a condensed log formatting
-logMAccessShort :: FormatTime t => LogAccess t
-logMAccessShort host user _ requestLine responseCode _ referer _ =
-    logM "Happstack.Server.AccessLog.Combined" INFO $ unwords
-        [ host
-        , user
-        , requestLine
-        , show responseCode
-        , referer
-        ]
 
 runServer :: IO ()
 runServer = do
-    -- Use line buffering to ensure logging messages are printed correctly
-    hSetBuffering stdout LineBuffering
-    hSetBuffering stderr LineBuffering
-    -- Set log level to INFO so requests are logged to stdout
-    updateGlobalLogger rootLoggerName $ setLevel INFO
+    configureLogger
+    staticDir <- getStaticDir
 
-    cwd <- getCurrentDirectory
     redirectUrlGraphEmail <- retrieveAuthURL testUrl
     redirectUrlGraphPost <- retrieveAuthURL testPostUrl
-    let staticDir = encodeString (parent $ decodeString cwd) ++ "public/"
     aboutContents <- LazyIO.readFile $ markdownPath ++ "README.md"
     privacyContents <- LazyIO.readFile $ markdownPath ++ "PRIVACY.md"
 
-    -- Bind server to PORT environment variable if provided
-    portStr <- lookupEnv "PORT"
-    let portEnv = read (fromMaybe "8000" portStr) :: Int
-
     -- Start the HTTP server
-    simpleHTTP nullConf {
-        port      = portEnv
-      , logAccess = Just logMAccessShort
-    } $ msum
+    simpleHTTP serverConf $ msum
         [ do
               nullDir
               seeOther "graph" (toResponse "Redirecting to /graph"),
@@ -67,7 +51,7 @@ runServer = do
               dir "draw" drawResponse,
               dir "about" $ aboutResponse aboutContents,
               dir "privacy" $ privacyResponse privacyContents,
-              dir "static" $ serveDirectory EnableBrowsing [] staticDir,
+              dir "static" $ serveDirectory DisableBrowsing [] staticDir,
               dir "course" $ look "name" >>= retrieveCourse,
               dir "all-courses" $ liftIO allCourses,
               dir "graphs" $ liftIO queryGraphs,
@@ -77,3 +61,20 @@ runServer = do
               dir "calendar" $ lookCookieValue "selected-lectures" >>= calendarResponse,
               notFoundResponse
         ]
+    where
+    -- | Global logger configuration.
+    configureLogger :: IO ()
+    configureLogger = do
+        -- Use line buffering to ensure logging messages are printed correctly
+        hSetBuffering stdout LineBuffering
+        hSetBuffering stderr LineBuffering
+        -- Set log level to INFO so requests are logged to stdout
+        updateGlobalLogger rootLoggerName $ setLevel INFO
+
+    -- | Return the directory where all static files are stored.
+    -- Note: the type here is System.IO.FilePath, not FileSystem.Path.FilePath.
+    getStaticDir :: IO Prelude.FilePath
+    getStaticDir = do
+        cwd <- getCurrentDirectory
+        let parentDir = Path.parent $ Path.decodeString cwd
+        return $ Path.encodeString $ Path.append parentDir $ fromString "public/"
