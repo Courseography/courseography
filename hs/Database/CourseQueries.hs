@@ -23,7 +23,7 @@ import Database.Persist
 import Database.Persist.Sqlite
 import Database.Tables as Tables
 import Control.Monad.IO.Class (liftIO, MonadIO)
-import JsonResponseHelper (createJSONResponse)
+import Util.Happstack (createJSONResponse)
 import qualified Data.Text as T
 import WebParsing.ParsingHelp
 import Data.String.Utils

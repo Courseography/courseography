@@ -1,27 +1,32 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Scripts
-    (graphScripts, timetableScripts, drawScripts, postScripts, searchScripts, notFoundScripts)
+module Scripts (
+    graphScripts, timetableScripts, drawScripts, postScripts, searchScripts, notFoundScripts,
+    jQueryScripts
+    )
     where
 
 import           Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
-import Utilities
+import Util.Blaze
 import Config (enableFb)
 
-facebookScripts :: [H.AttributeValue]
+facebookScripts :: [String]
 facebookScripts = [
     "/static/js/common/facebook/facebook_login.js",
     "/static/js/common/facebook/facebook_image.js",
     "/static/js/common/facebook/facebook_modal.js"
     ]
 
-graphScripts :: H.Html
-graphScripts = concatHtml (map makeScript $
+jQueryScripts :: [String]
+jQueryScripts =
     ["https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js",
-     "https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js",
-     "static/js/graph/tooltip.js",
+     "https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"]
+
+graphScripts :: H.Html
+graphScripts = sequence_ (map toScript $
+    ["static/js/graph/tooltip.js",
      "static/js/common/course_videos.js",
      "static/js/common/modal.js",
      "static/js/graph/objects/edge.js",
@@ -50,13 +55,11 @@ graphScripts = concatHtml (map makeScript $
 
 timetableScripts :: H.Html
 timetableScripts = do
-    jQuery
-    concatHtml (map makeScript $
+    sequence_ (map toScript $
         ["static/js/grid/timetable_util.js",
          "/static/js/grid/setup.js",
          "/static/js/grid/mouse_events.js",
          "//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js",
-         "https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js",
          "/static/js/common/cookie_handler.js",
          "/static/js/grid/generate_grid.js",
          "/static/js/common/objects/course.js",
@@ -73,17 +76,14 @@ timetableScripts = do
 
 drawScripts :: H.Html
 drawScripts = do
-    jQuery
-    concatHtml (map makeScript $
-        ["https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js",
-         "static/js/draw/variables.js",
+    sequence_ (map toScript $
+        ["static/js/draw/variables.js",
          "static/js/draw/path.js",
          "static/js/draw/draw.js",
          "static/js/draw/setup.js"])
 
 postScripts :: H.Html
-postScripts = concatHtml (map makeScript ["https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js",
-                                          "https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js",
+postScripts = sequence_ (map toScript [
                                           "static/js/post/change_div.js",
                                           "static/js/common/cookie_handler.js",
                                           "static/js/post/update_post.js",
@@ -95,11 +95,10 @@ postScripts = concatHtml (map makeScript ["https://ajax.googleapis.com/ajax/libs
 
 searchScripts :: H.Html
 searchScripts = do
-    concatHtml (map makeScript $
-        ["https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js",
-         "https://cdnjs.cloudflare.com/ajax/libs/react/0.13.1/react.js",
+    sequence_ (map toScript $
+        ["https://cdnjs.cloudflare.com/ajax/libs/react/0.13.1/react.js",
          "https://cdnjs.cloudflare.com/ajax/libs/react/0.13.1/JSXTransformer.js"])
     H.script ! A.type_ "text/jsx" ! A.src "static/js/search/timetable.js" $ ""
 
 notFoundScripts :: H.Html
-notFoundScripts = jQuery
+notFoundScripts = sequence_ $ map toScript jQueryScripts
