@@ -10,7 +10,7 @@ maintainer:          david@cs.toronto.edu
 -- copyright:
 -- category:
 build-type:          Simple
-cabal-version:       >=1.20
+cabal-version:       >=1.22
 
 executable courseography
   main-is:             Main.hs
