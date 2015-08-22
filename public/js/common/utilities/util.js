@@ -39,6 +39,10 @@ function getURLParameter(name) {
     return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null;
 }
 
+
+var courseObjects = [];     // All selected course JSON files.
+
+
 /* These specifically manipulate the two global arrays,
 courseObjects and selectedSections. */
 /**
@@ -73,6 +77,9 @@ function getCourseObject(courseName, courseArray) {
     }
     return undefined;
 }
+
+
+var courseCache = [];       // All Courses that have been previously requested.
 
 
 /**

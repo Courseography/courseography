@@ -18,8 +18,6 @@ var activeFocus = '';         // The active focus from the 'Focuses' tab.
 var timeouts = [];            // All timeouts. Used to remove timeouts later on
 var FCEPrerequisiteCourses;   // Courses that have FCE based prerequisites,
                               // initialised at runtime
-var courseCache = [];         // Cached Courses. Courses are cached to
-                              // minimise AJAX requests
 
 var nodes = [];               // List of all nodes
 
