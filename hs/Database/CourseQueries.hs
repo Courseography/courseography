@@ -151,8 +151,7 @@ allCourses = do
 
 -- | Returns all course info for a given department.
 courseInfo :: String -> ServerPart Response
-courseInfo dept =
-      liftM createJSONResponse (getDeptCourses dept)
+courseInfo dept = liftM createJSONResponse (getDeptCourses dept)
 
 -- | Returns all course info for a given department.
 getDeptCourses :: MonadIO m => String -> m [Course]
