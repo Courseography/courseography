@@ -1,36 +1,45 @@
+{-|
+Description: Entry point for Courseography.
+
+This module implements a 'main' method which takes a command-line
+argument and executes the corresponding IO action.
+
+If no argument is provided, the default action is 'server', which
+starts the server.
+-}
 module Main where
 
 import System.IO (stderr, hPutStrLn)
 import System.Environment (getArgs)
 import Data.Maybe (fromMaybe)
 import Data.List (intercalate)
-import Css.Compiler (compileCSS)
 import qualified Data.Map.Strict as Map
 
 -- internal dependencies
 import Server (runServer)
 import Database.Database (setupDatabase)
 import Svg.Parser (parsePrebuiltSvgs)
+import Css.Compiler (compileCSS)
 
-taskNamesToTasks :: Map.Map String (IO ())
-taskNamesToTasks = Map.fromList [
+-- | A map of command-line arguments to their corresponding IO actions.
+taskMap :: Map.Map String (IO ())
+taskMap = Map.fromList [
     ("server", runServer),
     ("database", setupDatabase),
     ("graphs", parsePrebuiltSvgs),
     ("css", compileCSS)]
 
-getTask :: String -> Maybe (IO ())
-getTask taskName = Map.lookup taskName taskNamesToTasks
-
+-- | Courseography entry point.
 main :: IO ()
 main = do
     args <- getArgs
     let taskName = if null args then "server" else head args
+    fromMaybe putUsage (Map.lookup taskName taskMap)
 
-    -- extract and perform the task we want to run
-    let taskNames = Map.keys taskNamesToTasks
-        availableTasksStr = "[" ++ (intercalate ", " taskNames) ++ "]"
-        lookupFailedMsg = "No task named " ++ taskName ++
-                          ", available tasks are " ++ availableTasksStr
-
-    fromMaybe (hPutStrLn stderr lookupFailedMsg) (getTask taskName)
+-- | Print usage message to user (when main gets an incorrect argument).
+putUsage :: IO ()
+putUsage = hPutStrLn stderr usageMsg
+    where
+        taskNames = Map.keys taskMap
+        usageMsg = "Unrecognized argument. Available arguments:\n" ++
+                   intercalate "\n" taskNames
