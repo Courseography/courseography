@@ -8,8 +8,7 @@
              DeriveGeneric,
              QuasiQuotes,
              TemplateHaskell,
-             TypeFamilies,
-             DeriveGeneric #-}
+             TypeFamilies #-}
 
 {-|
 Description: The database schema (and some helpers).
@@ -161,10 +160,7 @@ data Course =
 
 instance ToJSON Course
 instance ToJSON Session
-
-instance ToJSON Time where
-    toJSON (time) =
-        toJSON $ convertTimeToString time
+instance ToJSON Time
 
 -- instance FromJSON required so that tables can be parsed into JSON,
 -- not necessary otherwise.
