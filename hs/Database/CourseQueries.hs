@@ -12,7 +12,7 @@ module Database.CourseQueries
      returnCourse,
      allCourses,
      courseInfo,
-     getDepartment,
+     getDeptCourses,
      queryGraphs,
      deptList,
      returnTutorial,
@@ -29,14 +29,14 @@ import WebParsing.ParsingHelp
 import Data.String.Utils
 import Data.List
 import Config (databasePath)
+import Control.Monad (liftM)
 
 -- ** Querying a single course
 
 -- | Takes a course code (e.g. \"CSC108H1\") and sends a JSON representation
 -- of the course as a response.
 retrieveCourse :: String -> ServerPart Response
-retrieveCourse course =
-    liftIO $ queryCourse (T.pack course)
+retrieveCourse = liftIO . queryCourse . T.pack
 
 -- | Queries the database for all information about @course@, constructs a JSON object
 -- representing the course and returns the appropriate JSON response.
@@ -151,24 +151,18 @@ allCourses = do
 
 -- | Returns all course info for a given department.
 courseInfo :: String -> ServerPart Response
-courseInfo dept = do
-      (getDeptCourses dept) >>=
-        (\courses -> return $ createJSONResponse courses)
-
--- | Returns all courses for a given department.
-getDepartment :: String -> IO [Course]
-getDepartment str = getDeptCourses str
+courseInfo dept =
+      liftM createJSONResponse (getDeptCourses dept)
 
 -- | Returns all course info for a given department.
 getDeptCourses :: MonadIO m => String -> m [Course]
-getDeptCourses dept = do
-    response <- liftIO $ runSqlite databasePath $ do
+getDeptCourses dept =
+    liftIO $ runSqlite databasePath $ do
         courses :: [Entity Courses]   <- selectList [] []
         lecs    :: [Entity Lectures]  <- selectList [] []
         tuts    :: [Entity Tutorials] <- selectList [] []
         let c = filter (startswith dept . T.unpack . coursesCode) $ map entityVal courses
         return $ map (buildTimes (map entityVal lecs) (map entityVal tuts)) c
-    return response
     where
         lecByCode course = filter (\lec -> lecturesCode lec == coursesCode course)
         tutByCode course = filter (\tut -> tutorialsCode tut == coursesCode course)
