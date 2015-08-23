@@ -49,7 +49,7 @@ makeGraph' codes filename =
 -- | constructs a graph of all courses starting with code.
 makeGraph :: String ->  IO ProcessHandle
 makeGraph code = do
-    getDepartment code >>=
+    getDeptCourses code >>=
       toGraph >>=
        (\g -> graphVizProcess code (graphToDot graphParams g)) >>=
           (\_ -> runCommand $ "unflatten -f -l50 -c 4 -o out.dot " ++ code) >>=

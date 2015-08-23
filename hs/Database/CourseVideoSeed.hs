@@ -17,10 +17,10 @@ courseVideos = [
   ("CSC456H1", ["static/videos/csc456.mp4"]),
   ("CSC463H1", ["static/videos/csc463.mp4"])]
 
-seedVideo (code, videos) = do
+seedVideo (code, videos) =
     updateWhere [CoursesCode ==. code] [CoursesVideoUrls =. videos]
 
 
 seedVideos :: IO ()
-seedVideos = runSqlite databasePath $ do
+seedVideos = runSqlite databasePath $
     mapM_ seedVideo courseVideos

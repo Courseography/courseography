@@ -1,4 +1,3 @@
-
 {-|
 Description: Configure and run the server for Courseography.
 
