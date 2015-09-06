@@ -11,7 +11,7 @@ import qualified Data.Conduit.List as CL
 import Data.Conduit
 import Database.Persist
 import ImageConversion
-import GraphResponse
+import Response.Graph
 import Database.Tables
 import qualified Data.ByteString.Char8 as BS
 import Database.Persist.Sqlite
@@ -64,13 +64,13 @@ postPhoto (FB.UserAccessToken _ b _) _ = withSocketsDo $ withManager $ \m -> do
 -- | Constructs the Facebook authorization URL. This method does not actually
 -- interact with Facebook.
 retrieveAuthURL :: T.Text -> IO T.Text
-retrieveAuthURL url = 
+retrieveAuthURL url =
     performFBAction $ FB.getUserAccessTokenStep1 url perms
-        
+
 
 -- | Retrieves the user's email.
 retrieveFBData :: BS.ByteString -> IO Response
-retrieveFBData code = 
+retrieveFBData code =
     performFBAction $ do
         token <- getToken testUrl code
         user <- FB.getUser "me" [] (Just token)
@@ -88,7 +88,7 @@ postToFacebook code = (liftIO $ performPost (BS.pack code)) >> graphResponse
 
 -- | Performs the posting to facebook.
 performPost :: BS.ByteString -> IO Response
-performPost code = 
+performPost code =
     performFBAction $ do
         token <- getToken testPostUrl code
         user <- FB.getUser "me" [] (Just token)
@@ -110,7 +110,7 @@ getEmail code = liftIO $ retrieveFBData (BS.pack code)
 -- Note: Meant as an experimental function for inserting user information into the database.
 --       This function is not used.
 insertIdIntoDb :: FB.Id -> IO ()
-insertIdIntoDb id_ = 
+insertIdIntoDb id_ =
     runSqlite fbdatabasePath $ do
         runMigration migrateAll
         insert_ $ FacebookTest (show id_) "Test String"

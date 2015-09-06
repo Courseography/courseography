@@ -11,26 +11,27 @@ import Data.Maybe
 type Pos = (Maybe Int, Maybe Int, Maybe Int, Maybe Int)
 
 isSpan :: Tag T.Text -> Bool
-isSpan tag =
-    tagOpen  (\_ -> True) isSpanAttr tag
-    where isSpanAttr attrs =
-            any (\(attr, _) -> (attr == "colspan" || attr == "rowspan")) attrs
+isSpan =
+    tagOpen (const True) isSpanAttr
+    where
+        isSpanAttr = any (\(attr, _) -> (attr == "colspan" || attr == "rowspan"))
 
--- | 'findspan' returns the position of the first tag that contains rowspan or colspan attributes
+-- | Returns the position of the first tag that contains rowspan or colspan attributes
 -- the input is a HTML table interpreted by TagSoup, paritioned by 'td' tags
 findSpans :: [[[Tag T.Text]]] -> [(Maybe Int, Maybe Int)]
 findSpans rows =
-    let rowpos = findIndices (\row -> foldl (\bool td -> bool || isSpan (head td)) False row) rows
-    in map (\r -> (Just r, getCol r)) rowpos
-    where getCol rowpos = findIndex (\td -> isSpan (head td)) (rows !! rowpos)
+    map (\r -> (Just r, getCol r)) rowpos
+    where
+        getCol rowpos = findIndex (isSpan . head ) (rows !! rowpos)
+        rowpos = findIndices (foldl (\bool td -> bool || isSpan (head td)) False) rows
 
 toInt :: Maybe T.Text -> Maybe Int
 toInt Nothing = Nothing
-toInt (Just text)  =
-    let maybeInt = reads $ T.unpack text
-    in if length maybeInt == 1
-       then Just $ fst (head maybeInt)
-       else Nothing
+toInt (Just text)
+    | length maybeInt == 1 = Just $ fst (head maybeInt)
+    | otherwise = Nothing
+    where
+        maybeInt = reads $ T.unpack text
 
 maybeFromAttrib :: T.Text -> Maybe [Tag T.Text] -> Maybe T.Text
 maybeFromAttrib _ Nothing = Nothing
@@ -60,7 +61,7 @@ getCell cells (Just rowpos, Just colpos)  = Just $ (cells !!rowpos) !! colpos
 makeList :: a -> Int -> [a]
 makeList value 1 = [value]
 makeList value num = if num > 1
-                     then value:(makeList value (num - 1))
+                     then value:makeList value (num - 1)
                      else []
 
 -- | colpos is the position of the original colspanned cell
@@ -70,29 +71,30 @@ expandRow row _ _ Nothing = row
 expandRow row value (Just colpos) (Just colspan)
     | colpos > length row = row
     | otherwise =
-      let (before, after) = splitAt colpos row
-      in (before ++ (makeList value colspan)) ++ after
+          before ++ makeList value colspan ++ after
+    where
+        (before, after) = splitAt colpos row
 
 expandRows :: [[a]] -> a -> Maybe Int -> Maybe Int -> Maybe Int -> [[a]]
 expandRows [] _ _ _ _ =  []
 expandRows rows value colpos colspan num
-    | (maybe False (\n -> n <= 0) num) || (maybe False (\n-> n > length rows)) num
+    | maybe False (<= 0) num || maybe False (\n-> n > length rows) num
         = rows
     | otherwise =
         let expanded = expandRow (head rows) value colpos colspan
-        in expanded:(expandRows (tail rows) value colpos colspan (maybeAdd num (-1)))
+        in expanded:expandRows (tail rows) value colpos colspan (maybeAdd num (-1))
 
 expandTable :: [[a]] -> a -> Pos -> [[a]]
 expandTable cells _ (Nothing, _, _, _) = cells
 expandTable cells value (rowpos, colpos, Nothing, colspan)
-    | (maybe False (\n-> n > length cells) rowpos) = cells
+    | maybe False (\n-> n > length cells) rowpos = cells
     | otherwise =
         let (before, restRows) = splitAt (fromJust rowpos) cells
             firstRow = expandRow (head restRows) value (maybeAdd colpos 1) (maybeAdd colspan (-1))
-        in before ++ firstRow:(tail restRows)
+        in before ++ firstRow:tail restRows
 expandTable cells value (rowpos, colpos, rowspan, colspan)
-    | (maybe False (\n-> n > length cells) rowpos) ||
-      (maybe False (\n -> n <= 0) rowspan) = cells
+    | maybe False (\n-> n > length cells) rowpos ||
+      maybe False (<= 0) rowspan = cells
     | otherwise =
         let (before, restRows) = splitAt (fromJust rowpos) cells
             firstRow = expandRow (head restRows) value (maybeAdd colpos 1) (maybeAdd colspan (-1))
@@ -102,17 +104,3 @@ expandTable cells value (rowpos, colpos, rowspan, colspan)
 maybeAdd :: Maybe Int -> Int -> Maybe Int
 maybeAdd Nothing _ = Nothing
 maybeAdd (Just x) y = Just (x + y)
-
-{-}
-main :: IO ()
-main = do
-  rsp <- simpleHTTP (getRequest "http://www.artsandscience.utoronto.ca/ofr/timetable/winter/phl.html")
-  body <- getResponseBody rsp
-  let tags = dropAround  (tagOpen (=="table") (\x -> True)) (tagClose (=="table")) (parseTags $ T.pack body)
-  let row = partitions (tagOpen (=="tr") (\x -> True)) tags
-  let rowsColumns =  map (partitions (tagOpen (== "td") (\_ -> True))) row
-  let filterCells = map (map (filter isTagText)) rowsColumns
-  let textCells = map (map (map fromTagText)) filterCells
-  mapM_ (print) $ expandTable (map (map T.concat) textCells) ""  (head (extractSpans rowsColumns))
-  --print $ extractSpans rowsColumns
--}

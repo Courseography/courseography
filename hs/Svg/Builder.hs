@@ -87,8 +87,9 @@ buildEllipses texts entity elementId =
     let ellipseText = filter (intersects
                               (shapeWidth entity)
                               (shapeHeight entity)
-                              (shapePos entity)
-                              9 -- TODO: Should this be 9 or 20?
+                              (fst (shapePos entity) - shapeWidth entity / 2,
+                               snd (shapePos entity) - shapeHeight entity / 2)
+                              20
                               . textPos
                               ) texts
     in
@@ -123,12 +124,20 @@ intersects width height (rx, ry) offset (px, py) =
 
 -- | Determines if a point is contained in a shape.
 intersectsWithPoint :: Point -> Shape -> Bool
-intersectsWithPoint point shape =
-    intersects (shapeWidth shape)
-               (shapeHeight shape)
-               (shapePos shape)
-               (shapeTolerance shape)
-               point
+intersectsWithPoint point shape
+    | shapeType_ shape == BoolNode =
+        intersects (shapeWidth shape)
+                   (shapeHeight shape)
+                   (fst (shapePos shape) - shapeWidth shape / 2,
+                    snd (shapePos shape) - shapeHeight shape / 2)
+                   (shapeTolerance shape)
+                   point
+    | otherwise =
+        intersects (shapeWidth shape)
+                     (shapeHeight shape)
+                     (shapePos shape)
+                     (shapeTolerance shape)
+                     point
 
 -- | Returns the ID of the first shape in a list that intersects
 -- with the given point.
@@ -145,4 +154,4 @@ intersectsWithShape shapes text =
 
 -- | Strips disallowed characters from string for DOM id
 sanitizeId :: String -> String
-sanitizeId = filter (\c -> not $ elem c ",()/<>%")
+sanitizeId = filter (\c -> not $ elem c ",()/<>% ")

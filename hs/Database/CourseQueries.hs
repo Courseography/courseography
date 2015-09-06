@@ -12,29 +12,31 @@ module Database.CourseQueries
      returnCourse,
      allCourses,
      courseInfo,
-     getDepartment,
+     getDeptCourses,
      queryGraphs,
-     deptList) where
+     deptList,
+     returnTutorial,
+     returnLecture) where
 
 import Happstack.Server.SimpleHTTP
 import Database.Persist
 import Database.Persist.Sqlite
 import Database.Tables as Tables
 import Control.Monad.IO.Class (liftIO, MonadIO)
-import JsonResponse
+import Util.Happstack (createJSONResponse)
 import qualified Data.Text as T
 import WebParsing.ParsingHelp
 import Data.String.Utils
 import Data.List
 import Config (databasePath)
+import Control.Monad (liftM)
 
 -- ** Querying a single course
 
 -- | Takes a course code (e.g. \"CSC108H1\") and sends a JSON representation
 -- of the course as a response.
 retrieveCourse :: String -> ServerPart Response
-retrieveCourse course =
-    liftIO $ queryCourse (T.pack course)
+retrieveCourse = liftIO . queryCourse . T.pack
 
 -- | Queries the database for all information about @course@, constructs a JSON object
 -- representing the course and returns the appropriate JSON response.
@@ -69,6 +71,26 @@ returnCourse lowerStr = runSqlite databasePath $ do
     if null sqlCourse
     then return emptyCourse
     else return (buildCourse fallSession springSession yearSession (entityVal $ head sqlCourse))
+
+-- | Queries the database for all information regarding a specific tutorial for
+-- a @course@, returns a Tutorial.
+returnTutorial :: T.Text -> T.Text -> T.Text -> IO (Maybe Tutorial)
+returnTutorial lowerStr sect session = runSqlite databasePath $ do
+    maybeEntityTutorials <- selectFirst [TutorialCode ==. T.toUpper lowerStr,
+                                         TutorialSection ==. Just sect,
+                                         TutorialSession ==. session]
+                                        []
+    return $ fmap entityVal maybeEntityTutorials
+
+-- | Queries the database for all information regarding a specific lecture for
+--  a @course@, returns a Lecture.
+returnLecture :: T.Text -> T.Text -> T.Text -> IO (Maybe Lecture)
+returnLecture lowerStr sect session = runSqlite databasePath $ do
+    maybeEntityLectures <- selectFirst [LectureCode ==. T.toUpper lowerStr,
+                                        LectureSection ==. sect,
+                                        LectureSession ==. session]
+                                       []
+    return $ fmap entityVal maybeEntityLectures
 
 -- | Builds a Course structure from a tuple from the Courses table.
 -- Some fields still need to be added in.
@@ -110,24 +132,17 @@ allCourses = do
 
 -- | Returns all course info for a given department.
 courseInfo :: String -> ServerPart Response
-courseInfo dept = do
-      (getDeptCourses dept) >>=
-        (\courses -> return $ createJSONResponse courses)
-
--- | Returns all courses for a given department.
-getDepartment :: String -> IO [Course]
-getDepartment str = getDeptCourses str
+courseInfo dept = liftM createJSONResponse (getDeptCourses dept)
 
 -- | Returns all course info for a given department.
 getDeptCourses :: MonadIO m => String -> m [Course]
-getDeptCourses dept = do
-    response <- liftIO $ runSqlite databasePath $ do
+getDeptCourses dept =
+    liftIO $ runSqlite databasePath $ do
         courses :: [Entity Courses]   <- selectList [] []
         lecs    :: [Entity Lecture]  <- selectList [] []
         tuts    :: [Entity Tutorial] <- selectList [] []
         let c = filter (startswith dept . T.unpack . coursesCode) $ map entityVal courses
         return $ map (buildTimes (map entityVal lecs) (map entityVal tuts)) c
-    return response
     where
         lecByCode course = filter (\lec -> lectureCode lec == coursesCode course)
         tutByCode course = filter (\tut -> tutorialCode tut == coursesCode course)

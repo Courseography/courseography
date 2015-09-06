@@ -90,9 +90,13 @@ function buildGraph(gId) {
     });
 
     $('.path').each(function () {
-        makeEdge(window[$(this).attr('source-node')],
-                 window[$(this).attr('target-node')],
-                 $(this).attr('id'));
+        if ($(this).attr('source-node') && $(this).attr('target-node')) {
+            makeEdge(window[$(this).attr('source-node')],
+                     window[$(this).attr('target-node')],
+                     $(this).attr('id'));
+        } else {
+            console.log(this);
+        }
     });
 }
 

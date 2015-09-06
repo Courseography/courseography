@@ -6,15 +6,7 @@ import Control.Monad.IO.Class (liftIO)
 import Data.Maybe (fromMaybe)
 import Data.Time.Format (FormatTime)
 import Happstack.Server hiding (host)
-import GridResponse
-import GraphResponse
-import DrawResponse
-import ImageResponse
-import PostResponse
-import FourOhFourResponse
-import SearchResponse
-import AboutResponse
-import PrivacyResponse
+import Response
 import Database.CourseQueries (retrieveCourse, allCourses, queryGraphs, courseInfo, deptList)
 import Filesystem.Path.CurrentOS
 import System.Directory
@@ -82,5 +74,6 @@ runServer = do
               dir "course-info" $ look "dept" >>= courseInfo,
               dir "depts" $ liftIO deptList,
               dir "timesearch" searchResponse,
-              fourOhFourResponse
+              dir "calendar" $ lookCookieValue "selected-lectures" >>= calendarResponse,
+              notFoundResponse
         ]

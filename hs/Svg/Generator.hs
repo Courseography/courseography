@@ -19,7 +19,6 @@ import Database.DataType
 import Control.Monad.IO.Class (liftIO)
 import Database.Persist.Sqlite
 import Data.List hiding (map, filter)
-import Utilities
 import Data.Maybe (fromMaybe)
 import qualified Data.Text as T
 import Text.Blaze.Svg11 ((!))
@@ -137,21 +136,21 @@ makeSVGDoc courseMap rects ellipses edges regions regionTexts styled =
                  ! A.version "1.1" $ do
                       makeSVGDefs
                       S.g ! A.id_ "regions" $
-                          concatSVG $ map (regionToSVG styled)
+                          sequence_ $ map (regionToSVG styled)
                                           regions
                       S.g ! A.id_ "nodes"
                           ! A.stroke "black" $
-                          concatSVG $ map (rectToSVG styled courseMap)
+                          sequence_ $ map (rectToSVG styled courseMap)
                                            rects
                       S.g ! A.id_ "bools" $
-                          concatSVG $ map (ellipseToSVG styled)
+                          sequence_ $ map (ellipseToSVG styled)
                                           ellipses
                       S.g ! A.id_ "edges"
                           ! A.stroke "black" $
-                              concatSVG $ map (edgeToSVG styled)
+                              sequence_ $ map (edgeToSVG styled)
                                               edges
                       S.g ! A.id_ "region-labels" $
-                          concatSVG $ map (textToSVG styled Region 0)
+                          sequence_ $ map (textToSVG styled Region 0)
                                           regionTexts
 
 -- | Builds the SVG defs. Currently, we only use a single one, for the arrowheads.
@@ -201,7 +200,7 @@ rectToSVG styled courseMap rect
                          ! A.width (stringValue . show $ shapeWidth rect)
                          ! A.height (stringValue . show $ shapeHeight rect)
                          ! A.style (stringValue $ "fill:" ++ shapeFill rect ++ ";")
-                  concatSVG $ map
+                  sequence_ $ map
                       (textToSVG
                           styled
                           (shapeType_ rect)
@@ -222,7 +221,7 @@ ellipseToSVG styled ellipse =
                             A.stroke "black" `mappend`
                             A.fill "none"
                         else mempty
-            concatSVG $ map
+            sequence_ $ map
                 (textToSVG styled BoolNode (fst $ shapePos ellipse))
                 (shapeText ellipse)
 

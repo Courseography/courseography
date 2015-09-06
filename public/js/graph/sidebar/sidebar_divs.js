@@ -5,6 +5,7 @@ $(document).ready (function () {
 
     getGraphsInDatabase();
     updateFCECount();
+    createGraphButtons();
 });
 
 
@@ -30,10 +31,8 @@ $('#graphs-nav').click(function (e) {
 
     e.preventDefault();
     resetDivs();
-    $('#graphs').empty();
     $('#graphs').show();
     $('#graphs-nav').addClass('active');
-    createGraphButtons();
 });
 
 
@@ -89,8 +88,11 @@ function toggleSidebar(location) {
             $('#sidebar-icon').addClass('flip');
         });
         fillFCECount();
-        $('#focuses').show();
-        $('#focuses-nav').addClass('active');
+
+        $('#graphs').show();
+        $('#graphs-nav').addClass('active');
+
+        changeFocusEnable(getCookie('active-graph'));
 
         $('#reset').show();
 

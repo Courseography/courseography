@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings, DataKinds #-}
 
-module PostResponse
+module Response.Post
     (postResponse) where
 
 import           Text.Blaze ((!))

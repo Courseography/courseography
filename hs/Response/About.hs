@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module AboutResponse
+module Response.About
     (aboutResponse) where
 
 import           Text.Blaze ((!))
@@ -9,7 +9,7 @@ import qualified Text.Blaze.Html5.Attributes as A
 import Data.Text.Lazy (Text)
 import Happstack.Server
 import MasterTemplate
-import Utilities (mdToHTML)
+import Util.Blaze (mdToHTML)
 
 aboutResponse :: Text -> ServerPart Response
 aboutResponse aboutContents =

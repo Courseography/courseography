@@ -8,7 +8,8 @@ import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 import Text.Blaze.Internal (stringValue)
 import Config (enableFb)
-import Utilities
+import Util.Blaze
+import Scripts (jQueryScripts)
 
 masterTemplate :: String -> [H.Html] -> H.Html -> H.Html -> H.Html
 masterTemplate title headers body scripts =
@@ -19,27 +20,30 @@ masterTemplate title headers body scripts =
             H.title (H.toHtml title)
             H.link ! A.rel "icon" ! A.type_ "image/png"
                    ! A.href "static/res/ico/favicon.png"
-            sequence_ $ headers ++ (map stylesheet [
+            sequence_ $ headers ++ (map toStylesheet [
                 "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css",
                 "static/style/app.css"])
         H.body $ do
             body
-            concatHtml [scripts, makeScript "static/js/common/google_analytics.js"]
+            sequence_ (
+                map toScript jQueryScripts ++
+                [scripts, toScript "static/js/common/google_analytics.js"]
+                )
 
 -- Insert the header of the Grid and Graph. This contains the year of the timetable, and
 -- a link back to the Graph.
 header :: String -> H.Html
 header page =
-    createTag H.nav "" "row header" $ do
+    H.nav ! A.class_ "row header" $ do
         H.img ! A.id "courseography-header" ! A.src "static/res/img/logo.png"
-             ! H.customAttribute "context" (stringValue page) 
+             ! H.customAttribute "context" (stringValue page)
         H.ul ! A.id "nav-links" $ do
-            H.li $ makeA "" "" "graph" "" "Graph"
-            H.li $ makeA "" "" "grid" "" "Grid"
-            H.li $ makeA "" "" "timesearch" "" "Search"
-            H.li $ makeA "" "" "draw" "" "Draw"
-            H.li $ makeA "" "" "post" "" "Check My POSt!"
-            H.li $ makeA "" "" "about" "" "About"
+            H.li $ toLink "graph" "Graph"
+            H.li $ toLink "grid" "Grid"
+            H.li $ toLink "timesearch" "Search"
+            H.li $ toLink "draw" "Draw"
+            H.li $ toLink "post" "Check My POSt!"
+            H.li $ toLink "about" "About"
             if page `elem` ["graph", "grid"]
             then H.li $ H.a ! A.id "nav-export" $ "Export"
             else ""
