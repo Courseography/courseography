@@ -127,27 +127,36 @@ function fetchCourse(courseName) {
 
 /**
  * Converts times from format used in file to format used in td IDs.
- * @param {string[]} times The times to be converted.
+ * @param {object} times The times to be converted.
  * @returns {string[]} The converted times.
  */
 function convertTimes(times) {
     'use strict';
 
+    // Need to do some preprocessing on the "Time" objects,
+    // which correspond to the "Time" data type in Database/Tables.hs.
+    var newTimes = Array.map(times, function(t) {
+        var day = t.timeField[0];
+        var timeFloat = parseFloat(t.timeField[1]).toFixed(1)
+        var time = String(timeFloat).replace('.', '-');
+        return [day, time];
+    });
+
     var timeList = [];
     var time;
     var stime;
 
-    for (var i = 0; i < times.length; i++) {
-        var timeString = 'MTWRF'.charAt(times[i][0]);
-        time = times[i][1];
+    for (var i = 0; i < newTimes.length; i++) {
+        var timeString = 'MTWRF'.charAt(newTimes[i][0]);
+        time = newTimes[i][1];
 
         if (time.charAt(time.length - 1) === '0') {
-            if (i === times.length-1) {
+            if (i === newTimes.length - 1) {
                 timeString = timeString + time + 'E';
                 timeList.push(timeString);
             } else {
                 stime = time.replace('-0', '-5');
-                if (times[i+1][1] === stime) {
+                if (newTimes[i+1][1] === stime) {
                     timeString = timeString + time;
                     timeList.push(timeString);
                 } else {
@@ -162,7 +171,7 @@ function convertTimes(times) {
                 timeList.push(timeString);
             } else {
                 stime = time.replace('-5', '-0');
-                if (times[i-1][1] !== stime) {
+                if (newTimes[i-1][1] !== stime) {
                     timeString = timeString + time + 'H';
                     timeList.push(timeString);
                 }

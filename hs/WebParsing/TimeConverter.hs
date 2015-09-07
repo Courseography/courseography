@@ -4,6 +4,7 @@ module WebParsing.TimeConverter
     (makeTimeSlots) where
 
 import qualified Data.Text as T
+import Database.Tables
 
 -- | Converts days into numbers, returns a tuple of the rest of the string (the times)
 -- and a list of number representations of days
@@ -27,7 +28,7 @@ makeSlots start end
 
 -- | Extends functionality of makeSlots
 halfHourSlots :: Double -> Double -> [Double]
-halfHourSlots start end = 
+halfHourSlots start end =
     let hours = [start .. end - 1]
     in concatMap (\h -> [h,  h + 0.5]) hours
 
@@ -45,15 +46,15 @@ toDouble double
 
 -- | Zips together time slots with their days
 addList :: [a] -> [a] -> [[a]]
-addList days slots = 
+addList days slots =
     concatMap (\day -> map (\time -> [day,time]) slots) days
 
--- | Takes in a string representation of timeslots, returns a list of days and half-hour timeslots
-makeTimeSlots  :: T.Text -> [[Double]]
-makeTimeSlots str = 
+-- | Returns a list of days and half-hour timeslots.
+makeTimeSlots  :: T.Text -> [Time]
+makeTimeSlots str =
     let (times, days) = convertTime (str, [])
         doubles = map toDouble ( T.split (== '-') times)
         slots = if length doubles == 1
                 then makeSlots (head doubles) (head doubles + 1)
                 else makeSlots (head doubles) (head (tail doubles))
-    in addList days slots
+    in map Time (addList days slots)

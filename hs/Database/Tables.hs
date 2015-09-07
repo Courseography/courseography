@@ -8,8 +8,7 @@
              DeriveGeneric,
              QuasiQuotes,
              TemplateHaskell,
-             TypeFamilies,
-             DeriveGeneric #-}
+             TypeFamilies #-}
 
 {-|
 Description: The database schema (and some helpers).
@@ -33,7 +32,7 @@ import Data.Aeson
 import GHC.Generics
 
 -- | A data type representing a list of times for a course.
-data Time = Time { timeField :: [Double] } deriving (Show, Read, Eq)
+data Time = Time { timeField :: [Double] } deriving (Show, Read, Eq, Generic)
 derivePersistField "Time"
 
 -- | A two-dimensional point.
@@ -55,25 +54,24 @@ Courses json
     videoUrls [T.Text]
     deriving Show
 
-Lectures
+Lecture json
     code T.Text
     session T.Text
     section T.Text
     times [Time]
-    capacity Int
+    cap Int
     instructor T.Text
-    enrolled Int
-    waitlist Int
+    enrol Int
+    wait Int
     extra Int
     timeStr T.Text
     deriving Show
 
-Tutorials
+Tutorial json
     code T.Text
     section T.Text Maybe
     session T.Text
     times [Time]
-    timeStr T.Text
     deriving Show
 
 Breadth
@@ -128,27 +126,7 @@ FacebookTest
     deriving Show
 |]
 
-
 -- ** TODO: Remove these extra types and class instances
-
--- | A Lecture.
-data Lecture =
-    Lecture { extra :: Int,
-              section :: T.Text,
-              cap :: Int,
-              time_str :: T.Text,
-              time :: [[Double]],
-              instructor :: T.Text,
-              enrol :: Maybe Int,
-              wait :: Maybe Int
-            } deriving Show
-
--- | A Tutorial.
-data Tutorial =
-    Tutorial { tutorialSection :: Maybe T.Text,
-               times :: [[Double]],
-               timeStr :: T.Text
-             } deriving Show
 
 -- | A Session.
 data Session =
@@ -182,30 +160,17 @@ data Course =
 
 instance ToJSON Course
 instance ToJSON Session
+instance ToJSON Time
 
-instance ToJSON Lecture where
-  toJSON (Lecture lectureExtra lectureSection lectureCap lectureTimeStr lectureTime lectureInstructor lectureEnrol lectureWait)
-          = object ["extra" .= lectureExtra,
-                    "section" .= lectureSection,
-                    "cap" .= lectureCap,
-                    "time_str" .= lectureTimeStr,
-                    "time" .= map convertTimeToString lectureTime,
-                    "instructor" .= lectureInstructor,
-                    "enrol" .= lectureEnrol,
-                    "wait" .= lectureWait
-                   ]
-
-instance ToJSON Tutorial where
-  toJSON (Tutorial Nothing tutorialTimes tutorialTimeStr) =
-      Array $ V.fromList [toJSON (map convertTimeToString tutorialTimes), toJSON tutorialTimeStr]
-  toJSON (Tutorial (Just value) tutorialTimes tutorialTimeStr) =
-      Array $ V.fromList [toJSON value, toJSON (map convertTimeToString tutorialTimes), toJSON tutorialTimeStr]
+-- instance FromJSON required so that tables can be parsed into JSON,
+-- not necessary otherwise.
+instance FromJSON Time
 
 -- | Converts a Double to a T.Text.
 -- This removes the period from the double, as the JavaScript code,
 -- uses the output in an element's ID, which is then later used in
 -- jQuery. @.@ is a jQuery meta-character, and must be removed from the ID.
-convertTimeToString :: [Double] -> [T.Text]
-convertTimeToString [day, timeNum] =
+convertTimeToString :: Time -> [T.Text]
+convertTimeToString (Time [day, timeNum]) =
   [T.pack . show . floor $ day,
    T.replace "." "-" . T.pack . show $ timeNum]
