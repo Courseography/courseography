@@ -31,7 +31,12 @@ import qualified Data.Vector as V
 import Data.Aeson
 import GHC.Generics
 
--- | A data type representing a list of times for a course.
+-- | A data type representing a time for the section of a course.
+-- The first list is comprised of two values: the date (represented as a number
+-- of the week), and the time. The dates span Monday-Friday, being represented
+-- by 1-5 respectively. The time is a number between 0-23.
+-- TODO: Change this datatype. This datatype shouldn't be implemented with
+-- a list, perhaps a tuple would be better.
 data Time = Time { timeField :: [Double] } deriving (Show, Read, Eq, Generic)
 derivePersistField "Time"
 
