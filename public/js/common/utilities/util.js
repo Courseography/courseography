@@ -135,7 +135,7 @@ function convertTimes(times) {
 
     // Need to do some preprocessing on the "Time" objects,
     // which correspond to the "Time" data type in Database/Tables.hs.
-    var newTimes = Array.map(times, function(t) {
+    var newTimes = times.map(function(t) {
         var day = t.timeField[0];
         var timeFloat = parseFloat(t.timeField[1]).toFixed(1)
         var time = String(timeFloat).replace('.', '-');
