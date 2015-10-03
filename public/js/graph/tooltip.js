@@ -120,6 +120,8 @@ function createG(nodeId) {
         .click(function () {
             var id = nodeId.substring(0, 6);
             openModal(getCourseTitle(id), createModalDiv(id));
+            //openReactModal doesnt "open" a modal yet, this just overwrites the contents from openModal
+            openReactModal(id);
         });
     $('svg').append(g);
 
