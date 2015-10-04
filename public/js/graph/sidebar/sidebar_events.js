@@ -89,11 +89,6 @@ function loadGraph(id) {
     initializeGraphSettings();
 
     fillFCECount();
-
-    // Uncomment to enable the feedback form (must also be displayed in html)
-    // activateFeedbackForm();
-    // Uncomment to enable graph dragging
-    // enableGraphDragging();
 }
 
 
