@@ -58,6 +58,7 @@ executable courseography
     http-client,
     network,
     HTTP,
+    HaTeX,
     tagsoup,
     regex-posix,
     mtl,
