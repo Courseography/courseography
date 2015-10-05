@@ -81,7 +81,8 @@ drawScripts = do
          "/static/js/draw/setup.js"])
 
 postScripts :: H.Html
-postScripts = sequence_ (map toScript [
+postScripts = do 
+    sequence_ (map toScript [
                                           "/static/js/post/change_div.js",
                                           "/static/js/common/cookie_handler.js",
                                           "/static/js/post/update_post.js",
@@ -89,8 +90,11 @@ postScripts = sequence_ (map toScript [
                                           "/static/js/graph/objects/node.js",
                                           "/static/js/post/fill_textboxes.js",
                                           "/static/js/graph/create_data.js",
-                                          "/static/js/post/update_categories.js"])
-
+                                          "/static/js/post/update_categories.js",
+                                          "static/js/common/course_description.js",
+                                          "https://cdnjs.cloudflare.com/ajax/libs/react/0.13.1/react.js",
+         "https://cdnjs.cloudflare.com/ajax/libs/react/0.13.1/JSXTransformer.js"])
+    H.script ! A.type_ "text/jsx" ! A.src "/static/js/post/post.js" $ ""        
 searchScripts :: H.Html
 searchScripts = do
     sequence_ (map toScript $
