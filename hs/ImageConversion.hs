@@ -1,8 +1,28 @@
 module ImageConversion
-    (createImageFile, removeImage) where
+    (createImageFile, removeImage, compileTexToPdf) where
 
 import System.Process
 import GHC.IO.Handle.Types
+
+-- | Compiles a TeX file to a PDF file.
+compileTexToPdf :: String -> IO
+                      (Maybe Handle,
+                       Maybe Handle,
+                       Maybe Handle,
+                       ProcessHandle)
+
+compileTexToPdf inName = createProcess $ CreateProcess
+                                   (ShellCommand $ "pdflatex " ++
+                                                   inName
+                                   )
+                                   Nothing
+                                   Nothing
+                                   CreatePipe
+                                   CreatePipe
+                                   CreatePipe
+                                   False
+                                   False
+                                   False
 
 -- | Converts an SVG file to a PNG file. Note that image magik's 'convert' command
 -- can take in file descriptors.
