@@ -92,6 +92,9 @@ postScripts = do
                                           "/static/js/graph/create_data.js",
                                           "/static/js/post/update_categories.js",
                                           "static/js/common/course_description.js",
+                                          "/static/js/common/objects/course.js",
+                                          "/static/js/common/objects/section.js",
+                                          "/static/js/common/utilities/util.js",
                                           "https://cdnjs.cloudflare.com/ajax/libs/react/0.13.1/react.js",
          "https://cdnjs.cloudflare.com/ajax/libs/react/0.13.1/JSXTransformer.js"])
     H.script ! A.type_ "text/jsx" ! A.src "/static/js/post/post.js" $ ""        
