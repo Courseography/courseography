@@ -8,6 +8,8 @@ import qualified Data.ByteString.Lazy as BS
 import Control.Monad.IO.Class (liftIO)
 import qualified Data.ByteString.Base64.Lazy as BEnc
 import ImageConversion
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import Svg.Generator
 import TimetableImageCreator (renderTable)
 import qualified Data.Map as M
@@ -15,6 +17,14 @@ import System.Random
 import Database.Tables (GraphId)
 import Database.Persist.Sql (toSqlKey)
 import Data.Int(Int64)
+=======
+import TimetableImageCreator (renderTable)
+import System.Random
+>>>>>>> Stashed changes
+=======
+import TimetableImageCreator (renderTable)
+import System.Random
+>>>>>>> Stashed changes
 import Latex
 
 -- | Returns a PDF containing the image of the timetable
@@ -38,12 +48,27 @@ returnPdfData :: String -> String -> String -> String -> IO Response
 returnPdfData svgFilename imageFilename pdfFilename texFilename = do
     createImageFile svgFilename imageFilename
     compileTex texFilename imageFilename
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
     compileTexToPdf texFilename
     pdfData <- BS.readFile texFilename
     removeImage svgFilename
     removeImage imageFilename
     removeImage pdfFilename
     removeImage texFilename
+=======
+=======
+>>>>>>> Stashed changes
+    _ <- compileTexToPdf texFilename
+    pdfData <- BS.readFile texFilename
+    _ <- removeImage svgFilename
+    _ <- removeImage imageFilename
+    _ <- removeImage pdfFilename
+    _ <- removeImage texFilename
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
     let encodedData = BEnc.encode pdfData
     return $ toResponse encodedData
  
