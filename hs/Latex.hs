@@ -30,7 +30,3 @@ body imageFilename = do
 
 addImage imageFilename =
     includegraphics fitImageToPage imageFilename
-
-
-
-

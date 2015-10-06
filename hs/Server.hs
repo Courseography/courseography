@@ -42,6 +42,7 @@ runServer = do
               dir "graph" graphResponse,
               dir "image" graphImageResponse,
               dir "timetable-image" $ look "courses" >>= \x -> look "session" >>= timetableImageResponse x,
+              dir "pdf" $ look "courses" >>= \x -> look "session" >>= pdfResponse x,
               dir "graph-fb" $ seeOther redirectUrlGraphEmail $ toResponse "",
               dir "post-fb" $ seeOther redirectUrlGraphPost $ toResponse "",
               dir "test" $ look "code" >>= getEmail,
