@@ -84,14 +84,14 @@ Course.prototype.parseLectures = function (session, timeSuffix) {
 
     session.lectures.forEach(function (lecture, i, arr) {
         if (lecture.section.charAt(1) === '2' ||
-            lecture.time === 'Online Web Version') {
+            lecture.times === 'Online Web Version') {
             return;
         }
 
         sectionTimes = [];
 
         var id = tmp.name + '-' + lecture.section + '-' + timeSuffix;
-        sectionTimes = sectionTimes.concat(convertTimes(lecture.time));
+        sectionTimes = sectionTimes.concat(convertTimes(lecture.times));
 
         if (timeSuffix === 'Y') {
             sectionTimes = sectionTimes.map(function (t) {
@@ -130,16 +130,9 @@ Course.prototype.parseTutorials = function (session, timeSuffix) {
     }
 
     var tmp = this;
-    var tutorials = [];
-    var i;
-    for (i = 0; i < session.tutorials.length; i++) {
-        if (!inArray(session.tutorials[i], tutorials)) {
-            tutorials.push(session.tutorials[i]);
-        }
-    }
 
-    return tutorials.map(function (tutorial) {
-        var sectionTimes = convertTimes(tutorial[1]);
+    return session.tutorials.map(function (tutorial) {
+        var sectionTimes = convertTimes(tutorial.times);
         if (timeSuffix === 'Y') {
             sectionTimes = sectionTimes.map(function (t) {
                                               return '#' + t + 'F';
@@ -154,7 +147,7 @@ Course.prototype.parseTutorials = function (session, timeSuffix) {
             });
         }
 
-        var id = tmp.name + '-' + tutorial[0] + '-' + timeSuffix;
+        var id = tmp.name + '-' + tutorial.section + '-' + timeSuffix;
         sectionTimes = cleanUpTimes(sectionTimes);
         return makeTutorial(tutorial, tmp, id, sectionTimes);
     });

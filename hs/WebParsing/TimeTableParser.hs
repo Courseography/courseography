@@ -30,11 +30,13 @@ parseTT = do
 -- | Used as an intermediate container while extracting lecture and tutorial information
 -- from the table. Is is later converted into lecture or tutorial records by examinig the
 -- first letter of the section.
-data CourseSlot =
-    CourseSlot { slotSection :: T.Text,
-                 slotTime_str :: T.Text,
-                 slotInstructor :: T.Text
-               } deriving Show
+data CourseSlot = CourseSlot {
+    slotCode :: T.Text,
+    slotSession :: T.Text,
+    slotSection :: T.Text,
+    slotTimeStr :: T.Text,
+    slotInstructor :: T.Text
+    } deriving Show
 
 -- | A list of pages that contain special formatting, are dealt with seperately and removed
 -- from main list.
@@ -106,55 +108,63 @@ addLecture session lec = session { lectures = lec:lectures session }
 -- | Extracts the required information from a row of cells and places it into a CourseSlot
 -- if given a CourseSlot as input, it updates the time only. Otherwise updates time and
 -- section
-updateSlot :: [T.Text] -> Maybe CourseSlot -> Maybe CourseSlot
-updateSlot row Nothing
+updateSlot :: [T.Text] -> Maybe CourseSlot -> T.Text -> T.Text -> Maybe CourseSlot
+updateSlot row Nothing session code
     | isCancelled row || length row < 8 = Nothing
     | otherwise =
         let timestr = T.takeWhile (/= ' ') (row !! 5)
-        in Just CourseSlot { slotSection    = T.take 5 (row !! 3),
-                             slotTime_str   = timestr,
+        in Just CourseSlot { slotCode       = code,
+                             slotSession    = session,
+                             slotSection    = T.take 5 (row !! 3),
+                             slotTimeStr    = timestr,
                              slotInstructor = row !! 7 }
-updateSlot row (Just slot)
+updateSlot row (Just slot) session code
     | isCancelled row || length row < 8 = Just slot
     | otherwise =
         let newTime = T.takeWhile (/= ' ') (row !! 5)
-        in Just slot { slotTime_str = T.append newTime
-                                          (T.append " " (slotTime_str slot)) }
-
+        in Just slot { slotCode    = code,
+                       slotSession = session,
+                       slotTimeStr = T.append newTime
+                                          (T.append " " (slotTimeStr slot)) }
 
 -- | Takes in cells representing a course, and recursively places lecture and tutorial info
 -- into courseSlots.
-parseCourse :: [[T.Text]] -> Maybe CourseSlot -> [Maybe CourseSlot] -> [Maybe CourseSlot]
-parseCourse [] slot slots = slot:slots
-parseCourse course Nothing slots =
+parseCourse :: [[T.Text]] -> Maybe CourseSlot -> [Maybe CourseSlot] -> T.Text -> T.Text -> [Maybe CourseSlot]
+parseCourse [] slot slots _ _ = slot:slots
+parseCourse course Nothing slots session code =
     let row = head course
         rest = tail course
-    in parseCourse rest (updateSlot row Nothing) slots
-parseCourse course slot slots =
+    in parseCourse rest (updateSlot row Nothing session code) slots session code
+parseCourse course slot slots session code =
     let row = head course
         rest = tail course
     in if (row !! 3) == ""
-       then parseCourse rest (updateSlot row slot) slots
-       else parseCourse rest (updateSlot row Nothing) (slot:slots)
+       then parseCourse rest (updateSlot row slot session code) slots session code
+       else parseCourse rest (updateSlot row Nothing session code) (slot:slots) session code
 
 -- | Converts a courseSlot into a lecture
 makeLecture :: CourseSlot -> Lecture
-makeLecture slot =
-    Lecture { extra = 0,
-              section = slotSection slot,
-              cap = 0,
-              time_str = slotTime_str slot,
-              time = concatMap makeTimeSlots (T.split (== ' ') (slotTime_str slot)),
-              instructor = slotInstructor slot,
-              enrol = Nothing,
-              wait = Nothing }
+makeLecture slot = Lecture {
+    lectureCode = slotCode slot,
+    lectureSession = slotSession slot,
+    lectureSection = (slotSection slot),
+    lectureTimes = concatMap makeTimeSlots (T.split (== ' ') (slotTimeStr slot)),
+    lectureCap = 0,
+    lectureInstructor = (slotInstructor slot),
+    lectureEnrol = 0,
+    lectureWait = 0,
+    lectureExtra = 0,
+    lectureTimeStr = (slotTimeStr slot)
+    }
 
 -- | Converts a single courseSlot into a tutorial
 makeTutorial :: CourseSlot -> Tutorial
-makeTutorial slot =
-    Tutorial { tutorialSection = Just (slotSection slot),
-               times = concatMap makeTimeSlots (T.split (== ' ') (slotTime_str slot)),
-               timeStr = slotTime_str slot }
+makeTutorial slot = Tutorial {
+    tutorialCode = slotCode slot,
+    tutorialSession = slotSession slot,
+    tutorialSection = Just (slotSection slot),
+    tutorialTimes = concatMap makeTimeSlots (T.split (== ' ') (slotTimeStr slot))
+    }
 
 -- | Returns true if the courseSlot is housing a lecture, false otherwise.
 isLecture :: CourseSlot -> Bool
@@ -179,15 +189,15 @@ processCourseTable :: MonadIO m => [[T.Text]] -> ReaderT SqlBackend m ()
 processCourseTable course = do
     let session = head course !! 1
         code = T.take 8 (head course !! 0)
-        slots = filter isJust (parseCourse course Nothing [])
+        slots = filter isJust (parseCourse course Nothing [] session code)
         justSlots = map fromJust slots
         sesh = makeSession justSlots
+
     setTutorialEnrolment code (containsTut sesh)
     setPracticalEnrolment code (containsPrac sesh)
-    mapM_ (insertLecture session code) (lectures sesh)
-    mapM_ (insertTutorial session code) (tutorials sesh)
+    mapM_ insert_ (lectures sesh)
+    mapM_ insert_ (tutorials sesh)
     liftIO $ print code
     where
         containsTut sesh = any (maybe False (T.isPrefixOf "T") . tutorialSection) $ tutorials sesh
         containsPrac sesh = any (maybe False (T.isPrefixOf "P") . tutorialSection) $ tutorials sesh
-

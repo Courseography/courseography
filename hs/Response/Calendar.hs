@@ -68,7 +68,7 @@ getInfoCookies courses = map courseInfo allCourses
         allCourses = map (splitOn "-") (splitOn "_" courses)
 
 -- | Pulls either a Lecture or Tutorial from the database.
-pullDatabase :: (Code, Section, Session) -> IO (Maybe (Either Lectures Tutorials))
+pullDatabase :: (Code, Section, Session) -> IO (Maybe (Either Lecture Tutorial))
 pullDatabase (code, 'L':sectCode, session) =
     fmap (fmap Left) (returnLecture (T.pack code)
                                     (T.pack $ 'L':sectCode)
@@ -82,7 +82,7 @@ pullDatabase (code, sect, session) =
 type SystemTime = String
 
 -- | Creates all the events for a course.
-getEvents :: SystemTime -> Maybe (Either Lectures Tutorials) -> Events
+getEvents :: SystemTime -> Maybe (Either Lecture Tutorial) -> Events
 getEvents _ Nothing = []
 getEvents systemTime (Just lect) =
     concatMap eventsByDate (zip' (third courseInfo)
@@ -118,24 +118,24 @@ type DatesByDay = [(StartDate, EndDate)]
 
 -- | Obtains all the necessary information to create events for a course,
 -- such as code, section, start times, end times and dates.
-getCourseInfo :: Either Lectures Tutorials
+getCourseInfo :: Either Lecture Tutorial
               -> (Code, Section, StartTimesByDay, EndTimesByDay, DatesByDay)
 getCourseInfo (Left lect) = (code, sect, start, end, dates)
     where
-        code = T.unpack $ lecturesCode lect
-        sect = T.unpack $ lecturesSection lect
-        dataInOrder = orderTimeFields $ lecturesTimes lect
-        start = startTimesByCourse dataInOrder (T.unpack $ lecturesSession lect)
-        end = endTimesByCourse dataInOrder (T.unpack $ lecturesSession lect)
-        dates = getDatesByCourse dataInOrder (T.unpack $ lecturesSession lect)
+        code = T.unpack $ lectureCode lect
+        sect = T.unpack $ lectureSection lect
+        dataInOrder = orderTimeFields $ lectureTimes lect
+        start = startTimesByCourse dataInOrder (T.unpack $ lectureSession lect)
+        end = endTimesByCourse dataInOrder (T.unpack $ lectureSession lect)
+        dates = getDatesByCourse dataInOrder (T.unpack $ lectureSession lect)
 getCourseInfo (Right lect) = (code, sect, start, end, dates)
     where
-        code = T.unpack $ tutorialsCode lect
-        sect = maybe "" T.unpack (tutorialsSection lect)
-        dataInOrder = orderTimeFields $ tutorialsTimes lect
-        start = startTimesByCourse dataInOrder (T.unpack $ tutorialsSession lect)
-        end = endTimesByCourse dataInOrder (T.unpack $ tutorialsSession lect)
-        dates = getDatesByCourse dataInOrder (T.unpack $ tutorialsSession lect)
+        code = T.unpack $ tutorialCode lect
+        sect = maybe "" T.unpack (tutorialSection lect)
+        dataInOrder = orderTimeFields $ tutorialTimes lect
+        start = startTimesByCourse dataInOrder (T.unpack $ tutorialSession lect)
+        end = endTimesByCourse dataInOrder (T.unpack $ tutorialSession lect)
+        dates = getDatesByCourse dataInOrder (T.unpack $ tutorialSession lect)
 
 -- ** Functions that deal with tuples
 
