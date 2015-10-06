@@ -71,7 +71,7 @@ postCSS = do
             fullyVisible
     ".course_selected" ? do
         backgroundColor green1
-    ".category_selected" ? do
+    ".course .category_selected" ? do
         backgroundColor green2
     "div" ? do
         ".code" ? do

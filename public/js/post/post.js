@@ -3,13 +3,13 @@ var CourseCode = React.createClass({
         return {selected: false}
     },
 
-    updateSelected: function() {
-        var selected = (getCookie(this.props.courseID) == 'active') ? true : false;
-        this.setState({selected: selected});
+    componentWillMount: function() {
+        var isSelected = (getCookie(this.props.courseID) == 'active') ? true : false;
+        this.setState({selected: isSelected});
     },
 
     toggleFullInfo: function() {
-        $('#info').toggle();
+        $('#' + this.props.courseID + '_info').toggle();
     },
 
     render: function() {
@@ -23,9 +23,9 @@ var CourseCode = React.createClass({
         }
 
         return (
-            <div id = {this.props.courseID} >
+            <div id = {this.props.courseID} className = "course">
                 <p className = {categoryClasses} onClick={this.toggleFullInfo}>  {this.props.courseID.toUpperCase() + "H"}  </p>
-                <div id = 'info' className = 'more-info'>
+                <div id = {this.props.courseID + '_info'} className = 'more-info'>
                     <p className = {courseClasses}> {getCourseTitle(this.props.courseID)} </p>
                 </div>
             </div>
