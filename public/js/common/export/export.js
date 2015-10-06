@@ -18,7 +18,7 @@ function createExportModalDiv() {
     var contentDiv = $('<div></div>');
     var topContentDiv = $('<div></div>');
     var calendarOption = $('<a href="calendar">Download ICS</a>');
-    var gridOption = $('<a href="export-grid">Export to PDF</a><br>');
+    var gridOption = $('<a href="pdf">Export to PDF</a><br>');
     calendarOption.attr('target', '_blank');
     calendarOption.attr('style', 'display:block');
     gridOption.attr('style', 'display:block');
