@@ -79,31 +79,12 @@ function getCourseObject(courseName, courseArray) {
 }
 
 
-var courseCache = [];       // All Courses that have been previously requested.
-
-
-/**
- * Gets a course.
- * @param {string} name The course's course code.
- * @returns {JSON} The course being retrieved.
- */
-function getCourse(name) {
-    'use strict';
-
-    var course = getCourseObject(name, courseCache);
-    if (course === undefined) {
-        course = fetchCourse(name);
-    }
-    return course;
-}
-
-
 /**
  * Retrieves a course from file.
  * @param {string} courseName The course code. This + '.txt' is the name of the file.
  * @returns {undefined|JSON} The JSON object representing the course.
  */
-function fetchCourse(courseName) {
+function getCourse(courseName) {
     'use strict';
 
     var course;
@@ -120,7 +101,6 @@ function fetchCourse(courseName) {
         }
     });
 
-    courseCache.push(course);
     return course;
 }
 
