@@ -74,7 +74,7 @@ function alertUserOfConflict() {
     'use strict';
 
     var dialogSelector = $('#dialog');
-    getInConflict() ? dialogSelector.fadeIn(750) :
+    getInConflict() ? dialogSelector.fadeIn(750).delay(3000).fadeOut(750) :
                       dialogSelector.fadeOut(750);
 }
 
