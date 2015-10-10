@@ -15,6 +15,7 @@ import Database.Persist.Sqlite (runSqlite, runMigration, insert_)
 import Database.Tables
 import WebParsing.ParseAll (parseAll)
 import Database.CourseVideoSeed (seedVideos)
+import Database.DepartmentInformation (getDepartments)
 import Config (databasePath)
 
 -- | Main function for setting up the database with course information.
@@ -28,7 +29,8 @@ setupDatabase = do setupDistributionTable
                    print "breadth table set up"
                    parseAll
                    seedVideos
-
+                   getDepartments
+                   
 -- | Sets up the Distribution table.
 setupDistributionTable :: IO ()
 setupDistributionTable = runSqlite databasePath $ do
