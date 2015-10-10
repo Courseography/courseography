@@ -1,8 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Scripts (
-    graphScripts, timetableScripts, drawScripts, postScripts, searchScripts, notFoundScripts,
-    jQueryScripts
+    graphScripts, timetableScripts, drawScripts, postScripts, searchScripts,
+    globalScripts
     )
     where
 
@@ -12,6 +12,12 @@ import qualified Text.Blaze.Html5.Attributes as A
 import Util.Blaze
 import Config (enableFb)
 
+-- | Scripts that are loaded on every page.
+globalScripts :: [String]
+globalScripts =
+    concat [jQueryScripts, reactScripts, analyticsScripts] ++
+    if enableFb then facebookScripts else []
+
 facebookScripts :: [String]
 facebookScripts = [
     "/static/js/common/facebook/facebook_login.js",
@@ -20,9 +26,21 @@ facebookScripts = [
     ]
 
 jQueryScripts :: [String]
-jQueryScripts =
-    ["https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js",
-     "https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"]
+jQueryScripts = [
+    "https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js",
+    "https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"
+    ]
+
+reactScripts :: [String]
+reactScripts = [
+    "https://cdnjs.cloudflare.com/ajax/libs/react/0.13.1/react.js",
+    "https://cdnjs.cloudflare.com/ajax/libs/react/0.13.1/JSXTransformer.js"
+    ]
+
+analyticsScripts :: [String]
+analyticsScripts = [
+    "/static/js/common/google_analytics.js"
+    ]
 
 graphScripts :: H.Html
 graphScripts = sequence_ (map toScript $
@@ -50,8 +68,7 @@ graphScripts = sequence_ (map toScript $
      "/static/js/graph/sidebar/sidebar_divs.js",
      "/static/js/graph/sidebar/sidebar_events.js",
      "/static/js/graph/sidebar/focus_descriptions.js",
-     "/static/js/common/export/export.js"] ++
-    if enableFb then facebookScripts else [])
+     "/static/js/common/export/export.js"])
 
 timetableScripts :: H.Html
 timetableScripts = do
@@ -68,8 +85,7 @@ timetableScripts = do
          "/static/js/common/course_videos.js",
          "/static/js/common/modal.js",
          "/static/js/common/course_description.js",
-         "/static/js/common/export/export.js"] ++
-        if enableFb then facebookScripts else [])
+         "/static/js/common/export/export.js"])
     H.script ! H.dataAttribute "main" "/static/js/grid" ! A.src "/static/js/require.js" $ ""
 
 drawScripts :: H.Html
@@ -92,11 +108,5 @@ postScripts = sequence_ (map toScript [
                                           "/static/js/post/update_categories.js"])
 
 searchScripts :: H.Html
-searchScripts = do
-    sequence_ (map toScript $
-        ["https://cdnjs.cloudflare.com/ajax/libs/react/0.13.1/react.js",
-         "https://cdnjs.cloudflare.com/ajax/libs/react/0.13.1/JSXTransformer.js"])
+searchScripts =
     H.script ! A.type_ "text/jsx" ! A.src "/static/js/search/timetable.js" $ ""
-
-notFoundScripts :: H.Html
-notFoundScripts = sequence_ $ map toScript jQueryScripts
