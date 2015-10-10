@@ -16,7 +16,6 @@ gridResponse =
         masterTemplate "Courseography - Grid"
             []
             (do header "grid"
-                conflictDialog
                 H.div ! A.class_ "row main" $ do
                      coursePanel
                      searchPanel
@@ -24,12 +23,6 @@ gridResponse =
                 disclaimer
             )
             timetableScripts
-
-
-conflictDialog :: H.Html
-conflictDialog =
-    H.div ! A.id "dialog" $
-        "Conflicting courses are difficult to manage. Make sure you understand the added responsibility of having two or more conflicting courses."
 
 coursePanel :: H.Html
 coursePanel =

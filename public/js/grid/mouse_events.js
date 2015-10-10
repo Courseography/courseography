@@ -67,18 +67,6 @@ function getInConflict() {
 }
 
 
-/**
- * Alerts the user of conflicting selected sections.
- */
-function alertUserOfConflict() {
-    'use strict';
-
-    var dialogSelector = $('#dialog');
-    getInConflict() ? dialogSelector.fadeIn(750).delay(3000).fadeOut(750) :
-                      dialogSelector.fadeOut(750);
-}
-
-
 /* Functions to manipulate grid DOM */
 
 /**
