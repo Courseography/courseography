@@ -20,7 +20,6 @@ timetableStyles = do
     courseSelectCSS
     tdColours
     --infoCSS
-    conflictNotificationStyle
 
 {- searchCss
  - Generates CSS for the search box on
@@ -155,20 +154,6 @@ timetableCSS = do
         right (pct 14)
     ".col-md-push-8" ? do
         left (pct 72)
-
-{- conflictNotificationStyle
- - Generates CSS when a conflict arises
- - in the timetable. -}
-conflictNotificationStyle :: Css
-conflictNotificationStyle = "#dialog" ? do
-    position fixed
-    backgroundColor white
-    width100
-    display none
-    visibility hidden
-    alignCenter
-    borderBottom solid (px 2) $ parse "#330000"
-    "z-index" -: "2147483647"
 
 {- courseSelectCSS
  - Generates CSS for the course selection

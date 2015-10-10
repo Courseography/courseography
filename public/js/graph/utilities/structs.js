@@ -2,11 +2,6 @@
  * Data Structures for the course graph
  */
 
-// Global variables
-var nodes = []; // List of all nodes
-
-// Data Structures
-
 /**
  * Makes a Node.
  * @param {string} type The Node's type.

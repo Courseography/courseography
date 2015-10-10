@@ -11,9 +11,6 @@ requirejs([
     $(document).ready(function () {
         'use strict';
 
-        $('#dialog').fadeOut()
-                    .css('visibility', 'visible');
-
         generate_grid.generateGrid();
         var tdObjects = $('td');
         tdObjects.each(function () {
