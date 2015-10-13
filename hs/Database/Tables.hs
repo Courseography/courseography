@@ -46,8 +46,8 @@ type Point = (Double, Double)
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 
 Department json
-    code T.Text
-    information T.Text
+    code [T.Text]
+    name T.Text
 
 Courses json
     code T.Text
@@ -167,7 +167,6 @@ data Course =
              coreqs :: Maybe T.Text,
              videoUrls :: [T.Text]
            } deriving (Show, Generic)
-
 
 instance ToJSON Course
 instance ToJSON Session

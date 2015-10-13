@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Database.DepartmentInformation
+module Database.DepartmentName
     (department, getDepartments) where
 
 import Data.Text (Text)
@@ -93,8 +93,8 @@ department = [
     ("WGS", "Women and Gender Studies"),
     ("WDW", "Woodsworth College Courses")]
     
-getDepartment (code, info) =
-    updateWhere [DepartmentCode ==. code] [DepartmentInformation =. info] 
+getDepartment (code, name) =
+    insert [DepartmentCode ==. code] [DepartmentName ==. name] 
 
 
 getDepartments :: IO ()
