@@ -70,7 +70,7 @@ graphScripts = do
          "/static/js/graph/sidebar/sidebar_events.js",
          "/static/js/graph/sidebar/focus_descriptions.js",
          "/static/js/common/export/export.js"])
-    H.script ! A.type_ "text/jsx" ! A.src "/static/js/common/react_modal.js" $ ""
+    H.script ! A.type_ "text/jsx" ! A.src "/static/js/common/react_modal.js.jsx" $ ""
 
 timetableScripts :: H.Html
 timetableScripts = do
