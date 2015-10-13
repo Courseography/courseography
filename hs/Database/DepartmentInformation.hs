@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Database.DepartmentName
+module Database.DepartmentInformation
     (department, getDepartments) where
 
 import Data.Text (Text)
