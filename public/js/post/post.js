@@ -4,8 +4,7 @@ var CourseCode = React.createClass({
     },
 
     componentWillMount: function() {
-        var isSelected = (getCookie(this.props.courseID) == 'active') ? true : false;
-        this.setState({selected: isSelected});
+        this.setState({selected: getCookie(this.props.courseID) === 'active'});
     },
 
     toggleFullInfo: function() {
