@@ -23,13 +23,12 @@ var CourseCode = React.createClass({
         }
 
         return (
-            <div id = {this.props.courseID} className = "course">
-                <p className = {categoryClasses} onClick={this.toggleFullInfo}>  {this.props.courseID.toUpperCase() + "H"}  </p>
-                <div id = {this.props.courseID + '_info'} className = 'more-info'>
-                    <p className = {courseClasses}> {getCourseTitle(this.props.courseID)} </p>
+            <div id={this.props.courseID} className="course">
+                <p className={categoryClasses} onClick={this.toggleFullInfo}>  {this.props.courseID.toUpperCase() + "H"}  </p>
+                <div id={this.props.courseID + '_info'} className='more-info'>
+                    <p className={courseClasses}> {getCourseTitle(this.props.courseID)} </p>
                 </div>
             </div>
-           
         );
     }
 })
