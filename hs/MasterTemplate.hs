@@ -9,7 +9,7 @@ import qualified Text.Blaze.Html5.Attributes as A
 import Text.Blaze.Internal (stringValue)
 import Config (enableFb)
 import Util.Blaze
-import Scripts (jQueryScripts)
+import Scripts (globalScripts)
 
 masterTemplate :: String -> [H.Html] -> H.Html -> H.Html -> H.Html
 masterTemplate title headers body scripts =
@@ -25,10 +25,8 @@ masterTemplate title headers body scripts =
                 "static/style/app.css"])
         H.body $ do
             body
-            sequence_ (
-                map toScript jQueryScripts ++
-                [scripts, toScript "static/js/common/google_analytics.js"]
-                )
+            mapM_ toScript globalScripts
+            scripts
 
 -- Insert the header of the Grid and Graph. This contains the year of the timetable, and
 -- a link back to the Graph.
