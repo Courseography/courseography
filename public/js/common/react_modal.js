@@ -20,6 +20,7 @@ var ModalContent = React.createClass({
     }
 });
 
+//Use React component from search.js
 var Description = React.createClass({
     getInitialState: function() {
         return {
@@ -37,15 +38,11 @@ var Description = React.createClass({
             success: function(data) {
                 if (this.isMounted()) {
                     this.setState({course: data});
-                    //Not sure if there is a cleaner way to do this
                     //This is getting the session times
-                    var lectures = data.fallSession.lectures
+                    var sessions = data.fallSession.lectures
                                                    .concat(data.springSession.lectures)
-                                                   .concat(data.yearSession.lectures);
-                    var sessions = [];
-                    $.each(lectures, function( index, value ) {
-                        sessions.push(value.code + value.session + "-" + value.section +": " + value.timeStr);
-                    });
+                                                   .concat(data.yearSession.lectures)
+                    //Tutorials don't have a timeStr to print, so I've currently ommitted them
                     this.setState({sessions: sessions});
                 }
             }.bind(this),
@@ -53,10 +50,11 @@ var Description = React.createClass({
                 console.error('course-info', status, err.toString());
             }.bind(this)
         });
+        
     },
     
     render: function() {
-        //have yet to add video URLs but need to ask David how it works
+        //We want to use the Timetable component, but that component needs to be independent before using it here
         return (
             <div>
                 <p>{this.state.course.description}</p>
@@ -64,14 +62,25 @@ var Description = React.createClass({
                 <p><strong>Distribution Requirement Status: </strong>{this.state.course.distribution}</p>
                 <p><strong>Breadth Requirement: </strong>{this.state.course.breadth}</p>
                 <p><strong>Timetable: </strong></p>
-                {this.state.sessions.map(function(session) {
-                    return <p>{session}</p>;
-                })}                                 
-                <div id="course-video-div">
-                    <video id="course-video" className="video-js vjs-default-skin" controls="" preload="auto">
-                        <source src={this.state.course.videoUrls} type="video/mp4"/>
-                    </video>
-                </div>
+                {this.state.sessions.map(function(lecture) {
+                    return <p>{lecture.code + lecture.session + "-" + lecture.section + ": " + lecture.timeStr}</p>;
+                })}
+                <Video urls={this.state.sessions}/>
+            </div>
+        );
+    }
+});
+
+var Video = React.createClass({
+    render: function() {
+        //need to check how videoUrls are obtained
+        return (
+            <div id="course-video-div">
+                <video id="course-video" className="video-js vjs-default-skin" controls="" preload="auto">
+                    {this.props.url .map(function(url) {
+                        return <source src={url} type="video/mp4"/>
+                    })}
+                </video>
             </div>
         );
     }
