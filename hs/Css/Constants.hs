@@ -57,6 +57,7 @@ module Css.Constants
      red4,
      red5,
      green1,
+     green2,
      dRed,
      dGreen,
      dBlue,
@@ -238,6 +239,8 @@ red5 = rgb 221 189 189
 
 green1 :: Color
 green1 = rgb 170 228 164
+green2 :: Color
+green2 = parse "#3Cb371"
 
 dRed :: T.Text
 dRed = "#D77546"

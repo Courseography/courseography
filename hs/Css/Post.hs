@@ -69,8 +69,13 @@ postCSS = do
         semiVisible
         ":hover" & do
             fullyVisible
+    ".course_selected" ? do
+        backgroundColor green1
+    ".course .category_selected" ? do
+        backgroundColor green2
     "div" ? do
         ".code" ? do
+            backgroundColor beige1
             fontFamily ["HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", "Lucida Grande"][sansSerif]
             fontSize (px 20)
             paddingLeft (px 20)
