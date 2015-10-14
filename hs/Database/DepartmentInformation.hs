@@ -10,7 +10,7 @@ import Config (databasePath)
 
 department :: [([Text], Text)]
 department = [
-	(["ABS"], "Aboriginal Studies"),
+    (["ABS"], "Aboriginal Studies"),
     (["ACT"], "Acturial Science"),
     (["USA"], "American Studies"),
     (["ANA"], "Anatomy"),
