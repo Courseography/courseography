@@ -184,3 +184,4 @@ convertTimeToString :: Time -> [T.Text]
 convertTimeToString (Time [day, timeNum]) =
   [T.pack . show . floor $ day,
    T.replace "." "-" . T.pack . show $ timeNum]
+   
