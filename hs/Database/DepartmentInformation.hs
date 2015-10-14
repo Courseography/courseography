@@ -4,8 +4,8 @@ module Database.DepartmentInformation
     (department, getDepartments) where
 
 import Data.Text (Text)
-import Database.Tables (Department)
-import Database.Persist.Sqlite (runSqlite, updateWhere, (=.), (==.))
+import Database.Tables (Department(Department))
+import Database.Persist.Sqlite (runSqlite, insert, (=.), (==.))
 import Config (databasePath)
 
 department :: [([Text], Text)]
@@ -91,8 +91,8 @@ department = [
     (["WGS"], "Women and Gender Studies"),
     (["WDW"], "Woodsworth College Courses")]
     
-getDepartment (code, name) =
-    insert [Department code name]
+getDepartment (code, name) = 
+    insert (Department code name)
 
 getDepartments :: IO ()
 getDepartments = runSqlite databasePath $
