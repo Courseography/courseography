@@ -5,7 +5,7 @@ module Database.DepartmentInformation
 
 import Data.Text (Text)
 import Database.Tables (Department(Department))
-import Database.Persist.Sqlite (runSqlite, insert, (=.), (==.))
+import Database.Persist.Sqlite (runSqlite, insert)
 import Config (databasePath)
 
 department :: [([Text], Text)]
