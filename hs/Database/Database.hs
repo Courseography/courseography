@@ -29,6 +29,7 @@ setupDatabase = do setupDistributionTable
                    print "breadth table set up"
                    parseAll
                    seedVideos
+                   
                    getDepartments
                    
 -- | Sets up the Distribution table.
