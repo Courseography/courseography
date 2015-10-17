@@ -19,7 +19,7 @@
         <y:ShapeNode>
           <y:Geometry height="29.0" width="74.0" x="105.44282911383607" y="78.2299452230003"/>
           <y:Fill color="#99CC00" transparent="false"/>
-          <y:BorderStyle color="#000000" type="dashed" width="2.0"/>
+          <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" modelName="custom" textColor="#000000" visible="true" width="47.359375" x="13.3203125" y="5.1494140625">EST100<y:LabelModel>
               <y:SmartNodeLabelModel distance="4.0"/>
             </y:LabelModel>
@@ -36,7 +36,7 @@
         <y:ShapeNode>
           <y:Geometry height="29.0" width="74.0" x="105.44282911383607" y="124.4598904460006"/>
           <y:Fill color="#99CC00" transparent="false"/>
-          <y:BorderStyle color="#000000" type="dashed" width="2.0"/>
+          <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" modelName="custom" textColor="#000000" visible="true" width="47.359375" x="13.3203125" y="5.1494140625">EST101<y:LabelModel>
               <y:SmartNodeLabelModel distance="4.0"/>
             </y:LabelModel>
@@ -53,7 +53,7 @@
         <y:ShapeNode>
           <y:Geometry height="29.0" width="74.0" x="105.44282911383607" y="170.6898356690009"/>
           <y:Fill color="#99CC00" transparent="false"/>
-          <y:BorderStyle color="#000000" type="dashed" width="2.0"/>
+          <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" modelName="custom" textColor="#000000" visible="true" width="47.359375" x="13.3203125" y="5.1494140625">EST200<y:LabelModel>
               <y:SmartNodeLabelModel distance="4.0"/>
             </y:LabelModel>
@@ -70,7 +70,7 @@
         <y:ShapeNode>
           <y:Geometry height="29.0" width="74.0" x="105.44282911383607" y="216.3796713380018"/>
           <y:Fill color="#99CC00" transparent="false"/>
-          <y:BorderStyle color="#000000" type="dashed" width="2.0"/>
+          <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" modelName="custom" textColor="#000000" visible="true" width="47.359375" x="13.3203125" y="5.1494140625">EST201<y:LabelModel>
               <y:SmartNodeLabelModel distance="4.0"/>
             </y:LabelModel>
@@ -87,7 +87,7 @@
         <y:ShapeNode>
           <y:Geometry height="29.0" width="74.0" x="105.77131645534428" y="262.0695070070027"/>
           <y:Fill color="#99CC00" transparent="false"/>
-          <y:BorderStyle color="#000000" type="dashed" width="2.0"/>
+          <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" modelName="custom" textColor="#000000" visible="true" width="47.359375" x="13.3203125" y="5.1494140625">EST300<y:LabelModel>
               <y:SmartNodeLabelModel distance="4.0"/>
             </y:LabelModel>
@@ -104,7 +104,7 @@
         <y:ShapeNode>
           <y:Geometry height="29.0" width="74.0" x="105.77131645534428" y="307.7593426760036"/>
           <y:Fill color="#99CC00" transparent="false"/>
-          <y:BorderStyle color="#000000" type="dashed" width="2.0"/>
+          <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" modelName="custom" textColor="#000000" visible="true" width="47.359375" x="13.3203125" y="5.1494140625">EST400<y:LabelModel>
               <y:SmartNodeLabelModel distance="4.0"/>
             </y:LabelModel>
@@ -121,7 +121,7 @@
         <y:ShapeNode>
           <y:Geometry height="29.0" width="74.0" x="242.44282911383607" y="262.0695070070027"/>
           <y:Fill color="#99CCFF" transparent="false"/>
-          <y:BorderStyle color="#000000" type="dashed" width="2.0"/>
+          <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" modelName="custom" textColor="#000000" visible="true" width="47.359375" x="13.3203125" y="5.1494140625">EST420<y:LabelModel>
               <y:SmartNodeLabelModel distance="4.0"/>
             </y:LabelModel>
@@ -138,7 +138,7 @@
         <y:ShapeNode>
           <y:Geometry height="29.0" width="74.0" x="242.44282911383607" y="307.7593426760036"/>
           <y:Fill color="#99CCFF" transparent="false"/>
-          <y:BorderStyle color="#000000" type="dashed" width="2.0"/>
+          <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" modelName="custom" textColor="#000000" visible="true" width="47.359375" x="13.3203125" y="5.1494140625">EST421<y:LabelModel>
               <y:SmartNodeLabelModel distance="4.0"/>
             </y:LabelModel>
@@ -151,7 +151,6 @@
       </data>
     </node>
     <edge id="e0" source="n0" target="n1">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -162,7 +161,6 @@
       </data>
     </edge>
     <edge id="e1" source="n1" target="n2">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -173,7 +171,6 @@
       </data>
     </edge>
     <edge id="e2" source="n2" target="n3">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -184,7 +181,6 @@
       </data>
     </edge>
     <edge id="e3" source="n3" target="n4">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -195,7 +191,6 @@
       </data>
     </edge>
     <edge id="e4" source="n4" target="n6">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -206,7 +201,6 @@
       </data>
     </edge>
     <edge id="e5" source="n5" target="n6">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
