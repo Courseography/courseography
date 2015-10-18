@@ -14,7 +14,6 @@ function Node(type, id) {
     this.outEdges = []; // Edges leading to children
     this.inEdges = []; // Edges coming from parents
     this.logicalType = type;
-    this.updated = false; // Used when updating active/inactive state
     this.hybrid = false; // Identifies whether node is 'hybrid'
     this.status = 'inactive';
 }
@@ -86,17 +85,9 @@ Node.prototype.updateStatus = function () {
     'use strict';
 
     if (this.arePrereqsSatisfied()) {
-        if (this.isSelected() || this.hybrid) {
-            this.status = 'active';
-        } else {
-            this.status = 'takeable';
-        }
+        this.status = this.isSelected() || this.hybrid ? 'active' : 'takeable';
     } else {
-        if (this.isSelected() && !this.hybrid) {
-            this.status = 'overridden';
-        } else {
-            this.status = 'inactive';
-        }
+        this.status = this.isSelected() && !this.hybrid ? 'overridden' : 'inactive';
     }
     setCookie(this.id, this.status);
 
@@ -138,7 +129,6 @@ Node.prototype.turn = function () {
         edge.updateStatus();
     });
 
-    // Update interface
     this.updateSVG();
 };
 
@@ -152,16 +142,11 @@ Node.prototype.arePrereqsSatisfied = function () {
 
     var sat = this.checkFCEBasedPrerequisites();
     if (this.logicalType.toUpperCase() === 'AND') {
-        for (var i = 0; i < this.parents.length; i++) {
-            sat = sat && this.parents[i].isSelected();
-        }
+        sat = sat && this.parents.every(elem => elem.isSelected());        
     } else if (this.logicalType.toUpperCase() === 'OR') {
-        sat = false;
-        for (var i = 0; i < this.parents.length; i++) {
-            sat = sat || this.parents[i].isSelected();
-        }
+        sat = sat && this.parents.some(elem => elem.isSelected());
     } else {
-        console.log('Error: invalid node logicalType ' + this.logicalType +
+        console.err('Error: invalid node logicalType ' + this.logicalType +
                     ' for node ' + this.id);
     }
     return sat;
@@ -177,14 +162,16 @@ Node.prototype.arePrereqsSatisfied = function () {
 Node.prototype.checkFCEBasedPrerequisites = function() {
     'use strict';
 
-    if (this.id === 'CSC454') {
-        return FCEs200 + FCEs300 + FCEs400 >= 2.5;
-    } else if (this.id === 'CSC494' || this.id === 'CSC495') {
-        return FCEs300 + FCEs400 >= 1.5;
-    } else if (this.id === 'CSC318') {
-        return FCEs >= 0.5;
-    } else {
-        return true;
+    switch (this.id) {
+        case ('CSC318'):
+            return FCEs >= 0.5;
+        case ('CSC494'):
+        case ('CSC495'):
+            return FCEs300 + FCEs400 >= 1.5;
+        case ('CSC454'):
+            return FCEs200 + FCEs300 + FCEs400 >= 2.5;
+        default:
+            return true;
     }
 };
 
@@ -197,3 +184,4 @@ Node.prototype.updateSVG = function() {
 
     $('#' + this.id).attr('data-active', this.status);
 };
+
