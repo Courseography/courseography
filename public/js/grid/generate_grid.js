@@ -24,8 +24,7 @@ function generateGrid() {
     timetableContainerDivSpring.append(timetableTableSpring);
 
     rowDiv.append(timetableContainerDivFall)
-          .append(timetableContainerDivSpring)
-          .insertBefore($('#info'));
+          .append(timetableContainerDivSpring);
 }
 
 

@@ -19,7 +19,6 @@ timetableStyles = do
     timetableCSS
     courseSelectCSS
     tdColours
-    --infoCSS
 
 {- searchCss
  - Generates CSS for the search box on
