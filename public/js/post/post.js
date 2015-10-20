@@ -40,20 +40,6 @@ var MultipleCourseCode = React.createClass({
         }
     },
     
-    componentDidMount: function() {  
-        var elements = $('#' + this.props.courseID + ' input');
-        for (i = 0; i < elements.length; i++) {
-            elements[i].addEventListener("keydown", this.handleKeyDown);
-        }
-    },
-
-    componentWillUnmount: function() {
-        var elements = $('#' + this.props.courseID + ' input');
-        for (i = 0; i < elements.length; i++) {
-            elements[i].removeEventListener("keydown", this.handleKeyDown);
-        }
-    },
-    
     toggleFullInfo: function() {
           $('#' + this.props.courseID + ' > .more-info').toggle();
     },
@@ -81,6 +67,8 @@ var MultipleCourseCode = React.createClass({
             categoryClasses += ' category_selected';
             courseClasses += ' course_selected';
         }
+        
+        var me = this;
 
         return (
             <div id={this.props.courseID} className='course'>
@@ -88,7 +76,7 @@ var MultipleCourseCode = React.createClass({
                 <div className='more-info'>
                     <p className = {courseClasses}> 
                         {Array.apply(0, Array(this.props.data.textBoxNumber)).map(function (x, i) {
-                            return <input type='text' onKeyDown={this.handleKeyDown} />;
+                            return <input type='text' onKeyDown={me.handleKeyDown} />;
                         })}
                     </p>
                 </div>
