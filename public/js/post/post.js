@@ -112,7 +112,7 @@ var SpecialistPost = React.createClass({
     render: function() {
 
         var firstYearCourses = ['CSC108', 'CSC148', 'CSC165', 'MAT135'];
-        var secondYearCourses = ['CSC209', 'CSC236', 'CSC258', 'CSC263', 'MAT221', 'STA247'];
+        var secondYearCourses = ['CSC207', 'CSC209', 'CSC236', 'CSC258', 'CSC263', 'MAT221', 'STA247'];
         var laterYearCourses = ['CSC369', 'CSC373'];
 
         return (
