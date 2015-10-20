@@ -85,10 +85,7 @@ var MultipleCourseCode = React.createClass({
 var SpecialistPost = React.createClass({
     getInitialState: function() {
         return {
-            selected: true,
-            courses: ['CSC108', 'CSC148', 'CSC165', 'MAT135', 'CSC207',
-                      'CSC209', 'CSC236', 'CSC258', 'CSC263',
-                      'MAT221', 'STA247', 'CSC369', 'CSC373']
+            selected: true
         }
     },
 
@@ -97,9 +94,23 @@ var SpecialistPost = React.createClass({
     },
 
     render: function() {
+
+        var firstYearCourses = ['CSC108', 'CSC148', 'CSC165', 'MAT135'];
+        var secondYearCourses = ['CSC209', 'CSC236', 'CSC258', 'CSC263', 'MAT221', 'STA247'];
+        var laterYearCourses = ['CSC369', 'CSC373'];
+
         return (
-            <div id="specialist_div">
-                {this.state.courses.map(function (course) {
+            <div id="specialist_window">
+                <h2> First Year </h2>
+                {firstYearCourses.map(function (course) {
+                    return <CourseCode courseID={course.toLowerCase()} />;
+                })}
+                <h2> Second Year </h2>
+                {secondYearCourses.map(function (course) {
+                    return <CourseCode courseID={course.toLowerCase()} />;
+                })}
+                <h2> Later Years </h2>
+                {laterYearCourses.map(function (course) {
                     return <CourseCode courseID={course.toLowerCase()} />;
                 })}
                 <MultipleCourseCode courseID="spec400" data={{textBoxNumber: 3, 
@@ -113,6 +124,8 @@ var SpecialistPost = React.createClass({
                 <p className="code"> Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H, 
                     CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H, or PEY (0.5 FCEs) 
                     ** Note: Type 'PEY' for Check my POSt to recognize it ** </p>
+                <h2> Notes </h2>
+                <p id='notes'> - No more than 1.0 FCE from CSC490H1, CSC491H1, CSC494H1, CSC495H1, BCB430Y1 may be used to fulfill program requirements </p>
             </div>
         );
     }
