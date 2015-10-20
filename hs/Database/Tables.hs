@@ -44,6 +44,11 @@ derivePersistField "Time"
 type Point = (Double, Double)
 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
+
+Department json
+    code [T.Text]
+    name T.Text
+
 Courses json
     code T.Text
     title T.Text Maybe
