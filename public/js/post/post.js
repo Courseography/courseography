@@ -40,18 +40,34 @@ var MultipleCourseCode = React.createClass({
         }
     },
     
+    componentDidMount: function() {  
+        var elements = $('#' + this.props.courseID + ' input');
+        for (i = 0; i < elements.length; i++) {
+            elements[i].addEventListener("keydown", this.handleKeyDown);
+        }
+    },
+
+    componentWillUnmount: function() {
+        var elements = $('#' + this.props.courseID + ' input');
+        for (i = 0; i < elements.length; i++) {
+            elements[i].removeEventListener("keydown", this.handleKeyDown);
+        }
+    },
     
     toggleFullInfo: function() {
           $('#' + this.props.courseID + ' > .more-info').toggle();
     },
 
     checkIfCompleted: function() {
-       this.setState({completed: this.state.completedTextBoxes == this.props.data.textBoxNumber});
+       this.setState({completed: this.state.completedTextBoxes === this.props.data.textBoxNumber});
     },
 
     handleKeyDown: function(e) {
         if (e.keyCode === 13) {
-            this.setState({completedTextBoxes: this.state.completedTextBoxes += 1});
+            if (this.state.completedTextBoxes < this.props.data.textBoxNumber) {
+                 this.setState({completedTextBoxes: this.state.completedTextBoxes +=1})
+            }
+
             this.checkIfCompleted();
         }  
     },
