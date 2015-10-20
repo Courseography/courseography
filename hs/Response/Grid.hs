@@ -19,7 +19,6 @@ gridResponse =
                 H.div ! A.class_ "row main" $ do
                      coursePanel
                      searchPanel
-                     infoPanel
                 disclaimer
             )
             timetableScripts
@@ -43,8 +42,3 @@ searchPanel =
                         ! A.type_ "text"
         H.div ! A.id "search-container" $
             H.div ! A.id "search-list" $ ""
-
-infoPanel :: H.Html
-infoPanel =
-    H.div ! A.class_ "col-md-8 col-xs-12 col-md-pull-2" $
-        H.div ! A.id "info" ! A.class_ "row" $ ""
