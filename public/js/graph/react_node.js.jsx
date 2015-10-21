@@ -1,12 +1,15 @@
 function foo(){
     console.log("foo");
+    React.render(
+        <ReactSVG width="1195" height="650" />,
+        document.getElementById('modal-content-container')
+    );
 }
 
 var ReactSVG = React.createClass({
     render: function() {
         return (
-            {/* need to see if I can pull all the svg attributes */}
-            <svg width="1195" height="650">
+            <svg>
                 <Nodes/>
             </svg>
         );
@@ -23,3 +26,4 @@ var Nodes = React.createClass({
         );
     }
 });
+
