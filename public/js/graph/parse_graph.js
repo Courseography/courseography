@@ -15,6 +15,8 @@ function buildGraph(gId) {
 
     $('.node').each(function () {
         makeNode('AND', $(this).attr('id'));
+        //Why can't it see the foo function in public/js/graph/react_node.js.jsx?
+        foo();
     });
 
     $('.hybrid').each(function () {
