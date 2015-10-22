@@ -13,13 +13,9 @@ document.onkeydown = function (event) {
 
 
 /**
- * Initializes interface to cookie settings; blank interface if no cookies exist
- * TODO: Function too long
+ * Clears the FCE count variables.
  */
-function initializeGraphSettings() {
-    'use strict';
-
-    // Clear FCE count and 'Check My POSt!' tab
+function clearFCECount() {
     currentFCEs = 0;
     currentFCEs100 = 0;
     currentFCEs200 = 0;
@@ -27,12 +23,39 @@ function initializeGraphSettings() {
     currentFCEs400 = 0;
     currentFCEsMAT = 0;
     clickedCourses = [];
+}
 
-    // Clear 'My Courses' tab
-    $('#courseGrid').empty();
 
+/**
+ * Clear Check My POSt! Tab.
+ */
+function clearPOStTab() {
     $('input:checkbox').attr('checked', false);
     $('input:text').attr('value', '');
+}
+
+
+/**
+ * Clears any active focus.
+ */
+function clearActiveFocus() {
+    if (activeFocus !== '') {
+        $('.focusTabs').tabs('option', 'active', false);
+        $('ellipse.spotlight').remove();
+        clearFocus();
+    }
+}
+
+
+/**
+ * Initializes interface to cookie settings; blank interface if no cookies exist
+ * TODO: Function too long
+ */
+function initializeGraphSettings() {
+    'use strict';
+
+    clearFCECount();
+    clearPOStTab();
 
     // Set initial node status
     $.each(nodes, function (i, node) {
@@ -66,13 +89,7 @@ function initializeGraphSettings() {
     });
 
     updateFCECount();
-
-    // Clear any active focus
-    if (activeFocus !== '') {
-        $('.focusTabs').tabs('option', 'active', false);
-        $('ellipse.spotlight').remove();
-        clearFocus();
-    }
+    clearActiveFocus();
 
     // only run this if the CSC graph is loaded
     if (getCookie('active-graph') === '1') {
@@ -100,34 +117,16 @@ function reset() {
         window[node].updateSVG();
     });
 
-    // Edges
     $('path').attr('data-active', 'inactive');
 
     $('.region').removeAttr('data-active');
 
-    // Clear 'My Courses' tab
-    $('#courseGrid').empty();
+    clearActiveFocus();
 
-    // Clear any active focus
-    if (activeFocus !== '') {
-        $('.focusTabs').tabs('option', 'active', false);
-        $('ellipse.spotlight').remove();
-        clearFocus();
-    }
-
-    // Clear FCE count and 'Check My POSt!' tab
-    currentFCEs = 0;
-    currentFCEs100 = 0;
-    currentFCEs200 = 0;
-    currentFCEs300 = 0;
-    currentFCEs400 = 0;
-    currentFCEsMAT = 0;
-    clickedCourses = [];
+    clearFCECount();
     updateFCECount();
     fillFCECount();
-
-    $('input:checkbox').attr('checked', false);
-    $('input:text').attr('value', '');
+    clearPOStTab();
 }
 
 
@@ -153,3 +152,4 @@ function clearAllTimeouts() {
 
     timeouts = [];
 }
+
