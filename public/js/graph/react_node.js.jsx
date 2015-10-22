@@ -2,7 +2,7 @@ function foo(){
     console.log("foo");
     React.render(
         <ReactSVG width="1195" height="650" />,
-        document.getElementById('modal-content-container')
+        document.getElementById('react-graph')
     );
 }
 
