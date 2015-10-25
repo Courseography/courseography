@@ -142,9 +142,13 @@ Node.prototype.arePrereqsSatisfied = function () {
 
     var sat = this.checkFCEBasedPrerequisites();
     if (this.logicalType.toUpperCase() === 'AND') {
-        sat = sat && this.parents.every(elem => elem.isSelected());        
+        sat = sat && this.parents.every(function(elem, index, array) {
+                                            return elem.isSelected();
+                                        });
     } else if (this.logicalType.toUpperCase() === 'OR') {
-        sat = sat && this.parents.some(elem => elem.isSelected());
+        sat = sat && this.parents.some(function(elem, index, array) {
+                                           return elem.isSelected();
+                                       });
     } else {
         console.err('Error: invalid node logicalType ' + this.logicalType +
                     ' for node ' + this.id);
