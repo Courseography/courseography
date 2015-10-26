@@ -4,11 +4,29 @@ var CourseCode = React.createClass({
     },
 
     componentWillMount: function() {
-        this.setState({selected: getCookie(this.props.courseID) === 'active'});
+        this.setState({selected: getCookie(this.props.courseIDs[0]) === 'active'});
     },
 
     toggleFullInfo: function() {
-        $('#' + this.props.courseID + '_info').toggle();
+        $('#' + this.props.courseIDs[0] + '_info').toggle();
+    },
+
+    getCategoryName: function() {
+        var categoryName = '';
+
+        if (this.props.courseIDs[0] === 'mat135') {
+            // special case for calculus requirement since it doesn't fit the same pattern
+            categoryName = '(MAT135 and MAT136) or MAT137Y or MAT157Y';
+        } else {
+            categoryName += this.props.courseIDs[0].toUpperCase() + 'H';
+
+            for (i = 1; i < this.props.courseIDs.length; i++) {
+                categoryName += " or " + this.props.courseIDs[i].toUpperCase() + 'H';
+            }
+        }
+        
+
+        return categoryName;
     },
 
     render: function() {
@@ -22,10 +40,12 @@ var CourseCode = React.createClass({
         }
 
         return (
-            <div id={this.props.courseID} className="course">
-                <p className={categoryClasses} onClick={this.toggleFullInfo}>  {this.props.courseID.toUpperCase() + "H"}  </p>
-                <div id={this.props.courseID + '_info'} className='more-info'>
-                    <p className={courseClasses}> {getCourseTitle(this.props.courseID)} </p>
+            <div id ={this.props.courseIDs[0]} className='course'>
+                <p className={categoryClasses} onClick={this.toggleFullInfo}> {this.getCategoryName()} </p>
+                <div id= {this.props.courseIDs[0] + '_info'} className='more-info'>
+                    {this.props.courseIDs.map(function (course) {
+                         return <p className={courseClasses}> {getCourseTitle(course)} </p>
+                    })}
                 </div>
             </div>
         );
@@ -67,13 +87,13 @@ var MultipleCourseCode = React.createClass({
             categoryClasses += ' category_selected';
             courseClasses += ' course_selected';
         }
-        
+
         var me = this;
 
         return (
             <div id={this.props.courseID} className='course'>
                 <p className = {categoryClasses} onClick={this.toggleFullInfo}> {this.props.data.categoryName} </p>
-                <div className='more-info'>
+                <div id = {'spec' + this.props.courseID.substring(5, this.props.courseID.length)} className='more-info'>
                     <p className = {courseClasses}> 
                         {Array.apply(0, Array(this.props.data.textBoxNumber)).map(function (x, i) {
                             return <input type='text' onKeyDown={me.handleKeyDown} />;
@@ -99,23 +119,24 @@ var SpecialistPost = React.createClass({
 
     render: function() {
 
-        var firstYearCourses = ['CSC108', 'CSC148', 'CSC165', 'MAT135'];
-        var secondYearCourses = ['CSC207', 'CSC209', 'CSC236', 'CSC258', 'CSC263', 'MAT221', 'STA247'];
-        var laterYearCourses = ['CSC369', 'CSC373'];
+        var firstYearCourses = [['csc108'], ['csc148'], ['csc165', 'csc236'], ['mat135', 'mat136']];
+        var secondYearCourses = [['csc207'], ['csc209'], ['csc236'], ['csc258'], ['csc263', 'csc265'], ['mat221', 'mat223', 'mat240'], 
+                                ['sta247', 'sta255', 'sta257']];
+        var laterYearCourses = [['csc369'], ['csc373']];
 
         return (
             <div id="specialist_window">
                 <h2> First Year </h2>
-                {firstYearCourses.map(function (course) {
-                    return <CourseCode courseID={course.toLowerCase()} />;
+                {firstYearCourses.map(function (courses) {
+                    return <CourseCode id={courses[0]} courseIDs={courses} />;
                 })}
                 <h2> Second Year </h2>
-                {secondYearCourses.map(function (course) {
-                    return <CourseCode courseID={course.toLowerCase()} />;
+                {secondYearCourses.map(function (courses) {
+                    return <CourseCode id={courses[0]} courseIDs={courses} />;
                 })}
                 <h2> Later Years </h2>
-                {laterYearCourses.map(function (course) {
-                    return <CourseCode courseID={course.toLowerCase()} />;
+                {laterYearCourses.map(function (courses) {
+                    return <CourseCode  id={courses[0]} courseIDs={courses} />;
                 })}
                 <MultipleCourseCode courseID="spec400" data={{textBoxNumber: 3, 
                     categoryName: "Any 400-level CSC course, BCB410H, BCB420H, BCB430Y, ECE489H (1.5 FCEs)"}} />
