@@ -16,7 +16,7 @@ var CourseCode = React.createClass({
 
         if (this.props.courseIDs[0] === 'mat135') {
             // special case for calculus requirement since it doesn't fit the same pattern
-            categoryName = '(MAT135 and MAT136) or MAT137Y or MAT157Y';
+            categoryName = '(MAT135H and MAT136H) or MAT137Y or MAT157Y';
         } else {
             categoryName += this.props.courseIDs[0].toUpperCase() + 'H';
 
