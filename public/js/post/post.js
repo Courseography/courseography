@@ -24,7 +24,6 @@ var CourseCode = React.createClass({
                 categoryName += " or " + this.props.courseIDs[i].toUpperCase() + 'H';
             }
         }
-        
 
         return categoryName;
     },
@@ -114,7 +113,7 @@ var SpecialistPost = React.createClass({
     },
 
     componentWillMount: function() {
-        this.setState({selected: getCookie('specialist') === "active"});
+        this.setState({selected: getCookie('specialist') === 'active'});
     },
 
     render: function() {
@@ -138,15 +137,15 @@ var SpecialistPost = React.createClass({
                 {laterYearCourses.map(function (courses) {
                     return <CourseCode  id={courses[0]} courseIDs={courses} />;
                 })}
-                <MultipleCourseCode courseID="spec400" data={{textBoxNumber: 3, 
-                    categoryName: "Any 400-level CSC course, BCB410H, BCB420H, BCB430Y, ECE489H (1.5 FCEs)"}} />
-                <MultipleCourseCode courseID="spec300" data={{textBoxNumber: 3, 
-                    categoryName: "Any 300+ level CSC course, BCB410H, BCB420H, BCB430Y, ECE385H, ECE489H (1.5 FCEs)"}} />
-                <MultipleCourseCode courseID="specextra" data={{textBoxNumber: 4, 
-                    categoryName: "Any of the following: 300+ level CSC course; MAT: 235/237/257, any 300+ \
+                <MultipleCourseCode courseID='spec_400' data={{textBoxNumber: 3, 
+                    categoryName: 'Any 400-level CSC course, BCB410H, BCB420H, BCB430Y, ECE489H (1.5 FCEs)'}} />
+                <MultipleCourseCode courseID='spec_300' data={{textBoxNumber: 3, 
+                    categoryName: 'Any 300+ level CSC course, BCB410H, BCB420H, BCB430Y, ECE385H, ECE489H (1.5 FCEs)'}} />
+                <MultipleCourseCode courseID="spec_extra" data={{textBoxNumber: 4, 
+                    categoryName: 'Any of the following: 300+ level CSC course; MAT: 235/237/257, any 300+ \
                                      except for 329, 390, & 391; STA: 248, 261, any 300+; ECE: 385H/489H; \
-                                     BCB: 410H/420H/430Y (2.0 FCEs)"}} />
-                <p className="code"> Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H, 
+                                     BCB: 410H/420H/430Y (2.0 FCEs)'}} />
+                <p className='code'> Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H, 
                     CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H, or PEY (0.5 FCEs) 
                     ** Note: Type 'PEY' for Check my POSt to recognize it ** </p>
                 <h2> Notes </h2>
