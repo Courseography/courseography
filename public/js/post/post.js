@@ -116,12 +116,26 @@ var SpecialistPost = React.createClass({
         this.setState({selected: getCookie('specialist') === 'active'});
     },
 
+    getCourses: function (level, array, numberofTextBoxes) {
+        var newCourses = [];
+
+        for (i = 0; i < array.length || newCourses.length === numberofTextBoxes; i++)
+            if (array[i].substring(3, 6) === level) {
+                newCourses.push(array.splice(array[i], 1));
+            }
+        });
+
+        return newCourses;
+    },
+
     render: function() {
 
         var firstYearCourses = [['csc108'], ['csc148'], ['csc165', 'csc236'], ['mat135', 'mat136']];
         var secondYearCourses = [['csc207'], ['csc209'], ['csc236'], ['csc258'], ['csc263', 'csc265'], ['mat221', 'mat223', 'mat240'], 
                                 ['sta247', 'sta255', 'sta257']];
         var laterYearCourses = [['csc369'], ['csc373']];
+
+        var activeCoursesClone = activeCourses.slice();
 
         return (
             <div id="specialist_window">
@@ -137,11 +151,11 @@ var SpecialistPost = React.createClass({
                 {laterYearCourses.map(function (courses) {
                     return <CourseCode  id={courses[0]} courseIDs={courses} />;
                 })}
-                <MultipleCourseCode courseID='spec_400' data={{textBoxNumber: 3, 
+                <MultipleCourseCode courseID='spec_400' data={{textBoxNumber: 3, courses: {this.getCourses('400', activeCoursesClone, 3)},
                     categoryName: 'Any 400-level CSC course, BCB410H, BCB420H, BCB430Y, ECE489H (1.5 FCEs)'}} />
-                <MultipleCourseCode courseID='spec_300' data={{textBoxNumber: 3, 
+                <MultipleCourseCode courseID='spec_300' data={{textBoxNumber: 3, courses: {this.getCourses('300', activeCoursesClone, 3)},
                     categoryName: 'Any 300+ level CSC course, BCB410H, BCB420H, BCB430Y, ECE385H, ECE489H (1.5 FCEs)'}} />
-                <MultipleCourseCode courseID="spec_extra" data={{textBoxNumber: 4, 
+                <MultipleCourseCode courseID="spec_extra" data={{textBoxNumber: 4, courses: {this.getCourses('300', activeCoursesClone, 4)},
                     categoryName: 'Any of the following: 300+ level CSC course; MAT: 235/237/257, any 300+ \
                                      except for 329, 390, & 391; STA: 248, 261, any 300+; ECE: 385H/489H; \
                                      BCB: 410H/420H/430Y (2.0 FCEs)'}} />
