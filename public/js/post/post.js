@@ -95,7 +95,7 @@ var MultipleCourseCode = React.createClass({
                 <div id = {'spec' + this.props.courseID.substring(5, this.props.courseID.length)} className='more-info'>
                     <p className = {courseClasses}> 
                         {Array.apply(0, Array(this.props.data.textBoxNumber)).map(function (x, i) {
-                            return <input type='text' onKeyDown={me.handleKeyDown} />;
+                            return <input type='text' value={me.props.data.courses.splice(0, 1)} onKeyDown={me.handleKeyDown} />;
                         })}
                     </p>
                 </div>
@@ -118,14 +118,35 @@ var SpecialistPost = React.createClass({
 
     getCourses: function (level, array, numberofTextBoxes) {
         var newCourses = [];
+        var i = 0;
 
-        for (i = 0; i < array.length || newCourses.length === numberofTextBoxes; i++)
-            if (array[i].substring(3, 6) === level) {
-                newCourses.push(array.splice(array[i], 1));
+        for (var i = 0; i < numberofTextBoxes && array.length !== 0; i++) {
+            if (array[0].substring(3, 4) >= level) {
+                if (notSpecialistCourse(array[0])) {
+                    newCourses.push(array[0]);
+                }
+                array.splice(array[0], 1);
             }
-        });
+        }
 
         return newCourses;
+
+    },
+
+    updateActiveUpperLevelCourses: function() {
+
+        currentlyActiveCourses = [];
+
+        for (var i = 0; i < allCourses.length; i++) {
+            if (allCourses[i].substring(3, 4) >= '3' &&
+                notSpecialistCourse(allCourses[i]) &&
+                (getCookie(allCourses[i].toLowerCase()) === 'active' ||
+                getCookie(allCourses[i].toLowerCase()) === 'overridden')) {
+                    currentlyActiveCourses.push(allCourses[i]);
+            }
+        }
+
+        return currentlyActiveCourses.reverse();
     },
 
     render: function() {
@@ -135,7 +156,10 @@ var SpecialistPost = React.createClass({
                                 ['sta247', 'sta255', 'sta257']];
         var laterYearCourses = [['csc369'], ['csc373']];
 
-        var activeCoursesClone = activeCourses.slice();
+        var activeCoursesClone = this.updateActiveUpperLevelCourses();
+        var level400Courses = this.getCourses('4', activeCoursesClone, 3);
+        var level300PlusCourses = this.getCourses('3', activeCoursesClone, 3);
+        var levelExtraCourses = this.getCourses('3', activeCoursesClone, 4);
 
         return (
             <div id="specialist_window">
@@ -151,11 +175,11 @@ var SpecialistPost = React.createClass({
                 {laterYearCourses.map(function (courses) {
                     return <CourseCode  id={courses[0]} courseIDs={courses} />;
                 })}
-                <MultipleCourseCode courseID='spec_400' data={{textBoxNumber: 3, courses: {this.getCourses('400', activeCoursesClone, 3)},
+                <MultipleCourseCode courseID='spec_400' data={{textBoxNumber: 3, courses: level400Courses,
                     categoryName: 'Any 400-level CSC course, BCB410H, BCB420H, BCB430Y, ECE489H (1.5 FCEs)'}} />
-                <MultipleCourseCode courseID='spec_300' data={{textBoxNumber: 3, courses: {this.getCourses('300', activeCoursesClone, 3)},
+                <MultipleCourseCode courseID='spec_300' data={{textBoxNumber: 3, courses: level300PlusCourses,
                     categoryName: 'Any 300+ level CSC course, BCB410H, BCB420H, BCB430Y, ECE385H, ECE489H (1.5 FCEs)'}} />
-                <MultipleCourseCode courseID="spec_extra" data={{textBoxNumber: 4, courses: {this.getCourses('300', activeCoursesClone, 4)},
+                <MultipleCourseCode courseID="spec_extra" data={{textBoxNumber: 4, courses: levelExtraCourses,
                     categoryName: 'Any of the following: 300+ level CSC course; MAT: 235/237/257, any 300+ \
                                      except for 329, 390, & 391; STA: 248, 261, any 300+; ECE: 385H/489H; \
                                      BCB: 410H/420H/430Y (2.0 FCEs)'}} />
