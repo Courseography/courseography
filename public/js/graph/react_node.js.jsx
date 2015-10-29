@@ -119,21 +119,18 @@ var ReactRect = React.createClass({
 var ReactText = React.createClass({
     getInitialState: function(){
         return {
-            text_attributes: [],
-            text_styles: {}
+            text_attributes: []
         };
     },
     
     componentDidMount: function(){
         attrs = getAttributes(this.props.svg_element.attributes);
         this.setState({text_attributes: attrs});
-        styles = getStyles(attrs["style"]);
-        this.setState({text_styles: styles});
     },
     
     render: function() {
         return (
-            <text {... this.state.text_attributes} style={this.state.text_styles}>
+            <text {... this.state.text_attributes}>
                 {this.props.svg_element.innerHTML}
             </text>
         );
