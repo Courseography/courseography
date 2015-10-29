@@ -16,7 +16,7 @@ function buildGraph(gId) {
     $('.node').each(function () {
         makeNode('AND', $(this).attr('id'));    
     });
-    foo();
+    renderReactGraph();
 
     $('.hybrid').each(function () {
         var id = $(this).attr('id');

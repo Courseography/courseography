@@ -1,25 +1,49 @@
-function foo(){
+function renderReactGraph() {
     React.render(
         <ReactSVG />,
         document.getElementById('react-graph')
     );
 }
 
+function getAttributes(node_named_map) {
+    attrs = [];
+    //Traversing a NodeNamedMap type
+    Array.prototype.slice.call(node_named_map).forEach(function(item) {
+        attrs[item.name] = item.value;
+    });
+    return attrs;
+}
+
+function getStyles(styles_strings) {
+    styles = {};
+    individual_styles= styles_strings.split(";");
+    individual_styles.map(function(key, value){
+        if (key){
+            styles[key.substring(0, key.indexOf(':'))] = key.substring(key.indexOf(':')+1);
+        }
+    });
+    return styles;
+}
+
 var ReactSVG = React.createClass({
     render: function() {
         return (
             <svg width="1195" height="650">
+                {/*<ReactRegions/>*/}
                 <ReactNodes/>
+                {/*<ReactRegions/>*/}
+                {/*<ReactBools/>*/}
+                {/*<ReactEdges/>*/}
+                {/*<ReactRegionLabels/>*/}
             </svg>
         );
     }
 });
 
-//come up with better variable names
 var ReactNodes = React.createClass({
     getInitialState: function(){
         return {
-            foo: []
+            nodes_list: []
         };
     },
     
@@ -29,14 +53,14 @@ var ReactNodes = React.createClass({
             arr.push(value);
         });
 
-        this.setState({foo:arr});
+        this.setState({nodes_list:arr});
     },
     
     render: function() {
         return (
             <g id='nodes'>
-                {this.state.poo.map(function(svgelement, value) {
-                    return <ReactNode key={value} n={svgelement}/>
+                {this.state.nodes_list.map(function(svgelement, value) {
+                    return <ReactNode key={value} node={svgelement}/>
                 })}
                 
             </g>
@@ -48,37 +72,25 @@ var ReactNodes = React.createClass({
 var ReactNode = React.createClass({
     getInitialState: function(){
         return {
-            gattributes: {},
-            gstyles: {}
+            g_attributes: [],
+            g_styles: {}
         };
     },
     
     componentDidMount: function(){
-        //reusable code
-        attrs = [];
-        g = this.props.n.attributes;
-        Array.prototype.slice.call(g).forEach(function(item) {
-            attrs[item.name] = item.value;
-        });
-        this.setState({gattributes: attrs});
+        attrs = getAttributes(this.props.node.attributes);
+        this.setState({g_attributes: attrs});
+
+        styles = getStyles(attrs["style"]);
+        this.setState({g_styles: styles});
         
-        //Need to add styles as an object
-        styles = {};
-        //in case more than one style
-        individual_styles= attrs["style"].split(";");
-        individual_styles.map(function(key, value){
-            if (key){
-                styles[key.substring(0, key.indexOf(':'))] = key.substring(key.indexOf(':')+1);
-            }
-        });
-        this.setState({rectstyles: styles});
     },
     
     render: function() {
         return (
-            <g className='node' {... this.state.gattributes} style={this.state.gstyles} >
-                <ReactRect svgelement={this.props.n.children[0]}/>
-                <ReactText svgelement={this.props.n.children[1]}/>
+            <g className='node' {... this.state.g_attributes} style={this.state.g_styles} >
+                <ReactRect svgelement={this.props.node.children[0]}/>
+                <ReactText svgelement={this.props.node.children[1]}/>
             </g>
         );
     }
@@ -87,35 +99,24 @@ var ReactNode = React.createClass({
 var ReactRect = React.createClass({
     getInitialState: function(){
         return {
-            rectattributes: {},
-            rectstyles: {}
+            rect_attributes: {},
+            rect_styles: {}
         };
     },
     
     componentDidMount: function(){
-        attrs = [];
-        t = this.props.svgelement.attributes;
-        Array.prototype.slice.call(t).forEach(function(item) {
-            attrs[item.name] = item.value;
-        });
-        this.setState({rectattributes: attrs});
-        
-        //Need to add styles as an object
-        styles = {};
-        //in case more than one style
-        individual_styles= attrs["style"].split(";");
-        individual_styles.map(function(key, value){
-            if (key){
-                styles[key.substring(0, key.indexOf(':'))] = key.substring(key.indexOf(':')+1);
-            }
-        });
-        this.setState({rectstyles: styles});
+
+        attrs = getAttributes(this.props.svgelement.attributes);
+        this.setState({rect_attributes: attrs});
+
+        styles = getStyles(attrs["style"]);
+        this.setState({rect_styles: styles});
         
         
     },
     render: function() {
         return (
-            <rect {... this.state.rectattributes} style={this.state.rectstyles}>
+            <rect {... this.state.rect_attributes} style={this.state.rect_styles}>
             </rect>
         );
     }
@@ -125,21 +126,18 @@ var ReactRect = React.createClass({
 var ReactText = React.createClass({
     getInitialState: function(){
         return {
-            textattributes: []
+            text_attributes: []
         };
     },
     
     componentDidMount: function(){
-        dict = [];
-        t = this.props.svgelement.attributes;
-        Array.prototype.slice.call(t).forEach(function(item) {
-            dict[item.name] = item.value;
-        });
-        this.setState({textattributes: dict});
+        attrs = getAttributes(this.props.svgelement.attributes);
+        this.setState({text_attributes: attrs});
+
     },
     render: function() {
         return (
-            <text {... this.state.textattributes}>
+            <text {... this.state.text_attributes}>
                 {this.props.svgelement.innerHTML}
             </text>
         );
