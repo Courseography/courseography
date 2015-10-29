@@ -52,17 +52,15 @@ var ReactNodes = React.createClass({
         $('.node').map(function(key, value) {
             arr.push(value);
         });
-
         this.setState({nodes_list:arr});
     },
     
     render: function() {
         return (
             <g id='nodes'>
-                {this.state.nodes_list.map(function(svgelement, value) {
-                    return <ReactNode key={value} node={svgelement}/>
+                {this.state.nodes_list.map(function(svg_element, value) {
+                    return <ReactNode key={value} node={svg_element}/>
                 })}
-                
             </g>
         );
     }
@@ -80,17 +78,15 @@ var ReactNode = React.createClass({
     componentDidMount: function(){
         attrs = getAttributes(this.props.node.attributes);
         this.setState({g_attributes: attrs});
-
         styles = getStyles(attrs["style"]);
         this.setState({g_styles: styles});
-        
     },
     
     render: function() {
         return (
             <g className='node' {... this.state.g_attributes} style={this.state.g_styles} >
-                <ReactRect svgelement={this.props.node.children[0]}/>
-                <ReactText svgelement={this.props.node.children[1]}/>
+                <ReactRect svg_element={this.props.node.children[0]}/>
+                <ReactText svg_element={this.props.node.children[1]}/>
             </g>
         );
     }
@@ -99,21 +95,18 @@ var ReactNode = React.createClass({
 var ReactRect = React.createClass({
     getInitialState: function(){
         return {
-            rect_attributes: {},
+            rect_attributes: [],
             rect_styles: {}
         };
     },
     
     componentDidMount: function(){
-
-        attrs = getAttributes(this.props.svgelement.attributes);
+        attrs = getAttributes(this.props.svg_element.attributes);
         this.setState({rect_attributes: attrs});
-
         styles = getStyles(attrs["style"]);
         this.setState({rect_styles: styles});
-        
-        
     },
+    
     render: function() {
         return (
             <rect {... this.state.rect_attributes} style={this.state.rect_styles}>
@@ -126,19 +119,22 @@ var ReactRect = React.createClass({
 var ReactText = React.createClass({
     getInitialState: function(){
         return {
-            text_attributes: []
+            text_attributes: [],
+            text_styles: {}
         };
     },
     
     componentDidMount: function(){
-        attrs = getAttributes(this.props.svgelement.attributes);
+        attrs = getAttributes(this.props.svg_element.attributes);
         this.setState({text_attributes: attrs});
-
+        styles = getStyles(attrs["style"]);
+        this.setState({text_styles: styles});
     },
+    
     render: function() {
         return (
-            <text {... this.state.text_attributes}>
-                {this.props.svgelement.innerHTML}
+            <text {... this.state.text_attributes} style={this.state.text_styles}>
+                {this.props.svg_element.innerHTML}
             </text>
         );
     }
