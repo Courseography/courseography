@@ -71,7 +71,10 @@ var ReactNode = React.createClass({
     getInitialState: function(){
         return {
             g_attributes: [],
-            g_styles: {}
+            g_styles: {},
+            rect_attributes: [],
+            rect_styles: {},
+            text_attributes: []
         };
     },
     
@@ -80,59 +83,25 @@ var ReactNode = React.createClass({
         this.setState({g_attributes: attrs});
         styles = getStyles(attrs["style"]);
         this.setState({g_styles: styles});
-    },
-    
-    render: function() {
-        return (
-            <g className='node' {... this.state.g_attributes} style={this.state.g_styles} >
-                <ReactRect svg_element={this.props.node.children[0]}/>
-                <ReactText svg_element={this.props.node.children[1]}/>
-            </g>
-        );
-    }
-});
-
-var ReactRect = React.createClass({
-    getInitialState: function(){
-        return {
-            rect_attributes: [],
-            rect_styles: {}
-        };
-    },
-    
-    componentDidMount: function(){
-        attrs = getAttributes(this.props.svg_element.attributes);
+        
+        attrs = getAttributes(this.props.node.children[0].attributes);
         this.setState({rect_attributes: attrs});
         styles = getStyles(attrs["style"]);
         this.setState({rect_styles: styles});
-    },
-    
-    render: function() {
-        return (
-            <rect {... this.state.rect_attributes} style={this.state.rect_styles}>
-            </rect>
-        );
-    }
-});
-
-//need to do cases for two lines
-var ReactText = React.createClass({
-    getInitialState: function(){
-        return {
-            text_attributes: []
-        };
-    },
-    
-    componentDidMount: function(){
-        attrs = getAttributes(this.props.svg_element.attributes);
+        
+        attrs = getAttributes(this.props.node.children[1].attributes);
         this.setState({text_attributes: attrs});
     },
     
     render: function() {
         return (
-            <text {... this.state.text_attributes}>
-                {this.props.svg_element.innerHTML}
-            </text>
+            <g className='node' {... this.state.g_attributes} style={this.state.g_styles} >
+                <rect {... this.state.rect_attributes} style={this.state.rect_styles}>
+                </rect>
+                <text {... this.state.text_attributes}>
+                    {this.props.node.children[1].innerHTML}
+                </text>
+            </g>
         );
     }
 });
