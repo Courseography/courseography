@@ -26,7 +26,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1"
-     inkscape:cx="20.96495"
+     inkscape:cx="63.312917"
      inkscape:cy="179.5778"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -44,7 +44,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -80,16 +80,7 @@
         <g
            id="g4227"
            transform="translate(-90,-63)"
-           style="fill:#ffffff;stroke:#ffffff;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
-          <rect
-             id="rect4229"
-             clip-path="url(#clipPath2)"
-             y="63"
-             height="289"
-             width="242"
-             x="90"
-             style="stroke:none" />
-        </g>
+           style="fill:#ffffff;stroke:#ffffff;shape-rendering:geometricPrecision;text-rendering:geometricPrecision" />
         <g
            id="g4231"
            transform="translate(-90,-63)"
@@ -476,14 +467,16 @@
      transform="translate(0,-602.36237)">
     <path
        style="fill:#bbff56;fill-opacity:0.47337281;stroke:none;stroke-width:1;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
-       d="m 63.000009,647.36212 147.000001,0 0,348 -147.000001,0 z"
+       d="m 63.000009,647.36212 144.999871,0 0,348 -144.999871,0 z"
        id="rect8963"
-       inkscape:connector-curvature="0" />
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccc" />
     <path
        style="fill:#bbffff;fill-opacity:0.47337281;stroke:none;stroke-width:1;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
-       d="m 211.50001,648.36212 128,0 0,348 -128,0 z"
+       d="m 207.99988,647.36212 127.99992,0 0,348 -127.99992,0 z"
        id="rect8963-9"
-       inkscape:connector-curvature="0" />
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="ccccc" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:15px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;color-interpolation:auto;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto"
