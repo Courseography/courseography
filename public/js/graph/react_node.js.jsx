@@ -15,11 +15,11 @@ function getAttributes(node_named_map) {
 }
 
 function getStyles(styles_strings) {
-    if (!styles_strings){
-        return {};
-    }
     var styles = {};
-        styles_strings.split(";").map(function(key, value){
+    if (!styles_strings){
+        return styles;
+    }
+    styles_strings.split(";").map(function(key, value){
         if (key){
             styles[key.substring(0, key.indexOf(':'))] = key.substring(key.indexOf(':')+1);
         }
@@ -71,7 +71,6 @@ var ReactNodes = React.createClass({
                 entry["children"].push(child_entry);
             });
             dict_list.push(entry);
-          
         });
         this.setState({nodes_list:dict_list});
         //LATER: Add AJAX code to pull code here
@@ -79,8 +78,6 @@ var ReactNodes = React.createClass({
         //make a list of dictionarys instead of svgelements
         //because after getting new graph, 
         //attrs are stored in db
-        
-        
     },
     
     render: function() {
@@ -104,8 +101,7 @@ var ReactNode = React.createClass({
                 {//this.props.node.children is an HTMLCollection, not an array
                 this.props.children.slice(1).map(function(text_tag) {
                     return <text {... text_tag["attributes"]}>{text_tag["innerHTML"]}</text>;
-                })
-                }
+                })}
             </g>
         );
     }
