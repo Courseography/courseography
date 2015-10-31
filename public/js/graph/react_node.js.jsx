@@ -45,19 +45,14 @@ var ReactSVG = React.createClass({
 var ReactNodes = React.createClass({
     getInitialState: function(){
         return {
-            nodes_list: [],
-            nodes_list_dict: []
+            nodes_list: []
         };
     },
     
     componentDidMount: function(){
-        var arr = [];
         var dict_list = [];
         
-      
-        $('.node').map(function(key, value) {
-            arr.push(value);
-          
+        $('.node').map(function(key, value) {      
             var entry = {};
             entry["attributes"] = getAttributes(value.attributes);
             //assume no styles here
@@ -73,14 +68,12 @@ var ReactNodes = React.createClass({
                 child_entry["style"] = getStyles(child_entry["attributes"]["style"]);
                 //innerHTML is just for the text tag
                 child_entry["innerHTML"] = child.innerHTML;
-                //console.log(child_entry["style"]);
                 entry["children"].push(child_entry);
             });
             dict_list.push(entry);
           
         });
-        this.setState({nodes_list:arr});
-        this.setState({nodes_list_dict:dict_list});
+        this.setState({nodes_list:dict_list});
         //LATER: Add AJAX code to pull code here
         //long run, remove SVG generator
         //make a list of dictionarys instead of svgelements
@@ -93,21 +86,16 @@ var ReactNodes = React.createClass({
     render: function() {
         return (
             <g id='nodes'>
-                {/*this.state.nodes_list.map(function(svg_element, value) {
-                    return <ReactNode key={value} node={svg_element} node_list/>
-                })*/}
-                {this.state.nodes_list_dict.map(function(entry, value) {
-                    //console.log(entry);
-                    return <ReactNodeDict attributes={entry["attributes"]} style={entry["style"]} children={entry["children"]}/>
+                {this.state.nodes_list.map(function(entry, value) {
+                    return <ReactNode attributes={entry["attributes"]} style={entry["style"]} children={entry["children"]}/>
                 })}
-                
             </g>
         );
     }
 });
 
 
-var ReactNodeDict = React.createClass({
+var ReactNode = React.createClass({
     render: function(){
         return (
             <g className='node' {... this.props.attributes} style={this.props.styles}>
@@ -116,51 +104,6 @@ var ReactNodeDict = React.createClass({
                 {//this.props.node.children is an HTMLCollection, not an array
                 this.props.children.slice(1).map(function(text_tag) {
                     return <text {... text_tag["attributes"]}>{text_tag["innerHTML"]}</text>;
-                })
-                }
-            </g>
-        );
-    }
-});
-
-//Modify
-var ReactNode = React.createClass({
-    getInitialState: function(){
-        //don't need anything here
-        //do everything from props
-        return {
-            g_attributes: [],
-            g_styles: {},
-            rect_attributes: [],
-            rect_styles: {},
-            text_attributes: []
-        };
-    },
-    
-    componentDidMount: function(){
-        //don't need anything here
-        var attrs = getAttributes(this.props.node.attributes);
-        this.setState({g_attributes: attrs});
-        var styles = getStyles(attrs["style"]);
-        this.setState({g_styles: styles});
-        
-        attrs = getAttributes(this.props.node.children[0].attributes);
-        this.setState({rect_attributes: attrs});
-        styles = getStyles(attrs["style"]);
-        this.setState({rect_styles: styles});
-        
-        attrs = getAttributes(this.props.node.children[1].attributes);
-        this.setState({text_attributes: attrs});
-    },
-    
-    render: function() {
-        return (
-            <g className='node' {... this.state.g_attributes} style={this.state.g_styles} >
-                <rect {... this.state.rect_attributes} style={this.state.rect_styles}>
-                </rect>
-                {//this.props.node.children is an HTMLCollection, not an array
-                Array.prototype.slice.call(this.props.node.children).slice(1).map(function(svg_element) {
-                    return <text {... getAttributes(svg_element.attributes)}>{svg_element.innerHTML}</text>;
                 })
                 }
             </g>
