@@ -61,12 +61,13 @@ var MultipleCourseCode = React.createClass({
     getInitialState: function() {
         return {
             completed: false,
-            completedTextBoxes: 0
+            completedTextBoxes: 0,
+            infoOpened: false
         }
     },
     
     toggleFullInfo: function() {
-          $('#' + this.props.courseID + ' > .more-info').toggle();
+        this.setState({infoOpened: !this.state.infoOpened});
     },
 
     checkIfCompleted: function() {
@@ -87,10 +88,15 @@ var MultipleCourseCode = React.createClass({
 
         var categoryClasses = 'code';
         var courseClasses = 'full_name';
+        var infoClasses = 'more-info'
 
         if (this.state.completed) {
             categoryClasses += ' category_selected';
             courseClasses += ' course_selected';
+        }
+
+        if (this.state.infoOpened) {
+            infoClasses += ' info_opened'
         }
 
         var me = this;
@@ -98,7 +104,7 @@ var MultipleCourseCode = React.createClass({
         return (
             <div id={this.props.courseID} className='course'>
                 <p className = {categoryClasses} onClick={this.toggleFullInfo}> {this.props.data.categoryName} </p>
-                <div id = {'spec' + this.props.courseID.substring(5, this.props.courseID.length)} className='more-info'>
+                <div id = {'spec' + this.props.courseID.substring(5, this.props.courseID.length)} className={infoClasses}>
                     <p className = {courseClasses}> 
                         {Array.apply(0, Array(this.props.data.textBoxNumber)).map(function (x, i) {
                             return <input type='text' onKeyDown={me.handleKeyDown} />;
