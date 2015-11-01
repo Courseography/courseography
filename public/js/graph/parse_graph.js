@@ -14,7 +14,7 @@ function buildGraph(gId) {
     nodes = [];
 
     $('.node').each(function () {
-        makeNode('AND', $(this).attr('id'));    
+        makeNode('AND', $(this).attr('id'));
     });
     renderReactGraph();
 

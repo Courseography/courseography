@@ -5,10 +5,10 @@ function renderReactGraph() {
     );
 }
 
-function getAttributes(node_named_map) {
+function getAttributes(svgAttributes) {
     var attrs = [];
     //Traversing a NodeNamedMap type
-    Array.prototype.slice.call(node_named_map).forEach(function(item) {
+    Array.prototype.slice.call(svgAttributes).forEach(function(item) {
         attrs[item.name] = item.value;
     });
     return attrs;
@@ -16,11 +16,11 @@ function getAttributes(node_named_map) {
 
 function getStyles(styles_strings) {
     var styles = {};
-    if (!styles_strings){
+    if (!styles_strings) {
         return styles;
     }
     styles_strings.split(";").map(function(key, value){
-        if (key){
+        if (key) {
             styles[key.substring(0, key.indexOf(':'))] = key.substring(key.indexOf(':')+1);
         }
     });
@@ -54,6 +54,7 @@ var ReactNodes = React.createClass({
         
         $('.node').map(function(key, value) {      
             var entry = {};
+            entry["id"] = value.id;
             entry["attributes"] = getAttributes(value.attributes);
             //assume no styles here
             entry["style"] = getStyles(entry["attributes"]["style"]);
@@ -84,23 +85,23 @@ var ReactNodes = React.createClass({
         return (
             <g id='nodes'>
                 {this.state.nodes_list.map(function(entry, value) {
-                    return <ReactNode attributes={entry["attributes"]} style={entry["style"]} children={entry["children"]}/>
+                    return <ReactNode key={entry["id"]} attributes={entry["attributes"]} style={entry["style"]} children={entry["children"]}/>
                 })}
             </g>
         );
     }
 });
 
-
+//Kept as separate component in case it may be needed later
 var ReactNode = React.createClass({
     render: function(){
         return (
-            <g className='node' {... this.props.attributes} style={this.props.styles}>
+            <g className='node' {... this.props.attributes} className={this.props.attributes["class"]} style={this.props.styles}>
                 <rect {... this.props.children[0]["attributes"]} style={this.props.children[0]["style"]}>
                 </rect>
                 {//this.props.node.children is an HTMLCollection, not an array
-                this.props.children.slice(1).map(function(text_tag) {
-                    return <text {... text_tag["attributes"]}>{text_tag["innerHTML"]}</text>;
+                this.props.children.slice(1).map(function(text_tag, value) {
+                    return <text key={value} {... text_tag["attributes"]}>{text_tag["innerHTML"]}</text>;
                 })}
             </g>
         );
