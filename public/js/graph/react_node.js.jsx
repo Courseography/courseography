@@ -52,7 +52,7 @@ var ReactNodes = React.createClass({
     componentDidMount: function(){
         var dict_list = [];
         
-        $('.node').map(function(key, value) {      
+        $('.node').map(function(key, value) {
             var entry = {};
             entry["id"] = value.id;
             entry["attributes"] = getAttributes(value.attributes);
