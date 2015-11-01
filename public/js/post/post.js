@@ -31,13 +31,11 @@ var CourseCode = React.createClass({
 
     render: function() {
 
-        var categoryClasses = 'code';
-        var courseClasses = 'full_name';
+        var classes = 'course';
         var infoClasses = 'more-info';
 
         if (this.state.selected) {
-            categoryClasses += ' category_selected';
-            courseClasses += ' course_selected';
+            classes += " selected";
         }
 
         if (this.state.infoOpened) {
@@ -45,11 +43,11 @@ var CourseCode = React.createClass({
         }
 
         return (
-            <div id ={this.props.courseIDs[0]} className='course'>
-                <p className={categoryClasses} onClick={this.toggleFullInfo}> {this.getCategoryName()} </p>
+            <div id ={this.props.courseIDs[0]} className={classes}>
+                <p className="code" onClick={this.toggleFullInfo}> {this.getCategoryName()} </p>
                 <div id = {this.props.courseIDs[0] + '_info'} className={infoClasses}>
                     {this.props.courseIDs.map(function (course) {
-                         return <p className={courseClasses}> {getCourseTitle(course)} </p>
+                         return <p className="full_name"> {getCourseTitle(course)} </p>
                     })}
                 </div>
             </div>
@@ -86,13 +84,11 @@ var MultipleCourseCode = React.createClass({
 
     render: function() {
 
-        var categoryClasses = 'code';
-        var courseClasses = 'full_name';
-        var infoClasses = 'more-info'
+        var classes = 'course';
+        var infoClasses = 'more-info';
 
         if (this.state.completed) {
-            categoryClasses += ' category_selected';
-            courseClasses += ' course_selected';
+            classes += " .selected";
         }
 
         if (this.state.infoOpened) {
@@ -102,10 +98,10 @@ var MultipleCourseCode = React.createClass({
         var me = this;
 
         return (
-            <div id={this.props.courseID} className='course'>
-                <p className = {categoryClasses} onClick={this.toggleFullInfo}> {this.props.data.categoryName} </p>
+            <div id={this.props.courseID} className={classes}>
+                <p className="code" onClick={this.toggleFullInfo}> {this.props.data.categoryName} </p>
                 <div id = {'spec' + this.props.courseID.substring(5, this.props.courseID.length)} className={infoClasses}>
-                    <p className = {courseClasses}> 
+                    <p className="full_name"> 
                         {Array.apply(0, Array(this.props.data.textBoxNumber)).map(function (x, i) {
                             return <input type='text' onKeyDown={me.handleKeyDown} />;
                         })}
