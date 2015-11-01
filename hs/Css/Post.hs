@@ -133,3 +133,5 @@ postCSS = do
         height $ (px 40)
     "#notes" ? do
         textAlign $ alignSide sideCenter
+    ".info_opened" ? do
+        display block

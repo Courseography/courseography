@@ -1,6 +1,9 @@
 var CourseCode = React.createClass({
     getInitialState: function() {
-        return {selected: false}
+        return {
+            selected: false,
+            infoOpened: false
+        }
     },
 
     componentWillMount: function() {
@@ -8,7 +11,7 @@ var CourseCode = React.createClass({
     },
 
     toggleFullInfo: function() {
-        $('#' + this.props.courseIDs[0] + '_info').toggle();
+        this.setState({infoOpened: !this.state.infoOpened});
     },
 
     getCategoryName: function() {
@@ -32,16 +35,21 @@ var CourseCode = React.createClass({
 
         var categoryClasses = 'code';
         var courseClasses = 'full_name';
+        var infoClasses = 'more-info';
 
         if (this.state.selected) {
             categoryClasses += ' category_selected';
             courseClasses += ' course_selected';
         }
 
+        if (this.state.infoOpened) {
+            infoClasses += ' info_opened'
+        }
+
         return (
             <div id ={this.props.courseIDs[0]} className='course'>
                 <p className={categoryClasses} onClick={this.toggleFullInfo}> {this.getCategoryName()} </p>
-                <div id= {this.props.courseIDs[0] + '_info'} className='more-info'>
+                <div id = {this.props.courseIDs[0] + '_info'} className={infoClasses}>
                     {this.props.courseIDs.map(function (course) {
                          return <p className={courseClasses}> {getCourseTitle(course)} </p>
                     })}
