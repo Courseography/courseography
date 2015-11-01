@@ -48,7 +48,7 @@ headerCSS = do
     "#nav-links" ?
         do
             "list-style" -: "none"
-            minWidth $ pct 50
+            minWidth (px 697)
             paddingTop (px 10)
             margin nil nil nil nil
             display inlineBlock
@@ -64,6 +64,7 @@ headerCSS = do
                     hover & do
                         color darkgray
             height (px 50)
+            position absolute
     "#nav-fb" ? do
         float floatRight
         height (px 50)

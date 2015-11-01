@@ -15,11 +15,17 @@ timetableStyles = do
     ".main" ? do -- TODO: change to id, and pick better name
         height (pct 84)
         margin0
+    gridCSS
     searchCSS
     timetableCSS
     courseSelectCSS
     tdColours
     --infoCSS
+
+gridCSS :: Css
+gridCSS = do
+    "#grid-body" ? do
+        minHeight (px 540)
 
 {- searchCss
  - Generates CSS for the search box on
@@ -171,8 +177,7 @@ courseSelectCSS = do
         margin0
         height100
         alignCenter
-        overflowY auto
-        overflowX hidden
+        overflow auto
         "list-style-type" -: "none"
         ".ui-accordion-header" ? do
             outline solid nil white
@@ -216,7 +221,6 @@ courseSelectCSS = do
             minHeight (px 40)
             float floatLeft
         ".sections" ? do
-            -- overflow: auto <-- really necessary?
             cursor pointer -- necessary?
             "ul" <? do
                 display block

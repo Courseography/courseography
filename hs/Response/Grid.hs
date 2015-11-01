@@ -16,7 +16,7 @@ gridResponse =
         masterTemplate "Courseography - Grid"
             []
             (do header "grid"
-                H.div ! A.class_ "row main" $ do
+                H.div ! A.id "grid-body"! A.class_ "row main" $ do
                      coursePanel
                      searchPanel
                      infoPanel
