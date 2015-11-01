@@ -13,7 +13,10 @@ function getAttributes(svgAttributes) {
     //Using a for loop instead of converting to Array
     for (var i = 0; i < svgAttributes.length; i++) {
         var item = svgAttributes[i];
-        attrs[item.name] = item.value;
+        //Will be hard-coding in className and textAnchor
+        if (item.name!='class' && item.name!='text-anchor'){
+            attrs[item.name] = item.value; 
+        }
     }
     return attrs;
 }
@@ -99,14 +102,15 @@ var ReactNodes = React.createClass({
 //Kept as separate component in case it may be needed later
 var ReactNode = React.createClass({
     render: function() {
-        //currently hard-coded className, but class is still here
+        //hard-coded className
         return (
-            <g className='node' {... this.props.attributes} className={this.props.attributes['class']} style={this.props.styles}>
+            <g className='node' {... this.props.attributes} style={this.props.styles}>
                 <rect {... this.props.children[0]['attributes']} style={this.props.children[0]['style']}>
                 </rect>
                 {//this.props.node.children is an HTMLCollection, not an array
                 this.props.children.slice(1).map(function(text_tag, value) {
-                    return <text key={value} {... text_tag['attributes']} style={text_tag['style']}>{text_tag['innerHTML']}</text>;
+                    //hard-coded textAnchor
+                    return <text key={value} textAnchor='middle' {... text_tag['attributes']} style={text_tag['style']}>{text_tag['innerHTML']}</text>;
                 })}
             </g>
         );
