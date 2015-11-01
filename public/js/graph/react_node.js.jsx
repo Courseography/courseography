@@ -1,4 +1,5 @@
 function renderReactGraph() {
+    'use strict';
     React.render(
         <ReactSVG width={1195} height={650}/>,
         document.getElementById('react-graph')
@@ -6,22 +7,27 @@ function renderReactGraph() {
 }
 
 function getAttributes(svgAttributes) {
+    'use strict';
     var attrs = [];
     //Traversing a NodeNamedMap type
-    Array.prototype.slice.call(svgAttributes).forEach(function(item) {
+    //Using a for loop instead of converting to Array
+    for (var i = 0; i < svgAttributes.length; i++) {
+        var item = svgAttributes[i];
         attrs[item.name] = item.value;
-    });
+    }
     return attrs;
 }
 
-function getStyles(styles_strings) {
+function getStyles(stylesStrings) {
+    'use strict';
     var styles = {};
-    if (!styles_strings) {
+    //Have to check if it is null since null can't be split.
+    if (!stylesStrings) {
         return styles;
     }
-    styles_strings.split(";").map(function(key, value){
+    stylesStrings.split(';').map(function(key, value) {
         if (key) {
-            styles[key.substring(0, key.indexOf(':'))] = key.substring(key.indexOf(':')+1);
+            styles[key.substring(0, key.indexOf(':'))] = key.substring(key.indexOf(':') + 1);
         }
     });
     return styles;
@@ -43,49 +49,47 @@ var ReactSVG = React.createClass({
 });
 
 var ReactNodes = React.createClass({
-    getInitialState: function(){
+    getInitialState: function() {
         return {
             nodes_list: []
         };
     },
     
-    componentDidMount: function(){
+    componentDidMount: function() {
         var dict_list = [];
         
-        $('.node').map(function(key, value) {
+        $('.node').map(function(key, element) {
             var entry = {};
-            entry["id"] = value.id;
-            entry["attributes"] = getAttributes(value.attributes);
-            //assume no styles here
-            entry["style"] = getStyles(entry["attributes"]["style"]);
-            entry["children"] = [];
+            entry['id'] = element.id;
+            entry['attributes'] = getAttributes(element.attributes);
+            //<g> themselves currently have no styles, only the <rect> child has styles.
+            //The line below returns an empty Object, this is in case we were to add styles later on
+            entry['style'] = getStyles(entry['attributes']['style']);
+            entry['children'] = [];
             //value.children is an HTML collection, converting to array here
-            var children_arr = [].slice.call(value.children);
-            //assume only one level of children
-            //for each children
-            children_arr.map(function(child) {
+            var children_arr = Array.prototype.slice.call(element.children);
+            //Assumed only one level of children, the <rect> and one or more <text>
+            children_arr.forEach(function(child) {
                 var child_entry = {};
-                child_entry["attributes"] = getAttributes(child.attributes);
-                child_entry["style"] = getStyles(child_entry["attributes"]["style"]);
-                //innerHTML is just for the text tag
-                child_entry["innerHTML"] = child.innerHTML;
-                entry["children"].push(child_entry);
+                child_entry['attributes'] = getAttributes(child.attributes);
+                child_entry['style'] = getStyles(child_entry['attributes']['style']);
+                //innerHTML is just for text within the <text>
+                //there aren't anymore children since it was assumed only one level of children
+                child_entry['innerHTML'] = child.innerHTML;
+                entry['children'].push(child_entry);
             });
             dict_list.push(entry);
         });
         this.setState({nodes_list:dict_list});
         //LATER: Add AJAX code to pull code here
-        //long run, remove SVG generator
-        //make a list of dictionarys instead of svgelements
-        //because after getting new graph, 
-        //attrs are stored in db
+        //In the long run, remove SVGGenerator
     },
     
     render: function() {
         return (
             <g id='nodes'>
                 {this.state.nodes_list.map(function(entry, value) {
-                    return <ReactNode key={entry["id"]} attributes={entry["attributes"]} style={entry["style"]} children={entry["children"]}/>
+                    return <ReactNode key={entry['id']} attributes={entry['attributes']} style={entry['style']} children={entry['children']}/>
                 })}
             </g>
         );
@@ -94,14 +98,15 @@ var ReactNodes = React.createClass({
 
 //Kept as separate component in case it may be needed later
 var ReactNode = React.createClass({
-    render: function(){
+    render: function() {
+        //currently hard-coded className, but class is still here
         return (
-            <g className='node' {... this.props.attributes} className={this.props.attributes["class"]} style={this.props.styles}>
-                <rect {... this.props.children[0]["attributes"]} style={this.props.children[0]["style"]}>
+            <g className='node' {... this.props.attributes} className={this.props.attributes['class']} style={this.props.styles}>
+                <rect {... this.props.children[0]['attributes']} style={this.props.children[0]['style']}>
                 </rect>
                 {//this.props.node.children is an HTMLCollection, not an array
                 this.props.children.slice(1).map(function(text_tag, value) {
-                    return <text key={value} {... text_tag["attributes"]}>{text_tag["innerHTML"]}</text>;
+                    return <text key={value} {... text_tag['attributes']} style={text_tag['style']}>{text_tag['innerHTML']}</text>;
                 })}
             </g>
         );
