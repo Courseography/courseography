@@ -17,18 +17,16 @@ var CourseCode = React.createClass({
     getCategoryName: function() {
         var categoryName = '';
 
+        var editedCourseNames = this.props.courseIDs.map(function (course) {
+            return course.toUpperCase() + 'H';
+        });
+
         if (this.props.courseIDs[0] === 'mat135') {
             // special case for calculus requirement since it doesn't fit the same pattern
-            categoryName = '(MAT135H and MAT136H) or MAT137Y or MAT157Y';
-        } else {
-            categoryName += this.props.courseIDs[0].toUpperCase() + 'H';
-
-            for (i = 1; i < this.props.courseIDs.length; i++) {
-                categoryName += " or " + this.props.courseIDs[i].toUpperCase() + 'H';
-            }
+            return '(MAT135H and MAT136H) or MAT137Y or MAT157Y';
+        } else { 
+            return editedCourseNames.join(" or ");
         }
-
-        return categoryName;
     },
 
     render: function() {
