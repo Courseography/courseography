@@ -48,7 +48,7 @@ headerCSS = do
     "#nav-links" ?
         do
             "list-style" -: "none"
-            minWidth (px 697)
+            minWidth (px 687)
             paddingTop (px 10)
             margin nil nil nil nil
             display inlineBlock
