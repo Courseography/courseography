@@ -108,7 +108,8 @@ var MultipleCourseCode = React.createClass({
 var SpecialistPost = React.createClass({
     getInitialState: function() {
         return {
-            selected: true
+            selected: true,
+            activeCourses: activeCourses.slice()
         }
     },
 
@@ -116,37 +117,24 @@ var SpecialistPost = React.createClass({
         this.setState({selected: getCookie('specialist') === 'active'});
     },
 
-    getCourses: function (level, array, numberofTextBoxes) {
-        var newCourses = [];
-        var i = 0;
+    getCourses: function () {
+        var level400Courses = [];
+        var level300Courses = [];
+        var levelExtraCourses = [];
 
-        for (var i = 0; i < numberofTextBoxes && array.length !== 0; i++) {
-            if (array[0].substring(3, 4) >= level) {
-                if (notSpecialistCourse(array[0])) {
-                    newCourses.push(array[0]);
+        this.state.activeCourses.map(function (course) {
+            if (notSpecialistCourse(course)) {
+                if (course.substring(3, 4) === '4' && level400Courses.length < 3) {
+                    level400Courses.push(course);
+                } else if (course.substring(3, 4) >= '3' && level300Courses.length < 3) {
+                    level300Courses.push(course);
+                } else if (course.substring(3, 4) >= '3' && levelExtraCourses.length < 4) {
+                    levelExtraCourses.push(course);
                 }
-                array.splice(array[0], 1);
             }
-        }
+        });
 
-        return newCourses;
-
-    },
-
-    updateActiveUpperLevelCourses: function() {
-
-        currentlyActiveCourses = [];
-
-        for (var i = 0; i < allCourses.length; i++) {
-            if (allCourses[i].substring(3, 4) >= '3' &&
-                notSpecialistCourse(allCourses[i]) &&
-                (getCookie(allCourses[i].toLowerCase()) === 'active' ||
-                getCookie(allCourses[i].toLowerCase()) === 'overridden')) {
-                    currentlyActiveCourses.push(allCourses[i]);
-            }
-        }
-
-        return currentlyActiveCourses.reverse();
+        return [level400Courses, level300Courses, levelExtraCourses];
     },
 
     render: function() {
@@ -156,10 +144,7 @@ var SpecialistPost = React.createClass({
                                 ['sta247', 'sta255', 'sta257']];
         var laterYearCourses = [['csc369'], ['csc373']];
 
-        var activeCoursesClone = this.updateActiveUpperLevelCourses();
-        var level400Courses = this.getCourses('4', activeCoursesClone, 3);
-        var level300PlusCourses = this.getCourses('3', activeCoursesClone, 3);
-        var levelExtraCourses = this.getCourses('3', activeCoursesClone, 4);
+        var courseCategoryArrays = this.getCourses();
 
         return (
             <div id="specialist_window">
@@ -175,11 +160,11 @@ var SpecialistPost = React.createClass({
                 {laterYearCourses.map(function (courses) {
                     return <CourseCode  id={courses[0]} courseIDs={courses} />;
                 })}
-                <MultipleCourseCode courseID='spec_400' data={{textBoxNumber: 3, courses: level400Courses,
+                <MultipleCourseCode courseID='spec_400' data={{textBoxNumber: 3, courses: courseCategoryArrays[0],
                     categoryName: 'Any 400-level CSC course, BCB410H, BCB420H, BCB430Y, ECE489H (1.5 FCEs)'}} />
-                <MultipleCourseCode courseID='spec_300' data={{textBoxNumber: 3, courses: level300PlusCourses,
+                <MultipleCourseCode courseID='spec_300' data={{textBoxNumber: 3, courses: courseCategoryArrays[1],
                     categoryName: 'Any 300+ level CSC course, BCB410H, BCB420H, BCB430Y, ECE385H, ECE489H (1.5 FCEs)'}} />
-                <MultipleCourseCode courseID="spec_extra" data={{textBoxNumber: 4, courses: levelExtraCourses,
+                <MultipleCourseCode courseID="spec_extra" data={{textBoxNumber: 4, courses: courseCategoryArrays[2],
                     categoryName: 'Any of the following: 300+ level CSC course; MAT: 235/237/257, any 300+ \
                                      except for 329, 390, & 391; STA: 248, 261, any 300+; ECE: 385H/489H; \
                                      BCB: 410H/420H/430Y (2.0 FCEs)'}} />
