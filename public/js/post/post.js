@@ -63,19 +63,26 @@ var MultipleCourseCode = React.createClass({
             infoOpened: false
         }
     },
+
+    componentDidMount: function() {
+        for (i = 0; i < this.props.data.courses.length; i++) {
+            this.setState({completedTextBoxes: this.state.completedTextBoxes += 1});
+        }
+        this.checkIfCompleted();
+    },
     
     toggleFullInfo: function() {
         this.setState({infoOpened: !this.state.infoOpened});
     },
 
     checkIfCompleted: function() {
-       this.setState({completed: this.state.completedTextBoxes === this.props.data.textBoxNumber});
+        this.setState({completed: this.state.completedTextBoxes === this.props.data.textBoxNumber});
     },
 
     handleKeyDown: function(e) {
         if (e.keyCode === 13) {
             if (this.state.completedTextBoxes < this.props.data.textBoxNumber) {
-                 this.setState({completedTextBoxes: this.state.completedTextBoxes +=1})
+                this.setState({completedTextBoxes: this.state.completedTextBoxes += 1});
             }
 
             this.checkIfCompleted();
@@ -90,7 +97,7 @@ var MultipleCourseCode = React.createClass({
         var coursesClone = this.props.data.courses.slice();
 
         if (this.state.completed) {
-            classes += " .selected";
+            classes += ' selected';
         }
 
         if (this.state.infoOpened) {
