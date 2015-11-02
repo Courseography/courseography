@@ -69,10 +69,11 @@ postCSS = do
         semiVisible
         ":hover" & do
             fullyVisible
-    ".course_selected" ? do
-        backgroundColor green1
-    ".course .category_selected" ? do
-        backgroundColor green2
+    ".selected" ? do
+        ".code" ? do
+            backgroundColor green2
+        ".full_name" ? do
+            backgroundColor green1
     "div" ? do
         ".code" ? do
             backgroundColor beige1
@@ -133,3 +134,5 @@ postCSS = do
         height $ (px 40)
     "#notes" ? do
         textAlign $ alignSide sideCenter
+    ".info_opened" ? do
+        display block
