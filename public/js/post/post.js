@@ -81,9 +81,15 @@ var MultipleCourseCode = React.createClass({
 
     handleKeyDown: function(e) {
         if (e.keyCode === 13) {
-            if (this.state.completedTextBoxes < this.props.data.textBoxNumber) {
-                this.setState({completedTextBoxes: this.state.completedTextBoxes += 1});
+            if (this.state.completedTextBoxes <= this.props.data.textBoxNumber + 1) {
+                if (e.target.defaultValue === '' && e.target.value !== '') {
+                    this.setState({completedTextBoxes: this.state.completedTextBoxes += 1});
+                } else if (e.target.defaultValue !== '' && e.target.value === '') { 
+                    this.setState({completedTextBoxes: this.state.completedTextBoxes -= 1});
+                }
             }
+
+            e.target.defaultValue = e.target.value;
 
             this.checkIfCompleted();
         }  
@@ -110,7 +116,7 @@ var MultipleCourseCode = React.createClass({
                 <div id = {'spec' + this.props.courseID.substring(5, this.props.courseID.length)} className={infoClasses}>
                     <p className="full_name"> 
                         {Array.apply(0, Array(this.props.data.textBoxNumber)).map(function (x, i) {
-                            return <input type='text' value={coursesClone.splice(0, 1)} onKeyDown={me.handleKeyDown} />;
+                            return <input type='text' defaultValue={coursesClone.splice(0, 1)} data = '' onKeyDown={me.handleKeyDown} />;
                         })}
                     </p>
                 </div>
