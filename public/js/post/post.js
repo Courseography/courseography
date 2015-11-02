@@ -7,8 +7,8 @@ var CourseCode = React.createClass({
     },
 
     componentWillMount: function() {
-        this.setState({selected: getCookie(this.props.courseIDs[0]) === 'active' ||
-                                 getCookie(this.props.courseIDs[0]) === 'overridden'});
+        this.setState({selected: getCookie(this.getIdName()) === 'active' ||
+                                 getCookie(this.getIdName()) === 'overridden'});
     },
 
     toggleFullInfo: function() {
@@ -30,6 +30,26 @@ var CourseCode = React.createClass({
         }
     },
 
+    getIdName: function() {
+        var idName = this.props.courseIDs[0].substring(0, 3);
+        
+        this.props.courseIDs.map(function (course) {
+            idName += course.substring(3, 6);
+        });
+
+        // math and stats courses need extra stuff appended to their IDs 
+        // (mainly to check if they are active or not through their cookie)
+        if (this.props.courseIDs[0] === 'mat135') {
+            idName += 'calc1';
+        } else if (this.props.courseIDs[0] === 'mat221') {
+            idName += 'lin1';
+        } else if (this.props.courseIDs[0] === 'sta247') {
+            idName += 'sta1';
+        }
+
+        return idName;
+    },
+
     render: function() {
 
         var classes = 'course';
@@ -44,7 +64,7 @@ var CourseCode = React.createClass({
         }
 
         return (
-            <div id ={this.props.courseIDs[0]} className={classes}>
+            <div id ={this.getIdName()} className={classes}>
                 <p className="code" onClick={this.toggleFullInfo}> {this.getCategoryName()} </p>
                 <div id = {this.props.courseIDs[0] + '_info'} className={infoClasses}>
                     {this.props.courseIDs.map(function (course) {
