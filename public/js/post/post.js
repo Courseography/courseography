@@ -144,8 +144,13 @@ var SpecialistPost = React.createClass({
                     level400Courses.push(course);
                 } else if (course.substring(3, 4) >= '3' && level300Courses.length < 3) {
                     level300Courses.push(course);
-                } else if (course.substring(3, 4) >= '3' && levelExtraCourses.length < 4) {
-                    levelExtraCourses.push(course);
+                } else if (levelExtraCourses.length < 4) {
+                    // special case for STA248/261, to enter a visually-appealing name
+                    if (course === 'Sta248261') {
+                        levelExtraCourses.push('STA248/261')
+                    } else if (course.substring(3, 4) >= '3') {
+                        levelExtraCourses.push(course);
+                    }
                 }
 
                 if (CSCinq.indexOf(course) >= 0 && inquiryCourse.length < 1) {
