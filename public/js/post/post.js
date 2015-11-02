@@ -100,7 +100,6 @@ var MultipleCourseCode = React.createClass({
         var me = this;
         var classes = 'course';
         var infoClasses = 'more-info';
-        var coursesClone = this.props.data.courses.slice();
 
         if (this.state.completed) {
             classes += ' selected';
@@ -116,7 +115,7 @@ var MultipleCourseCode = React.createClass({
                 <div id = {'spec' + this.props.courseID.substring(5, this.props.courseID.length)} className={infoClasses}>
                     <p className="full_name"> 
                         {Array.apply(0, Array(this.props.data.textBoxNumber)).map(function (x, i) {
-                            return <input type='text' defaultValue={coursesClone.splice(0, 1)} data = '' onKeyDown={me.handleKeyDown} />;
+                            return <input type='text' defaultValue={me.props.data.courses[i]} onKeyDown={me.handleKeyDown} />;
                         })}
                     </p>
                 </div>
