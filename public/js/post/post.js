@@ -129,6 +129,7 @@ var SpecialistPost = React.createClass({
         var level400Courses = [];
         var level300Courses = [];
         var levelExtraCourses = [];
+        var inquiryCourse = [];
 
         this.state.activeCourses.map(function (course) {
             if (notSpecialistCourse(course)) {
@@ -139,10 +140,14 @@ var SpecialistPost = React.createClass({
                 } else if (course.substring(3, 4) >= '3' && levelExtraCourses.length < 4) {
                     levelExtraCourses.push(course);
                 }
+
+                if (CSCinq.indexOf(course) >= 0 && inquiryCourse.length < 1) {
+                    inquiryCourse.push(course);
+                }
             }
         });
 
-        return [level400Courses, level300Courses, levelExtraCourses];
+        return [level400Courses, level300Courses, levelExtraCourses, inquiryCourse];
     },
 
     render: function() {
@@ -176,7 +181,7 @@ var SpecialistPost = React.createClass({
                     categoryName: 'Any of the following: 300+ level CSC course; MAT: 235/237/257, any 300+ \
                                      except for 329, 390, & 391; STA: 248, 261, any 300+; ECE: 385H/489H; \
                                      BCB: 410H/420H/430Y (2.0 FCEs)'}} />
-                <MultipleCourseCode courseID="spec_inq" data={{textBoxNumber: 1, 
+                <MultipleCourseCode courseID="spec_inq" data={{textBoxNumber: 1, courses: courseCategoryArrays[3],
                     categoryName: 'Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H, \
                     CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H, or PEY (0.5 FCEs) \
                     ** Note: Type "PEY" for Check my POSt to recognize it **'}} />
