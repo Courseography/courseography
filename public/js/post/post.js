@@ -7,7 +7,8 @@ var CourseCode = React.createClass({
     },
 
     componentWillMount: function() {
-        this.setState({selected: getCookie(this.props.courseIDs[0]) === 'active'});
+        this.setState({selected: getCookie(this.props.courseIDs[0]) === 'active' ||
+                                 getCookie(this.props.courseIDs[0]) === 'overridden'});
     },
 
     toggleFullInfo: function() {
