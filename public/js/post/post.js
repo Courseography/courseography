@@ -65,7 +65,7 @@ var MultipleCourseCode = React.createClass({
     },
 
     componentDidMount: function() {
-        for (i = 0; i < this.props.data.courses.length; i++) {
+        for (i = 0; i < this.props.courses.length; i++) {
             this.setState({completedTextBoxes: this.state.completedTextBoxes += 1});
         }
         this.checkIfCompleted();
@@ -76,12 +76,12 @@ var MultipleCourseCode = React.createClass({
     },
 
     checkIfCompleted: function() {
-        this.setState({completed: this.state.completedTextBoxes === this.props.data.textBoxNumber});
+        this.setState({completed: this.state.completedTextBoxes === this.props.textBoxNumber});
     },
 
     handleKeyDown: function(e) {
         if (e.keyCode === 13) {
-            if (this.state.completedTextBoxes < this.props.data.textBoxNumber) {
+            if (this.state.completedTextBoxes < this.props.textBoxNumber) {
                 this.setState({completedTextBoxes: this.state.completedTextBoxes += 1});
             }
 
@@ -94,7 +94,7 @@ var MultipleCourseCode = React.createClass({
         var me = this;
         var classes = 'course';
         var infoClasses = 'more-info';
-        var coursesClone = this.props.data.courses.slice();
+        var coursesClone = this.props.courses.slice();
 
         if (this.state.completed) {
             classes += ' selected';
@@ -106,10 +106,10 @@ var MultipleCourseCode = React.createClass({
 
         return (
             <div id={this.props.courseID} className={classes}>
-                <p className="code" onClick={this.toggleFullInfo}> {this.props.data.categoryName} </p>
+                <p className="code" onClick={this.toggleFullInfo}> {this.props.categoryName} </p>
                 <div id = {'spec' + this.props.courseID.substring(5, this.props.courseID.length)} className={infoClasses}>
                     <p className="full_name"> 
-                        {Array.apply(0, Array(this.props.data.textBoxNumber)).map(function (x, i) {
+                        {Array.apply(0, Array(this.props.textBoxNumber)).map(function (x, i) {
                             return <input type='text' value={coursesClone.splice(0, 1)} onKeyDown={me.handleKeyDown} />;
                         })}
                     </p>
@@ -185,18 +185,18 @@ var SpecialistPost = React.createClass({
                 {laterYearCourses.map(function (courses) {
                     return <CourseCode  id={courses[0]} courseIDs={courses} />;
                 })}
-                <MultipleCourseCode courseID='spec_400' data={{textBoxNumber: 3, courses: courseCategoryArrays[0],
-                    categoryName: 'Any 400-level CSC course, BCB410H, BCB420H, BCB430Y, ECE489H (1.5 FCEs)'}} />
-                <MultipleCourseCode courseID='spec_300' data={{textBoxNumber: 3, courses: courseCategoryArrays[1],
-                    categoryName: 'Any 300+ level CSC course, BCB410H, BCB420H, BCB430Y, ECE385H, ECE489H (1.5 FCEs)'}} />
-                <MultipleCourseCode courseID="spec_extra" data={{textBoxNumber: 4, courses: courseCategoryArrays[2],
-                    categoryName: 'Any of the following: 300+ level CSC course; MAT: 235/237/257, any 300+ \
-                                     except for 329, 390, & 391; STA: 248, 261, any 300+; ECE: 385H/489H; \
-                                     BCB: 410H/420H/430Y (2.0 FCEs)'}} />
-                <MultipleCourseCode courseID="spec_inq" data={{textBoxNumber: 1, courses: courseCategoryArrays[3],
-                    categoryName: 'Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H, \
-                    CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H, or PEY (0.5 FCEs) \
-                    ** Note: Type "PEY" for Check my POSt to recognize it **'}} />
+                <MultipleCourseCode courseID='spec_400' textBoxNumber={3} courses={courseCategoryArrays[0]}
+                    categoryName='Any 400-level CSC course, BCB410H, BCB420H, BCB430Y, ECE489H (1.5 FCEs)' />
+                <MultipleCourseCode courseID='spec_300' textBoxNumber={3} courses={courseCategoryArrays[1]}
+                    categoryName='Any 300+ level CSC course, BCB410H, BCB420H, BCB430Y, ECE385H, ECE489H (1.5 FCEs)' />
+                <MultipleCourseCode courseID="spec_extra" textBoxNumber={4} courses={courseCategoryArrays[2]}
+                    categoryName='Any of the following: 300+ level CSC course; MAT: 235/237/257, any 300+ 
+                                  except for 329, 390, & 391; STA: 248, 261, any 300+; ECE: 385H/489H; 
+                                  BCB: 410H/420H/430Y (2.0 FCEs)' />
+                <MultipleCourseCode courseID="spec_inq" textBoxNumber={1} courses={courseCategoryArrays[3]}
+                    categoryName='Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H, 
+                    CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H, or PEY (0.5 FCEs) 
+                    ** Note: Type "PEY" for Check my POSt to recognize it **' />
                 <h2> Notes </h2>
                 <p id='notes'> - No more than 1.0 FCE from CSC490H1, CSC491H1, CSC494H1, CSC495H1, BCB430Y1 may be used to fulfill program requirements </p>
             </div>
