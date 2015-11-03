@@ -181,9 +181,9 @@ var ReactNode = React.createClass({
                 <rect {... this.props.children[0]['attributes']} style={this.props.children[0]['style']}>
                 </rect>
                 {//this.props.node.children is an HTMLCollection, not an array
-                this.props.children.slice(1).map(function(text_tag, value) {
+                this.props.children.slice(1).map(function(textTag, value) {
                     //hard-coded textAnchor
-                    return <text key={value} textAnchor='middle' {... text_tag['attributes']} style={text_tag['style']}>{text_tag['innerHTML']}</text>;
+                    return <text key={value} textAnchor='middle' {... textTag['attributes']} style={text_tag['style']}>{textTag['innerHTML']}</text>;
                 })}
             </g>
         );
