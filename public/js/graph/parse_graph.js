@@ -91,9 +91,9 @@ function buildGraph(gId) {
     });
 
     $('.path').each(function () {
-        if ($(this).attr('source-node') && $(this).attr('target-node')) {
-            makeEdge(window[$(this).attr('source-node')],
-                     window[$(this).attr('target-node')],
+        if ($(this).attr('data-source-node') && $(this).attr('data-target-node')) {
+            makeEdge(window[$(this).attr('data-source-node')],
+                     window[$(this).attr('data-target-node')],
                      $(this).attr('id'));
         } else {
             console.log(this);

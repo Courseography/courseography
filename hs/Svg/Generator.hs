@@ -273,9 +273,9 @@ edgeToSVG styled path =
            ! A.class_ "path"
            ! A.d (stringValue $ 'M' : buildPathString (pathPoints path))
            ! A.markerEnd "url(#arrow)"
-           ! S.customAttribute "source-node" (stringValue $ sanitizeId
+           ! S.customAttribute "data-source-node" (stringValue $ sanitizeId
                                                           $ pathSource path)
-           ! S.customAttribute "target-node" (stringValue $ sanitizeId
+           ! S.customAttribute "data-target-node" (stringValue $ sanitizeId
                                                           $ pathTarget path)
            ! if styled
              then
