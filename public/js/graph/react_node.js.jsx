@@ -162,6 +162,7 @@ var ReactNodes = React.createClass({
         return (
             <g id='nodes' stroke='black'>
                 {this.state.nodes_list.map(function(entry, value) {
+                    console.log(entry['attributes']);
                     return <ReactNode className='node' key={entry['id']} attributes={entry['attributes']} styles={entry['style']} children={entry['children']}/>
                 })}
                 {this.state.hybrids_list.map(function(entry, value) {
@@ -183,7 +184,7 @@ var ReactNode = React.createClass({
                 {//this.props.node.children is an HTMLCollection, not an array
                 this.props.children.slice(1).map(function(textTag, value) {
                     //hard-coded textAnchor
-                    return <text key={value} textAnchor='middle' {... textTag['attributes']} style={text_tag['style']}>{textTag['innerHTML']}</text>;
+                    return <text key={value} textAnchor='middle' {... textTag['attributes']} style={textTag['style']}>{textTag['innerHTML']}</text>;
                 })}
             </g>
         );
