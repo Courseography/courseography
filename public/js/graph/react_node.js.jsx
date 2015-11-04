@@ -67,9 +67,38 @@ function getNodes(mode){
 }
 
 var ReactSVG = React.createClass({
+    componentDidMount: function(){
+        //Need to hardcode these in because React does not understand these attributes
+        var svgNode = React.findDOMNode(this.refs.svg);
+        svgNode.setAttribute('xmlns','http://www.w3.org/2000/svg');
+        svgNode.setAttribute('xmlns:xlink','http://www.w3.org/1999/xlink');
+        svgNode.setAttribute('xmlns:svg','http://www.w3.org/2000/svg');
+        svgNode.setAttribute('xmlns:dc','http://purl.org/dc/elements/1.1/');
+        svgNode.setAttribute('xmlns:cc','http://creativecommons.org/ns#');
+        svgNode.setAttribute('xmlns:rdf','http://www.w3.org/1999/02/22-rdf-syntax-ns#');
+        
+        var markerNode = React.findDOMNode(this.refs.marker);
+        markerNode.setAttribute('viewBox', '0 0 10 10');
+        markerNode.setAttribute('refX', 4);
+        markerNode.setAttribute('refY', 5);
+        markerNode.setAttribute('markerUnits', 'strokeWidth');
+        markerNode.setAttribute('orient', 'auto');
+        markerNode.setAttribute('markerWidth', 7);
+        markerNode.setAttribute('markerHeight', 7);
+    },
     render: function() {
+        //not all of these properties are supported in React
+        var svgAttrs = {'width':this.props.width, 'height':this.props.height, 'version':'1.1'};
+        var markerAttrs = {'id':'arrow'};
+        var polylineAttrs = {'points':'0,1 10,5 0,9', 'fill':'black'};
         return (
-            <svg width={this.props.width} height={this.props.height}>
+            <svg ref ="svg" {... svgAttrs}>
+                <defs>
+                    <marker ref="marker" {... markerAttrs}>
+                    {/*<marker {... markerAttrs}>*/}
+                        <polyline {... polylineAttrs}/>
+                    </marker>
+                </defs>
                 <ReactRegions/>
                 <ReactNodes/>
                 <ReactBools/>
@@ -161,11 +190,9 @@ var ReactNodes = React.createClass({
         return (
             <g id='nodes' stroke='black'>
                 {this.state.nodes_list.map(function(entry, value) {
-                    entry['attributes']['data-active'] = 'inactive';
                     return <ReactNode className='node' key={entry['id']} attributes={entry['attributes']} styles={entry['style']} children={entry['children']}/>
                 })}
                 {this.state.hybrids_list.map(function(entry, value) {
-                    entry['attributes']['data-active'] = 'inactive';
                     return <ReactNode className='hybrid' key={entry['id']} attributes={entry['attributes']} styles={entry['style']} children={entry['children']}/>
                 })}
             </g>
@@ -176,6 +203,7 @@ var ReactNodes = React.createClass({
 //Kept as separate component in case it may be needed later
 var ReactNode = React.createClass({
     render: function() {
+        this.props.attributes['data-active'] = 'inactive';
         //hard-coded className
         return (
             <g className={this.props.className} {... this.props.attributes} style={this.props.styles}>
@@ -247,7 +275,6 @@ var ReactEdges = React.createClass({
         return (
             <g id='edges' stroke='black'>
                 {this.state.edges_list.map(function(entry, value) {
-                    entry['attributes']['data-active'] = 'inactive';
                     return <ReactEdge className='path' key={entry['id']} attributes={entry['attributes']} styles={entry['style']}/>
                 })}
             </g>
@@ -258,6 +285,7 @@ var ReactEdges = React.createClass({
 var ReactEdge = React.createClass({
     render: function() {
         //hard-coded className and markerEnd
+        this.props.attributes['data-active'] = 'inactive';
         return (
             <path className={this.props.className} {... this.props.attributes} style={this.props.styles} markerEnd='url(#arrow)'>
             </path>
