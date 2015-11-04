@@ -19,6 +19,7 @@ graphResponse =
                     header "graph"
                     H.div ! A.id "container" $ do
                         H.div ! A.id "graph" ! A.class_ "graph" $ ""
+                        H.div ! A.id "react-graph" ! A.class_ "react-graph" $ ""
                         sideBar
                     disclaimer
                 )
