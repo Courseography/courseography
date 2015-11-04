@@ -65,10 +65,8 @@ var MultipleCourseCode = React.createClass({
     },
 
     componentDidMount: function() {
-        for (i = 0; i < this.props.data.courses.length; i++) {
-            this.setState({completedTextBoxes: this.state.completedTextBoxes += 1});
-        }
-        this.checkIfCompleted();
+        this.setState({completedTextBoxes: this.state.completedTextBoxes + this.props.data.courses.length},
+            this.checkIfCompleted);
     },
     
     toggleFullInfo: function() {
