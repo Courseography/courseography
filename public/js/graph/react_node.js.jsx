@@ -66,6 +66,12 @@ function getNodes(mode){
     return dictList;
 }
 
+//Quick fix to initiallyTakeable case-sensitivity
+//Will later remove initiallyTakeable, by making a check if prerequisite list is empty or not
+var initiallyTakeableUpper = $.map(initiallyTakeable, function(item, index) {
+    return item.toUpperCase();
+});
+
 var ReactSVG = React.createClass({
     componentDidMount: function(){
         //Need to hardcode these in because React does not understand these attributes
@@ -201,13 +207,7 @@ var ReactNodes = React.createClass({
 });
 
 var ReactNode = React.createClass({
-    render: function() {
-        //Quick fix to initiallyTakeable
-        //Will later remove initiallyTakeable, by making a check if prerequisite list is empty or not
-        var initiallyTakeableUpper = $.map(initiallyTakeable, function(item, index) {
-            return item.toUpperCase();
-        });
-        
+    render: function() {    
         if (initiallyTakeableUpper.indexOf(this.props.attributes['id'].toUpperCase()) > -1) {
             this.props.attributes['data-active'] = 'takeable';
         } else {
