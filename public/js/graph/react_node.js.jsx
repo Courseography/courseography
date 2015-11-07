@@ -207,15 +207,38 @@ var ReactNodes = React.createClass({
 });
 
 var ReactNode = React.createClass({
-    render: function() {    
+    getInitialState: function() {
+        var id = this.props.attributes['id'];
+        var type = 'AND'; //????
+        
         if (initiallyTakeableUpper.indexOf(this.props.attributes['id'].toUpperCase()) > -1) {
-            this.props.attributes['data-active'] = 'takeable';
+            var status = 'takeable';
         } else {
-            this.props.attributes['data-active'] = 'inactive';
+            var status = 'inactive';
         }
+        return {
+            liked: false,
+            id: id,
+            parents: [],
+            children: [],
+            outEdges: [],
+            inEdges: [],
+            logicalType: type,
+            updated: false,
+            hybrid: false,
+            status: status
+        };
+    },
+    handleClick: function(event) {
+        this.setState({liked: !this.state.liked});
+        console.log(this.state.liked);
+    },
+    
+    render: function() {    
         //hard-coded className
+        this.props.attributes['data-active'] = this.state.status;
         return (
-            <g className={this.props.className} {... this.props.attributes} style={this.props.styles}>
+            <g className={this.props.className} {... this.props.attributes} style={this.props.styles} onClick={this.handleClick}>
                 <rect {... this.props.children[0]['attributes']} style={this.props.children[0]['style']}>
                 </rect>
                 {//this.props.node.children is an HTMLCollection, not an array
