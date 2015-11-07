@@ -40,7 +40,7 @@ function getNodes(mode){
     'use strict';
     //LATER: Add AJAX code to pull code here
     //In the long run, remove SVGGenerator
-    var dict_list = [];
+    var dictList = [];
     $(mode).map(function(key, element) {
         var entry = {};
         entry['id'] = element.id;
@@ -50,26 +50,28 @@ function getNodes(mode){
         entry['style'] = getStyles(entry['attributes']['style']);
         entry['children'] = [];
         //value.children is an HTML collection, converting to array here
-        var children_arr = Array.prototype.slice.call(element.children);
+        var childrenArr = Array.prototype.slice.call(element.children);
         //Assumed only one level of children, the <rect> and one or more <text>
-        children_arr.forEach(function(child) {
-            var child_entry = {};
-            child_entry['attributes'] = getAttributes(child.attributes);
-            child_entry['style'] = getStyles(child_entry['attributes']['style']);
+        childrenArr.forEach(function(child) {
+            var childEntry = {};
+            childEntry['attributes'] = getAttributes(child.attributes);
+            childEntry['style'] = getStyles(childEntry['attributes']['style']);
             //innerHTML is just for text within the <text>
             //there aren't anymore children since it was assumed only one level of children
-            child_entry['innerHTML'] = child.innerHTML;
-            entry['children'].push(child_entry);
+            childEntry['innerHTML'] = child.innerHTML;
+            entry['children'].push(childEntry);
         });
-        dict_list.push(entry);
+        dictList.push(entry);
     });
-    return dict_list;
+    return dictList;
 }
 
 var ReactSVG = React.createClass({
     componentDidMount: function(){
         //Need to hardcode these in because React does not understand these attributes
         var svgNode = React.findDOMNode(this.refs.svg);
+        var markerNode = React.findDOMNode(this.refs.marker);
+        
         svgNode.setAttribute('xmlns','http://www.w3.org/2000/svg');
         svgNode.setAttribute('xmlns:xlink','http://www.w3.org/1999/xlink');
         svgNode.setAttribute('xmlns:svg','http://www.w3.org/2000/svg');
@@ -77,7 +79,6 @@ var ReactSVG = React.createClass({
         svgNode.setAttribute('xmlns:cc','http://creativecommons.org/ns#');
         svgNode.setAttribute('xmlns:rdf','http://www.w3.org/1999/02/22-rdf-syntax-ns#');
         
-        var markerNode = React.findDOMNode(this.refs.marker);
         markerNode.setAttribute('viewBox', '0 0 10 10');
         markerNode.setAttribute('refX', 4);
         markerNode.setAttribute('refY', 5);
@@ -92,10 +93,9 @@ var ReactSVG = React.createClass({
         var markerAttrs = {'id':'arrow'};
         var polylineAttrs = {'points':'0,1 10,5 0,9', 'fill':'black'};
         return (
-            <svg ref ="svg" {... svgAttrs}>
+            <svg {... svgAttrs} ref ='svg'>
                 <defs>
-                    <marker ref="marker" {... markerAttrs}>
-                    {/*<marker {... markerAttrs}>*/}
+                    <marker {... markerAttrs} ref='marker' >
                         <polyline {... polylineAttrs}/>
                     </marker>
                 </defs>
@@ -112,28 +112,28 @@ var ReactSVG = React.createClass({
 var ReactRegionLabels = React.createClass({
     getInitialState: function() {
         return {
-            labels_list: []
+            labelsList: []
         };
     },
     
     componentDidMount: function() {
-        var dict_list = [];
+        var dictList = [];
         $('#region-labels > text').map(function(key, element) {
             var entry = {};
             entry['id'] = element.id;
             entry['attributes'] = getAttributes(element.attributes);
             entry['style'] = getStyles(entry['attributes']['style']);
             entry['innerHTML'] = element.innerHTML;
-            dict_list.push(entry);
+            dictList.push(entry);
         });
-        this.setState({labels_list:dict_list});
+        this.setState({labelsList:dictList});
     },
     
     render: function() {
         return (
             <g id='region-labels'>
-                {this.state.labels_list.map(function(entry, value) {
-                    return <text key={value} {... entry['attributes']} style={entry['style']}>{entry['innerHTML']}</text>
+                {this.state.labelsList.map(function(entry, value) {
+                    return <text {... entry['attributes']} key={value} style={entry['style']}>{entry['innerHTML']}</text>
                 })}
             </g>
         );
@@ -143,19 +143,19 @@ var ReactRegionLabels = React.createClass({
 var ReactRegions = React.createClass({
     getInitialState: function() {
         return {
-            regions_list: []
+            regionsList: []
         };
     },
     
     componentDidMount: function() {
-        this.setState({regions_list:getNodes('.region')});
+        this.setState({regionsList:getNodes('.region')});
     },
     
     render: function() {
         return (
             <g id='regions'>
-                {this.state.regions_list.map(function(entry, value) {
-                    return <ReactRegion className='region' key={entry['id']} attributes={entry['attributes']} styles={entry['style']}/>
+                {this.state.regionsList.map(function(entry, value) {
+                    return <ReactRegion attributes={entry['attributes']} className='region' key={entry['id']} styles={entry['style']}/>
                 })}
             </g>
         );
@@ -166,7 +166,7 @@ var ReactRegion = React.createClass({
     render: function() {
         //hard-coded className
         return (
-            <path className={this.props.className} {... this.props.attributes} style={this.props.styles}>
+            <path {... this.props.attributes} className={this.props.className} style={this.props.styles}>
             </path>
         );
     }
@@ -176,34 +176,43 @@ var ReactRegion = React.createClass({
 var ReactNodes = React.createClass({
     getInitialState: function() {
         return {
-            nodes_list: [],
-            hybrids_list: []
+            nodesList: [],
+            hybridsList: []
         };
     },
     
     componentDidMount: function() {
-        this.setState({nodes_list:getNodes('.node')});
-        this.setState({hybrids_list:getNodes('.hybrid')});
+        this.setState({nodesList:getNodes('.node')});
+        this.setState({hybridsList:getNodes('.hybrid')});
     },
     
     render: function() {
         return (
             <g id='nodes' stroke='black'>
-                {this.state.nodes_list.map(function(entry, value) {
-                    return <ReactNode className='node' key={entry['id']} attributes={entry['attributes']} styles={entry['style']} children={entry['children']}/>
+                {this.state.nodesList.map(function(entry, value) {
+                    return <ReactNode attributes={entry['attributes']} className='node' key={entry['id']} styles={entry['style']} children={entry['children']}/>
                 })}
-                {this.state.hybrids_list.map(function(entry, value) {
-                    return <ReactNode className='hybrid' key={entry['id']} attributes={entry['attributes']} styles={entry['style']} children={entry['children']}/>
+                {this.state.hybridsList.map(function(entry, value) {
+                    return <ReactNode attributes={entry['attributes']} className='hybrid' key={entry['id']} styles={entry['style']} children={entry['children']}/>
                 })}
             </g>
         );
     }
 });
 
-//Kept as separate component in case it may be needed later
 var ReactNode = React.createClass({
     render: function() {
-        this.props.attributes['data-active'] = 'inactive';
+        //Quick fix to initiallyTakeable
+        //Will later remove initiallyTakeable, by making a check if prerequisite list is empty or not
+        var initiallyTakeableUpper = $.map(initiallyTakeable, function(item, index) {
+            return item.toUpperCase();
+        });
+        
+        if (initiallyTakeableUpper.indexOf(this.props.attributes['id'].toUpperCase()) > -1) {
+            this.props.attributes['data-active'] = 'takeable';
+        } else {
+            this.props.attributes['data-active'] = 'inactive';
+        }
         //hard-coded className
         return (
             <g className={this.props.className} {... this.props.attributes} style={this.props.styles}>
@@ -222,18 +231,18 @@ var ReactNode = React.createClass({
 var ReactBools = React.createClass({
     getInitialState: function() {
         return {
-            bools_list: []
+            boolsList: []
         };
     },
     
     componentDidMount: function() {
-        this.setState({bools_list:getNodes('.bool')});
+        this.setState({boolsList:getNodes('.bool')});
     },
     
     render: function() {
         return (
             <g id='bools'>
-                {this.state.bools_list.map(function(entry, value) {
+                {this.state.boolsList.map(function(entry, value) {
                     return <ReactBool className='bool' key={entry['id']} attributes={entry['attributes']} styles={entry['style']} children={entry['children']}/>
                 })}
             </g>
@@ -263,18 +272,18 @@ var ReactBool = React.createClass({
 var ReactEdges = React.createClass({
     getInitialState: function() {
         return {
-            edges_list: []
+            edgesList: []
         };
     },
     
     componentDidMount: function() {
-        this.setState({edges_list:getNodes('.path')});
+        this.setState({edgesList:getNodes('.path')});
     },
     
     render: function() {
         return (
             <g id='edges' stroke='black'>
-                {this.state.edges_list.map(function(entry, value) {
+                {this.state.edgesList.map(function(entry, value) {
                     return <ReactEdge className='path' key={entry['id']} attributes={entry['attributes']} styles={entry['style']}/>
                 })}
             </g>
