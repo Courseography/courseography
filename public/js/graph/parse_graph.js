@@ -16,7 +16,7 @@ function buildGraph(gId) {
     $('.node').each(function () {
         makeNode('AND', $(this).attr('id'));
     });
-
+    
     $('.hybrid').each(function () {
         var id = $(this).attr('id');
         var course = $(this).children('text').text().toLowerCase();
@@ -90,14 +90,16 @@ function buildGraph(gId) {
     });
 
     $('.path').each(function () {
-        if ($(this).attr('source-node') && $(this).attr('target-node')) {
-            makeEdge(window[$(this).attr('source-node')],
-                     window[$(this).attr('target-node')],
+        if ($(this).attr('data-source-node') && $(this).attr('data-target-node')) {
+            makeEdge(window[$(this).attr('data-source-node')],
+                     window[$(this).attr('data-target-node')],
                      $(this).attr('id'));
         } else {
             console.log(this);
         }
     });
+    
+    renderReactGraph();
 }
 
 
