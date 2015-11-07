@@ -221,7 +221,7 @@ var ReactNode = React.createClass({
                 {//this.props.node.children is an HTMLCollection, not an array
                 this.props.children.slice(1).map(function(textTag, value) {
                     //hard-coded textAnchor
-                    return <text key={value} textAnchor='middle' {... textTag['attributes']} style={textTag['style']}>{textTag['innerHTML']}</text>;
+                    return <text {... textTag['attributes']} key={value} style={textTag['style']} textAnchor='middle'>{textTag['innerHTML']}</text>;
                 })}
             </g>
         );
@@ -243,7 +243,7 @@ var ReactBools = React.createClass({
         return (
             <g id='bools'>
                 {this.state.boolsList.map(function(entry, value) {
-                    return <ReactBool className='bool' key={entry['id']} attributes={entry['attributes']} styles={entry['style']} children={entry['children']}/>
+                    return <ReactBool attributes={entry['attributes']} children={entry['children']} className='bool' key={entry['id']} styles={entry['style']}/>
                 })}
             </g>
         );
@@ -261,7 +261,7 @@ var ReactBool = React.createClass({
                 {//this.props.node.children is an HTMLCollection, not an array
                 this.props.children.slice(1).map(function(textTag, value) {
                     //hard-coded textAnchor
-                    return <text key={value} textAnchor='middle' {... textTag['attributes']} style={textTag['style']}>{textTag['innerHTML']}</text>;
+                    return <text {... textTag['attributes']} key={value} style={textTag['style']} textAnchor='middle'>{textTag['innerHTML']}</text>;
                 })}
             </g>
         );
@@ -284,7 +284,7 @@ var ReactEdges = React.createClass({
         return (
             <g id='edges' stroke='black'>
                 {this.state.edgesList.map(function(entry, value) {
-                    return <ReactEdge className='path' key={entry['id']} attributes={entry['attributes']} styles={entry['style']}/>
+                    return <ReactEdge attributes={entry['attributes']} className='path' key={entry['id']} styles={entry['style']}/>
                 })}
             </g>
         );
@@ -296,7 +296,7 @@ var ReactEdge = React.createClass({
         //hard-coded className and markerEnd
         this.props.attributes['data-active'] = 'inactive';
         return (
-            <path className={this.props.className} {... this.props.attributes} style={this.props.styles} markerEnd='url(#arrow)'>
+            <path {... this.props.attributes} className={this.props.className} style={this.props.styles} markerEnd='url(#arrow)'>
             </path>
         );
     }
