@@ -190,10 +190,10 @@ var ReactNodes = React.createClass({
         return (
             <g id='nodes' stroke='black'>
                 {this.state.nodesList.map(function(entry, value) {
-                    return <ReactNode attributes={entry['attributes']} className='node' key={entry['id']} styles={entry['style']} children={entry['children']}/>
+                    return <ReactNode attributes={entry['attributes']} children={entry['children']} className='node' key={entry['id']} styles={entry['style']}/>
                 })}
                 {this.state.hybridsList.map(function(entry, value) {
-                    return <ReactNode attributes={entry['attributes']} className='hybrid' key={entry['id']} styles={entry['style']} children={entry['children']}/>
+                    return <ReactNode attributes={entry['attributes']} children={entry['children']} className='hybrid' key={entry['id']} styles={entry['style']}/>
                 })}
             </g>
         );
@@ -253,6 +253,7 @@ var ReactBools = React.createClass({
 var ReactBool = React.createClass({
     render: function() {
         //hard-coded className
+        //All bools start as inactive, will need to not hardcode this later
         this.props.attributes['data-active'] = 'inactive';
         return (
             <g className={this.props.className} {... this.props.attributes} style={this.props.styles}>
@@ -294,6 +295,7 @@ var ReactEdges = React.createClass({
 var ReactEdge = React.createClass({
     render: function() {
         //hard-coded className and markerEnd
+        //All edges start as inactive, will need to not hardcode this later
         this.props.attributes['data-active'] = 'inactive';
         return (
             <path {... this.props.attributes} className={this.props.className} style={this.props.styles} markerEnd='url(#arrow)'>
