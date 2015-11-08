@@ -20,9 +20,9 @@ masterTemplate title headers body scripts =
             H.title (H.toHtml title)
             H.link ! A.rel "icon" ! A.type_ "image/png"
                    ! A.href "static/res/ico/favicon.png"
-            sequence_ $ headers ++ (map toStylesheet [
+            sequence_ $ headers ++ map toStylesheet [
                 "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css",
-                "static/style/app.css"])
+                "static/style/app.css"]
         H.body $ do
             body
             mapM_ toScript globalScripts
@@ -48,7 +48,7 @@ header page =
         if enableFb && page `elem` ["graph", "grid"]
         then
             H.div ! A.id "nav-fb" $ do
-                H.span ! A.id "nav-fb-post" $ do
+                H.span ! A.id "nav-fb-post" $
                     H.a ! A.id "post-fb" $ "Post..."
                 H.span ! A.class_ "fb-login-button"
                        ! H.customAttribute "data-max-rows" "1"
