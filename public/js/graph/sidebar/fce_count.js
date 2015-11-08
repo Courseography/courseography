@@ -51,6 +51,7 @@ function updateClickedCourses(courseCode, active) {
 
 /**
  * Gets the number of FCEs the course with the course code courseCode is worth.
+ * @param {string} courseCode The course code of the course.
  */
 function getCourseFCECount(courseCode) {
     'use strict';
