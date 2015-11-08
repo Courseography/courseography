@@ -55,6 +55,6 @@ function updateClickedCourses(courseCode, active) {
 function getCourseFCECount(courseCode) {
     'use strict';
 
-    return (name === 'CSC200' || name === 'Calc1') ? 1 : 0.5;
+    return (courseCode === 'CSC200' || courseCode === 'Calc1') ? 1 : 0.5;
 }
 
