@@ -135,34 +135,37 @@ var SpecialistPost = React.createClass({
         this.setState({selected: getCookie('specialist') === 'active'});
     },
 
+    isLevel400: function (course, level400Array) {
+        return notSpecialistCourse(course) && course.substring(3, 4) === '4' && level400Array.length < 3;
+    },
+
+    isLevel300: function (course, level300Array) {
+        return notSpecialistCourse(course) && course.substring(3, 4) >= '3' && level300Array.length < 3;
+    },
+
+    isLevelExtra: function (course, levelExtraArray) {
+        return notSpecialistCourse(course) && course.substring(3, 4) >= '3' && levelExtraArray.length < 4;
+    },
+
     getCourses: function () {
-        var level400Courses = [];
-        var level300Courses = [];
-        var levelExtraCourses = [];
-        var inquiryCourse = [];
+        // [level400Courses, level300Courses, levelExtraCourses, inquiryCourse]
+        var courseArrays = [[], [], [], []];
+        var courseChecks = [this.isLevel400, this.isLevel300, this.isLevelExtra];
 
         this.state.activeCourses.map(function (course) {
-            if (notSpecialistCourse(course)) {
-                if (course.substring(3, 4) === '4' && level400Courses.length < 3) {
-                    level400Courses.push(course);
-                } else if (course.substring(3, 4) >= '3' && level300Courses.length < 3) {
-                    level300Courses.push(course);
-                } else if (levelExtraCourses.length < 4) {
-                    // special case for STA248/261, to enter a visually-appealing name
-                    if (course === 'Sta248261') {
-                        levelExtraCourses.push('STA248/261')
-                    } else if (course.substring(3, 4) >= '3') {
-                        levelExtraCourses.push(course);
-                    }
+            for (var i = 0; i < 3; i++) {
+                if (courseChecks[i](course, courseArrays[i])) {
+                    courseArrays[i].push(course);
+                    break;
                 }
+            }
 
-                if (CSCinq.indexOf(course) >= 0 && inquiryCourse.length < 1) {
-                    inquiryCourse.push(course);
-                }
+            if (CSCinq.indexOf(course) >= 0 && courseArrays[3] < 1) {
+                courseArrays[3].push(course);
             }
         });
 
-        return [level400Courses, level300Courses, levelExtraCourses, inquiryCourse];
+        return courseArrays;
     },
 
     render: function() {
