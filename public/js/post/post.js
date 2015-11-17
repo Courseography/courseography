@@ -147,10 +147,15 @@ var SpecialistPost = React.createClass({
         return notSpecialistCourse(course) && course.substring(3, 4) >= '3' && levelExtraArray.length < 4;
     },
 
+    isInquiryCourse: function(course, inquiryArray) {
+        return CSCinq.indexOf(course) >= 0 && inquiryArray < 1;
+    },
+
     getCourses: function () {
         // [level400Courses, level300Courses, levelExtraCourses, inquiryCourse]
         var courseArrays = [[], [], [], []];
         var courseChecks = [this.isLevel400, this.isLevel300, this.isLevelExtra];
+        var me = this;
 
         this.state.activeCourses.map(function (course) {
             for (var i = 0; i < 3; i++) {
@@ -160,7 +165,7 @@ var SpecialistPost = React.createClass({
                 }
             }
 
-            if (CSCinq.indexOf(course) >= 0 && courseArrays[3] < 1) {
+            if (me.isInquiryCourse(course, courseArrays[3])) {
                 courseArrays[3].push(course);
             }
         });
