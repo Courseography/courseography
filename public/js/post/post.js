@@ -86,10 +86,8 @@ var MultipleCourseCode = React.createClass({
     },
 
     componentDidMount: function() {
-        for (i = 0; i < this.props.courses.length; i++) {
-            this.setState({completedTextBoxes: this.state.completedTextBoxes += 1});
-        }
-        this.checkIfCompleted();
+        this.setState({completedTextBoxes: this.state.completedTextBoxes + this.props.courses.length},
+            this.checkIfCompleted);
     },
     
     toggleFullInfo: function() {
@@ -102,9 +100,15 @@ var MultipleCourseCode = React.createClass({
 
     handleKeyDown: function(e) {
         if (e.keyCode === 13) {
-            if (this.state.completedTextBoxes < this.props.textBoxNumber) {
-                this.setState({completedTextBoxes: this.state.completedTextBoxes += 1});
+            if (this.state.completedTextBoxes <= this.props.textBoxNumber + 1) {
+                if (e.target.defaultValue === '' && e.target.value !== '') {
+                    this.setState({completedTextBoxes: this.state.completedTextBoxes += 1});
+                } else if (e.target.defaultValue !== '' && e.target.value === '') { 
+                    this.setState({completedTextBoxes: this.state.completedTextBoxes -= 1});
+                }
             }
+
+            e.target.defaultValue = e.target.value;
 
             this.checkIfCompleted();
         }  
@@ -115,7 +119,6 @@ var MultipleCourseCode = React.createClass({
         var me = this;
         var classes = 'course';
         var infoClasses = 'more-info';
-        var coursesClone = this.props.courses.slice();
 
         if (this.state.completed) {
             classes += ' selected';
@@ -131,7 +134,7 @@ var MultipleCourseCode = React.createClass({
                 <div id = {'spec' + this.props.courseID.substring(5, this.props.courseID.length)} className={infoClasses}>
                     <p className="full_name"> 
                         {Array.apply(0, Array(this.props.textBoxNumber)).map(function (x, i) {
-                            return <input type='text' value={coursesClone.splice(0, 1)} onKeyDown={me.handleKeyDown} />;
+                            return <input type='text' defaultValue={me.props.courses[i]} onKeyDown={me.handleKeyDown} />;
                         })}
                     </p>
                 </div>
@@ -153,34 +156,42 @@ var SpecialistPost = React.createClass({
         this.setState({selected: getCookie('specialist') === 'active'});
     },
 
+    isLevel400: function (course, level400Array) {
+        return notSpecialistCourse(course) && course.substring(3, 4) === '4' && level400Array.length < 3;
+    },
+
+    isLevel300: function (course, level300Array) {
+        return notSpecialistCourse(course) && course.substring(3, 4) >= '3' && level300Array.length < 3;
+    },
+
+    isLevelExtra: function (course, levelExtraArray) {
+        return notSpecialistCourse(course) && course.substring(3, 4) >= '3' && levelExtraArray.length < 4;
+    },
+
+    isInquiryCourse: function(course, inquiryArray) {
+        return CSCinq.indexOf(course) >= 0 && inquiryArray < 1;
+    },
+
     getCourses: function () {
-        var level400Courses = [];
-        var level300Courses = [];
-        var levelExtraCourses = [];
-        var inquiryCourse = [];
+        // [level400Courses, level300Courses, levelExtraCourses, inquiryCourse]
+        var courseArrays = [[], [], [], []];
+        var courseChecks = [this.isLevel400, this.isLevel300, this.isLevelExtra];
+        var me = this;
 
         this.state.activeCourses.map(function (course) {
-            if (notSpecialistCourse(course)) {
-                if (course.substring(3, 4) === '4' && level400Courses.length < 3) {
-                    level400Courses.push(course);
-                } else if (course.substring(3, 4) >= '3' && level300Courses.length < 3) {
-                    level300Courses.push(course);
-                } else if (levelExtraCourses.length < 4) {
-                    // special case for STA248/261, to enter a visually-appealing name
-                    if (course === 'Sta248261') {
-                        levelExtraCourses.push('STA248/261')
-                    } else if (course.substring(3, 4) >= '3') {
-                        levelExtraCourses.push(course);
-                    }
+            for (var i = 0; i < 3; i++) {
+                if (courseChecks[i](course, courseArrays[i])) {
+                    courseArrays[i].push(course);
+                    break;
                 }
+            }
 
-                if (CSCinq.indexOf(course) >= 0 && inquiryCourse.length < 1) {
-                    inquiryCourse.push(course);
-                }
+            if (me.isInquiryCourse(course, courseArrays[3])) {
+                courseArrays[3].push(course);
             }
         });
 
-        return [level400Courses, level300Courses, levelExtraCourses, inquiryCourse];
+        return courseArrays;
     },
 
     render: function() {
