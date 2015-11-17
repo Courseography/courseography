@@ -143,6 +143,22 @@ var MultipleCourseCode = React.createClass({
     }
 })
 
+var CourseYear = React.createClass({
+    getInitialState: function() {
+        return {};
+    },
+
+    render: function() {
+        return (
+            <div>
+                <h2> {this.props.yearName} </h2>
+                {this.props.courses.map(function (courses) {
+                    return <CourseCode id={courses[0]} courseIDs={courses} />;
+                })}
+            </div>
+        );
+    }
+})
 
 var SpecialistPost = React.createClass({
     getInitialState: function() {
@@ -205,18 +221,9 @@ var SpecialistPost = React.createClass({
 
         return (
             <div id="specialist_window">
-                <h2> First Year </h2>
-                {firstYearCourses.map(function (courses) {
-                    return <CourseCode id={courses[0]} courseIDs={courses} />;
-                })}
-                <h2> Second Year </h2>
-                {secondYearCourses.map(function (courses) {
-                    return <CourseCode id={courses[0]} courseIDs={courses} />;
-                })}
-                <h2> Later Years </h2>
-                {laterYearCourses.map(function (courses) {
-                    return <CourseCode  id={courses[0]} courseIDs={courses} />;
-                })}
+                <CourseYear yearName='First Year' courses={firstYearCourses} />
+                <CourseYear yearName='Second Year' courses={secondYearCourses} />
+                <CourseYear yearName='Later Years' courses={laterYearCourses} />
                 <MultipleCourseCode courseID='spec_400' textBoxNumber={3} courses={courseCategoryArrays[0]}
                     categoryName='Any 400-level CSC course, BCB410H, BCB420H, BCB430Y, ECE489H (1.5 FCEs)' />
                 <MultipleCourseCode courseID='spec_300' textBoxNumber={3} courses={courseCategoryArrays[1]}
