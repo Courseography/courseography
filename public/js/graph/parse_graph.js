@@ -16,8 +16,7 @@ function buildGraph(gId) {
     $('.node').each(function () {
         makeNode('AND', $(this).attr('id'));
     });
-    renderReactGraph();
-
+    
     $('.hybrid').each(function () {
         var id = $(this).attr('id');
         var course = $(this).children('text').text().toLowerCase();
@@ -99,6 +98,8 @@ function buildGraph(gId) {
             console.log(this);
         }
     });
+    
+    renderReactGraph();
 }
 
 

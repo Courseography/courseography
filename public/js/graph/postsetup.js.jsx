@@ -1,5 +1,3 @@
-/*this was moved outside of setup.js*/
-
 $(document).ready(function () {
     'use strict';
 
