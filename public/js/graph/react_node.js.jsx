@@ -66,11 +66,6 @@ function getNodes(mode){
     return dictList;
 }
 
-function highlightPrerequisites(currentNode){
-    'use strict';
-    
-}
-
 var ReactSVG = React.createClass({
     componentDidMount: function() {
         //Need to hardcode these in because React does not understand these attributes
@@ -187,8 +182,7 @@ var ReactNodes = React.createClass({
     
     componentDidMount: function() {
         this.setState({nodesList:getNodes('.node')});
-        this.setState({hybridsList:getNodes('.hybrid')});
-        
+        this.setState({hybridsList:getNodes('.hybrid')});  
     },
     
     render: function() {
