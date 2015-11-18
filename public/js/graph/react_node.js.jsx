@@ -86,11 +86,12 @@ var ReactSVG = React.createClass({
         markerNode.setAttribute('orient', 'auto');
         markerNode.setAttribute('markerWidth', 7);
         markerNode.setAttribute('markerHeight', 7);
+        markerNode.setAttribute('viewBox', '0 0 10 10');
     },
     render: function() {
         //not all of these properties are supported in React
         var svgAttrs = {'width': this.props.width, 'height': this.props.height};
-        var markerAttrs = {'viewBox': '0 0 10 10', 'id': 'arrow'};
+        var markerAttrs = {'id': 'arrow'};
         var polylineAttrs = {'points': '0,1 10,5 0,9', 'fill': 'black'};
         return (
             <svg {... svgAttrs} ref='svg'>
