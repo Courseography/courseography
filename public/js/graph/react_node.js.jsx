@@ -66,14 +66,13 @@ function getNodes(mode){
     return dictList;
 }
 
-//Quick fix to initiallyTakeable case-sensitivity
-//Will later remove initiallyTakeable, by making a check if prerequisite list is empty or not
-var initiallyTakeableUpper = $.map(initiallyTakeable, function(item, index) {
-    return item.toUpperCase();
-});
+function highlightPrerequisites(currentNode){
+    'use strict';
+    
+}
 
 var ReactSVG = React.createClass({
-    componentDidMount: function(){
+    componentDidMount: function() {
         //Need to hardcode these in because React does not understand these attributes
         var svgNode = React.findDOMNode(this.refs.svg);
         var markerNode = React.findDOMNode(this.refs.marker);
@@ -84,8 +83,8 @@ var ReactSVG = React.createClass({
         svgNode.setAttribute('xmlns:dc','http://purl.org/dc/elements/1.1/');
         svgNode.setAttribute('xmlns:cc','http://creativecommons.org/ns#');
         svgNode.setAttribute('xmlns:rdf','http://www.w3.org/1999/02/22-rdf-syntax-ns#');
+        svgNode.setAttribute('version', '1.1');
         
-        markerNode.setAttribute('viewBox', '0 0 10 10');
         markerNode.setAttribute('refX', 4);
         markerNode.setAttribute('refY', 5);
         markerNode.setAttribute('markerUnits', 'strokeWidth');
@@ -95,11 +94,11 @@ var ReactSVG = React.createClass({
     },
     render: function() {
         //not all of these properties are supported in React
-        var svgAttrs = {'width':this.props.width, 'height':this.props.height, 'version':'1.1'};
-        var markerAttrs = {'id':'arrow'};
-        var polylineAttrs = {'points':'0,1 10,5 0,9', 'fill':'black'};
+        var svgAttrs = {'width': this.props.width, 'height': this.props.height};
+        var markerAttrs = {'viewBox': '0 0 10 10', 'id': 'arrow'};
+        var polylineAttrs = {'points': '0,1 10,5 0,9', 'fill': 'black'};
         return (
-            <svg {... svgAttrs} ref ='svg'>
+            <svg {... svgAttrs} ref='svg'>
                 <defs>
                     <marker {... markerAttrs} ref='marker' >
                         <polyline {... polylineAttrs}/>
@@ -178,7 +177,6 @@ var ReactRegion = React.createClass({
     }
 });
 
-
 var ReactNodes = React.createClass({
     getInitialState: function() {
         return {
@@ -190,16 +188,17 @@ var ReactNodes = React.createClass({
     componentDidMount: function() {
         this.setState({nodesList:getNodes('.node')});
         this.setState({hybridsList:getNodes('.hybrid')});
+        
     },
     
     render: function() {
         return (
             <g id='nodes' stroke='black'>
                 {this.state.nodesList.map(function(entry, value) {
-                    return <ReactNode attributes={entry['attributes']} children={entry['children']} className='node' key={entry['id']} styles={entry['style']}/>
+                    return <ReactNode attributes={entry['attributes']} children={entry['children']} className='node' key={entry['id']} styles={entry['style']} hybrid={false}/>
                 })}
                 {this.state.hybridsList.map(function(entry, value) {
-                    return <ReactNode attributes={entry['attributes']} children={entry['children']} className='hybrid' key={entry['id']} styles={entry['style']}/>
+                    return <ReactNode attributes={entry['attributes']} children={entry['children']} className='hybrid' key={entry['id']} styles={entry['style']} hybrid={true}/>
                 })}
             </g>
         );
@@ -209,36 +208,60 @@ var ReactNodes = React.createClass({
 var ReactNode = React.createClass({
     getInitialState: function() {
         var id = this.props.attributes['id'];
-        var type = 'AND'; //????
+        var type = 'AND'; //Need to figure out whether it is a OR or AND
+        var status = 'inactive';
+        var parents = [];
+        var children = [];
+        var outEdges = [];
+        var inEdges = [];
         
-        if (initiallyTakeableUpper.indexOf(this.props.attributes['id'].toUpperCase()) > -1) {
-            var status = 'takeable';
-        } else {
-            var status = 'inactive';
+        $('.path').map(function(key, element) {
+            if (id == element.getAttribute('data-target-node')){
+                parents.push(element.getAttribute('data-source-node'));
+                inEdges.push(element.id);
+            }
+            if (id == element.getAttribute('data-source-node')){
+                children.push(element.getAttribute('data-target-node'));
+                outEdges.push(element.id);
+            }
+        });
+        
+        if (parents.length == 0){
+            status = 'takeable';
         }
+        
         return {
-            liked: false,
             id: id,
-            parents: [],
-            children: [],
-            outEdges: [],
-            inEdges: [],
+            parents: parents,
+            children: children,
+            outEdges: outEdges,
+            inEdges: inEdges,
             logicalType: type,
             updated: false,
-            hybrid: false,
+            hybrid: this.props.hybrid,
             status: status
         };
     },
+    
     handleClick: function(event) {
-        this.setState({liked: !this.state.liked});
-        console.log(this.state.liked);
+        //code here
+    },
+    
+    handleMouseEnter: function(event) {
+        var currentNode = this.refs[this.state.id];
+        //code here
+        
+    },
+    
+    handleMouseLeave: function(event) {
+        //code here
     },
     
     render: function() {    
         //hard-coded className
         this.props.attributes['data-active'] = this.state.status;
         return (
-            <g className={this.props.className} {... this.props.attributes} style={this.props.styles} onClick={this.handleClick}>
+            <g className={this.props.className} {... this.props.attributes} style={this.props.styles} onClick={this.handleClick} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} ref={this.state.id}>
                 <rect {... this.props.children[0]['attributes']} style={this.props.children[0]['style']}>
                 </rect>
                 {//this.props.node.children is an HTMLCollection, not an array
