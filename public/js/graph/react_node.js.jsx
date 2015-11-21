@@ -186,15 +186,59 @@ var ReactNodes = React.createClass({
         this.setState({hybridsList:getNodes('.hybrid')});  
     },
     
+    handleClick: function(event) {
+        function getPrereqs(currentNode, me){
+            var courseList = [];
+            if (currentNode.state.parents.length > 0){
+                currentNode.state.parents.map(function(entry, value) {
+                    courseList.push(entry);
+                    courseList = courseList.concat(getPrereqs(me.refs[entry], me));
+                });
+            }
+            return courseList;
+        }
+        
+        var currentNode = this.refs[event.id];
+        var prereqs = getPrereqs(currentNode, this);
+        
+        console.log('prereqs', prereqs);        
+                
+        if (currentNode.state.status === 'active' || currentNode.state.status === 'overridden') {
+            currentNode.setState({status: 'inactive'});
+        } else {
+            currentNode.setState({status: 'active'});
+        }
+        //code here
+        
+        
+    },
+    
     render: function() {
         return (
             <g id='nodes' stroke='black'>
                 {this.state.nodesList.map(function(entry, value) {
-                    return <ReactNode attributes={entry['attributes']} children={entry['children']} className='node' key={entry['id']} styles={entry['style']} hybrid={false}/>
-                })}
+                    return <ReactNode
+                            attributes={entry['attributes']}
+                            children={entry['children']}
+                            className={'node'}
+                            key={entry['id']}
+                            styles={entry['style']}
+                            hybrid={false}
+                            ref={entry['id']}
+                            onClick={this.handleClick.bind(this, entry)}/>
+                }, this)}
+    
                 {this.state.hybridsList.map(function(entry, value) {
-                    return <ReactNode attributes={entry['attributes']} children={entry['children']} className='hybrid' key={entry['id']} styles={entry['style']} hybrid={true}/>
-                })}
+                    return <ReactNode
+                            attributes={entry['attributes']}
+                            children={entry['children']}
+                            className={'hybrid'}
+                            key={entry['id']}
+                            styles={entry['style']}
+                            hybrid={true}
+                            ref={entry['id']}
+                            onClick={this.handleClick.bind(this, entry)}/>
+                }, this)}
             </g>
         );
     }
@@ -237,26 +281,12 @@ var ReactNode = React.createClass({
             status: status
         };
     },
-    
-    handleClick: function(event) {
-        //code here
-    },
-    
-    handleMouseEnter: function(event) {
-        var currentNode = this.refs[this.state.id];
-        //code here
         
-    },
-    
-    handleMouseLeave: function(event) {
-        //code here
-    },
-    
     render: function() {    
         //hard-coded className
         this.props.attributes['data-active'] = this.state.status;
         return (
-            <g className={this.props.className} {... this.props.attributes} style={this.props.styles} onClick={this.handleClick} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} ref={this.state.id}>
+            <g className={this.props.className} {... this.props.attributes} style={this.props.styles} {... this.props}>
                 <rect {... this.props.children[0]['attributes']} style={this.props.children[0]['style']}>
                 </rect>
                 {//this.props.node.children is an HTMLCollection, not an array
