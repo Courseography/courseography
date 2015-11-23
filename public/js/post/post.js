@@ -158,7 +158,7 @@ var SpecialistPost = React.createClass({
         var me = this;
 
         this.state.activeCourses.map(function (course) {
-            for (var i = 0; i < 3; i++) {
+            for (var i = 0; i < courseChecks.length; i++) {
                 if (courseChecks[i](course, courseArrays[i])) {
                     courseArrays[i].push(course);
                     break;
