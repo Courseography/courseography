@@ -30,8 +30,7 @@ var SearchPanel = React.createClass({
 var CourseList = React.createClass({
     getInitialState: function() {
         return {
-            courses: [],
-            searchList: []
+            courses: [], courseFilter: ''
         };
     },
 
@@ -50,35 +49,29 @@ var CourseList = React.createClass({
         });
     },
 
-    enableSearch: function() {
+    enableSearch: function () {
         'use strict';
-
-        var self = this;
 
         $('#course-filter').keyup(function() {
-            self.resetSearchList();
-        });
+            this.setState({courseFilter: $('#course-filter').val().toUpperCase()});
+        }.bind(this));
     },
 
-    resetSearchList: function() {
-        'use strict';
+    render: function() {
 
-        var filter = $('#course-filter').val().toUpperCase();
+        var state = this.state;
 
-        if (filter !== '') {
-            var searchList = this.state.courses.filter(function (course) {
-                return course.indexOf(filter) > -1;
+        if (state.courseFilter !== '') {
+            var searchList = state.courses.filter(function (course) {
+                return course.indexOf(state.courseFilter) > -1;
             }).map(function (course) {
                 return <CourseEntry course={course} />
             });
         }
-        this.setState({searchList: searchList});
-    },
 
-    render: function() {
         return (
             <div id="search-list">
-                <ul>{this.state.searchList}</ul>
+                <ul>{searchList}</ul>           
             </div>
         );
     }
