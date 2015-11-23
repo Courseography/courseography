@@ -36,9 +36,8 @@ var CourseList = React.createClass({
 
     componentDidMount: function() {
         $.ajax({
-            url: "all-courses",
-            dataType: "text",
-            async: false,
+            url: 'all-courses',
+            dataType: 'text',
             success: function (data) {
                 this.enableSearch();
                 courses = data.split('\n').map(function (course) {
