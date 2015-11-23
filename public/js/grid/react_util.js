@@ -49,7 +49,7 @@ var CourseList = React.createClass({
         });
     },
 
-    enableSearch: function () {
+    enableSearch: function() {
         'use strict';
 
         $('#course-filter').keyup(function() {
@@ -71,7 +71,7 @@ var CourseList = React.createClass({
 
         return (
             <div id="search-list">
-                <ul>{searchList}</ul>           
+                <ul>{searchList}</ul>
             </div>
         );
     }
