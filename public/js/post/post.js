@@ -127,7 +127,7 @@ var SpecialistPost = React.createClass({
     getInitialState: function() {
         return {
             selected: true,
-            activeCourses: activeCourses.slice()
+            activeCourses: this.updateActiveCourses()
         }
     },
 
@@ -172,6 +172,28 @@ var SpecialistPost = React.createClass({
 
         return courseArrays;
     },
+
+    updateActiveCourses: function() {
+        var activeCourses = [];
+
+        // Check for active CSC courses
+        for (var i = 0; i < allCourses.length; i++) {
+            if (getCookie(allCourses[i].toLowerCase()) === 'active' ||
+                getCookie(allCourses[i].toLowerCase()) === 'overridden') {
+                activeCourses.push(allCourses[i]);
+            }
+        }
+
+        // Check for active math courses
+        for (var i = 0; i < math.length; i++) {
+            if (getCookie(math[i].toLowerCase()) === 'active') {
+                activeCourses.push(math[i]);
+            }
+        }
+
+        return activeCourses;
+    },
+
 
     render: function() {
 
