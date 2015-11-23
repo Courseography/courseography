@@ -81,15 +81,15 @@ var MultipleCourseCode = React.createClass({
         if (e.keyCode === 13) {
             if (this.state.completedTextBoxes <= this.props.data.textBoxNumber + 1) {
                 if (e.target.defaultValue === '' && e.target.value !== '') {
-                    this.setState({completedTextBoxes: this.state.completedTextBoxes += 1});
+                    this.setState({completedTextBoxes: this.state.completedTextBoxes + 1},
+                        this.checkIfCompleted);
                 } else if (e.target.defaultValue !== '' && e.target.value === '') { 
-                    this.setState({completedTextBoxes: this.state.completedTextBoxes -= 1});
+                    this.setState({completedTextBoxes: this.state.completedTextBoxes - 1},
+                        this.checkIfCompleted);
                 }
             }
 
             e.target.defaultValue = e.target.value;
-
-            this.checkIfCompleted();
         }  
     },
 
