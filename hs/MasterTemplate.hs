@@ -20,7 +20,8 @@ masterTemplate title headers body scripts =
             H.title (H.toHtml title)
             H.link ! A.rel "icon" ! A.type_ "image/png"
                    ! A.href "static/res/ico/favicon.png"
-            sequence_ $ headers ++ map toStylesheet [
+            sequence_ headers
+            mapM_ toStylesheet [
                 "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css",
                 "static/style/app.css"]
         H.body $ do
