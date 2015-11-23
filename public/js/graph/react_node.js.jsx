@@ -88,6 +88,61 @@ var ReactSVG = React.createClass({
         markerNode.setAttribute('markerHeight', 7);
         markerNode.setAttribute('viewBox', '0 0 10 10');
     },
+    
+    nodeClick: function(event) {
+        //code here
+        var courseID = event.currentTarget.id;
+        console.log('clicked', courseID);
+        
+    },
+    
+    nodeMouseEnter: function(event) {
+        //code here
+        var courseID = event.currentTarget.id;
+        var currentNode = this.refs['nodes'].refs[courseID]
+        
+        function highlightPrereqs(currentNode, svg) {
+            console.log('visit', currentNode.state.id);
+            currentNode.setState({missing: true});
+            currentNode.state.parents.map(function(entry, value) {
+                if (svg.refs['nodes'].refs[entry] && !svg.refs['nodes'].refs[entry].state.hybrid){
+                    highlightPrereqs(svg.refs['nodes'].refs[entry], svg)
+                }
+                if (svg.refs['bools'].refs[entry]){
+                    highlightPrereqs(svg.refs['bools'].refs[entry], svg)
+                }
+            });
+            currentNode.state.inEdges.map(function(entry, value) {
+                svg.refs['edges'].refs[entry].setState({missing: true});
+            });
+        }
+        
+        highlightPrereqs(currentNode, this);
+    },
+    
+    nodeMouseLeave: function(event) {
+        //code here
+        var courseID = event.currentTarget.id;
+        var currentNode = this.refs['nodes'].refs[courseID]
+        
+        function unhighlightPrereqs(currentNode, svg) {
+            currentNode.setState({missing: false});
+            currentNode.state.parents.map(function(entry, value) {
+                if (svg.refs['nodes'].refs[entry] && !svg.refs['nodes'].refs[entry].state.hybrid){
+                    unhighlightPrereqs(svg.refs['nodes'].refs[entry], svg)
+                }
+                if (svg.refs['bools'].refs[entry]){
+                    unhighlightPrereqs(svg.refs['bools'].refs[entry], svg)
+                }
+            });
+            currentNode.state.inEdges.map(function(entry, value) {
+                svg.refs['edges'].refs[entry].setState({missing: false});
+            });
+        }
+        
+        unhighlightPrereqs(currentNode, this);  
+    },
+    
     render: function() {
         //not all of these properties are supported in React
         var svgAttrs = {'width': this.props.width, 'height': this.props.height};
@@ -101,9 +156,9 @@ var ReactSVG = React.createClass({
                     </marker>
                 </defs>
                 <ReactRegions/>
-                <ReactNodes/>
-                <ReactBools/>
-                <ReactEdges/>
+                <ReactNodes ref='nodes' onClick={this.nodeClick} onMouseEnter={this.nodeMouseEnter} onMouseLeave={this.nodeMouseLeave}/>
+                <ReactBools ref='bools'/>
+                <ReactEdges ref='edges'/>
                 <ReactRegionLabels/>
             </svg>
         );
@@ -186,33 +241,6 @@ var ReactNodes = React.createClass({
         this.setState({hybridsList:getNodes('.hybrid')});  
     },
     
-    handleClick: function(event) {
-        function getPrereqs(currentNode, me){
-            var courseList = [];
-            if (currentNode.state.parents.length > 0){
-                currentNode.state.parents.map(function(entry, value) {
-                    courseList.push(entry);
-                    courseList = courseList.concat(getPrereqs(me.refs[entry], me));
-                });
-            }
-            return courseList;
-        }
-        
-        var currentNode = this.refs[event.id];
-        var prereqs = getPrereqs(currentNode, this);
-        
-        console.log('prereqs', prereqs);        
-                
-        if (currentNode.state.status === 'active' || currentNode.state.status === 'overridden') {
-            currentNode.setState({status: 'inactive'});
-        } else {
-            currentNode.setState({status: 'active'});
-        }
-        //code here
-        
-        
-    },
-    
     render: function() {
         return (
             <g id='nodes' stroke='black'>
@@ -225,7 +253,7 @@ var ReactNodes = React.createClass({
                             styles={entry['style']}
                             hybrid={false}
                             ref={entry['id']}
-                            onClick={this.handleClick.bind(this, entry)}/>
+                            {... this.props}/>
                 }, this)}
     
                 {this.state.hybridsList.map(function(entry, value) {
@@ -236,8 +264,7 @@ var ReactNodes = React.createClass({
                             key={entry['id']}
                             styles={entry['style']}
                             hybrid={true}
-                            ref={entry['id']}
-                            onClick={this.handleClick.bind(this, entry)}/>
+                            ref={entry['id']}/>
                 }, this)}
             </g>
         );
@@ -276,15 +303,19 @@ var ReactNode = React.createClass({
             outEdges: outEdges,
             inEdges: inEdges,
             logicalType: type,
-            updated: false,
             hybrid: this.props.hybrid,
-            status: status
+            status: status,
+            missing: false
         };
     },
         
     render: function() {    
         //hard-coded className
-        this.props.attributes['data-active'] = this.state.status;
+        if (!this.state.missing){
+            this.props.attributes['data-active'] = this.state.status;
+        } else {
+            this.props.attributes['data-active'] = 'missing';
+        }
         return (
             <g className={this.props.className} {... this.props.attributes} style={this.props.styles} {... this.props}>
                 <rect {... this.props.children[0]['attributes']} style={this.props.children[0]['style']}>
@@ -314,7 +345,7 @@ var ReactBools = React.createClass({
         return (
             <g id='bools'>
                 {this.state.boolsList.map(function(entry, value) {
-                    return <ReactBool attributes={entry['attributes']} children={entry['children']} className='bool' key={entry['id']} styles={entry['style']}/>
+                    return <ReactBool attributes={entry['attributes']} children={entry['children']} className='bool' key={entry['id']} styles={entry['style']} ref={entry['id']} ref={entry['id']}/>
                 })}
             </g>
         );
@@ -322,10 +353,50 @@ var ReactBools = React.createClass({
 });
 
 var ReactBool = React.createClass({
+    getInitialState: function() {
+        var id = this.props.attributes['id'];
+        var type = 'AND'; //Need to figure out whether it is a OR or AND
+        var status = 'inactive';
+        var parents = [];
+        var children = [];
+        var outEdges = [];
+        var inEdges = [];
+        
+        $('.path').map(function(key, element) {
+            if (id == element.getAttribute('data-target-node')){
+                parents.push(element.getAttribute('data-source-node'));
+                inEdges.push(element.id);
+            }
+            if (id == element.getAttribute('data-source-node')){
+                children.push(element.getAttribute('data-target-node'));
+                outEdges.push(element.id);
+            }
+        });
+        
+        if (parents.length == 0){
+            status = 'takeable';
+        }
+        
+        return {
+            id: id,
+            parents: parents,
+            children: children,
+            outEdges: outEdges,
+            inEdges: inEdges,
+            logicalType: type,
+            hybrid: this.props.hybrid,
+            status: status,
+            missing: false
+        };
+    },
     render: function() {
         //hard-coded className
         //All bools start as inactive, will need to not hardcode this later
-        this.props.attributes['data-active'] = 'inactive';
+        if (!this.state.missing){
+            this.props.attributes['data-active'] = this.state.status;
+        } else {
+            this.props.attributes['data-active'] = 'missing';
+        }
         return (
             <g className={this.props.className} {... this.props.attributes} style={this.props.styles}>
                 <ellipse {... this.props.children[0]['attributes']} style={this.props.children[0]['style']}>
@@ -356,7 +427,12 @@ var ReactEdges = React.createClass({
         return (
             <g id='edges' stroke='black'>
                 {this.state.edgesList.map(function(entry, value) {
-                    return <ReactEdge attributes={entry['attributes']} className='path' key={entry['id']} styles={entry['style']}/>
+                    return <ReactEdge
+                            attributes={entry['attributes']}
+                            className='path'
+                            key={entry['id']}
+                            styles={entry['style']}
+                            ref={entry['id']}/>
                 })}
             </g>
         );
@@ -364,10 +440,21 @@ var ReactEdges = React.createClass({
 });
 
 var ReactEdge = React.createClass({
+    getInitialState: function() {
+        var status = 'inactive';
+        return {
+            status: status,
+            missing: false
+        };
+    },
     render: function() {
         //hard-coded className and markerEnd
         //All edges start as inactive, will need to not hardcode this later
-        this.props.attributes['data-active'] = 'inactive';
+        if (!this.state.missing){
+            this.props.attributes['data-active'] = this.state.status;
+        } else {
+            this.props.attributes['data-active'] = 'missing';
+        }
         return (
             <path {... this.props.attributes} className={this.props.className} style={this.props.styles} markerEnd='url(#arrow)'>
             </path>
