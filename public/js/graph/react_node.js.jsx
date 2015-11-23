@@ -66,6 +66,21 @@ function getNodes(mode){
     return dictList;
 }
 
+function togglePrereqs(currentNode, svg) {
+    currentNode.setState({missing: !currentNode.state.missing});
+    currentNode.props.parents.map(function(entry, value) {
+        if (svg.refs['nodes'].refs[entry] && !svg.refs['nodes'].refs[entry].state.hybrid){
+            togglePrereqs(svg.refs['nodes'].refs[entry], svg)
+        }
+        if (svg.refs['bools'].refs[entry]){
+            togglePrereqs(svg.refs['bools'].refs[entry], svg)
+        }
+    });
+    currentNode.props.inEdges.map(function(entry, value) {
+        svg.refs['edges'].refs[entry].setState({missing: false});
+    });
+}
+
 var ReactSVG = React.createClass({
     componentDidMount: function() {
         //Need to hardcode these in because React does not understand these attributes
@@ -99,48 +114,17 @@ var ReactSVG = React.createClass({
     nodeMouseEnter: function(event) {
         //code here
         var courseID = event.currentTarget.id;
-        var currentNode = this.refs['nodes'].refs[courseID]
+        var currentNode = this.refs['nodes'].refs[courseID];
         
-        function highlightPrereqs(currentNode, svg) {
-            console.log('visit', currentNode.state.id);
-            currentNode.setState({missing: true});
-            currentNode.state.parents.map(function(entry, value) {
-                if (svg.refs['nodes'].refs[entry] && !svg.refs['nodes'].refs[entry].state.hybrid){
-                    highlightPrereqs(svg.refs['nodes'].refs[entry], svg)
-                }
-                if (svg.refs['bools'].refs[entry]){
-                    highlightPrereqs(svg.refs['bools'].refs[entry], svg)
-                }
-            });
-            currentNode.state.inEdges.map(function(entry, value) {
-                svg.refs['edges'].refs[entry].setState({missing: true});
-            });
-        }
-        
-        highlightPrereqs(currentNode, this);
+        togglePrereqs(currentNode, this);
     },
     
     nodeMouseLeave: function(event) {
         //code here
         var courseID = event.currentTarget.id;
-        var currentNode = this.refs['nodes'].refs[courseID]
-        
-        function unhighlightPrereqs(currentNode, svg) {
-            currentNode.setState({missing: false});
-            currentNode.state.parents.map(function(entry, value) {
-                if (svg.refs['nodes'].refs[entry] && !svg.refs['nodes'].refs[entry].state.hybrid){
-                    unhighlightPrereqs(svg.refs['nodes'].refs[entry], svg)
-                }
-                if (svg.refs['bools'].refs[entry]){
-                    unhighlightPrereqs(svg.refs['bools'].refs[entry], svg)
-                }
-            });
-            currentNode.state.inEdges.map(function(entry, value) {
-                svg.refs['edges'].refs[entry].setState({missing: false});
-            });
-        }
-        
-        unhighlightPrereqs(currentNode, this);  
+        var currentNode = this.refs['nodes'].refs[courseID];
+            
+        togglePrereqs(currentNode, this);
     },
     
     render: function() {
@@ -245,6 +229,21 @@ var ReactNodes = React.createClass({
         return (
             <g id='nodes' stroke='black'>
                 {this.state.nodesList.map(function(entry, value) {
+                    var parents = [];
+                    var childs = [];
+                    var outEdges = [];
+                    var inEdges = [];
+
+                    $('.path').map(function(key, element) {
+                        if (entry['id'] == element.getAttribute('data-target-node')){
+                            parents.push(element.getAttribute('data-source-node'));
+                            inEdges.push(element.id);
+                        }
+                        if (entry['id'] == element.getAttribute('data-source-node')){
+                            childs.push(element.getAttribute('data-target-node'));
+                            outEdges.push(element.id);
+                        }
+                    });
                     return <ReactNode
                             attributes={entry['attributes']}
                             children={entry['children']}
@@ -253,10 +252,29 @@ var ReactNodes = React.createClass({
                             styles={entry['style']}
                             hybrid={false}
                             ref={entry['id']}
+                            parents={parents}
+                            childs={childs}
+                            inEdges={inEdges}
+                            outEdges={outEdges}
                             {... this.props}/>
                 }, this)}
     
                 {this.state.hybridsList.map(function(entry, value) {
+                    var parents = [];
+                    var childs = [];
+                    var outEdges = [];
+                    var inEdges = [];
+
+                    $('.path').map(function(key, element) {
+                        if (entry['id'] == element.getAttribute('data-target-node')){
+                            parents.push(element.getAttribute('data-source-node'));
+                            inEdges.push(element.id);
+                        }
+                        if (entry['id'] == element.getAttribute('data-source-node')){
+                            childs.push(element.getAttribute('data-target-node'));
+                            outEdges.push(element.id);
+                        }
+                    });
                     return <ReactNode
                             attributes={entry['attributes']}
                             children={entry['children']}
@@ -264,7 +282,11 @@ var ReactNodes = React.createClass({
                             key={entry['id']}
                             styles={entry['style']}
                             hybrid={true}
-                            ref={entry['id']}/>
+                            ref={entry['id']}
+                            parents={parents}
+                            childs={childs}
+                            inEdges={inEdges}
+                            outEdges={outEdges}/>
                 }, this)}
             </g>
         );
@@ -276,32 +298,13 @@ var ReactNode = React.createClass({
         var id = this.props.attributes['id'];
         var type = 'AND'; //Need to figure out whether it is a OR or AND
         var status = 'inactive';
-        var parents = [];
-        var children = [];
-        var outEdges = [];
-        var inEdges = [];
         
-        $('.path').map(function(key, element) {
-            if (id == element.getAttribute('data-target-node')){
-                parents.push(element.getAttribute('data-source-node'));
-                inEdges.push(element.id);
-            }
-            if (id == element.getAttribute('data-source-node')){
-                children.push(element.getAttribute('data-target-node'));
-                outEdges.push(element.id);
-            }
-        });
-        
-        if (parents.length == 0){
+        if (this.props.parents.length == 0){
             status = 'takeable';
         }
         
         return {
             id: id,
-            parents: parents,
-            children: children,
-            outEdges: outEdges,
-            inEdges: inEdges,
             logicalType: type,
             hybrid: this.props.hybrid,
             status: status,
@@ -345,7 +348,22 @@ var ReactBools = React.createClass({
         return (
             <g id='bools'>
                 {this.state.boolsList.map(function(entry, value) {
-                    return <ReactBool attributes={entry['attributes']} children={entry['children']} className='bool' key={entry['id']} styles={entry['style']} ref={entry['id']} ref={entry['id']}/>
+                    var parents = [];
+                    var childs = [];
+                    var outEdges = [];
+                    var inEdges = [];
+
+                    $('.path').map(function(key, element) {
+                        if (entry['id'] == element.getAttribute('data-target-node')){
+                            parents.push(element.getAttribute('data-source-node'));
+                            inEdges.push(element.id);
+                        }
+                        if (entry['id'] == element.getAttribute('data-source-node')){
+                            childs.push(element.getAttribute('data-target-node'));
+                            outEdges.push(element.id);
+                        }
+                    });
+                    return <ReactBool attributes={entry['attributes']} children={entry['children']} className='bool' key={entry['id']} styles={entry['style']} ref={entry['id']} ref={entry['id']} parents={parents} childs={childs} inEdges={inEdges} outEdges={outEdges}/>
                 })}
             </g>
         );
@@ -357,32 +375,13 @@ var ReactBool = React.createClass({
         var id = this.props.attributes['id'];
         var type = 'AND'; //Need to figure out whether it is a OR or AND
         var status = 'inactive';
-        var parents = [];
-        var children = [];
-        var outEdges = [];
-        var inEdges = [];
-        
-        $('.path').map(function(key, element) {
-            if (id == element.getAttribute('data-target-node')){
-                parents.push(element.getAttribute('data-source-node'));
-                inEdges.push(element.id);
-            }
-            if (id == element.getAttribute('data-source-node')){
-                children.push(element.getAttribute('data-target-node'));
-                outEdges.push(element.id);
-            }
-        });
-        
-        if (parents.length == 0){
+    
+        if (this.props.parents.length == 0){
             status = 'takeable';
         }
         
         return {
             id: id,
-            parents: parents,
-            children: children,
-            outEdges: outEdges,
-            inEdges: inEdges,
             logicalType: type,
             hybrid: this.props.hybrid,
             status: status,
