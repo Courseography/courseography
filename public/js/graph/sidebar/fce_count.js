@@ -32,7 +32,7 @@ function updateClickedCourses(courseCode, active) {
     var weight = getCourseFCECount(courseCode);
 
     if (!active) {
-        diff *= -1;
+        weight *= -1;
     }
 
     if (math.indexOf(courseCode) > -1) {
