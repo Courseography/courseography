@@ -54,11 +54,11 @@ getDeptCodes tags =
         filterDeptInfo = map (charInString '[') tagsText
         removedEmptyStr = filter (\x -> x /= "") filterDeptInfo
         -- removedChars gets substring that contains dept codes
-        removedChars = map (removeUnwantedChar '[') removedEmptyStr
+        removedChars = map (removeCharsBefore '[') removedEmptyStr
         listOfWords = map words removedChars
         relevantWords = map (filter (`notElem` wordsToRemove)) listOfWords
         -- deptCodesStr removes words from wordsToRemove to isolate dept Codes
-        deptCodesStr = map (filter (\x -> filter isUpper x == x)) relevantWords
+        deptCodesStr = map (filter (\x -> all isUpper x == True)) relevantWords
         deptCodesText = map (map T.pack) deptCodesStr
     in deptCodesText
 
@@ -80,9 +80,9 @@ charInString y (x:xs)
     | otherwise = charInString y xs  
 
 -- | Returns the chars after the first instance of the Char input from the given String.
-removeUnwantedChar :: Char -> String -> String
-removeUnwantedChar _ [] = ""
-removeUnwantedChar y (x:xs)
+removeCharsBefore :: Char -> String -> String
+removeCharsBefore _ [] = ""
+removeCharsBefore y (x:xs)
     | y == x = xs
     | otherwise = (x:xs)
 
