@@ -22,7 +22,6 @@ function clearFCECount() {
     currentFCEs300 = 0;
     currentFCEs400 = 0;
     currentFCEsMAT = 0;
-    clickedCourses = [];
 }
 
 

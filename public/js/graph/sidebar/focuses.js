@@ -1,25 +1,25 @@
 /**
  * Updates the active focus.
- * @param {string} id The ID of the active focus.
+ * @param {string} focusId The ID of the active focus.
  */
-function updateActiveFocus(id) {
+function updateActiveFocus(focusId) {
     'use strict';
 
     var graphObject = $('#graph');
 
     $('ellipse.spotlight').remove();
 
-    if (id === '') {
+    if (focusId === '') {
         clearFocus();
     } else {
-        var focus = window[id + 'FocusList'];
+        var focus = window[focusId + 'FocusList'];
         $('body').css('background', 'rgb(40,40,40)');
         $('.node, .hybrid').attr('data-active', 'unlit');
         $.each(focus, function (index, elem) {
             spotlight(elem);
         });
         graphObject.html(graphObject.html()); // Hack to make spotlights appear
-        activeFocus = id;
+        activeFocus = focusId;
     }
 }
 

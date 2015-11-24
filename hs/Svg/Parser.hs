@@ -18,7 +18,7 @@ directly to the client when viewing the @/graph@ page.
 module Svg.Parser
     (parsePrebuiltSvgs) where
 
-import Data.Maybe (mapMaybe, fromMaybe, fromJust)
+import Data.Maybe (mapMaybe, fromMaybe, fromJust, isNothing)
 import Data.List.Split (splitOn)
 import Data.List (find)
 import qualified Data.Map as M (empty)
@@ -112,9 +112,9 @@ parseNode key content =
                 foldl concatThree (paths, rects ++ ellipses, texts)
                                   (map (parseNode key) (path [children] content))
          in
-             (map (updatePath fill trans) (newPaths),
-              map (updateShape fill trans) (newShapes),
-              map (updateText trans) (newTexts))
+             (map (updatePath fill trans) newPaths,
+              map (updateShape fill trans) newShapes,
+              map (updateText trans) newTexts)
 
 -- | Create a rectangle from a list of attributes.
 parseRect :: GraphId -- ^ The Rect's corresponding graph identifier.
@@ -251,7 +251,7 @@ parseTransform transform =
         xPos = readMaybe $ parsedTransform !! 0
         yPos = readMaybe $ init $ parsedTransform !! 1
     in
-        if xPos == Nothing || yPos == Nothing
+        if isNothing xPos || isNothing yPos
         then
             error transform
         else
