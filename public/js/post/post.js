@@ -33,7 +33,7 @@ var CourseCode = React.createClass({
     getIdName: function() {
         var idName = this.props.courseIDs[0].substring(0, 3);
         
-        this.props.courseIDs.map(function (course) {
+        this.props.courseIDs.forEach(function (course) {
             idName += course.substring(3, 6);
         });
 
