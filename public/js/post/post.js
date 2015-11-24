@@ -102,15 +102,15 @@ var MultipleCourseCode = React.createClass({
         if (e.keyCode === 13) {
             if (this.state.completedTextBoxes <= this.props.textBoxNumber + 1) {
                 if (e.target.defaultValue === '' && e.target.value !== '') {
-                    this.setState({completedTextBoxes: this.state.completedTextBoxes += 1});
+                    this.setState({completedTextBoxes: this.state.completedTextBoxes + 1},
+                        this.checkIfCompleted);
                 } else if (e.target.defaultValue !== '' && e.target.value === '') { 
-                    this.setState({completedTextBoxes: this.state.completedTextBoxes -= 1});
+                    this.setState({completedTextBoxes: this.state.completedTextBoxes - 1},
+                        this.checkIfCompleted);
                 }
             }
 
             e.target.defaultValue = e.target.value;
-
-            this.checkIfCompleted();
         }  
     },
 
@@ -168,7 +168,7 @@ var SpecialistPost = React.createClass({
     getInitialState: function() {
         return {
             selected: true,
-            activeCourses: activeCourses.slice()
+            activeCourses: this.updateActiveCourses()
         }
     },
 
@@ -194,25 +194,48 @@ var SpecialistPost = React.createClass({
 
     getCourses: function () {
         // [level400Courses, level300Courses, levelExtraCourses, inquiryCourse]
-        var courseArrays = [[], [], [], []];
-        var courseChecks = [this.isLevel400, this.isLevel300, this.isLevelExtra];
-        var me = this;
+        var courseArrays = [];
+        // currently this.isInquiryCourse is considered mutually exclusive to other categories
+        // - this will change eventually.
+        var courseChecks = [this.isLevel400, this.isLevel300, this.isLevelExtra, this.isInquiryCourse];
 
         this.state.activeCourses.map(function (course) {
-            for (var i = 0; i < 3; i++) {
+            for (var i = 0; i < courseChecks.length; i++) {
+                if (courseArrays.length <= i) {
+                    courseArrays.push([]);
+                }
+                 
                 if (courseChecks[i](course, courseArrays[i])) {
                     courseArrays[i].push(course);
                     break;
                 }
             }
-
-            if (me.isInquiryCourse(course, courseArrays[3])) {
-                courseArrays[3].push(course);
-            }
         });
 
         return courseArrays;
     },
+
+    updateActiveCourses: function() {
+        var activeCourses = [];
+
+        // Check for active CSC courses
+        for (var i = 0; i < allCourses.length; i++) {
+            if (getCookie(allCourses[i].toLowerCase()) === 'active' ||
+                getCookie(allCourses[i].toLowerCase()) === 'overridden') {
+                activeCourses.push(allCourses[i]);
+            }
+        }
+
+        // Check for active math courses
+        for (var i = 0; i < math.length; i++) {
+            if (getCookie(math[i].toLowerCase()) === 'active') {
+                activeCourses.push(math[i]);
+            }
+        }
+
+        return activeCourses;
+    },
+
 
     render: function() {
 
