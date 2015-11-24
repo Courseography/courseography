@@ -26,31 +26,18 @@ parseTT = do
     body <- getResponseBody rsp
 
     let depts = getDeptList $ parseTags body
-    let deptCode = getDeptCode $ parseTags body
-    let deptName = getDeptName $ parseTags body
+        deptCode = getDeptCodes $ parseTags body
+        deptName = getDeptName $ parseTags body
+        deptAssocList = init $ constructAssociationList deptName deptCode
 
     runSqlite databasePath $
         mapM_ getDeptTimetable depts
     runSqlite databasePath $ 
-        mapM_ insertDepartment $ init $ constructAssociationList deptName deptCode
-
--- | String left bracket to split tagText into two strings. One containing the 
--- department name and the other the department codes. 
-bracketLeftString :: String
-bracketLeftString = "["
-
--- | Char left bracket used to call removeUnwantedChar. Removes all char prior to 
--- and including itself from given String. 
-bracketLeft :: Char
-bracketLeft = '['
-
--- | Char right bracket to remove from the end of the last words in tagTexts.
-bracketRight :: Char
-bracketRight = ']'
+        mapM_ insertDepartment deptAssocList
 
 -- | List of unwanted words to remove when getting department codes.
-notDeptCodes :: [String]
-notDeptCodes = ["courses",
+wordsToRemove :: [String]
+wordsToRemove = ["courses",
                 "courses]", 
                 "includes",
                 "and",
@@ -59,59 +46,45 @@ notDeptCodes = ["courses",
                 "]",
                 ""]
 
--- | Parses the timetable main page, retrieves the tag text and gets the department
--- codes in a list of lists of T.Text.
-getDeptCode :: [Tag String] -> [[T.Text]]
-getDeptCode tags = 
+-- | Extracts a list of lists of department codes from the main website
+getDeptCodes :: [Tag String] -> [[T.Text]]
+getDeptCodes tags = 
     let tagsText = map fromTagText $ filter isTagText tags
-        filterDeptInfo = map (filterList bracketLeft) tagsText
+        -- filterDeptInfo returns only the strings that contain dept codes
+        filterDeptInfo = map (charInString '[') tagsText
         removedEmptyStr = filter (\x -> x /= "") filterDeptInfo
-        removedChars = map (removeUnwantedChar bracketLeft) removedEmptyStr
+        -- removedChars gets substring that contains dept codes
+        removedChars = map (removeUnwantedChar '[') removedEmptyStr
         listOfWords = map words removedChars
-        relevantWords = map (filter (`notElem` notDeptCodes)) listOfWords
-        deptCodesStr = map (filter (\x -> isUpperString x /= False)) relevantWords
+        relevantWords = map (filter (`notElem` wordsToRemove)) listOfWords
+        -- deptCodesStr removes words from wordsToRemove to isolate dept Codes
+        deptCodesStr = map (filter (\x -> filter isUpper x == x)) relevantWords
         deptCodesText = map (map T.pack) deptCodesStr
     in deptCodesText
 
--- | Parses the timetable main page, retrieves the tag text and gets the department
--- names in a list of T.Text.
+-- | Extracts a list of department names from the main website
 getDeptName :: [Tag String] -> [T.Text]
 getDeptName tags = 
     let tagsText = map fromTagText $ filter isTagText tags
-        containsBrackLeft = filter (\x -> containsChar bracketLeft x == True) tagsText
+        containsBrackLeft = filter (\x -> '[' `elem` x) tagsText
         convertToStr = map T.pack containsBrackLeft
-        deptNamesText = map head $ map (T.splitOn (T.pack bracketLeftString)) convertToStr
+        deptNamesText = map head $ map (T.splitOn (T.pack "[")) convertToStr
     in deptNamesText
-
--- | Takes a Char and a String and returns whether or not that Char is in the String.
-containsChar :: Char -> String -> Bool
-containsChar _ [] = False
-containsChar y (x:xs)
-    | y == x = True
-    | otherwise = containsChar y xs  
 
 -- | Takes a Char and a String and checks whether that char is in the String. If it
 -- is, it returns the original string, otherwise it returns an empty string.
-filterList :: Char -> String -> String 
-filterList _ [] = ""
-filterList y (x:xs) 
-    | y == x = (t:ts)
-    | otherwise = filterList y xs  
-    where (t:ts) = (x:xs)
+charInString :: Char -> String -> String 
+charInString _ [] = ""
+charInString y (x:xs) 
+    | y == x = (x:xs)
+    | otherwise = charInString y xs  
 
--- | Removes the chars before and including the Char input in the given String.
+-- | Returns the chars after the first instance of the Char input from the given String.
 removeUnwantedChar :: Char -> String -> String
 removeUnwantedChar _ [] = ""
 removeUnwantedChar y (x:xs)
     | y == x = xs
     | otherwise = (x:xs)
-
--- | Returns whether all the elements of the String are uppercase.
-isUpperString :: String -> Bool
-isUpperString [] = True
-isUpperString (x:xs)
-    | Data.Char.isUpper x == True && isUpperString xs == True = True
-    | otherwise = False
 
 -- | Constructs an association list given a list of T.Text and a list of lists of T.Text.
 constructAssociationList :: [T.Text] -> [[T.Text]] -> [([T.Text], T.Text)]
@@ -120,9 +93,9 @@ constructAssociationList [] _ = []
 constructAssociationList (x:xs) (y:ys) = [(y, x)] ++ constructAssociationList xs ys
 
 -- | Inserts the Department association list in the database.
-insertDepartment :: MonadIO m => ([T.Text], T.Text) -> ReaderT SqlBackend m (Key Department)
+insertDepartment :: MonadIO m => ([T.Text], T.Text) -> ReaderT SqlBackend m ()
 insertDepartment (code, name) = 
-    Database.Persist.Sqlite.insert (Department code name)
+    Database.Persist.Sqlite.insert_ (Department code name)
 
 -- | Used as an intermediate container while extracting lecture and tutorial information
 -- from the table. Is is later converted into lecture or tutorial records by examinig the
