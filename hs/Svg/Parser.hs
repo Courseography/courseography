@@ -46,6 +46,7 @@ parsePrebuiltSvgs =
         performParse "Finnish" "fin2015.svg"
         performParse "Italian" "ita2015.svg"
         performParse "Linguistics" "lin2015.svg"
+        performParse "Rotman" "rotman2015.svg"
 
 performParse :: String -- ^ The title of the graph.
              -> String -- ^ The filename of the file that will be parsed.
@@ -185,7 +186,7 @@ parseText key style content =
               (lookupAttr "id" (contentAttrs content))
               (readAttr "x" (contentAttrs content),
                readAttr "y" (contentAttrs content))
-              (replace "&gt;" ">" $ tagTextContent content)
+              (replace "&amp;" "&" (replace "&gt;" ">" $ tagTextContent content))
               align
               fill]
     else
