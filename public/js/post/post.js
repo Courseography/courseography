@@ -134,7 +134,11 @@ var MultipleCourseCode = React.createClass({
                 <div id = {'spec' + this.props.courseID.substring(5, this.props.courseID.length)} className={infoClasses}>
                     <p className="full_name"> 
                         {Array.apply(0, Array(this.props.textBoxNumber)).map(function (x, i) {
-                            return <input type='text' defaultValue={me.props.courses[i]} onKeyDown={me.handleKeyDown} />;
+                            if (me.props.textboxesDisabled) {
+                                return <input type='text' defaultValue={me.props.courses[i]} onKeyDown={me.handleKeyDown} disabled />;
+                            } else {
+                                return <input type='text' defaultValue={me.props.courses[i]} onKeyDown={me.handleKeyDown} />;
+                            }
                         })}
                     </p>
                 </div>
@@ -224,15 +228,15 @@ var SpecialistPost = React.createClass({
                 <CourseYear yearName='First Year' courses={firstYearCourses} />
                 <CourseYear yearName='Second Year' courses={secondYearCourses} />
                 <CourseYear yearName='Later Years' courses={laterYearCourses} />
-                <MultipleCourseCode courseID='spec_400' textBoxNumber={3} courses={courseCategoryArrays[0]}
+                <MultipleCourseCode courseID='spec_400' textBoxNumber={3} courses={courseCategoryArrays[0]} textboxesDisabled={true}
                     categoryName='Any 400-level CSC course, BCB410H, BCB420H, BCB430Y, ECE489H (1.5 FCEs)' />
-                <MultipleCourseCode courseID='spec_300' textBoxNumber={3} courses={courseCategoryArrays[1]}
+                <MultipleCourseCode courseID='spec_300' textBoxNumber={3} courses={courseCategoryArrays[1]} textboxesDisabled={true}
                     categoryName='Any 300+ level CSC course, BCB410H, BCB420H, BCB430Y, ECE385H, ECE489H (1.5 FCEs)' />
-                <MultipleCourseCode courseID="spec_extra" textBoxNumber={4} courses={courseCategoryArrays[2]}
+                <MultipleCourseCode courseID="spec_extra" textBoxNumber={4} courses={courseCategoryArrays[2]} textboxesDisabled={false}
                     categoryName='Any of the following: 300+ level CSC course; MAT: 235/237/257, any 300+ 
                                   except for 329, 390, & 391; STA: 248, 261, any 300+; ECE: 385H/489H; 
                                   BCB: 410H/420H/430Y (2.0 FCEs)' />
-                <MultipleCourseCode courseID="spec_inq" textBoxNumber={1} courses={courseCategoryArrays[3]}
+                <MultipleCourseCode courseID="spec_inq" textBoxNumber={1} courses={courseCategoryArrays[3]} textboxesDisabled={true}
                     categoryName='Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H, 
                     CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H, or PEY (0.5 FCEs) 
                     ** Note: Type "PEY" for Check my POSt to recognize it **' />
