@@ -145,11 +145,8 @@ var MultipleCourseCode = React.createClass({
                 <div id = {'spec' + this.props.courseID.substring(5, this.props.courseID.length)} className={infoClasses}>
                     <p className="full_name"> 
                         {Array.apply(0, Array(this.props.textBoxNumber)).map(function (x, i) {
-                            if (me.props.textboxesDisabled) {
-                                return <input type='text' defaultValue={me.props.courses[i]} onKeyDown={me.handleKeyDown} disabled />;
-                            } else {
-                                return <input type='text' defaultValue={me.props.courses[i]} onKeyDown={me.handleKeyDown} />;
-                            }
+                            return <input type='text' defaultValue={me.props.courses[i]} onKeyDown={me.handleKeyDown} 
+                                    disabled={me.props.textboxesDisabled} />;
                         })}
                     </p>
                 </div>
