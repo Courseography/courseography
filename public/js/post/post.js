@@ -50,8 +50,19 @@ var CourseCode = React.createClass({
         return idName;
     },
 
+    getTitle: function(id) {
+        if (id == 'mat137' || id == 'mat157') {
+            var course = new Course(id + 'Y1')
+        } else {
+            var course = new Course(id + 'H1');
+        }
+
+        return id.toUpperCase() + ": " + course.title;
+    },
+
     render: function() {
 
+        var me = this;
         var classes = 'course';
         var infoClasses = 'more-info';
 
@@ -68,7 +79,7 @@ var CourseCode = React.createClass({
                 <p className="code" onClick={this.toggleFullInfo}> {this.getCategoryName()} </p>
                 <div id = {this.props.courseIDs[0] + '_info'} className={infoClasses}>
                     {this.props.courseIDs.map(function (course) {
-                         return <p className="full_name"> {getCourseTitle(course)} </p>
+                         return <p className="full_name"> {me.getTitle(course)} </p>
                     })}
                 </div>
             </div>
@@ -239,7 +250,7 @@ var SpecialistPost = React.createClass({
 
     render: function() {
 
-        var firstYearCourses = [['csc108'], ['csc148'], ['csc165', 'csc240'], ['mat135', 'mat136']];
+        var firstYearCourses = [['csc108'], ['csc148'], ['csc165', 'csc240'], ['mat135', 'mat136', 'mat137', 'mat157']];
         var secondYearCourses = [['csc207'], ['csc209'], ['csc236', 'csc240'], ['csc258'], ['csc263', 'csc265'], ['mat221', 'mat223', 'mat240'], 
                                 ['sta247', 'sta255', 'sta257']];
         var laterYearCourses = [['csc369'], ['csc373']];
