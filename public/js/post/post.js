@@ -153,20 +153,21 @@ var SpecialistPost = React.createClass({
 
     getCourses: function () {
         // [level400Courses, level300Courses, levelExtraCourses, inquiryCourse]
-        var courseArrays = [[], [], [], []];
-        var courseChecks = [this.isLevel400, this.isLevel300, this.isLevelExtra];
-        var me = this;
+        var courseArrays = [];
+        // currently this.isInquiryCourse is considered mutually exclusive to other categories
+        // - this will change eventually.
+        var courseChecks = [this.isLevel400, this.isLevel300, this.isLevelExtra, this.isInquiryCourse];
 
         this.state.activeCourses.map(function (course) {
             for (var i = 0; i < courseChecks.length; i++) {
+                if (courseArrays.length <= i) {
+                    courseArrays.push([]);
+                }
+                 
                 if (courseChecks[i](course, courseArrays[i])) {
                     courseArrays[i].push(course);
                     break;
                 }
-            }
-
-            if (me.isInquiryCourse(course, courseArrays[3])) {
-                courseArrays[3].push(course);
             }
         });
 
