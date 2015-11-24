@@ -156,10 +156,6 @@ var MultipleCourseCode = React.createClass({
 })
 
 var CourseYear = React.createClass({
-    getInitialState: function() {
-        return {};
-    },
-
     render: function() {
         return (
             <div>
