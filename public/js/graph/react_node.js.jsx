@@ -66,21 +66,6 @@ function getNodes(mode){
     return dictList;
 }
 
-function togglePrereqs(currentNode, svg) {
-    currentNode.setState({missing: !currentNode.state.missing});
-    currentNode.props.parents.map(function(entry, value) {
-        if (svg.refs['nodes'].refs[entry] && !svg.refs['nodes'].refs[entry].state.hybrid){
-            togglePrereqs(svg.refs['nodes'].refs[entry], svg)
-        }
-        if (svg.refs['bools'].refs[entry]){
-            togglePrereqs(svg.refs['bools'].refs[entry], svg)
-        }
-    });
-    currentNode.props.inEdges.map(function(entry, value) {
-        svg.refs['edges'].refs[entry].setState({missing: false});
-    });
-}
-
 var ReactSVG = React.createClass({
     componentDidMount: function() {
         //Need to hardcode these in because React does not understand these attributes
@@ -116,7 +101,8 @@ var ReactSVG = React.createClass({
         var courseID = event.currentTarget.id;
         var currentNode = this.refs['nodes'].refs[courseID];
         
-        togglePrereqs(currentNode, this);
+        currentNode.togglePrereqs(this);
+
     },
     
     nodeMouseLeave: function(event) {
@@ -124,7 +110,7 @@ var ReactSVG = React.createClass({
         var courseID = event.currentTarget.id;
         var currentNode = this.refs['nodes'].refs[courseID];
             
-        togglePrereqs(currentNode, this);
+        currentNode.togglePrereqs(this);
     },
     
     render: function() {
@@ -311,7 +297,22 @@ var ReactNode = React.createClass({
             missing: false
         };
     },
-        
+    
+    togglePrereqs: function(svg) {
+        this.setState({missing: !this.state.missing});
+        this.props.parents.map(function(entry, value) {
+            if (svg.refs['nodes'].refs[entry] && !svg.refs['nodes'].refs[entry].state.hybrid){
+                svg.refs['nodes'].refs[entry].togglePrereqs(svg);
+            }
+            if (svg.refs['bools'].refs[entry]){
+                svg.refs['bools'].refs[entry].togglePrereqs(svg);
+            }
+        });
+        this.props.inEdges.map(function(entry, value) {
+            svg.refs['edges'].refs[entry].setState({missing: false});
+        });
+    },
+
     render: function() {    
         //hard-coded className
         if (!this.state.missing){
@@ -388,6 +389,22 @@ var ReactBool = React.createClass({
             missing: false
         };
     },
+    
+    togglePrereqs: function(svg) {
+        this.setState({missing: !this.state.missing});
+        this.props.parents.map(function(entry, value) {
+            if (svg.refs['nodes'].refs[entry] && !svg.refs['nodes'].refs[entry].state.hybrid){
+                svg.refs['nodes'].refs[entry].togglePrereqs(svg);
+            }
+            if (svg.refs['bools'].refs[entry]){
+                svg.refs['bools'].refs[entry].togglePrereqs(svg);
+            }
+        });
+        this.props.inEdges.map(function(entry, value) {
+            svg.refs['edges'].refs[entry].setState({missing: false});
+        });
+    },
+    
     render: function() {
         //hard-coded className
         //All bools start as inactive, will need to not hardcode this later
