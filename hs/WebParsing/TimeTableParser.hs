@@ -18,7 +18,6 @@ import WebParsing.TimeConverter
 import Control.Monad.IO.Class (liftIO, MonadIO)
 import Control.Monad.Trans.Reader (ReaderT)
 import Config (databasePath, timetableUrl)
-import Database.Tables (Department(Department))
 
 parseTT :: IO ()
 parseTT = do
@@ -26,14 +25,17 @@ parseTT = do
     body <- getResponseBody rsp
 
     let depts = getDeptList $ parseTags body
-        deptCode = getDeptCodes $ parseTags body
-        deptName = getDeptName $ parseTags body
-        deptAssocList = init $ constructAssociationList deptName deptCode
+        deptInfo = getDeptInfo $ parseTags body
 
     runSqlite databasePath $
         mapM_ getDeptTimetable depts
     runSqlite databasePath $ 
-        mapM_ insertDepartment deptAssocList
+        mapM_ insertDepartment deptInfo
+
+-- | Inserts the Department association list in the database.
+insertDepartment :: MonadIO m => ([T.Text], T.Text) -> ReaderT SqlBackend m ()
+insertDepartment (code, name) = 
+    Database.Persist.Sqlite.insert_ (Tables.Department code name)
 
 -- | List of unwanted words to remove when getting department codes.
 wordsToRemove :: [String]
@@ -46,56 +48,27 @@ wordsToRemove = ["courses",
                 "]",
                 ""]
 
--- | Extracts a list of lists of department codes from the main website
-getDeptCodes :: [Tag String] -> [[T.Text]]
-getDeptCodes tags = 
-    let tagsText = map fromTagText $ filter isTagText tags
-        -- filterDeptInfo returns only the strings that contain dept codes
-        filterDeptInfo = map (charInString '[') tagsText
-        removedEmptyStr = filter (\x -> x /= "") filterDeptInfo
-        -- removedChars gets substring that contains dept codes
-        removedChars = map (removeCharsBefore '[') removedEmptyStr
-        listOfWords = map words removedChars
-        relevantWords = map (filter (`notElem` wordsToRemove)) listOfWords
-        -- deptCodesStr removes words from wordsToRemove to isolate dept Codes
-        deptCodesStr = map (filter (\x -> all isUpper x == True)) relevantWords
-        deptCodesText = map (map T.pack) deptCodesStr
-    in deptCodesText
-
--- | Extracts a list of department names from the main website
-getDeptName :: [Tag String] -> [T.Text]
-getDeptName tags = 
+-- | Extracts a list of tuples containing a list of dept codes and the respective dept name.
+getDeptInfo :: [Tag String] -> [([T.Text],T.Text)]
+getDeptInfo tags = 
     let tagsText = map fromTagText $ filter isTagText tags
         containsBrackLeft = filter (\x -> '[' `elem` x) tagsText
         convertToStr = map T.pack containsBrackLeft
-        deptNamesText = map head $ map (T.splitOn (T.pack "[")) convertToStr
-    in deptNamesText
-
--- | Takes a Char and a String and checks whether that char is in the String. If it
--- is, it returns the original string, otherwise it returns an empty string.
-charInString :: Char -> String -> String 
-charInString _ [] = ""
-charInString y (x:xs) 
-    | y == x = (x:xs)
-    | otherwise = charInString y xs  
-
--- | Returns the chars after the first instance of the Char input from the given String.
-removeCharsBefore :: Char -> String -> String
-removeCharsBefore _ [] = ""
-removeCharsBefore y (x:xs)
-    | y == x = xs
-    | otherwise = (x:xs)
-
--- | Constructs an association list given a list of T.Text and a list of lists of T.Text.
-constructAssociationList :: [T.Text] -> [[T.Text]] -> [([T.Text], T.Text)]
-constructAssociationList _ [] = []
-constructAssociationList [] _ = []
-constructAssociationList (x:xs) (y:ys) = [(y, x)] ++ constructAssociationList xs ys
-
--- | Inserts the Department association list in the database.
-insertDepartment :: MonadIO m => ([T.Text], T.Text) -> ReaderT SqlBackend m ()
-insertDepartment (code, name) = 
-    Database.Persist.Sqlite.insert_ (Department code name)
+        -- deptNamesAndCodes splits lists into two strings; one containing
+        -- dept names and the other containing the unfiltered dept codes
+        deptNamesAndCodes = map (T.splitOn (T.pack "[")) convertToStr
+        deptNamesText = map head deptNamesAndCodes
+        -- listOfWords takes the unfiltered string containing dept codes and 
+        -- makes a list of the words in that string
+        deptCodesUnfiltered = map T.unpack $ map last deptNamesAndCodes 
+        listOfWords = map words deptCodesUnfiltered
+        relevantWords = map (filter (`notElem` wordsToRemove)) listOfWords
+        -- deptCodesStr filters the dept codes
+        deptCodesStr = map (filter (all isUpper)) relevantWords
+        deptCodesText = map (map T.pack) deptCodesStr
+        -- deptAssocList zips the lists of dept codes and their dept name into a tuple 
+        deptAssocList = init $ zipWith ( , ) deptCodesText deptNamesText
+    in deptAssocList 
 
 -- | Used as an intermediate container while extracting lecture and tutorial information
 -- from the table. Is is later converted into lecture or tutorial records by examinig the
