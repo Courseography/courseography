@@ -118,6 +118,11 @@ var CourseCategory = React.createClass({
         return array;
     },
 
+    isValidExtraCourse: function(course) {
+        var validCourseCodes = ['CSC', 'MAT', 'STA', 'ECE', 'BCB'];
+        return validCourseCodes.indexOf(course.substring(0, 3)) > -1;
+    }, 
+
     handleOnChange: function(e) {
         var newValues = this.state.textboxValues;
         newValues[e.target.id] = e.target.value.substring(0, 6);
@@ -128,7 +133,8 @@ var CourseCategory = React.createClass({
     countCompletedTextBoxes: function() {
         var count = 0;
         for (i = 0; i < this.state.textboxValues.length; i++) {
-            if (this.state.textboxValues[i].length === 6) {
+            if (this.isValidExtraCourse(this.state.textboxValues[i]) &&
+                this.state.textboxValues[i].length === 6) {
                 count += 1;
             }
         }
