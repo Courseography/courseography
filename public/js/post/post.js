@@ -124,7 +124,7 @@ var CourseCategory = React.createClass({
     }, 
 
     handleOnChange: function(e) {
-        var newValues = this.state.textboxValues;
+        var newValues = this.state.textboxValues.slice();
         newValues[e.target.id] = e.target.value.substring(0, 6);
         this.setState({textboxValues: newValues});
         this.setState({completedTextBoxes: this.countCompletedTextBoxes()}, this.checkIfCompleted);
