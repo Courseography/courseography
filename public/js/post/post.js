@@ -92,7 +92,8 @@ var CourseCategory = React.createClass({
         return {
             completed: false,
             completedTextBoxes: 0,
-            infoOpened: false
+            infoOpened: false,
+            textboxValues: this.createInitialValueArray()
         }
     },
 
@@ -109,20 +110,30 @@ var CourseCategory = React.createClass({
         this.setState({completed: this.state.completedTextBoxes === this.props.textBoxNumber});
     },
 
-    handleKeyDown: function(e) {
-        if (e.keyCode === 13) {
-            if (this.state.completedTextBoxes <= this.props.textBoxNumber + 1) {
-                if (e.target.defaultValue === '' && e.target.value !== '') {
-                    this.setState({completedTextBoxes: this.state.completedTextBoxes + 1},
-                        this.checkIfCompleted);
-                } else if (e.target.defaultValue !== '' && e.target.value === '') { 
-                    this.setState({completedTextBoxes: this.state.completedTextBoxes - 1},
-                        this.checkIfCompleted);
-                }
-            }
+    createInitialValueArray: function() {
+        var array = Array(this.props.textBoxNumber).join(".").split(".");
+        for (i = 0; i < this.props.courses.length; i++) {
+            array[i] = this.props.courses[i];
+        }
+        return array;
+    },
 
-            e.target.defaultValue = e.target.value;
-        }  
+    handleOnChange: function(e) {
+        var newValues = this.state.textboxValues;
+        newValues[e.target.id] = e.target.value.substring(0, 6);
+        this.setState({textboxValues: newValues});
+        this.setState({completedTextBoxes: this.countCompletedTextBoxes()}, this.checkIfCompleted);
+    },
+
+    countCompletedTextBoxes: function() {
+        var count = 0;
+        for (i = 0; i < this.state.textboxValues.length; i++) {
+            if (this.state.textboxValues[i].length === 6) {
+                count += 1;
+            }
+        }
+
+        return count;
     },
 
     render: function() {
@@ -144,7 +155,7 @@ var CourseCategory = React.createClass({
                 <div id = {'spec' + this.props.courseID.substring(5, this.props.courseID.length)} className={infoClasses}>
                     <p className="full_name"> 
                         {Array.apply(0, Array(this.props.textBoxNumber)).map(function (x, i) {
-                            return <input type='text' defaultValue={me.props.courses[i]} onKeyDown={me.handleKeyDown} 
+                            return <input type='text' id={i} value={me.state.textboxValues[i]} onChange={me.handleOnChange} 
                                     disabled={me.props.textboxesDisabled} />;
                         })}
                     </p>
