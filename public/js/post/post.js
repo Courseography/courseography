@@ -126,7 +126,6 @@ var CourseCategory = React.createClass({
     },
 
     render: function() {
-
         var me = this;
         var classes = 'course';
         var infoClasses = 'more-info';
@@ -197,18 +196,18 @@ var SpecialistPost = React.createClass({
     },
 
     getCourses: function () {
-        // [level400Courses, level300Courses, levelExtraCourses, inquiryCourse]
-        var courseArrays = [];
         // currently this.isInquiryCourse is considered mutually exclusive to other categories
         // - this will change eventually.
         var courseChecks = [this.isLevel400, this.isLevel300, this.isLevelExtra, this.isInquiryCourse];
+        var courseArrays = [];
+
+        // initialize inner arrays
+        for (var i = 0; i < courseChecks.length; i++) {
+            courseArrays[i] = [];
+        }
 
         this.state.activeCourses.map(function (course) {
             for (var i = 0; i < courseChecks.length; i++) {
-                if (courseArrays.length <= i) {
-                    courseArrays.push([]);
-                }
-                 
                 if (courseChecks[i](course, courseArrays[i])) {
                     courseArrays[i].push(course);
                     break;
