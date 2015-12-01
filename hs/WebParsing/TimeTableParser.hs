@@ -25,7 +25,7 @@ parseTT = do
     body <- getResponseBody rsp
 
     let depts = getDeptList $ parseTags body
-        deptInfo = getDeptInfo $ parseTags body
+        deptInfo = parseLinkText $ parseTags body
 
     runSqlite databasePath $
         mapM_ getDeptTimetable depts
@@ -49,8 +49,8 @@ wordsToRemove = ["courses",
                 ""]
 
 -- | Extracts a list of tuples containing a list of dept codes and the respective dept name.
-getDeptInfo :: [Tag String] -> [([T.Text],T.Text)]
-getDeptInfo tags = 
+parseLinkText :: [Tag String] -> [([T.Text],T.Text)]
+parseLinkText tags = 
     let tagsText = map fromTagText $ filter isTagText tags
         containsBrackLeft = filter (\x -> '[' `elem` x) tagsText
         convertToStr = map T.pack containsBrackLeft
