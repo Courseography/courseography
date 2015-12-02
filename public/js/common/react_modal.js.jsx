@@ -3,7 +3,7 @@ function openReactModal(courseCode) {
     var courseName = getCourseTitle(courseCode);
     var formattedName = formatCourseName(courseCode);
     var courseVideoUrls = getCourseVideoUrls(formattedName);
-    
+
     React.render(
         <ModalContent course={formattedName[0]} />,
         document.getElementById('modal-content-container')
@@ -50,9 +50,9 @@ var Description = React.createClass({
                 console.error('course-info', status, err.toString());
             }.bind(this)
         });
-        
+
     },
-    
+
     render: function() {
         //We want to use the Timetable component, but that component needs to be independent before using it here
         return (
@@ -65,19 +65,24 @@ var Description = React.createClass({
                 {this.state.sessions.map(function(lecture) {
                     return <p>{lecture.code + lecture.session + "-" + lecture.section + ": " + lecture.timeStr}</p>;
                 })}
-                <Video urls={this.state.sessions}/>
+                <Video urls={this.state.course.videoUrls}/>
             </div>
         );
     }
 });
 
 var Video = React.createClass({
+    getDefaultProps: function() {
+        return {
+            urls: []
+        }
+    },
+
     render: function() {
-        //need to check how videoUrls are obtained
         return (
             <div id="course-video-div">
                 <video id="course-video" className="video-js vjs-default-skin" controls="" preload="auto">
-                    {this.props.url .map(function(url) {
+                    {this.props.urls.map(function(url) {
                         return <source src={url} type="video/mp4"/>
                     })}
                 </video>
