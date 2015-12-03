@@ -258,8 +258,7 @@ var ReactNodes = React.createClass({
                             inEdges={inEdges}
                             outEdges={outEdges}
                             {... this.props}
-                            svg={svg}
-                            hybrid={false}/>
+                            svg={svg}/>
                 }, this)}
     
                 {this.state.hybridsList.map(function(entry, value) {
@@ -290,8 +289,7 @@ var ReactNodes = React.createClass({
                             childs={childs}
                             inEdges={inEdges}
                             outEdges={outEdges}
-                            svg={svg}
-                            hybrid={true}/>
+                            svg={svg}/>
                 }, this)}
             </g>
         );
@@ -301,7 +299,7 @@ var ReactNodes = React.createClass({
 var ReactNode = React.createClass({
     getInitialState: function() {
         var id = this.props.attributes['id'];
-        var type = 'AND'; //Need to figure out whether it is a OR or AND
+        var type = 'AND';
         var status = this.props.parents.length == 0 ? 'takeable' : 'inactive';
 
         return {
@@ -359,15 +357,15 @@ var ReactNode = React.createClass({
 
         // Always update children of hybrids
         if (this.state.hybrid) {
-            $.each(this.props.child, function(i, node) {
+            $.each(this.props.childs, function(i, node) {
                 var currentNode = svg.refs['nodes'].refs[node] ? svg.refs['nodes'].refs[node] :
                                                                  svg.refs['bools'].refs[node];
-                currentNode.setState({status: newState},
+                currentNode.setState({status: currentNode.state.status},
                                      function(){this.updateNode(svg)}.bind(currentNode));
             });
             $.each(this.props.outEdges, function (i, edge) {
                 var currentEdge = svg.refs['edges'].refs[edge];
-                currentEdge.setState({status: newState}, 
+                currentEdge.setState({status: currentEdge.state.status}, 
                                      function(){this.updateEdge(svg)}.bind(currentEdge));
             });
         }
@@ -502,7 +500,7 @@ var ReactBools = React.createClass({
                             outEdges.push(element.id);
                         }
                     });
-                    return <ReactBool attributes={entry['attributes']} children={entry['children']} className='bool' key={entry['id']} styles={entry['style']} ref={entry['id']} ref={entry['id']} parents={parents} childs={childs} inEdges={inEdges} outEdges={outEdges}/>
+                    return <ReactBool attributes={entry['attributes']} children={entry['children']} className='bool' key={entry['id']} styles={entry['style']} ref={entry['id']} parents={parents} childs={childs} inEdges={inEdges} outEdges={outEdges} hybrid={true}/>
                 })}
             </g>
         );
@@ -513,16 +511,11 @@ var ReactBool = React.createClass({
     getInitialState: function() {
         var id = this.props.attributes['id'];
         var type = this.props.children[1].innerHTML.toUpperCase();
-        var status = 'inactive';
-    
-        if (this.props.parents.length == 0){
-            status = 'takeable';
-        }
+        var status = this.props.parents.length == 0 ? 'takeable' : 'inactive';
 
         return {
             id: id,
             logicalType: type,
-            hybrid: this.props.hybrid,
             status: status,
         };
     },
@@ -569,20 +562,19 @@ var ReactBool = React.createClass({
         //setCookie(this.id, this.status);
 
         // Always update children of hybrids
-        if (this.state.hybrid) {
-            $.each(this.props.child, function(i, node) {
+        if (this.props.hybrid) {
+            $.each(this.props.childs, function(i, node) {
                 var currentNode = svg.refs['nodes'].refs[node] ? svg.refs['nodes'].refs[node] :
                                                                  svg.refs['bools'].refs[node];
-                currentNode.setState({status: newState},
+                currentNode.setState({status: currentNode.state.status},
                                      function(){this.updateNode(svg)}.bind(currentNode));
             });
             $.each(this.props.outEdges, function (i, edge) {
                 var currentEdge = svg.refs['edges'].refs[edge];
-                currentEdge.setState({status: newState}, 
+                currentEdge.setState({status: currentEdge.state.status}, 
                                      function(){this.updateEdge(svg)}.bind(currentEdge));
             });
         }
-
     },
     
     focusPrereqs: function(svg){
