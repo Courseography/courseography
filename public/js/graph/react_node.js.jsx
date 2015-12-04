@@ -71,7 +71,7 @@ var ReactSVG = React.createClass({
         //Need to hardcode these in because React does not understand these attributes
         var svgNode = React.findDOMNode(this.refs.svg);
         var markerNode = React.findDOMNode(this.refs.marker);
-        
+
         svgNode.setAttribute('xmlns','http://www.w3.org/2000/svg');
         svgNode.setAttribute('xmlns:xlink','http://www.w3.org/1999/xlink');
         svgNode.setAttribute('xmlns:svg','http://www.w3.org/2000/svg');
@@ -79,7 +79,7 @@ var ReactSVG = React.createClass({
         svgNode.setAttribute('xmlns:cc','http://creativecommons.org/ns#');
         svgNode.setAttribute('xmlns:rdf','http://www.w3.org/1999/02/22-rdf-syntax-ns#');
         svgNode.setAttribute('version', '1.1');
-        
+
         markerNode.setAttribute('refX', 4);
         markerNode.setAttribute('refY', 5);
         markerNode.setAttribute('markerUnits', 'strokeWidth');
@@ -88,30 +88,30 @@ var ReactSVG = React.createClass({
         markerNode.setAttribute('markerHeight', 7);
         markerNode.setAttribute('viewBox', '0 0 10 10');
     },
-    
+
     nodeClick: function (event) {
         var courseID = event.currentTarget.id;
         var currentNode = this.refs['nodes'].refs[courseID];
-        currentNode.turn(this);
+        currentNode.toggleSelection(this);
     },
-    
+
     nodeMouseEnter: function (event) {
         var courseID = event.currentTarget.id;
         var currentNode = this.refs['nodes'].refs[courseID];
         currentNode.focusPrereqs(this);
-        
+
         //Old hover modal code
         if ($(".modal").length === 0) {
             removeToolTips();
             displayTooltip(courseID);
         }
     },
-    
+
     nodeMouseLeave: function (event) {
         var courseID = event.currentTarget.id;
         var currentNode = this.refs['nodes'].refs[courseID];   
         currentNode.unfocusPrereqs(this);
-        
+
         //Old hover modal code
         if ($(".modal").length === 0) {
             var timeout = setTimeout(function () {
@@ -121,7 +121,7 @@ var ReactSVG = React.createClass({
             timeouts.push(timeout);
         }
     },
-    
+
     render: function () {
         //not all of these properties are supported in React
         var svgAttrs = {'width': this.props.width, 'height': this.props.height};
@@ -154,7 +154,7 @@ var ReactRegionLabels = React.createClass({
             labelsList: []
         };
     },
-    
+
     componentDidMount: function () {
         var dictList = [];
         $('#region-labels > text').map(function (key, element) {
@@ -167,7 +167,7 @@ var ReactRegionLabels = React.createClass({
         });
         this.setState({labelsList: dictList});
     },
-    
+
     render: function () {
         return (
             <g id='region-labels'>
@@ -185,11 +185,11 @@ var ReactRegions = React.createClass({
             regionsList: []
         };
     },
-    
+
     componentDidMount: function () {
         this.setState({regionsList: getNodes('.region')});
     },
-    
+
     render: function () {
         return (
             <g id='regions'>
@@ -218,12 +218,11 @@ var ReactNodes = React.createClass({
             hybridsList: []
         };
     },
-    
+
     componentDidMount: function () {
-        this.setState({nodesList: getNodes('.node')});
-        this.setState({hybridsList: getNodes('.hybrid')});  
+        this.setState({nodesList: getNodes('.node'), hybridsList: getNodes('.hybrid')});
     },
-    
+
     render: function () {
         var svg = this.props.svg;
         return (
@@ -260,7 +259,7 @@ var ReactNodes = React.createClass({
                             svg={svg}
                             logicalType={'AND'}/>
                 }, this)}
-    
+
                 {this.state.hybridsList.map(function (entry, value) {
                     var parents = [];
                     var childs = [];
@@ -302,17 +301,17 @@ var ReactNode = React.createClass({
             status: this.props.parents.length === 0 ? 'takeable' : 'inactive',
         };
     },
-    
+
     isSelected: function () {
         return this.state.status === 'active' || this.state.status === 'overridden';
     },
-    
+
     arePrereqsSatisfied: function (svg) {
         function isAllTrue(element, index, array) {
             return svg.refs['nodes'].refs[element] ? svg.refs['nodes'].refs[element].isSelected() :
                                                      svg.refs['bools'].refs[element].isSelected();
         }
-        
+
         if (this.props.logicalType === 'AND') {
             return this.props.parents.every(isAllTrue);     
         } else if (this.props.logicalType === 'OR') {
@@ -321,99 +320,91 @@ var ReactNode = React.createClass({
     },
     
     updateNode: function (svg) {
-        if (this.arePrereqsSatisfied(svg)) {
-            if (this.isSelected() || this.props.hybrid) {
-                this.setState({status: 'active'});
-            } else {
-                this.setState({status: 'takeable'});
-            }
-        } else {
-            if (this.isSelected() && !this.props.hybrid) {
-                this.setState({status: 'overridden'});
-            } else {
-                this.setState({status: 'inactive'});
-            }
-        }
+        var newState = this.arePrereqsSatisfied(svg) ? (this.isSelected() || this.props.hybrid) ? 'active' : 'takeable' :
+                                               (this.isSelected() && !this.props.hybrid) ? 'overridden' : 'inactive';
 
-        // Always update children of hybrids
-        if (this.props.hybrid) {
-            $.each(this.props.childs, function (i, node) {
-                var currentNode = svg.refs['nodes'].refs[node] ? svg.refs['nodes'].refs[node] :
-                                                                 svg.refs['bools'].refs[node];
-                currentNode.forceUpdate(function () { currentNode.updateNode(svg) });
-            });
-            $.each(this.props.outEdges, function (i, edge) {
-                var currentEdge = svg.refs['edges'].refs[edge];
-                currentEdge.forceUpdate(function () { currentEdge.updateEdge(svg) });
-            });
-        }
+        this.setState({status: newState},
+                      function () {
+                          // Always update children of hybrids
+                          if (this.props.hybrid) {
+                              this.props.childs.forEach(function (node, i) {
+                                  var currentNode = svg.refs['nodes'].refs[node] ? svg.refs['nodes'].refs[node] :
+                                                                                   svg.refs['bools'].refs[node];
+                                  currentNode.updateNode(svg);
+                              });
+                              this.props.outEdges.forEach(function (edge, i) {
+                                  var currentEdge = svg.refs['edges'].refs[edge];
+                                  currentEdge.updateEdge(svg);
+                              });
+                          }
+                      }
+        );
     },
-    
-    turn: function (svg) {
-        if (this.isSelected()) {  
-            if (this.props.parents.length === 0) {
-                this.setState({status: 'takeable'}, function () { this.updateNode(svg) });
-            } else {
-                this.setState({status: 'inactive'}, function () { this.updateNode(svg) });
-            }
-        } else {
-            this.setState({status: 'active'}, function () { this.updateNode(svg) });
-        }
-                        
-        $.each(this.props.childs, function (i, node) {
-            var currentNode = svg.refs['nodes'].refs[node] ? svg.refs['nodes'].refs[node] :
-                                                             svg.refs['bools'].refs[node];
-            currentNode.forceUpdate(function () { currentNode.updateNode(svg) });
-        });
-        
-        $.each(this.props.outEdges, function (i, edge) {
-            var currentEdge = svg.refs['edges'].refs[edge];
-            currentEdge.forceUpdate(function () { currentEdge.updateEdge(svg) });
-        });
-        
-        $.each(this.props.inEdges, function (i, edge) {
-            var currentEdge = svg.refs['edges'].refs[edge];
-            currentEdge.forceUpdate(function () { currentEdge.updateEdge(svg) });
-        });
+
+    toggleSelection: function (svg) {
+        var newStatus = this.isSelected() ? (this.props.parents.length === 0 ? 'takeable' : 'inactive') : 'active';
+
+        this.setState({status: newStatus}, 
+                      function () { 
+                          this.updateNode(svg);
+                          this.props.childs.forEach(function (node, i) {
+                              var currentNode = svg.refs['nodes'].refs[node] ? svg.refs['nodes'].refs[node] :
+                                                                               svg.refs['bools'].refs[node];
+                              currentNode.updateNode(svg);
+                          });
+                          this.props.outEdges.forEach(function (edge, i) {
+                              var currentEdge = svg.refs['edges'].refs[edge];
+                              currentEdge.updateEdge(svg);
+                          });
+                          this.props.inEdges.forEach(function (edge, i) {
+                              var currentEdge = svg.refs['edges'].refs[edge];
+                              currentEdge.updateEdge(svg);
+                          });
+                      }
+        );
     },
-    
+
     focusPrereqs: function (svg) {
         if (this.state.status !== 'active') {
             if (this.state.status !== 'overridden') {
-                this.setState({status: 'missing'});
+                this.setState({status: 'missing'},
+                              function () {
+                                  this.props.inEdges.forEach(function (edge, i) {
+                                      var currentEdge = svg.refs['edges'].refs[edge];
+                                      var sourceNode = svg.refs['nodes'].refs[currentEdge.props.source] ?
+                                                       svg.refs['nodes'].refs[currentEdge.props.source] :
+                                                       svg.refs['bools'].refs[currentEdge.props.source];
+                                      if (sourceNode.state.status !== 'active') {
+                                          currentEdge.setState({status: 'missing'});
+                                      }
+                                  });
+                                  this.props.parents.forEach(function (node, i) {
+                                      var currentNode = svg.refs['nodes'].refs[node] ? svg.refs['nodes'].refs[node] :
+                                                                                       svg.refs['bools'].refs[node];
+                                      currentNode.focusPrereqs(svg);
+                                  });
+                              }
+                );
             }
-            
-            $.each(this.props.inEdges, function (i, edge) {
-                var currentEdge = svg.refs['edges'].refs[edge];
-                var sourceNode = svg.refs['nodes'].refs[currentEdge.props.source] ? svg.refs['nodes'].refs[currentEdge.props.source] :
-                                                                                    svg.refs['bools'].refs[currentEdge.props.source];
-                if (sourceNode.state.status !== 'active') {
-                    currentEdge.setState({status: 'missing'});
-                }
-            });
-            
-            $.each(this.props.parents, function (i, node) {
-                var currentNode = svg.refs['nodes'].refs[node] ? svg.refs['nodes'].refs[node] :
-                                                                 svg.refs['bools'].refs[node];
-                currentNode.focusPrereqs(svg);
-            });
         }
     },
-    
+
     unfocusPrereqs: function (svg) {
         var status = this.props.parents.length === 0 ? 'takeable' : 'inactive';
         if (!this.isSelected()) {
-            this.setState({status: this.arePrereqsSatisfied(svg) ? 'takeable' : status});
+            this.setState({status: status},
+                          function () {
+                              this.props.outEdges.forEach(function (edge, i) {
+                                  var currentEdge = svg.refs['edges'].refs[edge];
+                                  currentEdge.updateEdge(svg);
+                              });
+                          }
+            );
         }
-
-        $.each(this.props.parents, function (i, node) {
-            var currentNode = svg.refs['nodes'].refs[node] ? svg.refs['nodes'].refs[node] :
-                                                             svg.refs['bools'].refs[node];
-            currentNode.unfocusPrereqs(svg);
-        });
-        $.each(this.props.outEdges, function (i, edge) {
-            var currentEdge = svg.refs['edges'].refs[edge];
-            currentEdge.forceUpdate(function () { currentEdge.updateEdge(svg) });
+        this.props.parents.forEach(function (node, i) {
+          var currentNode = svg.refs['nodes'].refs[node] ? svg.refs['nodes'].refs[node] :
+                                                           svg.refs['bools'].refs[node];
+          currentNode.unfocusPrereqs(svg);
         });
     },
     
@@ -443,11 +434,11 @@ var ReactBools = React.createClass({
             boolsList: []
         };
     },
-    
+
     componentDidMount: function () {
         this.setState({boolsList: getNodes('.bool')});
     },
-    
+
     render: function () {
         return (
             <g id='bools'>
@@ -480,93 +471,89 @@ var ReactBool = React.createClass({
             status: this.props.parents.length === 0 ? 'takeable' : 'inactive'
         };
     },
-    
+
     isSelected: function () {
         return this.state.status === 'active' || this.state.status === 'overridden';
     },
-    
+
     arePrereqsSatisfied: function (svg) {
         function isAllTrue(element, index, array) {
             return svg.refs['nodes'].refs[element] ? svg.refs['nodes'].refs[element].isSelected() :
                                                      svg.refs['bools'].refs[element].isSelected();
         }
-        
+
         if (this.props.logicalType === 'AND') {
             return this.props.parents.every(isAllTrue);     
         } else if (this.props.logicalType === 'OR') {
             return this.props.parents.some(isAllTrue);
         }
     },
-    
-    updateNode: function (svg) {
-        if (this.arePrereqsSatisfied(svg)) {
-            if (this.isSelected() || this.props.hybrid) {
-                this.setState({status: 'active'});
-            } else {
-                this.setState({status: 'takeable'});
-            }
-        } else {
-            if (this.isSelected() && !this.props.hybrid) {
-                this.setState({status: 'overridden'});
-            } else {
-                this.setState({status: 'inactive'});
-            }
-        }
 
-        // Always update children of hybrids
-        if (this.props.hybrid) {
-            $.each(this.props.childs, function (i, node) {
-                var currentNode = svg.refs['nodes'].refs[node] ? svg.refs['nodes'].refs[node] :
-                                                                 svg.refs['bools'].refs[node];
-                currentNode.forceUpdate(function () { currentNode.updateNode(svg) });
-            });
-            $.each(this.props.outEdges, function (i, edge) {
-                var currentEdge = svg.refs['edges'].refs[edge];
-                currentEdge.forceUpdate(function () { currentEdge.updateEdge(svg) });
-            });
-        }
+    updateNode: function (svg) {
+        var newState = this.arePrereqsSatisfied(svg) ? (this.isSelected() || this.props.hybrid) ? 'active' : 'takeable' :
+                                                       (this.isSelected() && !this.props.hybrid) ? 'overridden' : 'inactive';
+        this.setState({status: newState},
+                      function () {
+                          // Always update children of hybrids
+                          if (this.props.hybrid) {
+                              this.props.childs.forEach(function (node, i) {
+                                  var currentNode = svg.refs['nodes'].refs[node] ? svg.refs['nodes'].refs[node] :
+                                                                                   svg.refs['bools'].refs[node];
+                                  currentNode.updateNode(svg);
+                              });
+                              this.props.outEdges.forEach(function (edge, i) {
+                                  var currentEdge = svg.refs['edges'].refs[edge];
+                                  currentEdge.updateEdge(svg);
+                              });
+                          }
+                      }
+        );
     },
-    
+
     focusPrereqs: function (svg) {
         if (this.state.status !== 'active') {
             if (this.state.status !== 'overridden') {
-                this.setState({status: 'missing'});
+                this.setState({status: 'missing'},
+                              function () {
+                                  this.props.inEdges.forEach(function (edge, i) {
+                                      var currentEdge = svg.refs['edges'].refs[edge];
+                                      var sourceNode = svg.refs['nodes'].refs[currentEdge.props.source] ?
+                                                       svg.refs['nodes'].refs[currentEdge.props.source] :
+                                                       svg.refs['bools'].refs[currentEdge.props.source];
+                                      if (sourceNode.state.status !== 'active') {
+                                          currentEdge.setState({status: 'missing'});
+                                      }
+                                  });
+                                  this.props.parents.forEach(function (node, i) {
+                                      var currentNode = svg.refs['nodes'].refs[node] ? svg.refs['nodes'].refs[node] :
+                                                                                       svg.refs['bools'].refs[node];
+                                      currentNode.focusPrereqs(svg);
+                                  });
+                              }
+                );
             }
-
-            $.each(this.props.inEdges, function (i, edge) {
-                var currentEdge = svg.refs['edges'].refs[edge];
-                var sourceNode = svg.refs['nodes'].refs[currentEdge.props.source] ? svg.refs['nodes'].refs[currentEdge.props.source] :
-                                                                                    svg.refs['bools'].refs[currentEdge.props.source];
-                if (sourceNode.state.status !== 'active') {
-                    currentEdge.setState({status: 'missing'});
-                }
-            });
-
-            $.each(this.props.parents, function (i, node) {
-                var currentNode = svg.refs['nodes'].refs[node] ? svg.refs['nodes'].refs[node] :
-                                                                 svg.refs['bools'].refs[node];
-                currentNode.focusPrereqs(svg);
-            });
         }
     },
-    
+
     unfocusPrereqs: function (svg) {
         var status = this.props.parents.length === 0 ? 'takeable' : 'inactive';
         if (!this.isSelected()) {
-            this.setState({status: this.arePrereqsSatisfied(svg) ? 'takeable' : status});
+            this.setState({status: status},
+                          function () {
+                              this.props.outEdges.forEach(function (edge, i) {
+                                  var currentEdge = svg.refs['edges'].refs[edge];
+                                  currentEdge.updateEdge(svg);
+                              });
+                          }
+            );
         }
-
-        $.each(this.props.parents, function (i, node) {
-            var currentNode = svg.refs['nodes'].refs[node] ? svg.refs['nodes'].refs[node] :
-                                                             svg.refs['bools'].refs[node];
-            currentNode.unfocusPrereqs(svg);
-        });
-        $.each(this.props.outEdges, function (i, edge) {
-            var currentEdge = svg.refs['edges'].refs[edge];
-            currentEdge.forceUpdate(function () { currentEdge.updateEdge(svg) });
+        this.props.parents.forEach(function (node, i) {
+          var currentNode = svg.refs['nodes'].refs[node] ? svg.refs['nodes'].refs[node] :
+                                                           svg.refs['bools'].refs[node];
+          currentNode.unfocusPrereqs(svg);
         });
     },
-    
+
     render: function () {
         //hard-coded className
         //All bools start as inactive, will need to not hardcode this later
@@ -585,18 +572,17 @@ var ReactBool = React.createClass({
     }
 });
 
-
 var ReactEdges = React.createClass({
     getInitialState: function () {
         return {
             edgesList: []
         };
     },
-    
+
     componentDidMount: function () {
         this.setState({edgesList: getNodes('.path')});
     },
-    
+
     render: function () {
         return (
             <g id='edges' stroke='black'>
@@ -635,7 +621,7 @@ var ReactEdge = React.createClass({
             this.setState({status: 'active'});
         }
     },
-    
+
     render: function () {
         //hard-coded className and markerEnd
         //All edges start as inactive, will need to not hardcode this later
