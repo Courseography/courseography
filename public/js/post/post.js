@@ -7,7 +7,8 @@ var CourseCode = React.createClass({
     },
 
     componentWillMount: function() {
-        this.setState({selected: getCookie(this.props.courseIDs[0]) === 'active'});
+        this.setState({selected: getCookie(this.getIdName()) === 'active' ||
+                                 getCookie(this.getIdName()) === 'overridden'});
     },
 
     toggleFullInfo: function() {
@@ -29,8 +30,39 @@ var CourseCode = React.createClass({
         }
     },
 
+    getIdName: function() {
+        var idName = this.props.courseIDs[0].substring(0, 3);
+        
+        this.props.courseIDs.forEach(function (course) {
+            idName += course.substring(3, 6);
+        });
+
+        // math and stats courses need extra stuff appended to their IDs 
+        // (mainly to check if they are active or not through their cookie)
+        if (this.props.courseIDs[0] === 'mat135') {
+            idName += 'calc1';
+        } else if (this.props.courseIDs[0] === 'mat221') {
+            idName += 'lin1';
+        } else if (this.props.courseIDs[0] === 'sta247') {
+            idName += 'sta1';
+        }
+
+        return idName;
+    },
+
+    getTitle: function(id) {
+        if (id == 'mat137' || id == 'mat157') {
+            var course = new Course(id + 'Y1')
+        } else {
+            var course = new Course(id + 'H1');
+        }
+
+        return id.toUpperCase() + ": " + course.title;
+    },
+
     render: function() {
 
+        var me = this;
         var classes = 'course';
         var infoClasses = 'more-info';
 
@@ -43,11 +75,11 @@ var CourseCode = React.createClass({
         }
 
         return (
-            <div id ={this.props.courseIDs[0]} className={classes}>
+            <div id ={this.getIdName()} className={classes}>
                 <p className="code" onClick={this.toggleFullInfo}> {this.getCategoryName()} </p>
                 <div id = {this.props.courseIDs[0] + '_info'} className={infoClasses}>
                     {this.props.courseIDs.map(function (course) {
-                         return <p className="full_name"> {getCourseTitle(course)} </p>
+                         return <p className="full_name"> {me.getTitle(course)} </p>
                     })}
                 </div>
             </div>
@@ -55,17 +87,18 @@ var CourseCode = React.createClass({
     }
 })
 
-var MultipleCourseCode = React.createClass({
+var CourseCategory = React.createClass({
     getInitialState: function() {
         return {
             completed: false,
             completedTextBoxes: 0,
-            infoOpened: false
+            infoOpened: false,
+            textboxValues: this.createInitialValueArray()
         }
     },
 
     componentDidMount: function() {
-        this.setState({completedTextBoxes: this.state.completedTextBoxes + this.props.data.courses.length},
+        this.setState({completedTextBoxes: this.state.completedTextBoxes + this.props.courses.length},
             this.checkIfCompleted);
     },
     
@@ -74,27 +107,47 @@ var MultipleCourseCode = React.createClass({
     },
 
     checkIfCompleted: function() {
-        this.setState({completed: this.state.completedTextBoxes === this.props.data.textBoxNumber});
+        this.setState({completed: this.state.completedTextBoxes === this.props.textBoxNumber});
     },
 
-    handleKeyDown: function(e) {
-        if (e.keyCode === 13) {
-            if (this.state.completedTextBoxes <= this.props.data.textBoxNumber + 1) {
-                if (e.target.defaultValue === '' && e.target.value !== '') {
-                    this.setState({completedTextBoxes: this.state.completedTextBoxes + 1},
-                        this.checkIfCompleted);
-                } else if (e.target.defaultValue !== '' && e.target.value === '') { 
-                    this.setState({completedTextBoxes: this.state.completedTextBoxes - 1},
-                        this.checkIfCompleted);
-                }
-            }
+    createInitialValueArray: function() {
+        var array = Array(this.props.textBoxNumber).join(".").split(".");
+        for (i = 0; i < this.props.courses.length; i++) {
+            array[i] = this.props.courses[i];
+        }
+        return array;
+    },
 
-            e.target.defaultValue = e.target.value;
-        }  
+    isValidExtraCourse: function(course) {
+        var validCourseCodes = ['CSC', 'MAT', 'STA', 'ECE', 'BCB'];
+        return (validCourseCodes.indexOf(course.substring(0, 3)) > -1) && (course.length === 6);
+    }, 
+
+    handleOnChange: function(e) {
+        var newValues = this.state.textboxValues.slice();
+        newValues[e.target.id] = e.target.value.substring(0, 6);
+        this.setState({textboxValues: newValues});
+        this.setState({completedTextBoxes: this.countCompletedTextBoxes()}, this.checkIfCompleted);
+
+        if (this.isValidExtraCourse(e.target.value.substring(0, 6))) {
+            e.target.style.color = 'green';
+        } else {
+            e.target.style.color = 'red';
+        }
+    },
+
+    countCompletedTextBoxes: function() {
+        var count = 0;
+        for (i = 0; i < this.state.textboxValues.length; i++) {
+            if (this.isValidExtraCourse(this.state.textboxValues[i])) {
+                count += 1;
+            }
+        }
+
+        return count;
     },
 
     render: function() {
-
         var me = this;
         var classes = 'course';
         var infoClasses = 'more-info';
@@ -109,11 +162,12 @@ var MultipleCourseCode = React.createClass({
 
         return (
             <div id={this.props.courseID} className={classes}>
-                <p className="code" onClick={this.toggleFullInfo}> {this.props.data.categoryName} </p>
+                <p className="code" onClick={this.toggleFullInfo}> {this.props.categoryName} </p>
                 <div id = {'spec' + this.props.courseID.substring(5, this.props.courseID.length)} className={infoClasses}>
                     <p className="full_name"> 
-                        {Array.apply(0, Array(this.props.data.textBoxNumber)).map(function (x, i) {
-                            return <input type='text' defaultValue={me.props.data.courses[i]} onKeyDown={me.handleKeyDown} />;
+                        {Array.apply(0, Array(this.props.textBoxNumber)).map(function (x, i) {
+                            return <input type='text' id={i} value={me.state.textboxValues[i]} onChange={me.handleOnChange} 
+                                    disabled={me.props.textboxesDisabled} />;
                         })}
                     </p>
                 </div>
@@ -122,6 +176,18 @@ var MultipleCourseCode = React.createClass({
     }
 })
 
+var CourseYear = React.createClass({
+    render: function() {
+        return (
+            <div>
+                <h2> {this.props.yearName} </h2>
+                {this.props.courses.map(function (courses) {
+                    return <CourseCode id={courses[0]} courseIDs={courses} />;
+                })}
+            </div>
+        );
+    }
+})
 
 var SpecialistPost = React.createClass({
     getInitialState: function() {
@@ -152,18 +218,18 @@ var SpecialistPost = React.createClass({
     },
 
     getCourses: function () {
-        // [level400Courses, level300Courses, levelExtraCourses, inquiryCourse]
-        var courseArrays = [];
         // currently this.isInquiryCourse is considered mutually exclusive to other categories
         // - this will change eventually.
         var courseChecks = [this.isLevel400, this.isLevel300, this.isLevelExtra, this.isInquiryCourse];
+        var courseArrays = [];
+
+        // initialize inner arrays
+        for (var i = 0; i < courseChecks.length; i++) {
+            courseArrays[i] = [];
+        }
 
         this.state.activeCourses.map(function (course) {
             for (var i = 0; i < courseChecks.length; i++) {
-                if (courseArrays.length <= i) {
-                    courseArrays.push([]);
-                }
-                 
                 if (courseChecks[i](course, courseArrays[i])) {
                     courseArrays[i].push(course);
                     break;
@@ -198,7 +264,7 @@ var SpecialistPost = React.createClass({
 
     render: function() {
 
-        var firstYearCourses = [['csc108'], ['csc148'], ['csc165', 'csc236'], ['mat135', 'mat136']];
+        var firstYearCourses = [['csc108'], ['csc148'], ['csc165', 'csc240'], ['mat135', 'mat136', 'mat137', 'mat157']];
         var secondYearCourses = [['csc207'], ['csc209'], ['csc236', 'csc240'], ['csc258'], ['csc263', 'csc265'], ['mat221', 'mat223', 'mat240'], 
                                 ['sta247', 'sta255', 'sta257']];
         var laterYearCourses = [['csc369'], ['csc373']];
@@ -207,30 +273,21 @@ var SpecialistPost = React.createClass({
 
         return (
             <div id="specialist_window">
-                <h2> First Year </h2>
-                {firstYearCourses.map(function (courses) {
-                    return <CourseCode id={courses[0]} courseIDs={courses} />;
-                })}
-                <h2> Second Year </h2>
-                {secondYearCourses.map(function (courses) {
-                    return <CourseCode id={courses[0]} courseIDs={courses} />;
-                })}
-                <h2> Later Years </h2>
-                {laterYearCourses.map(function (courses) {
-                    return <CourseCode  id={courses[0]} courseIDs={courses} />;
-                })}
-                <MultipleCourseCode courseID='spec_400' data={{textBoxNumber: 3, courses: courseCategoryArrays[0],
-                    categoryName: 'Any 400-level CSC course, BCB410H, BCB420H, BCB430Y, ECE489H (1.5 FCEs)'}} />
-                <MultipleCourseCode courseID='spec_300' data={{textBoxNumber: 3, courses: courseCategoryArrays[1],
-                    categoryName: 'Any 300+ level CSC course, BCB410H, BCB420H, BCB430Y, ECE385H, ECE489H (1.5 FCEs)'}} />
-                <MultipleCourseCode courseID="spec_extra" data={{textBoxNumber: 4, courses: courseCategoryArrays[2],
-                    categoryName: 'Any of the following: 300+ level CSC course; MAT: 235/237/257, any 300+ \
-                                     except for 329, 390, & 391; STA: 248, 261, any 300+; ECE: 385H/489H; \
-                                     BCB: 410H/420H/430Y (2.0 FCEs)'}} />
-                <MultipleCourseCode courseID="spec_inq" data={{textBoxNumber: 1, courses: courseCategoryArrays[3],
-                    categoryName: 'Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H, \
-                    CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H, or PEY (0.5 FCEs) \
-                    ** Note: Type "PEY" for Check my POSt to recognize it **'}} />
+                <CourseYear yearName='First Year' courses={firstYearCourses} />
+                <CourseYear yearName='Second Year' courses={secondYearCourses} />
+                <CourseYear yearName='Later Years' courses={laterYearCourses} />
+                <CourseCategory courseID='spec_400' textBoxNumber={3} courses={courseCategoryArrays[0]} textboxesDisabled={true}
+                    categoryName='Any 400-level CSC course, BCB410H, BCB420H, BCB430Y, ECE489H (1.5 FCEs)' />
+                <CourseCategory courseID='spec_300' textBoxNumber={3} courses={courseCategoryArrays[1]} textboxesDisabled={true}
+                    categoryName='Any 300+ level CSC course, BCB410H, BCB420H, BCB430Y, ECE385H, ECE489H (1.5 FCEs)' />
+                <CourseCategory courseID="spec_extra" textBoxNumber={4} courses={courseCategoryArrays[2]} textboxesDisabled={false}
+                    categoryName='Any of the following: 300+ level CSC course; MAT: 235/237/257, any 300+ 
+                                  except for 329, 390, & 391; STA: 248, 261, any 300+; ECE: 385H/489H; 
+                                  BCB: 410H/420H/430Y (2.0 FCEs)' />
+                <CourseCategory courseID="spec_inq" textBoxNumber={1} courses={courseCategoryArrays[3]} textboxesDisabled={true}
+                    categoryName='Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H, 
+                    CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H, or PEY (0.5 FCEs) 
+                    ** Note: Type "PEY" for Check my POSt to recognize it **' />
                 <h2> Notes </h2>
                 <p id='notes'> - No more than 1.0 FCE from CSC490H1, CSC491H1, CSC494H1, CSC495H1, BCB430Y1 may be used to fulfill program requirements </p>
             </div>
