@@ -12,7 +12,7 @@ import Control.Monad (msum)
 import Control.Monad.IO.Class (liftIO)
 import Happstack.Server hiding (host)
 import Response
-import Database.CourseQueries (retrieveCourse, allCourses, queryGraphs, courseInfo, deptList)
+import Database.CourseQueries (retrieveCourse, allCourses, queryGraphs, courseInfo, deptList, getJSONs)
 import Filesystem.Path.CurrentOS as Path
 import System.Directory (getCurrentDirectory)
 import System.IO (hSetBuffering, stdout, stderr, BufferMode(LineBuffering))
@@ -58,6 +58,7 @@ runServer = do
               dir "depts" $ liftIO deptList,
               dir "timesearch" searchResponse,
               dir "calendar" $ lookCookieValue "selected-lectures" >>= calendarResponse,
+              dir "graph-json" $liftIO (getJSONs 1),
               notFoundResponse
         ]
     where

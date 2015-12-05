@@ -16,7 +16,8 @@ module Database.CourseQueries
      queryGraphs,
      deptList,
      returnTutorial,
-     returnLecture) where
+     returnLecture,
+     getJSONs) where
 
 import Happstack.Server.SimpleHTTP
 import Database.Persist
@@ -30,6 +31,8 @@ import Data.String.Utils
 import Data.List
 import Config (databasePath)
 import Control.Monad (liftM)
+import Data.Aeson
+import Data.Int(Int64)
 
 -- ** Querying a single course
 
@@ -120,6 +123,19 @@ buildSession lecs tuts =
                           (map entityVal tuts)
 
 -- ** Other queries
+-- | Gets Shape, Text and Path elements and returns as JSONs
+getJSONs :: Int64 -> IO(Response)
+getJSONs gId = do
+    runSqlite databasePath $ do
+        sqlShape    :: [Entity Shape] <- selectList [ShapeGraph ==. toSqlKey gId] []
+        sqlText    :: [Entity Text] <- selectList [TextGraph ==. toSqlKey gId] []
+        sqlPath    :: [Entity Path] <- selectList [PathGraph ==. toSqlKey gId] []
+        
+        let sqlShapeWithoutKey = map entityVal sqlShape
+        let sqlPathWithoutKey = map entityVal sqlPath
+        let sqlTextWithoutKey = map entityVal sqlText
+        let result = createJSONResponse ["shapes" .= sqlShapeWithoutKey, "paths" .= sqlPathWithoutKey, "texts" .= sqlTextWithoutKey]
+        return result
 
 -- | Builds a list of all course codes in the database.
 allCourses :: IO Response
