@@ -31,6 +31,7 @@ nodeCSS = "g" ? do
         "-khtml-user-select" -: "none"
         "-moz-user-select" -: "none"
         "-ms-user-select" -: "none"
+   
     ".node" & do
         cursor pointer
         "text" ? do
@@ -38,6 +39,7 @@ nodeCSS = "g" ? do
             faded
             stroke "none"
             "text-anchor" -: "middle"
+        -- For nodes in draw tab
         "data-active" @= "active" & do
             "rect" <? do
                 wideStroke
@@ -71,7 +73,6 @@ nodeCSS = "g" ? do
             "rect" <? do
                 wideStroke
                 faded
-        -- For nodes in draw tab
         "data-group" @= "red" & do
             "rect" <? do
                 fill dRed
@@ -86,6 +87,33 @@ nodeCSS = "g" ? do
                 fill dPurple
         "rect" <? do
             stroke "black"
+         -- For the React graph
+        ".active" & do
+            "rect" <? do
+                wideStroke
+            "text" <? do
+                fullyVisible
+        ".overridden" & do
+            "rect" <? do
+                wideStroke
+                strokeRed
+            "text" <? do
+                fullyVisible
+        ".inactive" & do
+            "rect" <? do
+                faded
+                strokeDashed
+        ".takeable" & do
+            "rect" <? do
+                semiVisible
+            "text" <? do
+                semiVisible
+        ".missing" & do
+            "rect" <> "ellipse" <? do
+                wideStroke
+                strokeRed
+            "text" <? do
+                fullyVisible
     ".hybrid" & do
         cursor cursorDefault
         "text" <? do
@@ -123,6 +151,29 @@ nodeCSS = "g" ? do
         "data-active" @= "unlit" & do
             wideStroke
             strokeRed
+        -- For the React graph
+        ".active" & do
+            "ellipse" <? do
+                fill "none"
+                stroke "black"
+        ".overridden" & do
+            "ellipse" <? do
+                fill "white"
+                strokeRed
+        ".inactive" & do
+            "ellipse" <? do
+                fill lightGrey
+                faded
+                strokeDashed
+                stroke "black"
+        ".takeable" & do
+            "ellipse" <? do
+                fill lightGrey
+                stroke "black"
+        ".missing" & do
+            "ellipse" <? do
+                fill "white"
+                strokeRed
         "text" <? do
             fontFamily ["Trebuchet MS", "Arial"] [sansSerif]
             fontWeight bold
@@ -150,7 +201,18 @@ pathCSS = "path" ? do
     "data-active" @= "drawn" & do
         faded
         wideStroke
-
+    -- For the React graph
+    ".takeable" & do
+        strokeDashed
+    ".inactive" & do
+        faded
+        strokeDashed
+    ".active" & do
+        opacity 1
+        "stroke-width" -: "2px"
+    ".missing" & do
+        strokeRed
+        strokeDashed
 
 {- resetCSS
  - Generates CSS for the reset feature
@@ -175,11 +237,28 @@ graphContainer = do
         height (px 700)
         overflow hidden
         margin (px 10) (px 10) (px 10) (px 10)
-        display inlineBlock
+        display none
         position absolute
         textAlign $ alignSide sideCenter
         "left" -: "40px"
     "#graphRootSVG" ? do
+        width100
+        height100
+        stroke "black"
+        "stroke-linecap" -: "square"
+        "stroke-miterlimit" -: "10"
+        "shape-rendering" -: "geometricPrecision"
+    "#react-graph" ? do
+        width (px 1195)
+        minHeight (px 700)
+        height (px 700)
+        overflow hidden
+        margin (px 10) (px 10) (px 10) (px 10)
+        display inlineBlock
+        position absolute
+        textAlign $ alignSide sideCenter
+        "left" -: "40px"
+    "#react-graphRootSVG" ? do
         width100
         height100
         stroke "black"
