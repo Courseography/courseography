@@ -127,14 +127,13 @@ buildSession lecs tuts =
 getJSONs :: Int64 -> IO(Response)
 getJSONs gId = do
     runSqlite databasePath $ do
-        sqlShape    :: [Entity Shape] <- selectList [ShapeGraph ==. toSqlKey gId] []
         sqlText    :: [Entity Text] <- selectList [TextGraph ==. toSqlKey gId] []
+        sqlShape   :: [Entity Shape] <- selectList [ShapeGraph ==. toSqlKey gId] []
         sqlPath    :: [Entity Path] <- selectList [PathGraph ==. toSqlKey gId] []
-        
+        let sqlTextWithoutKey = map entityVal sqlText
         let sqlShapeWithoutKey = map entityVal sqlShape
         let sqlPathWithoutKey = map entityVal sqlPath
-        let sqlTextWithoutKey = map entityVal sqlText
-        let result = createJSONResponse ["shapes" .= sqlShapeWithoutKey, "paths" .= sqlPathWithoutKey, "texts" .= sqlTextWithoutKey]
+        let result = createJSONResponse ["texts" .= sqlTextWithoutKey, "shapes" .= sqlShapeWithoutKey, "paths" .= sqlPathWithoutKey]
         return result
 
 -- | Builds a list of all course codes in the database.
