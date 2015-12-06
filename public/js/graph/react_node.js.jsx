@@ -48,6 +48,7 @@ var ReactSVG = React.createClass({
                     }
                 });
                 //data[2] is ["paths", [JSON]]
+                //data[2][1] are the JSON without "paths"
                 data[2][1].forEach(function (entry) {
                     if (entry['isRegion']){
                         regionsList.push(entry);
@@ -89,6 +90,7 @@ var ReactSVG = React.createClass({
         markerNode.setAttribute('markerWidth', 7);
         markerNode.setAttribute('markerHeight', 7);
         markerNode.setAttribute('viewBox', '0 0 10 10');
+        
     },
 
     nodeClick: function (event) {
@@ -158,23 +160,23 @@ var ReactRegionLabels = React.createClass({
     render: function () {
         return (
             <g id='region-labels'>
-            {this.props.labelsJSON.map(function (entry, value) {
-                var textAttrs = {};
-                textAttrs['x'] = entry.pos[0];
-                textAttrs['y'] = entry.pos[1];
+                {this.props.labelsJSON.map(function (entry, value) {
+                    var textAttrs = {};
+                    textAttrs['x'] = entry.pos[0];
+                    textAttrs['y'] = entry.pos[1];
 
-                var textStyle = {
-                    fill : entry['fill']
-                }
+                    var textStyle = {
+                        fill : entry['fill']
+                    }
 
-                return <text
-                        {... textAttrs}
-                        key={value}
-                        style={textStyle}
-                        textAnchor={entry['text-anchor']}>
-                            {entry['text']}
-                        </text>
-            })}
+                    return <text
+                            {... textAttrs}
+                            key={value}
+                            style={textStyle}
+                            textAnchor={entry['text-anchor']}>
+                                {entry['text']}
+                           </text>
+                })}
             </g>
         );
     }
