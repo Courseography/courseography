@@ -16,5 +16,4 @@ data ShapeType = BoolNode | Node | Hybrid | Region
 derivePersistField "ShapeType"
 
 instance ToJSON ShapeType
-
 instance FromJSON ShapeType

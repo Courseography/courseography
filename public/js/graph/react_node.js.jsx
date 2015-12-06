@@ -7,7 +7,69 @@ function renderReactGraph() {
 }
 
 var ReactSVG = React.createClass({
+    getInitialState: function () {
+        return {
+            labelsJSON: [],
+            regionsJSON: [],
+            nodesJSON: [],
+            hybridsJSON: [],
+            boolsJSON: [],
+            edgesJSON: []
+        };
+    },
     componentDidMount: function () {
+        $.ajax({
+            dataType: 'json',
+            url: 'graph-json',
+            success: function (data) {
+                var labelsList = [];
+                var regionsList = [];
+                var nodesList = [];
+                var hybridsList = [];
+                var boolsList = [];
+                var edgesList = [];
+                
+                //data[0] is ["texts", [JSON]]
+                data[0][1].forEach(function (entry) {
+                    if (entry['rId'].substring(0,5) === 'tspan'){
+                        labelsList.push(entry);
+                    }
+                });
+                //data[1] is ["shapes", [JSON]]
+                data[1][1].forEach(function (entry) {
+                    if (entry['type_'] === 'Node'){
+                        nodesList.push(entry);
+                    }
+                    if (entry['type_'] === 'Hybrid'){
+                        hybridsList.push(entry);
+                    }
+                    if (entry['type_'] === 'BoolNode'){
+                        boolsList.push(entry);
+                    }
+                });
+                //data[2] is ["paths", [JSON]]
+                data[2][1].forEach(function (entry) {
+                    if (entry['isRegion']){
+                        regionsList.push(entry);
+                    } else {
+                        edgesList.push(entry);
+                    }
+                });
+
+                if (this.isMounted()) {
+                    this.setState({labelsJSON: labelsList,
+                                   regionsJSON: regionsList,
+                                   nodesJSON: nodesList,
+                                   hybridsJSON: hybridsList,
+                                   boolsJSON: boolsList,
+                                   edgesJSON: edgesList});
+                }
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error('graph-json', status, err.toString());
+            }
+        });
+        
         //Need to hardcode these in because React does not understand these attributes
         var svgNode = React.findDOMNode(this.refs.svg);
         var markerNode = React.findDOMNode(this.refs.marker);
@@ -74,113 +136,59 @@ var ReactSVG = React.createClass({
                         <polyline {... polylineAttrs}/>
                     </marker>
                 </defs>
-                <ReactRegions/>
+                <ReactRegions regionsJSON={this.state.regionsJSON}/>
                 <ReactNodes ref='nodes'
                             onClick={this.nodeClick}
                             onMouseEnter={this.nodeMouseEnter}
                             onMouseLeave={this.nodeMouseLeave}
-                            svg={this}/>
-                <ReactBools ref='bools'/>
-                <ReactEdges ref='edges'/>
-                <ReactRegionLabels/>
+                            svg={this}
+                            nodesJSON={this.state.nodesJSON}
+                            hybridsJSON={this.state.hybridsJSON}/>
+                <ReactBools ref='bools'
+                            boolsJSON={this.state.boolsJSON}/>
+                <ReactEdges ref='edges'
+                            edgesJSON={this.state.edgesJSON}s/>
+                <ReactRegionLabels labelsJSON={this.state.labelsJSON}/>
             </svg>
         );
     }
 });
 
 var ReactRegionLabels = React.createClass({
-    getInitialState: function () {
-        return {
-            labelsJSON: []
-        };
-    },
-
-    componentDidMount: function () {
-        $.ajax({
-            dataType: 'json',
-            url: 'graph-json',
-            success: function(data) {
-                //data[0] is ["texts", [JSON]]
-                //data[0][1] are the JSONs without "texts"
-                var labelsList = [];
-                data[0][1].forEach(function(entry){
-                    if (entry['rId'].substring(0,5) === 'tspan'){
-                        labelsList.push(entry);
-                    }
-                });
-                if (this.isMounted()) {
-                    this.setState({labelsJSON: labelsList});
-                }
-            }.bind(this),
-            error: function(xhr, status, err) {
-                console.error('graph-json', status, err.toString());
-            }.bind(this)
-        });
-    },
-
     render: function () {
         return (
             <g id='region-labels'>
-                {this.state.labelsJSON.map(function (entry, value) {
-                    var textAttrs = {};
-                    textAttrs['x'] = entry['pos'][0];
-                    textAttrs['y'] = entry['pos'][1];
-                    
-                    var rectStyle = {
-                        fill : entry['fill']
-                    }
-            
-                    return <text
-                            {... textAttrs}
-                            key={value}
-                            style={rectStyle}
-                            textAnchor={entry['text-anchor']}>
-                                {entry['text']}
-                            </text>
-                })}
+            {this.props.labelsJSON.map(function (entry, value) {
+                var textAttrs = {};
+                textAttrs['x'] = entry.pos[0];
+                textAttrs['y'] = entry.pos[1];
+
+                var textStyle = {
+                    fill : entry['fill']
+                }
+
+                return <text
+                        {... textAttrs}
+                        key={value}
+                        style={textStyle}
+                        textAnchor={entry['text-anchor']}>
+                            {entry['text']}
+                        </text>
+            })}
             </g>
         );
     }
 });
 
 var ReactRegions = React.createClass({
-    getInitialState: function () {
-        return {
-            regionsJSON: []
-        };
-    },
-
-    componentDidMount: function () {
-        $.ajax({
-            dataType: 'json',
-            url: 'graph-json',
-            success: function(data) {
-                //data[2] is ["paths", [JSON]]
-                //data[2][1] are the JSONs without "paths"
-                var regionsList = [];
-                data[2][1].forEach(function(entry){
-                    if (entry['isRegion']){
-                        regionsList.push(entry);
-                    }
-                });
-                if (this.isMounted()) {
-                    this.setState({regionsJSON: regionsList});
-                }
-            }.bind(this),
-            error: function(xhr, status, err) {
-                console.error('graph-json', status, err.toString());
-            }.bind(this)
-        });
-    },
-
     render: function () {
         return (
             <g id='regions'>
-                {this.state.regionsJSON.map(function (entry, value) {
+                {this.props.regionsJSON.map(function (entry, value) {
                     return <ReactRegion
                             key={value}
                             JSON={entry}
-                            className={'region'}
+                            className='region'
                             />
                 },this)}
             </g>
@@ -193,11 +201,11 @@ var ReactRegion = React.createClass({
         var pathAttrs = {};
         pathAttrs['d'] = 'M';
         //Is there a better way to do this?
-        this.props.JSON['points'].forEach(function(x){
+        this.props.JSON.points.forEach(function(x){
             pathAttrs['d'] += x[0] + ',' + x[1] + ' '});
         
         var pathStyle = {
-            fill : this.props.JSON['fill']
+            fill : this.props.JSON.fill
         }
         
         return (
@@ -208,65 +216,31 @@ var ReactRegion = React.createClass({
 });
 
 var ReactNodes = React.createClass({
-    getInitialState: function () {
-        return {
-            nodesJSON: [],
-            hybridsJSON: []
-        };
-    },
-
-    componentDidMount: function () {
-        $.ajax({
-            dataType: 'json',
-            url: 'graph-json',
-            success: function(data) {
-                //data[1] is ["shapes", [JSON]]
-                //data[1] are the JSONs without "shapes"
-                var nodesList = [];
-                var hybridsList = [];
-                data[1][1].forEach(function(entry){
-                    if (entry['type_'] === 'Node'){
-                        nodesList.push(entry);
-                    }
-                    if (entry['type_'] === 'Hybrid'){
-                        hybridsList.push(entry);
-                    }
-                });
-                if (this.isMounted()) {
-                    this.setState({nodesJSON: nodesList, hybridsJSON: hybridsList});
-                }
-            }.bind(this),
-            error: function(xhr, status, err) {
-                console.error('graph-json', status, err.toString());
-            }.bind(this)
-        });
-    },
-
     render: function () {
         return (
             <g id='nodes' stroke='black'>
-                {this.state.nodesJSON.map(function (entry, value) {
+                {this.props.nodesJSON.map(function (entry, value) {
                     return <ReactNode
                             {...this.props}
                             key={value}
                             JSON={entry}
                             hybrid={false}
-                            logicalType={'AND'}
-                            className={'node'}
+                            logicalType='AND'
+                            className='node'
                             parents={[]}
                             childs={[]}
                             outEdges={[]}
                             inEdges={[]}
                             />
                 },this)}
-                {this.state.hybridsJSON.map(function (entry, value) {
+                {this.props.hybridsJSON.map(function (entry, value) {
                     return <ReactNode
                             {...this.props}
                             key={value}
                             JSON={entry}
                             hybrid={true}
-                            logicalType={'AND'}
-                            className={'hybrid'}
+                            logicalType='AND'
+                            className='hybrid'
                             parents={[]}
                             childs={[]}
                             outEdges={[]}
@@ -397,15 +371,15 @@ var ReactNode = React.createClass({
         gAttrs['shape-rendering'] = 'geometricPrecision';
         
         var rectAttrs = {};
-        rectAttrs['height'] = this.props.JSON['height'];
-        rectAttrs['width'] = this.props.JSON['width'];
+        rectAttrs['height'] = this.props.JSON.height;
+        rectAttrs['width'] = this.props.JSON.width;
         rectAttrs['rx'] = '4';
         rectAttrs['ry'] = '4';
-        rectAttrs['x'] = this.props.JSON['pos'][0];
-        rectAttrs['y'] = this.props.JSON['pos'][1];
+        rectAttrs['x'] = this.props.JSON.pos[0];
+        rectAttrs['y'] = this.props.JSON.pos[1];
         
         var rectStyle = {
-            fill : this.props.JSON['fill']
+            fill : this.props.JSON.fill
         }
         
         return (
@@ -421,46 +395,17 @@ var ReactNode = React.createClass({
 });
 
 var ReactBools = React.createClass({
-    getInitialState: function () {
-        return {
-            boolsJSON: []
-        };
-    },
-
-    componentDidMount: function () {
-       $.ajax({
-            dataType: 'json',
-            url: 'graph-json',
-            success: function(data) {
-                //data[1] is ["shapes", [JSON]]
-                //data[1] are the JSONs without "shapes"
-                var boolsList = [];
-                data[1][1].forEach(function(entry){
-                    if (entry['type_'] === 'BoolNode'){
-                        boolsList.push(entry);
-                    }
-                });
-                if (this.isMounted()) {
-                    this.setState({boolsJSON: boolsList});
-                }
-            }.bind(this),
-            error: function(xhr, status, err) {
-                console.error('graph-json', status, err.toString());
-            }.bind(this)
-        });
-    },
-
     render: function () {
         return (
             <g id='bools'>
-                {this.state.boolsJSON.map(function (entry, value) {
+                {this.props.boolsJSON.map(function (entry, value) {
                     return <ReactBool
                             {... this.props}
                             key={value}
                             JSON={entry}
                             hybrid={true}
-                            logicalType={'AND'}
-                            className={'bool'}
+                            logicalType='AND/OR'
+                            className='bool'
                             parents={[]}
                             childs={[]}
                             outEdges={[]}
@@ -563,8 +508,8 @@ var ReactBool = React.createClass({
 
     render: function () {
         var ellipseAttrs = {};
-        ellipseAttrs['cx'] = this.props.JSON['pos'][0];
-        ellipseAttrs['cy'] = this.props.JSON['pos'][1];
+        ellipseAttrs['cx'] = this.props.JSON.pos[0];
+        ellipseAttrs['cy'] = this.props.JSON.pos[1];
         ellipseAttrs['rx'] = '9.8800001';
         ellipseAttrs['ry'] = '7.3684001';
             
@@ -580,43 +525,14 @@ var ReactBool = React.createClass({
 });
 
 var ReactEdges = React.createClass({
-    getInitialState: function () {
-        return {
-            edgesJSON: []
-        };
-    },
-
-    componentDidMount: function () {
-        $.ajax({
-            dataType: 'json',
-            url: 'graph-json',
-            success: function(data) {
-                //data[2] is ["paths", [JSON]]
-                //data[2][1] are the JSONs without "paths"
-                var edgesList = [];
-                data[2][1].forEach(function(entry){
-                    if (!entry['isRegion']){
-                        edgesList.push(entry);
-                    }
-                });
-                if (this.isMounted()) {
-                    this.setState({edgesJSON: edgesList});
-                }
-            }.bind(this),
-            error: function(xhr, status, err) {
-                console.error('graph-json', status, err.toString());
-            }.bind(this)
-        });
-    },
-
     render: function () {
         return (
             <g id='edges' stroke='black'>
-                {this.state.edgesJSON.map(function (entry, value) {
+                {this.props.edgesJSON.map(function (entry, value) {
                     return <ReactEdge
                             key={value}
                             JSON={entry}
-                            className={'edge'}
+                            className='edge'
                             source=''
                             target=''
                             />
@@ -651,7 +567,7 @@ var ReactEdge = React.createClass({
         var pathAttrs = {};
         pathAttrs['d'] = 'M';
         //Is there a better way to do this?
-        this.props.JSON['points'].forEach(function(x){
+        this.props.JSON.points.forEach(function(x){
             pathAttrs['d'] += x[0] + ',' + x[1] + ' '});
         
         return (

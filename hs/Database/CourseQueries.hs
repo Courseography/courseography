@@ -17,7 +17,7 @@ module Database.CourseQueries
      deptList,
      returnTutorial,
      returnLecture,
-     getJSONs) where
+     getGraphJSON) where
 
 import Happstack.Server.SimpleHTTP
 import Database.Persist
@@ -31,8 +31,8 @@ import Data.String.Utils
 import Data.List
 import Config (databasePath)
 import Control.Monad (liftM)
-import Data.Aeson
-import Data.Int(Int64)
+import Data.Aeson ((.=))
+import Data.Int (Int64)
 
 -- ** Querying a single course
 
@@ -123,17 +123,17 @@ buildSession lecs tuts =
                           (map entityVal tuts)
 
 -- ** Other queries
--- | Gets Shape, Text and Path elements and returns as JSONs
-getJSONs :: Int64 -> IO(Response)
-getJSONs gId = do
+-- | Gets Shape, Text and Path elements for rendering graph returned as JSON
+getGraphJSON :: Int64 -> IO (Response)
+getGraphJSON gId =
     runSqlite databasePath $ do
         sqlText    :: [Entity Text] <- selectList [TextGraph ==. toSqlKey gId] []
         sqlShape   :: [Entity Shape] <- selectList [ShapeGraph ==. toSqlKey gId] []
         sqlPath    :: [Entity Path] <- selectList [PathGraph ==. toSqlKey gId] []
         let sqlTextWithoutKey = map entityVal sqlText
-        let sqlShapeWithoutKey = map entityVal sqlShape
-        let sqlPathWithoutKey = map entityVal sqlPath
-        let result = createJSONResponse ["texts" .= sqlTextWithoutKey, "shapes" .= sqlShapeWithoutKey, "paths" .= sqlPathWithoutKey]
+            sqlShapeWithoutKey = map entityVal sqlShape
+            sqlPathWithoutKey = map entityVal sqlPath
+            result = createJSONResponse ["texts" .= sqlTextWithoutKey, "shapes" .= sqlShapeWithoutKey, "paths" .= sqlPathWithoutKey]
         return result
 
 -- | Builds a list of all course codes in the database.
