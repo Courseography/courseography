@@ -18,7 +18,7 @@ directly to the client when viewing the @/graph@ page.
 module Svg.Parser
     (parsePrebuiltSvgs) where
 
-import Data.Maybe (mapMaybe, fromMaybe, fromJust)
+import Data.Maybe (mapMaybe, fromMaybe, fromJust, isNothing)
 import Data.List.Split (splitOn)
 import Data.List (find)
 import qualified Data.Map as M (empty)
@@ -36,12 +36,18 @@ import Config (graphPath)
 import Text.Read (readMaybe)
 
 parsePrebuiltSvgs :: IO ()
-parsePrebuiltSvgs =
-    do
-        performParse "Computer Science" "csc2015.svg"
-        performParse "Statistics" "sta2015.svg"
-        performParse "Biochemistry" "bch2015.svg"
-        performParse "Cell & Systems Biology" "csb2015.svg"
+parsePrebuiltSvgs = do
+    performParse "Computer Science" "csc2015.svg"
+    performParse "Statistics" "sta2015.svg"
+    performParse "Biochemistry" "bch2015.svg"
+    performParse "Cell & Systems Biology" "csb2015.svg"
+    performParse "Estonian" "est2015.svg"
+    performParse "Finnish" "fin2015.svg"
+    performParse "Italian" "ita2015.svg"
+    performParse "Linguistics" "lin2015.svg"
+    performParse "Rotman" "rotman2015.svg"
+    performParse "Economics" "eco2015.svg"
+    performParse "Spanish" "spa2015.svg"
 
 performParse :: String -- ^ The title of the graph.
              -> String -- ^ The filename of the file that will be parsed.
@@ -108,9 +114,9 @@ parseNode key content =
                 foldl concatThree (paths, rects ++ ellipses, texts)
                                   (map (parseNode key) (path [children] content))
          in
-             (map (updatePath fill trans) (newPaths),
-              map (updateShape fill trans) (newShapes),
-              map (updateText trans) (newTexts))
+             (map (updatePath fill trans) newPaths,
+              map (updateShape fill trans) newShapes,
+              map (updateText trans) newTexts)
 
 -- | Create a rectangle from a list of attributes.
 parseRect :: GraphId -- ^ The Rect's corresponding graph identifier.
@@ -181,7 +187,7 @@ parseText key style content =
               (lookupAttr "id" (contentAttrs content))
               (readAttr "x" (contentAttrs content),
                readAttr "y" (contentAttrs content))
-              (replace "&gt;" ">" $ tagTextContent content)
+              (replace "&amp;" "&" (replace "&gt;" ">" $ tagTextContent content))
               align
               fill]
     else
@@ -247,7 +253,7 @@ parseTransform transform =
         xPos = readMaybe $ parsedTransform !! 0
         yPos = readMaybe $ init $ parsedTransform !! 1
     in
-        if xPos == Nothing || yPos == Nothing
+        if isNothing xPos || isNothing yPos
         then
             error transform
         else
