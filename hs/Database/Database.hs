@@ -28,7 +28,7 @@ setupDatabase = do setupDistributionTable
                    print "breadth table set up"
                    parseAll
                    seedVideos
-
+                   
 -- | Sets up the Distribution table.
 setupDistributionTable :: IO ()
 setupDistributionTable = runSqlite databasePath $ do

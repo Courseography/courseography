@@ -15,46 +15,6 @@ function getCourseVideoUrls(names) {
     return courseVideoUrls;
 }
 
-
-/**
- * Displays the course video.
- * @param courseVideoUrls The video URLs associated with the course.
- * @param contentDiv The modal div.
- */
-function displayCourseVideo(courseVideoUrls, contentDiv) {
-    'use strict';
-
-    if (courseVideoUrls.length > 0) {
-        // Only display first video right now
-        var videoDiv = setupVideoPlayer(courseVideoUrls[0]);
-        contentDiv.append(videoDiv);
-    }
-}
-
-
-/**
- * Sets up and returns the video player, false if the video URL does not exist.
- * @param {string} url The video url.
- * @returns {jQuery}
- */
-function setupVideoPlayer(url) {
-    'use strict';
-
-    // Not divided up into 'attr' yet because 'controls preload'
-    // cannot be added that way.
-    var videoDiv = $('<div id="course-video-div"></div>');
-    var video = $('<video id="course-video" class="video-js vjs-default-skin"' +
-        'controls preload="auto"></video>');
-    var src = $('<source></source>').attr('src', url)
-        .attr('type', 'video/mp4');
-
-    video.append(src);
-    videoDiv.append(video);
-
-    return videoDiv;
-}
-
-
 /**
  * Enables VideoJS.
  * Note: Must be called after the video player is set up.
