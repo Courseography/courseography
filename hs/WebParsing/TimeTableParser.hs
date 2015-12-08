@@ -7,6 +7,7 @@ import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Match
 import Database.Persist.Sqlite
 import Data.List
+import Data.Char (isUpper)
 import qualified Data.Text as T
 import Data.Maybe
 import Database.Tables as Tables
@@ -22,10 +23,48 @@ parseTT :: IO ()
 parseTT = do
     rsp <- simpleHTTP (getRequest timetableUrl)
     body <- getResponseBody rsp
-    let depts = getDeptList $ parseTags body
 
-    runSqlite databasePath $
+    let depts = getDeptList $ parseTags body
+        deptInfo = parseLinkText $ parseTags body
+
+    runSqlite databasePath $ do
         mapM_ getDeptTimetable depts
+        mapM_ insertDepartment deptInfo
+
+-- | Inserts the Department association list in the database.
+insertDepartment :: MonadIO m => ([T.Text], T.Text) -> ReaderT SqlBackend m ()
+insertDepartment (code, name) = 
+    insert_ (Tables.Department code name)
+
+-- | List of unwanted words to remove when getting department codes.
+wordsToRemove :: [String]
+wordsToRemove = ["courses",
+                "courses]", 
+                "includes",
+                "and",
+                "-",
+                "[",
+                "]",
+                ""]
+
+-- | Extracts a list of tuples containing a list of dept codes and the respective dept name.
+parseLinkText :: [Tag String] -> [([T.Text],T.Text)]
+parseLinkText tags = 
+    init $ zip deptCodesText deptNamesText
+    where
+        tagsText = map fromTagText $ filter isTagText tags
+        convertToStr = map T.pack $ filter (\x -> '[' `elem` x) tagsText
+        -- deptNamesAndCodes splits lists into two strings; one containing
+        -- dept names and the other containing the unfiltered dept codes
+        deptNamesAndCodes = map (T.splitOn (T.pack "[")) convertToStr
+        deptNamesText = map head deptNamesAndCodes
+        -- relevantWords takes the unfiltered string containing dept codes and 
+        -- makes a list of the words in that string and removes wordsToRemove
+        -- from that list
+        deptCodesUnfiltered = map T.unpack $ map last deptNamesAndCodes 
+        relevantWords = map (filter (`notElem` wordsToRemove)) $ map words deptCodesUnfiltered
+        -- deptCodesText filters the dept codes
+        deptCodesText = map (map T.pack) $ map (filter (all isUpper)) relevantWords 
 
 -- | Used as an intermediate container while extracting lecture and tutorial information
 -- from the table. Is is later converted into lecture or tutorial records by examinig the
@@ -52,9 +91,9 @@ getDeptList tags =
         notDepts = filter (\str -> length str < 20) (map getAttribute deptList)
     in nub $ filter (`notElem` specialCases) notDepts
     where
-      isHref [("href", _)] = True
-      isHref _ = False
-      getAttribute (TagOpen _ [(_, link)]) = link
+        isHref [("href", _)] = True
+        isHref _ = False
+        getAttribute (TagOpen _ [(_, link)]) = link
 
 -- | If a row contains "NOTE" we add 3 empty 'cells' to the beginning
 -- used to deal with corner case found in "csc.html"
