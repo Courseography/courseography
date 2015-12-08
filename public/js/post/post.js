@@ -271,7 +271,11 @@ var SpecialistPost = React.createClass({
         this.state.activeCourses.forEach(function (course) {
             var courseID = course.toLowerCase()
             if (getCookie(courseID) === 'active' || getCookie(courseID) === 'overridden') {
-                count += 1;
+                if (course === 'MAT135136137157Calc1') {
+                    count += 1;
+                } else {
+                    count += 0.5;
+                }
             }
         });
 
