@@ -71,20 +71,14 @@
      id="path5978"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="cccccc" />
-  <rect
+  <path
      style="fill:#9eff2b;fill-opacity:0.4638554;stroke:none;stroke-width:1;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
-     id="rect5982"
-     width="160.62979"
-     height="415"
-     x="-0.37021208"
-     y="191.43518" />
-  <rect
+     d="m -0.37021208,191.43518 160.62979208,0 0,415 -160.62979208,0 z"
+     id="rect5982" />
+  <path
      style="fill:#e9a32b;fill-opacity:0.4638554;stroke:none;stroke-width:1;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
-     id="rect5984"
-     width="119.57023"
-     height="370.12448"
-     x="384.78021"
-     y="236.31068" />
+     d="m 384.78021,236.31068 119.57023,0 0,370.12449 -119.57023,0 z"
+     id="rect5984" />
   <g
      style="font-style:normal;font-weight:normal;font-size:12px;font-family:Dialog;color-interpolation:auto;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto"
      id="g6531"
@@ -1553,7 +1547,17 @@
       </g>
     </g>
   </g>
-    <text
+  <flowRoot
+     xml:space="preserve"
+     id="flowRoot7537"
+     style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"><flowRegion
+       id="flowRegion7539"><rect
+         id="rect7541"
+         width="195.1848"
+         height="41.620289"
+         x="-275.55502"
+         y="175.88048" /></flowRegion><flowPara
+       id="flowPara7543">Portugu</flowPara></flowRoot>  <text
      xml:space="preserve"
      style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
      x="218.14771"
