@@ -195,12 +195,14 @@ var SpecialistPost = React.createClass({
     getInitialState: function() {
         return {
             selected: true,
-            activeCourses: this.updateActiveCourses()
+            activeCourses: this.updateActiveCourses(),
+            creditCount: 0
         }
     },
 
     componentWillMount: function() {
         this.setState({selected: getCookie('specialist') === 'active'});
+        this.calculateCreditCount();
     },
 
     isLevel400: function (course, level400Array) {
@@ -263,6 +265,18 @@ var SpecialistPost = React.createClass({
         return activeCourses;
     },
 
+    calculateCreditCount: function() {
+        var count = 0;
+
+        this.state.activeCourses.forEach(function (course) {
+            var courseID = course.toLowerCase()
+            if (getCookie(courseID) === 'active' || getCookie(courseID) === 'overridden') {
+                count += 1;
+            }
+        });
+
+        this.setState({creditCount: count});
+    },
 
     render: function() {
 
