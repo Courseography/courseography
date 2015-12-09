@@ -87,7 +87,7 @@ var CourseCode = React.createClass({
     }
 })
 
-var CourseCategory = React.createClass({
+var MultipleCourseCode = React.createClass({
     getInitialState: function() {
         return {
             completed: false,
@@ -126,8 +126,10 @@ var CourseCategory = React.createClass({
     handleOnChange: function(e) {
         var newValues = this.state.textboxValues.slice();
         newValues[e.target.id] = e.target.value.substring(0, 6);
-        this.setState({textboxValues: newValues});
-        this.setState({completedTextBoxes: this.countCompletedTextBoxes()}, this.checkIfCompleted);
+        this.setState({textboxValues: newValues}, function () {
+            this.setState({completedTextBoxes: this.countCompletedTextBoxes()}, this.checkIfCompleted);
+        });
+        
 
         if (this.isValidExtraCourse(e.target.value.substring(0, 6))) {
             e.target.style.color = 'green';
@@ -176,7 +178,7 @@ var CourseCategory = React.createClass({
     }
 })
 
-var CourseYear = React.createClass({
+var CourseCategory = React.createClass({
     render: function() {
         return (
             <div>
@@ -193,12 +195,14 @@ var SpecialistPost = React.createClass({
     getInitialState: function() {
         return {
             selected: true,
-            activeCourses: this.updateActiveCourses()
+            activeCourses: this.updateActiveCourses(),
+            creditCount: 0
         }
     },
 
     componentWillMount: function() {
         this.setState({selected: getCookie('specialist') === 'active'});
+        this.calculateCreditCount();
     },
 
     isLevel400: function (course, level400Array) {
@@ -261,6 +265,22 @@ var SpecialistPost = React.createClass({
         return activeCourses;
     },
 
+    calculateCreditCount: function() {
+        var count = 0;
+
+        this.state.activeCourses.forEach(function (course) {
+            var courseID = course.toLowerCase()
+            if (getCookie(courseID) === 'active' || getCookie(courseID) === 'overridden') {
+                if (course === 'MAT135136137157Calc1') {
+                    count += 1;
+                } else {
+                    count += 0.5;
+                }
+            }
+        });
+
+        this.setState({creditCount: count});
+    },
 
     render: function() {
 
@@ -273,18 +293,18 @@ var SpecialistPost = React.createClass({
 
         return (
             <div id="specialist_window">
-                <CourseYear yearName='First Year' courses={firstYearCourses} />
-                <CourseYear yearName='Second Year' courses={secondYearCourses} />
-                <CourseYear yearName='Later Years' courses={laterYearCourses} />
-                <CourseCategory courseID='spec_400' textBoxNumber={3} courses={courseCategoryArrays[0]} textboxesDisabled={true}
+                <CourseCategory yearName='First Year' courses={firstYearCourses} />
+                <CourseCategory yearName='Second Year' courses={secondYearCourses} />
+                <CourseCategory yearName='Later Years' courses={laterYearCourses} />
+                <MultipleCourseCode courseID='spec_400' textBoxNumber={3} courses={courseCategoryArrays[0]} textboxesDisabled={true}
                     categoryName='Any 400-level CSC course, BCB410H, BCB420H, BCB430Y, ECE489H (1.5 FCEs)' />
-                <CourseCategory courseID='spec_300' textBoxNumber={3} courses={courseCategoryArrays[1]} textboxesDisabled={true}
+                <MultipleCourseCode courseID='spec_300' textBoxNumber={3} courses={courseCategoryArrays[1]} textboxesDisabled={true}
                     categoryName='Any 300+ level CSC course, BCB410H, BCB420H, BCB430Y, ECE385H, ECE489H (1.5 FCEs)' />
-                <CourseCategory courseID="spec_extra" textBoxNumber={4} courses={courseCategoryArrays[2]} textboxesDisabled={false}
+                <MultipleCourseCode courseID="spec_extra" textBoxNumber={4} courses={courseCategoryArrays[2]} textboxesDisabled={false}
                     categoryName='Any of the following: 300+ level CSC course; MAT: 235/237/257, any 300+ 
                                   except for 329, 390, & 391; STA: 248, 261, any 300+; ECE: 385H/489H; 
                                   BCB: 410H/420H/430Y (2.0 FCEs)' />
-                <CourseCategory courseID="spec_inq" textBoxNumber={1} courses={courseCategoryArrays[3]} textboxesDisabled={true}
+                <MultipleCourseCode courseID="spec_inq" textBoxNumber={1} courses={courseCategoryArrays[3]} textboxesDisabled={true}
                     categoryName='Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H, 
                     CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H, or PEY (0.5 FCEs) 
                     ** Note: Type "PEY" for Check my POSt to recognize it **' />
