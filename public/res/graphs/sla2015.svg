@@ -15,7 +15,7 @@
    font-size="12px"
    id="svg4136"
    version="1.1"
-   inkscape:version="0.91 r13725"
+   inkscape:version="0.48.5 r10040"
    sodipodi:docname="sla2015.svg"
    style="font-style:normal;font-weight:normal;font-size:12px;font-family:Dialog;color-interpolation:auto;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto">
   <metadata
@@ -26,7 +26,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -39,14 +39,14 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1366"
-     inkscape:window-height="706"
+     inkscape:window-width="1280"
+     inkscape:window-height="697"
      id="namedview5646"
      showgrid="false"
      showguides="false"
-     inkscape:zoom="0.62224797"
-     inkscape:cx="497.51505"
-     inkscape:cy="465.65728"
+     inkscape:zoom="1"
+     inkscape:cx="513.76887"
+     inkscape:cy="231.23881"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
@@ -2641,7 +2641,8 @@
          cx="106.6928"
          cy="26.9198"
          id="ellipse4824"
-         style="fill:none" />
+         style="fill:none"
+         d="M 116.5728,26.9198 C 116.5728,30.989255 112.14938,34.2882 106.6928,34.2882 101.23623,34.2882 96.812802,30.989255 96.812802,26.9198 96.812802,22.850345 101.23623,19.5514 106.6928,19.5514 112.14938,19.5514 116.5728,22.850345 116.5728,26.9198 z" />
     </g>
     <g
        transform="translate(466,98)"
@@ -2998,7 +2999,7 @@
          ry="4"
          height="29"
          id="rect4918"
-         style="stroke:none" />
+         style="fill:#c73737;stroke:none" />
     </g>
     <g
        stroke-miterlimit="1.45"
@@ -5683,18 +5684,6 @@
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="cccccccccc" />
   <path
-     style="fill:#e63261;fill-opacity:0.33774839;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     d="m 620,206 0,714 307,0 0,-525 -102,-0.005 L 823.87157,348 715,348 715,206"
-     id="path5660"
-     inkscape:connector-curvature="0"
-     sodipodi:nodetypes="cccccccc" />
-  <path
-     style="fill:#e63261;fill-opacity:0.33774839;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     d="M 927.28166,393.85857 927,535 l 211,0 0,-140 -211,0 z"
-     id="path5677"
-     inkscape:connector-curvature="0"
-     sodipodi:nodetypes="cccccc" />
-  <path
      style="fill:#b85eb5;fill-opacity:0.49006623;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
      d="m 927,535 0,385 211,0 0,-385 z"
      id="path5681"
@@ -5748,12 +5737,6 @@
      id="path5699"
      inkscape:connector-curvature="0"
      sodipodi:nodetypes="ccccccc" />
-  <path
-     style="fill:#ff8c00;fill-opacity:0.37162164;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     d="M 210.2293,440.44992 315,440 l 0,480 -315,0 0,-200 210,0 0,-280 z"
-     id="path5701"
-     inkscape:connector-curvature="0"
-     sodipodi:nodetypes="cccccccc" />
   <text
      xml:space="preserve"
      style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -5967,4 +5950,14 @@
        y="524.43445"
        style="font-size:17.5px;text-align:center;text-anchor:middle"
        id="tspan5804-37">Culture and Literature</tspan></text>
+  <path
+     style="fill:#e63261;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:0.33725491000000002"
+     d="M 927,920 619,920 619,206 714,206 714,349 825,349 825,395 1140,395 1140,536 927,536 z"
+     id="path4553"
+     inkscape:connector-curvature="0" />
+  <path
+     style="fill:#b37945;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:0.33725491000000002"
+     d="M 0,720 210,720 210,440 315,440 315,921 -1,921"
+     id="path4555"
+     inkscape:connector-curvature="0" />
 </svg>
