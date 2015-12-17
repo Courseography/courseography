@@ -7,7 +7,7 @@ resolver: lts-3.17
 packages:
 - '.'
 # Couldn't get this to compile on Windows directly. Needed to modify source.
-- dependencies\HaXml-1.25.3
+- dependencies/HaXml-1.25.3
 
 # Packages to be pulled from upstream that are not in the resolver (e.g., acme-missiles-0.3)
 extra-deps: []
