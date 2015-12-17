@@ -1,16 +1,15 @@
-machine:
-  ghc:
-    version: 7.8.3
-
-general:
-  build_dir: hs
-
 dependencies:
+  cache_directories:
+    - "~/.stack"
+  pre:
+    - wget https://github.com/commercialhaskell/stack/releases/download/v0.1.10.1/stack-0.1.10.1-linux-x86_64.tar.gz -O /tmp/stack.tar.gz
+    - tar xzf /tmp/stack.gz && chmod +x /tmp/stack
+    - sudo mv /tmp/stack /usr/bin/stack
   override:
-    - cabal update
-    - cabal install --only-dependencies
+    - stack setup 7.10.3
+    - stack build
 
 test:
   pre:
-    - cp DevelopmentConfig.hs Config.hs
+    - cp hs/DevelopmentConfig.hs hs/Config.hs
 
