@@ -24,16 +24,6 @@ function clearFCECount() {
     currentFCEsMAT = 0;
 }
 
-
-/**
- * Clear Check My POSt! Tab.
- */
-function clearPOStTab() {
-    $('input:checkbox').attr('checked', false);
-    $('input:text').attr('value', '');
-}
-
-
 /**
  * Clears any active focus.
  */
@@ -54,7 +44,6 @@ function initializeGraphSettings() {
     'use strict';
 
     clearFCECount();
-    clearPOStTab();
 
     // Set initial node status
     $.each(nodes, function (i, node) {
@@ -125,7 +114,6 @@ function reset() {
     clearFCECount();
     updateFCECount();
     fillFCECount();
-    clearPOStTab();
 }
 
 

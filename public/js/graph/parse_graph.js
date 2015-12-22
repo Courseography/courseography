@@ -3,43 +3,12 @@
  * (Node & Edge) to represent prerequisites, given just the SVG graph.
  */
 
-
 /**
  * Generates Node and Edge objects based on geometric relationships.
  * TODO: This function is too long.
  */
 function buildGraph(gId) {
     'use strict';
-
-    nodes = [];
-
-    $('.node').each(function () {
-        makeNode('AND', $(this).attr('id'));
-    });
-    
-    $('.hybrid').each(function () {
-        var id = $(this).attr('id');
-        var course = $(this).children('text').text().toLowerCase();
-        var reqs = parseAnd(course)[0];
-        makeHybrid('AND', id);
-        $.each(reqs, function (index, elem) {
-            if ($.isArray(elem)) {
-                var orNode = id + elem.join('');
-                makeHybrid('OR', orNode);
-                $.each(elem, function (i, e) {
-                    if (typeof(window[e]) !== 'undefined') {
-                        window[orNode].parents.push(window[e]);
-                        window[e].children.push(window[orNode]);
-                    }
-                });
-                window[id].parents.push(window[orNode]);
-                window[orNode].children.push(window[id]);
-            } else if (typeof(window[elem]) !== 'undefined') {
-                window[id].parents.push(window[elem]);
-                window[elem].children.push(window[id]);
-            }
-        });
-    });
 
     // Hard-coded hybrid relationships.
     // TODO: This should be automatically generated.
@@ -82,24 +51,6 @@ function buildGraph(gId) {
         h199.parents = [csc108120148];
         csc108120148.children.push(h199);
     }
-
-    $('.bool').each(function () {
-        var id = $(this).attr('id');
-        var type = $(this).children('text').text();
-        makeHybrid(type, id);
-    });
-
-    $('.path').each(function () {
-        if ($(this).attr('data-source-node') && $(this).attr('data-target-node')) {
-            makeEdge(window[$(this).attr('data-source-node')],
-                     window[$(this).attr('data-target-node')],
-                     $(this).attr('id'));
-        } else {
-            console.log(this);
-        }
-    });
-    
-    renderReactGraph();
 }
 
 

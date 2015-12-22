@@ -75,15 +75,15 @@ function loadGraph(id) {
 
     getRemote('static/res/graphs/gen/' + id + '.svg');
 
-    buildGraph(id);
+    //buildGraph(id);
 
     // Set mouse callbacks
-    setMouseCallbacks();
+    //setMouseCallbacks();
 
     // Initialize interface
-    initializeGraphSettings();
+    //initializeGraphSettings();
 
-    fillFCECount();
+    //fillFCECount();
 }
 
 

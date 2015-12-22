@@ -125,7 +125,7 @@ var ReactSVG = React.createClass({
     render: function () {
         //not all of these properties are supported in React
         var svgAttrs = {'width': this.props.width, 'height': this.props.height};
-        var markerAttrs = {'id': 'arrow'};
+        var markerAttrs = {'id': 'arrowHead'};
         var polylineAttrs = {'points': '0,1 10,5 0,9', 'fill': 'black'};
         return (
             <svg {... svgAttrs} ref='svg'>
@@ -232,6 +232,8 @@ var ReactNodes = React.createClass({
                     var childs = [];
                     var outEdges = [];
                     var inEdges = [];
+                    // Can be removed when we no longer use the Haskell-generated graphs.
+                    delete entry['attributes']['data-active'];
 
                     $('.path').map(function (key, element) {
                         if (entry['id'] === element.getAttribute('data-target-node')) {
@@ -265,6 +267,8 @@ var ReactNodes = React.createClass({
                     var childs = [];
                     var outEdges = [];
                     var inEdges = [];
+                    // Can be removed when we no longer use the Haskell-generated graphs.
+                    delete entry['attributes']['data-active'];
 
                     $('.path').map(function (key, element) {
                         if (entry['id'] === element.getAttribute('data-target-node')) {
@@ -448,6 +452,9 @@ var ReactBools = React.createClass({
                     var outEdges = [];
                     var inEdges = [];
 
+                    // Can be removed when we no longer use the Haskell-generated graphs.
+                    delete entry['attributes']['data-active'];
+
                     $('.path').map(function (key, element) {
                         if (entry['id'] === element.getAttribute('data-target-node')) {
                             parents.push(element.getAttribute('data-source-node'));
@@ -587,6 +594,8 @@ var ReactEdges = React.createClass({
         return (
             <g id='edges' stroke='black'>
                 {this.state.edgesList.map(function (entry, value) {
+                    // Can be removed when we no longer use the Haskell-generated graphs.
+                    delete entry['attributes']['data-active'];
                     return <ReactEdge
                             attributes={entry['attributes']}
                             className='path'
@@ -627,8 +636,12 @@ var ReactEdge = React.createClass({
         //All edges start as inactive, will need to not hardcode this later
         var newClassName = this.props.className + ' ' + this.state.status;
         return (
-            <path {... this.props.attributes} className={newClassName} style={this.props.styles} markerEnd='url(#arrow)'>
+            <path {... this.props.attributes} className={newClassName} style={this.props.styles} markerEnd='url(#arrowHead)'>
             </path>
         );
     }
+});
+
+$(document).ready(function () {
+    renderReactGraph();
 });
