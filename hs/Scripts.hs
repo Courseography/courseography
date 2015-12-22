@@ -68,7 +68,6 @@ graphScripts = do
          "/static/js/common/export/export.js"])
     H.script ! A.type_ "text/jsx" ! A.src "/static/js/common/react_modal.js.jsx" $ ""
     H.script ! A.type_ "text/jsx" ! A.src "/static/js/graph/react_node.js.jsx" $ ""
-    H.script ! A.type_ "text/jsx" ! A.src "/static/js/graph/postsetup.js.jsx" $ ""
 
 timetableScripts :: H.Html
 timetableScripts = do

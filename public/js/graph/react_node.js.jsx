@@ -66,6 +66,7 @@ function getNodes(mode) {
     return dictList;
 }
 
+
 var ReactSVG = React.createClass({
     componentDidMount: function () {
         //Need to hardcode these in because React does not understand these attributes
@@ -87,6 +88,40 @@ var ReactSVG = React.createClass({
         markerNode.setAttribute('markerWidth', 7);
         markerNode.setAttribute('markerHeight', 7);
         markerNode.setAttribute('viewBox', '0 0 10 10');
+
+        this.getGraph();
+    },
+
+    getGraph: function () {
+        var urlSpecifiedGraph = getURLParameter('dept');
+
+        // HACK: Temporary workaround for giving the statistics department a link to our graph.
+        // Should be replaced with a more general solution.
+        var active;
+        if (urlSpecifiedGraph === 'sta') {
+            active = '2';
+        } else if (urlSpecifiedGraph !== null) {
+            active = '1';
+        } else {
+            active = getCookie('active-graph');
+            if (active === '') {
+                active = '1';
+            }
+        }
+
+        $.ajax({
+            type: 'GET',
+            dataType: 'text',
+            url: 'static/res/graphs/gen/' + active + '.svg',
+        }).success(function(data) {
+            var lines = data.split('\n');
+            $('#graph').html(lines[lines.length - 1]);
+            this.refs.nodes.componentDidMount();
+            this.refs.bools.componentDidMount();
+            this.refs.edges.componentDidMount();
+            this.refs.regions.componentDidMount();
+            this.refs.regionLabels.componentDidMount();
+        }.bind(this));
     },
 
     nodeClick: function (event) {
@@ -134,7 +169,7 @@ var ReactSVG = React.createClass({
                         <polyline {... polylineAttrs}/>
                     </marker>
                 </defs>
-                <ReactRegions/>
+                <ReactRegions ref='regions'/>
                 <ReactNodes ref='nodes'
                             onClick={this.nodeClick}
                             onMouseEnter={this.nodeMouseEnter}
@@ -142,7 +177,7 @@ var ReactSVG = React.createClass({
                             svg={this}/>
                 <ReactBools ref='bools'/>
                 <ReactEdges ref='edges'/>
-                <ReactRegionLabels/>
+                <ReactRegionLabels ref='regionLabels'/>
             </svg>
         );
     }
