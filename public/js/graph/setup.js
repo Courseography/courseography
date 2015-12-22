@@ -15,19 +15,3 @@ var timeouts = [];            // All timeouts. Used to remove timeouts later on
 
 var nodes = [];               // List of all nodes
 var graphs = [];              // List of graphs (jsons) that are parsed in the database
-
-/**
- * Retrieves an SVG file.
- * @param {string} filepath The relative filepath of the graph
- * @returns {string} An SVG string representing a graph. 
- */
-function getRemote(filepath) {
-    'use strict';
-
-    var SVG = $.ajax({
-        type: 'GET',
-        url: filepath,
-        async: false
-    }).responseText;
-    $('#graph').append(SVG);
-}

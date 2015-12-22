@@ -50,44 +50,6 @@ function createGraphButtons() {
 
 
 /**
- * Click function to load graph, based on button clicked in sidebar.
- */
-$(document).on('click', '.graph-button', function() {
-    'use strict';
-
-    var id = $(this).data('id');
-    loadGraph(id);
-    changeFocusEnable(id);
-});
-
-
-/**
- * Loads a Graph
- * @param{string} id ID of graph in database
- */
-function loadGraph(id) {
-    'use strict';
-
-    setCookie('active-graph', id);
-
-    // Remove current graph
-    $('#graph').empty();
-
-    getRemote('static/res/graphs/gen/' + id + '.svg');
-
-    //buildGraph(id);
-
-    // Set mouse callbacks
-    //setMouseCallbacks();
-
-    // Initialize interface
-    //initializeGraphSettings();
-
-    //fillFCECount();
-}
-
-
-/**
  * Grabs all the graphs currently parsed into the database
  */
 function getGraphsInDatabase() {

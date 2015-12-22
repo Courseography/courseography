@@ -1,6 +1,6 @@
 function renderReactGraph() {
     'use strict';
-    React.render(
+    return React.render(
         <ReactSVG width={1195} height={650}/>,
         document.getElementById('react-graph')
     );
@@ -41,7 +41,7 @@ function getNodes(mode) {
     //LATER: Add AJAX code to pull code here
     //In the long run, remove SVGGenerator
     var dictList = [];
-    $(mode).map(function (key, element) {
+    $('#graph ' + mode).map(function (key, element) {
         var entry = {};
         entry['id'] = element.id;
         entry['attributes'] = getAttributes(element.attributes);
@@ -92,35 +92,36 @@ var ReactSVG = React.createClass({
         this.getGraph();
     },
 
-    getGraph: function () {
-        var urlSpecifiedGraph = getURLParameter('dept');
+    getGraph: function (graphId) {
+        if (graphId === undefined) {
+            var urlSpecifiedGraph = getURLParameter('dept');
 
-        // HACK: Temporary workaround for giving the statistics department a link to our graph.
-        // Should be replaced with a more general solution.
-        var active;
-        if (urlSpecifiedGraph === 'sta') {
-            active = '2';
-        } else if (urlSpecifiedGraph !== null) {
-            active = '1';
-        } else {
-            active = getCookie('active-graph');
-            if (active === '') {
-                active = '1';
+            // HACK: Temporary workaround for giving the statistics department a link to our graph.
+            // Should be replaced with a more general solution.
+            if (urlSpecifiedGraph === 'sta') {
+                graphId = '2';
+            } else if (urlSpecifiedGraph !== null) {
+                graphId = '1';
+            } else {
+                graphId = getCookie('active-graph');
+                if (graphId === '') {
+                    graphId = '1';
+                }
             }
         }
 
         $.ajax({
             type: 'GET',
             dataType: 'text',
-            url: 'static/res/graphs/gen/' + active + '.svg',
+            url: 'static/res/graphs/gen/' + graphId + '.svg',
         }).success(function(data) {
             var lines = data.split('\n');
             $('#graph').html(lines[lines.length - 1]);
-            this.refs.nodes.componentDidMount();
-            this.refs.bools.componentDidMount();
-            this.refs.edges.componentDidMount();
-            this.refs.regions.componentDidMount();
-            this.refs.regionLabels.componentDidMount();
+            this.refs.nodes.parseSVG();
+            this.refs.bools.parseSVG();
+            this.refs.edges.parseSVG();
+            this.refs.regions.parseSVG();
+            this.refs.regionLabels.parseSVG();
         }.bind(this));
     },
 
@@ -191,8 +192,12 @@ var ReactRegionLabels = React.createClass({
     },
 
     componentDidMount: function () {
+        this.parseSVG();
+    },
+
+    parseSVG: function () {
         var dictList = [];
-        $('#region-labels > text').map(function (key, element) {
+        $('#graph #region-labels > text').map(function (key, element) {
             var entry = {};
             entry['id'] = element.id;
             entry['attributes'] = getAttributes(element.attributes);
@@ -222,6 +227,10 @@ var ReactRegions = React.createClass({
     },
 
     componentDidMount: function () {
+        this.parseSVG();
+    },
+
+    parseSVG: function () {
         this.setState({regionsList: getNodes('.region')});
     },
 
@@ -255,6 +264,10 @@ var ReactNodes = React.createClass({
     },
 
     componentDidMount: function () {
+        this.parseSVG();
+    },
+
+    parseSVG: function () {
         this.setState({nodesList: getNodes('.node'), hybridsList: getNodes('.hybrid')});
     },
 
@@ -475,6 +488,10 @@ var ReactBools = React.createClass({
     },
 
     componentDidMount: function () {
+        this.parseSVG();
+    },
+
+    parseSVG: function () {
         this.setState({boolsList: getNodes('.bool')});
     },
 
@@ -622,6 +639,10 @@ var ReactEdges = React.createClass({
     },
 
     componentDidMount: function () {
+        this.parseSVG();
+    },
+
+    parseSVG: function () {
         this.setState({edgesList: getNodes('.path')});
     },
 
@@ -678,5 +699,12 @@ var ReactEdge = React.createClass({
 });
 
 $(document).ready(function () {
-    renderReactGraph();
+    var graphComponent = renderReactGraph();
+
+    // Set sidebar onclick. Eventually move this into its own React component.
+    $('.graph-button').click(function () {
+        var id = $(this).data('id');
+        graphComponent.getGraph(id);
+        changeFocusEnable(id);
+    });
 });
