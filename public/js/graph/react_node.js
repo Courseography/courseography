@@ -20,7 +20,7 @@ function getAttributes(svgAttributes) {
         // Will be hard-coding in className and textAnchor and markerEnd
         var ignoredAttributes = ['class', 'text-anchor', 'marker-end'];
         if (ignoredAttributes.indexOf(item.name) === -1) {
-            attrs[item.name] = item.value; 
+            attrs[item.name] = item.value;
         }
     }
     return attrs;
@@ -151,7 +151,7 @@ var Graph = React.createClass({
 
     nodeMouseLeave: function (event) {
         var courseID = event.currentTarget.id;
-        var currentNode = this.refs['nodes'].refs[courseID];   
+        var currentNode = this.refs['nodes'].refs[courseID];
         currentNode.unfocusPrereqs(this);
 
         // Old hover modal code
@@ -389,12 +389,12 @@ var Node = React.createClass({
         }
 
         if (this.props.logicalType === 'AND') {
-            return this.props.parents.every(isAllTrue);     
+            return this.props.parents.every(isAllTrue);
         } else if (this.props.logicalType === 'OR') {
             return this.props.parents.some(isAllTrue);
         }
     },
-    
+
     updateNode: function (svg) {
         var newState;
         if (this.arePrereqsSatisfied(svg)) {
@@ -460,8 +460,8 @@ var Node = React.createClass({
             currentNode.unfocusPrereqs(svg);
         });
     },
-    
-    render: function () {    
+
+    render: function () {
         var newClassName = this.props.className;
         if (!this.props.hybrid) {
             newClassName += ' ' + this.state.status;
@@ -564,7 +564,7 @@ var Bool = React.createClass({
         }
 
         if (this.props.logicalType === 'and') {
-            return this.props.parents.every(isAllTrue);     
+            return this.props.parents.every(isAllTrue);
         } else if (this.props.logicalType === 'or') {
             return this.props.parents.some(isAllTrue);
         }
@@ -710,14 +710,4 @@ var Edge = React.createClass({
     }
 });
 
-
-$(document).ready(function () {
-    var graphComponent = renderReactGraph();
-
-    // Set sidebar onclick. Eventually move this into its own React component.
-    $('.graph-button').click(function () {
-        var id = $(this).data('id');
-        graphComponent.getGraph(id);
-        changeFocusEnable(id);
-    });
-});
+export default {renderReactGraph: renderReactGraph};

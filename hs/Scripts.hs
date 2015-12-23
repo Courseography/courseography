@@ -68,7 +68,8 @@ graphScripts = do
          "/static/js/graph/sidebar/focus_descriptions.js",
          "/static/js/common/export/export.js"])
     H.script ! A.type_ "text/babel" ! A.src "/static/js/common/react_modal.js.jsx" $ ""
-    H.script ! A.type_ "text/babel" ! A.src "/static/js/graph/react_node.js.jsx" $ ""
+    H.script ! A.src "/static/js/requirejs-config.js" $ ""
+    H.script ! H.dataAttribute "main" "/static/js/graph" ! A.src "/static/js/require.js" $ ""
 
 timetableScripts :: H.Html
 timetableScripts = do
