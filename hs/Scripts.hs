@@ -33,8 +33,9 @@ jQueryScripts = [
 
 reactScripts :: [String]
 reactScripts = [
-    "https://cdnjs.cloudflare.com/ajax/libs/react/0.13.1/react.js",
-    "https://cdnjs.cloudflare.com/ajax/libs/react/0.13.1/JSXTransformer.js"
+   "https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react.js",
+   "https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react-dom.js",
+   "https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.js"
     ]
 
 analyticsScripts :: [String]
@@ -66,8 +67,8 @@ graphScripts = do
          "/static/js/graph/sidebar/sidebar_events.js",
          "/static/js/graph/sidebar/focus_descriptions.js",
          "/static/js/common/export/export.js"])
-    H.script ! A.type_ "text/jsx" ! A.src "/static/js/common/react_modal.js.jsx" $ ""
-    H.script ! A.type_ "text/jsx" ! A.src "/static/js/graph/react_node.js.jsx" $ ""
+    H.script ! A.type_ "text/babel" ! A.src "/static/js/common/react_modal.js.jsx" $ ""
+    H.script ! A.type_ "text/babel" ! A.src "/static/js/graph/react_node.js.jsx" $ ""
 
 timetableScripts :: H.Html
 timetableScripts = do
@@ -107,4 +108,4 @@ postScripts = sequence_ (map toScript [
 
 searchScripts :: H.Html
 searchScripts =
-    H.script ! A.type_ "text/jsx" ! A.src "/static/js/search/timetable.js.jsx" $ ""
+    H.script ! A.type_ "text/babel" ! A.src "/static/js/search/timetable.js.jsx" $ ""

@@ -1,6 +1,6 @@
 function renderReactGraph() {
     'use strict';
-    return React.render(
+    return ReactDOM.render(
         <Graph width={1195} height={650}/>,
         document.getElementById('react-graph')
     );
@@ -77,8 +77,8 @@ function getNodes(mode) {
 var Graph = React.createClass({
     componentDidMount: function () {
         //Need to hardcode these in because React does not understand these attributes
-        var svgNode = React.findDOMNode(this.refs.svg);
-        var markerNode = React.findDOMNode(this.refs.marker);
+        var svgNode = ReactDOM.findDOMNode(this.refs.svg);
+        var markerNode = ReactDOM.findDOMNode(this.refs.marker);
 
         svgNode.setAttribute('xmlns','http://www.w3.org/2000/svg');
         svgNode.setAttribute('xmlns:xlink','http://www.w3.org/1999/xlink');
@@ -86,7 +86,6 @@ var Graph = React.createClass({
         svgNode.setAttribute('xmlns:dc','http://purl.org/dc/elements/1.1/');
         svgNode.setAttribute('xmlns:cc','http://creativecommons.org/ns#');
         svgNode.setAttribute('xmlns:rdf','http://www.w3.org/1999/02/22-rdf-syntax-ns#');
-        svgNode.setAttribute('version', '1.1');
 
         markerNode.setAttribute('refX', 4);
         markerNode.setAttribute('refY', 5);
@@ -94,7 +93,6 @@ var Graph = React.createClass({
         markerNode.setAttribute('orient', 'auto');
         markerNode.setAttribute('markerWidth', 7);
         markerNode.setAttribute('markerHeight', 7);
-        markerNode.setAttribute('viewBox', '0 0 10 10');
 
         this.getGraph();
     },
@@ -136,6 +134,7 @@ var Graph = React.createClass({
         var courseID = event.currentTarget.id;
         var currentNode = this.refs['nodes'].refs[courseID];
         currentNode.toggleSelection(this);
+
     },
 
     nodeMouseEnter: function (event) {
@@ -171,9 +170,10 @@ var Graph = React.createClass({
         var markerAttrs = {'id': 'arrowHead'};
         var polylineAttrs = {'points': '0,1 10,5 0,9', 'fill': 'black'};
         return (
-            <svg {... svgAttrs} ref='svg'>
+            <svg {... svgAttrs} ref='svg' version='1.1'>
                 <defs>
-                    <marker {... markerAttrs} ref='marker'>
+                    <marker {... markerAttrs} ref='marker'
+                            viewBox='0 0 10 10'>
                         <polyline {... polylineAttrs}/>
                     </marker>
                 </defs>
@@ -263,15 +263,16 @@ var RegionGroup = React.createClass({
 });
 
 
-var Region = React.createClass({
-    render: function () {
-        return (
-            <path {... this.props.attributes}
-                  className='region'
-                  style={this.props.styles} />
-        );
-    }
-});
+// This now uses the new syntax for a stateless React component
+// (component with only a render method).
+// It also uses ES2015 "fat arrow" syntax for function definition.
+var Region = ({attributes, styles}) => {
+    return (
+        <path {... attributes}
+              className='region'
+              style={styles} />
+    );
+};
 
 
 var NodeGroup = React.createClass({
