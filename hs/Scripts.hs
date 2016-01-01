@@ -113,7 +113,8 @@ postScripts = do
                                           "/static/js/common/objects/course.js",
                                           "/static/js/common/objects/section.js",
                                           "/static/js/common/utilities/util.js"])
-    H.script ! A.type_ "text/jsx" ! A.src "/static/js/post/post.js" $ ""        
+    H.script ! A.type_ "text/jsx" ! A.src "/static/js/post/course_components.js.jsx" $ ""
+    H.script ! A.type_ "text/jsx" ! A.src "/static/js/post/post_components.js.jsx" $ ""        
 searchScripts :: H.Html
 searchScripts =
     H.script ! A.type_ "text/jsx" ! A.src "/static/js/search/timetable.js.jsx" $ ""
