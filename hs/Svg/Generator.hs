@@ -103,6 +103,7 @@ buildSVG gId courseMap filename styled =
             then "stroke-width:4;"
             else "opacity:0.5;stroke-dasharray:8,5;"
 
+        isSelected :: String -> Bool
         isSelected courseStatus =
             isPrefixOf "active" courseStatus ||
             isPrefixOf "overridden" courseStatus

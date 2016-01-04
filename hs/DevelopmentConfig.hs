@@ -58,21 +58,21 @@ logMAccessShort host user _ requestLine responseCode _ referer _ =
 
 -- | The path to the database file, relative to @hs/@.
 databasePath :: Text
-databasePath = "Database/database2015.sqlite3"
+databasePath = "db/database2015.sqlite3"
 
 -- FILE PATH STRINGS
 
 -- | The relative path to the directory with the markdown files rendered for site content.
 markdownPath :: String
-markdownPath = "../"
+markdownPath = "./"
 
 -- | The relative path to the directory that contains all of the graph SVG files.
 graphPath :: String
-graphPath = "../public/res/graphs/"
+graphPath = "./public/res/graphs/"
 
 -- | The relative path to the directory containing all of the generated CSS files.
 genCssPath :: String
-genCssPath = "../public/style/"
+genCssPath = "./public/style/"
 
 -- URLs
 
@@ -89,7 +89,7 @@ cssStyle = Clay.pretty
 
 -- CALENDAR RESPONSE DATES
 
--- | First day of classes for the fall term. Also the first day to be 
+-- | First day of classes for the fall term. Also the first day to be
 -- assigned for a course scheduled on a Monday.
 firstMondayFall :: Day
 firstMondayFall = fromGregorian 2015 09 14
@@ -99,7 +99,7 @@ firstMondayFall = fromGregorian 2015 09 14
 lastWednesdayFall :: Day
 lastWednesdayFall = fromGregorian 2015 12 02
 
--- | First day of classes for the winter term. Also the first day to be 
+-- | First day of classes for the winter term. Also the first day to be
 -- assigned for a course scheduled on a Wednesday.
 firstMondayWinter :: Day
 firstMondayWinter = fromGregorian 2016 01 11

@@ -13,6 +13,9 @@ cabal.sandbox.config
 # generated build files
 /hs/dist/
 
+# generated stack files
+.stack-work/
+
 # generated CSS
 /public/style/
 

@@ -22,9 +22,9 @@ toScript src = H.script ! A.src (H.stringValue src) $ ""
 
 toLink :: String -> String -> H.Html
 toLink link content = H.a ! A.href (H.stringValue link)
-                          $ (H.toHtml content)
+                          $ H.toHtml content
 
 -- | mdToHTML takes in the contents of a file written in Mark Down and converts it to
 -- blaze-HTML.
 mdToHTML :: Text -> H.Html
-mdToHTML contents = markdown def contents
+mdToHTML = markdown def

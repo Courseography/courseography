@@ -112,4 +112,4 @@ postScripts = sequence_ (map toScript [
 
 searchScripts :: H.Html
 searchScripts =
-    H.script ! A.type_ "text/jsx" ! A.src "/static/js/search/timetable.js" $ ""
+    H.script ! A.type_ "text/jsx" ! A.src "/static/js/search/timetable.js.jsx" $ ""
