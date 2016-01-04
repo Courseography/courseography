@@ -3,10 +3,9 @@ module Response.Calendar
 
 import Data.List (sort, groupBy, sortBy)
 import Data.List.Split (splitOn)
-import Data.Time (Day, addDays, formatTime, getCurrentTime)
+import Data.Time (Day, addDays, formatTime, getCurrentTime, defaultTimeLocale)
 import Happstack.Server (ServerPart, Response, toResponse)
 import Control.Monad.IO.Class (liftIO)
-import System.Locale
 import Database.CourseQueries (returnTutorial, returnLecture)
 import qualified Data.Text as T
 import Text.Read (readMaybe)
