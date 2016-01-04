@@ -75,5 +75,6 @@ runServer = do
     getStaticDir :: IO Prelude.FilePath
     getStaticDir = do
         cwd <- getCurrentDirectory
-        let parentDir = Path.parent $ Path.decodeString cwd
-        return $ Path.encodeString $ Path.append parentDir $ fromString "public/"
+        --let parentDir = Path.parent $ Path.decodeString cwd
+        --return $ Path.encodeString $ Path.append parentDir $ fromString "public/"
+        return $ Path.encodeString $ Path.append (Path.decodeString cwd) $ fromString "public/"
