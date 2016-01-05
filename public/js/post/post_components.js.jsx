@@ -24,14 +24,12 @@ var SpecialistPost = React.createClass({
         return notSpecialistCourse(course) && course.substring(3, 4) >= '3' && levelExtraArray.length < 4;
     },
 
-    isInquiryCourse: function(course, inquiryArray) {
-        return CSCinq.indexOf(course) >= 0 && inquiryArray < 1;
+    isInquiryCourse: function(course) {
+        return CSCinq.indexOf(course) > 0;
     },
 
     getCourses: function () {
-        // currently this.isInquiryCourse is considered mutually exclusive to other categories
-        // - this will change eventually.
-        var courseChecks = [this.isLevel400, this.isLevel300, this.isLevelExtra, this.isInquiryCourse];
+        var courseChecks = [this.isLevel400, this.isLevel300, this.isLevelExtra];
         var courseArrays = [];
 
         // initialize inner arrays
@@ -49,6 +47,11 @@ var SpecialistPost = React.createClass({
         });
 
         return courseArrays;
+    },
+
+    getInquiryCourse: function () {
+        var inquiryCourses = this.state.activeCourses.filter(this.isInquiryCourse);
+        return inquiryCourses == [] ? '' : inquiryCourses[0];
     },
 
     updateActiveCourses: function() {
@@ -110,8 +113,8 @@ var SpecialistPost = React.createClass({
                 <MultipleCourseCode courseID="spec_extra" textBoxNumber={4} courses={courseCategoryArrays[2]} textboxesDisabled={false}
                     categoryName='Any of the following: 300+ level CSC course; MAT: 235/237/257, any 300+ 
                                   except for 329, 390, & 391; STA: 248, 261, any 300+; ECE: 385H/489H; 
-                                  BCB: 410H/420H/430Y (2.0 FCEs)' />
-                <MultipleCourseCode courseID="spec_inq" textBoxNumber={1} courses={courseCategoryArrays[3]} textboxesDisabled={true}
+                                  BCB: 410H/420H/430Y (2.0 FCEs)' />  
+                <InquiryCategory courseID='spec_inq' course={this.getInquiryCourse()} 
                     categoryName='Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H, 
                     CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H, or PEY (0.5 FCEs) 
                     ** Note: Type "PEY" for Check my POSt to recognize it **' />

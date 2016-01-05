@@ -193,3 +193,44 @@ var CourseCategory = React.createClass({
     }
 })
 
+var InquiryCategory = React.createClass({
+    getInitialState: function() {
+        return {
+            completed: false,
+            infoOpened: false,
+        }
+    },
+
+    componentDidMount: function() {
+        this.setState({completed: this.props.course != ''});
+    },
+    
+    toggleFullInfo: function() {
+        this.setState({infoOpened: !this.state.infoOpened});
+    },
+
+    render: function() {
+        var classes = 'course';
+        var infoClasses = 'more-info';
+
+        if (this.state.completed) {
+            classes += ' selected';
+        }
+
+        if (this.state.infoOpened) {
+            infoClasses += ' info_opened'
+        }
+
+       return (
+            <div id={this.props.courseID} className={classes}>
+                <p className="code" onClick={this.toggleFullInfo}> {this.props.categoryName} </p>
+                <div id = {'spec' + this.props.courseID.substring(5, this.props.courseID.length)} className={infoClasses}>
+                    <p className="full_name"> 
+                        <input type='text' id={i} value={this.props.course} disabled='true' />
+                    </p>
+                </div>
+            </div>
+        );
+    }
+})
+
