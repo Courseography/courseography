@@ -132,9 +132,11 @@ var MultipleCourseCode = React.createClass({
         
 
         if (this.isValidExtraCourse(e.target.value.substring(0, 6))) {
-            e.target.style.color = 'green';
+            $(e.target).addClass('valid_extra_course');
+            $(e.target).removeClass('not_valid_extra_course');
         } else {
-            e.target.style.color = 'red';
+            $(e.target).addClass('not_valid_extra_course');
+            $(e.target).removeClass('valid_extra_course');
         }
     },
 

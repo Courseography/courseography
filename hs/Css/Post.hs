@@ -136,3 +136,7 @@ postCSS = do
         textAlign $ alignSide sideCenter
     ".info_opened" ? do
         display block
+    ".valid_extra_course" ? do
+        color green
+    ".not_valid_extra_course" ? do
+        color red
