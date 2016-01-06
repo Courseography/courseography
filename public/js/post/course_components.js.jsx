@@ -202,7 +202,7 @@ var InquiryCategory = React.createClass({
     getInitialState: function() {
         return {
             completed: false,
-            infoOpened: false,
+            infoOpened: false
         }
     },
 
@@ -231,7 +231,7 @@ var InquiryCategory = React.createClass({
                 <p className="code" onClick={this.toggleFullInfo}> {this.props.categoryName} </p>
                 <div id = {'spec' + this.props.courseID.substring(5, this.props.courseID.length)} className={infoClasses}>
                     <p className="full_name"> 
-                        <input type='text' id={i} value={this.props.course} disabled='true' />
+                        <input type='text' value={this.props.course} disabled='true' />
                     </p>
                 </div>
             </div>
