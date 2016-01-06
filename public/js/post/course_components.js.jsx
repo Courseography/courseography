@@ -125,19 +125,24 @@ var MultipleCourseCode = React.createClass({
 
     handleOnChange: function(e) {
         var newValues = this.state.textboxValues.slice();
-        newValues[e.target.id] = e.target.value.substring(0, 6);
+        var oldCourse = newValues[e.target.id];
+        var newCourse = e.target.value.substring(0, 6);
+        $(e.target).addClass('not_valid_extra_course');
+
+        if (this.isValidExtraCourse(oldCourse) && !(this.isValidExtraCourse(newCourse))) {
+            $(e.target).addClass('not_valid_extra_course');
+            $(e.target).removeClass('valid_extra_course');
+            this.props.changeCourseCredit(-0.5);
+        } else if (this.isValidExtraCourse(newCourse) && !(this.isValidExtraCourse(oldCourse))) {
+            $(e.target).addClass('valid_extra_course');
+            $(e.target).removeClass('not_valid_extra_course');
+            this.props.changeCourseCredit(0.5);
+        }
+
+        newValues[e.target.id] = newCourse;
         this.setState({textboxValues: newValues}, function () {
             this.setState({completedTextBoxes: this.countCompletedTextBoxes()}, this.checkIfCompleted);
         });
-        
-
-        if (this.isValidExtraCourse(e.target.value.substring(0, 6))) {
-            $(e.target).addClass('valid_extra_course');
-            $(e.target).removeClass('not_valid_extra_course');
-        } else {
-            $(e.target).addClass('not_valid_extra_course');
-            $(e.target).removeClass('valid_extra_course');
-        }
     },
 
     countCompletedTextBoxes: function() {

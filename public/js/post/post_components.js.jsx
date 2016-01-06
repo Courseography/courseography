@@ -75,6 +75,10 @@ var SpecialistPost = React.createClass({
         return activeCourses;
     },
 
+    changeCreditCount: function (value) {
+        this.setState({creditCount: this.state.creditCount + value});
+    },
+
     calculateCreditCount: function() {
         var count = 0;
 
@@ -89,7 +93,7 @@ var SpecialistPost = React.createClass({
             }
         });
 
-        this.setState({creditCount: count});
+        this.changeCreditCount(count);
     },
 
     render: function() {
@@ -106,11 +110,11 @@ var SpecialistPost = React.createClass({
                 <CourseCategory yearName='First Year' courses={firstYearCourses} />
                 <CourseCategory yearName='Second Year' courses={secondYearCourses} />
                 <CourseCategory yearName='Later Years' courses={laterYearCourses} />
-                <MultipleCourseCode courseID='spec_400' textBoxNumber={3} courses={courseCategoryArrays[0]} textboxesDisabled={true}
+                <MultipleCourseCode courseID='spec_400' textBoxNumber={3} courses={courseCategoryArrays[0]} textboxesDisabled={true} changeCourseCredit={this.changeCreditCount}
                     categoryName='Any 400-level CSC course, BCB410H, BCB420H, BCB430Y, ECE489H (1.5 FCEs)' />
-                <MultipleCourseCode courseID='spec_300' textBoxNumber={3} courses={courseCategoryArrays[1]} textboxesDisabled={true}
+                <MultipleCourseCode courseID='spec_300' textBoxNumber={3} courses={courseCategoryArrays[1]} textboxesDisabled={true} changeCourseCredit={this.changeCreditCount}
                     categoryName='Any 300+ level CSC course, BCB410H, BCB420H, BCB430Y, ECE385H, ECE489H (1.5 FCEs)' />
-                <MultipleCourseCode courseID="spec_extra" textBoxNumber={4} courses={courseCategoryArrays[2]} textboxesDisabled={false}
+                <MultipleCourseCode courseID="spec_extra" textBoxNumber={4} courses={courseCategoryArrays[2]} textboxesDisabled={false} changeCourseCredit={this.changeCreditCount}
                     categoryName='Any of the following: 300+ level CSC course; MAT: 235/237/257, any 300+ 
                                   except for 329, 390, & 391; STA: 248, 261, any 300+; ECE: 385H/489H; 
                                   BCB: 410H/420H/430Y (2.0 FCEs)' />  
