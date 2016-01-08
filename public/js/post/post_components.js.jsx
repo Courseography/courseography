@@ -51,7 +51,7 @@ var SpecialistPost = React.createClass({
 
     getInquiryCourse: function () {
         var inquiryCourses = this.state.activeCourses.filter(this.isInquiryCourse);
-        return inquiryCourses == [] ? '' : inquiryCourses[0];
+        return inquiryCourses.length === 0 ? '' : inquiryCourses[0];
     },
 
     updateActiveCourses: function() {
