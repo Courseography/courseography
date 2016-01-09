@@ -79,7 +79,8 @@ var CourseCode = React.createClass({
                 <p className="code" onClick={this.toggleFullInfo}> {this.getCategoryName()} </p>
                 <div id = {this.props.courseIDs[0] + '_info'} className={infoClasses}>
                     {this.props.courseIDs.map(function (course) {
-                         return <p className="full_name"> {me.getTitle(course)} </p>
+                        var title = me.getTitle(course);
+                        return <p className="full_name" key={title}>{title}</p>
                     })}
                 </div>
             </div>
@@ -112,7 +113,7 @@ export var MultipleCourseCode = React.createClass({
 
     createInitialValueArray: function() {
         var array = Array(this.props.textBoxNumber).join(".").split(".");
-        for (i = 0; i < this.props.courses.length; i++) {
+        for (var i = 0; i < this.props.courses.length; i++) {
             array[i] = this.props.courses[i];
         }
         return array;
@@ -175,7 +176,7 @@ export var MultipleCourseCode = React.createClass({
                 <div id = {'spec' + this.props.courseID.substring(5, this.props.courseID.length)} className={infoClasses}>
                     <p className="full_name"> 
                         {Array.apply(0, Array(this.props.textBoxNumber)).map(function (x, i) {
-                            return <input type='text' id={i} value={me.state.textboxValues[i]} onChange={me.handleOnChange} 
+                            return <input type='text' key={i} id={i} value={me.state.textboxValues[i]} onChange={me.handleOnChange} 
                                     disabled={me.props.textboxesDisabled} />;
                         })}
                     </p>
@@ -191,7 +192,7 @@ export var CourseCategory = React.createClass({
             <div>
                 <h2> {this.props.yearName} </h2>
                 {this.props.courses.map(function (courses) {
-                    return <CourseCode id={courses[0]} courseIDs={courses} />;
+                    return <CourseCode id={courses[0]} key={courses[0]} courseIDs={courses} />;
                 })}
             </div>
         );
