@@ -125,6 +125,8 @@ postCSS = do
         "-ms-transition" -: "all 0.2s"
         "-o-transition" -: "all 0.2s"
         "transition" -: "all 0.2s"
+    ".info_opened > div" ? do
+        display block
     ".full_name" ? do
         paddingLeft (px 20)
         textAlign $ alignSide sideCenter
@@ -134,8 +136,6 @@ postCSS = do
         height $ (px 40)
     "#notes" ? do
         textAlign $ alignSide sideCenter
-    ".info_opened" ? do
-        display block
     ".valid_extra_course" ? do
         color green
     ".not_valid_extra_course" ? do

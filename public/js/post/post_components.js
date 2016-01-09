@@ -1,5 +1,6 @@
 import {CourseCategory, MultipleCourseCode, InquiryCategory} from 'es6!post/course_components';
 
+
 var SpecialistPost = React.createClass({
     getInitialState: function() {
         return {
@@ -7,6 +8,15 @@ var SpecialistPost = React.createClass({
             activeCourses: this.updateActiveCourses(),
             creditCount: 0
         }
+    },
+
+    updateActiveCourses: function() {
+        var activeCourses = [];
+
+        return allCourses.concat(math).filter(function (course) {
+            var status = getCookie(course.toLowerCase());
+            return status === 'active' || status === 'overridden';
+        });
     },
 
     componentWillMount: function() {
@@ -36,10 +46,10 @@ var SpecialistPost = React.createClass({
 
         // initialize inner arrays
         for (var i = 0; i < courseChecks.length; i++) {
-            courseArrays[i] = [];
+            courseArrays.push([]);
         }
 
-        this.state.activeCourses.map(function (course) {
+        this.state.activeCourses.forEach(function (course) {
             for (var i = 0; i < courseChecks.length; i++) {
                 if (courseChecks[i](course, courseArrays[i])) {
                     courseArrays[i].push(course);
@@ -54,27 +64,6 @@ var SpecialistPost = React.createClass({
     getInquiryCourse: function () {
         var inquiryCourses = this.state.activeCourses.filter(this.isInquiryCourse);
         return inquiryCourses.length === 0 ? '' : inquiryCourses[0];
-    },
-
-    updateActiveCourses: function() {
-        var activeCourses = [];
-
-        // Check for active CSC courses
-        for (var i = 0; i < allCourses.length; i++) {
-            if (getCookie(allCourses[i].toLowerCase()) === 'active' ||
-                getCookie(allCourses[i].toLowerCase()) === 'overridden') {
-                activeCourses.push(allCourses[i]);
-            }
-        }
-
-        // Check for active math courses
-        for (var i = 0; i < math.length; i++) {
-            if (getCookie(math[i].toLowerCase()) === 'active') {
-                activeCourses.push(math[i]);
-            }
-        }
-
-        return activeCourses;
     },
 
     changeCreditCount: function (value) {
@@ -108,7 +97,7 @@ var SpecialistPost = React.createClass({
         var courseCategoryArrays = this.getCourses();
 
         return (
-            <div id="specialist_window">
+            <div id='specialist_window'>
                 <CourseCategory yearName='First Year' courses={firstYearCourses} />
                 <CourseCategory yearName='Second Year' courses={secondYearCourses} />
                 <CourseCategory yearName='Later Years' courses={laterYearCourses} />
@@ -124,8 +113,13 @@ var SpecialistPost = React.createClass({
                     categoryName='Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H, 
                     CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H, or PEY (0.5 FCEs) 
                     ** Note: Type "PEY" for Check my POSt to recognize it **' />
-                <h2> Notes </h2>
-                <p id='notes'> - No more than 1.0 FCE from CSC490H1, CSC491H1, CSC494H1, CSC495H1, BCB430Y1 may be used to fulfill program requirements </p>
+                <h2>Notes</h2>
+                <ul id='notes'>
+                    <li>
+                        No more than 1.0 FCE from CSC490H1, CSC491H1, CSC494H1,
+                        CSC495H1, BCB430Y1 may be used to fulfill program requirements
+                    </li>
+                </ul>
             </div>
         );
     }
