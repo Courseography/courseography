@@ -1,3 +1,5 @@
+import {CourseCategory, MultipleCourseCode, InquiryCategory} from 'es6!post/course_components';
+
 var SpecialistPost = React.createClass({
     getInitialState: function() {
         return {
@@ -127,6 +129,6 @@ var SpecialistPost = React.createClass({
             </div>
         );
     }
-})
+});
 
-React.render(<SpecialistPost />, document.getElementById('div_specialist'));
+export default {SpecialistPost: SpecialistPost};

@@ -87,7 +87,7 @@ var CourseCode = React.createClass({
     }
 })
 
-var MultipleCourseCode = React.createClass({
+export var MultipleCourseCode = React.createClass({
     getInitialState: function() {
         return {
             completed: false,
@@ -185,7 +185,7 @@ var MultipleCourseCode = React.createClass({
     }
 })
 
-var CourseCategory = React.createClass({
+export var CourseCategory = React.createClass({
     render: function() {
         return (
             <div>
@@ -198,7 +198,7 @@ var CourseCategory = React.createClass({
     }
 })
 
-var InquiryCategory = React.createClass({
+export var InquiryCategory = React.createClass({
     getInitialState: function() {
         return {
             completed: false,

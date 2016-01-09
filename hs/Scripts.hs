@@ -33,8 +33,9 @@ jQueryScripts = [
 
 reactScripts :: [String]
 reactScripts = [
-    "https://cdnjs.cloudflare.com/ajax/libs/react/0.13.1/react.js",
-    "https://cdnjs.cloudflare.com/ajax/libs/react/0.13.1/JSXTransformer.js"
+    "https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react.js",
+    "https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react-dom.js",
+    "https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.js"
     ]
 
 analyticsScripts :: [String]
@@ -70,7 +71,7 @@ graphScripts = do
          "/static/js/graph/sidebar/sidebar_events.js",
          "/static/js/graph/sidebar/focus_descriptions.js",
          "/static/js/common/export/export.js"])
-    H.script ! A.type_ "text/jsx" ! A.src "/static/js/common/react_modal.js.jsx" $ ""
+    H.script ! A.type_ "text/babel" ! A.src "/static/js/common/react_modal.js.jsx" $ ""
 
 timetableScripts :: H.Html
 timetableScripts = do
@@ -113,8 +114,9 @@ postScripts = do
                                           "/static/js/common/objects/course.js",
                                           "/static/js/common/objects/section.js",
                                           "/static/js/common/utilities/util.js"])
-    H.script ! A.type_ "text/jsx" ! A.src "/static/js/post/course_components.js.jsx" $ ""
-    H.script ! A.type_ "text/jsx" ! A.src "/static/js/post/post_components.js.jsx" $ ""        
+    H.script ! A.src "/static/js/requirejs-config.js" $ ""
+    H.script ! H.dataAttribute "main" "/static/js/post" ! A.src "/static/js/require.js" $ ""
+
 searchScripts :: H.Html
 searchScripts =
-    H.script ! A.type_ "text/jsx" ! A.src "/static/js/search/timetable.js.jsx" $ ""
+    H.script ! A.type_ "text/babel" ! A.src "/static/js/search/timetable.js.jsx" $ ""
