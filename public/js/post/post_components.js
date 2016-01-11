@@ -79,7 +79,7 @@ var Post = React.createClass({
         var courseCategoryArrays = this.getCourses();
 
         return (
-            <div id='specialist_window'>
+            <div id={'post_' + this.props.postType}>
                 <CourseCategory yearName='First Year' courses={this.props.firstYearCourses} />
                 <CourseCategory yearName='Second Year' courses={this.props.secondYearCourses} />
                 <CourseCategory yearName='Later Years' courses={this.props.laterYearCourses} />
@@ -132,8 +132,37 @@ var SpecialistPost = React.createClass({
                 <Post postType='specialist' firstYearCourses={firstYearCourses} secondYearCourses={secondYearCourses} laterYearCourses={laterYearCourses}
                     textBoxNumbers={[3, 3, 4]} courseChecks={[this.isLevel400, this.isLevel300, this.isLevelExtra]} />
             </div>
-            );
+        );
     }
 });
 
-export default {SpecialistPost: SpecialistPost};
+var MajorPost = React.createClass({
+    isLevel400: function (course, level400Array) {
+        return course.substring(3, 4) === '4' && level400Array.length < 1;
+    },
+
+    isLevel300: function (course, level300Array) {
+        return course.substring(3, 4) >= '3' && level300Array.length < 2;
+    },
+
+    isLevelExtra: function (course, levelExtraArray) {
+        return course.substring(3, 4) >= '3' && levelExtraArray.length < 3;
+    },
+
+    render: function() {
+
+        var firstYearCourses = [['csc108'], ['csc148'], ['csc165', 'csc240'], ['mat135', 'mat136', 'mat137', 'mat157']];
+        var secondYearCourses = [['csc207'], ['csc236', 'csc240'], ['csc258'], ['csc263', 'csc265'], 
+                                ['sta247', 'sta255', 'sta257']];
+        var laterYearCourses = [];
+
+        return (
+            <div id ='major_window'>
+                <Post postType='major' firstYearCourses={firstYearCourses} secondYearCourses={secondYearCourses} laterYearCourses={laterYearCourses}
+                    textBoxNumbers={[1, 2, 3]} courseChecks={[this.isLevel400, this.isLevel300, this.isLevelExtra]} />
+            </div>  
+        );
+    }
+});
+
+export default {SpecialistPost: SpecialistPost, MajorPost: MajorPost};
