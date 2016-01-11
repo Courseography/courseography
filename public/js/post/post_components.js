@@ -1,10 +1,9 @@
 import {CourseCategory, MultipleCourseCode, InquiryCategory} from 'es6!post/course_components';
 
-
-var SpecialistPost = React.createClass({
+var Post = React.createClass({
     getInitialState: function() {
         return {
-            selected: true,
+            selected: false,
             activeCourses: this.updateActiveCourses(),
             creditCount: 0
         }
@@ -20,20 +19,8 @@ var SpecialistPost = React.createClass({
     },
 
     componentWillMount: function() {
-        this.setState({selected: getCookie('specialist') === 'active'});
+        this.setState({selected: getCookie(this.props.postType) === 'active'});
         this.calculateCreditCount();
-    },
-
-    isLevel400: function (course, level400Array) {
-        return notSpecialistCourse(course) && course.substring(3, 4) === '4' && level400Array.length < 3;
-    },
-
-    isLevel300: function (course, level300Array) {
-        return notSpecialistCourse(course) && course.substring(3, 4) >= '3' && level300Array.length < 3;
-    },
-
-    isLevelExtra: function (course, levelExtraArray) {
-        return notSpecialistCourse(course) && course.substring(3, 4) >= '3' && levelExtraArray.length < 4;
     },
 
     isInquiryCourse: function(course) {
@@ -41,7 +28,7 @@ var SpecialistPost = React.createClass({
     },
 
     getCourses: function () {
-        var courseChecks = [this.isLevel400, this.isLevel300, this.isLevelExtra];
+        var courseChecks = this.props.courseChecks;
         var courseArrays = [];
 
         // initialize inner arrays
@@ -89,23 +76,18 @@ var SpecialistPost = React.createClass({
 
     render: function() {
 
-        var firstYearCourses = [['csc108'], ['csc148'], ['csc165', 'csc240'], ['mat135', 'mat136', 'mat137', 'mat157']];
-        var secondYearCourses = [['csc207'], ['csc209'], ['csc236', 'csc240'], ['csc258'], ['csc263', 'csc265'], ['mat221', 'mat223', 'mat240'], 
-                                ['sta247', 'sta255', 'sta257']];
-        var laterYearCourses = [['csc369'], ['csc373']];
-
         var courseCategoryArrays = this.getCourses();
 
         return (
             <div id='specialist_window'>
-                <CourseCategory yearName='First Year' courses={firstYearCourses} />
-                <CourseCategory yearName='Second Year' courses={secondYearCourses} />
-                <CourseCategory yearName='Later Years' courses={laterYearCourses} />
-                <MultipleCourseCode courseID='spec_400' textBoxNumber={3} courses={courseCategoryArrays[0]} textboxesDisabled={true} changeCourseCredit={this.changeCreditCount}
+                <CourseCategory yearName='First Year' courses={this.props.firstYearCourses} />
+                <CourseCategory yearName='Second Year' courses={this.props.secondYearCourses} />
+                <CourseCategory yearName='Later Years' courses={this.props.laterYearCourses} />
+                <MultipleCourseCode courseID='spec_400' textBoxNumber={this.props.textBoxNumbers[0]} courses={courseCategoryArrays[0]} textboxesDisabled={true} changeCourseCredit={this.changeCreditCount}
                     categoryName='Any 400-level CSC course, BCB410H, BCB420H, BCB430Y, ECE489H (1.5 FCEs)' />
-                <MultipleCourseCode courseID='spec_300' textBoxNumber={3} courses={courseCategoryArrays[1]} textboxesDisabled={true} changeCourseCredit={this.changeCreditCount}
+                <MultipleCourseCode courseID='spec_300' textBoxNumber={this.props.textBoxNumbers[1]} courses={courseCategoryArrays[1]} textboxesDisabled={true} changeCourseCredit={this.changeCreditCount}
                     categoryName='Any 300+ level CSC course, BCB410H, BCB420H, BCB430Y, ECE385H, ECE489H (1.5 FCEs)' />
-                <MultipleCourseCode courseID="spec_extra" textBoxNumber={4} courses={courseCategoryArrays[2]} textboxesDisabled={false} changeCourseCredit={this.changeCreditCount}
+                <MultipleCourseCode courseID="spec_extra" textBoxNumber={this.props.textBoxNumbers[2]} courses={courseCategoryArrays[2]} textboxesDisabled={false} changeCourseCredit={this.changeCreditCount}
                     categoryName='Any of the following: 300+ level CSC course; MAT: 235/237/257, any 300+ 
                                   except for 329, 390, & 391; STA: 248, 261, any 300+; ECE: 385H/489H; 
                                   BCB: 410H/420H/430Y (2.0 FCEs)' />  
@@ -122,6 +104,35 @@ var SpecialistPost = React.createClass({
                 </ul>
             </div>
         );
+    }
+});
+
+var SpecialistPost = React.createClass({ 
+    isLevel400: function (course, level400Array) {
+        return notSpecialistCourse(course) && course.substring(3, 4) === '4' && level400Array.length < 3;
+    },
+
+    isLevel300: function (course, level300Array) {
+        return notSpecialistCourse(course) && course.substring(3, 4) >= '3' && level300Array.length < 3;
+    },
+
+    isLevelExtra: function (course, levelExtraArray) {
+        return notSpecialistCourse(course) && course.substring(3, 4) >= '3' && levelExtraArray.length < 4;
+    },
+
+    render: function() {
+
+        var firstYearCourses = [['csc108'], ['csc148'], ['csc165', 'csc240'], ['mat135', 'mat136', 'mat137', 'mat157']];
+        var secondYearCourses = [['csc207'], ['csc209'], ['csc236', 'csc240'], ['csc258'], ['csc263', 'csc265'], ['mat221', 'mat223', 'mat240'], 
+                                ['sta247', 'sta255', 'sta257']];
+        var laterYearCourses = [['csc369'], ['csc373']];
+
+        return (
+            <div id ='specialist_window'>
+                <Post postType='specialist' firstYearCourses={firstYearCourses} secondYearCourses={secondYearCourses} laterYearCourses={laterYearCourses}
+                    textBoxNumbers={[3, 3, 4]} courseChecks={[this.isLevel400, this.isLevel300, this.isLevelExtra]} />
+            </div>
+            );
     }
 });
 
