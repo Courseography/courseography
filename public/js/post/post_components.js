@@ -83,29 +83,27 @@ var Post = React.createClass({
                 <CourseCategory yearName='First Year' courses={this.props.firstYearCourses} />
                 <CourseCategory yearName='Second Year' courses={this.props.secondYearCourses} />
                 <CourseCategory yearName='Later Years' courses={this.props.laterYearCourses} />
-                <MultipleCourseCode courseID='spec_400' textBoxNumber={this.props.textBoxNumbers[0]} courses={courseCategoryArrays[0]} textboxesDisabled={true} changeCourseCredit={this.changeCreditCount}
-                    categoryName='Any 400-level CSC course, BCB410H, BCB420H, BCB430Y, ECE489H (1.5 FCEs)' />
-                <MultipleCourseCode courseID='spec_300' textBoxNumber={this.props.textBoxNumbers[1]} courses={courseCategoryArrays[1]} textboxesDisabled={true} changeCourseCredit={this.changeCreditCount}
-                    categoryName='Any 300+ level CSC course, BCB410H, BCB420H, BCB430Y, ECE385H, ECE489H (1.5 FCEs)' />
-                <MultipleCourseCode courseID="spec_extra" textBoxNumber={this.props.textBoxNumbers[2]} courses={courseCategoryArrays[2]} textboxesDisabled={false} changeCourseCredit={this.changeCreditCount}
-                    categoryName='Any of the following: 300+ level CSC course; MAT: 235/237/257, any 300+ 
-                                  except for 329, 390, & 391; STA: 248, 261, any 300+; ECE: 385H/489H; 
-                                  BCB: 410H/420H/430Y (2.0 FCEs)' />  
+                <MultipleCourseCode courseID='spec_400' textBoxNumber={this.props.textBoxNumbers[0]} courses={courseCategoryArrays[0]} textboxesDisabled={true} 
+                                    changeCourseCredit={this.changeCreditCount} categoryName={this.props.categoryTitles[0]} />
+                <MultipleCourseCode courseID='spec_300' textBoxNumber={this.props.textBoxNumbers[1]} courses={courseCategoryArrays[1]} textboxesDisabled={true} 
+                                    changeCourseCredit={this.changeCreditCount} categoryName={this.props.categoryTitles[1]} />
+                <MultipleCourseCode courseID="spec_extra" textBoxNumber={this.props.textBoxNumbers[2]} courses={courseCategoryArrays[2]} textboxesDisabled={false} 
+                                    changeCourseCredit={this.changeCreditCount} categoryName={this.props.categoryTitles[2]} />  
                 <InquiryCategory courseID='spec_inq' course={this.getInquiryCourse()} 
                     categoryName='Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H, 
                     CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H, or PEY (0.5 FCEs) 
                     ** Note: Type "PEY" for Check my POSt to recognize it **' />
                 <h2>Notes</h2>
                 <ul id='notes'>
-                    <li>
-                        No more than 1.0 FCE from CSC490H1, CSC491H1, CSC494H1,
-                        CSC495H1, BCB430Y1 may be used to fulfill program requirements
-                    </li>
+                    {this.props.notes.map(function (note, i) {
+                        return <li key={i}>{note}</li>
+                    })}
                 </ul>
             </div>
         );
     }
 });
+
 
 var SpecialistPost = React.createClass({ 
     isLevel400: function (course, level400Array) {
@@ -122,6 +120,14 @@ var SpecialistPost = React.createClass({
 
     render: function() {
 
+        var categoryTitles = ['Any 400-level CSC course, BCB410H, BCB420H, BCB430Y, ECE489H (1.5 FCEs)', 
+                              'Any 300+ level CSC course, BCB410H, BCB420H, BCB430Y, ECE385H, ECE489H (1.5 FCEs)',
+                              'Any of the following: 300+ level CSC course; MAT: 235/237/257, any 300+ \
+                               except for 329, 390, & 391; STA: 248, 261, any 300+; ECE: 385H/489H; \
+                               BCB: 410H/420H/430Y (2.0 FCEs)'];
+        var notes = ['No more than 1.0 FCE from CSC490H1, CSC491H1, CSC494H1, CSC495H1, BCB430Y1 may be used \
+                     to fulfill program requirements'];
+
         var firstYearCourses = [['csc108'], ['csc148'], ['csc165', 'csc240'], ['mat135', 'mat136', 'mat137', 'mat157']];
         var secondYearCourses = [['csc207'], ['csc209'], ['csc236', 'csc240'], ['csc258'], ['csc263', 'csc265'], ['mat221', 'mat223', 'mat240'], 
                                 ['sta247', 'sta255', 'sta257']];
@@ -129,12 +135,19 @@ var SpecialistPost = React.createClass({
 
         return (
             <div id ='specialist_window'>
-                <Post postType='specialist' firstYearCourses={firstYearCourses} secondYearCourses={secondYearCourses} laterYearCourses={laterYearCourses}
-                    textBoxNumbers={[3, 3, 4]} courseChecks={[this.isLevel400, this.isLevel300, this.isLevelExtra]} />
+                <Post postType='specialist' 
+                      firstYearCourses={firstYearCourses} 
+                      secondYearCourses={secondYearCourses} 
+                      laterYearCourses={laterYearCourses} 
+                      textBoxNumbers={[3, 3, 4]} 
+                      courseChecks={[this.isLevel400, this.isLevel300, this.isLevelExtra]} 
+                      categoryTitles={categoryTitles} 
+                      notes={notes}/>
             </div>
         );
     }
 });
+
 
 var MajorPost = React.createClass({
     isLevel400: function (course, level400Array) {
@@ -151,6 +164,14 @@ var MajorPost = React.createClass({
 
     render: function() {
 
+        var categoryTitles = ['Any 400-level CSC course, BCB410H, BCB420H, BCB430Y (0.5 FCEs)', 
+                              'Any 300+ level CSC course, BCB410H, BCB420H, BCB430Y, ECE385H, ECE489H (1.0 FCEs)',
+                              'Any of the following: 200+ level CSC course; MAT: 221/223/240, 235/237/257, any 300+ \
+                               except for 329, 390, & 391; STA: 248, 261, any 300+; ECE: 385H/489H; BCB: 410H/420H/430Y \
+                              (1.5 FCEs, with at least 0.5 FCEs in the 300+ level)'];
+       var notes = ['No more than 1.0 FCE from CSC490H1, CSC491H1, CSC494H1, CSC495H1, BCB430Y1 may be used \
+                     to fulfill program requirements'];
+
         var firstYearCourses = [['csc108'], ['csc148'], ['csc165', 'csc240'], ['mat135', 'mat136', 'mat137', 'mat157']];
         var secondYearCourses = [['csc207'], ['csc236', 'csc240'], ['csc258'], ['csc263', 'csc265'], 
                                 ['sta247', 'sta255', 'sta257']];
@@ -158,8 +179,14 @@ var MajorPost = React.createClass({
 
         return (
             <div id ='major_window'>
-                <Post postType='major' firstYearCourses={firstYearCourses} secondYearCourses={secondYearCourses} laterYearCourses={laterYearCourses}
-                    textBoxNumbers={[1, 2, 3]} courseChecks={[this.isLevel400, this.isLevel300, this.isLevelExtra]} />
+                <Post postType='major' 
+                      firstYearCourses={firstYearCourses} 
+                      secondYearCourses={secondYearCourses} 
+                      laterYearCourses={laterYearCourses}
+                      textBoxNumbers={[1, 2, 3]} 
+                      courseChecks={[this.isLevel400, this.isLevel300, this.isLevelExtra]} 
+                      categoryTitles={categoryTitles}
+                      notes={notes} />
             </div>  
         );
     }
