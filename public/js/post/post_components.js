@@ -77,18 +77,22 @@ var Post = React.createClass({
     render: function() {
 
         var courseCategoryArrays = this.getCourses();
+        var me = this;
 
         return (
             <div id={'post_' + this.props.postType}>
                 <CourseCategory yearName='First Year' courses={this.props.firstYearCourses} />
                 <CourseCategory yearName='Second Year' courses={this.props.secondYearCourses} />
                 <CourseCategory yearName='Later Years' courses={this.props.laterYearCourses} />
-                <MultipleCourseCode courseID={this.props.postType + '_400'} textBoxNumber={this.props.textBoxNumbers[0]} courses={courseCategoryArrays[0]} textboxesDisabled={true} 
-                                    changeCourseCredit={this.changeCreditCount} categoryName={this.props.categoryTitles[0]} />
-                <MultipleCourseCode courseID={this.props.postType + '_300'} textBoxNumber={this.props.textBoxNumbers[1]} courses={courseCategoryArrays[1]} textboxesDisabled={true} 
-                                    changeCourseCredit={this.changeCreditCount} categoryName={this.props.categoryTitles[1]} />
-                <MultipleCourseCode courseID={this.props.postType + '_extra'} textBoxNumber={this.props.textBoxNumbers[2]} courses={courseCategoryArrays[2]} textboxesDisabled={false} 
-                                    changeCourseCredit={this.changeCreditCount} categoryName={this.props.categoryTitles[2]} />  
+                {this.props.categoryTitles.map(function (title, i) {
+                    return <MultipleCourseCode courseID={me.props.postType + '_category_' + (i + 1)} 
+                                               textBoxNumber={me.props.textBoxNumbers[i]} 
+                                               courses={courseCategoryArrays[i]} 
+                                               textboxesDisabled={true} 
+                                               changeCourseCredit={me.changeCreditCount} 
+                                               categoryName={title}
+                                               key={i} /> 
+                })}
                 <InquiryCategory courseID={this.props.postType + '_inq'} course={this.getInquiryCourse()} 
                     categoryName='Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H, 
                     CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H, or PEY (0.5 FCEs) 
@@ -188,4 +192,33 @@ var MajorPost = React.createClass({
     }
 });
 
-export default {SpecialistPost: SpecialistPost, MajorPost: MajorPost};
+var MinorPost = React.createClass({
+
+    isLevelExtra: function (course, levelExtraArray) {
+        var nonValidCourses = ['CSC207', 'CSC236240'];
+        return course.substring(3, 4) >= '2' && nonValidCourses.indexOf(course) < 0 && levelExtraArray.length < 3;
+    },
+
+    render: function() {
+
+        var categoryTitles = ['200+ CSC courses (1.5 FCEs, with at least 1.0 FCE in the 300+ levels)'];
+        var notes = ['You may take no more than three 300+ CSC/ECE courses'];
+
+        var firstYearCourses = [['csc108'], ['csc148'], ['csc165', 'csc240']];
+        var secondYearCourses = [['csc207'], ['csc236', 'csc240']];
+        var laterYearCourses = [];
+
+        return (
+            <Post postType='minor' 
+                  firstYearCourses={firstYearCourses} 
+                  secondYearCourses={secondYearCourses} 
+                  laterYearCourses={laterYearCourses}
+                  textBoxNumbers={[3]} 
+                  courseChecks={[this.isLevelExtra]} 
+                  categoryTitles={categoryTitles}
+                  notes={notes} /> 
+        );
+    }
+});
+
+export default {SpecialistPost: SpecialistPost, MajorPost: MajorPost, MinorPost: MinorPost};
