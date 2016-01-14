@@ -129,6 +129,9 @@ makeSVGDoc :: M.Map String String
 makeSVGDoc courseMap rects ellipses edges regions regionTexts styled =
     S.docTypeSvg ! A.width "1195"
                  ! A.height "650"
+                 ! A.preserveAspectRatio "xMinYMin
+                 -- | ! A.viewBox "0 0 svgWidth svgHeight"
+                 -- how do I get this svg information?
                  ! S.customAttribute "xmlns:svg" "http://www.w3.org/2000/svg"
                  ! S.customAttribute "xmlns:dc" "http://purl.org/dc/elements/1.1/"
                  ! S.customAttribute "xmlns:cc" "http://creativecommons.org/ns#"
