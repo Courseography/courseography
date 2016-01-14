@@ -134,16 +134,14 @@ var SpecialistPost = React.createClass({
         var laterYearCourses = [['csc369'], ['csc373']];
 
         return (
-            <div id ='specialist_window'>
-                <Post postType='specialist' 
-                      firstYearCourses={firstYearCourses} 
-                      secondYearCourses={secondYearCourses} 
-                      laterYearCourses={laterYearCourses} 
-                      textBoxNumbers={[3, 3, 4]} 
-                      courseChecks={[this.isLevel400, this.isLevel300, this.isLevelExtra]} 
-                      categoryTitles={categoryTitles} 
-                      notes={notes}/>
-            </div>
+            <Post postType='specialist' 
+                  firstYearCourses={firstYearCourses} 
+                  secondYearCourses={secondYearCourses} 
+                  laterYearCourses={laterYearCourses} 
+                  textBoxNumbers={[3, 3, 4]} 
+                  courseChecks={[this.isLevel400, this.isLevel300, this.isLevelExtra]} 
+                  categoryTitles={categoryTitles} 
+                  notes={notes}/>
         );
     }
 });
@@ -178,16 +176,14 @@ var MajorPost = React.createClass({
         var laterYearCourses = [];
 
         return (
-            <div id ='major_window'>
-                <Post postType='major' 
-                      firstYearCourses={firstYearCourses} 
-                      secondYearCourses={secondYearCourses} 
-                      laterYearCourses={laterYearCourses}
-                      textBoxNumbers={[1, 2, 3]} 
-                      courseChecks={[this.isLevel400, this.isLevel300, this.isLevelExtra]} 
-                      categoryTitles={categoryTitles}
-                      notes={notes} />
-            </div>  
+            <Post postType='major' 
+                  firstYearCourses={firstYearCourses} 
+                  secondYearCourses={secondYearCourses} 
+                  laterYearCourses={laterYearCourses}
+                  textBoxNumbers={[1, 2, 3]} 
+                  courseChecks={[this.isLevel400, this.isLevel300, this.isLevelExtra]} 
+                  categoryTitles={categoryTitles}
+                  notes={notes} /> 
         );
     }
 });
