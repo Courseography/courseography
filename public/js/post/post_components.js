@@ -83,13 +83,13 @@ var Post = React.createClass({
                 <CourseCategory yearName='First Year' courses={this.props.firstYearCourses} />
                 <CourseCategory yearName='Second Year' courses={this.props.secondYearCourses} />
                 <CourseCategory yearName='Later Years' courses={this.props.laterYearCourses} />
-                <MultipleCourseCode courseID='spec_400' textBoxNumber={this.props.textBoxNumbers[0]} courses={courseCategoryArrays[0]} textboxesDisabled={true} 
+                <MultipleCourseCode courseID={this.props.postType + '_400'} textBoxNumber={this.props.textBoxNumbers[0]} courses={courseCategoryArrays[0]} textboxesDisabled={true} 
                                     changeCourseCredit={this.changeCreditCount} categoryName={this.props.categoryTitles[0]} />
-                <MultipleCourseCode courseID='spec_300' textBoxNumber={this.props.textBoxNumbers[1]} courses={courseCategoryArrays[1]} textboxesDisabled={true} 
+                <MultipleCourseCode courseID={this.props.postType + '_300'} textBoxNumber={this.props.textBoxNumbers[1]} courses={courseCategoryArrays[1]} textboxesDisabled={true} 
                                     changeCourseCredit={this.changeCreditCount} categoryName={this.props.categoryTitles[1]} />
-                <MultipleCourseCode courseID="spec_extra" textBoxNumber={this.props.textBoxNumbers[2]} courses={courseCategoryArrays[2]} textboxesDisabled={false} 
+                <MultipleCourseCode courseID={this.props.postType + '_extra'} textBoxNumber={this.props.textBoxNumbers[2]} courses={courseCategoryArrays[2]} textboxesDisabled={false} 
                                     changeCourseCredit={this.changeCreditCount} categoryName={this.props.categoryTitles[2]} />  
-                <InquiryCategory courseID='spec_inq' course={this.getInquiryCourse()} 
+                <InquiryCategory courseID={this.props.postType + '_inq'} course={this.getInquiryCourse()} 
                     categoryName='Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H, 
                     CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H, or PEY (0.5 FCEs) 
                     ** Note: Type "PEY" for Check my POSt to recognize it **' />
