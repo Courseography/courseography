@@ -93,10 +93,14 @@ var Post = React.createClass({
                                                categoryName={title}
                                                key={i} /> 
                 })}
-                <InquiryCategory courseID={this.props.postType + '_inq'} course={this.getInquiryCourse()} 
-                    categoryName='Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H, 
-                    CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H, or PEY (0.5 FCEs) 
-                    ** Note: Type "PEY" for Check my POSt to recognize it **' />
+                {(() => {
+                    if (this.props.hasInquiryCategory) {
+                        return <InquiryCategory courseID={this.props.postType + '_inq'} course={this.getInquiryCourse()} 
+                                categoryName='Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H, 
+                                CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H, or PEY (0.5 FCEs) 
+                                ** Note: Type "PEY" for Check my POSt to recognize it **' />
+                    }
+                })()}
                 <h2>Notes</h2>
                 <ul id='notes'>
                     {this.props.notes.map(function (note, i) {
@@ -146,7 +150,8 @@ var SpecialistPost = React.createClass({
                   disabledTextboxes={[true, true, false]}
                   courseChecks={[this.isLevel400, this.isLevel300, this.isLevelExtra]} 
                   categoryTitles={categoryTitles} 
-                  notes={notes}/>
+                  notes={notes}
+                  hasInquiryCategory={true} />
         );
     }
 });
@@ -172,7 +177,7 @@ var MajorPost = React.createClass({
                               'Any of the following: 200+ level CSC course; MAT: 221/223/240, 235/237/257, any 300+ \
                                except for 329, 390, & 391; STA: 248, 261, any 300+; ECE: 385H/489H; BCB: 410H/420H/430Y \
                               (1.5 FCEs, with at least 0.5 FCEs in the 300+ level)'];
-       var notes = ['No more than 1.0 FCE from CSC490H1, CSC491H1, CSC494H1, CSC495H1, BCB430Y1 may be used \
+        var notes = ['No more than 1.0 FCE from CSC490H1, CSC491H1, CSC494H1, CSC495H1, BCB430Y1 may be used \
                      to fulfill program requirements'];
 
         var firstYearCourses = [['csc108'], ['csc148'], ['csc165', 'csc240'], ['mat135', 'mat136', 'mat137', 'mat157']];
@@ -189,10 +194,12 @@ var MajorPost = React.createClass({
                   disabledTextboxes={[true, true, false]}
                   courseChecks={[this.isLevel400, this.isLevel300, this.isLevelExtra]} 
                   categoryTitles={categoryTitles}
-                  notes={notes} /> 
+                  notes={notes}
+                  hasInquiryCategory={true} /> 
         );
     }
 });
+
 
 var MinorPost = React.createClass({
 
@@ -219,7 +226,8 @@ var MinorPost = React.createClass({
                   disabledTextboxes={[false]}
                   courseChecks={[this.isLevelExtra]} 
                   categoryTitles={categoryTitles}
-                  notes={notes} /> 
+                  notes={notes}
+                  hasInquiryCategory={false} /> 
         );
     }
 });
