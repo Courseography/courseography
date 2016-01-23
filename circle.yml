@@ -18,6 +18,5 @@ dependencies:
     - stack build
 
 test:
-  pre:
-    - cp hs/DevelopmentConfig.hs hs/Config.hs
-
+  override:
+    - stack test
