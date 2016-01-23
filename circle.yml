@@ -12,6 +12,7 @@ dependencies:
     - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.6 20
     - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 10
     - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 10
+    - cp hs/DevelopmentConfig.hs hs/Config.hs
   override:
     - stack setup 7.10.3
     - stack build
