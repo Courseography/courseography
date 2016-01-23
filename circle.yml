@@ -1,12 +1,13 @@
 dependencies:
   cache_directories:
     - "~/.stack"
+    - ".stack-work"
   pre:
     - mkdir tmp
     - cd tmp
-    - wget https://github.com/commercialhaskell/stack/releases/download/v1.0.2/stack-1.0.2-linux-x86_64.tar.gz -O stack.tar.gz
-    - tar xzf stack.tar.gz && chmod +x stack-1.0.2-linux-x86_64/stack
-    - sudo mv stack-1.0.2-linux-x86_64/stack /usr/bin/stack
+    - wget https://github.com/commercialhaskell/stack/releases/download/v0.10.1/stack-0.10.1-linux-x86_64.tar.gz -O stack.tar.gz
+    - tar xzf stack.tar.gz && chmod +x stack-0.10.1-linux-x86_64/stack
+    - sudo mv stack-0.10.1-linux-x86_64/stack /usr/bin/stack
   override:
     - stack setup 7.10.3
     - stack build
