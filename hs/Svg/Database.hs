@@ -8,7 +8,7 @@ here as well at some point in the future.
 -}
 
 module Svg.Database
-    (insertGraph, insertElements) where
+    (insertGraph, insertElements, deleteGraphs) where
 
 import Database.Persist.Sqlite
 import Database.Tables
@@ -29,3 +29,11 @@ insertElements (paths, shapes, texts) =
         mapM_ insert_ shapes
         mapM_ insert_ paths
         mapM_ insert_ texts
+
+-- | Delete graphs from the database.
+deleteGraphs :: IO ()
+deleteGraphs = runSqlite databasePath $ do
+    deleteWhere ([] :: [Filter Graph])
+    deleteWhere ([] :: [Filter Text])
+    deleteWhere ([] :: [Filter Shape])
+    deleteWhere ([] :: [Filter Path])
