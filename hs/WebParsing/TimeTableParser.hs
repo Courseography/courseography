@@ -48,20 +48,20 @@ splitTagsToLists input =
         eol = char '\n'
     in  parse tags "(unknown)" input
 
--- | Extracts tuples containing the department names and respective codes from raw data.
-extractDeptInfo :: [[[String]]] -> [([T.Text],T.Text)]
+-- | Extracts department codes and department name and forms a tuple.
+extractDeptInfo :: [[String]] -> ([T.Text], T.Text)
 extractDeptInfo namesAndCodes =
     let pat = "[A-Z]{3}" :: String
-        deptNamesText = head $ map (map T.pack) $ map (map head) namesAndCodes
-        deptCodesText = map (map T.pack) $ map (filter (=~ pat)) $ map (map last) namesAndCodes
-    in init $ zip deptCodesText deptNamesText
+        deptNameText = T.pack $ head $ map head namesAndCodes
+        deptCodesText = map T.pack $ filter (=~ pat) $ map last namesAndCodes
+    in (deptCodesText, deptNameText)
 
 -- | Extracts a list of tuples containing a list of dept codes and the respective dept name.
 parseLinkText :: [Tag String] -> [([T.Text],T.Text)]
 parseLinkText tags = 
     let tagsText = map fromTagText $ filter isTagText tags 
         rawDeptInfo = rights $ map splitTagsToLists tagsText
-    in extractDeptInfo rawDeptInfo
+    in init $ map extractDeptInfo rawDeptInfo
 
 -- | Used as an intermediate container while extracting lecture and tutorial information
 -- from the table. Is is later converted into lecture or tutorial records by examining the
