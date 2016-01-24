@@ -10,6 +10,7 @@ import Data.List
 import Data.Char (isUpper)
 import qualified Data.Text as T
 import Data.Maybe
+import Data.Either (rights)
 import Database.Tables as Tables
 import Database.CourseInsertion
 import WebParsing.HtmlTable
@@ -18,6 +19,8 @@ import WebParsing.TimeConverter
 import Control.Monad.IO.Class (liftIO, MonadIO)
 import Control.Monad.Trans.Reader (ReaderT)
 import Config (databasePath, timetableUrl)
+import Text.ParserCombinators.Parsec 
+import Text.Regex.Posix ((=~))
 
 parseTT :: IO ()
 parseTT = do
@@ -36,38 +39,32 @@ insertDepartment :: MonadIO m => ([T.Text], T.Text) -> ReaderT SqlBackend m ()
 insertDepartment (code, name) = 
     insert_ (Tables.Department code name)
 
--- | List of unwanted words to remove when getting department codes.
-wordsToRemove :: [String]
-wordsToRemove = ["courses",
-                "courses]", 
-                "includes",
-                "and",
-                "-",
-                "[",
-                "]",
-                ""]
+-- | Extracts a list of lists of department names followed by unfiltered department codes.
+splitTagsToLists :: String -> Either ParseError [[String]]
+splitTagsToLists input =
+    let tags = endBy line eol
+        line = sepBy cell (char '[')
+        cell = many (noneOf ",\n")
+        eol = char '\n'
+    in  parse tags "(unknown)" input
+
+-- | Extracts department codes and department name and forms a tuple.
+extractDeptInfo :: [[String]] -> ([T.Text], T.Text)
+extractDeptInfo namesAndCodes =
+    let pat = "[A-Z]{3}" :: String
+        deptNameText = T.pack $ head $ map head namesAndCodes
+        deptCodesText = map T.pack $ filter (=~ pat) $ map last namesAndCodes
+    in (deptCodesText, deptNameText)
 
 -- | Extracts a list of tuples containing a list of dept codes and the respective dept name.
 parseLinkText :: [Tag String] -> [([T.Text],T.Text)]
 parseLinkText tags = 
-    init $ zip deptCodesText deptNamesText
-    where
-        tagsText = map fromTagText $ filter isTagText tags
-        convertToStr = map T.pack $ filter (\x -> '[' `elem` x) tagsText
-        -- deptNamesAndCodes splits lists into two strings; one containing
-        -- dept names and the other containing the unfiltered dept codes
-        deptNamesAndCodes = map (T.splitOn (T.pack "[")) convertToStr
-        deptNamesText = map head deptNamesAndCodes
-        -- relevantWords takes the unfiltered string containing dept codes and 
-        -- makes a list of the words in that string and removes wordsToRemove
-        -- from that list
-        deptCodesUnfiltered = map T.unpack $ map last deptNamesAndCodes 
-        relevantWords = map (filter (`notElem` wordsToRemove)) $ map words deptCodesUnfiltered
-        -- deptCodesText filters the dept codes
-        deptCodesText = map (map T.pack) $ map (filter (all isUpper)) relevantWords 
+    let tagsText = map fromTagText $ filter isTagText tags 
+        rawDeptInfo = rights $ map splitTagsToLists tagsText
+    in init $ map extractDeptInfo rawDeptInfo
 
 -- | Used as an intermediate container while extracting lecture and tutorial information
--- from the table. Is is later converted into lecture or tutorial records by examinig the
+-- from the table. Is is later converted into lecture or tutorial records by examining the
 -- first letter of the section.
 data CourseSlot = CourseSlot {
     slotCode :: T.Text,
