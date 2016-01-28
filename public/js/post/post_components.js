@@ -1,5 +1,28 @@
 import {CourseCategory, MultipleCourseCode, InquiryCategory} from 'es6!post/course_components';
 
+/**
+ * Returns whether course is a specialist course or not
+ * @param {string} course Name of course
+ * @return {boolean} True if course is a specialist, False otherwise
+ */
+function notSpecialistCourse(course) {
+    'use strict';
+
+    return specialistCourses.indexOf(course) === -1;
+}
+
+var CheckMyPost = React.createClass({
+    render: function() {
+        return (
+            <div id='check_my_post'>
+                <SpecialistPost />
+                <MajorPost />
+                <MinorPost />
+            </div>
+        );
+    }
+});
+
 var Post = React.createClass({
     getInitialState: function() {
         return {
@@ -232,4 +255,5 @@ var MinorPost = React.createClass({
     }
 });
 
-export default {SpecialistPost: SpecialistPost, MajorPost: MajorPost, MinorPost: MinorPost};
+export default {SpecialistPost: SpecialistPost, MajorPost: MajorPost, MinorPost: MinorPost, 
+                CheckMyPost: CheckMyPost};

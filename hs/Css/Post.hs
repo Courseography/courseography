@@ -96,7 +96,7 @@ postCSS = do
             "transition" -: "all 0.2s"
     i ? do
         color red
-    "#div_specialist, #div_major, #div_minor" ? do
+    "#post_specialist, #post_major, #post_minor" ? do
         position absolute
         "margin-above" -: "30px"
         paddingBottom (px 30)
