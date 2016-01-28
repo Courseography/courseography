@@ -39,7 +39,6 @@ function resetAttributes() {
     $('#post_specialist').hide();
     $('#post_major').hide();
     $('#post_minor').hide();
-    $('#specialist, #major, #minor').css('background-color', 'white');
 }
 
 
@@ -67,15 +66,12 @@ function openTab(tab) {
 
     if (tab === 'specialist') {
         $('#post_specialist').show();
-        $('#specialist').css('background-color', '#9C9C9C');
         setCookie('specialist', 'active');
     } else if (tab === 'major') {
         $('#post_major').show();
-        $('#major').css('background-color', '#9C9C9C');
         setCookie('major', 'active');
     } else if (tab === 'minor') {
         $('#post_minor').show();
-        $('#minor').css('background-color', '#9C9C9C');
         setCookie('minor', 'active');
     }
 }

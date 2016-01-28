@@ -46,6 +46,7 @@ tabsCSS = do
                     "background-color" -: "#9C9C9C !important"
                     a ? do
                         "color" -: "white !important"
+                        cursor pointer
                 a ? do
                     color black
                     display inlineBlock
@@ -53,6 +54,10 @@ tabsCSS = do
                     paddingLeft (px 24)
                     width (pct 70)
                     textDecoration none
+            ".nav_selected" ? do
+                backgroundColor grey6
+            ".nav_not_selected" ? do
+                backgroundColor white
 
 postCSS :: Css
 postCSS = do

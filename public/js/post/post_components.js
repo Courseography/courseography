@@ -34,28 +34,36 @@ var PostNav = React.createClass({
 
     getActiveTab: function() {
         if (getCookie('minor') === 'active') {
-           return 'minor';
+           return 'min';
         } else if (getCookie('major') === 'active') {
-            return 'major';
+            return 'maj';
         } else {
-            return 'specialist';
+            return 'spe';
         }
+    },
+
+    changeActiveTab: function(e) {
+        this.setState({visible: e.target.id.substring(0, 3)});
+    },
+
+    getNavClass: function(type) {
+        return this.state.visible === type ? 'nav_selected' : 'nav_not_selected';
     },
 
     render: function() {
         return (
             <nav id='posts'> 
                 <ul>
-                    <li id='specialist'>
-                        <a> Specialist </a>
+                    <li id='specialist' className={this.getNavClass('spe')}>
+                        <a id='spec_link' onClick={this.changeActiveTab}> Specialist </a>
                         <div id='spec_creds'> (0/12.0) </div>
                     </li>
-                    <li id='major'>
-                        <a> Major </a>
+                    <li id='major' className={this.getNavClass('maj')}>
+                        <a id='maj_link' onClick={this.changeActiveTab}> Major </a>
                         <div id='maj_creds'> (0/8.0) </div>
                     </li>
-                    <li id='minor'>
-                        <a> Minor </a>
+                    <li id='minor' className={this.getNavClass('min')}>
+                        <a id='min_link' onClick={this.changeActiveTab}> Minor </a>
                         <div id='min_creds'> (0/4.0) </div>
                     </li>
                 </ul>
