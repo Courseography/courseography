@@ -15,6 +15,7 @@ var CheckMyPost = React.createClass({
     render: function() {
         return (
             <div id='check_my_post'>
+                <PostNav />
                 <SpecialistPost />
                 <MajorPost />
                 <MinorPost />
@@ -22,6 +23,48 @@ var CheckMyPost = React.createClass({
         );
     }
 });
+
+
+var PostNav = React.createClass({
+    getInitialState: function() {
+        return {
+            visible: this.getActiveTab()
+        }
+    },
+
+    getActiveTab: function() {
+        if (getCookie('minor') === 'active') {
+           return 'minor';
+        } else if (getCookie('major') === 'active') {
+            return 'major';
+        } else {
+            return 'specialist';
+        }
+    },
+
+    render: function() {
+        return (
+            <nav id='posts'> 
+                <ul>
+                    <li id='specialist'>
+                        <a> Specialist </a>
+                        <div id='spec_creds'> (0/12.0) </div>
+                    </li>
+                    <li id='major'>
+                        <a> Major </a>
+                        <div id='maj_creds'> (0/8.0) </div>
+                    </li>
+                    <li id='minor'>
+                        <a> Minor </a>
+                        <div id='min_creds'> (0/4.0) </div>
+                    </li>
+                </ul>
+            </nav>
+        );
+    }
+
+});
+
 
 var Post = React.createClass({
     getInitialState: function() {

@@ -26,14 +26,4 @@ checkPost =
     H.html $ do
         H.head $
             H.title "Check My Post!"
-        H.nav ! A.id "posts" $ H.ul $ do
-            H.li ! A.id "specialist" $ do
-                H.a ! A.href "" $ "Specialist"
-                H.div ! A.id "spec_creds" $ "(0/12.0)"
-            H.li ! A.id "major" $ do
-                H.a ! A.href "" $ "Major"
-                H.div ! A.id "maj_creds" $ "(0/8.0)"
-            H.li ! A.id "minor" $ do
-                H.a ! A.href "" $ "Minor"
-                H.div ! A.id "min_creds" $ "(0/4.0)"
         H.div ! A.id "all_posts" $ ""
