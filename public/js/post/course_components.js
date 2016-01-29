@@ -178,7 +178,7 @@ export var MultipleCourseCode = React.createClass({
                 <div id = {'spec' + this.props.courseID.substring(5, this.props.courseID.length)} className='more-info'>
                     <p className="full_name"> 
                         {Array.apply(0, Array(this.props.textBoxNumber)).map(function (x, i) {
-                            if (me.isValidExtraCourse(me.state.textboxValues[i])) {
+                            if (me.isValidExtraCourse(me.state.textboxValues[i].substring(0, 6))) {
                                 var className = 'valid_extra_course';
                             } else {
                                 var className = 'not_valid_extra_course';
@@ -189,7 +189,7 @@ export var MultipleCourseCode = React.createClass({
                                        key={i}
                                        id={i}
                                        className={className}
-                                       value={me.state.textboxValues[i]}
+                                       value={me.state.textboxValues[i].substring(0, 6)}
                                        onChange={me.handleOnChange}
                                        disabled={me.props.textboxesDisabled} />
                             );

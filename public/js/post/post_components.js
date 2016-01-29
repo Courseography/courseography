@@ -77,22 +77,30 @@ var Post = React.createClass({
     render: function() {
 
         var courseCategoryArrays = this.getCourses();
+        var me = this;
 
         return (
             <div id={'post_' + this.props.postType}>
                 <CourseCategory yearName='First Year' courses={this.props.firstYearCourses} />
                 <CourseCategory yearName='Second Year' courses={this.props.secondYearCourses} />
                 <CourseCategory yearName='Later Years' courses={this.props.laterYearCourses} />
-                <MultipleCourseCode courseID={this.props.postType + '_400'} textBoxNumber={this.props.textBoxNumbers[0]} courses={courseCategoryArrays[0]} textboxesDisabled={true} 
-                                    changeCourseCredit={this.changeCreditCount} categoryName={this.props.categoryTitles[0]} />
-                <MultipleCourseCode courseID={this.props.postType + '_300'} textBoxNumber={this.props.textBoxNumbers[1]} courses={courseCategoryArrays[1]} textboxesDisabled={true} 
-                                    changeCourseCredit={this.changeCreditCount} categoryName={this.props.categoryTitles[1]} />
-                <MultipleCourseCode courseID={this.props.postType + '_extra'} textBoxNumber={this.props.textBoxNumbers[2]} courses={courseCategoryArrays[2]} textboxesDisabled={false} 
-                                    changeCourseCredit={this.changeCreditCount} categoryName={this.props.categoryTitles[2]} />  
-                <InquiryCategory courseID={this.props.postType + '_inq'} course={this.getInquiryCourse()} 
-                    categoryName='Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H, 
-                    CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H, or PEY (0.5 FCEs) 
-                    ** Note: Type "PEY" for Check my POSt to recognize it **' />
+                {this.props.categoryTitles.map(function (title, i) {
+                    return <MultipleCourseCode courseID={me.props.postType + '_category_' + (i + 1)} 
+                                               textBoxNumber={me.props.textBoxNumbers[i]} 
+                                               courses={courseCategoryArrays[i]} 
+                                               textboxesDisabled={me.props.disabledTextboxes[i]} 
+                                               changeCourseCredit={me.changeCreditCount} 
+                                               categoryName={title}
+                                               key={i} /> 
+                })}
+                {(() => {
+                    if (this.props.hasInquiryCategory) {
+                        return <InquiryCategory courseID={this.props.postType + '_inq'} course={this.getInquiryCourse()} 
+                                categoryName='Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H, 
+                                CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H, or PEY (0.5 FCEs) 
+                                ** Note: Type "PEY" for Check my POSt to recognize it **' />
+                    }
+                })()}
                 <h2>Notes</h2>
                 <ul id='notes'>
                     {this.props.notes.map(function (note, i) {
@@ -139,9 +147,11 @@ var SpecialistPost = React.createClass({
                   secondYearCourses={secondYearCourses} 
                   laterYearCourses={laterYearCourses} 
                   textBoxNumbers={[3, 3, 4]} 
+                  disabledTextboxes={[true, true, false]}
                   courseChecks={[this.isLevel400, this.isLevel300, this.isLevelExtra]} 
                   categoryTitles={categoryTitles} 
-                  notes={notes}/>
+                  notes={notes}
+                  hasInquiryCategory={true} />
         );
     }
 });
@@ -167,7 +177,7 @@ var MajorPost = React.createClass({
                               'Any of the following: 200+ level CSC course; MAT: 221/223/240, 235/237/257, any 300+ \
                                except for 329, 390, & 391; STA: 248, 261, any 300+; ECE: 385H/489H; BCB: 410H/420H/430Y \
                               (1.5 FCEs, with at least 0.5 FCEs in the 300+ level)'];
-       var notes = ['No more than 1.0 FCE from CSC490H1, CSC491H1, CSC494H1, CSC495H1, BCB430Y1 may be used \
+        var notes = ['No more than 1.0 FCE from CSC490H1, CSC491H1, CSC494H1, CSC495H1, BCB430Y1 may be used \
                      to fulfill program requirements'];
 
         var firstYearCourses = [['csc108'], ['csc148'], ['csc165', 'csc240'], ['mat135', 'mat136', 'mat137', 'mat157']];
@@ -181,11 +191,45 @@ var MajorPost = React.createClass({
                   secondYearCourses={secondYearCourses} 
                   laterYearCourses={laterYearCourses}
                   textBoxNumbers={[1, 2, 3]} 
+                  disabledTextboxes={[true, true, false]}
                   courseChecks={[this.isLevel400, this.isLevel300, this.isLevelExtra]} 
                   categoryTitles={categoryTitles}
-                  notes={notes} /> 
+                  notes={notes}
+                  hasInquiryCategory={true} /> 
         );
     }
 });
 
-export default {SpecialistPost: SpecialistPost, MajorPost: MajorPost};
+
+var MinorPost = React.createClass({
+
+    isLevelExtra: function (course, levelExtraArray) {
+        var nonValidCourses = ['CSC207', 'CSC236240'];
+        return course.substring(3, 4) >= '2' && nonValidCourses.indexOf(course) < 0 && levelExtraArray.length < 3;
+    },
+
+    render: function() {
+
+        var categoryTitles = ['200+ CSC courses (1.5 FCEs, with at least 1.0 FCE in the 300+ levels)'];
+        var notes = ['You may take no more than three 300+ CSC/ECE courses'];
+
+        var firstYearCourses = [['csc108'], ['csc148'], ['csc165', 'csc240']];
+        var secondYearCourses = [['csc207'], ['csc236', 'csc240']];
+        var laterYearCourses = [];
+
+        return (
+            <Post postType='minor' 
+                  firstYearCourses={firstYearCourses} 
+                  secondYearCourses={secondYearCourses} 
+                  laterYearCourses={laterYearCourses}
+                  textBoxNumbers={[3]} 
+                  disabledTextboxes={[false]}
+                  courseChecks={[this.isLevelExtra]} 
+                  categoryTitles={categoryTitles}
+                  notes={notes}
+                  hasInquiryCategory={false} /> 
+        );
+    }
+});
+
+export default {SpecialistPost: SpecialistPost, MajorPost: MajorPost, MinorPost: MinorPost};
