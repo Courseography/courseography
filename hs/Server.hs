@@ -34,6 +34,8 @@ runServer = do
     privacyContents <- LazyIO.readFile $ markdownPath ++ "PRIVACY.md"
 
     -- Start the HTTP server
+    -- TODO: (getGraphJSON 1) is currently hard coded to 1, the CSC graph.
+    --       This needs to be changed so that it will work for any graph.
     simpleHTTP serverConf $ msum
         [ do
               nullDir

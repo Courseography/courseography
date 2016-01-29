@@ -125,7 +125,7 @@ buildSession lecs tuts =
 -- ** Other queries
 
 -- | Gets Shape, Text and Path elements for rendering graph returned as JSON
-getGraphJSON :: Int64 -> IO (Response)
+getGraphJSON :: Int64 -> IO Response
 getGraphJSON gId =
     runSqlite databasePath $ do
         sqlText    :: [Entity Text] <- selectList [TextGraph ==. toSqlKey gId] []
@@ -134,7 +134,9 @@ getGraphJSON gId =
         let sqlTextWithoutKey = map entityVal sqlText
             sqlShapeWithoutKey = map entityVal sqlShape
             sqlPathWithoutKey = map entityVal sqlPath
-            result = createJSONResponse ["texts" .= sqlTextWithoutKey, "shapes" .= sqlShapeWithoutKey, "paths" .= sqlPathWithoutKey]
+            result = createJSONResponse ["texts" .= sqlTextWithoutKey, 
+                                         "shapes" .= sqlShapeWithoutKey, 
+                                         "paths" .= sqlPathWithoutKey]
         return result
 
 -- | Builds a list of all course codes in the database.
