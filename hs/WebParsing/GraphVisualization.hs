@@ -66,4 +66,4 @@ main = do
     let depts = filter (isPrefixOf "crs_")  (getDeptList $ parseTags body)
     let codes = map (drop 4 . takeWhile (/= '.') . map toUpper)  depts\\ junkCodes
     mapM_ makeGraph codes
-    mapM_ (\x -> (runCommand $ "rm " ++ (map toUpper x))) codes
+    mapM_ (\x -> (runCommand $ "rm " ++ map toUpper x)) codes
