@@ -12,7 +12,7 @@ import Control.Monad (msum)
 import Control.Monad.IO.Class (liftIO)
 import Happstack.Server hiding (host)
 import Response
-import Database.CourseQueries (retrieveCourse, allCourses, queryGraphs, courseInfo, deptList)
+import Database.CourseQueries (retrieveCourse, allCourses, queryGraphs, courseInfo, deptList, getGraphJSON)
 import Filesystem.Path.CurrentOS as Path
 import System.Directory (getCurrentDirectory)
 import System.IO (hSetBuffering, stdout, stderr, BufferMode(LineBuffering))
@@ -34,6 +34,8 @@ runServer = do
     privacyContents <- LazyIO.readFile $ markdownPath ++ "PRIVACY.md"
 
     -- Start the HTTP server
+    -- TODO: (getGraphJSON 1) is currently hard coded to 1, the CSC graph.
+    --       This needs to be changed so that it will work for any graph.
     simpleHTTP serverConf $ msum
         [ do
               nullDir
@@ -58,6 +60,7 @@ runServer = do
               dir "depts" $ liftIO deptList,
               dir "timesearch" searchResponse,
               dir "calendar" $ lookCookieValue "selected-lectures" >>= calendarResponse,
+              dir "graph-json" $ liftIO (getGraphJSON 1),
               notFoundResponse
         ]
     where
