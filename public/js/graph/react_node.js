@@ -288,7 +288,7 @@ var NodeGroup = React.createClass({
     getInitialState: function () {
         return {
             nodesList: [],
-            hybridsList: [],
+            hybridsList: []
         };
     },
 
@@ -302,11 +302,11 @@ var NodeGroup = React.createClass({
 
     render: function () {
         var svg = this.props.svg;
-        var me = this;
+        var highlightedNodes = this.props.highlightedNodes;
         return (
             <g id='nodes' stroke='black'>
                 {this.state.nodesList.map(function (entry, value) {
-                    var highlighted = me.props.highlightedNodes.indexOf(entry['id']) >= 0;
+                    var highlighted = highlightedNodes.indexOf(entry['id']) >= 0;
                     var parents = [];
                     var childs = [];
                     var outEdges = [];
