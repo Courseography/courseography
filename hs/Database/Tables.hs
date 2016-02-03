@@ -96,6 +96,8 @@ Distribution
 
 Graph json
     title String
+    width Double
+    height Double
     deriving Show
 
 Text json

@@ -16,11 +16,13 @@ import Config (databasePath)
 
 -- | Insert a new graph into the database, returning the key of the new graph.
 insertGraph :: String   -- ^ The title of the graph that is being inserted.
+            -> Double   -- ^ The width dimension of the graph
+            -> Double   -- ^ The height dimension of the graph
             -> IO GraphId -- ^ The unique identifier of the inserted graph.
-insertGraph graphName =
+insertGraph graphName graphWidth graphHeight =
     runSqlite databasePath $ do
         runMigration migrateAll
-        insert (Graph graphName)
+        insert (Graph graphName graphWidth graphHeight)
 
 -- | Insert graph components into the database.
 insertElements :: ([Path], [Shape], [Text]) -> IO ()
