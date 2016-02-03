@@ -29,7 +29,7 @@ import Text.XML.HaXml.Namespaces (printableName)
 import System.Directory
 import Database.Tables
 import Database.DataType
-import Svg.Database
+import Svg.Database (insertGraph, insertElements, deleteGraphs)
 import Svg.Generator
 import Database.Persist.Sqlite hiding (replace)
 import Config (graphPath)
@@ -37,6 +37,7 @@ import Text.Read (readMaybe)
 
 parsePrebuiltSvgs :: IO ()
 parsePrebuiltSvgs = do
+    deleteGraphs
     performParse "Computer Science" "csc2015.svg"
     performParse "Statistics" "sta2015.svg"
     performParse "Biochemistry" "bch2015.svg"
@@ -51,6 +52,7 @@ parsePrebuiltSvgs = do
     performParse "Portuguese" "prt2015.svg"
     performParse "Slavic"  "sla2015.svg"
     performParse "East Asian Studies" "eas2015.svg"
+    performParse "English" "eng2015.svg"
 
 performParse :: String -- ^ The title of the graph.
              -> String -- ^ The filename of the file that will be parsed.
