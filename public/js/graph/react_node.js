@@ -175,12 +175,10 @@ var Graph = React.createClass({
         var svgAttrs = {'width': this.props.width, 'height': this.props.height};
         var markerAttrs = {'id': 'arrowHead'};
         var polylineAttrs = {'points': '0,1 10,5 0,9', 'fill': 'black'};
-        // TODO: Put this into a class
-        var style = {background: (this.state.highlightedNodes.length == 0) ?
-                                 'white' : 'grey'};
         return (
             <svg {... svgAttrs} ref='svg' version='1.1'
-                 style={style}>
+                 className={this.state.highlightedNodes.length > 0 ?
+                            'highlight-nodes' : ''}>
                 <defs>
                     <marker {... markerAttrs} ref='marker'
                             viewBox='0 0 10 10'>

@@ -66,9 +66,6 @@ nodeCSS = "g" ? do
                 strokeRed
             "text" <? do
                 fullyVisible
-        "data-active" @= "unlit" & do
-            "rect" <?
-                faded
         "data-active" @= "unselected" & do
             "rect" <? do
                 wideStroke
@@ -148,9 +145,6 @@ nodeCSS = "g" ? do
             "ellipse" <? do
                 fill "white"
                 strokeRed
-        "data-active" @= "unlit" & do
-            wideStroke
-            strokeRed
         -- For the React graph
         ".active" & do
             "ellipse" <? do
@@ -265,6 +259,9 @@ graphContainer = do
         "stroke-linecap" -: "square"
         "stroke-miterlimit" -: "10"
         "shape-rendering" -: "geometricPrecision"
+    ".highlight-nodes" ? do
+        backgroundColor grey
+
 
 sidebarCSS :: Css
 sidebarCSS = do
@@ -383,7 +380,6 @@ sidebarCSS = do
         textAlign $ alignSide sideCenter
         width (pct 90)
     ".spotlight" & do
-        semiVisible
         fill "white"
         stroke "none"
     ".details" & do
