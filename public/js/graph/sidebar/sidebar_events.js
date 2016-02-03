@@ -8,29 +8,6 @@ $('#reset').click(function () {
     enableReset();
 });
 
-/**
- * The click function when a focus is clicked.
- */
-$('.focus').click(function(e) {
-    'use strict';
-
-    var id = $(this).attr('id');
-    var focusDetails = $('#' + id + '-details');
-
-    if (focusDetails.text() !== '') {
-        clearFocus();
-        $('ellipse.spotlight').remove();
-        setMouseCallbacks();
-        focusDetails.animate({height: '2px'}, 'fast');
-        focusDetails.html('');
-    } else {
-        $('.details').css('height', '2px');
-        updateActiveFocus(id);
-        focusDetails.animate({height: '128px'}, 'fast');
-        focusDetails.html(window[id + 'Description']);
-    }
-});
-
 
 /**
  * Dynamically creates buttons for each graph in the sidebar.

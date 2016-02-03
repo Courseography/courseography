@@ -37,55 +37,55 @@ var CSCinq = [
 
 // Focus-related courses
 var sciFocusList = [
-    'CSC336', 'CSC446', 'CSC456', 'CSC320',
-    'CSC418', 'CSC321', 'CSC411', 'CSC343',
-    'CSC384', 'CSC358', 'CSC458', 'CSC436',
-    'CSC466'
+    'csc336', 'csc446', 'csc456', 'csc320',
+    'csc418', 'csc321', 'csc411', 'csc343',
+    'csc384', 'csc358', 'csc458', 'csc436',
+    'csc466'
 ];
 
 var AIFocusList = [
-    'CSC310', 'CSC438', 'CSC448',
-    'CSC463', 'CSC401', 'CSC485', 'CSC320',
-    'CSC420', 'CSC321', 'CSC411', 'CSC412',
-    'CSC384', 'CSC486', 'CSC336', 'Sta248261'
+    'csc310', 'csc438', 'csc448',
+    'csc463', 'csc401', 'csc485', 'csc320',
+    'csc420', 'csc321', 'csc411', 'csc412',
+    'csc384', 'csc486', 'csc336', 'sta248261'
 ];
 
 var NLPFocusList = [
-    'CSC318', 'CSC401', 'CSC485', 'CSC309',
-    'CSC321', 'CSC411', 'CSC428', 'CSC486'
+    'csc318', 'csc401', 'csc485', 'csc309',
+    'csc321', 'csc411', 'csc428', 'csc486'
 ];
 
 var visionFocusList = [
-    'CSC320', 'CSC336', 'CSC411', 'CSC420',
-    'CSC418', 'CSC412'
+    'csc320', 'csc336', 'csc411', 'csc420',
+    'csc418', 'csc412'
 ];
 
 var systemsFocusList = [
-    'CSC324', 'CSC343', 'CSC443', 'CSC469',
-    'CSC488', 'CSC372', 'ECE385', 'CSC358',
-    'CSC458'
+    'csc324', 'csc343', 'csc443', 'csc469',
+    'csc488', 'csc372', 'ece385', 'csc358',
+    'csc458'
 ];
 
 var gameFocusList = [
-    'CSC300', 'CSC301', 'CSC318', 'CSC324',
-    'CSC384', 'CSC418', 'CSC404'
+    'csc300', 'csc301', 'csc318', 'csc324',
+    'csc384', 'csc418', 'csc404'
 ];
 
 var HCIFocusList = [
-    'CSC300', 'CSC301', 'CSC318', 'CSC428',
-    'CSC309', 'CSC320', 'CSC321', 'CSC343',
-    'CSC384', 'CSC401', 'CSC404', 'CSC418',
-    'CSC485'
+    'csc300', 'csc301', 'csc318', 'csc428',
+    'csc309', 'csc320', 'csc321', 'csc343',
+    'csc384', 'csc401', 'csc404', 'csc418',
+    'csc485'
 ];
 
 var theoryFocusList = [
-    'CSC336', 'CSC463', 'CSC310', 'CSC438',
-    'CSC448', 'Sta248261'
+    'csc336', 'csc463', 'csc310', 'csc438',
+    'csc448', 'sta248261'
 ];
 
 var webFocusList = [
-    'Sta248261', 'CSC309', 'CSC343', 'CSC358',
-    'CSC458', 'CSC411', 'CSC310', 'CSC443', 'CSC469'
+    'sta248261', 'csc309', 'csc343', 'csc358',
+    'csc458', 'csc411', 'csc310', 'csc443', 'csc469'
 ];
 
 // Courses that can be taken with no other prerequisites

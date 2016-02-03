@@ -52,7 +52,6 @@ graphScripts = do
          "/static/js/common/objects/course.js",
          "/static/js/common/cookie_handler.js",
          "/static/js/common/course_description.js",
-         "/static/js/graph/sidebar/focuses.js",
          "/static/js/graph/sidebar/fce_count.js",
          "/static/js/common/objects/section.js",
          "/static/js/common/utilities/util.js",

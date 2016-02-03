@@ -75,6 +75,12 @@ function getNodes(mode) {
 
 
 var Graph = React.createClass({
+    getInitialState: function () {
+        return {
+            highlightedNodes: []
+        };
+    },
+
     componentDidMount: function () {
         //Need to hardcode these in because React does not understand these attributes
         var svgNode = ReactDOM.findDOMNode(this.refs.svg);
@@ -169,8 +175,12 @@ var Graph = React.createClass({
         var svgAttrs = {'width': this.props.width, 'height': this.props.height};
         var markerAttrs = {'id': 'arrowHead'};
         var polylineAttrs = {'points': '0,1 10,5 0,9', 'fill': 'black'};
+        // TODO: Put this into a class
+        var style = {background: (this.state.highlightedNodes.length == 0) ?
+                                 'white' : 'grey'};
         return (
-            <svg {... svgAttrs} ref='svg' version='1.1'>
+            <svg {... svgAttrs} ref='svg' version='1.1'
+                 style={style}>
                 <defs>
                     <marker {... markerAttrs} ref='marker'
                             viewBox='0 0 10 10'>
@@ -182,7 +192,8 @@ var Graph = React.createClass({
                             onClick={this.nodeClick}
                             onMouseEnter={this.nodeMouseEnter}
                             onMouseLeave={this.nodeMouseLeave}
-                            svg={this}/>
+                            svg={this}
+                            highlightedNodes={this.state.highlightedNodes}/>
                 <BoolGroup ref='bools'/>
                 <EdgeGroup ref='edges'/>
                 <RegionLabelGroup ref='regionLabels'/>
@@ -279,7 +290,7 @@ var NodeGroup = React.createClass({
     getInitialState: function () {
         return {
             nodesList: [],
-            hybridsList: []
+            hybridsList: [],
         };
     },
 
@@ -293,9 +304,11 @@ var NodeGroup = React.createClass({
 
     render: function () {
         var svg = this.props.svg;
+        var me = this;
         return (
             <g id='nodes' stroke='black'>
                 {this.state.nodesList.map(function (entry, value) {
+                    var highlighted = me.props.highlightedNodes.indexOf(entry['id']) >= 0;
                     var parents = [];
                     var childs = [];
                     var outEdges = [];
@@ -327,7 +340,8 @@ var NodeGroup = React.createClass({
                             outEdges={outEdges}
                             {... this.props}
                             svg={svg}
-                            logicalType={'AND'}/>
+                            logicalType={'AND'}
+                            highlighted={highlighted} />
                 }, this)}
 
                 {this.state.hybridsList.map(function (entry, value) {
@@ -466,11 +480,31 @@ var Node = React.createClass({
         if (!this.props.hybrid) {
             newClassName += ' ' + this.state.status;
         }
+        if (this.props.highlighted) {
+            var attrs = this.props.children[0]['attributes'];
+            var width = parseFloat(attrs['width']) / 2;
+            var height = parseFloat(attrs['height']) / 2;
+            var cx = parseFloat(attrs['x']) + width;
+            var cy = parseFloat(attrs['y']) + height;
+            var rx = width + 9;
+            var ry = height + 8.5;
+            var ellipse = (
+                <ellipse
+                    className='spotlight'
+                    cx={cx}
+                    cy={cy}
+                    rx={rx}
+                    ry={ry} />
+                );
+        } else {
+            var ellipse = null;
+        }
         return (
             <g {... this.props.attributes}
                style={this.props.styles}
                {... this.props}
                className={newClassName} >
+                {ellipse}
                 <rect {... this.props.children[0]['attributes']}
                       style={this.props.children[0]['style']} />
                 {this.props.children.slice(1).map(function (textTag, value) {
