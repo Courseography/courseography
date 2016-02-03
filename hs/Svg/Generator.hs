@@ -67,6 +67,7 @@ buildSVG gId courseMap filename styled =
         sqlEllipses :: [Entity Shape] <- selectList
                                              [ShapeType_ ==. BoolNode,
                                               ShapeGraph ==. gId] []
+        sqlGraph    :: [Entity Graph] <- selectList [GraphId ==. gId] []
         let courseStyleMap = M.map convertSelectionToStyle courseMap
             texts          = map entityVal sqlTexts
             -- TODO: Ideally, we would do these "build" steps *before*
@@ -85,6 +86,8 @@ buildSVG gId courseMap filename styled =
             regionTexts    = filter (not .
                                      intersectsWithShape (rects ++ ellipses))
                                     texts
+            width          = graphWidth $ entityVal (head sqlGraph)
+            height         = graphHeight $ entityVal (head sqlGraph)
             stringSVG      = renderSvg $ makeSVGDoc courseStyleMap
                                                     rects
                                                     ellipses
@@ -92,6 +95,8 @@ buildSVG gId courseMap filename styled =
                                                     regions
                                                     regionTexts
                                                     styled
+                                                    width
+                                                    height
         liftIO $ writeFile filename stringSVG
     where
         keyAsInt :: PersistEntity a => Entity a -> Integer
@@ -125,12 +130,14 @@ makeSVGDoc :: M.Map String String
            -> [Text]  -- ^ A list of the 'Text' elements that will be included
                       --   in the graph.
            -> Bool    -- ^ Whether to include inline styles in the graph.
+           -> Double  -- ^ The width dimension of the graph.
+           -> Double  -- ^ The height dimension of the graph.
            -> S.Svg   -- ^ The completed SVG document.
-makeSVGDoc courseMap rects ellipses edges regions regionTexts styled =
-    S.docTypeSvg ! A.width "1195"
-                 ! A.height "650"
+makeSVGDoc courseMap rects ellipses edges regions regionTexts styled width height =
+    S.docTypeSvg ! A.width "100%"
+                 ! A.height "100%"
                  ! A.preserveaspectratio "xMinYMin"
-                 -- ! A.viewBox "0 0 courseMap svgHeight"
+                 ! A.viewbox (stringValue $ "0 0 " ++ (show width) ++ " " ++ (show height))
                  ! S.customAttribute "xmlns:svg" "http://www.w3.org/2000/svg"
                  ! S.customAttribute "xmlns:dc" "http://purl.org/dc/elements/1.1/"
                  ! S.customAttribute "xmlns:cc" "http://creativecommons.org/ns#"
