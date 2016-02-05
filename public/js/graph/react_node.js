@@ -382,8 +382,12 @@ var NodeGroup = React.createClass({
 
 var Node = React.createClass({
     getInitialState: function () {
+        var state = getCookie(this.props.attributes['id']);
+        if (state === '') {
+            state = this.props.parents.length === 0 ? 'takeable' : 'inactive';
+        }
         return {
-            status: this.props.parents.length === 0 ? 'takeable' : 'inactive',
+            status: state,
             selected: false
         };
     },
@@ -580,9 +584,11 @@ var BoolGroup = React.createClass({
 
 var Bool = React.createClass({
     getInitialState: function () {
-        return {
-            status: this.props.parents.length === 0 ? 'takeable' : 'inactive'
-        };
+        var state = getCookie(this.props.attributes['id']);
+        if (state === '') {
+            state = this.props.parents.length === 0 ? 'takeable' : 'inactive';
+        }
+        return {status: state};
     },
 
     isSelected: function () {
