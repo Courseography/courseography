@@ -153,7 +153,7 @@ insertPrereqDummy name gpart prereq =
 -- | converts a list of Course Records into a Graph
 coursesToGraph :: [Course] -> IO (Gr T.Text ())
 coursesToGraph courses =
-    let noEmpty = filter (\c -> "" /= (name c)) courses
+    let noEmpty = filter (\c -> "" /= name c) courses
     in return $ fst $ parseCoursesEdges noEmpty $ (mkMapGraph (map name noEmpty) [])
 
 -- | takes a list of course codes, extracts them from Database, converts them
@@ -164,7 +164,7 @@ toGraph' courses =
     coursesToGraph
 
 toGraph :: [Course] -> IO (Gr T.Text ())
-toGraph courses = coursesToGraph courses
+toGraph = coursesToGraph
 
 labNodes' :: Gr T.Text () -> IO [LNode T.Text]
 labNodes' graph = return (labNodes graph)

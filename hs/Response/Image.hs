@@ -37,8 +37,8 @@ getGraphImage :: GraphId -> M.Map String String -> IO Response
 getGraphImage gId courseMap = do
     gen <- newStdGen
     let (rand, _) = next gen
-        svgFilename = (show rand ++ ".svg")
-        imageFilename = (show rand ++ ".png")
+        svgFilename = show rand ++ ".svg"
+        imageFilename = show rand ++ ".png"
     buildSVG gId courseMap svgFilename True
     returnImageData svgFilename imageFilename
 
@@ -47,8 +47,8 @@ getTimetableImage :: String -> String -> IO Response
 getTimetableImage courses session = do
     gen <- newStdGen
     let (rand, _) = next gen
-        svgFilename = (show rand ++ ".svg")
-        imageFilename = (show rand ++ ".png")
+        svgFilename = show rand ++ ".svg"
+        imageFilename = show rand ++ ".png"
     renderTable svgFilename courses session
     returnImageData svgFilename imageFilename
 
