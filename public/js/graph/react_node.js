@@ -423,7 +423,9 @@ var Node = React.createClass({
             }
         }
 
+        var nodeId = this.props.attributes['id'];
         this.setState({status: newState}, function () {
+            setCookie(nodeId, newState);
             this.props.childs.forEach(function (node) {
                 var currentNode = svg.refs['nodes'].refs[node] ||
                                   svg.refs['bools'].refs[node];
@@ -610,7 +612,9 @@ var Bool = React.createClass({
             newState = 'inactive';
         }
 
+        var boolId = this.props.attributes['id'];
         this.setState({status: newState}, function () {
+            setCookie(boolId, newState);
             this.props.childs.forEach(function (node) {
                 var currentNode = svg.refs['nodes'].refs[node] ||
                                   svg.refs['bools'].refs[node];
