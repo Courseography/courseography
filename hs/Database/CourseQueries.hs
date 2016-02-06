@@ -140,8 +140,6 @@ getGraphJSON gId =
                                               ShapeGraph ==. toSqlKey gId] []
         sqlPaths    :: [Entity Path] <- selectList [PathGraph ==. toSqlKey gId] []
         
-        --ADD SOURCE AND TARGETS
-        
         let             
             keyAsInt :: PersistEntity a => Entity a -> Integer
             keyAsInt = fromIntegral . (\(PersistInt64 x) -> x) . head . keyToValues . entityKey
@@ -162,9 +160,9 @@ getGraphJSON gId =
                                      intersectsWithShape (rects ++ ellipses))
                                     texts
                                     
-            result = createJSONResponse ["texts" .= (texts++regionTexts), 
-                                         "shapes" .= (rects++ellipses), 
-                                         "paths" .= (paths++regions++edges)]
+            result = createJSONResponse ["texts" .= (texts ++ regionTexts), 
+                                         "shapes" .= (rects ++ ellipses), 
+                                         "paths" .= (paths ++ regions ++ edges)]
                                          
         return result
 
