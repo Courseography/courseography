@@ -59,7 +59,8 @@ performParse :: String -- ^ The title of the graph.
              -> IO ()
 performParse graphName inputFilename = do
     graphFile <- readFile (graphPath ++ inputFilename)
-    key <- insertGraph graphName
+    let (graphWidth, graphHeight) = parseSize graphFile
+    key <- insertGraph graphName graphWidth graphHeight
     let parsedGraph = parseGraph key graphFile
         PersistInt64 keyVal = toPersistValue key
     print "Graph Parsed"
@@ -96,6 +97,24 @@ parseGraph key graphFile =
         -- Raw SVG seems to have a rectangle the size of the whole image
         small shape = shapeWidth shape < 300
 
+-- | Parse the height and width dimensions from the SVG element, respectively,  
+-- and return them as a tuple.
+parseSize :: String   -- ^ The file contents of the graph that will be parsed.
+          -> (Double, Double)
+parseSize graphFile =
+    let Document _ _ root _ = xmlParse "output.error" graphFile
+        svgElems = tag "svg" $ CElem root undefined
+        svgRoot = head svgElems
+        attrs = contentAttrs svgRoot 
+        width = readAttr "width" attrs
+        height = readAttr "height" attrs
+    in
+        if null svgElems
+        then
+            error "No svg element detected"
+        else
+            (width, height)
+            
 -- | The main parsing function. Parses an SVG element,
 -- and then recurses on its children.
 parseNode :: GraphId  -- ^ The Path's corresponding graph identifier.
