@@ -11,6 +11,7 @@ function notSpecialistCourse(course) {
     return specialistCourses.indexOf(course) === -1;
 }
 
+
 var Post = React.createClass({
     getInitialState: function() {
         return {
@@ -157,6 +158,10 @@ var SpecialistPost = React.createClass({
         return notSpecialistCourse(course) && course.substring(3, 4) >= '3' && levelExtraArray.length < 4;
     },
 
+    getCreditCount: function() {
+        return this.refs.post.state.creditCount;
+    },
+
     render: function() {
 
         var categoryTitles = ['Any 400-level CSC course, BCB410H, BCB420H, BCB430Y, ECE489H (1.5 FCEs)', 
@@ -174,6 +179,7 @@ var SpecialistPost = React.createClass({
 
         return (
             <Post postType='specialist' 
+                  ref='post'
                   firstYearCourses={firstYearCourses} 
                   secondYearCourses={secondYearCourses} 
                   laterYearCourses={laterYearCourses} 
@@ -212,6 +218,10 @@ var MajorPost = React.createClass({
         return course.substring(3, 4) >= '3' && levelExtraArray.length < 3;
     },
 
+    getCreditCount: function() {
+        return this.refs.post.state.creditCount;
+    },
+
     render: function() {
 
         var categoryTitles = ['Any 400-level CSC course, BCB410H, BCB420H, BCB430Y (0.5 FCEs)', 
@@ -229,6 +239,7 @@ var MajorPost = React.createClass({
 
         return (
             <Post postType='major' 
+                  ref='post'
                   firstYearCourses={firstYearCourses} 
                   secondYearCourses={secondYearCourses} 
                   laterYearCourses={laterYearCourses}
@@ -260,6 +271,10 @@ var MinorPost = React.createClass({
         return course.substring(3, 4) >= '2' && nonValidCourses.indexOf(course) < 0 && levelExtraArray.length < 3;
     },
 
+    getCreditCount: function() {
+        return this.refs.post.state.creditCount;
+    },
+
     render: function() {
 
         var categoryTitles = ['200+ CSC courses (1.5 FCEs, with at least 1.0 FCE in the 300+ levels)'];
@@ -271,6 +286,7 @@ var MinorPost = React.createClass({
 
         return (
             <Post postType='minor' 
+                  ref='post'
                   firstYearCourses={firstYearCourses} 
                   secondYearCourses={secondYearCourses} 
                   laterYearCourses={laterYearCourses}
