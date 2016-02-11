@@ -2,6 +2,12 @@ import {CourseCategory, MultipleCourseCode, InquiryCategory} from 'es6!post/cour
 import {SpecialistPost, MajorPost, MinorPost} from 'es6!post/post_components';
 
 var CheckMyPost = React.createClass({
+
+    componentDidMount: function() {
+        var activeTab = this.refs.postNav.getActiveTab() + 'Post';
+        this.changeActiveTab(activeTab);
+    },
+
     changeActiveTab: function(newTab) {
         var activeTab = newTab;
         var tabs = ['spePost', 'majPost', 'minPost'];
@@ -32,23 +38,20 @@ var CheckMyPost = React.createClass({
 var PostNav = React.createClass({
     getInitialState: function() {
         return {
-            visible: this.getActiveTab()
+            visible: this.getActiveTab() === '' ? 'spe' : this.getActiveTab()
         }
     },
 
     getActiveTab: function() {
-        if (getCookie('minor') === 'active') {
-           return 'min';
-        } else if (getCookie('major') === 'active') {
-            return 'maj';
-        } else {
-            return 'spe';
-        }
+        return getCookie('activePost');
     },
 
     changeActiveTab: function(e) {
         var newVisible = e.target.id.substring(0, 3);
-        this.setState({visible: newVisible}, this.props.updateTab(newVisible + 'Post'));
+        this.setState({visible: newVisible}, function() {
+            this.props.updateTab(newVisible + 'Post');
+            setCookie('activePost', newVisible);
+        });
     },
 
     getNavClass: function(type) {
