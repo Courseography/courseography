@@ -102,7 +102,6 @@ drawScripts = do
 postScripts :: H.Html
 postScripts = do 
     sequence_ (map toScript [
-                                          "/static/js/post/change_div.js",
                                           "/static/js/common/cookie_handler.js",
                                           "/static/js/graph/create_data.js",
                                           "/static/js/graph/objects/node.js",

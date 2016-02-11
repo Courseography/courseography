@@ -105,7 +105,6 @@ postCSS = do
         position absolute
         "margin-above" -: "30px"
         paddingBottom (px 30)
-        display none
         height (pct 70)
         marginLeft (px 25)
         width (pct 97)
@@ -145,3 +144,7 @@ postCSS = do
         color green
     ".not_valid_extra_course" ? do
         color red
+    ".post_selected" ? do
+        display block
+    ".post_not_selected" ? do
+        display none
