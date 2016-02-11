@@ -42,9 +42,9 @@ parsePrebuiltSvgs = do
     performParse "Statistics" "sta2015.svg"
     performParse "Biochemistry" "bch2015.svg"
     performParse "Cell & Systems Biology" "csb2015.svg"
-    performParse "Estonian" "est2015.svg"
-    performParse "Finnish" "fin2015.svg"
-    performParse "Italian" "ita2015.svg"
+    --performParse "Estonian" "est2015.svg"
+    --performParse "Finnish" "fin2015.svg"
+    --performParse "Italian" "ita2015.svg"
     performParse "Linguistics" "lin2015.svg"
     performParse "Rotman" "rotman2015.svg"
     performParse "Economics" "eco2015.svg"
@@ -98,7 +98,7 @@ parseGraph key graphFile =
         -- Raw SVG seems to have a rectangle the size of the whole image
         small shape = shapeWidth shape < 300
 
--- | Parse the height and width dimensions from the SVG element, respectively,  
+-- | Parse the height and width dimensions from the SVG element, respectively,
 -- and return them as a tuple.
 parseSize :: String   -- ^ The file contents of the graph that will be parsed.
           -> (Double, Double)
@@ -106,7 +106,7 @@ parseSize graphFile =
     let Document _ _ root _ = xmlParse "output.error" graphFile
         svgElems = tag "svg" $ CElem root undefined
         svgRoot = head svgElems
-        attrs = contentAttrs svgRoot 
+        attrs = contentAttrs svgRoot
         width = readAttr "width" attrs
         height = readAttr "height" attrs
     in
@@ -115,7 +115,7 @@ parseSize graphFile =
             error "No svg element detected"
         else
             (width, height)
-            
+
 -- | The main parsing function. Parses an SVG element,
 -- and then recurses on its children.
 parseNode :: GraphId  -- ^ The Path's corresponding graph identifier.
