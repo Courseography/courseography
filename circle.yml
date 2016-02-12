@@ -1,15 +1,22 @@
 dependencies:
   cache_directories:
     - "~/.stack"
+    - ".stack-work"
   pre:
-    - wget https://github.com/commercialhaskell/stack/releases/download/v0.1.10.1/stack-0.1.10.1-linux-x86_64.tar.gz -O /tmp/stack.tar.gz
-    - tar xzf /tmp/stack.gz && chmod +x /tmp/stack
-    - sudo mv /tmp/stack /usr/bin/stack
+    - mkdir tmp
+    - cd tmp
+    - wget https://github.com/commercialhaskell/stack/releases/download/v0.1.10.1/stack-0.1.10.1-linux-x86_64.tar.gz -O stack.tar.gz
+    - tar xzf stack.tar.gz && chmod +x stack-0.1.10.1-linux-x86_64/stack
+    - sudo mv stack-0.1.10.1-linux-x86_64/stack /usr/bin/stack
+    - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.6 20
+    - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.6 20
+    - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.9 10
+    - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.9 10
+    - cp hs/DevelopmentConfig.hs hs/Config.hs
   override:
     - stack setup 7.10.3
     - stack build
 
 test:
-  pre:
-    - cp hs/DevelopmentConfig.hs hs/Config.hs
-
+  override:
+    - stack test
