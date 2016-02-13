@@ -77,11 +77,68 @@ function getNodes(mode) {
 var Graph = React.createClass({
     getInitialState: function () {
         return {
+		  	labelsJSON: [],
+            regionsJSON: [],
+            nodesJSON: [],
+            hybridsJSON: [],
+            boolsJSON: [],
+            edgesJSON: [],
             highlightedNodes: []
         };
     },
 
     componentDidMount: function () {
+        $.ajax({
+            dataType: 'json',
+            url: 'graph-json',
+            success: function (data) {
+                var labelsList = [];
+                var regionsList = [];
+                var nodesList = [];
+                var hybridsList = [];
+                var boolsList = [];
+                var edgesList = [];
+                
+                //data[0] is ["texts", [JSON]]
+                data[0][1].forEach(function (entry) {
+                    if (entry['rId'].substring(0,5) === 'tspan'){
+                        labelsList.push(entry);
+                    }
+                });
+                //data[1] is ["shapes", [JSON]]
+                data[1][1].forEach(function (entry) {
+                    if (entry['type_'] === 'Node'){
+                        nodesList.push(entry);
+                    }
+                    if (entry['type_'] === 'Hybrid'){
+                        hybridsList.push(entry);
+                    }
+                    if (entry['type_'] === 'BoolNode'){
+                        boolsList.push(entry);
+                    }
+                });
+                //data[2] is ["paths", [JSON]]
+                //data[2][1] are the JSON without "paths"
+                data[2][1].forEach(function (entry) {
+                    if (entry['isRegion']){
+                        regionsList.push(entry);
+                    } else {
+                        edgesList.push(entry);
+                    }
+                });
+                if (this.isMounted()) {
+                    this.setState({labelsJSON: labelsList,
+                                   regionsJSON: regionsList,
+                                   nodesJSON: nodesList,
+                                   hybridsJSON: hybridsList,
+                                   boolsJSON: boolsList,
+                                   edgesJSON: edgesList});
+                }
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error('graph-json', status, err.toString());
+            }
+        });
         //Need to hardcode these in because React does not understand these attributes
         var svgNode = ReactDOM.findDOMNode(this.refs.svg);
         var markerNode = ReactDOM.findDOMNode(this.refs.marker);
@@ -100,10 +157,10 @@ var Graph = React.createClass({
         markerNode.setAttribute('markerWidth', 7);
         markerNode.setAttribute('markerHeight', 7);
 
-        this.getGraph();
+        //this.getGraph();
     },
 
-    getGraph: function (graphId) {
+    /*getGraph: function (graphId) {
         if (graphId === undefined) {
             var urlSpecifiedGraph = getURLParameter('dept');
 
@@ -134,13 +191,12 @@ var Graph = React.createClass({
             this.refs.regions.parseSVG();
             this.refs.regionLabels.parseSVG();
         }.bind(this));
-    },
+    },*/
 
     nodeClick: function (event) {
         var courseID = event.currentTarget.id;
         var currentNode = this.refs['nodes'].refs[courseID];
         currentNode.toggleSelection(this);
-
     },
 
     nodeMouseEnter: function (event) {
@@ -185,16 +241,18 @@ var Graph = React.createClass({
                         <polyline {... polylineAttrs}/>
                     </marker>
                 </defs>
-                <RegionGroup ref='regions'/>
-                <NodeGroup ref='nodes'
+                <RegionGroup ref='regions' regionsJSON={this.state.regionsJSON}/>
+                /*<NodeGroup ref='nodes'
                             onClick={this.nodeClick}
                             onMouseEnter={this.nodeMouseEnter}
                             onMouseLeave={this.nodeMouseLeave}
                             svg={this}
+                            nodesJSON={this.state.nodesJSON}
+                            hybridsJSON={this.state.hybridsJSON}
                             highlightedNodes={this.state.highlightedNodes}/>
-                <BoolGroup ref='bools'/>
-                <EdgeGroup ref='edges'/>
-                <RegionLabelGroup ref='regionLabels'/>
+                <BoolGroup ref='bools' boolsJSON={this.state.boolsJSON}/>
+                <EdgeGroup ref='edges' edgesJSON={this.state.edgesJSON}/>*/
+                <RegionLabelGroup ref='regionLabels' labelsJSON={this.state.labelsJSON}/>
             </svg>
         );
     }
@@ -202,46 +260,30 @@ var Graph = React.createClass({
 
 
 var RegionLabelGroup = React.createClass({
-    getInitialState: function () {
-        return {
-            labelsList: []
-        };
-    },
-
-    componentDidMount: function () {
-        this.parseSVG();
-    },
-
-    parseSVG: function () {
-        var dictList = $('#graph #region-labels > text').map(function (key, element) {
-            var attrs = getAttributes(element.attributes);
-            return {
-                'id': element.id,
-                'attributes': attrs,
-                'style': getStyles(attrs['style']),
-                'innerHTML': element.innerHTML
-            };
-        }).get();
-        this.setState({labelsList: dictList});
-    },
-
     render: function () {
         return (
             <g id='region-labels'>
-                {this.state.labelsList.map(function (entry, value) {
-                    return (
-                        <text {... entry['attributes']}
-                              key={value}
-                              style={entry['style']} >
-                            {entry['innerHTML']}
-                        </text>
-                    );
+                {this.props.labelsJSON.map(function (entry, value) {
+                    var textAttrs = {};
+                    textAttrs['x'] = entry.pos[0];
+                    textAttrs['y'] = entry.pos[1];
+
+                    var textStyle = {
+                        fill : entry['fill']
+                    }
+
+                    return <text
+                            {... textAttrs}
+                            key={value}
+                            style={textStyle}
+                            textAnchor={entry['text-anchor']}>
+                                {entry['text']}
+                           </text>
                 })}
             </g>
         );
     }
 });
-
 
 var RegionGroup = React.createClass({
     getInitialState: function () {
@@ -261,10 +303,18 @@ var RegionGroup = React.createClass({
     render: function () {
         return (
             <g id='regions'>
-                {this.state.regionsList.map(function (entry, value) {
-                    return <Region attributes={entry['attributes']}
-                                   key={entry['id']}
-                                   styles={entry['style']} />;
+                {this.props.regionsJSON.map(function (entry, value) {
+                    var pathAttrs = {};
+                    pathAttrs['d'] = 'M';
+                    
+                    entry.points.forEach(function(x){
+                        pathAttrs['d'] += x[0] + ',' + x[1] + ' '});
+
+                    var pathStyle = {
+                        fill : entry.fill
+                    }
+                    return <path {... pathAttrs} key={value} className='region' style={pathStyle}>
+            </path>
                 })}
             </g>
         );
@@ -273,15 +323,15 @@ var RegionGroup = React.createClass({
 
 
 // This now uses the new syntax for a stateless React component
-// (component with only a render method).
-// It also uses ES2015 "fat arrow" syntax for function definition.
-var Region = ({attributes, styles}) => {
-    return (
-        <path {... attributes}
-              className='region'
-              style={styles} />
-    );
-};
+// (component with only a render method).		
+// It also uses ES2015 "fat arrow" syntax for function definition.		
+var Region = ({attributes, styles}) => {		
+    return (		
+        <path {... attributes}		
+              className='region'		
+              style={styles} />		
+    );		
+};		
 
 
 var NodeGroup = React.createClass({
@@ -545,6 +595,7 @@ var BoolGroup = React.createClass({
         return (
             <g id='bools'>
                 {this.state.boolsList.map(function (entry, value) {
+                    console.log(boolsList);
                     var parents = [];
                     var childs = [];
                     var outEdges = [];
