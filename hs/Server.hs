@@ -63,7 +63,6 @@ runServer = do
               dir "depts" $ liftIO deptList,
               dir "timesearch" searchResponse,
               dir "calendar" $ lookCookieValue "selected-lectures" >>= calendarResponse,
-              -- dir "draw-json?gid=num" $ look "gid" >>= drawJsonResponse,
               dir "get-json-data" $ look "gid" >>= \gid -> liftIO $ (getGraphJSON (read gid :: Int64)),
               dir "draw-json" drawJsonResponse,
               notFoundResponse
