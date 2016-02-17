@@ -157,10 +157,10 @@ var Graph = React.createClass({
         markerNode.setAttribute('markerWidth', 7);
         markerNode.setAttribute('markerHeight', 7);
 
-        //this.getGraph();
+        this.getGraph();
     },
 
-    /*getGraph: function (graphId) {
+    getGraph: function (graphId) {
         if (graphId === undefined) {
             var urlSpecifiedGraph = getURLParameter('dept');
 
@@ -188,10 +188,10 @@ var Graph = React.createClass({
             this.refs.nodes.parseSVG();
             this.refs.bools.parseSVG();
             this.refs.edges.parseSVG();
-            this.refs.regions.parseSVG();
-            this.refs.regionLabels.parseSVG();
+            //this.refs.regions.parseSVG();
+            //this.refs.regionLabels.parseSVG();
         }.bind(this));
-    },*/
+    },
 
     nodeClick: function (event) {
         var courseID = event.currentTarget.id;
@@ -242,16 +242,17 @@ var Graph = React.createClass({
                     </marker>
                 </defs>
                 <RegionGroup ref='regions' regionsJSON={this.state.regionsJSON}/>
-                /*<NodeGroup ref='nodes'
+                <NodeGroup ref='nodes'
                             onClick={this.nodeClick}
                             onMouseEnter={this.nodeMouseEnter}
                             onMouseLeave={this.nodeMouseLeave}
                             svg={this}
                             nodesJSON={this.state.nodesJSON}
                             hybridsJSON={this.state.hybridsJSON}
+                            edgesJSON={this.state.edgesJSON}
                             highlightedNodes={this.state.highlightedNodes}/>
-                <BoolGroup ref='bools' boolsJSON={this.state.boolsJSON}/>
-                <EdgeGroup ref='edges' edgesJSON={this.state.edgesJSON}/>*/
+                <BoolGroup ref='bools' boolsJSON={this.state.boolsJSON} edgesJSON={this.state.edgesJSON}/>
+                <EdgeGroup ref='edges' edgesJSON={this.state.edgesJSON}/>
                 <RegionLabelGroup ref='regionLabels' labelsJSON={this.state.labelsJSON}/>
             </svg>
         );
@@ -361,7 +362,7 @@ var NodeGroup = React.createClass({
                     var childs = [];
                     var outEdges = [];
                     var inEdges = [];
-                    // Can be removed when we no longer use the Haskell-generated graphs.
+                    /*// Can be removed when we no longer use the Haskell-generated graphs.
                     delete entry['attributes']['data-active'];
 
                     $('.path').map(function (key, element) {
@@ -372,6 +373,16 @@ var NodeGroup = React.createClass({
                         if (entry['id'] === element.getAttribute('data-source-node')) {
                             childs.push(element.getAttribute('data-target-node'));
                             outEdges.push(element.id);
+                        }
+                    });*/
+                    this.props.edgesJSON.map(function (element, key) {
+                        if (entry.id === element.target) {
+                            parents.push(element.source);
+                            inEdges.push(element.id_);
+                        }
+                        if (entry['id'] === element.target) {
+                            childs.push(element.source);
+                            outEdges.push(element.id_);
                         }
                     });
                     return <Node
@@ -397,17 +408,14 @@ var NodeGroup = React.createClass({
                     var childs = [];
                     var outEdges = [];
                     var inEdges = [];
-                    // Can be removed when we no longer use the Haskell-generated graphs.
-                    delete entry['attributes']['data-active'];
-
-                    $('.path').map(function (key, element) {
-                        if (entry['id'] === element.getAttribute('data-target-node')) {
-                            parents.push(element.getAttribute('data-source-node'));
-                            inEdges.push(element.id);
+                    this.props.edgesJSON.map(function (element, key) {
+                        if (entry.id === element.target) {
+                            parents.push(element.source);
+                            inEdges.push(element.id_);
                         }
-                        if (entry['id'] === element.getAttribute('data-source-node')) {
-                            childs.push(element.getAttribute('data-target-node'));
-                            outEdges.push(element.id);
+                        if (entry['id'] === element.target) {
+                            childs.push(element.source);
+                            outEdges.push(element.id_);
                         }
                     });
                     return <Node
@@ -488,6 +496,7 @@ var Node = React.createClass({
             var allEdges = this.props.outEdges.concat(this.props.inEdges);
             allEdges.forEach(function (edge) {
                 var currentEdge = svg.refs['edges'].refs[edge];
+                
                 currentEdge.updateEdge(svg);
             });
         });
@@ -595,23 +604,19 @@ var BoolGroup = React.createClass({
         return (
             <g id='bools'>
                 {this.state.boolsList.map(function (entry, value) {
-                    console.log(boolsList);
                     var parents = [];
                     var childs = [];
                     var outEdges = [];
                     var inEdges = [];
 
-                    // Can be removed when we no longer use the Haskell-generated graphs.
-                    delete entry['attributes']['data-active'];
-
-                    $('.path').map(function (key, element) {
-                        if (entry['id'] === element.getAttribute('data-target-node')) {
-                            parents.push(element.getAttribute('data-source-node'));
-                            inEdges.push(element.id);
+                    this.props.edgesJSON.map(function (element, key) {
+                        if (entry.id === element.target) {
+                            parents.push(element.source);
+                            inEdges.push(element.id_);
                         }
-                        if (entry['id'] === element.getAttribute('data-source-node')) {
-                            childs.push(element.getAttribute('data-target-node'));
-                            outEdges.push(element.id);
+                        if (entry['id'] === element.target) {
+                            childs.push(element.source);
+                            outEdges.push(element.id_);
                         }
                     });
                     return <Bool
@@ -626,7 +631,7 @@ var BoolGroup = React.createClass({
                             outEdges={outEdges}
                             hybrid={true}
                             logicalType={entry['children'][1].innerHTML} />
-                })}
+                }, this)}
             </g>
         );
     }
@@ -753,7 +758,16 @@ var EdgeGroup = React.createClass({
     render: function () {
         return (
             <g id='edges' stroke='black'>
-                {this.state.edgesList.map(function (entry, value) {
+                {this.props.edgesJSON.map(function (entry, value) {
+                    return <Edge
+                            className='path'
+                            key={value}
+                            ref={entry.id_}
+                            source={entry.source}
+                            target={entry.target}
+                            JSON={entry}/>
+                })}
+                {/*this.state.edgesList.map(function (entry, value) {
                     // Can be removed when we no longer use the Haskell-generated graphs.
                     delete entry['attributes']['data-active'];
                     return <Edge
@@ -764,7 +778,7 @@ var EdgeGroup = React.createClass({
                             ref={entry['id']}
                             source={entry['attributes']['data-source-node']}
                             target={entry['attributes']['data-target-node']}/>
-                })}
+                })*/}
             </g>
         );
     }
@@ -794,11 +808,16 @@ var Edge = React.createClass({
     },
 
     render: function () {
+        var pathAttrs = {};
+        pathAttrs['d'] = 'M';
+        this.props.JSON.points.forEach(function(x){
+            pathAttrs['d'] += x[0] + ',' + x[1] + ' '});
+        
         return (
-            <path {... this.props.attributes}
+            <path {... pathAttrs}
                   className={this.props.className + ' ' + this.state.status}
-                  style={this.props.styles}
-                  markerEnd='url(#arrowHead)' />
+                  markerEnd='url(#arrowHead)'>
+            </path>
         );
     }
 });
