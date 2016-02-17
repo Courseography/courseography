@@ -29,7 +29,7 @@ import Text.XML.HaXml.Namespaces (printableName)
 import System.Directory
 import Database.Tables
 import Database.DataType
-import Svg.Database
+import Svg.Database (insertGraph, insertElements, deleteGraphs)
 import Svg.Generator
 import Database.Persist.Sqlite hiding (replace)
 import Config (graphPath)
@@ -37,13 +37,14 @@ import Text.Read (readMaybe)
 
 parsePrebuiltSvgs :: IO ()
 parsePrebuiltSvgs = do
+    deleteGraphs
     performParse "Computer Science" "csc2015.svg"
     performParse "Statistics" "sta2015.svg"
     performParse "Biochemistry" "bch2015.svg"
     performParse "Cell & Systems Biology" "csb2015.svg"
-    performParse "Estonian" "est2015.svg"
-    performParse "Finnish" "fin2015.svg"
-    performParse "Italian" "ita2015.svg"
+    --performParse "Estonian" "est2015.svg"
+    --performParse "Finnish" "fin2015.svg"
+    --performParse "Italian" "ita2015.svg"
     performParse "Linguistics" "lin2015.svg"
     performParse "Rotman" "rotman2015.svg"
     performParse "Economics" "eco2015.svg"
@@ -51,13 +52,16 @@ parsePrebuiltSvgs = do
     performParse "Portuguese" "prt2015.svg"
     performParse "Slavic"  "sla2015.svg"
     performParse "East Asian Studies" "eas2015.svg"
+    performParse "English" "eng2015.svg"
+    performParse "History and Philosophy of Science" "hps2015.svg"
 
 performParse :: String -- ^ The title of the graph.
              -> String -- ^ The filename of the file that will be parsed.
              -> IO ()
 performParse graphName inputFilename = do
     graphFile <- readFile (graphPath ++ inputFilename)
-    key <- insertGraph graphName
+    let (graphWidth, graphHeight) = parseSize graphFile
+    key <- insertGraph graphName graphWidth graphHeight
     let parsedGraph = parseGraph key graphFile
         PersistInt64 keyVal = toPersistValue key
     print "Graph Parsed"
@@ -93,6 +97,24 @@ parseGraph key graphFile =
     where
         -- Raw SVG seems to have a rectangle the size of the whole image
         small shape = shapeWidth shape < 300
+
+-- | Parse the height and width dimensions from the SVG element, respectively,
+-- and return them as a tuple.
+parseSize :: String   -- ^ The file contents of the graph that will be parsed.
+          -> (Double, Double)
+parseSize graphFile =
+    let Document _ _ root _ = xmlParse "output.error" graphFile
+        svgElems = tag "svg" $ CElem root undefined
+        svgRoot = head svgElems
+        attrs = contentAttrs svgRoot
+        width = readAttr "width" attrs
+        height = readAttr "height" attrs
+    in
+        if null svgElems
+        then
+            error "No svg element detected"
+        else
+            (width, height)
 
 -- | The main parsing function. Parses an SVG element,
 -- and then recurses on its children.
