@@ -42,9 +42,9 @@ parsePrebuiltSvgs = do
     performParse "Statistics" "sta2015.svg"
     performParse "Biochemistry" "bch2015.svg"
     performParse "Cell & Systems Biology" "csb2015.svg"
-    --performParse "Estonian" "est2015.svg"
-    --performParse "Finnish" "fin2015.svg"
-    --performParse "Italian" "ita2015.svg"
+    performParse "Estonian" "est2015.svg"
+    performParse "Finnish" "fin2015.svg"
+    performParse "Italian" "ita2015.svg"
     performParse "Linguistics" "lin2015.svg"
     performParse "Rotman" "rotman2015.svg"
     performParse "Economics" "eco2015.svg"
@@ -54,6 +54,7 @@ parsePrebuiltSvgs = do
     performParse "East Asian Studies" "eas2015.svg"
     performParse "English" "eng2015.svg"
     performParse "History and Philosophy of Science" "hps2015.svg"
+    performParse "History" "his2015.svg"
 
 performParse :: String -- ^ The title of the graph.
              -> String -- ^ The filename of the file that will be parsed.
