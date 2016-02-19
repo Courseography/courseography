@@ -55,6 +55,7 @@ parsePrebuiltSvgs = do
     performParse "English" "eng2015.svg"
     performParse "History and Philosophy of Science" "hps2015.svg"
     performParse "History" "his2015.svg"
+    performParse "Geography" "ggr2015.svg"
 
 performParse :: String -- ^ The title of the graph.
              -> String -- ^ The filename of the file that will be parsed.
