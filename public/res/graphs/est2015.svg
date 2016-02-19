@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -9,33 +7,37 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="114mm"
-   height="127mm"
-   viewBox="0 0 403.93677 449.99973"
-   id="svg8229"
    version="1.1"
+   id="svg8229"
+   viewBox="0 0 403.93677 449.99973"
+   height="450"
+   width="403.93701"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="EstonianInkscape.svg">
-  <defs
-     id="defs8231" />
+   sodipodi:docname="est2015.svg">
   <sodipodi:namedview
-     id="base"
      pagecolor="#ffffff"
      bordercolor="#666666"
-     borderopacity="1.0"
-     inkscape:pageopacity="0.0"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="63.312917"
-     inkscape:cy="179.5778"
-     inkscape:document-units="px"
-     inkscape:current-layer="layer1"
-     showgrid="false"
      inkscape:window-width="1366"
      inkscape:window-height="706"
+     id="namedview13195"
+     showgrid="false"
+     units="px"
+     inkscape:showpageshadow="false"
+     inkscape:zoom="1.0488889"
+     inkscape:cx="155.4935"
+     inkscape:cy="225"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
-     inkscape:window-maximized="1" />
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg8229" />
+  <defs
+     id="defs8231" />
   <metadata
      id="metadata8234">
     <rdf:RDF>
@@ -49,479 +51,469 @@
     </rdf:RDF>
   </metadata>
   <g
-     inkscape:groupmode="layer"
-     id="layer2"
-     inkscape:label="Layer 2">
+     id="layer2">
     <g
-       style="font-style:normal;font-weight:normal;font-size:12px;font-family:Dialog;color-interpolation:auto;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto"
+       transform="translate(79.999952,94.499948)"
        id="g4339"
-       transform="translate(79.999952,94.499948)">
+       style="font-style:normal;font-weight:normal;font-size:12px;font-family:Dialog;color-interpolation:auto;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto">
       <g
          id="g4218">
         <defs
            id="defs1">
           <clipPath
-             id="clipPath1"
-             clipPathUnits="userSpaceOnUse">
+             clipPathUnits="userSpaceOnUse"
+             id="clipPath1">
             <path
-               id="path4222"
                d="M 0,0 242,0 242,289 0,289 0,0 Z"
+               id="path4222"
                inkscape:connector-curvature="0" />
           </clipPath>
           <clipPath
-             id="clipPath2"
-             clipPathUnits="userSpaceOnUse">
+             clipPathUnits="userSpaceOnUse"
+             id="clipPath2">
             <path
-               id="path4225"
                d="m 90,63 242,0 0,289 -242,0 0,-289 z"
+               id="path4225"
                inkscape:connector-curvature="0" />
           </clipPath>
         </defs>
         <g
-           id="g4227"
+           style="fill:#ffffff;stroke:#ffffff;shape-rendering:geometricPrecision;text-rendering:geometricPrecision"
            transform="translate(-90,-63)"
-           style="fill:#ffffff;stroke:#ffffff;shape-rendering:geometricPrecision;text-rendering:geometricPrecision" />
+           id="g4227" />
         <g
-           id="g4231"
+           style="fill:#99cc00;stroke:#99cc00;shape-rendering:geometricPrecision;text-rendering:geometricPrecision"
            transform="translate(-90,-63)"
-           style="fill:#99cc00;stroke:#99cc00;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+           id="g4231">
           <rect
-             id="rect4233"
-             height="29"
-             ry="4"
-             rx="4"
-             width="74"
-             clip-path="url(#clipPath2)"
-             y="78.229897"
+             style="stroke:none"
              x="105.4428"
-             style="stroke:none" />
+             y="78.229897"
+             clip-path="url(#clipPath2)"
+             width="74"
+             rx="4"
+             ry="4"
+             height="29"
+             id="rect4233" />
         </g>
         <g
-           id="g4235"
-           transform="translate(-90,-63)"
+           style="font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45000005;shape-rendering:geometricPrecision;text-rendering:geometricPrecision"
            stroke-miterlimit="1.45"
-           style="font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45000005;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+           transform="translate(-90,-63)"
+           id="g4235">
           <text
-             id="text4237"
-             clip-path="url(#clipPath2)"
+             style="stroke:none"
+             x="120.7631"
+             xml:space="preserve"
              y="97.443802"
-             xml:space="preserve"
-             x="120.7631"
-             style="stroke:none">EST100</text>
-          <rect
-             id="rect4239"
-             height="29"
-             ry="4"
-             rx="4"
-             width="74"
              clip-path="url(#clipPath2)"
+             id="text4237">EST100</text>
+          <rect
+             style="fill:none"
+             x="105.4428"
              y="78.229897"
-             x="105.4428"
-             style="fill:none" />
-        </g>
-        <g
-           id="g4241"
-           transform="translate(-90,-63)"
-           style="fill:#99cc00;stroke:#99cc00;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
-          <rect
-             id="rect4243"
-             height="29"
-             ry="4"
-             rx="4"
+             clip-path="url(#clipPath2)"
              width="74"
-             clip-path="url(#clipPath2)"
-             y="124.4599"
-             x="105.4428"
-             style="stroke:none" />
+             rx="4"
+             ry="4"
+             height="29"
+             id="rect4239" />
         </g>
         <g
-           id="g4245"
+           style="fill:#99cc00;stroke:#99cc00;shape-rendering:geometricPrecision;text-rendering:geometricPrecision"
            transform="translate(-90,-63)"
-           stroke-miterlimit="1.45"
-           style="font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45000005;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
-          <text
-             id="text4247"
+           id="g4241">
+          <rect
+             style="stroke:none"
+             x="105.4428"
+             y="124.4599"
              clip-path="url(#clipPath2)"
+             width="74"
+             rx="4"
+             ry="4"
+             height="29"
+             id="rect4243" />
+        </g>
+        <g
+           style="font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45000005;shape-rendering:geometricPrecision;text-rendering:geometricPrecision"
+           stroke-miterlimit="1.45"
+           transform="translate(-90,-63)"
+           id="g4245">
+          <text
+             style="stroke:none"
+             x="120.7631"
+             xml:space="preserve"
              y="143.6738"
-             xml:space="preserve"
-             x="120.7631"
-             style="stroke:none">EST101</text>
-          <rect
-             id="rect4249"
-             height="29"
-             ry="4"
-             rx="4"
-             width="74"
              clip-path="url(#clipPath2)"
+             id="text4247">EST101</text>
+          <rect
+             style="fill:none"
+             x="105.4428"
              y="124.4599"
-             x="105.4428"
-             style="fill:none" />
-        </g>
-        <g
-           id="g4251"
-           transform="translate(-90,-63)"
-           style="fill:#99cc00;stroke:#99cc00;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
-          <rect
-             id="rect4253"
-             height="29"
-             ry="4"
-             rx="4"
+             clip-path="url(#clipPath2)"
              width="74"
-             clip-path="url(#clipPath2)"
-             y="170.6898"
-             x="105.4428"
-             style="stroke:none" />
+             rx="4"
+             ry="4"
+             height="29"
+             id="rect4249" />
         </g>
         <g
-           id="g4255"
+           style="fill:#99cc00;stroke:#99cc00;shape-rendering:geometricPrecision;text-rendering:geometricPrecision"
            transform="translate(-90,-63)"
-           stroke-miterlimit="1.45"
-           style="font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45000005;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
-          <text
-             id="text4257"
+           id="g4251">
+          <rect
+             style="stroke:none"
+             x="105.4428"
+             y="170.6898"
              clip-path="url(#clipPath2)"
+             width="74"
+             rx="4"
+             ry="4"
+             height="29"
+             id="rect4253" />
+        </g>
+        <g
+           style="font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45000005;shape-rendering:geometricPrecision;text-rendering:geometricPrecision"
+           stroke-miterlimit="1.45"
+           transform="translate(-90,-63)"
+           id="g4255">
+          <text
+             style="stroke:none"
+             x="120.7631"
+             xml:space="preserve"
              y="189.9037"
-             xml:space="preserve"
-             x="120.7631"
-             style="stroke:none">EST200</text>
-          <rect
-             id="rect4259"
-             height="29"
-             ry="4"
-             rx="4"
-             width="74"
              clip-path="url(#clipPath2)"
+             id="text4257">EST200</text>
+          <rect
+             style="fill:none"
+             x="105.4428"
              y="170.6898"
-             x="105.4428"
-             style="fill:none" />
-        </g>
-        <g
-           id="g4261"
-           transform="translate(-90,-63)"
-           style="fill:#99cc00;stroke:#99cc00;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
-          <rect
-             id="rect4263"
-             height="29"
-             ry="4"
-             rx="4"
+             clip-path="url(#clipPath2)"
              width="74"
-             clip-path="url(#clipPath2)"
-             y="216.3797"
-             x="105.4428"
-             style="stroke:none" />
+             rx="4"
+             ry="4"
+             height="29"
+             id="rect4259" />
         </g>
         <g
-           id="g4265"
+           style="fill:#99cc00;stroke:#99cc00;shape-rendering:geometricPrecision;text-rendering:geometricPrecision"
            transform="translate(-90,-63)"
-           stroke-miterlimit="1.45"
-           style="font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45000005;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
-          <text
-             id="text4267"
+           id="g4261">
+          <rect
+             style="stroke:none"
+             x="105.4428"
+             y="216.3797"
              clip-path="url(#clipPath2)"
-             y="235.59351"
-             xml:space="preserve"
+             width="74"
+             rx="4"
+             ry="4"
+             height="29"
+             id="rect4263" />
+        </g>
+        <g
+           style="font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45000005;shape-rendering:geometricPrecision;text-rendering:geometricPrecision"
+           stroke-miterlimit="1.45"
+           transform="translate(-90,-63)"
+           id="g4265">
+          <text
+             style="stroke:none"
              x="120.7631"
-             style="stroke:none">EST201</text>
-          <rect
-             id="rect4269"
-             height="29"
-             ry="4"
-             rx="4"
-             width="74"
+             xml:space="preserve"
+             y="235.59351"
              clip-path="url(#clipPath2)"
-             y="216.3797"
+             id="text4267">EST201</text>
+          <rect
+             style="fill:none"
              x="105.4428"
-             style="fill:none" />
-        </g>
-        <g
-           id="g4271"
-           transform="translate(-90,-63)"
-           style="fill:#99cc00;stroke:#99cc00;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
-          <rect
-             id="rect4273"
-             height="29"
-             ry="4"
-             rx="4"
+             y="216.3797"
+             clip-path="url(#clipPath2)"
              width="74"
-             clip-path="url(#clipPath2)"
-             y="262.06949"
-             x="105.7713"
-             style="stroke:none" />
+             rx="4"
+             ry="4"
+             height="29"
+             id="rect4269" />
         </g>
         <g
-           id="g4275"
+           style="fill:#99cc00;stroke:#99cc00;shape-rendering:geometricPrecision;text-rendering:geometricPrecision"
            transform="translate(-90,-63)"
-           stroke-miterlimit="1.45"
-           style="font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45000005;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
-          <text
-             id="text4277"
+           id="g4271">
+          <rect
+             style="stroke:none"
+             x="105.7713"
+             y="262.06949"
              clip-path="url(#clipPath2)"
-             y="281.28339"
-             xml:space="preserve"
+             width="74"
+             rx="4"
+             ry="4"
+             height="29"
+             id="rect4273" />
+        </g>
+        <g
+           style="font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45000005;shape-rendering:geometricPrecision;text-rendering:geometricPrecision"
+           stroke-miterlimit="1.45"
+           transform="translate(-90,-63)"
+           id="g4275">
+          <text
+             style="stroke:none"
              x="121.0916"
-             style="stroke:none">EST300</text>
-          <rect
-             id="rect4279"
-             height="29"
-             ry="4"
-             rx="4"
-             width="74"
-             clip-path="url(#clipPath2)"
-             y="262.06949"
-             x="105.7713"
-             style="fill:none" />
-        </g>
-        <g
-           id="g4281"
-           transform="translate(-90,-63)"
-           style="fill:#99cc00;stroke:#99cc00;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
-          <rect
-             id="rect4283"
-             height="29"
-             ry="4"
-             rx="4"
-             width="74"
-             clip-path="url(#clipPath2)"
-             y="307.75931"
-             x="105.7713"
-             style="stroke:none" />
-        </g>
-        <g
-           id="g4285"
-           transform="translate(-90,-63)"
-           stroke-miterlimit="1.45"
-           style="font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45000005;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
-          <text
-             id="text4287"
-             clip-path="url(#clipPath2)"
-             y="326.97321"
              xml:space="preserve"
-             x="121.0916"
-             style="stroke:none">EST400</text>
-          <rect
-             id="rect4289"
-             height="29"
-             ry="4"
-             rx="4"
-             width="74"
-             clip-path="url(#clipPath2)"
-             y="307.75931"
-             x="105.7713"
-             style="fill:none" />
-        </g>
-        <g
-           id="g4291"
-           transform="translate(-90,-63)"
-           style="fill:#99ccff;stroke:#99ccff;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
-          <rect
-             id="rect4293"
-             height="29"
-             ry="4"
-             rx="4"
-             width="74"
-             clip-path="url(#clipPath2)"
-             y="262.06949"
-             x="242.44279"
-             style="stroke:none" />
-        </g>
-        <g
-           id="g4295"
-           transform="translate(-90,-63)"
-           stroke-miterlimit="1.45"
-           style="font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45000005;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
-          <text
-             id="text4297"
-             clip-path="url(#clipPath2)"
              y="281.28339"
-             xml:space="preserve"
-             x="257.76321"
-             style="stroke:none">EST420</text>
-          <rect
-             id="rect4299"
-             height="29"
-             ry="4"
-             rx="4"
-             width="74"
              clip-path="url(#clipPath2)"
+             id="text4277">EST300</text>
+          <rect
+             style="fill:none"
+             x="105.7713"
              y="262.06949"
-             x="242.44279"
-             style="fill:none" />
-        </g>
-        <g
-           id="g4301"
-           transform="translate(-90,-63)"
-           style="fill:#99ccff;stroke:#99ccff;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
-          <rect
-             id="rect4303"
-             height="29"
-             ry="4"
-             rx="4"
-             width="74"
              clip-path="url(#clipPath2)"
-             y="307.75931"
-             x="242.44279"
-             style="stroke:none" />
+             width="74"
+             rx="4"
+             ry="4"
+             height="29"
+             id="rect4279" />
         </g>
         <g
-           id="g4305"
+           style="fill:#99cc00;stroke:#99cc00;shape-rendering:geometricPrecision;text-rendering:geometricPrecision"
            transform="translate(-90,-63)"
+           id="g4281">
+          <rect
+             style="stroke:none"
+             x="105.7713"
+             y="307.75931"
+             clip-path="url(#clipPath2)"
+             width="74"
+             rx="4"
+             ry="4"
+             height="29"
+             id="rect4283" />
+        </g>
+        <g
+           style="font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45000005;shape-rendering:geometricPrecision;text-rendering:geometricPrecision"
            stroke-miterlimit="1.45"
-           style="font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45000005;shape-rendering:geometricPrecision;text-rendering:geometricPrecision">
+           transform="translate(-90,-63)"
+           id="g4285">
           <text
-             id="text4307"
-             clip-path="url(#clipPath2)"
-             y="326.97321"
+             style="stroke:none"
+             x="121.0916"
              xml:space="preserve"
-             x="257.76321"
-             style="stroke:none">EST421</text>
-          <rect
-             id="rect4309"
-             height="29"
-             ry="4"
-             rx="4"
-             width="74"
+             y="326.97321"
              clip-path="url(#clipPath2)"
+             id="text4287">EST400</text>
+          <rect
+             style="fill:none"
+             x="105.7713"
              y="307.75931"
+             clip-path="url(#clipPath2)"
+             width="74"
+             rx="4"
+             ry="4"
+             height="29"
+             id="rect4289" />
+        </g>
+        <g
+           style="fill:#99ccff;stroke:#99ccff;shape-rendering:geometricPrecision;text-rendering:geometricPrecision"
+           transform="translate(-90,-63)"
+           id="g4291">
+          <rect
+             style="stroke:none"
              x="242.44279"
-             style="fill:none" />
+             y="262.06949"
+             clip-path="url(#clipPath2)"
+             width="74"
+             rx="4"
+             ry="4"
+             height="29"
+             id="rect4293" />
+        </g>
+        <g
+           style="font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45000005;shape-rendering:geometricPrecision;text-rendering:geometricPrecision"
+           stroke-miterlimit="1.45"
+           transform="translate(-90,-63)"
+           id="g4295">
+          <text
+             style="stroke:none"
+             x="257.76321"
+             xml:space="preserve"
+             y="281.28339"
+             clip-path="url(#clipPath2)"
+             id="text4297">EST420</text>
+          <rect
+             style="fill:none"
+             x="242.44279"
+             y="262.06949"
+             clip-path="url(#clipPath2)"
+             width="74"
+             rx="4"
+             ry="4"
+             height="29"
+             id="rect4299" />
+        </g>
+        <g
+           style="fill:#99ccff;stroke:#99ccff;shape-rendering:geometricPrecision;text-rendering:geometricPrecision"
+           transform="translate(-90,-63)"
+           id="g4301">
+          <rect
+             style="stroke:none"
+             x="242.44279"
+             y="307.75931"
+             clip-path="url(#clipPath2)"
+             width="74"
+             rx="4"
+             ry="4"
+             height="29"
+             id="rect4303" />
+        </g>
+        <g
+           style="font-family:sans-serif;stroke-linecap:butt;stroke-miterlimit:1.45000005;shape-rendering:geometricPrecision;text-rendering:geometricPrecision"
+           stroke-miterlimit="1.45"
+           transform="translate(-90,-63)"
+           id="g4305">
+          <text
+             style="stroke:none"
+             x="257.76321"
+             xml:space="preserve"
+             y="326.97321"
+             clip-path="url(#clipPath2)"
+             id="text4307">EST421</text>
+          <rect
+             style="fill:none"
+             x="242.44279"
+             y="307.75931"
+             clip-path="url(#clipPath2)"
+             width="74"
+             rx="4"
+             ry="4"
+             height="29"
+             id="rect4309" />
           <path
-             id="path4311"
-             clip-path="url(#clipPath2)"
+             style="fill:none"
              d="m 142.4428,107.2219 0,9.2638"
-             inkscape:connector-curvature="0"
-             style="fill:none" />
-          <path
-             id="path4313"
              clip-path="url(#clipPath2)"
+             id="path4311"
+             inkscape:connector-curvature="0" />
+          <path
+             style="stroke:none"
              d="m 142.4428,124.4857 5,-12 -5,3 -5,-3 z"
-             inkscape:connector-curvature="0"
-             style="stroke:none" />
-          <path
-             id="path4315"
              clip-path="url(#clipPath2)"
+             id="path4313"
+             inkscape:connector-curvature="0" />
+          <path
+             style="fill:none"
              d="m 142.4428,153.4519 0,9.2637"
-             inkscape:connector-curvature="0"
-             style="fill:none" />
-          <path
-             id="path4317"
              clip-path="url(#clipPath2)"
+             id="path4315"
+             inkscape:connector-curvature="0" />
+          <path
+             style="stroke:none"
              d="m 142.4428,170.7156 5,-12 -5,3 -5,-3 z"
-             inkscape:connector-curvature="0"
-             style="stroke:none" />
-          <path
-             id="path4319"
              clip-path="url(#clipPath2)"
+             id="path4317"
+             inkscape:connector-curvature="0" />
+          <path
+             style="fill:none"
              d="m 142.4428,199.691 0,8.6604"
-             inkscape:connector-curvature="0"
-             style="fill:none" />
-          <path
-             id="path4321"
              clip-path="url(#clipPath2)"
+             id="path4319"
+             inkscape:connector-curvature="0" />
+          <path
+             style="stroke:none"
              d="m 142.4428,216.3514 5,-12 -5,3 -5,-3 z"
-             inkscape:connector-curvature="0"
-             style="stroke:none" />
-          <path
-             id="path4323"
              clip-path="url(#clipPath2)"
+             id="path4321"
+             inkscape:connector-curvature="0" />
+          <path
+             style="fill:none"
              d="m 142.5471,245.3808 0.0622,8.6606"
-             inkscape:connector-curvature="0"
-             style="fill:none" />
-          <path
-             id="path4325"
              clip-path="url(#clipPath2)"
+             id="path4323"
+             inkscape:connector-curvature="0" />
+          <path
+             style="stroke:none"
              d="m 142.6669,262.0412 4.9136,-12.0356 -4.9783,3.0358 -5.0215,-2.9639 z"
-             inkscape:connector-curvature="0"
-             style="stroke:none" />
-          <path
-             id="path4327"
              clip-path="url(#clipPath2)"
+             id="path4325"
+             inkscape:connector-curvature="0" />
+          <path
+             style="fill:none"
              d="m 179.7754,276.5695 54.6328,0"
-             inkscape:connector-curvature="0"
-             style="fill:none" />
-          <path
-             id="path4329"
              clip-path="url(#clipPath2)"
+             id="path4327"
+             inkscape:connector-curvature="0" />
+          <path
+             style="stroke:none"
              d="m 242.4082,276.5695 -12,-5 3,5 -3,5 z"
-             inkscape:connector-curvature="0"
-             style="stroke:none" />
-          <path
-             id="path4331"
              clip-path="url(#clipPath2)"
+             id="path4329"
+             inkscape:connector-curvature="0" />
+          <path
+             style="fill:none"
              d="m 179.375,310.0226 55.8591,-18.6739"
-             inkscape:connector-curvature="0"
-             style="fill:none" />
-          <path
-             id="path4333"
              clip-path="url(#clipPath2)"
+             id="path4331"
+             inkscape:connector-curvature="0" />
+          <path
+             style="stroke:none"
              d="m 242.8213,288.8122 -12.9661,-0.9374 4.4305,3.7909 -1.26,5.6932 z"
-             inkscape:connector-curvature="0"
-             style="stroke:none" />
+             clip-path="url(#clipPath2)"
+             id="path4333"
+             inkscape:connector-curvature="0" />
         </g>
       </g>
     </g>
   </g>
   <g
-     inkscape:label="Layer 1"
-     inkscape:groupmode="layer"
-     id="layer1"
-     transform="translate(0,-602.36237)">
+     transform="translate(3.9593528e-7,-600.45559)"
+     id="layer1">
     <path
-       style="fill:#bbff56;fill-opacity:0.47337281;stroke:none;stroke-width:1;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
-       d="m 63.000009,647.36212 144.999871,0 0,348 -144.999871,0 z"
        id="rect8963"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccccc" />
+       d="m 63.000009,647.36212 147.000001,0 0,348 -147.000001,0 z"
+       style="fill:#bbff56;fill-opacity:0.47337281;stroke:none;stroke-width:1;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:connector-curvature="0" />
     <path
-       style="fill:#bbffff;fill-opacity:0.47337281;stroke:none;stroke-width:1;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
-       d="m 207.99988,647.36212 127.99992,0 0,348 -127.99992,0 z"
        id="rect8963-9"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccccc" />
+       d="m 211.50001,648.36212 128,0 0,348 -128,0 z"
+       style="fill:#bbffff;fill-opacity:0.47337281;stroke:none;stroke-width:1;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:connector-curvature="0" />
     <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:15px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;color-interpolation:auto;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto"
-       x="101.40319"
-       y="678.81256"
        id="text4214"
-       sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         x="101.40319"
-         y="678.81256"
-         id="tspan4216"><tspan
-           x="101.40319"
-           y="678.81256"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15px;font-family:Verdana;-inkscape-font-specification:Verdana"
-           id="tspan4218">Estonian </tspan></tspan><tspan
-         sodipodi:role="line"
-         x="101.40319"
-         y="697.56256"
-         id="tspan4220"><tspan
-           x="101.40319"
-           y="697.56256"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15px;font-family:Verdana;-inkscape-font-specification:Verdana"
-           id="tspan4222">Language</tspan></tspan></text>
-    <text
-       xml:space="preserve"
+       y="678.81256"
+       x="101.40319"
        style="font-style:normal;font-weight:normal;font-size:15px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;color-interpolation:auto;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto"
-       x="226.1299"
-       y="862.92755"
-       id="text4204"
+       xml:space="preserve"
        sodipodi:linespacing="125%"><tspan
-         sodipodi:role="line"
-         x="226.1299"
+         id="tspan4216"
+         y="678.81256"
+         x="101.40319"><tspan
+           id="tspan4218"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15px;font-family:Verdana;-inkscape-font-specification:Verdana"
+           y="678.81256"
+           x="101.40319">Estonian </tspan></tspan><tspan
+         id="tspan4220"
+         y="697.56256"
+         x="101.40319"><tspan
+           id="tspan4222"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15px;font-family:Verdana;-inkscape-font-specification:Verdana"
+           y="697.56256"
+           x="101.40319">Language</tspan></tspan></text>
+    <text
+       id="text4204"
+       y="862.92755"
+       x="226.1299"
+       style="font-style:normal;font-weight:normal;font-size:15px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;color-interpolation:auto;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto"
+       xml:space="preserve"
+       sodipodi:linespacing="125%"><tspan
+         id="tspan4206"
          y="862.92755"
-         id="tspan4206"><tspan
-           x="226.1299"
+         x="226.1299"><tspan
+           id="tspan4208"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15px;font-family:Verdana;-inkscape-font-specification:Verdana"
            y="862.92755"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15px;font-family:Verdana;-inkscape-font-specification:Verdana"
-           id="tspan4208">Independent </tspan></tspan><tspan
-         sodipodi:role="line"
-         x="226.1299"
+           x="226.1299">Independent </tspan></tspan><tspan
+         id="tspan4210"
          y="881.67755"
-         id="tspan4210"><tspan
-           x="226.1299"
-           y="881.67755"
+         x="226.1299"><tspan
+           id="tspan4212"
            style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:15px;font-family:Verdana;-inkscape-font-specification:Verdana"
-           id="tspan4212">Study</tspan></tspan></text>
+           y="881.67755"
+           x="226.1299">Study</tspan></tspan></text>
   </g>
 </svg>
