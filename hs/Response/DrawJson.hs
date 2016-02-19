@@ -12,8 +12,15 @@ import Happstack.Server
 import MasterTemplate
 import Scripts
 
+<<<<<<< HEAD
 drawJsonResponse :: ServerPart Response
 drawJsonResponse = do
+=======
+
+drawJsonResponse :: ServerPart Response
+drawJsonResponse = do
+
+>>>>>>> 23538ff9fbdec83225c0ac20b82a26c214f1a983
    ok $ toResponse $
     masterTemplate "Courseography - Draw!"
                 []
@@ -21,9 +28,20 @@ drawJsonResponse = do
                     header "draw"
                     drawContent
                     modePanel
+<<<<<<< HEAD
                 )
                 drawScripts
 
+=======
+
+
+                )
+                drawScripts
+
+
+
+
+>>>>>>> 23538ff9fbdec83225c0ac20b82a26c214f1a983
 drawContent :: H.Html
 drawContent = H.div ! A.id "about-div" $ "Draw a Graph"
 
