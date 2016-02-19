@@ -88,7 +88,8 @@ $('#finish-region').click(function () {
 
 $('#submit-gid').click(function(){
        $.ajax({
-            url: window.location.protocol + '//' + window.location.host + '/get-json-data?gid=' + $('#area-of-study').val(),
+            url: 'get-json-data',
+            data: {gid : $('#area-of-study').val()},
             dataType: "json", 
             success: function(data){
                 $('#json-data').html('<pre>' + JSON.stringify(data) + '<pre>');
