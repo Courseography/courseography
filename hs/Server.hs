@@ -14,7 +14,6 @@ import Happstack.Server hiding (host)
 import Response
 
 import Database.CourseQueries (retrieveCourse, allCourses, queryGraphs, courseInfo, deptList, getGraphJSON)
--- import Database.CourseQueriesGeneric (retrieveCourse, allCourses, queryGraphs, courseInfo, deptList, getGraphJSON)
 
 import Filesystem.Path.CurrentOS as Path
 import System.Directory (getCurrentDirectory)
@@ -64,7 +63,6 @@ runServer = do
               dir "timesearch" searchResponse,
               dir "calendar" $ lookCookieValue "selected-lectures" >>= calendarResponse,
               dir "get-json-data" $ look "gid" >>= \gid -> liftIO $ (getGraphJSON (read gid :: Int64)),
-              dir "draw-json" drawJsonResponse,
               notFoundResponse
         ]
     where

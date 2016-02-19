@@ -20,8 +20,6 @@ module Response
         module Response.Privacy,
         -- | @/timesearch@
         module Response.Search,
-        -- | @/timesearch@
-        module Response.DrawJson,
     )
     where
 
@@ -35,4 +33,3 @@ import Response.NotFound
 import Response.Post
 import Response.Privacy
 import Response.Search
-import Response.DrawJson
