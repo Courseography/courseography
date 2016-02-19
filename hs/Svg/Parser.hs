@@ -33,7 +33,7 @@ import Svg.Database (insertGraph, insertElements, deleteGraphs)
 import Svg.Generator
 import Database.Persist.Sqlite hiding (replace)
 import Config (graphPath)
-import Text.Read (readMaybe)
+import Text.Read (readMaybe, readEither)
 
 parsePrebuiltSvgs :: IO ()
 parsePrebuiltSvgs = do
@@ -56,6 +56,7 @@ parsePrebuiltSvgs = do
     performParse "History and Philosophy of Science" "hps2015.svg"
     performParse "History" "his2015.svg"
     performParse "Geography" "ggr2015.svg"
+    performParse "Aboriginal" "abs2015.svg"
 
 performParse :: String -- ^ The title of the graph.
              -> String -- ^ The filename of the file that will be parsed.
@@ -132,7 +133,7 @@ parseNode key content =
              fill = styleVal "fill" styles'
              -- TODO: These 'tag "_"' conditions are mutually exclusive (I think).
              rects = map (parseRect key . contentAttrs) (tag "rect" content)
-             texts = concatMap (parseText key styles') (tag "text" content)
+             texts = concatMap (parseText key styles' []) (tag "text" content)
              paths = mapMaybe (parsePath key . contentAttrs) (tag "path" content)
              ellipses = map (parseEllipse key . contentAttrs) (tag "ellipse" content)
              concatThree (a1, b1, c1) (a2, b2, c2) =
@@ -205,20 +206,22 @@ parsePath key attrs =
 -- for nested tspan elements.
 parseText :: GraphId -- ^ The Text's corresponding graph identifier.
           -> [(String, String)]
+          -> [Attribute]  -- ^ Ancestor tspan attributes
           -> Content i
           -> [Text]
-parseText key style content =
+parseText key style parentAttrs content =
     if null (childrenBy (tag "tspan") content)
     then
         [Text key
-              (lookupAttr "id" (contentAttrs content))
-              (readAttr "x" (contentAttrs content),
-               readAttr "y" (contentAttrs content))
+              (lookupAttr "id" (contentAttrs content ++ parentAttrs))
+              (readAttr "x" (contentAttrs content ++ parentAttrs),
+               readAttr "y" (contentAttrs content ++ parentAttrs))
               (replace "&amp;" "&" (replace "&gt;" ">" $ tagTextContent content))
               align
               fill]
     else
-        concatMap (parseText key $ styles $ contentAttrs content)
+        concatMap (parseText key (styles $ contentAttrs content)
+                             (contentAttrs content ++ parentAttrs))
                   (childrenBy (tag "tspan") content)
     where
         newStyle = style ++ styles (contentAttrs content)
@@ -254,7 +257,10 @@ lookupAttr nameStr attrs =
 readAttr :: Read a => String    -- ^ The attribute's name.
                    -> [Attribute] -- ^ The element that contains the attribute.
                    -> a
-readAttr attr attrs = read $ lookupAttr attr attrs
+readAttr attr attrs =
+    case readMaybe $ lookupAttr attr attrs of
+        Just x -> x
+        Nothing -> error $ "reading " ++ attr ++ " from " ++ show attrs
 
 -- | Return a list of styles from the style attribute of an element.
 -- Every style has the form (name, value).
@@ -302,7 +308,15 @@ parsePathD d
                                coordList
       -- Converts a relative coordinate structure into an absolute one.
       absCoords = map convertToPoint coordList
-      convertToPoint z = (read (head z), read (last z))
+
+      convertToPoint z =
+        let
+            x = readMaybe (head z)
+            y = readMaybe (last z)
+        in
+            case (x, y) of
+                (Just m, Just n) -> (m, n)
+                _ -> error $ show z
 
 
 -- * Other helpers
