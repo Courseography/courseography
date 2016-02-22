@@ -14,7 +14,7 @@ import Scripts
 
 
 drawResponse :: ServerPart Response
-drawResponse = do
+drawResponse =
    ok $ toResponse $
     masterTemplate "Courseography - Draw!"
                 []
