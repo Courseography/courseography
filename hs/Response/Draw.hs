@@ -7,11 +7,9 @@ import           Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 import qualified Data.Text as T
-
 import Happstack.Server
 import MasterTemplate
 import Scripts
-
 
 drawResponse :: ServerPart Response
 drawResponse =
@@ -27,7 +25,6 @@ drawResponse =
 
 drawContent :: H.Html
 drawContent = H.div ! A.id "about-div" $ "Draw a Graph"
-
 
 modePanel :: H.Html
 modePanel = H.div ! A.id "side-panel-wrap" $ do

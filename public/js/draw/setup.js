@@ -86,7 +86,7 @@ $('#finish-region').click(function () {
     finishRegion();
     });
 
-$('#submit-gid').click(function(){
+$('#submit-gid').click(function() {
        $.ajax({
             url: 'get-json-data',
             data: {gid : $('#area-of-study').val()},

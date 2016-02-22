@@ -19,7 +19,7 @@ module Response
         -- | @/privacy@
         module Response.Privacy,
         -- | @/timesearch@
-        module Response.Search,
+        module Response.Search
     )
     where
 
