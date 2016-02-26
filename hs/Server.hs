@@ -63,6 +63,7 @@ runServer = do
               dir "timesearch" searchResponse,
               dir "calendar" $ lookCookieValue "selected-lectures" >>= calendarResponse,
               dir "get-json-data" $ look "gid" >>= \gid -> liftIO $ (getGraphJSON (read gid :: Int64)),
+              dir "loading" $ look "size" >>= loadingResponse,
               notFoundResponse
         ]
     where
