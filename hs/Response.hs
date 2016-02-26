@@ -12,6 +12,8 @@ module Response
         module Response.Grid,
         -- | @/image@
         module Response.Image,
+        -- | @/timesearch@
+        module Response.Loading,
         -- | 404 errors
         module Response.NotFound,
         -- | @/post@
@@ -29,6 +31,7 @@ import Response.Draw
 import Response.Graph
 import Response.Grid
 import Response.Image
+import Response.Loading
 import Response.NotFound
 import Response.Post
 import Response.Privacy
