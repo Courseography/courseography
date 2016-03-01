@@ -12,7 +12,7 @@ module Response
         module Response.Grid,
         -- | @/image@
         module Response.Image,
-        -- | @/timesearch@
+        -- | @/loading@
         module Response.Loading,
         -- | 404 errors
         module Response.NotFound,
