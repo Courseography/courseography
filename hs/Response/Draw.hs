@@ -6,6 +6,7 @@ module Response.Draw
 import           Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
+import qualified Data.Text as T
 import Happstack.Server
 import MasterTemplate
 import Scripts
@@ -22,10 +23,8 @@ drawResponse =
                 )
                 drawScripts
 
-
 drawContent :: H.Html
 drawContent = H.div ! A.id "about-div" $ "Draw a Graph"
-
 
 modePanel :: H.Html
 modePanel = H.div ! A.id "side-panel-wrap" $ do
@@ -47,3 +46,12 @@ modePanel = H.div ! A.id "side-panel-wrap" $ do
     H.div ! A.id "finish-region" ! A.class_ "button" $ "finish (f)"
     H.div ! A.id "change-mode" ! A.class_ "mode" $ "SELECT/MOVE (m)"
     H.div ! A.id "erase-mode" ! A.class_ "mode" $ "ERASE (e)"
+    H.input ! A.id "area-of-study"
+            ! A.class_ "course-code"
+            ! A.name "course-code"
+            ! A.placeholder "Enter area of study."
+            ! A.autocomplete "off"
+            ! A.type_ "text"
+            ! A.size "30"
+    H.div ! A.id "submit-gid" ! A.class_ "button" $ "Submit"
+    H.div ! A.id "json-data" ! A.class_ "json-data" $ ""
