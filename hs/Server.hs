@@ -16,11 +16,13 @@ import Database.CourseQueries (retrieveCourse, allCourses, queryGraphs, courseIn
 import Filesystem.Path.CurrentOS as Path
 import System.Directory (getCurrentDirectory)
 import System.IO (hSetBuffering, stdout, stderr, BufferMode(LineBuffering))
-import System.Log.Logger (updateGlobalLogger, rootLoggerName, setLevel, Priority(INFO))
+import System.Log.Logger (updateGlobalLogger, rootLoggerName, setLevel,
+    Priority(INFO))
 import Data.String (fromString)
 import FacebookUtilities
 import Config (markdownPath, serverConf)
 import qualified Data.Text.Lazy.IO as LazyIO
+
 import Data.Int (Int64)
 
 runServer :: IO ()
