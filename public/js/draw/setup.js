@@ -91,7 +91,7 @@ $('#submit-gid').click(function() {
             url: 'get-json-data',
             data: {gid : $('#area-of-study').val()},
             dataType: 'json', 
-            success: function(data){
+            success: function(data) {
                 $('#json-data').html('<pre>' + JSON.stringify(data) + '<pre>');
             },
             error: function(xhr, status, err) {
