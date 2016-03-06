@@ -46,6 +46,7 @@ modePanel = H.div ! A.id "side-panel-wrap" $ do
     H.div ! A.id "finish-region" ! A.class_ "button" $ "finish (f)"
     H.div ! A.id "change-mode" ! A.class_ "mode" $ "SELECT/MOVE (m)"
     H.div ! A.id "erase-mode" ! A.class_ "mode" $ "ERASE (e)"
+    H.div ! A.id "save-graph" ! A.class_ "button" $ "SAVE"
     H.input ! A.id "area-of-study"
             ! A.class_ "course-code"
             ! A.name "course-code"

@@ -376,6 +376,7 @@ function finishRegion() {
  * @param e
  */
 function regionClicked(e) {
+    'use strict';
     if (mode === 'erase-mode') {
         // delete the dummy nodes and the path itself
         e.currentTarget.elbows.map(function (item) {
@@ -387,5 +388,25 @@ function regionClicked(e) {
         regionMoving = e.currentTarget;
         prevX = position.x;
         prevY = position.y;
+    }
+}
+
+
+/**
+ *
+ * 
+ */
+function saveGraph() {
+    'use strict';
+    // TO DO: Gather SVG data, convert to JSON, and call SQL function
+    var texts = [];
+    var shapes = [];
+    var paths = [];
+    var svgElements = document.getElementById('mySVG').children;
+    for (var i = 0; i < svgElements.length; i++) {
+        // gather node data
+        if (svgElements[i].tagName == "g" && svgElements[i].id != "regions"){
+                    console.log(svgElements[i].tagName);
+                }
     }
 }

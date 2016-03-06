@@ -86,6 +86,10 @@ $('#finish-region').click(function () {
     finishRegion();
     });
 
+$('#save-graph').click(function () {
+    saveGraph();
+    });
+
 $('#submit-gid').click(function() {
        $.ajax({
             url: 'get-json-data',
