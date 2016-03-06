@@ -398,15 +398,57 @@ function regionClicked(e) {
  */
 function saveGraph() {
     'use strict';
-    // TO DO: Gather SVG data, convert to JSON, and call SQL function
+
     var texts = [];
     var shapes = [];
     var paths = [];
     var svgElements = document.getElementById('mySVG').children;
     for (var i = 0; i < svgElements.length; i++) {
-        // gather node data
         if (svgElements[i].tagName == "g" && svgElements[i].id != "regions"){
-                    console.log(svgElements[i].tagName);
-                }
+            var textObj = "";
+            var gText = svgElements[i].querySelector("text");
+            if (gText !== null){
+                textObj = {
+                    "graph"     : 9000,
+                    "rId"       : gText.id,
+                    "text"      : gText.textContent,
+                    "pos"       : [ parseInt(gText.getAttribute("x")),
+                                    parseInt(gText.getAttribute("y"))
+                                    ],
+                    "fill"      : "",
+                    "align"     : "begin"
+                };
+               texts.push(textObj); 
+            }
+
+            var gRect = svgElements[i].querySelector("rect");
+            shapes.push({
+                    "graph"     : 9000,
+                    "type_"     : "Node",
+                    "id_"       : svgElements[i].id,
+                    "stroke"    : "",
+                    "fill"      : "none",
+                    "tolerance" : 9,
+                    "text"      : [textObj],
+                    "pos"       : [ parseInt(gRect.getAttribute("x")),
+                                    parseInt(gRect.getAttribute("y"))
+                                    ],
+                    "height"    : parseInt(gRect.getAttribute("height")),
+                    "width"     : parseInt(gRect.getAttribute("width"))
+            });
+        } else if (svgElements[i].tagName == "path") {
+            paths.push({
+                    "graph"     : 9000,
+                    "id_"       : svgElements[i].id,
+                    "isRegion"  : false,
+                    "stroke"    : "",
+                    "fill"      :"none",
+                    "points"    : [svgElements[i].getAttribute("d")],
+                    "source"    : "csc207",
+                    "target"    : "csc209"
+            });
+        }
     }
+    
+    console.log(JSON.stringify([["texts", texts], ["shapes", shapes], ["paths", paths]]));
 }
