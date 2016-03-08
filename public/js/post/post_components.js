@@ -138,13 +138,20 @@ var Post = React.createClass({
 var SpecialistPost = React.createClass({ 
     getInitialState: function() {
         return {
-            selected: false
+            selected: false,
+            completed: false
         }
     },
 
     changeTabView: function(isSelected) {
         this.setState({selected: isSelected});
     }, 
+
+    setIfCompleted: function() {
+        var isCompleted = this.refs.post.state.creditCount >= 12.0;
+        this.setState({completed: isCompleted});
+        return isCompleted;
+    },
 
     isLevel400: function (course, level400Array) {
         return notSpecialistCourse(course) && course.substring(3, 4) === '4' && level400Array.length < 3;
@@ -198,13 +205,20 @@ var SpecialistPost = React.createClass({
 var MajorPost = React.createClass({
     getInitialState: function() {
         return {
-            selected: false
+            selected: false,
+            completed: false
         }
     },
 
     changeTabView: function(isSelected) {
         this.setState({selected: isSelected});
     }, 
+
+    setIfCompleted: function() {
+        var isCompleted = this.refs.post.state.creditCount >= 8.0;
+        this.setState({completed: isCompleted});
+        return isCompleted;
+    },
 
     isLevel400: function (course, level400Array) {
         return course.substring(3, 4) === '4' && level400Array.length < 1;
@@ -258,13 +272,20 @@ var MajorPost = React.createClass({
 var MinorPost = React.createClass({
     getInitialState: function() {
         return {
-            selected: false
+            selected: false,
+            completed: false
         }
     },
 
     changeTabView: function(isSelected) {
         this.setState({selected: isSelected});
     }, 
+
+    setIfCompleted: function() {
+        var isCompleted = this.refs.post.state.creditCount >= 4.0;
+        this.setState({completed: isCompleted});
+        return isCompleted;
+    },
 
     isLevelExtra: function (course, levelExtraArray) {
         var nonValidCourses = ['CSC207', 'CSC236240'];

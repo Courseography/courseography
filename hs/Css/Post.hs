@@ -58,6 +58,10 @@ tabsCSS = do
                 backgroundColor grey6
             ".nav_not_selected" ? do
                 backgroundColor white
+            ".credits_completed" ? do
+                color green
+            ".credits_not_completed" ? do
+                color red
 
 postCSS :: Css
 postCSS = do
@@ -111,7 +115,6 @@ postCSS = do
     "#spec_creds, #maj_creds, #min_creds" ? do
         display inlineBlock
         marginLeft nil
-        color red
     ".more-info" ? do
         cursor pointer
         border solid (px 2) grey3
