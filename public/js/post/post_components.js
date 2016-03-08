@@ -159,7 +159,7 @@ var SpecialistPost = React.createClass({
     },
 
     getCreditCount: function() {
-        return this.refs.post.state.creditCount;
+        return this.refs.post.state.creditCount < 12.0 ? this.refs.post.state.creditCount : 12.0;
     },
 
     render: function() {
@@ -219,7 +219,7 @@ var MajorPost = React.createClass({
     },
 
     getCreditCount: function() {
-        return this.refs.post.state.creditCount;
+        return this.refs.post.state.creditCount < 8.0 ? this.refs.post.state.creditCount : 8.0
     },
 
     render: function() {
@@ -272,7 +272,7 @@ var MinorPost = React.createClass({
     },
 
     getCreditCount: function() {
-        return this.refs.post.state.creditCount;
+        return this.refs.post.state.creditCount < 4.0 ? this.refs.post.state.creditCount : 4.0;
     },
 
     render: function() {

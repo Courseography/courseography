@@ -73,15 +73,15 @@ var PostNav = React.createClass({
                 <ul>
                     <li id='specialist' className={this.getNavClass('spe')}>
                         <a id='spec_link' onClick={this.changeActiveTab}> Specialist </a>
-                        <div id='spec_creds'> {'(' + this.state.creditCounts[0] + '/12.0)'} </div>
+                        <div id='spec_creds'> {'(' + this.state.creditCounts[0].toFixed(1) + '/12.0)'} </div>
                     </li>
                     <li id='major' className={this.getNavClass('maj')}>
                         <a id='maj_link' onClick={this.changeActiveTab}> Major </a>
-                        <div id='maj_creds'> {'(' + this.state.creditCounts[1] + '/8.0)'} </div>
+                        <div id='maj_creds'> {'(' + this.state.creditCounts[1].toFixed(1) + '/8.0)'} </div>
                     </li>
                     <li id='minor' className={this.getNavClass('min')}>
                         <a id='min_link' onClick={this.changeActiveTab}> Minor </a>
-                        <div id='min_creds'> {'(' + this.state.creditCounts[2] + '/4.0)'} </div>
+                        <div id='min_creds'> {'(' + this.state.creditCounts[2].toFixed(1) + '/4.0)'} </div>
                     </li>
                 </ul>
             </nav>
