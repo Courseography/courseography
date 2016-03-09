@@ -46,6 +46,7 @@ tabsCSS = do
                     "background-color" -: "#9C9C9C !important"
                     a ? do
                         "color" -: "white !important"
+                        cursor pointer
                 a ? do
                     color black
                     display inlineBlock
@@ -53,6 +54,14 @@ tabsCSS = do
                     paddingLeft (px 24)
                     width (pct 70)
                     textDecoration none
+            ".nav_selected" ? do
+                backgroundColor grey6
+            ".nav_not_selected" ? do
+                backgroundColor white
+            ".credits_completed" ? do
+                color green
+            ".credits_not_completed" ? do
+                color red
 
 postCSS :: Css
 postCSS = do
@@ -96,18 +105,16 @@ postCSS = do
             "transition" -: "all 0.2s"
     i ? do
         color red
-    "#div_specialist, #div_major, #div_minor" ? do
+    "#post_specialist, #post_major, #post_minor" ? do
         position absolute
         "margin-above" -: "30px"
         paddingBottom (px 30)
-        display none
         height (pct 70)
         marginLeft (px 25)
         width (pct 97)
     "#spec_creds, #maj_creds, #min_creds" ? do
         display inlineBlock
         marginLeft nil
-        color red
     ".more-info" ? do
         cursor pointer
         border solid (px 2) grey3
@@ -140,3 +147,7 @@ postCSS = do
         color green
     ".not_valid_extra_course" ? do
         color red
+    ".post_selected" ? do
+        display block
+    ".post_not_selected" ? do
+        display none

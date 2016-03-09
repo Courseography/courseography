@@ -1,5 +1,17 @@
 import {CourseCategory, MultipleCourseCode, InquiryCategory} from 'es6!post/course_components';
 
+/**
+ * Returns whether course is a specialist course or not
+ * @param {string} course Name of course
+ * @return {boolean} True if course is a specialist, False otherwise
+ */
+function notSpecialistCourse(course) {
+    'use strict';
+
+    return specialistCourses.indexOf(course) === -1;
+}
+
+
 var Post = React.createClass({
     getInitialState: function() {
         return {
@@ -21,6 +33,10 @@ var Post = React.createClass({
     componentWillMount: function() {
         this.setState({selected: getCookie(this.props.postType) === 'active'});
         this.calculateCreditCount();
+    },
+
+    componentWillReceiveProps: function(newProps) {
+        this.setState({selected: newProps.isSelected});
     },
 
     isInquiryCourse: function(course) {
@@ -76,11 +92,17 @@ var Post = React.createClass({
 
     render: function() {
 
+        if (this.state.selected) {
+            var classes = 'post_selected';
+        } else {
+            var classes = 'post_not_selected';
+        }
+
         var courseCategoryArrays = this.getCourses();
         var me = this;
 
         return (
-            <div id={'post_' + this.props.postType}>
+            <div id={'post_' + this.props.postType} className={classes} >
                 <CourseCategory yearName='First Year' courses={this.props.firstYearCourses} />
                 <CourseCategory yearName='Second Year' courses={this.props.secondYearCourses} />
                 <CourseCategory yearName='Later Years' courses={this.props.laterYearCourses} />
@@ -114,6 +136,23 @@ var Post = React.createClass({
 
 
 var SpecialistPost = React.createClass({ 
+    getInitialState: function() {
+        return {
+            selected: false,
+            completed: false
+        }
+    },
+
+    changeTabView: function(isSelected) {
+        this.setState({selected: isSelected});
+    }, 
+
+    setIfCompleted: function() {
+        var isCompleted = this.refs.post.state.creditCount >= 12.0;
+        this.setState({completed: isCompleted});
+        return isCompleted;
+    },
+
     isLevel400: function (course, level400Array) {
         return notSpecialistCourse(course) && course.substring(3, 4) === '4' && level400Array.length < 3;
     },
@@ -124,6 +163,10 @@ var SpecialistPost = React.createClass({
 
     isLevelExtra: function (course, levelExtraArray) {
         return notSpecialistCourse(course) && course.substring(3, 4) >= '3' && levelExtraArray.length < 4;
+    },
+
+    getCreditCount: function() {
+        return this.refs.post.state.creditCount < 12.0 ? this.refs.post.state.creditCount : 12.0;
     },
 
     render: function() {
@@ -143,6 +186,7 @@ var SpecialistPost = React.createClass({
 
         return (
             <Post postType='specialist' 
+                  ref='post'
                   firstYearCourses={firstYearCourses} 
                   secondYearCourses={secondYearCourses} 
                   laterYearCourses={laterYearCourses} 
@@ -151,13 +195,31 @@ var SpecialistPost = React.createClass({
                   courseChecks={[this.isLevel400, this.isLevel300, this.isLevelExtra]} 
                   categoryTitles={categoryTitles} 
                   notes={notes}
-                  hasInquiryCategory={true} />
+                  hasInquiryCategory={true}
+                  isSelected={this.state.selected} />
         );
     }
 });
 
 
 var MajorPost = React.createClass({
+    getInitialState: function() {
+        return {
+            selected: false,
+            completed: false
+        }
+    },
+
+    changeTabView: function(isSelected) {
+        this.setState({selected: isSelected});
+    }, 
+
+    setIfCompleted: function() {
+        var isCompleted = this.refs.post.state.creditCount >= 8.0;
+        this.setState({completed: isCompleted});
+        return isCompleted;
+    },
+
     isLevel400: function (course, level400Array) {
         return course.substring(3, 4) === '4' && level400Array.length < 1;
     },
@@ -168,6 +230,10 @@ var MajorPost = React.createClass({
 
     isLevelExtra: function (course, levelExtraArray) {
         return course.substring(3, 4) >= '3' && levelExtraArray.length < 3;
+    },
+
+    getCreditCount: function() {
+        return this.refs.post.state.creditCount < 8.0 ? this.refs.post.state.creditCount : 8.0
     },
 
     render: function() {
@@ -187,6 +253,7 @@ var MajorPost = React.createClass({
 
         return (
             <Post postType='major' 
+                  ref='post'
                   firstYearCourses={firstYearCourses} 
                   secondYearCourses={secondYearCourses} 
                   laterYearCourses={laterYearCourses}
@@ -195,17 +262,38 @@ var MajorPost = React.createClass({
                   courseChecks={[this.isLevel400, this.isLevel300, this.isLevelExtra]} 
                   categoryTitles={categoryTitles}
                   notes={notes}
-                  hasInquiryCategory={true} /> 
+                  hasInquiryCategory={true} 
+                  isSelected={this.state.selected} /> 
         );
     }
 });
 
 
 var MinorPost = React.createClass({
+    getInitialState: function() {
+        return {
+            selected: false,
+            completed: false
+        }
+    },
+
+    changeTabView: function(isSelected) {
+        this.setState({selected: isSelected});
+    }, 
+
+    setIfCompleted: function() {
+        var isCompleted = this.refs.post.state.creditCount >= 4.0;
+        this.setState({completed: isCompleted});
+        return isCompleted;
+    },
 
     isLevelExtra: function (course, levelExtraArray) {
         var nonValidCourses = ['CSC207', 'CSC236240'];
         return course.substring(3, 4) >= '2' && nonValidCourses.indexOf(course) < 0 && levelExtraArray.length < 3;
+    },
+
+    getCreditCount: function() {
+        return this.refs.post.state.creditCount < 4.0 ? this.refs.post.state.creditCount : 4.0;
     },
 
     render: function() {
@@ -219,6 +307,7 @@ var MinorPost = React.createClass({
 
         return (
             <Post postType='minor' 
+                  ref='post'
                   firstYearCourses={firstYearCourses} 
                   secondYearCourses={secondYearCourses} 
                   laterYearCourses={laterYearCourses}
@@ -227,7 +316,8 @@ var MinorPost = React.createClass({
                   courseChecks={[this.isLevelExtra]} 
                   categoryTitles={categoryTitles}
                   notes={notes}
-                  hasInquiryCategory={false} /> 
+                  hasInquiryCategory={false} 
+                  isSelected={this.state.selected} /> 
         );
     }
 });

@@ -1,12 +1,10 @@
 requirejs([
-    'es6!post/post_components'],
+    'es6!post/post_page'],
     function (
-        postComponents
+        checkMyPost
     ) {
 
     $(document).ready(function () {
-        ReactDOM.render(React.createElement(postComponents.SpecialistPost, null), document.getElementById('div_specialist'));
-        ReactDOM.render(React.createElement(postComponents.MajorPost, null), document.getElementById('div_major'));
-        ReactDOM.render(React.createElement(postComponents.MinorPost, null), document.getElementById('div_minor'));
+        ReactDOM.render(React.createElement(checkMyPost.CheckMyPost, null), document.getElementById('all_posts'));
     });
 });

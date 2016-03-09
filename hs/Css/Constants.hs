@@ -67,6 +67,7 @@ module Css.Constants
      grey3,
      grey4,
      grey5,
+     grey6,
      beige1,
      fceCountColor,
      nodeFontSize,
@@ -264,6 +265,8 @@ grey4 :: Color
 grey4 = parse "#BABABA"
 grey5 :: Color
 grey5 = parse "#DCDCDC"
+grey6 :: Color
+grey6 = parse "#9C9C9C"
 
 beige1 :: Color
 beige1 = parse "#EBE8E4"
