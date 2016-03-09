@@ -27,14 +27,14 @@ facebookScripts = [
 
 jQueryScripts :: [String]
 jQueryScripts = [
-    "https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js",
-    "https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"
+    "/static/js/common/jquery.min.1.10.2.js",
+    "/static/js/common/jquery-ui.min.1.10.4.js"
     ]
 
 reactScripts :: [String]
 reactScripts = [
-    "https://cdnjs.cloudflare.com/ajax/libs/react/0.13.1/react.js",
-    "https://cdnjs.cloudflare.com/ajax/libs/react/0.13.1/JSXTransformer.js"
+    "/static/js/common/react.0.13.1.js",
+    "/static/js/common/JSXTransformer.0.13.1.js"
     ]
 
 analyticsScripts :: [String]
@@ -76,7 +76,7 @@ timetableScripts :: H.Html
 timetableScripts = do
     sequence_ (map toScript $
         ["/static/js/grid/mouse_events.js",
-         "//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js",
+         "/static/js/common/bootstrap.min.3.1.1.js",
          "/static/js/common/cookie_handler.js",
          "/static/js/common/objects/course.js",
          "/static/js/common/objects/section.js",

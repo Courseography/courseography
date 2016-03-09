@@ -22,7 +22,7 @@ masterTemplate title headers body scripts =
                    ! A.href "static/res/ico/favicon.png"
             sequence_ headers
             mapM_ toStylesheet [
-                "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css",
+                "/static/js/common/bootstrap.min.3.1.1.js",
                 "static/style/app.css"]
         H.body $ do
             body
