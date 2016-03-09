@@ -87,7 +87,7 @@ $('#finish-region').click(function () {
     });
 
 $('#save-graph').click(function () {
-    saveGraph();
+    saveGraph(convertSvgToJson);
     });
 
 $('#submit-gid').click(function() {

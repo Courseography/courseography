@@ -396,7 +396,7 @@ function regionClicked(e) {
  *
  * 
  */
-function saveGraph() {
+function convertSvgToJson() {
     'use strict';
 
     var texts = [];
@@ -404,16 +404,15 @@ function saveGraph() {
     var paths = [];
     var svgElements = document.getElementById('mySVG').children;
     for (var i = 0; i < svgElements.length; i++) {
-        if (svgElements[i].tagName == "g" && svgElements[i].id != "regions"){
+        if (svgElements[i].tagName == "g" && svgElements[i].id != "regions") {
             var textObj = "";
             var gText = svgElements[i].querySelector("text");
-            if (gText !== null){
+            if (gText !== null) {
                 textObj = {
-                    "graph"     : 9000,
                     "rId"       : gText.id,
                     "text"      : gText.textContent,
-                    "pos"       : [ parseInt(gText.getAttribute("x")),
-                                    parseInt(gText.getAttribute("y"))
+                    "pos"       : [ parseFloat(gText.getAttribute("x")),
+                                    parseFloat(gText.getAttribute("y"))
                                     ],
                     "fill"      : "",
                     "align"     : "begin"
@@ -423,32 +422,78 @@ function saveGraph() {
 
             var gRect = svgElements[i].querySelector("rect");
             shapes.push({
-                    "graph"     : 9000,
+                    "height"    : parseFloat(gRect.getAttribute("height")),
                     "type_"     : "Node",
-                    "id_"       : svgElements[i].id,
-                    "stroke"    : "",
-                    "fill"      : "none",
-                    "tolerance" : 9,
                     "text"      : [textObj],
-                    "pos"       : [ parseInt(gRect.getAttribute("x")),
-                                    parseInt(gRect.getAttribute("y"))
+                    "width"     : parseFloat(gRect.getAttribute("width")),
+                    "stroke"    : "",
+                    "pos"       : [ parseFloat(gRect.getAttribute("x")),
+                                    parseFloat(gRect.getAttribute("y"))
                                     ],
-                    "height"    : parseInt(gRect.getAttribute("height")),
-                    "width"     : parseInt(gRect.getAttribute("width"))
+                    "fill"      : "none",
+                    "tolerance" : 9,      
             });
         } else if (svgElements[i].tagName == "path") {
+            var pathCoords = getPathCoords(svgElements[i].getAttribute("d"));
             paths.push({
-                    "graph"     : 9000,
-                    "id_"       : svgElements[i].id,
+                    "points"    : pathCoords,
                     "isRegion"  : false,
                     "stroke"    : "",
                     "fill"      :"none",
-                    "points"    : [svgElements[i].getAttribute("d")],
-                    "source"    : "csc207",
-                    "target"    : "csc209"
+                    "source"    : getPathCoords(pathCoords[0], shapes),
+                    "target"    : getPathCoords(pathCoords[1], shapes)
             });
         }
     }
-    
-    console.log(JSON.stringify([["texts", texts], ["shapes", shapes], ["paths", paths]]));
+
+    return [["texts", texts], ["shapes", shapes], ["paths", paths]];
+}
+
+
+/**
+ *
+ * 
+ */
+function getPathCoords(pathCoords) {
+    'use strict';
+
+    var coordList = pathCoords.split(" ").filter(function(entry) {
+        return (entry != "")
+    });
+
+    return coordList.map(function(coord) {
+            return coord.slice(1).split(",").map(parseFloat);
+         });
+}
+
+
+/**
+ *
+ * 
+ */
+function getClosestText(coords, nodeList) {
+    'use strict';
+
+    var minTuple = [null, null];
+    nodeList.map(function(node) {
+        var a = node.pos[0] - coords[0];
+        var b = node.pos[1] - coords[1];
+        return [node.text[0].text, Math.sqrt( a*a + b*b )];
+    }).forEach(function(tuple) {
+        if (minTuple.equals([null, null]) || minTuple[1] > tuple[1]) {
+            minTuple = tuple;
+        }
+    });
+    return minTuple[0];
+}
+
+
+/**
+ *
+ * 
+ */
+function saveGraph(jsonData) {
+    'use strict';
+
+    console.log(JSON.stringify(jsonData));
 }
