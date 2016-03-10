@@ -77,9 +77,27 @@ var CourseList = React.createClass({
 });
 
 var CourseEntry = React.createClass({
+
+    getInitialState: function() {
+        return {
+            star: false
+        };
+    },
+
+    toggleStar: function() {
+        this.setState({star: !this.state.star});
+    },
+
     render: function() {
+
+        var star = '';
+
+        if (this.state.star) {
+            star += 'starred-course';
+        }
+
         return (
-            <li id={this.props.course + '-search'}>{this.props.course}</li>
+            <li id={this.props.course + '-search'} className={star} onClick={this.toggleStar}>{this.props.course}</li>
         );
     }
 });
