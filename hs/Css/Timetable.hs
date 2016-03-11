@@ -69,8 +69,8 @@ searchCSS = do
                     fontWeight bold
                     cursor pointer
                     textDecoration underline
-            ".starred-course" & do
-                backgroundColor blue1
+                ".starred-course" & do
+                    backgroundColor blue1
 
 {- timetableCSS
  - Generates CSS for the timetable. -}
