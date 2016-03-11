@@ -22,7 +22,8 @@ module Config (
     firstMondayWinter,
     lastMondayWinter,
     outDay,
-    holidays
+    holidays,
+    enableCdn
     ) where
 
 import Data.Text (Text)
@@ -124,3 +125,9 @@ holidays = ["20151012T", "20151109T", "20151110T",
 -- | Enable Facebook integration. Should only be true on the production server.
 enableFb :: Bool
 enableFb = False
+
+-- SCRIPT DEPENDENCIES CONFIGURATION
+
+-- | Enable CDN downloads for js and css dependencies. Should only be true on the production server.
+enableCdn :: Bool
+enableCdn = True
