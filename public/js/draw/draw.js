@@ -393,8 +393,8 @@ function regionClicked(e) {
 
 
 /**
- *
- * 
+ * convertSvgToJson()
+ * Parse SVG elements into a JSON list.
  */
 function convertSvgToJson() {
     'use strict';
@@ -440,8 +440,8 @@ function convertSvgToJson() {
                     "isRegion"  : false,
                     "stroke"    : "",
                     "fill"      :"none",
-                    "source"    : getPathCoords(pathCoords[0], shapes),
-                    "target"    : getPathCoords(pathCoords[1], shapes)
+                    "source"    : getClosestText(pathCoords[0], shapes),
+                    "target"    : getClosestText(pathCoords[1], shapes)
             });
         }
     }
@@ -451,46 +451,41 @@ function convertSvgToJson() {
 
 
 /**
- *
- * 
+ * getPathCoords(pathCoords)
+ * Convert path element coordinates into a list of floats.
  */
 function getPathCoords(pathCoords) {
     'use strict';
 
-    var coordList = pathCoords.split(" ").filter(function(entry) {
+    return pathCoords.split(" ").filter(function(entry) {
         return (entry != "")
+    }).map(function(coord) {
+        return coord.slice(1).split(",").map(parseFloat);
     });
-
-    return coordList.map(function(coord) {
-            return coord.slice(1).split(",").map(parseFloat);
-         });
 }
 
 
 /**
- *
- * 
+ * getClosestText(coords, nodeList)
+ * Find the closest node (within nodeList) to the given coordinates.
+ * Return the closest node's text.
  */
 function getClosestText(coords, nodeList) {
     'use strict';
 
-    var minTuple = [null, null];
-    nodeList.map(function(node) {
+    return nodeList.map(function(node) {
         var a = node.pos[0] - coords[0];
         var b = node.pos[1] - coords[1];
         return [node.text[0].text, Math.sqrt( a*a + b*b )];
-    }).forEach(function(tuple) {
-        if (minTuple.equals([null, null]) || minTuple[1] > tuple[1]) {
-            minTuple = tuple;
-        }
-    });
-    return minTuple[0];
+    }).sort(function(a,b) {
+        return a[1] === b[1] ? 0 : a[1] < b[1] ? -1: 1
+    })[0][0];
 }
 
 
 /**
- *
- * 
+ * saveGraph(jsonData)
+ * Insert JSON data into Persistent graph table.
  */
 function saveGraph(jsonData) {
     'use strict';
