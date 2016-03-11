@@ -7,6 +7,7 @@ function Course(name) {
     'use strict';
 
     var course = getCourse(name);
+    console.log(course);
     // Copy attributes
     this.F = course.fallSession;
     this.S = course.springSession;
@@ -292,6 +293,7 @@ Course.prototype.updateSatisfaction = function () {
 /**
  * Renders this Course.
  * @returns {HTMLElement} The list element representing this Course.
+ TODO
  */
 Course.prototype.render = function () {
     'use strict';
