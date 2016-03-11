@@ -90,14 +90,14 @@ var CourseEntry = React.createClass({
 
     render: function() {
 
-        var star = '';
+        var classes = '';
 
         if (this.state.star) {
-            star += 'starred-course';
+            classes += 'starred-course';
         }
 
         return (
-            <li id={this.props.course + '-search'} className={star} onClick={this.toggleStar}>{this.props.course}</li>
+            <li id={this.props.course + '-search'} className={classes} onClick={this.toggleStar}>{this.props.course}</li>
         );
     }
 });
