@@ -128,6 +128,6 @@ enableFb = False
 
 -- SCRIPT DEPENDENCIES CONFIGURATION
 
--- | Enable CDN downloads for js and css dependencies. Should only be true on the production server.
+-- | Enable CDN downloads for js and css dependencies. Should be true on the production server.
 enableCdn :: Bool
 enableCdn = True
