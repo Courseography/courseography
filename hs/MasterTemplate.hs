@@ -7,7 +7,7 @@ import           Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 import Text.Blaze.Internal (stringValue)
-import Config (enableFb)
+import Config (enableFb, enableCdn)
 import Util.Blaze
 import Scripts (globalScripts)
 
@@ -22,7 +22,9 @@ masterTemplate title headers body scripts =
                    ! A.href "static/res/ico/favicon.png"
             sequence_ headers
             mapM_ toStylesheet [
-                "/static/js/common/bootstrap.min.3.1.1.js",
+                (if enableCdn
+                 then "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"
+                 else "/static/js/common/bootstrap.min.3.1.1.js"),
                 "static/style/app.css"]
         H.body $ do
             body
