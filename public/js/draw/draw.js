@@ -481,14 +481,3 @@ function getClosestText(coords, nodeList) {
         return a[1] === b[1] ? 0 : a[1] < b[1] ? -1: 1
     })[0][0];
 }
-
-
-/**
- * saveGraph(jsonData)
- * Insert JSON data into Persistent graph table.
- */
-function saveGraph(jsonData) {
-    'use strict';
-
-    console.log(JSON.stringify(jsonData));
-}

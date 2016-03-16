@@ -140,6 +140,8 @@ FacebookTest
 
 -- ** TODO: Remove these extra types and class instances
 
+
+
 -- | A Session.
 data Session =
     Session { lectures :: [Lecture],

@@ -87,7 +87,18 @@ $('#finish-region').click(function () {
     });
 
 $('#save-graph').click(function () {
-    saveGraph(convertSvgToJson());
+        $.ajax({
+            url: 'save-json',
+            data: {'json-data' : convertSvgToJson()},
+            dataType: 'json',
+            method: "POST", 
+            success: function(data) {
+                $('#json-data').html('<pre>' + JSON.stringify(data) + '<pre>');
+            },
+            error: function(xhr, status, err) {
+                console.error('graphs', status, err.toString());
+            }
+        });
     });
 
 $('#submit-gid').click(function() {

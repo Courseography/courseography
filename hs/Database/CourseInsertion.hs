@@ -11,16 +11,24 @@ into the database. These functions are used as helpers for the WebParsing module
 module Database.CourseInsertion
     (insertCourse,
      setTutorialEnrolment,
-     setPracticalEnrolment) where
+     setPracticalEnrolment,
+     saveGraphJSON) where
 
 import qualified Data.Text as T
-
+import Happstack.Server.SimpleHTTP
 import Control.Monad.IO.Class (MonadIO)
 import Control.Monad.Trans.Reader (ReaderT)
 import Data.Maybe (fromMaybe)
-
 import Database.Persist.Sqlite (insert_, SqlBackend, (=.), (==.), updateWhere)
+import Util.Happstack (createJSONResponse)
 import Database.Tables
+import Data.Aeson
+
+-- | Inserts SVG graph data into Texts, Shapes, and Paths tables
+-- saveGraphJSON :: [Value] -> ()
+saveGraphJSON :: String -> IO Response
+saveGraphJSON jsonStr = do
+    return $ createJSONResponse jsonStr
 
 -- | Inserts course into the Courses table.
 insertCourse :: MonadIO m => Course -> ReaderT SqlBackend m ()
