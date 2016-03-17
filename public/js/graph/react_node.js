@@ -77,11 +77,68 @@ function getNodes(mode) {
 var Graph = React.createClass({
     getInitialState: function () {
         return {
+		  	labelsJSON: [],
+            regionsJSON: [],
+            nodesJSON: [],
+            hybridsJSON: [],
+            boolsJSON: [],
+            edgesJSON: [],
             highlightedNodes: []
         };
     },
 
     componentDidMount: function () {
+        $.ajax({
+            dataType: 'json',
+            url: 'graph-json',
+            success: function (data) {
+                var labelsList = [];
+                var regionsList = [];
+                var nodesList = [];
+                var hybridsList = [];
+                var boolsList = [];
+                var edgesList = [];
+                
+                //data[0] is ["texts", [JSON]]
+                data[0][1].forEach(function (entry) {
+                    if (entry['rId'].substring(0,5) === 'tspan'){
+                        labelsList.push(entry);
+                    }
+                });
+                //data[1] is ["shapes", [JSON]]
+                data[1][1].forEach(function (entry) {
+                    if (entry['type_'] === 'Node'){
+                        nodesList.push(entry);
+                    }
+                    if (entry['type_'] === 'Hybrid'){
+                        hybridsList.push(entry);
+                    }
+                    if (entry['type_'] === 'BoolNode'){
+                        boolsList.push(entry);
+                    }
+                });
+                //data[2] is ["paths", [JSON]]
+                //data[2][1] are the JSON without "paths"
+                data[2][1].forEach(function (entry) {
+                    if (entry['isRegion']){
+                        regionsList.push(entry);
+                    } else {
+                        edgesList.push(entry);
+                    }
+                });
+                if (this.isMounted()) {
+                    this.setState({labelsJSON: labelsList,
+                                   regionsJSON: regionsList,
+                                   nodesJSON: nodesList,
+                                   hybridsJSON: hybridsList,
+                                   boolsJSON: boolsList,
+                                   edgesJSON: edgesList});
+                }
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error('graph-json', status, err.toString());
+            }
+        });
         //Need to hardcode these in because React does not understand these attributes
         var svgNode = ReactDOM.findDOMNode(this.refs.svg);
         var markerNode = ReactDOM.findDOMNode(this.refs.marker);
@@ -100,7 +157,7 @@ var Graph = React.createClass({
         markerNode.setAttribute('markerWidth', 7);
         markerNode.setAttribute('markerHeight', 7);
 
-        this.getGraph();
+        //this.getGraph();
     },
 
     getGraph: function (graphId) {
@@ -137,10 +194,10 @@ var Graph = React.createClass({
     },
 
     nodeClick: function (event) {
+        console.log(event);
         var courseID = event.currentTarget.id;
         var currentNode = this.refs['nodes'].refs[courseID];
         currentNode.toggleSelection(this);
-
     },
 
     nodeMouseEnter: function (event) {
@@ -185,16 +242,19 @@ var Graph = React.createClass({
                         <polyline {... polylineAttrs}/>
                     </marker>
                 </defs>
-                <RegionGroup ref='regions'/>
+                <RegionGroup ref='regions' regionsJSON={this.state.regionsJSON}/>
                 <NodeGroup ref='nodes'
                             onClick={this.nodeClick}
                             onMouseEnter={this.nodeMouseEnter}
                             onMouseLeave={this.nodeMouseLeave}
                             svg={this}
+                            nodesJSON={this.state.nodesJSON}
+                            hybridsJSON={this.state.hybridsJSON}
+                            edgesJSON={this.state.edgesJSON}
                             highlightedNodes={this.state.highlightedNodes}/>
-                <BoolGroup ref='bools'/>
-                <EdgeGroup ref='edges'/>
-                <RegionLabelGroup ref='regionLabels'/>
+                <BoolGroup ref='bools' boolsJSON={this.state.boolsJSON} edgesJSON={this.state.edgesJSON}/>
+                <EdgeGroup ref='edges' edgesJSON={this.state.edgesJSON}/>
+                <RegionLabelGroup ref='regionLabels' labelsJSON={this.state.labelsJSON}/>
             </svg>
         );
     }
@@ -202,46 +262,30 @@ var Graph = React.createClass({
 
 
 var RegionLabelGroup = React.createClass({
-    getInitialState: function () {
-        return {
-            labelsList: []
-        };
-    },
-
-    componentDidMount: function () {
-        this.parseSVG();
-    },
-
-    parseSVG: function () {
-        var dictList = $('#graph #region-labels > text').map(function (key, element) {
-            var attrs = getAttributes(element.attributes);
-            return {
-                'id': element.id,
-                'attributes': attrs,
-                'style': getStyles(attrs['style']),
-                'innerHTML': element.innerHTML
-            };
-        }).get();
-        this.setState({labelsList: dictList});
-    },
-
     render: function () {
         return (
             <g id='region-labels'>
-                {this.state.labelsList.map(function (entry, value) {
-                    return (
-                        <text {... entry['attributes']}
-                              key={value}
-                              style={entry['style']} >
-                            {entry['innerHTML']}
-                        </text>
-                    );
+                {this.props.labelsJSON.map(function (entry, value) {
+                    var textAttrs = {};
+                    textAttrs['x'] = entry.pos[0];
+                    textAttrs['y'] = entry.pos[1];
+
+                    var textStyle = {
+                        fill : entry['fill']
+                    }
+
+                    return <text
+                            {... textAttrs}
+                            key={value}
+                            style={textStyle}
+                            textAnchor={entry['text-anchor']}>
+                                {entry['text']}
+                           </text>
                 })}
             </g>
         );
     }
 });
-
 
 var RegionGroup = React.createClass({
     getInitialState: function () {
@@ -261,10 +305,18 @@ var RegionGroup = React.createClass({
     render: function () {
         return (
             <g id='regions'>
-                {this.state.regionsList.map(function (entry, value) {
-                    return <Region attributes={entry['attributes']}
-                                   key={entry['id']}
-                                   styles={entry['style']} />;
+                {this.props.regionsJSON.map(function (entry, value) {
+                    var pathAttrs = {};
+                    pathAttrs['d'] = 'M';
+                    
+                    entry.points.forEach(function(x){
+                        pathAttrs['d'] += x[0] + ',' + x[1] + ' '});
+
+                    var pathStyle = {
+                        fill : entry.fill
+                    }
+                    return <path {... pathAttrs} key={value} className='region' style={pathStyle}>
+            </path>
                 })}
             </g>
         );
@@ -273,15 +325,15 @@ var RegionGroup = React.createClass({
 
 
 // This now uses the new syntax for a stateless React component
-// (component with only a render method).
-// It also uses ES2015 "fat arrow" syntax for function definition.
-var Region = ({attributes, styles}) => {
-    return (
-        <path {... attributes}
-              className='region'
-              style={styles} />
-    );
-};
+// (component with only a render method).		
+// It also uses ES2015 "fat arrow" syntax for function definition.		
+var Region = ({attributes, styles}) => {		
+    return (		
+        <path {... attributes}		
+              className='region'		
+              style={styles} />		
+    );		
+};		
 
 
 var NodeGroup = React.createClass({
@@ -305,33 +357,28 @@ var NodeGroup = React.createClass({
         var highlightedNodes = this.props.highlightedNodes;
         return (
             <g id='nodes' stroke='black'>
-                {this.state.nodesList.map(function (entry, value) {
+                {this.props.nodesJSON.map(function (entry, value) {
                     var highlighted = highlightedNodes.indexOf(entry['id']) >= 0;
                     var parents = [];
                     var childs = [];
                     var outEdges = [];
                     var inEdges = [];
-                    // Can be removed when we no longer use the Haskell-generated graphs.
-                    delete entry['attributes']['data-active'];
-
-                    $('.path').map(function (key, element) {
-                        if (entry['id'] === element.getAttribute('data-target-node')) {
-                            parents.push(element.getAttribute('data-source-node'));
-                            inEdges.push(element.id);
+                    this.props.edgesJSON.map(function (element, key) {
+                        if (entry.id_ === element.target) {
+                            parents.push(element.source);
+                            inEdges.push(element.id_);
                         }
-                        if (entry['id'] === element.getAttribute('data-source-node')) {
-                            childs.push(element.getAttribute('data-target-node'));
-                            outEdges.push(element.id);
+                        if (entry.id_ === element.source) {
+                            childs.push(element.target);
+                            outEdges.push(element.id_);
                         }
                     });
                     return <Node
-                            attributes={entry['attributes']}
-                            children={entry['children']}
+                            JSON={entry}
                             className={'node'}
-                            key={entry['id']}
-                            styles={entry['style']}
+                            key={value}
                             hybrid={false}
-                            ref={entry['id']}
+                            ref={entry.id_}
                             parents={parents}
                             childs={childs}
                             inEdges={inEdges}
@@ -341,33 +388,28 @@ var NodeGroup = React.createClass({
                             logicalType={'AND'}
                             highlighted={highlighted} />
                 }, this)}
-
-                {this.state.hybridsList.map(function (entry, value) {
+                
+                {this.props.hybridsJSON.map(function (entry, value) {
                     var parents = [];
                     var childs = [];
                     var outEdges = [];
                     var inEdges = [];
-                    // Can be removed when we no longer use the Haskell-generated graphs.
-                    delete entry['attributes']['data-active'];
-
-                    $('.path').map(function (key, element) {
-                        if (entry['id'] === element.getAttribute('data-target-node')) {
-                            parents.push(element.getAttribute('data-source-node'));
-                            inEdges.push(element.id);
+                    this.props.edgesJSON.map(function (element, key) {
+                        if (entry.id_ === element.target) {
+                            parents.push(element.source);
+                            inEdges.push(element.id_);
                         }
-                        if (entry['id'] === element.getAttribute('data-source-node')) {
-                            childs.push(element.getAttribute('data-target-node'));
-                            outEdges.push(element.id);
+                        if (entry.id_ === element.source) {
+                            childs.push(element.target);
+                            outEdges.push(element.id_);
                         }
                     });
                     return <Node
-                            attributes={entry['attributes']}
-                            children={entry['children']}
+                            JSON={entry}
                             className={'hybrid'}
-                            key={entry['id']}
-                            styles={entry['style']}
+                            key={entry.id_}
                             hybrid={true}
-                            ref={entry['id']}
+                            ref={entry.id_}
                             parents={parents}
                             childs={childs}
                             inEdges={inEdges}
@@ -382,7 +424,7 @@ var NodeGroup = React.createClass({
 
 var Node = React.createClass({
     getInitialState: function () {
-        var state = getCookie(this.props.attributes['id']);
+        var state = getCookie(this.props.JSON.id_);
         if (state === '') {
             state = this.props.parents.length === 0 ? 'takeable' : 'inactive';
         }
@@ -438,6 +480,7 @@ var Node = React.createClass({
             var allEdges = this.props.outEdges.concat(this.props.inEdges);
             allEdges.forEach(function (edge) {
                 var currentEdge = svg.refs['edges'].refs[edge];
+                
                 currentEdge.updateEdge(svg);
             });
         });
@@ -503,21 +546,36 @@ var Node = React.createClass({
         } else {
             var ellipse = null;
         }
+        
+        var gAttrs = {};
+        gAttrs['text-rendering'] = 'geometricPrecision';
+        gAttrs['shape-rendering'] = 'geometricPrecision';
+        
+        var rectAttrs = {};
+        rectAttrs['height'] = this.props.JSON.height;
+        rectAttrs['width'] = this.props.JSON.width;
+        rectAttrs['rx'] = '4';
+        rectAttrs['ry'] = '4';
+        rectAttrs['x'] = this.props.JSON.pos[0];
+        rectAttrs['y'] = this.props.JSON.pos[1];
+        
+        var rectStyle = {
+            fill : this.props.JSON.fill
+        }
+        
         return (
-            <g {... this.props.attributes}
-               style={this.props.styles}
-               {... this.props}
+            <g {... this.props}{... gAttrs} 
                className={newClassName} >
                 {ellipse}
-                <rect {... this.props.children[0]['attributes']}
-                      style={this.props.children[0]['style']} />
-                {this.props.children.slice(1).map(function (textTag, value) {
+                <rect {... rectAttrs} style={rectStyle} />
+                {this.props.JSON.text.map(function (textTag, value) {
+                    var textAttrs = {};
+                    textAttrs['x'] = textTag.pos[0];
+                    textAttrs['y'] = textTag.pos[1];
                     return (
-                        <text {... textTag['attributes']}
-                              key={value}
-                              style={textTag['style']}
-                              textAnchor='middle'>
-                            {textTag['innerHTML']}
+                        <text {... textAttrs}
+                            key={textTag.rId}>
+                            {textTag.text}
                         </text>);
                 })}
             </g>
@@ -544,38 +602,33 @@ var BoolGroup = React.createClass({
     render: function () {
         return (
             <g id='bools'>
-                {this.state.boolsList.map(function (entry, value) {
+                {this.props.boolsJSON.map(function (entry, value) {
                     var parents = [];
                     var childs = [];
                     var outEdges = [];
-                    var inEdges = [];
-
-                    // Can be removed when we no longer use the Haskell-generated graphs.
-                    delete entry['attributes']['data-active'];
-
-                    $('.path').map(function (key, element) {
-                        if (entry['id'] === element.getAttribute('data-target-node')) {
-                            parents.push(element.getAttribute('data-source-node'));
-                            inEdges.push(element.id);
+                    var inEdges = []; 
+                    this.props.edgesJSON.map(function (element, key) {
+                        if (entry.id_ === element.target) {
+                            parents.push(element.source);
+                            inEdges.push(element.id_);
                         }
-                        if (entry['id'] === element.getAttribute('data-source-node')) {
-                            childs.push(element.getAttribute('data-target-node'));
-                            outEdges.push(element.id);
+                        if (entry.id_ === element.source) {
+                            childs.push(element.target);
+                            outEdges.push(element.id_);
                         }
                     });
                     return <Bool
-                            attributes={entry['attributes']}
-                            children={entry['children']}
+                            JSON={entry}
                             className='bool'
-                            key={entry['id']}
-                            ref={entry['id']}
+                            key={entry.id_}
+                            ref={entry.id_}
                             parents={parents}
                             childs={childs}
                             inEdges={inEdges}
                             outEdges={outEdges}
                             hybrid={true}
-                            logicalType={entry['children'][1].innerHTML} />
-                })}
+                            logicalType={entry.text[0].text} />
+                }, this)}
             </g>
         );
     }
@@ -584,7 +637,7 @@ var BoolGroup = React.createClass({
 
 var Bool = React.createClass({
     getInitialState: function () {
-        var state = getCookie(this.props.attributes['id']);
+        var state = getCookie(this.props.JSON.id_);
         if (state === '') {
             state = this.props.parents.length === 0 ? 'takeable' : 'inactive';
         }
@@ -618,7 +671,7 @@ var Bool = React.createClass({
             newState = 'inactive';
         }
 
-        var boolId = this.props.attributes['id'];
+        var boolId = this.props.JSON.id_;
         this.setState({status: newState}, function () {
             setCookie(boolId, newState);
             this.props.childs.forEach(function (node) {
@@ -665,16 +718,24 @@ var Bool = React.createClass({
     },
 
     render: function () {
+        var ellipseAttrs = {};
+        ellipseAttrs['cx'] = this.props.JSON.pos[0];
+        ellipseAttrs['cy'] = this.props.JSON.pos[1];
+        ellipseAttrs['rx'] = '9.8800001';
+        ellipseAttrs['ry'] = '7.3684001';
         return (
-            <g {... this.props.attributes}
+            <g {... this.props.JSON}
                className={this.props.className + ' ' + this.state.status} >
-                <ellipse {... this.props.children[0]['attributes']}
-                         style={this.props.children[0]['style']} />
-                {this.props.children.slice(1).map(function (textTag, value) {
+                <ellipse {... ellipseAttrs}/>
+                {this.props.JSON.text.map(function (textTag, value) {
+                    var textAttrs = {};
+                    textAttrs['x'] = textTag.pos[0];
+                    textAttrs['y'] = textTag.pos[1];
                     return (
-                        <text {... textTag['attributes']}
+                        <text {... textAttrs}
                               key={value}
-                              textAnchor='middle'>
+                              textAnchor='middle'
+                              stroke='none'>
                             {this.props.logicalType}
                         </text>);
                 }.bind(this))}
@@ -702,17 +763,14 @@ var EdgeGroup = React.createClass({
     render: function () {
         return (
             <g id='edges' stroke='black'>
-                {this.state.edgesList.map(function (entry, value) {
-                    // Can be removed when we no longer use the Haskell-generated graphs.
-                    delete entry['attributes']['data-active'];
+                {this.props.edgesJSON.map(function (entry, value) {
                     return <Edge
-                            attributes={entry['attributes']}
                             className='path'
-                            key={entry['id']}
-                            styles={entry['style']}
-                            ref={entry['id']}
-                            source={entry['attributes']['data-source-node']}
-                            target={entry['attributes']['data-target-node']}/>
+                            key={value}
+                            ref={entry.id_}
+                            source={entry.source}
+                            target={entry.target}
+                            JSON={entry}/>
                 })}
             </g>
         );
@@ -743,11 +801,16 @@ var Edge = React.createClass({
     },
 
     render: function () {
+        var pathAttrs = {};
+        pathAttrs['d'] = 'M';
+        this.props.JSON.points.forEach(function(x){
+            pathAttrs['d'] += x[0] + ',' + x[1] + ' '});
+        
         return (
-            <path {... this.props.attributes}
+            <path {... pathAttrs}
                   className={this.props.className + ' ' + this.state.status}
-                  style={this.props.styles}
-                  markerEnd='url(#arrowHead)' />
+                  markerEnd='url(#arrowHead)'>
+            </path>
         );
     }
 });
