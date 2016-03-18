@@ -35,6 +35,7 @@ insertElements (paths, shapes, texts) =
 -- | Delete graphs from the database.
 deleteGraphs :: IO ()
 deleteGraphs = runSqlite databasePath $ do
+    runMigration migrateAll
     deleteWhere ([] :: [Filter Graph])
     deleteWhere ([] :: [Filter Text])
     deleteWhere ([] :: [Filter Shape])

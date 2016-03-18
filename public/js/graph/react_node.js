@@ -77,7 +77,7 @@ function getNodes(mode) {
 var Graph = React.createClass({
     getInitialState: function () {
         return {
-		  	labelsJSON: [],
+            labelsJSON: [],
             regionsJSON: [],
             nodesJSON: [],
             hybridsJSON: [],
@@ -88,9 +88,31 @@ var Graph = React.createClass({
     },
 
     componentDidMount: function () {
+        this.getGraph();
+    },
+
+    getGraph: function (graphId) {
+        if (graphId === undefined) {
+            var urlSpecifiedGraph = getURLParameter('dept');
+
+            // HACK: Temporary workaround for giving the statistics department a link to our graph.
+            // Should be replaced with a more general solution.
+            if (urlSpecifiedGraph === 'sta') {
+                graphId = '2';
+            } else if (urlSpecifiedGraph !== null) {
+                graphId = '1';
+            } else {
+                graphId = getCookie('active-graph');
+                if (graphId === '') {
+                    graphId = '1';
+                }
+            }
+        }
+
         $.ajax({
             dataType: 'json',
-            url: 'graph-json',
+            url: 'get-json-data',
+            data: {'gid': graphId},
             success: function (data) {
                 var labelsList = [];
                 var regionsList = [];
@@ -98,29 +120,29 @@ var Graph = React.createClass({
                 var hybridsList = [];
                 var boolsList = [];
                 var edgesList = [];
-                
+
                 //data[0] is ["texts", [JSON]]
                 data[0][1].forEach(function (entry) {
-                    if (entry['rId'].substring(0,5) === 'tspan'){
+                    if (entry['rId'].substring(0,5) === 'tspan') {
                         labelsList.push(entry);
                     }
                 });
                 //data[1] is ["shapes", [JSON]]
                 data[1][1].forEach(function (entry) {
-                    if (entry['type_'] === 'Node'){
+                    if (entry['type_'] === 'Node') {
                         nodesList.push(entry);
-                    }
-                    if (entry['type_'] === 'Hybrid'){
+                    } else
+                    if (entry['type_'] === 'Hybrid') {
                         hybridsList.push(entry);
-                    }
-                    if (entry['type_'] === 'BoolNode'){
+                    } else
+                    if (entry['type_'] === 'BoolNode') {
                         boolsList.push(entry);
                     }
                 });
                 //data[2] is ["paths", [JSON]]
                 //data[2][1] are the JSON without "paths"
                 data[2][1].forEach(function (entry) {
-                    if (entry['isRegion']){
+                    if (entry['isRegion']) {
                         regionsList.push(entry);
                     } else {
                         edgesList.push(entry);
@@ -156,41 +178,6 @@ var Graph = React.createClass({
         markerNode.setAttribute('orient', 'auto');
         markerNode.setAttribute('markerWidth', 7);
         markerNode.setAttribute('markerHeight', 7);
-
-        //this.getGraph();
-    },
-
-    getGraph: function (graphId) {
-        if (graphId === undefined) {
-            var urlSpecifiedGraph = getURLParameter('dept');
-
-            // HACK: Temporary workaround for giving the statistics department a link to our graph.
-            // Should be replaced with a more general solution.
-            if (urlSpecifiedGraph === 'sta') {
-                graphId = '2';
-            } else if (urlSpecifiedGraph !== null) {
-                graphId = '1';
-            } else {
-                graphId = getCookie('active-graph');
-                if (graphId === '') {
-                    graphId = '1';
-                }
-            }
-        }
-
-        $.ajax({
-            type: 'GET',
-            dataType: 'text',
-            url: 'static/res/graphs/gen/' + graphId + '.svg',
-        }).success(function(data) {
-            var lines = data.split('\n');
-            $('#graph').html(lines[lines.length - 1]);
-            this.refs.nodes.parseSVG();
-            this.refs.bools.parseSVG();
-            this.refs.edges.parseSVG();
-            this.refs.regions.parseSVG();
-            this.refs.regionLabels.parseSVG();
-        }.bind(this));
     },
 
     nodeClick: function (event) {
@@ -245,8 +232,8 @@ var Graph = React.createClass({
                 <RegionGroup ref='regions' regionsJSON={this.state.regionsJSON}/>
                 <NodeGroup ref='nodes'
                             onClick={this.nodeClick}
-                            onMouseEnter={this.nodeMouseEnter}
-                            onMouseLeave={this.nodeMouseLeave}
+                            nodeMouseEnter={this.nodeMouseEnter}
+                            nodeMouseLeave={this.nodeMouseLeave}
                             svg={this}
                             nodesJSON={this.state.nodesJSON}
                             hybridsJSON={this.state.hybridsJSON}
@@ -308,7 +295,7 @@ var RegionGroup = React.createClass({
                 {this.props.regionsJSON.map(function (entry, value) {
                     var pathAttrs = {};
                     pathAttrs['d'] = 'M';
-                    
+
                     entry.points.forEach(function(x){
                         pathAttrs['d'] += x[0] + ',' + x[1] + ' '});
 
@@ -325,15 +312,15 @@ var RegionGroup = React.createClass({
 
 
 // This now uses the new syntax for a stateless React component
-// (component with only a render method).		
-// It also uses ES2015 "fat arrow" syntax for function definition.		
-var Region = ({attributes, styles}) => {		
-    return (		
-        <path {... attributes}		
-              className='region'		
-              style={styles} />		
-    );		
-};		
+// (component with only a render method).
+// It also uses ES2015 "fat arrow" syntax for function definition.
+var Region = ({attributes, styles}) => {
+    return (
+        <path {... attributes}
+              className='region'
+              style={styles} />
+    );
+};
 
 
 var NodeGroup = React.createClass({
@@ -367,8 +354,7 @@ var NodeGroup = React.createClass({
                         if (entry.id_ === element.target) {
                             parents.push(element.source);
                             inEdges.push(element.id_);
-                        }
-                        if (entry.id_ === element.source) {
+                        } else if (entry.id_ === element.source) {
                             childs.push(element.target);
                             outEdges.push(element.id_);
                         }
@@ -386,9 +372,11 @@ var NodeGroup = React.createClass({
                             {... this.props}
                             svg={svg}
                             logicalType={'AND'}
-                            highlighted={highlighted} />
+                            highlighted={highlighted}
+                            onMouseEnter={this.props.nodeMouseEnter}
+                            onMouseLeave={this.props.nodeMouseLeave} />
                 }, this)}
-                
+
                 {this.props.hybridsJSON.map(function (entry, value) {
                     var parents = [];
                     var childs = [];
@@ -398,8 +386,7 @@ var NodeGroup = React.createClass({
                         if (entry.id_ === element.target) {
                             parents.push(element.source);
                             inEdges.push(element.id_);
-                        }
-                        if (entry.id_ === element.source) {
+                        } else if (entry.id_ === element.source) {
                             childs.push(element.target);
                             outEdges.push(element.id_);
                         }
@@ -469,7 +456,7 @@ var Node = React.createClass({
             }
         }
 
-        var nodeId = this.props.attributes['id'];
+        var nodeId = this.props.JSON.id_;
         this.setState({status: newState}, function () {
             setCookie(nodeId, newState);
             this.props.childs.forEach(function (node) {
@@ -480,7 +467,7 @@ var Node = React.createClass({
             var allEdges = this.props.outEdges.concat(this.props.inEdges);
             allEdges.forEach(function (edge) {
                 var currentEdge = svg.refs['edges'].refs[edge];
-                
+
                 currentEdge.updateEdge(svg);
             });
         });
@@ -546,11 +533,11 @@ var Node = React.createClass({
         } else {
             var ellipse = null;
         }
-        
+
         var gAttrs = {};
         gAttrs['text-rendering'] = 'geometricPrecision';
         gAttrs['shape-rendering'] = 'geometricPrecision';
-        
+
         var rectAttrs = {};
         rectAttrs['height'] = this.props.JSON.height;
         rectAttrs['width'] = this.props.JSON.width;
@@ -558,19 +545,21 @@ var Node = React.createClass({
         rectAttrs['ry'] = '4';
         rectAttrs['x'] = this.props.JSON.pos[0];
         rectAttrs['y'] = this.props.JSON.pos[1];
-        
+
         var rectStyle = {
             fill : this.props.JSON.fill
         }
-        
+
+        var textXOffset = this.props.JSON.pos[0] + this.props.JSON.width / 2;
+
         return (
-            <g {... this.props}{... gAttrs} 
+            <g {... this.props}{... gAttrs} id={this.props.JSON.id_}
                className={newClassName} >
                 {ellipse}
                 <rect {... rectAttrs} style={rectStyle} />
                 {this.props.JSON.text.map(function (textTag, value) {
                     var textAttrs = {};
-                    textAttrs['x'] = textTag.pos[0];
+                    textAttrs['x'] = textXOffset;
                     textAttrs['y'] = textTag.pos[1];
                     return (
                         <text {... textAttrs}
@@ -606,7 +595,7 @@ var BoolGroup = React.createClass({
                     var parents = [];
                     var childs = [];
                     var outEdges = [];
-                    var inEdges = []; 
+                    var inEdges = [];
                     this.props.edgesJSON.map(function (element, key) {
                         if (entry.id_ === element.target) {
                             parents.push(element.source);
@@ -729,7 +718,7 @@ var Bool = React.createClass({
                 <ellipse {... ellipseAttrs}/>
                 {this.props.JSON.text.map(function (textTag, value) {
                     var textAttrs = {};
-                    textAttrs['x'] = textTag.pos[0];
+                    textAttrs['x'] = ellipseAttrs['cx'];
                     textAttrs['y'] = textTag.pos[1];
                     return (
                         <text {... textAttrs}
@@ -790,7 +779,6 @@ var Edge = React.createClass({
                          svg.refs['bools'].refs[this.props.source];
         var targetNode = svg.refs['nodes'].refs[this.props.target] ||
                          svg.refs['bools'].refs[this.props.target];
-
         if (!sourceNode.isSelected()) {
             this.setState({status: 'inactive'});
         } else if (!targetNode.isSelected()) {
@@ -805,7 +793,7 @@ var Edge = React.createClass({
         pathAttrs['d'] = 'M';
         this.props.JSON.points.forEach(function(x){
             pathAttrs['d'] += x[0] + ',' + x[1] + ' '});
-        
+
         return (
             <path {... pathAttrs}
                   className={this.props.className + ' ' + this.state.status}

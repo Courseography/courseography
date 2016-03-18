@@ -139,11 +139,11 @@ getGraphJSON gId =
                                              [ShapeType_ ==. BoolNode,
                                               ShapeGraph ==. toSqlKey gId] []
         sqlPaths    :: [Entity Path] <- selectList [PathGraph ==. toSqlKey gId] []
-        
-        let             
+
+        let
             keyAsInt :: PersistEntity a => Entity a -> Integer
             keyAsInt = fromIntegral . (\(PersistInt64 x) -> x) . head . keyToValues . entityKey
-            
+
             texts          = map entityVal sqlTexts
             rects          = zipWith (buildRect texts)
                                      (map entityVal sqlRects)
@@ -159,11 +159,10 @@ getGraphJSON gId =
             regionTexts    = filter (not .
                                      intersectsWithShape (rects ++ ellipses))
                                     texts
-                                    
-            result = createJSONResponse ["texts" .= (texts ++ regionTexts), 
-                                         "shapes" .= (rects ++ ellipses), 
+
+            result = createJSONResponse ["texts" .= (texts ++ regionTexts),
+                                         "shapes" .= (rects ++ ellipses),
                                          "paths" .= (paths ++ regions ++ edges)]
-                                         
         return result
 
 -- | Builds a list of all course codes in the database.
