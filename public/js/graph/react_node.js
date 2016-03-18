@@ -440,47 +440,9 @@ var NodeGroup = React.createClass({
         var svg = this.props.svg;
         var highlightedNodes = this.props.highlightedNodes;
         var nodes = this.props.nodesJSON;
+        var hybridRelationships = [];
         return (
             <g id='nodes' stroke='black'>
-                {this.props.nodesJSON.map(function (entry, value) {
-                    var highlighted = highlightedNodes.indexOf(entry['id']) >= 0;
-                    var parents = [];
-                    var childs = [];
-                    var outEdges = [];
-                    var inEdges = [];
-                    this.props.edgesJSON.forEach(function (element, key) {
-                        if (entry.id_ === element.target) {
-                            if (parents.indexOf(element.source) >= 0) {
-                                console.log('duplicate', element.source);
-                            } else {
-                                parents.push(element.source);
-                                inEdges.push(element.id_);
-                            }
-                        } else if (entry.id_ === element.source) {
-                            childs.push(element.target);
-                            outEdges.push(element.id_);
-                        }
-                    });
-                    return <Node
-                            JSON={entry}
-                            className={'node'}
-                            key={value}
-                            hybrid={false}
-                            ref={entry.id_}
-                            parents={parents}
-                            childs={childs}
-                            inEdges={inEdges}
-                            outEdges={outEdges}
-                            {... this.props}
-                            svg={svg}
-                            logicalType={'AND'}
-                            highlighted={highlighted}
-                            onMouseEnter={this.props.nodeMouseEnter}
-                            onMouseLeave={this.props.nodeMouseLeave} />
-                }, this)}
-
-
-
                 {this.props.hybridsJSON.map(function (entry, value) {
                     var parents = [];
                     var childs = [];
@@ -516,6 +478,7 @@ var NodeGroup = React.createClass({
                                 }
                             }
                             parents.push(nodes[i].id_);
+                            hybridRelationships.push([nodes[i].id_, entry.id_]);
                         }
                     });
                     return <Node
@@ -528,7 +491,53 @@ var NodeGroup = React.createClass({
                             childs={childs}
                             inEdges={inEdges}
                             outEdges={outEdges}
-                            svg={svg}/>
+                            svg={svg}
+                            logicalType={'AND'}/>
+                }, this)}
+                {this.props.nodesJSON.map(function (entry, value) {
+                    var highlighted = highlightedNodes.indexOf(entry['id']) >= 0;
+                    var parents = [];
+                    var childs = [];
+                    var outEdges = [];
+                    var inEdges = [];
+                    this.props.edgesJSON.forEach(function (element, key) {
+                        if (entry.id_ === element.target) {
+                            if (parents.indexOf(element.source) >= 0) {
+                                console.log('duplicate', element.source);
+                            } else {
+                                parents.push(element.source);
+                                inEdges.push(element.id_);
+                            }
+                        } else if (entry.id_ === element.source) {
+                            if (childs.indexOf(element.target) >= 0) {
+                                console.log('child duplicate', element.target);
+                            } else {
+                                childs.push(element.target);
+                                outEdges.push(element.id_);
+                            }
+                        }
+                    });
+                    hybridRelationships.forEach(function (element, key) {
+                        if (element[0] === entry.id_) {
+                            childs.push(element[1]);
+                        }
+                    });
+                    return <Node
+                            JSON={entry}
+                            className={'node'}
+                            key={value}
+                            hybrid={false}
+                            ref={entry.id_}
+                            parents={parents}
+                            childs={childs}
+                            inEdges={inEdges}
+                            outEdges={outEdges}
+                            {... this.props}
+                            svg={svg}
+                            logicalType={'AND'}
+                            highlighted={highlighted}
+                            onMouseEnter={this.props.nodeMouseEnter}
+                            onMouseLeave={this.props.nodeMouseLeave} />
                 }, this)}
             </g>
         );
@@ -549,7 +558,11 @@ var Node = React.createClass({
     },
 
     isSelected: function () {
-        return this.state.selected;
+        if (this.props.hybrid) {
+            return this.state.status === 'active';
+        } else {
+            return this.state.selected;
+        }
     },
 
     arePrereqsSatisfied: function (svg) {
@@ -581,6 +594,13 @@ var Node = React.createClass({
             } else {
                 newState = 'inactive';
             }
+        }
+
+        // Check whether need to update children
+        if (['active', 'overridden'].indexOf(newState) ==
+            ['active', 'overridden'].indexOf(this.state.status)) {
+            this.setState({status: newState});
+            return;
         }
 
         if (recursive === undefined || recursive) {
