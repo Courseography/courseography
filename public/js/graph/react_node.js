@@ -1,3 +1,100 @@
+/**
+ *
+ * @param {string} s
+ * @returns {Array}
+ */
+function parseAnd(s) {
+    'use strict';
+
+    var curr = s;
+    var andList = [];
+    while (curr.length > 0) {
+        if (curr.charAt(0) === ',' ||
+            curr.charAt(0) === ';' ||
+            curr.charAt(0) === ' ') {
+            curr = curr.substr(1);
+        } else {
+            var result = parseOr(curr);
+            if (curr === result[1]) {
+                console.log('Parsing failed for ' + s + '  with curr = ' + curr);
+                break;
+            } else {
+                curr = result[1];
+                andList.push(result[0]);
+            }
+        }
+    }
+    return [andList, curr];
+}
+
+
+/**
+ *
+ * @param {string} s
+ * @returns {Array}
+ */
+function parseOr(s) {
+    'use strict';
+
+    var curr = s;
+    var orList = [];
+    var tmp;
+    var result;
+    while (curr.length > 0 &&
+        curr.charAt(0) !== ',' &&
+        curr.charAt(0) !== ';') {
+
+        if (curr.charAt(0) === '(') {
+            tmp = curr.substr(1, curr.indexOf(')'));
+            result = parseCourse(tmp);
+            orList.append(result[0]);
+            curr = curr.substr(curr.indexOf(')') + 1);
+        } else if (curr.charAt(0) === ' ' ||
+            curr.charAt(0) === '/') {
+            curr = curr.substr(1);
+        } else {
+            result = parseCourse(curr);
+            if (curr === result[1]) {
+                console.log('Parsing failed for ' + s + ' with curr = ' + curr);
+                break;
+            }
+            curr = result[1];
+            orList.push(result[0]);
+        }
+    }
+
+    if (orList.length === 1) {
+        orList = orList[0];
+    }
+
+    return [orList, curr];
+}
+
+
+/**
+ *
+ * @param {string} s
+ * @returns {Array}
+ */
+function parseCourse(s) {
+    'use strict';
+
+    var start = s.search(/[,/]/);
+
+    if (start === 3) {
+        return ['csc' + s.substr(0, start), s.substr(start)];
+    } else if (start > 0) {
+        return [s.substr(0, start), s.substr(start)];
+    }
+
+    if (s.length === 3) {
+        return ['csc' + s, ''];
+    }
+
+    return [s, ''];
+}
+
+
 function renderReactGraph() {
     'use strict';
     return ReactDOM.render(
@@ -342,6 +439,7 @@ var NodeGroup = React.createClass({
     render: function () {
         var svg = this.props.svg;
         var highlightedNodes = this.props.highlightedNodes;
+        var nodes = this.props.nodesJSON;
         return (
             <g id='nodes' stroke='black'>
                 {this.props.nodesJSON.map(function (entry, value) {
@@ -377,6 +475,8 @@ var NodeGroup = React.createClass({
                             onMouseLeave={this.props.nodeMouseLeave} />
                 }, this)}
 
+
+
                 {this.props.hybridsJSON.map(function (entry, value) {
                     var parents = [];
                     var childs = [];
@@ -391,6 +491,30 @@ var NodeGroup = React.createClass({
                             outEdges.push(element.id_);
                         }
                     });
+                    // parse prereqs based on text
+                    var hybridText = "";
+                    entry.text.map(function (textTag, i) {
+                        hybridText += textTag.text;
+                    });
+                    var prereqs = parseAnd(hybridText)[0];
+                    prereqs.forEach(function (course, i) {
+                        var prereqNode = null;
+                        if (typeof(course) === 'string') {
+                            for (var i = 0; i < nodes.length; i++) {
+                                for (var j = 0; j < nodes[i].text.length; j++) {
+                                    if (nodes[i].text[j].text.includes(course)) {
+                                        prereqNode = nodes[i];
+                                        break;
+                                    }
+                                }
+                                if (prereqNode !== null) {
+                                    break;
+                                }
+                            }
+                            parents.push(nodes[i].id_);
+                        }
+                    });
+                    console.log(parents);
                     return <Node
                             JSON={entry}
                             className={'hybrid'}
@@ -491,6 +615,7 @@ var Node = React.createClass({
                         currentEdge.setState({status: 'missing'});
                     }
                 });
+                var isHybrid = this.props.hybrid;
                 this.props.parents.forEach(function (node) {
                     var currentNode = svg.refs['nodes'].refs[node] ||
                                       svg.refs['bools'].refs[node];
@@ -510,10 +635,7 @@ var Node = React.createClass({
     },
 
     render: function () {
-        var newClassName = this.props.className;
-        if (!this.props.hybrid) {
-            newClassName += ' ' + this.state.status;
-        }
+        var newClassName = this.props.className + ' ' + this.state.status;
         if (this.props.highlighted) {
             var attrs = this.props.children[0]['attributes'];
             var width = parseFloat(attrs['width']) / 2;

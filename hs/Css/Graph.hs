@@ -31,7 +31,7 @@ nodeCSS = "g" ? do
         "-khtml-user-select" -: "none"
         "-moz-user-select" -: "none"
         "-ms-user-select" -: "none"
-   
+
     ".node" & do
         cursor pointer
         "text" ? do
@@ -84,33 +84,6 @@ nodeCSS = "g" ? do
                 fill dPurple
         "rect" <? do
             stroke "black"
-         -- For the React graph
-        ".active" & do
-            "rect" <? do
-                wideStroke
-            "text" <? do
-                fullyVisible
-        ".overridden" & do
-            "rect" <? do
-                wideStroke
-                strokeRed
-            "text" <? do
-                fullyVisible
-        ".inactive" & do
-            "rect" <? do
-                faded
-                strokeDashed
-        ".takeable" & do
-            "rect" <? do
-                semiVisible
-            "text" <? do
-                semiVisible
-        ".missing" & do
-            "rect" <> "ellipse" <? do
-                wideStroke
-                strokeRed
-            "text" <? do
-                fullyVisible
     ".hybrid" & do
         cursor cursorDefault
         "text" <? do
@@ -121,6 +94,32 @@ nodeCSS = "g" ? do
         "rect" <? do
             fill "#888888"
             stroke "black"
+    ".active" & do
+        "rect" <? do
+            wideStroke
+        "text" <? do
+            fullyVisible
+    ".overridden" & do
+        "rect" <? do
+            wideStroke
+            strokeRed
+        "text" <? do
+            fullyVisible
+    ".inactive" & do
+        "rect" <? do
+            faded
+            strokeDashed
+    ".takeable" & do
+        "rect" <? do
+            semiVisible
+        "text" <? do
+            semiVisible
+    ".missing" & do
+        "rect" <> "ellipse" <? do
+            wideStroke
+            strokeRed
+        "text" <? do
+            fullyVisible
     ".bool" & do
         cursor cursorDefault
         "data-active" @= "active" & do
