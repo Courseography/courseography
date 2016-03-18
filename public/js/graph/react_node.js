@@ -448,10 +448,14 @@ var NodeGroup = React.createClass({
                     var childs = [];
                     var outEdges = [];
                     var inEdges = [];
-                    this.props.edgesJSON.map(function (element, key) {
+                    this.props.edgesJSON.forEach(function (element, key) {
                         if (entry.id_ === element.target) {
-                            parents.push(element.source);
-                            inEdges.push(element.id_);
+                            if (parents.indexOf(element.source) >= 0) {
+                                console.log('duplicate', element.source);
+                            } else {
+                                parents.push(element.source);
+                                inEdges.push(element.id_);
+                            }
                         } else if (entry.id_ === element.source) {
                             childs.push(element.target);
                             outEdges.push(element.id_);
@@ -514,7 +518,6 @@ var NodeGroup = React.createClass({
                             parents.push(nodes[i].id_);
                         }
                     });
-                    console.log(parents);
                     return <Node
                             JSON={entry}
                             className={'hybrid'}
@@ -564,7 +567,7 @@ var Node = React.createClass({
         }
     },
 
-    updateNode: function (svg) {
+    updateNode: function (svg, recursive) {
         var newState;
         if (this.arePrereqsSatisfied(svg)) {
             if (this.isSelected() || this.props.hybrid) {
@@ -580,21 +583,25 @@ var Node = React.createClass({
             }
         }
 
-        var nodeId = this.props.JSON.id_;
-        this.setState({status: newState}, function () {
-            setCookie(nodeId, newState);
-            this.props.childs.forEach(function (node) {
-                var currentNode = svg.refs['nodes'].refs[node] ||
-                                  svg.refs['bools'].refs[node];
-                currentNode.updateNode(svg);
-            });
-            var allEdges = this.props.outEdges.concat(this.props.inEdges);
-            allEdges.forEach(function (edge) {
-                var currentEdge = svg.refs['edges'].refs[edge];
+        if (recursive === undefined || recursive) {
+            var nodeId = this.props.JSON.id_;
+            this.setState({status: newState}, function () {
+                setCookie(nodeId, newState);
+                this.props.childs.forEach(function (node) {
+                    var currentNode = svg.refs['nodes'].refs[node] ||
+                                      svg.refs['bools'].refs[node];
+                    currentNode.updateNode(svg);
+                });
+                var allEdges = this.props.outEdges.concat(this.props.inEdges);
+                allEdges.forEach(function (edge) {
+                    var currentEdge = svg.refs['edges'].refs[edge];
 
-                currentEdge.updateEdge(svg);
+                    currentEdge.updateEdge(svg);
+                });
             });
-        });
+        } else {
+            this.setState({status: newState});
+        }
     },
 
     toggleSelection: function (svg) {
@@ -605,7 +612,8 @@ var Node = React.createClass({
 
     focusPrereqs: function (svg) {
         // Check if there are any missing prerequisites.
-        if (this.state.status !== 'active') {
+        var id = this.props.JSON.id_;
+        if (!this.isSelected() && this.state.status !== 'missing') {
             this.setState({status: 'missing'}, function () {
                 this.props.inEdges.forEach(function (edge) {
                     var currentEdge = svg.refs['edges'].refs[edge];
@@ -626,11 +634,17 @@ var Node = React.createClass({
     },
 
     unfocusPrereqs: function (svg) {
-        this.updateNode(svg);
+        this.updateNode(svg, false);
         this.props.parents.forEach(function (node) {
             var currentNode = svg.refs['nodes'].refs[node] ||
                               svg.refs['bools'].refs[node];
             currentNode.unfocusPrereqs(svg);
+        });
+        this.props.inEdges.forEach(function (edge) {
+            var currentEdge = svg.refs['edges'].refs[edge];
+            if (currentEdge.state.status === 'missing') {
+                currentEdge.updateEdge(svg);
+            }
         });
     },
 
