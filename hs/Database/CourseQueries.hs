@@ -154,15 +154,14 @@ getGraphJSON gId =
             paths          = zipWith (buildPath rects ellipses)
                                      (map entityVal sqlPaths)
                                      (map keyAsInt sqlPaths)
-            regions        = filter pathIsRegion paths
-            edges          = filter (not . pathIsRegion) paths
+            (regions, edges) = partition pathIsRegion paths
             regionTexts    = filter (not .
                                      intersectsWithShape (rects ++ ellipses))
                                     texts
 
             result = createJSONResponse ["texts" .= (texts ++ regionTexts),
                                          "shapes" .= (rects ++ ellipses),
-                                         "paths" .= (paths ++ regions ++ edges)]
+                                         "paths" .= (paths ++ regions)]
         return result
 
 -- | Builds a list of all course codes in the database.

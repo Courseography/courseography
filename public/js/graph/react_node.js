@@ -245,6 +245,7 @@ var Graph = React.createClass({
                         edgesList.push(entry);
                     }
                 });
+
                 if (this.isMounted()) {
                     this.setState({labelsJSON: labelsList,
                                    regionsJSON: regionsList,
@@ -502,19 +503,11 @@ var NodeGroup = React.createClass({
                     var inEdges = [];
                     this.props.edgesJSON.forEach(function (element, key) {
                         if (entry.id_ === element.target) {
-                            if (parents.indexOf(element.source) >= 0) {
-                                console.log('duplicate', element.source);
-                            } else {
-                                parents.push(element.source);
-                                inEdges.push(element.id_);
-                            }
+                            parents.push(element.source);
+                            inEdges.push(element.id_);
                         } else if (entry.id_ === element.source) {
-                            if (childs.indexOf(element.target) >= 0) {
-                                console.log('child duplicate', element.target);
-                            } else {
-                                childs.push(element.target);
-                                outEdges.push(element.id_);
-                            }
+                            childs.push(element.target);
+                            outEdges.push(element.id_);
                         }
                     });
                     hybridRelationships.forEach(function (element, key) {
