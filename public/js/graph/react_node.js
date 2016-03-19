@@ -220,6 +220,7 @@ var Graph = React.createClass({
             url: 'get-json-data',
             data: {'gid': graphId},
             success: function (data) {
+                setCookie('active-graph', graphId);
                 var labelsList = [];
                 var regionsList = [];
                 var nodesList = [];
@@ -769,6 +770,9 @@ var BoolGroup = React.createClass({
 
     componentDidMount: function () {
         this.parseSVG();
+        for (var ref in this.refs) {
+            this.refs[ref].updateNode(this.props.svg);
+        }
     },
 
     parseSVG: function () {
@@ -816,9 +820,6 @@ var BoolGroup = React.createClass({
 var Bool = React.createClass({
     getInitialState: function () {
         return {status: 'inactive'};
-    },
-    componentDidMount: function () {
-        this.updateNode(this.props.svg);
     },
 
     isSelected: function () {
@@ -931,6 +932,9 @@ var EdgeGroup = React.createClass({
 
     componentDidMount: function () {
         this.parseSVG();
+        for (var ref in this.refs) {
+            this.refs[ref].updateEdge(this.props.svg);
+        }
     },
 
     parseSVG: function () {
@@ -960,10 +964,6 @@ var EdgeGroup = React.createClass({
 var Edge = React.createClass({
     getInitialState: function () {
         return {status: 'inactive'};
-    },
-
-    componentDidMount: function () {
-        this.updateEdge(this.props.svg);
     },
 
     updateEdge: function (svg) {

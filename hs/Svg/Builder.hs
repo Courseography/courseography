@@ -84,12 +84,11 @@ buildEllipses :: [Text]  -- ^ A list of Text elements that may or may not inters
               -> Integer -- ^ A number to use in the ID of the ellipse.
               -> Shape
 buildEllipses texts entity elementId =
-    let ellipseText = filter (intersects
-                              (shapeWidth entity)
-                              (shapeHeight entity)
+    let ellipseText = filter (intersectsEllipse
+                              (shapeWidth entity / 2)
+                              (shapeHeight entity / 2)
                               (fst (shapePos entity) - shapeWidth entity / 2,
                                snd (shapePos entity) - shapeHeight entity / 2)
-                              20
                               . textPos
                               ) texts
     in
@@ -97,6 +96,12 @@ buildEllipses texts entity elementId =
                 shapeFill = "", -- TODO: necessary?
                 shapeText = ellipseText,
                 shapeTolerance = 20} -- TODO: necessary?
+    where
+        intersectsEllipse a b (cx, cy) (x, y) =
+            let dx = x - cx - 5  -- some tolerance
+                dy = y - cy - 5
+            in
+                (dx*dx) / (a*a) + (dy*dy) / (b*b) < 1
 
 -- | Rebuilds a path's `d` attribute based on a list of Rational tuples.
 buildPathString :: [Point] -> String
