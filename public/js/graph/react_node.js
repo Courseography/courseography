@@ -279,7 +279,6 @@ var Graph = React.createClass({
     },
 
     nodeClick: function (event) {
-        console.log(event);
         var courseID = event.currentTarget.id;
         var currentNode = this.refs['nodes'].refs[courseID];
         currentNode.toggleSelection(this);
@@ -337,8 +336,8 @@ var Graph = React.createClass({
                             hybridsJSON={this.state.hybridsJSON}
                             edgesJSON={this.state.edgesJSON}
                             highlightedNodes={this.state.highlightedNodes}/>
-                <BoolGroup ref='bools' boolsJSON={this.state.boolsJSON} edgesJSON={this.state.edgesJSON}/>
-                <EdgeGroup ref='edges' edgesJSON={this.state.edgesJSON}/>
+                <BoolGroup ref='bools' boolsJSON={this.state.boolsJSON} edgesJSON={this.state.edgesJSON} svg={this}/>
+                <EdgeGroup svg={this} ref='edges' edgesJSON={this.state.edgesJSON}/>
                 <RegionLabelGroup ref='regionLabels' labelsJSON={this.state.labelsJSON}/>
             </svg>
         );
@@ -546,7 +545,7 @@ var Node = React.createClass({
         }
         return {
             status: state,
-            selected: false
+            selected: ['active', 'overridden'].indexOf(state) >= 0
         };
     },
 
@@ -589,15 +588,18 @@ var Node = React.createClass({
             }
         }
 
+        var nodeId = this.props.JSON.id_;
+
         // Check whether need to update children
-        if (['active', 'overridden'].indexOf(newState) ==
-            ['active', 'overridden'].indexOf(this.state.status)) {
+        if ((['active', 'overridden'].indexOf(newState) >= 0) ===
+            (['active', 'overridden'].indexOf(this.state.status) >= 0) &&
+            this.state.status !== 'missing') {
+            setCookie(nodeId, newState);
             this.setState({status: newState});
             return;
         }
 
         if (recursive === undefined || recursive) {
-            var nodeId = this.props.JSON.id_;
             this.setState({status: newState}, function () {
                 setCookie(nodeId, newState);
                 this.props.childs.forEach(function (node) {
@@ -608,12 +610,12 @@ var Node = React.createClass({
                 var allEdges = this.props.outEdges.concat(this.props.inEdges);
                 allEdges.forEach(function (edge) {
                     var currentEdge = svg.refs['edges'].refs[edge];
-
                     currentEdge.updateEdge(svg);
-                });
+                }.bind(this));
             });
         } else {
             this.setState({status: newState});
+            setCookie(nodeId, newState);
         }
     },
 
@@ -626,7 +628,7 @@ var Node = React.createClass({
     focusPrereqs: function (svg) {
         // Check if there are any missing prerequisites.
         var id = this.props.JSON.id_;
-        if (!this.isSelected() && this.state.status !== 'missing') {
+        if (['inactive', 'overridden', 'takeable'].indexOf(this.state.status) >= 0) {
             this.setState({status: 'missing'}, function () {
                 this.props.inEdges.forEach(function (edge) {
                     var currentEdge = svg.refs['edges'].refs[edge];
@@ -738,6 +740,7 @@ var BoolGroup = React.createClass({
     },
 
     render: function () {
+        var svg = this.props.svg;
         return (
             <g id='bools'>
                 {this.props.boolsJSON.map(function (entry, value) {
@@ -765,7 +768,8 @@ var BoolGroup = React.createClass({
                             inEdges={inEdges}
                             outEdges={outEdges}
                             hybrid={true}
-                            logicalType={entry.text[0].text} />
+                            logicalType={entry.text[0].text}
+                            svg={svg} />
                 }, this)}
             </g>
         );
@@ -775,11 +779,10 @@ var BoolGroup = React.createClass({
 
 var Bool = React.createClass({
     getInitialState: function () {
-        var state = getCookie(this.props.JSON.id_);
-        if (state === '') {
-            state = this.props.parents.length === 0 ? 'takeable' : 'inactive';
-        }
-        return {status: state};
+        return {status: 'inactive'};
+    },
+    componentDidMount: function () {
+        this.updateNode(this.props.svg);
     },
 
     isSelected: function () {
@@ -899,6 +902,7 @@ var EdgeGroup = React.createClass({
     },
 
     render: function () {
+        var svg = this.props.svg;
         return (
             <g id='edges' stroke='black'>
                 {this.props.edgesJSON.map(function (entry, value) {
@@ -908,7 +912,8 @@ var EdgeGroup = React.createClass({
                             ref={entry.id_}
                             source={entry.source}
                             target={entry.target}
-                            JSON={entry}/>
+                            JSON={entry}
+                            svg={svg}/>
                 })}
             </g>
         );
@@ -918,9 +923,11 @@ var EdgeGroup = React.createClass({
 
 var Edge = React.createClass({
     getInitialState: function () {
-        return {
-            status: 'inactive'
-        };
+        return {status: 'inactive'};
+    },
+
+    componentDidMount: function () {
+        this.updateEdge(this.props.svg);
     },
 
     updateEdge: function (svg) {
