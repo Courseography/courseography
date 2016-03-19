@@ -16,7 +16,7 @@ function parseAnd(s) {
         } else {
             var result = parseOr(curr);
             if (curr === result[1]) {
-                console.log('Parsing failed for ' + s + '  with curr = ' + curr);
+                console.error('Parsing failed for ' + s + '  with curr = ' + curr);
                 break;
             } else {
                 curr = result[1];
@@ -40,22 +40,30 @@ function parseOr(s) {
     var orList = [];
     var tmp;
     var result;
+    var coursePrefix;
     while (curr.length > 0 &&
         curr.charAt(0) !== ',' &&
         curr.charAt(0) !== ';') {
 
         if (curr.charAt(0) === '(') {
             tmp = curr.substr(1, curr.indexOf(')'));
-            result = parseCourse(tmp);
+            if (coursePrefix === undefined && tmp.length >= 6) {
+                coursePrefix = tmp.substr(0, 3).toUpperCase();
+            }
+            result = parseCourse(tmp, coursePrefix);
+
             orList.append(result[0]);
             curr = curr.substr(curr.indexOf(')') + 1);
         } else if (curr.charAt(0) === ' ' ||
             curr.charAt(0) === '/') {
             curr = curr.substr(1);
         } else {
-            result = parseCourse(curr);
+            if (coursePrefix === undefined && curr.length >= 6) {
+                coursePrefix = curr.substr(0, 3).toUpperCase();
+            }
+            result = parseCourse(curr, coursePrefix);
             if (curr === result[1]) {
-                console.log('Parsing failed for ' + s + ' with curr = ' + curr);
+                console.error('Parsing failed for ' + s + ' with curr = ' + curr);
                 break;
             }
             curr = result[1];
@@ -74,21 +82,22 @@ function parseOr(s) {
 /**
  *
  * @param {string} s
+ * @param {string} prefix
  * @returns {Array}
  */
-function parseCourse(s) {
+function parseCourse(s, prefix) {
     'use strict';
 
     var start = s.search(/[,/]/);
 
     if (start === 3) {
-        return ['csc' + s.substr(0, start), s.substr(start)];
+        return [prefix + s.substr(0, start), s.substr(start)];
     } else if (start > 0) {
-        return [s.substr(0, start), s.substr(start)];
+        return [s.substr(0, start).toUpperCase(), s.substr(start)];
     }
 
     if (s.length === 3) {
-        return ['csc' + s, ''];
+        return [prefix + s, ''];
     }
 
     return [s, ''];
@@ -444,28 +453,25 @@ var NodeGroup = React.createClass({
         return (
             <g id='nodes' stroke='black'>
                 {this.props.hybridsJSON.map(function (entry, value) {
-                    var parents = [];
                     var childs = [];
                     var outEdges = [];
-                    var inEdges = [];
                     this.props.edgesJSON.map(function (element, key) {
-                        if (entry.id_ === element.target) {
-                            parents.push(element.source);
-                            inEdges.push(element.id_);
-                        } else if (entry.id_ === element.source) {
+                        // Note: hybrids shouldn't have any in edges
+                        if (entry.id_ === element.source) {
                             childs.push(element.target);
                             outEdges.push(element.id_);
                         }
                     });
                     // parse prereqs based on text
                     var hybridText = "";
-                    entry.text.map(function (textTag, i) {
+                    entry.text.forEach(function (textTag, i) {
                         hybridText += textTag.text;
                     });
                     var prereqs = parseAnd(hybridText)[0];
+                    var parents = [];
                     prereqs.forEach(function (course, i) {
-                        var prereqNode = null;
                         if (typeof(course) === 'string') {
+                            var prereqNode = null;
                             for (var i = 0; i < nodes.length; i++) {
                                 for (var j = 0; j < nodes[i].text.length; j++) {
                                     if (nodes[i].text[j].text.includes(course)) {
@@ -477,8 +483,35 @@ var NodeGroup = React.createClass({
                                     break;
                                 }
                             }
-                            parents.push(nodes[i].id_);
-                            hybridRelationships.push([nodes[i].id_, entry.id_]);
+                            if (prereqNode !== null) {
+                                parents.push(nodes[i].id_);
+                                hybridRelationships.push([nodes[i].id_, entry.id_]);
+                            }
+                        } else if (typeof(course) === 'object') {
+                            var orPrereq = [];
+                            for (var k = 0; k < course.length; k++) {
+                                var prereqNode = null;
+                                var i;
+                                for (i = 0; i < nodes.length; i++) {
+                                    for (var j = 0; j < nodes[i].text.length; j++) {
+                                        if (nodes[i].text[j].text.includes(course[k])) {
+                                            prereqNode = nodes[i];
+                                            break;
+                                        }
+                                    }
+                                    if (prereqNode !== null) {
+                                        break;
+                                    }
+                                }
+                                if (prereqNode !== null) {
+                                    orPrereq.push(prereqNode.id_);
+                                    hybridRelationships.push([prereqNode.id_, entry.id_]);
+                                }
+
+                            }
+                            if (orPrereq.length > 0) {
+                                parents.push(orPrereq);
+                            }
                         }
                     });
                     return <Node
@@ -489,7 +522,7 @@ var NodeGroup = React.createClass({
                             ref={entry.id_}
                             parents={parents}
                             childs={childs}
-                            inEdges={inEdges}
+                            inEdges={[]}
                             outEdges={outEdges}
                             svg={svg}
                             logicalType={'AND'}/>
@@ -559,10 +592,13 @@ var Node = React.createClass({
 
     arePrereqsSatisfied: function (svg) {
         function isAllTrue(element) {
-            return (
-                svg.refs['nodes'].refs[element] ?
-                svg.refs['nodes'].refs[element].isSelected() :
-                svg.refs['bools'].refs[element].isSelected());
+            if (typeof(element) === 'string') {
+                return (svg.refs['nodes'].refs[element] ?
+                        svg.refs['nodes'].refs[element].isSelected() :
+                        svg.refs['bools'].refs[element].isSelected());
+            } else {
+                return element.some(isAllTrue);
+            }
         }
 
         if (this.props.logicalType === 'AND') {
