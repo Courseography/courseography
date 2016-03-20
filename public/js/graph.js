@@ -30,5 +30,10 @@ requirejs([
                 graphComponent.setState({highlightedNodes: window[id + 'FocusList']});
             }
         });
+
+        // Enable Reset button
+        $('#reset').click(function () {
+            graphComponent.reset();
+        })
     });
 });

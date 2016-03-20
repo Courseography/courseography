@@ -356,6 +356,14 @@ var Graph = React.createClass({
         });
     },
 
+    // Reset graph
+    reset: function () {
+        this.setFCECount(0);
+        this.refs.nodes.reset();
+        this.refs.bools.reset();
+        this.refs.edges.reset();
+    },
+
     render: function () {
         //not all of these properties are supported in React
         var svgAttrs = {'width': this.props.width, 'height': this.props.height};
@@ -479,6 +487,22 @@ var NodeGroup = React.createClass({
 
     parseSVG: function () {
         this.setState({nodesList: getNodes('.node'), hybridsList: getNodes('.hybrid')});
+    },
+
+    reset: function () {
+        this.props.nodesJSON.forEach((nodeJSON) => {
+            var node = this.refs[nodeJSON.id_];
+            var state = node.props.parents.length === 0 ? 'takeable' : 'inactive';
+            node.setState({status: state, selected: false});
+            setCookie(node.props.JSON.id_, state);
+        });
+
+        this.props.hybridsJSON.forEach((hybridJSON) => {
+            var hybrid = this.refs[hybridJSON.id_];
+            var state = hybrid.props.parents.length === 0 ? 'takeable' : 'inactive';
+            hybrid.setState({status: state, selected: false});
+            setCookie(hybrid.props.JSON.id_, state);
+        })
     },
 
     render: function () {
@@ -814,6 +838,13 @@ var BoolGroup = React.createClass({
         this.setState({boolsList: getNodes('.bool')});
     },
 
+    reset: function () {
+        this.props.boolsJSON.forEach((boolJSON) => {
+            var bool = this.refs[boolJSON.id_];
+            bool.setState({status: 'inactive'});
+        });
+    },
+
     render: function () {
         var svg = this.props.svg;
         return (
@@ -974,6 +1005,13 @@ var EdgeGroup = React.createClass({
 
     parseSVG: function () {
         this.setState({edgesList: getNodes('.path')});
+    },
+
+    reset: function () {
+        this.props.edgesJSON.forEach((edgeJSON) => {
+            var edge = this.refs[edgeJSON.id_];
+            edge.setState({status: 'inactive'});
+        });
     },
 
     render: function () {

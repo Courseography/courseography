@@ -1,15 +1,4 @@
 /**
- * The click function when we click the reset button.
- */
-$('#reset').click(function () {
-    'use strict';
-
-    reset();
-    enableReset();
-});
-
-
-/**
  * Dynamically creates buttons for each graph in the sidebar.
  */
 function createGraphButtons() {

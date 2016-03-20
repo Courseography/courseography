@@ -83,8 +83,6 @@ function toggleSidebar(location) {
 
         $('#reset').show();
         $('#fcecount').show();
-
-        enableReset();
     }
 }
 
