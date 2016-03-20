@@ -45,15 +45,6 @@ function getGraphsInDatabase() {
     });
 }
 
-/**
- * Determines whether Reset button should be greyed out or not
- * (If there are active FCEs or not)
- */
-function enableReset() {
-    'use strict';
-
-    fillFCECount();
-}
 
 /**
  * Enables the Focuses nav in the sidebar if the CS graph is selected.

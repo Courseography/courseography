@@ -189,7 +189,8 @@ var Graph = React.createClass({
             hybridsJSON: [],
             boolsJSON: [],
             edgesJSON: [],
-            highlightedNodes: []
+            highlightedNodes: [],
+            fceCount: 0
         };
     },
 
@@ -269,6 +270,7 @@ var Graph = React.createClass({
                 console.error('graph-json', status, err.toString());
             }
         });
+
         //Need to hardcode these in because React does not understand these attributes
         var svgNode = ReactDOM.findDOMNode(this.refs.svg);
         var markerNode = ReactDOM.findDOMNode(this.refs.marker);
@@ -288,10 +290,31 @@ var Graph = React.createClass({
         markerNode.setAttribute('markerHeight', 7);
     },
 
+    componentDidUpdate: function (prevProps, prevState) {
+        if (prevState.nodesJSON !== this.state.nodesJSON) {
+            var totalFCEs = 0;
+            for (var ref in this.refs.nodes.refs) {
+                var node = this.refs.nodes.refs[ref];
+                if (!node.props.hybrid && node.state.selected) {
+                    totalFCEs += 0.5;
+                }
+            }
+            this.setFCECount(totalFCEs);
+        }
+    },
+
+
     nodeClick: function (event) {
         var courseID = event.currentTarget.id;
         var currentNode = this.refs['nodes'].refs[courseID];
+        var wasSelected = currentNode.state.selected;
         currentNode.toggleSelection(this);
+        if (wasSelected) {
+            // TODO: Differentiate half- and full-year courses
+            this.incrementFCECount(-0.5);
+        } else {
+            this.incrementFCECount(0.5);
+        }
     },
 
     nodeMouseEnter: function (event) {
@@ -319,6 +342,18 @@ var Graph = React.createClass({
 
             timeouts.push(timeout);
         }
+    },
+
+    setFCECount: function (credits) {
+        this.setState({fceCount: credits}, function () {
+            $('#fcecount').text('FCE Count: ' + this.state.fceCount);
+        });
+    },
+
+    incrementFCECount: function (credits) {
+        this.setState({fceCount: this.state.fceCount + credits}, function () {
+            $('#fcecount').text('FCE Count: ' + this.state.fceCount);
+        });
     },
 
     render: function () {

@@ -29,7 +29,7 @@ sideBar :: H.Html
 sideBar = do
     H.div ! A.id "sidebar" $ do
         H.div ! A.id "fce" $ do
-            H.div ! A.id "fcecount" $ ""
+            H.div ! A.id "fcecount" $ "FCE Count: 0.0"
             H.button ! A.id "reset" $ "Reset Graph"
         H.nav ! A.id "sidebar-nav" $ H.ul $ do
             H.li ! A.id "graphs-nav" $

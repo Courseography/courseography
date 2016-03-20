@@ -4,7 +4,6 @@ $(document).ready (function () {
     'use strict';
 
     getGraphsInDatabase();
-    updateFCECount();
     createGraphButtons();
 });
 
@@ -57,17 +56,6 @@ function resetDivs() {
 
 
 /**
- * Fills the count of FCEs in the sidebar.
-**/
-function fillFCECount() {
-    'use strict';
-
-    $('#fcecount').show();
-    $('#fcecount').html('FCE Count: ' + currentFCEs.toFixed(1));
-}
-
-
-/**
  * Opens and closes the sidebar.
  * @param{string} location The location where you are clicking (either the sidebar button or the graph).
 **/
@@ -78,16 +66,15 @@ function toggleSidebar(location) {
         toggled = false;
         resetDivs();
         $('#sidebar').animate({width: '40px'}, 'fast', undefined, function() {
-            $('#fcecount').html('');
             $('#sidebar-icon').removeClass('flip');
         });
         $('#reset').hide();
+        $('#fcecount').hide();
     } else if (!toggled && location === 'button') {
         toggled = true;
         $('#sidebar').animate({width: '400px'}, 'fast', undefined, function() {
             $('#sidebar-icon').addClass('flip');
         });
-        fillFCECount();
 
         $('#graphs').show();
         $('#graphs-nav').addClass('active');
@@ -95,6 +82,7 @@ function toggleSidebar(location) {
         changeFocusEnable(getCookie('active-graph'));
 
         $('#reset').show();
+        $('#fcecount').show();
 
         enableReset();
     }

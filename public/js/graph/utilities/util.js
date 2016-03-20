@@ -13,18 +13,6 @@ document.onkeydown = function (event) {
 
 
 /**
- * Clears the FCE count variables.
- */
-function clearFCECount() {
-    currentFCEs = 0;
-    currentFCEs100 = 0;
-    currentFCEs200 = 0;
-    currentFCEs300 = 0;
-    currentFCEs400 = 0;
-    currentFCEsMAT = 0;
-}
-
-/**
  * Clears any active focus.
  */
 function clearActiveFocus() {
@@ -42,8 +30,6 @@ function clearActiveFocus() {
  */
 function initializeGraphSettings() {
     'use strict';
-
-    clearFCECount();
 
     // Set initial node status
     $.each(nodes, function (i, node) {
@@ -76,7 +62,6 @@ function initializeGraphSettings() {
         });
     });
 
-    updateFCECount();
     clearActiveFocus();
 
     // only run this if the CSC graph is loaded
@@ -111,9 +96,6 @@ function reset() {
 
     clearActiveFocus();
 
-    clearFCECount();
-    updateFCECount();
-    fillFCECount();
 }
 
 
