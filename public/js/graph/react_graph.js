@@ -324,7 +324,7 @@ var Graph = React.createClass({
 
         // Old hover modal code
         if ($('.modal').length === 0) {
-            removeToolTips();
+            $('.tooltip-group').remove();
             displayTooltip(courseID);
         }
     },
@@ -336,11 +336,7 @@ var Graph = React.createClass({
 
         // Old hover modal code
         if ($('.modal').length === 0) {
-            var timeout = setTimeout(function () {
-                $('.tooltip-group').hide('slow', function () { $(this).remove();});
-            }, 100);
-
-            timeouts.push(timeout);
+            removeToolTip(this);
         }
     },
 
@@ -588,7 +584,7 @@ var NodeGroup = React.createClass({
                             logicalType={'AND'}/>
                 }, this)}
                 {this.props.nodesJSON.map(function (entry, value) {
-                    var highlighted = highlightedNodes.indexOf(entry['id']) >= 0;
+                    var highlighted = highlightedNodes.indexOf(entry.id_) >= 0;
                     var parents = [];
                     var childs = [];
                     var outEdges = [];
@@ -762,11 +758,11 @@ var Node = React.createClass({
     render: function () {
         var newClassName = this.props.className + ' ' + this.state.status;
         if (this.props.highlighted) {
-            var attrs = this.props.children[0]['attributes'];
-            var width = parseFloat(attrs['width']) / 2;
-            var height = parseFloat(attrs['height']) / 2;
-            var cx = parseFloat(attrs['x']) + width;
-            var cy = parseFloat(attrs['y']) + height;
+            var attrs = this.props.JSON;
+            var width = parseFloat(attrs.width) / 2;
+            var height = parseFloat(attrs.height) / 2;
+            var cx = parseFloat(attrs.pos[0]) + width;
+            var cy = parseFloat(attrs.pos[1]) + height;
             var rx = width + 9;
             var ry = height + 8.5;
             var ellipse = (

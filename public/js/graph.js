@@ -1,5 +1,5 @@
 requirejs([
-    'es6!graph/react_node'],
+    'es6!graph/react_graph'],
     function (
         reactNode
     ) {
