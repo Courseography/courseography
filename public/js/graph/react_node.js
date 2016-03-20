@@ -610,7 +610,7 @@ var NodeGroup = React.createClass({
                     return <Node
                             JSON={entry}
                             className={'node'}
-                            key={value}
+                            key={entry.id_}
                             hybrid={false}
                             ref={entry.id_}
                             parents={parents}
@@ -1021,7 +1021,7 @@ var EdgeGroup = React.createClass({
                 {this.props.edgesJSON.map(function (entry, value) {
                     return <Edge
                             className='path'
-                            key={value}
+                            key={entry.id_}
                             ref={entry.id_}
                             source={entry.source}
                             target={entry.target}
