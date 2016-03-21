@@ -16,7 +16,8 @@ module Database.CourseQueries
      queryGraphs,
      deptList,
      returnTutorial,
-     returnLecture) where
+     returnLecture,
+     getGraphJSON) where
 
 import Happstack.Server.SimpleHTTP
 import Database.Persist
@@ -30,6 +31,11 @@ import Data.String.Utils
 import Data.List
 import Config (databasePath)
 import Control.Monad (liftM)
+import Data.Aeson ((.=))
+import Data.Int (Int64)
+
+import Database.DataType
+import Svg.Builder
 
 -- ** Querying a single course
 
@@ -120,6 +126,45 @@ buildSession lecs tuts =
                           (map entityVal tuts)
 
 -- ** Other queries
+
+-- | Gets Shape, Text and Path elements for rendering graph returned as JSON
+getGraphJSON :: Int64 -> IO Response
+getGraphJSON gId =
+    runSqlite databasePath $ do
+        sqlTexts    :: [Entity Text] <- selectList [TextGraph ==. toSqlKey gId] []
+        sqlRects    :: [Entity Shape] <- selectList
+                                             [ShapeType_ <-. [Node, Hybrid],
+                                              ShapeGraph ==. toSqlKey gId] []
+        sqlEllipses :: [Entity Shape] <- selectList
+                                             [ShapeType_ ==. BoolNode,
+                                              ShapeGraph ==. toSqlKey gId] []
+        sqlPaths    :: [Entity Path] <- selectList [PathGraph ==. toSqlKey gId] []
+        
+        let             
+            keyAsInt :: PersistEntity a => Entity a -> Integer
+            keyAsInt = fromIntegral . (\(PersistInt64 x) -> x) . head . keyToValues . entityKey
+            
+            texts          = map entityVal sqlTexts
+            rects          = zipWith (buildRect texts)
+                                     (map entityVal sqlRects)
+                                     (map keyAsInt sqlRects)
+            ellipses       = zipWith (buildEllipses texts)
+                                     (map entityVal sqlEllipses)
+                                     (map keyAsInt sqlEllipses)
+            paths          = zipWith (buildPath rects ellipses)
+                                     (map entityVal sqlPaths)
+                                     (map keyAsInt sqlPaths)
+            regions        = filter pathIsRegion paths
+            edges          = filter (not . pathIsRegion) paths
+            regionTexts    = filter (not .
+                                     intersectsWithShape (rects ++ ellipses))
+                                    texts
+                                    
+            result = createJSONResponse ["texts" .= (texts ++ regionTexts), 
+                                         "shapes" .= (rects ++ ellipses), 
+                                         "paths" .= (paths ++ regions ++ edges)]
+                                         
+        return result
 
 -- | Builds a list of all course codes in the database.
 allCourses :: IO Response

@@ -96,9 +96,11 @@ Distribution
 
 Graph json
     title String
+    width Double
+    height Double
     deriving Show
 
-Text
+Text json
     graph GraphId
     rId String
     pos Point
@@ -107,7 +109,7 @@ Text
     fill String
     deriving Show
 
-Shape
+Shape json
     graph GraphId
     id_ String
     pos Point
@@ -119,7 +121,7 @@ Shape
     tolerance Double
     type_ ShapeType
 
-Path
+Path json
     graph GraphId
     id_ String
     points [Point]

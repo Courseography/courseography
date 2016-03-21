@@ -29,14 +29,15 @@ import Text.XML.HaXml.Namespaces (printableName)
 import System.Directory
 import Database.Tables
 import Database.DataType
-import Svg.Database
+import Svg.Database (insertGraph, insertElements, deleteGraphs)
 import Svg.Generator
 import Database.Persist.Sqlite hiding (replace)
 import Config (graphPath)
-import Text.Read (readMaybe)
+import Text.Read (readMaybe, readEither)
 
 parsePrebuiltSvgs :: IO ()
 parsePrebuiltSvgs = do
+    deleteGraphs
     performParse "Computer Science" "csc2015.svg"
     performParse "Statistics" "sta2015.svg"
     performParse "Biochemistry" "bch2015.svg"
@@ -50,13 +51,20 @@ parsePrebuiltSvgs = do
     performParse "Spanish" "spa2015.svg"
     performParse "Portuguese" "prt2015.svg"
     performParse "Slavic"  "sla2015.svg"
+    performParse "East Asian Studies" "eas2015.svg"
+    performParse "English" "eng2015.svg"
+    performParse "History and Philosophy of Science" "hps2015.svg"
+    performParse "History" "his2015.svg"
+    performParse "Geography" "ggr2015.svg"
+    performParse "Aboriginal" "abs2015.svg"
 
 performParse :: String -- ^ The title of the graph.
              -> String -- ^ The filename of the file that will be parsed.
              -> IO ()
 performParse graphName inputFilename = do
     graphFile <- readFile (graphPath ++ inputFilename)
-    key <- insertGraph graphName
+    let (graphWidth, graphHeight) = parseSize graphFile
+    key <- insertGraph graphName graphWidth graphHeight
     let parsedGraph = parseGraph key graphFile
         PersistInt64 keyVal = toPersistValue key
     print "Graph Parsed"
@@ -93,6 +101,24 @@ parseGraph key graphFile =
         -- Raw SVG seems to have a rectangle the size of the whole image
         small shape = shapeWidth shape < 300
 
+-- | Parse the height and width dimensions from the SVG element, respectively,
+-- and return them as a tuple.
+parseSize :: String   -- ^ The file contents of the graph that will be parsed.
+          -> (Double, Double)
+parseSize graphFile =
+    let Document _ _ root _ = xmlParse "output.error" graphFile
+        svgElems = tag "svg" $ CElem root undefined
+        svgRoot = head svgElems
+        attrs = contentAttrs svgRoot
+        width = readAttr "width" attrs
+        height = readAttr "height" attrs
+    in
+        if null svgElems
+        then
+            error "No svg element detected"
+        else
+            (width, height)
+
 -- | The main parsing function. Parses an SVG element,
 -- and then recurses on its children.
 parseNode :: GraphId  -- ^ The Path's corresponding graph identifier.
@@ -107,7 +133,7 @@ parseNode key content =
              fill = styleVal "fill" styles'
              -- TODO: These 'tag "_"' conditions are mutually exclusive (I think).
              rects = map (parseRect key . contentAttrs) (tag "rect" content)
-             texts = concatMap (parseText key styles') (tag "text" content)
+             texts = concatMap (parseText key styles' []) (tag "text" content)
              paths = mapMaybe (parsePath key . contentAttrs) (tag "path" content)
              ellipses = map (parseEllipse key . contentAttrs) (tag "ellipse" content)
              concatThree (a1, b1, c1) (a2, b2, c2) =
@@ -180,20 +206,22 @@ parsePath key attrs =
 -- for nested tspan elements.
 parseText :: GraphId -- ^ The Text's corresponding graph identifier.
           -> [(String, String)]
+          -> [Attribute]  -- ^ Ancestor tspan attributes
           -> Content i
           -> [Text]
-parseText key style content =
+parseText key style parentAttrs content =
     if null (childrenBy (tag "tspan") content)
     then
         [Text key
-              (lookupAttr "id" (contentAttrs content))
-              (readAttr "x" (contentAttrs content),
-               readAttr "y" (contentAttrs content))
+              (lookupAttr "id" (contentAttrs content ++ parentAttrs))
+              (readAttr "x" (contentAttrs content ++ parentAttrs),
+               readAttr "y" (contentAttrs content ++ parentAttrs))
               (replace "&amp;" "&" (replace "&gt;" ">" $ tagTextContent content))
               align
               fill]
     else
-        concatMap (parseText key $ styles $ contentAttrs content)
+        concatMap (parseText key (styles $ contentAttrs content)
+                             (contentAttrs content ++ parentAttrs))
                   (childrenBy (tag "tspan") content)
     where
         newStyle = style ++ styles (contentAttrs content)
@@ -229,7 +257,10 @@ lookupAttr nameStr attrs =
 readAttr :: Read a => String    -- ^ The attribute's name.
                    -> [Attribute] -- ^ The element that contains the attribute.
                    -> a
-readAttr attr attrs = read $ lookupAttr attr attrs
+readAttr attr attrs =
+    case readMaybe $ lookupAttr attr attrs of
+        Just x -> x
+        Nothing -> error $ "reading " ++ attr ++ " from " ++ show attrs
 
 -- | Return a list of styles from the style attribute of an element.
 -- Every style has the form (name, value).
@@ -277,7 +308,15 @@ parsePathD d
                                coordList
       -- Converts a relative coordinate structure into an absolute one.
       absCoords = map convertToPoint coordList
-      convertToPoint z = (read (head z), read (last z))
+
+      convertToPoint z =
+        let
+            x = readMaybe (head z)
+            y = readMaybe (last z)
+        in
+            case (x, y) of
+                (Just m, Just n) -> (m, n)
+                _ -> error $ show z
 
 
 -- * Other helpers
