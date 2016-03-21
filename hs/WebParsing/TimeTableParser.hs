@@ -61,8 +61,8 @@ parseLinkText tags =
         -- relevantWords takes the unfiltered string containing dept codes and 
         -- makes a list of the words in that string and removes wordsToRemove
         -- from that list
-        deptCodesUnfiltered = map T.unpack $ map last deptNamesAndCodes 
-        relevantWords = map (filter (`notElem` wordsToRemove)) $ map words deptCodesUnfiltered
+        deptCodesUnfiltered = map (T.unpack . last) deptNamesAndCodes
+        relevantWords = map (filter (`notElem` wordsToRemove) . words) deptCodesUnfiltered
         -- deptCodesText filters the dept codes
         deptCodesText = map (map T.pack) $ map (filter (all isUpper)) relevantWords 
 
@@ -186,14 +186,14 @@ makeLecture :: CourseSlot -> Lecture
 makeLecture slot = Lecture {
     lectureCode = slotCode slot,
     lectureSession = slotSession slot,
-    lectureSection = (slotSection slot),
+    lectureSection = slotSection slot,
     lectureTimes = concatMap makeTimeSlots (T.split (== ' ') (slotTimeStr slot)),
     lectureCap = 0,
-    lectureInstructor = (slotInstructor slot),
+    lectureInstructor = slotInstructor slot,
     lectureEnrol = 0,
     lectureWait = 0,
     lectureExtra = 0,
-    lectureTimeStr = (slotTimeStr slot)
+    lectureTimeStr = slotTimeStr slot
     }
 
 -- | Converts a single courseSlot into a tutorial

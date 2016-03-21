@@ -17,12 +17,11 @@ notFoundResponse =
             H.title "Courseography - 404!"
             H.meta ! A.httpEquiv "Content-Type"
                    ! A.content "text/html;charset=utf-8"
-            sequence_  $ map toStylesheet [
+            mapM_ toStylesheet [
                 "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css",
                 "static/style/app.css"]
 
-        H.body $ do
-            notFoundContent
+        H.body notFoundContent
 
 notFoundContent :: H.Html
 notFoundContent =

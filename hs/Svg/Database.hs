@@ -8,7 +8,7 @@ here as well at some point in the future.
 -}
 
 module Svg.Database
-    (insertGraph, insertElements) where
+    (insertGraph, insertElements, deleteGraphs) where
 
 import Database.Persist.Sqlite
 import Database.Tables
@@ -16,11 +16,13 @@ import Config (databasePath)
 
 -- | Insert a new graph into the database, returning the key of the new graph.
 insertGraph :: String   -- ^ The title of the graph that is being inserted.
+            -> Double   -- ^ The width dimension of the graph
+            -> Double   -- ^ The height dimension of the graph
             -> IO GraphId -- ^ The unique identifier of the inserted graph.
-insertGraph graphName =
+insertGraph graphName graphWidth graphHeight =
     runSqlite databasePath $ do
         runMigration migrateAll
-        insert (Graph graphName)
+        insert (Graph graphName graphWidth graphHeight)
 
 -- | Insert graph components into the database.
 insertElements :: ([Path], [Shape], [Text]) -> IO ()
@@ -29,3 +31,11 @@ insertElements (paths, shapes, texts) =
         mapM_ insert_ shapes
         mapM_ insert_ paths
         mapM_ insert_ texts
+
+-- | Delete graphs from the database.
+deleteGraphs :: IO ()
+deleteGraphs = runSqlite databasePath $ do
+    deleteWhere ([] :: [Filter Graph])
+    deleteWhere ([] :: [Filter Text])
+    deleteWhere ([] :: [Filter Shape])
+    deleteWhere ([] :: [Filter Path])

@@ -92,7 +92,7 @@ getEvents systemTime (Just lect) =
                                                      (zip start end)
         courseInfo = getCourseInfo lect
         formatEvents (startDate, endDate) (start1, end1)
-            | (startDate == "" || endDate == "") = []
+            | startDate == "" || endDate == "" = []
             | otherwise =
                 ["BEGIN:VEVENT",
                  "DTSTAMP:" ++ systemTime,
@@ -187,11 +187,10 @@ startTimesByCourse dataInOrder _ = startTime dataInOrder
 
 -- | Obtains the start times for each course by day.
 startTime :: InfoTimeFieldsByDay -> StartTimesByDay
-startTime dataInOrder =
+startTime =
     map (\dataByDay -> map formatTimes
                            (head (timesOrdered dataByDay) :
                                    getStartConsecutives (timesOrdered dataByDay)))
-        dataInOrder
     where
         timesOrdered dataDay = sort $ map (!! 1) dataDay
 
@@ -214,11 +213,10 @@ endTimesByCourse dataInOrder _ = endTime dataInOrder
 
 -- | Obtains the end times for each course by day.
 endTime :: InfoTimeFieldsByDay -> EndTimesByDay
-endTime dataInOrder =
+endTime =
     map (\dataByDay -> map (formatTimes . (+ 0.5))
                            (getEndConsecutives $ timesOrdered dataByDay ++
                             [last $ timesOrdered dataByDay]))
-        dataInOrder
     where
         timesOrdered dataDay = sort $ map (!! 1) dataDay
 
@@ -262,9 +260,9 @@ formatMinutes decimal = if minutes >= 10 then show minutes else '0' : show minut
 -- | Obtains all the dates for each course depending on its session.
 getDatesByCourse :: InfoTimeFieldsByDay -> Session -> DatesByDay
 getDatesByCourse dataInOrder session
-    | session == "Y" = concat [map (getDatesByDay "F") dataInOrder ++
-                               map (getDatesByDay "S") dataInOrder]
-    | otherwise = concat [map (getDatesByDay session) dataInOrder]
+    | session == "Y" = map (getDatesByDay "F") dataInOrder ++
+                       map (getDatesByDay "S") dataInOrder
+    | otherwise = map (getDatesByDay session) dataInOrder
 
 -- | The string representation for a date in which an event
 -- occurs for the first time.
