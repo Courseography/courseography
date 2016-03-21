@@ -108,9 +108,11 @@ postScripts = do
                                           "/static/js/common/course_description.js",
                                           "/static/js/common/objects/course.js",
                                           "/static/js/common/objects/section.js",
-                                          "/static/js/common/utilities/util.js"])
+                                          "/static/js/common/utilities/util.js",
+                                          "/static/js/common/modal.js"])
     H.script ! A.src "/static/js/requirejs-config.js" $ ""
     H.script ! H.dataAttribute "main" "/static/js/post" ! A.src "/static/js/require.js" $ ""
+    H.script ! A.type_ "text/babel" ! A.src "/static/js/common/react_modal.js.jsx" $ ""
 
 searchScripts :: H.Html
 searchScripts =

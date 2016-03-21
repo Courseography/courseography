@@ -60,9 +60,16 @@ var CourseCode = React.createClass({
         return id.toUpperCase() + ": " + course.title;
     },
 
+    openModal: function(id) {
+        var newID = this.getIdName().substring(0, 6);
+        openModal(this.getTitle(newID), createModalDiv(newID));
+        openReactModal(newID);
+    },
+
     render: function() {
         var me = this;
         var classes = '';
+        var id = this.getIdName();
 
         if (this.state.selected) {
             classes += ' selected';
@@ -74,15 +81,9 @@ var CourseCode = React.createClass({
 
         return (
             <div id={this.getIdName()} className={classes}>
-                <p className='code' onClick={this.toggleFullInfo}>
+                <p className='code' onClick={this.openModal}>
                     {this.getCategoryName()}
                 </p>
-                <div id={this.props.courseIDs[0] + '_info'} className='more-info'>
-                    {this.props.courseIDs.map(function (course) {
-                        var title = me.getTitle(course);
-                        return <p className='full_name' key={title}>{title}</p>
-                    })}
-                </div>
             </div>
         );
     }
