@@ -70,7 +70,6 @@ graphScripts = do
          "/static/js/graph/sidebar/sidebar_events.js",
          "/static/js/graph/sidebar/focus_descriptions.js",
          "/static/js/common/export/export.js"])
-    H.script ! A.type_ "text/babel" ! A.src "/static/js/common/react_modal.js.jsx" $ ""
 
 timetableScripts :: H.Html
 timetableScripts = do
@@ -109,10 +108,10 @@ postScripts = do
                                           "/static/js/common/objects/course.js",
                                           "/static/js/common/objects/section.js",
                                           "/static/js/common/utilities/util.js",
-                                          "/static/js/common/modal.js"])
+                                          "/static/js/common/modal.js",
+                                          "/static/js/common/course_videos.js"])
     H.script ! A.src "/static/js/requirejs-config.js" $ ""
     H.script ! H.dataAttribute "main" "/static/js/post" ! A.src "/static/js/require.js" $ ""
-    H.script ! A.type_ "text/babel" ! A.src "/static/js/common/react_modal.js.jsx" $ ""
 
 searchScripts :: H.Html
 searchScripts =

@@ -1,3 +1,17 @@
+import {ModalContent} from 'es6!common/react_modal';
+
+function openReactModal(courseCode) {
+    'use strict';
+    var courseName = getCourseTitle(courseCode);
+    var formattedName = formatCourseName(courseCode);
+    var courseVideoUrls = getCourseVideoUrls(formattedName);
+
+    React.render(
+        <ModalContent course={formattedName[0]} />,
+        document.getElementById('modal-content-container')
+    );
+}
+
 var CourseCode = React.createClass({
     getInitialState: function() {
         return {
