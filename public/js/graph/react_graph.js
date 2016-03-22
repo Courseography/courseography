@@ -112,73 +112,6 @@ function renderReactGraph() {
     );
 }
 
-/**
- * Converts a NamedNodeMap of SVG attributes into a dictionary
- * of attribute name-value pairs.
- * @param {NamedNodeMap} svgAttributes
- */
-function getAttributes(svgAttributes) {
-    'use strict';
-
-    var attrs = {};
-    for (var i = 0; i < svgAttributes.length; i++) {
-        var item = svgAttributes[i];
-        // Will be hard-coding in className and textAnchor and markerEnd
-        var ignoredAttributes = ['class', 'text-anchor', 'marker-end'];
-        if (ignoredAttributes.indexOf(item.name) === -1) {
-            attrs[item.name] = item.value;
-        }
-    }
-    return attrs;
-}
-
-/**
- * Converts a style string to dictionary.
- * @param {String} styleString
- */
-function getStyles(styleString) {
-    'use strict';
-
-    //Have to check if it is null since null can't be split.
-    if (styleString === null || styleString === undefined) {
-        return {};
-    }
-
-    var styles = {};
-    styleString.split(';').forEach(function (key, value) {
-        var parts = key.split(':');
-        if (parts.length === 2) {
-            styles[parts[0]] = parts[1];
-        }
-    });
-    return styles;
-}
-
-function getNodes(mode) {
-    'use strict';
-
-    return $('#graph ' + mode).map(function (key, element) {
-        var children = Array.prototype.map.call(element.children,
-            function (child) {
-                var attrs = getAttributes(child.attributes);
-                return {
-                    'attributes': attrs,
-                    'style': getStyles(attrs['style']),
-                    //innerHTML is just for text within the <text>
-                    //there aren't anymore children since it was assumed only one level of children
-                    'innerHTML': child.innerHTML
-                };
-            });
-        var attrs = getAttributes(element.attributes);
-        return {
-            'id': element.id,
-            'attributes': attrs,
-            'style': getStyles(attrs['style']),
-            'children': children
-        };
-    }).get();
-}
-
 
 var Graph = React.createClass({
     getInitialState: function () {
@@ -222,35 +155,30 @@ var Graph = React.createClass({
             data: {'gid': graphId},
             success: function (data) {
                 setCookie('active-graph', graphId);
-                var labelsList = [];
                 var regionsList = [];
                 var nodesList = [];
                 var hybridsList = [];
                 var boolsList = [];
                 var edgesList = [];
 
-                //data[0] is ["texts", [JSON]]
-                data[0][1].forEach(function (entry) {
-                    if (entry['rId'].substring(0,5) === 'tspan') {
-                        labelsList.push(entry);
-                    }
+                // data[0] is ["texts", [JSON]]
+                var labelsList =  data[0][1].filter(function (entry) {
+                    return entry.rId.startsWith('tspan');
                 });
-                //data[1] is ["shapes", [JSON]]
+                // data[1] is ["shapes", [JSON]]
                 data[1][1].forEach(function (entry) {
-                    if (entry['type_'] === 'Node') {
+                    if (entry.type_ === 'Node') {
                         nodesList.push(entry);
-                    } else
-                    if (entry['type_'] === 'Hybrid') {
+                    } else if (entry.type_ === 'Hybrid') {
                         hybridsList.push(entry);
-                    } else
-                    if (entry['type_'] === 'BoolNode') {
+                    } else if (entry.type_ === 'BoolNode') {
                         boolsList.push(entry);
                     }
                 });
-                //data[2] is ["paths", [JSON]]
-                //data[2][1] are the JSON without "paths"
+                // data[2] is ["paths", [JSON]]
+                // data[2][1] are the JSON without "paths"
                 data[2][1].forEach(function (entry) {
-                    if (entry['isRegion']) {
+                    if (entry.isRegion) {
                         regionsList.push(entry);
                     } else {
                         edgesList.push(entry);
@@ -258,12 +186,14 @@ var Graph = React.createClass({
                 });
 
                 if (this.isMounted()) {
-                    this.setState({labelsJSON: labelsList,
-                                   regionsJSON: regionsList,
-                                   nodesJSON: nodesList,
-                                   hybridsJSON: hybridsList,
-                                   boolsJSON: boolsList,
-                                   edgesJSON: edgesList});
+                    this.setState({
+                        labelsJSON: labelsList,
+                        regionsJSON: regionsList,
+                        nodesJSON: nodesList,
+                        hybridsJSON: hybridsList,
+                        boolsJSON: boolsList,
+                        edgesJSON: edgesList
+                    });
                 }
             }.bind(this),
             error: function(xhr, status, err) {
@@ -303,43 +233,6 @@ var Graph = React.createClass({
         }
     },
 
-
-    nodeClick: function (event) {
-        var courseID = event.currentTarget.id;
-        var currentNode = this.refs['nodes'].refs[courseID];
-        var wasSelected = currentNode.state.selected;
-        currentNode.toggleSelection(this);
-        if (wasSelected) {
-            // TODO: Differentiate half- and full-year courses
-            this.incrementFCECount(-0.5);
-        } else {
-            this.incrementFCECount(0.5);
-        }
-    },
-
-    nodeMouseEnter: function (event) {
-        var courseID = event.currentTarget.id;
-        var currentNode = this.refs['nodes'].refs[courseID];
-        currentNode.focusPrereqs(this);
-
-        // Old hover modal code
-        if ($('.modal').length === 0) {
-            $('.tooltip-group').remove();
-            displayTooltip(courseID);
-        }
-    },
-
-    nodeMouseLeave: function (event) {
-        var courseID = event.currentTarget.id;
-        var currentNode = this.refs['nodes'].refs[courseID];
-        currentNode.unfocusPrereqs(this);
-
-        // Old hover modal code
-        if ($('.modal').length === 0) {
-            removeToolTip(this);
-        }
-    },
-
     setFCECount: function (credits) {
         this.setState({fceCount: credits}, function () {
             $('#fcecount').text('FCE Count: ' + this.state.fceCount);
@@ -352,6 +245,42 @@ var Graph = React.createClass({
         });
     },
 
+    nodeClick: function (event) {
+        var courseID = event.currentTarget.id;
+        var currentNode = this.refs.nodes.refs[courseID];
+        var wasSelected = currentNode.state.selected;
+        currentNode.toggleSelection(this);
+        if (wasSelected) {
+            // TODO: Differentiate half- and full-year courses
+            this.incrementFCECount(-0.5);
+        } else {
+            this.incrementFCECount(0.5);
+        }
+    },
+
+    nodeMouseEnter: function (event) {
+        var courseID = event.currentTarget.id;
+        var currentNode = this.refs.nodes.refs[courseID];
+        currentNode.focusPrereqs(this);
+
+        // Old hover modal code
+        if ($('.modal').length === 0) {
+            $('.tooltip-group').remove();
+            displayTooltip(courseID);
+        }
+    },
+
+    nodeMouseLeave: function (event) {
+        var courseID = event.currentTarget.id;
+        var currentNode = this.refs.nodes.refs[courseID];
+        currentNode.unfocusPrereqs(this);
+
+        // Old hover modal code
+        if ($('.modal').length === 0) {
+            removeTooltip(this);
+        }
+    },
+
     // Reset graph
     reset: function () {
         this.setFCECount(0);
@@ -360,98 +289,47 @@ var Graph = React.createClass({
         this.refs.edges.reset();
     },
 
+    renderArrowHead: function () {
+        var polylineAttrs = {points: '0,1 10,5 0,9', fill: 'black'};
+        return (
+            <defs>
+                <marker id='arrowHead' ref='marker'
+                        viewBox='0 0 10 10'>
+                    <polyline {... polylineAttrs}/>
+                </marker>
+            </defs>
+        );
+    },
+
     render: function () {
-        //not all of these properties are supported in React
-        var svgAttrs = {'width': this.props.width, 'height': this.props.height};
-        var markerAttrs = {'id': 'arrowHead'};
-        var polylineAttrs = {'points': '0,1 10,5 0,9', 'fill': 'black'};
+        // not all of these properties are supported in React
+        var svgAttrs = {width: this.props.width, height: this.props.height};
+
         return (
             <svg {... svgAttrs} ref='svg' version='1.1'
                  className={this.state.highlightedNodes.length > 0 ?
                             'highlight-nodes' : ''}>
-                <defs>
-                    <marker {... markerAttrs} ref='marker'
-                            viewBox='0 0 10 10'>
-                        <polyline {... polylineAttrs}/>
-                    </marker>
-                </defs>
-                <RegionGroup ref='regions' regionsJSON={this.state.regionsJSON}/>
-                <NodeGroup ref='nodes'
-                            onClick={this.nodeClick}
-                            nodeMouseEnter={this.nodeMouseEnter}
-                            nodeMouseLeave={this.nodeMouseLeave}
-                            svg={this}
-                            nodesJSON={this.state.nodesJSON}
-                            hybridsJSON={this.state.hybridsJSON}
-                            edgesJSON={this.state.edgesJSON}
-                            highlightedNodes={this.state.highlightedNodes}/>
-                <BoolGroup ref='bools' boolsJSON={this.state.boolsJSON} edgesJSON={this.state.edgesJSON} svg={this}/>
+                {this.renderArrowHead()}
+                <RegionGroup
+                    regionsJSON={this.state.regionsJSON}
+                    labelsJSON={this.state.labelsJSON}/>
+                <NodeGroup
+                    ref='nodes'
+                    nodeClick={this.nodeClick}
+                    nodeMouseEnter={this.nodeMouseEnter}
+                    nodeMouseLeave={this.nodeMouseLeave}
+                    svg={this}
+                    nodesJSON={this.state.nodesJSON}
+                    hybridsJSON={this.state.hybridsJSON}
+                    edgesJSON={this.state.edgesJSON}
+                    highlightedNodes={this.state.highlightedNodes}/>
+                <BoolGroup
+                    ref='bools'
+                    boolsJSON={this.state.boolsJSON}
+                    edgesJSON={this.state.edgesJSON}
+                    svg={this}/>
                 <EdgeGroup svg={this} ref='edges' edgesJSON={this.state.edgesJSON}/>
-                <RegionLabelGroup ref='regionLabels' labelsJSON={this.state.labelsJSON}/>
             </svg>
-        );
-    }
-});
-
-
-var RegionLabelGroup = React.createClass({
-    render: function () {
-        return (
-            <g id='region-labels'>
-                {this.props.labelsJSON.map(function (entry, value) {
-                    var textAttrs = {};
-                    textAttrs['x'] = entry.pos[0];
-                    textAttrs['y'] = entry.pos[1];
-
-                    var textStyle = {
-                        fill : entry['fill']
-                    }
-
-                    return <text
-                            {... textAttrs}
-                            key={value}
-                            style={textStyle}
-                            textAnchor={entry['text-anchor']}>
-                                {entry['text']}
-                           </text>
-                })}
-            </g>
-        );
-    }
-});
-
-var RegionGroup = React.createClass({
-    getInitialState: function () {
-        return {
-            regionsList: []
-        };
-    },
-
-    componentDidMount: function () {
-        this.parseSVG();
-    },
-
-    parseSVG: function () {
-        this.setState({regionsList: getNodes('.region')});
-    },
-
-    render: function () {
-        return (
-            <g id='regions'>
-                {this.props.regionsJSON.map(function (entry, value) {
-                    var pathAttrs = {};
-                    pathAttrs['d'] = 'M';
-
-                    entry.points.forEach(function(x){
-                        pathAttrs['d'] += x[0] + ',' + x[1] + ' '});
-
-                    var pathStyle = {
-                        fill : entry.fill
-                    }
-                    return <path {... pathAttrs} key={value} className='region' style={pathStyle}>
-            </path>
-                })}
-            </g>
         );
     }
 });
@@ -460,45 +338,67 @@ var RegionGroup = React.createClass({
 // This now uses the new syntax for a stateless React component
 // (component with only a render method).
 // It also uses ES2015 "fat arrow" syntax for function definition.
-var Region = ({attributes, styles}) => {
-    return (
-        <path {... attributes}
-              className='region'
-              style={styles} />
-    );
-};
+var RegionGroup = ({regionsJSON, labelsJSON}) => (
+    <g id='regions'>
+        {regionsJSON.map(function (entry, value) {
+            var pathAttrs = {d: 'M'};
+            entry.points.forEach(function(x) {
+                pathAttrs['d'] += x[0] + ',' + x[1] + ' ';
+            });
+
+            var pathStyle = {fill : entry.fill}
+            return (
+                <path {... pathAttrs} key={value} className='region' style={pathStyle}>
+                </path>
+            );
+        })}
+        {labelsJSON.map(function (entry, value) {
+            var textAttrs = {
+                x: entry.pos[0],
+                y: entry.pos[1]
+            };
+
+            var textStyle = {fill : entry.fill}
+
+            return (
+                <text {... textAttrs}
+                      key={value}
+                      style={textStyle}
+                      className='region-label'
+                      textAnchor={entry['text-anchor']}>
+                    {entry['text']}
+               </text>
+            );
+        })}
+    </g>
+);
 
 
 var NodeGroup = React.createClass({
-    getInitialState: function () {
-        return {
-            nodesList: [],
-            hybridsList: []
-        };
-    },
-
-    componentDidMount: function () {
-        this.parseSVG();
-    },
-
-    parseSVG: function () {
-        this.setState({nodesList: getNodes('.node'), hybridsList: getNodes('.hybrid')});
-    },
-
     reset: function () {
-        this.props.nodesJSON.forEach((nodeJSON) => {
+        this.props.nodesJSON.forEach(nodeJSON => {
             var node = this.refs[nodeJSON.id_];
             var state = node.props.parents.length === 0 ? 'takeable' : 'inactive';
             node.setState({status: state, selected: false});
             setCookie(node.props.JSON.id_, state);
         });
 
-        this.props.hybridsJSON.forEach((hybridJSON) => {
+        this.props.hybridsJSON.forEach(hybridJSON => {
             var hybrid = this.refs[hybridJSON.id_];
             var state = hybrid.props.parents.length === 0 ? 'takeable' : 'inactive';
             hybrid.setState({status: state, selected: false});
             setCookie(hybrid.props.JSON.id_, state);
-        })
+        });
+    },
+
+    // Helper for hybrid computation
+    findRelationship: function (course) {
+        var hybridRelationships = [];
+        var nodes = this.props.nodesJSON;
+        var node = nodes.find(n =>
+            n.text.some(textTag => textTag.text.includes(course)));
+        hybridRelationships.push([node.id_, course]);
+        return node;
     },
 
     render: function () {
@@ -507,11 +407,11 @@ var NodeGroup = React.createClass({
         var nodes = this.props.nodesJSON;
         var hybridRelationships = [];
         return (
-            <g id='nodes' stroke='black'>
-                {this.props.hybridsJSON.map(function (entry, value) {
+            <g id='nodes'>
+                {this.props.hybridsJSON.map(entry => {
                     var childs = [];
                     var outEdges = [];
-                    this.props.edgesJSON.map(function (element, key) {
+                    this.props.edgesJSON.map(element => {
                         // Note: hybrids shouldn't have any in edges
                         if (entry.id_ === element.source) {
                             childs.push(element.target);
@@ -520,51 +420,21 @@ var NodeGroup = React.createClass({
                     });
                     // parse prereqs based on text
                     var hybridText = "";
-                    entry.text.forEach(function (textTag, i) {
-                        hybridText += textTag.text;
-                    });
+                    entry.text.forEach(textTag => hybridText += textTag.text);
                     var prereqs = parseAnd(hybridText)[0];
                     var parents = [];
-                    prereqs.forEach(function (course, i) {
-                        if (typeof(course) === 'string') {
-                            var prereqNode = null;
-                            for (var i = 0; i < nodes.length; i++) {
-                                for (var j = 0; j < nodes[i].text.length; j++) {
-                                    if (nodes[i].text[j].text.includes(course)) {
-                                        prereqNode = nodes[i];
-                                        break;
-                                    }
-                                }
-                                if (prereqNode !== null) {
-                                    break;
-                                }
-                            }
-                            if (prereqNode !== null) {
-                                parents.push(nodes[i].id_);
-                                hybridRelationships.push([nodes[i].id_, entry.id_]);
-                            }
-                        } else if (typeof(course) === 'object') {
+                    prereqs.forEach(course => {
+                        if (typeof course === 'string') {
+                            var prereqNode = this.findRelationship(course);
+                            parents.push(prereqNode.id_);
+                            hybridRelationships.push([prereqNode.id_, entry.id_]);
+                        } else if (typeof course === 'object') {
                             var orPrereq = [];
-                            for (var k = 0; k < course.length; k++) {
-                                var prereqNode = null;
-                                var i;
-                                for (i = 0; i < nodes.length; i++) {
-                                    for (var j = 0; j < nodes[i].text.length; j++) {
-                                        if (nodes[i].text[j].text.includes(course[k])) {
-                                            prereqNode = nodes[i];
-                                            break;
-                                        }
-                                    }
-                                    if (prereqNode !== null) {
-                                        break;
-                                    }
-                                }
-                                if (prereqNode !== null) {
-                                    orPrereq.push(prereqNode.id_);
-                                    hybridRelationships.push([prereqNode.id_, entry.id_]);
-                                }
-
-                            }
+                            course.forEach(c => {
+                                var prereqNode = this.findRelationship(c);
+                                orPrereq.push(prereqNode.id_);
+                                hybridRelationships.push([prereqNode.id_, entry.id_]);
+                            });
                             if (orPrereq.length > 0) {
                                 parents.push(orPrereq);
                             }
@@ -605,18 +475,17 @@ var NodeGroup = React.createClass({
                     });
                     return <Node
                             JSON={entry}
-                            className={'node'}
+                            className='node'
                             key={entry.id_}
-                            hybrid={false}
                             ref={entry.id_}
+                            hybrid={false}
                             parents={parents}
                             childs={childs}
                             inEdges={inEdges}
                             outEdges={outEdges}
-                            {... this.props}
                             svg={svg}
-                            logicalType={'AND'}
                             highlighted={highlighted}
+                            onClick={this.props.nodeClick}
                             onMouseEnter={this.props.nodeMouseEnter}
                             onMouseLeave={this.props.nodeMouseLeave} />
                 }, this)}
@@ -646,9 +515,10 @@ var Node = React.createClass({
         }
     },
 
-    arePrereqsSatisfied: function (svg) {
+    arePrereqsSatisfied: function () {
+        var svg = this.props.svg;
         function isAllTrue(element) {
-            if (typeof(element) === 'string') {
+            if (typeof element === 'string') {
                 return (svg.refs['nodes'].refs[element] ?
                         svg.refs['nodes'].refs[element].isSelected() :
                         svg.refs['bools'].refs[element].isSelected());
@@ -657,16 +527,12 @@ var Node = React.createClass({
             }
         }
 
-        if (this.props.logicalType === 'AND') {
-            return this.props.parents.every(isAllTrue);
-        } else if (this.props.logicalType === 'OR') {
-            return this.props.parents.some(isAllTrue);
-        }
+        return this.props.parents.every(isAllTrue);
     },
 
-    updateNode: function (svg, recursive) {
+    updateNode: function (recursive) {
         var newState;
-        if (this.arePrereqsSatisfied(svg)) {
+        if (this.arePrereqsSatisfied()) {
             if (this.isSelected() || this.props.hybrid) {
                 newState = 'active';
             } else {
@@ -692,17 +558,18 @@ var Node = React.createClass({
         }
 
         if (recursive === undefined || recursive) {
+            var svg = this.props.svg;
             this.setState({status: newState}, function () {
                 setCookie(nodeId, newState);
                 this.props.childs.forEach(function (node) {
                     var currentNode = svg.refs['nodes'].refs[node] ||
                                       svg.refs['bools'].refs[node];
-                    currentNode.updateNode(svg);
+                    currentNode.updateNode();
                 });
                 var allEdges = this.props.outEdges.concat(this.props.inEdges);
                 allEdges.forEach(function (edge) {
                     var currentEdge = svg.refs['edges'].refs[edge];
-                    currentEdge.updateEdge(svg);
+                    currentEdge.updateStatus();
                 }.bind(this));
             });
         } else {
@@ -711,15 +578,16 @@ var Node = React.createClass({
         }
     },
 
-    toggleSelection: function (svg) {
+    toggleSelection: function () {
         this.setState({selected: !this.state.selected}, function () {
-            this.updateNode(svg);
+            this.updateNode();
         })
     },
 
-    focusPrereqs: function (svg) {
-        // Check if there are any missing prerequisites.
+    focusPrereqs: function () {
+        var svg = this.props.svg;
         var id = this.props.JSON.id_;
+        // Check if there are any missing prerequisites.
         if (['inactive', 'overridden', 'takeable'].indexOf(this.state.status) >= 0) {
             this.setState({status: 'missing'}, function () {
                 this.props.inEdges.forEach(function (edge) {
@@ -732,25 +600,42 @@ var Node = React.createClass({
                 });
                 var isHybrid = this.props.hybrid;
                 this.props.parents.forEach(function (node) {
-                    var currentNode = svg.refs['nodes'].refs[node] ||
-                                      svg.refs['bools'].refs[node];
-                    currentNode.focusPrereqs(svg);
+                    if (typeof node === 'string') {
+                        var currentNode = svg.refs['nodes'].refs[node] ||
+                                          svg.refs['bools'].refs[node];
+                        currentNode.focusPrereqs();
+                    } else {
+                        node.forEach(n => {
+                            var currentNode = svg.refs['nodes'].refs[n] ||
+                                              svg.refs['bools'].refs[n];
+                            currentNode.focusPrereqs();
+                        });
+                    }
                 });
             });
         }
     },
 
-    unfocusPrereqs: function (svg) {
-        this.updateNode(svg, false);
+    unfocusPrereqs: function () {
+        var svg = this.props.svg;
+        this.updateNode(false);
         this.props.parents.forEach(function (node) {
-            var currentNode = svg.refs['nodes'].refs[node] ||
-                              svg.refs['bools'].refs[node];
-            currentNode.unfocusPrereqs(svg);
+            if (typeof node === 'string') {
+                var currentNode = svg.refs['nodes'].refs[node] ||
+                                  svg.refs['bools'].refs[node];
+                currentNode.unfocusPrereqs();
+            } else {
+                node.forEach(n => {
+                    var currentNode = svg.refs['nodes'].refs[n] ||
+                                      svg.refs['bools'].refs[n];
+                    currentNode.unfocusPrereqs();
+                });
+            }
         });
         this.props.inEdges.forEach(function (edge) {
             var currentEdge = svg.refs['edges'].refs[edge];
             if (currentEdge.state.status === 'missing') {
-                currentEdge.updateEdge(svg);
+                currentEdge.updateStatus();
             }
         });
     },
@@ -761,33 +646,31 @@ var Node = React.createClass({
             var attrs = this.props.JSON;
             var width = parseFloat(attrs.width) / 2;
             var height = parseFloat(attrs.height) / 2;
-            var cx = parseFloat(attrs.pos[0]) + width;
-            var cy = parseFloat(attrs.pos[1]) + height;
-            var rx = width + 9;
-            var ry = height + 8.5;
             var ellipse = (
                 <ellipse
                     className='spotlight'
-                    cx={cx}
-                    cy={cy}
-                    rx={rx}
-                    ry={ry} />
+                    cx={parseFloat(attrs.pos[0]) + width}
+                    cy={parseFloat(attrs.pos[1]) + height}
+                    rx={width + 9}
+                    ry={height + 8.5} />
                 );
         } else {
             var ellipse = null;
         }
 
-        var gAttrs = {};
-        gAttrs['text-rendering'] = 'geometricPrecision';
-        gAttrs['shape-rendering'] = 'geometricPrecision';
+        var gAttrs = {
+            'text-rendering': 'geometricPrecision',
+            'shape-rendering': 'geometricPrecision'
+        };
 
-        var rectAttrs = {};
-        rectAttrs['height'] = this.props.JSON.height;
-        rectAttrs['width'] = this.props.JSON.width;
-        rectAttrs['rx'] = '4';
-        rectAttrs['ry'] = '4';
-        rectAttrs['x'] = this.props.JSON.pos[0];
-        rectAttrs['y'] = this.props.JSON.pos[1];
+        var rectAttrs = {
+            height: this.props.JSON.height,
+            width: this.props.JSON.width,
+            rx: '4',
+            ry: '4',
+            x: this.props.JSON.pos[0],
+            y: this.props.JSON.pos[1]
+        };
 
         var rectStyle = {
             fill : this.props.JSON.fill
@@ -796,17 +679,18 @@ var Node = React.createClass({
         var textXOffset = this.props.JSON.pos[0] + this.props.JSON.width / 2;
 
         return (
-            <g {... this.props}{... gAttrs} id={this.props.JSON.id_}
+            <g {... this.props} {... gAttrs}
+               id={this.props.JSON.id_}
                className={newClassName} >
                 {ellipse}
-                <rect {... rectAttrs} style={rectStyle} />
-                {this.props.JSON.text.map(function (textTag, value) {
-                    var textAttrs = {};
-                    textAttrs['x'] = textXOffset;
-                    textAttrs['y'] = textTag.pos[1];
+                <rect {... rectAttrs} style={rectStyle}/>
+                {this.props.JSON.text.map(function (textTag, i) {
+                    var textAttrs = {
+                        x: textXOffset,
+                        y: textTag.pos[1]
+                    };
                     return (
-                        <text {... textAttrs}
-                            key={textTag.rId}>
+                        <text {... textAttrs} key={i}>
                             {textTag.text}
                         </text>);
                 })}
@@ -817,21 +701,10 @@ var Node = React.createClass({
 
 
 var BoolGroup = React.createClass({
-    getInitialState: function () {
-        return {
-            boolsList: []
-        };
-    },
-
     componentDidMount: function () {
-        this.parseSVG();
         for (var ref in this.refs) {
             this.refs[ref].updateNode(this.props.svg);
         }
-    },
-
-    parseSVG: function () {
-        this.setState({boolsList: getNodes('.bool')});
     },
 
     reset: function () {
@@ -841,38 +714,39 @@ var BoolGroup = React.createClass({
         });
     },
 
+    // Generate data for a Bool node
+    generateBool: function (boolJSON) {
+        var parents = [];
+        var childs = [];
+        var outEdges = [];
+        var inEdges = [];
+        this.props.edgesJSON.map(function (edge) {
+            if (boolJSON.id_ === edge.target) {
+                parents.push(edge.source);
+                inEdges.push(edge.id_);
+            } else if (boolJSON.id_ === edge.source) {
+                childs.push(edge.target);
+                outEdges.push(edge.id_);
+            }
+        });
+
+        return <Bool
+                JSON={boolJSON}
+                className='bool'
+                key={boolJSON.id_}
+                ref={boolJSON.id_}
+                parents={parents}
+                childs={childs}
+                inEdges={inEdges}
+                outEdges={outEdges}
+                logicalType={boolJSON.text[0].text}
+                svg={this.props.svg}/>
+    },
+
     render: function () {
-        var svg = this.props.svg;
         return (
             <g id='bools'>
-                {this.props.boolsJSON.map(function (entry, value) {
-                    var parents = [];
-                    var childs = [];
-                    var outEdges = [];
-                    var inEdges = [];
-                    this.props.edgesJSON.map(function (element, key) {
-                        if (entry.id_ === element.target) {
-                            parents.push(element.source);
-                            inEdges.push(element.id_);
-                        }
-                        if (entry.id_ === element.source) {
-                            childs.push(element.target);
-                            outEdges.push(element.id_);
-                        }
-                    });
-                    return <Bool
-                            JSON={entry}
-                            className='bool'
-                            key={entry.id_}
-                            ref={entry.id_}
-                            parents={parents}
-                            childs={childs}
-                            inEdges={inEdges}
-                            outEdges={outEdges}
-                            hybrid={true}
-                            logicalType={entry.text[0].text}
-                            svg={svg} />
-                }, this)}
+                {this.props.boolsJSON.map(this.generateBool)}
             </g>
         );
     }
@@ -888,7 +762,8 @@ var Bool = React.createClass({
         return this.state.status == 'active';
     },
 
-    arePrereqsSatisfied: function (svg) {
+    arePrereqsSatisfied: function () {
+        var svg = this.props.svg;
         function isAllTrue(element) {
             return (
                 svg.refs['nodes'].refs[element] ?
@@ -903,13 +778,9 @@ var Bool = React.createClass({
         }
     },
 
-    updateNode: function (svg) {
-        var newState;
-        if (this.arePrereqsSatisfied(svg)) {
-            newState = 'active';
-        } else {
-            newState = 'inactive';
-        }
+    updateNode: function () {
+        var svg = this.props.svg;
+        var newState = this.arePrereqsSatisfied() ? 'active' : 'inactive';
 
         var boolId = this.props.JSON.id_;
         this.setState({status: newState}, function () {
@@ -922,19 +793,20 @@ var Bool = React.createClass({
             var allEdges = this.props.outEdges.concat(this.props.inEdges);
             allEdges.forEach(function (edge) {
                 var currentEdge = svg.refs['edges'].refs[edge];
-                currentEdge.updateEdge(svg);
+                currentEdge.updateStatus();
             });
         });
     },
 
-    focusPrereqs: function (svg) {
+    focusPrereqs: function () {
+        var svg = this.props.svg;
         // Check if there are any missing prerequisites.
         if (this.state.status !== 'active') {
             this.setState({status: 'missing'}, function () {
                 this.props.inEdges.forEach(function (edge) {
                     var currentEdge = svg.refs['edges'].refs[edge];
                     var sourceNode = svg.refs['nodes'].refs[currentEdge.props.source] ||
-                                     svg.refs['bools'].refs[currentEdge.props.source];
+                                      svg.refs['bools'].refs[currentEdge.props.source];
                     if (!sourceNode.isSelected()) {
                         currentEdge.setState({status: 'missing'});
                     }
@@ -942,13 +814,14 @@ var Bool = React.createClass({
                 this.props.parents.forEach(function (node) {
                     var currentNode = svg.refs['nodes'].refs[node] ||
                                       svg.refs['bools'].refs[node];
-                    currentNode.focusPrereqs(svg);
+                    currentNode.focusPrereqs();
                 });
             });
         }
     },
 
-    unfocusPrereqs: function (svg) {
+    unfocusPrereqs: function () {
+        var svg = this.props.svg;
         this.updateNode(svg);
         this.props.parents.forEach(function (node, i) {
             var currentNode = svg.refs['nodes'].refs[node] ||
@@ -958,24 +831,23 @@ var Bool = React.createClass({
     },
 
     render: function () {
-        var ellipseAttrs = {};
-        ellipseAttrs['cx'] = this.props.JSON.pos[0];
-        ellipseAttrs['cy'] = this.props.JSON.pos[1];
-        ellipseAttrs['rx'] = '9.8800001';
-        ellipseAttrs['ry'] = '7.3684001';
+        var ellipseAttrs = {
+            cx: this.props.JSON.pos[0],
+            cy: this.props.JSON.pos[1],
+            rx: '9.8800001',
+            ry: '7.3684001'
+        };
         return (
             <g {... this.props.JSON}
                className={this.props.className + ' ' + this.state.status} >
                 <ellipse {... ellipseAttrs}/>
-                {this.props.JSON.text.map(function (textTag, value) {
-                    var textAttrs = {};
-                    textAttrs['x'] = ellipseAttrs['cx'];
-                    textAttrs['y'] = textTag.pos[1];
+                {this.props.JSON.text.map(function (textTag, i) {
+                    var textAttrs = {
+                        x: ellipseAttrs.cx,
+                        y: textTag.pos[1]
+                    };
                     return (
-                        <text {... textAttrs}
-                              key={value}
-                              textAnchor='middle'
-                              stroke='none'>
+                        <text {... textAttrs} key={i}>
                             {this.props.logicalType}
                         </text>);
                 }.bind(this))}
@@ -986,44 +858,33 @@ var Bool = React.createClass({
 
 
 var EdgeGroup = React.createClass({
-    getInitialState: function () {
-        return {
-            edgesList: []
-        };
-    },
-
     componentDidMount: function () {
-        this.parseSVG();
         for (var ref in this.refs) {
-            this.refs[ref].updateEdge(this.props.svg);
+            this.refs[ref].updateStatus();
         }
-    },
-
-    parseSVG: function () {
-        this.setState({edgesList: getNodes('.path')});
     },
 
     reset: function () {
         this.props.edgesJSON.forEach((edgeJSON) => {
-            var edge = this.refs[edgeJSON.id_];
-            edge.setState({status: 'inactive'});
+            this.refs[edgeJSON.id_].setState({status: 'inactive'});
         });
     },
 
+    // Generate data for an Edge component
+    generateEdge: function (edgeJSON) {
+        return <Edge className='path'
+                     key={edgeJSON.id_}
+                     ref={edgeJSON.id_}
+                     source={edgeJSON.source}
+                     target={edgeJSON.target}
+                     points={edgeJSON.points}
+                     svg={this.props.svg} />;
+    },
+
     render: function () {
-        var svg = this.props.svg;
         return (
-            <g id='edges' stroke='black'>
-                {this.props.edgesJSON.map(function (entry, value) {
-                    return <Edge
-                            className='path'
-                            key={entry.id_}
-                            ref={entry.id_}
-                            source={entry.source}
-                            target={entry.target}
-                            JSON={entry}
-                            svg={svg}/>
-                })}
+            <g id='edges'>
+                {this.props.edgesJSON.map(this.generateEdge)}
             </g>
         );
     }
@@ -1035,14 +896,14 @@ var Edge = React.createClass({
         return {status: 'inactive'};
     },
 
-    updateEdge: function (svg) {
-        var sourceNode = svg.refs['nodes'].refs[this.props.source] ||
-                         svg.refs['bools'].refs[this.props.source];
-        var targetNode = svg.refs['nodes'].refs[this.props.target] ||
-                         svg.refs['bools'].refs[this.props.target];
-        if (!sourceNode.isSelected()) {
+    updateStatus: function () {
+        var source = this.props.svg.refs.nodes.refs[this.props.source] ||
+                     this.props.svg.refs.bools.refs[this.props.source];
+        var target = this.props.svg.refs.nodes.refs[this.props.target] ||
+                     this.props.svg.refs.bools.refs[this.props.target];
+        if (!source.isSelected()) {
             this.setState({status: 'inactive'});
-        } else if (!targetNode.isSelected()) {
+        } else if (!target.isSelected()) {
             this.setState({status: 'takeable'});
         } else {
             this.setState({status: 'active'});
@@ -1050,10 +911,10 @@ var Edge = React.createClass({
     },
 
     render: function () {
-        var pathAttrs = {};
-        pathAttrs['d'] = 'M';
-        this.props.JSON.points.forEach(function(x){
-            pathAttrs['d'] += x[0] + ',' + x[1] + ' '});
+        var pathAttrs = {d: 'M'};
+        this.props.points.forEach(function(p) {
+            pathAttrs.d += p[0] + ',' + p[1] + ' ';
+        });
 
         return (
             <path {... pathAttrs}

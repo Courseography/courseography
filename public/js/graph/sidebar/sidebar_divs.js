@@ -3,8 +3,16 @@ var toggled = false;
 $(document).ready (function () {
     'use strict';
 
-    getGraphsInDatabase();
-    createGraphButtons();
+    $.ajax({
+        url: 'graphs',
+        dataType: 'json',
+        success: function (data) {
+            createGraphButtons(data);
+        },
+        error: function () {
+            throw 'No graphs in database';
+        }
+    });
 });
 
 
@@ -86,3 +94,33 @@ function toggleSidebar(location) {
     }
 }
 
+
+/**
+ * Dynamically creates buttons for each graph in the sidebar.
+ */
+function createGraphButtons(graphs) {
+    'use strict';
+
+    for (var i = 0; i < graphs.length; i++) {
+        var graphId = graphs[i].id;
+        var graphTitle = graphs[i].title;
+        var graphButton = '<div id = "graph-' + graphId +'" class = "graph-button">';
+        $('#graphs').append(graphButton);
+        $('#graph-' + graphId).html(graphTitle);
+        $('#graph-' + graphId).data('id', graphs[i].id);
+    }
+}
+
+
+/**
+ * Enables the Focuses nav in the sidebar if the CS graph is selected.
+ * @param:{string} id ID of the graph we just selected
+**/
+function changeFocusEnable(id) {
+    var graph = $('#graph-' + id)[0];
+    if (graph !== undefined && graph.innerHTML === 'Computer Science') {
+        $("#focuses-nav").removeClass('disabled');
+    } else {
+        $("#focuses-nav").addClass('disabled');
+    }
+}

@@ -180,29 +180,21 @@ nodeCSS = "g" ? do
 pathCSS :: Css
 pathCSS = "path" ? do
     fill "none"
-    "data-active" @= "takeable" & do
-        strokeDashed
-    "data-active" @= "inactive" & do
-        faded
-        strokeDashed
-    "data-active" @= "active" & do
-        opacity 1
-        "stroke-width" -: "2px"
-    "data-active" @= "missing" & do
-        strokeRed
-        strokeDashed
     "data-active" @= "drawn" & do
         faded
         wideStroke
     -- For the React graph
     ".takeable" & do
         strokeDashed
+        stroke "black"
     ".inactive" & do
         faded
         strokeDashed
+        stroke "black"
     ".active" & do
         opacity 1
         "stroke-width" -: "2px"
+        stroke "black"
     ".missing" & do
         strokeRed
         strokeDashed
@@ -426,7 +418,7 @@ titleCSS = "#svgTitle" ? do
  - Generates CSS for focus regions in the graph. -}
 regionCSS :: Css
 regionCSS = do
-    "#region-labels > text" ? do
+    ".region-label" ? do
         fontSize (pt regionFontSize)
     ".region" ? do
         "fill-opacity" -: "0.25"

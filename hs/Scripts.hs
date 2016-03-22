@@ -57,7 +57,6 @@ graphScripts = do
          "/static/js/common/image_conversion.js",
          "/static/js/common/graph_image.js",
          "/static/js/graph/sidebar/sidebar_divs.js",
-         "/static/js/graph/sidebar/sidebar_events.js",
          "/static/js/graph/sidebar/focus_descriptions.js",
          "/static/js/common/export/export.js"])
     H.script ! A.type_ "text/babel" ! A.src "/static/js/common/react_modal.js.jsx" $ ""

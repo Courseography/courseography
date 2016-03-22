@@ -148,7 +148,7 @@ function clearAllTimeouts() {
 /**
  * Set timeout to remove a tooltip.
  */
-function removeToolTip(elem) {
+function removeTooltip(elem) {
     var timeout = setTimeout(function () {
         $('.tooltip-group').hide('slow', function () { $(elem).remove();});
     }, 100);
