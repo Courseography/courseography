@@ -10,7 +10,7 @@ import           Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 import Util.Blaze
-import Config (enableFb)
+import Config (enableFb, enableCdn)
 
 -- | Scripts that are loaded on every page.
 globalScripts :: [String]
@@ -26,17 +26,20 @@ facebookScripts = [
     ]
 
 jQueryScripts :: [String]
-jQueryScripts = [
-    "https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js",
-    "https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"
-    ]
+jQueryScripts = if enableCdn
+                then ["https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js",
+                      "https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"]
+                else ["/static/js/vendor/jquery.min.1.10.2.js",
+                      "/static/js/vendor/jquery-ui.min.1.10.4.js"]
 
 reactScripts :: [String]
-reactScripts = [
-   "https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react.js",
-   "https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react-dom.js",
-   "https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.js"
-    ]
+reactScripts = if enableCdn
+               then ["https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react.min.js",
+                     "https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react-dom.min.js",
+                     "https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"]
+               else ["/static/js/vendor/react.0.14.3.js",
+                     "/static/js/vendor/react-dom.0.14.3.js",
+                     "/static/js/vendor/browser.5.8.34.js"]
 
 analyticsScripts :: [String]
 analyticsScripts = [
@@ -67,7 +70,9 @@ timetableScripts :: H.Html
 timetableScripts = do
     sequence_ (map toScript $
         ["/static/js/grid/mouse_events.js",
-         "//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js",
+         (if enableCdn
+          then "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"
+          else "/static/js/vendor/bootstrap.min.3.1.1.js"),
          "/static/js/common/cookie_handler.js",
          "/static/js/common/objects/course.js",
          "/static/js/common/objects/section.js",
