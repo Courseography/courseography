@@ -89,7 +89,6 @@ postCSS = do
             fontFamily ["HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", "Lucida Grande"][sansSerif]
             fontSize (px 20)
             paddingLeft (px 20)
-            "cursor" -: "pointer"
             "box-shadow" -: "0 2px 2px -1px rgba(0, 0, 0, 0.055)"
             borderBottom solid (px 1) grey5
             lineHeight (px 50)
@@ -103,6 +102,14 @@ postCSS = do
             "-ms-transition" -: "all 0.2s"
             "-o-transition" -: "all 0.2s"
             "transition" -: "all 0.2s"
+            "span" ? do
+                display inlineBlock
+                fontFamily ["HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", "Lucida Grande"][sansSerif]
+                lineHeight (px 50)
+                paddingLeft (px 24)
+                cursor pointer
+                ":hover" & do
+                    fontWeight bold
     i ? do
         color red
     "#post_specialist, #post_major, #post_minor" ? do

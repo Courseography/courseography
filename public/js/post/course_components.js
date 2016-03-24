@@ -96,7 +96,7 @@ var CourseCode = React.createClass({
         return (
             <div id={this.getIdName()} className={classes}>
                 <p className='code' onClick={this.openModal}>
-                    {this.getCategoryName()}
+                    <span>{this.getCategoryName()}</span>
                 </p>
             </div>
         );
@@ -188,7 +188,7 @@ export var MultipleCourseCode = React.createClass({
         return (
             <div id={courseID} className={classes}>
                 <p className='code' onClick={this.toggleFullInfo}>
-                    {this.props.categoryName}
+                    <span>{this.props.categoryName}</span>
                 </p>
                 <div id = {'spec' + this.props.courseID.substring(5, this.props.courseID.length)} className='more-info'>
                     <p className="full_name"> 
@@ -265,7 +265,7 @@ export var InquiryCategory = React.createClass({
        return (
             <div id={this.props.courseID} className={classes}>
                 <p className='code' onClick={this.toggleFullInfo}>
-                    {this.props.categoryName}
+                    <span>{this.props.categoryName}</span>
                 </p>
                 <div id={'spec' + this.props.courseID.substring(5, this.props.courseID.length)}
                      className='more-info'>
