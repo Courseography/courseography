@@ -4,7 +4,7 @@ import {SpecialistPost, MajorPost, MinorPost} from 'es6!post/post_components';
 var CheckMyPost = React.createClass({
 
     componentDidMount: function() {
-        var activeTab = this.refs.postNav.getActiveTab() + 'Post';
+        var activeTab = this.refs.postNav.state.activeTab + 'Post';
         this.changeActiveTab(activeTab);
         this.updateNavCreditCounts();
     },
@@ -32,7 +32,6 @@ var CheckMyPost = React.createClass({
     },
 
     updatePostStatus: function() {
-
         var newStatuses = [this.refs.spePost.setIfCompleted(), 
                            this.refs.majPost.setIfCompleted(),
                            this.refs.minPost.setIfCompleted()];
@@ -57,9 +56,10 @@ var CheckMyPost = React.createClass({
 var PostNav = React.createClass({
     getInitialState: function() {
         return {
-            visible: this.getActiveTab() === '' ? 'spe' : this.getActiveTab(),
+            visible: getCookie('activePost') === '' ? 'spe' : getCookie('activePost'),
             creditCounts: [0.0, 0.0, 0.0],
-            completed: [false, false, false]
+            completed: [false, false, false],
+            activeTab: getCookie('activePost')
         }
     },
 
