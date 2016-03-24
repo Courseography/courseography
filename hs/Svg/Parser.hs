@@ -91,15 +91,20 @@ parseGraph key graphFile =
         svgElems = tag "svg" $ CElem root undefined
         svgRoot = head svgElems
         (paths, shapes, texts) = parseNode key svgRoot
+        shapes' = removeRedundant shapes
     in
         if null svgElems
         then
             error "No svg element detected"
         else
-            (paths, filter small shapes, texts)
+            (paths, filter small shapes', texts)
     where
         -- Raw SVG seems to have a rectangle the size of the whole image
         small shape = shapeWidth shape < 300
+        removeRedundant shapes =
+            filter (not . \s -> (elem (shapePos s) (map shapePos shapes)) &&
+                                (null (shapeFill s) || shapeFill s == "#000000") &&
+                                elem (shapeType_ s) [Node, Hybrid]) shapes
 
 -- | Parse the height and width dimensions from the SVG element, respectively,
 -- and return them as a tuple.
@@ -344,7 +349,9 @@ updateShape :: String -- ^ The fill that may be added to the Shape.
             -> Shape
 updateShape fill transform r =
     r { shapePos = addTuples transform (shapePos r),
-        shapeFill = if null (shapeFill r) then fill else shapeFill r,
+        shapeFill = if null (shapeFill r) || shapeFill r == "none"
+                    then fill
+                    else shapeFill r,
         shapeType_ = if fill == "#888888" then Hybrid
                      else case shapeType_ r of
                               Hybrid   -> Hybrid

@@ -52,18 +52,11 @@ graphScripts = do
          "/static/js/common/objects/course.js",
          "/static/js/common/cookie_handler.js",
          "/static/js/common/course_description.js",
-         "/static/js/graph/sidebar/fce_count.js",
          "/static/js/common/objects/section.js",
          "/static/js/common/utilities/util.js",
-         "/static/js/graph/utilities/util.js",
-         "/static/js/graph/create_data.js",
-         "/static/js/graph/parse_graph.js",
          "/static/js/common/image_conversion.js",
          "/static/js/common/graph_image.js",
-         "/static/js/graph/setup.js",
-         "/static/js/post/update_post.js",
          "/static/js/graph/sidebar/sidebar_divs.js",
-         "/static/js/graph/sidebar/sidebar_events.js",
          "/static/js/graph/sidebar/focus_descriptions.js",
          "/static/js/common/export/export.js"])
     H.script ! A.type_ "text/babel" ! A.src "/static/js/common/react_modal.js.jsx" $ ""

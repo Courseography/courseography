@@ -16,26 +16,23 @@ import Database.CourseQueries (retrieveCourse, allCourses, queryGraphs, courseIn
 import Filesystem.Path.CurrentOS as Path
 import System.Directory (getCurrentDirectory)
 import System.IO (hSetBuffering, stdout, stderr, BufferMode(LineBuffering))
-import System.Log.Logger (updateGlobalLogger, rootLoggerName, setLevel,
-    Priority(INFO))
+import System.Log.Logger (updateGlobalLogger, rootLoggerName, setLevel, Priority(INFO))
 import Data.String (fromString)
 import FacebookUtilities
 import Config (markdownPath, serverConf)
 import qualified Data.Text.Lazy.IO as LazyIO
+import Data.Int (Int64)
 
 runServer :: IO ()
 runServer = do
     configureLogger
     staticDir <- getStaticDir
-
     redirectUrlGraphEmail <- retrieveAuthURL testUrl
     redirectUrlGraphPost <- retrieveAuthURL testPostUrl
     aboutContents <- LazyIO.readFile $ markdownPath ++ "README.md"
     privacyContents <- LazyIO.readFile $ markdownPath ++ "PRIVACY.md"
 
     -- Start the HTTP server
-    -- TODO: (getGraphJSON 1) is currently hard coded to 1, the CSC graph.
-    --       This needs to be changed so that it will work for any graph.
     simpleHTTP serverConf $ msum
         [ do
               nullDir
@@ -60,7 +57,8 @@ runServer = do
               dir "depts" $ liftIO deptList,
               dir "timesearch" searchResponse,
               dir "calendar" $ lookCookieValue "selected-lectures" >>= calendarResponse,
-              dir "graph-json" $ liftIO (getGraphJSON 1),
+              dir "get-json-data" $ look "gid" >>= \gid -> liftIO $ (getGraphJSON (read gid :: Int64)),
+              dir "loading" $ look "size" >>= loadingResponse,
               notFoundResponse
         ]
     where

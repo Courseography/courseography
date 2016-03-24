@@ -1,5 +1,5 @@
 requirejs([
-    'es6!graph/react_node'],
+    'es6!graph/react_graph'],
     function (
         reactNode
     ) {
@@ -30,5 +30,10 @@ requirejs([
                 graphComponent.setState({highlightedNodes: window[id + 'FocusList']});
             }
         });
+
+        // Enable Reset button
+        $('#reset').click(function () {
+            graphComponent.reset();
+        })
     });
 });

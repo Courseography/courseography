@@ -15,6 +15,7 @@ import Css.About (aboutStyles)
 import Css.Privacy (privacyStyles)
 import Css.FourOhFour (fourOhFourStyles)
 import Css.Search (searchStyles)
+import Css.Loading (loadingStyles)
 import Config (genCssPath, cssStyle)
 import System.Directory (createDirectoryIfMissing)
 
@@ -30,6 +31,7 @@ compileCSS = do
                       aboutStyles,
                       privacyStyles,
                       fourOhFourStyles,
-                      searchStyles
+                      searchStyles,
+                      loadingStyles
                       ]
     writeFile (genCssPath ++ "app.css") cssText
