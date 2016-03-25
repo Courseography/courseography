@@ -33,3 +33,4 @@ smallLoadingIcon :: H.Html
 smallLoadingIcon = H.div ! A.id "loading-icon" $ do
               H.img ! A.id "c-logo-small" ! A.src "static/res/img/C-logo-small.png"
               H.img ! A.id "compass-small" ! A.class_ "spinner" ! A.src "static/res/img/compass-small.png"
+ 
