@@ -17,8 +17,7 @@ module Database.CourseQueries
      deptList,
      returnTutorial,
      returnLecture,
-     getGraphJSON,
-     getGraphId) where
+     getGraphJSON) where
 
 import Happstack.Server.SimpleHTTP
 import Database.Persist
@@ -128,19 +127,15 @@ buildSession lecs tuts =
 
 -- ** Other queries
 
--- | Gets Graph Id using graph title
-getGraphId :: String -> IO Int64
-getGraphId graphName = runSqlite databasePath $ do
-    graphEnt :: (Maybe (Entity Graph)) <- selectFirst [GraphTitle ==. graphName] []
-    case graphEnt of
-        Nothing -> return (-1)
-        Just graph -> return $ fromSqlKey $ entityKey graph
-
--- | Gets Shape, Text and Path elements for rendering graph returned as JSON
-getGraphJSON :: IO Int64 -> IO Response
-getGraphJSON gIdIo =
+-- | Looks up a graph using its title then gets the Shape, Text and Path elements 
+-- for rendering graph (returned as JSON).
+getGraphJSON :: String -> IO Response
+getGraphJSON graphName =
     runSqlite databasePath $ do
-        gId <- liftIO $ gIdIo
+        graphEnt :: (Maybe (Entity Graph)) <- selectFirst [GraphTitle ==. graphName] []
+        gId <- case graphEnt of
+                    Nothing -> return (-1)
+                    Just graph -> return $ fromSqlKey $ entityKey graph
         sqlTexts    :: [Entity Text] <- selectList [TextGraph ==. toSqlKey gId] []
         sqlRects    :: [Entity Shape] <- selectList
                                              [ShapeType_ <-. [Node, Hybrid],
