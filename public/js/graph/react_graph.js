@@ -393,11 +393,10 @@ var NodeGroup = React.createClass({
 
     // Helper for hybrid computation
     findRelationship: function (course) {
-        var hybridRelationships = [];
         var nodes = this.props.nodesJSON;
         var node = nodes.find(n =>
+            n.type_ === 'Node' &&
             n.text.some(textTag => textTag.text.includes(course)));
-        hybridRelationships.push([node.id_, course]);
         return node;
     },
 
@@ -408,87 +407,103 @@ var NodeGroup = React.createClass({
         var hybridRelationships = [];
         return (
             <g id='nodes'>
-                {this.props.hybridsJSON.map(entry => {
-                    var childs = [];
-                    var outEdges = [];
-                    this.props.edgesJSON.map(element => {
-                        // Note: hybrids shouldn't have any in edges
-                        if (entry.id_ === element.source) {
-                            childs.push(element.target);
-                            outEdges.push(element.id_);
-                        }
-                    });
-                    // parse prereqs based on text
-                    var hybridText = "";
-                    entry.text.forEach(textTag => hybridText += textTag.text);
+            {this.props.hybridsJSON.map(entry => {
+                var childs = [];
+                var outEdges = [];
+                this.props.edgesJSON.map(element => {
+                    // Note: hybrids shouldn't have any in edges
+                    if (entry.id_ === element.source) {
+                        childs.push(element.target);
+                        outEdges.push(element.id_);
+                    }
+                });
+                // parse prereqs based on text
+                var hybridText = "";
+                entry.text.forEach(textTag => hybridText += textTag.text);
+                var parents = [];
+                // First search for entire string (see Stats graph)
+                var prereqNode = this.findRelationship(hybridText);
+                if (prereqNode !== undefined) {
+                    //console.log(prereqNod)
+                    parents.push(prereqNode.id_);
+                    hybridRelationships.push([prereqNode.id_, entry.id_]);
+                } else { // Parse text first
                     var prereqs = parseAnd(hybridText)[0];
-                    var parents = [];
                     prereqs.forEach(course => {
                         if (typeof course === 'string') {
-                            var prereqNode = this.findRelationship(course);
-                            parents.push(prereqNode.id_);
-                            hybridRelationships.push([prereqNode.id_, entry.id_]);
+                            prereqNode = this.findRelationship(course);
+                            if (prereqNode !== undefined) {
+                                parents.push(prereqNode.id_);
+                                hybridRelationships.push([prereqNode.id_, entry.id_]);
+                            } else {
+                                console.error("Couldn't find prereq for ", hybridText);
+                            }
                         } else if (typeof course === 'object') {
                             var orPrereq = [];
                             course.forEach(c => {
                                 var prereqNode = this.findRelationship(c);
-                                orPrereq.push(prereqNode.id_);
-                                hybridRelationships.push([prereqNode.id_, entry.id_]);
+                                if (prereqNode !== undefined) {
+                                    orPrereq.push(prereqNode.id_);
+                                    hybridRelationships.push([prereqNode.id_, entry.id_]);
+                                } else {
+                                    console.error("Couldn't find prereq for ", hybridText);
+                                }
                             });
                             if (orPrereq.length > 0) {
                                 parents.push(orPrereq);
                             }
                         }
                     });
-                    return <Node
-                            JSON={entry}
-                            className={'hybrid'}
-                            key={entry.id_}
-                            hybrid={true}
-                            ref={entry.id_}
-                            parents={parents}
-                            childs={childs}
-                            inEdges={[]}
-                            outEdges={outEdges}
-                            svg={svg}
-                            logicalType={'AND'}/>
-                }, this)}
-                {this.props.nodesJSON.map(function (entry, value) {
-                    var highlighted = highlightedNodes.indexOf(entry.id_) >= 0;
-                    var parents = [];
-                    var childs = [];
-                    var outEdges = [];
-                    var inEdges = [];
-                    this.props.edgesJSON.forEach(function (element, key) {
-                        if (entry.id_ === element.target) {
-                            parents.push(element.source);
-                            inEdges.push(element.id_);
-                        } else if (entry.id_ === element.source) {
-                            childs.push(element.target);
-                            outEdges.push(element.id_);
-                        }
-                    });
-                    hybridRelationships.forEach(function (element, key) {
-                        if (element[0] === entry.id_) {
-                            childs.push(element[1]);
-                        }
-                    });
-                    return <Node
-                            JSON={entry}
-                            className='node'
-                            key={entry.id_}
-                            ref={entry.id_}
-                            hybrid={false}
-                            parents={parents}
-                            childs={childs}
-                            inEdges={inEdges}
-                            outEdges={outEdges}
-                            svg={svg}
-                            highlighted={highlighted}
-                            onClick={this.props.nodeClick}
-                            onMouseEnter={this.props.nodeMouseEnter}
-                            onMouseLeave={this.props.nodeMouseLeave} />
-                }, this)}
+                }
+                return <Node
+                        JSON={entry}
+                        className={'hybrid'}
+                        key={entry.id_}
+                        hybrid={true}
+                        ref={entry.id_}
+                        parents={parents}
+                        childs={childs}
+                        inEdges={[]}
+                        outEdges={outEdges}
+                        svg={svg}
+                        logicalType={'AND'}/>
+            }, this)}
+            {this.props.nodesJSON.map(function (entry, value) {
+                var highlighted = highlightedNodes.indexOf(entry.id_) >= 0;
+                var parents = [];
+                var childs = [];
+                var outEdges = [];
+                var inEdges = [];
+                this.props.edgesJSON.forEach(function (element, key) {
+                    if (entry.id_ === element.target) {
+                        parents.push(element.source);
+                        inEdges.push(element.id_);
+                    } else if (entry.id_ === element.source) {
+                        childs.push(element.target);
+                        outEdges.push(element.id_);
+                    }
+                });
+                hybridRelationships.forEach(function (element, key) {
+                    if (element[0] === entry.id_) {
+                        childs.push(element[1]);
+                    }
+                });
+                return <Node
+                        JSON={entry}
+                        className='node'
+                        key={entry.id_}
+                        ref={entry.id_}
+                        hybrid={false}
+                        parents={parents}
+                        childs={childs}
+                        inEdges={inEdges}
+                        outEdges={outEdges}
+                        svg={svg}
+                        highlighted={highlighted}
+                        onClick={this.props.nodeClick}
+                        onMouseEnter={this.props.nodeMouseEnter}
+                        onMouseLeave={this.props.nodeMouseLeave} />
+            }, this)}
             </g>
         );
     }
