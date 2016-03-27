@@ -400,7 +400,7 @@ function jsonToSvg(jsonStr) {
     var jsonData = JSON.parse(jsonStr);
 
     // Parse Path data
-    jsonData[2][1].forEach(function(jsonPath){
+    jsonData[2][1].forEach(function(jsonPath) {
         // Create Paths and Regions
         var path = document.createElementNS(xmlns, 'path');
         path.setAttributeNS(null, 'id', 'pathp' + nodeId);
@@ -420,7 +420,7 @@ function jsonToSvg(jsonStr) {
     });
 
     // Parse Shape data
-    jsonData[1][1].forEach(function(jsonShape){
+    jsonData[1][1].forEach(function(jsonShape) {
         // Create Shape and add it to SVG canvas
         var g = document.createElementNS(xmlns, 'g');
         var node = document.createElementNS(xmlns, 'rect');
@@ -469,8 +469,8 @@ function jsonToSvg(jsonStr) {
     });
 
     // Parse Text data
-    jsonData[0][1].forEach(function(jsonText){
-        if (jsonText.rId.indexOf('tspan') > -1){
+    jsonData[0][1].forEach(function(jsonText) {
+        if (jsonText.rId.indexOf('tspan') > -1) {
             var code = document.createElementNS(xmlns, 'text');
             code.setAttributeNS(null, 'id', 'tspan' + nodeId);
             code.setAttributeNS(null, 'fill', jsonText.fill);
