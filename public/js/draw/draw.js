@@ -389,3 +389,99 @@ function regionClicked(e) {
         prevY = position.y;
     }
 }
+
+
+/**
+ * Convert JSON data into SVG elements then populate the canvas with them.
+ */
+function jsonToSvg(jsonStr) {
+    'use strict';
+
+    var jsonData = JSON.parse(jsonStr);
+
+    // Parse Path data
+    jsonData[2][1].forEach(function(jsonPath){
+        // Create Paths and Regions
+        var path = document.createElementNS(xmlns, 'path');
+        path.setAttributeNS(null, 'id', 'pathp' + nodeId);
+        path.setAttributeNS(null, 'd', 'M' + jsonPath.points.join(' '));
+        path.setAttributeNS(null, 'data-active', 'inactive');
+        if (jsonPath.isRegion) {
+            path.setAttributeNS(null, 'class', 'region');
+            path.setAttributeNS(null, 'style', 'fill:' + jsonPath.fill);
+        } else {
+            path.setAttributeNS(null, 'stroke', 'black');
+            path.setAttributeNS(null, 'marker-end', 'url(#arrow)');
+            path.setAttributeNS(null, 'class', 'path');
+        }
+
+        svgDoc.appendChild(path);
+        nodeId += 1;
+    });
+
+    // Parse Shape data
+    jsonData[1][1].forEach(function(jsonShape){
+        // Create Shape and add it to SVG canvas
+        var g = document.createElementNS(xmlns, 'g');
+        var node = document.createElementNS(xmlns, 'rect');
+
+        g.setAttribute('class', 'node');
+        g.setAttribute('id', 'g' + nodeId);
+        g.setAttribute('data-active', 'active');
+        g.setAttribute('fill', jsonShape.fill);
+
+        node.setAttribute('x', jsonShape.pos[0]);
+        node.setAttribute('y', jsonShape.pos[1]);
+        node.setAttribute('rx', 4);
+        node.setAttribute('ry', 4);
+        node.setAttribute('id', 'n' + nodeId);
+        node.setAttribute('width', jsonShape.width);
+        node.setAttribute('height', jsonShape.height);
+        node.setAttribute('class', 'node');
+        node.parents = [];
+        node.kids = [];
+        // note: children doesn't work because javascript objects already have a children attribute
+        node.inEdges = [];
+        node.outEdges = [];
+
+        g.appendChild(node);
+        svgDoc.appendChild(g);
+        document.getElementById('n' + nodeId).addEventListener('mousedown', nodeClicked, false);
+
+        select(document.getElementById('n' + nodeId));
+        
+
+        // Input Text into Shape
+        var code = document.createElementNS(xmlns, 'text');
+        code.setAttributeNS(null, 'id', 't' + nodeId);
+        code.setAttributeNS(null, 'fill', 'black');
+        code.setAttributeNS(null, 'align', jsonShape.text[0].align);
+        code.setAttributeNS(null, 'x', jsonShape.text[0].pos[0] + (jsonShape.width/2));
+        code.setAttributeNS(null, 'y', jsonShape.text[0].pos[1]);
+        code.setAttributeNS(null, 'class', 'mylabel'); // note: label is a class in bootstrap
+        var textNode = document.createTextNode(jsonShape.text[0].text);
+        code.appendChild(textNode);
+        g.appendChild(code);
+
+        document.getElementById('t' + nodeId).addEventListener('mousedown', nodeClicked, false);
+
+        nodeId += 1;
+    });
+
+    // Parse Text data
+    jsonData[0][1].forEach(function(jsonText){
+        if (jsonText.rId.indexOf('tspan') > -1){
+            var code = document.createElementNS(xmlns, 'text');
+            code.setAttributeNS(null, 'id', 'tspan' + nodeId);
+            code.setAttributeNS(null, 'fill', jsonText.fill);
+            code.setAttributeNS(null, 'align', jsonText.align);
+            code.setAttributeNS(null, 'x', jsonText.pos[0]);
+            code.setAttributeNS(null, 'y', jsonText.pos[1]);
+            var textNode = document.createTextNode(jsonText.text);
+            code.appendChild(textNode);
+            svgDoc.appendChild(code);
+
+            nodeId += 1;
+        }
+    });
+}

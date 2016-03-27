@@ -92,7 +92,11 @@ $('#submit-gid').click(function() {
             data: {gid : $('#area-of-study').val()},
             dataType: 'json', 
             success: function(data) {
-                $('#json-data').html('<pre>' + JSON.stringify(data) + '<pre>');
+                var div = document.getElementById('main');
+                document.body.removeChild(div);
+                setupSVGCanvas();
+                svgDoc.appendChild(setupMarker());
+                jsonToSvg(JSON.stringify(data));
             },
             error: function(xhr, status, err) {
                 console.error('graphs', status, err.toString());
