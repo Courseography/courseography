@@ -1,16 +1,4 @@
-function openReactModal(courseCode) {
-    'use strict';
-    var courseName = getCourseTitle(courseCode);
-    var formattedName = formatCourseName(courseCode);
-    var courseVideoUrls = getCourseVideoUrls(formattedName);
-
-    React.render(
-        <ModalContent course={formattedName[0]} />,
-        document.getElementById('modal-content-container')
-    );
-}
-
-var ModalContent = React.createClass({
+export var ModalContent = React.createClass({
     render: function() {
         return (
             <div>

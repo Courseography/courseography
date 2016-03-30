@@ -1,3 +1,17 @@
+import {ModalContent} from 'es6!common/react_modal';
+
+function openReactModal(courseCode) {
+    'use strict';
+    var courseName = getCourseTitle(courseCode);
+    var formattedName = formatCourseName(courseCode);
+    var courseVideoUrls = getCourseVideoUrls(formattedName);
+
+    React.render(
+        <ModalContent course={formattedName[0]} />,
+        document.getElementById('modal-content-container')
+    );
+}
+
 var CourseCode = React.createClass({
     getInitialState: function() {
         return {
@@ -60,9 +74,16 @@ var CourseCode = React.createClass({
         return id.toUpperCase() + ": " + course.title;
     },
 
+    openModal: function(id) {
+        var newID = this.getIdName().substring(0, 6);
+        openModal(this.getTitle(newID), createModalDiv(newID));
+        openReactModal(newID);
+    },
+
     render: function() {
         var me = this;
         var classes = '';
+        var id = this.getIdName();
 
         if (this.state.selected) {
             classes += ' selected';
@@ -74,15 +95,9 @@ var CourseCode = React.createClass({
 
         return (
             <div id={this.getIdName()} className={classes}>
-                <p className='code' onClick={this.toggleFullInfo}>
-                    {this.getCategoryName()}
+                <p className='code' onClick={this.openModal}>
+                    <span>{this.getCategoryName()}</span>
                 </p>
-                <div id={this.props.courseIDs[0] + '_info'} className='more-info'>
-                    {this.props.courseIDs.map(function (course) {
-                        var title = me.getTitle(course);
-                        return <p className='full_name' key={title}>{title}</p>
-                    })}
-                </div>
             </div>
         );
     }
@@ -173,7 +188,7 @@ export var MultipleCourseCode = React.createClass({
         return (
             <div id={courseID} className={classes}>
                 <p className='code' onClick={this.toggleFullInfo}>
-                    {this.props.categoryName}
+                    <span>{this.props.categoryName}</span>
                 </p>
                 <div id = {'spec' + this.props.courseID.substring(5, this.props.courseID.length)} className='more-info'>
                     <p className="full_name"> 
@@ -250,7 +265,7 @@ export var InquiryCategory = React.createClass({
        return (
             <div id={this.props.courseID} className={classes}>
                 <p className='code' onClick={this.toggleFullInfo}>
-                    {this.props.categoryName}
+                    <span>{this.props.categoryName}</span>
                 </p>
                 <div id={'spec' + this.props.courseID.substring(5, this.props.courseID.length)}
                      className='more-info'>
