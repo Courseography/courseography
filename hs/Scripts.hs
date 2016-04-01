@@ -29,15 +29,17 @@ jQueryScripts :: [String]
 jQueryScripts = if enableCdn
                 then ["https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js",
                       "https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"]
-                else ["/static/js/common/jquery.min.1.10.2.js",
-                      "/static/js/common/jquery-ui.min.1.10.4.js"]
+                else ["/static/js/vendor/jquery.min.1.10.2.js",
+                      "/static/js/vendor/jquery-ui.min.1.10.4.js"]
 
 reactScripts :: [String]
 reactScripts = if enableCdn
-               then ["https://cdnjs.cloudflare.com/ajax/libs/react/0.13.1/react.js",
-                     "https://cdnjs.cloudflare.com/ajax/libs/react/0.13.1/JSXTransformer.js"]
-               else ["/static/js/common/react.0.13.1.js",
-                     "/static/js/common/JSXTransformer.0.13.1.js"]
+               then ["https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react.min.js",
+                     "https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react-dom.min.js",
+                     "https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"]
+               else ["/static/js/vendor/react.0.14.3.js",
+                     "/static/js/vendor/react-dom.0.14.3.js",
+                     "/static/js/vendor/browser.5.8.34.js"]
 
 analyticsScripts :: [String]
 analyticsScripts = [
@@ -50,29 +52,19 @@ graphScripts = do
         ["/static/js/graph/tooltip.js",
          "/static/js/common/course_videos.js",
          "/static/js/common/modal.js",
-         "/static/js/graph/objects/edge.js",
-         "/static/js/graph/objects/node.js",
          "/static/js/common/objects/course.js",
          "/static/js/common/cookie_handler.js",
          "/static/js/common/course_description.js",
-         "/static/js/graph/sidebar/focuses.js",
-         "/static/js/graph/sidebar/fce_count.js",
          "/static/js/common/objects/section.js",
          "/static/js/common/utilities/util.js",
-         "/static/js/graph/utilities/structs.js",
-         "/static/js/graph/utilities/util.js",
-         "/static/js/graph/create_data.js",
-         "/static/js/graph/parse_graph.js",
-         "/static/js/graph/mouse_events.js",
          "/static/js/common/image_conversion.js",
          "/static/js/common/graph_image.js",
-         "/static/js/graph/setup.js",
-         "/static/js/post/update_post.js",
          "/static/js/graph/sidebar/sidebar_divs.js",
-         "/static/js/graph/sidebar/sidebar_events.js",
          "/static/js/graph/sidebar/focus_descriptions.js",
          "/static/js/common/export/export.js"])
-    H.script ! A.type_ "text/jsx" ! A.src "/static/js/common/react_modal.js.jsx" $ ""
+    H.script ! A.type_ "text/babel" ! A.src "/static/js/common/react_modal.js.jsx" $ ""
+    H.script ! A.src "/static/js/requirejs-config.js" $ ""
+    H.script ! H.dataAttribute "main" "/static/js/graph" ! A.src "/static/js/require.js" $ ""
 
 timetableScripts :: H.Html
 timetableScripts = do
@@ -80,7 +72,7 @@ timetableScripts = do
         ["/static/js/grid/mouse_events.js",
          (if enableCdn
           then "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"
-          else "/static/js/common/bootstrap.min.3.1.1.js"),
+          else "/static/js/vendor/bootstrap.min.3.1.1.js"),
          "/static/js/common/cookie_handler.js",
          "/static/js/common/objects/course.js",
          "/static/js/common/objects/section.js",
@@ -108,11 +100,10 @@ postScripts = sequence_ (map toScript [
                                           "/static/js/common/cookie_handler.js",
                                           "/static/js/post/update_post.js",
                                           "/static/js/graph/create_data.js",
-                                          "/static/js/graph/objects/node.js",
                                           "/static/js/post/fill_textboxes.js",
                                           "/static/js/graph/create_data.js",
                                           "/static/js/post/update_categories.js"])
 
 searchScripts :: H.Html
 searchScripts =
-    H.script ! A.type_ "text/jsx" ! A.src "/static/js/search/timetable.js.jsx" $ ""
+    H.script ! A.type_ "text/babel" ! A.src "/static/js/search/timetable.js.jsx" $ ""

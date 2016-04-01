@@ -18,7 +18,7 @@ graphResponse =
                 (do
                     header "graph"
                     H.div ! A.id "container" $ do
-                        H.div ! A.id "graph" ! A.class_ "graph" $ ""
+                        H.div ! A.id "react-graph" ! A.class_ "react-graph" $ ""
                         sideBar
                     disclaimer
                 )
@@ -28,7 +28,7 @@ sideBar :: H.Html
 sideBar = do
     H.div ! A.id "sidebar" $ do
         H.div ! A.id "fce" $ do
-            H.div ! A.id "fcecount" $ ""
+            H.div ! A.id "fcecount" $ "FCE Count: 0.0"
             H.button ! A.id "reset" $ "Reset Graph"
         H.nav ! A.id "sidebar-nav" $ H.ul $ do
             H.li ! A.id "graphs-nav" $

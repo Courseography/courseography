@@ -14,7 +14,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.48.5 r10040"
-   sodipodi:docname="New document 1">
+   sodipodi:docname="sta2015.svg">
   <defs
      id="defs4" />
   <sodipodi:namedview
@@ -24,18 +24,18 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.35"
-     inkscape:cx="450.00003"
+     inkscape:zoom="1.16"
+     inkscape:cx="464.70543"
      inkscape:cy="172.35715"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="g3869"
      showgrid="false"
      fit-margin-top="0"
      fit-margin-left="0"
      fit-margin-right="0"
      fit-margin-bottom="0"
-     inkscape:window-width="1280"
-     inkscape:window-height="697"
+     inkscape:window-width="1920"
+     inkscape:window-height="1018"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1" />
@@ -47,7 +47,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -1278,29 +1278,14 @@
              x="74.037201"
              style="stroke:none" />
         </g>
-        <g
-           id="g4156"
-           stroke-miterlimit="1.45"
-           shape-rendering="geometricPrecision"
-           text-rendering="geometricPrecision"
-           transform="translate(-28,66)"
-           style="fill:#ffffff;stroke:#ffffff;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
-          <text
-             id="text4158"
-             clip-path="url(#clipPath2)"
-             y="484.7139"
-             xml:space="preserve"
-             x="76.752998"
-             style="stroke:none">CSC108/120/148</text>
-          <rect
-             id="rect4160"
-             height="30"
-             width="97.5"
-             clip-path="url(#clipPath2)"
-             y="465"
-             x="74.037201"
-             style="fill:none;stroke:#000000" />
-        </g>
+        <text
+           style="fill:#ffffff;stroke:none;font-family:sans-serif"
+           x="76.752998"
+           xml:space="preserve"
+           y="484.7139"
+           clip-path="url(#clipPath2)"
+           id="text4158"
+           transform="translate(-28,66)">CSC108/120/148</text>
         <g
            id="g4162"
            transform="translate(-28,66)"
@@ -1423,29 +1408,14 @@
              x="398.3595"
              style="stroke:none" />
         </g>
-        <g
-           id="g4190"
-           stroke-miterlimit="1.45"
-           shape-rendering="geometricPrecision"
-           text-rendering="geometricPrecision"
-           transform="translate(-28,66)"
-           style="fill:#ffffff;stroke:#ffffff;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
-          <text
-             id="text4192"
-             clip-path="url(#clipPath2)"
-             y="484.7139"
-             xml:space="preserve"
-             x="403.28189"
-             style="stroke:none">MAT235/237/257</text>
-          <rect
-             id="rect4194"
-             height="30"
-             width="101.9072"
-             clip-path="url(#clipPath2)"
-             y="465"
-             x="398.3595"
-             style="fill:none;stroke:#000000" />
-        </g>
+        <text
+           style="fill:#ffffff;stroke:none;font-family:sans-serif"
+           x="403.28189"
+           xml:space="preserve"
+           y="484.7139"
+           clip-path="url(#clipPath2)"
+           id="text4192"
+           transform="translate(-28,66)">MAT235/237/257</text>
         <g
            id="g4196"
            transform="translate(-28,66)"
@@ -1532,29 +1502,14 @@
              x="985"
              style="stroke:none" />
         </g>
-        <g
-           id="g4216"
-           stroke-miterlimit="1.45"
-           shape-rendering="geometricPrecision"
-           text-rendering="geometricPrecision"
-           transform="translate(-28,66)"
-           style="fill:#ffffff;stroke:#ffffff;stroke-linecap:butt;stroke-miterlimit:1.45000005;font-family:sans-serif">
-          <text
-             id="text4218"
-             clip-path="url(#clipPath2)"
-             y="204.5441"
-             xml:space="preserve"
-             x="988.71478"
-             style="stroke:none">STA247/255/257</text>
-          <rect
-             id="rect4220"
-             height="30"
-             width="97.5"
-             clip-path="url(#clipPath2)"
-             y="184.8302"
-             x="985"
-             style="fill:none;stroke:#000000" />
-        </g>
+        <text
+           transform="translate(-28,66.000001)"
+           style="fill:#ffffff;stroke:none;font-family:sans-serif"
+           x="988.71478"
+           xml:space="preserve"
+           y="204.5441"
+           clip-path="url(#clipPath2)"
+           id="text4218">STA247/255/257</text>
         <g
            id="g4222"
            transform="translate(-28,66)"

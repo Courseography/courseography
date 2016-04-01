@@ -31,6 +31,7 @@ nodeCSS = "g" ? do
         "-khtml-user-select" -: "none"
         "-moz-user-select" -: "none"
         "-ms-user-select" -: "none"
+
     ".node" & do
         cursor pointer
         "text" ? do
@@ -38,6 +39,7 @@ nodeCSS = "g" ? do
             faded
             stroke "none"
             "text-anchor" -: "middle"
+        -- For nodes in draw tab
         "data-active" @= "active" & do
             "rect" <? do
                 wideStroke
@@ -64,14 +66,10 @@ nodeCSS = "g" ? do
                 strokeRed
             "text" <? do
                 fullyVisible
-        "data-active" @= "unlit" & do
-            "rect" <?
-                faded
         "data-active" @= "unselected" & do
             "rect" <? do
                 wideStroke
                 faded
-        -- For nodes in draw tab
         "data-group" @= "red" & do
             "rect" <? do
                 fill dRed
@@ -96,6 +94,32 @@ nodeCSS = "g" ? do
         "rect" <? do
             fill "#888888"
             stroke "black"
+    ".active" & do
+        "rect" <? do
+            wideStroke
+        "text" <? do
+            fullyVisible
+    ".overridden" & do
+        "rect" <? do
+            wideStroke
+            strokeRed
+        "text" <? do
+            fullyVisible
+    ".inactive" & do
+        "rect" <? do
+            faded
+            strokeDashed
+    ".takeable" & do
+        "rect" <? do
+            semiVisible
+        "text" <? do
+            semiVisible
+    ".missing" & do
+        "rect" <> "ellipse" <? do
+            wideStroke
+            strokeRed
+        "text" <? do
+            fullyVisible
     ".bool" & do
         cursor cursorDefault
         "data-active" @= "active" & do
@@ -120,9 +144,29 @@ nodeCSS = "g" ? do
             "ellipse" <? do
                 fill "white"
                 strokeRed
-        "data-active" @= "unlit" & do
-            wideStroke
-            strokeRed
+        -- For the React graph
+        ".active" & do
+            "ellipse" <? do
+                fill "none"
+                stroke "black"
+        ".overridden" & do
+            "ellipse" <? do
+                fill "white"
+                strokeRed
+        ".inactive" & do
+            "ellipse" <? do
+                fill lightGrey
+                faded
+                strokeDashed
+                stroke "black"
+        ".takeable" & do
+            "ellipse" <? do
+                fill lightGrey
+                stroke "black"
+        ".missing" & do
+            "ellipse" <? do
+                fill "white"
+                strokeRed
         "text" <? do
             fontFamily ["Trebuchet MS", "Arial"] [sansSerif]
             fontWeight bold
@@ -136,21 +180,24 @@ nodeCSS = "g" ? do
 pathCSS :: Css
 pathCSS = "path" ? do
     fill "none"
-    "data-active" @= "takeable" & do
-        strokeDashed
-    "data-active" @= "inactive" & do
-        faded
-        strokeDashed
-    "data-active" @= "active" & do
-        opacity 1
-        "stroke-width" -: "2px"
-    "data-active" @= "missing" & do
-        strokeRed
-        strokeDashed
     "data-active" @= "drawn" & do
         faded
         wideStroke
-
+    -- For the React graph
+    ".takeable" & do
+        strokeDashed
+        stroke "black"
+    ".inactive" & do
+        faded
+        strokeDashed
+        stroke "black"
+    ".active" & do
+        opacity 1
+        "stroke-width" -: "2px"
+        stroke "black"
+    ".missing" & do
+        strokeRed
+        strokeDashed
 
 {- resetCSS
  - Generates CSS for the reset feature
@@ -169,7 +216,7 @@ resetCSS = "#resetButton" ? do
  - the page containing the graph. -}
 graphContainer :: Css
 graphContainer = do
-    "#graph" ? do
+    "#react-graph" ? do
         width (px 1195)
         minHeight (px 700)
         height (px 700)
@@ -179,13 +226,16 @@ graphContainer = do
         position absolute
         textAlign $ alignSide sideCenter
         "left" -: "40px"
-    "#graphRootSVG" ? do
+    "#react-graphRootSVG" ? do
         width100
         height100
         stroke "black"
         "stroke-linecap" -: "square"
         "stroke-miterlimit" -: "10"
         "shape-rendering" -: "geometricPrecision"
+    ".highlight-nodes" ? do
+        backgroundColor grey
+
 
 sidebarCSS :: Css
 sidebarCSS = do
@@ -304,7 +354,6 @@ sidebarCSS = do
         textAlign $ alignSide sideCenter
         width (pct 90)
     ".spotlight" & do
-        semiVisible
         fill "white"
         stroke "none"
     ".details" & do
@@ -352,7 +401,7 @@ titleCSS = "#svgTitle" ? do
  - Generates CSS for focus regions in the graph. -}
 regionCSS :: Css
 regionCSS = do
-    "#region-labels > text" ? do
+    ".region-label" ? do
         fontSize (pt regionFontSize)
     ".region" ? do
         "fill-opacity" -: "0.25"
