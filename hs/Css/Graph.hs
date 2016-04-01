@@ -216,23 +216,6 @@ resetCSS = "#resetButton" ? do
  - the page containing the graph. -}
 graphContainer :: Css
 graphContainer = do
-    "#graph" ? do
-        width (px 1195)
-        minHeight (px 700)
-        height (px 700)
-        overflow hidden
-        margin (px 10) (px 10) (px 10) (px 10)
-        display none
-        position absolute
-        textAlign $ alignSide sideCenter
-        "left" -: "40px"
-    "#graphRootSVG" ? do
-        width100
-        height100
-        stroke "black"
-        "stroke-linecap" -: "square"
-        "stroke-miterlimit" -: "10"
-        "shape-rendering" -: "geometricPrecision"
     "#react-graph" ? do
         width (px 1195)
         minHeight (px 700)

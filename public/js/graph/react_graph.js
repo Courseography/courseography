@@ -716,7 +716,7 @@ var Node = React.createClass({
 
 
 var BoolGroup = React.createClass({
-    componentDidMount: function () {
+    componentDidUpdate: function () {
         for (var ref in this.refs) {
             this.refs[ref].updateNode(this.props.svg);
         }
@@ -873,7 +873,7 @@ var Bool = React.createClass({
 
 
 var EdgeGroup = React.createClass({
-    componentDidMount: function () {
+    componentDidUpdate: function () {
         for (var ref in this.refs) {
             this.refs[ref].updateStatus();
         }
