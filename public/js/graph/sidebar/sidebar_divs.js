@@ -87,8 +87,6 @@ function toggleSidebar(location) {
         $('#graphs').show();
         $('#graphs-nav').addClass('active');
 
-        changeFocusEnable(getCookie('active-graph'));
-
         $('#reset').show();
         $('#fcecount').show();
     }

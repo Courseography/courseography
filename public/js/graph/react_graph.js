@@ -131,20 +131,20 @@ var Graph = React.createClass({
         this.getGraph();
     },
 
-    getGraph: function (graphId) {
-        if (graphId === undefined) {
+    getGraph: function (graphName) {
+        if (graphName === undefined) {
             var urlSpecifiedGraph = getURLParameter('dept');
 
             // HACK: Temporary workaround for giving the statistics department a link to our graph.
             // Should be replaced with a more general solution.
             if (urlSpecifiedGraph === 'sta') {
-                graphId = '2';
+                graphName = 'Statistics';
             } else if (urlSpecifiedGraph !== null) {
-                graphId = '1';
+                graphName = 'Computer Science';
             } else {
-                graphId = getCookie('active-graph');
-                if (graphId === '') {
-                    graphId = '1';
+                graphName = getCookie('active-graph');
+                if (graphName === '') {
+                    graphName = 'Computer Science';
                 }
             }
         }
@@ -152,9 +152,9 @@ var Graph = React.createClass({
         $.ajax({
             dataType: 'json',
             url: 'get-json-data',
-            data: {'gid': graphId},
+            data: {'graphName': graphName},
             success: function (data) {
-                setCookie('active-graph', graphId);
+                setCookie('active-graph', graphName);
                 var regionsList = [];
                 var nodesList = [];
                 var hybridsList = [];

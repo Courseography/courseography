@@ -53,5 +53,5 @@ modePanel = H.div ! A.id "side-panel-wrap" $ do
             ! A.autocomplete "off"
             ! A.type_ "text"
             ! A.size "30"
-    H.div ! A.id "submit-gid" ! A.class_ "button" $ "Submit"
+    H.div ! A.id "submit-graph-name" ! A.class_ "button" $ "Submit"
     H.div ! A.id "json-data" ! A.class_ "json-data" $ ""

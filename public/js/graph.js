@@ -11,7 +11,8 @@ requirejs([
         // Set sidebar onclick. Eventually move this into its own React component.
         $('.graph-button').click(function () {
             var id = $(this).data('id');
-            graphComponent.getGraph(id);
+            var name = $(this).text();
+            graphComponent.getGraph(name);
             changeFocusEnable(id);
         });
 
