@@ -134,45 +134,45 @@ getGraphJSON graphName =
     runSqlite databasePath $ do
         graphEnt :: (Maybe (Entity Graph)) <- selectFirst [GraphTitle ==. graphName] []
         case graphEnt of
-                Nothing -> return $ createJSONResponse ["texts" .= (),
-                                                        "shapes" .= (),
-                                                        "paths" .= ()]
-                Just graph -> do
-                            let gId = fromSqlKey $ entityKey graph
-                            sqlTexts    :: [Entity Text] <- selectList [TextGraph ==. toSqlKey gId] []
-                            sqlRects    :: [Entity Shape] <- selectList
-                                                                 [ShapeType_ <-. [Node, Hybrid],
-                                                                  ShapeGraph ==. toSqlKey gId] []
-                            sqlEllipses :: [Entity Shape] <- selectList
-                                                                 [ShapeType_ ==. BoolNode,
-                                                                  ShapeGraph ==. toSqlKey gId] []
-                            sqlPaths    :: [Entity Path] <- selectList [PathGraph ==. toSqlKey gId] []
+            Nothing -> return $ createJSONResponse ["texts" .= ([] :: [Text]),
+                                                    "shapes" .= ([] :: [Shape]),
+                                                    "paths" .= ([] :: [Path])]
+            Just graph -> do
+                let gId = fromSqlKey $ entityKey graph
+                sqlTexts    :: [Entity Text] <- selectList [TextGraph ==. toSqlKey gId] []
+                sqlRects    :: [Entity Shape] <- selectList
+                                                     [ShapeType_ <-. [Node, Hybrid],
+                                                      ShapeGraph ==. toSqlKey gId] []
+                sqlEllipses :: [Entity Shape] <- selectList
+                                                     [ShapeType_ ==. BoolNode,
+                                                      ShapeGraph ==. toSqlKey gId] []
+                sqlPaths    :: [Entity Path] <- selectList [PathGraph ==. toSqlKey gId] []
 
-                            let
-                                keyAsInt :: PersistEntity a => Entity a -> Integer
-                                keyAsInt = fromIntegral . (\(PersistInt64 x) -> x) . head . keyToValues . entityKey
+                let
+                    keyAsInt :: PersistEntity a => Entity a -> Integer
+                    keyAsInt = fromIntegral . (\(PersistInt64 x) -> x) . head . keyToValues . entityKey
 
-                                texts          = map entityVal sqlTexts
-                                rects          = zipWith (buildRect texts)
-                                                         (map entityVal sqlRects)
-                                                         (map keyAsInt sqlRects)
-                                ellipses       = zipWith (buildEllipses texts)
-                                                         (map entityVal sqlEllipses)
-                                                         (map keyAsInt sqlEllipses)
-                                paths          = zipWith (buildPath rects ellipses)
-                                                         (map entityVal sqlPaths)
-                                                         (map keyAsInt sqlPaths)
-                                regions        = filter pathIsRegion paths
-                                edges          = filter (not . pathIsRegion) paths
-                                regionTexts    = filter (not .
-                                                         intersectsWithShape (rects ++ ellipses))
-                                                        texts
+                    texts          = map entityVal sqlTexts
+                    rects          = zipWith (buildRect texts)
+                                             (map entityVal sqlRects)
+                                             (map keyAsInt sqlRects)
+                    ellipses       = zipWith (buildEllipses texts)
+                                             (map entityVal sqlEllipses)
+                                             (map keyAsInt sqlEllipses)
+                    paths          = zipWith (buildPath rects ellipses)
+                                             (map entityVal sqlPaths)
+                                             (map keyAsInt sqlPaths)
+                    regions        = filter pathIsRegion paths
+                    edges          = filter (not . pathIsRegion) paths
+                    regionTexts    = filter (not .
+                                             intersectsWithShape (rects ++ ellipses))
+                                            texts
 
-                                result = createJSONResponse ["texts" .= (texts ++ regionTexts),
-                                                             "shapes" .= (rects ++ ellipses),
-                                                             "paths" .= (paths ++ regions ++ edges)]
+                    result = createJSONResponse ["texts" .= (texts ++ regionTexts),
+                                                 "shapes" .= (rects ++ ellipses),
+                                                 "paths" .= (paths ++ regions ++ edges)]
 
-                            return result
+                return result
 
 -- | Builds a list of all course codes in the database.
 allCourses :: IO Response
