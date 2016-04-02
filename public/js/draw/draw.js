@@ -38,6 +38,72 @@ function getPosition(elem) {
     return { x: xPosition, y: yPosition };
 }
 
+/**
+ * Creates a new node at position (posX, posY) on the SVG canvas.
+ */
+function makeNode(posX, posY, jsonObj) {
+    'use strict';
+
+    if (jsonObj){
+        var colourId = jsonObj.fill;
+        var textPosX = jsonObj.pos[0] + (jsonObj.width/2) || posX;
+        var textPosY = jsonObj.text[0].pos[1] || posY;
+        var textStr = jsonObj.text[0].text || '';
+        var nodeWidth = jsonObj.width;
+        var nodeHeight = jsonObj.height;
+    } else {
+        var colourId = nodeColourId;
+        var textPosX = posX;
+        var textPosY = posY;
+        var textStr = '';
+        var nodeWidth = 40;
+        var nodeHeight = 32;
+    }
+
+        var g = document.createElementNS(xmlns, 'g');
+        var node = document.createElementNS(xmlns, 'rect');
+
+        g.setAttribute('class', 'node');
+        g.setAttribute('id', 'g' + nodeId);
+        g.setAttribute('data-active', 'active');
+        g.setAttribute('style', 'fill:' + colourId);
+
+        node.setAttribute('x', posX);
+        node.setAttribute('y', posY);
+        node.setAttribute('rx', 4);
+        node.setAttribute('ry', 4);
+        node.setAttribute('id', 'n' + nodeId);
+        node.setAttribute('width', nodeWidth);
+        node.setAttribute('height', nodeHeight);
+        node.setAttribute('class', 'node');
+        node.predecessors = [];
+        node.successors = [];
+        // note: children doesn't work because javascript objects already have a children attribute
+        node.inEdges = [];
+        node.outEdges = [];
+
+        g.appendChild(node);
+        svgDoc.appendChild(g);
+        document.getElementById('n' + nodeId).addEventListener('mousedown', nodeClicked, false);
+
+        select(document.getElementById('n' + nodeId));
+
+        // Input Text into Shape
+        var code = document.createElementNS(xmlns, 'text');
+        code.setAttributeNS(null, 'id', 't' + nodeId);
+        code.setAttributeNS(null, 'fill', 'black');
+        code.setAttributeNS(null, 'align', 'begin');
+        code.setAttributeNS(null, 'x', textPosX);
+        code.setAttributeNS(null, 'y', textPosY);
+        code.setAttributeNS(null, 'class', 'mylabel'); // note: label is a class in bootstrap
+        var textNode = document.createTextNode(textStr);
+        code.appendChild(textNode);
+        g.appendChild(code);
+
+        document.getElementById('t' + nodeId).addEventListener('mousedown', nodeClicked, false);
+
+        nodeId += 1;
+}
 
 /**
  * In node-mode creates a new node at the position of the click event on the SVG canvas.
@@ -50,35 +116,7 @@ function makeNodePath(e) {
 
     var position = getClickPosition(e, e.currentTarget);
     if (mode === 'node-mode') {
-        var g = document.createElementNS(xmlns, 'g');
-        var node = document.createElementNS(xmlns, 'rect');
-
-        g.setAttribute('class', 'node');
-        g.setAttribute('id', 'g' + nodeId);
-        g.setAttribute('data-active', 'active');
-        g.setAttribute('data-group', nodeColourId);
-
-        node.setAttribute('x', position.x);
-        node.setAttribute('y', position.y);
-        node.setAttribute('rx', 4);
-        node.setAttribute('ry', 4);
-        node.setAttribute('id', 'n' + nodeId);
-        node.setAttribute('width', nodeWidth);
-        node.setAttribute('height', nodeHeight);
-        node.setAttribute('class', 'node');
-        node.parents = [];
-        node.kids = [];
-        // note: children doesn't work because javascript objects already have a children attribute
-        node.inEdges = [];
-        node.outEdges = [];
-
-        g.appendChild(node);
-        svgDoc.appendChild(g);
-        document.getElementById('n' + nodeId).addEventListener('mousedown', nodeClicked, false);
-
-        select(document.getElementById('n' + nodeId));
-
-        nodeId += 1;
+        makeNode(position.x, position.y);
     } else if (mode === 'path-mode') {
         // make elbow joint, only if the dummy point is outside the starting node
         if (startNode !== null && ((position.x < parseFloat(startNode.getAttribute('x'), 10)) ||
@@ -118,7 +156,7 @@ function makeNodePath(e) {
             curPath.setAttributeNS(null, 'id', 'r' + regionId);
             elbow = makeElbow(position);
             elbow.partOfPath = 'elbow';
-        } else { 
+        } else {
             curPath.setAttributeNS(null, 'd', curPath.getAttribute('d') + 'L' + position.x + ',' + position.y + ' ');
             elbow = makeElbow(position);
             elbow.partOfPath = 'elbow';
@@ -128,9 +166,9 @@ function makeNodePath(e) {
 
 
 /**
- * Handles the clicking of the target of the event (a node) in different modes. 
- * In erase-mode, erases the node, and all edges in and out of the node. 
- * In change-mode, moves the node, and in path-mode, marks it a start node 
+ * Handles the clicking of the target of the event (a node) in different modes.
+ * In erase-mode, erases the node, and all edges in and out of the node.
+ * In change-mode, moves the node, and in path-mode, marks it a start node
  * or creates a path if valid.                                                          // !! FIX DESCRIPTION
  * @param {object} e The mousedown event.
  */
@@ -138,7 +176,7 @@ function nodeClicked(e) {
     'use strict';
 
     var index = null;
-    
+
     var targetNode = null;
     if (e.currentTarget.id[0] === 't') {
         targetNode = document.getElementById('n' + e.currentTarget.id.slice(1));
@@ -147,18 +185,18 @@ function nodeClicked(e) {
     }
 
     if (mode === 'erase-mode') {
-        // remove any paths leading to and from this node from the other node's 
+        // remove any paths leading to and from this node from the other node's
         // list of paths and remove this node from the other nodes' adjacency lists
-        targetNode.inEdges.map(function (edge) { 
-            // Remove edge from parent's outEdges and current node from parent's kids list
+        targetNode.inEdges.map(function (edge) {
+            // Remove edge from parent's outEdges and current node from parent's successors list
             var edgeParent = document.getElementById(edge.id.slice(0, edge.id.lastIndexOf('n')));
             index = edgeParent.outEdges.indexOf(edge);
             if (index > -1) {
                 edgeParent.outEdges.splice(index, 1);
             }
-            index = edgeParent.kids.indexOf(targetNode);
+            index = edgeParent.successors.indexOf(targetNode);
             if (index > -1) {
-                edgeParent.kids.splice(index, 1);
+                edgeParent.successors.splice(index, 1);
             }
             erasePath(edge);
         });
@@ -169,9 +207,9 @@ function nodeClicked(e) {
             if (index > -1) {
                 edgeChild.inEdges.splice(index, 1);
             }
-            index = edgeChild.parents.indexOf(targetNode);
+            index = edgeChild.predecessors.indexOf(targetNode);
             if (index > -1) {
-                edgeChild.parents.splice(index, 1);
+                edgeChild.predecessors.splice(index, 1);
             }
             erasePath(edge);
         });
@@ -182,7 +220,7 @@ function nodeClicked(e) {
         nodeMoving = targetNode;
         prevX = position.x;
         prevY = position.y;
-        
+
         // show which node has been selected
         select(targetNode);
 
@@ -266,14 +304,14 @@ function moveNodeElbow(e) {
                 textNode.setAttribute('x', textX);
                 textNode.setAttribute('y', textY);
             }
-            
+
             // move in and out edges by the same amount
             nodeMoving.inEdges.map(function (item) { // modify last node in path
                 movePath(item, (position.x - prevX), (position.y - prevY), 'end', -1);
             });
             nodeMoving.outEdges.map(function (item) { // modify the first node in path
                 movePath(item, (position.x - prevX), (position.y - prevY), 'start', -1);
-            });   
+            });
 
             prevX = position.x;
             prevY = position.y;
@@ -303,7 +341,7 @@ function moveNodeElbow(e) {
 function moveElbow(elbow, position) {
     'use strict';
 
-    // move dummy node 
+    // move dummy node
     var elbowX = parseFloat(elbow.getAttribute('cx'), 10);
     var elbowY = parseFloat(elbow.getAttribute('cy'), 10);
     elbowX += (position.x - prevX);
@@ -317,7 +355,7 @@ function moveElbow(elbow, position) {
         partOfPath = elbow.partOfPath;
     }
 
-    movePath(document.getElementById(elbow.path), 
+    movePath(document.getElementById(elbow.path),
              (position.x - prevX), (position.y - prevY), 'elbow',
              document.getElementById(elbow.path).elbows.indexOf(elbow));
 }
@@ -355,7 +393,7 @@ function finishRegion() {
         curPath.setAttributeNS(null, 'data-active', 'region');
 
         curPath.elbows.map(function (item) {
-            item.path = 'r' + regionId; 
+            item.path = 'r' + regionId;
             item.setAttributeNS(null, 'class', 'rElbow');
         });
 
@@ -394,7 +432,7 @@ function regionClicked(e) {
 /**
  * Convert JSON data into SVG elements then populate the canvas with them.
  */
-function jsonToSvg(jsonStr) {
+function renderJson(jsonStr) {
     'use strict';
 
     var jsonData = JSON.parse(jsonStr);
@@ -419,53 +457,9 @@ function jsonToSvg(jsonStr) {
         nodeId += 1;
     });
 
-    // Parse Shape data
+    // generate SVG nodes
     jsonData[1][1].forEach(function(jsonShape) {
-        // Create Shape and add it to SVG canvas
-        var g = document.createElementNS(xmlns, 'g');
-        var node = document.createElementNS(xmlns, 'rect');
-
-        g.setAttribute('class', 'node');
-        g.setAttribute('id', 'g' + nodeId);
-        g.setAttribute('data-active', 'active');
-        g.setAttribute('fill', jsonShape.fill);
-
-        node.setAttribute('x', jsonShape.pos[0]);
-        node.setAttribute('y', jsonShape.pos[1]);
-        node.setAttribute('rx', 4);
-        node.setAttribute('ry', 4);
-        node.setAttribute('id', 'n' + nodeId);
-        node.setAttribute('width', jsonShape.width);
-        node.setAttribute('height', jsonShape.height);
-        node.setAttribute('class', 'node');
-        node.parents = [];
-        node.kids = [];
-        // note: children doesn't work because javascript objects already have a children attribute
-        node.inEdges = [];
-        node.outEdges = [];
-
-        g.appendChild(node);
-        svgDoc.appendChild(g);
-        document.getElementById('n' + nodeId).addEventListener('mousedown', nodeClicked, false);
-
-        select(document.getElementById('n' + nodeId));
-        
-
-        // Input Text into Shape
-        var code = document.createElementNS(xmlns, 'text');
-        code.setAttributeNS(null, 'id', 't' + nodeId);
-        code.setAttributeNS(null, 'fill', 'black');
-        code.setAttributeNS(null, 'align', jsonShape.text[0].align);
-        code.setAttributeNS(null, 'x', jsonShape.text[0].pos[0] + (jsonShape.width/2));
-        code.setAttributeNS(null, 'y', jsonShape.text[0].pos[1]);
-        code.setAttributeNS(null, 'class', 'mylabel'); // note: label is a class in bootstrap
-        var textNode = document.createTextNode(jsonShape.text[0].text);
-        code.appendChild(textNode);
-        g.appendChild(code);
-
-        document.getElementById('t' + nodeId).addEventListener('mousedown', nodeClicked, false);
-
-        nodeId += 1;
+        makeNode(jsonShape.pos[0], jsonShape.pos[1], jsonShape);
     });
 
     // Parse Text data
