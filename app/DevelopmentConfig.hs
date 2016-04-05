@@ -69,7 +69,7 @@ markdownPath = "./"
 
 -- | The relative path to the directory that contains all of the graph SVG files.
 graphPath :: String
-graphPath = "./public/res/graphs/"
+graphPath = "./graphs/"
 
 -- | The relative path to the directory containing all of the generated CSS files.
 genCssPath :: String
