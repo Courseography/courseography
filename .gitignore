@@ -8,10 +8,10 @@ cabal.sandbox.config
 *.sqlite3-wal
 
 # chosen configuration file
-/hs/Config.hs
+/app/Config.hs
 
 # generated build files
-/hs/dist/
+/app/dist/
 
 # generated stack files
 .stack-work/
@@ -20,7 +20,7 @@ cabal.sandbox.config
 /public/style/
 
 # generated resources
-/public/res/graphs/gen/*.svg
+/graphs/gen/*.svg
 
 # course videos
 /public/videos/

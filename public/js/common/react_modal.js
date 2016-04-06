@@ -78,3 +78,9 @@ var Video = React.createClass({
         );
     }
 });
+
+
+// Ugly way of getting openReactModal exported globally. Apparently
+// running this file through Babel hides the names. Eventually use
+// modules to remove this.
+window.openReactModal = openReactModal;
