@@ -34,8 +34,9 @@ runServer = do
     privacyContents <- LazyIO.readFile $ markdownPath ++ "PRIVACY.md"
 
     -- Start the HTTP server
-    simpleHTTP serverConf $ msum
-        [ do
+    simpleHTTP serverConf $ do
+      decodeBody (defaultBodyPolicy "/tmp/" 4096 4096 4096)
+      msum [ do
               nullDir
               seeOther "graph" (toResponse "Redirecting to /graph"),
               dir "grid" gridResponse,
@@ -60,8 +61,8 @@ runServer = do
               dir "calendar" $ lookCookieValue "selected-lectures" >>= calendarResponse,
               dir "get-json-data" $ look "gid" >>= \gid -> liftIO $ (getGraphJSON (read gid :: Int64)),
               dir "loading" $ look "size" >>= loadingResponse,
-              dir "save-json" $ look "json-data" >>= \jsonStr -> liftIO $ saveGraphJSON jsonStr,
-              dir "insert-graph" $ look "name-data" >>= \nameStr -> insertGraph nameStr,
+              dir "save-json" $ look "jsonData" >>= \jsonStr -> liftIO $ saveGraphJSON jsonStr,
+              dir "insert-graph" $ look "nameData" >>= \nameStr -> insertGraph nameStr,
               notFoundResponse
         ]
     where

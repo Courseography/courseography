@@ -89,12 +89,12 @@ $('#finish-region').click(function () {
 $('#save-graph').click(function () {
     $.ajax({
         url: 'insert-graph',
-        data: {'name-data' : $('#area-of-study').val()},
+        data: {'nameData' : $('#area-of-study').val()},
         method: 'POST',
         success: function(gId) {
             $.ajax({
                 url: 'save-json',
-                data: {'json-data' : convertSvgToJson(gId)},
+                data: {'jsonData' : convertSvgToJson(gId)},
                 method: 'POST',
                 success: function(status) {
                     console.log(status);
