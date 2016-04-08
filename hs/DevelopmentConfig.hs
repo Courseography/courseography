@@ -123,4 +123,4 @@ holidays = ["20151012T", "20151109T", "20151110T",
 
 -- | Enable Facebook integration. Should only be true on the production server.
 enableFb :: Bool
-enableFb = True
+enableFb = False
