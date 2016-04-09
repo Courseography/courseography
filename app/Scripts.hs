@@ -61,7 +61,7 @@ graphScripts = do
          "/static/js/common/export/export.js"])
     H.script ! A.type_ "text/babel" ! A.src "/static/js/common/react_modal.js.jsx" $ ""
     H.script ! A.src "/static/js/requirejs-config.js" $ ""
-    H.script ! H.dataAttribute "main" "/static/js/graph" ! A.src "/static/js/require.js" $ ""
+    H.script ! H.dataAttribute "main" "/static/js/graph" ! A.src "/static/js/vendor/require.js" $ ""
 
 timetableScripts :: H.Html
 timetableScripts = do
@@ -81,7 +81,7 @@ timetableScripts = do
          "/static/js/common/modal.js",
          "/static/js/common/course_description.js",
          "/static/js/common/export/export.js"])
-    H.script ! H.dataAttribute "main" "/static/js/grid" ! A.src "/static/js/require.js" $ ""
+    H.script ! H.dataAttribute "main" "/static/js/grid" ! A.src "/static/js/vendor/require.js" $ ""
 
 drawScripts :: H.Html
 drawScripts = do
