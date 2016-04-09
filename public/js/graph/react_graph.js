@@ -1,3 +1,5 @@
+import * as tooltip from 'es6!graph/tooltip';
+
 /**
  *
  * @param {string} s
@@ -266,7 +268,7 @@ var Graph = React.createClass({
         // Old hover modal code
         if ($('.modal').length === 0) {
             $('.tooltip-group').remove();
-            displayTooltip(courseID);
+            tooltip.displayTooltip(courseID);
         }
     },
 
@@ -277,7 +279,7 @@ var Graph = React.createClass({
 
         // Old hover modal code
         if ($('.modal').length === 0) {
-            removeTooltip(this);
+            tooltip.removeTooltip(this);
         }
     },
 

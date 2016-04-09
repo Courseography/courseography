@@ -4,7 +4,7 @@ var timeouts = [];            // All timeouts. Used to remove timeouts later on.
  * Displays a tooltip for a Node.
  * @param {string} nodeId The Node's ID.
  */
-function displayTooltip(nodeId) {
+export function displayTooltip(nodeId) {
     'use strict';
 
     var rectObject = $('#' + nodeId).find('rect');
@@ -148,7 +148,7 @@ function clearAllTimeouts() {
 /**
  * Set timeout to remove a tooltip.
  */
-function removeTooltip(elem) {
+export function removeTooltip(elem) {
     var timeout = setTimeout(function () {
         $('.tooltip-group').hide('slow', function () { $(elem).remove();});
     }, 100);
