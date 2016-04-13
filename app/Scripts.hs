@@ -49,8 +49,7 @@ analyticsScripts = [
 graphScripts :: H.Html
 graphScripts = do
     sequence_ (map toScript $
-        ["/static/js/graph/tooltip.js",
-         "/static/js/common/course_videos.js",
+        ["/static/js/common/course_videos.js",
          "/static/js/common/modal.js",
          "/static/js/common/objects/course.js",
          "/static/js/common/cookie_handler.js",
@@ -59,12 +58,10 @@ graphScripts = do
          "/static/js/common/utilities/util.js",
          "/static/js/common/image_conversion.js",
          "/static/js/common/graph_image.js",
-         "/static/js/graph/sidebar/sidebar_divs.js",
-         "/static/js/graph/sidebar/focus_descriptions.js",
          "/static/js/common/export/export.js"])
     H.script ! A.type_ "text/babel" ! A.src "/static/js/common/react_modal.js.jsx" $ ""
     H.script ! A.src "/static/js/requirejs-config.js" $ ""
-    H.script ! H.dataAttribute "main" "/static/js/graph" ! A.src "/static/js/require.js" $ ""
+    H.script ! H.dataAttribute "main" "/static/js/graph" ! A.src "/static/js/vendor/require.js" $ ""
 
 timetableScripts :: H.Html
 timetableScripts = do
@@ -84,7 +81,7 @@ timetableScripts = do
          "/static/js/common/modal.js",
          "/static/js/common/course_description.js",
          "/static/js/common/export/export.js"])
-    H.script ! H.dataAttribute "main" "/static/js/grid" ! A.src "/static/js/require.js" $ ""
+    H.script ! H.dataAttribute "main" "/static/js/grid" ! A.src "/static/js/vendor/require.js" $ ""
 
 drawScripts :: H.Html
 drawScripts = do
