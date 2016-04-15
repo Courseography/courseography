@@ -101,7 +101,6 @@ $('#save-graph').click(function () {
     });
 });
 
-
 $('#submit-graph-name').click(function() {
        $.ajax({
             url: 'get-json-data',
