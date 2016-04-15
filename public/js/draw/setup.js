@@ -101,19 +101,20 @@ $('#save-graph').click(function () {
     });
 });
 
-$('#submit-gid').click(function() {
-    $.ajax({
-        url: 'get-json-data',
-        data: {gid : $('#area-of-study').val()},
-        dataType: 'json',
-        success: function(data) {
-            $('#json-data').html('<pre>' + JSON.stringify(data) + '<pre>');
-        },
-        error: function(xhr, status, err) {
-            console.error('graphs', status, err.toString());
-        }
+
+$('#submit-graph-name').click(function() {
+       $.ajax({
+            url: 'get-json-data',
+            data: {graphName : $('#area-of-study').val()},
+            dataType: 'json',
+            success: function(data) {
+                $('#json-data').html('<pre>' + JSON.stringify(data) + '<pre>');
+            },
+            error: function(xhr, status, err) {
+                console.error('graphs', status, err.toString());
+            }
+        });
     });
-});
 
 document.addEventListener('keydown', keyboard, false);
 
