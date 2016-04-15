@@ -54,9 +54,6 @@ function openModal(title, modalDiv) {
 function lightUpGraph() {
     'use strict';
 
-    $.each(nodes, function (index, elem) {
-        window[elem].updateSVG();
-    });
     $('body').css('background', 'rgb(255,255,255)');
 }
 
@@ -67,7 +64,6 @@ function lightUpGraph() {
 function dimGraph() {
     'use strict';
 
-    $('.node, .hybrid').attr('data-active', 'unlit');
     $('body').css('background', 'rgb(40,40,40)');
 
     $('.tooltip-group').remove();
