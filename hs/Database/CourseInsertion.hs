@@ -21,7 +21,7 @@ import Control.Monad.IO.Class (MonadIO)
 import Control.Monad.Trans.Reader (ReaderT)
 import Data.Maybe (fromMaybe)
 import Config (databasePath)
-import Database.Persist.Sqlite (selectFirst, fromSqlKey, toSqlKey, insertMany, insert_, insert, SqlBackend, (=.), (==.), updateWhere, runSqlite)
+import Database.Persist.Sqlite (selectFirst, fromSqlKey, toSqlKey, insertMany_, insert_, insert, SqlBackend, (=.), (==.), updateWhere, runSqlite)
 import Database.Tables
 import Data.Aeson
 
@@ -32,11 +32,13 @@ saveGraphJSON jsonStr nameStr = do
     case jsonObj of
         Nothing -> return $ toResponse ("Error" :: String)
         Just (SvgJSON texts shapes paths) -> do
-            response <- runSqlite databasePath $ do gId <- insert $ Graph nameStr 256 256
-                                                    textKeys <- insertMany texts
-                                                    shapeKeys <- insertMany shapes
-                                                    pathKeys <- insertMany paths
-                                                    updateWhere [GraphId ==. toSqlKey (-1)] [GraphId =. gId]
+            response <- runSqlite databasePath $ do insertMany_ texts
+                                                    insertMany_ shapes
+                                                    insertMany_ paths
+                                                    gId <- insert $ Graph nameStr 256 256
+                                                    updateWhere [TextGraph ==. toSqlKey (-1)] [TextGraph =. gId]
+                                                    updateWhere [PathGraph ==. toSqlKey (-1)] [PathGraph =. gId]
+                                                    updateWhere [ShapeGraph ==. toSqlKey (-1)] [ShapeGraph =. gId]
             return $ toResponse ("Success" :: String)
 
 -- | Inserts course into the Courses table.
