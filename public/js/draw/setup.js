@@ -88,28 +88,15 @@ $('#finish-region').click(function () {
 
 $('#save-graph').click(function () {
     $.ajax({
-        url: 'insert-graph',
-        data: {'nameData' : $('#area-of-study').val()},
+        url: 'save-json',
+        data: {'jsonData' : convertSvgToJson('-1'),
+               'nameData' : $('#area-of-study').val()},
         method: 'POST',
-        success: function(gId) {
-            $.ajax({
-                url: 'save-json',
-                data: {'jsonData' : convertSvgToJson(gId)},
-                method: 'POST',
-                success: function(status) {
-                    console.log(status);
-                },
-                error: function(xhr, status, err) {
-                    console.error('save-graph:', status, err.toString());
-                }
-            });
+        success: function(status) {
+            console.log(status);
         },
         error: function(xhr, status, err) {
-            if (xhr.status === 420) {
-                alert('Sorry! \"' + xhr.responseText + '\" is already taken.');
-            } else {
-                console.error('insert-graph:', status, err.toString());
-            }
+            console.error('save-graph:', status, err.toString());
         }
     });
 });

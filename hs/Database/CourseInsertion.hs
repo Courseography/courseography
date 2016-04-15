@@ -12,8 +12,7 @@ module Database.CourseInsertion
     (insertCourse,
      setTutorialEnrolment,
      setPracticalEnrolment,
-     saveGraphJSON,
-     insertGraph) where
+     saveGraphJSON) where
 
 import qualified Data.Text as T
 import qualified Data.ByteString.Lazy.Char8 as BSL
@@ -22,35 +21,22 @@ import Control.Monad.IO.Class (MonadIO)
 import Control.Monad.Trans.Reader (ReaderT)
 import Data.Maybe (fromMaybe)
 import Config (databasePath)
-import Database.Persist.Sqlite (selectFirst, fromSqlKey, insertMany_, insert_, insert, SqlBackend, (=.), (==.), updateWhere, runSqlite)
+import Database.Persist.Sqlite (selectFirst, fromSqlKey, toSqlKey, insertMany, insert_, insert, SqlBackend, (=.), (==.), updateWhere, runSqlite)
 import Database.Tables
 import Data.Aeson
 
--- | Insert SVG graph and return its id
-insertGraph :: String -> ServerPartT IO Response
-insertGraph nameStr = do
-    response <- runSqlite databasePath $ do
-        nameExists <- selectFirst [GraphTitle ==. nameStr] []
-        case nameExists of
-          Nothing -> runSqlite databasePath $ do
-                         gId <- insert $ Graph nameStr 256 256
-                         return $ Just $ show $ fromSqlKey gId
-          Just _ -> return Nothing
-    case response of
-        Nothing -> resp 420 $ toResponse nameStr
-        Just gId -> ok $ toResponse gId
-
 -- | Inserts SVG graph data into Texts, Shapes, and Paths tables
--- saveGraphJSON :: [Value] -> ()
-saveGraphJSON :: String -> IO Response
-saveGraphJSON jsonStr = do
+saveGraphJSON :: String -> String -> IO Response
+saveGraphJSON jsonStr nameStr = do
     let jsonObj = decode $ BSL.pack jsonStr
     case jsonObj of
         Nothing -> return $ toResponse ("Error" :: String)
         Just (SvgJSON texts shapes paths) -> do
-            response <- runSqlite databasePath $ do insertMany_ texts
-                                                    insertMany_ shapes
-                                                    insertMany_ paths
+            response <- runSqlite databasePath $ do gId <- insert $ Graph nameStr 256 256
+                                                    textKeys <- insertMany texts
+                                                    shapeKeys <- insertMany shapes
+                                                    pathKeys <- insertMany paths
+                                                    updateWhere [GraphId ==. toSqlKey (-1)] [GraphId =. gId]
             return $ toResponse ("Success" :: String)
 
 -- | Inserts course into the Courses table.
