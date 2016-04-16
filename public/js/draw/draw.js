@@ -44,14 +44,14 @@ function getPosition(elem) {
 function makeNode(posX, posY, jsonObj) {
     'use strict';
 
-    if (jsonObj){
-        var textPosX = jsonObj.pos[0] + (jsonObj.width/2) || posX;
-        var textPosY = jsonObj.text[0].pos[1] - (jsonObj.height/4) || posY;
-        var textStr = jsonObj.text[0].text || '';
-        var textFill = jsonObj.text[0].fill;
-        var textAlign = jsonObj.text[0].align;
-        var textId = jsonObj.text[0].rId;
+    var textPosX = posX;
+    var textPosY = posY;
+    var textStr = '';
+    var textFill = '';
+    var textAlign = 'begin';
+    var textId = 't' + nodeId;
 
+    if (jsonObj){
         var nodeWidth = jsonObj.width;
         var nodeHeight = jsonObj.height;
         var nodeFill = jsonObj.fill || 'none';
@@ -59,15 +59,14 @@ function makeNode(posX, posY, jsonObj) {
         var nodeTolerance = jsonObj.tolerance;
 
         switch (jsonObj.type_) {
-            case "Hybrid":
+            case 'Hybrid':
                 var node = document.createElementNS(xmlns, 'rect');
                 var gClass = 'hybrid';
                 textFill = 'white';
                 break;
-            case "BoolNode":
+            case 'BoolNode':
                 var node = document.createElementNS(xmlns, 'ellipse');
                 var gClass = 'bool';
-                textPosX -= (jsonObj.width/2);
                 node.setAttribute('stroke', 'black');
                 node.setAttribute('rx', 10);
                 node.setAttribute('ry', 7);
@@ -82,14 +81,6 @@ function makeNode(posX, posY, jsonObj) {
         }
 
     } else {
-
-        var textPosX = posX;
-        var textPosY = posY;
-        var textStr = '';
-        var textFill = '';
-        var textAlign = 'begin';
-        var textId = 't' + nodeId;
-
         var nodeWidth = 40;
         var nodeHeight = 32;
         var nodeFill = nodeColourId;
@@ -128,19 +119,30 @@ function makeNode(posX, posY, jsonObj) {
         select(document.getElementById(nodeId_));
 
         // Input Text into Shape
-        var code = document.createElementNS(xmlns, 'text');
-        code.setAttributeNS(null, 'id', textId);
-        code.setAttributeNS(null, 'fill', textFill);
-        code.setAttributeNS(null, 'align', textAlign);
-        code.setAttributeNS(null, 'text-anchor', 'middle');
-        code.setAttributeNS(null, 'x', textPosX);
-        code.setAttributeNS(null, 'y', textPosY);
-        code.setAttributeNS(null, 'class', 'mylabel'); // note: label is a class in bootstrap
-        var textNode = document.createTextNode(textStr);
-        code.appendChild(textNode);
-        g.appendChild(code);
+        for (var i = 0; i < jsonObj.text.length; i++) {
+            textPosX = jsonObj.pos[0];
+            if (jsonObj.type_ !== 'BoolNode') {
+                textPosX += (jsonObj.width/2)
+            }
 
-        document.getElementById(textId).addEventListener('mousedown', nodeClicked, false);
+            textPosY = jsonObj.text[i].pos[1] - (jsonObj.height/4);
+            textStr = jsonObj.text[i].text || '';
+            textFill = jsonObj.text[i].fill;
+            textAlign = jsonObj.text[i].align;
+            textId = jsonObj.text[i].rId;
+
+            var code = document.createElementNS(xmlns, 'text');
+            code.setAttributeNS(null, 'id', textId);
+            code.setAttributeNS(null, 'fill', textFill);
+            code.setAttributeNS(null, 'align', textAlign);
+            code.setAttributeNS(null, 'x', textPosX);
+            code.setAttributeNS(null, 'y', textPosY);
+            code.setAttributeNS(null, 'class', 'mylabel'); // note: label is a class in bootstrap
+            var textNode = document.createTextNode(textStr);
+            code.appendChild(textNode);
+            g.appendChild(code);
+            document.getElementById(textId).addEventListener('mousedown', nodeClicked, false);
+        };
 
         nodeId += 1;
 }
