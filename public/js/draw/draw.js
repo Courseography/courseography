@@ -46,7 +46,7 @@ function makeNode(posX, posY, jsonObj) {
 
     if (jsonObj){
         var textPosX = jsonObj.pos[0] + (jsonObj.width/2) || posX;
-        var textPosY = jsonObj.text[0].pos[1] || posY;
+        var textPosY = jsonObj.text[0].pos[1] - (jsonObj.height/4) || posY;
         var textStr = jsonObj.text[0].text || '';
         var textFill = jsonObj.text[0].fill;
         var textAlign = jsonObj.text[0].align;
@@ -61,10 +61,13 @@ function makeNode(posX, posY, jsonObj) {
         switch (jsonObj.type_) {
             case "Hybrid":
                 var node = document.createElementNS(xmlns, 'rect');
+                var gClass = 'hybrid';
                 textFill = 'white';
                 break;
             case "BoolNode":
                 var node = document.createElementNS(xmlns, 'ellipse');
+                var gClass = 'bool';
+                textPosX -= (jsonObj.width/2);
                 node.setAttribute('stroke', 'black');
                 node.setAttribute('rx', 10);
                 node.setAttribute('ry', 7);
@@ -73,6 +76,7 @@ function makeNode(posX, posY, jsonObj) {
                 break;
             default: // Node
                 var node = document.createElementNS(xmlns, 'rect');
+                var gClass = 'node';
                 node.setAttribute('rx', 4);
                 node.setAttribute('ry', 4);
         }
@@ -92,6 +96,7 @@ function makeNode(posX, posY, jsonObj) {
         var nodeId_ = 'n' + nodeId;
         var nodeTolerance = 9;
 
+        var gClass = 'node';
         var node = document.createElementNS(xmlns, 'rect');
         node.setAttribute('rx', 4);
         node.setAttribute('ry', 4);
@@ -99,8 +104,7 @@ function makeNode(posX, posY, jsonObj) {
 
         var g = document.createElementNS(xmlns, 'g');
 
-
-        g.setAttribute('class', 'node');
+        g.setAttribute('class', gClass);
         g.setAttribute('id', 'g' + nodeId);
         g.setAttribute('data-active', 'active');
 
@@ -110,7 +114,6 @@ function makeNode(posX, posY, jsonObj) {
         node.setAttribute('id', nodeId_);
         node.setAttribute('width', nodeWidth);
         node.setAttribute('height', nodeHeight);
-        node.setAttribute('class', 'node');
         node.setAttribute('tolerance', nodeTolerance);
         node.predecessors = [];
         node.successors = [];
@@ -129,6 +132,7 @@ function makeNode(posX, posY, jsonObj) {
         code.setAttributeNS(null, 'id', textId);
         code.setAttributeNS(null, 'fill', textFill);
         code.setAttributeNS(null, 'align', textAlign);
+        code.setAttributeNS(null, 'text-anchor', 'middle');
         code.setAttributeNS(null, 'x', textPosX);
         code.setAttributeNS(null, 'y', textPosY);
         code.setAttributeNS(null, 'class', 'mylabel'); // note: label is a class in bootstrap
@@ -507,6 +511,7 @@ function renderJson(jsonStr) {
             code.setAttributeNS(null, 'align', jsonText.align);
             code.setAttributeNS(null, 'x', jsonText.pos[0]);
             code.setAttributeNS(null, 'y', jsonText.pos[1]);
+            code.setAttributeNS(null, 'class', 'region-label');
             var textNode = document.createTextNode(jsonText.text);
             code.appendChild(textNode);
             svgDoc.appendChild(code);
