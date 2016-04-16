@@ -124,4 +124,5 @@ executable courseography
     time
   default-language: Haskell2010
   ghc-options: -Wall -fwarn-tabs
-  hs-source-dirs: hs, app
+  hs-source-dirs: app
+  
