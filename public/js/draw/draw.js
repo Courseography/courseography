@@ -45,37 +45,73 @@ function makeNode(posX, posY, jsonObj) {
     'use strict';
 
     if (jsonObj){
-        var colourId = jsonObj.fill;
         var textPosX = jsonObj.pos[0] + (jsonObj.width/2) || posX;
         var textPosY = jsonObj.text[0].pos[1] || posY;
         var textStr = jsonObj.text[0].text || '';
+        var textFill = jsonObj.text[0].fill;
+        var textAlign = jsonObj.text[0].align;
+        var textId = jsonObj.text[0].rId;
+
         var nodeWidth = jsonObj.width;
         var nodeHeight = jsonObj.height;
+        var nodeFill = jsonObj.fill || 'none';
+        var nodeId_ = jsonObj.id_;
+        var nodeTolerance = jsonObj.tolerance;
+
+        switch (jsonObj.type_) {
+            case "Hybrid":
+                var node = document.createElementNS(xmlns, 'rect');
+                textFill = 'white';
+                break;
+            case "BoolNode":
+                var node = document.createElementNS(xmlns, 'ellipse');
+                node.setAttribute('stroke', 'black');
+                node.setAttribute('rx', 10);
+                node.setAttribute('ry', 7);
+                node.setAttribute('cx', posX);
+                node.setAttribute('cy', posY);
+                break;
+            default: // Node
+                var node = document.createElementNS(xmlns, 'rect');
+                node.setAttribute('rx', 4);
+                node.setAttribute('ry', 4);
+        }
+
     } else {
-        var colourId = nodeColourId;
+
         var textPosX = posX;
         var textPosY = posY;
         var textStr = '';
+        var textFill = '';
+        var textAlign = 'begin';
+        var textId = 't' + nodeId;
+
         var nodeWidth = 40;
         var nodeHeight = 32;
+        var nodeFill = nodeColourId;
+        var nodeId_ = 'n' + nodeId;
+        var nodeTolerance = 9;
+
+        var node = document.createElementNS(xmlns, 'rect');
+        node.setAttribute('rx', 4);
+        node.setAttribute('ry', 4);
     }
 
         var g = document.createElementNS(xmlns, 'g');
-        var node = document.createElementNS(xmlns, 'rect');
+
 
         g.setAttribute('class', 'node');
         g.setAttribute('id', 'g' + nodeId);
         g.setAttribute('data-active', 'active');
-        g.setAttribute('style', 'fill:' + colourId);
 
         node.setAttribute('x', posX);
         node.setAttribute('y', posY);
-        node.setAttribute('rx', 4);
-        node.setAttribute('ry', 4);
-        node.setAttribute('id', 'n' + nodeId);
+        node.setAttribute('fill', nodeFill);
+        node.setAttribute('id', nodeId_);
         node.setAttribute('width', nodeWidth);
         node.setAttribute('height', nodeHeight);
         node.setAttribute('class', 'node');
+        node.setAttribute('tolerance', nodeTolerance);
         node.predecessors = [];
         node.successors = [];
         // note: children doesn't work because javascript objects already have a children attribute
@@ -84,15 +120,15 @@ function makeNode(posX, posY, jsonObj) {
 
         g.appendChild(node);
         svgDoc.appendChild(g);
-        document.getElementById('n' + nodeId).addEventListener('mousedown', nodeClicked, false);
+        document.getElementById(nodeId_).addEventListener('mousedown', nodeClicked, false);
 
-        select(document.getElementById('n' + nodeId));
+        select(document.getElementById(nodeId_));
 
         // Input Text into Shape
         var code = document.createElementNS(xmlns, 'text');
-        code.setAttributeNS(null, 'id', 't' + nodeId);
-        code.setAttributeNS(null, 'fill', 'black');
-        code.setAttributeNS(null, 'align', 'begin');
+        code.setAttributeNS(null, 'id', textId);
+        code.setAttributeNS(null, 'fill', textFill);
+        code.setAttributeNS(null, 'align', textAlign);
         code.setAttributeNS(null, 'x', textPosX);
         code.setAttributeNS(null, 'y', textPosY);
         code.setAttributeNS(null, 'class', 'mylabel'); // note: label is a class in bootstrap
@@ -100,7 +136,7 @@ function makeNode(posX, posY, jsonObj) {
         code.appendChild(textNode);
         g.appendChild(code);
 
-        document.getElementById('t' + nodeId).addEventListener('mousedown', nodeClicked, false);
+        document.getElementById(textId).addEventListener('mousedown', nodeClicked, false);
 
         nodeId += 1;
 }
