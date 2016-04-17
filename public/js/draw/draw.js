@@ -39,7 +39,11 @@ function getPosition(elem) {
 }
 
 /**
- * Creates a new node at position (posX, posY) on the SVG canvas.
+ * Creates a new node within the SVG canvas with specific attributes.
+ * If no attributes are specified, then a generic blank node is created.
+ * @param {String} posX The x-coordinate of the node.
+ * @param {String} posY The y-coordinate of the node.
+ * @param {JSON} jsonObj Specifies the node's attributes.
  */
 function makeNode(posX, posY, jsonObj) {
     'use strict';
@@ -143,8 +147,8 @@ function makeNode(posX, posY, jsonObj) {
                 document.getElementById(textId).addEventListener('mousedown', nodeClicked, false);
             };
         }
-        select(document.getElementById(nodeId_));
-        nodeId += 1;
+    select(document.getElementById(nodeId_));
+    nodeId += 1;
 }
 
 /**
