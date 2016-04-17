@@ -55,7 +55,7 @@ function makeNode(posX, posY, jsonObj) {
         var nodeWidth = jsonObj.width;
         var nodeHeight = jsonObj.height;
         var nodeFill = jsonObj.fill || 'none';
-        var nodeId_ = jsonObj.id_;
+        var nodeId_ = 'n' + jsonObj.id_;
         var nodeTolerance = jsonObj.tolerance;
 
         switch (jsonObj.type_) {
@@ -116,34 +116,34 @@ function makeNode(posX, posY, jsonObj) {
         svgDoc.appendChild(g);
         document.getElementById(nodeId_).addEventListener('mousedown', nodeClicked, false);
 
-        select(document.getElementById(nodeId_));
-
         // Input Text into Shape
-        for (var i = 0; i < jsonObj.text.length; i++) {
-            textPosX = jsonObj.pos[0];
-            if (jsonObj.type_ !== 'BoolNode') {
-                textPosX += (jsonObj.width/2)
-            }
+        if (jsonObj){
+            for (var i = 0; i < jsonObj.text.length; i++) {
+                textPosX = jsonObj.pos[0];
+                if (jsonObj.type_ !== 'BoolNode') {
+                    textPosX += (jsonObj.width/2)
+                }
 
-            textPosY = jsonObj.text[i].pos[1] - (jsonObj.height/4);
-            textStr = jsonObj.text[i].text || '';
-            textFill = jsonObj.text[i].fill;
-            textAlign = jsonObj.text[i].align;
-            textId = jsonObj.text[i].rId;
+                textPosY = jsonObj.text[i].pos[1] - (jsonObj.height/4);
+                textStr = jsonObj.text[i].text || '';
+                textFill = jsonObj.text[i].fill;
+                textAlign = jsonObj.text[i].align;
+                textId = 't' + jsonObj.id_;
 
-            var code = document.createElementNS(xmlns, 'text');
-            code.setAttributeNS(null, 'id', textId);
-            code.setAttributeNS(null, 'fill', textFill);
-            code.setAttributeNS(null, 'align', textAlign);
-            code.setAttributeNS(null, 'x', textPosX);
-            code.setAttributeNS(null, 'y', textPosY);
-            code.setAttributeNS(null, 'class', 'mylabel'); // note: label is a class in bootstrap
-            var textNode = document.createTextNode(textStr);
-            code.appendChild(textNode);
-            g.appendChild(code);
-            document.getElementById(textId).addEventListener('mousedown', nodeClicked, false);
-        };
-
+                var code = document.createElementNS(xmlns, 'text');
+                code.setAttributeNS(null, 'id', textId);
+                code.setAttributeNS(null, 'fill', textFill);
+                code.setAttributeNS(null, 'align', textAlign);
+                code.setAttributeNS(null, 'x', textPosX);
+                code.setAttributeNS(null, 'y', textPosY);
+                code.setAttributeNS(null, 'class', 'mylabel'); // note: label is a class in bootstrap
+                var textNode = document.createTextNode(textStr);
+                code.appendChild(textNode);
+                g.appendChild(code);
+                document.getElementById(textId).addEventListener('mousedown', nodeClicked, false);
+            };
+        }
+        select(document.getElementById(nodeId_));
         nodeId += 1;
 }
 
