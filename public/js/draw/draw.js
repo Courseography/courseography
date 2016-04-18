@@ -404,10 +404,9 @@ function convertSvgToJson(gId) {
     var svgElements = document.getElementById('mySVG').children;
     for (var i = 0; i < svgElements.length; i++) {
         if (svgElements[i].tagName === 'g' && svgElements[i].id !== 'regions') {
-            var textObj = '';
             var gText = svgElements[i].querySelector('text');
             if (gText !== null) {
-                textObj = {
+                texts.push({
                     'graph'     : parseInt(gId),
                     'rId'       : '',
                     'pos'       : [ parseFloat(gText.getAttribute('x')),
@@ -416,8 +415,7 @@ function convertSvgToJson(gId) {
                     'text'      : gText.textContent,
                     'align'     : 'begin',
                     'fill'      : ''
-                };
-               texts.push(textObj);
+                });
             }
 
             var gRect = svgElements[i].querySelector('rect');
@@ -431,7 +429,7 @@ function convertSvgToJson(gId) {
                     'height'    : parseFloat(gRect.getAttribute('height')),
                     'fill'      : 'none',
                     'stroke'    : '',
-                    'text'      : [textObj],
+                    'text'      : ((gText !== null) ? texts.slice(-1) : []),
                     'tolerance' : 9,
                     'type_'     : 'Node'
             });
@@ -444,8 +442,8 @@ function convertSvgToJson(gId) {
                     'fill'      : 'none',
                     'stroke'    : '',
                     'isRegion'  : false,
-                    'source'    : getClosestText(pathCoords[0], shapes),
-                    'target'    : getClosestText(pathCoords[1], shapes)
+                    'source'    : '',
+                    'target'    : ''
             });
         }
     }
@@ -482,15 +480,4 @@ function getClosestText(coords, nodeList) {
     }).sort(function(a,b) {
         return a[1] === b[1] ? 0 : a[1] < b[1] ? -1: 1
     })[0][0];
-}
-
-
-/**
- * saveGraph(jsonData)
- * Insert JSON data into Persistent graph table.
- */
-function saveGraph(jsonData) {
-    'use strict';
-
-    console.log(JSON.stringify(jsonData));
 }

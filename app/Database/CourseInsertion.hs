@@ -32,14 +32,12 @@ saveGraphJSON jsonStr nameStr = do
     case jsonObj of
         Nothing -> return $ toResponse ("Error" :: String)
         Just (SvgJSON texts shapes paths) -> do
-            response <- runSqlite databasePath $ do insertMany_ texts
-                                                    insertMany_ shapes
-                                                    insertMany_ paths
-                                                    gId <- insert $ Graph nameStr 256 256
-                                                    updateWhere [TextGraph ==. toSqlKey (-1)] [TextGraph =. gId]
-                                                    updateWhere [PathGraph ==. toSqlKey (-1)] [PathGraph =. gId]
-                                                    updateWhere [ShapeGraph ==. toSqlKey (-1)] [ShapeGraph =. gId]
-            return $ toResponse ("Success" :: String)
+            response <- runSqlite databasePath $ do
+                gId <- insert $ Graph nameStr 256 256
+                insertMany_ $ map (\text -> text {textGraph = gId}) texts
+                insertMany_ $ map (\shape -> shape {shapeGraph = gId}) shapes
+                insertMany_ $ map (\path -> path {pathGraph = gId}) paths
+            return $ toResponse $ ("Success" :: String)
 
 -- | Inserts course into the Courses table.
 insertCourse :: MonadIO m => Course -> ReaderT SqlBackend m ()
