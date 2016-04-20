@@ -11,12 +11,12 @@ import Css.Constants
  - Generates all CSS for the draw page. -}
 drawStyles :: Css
 drawStyles = do
+    colourWheelCSS
     mainCSS
     titleDiv
     canvasCSS
     panelCSS
     modeButtonsCSS
-    colourButtonsCSS
     clickedButtonsCSS
     simpleButton
     inputCSS
@@ -25,6 +25,12 @@ drawStyles = do
     elbowCSS
     regionCSS
     finishRegionCSS
+
+{- The colour wheel. -}
+colourWheelCSS :: Css
+colourWheelCSS = "#colour-wheel" ? do
+    height (px 225)
+    width (px 225)
 
 {- The wrapping around the canvas elements. -}
 mainCSS :: Css
@@ -95,35 +101,6 @@ clickedButtonsCSS :: Css
 clickedButtonsCSS = ".clicked" ? do
     "color" -: "#DCDCDC !important"
     border solid (px 2) black
-
-{- The colour buttons. -}
-colourButtonsCSS :: Css
-colourButtonsCSS = do
-    ".colour" ? do
-        width (pct 40)
-        margin (px 5) (px 5) (px 5) (px 5)
-        padding0
-        roundCorners
-        alignCenter
-        fontSize (em 0.75)
-        border solid (px 2) "#008080"
-        "-webkit-transition" -: "all 0.2s"
-        "-moz-transition" -: "all 0.2s"
-        "-ms-transition" -: "all 0.2s"
-        "-o-transition" -: "all 0.2s"
-        "transition" -: "all 0.2s"
-        ":hover" & do
-            "background-color" -: "black !important"
-            "color" -: "#DCDCDC !important"
-            cursor pointer
-    "#red" ? do
-        backgroundColor $ parse dRed
-    "#green" ? do
-        backgroundColor $ parse dGreen
-    "#blue"? do
-        backgroundColor $ parse dBlue
-    "#purple"? do
-        backgroundColor $ parse dPurple
 
 {- The input field. -}
 inputCSS :: Css

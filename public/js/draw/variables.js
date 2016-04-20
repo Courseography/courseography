@@ -5,7 +5,6 @@ var xmlns = 'http://www.w3.org/2000/svg';
 var svgDoc = null;
 var nodeId = 0;
 var mode = 'node-mode';
-var nodeColourId = 'red';
 var nodeMoving = null;      // for movement and path creation
 var prevX = -1;             // for movement
 var prevY = -1;             // for movement

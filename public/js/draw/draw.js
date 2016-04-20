@@ -56,7 +56,6 @@ function makeNodePath(e) {
         g.setAttribute('class', 'node');
         g.setAttribute('id', 'g' + nodeId);
         g.setAttribute('data-active', 'active');
-        g.setAttribute('data-group', nodeColourId);
 
         node.setAttribute('x', position.x);
         node.setAttribute('y', position.y);
@@ -66,6 +65,7 @@ function makeNodePath(e) {
         node.setAttribute('width', nodeWidth);
         node.setAttribute('height', nodeHeight);
         node.setAttribute('class', 'node');
+        node.setAttribute('fill', $('#select-colour').css('background-color'));
         node.parents = [];
         node.kids = [];
         // note: children doesn't work because javascript objects already have a children attribute
@@ -118,7 +118,7 @@ function makeNodePath(e) {
             curPath.setAttributeNS(null, 'id', 'r' + regionId);
             elbow = makeElbow(position);
             elbow.partOfPath = 'elbow';
-        } else { 
+        } else {
             curPath.setAttributeNS(null, 'd', curPath.getAttribute('d') + 'L' + position.x + ',' + position.y + ' ');
             elbow = makeElbow(position);
             elbow.partOfPath = 'elbow';
@@ -128,9 +128,9 @@ function makeNodePath(e) {
 
 
 /**
- * Handles the clicking of the target of the event (a node) in different modes. 
- * In erase-mode, erases the node, and all edges in and out of the node. 
- * In change-mode, moves the node, and in path-mode, marks it a start node 
+ * Handles the clicking of the target of the event (a node) in different modes.
+ * In erase-mode, erases the node, and all edges in and out of the node.
+ * In change-mode, moves the node, and in path-mode, marks it a start node
  * or creates a path if valid.                                                          // !! FIX DESCRIPTION
  * @param {object} e The mousedown event.
  */
@@ -138,7 +138,7 @@ function nodeClicked(e) {
     'use strict';
 
     var index = null;
-    
+
     var targetNode = null;
     if (e.currentTarget.id[0] === 't') {
         targetNode = document.getElementById('n' + e.currentTarget.id.slice(1));
@@ -147,9 +147,9 @@ function nodeClicked(e) {
     }
 
     if (mode === 'erase-mode') {
-        // remove any paths leading to and from this node from the other node's 
+        // remove any paths leading to and from this node from the other node's
         // list of paths and remove this node from the other nodes' adjacency lists
-        targetNode.inEdges.map(function (edge) { 
+        targetNode.inEdges.map(function (edge) {
             // Remove edge from parent's outEdges and current node from parent's kids list
             var edgeParent = document.getElementById(edge.id.slice(0, edge.id.lastIndexOf('n')));
             index = edgeParent.outEdges.indexOf(edge);
@@ -182,7 +182,7 @@ function nodeClicked(e) {
         nodeMoving = targetNode;
         prevX = position.x;
         prevY = position.y;
-        
+
         // show which node has been selected
         select(targetNode);
 
@@ -266,14 +266,14 @@ function moveNodeElbow(e) {
                 textNode.setAttribute('x', textX);
                 textNode.setAttribute('y', textY);
             }
-            
+
             // move in and out edges by the same amount
             nodeMoving.inEdges.map(function (item) { // modify last node in path
                 movePath(item, (position.x - prevX), (position.y - prevY), 'end', -1);
             });
             nodeMoving.outEdges.map(function (item) { // modify the first node in path
                 movePath(item, (position.x - prevX), (position.y - prevY), 'start', -1);
-            });   
+            });
 
             prevX = position.x;
             prevY = position.y;
@@ -303,7 +303,7 @@ function moveNodeElbow(e) {
 function moveElbow(elbow, position) {
     'use strict';
 
-    // move dummy node 
+    // move dummy node
     var elbowX = parseFloat(elbow.getAttribute('cx'), 10);
     var elbowY = parseFloat(elbow.getAttribute('cy'), 10);
     elbowX += (position.x - prevX);
@@ -317,7 +317,7 @@ function moveElbow(elbow, position) {
         partOfPath = elbow.partOfPath;
     }
 
-    movePath(document.getElementById(elbow.path), 
+    movePath(document.getElementById(elbow.path),
              (position.x - prevX), (position.y - prevY), 'elbow',
              document.getElementById(elbow.path).elbows.indexOf(elbow));
 }
@@ -348,14 +348,14 @@ function finishRegion() {
 
     if (mode === 'region-mode' && curPath !== null && curPath.elbows.length >= 3) {
         curPath.setAttributeNS(null, 'd', curPath.getAttribute('d') + 'Z');
-        curPath.setAttributeNS(null, 'data-group', nodeColourId);
+        curPath.setAttribute('fill', $('#select-colour').css('background-color'));
         curPath.addEventListener('mousedown', regionClicked, false);
         curPath.setAttributeNS(null, 'pointer-events','boundingBox'); // to solve point in polygon problem
         curPath.setAttributeNS(null, 'class', 'region');
         curPath.setAttributeNS(null, 'data-active', 'region');
 
         curPath.elbows.map(function (item) {
-            item.path = 'r' + regionId; 
+            item.path = 'r' + regionId;
             item.setAttributeNS(null, 'class', 'rElbow');
         });
 

@@ -10,7 +10,7 @@ function setupSVGCanvas() {
     div.setAttribute('id', 'main');
     // bgdiv as sibling necessary to decrease grid opacity without effecting svg objects
     var bgdiv = document.createElement('div');
-    bgdiv.setAttribute('id', 'background'); 
+    bgdiv.setAttribute('id', 'background');
     var svg = document.createElementNS(xmlns, 'svg');
     svg.setAttribute('id', 'mySVG');
 
@@ -73,13 +73,25 @@ $('.mode').each(function () {
         changeMode(this.id);});
     });
 
-$('.colour').each(function () {
-    $(this).click(function () {
-        changeColour(this.id);});
-    });
-
 $('#add-text').click(function () {
     addText();
+    });
+
+$('#colour-wheel').click(function (e) {
+    if (!this.canvas) {
+            this.canvas = $('<canvas />')[0];
+            this.canvas.width = this.width;
+            this.canvas.height = this.height;
+            this.canvas.getContext('2d').drawImage(this, 0, 0, this.width, this.height);
+        }
+
+    var pixelData = this.canvas.getContext('2d').getImageData(event.offsetX, event.offsetY, 1, 1).data;
+    var rgbVal = '#';
+    for (var i = 0; i < 3; i++) {
+        rgbVal += (pixelData[i] === 0) ? '00' : pixelData[i].toString(16);
+    };
+
+    $('#select-colour').css('background', rgbVal);
     });
 
 $('#finish-region').click(function () {
@@ -90,7 +102,7 @@ $('#submit-graph-name').click(function() {
        $.ajax({
             url: 'get-json-data',
             data: {graphName : $('#area-of-study').val()},
-            dataType: 'json', 
+            dataType: 'json',
             success: function(data) {
                 $('#json-data').html('<pre>' + JSON.stringify(data) + '<pre>');
             },
@@ -101,6 +113,7 @@ $('#submit-graph-name').click(function() {
     });
 
 document.addEventListener('keydown', keyboard, false);
+
 
 /**
  * Handles keydown event e, possibly switching modes.
@@ -145,7 +158,7 @@ function changeMode(id) {
             });
             svgDoc.removeChild(curPath);
             curPath = null;
-            
+
         }
     } else if (mode === 'region-mode') {
         //svgDoc.removeChild(startPoint);
@@ -159,29 +172,12 @@ function changeMode(id) {
         } else if (startPoint !== null) {
             svgDoc.removeChild(startPoint);
             startPoint = null;
-        }   
+        }
 
     }
 
     mode = id;
     $('#' + mode).toggleClass('clicked');
-}
-
-
-/**
- * Changes the current colour to the new colour with id id.
- * @param {object} id The id of the new colour to be selected.
- */
-function changeColour(id) {
-    'use strict';
-
-    $('#' + nodeColourId).toggleClass('clicked');
-    nodeColourId = id;
-    $('#' + nodeColourId).toggleClass('clicked');
-
-    if (mode === 'change-mode') {
-        nodeSelected.parentNode.setAttribute('data-group', id);
-    }
 }
 
 
@@ -195,11 +191,11 @@ function addText() {
     if (nodeSelected !== null && courseCode.length > 2) {
         var g = nodeSelected.parentNode;
         if (g.childNodes.length > 1) {
-            g.removeChild(g.childNodes[1]); 
+            g.removeChild(g.childNodes[1]);
         }
         var code = document.createElementNS(xmlns, 'text');
         code.setAttributeNS(null, 'id', 't' + nodeSelected.id.slice(1));
-        code.setAttributeNS(null, 'x', parseFloat(nodeSelected.getAttribute('x'), 10) + 
+        code.setAttributeNS(null, 'x', parseFloat(nodeSelected.getAttribute('x'), 10) +
                                         nodeWidth/2);
         code.setAttributeNS(null, 'y', parseFloat(nodeSelected.getAttribute('y'), 10) +
                                         nodeHeight/2);
