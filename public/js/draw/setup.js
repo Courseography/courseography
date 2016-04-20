@@ -10,7 +10,7 @@ function setupSVGCanvas() {
     div.setAttribute('id', 'main');
     // bgdiv as sibling necessary to decrease grid opacity without effecting svg objects
     var bgdiv = document.createElement('div');
-    bgdiv.setAttribute('id', 'background'); 
+    bgdiv.setAttribute('id', 'background');
     var svg = document.createElementNS(xmlns, 'svg');
     svg.setAttribute('id', 'mySVG');
 
@@ -86,11 +86,26 @@ $('#finish-region').click(function () {
     finishRegion();
     });
 
+$('#save-graph').click(function () {
+    $.ajax({
+        url: 'save-json',
+        data: {'jsonData' : convertSvgToJson(),
+               'nameData' : $('#area-of-study').val()},
+        method: 'POST',
+        success: function(status) {
+            console.log(status);
+        },
+        error: function(xhr, status, err) {
+            console.error('save-graph:', status, err.toString());
+        }
+    });
+});
+
 $('#submit-graph-name').click(function() {
        $.ajax({
             url: 'get-json-data',
             data: {graphName : $('#area-of-study').val()},
-            dataType: 'json', 
+            dataType: 'json',
             success: function(data) {
                 $('#json-data').html('<pre>' + JSON.stringify(data) + '<pre>');
             },
@@ -145,7 +160,7 @@ function changeMode(id) {
             });
             svgDoc.removeChild(curPath);
             curPath = null;
-            
+
         }
     } else if (mode === 'region-mode') {
         //svgDoc.removeChild(startPoint);
@@ -159,7 +174,7 @@ function changeMode(id) {
         } else if (startPoint !== null) {
             svgDoc.removeChild(startPoint);
             startPoint = null;
-        }   
+        }
 
     }
 
@@ -195,11 +210,11 @@ function addText() {
     if (nodeSelected !== null && courseCode.length > 2) {
         var g = nodeSelected.parentNode;
         if (g.childNodes.length > 1) {
-            g.removeChild(g.childNodes[1]); 
+            g.removeChild(g.childNodes[1]);
         }
         var code = document.createElementNS(xmlns, 'text');
         code.setAttributeNS(null, 'id', 't' + nodeSelected.id.slice(1));
-        code.setAttributeNS(null, 'x', parseFloat(nodeSelected.getAttribute('x'), 10) + 
+        code.setAttributeNS(null, 'x', parseFloat(nodeSelected.getAttribute('x'), 10) +
                                         nodeWidth/2);
         code.setAttributeNS(null, 'y', parseFloat(nodeSelected.getAttribute('y'), 10) +
                                         nodeHeight/2);

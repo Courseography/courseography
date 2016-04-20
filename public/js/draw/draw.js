@@ -118,7 +118,7 @@ function makeNodePath(e) {
             curPath.setAttributeNS(null, 'id', 'r' + regionId);
             elbow = makeElbow(position);
             elbow.partOfPath = 'elbow';
-        } else { 
+        } else {
             curPath.setAttributeNS(null, 'd', curPath.getAttribute('d') + 'L' + position.x + ',' + position.y + ' ');
             elbow = makeElbow(position);
             elbow.partOfPath = 'elbow';
@@ -128,9 +128,9 @@ function makeNodePath(e) {
 
 
 /**
- * Handles the clicking of the target of the event (a node) in different modes. 
- * In erase-mode, erases the node, and all edges in and out of the node. 
- * In change-mode, moves the node, and in path-mode, marks it a start node 
+ * Handles the clicking of the target of the event (a node) in different modes.
+ * In erase-mode, erases the node, and all edges in and out of the node.
+ * In change-mode, moves the node, and in path-mode, marks it a start node
  * or creates a path if valid.                                                          // !! FIX DESCRIPTION
  * @param {object} e The mousedown event.
  */
@@ -138,7 +138,7 @@ function nodeClicked(e) {
     'use strict';
 
     var index = null;
-    
+
     var targetNode = null;
     if (e.currentTarget.id[0] === 't') {
         targetNode = document.getElementById('n' + e.currentTarget.id.slice(1));
@@ -147,9 +147,9 @@ function nodeClicked(e) {
     }
 
     if (mode === 'erase-mode') {
-        // remove any paths leading to and from this node from the other node's 
+        // remove any paths leading to and from this node from the other node's
         // list of paths and remove this node from the other nodes' adjacency lists
-        targetNode.inEdges.map(function (edge) { 
+        targetNode.inEdges.map(function (edge) {
             // Remove edge from parent's outEdges and current node from parent's kids list
             var edgeParent = document.getElementById(edge.id.slice(0, edge.id.lastIndexOf('n')));
             index = edgeParent.outEdges.indexOf(edge);
@@ -182,7 +182,7 @@ function nodeClicked(e) {
         nodeMoving = targetNode;
         prevX = position.x;
         prevY = position.y;
-        
+
         // show which node has been selected
         select(targetNode);
 
@@ -266,14 +266,14 @@ function moveNodeElbow(e) {
                 textNode.setAttribute('x', textX);
                 textNode.setAttribute('y', textY);
             }
-            
+
             // move in and out edges by the same amount
             nodeMoving.inEdges.map(function (item) { // modify last node in path
                 movePath(item, (position.x - prevX), (position.y - prevY), 'end', -1);
             });
             nodeMoving.outEdges.map(function (item) { // modify the first node in path
                 movePath(item, (position.x - prevX), (position.y - prevY), 'start', -1);
-            });   
+            });
 
             prevX = position.x;
             prevY = position.y;
@@ -303,7 +303,7 @@ function moveNodeElbow(e) {
 function moveElbow(elbow, position) {
     'use strict';
 
-    // move dummy node 
+    // move dummy node
     var elbowX = parseFloat(elbow.getAttribute('cx'), 10);
     var elbowY = parseFloat(elbow.getAttribute('cy'), 10);
     elbowX += (position.x - prevX);
@@ -317,7 +317,7 @@ function moveElbow(elbow, position) {
         partOfPath = elbow.partOfPath;
     }
 
-    movePath(document.getElementById(elbow.path), 
+    movePath(document.getElementById(elbow.path),
              (position.x - prevX), (position.y - prevY), 'elbow',
              document.getElementById(elbow.path).elbows.indexOf(elbow));
 }
@@ -355,7 +355,7 @@ function finishRegion() {
         curPath.setAttributeNS(null, 'data-active', 'region');
 
         curPath.elbows.map(function (item) {
-            item.path = 'r' + regionId; 
+            item.path = 'r' + regionId;
             item.setAttributeNS(null, 'class', 'rElbow');
         });
 
@@ -376,6 +376,7 @@ function finishRegion() {
  * @param e
  */
 function regionClicked(e) {
+    'use strict';
     if (mode === 'erase-mode') {
         // delete the dummy nodes and the path itself
         e.currentTarget.elbows.map(function (item) {
@@ -388,4 +389,100 @@ function regionClicked(e) {
         prevX = position.x;
         prevY = position.y;
     }
+}
+
+
+/**
+ * Parse the SVG canvas and convert all the elements of the graph into a JSON list.
+ * Note: The graph ID is set to a "dummy" value of -1.
+ * @return {JSON} A JSON string which stores the parsed SVG elements.
+ */
+function convertSvgToJson() {
+    'use strict';
+
+    var gId = -1;
+    var texts = [];
+    var shapes = [];
+    var paths = [];
+    var svgElements = document.getElementById('mySVG').children;
+    for (var i = 0; i < svgElements.length; i++) {
+        if (svgElements[i].tagName === 'g' && svgElements[i].id !== 'regions') {
+            var gText = svgElements[i].querySelector('text');
+            if (gText !== null) {
+                texts.push({
+                    'graph'     : gId,
+                    'rId'       : '',
+                    'pos'       : [ parseFloat(gText.getAttribute('x')),
+                                    parseFloat(gText.getAttribute('y'))
+                                    ],
+                    'text'      : gText.textContent,
+                    'align'     : 'begin',
+                    'fill'      : ''
+                });
+            }
+
+            var gRect = svgElements[i].querySelector('rect');
+            shapes.push({
+                'graph'     : gId,
+                'id_'       : '',
+                'pos'       : [ parseFloat(gRect.getAttribute('x')),
+                                parseFloat(gRect.getAttribute('y'))
+                                ],
+                'width'     : parseFloat(gRect.getAttribute('width')),
+                'height'    : parseFloat(gRect.getAttribute('height')),
+                'fill'      : 'none',
+                'stroke'    : '',
+                'text'      : ((gText !== null) ? texts.slice(-1) : []),
+                'tolerance' : 9,
+                'type_'     : 'Node'
+            });
+        } else if (svgElements[i].tagName === 'path') {
+            paths.push({
+                'graph'     : gId,
+                'id_'       : '',
+                'points'    : getPathCoords(svgElements[i].getAttribute('d')),
+                'fill'      : 'none',
+                'stroke'    : '',
+                'isRegion'  : false,
+                'source'    : '',
+                'target'    : ''
+            });
+        }
+    }
+
+    return JSON.stringify({texts:texts, shapes:shapes, paths:paths});
+}
+
+
+/**
+ * Convert path tag coordinates into a list of tuples.
+ * @param {String} pathCoords The set of path coordinates within the "d" attribute of a <path> HTML tag.
+ * @return {[String]} A list of tuples.
+ */
+function getPathCoords(pathCoords) {
+    'use strict';
+
+    return pathCoords.split(' ').filter(function(entry) {
+        return (entry !== '')
+    }).map(function(coord) {
+        return coord.slice(1).split(',').map(parseFloat);
+    });
+}
+
+
+ /**
+ * Find the closest node (to the given coordinates), and return its text value.
+ * @param {[Float]} coords A single set of XY-coordinates.
+ * @return {String} The text value of the closest node.
+ */
+function getClosestText(coords, nodeList) {
+    'use strict';
+
+    return nodeList.map(function(node) {
+        var a = node.pos[0] - coords[0];
+        var b = node.pos[1] - coords[1];
+        return [node.text[0].text, Math.sqrt( a*a + b*b )];
+    }).sort(function(a,b) {
+        return a[1] === b[1] ? 0 : a[1] < b[1] ? -1: 1
+    })[0][0];
 }
