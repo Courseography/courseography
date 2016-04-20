@@ -393,11 +393,14 @@ function regionClicked(e) {
 
 
 /**
- * Parse SVG elements into a JSON list.
+ * Parse the SVG canvas and convert all the elements of the graph into a JSON list.
+ * Note: The graph ID is set to a "dummy" value of -1.
+ * @return {JSON} A JSON string which stores the parsed SVG elements.
  */
-function convertSvgToJson(gId) {
+function convertSvgToJson() {
     'use strict';
 
+    var gId = -1;
     var texts = [];
     var shapes = [];
     var paths = [];
@@ -407,7 +410,7 @@ function convertSvgToJson(gId) {
             var gText = svgElements[i].querySelector('text');
             if (gText !== null) {
                 texts.push({
-                    'graph'     : parseInt(gId),
+                    'graph'     : gId,
                     'rId'       : '',
                     'pos'       : [ parseFloat(gText.getAttribute('x')),
                                     parseFloat(gText.getAttribute('y'))
@@ -420,7 +423,7 @@ function convertSvgToJson(gId) {
 
             var gRect = svgElements[i].querySelector('rect');
             shapes.push({
-                    'graph'     : parseInt(gId),
+                    'graph'     : gId,
                     'id_'       : '',
                     'pos'       : [ parseFloat(gRect.getAttribute('x')),
                                     parseFloat(gRect.getAttribute('y'))
@@ -434,11 +437,10 @@ function convertSvgToJson(gId) {
                     'type_'     : 'Node'
             });
         } else if (svgElements[i].tagName === 'path') {
-            var pathCoords = getPathCoords(svgElements[i].getAttribute('d'));
             paths.push({
-                    'graph'     : parseInt(gId),
+                    'graph'     : gId,
                     'id_'       : '',
-                    'points'    : pathCoords,
+                    'points'    : getPathCoords(svgElements[i].getAttribute('d')),
                     'fill'      : 'none',
                     'stroke'    : '',
                     'isRegion'  : false,
@@ -453,7 +455,9 @@ function convertSvgToJson(gId) {
 
 
 /**
- * Convert path element coordinates into a list of floats.
+ * Convert path tag coordinates into a list of tuples.
+ * @param {String} pathCoords The set of path coordinates within the "d" attribute of a <path> HTML tag.
+ * @return {[String]} A list of tuples.
  */
 function getPathCoords(pathCoords) {
     'use strict';
@@ -466,9 +470,10 @@ function getPathCoords(pathCoords) {
 }
 
 
-/**
- * Find the closest node (within nodeList) to the given coordinates.
- * Return the closest node's text.
+ /**
+ * Find the closest node (to the given coordinates), and return its text value.
+ * @param {[Float]} coords A single set of XY-coordinates.
+ * @return {String} The text value of the closest node.
  */
 function getClosestText(coords, nodeList) {
     'use strict';

@@ -89,7 +89,7 @@ $('#finish-region').click(function () {
 $('#save-graph').click(function () {
     $.ajax({
         url: 'save-json',
-        data: {'jsonData' : convertSvgToJson('-1'),
+        data: {'jsonData' : convertSvgToJson(),
                'nameData' : $('#area-of-study').val()},
         method: 'POST',
         success: function(status) {
