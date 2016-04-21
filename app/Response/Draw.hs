@@ -47,6 +47,9 @@ modePanel = H.div ! A.id "side-panel-wrap" $ do
             ! A.class_ "jscolor"
             ! A.value "ab2567"
             ! A.size "15"
+    H.table !A.id "colour-table" $ forM_ ([["", "", "", "", ""],
+                                          ["", "", "", "", ""]] :: [[String]])
+                                         (H.tr . mapM_ (H.td . H.toHtml))
     H.input ! A.id "area-of-study"
             ! A.class_ "course-code"
             ! A.name "course-code"
@@ -54,8 +57,5 @@ modePanel = H.div ! A.id "side-panel-wrap" $ do
             ! A.autocomplete "off"
             ! A.type_ "text"
             ! A.size "30"
-    H.table !A.id "colour-table" $ forM_ ([["", "", "", "", ""],
-                                          ["", "", "", "", ""]] :: [[String]])
-                                         (H.tr . mapM_ (H.td . H.toHtml))
     H.div ! A.id "submit-graph-name" ! A.class_ "button" $ "Submit"
     H.div ! A.id "json-data" ! A.class_ "json-data" $ ""
