@@ -77,23 +77,6 @@ $('#add-text').click(function () {
     addText();
     });
 
-$('#colour-wheel').click(function (e) {
-    if (!this.canvas) {
-            this.canvas = $('<canvas />')[0];
-            this.canvas.width = this.width;
-            this.canvas.height = this.height;
-            this.canvas.getContext('2d').drawImage(this, 0, 0, this.width, this.height);
-        }
-
-    var pixelData = this.canvas.getContext('2d').getImageData(event.offsetX, event.offsetY, 1, 1).data;
-    var rgbVal = '#';
-    for (var i = 0; i < 3; i++) {
-        rgbVal += (pixelData[i] === 0) ? '00' : pixelData[i].toString(16);
-    };
-
-    $('#select-colour').css('background', rgbVal);
-    });
-
 $('#finish-region').click(function () {
     finishRegion();
     });

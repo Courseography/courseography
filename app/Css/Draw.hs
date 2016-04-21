@@ -11,7 +11,6 @@ import Css.Constants
  - Generates all CSS for the draw page. -}
 drawStyles :: Css
 drawStyles = do
-    colourWheelCSS
     mainCSS
     titleDiv
     canvasCSS
@@ -25,12 +24,6 @@ drawStyles = do
     elbowCSS
     regionCSS
     finishRegionCSS
-
-{- The colour wheel. -}
-colourWheelCSS :: Css
-colourWheelCSS = "#colour-wheel" ? do
-    height (px 225)
-    width (px 225)
 
 {- The wrapping around the canvas elements. -}
 mainCSS :: Css
