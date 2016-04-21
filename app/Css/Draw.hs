@@ -6,12 +6,14 @@ module Css.Draw
 import Clay
 import Prelude hiding ((**))
 import Css.Constants
+import qualified Data.Text as T
+import Control.Monad (forM_)
 
 {- drawStyles
  - Generates all CSS for the draw page. -}
 drawStyles :: Css
 drawStyles = do
-    colourWheelCSS
+    colourTableCSS
     mainCSS
     titleDiv
     canvasCSS
@@ -26,11 +28,19 @@ drawStyles = do
     regionCSS
     finishRegionCSS
 
-{- The colour wheel. -}
-colourWheelCSS :: Css
-colourWheelCSS = "#colour-wheel" ? do
-    height (px 225)
-    width (px 225)
+{- The colour table. -}
+colourTableCSS :: Css
+colourTableCSS =
+    "#colour-table" ? do
+        height (px 40)
+        width  (px 200)
+        forM_ (zipWith3 (\func xyPos color -> func xyPos color)
+                        (Prelude.repeat (\[x, y] rgb -> tr # nthChild x ** td # nthChild y ? do background rgb))
+                        [Prelude.map (\z -> T.pack $ show z) [x, y] | x <- [1 .. 2], y <- [1 .. 5]]
+                        -- [2x5] Colour Pallet --
+                        [crimson,       sienna,    tomato,     navy,       lightskyblue,
+                         paleturquoise, wheat,     seagreen,   lightcoral, moccasin    ])
+              (\css -> css)
 
 {- The wrapping around the canvas elements. -}
 mainCSS :: Css

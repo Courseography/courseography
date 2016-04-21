@@ -89,7 +89,8 @@ drawScripts = do
         ["/static/js/draw/variables.js",
          "/static/js/draw/path.js",
          "/static/js/draw/draw.js",
-         "/static/js/draw/setup.js"])
+         "/static/js/draw/setup.js",
+         "/static/js/draw/jscolor.min.js"])
 
 postScripts :: H.Html
 postScripts = sequence_ (map toScript [
