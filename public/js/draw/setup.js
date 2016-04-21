@@ -81,6 +81,10 @@ $('#finish-region').click(function () {
     finishRegion();
     });
 
+$('#colour-table').on('click', 'td', function() {
+    $('#select-colour').css('background', $(this).css('background'));
+});
+
 $('#submit-graph-name').click(function() {
        $.ajax({
             url: 'get-json-data',
