@@ -53,8 +53,6 @@ colourTableCSS = do
     tableCellBackground ["2", "4"] "#8a67be"
     tableCellBackground ["2", "5"] "#91f27a"
 
-
-
 {- The wrapping around the canvas elements. -}
 mainCSS :: Css
 mainCSS = "#main" ? do
