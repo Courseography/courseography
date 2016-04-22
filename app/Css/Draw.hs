@@ -6,7 +6,8 @@ module Css.Draw
 import Clay
 import Prelude hiding ((**))
 import Css.Constants
-import Data.Text.Internal
+import qualified Data.Text as T
+import Control.Monad (forM_)
 
 {- drawStyles
  - Generates all CSS for the draw page. -}
@@ -28,30 +29,25 @@ drawStyles = do
     finishRegionCSS
 
 {- Table cell background. -}
-tableCellBackground :: [Text] -> Text -> Css
-tableCellBackground [xPos, yPos] rgbv =
-    "#colour-table" ** tr ? do
-        nthChild xPos & do
-            td ? do
-                nthChild yPos & do
-                    background $ parse rgbv
+tableCellBackground :: [String] -> Css
+tableCellBackground [rgbv, xPos, yPos] = tr # nthChild (T.pack xPos) **
+                                         td # nthChild (T.pack yPos) ?
+                                         do background $ parse $ T.pack rgbv
 
 {- The colour table. -}
 colourTableCSS :: Css
-colourTableCSS = do
-    "#colour-table" ? do
-        height (px 40)
-        width  (px 200)
-    tableCellBackground ["1", "1"] "#5dd5b8"
-    tableCellBackground ["1", "2"] "#c285ff"
-    tableCellBackground ["1", "3"] "#888888"
-    tableCellBackground ["1", "4"] "#dc0c33"
-    tableCellBackground ["1", "5"] "#80b2ff"
-    tableCellBackground ["2", "1"] "#b1c8d1"
-    tableCellBackground ["2", "2"] "#b8ff70"
-    tableCellBackground ["2", "3"] "#66a366"
-    tableCellBackground ["2", "4"] "#8a67be"
-    tableCellBackground ["2", "5"] "#91f27a"
+colourTableCSS =
+    let rgbTbleCoordLst = zipWith (:)
+                                  ["#5dd5b8", "#c285ff",
+                                   "#888888", "#dc0c33",
+                                   "#80b2ff", "#b1c8d1",
+                                   "#b8ff70", "#66a366",
+                                   "#8a67be", "#91f27a"]
+                                  [[show x, show y] | x <- [1 .. 2], y <- [1 .. 5]]
+    in "#colour-table" ? do
+            height (px 40)
+            width  (px 200)
+            forM_ rgbTbleCoordLst tableCellBackground
 
 {- The wrapping around the canvas elements. -}
 mainCSS :: Css
