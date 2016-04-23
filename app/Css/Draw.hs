@@ -28,31 +28,19 @@ drawStyles = do
     regionCSS
     finishRegionCSS
 
-{- Table cell background. -}
-tableCellBackground :: [T.Text] -> Color -> Css
-tableCellBackground [xPos, yPos] rgbv = tr # nthChild xPos **
-                                        td # nthChild yPos ? do
-                                            background rgbv
-
 {- The colour table. -}
 colourTableCSS :: Css
-colourTableCSS = "#colour-table" ? do
-                     height (px 40)
-                     width  (px 200)
-                     forM_ (zipWith3 (\f clr xy -> f clr xy)
-                                          (Prelude.repeat tableCellBackground)
-                                          [Prelude.map (\z -> T.pack $ show z) [x, y] | x <- [1 .. 2], y <- [1 .. 5]]
-                                          [crimson,
-                                           sienna,
-                                           tomato,
-                                           navy,
-                                           lightskyblue,
-                                           paleturquoise,
-                                           wheat,
-                                           seagreen,
-                                           lightcoral,
-                                           moccasin])
-                           (\css -> css)
+colourTableCSS =
+    "#colour-table" ? do
+        height (px 40)
+        width  (px 200)
+        forM_ (zipWith3 (\func xyPos color -> func xyPos color)
+                        (Prelude.repeat (\[x, y] rgb -> tr # nthChild x ** td # nthChild y ? do background rgb))
+                        [Prelude.map (\z -> T.pack $ show z) [x, y] | x <- [1 .. 2], y <- [1 .. 5]]
+                        -- [2x5] Colour Pallet --
+                        [crimson,       sienna,    tomato,     navy,       lightskyblue,
+                         paleturquoise, wheat,     seagreen,   lightcoral, moccasin    ])
+              (\css -> css)
 
 {- The wrapping around the canvas elements. -}
 mainCSS :: Css
