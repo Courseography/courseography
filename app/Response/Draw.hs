@@ -47,8 +47,7 @@ modePanel = H.div ! A.id "side-panel-wrap" $ do
             ! A.class_ "jscolor"
             ! A.value "ab2567"
             ! A.size "15"
-    H.table !A.id "colour-table" $ forM_ ([["", "", "", "", ""],
-                                          ["", "", "", "", ""]] :: [[String]])
+    H.table !A.id "colour-table" $ forM_ ([replicate 5 "", replicate 5 ""] :: [[String]])
                                          (H.tr . mapM_ (H.td . H.toHtml))
     H.input ! A.id "area-of-study"
             ! A.class_ "course-code"
