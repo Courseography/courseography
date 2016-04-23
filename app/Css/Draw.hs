@@ -29,25 +29,30 @@ drawStyles = do
     finishRegionCSS
 
 {- Table cell background. -}
-tableCellBackground :: [String] -> Css
-tableCellBackground [rgbv, xPos, yPos] = tr # nthChild (T.pack xPos) **
-                                         td # nthChild (T.pack yPos) ?
-                                         do background $ parse $ T.pack rgbv
+tableCellBackground :: [T.Text] -> Color -> Css
+tableCellBackground [xPos, yPos] rgbv = tr # nthChild xPos **
+                                        td # nthChild yPos ? do
+                                            background rgbv
 
 {- The colour table. -}
 colourTableCSS :: Css
-colourTableCSS =
-    let rgbTbleCoordLst = zipWith (:)
-                                  ["#5dd5b8", "#c285ff",
-                                   "#888888", "#dc0c33",
-                                   "#80b2ff", "#b1c8d1",
-                                   "#b8ff70", "#66a366",
-                                   "#8a67be", "#91f27a"]
-                                  [[show x, show y] | x <- [1 .. 2], y <- [1 .. 5]]
-    in "#colour-table" ? do
-            height (px 40)
-            width  (px 200)
-            forM_ rgbTbleCoordLst tableCellBackground
+colourTableCSS = "#colour-table" ? do
+                     height (px 40)
+                     width  (px 200)
+                     forM_ (zipWith3 (\f clr xy -> f clr xy)
+                                          (Prelude.repeat tableCellBackground)
+                                          [Prelude.map (\z -> T.pack $ show z) [x, y] | x <- [1 .. 2], y <- [1 .. 5]]
+                                          [crimson,
+                                           sienna,
+                                           tomato,
+                                           navy,
+                                           lightskyblue,
+                                           paleturquoise,
+                                           wheat,
+                                           seagreen,
+                                           lightcoral,
+                                           moccasin])
+                           (\css -> css)
 
 {- The wrapping around the canvas elements. -}
 mainCSS :: Css
