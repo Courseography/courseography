@@ -87,7 +87,7 @@ function makeNode(posX, posY, jsonObj) {
     } else {
         var nodeWidth = 40;
         var nodeHeight = 32;
-        var nodeFill = nodeColourId;
+        var nodeFill = $('#select-colour').css('background-color');
         var nodeId_ = 'n' + nodeId;
         var nodeTolerance = 9;
 
