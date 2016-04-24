@@ -3,7 +3,7 @@
 module Css.Draw
     (drawStyles) where
 
-import Clay
+import Clay hiding (map, repeat, id)
 import Prelude hiding ((**))
 import Css.Constants
 import qualified Data.Text as T
@@ -34,13 +34,13 @@ colourTableCSS =
     "#colour-table" ? do
         height (px 40)
         width  (px 200)
-        forM_ (zipWith3 (\func xyPos color -> func xyPos color)
-                        (Prelude.repeat (\[x, y] rgb -> tr # nthChild x ** td # nthChild y ? do background rgb))
-                        [Prelude.map (\z -> T.pack $ show z) [x, y] | x <- [1 .. 2], y <- [1 .. 5]]
-                        -- [2x5] Colour Pallet --
-                        [crimson,       sienna,    tomato,     navy,       lightskyblue,
-                         paleturquoise, wheat,     seagreen,   lightcoral, moccasin    ])
-              (\css -> css)
+        forM_ (zipWith3 (\f xyPos colour -> f xyPos colour)
+                  (repeat (\[x, y] colour -> tr # nthChild y ** td # nthChild x ? background colour))
+                  [map (T.pack . show) [x, y] | x <- [1 .. 5], y <- [1 .. 2]]
+                  -- [5x2] Colour Pallet --
+                  [crimson,           sienna,     tomato,       navy,           lightskyblue,
+                   paleturquoise,     wheat,      seagreen,     lightcoral,     moccasin])
+              id
 
 {- The wrapping around the canvas elements. -}
 mainCSS :: Css
