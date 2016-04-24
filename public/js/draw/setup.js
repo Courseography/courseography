@@ -82,7 +82,7 @@ $('#finish-region').click(function () {
     });
 
 $('#colour-table').on('click', 'td', function() {
-    $('#select-colour').css('background', $(this).css('background'));
+    document.getElementById('select-colour').jscolor.fromString($(this).css('backgroundColor'));
 });
 
 $('#save-graph').click(function () {
