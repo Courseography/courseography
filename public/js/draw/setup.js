@@ -85,13 +85,32 @@ $('#colour-table').on('click', 'td', function() {
     $('#select-colour').css('background', $(this).css('background'));
 });
 
+$('#save-graph').click(function () {
+    $.ajax({
+        url: 'save-json',
+        data: {'jsonData' : convertSvgToJson(),
+               'nameData' : $('#area-of-study').val()},
+        method: 'POST',
+        success: function(status) {
+            console.log(status);
+        },
+        error: function(xhr, status, err) {
+            console.error('save-graph:', status, err.toString());
+        }
+    });
+});
+
 $('#submit-graph-name').click(function() {
        $.ajax({
             url: 'get-json-data',
             data: {graphName : $('#area-of-study').val()},
             dataType: 'json',
             success: function(data) {
-                $('#json-data').html('<pre>' + JSON.stringify(data) + '<pre>');
+                var div = document.getElementById('main');
+                document.body.removeChild(div);
+                setupSVGCanvas();
+                svgDoc.appendChild(setupMarker());
+                renderJson(JSON.stringify(data));
             },
             error: function(xhr, status, err) {
                 console.error('graphs', status, err.toString());

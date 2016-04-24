@@ -38,6 +38,120 @@ function getPosition(elem) {
     return { x: xPosition, y: yPosition };
 }
 
+/**
+ * Creates a new node within the SVG canvas with specific attributes.
+ * If no attributes are specified, then a generic blank node is created.
+ * @param {String} posX The x-coordinate of the node.
+ * @param {String} posY The y-coordinate of the node.
+ * @param {JSON} jsonObj Specifies the node's attributes.
+ */
+function makeNode(posX, posY, jsonObj) {
+    'use strict';
+
+    var textPosX = posX;
+    var textPosY = posY;
+    var textStr = '';
+    var textFill = '';
+    var textAlign = 'begin';
+    var textId = 't' + nodeId;
+
+    if (jsonObj) {
+        var nodeWidth = jsonObj.width;
+        var nodeHeight = jsonObj.height;
+        var nodeFill = jsonObj.fill || 'none';
+        var nodeId_ = 'n' + jsonObj.id_;
+        var nodeTolerance = jsonObj.tolerance;
+
+        switch (jsonObj.type_) {
+            case 'Hybrid':
+                var node = document.createElementNS(xmlns, 'rect');
+                var gClass = 'hybrid';
+                textFill = 'white';
+                break;
+            case 'BoolNode':
+                var node = document.createElementNS(xmlns, 'ellipse');
+                var gClass = 'bool';
+                node.setAttribute('stroke', 'black');
+                node.setAttribute('rx', 10);
+                node.setAttribute('ry', 7);
+                node.setAttribute('cx', posX);
+                node.setAttribute('cy', posY);
+                break;
+            default: // Node
+                var node = document.createElementNS(xmlns, 'rect');
+                var gClass = 'node';
+                node.setAttribute('rx', 4);
+                node.setAttribute('ry', 4);
+        }
+
+    } else {
+        var nodeWidth = 40;
+        var nodeHeight = 32;
+        var nodeFill = nodeColourId;
+        var nodeId_ = 'n' + nodeId;
+        var nodeTolerance = 9;
+
+        var gClass = 'node';
+        var node = document.createElementNS(xmlns, 'rect');
+        node.setAttribute('rx', 4);
+        node.setAttribute('ry', 4);
+    }
+
+        var g = document.createElementNS(xmlns, 'g');
+
+        g.setAttribute('class', gClass);
+        g.setAttribute('id', 'g' + nodeId);
+        g.setAttribute('data-active', 'active');
+
+        node.setAttribute('x', posX);
+        node.setAttribute('y', posY);
+        node.setAttribute('fill', nodeFill);
+        node.setAttribute('id', nodeId_);
+        node.setAttribute('width', nodeWidth);
+        node.setAttribute('height', nodeHeight);
+        node.setAttribute('class', 'node');
+        node.setAttribute('fill', $('#select-colour').css('background-color'));
+        node.setAttribute('tolerance', nodeTolerance);
+        node.predecessors = [];
+        node.successors = [];
+        // note: children doesn't work because javascript objects already have a children attribute
+        node.inEdges = [];
+        node.outEdges = [];
+
+        g.appendChild(node);
+        svgDoc.appendChild(g);
+        document.getElementById(nodeId_).addEventListener('mousedown', nodeClicked, false);
+
+    // Input Text into Shape
+    if (jsonObj) {
+        for (var i = 0; i < jsonObj.text.length; i++) {
+            textPosX = jsonObj.pos[0];
+            if (jsonObj.type_ !== 'BoolNode') {
+                textPosX += (jsonObj.width/2)
+            }
+
+            textPosY = jsonObj.text[i].pos[1] - (jsonObj.height/4);
+            textStr = jsonObj.text[i].text || '';
+            textFill = jsonObj.text[i].fill;
+            textAlign = jsonObj.text[i].align;
+            textId = 't' + jsonObj.id_;
+
+            var code = document.createElementNS(xmlns, 'text');
+            code.setAttributeNS(null, 'id', textId);
+            code.setAttributeNS(null, 'fill', textFill);
+            code.setAttributeNS(null, 'align', textAlign);
+            code.setAttributeNS(null, 'x', textPosX);
+            code.setAttributeNS(null, 'y', textPosY);
+            code.setAttributeNS(null, 'class', 'mylabel'); // note: label is a class in bootstrap
+            var textNode = document.createTextNode(textStr);
+            code.appendChild(textNode);
+            g.appendChild(code);
+            document.getElementById(textId).addEventListener('mousedown', nodeClicked, false);
+        };
+    }
+    select(document.getElementById(nodeId_));
+    nodeId += 1;
+}
 
 /**
  * In node-mode creates a new node at the position of the click event on the SVG canvas.
@@ -50,35 +164,7 @@ function makeNodePath(e) {
 
     var position = getClickPosition(e, e.currentTarget);
     if (mode === 'node-mode') {
-        var g = document.createElementNS(xmlns, 'g');
-        var node = document.createElementNS(xmlns, 'rect');
-
-        g.setAttribute('class', 'node');
-        g.setAttribute('id', 'g' + nodeId);
-        g.setAttribute('data-active', 'active');
-
-        node.setAttribute('x', position.x);
-        node.setAttribute('y', position.y);
-        node.setAttribute('rx', 4);
-        node.setAttribute('ry', 4);
-        node.setAttribute('id', 'n' + nodeId);
-        node.setAttribute('width', nodeWidth);
-        node.setAttribute('height', nodeHeight);
-        node.setAttribute('class', 'node');
-        node.setAttribute('fill', $('#select-colour').css('background-color'));
-        node.parents = [];
-        node.kids = [];
-        // note: children doesn't work because javascript objects already have a children attribute
-        node.inEdges = [];
-        node.outEdges = [];
-
-        g.appendChild(node);
-        svgDoc.appendChild(g);
-        document.getElementById('n' + nodeId).addEventListener('mousedown', nodeClicked, false);
-
-        select(document.getElementById('n' + nodeId));
-
-        nodeId += 1;
+        makeNode(position.x, position.y);
     } else if (mode === 'path-mode') {
         // make elbow joint, only if the dummy point is outside the starting node
         if (startNode !== null && ((position.x < parseFloat(startNode.getAttribute('x'), 10)) ||
@@ -150,15 +236,15 @@ function nodeClicked(e) {
         // remove any paths leading to and from this node from the other node's
         // list of paths and remove this node from the other nodes' adjacency lists
         targetNode.inEdges.map(function (edge) {
-            // Remove edge from parent's outEdges and current node from parent's kids list
+            // Remove edge from parent's outEdges and current node from parent's successors list
             var edgeParent = document.getElementById(edge.id.slice(0, edge.id.lastIndexOf('n')));
             index = edgeParent.outEdges.indexOf(edge);
             if (index > -1) {
                 edgeParent.outEdges.splice(index, 1);
             }
-            index = edgeParent.kids.indexOf(targetNode);
+            index = edgeParent.successors.indexOf(targetNode);
             if (index > -1) {
-                edgeParent.kids.splice(index, 1);
+                edgeParent.successors.splice(index, 1);
             }
             erasePath(edge);
         });
@@ -169,9 +255,9 @@ function nodeClicked(e) {
             if (index > -1) {
                 edgeChild.inEdges.splice(index, 1);
             }
-            index = edgeChild.parents.indexOf(targetNode);
+            index = edgeChild.predecessors.indexOf(targetNode);
             if (index > -1) {
-                edgeChild.parents.splice(index, 1);
+                edgeChild.predecessors.splice(index, 1);
             }
             erasePath(edge);
         });
@@ -376,6 +462,7 @@ function finishRegion() {
  * @param e
  */
 function regionClicked(e) {
+    'use strict';
     if (mode === 'erase-mode') {
         // delete the dummy nodes and the path itself
         e.currentTarget.elbows.map(function (item) {
@@ -388,4 +475,153 @@ function regionClicked(e) {
         prevX = position.x;
         prevY = position.y;
     }
+}
+
+
+/**
+ * Parse the SVG canvas and convert all the elements of the graph into a JSON list.
+ * Note: The graph ID is set to a "dummy" value of -1.
+ * @return {JSON} A JSON string which stores the parsed SVG elements.
+ */
+function convertSvgToJson() {
+    'use strict';
+
+    var gId = -1;
+    var texts = [];
+    var shapes = [];
+    var paths = [];
+    var svgElements = document.getElementById('mySVG').children;
+    for (var i = 0; i < svgElements.length; i++) {
+        if (svgElements[i].tagName === 'g' && svgElements[i].id !== 'regions') {
+            var gText = svgElements[i].querySelector('text');
+            if (gText !== null) {
+                texts.push({
+                    'graph'     : gId,
+                    'rId'       : '',
+                    'pos'       : [ parseFloat(gText.getAttribute('x')),
+                                    parseFloat(gText.getAttribute('y'))
+                                    ],
+                    'text'      : gText.textContent,
+                    'align'     : 'begin',
+                    'fill'      : ''
+                });
+            }
+
+            var gRect = svgElements[i].querySelector('rect');
+            shapes.push({
+                'graph'     : gId,
+                'id_'       : '',
+                'pos'       : [ parseFloat(gRect.getAttribute('x')),
+                                parseFloat(gRect.getAttribute('y'))
+                                ],
+                'width'     : parseFloat(gRect.getAttribute('width')),
+                'height'    : parseFloat(gRect.getAttribute('height')),
+                'fill'      : 'none',
+                'stroke'    : '',
+                'text'      : ((gText !== null) ? texts.slice(-1) : []),
+                'tolerance' : 9,
+                'type_'     : 'Node'
+            });
+        } else if (svgElements[i].tagName === 'path') {
+            paths.push({
+                'graph'     : gId,
+                'id_'       : '',
+                'points'    : getPathCoords(svgElements[i].getAttribute('d')),
+                'fill'      : 'none',
+                'stroke'    : '',
+                'isRegion'  : false,
+                'source'    : '',
+                'target'    : ''
+            });
+        }
+    }
+
+    return JSON.stringify({texts:texts, shapes:shapes, paths:paths});
+}
+
+
+/**
+ * Convert path tag coordinates into a list of tuples.
+ * @param {String} pathCoords The set of path coordinates within the "d" attribute of a <path> HTML tag.
+ * @return {[String]} A list of tuples.
+ */
+function getPathCoords(pathCoords) {
+    'use strict';
+
+    return pathCoords.split(' ').filter(function(entry) {
+        return (entry !== '')
+    }).map(function(coord) {
+        return coord.slice(1).split(',').map(parseFloat);
+    });
+}
+
+
+/**
+ * Find the closest node (to the given coordinates), and return its text value.
+ * @param {[Float]} coords A single set of XY-coordinates.
+ * @return {String} The text value of the closest node.
+ */
+function getClosestText(coords, nodeList) {
+    'use strict';
+
+    return nodeList.map(function(node) {
+        var a = node.pos[0] - coords[0];
+        var b = node.pos[1] - coords[1];
+        return [node.text[0].text, Math.sqrt( a*a + b*b )];
+    }).sort(function(a,b) {
+        return a[1] === b[1] ? 0 : a[1] < b[1] ? -1: 1
+    })[0][0];
+}
+
+/*
+ * Convert JSON data into SVG elements then populate the canvas with them.
+ */
+function renderJson(jsonStr) {
+    'use strict';
+
+    var jsonData = JSON.parse(jsonStr);
+
+    // Parse Path data
+    jsonData[2][1].forEach(function(jsonPath) {
+        // Create Paths and Regions
+        var path = document.createElementNS(xmlns, 'path');
+        path.setAttributeNS(null, 'id', 'pathp' + nodeId);
+        path.setAttributeNS(null, 'd', 'M' + jsonPath.points.join(' '));
+        path.setAttributeNS(null, 'data-active', 'inactive');
+        if (jsonPath.isRegion) {
+            path.setAttributeNS(null, 'class', 'region');
+            path.setAttributeNS(null, 'style', 'fill:' + jsonPath.fill);
+        } else {
+            path.setAttributeNS(null, 'stroke', 'black');
+            path.setAttributeNS(null, 'marker-end', 'url(#arrow)');
+            path.setAttributeNS(null, 'class', 'path');
+            path.setAttributeNS(null, 'data-active', 'drawn');
+        }
+
+        svgDoc.appendChild(path);
+        nodeId += 1;
+    });
+
+    // generate SVG nodes
+    jsonData[1][1].forEach(function(jsonShape) {
+        makeNode(jsonShape.pos[0], jsonShape.pos[1], jsonShape);
+    });
+
+    // Parse Text data
+    jsonData[0][1].forEach(function(jsonText) {
+        if (jsonText.rId.indexOf('tspan') > -1) {
+            var code = document.createElementNS(xmlns, 'text');
+            code.setAttributeNS(null, 'id', 'tspan' + nodeId);
+            code.setAttributeNS(null, 'fill', jsonText.fill);
+            code.setAttributeNS(null, 'align', jsonText.align);
+            code.setAttributeNS(null, 'x', jsonText.pos[0]);
+            code.setAttributeNS(null, 'y', jsonText.pos[1]);
+            code.setAttributeNS(null, 'class', 'region-label');
+            var textNode = document.createTextNode(jsonText.text);
+            code.appendChild(textNode);
+            svgDoc.appendChild(code);
+
+            nodeId += 1;
+        }
+    });
 }
