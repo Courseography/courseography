@@ -331,9 +331,9 @@ sidebarCSS = do
     "#focuses, #graphs" ? do
         marginTop (px 25)
         marginLeft (px 25)
-        height100
-        width100
+        height (pct 86)
         display none
+        overflowY scroll
     ".focus" ? do
         display block
         cursor pointer
