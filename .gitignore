@@ -12,6 +12,7 @@ cabal.sandbox.config
 
 # generated build files
 /app/dist/
+/hs/dist/
 
 # generated stack files
 .stack-work/
