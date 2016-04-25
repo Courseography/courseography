@@ -120,6 +120,7 @@ Shape json
     text [Text]
     tolerance Double
     type_ ShapeType
+    deriving Show
 
 Path json
     graph GraphId
@@ -139,6 +140,13 @@ FacebookTest
 |]
 
 -- ** TODO: Remove these extra types and class instances
+
+-- | JSON SVG data
+data SvgJSON =
+    SvgJSON { texts :: [Text],
+              shapes :: [Shape],
+              paths :: [Path]
+            } deriving (Show, Generic)
 
 -- | A Session.
 data Session =
@@ -177,6 +185,7 @@ instance ToJSON Time
 -- instance FromJSON required so that tables can be parsed into JSON,
 -- not necessary otherwise.
 instance FromJSON Time
+instance FromJSON SvgJSON
 
 -- | Converts a Double to a T.Text.
 -- This removes the period from the double, as the JavaScript code,

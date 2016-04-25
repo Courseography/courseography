@@ -13,6 +13,7 @@ import Control.Monad.IO.Class (liftIO)
 import Happstack.Server hiding (host)
 import Response
 import Database.CourseQueries (retrieveCourse, allCourses, queryGraphs, courseInfo, deptList, getGraphJSON)
+import Database.CourseInsertion (saveGraphJSON)
 import Filesystem.Path.CurrentOS as Path
 import System.Directory (getCurrentDirectory)
 import System.IO (hSetBuffering, stdout, stderr, BufferMode(LineBuffering))
@@ -33,8 +34,9 @@ runServer = do
     privacyContents <- LazyIO.readFile $ markdownPath ++ "PRIVACY.md"
 
     -- Start the HTTP server
-    simpleHTTP serverConf $ msum
-        [ do
+    simpleHTTP serverConf $ do
+      decodeBody (defaultBodyPolicy "/tmp/" 4096 4096 4096)
+      msum [ do
               nullDir
               seeOther "graph" (toResponse "Redirecting to /graph"),
               dir "grid" gridResponse,
@@ -59,6 +61,7 @@ runServer = do
               dir "calendar" $ lookCookieValue "selected-lectures" >>= calendarResponse,
               dir "get-json-data" $ look "graphName" >>= \graphName -> liftIO $ getGraphJSON graphName,
               dir "loading" $ look "size" >>= loadingResponse,
+              dir "save-json" $ look "jsonData" >>= \jsonStr -> look "nameData" >>= \nameStr -> liftIO $ saveGraphJSON jsonStr nameStr,
               notFoundResponse
         ]
     where

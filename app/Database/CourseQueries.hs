@@ -33,7 +33,6 @@ import Config (databasePath)
 import Control.Monad (liftM)
 import Data.Aeson ((.=))
 import Data.Int (Int64)
-
 import Database.DataType
 import Svg.Builder
 
