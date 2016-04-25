@@ -81,11 +81,9 @@ module Css.Constants
      airForceBlue,
      airSuperiorityBlue,
      alabamaCrimson,
-     aliceBlue,
      alienArmpit,
      alizarinCrimson,
      alloyOrange,
-     almond,
      amaranth,
      amaranthDeepPurple,
      amaranthPink,
@@ -102,12 +100,9 @@ module Css.Constants
      antiqueBronze,
      antiqueFuchsia,
      antiqueRuby,
-     antiqueWhite,
      ao,
      appleGreen,
      apricot,
-     aqua,
-     aquamarine,
      arcticLime,
      armyGreen,
      arsenic,
@@ -121,10 +116,9 @@ module Css.Constants
      auroMetalSaurus,
      avocado,
      aztecGold,
-     azure,
+     azureishWhite,
      azureMist,
      azureWebColor,
-     azureishWhite,
      babyBlue,
      babyBlueEyes,
      babyPink,
@@ -143,34 +137,34 @@ module Css.Constants
      beauBlue,
      beaver,
      begonia,
-     beige,
      bigDipORuby,
      bigFootFeet,
-     bisque,
      bistre,
      bistreBrown,
      bitterLemon,
      bitterLime,
      bittersweet,
      bittersweetShimmer,
-     black,
      blackBean,
      blackCoral,
      blackLeatherJacket,
      blackOlive,
      blackShadows,
-     blanchedAlmond,
      blastOffBronze,
      blazeOrange,
      bleuDeFrance,
      blizzardBlue,
      blond,
-     blue,
      blueBell,
+     blueberry,
      blueBolt,
+     bluebonnet,
      blueCrayola,
+     blueGray,
+     blueGreen,
      blueJeans,
      blueLagoon,
+     blueMagentaViolet,
      blueMunsell,
      blueNCS,
      bluePantone,
@@ -178,13 +172,6 @@ module Css.Constants
      blueRYB,
      blueSapphire,
      blueYonder,
-     blueberry,
-     bluebonnet,
-     blueGray,
-     blueGreen,
-     blueMagentaViolet,
-     blueViolet,
-     blush,
      bole,
      bondiBlue,
      bone,
@@ -212,11 +199,11 @@ module Css.Constants
      britishRacingGreen,
      bronze,
      bronzeYellow,
+     brownNose,
      brownSugar,
      brownTraditional,
      brownWeb,
      brownYellow,
-     brownNose,
      brunswickGreen,
      bubbleGum,
      bubbles,
@@ -224,15 +211,12 @@ module Css.Constants
      buff,
      bulgarianRose,
      burgundy,
-     burlywood,
      burnishedBrown,
      burntOrange,
      burntSienna,
      burntUmber,
      byzantine,
      byzantium,
-     cadet,
-     cadetBlue,
      cadetGrey,
      cadmiumGreen,
      cadmiumOrange,
@@ -319,36 +303,28 @@ module Css.Constants
      copperRed,
      copperRose,
      coquelicot,
-     coral,
      coralPink,
      coralRed,
      coralReef,
      cordovan,
-     corn,
      cornellRed,
-     cornflowerBlue,
-     cornsilk,
      cosmicCobalt,
      cosmicLatte,
      cottonCandy,
      coyoteBrown,
-     cream,
-     crimson,
      crimsonGlory,
      crimsonRed,
      cultured,
-     cyan,
      cyanAzure,
+     cyanBlueAzure,
      cyanCobaltBlue,
      cyanCornflowerBlue,
      cyanProcess,
-     cyanBlueAzure,
      cyberGrape,
      cyberYellow,
      cyclamen,
      daffodil,
      dandelion,
-     darkBlue,
      darkBlueGray,
      darkBrown,
      darkBrownTangelo,
@@ -357,28 +333,18 @@ module Css.Constants
      darkCerulean,
      darkChestnut,
      darkCoral,
-     darkCyan,
      darkElectricBlue,
-     darkGoldenrod,
-     darkGray,
-     darkGreen,
-     darkGreen,
      darkGunmetal,
      darkImperialBlue,
-     darkImperialBlue,
+     darkImperialBlue2,
      darkJungleGreen,
-     darkKhaki,
      darkLava,
      darkLavender,
      darkLiver,
      darkLiverHorses,
-     darkMagenta,
      darkMediumGray,
      darkMidnightBlue,
      darkMossGreen,
-     darkOliveGreen,
-     darkOrange,
-     darkOrchid,
      darkPastelBlue,
      darkPastelGreen,
      darkPastelPurple,
@@ -388,22 +354,15 @@ module Css.Constants
      darkPuce,
      darkPurple,
      darkRaspberry,
-     darkRed,
-     darkSalmon,
      darkScarlet,
-     darkSeaGreen,
      darkSienna,
      darkSkyBlue,
-     darkSlateBlue,
-     darkSlateGray,
      darkSpringGreen,
      darkTan,
      darkTangerine,
      darkTaupe,
      darkTerraCotta,
-     darkTurquoise,
      darkVanilla,
-     darkViolet,
      darkYellow,
      dartmouthGreen,
      davysGrey,
@@ -428,12 +387,10 @@ module Css.Constants
      deepMauve,
      deepMossGreen,
      deepPeach,
-     deepPink,
      deepPuce,
      deepRed,
      deepRuby,
      deepSaffron,
-     deepSkyBlue,
      deepSpaceSparkle,
      deepSpringBud,
      deepTaupe,
@@ -447,15 +404,12 @@ module Css.Constants
      desertSand,
      desire,
      diamond,
-     dimGray,
      dingyDungeon,
      dirt,
-     dodgerBlue,
      dogwoodRose,
      dollarBill,
      dolphinGray,
      donkeyBrown,
-     drab,
      dukeBlue,
      dustStorm,
      dutchWhite,
@@ -499,14 +453,12 @@ module Css.Constants
      fieldDrab,
      fieryRose,
      fireEngineRed,
-     firebrick,
      flame,
      flamingoPink,
      flattery,
      flavescent,
      flax,
      flirt,
-     floralWhite,
      fluorescentOrange,
      fluorescentPink,
      fluorescentYellow,
@@ -530,19 +482,16 @@ module Css.Constants
      frenchWine,
      freshAir,
      frostbite,
-     fuchsia,
      fuchsiaCrayola,
      fuchsiaPink,
      fuchsiaPurple,
      fuchsiaRose,
      fulvous,
      fuzzyWuzzy,
-     gainsboro,
      gamboge,
      gambogeOrangeBrown,
      gargoyleGas,
      genericViridian,
-     ghostWhite,
      giantsClub,
      giantsOrange,
      ginger,
@@ -550,21 +499,21 @@ module Css.Constants
      glitter,
      glossyGrape,
      gOGreen,
-     goldMetallic,
-     goldWeb,
-     goldFusion,
      goldenBrown,
      goldenPoppy,
      goldenYellow,
-     goldenrod,
+     goldFusion,
+     goldMetallic,
+     goldWeb,
      graniteGray,
      grannySmithApple,
      grape,
-     gray,
-     grayX11,
      grayAsparagus,
      grayBlue,
+     grayX11,
+     greenBlue,
      greenCrayola,
+     greenCyan,
      greenHTML,
      greenLizard,
      greenMunsell,
@@ -574,9 +523,6 @@ module Css.Constants
      greenRYB,
      greenSheen,
      greenX11,
-     greenBlue,
-     greenCyan,
-     greenYellow,
      grizzly,
      grullo,
      gunmetal,
@@ -596,11 +542,9 @@ module Css.Constants
      heliotropeGray,
      heliotropeMagenta,
      hollywoodCerise,
-     honeydew,
      honoluluBlue,
      hookersGreen,
      hotMagenta,
-     hotPink,
      hunterGreen,
      iceberg,
      icterine,
@@ -613,11 +557,9 @@ module Css.Constants
      inchworm,
      independence,
      indiaGreen,
-     indianRed,
      indianYellow,
-     indigo,
-     indigoWeb,
      indigoDye,
+     indigoWeb,
      infraRed,
      interdimensionalBlue,
      internationalKleinBlue,
@@ -629,7 +571,6 @@ module Css.Constants
      isabelline,
      islamicGreen,
      italianSkyBlue,
-     ivory,
      jade,
      japaneseCarmine,
      japaneseIndigo,
@@ -655,16 +596,14 @@ module Css.Constants
      kombuGreen,
      kSUPurple,
      kUCrimson,
-     laSalleGreen,
      languidLavender,
      lapisLazuli,
+     laSalleGreen,
      laserLemon,
      laurelGreen,
      lava,
-     lavenderFloral,
-     lavenderWeb,
      lavenderBlue,
-     lavenderBlush,
+     lavenderFloral,
      lavenderGray,
      lavenderIndigo,
      lavenderMagenta,
@@ -672,9 +611,7 @@ module Css.Constants
      lavenderPink,
      lavenderPurple,
      lavenderRose,
-     lawnGreen,
-     lemon,
-     lemonChiffon,
+     lavenderWeb,
      lemonCurry,
      lemonGlacier,
      lemonLime,
@@ -683,67 +620,49 @@ module Css.Constants
      liberty,
      licorice,
      lightApricot,
-     lightBlue,
      lightBrown,
      lightCarminePink,
      lightCobaltBlue,
-     lightCoral,
      lightCornflowerBlue,
      lightCrimson,
-     lightCyan,
      lightDeepPink,
      lightFrenchBeige,
      lightFuchsiaPink,
-     lightGoldenrodYellow,
-     lightGray,
      lightGrayishMagenta,
-     lightGreen,
      lightHotPink,
-     lightKhaki,
      lightKhaki,
      lightMediumOrchid,
      lightMossGreen,
      lightOrchid,
      lightPastelPurple,
-     lightPink,
      lightRedOchre,
-     lightSalmon,
      lightSalmonPink,
-     lightSeaGreen,
-     lightSkyBlue,
-     lightSlateGray,
-     lightSteelBlue,
      lightTaupe,
      lightThulianPink,
-     lightYellow,
      lilac,
      lilacLuster,
-     lime,
-     limeGreen,
-     limeWeb,
      limerick,
+     limeWeb,
      lincolnGreen,
-     linen,
      lion,
      liseranPurple,
      littleBoyBlue,
      liver,
+     liverChestnut,
      liverDogs,
      liverOrgan,
-     liverChestnut,
      livid,
      lumber,
      lust,
      maastrichtBlue,
      macaroniAndCheese,
      madderLake,
-     magenta,
      magentaCrayola,
      magentaDye,
-     magentaPantone,
-     magentaProcess,
      magentaHaze,
+     magentaPantone,
      magentaPink,
+     magentaProcess,
      magicMint,
      magicPotion,
      magnolia,
@@ -758,11 +677,11 @@ module Css.Constants
      mardiGras,
      marigold,
      maroonCrayola,
-     maroonX11,
      maroonHTML,
+     maroonX11,
      mauve,
-     mauveTaupe,
      mauvelous,
+     mauveTaupe,
      maximumBlue,
      maximumBlueGreen,
      maximumBluePurple,
@@ -773,38 +692,29 @@ module Css.Constants
      maximumRedPurple,
      maximumYellow,
      maximumYellowRed,
-     mayGreen,
      mayaBlue,
+     mayGreen,
      meatBrown,
-     mediumAquamarine,
-     mediumBlue,
      mediumCandyAppleRed,
      mediumCarmine,
      mediumChampagne,
      mediumElectricBlue,
      mediumJungleGreen,
      mediumLavenderMagenta,
-     mediumOrchid,
      mediumPersianBlue,
-     mediumPurple,
      mediumRedViolet,
      mediumRuby,
-     mediumSeaGreen,
      mediumSkyBlue,
-     mediumSlateBlue,
      mediumSpringBud,
-     mediumSpringGreen,
      mediumTaupe,
-     mediumTurquoise,
      mediumTuscanRed,
      mediumVermilion,
-     mediumVioletRed,
      mellowApricot,
      mellowYellow,
      melon,
-     metalPink,
      metallicSeaweed,
      metallicSunburst,
+     metalPink,
      mexicanPink,
      middleBlue,
      middleBlueGreen,
@@ -814,23 +724,17 @@ module Css.Constants
      middlePurple,
      middleRed,
      middleRedPurple,
-     middleRedPurple,
+     middleRedPurple2,
      middleYellow,
      middleYellowRed,
-     midnight,
-     midnightBlue,
      midnightGreenEagleGreen,
      mikadoYellow,
      mimiPink,
      mindaro,
      ming,
      minionYellow,
-     mint,
-     mintCream,
      mintGreen,
      mistyMoss,
-     mistyRose,
-     moccasin,
      modeBeige,
      moonstoneBlue,
      mordantRed19,
@@ -848,8 +752,6 @@ module Css.Constants
      nadeshikoPink,
      napierGreen,
      naplesYellow,
-     navajoWhite,
-     navy,
      navyPurple,
      neonCarrot,
      neonFuchsia,
@@ -869,13 +771,11 @@ module Css.Constants
      oldBurgundy,
      oldGold,
      oldHeliotrope,
-     oldLace,
      oldLavender,
      oldMauve,
      oldMossGreen,
      oldRose,
      oldSilver,
-     olive,
      oliveDrab3,
      oliveDrab7,
      olivine,
@@ -884,13 +784,11 @@ module Css.Constants
      orangeColorWheel,
      orangeCrayola,
      orangePantone,
-     orangeRYB,
-     orangeWeb,
      orangePeel,
+     orangeRYB,
      orangeSoda,
-     orangeRed,
+     orangeWeb,
      orangeYellow,
-     orchid,
      orchidPink,
      oriolesOrange,
      otterBrown,
@@ -911,9 +809,6 @@ module Css.Constants
      paleCopper,
      paleCornflowerBlue,
      paleCyan,
-     paleGold,
-     paleGoldenrod,
-     paleGreen,
      paleLavender,
      paleMagenta,
      paleMagentaPink,
@@ -924,13 +819,9 @@ module Css.Constants
      paleSilver,
      paleSpringBud,
      paleTaupe,
-     paleTurquoise,
-     paleViolet,
-     paleVioletRed,
      palmLeaf,
      pansyPurple,
      paoloVeroneseGreen,
-     papayaWhip,
      paradisePink,
      parisGreen,
      parrotPink,
@@ -947,9 +838,6 @@ module Css.Constants
      pastelYellow,
      patriarch,
      paynesGrey,
-     peach,
-     peach,
-     peachPuff,
      peachOrange,
      peachYellow,
      pear,
@@ -968,7 +856,6 @@ module Css.Constants
      persianRed,
      persianRose,
      persimmon,
-     peru,
      pewterBlue,
      phlox,
      phthaloBlue,
@@ -976,28 +863,25 @@ module Css.Constants
      pictonBlue,
      pictorialCarmine,
      piggyPink,
-     pineGreen,
      pineapple,
-     pink,
-     pinkPantone,
+     pineGreen,
      pinkFlamingo,
      pinkLace,
      pinkLavender,
+     pinkOrange,
+     pinkPantone,
      pinkPearl,
      pinkRaspberry,
      pinkSherbet,
-     pinkOrange,
      pistachio,
      pixiePowder,
      platinum,
-     plum,
-     plumWeb,
      plumpPurple,
+     plumWeb,
      polishedPine,
      pompAndPower,
      popstar,
      portlandOrange,
-     powderBlue,
      princessPerfume,
      princetonOrange,
      prune,
@@ -1008,15 +892,15 @@ module Css.Constants
      pullmanBrown,
      pullmanGreen,
      pumpkin,
-     purpleHTML,
-     purpleMunsell,
-     purpleX11,
      purpleHeart,
+     purpleHTML,
      purpleMountainMajesty,
+     purpleMunsell,
      purpleNavy,
      purplePizzazz,
      purplePlum,
      purpleTaupe,
+     purpleX11,
      purpureus,
      quartz,
      queenBlue,
@@ -1037,18 +921,17 @@ module Css.Constants
      razzmatazz,
      razzmicBerry,
      rebeccaPurple,
-     red,
+     redBrown,
      redCrayola,
+     redDevil,
      redMunsell,
      redNCS,
+     redOrange,
      redPantone,
      redPigment,
-     redRYB,
-     redDevil,
-     redSalsa,
-     redBrown,
-     redOrange,
      redPurple,
+     redRYB,
+     redSalsa,
      redViolet,
      redwood,
      regalia,
@@ -1068,7 +951,6 @@ module Css.Constants
      robinEggBlue,
      rocketMetallic,
      romanSilver,
-     rose,
      roseBonbon,
      roseDust,
      roseEbony,
@@ -1081,16 +963,12 @@ module Css.Constants
      roseVale,
      rosewood,
      rossoCorsa,
-     rosyBrown,
      royalAzure,
-     royalBlue,
-     royalBlue,
      royalFuchsia,
      royalPurple,
      royalYellow,
      ruber,
      rubineRed,
-     ruby,
      rubyRed,
      ruddy,
      ruddyBrown,
@@ -1102,17 +980,13 @@ module Css.Constants
      rust,
      rustyRed,
      sacramentoStateGreen,
-     saddleBrown,
      safetyOrange,
      safetyYellow,
      saffron,
      sage,
-     salmon,
      salmonPink,
-     sand,
      sandDune,
      sandstorm,
-     sandyBrown,
      sandyTan,
      sandyTaupe,
      sangria,
@@ -1122,18 +996,15 @@ module Css.Constants
      sasquatchSocks,
      satinSheenGold,
      scarlet,
-     scarlet,
+     scarlet2,
      schaussPink,
      schoolBusYellow,
      screaminGreen,
      seaBlue,
      seaFoamGreen,
-     seaGreen,
-     seaSerpent,
      sealBrown,
-     seashell,
+     seaSerpent,
      selectiveYellow,
-     sepia,
      shadow,
      shadowBlue,
      shampoo,
@@ -1143,8 +1014,6 @@ module Css.Constants
      shinyShamrock,
      shockingPink,
      shockingPinkCrayola,
-     sienna,
-     silver,
      silverChalice,
      silverLakeBlue,
      silverPink,
@@ -1153,19 +1022,14 @@ module Css.Constants
      sizzlingRed,
      sizzlingSunrise,
      skobeloff,
-     skyBlue,
      skyMagenta,
-     slateBlue,
-     slateGray,
      slimyGreen,
      smaltDarkPowderBlue,
      smashedPumpkin,
      smitten,
-     smoke,
      smokeyTopaz,
      smokyBlack,
      smokyTopaz,
-     snow,
      soap,
      solidPink,
      sonicSilver,
@@ -1187,15 +1051,13 @@ module Css.Constants
      spiroDiscoBall,
      springBud,
      springFrost,
-     springGreen,
-     stPatricksBlue,
      starCommandBlue,
-     steelBlue,
      steelPink,
      steelTeal,
      stilDeGrainYellow,
      stizza,
      stormcloud,
+     stPatricksBlue,
      straw,
      strawberry,
      sugarPlum,
@@ -1207,7 +1069,6 @@ module Css.Constants
      sunsetOrange,
      superPink,
      sweetBrown,
-     tan,
      tangelo,
      tangerine,
      tangerineYellow,
@@ -1216,23 +1077,20 @@ module Css.Constants
      taupe,
      taupeGray,
      teaGreen,
-     teaRose,
-     teaRose,
-     teal,
      tealBlue,
      tealDeer,
      tealGreen,
+     teaRose,
+     teaRose2,
      telemagenta,
-     tenné,
+     tenne,
      terraCotta,
-     thistle,
      thulianPink,
      tickleMePink,
      tiffanyBlue,
      tigersEye,
      timberwolf,
      titaniumYellow,
-     tomato,
      toolbox,
      topaz,
      tractorRed,
@@ -1244,7 +1102,6 @@ module Css.Constants
      tulip,
      tumbleweed,
      turkishRose,
-     turquoise,
      turquoiseBlue,
      turquoiseGreen,
      turquoiseSurf,
@@ -1262,10 +1119,10 @@ module Css.Constants
      uCLABlue,
      uCLAGold,
      uFOGreen,
-     ultraPink,
-     ultraRed,
      ultramarine,
      ultramarineBlue,
+     ultraPink,
+     ultraRed,
      umber,
      unbleachedSilk,
      unitedNationsBlue,
@@ -1287,7 +1144,7 @@ module Css.Constants
      venetianRed,
      verdigris,
      vermilion,
-     vermilion,
+     vermilion2,
      veronica,
      veryLightAzure,
      veryLightBlue,
@@ -1296,12 +1153,10 @@ module Css.Constants
      veryPaleOrange,
      veryPaleYellow,
      vESPIERose,
-     violet,
+     violetBlue,
      violetColorWheel,
      violetRYB,
      violetWeb,
-     violetBlue,
-     violetRed,
      viridian,
      viridianGreen,
      vistaBlue,
@@ -1333,9 +1188,6 @@ module Css.Constants
      waterspout,
      weldonBlue,
      wenge,
-     wheat,
-     white,
-     whiteSmoke,
      wildBlueYonder,
      wildOrchid,
      wildStrawberry,
@@ -1344,24 +1196,22 @@ module Css.Constants
      windsorTan,
      wine,
      wineDregs,
+     wintergreenDream,
      winterSky,
      winterWizard,
-     wintergreenDream,
      wisteria,
      woodBrown,
      xanadu,
      yaleBlue,
      yankeesBlue,
-     yellow,
-     yellowRYB,
      yellowCrayola,
-     yellowGreen,
      yellowMunsell,
      yellowNCS,
      yellowOrange,
      yellowPantone,
      yellowProcess,
      yellowRose,
+     yellowRYB,
      yellowSunshine,
      zaffre,
      zinnwalditeBrown,
@@ -1369,7 +1219,7 @@ module Css.Constants
      ) where
 
 import Clay
-import Prelude hiding ((**))
+import Prelude hiding ((**), tan)
 import Data.Text as T
 
 
@@ -1607,9 +1457,6 @@ airSuperiorityBlue = parse "#72A0C1"
 alabamaCrimson :: Color
 alabamaCrimson = parse "#AF002A"
 
-aliceBlue :: Color
-aliceBlue = parse "#F0F8FF"
-
 alienArmpit :: Color
 alienArmpit = parse "#84DE02"
 
@@ -1618,9 +1465,6 @@ alizarinCrimson = parse "#E32636"
 
 alloyOrange :: Color
 alloyOrange = parse "#C46210"
-
-almond :: Color
-almond = parse "#EFDECD"
 
 amaranth :: Color
 amaranth = parse "#E52B50"
@@ -1670,9 +1514,6 @@ antiqueFuchsia = parse "#915C83"
 antiqueRuby :: Color
 antiqueRuby = parse "#841B2D"
 
-antiqueWhite :: Color
-antiqueWhite = parse "#FAEBD7"
-
 ao :: Color
 ao = parse "#008000"
 
@@ -1681,12 +1522,6 @@ appleGreen = parse "#8DB600"
 
 apricot :: Color
 apricot = parse "#FBCEB1"
-
-aqua :: Color
-aqua = parse "#00FFFF"
-
-aquamarine :: Color
-aquamarine = parse "#7FFFD4"
 
 arcticLime :: Color
 arcticLime = parse "#D0FF14"
@@ -1727,17 +1562,14 @@ avocado = parse "#568203"
 aztecGold :: Color
 aztecGold = parse "#C39953"
 
-azure :: Color
-azure = parse "#007FFF"
+azureishWhite :: Color
+azureishWhite = parse "#DBE9F4"
 
 azureMist :: Color
 azureMist = parse "#F0FFFF"
 
 azureWebColor :: Color
 azureWebColor = parse "#F0FFFF"
-
-azureishWhite :: Color
-azureishWhite = parse "#DBE9F4"
 
 babyBlue :: Color
 babyBlue = parse "#89CFF0"
@@ -1793,17 +1625,11 @@ beaver = parse "#9F8170"
 begonia :: Color
 begonia = parse "#FA6E79"
 
-beige :: Color
-beige = parse "#F5F5DC"
-
 bigDipORuby :: Color
 bigDipORuby = parse "#9C2542"
 
 bigFootFeet :: Color
 bigFootFeet = parse "#E88E5A"
-
-bisque :: Color
-bisque = parse "#FFE4C4"
 
 bistre :: Color
 bistre = parse "#3D2B1F"
@@ -1823,9 +1649,6 @@ bittersweet = parse "#FE6F5E"
 bittersweetShimmer :: Color
 bittersweetShimmer = parse "#BF4F51"
 
-black :: Color
-black = parse "#000000"
-
 blackBean :: Color
 blackBean = parse "#3D0C02"
 
@@ -1840,9 +1663,6 @@ blackOlive = parse "#3B3C36"
 
 blackShadows :: Color
 blackShadows = parse "#BFAFB2"
-
-blanchedAlmond :: Color
-blanchedAlmond = parse "#FFEBCD"
 
 blastOffBronze :: Color
 blastOffBronze = parse "#A57164"
@@ -1859,23 +1679,35 @@ blizzardBlue = parse "#ACE5EE"
 blond :: Color
 blond = parse "#FAF0BE"
 
-blue :: Color
-blue = parse "#0000FF"
-
 blueBell :: Color
 blueBell = parse "#A2A2D0"
+
+blueberry :: Color
+blueberry = parse "#4F86F7"
 
 blueBolt :: Color
 blueBolt = parse "#00B9FB"
 
+bluebonnet :: Color
+bluebonnet = parse "#1C1CF0"
+
 blueCrayola :: Color
 blueCrayola = parse "#1F75FE"
+
+blueGray :: Color
+blueGray = parse "#6699CC"
+
+blueGreen :: Color
+blueGreen = parse "#0D98BA"
 
 blueJeans :: Color
 blueJeans = parse "#5DADEC"
 
 blueLagoon :: Color
 blueLagoon = parse "#ACE5EE"
+
+blueMagentaViolet :: Color
+blueMagentaViolet = parse "#553592"
 
 blueMunsell :: Color
 blueMunsell = parse "#0093AF"
@@ -1897,27 +1729,6 @@ blueSapphire = parse "#126180"
 
 blueYonder :: Color
 blueYonder = parse "#5072A7"
-
-blueberry :: Color
-blueberry = parse "#4F86F7"
-
-bluebonnet :: Color
-bluebonnet = parse "#1C1CF0"
-
-blueGray :: Color
-blueGray = parse "#6699CC"
-
-blueGreen :: Color
-blueGreen = parse "#0D98BA"
-
-blueMagentaViolet :: Color
-blueMagentaViolet = parse "#553592"
-
-blueViolet :: Color
-blueViolet = parse "#8A2BE2"
-
-blush :: Color
-blush = parse "#DE5D83"
 
 bole :: Color
 bole = parse "#79443B"
@@ -2000,6 +1811,9 @@ bronze = parse "#CD7F32"
 bronzeYellow :: Color
 bronzeYellow = parse "#737000"
 
+brownNose :: Color
+brownNose = parse "#6B4423"
+
 brownSugar :: Color
 brownSugar = parse "#AF6E4D"
 
@@ -2011,9 +1825,6 @@ brownWeb = parse "#A52A2A"
 
 brownYellow :: Color
 brownYellow = parse "#cc9966"
-
-brownNose :: Color
-brownNose = parse "#6B4423"
 
 brunswickGreen :: Color
 brunswickGreen = parse "#1B4D3E"
@@ -2036,9 +1847,6 @@ bulgarianRose = parse "#480607"
 burgundy :: Color
 burgundy = parse "#800020"
 
-burlywood :: Color
-burlywood = parse "#DEB887"
-
 burnishedBrown :: Color
 burnishedBrown = parse "#A17A74"
 
@@ -2056,12 +1864,6 @@ byzantine = parse "#BD33A4"
 
 byzantium :: Color
 byzantium = parse "#702963"
-
-cadet :: Color
-cadet = parse "#536872"
-
-cadetBlue :: Color
-cadetBlue = parse "#5F9EA0"
 
 cadetGrey :: Color
 cadetGrey = parse "#91A3B0"
@@ -2321,9 +2123,6 @@ copperRose = parse "#996666"
 coquelicot :: Color
 coquelicot = parse "#FF3800"
 
-coral :: Color
-coral = parse "#FF7F50"
-
 coralPink :: Color
 coralPink = parse "#F88379"
 
@@ -2336,17 +2135,8 @@ coralReef = parse "#FD7C6E"
 cordovan :: Color
 cordovan = parse "#893F45"
 
-corn :: Color
-corn = parse "#FBEC5D"
-
 cornellRed :: Color
 cornellRed = parse "#B31B1B"
-
-cornflowerBlue :: Color
-cornflowerBlue = parse "#6495ED"
-
-cornsilk :: Color
-cornsilk = parse "#FFF8DC"
 
 cosmicCobalt :: Color
 cosmicCobalt = parse "#2E2D88"
@@ -2360,12 +2150,6 @@ cottonCandy = parse "#FFBCD9"
 coyoteBrown :: Color
 coyoteBrown = parse "#81613C"
 
-cream :: Color
-cream = parse "#FFFDD0"
-
-crimson :: Color
-crimson = parse "#DC143C"
-
 crimsonGlory :: Color
 crimsonGlory = parse "#BE0032"
 
@@ -2375,11 +2159,11 @@ crimsonRed = parse "#990000"
 cultured :: Color
 cultured = parse "#F5F5F5"
 
-cyan :: Color
-cyan = parse "#00FFFF"
-
 cyanAzure :: Color
 cyanAzure = parse "#4E82B4"
+
+cyanBlueAzure :: Color
+cyanBlueAzure = parse "#4682BF"
 
 cyanCobaltBlue :: Color
 cyanCobaltBlue = parse "#28589C"
@@ -2389,9 +2173,6 @@ cyanCornflowerBlue = parse "#188BC2"
 
 cyanProcess :: Color
 cyanProcess = parse "#00B7EB"
-
-cyanBlueAzure :: Color
-cyanBlueAzure = parse "#4682BF"
 
 cyberGrape :: Color
 cyberGrape = parse "#58427C"
@@ -2407,9 +2188,6 @@ daffodil = parse "#FFFF31"
 
 dandelion :: Color
 dandelion = parse "#F0E130"
-
-darkBlue :: Color
-darkBlue = parse "#00008B"
 
 darkBlueGray :: Color
 darkBlueGray = parse "#666699"
@@ -2435,23 +2213,8 @@ darkChestnut = parse "#986960"
 darkCoral :: Color
 darkCoral = parse "#CD5B45"
 
-darkCyan :: Color
-darkCyan = parse "#008B8B"
-
 darkElectricBlue :: Color
 darkElectricBlue = parse "#536878"
-
-darkGoldenrod :: Color
-darkGoldenrod = parse "#B8860B"
-
-darkGray :: Color
-darkGray = parse "#A9A9A9"
-
-darkGreen :: Color
-darkGreen = parse "#006400"
-
-darkGreen :: Color
-darkGreen = parse "#013220"
 
 darkGunmetal :: Color
 darkGunmetal = parse "#1F262A"
@@ -2459,14 +2222,11 @@ darkGunmetal = parse "#1F262A"
 darkImperialBlue :: Color
 darkImperialBlue = parse "#00416A"
 
-darkImperialBlue :: Color
-darkImperialBlue = parse "#6E6EF9"
+darkImperialBlue2 :: Color
+darkImperialBlue2 = parse "#6E6EF9"
 
 darkJungleGreen :: Color
 darkJungleGreen = parse "#1A2421"
-
-darkKhaki :: Color
-darkKhaki = parse "#BDB76B"
 
 darkLava :: Color
 darkLava = parse "#483C32"
@@ -2480,9 +2240,6 @@ darkLiver = parse "#534B4F"
 darkLiverHorses :: Color
 darkLiverHorses = parse "#543D37"
 
-darkMagenta :: Color
-darkMagenta = parse "#8B008B"
-
 darkMediumGray :: Color
 darkMediumGray = parse "#A9A9A9"
 
@@ -2491,15 +2248,6 @@ darkMidnightBlue = parse "#003366"
 
 darkMossGreen :: Color
 darkMossGreen = parse "#4A5D23"
-
-darkOliveGreen :: Color
-darkOliveGreen = parse "#556B2F"
-
-darkOrange :: Color
-darkOrange = parse "#FF8C00"
-
-darkOrchid :: Color
-darkOrchid = parse "#9932CC"
 
 darkPastelBlue :: Color
 darkPastelBlue = parse "#779ECB"
@@ -2528,29 +2276,14 @@ darkPurple = parse "#301934"
 darkRaspberry :: Color
 darkRaspberry = parse "#872657"
 
-darkRed :: Color
-darkRed = parse "#8B0000"
-
-darkSalmon :: Color
-darkSalmon = parse "#E9967A"
-
 darkScarlet :: Color
 darkScarlet = parse "#560319"
-
-darkSeaGreen :: Color
-darkSeaGreen = parse "#8FBC8F"
 
 darkSienna :: Color
 darkSienna = parse "#3C1414"
 
 darkSkyBlue :: Color
 darkSkyBlue = parse "#8CBED6"
-
-darkSlateBlue :: Color
-darkSlateBlue = parse "#483D8B"
-
-darkSlateGray :: Color
-darkSlateGray = parse "#2F4F4F"
 
 darkSpringGreen :: Color
 darkSpringGreen = parse "#177245"
@@ -2567,14 +2300,8 @@ darkTaupe = parse "#483C32"
 darkTerraCotta :: Color
 darkTerraCotta = parse "#CC4E5C"
 
-darkTurquoise :: Color
-darkTurquoise = parse "#00CED1"
-
 darkVanilla :: Color
 darkVanilla = parse "#D1BEA8"
-
-darkViolet :: Color
-darkViolet = parse "#9400D3"
 
 darkYellow :: Color
 darkYellow = parse "#9B870C"
@@ -2648,9 +2375,6 @@ deepMossGreen = parse "#355E3B"
 deepPeach :: Color
 deepPeach = parse "#FFCBA4"
 
-deepPink :: Color
-deepPink = parse "#FF1493"
-
 deepPuce :: Color
 deepPuce = parse "#A95C68"
 
@@ -2662,9 +2386,6 @@ deepRuby = parse "#843F5B"
 
 deepSaffron :: Color
 deepSaffron = parse "#FF9933"
-
-deepSkyBlue :: Color
-deepSkyBlue = parse "#00BFFF"
 
 deepSpaceSparkle :: Color
 deepSpaceSparkle = parse "#4A646C"
@@ -2705,17 +2426,11 @@ desire = parse "#EA3C53"
 diamond :: Color
 diamond = parse "#B9F2FF"
 
-dimGray :: Color
-dimGray = parse "#696969"
-
 dingyDungeon :: Color
 dingyDungeon = parse "#C53151"
 
 dirt :: Color
 dirt = parse "#9B7653"
-
-dodgerBlue :: Color
-dodgerBlue = parse "#1E90FF"
 
 dogwoodRose :: Color
 dogwoodRose = parse "#D71868"
@@ -2728,9 +2443,6 @@ dolphinGray = parse "#828E84"
 
 donkeyBrown :: Color
 donkeyBrown = parse "#664C28"
-
-drab :: Color
-drab = parse "#967117"
 
 dukeBlue :: Color
 dukeBlue = parse "#00009C"
@@ -2861,9 +2573,6 @@ fieryRose = parse "#FF5470"
 fireEngineRed :: Color
 fireEngineRed = parse "#CE2029"
 
-firebrick :: Color
-firebrick = parse "#B22222"
-
 flame :: Color
 flame = parse "#E25822"
 
@@ -2881,9 +2590,6 @@ flax = parse "#EEDC82"
 
 flirt :: Color
 flirt = parse "#A2006D"
-
-floralWhite :: Color
-floralWhite = parse "#FFFAF0"
 
 fluorescentOrange :: Color
 fluorescentOrange = parse "#FFBF00"
@@ -2954,9 +2660,6 @@ freshAir = parse "#A6E7FF"
 frostbite :: Color
 frostbite = parse "#E936A7"
 
-fuchsia :: Color
-fuchsia = parse "#FF00FF"
-
 fuchsiaCrayola :: Color
 fuchsiaCrayola = parse "#C154C1"
 
@@ -2975,9 +2678,6 @@ fulvous = parse "#E48400"
 fuzzyWuzzy :: Color
 fuzzyWuzzy = parse "#CC6666"
 
-gainsboro :: Color
-gainsboro = parse "#DCDCDC"
-
 gamboge :: Color
 gamboge = parse "#E49B0F"
 
@@ -2989,9 +2689,6 @@ gargoyleGas = parse "#FFDF46"
 
 genericViridian :: Color
 genericViridian = parse "#007F66"
-
-ghostWhite :: Color
-ghostWhite = parse "#F8F8FF"
 
 giantsClub :: Color
 giantsClub = parse "#B05C52"
@@ -3014,15 +2711,6 @@ glossyGrape = parse "#AB92B3"
 gOGreen :: Color
 gOGreen = parse "#00AB66"
 
-goldMetallic :: Color
-goldMetallic = parse "#D4AF37"
-
-goldWeb :: Color
-goldWeb = parse "#FFD700"
-
-goldFusion :: Color
-goldFusion = parse "#85754E"
-
 goldenBrown :: Color
 goldenBrown = parse "#996515"
 
@@ -3032,8 +2720,14 @@ goldenPoppy = parse "#FCC200"
 goldenYellow :: Color
 goldenYellow = parse "#FFDF00"
 
-goldenrod :: Color
-goldenrod = parse "#DAA520"
+goldFusion :: Color
+goldFusion = parse "#85754E"
+
+goldMetallic :: Color
+goldMetallic = parse "#D4AF37"
+
+goldWeb :: Color
+goldWeb = parse "#FFD700"
 
 graniteGray :: Color
 graniteGray = parse "#676767"
@@ -3044,20 +2738,23 @@ grannySmithApple = parse "#A8E4A0"
 grape :: Color
 grape = parse "#6F2DA8"
 
-gray :: Color
-gray = parse "#808080"
-
-grayX11 :: Color
-grayX11 = parse "#BEBEBE"
-
 grayAsparagus :: Color
 grayAsparagus = parse "#465945"
 
 grayBlue :: Color
 grayBlue = parse "#8C92AC"
 
+grayX11 :: Color
+grayX11 = parse "#BEBEBE"
+
+greenBlue :: Color
+greenBlue = parse "#1164B4"
+
 greenCrayola :: Color
 greenCrayola = parse "#1CAC78"
+
+greenCyan :: Color
+greenCyan = parse "#009966"
 
 greenHTML :: Color
 greenHTML = parse "#008000"
@@ -3085,15 +2782,6 @@ greenSheen = parse "#6EAEA1"
 
 greenX11 :: Color
 greenX11 = parse "#00FF00"
-
-greenBlue :: Color
-greenBlue = parse "#1164B4"
-
-greenCyan :: Color
-greenCyan = parse "#009966"
-
-greenYellow :: Color
-greenYellow = parse "#ADFF2F"
 
 grizzly :: Color
 grizzly = parse "#885818"
@@ -3152,9 +2840,6 @@ heliotropeMagenta = parse "#AA00BB"
 hollywoodCerise :: Color
 hollywoodCerise = parse "#F400A1"
 
-honeydew :: Color
-honeydew = parse "#F0FFF0"
-
 honoluluBlue :: Color
 honoluluBlue = parse "#006DB0"
 
@@ -3163,9 +2848,6 @@ hookersGreen = parse "#49796B"
 
 hotMagenta :: Color
 hotMagenta = parse "#FF1DCE"
-
-hotPink :: Color
-hotPink = parse "#FF69B4"
 
 hunterGreen :: Color
 hunterGreen = parse "#355E3B"
@@ -3203,20 +2885,14 @@ independence = parse "#4C516D"
 indiaGreen :: Color
 indiaGreen = parse "#138808"
 
-indianRed :: Color
-indianRed = parse "#CD5C5C"
-
 indianYellow :: Color
 indianYellow = parse "#E3A857"
 
-indigo :: Color
-indigo = parse "#4B0082"
+indigoDye :: Color
+indigoDye = parse "#091F92"
 
 indigoWeb :: Color
 indigoWeb = parse "#4B0082"
-
-indigoDye :: Color
-indigoDye = parse "#091F92"
 
 infraRed :: Color
 infraRed = parse "#FF496C"
@@ -3250,9 +2926,6 @@ islamicGreen = parse "#009000"
 
 italianSkyBlue :: Color
 italianSkyBlue = parse "#B2FFFF"
-
-ivory :: Color
-ivory = parse "#FFFFF0"
 
 jade :: Color
 jade = parse "#00A86B"
@@ -3329,14 +3002,14 @@ kSUPurple = parse "#512888"
 kUCrimson :: Color
 kUCrimson = parse "#E8000D"
 
-laSalleGreen :: Color
-laSalleGreen = parse "#087830"
-
 languidLavender :: Color
 languidLavender = parse "#D6CADD"
 
 lapisLazuli :: Color
 lapisLazuli = parse "#26619C"
+
+laSalleGreen :: Color
+laSalleGreen = parse "#087830"
 
 laserLemon :: Color
 laserLemon = parse "#FFFF66"
@@ -3347,17 +3020,11 @@ laurelGreen = parse "#A9BA9D"
 lava :: Color
 lava = parse "#CF1020"
 
-lavenderFloral :: Color
-lavenderFloral = parse "#B57EDC"
-
-lavenderWeb :: Color
-lavenderWeb = parse "#E6E6FA"
-
 lavenderBlue :: Color
 lavenderBlue = parse "#CCCCFF"
 
-lavenderBlush :: Color
-lavenderBlush = parse "#FFF0F5"
+lavenderFloral :: Color
+lavenderFloral = parse "#B57EDC"
 
 lavenderGray :: Color
 lavenderGray = parse "#C4C3D0"
@@ -3380,14 +3047,8 @@ lavenderPurple = parse "#967BB6"
 lavenderRose :: Color
 lavenderRose = parse "#FBA0E3"
 
-lawnGreen :: Color
-lawnGreen = parse "#7CFC00"
-
-lemon :: Color
-lemon = parse "#FFF700"
-
-lemonChiffon :: Color
-lemonChiffon = parse "#FFFACD"
+lavenderWeb :: Color
+lavenderWeb = parse "#E6E6FA"
 
 lemonCurry :: Color
 lemonCurry = parse "#CCA01D"
@@ -3413,9 +3074,6 @@ licorice = parse "#1A1110"
 lightApricot :: Color
 lightApricot = parse "#FDD5B1"
 
-lightBlue :: Color
-lightBlue = parse "#ADD8E6"
-
 lightBrown :: Color
 lightBrown = parse "#B5651D"
 
@@ -3425,17 +3083,11 @@ lightCarminePink = parse "#E66771"
 lightCobaltBlue :: Color
 lightCobaltBlue = parse "#88ACE0"
 
-lightCoral :: Color
-lightCoral = parse "#F08080"
-
 lightCornflowerBlue :: Color
 lightCornflowerBlue = parse "#93CCEA"
 
 lightCrimson :: Color
 lightCrimson = parse "#F56991"
-
-lightCyan :: Color
-lightCyan = parse "#E0FFFF"
 
 lightDeepPink :: Color
 lightDeepPink = parse "#FF5CCD"
@@ -3446,23 +3098,11 @@ lightFrenchBeige = parse "#C8AD7F"
 lightFuchsiaPink :: Color
 lightFuchsiaPink = parse "#F984EF"
 
-lightGoldenrodYellow :: Color
-lightGoldenrodYellow = parse "#FAFAD2"
-
-lightGray :: Color
-lightGray = parse "#D3D3D3"
-
 lightGrayishMagenta :: Color
 lightGrayishMagenta = parse "#CC99CC"
 
-lightGreen :: Color
-lightGreen = parse "#90EE90"
-
 lightHotPink :: Color
 lightHotPink = parse "#FFB3DE"
-
-lightKhaki :: Color
-lightKhaki = parse "#F0E68C"
 
 lightKhaki :: Color
 lightKhaki = parse "#F0E68C"
@@ -3479,29 +3119,11 @@ lightOrchid = parse "#E6A8D7"
 lightPastelPurple :: Color
 lightPastelPurple = parse "#B19CD9"
 
-lightPink :: Color
-lightPink = parse "#FFB6C1"
-
 lightRedOchre :: Color
 lightRedOchre = parse "#E97451"
 
-lightSalmon :: Color
-lightSalmon = parse "#FFA07A"
-
 lightSalmonPink :: Color
 lightSalmonPink = parse "#FF9999"
-
-lightSeaGreen :: Color
-lightSeaGreen = parse "#20B2AA"
-
-lightSkyBlue :: Color
-lightSkyBlue = parse "#87CEFA"
-
-lightSlateGray :: Color
-lightSlateGray = parse "#778899"
-
-lightSteelBlue :: Color
-lightSteelBlue = parse "#B0C4DE"
 
 lightTaupe :: Color
 lightTaupe = parse "#B38B6D"
@@ -3509,32 +3131,20 @@ lightTaupe = parse "#B38B6D"
 lightThulianPink :: Color
 lightThulianPink = parse "#E68FAC"
 
-lightYellow :: Color
-lightYellow = parse "#FFFFE0"
-
 lilac :: Color
 lilac = parse "#C8A2C8"
 
 lilacLuster :: Color
 lilacLuster = parse "#AE98AA"
 
-lime :: Color
-lime = parse "#BFFF00"
-
-limeGreen :: Color
-limeGreen = parse "#32CD32"
+limerick :: Color
+limerick = parse "#9DC209"
 
 limeWeb :: Color
 limeWeb = parse "#00FF00"
 
-limerick :: Color
-limerick = parse "#9DC209"
-
 lincolnGreen :: Color
 lincolnGreen = parse "#195905"
-
-linen :: Color
-linen = parse "#FAF0E6"
 
 lion :: Color
 lion = parse "#C19A6B"
@@ -3548,14 +3158,14 @@ littleBoyBlue = parse "#6CA0DC"
 liver :: Color
 liver = parse "#674C47"
 
+liverChestnut :: Color
+liverChestnut = parse "#987456"
+
 liverDogs :: Color
 liverDogs = parse "#B86D29"
 
 liverOrgan :: Color
 liverOrgan = parse "#6C2E1F"
-
-liverChestnut :: Color
-liverChestnut = parse "#987456"
 
 livid :: Color
 livid = parse "#6699CC"
@@ -3575,26 +3185,23 @@ macaroniAndCheese = parse "#FFBD88"
 madderLake :: Color
 madderLake = parse "#CC3336"
 
-magenta :: Color
-magenta = parse "#FF00FF"
-
 magentaCrayola :: Color
 magentaCrayola = parse "#FF55A3"
 
 magentaDye :: Color
 magentaDye = parse "#CA1F7B"
 
-magentaPantone :: Color
-magentaPantone = parse "#D0417E"
-
-magentaProcess :: Color
-magentaProcess = parse "#FF0090"
-
 magentaHaze :: Color
 magentaHaze = parse "#9F4576"
 
+magentaPantone :: Color
+magentaPantone = parse "#D0417E"
+
 magentaPink :: Color
 magentaPink = parse "#CC338B"
+
+magentaProcess :: Color
+magentaProcess = parse "#FF0090"
 
 magicMint :: Color
 magicMint = parse "#AAF0D1"
@@ -3638,20 +3245,20 @@ marigold = parse "#EAA221"
 maroonCrayola :: Color
 maroonCrayola = parse "#C32148"
 
-maroonX11 :: Color
-maroonX11 = parse "#B03060"
-
 maroonHTML :: Color
 maroonHTML = parse "#800000"
+
+maroonX11 :: Color
+maroonX11 = parse "#B03060"
 
 mauve :: Color
 mauve = parse "#E0B0FF"
 
-mauveTaupe :: Color
-mauveTaupe = parse "#915F6D"
-
 mauvelous :: Color
 mauvelous = parse "#EF98AA"
+
+mauveTaupe :: Color
+mauveTaupe = parse "#915F6D"
 
 maximumBlue :: Color
 maximumBlue = parse "#47ABCC"
@@ -3683,20 +3290,14 @@ maximumYellow = parse "#FAFA37"
 maximumYellowRed :: Color
 maximumYellowRed = parse "#F2BA49"
 
-mayGreen :: Color
-mayGreen = parse "#4C9141"
-
 mayaBlue :: Color
 mayaBlue = parse "#73C2FB"
 
+mayGreen :: Color
+mayGreen = parse "#4C9141"
+
 meatBrown :: Color
 meatBrown = parse "#E5B73B"
-
-mediumAquamarine :: Color
-mediumAquamarine = parse "#66DDAA"
-
-mediumBlue :: Color
-mediumBlue = parse "#0000CD"
 
 mediumCandyAppleRed :: Color
 mediumCandyAppleRed = parse "#E2062C"
@@ -3716,14 +3317,8 @@ mediumJungleGreen = parse "#1C352D"
 mediumLavenderMagenta :: Color
 mediumLavenderMagenta = parse "#DDA0DD"
 
-mediumOrchid :: Color
-mediumOrchid = parse "#BA55D3"
-
 mediumPersianBlue :: Color
 mediumPersianBlue = parse "#0067A5"
-
-mediumPurple :: Color
-mediumPurple = parse "#9370DB"
 
 mediumRedViolet :: Color
 mediumRedViolet = parse "#BB3385"
@@ -3731,35 +3326,20 @@ mediumRedViolet = parse "#BB3385"
 mediumRuby :: Color
 mediumRuby = parse "#AA4069"
 
-mediumSeaGreen :: Color
-mediumSeaGreen = parse "#3CB371"
-
 mediumSkyBlue :: Color
 mediumSkyBlue = parse "#80DAEB"
-
-mediumSlateBlue :: Color
-mediumSlateBlue = parse "#7B68EE"
 
 mediumSpringBud :: Color
 mediumSpringBud = parse "#C9DC87"
 
-mediumSpringGreen :: Color
-mediumSpringGreen = parse "#00FA9A"
-
 mediumTaupe :: Color
 mediumTaupe = parse "#674C47"
-
-mediumTurquoise :: Color
-mediumTurquoise = parse "#48D1CC"
 
 mediumTuscanRed :: Color
 mediumTuscanRed = parse "#79443B"
 
 mediumVermilion :: Color
 mediumVermilion = parse "#D9603B"
-
-mediumVioletRed :: Color
-mediumVioletRed = parse "#C71585"
 
 mellowApricot :: Color
 mellowApricot = parse "#F8B878"
@@ -3770,14 +3350,14 @@ mellowYellow = parse "#F8DE7E"
 melon :: Color
 melon = parse "#FDBCB4"
 
-metalPink :: Color
-metalPink = parse "#FF00FD"
-
 metallicSeaweed :: Color
 metallicSeaweed = parse "#0A7E8C"
 
 metallicSunburst :: Color
 metallicSunburst = parse "#9C7C38"
+
+metalPink :: Color
+metalPink = parse "#FF00FD"
 
 mexicanPink :: Color
 mexicanPink = parse "#E4007C"
@@ -3806,20 +3386,14 @@ middleRed = parse "#E58E73"
 middleRedPurple :: Color
 middleRedPurple = parse "#8B8680"
 
-middleRedPurple :: Color
-middleRedPurple = parse "#A55353"
+middleRedPurple2 :: Color
+middleRedPurple2 = parse "#A55353"
 
 middleYellow :: Color
 middleYellow = parse "#FFEB00"
 
 middleYellowRed :: Color
 middleYellowRed = parse "#ECB176"
-
-midnight :: Color
-midnight = parse "#702670"
-
-midnightBlue :: Color
-midnightBlue = parse "#191970"
 
 midnightGreenEagleGreen :: Color
 midnightGreenEagleGreen = parse "#004953"
@@ -3839,23 +3413,11 @@ ming = parse "#36747D"
 minionYellow :: Color
 minionYellow = parse "#F5E050"
 
-mint :: Color
-mint = parse "#3EB489"
-
-mintCream :: Color
-mintCream = parse "#F5FFFA"
-
 mintGreen :: Color
 mintGreen = parse "#98FF98"
 
 mistyMoss :: Color
 mistyMoss = parse "#BBB477"
-
-mistyRose :: Color
-mistyRose = parse "#FFE4E1"
-
-moccasin :: Color
-moccasin = parse "#FAEBD7"
 
 modeBeige :: Color
 modeBeige = parse "#967117"
@@ -3907,12 +3469,6 @@ napierGreen = parse "#2A8000"
 
 naplesYellow :: Color
 naplesYellow = parse "#FADA5E"
-
-navajoWhite :: Color
-navajoWhite = parse "#FFDEAD"
-
-navy :: Color
-navy = parse "#000080"
 
 navyPurple :: Color
 navyPurple = parse "#9457EB"
@@ -3971,9 +3527,6 @@ oldGold = parse "#CFB53B"
 oldHeliotrope :: Color
 oldHeliotrope = parse "#563C5C"
 
-oldLace :: Color
-oldLace = parse "#FDF5E6"
-
 oldLavender :: Color
 oldLavender = parse "#796878"
 
@@ -3988,9 +3541,6 @@ oldRose = parse "#C08081"
 
 oldSilver :: Color
 oldSilver = parse "#848482"
-
-olive :: Color
-olive = parse "#808000"
 
 oliveDrab3 :: Color
 oliveDrab3 = parse "#6B8E23"
@@ -4016,26 +3566,20 @@ orangeCrayola = parse "#FF7538"
 orangePantone :: Color
 orangePantone = parse "#FF5800"
 
-orangeRYB :: Color
-orangeRYB = parse "#FB9902"
-
-orangeWeb :: Color
-orangeWeb = parse "#FFA500"
-
 orangePeel :: Color
 orangePeel = parse "#FF9F00"
+
+orangeRYB :: Color
+orangeRYB = parse "#FB9902"
 
 orangeSoda :: Color
 orangeSoda = parse "#FA5B3D"
 
-orangeRed :: Color
-orangeRed = parse "#FF4500"
+orangeWeb :: Color
+orangeWeb = parse "#FFA500"
 
 orangeYellow :: Color
 orangeYellow = parse "#F8D568"
-
-orchid :: Color
-orchid = parse "#DA70D6"
 
 orchidPink :: Color
 orchidPink = parse "#F2BDCD"
@@ -4097,15 +3641,6 @@ paleCornflowerBlue = parse "#ABCDEF"
 paleCyan :: Color
 paleCyan = parse "#87D3F8"
 
-paleGold :: Color
-paleGold = parse "#E6BE8A"
-
-paleGoldenrod :: Color
-paleGoldenrod = parse "#EEE8AA"
-
-paleGreen :: Color
-paleGreen = parse "#98FB98"
-
 paleLavender :: Color
 paleLavender = parse "#DCD0FF"
 
@@ -4136,15 +3671,6 @@ paleSpringBud = parse "#ECEBBD"
 paleTaupe :: Color
 paleTaupe = parse "#BC987E"
 
-paleTurquoise :: Color
-paleTurquoise = parse "#AFEEEE"
-
-paleViolet :: Color
-paleViolet = parse "#CC99FF"
-
-paleVioletRed :: Color
-paleVioletRed = parse "#DB7093"
-
 palmLeaf :: Color
 palmLeaf = parse "#6F9940"
 
@@ -4153,9 +3679,6 @@ pansyPurple = parse "#78184A"
 
 paoloVeroneseGreen :: Color
 paoloVeroneseGreen = parse "#009B7D"
-
-papayaWhip :: Color
-papayaWhip = parse "#FFEFD5"
 
 paradisePink :: Color
 paradisePink = parse "#E63E62"
@@ -4204,15 +3727,6 @@ patriarch = parse "#800080"
 
 paynesGrey :: Color
 paynesGrey = parse "#536878"
-
-peach :: Color
-peach = parse "#FFCBA4"
-
-peach :: Color
-peach = parse "#FFE5B4"
-
-peachPuff :: Color
-peachPuff = parse "#FFDAB9"
 
 peachOrange :: Color
 peachOrange = parse "#FFCC99"
@@ -4268,9 +3782,6 @@ persianRose = parse "#FE28A2"
 persimmon :: Color
 persimmon = parse "#EC5800"
 
-peru :: Color
-peru = parse "#CD853F"
-
 pewterBlue :: Color
 pewterBlue = parse "#8BA8B7"
 
@@ -4292,17 +3803,11 @@ pictorialCarmine = parse "#C30B4E"
 piggyPink :: Color
 piggyPink = parse "#FDDDE6"
 
-pineGreen :: Color
-pineGreen = parse "#01796F"
-
 pineapple :: Color
 pineapple = parse "#563C5C"
 
-pink :: Color
-pink = parse "#FFC0CB"
-
-pinkPantone :: Color
-pinkPantone = parse "#D74894"
+pineGreen :: Color
+pineGreen = parse "#01796F"
 
 pinkFlamingo :: Color
 pinkFlamingo = parse "#FC74FD"
@@ -4313,6 +3818,12 @@ pinkLace = parse "#FFDDF4"
 pinkLavender :: Color
 pinkLavender = parse "#D8B2D1"
 
+pinkOrange :: Color
+pinkOrange = parse "#FF9966"
+
+pinkPantone :: Color
+pinkPantone = parse "#D74894"
+
 pinkPearl :: Color
 pinkPearl = parse "#E7ACCF"
 
@@ -4321,9 +3832,6 @@ pinkRaspberry = parse "#980036"
 
 pinkSherbet :: Color
 pinkSherbet = parse "#F78FA7"
-
-pinkOrange :: Color
-pinkOrange = parse "#FF9966"
 
 pistachio :: Color
 pistachio = parse "#93C572"
@@ -4334,14 +3842,11 @@ pixiePowder = parse "#391285"
 platinum :: Color
 platinum = parse "#E5E4E2"
 
-plum :: Color
-plum = parse "#8E4585"
+plumpPurple :: Color
+plumpPurple = parse "#5946B2"
 
 plumWeb :: Color
 plumWeb = parse "#DDA0DD"
-
-plumpPurple :: Color
-plumpPurple = parse "#5946B2"
 
 polishedPine :: Color
 polishedPine = parse "#5DA493"
@@ -4354,9 +3859,6 @@ popstar = parse "#BE4F62"
 
 portlandOrange :: Color
 portlandOrange = parse "#FF5A36"
-
-powderBlue :: Color
-powderBlue = parse "#B0E0E6"
 
 princessPerfume :: Color
 princessPerfume = parse "#FF85CF"
@@ -4388,20 +3890,17 @@ pullmanGreen = parse "#3B331C"
 pumpkin :: Color
 pumpkin = parse "#FF7518"
 
-purpleHTML :: Color
-purpleHTML = parse "#800080"
-
-purpleMunsell :: Color
-purpleMunsell = parse "#9F00C5"
-
-purpleX11 :: Color
-purpleX11 = parse "#A020F0"
-
 purpleHeart :: Color
 purpleHeart = parse "#69359C"
 
+purpleHTML :: Color
+purpleHTML = parse "#800080"
+
 purpleMountainMajesty :: Color
 purpleMountainMajesty = parse "#9678B6"
+
+purpleMunsell :: Color
+purpleMunsell = parse "#9F00C5"
 
 purpleNavy :: Color
 purpleNavy = parse "#4E5180"
@@ -4414,6 +3913,9 @@ purplePlum = parse "#9C51B6"
 
 purpleTaupe :: Color
 purpleTaupe = parse "#50404D"
+
+purpleX11 :: Color
+purpleX11 = parse "#A020F0"
 
 purpureus :: Color
 purpureus = parse "#9A4EAE"
@@ -4475,11 +3977,14 @@ razzmicBerry = parse "#8D4E85"
 rebeccaPurple :: Color
 rebeccaPurple = parse "#663399"
 
-red :: Color
-red = parse "#FF0000"
+redBrown :: Color
+redBrown = parse "#A52A2A"
 
 redCrayola :: Color
 redCrayola = parse "#EE204D"
+
+redDevil :: Color
+redDevil = parse "#860111"
 
 redMunsell :: Color
 redMunsell = parse "#F2003C"
@@ -4487,29 +3992,23 @@ redMunsell = parse "#F2003C"
 redNCS :: Color
 redNCS = parse "#C40233"
 
+redOrange :: Color
+redOrange = parse "#FF5349"
+
 redPantone :: Color
 redPantone = parse "#ED2939"
 
 redPigment :: Color
 redPigment = parse "#ED1C24"
 
+redPurple :: Color
+redPurple = parse "#E40078"
+
 redRYB :: Color
 redRYB = parse "#FE2712"
 
-redDevil :: Color
-redDevil = parse "#860111"
-
 redSalsa :: Color
 redSalsa = parse "#FD3A4A"
-
-redBrown :: Color
-redBrown = parse "#A52A2A"
-
-redOrange :: Color
-redOrange = parse "#FF5349"
-
-redPurple :: Color
-redPurple = parse "#E40078"
 
 redViolet :: Color
 redViolet = parse "#C71585"
@@ -4568,9 +4067,6 @@ rocketMetallic = parse "#8A7F80"
 romanSilver :: Color
 romanSilver = parse "#838996"
 
-rose :: Color
-rose = parse "#FF007F"
-
 roseBonbon :: Color
 roseBonbon = parse "#F9429E"
 
@@ -4607,17 +4103,8 @@ rosewood = parse "#65000B"
 rossoCorsa :: Color
 rossoCorsa = parse "#D40000"
 
-rosyBrown :: Color
-rosyBrown = parse "#BC8F8F"
-
 royalAzure :: Color
 royalAzure = parse "#0038A8"
-
-royalBlue :: Color
-royalBlue = parse "#002366"
-
-royalBlue :: Color
-royalBlue = parse "#4169E1"
 
 royalFuchsia :: Color
 royalFuchsia = parse "#CA2C92"
@@ -4633,9 +4120,6 @@ ruber = parse "#CE4676"
 
 rubineRed :: Color
 rubineRed = parse "#D10056"
-
-ruby :: Color
-ruby = parse "#E0115F"
 
 rubyRed :: Color
 rubyRed = parse "#9B111E"
@@ -4670,9 +4154,6 @@ rustyRed = parse "#DA2C43"
 sacramentoStateGreen :: Color
 sacramentoStateGreen = parse "#00563F"
 
-saddleBrown :: Color
-saddleBrown = parse "#8B4513"
-
 safetyOrange :: Color
 safetyOrange = parse "#FF7800"
 
@@ -4685,23 +4166,14 @@ saffron = parse "#F4C430"
 sage :: Color
 sage = parse "#BCB88A"
 
-salmon :: Color
-salmon = parse "#FA8072"
-
 salmonPink :: Color
 salmonPink = parse "#FF91A4"
-
-sand :: Color
-sand = parse "#C2B280"
 
 sandDune :: Color
 sandDune = parse "#967117"
 
 sandstorm :: Color
 sandstorm = parse "#ECD540"
-
-sandyBrown :: Color
-sandyBrown = parse "#F4A460"
 
 sandyTan :: Color
 sandyTan = parse "#FDD9B5"
@@ -4730,8 +4202,8 @@ satinSheenGold = parse "#CBA135"
 scarlet :: Color
 scarlet = parse "#FD0E35"
 
-scarlet :: Color
-scarlet = parse "#FF2400"
+scarlet2 :: Color
+scarlet2 = parse "#FF2400"
 
 schaussPink :: Color
 schaussPink = parse "#FF91AF"
@@ -4748,23 +4220,14 @@ seaBlue = parse "#006994"
 seaFoamGreen :: Color
 seaFoamGreen = parse "#9FE2BF"
 
-seaGreen :: Color
-seaGreen = parse "#2E8B57"
+sealBrown :: Color
+sealBrown = parse "#59260B"
 
 seaSerpent :: Color
 seaSerpent = parse "#4BC7CF"
 
-sealBrown :: Color
-sealBrown = parse "#59260B"
-
-seashell :: Color
-seashell = parse "#FFF5EE"
-
 selectiveYellow :: Color
 selectiveYellow = parse "#FFBA00"
-
-sepia :: Color
-sepia = parse "#704214"
 
 shadow :: Color
 shadow = parse "#8A795D"
@@ -4793,12 +4256,6 @@ shockingPink = parse "#FC0FC0"
 shockingPinkCrayola :: Color
 shockingPinkCrayola = parse "#FF6FFF"
 
-sienna :: Color
-sienna = parse "#882D17"
-
-silver :: Color
-silver = parse "#C0C0C0"
-
 silverChalice :: Color
 silverChalice = parse "#ACACAC"
 
@@ -4823,17 +4280,8 @@ sizzlingSunrise = parse "#FFDB00"
 skobeloff :: Color
 skobeloff = parse "#007474"
 
-skyBlue :: Color
-skyBlue = parse "#87CEEB"
-
 skyMagenta :: Color
 skyMagenta = parse "#CF71AF"
-
-slateBlue :: Color
-slateBlue = parse "#6A5ACD"
-
-slateGray :: Color
-slateGray = parse "#708090"
 
 slimyGreen :: Color
 slimyGreen = parse "#299617"
@@ -4847,9 +4295,6 @@ smashedPumpkin = parse "#FF6D3A"
 smitten :: Color
 smitten = parse "#C84186"
 
-smoke :: Color
-smoke = parse "#738276"
-
 smokeyTopaz :: Color
 smokeyTopaz = parse "#832A0D"
 
@@ -4858,9 +4303,6 @@ smokyBlack = parse "#100C08"
 
 smokyTopaz :: Color
 smokyTopaz = parse "#933D41"
-
-snow :: Color
-snow = parse "#FFFAFA"
 
 soap :: Color
 soap = parse "#CEC8EF"
@@ -4925,17 +4367,8 @@ springBud = parse "#A7FC00"
 springFrost :: Color
 springFrost = parse "#87FF2A"
 
-springGreen :: Color
-springGreen = parse "#00FF7F"
-
-stPatricksBlue :: Color
-stPatricksBlue = parse "#23297A"
-
 starCommandBlue :: Color
 starCommandBlue = parse "#007BB8"
-
-steelBlue :: Color
-steelBlue = parse "#4682B4"
 
 steelPink :: Color
 steelPink = parse "#CC33CC"
@@ -4951,6 +4384,9 @@ stizza = parse "#990000"
 
 stormcloud :: Color
 stormcloud = parse "#4F666A"
+
+stPatricksBlue :: Color
+stPatricksBlue = parse "#23297A"
 
 straw :: Color
 straw = parse "#E4D96F"
@@ -4985,9 +4421,6 @@ superPink = parse "#CF6BA9"
 sweetBrown :: Color
 sweetBrown = parse "#A83731"
 
-tan :: Color
-tan = parse "#D2B48C"
-
 tangelo :: Color
 tangelo = parse "#F94D00"
 
@@ -5012,15 +4445,6 @@ taupeGray = parse "#8B8589"
 teaGreen :: Color
 teaGreen = parse "#D0F0C0"
 
-teaRose :: Color
-teaRose = parse "#F4C2C2"
-
-teaRose :: Color
-teaRose = parse "#F88379"
-
-teal :: Color
-teal = parse "#008080"
-
 tealBlue :: Color
 tealBlue = parse "#367588"
 
@@ -5030,17 +4454,20 @@ tealDeer = parse "#99E6B3"
 tealGreen :: Color
 tealGreen = parse "#00827F"
 
+teaRose :: Color
+teaRose = parse "#F4C2C2"
+
+teaRose2 :: Color
+teaRose2 = parse "#F88379"
+
 telemagenta :: Color
 telemagenta = parse "#CF3476"
 
-tenné :: Color
-tenné = parse "#CD5700"
+tenne :: Color
+tenne = parse "#CD5700"
 
 terraCotta :: Color
 terraCotta = parse "#E2725B"
-
-thistle :: Color
-thistle = parse "#D8BFD8"
 
 thulianPink :: Color
 thulianPink = parse "#DE6FA1"
@@ -5059,9 +4486,6 @@ timberwolf = parse "#DBD7D2"
 
 titaniumYellow :: Color
 titaniumYellow = parse "#EEE600"
-
-tomato :: Color
-tomato = parse "#FF6347"
 
 toolbox :: Color
 toolbox = parse "#746CC0"
@@ -5095,9 +4519,6 @@ tumbleweed = parse "#DEAA88"
 
 turkishRose :: Color
 turkishRose = parse "#B57281"
-
-turquoise :: Color
-turquoise = parse "#40E0D0"
 
 turquoiseBlue :: Color
 turquoiseBlue = parse "#00FFEF"
@@ -5150,17 +4571,17 @@ uCLAGold = parse "#FFB300"
 uFOGreen :: Color
 uFOGreen = parse "#3CD070"
 
-ultraPink :: Color
-ultraPink = parse "#FF6FFF"
-
-ultraRed :: Color
-ultraRed = parse "#FC6C85"
-
 ultramarine :: Color
 ultramarine = parse "#3F00FF"
 
 ultramarineBlue :: Color
 ultramarineBlue = parse "#4166F5"
+
+ultraPink :: Color
+ultraPink = parse "#FF6FFF"
+
+ultraRed :: Color
+ultraRed = parse "#FC6C85"
 
 umber :: Color
 umber = parse "#635147"
@@ -5225,8 +4646,8 @@ verdigris = parse "#43B3AE"
 vermilion :: Color
 vermilion = parse "#D9381E"
 
-vermilion :: Color
-vermilion = parse "#E34234"
+vermilion2 :: Color
+vermilion2 = parse "#E34234"
 
 veronica :: Color
 veronica = parse "#A020F0"
@@ -5252,8 +4673,8 @@ veryPaleYellow = parse "#FFFFBF"
 vESPIERose :: Color
 vESPIERose = parse "#FF0080"
 
-violet :: Color
-violet = parse "#8F00FF"
+violetBlue :: Color
+violetBlue = parse "#324AB2"
 
 violetColorWheel :: Color
 violetColorWheel = parse "#7F00FF"
@@ -5263,12 +4684,6 @@ violetRYB = parse "#8601AF"
 
 violetWeb :: Color
 violetWeb = parse "#EE82EE"
-
-violetBlue :: Color
-violetBlue = parse "#324AB2"
-
-violetRed :: Color
-violetRed = parse "#F75394"
 
 viridian :: Color
 viridian = parse "#40826D"
@@ -5363,15 +4778,6 @@ weldonBlue = parse "#7C98AB"
 wenge :: Color
 wenge = parse "#645452"
 
-wheat :: Color
-wheat = parse "#F5DEB3"
-
-white :: Color
-white = parse "#FFFFFF"
-
-whiteSmoke :: Color
-whiteSmoke = parse "#F5F5F5"
-
 wildBlueYonder :: Color
 wildBlueYonder = parse "#A2ADD0"
 
@@ -5396,14 +4802,14 @@ wine = parse "#722F37"
 wineDregs :: Color
 wineDregs = parse "#673147"
 
+wintergreenDream :: Color
+wintergreenDream = parse "#56887D"
+
 winterSky :: Color
 winterSky = parse "#FF007C"
 
 winterWizard :: Color
 winterWizard = parse "#A0E6FF"
-
-wintergreenDream :: Color
-wintergreenDream = parse "#56887D"
 
 wisteria :: Color
 wisteria = parse "#C9A0DC"
@@ -5420,17 +4826,8 @@ yaleBlue = parse "#0F4D92"
 yankeesBlue :: Color
 yankeesBlue = parse "#1C2841"
 
-yellow :: Color
-yellow = parse "#FFFF00"
-
-yellowRYB :: Color
-yellowRYB = parse "#FEFE33"
-
 yellowCrayola :: Color
 yellowCrayola = parse "#FCE883"
-
-yellowGreen :: Color
-yellowGreen = parse "#9ACD32"
 
 yellowMunsell :: Color
 yellowMunsell = parse "#EFCC00"
@@ -5449,6 +4846,9 @@ yellowProcess = parse "#FFEF00"
 
 yellowRose :: Color
 yellowRose = parse "#FFF000"
+
+yellowRYB :: Color
+yellowRYB = parse "#FEFE33"
 
 yellowSunshine :: Color
 yellowSunshine = parse "#FFF700"
