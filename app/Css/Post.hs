@@ -102,11 +102,12 @@ postCSS = do
             "-ms-transition" -: "all 0.2s"
             "-o-transition" -: "all 0.2s"
             "transition" -: "all 0.2s"
-            "span" ? do
+            ".courseName" ? do
                 display inlineBlock
                 fontFamily ["HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", "Lucida Grande"][sansSerif]
                 lineHeight (px 50)
-                paddingLeft (px 24)
+                paddingLeft (px 5)
+                paddingRight (px 5)
                 cursor pointer
                 ":hover" & do
                     fontWeight bold

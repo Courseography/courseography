@@ -29,18 +29,33 @@ var CourseCode = React.createClass({
         this.setState({infoOpened: !this.state.infoOpened});
     },
 
-    getCategoryName: function() {
+    getCategory: function() {
         var categoryName = '';
+        var me = this;
 
-        var editedCourseNames = this.props.courseIDs.map(function (course) {
-            return course.toUpperCase() + 'H';
-        });
+        var editedCourseNames = [];
+
+        // since you can render an array with a combination of jsx elements and strings, this combines all span elements and 
+        // "or" strings in between to be easily rendered later
+        this.props.courseIDs.forEach(function(course) {
+            editedCourseNames.push(<span id={course} className='courseName' onClick={me.openModal}>{course.toUpperCase() + 'H'}</span>);
+            editedCourseNames.push('or');
+        })
+
+        editedCourseNames.pop();
 
         if (this.props.courseIDs[0] === 'mat135') {
             // special case for calculus requirement since it doesn't fit the same pattern
-            return '(MAT135H and MAT136H) or MAT137Y or MAT157Y';
+            return (
+                <p className='code'>
+                    (<span id='mat135' className='courseName' onClick={this.openModal}>MAT135H</span> and 
+                    <span id='mat136' className='courseName' onClick={this.openModal}>MAT136H</span>) or 
+                    <span id='mat137' className='courseName' onClick={this.openModal}>MAT137Y</span>or 
+                    <span id='mat157' className='courseName' onClick={this.openModal}>MAT157Y</span>
+                 </p>
+            )
         } else { 
-            return editedCourseNames.join(' or ');
+            return <p className='code'> {editedCourseNames} </p>;
         }
     },
 
@@ -74,10 +89,10 @@ var CourseCode = React.createClass({
         return id.toUpperCase() + ": " + course.title;
     },
 
-    openModal: function(id) {
-        var newID = this.getIdName().substring(0, 6);
-        openModal(this.getTitle(newID), createModalDiv(newID));
-        openReactModal(newID);
+    openModal: function(e) {
+        var id = e.target.id;
+        openModal(this.getTitle(id), createModalDiv(id));
+        openReactModal(id);
     },
 
     render: function() {
@@ -95,9 +110,7 @@ var CourseCode = React.createClass({
 
         return (
             <div id={this.getIdName()} className={classes}>
-                <p className='code' onClick={this.openModal}>
-                    <span>{this.getCategoryName()}</span>
-                </p>
+                {this.getCategory()}
             </div>
         );
     }
