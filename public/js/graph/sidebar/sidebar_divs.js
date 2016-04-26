@@ -1,48 +1,19 @@
 var toggled = false;
 
-$(document).ready (function () {
+export function activateSidebar() {
     'use strict';
 
-    getGraphsInDatabase();
-    updateFCECount();
-    createGraphButtons();
-});
+    $('#sidebar-button').click(function() {
+        toggleSidebar('button');
+    });
 
-
-$('#sidebar-button').click(function() {
-    'use strict';
-
-    toggleSidebar('button');
-});
-
-
-$('#focuses-nav').click(function (e) {
-    'use strict';
-
-    e.preventDefault();
-    resetDivs();
-    $('#focuses').show();
-    $('#focuses-nav').addClass('active');
-});
-
-
-$('#graphs-nav').click(function (e) {
-    'use strict';
-
-    e.preventDefault();
-    resetDivs();
-    $('#graphs').show();
-    $('#graphs-nav').addClass('active');
-});
-
-
-$('#graph').click(function (e) {
-    'use strict';
-
-    e.preventDefault();
-    toggleSidebar('graph');
-});
-
+    $('#focuses-nav').click(function (e) {
+        e.preventDefault();
+        resetDivs();
+        $('#focuses').show();
+        $('#focuses-nav').addClass('active');
+    });
+}
 
 /**
  * Hides all currently open divs and resets navbar to display none of the links as clicked.
@@ -57,17 +28,6 @@ function resetDivs() {
 
 
 /**
- * Fills the count of FCEs in the sidebar.
-**/
-function fillFCECount() {
-    'use strict';
-
-    $('#fcecount').show();
-    $('#fcecount').html('FCE Count: ' + currentFCEs.toFixed(1));
-}
-
-
-/**
  * Opens and closes the sidebar.
  * @param{string} location The location where you are clicking (either the sidebar button or the graph).
 **/
@@ -78,25 +38,64 @@ function toggleSidebar(location) {
         toggled = false;
         resetDivs();
         $('#sidebar').animate({width: '40px'}, 'fast', undefined, function() {
-            $('#fcecount').html('');
             $('#sidebar-icon').removeClass('flip');
         });
         $('#reset').hide();
+        $('#fcecount').hide();
     } else if (!toggled && location === 'button') {
         toggled = true;
         $('#sidebar').animate({width: '400px'}, 'fast', undefined, function() {
             $('#sidebar-icon').addClass('flip');
         });
-        fillFCECount();
 
         $('#graphs').show();
         $('#graphs-nav').addClass('active');
 
-        changeFocusEnable(getCookie('active-graph'));
-
         $('#reset').show();
-
-        enableReset();
+        $('#fcecount').show();
     }
 }
 
+
+/**
+ * Dynamically creates buttons for each graph in the sidebar.
+ */
+export function createGraphButtons(graphs) {
+    'use strict';
+
+    for (var i = 0; i < graphs.length; i++) {
+        var graphId = graphs[i].id;
+        var graphTitle = graphs[i].title;
+        var graphButton = '<div id = "graph-' + graphId +'" class = "graph-button">';
+        $('#graphs').append(graphButton);
+        $('#graph-' + graphId).html(graphTitle);
+        $('#graph-' + graphId).data('id', graphs[i].id);
+    }
+
+    $('#graphs-nav').click(function (e) {
+        e.preventDefault();
+        resetDivs();
+        $('#graphs').show();
+        $('#graphs-nav').addClass('active');
+    });
+
+
+    $('#react-graph').click(function (e) {
+        e.preventDefault();
+        toggleSidebar('graph');
+    });
+}
+
+
+/**
+ * Enables the Focuses nav in the sidebar if the CS graph is selected.
+ * @param:{string} id ID of the graph we just selected
+**/
+export function changeFocusEnable(id) {
+    var graph = $('#graph-' + id)[0];
+    if (graph !== undefined && graph.innerHTML === 'Computer Science') {
+        $("#focuses-nav").removeClass('disabled');
+    } else {
+        $("#focuses-nav").addClass('disabled');
+    }
+}
