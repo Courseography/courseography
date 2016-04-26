@@ -433,7 +433,7 @@ function finishRegion() {
 
     if (mode === 'region-mode' && curPath !== null && curPath.elbows.length >= 3) {
         curPath.setAttributeNS(null, 'd', curPath.getAttribute('d') + 'Z');
-        curPath.setAttribute('fill', '#' + $('#select-colour').val());
+        curPath.setAttributeNS(null, 'style', 'fill:#' + $('#select-colour').val());
         curPath.addEventListener('mousedown', regionClicked, false);
         curPath.setAttributeNS(null, 'pointer-events','boundingBox'); // to solve point in polygon problem
         curPath.setAttributeNS(null, 'class', 'region');

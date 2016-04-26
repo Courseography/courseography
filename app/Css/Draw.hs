@@ -25,7 +25,6 @@ drawStyles = do
     textButtonCSS
     nodeLabelCSS
     elbowCSS
-    regionCSS
     finishRegionCSS
 
 {- The colour table. -}
@@ -182,18 +181,6 @@ elbowCSS = do
         ":hover" & do
             cursor pointer
             opacity 1
-
-{- The actual region svg elements. -}
-regionCSS :: Css
-regionCSS = ".region" ? do
-    "data-group" @= "red" & do
-        fill dRed
-    "data-group" @= "blue" & do
-        fill dBlue
-    "data-group" @= "green" & do
-        fill dGreen
-    "data-group" @= "purple" & do
-        fill dPurple
 
 {- The finish button -}
 finishRegionCSS :: Css
