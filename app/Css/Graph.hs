@@ -70,18 +70,6 @@ nodeCSS = "g" ? do
             "rect" <? do
                 wideStroke
                 faded
-        "data-group" @= "red" & do
-            "rect" <? do
-                fill dRed
-        "data-group" @= "blue" & do
-            "rect" <? do
-                fill dBlue
-        "data-group" @= "green" & do
-            "rect" <? do
-                fill dGreen
-        "data-group" @= "purple" & do
-            "rect" <? do
-                fill dPurple
         "rect" <? do
             stroke "black"
     ".hybrid" & do

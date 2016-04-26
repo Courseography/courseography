@@ -87,7 +87,7 @@ function makeNode(posX, posY, jsonObj) {
     } else {
         var nodeWidth = 40;
         var nodeHeight = 32;
-        var nodeFill = nodeColourId;
+        var nodeFill = '#' + $('#select-colour').val();
         var nodeId_ = 'n' + nodeId;
         var nodeTolerance = 9;
 
@@ -109,6 +109,7 @@ function makeNode(posX, posY, jsonObj) {
         node.setAttribute('id', nodeId_);
         node.setAttribute('width', nodeWidth);
         node.setAttribute('height', nodeHeight);
+        node.setAttribute('class', 'node');
         node.setAttribute('tolerance', nodeTolerance);
         node.predecessors = [];
         node.successors = [];
@@ -432,7 +433,7 @@ function finishRegion() {
 
     if (mode === 'region-mode' && curPath !== null && curPath.elbows.length >= 3) {
         curPath.setAttributeNS(null, 'd', curPath.getAttribute('d') + 'Z');
-        curPath.setAttributeNS(null, 'data-group', nodeColourId);
+        curPath.setAttributeNS(null, 'style', 'fill:#' + $('#select-colour').val());
         curPath.addEventListener('mousedown', regionClicked, false);
         curPath.setAttributeNS(null, 'pointer-events','boundingBox'); // to solve point in polygon problem
         curPath.setAttributeNS(null, 'class', 'region');

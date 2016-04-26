@@ -73,11 +73,6 @@ $('.mode').each(function () {
         changeMode(this.id);});
     });
 
-$('.colour').each(function () {
-    $(this).click(function () {
-        changeColour(this.id);});
-    });
-
 $('#add-text').click(function () {
     addText();
     });
@@ -85,6 +80,10 @@ $('#add-text').click(function () {
 $('#finish-region').click(function () {
     finishRegion();
     });
+
+$('#colour-table').on('click', 'td', function() {
+    document.getElementById('select-colour').jscolor.fromString($(this).css('backgroundColor'));
+});
 
 $('#save-graph').click(function () {
     $.ajax({
@@ -120,6 +119,7 @@ $('#submit-graph-name').click(function() {
     });
 
 document.addEventListener('keydown', keyboard, false);
+
 
 /**
  * Handles keydown event e, possibly switching modes.
@@ -184,23 +184,6 @@ function changeMode(id) {
 
     mode = id;
     $('#' + mode).toggleClass('clicked');
-}
-
-
-/**
- * Changes the current colour to the new colour with id id.
- * @param {object} id The id of the new colour to be selected.
- */
-function changeColour(id) {
-    'use strict';
-
-    $('#' + nodeColourId).toggleClass('clicked');
-    nodeColourId = id;
-    $('#' + nodeColourId).toggleClass('clicked');
-
-    if (mode === 'change-mode') {
-        nodeSelected.parentNode.setAttribute('data-group', id);
-    }
 }
 
 
