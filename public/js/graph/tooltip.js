@@ -1,4 +1,20 @@
+import {ModalContent} from 'es6!common/react_modal';
+
 var timeouts = [];            // All timeouts. Used to remove timeouts later on.
+
+
+function openReactModal(courseCode) {
+    'use strict';
+    var courseName = getCourseTitle(courseCode);
+    var formattedName = formatCourseName(courseCode);
+    var courseVideoUrls = getCourseVideoUrls(formattedName);
+
+    React.render(
+        <ModalContent course={formattedName[0]} />,
+        document.getElementById('modal-content-container')
+    );
+}
+
 
 /**
  * Displays a tooltip for a Node.
