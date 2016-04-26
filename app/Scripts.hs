@@ -59,7 +59,6 @@ graphScripts = do
          "/static/js/common/image_conversion.js",
          "/static/js/common/graph_image.js",
          "/static/js/common/export/export.js"])
-    H.script ! A.type_ "text/babel" ! A.src "/static/js/common/react_modal.js.jsx" $ ""
     H.script ! A.src "/static/js/requirejs-config.js" $ ""
     H.script ! H.dataAttribute "main" "/static/js/graph" ! A.src "/static/js/vendor/require.js" $ ""
 
