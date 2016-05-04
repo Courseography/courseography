@@ -272,7 +272,7 @@ export var InquiryCategory = React.createClass({
     handleOnChange: function(e) {
         var newValue = e.target.value;
         this.setState({value: newValue}, function () {
-            if (this.state.value === 'PEY') {
+            if (this.state.value === 'PEY' || CSCinq.indexOf(this.state.value) >= 0) {
                 this.setState({completed: true});
             } else {
                 this.setState({completed : false});
