@@ -40,7 +40,7 @@ var Post = React.createClass({
     },
 
     isInquiryCourse: function(course) {
-        return CSCinq.indexOf(course) > 0;
+        return CSCinq.indexOf(course) >= 0;
     },
 
     getCourses: function () {
