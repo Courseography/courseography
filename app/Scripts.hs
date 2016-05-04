@@ -96,7 +96,6 @@ postScripts = do
     sequence_ (map toScript [
                                           "/static/js/common/cookie_handler.js",
                                           "/static/js/graph/create_data.js",
-                                          "/static/js/graph/objects/node.js",
                                           "/static/js/graph/create_data.js",
                                           "/static/js/common/course_description.js",
                                           "/static/js/common/objects/course.js",
