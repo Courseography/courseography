@@ -252,7 +252,8 @@ export var InquiryCategory = React.createClass({
     getInitialState: function() {
         return {
             completed: false,
-            infoOpened: false
+            infoOpened: false,
+            value: this.getDefaultCourse()
         }
     },
 
@@ -262,6 +263,21 @@ export var InquiryCategory = React.createClass({
     
     toggleFullInfo: function() {
         this.setState({infoOpened: !this.state.infoOpened});
+    },
+
+    getDefaultCourse: function() {
+        return this.props.course;
+    },
+
+    handleOnChange: function(e) {
+        var newValue = e.target.value;
+        this.setState({value: newValue}, function () {
+            if (this.state.value === 'PEY') {
+                this.setState({completed: true});
+            } else {
+                this.setState({completed : false});
+            }
+        });
     },
 
     render: function() {
@@ -283,7 +299,9 @@ export var InquiryCategory = React.createClass({
                 <div id={'spec' + this.props.courseID.substring(5, this.props.courseID.length)}
                      className='more-info'>
                     <p className='full_name'>
-                        <input type='text' value={this.props.course} disabled='true' />
+                        <input type='text' 
+                               value={this.state.value}
+                               onChange={this.handleOnChange} />
                     </p>
                 </div>
             </div>
