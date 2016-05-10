@@ -93,6 +93,7 @@ executable courseography
     base64-bytestring,
     split,
     containers,
+    unordered-containers,
     random,
     process >= 1.2,
     diagrams-lib >= 1.3,
@@ -125,4 +126,4 @@ executable courseography
   default-language: Haskell2010
   ghc-options: -Wall -fwarn-tabs
   hs-source-dirs: app
-  
+
