@@ -264,24 +264,61 @@ var Graph = React.createClass({
         var courseID = event.currentTarget.id;
         var currentNode = this.refs.nodes.refs[courseID];
         currentNode.focusPrereqs(this);
+				
+				clearAllTimeouts();
+			
+				var infoBox = this.refs.infobox;
+				//TODO: adjust xPos and yPos
+				var xPos = currentNode.props.JSON.pos[0];
+				var yPos = currentNode.props.JSON.pos[1];
+				var rightSide = xPos > 222;
+				// The tooltip is offset with a 'padding' of 5.
+				if (rightSide) {
+						xPos = parseFloat(xPos) - 65;
+				} else {
+						xPos = parseFloat(xPos) +
+								parseFloat(currentNode.props.JSON.width) + 5;
+				}
 
-        // Old hover modal code
-        if ($('.modal').length === 0) {
-            $('.tooltip-group').remove();
-            tooltip.displayTooltip(courseID);
-        }
+				yPos = parseFloat(yPos);
+				
+				infoBox.setState({xPos: xPos,
+													yPos: yPos,
+													nodeID: courseID,
+												 	showInfobox: true});
     },
 
     nodeMouseLeave: function (event) {
         var courseID = event.currentTarget.id;
         var currentNode = this.refs.nodes.refs[courseID];
         currentNode.unfocusPrereqs(this);
+				
+				var infoBox = this.refs.infobox;
+				
+				var timeout = setTimeout(function () {
+						infoBox.setState({showInfobox: false});
+				}, 100);
 
-        // Old hover modal code
-        if ($('.modal').length === 0) {
-            tooltip.removeTooltip(this);
-        }
+				timeouts.push(timeout);
+			
     },
+	
+		infoBoxMouseEnter: function (event) {
+				var infoBox = this.refs.infobox;
+				console.log("enterinfobox");
+				setTimeout(function () {
+						infoBox.setState({showInfobox: true});
+				}, 400);
+			
+    },
+	
+		infoBoxMouseLeave: function (event) {
+				var infoBox = this.refs.infobox;
+				setTimeout(function () {
+						infoBox.setState({showInfobox: false});
+				}, 400);
+    },
+	
 
     // Reset graph
     reset: function () {
@@ -331,6 +368,8 @@ var Graph = React.createClass({
                     edgesJSON={this.state.edgesJSON}
                     svg={this}/>
                 <EdgeGroup svg={this} ref='edges' edgesJSON={this.state.edgesJSON}/>
+								<InfoBox ref='infobox'onMouseEnter={this.props.infoBoxMouseEnter}
+                        onMouseLeave={this.props.infoBoxMouseLeave}/>
             </svg>
         );
     }
@@ -938,6 +977,69 @@ var Edge = React.createClass({
                   className={this.props.className + ' ' + this.state.status}
                   markerEnd='url(#arrowHead)'>
             </path>
+        );
+    }
+});
+
+var timeouts = [];            // All timeouts. Used to remove timeouts later on.tim
+/**
+ * Clears all timeouts.
+ */
+function clearAllTimeouts() {
+    'use strict';
+
+    for (var i = 0; i < timeouts.length; i++) {
+        clearTimeout(timeouts[i]);
+    }
+
+    timeouts = [];
+}
+
+
+var InfoBox = React.createClass({
+		getInitialState: function () {
+        return {
+            xPos: '0',
+            yPos: '0',
+            nodeID: '',
+						showInfobox: false
+        };
+    },
+
+    render: function () {
+				var gStyles = {
+					cursor: 'pointer',
+					transition: 'opacity .4s',
+					opacity: this.state.showInfobox ? 1 : 0
+				}
+				var rectAttrs = {
+					id:this.state.nodeID+'-tooltip' + '-rect',
+					x: this.state.xPos,
+					y: this.state.yPos,
+					rx: '4',
+					ry: '4',
+					fill: 'white',
+					stroke: 'black',
+					'stroke-width': '2',
+					width: '60',
+					height: '30'
+				};
+							
+				var textAttrs = {
+        	'id': this.state.nodeID +'-tooltip' + '-text',
+        	'x': parseFloat(this.state.xPos) + 60 / 2 - 18,
+        	'y': parseFloat(this.state.yPos) + 30 / 2 + 6
+				};
+				
+        return (
+						<g id='infobox' className='tooltip-group' style={gStyles}>
+								<rect {... rectAttrs} >
+								</rect>
+            		<text {... textAttrs} >
+                		{'Info'}
+                </text>
+            </g>
+						
         );
     }
 });
