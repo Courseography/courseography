@@ -90,5 +90,3 @@ var getCourse = function(courseName) {
         }
     });
 }
-
-getCourse('CSC108H1');
