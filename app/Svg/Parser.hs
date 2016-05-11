@@ -38,7 +38,7 @@ import Text.Read (readMaybe, readEither)
 parsePrebuiltSvgs :: IO ()
 parsePrebuiltSvgs = do
     deleteGraphs
-    performParse "Computer Science" "csc2015.svg"
+    performParse "Computer Science" "csc2016.svg"
     performParse "Statistics" "sta2015.svg"
     performParse "Biochemistry" "bch2015.svg"
     performParse "Cell & Systems Biology" "csb2015.svg"
