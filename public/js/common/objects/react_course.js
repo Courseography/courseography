@@ -1,48 +1,5 @@
 var Course = React.createClass({
 
-    getDefaultProps: function() {
-        var course = getCourse("CSC108H1");
-
-        return {
-            F: course.fallSession,
-            S: course.springSession,
-            Y: course.yearSession,
-            name: course.name,
-            title: course.title,
-            prereqs: course.prereqs,
-            prereqString: course.prereqString,
-            coreqs: course.coreqs,
-            breadth: course.breadth,
-            prep: course.prep,
-            description: course.description,
-            exclusions: course.exclusions,
-            distribution: course.distribution,
-            manualTutorialEnrolment: course.manualTutorialEnrolment,
-            manualPracticalEnrolment: course.manualPracticalEnrolment,
-            videoUrls: course.videoUrls
-        };
-    },
-
-    getCourse: function(courseName) {
-        'use strict';
-
-        var course;
-        $.ajax({
-            url: 'course',
-            dataType: 'json',
-            data: {name : courseName},
-            async: false,
-            success: function (data) {
-                course = data;
-            },
-            error: function () {
-                throw 'No course file';
-            }
-        });
-
-        return course;
-    },
-
     render: function() {
 
         var fallLectures = this.props.F.lectures.map(function (section) {
@@ -95,6 +52,43 @@ var Section = React.createClass({
 });
 
 
-React.render(
-    <Course />,
-    document.getElementById('course-select-wrapper'));
+var getCourse = function(courseName) {
+
+    'use strict';
+
+    var course;
+
+    $.ajax({
+        url: 'course',
+        dataType: 'json',
+        data: {name : courseName},
+        async: false,
+
+        success: function (data) {
+            React.render(
+                <Course F={data.fallSession}
+                        S={data.springSession}
+                        Y={data.yearSession}
+                        name={data.name}
+                        title={data.title}
+                        prereqs={data.prereqs}
+                        prereqString={data.prereqString}
+                        coreqs={data.coreqs}
+                        breadth={data.breadth}
+                        prep={data.prep}
+                        description={data.description}
+                        exclusions={data.exclusions}
+                        distribution={data.distribution}
+                        manualTutorialEnrolment={data.manualTutorialEnrolment}
+                        manualPracticalEnrolment={data.manualPracticalEnrolment}
+                        videoUrls={data.videoUrls} />,
+                    document.getElementById('course-select-wrapper'));
+        },
+
+        error: function () {
+            throw 'No course file';
+        }
+    });
+}
+
+getCourse('CSC108H1');
