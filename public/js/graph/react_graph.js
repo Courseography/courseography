@@ -5,8 +5,8 @@ import * as tooltip from 'es6!graph/tooltip';
  * 
  * Search for target node in list of nodes,
  * or if node not found search through list of bools.
- * @param {node} targetNode
- * @returns {node}
+ * @param {Node} targetNode
+ * @returns {Node}
  *
  */
 
