@@ -9,12 +9,11 @@ import Data.Aeson
 import Data.List
 import Database.Tables
 import WebParsing.PrerequisiteParsing
-import Database.Persist.Sqlite
+import Database.Persist.Sqlite (runSqlite, insertMany_)
 import qualified Data.HashMap.Lazy as M
+import qualified Data.Text as T
 import Config (databasePath)
 import Network.HTTP.Conduit (simpleHttp)
-import Control.Monad (forM_)
-import Database.CourseInsertion (insertCourse)
 
 {- URL to UofT courses (stored as JSON string) -}
 jsonURL :: String
@@ -43,39 +42,39 @@ getAllCourses = do
     print ("parsing JSON data from: " ++ jsonURL)
     allMetadata <- getMetadata getJSON
     let codes'                    = lookupField "code"                     allMetadata
-        codes                     = fmap (\(Just v) -> v) codes'
-        courseTitles              = lookupField "courseTitle"              allMetadata
+        codes                     = map (\(Just c) -> c) codes'
+    let courseTitles              = lookupField "courseTitle"              allMetadata
         courseDescriptions        = lookupField "courseDescription"        allMetadata
-        manualTutorialEnrolments  = repeat      $ Just "0"
-        manualPracticalEnrolments = repeat      $ Just "0"
         prereqs                   = fmap        parsePrerequisites         prereqStrings
         exclusions                = lookupField "exclusion"                allMetadata
         breadths                  = lookupField "breadthCategories"        allMetadata
         distributions             = lookupField "distributionCategories"   allMetadata
         prereqStrings             = lookupField "prerequisite"             allMetadata
         coreqs                    = lookupField "corequisite"              allMetadata
-        videoUrls                 = repeat      $ Just "[]"
+    let manualTutorialEnrolments  = repeat      $ Just False
+        manualPracticalEnrolments = repeat      $ Just False
+    let videoUrls                 = repeat      ([] :: [T.Text])
 
-    let lst12 = zipWith6 (\a b c d e lst -> a:b:c:d:e:lst)
-                         codes
+    let lst7 = zipWith7 (\a b c d e f g -> a:b:c:d:e:f:g:[])
                          courseTitles
                          courseDescriptions
-                         manualTutorialEnrolments
-                         manualPracticalEnrolments
-                         lst7
-        lst7  = zipWith7 (\a b c d e f g -> a:b:c:d:e:f:g:[])
                          prereqs
                          exclusions
                          breadths
                          distributions
                          prereqStrings
-                         coreqs
-                         videoUrls
 
-    print ("inserting " ++ (show $ length lst12) ++ " courses into database")
-    {-runSqlite databasePath $ do
-        runMigration migrateAll
-        -- forM_ -}
-    print (lst12)
+    print ("inserting " ++ (show $ length lst7) ++ " courses into database")
+
+    runSqlite databasePath $ insertMany_ $ zipWith6 (\c lst corqs mTutEnrl mPratEnrl vUrl ->
+                                                    Courses c (lst !! 0) (lst !! 1) mTutEnrl mPratEnrl (lst !! 2)
+                                                            (lst !! 3) (lst !! 4) (lst !! 5) (lst !! 6) corqs vUrl)
+                                                    codes
+                                                    lst7
+                                                    coreqs
+                                                    manualTutorialEnrolments
+                                                    manualPracticalEnrolments
+                                                    videoUrls
+
     print ("All Courses have been successfully inserted")
 
