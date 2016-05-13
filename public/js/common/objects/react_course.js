@@ -2,15 +2,15 @@ var Course = React.createClass({
 
     render: function() {
 
-        var fallLectures = this.props.F.lectures.map(function (section) {
+        var fallLectures = this.props.data.fallSession.lectures.map(function (section) {
             return <Section section={section} />
         });
 
-        var springLectures = this.props.S.lectures.map(function (section) {
+        var springLectures = this.props.data.springSession.lectures.map(function (section) {
             return <Section section={section} />
         });
 
-        var yearLectures = this.props.Y.lectures.map(function (section) {
+        var yearLectures = this.props.data.yearSession.lectures.map(function (section) {
             return <Section section={section} />
         });
 
@@ -22,8 +22,8 @@ var Course = React.createClass({
             </div>
         );
     }
-
 });
+
 
 var Section = React.createClass({
 
@@ -66,22 +66,7 @@ var getCourse = function(courseName) {
 
         success: function (data) {
             React.render(
-                <Course F={data.fallSession}
-                        S={data.springSession}
-                        Y={data.yearSession}
-                        name={data.name}
-                        title={data.title}
-                        prereqs={data.prereqs}
-                        prereqString={data.prereqString}
-                        coreqs={data.coreqs}
-                        breadth={data.breadth}
-                        prep={data.prep}
-                        description={data.description}
-                        exclusions={data.exclusions}
-                        distribution={data.distribution}
-                        manualTutorialEnrolment={data.manualTutorialEnrolment}
-                        manualPracticalEnrolment={data.manualPracticalEnrolment}
-                        videoUrls={data.videoUrls} />,
+                <Course data={data} />,
                     document.getElementById('course-select-wrapper'));
         },
 
