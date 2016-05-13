@@ -265,7 +265,7 @@ var Graph = React.createClass({
         var currentNode = this.refs.nodes.refs[courseID];
         currentNode.focusPrereqs(this);
 				
-				clearAllTimeouts();
+        clearAllTimeouts();
 			
 				var infoBox = this.refs.infobox;
 				//TODO: adjust xPos and yPos
@@ -297,29 +297,34 @@ var Graph = React.createClass({
 				
 				var timeout = setTimeout(function () {
 						infoBox.setState({showInfobox: false});
-				}, 100);
+				}, 400);
 
 				timeouts.push(timeout);
 			
     },
-	
-		infoBoxMouseEnter: function (event) {
-				var infoBox = this.refs.infobox;
-				console.log("enterinfobox");
-				setTimeout(function () {
-						infoBox.setState({showInfobox: true});
-				}, 400);
+    
+    infoBoxMouseEnter: function (event) {
+        clearAllTimeouts();
 			
-    },
-	
-		infoBoxMouseLeave: function (event) {
 				var infoBox = this.refs.infobox;
-				setTimeout(function () {
+        infoBox.setState({showInfobox: true});
+    },
+    
+    infoBoxMouseLeave: function (event) {
+        var infoBox = this.refs.infobox;
+				
+				var timeout = setTimeout(function () {
 						infoBox.setState({showInfobox: false});
 				}, 400);
-    },
-	
 
+				timeouts.push(timeout);
+    },
+    
+    infoBoxMouseClick: function (event) {
+        var infoBox = this.refs.infobox;
+        console.log("clicked", infoBox.state.nodeID);
+    },
+    
     // Reset graph
     reset: function () {
         this.setFCECount(0);
@@ -360,7 +365,7 @@ var Graph = React.createClass({
                     svg={this}
                     nodesJSON={this.state.nodesJSON}
                     hybridsJSON={this.state.hybridsJSON}
-                    edgesJSON={this.state.edgesJSON}
+                    edgesJSON={this.state.edgesJSON}y
                     highlightedNodes={this.state.highlightedNodes}/>
                 <BoolGroup
                     ref='bools'
@@ -368,8 +373,12 @@ var Graph = React.createClass({
                     edgesJSON={this.state.edgesJSON}
                     svg={this}/>
                 <EdgeGroup svg={this} ref='edges' edgesJSON={this.state.edgesJSON}/>
-								<InfoBox ref='infobox'onMouseEnter={this.props.infoBoxMouseEnter}
-                        onMouseLeave={this.props.infoBoxMouseLeave}/>
+								<InfoBox
+										ref='infobox'
+                    onClick={this.infoBoxMouseClick}
+                    onMouseEnter={this.infoBoxMouseEnter}
+                    onMouseLeave={this.infoBoxMouseLeave}
+								/>
             </svg>
         );
     }
@@ -1005,8 +1014,11 @@ var InfoBox = React.createClass({
 						showInfobox: false
         };
     },
-
+    handleClick: function(event) {
+        console.log("clicked");
+    },
     render: function () {
+        //TODO: move to CSS
 				var gStyles = {
 					cursor: 'pointer',
 					transition: 'opacity .4s',
@@ -1032,7 +1044,7 @@ var InfoBox = React.createClass({
 				};
 				
         return (
-						<g id='infobox' className='tooltip-group' style={gStyles}>
+						<g id='infobox' className='tooltip-group' style={gStyles} {... this.props}>
 								<rect {... rectAttrs} >
 								</rect>
             		<text {... textAttrs} >
