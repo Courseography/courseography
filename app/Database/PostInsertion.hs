@@ -19,7 +19,6 @@ import Data.Aeson
 insertPost :: T.Text -> T.Text -> T.Text -> IO ()
 insertPost departmentName postName postCode =
     runSqlite databasePath $ do
-        runMigration migrateAll
         insert_ $ Post postName departmentName postCode
 
 -- | Insert a new post category into the database
