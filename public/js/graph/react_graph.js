@@ -5,13 +5,13 @@ import * as tooltip from 'es6!graph/tooltip';
  * 
  * Search for target node in list of nodes,
  * or if node not found search through list of bools.
- * @param {Node} targetNode
- * @returns {Node}
+ * @param {React.PropTypes.node} targetNode
+ * @param {React.PropTypes.element} elem
+ * @returns {React.PropTypes.Node} 
  *
  */
-
-function refLookUp(targetNode) {
-    var svg = this.props.svg;
+function refLookUp(targetNode, elem) {
+    var svg = elem;
     return svg.refs['nodes'].refs[targetNode] ||
         svg.refs['bools'].refs[targetNode];
 }
@@ -596,7 +596,7 @@ var Node = React.createClass({
             this.setState({status: newState}, function () {
                 setCookie(nodeId, newState);
                 this.props.childs.forEach(function (node) {
-                    var currentNode = refLookUp(node);
+                    var currentNode = refLookUp(node, this.props.svg);
                     currentNode.updateNode();
                 });
                 var allEdges = this.props.outEdges.concat(this.props.inEdges);
@@ -625,7 +625,7 @@ var Node = React.createClass({
             this.setState({status: 'missing'}, function () {
                 this.props.inEdges.forEach(function (edge) {
                     var currentEdge = svg.refs['edges'].refs[edge];
-                    var sourceNode = refLookUp(currentEdge.props.source);
+                    var sourceNode = refLookUp(currentEdge.props.source, this.props.svg);
                     if (!sourceNode.isSelected()) {
                         currentEdge.setState({status: 'missing'});
                     }
@@ -633,11 +633,11 @@ var Node = React.createClass({
                 var isHybrid = this.props.hybrid;
                 this.props.parents.forEach(function (node) {
                     if (typeof node === 'string') {
-                        var currentNode = refLookUp(node);
+                        var currentNode = refLookUp(node, this.props.svg);
                         currentNode.focusPrereqs();
                     } else {
                         node.forEach(n => {
-                            var currentNode = refLookUp(n);
+                            var currentNode = refLookUp(n, this.props.svg);
                             currentNode.focusPrereqs();
                         });
                     }
@@ -651,11 +651,11 @@ var Node = React.createClass({
         this.updateNode(false);
         this.props.parents.forEach(function (node) {
             if (typeof node === 'string') {
-                var currentNode = refLookUp(node);
+                var currentNode = refLookUp(node, this.props.svg);
                 currentNode.unfocusPrereqs();
             } else {
                 node.forEach(n => {
-                    var currentNode = refLookUp(n);
+                    var currentNode = refLookUp(n, this.props.svg);
                     currentNode.unfocusPrereqs();
                 });
             }
@@ -814,7 +814,7 @@ var Bool = React.createClass({
         this.setState({status: newState}, function () {
             setCookie(boolId, newState);
             this.props.childs.forEach(function (node) {
-                var currentNode = refLookUp(node);
+                var currentNode = refLookUp(node, this.props.svg);
                 currentNode.updateNode(svg);
             });
             var allEdges = this.props.outEdges.concat(this.props.inEdges);
@@ -832,13 +832,13 @@ var Bool = React.createClass({
             this.setState({status: 'missing'}, function () {
                 this.props.inEdges.forEach(function (edge) {
                     var currentEdge = svg.refs['edges'].refs[edge];
-                    var sourceNode = refLookUp(currentEdge.props.source);
+                    var sourceNode = refLookUp(currentEdge.props.source, this.props.svg);
                     if (!sourceNode.isSelected()) {
                         currentEdge.setState({status: 'missing'});
                     }
                 });
                 this.props.parents.forEach(function (node) {
-                    var currentNode = refLookUp(node);
+                    var currentNode = refLookUp(node, this.props.svg);
                     currentNode.focusPrereqs();
                 });
             });
@@ -849,7 +849,7 @@ var Bool = React.createClass({
         var svg = this.props.svg;
         this.updateNode(svg);
         this.props.parents.forEach(function (node, i) {
-            var currentNode = refLookUp(node);
+            var currentNode = refLookUp(node, this.props.svg);
             currentNode.unfocusPrereqs(svg);
         });
     },
