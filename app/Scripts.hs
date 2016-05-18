@@ -92,14 +92,19 @@ drawScripts = do
          "/static/js/vendor/jscolor.min.js"])
 
 postScripts :: H.Html
-postScripts = sequence_ (map toScript [
-                                          "/static/js/post/change_div.js",
+postScripts = do 
+    sequence_ (map toScript [
                                           "/static/js/common/cookie_handler.js",
-                                          "/static/js/post/update_post.js",
                                           "/static/js/graph/create_data.js",
-                                          "/static/js/post/fill_textboxes.js",
                                           "/static/js/graph/create_data.js",
-                                          "/static/js/post/update_categories.js"])
+                                          "/static/js/common/course_description.js",
+                                          "/static/js/common/objects/course.js",
+                                          "/static/js/common/objects/section.js",
+                                          "/static/js/common/utilities/util.js",
+                                          "/static/js/common/modal.js",
+                                          "/static/js/common/course_videos.js"])
+    H.script ! A.src "/static/js/requirejs-config.js" $ ""
+    H.script ! H.dataAttribute "main" "/static/js/post" ! A.src "/static/js/vendor/require.js" $ ""
 
 searchScripts :: H.Html
 searchScripts =

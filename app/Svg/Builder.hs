@@ -63,7 +63,7 @@ buildRect texts entity elementId =
                             (shapeWidth entity)
                             (shapeHeight entity)
                             (shapePos entity)
-                            9
+                            0  -- no tolerance for text intersection
                             . textPos
                             ) texts
         textString = concatMap textText rectTexts

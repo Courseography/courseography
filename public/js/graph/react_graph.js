@@ -126,7 +126,7 @@ function parseCourse(s, prefix) {
 function renderReactGraph() {
     'use strict';
     return ReactDOM.render(
-        <Graph width={1195} height={650}/>,
+        <Graph width={1210} height={650}/>,
         document.getElementById('react-graph')
     );
 }
