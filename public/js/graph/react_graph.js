@@ -128,6 +128,7 @@ var Graph = React.createClass({
             fceCount: 0,
             width: 0,
             height: 0,
+            zoomFactor: 1
         };
     },
 
@@ -307,20 +308,31 @@ var Graph = React.createClass({
 
     incrementZoom: function(increase) {
         if (increase) {
-            this.props.zoomFactor += 5;
+            if (this.state.zoomFactor > 0.5) {
+                this.setState({zoomFactor: this.state.zoomFactor - 0.05});
+            }
         } else {
-            this.props.zoomFactor -= 5;
+            if (this.state.zoomFactor < 1.5) {
+                this.setState({zoomFactor: this.state.zoomFactor + 0.05});
+            }
         }
 
-    }
+    },
 
     render: function () {
         // not all of these properties are supported in React
-        var svgAttrs = {width: this.props.zoomFactor + '%', height: this.props.zoomFactor + '%',
-                        viewBox: '0 0 ' + this.props.width + ' ' + this.props.height,
-                        preserveAspectRatio: 'xMinYMin'};
+        var svgAttrs = {
+            width: '100%',
+            height: '100%',
+            viewBox: '0 0 ' +
+                (this.props.width * this.state.zoomFactor) + ' ' + (this.props.height * this.state.zoomFactor),
+            preserveAspectRatio: 'xMinYMin'
+        };
 
         return (
+            <div>
+            <ZoomInButton onClick={this.incrementZoom}/>
+            <ZoomOutButton onClick={this.incrementZoom}/>
             <svg {... svgAttrs} ref='svg' version='1.1'
                  className={this.state.highlightedNodes.length > 0 ?
                             'highlight-nodes' : ''}>
@@ -344,8 +356,36 @@ var Graph = React.createClass({
                     edgesJSON={this.state.edgesJSON}
                     svg={this}/>
                 <EdgeGroup svg={this} ref='edges' edgesJSON={this.state.edgesJSON}/>
-            </svg>
+            </svg></div>
+
         );
+    }
+});
+
+var ZoomInButton = React.createClass({
+
+    handleClick: function (event) {
+        setInterval(this.props.onClick(true), 500);
+    },
+
+    render: function() {
+        return (
+            <div id="zoom-in-button"> <img id='zoom-in-button' onMouseDown={this.handleClick}
+            src='static/res/ico/in.png'/></div>);
+    }
+});
+
+var ZoomOutButton = React.createClass({
+
+    
+    handleClick: function (event) {
+        setInterval(this.props.onClick(false), 500);
+    },
+
+    render: function() {
+        return (
+            <div id="zoom-out-button"> <img id='zoom-out-button' onMouseDown={this.handleClick}
+            src='static/res/ico/out.png'/></div>);
     }
 });
 
