@@ -109,7 +109,7 @@ function parseCourse(s, prefix) {
 function renderReactGraph() {
     'use strict';
     return ReactDOM.render(
-        <Graph width={1195} height={650}/>,
+        <Graph width={1195} height={650} zoomFactor={100}/>,
         document.getElementById('react-graph')
     );
 }
@@ -303,9 +303,20 @@ var Graph = React.createClass({
         );
     },
 
+    incrementZoom: function(increase) {
+        if (increase) {
+            this.props.zoomFactor += 5;
+        } else {
+            this.props.zoomFactor -= 5;
+        }
+
+    }
+
     render: function () {
         // not all of these properties are supported in React
-        var svgAttrs = {width: this.props.width, height: this.props.height};
+        var svgAttrs = {width: this.props.zoomFactor + '%', height: this.props.zoomFactor + '%',
+                        viewBox: '0 0 ' + this.props.width + ' ' + this.props.height,
+                        preserveAspectRatio: 'xMinYMin'};
 
         return (
             <svg {... svgAttrs} ref='svg' version='1.1'
@@ -335,7 +346,6 @@ var Graph = React.createClass({
         );
     }
 });
-
 
 // This now uses the new syntax for a stateless React component
 // (component with only a render method).
