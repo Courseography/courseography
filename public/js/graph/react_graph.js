@@ -248,8 +248,8 @@ var Graph = React.createClass({
     },
 
     nodeClick: function (event) {
-        var courseID = event.currentTarget.id;
-        var currentNode = this.refs.nodes.refs[courseID];
+        var courseId = event.currentTarget.id;
+        var currentNode = this.refs.nodes.refs[courseId];
         var wasSelected = currentNode.state.selected;
         currentNode.toggleSelection(this);
         if (wasSelected) {
@@ -261,8 +261,8 @@ var Graph = React.createClass({
     },
 
     nodeMouseEnter: function (event) {
-        var courseID = event.currentTarget.id;
-        var currentNode = this.refs.nodes.refs[courseID];
+        var courseId = event.currentTarget.id;
+        var currentNode = this.refs.nodes.refs[courseId];
         currentNode.focusPrereqs(this);
 				
         clearAllTimeouts();
@@ -284,13 +284,13 @@ var Graph = React.createClass({
 				
 				infoBox.setState({xPos: xPos,
 													yPos: yPos,
-													nodeID: courseID,
+													nodeId: courseId,
 												 	showInfobox: true});
     },
 
     nodeMouseLeave: function (event) {
-        var courseID = event.currentTarget.id;
-        var currentNode = this.refs.nodes.refs[courseID];
+        var courseId = event.currentTarget.id;
+        var currentNode = this.refs.nodes.refs[courseId];
         currentNode.unfocusPrereqs(this);
 				
 				var infoBox = this.refs.infobox;
@@ -322,7 +322,10 @@ var Graph = React.createClass({
     
     infoBoxMouseClick: function (event) {
         var infoBox = this.refs.infobox;
-        console.log("clicked", infoBox.state.nodeID);
+        var modal = this.refs.modal;
+        console.log("clicked", infoBox.state.nodeId);
+        modal.setState({courseId: infoBox.state.nodeId});
+        $(this.refs.modal.getDOMNode()).modal();
     },
     
     // Reset graph
@@ -379,6 +382,7 @@ var Graph = React.createClass({
                     onMouseEnter={this.infoBoxMouseEnter}
                     onMouseLeave={this.infoBoxMouseLeave}
 								/>
+                <Modal ref="modal" />
             </svg>
         );
     }
@@ -1010,7 +1014,7 @@ var InfoBox = React.createClass({
         return {
             xPos: '0',
             yPos: '0',
-            nodeID: '',
+            nodeId: '',
 						showInfobox: false
         };
     },
@@ -1025,7 +1029,7 @@ var InfoBox = React.createClass({
 					opacity: this.state.showInfobox ? 1 : 0
 				}
 				var rectAttrs = {
-					id:this.state.nodeID+'-tooltip' + '-rect',
+					id:this.state.nodeId+'-tooltip' + '-rect',
 					x: this.state.xPos,
 					y: this.state.yPos,
 					rx: '4',
@@ -1038,7 +1042,7 @@ var InfoBox = React.createClass({
 				};
 							
 				var textAttrs = {
-        	'id': this.state.nodeID +'-tooltip' + '-text',
+        	'id': this.state.nodeId +'-tooltip' + '-text',
         	'x': parseFloat(this.state.xPos) + 60 / 2 - 18,
         	'y': parseFloat(this.state.yPos) + 30 / 2 + 6
 				};
@@ -1054,6 +1058,57 @@ var InfoBox = React.createClass({
 						
         );
     }
+});
+
+var ModalHeader = React.createClass({
+  render: function () {
+    return (
+      <div className="modal-header">
+        {this.props.title}
+        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    )
+  }
+});
+
+var ModalBody = React.createClass({
+  render: function () {
+    return (
+      <div className="modal-body">
+        {this.props.content}
+      </div>
+    )
+  }
+});
+
+var ModalFooter = React.createClass({
+  render: function () {
+    return (
+      <div className="modal-footer">
+      </div>
+    )
+  }
+});
+
+var Modal = React.createClass({
+  getInitialState: function () {
+    return {
+        courseId: []
+    };
+},
+  render: function () {
+    return (<div className="modal fade">
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <ModalHeader title={this.state.courseId}/>
+            <ModalBody content = "Modal Content" />
+            <ModalFooter />
+          </div>
+        </div>
+      </div>)
+  }
 });
 
 export default {renderReactGraph: renderReactGraph};

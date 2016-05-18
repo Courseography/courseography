@@ -129,8 +129,6 @@ modalCSS = do
         left nil
         top nil
     ".modal" ? do
-        padding (px 10) (px 25) (px 25) (px 25)
-        position static
         p ? do
             fontSize (pt 12)
             margin (pt 5) 0 (pt 5) 0
