@@ -205,15 +205,14 @@ resetCSS = "#resetButton" ? do
 graphContainer :: Css
 graphContainer = do
     "#react-graph" ? do
-        width (px 1210)
-        minHeight (px 700)
-        height (px 700)
-        overflow hidden
-        margin (px 10) (px 10) (px 10) (px 10)
+        "width" -: "calc(100% - 40px)"
+        height100
+        overflow scroll
+        margin0
         display inlineBlock
         position absolute
         textAlign $ alignSide sideCenter
-        "left" -: "40px"
+        left (px 40)
     "#react-graphRootSVG" ? do
         width100
         height100
@@ -253,13 +252,13 @@ sidebarCSS = do
             backgroundColor grey1
             fontColor white
     "#container" ? do
-        width (pct 100)
-        height (px 700)
+        "height" -: "calc(100% - 100px)"
+        width100
         position relative
     "#sidebar" ? do
         display inlineBlock
         width (px 40)
-        height (pct 100)
+        height100
         float floatLeft
         backgroundColor purple8
         position absolute

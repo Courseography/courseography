@@ -109,7 +109,7 @@ function parseCourse(s, prefix) {
 function renderReactGraph() {
     'use strict';
     return ReactDOM.render(
-        <Graph width={1210} height={650}/>,
+        <Graph/>,
         document.getElementById('react-graph')
     );
 }
@@ -125,7 +125,9 @@ var Graph = React.createClass({
             boolsJSON: [],
             edgesJSON: [],
             highlightedNodes: [],
-            fceCount: 0
+            fceCount: 0,
+            width: 0,
+            height: 0,
         };
     },
 
@@ -194,7 +196,9 @@ var Graph = React.createClass({
                         nodesJSON: nodesList,
                         hybridsJSON: hybridsList,
                         boolsJSON: boolsList,
-                        edgesJSON: edgesList
+                        edgesJSON: edgesList,
+                        width: data[3][1],
+                        height: data[4][1]
                     });
                 }
             }.bind(this),
@@ -305,7 +309,7 @@ var Graph = React.createClass({
 
     render: function () {
         // not all of these properties are supported in React
-        var svgAttrs = {width: this.props.width, height: this.props.height};
+        var svgAttrs = {width: this.state.width, height: this.state.height};
 
         return (
             <svg {... svgAttrs} ref='svg' version='1.1'
