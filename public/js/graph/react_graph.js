@@ -10,8 +10,7 @@ import * as tooltip from 'es6!graph/tooltip';
  * @returns {React.PropTypes.Node} 
  *
  */
-function refLookUp(targetNode, elem) {
-    var svg = elem;
+function refLookUp(targetNode, svg) {
     return svg.refs['nodes'].refs[targetNode] ||
         svg.refs['bools'].refs[targetNode];
 }
