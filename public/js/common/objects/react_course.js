@@ -62,12 +62,10 @@ var getCourse = function(courseName) {
         url: 'course',
         dataType: 'json',
         data: {name : courseName},
-        async: false,
 
         success: function (data) {
             React.render(
-                <Course data={data} />,
-                    document.getElementById('course-select-wrapper'));
+                <Course data={data} />, document.getElementById('course-select-wrapper'));
         },
 
         error: function () {
