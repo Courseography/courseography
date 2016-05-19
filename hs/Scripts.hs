@@ -90,6 +90,7 @@ timetableScripts = do
          "/static/js/common/export/export.js"])
     H.script ! H.dataAttribute "main" "/static/js/grid" ! A.src "/static/js/require.js" $ ""
     H.script ! A.type_ "text/jsx" ! A.src "/static/js/grid/react_util.js" $ ""
+    H.script ! A.type_ "text/jsx" ! A.src "/static/js/common/objects/react_course.js" $ ""
 
 drawScripts :: H.Html
 drawScripts = do
