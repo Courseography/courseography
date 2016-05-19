@@ -197,7 +197,8 @@ var Graph = React.createClass({
                         boolsJSON: boolsList,
                         edgesJSON: edgesList,
                         width: data.width,
-                        height: data.height
+                        height: data.height,
+                        zoomFactor: 1
                     });
                 }
             }.bind(this),
@@ -331,8 +332,16 @@ var Graph = React.createClass({
 
         return (
             <div>
-            <ZoomInButton onClick={this.incrementZoom}/>
-            <ZoomOutButton onClick={this.incrementZoom}/>
+            <Button
+                id='zoom-in-button'
+                sourceImg="static/res/ico/in.png"
+                mouseDown={this.incrementZoom}
+                mouseDownArg={true}/>
+             <Button
+                id='zoom-out-button'
+                sourceImg="static/res/ico/out.png"
+                mouseDown={this.incrementZoom}
+                mouseDownArg={false}/>
             <svg {... svgAttrs} ref='svg' version='1.1'
                  className={this.state.highlightedNodes.length > 0 ?
                             'highlight-nodes' : ''}>
@@ -362,30 +371,20 @@ var Graph = React.createClass({
     }
 });
 
-var ZoomInButton = React.createClass({
+var Button = React.createClass({
 
-    handleClick: function (event) {
-        setInterval(this.props.onClick(true), 500);
+    handleMouseDown: function() {
+        this.props.mouseDown(this.props.mouseDownArg);
     },
 
     render: function() {
+
         return (
-            <div id="zoom-in-button"> <img id='zoom-in-button' onMouseDown={this.handleClick}
-            src='static/res/ico/in.png'/></div>);
-    }
-});
-
-var ZoomOutButton = React.createClass({
-
-    
-    handleClick: function (event) {
-        setInterval(this.props.onClick(false), 500);
-    },
-
-    render: function() {
-        return (
-            <div id="zoom-out-button"> <img id='zoom-out-button' onMouseDown={this.handleClick}
-            src='static/res/ico/out.png'/></div>);
+         <div id={this.props.id}>
+        <img id={this.props.id} onMouseDown={this.handleMouseDown}
+        src={this.props.sourceImg}/>
+        </div>
+        );
     }
 });
 
