@@ -62,7 +62,7 @@ canvasCSS = do
     "#background" ? do
         height100
         width100
-        "background-image" -: "url(/static/res/grid.png)"
+        "background-image" -: "url(/static/res/backgrounds/draw-background.png)"
         "background-size" -: "8px"
         opacity 0.3
     "#mySVG" ? do
