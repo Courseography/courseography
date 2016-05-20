@@ -1042,14 +1042,16 @@ var InfoBox = React.createClass({
         	'x': parseFloat(this.state.xPos) + 60 / 2 - 18,
         	'y': parseFloat(this.state.yPos) + 30 / 2 + 6
         };
-				
+
         return (
-            <g id='infobox' className='tooltip-group' style={gStyles} {... this.props}>
+            this.state.showInfobox
+            ? <g id='infobox' className='tooltip-group' style={gStyles} {... this.props}>
                 <rect {... rectAttrs} ></rect>
                 <text {... textAttrs} >
                     Info
                 </text>
-            </g>			
+            </g>
+            : <g></g>
         );
     }
 });
