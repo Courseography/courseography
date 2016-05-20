@@ -31,7 +31,7 @@ import Data.String.Utils
 import Data.List
 import Config (databasePath)
 import Control.Monad (liftM)
-import Data.Aeson ((.=))
+import Data.Aeson ((.=), toJSON, object)
 import Data.Int (Int64)
 import Database.DataType
 import Svg.Builder
@@ -166,12 +166,14 @@ getGraphJSON graphName =
                                              intersectsWithShape (rects ++ ellipses))
                                             texts
 
-                    result = createJSONResponse [
-                        "texts" .= (texts ++ regionTexts),
-                        "shapes" .= (rects ++ ellipses),
-                        "paths" .= (paths ++ regions),
-                        "width" .= (graphWidth $ entityVal graph),
-                        "height" .= (graphHeight $ entityVal graph)]
+                    result = createJSONResponse $
+                        object [
+                            ("texts", toJSON $ texts ++ regionTexts),
+                            ("shapes", toJSON $ rects ++ ellipses),
+                            ("paths", toJSON $ paths ++ regions),
+                            ("width", toJSON $ graphWidth $ entityVal graph),
+                            ("height", toJSON $ graphHeight $ entityVal graph)
+                        ]
 
                 return result
 
