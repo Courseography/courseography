@@ -314,14 +314,14 @@ var Graph = React.createClass({
 			
     },
     
-    infoBoxMouseEnter: function (event) {
+    infoBoxMouseEnter: function () {
         this.clearAllTimeouts();
 			
         var infoBox = this.refs.infobox;
         infoBox.setState({showInfobox: true});
     },
     
-    infoBoxMouseLeave: function (event) {
+    infoBoxMouseLeave: function () {
         var infoBox = this.refs.infobox;
 
         var timeout = setTimeout(function () {
@@ -333,7 +333,7 @@ var Graph = React.createClass({
         this.setState({timeouts: timeouts});
     },
     
-    infoBoxMouseClick: function (event) {
+    infoBoxMouseClick: function () {
         var infoBox = this.refs.infobox;
         var modal = this.refs.modal;
         modal.setState({courseId: infoBox.state.nodeId.substring(0, 6)});
