@@ -125,6 +125,7 @@ var Graph = React.createClass({
             boolsJSON: [],
             edgesJSON: [],
             highlightedNodes: [],
+            timeouts: [],
             fceCount: 0
         };
     },
@@ -235,6 +236,14 @@ var Graph = React.createClass({
         }
     },
 
+    clearAllTimeouts: function() {
+        for (var i = 0; i < this.state.timeouts.length; i++) {
+            clearTimeout(this.state.timeouts[i]);
+        }
+
+        this.setState({timeouts: []});
+    },
+
     setFCECount: function (credits) {
         this.setState({fceCount: credits}, function () {
             $('#fcecount').text('FCE Count: ' + this.state.fceCount);
@@ -265,27 +274,27 @@ var Graph = React.createClass({
         var currentNode = this.refs.nodes.refs[courseId];
         currentNode.focusPrereqs(this);
 				
-        clearAllTimeouts();
+        this.clearAllTimeouts();
 			
-				var infoBox = this.refs.infobox;
-				//TODO: adjust xPos and yPos
-				var xPos = currentNode.props.JSON.pos[0];
-				var yPos = currentNode.props.JSON.pos[1];
-				var rightSide = xPos > 222;
-				// The tooltip is offset with a 'padding' of 5.
-				if (rightSide) {
-						xPos = parseFloat(xPos) - 65;
-				} else {
-						xPos = parseFloat(xPos) +
-								parseFloat(currentNode.props.JSON.width) + 5;
-				}
+        var infoBox = this.refs.infobox;
+        //TODO: adjust xPos and yPos
+        var xPos = currentNode.props.JSON.pos[0];
+        var yPos = currentNode.props.JSON.pos[1];
+        var rightSide = xPos > 222;
+        // The tooltip is offset with a 'padding' of 5.
+        if (rightSide) {
+                xPos = parseFloat(xPos) - 65;
+        } else {
+                xPos = parseFloat(xPos) +
+                        parseFloat(currentNode.props.JSON.width) + 5;
+        }
 
-				yPos = parseFloat(yPos);
-				
-				infoBox.setState({xPos: xPos,
-													yPos: yPos,
-													nodeId: courseId,
-												 	showInfobox: true});
+        yPos = parseFloat(yPos);
+
+        infoBox.setState({xPos: xPos,
+                          yPos: yPos,
+                          nodeId: courseId,
+                          showInfobox: true});
     },
 
     nodeMouseLeave: function (event) {
@@ -293,38 +302,41 @@ var Graph = React.createClass({
         var currentNode = this.refs.nodes.refs[courseId];
         currentNode.unfocusPrereqs(this);
 				
-				var infoBox = this.refs.infobox;
-				
-				var timeout = setTimeout(function () {
-						infoBox.setState({showInfobox: false});
-				}, 400);
+        var infoBox = this.refs.infobox;
 
-				timeouts.push(timeout);
+        var timeout = setTimeout(function () {
+                infoBox.setState({showInfobox: false});
+        }, 400);
+
+        var timeouts = this.state.timeouts;
+        timeouts.push(timeout);
+        this.setState({timeouts: timeouts});
 			
     },
     
     infoBoxMouseEnter: function (event) {
-        clearAllTimeouts();
+        this.clearAllTimeouts();
 			
-				var infoBox = this.refs.infobox;
+        var infoBox = this.refs.infobox;
         infoBox.setState({showInfobox: true});
     },
     
     infoBoxMouseLeave: function (event) {
         var infoBox = this.refs.infobox;
-				
-				var timeout = setTimeout(function () {
-						infoBox.setState({showInfobox: false});
-				}, 400);
 
-				timeouts.push(timeout);
+        var timeout = setTimeout(function () {
+                infoBox.setState({showInfobox: false});
+        }, 400);
+
+        var timeouts = this.state.timeouts;
+        timeouts.push(timeout);
+        this.setState({timeouts: timeouts});
     },
     
     infoBoxMouseClick: function (event) {
         var infoBox = this.refs.infobox;
         var modal = this.refs.modal;
-        console.log("clicked", infoBox.state.nodeId);
-        modal.setState({courseId: infoBox.state.nodeId});
+        modal.setState({courseId: infoBox.state.nodeId.substring(0, 6)});
         $(this.refs.modal.getDOMNode()).modal();
     },
     
@@ -368,7 +380,7 @@ var Graph = React.createClass({
                     svg={this}
                     nodesJSON={this.state.nodesJSON}
                     hybridsJSON={this.state.hybridsJSON}
-                    edgesJSON={this.state.edgesJSON}y
+                    edgesJSON={this.state.edgesJSON}
                     highlightedNodes={this.state.highlightedNodes}/>
                 <BoolGroup
                     ref='bools'
@@ -994,20 +1006,6 @@ var Edge = React.createClass({
     }
 });
 
-var timeouts = [];            // All timeouts. Used to remove timeouts later on.tim
-/**
- * Clears all timeouts.
- */
-function clearAllTimeouts() {
-    'use strict';
-
-    for (var i = 0; i < timeouts.length; i++) {
-        clearTimeout(timeouts[i]);
-    }
-
-    timeouts = [];
-}
-
 
 var InfoBox = React.createClass({
 		getInitialState: function () {
@@ -1015,100 +1013,131 @@ var InfoBox = React.createClass({
             xPos: '0',
             yPos: '0',
             nodeId: '',
-						showInfobox: false
+            showInfobox: false
         };
     },
-    handleClick: function(event) {
-        console.log("clicked");
-    },
+
     render: function () {
         //TODO: move to CSS
-				var gStyles = {
-					cursor: 'pointer',
-					transition: 'opacity .4s',
-					opacity: this.state.showInfobox ? 1 : 0
-				}
-				var rectAttrs = {
-					id:this.state.nodeId+'-tooltip' + '-rect',
-					x: this.state.xPos,
-					y: this.state.yPos,
-					rx: '4',
-					ry: '4',
-					fill: 'white',
-					stroke: 'black',
-					'stroke-width': '2',
-					width: '60',
-					height: '30'
-				};
-							
-				var textAttrs = {
+        var gStyles = {
+            cursor: 'pointer',
+            transition: 'opacity .4s',
+            opacity: this.state.showInfobox ? 1 : 0
+        }
+        var rectAttrs = {
+            id:this.state.nodeId+'-tooltip' + '-rect',
+            x: this.state.xPos,
+            y: this.state.yPos,
+            rx: '4',
+            ry: '4',
+            fill: 'white',
+            stroke: 'black',
+            'stroke-width': '2',
+            width: '60',
+            height: '30'
+        };
+
+        var textAttrs = {
         	'id': this.state.nodeId +'-tooltip' + '-text',
         	'x': parseFloat(this.state.xPos) + 60 / 2 - 18,
         	'y': parseFloat(this.state.yPos) + 30 / 2 + 6
-				};
+        };
 				
         return (
-						<g id='infobox' className='tooltip-group' style={gStyles} {... this.props}>
-								<rect {... rectAttrs} >
-								</rect>
-            		<text {... textAttrs} >
-                		{'Info'}
+            <g id='infobox' className='tooltip-group' style={gStyles} {... this.props}>
+                <rect {... rectAttrs} ></rect>
+                <text {... textAttrs} >
+                    Info
                 </text>
-            </g>
-						
+            </g>			
         );
     }
 });
 
-var ModalHeader = React.createClass({
-  render: function () {
-    return (
-      <div className="modal-header">
-        {this.props.title}
-        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-    )
-  }
-});
-
-var ModalBody = React.createClass({
-  render: function () {
-    return (
-      <div className="modal-body">
-        {this.props.content}
-      </div>
-    )
-  }
-});
-
-var ModalFooter = React.createClass({
-  render: function () {
-    return (
-      <div className="modal-footer">
-      </div>
-    )
-  }
-});
 
 var Modal = React.createClass({
-  getInitialState: function () {
-    return {
-        courseId: []
-    };
-},
-  render: function () {
-    return (<div className="modal fade">
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <ModalHeader title={this.state.courseId}/>
-            <ModalBody content = "Modal Content" />
-            <ModalFooter />
-          </div>
-        </div>
-      </div>)
-  }
+    getInitialState: function () {
+        return {
+            courseId: 'mat135',
+            course: [],
+            sessions: []
+        };
+    },
+    
+    componentDidMount: function(){
+        $.ajax({
+            url: 'course',
+            data: {name: formatCourseName(this.state.courseId)[0]},
+            dataType: 'json',
+            success: function(data) {
+                if (this.isMounted()) {
+                    this.setState({course: data});
+                    //This is getting the session times
+                    var sessions = data.fallSession.lectures
+                                                   .concat(data.springSession.lectures)
+                                                   .concat(data.yearSession.lectures)
+                    //Tutorials don't have a timeStr to print, so I've currently ommitted them
+                    this.setState({sessions: sessions});
+                }
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error('course-info', status, err.toString());
+            }.bind(this)
+        });
+
+    },
+    render: function () {
+        return (
+            <div className="modal fade">
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            {getCourseTitle(this.state.courseId)}
+                            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            <div>
+                                <p>{this.state.course.description}</p>
+                                <p><strong>Prerequisite: </strong>{this.state.course.prereqString}</p>
+                                <p><strong>Distribution Requirement Status: </strong>{this.state.course.distribution}</p>
+                                <p><strong>Breadth Requirement: </strong>{this.state.course.breadth}</p>
+                                <p><strong>Timetable: </strong></p>
+                                {this.state.sessions.map(function(lecture) {
+                                    return <p>{lecture.code + lecture.session + "-" + lecture.section + ": " + lecture.timeStr}</p>;
+                                })}
+                                <Video urls={this.state.course.videoUrls}/>
+                            </div>
+                        </div>
+                        <div className="modal-footer">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+});
+
+
+var Video = React.createClass({
+    getDefaultProps: function() {
+        return {
+            urls: []
+        }
+    },
+
+    render: function() {
+        return (
+            <div id="course-video-div">
+                <video id="course-video" className="video-js vjs-default-skin" controls="" preload="auto">
+                    {this.props.urls.map(function(url) {
+                        return <source src={url} type="video/mp4"/>
+                    })}
+                </video>
+            </div>
+        );
+    }
 });
 
 export default {renderReactGraph: renderReactGraph};
