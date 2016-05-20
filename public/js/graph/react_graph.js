@@ -1097,18 +1097,16 @@ var Modal = React.createClass({
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <div className="modal-body">
-                            <div>
-                                <p>{this.state.course.description}</p>
-                                <p><strong>Prerequisite: </strong>{this.state.course.prereqString}</p>
-                                <p><strong>Distribution Requirement Status: </strong>{this.state.course.distribution}</p>
-                                <p><strong>Breadth Requirement: </strong>{this.state.course.breadth}</p>
-                                <p><strong>Timetable: </strong></p>
-                                {this.state.sessions.map(function(lecture) {
-                                    return <p>{lecture.code + lecture.session + "-" + lecture.section + ": " + lecture.timeStr}</p>;
-                                })}
-                                <Video urls={this.state.course.videoUrls}/>
-                            </div>
+                        <div className="modal-body" style={{'height':'360px', 'overflow-y':'scroll'}}>
+                            <p>{this.state.course.description}</p>
+                            <p><strong>Prerequisite: </strong>{this.state.course.prereqString}</p>
+                            <p><strong>Distribution Requirement Status: </strong>{this.state.course.distribution}</p>
+                            <p><strong>Breadth Requirement: </strong>{this.state.course.breadth}</p>
+                            <p><strong>Timetable: </strong></p>
+                            {this.state.sessions.map(function(lecture) {
+                                return <p>{lecture.code + lecture.session + "-" + lecture.section + ": " + lecture.timeStr}</p>;
+                            })}
+                            <Video urls={this.state.course.videoUrls}/>
                         </div>
                         <div className="modal-footer">
                         </div>

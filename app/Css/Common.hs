@@ -128,11 +128,16 @@ modalCSS = do
         position fixed
         left nil
         top nil
-    ".modal" ? do
+    ".modal-header" ? do
+        color blue3
+    ".modal-body" ? do
+        overflowY scroll
+        height (px 360)
         p ? do
             fontSize (pt 12)
             margin (pt 5) 0 (pt 5) 0
             lineHeight (em 1.3)
+            textAlign $ alignSide sideLeft
     ".ui-dialog-titlebar" ? do
         color blue3
         cursor move
