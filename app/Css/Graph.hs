@@ -205,7 +205,7 @@ resetCSS = "#resetButton" ? do
 graphContainer :: Css
 graphContainer = do
     "#react-graph" ? do
-        width (px 1195)
+        width (px 1210)
         minHeight (px 700)
         height (px 700)
         overflow hidden

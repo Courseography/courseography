@@ -14,12 +14,12 @@ import WebParsing.ParsingHelp
 import Config (databasePath)
 
 fasCalendarURL :: String
-fasCalendarURL = "http://www.artsandscience.utoronto.ca/ofr/calendar/"
+fasCalendarURL = "http://calendar.artsci.utoronto.ca/"
 
 
 -- | A collection of pages that do not contain any course information
 toDelete :: [String]
-toDelete = ["199299398399Big_Ideas_(Faculty_of_Arts_&_Science_Programs).html",
+toDelete = ["199299398399(Faculty_of_Arts_&_Science_Programs).html",
             "Joint_Courses.html",
             "Writing_in_the_Faculty_of_Arts_&_Science.html",
             "crs_bio.htm",
