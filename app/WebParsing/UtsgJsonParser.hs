@@ -106,7 +106,7 @@ getAllCourses = do
 
     let enrollmentCapacities      = fmap (lookupField "enrollmentCapacity")                  allMeetingMetadata
         waitlists'                = fmap (lookupField "waitlist")                            allMeetingMetadata
-    let waitlists                 = map (map (\(Just v) -> (if v == "Y" then 1 else 0)))     waitlists'
+    let waitlists                 = map (map (\(Just v) -> (if v == "Y" then 0 else -1)))     waitlists'
         enrollments               = waitlists
         extras                    = waitlists
     let allSchedulesMetadata      = fmap (lookupObj "schedule")                              allMeetingMetadata
@@ -142,7 +142,7 @@ getAllCourses = do
                          prereqStrings
 
     print ("inserting " ++ (show $ length lst7) ++ " courses into database")
-    print allInstructors
+    print times
     runSqlite databasePath $ insertMany_ $ zipWith6 (\c lst corqs mTutEnrl mPratEnrl vUrl ->
                                                     Courses c (lst !! 0) (lst !! 1) mTutEnrl mPratEnrl (lst !! 2)
                                                             (lst !! 3) (lst !! 4) (lst !! 5) (lst !! 6) corqs vUrl)
