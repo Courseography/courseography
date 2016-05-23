@@ -137,6 +137,17 @@ FacebookTest
     fId String
     testString String
     deriving Show
+
+Post
+    name T.Text
+    department T.Text
+    code T.Text
+    deriving Show
+
+PostCategory
+    name T.Text
+    post T.Text
+    deriving Show
 |]
 
 -- ** TODO: Remove these extra types and class instances

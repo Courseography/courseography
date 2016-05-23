@@ -3,9 +3,11 @@ module WebParsing.ParseAll
 
 import WebParsing.ArtSciParser
 import WebParsing.TimeTableParser
+import WebParsing.PostParser
 
 parseAll :: IO ()
 parseAll = do
     parseArtSci
     --parseUTSC
     parseTT
+    parsePosts
