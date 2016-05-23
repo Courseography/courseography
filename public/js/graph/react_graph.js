@@ -127,7 +127,6 @@ var Graph = React.createClass({
             highlightedNodes: [],
             fceCount: 0,
             zoomFactor: 1
-
         };
     },
 
@@ -332,15 +331,15 @@ var Graph = React.createClass({
         return (
             <div>
             <Button
-                id='zoom-in-button'
+                divId='zoom-in-button'
+                imgId='zoom-in'
                 sourceImg="static/res/ico/in.png"
-                mouseDown={this.incrementZoom}
-                mouseDownArg={true}/>
-             <Button
-                id='zoom-out-button'
+                mouseDown={() => this.incrementZoom(true)}/>
+            <Button
+                divId='zoom-out-button'
+                imgId='zoom-out'
                 sourceImg="static/res/ico/out.png"
-                mouseDown={this.incrementZoom}
-                mouseDownArg={false}/>
+                mouseDown={() => this.incrementZoom(false)}/>
             <svg {... svgAttrs} ref='svg' version='1.1'
                  className={this.state.highlightedNodes.length > 0 ?
                             'highlight-nodes' : ''}>
@@ -373,16 +372,17 @@ var Graph = React.createClass({
 var Button = React.createClass({
 
     handleMouseDown: function() {
-        this.props.mouseDown(this.props.mouseDownArg);
+        this.props.mouseDown();
     },
 
     render: function() {
 
         return (
-         <div id={this.props.id}>
-        <img id={this.props.id} onMouseDown={this.handleMouseDown}
-        src={this.props.sourceImg}/>
-        </div>
+            <div id={this.props.divId} className='graph-control-button'>
+            <img id={this.props.imgId} alt={this.props.imgId}
+            onMouseDown={this.handleMouseDown}
+            src={this.props.sourceImg}/>
+            </div>
         );
     }
 });
