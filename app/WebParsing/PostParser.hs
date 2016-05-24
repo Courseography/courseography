@@ -20,10 +20,10 @@ getPost str = do
     rsp <- simpleHTTP (getRequest path)
     body <- getResponseBody rsp
     let tags = filter isNotComment $ parseTags (T.pack body)
-        programs = secondH2 tags
+        postsSoup = secondH2 tags
+        posts =  partitions isPostName postsSoup
     print $ "parsing " ++ str
-    print programs
-
+    print posts
     where 
         isNotComment (TagComment _) = False
         isNotComment _ = True
@@ -35,3 +35,5 @@ getPost str = do
                     []
                 else
                     takeWhile (~/= ("<a name=courses>" :: String)) $ sect !! 1
+        isPostName (TagOpen _ attrs) = any (\x -> fst x == "name" && T.length (snd x) == 9) attrs
+        isPostName _ = False
