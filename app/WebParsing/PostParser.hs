@@ -34,4 +34,4 @@ getPost str = do
                 then
                     []
                 else
-                    sect !! 1
+                    takeWhile (~/= ("<a name=courses>" :: String)) $ sect !! 1
