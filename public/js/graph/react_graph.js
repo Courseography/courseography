@@ -388,12 +388,11 @@ var Graph = React.createClass({
                     edgesJSON={this.state.edgesJSON}
                     svg={this}/>
                 <EdgeGroup svg={this} ref='edges' edgesJSON={this.state.edgesJSON}/>
-								<InfoBox
-										ref='infobox'
+                <InfoBox
+					ref='infobox'
                     onClick={this.infoBoxMouseClick}
                     onMouseEnter={this.infoBoxMouseEnter}
-                    onMouseLeave={this.infoBoxMouseLeave}
-								/>
+                    onMouseLeave={this.infoBoxMouseLeave}/>
                 <Modal ref="modal" />
             </svg>
         );
