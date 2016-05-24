@@ -12,6 +12,7 @@ import qualified Data.Text as T
 import Database.Tables
 import WebParsing.ParsingHelp
 import Config (databasePath)
+import WebParsing.PostParser
 
 fasCalendarURL :: String
 fasCalendarURL = "http://calendar.artsci.utoronto.ca/"
@@ -93,3 +94,5 @@ parseArtSci = do
     let depts = getDeptList $ parseTags body
     putStrLn "Parsing Arts and Science Calendar..."
     mapM_ getCalendar depts
+    putStrLn "Parsing Arts and Science Posts"
+    mapM_ getPost depts

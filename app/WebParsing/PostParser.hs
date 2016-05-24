@@ -1,11 +1,10 @@
 {-# LANGUAGE OverloadedStrings #-}
 module WebParsing.PostParser
-    (parsePosts) where
+    (getPost) where
 
 import Network.HTTP
 import Database.PostInsertion(insertPost, insertPostCategory)
 import Database.Persist.Sqlite
-import WebParsing.ArtSciParser(getDeptList)
 import WebParsing.ParsingHelp
 import qualified Data.Text as T
 import Data.Char
@@ -36,14 +35,3 @@ getPost str = do
                     []
                 else
                     sect !! 1
-
--- | Parses the entire Arts & Science Course Calendar and inserts posts
--- into the database.
-parsePosts :: IO ()
-parsePosts = do
-    rsp <- simpleHTTP (getRequest fasCalendarURL)
-    body <- getResponseBody rsp
-    let depts = getDeptList $ parseTags body
-
-    putStrLn "Parsing Posts..."
-    mapM_ getPost depts
