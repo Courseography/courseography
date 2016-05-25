@@ -322,9 +322,9 @@ var Graph = React.createClass({
 
     panDirection: function(direction) {
         if (direction === 'up') {
-            this.setState({verticalPanFactor: this.state.verticalPanFactor += 10});
-        } else if (direction ==='down') {
             this.setState({verticalPanFactor: this.state.verticalPanFactor -= 10});
+        } else if (direction ==='down') {
+            this.setState({verticalPanFactor: this.state.verticalPanFactor += 10});
         } else if (direction === 'right') {
             this.setState({horizontalPanFactor: this.state.horizontalPanFactor += 10});
         } else if (direction === 'left') {
