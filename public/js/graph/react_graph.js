@@ -295,6 +295,9 @@ var Graph = React.createClass({
                           yPos: yPos,
                           nodeId: courseId,
                           showInfobox: true});
+        
+        var modal = this.refs.modal;
+        modal.setState({courseId: courseId.substring(0,6)});
     },
 
     nodeMouseLeave: function (event) {
@@ -1059,7 +1062,7 @@ var InfoBox = React.createClass({
 var Modal = React.createClass({
     getInitialState: function () {
         return {
-            courseId: 'mat135',
+            courseId: '',
             course: [],
             sessions: []
         };
