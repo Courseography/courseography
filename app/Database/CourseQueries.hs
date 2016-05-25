@@ -166,9 +166,12 @@ getGraphJSON graphName =
                                              intersectsWithShape (rects ++ ellipses))
                                             texts
 
-                    result = createJSONResponse ["texts" .= (texts ++ regionTexts),
-                                                 "shapes" .= (rects ++ ellipses),
-                                                 "paths" .= (paths ++ regions)]
+                    result = createJSONResponse [
+                        "texts" .= (texts ++ regionTexts),
+                        "shapes" .= (rects ++ ellipses),
+                        "paths" .= (paths ++ regions),
+                        "width" .= (graphWidth $ entityVal graph),
+                        "height" .= (graphHeight $ entityVal graph)]
 
                 return result
 
