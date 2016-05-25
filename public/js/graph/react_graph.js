@@ -2,8 +2,7 @@ import * as tooltip from 'es6!graph/tooltip';
 
 /**
  * 
- * @param {string}
- *            s
+ * @param {string} s
  * @returns {Array}
  */
 function parseAnd(s) {
@@ -33,8 +32,7 @@ function parseAnd(s) {
 
 /**
  * 
- * @param {string}
- *            s
+ * @param {string} s
  * @returns {Array}
  */
 function parseOr(s) {
@@ -85,10 +83,8 @@ function parseOr(s) {
 
 /**
  * 
- * @param {string}
- *            s
- * @param {string}
- *            prefix
+ * @param {string} s
+ * @param {string} prefix
  * @returns {Array}
  */
 function parseCourse(s, prefix) {
