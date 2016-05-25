@@ -904,7 +904,7 @@ var EdgeGroup = React.createClass({
     	var missingEdges = [];
     	var otherEdges = [];
     	var edges = this.props.edgesJSON;
-    	for (i = 0; i < edges.length; i++) {
+    	for (var i = 0; i < edges.length; i++) {
     		if (this.refs[edges[i].id_].state.status !== 'missing') {
     			otherEdges.push(this.refs[edges[i]]);
     		} else {
