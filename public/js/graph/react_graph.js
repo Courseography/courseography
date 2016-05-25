@@ -1,8 +1,9 @@
 import * as tooltip from 'es6!graph/tooltip';
 
 /**
- *
- * @param {string} s
+ * 
+ * @param {string}
+ *            s
  * @returns {Array}
  */
 function parseAnd(s) {
@@ -31,8 +32,9 @@ function parseAnd(s) {
 
 
 /**
- *
- * @param {string} s
+ * 
+ * @param {string}
+ *            s
  * @returns {Array}
  */
 function parseOr(s) {
@@ -82,9 +84,11 @@ function parseOr(s) {
 
 
 /**
- *
- * @param {string} s
- * @param {string} prefix
+ * 
+ * @param {string}
+ *            s
+ * @param {string}
+ *            prefix
  * @returns {Array}
  */
 function parseCourse(s, prefix) {
@@ -137,7 +141,8 @@ var Graph = React.createClass({
         if (graphName === undefined) {
             var urlSpecifiedGraph = getURLParameter('dept');
 
-            // HACK: Temporary workaround for giving the statistics department a link to our graph.
+            // HACK: Temporary workaround for giving the statistics department a
+			// link to our graph.
             // Should be replaced with a more general solution.
             if (urlSpecifiedGraph === 'sta') {
                 graphName = 'Statistics';
@@ -203,7 +208,8 @@ var Graph = React.createClass({
             }
         });
 
-        //Need to hardcode these in because React does not understand these attributes
+        // Need to hardcode these in because React does not understand these
+		// attributes
         var svgNode = ReactDOM.findDOMNode(this.refs.svg);
         var markerNode = ReactDOM.findDOMNode(this.refs.marker);
 
@@ -426,7 +432,7 @@ var NodeGroup = React.createClass({
                 // First search for entire string (see Stats graph)
                 var prereqNode = this.findRelationship(hybridText);
                 if (prereqNode !== undefined) {
-                    //console.log(prereqNod)
+                    // console.log(prereqNod)
                     parents.push(prereqNode.id_);
                     hybridRelationships.push([prereqNode.id_, entry.id_]);
                 } else { // Parse text first
@@ -899,9 +905,20 @@ var EdgeGroup = React.createClass({
     },
 
     render: function () {
+    	var missingEdges = [];
+    	var otherEdges = [];
+    	var edges = this.props.edgesJSON;
+    	for (i = 0; i < edges.length; i++) {
+    		if (this.refs[edges[i].id_].state.status !== 'missing') {
+    			otherEdges.push(this.refs[edges[i]]);
+    		} else {
+    			missingEdges.push(this.refs[edges[i]]);
+    		}
+    	}
         return (
             <g id='edges'>
-                {this.props.edgesJSON.map(this.generateEdge)}
+                {otherEdges.map(this.generateEdge)}
+                {missingEdges.map(this.generateEdge)}
             </g>
         );
     }
@@ -941,5 +958,6 @@ var Edge = React.createClass({
         );
     }
 });
+
 
 export default {renderReactGraph: renderReactGraph};
