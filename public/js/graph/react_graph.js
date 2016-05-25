@@ -198,7 +198,9 @@ var Graph = React.createClass({
                         edgesJSON: edgesList,
                         width: data.width,
                         height: data.height,
-                        zoomFactor: 1
+                        zoomFactor: 1,
+                        horizontalPanFactor: 0,
+                        verticalPanFactor: 0,
                     });
                 }
             }.bind(this),
@@ -320,15 +322,30 @@ var Graph = React.createClass({
 
     },
 
+    panDirection: function(direction) {
+        if (direction === 'up') {
+            this.setState({verticalPanFactor: this.state.verticalPanFactor += 10});
+        } else if (direction ==='down') {
+            this.setState({verticalPanFactor: this.state.verticalPanFactor -= 10});
+        } else if (direction === 'right') {
+            this.setState({horizontalPanFactor: this.state.horizontalPanFactor += 10});
+        } else if (direction === 'left') {
+            this.setState({horizontalPanFactor: this.state.horizontalPanFactor -= 10});
+        }
+    },
+
     render: function () {
         // not all of these properties are supported in React
         var svgAttrs = {
             width: '100%',
             height: '100%',
-            viewBox: '0 0 ' +
-                (this.props.width * this.state.zoomFactor) + ' ' + (this.props.height * this.state.zoomFactor),
+            viewBox: (this.state.horizontalPanFactor + ' ' +
+                      this.state.verticalPanFactor + ' ' +
+                      (this.props.width * this.state.zoomFactor) + ' ' +
+                      (this.props.height * this.state.zoomFactor)),
             preserveAspectRatio: 'xMinYMin'
         };
+
         return (
             <div>
             <Button
@@ -341,6 +358,26 @@ var Graph = React.createClass({
                 imgId='zoom-out'
                 sourceImg="static/res/ico/out.png"
                 mouseDown={() => this.incrementZoom(false)}/>
+            <Button
+                divId='pan-up-button'
+                imgId='pan-up'
+                sourceImg="static/res/ico/up.png"
+                mouseDown={() => this.panDirection('up')}/>
+            <Button
+                divId='pan-down-button'
+                imgId='pan-down'
+                sourceImg="static/res/ico/down.png"
+                mouseDown={() => this.panDirection('down')}/>
+            <Button
+                divId='pan-right-button'
+                imgId='pan-right'
+                sourceImg="static/res/ico/right.png"
+                mouseDown={() => this.panDirection('right')}/>
+            <Button
+                divId='pan-left-button'
+                imgId='pan-left'
+                sourceImg="static/res/ico/left.png"
+                mouseDown={() => this.panDirection('left')}/>
             <svg {... svgAttrs} ref='svg' version='1.1'
                  className={this.state.highlightedNodes.length > 0 ?
                             'highlight-nodes' : ''}>
