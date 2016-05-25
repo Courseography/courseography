@@ -66,6 +66,7 @@ Courses json
     deriving Show
 
 Lecture json
+    Foreign Courses courseCode code
     code T.Text
     session T.Text
     section T.Text
@@ -79,6 +80,7 @@ Lecture json
     deriving Show
 
 Tutorial json
+    Foreign Courses courseCode code
     code T.Text
     section T.Text Maybe
     session T.Text
