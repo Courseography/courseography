@@ -329,7 +329,6 @@ var Graph = React.createClass({
                 (this.props.width * this.state.zoomFactor) + ' ' + (this.props.height * this.state.zoomFactor),
             preserveAspectRatio: 'xMinYMin'
         };
-
         return (
             <div>
             <Button
@@ -373,16 +372,11 @@ var Graph = React.createClass({
 
 var Button = React.createClass({
 
-    handleMouseDown: function() {
-        this.props.mouseDown();
-    },
-
     render: function() {
-
         return (
             <div id={this.props.divId} className='graph-control-button'>
             <img id={this.props.imgId} alt={this.props.imgId}
-            onMouseDown={this.handleMouseDown}
+            onMouseDown={this.props.mouseDown}
             src={this.props.sourceImg}/>
             </div>
         );
