@@ -165,7 +165,7 @@ var Graph = React.createClass({
                 var boolsList = [];
                 var edgesList = [];
 
-                var labelsList =  data.texts.filter(function (entry) {
+                var labelsList = data.texts.filter(function (entry) {
                     return entry.rId.startsWith('tspan');
                 });
 
