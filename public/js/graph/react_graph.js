@@ -165,12 +165,11 @@ var Graph = React.createClass({
                 var boolsList = [];
                 var edgesList = [];
 
-                // data[0] is ["texts", [JSON]]
-                var labelsList =  data[0][1].filter(function (entry) {
+                var labelsList = data.texts.filter(function (entry) {
                     return entry.rId.startsWith('tspan');
                 });
-                // data[1] is ["shapes", [JSON]]
-                data[1][1].forEach(function (entry) {
+
+                data.shapes.forEach(function (entry) {
                     if (entry.type_ === 'Node') {
                         nodesList.push(entry);
                     } else if (entry.type_ === 'Hybrid') {
@@ -179,9 +178,8 @@ var Graph = React.createClass({
                         boolsList.push(entry);
                     }
                 });
-                // data[2] is ["paths", [JSON]]
-                // data[2][1] are the JSON without "paths"
-                data[2][1].forEach(function (entry) {
+
+                data.paths.forEach(function (entry) {
                     if (entry.isRegion) {
                         regionsList.push(entry);
                     } else {
@@ -197,8 +195,8 @@ var Graph = React.createClass({
                         hybridsJSON: hybridsList,
                         boolsJSON: boolsList,
                         edgesJSON: edgesList,
-                        width: data[3][1],
-                        height: data[4][1]
+                        width: data.width,
+                        height: data.height
                     });
                 }
             }.bind(this),
