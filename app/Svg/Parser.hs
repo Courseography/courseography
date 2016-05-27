@@ -87,12 +87,6 @@ performParse graphName inputFilename = do
     -- Insert the graph components into the database
     insertElements parsedGraph
 
-    let genGraphPath = graphPath ++ "gen/"
-        PersistInt64 keyVal = toPersistValue key
-    createDirectoryIfMissing True genGraphPath
-    buildSVG key M.empty (genGraphPath ++ show keyVal ++ ".svg") False
-    print "Success"
-
 
 -- * Parsing functions
 
