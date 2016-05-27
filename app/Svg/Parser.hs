@@ -81,8 +81,7 @@ performParse graphName inputFilename = do
                 -- TODO: pull this out into a generic helper
                 (takeWhile (not . TS.isTagOpenName "defs") tags) ++
                 (concatMap (dropWhile (not . TS.isTagCloseName "defs")) defs)
-        parsedGraph@(a, b, c) = parseGraph key tagsWithoutDefs
-        gTags = TS.partitions (TS.isTagOpenName "g") tagsWithoutDefs
+        parsedGraph = parseGraph key tagsWithoutDefs
 
     -- Insert the graph components into the database
     insertElements parsedGraph
@@ -90,18 +89,12 @@ performParse graphName inputFilename = do
 
 -- * Parsing functions
 
-
 -- | Parse the height and width dimensions from the SVG element, respectively,
 -- and return them as a tuple.
-parseSize :: TS.Tag String   -- ^ The file contents of the graph that will be parsed.
+parseSize :: Tag String   -- ^ The file contents of the graph that will be parsed.
           -> (Double, Double)
 parseSize svgRoot =
-    let width = readMaybe $ TS.fromAttrib "width" svgRoot
-        height = readMaybe $ TS.fromAttrib "height" svgRoot
-    in
-        case (width, height) of
-            (Just w, Just h) -> (w, h)
-            _ -> (1000, 700)
+    (readAttr "width" svgRoot, readAttr "height" svgRoot)
 
 
 -- | Parses an SVG file.
@@ -130,16 +123,18 @@ parseGraph key tags =
                                 (null (shapeFill s) || shapeFill s == "#000000") &&
                                 elem (shapeType_ s) [Node, Hybrid]) shapes
 
+
 -- | Create text values from g tags.
 -- This searches for nested tspan tags inside text tags using a recursive
 -- helper function.
 parseText :: GraphId -> [Tag String] -> [Text]
 parseText key tags =
-    let trans = parseTransform $ TS.fromAttrib "transform" $ head tags
+    let trans = getTransform $ head tags
         textTags = TS.partitions (TS.isTagOpenName "text") tags
         texts = concatMap (parseTextHelper key [] trans) textTags
     in
         texts
+
 
 parseTextHelper :: GraphId -- ^ The Text's corresponding graph identifier.
                 -> [(String, String)]
@@ -151,8 +146,8 @@ parseTextHelper key styles' trans textTags =
     then
         [Text key
               (TS.fromAttrib "id" $ head textTags) -- TODO: Why are we setting an id?
-              (readAttr "x" (head textTags) + fst newTrans,
-               readAttr "y" (head textTags) + snd newTrans)
+              (addTuples newTrans (readAttr "x" $ head textTags,
+                                   readAttr "y" $ head textTags))
               (TS.escapeHTML $ trim $ TS.innerText textTags)
               align
               fill
@@ -160,8 +155,7 @@ parseTextHelper key styles' trans textTags =
     else
         let tspanTags = TS.partitions (TS.isTagOpenName "tspan") textTags
         in
-            concatMap (parseTextHelper key newStyle newTrans)
-                      tspanTags
+            concatMap (parseTextHelper key newStyle newTrans) tspanTags
     where
         newStyle = (styles $ head textTags) ++ styles'
         currTrans = getTransform $ head textTags
@@ -172,21 +166,22 @@ parseTextHelper key styles' trans textTags =
                 else alignAttr
         fill = styleVal "fill" newStyle
 
+
 -- | Create a rectangle from a list of attributes.
 parseRect :: GraphId -- ^ The Rect's corresponding graph identifier.
           -> [Tag String]
           -> [Shape]
 parseRect key tags =
-    let gOpen = head tags
-        styles' = styles gOpen
-        fill = styleVal "fill" styles'
-
+    let
         rectOpenTags = filter (TS.isTagOpenName "rect") tags
     in
-        map (makeRect fill) rectOpenTags
+        map makeRect rectOpenTags
     where
+        gOpen = head tags
+        styles' = styles gOpen
+        fill = styleVal "fill" styles'
         trans = getTransform $ head tags
-        makeRect fill rectOpenTag =
+        makeRect rectOpenTag =
             updateShape fill $
                 Shape key
                   ""
@@ -221,9 +216,9 @@ parsePathHelper key trans pathTag =
         currTrans = parseTransform $ TS.fromAttrib "transform" $ pathTag
         realD = map (addTuples (addTuples trans currTrans)) $ parsePathD d
         fillAttr = styleVal "fill" styles'
-        isRegion = not $ null fillAttr || fillAttr == "none"
+        isRegion = not (null fillAttr) && fillAttr /= "none"
     in
-        if (null d) || (null realD) || (last d == 'z' && not isRegion)
+        if null d || null realD || (last d == 'z' && not isRegion)
     then []
     else [updatePath fillAttr $
             Path key
