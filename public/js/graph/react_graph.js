@@ -365,6 +365,9 @@ var RegionGroup = ({regionsJSON, labelsJSON}) => (
             };
 
             var textStyle = {fill : entry.fill}
+            if (entry.align !== 'begin') {
+                textStyle['text-anchor'] = entry.align;
+            }
 
             return (
                 <text {... textAttrs}
@@ -760,7 +763,7 @@ var BoolGroup = React.createClass({
                 childs={childs}
                 inEdges={inEdges}
                 outEdges={outEdges}
-                logicalType={boolJSON.text[0].text}
+                logicalType={boolJSON.text[0] === undefined ? 'and' : boolJSON.text[0].text}
                 svg={this.props.svg}/>
     },
 
