@@ -22,6 +22,7 @@ common = do
         do margin0
            padding0
            width100
+           height100
            minHeight $ pct 100
            fontSize $ pt 17
            fontFamily ["Trebuchet MS", "Arial"] [sansSerif]
@@ -60,7 +61,7 @@ headerCSS = do
                 padding 0 (px 10) 0 (px 10)
                 a <? do
                     color white
-                    "text-shadow" -: "0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000;" 
+                    "text-shadow" -: "0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000;"
                     hover & do
                         color darkgray
             height (px 50)
@@ -92,7 +93,7 @@ headerCSS = do
         paddingBottom (px 3)
     "#nav-export" ? do
         cursor pointer
-        
+
 {- aDefaultCSS
  - Generates default CSS. -}
 aDefaultCSS :: Css
