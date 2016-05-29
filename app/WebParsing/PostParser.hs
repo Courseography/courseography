@@ -21,7 +21,7 @@ getPost str = do
     let path = fasCalendarURL ++ str
     rsp <- simpleHTTP (getRequest path)
     body <- getResponseBody rsp
-    let tags = filter isNotComment $ parseTags (T.pack body)
+    let tags = filter isNotComment $ parseTags body
         postsSoup = secondH2 tags
         posts = partitions isPostName postsSoup
     mapM_ addPostToDatabase posts
@@ -32,18 +32,20 @@ getPost str = do
         secondH2 tags =
             let sect = sections (isTagOpenName "h2") tags
             in
-                if null sect
+                if (length sect) < 2
                 then
                     []
                 else
-                    takeWhile (~/= ("<a name=courses>" :: String)) $ sect !! 1
-        isPostName (TagOpen _ attrs) = any (\x -> fst x == "name" && T.length (snd x) == 9) attrs
-        isPostName _ = False
+                    takeWhile isNotCoursesSection tags
+        isNotCoursesSection tag = not (tagOpenAttrLit "a" ("name", "courses") tag)
+        isPostName tag = tagOpenAttrNameLit "a" "name" (\nameValue -> (length nameValue) == 9) tag
 
+addPostToDatabase :: [Tag String] -> IO ()
 addPostToDatabase tags =
-    let postCode = fromAttrib "name" ((take 1 $ filter (isTagOpenName "a") tags) !! 0)
+    let postCode = T.pack (fromAttrib "name" ((take 1 $ filter (isTagOpenName "a") tags) !! 0))
         fullPostName = innerText (take 1 $ filter (isTagText) tags)
-        postType = T.pack ((reverse $ words $ T.unpack fullPostName) !! 2)
-        departmentName = T.pack $ unwords $ reverse $ drop 3  $ reverse $ words $ T.unpack fullPostName
+        postType = T.pack ((reverse $ words $ fullPostName) !! 2)
+        departmentName = T.pack $ unwords $ reverse $ drop 3  $ reverse $ words $ fullPostName
     in
         insertPost departmentName postType postCode
+        
