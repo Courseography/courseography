@@ -448,7 +448,6 @@ var Graph = React.createClass({
                 <EdgeGroup svg={this} ref='edges' edgesJSON={this.state.edgesJSON}/>
             </svg>
             </div>
-
         );
     }
 });
