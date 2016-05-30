@@ -246,6 +246,10 @@ graphContainer = do
     "#pan-left-button" ? do
         top (px 30)
         right (px 55)
+    "#reset-button" ? do
+        width (px 48)
+        top (px 111)
+        right (px 33)
 
 sidebarCSS :: Css
 sidebarCSS = do
