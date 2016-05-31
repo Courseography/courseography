@@ -11,7 +11,9 @@ import Data.List
 import qualified Data.Text as T
 import Database.Tables
 import WebParsing.ParsingHelp
+import Database.PostInsertion
 import Config (databasePath)
+import WebParsing.PostParser
 
 fasCalendarURL :: String
 fasCalendarURL = "http://calendar.artsci.utoronto.ca/"
@@ -91,5 +93,7 @@ parseArtSci = do
     rsp <- simpleHTTP (getRequest fasCalendarURL)
     body <- getResponseBody rsp
     let depts = getDeptList $ parseTags body
+    putStrLn "Parsing Arts and Science Posts"
+    mapM_ getPost depts
     putStrLn "Parsing Arts and Science Calendar..."
     mapM_ getCalendar depts
