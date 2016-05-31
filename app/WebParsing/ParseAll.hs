@@ -10,4 +10,3 @@ parseAll = do
     parseArtSci
     --parseUTSC
     parseTT
-    parsePosts
