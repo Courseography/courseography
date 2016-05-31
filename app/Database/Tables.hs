@@ -49,7 +49,7 @@ Department json
     code [T.Text]
     name T.Text
 
-Courses json
+Courses json sql=code
     code T.Text
     Primary code
     title T.Text Maybe
@@ -66,7 +66,6 @@ Courses json
     deriving Show
 
 Lecture json
-    Foreign Courses courseCode code
     code T.Text
     session T.Text
     section T.Text
@@ -77,10 +76,10 @@ Lecture json
     wait Int
     extra Int
     timeStr T.Text
+    Foreign Courses courseId code
     deriving Show
 
 Tutorial json
-    Foreign Courses courseCode code
     code T.Text
     section T.Text Maybe
     session T.Text

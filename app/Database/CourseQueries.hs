@@ -45,14 +45,14 @@ retrieveCourse = liftIO . queryCourse . T.pack
 
 -- | Queries the database for all information about @course@, constructs a JSON object
 -- representing the course and returns the appropriate JSON response.
-queryCourse :: T.Text -> IO Response
+queryCourse :: T.Text -> IO Response -- change T.Text to courses Key
 queryCourse str = do
     courseJSON <- returnCourse str
     return $ createJSONResponse courseJSON
 
 -- | Queries the database for all information about @course@,
 -- constructs and returns a Course value.
-returnCourse :: T.Text -> IO Course
+returnCourse :: T.Text -> IO Course -- change t.text to courses key
 returnCourse lowerStr = runSqlite databasePath $ do
     let courseStr = T.toUpper lowerStr
     sqlCourse :: [Entity Courses] <- selectList [CoursesCode ==. courseStr] []
