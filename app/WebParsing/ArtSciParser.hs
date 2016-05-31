@@ -46,6 +46,7 @@ getCalendar str = do
         coursesSoup = lastH2 tags
         course = map (processCourseToData . filter isTagText) $ partitions isCourseTitle coursesSoup
     print $ "parsing " ++ str
+    mapM_ print $ course --Kael
     runSqlite databasePath $ do
         runMigration migrateAll
         mapM_ insertCourse course
