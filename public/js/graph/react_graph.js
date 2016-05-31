@@ -130,7 +130,7 @@ var Graph = React.createClass({
             height: 0,
             zoomFactor: 1,
             horizontalPanFactor: 0,
-            verticalPanFactor: 0
+            verticalPanFactor: 0,
         };
     },
 
@@ -335,7 +335,7 @@ var Graph = React.createClass({
         // size of container
         var containerWidth = document.getElementById("react-graph").clientWidth;
         var containerHeight = document.getElementById("react-graph").clientHeight;
-
+        
         // if the graph does not fit in it's container, it is resized by the inverse factor
         // of the greater of these two ratios, which needs to be accounted for when
         // calculating right and bottom edges.
@@ -369,7 +369,7 @@ var Graph = React.createClass({
     resetZoomAndPan: function() {
         this.setState({
             zoomFactor:1,
-            verticalPanFactor: 0,
+            verticalPanFactor: 0, 
             horizontalPanFactor: 0
         });
     },
@@ -418,7 +418,7 @@ var Graph = React.createClass({
                 altId='pan-left'
                 sourceImg="static/res/ico/left.png"
                 mouseDown={() => this.panDirection('left')}/>
-            <Button
+            <Button 
                 divId='reset-button'
                 altId='reset'
                 sourceImg="static/res/ico/reset.png"
@@ -448,6 +448,7 @@ var Graph = React.createClass({
                 <EdgeGroup svg={this} ref='edges' edgesJSON={this.state.edgesJSON}/>
             </svg>
             </div>
+
         );
     }
 });
@@ -489,9 +490,6 @@ var RegionGroup = ({regionsJSON, labelsJSON}) => (
             };
 
             var textStyle = {fill : entry.fill}
-            if (entry.align !== 'begin') {
-                textStyle['text-anchor'] = entry.align;
-            }
 
             return (
                 <text {... textAttrs}
@@ -887,7 +885,7 @@ var BoolGroup = React.createClass({
                 childs={childs}
                 inEdges={inEdges}
                 outEdges={outEdges}
-                logicalType={boolJSON.text[0] === undefined ? 'and' : boolJSON.text[0].text}
+                logicalType={boolJSON.text[0].text}
                 svg={this.props.svg}/>
     },
 
