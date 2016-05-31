@@ -26,7 +26,7 @@ getPost str = do
         posts = partitions isPostName postsSoup
     mapM_ addPostToDatabase posts
     print $ "parsing " ++ str
-    where 
+    where
         isNotComment (TagComment _) = False
         isNotComment _ = True
         secondH2 tags =
@@ -44,8 +44,11 @@ addPostToDatabase :: [Tag String] -> IO ()
 addPostToDatabase tags =
     let postCode = T.pack (fromAttrib "name" ((take 1 $ filter (isTagOpenName "a") tags) !! 0))
         fullPostName = innerText (take 1 $ filter (isTagText) tags)
-        postType = T.pack ((reverse $ words $ fullPostName) !! 2)
+        postType =
+            -- Note: See Biochemistry Specialist calendar entry
+            if length (words fullPostName) > 2
+            then T.pack ((reverse $ words $ fullPostName) !! 2)
+            else ""
         departmentName = T.pack $ unwords $ reverse $ drop 3  $ reverse $ words $ fullPostName
     in
         insertPost departmentName postType postCode
-        
