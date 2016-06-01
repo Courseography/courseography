@@ -110,7 +110,7 @@ function parseCourse(s, prefix) {
 function renderReactGraph() {
     'use strict';
     return ReactDOM.render(
-        <Graph width={1210} height={650}/>,
+        <Graph/>,
         document.getElementById('react-graph')
     );
 }
@@ -127,7 +127,9 @@ var Graph = React.createClass({
             edgesJSON: [],
             highlightedNodes: [],
             timeouts: [],
-            fceCount: 0
+            fceCount: 0,
+            width: 0,
+            height: 0,
         };
     },
 
@@ -165,12 +167,11 @@ var Graph = React.createClass({
                 var boolsList = [];
                 var edgesList = [];
 
-                // data[0] is ["texts", [JSON]]
-                var labelsList =  data[0][1].filter(function (entry) {
+                var labelsList = data.texts.filter(function (entry) {
                     return entry.rId.startsWith('tspan');
                 });
-                // data[1] is ["shapes", [JSON]]
-                data[1][1].forEach(function (entry) {
+
+                data.shapes.forEach(function (entry) {
                     if (entry.type_ === 'Node') {
                         nodesList.push(entry);
                     } else if (entry.type_ === 'Hybrid') {
@@ -179,9 +180,8 @@ var Graph = React.createClass({
                         boolsList.push(entry);
                     }
                 });
-                // data[2] is ["paths", [JSON]]
-                // data[2][1] are the JSON without "paths"
-                data[2][1].forEach(function (entry) {
+
+                data.paths.forEach(function (entry) {
                     if (entry.isRegion) {
                         regionsList.push(entry);
                     } else {
@@ -196,7 +196,9 @@ var Graph = React.createClass({
                         nodesJSON: nodesList,
                         hybridsJSON: hybridsList,
                         boolsJSON: boolsList,
-                        edgesJSON: edgesList
+                        edgesJSON: edgesList,
+                        width: data.width,
+                        height: data.height
                     });
                 }
             }.bind(this),
@@ -380,7 +382,7 @@ var Graph = React.createClass({
 
     render: function () {
         // not all of these properties are supported in React
-        var svgAttrs = {width: this.props.width, height: this.props.height};
+        var svgAttrs = {width: this.state.width, height: this.state.height};
 
         return (
             <svg {... svgAttrs} ref='svg' version='1.1'
@@ -442,6 +444,9 @@ var RegionGroup = ({regionsJSON, labelsJSON}) => (
             };
 
             var textStyle = {fill : entry.fill}
+            if (entry.align !== 'begin') {
+                textStyle['text-anchor'] = entry.align;
+            }
 
             return (
                 <text {... textAttrs}
@@ -837,7 +842,7 @@ var BoolGroup = React.createClass({
                 childs={childs}
                 inEdges={inEdges}
                 outEdges={outEdges}
-                logicalType={boolJSON.text[0].text}
+                logicalType={boolJSON.text[0] === undefined ? 'and' : boolJSON.text[0].text}
                 svg={this.props.svg}/>
     },
 

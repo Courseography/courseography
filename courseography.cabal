@@ -114,7 +114,6 @@ executable courseography
     tagsoup,
     regex-posix,
     mtl,
-    HaXml,
     persistent-template,
     vector,
     clay,
@@ -127,4 +126,3 @@ executable courseography
   default-language: Haskell2010
   ghc-options: -Wall -fwarn-tabs
   hs-source-dirs: app
-  
