@@ -130,7 +130,7 @@ var Graph = React.createClass({
             height: 0,
             zoomFactor: 1,
             horizontalPanFactor: 0,
-            verticalPanFactor: 0,
+            verticalPanFactor: 0
         };
     },
 
@@ -317,7 +317,7 @@ var Graph = React.createClass({
                 this.setState({zoomFactor: this.state.zoomFactor - 0.05});
             }
         } else {
-            if (this.state.zoomFactor < 1.5) {
+            if (this.state.zoomFactor < 1.1) {
                 this.setState({zoomFactor: this.state.zoomFactor + 0.05});
             }
         }
@@ -329,28 +329,21 @@ var Graph = React.createClass({
         // bottom and right edges require further calculation performed below
         var topEdge = -(this.state.verticalPanFactor);
         var leftEdge = -(this.state.horizontalPanFactor);
-        var bottomEdge = this.state.height / this.state.zoomFactor;
-        var rightEdge = this.state.width / this.state.zoomFactor;
+        var bottomEdge = (this.state.height - this.state.verticalPanFactor) / this.state.zoomFactor;
+        var rightEdge = (this.state.width - this.state.horizontalPanFactor) / this.state.zoomFactor;
 
         // size of container
         var containerWidth = document.getElementById("react-graph").clientWidth;
         var containerHeight = document.getElementById("react-graph").clientHeight;
         
         // if the graph does not fit in it's container, it is resized by the inverse factor
-        // of the greater of these two ratios, which needs to be accounted for when
-        // calculating right and bottom edges.
+        // of the greater of these two ratios.
         var autoResizeFactor;
-        var heightToContainerRatio = this.state.height/containerHeight;
-        var widthToContainerRatio = this.state.width/containerWidth;
-        if (heightToContainerRatio > 1 || widthToContainerRatio > 1) {
-            autoResizeFactor = Math.max(heightToContainerRatio, widthToContainerRatio);
-            bottomEdge /= autoResizeFactor;
-            rightEdge /=  autoResizeFactor;
-        }
-
-        // account for current pan factor
-        bottomEdge -= this.state.verticalPanFactor;
-        rightEdge -= this.state.horizontalPanFactor;
+        var heightToContainerRatio = this.state.height / containerHeight;
+        var widthToContainerRatio = this.state.width /containerWidth;
+        autoResizeFactor = Math.max(heightToContainerRatio, widthToContainerRatio);
+        bottomEdge /= autoResizeFactor;
+        rightEdge /= autoResizeFactor;
 
         if (direction === 'up' && topEdge < 0) {
             this.setState({verticalPanFactor: this.state.verticalPanFactor -= 10});
@@ -358,10 +351,10 @@ var Graph = React.createClass({
         } else if (direction === 'left' && leftEdge < 0) {
             this.setState({horizontalPanFactor: this.state.horizontalPanFactor -= 10});
 
-        } else if (direction ==='down' && bottomEdge >= containerHeight) {
+        } else if (direction ==='down' && bottomEdge > (containerHeight)) {
             this.setState({verticalPanFactor: this.state.verticalPanFactor += 10});
 
-        } else if (direction === 'right' && rightEdge >= containerWidth) {
+        } else if (direction === 'right' && rightEdge > (containerWidth)) {
             this.setState({horizontalPanFactor: this.state.horizontalPanFactor += 10});
         }
     },
