@@ -8,6 +8,36 @@ export var ModalContent = React.createClass({
     }
 });
 
+export var Modal = React.createClass({
+    getInitialState: function () {
+        return {
+            courseId: 'mat135',
+            course: [],
+            sessions: []
+        };
+    },
+    
+    render: function () {
+        return (
+            <div className='modal fade'>
+                <div className='modal-dialog'>
+                    <div className='modal-content'>
+                        <div className='modal-header'>
+                            {this.state.courseId ? getCourseTitle(this.state.courseId) : ''}
+                        </div>
+                        <div className='modal-body'>
+                            <Description course={formatCourseName(this.state.courseId)[0]}/>
+                            <Video urls={getCourseVideoUrls(formatCourseName(this.state.courseId))}/>
+                        </div>
+                        <div className='modal-footer'>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+});
+
 //Use React component from search.js
 var Description = React.createClass({
     getInitialState: function() {

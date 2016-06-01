@@ -1,5 +1,5 @@
 import * as tooltip from 'es6!graph/tooltip';
-import {ModalContent} from 'es6!common/react_modal';
+import {Modal} from 'es6!common/react_modal';
 
 /**
  *
@@ -1077,57 +1077,6 @@ var InfoBox = React.createClass({
         } else {
             return <g></g>;
         }
-    }
-});
-
-
-var Modal = React.createClass({
-    getInitialState: function () {
-        return {
-            courseId: 'mat135',
-            course: [],
-            sessions: []
-        };
-    },
-    
-    render: function () {
-        return (
-            <div className='modal fade'>
-                <div className='modal-dialog'>
-                    <div className='modal-content'>
-                        <div className='modal-header'>
-                            {this.state.courseId ? getCourseTitle(this.state.courseId) : ''}
-                        </div>
-                        <div className='modal-body'>
-                            <ModalContent course={formatCourseName(this.state.courseId)[0]}/>
-                        </div>
-                        <div className='modal-footer'>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-});
-
-
-var Video = React.createClass({
-    getDefaultProps: function () {
-        return {
-            urls: []
-        }
-    },
-
-    render: function () {
-        return (
-            <div id='course-video-div'>
-                <video id='course-video' className='video-js vjs-default-skin' controls='' preload='auto'>
-                    {this.props.urls.map(function (url) {
-                        return <source src={url} type='video/mp4'/>
-                    })}
-                </video>
-            </div>
-        );
     }
 });
 
