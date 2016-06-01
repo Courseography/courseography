@@ -46,12 +46,13 @@ getCalendar str = do
         coursesSoup = lastH2 tags
         course = map (processCourseToData . filter isTagText) $ partitions isCourseTitle coursesSoup
     print $ "parsing " ++ str
-    mapM_ myPrint course --Kael - debugging - to remove
+    mapM_ myPrint course -- debugging - to remove
+    --newCrs = removeDuplicateCrs course -- temporary - to avoid duplicate entries
     runSqlite databasePath $ do
         runMigration migrateAll
-        mapM_ insertCourse course
+        mapM_ insertCourse course -- orig 'course' -- to remove duplicates
     where
-        myPrint x = print $ name x-- Kael -- debugging
+        myPrint x = print $ name x-- debugging - to remove
         isNotComment (TagComment _) = False
         isNotComment _ = True
         lastH2 tags =
@@ -68,7 +69,15 @@ getCalendar str = do
 
 -- | Remove duplicate course entries. Temporary fix while parsing issues addressed.
 removeDuplicateCrs :: [Course] -> [Course]
-removeDuplicateCrs xs = nubBy (\x y -> (name x == name y)) xs
+removeDuplicateCrs xs = nubBy compareName xs
+
+-- First attempt at comparing (originally nubBY compareName xs)
+compareName :: Course -> Course -> Bool
+compareName x y = (name x == name y)
+
+-- Second attempt at comparing
+instance Eq Course where
+    (Course c1 _ _ _ _ _ _ _ _ _ _ _ _ _ _) == (Course c2 _ _ _ _ _ _ _ _ _ _ _ _ _ _) = c1 == c2
 
 parseTitleFAS :: CoursePart -> CoursePart
 parseTitleFAS (tag:tags, course) =
