@@ -1,4 +1,5 @@
 import * as tooltip from 'es6!graph/tooltip';
+import {ModalContent} from 'es6!common/react_modal';
 
 /**
  *
@@ -18,7 +19,7 @@ function parseAnd(s) {
         } else {
             var result = parseOr(curr);
             if (curr === result[1]) {
-                console.error('Parsing failed for ' + s + '  with curr = ' + curr);
+                console.error("Parsing failed for " + s + "  with curr = " + curr);
                 break;
             } else {
                 curr = result[1];
@@ -65,7 +66,7 @@ function parseOr(s) {
             }
             result = parseCourse(curr, coursePrefix);
             if (curr === result[1]) {
-                console.error('Parsing failed for ' + s + ' with curr = ' + curr);
+                console.error("Parsing failed for " + s + " with curr = " + curr);
                 break;
             }
             curr = result[1];
@@ -199,8 +200,8 @@ var Graph = React.createClass({
                     });
                 }
             }.bind(this),
-            error: function(xhr, status, err) {
-                console.error('graph-json', status, err.toString());
+            error: function (xhr, status, err) {
+                console.error("graph-json", status, err.toString());
             }
         });
 
@@ -236,7 +237,7 @@ var Graph = React.createClass({
         }
     },
 
-    clearAllTimeouts: function() {
+    clearAllTimeouts: function () {
         for (var i = 0; i < this.state.timeouts.length; i++) {
             clearTimeout(this.state.timeouts[i]);
         }
@@ -276,8 +277,8 @@ var Graph = React.createClass({
 				
         this.clearAllTimeouts();
 			
-        var infoBox = this.refs.infobox;
-        //TODO: adjust xPos and yPos
+        var infoBox = this.refs.infoBox;
+
         var xPos = currentNode.props.JSON.pos[0];
         var yPos = currentNode.props.JSON.pos[1];
         var rightSide = xPos > 222;
@@ -286,7 +287,7 @@ var Graph = React.createClass({
                 xPos = parseFloat(xPos) - 65;
         } else {
                 xPos = parseFloat(xPos) +
-                        parseFloat(currentNode.props.JSON.width) + 5;
+                       parseFloat(currentNode.props.JSON.width) + 5;
         }
 
         yPos = parseFloat(yPos);
@@ -295,9 +296,7 @@ var Graph = React.createClass({
                           yPos: yPos,
                           nodeId: courseId,
                           showInfobox: true});
-        
-        var modal = this.refs.modal;
-        modal.setState({courseId: courseId.substring(0,6)});
+
     },
 
     nodeMouseLeave: function (event) {
@@ -305,41 +304,57 @@ var Graph = React.createClass({
         var currentNode = this.refs.nodes.refs[courseId];
         currentNode.unfocusPrereqs(this);
 				
-        var infoBox = this.refs.infobox;
+        var infoBox = this.refs.infoBox;
 
         var timeout = setTimeout(function () {
                 infoBox.setState({showInfobox: false});
         }, 400);
 
-        var timeouts = this.state.timeouts;
-        timeouts.push(timeout);
-        this.setState({timeouts: timeouts});
+        this.setState({timeouts: this.state.timeouts.concat(timeout)});
 			
     },
     
     infoBoxMouseEnter: function () {
         this.clearAllTimeouts();
 			
-        var infoBox = this.refs.infobox;
+        var infoBox = this.refs.infoBox;
         infoBox.setState({showInfobox: true});
     },
     
     infoBoxMouseLeave: function () {
-        var infoBox = this.refs.infobox;
+        var infoBox = this.refs.infoBox;
 
         var timeout = setTimeout(function () {
                 infoBox.setState({showInfobox: false});
         }, 400);
 
-        var timeouts = this.state.timeouts;
-        timeouts.push(timeout);
-        this.setState({timeouts: timeouts});
+        this.setState({timeouts: this.state.timeouts.concat(timeout)});
     },
     
     infoBoxMouseClick: function () {
-        var infoBox = this.refs.infobox;
+        var infoBox = this.refs.infoBox;
         var modal = this.refs.modal;
-        modal.setState({courseId: infoBox.state.nodeId.substring(0, 6)});
+        modal.setState({courseId: infoBox.state.nodeId.substring(0, 6)}, function (){
+            $.ajax({
+                url: 'course',
+                data: {name: formatCourseName(modal.state.courseId)[0]},
+                dataType: 'json',
+                success: function (data) {
+                    if (modal.isMounted()) {
+                        //This is getting the session times
+                        var sessions = data.fallSession.lectures
+                                                       .concat(data.springSession.lectures)
+                                                       .concat(data.yearSession.lectures)
+                        //Tutorials don't have a timeStr to print, so I've currently omitted them
+                        modal.setState({course: data, sessions: sessions});
+                    }
+                },
+                error: function (xhr, status, err) {
+                    console.error("course-info", status, err.toString());
+                }
+            });
+        });
+
         $(this.refs.modal.getDOMNode()).modal();
     },
     
@@ -392,11 +407,11 @@ var Graph = React.createClass({
                     svg={this}/>
                 <EdgeGroup svg={this} ref='edges' edgesJSON={this.state.edgesJSON}/>
                 <InfoBox
-					ref='infobox'
+                    ref='infoBox'
                     onClick={this.infoBoxMouseClick}
                     onMouseEnter={this.infoBoxMouseEnter}
                     onMouseLeave={this.infoBoxMouseLeave}/>
-                <Modal ref="modal" />
+                <Modal ref='modal' />
             </svg>
         );
     }
@@ -410,7 +425,7 @@ var RegionGroup = ({regionsJSON, labelsJSON}) => (
     <g id='regions'>
         {regionsJSON.map(function (entry, value) {
             var pathAttrs = {d: 'M'};
-            entry.points.forEach(function(x) {
+            entry.points.forEach(function (x) {
                 pathAttrs['d'] += x[0] + ',' + x[1] + ' ';
             });
 
@@ -486,7 +501,7 @@ var NodeGroup = React.createClass({
                     }
                 });
                 // parse prereqs based on text
-                var hybridText = "";
+                var hybridText = '';
                 entry.text.forEach(textTag => hybridText += textTag.text);
                 var parents = [];
                 // First search for entire string (see Stats graph)
@@ -885,11 +900,11 @@ var Bool = React.createClass({
         var svg = this.props.svg;
         // Check if there are any missing prerequisites.
         if (this.state.status !== 'active') {
-            this.setState({status: 'missing'}, function () {
+            this.setState({status: 'missing'}, () => {
                 this.props.inEdges.forEach(function (edge) {
                     var currentEdge = svg.refs['edges'].refs[edge];
                     var sourceNode = svg.refs['nodes'].refs[currentEdge.props.source] ||
-                                      svg.refs['bools'].refs[currentEdge.props.source];
+                                     svg.refs['bools'].refs[currentEdge.props.source];
                     if (!sourceNode.isSelected()) {
                         currentEdge.setState({status: 'missing'});
                     }
@@ -995,7 +1010,7 @@ var Edge = React.createClass({
 
     render: function () {
         var pathAttrs = {d: 'M'};
-        this.props.points.forEach(function(p) {
+        this.props.points.forEach(function (p) {
             pathAttrs.d += p[0] + ',' + p[1] + ' ';
         });
 
@@ -1010,7 +1025,7 @@ var Edge = React.createClass({
 
 
 var InfoBox = React.createClass({
-		getInitialState: function () {
+    getInitialState: function () {
         return {
             xPos: '0',
             yPos: '0',
@@ -1020,41 +1035,43 @@ var InfoBox = React.createClass({
     },
 
     render: function () {
-        //TODO: move to CSS
-        var gStyles = {
-            cursor: 'pointer',
-            transition: 'opacity .4s',
-            opacity: this.state.showInfobox ? 1 : 0
+        if (this.state.showInfobox) {
+            //TODO: move to CSS
+            var gStyles = {
+                cursor: 'pointer',
+                transition: 'opacity .4s',
+                opacity: this.state.showInfobox ? 1 : 0
+            }
+            var rectAttrs = {
+                id:this.state.nodeId+'-tooltip' + '-rect',
+                x: this.state.xPos,
+                y: this.state.yPos,
+                rx: '4',
+                ry: '4',
+                fill: 'white',
+                stroke: 'black',
+                'stroke-width': '2',
+                width: '60',
+                height: '30'
+            };
+
+            var textAttrs = {
+                'id': this.state.nodeId +'-tooltip' + '-text',
+                'x': parseFloat(this.state.xPos) + 60 / 2 - 18,
+                'y': parseFloat(this.state.yPos) + 30 / 2 + 6
+            };
+
+            return (            
+                <g id='infoBox' className='tooltip-group' style={gStyles} {... this.props}>
+                    <rect {... rectAttrs} ></rect>
+                    <text {... textAttrs} >
+                        Info
+                    </text>
+                </g>
+            );
+        } else {
+            return <g></g>;
         }
-        var rectAttrs = {
-            id:this.state.nodeId+'-tooltip' + '-rect',
-            x: this.state.xPos,
-            y: this.state.yPos,
-            rx: '4',
-            ry: '4',
-            fill: 'white',
-            stroke: 'black',
-            'stroke-width': '2',
-            width: '60',
-            height: '30'
-        };
-
-        var textAttrs = {
-        	'id': this.state.nodeId +'-tooltip' + '-text',
-        	'x': parseFloat(this.state.xPos) + 60 / 2 - 18,
-        	'y': parseFloat(this.state.yPos) + 30 / 2 + 6
-        };
-
-        return (
-            this.state.showInfobox
-            ? <g id='infobox' className='tooltip-group' style={gStyles} {... this.props}>
-                <rect {... rectAttrs} ></rect>
-                <text {... textAttrs} >
-                    Info
-                </text>
-            </g>
-            : <g></g>
-        );
     }
 });
 
@@ -1062,57 +1079,24 @@ var InfoBox = React.createClass({
 var Modal = React.createClass({
     getInitialState: function () {
         return {
-            courseId: '',
+            courseId: 'mat135',
             course: [],
             sessions: []
         };
     },
     
-    componentDidMount: function(){
-        $.ajax({
-            url: 'course',
-            data: {name: formatCourseName(this.state.courseId)[0]},
-            dataType: 'json',
-            success: function(data) {
-                if (this.isMounted()) {
-                    this.setState({course: data});
-                    //This is getting the session times
-                    var sessions = data.fallSession.lectures
-                                                   .concat(data.springSession.lectures)
-                                                   .concat(data.yearSession.lectures)
-                    //Tutorials don't have a timeStr to print, so I've currently ommitted them
-                    this.setState({sessions: sessions});
-                }
-            }.bind(this),
-            error: function(xhr, status, err) {
-                console.error('course-info', status, err.toString());
-            }.bind(this)
-        });
-
-    },
     render: function () {
         return (
-            <div className="modal fade">
-                <div className="modal-dialog">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            {getCourseTitle(this.state.courseId)}
-                            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+            <div className='modal fade'>
+                <div className='modal-dialog'>
+                    <div className='modal-content'>
+                        <div className='modal-header'>
+                            {this.state.courseId ? getCourseTitle(this.state.courseId) : ''}
                         </div>
-                        <div className="modal-body" style={{'height':'360px', 'overflow-y':'scroll'}}>
-                            <p>{this.state.course.description}</p>
-                            <p><strong>Prerequisite: </strong>{this.state.course.prereqString}</p>
-                            <p><strong>Distribution Requirement Status: </strong>{this.state.course.distribution}</p>
-                            <p><strong>Breadth Requirement: </strong>{this.state.course.breadth}</p>
-                            <p><strong>Timetable: </strong></p>
-                            {this.state.sessions.map(function(lecture) {
-                                return <p>{lecture.code + lecture.session + "-" + lecture.section + ": " + lecture.timeStr}</p>;
-                            })}
-                            <Video urls={this.state.course.videoUrls}/>
+                        <div className='modal-body'>
+                            <ModalContent course={formatCourseName(this.state.courseId)[0]}/>
                         </div>
-                        <div className="modal-footer">
+                        <div className='modal-footer'>
                         </div>
                     </div>
                 </div>
@@ -1123,18 +1107,18 @@ var Modal = React.createClass({
 
 
 var Video = React.createClass({
-    getDefaultProps: function() {
+    getDefaultProps: function () {
         return {
             urls: []
         }
     },
 
-    render: function() {
+    render: function () {
         return (
-            <div id="course-video-div">
-                <video id="course-video" className="video-js vjs-default-skin" controls="" preload="auto">
-                    {this.props.urls.map(function(url) {
-                        return <source src={url} type="video/mp4"/>
+            <div id='course-video-div'>
+                <video id='course-video' className='video-js vjs-default-skin' controls='' preload='auto'>
+                    {this.props.urls.map(function (url) {
+                        return <source src={url} type='video/mp4'/>
                     })}
                 </video>
             </div>

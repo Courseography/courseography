@@ -164,6 +164,17 @@ modalCSS = do
     "#course-video" ? do
         width100
         height100
+    -- new modal CSS, need to remove above later
+    ".modal-header" ? do
+        color blue3
+        padding0
+        paddingLeft (px 25)
+        height (em 1.8)
+        lineHeight (em 1.8)
+        fontSize (em 1)
+        borderBottom solid (px 1) black
+        textAlign $ alignSide sideLeft
+    
     fbModalCSS
 
 
