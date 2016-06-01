@@ -324,7 +324,6 @@ var Graph = React.createClass({
     },
 
     panDirection: function(direction) {
-
         // initial calculation for poisition of each edge
         // bottom and right edges require further calculation performed below
         var topEdge = -(this.state.verticalPanFactor);
@@ -336,32 +335,29 @@ var Graph = React.createClass({
         var containerWidth = document.getElementById("react-graph").clientWidth;
         var containerHeight = document.getElementById("react-graph").clientHeight;
         
-        // if the graph does not fit in it's container, it is resized by the inverse factor
+        // if the graph does not fit in its container, it is resized by the inverse factor
         // of the greater of these two ratios.
         var autoResizeFactor;
         var heightToContainerRatio = this.state.height / containerHeight;
-        var widthToContainerRatio = this.state.width /containerWidth;
+        var widthToContainerRatio = this.state.width / containerWidth;
         autoResizeFactor = Math.max(heightToContainerRatio, widthToContainerRatio);
         bottomEdge /= autoResizeFactor;
         rightEdge /= autoResizeFactor;
 
         if (direction === 'up' && topEdge < 0) {
-            this.setState({verticalPanFactor: this.state.verticalPanFactor -= 10});
-
+            this.setState({verticalPanFactor: this.state.verticalPanFactor - 10});
         } else if (direction === 'left' && leftEdge < 0) {
-            this.setState({horizontalPanFactor: this.state.horizontalPanFactor -= 10});
-
-        } else if (direction ==='down' && bottomEdge > (containerHeight)) {
-            this.setState({verticalPanFactor: this.state.verticalPanFactor += 10});
-
-        } else if (direction === 'right' && rightEdge > (containerWidth)) {
-            this.setState({horizontalPanFactor: this.state.horizontalPanFactor += 10});
+            this.setState({horizontalPanFactor: this.state.horizontalPanFactor - 10});
+        } else if (direction ==='down' && bottomEdge > containerHeight) {
+            this.setState({verticalPanFactor: this.state.verticalPanFactor + 10});
+        } else if (direction === 'right' && rightEdge > containerWidth) {
+            this.setState({horizontalPanFactor: this.state.horizontalPanFactor + 10});
         }
     },
 
     resetZoomAndPan: function() {
         this.setState({
-            zoomFactor:1,
+            zoomFactor: 1,
             verticalPanFactor: 0, 
             horizontalPanFactor: 0
         });
