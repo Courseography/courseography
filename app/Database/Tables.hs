@@ -51,7 +51,7 @@ Department json
 
 Courses json sql=code
     code T.Text
-    Primary code
+    Primary code 
     title T.Text Maybe
     description T.Text Maybe
     manualTutorialEnrolment Bool Maybe
@@ -76,7 +76,6 @@ Lecture json
     wait Int
     extra Int
     timeStr T.Text
-    Foreign Courses courseId code
     deriving Show
 
 Tutorial json
