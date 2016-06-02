@@ -222,7 +222,34 @@ graphContainer = do
         "shape-rendering" -: "geometricPrecision"
     ".highlight-nodes" ? do
         backgroundColor grey
-
+    ".graph-control-button" ? do
+        cursor pointer
+        display inlineBlock
+        width (px 24)
+        height (px 24)
+        position absolute
+    "#zoom-in-button" ? do
+        top (px 85)
+        right (px 31)
+    "#zoom-out-button" ? do
+        top (px 85)
+        right (px 55)
+    "#pan-up-button" ? do
+        top (px 5)
+        right (px 43)
+    "#pan-down-button" ? do
+        top (px 55)
+        right (px 43)
+    "#pan-right-button" ? do
+        top (px 30)
+        right (px 31)
+    "#pan-left-button" ? do
+        top (px 30)
+        right (px 55)
+    "#reset-button" ? do
+        width (px 48)
+        top (px 111)
+        right (px 33)
 
 sidebarCSS :: Css
 sidebarCSS = do
