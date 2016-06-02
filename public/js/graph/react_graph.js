@@ -1,4 +1,5 @@
 import * as tooltip from 'es6!graph/tooltip';
+import {Modal} from 'es6!common/react_modal';
 
 /**
  *
@@ -125,6 +126,7 @@ var Graph = React.createClass({
             boolsJSON: [],
             edgesJSON: [],
             highlightedNodes: [],
+            timeouts: [],
             fceCount: 0,
             width: 0,
             height: 0,
@@ -206,7 +208,7 @@ var Graph = React.createClass({
                     });
                 }
             }.bind(this),
-            error: function(xhr, status, err) {
+            error: function (xhr, status, err) {
                 console.error('graph-json', status, err.toString());
             }
         });
@@ -243,6 +245,14 @@ var Graph = React.createClass({
         }
     },
 
+    clearAllTimeouts: function () {
+        for (var i = 0; i < this.state.timeouts.length; i++) {
+            clearTimeout(this.state.timeouts[i]);
+        }
+
+        this.setState({timeouts: []});
+    },
+
     setFCECount: function (credits) {
         this.setState({fceCount: credits}, function () {
             $('#fcecount').text('FCE Count: ' + this.state.fceCount);
@@ -256,8 +266,8 @@ var Graph = React.createClass({
     },
 
     nodeClick: function (event) {
-        var courseID = event.currentTarget.id;
-        var currentNode = this.refs.nodes.refs[courseID];
+        var courseId = event.currentTarget.id;
+        var currentNode = this.refs.nodes.refs[courseId];
         var wasSelected = currentNode.state.selected;
         currentNode.toggleSelection(this);
         if (wasSelected) {
@@ -269,28 +279,93 @@ var Graph = React.createClass({
     },
 
     nodeMouseEnter: function (event) {
-        var courseID = event.currentTarget.id;
-        var currentNode = this.refs.nodes.refs[courseID];
+        var courseId = event.currentTarget.id;
+        var currentNode = this.refs.nodes.refs[courseId];
         currentNode.focusPrereqs(this);
+				
+        this.clearAllTimeouts();
+			
+        var infoBox = this.refs.infoBox;
 
-        // Old hover modal code
-        if ($('.modal').length === 0) {
-            $('.tooltip-group').remove();
-            tooltip.displayTooltip(courseID);
+        var xPos = currentNode.props.JSON.pos[0];
+        var yPos = currentNode.props.JSON.pos[1];
+        var rightSide = xPos > 222;
+        // The tooltip is offset with a 'padding' of 5.
+        if (rightSide) {
+                xPos = parseFloat(xPos) - 65;
+        } else {
+                xPos = parseFloat(xPos) +
+                       parseFloat(currentNode.props.JSON.width) + 5;
         }
+
+        yPos = parseFloat(yPos);
+
+        infoBox.setState({xPos: xPos,
+                          yPos: yPos,
+                          nodeId: courseId,
+                          showInfobox: true});
+
     },
 
     nodeMouseLeave: function (event) {
-        var courseID = event.currentTarget.id;
-        var currentNode = this.refs.nodes.refs[courseID];
+        var courseId = event.currentTarget.id;
+        var currentNode = this.refs.nodes.refs[courseId];
         currentNode.unfocusPrereqs(this);
+				
+        var infoBox = this.refs.infoBox;
 
-        // Old hover modal code
-        if ($('.modal').length === 0) {
-            tooltip.removeTooltip(this);
-        }
+        var timeout = setTimeout(function () {
+                infoBox.setState({showInfobox: false});
+        }, 400);
+
+        this.setState({timeouts: this.state.timeouts.concat(timeout)});
+			
     },
+    
+    infoBoxMouseEnter: function () {
+        this.clearAllTimeouts();
+			
+        var infoBox = this.refs.infoBox;
+        infoBox.setState({showInfobox: true});
+    },
+    
+    infoBoxMouseLeave: function () {
+        var infoBox = this.refs.infoBox;
 
+        var timeout = setTimeout(function () {
+                infoBox.setState({showInfobox: false});
+        }, 400);
+
+        this.setState({timeouts: this.state.timeouts.concat(timeout)});
+    },
+    
+    infoBoxMouseClick: function () {
+        var infoBox = this.refs.infoBox;
+        var modal = this.refs.modal;
+        modal.setState({courseId: infoBox.state.nodeId.substring(0, 6)}, function (){
+            $.ajax({
+                url: 'course',
+                data: {name: formatCourseName(modal.state.courseId)[0]},
+                dataType: 'json',
+                success: function (data) {
+                    if (modal.isMounted()) {
+                        //This is getting the session times
+                        var sessions = data.fallSession.lectures
+                                                       .concat(data.springSession.lectures)
+                                                       .concat(data.yearSession.lectures)
+                        //Tutorials don't have a timeStr to print, so I've currently omitted them
+                        modal.setState({course: data, sessions: sessions});
+                    }
+                },
+                error: function (xhr, status, err) {
+                    console.error('course-info', status, err.toString());
+                }
+            });
+        });
+
+        $(this.refs.modal.getDOMNode()).modal();
+    },
+    
     // Reset graph
     reset: function () {
         this.setFCECount(0);
@@ -435,6 +510,12 @@ var Graph = React.createClass({
                     edgesJSON={this.state.edgesJSON}
                     svg={this}/>
                 <EdgeGroup svg={this} ref='edges' edgesJSON={this.state.edgesJSON}/>
+                <InfoBox
+                    ref='infoBox'
+                    onClick={this.infoBoxMouseClick}
+                    onMouseEnter={this.infoBoxMouseEnter}
+                    onMouseLeave={this.infoBoxMouseLeave}/>
+                <Modal ref='modal' />
             </svg>
             </div>
 
@@ -462,7 +543,7 @@ var RegionGroup = ({regionsJSON, labelsJSON}) => (
     <g id='regions'>
         {regionsJSON.map(function (entry, value) {
             var pathAttrs = {d: 'M'};
-            entry.points.forEach(function(x) {
+            entry.points.forEach(function (x) {
                 pathAttrs['d'] += x[0] + ',' + x[1] + ' ';
             });
 
@@ -538,7 +619,7 @@ var NodeGroup = React.createClass({
                     }
                 });
                 // parse prereqs based on text
-                var hybridText = "";
+                var hybridText = '';
                 entry.text.forEach(textTag => hybridText += textTag.text);
                 var parents = [];
                 // First search for entire string (see Stats graph)
@@ -556,7 +637,7 @@ var NodeGroup = React.createClass({
                                 parents.push(prereqNode.id_);
                                 hybridRelationships.push([prereqNode.id_, entry.id_]);
                             } else {
-                                console.error("Couldn't find prereq for ", hybridText);
+                                console.error('Could not find prereq for ', hybridText);
                             }
                         } else if (typeof course === 'object') {
                             var orPrereq = [];
@@ -566,7 +647,7 @@ var NodeGroup = React.createClass({
                                     orPrereq.push(prereqNode.id_);
                                     hybridRelationships.push([prereqNode.id_, entry.id_]);
                                 } else {
-                                    console.error("Couldn't find prereq for ", hybridText);
+                                    console.error('Could not find prereq for ', hybridText);
                                 }
                             });
                             if (orPrereq.length > 0) {
@@ -937,11 +1018,11 @@ var Bool = React.createClass({
         var svg = this.props.svg;
         // Check if there are any missing prerequisites.
         if (this.state.status !== 'active') {
-            this.setState({status: 'missing'}, function () {
+            this.setState({status: 'missing'}, () => {
                 this.props.inEdges.forEach(function (edge) {
                     var currentEdge = svg.refs['edges'].refs[edge];
                     var sourceNode = svg.refs['nodes'].refs[currentEdge.props.source] ||
-                                      svg.refs['bools'].refs[currentEdge.props.source];
+                                     svg.refs['bools'].refs[currentEdge.props.source];
                     if (!sourceNode.isSelected()) {
                         currentEdge.setState({status: 'missing'});
                     }
@@ -1047,7 +1128,7 @@ var Edge = React.createClass({
 
     render: function () {
         var pathAttrs = {d: 'M'};
-        this.props.points.forEach(function(p) {
+        this.props.points.forEach(function (p) {
             pathAttrs.d += p[0] + ',' + p[1] + ' ';
         });
 
@@ -1057,6 +1138,58 @@ var Edge = React.createClass({
                   markerEnd='url(#arrowHead)'>
             </path>
         );
+    }
+});
+
+
+var InfoBox = React.createClass({
+    getInitialState: function () {
+        return {
+            xPos: '0',
+            yPos: '0',
+            nodeId: '',
+            showInfobox: false
+        };
+    },
+
+    render: function () {
+        if (this.state.showInfobox) {
+            //TODO: move to CSS
+            var gStyles = {
+                cursor: 'pointer',
+                transition: 'opacity .4s',
+                opacity: this.state.showInfobox ? 1 : 0
+            }
+            var rectAttrs = {
+                id:this.state.nodeId+'-tooltip' + '-rect',
+                x: this.state.xPos,
+                y: this.state.yPos,
+                rx: '4',
+                ry: '4',
+                fill: 'white',
+                stroke: 'black',
+                'stroke-width': '2',
+                width: '60',
+                height: '30'
+            };
+
+            var textAttrs = {
+                'id': this.state.nodeId +'-tooltip' + '-text',
+                'x': parseFloat(this.state.xPos) + 60 / 2 - 18,
+                'y': parseFloat(this.state.yPos) + 30 / 2 + 6
+            };
+
+            return (            
+                <g id='infoBox' className='tooltip-group' style={gStyles} {... this.props}>
+                    <rect {... rectAttrs} ></rect>
+                    <text {... textAttrs} >
+                        Info
+                    </text>
+                </g>
+            );
+        } else {
+            return <g></g>;
+        }
     }
 });
 
