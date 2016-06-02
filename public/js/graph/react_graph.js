@@ -19,7 +19,7 @@ function parseAnd(s) {
         } else {
             var result = parseOr(curr);
             if (curr === result[1]) {
-                console.error("Parsing failed for " + s + "  with curr = " + curr);
+                console.error('Parsing failed for ' + s + '  with curr = ' + curr);
                 break;
             } else {
                 curr = result[1];
@@ -66,7 +66,7 @@ function parseOr(s) {
             }
             result = parseCourse(curr, coursePrefix);
             if (curr === result[1]) {
-                console.error("Parsing failed for " + s + " with curr = " + curr);
+                console.error('Parsing failed for ' + s + ' with curr = ' + curr);
                 break;
             }
             curr = result[1];
@@ -203,7 +203,7 @@ var Graph = React.createClass({
                 }
             }.bind(this),
             error: function (xhr, status, err) {
-                console.error("graph-json", status, err.toString());
+                console.error('graph-json', status, err.toString());
             }
         });
 
@@ -352,7 +352,7 @@ var Graph = React.createClass({
                     }
                 },
                 error: function (xhr, status, err) {
-                    console.error("course-info", status, err.toString());
+                    console.error('course-info', status, err.toString());
                 }
             });
         });
@@ -524,7 +524,7 @@ var NodeGroup = React.createClass({
                                 parents.push(prereqNode.id_);
                                 hybridRelationships.push([prereqNode.id_, entry.id_]);
                             } else {
-                                console.error("Couldn't find prereq for ", hybridText);
+                                console.error('Could not find prereq for ', hybridText);
                             }
                         } else if (typeof course === 'object') {
                             var orPrereq = [];
@@ -534,7 +534,7 @@ var NodeGroup = React.createClass({
                                     orPrereq.push(prereqNode.id_);
                                     hybridRelationships.push([prereqNode.id_, entry.id_]);
                                 } else {
-                                    console.error("Couldn't find prereq for ", hybridText);
+                                    console.error('Could not find prereq for ', hybridText);
                                 }
                             });
                             if (orPrereq.length > 0) {
