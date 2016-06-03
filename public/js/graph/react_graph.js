@@ -452,71 +452,71 @@ var Graph = React.createClass({
 
         return (
             <div>
-            <Button
-                divId='zoom-in-button'
-                altId='zoom-in'
-                sourceImg="static/res/ico/in.png"
-                mouseDown={() => this.incrementZoom(true)}/>
-            <Button
-                divId='zoom-out-button'
-                altId='zoom-out'
-                sourceImg="static/res/ico/out.png"
-                mouseDown={() => this.incrementZoom(false)}/>
-            <Button
-                divId='pan-up-button'
-                altId='pan-up'
-                sourceImg="static/res/ico/up.png"
-                mouseDown={() => this.panDirection('up')}/>
-            <Button
-                divId='pan-down-button'
-                altId='pan-down'
-                sourceImg="static/res/ico/down.png"
-                mouseDown={() => this.panDirection('down')}/>
-            <Button
-                divId='pan-right-button'
-                altId='pan-right'
-                sourceImg="static/res/ico/right.png"
-                mouseDown={() => this.panDirection('right')}/>
-            <Button
-                divId='pan-left-button'
-                altId='pan-left'
-                sourceImg="static/res/ico/left.png"
-                mouseDown={() => this.panDirection('left')}/>
-            <Button 
-                divId='reset-button'
-                altId='reset'
-                sourceImg="static/res/ico/reset.png"
-                mouseDown={() => this.resetZoomAndPan()}/>
-            <svg {... svgAttrs} ref='svg' version='1.1'
-                 className={this.state.highlightedNodes.length > 0 ?
-                            'highlight-nodes' : ''}>
-                {this.renderArrowHead()}
-                <RegionGroup
-                    regionsJSON={this.state.regionsJSON}
-                    labelsJSON={this.state.labelsJSON}/>
-                <NodeGroup
-                    ref='nodes'
-                    nodeClick={this.nodeClick}
-                    nodeMouseEnter={this.nodeMouseEnter}
-                    nodeMouseLeave={this.nodeMouseLeave}
-                    svg={this}
-                    nodesJSON={this.state.nodesJSON}
-                    hybridsJSON={this.state.hybridsJSON}
-                    edgesJSON={this.state.edgesJSON}
-                    highlightedNodes={this.state.highlightedNodes}/>
-                <BoolGroup
-                    ref='bools'
-                    boolsJSON={this.state.boolsJSON}
-                    edgesJSON={this.state.edgesJSON}
-                    svg={this}/>
-                <EdgeGroup svg={this} ref='edges' edgesJSON={this.state.edgesJSON}/>
-                <InfoBox
-                    ref='infoBox'
-                    onClick={this.infoBoxMouseClick}
-                    onMouseEnter={this.infoBoxMouseEnter}
-                    onMouseLeave={this.infoBoxMouseLeave}/>
+                <Button
+                    divId='zoom-in-button'
+                    altId='zoom-in'
+                    sourceImg="static/res/ico/in.png"
+                    mouseDown={() => this.incrementZoom(true)}/>
+                <Button
+                    divId='zoom-out-button'
+                    altId='zoom-out'
+                    sourceImg="static/res/ico/out.png"
+                    mouseDown={() => this.incrementZoom(false)}/>
+                <Button
+                    divId='pan-up-button'
+                    altId='pan-up'
+                    sourceImg="static/res/ico/up.png"
+                    mouseDown={() => this.panDirection('up')}/>
+                <Button
+                    divId='pan-down-button'
+                    altId='pan-down'
+                    sourceImg="static/res/ico/down.png"
+                    mouseDown={() => this.panDirection('down')}/>
+                <Button
+                    divId='pan-right-button'
+                    altId='pan-right'
+                    sourceImg="static/res/ico/right.png"
+                    mouseDown={() => this.panDirection('right')}/>
+                <Button
+                    divId='pan-left-button'
+                    altId='pan-left'
+                    sourceImg="static/res/ico/left.png"
+                    mouseDown={() => this.panDirection('left')}/>
+                <Button 
+                    divId='reset-button'
+                    altId='reset'
+                    sourceImg="static/res/ico/reset.png"
+                    mouseDown={() => this.resetZoomAndPan()}/>
                 <Modal ref='modal' />
-            </svg>
+                <svg {... svgAttrs} ref='svg' version='1.1'
+                     className={this.state.highlightedNodes.length > 0 ?
+                                'highlight-nodes' : ''}>
+                    {this.renderArrowHead()}
+                    <RegionGroup
+                        regionsJSON={this.state.regionsJSON}
+                        labelsJSON={this.state.labelsJSON}/>
+                    <NodeGroup
+                        ref='nodes'
+                        nodeClick={this.nodeClick}
+                        nodeMouseEnter={this.nodeMouseEnter}
+                        nodeMouseLeave={this.nodeMouseLeave}
+                        svg={this}
+                        nodesJSON={this.state.nodesJSON}
+                        hybridsJSON={this.state.hybridsJSON}
+                        edgesJSON={this.state.edgesJSON}
+                        highlightedNodes={this.state.highlightedNodes}/>
+                    <BoolGroup
+                        ref='bools'
+                        boolsJSON={this.state.boolsJSON}
+                        edgesJSON={this.state.edgesJSON}
+                        svg={this}/>
+                    <EdgeGroup svg={this} ref='edges' edgesJSON={this.state.edgesJSON}/>
+                    <InfoBox
+                        ref='infoBox'
+                        onClick={this.infoBoxMouseClick}
+                        onMouseEnter={this.infoBoxMouseEnter}
+                        onMouseLeave={this.infoBoxMouseLeave}/>
+                </svg>
             </div>
 
         );
