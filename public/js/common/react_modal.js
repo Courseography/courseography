@@ -11,14 +11,14 @@ export var ModalContent = React.createClass({
 export var Modal = React.createClass({
     getInitialState: function () {
         return {
-            courseId: 'mat135',
+            courseId: '',
             course: [],
             sessions: []
         };
     },
-    
+
     render: function () {
-        if (this.state.courseId){
+        if (this.state.courseId) {
             return (
                 <div className='modal fade'>
                     <div className='modal-dialog'>
@@ -28,7 +28,6 @@ export var Modal = React.createClass({
                             </div>
                             <div className='modal-body'>
                                 <Description course={formatCourseName(this.state.courseId)[0]}/>
-                                <Video urls={getCourseVideoUrls(formatCourseName(this.state.courseId))}/>
                             </div>
                             <div className='modal-footer'>
                             </div>
@@ -38,7 +37,20 @@ export var Modal = React.createClass({
                 </div>
             );
         } else {
-            return <div></div>;
+            return (
+                <div className='modal fade'>
+                    <div className='modal-dialog'>
+                        <div className='modal-content'>
+                            <div className='modal-header'>
+                            </div>
+                            <div className='modal-body'>
+                            </div>
+                            <div className='modal-footer'>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
         }
     }
 });
