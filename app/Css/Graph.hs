@@ -207,7 +207,7 @@ graphContainer = do
     "#react-graph" ? do
         "width" -: "calc(100% - 40px)"
         height100
-        overflow scroll
+        overflow hidden
         margin0
         display inlineBlock
         position absolute
