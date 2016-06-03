@@ -37,20 +37,7 @@ export var Modal = React.createClass({
                 </div>
             );
         } else {
-            return (
-                <div className='modal fade'>
-                    <div className='modal-dialog'>
-                        <div className='modal-content'>
-                            <div className='modal-header'>
-                            </div>
-                            <div className='modal-body'>
-                            </div>
-                            <div className='modal-footer'>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            );
+            return <div className='modal fade'></div>;
         }
     }
 });
