@@ -31,6 +31,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -43,12 +44,12 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1920"
-     inkscape:window-height="1018"
+     inkscape:window-width="1280"
+     inkscape:window-height="738"
      id="namedview3675"
      showgrid="false"
-     inkscape:zoom="1"
-     inkscape:cx="569.02645"
+     inkscape:zoom="2"
+     inkscape:cx="952.58348"
      inkscape:cy="339.84609"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
@@ -774,7 +775,8 @@
        clip-path="url(#clipPath2)"
        y="75.001404"
        xml:space="preserve"
-       x="1047.5712">CHM247/249</text>
+       x="1047.5712"
+       transform="translate(6,0)">CHM247/249</text>
     <rect
        style="fill:none"
        id="rect3159"
@@ -1718,7 +1720,8 @@
        clip-path="url(#clipPath2)"
        y="135.5014"
        xml:space="preserve"
-       x="254.4109">MGY311</text>
+       x="254.4109"
+       transform="translate(2,0)">MGY311</text>
     <rect
        style="fill:none"
        id="rect3375"
@@ -1938,7 +1941,8 @@
        clip-path="url(#clipPath2)"
        y="75.001404"
        xml:space="preserve"
-       x="496.76111">CHM(138,139)/151</text>
+       x="496.76111"
+       transform="translate(8,0)">CHM(138,139)/151</text>
     <rect
        style="fill:none"
        id="rect3425"

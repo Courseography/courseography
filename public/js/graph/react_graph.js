@@ -130,6 +130,9 @@ var Graph = React.createClass({
             fceCount: 0,
             width: 0,
             height: 0,
+            zoomFactor: 1,
+            horizontalPanFactor: 0,
+            verticalPanFactor: 0
         };
     },
 
@@ -198,7 +201,10 @@ var Graph = React.createClass({
                         boolsJSON: boolsList,
                         edgesJSON: edgesList,
                         width: data.width,
-                        height: data.height
+                        height: data.height,
+                        zoomFactor: 1,
+                        horizontalPanFactor: 0,
+                        verticalPanFactor: 0
                     });
                 }
             }.bind(this),
@@ -380,11 +386,107 @@ var Graph = React.createClass({
         );
     },
 
+    incrementZoom: function(increase) {
+        if (increase) {
+            if (this.state.zoomFactor > 0.5) {
+                this.setState({zoomFactor: this.state.zoomFactor - 0.05});
+            }
+        } else {
+            if (this.state.zoomFactor < 1.1) {
+                this.setState({zoomFactor: this.state.zoomFactor + 0.05});
+            }
+        }
+    },
+
+    panDirection: function(direction) {
+        // initial calculation for poisition of each edge
+        // bottom and right edges require further calculation performed below
+        var topEdge = -(this.state.verticalPanFactor);
+        var leftEdge = -(this.state.horizontalPanFactor);
+        var bottomEdge = (this.state.height - this.state.verticalPanFactor) / this.state.zoomFactor;
+        var rightEdge = (this.state.width - this.state.horizontalPanFactor) / this.state.zoomFactor;
+
+        // size of container
+        var containerWidth = document.getElementById("react-graph").clientWidth;
+        var containerHeight = document.getElementById("react-graph").clientHeight;
+        
+        // if the graph does not fit in its container, it is resized by the inverse factor
+        // of the greater of these two ratios.
+        var autoResizeFactor;
+        var heightToContainerRatio = this.state.height / containerHeight;
+        var widthToContainerRatio = this.state.width / containerWidth;
+        autoResizeFactor = Math.max(heightToContainerRatio, widthToContainerRatio);
+        bottomEdge /= autoResizeFactor;
+        rightEdge /= autoResizeFactor;
+
+        if (direction === 'up' && topEdge < 0) {
+            this.setState({verticalPanFactor: this.state.verticalPanFactor - 10});
+        } else if (direction === 'left' && leftEdge < 0) {
+            this.setState({horizontalPanFactor: this.state.horizontalPanFactor - 10});
+        } else if (direction ==='down' && bottomEdge > containerHeight) {
+            this.setState({verticalPanFactor: this.state.verticalPanFactor + 10});
+        } else if (direction === 'right' && rightEdge > containerWidth) {
+            this.setState({horizontalPanFactor: this.state.horizontalPanFactor + 10});
+        }
+    },
+
+    resetZoomAndPan: function() {
+        this.setState({
+            zoomFactor: 1,
+            verticalPanFactor: 0, 
+            horizontalPanFactor: 0
+        });
+    },
+
     render: function () {
         // not all of these properties are supported in React
-        var svgAttrs = {width: this.state.width, height: this.state.height};
+        var svgAttrs = {
+            width: '100%',
+            height: '100%',
+            viewBox: this.state.horizontalPanFactor + ' ' +
+                     this.state.verticalPanFactor + ' ' +
+                     (this.state.width * this.state.zoomFactor) + ' ' +
+                     (this.state.height * this.state.zoomFactor),
+            preserveAspectRatio: 'xMinYMin'
+        };
 
         return (
+            <div>
+            <Button
+                divId='zoom-in-button'
+                altId='zoom-in'
+                sourceImg="static/res/ico/in.png"
+                mouseDown={() => this.incrementZoom(true)}/>
+            <Button
+                divId='zoom-out-button'
+                altId='zoom-out'
+                sourceImg="static/res/ico/out.png"
+                mouseDown={() => this.incrementZoom(false)}/>
+            <Button
+                divId='pan-up-button'
+                altId='pan-up'
+                sourceImg="static/res/ico/up.png"
+                mouseDown={() => this.panDirection('up')}/>
+            <Button
+                divId='pan-down-button'
+                altId='pan-down'
+                sourceImg="static/res/ico/down.png"
+                mouseDown={() => this.panDirection('down')}/>
+            <Button
+                divId='pan-right-button'
+                altId='pan-right'
+                sourceImg="static/res/ico/right.png"
+                mouseDown={() => this.panDirection('right')}/>
+            <Button
+                divId='pan-left-button'
+                altId='pan-left'
+                sourceImg="static/res/ico/left.png"
+                mouseDown={() => this.panDirection('left')}/>
+            <Button 
+                divId='reset-button'
+                altId='reset'
+                sourceImg="static/res/ico/reset.png"
+                mouseDown={() => this.resetZoomAndPan()}/>
             <svg {... svgAttrs} ref='svg' version='1.1'
                  className={this.state.highlightedNodes.length > 0 ?
                             'highlight-nodes' : ''}>
@@ -415,10 +517,24 @@ var Graph = React.createClass({
                     onMouseLeave={this.infoBoxMouseLeave}/>
                 <Modal ref='modal' />
             </svg>
+            </div>
+
         );
     }
 });
 
+var Button = React.createClass({
+
+    render: function() {
+        return (
+            <div id={this.props.divId} className='graph-control-button'>
+            <img alt={this.props.altId}
+            onMouseDown={this.props.mouseDown}
+            src={this.props.sourceImg}/>
+            </div>
+        );
+    }
+});
 
 // This now uses the new syntax for a stateless React component
 // (component with only a render method).
@@ -444,9 +560,6 @@ var RegionGroup = ({regionsJSON, labelsJSON}) => (
             };
 
             var textStyle = {fill : entry.fill}
-            if (entry.align !== 'begin') {
-                textStyle['text-anchor'] = entry.align;
-            }
 
             return (
                 <text {... textAttrs}
@@ -842,7 +955,7 @@ var BoolGroup = React.createClass({
                 childs={childs}
                 inEdges={inEdges}
                 outEdges={outEdges}
-                logicalType={boolJSON.text[0] === undefined ? 'and' : boolJSON.text[0].text}
+                logicalType={boolJSON.text[0].text}
                 svg={this.props.svg}/>
     },
 
