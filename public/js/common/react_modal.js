@@ -11,7 +11,7 @@ export var ModalContent = React.createClass({
 export var Modal = React.createClass({
     getInitialState: function () {
         return {
-            courseId: 'mat135',
+            courseId: '',
             course: [],
             sessions: []
         };
@@ -38,7 +38,7 @@ export var Modal = React.createClass({
                 </div>
             );
         } else {
-            return <div></div>;
+            return <div className='modal fade'></div>;
         }
     }
 });
