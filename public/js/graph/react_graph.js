@@ -884,27 +884,30 @@ var EdgeGroup = React.createClass({
 	// edge state is missing, false if not
 	getInitialState: function() {
 		var missingEdgesDict = [];
-		return {missingEdgesDict};
+		return {missEdges: missingEdgesDict};
 	},
 
 	// When an edge's state changes and the edge is not undefined, 
 	// it will call updateEdgeStatus and notify missingEdgesDict 
 	// if its state has changed to missing.
-	updateEdgeStatus: function(edgeID, state) {
+	updateEdgeStatus: function(edgeID, state) {		
+		console.log(edgeID);
 		var isMissing = true;
-		var missEdgesDict = this.state.missingEdgesDict;
+		// create a copy of missingEdgesDict
+		var empty = [];
+		var newMissingEdgesDict = $.extend(empty, this.state.missEdges);
 		if (state !== 'missing') {
 			isMissing = false;
 		}
-		if (edgeID in missEdgesDict) {
-			missEdgesDict[edgeID] = isMissing;
+		if (edgeID in newMissingEdgesDict) {
+			newMissingEdgesDict[edgeID] = isMissing;
 		} else {
-			missEdgesDict.push({
+			newMissingEdgesDict.push({
     			key: edgeID,
     			value: isMissing
 			});
 		}
-		this.setState({missEdgesDict});
+		this.setState({missEdges: newMissingEdgesDict});
 	},
 
     componentDidUpdate: function () {
@@ -934,17 +937,29 @@ var EdgeGroup = React.createClass({
     render: function () {
     	var missingEdges = [];
     	var otherEdges = [];
-    	var missEdgesDict = this.state.missingEdgesDict;
+    	var missEdgesDict = this.state.missEdges;
+    	var edges = this.props.edgesJSON;
 		console.log(missEdgesDict);
-    	for (edgeID in missEdgesDict) {
-    		if (missEdgesDict[edgeID] === true &&
-    			this.refs[edgeID] !== undefined) {
-    			missingEdges.push(this.refs[edgeID]);
-    		} else if (missEdgesDict[edgeID] === false &&
-    			this.refs[edgeID] !== undefined) {
-    			otherEdges.push(this.refs[edgeID]);
-    		}
-    	}
+		for (var i = 0; i < edges.length; i++) {
+			// if (this.refs[edges[i]] !== undefined) {
+			if (edges[i].id_ in missEdgesDict) {
+				var edgeID = edges[i].id_;
+	      		if (missEdgesDict[edgeID] !== true) {
+	      			otherEdges.push(this.refs[edges[i]]);
+	      		} else {
+	     			missingEdges.push(this.refs[edges[i]]);
+	     		}
+     		}
+     	}
+    	// for (edgeID in missEdgesDict) {
+    	// 	if (missEdgesDict[edgeID] === true &&
+    	// 		this.refs[edgeID] !== undefined) {
+    	// 		missingEdges.push(this.refs[edgeID]);
+    	// 	} else if (missEdgesDict[edgeID] === false &&
+    	// 		this.refs[edgeID] !== undefined) {
+    	// 		otherEdges.push(this.refs[edgeID]);
+    	// 	}
+    	// }
         return (
             <g id='edges'>
                 {otherEdges.map(this.generateEdge)}
