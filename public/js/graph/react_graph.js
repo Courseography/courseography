@@ -931,7 +931,7 @@ var EdgeGroup = React.createClass({
                      target={edgeJSON.target}
                      points={edgeJSON.points}
                      svg={this.props.svg}
-                     updateEdgeStatus={updateEdgeStatus} />;
+                     updateEdgeStatus={this.updateEdgeStatus} />;
     },
 
     render: function () {
@@ -939,16 +939,19 @@ var EdgeGroup = React.createClass({
     	var otherEdges = [];
     	var missEdgesDict = this.state.missEdges;
     	var edges = this.props.edgesJSON;
+    	console.log(Object.prototype.toString.call(this.refs[edges[0]]));
 		console.log(missEdgesDict);
 		for (var i = 0; i < edges.length; i++) {
 			// if (this.refs[edges[i]] !== undefined) {
 			if (edges[i].id_ in missEdgesDict) {
 				var edgeID = edges[i].id_;
 	      		if (missEdgesDict[edgeID] !== true) {
-	      			otherEdges.push(this.refs[edges[i]]);
+	      			otherEdges.push(edges[i]);
 	      		} else {
-	     			missingEdges.push(this.refs[edges[i]]);
+	     			missingEdges.push(edges[i]);
 	     		}
+     		} else {
+     			otherEdges.push(edges[i]);
      		}
      	}
     	// for (edgeID in missEdgesDict) {
@@ -990,8 +993,9 @@ var Edge = React.createClass({
     },
 
     render: function () {
-    	console.log('hi');
-    	this.props.updateEdgeStatus(this.id_, this.state.status);
+    	if (this.id_ !== undefined) {
+    		this.props.updateEdgeStatus(this.id_, this.state.status);
+    	}
         var pathAttrs = {d: 'M'};
         this.props.points.forEach(function(p) {
             pathAttrs.d += p[0] + ',' + p[1] + ' ';
