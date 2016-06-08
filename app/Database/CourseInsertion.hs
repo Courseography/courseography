@@ -24,7 +24,8 @@ import Config (databasePath)
 import Database.Persist.Sqlite (selectFirst, fromSqlKey, toSqlKey, insertMany_, insert_, insert, checkUnique, SqlBackend, (=.), (==.), updateWhere, runSqlite)
 import Database.Tables
 import Data.Aeson
-
+import Control.Exception -- Kael
+import Data.Dynamic  -- Kael
 
 -- | Inserts SVG graph data into Texts, Shapes, and Paths tables
 saveGraphJSON :: String -> String -> IO Response
@@ -44,17 +45,37 @@ saveGraphJSON jsonStr nameStr = do
 --    result <- checkUnique c
 --    return result
 
-testResult :: Bool -> IO()
-testResult r =
-  if r
-    then print "true"
-    else print "false"
+-- | Handle Sql problems re unique constraints
+catchSql :: IO a -> (SqlError -> IO a) -> IO a
+catchSql = catchDyn
 
--- | Inserts course into the Courses table.
+{- | Like 'catchSql', with the order of arguments reversed. -}
+handleSql :: (SqlError -> IO a) -> IO a -> IO a
+handleSql = flip catchSql
+
+
+-- | Test handle Sql exceptions, to debug insertion error.
+-- | handleSql runs second argument, if errors does first arg.
+safeInsert course = handleSql print $ do 
+    insertCourse course 
+  --insert_ $ Courses (name course)
+  --                    (title course)
+  --                    (description course)
+  --                    (manualTutorialEnrolment course)
+  --                    (manualPracticalEnrolment course)
+  --                    (prereqs course)
+  --                    (exclusions course)
+  --                    (breadth course)
+  --                    (distribution course)
+  --                    (prereqString course)
+  --                    (coreqs course)
+  --                    []
+
+-- | Inserts course into the Courses  table.
 insertCourse :: MonadIO m => Course -> ReaderT SqlBackend m ()
-insertCourse course = 
-    -- unique <- testUnique  course -- test if true before inserting
-    insert_ $ Courses (name course)
+insertCourse course = do 
+    --unique <- runSqlite databasePath $ checkUnique course
+    insert_ $ Courses (name course) -- idea: insertKey?
                       (title course)
                       (description course)
                       (manualTutorialEnrolment course)
