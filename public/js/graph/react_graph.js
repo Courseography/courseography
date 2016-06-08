@@ -132,7 +132,8 @@ var Graph = React.createClass({
             height: 0,
             zoomFactor: 1,
             horizontalPanFactor: 0,
-            verticalPanFactor: 0
+            verticalPanFactor: 0,
+            mouseDown: false
         };
     },
 
@@ -438,6 +439,39 @@ var Graph = React.createClass({
         });
     },
 
+    // Zoom and pan function calls work once, but they are not repeated while mouse is down, as wanted.
+    onButtonPress: function(zoomOrPanFunction, direction) {
+        this.setState({mouseDown: setInterval(zoomOrPanFunction(direction), 50)});
+    },
+
+    onButtonRelease: function() {
+        this.setState({mouseDown: clearInterval(this.state.mouseDown)});
+    },
+    
+    // Trying to get the graph to zoom by scrolling and to pan using arrow keys.
+    // Neither of these two functions below work yet and no error is generated in console.
+    // Still trying to figure this out.
+
+    // onKeyPress: function(event) {
+    //     if (event.keyCode == 39) {
+    //         this.panDirection('right');
+    //     } else if (event.keyCode == 40) {
+    //         this.panDirection('down');
+    //     } else if (event.keyCode == 37) {
+    //         this.panDirection('left');
+    //     } else if (event.keyCode == 38) {
+    //         this.panDirection('up');
+    //     }
+    // },
+
+    // onWheel: function(event) {
+    //     if (event.delta > 0) {
+    //         this.incrementZoom('true');
+    //     } else if (event.delta < 0) {
+    //         this.incrementZoom('false');
+    //     }
+    // },
+
     render: function () {
         // not all of these properties are supported in React
         var svgAttrs = {
@@ -456,37 +490,44 @@ var Graph = React.createClass({
                     divId='zoom-in-button'
                     altId='zoom-in'
                     sourceImg="static/res/ico/in.png"
-                    mouseDown={() => this.incrementZoom(true)}/>
+                    mouseDown={() => this.onButtonPress(this.incrementZoom, true)}
+                    mouseUp={() => this.onButtonRelease()}/>
                 <Button
                     divId='zoom-out-button'
                     altId='zoom-out'
                     sourceImg="static/res/ico/out.png"
-                    mouseDown={() => this.incrementZoom(false)}/>
+                    mouseDown={() => this.onButtonPress(this.incrementZoom, false)}
+                    mouseUp={() => this.onButtonRelease()}/>
                 <Button
                     divId='pan-up-button'
                     altId='pan-up'
                     sourceImg="static/res/ico/up.png"
-                    mouseDown={() => this.panDirection('up')}/>
+                    mouseDown={() => this.onButtonPress(this.panDirection, 'up')}
+                    mouseUp={() => this.onButtonRelease()}/>
                 <Button
                     divId='pan-down-button'
                     altId='pan-down'
                     sourceImg="static/res/ico/down.png"
-                    mouseDown={() => this.panDirection('down')}/>
+                    mouseDown={() => this.onButtonPress(this.panDirection, 'down')}
+                    mouseUp={() => this.onButtonRelease()}/>
                 <Button
                     divId='pan-right-button'
                     altId='pan-right'
                     sourceImg="static/res/ico/right.png"
-                    mouseDown={() => this.panDirection('right')}/>
+                    mouseDown={() => this.onButtonPress(this.panDirection, 'right')}
+                    mouseUp={() => this.onButtonRelease()}/>
                 <Button
                     divId='pan-left-button'
                     altId='pan-left'
                     sourceImg="static/res/ico/left.png"
-                    mouseDown={() => this.panDirection('left')}/>
+                    mouseDown={() => this.onButtonPress(this.panDirection, 'left')}
+                    mouseUp={() => this.onButtonRelease()}/>
                 <Button 
                     divId='reset-button'
                     altId='reset'
                     sourceImg="static/res/ico/reset.png"
-                    mouseDown={() => this.resetZoomAndPan()}/>
+                    mouseDown={() => this.resetZoomAndPan()}
+                    mouseUp={() => this.onButtonRelease()}/>
                 <Modal ref='modal' />
                 <svg {... svgAttrs} ref='svg' version='1.1'
                      className={this.state.highlightedNodes.length > 0 ?
@@ -530,6 +571,7 @@ var Button = React.createClass({
             <div id={this.props.divId} className='graph-control-button'>
             <img alt={this.props.altId}
             onMouseDown={this.props.mouseDown}
+            onMouseUp={this.props.mouseUp}
             src={this.props.sourceImg}/>
             </div>
         );
