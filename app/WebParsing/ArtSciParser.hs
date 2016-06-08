@@ -47,10 +47,12 @@ getCalendar str = do
         course = map (processCourseToData . filter isTagText) $ partitions isCourseTitle coursesSoup
     print $ "parsing " ++ str
     mapM_ myPrint course -- debugging - to remove
-    --newCrs = removeDuplicateCrs course -- temporary - to avoid duplicate entries
+    let newCrs = removeDuplicateCrs course -- temporary - to avoid duplicate entries 
+    -- print $ "Parsed minus duplicates: "
+    -- mapM_ myPrint newCrs -- debugging - to remove
     runSqlite databasePath $ do
         runMigration migrateAll
-        mapM_ insertCourse course -- orig 'course' -- to remove duplicates
+        mapM_ insertCourse newCrs -- orig 'course' -- to remove duplicates
     where
         myPrint x = print $ name x-- debugging - to remove
         isNotComment (TagComment _) = False

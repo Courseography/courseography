@@ -21,9 +21,10 @@ import Control.Monad.IO.Class (MonadIO)
 import Control.Monad.Trans.Reader (ReaderT)
 import Data.Maybe (fromMaybe)
 import Config (databasePath)
-import Database.Persist.Sqlite (selectFirst, fromSqlKey, toSqlKey, insertMany_, insert_, insert, SqlBackend, (=.), (==.), updateWhere, runSqlite)
+import Database.Persist.Sqlite (selectFirst, fromSqlKey, toSqlKey, insertMany_, insert_, insert, checkUnique, SqlBackend, (=.), (==.), updateWhere, runSqlite)
 import Database.Tables
 import Data.Aeson
+
 
 -- | Inserts SVG graph data into Texts, Shapes, and Paths tables
 saveGraphJSON :: String -> String -> IO Response
@@ -39,9 +40,20 @@ saveGraphJSON jsonStr nameStr = do
                 insertMany_ $ map (\path -> path {pathGraph = gId}) paths
             return $ toResponse $ ("Success" :: String)
 
+--testUnique c = runSqlite databasePath $ do 
+--    result <- checkUnique c
+--    return result
+
+testResult :: Bool -> IO()
+testResult r =
+  if r
+    then print "true"
+    else print "false"
+
 -- | Inserts course into the Courses table.
 insertCourse :: MonadIO m => Course -> ReaderT SqlBackend m ()
-insertCourse course =
+insertCourse course = 
+    -- unique <- testUnique  course -- test if true before inserting
     insert_ $ Courses (name course)
                       (title course)
                       (description course)
@@ -54,7 +66,7 @@ insertCourse course =
                       (prereqString course)
                       (coreqs course)
                       []
-
+      
 -- | Updates the manualTutorialEnrolment field of the given course.
 setTutorialEnrolment :: MonadIO m => T.Text -> Bool -> ReaderT SqlBackend m ()
 setTutorialEnrolment course val =
