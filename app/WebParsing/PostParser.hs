@@ -47,8 +47,7 @@ addPostToDatabase tags = do
     let postCode = T.pack (fromAttrib "name" ((take 1 $ filter (isTagOpenName "a") tags) !! 0))
         fullPostName = innerText (take 1 $ filter (isTagText) tags)
         postType = T.pack $ getPostType postCode
-        --departmentName = T.pack $ unwords $ reverse $ drop 3  $ reverse $ words $ fullPostName
-        departmentName = T.pack $ getDepartmentName fullPostName
+        departmentName = T.pack $ (getDepartmentName fullPostName postType)
     insertPost departmentName postType postCode
 
 getPostType :: T.Text -> String
@@ -60,12 +59,12 @@ getPostType postCode =
             "MAJ" -> "Major"
             "MIN" ->  "Minor"
 
-getDepartmentName :: [Char] -> [Char]
-getDepartmentName fullPostName = do
-    let parsed = P.parse isDepartmentName "(source)" fullPostName
+getDepartmentName :: [Char] -> T.Text -> [Char]
+getDepartmentName fullPostName postType = do
+    let parsed = P.parse (isDepartmentName (T.unpack postType)) "(source)" fullPostName
     case parsed of 
         Right name -> name
         Left _ -> ""
 
-isDepartmentName ::  P.Parsec String () String
-isDepartmentName = P.manyTill P.anyChar (P.try ((P.string "Specialist") <|> (P.string "Major") <|> (P.string "Minor")))
+isDepartmentName ::  [Char] -> P.Parsec String () String
+isDepartmentName postType = P.manyTill P.anyChar (P.try (P.string postType))
