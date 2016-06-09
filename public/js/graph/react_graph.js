@@ -1,5 +1,5 @@
 import * as tooltip from 'es6!graph/tooltip';
-import {Modal} from 'es6!common/react_modal';
+// import {Modal} from 'es6!common/react_modal';
 
 /**
  *
@@ -139,6 +139,8 @@ var Graph = React.createClass({
 
     componentDidMount: function () {
         this.getGraph();
+        document.body.addEventListener('keydown', this.onKeyDown);
+        document.body.addEventListener('wheel', this.onWheel);
     },
 
     getGraph: function (graphName) {
@@ -301,11 +303,11 @@ var Graph = React.createClass({
 
         yPos = parseFloat(yPos);
 
-        infoBox.setState({xPos: xPos,
+        /*infoBox.setState({xPos: xPos,
                           yPos: yPos,
                           nodeId: courseId,
                           showInfobox: true});
-
+        */
     },
 
     nodeMouseLeave: function (event) {
@@ -315,12 +317,13 @@ var Graph = React.createClass({
 				
         var infoBox = this.refs.infoBox;
 
-        var timeout = setTimeout(function () {
+        /* var timeout = setTimeout(function () {
                 infoBox.setState({showInfobox: false});
         }, 400);
+        
 
         this.setState({timeouts: this.state.timeouts.concat(timeout)});
-			
+		*/	
     },
     
     infoBoxMouseEnter: function () {
@@ -439,38 +442,34 @@ var Graph = React.createClass({
         });
     },
 
-    // Zoom and pan function calls work once, but they are not repeated while mouse is down, as wanted.
     onButtonPress: function(zoomOrPanFunction, direction) {
-        this.setState({mouseDown: setInterval(zoomOrPanFunction(direction), 50)});
+        this.setState({mouseDown: setInterval(() => zoomOrPanFunction(direction), 100)});
     },
 
     onButtonRelease: function() {
         this.setState({mouseDown: clearInterval(this.state.mouseDown)});
     },
-    
-    // Trying to get the graph to zoom by scrolling and to pan using arrow keys.
-    // Neither of these two functions below work yet and no error is generated in console.
-    // Still trying to figure this out.
 
-    // onKeyPress: function(event) {
-    //     if (event.keyCode == 39) {
-    //         this.panDirection('right');
-    //     } else if (event.keyCode == 40) {
-    //         this.panDirection('down');
-    //     } else if (event.keyCode == 37) {
-    //         this.panDirection('left');
-    //     } else if (event.keyCode == 38) {
-    //         this.panDirection('up');
-    //     }
-    // },
+    onKeyDown: function(event) {
+        console.log("key code: " + event.keyCode + " char code: " + event.charCode);
+        if (event.keyCode == 39) {
+            this.panDirection('right');
+        } else if (event.keyCode == 40) {
+            this.panDirection('down');
+        } else if (event.keyCode == 37) {
+            this.panDirection('left');
+        } else if (event.keyCode == 38) {
+            this.panDirection('up');
+        }
+    },
 
-    // onWheel: function(event) {
-    //     if (event.delta > 0) {
-    //         this.incrementZoom('true');
-    //     } else if (event.delta < 0) {
-    //         this.incrementZoom('false');
-    //     }
-    // },
+    onWheel: function(event) {
+        if (event.deltaY > 0) {
+            this.incrementZoom(true);
+        } else if (event.deltaY < 0) {
+            this.incrementZoom(false);
+        }
+    },
 
     render: function () {
         // not all of these properties are supported in React
@@ -528,9 +527,8 @@ var Graph = React.createClass({
                     sourceImg="static/res/ico/reset.png"
                     mouseDown={() => this.resetZoomAndPan()}
                     mouseUp={() => this.onButtonRelease()}/>
-                <Modal ref='modal' />
                 <svg {... svgAttrs} ref='svg' version='1.1'
-                     className={this.state.highlightedNodes.length > 0 ?
+                    className={this.state.highlightedNodes.length > 0 ?
                                 'highlight-nodes' : ''}>
                     {this.renderArrowHead()}
                     <RegionGroup
@@ -552,11 +550,6 @@ var Graph = React.createClass({
                         edgesJSON={this.state.edgesJSON}
                         svg={this}/>
                     <EdgeGroup svg={this} ref='edges' edgesJSON={this.state.edgesJSON}/>
-                    <InfoBox
-                        ref='infoBox'
-                        onClick={this.infoBoxMouseClick}
-                        onMouseEnter={this.infoBoxMouseEnter}
-                        onMouseLeave={this.infoBoxMouseLeave}/>
                 </svg>
             </div>
 
@@ -1184,55 +1177,55 @@ var Edge = React.createClass({
 });
 
 
-var InfoBox = React.createClass({
-    getInitialState: function () {
-        return {
-            xPos: '0',
-            yPos: '0',
-            nodeId: '',
-            showInfobox: false
-        };
-    },
+// var InfoBox = React.createClass({
+//     getInitialState: function () {
+//         return {
+//             xPos: '0',
+//             yPos: '0',
+//             nodeId: '',
+//             showInfobox: false
+//         };
+//     },
 
-    render: function () {
-        if (this.state.showInfobox) {
-            //TODO: move to CSS
-            var gStyles = {
-                cursor: 'pointer',
-                transition: 'opacity .4s',
-                opacity: this.state.showInfobox ? 1 : 0
-            }
-            var rectAttrs = {
-                id:this.state.nodeId+'-tooltip' + '-rect',
-                x: this.state.xPos,
-                y: this.state.yPos,
-                rx: '4',
-                ry: '4',
-                fill: 'white',
-                stroke: 'black',
-                'stroke-width': '2',
-                width: '60',
-                height: '30'
-            };
+//     render: function () {
+//         if (this.state.showInfobox) {
+//             //TODO: move to CSS
+//             var gStyles = {
+//                 cursor: 'pointer',
+//                 transition: 'opacity .4s',
+//                 opacity: this.state.showInfobox ? 1 : 0
+//             }
+//             var rectAttrs = {
+//                 id:this.state.nodeId+'-tooltip' + '-rect',
+//                 x: this.state.xPos,
+//                 y: this.state.yPos,
+//                 rx: '4',
+//                 ry: '4',
+//                 fill: 'white',
+//                 stroke: 'black',
+//                 'stroke-width': '2',
+//                 width: '60',
+//                 height: '30'
+//             };
 
-            var textAttrs = {
-                'id': this.state.nodeId +'-tooltip' + '-text',
-                'x': parseFloat(this.state.xPos) + 60 / 2 - 18,
-                'y': parseFloat(this.state.yPos) + 30 / 2 + 6
-            };
+//             var textAttrs = {
+//                 'id': this.state.nodeId +'-tooltip' + '-text',
+//                 'x': parseFloat(this.state.xPos) + 60 / 2 - 18,
+//                 'y': parseFloat(this.state.yPos) + 30 / 2 + 6
+//             };
 
-            return (            
-                <g id='infoBox' className='tooltip-group' style={gStyles} {... this.props}>
-                    <rect {... rectAttrs} ></rect>
-                    <text {... textAttrs} >
-                        Info
-                    </text>
-                </g>
-            );
-        } else {
-            return <g></g>;
-        }
-    }
-});
+//             return (            
+//                 <g id='infoBox' className='tooltip-group' style={gStyles} {... this.props}>
+//                     <rect {... rectAttrs} ></rect>
+//                     <text {... textAttrs} >
+//                         Info
+//                     </text>
+//                 </g>
+//             );
+//         } else {
+//             return <g></g>;
+//         }
+//     }
+// });
 
 export default {renderReactGraph: renderReactGraph};
