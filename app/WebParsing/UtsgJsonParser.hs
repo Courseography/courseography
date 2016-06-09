@@ -1,9 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-{-
+
 module WebParsing.UtsgJsonParser
-     (getJSON) where
--}
+     (getAllCourses) where
 
 import Data.Aeson
 import Data.List
@@ -53,7 +52,7 @@ getNestedTimeSlots days starts ends = zipWith3 (\(Just day)
 
  -- | URL to UofT courses (stored as JSON string)
 jsonURL :: String
-jsonURL = "https://timetable.iit.artsci.utoronto.ca/api/courses?org=&code=PRT100Y"
+jsonURL = "https://timetable.iit.artsci.utoronto.ca/api/courses?org=CSC"
 
  -- | Decode JSON string to JSON object
 getJSON :: IO (Maybe Object)
@@ -174,8 +173,6 @@ getAllCourses = do
                                              meetingStartTimes
                                              meetingEndTimes
 
-    let manualTutorialEnrolments  = repeat      $ Just False
-        manualPracticalEnrolments = repeat      $ Just False
     let videoUrls                 = repeat      ([] :: [T.Text])
 
     let lst7 = zipWith7 (\a b c d e f g -> a:b:c:d:e:f:g:[])
@@ -207,23 +204,21 @@ getAllCourses = do
                                     waitlists
                                     extras
 
-    let lectureObjs = zipWith4 (\codeSession secMeta time tStrs -> zipWith3 (\sMeta ts tStr -> zipWith (\t ts -> if (take 3 $ sMeta !! 0) == "TUT"
-                                                                                                                 then (Left $ Tutorial (codeSession !! 0)
-                                                                                                                                       (Just $ T.pack $ sMeta !! 0)
-                                                                                                                                       (codeSession !! 1)
-                                                                                                                                       t)
-                                                                                                                 else (Right $ Lecture (codeSession !! 0)
-                                                                                                                                       (codeSession !! 1)
-                                                                                                                                       (T.pack $ sMeta !! 0)
-                                                                                                                                       t
-                                                                                                                                       (read $ sMeta !! 1 :: Int)
-                                                                                                                                       (T.pack $ sMeta !! 2)
-                                                                                                                                       (read $ sMeta !! 3 :: Int)
-                                                                                                                                       (read $ sMeta !! 4 :: Int)
-                                                                                                                                       (read $ sMeta !! 5 :: Int)
-                                                                                                                                       (T.pack ts)))
-                                                                                                       ts
-                                                                                                       tStr)
+    let lectureObjs = zipWith4 (\codeSession secMeta time tStrs -> zipWith3 (\sMeta tms tStr -> if (take 3 $ sMeta !! 0) == "TUT" || (take 3 $ sMeta !! 0) == "PRA"
+                                                                                                then (Left $ Tutorial (codeSession !! 0)
+                                                                                                                      (Just $ T.pack $ sMeta !! 0)
+                                                                                                                      (codeSession !! 1)
+                                                                                                                      (foldl (\res t -> t ++ res) [] tms))
+                                                                                                else (Right $ Lecture (codeSession !! 0)
+                                                                                                                      (codeSession !! 1)
+                                                                                                                      (T.pack $ sMeta !! 0)
+                                                                                                                      (foldl (\res t -> t ++ res) [] tms)
+                                                                                                                      (read $ sMeta !! 1 :: Int)
+                                                                                                                      (T.pack $ sMeta !! 2)
+                                                                                                                      (read $ sMeta !! 3 :: Int)
+                                                                                                                      (read $ sMeta !! 4 :: Int)
+                                                                                                                      (read $ sMeta !! 5 :: Int)
+                                                                                                                      (T.pack $ intercalate ", " tStr)))
                                                                             secMeta
                                                                             time
                                                                             tStrs)
@@ -232,9 +227,32 @@ getAllCourses = do
                                times
                                timeStr
 
-    forM_ lectureObjs (\lecLists -> forM_ lecLists (\lecLst -> forM_ lecLst (\lecTut -> runSqlite databasePath $  case lecTut of
-                                                                                                                        (Left tut) -> insert_ tut
-                                                                                                                        (Right lec) -> insert_ lec)))
+    let manualTutorialEnrolments  =  map (\lecLists -> foldl (\tutExists lecTut -> case lecTut of
+                                                                                          (Left tut) -> if (take 3 $ T.unpack $ fromJust $ tutorialSection tut) == "TUT"
+                                                                                                        then (Just True)
+                                                                                                        else tutExists
+                                                                                          (Right lec) -> tutExists) (Just False) lecLists) lectureObjs
+
+        manualPracticalEnrolments = map (\lecLists -> foldl (\tutExists lecTut -> case lecTut of
+                                                                                          (Left tut) -> if (take 3 $ T.unpack $ fromJust $ tutorialSection tut) == "PRA"
+                                                                                                        then (Just True)
+                                                                                                        else tutExists
+                                                                                          (Right lec) -> tutExists) (Just False) lecLists) lectureObjs
+
+
+    print $ zipWith6 (\c lst corqs mTutEnrl mPratEnrl vUrl ->
+                      Courses c (lst !! 0) (lst !! 1) mTutEnrl mPratEnrl (lst !! 2)
+                              (lst !! 3) (lst !! 4) (lst !! 5) (lst !! 6) corqs vUrl)
+                      codes
+                      lst7
+                      coreqs
+                      manualTutorialEnrolments
+                      manualPracticalEnrolments
+                      videoUrls
+
+    forM_ lectureObjs (\lecLists -> forM_ lecLists (\lecTut -> runSqlite databasePath $  case lecTut of
+                                                                                              (Left tut) -> insert_ tut
+                                                                                              (Right lec) -> insert_ lec))
 
     runSqlite databasePath $ insertMany_ $ zipWith6 (\c lst corqs mTutEnrl mPratEnrl vUrl ->
                                                     Courses c (lst !! 0) (lst !! 1) mTutEnrl mPratEnrl (lst !! 2)
@@ -245,7 +263,6 @@ getAllCourses = do
                                                     manualTutorialEnrolments
                                                     manualPracticalEnrolments
                                                     videoUrls
-
 
     print ("All Courses have been successfully inserted")
 
