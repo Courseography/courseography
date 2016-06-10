@@ -95,6 +95,7 @@ executable courseography
     base64-bytestring,
     split,
     containers,
+    unordered-containers,
     random,
     process >= 1.2,
     diagrams-lib >= 1.3,
