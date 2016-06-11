@@ -102,8 +102,9 @@ returnLecture lowerStr sect session = runSqlite databasePath $ do
 buildCourse :: Maybe Session -> Maybe Session -> Maybe Session -> Courses -> Course
 buildCourse fallSession springSession yearSession course =
     Course (coursesBreadth course)
-           (coursesDescription course)
-           (coursesTitle course)
+           -- TODO: Remove the filter and allow double-quotes
+           (fmap (T.filter (/='\"')) (coursesDescription course))
+           (fmap (T.filter (/='\"')) (coursesTitle course))
            (coursesPrereqString course)
            fallSession
            springSession
