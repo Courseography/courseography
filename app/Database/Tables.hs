@@ -165,6 +165,12 @@ data Session =
               tutorials :: [Tutorial]
             } deriving (Show, Generic)
 
+data Course2 =
+    Course2 { code :: T.Text,
+             session :: T.Text,
+             section :: T.Text
+           } deriving (Show, Generic)
+
 -- | A Course.
 -- each element of prereqs can be one of three things:
 --
