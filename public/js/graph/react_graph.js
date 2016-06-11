@@ -441,11 +441,14 @@ var Graph = React.createClass({
     },
 
     onButtonPress: function(zoomOrPanFunction, direction) {
-        this.setState({mouseDown: setInterval(() => zoomOrPanFunction(direction), 100)});
+        zoomOrPanFunction(direction);
+        var mouseIsDown = setInterval(() => zoomOrPanFunction(direction), 500);
+        this.setState({mouseDown: mouseIsDown});
     },
 
     onButtonRelease: function() {
-        this.setState({mouseDown: clearInterval(this.state.mouseDown)});
+        var mouseIsDown = clearInterval(this.state.mouseDown)
+        this.setState({mouseDown: mouseIsDown});
     },
 
     onKeyDown: function(event) {
@@ -487,43 +490,43 @@ var Graph = React.createClass({
                     altId='zoom-in'
                     sourceImg="static/res/ico/in.png"
                     mouseDown={() => this.onButtonPress(this.incrementZoom, true)}
-                    mouseUp={() => this.onButtonRelease()}/>
+                    mouseUp={this.onButtonRelease}/>
                 <Button
                     divId='zoom-out-button'
                     altId='zoom-out'
                     sourceImg="static/res/ico/out.png"
                     mouseDown={() => this.onButtonPress(this.incrementZoom, false)}
-                    mouseUp={() => this.onButtonRelease()}/>
+                    mouseUp={this.onButtonRelease}/>
                 <Button
                     divId='pan-up-button'
                     altId='pan-up'
                     sourceImg="static/res/ico/up.png"
                     mouseDown={() => this.onButtonPress(this.panDirection, 'up')}
-                    mouseUp={() => this.onButtonRelease()}/>
+                    mouseUp={this.onButtonRelease}/>
                 <Button
                     divId='pan-down-button'
                     altId='pan-down'
                     sourceImg="static/res/ico/down.png"
                     mouseDown={() => this.onButtonPress(this.panDirection, 'down')}
-                    mouseUp={() => this.onButtonRelease()}/>
+                    mouseUp={this.onButtonRelease}/>
                 <Button
                     divId='pan-right-button'
                     altId='pan-right'
                     sourceImg="static/res/ico/right.png"
                     mouseDown={() => this.onButtonPress(this.panDirection, 'right')}
-                    mouseUp={() => this.onButtonRelease()}/>
+                    mouseUp={this.onButtonRelease}/>
                 <Button
                     divId='pan-left-button'
                     altId='pan-left'
                     sourceImg="static/res/ico/left.png"
                     mouseDown={() => this.onButtonPress(this.panDirection, 'left')}
-                    mouseUp={() => this.onButtonRelease()}/>
+                    mouseUp={this.onButtonRelease}/>
                 <Button 
                     divId='reset-button'
                     altId='reset'
                     sourceImg="static/res/ico/reset.png"
-                    mouseDown={() => this.resetZoomAndPan()}
-                    mouseUp={() => this.onButtonRelease()}/>
+                    mouseDown={this.resetZoomAndPan}
+                    mouseUp={this.onButtonRelease}/>
                 <Modal ref='modal' />
                 <svg {... svgAttrs} ref='svg' version='1.1'
                     className={this.state.highlightedNodes.length > 0 ?
