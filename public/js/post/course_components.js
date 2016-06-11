@@ -1,17 +1,3 @@
-import {ModalContent} from 'es6!common/react_modal';
-
-function openReactModal(courseCode) {
-    'use strict';
-    var courseName = getCourseTitle(courseCode);
-    var formattedName = formatCourseName(courseCode);
-    var courseVideoUrls = getCourseVideoUrls(formattedName);
-
-    React.render(
-        <ModalContent course={formattedName[0]} />,
-        document.getElementById('modal-content-container')
-    );
-}
-
 var CourseCode = React.createClass({
     getInitialState: function() {
         return {
@@ -35,7 +21,7 @@ var CourseCode = React.createClass({
 
         var editedCourseNames = [];
 
-        // since you can render an array with a combination of jsx elements and strings, this combines all span elements and 
+        // since you can render an array with a combination of jsx elements and strings, this combines all span elements and
         // "or" strings in between to be easily rendered later
         this.props.courseIDs.forEach(function(course) {
             editedCourseNames.push(<span id={course} className='courseName' onClick={me.openModal}>{course.toUpperCase() + 'H'}</span>);
@@ -48,25 +34,25 @@ var CourseCode = React.createClass({
             // special case for calculus requirement since it doesn't fit the same pattern
             return (
                 <p className='code'>
-                    (<span id='mat135' className='courseName' onClick={this.openModal}>MAT135H</span> and 
-                    <span id='mat136' className='courseName' onClick={this.openModal}>MAT136H</span>) or 
-                    <span id='mat137' className='courseName' onClick={this.openModal}>MAT137Y</span>or 
+                    (<span id='mat135' className='courseName' onClick={this.openModal}>MAT135H</span> and
+                    <span id='mat136' className='courseName' onClick={this.openModal}>MAT136H</span>) or
+                    <span id='mat137' className='courseName' onClick={this.openModal}>MAT137Y</span>or
                     <span id='mat157' className='courseName' onClick={this.openModal}>MAT157Y</span>
                  </p>
             )
-        } else { 
+        } else {
             return <p className='code'> {editedCourseNames} </p>;
         }
     },
 
     getIdName: function() {
         var idName = this.props.courseIDs[0].substring(0, 3);
-        
+
         this.props.courseIDs.forEach(function (course) {
             idName += course.substring(3, 6);
         });
 
-        // math and stats courses need extra stuff appended to their IDs 
+        // math and stats courses need extra stuff appended to their IDs
         // (mainly to check if they are active or not through their cookie)
         if (this.props.courseIDs[0] === 'mat135') {
             idName += 'calc1';
@@ -90,9 +76,7 @@ var CourseCode = React.createClass({
     },
 
     openModal: function(e) {
-        var id = e.target.id;
-        openModal(this.getTitle(id), createModalDiv(id));
-        openReactModal(id);
+        this.props.openModal(e.target.id);
     },
 
     render: function() {
@@ -132,7 +116,7 @@ export var MultipleCourseCode = React.createClass({
                                            this.props.courses.length},
                       this.checkIfCompleted);
     },
-    
+
     toggleFullInfo: function() {
         this.setState({infoOpened: !this.state.infoOpened});
     },
@@ -204,7 +188,7 @@ export var MultipleCourseCode = React.createClass({
                     <span>{this.props.categoryName}</span>
                 </p>
                 <div id = {'spec' + this.props.courseID.substring(5, this.props.courseID.length)} className='more-info'>
-                    <p className="full_name"> 
+                    <p className="full_name">
                         {Array.apply(0, Array(this.props.textBoxNumber)).map(function (x, i) {
                             if (me.isValidExtraCourse(me.state.textboxValues[i].substring(0, 6))) {
                                 var className = 'valid_extra_course';
@@ -235,13 +219,12 @@ export var CourseCategory = React.createClass({
         return (
             <div>
                 <h2>{this.props.yearName}</h2>
-                {this.props.courses.map(function (courses) {
-                    return (
+                {this.props.courses.map((courses) =>
                         <CourseCode id={courses[0]}
                                     key={courses[0]}
-                                    courseIDs={courses} />
-                    );
-                })}
+                                    courseIDs={courses}
+                                    openModal={this.props.openModal} />
+                )}
             </div>
         );
     }
@@ -260,7 +243,7 @@ export var InquiryCategory = React.createClass({
     componentWillMount: function() {
         this.setState({completed: this.props.course !== ''});
     },
-    
+
     toggleFullInfo: function() {
         this.setState({infoOpened: !this.state.infoOpened});
     },
@@ -299,7 +282,7 @@ export var InquiryCategory = React.createClass({
                 <div id={'spec' + this.props.courseID.substring(5, this.props.courseID.length)}
                      className='more-info'>
                     <p className='full_name'>
-                        <input type='text' 
+                        <input type='text'
                                value={this.state.value}
                                onChange={this.handleOnChange} />
                     </p>

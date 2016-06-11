@@ -1,4 +1,5 @@
 import {CourseCategory, MultipleCourseCode, InquiryCategory} from 'es6!post/course_components';
+import {Modal} from 'es6!common/react_modal';
 
 /**
  * Returns whether course is a specialist course or not
@@ -90,6 +91,13 @@ var Post = React.createClass({
         this.changeCreditCount(count);
     },
 
+    openModal: function (nodeId) {
+        var modal = this.refs.modal;
+        modal.setState({courseId: nodeId.substring(0, 6)}, () =>
+            $(modal.getDOMNode()).modal()
+        );
+    },
+
     render: function() {
 
         if (this.state.selected) {
@@ -103,23 +111,27 @@ var Post = React.createClass({
 
         return (
             <div id={'post_' + this.props.postType} className={classes} >
-                <CourseCategory yearName='First Year' courses={this.props.firstYearCourses} />
-                <CourseCategory yearName='Second Year' courses={this.props.secondYearCourses} />
-                <CourseCategory yearName='Later Years' courses={this.props.laterYearCourses} />
+                <Modal ref='modal' />
+                <CourseCategory yearName='First Year' courses={this.props.firstYearCourses}
+                                openModal={this.openModal} />
+                <CourseCategory yearName='Second Year' courses={this.props.secondYearCourses}
+                                openModal={this.openModal} />
+                <CourseCategory yearName='Later Years' courses={this.props.laterYearCourses}
+                                openModal={this.openModal} />
                 {this.props.categoryTitles.map(function (title, i) {
-                    return <MultipleCourseCode courseID={me.props.postType + '_category_' + (i + 1)} 
-                                               textBoxNumber={me.props.textBoxes[i][0]} 
-                                               courses={courseCategoryArrays[i]} 
-                                               textboxesDisabled={me.props.textBoxes[i][1]} 
-                                               changeCourseCredit={me.changeCreditCount} 
+                    return <MultipleCourseCode courseID={me.props.postType + '_category_' + (i + 1)}
+                                               textBoxNumber={me.props.textBoxes[i][0]}
+                                               courses={courseCategoryArrays[i]}
+                                               textboxesDisabled={me.props.textBoxes[i][1]}
+                                               changeCourseCredit={me.changeCreditCount}
                                                categoryName={title}
-                                               key={i} /> 
+                                               key={i} />
                 })}
                 {(() => {
                     if (this.props.hasInquiryCategory) {
-                        return <InquiryCategory courseID={this.props.postType + '_inq'} course={this.getInquiryCourse()} 
-                                categoryName='Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H, 
-                                CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H, or PEY (0.5 FCEs) 
+                        return <InquiryCategory courseID={this.props.postType + '_inq'} course={this.getInquiryCourse()}
+                                categoryName='Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H,
+                                CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H, or PEY (0.5 FCEs)
                                 ** Note: Type "PEY" for Check my POSt to recognize it **' />
                     }
                 })()}
@@ -135,7 +147,7 @@ var Post = React.createClass({
 });
 
 
-var SpecialistPost = React.createClass({ 
+var SpecialistPost = React.createClass({
     getInitialState: function() {
         return {
             selected: false,
@@ -145,7 +157,7 @@ var SpecialistPost = React.createClass({
 
     changeTabView: function(isSelected) {
         this.setState({selected: isSelected});
-    }, 
+    },
 
     setIfCompleted: function() {
         var isCompleted = this.refs.post.state.creditCount >= 12.0;
@@ -171,7 +183,7 @@ var SpecialistPost = React.createClass({
 
     render: function() {
 
-        var categoryTitles = ['Any 400-level CSC course, BCB410H, BCB420H, BCB430Y, ECE489H (1.5 FCEs)', 
+        var categoryTitles = ['Any 400-level CSC course, BCB410H, BCB420H, BCB430Y, ECE489H (1.5 FCEs)',
                               'Any 300+ level CSC course, BCB410H, BCB420H, BCB430Y, ECE385H, ECE489H (1.5 FCEs)',
                               'Any of the following: 300+ level CSC course; MAT: 235/237/257, any 300+ \
                                except for 329, 390, & 391; STA: 248, 261, any 300+; ECE: 385H/489H; \
@@ -180,19 +192,19 @@ var SpecialistPost = React.createClass({
                      to fulfill program requirements'];
 
         var firstYearCourses = [['csc108'], ['csc148'], ['csc165', 'csc240'], ['mat135', 'mat136', 'mat137', 'mat157']];
-        var secondYearCourses = [['csc207'], ['csc209'], ['csc236', 'csc240'], ['csc258'], ['csc263', 'csc265'], ['mat221', 'mat223', 'mat240'], 
+        var secondYearCourses = [['csc207'], ['csc209'], ['csc236', 'csc240'], ['csc258'], ['csc263', 'csc265'], ['mat221', 'mat223', 'mat240'],
                                 ['sta247', 'sta255', 'sta257']];
         var laterYearCourses = [['csc369'], ['csc373']];
 
         return (
-            <Post postType='specialist' 
+            <Post postType='specialist'
                   ref='post'
-                  firstYearCourses={firstYearCourses} 
-                  secondYearCourses={secondYearCourses} 
-                  laterYearCourses={laterYearCourses} 
-                  textBoxes={[[3, true], [3, true], [4, false]]} 
-                  courseChecks={[this.isLevel400, this.isLevel300, this.isLevelExtra]} 
-                  categoryTitles={categoryTitles} 
+                  firstYearCourses={firstYearCourses}
+                  secondYearCourses={secondYearCourses}
+                  laterYearCourses={laterYearCourses}
+                  textBoxes={[[3, true], [3, true], [4, false]]}
+                  courseChecks={[this.isLevel400, this.isLevel300, this.isLevelExtra]}
+                  categoryTitles={categoryTitles}
                   notes={notes}
                   hasInquiryCategory={true}
                   isSelected={this.state.selected} />
@@ -211,7 +223,7 @@ var MajorPost = React.createClass({
 
     changeTabView: function(isSelected) {
         this.setState({selected: isSelected});
-    }, 
+    },
 
     setIfCompleted: function() {
         var isCompleted = this.refs.post.state.creditCount >= 8.0;
@@ -237,7 +249,7 @@ var MajorPost = React.createClass({
 
     render: function() {
 
-        var categoryTitles = ['Any 400-level CSC course, BCB410H, BCB420H, BCB430Y (0.5 FCEs)', 
+        var categoryTitles = ['Any 400-level CSC course, BCB410H, BCB420H, BCB430Y (0.5 FCEs)',
                               'Any 300+ level CSC course, BCB410H, BCB420H, BCB430Y, ECE385H, ECE489H (1.0 FCEs)',
                               'Any of the following: 200+ level CSC course; MAT: 221/223/240, 235/237/257, any 300+ \
                                except for 329, 390, & 391; STA: 248, 261, any 300+; ECE: 385H/489H; BCB: 410H/420H/430Y \
@@ -246,22 +258,22 @@ var MajorPost = React.createClass({
                      to fulfill program requirements'];
 
         var firstYearCourses = [['csc108'], ['csc148'], ['csc165', 'csc240'], ['mat135', 'mat136', 'mat137', 'mat157']];
-        var secondYearCourses = [['csc207'], ['csc236', 'csc240'], ['csc258'], ['csc263', 'csc265'], 
+        var secondYearCourses = [['csc207'], ['csc236', 'csc240'], ['csc258'], ['csc263', 'csc265'],
                                 ['sta247', 'sta255', 'sta257']];
         var laterYearCourses = [];
 
         return (
-            <Post postType='major' 
+            <Post postType='major'
                   ref='post'
-                  firstYearCourses={firstYearCourses} 
-                  secondYearCourses={secondYearCourses} 
+                  firstYearCourses={firstYearCourses}
+                  secondYearCourses={secondYearCourses}
                   laterYearCourses={laterYearCourses}
-                  textBoxes={[[1, true], [2, true], [3, false]]} 
-                  courseChecks={[this.isLevel400, this.isLevel300, this.isLevelExtra]} 
+                  textBoxes={[[1, true], [2, true], [3, false]]}
+                  courseChecks={[this.isLevel400, this.isLevel300, this.isLevelExtra]}
                   categoryTitles={categoryTitles}
                   notes={notes}
-                  hasInquiryCategory={true} 
-                  isSelected={this.state.selected} /> 
+                  hasInquiryCategory={true}
+                  isSelected={this.state.selected} />
         );
     }
 });
@@ -277,7 +289,7 @@ var MinorPost = React.createClass({
 
     changeTabView: function(isSelected) {
         this.setState({selected: isSelected});
-    }, 
+    },
 
     setIfCompleted: function() {
         var isCompleted = this.refs.post.state.creditCount >= 4.0;
@@ -304,17 +316,17 @@ var MinorPost = React.createClass({
         var laterYearCourses = [];
 
         return (
-            <Post postType='minor' 
+            <Post postType='minor'
                   ref='post'
-                  firstYearCourses={firstYearCourses} 
-                  secondYearCourses={secondYearCourses} 
+                  firstYearCourses={firstYearCourses}
+                  secondYearCourses={secondYearCourses}
                   laterYearCourses={laterYearCourses}
-                  textBoxes={[[3, false]]} 
-                  courseChecks={[this.isLevelExtra]} 
+                  textBoxes={[[3, false]]}
+                  courseChecks={[this.isLevelExtra]}
                   categoryTitles={categoryTitles}
                   notes={notes}
-                  hasInquiryCategory={false} 
-                  isSelected={this.state.selected} /> 
+                  hasInquiryCategory={false}
+                  isSelected={this.state.selected} />
         );
     }
 });

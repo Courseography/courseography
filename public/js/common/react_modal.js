@@ -51,11 +51,24 @@ var Description = React.createClass({
         };
     },
 
-    componentDidMount: function(){
-        //This loads the course json
+    componentDidMount: function() {
+        this.refresh();
+    },
+
+    componentWillUpdate: function (newProps, newState) {
+        if (newProps.course !== this.props.course) {
+            this.refresh(newProps.course);
+        }
+    },
+
+    // This loads the course json
+    refresh: function(newCourse) {
+        if (newCourse === undefined) {
+            newCourse = this.props.course;
+        }
         $.ajax({
             url: 'course',
-            data: {name: this.props.course},
+            data: {name: newCourse},
             dataType: 'json',
             success: function(data) {
                 if (this.isMounted()) {
@@ -72,7 +85,6 @@ var Description = React.createClass({
                 console.error('course-info', status, err.toString());
             }.bind(this)
         });
-
     },
 
     render: function() {
