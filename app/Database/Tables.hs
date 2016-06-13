@@ -64,7 +64,7 @@ Courses
     videoUrls [T.Text]
     deriving Show
 
-Lecture json
+Lecture
     code T.Text
     session T.Text
     section T.Text
@@ -190,6 +190,7 @@ data Course =
            } deriving (Show, Generic)
 
 instance ToJSON Course
+instance ToJSON Lecture
 instance ToJSON Session
 instance ToJSON Time
 

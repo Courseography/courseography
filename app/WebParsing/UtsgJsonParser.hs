@@ -1,4 +1,4 @@
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE OverloadedStrings, ScopedTypeVariables #-}
 
 
 module WebParsing.UtsgJsonParser
@@ -23,17 +23,54 @@ import Data.Traversable
 import Data.Aeson.Types
 import qualified Data.HashMap.Strict as HM
 
-import Data.Map (Map)
-
  -- | URL to UofT courses (stored as JSON string)
 jsonURL :: String
-jsonURL = "https://timetable.iit.artsci.utoronto.ca/api/courses?code=ABS210"
+jsonURL = "https://timetable.iit.artsci.utoronto.ca/api/courses?code=csc"
+
+-- | Converts 24-hour time into a double
+-- | Assumes times are rounded to the nearest hour
+getHourVal :: String -> Double
+getHourVal time = (read $ take 2 time :: Double) + (/) (read $ drop 3 time :: Double) 60
+
+-- | Converts a weekday into a double
+-- | Monday to Friday becomes 0.0 to 4.0
+getDayVal :: String -> Double
+getDayVal day = case day of
+                    "MO" -> 0.0
+                    "TU" -> 1.0
+                    "WE" -> 2.0
+                    "TH" -> 3.0
+                    "FR" -> 4.0
+
+-- | Takes a day and start/end times then generates a set of 30-minute timeslots
+getTimeSlots :: String -> String -> String -> [Time]
+getTimeSlots day start end = do
+    let dayDbl = getDayVal day
+        startDbl = getHourVal start
+        endDbl = getHourVal end
+    [Time [dayDbl, timeDbl] | timeDbl <- [startDbl, (startDbl + 0.5) .. (endDbl - 0.5)]]
 
  -- | Decode JSON string into hash map object
 getJSON :: IO (Maybe DB)
 getJSON = do
   resp <- simpleHttp jsonURL
   return $ (decode resp :: Maybe DB)
+
+instance FromJSON Lecture where
+  parseJSON = withObject "Lecture" $ \o -> do
+    code <- o .: "code"
+    session <- o .: "section"
+    meetings <- o .: "meetings" -- :: Parser (HM.HashMap String Value))
+    return $ Lecture code
+                     session
+                     section
+                     ([] :: [Time])
+                     1
+                     ""
+                     1
+                     1
+                     1
+                     ""
 
 instance FromJSON Courses where
   parseJSON = withObject "Courses" $ \o -> do
@@ -64,7 +101,7 @@ instance FromJSON Courses where
                      videoUrls
 
 
-newtype DB = DB (Map String Courses)
+newtype DB = DB (HM.HashMap String Lecture)
   deriving Show
 
 instance FromJSON DB where
@@ -72,9 +109,9 @@ instance FromJSON DB where
 
 insertAllCourses = do
     coursesLst <- getJSON
-    return $ case coursesLst of
-                (Just (DB courses)) -> courses
-                otherwise -> (() Map String Courses)
+    case coursesLst of
+            (Just (DB courses)) -> runSqlite databasePath $ insertMany_ $ HM.elems courses
+            otherwise -> print "Failed to insert courses"
 
 
 
