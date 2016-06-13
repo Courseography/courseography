@@ -139,8 +139,13 @@ var Graph = React.createClass({
 
     componentDidMount: function () {
         this.getGraph();
-        document.body.addEventListener('keydown', this.onKeyDown);
-        document.body.addEventListener('wheel', this.onWheel);
+        document.getElementById('react-graph').addEventListener('keydown', this.onKeyDown);
+        document.getElementById('react-graph').addEventListener('wheel', this.onWheel);
+    },
+
+    componentDidUnmount: function () {
+        document.getElementById('react-graph').addEventListener('keydown', this.onKeyDown);
+        document.getElementById('react-graph').addEventListener('wheel', this.onWheel);
     },
 
     getGraph: function (graphName) {
