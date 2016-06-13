@@ -49,7 +49,7 @@ Department json
     code [T.Text]
     name T.Text
 
-Courses json
+Courses
     code T.Text
     title T.Text Maybe
     description T.Text Maybe
@@ -164,12 +164,6 @@ data Session =
     Session { lectures :: [Lecture],
               tutorials :: [Tutorial]
             } deriving (Show, Generic)
-
-data Course2 =
-    Course2 { code :: T.Text,
-             session :: T.Text,
-             section :: T.Text
-           } deriving (Show, Generic)
 
 -- | A Course.
 -- each element of prereqs can be one of three things:

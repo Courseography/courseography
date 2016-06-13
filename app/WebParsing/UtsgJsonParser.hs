@@ -2,7 +2,7 @@
 
 
 module WebParsing.UtsgJsonParser
-     (getAllCourses) where
+     (insertAllCourses) where
 
 import Data.Aeson ((.:), (.:?), decode, FromJSON(..), Value(..))
 import Data.List
@@ -18,7 +18,7 @@ import Config (databasePath)
 import Network.HTTP.Conduit (simpleHttp)
 import Control.Applicative ((<$>), (<*>))
 
-import Data.ByteString.Lazy
+import Data.ByteString.Lazy hiding (take, foldl, map, elem)
 import Data.Traversable
 import Data.Aeson.Types
 import qualified Data.HashMap.Strict as HM
@@ -27,7 +27,7 @@ import Data.Map (Map)
 
  -- | URL to UofT courses (stored as JSON string)
 jsonURL :: String
-jsonURL = "https://timetable.iit.artsci.utoronto.ca/api/courses?code=CSC108"
+jsonURL = "https://timetable.iit.artsci.utoronto.ca/api/courses?code=ABS210"
 
  -- | Decode JSON string into hash map object
 getJSON :: IO (Maybe DB)
@@ -35,18 +35,47 @@ getJSON = do
   resp <- simpleHttp jsonURL
   return $ (decode resp :: Maybe DB)
 
-instance FromJSON Course2 where
- parseJSON (Object v) =
-    Course2 <$> v .: "code"
-            <*> v .: "courseTitle"
-            <*> v .: "courseDescription"
- parseJSON _ = mzero
+instance FromJSON Courses where
+  parseJSON = withObject "Courses" $ \o -> do
+    code <- o .: "code"
+    title  <- o .: "courseTitle"
+    description  <- o .: "courseDescription"
+    meetingsObj <- (o .: "meetings" :: Parser (HM.HashMap String Value))
+    let manualTutorialEnrolment = elem "TUT" $ map (take 3) $ M.keys meetingsObj
+        manualPracticalEnrolment = elem "PRA" $ map (take 3) $ M.keys meetingsObj
+    prereqString <- o .: "prerequisite"
+    let prereqs = parsePrerequisites $ Just prereqString
+    exclusions <- o .: "exclusion"
+    breadth <- o .: "breadthCategories"
+    distribution <- o .: "distributionCategories"
+    coreqs <- o .: "corequisite"
+    let videoUrls = []
+    return $ Courses code
+                     (Just title)
+                     (Just description)
+                     (Just manualTutorialEnrolment)
+                     (Just manualPracticalEnrolment)
+                     prereqs
+                     exclusions
+                     (Just breadth)
+                     (Just distribution)
+                     (Just prereqString)
+                     (Just coreqs)
+                     videoUrls
 
-newtype DB = DB (Map String Course2)
+
+newtype DB = DB (Map String Courses)
   deriving Show
 
 instance FromJSON DB where
   parseJSON val = DB <$> parseJSON val
 
-getAllCourses = undefined
+insertAllCourses = do
+    coursesLst <- getJSON
+    return $ case coursesLst of
+                (Just (DB courses)) -> courses
+                otherwise -> (() Map String Courses)
+
+
+
 
