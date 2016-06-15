@@ -155,7 +155,7 @@ var Graph = React.createClass({
         document.getElementById('react-graph').addEventListener('wheel', this.onWheel);
     },
 
-    componentDidUnmount: function () {
+    componentWillUnmount: function () {
         document.getElementById('react-graph').addEventListener('keydown', this.onKeyDown);
         document.getElementById('react-graph').addEventListener('wheel', this.onWheel);
     },
