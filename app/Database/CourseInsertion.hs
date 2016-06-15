@@ -43,12 +43,15 @@ saveGraphJSON jsonStr nameStr = do
                 insertMany_ $ map (\path -> path {pathGraph = gId}) paths
             return $ toResponse $ ("Success" :: String)
 
+
 -- | Check for duplicate key, then if unique, insert course into Courses table
+--safeInsertCourse :: Course -> ReaderT SqlBackend m (Maybe Course) -- this screws up 'insert'
+--safeInsertCourse :: Course -> ReaderT SqlBackend m () -- this screws up 'insert'
 safeInsertCourse course = do
-    maybeCourse <- selectFirst [CoursesCode ==. (name course)] [] -- maybeCourse :: [Entity Courses]
+    maybeCourse <- selectFirst [CoursesCode ==. (name course)] [] -- maybeCourse :: [Entity Courses] ?
     case maybeCourse of
         Nothing -> insertCourse course
-        Just _ -> return ()
+        Just _ -> return () --'Nothing' doesn't work here.
 
 
 --newCourse c = do 
