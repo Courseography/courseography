@@ -18,14 +18,16 @@ import qualified Data.Text as T
 import qualified Data.ByteString.Lazy.Char8 as BSL
 import Happstack.Server.SimpleHTTP
 import Control.Monad.IO.Class (MonadIO)
+import Control.Monad (when) --Kael 
 import Control.Monad.Trans.Reader (ReaderT)
-import Data.Maybe (fromMaybe)
+import Data.Maybe (fromMaybe) 
 import Config (databasePath)
-import Database.Persist.Sqlite (selectFirst, fromSqlKey, toSqlKey, insertMany_, insert_, insert, checkUnique, SqlBackend, (=.), (==.), updateWhere, runSqlite)
+import Database.Persist -- Kael
+import Database.Persist.Sqlite (selectFirst, fromSqlKey, toSqlKey, insertMany_, insert_, insert, repsert, SqlBackend, (=.), (==.), updateWhere, runSqlite)
 import Database.Tables
 import Data.Aeson
-import Control.Exception -- Kael
-import Data.Dynamic  -- Kael
+import Control.Monad.IO.Class (liftIO) -- Kael
+import Database.Persist.Sqlite (get) -- Kael
 
 -- | Inserts SVG graph data into Texts, Shapes, and Paths tables
 saveGraphJSON :: String -> String -> IO Response
@@ -41,40 +43,24 @@ saveGraphJSON jsonStr nameStr = do
                 insertMany_ $ map (\path -> path {pathGraph = gId}) paths
             return $ toResponse $ ("Success" :: String)
 
---testUnique c = runSqlite databasePath $ do 
---    result <- checkUnique c
---    return result
-
--- | Handle Sql problems re unique constraints
-catchSql :: IO a -> (SqlError -> IO a) -> IO a
-catchSql = catchDyn
-
-{- | Like 'catchSql', with the order of arguments reversed. -}
-handleSql :: (SqlError -> IO a) -> IO a -> IO a
-handleSql = flip catchSql
+-- | Check for duplicate key, then if unique, insert course into Courses table
+safeInsertCourse course = do
+    maybeCourse <- selectFirst [CoursesCode ==. (name course)] [] -- maybeCourse :: [Entity Courses]
+    case maybeCourse of
+        Nothing -> insertCourse course
+        Just _ -> return ()
 
 
--- | Test handle Sql exceptions, to debug insertion error.
--- | handleSql runs second argument, if errors does first arg.
-safeInsert course = handleSql print $ do 
-    insertCourse course 
-  --insert_ $ Courses (name course)
-  --                    (title course)
-  --                    (description course)
-  --                    (manualTutorialEnrolment course)
-  --                    (manualPracticalEnrolment course)
-  --                    (prereqs course)
-  --                    (exclusions course)
-  --                    (breadth course)
-  --                    (distribution course)
-  --                    (prereqString course)
-  --                    (coreqs course)
-  --                    []
+--newCourse c = do 
+--    case existingCourse of
+--        ReaderT SqlBackend m0 Nothing -> True
+--        _ -> False
+    --where existingCourse = get (CoursesKey c) 
 
 -- | Inserts course into the Courses  table.
 insertCourse :: MonadIO m => Course -> ReaderT SqlBackend m ()
 insertCourse course = do 
-    --unique <- runSqlite databasePath $ checkUnique course
+    liftIO $ print $ (name course)
     insert_ $ Courses (name course) -- idea: insertKey?
                       (title course)
                       (description course)
