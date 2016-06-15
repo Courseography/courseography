@@ -107,6 +107,18 @@ function parseCourse(s, prefix) {
 }
 
 
+function Button(props) {
+    return (
+        <div id={props.divId} className='graph-control-button'>
+        <img alt={props.altId}
+        onMouseDown={props.mouseDown}
+        onMouseUp={props.mouseUp}
+        src={props.sourceImg}/>
+        </div>
+    );
+}
+
+
 function renderReactGraph() {
     'use strict';
     return ReactDOM.render(
@@ -526,7 +538,7 @@ var Graph = React.createClass({
                     sourceImg="static/res/ico/left.png"
                     mouseDown={() => this.onButtonPress(this.panDirection, 'left')}
                     mouseUp={this.onButtonRelease}/>
-                <Button 
+                <Button
                     divId='reset-button'
                     altId='reset'
                     sourceImg="static/res/ico/reset.png"
@@ -568,19 +580,6 @@ var Graph = React.createClass({
     }
 });
 
-var Button = React.createClass({
-
-    render: function() {
-        return (
-            <div id={this.props.divId} className='graph-control-button'>
-            <img alt={this.props.altId}
-            onMouseDown={this.props.mouseDown}
-            onMouseUp={this.props.mouseUp}
-            src={this.props.sourceImg}/>
-            </div>
-        );
-    }
-});
 
 // This now uses the new syntax for a stateless React component
 // (component with only a render method).
