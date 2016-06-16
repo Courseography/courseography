@@ -52,12 +52,24 @@ addPostToDatabase tags = do
 
 getPostType :: T.Text -> String
 getPostType postCode = 
-    let codeSection = T.unpack $ T.takeEnd 3 $ T.take 5 postCode
+    let codeSection = extractPostType (T.unpack postCode)
     in
         case codeSection of
             "SPE" -> "Specialist"
             "MAJ" -> "Major"
             "MIN" ->  "Minor"
+
+extractPostType :: [Char] -> [Char]
+extractPostType postCode = do
+    let parsed = P.parse findPostType "(source)" postCode
+    case parsed of 
+        Right name -> name
+        Left _ -> ""
+
+findPostType :: P.Parsec String () String
+findPostType = do
+   P.string "AS"
+   P.many1 P.letter
 
 getDepartmentName :: [Char] -> T.Text -> [Char]
 getDepartmentName fullPostName postType = do
