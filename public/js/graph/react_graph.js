@@ -151,12 +151,13 @@ var Graph = React.createClass({
 
     componentDidMount: function () {
         this.getGraph();
-        document.getElementById('react-graph').addEventListener('keydown', this.onKeyDown);
+        // can't detect keydown event when adding event listener to react-graph
+        document.body.addEventListener('keydown', this.onKeyDown);
         document.getElementById('react-graph').addEventListener('wheel', this.onWheel);
     },
 
     componentWillUnmount: function () {
-        document.getElementById('react-graph').addEventListener('keydown', this.onKeyDown);
+        document.body.addEventListener('keydown', this.onKeyDown);
         document.getElementById('react-graph').addEventListener('wheel', this.onWheel);
     },
 
@@ -405,19 +406,19 @@ var Graph = React.createClass({
         );
     },
 
-    incrementZoom: function(increase) {
+    incrementZoom: function(increase, zoomFactorRate) {
         if (increase) {
             if (this.state.zoomFactor > 0.5) {
-                this.setState({zoomFactor: this.state.zoomFactor - 0.05});
+                this.setState({zoomFactor: this.state.zoomFactor - zoomFactorRate});
             }
         } else {
             if (this.state.zoomFactor < 1.1) {
-                this.setState({zoomFactor: this.state.zoomFactor + 0.05});
+                this.setState({zoomFactor: this.state.zoomFactor + zoomFactorRate});
             }
         }
     },
 
-    panDirection: function(direction) {
+    panDirection: function(direction, panFactorRate) {
         // initial calculation for poisition of each edge
         // bottom and right edges require further calculation performed below
         var topEdge = -(this.state.verticalPanFactor);
@@ -439,13 +440,13 @@ var Graph = React.createClass({
         rightEdge /= autoResizeFactor;
 
         if (direction === 'up' && topEdge < 0) {
-            this.setState({verticalPanFactor: this.state.verticalPanFactor - 10});
+            this.setState({verticalPanFactor: this.state.verticalPanFactor - panFactorRate});
         } else if (direction === 'left' && leftEdge < 0) {
-            this.setState({horizontalPanFactor: this.state.horizontalPanFactor - 10});
+            this.setState({horizontalPanFactor: this.state.horizontalPanFactor - panFactorRate});
         } else if (direction ==='down' && bottomEdge > containerHeight) {
-            this.setState({verticalPanFactor: this.state.verticalPanFactor + 10});
+            this.setState({verticalPanFactor: this.state.verticalPanFactor + panFactorRate});
         } else if (direction === 'right' && rightEdge > containerWidth) {
-            this.setState({horizontalPanFactor: this.state.horizontalPanFactor + 10});
+            this.setState({horizontalPanFactor: this.state.horizontalPanFactor + panFactorRate});
         }
     },
 
@@ -457,9 +458,9 @@ var Graph = React.createClass({
         });
     },
 
-    onButtonPress: function(zoomOrPanFunction, direction) {
-        zoomOrPanFunction(direction);
-        var mouseIsDown = setInterval(() => zoomOrPanFunction(direction), 500);
+    onButtonPress: function(zoomOrPanFunction, direction, rateOfChange) {
+        zoomOrPanFunction(direction, rateOfChange);
+        var mouseIsDown = setInterval(() => zoomOrPanFunction(direction, rateOfChange), 500);
         this.setState({mouseDown: mouseIsDown});
     },
 
@@ -470,21 +471,21 @@ var Graph = React.createClass({
 
     onKeyDown: function(event) {
         if (event.keyCode == 39) {
-            this.panDirection('right');
+            this.panDirection('right', 5);
         } else if (event.keyCode == 40) {
-            this.panDirection('down');
+            this.panDirection('down', 5);
         } else if (event.keyCode == 37) {
-            this.panDirection('left');
+            this.panDirection('left', 5);
         } else if (event.keyCode == 38) {
-            this.panDirection('up');
+            this.panDirection('up', 5);
         }
     },
 
     onWheel: function(event) {
-        if (event.deltaY > 0) {
-            this.incrementZoom(true);
-        } else if (event.deltaY < 0) {
-            this.incrementZoom(false);
+        if (event.deltaY < 0) {
+            this.incrementZoom(true, 0.005);
+        } else if (event.deltaY > 0) {
+            this.incrementZoom(false, 0.005);
         }
     },
 
@@ -506,37 +507,37 @@ var Graph = React.createClass({
                     divId='zoom-in-button'
                     altId='zoom-in'
                     sourceImg="static/res/ico/in.png"
-                    mouseDown={() => this.onButtonPress(this.incrementZoom, true)}
+                    mouseDown={() => this.onButtonPress(this.incrementZoom, true, 0.05)}
                     mouseUp={this.onButtonRelease}/>
                 <Button
                     divId='zoom-out-button'
                     altId='zoom-out'
                     sourceImg="static/res/ico/out.png"
-                    mouseDown={() => this.onButtonPress(this.incrementZoom, false)}
+                    mouseDown={() => this.onButtonPress(this.incrementZoom, false, 0.05)}
                     mouseUp={this.onButtonRelease}/>
                 <Button
                     divId='pan-up-button'
                     altId='pan-up'
                     sourceImg="static/res/ico/up.png"
-                    mouseDown={() => this.onButtonPress(this.panDirection, 'up')}
+                    mouseDown={() => this.onButtonPress(this.panDirection, 'up', 10)}
                     mouseUp={this.onButtonRelease}/>
                 <Button
                     divId='pan-down-button'
                     altId='pan-down'
                     sourceImg="static/res/ico/down.png"
-                    mouseDown={() => this.onButtonPress(this.panDirection, 'down')}
+                    mouseDown={() => this.onButtonPress(this.panDirection, 'down', 10)}
                     mouseUp={this.onButtonRelease}/>
                 <Button
                     divId='pan-right-button'
                     altId='pan-right'
                     sourceImg="static/res/ico/right.png"
-                    mouseDown={() => this.onButtonPress(this.panDirection, 'right')}
+                    mouseDown={() => this.onButtonPress(this.panDirection, 'right', 10)}
                     mouseUp={this.onButtonRelease}/>
                 <Button
                     divId='pan-left-button'
                     altId='pan-left'
                     sourceImg="static/res/ico/left.png"
-                    mouseDown={() => this.onButtonPress(this.panDirection, 'left')}
+                    mouseDown={() => this.onButtonPress(this.panDirection, 'left', 10)}
                     mouseUp={this.onButtonRelease}/>
                 <Button
                     divId='reset-button'
