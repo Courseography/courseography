@@ -18,7 +18,6 @@ import Config (databasePath)
 import Network.HTTP.Conduit (simpleHttp)
 import Control.Applicative ((<$>), (<*>))
 
-import Data.ByteString.Lazy hiding (take, foldl, map, elem)
 import Data.Traversable
 import Data.Aeson.Types
 import qualified Data.HashMap.Strict as HM
@@ -56,21 +55,32 @@ getJSON = do
   resp <- simpleHttp jsonURL
   return $ (decode resp :: Maybe DB)
 
-instance FromJSON Lecture where
-  parseJSON = withObject "Lecture" $ \o -> do
-    code <- o .: "code"
-    session <- o .: "section"
-    meetings <- o .: "meetings" -- :: Parser (HM.HashMap String Value))
-    return $ Lecture code
-                     session
-                     section
-                     ([] :: [Time])
-                     1
-                     ""
-                     1
-                     1
-                     1
-                     ""
+newtype Meeting = Meeting [(Either Lecture Tutorial)]
+  deriving Show
+
+instance FromJSON Meeting where
+    parseJSON = withObject "Meeting" $ \o -> do
+      code <- o .: "code"
+      session <- o .: "section"
+      meetings <- (o .: "meetings" :: Parser (HM.HashMap String Object))
+      return $ Meeting $ map (\(section, sectionHash) -> let cap = fromJust $ HM.lookup "enrollmentCapacity" sectionHash
+                                                         in
+                                                         if (take 3 section) == "LEC"
+                                                         then Left $ Lecture code
+                                                                             session
+                                                                             (T.pack section)
+                                                                             ([] :: [Time])
+                                                                             cap
+                                                                             ""
+                                                                             1
+                                                                             1
+                                                                             1
+                                                                             ""
+                                                        else Right $ Tutorial code
+                                                                              (Just $ T.pack section)
+                                                                              session
+                                                                              ([] :: [Time]))
+                            (HM.toList meetings)
 
 instance FromJSON Courses where
   parseJSON = withObject "Courses" $ \o -> do
@@ -101,7 +111,7 @@ instance FromJSON Courses where
                      videoUrls
 
 
-newtype DB = DB (HM.HashMap String Lecture)
+newtype DB = DB (HM.HashMap String Meeting)
   deriving Show
 
 instance FromJSON DB where
@@ -110,7 +120,8 @@ instance FromJSON DB where
 insertAllCourses = do
     coursesLst <- getJSON
     case coursesLst of
-            (Just (DB courses)) -> runSqlite databasePath $ insertMany_ $ HM.elems courses
+            --(Just (DB courses)) -> runSqlite databasePath $ insertMany_ $ HM.elems courses
+            (Just (DB courses)) -> print $ HM.elems courses
             otherwise -> print "Failed to insert courses"
 
 
