@@ -62,25 +62,29 @@ instance FromJSON Meeting where
     parseJSON = withObject "Meeting" $ \o -> do
       code <- o .: "code"
       session <- o .: "section"
-      meetings <- (o .: "meetings" :: Parser (HM.HashMap String Object))
-      return $ Meeting $ map (\(section, sectionHash) -> let cap = fromJust $ HM.lookup "enrollmentCapacity" sectionHash
+      meetings <- (o .: "meetings" :: Parser (HM.HashMap String (HM.HashMap String Value)))
+      return $ Meeting $ map (\(section, sectionHash) -> let (String cap) = fromJust $ HM.lookup "enrollmentCapacity" sectionHash
+                                                             (String wait') = fromJust $ HM.lookup "waitlist" sectionHash
+                                                             wait = if (T.unpack wait') == "Y" then 0 else -1
+                                                             enrol = 0
+                                                             extra = 0
                                                          in
                                                          if (take 3 section) == "LEC"
                                                          then Left $ Lecture code
                                                                              session
                                                                              (T.pack section)
                                                                              ([] :: [Time])
-                                                                             cap
+                                                                             (read $ T.unpack cap :: Int)
                                                                              ""
-                                                                             1
-                                                                             1
-                                                                             1
+                                                                             enrol
+                                                                             wait
+                                                                             extra
                                                                              ""
                                                         else Right $ Tutorial code
                                                                               (Just $ T.pack section)
                                                                               session
                                                                               ([] :: [Time]))
-                            (HM.toList meetings)
+                             (HM.toList meetings)
 
 instance FromJSON Courses where
   parseJSON = withObject "Courses" $ \o -> do
