@@ -64,7 +64,10 @@ safeInsertCourse course = do
 insertCourse :: MonadIO m => Course -> ReaderT SqlBackend m ()
 insertCourse course = do 
     liftIO $ print $ (name course)
-    insert_ $ Courses (name course) -- idea: insertKey?
+
+    maybeCourse <- selectFirst [CoursesCode ==. (name course)] [] -- maybeCourse :: [Entity Courses] ?
+    case maybeCourse of
+        Nothing -> insert_ $ Courses (name course) -- idea: insertKey?
                       (title course)
                       (description course)
                       (manualTutorialEnrolment course)
@@ -76,6 +79,21 @@ insertCourse course = do
                       (prereqString course)
                       (coreqs course)
                       []
+
+        Just _ -> return ()
+
+    --insert_ $ Courses (name course) -- idea: insertKey?
+    --                  (title course)
+    --                  (description course)
+    --                  (manualTutorialEnrolment course)
+    --                  (manualPracticalEnrolment course)
+    --                  (prereqs course)
+    --                  (exclusions course)
+    --                  (breadth course)
+    --                  (distribution course)
+    --                  (prereqString course)
+    --                  (coreqs course)
+    --                  []
       
 -- | Updates the manualTutorialEnrolment field of the given course.
 setTutorialEnrolment :: MonadIO m => T.Text -> Bool -> ReaderT SqlBackend m ()
