@@ -223,11 +223,23 @@ graphContainer = do
     ".highlight-nodes" ? do
         backgroundColor grey
     ".graph-control-button" ? do
+        textAlign $ alignSide sideCenter
+        backgroundColor white
+        border solid (px 1) purple10
+        "border-radius" -: "6px"
+        fontSize (px 16)
+        fontColor purple10
         cursor pointer
         display inlineBlock
-        width (px 24)
-        height (px 24)
+        width (px 25)
+        height (px 25)
         position absolute
+        ":hover" & do
+            backgroundColor purple8
+            fontColor white
+        ":active" & do
+            backgroundColor purple10
+            fontColor white
     "#zoom-in-button" ? do
         top (px 85)
         right (px 31)
@@ -247,9 +259,9 @@ graphContainer = do
         top (px 30)
         right (px 55)
     "#reset-button" ? do
-        width (px 48)
+        width (px 49)
         top (px 111)
-        right (px 33)
+        right (px 31)
 
 sidebarCSS :: Css
 sidebarCSS = do

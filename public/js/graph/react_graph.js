@@ -109,11 +109,9 @@ function parseCourse(s, prefix) {
 
 function Button(props) {
     return (
-        <div id={props.divId} className='graph-control-button'>
-        <img alt={props.altId}
+        <div id={props.divId} className='graph-control-button'
         onMouseDown={props.mouseDown}
-        onMouseUp={props.mouseUp}
-        src={props.sourceImg}/>
+        onMouseUp={props.mouseUp}>{props.text}
         </div>
     );
 }
@@ -303,9 +301,9 @@ var Graph = React.createClass({
         var courseId = event.currentTarget.id;
         var currentNode = this.refs.nodes.refs[courseId];
         currentNode.focusPrereqs(this);
-				
+
         this.clearAllTimeouts();
-			
+
         var infoBox = this.refs.infoBox;
 
         var xPos = currentNode.props.JSON.pos[0];
@@ -331,24 +329,24 @@ var Graph = React.createClass({
         var courseId = event.currentTarget.id;
         var currentNode = this.refs.nodes.refs[courseId];
         currentNode.unfocusPrereqs(this);
-				
+
         var infoBox = this.refs.infoBox;
 
         var timeout = setTimeout(function () {
                 infoBox.setState({showInfobox: false});
         }, 400);
-        
+
 
         this.setState({timeouts: this.state.timeouts.concat(timeout)});
     },
-    
+
     infoBoxMouseEnter: function () {
         this.clearAllTimeouts();
-			
+
         var infoBox = this.refs.infoBox;
         infoBox.setState({showInfobox: true});
     },
-    
+
     infoBoxMouseLeave: function () {
         var infoBox = this.refs.infoBox;
 
@@ -358,7 +356,7 @@ var Graph = React.createClass({
 
         this.setState({timeouts: this.state.timeouts.concat(timeout)});
     },
-    
+
     infoBoxMouseClick: function () {
         var infoBox = this.refs.infoBox;
         var modal = this.refs.modal;
@@ -385,7 +383,7 @@ var Graph = React.createClass({
 
         $(this.refs.modal.getDOMNode()).modal();
     },
-    
+
     // Reset graph
     reset: function () {
         this.setFCECount(0);
@@ -429,7 +427,7 @@ var Graph = React.createClass({
         // size of container
         var containerWidth = document.getElementById("react-graph").clientWidth;
         var containerHeight = document.getElementById("react-graph").clientHeight;
-        
+
         // if the graph does not fit in its container, it is resized by the inverse factor
         // of the greater of these two ratios.
         var autoResizeFactor;
@@ -453,7 +451,7 @@ var Graph = React.createClass({
     resetZoomAndPan: function() {
         this.setState({
             zoomFactor: 1,
-            verticalPanFactor: 0, 
+            verticalPanFactor: 0,
             horizontalPanFactor: 0
         });
     },
@@ -505,44 +503,37 @@ var Graph = React.createClass({
             <div>
                 <Button
                     divId='zoom-in-button'
-                    altId='zoom-in'
-                    sourceImg="static/res/ico/in.png"
+                    text="+"
                     mouseDown={() => this.onButtonPress(this.incrementZoom, true, 0.05)}
                     mouseUp={this.onButtonRelease}/>
                 <Button
                     divId='zoom-out-button'
-                    altId='zoom-out'
-                    sourceImg="static/res/ico/out.png"
+                    text="-"
                     mouseDown={() => this.onButtonPress(this.incrementZoom, false, 0.05)}
                     mouseUp={this.onButtonRelease}/>
                 <Button
                     divId='pan-up-button'
-                    altId='pan-up'
-                    sourceImg="static/res/ico/up.png"
+                    text="↑"
                     mouseDown={() => this.onButtonPress(this.panDirection, 'up', 10)}
                     mouseUp={this.onButtonRelease}/>
                 <Button
                     divId='pan-down-button'
-                    altId='pan-down'
-                    sourceImg="static/res/ico/down.png"
+                    text="↓"
                     mouseDown={() => this.onButtonPress(this.panDirection, 'down', 10)}
                     mouseUp={this.onButtonRelease}/>
                 <Button
                     divId='pan-right-button'
-                    altId='pan-right'
-                    sourceImg="static/res/ico/right.png"
+                    text="→"
                     mouseDown={() => this.onButtonPress(this.panDirection, 'right', 10)}
                     mouseUp={this.onButtonRelease}/>
                 <Button
                     divId='pan-left-button'
-                    altId='pan-left'
-                    sourceImg="static/res/ico/left.png"
+                    text="←"
                     mouseDown={() => this.onButtonPress(this.panDirection, 'left', 10)}
                     mouseUp={this.onButtonRelease}/>
                 <Button
                     divId='reset-button'
-                    altId='reset'
-                    sourceImg="static/res/ico/reset.png"
+                    text="Reset"
                     mouseDown={this.resetZoomAndPan}
                     mouseUp={this.onButtonRelease}/>
                 <Modal ref='modal' />
@@ -1225,7 +1216,7 @@ var InfoBox = React.createClass({
                 'y': parseFloat(this.state.yPos) + 30 / 2 + 6
             };
 
-            return (            
+            return (
                 <g id='infoBox' className='tooltip-group' style={gStyles} {... this.props}>
                     <rect {... rectAttrs} ></rect>
                     <text {... textAttrs} >
