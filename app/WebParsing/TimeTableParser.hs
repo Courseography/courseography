@@ -70,7 +70,7 @@ parseLinkText tags =
 -- from the table. Is is later converted into lecture or tutorial records by examinig the
 -- first letter of the section.
 data CourseSlot = CourseSlot {
-    slotCode :: T.Text,
+    slotCode :: T.Text, -- Kael
     slotSession :: T.Text,
     slotSection :: T.Text,
     slotTimeStr :: T.Text,

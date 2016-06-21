@@ -49,9 +49,9 @@ Department json
     code [T.Text]
     name T.Text
 
-Courses json sql=code
+Courses json
     code T.Text
-    Primary code 
+    Primary code
     title T.Text Maybe
     description T.Text Maybe
     manualTutorialEnrolment Bool Maybe
