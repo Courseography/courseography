@@ -205,15 +205,14 @@ resetCSS = "#resetButton" ? do
 graphContainer :: Css
 graphContainer = do
     "#react-graph" ? do
-        width (px 1210)
-        minHeight (px 700)
-        height (px 700)
+        "width" -: "calc(100% - 40px)"
+        height100
         overflow hidden
-        margin (px 10) (px 10) (px 10) (px 10)
+        margin0
         display inlineBlock
         position absolute
         textAlign $ alignSide sideCenter
-        "left" -: "40px"
+        left (px 40)
     "#react-graphRootSVG" ? do
         width100
         height100
@@ -223,7 +222,34 @@ graphContainer = do
         "shape-rendering" -: "geometricPrecision"
     ".highlight-nodes" ? do
         backgroundColor grey
-
+    ".graph-control-button" ? do
+        cursor pointer
+        display inlineBlock
+        width (px 24)
+        height (px 24)
+        position absolute
+    "#zoom-in-button" ? do
+        top (px 85)
+        right (px 31)
+    "#zoom-out-button" ? do
+        top (px 85)
+        right (px 55)
+    "#pan-up-button" ? do
+        top (px 5)
+        right (px 43)
+    "#pan-down-button" ? do
+        top (px 55)
+        right (px 43)
+    "#pan-right-button" ? do
+        top (px 30)
+        right (px 31)
+    "#pan-left-button" ? do
+        top (px 30)
+        right (px 55)
+    "#reset-button" ? do
+        width (px 48)
+        top (px 111)
+        right (px 33)
 
 sidebarCSS :: Css
 sidebarCSS = do
@@ -253,13 +279,13 @@ sidebarCSS = do
             backgroundColor grey1
             fontColor white
     "#container" ? do
-        width (pct 100)
-        height (px 700)
+        "height" -: "calc(100% - 100px)"
+        width100
         position relative
     "#sidebar" ? do
         display inlineBlock
         width (px 40)
-        height (pct 100)
+        height100
         float floatLeft
         backgroundColor purple8
         position absolute

@@ -31,7 +31,7 @@ import Data.String.Utils
 import Data.List
 import Config (databasePath)
 import Control.Monad (liftM)
-import Data.Aeson ((.=))
+import Data.Aeson ((.=), toJSON, object)
 import Data.Int (Int64)
 import Database.DataType
 import Svg.Builder
@@ -54,22 +54,27 @@ queryCourse str = do
 -- constructs and returns a Course value.
 returnCourse :: T.Text -> IO Course -- change t.text to courses key
 returnCourse lowerStr = runSqlite databasePath $ do
+<<<<<<< HEAD
     let courseStr = T.toUpper lowerStr --test
     sqlCourse :: [Entity Courses] <- selectList [CoursesCode ==. courseStr] []
+=======
+    let courseStr = T.toUpper lowerStr
+    sqlCourse :: [Entity Courses] <- selectList [CoursesCode ==. courseStr] [Asc CoursesCode]
+>>>>>>> 6ca924f469c73cba5b5a65b9ae7845b27d15fce1
     -- TODO: Just make one query for all lectures, then partition later.
     -- Same for tutorials.
     sqlLecturesFall    :: [Entity Lecture]   <- selectList
-        [LectureCode  ==. courseStr, LectureSession ==. "F"] []
+        [LectureCode  ==. courseStr, LectureSession ==. "F"] [Asc LectureSection]
     sqlLecturesSpring  :: [Entity Lecture]   <- selectList
-        [LectureCode  ==. courseStr, LectureSession ==. "S"] []
+        [LectureCode  ==. courseStr, LectureSession ==. "S"] [Asc LectureSection]
     sqlLecturesYear    :: [Entity Lecture]   <- selectList
-        [LectureCode  ==. courseStr, LectureSession ==. "Y"] []
+        [LectureCode  ==. courseStr, LectureSession ==. "Y"] [Asc LectureSection]
     sqlTutorialsFall   :: [Entity Tutorial]  <- selectList
-        [TutorialCode ==. courseStr, TutorialSession ==. "F"] []
+        [TutorialCode ==. courseStr, TutorialSession ==. "F"] [Asc TutorialSection]
     sqlTutorialsSpring :: [Entity Tutorial]  <- selectList
-        [TutorialCode ==. courseStr, TutorialSession ==. "S"] []
+        [TutorialCode ==. courseStr, TutorialSession ==. "S"] [Asc TutorialSection]
     sqlTutorialsYear   :: [Entity Tutorial]  <- selectList
-        [TutorialCode ==. courseStr, TutorialSession ==. "Y"] []
+        [TutorialCode ==. courseStr, TutorialSession ==. "Y"] [Asc TutorialSection]
     let fallSession   = buildSession sqlLecturesFall sqlTutorialsFall
         springSession = buildSession sqlLecturesSpring sqlTutorialsSpring
         yearSession   = buildSession sqlLecturesYear sqlTutorialsYear
@@ -102,8 +107,9 @@ returnLecture lowerStr sect session = runSqlite databasePath $ do
 buildCourse :: Maybe Session -> Maybe Session -> Maybe Session -> Courses -> Course
 buildCourse fallSession springSession yearSession course =
     Course (coursesBreadth course)
-           (coursesDescription course)
-           (coursesTitle course)
+           -- TODO: Remove the filter and allow double-quotes
+           (fmap (T.filter (/='\"')) (coursesDescription course))
+           (fmap (T.filter (/='\"')) (coursesTitle course))
            (coursesPrereqString course)
            fallSession
            springSession
@@ -166,9 +172,14 @@ getGraphJSON graphName =
                                              intersectsWithShape (rects ++ ellipses))
                                             texts
 
-                    result = createJSONResponse ["texts" .= (texts ++ regionTexts),
-                                                 "shapes" .= (rects ++ ellipses),
-                                                 "paths" .= (paths ++ regions)]
+                    result = createJSONResponse $
+                        object [
+                            ("texts", toJSON $ texts ++ regionTexts),
+                            ("shapes", toJSON $ rects ++ ellipses),
+                            ("paths", toJSON $ paths ++ regions),
+                            ("width", toJSON $ graphWidth $ entityVal graph),
+                            ("height", toJSON $ graphHeight $ entityVal graph)
+                        ]
 
                 return result
 
