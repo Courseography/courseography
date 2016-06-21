@@ -55,8 +55,18 @@ getJSON = do
   resp <- simpleHttp jsonURL
   return $ (decode resp :: Maybe DB)
 
-newtype Meeting = Meeting [(Either Lecture Tutorial)]
+newtype Test = Test T.Text
+    deriving Show
+
+newtype Meeting = Meeting [(Either Lecture Test)] -- Tutorial
   deriving Show
+
+lookupVal :: Value -> T.Text -> [T.Text]
+lookupVal (Object lst) val = map (\v -> case v of
+                                            (String s) -> s
+                                            _ -> "") $
+                                map (\(Object o) -> fromJust $ HM.lookup val o) $
+                                    map snd $ HM.toList lst
 
 instance FromJSON Meeting where
     parseJSON = withObject "Meeting" $ \o -> do
@@ -65,25 +75,34 @@ instance FromJSON Meeting where
       meetings <- (o .: "meetings" :: Parser (HM.HashMap String (HM.HashMap String Value)))
       return $ Meeting $ map (\(section, sectionHash) -> let (String cap) = fromJust $ HM.lookup "enrollmentCapacity" sectionHash
                                                              (String wait') = fromJust $ HM.lookup "waitlist" sectionHash
+                                                             schedule = fromJust $ HM.lookup "schedule" sectionHash
+                                                             dayLst = lookupVal schedule "meetingDay"
+                                                             startLst = lookupVal schedule "meetingStartTime"
+                                                             endLst = lookupVal schedule "meetingEndTime"
+                                                             zipTimes = zipWith3 (\day start end -> intercalate " " [(T.unpack day), (T.unpack start), (T.unpack end)])
+                                                                                 dayLst
+                                                                                 startLst
+                                                                                 endLst
+                                                             instructors = fromJust $ HM.lookup "instructors" sectionHash
+                                                             zipInstructors = zipWith (\firstN lastN -> intercalate " " [(T.unpack firstN), T.unpack lastN])
+                                                                                      (lookupVal instructors "firstName")
+                                                                                      (lookupVal instructors "lastName")
                                                              wait = if (T.unpack wait') == "Y" then 0 else -1
                                                              enrol = 0
                                                              extra = 0
                                                          in
-                                                         if (take 3 section) == "LEC"
+                                                         if (take 3 section) == "LEC2"
                                                          then Left $ Lecture code
                                                                              session
                                                                              (T.pack section)
                                                                              ([] :: [Time])
                                                                              (read $ T.unpack cap :: Int)
-                                                                             ""
+                                                                             (T.pack $ intercalate ", " zipInstructors)
                                                                              enrol
                                                                              wait
                                                                              extra
-                                                                             ""
-                                                        else Right $ Tutorial code
-                                                                              (Just $ T.pack section)
-                                                                              session
-                                                                              ([] :: [Time]))
+                                                                             (T.pack $ intercalate ", " zipTimes)
+                                                        else Right $ Test (T.pack $ intercalate ", " zipInstructors))
                              (HM.toList meetings)
 
 instance FromJSON Courses where
@@ -127,7 +146,3 @@ insertAllCourses = do
             --(Just (DB courses)) -> runSqlite databasePath $ insertMany_ $ HM.elems courses
             (Just (DB courses)) -> print $ HM.elems courses
             otherwise -> print "Failed to insert courses"
-
-
-
-
