@@ -45,17 +45,22 @@ retrieveCourse = liftIO . queryCourse . T.pack
 
 -- | Queries the database for all information about @course@, constructs a JSON object
 -- representing the course and returns the appropriate JSON response.
-queryCourse :: T.Text -> IO Response
+queryCourse :: T.Text -> IO Response -- change T.Text to courses Key
 queryCourse str = do
     courseJSON <- returnCourse str
     return $ createJSONResponse courseJSON
 
 -- | Queries the database for all information about @course@,
 -- constructs and returns a Course value.
-returnCourse :: T.Text -> IO Course
+returnCourse :: T.Text -> IO Course -- change t.text to courses key
 returnCourse lowerStr = runSqlite databasePath $ do
+<<<<<<< HEAD
+    let courseStr = T.toUpper lowerStr --test
+    sqlCourse :: [Entity Courses] <- selectList [CoursesCode ==. courseStr] []
+=======
     let courseStr = T.toUpper lowerStr
     sqlCourse :: [Entity Courses] <- selectList [CoursesCode ==. courseStr] [Asc CoursesCode]
+>>>>>>> 6ca924f469c73cba5b5a65b9ae7845b27d15fce1
     -- TODO: Just make one query for all lectures, then partition later.
     -- Same for tutorials.
     sqlLecturesFall    :: [Entity Lecture]   <- selectList
@@ -81,7 +86,7 @@ returnCourse lowerStr = runSqlite databasePath $ do
 -- a @course@, returns a Tutorial.
 returnTutorial :: T.Text -> T.Text -> T.Text -> IO (Maybe Tutorial)
 returnTutorial lowerStr sect session = runSqlite databasePath $ do
-    maybeEntityTutorials <- selectFirst [TutorialCode ==. T.toUpper lowerStr,
+    maybeEntityTutorials <- selectFirst [TutorialCode ==. T.toUpper lowerStr, -- will change if TutorialCode is a fk
                                          TutorialSection ==. Just sect,
                                          TutorialSession ==. session]
                                         []
@@ -91,7 +96,7 @@ returnTutorial lowerStr sect session = runSqlite databasePath $ do
 --  a @course@, returns a Lecture.
 returnLecture :: T.Text -> T.Text -> T.Text -> IO (Maybe Lecture)
 returnLecture lowerStr sect session = runSqlite databasePath $ do
-    maybeEntityLectures <- selectFirst [LectureCode ==. T.toUpper lowerStr,
+    maybeEntityLectures <- selectFirst [LectureCode ==. T.toUpper lowerStr, -- will change if LectureCode is a fk
                                         LectureSection ==. sect,
                                         LectureSession ==. session]
                                        []
@@ -201,8 +206,8 @@ getDeptCourses dept =
         let c = filter (startswith dept . T.unpack . coursesCode) $ map entityVal courses
         return $ map (buildTimes (map entityVal lecs) (map entityVal tuts)) c
     where
-        lecByCode course = filter (\lec -> lectureCode lec == coursesCode course)
-        tutByCode course = filter (\tut -> tutorialCode tut == coursesCode course)
+        lecByCode course = filter (\lec -> lectureCode lec == coursesCode course)  -- will change if lec is not same type as coursecode 
+        tutByCode course = filter (\tut -> tutorialCode tut == coursesCode course) -- will change if tut is not same type as coursecode
         buildTimes lecs tuts course =
             let fallLectures = filter (\lec -> lectureSession lec == "F") lecs
                 springLectures = filter (\lec -> lectureSession lec == "S") lecs

@@ -5,7 +5,7 @@
 Description: Functions that insert/update course information in the database.
 
 This module contains a bunch of functions related to inserting information
-into the database. These functions are used as helpers for the WebParsing module.
+into the database. These functions are used as helpers for the Webmodule.
 -}
 
 module Database.CourseInsertion
@@ -19,8 +19,9 @@ import qualified Data.ByteString.Lazy.Char8 as BSL
 import Happstack.Server.SimpleHTTP
 import Control.Monad.IO.Class (MonadIO)
 import Control.Monad.Trans.Reader (ReaderT)
-import Data.Maybe (fromMaybe)
+import Data.Maybe (fromMaybe) 
 import Config (databasePath)
+import Database.Persist --Kael
 import Database.Persist.Sqlite (selectFirst, fromSqlKey, toSqlKey, insertMany_, insert_, insert, SqlBackend, (=.), (==.), updateWhere, runSqlite)
 import Database.Tables
 import Data.Aeson
@@ -39,10 +40,13 @@ saveGraphJSON jsonStr nameStr = do
                 insertMany_ $ map (\path -> path {pathGraph = gId}) paths
             return $ toResponse $ ("Success" :: String)
 
--- | Inserts course into the Courses table.
+
+-- | Inserts course into the Courses  table.
 insertCourse :: MonadIO m => Course -> ReaderT SqlBackend m ()
-insertCourse course =
-    insert_ $ Courses (name course)
+insertCourse course = do 
+    maybeCourse <- selectFirst [CoursesCode ==. (name course)] []
+    case maybeCourse of
+        Nothing -> insert_ $ Courses (name course)
                       (title course)
                       (description course)
                       (manualTutorialEnrolment course)
@@ -55,6 +59,8 @@ insertCourse course =
                       (coreqs course)
                       []
 
+        Just _ -> return ()
+      
 -- | Updates the manualTutorialEnrolment field of the given course.
 setTutorialEnrolment :: MonadIO m => T.Text -> Bool -> ReaderT SqlBackend m ()
 setTutorialEnrolment course val =

@@ -48,10 +48,15 @@ getCalendar str = do
         coursesSoup = lastH2 tags
         course = map (processCourseToData . filter isTagText) $ partitions isCourseTitle coursesSoup
     print $ "parsing " ++ str
+    mapM_ myPrint course -- debugging - to remove
+    --let newCrs = removeDuplicateCrs course -- temporary - to avoid duplicate entries 
+    -- print $ "Parsed minus duplicates: "
+    -- mapM_ myPrint newCrs -- debugging - to remove
     runSqlite databasePath $ do
         runMigration migrateAll
-        mapM_ insertCourse course
+        mapM_ insertCourse course -- prev: insertCourse (Kael)
     where
+        myPrint x = print $ name x-- debugging - to remove
         isNotComment (TagComment _) = False
         isNotComment _ = True
         lastH2 tags =
@@ -64,6 +69,19 @@ getCalendar str = do
                     last sect
         isCourseTitle (TagOpen _ attrs) = any (\x -> fst x == "name" && T.length (snd x) == 8) attrs
         isCourseTitle _ = False
+
+
+-- | Remove duplicate course entries. Temporary fix while parsing issues addressed.
+removeDuplicateCrs :: [Course] -> [Course]
+removeDuplicateCrs xs = nubBy compareName xs
+
+-- First attempt at comparing (originally nubBY compareName xs)
+compareName :: Course -> Course -> Bool
+compareName x y = (name x == name y)
+
+-- Second attempt at comparing
+instance Eq Course where
+    (Course c1 _ _ _ _ _ _ _ _ _ _ _ _ _ _) == (Course c2 _ _ _ _ _ _ _ _ _ _ _ _ _ _) = c1 == c2
 
 parseTitleFAS :: CoursePart -> CoursePart
 parseTitleFAS (tag:tags, course) =
