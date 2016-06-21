@@ -51,6 +51,7 @@ Department json
 
 Courses json
     code T.Text
+    Primary code
     title T.Text Maybe
     description T.Text Maybe
     manualTutorialEnrolment Bool Maybe
