@@ -48,7 +48,24 @@ addPostToDatabase tags = do
         fullPostName = innerText (take 1 $ filter (isTagText) tags)
         postType = T.pack $ getPostType postCode
         departmentName = T.pack $ (getDepartmentName fullPostName postType)
+        prereqs = map getCourseFromTag $ map (fromAttrib "href") $ filter isCourseTag tags
     insertPost departmentName postType postCode
+    where
+        isCourseTag tag = tagOpenAttrNameLit "a" "href" (\hrefValue -> (length hrefValue) >= 0) tag
+
+
+-- Parsec Combinator Helper Rules
+
+getCourseFromTag courseTag = do
+    let course = P.parse findCourseFromTag "(source)" courseTag
+    case course of
+        Right name -> name
+        Left _ -> ""
+
+findCourseFromTag :: P.Parsec String () String
+findCourseFromTag = do
+    P.manyTill P.anyChar (P.char '#') 
+    P.many1 P.anyChar
 
 getPostType :: T.Text -> String
 getPostType postCode = 
