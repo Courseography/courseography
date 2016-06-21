@@ -111,8 +111,7 @@ function Button(props) {
     return (
         <div id={props.divId} className='graph-control-button'
         onMouseDown={props.mouseDown}
-        onMouseUp={props.mouseUp}>{props.text}
-        </div>
+        onMouseUp={props.mouseUp}>{props.text}</div>
     );
 }
 
@@ -263,12 +262,12 @@ var Graph = React.createClass({
             this.setFCECount(totalFCEs);
         }
     },
+
     clearAllTimeouts: function () {
         for (var i = 0; i < this.state.timeouts.length; i++) {
-
             clearTimeout(this.state.timeouts[i]);
-
         }
+
         this.setState({timeouts: []});
     },
 
@@ -329,25 +328,32 @@ var Graph = React.createClass({
         var courseId = event.currentTarget.id;
         var currentNode = this.refs.nodes.refs[courseId];
         currentNode.unfocusPrereqs(this);
+
         var infoBox = this.refs.infoBox;
+
         var timeout = setTimeout(function () {
                 infoBox.setState({showInfobox: false});
         }, 400);
 
+
         this.setState({timeouts: this.state.timeouts.concat(timeout)});
+
     },
 
     infoBoxMouseEnter: function () {
         this.clearAllTimeouts();
+
         var infoBox = this.refs.infoBox;
         infoBox.setState({showInfobox: true});
     },
 
     infoBoxMouseLeave: function () {
         var infoBox = this.refs.infoBox;
+
         var timeout = setTimeout(function () {
                 infoBox.setState({showInfobox: false});
         }, 400);
+
         this.setState({timeouts: this.state.timeouts.concat(timeout)});
     },
 
