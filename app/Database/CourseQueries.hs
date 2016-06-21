@@ -55,21 +55,21 @@ queryCourse str = do
 returnCourse :: T.Text -> IO Course
 returnCourse lowerStr = runSqlite databasePath $ do
     let courseStr = T.toUpper lowerStr
-    sqlCourse :: [Entity Courses] <- selectList [CoursesCode ==. courseStr] []
+    sqlCourse :: [Entity Courses] <- selectList [CoursesCode ==. courseStr] [Asc CoursesCode]
     -- TODO: Just make one query for all lectures, then partition later.
     -- Same for tutorials.
     sqlLecturesFall    :: [Entity Lecture]   <- selectList
-        [LectureCode  ==. courseStr, LectureSession ==. "F"] []
+        [LectureCode  ==. courseStr, LectureSession ==. "F"] [Asc LectureSection]
     sqlLecturesSpring  :: [Entity Lecture]   <- selectList
-        [LectureCode  ==. courseStr, LectureSession ==. "S"] []
+        [LectureCode  ==. courseStr, LectureSession ==. "S"] [Asc LectureSection]
     sqlLecturesYear    :: [Entity Lecture]   <- selectList
-        [LectureCode  ==. courseStr, LectureSession ==. "Y"] []
+        [LectureCode  ==. courseStr, LectureSession ==. "Y"] [Asc LectureSection]
     sqlTutorialsFall   :: [Entity Tutorial]  <- selectList
-        [TutorialCode ==. courseStr, TutorialSession ==. "F"] []
+        [TutorialCode ==. courseStr, TutorialSession ==. "F"] [Asc TutorialSection]
     sqlTutorialsSpring :: [Entity Tutorial]  <- selectList
-        [TutorialCode ==. courseStr, TutorialSession ==. "S"] []
+        [TutorialCode ==. courseStr, TutorialSession ==. "S"] [Asc TutorialSection]
     sqlTutorialsYear   :: [Entity Tutorial]  <- selectList
-        [TutorialCode ==. courseStr, TutorialSession ==. "Y"] []
+        [TutorialCode ==. courseStr, TutorialSession ==. "Y"] [Asc TutorialSection]
     let fallSession   = buildSession sqlLecturesFall sqlTutorialsFall
         springSession = buildSession sqlLecturesSpring sqlTutorialsSpring
         yearSession   = buildSession sqlLecturesYear sqlTutorialsYear
@@ -102,8 +102,9 @@ returnLecture lowerStr sect session = runSqlite databasePath $ do
 buildCourse :: Maybe Session -> Maybe Session -> Maybe Session -> Courses -> Course
 buildCourse fallSession springSession yearSession course =
     Course (coursesBreadth course)
-           (coursesDescription course)
-           (coursesTitle course)
+           -- TODO: Remove the filter and allow double-quotes
+           (fmap (T.filter (/='\"')) (coursesDescription course))
+           (fmap (T.filter (/='\"')) (coursesTitle course))
            (coursesPrereqString course)
            fallSession
            springSession

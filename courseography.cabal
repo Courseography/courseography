@@ -66,8 +66,8 @@ executable courseography
     WebParsing.ParsingHelp,
     WebParsing.PrerequisiteParsing,
     WebParsing.TimeConverter,
-    WebParsing.TimeTableParser,
-    WebParsing.PostParser
+    WebParsing.PostParser,
+    WebParsing.UtsgJsonParser
   other-extensions:
     OverloadedStrings,
     DataKinds,
@@ -95,6 +95,7 @@ executable courseography
     base64-bytestring,
     split,
     containers,
+    unordered-containers,
     random,
     process >= 1.2,
     diagrams-lib >= 1.3,
