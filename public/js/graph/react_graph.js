@@ -138,7 +138,7 @@ var Graph = React.createClass({
             var urlSpecifiedGraph = getURLParameter('dept');
 
             // HACK: Temporary workaround for giving the statistics department a
-			// link to our graph.
+            // link to our graph.
             // Should be replaced with a more general solution.
             if (urlSpecifiedGraph === 'sta') {
                 graphName = 'Statistics';
@@ -205,7 +205,7 @@ var Graph = React.createClass({
         });
 
         // Need to hardcode these in because React does not understand these
-		// attributes
+        // attributes
         var svgNode = ReactDOM.findDOMNode(this.refs.svg);
         var markerNode = ReactDOM.findDOMNode(this.refs.marker);
 
@@ -825,8 +825,8 @@ var Bool = React.createClass({
                 this.props.inEdges.forEach(function (edge) {
                     var currentEdge = svg.refs['edges'].refs[edge];
                     var sourceNode = 
-                    	svg.refs['nodes'].refs[currentEdge.props.source] || 
-                    	svg.refs['bools'].refs[currentEdge.props.source];
+                        svg.refs['nodes'].refs[currentEdge.props.source] || 
+                        svg.refs['bools'].refs[currentEdge.props.source];
                     if (!sourceNode.isSelected()) {
                         currentEdge.setState({status: 'missing'});
                     }
@@ -878,39 +878,39 @@ var Bool = React.createClass({
 
 
 var EdgeGroup = React.createClass({
-	// missingEdgesDict keeps track of each missing edge by
-	// matching edge ids to a boolean; true if the corresponding
-	// edge state is missing, false if not
-	getInitialState: function() {
-		// var edges = this.props.edgesJSON;
-		// console.log(this.refs[edges[0]]);
-		// var state = {};
-		// for (var i = 0; i < edges.length; i++) {
-		// 	if (this.refs[edges[i]] !== undefined) {
-		// 	// console.log(edges[i].id_);
-	 //      		state[edges[i].id_] = false;
-	 //      	}
-  //    	}
-		return {state: null};
-	},
+    // missingEdgesDict keeps track of each missing edge by
+    // matching edge ids to a boolean; true if the corresponding
+    // edge state is missing, false if not
+    getInitialState: function() {
+        // var edges = this.props.edgesJSON;
+        // console.log(this.refs[edges[0]]);
+        // var state = {};
+        // for (var i = 0; i < edges.length; i++) {
+        //  if (this.refs[edges[i]] !== undefined) {
+        //  // console.log(edges[i].id_);
+     //             state[edges[i].id_] = false;
+     //         }
+  //        }
+        return {state: null};
+    },
 
-	// When an edge's state changes and the edge is not undefined, 
-	// it will call updateEdgeStatus and notify missingEdgesDict 
-	// if its state has changed to missing.
-	updateEdgeStatus: function(edgeID, state) {
-		// console.log(1, edgeID);
-		// console.log(2, this.state.edgeID);
-		// console.log(3, state);
-		var isMissing = true;
-		if (state !== 'missing') {
-			isMissing = false;
-		}
-		var newState = {};
-		newState[edgeID] = isMissing;
-		// console.log(4, isMissing);
-		this.setState({[edgeID]: isMissing});
-		// console.log(5, this.state.edgeID);
-	},
+    // When an edge's state changes and the edge is not undefined, 
+    // it will call updateEdgeStatus and notify missingEdgesDict 
+    // if its state has changed to missing.
+    updateEdgeStatus: function(edgeID, state) {
+        // console.log(1, edgeID);
+        // console.log(2, this.state.edgeID);
+        // console.log(3, state);
+        var isMissing = true;
+        if (state !== 'missing') {
+            isMissing = false;
+        }
+        var newState = {};
+        newState[edgeID] = isMissing;
+        // console.log(4, isMissing);
+        this.setState({[edgeID]: isMissing});
+        // console.log(5, this.state.edgeID);
+    },
 
     componentDidUpdate: function () {
         for (var ref in this.refs) {
@@ -938,28 +938,28 @@ var EdgeGroup = React.createClass({
     },
 
     render: function () {
-    	var missingEdges = [];
-    	var otherEdges = [];
-    	var edges = this.props.edgesJSON;
-		for (var i = 0; i < edges.length; i++) {
-			// if (this.refs[edges[i]] !== undefined) {
-			// console.log(edges[i].id_);
-			var edgeID = edges[i].id_;
-			// console.log(this.state);
-			if (edgeID in this.state) {
-				missingEdges.push(edges[i]);
-				// console.log(this.state.edgeID);
-	   //    		if (this.state.edgeID) {
-	   //    			missingEdges.push(edges[i]);
-	   //    		} else {
-	   //   			otherEdges.push(edges[i]);
-	   //   		}
-     		} else {
-     			otherEdges.push(edges[i]);
-     		}
-     	}
-     	console.log('miss', missingEdges);
-     	console.log('rest', otherEdges);
+        var missingEdges = [];
+        var otherEdges = [];
+        var edges = this.props.edgesJSON;
+        for (var i = 0; i < edges.length; i++) {
+            // if (this.refs[edges[i]] !== undefined) {
+            // console.log(edges[i].id_);
+            var edgeID = edges[i].id_;
+            // console.log(this.state);
+            if (edgeID in this.state) {
+                missingEdges.push(edges[i]);
+                // console.log(this.state.edgeID);
+       //           if (this.state.edgeID) {
+       //               missingEdges.push(edges[i]);
+       //           } else {
+       //               otherEdges.push(edges[i]);
+       //           }
+            } else {
+                otherEdges.push(edges[i]);
+            }
+        }
+        console.log('miss', missingEdges);
+        console.log('rest', otherEdges);
         return (
             <g id='edges'>
                 {otherEdges.map(this.generateEdge)}
@@ -969,7 +969,7 @@ var EdgeGroup = React.createClass({
     }
 });
 
-
+    
 var Edge = React.createClass({
     getInitialState: function () {
         return {status: 'inactive'};
@@ -990,15 +990,15 @@ var Edge = React.createClass({
     },
 
     componentDidUpdate : function() {
-    	if (this.state.status === 'missing') {
-    		this.props.updateEdgeStatus(this.props.edgeID, this.state.status);
-    	// } else if (this.props.edgeID !== undefined) {
-    	// 	this.props.updateEdgeStatus(this.props.edgeID, this.state.status);
-    	}
+        if (this.state.status === 'missing') {
+            this.props.updateEdgeStatus(this.props.edgeID, this.state.status);
+        // } else if (this.props.edgeID !== undefined) {
+        //  this.props.updateEdgeStatus(this.props.edgeID, this.state.status);
+        }
     },
 
     render: function () {
-    	// console.log(this.props.edgeID, this.state.status);
+        // console.log(this.props.edgeID, this.state.status);
         var pathAttrs = {d: 'M'};
         this.props.points.forEach(function(p) {
             pathAttrs.d += p[0] + ',' + p[1] + ' ';
