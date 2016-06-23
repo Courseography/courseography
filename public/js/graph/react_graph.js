@@ -938,32 +938,61 @@ var EdgeGroup = React.createClass({
     },
 
     render: function () {
-        var missingEdges = [];
-        var otherEdges = [];
+        // var missingEdges = [];
+        // var otherEdges = [];
         var edges = this.props.edgesJSON;
-        for (var i = 0; i < edges.length; i++) {
-            // if (this.refs[edges[i]] !== undefined) {
-            // console.log(edges[i].id_);
-            var edgeID = edges[i].id_;
-            // console.log(this.state);
-            if (edgeID in this.state) {
-                missingEdges.push(edges[i]);
-                // console.log(this.state.edgeID);
-       //           if (this.state.edgeID) {
-       //               missingEdges.push(edges[i]);
-       //           } else {
-       //               otherEdges.push(edges[i]);
-       //           }
-            } else {
-                otherEdges.push(edges[i]);
+        var edgesCopy = $.extend([], edges);
+        var state = this.state;
+        edgesCopy.sort(function(a, b) {
+            var aID = a.id_;
+            var bID = b.id_;
+            var aMiss = false;
+            var bMiss = false;
+            if (aID in state) {
+                if (state.aID) {
+                    aMiss = true;
+                }
             }
-        }
-        console.log('miss', missingEdges);
-        console.log('rest', otherEdges);
+            if (bID in state) {
+                if (state.bID) {
+                    bMiss = true;
+                }
+            }
+            if ((aMiss && bMiss) || (!aMiss && !bMiss)) {
+                // a and b are equal
+                return 0;
+            } else if (aMiss && !bMiss) {
+                // sort a after b
+                return 1;
+            } else if (!aMiss && bMiss) {
+                // sort b after a
+                return -1;
+            }
+        });
+       //  for (var i = 0; i < edges.length; i++) {
+       //      // if (this.refs[edges[i]] !== undefined) {
+       //      // console.log(edges[i].id_);
+       //      var edgeID = edges[i].id_;
+       //      // console.log(this.state);
+       //      if (edgeID in this.state) {
+       //          if (this.state.edgeID) {
+       //              missingEdges.push(edges[i]);
+       //          // console.log(this.state.edgeID);
+       // //           if (this.state.edgeID) {
+       // //               missingEdges.push(edges[i]);
+       // //           } else {
+       // //               otherEdges.push(edges[i]);
+       // //           }
+       //          }
+       //      } else {
+       //          otherEdges.push(edges[i]);
+       //      }
+       //  }
+       //  console.log('miss', missingEdges);
+       //  console.log('rest', otherEdges);
         return (
             <g id='edges'>
-                {otherEdges.map(this.generateEdge)}
-                {missingEdges.map(this.generateEdge)}
+                {edgesCopy.map(this.generateEdge)}
             </g>
         );
     }
@@ -980,7 +1009,9 @@ var Edge = React.createClass({
                      this.props.svg.refs.bools.refs[this.props.source];
         var target = this.props.svg.refs.nodes.refs[this.props.target] ||
                      this.props.svg.refs.bools.refs[this.props.target];
-        if (!source.isSelected()) {
+        if (target.state.status === 'missing') {
+            this.setState({status: 'missing'});
+        } else if (!source.isSelected()) {
             this.setState({status: 'inactive'});
         } else if (!target.isSelected()) {
             this.setState({status: 'takeable'});
