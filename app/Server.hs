@@ -23,7 +23,8 @@ import FacebookUtilities
 import Config (markdownPath, serverConf)
 import qualified Data.Text.Lazy.IO as LazyIO
 import Data.Int (Int64)
-import Route(route)
+<<<<<<< HEAD
+import Route (routes)
 
 runServer :: IO ()
 runServer = do
@@ -37,7 +38,12 @@ runServer = do
     -- Start the HTTP server
     simpleHTTP serverConf $ do
       decodeBody (defaultBodyPolicy "/tmp/" 4096 4096 4096)
-      msum route
+      msum [ do
+              nullDir
+              seeOther "graph" (toResponse "Redirecting to /graph"),    
+              map (dir . fst) routes,
+              not FoundResponse
+        ]
     where
     -- | Global logger configuration.
     configureLogger :: IO ()
