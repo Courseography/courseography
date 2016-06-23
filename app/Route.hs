@@ -1,5 +1,6 @@
 module Route
-    (route) where
+    (routes-
+      ) where
 
     import Control.Monad (msum)
     import Control.Monad.IO.Class (liftIO)
@@ -17,29 +18,30 @@ module Route
     import qualified Data.Text.Lazy.IO as LazyIO
     import Data.Int (Int64)
 
-
-route = 
-[ ("grid", gridResponse),
-  ("graph", graphResponse),
-  ("image", graphImageResponse),
-  ("timetable-image", timetableImageResponse x),
-  ("graph-fb",toResponse ""),
-  ("post-fb",toResponse ""),
-  ("test", getEmail),
-  ("test-post", postToFacebook),
-  ("post", postResponse),
-  ("draw", drawResponse),                  
-  ("about", aboutResponse),
-  ("privacy" ,privacyResponse),
-  ("static", serveDirectory),
-  ("course", retrieveCourse),
-  ("all-courses", allCourses),
-  ("graphs", queryGraphs),
-  ("course-info", courseInfo),
-  ( "depts", deptList),
-  ("timesearch",searchResponse),
-  ("calendar",calendarResponse),
-  ("get-json-data",getGraphJSON),
-  ("loading",loadingResponse),
-  ("save-json", saveGraphJSON),
-  (x, notFoundResponse)]
+routes :: (String a, IO() b) => [(a, b)]
+routes = 
+[ 
+    ("grid", gridResponse),
+    ("graph", graphResponse),
+    ("image", graphImageResponse),
+    ("timetable-image", look "courses" >>= \x -> look "session" >>= timetableImageResponse x),
+    ("graph-fb", seeOther redirectUrlGraphEmail $ toResponse ""),
+    ("post-fb", seeOther redirectUrlGraphPost $ toResponse ""),
+    ("test", look "code" >>= getEmail),
+    ("test-post", look "code" >>= postToFacebook),
+    ("post", postResponse),
+    ("draw", drawResponse),                  
+    ("about", (aboutResponse aboutContents)),
+    ("privacy", (privacyResponse privacyContents)),
+    ("static", (serveDirectory DisableBrowsing [] staticDir)),
+    ("course", look "name" >>= retrieveCourse),
+    ("all-courses", (liftIO allCourses)),
+    ("graphs", (liftIO queryGraphs)),
+    ("course-info", look "dept" >>= courseInfo),
+    ("depts", (liftIO deptList)),
+    ("timesearch", searchResponse),
+    ("calendar", lookCookieValue "selected-lectures" >>= calendarResponse),
+    ("get-json-data", getGraphJSON),
+    ("loading", look "size" >>= loadingResponse),
+    ("save-json", look "jsonData" >>= \jsonStr -> look "nameData" >>= \nameStr -> liftIO $ saveGraphJSON jsonStr nameStr)
+]
