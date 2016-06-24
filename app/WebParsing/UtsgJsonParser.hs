@@ -61,11 +61,25 @@ newtype Test = Test T.Text
 newtype Meeting = Meeting [(Either Lecture Test)] -- Tutorial
   deriving Show
 
+zipTimes :: [T.Text] -> [T.Text] -> [T.Text] -> [[Time]]
+zipTimes [""] [""] [""] = [[]]
+zipTimes days starts ends = zipWith3 (\day start end -> getTimeSlots (T.unpack day) (T.unpack start) (T.unpack end))
+                                      days
+                                      starts
+                                      ends
+
+zipTimeStr :: [T.Text] -> [T.Text] -> [T.Text] -> [String]
+zipTimeStr = zipWith3 (\day start end -> intercalate " " [(T.unpack day), (T.unpack start), (T.unpack end)])
+
+zipInstructors :: [T.Text] -> [T.Text] -> [String]
+zipInstructors = zipWith (\firstN lastN -> intercalate " " [(T.unpack firstN), T.unpack lastN])
+
 lookupVal :: Value -> T.Text -> [T.Text]
-lookupVal (Object lst) val = map (\v -> case v of
+lookupVal (Array _) _ = [""]
+lookupVal (Object lst) val = map (\val -> case val of
                                             (String s) -> s
                                             _ -> "") $
-                                map (\(Object o) -> fromJust $ HM.lookup val o) $
+                                 map (\(Object o) -> fromMaybe (String "") $ HM.lookup val o) $
                                     map snd $ HM.toList lst
 
 instance FromJSON Meeting where
@@ -73,36 +87,31 @@ instance FromJSON Meeting where
       code <- o .: "code"
       session <- o .: "section"
       meetings <- (o .: "meetings" :: Parser (HM.HashMap String (HM.HashMap String Value)))
-      return $ Meeting $ map (\(section, sectionHash) -> let (String cap) = fromJust $ HM.lookup "enrollmentCapacity" sectionHash
-                                                             (String wait') = fromJust $ HM.lookup "waitlist" sectionHash
+      return $ Meeting $ map (\(section, sectionHash) -> let (String cap) = fromMaybe (String "-1") $ HM.lookup "enrollmentCapacity" sectionHash
+                                                             (String wait') = fromMaybe (String "-1") $ HM.lookup "waitlist" sectionHash
                                                              schedule = fromJust $ HM.lookup "schedule" sectionHash
                                                              dayLst = lookupVal schedule "meetingDay"
                                                              startLst = lookupVal schedule "meetingStartTime"
                                                              endLst = lookupVal schedule "meetingEndTime"
-                                                             zipTimes = zipWith3 (\day start end -> intercalate " " [(T.unpack day), (T.unpack start), (T.unpack end)])
-                                                                                 dayLst
-                                                                                 startLst
-                                                                                 endLst
+                                                             timesStr = zipTimeStr dayLst startLst endLst
                                                              instructors = fromJust $ HM.lookup "instructors" sectionHash
-                                                             zipInstructors = zipWith (\firstN lastN -> intercalate " " [(T.unpack firstN), T.unpack lastN])
-                                                                                      (lookupVal instructors "firstName")
-                                                                                      (lookupVal instructors "lastName")
+                                                             instructorStr = zipInstructors (lookupVal instructors "firstName") (lookupVal instructors "lastName")
                                                              wait = if (T.unpack wait') == "Y" then 0 else -1
                                                              enrol = 0
                                                              extra = 0
                                                          in
-                                                         if (take 3 section) == "LEC2"
+                                                         if (take 3 section) == "LEC"
                                                          then Left $ Lecture code
                                                                              session
                                                                              (T.pack section)
-                                                                             ([] :: [Time])
+                                                                             (concat $ zipTimes dayLst startLst endLst)
                                                                              (read $ T.unpack cap :: Int)
-                                                                             (T.pack $ intercalate ", " zipInstructors)
+                                                                             (T.pack $ intercalate ", " instructorStr)
                                                                              enrol
                                                                              wait
                                                                              extra
-                                                                             (T.pack $ intercalate ", " zipTimes)
-                                                        else Right $ Test (T.pack $ intercalate ", " zipInstructors))
+                                                                             (T.pack $ intercalate ", " timesStr)
+                                                        else Right $ Test (T.pack $ intercalate ", " instructorStr ++ (T.unpack code)))
                              (HM.toList meetings)
 
 instance FromJSON Courses where
