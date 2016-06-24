@@ -36,9 +36,12 @@ colourTableCSS =
         forM_ (zipWith3 (\f xyPos colour -> f xyPos colour)
                   (repeat (\[x, y] colour -> tr # nthChild y ** td # nthChild x ? background colour))
                   [map (T.pack . show) [x, y] | x <- [1 .. 5], y <- [1 .. 2]]
-                  -- [5x2] Colour Pallet --
-                  [crimson,           sienna,     tomato,       navy,           lightskyblue,
-                   paleturquoise,     wheat,      seagreen,     lightcoral,     moccasin])
+                  -- [5x2] Colour Pallet (sideways)--
+                  [pastelRed,      pastelOrange, 
+                   pastelYellow,   pastelGreen,
+                   pastelBlue,     pastelPurple,
+                   pastelPink,     pastelBrown,
+                   white,          pastelGrey])
               id
 
 {- The wrapping around the canvas elements. -}
