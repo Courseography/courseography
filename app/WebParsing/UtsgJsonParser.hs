@@ -167,7 +167,7 @@ insertAllCourses = do
             (Just (DB2 courses)) -> runSqlite databasePath $ insertMany_ $ HM.elems courses
             otherwise -> print "Failed to insert courses"
     case coursesLst of
-        (Just (DB courses)) -> forM_ (HM.elems courses) (\lecTut -> runSqlite databasePath $ case lecTut of
-                                                                                                (Meeting [(Left lec)]) -> insert_ lec
-                                                                                                (Meeting [(Right tut)]) -> insert_ tut)
-        otherwise -> print "Failed to insert courses"
+        (Just (DB courses)) -> forM_ (HM.elems courses) (\(Meeting meetingLst) -> forM_ meetingLst (\lecTut -> runSqlite databasePath $ case lecTut of
+                                                                                                                                        (Left lec) -> insert_ lec
+                                                                                                                                        (Right tut) -> insert_ tut))
+        otherwise -> print "Failed to insert Lectures/Tutorials"
