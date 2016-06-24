@@ -50,15 +50,18 @@ getTimeSlots day start end = do
     [Time [dayDbl, timeDbl] | timeDbl <- [startDbl, (startDbl + 0.5) .. (endDbl - 0.5)]]
 
  -- | Decode JSON string into hash map object
+getJSON2 :: IO (Maybe DB2)
+getJSON2 = do
+  resp <- simpleHttp jsonURL
+  return $ (decode resp :: Maybe DB2)
+
+ -- | Decode JSON string into hash map object
 getJSON :: IO (Maybe DB)
 getJSON = do
   resp <- simpleHttp jsonURL
   return $ (decode resp :: Maybe DB)
 
-newtype Test = Test T.Text
-    deriving Show
-
-newtype Meeting = Meeting [(Either Lecture Test)] -- Tutorial
+newtype Meeting = Meeting [(Either Lecture Tutorial)]
   deriving Show
 
 zipTimes :: [T.Text] -> [T.Text] -> [T.Text] -> [[Time]]
@@ -111,7 +114,10 @@ instance FromJSON Meeting where
                                                                              wait
                                                                              extra
                                                                              (T.pack $ intercalate ", " timesStr)
-                                                        else Right $ Test (T.pack $ intercalate ", " instructorStr ++ (T.unpack code)))
+                                                        else Right $ Tutorial code
+                                                                              (Just session)
+                                                                              (T.pack section)
+                                                                              (concat $ zipTimes dayLst startLst endLst))
                              (HM.toList meetings)
 
 instance FromJSON Courses where
@@ -142,16 +148,26 @@ instance FromJSON Courses where
                      (Just coreqs)
                      videoUrls
 
+newtype DB2 = DB2 (HM.HashMap String Courses)
+  deriving Show
 
 newtype DB = DB (HM.HashMap String Meeting)
   deriving Show
+
+instance FromJSON DB2 where
+  parseJSON val = DB2 <$> parseJSON val
 
 instance FromJSON DB where
   parseJSON val = DB <$> parseJSON val
 
 insertAllCourses = do
     coursesLst <- getJSON
-    case coursesLst of
-            --(Just (DB courses)) -> runSqlite databasePath $ insertMany_ $ HM.elems courses
-            (Just (DB courses)) -> print $ HM.elems courses
+    coursesLst2 <- getJSON2
+    case coursesLst2 of
+            (Just (DB2 courses)) -> runSqlite databasePath $ insertMany_ $ HM.elems courses
             otherwise -> print "Failed to insert courses"
+    case coursesLst of
+        (Just (DB courses)) -> forM_ (HM.elems courses) (\lecTut -> runSqlite databasePath $ case lecTut of
+                                                                                                (Meeting [(Left lec)]) -> insert_ lec
+                                                                                                (Meeting [(Right tut)]) -> insert_ tut)
+        otherwise -> print "Failed to insert courses"
