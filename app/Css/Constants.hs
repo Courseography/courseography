@@ -306,7 +306,7 @@ pastelBrown :: Color
 pastelBrown = parse "#AD876E"
 
 pastelGrey :: Color
-pastelGrey = parse "#7A7677"
+pastelGrey = parse "#A2A9AF"
 
 {- FCE count color. Currently unused. -}
 fceCountColor :: Color
