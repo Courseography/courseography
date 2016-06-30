@@ -949,12 +949,12 @@ var EdgeGroup = React.createClass({
             var aMiss = false;
             var bMiss = false;
             if (aID in state) {
-                if (state.aID) {
+                if (state[aID]) {
                     aMiss = true;
                 }
             }
             if (bID in state) {
-                if (state.bID) {
+                if (state[bID]) {
                     bMiss = true;
                 }
             }
@@ -1009,7 +1009,7 @@ var Edge = React.createClass({
                      this.props.svg.refs.bools.refs[this.props.source];
         var target = this.props.svg.refs.nodes.refs[this.props.target] ||
                      this.props.svg.refs.bools.refs[this.props.target];
-        if (target.state.status === 'missing') {
+        if (target.state.status === 'missing' && !source.isSelected()) {
             this.setState({status: 'missing'});
         } else if (!source.isSelected()) {
             this.setState({status: 'inactive'});
@@ -1020,8 +1020,8 @@ var Edge = React.createClass({
         }
     },
 
-    componentDidUpdate : function() {
-        if (this.state.status === 'missing') {
+    componentDidUpdate : function(prevProps, prevState) {
+        if (this.state.status !== prevState.status) {
             this.props.updateEdgeStatus(this.props.edgeID, this.state.status);
         // } else if (this.props.edgeID !== undefined) {
         //  this.props.updateEdgeStatus(this.props.edgeID, this.state.status);
@@ -1043,6 +1043,5 @@ var Edge = React.createClass({
         );
     }
 });
-
 
 export default {renderReactGraph: renderReactGraph};
