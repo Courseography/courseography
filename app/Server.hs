@@ -1,19 +1,3 @@
-Skip to content
-This repository
-Search
-Pull requests
-Issues
-Gist
- @miameng
- Watch 7
-  Star 23
- Fork 33 Courseography/courseography
- Code  Issues 58  Pull requests 10  Wiki  Pulse  Graphs
-Branch: master Find file Copy pathcourseography/app/Server.hs
-ea150e9  on Apr 15
-@R0ss R0ss Completed merge with Courseography Master
-1 contributor
-RawBlameHistory     85 lines (79 sloc)  3.83 KB
 {-|
 Description: Configure and run the server for Courseography.
 This module defines the configuration for the server, including logging.
@@ -97,5 +81,3 @@ runServer = do
         --let parentDir = Path.parent $ Path.decodeString cwd
         --return $ Path.encodeString $ Path.append parentDir $ fromString "public/"
         return $ Path.encodeString $ Path.append (Path.decodeString cwd) $ fromString "public/"
-Status API Training Shop Blog About
-© 2016 GitHub, Inc. Terms Privacy Security Contact Help
