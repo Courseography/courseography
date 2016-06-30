@@ -227,7 +227,9 @@ graphContainer = do
         backgroundColor white
         border solid (px 1) purple10
         "border-radius" -: "6px"
-        fontSize (px 16)
+        "outline" -: "none"
+        fontSize (px 14)
+        fontWeight bold
         fontColor purple10
         cursor pointer
         display inlineBlock
@@ -235,33 +237,37 @@ graphContainer = do
         height (px 25)
         position absolute
         ":hover" & do
-            backgroundColor purple8
+            backgroundColor purple6
             fontColor white
         ":active" & do
             backgroundColor purple10
             fontColor white
+        ":disabled" & do
+            border solid (px 1) grey2
+            backgroundColor white
+            fontColor grey2
     "#zoom-in-button" ? do
         top (px 85)
-        right (px 31)
+        right (px 30)
     "#zoom-out-button" ? do
         top (px 85)
-        right (px 55)
+        right (px 57)
     "#pan-up-button" ? do
-        top (px 5)
+        top (px 4)
         right (px 43)
     "#pan-down-button" ? do
-        top (px 55)
+        top (px 57)
         right (px 43)
     "#pan-right-button" ? do
         top (px 30)
-        right (px 31)
+        right (px 30)
     "#pan-left-button" ? do
         top (px 30)
-        right (px 55)
+        right (px 57)
     "#reset-button" ? do
-        width (px 49)
+        width (px 52)
         top (px 111)
-        right (px 31)
+        right (px 30)
 
 sidebarCSS :: Css
 sidebarCSS = do
