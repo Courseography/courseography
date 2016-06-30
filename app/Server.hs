@@ -42,7 +42,7 @@ runServer = do
             [ do
               nullDir
               seeOther "graph" (toResponse "Redirecting to /graph"),    
-              not FoundResponse
+              notFoundResponse
         ]
 
     where
