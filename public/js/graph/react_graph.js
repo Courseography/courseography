@@ -521,7 +521,8 @@ var Node = React.createClass({
         }
         return {
             status: state,
-            selected: ['active', 'overridden'].indexOf(state) >= 0
+            selected: ['active', 'overridden'].indexOf(state) >= 0,
+            inFocus: false
         };
     },
 
@@ -603,6 +604,7 @@ var Node = React.createClass({
     },
 
     focusPrereqs: function () {
+        this.setState({inFocus: true});
         var svg = this.props.svg;
         var id = this.props.JSON.id_;
         // Check if there are any missing prerequisites.
@@ -636,6 +638,7 @@ var Node = React.createClass({
     },
 
     unfocusPrereqs: function () {
+        this.setState({inFocus: false});
         var svg = this.props.svg;
         this.updateNode(false);
         this.props.parents.forEach(function (node) {
@@ -878,38 +881,24 @@ var Bool = React.createClass({
 
 
 var EdgeGroup = React.createClass({
-    // missingEdgesDict keeps track of each missing edge by
-    // matching edge ids to a boolean; true if the corresponding
-    // edge state is missing, false if not
+    // EdgeGroup's state is used to keep track of the edgeIDs of
+    // edges that are missing. Void is just a placeholder state so 
+    // we can declare an initial state; it does nothing. 
     getInitialState: function() {
-        // var edges = this.props.edgesJSON;
-        // console.log(this.refs[edges[0]]);
-        // var state = {};
-        // for (var i = 0; i < edges.length; i++) {
-        //  if (this.refs[edges[i]] !== undefined) {
-        //  // console.log(edges[i].id_);
-     //             state[edges[i].id_] = false;
-     //         }
-  //        }
-        return {state: null};
+        return {void: null};
     },
 
     // When an edge's state changes and the edge is not undefined, 
-    // it will call updateEdgeStatus and notify missingEdgesDict 
-    // if its state has changed to missing.
+    // it will call updateEdgeStatus and update EdgeGroup's state with its
+    // edgeID and status. This function is passed as a props to Edge.
     updateEdgeStatus: function(edgeID, state) {
-        // console.log(1, edgeID);
-        // console.log(2, this.state.edgeID);
-        // console.log(3, state);
         var isMissing = true;
         if (state !== 'missing') {
             isMissing = false;
         }
         var newState = {};
         newState[edgeID] = isMissing;
-        // console.log(4, isMissing);
         this.setState({[edgeID]: isMissing});
-        // console.log(5, this.state.edgeID);
     },
 
     componentDidUpdate: function () {
@@ -938,12 +927,15 @@ var EdgeGroup = React.createClass({
     },
 
     render: function () {
-        // var missingEdges = [];
-        // var otherEdges = [];
+        // Missing edges must be rendered last. The sort
+        // method custom sorts a copy of edgesJSON so that all missing edges 
+        // are last in the list. Then render based on that list.
         var edges = this.props.edgesJSON;
         var edgesCopy = $.extend([], edges);
         var state = this.state;
         edgesCopy.sort(function(a, b) {
+            // If an edge is missing, its edgeID should be in EdgeGroup's
+            // state and its value should be true.
             var aID = a.id_;
             var bID = b.id_;
             var aMiss = false;
@@ -969,27 +961,6 @@ var EdgeGroup = React.createClass({
                 return -1;
             }
         });
-       //  for (var i = 0; i < edges.length; i++) {
-       //      // if (this.refs[edges[i]] !== undefined) {
-       //      // console.log(edges[i].id_);
-       //      var edgeID = edges[i].id_;
-       //      // console.log(this.state);
-       //      if (edgeID in this.state) {
-       //          if (this.state.edgeID) {
-       //              missingEdges.push(edges[i]);
-       //          // console.log(this.state.edgeID);
-       // //           if (this.state.edgeID) {
-       // //               missingEdges.push(edges[i]);
-       // //           } else {
-       // //               otherEdges.push(edges[i]);
-       // //           }
-       //          }
-       //      } else {
-       //          otherEdges.push(edges[i]);
-       //      }
-       //  }
-       //  console.log('miss', missingEdges);
-       //  console.log('rest', otherEdges);
         return (
             <g id='edges'>
                 {edgesCopy.map(this.generateEdge)}
@@ -1009,7 +980,27 @@ var Edge = React.createClass({
                      this.props.svg.refs.bools.refs[this.props.source];
         var target = this.props.svg.refs.nodes.refs[this.props.target] ||
                      this.props.svg.refs.bools.refs[this.props.target];
-        if (target.state.status === 'missing' && !source.isSelected()) {
+        // if (target.state.status === 'missing' && !source.isSelected()) {
+        //     this.setState({status: 'missing'});
+        // } else if (!source.isSelected()) {
+        //     this.setState({status: 'inactive'});
+        // } else if (!target.isSelected()) {
+        //     this.setState({status: 'takeable'});
+        // } else {
+        //     this.setState({status: 'active'});
+        // }
+        // if (!source.isSelected() && target.state.status !== 'missing') {
+        //     this.setState({status: 'inactive'});
+        // } else if (!target.isSelected() && target.state.status !== 'missing') {
+        //     this.setState({status: 'takeable'});
+        // } else if (!source.isSelected() && target.state.status === 'missing') {
+        //     this.setState({status: 'missing'});
+        // } else {
+        //     this.setState({status: 'active'});
+        // }
+        if (!source.isSelected() && target.state.status === 'missing') {
+            // console.log(source.state.inFocus);
+            // console.log(target.state.inFocus);
             this.setState({status: 'missing'});
         } else if (!source.isSelected()) {
             this.setState({status: 'inactive'});
@@ -1021,15 +1012,14 @@ var Edge = React.createClass({
     },
 
     componentDidUpdate : function(prevProps, prevState) {
+        // After each render, check if the edge's state has changed. If so,
+        // notify the state of EdgeGroup with updateEdgeStatus.
         if (this.state.status !== prevState.status) {
             this.props.updateEdgeStatus(this.props.edgeID, this.state.status);
-        // } else if (this.props.edgeID !== undefined) {
-        //  this.props.updateEdgeStatus(this.props.edgeID, this.state.status);
         }
     },
 
     render: function () {
-        // console.log(this.props.edgeID, this.state.status);
         var pathAttrs = {d: 'M'};
         this.props.points.forEach(function(p) {
             pathAttrs.d += p[0] + ',' + p[1] + ' ';
