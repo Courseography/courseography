@@ -73,7 +73,16 @@ module Css.Constants
      nodeFontSize,
      hybridFontSize,
      boolFontSize,
-     regionFontSize
+     regionFontSize,
+     pastelRed,
+     pastelOrange,
+     pastelYellow,
+     pastelGreen,
+     pastelBlue,
+     pastelPink,
+     pastelPurple,
+     pastelBrown,     
+     pastelGrey
      ) where
 
 import Clay
@@ -271,6 +280,34 @@ grey6 = parse "#9C9C9C"
 beige1 :: Color
 beige1 = parse "#EBE8E4"
 
+{-Color palette colors-}
+pastelRed  :: Color
+pastelRed = parse "#FF7878"
+
+pastelOrange  :: Color
+pastelOrange = parse "#FFC48C"
+
+pastelYellow  :: Color
+pastelYellow = parse "#EEDD99"
+
+pastelGreen :: Color
+pastelGreen = parse "#BDECB6"
+
+pastelBlue :: Color
+pastelBlue = parse "#9BD1FA"
+
+pastelPink :: Color
+pastelPink = parse "#FFD1DC"
+
+pastelPurple :: Color
+pastelPurple = parse "#E3AAD6"
+
+pastelBrown :: Color
+pastelBrown = parse "#AD876E"
+
+pastelGrey :: Color
+pastelGrey = parse "#A2A9AF"
+
 {- FCE count color. Currently unused. -}
 fceCountColor :: Color
 fceCountColor = parse "#66C2FF"
@@ -289,3 +326,4 @@ boolFontSize = 6
 
 regionFontSize :: Num a => a
 regionFontSize = 14
+

@@ -45,7 +45,7 @@ modePanel = H.div ! A.id "side-panel-wrap" $ do
     H.div ! A.id "erase-mode" ! A.class_ "mode" $ "ERASE (e)"
     H.input ! A.id "select-colour"
             ! A.class_ "jscolor"
-            ! A.value "ab2567"
+            ! A.value "ff7878" -- pastelRed color as defined in Css.Constants
             ! A.size "15"
     H.table !A.id "colour-table" $ forM_ (replicate 2 $ replicate 5 "" :: [[H.Html]])
                                          (H.tr . mapM_ (H.td . H.toHtml))
