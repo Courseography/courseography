@@ -109,9 +109,10 @@ function parseCourse(s, prefix) {
 
 function Button(props) {
     return (
-        <div id={props.divId} className='graph-control-button'
+        <button id={props.divId} className='graph-control-button'
         onMouseDown={props.mouseDown}
-        onMouseUp={props.mouseUp}>{props.text}</div>
+        onMouseUp={props.mouseUp}
+        disabled={props.disabled}>{props.text}</button>
     );
 }
 
@@ -405,46 +406,82 @@ var Graph = React.createClass({
     },
 
     incrementZoom: function(increase, zoomFactorRate) {
+        // onButtonRelease calls are required when a button becomes disabled
+        // because it loses its ability to detect mouseUp event
         if (increase) {
-            if (this.state.zoomFactor > 0.5) {
+            if (this.state.zoomFactor > 0.5) { // zooming allowed
                 this.setState({zoomFactor: this.state.zoomFactor - zoomFactorRate});
+            } else { // button becomes disabled
+                this.onButtonRelease();
             }
         } else {
             if (this.state.zoomFactor < 1.1) {
                 this.setState({zoomFactor: this.state.zoomFactor + zoomFactorRate});
+            } else {
+                this.onButtonRelease();
             }
         }
     },
 
-    panDirection: function(direction, panFactorRate) {
-        // initial calculation for poisition of each edge
-        // bottom and right edges require further calculation performed below
-        var topEdge = -(this.state.verticalPanFactor);
-        var leftEdge = -(this.state.horizontalPanFactor);
-        var bottomEdge = (this.state.height - this.state.verticalPanFactor) / this.state.zoomFactor;
-        var rightEdge = (this.state.width - this.state.horizontalPanFactor) / this.state.zoomFactor;
-
-        // size of container
+    calculateRatioGraphSizeToContainerSize: function() {
         var containerWidth = document.getElementById("react-graph").clientWidth;
         var containerHeight = document.getElementById("react-graph").clientHeight;
-
-        // if the graph does not fit in its container, it is resized by the inverse factor
-        // of the greater of these two ratios.
-        var autoResizeFactor;
         var heightToContainerRatio = this.state.height / containerHeight;
         var widthToContainerRatio = this.state.width / containerWidth;
-        autoResizeFactor = Math.max(heightToContainerRatio, widthToContainerRatio);
-        bottomEdge /= autoResizeFactor;
-        rightEdge /= autoResizeFactor;
+        return Math.max(heightToContainerRatio, widthToContainerRatio);
+    },
 
-        if (direction === 'up' && topEdge < 0) {
-            this.setState({verticalPanFactor: this.state.verticalPanFactor - panFactorRate});
-        } else if (direction === 'left' && leftEdge < 0) {
-            this.setState({horizontalPanFactor: this.state.horizontalPanFactor - panFactorRate});
-        } else if (direction ==='down' && bottomEdge > containerHeight) {
-            this.setState({verticalPanFactor: this.state.verticalPanFactor + panFactorRate});
-        } else if (direction === 'right' && rightEdge > containerWidth) {
-            this.setState({horizontalPanFactor: this.state.horizontalPanFactor + panFactorRate});
+    graphRightEdgeOffScreen: function() {
+        // Calculate right edge prior to auto adjusting to fill container.
+        var rightEdge = (this.state.width - this.state.horizontalPanFactor) / this.state.zoomFactor;
+        // Adjust right edge position to account for auto resize.
+        rightEdge /= this.calculateRatioGraphSizeToContainerSize();
+        return rightEdge > document.getElementById("react-graph").clientWidth;
+    },
+
+    graphBottomEdgeOffScreen: function() {
+        // Calculate bottom edge prior to auto adjusting to fill container.
+        var bottomEdge = (this.state.height - this.state.verticalPanFactor) / this.state.zoomFactor;
+        // Adjust bottom edge position to account for auto resize.
+        bottomEdge /= this.calculateRatioGraphSizeToContainerSize();
+        return bottomEdge > document.getElementById("react-graph").clientHeight;;
+    },
+
+    graphTopEdgeOffScreen: function() {
+        return this.state.verticalPanFactor > 0;
+    },
+
+    graphLeftEdgeOffScreen: function() {
+        return this.state.horizontalPanFactor > 0;
+    },
+
+    panDirection: function(direction, panFactorRate) {
+        // onButtonRelease calls are required when a button becomes disabled
+        // because it loses its ability to detect mouseUp event
+        if (direction === 'up') {
+            if (this.graphTopEdgeOffScreen()) { //panning allowed
+                this.setState({verticalPanFactor: this.state.verticalPanFactor - panFactorRate});
+            } else { // button becomes disabled
+                this.onButtonRelease();
+            }
+        } else if (direction === 'left') {
+            if (this.graphLeftEdgeOffScreen()) {
+                this.setState({horizontalPanFactor: this.state.horizontalPanFactor - panFactorRate});
+            } else {
+                this.onButtonRelease();
+            }
+        } else if (direction ==='down') {
+            if (this.graphBottomEdgeOffScreen()) {
+                this.setState({verticalPanFactor: this.state.verticalPanFactor + panFactorRate});
+            } else {
+                this.onButtonRelease();
+            }
+        } else if (direction === 'right') {
+            if (this.graphRightEdgeOffScreen()) {
+                this.setState({horizontalPanFactor: this.state.horizontalPanFactor + panFactorRate});
+            } else {
+                this.onButtonRelease();
+            }
         }
     },
 
@@ -499,38 +536,51 @@ var Graph = React.createClass({
             preserveAspectRatio: 'xMinYMin'
         };
 
+        var zoomInDisabled = (this.state.zoomFactor <= 0.5) ? true : false;
+        var zoomOutDisabled = (this.state.zoomFactor >= 1.1) ? true : false;
+        var panUpDisabled = !this.graphTopEdgeOffScreen() ? true: false;
+        var panRightDisabled = !this.graphRightEdgeOffScreen() ? true: false;
+        var panDownDisabled = !this.graphBottomEdgeOffScreen() ? true: false;
+        var panLeftDisabled = !this.graphLeftEdgeOffScreen() ? true: false;
+
         return (
             <div>
                 <Button
                     divId='zoom-in-button'
                     text="+"
                     mouseDown={() => this.onButtonPress(this.incrementZoom, true, 0.05)}
-                    mouseUp={this.onButtonRelease}/>
+                    mouseUp={this.onButtonRelease}
+                    disabled={zoomInDisabled}/>
                 <Button
                     divId='zoom-out-button'
-                    text="-"
+                    text= "&mdash;"
                     mouseDown={() => this.onButtonPress(this.incrementZoom, false, 0.05)}
-                    mouseUp={this.onButtonRelease}/>
+                    mouseUp={this.onButtonRelease}
+                    disabled={zoomOutDisabled}/>
                 <Button
                     divId='pan-up-button'
                     text="↑"
                     mouseDown={() => this.onButtonPress(this.panDirection, 'up', 10)}
-                    mouseUp={this.onButtonRelease}/>
+                    mouseUp={this.onButtonRelease}
+                    disabled={panUpDisabled}/>
                 <Button
                     divId='pan-down-button'
                     text="↓"
                     mouseDown={() => this.onButtonPress(this.panDirection, 'down', 10)}
-                    mouseUp={this.onButtonRelease}/>
+                    mouseUp={this.onButtonRelease}
+                    disabled={panDownDisabled}/>
                 <Button
                     divId='pan-right-button'
                     text="→"
                     mouseDown={() => this.onButtonPress(this.panDirection, 'right', 10)}
-                    mouseUp={this.onButtonRelease}/>
+                    mouseUp={this.onButtonRelease}
+                    disabled={panRightDisabled}/>
                 <Button
                     divId='pan-left-button'
                     text="←"
                     mouseDown={() => this.onButtonPress(this.panDirection, 'left', 10)}
-                    mouseUp={this.onButtonRelease}/>
+                    mouseUp={this.onButtonRelease}
+                    disabled={panLeftDisabled}/>
                 <Button
                     divId='reset-button'
                     text="Reset"
