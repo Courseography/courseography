@@ -1,6 +1,5 @@
 {-|
 Description: Configure and run the server for Courseography.
-
 This module defines the configuration for the server, including logging.
 It also defines all of the allowed server routes, and the corresponding
 responses.
@@ -23,6 +22,8 @@ import FacebookUtilities
 import Config (markdownPath, serverConf)
 import qualified Data.Text.Lazy.IO as LazyIO
 import Data.Int (Int64)
+<<<<<<< HEAD
+import Route (routes)
 
 runServer :: IO ()
 runServer = do
@@ -36,34 +37,14 @@ runServer = do
     -- Start the HTTP server
     simpleHTTP serverConf $ do
       decodeBody (defaultBodyPolicy "/tmp/" 4096 4096 4096)
-      msum [ do
+      msum 
+            routes ++
+            [ do
               nullDir
-              seeOther "graph" (toResponse "Redirecting to /graph"),
-              dir "grid" gridResponse,
-              dir "graph" graphResponse,
-              dir "image" graphImageResponse,
-              dir "timetable-image" $ look "courses" >>= \x -> look "session" >>= timetableImageResponse x,
-              dir "graph-fb" $ seeOther redirectUrlGraphEmail $ toResponse "",
-              dir "post-fb" $ seeOther redirectUrlGraphPost $ toResponse "",
-              dir "test" $ look "code" >>= getEmail,
-              dir "test-post" $ look "code" >>= postToFacebook,
-              dir "post" postResponse,
-              dir "draw" drawResponse,
-              dir "about" $ aboutResponse aboutContents,
-              dir "privacy" $ privacyResponse privacyContents,
-              dir "static" $ serveDirectory DisableBrowsing [] staticDir,
-              dir "course" $ look "name" >>= retrieveCourse,
-              dir "all-courses" $ liftIO allCourses,
-              dir "graphs" $ liftIO queryGraphs,
-              dir "course-info" $ look "dept" >>= courseInfo,
-              dir "depts" $ liftIO deptList,
-              dir "timesearch" searchResponse,
-              dir "calendar" $ lookCookieValue "selected-lectures" >>= calendarResponse,
-              dir "get-json-data" $ look "graphName" >>= \graphName -> liftIO $ getGraphJSON graphName,
-              dir "loading" $ look "size" >>= loadingResponse,
-              dir "save-json" $ look "jsonData" >>= \jsonStr -> look "nameData" >>= \nameStr -> liftIO $ saveGraphJSON jsonStr nameStr,
-              notFoundResponse
+              seeOther "graph" (toResponse "Redirecting to /graph"),    
+              not FoundResponse
         ]
+
     where
     -- | Global logger configuration.
     configureLogger :: IO ()
