@@ -1,7 +1,7 @@
 import * as tooltip from 'es6!graph/tooltip';
 
 /**
- * 
+ *
  * @param {string} s
  * @returns {Array}
  */
@@ -31,7 +31,7 @@ function parseAnd(s) {
 
 
 /**
- * 
+ *
  * @param {string} s
  * @returns {Array}
  */
@@ -82,7 +82,7 @@ function parseOr(s) {
 
 
 /**
- * 
+ *
  * @param {string} s
  * @param {string} prefix
  * @returns {Array}
@@ -615,7 +615,6 @@ var Node = React.createClass({
                     var sourceNode = svg.refs['nodes'].refs[currentEdge.props.source] ||
                                      svg.refs['bools'].refs[currentEdge.props.source];
                     if (!sourceNode.isSelected()) {
-                        // currentEdge.setState({status: 'missing'}, () => svg.refs['edges'].render());
                         currentEdge.setState({status: 'missing'});
                     }
                 });
@@ -885,19 +884,14 @@ var EdgeGroup = React.createClass({
     // edges that are missing. Void is just a placeholder state so 
     // we can declare an initial state; it does nothing. 
     getInitialState: function() {
-        return {void: null};
+        return {};
     },
 
     // When an edge's state changes and the edge is not undefined, 
     // it will call updateEdgeStatus and update EdgeGroup's state with its
     // edgeID and status. This function is passed as a props to Edge.
     updateEdgeStatus: function(edgeID, state) {
-        var isMissing = true;
-        if (state !== 'missing') {
-            isMissing = false;
-        }
-        var newState = {};
-        newState[edgeID] = isMissing;
+        var isMissing = state === 'missing';
         this.setState({[edgeID]: isMissing});
     },
 
@@ -941,14 +935,10 @@ var EdgeGroup = React.createClass({
             var aMiss = false;
             var bMiss = false;
             if (aID in state) {
-                if (state[aID]) {
-                    aMiss = true;
-                }
+                aMiss = state[aID];
             }
             if (bID in state) {
-                if (state[bID]) {
-                    bMiss = true;
-                }
+                bMiss = state[bID];
             }
             if ((aMiss && bMiss) || (!aMiss && !bMiss)) {
                 // a and b are equal
@@ -969,7 +959,7 @@ var EdgeGroup = React.createClass({
     }
 });
 
-    
+
 var Edge = React.createClass({
     getInitialState: function () {
         return {status: 'inactive'};
