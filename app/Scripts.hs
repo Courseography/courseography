@@ -58,6 +58,7 @@ graphScripts = do
          "/static/js/common/utilities/util.js",
          "/static/js/common/image_conversion.js",
          "/static/js/common/graph_image.js",
+         "/static/js/vendor/bootstrap.min.3.1.1.js",
          "/static/js/common/export/export.js"])
     H.script ! A.src "/static/js/requirejs-config.js" $ ""
     H.script ! H.dataAttribute "main" "/static/js/graph" ! A.src "/static/js/vendor/require.js" $ ""
@@ -92,7 +93,7 @@ drawScripts = do
          "/static/js/vendor/jscolor.min.js"])
 
 postScripts :: H.Html
-postScripts = do 
+postScripts = do
     sequence_ (map toScript [
                                           "/static/js/common/cookie_handler.js",
                                           "/static/js/graph/create_data.js",
@@ -102,6 +103,7 @@ postScripts = do
                                           "/static/js/common/objects/section.js",
                                           "/static/js/common/utilities/util.js",
                                           "/static/js/common/modal.js",
+                                          "/static/js/vendor/bootstrap.min.3.1.1.js",
                                           "/static/js/common/course_videos.js"])
     H.script ! A.src "/static/js/requirejs-config.js" $ ""
     H.script ! H.dataAttribute "main" "/static/js/post" ! A.src "/static/js/vendor/require.js" $ ""

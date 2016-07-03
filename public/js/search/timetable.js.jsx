@@ -1,6 +1,6 @@
 var filterCourse = function (inst, time, lec) {
     'use strict';
-    return lec.instructor.indexOf(inst) > -1 && 
+    return lec.instructor.indexOf(inst) > -1 &&
            (time.length < 2 || hasTime(time, lec.time));
 };
 
@@ -123,13 +123,15 @@ var Timetable = React.createClass({
             if (course.yearSession.lectures.length === 0) {
                 var fallLec = '';
                 var springLec = '';
-            
+
                 fallLec = course.fallSession.lectures.filter(function (lec) {
                     return filterCourse(state.instSearch, state.timeSearch, lec);
                 }).map(function (lec) {
                     return (
                         <tr>
-                        <td className="timetableSection">{lec.section}</td>
+                        <td className="timetableSection">
+                            {lec.section.substring(0, 1) + lec.section.substring(4)}
+                        </td>
                         <td className="timetableTime">{lec.timeStr}</td>
                         <td className="timetableInstructor">{lec.instructor}</td>
                         <td className="timetableCap">{lec.cap}</td>
@@ -142,7 +144,9 @@ var Timetable = React.createClass({
                 }).map(function (lec) {
                     return (
                         <tr>
-                        <td className="timetableSection">{lec.section}</td>
+                        <td className="timetableSection">
+                            {lec.section.substring(0, 1) + lec.section.substring(4)}
+                        </td>
                         <td className="timetableTime">{lec.timeStr}</td>
                         <td className="timetableInstructor">{lec.instructor}</td>
                         <td className="timetableCap">{lec.cap}</td>
@@ -163,7 +167,9 @@ var Timetable = React.createClass({
                     }).map(function (lec) {
                         return (
                             <tr>
-                            <td className="timetableSection">{lec.section}</td>
+                            <td className="timetableSection">
+                                {lec.section.substring(0, 1) + lec.section.substring(4)}
+                            </td>
                             <td className="timetableTime">{lec.time_str}</td>
                             <td className="timetableInstructor">{lec.instructor}</td>
                             <td className="timetableCap">{lec.cap}</td>

@@ -8,6 +8,40 @@ export var ModalContent = React.createClass({
     }
 });
 
+export var Modal = React.createClass({
+    getInitialState: function () {
+        return {
+            courseId: '',
+            course: [],
+            sessions: []
+        };
+    },
+
+    render: function () {
+        if (this.state.courseId) {
+            return (
+                <div className='modal fade'>
+                    <div className='modal-dialog'>
+                        <div className='modal-content'>
+                            <div className='modal-header'>
+                                {getCourseTitle(this.state.courseId)}
+                            </div>
+                            <div className='modal-body'>
+                                <Description course={formatCourseName(this.state.courseId)[0]}/>
+                            </div>
+                            <div className='modal-footer'>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            );
+        } else {
+            return <div className='modal fade'></div>;
+        }
+    }
+});
+
 //Use React component from search.js
 var Description = React.createClass({
     getInitialState: function() {
@@ -17,11 +51,24 @@ var Description = React.createClass({
         };
     },
 
-    componentDidMount: function(){
-        //This loads the course json
+    componentDidMount: function() {
+        this.refresh();
+    },
+
+    componentWillUpdate: function (newProps, newState) {
+        if (newProps.course !== this.props.course) {
+            this.refresh(newProps.course);
+        }
+    },
+
+    // This loads the course json
+    refresh: function(newCourse) {
+        if (newCourse === undefined) {
+            newCourse = this.props.course;
+        }
         $.ajax({
             url: 'course',
-            data: {name: this.props.course},
+            data: {name: newCourse},
             dataType: 'json',
             success: function(data) {
                 if (this.isMounted()) {
@@ -38,7 +85,6 @@ var Description = React.createClass({
                 console.error('course-info', status, err.toString());
             }.bind(this)
         });
-
     },
 
     render: function() {
@@ -51,7 +97,7 @@ var Description = React.createClass({
                 <p><strong>Breadth Requirement: </strong>{this.state.course.breadth}</p>
                 <p><strong>Timetable: </strong></p>
                 {this.state.sessions.map(function(lecture) {
-                    return <p>{lecture.code + lecture.session + "-" + lecture.section + ": " + lecture.timeStr}</p>;
+                    return <p>{lecture.code + lecture.session + '-' + lecture.section + ': ' + lecture.timeStr}</p>;
                 })}
                 <Video urls={this.state.course.videoUrls}/>
             </div>
@@ -68,10 +114,10 @@ var Video = React.createClass({
 
     render: function() {
         return (
-            <div id="course-video-div">
-                <video id="course-video" className="video-js vjs-default-skin" controls="" preload="auto">
+            <div id='course-video-div'>
+                <video id='course-video' className='video-js vjs-default-skin' controls='' preload='auto'>
                     {this.props.urls.map(function(url) {
-                        return <source src={url} type="video/mp4"/>
+                        return <source src={url} type='video/mp4'/>
                     })}
                 </video>
             </div>

@@ -41,8 +41,10 @@ saveGraphJSON jsonStr nameStr = do
 
 -- | Inserts course into the Courses table.
 insertCourse :: MonadIO m => Course -> ReaderT SqlBackend m ()
-insertCourse course =
-    insert_ $ Courses (name course)
+insertCourse course = do 
+    maybeCourse <- selectFirst [CoursesCode ==. (name course)] []
+    case maybeCourse of
+        Nothing -> insert_ $ Courses (name course)
                       (title course)
                       (description course)
                       (manualTutorialEnrolment course)
@@ -54,6 +56,9 @@ insertCourse course =
                       (prereqString course)
                       (coreqs course)
                       []
+
+        Just _ -> return ()
+
 
 -- | Updates the manualTutorialEnrolment field of the given course.
 setTutorialEnrolment :: MonadIO m => T.Text -> Bool -> ReaderT SqlBackend m ()

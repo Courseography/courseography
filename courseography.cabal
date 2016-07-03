@@ -66,8 +66,8 @@ executable courseography
     WebParsing.ParsingHelp,
     WebParsing.PrerequisiteParsing,
     WebParsing.TimeConverter,
-    WebParsing.TimeTableParser,
-    WebParsing.PostParser
+    WebParsing.PostParser,
+    WebParsing.UtsgJsonParser
   other-extensions:
     OverloadedStrings,
     DataKinds,
@@ -95,6 +95,7 @@ executable courseography
     base64-bytestring,
     split,
     containers,
+    unordered-containers,
     random,
     process >= 1.2,
     diagrams-lib >= 1.3,
@@ -114,7 +115,6 @@ executable courseography
     tagsoup,
     regex-posix,
     mtl,
-    HaXml,
     persistent-template,
     vector,
     clay,
@@ -127,4 +127,3 @@ executable courseography
   default-language: Haskell2010
   ghc-options: -Wall -fwarn-tabs
   hs-source-dirs: app
-  
