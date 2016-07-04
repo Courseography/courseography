@@ -424,8 +424,8 @@ var Graph = React.createClass({
     },
 
     calculateRatioGraphSizeToContainerSize: function() {
-        var containerWidth = document.getElementById("react-graph").clientWidth;
-        var containerHeight = document.getElementById("react-graph").clientHeight;
+        var containerWidth = document.getElementById('react-graph').clientWidth;
+        var containerHeight = document.getElementById('react-graph').clientHeight;
         var heightToContainerRatio = this.state.height / containerHeight;
         var widthToContainerRatio = this.state.width / containerWidth;
         return Math.max(heightToContainerRatio, widthToContainerRatio);
@@ -436,7 +436,7 @@ var Graph = React.createClass({
         var rightEdge = (this.state.width - this.state.horizontalPanFactor) / this.state.zoomFactor;
         // Adjust right edge position to account for auto resize.
         rightEdge /= this.calculateRatioGraphSizeToContainerSize();
-        return rightEdge > document.getElementById("react-graph").clientWidth;
+        return rightEdge > document.getElementById('react-graph').clientWidth;
     },
 
     graphBottomEdgeOffScreen: function() {
@@ -444,7 +444,7 @@ var Graph = React.createClass({
         var bottomEdge = (this.state.height - this.state.verticalPanFactor) / this.state.zoomFactor;
         // Adjust bottom edge position to account for auto resize.
         bottomEdge /= this.calculateRatioGraphSizeToContainerSize();
-        return bottomEdge > document.getElementById("react-graph").clientHeight;;
+        return bottomEdge > document.getElementById('react-graph').clientHeight;;
     },
 
     graphTopEdgeOffScreen: function() {
@@ -536,56 +536,59 @@ var Graph = React.createClass({
             preserveAspectRatio: 'xMinYMin'
         };
 
-        var zoomInDisabled = (this.state.zoomFactor <= 0.5) ? true : false;
-        var zoomOutDisabled = (this.state.zoomFactor >= 1.1) ? true : false;
+        var zoomInDisabled = this.state.zoomFactor <= 0.5;
+        var zoomOutDisabled = this.state.zoomFactor >= 1.1;
         var panUpDisabled = !this.graphTopEdgeOffScreen() ? true: false;
         var panRightDisabled = !this.graphRightEdgeOffScreen() ? true: false;
         var panDownDisabled = !this.graphBottomEdgeOffScreen() ? true: false;
         var panLeftDisabled = !this.graphLeftEdgeOffScreen() ? true: false;
-
+        var resetDisabled = this.state.zoomFactor == 1 &&
+                            this.state.horizontalPanFactor == 0 &&
+                            this.state.verticalPanFactor == 0;
         return (
             <div>
                 <Button
                     divId='zoom-in-button'
-                    text="+"
+                    text='+'
                     mouseDown={() => this.onButtonPress(this.incrementZoom, true, 0.05)}
                     mouseUp={this.onButtonRelease}
                     disabled={zoomInDisabled}/>
                 <Button
                     divId='zoom-out-button'
-                    text= "&mdash;"
+                    text= '&mdash;'
                     mouseDown={() => this.onButtonPress(this.incrementZoom, false, 0.05)}
                     mouseUp={this.onButtonRelease}
                     disabled={zoomOutDisabled}/>
                 <Button
                     divId='pan-up-button'
-                    text="↑"
+                    text='↑'
                     mouseDown={() => this.onButtonPress(this.panDirection, 'up', 10)}
                     mouseUp={this.onButtonRelease}
                     disabled={panUpDisabled}/>
                 <Button
                     divId='pan-down-button'
-                    text="↓"
+                    text='↓'
                     mouseDown={() => this.onButtonPress(this.panDirection, 'down', 10)}
                     mouseUp={this.onButtonRelease}
                     disabled={panDownDisabled}/>
                 <Button
                     divId='pan-right-button'
-                    text="→"
+                    text='→'
                     mouseDown={() => this.onButtonPress(this.panDirection, 'right', 10)}
                     mouseUp={this.onButtonRelease}
                     disabled={panRightDisabled}/>
                 <Button
                     divId='pan-left-button'
-                    text="←"
+                    text='←'
                     mouseDown={() => this.onButtonPress(this.panDirection, 'left', 10)}
                     mouseUp={this.onButtonRelease}
                     disabled={panLeftDisabled}/>
                 <Button
                     divId='reset-button'
-                    text="Reset"
+                    text='Reset'
                     mouseDown={this.resetZoomAndPan}
-                    mouseUp={this.onButtonRelease}/>
+                    mouseUp={this.onButtonRelease}
+                    disabled={resetDisabled}/>
                 <Modal ref='modal' />
                 <svg {... svgAttrs} ref='svg' version='1.1'
                     className={this.state.highlightedNodes.length > 0 ?
