@@ -243,9 +243,9 @@ graphContainer = do
             backgroundColor purple10
             fontColor white
         ":disabled" & do
-            border solid (px 1) grey2
-            backgroundColor white
-            fontColor grey2
+            border solid (px 1) grey6
+            backgroundColor grey2
+            fontColor grey6
     "#zoom-in-button" ? do
         top (px 85)
         right (px 30)
