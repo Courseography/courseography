@@ -720,7 +720,7 @@ var Node = React.createClass({
         }
         return {
             status: state,
-            selected: ['active', 'overridden'].indexOf(state) >= 0,
+            selected: ['active', 'overridden'].indexOf(state) >= 0
         };
     },
 
