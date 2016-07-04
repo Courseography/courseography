@@ -721,7 +721,6 @@ var Node = React.createClass({
         return {
             status: state,
             selected: ['active', 'overridden'].indexOf(state) >= 0,
-            inFocus: false
         };
     },
 
@@ -803,7 +802,6 @@ var Node = React.createClass({
     },
 
     focusPrereqs: function () {
-        this.setState({inFocus: true});
         var svg = this.props.svg;
         var id = this.props.JSON.id_;
         // Check if there are any missing prerequisites.
@@ -836,7 +834,6 @@ var Node = React.createClass({
     },
 
     unfocusPrereqs: function () {
-        this.setState({inFocus: false});
         var svg = this.props.svg;
         this.updateNode(false);
         this.props.parents.forEach(function (node) {
@@ -921,7 +918,7 @@ var Node = React.createClass({
 
 
 var BoolGroup = React.createClass({
-    componentDidUpdate: function () {
+    componentDidMount: function () {
         for (var ref in this.refs) {
             this.refs[ref].updateNode(this.props.svg);
         }
@@ -1132,12 +1129,8 @@ var EdgeGroup = React.createClass({
             var bID = b.id_;
             var aMiss = false;
             var bMiss = false;
-            if (aID in state) {
-                aMiss = state[aID];
-            }
-            if (bID in state) {
-                bMiss = state[bID];
-            }
+            aMiss = aID in state && state[aID];
+            bMiss = bID in state && state[bID];
             if ((aMiss && bMiss) || (!aMiss && !bMiss)) {
                 // a and b are equal
                 return 0;
@@ -1168,27 +1161,7 @@ var Edge = React.createClass({
                      this.props.svg.refs.bools.refs[this.props.source];
         var target = this.props.svg.refs.nodes.refs[this.props.target] ||
                      this.props.svg.refs.bools.refs[this.props.target];
-        // if (target.state.status === 'missing' && !source.isSelected()) {
-        //     this.setState({status: 'missing'});
-        // } else if (!source.isSelected()) {
-        //     this.setState({status: 'inactive'});
-        // } else if (!target.isSelected()) {
-        //     this.setState({status: 'takeable'});
-        // } else {
-        //     this.setState({status: 'active'});
-        // }
-        // if (!source.isSelected() && target.state.status !== 'missing') {
-        //     this.setState({status: 'inactive'});
-        // } else if (!target.isSelected() && target.state.status !== 'missing') {
-        //     this.setState({status: 'takeable'});
-        // } else if (!source.isSelected() && target.state.status === 'missing') {
-        //     this.setState({status: 'missing'});
-        // } else {
-        //     this.setState({status: 'active'});
-        // }
         if (!source.isSelected() && target.state.status === 'missing') {
-            // console.log(source.state.inFocus);
-            // console.log(target.state.inFocus);
             this.setState({status: 'missing'});
         } else if (!source.isSelected()) {
             this.setState({status: 'inactive'});
