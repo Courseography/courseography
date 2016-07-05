@@ -34,9 +34,9 @@ jQueryScripts = if enableCdn
 
 reactScripts :: [String]
 reactScripts = if enableCdn
-               then ["https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react.js",
-                     "https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react-dom.js",
-                     "https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.js"]
+               then ["https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react.min.js",
+                     "https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react-dom.min.js",
+                     "https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"]
                else ["/static/js/vendor/react.0.14.3.js",
                      "/static/js/vendor/react-dom.0.14.3.js",
                      "/static/js/vendor/browser.5.8.34.js"]
