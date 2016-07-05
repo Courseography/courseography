@@ -107,6 +107,16 @@ function parseCourse(s, prefix) {
 }
 
 
+function Button(props) {
+    return (
+        <button id={props.divId} className='graph-control-button'
+        onMouseDown={props.mouseDown}
+        onMouseUp={props.mouseUp}
+        disabled={props.disabled}>{props.text}</button>
+    );
+}
+
+
 function renderReactGraph() {
     'use strict';
     return ReactDOM.render(
@@ -132,12 +142,21 @@ var Graph = React.createClass({
             height: 0,
             zoomFactor: 1,
             horizontalPanFactor: 0,
-            verticalPanFactor: 0
+            verticalPanFactor: 0,
+            mouseDown: false
         };
     },
 
     componentDidMount: function () {
         this.getGraph();
+        // can't detect keydown event when adding event listener to react-graph
+        document.body.addEventListener('keydown', this.onKeyDown);
+        document.getElementById('react-graph').addEventListener('wheel', this.onWheel);
+    },
+
+    componentWillUnmount: function () {
+        document.body.removeEventListener('keydown', this.onKeyDown);
+        document.getElementById('react-graph').removeEventListener('wheel', this.onWheel);
     },
 
     getGraph: function (graphName) {
@@ -284,9 +303,9 @@ var Graph = React.createClass({
         var courseId = event.currentTarget.id;
         var currentNode = this.refs.nodes.refs[courseId];
         currentNode.focusPrereqs(this);
-				
+
         this.clearAllTimeouts();
-			
+
         var infoBox = this.refs.infoBox;
 
         var xPos = currentNode.props.JSON.pos[0];
@@ -306,31 +325,31 @@ var Graph = React.createClass({
                           yPos: yPos,
                           nodeId: courseId,
                           showInfobox: true});
-
     },
 
     nodeMouseLeave: function (event) {
         var courseId = event.currentTarget.id;
         var currentNode = this.refs.nodes.refs[courseId];
         currentNode.unfocusPrereqs(this);
-				
+
         var infoBox = this.refs.infoBox;
 
         var timeout = setTimeout(function () {
                 infoBox.setState({showInfobox: false});
         }, 400);
 
+
         this.setState({timeouts: this.state.timeouts.concat(timeout)});
-			
+
     },
-    
+
     infoBoxMouseEnter: function () {
         this.clearAllTimeouts();
-			
+
         var infoBox = this.refs.infoBox;
         infoBox.setState({showInfobox: true});
     },
-    
+
     infoBoxMouseLeave: function () {
         var infoBox = this.refs.infoBox;
 
@@ -340,7 +359,7 @@ var Graph = React.createClass({
 
         this.setState({timeouts: this.state.timeouts.concat(timeout)});
     },
-    
+
     infoBoxMouseClick: function () {
         var infoBox = this.refs.infoBox;
         var modal = this.refs.modal;
@@ -367,7 +386,7 @@ var Graph = React.createClass({
 
         $(this.refs.modal.getDOMNode()).modal();
     },
-    
+
     // Reset graph
     reset: function () {
         this.setFCECount(0);
@@ -388,56 +407,123 @@ var Graph = React.createClass({
         );
     },
 
-    incrementZoom: function(increase) {
+    incrementZoom: function(increase, zoomFactorRate) {
+        // onButtonRelease calls are required when a button becomes disabled
+        // because it loses its ability to detect mouseUp event
         if (increase) {
-            if (this.state.zoomFactor > 0.5) {
-                this.setState({zoomFactor: this.state.zoomFactor - 0.05});
+            if (this.state.zoomFactor > 0.5) { // zooming allowed
+                this.setState({zoomFactor: this.state.zoomFactor - zoomFactorRate});
+            } else { // button becomes disabled
+                this.onButtonRelease();
             }
         } else {
             if (this.state.zoomFactor < 1.1) {
-                this.setState({zoomFactor: this.state.zoomFactor + 0.05});
+                this.setState({zoomFactor: this.state.zoomFactor + zoomFactorRate});
+            } else {
+                this.onButtonRelease();
             }
         }
     },
 
-    panDirection: function(direction) {
-        // initial calculation for poisition of each edge
-        // bottom and right edges require further calculation performed below
-        var topEdge = -(this.state.verticalPanFactor);
-        var leftEdge = -(this.state.horizontalPanFactor);
-        var bottomEdge = (this.state.height - this.state.verticalPanFactor) / this.state.zoomFactor;
-        var rightEdge = (this.state.width - this.state.horizontalPanFactor) / this.state.zoomFactor;
-
-        // size of container
-        var containerWidth = document.getElementById("react-graph").clientWidth;
-        var containerHeight = document.getElementById("react-graph").clientHeight;
-        
-        // if the graph does not fit in its container, it is resized by the inverse factor
-        // of the greater of these two ratios.
-        var autoResizeFactor;
+    calculateRatioGraphSizeToContainerSize: function() {
+        var containerWidth = document.getElementById('react-graph').clientWidth;
+        var containerHeight = document.getElementById('react-graph').clientHeight;
         var heightToContainerRatio = this.state.height / containerHeight;
         var widthToContainerRatio = this.state.width / containerWidth;
-        autoResizeFactor = Math.max(heightToContainerRatio, widthToContainerRatio);
-        bottomEdge /= autoResizeFactor;
-        rightEdge /= autoResizeFactor;
+        return Math.max(heightToContainerRatio, widthToContainerRatio);
+    },
 
-        if (direction === 'up' && topEdge < 0) {
-            this.setState({verticalPanFactor: this.state.verticalPanFactor - 10});
-        } else if (direction === 'left' && leftEdge < 0) {
-            this.setState({horizontalPanFactor: this.state.horizontalPanFactor - 10});
-        } else if (direction ==='down' && bottomEdge > containerHeight) {
-            this.setState({verticalPanFactor: this.state.verticalPanFactor + 10});
-        } else if (direction === 'right' && rightEdge > containerWidth) {
-            this.setState({horizontalPanFactor: this.state.horizontalPanFactor + 10});
+    graphRightEdgeOffScreen: function() {
+        // Calculate right edge prior to auto adjusting to fill container.
+        var rightEdge = (this.state.width - this.state.horizontalPanFactor) / this.state.zoomFactor;
+        // Adjust right edge position to account for auto resize.
+        rightEdge /= this.calculateRatioGraphSizeToContainerSize();
+        return rightEdge > document.getElementById('react-graph').clientWidth;
+    },
+
+    graphBottomEdgeOffScreen: function() {
+        // Calculate bottom edge prior to auto adjusting to fill container.
+        var bottomEdge = (this.state.height - this.state.verticalPanFactor) / this.state.zoomFactor;
+        // Adjust bottom edge position to account for auto resize.
+        bottomEdge /= this.calculateRatioGraphSizeToContainerSize();
+        return bottomEdge > document.getElementById('react-graph').clientHeight;;
+    },
+
+    graphTopEdgeOffScreen: function() {
+        return this.state.verticalPanFactor > 0;
+    },
+
+    graphLeftEdgeOffScreen: function() {
+        return this.state.horizontalPanFactor > 0;
+    },
+
+    panDirection: function(direction, panFactorRate) {
+        // onButtonRelease calls are required when a button becomes disabled
+        // because it loses its ability to detect mouseUp event
+        if (direction === 'up') {
+            if (this.graphTopEdgeOffScreen()) { //panning allowed
+                this.setState({verticalPanFactor: this.state.verticalPanFactor - panFactorRate});
+            } else { // button becomes disabled
+                this.onButtonRelease();
+            }
+        } else if (direction === 'left') {
+            if (this.graphLeftEdgeOffScreen()) {
+                this.setState({horizontalPanFactor: this.state.horizontalPanFactor - panFactorRate});
+            } else {
+                this.onButtonRelease();
+            }
+        } else if (direction ==='down') {
+            if (this.graphBottomEdgeOffScreen()) {
+                this.setState({verticalPanFactor: this.state.verticalPanFactor + panFactorRate});
+            } else {
+                this.onButtonRelease();
+            }
+        } else if (direction === 'right') {
+            if (this.graphRightEdgeOffScreen()) {
+                this.setState({horizontalPanFactor: this.state.horizontalPanFactor + panFactorRate});
+            } else {
+                this.onButtonRelease();
+            }
         }
     },
 
     resetZoomAndPan: function() {
         this.setState({
             zoomFactor: 1,
-            verticalPanFactor: 0, 
+            verticalPanFactor: 0,
             horizontalPanFactor: 0
         });
+    },
+
+    onButtonPress: function(zoomOrPanFunction, direction, rateOfChange) {
+        zoomOrPanFunction(direction, rateOfChange);
+        var mouseIsDown = setInterval(() => zoomOrPanFunction(direction, rateOfChange), 500);
+        this.setState({mouseDown: mouseIsDown});
+    },
+
+    onButtonRelease: function() {
+        var mouseIsDown = clearInterval(this.state.mouseDown)
+        this.setState({mouseDown: mouseIsDown});
+    },
+
+    onKeyDown: function(event) {
+        if (event.keyCode == 39) {
+            this.panDirection('right', 5);
+        } else if (event.keyCode == 40) {
+            this.panDirection('down', 5);
+        } else if (event.keyCode == 37) {
+            this.panDirection('left', 5);
+        } else if (event.keyCode == 38) {
+            this.panDirection('up', 5);
+        }
+    },
+
+    onWheel: function(event) {
+        if (event.deltaY < 0) {
+            this.incrementZoom(true, 0.005);
+        } else if (event.deltaY > 0) {
+            this.incrementZoom(false, 0.005);
+        }
     },
 
     render: function () {
@@ -452,46 +538,62 @@ var Graph = React.createClass({
             preserveAspectRatio: 'xMinYMin'
         };
 
+        var zoomInDisabled = this.state.zoomFactor <= 0.5;
+        var zoomOutDisabled = this.state.zoomFactor >= 1.1;
+        var panUpDisabled = !this.graphTopEdgeOffScreen() ? true: false;
+        var panRightDisabled = !this.graphRightEdgeOffScreen() ? true: false;
+        var panDownDisabled = !this.graphBottomEdgeOffScreen() ? true: false;
+        var panLeftDisabled = !this.graphLeftEdgeOffScreen() ? true: false;
+        var resetDisabled = this.state.zoomFactor == 1 &&
+                            this.state.horizontalPanFactor == 0 &&
+                            this.state.verticalPanFactor == 0;
         return (
             <div>
                 <Button
                     divId='zoom-in-button'
-                    altId='zoom-in'
-                    sourceImg="static/res/ico/in.png"
-                    mouseDown={() => this.incrementZoom(true)}/>
+                    text='+'
+                    mouseDown={() => this.onButtonPress(this.incrementZoom, true, 0.05)}
+                    mouseUp={this.onButtonRelease}
+                    disabled={zoomInDisabled}/>
                 <Button
                     divId='zoom-out-button'
-                    altId='zoom-out'
-                    sourceImg="static/res/ico/out.png"
-                    mouseDown={() => this.incrementZoom(false)}/>
+                    text= '&mdash;'
+                    mouseDown={() => this.onButtonPress(this.incrementZoom, false, 0.05)}
+                    mouseUp={this.onButtonRelease}
+                    disabled={zoomOutDisabled}/>
                 <Button
                     divId='pan-up-button'
-                    altId='pan-up'
-                    sourceImg="static/res/ico/up.png"
-                    mouseDown={() => this.panDirection('up')}/>
+                    text='↑'
+                    mouseDown={() => this.onButtonPress(this.panDirection, 'up', 10)}
+                    mouseUp={this.onButtonRelease}
+                    disabled={panUpDisabled}/>
                 <Button
                     divId='pan-down-button'
-                    altId='pan-down'
-                    sourceImg="static/res/ico/down.png"
-                    mouseDown={() => this.panDirection('down')}/>
+                    text='↓'
+                    mouseDown={() => this.onButtonPress(this.panDirection, 'down', 10)}
+                    mouseUp={this.onButtonRelease}
+                    disabled={panDownDisabled}/>
                 <Button
                     divId='pan-right-button'
-                    altId='pan-right'
-                    sourceImg="static/res/ico/right.png"
-                    mouseDown={() => this.panDirection('right')}/>
+                    text='→'
+                    mouseDown={() => this.onButtonPress(this.panDirection, 'right', 10)}
+                    mouseUp={this.onButtonRelease}
+                    disabled={panRightDisabled}/>
                 <Button
                     divId='pan-left-button'
-                    altId='pan-left'
-                    sourceImg="static/res/ico/left.png"
-                    mouseDown={() => this.panDirection('left')}/>
-                <Button 
+                    text='←'
+                    mouseDown={() => this.onButtonPress(this.panDirection, 'left', 10)}
+                    mouseUp={this.onButtonRelease}
+                    disabled={panLeftDisabled}/>
+                <Button
                     divId='reset-button'
-                    altId='reset'
-                    sourceImg="static/res/ico/reset.png"
-                    mouseDown={() => this.resetZoomAndPan()}/>
+                    text='Reset'
+                    mouseDown={this.resetZoomAndPan}
+                    mouseUp={this.onButtonRelease}
+                    disabled={resetDisabled}/>
                 <Modal ref='modal' />
                 <svg {... svgAttrs} ref='svg' version='1.1'
-                     className={this.state.highlightedNodes.length > 0 ?
+                    className={this.state.highlightedNodes.length > 0 ?
                                 'highlight-nodes' : ''}>
                     {this.renderArrowHead()}
                     <RegionGroup
@@ -525,18 +627,6 @@ var Graph = React.createClass({
     }
 });
 
-var Button = React.createClass({
-
-    render: function() {
-        return (
-            <div id={this.props.divId} className='graph-control-button'>
-            <img alt={this.props.altId}
-            onMouseDown={this.props.mouseDown}
-            src={this.props.sourceImg}/>
-            </div>
-        );
-    }
-});
 
 // This now uses the new syntax for a stateless React component
 // (component with only a render method).
@@ -1233,7 +1323,7 @@ var InfoBox = React.createClass({
                 'y': parseFloat(this.state.yPos) + 30 / 2 + 6
             };
 
-            return (            
+            return (
                 <g id='infoBox' className='tooltip-group' style={gStyles} {... this.props}>
                     <rect {... rectAttrs} ></rect>
                     <text {... textAttrs} >
