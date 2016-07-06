@@ -10,7 +10,7 @@ requirejs([
 
     $(document).ready(function () {
         'use strict';
-        var graphComponent = reactGraph.renderReactGraph();
+        var graphComponent = reactGraph.renderReactGraph('react-graph');
 
         // Set focus button onclicks
         $('.focus').click(function(e) {

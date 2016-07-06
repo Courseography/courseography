@@ -117,11 +117,18 @@ function Button(props) {
 }
 
 
-function renderReactGraph() {
+function renderReactGraph(graph_container_id, start_blank, edit) {
     'use strict';
+    if (start_blank === undefined) {
+        start_blank = false;
+    }
+    if (edit === undefined) {
+        edit = false;
+    }
+
     return ReactDOM.render(
-        <Graph/>,
-        document.getElementById('react-graph')
+        <Graph start_blank={start_blank} edit={edit} />,
+        document.getElementById(graph_container_id)
     );
 }
 
@@ -138,8 +145,8 @@ var Graph = React.createClass({
             highlightedNodes: [],
             timeouts: [],
             fceCount: 0,
-            width: 0,
-            height: 0,
+            width: window.innerWidth,
+            height: window.innerHeight,
             zoomFactor: 1,
             horizontalPanFactor: 0,
             verticalPanFactor: 0,
@@ -148,10 +155,31 @@ var Graph = React.createClass({
     },
 
     componentDidMount: function () {
-        this.getGraph();
+        if (!this.props.start_blank) {
+            this.getGraph();
+        }
         // can't detect keydown event when adding event listener to react-graph
         document.body.addEventListener('keydown', this.onKeyDown);
         document.getElementById('react-graph').addEventListener('wheel', this.onWheel);
+
+        // Need to hardcode these in because React does not understand these
+        // attributes
+        var svgNode = ReactDOM.findDOMNode(this.refs.svg);
+        var markerNode = ReactDOM.findDOMNode(this.refs.marker);
+
+        svgNode.setAttribute('xmlns','http://www.w3.org/2000/svg');
+        svgNode.setAttribute('xmlns:xlink','http://www.w3.org/1999/xlink');
+        svgNode.setAttribute('xmlns:svg','http://www.w3.org/2000/svg');
+        svgNode.setAttribute('xmlns:dc','http://purl.org/dc/elements/1.1/');
+        svgNode.setAttribute('xmlns:cc','http://creativecommons.org/ns#');
+        svgNode.setAttribute('xmlns:rdf','http://www.w3.org/1999/02/22-rdf-syntax-ns#');
+
+        markerNode.setAttribute('refX', 4);
+        markerNode.setAttribute('refY', 5);
+        markerNode.setAttribute('markerUnits', 'strokeWidth');
+        markerNode.setAttribute('orient', 'auto');
+        markerNode.setAttribute('markerWidth', 7);
+        markerNode.setAttribute('markerHeight', 7);
     },
 
     componentWillUnmount: function () {
@@ -1166,13 +1194,13 @@ var Bool = React.createClass({
 
 var EdgeGroup = React.createClass({
     // EdgeGroup's state is used to keep track of the edgeIDs of
-    // edges that are missing. Void is just a placeholder state so 
-    // we can declare an initial state; it does nothing. 
+    // edges that are missing. Void is just a placeholder state so
+    // we can declare an initial state; it does nothing.
     getInitialState: function() {
         return {};
     },
 
-    // When an edge's state changes and the edge is not undefined, 
+    // When an edge's state changes and the edge is not undefined,
     // it will call updateEdgeStatus and update EdgeGroup's state with its
     // edgeID and status. This function is passed as a props to Edge.
     updateEdgeStatus: function(edgeID, state) {
@@ -1207,7 +1235,7 @@ var EdgeGroup = React.createClass({
 
     render: function () {
         // Missing edges must be rendered last. The sort
-        // method custom sorts a copy of edgesJSON so that all missing edges 
+        // method custom sorts a copy of edgesJSON so that all missing edges
         // are last in the list. Then render based on that list.
         var edges = this.props.edgesJSON;
         var edgesCopy = $.extend([], edges);

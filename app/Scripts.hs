@@ -88,9 +88,10 @@ drawScripts = do
     sequence_ (map toScript $
         ["/static/js/draw/variables.js",
          "/static/js/draw/path.js",
-         "/static/js/draw/draw.js",
          "/static/js/draw/setup.js",
          "/static/js/vendor/jscolor.min.js"])
+    H.script ! A.src "/static/js/requirejs-config.js" $ ""
+    H.script ! H.dataAttribute "main" "/static/js/draw" ! A.src "/static/js/vendor/require.js" $ ""
 
 postScripts :: H.Html
 postScripts = do
