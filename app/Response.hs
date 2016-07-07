@@ -21,7 +21,9 @@ module Response
         -- | @/privacy@
         module Response.Privacy,
         -- | @/timesearch@
-        module Response.Search
+        module Response.Search,
+        -- | @/export@
+        module Response.Export
     )
     where
 
@@ -36,3 +38,4 @@ import Response.NotFound
 import Response.Post
 import Response.Privacy
 import Response.Search
+import Response.Export
