@@ -554,6 +554,11 @@ var Graph = React.createClass({
         }
     },
 
+    drawNode: function(nodeJSON) {
+        var newNodesJSON = $.extend([], this.state.nodesJSON).push(nodeJSON);
+        this.setState({nodesJSON: newNodesJSON});
+    },
+
     render: function () {
         // not all of these properties are supported in React
         var svgAttrs = {
@@ -1194,8 +1199,7 @@ var Bool = React.createClass({
 
 var EdgeGroup = React.createClass({
     // EdgeGroup's state is used to keep track of the edgeIDs of
-    // edges that are missing. Void is just a placeholder state so
-    // we can declare an initial state; it does nothing.
+    // edges that are missing.
     getInitialState: function() {
         return {};
     },
