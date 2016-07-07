@@ -16,21 +16,20 @@ module Database.CourseInsertion
 
 import qualified Data.Text as T
 import qualified Data.ByteString.Lazy.Char8 as BSL
-import Happstack.Server.SimpleHTTP
-import Data.Maybe (fromMaybe)
+import Happstack.Server.SimpleHTTP (Response, toResponse)
 import Config (databasePath)
-import Database.Persist.Sqlite (selectFirst, fromSqlKey, toSqlKey, insertMany_, insert_, insert, SqlPersistM, (=.), (==.), updateWhere, runSqlite)
+import Database.Persist.Sqlite (selectFirst, insertMany_, insert_, insert, SqlPersistM, (=.), (==.), updateWhere, runSqlite)
 import Database.Tables
-import Data.Aeson
+import qualified Data.Aeson as Aeson
 
 -- | Inserts SVG graph data into Texts, Shapes, and Paths tables
 saveGraphJSON :: String -> String -> IO Response
 saveGraphJSON jsonStr nameStr = do
-    let jsonObj = decode $ BSL.pack jsonStr
+    let jsonObj = Aeson.decode $ BSL.pack jsonStr
     case jsonObj of
         Nothing -> return $ toResponse ("Error" :: String)
         Just (SvgJSON texts shapes paths) -> do
-            response <- runSqlite databasePath $ do
+            _ <- runSqlite databasePath $ do
                 gId <- insert $ Graph nameStr 256 256
                 insertMany_ $ map (\text -> text {textGraph = gId}) texts
                 insertMany_ $ map (\shape -> shape {shapeGraph = gId}) shapes
