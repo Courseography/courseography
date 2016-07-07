@@ -22,7 +22,6 @@ import FacebookUtilities
 import Config (markdownPath, serverConf)
 import qualified Data.Text.Lazy.IO as LazyIO
 import Data.Int (Int64)
-<<<<<<< HEAD
 import Route (routes)
 
 runServer :: IO ()
@@ -42,7 +41,7 @@ runServer = do
             [ do
               nullDir
               seeOther "graph" (toResponse "Redirecting to /graph"),    
-              not FoundResponse
+              notFoundResponse
         ]
 
     where
