@@ -38,7 +38,7 @@ runServer = do
     simpleHTTP serverConf $ do
       decodeBody (defaultBodyPolicy "/tmp/" 4096 4096 4096)
       msum 
-            routes ++
+            (map (\(a,b) -> dir a b) $ routes) ++
             [ do
               nullDir
               seeOther "graph" (toResponse "Redirecting to /graph"),    
