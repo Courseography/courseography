@@ -12,6 +12,8 @@ import Data.Char
 import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Match
 import Database.Tables
+import qualified Text.Parsec as P
+import Text.Parsec ((<|>))
 
 fasCalendarURL :: String
 fasCalendarURL = "http://calendar.artsci.utoronto.ca/"
@@ -41,14 +43,40 @@ getPost str = do
         isPostName tag = tagOpenAttrNameLit "a" "name" (\nameValue -> (length nameValue) == 9) tag
 
 addPostToDatabase :: [Tag String] -> IO ()
-addPostToDatabase tags =
+addPostToDatabase tags = do
     let postCode = T.pack (fromAttrib "name" ((take 1 $ filter (isTagOpenName "a") tags) !! 0))
         fullPostName = innerText (take 1 $ filter (isTagText) tags)
-        postType =
-            -- Note: See Biochemistry Specialist calendar entry
-            if length (words fullPostName) > 2
-            then T.pack ((reverse $ words $ fullPostName) !! 2)
-            else ""
-        departmentName = T.pack $ unwords $ reverse $ drop 3  $ reverse $ words $ fullPostName
+        postType = T.pack $ getPostType postCode
+        departmentName = T.pack $ (getDepartmentName fullPostName postType)
+    insertPost departmentName postType postCode
+
+getPostType :: T.Text -> String
+getPostType postCode = 
+    let codeSection = extractPostType (T.unpack postCode)
     in
-        insertPost departmentName postType postCode
+        case codeSection of
+            "SPE" -> "Specialist"
+            "MAJ" -> "Major"
+            "MIN" ->  "Minor"
+
+extractPostType :: [Char] -> [Char]
+extractPostType postCode = do
+    let parsed = P.parse findPostType "(source)" postCode
+    case parsed of 
+        Right name -> name
+        Left _ -> ""
+
+findPostType :: P.Parsec String () String
+findPostType = do
+   P.string "AS"
+   P.many1 P.letter
+
+getDepartmentName :: [Char] -> T.Text -> [Char]
+getDepartmentName fullPostName postType = do
+    let parsed = P.parse (isDepartmentName (T.unpack postType)) "(source)" fullPostName
+    case parsed of 
+        Right name -> name
+        Left _ -> ""
+
+isDepartmentName ::  [Char] -> P.Parsec String () String
+isDepartmentName postType = P.manyTill P.anyChar (P.try (P.string postType))
