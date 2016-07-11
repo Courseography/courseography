@@ -11,4 +11,4 @@ import Happstack.Server
 
 exportResponse :: ServerPart Response
 exportResponse =
-    serveDirectory DisableBrowsing ["CSGraph.pdf"] "."
+    serveFile (asContentType "application/pdf") "CSGraph.pdf"
