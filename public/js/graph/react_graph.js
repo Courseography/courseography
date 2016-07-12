@@ -150,7 +150,9 @@ var Graph = React.createClass({
             zoomFactor: 1,
             horizontalPanFactor: 0,
             verticalPanFactor: 0,
-            mouseDown: false
+            mouseDown: false,
+            drawMode: 'node-mode',
+            drawNodeID: 0
         };
     },
 
@@ -554,9 +556,74 @@ var Graph = React.createClass({
         }
     },
 
-    drawNode: function(nodeJSON) {
+    /**
+     * Calculates the position of the click in relation to the page.
+     * @param {object} e The click event.
+     * @param {HTMLElement} elem The target of the click event.
+     * @return {object} The position of the click.
+     */
+    getClickPosition: function(e, elem) {
+        var parentPosition = getPosition(elem);
+        var xPosition = e.clientX - parentPosition.x;
+        var yPosition = e.clientY - parentPosition.y;
+        xPosition = Math.round(xPosition / 4) * 4; // for snapping!!
+        yPosition = Math.round(yPosition / 4) * 4;
+
+        return { x: xPosition, y: yPosition };
+    },
+
+    /**
+     * Calculates the position of elem in relation to the page.
+     * @param {HTMLElement} elem The target of the click event.
+     * @return {object} The position of elem on the page.
+     */
+    getPosition: function(elem) {
+        var xPosition = 0;
+        var yPosition = 0;
+
+        while (elem) {
+            // || 0 for firefox compatability
+            xPosition += (elem.offsetLeft || 0) - elem.scrollLeft + elem.clientLeft;
+            yPosition += (elem.offsetTop || 0) - elem.scrollTop + elem.clientTop;
+            elem = elem.parentElement; // offsetParent undefined in mozilla
+        }
+        return { x: xPosition, y: yPosition };
+    },
+
+    makeNode: function(xPos, yPos) {
+        // are these the coords of text or node
+        var text = [];
+        // how do we get fill, text, graph
+        // can we add strings to ints
+        var nodeJSON = {
+            'fill':,
+            'graph':,
+            // default dimensions for a node
+            'height': 32,
+            'width': 40,
+            'id_': 'n' + this.state.drawNodeID,
+            'pos': [],
+            'stroke':
+            'text': text,
+            'tolerance': 9,
+            'type_': 'Node'   
+        };
         var newNodesJSON = $.extend([], this.state.nodesJSON).push(nodeJSON);
-        this.setState({nodesJSON: newNodesJSON});
+        var newDrawNodeID = this.state.drawNodeID + 1;
+        this.setState({nodesJSON: newNodesJSON, drawNodeID: newDrawNodeID});
+    },
+
+    /**
+    * In node-mode creates a new node at the position of the click event on the SVG canvas.
+    * In path-mode creates an elbow at the position of the click event on the SVG canvas,
+      if the startNode is defined.
+    * @param {object} e The mousedown event.
+    */
+    makeNodePath: function(e) {
+        var position = getClickPosition(e, e.currentTarget);
+        if (this.state.drawMode === 'node-mode') {
+            makeNode(position.x, position.y);
+        }
     },
 
     render: function () {
@@ -1199,7 +1266,8 @@ var Bool = React.createClass({
 
 var EdgeGroup = React.createClass({
     // EdgeGroup's state is used to keep track of the edgeIDs of
-    // edges that are missing.
+    // edges that are missing. Void is just a placeholder state so
+    // we can declare an initial state; it does nothing.
     getInitialState: function() {
         return {};
     },
