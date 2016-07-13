@@ -1,4 +1,4 @@
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE OverloadedStrings, ScopedTypeVariables #-}
 module WebParsing.ArtSciParser
     (parseArtSci, getDeptList, fasCalendarURL) where
 
@@ -46,7 +46,10 @@ getCalendar str = do
         coursesSoup = lastH2 tags
         course = map (processCourseToData . filter isTagText) $ partitions isCourseTitle coursesSoup
     print $ "parsing " ++ str
+    --runSqlite databasePath $
+    --    rawSql "PRAGMA foreign_keys = ON;" []
     runSqlite databasePath $ do
+        --x :: [T.Text] <- rawSql "PRAGMA foreign_keys = ON;" []
         runMigration migrateAll
         mapM_ insertCourse course
     where

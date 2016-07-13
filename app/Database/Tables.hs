@@ -67,6 +67,7 @@ Courses json
 
 Lecture json
     code T.Text
+    Foreign Courses fkcourse code
     session T.Text
     section T.Text
     times [Time]
