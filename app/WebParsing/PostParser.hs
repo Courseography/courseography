@@ -8,11 +8,13 @@ import Database.Persist.Sqlite(runSqlite, runMigration)
 import Config (databasePath)
 import WebParsing.ParsingHelp
 import qualified Data.Text as T
+import Data.List
 import Data.Char
 import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Match
 import Database.Tables
-import WebParsing.ParsecCombinators(getCourseFromTag, getPostType, getDepartmentName)
+import WebParsing.ParsecCombinators(getCourseFromTag, getPostType, getDepartmentName,
+    parsingAlgoOne)
 
 fasCalendarURL :: String
 fasCalendarURL = "http://calendar.artsci.utoronto.ca/"
@@ -48,6 +50,11 @@ addPostToDatabase tags = do
         postType = T.pack $ getPostType postCode
         departmentName = T.pack $ (getDepartmentName fullPostName postType)
         prereqs = map getCourseFromTag $ map (fromAttrib "href") $ filter isCourseTag tags
+    addPostCategoriesToDatabase (innerText tags)
     insertPost departmentName postType postCode
     where
         isCourseTag tag = tagOpenAttrNameLit "a" "href" (\hrefValue -> (length hrefValue) >= 0) tag
+
+addPostCategoriesToDatabase :: [Char] -> IO ()
+addPostCategoriesToDatabase tagText = do
+    parsingAlgoOne tagText

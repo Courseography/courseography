@@ -6,7 +6,8 @@ module WebParsing.ParsecCombinators
      extractPostType,
      findPostType,
      getDepartmentName,
-     isDepartmentName) where
+     isDepartmentName,
+     parsingAlgoOne) where
 
 import qualified Text.Parsec as P
 import Text.Parsec ((<|>))
@@ -22,6 +23,8 @@ findCourseFromTag :: P.Parsec String () String
 findCourseFromTag = do
     P.manyTill P.anyChar (P.char '#') 
     P.many1 P.anyChar
+
+-- Post Parsing
 
 getPostType :: T.Text -> String
 getPostType postCode = 
@@ -53,3 +56,31 @@ getDepartmentName fullPostName postType = do
 
 isDepartmentName ::  [Char] -> P.Parsec String () String
 isDepartmentName postType = P.manyTill P.anyChar (P.try (P.string postType))
+
+-- Post Category Parsing
+
+parsingAlgoOne :: [Char] -> IO ()
+parsingAlgoOne tagText = do
+    let parsed = P.parse getRequirements "(source)" tagText
+    case parsed of 
+        Right text -> do
+            let firstYear = P.parse getFirstYear "(source)" text
+            print firstYear
+        Left _ -> print "Failed."
+
+getRequirements ::  P.Parsec String () String
+getRequirements =  do
+    P.manyTill P.anyChar (P.try (P.string "Program Course Requirements:"))
+    P.many P.anyChar
+
+getFirstYear ::  P.Parsec String () String
+getFirstYear = do
+    P.manyTill P.anyChar (P.try (P.string "First Year"))
+    P.manyTill P.anyChar (P.try (P.string "Second Year"))
+
+
+-- Other Helpers
+
+line :: P.Parsec String () String
+line = P.manyTill P.anyChar (P.char '\n')
+
