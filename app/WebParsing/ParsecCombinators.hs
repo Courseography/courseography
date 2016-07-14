@@ -12,6 +12,7 @@ module WebParsing.ParsecCombinators
 import qualified Text.Parsec as P
 import Text.Parsec ((<|>))
 import qualified Data.Text as T
+import Data.Functor.Identity
 
 getCourseFromTag courseTag = do
     let course = P.parse findCourseFromTag "(source)" courseTag
@@ -64,23 +65,27 @@ parsingAlgoOne tagText = do
     let parsed = P.parse getRequirements "(source)" tagText
     case parsed of 
         Right text -> do
-            let firstYear = P.parse getFirstYear "(source)" text
-            print firstYear
+            let splitText = P.parse splitPrereqText "(source)" text
+            case splitText of
+                Right text ->
+                    print $ filter isCategory text
+                Left _ -> print "Failed."
         Left _ -> print "Failed."
+    where
+        isCategory string = (length string) /= 0
 
 getRequirements ::  P.Parsec String () String
 getRequirements =  do
     P.manyTill P.anyChar (P.try (P.string "Program Course Requirements:"))
     P.many P.anyChar
 
-getFirstYear ::  P.Parsec String () String
-getFirstYear = do
+splitPrereqText :: P.Parsec String () [String]
+splitPrereqText = do
     P.manyTill P.anyChar (P.try (P.string "First Year"))
-    P.manyTill P.anyChar (P.try (P.string "Second Year"))
+    parsed <- P.many $ do
+       P.manyTill P.anyChar (P.try categorySeperator)
+    return parsed
 
-
--- Other Helpers
-
-line :: P.Parsec String () String
-line = P.manyTill P.anyChar (P.char '\n')
+categorySeperator = do
+    P.oneOf ";\r\n"
 
