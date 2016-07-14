@@ -591,17 +591,27 @@ var Graph = React.createClass({
     },
 
     makeNode: function(xPos, yPos) {
-        // text is an array of json objects, one for each
-        // line of text?
-        var text = [];
-        // how does it detect multiple lines
-        for (var i = 0; i < jsonObj.text.length; i++) {
-            textPosX = jsonObj.pos[0];
-            if (jsonObj.type_ !== 'BoolNode') {
-                textPosX += (jsonObj.width/2)
-            }
+        var textsList = [];
+        // create text jsons, move to helper function?
+        var textXPos = xPos;
+        var textYPos = yPos;
+        for (var i = 0; i < textsList.length; i++) {
+            textXPos = xPos;
+            //if (jsonObj.type_ !== 'BoolNode') {
+                textXPos += 20;
+            //}
         }
-        textPosY = jsonObj.text[i].pos[1] - (jsonObj.height/4);
+        textYPos = text[i].pos[1] - 8;
+        // how to get align, graph, text
+        var textJSON = {
+            'align': 'begin',
+            'fill': '',
+            'graph':,
+            'pos': [textXPos, textYPos],
+            'rId': 'text' + this.state.drawNodeID,
+            'text': text
+        }
+        var texts = [textJSON];
 
         // how do we get fill, text, graph
         // can we add strings to ints
@@ -612,9 +622,9 @@ var Graph = React.createClass({
             'height': 32,
             'width': 40,
             'id_': 'n' + this.state.drawNodeID,
-            'pos': [],
+            'pos': [xPos, yPos],
             'stroke':,
-            'text': text,
+            'text': texts,
             'tolerance': 9,
             'type_': 'Node'   
         };
