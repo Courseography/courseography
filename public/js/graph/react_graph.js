@@ -591,8 +591,18 @@ var Graph = React.createClass({
     },
 
     makeNode: function(xPos, yPos) {
-        // are these the coords of text or node
+        // text is an array of json objects, one for each
+        // line of text?
         var text = [];
+        // how does it detect multiple lines
+        for (var i = 0; i < jsonObj.text.length; i++) {
+            textPosX = jsonObj.pos[0];
+            if (jsonObj.type_ !== 'BoolNode') {
+                textPosX += (jsonObj.width/2)
+            }
+        }
+        textPosY = jsonObj.text[i].pos[1] - (jsonObj.height/4);
+
         // how do we get fill, text, graph
         // can we add strings to ints
         var nodeJSON = {
@@ -603,7 +613,7 @@ var Graph = React.createClass({
             'width': 40,
             'id_': 'n' + this.state.drawNodeID,
             'pos': [],
-            'stroke':
+            'stroke':,
             'text': text,
             'tolerance': 9,
             'type_': 'Node'   
