@@ -7,8 +7,8 @@ function setCookie(cookieName, cookieValue) {
     'use strict';
 
     var lifeSpanInDays = 300;
-    document.cookie = cookieName +
-                      '=' + cookieValue +
+    document.cookie = cookieName.replace(/[^0-9a-zA-Z_\-]/g, '-') +
+                      '=' + cookieValue.replace(/[^0-9a-zA-Z_\-]/g, '-') +
                       '; max-age=' + 60 * 60 * 24 * lifeSpanInDays;
 }
 
@@ -21,7 +21,7 @@ function setCookie(cookieName, cookieValue) {
 function getCookie(cookieName) {
     'use strict';
 
-    var name = cookieName + '=';
+    var name = cookieName.replace(/[^0-9a-zA-Z_\-]/g, '-') + '=';
     var cookies = document.cookie.split(';');
     for (var i = 0; i < cookies.length; i++) {
         var cookie = cookies[i].trim();

@@ -178,6 +178,8 @@ var Graph = React.createClass({
             }
         }
 
+        graphName = graphName.replace('-', ' ');
+
         $.ajax({
             dataType: 'json',
             url: 'get-json-data',
@@ -1166,13 +1168,13 @@ var Bool = React.createClass({
 
 var EdgeGroup = React.createClass({
     // EdgeGroup's state is used to keep track of the edgeIDs of
-    // edges that are missing. Void is just a placeholder state so 
-    // we can declare an initial state; it does nothing. 
+    // edges that are missing. Void is just a placeholder state so
+    // we can declare an initial state; it does nothing.
     getInitialState: function() {
         return {};
     },
 
-    // When an edge's state changes and the edge is not undefined, 
+    // When an edge's state changes and the edge is not undefined,
     // it will call updateEdgeStatus and update EdgeGroup's state with its
     // edgeID and status. This function is passed as a props to Edge.
     updateEdgeStatus: function(edgeID, state) {
@@ -1207,7 +1209,7 @@ var EdgeGroup = React.createClass({
 
     render: function () {
         // Missing edges must be rendered last. The sort
-        // method custom sorts a copy of edgesJSON so that all missing edges 
+        // method custom sorts a copy of edgesJSON so that all missing edges
         // are last in the list. Then render based on that list.
         var edges = this.props.edgesJSON;
         var edgesCopy = $.extend([], edges);
