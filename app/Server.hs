@@ -36,12 +36,12 @@ runServer = do
     -- Start the HTTP server
     simpleHTTP serverConf $ do
       decodeBody (defaultBodyPolicy "/tmp/" 4096 4096 4096)
-      msum 
-            (map (\(a,b) -> dir a b) $ routes) ++
-            [ do
-              nullDir
-              seeOther "graph" (toResponse "Redirecting to /graph"),    
-              notFoundResponse
+      msum  
+           (map (\ (a, b) -> dir a b) $ routes) ++
+           [ do
+               nullDir
+               seeOther "graph" (toResponse "Redirecting to /graph"),    
+               notFoundResponse
         ]
 
     where
