@@ -151,9 +151,18 @@ var Graph = React.createClass({
             horizontalPanFactor: 0,
             verticalPanFactor: 0,
             mouseDown: false,
-            drawMode: 'node-mode',
+            graphMode: 'graph',
             drawNodeID: 0
         };
+    },
+
+    componentWillMount: function () {
+        if (location.href.endsWith('draw')) {
+            this.setState({graphMode: 'draw-node'});
+            document.body.addEventListener('mousedown', this.drawGraphObject, false);
+        } else {
+            this.setState({graphMode: 'graph'})
+        }
     },
 
     componentDidMount: function () {
@@ -556,93 +565,61 @@ var Graph = React.createClass({
         }
     },
 
-    /**
-     * Calculates the position of the click in relation to the page.
-     * @param {object} e The click event.
-     * @param {HTMLElement} elem The target of the click event.
-     * @return {object} The position of the click.
-     */
-    getClickPosition: function(e, elem) {
-        var parentPosition = getPosition(elem);
-        var xPosition = e.clientX - parentPosition.x;
-        var yPosition = e.clientY - parentPosition.y;
-        xPosition = Math.round(xPosition / 4) * 4; // for snapping!!
-        yPosition = Math.round(yPosition / 4) * 4;
+    drawNode: function(xPos, yPos) {
+        // var textsList = [];
+        // // create text jsons, move to helper function?
+        // var textXPos = xPos;
+        // var textYPos = yPos;
+        // for (var i = 0; i < textsList.length; i++) {
+        //     textXPos = xPos;
+        //     //if (jsonObj.type_ !== 'BoolNode') {
+        //         textXPos += 20;
+        //     //}
+        // }
+        // textYPos = text[i].pos[1] - 8;
 
-        return { x: xPosition, y: yPosition };
-    },
-
-    /**
-     * Calculates the position of elem in relation to the page.
-     * @param {HTMLElement} elem The target of the click event.
-     * @return {object} The position of elem on the page.
-     */
-    getPosition: function(elem) {
-        var xPosition = 0;
-        var yPosition = 0;
-
-        while (elem) {
-            // || 0 for firefox compatability
-            xPosition += (elem.offsetLeft || 0) - elem.scrollLeft + elem.clientLeft;
-            yPosition += (elem.offsetTop || 0) - elem.scrollTop + elem.clientTop;
-            elem = elem.parentElement; // offsetParent undefined in mozilla
-        }
-        return { x: xPosition, y: yPosition };
-    },
-
-    makeNode: function(xPos, yPos) {
-        var textsList = [];
-        // create text jsons, move to helper function?
-        var textXPos = xPos;
-        var textYPos = yPos;
-        for (var i = 0; i < textsList.length; i++) {
-            textXPos = xPos;
-            //if (jsonObj.type_ !== 'BoolNode') {
-                textXPos += 20;
-            //}
-        }
-        textYPos = text[i].pos[1] - 8;
-        // how to get align, graph, text
+        // text is an empty string for now until implementation,
+        // text position uses node position for now
         var textJSON = {
             'align': 'begin',
             'fill': '',
-            'graph':,
-            'pos': [textXPos, textYPos],
+            'graph': 0,
+            'pos': [xPos, yPos+20],
             'rId': 'text' + this.state.drawNodeID,
-            'text': text
+            'text': 'la'
         }
         var texts = [textJSON];
 
-        // how do we get fill, text, graph
-        // can we add strings to ints
         var nodeJSON = {
-            'fill':,
-            'graph':,
+            'fill': '#' + $('#select-colour').val(),
+            'graph': 0,
             // default dimensions for a node
             'height': 32,
             'width': 40,
             'id_': 'n' + this.state.drawNodeID,
             'pos': [xPos, yPos],
-            'stroke':,
+            'stroke': '',
             'text': texts,
             'tolerance': 9,
             'type_': 'Node'   
         };
-        var newNodesJSON = $.extend([], this.state.nodesJSON).push(nodeJSON);
+        var newNodesJSON = $.extend([], this.state.nodesJSON);
+        newNodesJSON.push(nodeJSON);
+        console.log(newNodesJSON);
         var newDrawNodeID = this.state.drawNodeID + 1;
         this.setState({nodesJSON: newNodesJSON, drawNodeID: newDrawNodeID});
     },
 
     /**
-    * In node-mode creates a new node at the position of the click event on the SVG canvas.
+    * In draw-node creates a new node at the position of the click event on the SVG canvas.
     * In path-mode creates an elbow at the position of the click event on the SVG canvas,
       if the startNode is defined.
     * @param {object} e The mousedown event.
     */
-    makeNodePath: function(e) {
+    drawGraphObject: function(e) {
         var position = getClickPosition(e, e.currentTarget);
-        if (this.state.drawMode === 'node-mode') {
-            makeNode(position.x, position.y);
+        if (this.state.graphMode === 'draw-node') {
+            this.drawNode(position.x-40, position.y-88);
         }
     },
 
@@ -728,7 +705,8 @@ var Graph = React.createClass({
                         nodesJSON={this.state.nodesJSON}
                         hybridsJSON={this.state.hybridsJSON}
                         edgesJSON={this.state.edgesJSON}
-                        highlightedNodes={this.state.highlightedNodes}/>
+                        highlightedNodes={this.state.highlightedNodes}
+                        graphMode={this.state.graphMode}/>
                     <BoolGroup
                         ref='bools'
                         boolsJSON={this.state.boolsJSON}
@@ -914,7 +892,8 @@ var NodeGroup = React.createClass({
                         highlighted={highlighted}
                         onClick={this.props.nodeClick}
                         onMouseEnter={this.props.nodeMouseEnter}
-                        onMouseLeave={this.props.nodeMouseLeave} />
+                        onMouseLeave={this.props.nodeMouseLeave}
+                        graphMode={this.props.graphMode} />
             }, this)}
             </g>
         );
@@ -924,7 +903,11 @@ var NodeGroup = React.createClass({
 
 var Node = React.createClass({
     getInitialState: function () {
-        var state = getCookie(this.props.JSON.id_);
+        if (this.props.graphMode === 'graph') {
+            var state = getCookie(this.props.JSON.id_);
+        } else {
+            var state = '';
+        }
         if (state === '') {
             state = this.props.parents.length === 0 ? 'takeable' : 'inactive';
         }
@@ -1456,5 +1439,43 @@ var InfoBox = React.createClass({
         }
     }
 });
+
+
+/**
+ * Calculates the position of the click in relation to the page.
+ * @param {object} e The click event.
+ * @param {HTMLElement} elem The target of the click event.
+ * @return {object} The position of the click.
+ */
+function getClickPosition(e, elem) {
+    console.log(e.clientX, e.clientY);
+    var parentPosition = getPosition(elem);
+    var xPosition = e.clientX - parentPosition.x;
+    var yPosition = e.clientY - parentPosition.y;
+    // for snapping!!
+    xPosition = Math.round(xPosition / 4) * 4;
+    yPosition = Math.round(yPosition / 4) * 4;
+
+    return {x: e.clientX, y: e.clientY};
+}
+
+
+/**
+ * Calculates the position of elem in relation to the page.
+ * @param {HTMLElement} elem The target of the click event.
+ * @return {object} The position of elem on the page.
+ */
+function getPosition(elem) {
+    var xPosition = 0;
+    var yPosition = 0;
+
+    while (elem) {
+        // || 0 for firefox compatability
+        xPosition += (elem.offsetLeft || 0) - elem.scrollLeft + elem.clientLeft;
+        yPosition += (elem.offsetTop || 0) - elem.scrollTop + elem.clientTop;
+        elem = elem.parentElement; // offsetParent undefined in mozilla
+    }
+    return {x: xPosition, y: yPosition};
+}
 
 export default {renderReactGraph: renderReactGraph};
