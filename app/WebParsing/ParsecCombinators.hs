@@ -72,18 +72,18 @@ parsingAlgoOne tagText = do
                 Left _ -> print "Failed."
         Left _ -> print "Failed."
     where
-        isCategory string = (length string) /= 0
+        isCategory string = (length string) >= 7
 
 getRequirements ::  P.Parsec String () String
 getRequirements =  do
     P.manyTill P.anyChar (P.try (P.string "Program Course Requirements:"))
-    P.many P.anyChar
+    P.manyTill P.anyChar (P.try (P.string "Note"))
 
 splitPrereqText :: P.Parsec String () [String]
 splitPrereqText = do
     P.manyTill P.anyChar (P.try (P.string "First Year"))
     parsed <- P.many $ do
-       P.manyTill P.anyChar (P.try categorySeperator)
+        P.manyTill P.anyChar (P.try categorySeperator)
     return parsed
 
 categorySeperator = do
