@@ -72,7 +72,7 @@ getRequirements =  do
 splitPrereqText :: P.Parsec String () [String]
 splitPrereqText = do
     P.manyTill P.anyChar (P.try (P.string "First Year"))
-    P.many getCategory
+    P.manyTill getCategory ((P.try (P.string "Notes")) <|> (P.try (P.string "NOTES")))
 
 getCategory :: P.Parsec String () String
 getCategory = do
