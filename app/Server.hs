@@ -62,7 +62,7 @@ runServer = do
               dir "get-json-data" $ look "graphName" >>= \graphName -> liftIO $ getGraphJSON graphName,
               dir "loading" $ look "size" >>= loadingResponse,
               dir "save-json" $ look "jsonData" >>= \jsonStr -> look "nameData" >>= \nameStr -> liftIO $ saveGraphJSON jsonStr nameStr,
-              dir "export-pdf" $ exportResponse "HelloWorld",
+              dir "export-pdf" $ exportResponse,
               notFoundResponse
         ]
     where
