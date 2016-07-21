@@ -7,7 +7,6 @@ import Clay hiding (map, repeat, id)
 import Prelude hiding ((**))
 import Css.Constants
 import qualified Data.Text as T
-import Control.Monad (forM_)
 
 {- drawStyles
  - Generates all CSS for the draw page. -}
@@ -33,16 +32,19 @@ colourTableCSS =
     "#colour-table" ? do
         height (px 40)
         width  (px 200)
-        forM_ (zipWith3 (\f xyPos colour -> f xyPos colour)
-                  (repeat (\[x, y] colour -> tr # nthChild y ** td # nthChild x ? background colour))
-                  [map (T.pack . show) [x, y] | x <- [1 .. 5], y <- [1 .. 2]]
-                  -- [5x2] Colour Pallet (sideways)--
-                  [pastelRed,      pastelOrange, 
-                   pastelYellow,   pastelGreen,
-                   pastelBlue,     pastelPurple,
-                   pastelPink,     pastelBrown,
-                   white,          pastelGrey])
-              id
+        mapM_ makeRule [0..length colours - 1]
+    where
+        makeRule i =
+            let colour = colours !! i
+                (row, col) = divMod i 5
+            in
+                tr # nthChild (T.pack $ show $ row + 1) **
+                td # nthChild (T.pack $ show $ col + 1) ? background colour
+
+        colours = [
+            pastelRed,    pastelYellow, pastelBlue,   pastelPink,  white,
+            pastelOrange, pastelGreen,  pastelPurple, pastelBrown, pastelGrey
+            ]
 
 {- The wrapping around the canvas elements. -}
 mainCSS :: Css

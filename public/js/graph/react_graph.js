@@ -217,6 +217,8 @@ var Graph = React.createClass({
             }
         }
 
+        graphName = graphName.replace('-', ' ');
+
         $.ajax({
             dataType: 'json',
             url: 'get-json-data',
