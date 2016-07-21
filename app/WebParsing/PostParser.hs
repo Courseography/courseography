@@ -13,6 +13,7 @@ import Data.Char
 import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Match
 import Database.Tables
+import qualified Text.Parsec as P
 import WebParsing.ParsecCombinators(getCourseFromTag, getPostType, getDepartmentName,
     parsingAlgoOne)
 
@@ -57,4 +58,11 @@ addPostToDatabase tags = do
 
 addPostCategoriesToDatabase :: [Char] -> IO ()
 addPostCategoriesToDatabase tagText = do
-    parsingAlgoOne tagText
+    let parsed = P.parse parsingAlgoOne "(source)" tagText
+    case parsed of
+        Right text ->
+            print $ filter isCategory text
+        Left _ -> print "Failed."
+    where
+        isCategory string = (length string) >= 7
+

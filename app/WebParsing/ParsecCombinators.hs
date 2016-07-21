@@ -60,32 +60,24 @@ isDepartmentName postType = P.manyTill P.anyChar (P.try (P.string postType))
 
 -- Post Category Parsing
 
-parsingAlgoOne :: [Char] -> IO ()
-parsingAlgoOne tagText = do
-    let parsed = P.parse getRequirements "(source)" tagText
-    case parsed of 
-        Right text -> do
-            let splitText = P.parse splitPrereqText "(source)" text
-            case splitText of
-                Right text ->
-                    print $ filter isCategory text
-                Left _ -> print "Failed."
-        Left _ -> print "Failed."
-    where
-        isCategory string = (length string) >= 7
+parsingAlgoOne :: P.Parsec String () [String]
+parsingAlgoOne = do
+    getRequirements 
+    splitPrereqText
 
 getRequirements ::  P.Parsec String () String
 getRequirements =  do
     P.manyTill P.anyChar (P.try (P.string "Program Course Requirements:"))
-    P.manyTill P.anyChar (P.try (P.string "Note"))
 
 splitPrereqText :: P.Parsec String () [String]
 splitPrereqText = do
     P.manyTill P.anyChar (P.try (P.string "First Year"))
-    parsed <- P.many $ do
-        P.manyTill P.anyChar (P.try categorySeperator)
-    return parsed
+    P.many getCategory
+
+getCategory :: P.Parsec String () String
+getCategory = do
+    P.manyTill P.anyChar (P.try categorySeperator)
 
 categorySeperator = do
-    P.oneOf ";\r\n"
+    P.oneOf ";\r\n\160"
 
