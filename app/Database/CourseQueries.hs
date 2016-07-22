@@ -69,23 +69,23 @@ returnCourse lowerStr = runSqlite databasePath $ do
       Just course -> do
         lecturesList :: [Entity Lecture] <- lectureQuery courseStr
         tutorialsList :: [Entity Tutorial] <- tutorialQuery courseStr
-        let (fallLec, springLec, yearLec) = splitSessionsL lecturesList
-            (fallTut, springTut, yearTut) = splitSessionsT tutorialsList
-            fallSession = buildSession fallLec fallTut
-            springSession = buildSession springLec springTut
-            yearSession = buildSession yearLec yearTut
+        let (fallSession, springSession, yearSession) = buildAllSessions lecturesList tutorialsList
+        --(fallLec, springLec, yearLec) = splitSessionsL lecturesList
+        --    (fallTut, springTut, yearTut) = splitSessionsT tutorialsList
+        --    fallSession = buildSession fallLec fallTut
+        --    springSession = buildSession springLec springTut
+        --    yearSession = buildSession yearLec yearTut
         return (buildCourse fallSession springSession yearSession (entityVal course))
 
-        
---buildAllSessions :: T.Text -> ([Maybe Tables.Session], [Maybe Tables.Session], [Maybe Tables.Session])
---buildAllSessions courseStr  
-
---        fallSession  buildSession 
---        springSession  buildSession
---        yearSession  buildSession
---            in (fallSession, springSession, yearSession)
-
-
+buildAllSessions :: [Entity Lecture] -> [Entity Tutorial] -> (Maybe Tables.Session, Maybe Tables.Session, Maybe Tables.Session)
+buildAllSessions entityListL entityListT =  
+    let (fallLec, springLec, yearLec) = splitSessionsL entityListL
+        (fallTut, springTut, yearTut) = splitSessionsT entityListT
+        fallSession = buildSession fallLec fallTut
+        springSession = buildSession springLec springTut
+        yearSession = buildSession yearLec yearTut
+    in (fallSession, springSession, yearSession)  
+    
 -- | Takes a course code (e.g. \"CSC108H1\") and sends a JSON representation
 -- of the course as a response.
 retrieveCourse :: String -> ServerPart Response
