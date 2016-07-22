@@ -38,14 +38,12 @@ import Database.DataType
 import Svg.Builder
 
 ---- | Queries db for all matching records with lecture or tutorial code of this course
---lectureQuery :: MonadIO m => T.Text -> ReaderT SqlBackend m a 
---lectureQuery courseCode = selectList [LectureCode ==. courseCode] []
+lectureQuery :: MonadIO m => T.Text -> ReaderT SqlBackend m [Entity Lecture] 
+lectureQuery courseCode = selectList [LectureCode ==. courseCode] []
 
---tutorialQuery :: MonadIO m => T.Text -> ReaderT SqlBackend m a 
---tutorialQuery courseCode = selectList [TutorialCode ==. courseCode] []
+tutorialQuery :: MonadIO m => T.Text -> ReaderT SqlBackend m [Entity Tutorial] 
+tutorialQuery courseCode = selectList [TutorialCode ==. courseCode] []
 
--- | @todo this type may not be correct: it may be (Tutorial, Tutorial, Tutorial)
--- figure out whether to use toPersistValue or use as Tutorial entity.
 splitSessionsT :: [Entity Tutorial] -> ([Entity Tutorial], [Entity Tutorial], [Entity Tutorial])
 splitSessionsT tutorialsList = 
     let fallTut = filter (\tut -> tutorialSession (entityVal tut) == "F") tutorialsList
@@ -54,7 +52,7 @@ splitSessionsT tutorialsList =
     in  (fallTut, springTut, yearTut)
     
 splitSessionsL :: [Entity Lecture] -> ([Entity Lecture], [Entity Lecture], [Entity Lecture])
-splitSessionsL lecturesList = 
+splitSessionsL lecturesList =
     let fallLec = filter (\lec -> lectureSession (entityVal lec) == "F") lecturesList
         springLec = filter (\lec -> lectureSession (entityVal lec) == "S") lecturesList
         yearLec = filter (\lec -> lectureSession (entityVal lec) == "Y") lecturesList        
@@ -69,13 +67,16 @@ returnCourse lowerStr = runSqlite databasePath $ do
     case sqlCourse of
       Nothing -> return emptyCourse
       Just course -> do
-        -- do db operations here?
-        --(fallLec, springLec, yearLec) :: ([Entity Lecture], [Entity Lecture], [Entity Lecture]) <- splitSessionsL $ selectList [LectureCode ==. courseStr]
+        lecturesList :: [Entity Lecture] <- lectureQuery courseStr
+        tutorialsList :: [Entity Tutorial] <- tutorialQuery courseStr
+        let (fallLec, springLec, yearLec) = splitSessionsL lecturesList
+            (fallTut, springTut, yearTut) = splitSessionsT tutorialsList
+            fallSession = buildSession fallLec fallTut
+            springSession = buildSession springLec springTut
+            yearSession = buildSession yearLec yearTut
+        return (buildCourse fallSession springSession yearSession (entityVal course))
 
-        --(fallSession, springSession, yearSession) <- buildAllSessions courseStr
-        --return (buildCourse fallSession springSession yearSession course)
-        return emptyCourse
-
+        
 --buildAllSessions :: T.Text -> ([Maybe Tables.Session], [Maybe Tables.Session], [Maybe Tables.Session])
 --buildAllSessions courseStr  
 
