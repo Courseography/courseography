@@ -24,7 +24,6 @@ import Database.Persist
 import Database.Persist.Sqlite
 import Database.Tables as Tables
 import Control.Monad.IO.Class (liftIO, MonadIO)
-import Control.Monad.Trans.Reader (ReaderT) --Kael
 import Util.Happstack (createJSONResponse)
 import qualified Data.Text as T
 import WebParsing.ParsingHelp
@@ -38,10 +37,10 @@ import Database.DataType
 import Svg.Builder
 
 ---- | Queries db for all matching records with lecture or tutorial code of this course
-lectureQuery :: MonadIO m => T.Text -> ReaderT SqlBackend m [Entity Lecture] 
+lectureQuery :: MonadIO m => T.Text -> SqlPersistM [Entity Lecture] 
 lectureQuery courseCode = selectList [LectureCode ==. courseCode] []
 
-tutorialQuery :: MonadIO m => T.Text -> ReaderT SqlBackend m [Entity Tutorial] 
+tutorialQuery :: MonadIO m => T.Text -> SqlPersistM [Entity Tutorial] 
 tutorialQuery courseCode = selectList [TutorialCode ==. courseCode] []
 
 splitSessionsT :: [Entity Tutorial] -> ([Entity Tutorial], [Entity Tutorial], [Entity Tutorial])
@@ -70,11 +69,6 @@ returnCourse lowerStr = runSqlite databasePath $ do
         lecturesList :: [Entity Lecture] <- lectureQuery courseStr
         tutorialsList :: [Entity Tutorial] <- tutorialQuery courseStr
         let (fallSession, springSession, yearSession) = buildAllSessions lecturesList tutorialsList
-        --(fallLec, springLec, yearLec) = splitSessionsL lecturesList
-        --    (fallTut, springTut, yearTut) = splitSessionsT tutorialsList
-        --    fallSession = buildSession fallLec fallTut
-        --    springSession = buildSession springLec springTut
-        --    yearSession = buildSession yearLec yearTut
         return (buildCourse fallSession springSession yearSession (entityVal course))
 
 buildAllSessions :: [Entity Lecture] -> [Entity Tutorial] -> (Maybe Tables.Session, Maybe Tables.Session, Maybe Tables.Session)
@@ -85,7 +79,7 @@ buildAllSessions entityListL entityListT =
         springSession = buildSession springLec springTut
         yearSession = buildSession yearLec yearTut
     in (fallSession, springSession, yearSession)  
-    
+
 -- | Takes a course code (e.g. \"CSC108H1\") and sends a JSON representation
 -- of the course as a response.
 retrieveCourse :: String -> ServerPart Response
