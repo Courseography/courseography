@@ -1,59 +1,42 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Response.Export
-    (exportResponse) where
+    (exportGraphResponse, exportTimetableResponse) where
 
-import           Text.Blaze ((!))
-import qualified Text.Blaze.Html5 as H
-import qualified Text.Blaze.Html5.Attributes as A
 import Control.Monad.IO.Class  (liftIO)
+import qualified Data.Map as M
 import Happstack.Server
-import System.Process
-import GHC.IO.Handle.Types
 import ImageConversion
+import Database.Persist.Sql (toSqlKey)
+import Data.Int(Int64)
 
--- | Serves a pdf file requested by the user.
-exportResponse :: ServerPart Response
-exportResponse = do
-	-- TODO: replace all instances of "test" with image file
-	let pdfName = "test.pdf"
-	    texName = "test.tex"
-	liftIO $ createPDF texName pdfName "test"
-	serveFile (asContentType "application/pdf") pdfName
+-- | Serves a pdf file of a graph image
+exportGraphResponse :: ServerPart Response
+exportGraphResponse = do
+    req <- askRq
+    let cookies = M.fromList $ rqCookies req
+        gId = maybe "1" cookieValue (M.lookup "active-graph" cookies)
+        graphKey = read gId :: Int64
+    (svgFilename, imageFilename) <- liftIO $ getGraphImage (toSqlKey graphKey) (M.map cookieValue cookies)
+    pdfName <- liftIO $ returnPDF svgFilename imageFilename
+    serveFile (asContentType "application/pdf") pdfName
 
--- | Create a process to use the pdflatex program to create a .pdf file from a .tex file
-convertTexToPDF :: String -> String -> String -> IO
-							                     (Maybe Handle,
-							                      Maybe Handle,
-							                      Maybe Handle,
-							                      ProcessHandle)
+-- | Serves a pdf file of a timetable requested by user
+-- Note: Not completely working yet! Sending ByteString I think
+exportTimetableResponse :: String -> String -> ServerPart Response
+exportTimetableResponse course session = do
+    (svgFilename, imageFilename) <- liftIO $ getTimetableImage course session
+    pdfName <- liftIO $ returnPDF svgFilename imageFilename
+    serveFile (asContentType "application/pdf") pdfName
 
-convertTexToPDF texName pdfName imgName = createProcess $ CreateProcess
-											(ShellCommand $ "pdflatex " ++
-															"\'\\def\\img{" ++
-															imgName ++
-															"}\\input " ++
-															texName ++
-															" " ++
-															pdfName ++ "\'"
-											) -- runs pdflatex from shell command
-											Nothing
-											Nothing
-											CreatePipe
-											CreatePipe
-											CreatePipe
-											False
-											False
-											False
-
--- | Opens a new process to create a .pdf file from a .tex file and waits for that process to terminate.
-createPDF :: String -> String -> String -> IO ()
-createPDF texName pdfName imgName =	do
-		-- Get the pid of process that is opened for converting .tex to .pdf
-		(_, _, _, pid) <- convertTexToPDF texName pdfName imgName
-		print "Waiting for a process..."
-		-- Force current process to wait for conversion to finish
-		waitForProcess pid
-		print "Process Complete"
-
-
+-- | Returns the name of a new pdf created from an image with imageFilename
+-- Also deletes some additional files created in the process
+returnPDF :: String -> String -> IO String
+returnPDF svgFilename imageFilename = do
+    let imgName = take (length imageFilename - 4) imageFilename
+        pdfName = imgName ++ ".pdf"
+    createPDF "export" imgName
+    removeImage svgFilename
+    removeImage (imgName ++ ".aux")
+    removeImage (imgName ++ ".log")
+    return $ pdfName

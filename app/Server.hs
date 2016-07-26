@@ -62,7 +62,8 @@ runServer = do
               dir "get-json-data" $ look "graphName" >>= \graphName -> liftIO $ getGraphJSON graphName,
               dir "loading" $ look "size" >>= loadingResponse,
               dir "save-json" $ look "jsonData" >>= \jsonStr -> look "nameData" >>= \nameStr -> liftIO $ saveGraphJSON jsonStr nameStr,
-              dir "export-pdf" $ exportResponse,
+              dir "export-graph-pdf" $ exportGraphResponse,
+              dir "export-timetable-pdf" $ look "courses" >>= \x -> look "session" >>= timetableImageResponse x,
               notFoundResponse
         ]
     where
