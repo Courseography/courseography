@@ -1,5 +1,6 @@
 {-|
 Description: Configure and run the server for Courseography.
+
 This module defines the configuration for the server, including logging.
 It also defines all of the allowed server routes, and the corresponding
 responses.
@@ -43,7 +44,6 @@ runServer = do
               seeOther "graph" (toResponse "Redirecting to /graph"),    
               notFoundResponse
         ]
-
     where
     -- | Global logger configuration.
     configureLogger :: IO ()
