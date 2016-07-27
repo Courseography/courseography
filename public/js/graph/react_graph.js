@@ -362,10 +362,12 @@ var Graph = React.createClass({
 
         yPos = parseFloat(yPos);
 
-        infoBox.setState({xPos: xPos,
-                          yPos: yPos,
-                          nodeId: courseId,
-                          showInfobox: true});
+        if (this.state.graphMode === 'graph') {
+            infoBox.setState({xPos: xPos,
+                              yPos: yPos,
+                              nodeId: courseId,
+                              showInfobox: true});
+        }
     },
 
     nodeMouseLeave: function (event) {
@@ -567,18 +569,44 @@ var Graph = React.createClass({
         }
     },
 
-    drawNode: function(xPos, yPos) {
-        // var textsList = [];
-        // // create text jsons, move to helper function?
-        // var textXPos = xPos;
-        // var textYPos = yPos;
-        // for (var i = 0; i < textsList.length; i++) {
-        //     textXPos = xPos;
-        //     //if (jsonObj.type_ !== 'BoolNode') {
-        //         textXPos += 20;
-        //     //}
-        // }
-        // textYPos = text[i].pos[1] - 8;
+    getCursorPosition: function(canvas, e) {
+        var rect = canvas.getBoundingClientRect();
+        var x = event.clientX - rect.left;
+        var y = event.clientY - rect.top;
+        x = (x * this.state.zoomFactor) + this.state.horizontalPanFactor;
+        y = (y * this.state.zoomFactor) + this.state.verticalPanFactor;
+
+        return {x: x, y: y};
+    },
+
+    getRelativeCoords: function(event) {
+        var x = event.offsetX;
+        var y = event.offsetY;
+        x = (x * this.state.zoomFactor) + this.state.horizontalPanFactor;
+        y = (y * this.state.zoomFactor) + this.state.verticalPanFactor;
+        return {x: x, y: y};
+    },
+
+    drawNode: function(x, y) {
+        var xPos, yPos;
+
+        // if node would extend offscreen, instead place it at the
+        // edge. Give 2 pixels extra for node border width.
+        if (x+42 > this.state.width) {
+            xPos = this.state.width-42;
+        } else if (x < 2) {
+            xPos = 2;
+        } else {
+            xPos = x;
+        }
+
+        if (y+34 > this.state.height) {
+            yPos = this.state.height-34;
+        } else if (y < 2) {
+            yPos = 2;
+        } else {
+            yPos = y;
+        }
 
         // text is an empty string for now until implementation,
         // text position uses node position for now
@@ -590,7 +618,6 @@ var Graph = React.createClass({
             'rId': 'text' + this.state.drawNodeID,
             'text': 'la'
         }
-        var texts = [textJSON];
 
         var nodeJSON = {
             'fill': '#' + $('#select-colour').val(),
@@ -601,15 +628,14 @@ var Graph = React.createClass({
             'id_': 'n' + this.state.drawNodeID,
             'pos': [xPos, yPos],
             'stroke': '',
-            'text': texts,
+            'text': [textJSON],
             'tolerance': 9,
             'type_': 'Node'   
         };
         var newNodesJSON = $.extend([], this.state.nodesJSON);
         newNodesJSON.push(nodeJSON);
-        console.log(newNodesJSON);
-        var newDrawNodeID = this.state.drawNodeID + 1;
-        this.setState({nodesJSON: newNodesJSON, drawNodeID: newDrawNodeID});
+        this.setState({nodesJSON: newNodesJSON,
+            drawNodeID: this.state.drawNodeID + 1});
     },
 
     /**
@@ -619,9 +645,11 @@ var Graph = React.createClass({
     * @param {object} e The mousedown event.
     */
     drawGraphObject: function(e) {
-        var position = getClickPosition(e, e.currentTarget);
+        // var pos = this.getCursorPosition(document.body, e);
+        var pos = this.getRelativeCoords(e);
         if (this.state.graphMode === 'draw-node') {
-            this.drawNode(position.x-40, position.y-88);
+            // 40, 88
+            this.drawNode(pos.x, pos.y);
         }
     },
 
@@ -1442,42 +1470,5 @@ var InfoBox = React.createClass({
     }
 });
 
-
-/**
- * Calculates the position of the click in relation to the page.
- * @param {object} e The click event.
- * @param {HTMLElement} elem The target of the click event.
- * @return {object} The position of the click.
- */
-function getClickPosition(e, elem) {
-    console.log(e.clientX, e.clientY);
-    var parentPosition = getPosition(elem);
-    var xPosition = e.clientX - parentPosition.x;
-    var yPosition = e.clientY - parentPosition.y;
-    // for snapping!!
-    xPosition = Math.round(xPosition / 4) * 4;
-    yPosition = Math.round(yPosition / 4) * 4;
-
-    return {x: e.clientX, y: e.clientY};
-}
-
-
-/**
- * Calculates the position of elem in relation to the page.
- * @param {HTMLElement} elem The target of the click event.
- * @return {object} The position of elem on the page.
- */
-function getPosition(elem) {
-    var xPosition = 0;
-    var yPosition = 0;
-
-    while (elem) {
-        // || 0 for firefox compatability
-        xPosition += (elem.offsetLeft || 0) - elem.scrollLeft + elem.clientLeft;
-        yPosition += (elem.offsetTop || 0) - elem.scrollTop + elem.clientTop;
-        elem = elem.parentElement; // offsetParent undefined in mozilla
-    }
-    return {x: xPosition, y: yPosition};
-}
 
 export default {renderReactGraph: renderReactGraph};
