@@ -24,6 +24,8 @@ import Database.Persist
 import Database.Persist.Sqlite
 import Database.Tables as Tables
 import Control.Monad.IO.Class (liftIO, MonadIO)
+import Control.Monad.Reader (ReaderT) --Kael - for now until resolve SqlPersistM
+import Control.Monad.IO
 import Util.Happstack (createJSONResponse)
 import qualified Data.Text as T
 import WebParsing.ParsingHelp
@@ -37,10 +39,10 @@ import Database.DataType
 import Svg.Builder
 
 ---- | Queries db for all matching records with lecture or tutorial code of this course
-lectureQuery :: MonadIO m => T.Text -> SqlPersistM [Entity Lecture] 
+lectureQuery :: MonadIO m => T.Text -> ReaderT SqlBackend [Entity Lecture] 
 lectureQuery courseCode = selectList [LectureCode ==. courseCode] []
 
-tutorialQuery :: MonadIO m => T.Text -> SqlPersistM [Entity Tutorial] 
+tutorialQuery :: MonadIO m => T.Text -> ReaderT SqlBackend [Entity Tutorial] 
 tutorialQuery courseCode = selectList [TutorialCode ==. courseCode] []
 
 splitSessionsT :: [Entity Tutorial] -> ([Entity Tutorial], [Entity Tutorial], [Entity Tutorial])
@@ -92,36 +94,6 @@ queryCourse str = do
     courseJSON <- returnCourse str
     return $ createJSONResponse courseJSON
 
-<<<<<<< HEAD
-=======
--- | Queries the database for all information about @course@,
--- constructs and returns a Course value.
-returnCourse :: T.Text -> IO Course
-returnCourse lowerStr = runSqlite databasePath $ do
-    let courseStr = T.toUpper lowerStr
-    sqlCourse :: [Entity Courses] <- selectList [CoursesCode ==. courseStr] [Asc CoursesCode]
-    -- TODO: Just make one query for all lectures, then partition later.
-    -- Same for tutorials.
-    sqlLecturesFall    :: [Entity Lecture]   <- selectList
-        [LectureCode  ==. courseStr, LectureSession ==. "F"] [Asc LectureSection]
-    sqlLecturesSpring  :: [Entity Lecture]   <- selectList
-        [LectureCode  ==. courseStr, LectureSession ==. "S"] [Asc LectureSection]
-    sqlLecturesYear    :: [Entity Lecture]   <- selectList
-        [LectureCode  ==. courseStr, LectureSession ==. "Y"] [Asc LectureSection]
-    sqlTutorialsFall   :: [Entity Tutorial]  <- selectList
-        [TutorialCode ==. courseStr, TutorialSession ==. "F"] [Asc TutorialSection]
-    sqlTutorialsSpring :: [Entity Tutorial]  <- selectList
-        [TutorialCode ==. courseStr, TutorialSession ==. "S"] [Asc TutorialSection]
-    sqlTutorialsYear   :: [Entity Tutorial]  <- selectList
-        [TutorialCode ==. courseStr, TutorialSession ==. "Y"] [Asc TutorialSection]
-    let fallSession   = buildSession sqlLecturesFall sqlTutorialsFall
-        springSession = buildSession sqlLecturesSpring sqlTutorialsSpring
-        yearSession   = buildSession sqlLecturesYear sqlTutorialsYear
-    if null sqlCourse
-    then return emptyCourse
-    else return (buildCourse fallSession springSession yearSession (entityVal $ head sqlCourse))
-
->>>>>>> 4c63f748516013af9e74d9b02cb0d3080a4d3be0
 -- | Queries the database for all information regarding a specific tutorial for
 -- a @course@, returns a Tutorial.
 returnTutorial :: T.Text -> T.Text -> T.Text -> IO (Maybe Tutorial)
