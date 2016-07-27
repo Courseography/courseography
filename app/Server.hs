@@ -39,9 +39,9 @@ runServer = do
       msum  
            (map (\ (a, b) -> dir a b) $ routes) ++
            [ do
-               nullDir
-               seeOther "graph" (toResponse "Redirecting to /graph"),    
-               notFoundResponse
+              nullDir
+              seeOther "graph" (toResponse "Redirecting to /graph"),    
+              notFoundResponse
         ]
 
     where

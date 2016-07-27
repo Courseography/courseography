@@ -1,24 +1,23 @@
 module Route
-    (routes-
-      ) where
+    (routes) where
 
-    import Control.Monad (msum)
-    import Control.Monad.IO.Class (liftIO)
-    import Happstack.Server hiding (host)
-    import Response
-    import Database.CourseQueries (retrieveCourse, allCourses, queryGraphs, courseInfo, deptList, getGraphJSON)
-    import Database.CourseInsertion (saveGraphJSON)
-    import Filesystem.Path.CurrentOS as Path
-    import System.Directory (getCurrentDirectory)
-    import System.IO (hSetBuffering, stdout, stderr, BufferMode(LineBuffering))
-    import System.Log.Logger (updateGlobalLogger, rootLoggerName, setLevel, Priority(INFO))
-    import Data.String (fromString)
-    import FacebookUtilities
-    import Config (markdownPath, serverConf)
-    import qualified Data.Text.Lazy.IO as LazyIO
-    import Data.Int (Int64)
+import Control.Monad (msum)
+import Control.Monad.IO.Class (liftIO)
+import Happstack.Server hiding (host)
+import Response
+import Database.CourseQueries (retrieveCourse, allCourses, queryGraphs, courseInfo, deptList, getGraphJSON)
+import Database.CourseInsertion (saveGraphJSON)
+import Filesystem.Path.CurrentOS as Path
+import System.Directory (getCurrentDirectory)
+import System.IO (hSetBuffering, stdout, stderr, BufferMode(LineBuffering))
+import System.Log.Logger (updateGlobalLogger, rootLoggerName, setLevel, Priority(INFO))
+import Data.String (fromString)
+import FacebookUtilities
+import Config (markdownPath, serverConf)
+import qualified Data.Text.Lazy.IO as LazyIO
+import Data.Int (Int64)
 
-routes :: [(String, ServerPart Response)]
+routes :: [ (String, ServerPart Response)]
 routes = 
 [ 
     ("grid", gridResponse),
