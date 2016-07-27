@@ -58,8 +58,8 @@ Courses json
     manualPracticalEnrolment Bool Maybe
     prereqs T.Text Maybe
     exclusions T.Text Maybe
-    breadth T.Text Maybe
-    distribution T.Text Maybe
+    breadth BreadthId
+    distribution DistributionId
     prereqString T.Text Maybe
     coreqs T.Text Maybe
     videoUrls [T.Text]
@@ -86,12 +86,10 @@ Tutorial json
     deriving Show
 
 Breadth
-    bId Int
     description String
     deriving Show
 
 Distribution
-    dId Int
     description String
     deriving Show
 
