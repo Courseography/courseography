@@ -39,10 +39,10 @@ import Database.DataType
 import Svg.Builder
 
 ---- | Queries db for all matching records with lecture or tutorial code of this course
-lectureQuery :: MonadIO m => T.Text -> ReaderT SqlBackend [Entity Lecture] 
+lectureQuery :: MonadIO m => T.Text -> ReaderT SqlBackend m [Entity Lecture] 
 lectureQuery courseCode = selectList [LectureCode ==. courseCode] []
 
-tutorialQuery :: MonadIO m => T.Text -> ReaderT SqlBackend [Entity Tutorial] 
+tutorialQuery :: MonadIO m => T.Text -> ReaderT SqlBackend m [Entity Tutorial] 
 tutorialQuery courseCode = selectList [TutorialCode ==. courseCode] []
 
 splitSessionsT :: [Entity Tutorial] -> ([Entity Tutorial], [Entity Tutorial], [Entity Tutorial])
