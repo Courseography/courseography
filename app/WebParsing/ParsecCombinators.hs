@@ -76,8 +76,7 @@ splitPrereqText = do
     P.manyTill getCategory ((P.try (P.string "Notes")) <|> (P.try (P.string "NOTES")))
 
 getCategory :: Parser String
-getCategory = do
-    parseUntil categorySeperator
+getCategory = parseUntil categorySeperator
 
 parseUntil :: Parser a -> Parser String
 parseUntil parser = P.manyTill P.anyChar (P.try parser)

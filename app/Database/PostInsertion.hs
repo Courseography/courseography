@@ -17,8 +17,8 @@ insertPost departmentName postName postCode =
 
 -- | Insert a new post category into the database
 insertPostCategory :: T.Text -> T.Text -> IO ()
-insertPostCategory postCategoryName postName =
+insertPostCategory postCategoryName postCode =
     runSqlite databasePath $ do
         runMigration migrateAll
-        insert_ $ PostCategory postCategoryName postName
+        insert_ $ PostCategory postCategoryName postCode
 
