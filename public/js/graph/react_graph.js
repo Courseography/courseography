@@ -112,6 +112,8 @@ function Button(props) {
         <button id={props.divId} className='graph-control-button'
         onMouseDown={props.mouseDown}
         onMouseUp={props.mouseUp}
+        onMouseEnter={props.onMouseEnter}
+        onMouseLeave={props.onMouseLeave}
         disabled={props.disabled}>{props.text}</button>
     );
 }
@@ -119,15 +121,25 @@ function Button(props) {
 
 function renderReactGraph(graph_container_id, start_blank, edit) {
     'use strict';
+
+    var initialGraphMode;
+
     if (start_blank === undefined) {
         start_blank = false;
     }
+    // if edit is NOT undefined, then the user is on the draw page
     if (edit === undefined) {
         edit = false;
+        initialGraphMode = 'graph';
+    } else {
+        initialGraphMode = 'draw-node';
     }
 
     return ReactDOM.render(
-        <Graph start_blank={start_blank} edit={edit} />,
+        <Graph 
+            start_blank={start_blank}
+            edit={edit}
+            initialGraphMode={initialGraphMode}/>,
         document.getElementById(graph_container_id)
     );
 }
@@ -151,17 +163,15 @@ var Graph = React.createClass({
             horizontalPanFactor: 0,
             verticalPanFactor: 0,
             mouseDown: false,
-            graphMode: 'graph',
+            buttonHover: false,
+            graphMode: this.props.initialGraphMode,
             drawNodeID: 0
         };
     },
 
     componentWillMount: function () {
-        if (location.href.endsWith('draw')) {
-            this.setState({graphMode: 'draw-node'});
+        if (this.state.graphMode === 'draw-node') {
             document.body.addEventListener('mousedown', this.drawGraphObject, false);
-        } else {
-            this.setState({graphMode: 'graph'})
         }
     },
 
@@ -569,6 +579,14 @@ var Graph = React.createClass({
         }
     },
 
+    buttonMouseEnter: function() {
+        this.setState({buttonHover: true});
+    },
+
+    buttonMouseLeave: function() {
+        this.setState({buttonHover: false});
+    },
+
     getCursorPosition: function(canvas, e) {
         var rect = canvas.getBoundingClientRect();
         var x = event.clientX - rect.left;
@@ -647,7 +665,11 @@ var Graph = React.createClass({
     drawGraphObject: function(e) {
         // var pos = this.getCursorPosition(document.body, e);
         var pos = this.getRelativeCoords(e);
-        if (this.state.graphMode === 'draw-node') {
+
+        // check if the user is trying to draw a node. Also check
+        // if the user is trying to press a button instead (ie zoom buttons)
+        if (this.state.graphMode === 'draw-node' &&
+            !this.state.buttonHover) {
             // 40, 88
             this.drawNode(pos.x, pos.y);
         }
@@ -681,42 +703,56 @@ var Graph = React.createClass({
                     text='+'
                     mouseDown={() => this.onButtonPress(this.incrementZoom, true, 0.05)}
                     mouseUp={this.onButtonRelease}
+                    onMouseEnter={this.buttonMouseEnter}
+                    onMouseLeave={this.buttonMouseLeave}
                     disabled={zoomInDisabled}/>
                 <Button
                     divId='zoom-out-button'
                     text= '&mdash;'
                     mouseDown={() => this.onButtonPress(this.incrementZoom, false, 0.05)}
                     mouseUp={this.onButtonRelease}
+                    onMouseEnter={this.buttonMouseEnter}
+                    onMouseLeave={this.buttonMouseLeave}
                     disabled={zoomOutDisabled}/>
                 <Button
                     divId='pan-up-button'
                     text='↑'
                     mouseDown={() => this.onButtonPress(this.panDirection, 'up', 10)}
                     mouseUp={this.onButtonRelease}
+                    onMouseEnter={this.buttonMouseEnter}
+                    onMouseLeave={this.buttonMouseLeave}
                     disabled={panUpDisabled}/>
                 <Button
                     divId='pan-down-button'
                     text='↓'
                     mouseDown={() => this.onButtonPress(this.panDirection, 'down', 10)}
                     mouseUp={this.onButtonRelease}
+                    onMouseEnter={this.buttonMouseEnter}
+                    onMouseLeave={this.buttonMouseLeave}
                     disabled={panDownDisabled}/>
                 <Button
                     divId='pan-right-button'
                     text='→'
                     mouseDown={() => this.onButtonPress(this.panDirection, 'right', 10)}
                     mouseUp={this.onButtonRelease}
+                    onMouseEnter={this.buttonMouseEnter}
+                    onMouseLeave={this.buttonMouseLeave}
                     disabled={panRightDisabled}/>
                 <Button
                     divId='pan-left-button'
                     text='←'
                     mouseDown={() => this.onButtonPress(this.panDirection, 'left', 10)}
                     mouseUp={this.onButtonRelease}
+                    onMouseEnter={this.buttonMouseEnter}
+                    onMouseLeave={this.buttonMouseLeave}
                     disabled={panLeftDisabled}/>
                 <Button
                     divId='reset-button'
                     text='Reset'
                     mouseDown={this.resetZoomAndPan}
                     mouseUp={this.onButtonRelease}
+                    onMouseEnter={this.buttonMouseEnter}
+                    onMouseLeave={this.buttonMouseLeave}
                     disabled={resetDisabled}/>
                 <Modal ref='modal' />
                 <svg {... svgAttrs} ref='svg' version='1.1'
