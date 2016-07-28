@@ -17,7 +17,6 @@ import WebParsing.ParsingHelp
 import WebParsing.TimeConverter
 import Database.Persist.Sqlite (SqlPersistM)
 import Control.Monad.IO.Class (liftIO, MonadIO)
-import Control.Monad.Trans.Reader (ReaderT)
 import Config (databasePath, timetableUrl)
 
 parseTT :: IO ()
