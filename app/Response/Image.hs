@@ -15,17 +15,18 @@ import System.Random
 import Database.Tables (GraphId)
 import Database.Persist.Sql (toSqlKey)
 import Data.Int(Int64)
+import Data.List.Utils (replace)
 
 -- | Returns an image of the graph requested by the user.
 graphImageResponse :: ServerPart Response
 graphImageResponse = do
     req <- askRq
     let cookies = M.fromList $ rqCookies req
-        gId = maybe "1" cookieValue
-                    (M.lookup "active-graph" cookies)
-        graphKey = read gId :: Int64
-    liftIO $ print graphKey
-    liftIO $ getGraphImage (toSqlKey graphKey) (M.map cookieValue cookies)
+        graphName =
+            replace "-" " " $
+                maybe "Computer-Science" cookieValue (M.lookup "active-graph" cookies)
+    liftIO $ print $ "Generating image for " ++ graphName
+    liftIO $ getGraphImage graphName (M.map cookieValue cookies)
 
 -- | Returns an image of the timetable requested by the user.
 timetableImageResponse :: String -> String -> ServerPart Response
@@ -33,13 +34,13 @@ timetableImageResponse courses session =
     liftIO $ getTimetableImage courses session
 
 -- | Creates an image, and returns the base64 representation of that image.
-getGraphImage :: GraphId -> M.Map String String -> IO Response
-getGraphImage gId courseMap = do
+getGraphImage :: String -> M.Map String String -> IO Response
+getGraphImage graphName courseMap = do
     gen <- newStdGen
     let (rand, _) = next gen
         svgFilename = show rand ++ ".svg"
         imageFilename = show rand ++ ".png"
-    buildSVG gId courseMap svgFilename True
+    buildSVG graphName courseMap svgFilename True
     returnImageData svgFilename imageFilename
 
 -- | Creates an image, and returns the base64 representation of that image.

@@ -1,34 +1,67 @@
 /**
  * Requests an image from the server. The server automatically generates this
- * image.
- * @returns {String} The base64 representation of an image.
+ * image. Displays the image in a new modal.
  */
 function getGridImage(session) {
     'use strict';
 
-    var img;
-    var courses = getCoursesTable(session);
     session = session.charAt(0).toUpperCase() + session.slice(1);
+    var courses = getCoursesTable(session);
     $.ajax({
         url: 'timetable-image',
-        async: false,
         data: {courses: courses, session: session},
         success: function (data) {
-            img = data;
+            var contentDiv = $('<div></div>');
+            var topContentDiv = $('<div></div>');
+            var calendarOption = $('<a href="calendar">Download ICS</a>');
+            calendarOption.attr('target', '_blank');
+            topContentDiv.html('<img id="post-image" src="data:image/png;base64,' + data + '" />');
+            contentDiv.attr('id', 'modal-content-container')
+                      .append(calendarOption)
+                      .append(topContentDiv);
+
+            var sessionButton = $('<button type="button" class="btn btn-primary" id="switch-session-button">Switch Sessions</button>');
+            sessionButton.click(function () {
+                session = session === 'Fall' ? 'Spring' : 'Fall';
+                updateGridImage(session);
+            });
+            contentDiv.append(sessionButton);
+            openModal('Export', contentDiv);
         },
         error: function () {
             throw 'No image generated';
         }
     });
+}
 
-    return img;
+
+/**
+ * Requests an image from the server, and updates the existing modal.
+ */
+function updateGridImage(session) {
+    var courses = getCoursesTable(session);
+    session = session.charAt(0).toUpperCase() + session.slice(1);
+    $.ajax({
+        url: 'timetable-image',
+        data: {courses: courses, session: session},
+        success: function (data) {
+            $('#post-image').attr('src', 'data:image/png;base64,' + data);
+            $('#switch-session-button').unbind('click').click(function () {
+                session = session === 'Fall' ? 'Spring' : 'Fall';
+                updateGridImage(session);
+            });
+        },
+        error: function () {
+            throw 'No image generated';
+        }
+    });
 }
 
 
 function getCoursesTable(session) {
     'use strict';
 
-    var sessionChar = session === 'fall' ? 'F' : 'S';
+    var sessionChar = session === 'Fall' ? 'F' : 'S';
     var days = ['M', 'T', 'W', 'R', 'F'];
     var courses = '';
     for (var i = 8; i < 22; i++) {

@@ -51,6 +51,7 @@ Department json
 
 Courses json
     code T.Text
+    Primary code
     title T.Text Maybe
     description T.Text Maybe
     manualTutorialEnrolment Bool Maybe
@@ -136,6 +137,17 @@ Path json
 FacebookTest
     fId String
     testString String
+    deriving Show
+
+Post
+    name T.Text
+    department T.Text
+    code T.Text
+    deriving Show
+
+PostCategory
+    name T.Text
+    post T.Text
     deriving Show
 |]
 

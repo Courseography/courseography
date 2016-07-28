@@ -57,6 +57,7 @@ module Css.Constants
      red4,
      red5,
      green1,
+     green2,
      dRed,
      dGreen,
      dBlue,
@@ -66,12 +67,22 @@ module Css.Constants
      grey3,
      grey4,
      grey5,
+     grey6,
      beige1,
      fceCountColor,
      nodeFontSize,
      hybridFontSize,
      boolFontSize,
-     regionFontSize
+     regionFontSize,
+     pastelRed,
+     pastelOrange,
+     pastelYellow,
+     pastelGreen,
+     pastelBlue,
+     pastelPink,
+     pastelPurple,
+     pastelBrown,     
+     pastelGrey
      ) where
 
 import Clay
@@ -238,6 +249,8 @@ red5 = rgb 221 189 189
 
 green1 :: Color
 green1 = rgb 170 228 164
+green2 :: Color
+green2 = parse "#3Cb371"
 
 dRed :: T.Text
 dRed = "#D77546"
@@ -261,9 +274,39 @@ grey4 :: Color
 grey4 = parse "#BABABA"
 grey5 :: Color
 grey5 = parse "#DCDCDC"
+grey6 :: Color
+grey6 = parse "#9C9C9C"
 
 beige1 :: Color
 beige1 = parse "#EBE8E4"
+
+{-Color palette colors-}
+pastelRed  :: Color
+pastelRed = parse "#FF7878"
+
+pastelOrange  :: Color
+pastelOrange = parse "#FFC48C"
+
+pastelYellow  :: Color
+pastelYellow = parse "#EEDD99"
+
+pastelGreen :: Color
+pastelGreen = parse "#BDECB6"
+
+pastelBlue :: Color
+pastelBlue = parse "#9BD1FA"
+
+pastelPink :: Color
+pastelPink = parse "#FFD1DC"
+
+pastelPurple :: Color
+pastelPurple = parse "#E3AAD6"
+
+pastelBrown :: Color
+pastelBrown = parse "#AD876E"
+
+pastelGrey :: Color
+pastelGrey = parse "#A2A9AF"
 
 {- FCE count color. Currently unused. -}
 fceCountColor :: Color
@@ -283,3 +326,4 @@ boolFontSize = 6
 
 regionFontSize :: Num a => a
 regionFontSize = 14
+
