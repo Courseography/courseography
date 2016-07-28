@@ -25,7 +25,6 @@ import Database.Persist.Sqlite
 import Database.Tables as Tables
 import Control.Monad.IO.Class (liftIO, MonadIO)
 import Control.Monad.Reader (ReaderT) --Kael - for now until resolve SqlPersistM
-import Control.Monad.IO
 import Util.Happstack (createJSONResponse)
 import qualified Data.Text as T
 import WebParsing.ParsingHelp
