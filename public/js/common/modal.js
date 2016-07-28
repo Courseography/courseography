@@ -22,9 +22,9 @@ function openModal(title, modalDiv) {
 
     var context = $('#courseography-header').attr('context');
 
-    if ($('.modal').length === 0) {
+    if ($('.modal-ui').length === 0) {
         modalDiv.attr('title', title)
-                .addClass('modal').dialog({
+                .addClass('modal-ui').dialog({
                     autoOpen: true,
                     modal: true,
                     width: 750,

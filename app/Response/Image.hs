@@ -8,21 +8,20 @@ import qualified Data.ByteString.Lazy as BS
 import Control.Monad.IO.Class  (liftIO)
 import qualified Data.ByteString.Base64.Lazy as BEnc
 import qualified Data.Map as M
+import GetImages
 import ImageConversion
-import Database.Persist.Sql (toSqlKey)
-import Data.Int(Int64)
+import Data.List.Utils (replace)
 
 -- | Returns an image of the graph requested by the user.
 graphImageResponse :: ServerPart Response
 graphImageResponse = do
     req <- askRq
     let cookies = M.fromList $ rqCookies req
-        gId = maybe "1" cookieValue
-                    (M.lookup "active-graph" cookies)
-        graphKey = read gId :: Int64
-    liftIO $ print graphKey
-    (svgFilename, imageFilename) <- liftIO $ getGraphImage (toSqlKey graphKey)
-                                                    (M.map cookieValue cookies)
+        graphName =
+            replace "-" " " $
+                maybe "Computer-Science" cookieValue (M.lookup "active-graph" cookies)
+    liftIO $ print $ "Generating image for " ++ graphName
+    (svgFilename, imageFilename) <- liftIO $ getGraphImage graphName (M.map cookieValue cookies)
     liftIO $ returnImageData svgFilename imageFilename
 
 -- | Returns an image of the timetable requested by the user.
