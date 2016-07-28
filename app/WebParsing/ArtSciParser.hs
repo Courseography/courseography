@@ -11,15 +11,17 @@ import Data.List
 import qualified Data.Text as T
 import Database.Tables
 import WebParsing.ParsingHelp
+import Database.PostInsertion
 import Config (databasePath)
+import WebParsing.PostParser
 
 fasCalendarURL :: String
-fasCalendarURL = "http://www.artsandscience.utoronto.ca/ofr/calendar/"
+fasCalendarURL = "http://calendar.artsci.utoronto.ca/"
 
 
 -- | A collection of pages that do not contain any course information
 toDelete :: [String]
-toDelete = ["199299398399Big_Ideas_(Faculty_of_Arts_&_Science_Programs).html",
+toDelete = ["199299398399(Faculty_of_Arts_&_Science_Programs).html",
             "Joint_Courses.html",
             "Writing_in_the_Faculty_of_Arts_&_Science.html",
             "crs_bio.htm",
@@ -91,5 +93,7 @@ parseArtSci = do
     rsp <- simpleHTTP (getRequest fasCalendarURL)
     body <- getResponseBody rsp
     let depts = getDeptList $ parseTags body
+    putStrLn "Parsing Arts and Science Posts"
+    mapM_ getPost depts
     putStrLn "Parsing Arts and Science Calendar..."
     mapM_ getCalendar depts

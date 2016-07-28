@@ -205,15 +205,14 @@ resetCSS = "#resetButton" ? do
 graphContainer :: Css
 graphContainer = do
     "#react-graph" ? do
-        width (px 1195)
-        minHeight (px 700)
-        height (px 700)
+        "width" -: "calc(100% - 40px)"
+        height100
         overflow hidden
-        margin (px 10) (px 10) (px 10) (px 10)
+        margin0
         display inlineBlock
         position absolute
         textAlign $ alignSide sideCenter
-        "left" -: "40px"
+        left (px 40)
     "#react-graphRootSVG" ? do
         width100
         height100
@@ -223,7 +222,52 @@ graphContainer = do
         "shape-rendering" -: "geometricPrecision"
     ".highlight-nodes" ? do
         backgroundColor grey
-
+    ".graph-control-button" ? do
+        textAlign $ alignSide sideCenter
+        backgroundColor white
+        border solid (px 1) purple10
+        "border-radius" -: "6px"
+        "outline" -: "none"
+        fontSize (px 14)
+        fontWeight bold
+        fontColor purple10
+        cursor pointer
+        display inlineBlock
+        width (px 25)
+        height (px 25)
+        position absolute
+        ":hover" & do
+            backgroundColor purple6
+            fontColor white
+        ":active" & do
+            backgroundColor purple10
+            fontColor white
+        ":disabled" & do
+            border solid (px 1) grey6
+            backgroundColor grey2
+            fontColor grey6
+    "#zoom-in-button" ? do
+        top (px 85)
+        right (px 30)
+    "#zoom-out-button" ? do
+        top (px 85)
+        right (px 57)
+    "#pan-up-button" ? do
+        top (px 4)
+        right (px 43)
+    "#pan-down-button" ? do
+        top (px 57)
+        right (px 43)
+    "#pan-right-button" ? do
+        top (px 30)
+        right (px 30)
+    "#pan-left-button" ? do
+        top (px 30)
+        right (px 57)
+    "#reset-button" ? do
+        width (px 52)
+        top (px 111)
+        right (px 30)
 
 sidebarCSS :: Css
 sidebarCSS = do
@@ -253,13 +297,13 @@ sidebarCSS = do
             backgroundColor grey1
             fontColor white
     "#container" ? do
-        width (pct 100)
-        height (px 700)
+        "height" -: "calc(100% - 100px)"
+        width100
         position relative
     "#sidebar" ? do
         display inlineBlock
         width (px 40)
-        height (pct 100)
+        height100
         float floatLeft
         backgroundColor purple8
         position absolute

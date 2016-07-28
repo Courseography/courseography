@@ -1,23 +1,27 @@
 /**
  * Requests an image from the server. The server automatically generates this
  * image.
- * @returns {String} The base64 representation of an image.
  */
 function getGraphImage() {
     'use strict';
 
-    var img;
-
     $.ajax({
         url: 'image',
-        async: false,
         success: function (data) {
-            img = data;
+            var contentDiv = $('<div></div>');
+            var topContentDiv = $('<div></div>');
+            var calendarOption = $('<a href="calendar">Download ICS</a>');
+            calendarOption.attr('target', '_blank');
+            topContentDiv.html('<img id="post-image" src="data:image/png;base64,' + data + '" />');
+            contentDiv.attr('id', 'modal-content-container')
+                      .append(calendarOption)
+                      .append(topContentDiv);
+
+            openModal('Export', contentDiv);
         },
         error: function () {
             throw 'No image generated';
         }
     });
 
-    return img;
 }

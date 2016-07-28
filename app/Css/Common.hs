@@ -22,6 +22,7 @@ common = do
         do margin0
            padding0
            width100
+           height100
            minHeight $ pct 100
            fontSize $ pt 17
            fontFamily ["Trebuchet MS", "Arial"] [sansSerif]
@@ -60,7 +61,7 @@ headerCSS = do
                 padding 0 (px 10) 0 (px 10)
                 a <? do
                     color white
-                    "text-shadow" -: "0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000;" 
+                    "text-shadow" -: "0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000;"
                     hover & do
                         color darkgray
             height (px 50)
@@ -92,7 +93,7 @@ headerCSS = do
         paddingBottom (px 3)
     "#nav-export" ? do
         cursor pointer
-        
+
 {- aDefaultCSS
  - Generates default CSS. -}
 aDefaultCSS :: Css
@@ -128,13 +129,16 @@ modalCSS = do
         position fixed
         left nil
         top nil
-    ".modal" ? do
-        padding (px 10) (px 25) (px 25) (px 25)
-        position static
+    ".modal-header" ? do
+        color blue3
+    ".modal-body" ? do
+        overflowY scroll
+        height (px 360)
         p ? do
             fontSize (pt 12)
             margin (pt 5) 0 (pt 5) 0
             lineHeight (em 1.3)
+            textAlign $ alignSide sideLeft
     ".ui-dialog-titlebar" ? do
         color blue3
         cursor move
@@ -161,6 +165,17 @@ modalCSS = do
     "#course-video" ? do
         width100
         height100
+    -- new modal CSS, need to remove above later
+    ".modal-header" ? do
+        color blue3
+        padding0
+        paddingLeft (px 25)
+        height (em 1.8)
+        lineHeight (em 1.8)
+        fontSize (em 1)
+        borderBottom solid (px 1) black
+        textAlign $ alignSide sideLeft
+    
     fbModalCSS
 
 

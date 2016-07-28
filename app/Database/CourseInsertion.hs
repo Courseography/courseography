@@ -16,23 +16,20 @@ module Database.CourseInsertion
 
 import qualified Data.Text as T
 import qualified Data.ByteString.Lazy.Char8 as BSL
-import Happstack.Server.SimpleHTTP
-import Control.Monad.IO.Class (MonadIO)
-import Control.Monad.Trans.Reader (ReaderT)
-import Data.Maybe (fromMaybe)
+import Happstack.Server.SimpleHTTP (Response, toResponse)
 import Config (databasePath)
-import Database.Persist.Sqlite (selectFirst, fromSqlKey, toSqlKey, insertMany_, insert_, insert, SqlBackend, (=.), (==.), updateWhere, runSqlite)
+import Database.Persist.Sqlite (selectFirst, insertMany_, insert_, insert, SqlPersistM, (=.), (==.), updateWhere, runSqlite)
 import Database.Tables
-import Data.Aeson
+import qualified Data.Aeson as Aeson
 
 -- | Inserts SVG graph data into Texts, Shapes, and Paths tables
 saveGraphJSON :: String -> String -> IO Response
 saveGraphJSON jsonStr nameStr = do
-    let jsonObj = decode $ BSL.pack jsonStr
+    let jsonObj = Aeson.decode $ BSL.pack jsonStr
     case jsonObj of
         Nothing -> return $ toResponse ("Error" :: String)
         Just (SvgJSON texts shapes paths) -> do
-            response <- runSqlite databasePath $ do
+            _ <- runSqlite databasePath $ do
                 gId <- insert $ Graph nameStr 256 256
                 insertMany_ $ map (\text -> text {textGraph = gId}) texts
                 insertMany_ $ map (\shape -> shape {shapeGraph = gId}) shapes
@@ -40,9 +37,11 @@ saveGraphJSON jsonStr nameStr = do
             return $ toResponse $ ("Success" :: String)
 
 -- | Inserts course into the Courses table.
-insertCourse :: MonadIO m => Course -> ReaderT SqlBackend m ()
-insertCourse course =
-    insert_ $ Courses (name course)
+insertCourse :: Course -> SqlPersistM ()
+insertCourse course = do
+    maybeCourse <- selectFirst [CoursesCode ==. (name course)] []
+    case maybeCourse of
+        Nothing -> insert_ $ Courses (name course)
                       (title course)
                       (description course)
                       (manualTutorialEnrolment course)
@@ -55,14 +54,17 @@ insertCourse course =
                       (coreqs course)
                       []
 
+        Just _ -> return ()
+
+
 -- | Updates the manualTutorialEnrolment field of the given course.
-setTutorialEnrolment :: MonadIO m => T.Text -> Bool -> ReaderT SqlBackend m ()
+setTutorialEnrolment :: T.Text -> Bool -> SqlPersistM ()
 setTutorialEnrolment course val =
     updateWhere [CoursesCode ==. course]
                 [CoursesManualTutorialEnrolment =. Just val]
 
 -- | Updates the manualPracticalEnrolment field of the given course.
-setPracticalEnrolment :: MonadIO m => T.Text -> Bool -> ReaderT SqlBackend m ()
+setPracticalEnrolment :: T.Text -> Bool -> SqlPersistM ()
 setPracticalEnrolment course val =
     updateWhere [CoursesCode ==. course]
                 [CoursesManualPracticalEnrolment =. Just val]
