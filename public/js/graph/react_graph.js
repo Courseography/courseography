@@ -1,5 +1,6 @@
 import * as tooltip from 'es6!graph/tooltip';
 import {Modal} from 'es6!common/react_modal';
+import {setCookie, getCookie} from 'es6!common/cookie_handler';
 
 /**
  *
@@ -378,6 +379,7 @@ var Graph = React.createClass({
                               nodeId: courseId,
                               showInfobox: true});
         }
+        this.setState({buttonHover: true});
     },
 
     nodeMouseLeave: function (event) {
@@ -392,8 +394,8 @@ var Graph = React.createClass({
         }, 400);
 
 
-        this.setState({timeouts: this.state.timeouts.concat(timeout)});
-
+        this.setState({timeouts: this.state.timeouts.concat(timeout),
+            buttonHover: false});
     },
 
     infoBoxMouseEnter: function () {
