@@ -13,6 +13,7 @@ import qualified Text.Parsec as P
 import Text.Parsec ((<|>))
 import qualified Data.Text as T
 import Data.Functor.Identity
+import Text.Parsec.String
 
 getCourseFromTag courseTag = do
     let course = P.parse findCourseFromTag "(source)" courseTag
@@ -20,9 +21,9 @@ getCourseFromTag courseTag = do
         Right name -> name
         Left _ -> ""
 
-findCourseFromTag :: P.Parsec String () String
+findCourseFromTag :: Parser String
 findCourseFromTag = do
-    P.manyTill P.anyChar (P.char '#') 
+    parseUntil (P.char '#')
     P.many1 P.anyChar
 
 -- Post Parsing
@@ -43,7 +44,7 @@ extractPostType postCode = do
         Right name -> name
         Left _ -> ""
 
-findPostType :: P.Parsec String () String
+findPostType :: Parser String
 findPostType = do
    P.string "AS"
    P.many1 P.letter
@@ -55,29 +56,32 @@ getDepartmentName fullPostName postType = do
         Right name -> name
         Left _ -> ""
 
-isDepartmentName ::  [Char] -> P.Parsec String () String
-isDepartmentName postType = P.manyTill P.anyChar (P.try (P.string postType))
+isDepartmentName ::  [Char] -> Parser String
+isDepartmentName postType = parseUntil (P.string postType)
 
 -- Post Category Parsing
 
-parsingAlgoOne :: P.Parsec String () [String]
+parsingAlgoOne :: Parser [String]
 parsingAlgoOne = do
     getRequirements 
     splitPrereqText
 
-getRequirements ::  P.Parsec String () String
-getRequirements =  do
-    P.manyTill P.anyChar (P.try (P.string "Program Course Requirements:"))
+getRequirements :: Parser String
+getRequirements = 
+    parseUntil (P.string "Program Course Requirements:")
 
-splitPrereqText :: P.Parsec String () [String]
+splitPrereqText :: Parser [String]
 splitPrereqText = do
-    P.manyTill P.anyChar (P.try (P.string "First Year"))
+    parseUntil (P.string "First Year")
     P.manyTill getCategory ((P.try (P.string "Notes")) <|> (P.try (P.string "NOTES")))
 
-getCategory :: P.Parsec String () String
+getCategory :: Parser String
 getCategory = do
-    P.manyTill P.anyChar (P.try categorySeperator)
+    parseUntil categorySeperator
 
-categorySeperator = do
+parseUntil :: Parser a -> Parser String
+parseUntil parser = P.manyTill P.anyChar (P.try parser)
+
+categorySeperator = 
     P.oneOf ";\r\n\160"
 
