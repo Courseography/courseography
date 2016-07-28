@@ -24,7 +24,6 @@ import Database.Persist
 import Database.Persist.Sqlite
 import Database.Tables as Tables
 import Control.Monad.IO.Class (liftIO, MonadIO)
-import Control.Monad.Reader (ReaderT) --Kael - for now until resolve SqlPersistM
 import Util.Happstack (createJSONResponse)
 import qualified Data.Text as T
 import WebParsing.ParsingHelp
@@ -38,10 +37,10 @@ import Database.DataType
 import Svg.Builder
 
 ---- | Queries db for all matching records with lecture or tutorial code of this course
-lectureQuery :: MonadIO m => T.Text -> ReaderT SqlBackend m [Entity Lecture] 
+lectureQuery :: T.Text -> SqlPersistM [Entity Lecture]
 lectureQuery courseCode = selectList [LectureCode ==. courseCode] []
 
-tutorialQuery :: MonadIO m => T.Text -> ReaderT SqlBackend m [Entity Tutorial] 
+tutorialQuery :: T.Text -> SqlPersistM [Entity Tutorial]
 tutorialQuery courseCode = selectList [TutorialCode ==. courseCode] []
 
 splitSessionsT :: [Entity Tutorial] -> ([Entity Tutorial], [Entity Tutorial], [Entity Tutorial])

@@ -15,6 +15,7 @@ import Database.CourseInsertion
 import WebParsing.HtmlTable
 import WebParsing.ParsingHelp
 import WebParsing.TimeConverter
+import Database.Persist.Sqlite (SqlPersistM)
 import Control.Monad.IO.Class (liftIO, MonadIO)
 import Control.Monad.Trans.Reader (ReaderT)
 import Config (databasePath, timetableUrl)
@@ -32,7 +33,7 @@ parseTT = do
         mapM_ insertDepartment deptInfo
 
 -- | Inserts the Department association list in the database.
-insertDepartment :: MonadIO m => ([T.Text], T.Text) -> ReaderT SqlBackend m ()
+insertDepartment :: ([T.Text], T.Text) -> SqlPersistM ()
 insertDepartment (code, name) = 
     insert_ (Tables.Department code name)
 
@@ -105,7 +106,7 @@ expandNote row
 -- | Takes in a department page name, extracts the html table, partitions into a list of all
 -- information related to a single course, and inserts the resulting tutorials and lectures
 -- into the database.
-getDeptTimetable :: MonadIO m => String -> ReaderT SqlBackend m ()
+getDeptTimetable :: String -> SqlPersistM ()
 getDeptTimetable url = do
     rsp <- liftIO $ simpleHTTP (getRequest $ timetableUrl ++ url)
     body <- liftIO $ getResponseBody rsp
@@ -224,7 +225,7 @@ makeSession slots =
 
 -- | Takes in cells representing a single course, and inserts the lecture tutorial info
 -- into the database
-processCourseTable :: MonadIO m => [[T.Text]] -> ReaderT SqlBackend m ()
+processCourseTable :: [[T.Text]] -> SqlPersistM ()
 processCourseTable course = do
     let session = head course !! 1
         code = T.take 8 (head course !! 0)
