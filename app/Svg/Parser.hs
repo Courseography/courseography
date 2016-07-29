@@ -43,6 +43,7 @@ parsePrebuiltSvgs = do
     performParse "Biochemistry" "bch2015.svg"
     performParse "Cell & Systems Biology" "csb2015.svg"
     performParse "Estonian" "est2015.svg"
+    performParse "German" "ger2015.svg"
     performParse "Finnish" "fin2015.svg"
     performParse "Italian" "ita2015.svg"
     performParse "Linguistics" "lin2015.svg"

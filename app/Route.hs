@@ -18,8 +18,7 @@ import qualified Data.Text.Lazy.IO as LazyIO
 import Data.Int (Int64)
 
 routes :: [ (String, ServerPart Response)]
-routes = 
-[ 
+routes = [
     ("grid", gridResponse),
     ("graph", graphResponse),
     ("image", graphImageResponse),
@@ -42,5 +41,6 @@ routes =
     ("calendar", lookCookieValue "selected-lectures" >>= calendarResponse),
     ("get-json-data", getGraphJSON),
     ("loading", look "size" >>= loadingResponse),
-    ("save-json", look "jsonData" >>= \jsonStr -> look "nameData" >>= \nameStr -> liftIO $ saveGraphJSON jsonStr nameStr)
-]
+    ("save-json", look "jsonData" >>= \jsonStr -> look "nameData" >>= \nameStr -> liftIO $ saveGraphJSON jsonStr nameStr)]
+
+
