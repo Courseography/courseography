@@ -6,6 +6,7 @@ cabal.sandbox.config
 *.sqlite3
 *.sqlite3-shm
 *.sqlite3-wal
+/db
 
 # chosen configuration file
 /app/Config.hs
