@@ -58,8 +58,8 @@ Courses json
     manualPracticalEnrolment Bool Maybe
     prereqs T.Text Maybe
     exclusions T.Text Maybe
-    breadth BreadthId
-    distribution DistributionId
+    breadth BreadthId Maybe
+    distribution DistributionId Maybe
     prereqString T.Text Maybe
     coreqs T.Text Maybe
     videoUrls [T.Text]
