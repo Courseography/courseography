@@ -1,5 +1,5 @@
 {-# LANGUAGE FlexibleContexts, GADTs, MultiParamTypeClasses,
-    OverloadedStrings, TypeFamilies #-}
+    OverloadedStrings, TypeFamilies, ScopedTypeVariables #-}
 
 {-|
 Description: Functions that insert/update course information in the database.
@@ -18,6 +18,7 @@ import qualified Data.Text as T
 import qualified Data.ByteString.Lazy.Char8 as BSL
 import Happstack.Server.SimpleHTTP (Response, toResponse)
 import Config (databasePath)
+import Database.Persist.Class (selectKeysList, PersistEntity, Key) --kael
 import Database.Persist.Sqlite (selectFirst, insertMany_, insert_, insert, SqlPersistM, (=.), (==.), updateWhere, runSqlite)
 import Database.Tables
 import qualified Data.Aeson as Aeson
@@ -36,6 +37,45 @@ saveGraphJSON jsonStr nameStr = do
                 insertMany_ $ map (\path -> path {pathGraph = gId}) paths
             return $ toResponse $ ("Success" :: String)
 
+-- Get Key of correspondig record in Distribution column  
+getDistributionKey :: Maybe T.Text -> Maybe DistributionId 
+getDistributionKey description = do
+    case description of
+        Nothing -> Nothing
+        Just _ -> do
+            textDescription :: T.Text <- description
+            keyListDistribution :: [DistributionId] <- selectKeysList [ DistributionDescription ==. textDescription ] [] 
+            return (head keyListDistribution)
+            
+--alternate version:
+--getDistributionKey :: Maybe T.Text -> Maybe DistributionId 
+--getDistributionKey description --(equals)-- -- do
+    --case description of
+    --    Nothing -> Nothing
+    --    Just _ -> do
+    --        keyListDistribution :: [DistributionId] <- selectKeysList [ DistributionDescription ==. description ] [] 
+    --        let keyDistribution --(equals)-- (if null keyListDistribution then Nothing else Just (head keyListDistribution))
+  
+
+-- **Problem: Breadth as it is hard-coded in Database.hs won't match breadth field from Code.
+-- Get Key of corresponding breadth record 
+getBreadthKey :: Maybe T.Text -> Maybe BreadthId 
+getBreadthKey description = do
+    case description of   
+        Nothing -> Nothing
+        Just _ -> do
+            textDescription :: T.Text <- description  
+            keyListBreadth :: [BreadthId] <- selectKeysList [ BreadthDescription ==. textDescription ] [] 
+            case keyListBreadth of 
+                null -> Nothing
+                _ -> Just (head keyListBreadth)
+
+            --if null keyListBreadth
+            --then Nothing
+            --else Just (head keyListBreadth)  
+          -- or 
+            --return (head keyListBreadth)
+
 -- | Inserts course into the Courses table.
 insertCourse :: Course -> SqlPersistM ()
 insertCourse course = do
@@ -48,8 +88,8 @@ insertCourse course = do
                       (manualPracticalEnrolment course)
                       (prereqs course)
                       (exclusions course)
-                      (breadth course)
-                      (distribution course)
+                      (getBreadthKey (breadth course))
+                      (getDistributionKey (distribution course))
                       (prereqString course)
                       (coreqs course)
                       []
