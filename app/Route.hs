@@ -23,15 +23,15 @@ routes = [
     ("graph", graphResponse),
     ("image", graphImageResponse),
     ("timetable-image", look "courses" >>= \x -> look "session" >>= timetableImageResponse x),
-    ("graph-fb", seeOther redirectUrlGraphEmail $ toResponse ""),
-    ("post-fb", seeOther redirectUrlGraphPost $ toResponse ""),
+    ("graph-fb", seeOther redirectUrlGraphEmail $ toResponse ""),///
+    ("post-fb", seeOther redirectUrlGraphPost $ toResponse ""),////
     ("test", look "code" >>= getEmail),
     ("test-post", look "code" >>= postToFacebook),
     ("post", postResponse),
     ("draw", drawResponse),                  
-    ("about", aboutResponse aboutContents),
-    ("privacy", privacyResponse privacyContents),
-    ("static", serveDirectory DisableBrowsing [] staticDir),
+    ("about", aboutResponse aboutContents),////
+    ("privacy", privacyResponse privacyContents),/////
+    ("static", serveDirectory DisableBrowsing [] staticDir),////
     ("course", look "name" >>= retrieveCourse),
     ("all-courses", liftIO allCourses),
     ("graphs", liftIO queryGraphs),
