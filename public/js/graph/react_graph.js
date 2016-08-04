@@ -123,7 +123,8 @@ function Button(props) {
 function renderReactGraph(graph_container_id, start_blank, edit) {
     'use strict';
 
-    var initialGraphMode;
+    var initialOnDraw;
+    var initialDrawMode = 'draw-node';
 
     if (start_blank === undefined) {
         start_blank = false;
@@ -131,16 +132,17 @@ function renderReactGraph(graph_container_id, start_blank, edit) {
     // if edit is NOT undefined, then the user is on the draw page
     if (edit === undefined) {
         edit = false;
-        initialGraphMode = 'graph';
+        initialOnDraw = false;
     } else {
-        initialGraphMode = 'draw-node';
+        initialOnDraw = true;
     }
 
     return ReactDOM.render(
         <Graph 
             start_blank={start_blank}
             edit={edit}
-            initialGraphMode={initialGraphMode}/>,
+            initialOnDraw={initialOnDraw}
+            initialDrawMode={initialDrawMode}/>,
         document.getElementById(graph_container_id)
     );
 }
@@ -165,14 +167,15 @@ var Graph = React.createClass({
             verticalPanFactor: 0,
             mouseDown: false,
             buttonHover: false,
-            graphMode: this.props.initialGraphMode,
+            onDraw: this.props.initialOnDraw,
+            drawMode: this.props.initialDrawMode,
             drawNodeID: 0
         };
     },
 
     componentWillMount: function () {
-        if (this.state.graphMode === 'draw-node') {
-            document.body.addEventListener('mousedown', this.drawGraphObject, false);
+        if (this.state.onDraw) {
+            document.getElementById('react-graph').addEventListener('mousedown', this.drawGraphObject, false);
         }
     },
 
@@ -316,6 +319,17 @@ var Graph = React.createClass({
             }
             this.setFCECount(totalFCEs);
         }
+
+        // after each update, check if the draw mode has changed
+        // if ((prevState.onDraw !== this.state.onDraw) && this.state.onDraw) {
+        //     document.getElementById('react-graph').addEventListener('mousedown', this.drawGraphObject, false);
+        // }
+        // } else if ((prevState.drawMode !== this.state.drawMode) &&
+        //     this.state.onDraw) {
+        //     if (this.state.drawMode === 'move-node') {
+        //         document.getElementById('react-graph').addEventListener('mousedown', this.clickDrawnNode, false);
+        //     }
+        // }
     },
 
     clearAllTimeouts: function () {
@@ -349,6 +363,8 @@ var Graph = React.createClass({
         } else {
             this.incrementFCECount(0.5);
         }
+
+        if (this.state.drawMode === 'move-node') {}
     },
 
     nodeMouseEnter: function (event) {
@@ -373,7 +389,7 @@ var Graph = React.createClass({
 
         yPos = parseFloat(yPos);
 
-        if (this.state.graphMode === 'graph') {
+        if (!this.state.onDraw) {
             infoBox.setState({xPos: xPos,
                               yPos: yPos,
                               nodeId: courseId,
@@ -396,6 +412,26 @@ var Graph = React.createClass({
 
         this.setState({timeouts: this.state.timeouts.concat(timeout),
             buttonHover: false});
+    },
+
+    // nodeMouseDown: function (event) {
+    //     if (this.state.drawMode === 'move-node') {
+    //         var id = event.currentTarget.id;
+    //         var currentNode = this.refs.nodes.refs[id];
+    //     }
+    // },
+
+    nodeDragEnd: function (event) {
+        console.log('hi');
+        if (this.state.drawMode === 'move-node') {
+            var id = event.currentTarget.id;
+            var currentNode = this.refs.nodes.refs[id];
+            console.log(currentNode);
+            var newPos = this.getRelativeCoords(event);
+            console.log(currentNode.props.JSON.pos);
+            console.log(newPos.x, newPos.y);
+            currentNode.props.JSON.pos = [newPos.x, newPos.y];
+        }
     },
 
     infoBoxMouseEnter: function () {
@@ -570,6 +606,12 @@ var Graph = React.createClass({
             this.panDirection('left', 5);
         } else if (event.keyCode == 38) {
             this.panDirection('up', 5);
+        } else if (this.state.onDraw) {
+            if (event.keyCode == 77) {
+                this.setState({drawMode: 'move-node'});
+            } else if (event.keyCode == 78) {
+                this.setState({drawMode: 'draw-node'});
+            }
         }
     },
 
@@ -589,17 +631,8 @@ var Graph = React.createClass({
         this.setState({buttonHover: false});
     },
 
-    getCursorPosition: function(canvas, e) {
-        var rect = canvas.getBoundingClientRect();
-        var x = event.clientX - rect.left;
-        var y = event.clientY - rect.top;
-        x = (x * this.state.zoomFactor) + this.state.horizontalPanFactor;
-        y = (y * this.state.zoomFactor) + this.state.verticalPanFactor;
-
-        return {x: x, y: y};
-    },
-
     getRelativeCoords: function(event) {
+        console.log(event)
         var x = event.offsetX;
         var y = event.offsetY;
         x = (x * this.state.zoomFactor) + this.state.horizontalPanFactor;
@@ -665,14 +698,12 @@ var Graph = React.createClass({
     * @param {object} e The mousedown event.
     */
     drawGraphObject: function(e) {
-        // var pos = this.getCursorPosition(document.body, e);
         var pos = this.getRelativeCoords(e);
 
         // check if the user is trying to draw a node. Also check
         // if the user is trying to press a button instead (ie zoom buttons)
-        if (this.state.graphMode === 'draw-node' &&
+        if (this.state.drawMode === 'draw-node' &&
             !this.state.buttonHover) {
-            // 40, 88
             this.drawNode(pos.x, pos.y);
         }
     },
@@ -769,12 +800,13 @@ var Graph = React.createClass({
                         nodeClick={this.nodeClick}
                         nodeMouseEnter={this.nodeMouseEnter}
                         nodeMouseLeave={this.nodeMouseLeave}
+                        nodeDragEnd={this.nodeDragEnd}
                         svg={this}
                         nodesJSON={this.state.nodesJSON}
                         hybridsJSON={this.state.hybridsJSON}
                         edgesJSON={this.state.edgesJSON}
                         highlightedNodes={this.state.highlightedNodes}
-                        graphMode={this.state.graphMode}/>
+                        onDraw={this.state.onDraw}/>
                     <BoolGroup
                         ref='bools'
                         boolsJSON={this.state.boolsJSON}
@@ -961,7 +993,8 @@ var NodeGroup = React.createClass({
                         onClick={this.props.nodeClick}
                         onMouseEnter={this.props.nodeMouseEnter}
                         onMouseLeave={this.props.nodeMouseLeave}
-                        graphMode={this.props.graphMode} />
+                        onDragEnd={this.props.nodeDragEnd}
+                        onDraw={this.props.onDraw} />
             }, this)}
             </g>
         );
@@ -971,7 +1004,7 @@ var NodeGroup = React.createClass({
 
 var Node = React.createClass({
     getInitialState: function () {
-        if (this.props.graphMode === 'graph') {
+        if (!this.props.onDraw) {
             var state = getCookie(this.props.JSON.id_);
         } else {
             var state = '';
