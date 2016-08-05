@@ -27,10 +27,11 @@ convertTexToPDF :: String -> String -> String -> String -> IO
                                                            Maybe Handle,
                                                            ProcessHandle)
 convertTexToPDF texName pdfName graphImg timetableImg = createProcess $ CreateProcess
-                      (ShellCommand $ "pdflatex --jobname=" ++ pdfName ++       -- declare name of resulting pdf
-                                      " \'\\def\\graph{" ++ graphImg ++         -- provide graph image variable
+                      (ShellCommand $ "pdflatex -interaction=nonstopmode " ++   
+                                      "--jobname=" ++ pdfName ++                -- declare name of resulting pdf
+                                      " \"\\def\\graph{" ++ graphImg ++         -- provide graph image variable
                                       "}\\def\\timetable{" ++ timetableImg ++   -- provide timetable image variable
-                                      "}\\input\' " ++ texName                  -- tex source
+                                      "}\\input\" " ++ texName                  -- tex source
                       ) 
                       Nothing
                       Nothing
