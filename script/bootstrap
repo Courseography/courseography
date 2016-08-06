@@ -1,0 +1,130 @@
+#!/usr/bin/env bash
+
+set -e
+set -o pipefail
+
+# Stolen from https://github.com/heroku/heroku-buildpack-nodejs/blob/master/lib/common.sh:
+
+head() {
+  echo "==> $*"
+}
+
+info() {
+  echo "    $*"
+}
+
+# sed -l basically makes sed replace and buffer through stdin to stdout
+# so you get updates while the command runs and dont wait for the end
+# e.g. npm install | indent
+indent() {
+  c='s/^/    /'
+  case $(uname) in
+    Darwin) sed -l "$c";; # mac/bsd sed: -l buffers on line boundaries
+    *)      sed -u "$c";; # unix/gnu sed: -u unbuffered (arbitrary) chunks of data
+  esac
+}
+
+test_command() {
+  local cmd=$1
+  command -v "${cmd}" 2>&1 > /dev/null || return 1
+}
+
+handle_failure() {
+  echo
+  head "Bootstrapping failed! See above for errors."
+}
+
+# Run handle_failure upon exiting prematurely
+trap handle_failure EXIT
+
+head "Checking directory..."
+if [ ! -d ".git" ] || [ ! -d "hs" ] || [ ! -e "package.json" ]; then
+  info "Error: you must run this script from the root of the repository."
+  exit 1
+fi
+
+head "Detecting Haskell..."
+echo
+
+haskell_failure() {
+  info "Failed to find ${1} on your PATH. Is The Haskell Platform installed correctly?";
+  info "Install the Haskell Platform from:"
+  echo
+  info "    https://www.haskell.org/platform/"
+  echo
+  return 1
+}
+
+test_command runhaskell && {
+  info "Found runhaskell: $(command -v runhaskell)"
+  info "Version:          ${VERSION}"
+} || haskell_failure runhaskell
+echo
+
+test_command cabal && {
+  CABAL_VERSION=$(cabal --numeric-version)
+  info "Found cabal:      $(command -v cabal)";
+  info "Version:          ${CABAL_VERSION}"
+  if [[ ! $CABAL_VERSION =~ ^1\.22\..\..$ ]]; then
+    echo
+    info "Error: cabal version must be 1.22.x.x"
+    echo
+    exit 1
+  fi
+} || haskell_failure cabal
+echo
+
+head "Detecting Node.js..."
+echo
+
+node_failure() {
+  info "Failed to find ${1} on your PATH. Is Node.js installed correctly?";
+  info "Install Node.js using nvm:"
+  echo
+  info "    https://github.com/creationix/nvm"
+  echo
+  info "Once nvm is installed, install the most recent stable release of Node.js:"
+  echo
+  info "    $ nvm install stable"
+  info "    $ nvm alias default stable"
+  exit 1
+}
+
+test_command node && {
+  info "Found node:       $(command -v node)";
+  info "Version:          $(cabal --numeric-version)"
+} || node_failure node
+echo
+
+test_command npm && {
+  info "Found npm:        $(command -v npm)";
+  info "Version:          $(npm --version)"
+} || node_failure npm
+echo
+
+(cd hs && {
+  head "Creating cabal sandbox"
+  echo
+  cabal sandbox init 2>&1 | indent
+  echo
+
+  head "Updating cabal package list"
+  echo
+  cabal update 2>&1 | indent
+  echo
+
+  head "Installing cabal dependencies"
+  echo
+  cabal install --only-dependencies 2>&1 | indent
+  echo
+})
+
+head "Installing npm dependencies"
+echo
+npm install --loglevel info --color always 2>&1 | indent
+echo
+
+# Disable failure trap
+trap - EXIT
+
+head "Bootstrapping successful!"
