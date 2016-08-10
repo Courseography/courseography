@@ -1,4 +1,4 @@
-{-# LANGUAGE ScopedTypeVariables, OverloadedStrings #-}
+{-# LANGUAGE ScopedTypeVariables, OverloadedStrings, GADTs #-} -- GADTs added by Kael
 
 {-|
 Description: Respond to various requests involving database course information.
@@ -97,11 +97,37 @@ returnLecture lowerStr sect session = runSqlite databasePath $ do
                                        []
     return $ fmap entityVal maybeEntityLectures
 
+-- original!---
+---- | Builds a Course structure from a tuple from the Courses table.
+---- Some fields still need to be added in.
+--buildCourse :: Maybe Session -> Maybe Session -> Maybe Session -> Courses -> Course
+--buildCourse fallSession springSession yearSession course =
+--    Course (coursesBreadth course)
+--           -- TODO: Remove the filter and allow double-quotes
+--           (fmap (T.filter (/='\"')) (coursesDescription course))
+--           (fmap (T.filter (/='\"')) (coursesTitle course))
+--           (coursesPrereqString course)
+--           fallSession
+--           springSession
+--           yearSession
+--           (coursesCode course)
+--           (coursesExclusions course)
+--           (coursesManualTutorialEnrolment course)
+--           (coursesManualPracticalEnrolment course)
+--           (coursesDistribution course)
+--           (coursesPrereqs course)
+--           (coursesCoreqs course)
+--           (coursesVideoUrls course)
+
+
 -- | Builds a Course structure from a tuple from the Courses table.
 -- Some fields still need to be added in.
 buildCourse :: Maybe Session -> Maybe Session -> Maybe Session -> Courses -> Course
 buildCourse fallSession springSession yearSession course =
-    Course (coursesBreadth course)
+    let cBreadth = getText $ getDescriptionB (coursesBreadth course) :: (Maybe T.Text)
+        cDistribution = getText $ getDescriptionD (coursesDistribution course) :: (Maybe T.Text)
+    in
+    Course cBreadth
            -- TODO: Remove the filter and allow double-quotes
            (fmap (T.filter (/='\"')) (coursesDescription course))
            (fmap (T.filter (/='\"')) (coursesTitle course))
@@ -113,11 +139,46 @@ buildCourse fallSession springSession yearSession course =
            (coursesExclusions course)
            (coursesManualTutorialEnrolment course)
            (coursesManualPracticalEnrolment course)
-           (coursesDistribution course)
+           cDistribution
            (coursesPrereqs course)
            (coursesCoreqs course)
            (coursesVideoUrls course)
 
+-- attempt 1 to get text for course field from sqlkey 
+--getDescriptionB :: Maybe (Key Breadth) -> SqlPersistM (Maybe (T.Text))
+--getDescriptionB Nothing = return Nothing
+--getDescriptionB (Just key) = do
+--    maybeBreadth :: (Maybe Breadth) <- get key
+--    return $ case maybeBreadth of 
+--        Nothing -> Nothing
+--        Just mBreadth -> Just ( T.pack (breadthDescription mBreadth))
+        -- why don't need SqlPersistM (Maybe (Entity Breadth)) ... and (T.pack breadthDescription $ entityVal maybeBreadth))?
+
+--getText :: SqlPersistM (Maybe (T.Text)) -> Maybe (T.Text)
+--getDescriptionB :: (MonadIO m, backend ~ PersistEntityBackend Breadth, PersistEntity Breadth) => Maybe (Key Breadth) -> SqlPersistM (Maybe (T.Text))
+getDescriptionB :: SqlPersistM (Maybe (Key Breadth)) -> SqlPersistM (Maybe (T.Text))
+getDescriptionB Nothing = return Nothing
+getDescriptionB (Just key) = do
+    maybeBreadth <- get key
+    case maybeBreadth of
+        Nothing -> return Nothing 
+        _ -> return $ T.pack $ breadthDescription (entityVal maybeBreadth)  
+
+--getDescriptionD :: (MonadIO m, backend ~ PersistEntityBackend Distribution, PersistEntity Distribution) => Maybe (Key Distribution) -> SqlPersistM (Maybe (T.Text))
+getDescriptionD :: Maybe (Key Distribution) -> SqlPersistM (Maybe (T.Text))
+getDescriptionD Nothing = return Nothing
+getDescriptionD (Just key) = do
+    maybeDistribution <- get key
+    case maybeDistribution of
+        Nothing -> return Nothing
+        Just _ -> Just $ T.pack $ distributionDescription (maybeDistribution)  
+
+getText :: SqlPersistM (Maybe (T.Text)) -> Maybe T.Text
+getText t = do
+    text :: Maybe T.Text <- t -- none of this is right! This isn't the right thing to do with SqlPersistM :( 
+    case text of
+        Nothing -> Nothing
+        _ -> text
 -- | Builds a Session structure from a list of tuples from the Lecture table,
 -- and a list of tuples from the Tutorial table.
 buildSession :: [Entity Lecture] -> [Entity Tutorial] -> Maybe Tables.Session
@@ -236,3 +297,4 @@ queryGraphs =
     runSqlite databasePath $
         do graphs :: [Entity Graph] <- selectList [] []
            return $ createJSONResponse graphs
+
