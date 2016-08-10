@@ -37,49 +37,47 @@ saveGraphJSON jsonStr nameStr = do
                 insertMany_ $ map (\path -> path {pathGraph = gId}) paths
             return $ toResponse $ ("Success" :: String)
 
+-- | a function to select queries which contain the string 'query' (Sql's "like" operator)
+-- Note: In cases where there are multiple values (eg breadth (1) and (2)), because
+-- the current select uses only the head of the list, this will disguise the fact that
+-- there are multiple answers. 
+--contains' :: PersistEntity m => T.Text -> SqlPersistM m
+--contains field query = Filter field (Left $ T.concat ["%", query, "%"]) (BackendSpecificFilter "LIKE")
+
 -- Get Key of correspondig record in Distribution column  
-getDistributionKey :: Maybe T.Text -> Maybe DistributionId 
+getDistributionKey :: Maybe T.Text -> SqlPersistM (Maybe (Key Distribution)) 
 getDistributionKey description = do
     case description of
         Nothing -> Nothing
         Just _ -> do
             textDescription :: T.Text <- description
-            keyListDistribution :: [DistributionId] <- selectKeysList [ DistributionDescription ==. textDescription ] [] 
-            return (head keyListDistribution)
-            
---alternate version:
---getDistributionKey :: Maybe T.Text -> Maybe DistributionId 
---getDistributionKey description --(equals)-- -- do
-    --case description of
-    --    Nothing -> Nothing
-    --    Just _ -> do
-    --        keyListDistribution :: [DistributionId] <- selectKeysList [ DistributionDescription ==. description ] [] 
-    --        let keyDistribution --(equals)-- (if null keyListDistribution then Nothing else Just (head keyListDistribution))
-  
+            keyListDistribution :: [DistributionId] <- selectKeysList [ DistributionDescription ==. (T.unpack textDescription) ] []
+            -- option: keyListDistribution :: [DistributionId] <- selectKeysList [ DistributionDescription `contains'` description] [] 
+            case keyListDistribution of 
+                [] -> Nothing
+                _ -> Just (head keyListDistribution)  
 
 -- **Problem: Breadth as it is hard-coded in Database.hs won't match breadth field from Code.
+-- possible solution: use contains' helper
 -- Get Key of corresponding breadth record 
-getBreadthKey :: Maybe T.Text -> Maybe BreadthId 
+getBreadthKey :: Maybe T.Text -> SqlPersistM (Maybe (Key Breadth))
 getBreadthKey description = do
     case description of   
         Nothing -> Nothing
         Just _ -> do
             textDescription :: T.Text <- description  
-            keyListBreadth :: [BreadthId] <- selectKeysList [ BreadthDescription ==. textDescription ] [] 
+            keyListBreadth :: [BreadthId] <- selectKeysList [ BreadthDescription ==. (T.unpack textDescription) ] [] 
+            -- option: selectKeysList [ BreadthDescription `contains'` description] []
             case keyListBreadth of 
-                null -> Nothing
+                [] -> Nothing
                 _ -> Just (head keyListBreadth)
-
-            --if null keyListBreadth
-            --then Nothing
-            --else Just (head keyListBreadth)  
-          -- or 
-            --return (head keyListBreadth)
 
 -- | Inserts course into the Courses table.
 insertCourse :: Course -> SqlPersistM ()
 insertCourse course = do
     maybeCourse <- selectFirst [CoursesCode ==. (name course)] []
+    breadthKey <- getBreadthKey (breadth course)
+    distributionKey <- getDistributionKey (distribution course)
     case maybeCourse of
         Nothing -> insert_ $ Courses (name course)
                       (title course)
@@ -88,8 +86,8 @@ insertCourse course = do
                       (manualPracticalEnrolment course)
                       (prereqs course)
                       (exclusions course)
-                      (getBreadthKey (breadth course))
-                      (getDistributionKey (distribution course))
+                      breadthKey
+                      distributionKey
                       (prereqString course)
                       (coreqs course)
                       []
