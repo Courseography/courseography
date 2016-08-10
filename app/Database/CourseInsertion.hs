@@ -45,32 +45,28 @@ saveGraphJSON jsonStr nameStr = do
 --contains field query = Filter field (Left $ T.concat ["%", query, "%"]) (BackendSpecificFilter "LIKE")
 
 -- Get Key of correspondig record in Distribution column  
-getDistributionKey :: Maybe T.Text -> SqlPersistM (Maybe (Key Distribution)) 
-getDistributionKey description = do
-    case description of
-        Nothing -> Nothing
-        Just _ -> do
-            textDescription :: T.Text <- description
-            keyListDistribution :: [DistributionId] <- selectKeysList [ DistributionDescription ==. (T.unpack textDescription) ] []
-            -- option: keyListDistribution :: [DistributionId] <- selectKeysList [ DistributionDescription `contains'` description] [] 
-            case keyListDistribution of 
-                [] -> Nothing
-                _ -> Just (head keyListDistribution)  
+getDistributionKey :: Maybe T.Text -> SqlPersistM (Maybe (Key Distribution))
+getDistributionKey Nothing = return Nothing 
+getDistributionKey (Just description) = do
+    --textDescription :: T.Text <- description
+    keyListDistribution :: [Key Distribution] <- selectKeysList [ DistributionDescription ==. (T.unpack description) ] []
+    -- option: keyListDistribution :: [DistributionId] <- selectKeysList [ DistributionDescription `contains'` description] [] 
+    return $ case keyListDistribution of 
+        [] -> Nothing
+        _ -> Just (head keyListDistribution)  
 
 -- **Problem: Breadth as it is hard-coded in Database.hs won't match breadth field from Code.
 -- possible solution: use contains' helper
 -- Get Key of corresponding breadth record 
 getBreadthKey :: Maybe T.Text -> SqlPersistM (Maybe (Key Breadth))
-getBreadthKey description = do
-    case description of   
-        Nothing -> Nothing
-        Just _ -> do
-            textDescription :: T.Text <- description  
-            keyListBreadth :: [BreadthId] <- selectKeysList [ BreadthDescription ==. (T.unpack textDescription) ] [] 
-            -- option: selectKeysList [ BreadthDescription `contains'` description] []
-            case keyListBreadth of 
-                [] -> Nothing
-                _ -> Just (head keyListBreadth)
+getBreadthKey Nothing = return Nothing
+getBreadthKey (Just description) = do
+--textDescription :: T.Text <- description  
+    keyListBreadth :: [Key Breadth] <- selectKeysList [ BreadthDescription ==. (T.unpack description) ] [] 
+    -- option: selectKeysList [ BreadthDescription `contains'` description] []
+    return $ case keyListBreadth of 
+        [] -> Nothing
+        _ -> Just (head keyListBreadth)
 
 -- | Inserts course into the Courses table.
 insertCourse :: Course -> SqlPersistM ()
