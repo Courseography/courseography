@@ -93,9 +93,15 @@ parseUntil parser = P.manyTill P.anyChar (P.try parser)
 brackets :: Parser String
 brackets = do
     P.string "("
-    middle <- P.manyTill P.anyChar (P.char ')')
-    return $ "(" ++ middle ++ ")"
+    text <- parseUntil (P.char ')')
+    nextChar <- P.anyChar 
+    case nextChar of 
+        '/' -> do
+            categoryText <- getCategory
+            return $ "(" ++ text ++ ")" ++ "/" ++ categoryText
+        other -> do
+            return $ "(" ++ text ++ ")"
 
 categorySeperator = 
-    P.oneOf ";\r\n\160"
+    P.oneOf ",;\r\n\160"
 
