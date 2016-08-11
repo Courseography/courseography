@@ -1,4 +1,4 @@
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE OverloadedStrings, FlexibleContexts #-}
 module WebParsing.PostParser
     (getPost) where
 
@@ -64,7 +64,11 @@ addPostCategoriesToDatabase postCode tagText  = do
             mapM_ (addCategoryToDatabase postCode) (filter isCategory text)
         Left _ -> print "Failed."
     where
-        isCategory string = (length string) >= 7
+        isCategory string = 
+            let infixes = map (containsString string) ["First", "Second", "Third", "suitable"]
+            in 
+                ((length string) >= 7) && ((length $ filter (\bool -> bool) infixes) <= 0)
+        containsString string substring = isInfixOf substring string
 
 addCategoryToDatabase :: String -> String -> IO ()
 addCategoryToDatabase postCode category =
