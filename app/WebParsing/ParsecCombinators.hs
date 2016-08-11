@@ -73,7 +73,10 @@ getRequirements =
 splitPrereqText :: Parser [String]
 splitPrereqText = do
     parseUntil (P.string "First Year")
-    P.manyTill getCategory ((P.try (P.string "Notes")) <|> (P.try (P.string "NOTES")))
+    P.manyTill ((P.try brackets) <|> getCategory) parseNotes
+
+parseNotes :: Parser String
+parseNotes = (P.try (P.string "Notes")) <|> (P.try (P.string "NOTES"))
 
 getCategory :: Parser String
 getCategory = parseUntil categorySeperator
