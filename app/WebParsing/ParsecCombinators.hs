@@ -79,10 +79,22 @@ parseNotes :: Parser String
 parseNotes = (P.try (P.string "Notes")) <|> (P.try (P.string "NOTES"))
 
 getCategory :: Parser String
-getCategory = parseUntil categorySeperator
+getCategory = parseUntil ((P.try reachedABracket) <|> categorySeperator)
+
+reachedABracket :: Parser Char
+reachedABracket = do
+    char <- P.anyChar
+    P.notFollowedBy (P.noneOf "(")
+    return char
 
 parseUntil :: Parser a -> Parser String
 parseUntil parser = P.manyTill P.anyChar (P.try parser)
+
+brackets :: Parser String
+brackets = do
+    P.string "("
+    middle <- P.manyTill P.anyChar (P.char ')')
+    return $ "(" ++ middle ++ ")"
 
 categorySeperator = 
     P.oneOf ";\r\n\160"
