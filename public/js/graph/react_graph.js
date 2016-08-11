@@ -169,7 +169,8 @@ var Graph = React.createClass({
             buttonHover: false,
             onDraw: this.props.initialOnDraw,
             drawMode: this.props.initialDrawMode,
-            drawNodeID: 0
+            drawNodeID: 0,
+            draggingNode: null
         };
     },
 
@@ -320,16 +321,16 @@ var Graph = React.createClass({
             this.setFCECount(totalFCEs);
         }
 
-        // after each update, check if the draw mode has changed
-        // if ((prevState.onDraw !== this.state.onDraw) && this.state.onDraw) {
-        //     document.getElementById('react-graph').addEventListener('mousedown', this.drawGraphObject, false);
-        // }
-        // } else if ((prevState.drawMode !== this.state.drawMode) &&
-        //     this.state.onDraw) {
-        //     if (this.state.drawMode === 'move-node') {
-        //         document.getElementById('react-graph').addEventListener('mousedown', this.clickDrawnNode, false);
-        //     }
-        // }
+        if (this.state.onDraw) {
+            if (this.state.drawMode === 'move-node') {
+                document.getElementById('react-graph').addEventListener('mouseup', this.dropNode, false);
+                document.getElementById('react-graph').addEventListener('mousemove', this.dragNode, false);
+            } else {
+                document.getElementById('react-graph').removeEventListener('mouseup', this.dropNode);
+                document.getElementById('react-graph').removeEventListener('mousemove', this.dragNode);
+            }
+        }
+
     },
 
     clearAllTimeouts: function () {
@@ -414,23 +415,29 @@ var Graph = React.createClass({
             buttonHover: false});
     },
 
-    // nodeMouseDown: function (event) {
-    //     if (this.state.drawMode === 'move-node') {
-    //         var id = event.currentTarget.id;
-    //         var currentNode = this.refs.nodes.refs[id];
-    //     }
-    // },
-
-    nodeDragEnd: function (event) {
-        console.log('hi');
+    nodeMouseDown: function (event) {
         if (this.state.drawMode === 'move-node') {
             var id = event.currentTarget.id;
-            var currentNode = this.refs.nodes.refs[id];
-            console.log(currentNode);
+            this.setState({draggingNode: id});
+        }
+    },
+
+    dragNode: function (event) {
+        if (this.state.draggingNode !== null) {
             var newPos = this.getRelativeCoords(event);
-            console.log(currentNode.props.JSON.pos);
-            console.log(newPos.x, newPos.y);
+            var currentNode = this.refs.nodes.refs[this.state.draggingNode];
             currentNode.props.JSON.pos = [newPos.x, newPos.y];
+            currentNode.props.JSON.text[0].pos = [newPos.x, newPos.y+20];
+        }
+    },
+
+    dropNode: function (event) {
+        if (this.state.draggingNode !== null) {
+            var newPos = this.getRelativeCoords(event);
+            var currentNode = this.refs.nodes.refs[this.state.draggingNode];
+            currentNode.props.JSON.pos = [newPos.x, newPos.y];
+            currentNode.props.JSON.text[0].pos = [newPos.x, newPos.y+20];
+            this.setState({draggingNode: null});
         }
     },
 
@@ -632,7 +639,6 @@ var Graph = React.createClass({
     },
 
     getRelativeCoords: function(event) {
-        console.log(event)
         var x = event.offsetX;
         var y = event.offsetY;
         x = (x * this.state.zoomFactor) + this.state.horizontalPanFactor;
@@ -800,7 +806,7 @@ var Graph = React.createClass({
                         nodeClick={this.nodeClick}
                         nodeMouseEnter={this.nodeMouseEnter}
                         nodeMouseLeave={this.nodeMouseLeave}
-                        nodeDragEnd={this.nodeDragEnd}
+                        nodeMouseDown={this.nodeMouseDown}
                         svg={this}
                         nodesJSON={this.state.nodesJSON}
                         hybridsJSON={this.state.hybridsJSON}
@@ -993,7 +999,7 @@ var NodeGroup = React.createClass({
                         onClick={this.props.nodeClick}
                         onMouseEnter={this.props.nodeMouseEnter}
                         onMouseLeave={this.props.nodeMouseLeave}
-                        onDragEnd={this.props.nodeDragEnd}
+                        onMouseDown={this.props.nodeMouseDown}
                         onDraw={this.props.onDraw} />
             }, this)}
             </g>
