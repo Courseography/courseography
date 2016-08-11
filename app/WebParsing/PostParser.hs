@@ -65,7 +65,8 @@ addPostCategoriesToDatabase postCode tagText  = do
         Left _ -> print "Failed."
     where
         isCategory string = 
-            let infixes = map (containsString string) ["First", "Second", "Third", "suitable"]
+            let infixes = map (containsString string) 
+                         ["First", "Second", "Third", "suitable", "Core", "Electives"]
             in 
                 ((length string) >= 7) && ((length $ filter (\bool -> bool) infixes) <= 0)
         containsString string substring = isInfixOf substring string
