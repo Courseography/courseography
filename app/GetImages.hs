@@ -26,7 +26,7 @@ getGraphImage :: String -> M.Map String String -> IO (String, String)
 getGraphImage graphName courseMap = do
     rand <- randomName
     let svgFilename = rand ++ ".svg"
-        imageFilename =  rand ++ ".png"
+        imageFilename = rand ++ ".png"
     buildSVG graphName courseMap svgFilename True
     createImageFile svgFilename imageFilename
     return (svgFilename, imageFilename)
