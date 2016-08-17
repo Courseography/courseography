@@ -323,7 +323,6 @@ var Graph = React.createClass({
             }
             this.setFCECount(totalFCEs);
         }
-
     },
 
     clearAllTimeouts: function () {
@@ -357,7 +356,6 @@ var Graph = React.createClass({
         } else {
             this.incrementFCECount(0.5);
         }
-
     },
 
     nodeMouseEnter: function (event) {
