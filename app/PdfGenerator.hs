@@ -4,35 +4,30 @@ module PdfGenerator
 import System.Process
 import GHC.IO.Handle.Types
 import ImageConversion (removeImage)
+import Data.List.Utils (replace)
 
--- | Opens a new process to create a .pdf file (pdfName) from a .tex 
--- file (texName) that contains graphImg and timetableImg and deletes
--- extra files created by pdflatex
-createPDF :: String -> String -> String -> String -> IO ()
-createPDF texName pdfName graphImg timetableImg = do
-  (_, _, _, pid) <- convertTexToPDF texName pdfName graphImg timetableImg
+-- | Opens a new process to create a PDF from a TEX (texName) and deletes
+-- the tex file and extra files created by pdflatex
+createPDF :: String -> IO ()
+createPDF texName  = do
+  (_, _, _, pid) <- convertTexToPDF texName 
   print "Waiting for a process..."
   waitForProcess pid
-  removeImage (pdfName ++ ".aux") -- delete log and aux files created in the pdflatex process
-  removeImage (pdfName ++ ".log")
+  let aux = replace ".tex" ".aux" texName
+      log = replace ".tex" ".log" texName
+  removeImage (aux ++ " " ++ log ++ " " ++ texName)
   print "Process Complete"
 
--- | Create a process to use the pdflatex program to create a .pdf 
--- file (pdfName, which should not have file extension) from a .tex file 
--- (texName, which doesn't require file extension) that contains the supplied 
--- images graphImg timetableImg
-convertTexToPDF :: String -> String -> String -> String -> IO
-                                                          (Maybe Handle,
-                                                           Maybe Handle,
-                                                           Maybe Handle,
-                                                           ProcessHandle)
-convertTexToPDF texName pdfName graphImg timetableImg = createProcess $ CreateProcess
-                      (ShellCommand $ "pdflatex -interaction=nonstopmode " ++   
-                                      "--jobname=" ++ pdfName ++                -- declare name of resulting pdf
-                                      " \"\\def\\graph{" ++ graphImg ++         -- provide graph image variable
-                                      "}\\def\\timetable{" ++ timetableImg ++   -- provide timetable image variable
-                                      "}\\input\" " ++ texName                  -- tex source
-                      ) 
+-- | Create a process to use the pdflatex program to create a PDF from a TEX 
+-- file (texName). The process is run in nonstop mode and so it will not block 
+-- if an error occurs. The resulting PDF will have the same filename as texName.
+convertTexToPDF :: String -> IO
+                            (Maybe Handle,
+                             Maybe Handle,
+                             Maybe Handle,
+                             ProcessHandle)
+convertTexToPDF texName = createProcess $ CreateProcess
+                      (ShellCommand $ "pdflatex -interaction=nonstopmode " ++ texName) 
                       Nothing
                       Nothing
                       CreatePipe
