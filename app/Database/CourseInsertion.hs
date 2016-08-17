@@ -37,10 +37,6 @@ saveGraphJSON jsonStr nameStr = do
                 insertMany_ $ map (\path -> path {pathGraph = gId}) paths
             return $ toResponse $ ("Success" :: String)
 
--- | a function to select queries which contain the string 'query' (Sql's "like" operator)
--- Note: In cases where there are multiple values (eg breadth (1) and (2)), because
--- the current select uses only the head of the list, this will disguise the fact that
--- there are multiple answers. 
 --contains' :: PersistEntity m => T.Text -> SqlPersistM m
 --contains field query = Filter field (Left $ T.concat ["%", query, "%"]) (BackendSpecificFilter "LIKE")
 
@@ -54,9 +50,6 @@ getDistributionKey (Just description) = do
         [] -> Nothing
         _ -> Just (head keyListDistribution)  
 
--- **Problem: Breadth as it is hard-coded in Database.hs won't match breadth field from Code.
--- possible solution: use contains' helper
--- Get Key of corresponding breadth record 
 getBreadthKey :: Maybe T.Text -> SqlPersistM (Maybe (Key Breadth))
 getBreadthKey Nothing = return Nothing
 getBreadthKey (Just description) = do
