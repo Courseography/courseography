@@ -3,7 +3,7 @@
  * @param {string} cookieName The name of the cookie.
  * @param {string} cookieValue The cookies value.
  */
-export function setCookie(cookieName, cookieValue) {
+function setCookie(cookieName, cookieValue) {
     'use strict';
 
     var lifeSpanInDays = 300;
@@ -18,7 +18,7 @@ export function setCookie(cookieName, cookieValue) {
  * @param {string} cookieName The name of the cookie being retrieved.
  * @returns {string} The cookie.
  */
-export function getCookie(cookieName) {
+function getCookie(cookieName) {
     'use strict';
 
     var name = cookieName.replace(/[^0-9a-zA-Z_\-]/g, '-') + '=';

@@ -90,7 +90,8 @@ drawScripts = do
         ["/static/js/draw/variables.js",
          "/static/js/draw/path.js",
          "/static/js/draw/setup.js",
-         "/static/js/vendor/jscolor.min.js"])
+         "/static/js/vendor/jscolor.min.js",
+         "/static/js/common/cookie_handler.js"])
     H.script ! A.src "/static/js/requirejs-config.js" $ ""
     H.script ! H.dataAttribute "main" "/static/js/draw" ! A.src "/static/js/vendor/require.js" $ ""
 

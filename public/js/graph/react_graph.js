@@ -1,6 +1,5 @@
 import * as tooltip from 'es6!graph/tooltip';
 import {Modal} from 'es6!common/react_modal';
-import {setCookie, getCookie} from 'es6!common/cookie_handler';
 
 /**
  *
@@ -177,6 +176,8 @@ var Graph = React.createClass({
     componentWillMount: function () {
         if (this.state.onDraw) {
             document.getElementById('react-graph').addEventListener('mousedown', this.drawGraphObject, false);
+            document.getElementById('react-graph').addEventListener('mouseup', this.drawMouseUp, false);
+            document.getElementById('react-graph').addEventListener('mousemove', this.drawMouseMove, false);
         }
     },
 
@@ -211,6 +212,8 @@ var Graph = React.createClass({
     componentWillUnmount: function () {
         document.body.removeEventListener('keydown', this.onKeyDown);
         document.getElementById('react-graph').removeEventListener('wheel', this.onWheel);
+        document.getElementById('react-graph').removeEventListener('mouseup', this.drawMouseUp);
+        document.getElementById('react-graph').removeEventListener('mousemove', this.drawMouseMove);
     },
 
     getGraph: function (graphName) {
@@ -321,16 +324,6 @@ var Graph = React.createClass({
             this.setFCECount(totalFCEs);
         }
 
-        if (this.state.onDraw) {
-            if (this.state.drawMode === 'move-node') {
-                document.getElementById('react-graph').addEventListener('mouseup', this.dropNode, false);
-                document.getElementById('react-graph').addEventListener('mousemove', this.dragNode, false);
-            } else {
-                document.getElementById('react-graph').removeEventListener('mouseup', this.dropNode);
-                document.getElementById('react-graph').removeEventListener('mousemove', this.dragNode);
-            }
-        }
-
     },
 
     clearAllTimeouts: function () {
@@ -365,7 +358,6 @@ var Graph = React.createClass({
             this.incrementFCECount(0.5);
         }
 
-        if (this.state.drawMode === 'move-node') {}
     },
 
     nodeMouseEnter: function (event) {
@@ -416,28 +408,48 @@ var Graph = React.createClass({
     },
 
     nodeMouseDown: function (event) {
-        if (this.state.drawMode === 'move-node') {
+        if (this.state.drawMode === 'draw-node' && event.currentTarget.id.startsWith('n')) {
             var id = event.currentTarget.id;
             this.setState({draggingNode: id});
         }
     },
 
-    dragNode: function (event) {
-        if (this.state.draggingNode !== null) {
-            var newPos = this.getRelativeCoords(event);
-            var currentNode = this.refs.nodes.refs[this.state.draggingNode];
-            currentNode.props.JSON.pos = [newPos.x, newPos.y];
-            currentNode.props.JSON.text[0].pos = [newPos.x, newPos.y+20];
+    drawMouseMove: function (event) {
+        // in draw-node mode, drag a node as the mouse moves
+        if (this.state.drawMode === 'draw-node') {
+            if (this.state.draggingNode !== null) {
+                var newPos = this.getRelativeCoords(event);
+                for (var node in this.state.nodesJSON) {
+                    if (this.state.nodesJSON[node].id_ === this.state.draggingNode) {
+                        var currentNode = this.state.nodesJSON[node];
+                    }
+                }
+                currentNode.pos = [newPos.x-20, newPos.y-15];
+                currentNode.text[0].pos = [newPos.x, newPos.y+5];
+                var newNodesJSON = $.extend([], this.state.nodesJSON);
+                newNodesJSON.push(currentNode);
+                this.setState({nodesJSON: newNodesJSON});
+            }
         }
     },
 
-    dropNode: function (event) {
-        if (this.state.draggingNode !== null) {
-            var newPos = this.getRelativeCoords(event);
-            var currentNode = this.refs.nodes.refs[this.state.draggingNode];
-            currentNode.props.JSON.pos = [newPos.x, newPos.y];
-            currentNode.props.JSON.text[0].pos = [newPos.x, newPos.y+20];
-            this.setState({draggingNode: null});
+    drawMouseUp: function (event) {
+        // in draw-node mode, drop a dragged node to a new location        
+        if (this.state.drawMode === 'draw-node') {
+            if (this.state.draggingNode !== null) {
+                var newPos = this.getRelativeCoords(event);
+                for (var node in this.state.nodesJSON) {
+                    if (this.state.nodesJSON[node].id_ === this.state.draggingNode) {
+                        var currentNode = this.state.nodesJSON[node];
+                    }
+                }
+                currentNode.pos = [newPos.x-20, newPos.y-15];
+                currentNode.text[0].pos = [newPos.x, newPos.y+5];
+                var newNodesJSON = $.extend([], this.state.nodesJSON);
+                newNodesJSON.push(currentNode);
+                this.setState({nodesJSON: newNodesJSON,
+                    draggingNode: null});
+            }
         }
     },
 
@@ -614,9 +626,7 @@ var Graph = React.createClass({
         } else if (event.keyCode == 38) {
             this.panDirection('up', 5);
         } else if (this.state.onDraw) {
-            if (event.keyCode == 77) {
-                this.setState({drawMode: 'move-node'});
-            } else if (event.keyCode == 78) {
+            if (event.keyCode == 78) {
                 this.setState({drawMode: 'draw-node'});
             }
         }
@@ -691,6 +701,7 @@ var Graph = React.createClass({
             'tolerance': 9,
             'type_': 'Node'   
         };
+
         var newNodesJSON = $.extend([], this.state.nodesJSON);
         newNodesJSON.push(nodeJSON);
         this.setState({nodesJSON: newNodesJSON,
