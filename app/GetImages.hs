@@ -1,5 +1,5 @@
  module GetImages 
-    (getActiveGraphImage, getTimetableImage) where
+    (getActiveGraphImage, getTimetableImage, randomName) where
 
 import TimetableImageCreator (renderTable)
 import qualified Data.Map as M
@@ -24,10 +24,9 @@ getActiveGraphImage req = do
 -- image and the name of the image
 getGraphImage :: String -> M.Map String String -> IO (String, String)
 getGraphImage graphName courseMap = do
-    gen <- newStdGen
-    let (rand, _) = next gen
-        svgFilename = show rand ++ ".svg"
-        imageFilename = show rand ++ ".png"
+    rand <- randomName
+    let svgFilename = rand ++ ".svg"
+        imageFilename =  rand ++ ".png"
     buildSVG graphName courseMap svgFilename True
     createImageFile svgFilename imageFilename
     return (svgFilename, imageFilename)
@@ -36,10 +35,16 @@ getGraphImage graphName courseMap = do
 -- image and the name of the image
 getTimetableImage :: String -> String -> IO (String, String)
 getTimetableImage courses session = do
-    gen <- newStdGen
-    let (rand, _) = next gen
-        svgFilename = show rand ++ ".svg"
-        imageFilename = show rand ++ ".png"
+    rand <- randomName
+    let svgFilename = rand ++ ".svg"
+        imageFilename = rand ++ ".png"
     renderTable svgFilename courses session
     createImageFile svgFilename imageFilename
     return (svgFilename, imageFilename)
+
+-- | Generate a string containing random integers
+randomName :: IO String
+randomName = do
+    gen <- newStdGen
+    let (rand, _) = next gen
+    return (show rand)
