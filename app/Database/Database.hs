@@ -41,9 +41,9 @@ setupDistributionTable = runSqlite databasePath $ do
 setupBreadthTable :: IO ()
 setupBreadthTable = runSqlite databasePath $ do
     runMigration migrateAll
-    insert_ $ Breadth "Creative and Cultural Representations"
-    insert_ $ Breadth "Thought, Belief, and Behaviour"
-    insert_ $ Breadth "Society and Its Institutions"
-    insert_ $ Breadth "Living Things and Their Environment"
-    insert_ $ Breadth "The Physical and Mathematical Universes"
+    insert_ $ Breadth "Creative and Cultural Representations (1)"
+    insert_ $ Breadth "Thought, Belief, and Behaviour (2)"
+    insert_ $ Breadth "Society and Its Institutions (3)"
+    insert_ $ Breadth "Living Things and Their Environment (4)"
+    insert_ $ Breadth "The Physical and Mathematical Universes (5)"
     insert_ $ Breadth "No Breadth"
