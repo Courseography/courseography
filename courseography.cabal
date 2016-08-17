@@ -37,12 +37,16 @@ executable courseography
     Database.Database,
     Database.Tables,
     FacebookUtilities,
+    GetImages,
     ImageConversion,
+    LatexGenerator,
     MasterTemplate,
+    PdfGenerator,
     Response,
     Response.About,
     Response.Calendar,
     Response.Draw,
+    Response.Export,
     Response.Graph,
     Response.Grid,
     Response.Image,
@@ -124,7 +128,8 @@ executable courseography
     hslogger,
     old-locale,
     time,
-    parsec
+    parsec,
+    HaTeX
   default-language: Haskell2010
   ghc-options: -Wall -fwarn-tabs
   hs-source-dirs: app
