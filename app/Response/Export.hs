@@ -1,44 +1,31 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Response.Export
-    (exportGraphResponse, exportTimetableResponse) where
+    (exportGraphResponse) where
 
 import Control.Monad.IO.Class  (liftIO)
-import qualified Data.Map as M
 import Happstack.Server
 import GetImages
-import ImageConversion
+import ImageConversion (removeImage)
 import PdfGenerator
-import Data.List.Utils (replace)
+import LatexGenerator
 
--- | Serves a pdf file of a graph image
-exportGraphResponse :: ServerPart Response
-exportGraphResponse = do
+-- | Serves a pdf file that includes a graph and timetable information from 
+-- selected course sessions
+exportGraphResponse :: String -> String -> ServerPart Response
+exportGraphResponse courses session = do
     req <- askRq
-    let cookies = M.fromList $ rqCookies req
-        graphName =
-            replace "-" " " $
-                maybe "Computer-Science" cookieValue (M.lookup "active-graph" cookies)
-    (svgFilename, imageFilename) <- liftIO $ getGraphImage graphName (M.map cookieValue cookies)
-    pdfName <- liftIO $ returnPDF svgFilename imageFilename
+    (graphSvg, graphImg) <- liftIO $ getActiveGraphImage req                    -- create image of active graph
+    (timetableSvg, timetableImg) <- liftIO $ getTimetableImage courses session  -- create timetable image from course and session 
+    pdfName <- liftIO $ returnPDF graphSvg graphImg timetableSvg timetableImg   -- create pdf with both graph and timetable
     serveFile (asContentType "application/pdf") pdfName
 
--- | Serves a pdf file of a timetable requested by user
--- Note: Not completely working yet! Sending ByteString I think
-exportTimetableResponse :: String -> String -> ServerPart Response
-exportTimetableResponse course session = do
-    (svgFilename, imageFilename) <- liftIO $ getTimetableImage course session
-    pdfName <- liftIO $ returnPDF svgFilename imageFilename
-    serveFile (asContentType "application/pdf") pdfName
-
--- | Returns the name of a new pdf created from an image with imageFilename
--- Also deletes some additional files created in the process
-returnPDF :: String -> String -> IO String
-returnPDF svgFilename imageFilename = do
-    let imgName = take (length imageFilename - 4) imageFilename
-        pdfName = imgName ++ ".pdf"
-    createPDF "export" imgName
-    removeImage svgFilename
-    removeImage (imgName ++ ".aux")
-    removeImage (imgName ++ ".log")
-    return $ pdfName
+-- | Returns the name of a generated pdf that contains graphImg and timetableImg
+-- and deletes all of the img and svg files passed as arguments
+returnPDF :: String -> String -> String -> String -> IO String
+returnPDF graphSvg graphImg timetableSvg timetableImg = do
+    rand <- randomName
+    let texName = rand ++ ".tex"
+        pdfName = rand ++ ".pdf"
+    generateTex [graphImg, timetableImg] texName -- generate a temporary TEX file
+    createPDF texName                            -- create PDF using TEX and delete the TEX file afterwards
+    removeImage (graphSvg ++ " " ++ graphImg ++ " " ++ timetableSvg ++ " " ++ timetableImg)
+    return $ (pdfName)

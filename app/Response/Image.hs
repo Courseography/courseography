@@ -16,12 +16,7 @@ import Data.List.Utils (replace)
 graphImageResponse :: ServerPart Response
 graphImageResponse = do
     req <- askRq
-    let cookies = M.fromList $ rqCookies req
-        graphName =
-            replace "-" " " $
-                maybe "Computer-Science" cookieValue (M.lookup "active-graph" cookies)
-    liftIO $ print $ "Generating image for " ++ graphName
-    (svgFilename, imageFilename) <- liftIO $ getGraphImage graphName (M.map cookieValue cookies)
+    (svgFilename, imageFilename) <- liftIO $ getActiveGraphImage req
     liftIO $ returnImageData svgFilename imageFilename
 
 -- | Returns an image of the timetable requested by the user.

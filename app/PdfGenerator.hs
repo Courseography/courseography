@@ -3,36 +3,31 @@ module PdfGenerator
 
 import System.Process
 import GHC.IO.Handle.Types
+import ImageConversion (removeImage)
+import Data.List.Utils (replace)
 
--- | Opens a new process to create a .pdf file (with the same name as imgName) 
--- from a .tex file (texName) that contains the image imgName and waits for
--- that process to terminate.
-createPDF :: String -> String -> IO ()
-createPDF texName imgName = do
-  -- Get the pid of process that is opened for converting .tex to .pdf
-  (_, _, _, pid) <- convertTexToPDF texName imgName
+-- | Opens a new process to create a PDF from a TEX (texName) and deletes
+-- the tex file and extra files created by pdflatex
+createPDF :: String -> IO ()
+createPDF texName  = do
+  (_, _, _, pid) <- convertTexToPDF texName 
   print "Waiting for a process..."
-  -- Force current process to wait for conversion to finish
   waitForProcess pid
+  let aux = replace ".tex" ".aux" texName
+      log = replace ".tex" ".log" texName
+  removeImage (aux ++ " " ++ log ++ " " ++ texName)
   print "Process Complete"
 
--- | Create a process to use the pdflatex program to create a .pdf file (named 
--- imgName) from a .tex file (texName) using a supplied image (imgName)
-convertTexToPDF :: String -> String -> IO
-                                   (Maybe Handle,
-                                    Maybe Handle,
-                                    Maybe Handle,
-                                    ProcessHandle)
-
-convertTexToPDF texName imgName = createProcess $ CreateProcess
-                      (ShellCommand $ "pdflatex " ++
-                              "--jobname=" ++ 
-                              imgName ++ " " ++
-                              "\'\\def\\img{" ++
-                              imgName ++
-                              "}\\input \'" ++
-                              texName
-                      ) -- runs pdflatex from shell command
+-- | Create a process to use the pdflatex program to create a PDF from a TEX 
+-- file (texName). The process is run in nonstop mode and so it will not block 
+-- if an error occurs. The resulting PDF will have the same filename as texName.
+convertTexToPDF :: String -> IO
+                            (Maybe Handle,
+                             Maybe Handle,
+                             Maybe Handle,
+                             ProcessHandle)
+convertTexToPDF texName = createProcess $ CreateProcess
+                      (ShellCommand $ "pdflatex -interaction=nonstopmode " ++ texName) 
                       Nothing
                       Nothing
                       CreatePipe
