@@ -122,26 +122,21 @@ function Button(props) {
 function renderReactGraph(graph_container_id, start_blank, edit) {
     'use strict';
 
-    var initialOnDraw;
-    var initialDrawMode = 'draw-node';
-
     if (start_blank === undefined) {
         start_blank = false;
     }
-    // if edit is NOT undefined, then the user is on the draw page
+
+    // If edit is NOT undefined, then the user is on the draw page
     if (edit === undefined) {
         edit = false;
-        initialOnDraw = false;
-    } else {
-        initialOnDraw = true;
     }
 
     return ReactDOM.render(
-        <Graph 
+        <Graph
             start_blank={start_blank}
             edit={edit}
-            initialOnDraw={initialOnDraw}
-            initialDrawMode={initialDrawMode}/>,
+            initialOnDraw={edit}
+            initialDrawMode='draw-node' />,
         document.getElementById(graph_container_id)
     );
 }
@@ -171,14 +166,6 @@ var Graph = React.createClass({
             drawNodeID: 0,
             draggingNode: null
         };
-    },
-
-    componentWillMount: function () {
-        if (this.state.onDraw) {
-            document.getElementById('react-graph').addEventListener('mousedown', this.drawGraphObject, false);
-            document.getElementById('react-graph').addEventListener('mouseup', this.drawMouseUp, false);
-            document.getElementById('react-graph').addEventListener('mousemove', this.drawMouseMove, false);
-        }
     },
 
     componentDidMount: function () {
@@ -212,8 +199,6 @@ var Graph = React.createClass({
     componentWillUnmount: function () {
         document.body.removeEventListener('keydown', this.onKeyDown);
         document.getElementById('react-graph').removeEventListener('wheel', this.onWheel);
-        document.getElementById('react-graph').removeEventListener('mouseup', this.drawMouseUp);
-        document.getElementById('react-graph').removeEventListener('mousemove', this.drawMouseMove);
     },
 
     getGraph: function (graphName) {
@@ -417,9 +402,10 @@ var Graph = React.createClass({
         if (this.state.drawMode === 'draw-node') {
             if (this.state.draggingNode !== null) {
                 var newPos = this.getRelativeCoords(event);
-                for (var node in this.state.nodesJSON) {
-                    if (this.state.nodesJSON[node].id_ === this.state.draggingNode) {
-                        var currentNode = this.state.nodesJSON[node];
+                var currentNode;
+                for (var node of this.state.nodesJSON) {
+                    if (node.id_ === this.state.draggingNode) {
+                        currentNode = node;
                     }
                 }
                 currentNode.pos = [newPos.x-20, newPos.y-15];
@@ -432,13 +418,14 @@ var Graph = React.createClass({
     },
 
     drawMouseUp: function (event) {
-        // in draw-node mode, drop a dragged node to a new location        
+        // in draw-node mode, drop a dragged node to a new location
         if (this.state.drawMode === 'draw-node') {
             if (this.state.draggingNode !== null) {
                 var newPos = this.getRelativeCoords(event);
-                for (var node in this.state.nodesJSON) {
-                    if (this.state.nodesJSON[node].id_ === this.state.draggingNode) {
-                        var currentNode = this.state.nodesJSON[node];
+                var currentNode;
+                for (var node of this.state.nodesJSON) {
+                    if (node.id_ === this.state.draggingNode) {
+                        currentNode = node;
                     }
                 }
                 currentNode.pos = [newPos.x-20, newPos.y-15];
@@ -647,8 +634,8 @@ var Graph = React.createClass({
     },
 
     getRelativeCoords: function(event) {
-        var x = event.offsetX;
-        var y = event.offsetY;
+        var x = event.nativeEvent.offsetX;
+        var y = event.nativeEvent.offsetY;
         x = (x * this.state.zoomFactor) + this.state.horizontalPanFactor;
         y = (y * this.state.zoomFactor) + this.state.verticalPanFactor;
         return {x: x, y: y};
@@ -697,7 +684,7 @@ var Graph = React.createClass({
             'stroke': '',
             'text': [textJSON],
             'tolerance': 9,
-            'type_': 'Node'   
+            'type_': 'Node'
         };
 
         var newNodesJSON = $.extend([], this.state.nodesJSON);
@@ -714,7 +701,6 @@ var Graph = React.createClass({
     */
     drawGraphObject: function(e) {
         var pos = this.getRelativeCoords(e);
-
         // check if the user is trying to draw a node. Also check
         // if the user is trying to press a button instead (ie zoom buttons)
         if (this.state.drawMode === 'draw-node' &&
@@ -744,6 +730,18 @@ var Graph = React.createClass({
         var resetDisabled = this.state.zoomFactor == 1 &&
                             this.state.horizontalPanFactor == 0 &&
                             this.state.verticalPanFactor == 0;
+
+
+        // Mouse events for draw tool
+        var mouseEvents = {}
+        if (this.state.onDraw) {
+            mouseEvents = {
+                'onMouseDown': this.drawGraphObject,
+                'onMouseUp': this.drawMouseUp,
+                'onMouseMove': this.drawMouseMove
+            };
+        }
+
         return (
             <div>
                 <Button
@@ -805,7 +803,8 @@ var Graph = React.createClass({
                 <Modal ref='modal' />
                 <svg {... svgAttrs} ref='svg' version='1.1'
                     className={this.state.highlightedNodes.length > 0 ?
-                                'highlight-nodes' : ''}>
+                                'highlight-nodes' : ''}
+                    {... mouseEvents } >
                     {this.renderArrowHead()}
                     <RegionGroup
                         regionsJSON={this.state.regionsJSON}
