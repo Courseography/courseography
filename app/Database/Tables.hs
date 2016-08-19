@@ -148,7 +148,7 @@ Post
 
 PostCategory
     name T.Text
-    post T.Text
+    postCode T.Text
     deriving Show
 |]
 
