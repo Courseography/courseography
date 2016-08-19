@@ -21,8 +21,9 @@ import Happstack.Server.SimpleHTTP
 import Control.Monad.IO.Class (MonadIO)
 import Data.Maybe (fromMaybe)
 import Config (databasePath)
-import Database.Persist
-import Database.Persist.Sqlite (selectFirst, fromSqlKey, toSqlKey, insertMany_, insert_, insert, SqlBackend, SqlPersistM, (=.), (==.), updateWhere, runSqlite)
+import Database.Persist.Sqlite (selectFirst, insertMany_, insert_, insert, SqlBackend, SqlPersistM, (=.), (==.), updateWhere, runSqlite)
+import Database.Persist.Class (selectKeysList, PersistEntity, Key)
+import Database.Persist.Sqlite (selectFirst, fromSqlKey, toSqlKey, insertMany_, insert_, insert, SqlPersistM, (=.), (==.), updateWhere, runSqlite)
 import Database.Tables
 import qualified Data.Aeson as Aeson
 
@@ -40,10 +41,34 @@ saveGraphJSON jsonStr nameStr = do
                 insertMany_ $ map (\path -> path {pathGraph = gId}) paths
             return $ toResponse $ ("Success" :: String)
 
+--contains' :: PersistEntity m => T.Text -> SqlPersistM m
+--contains field query = Filter field (Left $ T.concat ["%", query, "%"]) (BackendSpecificFilter "LIKE")
+
+-- Get Key of correspondig record in Distribution column
+getDistributionKey :: Maybe T.Text -> SqlPersistM (Maybe (Key Distribution))
+getDistributionKey Nothing = return Nothing
+getDistributionKey (Just description) = do
+    keyListDistribution :: [Key Distribution] <- selectKeysList [ DistributionDescription ==. (T.unpack description) ] []
+    -- option: keyListDistribution :: [DistributionId] <- selectKeysList [ DistributionDescription `contains'` description] []
+    return $ case keyListDistribution of
+        [] -> Nothing
+        _ -> Just (head keyListDistribution)
+
+getBreadthKey :: Maybe T.Text -> SqlPersistM (Maybe (Key Breadth))
+getBreadthKey Nothing = return Nothing
+getBreadthKey (Just description) = do
+    keyListBreadth :: [Key Breadth] <- selectKeysList [ BreadthDescription ==. (T.unpack description) ] []
+    -- option: selectKeysList [ BreadthDescription `contains'` description] []
+    return $ case keyListBreadth of
+        [] -> Nothing
+        _ -> Just (head keyListBreadth)
+
 -- | Inserts course into the Courses table.
 insertCourse :: Course -> SqlPersistM ()
 insertCourse course = do
     maybeCourse <- selectFirst [CoursesCode ==. (name course)] []
+    breadthKey <- getBreadthKey (breadth course)
+    distributionKey <- getDistributionKey (distribution course)
     case maybeCourse of
         Nothing -> insert_ $ Courses (name course)
                       (title course)
@@ -52,8 +77,8 @@ insertCourse course = do
                       (manualPracticalEnrolment course)
                       (prereqs course)
                       (exclusions course)
-                      (breadth course)
-                      (distribution course)
+                      breadthKey
+                      distributionKey
                       (prereqString course)
                       (coreqs course)
                       []

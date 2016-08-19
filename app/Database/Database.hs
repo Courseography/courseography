@@ -28,22 +28,22 @@ setupDatabase = do setupDistributionTable
                    print "breadth table set up"
                    parseAll
                    seedVideos
-                   
+
 -- | Sets up the Distribution table.
 setupDistributionTable :: IO ()
 setupDistributionTable = runSqlite databasePath $ do
     runMigration migrateAll
-    insert_ $ Distribution 1 "Humanities"
-    insert_ $ Distribution 2 "Social Sciences"
-    insert_ $ Distribution 3 "Sciences"
+    insert_ $ Distribution "Humanities"
+    insert_ $ Distribution "Social Sciences"
+    insert_ $ Distribution "Sciences"
 
 -- | Sets up the Breadth table.
 setupBreadthTable :: IO ()
 setupBreadthTable = runSqlite databasePath $ do
     runMigration migrateAll
-    insert_ $ Breadth 1 "Creative and Cultural Representations"
-    insert_ $ Breadth 2 "Thought, Belief, and Behaviour"
-    insert_ $ Breadth 3 "Society and Its Institutions"
-    insert_ $ Breadth 4 "Living Things and Their Environment"
-    insert_ $ Breadth 5 "The Physical and Mathematical Universes"
-    insert_ $ Breadth 6 "No Breadth"
+    insert_ $ Breadth "Creative and Cultural Representations (1)"
+    insert_ $ Breadth "Thought, Belief, and Behaviour (2)"
+    insert_ $ Breadth "Society and Its Institutions (3)"
+    insert_ $ Breadth "Living Things and Their Environment (4)"
+    insert_ $ Breadth "The Physical and Mathematical Universes (5)"
+    insert_ $ Breadth "No Breadth"

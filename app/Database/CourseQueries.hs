@@ -1,4 +1,4 @@
-{-# LANGUAGE ScopedTypeVariables, OverloadedStrings #-}
+{-# LANGUAGE ScopedTypeVariables, OverloadedStrings, GADTs #-} -- GADTs added by Kael
 
 {-|
 Description: Respond to various requests involving database course information.
@@ -69,7 +69,7 @@ returnCourse lowerStr = runSqlite databasePath $ do
         lecturesList :: [Entity Lecture] <- lectureQuery courseStr
         tutorialsList :: [Entity Tutorial] <- tutorialQuery courseStr
         let (fallSession, springSession, yearSession) = buildAllSessions lecturesList tutorialsList
-        return (buildCourse fallSession springSession yearSession (entityVal course))
+        buildCourse fallSession springSession yearSession (entityVal course)
 
 buildAllSessions :: [Entity Lecture] -> [Entity Tutorial] -> (Maybe Tables.Session, Maybe Tables.Session, Maybe Tables.Session)
 buildAllSessions entityListL entityListT =
@@ -91,7 +91,6 @@ queryCourse :: T.Text -> IO Response
 queryCourse str = do
     courseJSON <- returnCourse str
     return $ createJSONResponse courseJSON
-
 
 -- | Queries the database for all information regarding a specific tutorial for
 -- a @course@, returns a Tutorial.
@@ -115,9 +114,11 @@ returnLecture lowerStr sect session = runSqlite databasePath $ do
 
 -- | Builds a Course structure from a tuple from the Courses table.
 -- Some fields still need to be added in.
-buildCourse :: Maybe Session -> Maybe Session -> Maybe Session -> Courses -> Course
-buildCourse fallSession springSession yearSession course =
-    Course (coursesBreadth course)
+buildCourse :: Maybe Session -> Maybe Session -> Maybe Session -> Courses -> SqlPersistM Course
+buildCourse fallSession springSession yearSession course = do
+    cBreadth <- getDescriptionB (coursesBreadth course)
+    cDistribution <- getDescriptionD (coursesDistribution course)
+    return $ Course cBreadth
            -- TODO: Remove the filter and allow double-quotes
            (fmap (T.filter (/='\"')) (coursesDescription course))
            (fmap (T.filter (/='\"')) (coursesTitle course))
@@ -129,10 +130,27 @@ buildCourse fallSession springSession yearSession course =
            (coursesExclusions course)
            (coursesManualTutorialEnrolment course)
            (coursesManualPracticalEnrolment course)
-           (coursesDistribution course)
+           cDistribution
            (coursesPrereqs course)
            (coursesCoreqs course)
            (coursesVideoUrls course)
+
+
+getDescriptionB :: Maybe (Key Breadth) -> SqlPersistM (Maybe T.Text)
+getDescriptionB Nothing = return Nothing
+getDescriptionB (Just key) = do
+    maybeBreadth <- get key
+    case maybeBreadth of
+        Nothing -> return Nothing
+        Just breadth  -> return $ Just $ T.pack (breadthDescription breadth)
+
+getDescriptionD :: Maybe (Key Distribution) -> SqlPersistM (Maybe T.Text)
+getDescriptionD Nothing = return Nothing
+getDescriptionD (Just key) = do
+    maybeDistribution <- get key
+    case maybeDistribution of
+        Nothing -> return Nothing
+        Just dist -> return $ Just $ T.pack (distributionDescription dist)
 
 -- | Builds a Session structure from a list of tuples from the Lecture table,
 -- and a list of tuples from the Tutorial table.
@@ -215,7 +233,7 @@ getDeptCourses dept =
         lecs    :: [Entity Lecture]  <- selectList [] []
         tuts    :: [Entity Tutorial] <- selectList [] []
         let c = filter (startswith dept . T.unpack . coursesCode) $ map entityVal courses
-        return $ map (buildTimes (map entityVal lecs) (map entityVal tuts)) c
+        mapM (buildTimes (map entityVal lecs) (map entityVal tuts)) c
     where
         lecByCode course = filter (\lec -> lectureCode lec == coursesCode course)
         tutByCode course = filter (\tut -> tutorialCode tut == coursesCode course)
@@ -252,3 +270,4 @@ queryGraphs =
     runSqlite databasePath $
         do graphs :: [Entity Graph] <- selectList [] []
            return $ createJSONResponse graphs
+
