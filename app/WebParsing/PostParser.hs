@@ -1,4 +1,4 @@
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE OverloadedStrings, FlexibleContexts #-}
 module WebParsing.PostParser
     (getPost) where
 
@@ -8,12 +8,14 @@ import Database.Persist.Sqlite(runSqlite, runMigration)
 import Config (databasePath)
 import WebParsing.ParsingHelp
 import qualified Data.Text as T
+import Data.List
 import Data.Char
 import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Match
 import Database.Tables
 import qualified Text.Parsec as P
-import Text.Parsec ((<|>))
+import WebParsing.ParsecCombinators(getCourseFromTag, getPostType, getDepartmentName,
+    parsingAlgoOne)
 
 fasCalendarURL :: String
 fasCalendarURL = "http://calendar.artsci.utoronto.ca/"
@@ -48,35 +50,27 @@ addPostToDatabase tags = do
         fullPostName = innerText (take 1 $ filter (isTagText) tags)
         postType = T.pack $ getPostType postCode
         departmentName = T.pack $ (getDepartmentName fullPostName postType)
+        prereqs = map getCourseFromTag $ map (fromAttrib "href") $ filter isCourseTag tags
+    addPostCategoriesToDatabase (T.unpack postCode) (innerText tags)
     insertPost departmentName postType postCode
+    where
+        isCourseTag tag = tagOpenAttrNameLit "a" "href" (\hrefValue -> (length hrefValue) >= 0) tag
 
-getPostType :: T.Text -> String
-getPostType postCode = 
-    let codeSection = extractPostType (T.unpack postCode)
-    in
-        case codeSection of
-            "SPE" -> "Specialist"
-            "MAJ" -> "Major"
-            "MIN" ->  "Minor"
+addPostCategoriesToDatabase :: String -> String -> IO ()
+addPostCategoriesToDatabase postCode tagText  = do
+    let parsed = P.parse parsingAlgoOne "(source)" tagText
+    case parsed of
+        Right text ->
+            mapM_ (addCategoryToDatabase postCode) (filter isCategory text)
+        Left _ -> print "Failed."
+    where
+        isCategory string = 
+            let infixes = map (containsString string) 
+                         ["First", "Second", "Third", "suitable", "Core", "Electives"]
+            in 
+                ((length string) >= 7) && ((length $ filter (\bool -> bool) infixes) <= 0)
+        containsString string substring = isInfixOf substring string
 
-extractPostType :: [Char] -> [Char]
-extractPostType postCode = do
-    let parsed = P.parse findPostType "(source)" postCode
-    case parsed of 
-        Right name -> name
-        Left _ -> ""
-
-findPostType :: P.Parsec String () String
-findPostType = do
-   P.string "AS"
-   P.many1 P.letter
-
-getDepartmentName :: [Char] -> T.Text -> [Char]
-getDepartmentName fullPostName postType = do
-    let parsed = P.parse (isDepartmentName (T.unpack postType)) "(source)" fullPostName
-    case parsed of 
-        Right name -> name
-        Left _ -> ""
-
-isDepartmentName ::  [Char] -> P.Parsec String () String
-isDepartmentName postType = P.manyTill P.anyChar (P.try (P.string postType))
+addCategoryToDatabase :: String -> String -> IO ()
+addCategoryToDatabase postCode category =
+    insertPostCategory (T.pack category) (T.pack postCode)
