@@ -1,4 +1,4 @@
- module GetImages 
+ module GetImages
     (getActiveGraphImage, getTimetableImage, randomName) where
 
 import TimetableImageCreator (renderTable)
@@ -6,12 +6,12 @@ import qualified Data.Map as M
 import System.Random
 import Svg.Generator
 import ImageConversion
-import Happstack.Server
+import Happstack.Server (Request, rqCookies, cookieValue)
 import Data.List.Utils (replace)
 
 -- | If there is an active graph available, an image of that graph is created,
--- otherwise the Computer Science graph is created as a default. 
--- Either way, the resulting graph's .svg and .png names are returned. 
+-- otherwise the Computer Science graph is created as a default.
+-- Either way, the resulting graph's .svg and .png names are returned.
 getActiveGraphImage :: Request -> IO (String, String)
 getActiveGraphImage req = do
     let cookies = M.fromList $ rqCookies req
