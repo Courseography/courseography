@@ -21,8 +21,9 @@ import Data.String (fromString)
 import FacebookUtilities
 import Config (markdownPath, serverConf)
 import qualified Data.Text.Lazy.IO as LazyIO
+import Data.Text.Lazy
 import Data.Int (Int64)
-import Route (routes)
+import Route (run, routes)
 
 runServer :: IO ()
 runServer = do
@@ -30,14 +31,14 @@ runServer = do
     staticDir <- getStaticDir
     redirectUrlGraphEmail <- retrieveAuthURL testUrl
     redirectUrlGraphPost <- retrieveAuthURL testPostUrl
-    aboutContents <- LazyIO.readFile $ markdownPath ++ "README.md"
+    aboutContents <- LazyIO.readFile $ markdownPath ++ "README.md" 
     privacyContents <- LazyIO.readFile $ markdownPath ++ "PRIVACY.md"
 
     -- Start the HTTP server
     simpleHTTP serverConf $ do
       decodeBody (defaultBodyPolicy "/tmp/" 4096 4096 4096)
       msum  
-           (map (\ (a, b) -> dir a b) $ routes) ++
+           (map (\ (a, b) -> dir a b) $ routes staticDir redirectUrlGraphEmail redirectUrlGraphPost aboutContents privacyContents ) ++  
            [ do
               nullDir
               seeOther "graph" (toResponse "Redirecting to /graph"),    
@@ -49,7 +50,7 @@ runServer = do
     configureLogger = do
         -- Use line buffering to ensure logging messages are printed correctly
         hSetBuffering stdout LineBuffering
-        hSetBuffering stderr LineBuffering
+        hSetBuffering stderr LineBufferingnbm,,
         -- Set log level to INFO so requests are logged to stdout
         updateGlobalLogger rootLoggerName $ setLevel INFO
 

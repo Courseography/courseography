@@ -1,5 +1,5 @@
 module Route
-    (routes) where
+    (run, routes) where
 
 import Control.Monad (msum)
 import Control.Monad.IO.Class (liftIO)
@@ -15,23 +15,24 @@ import Data.String (fromString)
 import FacebookUtilities
 import Config (markdownPath, serverConf)
 import qualified Data.Text.Lazy.IO as LazyIO
+import Data.Text.Lazy
 import Data.Int (Int64)
 
-routes :: [ (String, ServerPart Response)]
-routes = [
+routes :: [Char] -> IO () -> IO () -> Data.Text.Lazy.Text -> Data.Text.Lazy.Text -> [ (String, ServerPart Response)]
+routes staticDir redirectUrlGraphEmail redirectUrlGraphPost aboutContents privacyContents = [
     ("grid", gridResponse),
     ("graph", graphResponse),
     ("image", graphImageResponse),
     ("timetable-image", look "courses" >>= \x -> look "session" >>= timetableImageResponse x),
-    ("graph-fb", seeOther redirectUrlGraphEmail $ toResponse ""),///
-    ("post-fb", seeOther redirectUrlGraphPost $ toResponse ""),////
+    ("graph-fb", seeOther redirectUrlGraphEmail $ toResponse ""),
+    ("post-fb", seeOther redirectUrlGraphPost $ toResponse ""),
     ("test", look "code" >>= getEmail),
     ("test-post", look "code" >>= postToFacebook),
     ("post", postResponse),
     ("draw", drawResponse),                  
-    ("about", aboutResponse aboutContents),////
-    ("privacy", privacyResponse privacyContents),/////
-    ("static", serveDirectory DisableBrowsing [] staticDir),////
+    ("about", aboutResponse aboutContents),
+    ("privacy", privacyResponse privacyContents),
+    ("static", serveDirectory DisableBrowsing [] staticDir),
     ("course", look "name" >>= retrieveCourse),
     ("all-courses", liftIO allCourses),
     ("graphs", liftIO queryGraphs),
@@ -39,8 +40,7 @@ routes = [
     ("depts", liftIO deptList),
     ("timesearch", searchResponse),
     ("calendar", lookCookieValue "selected-lectures" >>= calendarResponse),
-    ("get-json-data", getGraphJSON),
+    ("get-json-data", look "graphName" >>= \graphName -> liftIO $ getGraphJSON graphName),
     ("loading", look "size" >>= loadingResponse),
     ("save-json", look "jsonData" >>= \jsonStr -> look "nameData" >>= \nameStr -> liftIO $ saveGraphJSON jsonStr nameStr)]
-
 
