@@ -21,9 +21,8 @@ import Data.String (fromString)
 import FacebookUtilities
 import Config (markdownPath, serverConf)
 import qualified Data.Text.Lazy.IO as LazyIO
-import Data.Text.Lazy
 import Data.Int (Int64)
-import Route (run, routes)
+import Route (routes)
 
 runServer :: IO ()
 runServer = do
