@@ -110,3 +110,22 @@ brackets = do
 categorySeperator = 
     P.oneOf ",;\r\n\160"
 
+
+--------------------------------------
+
+--parseCategories :: Parser String
+parseCategories = do
+    left <- parseOneCategory
+    nextChar <- P.anyChar
+    right <- P.option " " parseCategories
+    case nextChar of 
+        '/' -> return $ left ++ " or " ++ right
+        other -> return $ left 
+
+parseOneCategory :: Parser String
+parseOneCategory = do
+    parseUntil (P.notFollowedBy (P.noneOf "\n/,"))
+
+
+
+
