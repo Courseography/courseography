@@ -14,6 +14,7 @@ import Text.Parsec ((<|>))
 import qualified Data.Text as T
 import Data.Functor.Identity
 import Text.Parsec.String
+import Data.List
 
 getCourseFromTag courseTag = do
     let course = P.parse findCourseFromTag "(source)" courseTag
@@ -112,22 +113,27 @@ categorySeperator =
 
 
 --------------------------------------
+parseAll :: Parser [String]
+parseAll = P.many parseCategory 
 
---parseCategories :: Parser String
-parseCategories = do
-    left <- parseOneCategory
+parseCategory :: Parser String
+parseCategory = do
+    left <- parseUpToSeperator
     nextChar <- P.anyChar
-    right <- P.option " " parseCategories
-    case nextChar of 
-        '/' -> return $ left ++ " or " ++ right
-        '(' -> return $ left ++ " (" ++ right
-        ')' -> return $ left ++ ") " ++ right
-        ',' -> return $ left ++ " and " ++ right
-        other -> return $ left 
+    if (elemIndex nextChar ",/()") == Nothing
+    then return $ left 
+    else do
+        right <- (P.option " " parseCategory)
+        case nextChar of 
+            '/' -> return $ left ++ " or " ++ right
+            '(' -> return $ left ++ " (" ++ right
+            ')' -> return $ left ++ ") " ++ right
+            ',' -> return $ left ++ " and " ++ right
+            other -> return $ left 
 
-parseOneCategory :: Parser String
-parseOneCategory = do
-    parseUntil (P.notFollowedBy (P.noneOf ",/()\n"))
+parseUpToSeperator :: Parser String
+parseUpToSeperator = do
+    parseUntil (P.notFollowedBy (P.noneOf ",/();\n"))
 
 
 
