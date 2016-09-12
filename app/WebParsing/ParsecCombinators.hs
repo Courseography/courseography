@@ -119,16 +119,15 @@ parseCategories = do
     nextChar <- P.anyChar
     right <- P.option " " parseCategories
     case nextChar of 
-        '/' -> do
-            return $ left ++ " or " ++ right
-        '(' -> do
-            return $ left ++ "(" ++ right
-        ')' -> return $ left ++ ")" ++ right
+        '/' -> return $ left ++ " or " ++ right
+        '(' -> return $ left ++ " (" ++ right
+        ')' -> return $ left ++ ") " ++ right
+        ',' -> return $ left ++ " and " ++ right
         other -> return $ left 
 
 parseOneCategory :: Parser String
 parseOneCategory = do
-    parseUntil (P.notFollowedBy (P.noneOf "/()\n"))
+    parseUntil (P.notFollowedBy (P.noneOf ",/()\n"))
 
 
 
