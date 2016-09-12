@@ -71,10 +71,10 @@ getRequirements :: Parser String
 getRequirements = 
     parseUntil (P.string "Program Course Requirements:")
 
-splitPrereqText :: Parser [String]
-splitPrereqText = do
-    parseUntil (P.string "First Year")
-    P.manyTill ((P.try parseNoteLine) <|> (P.try brackets) <|> getCategory) parseNotes
+--splitPrereqText :: Parser [String]
+--splitPrereqText = do
+--    parseUntil (P.string "First Year")
+--    P.manyTill ((P.try parseNoteLine) <|> (P.try brackets) <|> getCategory) parseNotes
 
 parseNoteLine :: Parser String
 parseNoteLine = do
@@ -126,14 +126,19 @@ parseCategory = do
         right <- (P.option " " parseCategory)
         case nextChar of 
             '/' -> return $ left ++ " or " ++ right
-            '(' -> return $ left ++ " (" ++ right
-            ')' -> return $ left ++ ") " ++ right
+            '(' -> return $ left ++ "(" ++ right
+            ')' -> return $ left ++ ")" ++ right
             ',' -> return $ left ++ " and " ++ right
             other -> return $ left 
 
 parseUpToSeperator :: Parser String
 parseUpToSeperator = do
-    parseUntil (P.notFollowedBy (P.noneOf ",/();\n"))
+    parseUntil (P.notFollowedBy (P.noneOf ",/();\r\n"))
+
+splitPrereqText :: Parser [String]
+splitPrereqText = do
+    parseUntil (P.string "First Year")
+    P.manyTill ((P.try parseNoteLine) <|> parseCategory) parseNotes
 
 
 
