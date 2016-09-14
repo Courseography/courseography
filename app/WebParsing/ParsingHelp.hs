@@ -26,6 +26,8 @@ import Text.HTML.TagSoup
 import qualified Data.Text as T
 import Database.Tables
 import WebParsing.PrerequisiteParsing
+import qualified Data.Text.Lazy as L
+import WebParsing.Ligature
 
 type CoursePart = ([Tag T.Text], Course)
 
@@ -162,7 +164,7 @@ parseDescription :: CoursePart -> CoursePart
 parseDescription (tags, course) =
     let (parsed, rest) = tagBreak ["Prerequisite","Corequisite","Exclusion","Recommended","Distribution","Breadth"] tags
         descriptn = makeEntry parsed Nothing
-    in (rest, course {description = descriptn})
+    in (rest, course {description = fmap (L.toStrict . expand . L.fromStrict) descriptn})
 
 parsePrerequisite :: CoursePart -> CoursePart
 parsePrerequisite (tags, course) =
