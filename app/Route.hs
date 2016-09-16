@@ -1,5 +1,5 @@
 module Route
-    (run, routes) where
+    (routes) where
 
 import Control.Monad (msum)
 import Control.Monad.IO.Class (liftIO)
@@ -16,9 +16,10 @@ import FacebookUtilities
 import Config (markdownPath, serverConf)
 import qualified Data.Text.Lazy.IO as LazyIO
 import Data.Text.Lazy (Text)
+import qualified Data.Text as T
 import Data.Int (Int64)
 
-routes :: [Char] -> IO () -> IO () -> Text -> Text -> [ (String, ServerPart Response)]
+routes :: [Char] -> T.Text -> T.Text -> Text -> Text -> [ (String, ServerPart Response)]
 routes staticDir redirectUrlGraphEmail redirectUrlGraphPost aboutContents privacyContents = [
     ("grid", gridResponse),
     ("graph", graphResponse),

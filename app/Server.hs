@@ -37,19 +37,19 @@ runServer = do
     simpleHTTP serverConf $ do
       decodeBody (defaultBodyPolicy "/tmp/" 4096 4096 4096)
       msum  
-           (map (\ (a, b) -> dir a b) $ routes staticDir redirectUrlGraphEmail redirectUrlGraphPost aboutContents privacyContents ) ++  
+           ((map (\ (a, b) -> dir a b) $ routes staticDir redirectUrlGraphEmail redirectUrlGraphPost aboutContents privacyContents ) ++  
            [ do
               nullDir
               seeOther "graph" (toResponse "Redirecting to /graph"),    
               notFoundResponse
-        ]
+        ])
     where
     -- | Global logger configuration.
     configureLogger :: IO ()
     configureLogger = do
         -- Use line buffering to ensure logging messages are printed correctly
         hSetBuffering stdout LineBuffering
-        hSetBuffering stderr LineBufferingnbm,,
+        hSetBuffering stderr LineBuffering
         -- Set log level to INFO so requests are logged to stdout
         updateGlobalLogger rootLoggerName $ setLevel INFO
 
