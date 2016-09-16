@@ -170,7 +170,6 @@ modalCSS = do
         color blue3
         padding0
         paddingLeft (px 25)
-        height (em 1.8)
         lineHeight (em 1.8)
         fontSize (em 1)
         borderBottom solid (px 1) black
