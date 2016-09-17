@@ -48,6 +48,7 @@ parsePrebuiltSvgs = do
     performParse "English" "eng2015.svg"
     performParse "Finnish" "fin2015.svg"
     performParse "Geography" "ggr2015.svg"
+    performParse "German" "get2015.svg"
     performParse "History" "his2015.svg"
     performParse "History and Philosophy of Science" "hps2015.svg"
     performParse "Italian" "ita2015.svg"
