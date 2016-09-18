@@ -161,7 +161,8 @@ preProcess tags =
 parseDescription :: CoursePart -> CoursePart
 parseDescription (tags, course) =
     let (parsed, rest) = tagBreak ["Prerequisite","Corequisite","Exclusion","Recommended","Distribution","Breadth"] tags
-        descriptn = makeEntry parsed Nothing
+        -- makeEntry concatenates all tagText into a single Text entity; so expand this output to remove ligatures.
+        descriptn = expand . makeEntry parsed Nothing
     in (rest, course {description = descriptn})
 
 parsePrerequisite :: CoursePart -> CoursePart
