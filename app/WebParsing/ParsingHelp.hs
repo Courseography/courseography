@@ -26,6 +26,8 @@ import Text.HTML.TagSoup
 import qualified Data.Text as T
 import Database.Tables
 import WebParsing.PrerequisiteParsing
+-- importing new Ligature module to use expand function.
+import WebParsing.Ligature
 
 type CoursePart = ([Tag T.Text], Course)
 
