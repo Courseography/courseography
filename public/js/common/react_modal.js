@@ -20,7 +20,7 @@ export var Modal = React.createClass({
     render: function () {
         if (this.state.courseId) {
             return (
-                <div className='modal fade'>
+                <div className='modal fade' >
                     <div className='modal-dialog'>
                         <div className='modal-content'>
                             <div className='modal-header'>
@@ -37,7 +37,7 @@ export var Modal = React.createClass({
                 </div>
             );
         } else {
-            return <div className='modal fade'></div>;
+            return <div className='modal fade' ></div>;
         }
     }
 });
@@ -59,6 +59,8 @@ var Description = React.createClass({
         if (newProps.course !== this.props.course) {
             this.refresh(newProps.course);
         }
+        var node = ReactDOM.findDOMNode(this)
+        node.scrollIntoView();
     },
 
     // This loads the course json
