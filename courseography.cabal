@@ -55,6 +55,7 @@ executable courseography
     Response.Post,
     Response.Privacy,
     Response.Search,
+    Routes,
     Scripts,
     Server,
     Svg.Builder,
