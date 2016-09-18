@@ -26,6 +26,7 @@ import Text.HTML.TagSoup
 import qualified Data.Text as T
 import Database.Tables
 import WebParsing.PrerequisiteParsing
+import WebParsing.Ligature
 
 type CoursePart = ([Tag T.Text], Course)
 
@@ -161,7 +162,8 @@ preProcess tags =
 parseDescription :: CoursePart -> CoursePart
 parseDescription (tags, course) =
     let (parsed, rest) = tagBreak ["Prerequisite","Corequisite","Exclusion","Recommended","Distribution","Breadth"] tags
-        descriptn = makeEntry parsed Nothing
+        -- makeEntry concatenates all tag texts and returns a single text; expand the output to remove ligatures.
+        descriptn = expand . makeEntry parsed Nothing
     in (rest, course {description = descriptn})
 
 parsePrerequisite :: CoursePart -> CoursePart
