@@ -49,7 +49,7 @@ Department json
     code [T.Text]
     name T.Text
 
-Courses json
+Courses
     code T.Text
     Primary code
     title T.Text Maybe
@@ -65,7 +65,7 @@ Courses json
     videoUrls [T.Text]
     deriving Show
 
-Lecture json
+Lecture
     code T.Text
     Foreign Courses fkcourse code
     session T.Text
@@ -77,14 +77,14 @@ Lecture json
     wait Int
     extra Int
     timeStr T.Text
-    deriving Show
+    deriving Generic Show
 
-Tutorial json
+Tutorial
     code T.Text
     section T.Text Maybe
     session T.Text
     times [Time]
-    deriving Show
+    deriving Generic Show
 
 Breadth
     description String
@@ -190,6 +190,8 @@ data Course =
            } deriving (Show, Generic)
 
 instance ToJSON Course
+instance ToJSON Lecture
+instance ToJSON Tutorial
 instance ToJSON Session
 instance ToJSON Time
 
