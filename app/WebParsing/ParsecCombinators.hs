@@ -84,37 +84,8 @@ parseNoteLine = do
 parseNotes :: Parser String
 parseNotes = (P.try (P.string "Notes")) <|> (P.try (P.string "NOTES"))
 
-getCategory :: Parser String
-getCategory = parseUntil ((P.try reachedABracket) <|> categorySeperator)
-
-reachedABracket :: Parser Char
-reachedABracket = do
-    char <- P.anyChar
-    P.notFollowedBy (P.noneOf "(")
-    return char
-
 parseUntil :: Parser a -> Parser String
 parseUntil parser = P.manyTill P.anyChar (P.try parser)
-
-brackets :: Parser String
-brackets = do
-    P.string "("
-    text <- parseUntil (P.char ')')
-    nextChar <- P.anyChar 
-    case nextChar of 
-        '/' -> do
-            categoryText <- getCategory
-            return $ "(" ++ text ++ ")" ++ "/" ++ categoryText
-        other -> do
-            return $ "(" ++ text ++ ")"
-
-categorySeperator = 
-    P.oneOf ",;\r\n\160"
-
-
---------------------------------------
-parseAll :: Parser [String]
-parseAll = P.many (parseCategory False)
 
 parseCategory :: Bool -> Parser String
 parseCategory withinBracket = do
@@ -152,6 +123,10 @@ splitPrereqText :: Parser [String]
 splitPrereqText = do
     parseUntil (P.string "First Year")
     P.manyTill ((P.try parseNoteLine) <|> (parseCategory False)) parseNotes
+
+-- For testing purposed in REPL
+parseAll :: Parser [String]
+parseAll = P.many (parseCategory False)
 
 
 
