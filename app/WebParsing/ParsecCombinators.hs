@@ -114,22 +114,35 @@ categorySeperator =
 
 --------------------------------------
 parseAll :: Parser [String]
-parseAll = P.many parseCategory 
+parseAll = P.many (parseCategory False)
 
-parseCategory :: Parser String
-parseCategory = do
+parseCategory :: Bool -> Parser String
+parseCategory withinBracket = do
     left <- parseUpToSeperator
     nextChar <- P.anyChar
-    if (elemIndex nextChar ",/()") == Nothing
+    if nextChar == ',' && (not withinBracket)
     then return $ left 
     else do
-        right <- (P.option " " parseCategory)
-        case nextChar of 
-            '/' -> return $ left ++ " or " ++ right
-            '(' -> return $ left ++ "(" ++ right
-            ')' -> return $ left ++ ")" ++ right
-            ',' -> return $ left ++ " and " ++ right
-            other -> return $ left 
+        mergeText left nextChar withinBracket
+
+mergeText :: String -> Char -> Bool -> Parser String
+mergeText left nextChar withinBracket = do
+    case nextChar of
+        '(' -> do
+            right <- P.option " " (parseCategory True)
+            return $ "(" ++ left ++ right
+        ')' -> do
+            right <- P.option " " (parseCategory False) 
+            return $ left ++ ")" ++ right
+        '/' -> do
+            right <- P.option " " (parseCategory withinBracket)
+            return $ left ++ " or " ++ right
+        ',' -> do
+            right <- P.option " " (parseCategory withinBracket)
+            case withinBracket of
+                True -> return $ left ++ " and " ++ right
+                False -> return $ left
+        other -> return $ left
 
 parseUpToSeperator :: Parser String
 parseUpToSeperator = do
@@ -138,7 +151,7 @@ parseUpToSeperator = do
 splitPrereqText :: Parser [String]
 splitPrereqText = do
     parseUntil (P.string "First Year")
-    P.manyTill ((P.try parseNoteLine) <|> parseCategory) parseNotes
+    P.manyTill ((P.try parseNoteLine) <|> (parseCategory False)) parseNotes
 
 
 
