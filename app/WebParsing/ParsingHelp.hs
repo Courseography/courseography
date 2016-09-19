@@ -161,7 +161,8 @@ preProcess tags =
 parseDescription :: CoursePart -> CoursePart
 parseDescription (tags, course) =
     let (parsed, rest) = tagBreak ["Prerequisite","Corequisite","Exclusion","Recommended","Distribution","Breadth"] tags
-        descriptn = makeEntry parsed Nothing
+        -- Expand the ligatures on course description
+        descriptn = expand $ makeEntry parsed Nothing
     in (rest, course {description = descriptn})
 
 parsePrerequisite :: CoursePart -> CoursePart
