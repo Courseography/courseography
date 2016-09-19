@@ -14,7 +14,8 @@ exportGraphResponse :: String -> String -> ServerPart Response
 exportGraphResponse courses session = do
     req <- askRq
     (graphSvg, graphImg) <- liftIO $ getActiveGraphImage req                    -- create image of active graph
-    (timetableSvg, timetableImg) <- liftIO $ getTimetableImage courses session  -- create timetable image from course and session 
+    (timetableSvg, timetableImg) <- liftIO $ getTimetableImage courses session  -- create timetable image from course and session
+    --(timetableSvg, timetableImg) <- liftIO $ getActiveTimetableImage req      -- to replace line above when using cookies instead of query
     pdfName <- liftIO $ returnPDF graphSvg graphImg timetableSvg timetableImg   -- create pdf with both graph and timetable
     serveFile (asContentType "application/pdf") pdfName
 

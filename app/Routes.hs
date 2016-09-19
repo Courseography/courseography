@@ -28,5 +28,7 @@ routes staticDir aboutContents privacyContents = [
     ("calendar", lookCookieValue "selected-lectures" >>= calendarResponse),
     ("get-json-data", look "graphName" >>= \graphName -> liftIO $ getGraphJSON graphName),
     ("loading", look "size" >>= loadingResponse),
-    ("save-json", look "jsonData" >>= \jsonStr -> look "nameData" >>= \nameStr -> liftIO $ saveGraphJSON jsonStr nameStr)
+    ("save-json", look "jsonData" >>= \jsonStr -> look "nameData" >>= \nameStr -> liftIO $ saveGraphJSON jsonStr nameStr),
+    ("export-graph-pdf", look "courses" >>= \x -> look "session" >>= exportGraphResponse x)
+    -- dir "export-graph-pdf" $ exportGraphResponse, -- will replace the line above when timetable can be generated using cookies)
     ]
