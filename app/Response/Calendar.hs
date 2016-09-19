@@ -1,5 +1,5 @@
 module Response.Calendar
-    (calendarResponse) where
+    (calendarResponse, getInfoCookies, pullDatabase) where
 
 import Data.List (sort, groupBy, sortBy)
 import Data.List.Split (splitOn)
