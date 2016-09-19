@@ -8,8 +8,8 @@ import qualified Data.ByteString.Lazy as BS
 import Control.Monad.IO.Class  (liftIO)
 import qualified Data.ByteString.Base64.Lazy as BEnc
 import qualified Data.Map as M
-import GetImages
-import ImageConversion
+import Export.GetImages
+import Export.ImageConversion
 import Data.List.Utils (replace)
 
 -- | Returns an image of the graph requested by the user.

@@ -1,4 +1,4 @@
-module ImageConversion
+module Export.ImageConversion
     (createImageFile, removeImage) where
 
 import System.Process
