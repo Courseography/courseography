@@ -268,6 +268,5 @@ deptList = do
 queryGraphs :: IO Response
 queryGraphs =
     runSqlite databasePath $
-        do graphs :: [Entity Graph] <- selectList [] []
+        do graphs :: [Entity Graph] <- selectList [] [Asc GraphTitle]
            return $ createJSONResponse graphs
-

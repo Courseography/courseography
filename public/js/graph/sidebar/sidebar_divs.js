@@ -63,20 +63,13 @@ function toggleSidebar(location) {
 export function createGraphButtons(graphs) {
     'use strict';
 
-    // read deparment title and sort
-    var departments = [];
-    for (var i =0; i < graphs.length; i++) {
-        departments.push(graphs[i].title);
-    }
-    departments.sort();
-
-    for (var i = 0; i < departments.length; i++) {
-        var graphId = i;
-        var graphTitle = departments[i];
+    for (var i = 0; i < graphs.length; i++) {
+        var graphId = graphs[i].id;
+        var graphTitle = graphs[i].title;
         var graphButton = '<div id = "graph-' + graphId +'" class = "graph-button">';
         $('#graphs').append(graphButton);
         $('#graph-' + graphId).html(graphTitle);
-        $('#graph-' + graphId).data('id', i);
+        $('#graph-' + graphId).data('id', graphs[i].id);
     }
 
     $('#graphs-nav').click(function (e) {
