@@ -26,7 +26,7 @@ import Text.HTML.TagSoup
 import qualified Data.Text as T
 import Database.Tables
 import WebParsing.PrerequisiteParsing
-import WebParsing.ligatures
+import WebParsing.Ligature
 
 type CoursePart = ([Tag T.Text], Course)
 
