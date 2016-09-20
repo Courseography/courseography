@@ -38,26 +38,26 @@ import Data.Char (isSpace)
 parsePrebuiltSvgs :: IO ()
 parsePrebuiltSvgs = do
     deleteGraphs
-    performParse "Computer Science" "csc2016.svg"
-    performParse "Statistics" "sta2015.svg"
+    performParse "Aboriginal" "abs2015.svg"
     performParse "Biochemistry" "bch2015.svg"
     performParse "Cell & Systems Biology" "csb2015.svg"
+    performParse "Computer Science" "csc2016.svg"
+    performParse "East Asian Studies" "eas2015.svg"
+    performParse "Economics" "eco2015.svg"
     performParse "Estonian" "est2015.svg"
+    performParse "English" "eng2015.svg"
     performParse "Finnish" "fin2015.svg"
+    performParse "Geography" "ggr2015.svg"
+    performParse "German" "ger2015.svg"
+    performParse "History" "his2015.svg"
+    performParse "History and Philosophy of Science" "hps2015.svg"
     performParse "Italian" "ita2015.svg"
     performParse "Linguistics" "lin2015.svg"
-    performParse "Rotman" "rotman2015.svg"
-    performParse "Economics" "eco2015.svg"
-    performParse "Spanish" "spa2015.svg"
     performParse "Portuguese" "prt2015.svg"
+    performParse "Rotman" "rotman2015.svg"
     performParse "Slavic"  "sla2015.svg"
-    performParse "East Asian Studies" "eas2015.svg"
-    performParse "English" "eng2015.svg"
-    performParse "History and Philosophy of Science" "hps2015.svg"
-    performParse "History" "his2015.svg"
-    performParse "Geography" "ggr2015.svg"
-    performParse "Aboriginal" "abs2015.svg"
-
+    performParse "Spanish" "spa2015.svg"
+    performParse "Statistics" "sta2015.svg"
 
 -- | The starting point for parsing a graph with a given title and file.
 performParse :: String -- ^ The title of the graph.
