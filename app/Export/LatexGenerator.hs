@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module LatexGenerator
+module Export.LatexGenerator
     (generateTex) where
 
 import Text.LaTeX

@@ -10,7 +10,7 @@ import Control.Monad.Trans.Resource
 import qualified Data.Conduit.List as CL
 import Data.Conduit
 import Database.Persist
-import ImageConversion
+import Export.ImageConversion
 import Response.Graph
 import Database.Tables
 import qualified Data.ByteString.Char8 as BS

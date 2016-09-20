@@ -3,10 +3,10 @@ module Response.Export
 
 import Control.Monad.IO.Class  (liftIO)
 import Happstack.Server
-import GetImages
-import ImageConversion (removeImage)
-import PdfGenerator
-import LatexGenerator
+import Export.GetImages
+import Export.ImageConversion (removeImage)
+import Export.PdfGenerator
+import Export.LatexGenerator
 
 -- | Serves a pdf file that includes a graph and timetable information from 
 -- selected course sessions
