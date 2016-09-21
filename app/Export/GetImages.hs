@@ -1,11 +1,11 @@
- module GetImages
+ module Export.GetImages
     (getActiveGraphImage, getTimetableImage, randomName) where
 
-import TimetableImageCreator (renderTable)
+import Export.TimetableImageCreator (renderTable)
 import qualified Data.Map as M
 import System.Random
 import Svg.Generator
-import ImageConversion
+import Export.ImageConversion
 import Happstack.Server (Request, rqCookies, cookieValue)
 import Data.List.Utils (replace)
 
