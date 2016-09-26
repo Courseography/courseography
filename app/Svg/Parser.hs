@@ -57,6 +57,7 @@ parsePrebuiltSvgs = do
     performParse "History" "his2015.svg"
     performParse "Geography" "ggr2015.svg"
     performParse "Aboriginal" "abs2015.svg"
+    performParse "German" "ger2015.svg"
 
 
 -- | The starting point for parsing a graph with a given title and file.
