@@ -89,7 +89,7 @@ splitPrereqText = do
 
 parseCategory :: Bool -> Parser String
 parseCategory withinBracket = do
-    left <- parseUpToSeperator
+    left <- parseUpToSeparator
     nextChar <- P.anyChar
     if nextChar == ',' && (not withinBracket)
     then return $ left 
@@ -115,8 +115,8 @@ mergeText left nextChar withinBracket = do
                 False -> return $ left
         other -> return $ left
 
-parseUpToSeperator :: Parser String
-parseUpToSeperator = do
+parseUpToSeparator :: Parser String
+parseUpToSeparator = do
     parseUntil (P.notFollowedBy (P.noneOf ",/();\r\n"))
 
 -- For testing purposed in REPL
