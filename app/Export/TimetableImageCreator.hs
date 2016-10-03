@@ -1,6 +1,6 @@
 {-# LANGUAGE NoMonomorphismRestriction, OverloadedStrings #-}
 
-module TimetableImageCreator
+module Export.TimetableImageCreator
     (renderTable) where
 
 import Diagrams.Prelude
