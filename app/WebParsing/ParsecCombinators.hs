@@ -77,7 +77,10 @@ parseNoteLine = do
     parseUntil (P.char '\n')
 
 parseNotes :: Parser String
-parseNotes = (P.try (P.string "Notes")) <|> (P.try (P.string "NOTES"))
+parseNotes = do
+    (P.try (P.string "Notes")) <|> (P.try (P.string "NOTES"))
+    parseUntil P.eof
+    return $ ""
 
 parseUntil :: Parser a -> Parser String
 parseUntil parser = P.manyTill P.anyChar (P.try parser)
@@ -85,7 +88,7 @@ parseUntil parser = P.manyTill P.anyChar (P.try parser)
 splitPrereqText :: Parser [String]
 splitPrereqText = do
     parseUntil (P.string "First Year")
-    P.manyTill ((P.try parseNoteLine) <|> (parseCategory False)) parseNotes
+    P.manyTill ((P.try parseNotes) <|> (P.try parseNoteLine) <|> (parseCategory False)) P.eof 
 
 parseCategory :: Bool -> Parser String
 parseCategory withinBracket = do
