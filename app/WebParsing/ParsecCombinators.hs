@@ -62,14 +62,17 @@ isDepartmentName postType = parseUntil (P.string postType)
 
 -- Post Category Parsing
 
-parsingAlgoOne :: Parser [String]
-parsingAlgoOne = do
-    getRequirements 
+parsingAlgoOne :: String -> Parser [String]
+parsingAlgoOne firstCourse = do
+    getRequirements firstCourse
     splitPrereqText
 
-getRequirements :: Parser String
-getRequirements = 
-    parseUntil (P.string "Program Course Requirements:")
+getRequirements :: String -> Parser String
+getRequirements firstCourse = 
+    (P.try (parseUntil (P.string "First Year"))) <|>
+    (P.try (parseUntil (P.string "Program Course Requirements:"))) <|>
+    (P.try (parseUntil (P.string "Program requirements:"))) <|>
+    (P.try (parseUntil (P.lookAhead (P.string firstCourse))))
 
 parseNoteLine :: Parser String
 parseNoteLine = do
@@ -87,8 +90,7 @@ parseUntil parser = P.manyTill P.anyChar (P.try parser)
 
 splitPrereqText :: Parser [String]
 splitPrereqText = do
-    parseUntil (P.string "First Year")
-    P.manyTill ((P.try parseNotes) <|> (P.try parseNoteLine) <|> (parseCategory False)) P.eof 
+    P.manyTill ((P.try parseNotes) <|> (P.try parseNoteLine) <|> (parseCategory False)) P.eof
 
 parseCategory :: Bool -> Parser String
 parseCategory withinBracket = do
