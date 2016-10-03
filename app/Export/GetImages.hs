@@ -14,10 +14,10 @@ import Data.List.Utils (replace)
 -- Either way, the resulting graph's .svg and .png names are returned.
 getActiveGraphImage :: Request -> IO (String, String)
 getActiveGraphImage req = do
-    let cookies = M.fromList $ rqCookies req
+    let cookies = M.fromList $ rqCookies req  --  Map String Cookie
         graphName =
             replace "-" " " $
-                maybe "Computer-Science" cookieValue (M.lookup "active-graph" cookies)
+                maybe "Computer-Science" cookieValue (M.lookup "active-graph" cookies)  -- if M.lookup "active-graph" cookies is Nothing, then "Computer Science", else get cookieValue of coookie
     getGraphImage graphName (M.map cookieValue cookies)
 
 -- | Creates an image, and returns the name of the svg used to create the
