@@ -1,5 +1,6 @@
 import * as tooltip from 'es6!graph/tooltip';
 import {Modal} from 'es6!common/react_modal';
+import * as ReactModal from 'vendor/react-modal';
 
 
 /**
@@ -565,6 +566,12 @@ var Graph = React.createClass({
                             this.state.verticalPanFactor == 0;
         return (
             <div>
+                <ReactModal
+                  isOpen={true}
+                >
+                  <h1>Test modal</h1>
+                  <p>Hi Lana!</p>
+                </ReactModal>
                 <Button
                     divId='zoom-in-button'
                     text='+'
