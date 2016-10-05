@@ -95,6 +95,7 @@ renderTable :: String -> String -> String -> IO ()
 renderTable filename courses session = do
     let courseTable = partition5 $ splitOn "_" courses
     print courseTable
+    -- print (zipWith (:) times courseTable)
     let g = makeTable (zipWith (:) times courseTable) session
         svg = renderDia SVG (SVGOptions (mkWidth 1024) Nothing "") g
         txt = replace (show (fs :: Double) ++ "px") (show fs' ++ "px") $
@@ -106,3 +107,6 @@ renderTable filename courses session = do
 
         -- relative fonts don't play well with ImageMagick, apparently
         fs' = round $ 1024 / 600 * fs
+
+-- [["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["STA257 (L)","","STA257 (L)","",""],["STA257 (L)","","STA257 (T)","",""],["","","","",""],["","","","",""],["","","","CSC148 (T)",""],["","","","CSC148 (T)",""],["","","","",""],[""]]
+-- [["8:00","","","","",""],["9:00","","","","",""],["10:00","","","","",""],["11:00","","","","",""],["12:00","","","","",""],["1:00","","","","",""],["2:00","","","","",""],["3:00","STA257 (L)","","STA257 (L)","",""],["4:00","STA257 (L)","","STA257 (T)","",""],["5:00","","","","",""],["6:00","","","","",""],["7:00","","","","CSC148 (T)",""],["8:00","","","","CSC148 (T)",""]]
