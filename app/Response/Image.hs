@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Response.Image
-    (graphImageResponse, timetableImageResponse) where
+    (graphImageResponse, timetableImageResponse, timetableImageCookieResponse) where
 
 import Happstack.Server
 import qualified Data.ByteString.Lazy as BS
@@ -24,6 +24,20 @@ timetableImageResponse :: String -> String -> ServerPart Response
 timetableImageResponse courses session = do
     (svgFilename, imageFilename) <- liftIO $ getTimetableImage courses session
     liftIO $ returnImageData svgFilename imageFilename
+
+
+-- =============================
+-- get timetable from parsing selected-lectures cookie
+-- right now still end up with timetableImageResponse courses session because i don't know how to create ServerPart Response
+timetableImageCookieResponse :: String -> String -> ServerPart Response
+timetableImageCookieResponse courses session = do
+    req <- askRq
+    selectdCourse <- liftIO $ getActiveTimetable req
+    liftIO $ print selectdCourse
+    timetableImageResponse courses session
+
+
+-- =============================
 
 -- | Creates and converts an SVG file to an image file, deletes them both and
 -- returns the image data as a response.

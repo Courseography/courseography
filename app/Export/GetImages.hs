@@ -1,5 +1,5 @@
  module Export.GetImages
-    (getActiveGraphImage, getTimetableImage, randomName) where
+    (getActiveGraphImage, getTimetableImage, randomName, getActiveTimetable) where
 
 import Export.TimetableImageCreator (renderTable)
 import qualified Data.Map as M
@@ -19,6 +19,20 @@ getActiveGraphImage req = do
             replace "-" " " $
                 maybe "Computer-Science" cookieValue (M.lookup "active-graph" cookies)  -- if M.lookup "active-graph" cookies is Nothing, then "Computer Science", else get cookieValue of coookie
     getGraphImage graphName (M.map cookieValue cookies)
+
+
+-- =================================
+-- Get lectures selected by user from selected-lectures cookie. If DNE, assume no lecture seleted
+getActiveTimetable :: Request -> IO (String)
+getActiveTimetable req = do
+    let cookies = M.fromList $ rqCookies req  --  Map String Cookie
+        coursecookie = maybe "" cookieValue $ M.lookup "selected-lectures" cookies
+    return coursecookie
+
+
+
+
+-- =================================
 
 -- | Creates an image, and returns the name of the svg used to create the
 -- image and the name of the image
