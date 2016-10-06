@@ -37,7 +37,7 @@ getActiveTimetable req = do
     -- liftIO $ print coursecookie
     -- liftIO $ print lectures
     -- liftIO $ print tutorials
-    a <- mapM getLectureTime lectures -- [[string]]
+    a <- mapM getLectureTime lectures  -- [[string]] -> IO ([Maybe [Time]])
     b <- mapM getTutorialTime tutorials
     return (a ++ b)
 
@@ -70,6 +70,7 @@ getGraphImage graphName courseMap = do
 -- image and the name of the image
 getTimetableImage :: String -> String -> IO (String, String)
 getTimetableImage courses session = do
+    -- generate 2 random names
     rand <- randomName
     let svgFilename = rand ++ ".svg"
         imageFilename = rand ++ ".png"

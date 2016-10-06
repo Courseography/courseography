@@ -94,19 +94,35 @@ makeTable s session = vsep 0.04 $ (header session): intersperse rowBorder (map m
 renderTable :: String -> String -> String -> IO ()
 renderTable filename courses session = do
     let courseTable = partition5 $ splitOn "_" courses
-    print courseTable
+    renderTableHelper filename (zipWith (:) times courseTable) session
+    -- print courseTable
     -- print (zipWith (:) times courseTable)
-    let g = makeTable (zipWith (:) times courseTable) session
+    -- let g = makeTable (zipWith (:) times courseTable) session
+    --     svg = renderDia SVG (SVGOptions (mkWidth 1024) Nothing "") g
+    --     txt = replace (show (fs :: Double) ++ "px") (show fs' ++ "px") $
+    --           unpack $ renderText svg
+    -- writeFile filename txt
+    where
+        partition5 [] = []
+        partition5 lst = take 5 lst : partition5 (drop 5 lst)
+    --     -- relative fonts don't play well with ImageMagick, apparently
+    --     fs' = round $ 1024 / 600 * fs
+
+
+-- coursetable : [["","","","",""],["","","","",""],["CSC108 (L)","","CSC108 (L)","","CSC108 (L)"],["","","","",""],["","","","",""],["","","","",""],["STA355 (L)","","STA355 (L)","",""],["STA355 (L)","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],[""]]
+-- zipwith :  [["8:00","","","","",""],["9:00","","","","",""],["10:00","CSC108 (L)","","CSC108 (L)","","CSC108 (L)"],["11:00","","","","",""],["12:00","","","","",""],["1:00","","","","",""],["2:00","STA355 (L)","","STA355 (L)","",""],["3:00","STA355 (L)","","","",""],["4:00","","","","",""],["5:00","","","","",""],["6:00","","","","",""],["7:00","","","","",""],["8:00","","","","",""]]
+
+renderTableHelper :: String -> [[String]] -> String -> IO ()
+renderTableHelper filename schedule session = do
+    let g = makeTable schedule session
         svg = renderDia SVG (SVGOptions (mkWidth 1024) Nothing "") g
         txt = replace (show (fs :: Double) ++ "px") (show fs' ++ "px") $
               unpack $ renderText svg
     writeFile filename txt
     where
-        partition5 [] = []
-        partition5 lst = take 5 lst : partition5 (drop 5 lst)
-
         -- relative fonts don't play well with ImageMagick, apparently
         fs' = round $ 1024 / 600 * fs
 
--- [["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["STA257 (L)","","STA257 (L)","",""],["STA257 (L)","","STA257 (T)","",""],["","","","",""],["","","","",""],["","","","CSC148 (T)",""],["","","","CSC148 (T)",""],["","","","",""],[""]]
--- [["8:00","","","","",""],["9:00","","","","",""],["10:00","","","","",""],["11:00","","","","",""],["12:00","","","","",""],["1:00","","","","",""],["2:00","","","","",""],["3:00","STA257 (L)","","STA257 (L)","",""],["4:00","STA257 (L)","","STA257 (T)","",""],["5:00","","","","",""],["6:00","","","","",""],["7:00","","","","CSC148 (T)",""],["8:00","","","","CSC148 (T)",""]]
+
+
+
