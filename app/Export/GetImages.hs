@@ -27,22 +27,23 @@ getActiveGraphImage req = do
 
 -- =================================
 -- Get lectures selected by user from selected-lectures cookie. If DNE, assume no lecture seleted
--- "CSC148H1-L0301-S_STA257H1-T0105-F_STA257H1-L0101-F_STA303H1-L0101-S_CSC148H1-T5101-F"
+-- get "CSC148H1-L0301-S_STA257H1-T0105-F_STA257H1-L0101-F_STA303H1-L0101-S_CSC148H1-T5101-F"
+-- return [Just [Time {timeField = [2.0,18.0]},Time {timeField = [2.0,18.5]},Time {timeField = [2.0,19.0]},Time {timeField = [2.0,19.5]},Time {timeField = [2.0,20.0]},Time {timeField = [2.0,20.5]}],Just [Time {timeField = [0.0,14.0]},Time {timeField = [0.0,14.5]},Time {timeField = [0.0,15.0]},Time {timeField = [0.0,15.5]},Time {timeField = [2.0,14.0]},Time {timeField = [2.0,14.5]}],Just [Time {timeField = [2.0,10.0]},Time {timeField = [2.0,10.5]},Time {timeField = [0.0,10.0]},Time {timeField = [0.0,10.5]},Time {timeField = [4.0,10.0]},Time {timeField = [4.0,10.5]}],Just [Time {timeField = [4.0,11.0]},Time {timeField = [4.0,11.5]},Time {timeField = [4.0,12.0]},Time {timeField = [4.0,12.5]}]]
 getActiveTimetable :: Request -> IO ([Maybe [Time]])
 getActiveTimetable req = do
     let cookies = M.fromList $ rqCookies req  --  Map String Cookie
         coursecookie = maybe "" cookieValue $ M.lookup "selected-lectures" cookies
         (lectures, tutorials) = parseCourseCookie coursecookie
-    liftIO $ print coursecookie
-    liftIO $ print lectures
-    liftIO $ print tutorials
-    mapM getLectureTime lectures -- [[string]]
-    mapM getTutorialTime tutorials
+    -- liftIO $ print coursecookie
+    -- liftIO $ print lectures
+    -- liftIO $ print tutorials
+    a <- mapM getLectureTime lectures -- [[string]]
+    b <- mapM getTutorialTime tutorials
+    return (a ++ b)
 
 
 -- "CSC148H1-L5101-S_CSC148H1-T0501-S_STA355H1-L0101-F_CSC108H1-L0102-F"
--- [["CSC148H1","L5101","S"],["STA355H1","L0101","F"],["CSC108H1","L0102","F"]]
--- [["CSC148H1","T0501","S"]]
+-- ([["CSC148H1","L5101","S"],["STA355H1","L0101","F"],["CSC108H1","L0102","F"]],  [["CSC148H1","T0501","S"]])
 parseCourseCookie :: String -> ([[String]], [[String]])
 parseCourseCookie s = let lecAndTut = map (splitOn "-") $ splitOn "_" s
                           lectures = filter isLec lecAndTut
