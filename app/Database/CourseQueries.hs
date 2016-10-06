@@ -18,7 +18,8 @@ module Database.CourseQueries
      returnTutorial,
      returnLecture,
      getGraphJSON,
-     getLectureTime) where
+     getLectureTime,
+     getTutorialTime) where
 
 import Happstack.Server.SimpleHTTP
 import Database.Persist
@@ -273,13 +274,20 @@ queryGraphs =
            return $ createJSONResponse graphs
 
 
-getLectureTime :: [String] -> IO (Maybe Lecture)
+getLectureTime :: [String] -> IO (Maybe [Time])
 getLectureTime [code, section, session] = runSqlite databasePath $ do 
     maybeEntityLectures <- selectFirst [LectureCode ==. (T.pack code),
                                         LectureSection ==. (T.pack $ take 1 section ++ "EC-" ++ drop 1 section),
                                         LectureSession ==. (T.pack session)]
                                        []
-    liftIO $ print (take 1 section ++ "EC" ++ drop 1 section)
-    liftIO $ print maybeEntityLectures
-    return $ fmap entityVal maybeEntityLectures
+    return $ fmap (lectureTimes . entityVal) maybeEntityLectures
+
+
+getTutorialTime :: [String] -> IO (Maybe [Time])
+getTutorialTime [code, section, session] = runSqlite databasePath $ do 
+    maybeEntityTutorials <- selectFirst [TutorialCode ==. (T.pack code),
+                                         TutorialSection ==. Just (T.pack $ take 1 section ++ "UT-" ++ drop 1 section),
+                                         TutorialSession ==. (T.pack session)]
+                                        []
+    return $ fmap (tutorialTimes . entityVal) maybeEntityTutorials
 

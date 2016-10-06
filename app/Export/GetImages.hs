@@ -9,7 +9,7 @@ import Export.ImageConversion
 import Happstack.Server (Request, rqCookies, cookieValue)
 import Data.List.Utils (replace)
 import Data.List.Split (splitOn)
-import Database.CourseQueries (getLectureTime)
+import Database.CourseQueries (getLectureTime, getTutorialTime)
 import Database.Tables as Tables
 import Control.Monad.IO.Class  (liftIO)
 
@@ -28,18 +28,28 @@ getActiveGraphImage req = do
 -- =================================
 -- Get lectures selected by user from selected-lectures cookie. If DNE, assume no lecture seleted
 -- "CSC148H1-L0301-S_STA257H1-T0105-F_STA257H1-L0101-F_STA303H1-L0101-S_CSC148H1-T5101-F"
-getActiveTimetable :: Request -> IO (Maybe Lecture)
+getActiveTimetable :: Request -> IO ([Maybe [Time]])
 getActiveTimetable req = do
     let cookies = M.fromList $ rqCookies req  --  Map String Cookie
         coursecookie = maybe "" cookieValue $ M.lookup "selected-lectures" cookies
-        course = head $ parseCourseCookie coursecookie
-    liftIO $ print course
-    getLectureTime course
+        (lectures, tutorials) = parseCourseCookie coursecookie
+    liftIO $ print coursecookie
+    liftIO $ print lectures
+    liftIO $ print tutorials
+    mapM getLectureTime lectures -- [[string]]
+    mapM getTutorialTime tutorials
 
 
--- [["CSC148H1","L0301","S"],["STA257H1","T0105","F"],["STA257H1","L0101","F"],["STA303H1","L0101","S"],["CSC148H1","T5101","F"]]
-parseCourseCookie :: String -> [[String]]
-parseCourseCookie s = map (splitOn "-") $ splitOn "_" s
+-- "CSC148H1-L5101-S_CSC148H1-T0501-S_STA355H1-L0101-F_CSC108H1-L0102-F"
+-- [["CSC148H1","L5101","S"],["STA355H1","L0101","F"],["CSC108H1","L0102","F"]]
+-- [["CSC148H1","T0501","S"]]
+parseCourseCookie :: String -> ([[String]], [[String]])
+parseCourseCookie s = let lecAndTut = map (splitOn "-") $ splitOn "_" s
+                          lectures = filter isLec lecAndTut
+                          tutorials = filter isTut lecAndTut
+                      in (lectures, tutorials)
+                      where isTut x = (x !! 1 !! 0) == 'T'
+                            isLec x = (x !! 1 !! 0) == 'L'
 
 
 -- =================================
