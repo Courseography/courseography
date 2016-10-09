@@ -1,7 +1,7 @@
 {-# LANGUAGE NoMonomorphismRestriction, OverloadedStrings #-}
 
 module Export.TimetableImageCreator
-    (renderTable) where
+    (renderTable, renderTableHelper) where
 
 import Diagrams.Prelude
 import Diagrams.Backend.SVG.CmdLine

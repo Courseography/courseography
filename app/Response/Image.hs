@@ -32,9 +32,9 @@ timetableImageResponse courses session = do
 timetableImageCookieResponse :: String -> String -> ServerPart Response
 timetableImageCookieResponse courses session = do
     req <- askRq
-    selectdCourse <- liftIO $ getActiveTimetable req
-    liftIO $ print selectdCourse
-    timetableImageResponse courses session
+    (svgFilename, imageFilename) <- liftIO $ getActiveTimetable req
+    liftIO $ returnImageData svgFilename imageFilename
+
 
 
 -- =============================

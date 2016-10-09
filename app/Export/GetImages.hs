@@ -1,7 +1,7 @@
  module Export.GetImages
     (getActiveGraphImage, getTimetableImage, randomName, getActiveTimetable) where
 
-import Export.TimetableImageCreator (renderTable)
+import Export.TimetableImageCreator (renderTable, renderTableHelper)
 import qualified Data.Map as M
 import System.Random
 import Svg.Generator
@@ -31,7 +31,7 @@ getActiveGraphImage req = do
 -- get "CSC148H1-L0301-S_STA257H1-T0105-F_STA257H1-L0101-F_STA303H1-L0101-S_CSC148H1-T5101-F"
 -- return [Just [Time {timeField = [2.0,18.0]},Time {timeField = [2.0,18.5]},Time {timeField = [2.0,19.0]},Time {timeField = [2.0,19.5]},Time {timeField = [2.0,20.0]},Time {timeField = [2.0,20.5]}],Just [Time {timeField = [0.0,14.0]},Time {timeField = [0.0,14.5]},Time {timeField = [0.0,15.0]},Time {timeField = [0.0,15.5]},Time {timeField = [2.0,14.0]},Time {timeField = [2.0,14.5]}],Just [Time {timeField = [2.0,10.0]},Time {timeField = [2.0,10.5]},Time {timeField = [0.0,10.0]},Time {timeField = [0.0,10.5]},Time {timeField = [4.0,10.0]},Time {timeField = [4.0,10.5]}],Just [Time {timeField = [4.0,11.0]},Time {timeField = [4.0,11.5]},Time {timeField = [4.0,12.0]},Time {timeField = [4.0,12.5]}]]
 -- [["8:00","","","","",""],["9:00","","","","",""],["10:00","CSC108 (L)","","CSC108 (L)","","CSC108 (L)"],["11:00","","","","",""],["12:00","","","","",""],["1:00","","","","",""],["2:00","STA355 (L)","","STA355 (L)","",""],["3:00","STA355 (L)","","","",""],["4:00","","","","",""],["5:00","","","","",""],["6:00","","","","",""],["7:00","","","","",""],["8:00","","","","",""]]
-getActiveTimetable :: Request -> IO ([[String]], [[String]])
+getActiveTimetable :: Request -> IO (String, String)
 getActiveTimetable req = do
     let cookies = M.fromList $ rqCookies req  --  Map String Cookie
         coursecookie = maybe "" cookieValue $ M.lookup "selected-lectures" cookies
@@ -49,7 +49,17 @@ getActiveTimetable req = do
         spring_schedule = replicate 13 $ replicate 5 ""
         fall_schedule' = foldl (\acc x -> addCourseToSchedule x acc) fall_schedule fall_times
         spring_schedule' = foldl (\acc x -> addCourseToSchedule x acc) spring_schedule spring_times
-    return (fall_schedule', spring_schedule')
+    fallrand <- randomName
+    springrand <- randomName
+    let fallsvgFilename = fallrand ++ ".svg"
+        fallimageFilename = fallrand ++ ".png"
+        springsvgFilename = springrand ++ ".svg"
+        springimageFilename = springrand ++ ".png"
+    renderTableHelper fallsvgFilename fall_schedule' "F"
+    renderTableHelper springsvgFilename spring_schedule' "S"
+    createImageFile fallsvgFilename fallimageFilename
+    createImageFile springsvgFilename springimageFilename
+    return (springsvgFilename, springimageFilename)
     where isFall (c, t) = last c == "F"
     
 
