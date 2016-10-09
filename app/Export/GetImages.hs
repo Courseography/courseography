@@ -31,7 +31,7 @@ getActiveGraphImage req = do
 -- get "CSC148H1-L0301-S_STA257H1-T0105-F_STA257H1-L0101-F_STA303H1-L0101-S_CSC148H1-T5101-F"
 -- return [Just [Time {timeField = [2.0,18.0]},Time {timeField = [2.0,18.5]},Time {timeField = [2.0,19.0]},Time {timeField = [2.0,19.5]},Time {timeField = [2.0,20.0]},Time {timeField = [2.0,20.5]}],Just [Time {timeField = [0.0,14.0]},Time {timeField = [0.0,14.5]},Time {timeField = [0.0,15.0]},Time {timeField = [0.0,15.5]},Time {timeField = [2.0,14.0]},Time {timeField = [2.0,14.5]}],Just [Time {timeField = [2.0,10.0]},Time {timeField = [2.0,10.5]},Time {timeField = [0.0,10.0]},Time {timeField = [0.0,10.5]},Time {timeField = [4.0,10.0]},Time {timeField = [4.0,10.5]}],Just [Time {timeField = [4.0,11.0]},Time {timeField = [4.0,11.5]},Time {timeField = [4.0,12.0]},Time {timeField = [4.0,12.5]}]]
 -- [["8:00","","","","",""],["9:00","","","","",""],["10:00","CSC108 (L)","","CSC108 (L)","","CSC108 (L)"],["11:00","","","","",""],["12:00","","","","",""],["1:00","","","","",""],["2:00","STA355 (L)","","STA355 (L)","",""],["3:00","STA355 (L)","","","",""],["4:00","","","","",""],["5:00","","","","",""],["6:00","","","","",""],["7:00","","","","",""],["8:00","","","","",""]]
-getActiveTimetable :: Request -> IO (String, String)
+getActiveTimetable :: Request -> IO (String, String, String, String)
 getActiveTimetable req = do
     let cookies = M.fromList $ rqCookies req  --  Map String Cookie
         coursecookie = maybe "" cookieValue $ M.lookup "selected-lectures" cookies
@@ -59,7 +59,7 @@ getActiveTimetable req = do
     renderTableHelper springsvgFilename spring_schedule' "S"
     createImageFile fallsvgFilename fallimageFilename
     createImageFile springsvgFilename springimageFilename
-    return (springsvgFilename, springimageFilename)
+    return (fallsvgFilename, fallimageFilename, springsvgFilename, springimageFilename)
     where isFall (c, t) = last c == "F"
     
 

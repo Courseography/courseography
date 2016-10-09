@@ -273,6 +273,7 @@ queryGraphs =
         do graphs :: [Entity Graph] <- selectList [] []
            return $ createJSONResponse graphs
 
+-- ========================================================
 
 getLectureTime :: [String] -> IO (Maybe [Time])
 getLectureTime [code, section, session] = runSqlite databasePath $ do 

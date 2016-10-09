@@ -1,5 +1,5 @@
 module Response.Export
-    (exportGraphResponse) where
+    (exportGraphResponse, returnPDF) where
 
 import Control.Monad.IO.Class  (liftIO)
 import Happstack.Server

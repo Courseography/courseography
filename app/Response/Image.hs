@@ -11,6 +11,7 @@ import qualified Data.Map as M
 import Export.GetImages
 import Export.ImageConversion
 import Data.List.Utils (replace)
+import Response.Export (returnPDF)
 
 -- | Returns an image of the graph requested by the user.
 graphImageResponse :: ServerPart Response
@@ -32,8 +33,10 @@ timetableImageResponse courses session = do
 timetableImageCookieResponse :: String -> String -> ServerPart Response
 timetableImageCookieResponse courses session = do
     req <- askRq
-    (svgFilename, imageFilename) <- liftIO $ getActiveTimetable req
-    liftIO $ returnImageData svgFilename imageFilename
+    (fallsvgFilename, fallimageFilename, springsvgFilename, springimageFilename) <- liftIO $ getActiveTimetable req
+    -- liftIO $ returnImageData svgFilename imageFilename
+    pdfName <- liftIO $ returnPDF fallsvgFilename fallimageFilename springsvgFilename springimageFilename 
+    serveFile (asContentType "application/pdf") pdfName
 
 
 
