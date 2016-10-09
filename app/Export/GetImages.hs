@@ -1,7 +1,7 @@
  module Export.GetImages
     (getActiveGraphImage, getTimetableImage, randomName, getActiveTimetable) where
 
-import Export.TimetableImageCreator (renderTable, renderTableHelper)
+import Export.TimetableImageCreator (renderTable, renderTableHelper, times)
 import qualified Data.Map as M
 import System.Random
 import Svg.Generator
@@ -55,8 +55,8 @@ getActiveTimetable req = do
         fallimageFilename = fallrand ++ ".png"
         springsvgFilename = springrand ++ ".svg"
         springimageFilename = springrand ++ ".png"
-    renderTableHelper fallsvgFilename fall_schedule' "F"
-    renderTableHelper springsvgFilename spring_schedule' "S"
+    renderTableHelper fallsvgFilename (zipWith (:) times fall_schedule') "Fall"
+    renderTableHelper springsvgFilename (zipWith (:) times spring_schedule') "Spring"
     createImageFile fallsvgFilename fallimageFilename
     createImageFile springsvgFilename springimageFilename
     return (fallsvgFilename, fallimageFilename, springsvgFilename, springimageFilename)

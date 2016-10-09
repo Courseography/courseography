@@ -1,7 +1,7 @@
 {-# LANGUAGE NoMonomorphismRestriction, OverloadedStrings #-}
 
 module Export.TimetableImageCreator
-    (renderTable, renderTableHelper) where
+    (renderTable, renderTableHelper, times) where
 
 import Diagrams.Prelude
 import Diagrams.Backend.SVG.CmdLine
@@ -95,18 +95,10 @@ renderTable :: String -> String -> String -> IO ()
 renderTable filename courses session = do
     let courseTable = partition5 $ splitOn "_" courses
     renderTableHelper filename (zipWith (:) times courseTable) session
-    -- print courseTable
-    -- print (zipWith (:) times courseTable)
-    -- let g = makeTable (zipWith (:) times courseTable) session
-    --     svg = renderDia SVG (SVGOptions (mkWidth 1024) Nothing "") g
-    --     txt = replace (show (fs :: Double) ++ "px") (show fs' ++ "px") $
-    --           unpack $ renderText svg
-    -- writeFile filename txt
     where
         partition5 [] = []
         partition5 lst = take 5 lst : partition5 (drop 5 lst)
-    --     -- relative fonts don't play well with ImageMagick, apparently
-    --     fs' = round $ 1024 / 600 * fs
+
 
 -- =====================================================
 
@@ -122,4 +114,4 @@ renderTableHelper filename schedule session = do
     writeFile filename txt
     where
         -- relative fonts don't play well with ImageMagick, apparently
-        fs' = round $ 1024 / 600 * fs
+        fs' = round $ 1024 / 700 * fs
