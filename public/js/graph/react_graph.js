@@ -158,7 +158,9 @@ var Graph = React.createClass({
             zoomFactor: 1,
             horizontalPanFactor: 0,
             verticalPanFactor: 0,
-            mouseDown: false
+            mouseDown: false,
+            modalIsOpen: true,
+            currentCourse: ""
         };
     },
 
@@ -360,6 +362,44 @@ var Graph = React.createClass({
 
     },
 
+    openModal: function () {  
+        /*
+        var infoBox = this.refs.infoBox;
+        var modal = this.refs.modal;
+        modal.setState({courseId: infoBox.state.nodeId.substring(0, 6)}, function (){
+            $.ajax({
+                url: 'course',
+                data: {name: formatCourseName(modal.state.courseId)[0]},
+                dataType: 'json',
+                success: function (data) {
+                    if (modal.isMounted()) {
+                        //This is getting the session times
+                        var sessions = data.fallSession.lectures
+                                                       .concat(data.springSession.lectures)
+                                                       .concat(data.yearSession.lectures)
+                        //Tutorials don't have a timeStr to print, so I've currently omitted them
+                        modal.setState({course: data, sessions: sessions});
+                    }
+                },
+                error: function (xhr, status, err) {
+                    console.error('course-info', status, err.toString());
+                }
+            });
+        }
+        );
+
+        ReactDOM.render(
+        <Modal />,
+        document.getElementById('container')
+        ); */
+        this.setState({modalIsOpen: true, currentCourse: "This new course"});
+
+    },
+
+    closeModal: function() {
+        this.setState({modalIsOpen: false});
+    },
+
     infoBoxMouseEnter: function () {
         this.clearAllTimeouts();
 
@@ -379,6 +419,8 @@ var Graph = React.createClass({
 
     infoBoxMouseClick: function () {
         var infoBox = this.refs.infoBox;
+        this.openModal();
+
         var modal = this.refs.modal;
         modal.setState({courseId: infoBox.state.nodeId.substring(0, 6)}, function (){
             $.ajax({
@@ -401,7 +443,7 @@ var Graph = React.createClass({
             });
         });
 
-        $(this.refs.modal.getDOMNode()).modal();
+        //$(this.refs.modal.getDOMNode()).modal(); 
     },
 
     // Reset graph
@@ -566,12 +608,24 @@ var Graph = React.createClass({
                             this.state.verticalPanFactor == 0;
         return (
             <div>
-                <ReactModal
-                  isOpen={true}
-                >
-                  <h1>Test modal</h1>
-                  <p>Hi Lana!</p>
-                </ReactModal>
+                <ReactModal //ref='reactmodal'
+                    isOpen={this.state.modalIsOpen}
+                    onRequestClose={this.closeModal}
+                    // Insert the rendered Description
+                    //The current text is for testing purposes 
+                     >
+                    <button onClick = {this.closeModal}> Close </button><br/>
+                    <button onClick = {this.openModal}> Get Text </button>
+                    <h1>Test modal</h1>
+                    <p>{this.state.currentCourse}</p> 
+                   
+                    <p><strong>Prerequisite: </strong></p>
+                    <p><strong>Distribution Requirement Status: </strong></p> 
+                    <p><strong>Breadth Requirement: </strong></p> 
+                    <p><strong>Timetable: </strong></p>
+                    </ReactModal>
+
+                
                 <Button
                     divId='zoom-in-button'
                     text='+'
@@ -613,7 +667,7 @@ var Graph = React.createClass({
                     text='Reset'
                     mouseDown={this.resetZoomAndPan}
                     mouseUp={this.onButtonRelease}
-                    disabled={resetDisabled}/>
+                    disabled={resetDisabled}/>              
                 <Modal ref='modal' />
                 <svg {... svgAttrs} ref='svg' version='1.1'
                     className={this.state.highlightedNodes.length > 0 ?
@@ -642,7 +696,7 @@ var Graph = React.createClass({
                         ref='infoBox'
                         onClick={this.infoBoxMouseClick}
                         onMouseEnter={this.infoBoxMouseEnter}
-                        onMouseLeave={this.infoBoxMouseLeave}/>
+                        onMouseLeave={this.infoBoxMouseLeave}/> 
                 </svg>
             </div>
 
@@ -1347,5 +1401,7 @@ var InfoBox = React.createClass({
         }
     }
 });
+
+
 
 export default {renderReactGraph: renderReactGraph};
