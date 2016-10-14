@@ -6,7 +6,7 @@ module WebParsing.Ligature where
 
 import Prelude hiding (concatMap)
 
-import Data.Text.Lazy
+import Data.Text
 
 -- | If a character is a ligature, expand it to several characters
 expandLigature :: Char -> Text
