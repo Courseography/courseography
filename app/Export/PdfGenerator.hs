@@ -1,9 +1,9 @@
-module PdfGenerator
+module Export.PdfGenerator
     (createPDF) where
 
 import System.Process
 import GHC.IO.Handle.Types
-import ImageConversion (removeImage)
+import Export.ImageConversion (removeImage)
 import Data.List.Utils (replace)
 
 -- | Opens a new process to create a PDF from a TEX (texName) and deletes

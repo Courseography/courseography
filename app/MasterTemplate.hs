@@ -67,10 +67,10 @@ disclaimer :: H.Html
 disclaimer =
     H.div ! A.id "disclaimerDiv" $ do
         "DISCLAIMER: Both the "
-        H.a ! A.href "http://www.artsandscience.utoronto.ca/ofr/timetable/winter/csc.html"
+        H.a ! A.href "https://timetable.iit.artsci.utoronto.ca/"
             $ "Official Timetable"
         " and "
-        H.a ! A.href "http://www.artsandscience.utoronto.ca/ofr/calendar/index.html"
+        H.a ! A.href "http://calendar.artsci.utoronto.ca/"
             $ "Calendar"
         " take precedence over the information presented here. "
         "It's important that you double-check your course selection, "
