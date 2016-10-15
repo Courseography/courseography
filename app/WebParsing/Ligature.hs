@@ -1,6 +1,8 @@
 {- | Utilities for expanding ligatures in unicode text.
 
      Currently this module expands the following ligatures:ﬀ,ﬁ,ﬂ,ﬃ,ﬄ,ﬅ,ﬆ
+
+     From https://hackage.haskell.org/package/ligature.
 -}
 module WebParsing.Ligature where
 

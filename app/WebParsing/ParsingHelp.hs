@@ -24,11 +24,9 @@ module WebParsing.ParsingHelp
 import Text.Regex.Posix ((=~))
 import Text.HTML.TagSoup
 import qualified Data.Text as T
-import qualified Data.Text.Lazy as L
-import Data.Maybe
 import Database.Tables
 import WebParsing.PrerequisiteParsing
-import qualified WebParsing.Ligature as G
+import WebParsing.Ligature (expand)
 
 type CoursePart = ([Tag T.Text], Course)
 
@@ -165,7 +163,7 @@ parseDescription :: CoursePart -> CoursePart
 parseDescription (tags, course) =
     let (parsed, rest) = tagBreak ["Prerequisite","Corequisite","Exclusion","Recommended","Distribution","Breadth"] tags
         -- Expand the ligatures on course description
-        descriptn = fmap G.expand $ makeEntry parsed Nothing
+        descriptn = fmap expand $ makeEntry parsed Nothing
     in (rest, course {description = descriptn})
 
 parsePrerequisite :: CoursePart -> CoursePart
