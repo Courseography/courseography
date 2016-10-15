@@ -67,11 +67,12 @@ executable courseography
     Util.Happstack,
     WebParsing.ArtSciParser,
     WebParsing.HtmlTable,
+    WebParsing.Ligature,
     WebParsing.ParseAll,
     WebParsing.ParsingHelp,
+    WebParsing.PostParser,
     WebParsing.PrerequisiteParsing,
     WebParsing.TimeConverter,
-    WebParsing.PostParser,
     WebParsing.UtsgJsonParser
   other-extensions:
     OverloadedStrings,
