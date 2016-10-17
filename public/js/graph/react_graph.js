@@ -1,5 +1,6 @@
 import * as tooltip from 'es6!graph/tooltip';
 import {Modal} from 'es6!common/react_modal';
+import {Description} from 'es6!common/react_modal';
 import * as ReactModal from 'vendor/react-modal';
 
 
@@ -158,8 +159,8 @@ var Graph = React.createClass({
             zoomFactor: 1,
             horizontalPanFactor: 0,
             verticalPanFactor: 0,
-            mouseDown: false
-        };
+            mouseDown: false,
+            modalIsOpen: false,        };
     },
 
     componentDidMount: function () {
@@ -302,7 +303,38 @@ var Graph = React.createClass({
             $('#fcecount').text('FCE Count: ' + this.state.fceCount);
         });
     },
+     openModal: function () {  
+        
+        var infoBox = this.refs.infoBox;
+        var modal = this.refs.modal;
+        /*modal.setState({courseId: infoBox.state.nodeId.substring(0, 6)}, function (){
+            $.ajax({
+                url: 'course',
+                data: {name: formatCourseName(modal.state.courseId)[0]},
+                dataType: 'json',
+                success: function (data) {
+                    if (modal.isMounted()) {
+                        //This is getting the session times
+                        var sessions = data.fallSession.lectures
+                                                       .concat(data.springSession.lectures)
+                                                       .concat(data.yearSession.lectures)
+                        //Tutorials don't have a timeStr to print, so I've currently omitted them
+                        modal.setState({course: data, sessions: sessions});
+                    }
+                },
+                error: function (xhr, status, err) {
+                    console.error('course-info', status, err.toString());
+                }
+            });
+        }
+        );*/
+        this.setState({modalIsOpen: true});
 
+    },
+
+    closeModal: function() {
+        this.setState({modalIsOpen: false});
+    },
     nodeClick: function (event) {
         var courseId = event.currentTarget.id;
         var currentNode = this.refs.nodes.refs[courseId];
@@ -379,6 +411,7 @@ var Graph = React.createClass({
 
     infoBoxMouseClick: function () {
         var infoBox = this.refs.infoBox;
+        this.openModal();
         var modal = this.refs.modal;
         modal.setState({courseId: infoBox.state.nodeId.substring(0, 6)}, function (){
             $.ajax({
@@ -401,7 +434,7 @@ var Graph = React.createClass({
             });
         });
 
-        $(this.refs.modal.getDOMNode()).modal();
+        //$(this.refs.modal.getDOMNode()).modal();
     },
 
     // Reset graph
@@ -566,11 +599,19 @@ var Graph = React.createClass({
                             this.state.verticalPanFactor == 0;
         return (
             <div>
-                <ReactModal
-                  isOpen={true}
-                >
-                  <h1>Test modal</h1>
-                  <p>Hi Lana!</p>
+                <ReactModal className = 'ModalClass'
+                    overlayClassName = 'OverlayClass'
+                    isOpen={this.state.modalIsOpen}
+                    onRequestClose={this.closeModal}   
+                     >
+                    <div className='modal-header'>
+                        Course Title </div>
+                        <div className='modal-body'>
+                            <Description />  
+                        </div>  
+                        <div className='modal-footer'>
+                        </div>  
+
                 </ReactModal>
                 <Button
                     divId='zoom-in-button'
@@ -614,7 +655,6 @@ var Graph = React.createClass({
                     mouseDown={this.resetZoomAndPan}
                     mouseUp={this.onButtonRelease}
                     disabled={resetDisabled}/>
-                <Modal ref='modal' />
                 <svg {... svgAttrs} ref='svg' version='1.1'
                     className={this.state.highlightedNodes.length > 0 ?
                                 'highlight-nodes' : ''}>
@@ -644,6 +684,8 @@ var Graph = React.createClass({
                         onMouseEnter={this.infoBoxMouseEnter}
                         onMouseLeave={this.infoBoxMouseLeave}/>
                 </svg>
+                 
+                <button onClick = {this.openModal}> Open Modal</button>
             </div>
 
         );
@@ -1026,7 +1068,11 @@ var Node = React.createClass({
 
 var BoolGroup = React.createClass({
     componentDidMount: function () {
-        for (var ref in this.refs) {
+        console.log(this, this.refs);
+        console.log(this.props.boolsJSON);
+        for (var boolJSON of this.props.boolsJSON) {
+        //for (var ref in this.refs) {
+            var ref = boolJSON.id_;
             this.refs[ref].updateNode(this.props.svg);
         }
     },
