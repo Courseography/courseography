@@ -1,4 +1,4 @@
- module Export.GetImages
+module Export.GetImages
     (getActiveGraphImage, getTimetableImage, randomName, getActiveTimetable) where
 
 import Export.TimetableImageCreator (renderTable, renderTableHelper, times)
@@ -38,12 +38,12 @@ getActiveTimetable req = do
     -- get cookie value of "selected-lectures" from browser
     let cookies = M.fromList $ rqCookies req  --  Map String Cookie
         coursecookie = maybe "" cookieValue $ M.lookup "selected-lectures" cookies
-        (lectures, tutorials) = parseCourseCookie coursecookie
+        (lecture, tutorial) = parseCourseCookie coursecookie
     -- liftIO $ print coursecookie
-    -- liftIO $ print lectures
-    -- liftIO $ print tutorials
-    (lecTimes, tutTimes) <- getTimes (lectures, tutorials)
-    let (fall_schedule', spring_schedule') = getScheduleByTime lectures tutorials lecTimes tutTimes
+    -- liftIO $ print lecture
+    -- liftIO $ print tutorial
+    (lecTimes, tutTimes) <- getTimes (lecture, tutorial)
+    let (fall_schedule', spring_schedule') = getScheduleByTime lecture tutorial lecTimes tutTimes
     (fallsvgFilename, fallimageFilename, springsvgFilename, springimageFilename) <- generateTimetableImg fall_schedule' spring_schedule'
     return (fallsvgFilename, fallimageFilename, springsvgFilename, springimageFilename)
 
@@ -53,15 +53,16 @@ getActiveTimetable req = do
 -- ([("CSC148H1","LEC-5101","S"),("STA355H1","LEC-0101","F"),("CSC108H1","LEC-0102","F")], [("CSC148H1","TUT-0501","S")])
 parseCourseCookie :: String -> ([(String, String, String)], [(String, String, String)])
 parseCourseCookie s = let lecAndTut = map (splitOn "-") $ splitOn "_" s
-                          (lectures, tutorials) = partition isLec lecAndTut
-                          lectures' = map (convertLec . list2tuple) lectures
-                          tutorials' = map (convertTut . list2tuple) tutorials
-                      in (lectures', tutorials')
+                          (lecture, tutorial) = partition isLec lecAndTut
+                          lecture' = map (convertLec . list2tuple) lecture
+                          tutorial' = map (convertTut . list2tuple) tutorial
+                      in (lecture', tutorial')
                       where isLec x = (x !! 1 !! 0) == 'L'
 
 
 list2tuple :: [String] -> (String, String, String)
 list2tuple [a, b, c] = (a, b, c)
+list2tuple _ = undefined
 
 -- ("CSC148H1","L5101","S") -> ("CSC148H1","LEC-5101","S") convert format to match database
 convertLec :: (String, String, String) -> (String, String, String)
@@ -73,31 +74,31 @@ convertTut (code, section, session) = (code, take 1 section ++ "UT-" ++ drop 1 s
 
 -- | Get data from database for selected courses
 getTimes :: ([(String, String, String)], [(String, String, String)]) -> IO ([[Time]], [[Time]])
-getTimes (lectures, tutorials) = runSqlite databasePath $ do
+getTimes (lecture, tutorial) = runSqlite databasePath $ do
     runMigration migrateAll
-    lecTimes <- mapM getLectureTime lectures  -- [(String, String, String)] -> IO ([[Time]])
-    tutTimes <- mapM getTutorialTime tutorials
+    lecTimes <- mapM getLectureTime lecture  -- [(String, String, String)] -> IO ([[Time]])
+    tutTimes <- mapM getTutorialTime tutorial
     return (lecTimes, tutTimes)
 
 
 -- | Generate fall scheduel and spring schedule in special format based on Times
 getScheduleByTime :: [(String, String, String)] -> [(String, String, String)] -> [[Time]] -> [[Time]] -> ([[String]], [[String]])
-getScheduleByTime lectures tutorials lecTimes tutTimes = let lecture_times = zip lectures lecTimes
-                                                             tutorial_times = zip tutorials tutTimes
-                                                             all_times = lecture_times ++ tutorial_times
-                                                             (fall_times, spring_times) = partition isFall all_times
-                                                             fall_schedule = replicate 13 $ replicate 5 ""
-                                                             spring_schedule = replicate 13 $ replicate 5 ""
-                                                             fall_schedule' = foldl (\acc x -> addCourseToSchedule x acc) fall_schedule fall_times
-                                                             spring_schedule' = foldl (\acc x -> addCourseToSchedule x acc) spring_schedule spring_times
-                                                         in (fall_schedule', spring_schedule')
-                                                         where isFall ((a, b, c) , _) = c == "F"
+getScheduleByTime lecture tutorial lecTimes tutTimes = let lecture_times = zip lecture lecTimes
+                                                           tutorial_times = zip tutorial tutTimes
+                                                           all_times = lecture_times ++ tutorial_times
+                                                           (fall_times, spring_times) = partition isFall all_times
+                                                           fall_schedule = replicate 13 $ replicate 5 ""
+                                                           spring_schedule = replicate 13 $ replicate 5 ""
+                                                           fall_schedule' = foldl (\acc x -> addCourseToSchedule x acc) fall_schedule fall_times
+                                                           spring_schedule' = foldl (\acc x -> addCourseToSchedule x acc) spring_schedule spring_times
+                                                       in (fall_schedule', spring_schedule')
+                                                       where isFall ((_, _, c) , _) = c == "F"
 
 
 -- (("STA355H1","L0101","F"),Just [Time {timeField = [0.0,14.0]},Time {timeField = [0.0,14.5]},Time {timeField = [0.0,15.0]},Time {timeField = [0.0,15.5]},Time {timeField = [2.0,14.0]},Time {timeField = [2.0,14.5]}])
 -- [["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""]]
 addCourseToSchedule :: ((String, String, String), [Time]) -> [[String]] -> [[String]]
-addCourseToSchedule (course, times) schedule = foldl (\acc x -> addCourseHelper course acc x) schedule times
+addCourseToSchedule (course, courseTimes) schedule = foldl (\acc x -> addCourseHelper course acc x) schedule courseTimes
 
 
 -- ("STA355H1","L0101","F")  Time {timeField = [0.0,14.0]}
