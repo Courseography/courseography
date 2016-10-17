@@ -17,12 +17,8 @@ module Database.CourseInsertion
 import qualified Data.Text as T
 import qualified Data.ByteString.Lazy.Char8 as BSL
 import Happstack.Server.SimpleHTTP (Response, toResponse)
-import Happstack.Server.SimpleHTTP
-import Control.Monad.IO.Class (MonadIO)
-import Data.Maybe (fromMaybe)
 import Config (databasePath)
-import Database.Persist.Sqlite (selectFirst, insertMany_, insert_, insert, SqlBackend, SqlPersistM, (=.), (==.), updateWhere, runSqlite)
-import Database.Persist.Class (selectKeysList, PersistEntity, Key)
+import Database.Persist.Class (selectKeysList, Key)
 import Database.Persist.Sqlite (selectFirst, fromSqlKey, toSqlKey, insertMany_, insert_, insert, SqlPersistM, (=.), (==.), updateWhere, runSqlite)
 import Database.Tables
 import qualified Data.Aeson as Aeson

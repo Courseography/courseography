@@ -35,7 +35,6 @@ import Data.List
 import Config (databasePath)
 import Control.Monad (liftM)
 import Data.Aeson ((.=), toJSON, object)
-import Data.Int (Int64)
 import Database.DataType
 import Svg.Builder
 
@@ -271,7 +270,7 @@ deptList = do
 queryGraphs :: IO Response
 queryGraphs =
     runSqlite databasePath $
-        do graphs :: [Entity Graph] <- selectList [] []
+        do graphs :: [Entity Graph] <- selectList [] [Asc GraphTitle]
            return $ createJSONResponse graphs
 
 -- ========================================================
@@ -296,4 +295,3 @@ getTutorialTime (code, section, session) = do
     case maybeEntityTutorials of 
         Nothing -> return []
         Just entityTutorials -> return $ tutorialTimes . entityVal $ entityTutorials
-
