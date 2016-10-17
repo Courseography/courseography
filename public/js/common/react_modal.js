@@ -43,7 +43,7 @@ export var Modal = React.createClass({
 });
 
 //Use React component from search.js
-var Description = React.createClass({
+export var Description = React.createClass({
     getInitialState: function() {
         return {
             course: [],
