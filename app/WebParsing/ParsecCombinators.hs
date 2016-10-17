@@ -72,12 +72,13 @@ getRequirements firstCourse =
     (P.try (parseUntil (P.string "First Year"))) <|>
     (P.try (parseUntil (P.string "Program Course Requirements:"))) <|>
     (P.try (parseUntil (P.string "Program requirements:"))) <|>
-    (P.try (parseUntil (P.lookAhead (P.string firstCourse))))
+    (P.try (parseUntil (P.lookAhead (P.string firstCourse)))) <|>
+    (parseUntil P.eof)
 
 parseNoteLine :: Parser String
 parseNoteLine = do
     P.string "Note"
-    parseUntil (P.char '\n')
+    (P.try (parseUntil (P.char '\n'))) <|> (parseUntil P.eof)
 
 parseNotes :: Parser String
 parseNotes = do
@@ -90,7 +91,8 @@ parseUntil parser = P.manyTill P.anyChar (P.try parser)
 
 splitPrereqText :: Parser [String]
 splitPrereqText = do
-    P.manyTill ((P.try parseNotes) <|> (P.try parseNoteLine) <|> (parseCategory False)) P.eof
+    P.manyTill ((P.try parseNotes) <|> (P.try parseNoteLine) <|> 
+        (P.try (parseCategory False)) <|> (parseUntil P.eof)) P.eof
 
 parseCategory :: Bool -> Parser String
 parseCategory withinBracket = do
@@ -121,8 +123,7 @@ mergeText left nextChar withinBracket = do
         other -> return $ left
 
 parseUpToSeparator :: Parser String
-parseUpToSeparator = do
-    parseUntil (P.notFollowedBy (P.noneOf ",/();\r\n"))
+parseUpToSeparator = parseUntil (P.notFollowedBy (P.noneOf ",/();\r\n"))
 
 -- For testing purposed in REPL
 parseAll :: Parser [String]
