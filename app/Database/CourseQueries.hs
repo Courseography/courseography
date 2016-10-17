@@ -67,17 +67,17 @@ returnCourse lowerStr = runSqlite databasePath $ do
       Just course -> do
         lecturesList :: [Entity Lecture] <- lectureQuery courseStr
         tutorialsList :: [Entity Tutorial] <- tutorialQuery courseStr
-        let (fallsession, springsession, yearsession) = buildAllSessions lecturesList tutorialsList
-        buildCourse fallsession springsession yearsession (entityVal course)
+        let (fall, spring, year) = buildAllSessions lecturesList tutorialsList
+        buildCourse fall spring year (entityVal course)
 
 buildAllSessions :: [Entity Lecture] -> [Entity Tutorial] -> (Maybe Tables.Session, Maybe Tables.Session, Maybe Tables.Session)
 buildAllSessions entityListL entityListT =
     let (fallLec, springLec, yearLec) = splitSessionsL entityListL
         (fallTut, springTut, yearTut) = splitSessionsT entityListT
-        fallsession = buildSession fallLec fallTut
-        springsession = buildSession springLec springTut
-        yearsession = buildSession yearLec yearTut
-    in (fallsession, springsession, yearsession)
+        fall = buildSession fallLec fallTut
+        spring = buildSession springLec springTut
+        year = buildSession yearLec yearTut
+    in (fall, spring, year)
 
 -- | Takes a course code (e.g. \"CSC108H1\") and sends a JSON representation
 -- of the course as a response.
@@ -114,7 +114,7 @@ returnLecture lowerStr sect session = runSqlite databasePath $ do
 -- | Builds a Course structure from a tuple from the Courses table.
 -- Some fields still need to be added in.
 buildCourse :: Maybe Session -> Maybe Session -> Maybe Session -> Courses -> SqlPersistM Course
-buildCourse fallsession springsession yearsession course = do
+buildCourse fall spring year course = do
     cBreadth <- getDescriptionB (coursesBreadth course)
     cDistribution <- getDescriptionD (coursesDistribution course)
     return $ Course cBreadth
@@ -122,9 +122,9 @@ buildCourse fallsession springsession yearsession course = do
            (fmap (T.filter (/='\"')) (coursesDescription course))
            (fmap (T.filter (/='\"')) (coursesTitle course))
            (coursesPrereqString course)
-           fallsession
-           springsession
-           yearsession
+           fall
+           spring
+           year
            (coursesCode course)
            (coursesExclusions course)
            (coursesManualTutorialEnrolment course)
@@ -200,7 +200,7 @@ getGraphJSON graphName =
                                              intersectsWithShape (rects ++ ellipses))
                                             graphtexts
 
-                    responseresult = createJSONResponse $
+                    response = createJSONResponse $
                         object [
                             ("texts", toJSON $ graphtexts ++ regionTexts),
                             ("shapes", toJSON $ rects ++ ellipses),
@@ -209,7 +209,7 @@ getGraphJSON graphName =
                             ("height", toJSON $ graphHeight $ entityVal graph)
                         ]
 
-                return responseresult
+                return response
 
 -- | Builds a list of all course codes in the database.
 allCourses :: IO Response
@@ -243,11 +243,11 @@ getDeptCourses dept =
                 fallTutorials = filter (\tut -> tutorialSession tut == "F") tuts
                 springTutorials = filter (\tut -> tutorialSession tut == "S") tuts
                 yearTutorials = filter (\tut -> tutorialSession tut == "Y") tuts
-                fallsession   = buildSession' (lecByCode course fallLectures) (tutByCode course fallTutorials)
-                springsession = buildSession' (lecByCode course springLectures) (tutByCode course springTutorials)
-                yearsession   = buildSession' (lecByCode course yearLectures) (tutByCode course yearTutorials)
+                fall   = buildSession' (lecByCode course fallLectures) (tutByCode course fallTutorials)
+                spring = buildSession' (lecByCode course springLectures) (tutByCode course springTutorials)
+                year   = buildSession' (lecByCode course yearLectures) (tutByCode course yearTutorials)
             in
-                buildCourse fallsession springsession yearsession course
+                buildCourse fall spring year course
         buildSession' lecs tuts =
             Just $ Tables.Session lecs
                                   tuts
