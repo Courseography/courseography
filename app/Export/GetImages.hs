@@ -29,12 +29,13 @@ getActiveGraphImage req = do
 
 
 -- =================================
--- Get lectures selected by user from selected-lectures cookie. If DNE, assume no lecture seleted
+-- | Get lectures selected by user from selected-lectures cookie. If DNE, assume no lecture seleted
 -- get "CSC148H1-L0301-S_STA257H1-T0105-F_STA257H1-L0101-F_STA303H1-L0101-S_CSC148H1-T5101-F"
 -- return [Just [Time {timeField = [2.0,18.0]},Time {timeField = [2.0,18.5]},Time {timeField = [2.0,19.0]},Time {timeField = [2.0,19.5]},Time {timeField = [2.0,20.0]},Time {timeField = [2.0,20.5]}],Just [Time {timeField = [0.0,14.0]},Time {timeField = [0.0,14.5]},Time {timeField = [0.0,15.0]},Time {timeField = [0.0,15.5]},Time {timeField = [2.0,14.0]},Time {timeField = [2.0,14.5]}],Just [Time {timeField = [2.0,10.0]},Time {timeField = [2.0,10.5]},Time {timeField = [0.0,10.0]},Time {timeField = [0.0,10.5]},Time {timeField = [4.0,10.0]},Time {timeField = [4.0,10.5]}],Just [Time {timeField = [4.0,11.0]},Time {timeField = [4.0,11.5]},Time {timeField = [4.0,12.0]},Time {timeField = [4.0,12.5]}]]
 -- [["8:00","","","","",""],["9:00","","","","",""],["10:00","CSC108 (L)","","CSC108 (L)","","CSC108 (L)"],["11:00","","","","",""],["12:00","","","","",""],["1:00","","","","",""],["2:00","STA355 (L)","","STA355 (L)","",""],["3:00","STA355 (L)","","","",""],["4:00","","","","",""],["5:00","","","","",""],["6:00","","","","",""],["7:00","","","","",""],["8:00","","","","",""]]
 getActiveTimetable :: Request -> IO (String, String, String, String)
 getActiveTimetable req = do
+    -- get cookie value of "selected-lectures" from browser
     let cookies = M.fromList $ rqCookies req  --  Map String Cookie
         coursecookie = maybe "" cookieValue $ M.lookup "selected-lectures" cookies
         (lectures, tutorials) = parseCourseCookie coursecookie
@@ -42,28 +43,12 @@ getActiveTimetable req = do
     -- liftIO $ print lectures
     -- liftIO $ print tutorials
     (lecTimes, tutTimes) <- getTimes (lectures, tutorials)
-    let lecture_times = zip lectures lecTimes
-        tutorial_times = zip tutorials tutTimes
-        all_times = lecture_times ++ tutorial_times
-        (fall_times, spring_times) = partition isFall all_times
-        fall_schedule = replicate 13 $ replicate 5 ""
-        spring_schedule = replicate 13 $ replicate 5 ""
-        fall_schedule' = foldl (\acc x -> addCourseToSchedule x acc) fall_schedule fall_times
-        spring_schedule' = foldl (\acc x -> addCourseToSchedule x acc) spring_schedule spring_times
-    fallrand <- randomName
-    springrand <- randomName
-    let fallsvgFilename = fallrand ++ ".svg"
-        fallimageFilename = fallrand ++ ".png"
-        springsvgFilename = springrand ++ ".svg"
-        springimageFilename = springrand ++ ".png"
-    renderTableHelper fallsvgFilename (zipWith (:) times fall_schedule') "Fall"
-    renderTableHelper springsvgFilename (zipWith (:) times spring_schedule') "Spring"
-    createImageFile fallsvgFilename fallimageFilename
-    createImageFile springsvgFilename springimageFilename
+    let (fall_schedule', spring_schedule') = getScheduleByTime lectures tutorials lecTimes tutTimes
+    (fallsvgFilename, fallimageFilename, springsvgFilename, springimageFilename) <- generateTimetableImg fall_schedule' spring_schedule'
     return (fallsvgFilename, fallimageFilename, springsvgFilename, springimageFilename)
-    where isFall ((a, b, c) , _) = c == "F"
 
 
+-- | Parse cookie string to two lists of courses, one for fall, the other for spring
 -- "CSC148H1-L5101-S_CSC148H1-T0501-S_STA355H1-L0101-F_CSC108H1-L0102-F"
 -- ([("CSC148H1","LEC-5101","S"),("STA355H1","LEC-0101","F"),("CSC108H1","LEC-0102","F")], [("CSC148H1","TUT-0501","S")])
 parseCourseCookie :: String -> ([(String, String, String)], [(String, String, String)])
@@ -78,19 +63,35 @@ parseCourseCookie s = let lecAndTut = map (splitOn "-") $ splitOn "_" s
 list2tuple :: [String] -> (String, String, String)
 list2tuple [a, b, c] = (a, b, c)
 
+-- ("CSC148H1","L5101","S") -> ("CSC148H1","LEC-5101","S") convert format to match database
 convertLec :: (String, String, String) -> (String, String, String)
 convertLec (code, section, session) = (code, take 1 section ++ "EC-" ++ drop 1 section, session)
 
+-- ("CSC148H1","T0501","S") -> ("CSC148H1","TUT-0501","S") convert format to match database
 convertTut :: (String, String, String) -> (String, String, String)
 convertTut (code, section, session) = (code, take 1 section ++ "UT-" ++ drop 1 section, session)
 
-
+-- | Get data from database for selected courses
 getTimes :: ([(String, String, String)], [(String, String, String)]) -> IO ([[Time]], [[Time]])
 getTimes (lectures, tutorials) = runSqlite databasePath $ do
     runMigration migrateAll
-    lecTimes <- mapM getLectureTime lectures  -- [[string]] -> IO ([Maybe [Time]])
+    lecTimes <- mapM getLectureTime lectures  -- [(String, String, String)] -> IO ([[Time]])
     tutTimes <- mapM getTutorialTime tutorials
     return (lecTimes, tutTimes)
+
+
+-- | Generate fall scheduel and spring schedule in special format based on Times
+getScheduleByTime :: [(String, String, String)] -> [(String, String, String)] -> [[Time]] -> [[Time]] -> ([[String]], [[String]])
+getScheduleByTime lectures tutorials lecTimes tutTimes = let lecture_times = zip lectures lecTimes
+                                                             tutorial_times = zip tutorials tutTimes
+                                                             all_times = lecture_times ++ tutorial_times
+                                                             (fall_times, spring_times) = partition isFall all_times
+                                                             fall_schedule = replicate 13 $ replicate 5 ""
+                                                             spring_schedule = replicate 13 $ replicate 5 ""
+                                                             fall_schedule' = foldl (\acc x -> addCourseToSchedule x acc) fall_schedule fall_times
+                                                             spring_schedule' = foldl (\acc x -> addCourseToSchedule x acc) spring_schedule spring_times
+                                                         in (fall_schedule', spring_schedule')
+                                                         where isFall ((a, b, c) , _) = c == "F"
 
 
 -- (("STA355H1","L0101","F"),Just [Time {timeField = [0.0,14.0]},Time {timeField = [0.0,14.5]},Time {timeField = [0.0,15.0]},Time {timeField = [0.0,15.5]},Time {timeField = [2.0,14.0]},Time {timeField = [2.0,14.5]}])
@@ -99,6 +100,7 @@ addCourseToSchedule :: ((String, String, String), [Time]) -> [[String]] -> [[Str
 addCourseToSchedule (course, times) schedule = foldl (\acc x -> addCourseHelper course acc x) schedule times
 
 
+-- ("STA355H1","L0101","F")  Time {timeField = [0.0,14.0]}
 addCourseHelper :: (String, String, String) -> [[String]] -> Time -> [[String]]
 addCourseHelper (code, section, session) acc x = let [day, time'] = map floor $ timeField x
                                                      time = time' - 8
@@ -107,6 +109,20 @@ addCourseHelper (code, section, session) acc x = let [day, time'] = map floor $ 
                                                      newacc = (take time acc) ++ [time_schedule'] ++ (drop (time + 1) acc)
                                                  in newacc
 
+
+generateTimetableImg :: [[String]] -> [[String]] -> IO(String, String, String, String)
+generateTimetableImg fall_schedule spring_schedule = do
+    fallrand <- randomName
+    springrand <- randomName
+    let fallsvgFilename = fallrand ++ ".svg"
+        fallimageFilename = fallrand ++ ".png"
+        springsvgFilename = springrand ++ ".svg"
+        springimageFilename = springrand ++ ".png"
+    renderTableHelper fallsvgFilename (zipWith (:) times fall_schedule) "Fall"
+    renderTableHelper springsvgFilename (zipWith (:) times spring_schedule) "Spring"
+    createImageFile fallsvgFilename fallimageFilename
+    createImageFile springsvgFilename springimageFilename
+    return (fallsvgFilename, fallimageFilename, springsvgFilename, springimageFilename)
 
 -- =================================
 

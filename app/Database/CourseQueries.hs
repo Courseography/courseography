@@ -23,7 +23,7 @@ module Database.CourseQueries
      getTutorialTime) where
 
 import Happstack.Server.SimpleHTTP
--- import Database.Persist
+import Database.Persist
 import Database.Persist.Sqlite
 import Database.Tables as Tables
 import Control.Monad.IO.Class (liftIO, MonadIO)
