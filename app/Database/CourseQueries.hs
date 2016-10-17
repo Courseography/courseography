@@ -1,4 +1,5 @@
-{-# LANGUAGE ScopedTypeVariables, OverloadedStrings, GADTs #-} -- GADTs added by Kael
+{-# LANGUAGE FlexibleContexts, GADTs, OverloadedStrings, ScopedTypeVariables #-}
+-- {-# LANGUAGE ScopedTypeVariables, OverloadedStrings, GADTs #-} -- GADTs added by Kael
 
 {-|
 Description: Respond to various requests involving database course information.
@@ -22,7 +23,7 @@ module Database.CourseQueries
      getTutorialTime) where
 
 import Happstack.Server.SimpleHTTP
-import Database.Persist
+-- import Database.Persist
 import Database.Persist.Sqlite
 import Database.Tables as Tables
 import Control.Monad.IO.Class (liftIO, MonadIO)
@@ -275,20 +276,24 @@ queryGraphs =
 
 -- ========================================================
 
-getLectureTime :: [String] -> IO (Maybe [Time])
-getLectureTime [code, section, session] = runSqlite databasePath $ do 
-    maybeEntityLectures <- selectFirst [LectureCode ==. (T.pack code),
-                                        LectureSection ==. (T.pack $ take 1 section ++ "EC-" ++ drop 1 section),
-                                        LectureSession ==. (T.pack session)]
-                                       []
-    return $ fmap (lectureTimes . entityVal) maybeEntityLectures
-
-
-getTutorialTime :: [String] -> IO (Maybe [Time])
-getTutorialTime [code, section, session] = runSqlite databasePath $ do 
-    maybeEntityTutorials <- selectFirst [TutorialCode ==. (T.pack code),
-                                         TutorialSection ==. Just (T.pack $ take 1 section ++ "UT-" ++ drop 1 section),
-                                         TutorialSession ==. (T.pack session)]
+-- getLectureTime :: (String, String, String) -> IO ([Time])
+getLectureTime (code, section, session) = do
+    maybeEntityLectures  <- selectFirst [LectureCode ==. (T.pack code),
+                                         LectureSection ==. (T.pack $ take 1 section ++ "EC-" ++ drop 1 section),
+                                         LectureSession ==. (T.pack session)]
                                         []
-    return $ fmap (tutorialTimes . entityVal) maybeEntityTutorials
+    case maybeEntityLectures of
+        Nothing -> return []
+        Just entityLectures -> return $ lectureTimes . entityVal $ entityLectures
+
+
+-- getTutorialTime :: (String, String, String) -> IO ([Time])
+getTutorialTime (code, section, session) = do
+    maybeEntityTutorials  <- selectFirst [TutorialCode ==. (T.pack code),
+                                          TutorialSection ==. Just (T.pack $ take 1 section ++ "UT-" ++ drop 1 section),
+                                          TutorialSession ==. (T.pack session)]
+                                         []
+    case maybeEntityTutorials of 
+        Nothing -> return []
+        Just entityTutorials -> return $ tutorialTimes . entityVal $ entityTutorials
 

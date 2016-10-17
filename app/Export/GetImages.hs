@@ -13,6 +13,8 @@ import Database.CourseQueries (getLectureTime, getTutorialTime)
 import Database.Tables as Tables
 import Control.Monad.IO.Class  (liftIO)
 import Data.List (partition)
+import Database.Persist.Sqlite (runSqlite, runMigration)
+import Config (databasePath)
 
 -- | If there is an active graph available, an image of that graph is created,
 -- otherwise the Computer Science graph is created as a default.
@@ -39,8 +41,7 @@ getActiveTimetable req = do
     -- liftIO $ print coursecookie
     -- liftIO $ print lectures
     -- liftIO $ print tutorials
-    lecTimes <- mapM getLectureTime lectures  -- [[string]] -> IO ([Maybe [Time]])
-    tutTimes <- mapM getTutorialTime tutorials
+    (lecTimes, tutTimes) <- getTimes (lectures, tutorials)
     let lecture_times = zip lectures lecTimes
         tutorial_times = zip tutorials tutTimes
         all_times = lecture_times ++ tutorial_times
@@ -60,7 +61,7 @@ getActiveTimetable req = do
     createImageFile fallsvgFilename fallimageFilename
     createImageFile springsvgFilename springimageFilename
     return (fallsvgFilename, fallimageFilename, springsvgFilename, springimageFilename)
-    where isFall (c, t) = last c == "F"
+    where isFall (c, _) = last c == "F"
     
 
 
@@ -68,18 +69,26 @@ getActiveTimetable req = do
 -- ([["CSC148H1","L5101","S"],["STA355H1","L0101","F"],["CSC108H1","L0102","F"]],  [["CSC148H1","T0501","S"]])
 parseCourseCookie :: String -> ([[String]], [[String]])
 parseCourseCookie s = let lecAndTut = map (splitOn "-") $ splitOn "_" s
-                          lectures = filter isLec lecAndTut
-                          tutorials = filter isTut lecAndTut
+                          (lectures, tutorials) = partition isLec lecAndTut
                       in (lectures, tutorials)
-                      where isTut x = (x !! 1 !! 0) == 'T'
-                            isLec x = (x !! 1 !! 0) == 'L'
+                      where isLec x = (x !! 1 !! 0) == 'L'
+
+list2tuple :: [String] -> (String, String, String)
+list2tuple [a, b, c] = (a, b, c)
+
+
+getTimes :: ([[String]], [[String]]) -> IO ([[Time]], [[Time]])
+getTimes (lectures, tutorials) = runSqlite databasePath $ do
+    runMigration migrateAll
+    lecTimes <- mapM getLectureTime $ map list2tuple lectures  -- [[string]] -> IO ([Maybe [Time]])
+    tutTimes <- mapM getTutorialTime $ map list2tuple tutorials
+    return (lecTimes, tutTimes)
 
 
 -- (["STA355H1","L0101","F"],Just [Time {timeField = [0.0,14.0]},Time {timeField = [0.0,14.5]},Time {timeField = [0.0,15.0]},Time {timeField = [0.0,15.5]},Time {timeField = [2.0,14.0]},Time {timeField = [2.0,14.5]}])
 -- [["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""]]
-addCourseToSchedule :: ([String], Maybe [Time]) -> [[String]] -> [[String]]
-addCourseToSchedule (_, Nothing) schedule = schedule
-addCourseToSchedule (course, Just times) schedule = foldl (\acc x -> addCourseHelper course acc x) schedule times
+addCourseToSchedule :: ([String], [Time]) -> [[String]] -> [[String]]
+addCourseToSchedule (course, times) schedule = foldl (\acc x -> addCourseHelper course acc x) schedule times
 
 
 addCourseHelper :: [String] -> [[String]] -> Time -> [[String]]
