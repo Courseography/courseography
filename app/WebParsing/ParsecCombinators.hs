@@ -62,18 +62,23 @@ isDepartmentName postType = parseUntil (P.string postType)
 
 -- Post Category Parsing
 
-parsingAlgoOne :: String -> Parser [String]
+parsingAlgoOne :: Maybe String -> Parser [String]
 parsingAlgoOne firstCourse = do
     getRequirements firstCourse
     splitPrereqText
 
-getRequirements :: String -> Parser String
+getRequirements :: Maybe String -> Parser String
 getRequirements firstCourse = 
     (P.try (parseUntil (P.string "First Year"))) <|>
     (P.try (parseUntil (P.string "Program Course Requirements:"))) <|>
     (P.try (parseUntil (P.string "Program requirements:"))) <|>
-    (P.try (parseUntil (P.lookAhead (P.string firstCourse)))) <|>
-    (parseUntil P.eof)
+    (findFirstCourse firstCourse)
+    
+findFirstCourse :: Maybe String -> Parser String
+findFirstCourse firstCourse =
+    case firstCourse of
+        Nothing -> parseUntil P.eof
+        Just course -> (P.try (parseUntil (P.lookAhead (P.string course)))) <|> (parseUntil P.eof)
 
 parseNoteLine :: Parser String
 parseNoteLine = do

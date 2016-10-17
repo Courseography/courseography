@@ -51,12 +51,16 @@ addPostToDatabase tags = do
         postType = T.pack $ getPostType postCode
         departmentName = T.pack $ (getDepartmentName fullPostName postType)
         prereqs = map getCourseFromTag $ map (fromAttrib "href") $ filter isCourseTag tags
-    addPostCategoriesToDatabase (T.unpack postCode) (innerText tags) (head prereqs)
+    if null prereqs
+    then
+        addPostCategoriesToDatabase (T.unpack postCode) (innerText tags) Nothing
+    else
+        addPostCategoriesToDatabase (T.unpack postCode) (innerText tags) (Just (head prereqs))
     insertPost departmentName postType postCode
     where
         isCourseTag tag = tagOpenAttrNameLit "a" "href" (\hrefValue -> (length hrefValue) >= 0) tag
 
-addPostCategoriesToDatabase :: String -> String -> String -> IO ()
+addPostCategoriesToDatabase :: String -> String -> Maybe String -> IO ()
 addPostCategoriesToDatabase postCode tagText firstCourse = do
     let parsed = P.parse (parsingAlgoOne firstCourse) "(source)" tagText
     case parsed of
