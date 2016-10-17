@@ -114,4 +114,4 @@ renderTableHelper filename schedule session = do
     writeFile filename txt
     where
         -- relative fonts don't play well with ImageMagick, apparently
-        fs' = round $ 1024 / 700 * fs
+        fs' = round $ 1024 / 800 * fs

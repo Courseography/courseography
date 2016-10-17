@@ -61,38 +61,46 @@ getActiveTimetable req = do
     createImageFile fallsvgFilename fallimageFilename
     createImageFile springsvgFilename springimageFilename
     return (fallsvgFilename, fallimageFilename, springsvgFilename, springimageFilename)
-    where isFall (c, _) = last c == "F"
-    
+    where isFall ((a, b, c) , _) = c == "F"
 
 
 -- "CSC148H1-L5101-S_CSC148H1-T0501-S_STA355H1-L0101-F_CSC108H1-L0102-F"
--- ([["CSC148H1","L5101","S"],["STA355H1","L0101","F"],["CSC108H1","L0102","F"]],  [["CSC148H1","T0501","S"]])
-parseCourseCookie :: String -> ([[String]], [[String]])
+-- ([("CSC148H1","LEC-5101","S"),("STA355H1","LEC-0101","F"),("CSC108H1","LEC-0102","F")], [("CSC148H1","TUT-0501","S")])
+parseCourseCookie :: String -> ([(String, String, String)], [(String, String, String)])
 parseCourseCookie s = let lecAndTut = map (splitOn "-") $ splitOn "_" s
                           (lectures, tutorials) = partition isLec lecAndTut
-                      in (lectures, tutorials)
+                          lectures' = map (convertLec . list2tuple) lectures
+                          tutorials' = map (convertTut . list2tuple) tutorials
+                      in (lectures', tutorials')
                       where isLec x = (x !! 1 !! 0) == 'L'
+
 
 list2tuple :: [String] -> (String, String, String)
 list2tuple [a, b, c] = (a, b, c)
 
+convertLec :: (String, String, String) -> (String, String, String)
+convertLec (code, section, session) = (code, take 1 section ++ "EC-" ++ drop 1 section, session)
 
-getTimes :: ([[String]], [[String]]) -> IO ([[Time]], [[Time]])
+convertTut :: (String, String, String) -> (String, String, String)
+convertTut (code, section, session) = (code, take 1 section ++ "UT-" ++ drop 1 section, session)
+
+
+getTimes :: ([(String, String, String)], [(String, String, String)]) -> IO ([[Time]], [[Time]])
 getTimes (lectures, tutorials) = runSqlite databasePath $ do
     runMigration migrateAll
-    lecTimes <- mapM getLectureTime $ map list2tuple lectures  -- [[string]] -> IO ([Maybe [Time]])
-    tutTimes <- mapM getTutorialTime $ map list2tuple tutorials
+    lecTimes <- mapM getLectureTime lectures  -- [[string]] -> IO ([Maybe [Time]])
+    tutTimes <- mapM getTutorialTime tutorials
     return (lecTimes, tutTimes)
 
 
--- (["STA355H1","L0101","F"],Just [Time {timeField = [0.0,14.0]},Time {timeField = [0.0,14.5]},Time {timeField = [0.0,15.0]},Time {timeField = [0.0,15.5]},Time {timeField = [2.0,14.0]},Time {timeField = [2.0,14.5]}])
+-- (("STA355H1","L0101","F"),Just [Time {timeField = [0.0,14.0]},Time {timeField = [0.0,14.5]},Time {timeField = [0.0,15.0]},Time {timeField = [0.0,15.5]},Time {timeField = [2.0,14.0]},Time {timeField = [2.0,14.5]}])
 -- [["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""]]
-addCourseToSchedule :: ([String], [Time]) -> [[String]] -> [[String]]
+addCourseToSchedule :: ((String, String, String), [Time]) -> [[String]] -> [[String]]
 addCourseToSchedule (course, times) schedule = foldl (\acc x -> addCourseHelper course acc x) schedule times
 
 
-addCourseHelper :: [String] -> [[String]] -> Time -> [[String]]
-addCourseHelper [code, section, session] acc x = let [day, time'] = map floor $ timeField x
+addCourseHelper :: (String, String, String) -> [[String]] -> Time -> [[String]]
+addCourseHelper (code, section, session) acc x = let [day, time'] = map floor $ timeField x
                                                      time = time' - 8
                                                      time_schedule = acc !! time
                                                      time_schedule' = (take day time_schedule) ++ [code++session++" "++section] ++ (drop (day + 1) time_schedule)

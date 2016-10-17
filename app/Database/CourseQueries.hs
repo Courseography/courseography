@@ -278,7 +278,7 @@ queryGraphs =
 -- getLectureTime :: (String, String, String) -> IO ([Time])
 getLectureTime (code, section, session) = do
     maybeEntityLectures  <- selectFirst [LectureCode ==. (T.pack code),
-                                         LectureSection ==. (T.pack $ take 1 section ++ "EC-" ++ drop 1 section),
+                                         LectureSection ==. (T.pack section),
                                          LectureSession ==. (T.pack session)]
                                         []
     case maybeEntityLectures of
@@ -289,7 +289,7 @@ getLectureTime (code, section, session) = do
 -- getTutorialTime :: (String, String, String) -> IO ([Time])
 getTutorialTime (code, section, session) = do
     maybeEntityTutorials  <- selectFirst [TutorialCode ==. (T.pack code),
-                                          TutorialSection ==. Just (T.pack $ take 1 section ++ "UT-" ++ drop 1 section),
+                                          TutorialSection ==. Just (T.pack section),
                                           TutorialSession ==. (T.pack session)]
                                          []
     case maybeEntityTutorials of 
