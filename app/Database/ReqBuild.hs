@@ -7,7 +7,7 @@ We will use parsed data to create instances of this type.
 -}
 module ReqBuild
 ( Req(..)
-, showReq
+, showReqs
 ) where
 
 import Data.String

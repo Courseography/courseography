@@ -7,6 +7,9 @@ Use parsed data to create instances of this type.
 -}
 module Course
 ( Course(..)
+, getCreq
+, getExcl
+, getPreq
 , getCourseReqs
 ) where
 
