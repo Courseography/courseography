@@ -11,7 +11,7 @@ module Course
 ) where
 
 import Data.String
-import Database.CourseReq
+import qualified Database.CourseReq as CR
 
 data Course = Course { name :: String
                      , breadth :: String
@@ -26,10 +26,24 @@ data Course = Course { name :: String
                      , manualTutorialEnrolment :: String
                      , manualPracticalEnrolment :: String
                      , distribution :: String
-                     , prereqs :: Course
+                     , prereqs :: CourseReq
                      , coreqs :: CourseReq
                      , videoUrls = []
                      }
 
--- | Returns Course Requirements of specified Course in readable String format.
-getCourseReqs :: Course -> String
+-- | Returns a well formatted String representing the Corequisites for specified Course.
+getCreq :: Course -> String
+getCreq course =  CR.showCourseReq $ coreqs course
+
+-- | Returns a well formatted String representing the Exclusions specified Course.
+getExcl :: Course -> String
+getExcl course =  CR.showCourseReq $ exclusions course
+
+-- | Returns a well formatted String representing the Prerequisites specified Course.
+getPreq :: Course -> String
+getPreq course =  CR.showCourseReq $ prereqs course
+
+-- | Returns a well formatted String representing the Course Requirements for specified Course.
+getCourseReq :: Course -> String
+-- get a list of CourseReqs in order (corequisite, exclusion, prerequisite) and map over to display them.
+getCourseReq course = show $ map (CR.showCourseReq) [ x course |  x <- [coreqs, exclusions, prereqs] ] 
