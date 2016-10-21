@@ -160,7 +160,9 @@ var Graph = React.createClass({
             horizontalPanFactor: 0,
             verticalPanFactor: 0,
             mouseDown: false,
-            modalIsOpen: false,        };
+            modalIsOpen: false,
+            courseId: 'csc108H1'
+            };
     },
 
     componentDidMount: function () {
@@ -304,30 +306,6 @@ var Graph = React.createClass({
         });
     },
      openModal: function () {  
-        
-        var infoBox = this.refs.infoBox;
-        var modal = this.refs.modal;
-        /*modal.setState({courseId: infoBox.state.nodeId.substring(0, 6)}, function (){
-            $.ajax({
-                url: 'course',
-                data: {name: formatCourseName(modal.state.courseId)[0]},
-                dataType: 'json',
-                success: function (data) {
-                    if (modal.isMounted()) {
-                        //This is getting the session times
-                        var sessions = data.fallSession.lectures
-                                                       .concat(data.springSession.lectures)
-                                                       .concat(data.yearSession.lectures)
-                        //Tutorials don't have a timeStr to print, so I've currently omitted them
-                        modal.setState({course: data, sessions: sessions});
-                    }
-                },
-                error: function (xhr, status, err) {
-                    console.error('course-info', status, err.toString());
-                }
-            });
-        }
-        );*/
         this.setState({modalIsOpen: true});
 
     },
@@ -411,7 +389,9 @@ var Graph = React.createClass({
 
     infoBoxMouseClick: function () {
         var infoBox = this.refs.infoBox;
+        this.setState({courseId: infoBox.state.nodeId.substring(0, 6) });
         this.openModal();
+/*        
         var modal = this.refs.modal;
         modal.setState({courseId: infoBox.state.nodeId.substring(0, 6)}, function (){
             $.ajax({
@@ -433,8 +413,7 @@ var Graph = React.createClass({
                 }
             });
         });
-
-        //$(this.refs.modal.getDOMNode()).modal();
+*/
     },
 
     // Reset graph
@@ -602,17 +581,14 @@ var Graph = React.createClass({
                 <ReactModal className = 'ModalClass'
                     overlayClassName = 'OverlayClass'
                     isOpen={this.state.modalIsOpen}
-                    onRequestClose={this.closeModal}   
-                     >
+                    onRequestClose={this.closeModal}>
                     <div className='modal-header'>
-                        Course Title </div>
+                         {getCourseTitle(this.state.courseId)} </div>
                         <div className='modal-body'>
-                            <Description />  
+                            <Description course = {formatCourseName(this.state.courseId)[0]}/>  
                         </div>  
-                        <div className='modal-footer'>
-                        </div>  
-
                 </ReactModal>
+
                 <Button
                     divId='zoom-in-button'
                     text='+'
@@ -655,6 +631,7 @@ var Graph = React.createClass({
                     mouseDown={this.resetZoomAndPan}
                     mouseUp={this.onButtonRelease}
                     disabled={resetDisabled}/>
+
                 <svg {... svgAttrs} ref='svg' version='1.1'
                     className={this.state.highlightedNodes.length > 0 ?
                                 'highlight-nodes' : ''}>
