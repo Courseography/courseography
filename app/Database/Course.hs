@@ -10,7 +10,7 @@ module Course
 , getCreq
 , getExcl
 , getPreq
-, getCourseReqs
+, getCourseReq
 ) where
 
 import Data.String
@@ -31,7 +31,7 @@ data Course = Course { name :: String
                      , distribution :: String
                      , prereqs :: CourseReq
                      , coreqs :: CourseReq
-                     , videoUrls = []
+                     , videoUrls :: []
                      }
 
 -- | Returns a well formatted String representing the Corequisites for specified Course.
