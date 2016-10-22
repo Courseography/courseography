@@ -15,7 +15,7 @@ routes staticDir aboutContents privacyContents = [
     ("image", graphImageResponse),
     -- ("timetable-image", look "courses" >>= \x -> look "session" >>= timetableImageResponse x),
     -- ("calendar", look "session" >>= timetableImageCookieResponse),
-    ("calendar", timetableImageCookieResponse "Fall"),
+    ("calendar", look "session" >>= timetableImageCookieResponse),
     ("post", postResponse),
     ("draw", drawResponse),
     ("about", aboutResponse aboutContents),

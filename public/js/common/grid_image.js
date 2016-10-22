@@ -11,7 +11,7 @@ function getGridImage(session) {
         // url: 'timetable-image',
         url: 'calendar',
         // data: {courses: courses, session: session},
-        data: {session: "Fall"},
+        data: {session: session},
         success: function (data) {
             var contentDiv = $('<div></div>');
             var topContentDiv = $('<div></div>');
@@ -46,7 +46,8 @@ function updateGridImage(session) {
     $.ajax({
         //url: 'timetable-image',
         url: 'calendar',
-        data: {courses: courses, session: session},
+        // data: {courses: courses, session: session},
+        data: {session: session},
         success: function (data) {
             $('#post-image').attr('src', 'data:image/png;base64,' + data);
             $('#switch-session-button').unbind('click').click(function () {
