@@ -30,17 +30,15 @@ timetableImageResponse courses session = do
 -- get timetable from parsing selected-lectures cookie
 -- If using returnImageData, can download timetable images to local. 
 -- Elseif using return pdf, suppose to get pdf of timetable
-timetableImageCookieResponse :: ServerPart Response
-timetableImageCookieResponse = do
+timetableImageCookieResponse :: String -> ServerPart Response
+timetableImageCookieResponse session = do
+    liftIO $ print session
     req <- askRq
     (fallsvgFilename, fallimageFilename, springsvgFilename, springimageFilename) <- liftIO $ getActiveTimetable req
-    -- liftIO $ returnImageData fallsvgFilename fallimageFilename
-    -- liftIO $ returnImageData springsvgFilename springimageFilename
-
+    
     pdfName <- liftIO $ returnPDF fallsvgFilename fallimageFilename springsvgFilename springimageFilename 
     serveFile (asContentType "application/pdf") pdfName
-
-
+    -- liftIO $ returnImageData fallsvgFilename fallimageFilename
 
 -- =============================
 

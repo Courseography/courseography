@@ -9,7 +9,8 @@ function getGridImage(session) {
     var courses = getCoursesTable(session);
     $.ajax({
         url: 'calendar',
-        data: {courses: courses, session: session},
+        // data: {courses: courses, session: session},
+        data: {session: "Fall"},
         success: function (data) {
             var contentDiv = $('<div></div>');
             var topContentDiv = $('<div></div>');
