@@ -8,6 +8,7 @@ function getGridImage(session) {
     session = session.charAt(0).toUpperCase() + session.slice(1);
     var courses = getCoursesTable(session);
     $.ajax({
+        // url: 'timetable-image',
         url: 'calendar',
         // data: {courses: courses, session: session},
         data: {session: "Fall"},
@@ -43,7 +44,8 @@ function updateGridImage(session) {
     var courses = getCoursesTable(session);
     session = session.charAt(0).toUpperCase() + session.slice(1);
     $.ajax({
-        url: 'timetable-image',
+        //url: 'timetable-image',
+        url: 'calendar',
         data: {courses: courses, session: session},
         success: function (data) {
             $('#post-image').attr('src', 'data:image/png;base64,' + data);
