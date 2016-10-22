@@ -25,6 +25,7 @@ returnPDF graphSvg graphImg timetableSvg timetableImg = do
     rand <- randomName
     let texName = rand ++ ".tex"
         pdfName = rand ++ ".pdf"
+    liftIO $ print (graphSvg, graphImg, timetableSvg, timetableImg)
     generateTex [graphImg, timetableImg] texName -- generate a temporary TEX file
     createPDF texName                            -- create PDF using TEX and delete the TEX file afterwards
     removeImage (graphSvg ++ " " ++ graphImg ++ " " ++ timetableSvg ++ " " ++ timetableImg)
