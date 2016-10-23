@@ -1,5 +1,4 @@
 import * as tooltip from 'es6!graph/tooltip';
-import {Modal} from 'es6!common/react_modal';
 import {Description} from 'es6!common/react_modal';
 import * as ReactModal from 'vendor/react-modal';
 
@@ -306,7 +305,8 @@ var Graph = React.createClass({
         });
     },
      openModal: function () {  
-        this.setState({modalIsOpen: true});
+        var infoBox = this.refs.infoBox
+        this.setState({modalIsOpen: true, courseId: infoBox.state.nodeId.substring(0, 6)});
 
     },
 
@@ -389,31 +389,7 @@ var Graph = React.createClass({
 
     infoBoxMouseClick: function () {
         var infoBox = this.refs.infoBox;
-        this.setState({courseId: infoBox.state.nodeId.substring(0, 6) });
         this.openModal();
-/*        
-        var modal = this.refs.modal;
-        modal.setState({courseId: infoBox.state.nodeId.substring(0, 6)}, function (){
-            $.ajax({
-                url: 'course',
-                data: {name: formatCourseName(modal.state.courseId)[0]},
-                dataType: 'json',
-                success: function (data) {
-                    if (modal.isMounted()) {
-                        //This is getting the session times
-                        var sessions = data.fallSession.lectures
-                                                       .concat(data.springSession.lectures)
-                                                       .concat(data.yearSession.lectures)
-                        //Tutorials don't have a timeStr to print, so I've currently omitted them
-                        modal.setState({course: data, sessions: sessions});
-                    }
-                },
-                error: function (xhr, status, err) {
-                    console.error('course-info', status, err.toString());
-                }
-            });
-        });
-*/
     },
 
     // Reset graph
@@ -578,8 +554,8 @@ var Graph = React.createClass({
                             this.state.verticalPanFactor == 0;
         return (
             <div>
-                <ReactModal className = 'ModalClass'
-                    overlayClassName = 'OverlayClass'
+                <ReactModal className='ModalClass'
+                    overlayClassName='OverlayClass'
                     isOpen={this.state.modalIsOpen}
                     onRequestClose={this.closeModal}>
                     <div className='modal-header'>
@@ -1045,10 +1021,7 @@ var Node = React.createClass({
 
 var BoolGroup = React.createClass({
     componentDidMount: function () {
-        console.log(this, this.refs);
-        console.log(this.props.boolsJSON);
         for (var boolJSON of this.props.boolsJSON) {
-        //for (var ref in this.refs) {
             var ref = boolJSON.id_;
             this.refs[ref].updateNode(this.props.svg);
         }
