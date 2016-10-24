@@ -6,7 +6,7 @@ About
 
 Here at the University of Toronto, we have hundreds of courses to choose from, and it can be hard to navigate prerequisite chains, program requirements, and term-by-term offerings all at once. That's where Courseography comes in: by presenting course and scheduling information in a set of graphical interactive tools, we make it easier to choose the right courses for your academic career. Whether it's making sure you'll satisfy all the prerequities for that 4th year course you really want to take, or fitting together fragments of your schedule for next term, we hope Courseography makes your life easier!
 
-Courseography was started in late 2013 by [David Liu](http://www.cs.toronto.edu/~david/). However, it wasn't until he recruited [Ian Stewart-Binks](http://www.cs.toronto.edu/~iansb/) to the project that things really got rolling. Though the past two years have really seen our tools take off within the CS student body, there's still a long way for us to go. Our current projects include moving the front-end of the application over to [React](https://facebook.github.io/react/), unifying the graph viewing and drawing tools, and improved exporting and report generation.
+Powered by [Haskell](https://www.haskell.org/), Courseography was started in late 2013 by [David Liu](http://www.cs.toronto.edu/~david/). However, it wasn't until he recruited [Ian Stewart-Binks](http://www.cs.toronto.edu/~iansb/) to the project that things really got rolling. Though the past two years have really seen our tools take off within the CS student body, there's still a long way for us to go. Our current projects include moving the front-end of the application over to [React](https://facebook.github.io/react/), unifying the graph viewing and drawing tools, and improved exporting and report generation.
 
 
 Getting Involved
@@ -47,14 +47,6 @@ For a more indepth tutorial click [here](https://github.com/Courseography/course
 #### Running
 1. Run `$ stack exec courseography` to start the server
 2. Navigate to `http://localhost:8000/graph` in your browser
-
-
-Development Information
---------------------------------------
-
-Courseography is powered by [Haskell](https://www.haskell.org/).
-
-More information about the project, including code and commit style guides, can be found in the [wiki](https://github.com/Courseography/courseography/wiki).
 
 
 Contributors
