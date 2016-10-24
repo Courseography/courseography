@@ -19,12 +19,40 @@ Say hello on our [Slack channel][slackin]! ![Slack][slackin-badge]
 Click [here](/privacy) to learn about our Privacy Policy.
 
 
-Development
+Running and Courseography Setup
+--------------------------------------
+For a more indepth tutorial click [here](https://github.com/Courseography/courseography/wiki/Installing-Courseography).
+
+*This assumes a local copy is already setup.*
+
+##### Software Dependencies
+1. [Stack](https://docs.haskellstack.org/en/stable/README/)
+2. [ImageMagick](http://www.imagemagick.org/script/binary-releases.php)
+
+##### Other Files
+*You can also do these two steps manually.*
+
+1. Generate app/DevelopmentConfig.hs to app/Config.hs with `$ cp app/DevelopmentConfig.hs app/Config.hs`
+2. Create the db folder with `$ mkdir db`
+
+#### Installing
+1. Install GHC 7.10.3 with `$ cp app/Development`
+2. Compile Courseography with `$ stack build`
+
+#### Parsing and Generation
+1. Create database file for an parse prerequisite graph `$ stack exec courseography graphs`
+2. Parse course information `$ stack exec courseography database`
+3. Generate the CSS `$ stack exec courseography css`
+
+#### Running
+1. Run `$ stack exec courseography` to start the server
+2. Navigate to `http://localhost:8000/graph` in your browser
+
+
+Development Information
 --------------------------------------
 
 Courseography is powered by [Haskell](https://www.haskell.org/).
-
-Learn more about setting up and installing Courseography on your local machine for development [here](https://github.com/Courseography/courseography/wiki/Installing-Courseography).
 
 More information about the project, including code and commit style guides, can be found in the [wiki](https://github.com/Courseography/courseography/wiki).
 
