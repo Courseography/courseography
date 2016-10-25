@@ -13,9 +13,11 @@ function getGridImage(session) {
         // data: {courses: courses, session: session},
         data: {session: session},
         success: function (data) {
+            // console.log(data)
             var contentDiv = $('<div></div>');
             var topContentDiv = $('<div></div>');
-            var calendarOption = $('<a href="calendar">Download ICS</a>');
+            // var calendarOption = $('<a href="calendar">Download ICS</a>');
+            var calendarOption = $('<a href="timetable-pdf" onclick="getPDF()">Download ICS</a>');
             calendarOption.attr('target', '_blank');
             topContentDiv.html('<img id="post-image" src="data:image/png;base64,' + data + '" />');
             contentDiv.attr('id', 'modal-content-container')
@@ -76,4 +78,23 @@ function getCoursesTable(session) {
     }
 
     return courses;
+}
+
+
+function getPDF() {
+    'use strict';
+
+    console.log("getpdf called");
+    $.ajax({
+        url: 'timetable-pdf',
+        data: {},
+        success: function (data) {
+            // console.log(data)
+            var topContentDiv = $('<div></div>');
+            topContentDiv.html('<img id="post-image" src="data:image/png;base64,' + data + '" />');
+        },
+        error: function () {
+            throw 'No pdf generated';
+        }
+    });
 }

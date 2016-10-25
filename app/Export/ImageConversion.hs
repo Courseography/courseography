@@ -3,6 +3,7 @@ module Export.ImageConversion
 
 import System.Process
 import GHC.IO.Handle.Types
+import Data.List.Split (splitOn)
 
 -- | Opens a new process to convert an SVG (inName) to a PNG (outName) 
 -- Note: hGetContents can be used to read Handles. Useful when trying to read from

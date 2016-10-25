@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Response.Image
-    (graphImageResponse, timetableImageResponse, timetableImageCookieResponse) where
+    (graphImageResponse, timetableImageResponse, timetableImageCookieResponse, timetablePDFResponse) where
 
 import Happstack.Server
 import qualified Data.ByteString.Lazy as BS
@@ -9,7 +9,7 @@ import Control.Monad.IO.Class  (liftIO)
 import qualified Data.ByteString.Base64.Lazy as BEnc
 import Export.GetImages
 import Export.ImageConversion
-import Data.List.Utils (replace)
+-- import Data.List.Utils (replace)
 import Response.Export (returnPDF)
 
 -- | Returns an image of the graph requested by the user.
@@ -32,14 +32,23 @@ timetableImageResponse courses session = do
 -- Elseif using return pdf, suppose to get pdf of timetable
 timetableImageCookieResponse :: String -> ServerPart Response
 timetableImageCookieResponse session = do
-    liftIO $ print session
+    -- liftIO $ print session
     req <- askRq
     (fallsvgFilename, fallimageFilename, springsvgFilename, springimageFilename) <- liftIO $ getActiveTimetable req
 
-    pdfName <- liftIO $ returnPDF fallsvgFilename fallimageFilename springsvgFilename springimageFilename 
+    -- pdfName <- liftIO $ returnPDF fallsvgFilename fallimageFilename springsvgFilename springimageFilename
+    -- serveFile (asContentType "application/pdf") pdfName
+    case session of "Fall" -> liftIO $ returnImageData fallsvgFilename fallimageFilename
+                    "Spring" -> liftIO $ returnImageData springsvgFilename springimageFilename
+
+
+timetablePDFResponse :: ServerPart Response
+timetablePDFResponse = do
+    req <- askRq
+    (fallsvgFilename, fallimageFilename, springsvgFilename, springimageFilename) <- liftIO $ getActiveTimetable req
+    pdfName <- liftIO $ returnPDF fallsvgFilename fallimageFilename springsvgFilename springimageFilename
     serveFile (asContentType "application/pdf") pdfName
-    -- case session of "Fall" -> liftIO $ returnImageData fallsvgFilename fallimageFilename
-    --                 "Spring" -> liftIO $ returnImageData springsvgFilename springimageFilename
+
 
 -- =============================
 
