@@ -7,7 +7,7 @@ We will use parsed data to create instances of this type.
 -}
 module Requirement
 ( ProgramReq(..)
-, CourseRequrement
+, CourseRequirement(..)
 , CourseReq(..)
 , Req(..)
 , showProgramReq
@@ -21,23 +21,23 @@ import Data.String
 
 data ProgramReq = PRGREQ String [Req]
 
--- | Returns a well formatted String representing a Program Requirement for specified Program.
+-- | Returns a well formatted String representing a program requirement for specified program.
 showProgramReq :: ProgramReq -> String
-getProgramReq (ProgramReq program reqs) = "The program requirements for " + program
+showProgramReq (PRGREQ program reqs) = "The program requirements for " + program + ":\n"
 										+ map (showReq) reqs
 
 
--- Assuming we have correctly parsed inputs, CourseReqs in order [corequisite, exclusion, prerequisite]
-data CourseRequrement = CRSREQ String [CourseReq]
+-- Assuming we have correctly parsed inputs, CourseReq is in order [corequisite, exclusion, prerequisite]
+data CourseRequirement = CRSREQ String [CourseReq]
 
-showCourseRequirement :: CourseRequisite -> String
--- get a list of and map over to display them.
-showCourseRequisite (CRSERQ course coursereqs) = course + "\n" + map (showCourseReq) coursereqs 
+-- | Returns a well formatted String representing all course requirements for specified course.
+showCourseRequirement :: CourseRequirement -> String
+showCourseRequirement (CRSREQ course coursereqs) = course + "\n" + map (showCourseReq) coursereqs 
 
 
 data CourseReq = CREQ String Req | EXCL String Req | PREQ String Req
 
--- | Returns a well formatted String representing a String Requirement for specified String.
+-- | Returns a well formatted String representing a  certain course requirement.
 showCourseReq :: CourseReq -> String
 showCourseReq (CREQ course req) = "Corequisites for" + course + ":/n"
 							    + showReq req + "/n"
@@ -50,10 +50,10 @@ showCourseReq (PREQ course req) = "Prerequisites for" + course + ":/n"
 -- for now J seems to be most readable and convenient value constructor for satisfying rec structure.
 data Req = J String | AND [Req]| OR [Req] | FROM (Integer) [Req]
 
--- | Returns a well formatted String representing the String(s) relationships.
-showReqs :: Req -> String
-showReqs (J course) = course
-showReqs (AND x:xs) = showReqs x + ", " + showReqs (AND xs)
-showReqs (OR x:xs) = showReqs x + "/ " + showReqs (OR xs)
-showReqs (FROM (a) x:xs) =  show a + "FCE(s) from: (" + showReqs x + ", "
-					     +  showReqs (xs) + ")"
+-- | Returns a well formatted String representing the course(s) relationships.
+showReq :: Req -> String
+showReq (J course) = course
+showReq (AND x:xs) = showReq x + ", " + showReq (AND xs)
+showReq (OR x:xs) = showReq x + "/ " + showReq (OR xs)
+showReq (FROM (a) x:xs) =  show a + "FCE(s) from: (" + showReq x + ", "
+					     +  showReq (xs) + ")"
