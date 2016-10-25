@@ -7,10 +7,11 @@ We will use parsed data to create instances of this type.
 -}
 module Requirement
 ( ProgramReq(..)
+, CourseRequrement
 , CourseReq(..)
 , Req(..)
 , showProgramReq
-, showCourseRequisite
+, showCourseRequirement
 , showCourseReq
 , showReq
 ) where
@@ -18,32 +19,32 @@ module Requirement
 import Data.String
 
 
-data ProgramReq = ProgramReq String [Req]
+data ProgramReq = PRGREQ String [Req]
 
 -- | Returns a well formatted String representing a Program Requirement for specified Program.
-getProgramReq :: ProgramReq -> String
-getProgramReq (ProgramReq program reqs) = "The program requirements for " + show program
-										+ show $ map (showReq) reqs
+showProgramReq :: ProgramReq -> String
+getProgramReq (ProgramReq program reqs) = "The program requirements for " + program
+										+ map (showReq) reqs
 
 
--- IMPLEMENT THIS.. MAKE SOME SORT OF INFIX FUNCTION TO GET STRING REPR OF COURSE REQUIREMENTS
--- when initializing this type, we need to check that all the courses correspond correctly.
-type CourseRequisite = String :~ (CourseReq, CourseReq, CourseReq)
+-- Assuming we have correctly parsed inputs, CourseReqs in order [corequisite, exclusion, prerequisite]
+data CourseRequrement = CRSREQ String [CourseReq]
 
-showCourseRequisite :: CourseRequisite -> String
--- get a list of CourseReqs in order (corequisite, exclusion, prerequisite) and map over to display them.
+showCourseRequirement :: CourseRequisite -> String
+-- get a list of and map over to display them.
+showCourseRequisite (CRSERQ course coursereqs) = course + "\n" + map (showCourseReq) coursereqs 
 
 
 data CourseReq = CREQ String Req | EXCL String Req | PREQ String Req
 
 -- | Returns a well formatted String representing a String Requirement for specified String.
 showCourseReq :: CourseReq -> String
-showCourseReq (CREQ course Req) = "Corequisites for" + course + ":/n"
-							    + showReq Req + "/n"
-showCourseReq (EXCL course Req) = "Exclusions for" + course + ":/n"
-							    + showReq Req + "/n"
-showCourseReq (PREQ course Req) = "Prerequisites for" + course + ":/n"
-							    + showReq Req + "/n"
+showCourseReq (CREQ course req) = "Corequisites for" + course + ":/n"
+							    + showReq req + "/n"
+showCourseReq (EXCL course req) = "Exclusions for" + course + ":/n"
+							    + showReq req + "/n"
+showCourseReq (PREQ course req) = "Prerequisites for" + course + ":/n"
+							    + showReq req + "/n"
 
 
 -- for now J seems to be most readable and convenient value constructor for satisfying rec structure.
