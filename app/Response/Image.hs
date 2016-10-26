@@ -38,10 +38,11 @@ timetableImageCookieResponse session = do
 timetablePDFResponse :: ServerPart Response
 timetablePDFResponse = do
     req <- askRq
+    (graphSvg, graphImg) <- liftIO $ getActiveGraphImage req
     (fallsvgFilename, fallimageFilename) <- liftIO $ getActiveTimetable req "Fall"
     (springsvgFilename, springimageFilename) <- liftIO $ getActiveTimetable req "Spring"
     -- liftIO $ print "going to generate =================="
-    pdfName <- liftIO $ returnPDF fallsvgFilename fallimageFilename springsvgFilename springimageFilename
+    pdfName <- liftIO $ returnPDF graphSvg graphImg fallsvgFilename fallimageFilename springsvgFilename springimageFilename
     serveFile (asContentType "application/pdf") pdfName
 
 
