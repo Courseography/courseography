@@ -9,7 +9,6 @@ import Control.Monad.IO.Class  (liftIO)
 import qualified Data.ByteString.Base64.Lazy as BEnc
 import Export.GetImages
 import Export.ImageConversion
--- import Data.List.Utils (replace)
 import Response.Export (returnPDF)
 
 -- | Returns an image of the graph requested by the user.
@@ -33,15 +32,18 @@ timetableImageResponse courses session = do
 timetableImageCookieResponse :: String -> ServerPart Response
 timetableImageCookieResponse session = do
     req <- askRq
-    (fallsvgFilename, fallimageFilename, springsvgFilename, springimageFilename) <- liftIO $ getActiveTimetable req
-    case session of "Fall" -> liftIO $ returnImageData fallsvgFilename fallimageFilename
-                    "Spring" -> liftIO $ returnImageData springsvgFilename springimageFilename
+    (svgFilename, imageFilename) <- liftIO $ getActiveTimetable req session
+    liftIO $ returnImageData svgFilename imageFilename
+    -- case session of "Fall" -> liftIO $ returnImageData fallsvgFilename fallimageFilename
+    --                 "Spring" -> liftIO $ returnImageData springsvgFilename springimageFilename
 
 
 timetablePDFResponse :: ServerPart Response
 timetablePDFResponse = do
     req <- askRq
-    (fallsvgFilename, fallimageFilename, springsvgFilename, springimageFilename) <- liftIO $ getActiveTimetable req
+    (fallsvgFilename, fallimageFilename) <- liftIO $ getActiveTimetable req "Fall"
+    (springsvgFilename, springimageFilename) <- liftIO $ getActiveTimetable req "Spring"
+    -- liftIO $ print "going to generate =================="
     pdfName <- liftIO $ returnPDF fallsvgFilename fallimageFilename springsvgFilename springimageFilename
     serveFile (asContentType "application/pdf") pdfName
 
@@ -53,7 +55,7 @@ timetablePDFResponse = do
 returnImageData :: String -> String -> IO Response
 returnImageData svgFilename imageFilename = do
     imageData <- BS.readFile imageFilename
-    removeImage imageFilename
-    removeImage svgFilename
+    _ <- removeImage imageFilename
+    _ <- removeImage svgFilename
     let encodedData = BEnc.encode imageData
     return $ toResponse encodedData

@@ -27,5 +27,5 @@ returnPDF graphSvg graphImg timetableSvg timetableImg = do
         pdfName = rand ++ ".pdf"
     generateTex [graphImg, timetableImg] texName -- generate a temporary TEX file
     createPDF texName                            -- create PDF using TEX and delete the TEX file afterwards    
-    removeImage (graphSvg ++ " " ++ graphImg ++ " " ++ timetableSvg ++ " " ++ timetableImg)
+    _ <- removeImage (graphSvg ++ " " ++ graphImg ++ " " ++ timetableSvg ++ " " ++ timetableImg)
     return $ (pdfName)
