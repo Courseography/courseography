@@ -1,5 +1,5 @@
 module Export.GetImages
-    (getActiveGraphImage, getTimetableImage, randomName, getActiveTimetable, CourseInfo) where
+    (getActiveGraphImage, getTimetableImage, randomName, getActiveTimetable) where
 
 import Export.TimetableImageCreator (renderTable, renderTableHelper, times)
 import qualified Data.Map as M
