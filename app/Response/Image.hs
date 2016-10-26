@@ -32,12 +32,8 @@ timetableImageResponse courses session = do
 -- Elseif using return pdf, suppose to get pdf of timetable
 timetableImageCookieResponse :: String -> ServerPart Response
 timetableImageCookieResponse session = do
-    -- liftIO $ print session
     req <- askRq
     (fallsvgFilename, fallimageFilename, springsvgFilename, springimageFilename) <- liftIO $ getActiveTimetable req
-
-    -- pdfName <- liftIO $ returnPDF fallsvgFilename fallimageFilename springsvgFilename springimageFilename
-    -- serveFile (asContentType "application/pdf") pdfName
     case session of "Fall" -> liftIO $ returnImageData fallsvgFilename fallimageFilename
                     "Spring" -> liftIO $ returnImageData springsvgFilename springimageFilename
 

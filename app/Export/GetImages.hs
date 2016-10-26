@@ -35,7 +35,6 @@ getActiveGraphImage req = do
 -- [["8:00","","","","",""],["9:00","","","","",""],["10:00","CSC108 (L)","","CSC108 (L)","","CSC108 (L)"],["11:00","","","","",""],["12:00","","","","",""],["1:00","","","","",""],["2:00","STA355 (L)","","STA355 (L)","",""],["3:00","STA355 (L)","","","",""],["4:00","","","","",""],["5:00","","","","",""],["6:00","","","","",""],["7:00","","","","",""],["8:00","","","","",""]]
 getActiveTimetable :: Request -> IO (String, String, String, String)
 getActiveTimetable req = do
-    -- liftIO $ print req
     -- get cookie value of "selected-lectures" from browser
     let cookies = M.fromList $ rqCookies req  --  Map String Cookie
         coursecookie = maybe "" cookieValue $ M.lookup "selected-lectures" cookies
