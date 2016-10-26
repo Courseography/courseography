@@ -24,7 +24,7 @@ data ProgramReq = PRGREQ String [Req]
 -- | Returns a well formatted String representing a program requirement for specified program.
 showProgramReq :: ProgramReq -> String
 showProgramReq (PRGREQ program reqs) = "The program requirements for " + program + ":\n"
-										+ map (showReq) reqs
+										+ map showReq reqs
 
 
 -- Assuming we have correctly parsed inputs, CourseReq is in order [corequisite, exclusion, prerequisite]
@@ -32,7 +32,7 @@ data CourseRequirement = CRSREQ String [CourseReq]
 
 -- | Returns a well formatted String representing all course requirements for specified course.
 showCourseRequirement :: CourseRequirement -> String
-showCourseRequirement (CRSREQ course coursereqs) = course + "\n" + map (showCourseReq) coursereqs 
+showCourseRequirement (CRSREQ course coursereqs) = course + "\n" + map showCourseReq coursereqs 
 
 
 data CourseReq = CREQ String Req | EXCL String Req | PREQ String Req
@@ -53,7 +53,7 @@ data Req = J String | AND [Req]| OR [Req] | FROM (Integer) [Req]
 -- | Returns a well formatted String representing the course(s) relationships.
 showReq :: Req -> String
 showReq (J course) = course
-showReq (AND x:xs) = showReq x + ", " + showReq (AND xs)
-showReq (OR x:xs) = showReq x + "/ " + showReq (OR xs)
+showReq (AND x:xs) = showReq x + ", " + showReq AND xs
+showReq (OR x:xs) = showReq x + "/ " + showReq OR xs
 showReq (FROM (a) x:xs) =  show a + "FCE(s) from: (" + showReq x + ", "
-					     +  showReq (xs) + ")"
+					     +  showReq xs + ")"
