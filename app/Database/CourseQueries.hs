@@ -37,6 +37,8 @@ import Control.Monad (liftM)
 import Data.Aeson ((.=), toJSON, object)
 import Database.DataType
 import Svg.Builder
+-- import Export.GetImages (CourseInfo)
+
 
 ---- | Queries db for all matching records with lecture or tutorial code of this course
 lectureQuery :: T.Text -> SqlPersistM [Entity Lecture]
@@ -276,22 +278,44 @@ queryGraphs =
 -- ========================================================
 
 -- getLectureTime :: (String, String, String) -> IO ([Time])
-getLectureTime (code, section, session) = do
-    maybeEntityLectures  <- selectFirst [LectureCode ==. (T.pack code),
-                                         LectureSection ==. (T.pack section),
-                                         LectureSession ==. (T.pack session)]
+-- getLectureTime (code, section, session) = do
+--     maybeEntityLectures  <- selectFirst [LectureCode ==. (T.pack code),
+--                                          LectureSection ==. (T.pack section),
+--                                          LectureSession ==. (T.pack session)]
+--                                         []
+--     case maybeEntityLectures of
+--         Nothing -> return []
+--         Just entityLectures -> return $ lectureTimes . entityVal $ entityLectures
+
+
+
+getLectureTime courseInfo = do
+    maybeEntityLectures  <- selectFirst [LectureCode ==. (T.pack . code $ courseInfo),
+                                         LectureSection ==. (T.pack . section $ courseInfo),
+                                         LectureSession ==. (T.pack . session $ courseInfo)]
                                         []
     case maybeEntityLectures of
-        Nothing -> return []
-        Just entityLectures -> return $ lectureTimes . entityVal $ entityLectures
+        Nothing -> return CourseInfo {code = code courseInfo, section = section courseInfo, session = session courseInfo, time = []}
+        Just entityLectures -> return $ CourseInfo {code = code courseInfo, section = section courseInfo, session = session courseInfo, time = lectureTimes . entityVal $ entityLectures}
+
 
 
 -- getTutorialTime :: (String, String, String) -> IO ([Time])
-getTutorialTime (code, section, session) = do
-    maybeEntityTutorials  <- selectFirst [TutorialCode ==. (T.pack code),
-                                          TutorialSection ==. Just (T.pack section),
-                                          TutorialSession ==. (T.pack session)]
+-- getTutorialTime (code, section, session) = do
+--     maybeEntityTutorials  <- selectFirst [TutorialCode ==. (T.pack code),
+--                                           TutorialSection ==. Just (T.pack section),
+--                                           TutorialSession ==. (T.pack session)]
+--                                          []
+--     case maybeEntityTutorials of 
+--         Nothing -> return []
+--         Just entityTutorials -> return $ tutorialTimes . entityVal $ entityTutorials
+
+
+getTutorialTime courseInfo = do
+    maybeEntityTutorials  <- selectFirst [TutorialCode ==. (T.pack . code $ courseInfo),
+                                          TutorialSection ==. Just (T.pack . section $ courseInfo),
+                                          TutorialSession ==. (T.pack . session $ courseInfo)]
                                          []
     case maybeEntityTutorials of 
-        Nothing -> return []
-        Just entityTutorials -> return $ tutorialTimes . entityVal $ entityTutorials
+        Nothing -> return CourseInfo {code = code courseInfo, section = section courseInfo, session = session courseInfo, time = []}
+        Just entityTutorials -> return $ CourseInfo {code = code courseInfo, section = section courseInfo, session = session courseInfo, time = tutorialTimes . entityVal $ entityTutorials}
