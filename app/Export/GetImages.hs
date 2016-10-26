@@ -29,22 +29,25 @@ getActiveGraphImage req = do
 
 
 -- =================================
+
+-- data CourseInfo = CourseInfo {code :: String, section :: String, courseSession :: String, time :: [Time]}
+
 -- | Get lectures selected by user from selected-lectures cookie. If DNE, assume no lecture seleted
 -- get "CSC148H1-L0301-S_STA257H1-T0105-F_STA257H1-L0101-F_STA303H1-L0101-S_CSC148H1-T5101-F"
 -- return [[Time {timeField = [2.0,18.0]},Time {timeField = [2.0,18.5]},Time {timeField = [2.0,19.0]},Time {timeField = [2.0,19.5]},Time {timeField = [2.0,20.0]},Time {timeField = [2.0,20.5]}],[Time {timeField = [0.0,14.0]},Time {timeField = [0.0,14.5]},Time {timeField = [0.0,15.0]},Time {timeField = [0.0,15.5]},Time {timeField = [2.0,14.0]},Time {timeField = [2.0,14.5]}],Just [Time {timeField = [2.0,10.0]},Time {timeField = [2.0,10.5]},Time {timeField = [0.0,10.0]},Time {timeField = [0.0,10.5]},Time {timeField = [4.0,10.0]},Time {timeField = [4.0,10.5]}], [Time {timeField = [4.0,11.0]},Time {timeField = [4.0,11.5]},Time {timeField = [4.0,12.0]},Time {timeField = [4.0,12.5]}]]
 -- [["8:00","","","","",""],["9:00","","","","",""],["10:00","CSC108 (L)","","CSC108 (L)","","CSC108 (L)"],["11:00","","","","",""],["12:00","","","","",""],["1:00","","","","",""],["2:00","STA355 (L)","","STA355 (L)","",""],["3:00","STA355 (L)","","","",""],["4:00","","","","",""],["5:00","","","","",""],["6:00","","","","",""],["7:00","","","","",""],["8:00","","","","",""]]
 getActiveTimetable :: Request -> String -> IO (String, String)
-getActiveTimetable req session = do
+getActiveTimetable req courseSession = do
     -- get cookie value of "selected-lectures" from browser
     let cookies = M.fromList $ rqCookies req  --  Map String Cookie
         coursecookie = maybe "" cookieValue $ M.lookup "selected-lectures" cookies
-        (lecture, tutorial) = parseCourseCookie coursecookie session
+        (lecture, tutorial) = parseCourseCookie coursecookie courseSession
     -- liftIO $ print coursecookie
     -- liftIO $ print lecture
     -- liftIO $ print tutorial
     (lecTimes, tutTimes) <- getTimes (lecture, tutorial)
     let schedule' = getScheduleByTime lecture tutorial lecTimes tutTimes
-    (svgFilename, imageFilename) <- generateTimetableImg schedule' session
+    (svgFilename, imageFilename) <- generateTimetableImg schedule' courseSession
     return (svgFilename, imageFilename)
 
 
@@ -52,14 +55,13 @@ getActiveTimetable req session = do
 -- "CSC148H1-L5101-S_CSC148H1-T0501-S_STA355H1-L0101-F_CSC108H1-L0102-F"
 -- [("STA355H1","LEC-0101","F"),("CSC108H1","LEC-0102","F")], [])
 parseCourseCookie :: String -> String -> ([(String, String, String)], [(String, String, String)])
-parseCourseCookie s session = let lecAndTut = map (splitOn "-") $ splitOn "_" s
-                                  (lecture, tutorial) = partition isLec lecAndTut
-                                  [lectureOfSession, tutorialOfSession] = map (filter (\x -> (x !! 2 !! 0) == (head session))) [lecture, tutorial]
-                                  lecture' = map (convertLec . list2tuple) lectureOfSession
-                                  tutorial' = map (convertTut . list2tuple) tutorialOfSession
-                              in (lecture', tutorial')
-                              where isLec x = (x !! 1 !! 0) == 'L'
-
+parseCourseCookie s courseSession = let lecAndTut = map (splitOn "-") $ splitOn "_" s
+                                        (lecture, tutorial) = partition isLec lecAndTut
+                                        [lectureOfcourseSession, tutorialOfcourseSession] = map (filter (\x -> or ([(x !! 2 !! 0) == (head courseSession), (x !! 2 !! 0) == 'Y']))) [lecture, tutorial]
+                                        lecture' = map (convertLec . list2tuple) lectureOfcourseSession
+                                        tutorial' = map (convertTut . list2tuple) tutorialOfcourseSession
+                                    in (lecture', tutorial')
+                                    where isLec x = (x !! 1 !! 0) == 'L'
 
 
 list2tuple :: [String] -> (String, String, String)
@@ -68,11 +70,11 @@ list2tuple _ = undefined
 
 -- ("CSC148H1","L5101","S") -> ("CSC148H1","LEC-5101","S") convert format to match database
 convertLec :: (String, String, String) -> (String, String, String)
-convertLec (code, section, session) = (code, take 1 section ++ "EC-" ++ drop 1 section, session)
+convertLec (code, section, courseSession) = (code, take 1 section ++ "EC-" ++ drop 1 section, courseSession)
 
 -- ("CSC148H1","T0501","S") -> ("CSC148H1","TUT-0501","S") convert format to match database
 convertTut :: (String, String, String) -> (String, String, String)
-convertTut (code, section, session) = (code, take 1 section ++ "UT-" ++ drop 1 section, session)
+convertTut (code, section, courseSession) = (code, take 1 section ++ "UT-" ++ drop 1 section, courseSession)
 
 -- | Get data from database for selected courses
 getTimes :: ([(String, String, String)], [(String, String, String)]) -> IO ([[Time]], [[Time]])
@@ -101,20 +103,20 @@ addCourseToSchedule (course, courseTimes) schedule = foldl (\acc x -> addCourseH
 
 -- ("STA355H1","L0101","F")  Time {timeField = [0.0,14.0]}
 addCourseHelper :: (String, String, String) -> [[String]] -> Time -> [[String]]
-addCourseHelper (code, section, session) acc x = let [day, time'] = map floor $ timeField x
-                                                     time = time' - 8
-                                                     time_schedule = acc !! time
-                                                     time_schedule' = (take day time_schedule) ++ [code++session++" "++section] ++ (drop (day + 1) time_schedule)
-                                                     newacc = (take time acc) ++ [time_schedule'] ++ (drop (time + 1) acc)
-                                                 in newacc
+addCourseHelper (code, section, courseSession) acc x = let [day, time'] = map floor $ timeField x
+                                                           time = time' - 8
+                                                           time_schedule = acc !! time
+                                                           time_schedule' = (take day time_schedule) ++ [code++courseSession++" "++section] ++ (drop (day + 1) time_schedule)
+                                                           newacc = (take time acc) ++ [time_schedule'] ++ (drop (time + 1) acc)
+                                                       in newacc
 
 
 generateTimetableImg :: [[String]] -> String -> IO(String, String)
-generateTimetableImg schedule session = do
+generateTimetableImg schedule courseSession = do
     rand <- randomName
     let svgFilename = rand ++ ".svg"
         imageFilename = rand ++ ".png"
-    renderTableHelper svgFilename (zipWith (:) times schedule) session
+    renderTableHelper svgFilename (zipWith (:) times schedule) courseSession
     createImageFile svgFilename imageFilename
     return (svgFilename, imageFilename)
 
@@ -134,12 +136,12 @@ getGraphImage graphName courseMap = do
 -- | Creates an image, and returns the name of the svg used to create the
 -- image and the name of the image
 getTimetableImage :: String -> String -> IO (String, String)
-getTimetableImage courses session = do
+getTimetableImage courses courseSession = do
     -- generate 2 random names
     rand <- randomName
     let svgFilename = rand ++ ".svg"
         imageFilename = rand ++ ".png"
-    renderTable svgFilename courses session
+    renderTable svgFilename courses courseSession
     createImageFile svgFilename imageFilename
     return (svgFilename, imageFilename)
 
