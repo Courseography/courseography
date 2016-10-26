@@ -3,18 +3,13 @@ module WebParsing.PostParser
     (getPost) where
 
 import Network.HTTP
-import Database.PostInsertion(insertPost, insertPostCategory)
-import Database.Persist.Sqlite(runSqlite, runMigration)
-import Config (databasePath)
-import WebParsing.ParsingHelp
+import Database.PostInsertion (insertPost, insertPostCategory)
 import qualified Data.Text as T
 import Data.List
-import Data.Char
 import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Match
-import Database.Tables
 import qualified Text.Parsec as P
-import WebParsing.ParsecCombinators(getCourseFromTag, getPostType, getDepartmentName,
+import WebParsing.ParsecCombinators (getCourseFromTag, getPostType, getDepartmentName,
     parsingAlgoOne)
 
 fasCalendarURL :: String
@@ -68,10 +63,10 @@ addPostCategoriesToDatabase postCode tagText firstCourse = do
             mapM_ (addCategoryToDatabase postCode) (filter isCategory text)
         Left _ -> print "Failed."
     where
-        isCategory string = 
-            let infixes = map (containsString string) 
+        isCategory string =
+            let infixes = map (containsString string)
                          ["First", "Second", "Third", "suitable", "Core", "Electives"]
-            in 
+            in
                 ((length string) >= 7) && ((length $ filter (\bool -> bool) infixes) <= 0)
         containsString string substring = isInfixOf substring string
 

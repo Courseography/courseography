@@ -12,15 +12,15 @@ module WebParsing.ParsecCombinators
 import qualified Text.Parsec as P
 import Text.Parsec ((<|>))
 import qualified Data.Text as T
-import Data.Functor.Identity
-import Text.Parsec.String
-import Data.List
+import Text.Parsec.String (Parser)
 
-getCourseFromTag courseTag = do
+getCourseFromTag :: String -> String
+getCourseFromTag courseTag =
     let course = P.parse findCourseFromTag "(source)" courseTag
-    case course of
-        Right name -> name
-        Left _ -> ""
+    in
+        case course of
+            Right name -> name
+            Left _ -> ""
 
 findCourseFromTag :: Parser String
 findCourseFromTag = do
@@ -30,7 +30,7 @@ findCourseFromTag = do
 -- Post Parsing
 
 getPostType :: T.Text -> String
-getPostType postCode = 
+getPostType postCode =
     let codeSection = extractPostType (T.unpack postCode)
     in
         case codeSection of
@@ -38,10 +38,10 @@ getPostType postCode =
             "MAJ" -> "Major"
             "MIN" ->  "Minor"
 
-extractPostType :: [Char] -> [Char]
+extractPostType :: String -> String
 extractPostType postCode = do
     let parsed = P.parse findPostType "(source)" postCode
-    case parsed of 
+    case parsed of
         Right name -> name
         Left _ -> ""
 
@@ -50,10 +50,10 @@ findPostType = do
    P.string "AS"
    P.many1 P.letter
 
-getDepartmentName :: [Char] -> T.Text -> [Char]
+getDepartmentName :: String -> T.Text -> String
 getDepartmentName fullPostName postType = do
     let parsed = P.parse (isDepartmentName (T.unpack postType)) "(source)" fullPostName
-    case parsed of 
+    case parsed of
         Right name -> name
         Left _ -> ""
 
@@ -68,12 +68,12 @@ parsingAlgoOne firstCourse = do
     splitPrereqText
 
 getRequirements :: Maybe String -> Parser String
-getRequirements firstCourse = 
+getRequirements firstCourse =
     (P.try (parseUntil (P.string "First Year"))) <|>
     (P.try (parseUntil (P.string "Program Course Requirements:"))) <|>
     (P.try (parseUntil (P.string "Program requirements:"))) <|>
     (findFirstCourse firstCourse)
-    
+
 findFirstCourse :: Maybe String -> Parser String
 findFirstCourse firstCourse =
     case firstCourse of
@@ -89,14 +89,14 @@ parseNotes :: Parser String
 parseNotes = do
     (P.try (P.string "Notes")) <|> (P.try (P.string "NOTES"))
     parseUntil P.eof
-    return $ ""
+    return ""
 
 parseUntil :: Parser a -> Parser String
 parseUntil parser = P.manyTill P.anyChar (P.try parser)
 
 splitPrereqText :: Parser [String]
 splitPrereqText = do
-    P.manyTill ((P.try parseNotes) <|> (P.try parseNoteLine) <|> 
+    P.manyTill ((P.try parseNotes) <|> (P.try parseNoteLine) <|>
         (P.try (parseCategory False)) <|> (parseUntil P.eof)) P.eof
 
 parseCategory :: Bool -> Parser String
@@ -104,8 +104,8 @@ parseCategory withinBracket = do
     left <- parseUpToSeparator
     nextChar <- P.anyChar
     if nextChar == ',' && (not withinBracket)
-    then return $ left 
-    else do
+    then return left
+    else
         mergeText left nextChar withinBracket
 
 mergeText :: String -> Char -> Bool -> Parser String
@@ -115,7 +115,7 @@ mergeText left nextChar withinBracket = do
             right <- P.option " " (parseCategory True)
             return $ "(" ++ left ++ right
         ')' -> do
-            right <- P.option " " (parseCategory False) 
+            right <- P.option " " (parseCategory False)
             return $ left ++ ")" ++ right
         '/' -> do
             right <- P.option " " (parseCategory withinBracket)
@@ -124,8 +124,8 @@ mergeText left nextChar withinBracket = do
             right <- P.option " " (parseCategory withinBracket)
             case withinBracket of
                 True -> return $ left ++ " and " ++ right
-                False -> return $ left
-        other -> return $ left
+                False -> return left
+        _ -> return left
 
 parseUpToSeparator :: Parser String
 parseUpToSeparator = parseUntil (P.notFollowedBy (P.noneOf ",/();\r\n"))
@@ -133,7 +133,3 @@ parseUpToSeparator = parseUntil (P.notFollowedBy (P.noneOf ",/();\r\n"))
 -- For testing purposed in REPL
 parseAll :: Parser [String]
 parseAll = P.many (parseCategory False)
-
-
-
-
