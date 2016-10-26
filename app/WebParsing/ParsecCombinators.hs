@@ -14,6 +14,7 @@ import Text.Parsec ((<|>))
 import qualified Data.Text as T
 import Data.Functor.Identity
 import Text.Parsec.String
+import Data.List
 
 getCourseFromTag courseTag = do
     let course = P.parse findCourseFromTag "(source)" courseTag
@@ -61,52 +62,78 @@ isDepartmentName postType = parseUntil (P.string postType)
 
 -- Post Category Parsing
 
-parsingAlgoOne :: Parser [String]
-parsingAlgoOne = do
-    getRequirements 
+parsingAlgoOne :: Maybe String -> Parser [String]
+parsingAlgoOne firstCourse = do
+    getRequirements firstCourse
     splitPrereqText
 
-getRequirements :: Parser String
-getRequirements = 
-    parseUntil (P.string "Program Course Requirements:")
-
-splitPrereqText :: Parser [String]
-splitPrereqText = do
-    parseUntil (P.string "First Year")
-    P.manyTill ((P.try parseNoteLine) <|> (P.try brackets) <|> getCategory) parseNotes
+getRequirements :: Maybe String -> Parser String
+getRequirements firstCourse = 
+    (P.try (parseUntil (P.string "First Year"))) <|>
+    (P.try (parseUntil (P.string "Program Course Requirements:"))) <|>
+    (P.try (parseUntil (P.string "Program requirements:"))) <|>
+    (findFirstCourse firstCourse)
+    
+findFirstCourse :: Maybe String -> Parser String
+findFirstCourse firstCourse =
+    case firstCourse of
+        Nothing -> parseUntil P.eof
+        Just course -> (P.try (parseUntil (P.lookAhead (P.string course)))) <|> (parseUntil P.eof)
 
 parseNoteLine :: Parser String
 parseNoteLine = do
     P.string "Note"
-    parseUntil (P.char '\n')
+    (P.try (parseUntil (P.char '\n'))) <|> (parseUntil P.eof)
 
 parseNotes :: Parser String
-parseNotes = (P.try (P.string "Notes")) <|> (P.try (P.string "NOTES"))
-
-getCategory :: Parser String
-getCategory = parseUntil ((P.try reachedABracket) <|> categorySeperator)
-
-reachedABracket :: Parser Char
-reachedABracket = do
-    char <- P.anyChar
-    P.notFollowedBy (P.noneOf "(")
-    return char
+parseNotes = do
+    (P.try (P.string "Notes")) <|> (P.try (P.string "NOTES"))
+    parseUntil P.eof
+    return $ ""
 
 parseUntil :: Parser a -> Parser String
 parseUntil parser = P.manyTill P.anyChar (P.try parser)
 
-brackets :: Parser String
-brackets = do
-    P.string "("
-    text <- parseUntil (P.char ')')
-    nextChar <- P.anyChar 
-    case nextChar of 
-        '/' -> do
-            categoryText <- getCategory
-            return $ "(" ++ text ++ ")" ++ "/" ++ categoryText
-        other -> do
-            return $ "(" ++ text ++ ")"
+splitPrereqText :: Parser [String]
+splitPrereqText = do
+    P.manyTill ((P.try parseNotes) <|> (P.try parseNoteLine) <|> 
+        (P.try (parseCategory False)) <|> (parseUntil P.eof)) P.eof
 
-categorySeperator = 
-    P.oneOf ",;\r\n\160"
+parseCategory :: Bool -> Parser String
+parseCategory withinBracket = do
+    left <- parseUpToSeparator
+    nextChar <- P.anyChar
+    if nextChar == ',' && (not withinBracket)
+    then return $ left 
+    else do
+        mergeText left nextChar withinBracket
+
+mergeText :: String -> Char -> Bool -> Parser String
+mergeText left nextChar withinBracket = do
+    case nextChar of
+        '(' -> do
+            right <- P.option " " (parseCategory True)
+            return $ "(" ++ left ++ right
+        ')' -> do
+            right <- P.option " " (parseCategory False) 
+            return $ left ++ ")" ++ right
+        '/' -> do
+            right <- P.option " " (parseCategory withinBracket)
+            return $ left ++ " or " ++ right
+        ',' -> do
+            right <- P.option " " (parseCategory withinBracket)
+            case withinBracket of
+                True -> return $ left ++ " and " ++ right
+                False -> return $ left
+        other -> return $ left
+
+parseUpToSeparator :: Parser String
+parseUpToSeparator = parseUntil (P.notFollowedBy (P.noneOf ",/();\r\n"))
+
+-- For testing purposed in REPL
+parseAll :: Parser [String]
+parseAll = P.many (parseCategory False)
+
+
+
 
