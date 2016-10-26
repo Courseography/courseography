@@ -37,10 +37,3 @@ instance Show Req where
 	show (AND x:xs) = show x ++ ", " ++ show AND xs
 	show (OR x:xs) = show x ++ "/ " ++ show OR xs
 	show (FROM a x:xs) =  show a ++ "FCE(s) from: (" ++ show x ++ ", " ++  show xs ++ ")"
-
-
-
-
-
-
-
