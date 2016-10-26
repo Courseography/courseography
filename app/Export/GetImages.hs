@@ -43,14 +43,12 @@ getActiveTimetable req session = do
     -- liftIO $ print lecture
     -- liftIO $ print tutorial
     (lecTimes, tutTimes) <- getTimes (lecture, tutorial)
-    -- let (fall_schedule', spring_schedule') = getScheduleByTime lecture tutorial lecTimes tutTimes
     let schedule' = getScheduleByTime lecture tutorial lecTimes tutTimes
-    -- (fallsvgFilename, fallimageFilename, springsvgFilename, springimageFilename) <- generateTimetableImg fall_schedule' spring_schedule'
     (svgFilename, imageFilename) <- generateTimetableImg schedule' session
     return (svgFilename, imageFilename)
 
 
--- | Parse cookie string to two lists of courses, one for fall, the other for spring
+-- | Parse cookie string to two lists of courses, one for lecture, the other for tutorial
 -- "CSC148H1-L5101-S_CSC148H1-T0501-S_STA355H1-L0101-F_CSC108H1-L0102-F"
 -- [("STA355H1","LEC-0101","F"),("CSC108H1","LEC-0102","F")], [])
 parseCourseCookie :: String -> String -> ([(String, String, String)], [(String, String, String)])
@@ -85,20 +83,14 @@ getTimes (lecture, tutorial) = runSqlite databasePath $ do
     return (lecTimes, tutTimes)
 
 
--- | Generate fall scheduel and spring schedule in special format based on Times
+-- | Generate scheduel in special format based on Times
 getScheduleByTime :: [(String, String, String)] -> [(String, String, String)] -> [[Time]] -> [[Time]] -> [[String]]
 getScheduleByTime lecture tutorial lecTimes tutTimes = let lecture_times = zip lecture lecTimes
                                                            tutorial_times = zip tutorial tutTimes
                                                            all_times = lecture_times ++ tutorial_times
-                                                           -- (fall_times, spring_times) = partition isFall all_times
-                                                           -- fall_schedule = replicate 13 $ replicate 5 ""
-                                                           -- spring_schedule = replicate 13 $ replicate 5 ""
                                                            schedule = replicate 13 $ replicate 5 ""
-                                                           -- fall_schedule' = foldl (\acc x -> addCourseToSchedule x acc) fall_schedule fall_times
-                                                           -- spring_schedule' = foldl (\acc x -> addCourseToSchedule x acc) spring_schedule spring_times
                                                            schedule' = foldl (\acc x -> addCourseToSchedule x acc) schedule all_times
                                                        in schedule'
-                                                       -- where isFall ((_, _, c) , _) = c == "F"
 
 
 -- (("STA355H1","L0101","F"),Just [Time {timeField = [0.0,14.0]},Time {timeField = [0.0,14.5]},Time {timeField = [0.0,15.0]},Time {timeField = [0.0,15.5]},Time {timeField = [2.0,14.0]},Time {timeField = [2.0,14.5]}])
@@ -120,15 +112,10 @@ addCourseHelper (code, section, session) acc x = let [day, time'] = map floor $ 
 generateTimetableImg :: [[String]] -> String -> IO(String, String)
 generateTimetableImg schedule session = do
     rand <- randomName
-    -- springrand <- randomName
     let svgFilename = rand ++ ".svg"
         imageFilename = rand ++ ".png"
-        -- springsvgFilename = springrand ++ ".svg"
-        -- springimageFilename = springrand ++ ".png"
     renderTableHelper svgFilename (zipWith (:) times schedule) session
-    -- renderTableHelper springsvgFilename (zipWith (:) times spring_schedule) "Spring"
     createImageFile svgFilename imageFilename
-    -- createImageFile springsvgFilename springimageFilename
     return (svgFilename, imageFilename)
 
 -- =================================

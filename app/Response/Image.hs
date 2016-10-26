@@ -34,9 +34,6 @@ timetableImageCookieResponse session = do
     req <- askRq
     (svgFilename, imageFilename) <- liftIO $ getActiveTimetable req session
     liftIO $ returnImageData svgFilename imageFilename
-    -- case session of "Fall" -> liftIO $ returnImageData fallsvgFilename fallimageFilename
-    --                 "Spring" -> liftIO $ returnImageData springsvgFilename springimageFilename
-
 
 timetablePDFResponse :: ServerPart Response
 timetablePDFResponse = do
