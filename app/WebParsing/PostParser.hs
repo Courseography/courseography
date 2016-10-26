@@ -3,18 +3,13 @@ module WebParsing.PostParser
     (getPost) where
 
 import Network.HTTP
-import Database.PostInsertion(insertPost, insertPostCategory)
-import Database.Persist.Sqlite(runSqlite, runMigration)
-import Config (databasePath)
-import WebParsing.ParsingHelp
+import Database.PostInsertion (insertPost, insertPostCategory)
 import qualified Data.Text as T
 import Data.List
-import Data.Char
 import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Match
-import Database.Tables
 import qualified Text.Parsec as P
-import WebParsing.ParsecCombinators(getCourseFromTag, getPostType, getDepartmentName,
+import WebParsing.ParsecCombinators (getCourseFromTag, getPostType, getDepartmentName,
     parsingAlgoOne)
 
 fasCalendarURL :: String
@@ -51,23 +46,27 @@ addPostToDatabase tags = do
         postType = T.pack $ getPostType postCode
         departmentName = T.pack $ (getDepartmentName fullPostName postType)
         prereqs = map getCourseFromTag $ map (fromAttrib "href") $ filter isCourseTag tags
-    addPostCategoriesToDatabase (T.unpack postCode) (innerText tags)
+    if null prereqs
+    then
+        addPostCategoriesToDatabase (T.unpack postCode) (innerText tags) Nothing
+    else
+        addPostCategoriesToDatabase (T.unpack postCode) (innerText tags) (Just (head prereqs))
     insertPost departmentName postType postCode
     where
         isCourseTag tag = tagOpenAttrNameLit "a" "href" (\hrefValue -> (length hrefValue) >= 0) tag
 
-addPostCategoriesToDatabase :: String -> String -> IO ()
-addPostCategoriesToDatabase postCode tagText  = do
-    let parsed = P.parse parsingAlgoOne "(source)" tagText
+addPostCategoriesToDatabase :: String -> String -> Maybe String -> IO ()
+addPostCategoriesToDatabase postCode tagText firstCourse = do
+    let parsed = P.parse (parsingAlgoOne firstCourse) "(source)" tagText
     case parsed of
         Right text ->
             mapM_ (addCategoryToDatabase postCode) (filter isCategory text)
         Left _ -> print "Failed."
     where
-        isCategory string = 
-            let infixes = map (containsString string) 
+        isCategory string =
+            let infixes = map (containsString string)
                          ["First", "Second", "Third", "suitable", "Core", "Electives"]
-            in 
+            in
                 ((length string) >= 7) && ((length $ filter (\bool -> bool) infixes) <= 0)
         containsString string substring = isInfixOf substring string
 
