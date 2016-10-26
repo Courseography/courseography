@@ -288,7 +288,7 @@ queryGraphs =
 --         Just entityLectures -> return $ lectureTimes . entityVal $ entityLectures
 
 
-
+-- getLectureTime :: CourseInfo -> IO (CourseInfo)
 getLectureTime courseInfo = do
     maybeEntityLectures  <- selectFirst [LectureCode ==. (T.pack . code $ courseInfo),
                                          LectureSection ==. (T.pack . section $ courseInfo),
@@ -311,6 +311,7 @@ getLectureTime courseInfo = do
 --         Just entityTutorials -> return $ tutorialTimes . entityVal $ entityTutorials
 
 
+-- getTutorialTime :: CourseInfo -> IO (CourseInfo)
 getTutorialTime courseInfo = do
     maybeEntityTutorials  <- selectFirst [TutorialCode ==. (T.pack . code $ courseInfo),
                                           TutorialSection ==. Just (T.pack . section $ courseInfo),
