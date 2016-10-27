@@ -49,19 +49,19 @@ cellPadding :: Diagram B
 cellPadding = rect cellWidth cellPaddingHeight
 
 timeCell :: Diagram B
-timeCell = rect timeCellWidth cellHeight # lw none
+timeCell = rect timeCellWidth cellHeight # lw none # fc white # lc white
 
 timeCellPadding :: Diagram B
-timeCellPadding = rect timeCellWidth cellPaddingHeight # lw none
+timeCellPadding = rect timeCellWidth cellPaddingHeight # lw none # fc white # lc white
 
 cellText :: String -> Diagram B
 cellText s = font "Trebuchet MS" $ text s # fontSizeO fs
 
 makeCell :: String -> Diagram B
 makeCell s = let sList = splitOn "&" s
-             in vsep 0.030
-                ([cellPadding # fc background # lc background] ++
-                 map (\x -> cellText x # fc white <> cell # fc background # lc background) sList)
+             in vsep 0.030 $
+                 [cellPadding # fc background # lc background] ++
+                 map (\x -> cellText x # fc white <> cell # fc background # lc background) sList
              where
                  background = getBackground s
 
@@ -79,12 +79,12 @@ makeSessionCell s =
     timeCellPadding === (cellText s <> timeCell)
 
 makeHeaderCell :: String -> Diagram B
-makeHeaderCell s =
-    cellPadding # lw none === (cellText s <> cell # lw none)
+makeHeaderCell s = 
+    (cellPadding # lw none # fc white # lc white) === (cellText s <> cell # lw none # fc white # lc white)
 
 makeTimeCell :: String -> Diagram B
 makeTimeCell s =
-    timeCellPadding === (cellText s <> timeCell # lw none)
+    timeCellPadding === (cellText s <> timeCell)
 
 makeRow :: [String] -> Diagram B
 makeRow (x:xs) = (# centerX) . hcat $ 
@@ -123,4 +123,4 @@ renderTableHelper filename schedule session = do
     writeFile filename txt
     where
         -- relative fonts don't play well with ImageMagick, apparently
-        fs' = round $ 1024 / 800 * fs
+        fs' = round $ 1024 / 900 * fs
