@@ -37,7 +37,7 @@ import Control.Monad (liftM)
 import Data.Aeson ((.=), toJSON, object)
 import Database.DataType
 import Svg.Builder
--- import Export.GetImages (CourseInfo)
+-- import Control.Monad.Reader.Class
 
 
 ---- | Queries db for all matching records with lecture or tutorial code of this course
@@ -289,11 +289,15 @@ queryGraphs =
 
 
 -- getLectureTime :: CourseInfo -> IO (CourseInfo)
+-- getLectureTime :: (MonadIO m, Control.Monad.Reader.Class.MonadReader env m,
+--                          HasPersistBackend env SqlBackend) =>
+--                         CourseInfo -> m CourseInfo
 getLectureTime courseInfo = do
-    maybeEntityLectures  <- selectFirst [LectureCode ==. (T.pack . code $ courseInfo),
-                                         LectureSection ==. (T.pack . section $ courseInfo),
-                                         LectureSession ==. (T.pack . session $ courseInfo)]
-                                        []
+    maybeEntityLectures <- selectFirst [LectureCode ==. (T.pack . code $ courseInfo),
+                                        LectureSection ==. (T.pack . section $ courseInfo),
+                                        LectureSession ==. (T.pack . session $ courseInfo)]
+                                       []
+    -- liftIO $ print maybeEntityLectures
     case maybeEntityLectures of
         Nothing -> return CourseInfo {code = code courseInfo, section = section courseInfo, session = session courseInfo, time = []}
         Just entityLectures -> return $ CourseInfo {code = code courseInfo, section = section courseInfo, session = session courseInfo, time = lectureTimes . entityVal $ entityLectures}
