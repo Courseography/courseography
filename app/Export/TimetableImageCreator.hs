@@ -6,7 +6,7 @@ module Export.TimetableImageCreator
 import Diagrams.Prelude
 import Diagrams.Backend.SVG.CmdLine
 import Diagrams.Backend.SVG
-import Data.List (intersperse)
+import Data.List (intersperse, isInfixOf)
 import Data.List.Utils (replace)
 import Data.List.Split (splitOn)
 import Lucid (renderText)
@@ -77,10 +77,52 @@ makeTimeCell :: String -> Diagram B
 makeTimeCell s =
     timeCellPadding === (cellText s <> timeCell # lw none)
 
+-- makeRow :: [String] -> Diagram B
+-- makeRow (x:xs) = (# centerX) . hcat $
+--     makeTimeCell x : map makeCell xs
+-- makeRow [] = error "invalid timetable format"
+
+
+-- ===============================
+cellHeight1 :: Double
+cellHeight1 = 0.8
+
+fei :: Colour Double
+fei = sRGB24read "#ED5736"
+
+cellLarge :: Diagram B
+cellLarge = rect cellWidth cellHeight1
+
+timeCellLarge :: Diagram B
+timeCellLarge = rect timeCellWidth cellHeight1 # lw none
+
+makeCellLarge :: String -> Diagram B
+makeCellLarge s = vsep 0.030
+    [cellPadding # fc background # lc background,
+     cellText s # fc white <>
+     cellLarge # fc background # lc background]
+    where
+        background = getBackground s
+
+getBackground :: String -> Colour Double
+getBackground s
+    | null s = white
+    | elem '&' s = fei
+    | otherwise = blue3
+
+makeTimeCellLarge :: String -> Diagram B
+makeTimeCellLarge s =
+    timeCellPadding === (cellText s <> timeCellLarge # lw none)
+
+
 makeRow :: [String] -> Diagram B
-makeRow (x:xs) = (# centerX) . hcat $
-    makeTimeCell x : map makeCell xs
+makeRow (x:xs)
+    | or $ map (elem '&') xs = (# centerX) . hcat $ makeTimeCellLarge x : map makeCellLarge xs
+    | otherwise = (# centerX) . hcat $ makeTimeCell x : map makeCell xs
 makeRow [] = error "invalid timetable format"
+
+-- =================================
+
 
 headerBorder :: Diagram B
 headerBorder = hrule 11.2 # lw medium # lc pink1

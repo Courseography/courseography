@@ -15,6 +15,7 @@ import Control.Monad.IO.Class  (liftIO)
 import Data.List (partition)
 import Database.Persist.Sqlite (runSqlite, runMigration)
 import Config (databasePath)
+import Data.Fixed
 
 -- | If there is an active graph available, an image of that graph is created,
 -- otherwise the Computer Science graph is created as a default.
@@ -113,8 +114,8 @@ getScheduleByTime lecTimes tutTimes = let allTimes = lecTimes ++ tutTimes
 addCourseToSchedule :: CourseInfo -> [[String]] -> [[String]]
 addCourseToSchedule courseInfo schedule
     | (time courseInfo) == [] = schedule
-    | otherwise = foldl (\acc x -> addCourseHelper (code courseInfo) (section courseInfo) (session courseInfo) acc x) schedule (time courseInfo)
-
+    | otherwise = let time' = filter (\t-> (mod' (timeField t !! 1) 1) == 0) (time courseInfo)
+            in foldl (\acc x -> addCourseHelper (code courseInfo) (section courseInfo) (session courseInfo) acc x) schedule time'
 
 -- (("STA355H1","L0101","F"),Just [Time {timeField = [0.0,14.0]},Time {timeField = [0.0,14.5]},Time {timeField = [0.0,15.0]},Time {timeField = [0.0,15.5]},Time {timeField = [2.0,14.0]},Time {timeField = [2.0,14.5]}])
 -- [["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""]]
@@ -127,7 +128,9 @@ addCourseHelper :: String -> String -> String -> [[String]] -> Time -> [[String]
 addCourseHelper code section session acc x = let [day, time'] = map floor $ timeField x
                                                  time = time' - 8
                                                  time_schedule = acc !! time
-                                                 time_schedule' = (take day time_schedule) ++ [code++session++" "++section] ++ (drop (day + 1) time_schedule)
+                                                 current_schedule = if (null $ time_schedule !! day) then (code++session++" "++section) else (time_schedule !! day ++ ("& "++code++session++" "++section))
+                                                 -- time_schedule' = (take day time_schedule) ++ [code++session++" "++section] ++ (drop (day + 1) time_schedule)
+                                                 time_schedule' = (take day time_schedule) ++ [current_schedule] ++ (drop (day + 1) time_schedule)
                                                  newacc = (take time acc) ++ [time_schedule'] ++ (drop (time + 1) acc)
                                              in newacc
 
