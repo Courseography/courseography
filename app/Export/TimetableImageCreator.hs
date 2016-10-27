@@ -6,7 +6,7 @@ module Export.TimetableImageCreator
 import Diagrams.Prelude
 import Diagrams.Backend.SVG.CmdLine
 import Diagrams.Backend.SVG
-import Data.List (intersperse, isInfixOf)
+import Data.List (intersperse)
 import Data.List.Utils (replace)
 import Data.List.Split (splitOn)
 import Lucid (renderText)
@@ -23,6 +23,9 @@ blue3 = sRGB24read "#437699"
 
 pink1 :: Colour Double
 pink1 = sRGB24read "#DB94B8"
+
+capucine :: Colour Double
+capucine = sRGB24read "#ED5736"
 
 cellWidth :: Double
 cellWidth = 2
@@ -55,12 +58,18 @@ cellText :: String -> Diagram B
 cellText s = font "Trebuchet MS" $ text s # fontSizeO fs
 
 makeCell :: String -> Diagram B
-makeCell s = vsep 0.030
-    [cellPadding # fc background # lc background,
-     cellText s # fc white <>
-     cell # fc background # lc background]
-    where
-        background = if null s then white else blue3
+makeCell s = let sList = splitOn "&" s
+             in vsep 0.030
+                ([cellPadding # fc background # lc background] ++
+                 map (\x -> cellText x # fc white <> cell # fc background # lc background) sList)
+             where
+                 background = getBackground s
+
+getBackground :: String -> Colour Double
+getBackground s
+    | null s = white
+    | elem '&' s = capucine
+    | otherwise = blue3
 
 header :: String -> Diagram B
 header session = (hcat $ (makeSessionCell session) : map makeHeaderCell days) # centerX === headerBorder
@@ -77,52 +86,10 @@ makeTimeCell :: String -> Diagram B
 makeTimeCell s =
     timeCellPadding === (cellText s <> timeCell # lw none)
 
--- makeRow :: [String] -> Diagram B
--- makeRow (x:xs) = (# centerX) . hcat $
---     makeTimeCell x : map makeCell xs
--- makeRow [] = error "invalid timetable format"
-
-
--- ===============================
-cellHeight1 :: Double
-cellHeight1 = 0.8
-
-fei :: Colour Double
-fei = sRGB24read "#ED5736"
-
-cellLarge :: Diagram B
-cellLarge = rect cellWidth cellHeight1
-
-timeCellLarge :: Diagram B
-timeCellLarge = rect timeCellWidth cellHeight1 # lw none
-
-makeCellLarge :: String -> Diagram B
-makeCellLarge s = vsep 0.030
-    [cellPadding # fc background # lc background,
-     cellText s # fc white <>
-     cellLarge # fc background # lc background]
-    where
-        background = getBackground s
-
-getBackground :: String -> Colour Double
-getBackground s
-    | null s = white
-    | elem '&' s = fei
-    | otherwise = blue3
-
-makeTimeCellLarge :: String -> Diagram B
-makeTimeCellLarge s =
-    timeCellPadding === (cellText s <> timeCellLarge # lw none)
-
-
 makeRow :: [String] -> Diagram B
-makeRow (x:xs)
-    | or $ map (elem '&') xs = (# centerX) . hcat $ makeTimeCellLarge x : map makeCellLarge xs
-    | otherwise = (# centerX) . hcat $ makeTimeCell x : map makeCell xs
+makeRow (x:xs) = (# centerX) . hcat $ 
+                 makeTimeCell x : map makeCell xs
 makeRow [] = error "invalid timetable format"
-
--- =================================
-
 
 headerBorder :: Diagram B
 headerBorder = hrule 11.2 # lw medium # lc pink1

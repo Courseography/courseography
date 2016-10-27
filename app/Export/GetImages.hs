@@ -128,7 +128,7 @@ addCourseHelper :: String -> String -> String -> [[String]] -> Time -> [[String]
 addCourseHelper code section session acc x = let [day, time'] = map floor $ timeField x
                                                  time = time' - 8
                                                  time_schedule = acc !! time
-                                                 current_schedule = if (null $ time_schedule !! day) then (code++session++" "++section) else (time_schedule !! day ++ ("& "++code++session++" "++section))
+                                                 current_schedule = if (null $ time_schedule !! day) then (code++session++" "++section) else (time_schedule !! day ++ ("&"++code++session++" "++section))
                                                  -- time_schedule' = (take day time_schedule) ++ [code++session++" "++section] ++ (drop (day + 1) time_schedule)
                                                  time_schedule' = (take day time_schedule) ++ [current_schedule] ++ (drop (day + 1) time_schedule)
                                                  newacc = (take time acc) ++ [time_schedule'] ++ (drop (time + 1) acc)
