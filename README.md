@@ -16,8 +16,6 @@ Click [here](/CONTRIBUTING.md) if you would like to get involved.
 
 Say hello on our [Slack channel][slackin]! ![Slack][slackin-badge]
 
-Click [here](/PRIVACY.md) to learn about our Privacy Policy.
-
 
 Running and Courseography Setup
 --------------------------------------
@@ -55,6 +53,14 @@ Contributors
 This project would not exist without the contributions of many students in the Department of Computer Science. In alphabetical order, our contributors are:
 
 Alex Baluta, Alexander Biggs, Kelly Bell, Christina Chen, Eugene Cheung, Spencer Elliott, Ryan Fan, Christian Garcia, Ross Gatih, Philip Kukulak, Tamara Lipowski, Lydia Liu, Jahnavi Matholia, Christine Murad, San Shaftoe, Ian Stewart-Binks
+
+
+Privacy Policy and Licensing
+--------------------------------------
+
+Click [here](/PRIVACY.md) to learn about our Privacy Policy.
+
+Click [here](/LICENSE) to learn about our licensing.
 
 
 [slackin]: https://courseography-slack.herokuapp.com/
