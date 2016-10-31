@@ -12,7 +12,7 @@ Powered by [Haskell](https://www.haskell.org/), Courseography was started in lat
 Getting Involved
 --------------------------------------
 
-See [CONTRIBUTING.md](https://github.com/Courseography/courseography/blob/master/CONTRIBUTING.md).
+Click [here](/CONTRIBUTING.md) if you would like to get involved.
 
 Say hello on our [Slack channel][slackin]! ![Slack][slackin-badge]
 
