@@ -73,7 +73,8 @@ executable courseography
     WebParsing.PostParser,
     WebParsing.PrerequisiteParsing,
     WebParsing.TimeConverter,
-    WebParsing.UtsgJsonParser
+    WebParsing.UtsgJsonParser,
+    WebParsing.ParsecCombinators
   other-extensions:
     OverloadedStrings,
     DataKinds,
