@@ -19,7 +19,7 @@ Say hello on our [Slack channel][slackin]! ![Slack][slackin-badge]
 
 Running and Courseography Setup
 --------------------------------------
-For a more indepth tutorial click [here](https://github.com/Courseography/courseography/wiki/Installing-Courseography).
+**If this is your first time setting up Courseography, please click [here](https://github.com/Courseography/courseography/wiki/Installing-Courseography). The following is intended to be a general guide for those who have already set up Courseography and not a proper tutorial.**
 
 *This assumes a local copy is already setup.*
 
