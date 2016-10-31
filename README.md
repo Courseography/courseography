@@ -16,7 +16,7 @@ See [CONTRIBUTING.md](https://github.com/Courseography/courseography/blob/master
 
 Say hello on our [Slack channel][slackin]! ![Slack][slackin-badge]
 
-Click [here](/privacy) to learn about our Privacy Policy.
+Click [here](/PRIVACY.md) to learn about our Privacy Policy.
 
 
 Running and Courseography Setup
