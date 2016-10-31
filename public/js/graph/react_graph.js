@@ -160,8 +160,11 @@ var Graph = React.createClass({
             verticalPanFactor: 0,
             mouseDown: false,
             modalIsOpen: false,
-            courseId: 'csc108H1'
+            courseId : '',
+            courseTitle : '',
+            formatCourse : ''
             };
+            
     },
 
     componentDidMount: function () {
@@ -306,7 +309,14 @@ var Graph = React.createClass({
     },
      openModal: function () {  
         var infoBox = this.refs.infoBox
-        this.setState({modalIsOpen: true, courseId: infoBox.state.nodeId.substring(0, 6)});
+        var newCourse = infoBox.state.nodeId.substring(0, 6)
+
+        if (newCourse == this.state.courseId) {
+            this.setState({modalIsOpen: true});
+        }
+        else {
+            this.setState({modalIsOpen: true, courseId: newCourse, courseTitle: getCourseTitle(newCourse), formatCourse: formatCourseName(newCourse)[0]});
+    }
 
     },
 
@@ -552,6 +562,7 @@ var Graph = React.createClass({
         var resetDisabled = this.state.zoomFactor == 1 &&
                             this.state.horizontalPanFactor == 0 &&
                             this.state.verticalPanFactor == 0;
+
         return (
             <div>
                 <ReactModal className='ModalClass'
@@ -559,10 +570,10 @@ var Graph = React.createClass({
                     isOpen={this.state.modalIsOpen}
                     onRequestClose={this.closeModal}>
                     <div className='modal-header'>
-                         {getCourseTitle(this.state.courseId)} </div>
+                        {this.state.courseTitle}
+                          </div>
                         <div className='modal-body'>
-                            <Description course = {formatCourseName(this.state.courseId)[0]}/>  
-                        </div>  
+                            <Description course  = {this.state.formatCourse}/> </div>  
                 </ReactModal>
 
                 <Button
@@ -637,8 +648,6 @@ var Graph = React.createClass({
                         onMouseEnter={this.infoBoxMouseEnter}
                         onMouseLeave={this.infoBoxMouseLeave}/>
                 </svg>
-                 
-                <button onClick = {this.openModal}> Open Modal</button>
             </div>
 
         );

@@ -18,21 +18,15 @@ directly to the client when viewing the @/graph@ page.
 module Svg.Parser
     (parsePrebuiltSvgs) where
 
-import Data.Maybe (mapMaybe, fromMaybe, fromJust, isNothing)
+import Data.Maybe (fromMaybe, fromJust, isNothing)
 import Data.List.Split (splitOn)
-import Data.List (find)
-import qualified Data.Map as M (empty)
-import Data.String.Utils (replace)
 import qualified Text.HTML.TagSoup as TS
 import Text.HTML.TagSoup (Tag)
-import System.Directory
 import Database.Tables
 import Database.DataType
 import Svg.Database (insertGraph, insertElements, deleteGraphs)
-import Svg.Generator
-import Database.Persist.Sqlite hiding (replace)
 import Config (graphPath)
-import Text.Read (readMaybe, readEither)
+import Text.Read (readMaybe)
 import Data.Char (isSpace)
 
 parsePrebuiltSvgs :: IO ()
@@ -57,6 +51,7 @@ parsePrebuiltSvgs = do
     performParse "History" "his2015.svg"
     performParse "Geography" "ggr2015.svg"
     performParse "Aboriginal" "abs2015.svg"
+    performParse "German" "ger2015.svg"
 
 
 -- | The starting point for parsing a graph with a given title and file.
