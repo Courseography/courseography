@@ -36,7 +36,7 @@ For a more indepth tutorial click [here](https://github.com/Courseography/course
 2. Create the db folder with `$ mkdir db`
 
 #### Installing
-1. Install GHC 7.10.3 with `$ cp app/Development`
+1. Install GHC 7.10.3 with `$ stack setup 7.10.3`
 2. Compile Courseography with `$ stack build`
 
 #### Parsing and Generation
