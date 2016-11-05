@@ -21,7 +21,20 @@ Quickstart and Setup
 --------------------------------------
 **If this is your first time running Courseography, please click [here](https://github.com/Courseography/courseography/wiki/Installing-Courseography). The following is intended to be a quickstart guide and not a proper tutorial.**
 
-*This assumes a local copy is already downloaded.*
+##### Download and Install GitHub
+1. Click [here](https://desktop.github.com/) to download and install GitHub.
+
+##### Download Courseography
+1. Open Git Shell.
+2. Run '$ git clone https://github.com/Courseography/courseography.git' to create a local copy.
+
+##### Updating Courseography
+*If you have just downloaded Courseography, then it will already be up to date and this part can be skipped.*
+
+1. Open Git Shell.
+2. Run '$ git pull https://github.com/Courseography/courseography.git master' to update Courseography.
+
+*Alternatively, a remote can be setup, which is recommended for future convenience, see the tutorial for more information.*
 
 ##### Software Dependencies
 Install both of the following.
