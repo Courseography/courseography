@@ -17,13 +17,15 @@ Click [here](/CONTRIBUTING.md) if you would like to get involved.
 Say hello on our [Slack channel][slackin]! ![Slack][slackin-badge]
 
 
-Running and Courseography Setup
+Quickstart and Setup
 --------------------------------------
-**If this is your first time setting up Courseography, please click [here](https://github.com/Courseography/courseography/wiki/Installing-Courseography). The following is intended to be a general guide for those who have already set up Courseography and not a proper tutorial.**
+**If this is your first time running Courseography, please click [here](https://github.com/Courseography/courseography/wiki/Installing-Courseography). The following is intended to be a quickstart guide and not a proper tutorial.**
 
-*This assumes a local copy is already setup.*
+*This assumes a local copy is already downloaded.*
 
 ##### Software Dependencies
+Install both of the following.
+
 1. [Stack](https://docs.haskellstack.org/en/stable/README/)
 2. [ImageMagick](http://www.imagemagick.org/script/binary-releases.php)
 
