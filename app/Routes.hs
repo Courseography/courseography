@@ -13,8 +13,7 @@ routes staticDir aboutContents privacyContents = [
     ("grid", gridResponse),
     ("graph", graphResponse),
     ("image", graphImageResponse),
-    -- ("timetable-image", look "courses" >>= \x -> look "session" >>= timetableImageResponse x),
-    ("calendar", look "session" >>= timetableImageCookieResponse),
+    ("timetable-image", look "session" >>= timetableImageCookieResponse),
     ("timetable-pdf", timetablePDFResponse),
     ("post", postResponse),
     ("draw", drawResponse),
@@ -27,7 +26,7 @@ routes staticDir aboutContents privacyContents = [
     ("course-info", look "dept" >>= courseInfo),
     ("depts", liftIO deptList),
     ("timesearch", searchResponse),
-    -- ("calendar", lookCookieValue "selected-lectures" >>= calendarResponse),
+    ("calendar", lookCookieValue "selected-lectures" >>= calendarResponse),
     ("get-json-data", look "graphName" >>= \graphName -> liftIO $ getGraphJSON graphName),
     ("loading", look "size" >>= loadingResponse),
     ("save-json", look "jsonData" >>= \jsonStr -> look "nameData" >>= \nameStr -> liftIO $ saveGraphJSON jsonStr nameStr)

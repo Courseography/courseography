@@ -4,11 +4,11 @@
  */
 function getGridImage(session) {
     'use strict';
-
+    console.log("dxfcgvhbjn")
     session = session.charAt(0).toUpperCase() + session.slice(1);
     var courses = getCoursesTable(session);
     $.ajax({
-        url: 'calendar',
+        url: 'timetable-image',
         data: {session: session},
         success: function (data) {
             var contentDiv = $('<div></div>');
@@ -43,8 +43,8 @@ function updateGridImage(session) {
     var courses = getCoursesTable(session);
     session = session.charAt(0).toUpperCase() + session.slice(1);
     $.ajax({
-        //url: 'timetable-image',
-        url: 'calendar',
+        url: 'timetable-image',
+        // url: 'calendar',
         // data: {courses: courses, session: session},
         data: {session: session},
         success: function (data) {
