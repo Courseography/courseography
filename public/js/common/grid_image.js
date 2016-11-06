@@ -4,7 +4,7 @@
  */
 function getGridImage(session) {
     'use strict';
-    console.log("dxfcgvhbjn")
+    
     session = session.charAt(0).toUpperCase() + session.slice(1);
     var courses = getCoursesTable(session);
     $.ajax({
