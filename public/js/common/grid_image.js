@@ -4,7 +4,7 @@
  */
 function getGridImage(session) {
     'use strict';
-    
+
     session = session.charAt(0).toUpperCase() + session.slice(1);
     var courses = getCoursesTable(session);
     $.ajax({
@@ -13,8 +13,7 @@ function getGridImage(session) {
         success: function (data) {
             var contentDiv = $('<div></div>');
             var topContentDiv = $('<div></div>');
-            // var calendarOption = $('<a href="timetable-pdf" onclick="getPDF()">Download ICS</a>');
-            var calendarOption = $('<a href="timetable-pdf" target="_blank">Download ICS</a>');
+            var calendarOption = $('<a onclick="getPDF()">Download ICS</a>');
             calendarOption.attr('target', '_blank');
             topContentDiv.html('<img id="post-image" src="data:image/png;base64,' + data + '" />');
             contentDiv.attr('id', 'modal-content-container')
@@ -78,15 +77,15 @@ function getCoursesTable(session) {
 }
 
 
-/* Request a PDF of graph and timetable */
+/* Request bytestring of PDF of graph and timetable and convert to PDF*/
 function getPDF() {
     'use strict';
 
     $.ajax({
         url: 'timetable-pdf',
         success: function (data) {
-            var topContentDiv = $('<div></div>');
-            topContentDiv.html('<img id="post-image" src="data:image/png;base64,' + data + '" />');
+            var pdfAsDataUri = "data:application/pdf;base64," + data;
+            window.open(pdfAsDataUri);
         },
         error: function () {
             throw 'No pdf generated';

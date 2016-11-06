@@ -42,8 +42,7 @@ timetablePDFResponse = do
     (fallsvgFilename, fallimageFilename) <- liftIO $ getActiveTimetable req "Fall"
     (springsvgFilename, springimageFilename) <- liftIO $ getActiveTimetable req "Spring"
     pdfName <- liftIO $ returnPDF graphSvg graphImg fallsvgFilename fallimageFilename springsvgFilename springimageFilename
-    serveFile (asContentType "application/pdf") pdfName
-
+    liftIO $ returnPdfData pdfName
 
 -- =============================
 
@@ -55,4 +54,12 @@ returnImageData svgFilename imageFilename = do
     _ <- removeImage imageFilename
     _ <- removeImage svgFilename
     let encodedData = BEnc.encode imageData
+    return $ toResponse encodedData
+
+-- | Read PDF and convert into bytestring formate, then delete from local
+returnPdfData :: String -> IO Response
+returnPdfData pdfFilename = do
+    pdfData <- BS.readFile pdfFilename
+    _ <- removeImage pdfFilename
+    let encodedData = BEnc.encode pdfData
     return $ toResponse encodedData
