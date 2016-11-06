@@ -24,8 +24,8 @@ blue3 = sRGB24read "#437699"
 pink1 :: Colour Double
 pink1 = sRGB24read "#DB94B8"
 
-capucine :: Colour Double
-capucine = sRGB24read "#ED5736"
+pomegranate :: Colour Double
+pomegranate = sRGB24read "#F20C00"
 
 cellWidth :: Double
 cellWidth = 2
@@ -68,7 +68,7 @@ makeCell s = let sList = splitOn "&" s
 getBackground :: String -> Colour Double
 getBackground s
     | null s = white
-    | elem '&' s = capucine
+    | elem '&' s = pomegranate
     | otherwise = blue3
 
 header :: String -> Diagram B
