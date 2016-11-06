@@ -29,6 +29,6 @@ returnPDF graphSvg graphImg fallTimetableSvg fallTimetableImg springTimetableSvg
     let texName = rand ++ ".tex"
         pdfName = rand ++ ".pdf"
     generateTex [graphImg, fallTimetableImg, springTimetableImg] texName -- generate a temporary TEX file
-    createPDF texName                            -- create PDF using TEX and delete the TEX file afterwards    
+    createPDF texName                            -- create PDF using TEX and delete the TEX file afterwards
     _ <- removeImage (graphSvg ++ " " ++ graphImg ++ " " ++ fallTimetableSvg ++ " " ++ fallTimetableImg ++ " " ++ springTimetableSvg ++ " " ++ springTimetableImg)
     return $ (pdfName)

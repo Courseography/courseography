@@ -13,7 +13,8 @@ function getGridImage(session) {
         success: function (data) {
             var contentDiv = $('<div></div>');
             var topContentDiv = $('<div></div>');
-            var calendarOption = $('<a href="timetable-pdf" onclick="getPDF()">Download ICS</a>');
+            // var calendarOption = $('<a href="timetable-pdf" onclick="getPDF()">Download ICS</a>');
+            var calendarOption = $('<a href="timetable-pdf" target="_blank">Download ICS</a>');
             calendarOption.attr('target', '_blank');
             topContentDiv.html('<img id="post-image" src="data:image/png;base64,' + data + '" />');
             contentDiv.attr('id', 'modal-content-container')
