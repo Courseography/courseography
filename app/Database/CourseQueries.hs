@@ -1,5 +1,4 @@
 {-# LANGUAGE FlexibleContexts, GADTs, OverloadedStrings, ScopedTypeVariables #-}
--- {-# LANGUAGE ScopedTypeVariables, OverloadedStrings, GADTs #-} -- GADTs added by Kael
 
 {-|
 Description: Respond to various requests involving database course information.
@@ -277,17 +276,6 @@ queryGraphs =
 
 -- ========================================================
 
--- getLectureTime :: (String, String, String) -> IO ([Time])
--- getLectureTime (code, section, session) = do
---     maybeEntityLectures  <- selectFirst [LectureCode ==. (T.pack code),
---                                          LectureSection ==. (T.pack section),
---                                          LectureSession ==. (T.pack session)]
---                                         []
---     case maybeEntityLectures of
---         Nothing -> return []
---         Just entityLectures -> return $ lectureTimes . entityVal $ entityLectures
-
-
 -- getLectureTime :: CourseInfo -> IO (CourseInfo)
 -- getLectureTime :: (MonadIO m, Control.Monad.Reader.Class.MonadReader env m,
 --                          HasPersistBackend env SqlBackend) =>
@@ -297,22 +285,8 @@ getLectureTime courseInfo = do
                                         LectureSection ==. (T.pack . section $ courseInfo),
                                         LectureSession ==. (T.pack . session $ courseInfo)]
                                        []
-    -- liftIO $ print maybeEntityLectures
-    case maybeEntityLectures of
-        Nothing -> return CourseInfo {code = code courseInfo, section = section courseInfo, session = session courseInfo, time = []}
-        Just entityLectures -> return $ CourseInfo {code = code courseInfo, section = section courseInfo, session = session courseInfo, time = lectureTimes . entityVal $ entityLectures}
-
-
-
--- getTutorialTime :: (String, String, String) -> IO ([Time])
--- getTutorialTime (code, section, session) = do
---     maybeEntityTutorials  <- selectFirst [TutorialCode ==. (T.pack code),
---                                           TutorialSection ==. Just (T.pack section),
---                                           TutorialSession ==. (T.pack session)]
---                                          []
---     case maybeEntityTutorials of 
---         Nothing -> return []
---         Just entityTutorials -> return $ tutorialTimes . entityVal $ entityTutorials
+    let times = maybe [] (lectureTimes . entityVal) maybeEntityLectures
+    return CourseInfo {code = code courseInfo, section = section courseInfo, session = session courseInfo, time = times}
 
 
 -- getTutorialTime :: CourseInfo -> IO (CourseInfo)
@@ -321,6 +295,5 @@ getTutorialTime courseInfo = do
                                           TutorialSection ==. Just (T.pack . section $ courseInfo),
                                           TutorialSession ==. (T.pack . session $ courseInfo)]
                                          []
-    case maybeEntityTutorials of 
-        Nothing -> return CourseInfo {code = code courseInfo, section = section courseInfo, session = session courseInfo, time = []}
-        Just entityTutorials -> return $ CourseInfo {code = code courseInfo, section = section courseInfo, session = session courseInfo, time = tutorialTimes . entityVal $ entityTutorials}
+    let times = maybe [] (tutorialTimes . entityVal) maybeEntityTutorials
+    return CourseInfo {code = code courseInfo, section = section courseInfo, session = session courseInfo, time = times}
