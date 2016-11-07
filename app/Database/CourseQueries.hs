@@ -1,4 +1,4 @@
-{-# LANGUAGE FlexibleContexts, GADTs, OverloadedStrings, ScopedTypeVariables #-}
+{-# LANGUAGE GADTs, OverloadedStrings, ScopedTypeVariables #-}
 
 {-|
 Description: Respond to various requests involving database course information.
