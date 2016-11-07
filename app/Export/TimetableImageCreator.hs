@@ -49,21 +49,23 @@ cellPadding :: Diagram B
 cellPadding = rect cellWidth cellPaddingHeight
 
 timeCell :: Diagram B
-timeCell = rect timeCellWidth cellHeight # lw none # fc white # lc white
+timeCell = rect timeCellWidth cellHeight # lw none
 
 timeCellPadding :: Diagram B
-timeCellPadding = rect timeCellWidth cellPaddingHeight # lw none # fc white # lc white
+timeCellPadding = rect timeCellWidth cellPaddingHeight # lw none
 
 cellText :: String -> Diagram B
 cellText s = font "Trebuchet MS" $ text s # fontSizeO fs
 
-makeCell :: String -> Diagram B
-makeCell s = let sList = splitOn "&" s
-             in vsep 0.030 $
-                 [cellPadding # fc background # lc background] ++
-                 map (\x -> cellText x # fc white <> cell # fc background # lc background) sList
-             where
-                 background = getBackground s
+makeCell :: Int -> String -> Diagram B
+makeCell maxCourse s = 
+    let sList = splitOn "&" s
+        actualCourse = length sList
+        extraCell = replicate (maxCourse - actualCourse) [cellPadding # fc white # lc white, cellText "" # fc white <> cell # fc white # lc white]
+    in vsep 0.030 $
+        concat $ map (\x -> [cellPadding # fc background # lc background, cellText x # fc white <> cell # fc background # lc background]) sList ++ extraCell
+    where
+        background = getBackground s
 
 getBackground :: String -> Colour Double
 getBackground s
@@ -80,15 +82,17 @@ makeSessionCell s =
 
 makeHeaderCell :: String -> Diagram B
 makeHeaderCell s = 
-    (cellPadding # lw none # fc white # lc white) === (cellText s <> cell # lw none # fc white # lc white)
+    (cellPadding # lw none # fc white # lc white) === (cellText s <> cell # lw none)
 
 makeTimeCell :: String -> Diagram B
 makeTimeCell s =
     timeCellPadding === (cellText s <> timeCell)
 
 makeRow :: [String] -> Diagram B
-makeRow (x:xs) = (# centerX) . hcat $ 
-                 makeTimeCell x : map makeCell xs
+makeRow (x:xs) = 
+    let maxCourse = maximum (map (length . (splitOn "&")) xs)
+    in (# centerX) . hcat $ 
+        makeTimeCell x : map (makeCell maxCourse) xs
 makeRow [] = error "invalid timetable format"
 
 headerBorder :: Diagram B
@@ -123,4 +127,4 @@ renderTableHelper filename schedule session = do
     writeFile filename txt
     where
         -- relative fonts don't play well with ImageMagick, apparently
-        fs' = round $ 1024 / 900 * fs
+        fs' = round $ 1024 / 800 * fs
