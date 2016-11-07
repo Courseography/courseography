@@ -109,12 +109,12 @@ convertTimeToArray = map (\x -> (floor $ timeField x !! 0 , floor $ timeField x 
 
 --  "STA355H1" "L0101" "F"  Time {timeField = [0.0,14.0]}
 addCourseHelper :: String -> String -> String -> [[String]] -> (Int, Int) -> [[String]]
-addCourseHelper code section session acc (day, time) = 
-  let time_schedule = acc !! time
+addCourseHelper code section session currentSchedule (day, time) = 
+  let time_schedule = currentSchedule !! time
       current_schedule = if (null $ time_schedule !! day) then (code++session++" "++section) else (time_schedule !! day ++ ("&"++code++session++" "++section))
       time_schedule' = (take day time_schedule) ++ [current_schedule] ++ (drop (day + 1) time_schedule)
-      newacc = (take time acc) ++ [time_schedule'] ++ (drop (time + 1) acc)
-  in newacc
+      newSchedule = (take time currentSchedule) ++ [time_schedule'] ++ (drop (time + 1) currentSchedule)
+  in newSchedule
 
 generateTimetableImg :: [[String]] -> String -> IO(String, String)
 generateTimetableImg schedule session = do
