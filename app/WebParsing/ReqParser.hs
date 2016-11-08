@@ -48,8 +48,6 @@ courseParser2 = do
     Parsec.spaces
     return (course)
 
-
--- parse "courses" separated by /
 -- csc263/csc265, MAT235/Mat237/Mat257
 -- PRECONDITION: '/' infix binary OP => will always have "courses" on both sides
 --                => we will always have "course" followed by (/ "course")s
@@ -62,7 +60,6 @@ orParser1 = Parsec.many $ do
     Parsec.eof <|> orSeparator
     return course
 
--- parse "courses" separated by /
 -- lenient orParser, will simply parse by / and return list of "reqs"
 orParser2 :: Parsec.Parsec String () [String]
 -- look for whitespaces, /, course, whitespaces. Repeat.
@@ -86,12 +83,6 @@ andParser2 = Parsec.sepBy (Parsec.many1 (Parsec.alphaNum <|> Parsec.oneOf "/ ()"
 -- parse by parantheses, treat everything inside paranthesis as one "req"
 parParser1 :: Parsec.Parsec String () [String]
 
-
--- IDEA: within parParser, store all chunks of Reqs while parsing Req within parantheses until EOF then call
---       andorParser on all paranthesized Reqs. then call andorParser on 
-
-
--- parse "courses" separated by , then by /
 -- csc263/csc265, MAT235/Mat237/Mat257
 -- PRECONDITION: '/' ',' infix binary OPs => will always have "courses" on both sides
 -- POSTCONDITION: returns list of list of "courses". Depth 0 by ','' . Depth 1 by '/'.
@@ -100,6 +91,13 @@ andorParser = do
     andParsed <- andParser2
     let tmp = map (parse orParser2) andParsed
     return tmp
+
+
+-- IDEA: within parParser, store all chunks of Reqs while parsing Req within parantheses until EOF then call
+--       andorParser on all paranthesized Reqs. then call andorParser on 
+
+
+
 
 -- adding functionality to andorParser to let it parse valid courses as well.
 -- may be unnecessary since we can assume courses have no typo
@@ -118,3 +116,5 @@ andorParser = do
 -- create parser for AND, OR, ANDOR, PARANTHESES, FROM..
 -- MUST MAKE SURE TYPES MATCH UP..
 -- AM I TRYING TO DO TOO MUCH IN ONE PARSER.. THINK RECURSIVELY.
+-- 
+-- break down by precedence and try different parsers and merge..?
