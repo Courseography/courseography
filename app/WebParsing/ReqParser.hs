@@ -1,23 +1,4 @@
-{-# LANGUAGE OverloadedStrings #-}
-module WebParsing.ReqParser
-    ( courseParser
-    , courseParser2
-    , orSeparator
-    , andSeparator
-    , lpSeparator
-    , rpSeparator
-    , fromSeparator
-    , andParser
-    , andParser2
-    , orParser
-    , orParser2
-    , andorParser
-    ) where
-
-import qualified Text.Parsec as P
-import Text.Parsec ((<|>))
-import qualified Data.Text as T
-import Text.Parsec.String (Parser)
+{-# LANGUAGE FlexibleContexts #-}
 
 -- I import qualified so that it's clear which
 -- functions are from the parsec library:
@@ -79,8 +60,6 @@ courseParser2 = do
     return (course)
 
 
-
-
 -- parse "courses" separated by /
 -- csc263/csc265, MAT235/Mat237/Mat257
 -- PRECONDITION: '/' infix binary OP => will always have "courses" on both sides
@@ -102,7 +81,6 @@ orParser2 :: Parsec.Parsec String () [String]
 orParser2 = Parsec.sepBy (Parsec.many1 (Parsec.alphaNum <|> Parsec.oneOf ", ()")) (Parsec.char '/')
 
 
-
 -- mat240,csc263/csc265, MAT235/Mat237/Mat257
 -- PRECONDITION: ',' infix binary OP => will always have "courses" on both sides
 --                => we will always have "course" followed by (, "course")s
@@ -122,8 +100,8 @@ andParser2 = Parsec.sepBy (Parsec.many1 (Parsec.alphaNum <|> Parsec.oneOf "/ ()"
 -- csc263/csc265, MAT235/Mat237/Mat257
 -- PRECONDITION: '/' ',' infix binary OPs => will always have "courses" on both sides
 -- POSTCONDITION: returns list of list of "courses". Depth 0 ','' . Depth 1 '/'.
-andorParser :: Parsec.Parsec String () [[String]]
-andorParser = 
+--andorParser :: Parsec.Parsec String () [[String]]
+--andorParser = 
 
 
 
