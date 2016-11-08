@@ -59,20 +59,3 @@ function updateGridImage(session) {
         }
     });
 }
-
-// delete it
-function getCoursesTable(session) {
-    'use strict';
-
-    var sessionChar = session === 'Fall' ? 'F' : 'S';
-    var days = ['M', 'T', 'W', 'R', 'F'];
-    var courses = '';
-    for (var i = 8; i < 22; i++) {
-        for (var j = 0; j < 5; j++) {
-            courses += $('#' + days[j] + i + '-0' + sessionChar).text();
-            courses += '_';
-        }
-    }
-
-    return courses;
-}
