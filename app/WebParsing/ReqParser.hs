@@ -1,20 +1,9 @@
 {-# LANGUAGE FlexibleContexts #-}
 
--- I import qualified so that it's clear which
--- functions are from the parsec library:
 import qualified Text.Parsec as Parsec
-
--- I am the choice and optional error message infix operator, used later:
 import Text.Parsec ((<?>))
-
--- Imported so we can play with applicative things later.
--- not qualified as mostly infix operators we'll be using.
 import Control.Applicative
-
--- Get the Identity monad from here:
 import Control.Monad.Identity (Identity)
-
--- alias parseTest for more concise usage in my examples:
 parse rule text = Parsec.parse rule "(source)" text
 
 
@@ -65,10 +54,10 @@ courseParser2 = do
 -- PRECONDITION: '/' infix binary OP => will always have "courses" on both sides
 --                => we will always have "course" followed by (/ "course")s
 -- POSTCONDITION: returns list of "courses" that were separated by '/'
-orParser :: Parsec.Parsec String () [String]
+orParser1 :: Parsec.Parsec String () [String]
 -- look for whitespaces, /, course, whitespaces. Repeat.
 -- more efficiently, separate by optional whitespaces with '/'
-orParser = Parsec.many $ do
+orParser1 = Parsec.many $ do
     course <- courseParser
     Parsec.eof <|> orSeparator
     return course
@@ -80,13 +69,12 @@ orParser2 :: Parsec.Parsec String () [String]
 -- more efficiently, separate by optional whitespaces with '/'
 orParser2 = Parsec.sepBy (Parsec.many1 (Parsec.alphaNum <|> Parsec.oneOf ", ()")) (Parsec.char '/')
 
-
 -- mat240,csc263/csc265, MAT235/Mat237/Mat257
 -- PRECONDITION: ',' infix binary OP => will always have "courses" on both sides
 --                => we will always have "course" followed by (, "course")s
 -- POSTCONDITION: returns list of "courses" that were separated by ','
-andParser :: Parsec.Parsec String () [String]
-andParser = Parsec.many $ do
+andParser1 :: Parsec.Parsec String () [String]
+andParser1 = Parsec.many $ do
     course <- courseParser
     Parsec.eof <|> andSeparator
     return course
@@ -95,19 +83,38 @@ andParser = Parsec.many $ do
 andParser2 :: Parsec.Parsec String () [String]
 andParser2 = Parsec.sepBy (Parsec.many1 (Parsec.alphaNum <|> Parsec.oneOf "/ ()")) (Parsec.char ',')
 
+-- parse by parantheses, treat everything inside paranthesis as one "req"
+parParser1 :: Parsec.Parsec String () [String]
+
+
+-- IDEA: within parParser, store all chunks of Reqs while parsing Req within parantheses until EOF then call
+--       andorParser on all paranthesized Reqs. then call andorParser on 
+
 
 -- parse "courses" separated by , then by /
 -- csc263/csc265, MAT235/Mat237/Mat257
 -- PRECONDITION: '/' ',' infix binary OPs => will always have "courses" on both sides
--- POSTCONDITION: returns list of list of "courses". Depth 0 ','' . Depth 1 '/'.
---andorParser :: Parsec.Parsec String () [[String]]
---andorParser = 
+-- POSTCONDITION: returns list of list of "courses". Depth 0 by ','' . Depth 1 by '/'.
+andorParser :: Parsec.Parsec String () [Either Parsec.ParseError [String]]
+andorParser = do
+    andParsed <- andParser2
+    let tmp = map (parse orParser2) andParsed
+    return tmp
 
-
+-- adding functionality to andorParser to let it parse valid courses as well.
+-- may be unnecessary since we can assume courses have no typo
+-- might be more realistic to NOT expect perfectly formatted course codes due to inconsistencies in html.
+--andorParser2 :: Parsec.Parsec String () [Either Parsec.ParseError [String]]
+--andorParser2 = do
+--    andParsed <- andParser2
+--    let tmp = map (parse orParser2) andParsed
+--    return map (map (parse courseParser2)) tmp
 
 -- recursion comes in with ()
 -- (mat136, mat136)
 -- parse outer bracket, call lvl 3 then parse closing
 -- parsec sepby
 
-
+-- create parser for AND, OR, ANDOR, PARANTHESES, FROM..
+-- MUST MAKE SURE TYPES MATCH UP..
+-- AM I TRYING TO DO TOO MUCH IN ONE PARSER.. THINK RECURSIVELY.
