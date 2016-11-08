@@ -60,6 +60,6 @@ returnImageData svgFilename imageFilename = do
 returnPdfData :: String -> IO Response
 returnPdfData pdfFilename = do
     pdfData <- BS.readFile pdfFilename
-    _ <- removeImage pdfFilename
     let encodedData = BEnc.encode pdfData
+    _ <- removeImage pdfFilename
     return $ toResponse encodedData

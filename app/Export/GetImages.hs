@@ -44,8 +44,8 @@ getActiveTimetable req termSession = do
         (lecture, tutorial) = parseCourseCookie coursecookie termSession  -- ([CourseInfo], [CourseInfo])
     (lecTimes, tutTimes) <- getTimes (lecture, tutorial)
     let schedule' = getScheduleByTime lecTimes tutTimes
-    (svgFilename, imageFilename) <- generateTimetableImg schedule' termSession
-    return (svgFilename, imageFilename)
+    generateTimetableImg schedule' termSession
+    
 
 -- | Parse cookie string to two lists of courses, one for lecture, the other for tutorial
 -- "CSC148H1-L5101-S_CSC148H1-T0501-S_STA355H1-L0101-F_CSC108H1-L0102-F"

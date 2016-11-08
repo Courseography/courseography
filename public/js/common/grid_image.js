@@ -60,7 +60,7 @@ function updateGridImage(session) {
     });
 }
 
-
+// delete it
 function getCoursesTable(session) {
     'use strict';
 
@@ -75,21 +75,4 @@ function getCoursesTable(session) {
     }
 
     return courses;
-}
-
-
-/* Request bytestring of PDF of graph and timetable and convert to PDF*/
-function getPDF() {
-    'use strict';
-
-    $.ajax({
-        url: 'timetable-pdf',
-        success: function (data) {
-            var pdfAsDataUri = "data:application/pdf;base64," + data;
-            window.open(pdfAsDataUri);
-        },
-        error: function () {
-            throw 'No pdf generated';
-        }
-    });
 }

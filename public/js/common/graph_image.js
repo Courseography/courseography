@@ -27,18 +27,18 @@ function getGraphImage() {
 
 }
 
-/* Request bytestring of PDF of graph and timetable and convert to PDF*/
-function getPDF() {
-    'use strict';
+// /* Request bytestring of PDF of graph and timetable and convert to PDF*/
+// function getPDF() {
+//     'use strict';
 
-    $.ajax({
-        url: 'timetable-pdf',
-        success: function (data) {
-            var pdfAsDataUri = "data:application/pdf;base64," + data;
-            window.open(pdfAsDataUri);
-        },
-        error: function () {
-            throw 'No pdf generated';
-        }
-    });
-}
+//     $.ajax({
+//         url: 'timetable-pdf',
+//         success: function (data) {
+//             var pdfAsDataUri = "data:application/pdf;base64," + data;
+//             window.open(pdfAsDataUri);
+//         },
+//         error: function () {
+//             throw 'No pdf generated';
+//         }
+//     });
+// }
