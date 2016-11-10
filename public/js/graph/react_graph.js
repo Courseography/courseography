@@ -1346,7 +1346,7 @@ var Modal = React.createClass({
     },
     closeModal : function() {
         this.setState({modalIsOpen: false});
-            }
+        },
     render: function () {
         if (this.state.courseId) {
             return (
