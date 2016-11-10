@@ -556,7 +556,7 @@ var Graph = React.createClass({
 
         return (
             <div>
-                <Modal ref = "modal"/>
+                <Modal ref = 'modal'/>
                 <Button
                     divId='zoom-in-button'
                     text='+'
@@ -1348,7 +1348,6 @@ var Modal = React.createClass({
         this.setState({modalIsOpen: false});
         },
     render: function () {
-        if (this.state.courseId) {
             return (
                 <div>
                 <ReactModal className='ModalClass'
@@ -1363,8 +1362,6 @@ var Modal = React.createClass({
                 </ReactModal>
                 </div>
             );
-        } else {
-            return <div className='modal fade'></div>;
         }
     }
 });
