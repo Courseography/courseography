@@ -159,10 +159,6 @@ var Graph = React.createClass({
             horizontalPanFactor: 0,
             verticalPanFactor: 0,
             mouseDown: false,
-            modalIsOpen: false,
-            courseId : '',
-            courseTitle : '',
-            formatCourse : ''
             };
             
     },
@@ -319,10 +315,6 @@ var Graph = React.createClass({
             modal.setState({modalIsOpen: true, courseId: newCourse, formatCourse: formatted[0], courseTitle: getCourseTitle(newCourse, formatted)});
     }
     },
-
-    closeModal: function() {
-        this.setState({modalIsOpen: false});
-    },
     nodeClick: function (event) {
         var courseId = event.currentTarget.id;
         var currentNode = this.refs.nodes.refs[courseId];
@@ -398,7 +390,6 @@ var Graph = React.createClass({
     },
 
     infoBoxMouseClick: function () {
-        var infoBox = this.refs.infoBox;
         this.openModal();
     },
 

@@ -58,24 +58,18 @@ export var Description = React.createClass({
 
     componentDidMount: function(newProps) {
         this.refresh();
-        console.log("Did mount");
     },
 
     componentWillUpdate: function (newProps, newState) {
         if (newProps.course !== this.props.course) {
             this.refresh(newProps.course);
         }
-        console.log(newProps.course, this.props.course);
+
         
     },
 
     // This loads the course json
     refresh: function(newCourse) {
-        // This means a previous course is being passed 
-        if (newCourse === '') {
-            console.log("old");
-        }
-        else {
         if (newCourse === undefined) {
             newCourse = this.props.course;
         }
@@ -98,7 +92,7 @@ export var Description = React.createClass({
                 console.error('course-info', status, err.toString());
             }.bind(this)
             });
-            }
+            
     },
 
     render: function() {
