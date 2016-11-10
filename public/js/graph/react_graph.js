@@ -307,17 +307,17 @@ var Graph = React.createClass({
             $('#fcecount').text('FCE Count: ' + this.state.fceCount);
         });
     },
-     openModal: function () {  
-        var infoBox = this.refs.infoBox
-        var newCourse = infoBox.state.nodeId.substring(0, 6)
-
-        if (newCourse == this.state.courseId) {
-            this.setState({modalIsOpen: true});
+    openModal: function () {  
+    var infoBox = this.refs.infoBox
+    var newCourse = infoBox.state.nodeId.substring(0, 6)
+    var modal = this.refs.modal
+    if (newCourse == modal.state.courseId) {
+            modal.setState({modalIsOpen: true, formatCourse: ''});
         }
         else {
-            this.setState({modalIsOpen: true, courseId: newCourse, courseTitle: getCourseTitle(newCourse), formatCourse: formatCourseName(newCourse)[0]});
+            var formatted = formatCourseName(newCourse);
+            modal.setState({modalIsOpen: true, courseId: newCourse, formatCourse: formatted[0], courseTitle: getCourseTitle(newCourse, formatted)});
     }
-
     },
 
     closeModal: function() {
@@ -565,17 +565,7 @@ var Graph = React.createClass({
 
         return (
             <div>
-                <ReactModal className='ModalClass'
-                    overlayClassName='OverlayClass'
-                    isOpen={this.state.modalIsOpen}
-                    onRequestClose={this.closeModal}>
-                    <div className='modal-header'>
-                        {this.state.courseTitle}
-                          </div>
-                        <div className='modal-body'>
-                            <Description course  = {this.state.formatCourse}/> </div>  
-                </ReactModal>
-
+                <Modal ref = "modal"/>
                 <Button
                     divId='zoom-in-button'
                     text='+'
@@ -1352,5 +1342,39 @@ var InfoBox = React.createClass({
         }
     }
 });
-
+var Modal = React.createClass({
+    getInitialState: function () {
+        return {
+            courseId: '',
+            course: [],
+            sessions: []
+            modalIsOpen: false,
+            courseTitle : '',
+            formatCourse : ''
+        };
+    },
+    closeModal : function() {
+        this.setState({modalIsOpen: false});
+            }
+    render: function () {
+        if (this.state.courseId) {
+            return (
+                <div>
+                <ReactModal className='ModalClass'
+                    overlayClassName='OverlayClass'
+                    isOpen={this.state.modalIsOpen}
+                    onRequestClose={this.closeModal}>
+                    <div className='modal-header'>
+                        {this.state.courseTitle}
+                          </div>
+                        <div className='modal-body'>
+                            <Description course  = {this.state.formatCourse}/> </div>  
+                </ReactModal>
+                </div>
+            );
+        } else {
+            return <div className='modal fade'></div>;
+        }
+    }
+});
 export default {renderReactGraph: renderReactGraph};
