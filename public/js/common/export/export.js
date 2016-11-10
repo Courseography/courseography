@@ -23,12 +23,40 @@ function getPDF() {
 
     $.ajax({
         url: 'timetable-pdf',
-        success: function (data) {
-            var pdfAsDataUri = "data:application/pdf;base64," + data;
-            window.open(pdfAsDataUri);
-        },
-        error: function () {
-            throw 'No pdf generated';
+        type: 'post',
+        success: function(b64Data) {
+         	var contentType = "application/pdf";
+        	var blob = b64toBlob(b64Data, contentType);
+			var blobUrl = window.URL.createObjectURL(blob);
+			var link = document.createElement('a');
+			link.href = blobUrl;
+			link.download="graph_and_timeable.pdf";
+            link.click();
         }
     });
+}
+
+
+
+function b64toBlob(b64Data, contentType, sliceSize) {
+	contentType = contentType || '';
+	sliceSize = sliceSize || 512;
+
+	var byteCharacters = atob(b64Data);
+	var byteArrays = [];
+
+	for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+		var slice = byteCharacters.slice(offset, offset + sliceSize);
+
+		var byteNumbers = new Array(slice.length);
+		for (var i = 0; i < slice.length; i++) {
+			byteNumbers[i] = slice.charCodeAt(i);
+		}
+
+		var byteArray = new Uint8Array(byteNumbers);
+		byteArrays.push(byteArray);
+	}
+
+	var blob = new Blob(byteArrays, {type: contentType});
+	return blob;
 }
