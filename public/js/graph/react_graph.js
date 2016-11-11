@@ -1338,7 +1338,7 @@ var Modal = React.createClass({
         return {
             courseId: '',
             course: [],
-            sessions: []
+            sessions: [],
             modalIsOpen: false,
             courseTitle : '',
             formatCourse : ''
@@ -1360,9 +1360,7 @@ var Modal = React.createClass({
                         <div className='modal-body'>
                             <Description course  = {this.state.formatCourse}/> </div>  
                 </ReactModal>
-                </div>
-            );
+                </div> ); 
         }
-    }
-});
+    });
 export default {renderReactGraph: renderReactGraph};
