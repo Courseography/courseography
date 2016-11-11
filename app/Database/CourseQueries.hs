@@ -1,4 +1,4 @@
-{-# LANGUAGE ScopedTypeVariables, OverloadedStrings, GADTs #-} -- GADTs added by Kael
+{-# LANGUAGE GADTs, OverloadedStrings, ScopedTypeVariables #-}
 
 {-|
 Description: Respond to various requests involving database course information.
@@ -17,7 +17,9 @@ module Database.CourseQueries
      deptList,
      returnTutorial,
      returnLecture,
-     getGraphJSON) where
+     getGraphJSON,
+     getLectureTime,
+     getTutorialTime) where
 
 import Happstack.Server.SimpleHTTP
 import Database.Persist
@@ -34,6 +36,8 @@ import Control.Monad (liftM)
 import Data.Aeson ((.=), toJSON, object)
 import Database.DataType
 import Svg.Builder
+import Control.Monad.Trans.Reader
+
 
 ---- | Queries db for all matching records with lecture or tutorial code of this course
 lectureQuery :: T.Text -> SqlPersistM [Entity Lecture]
@@ -269,3 +273,24 @@ queryGraphs =
     runSqlite databasePath $
         do graphs :: [Entity Graph] <- selectList [] [Asc GraphTitle]
            return $ createJSONResponse graphs
+
+-- ========================================================
+
+getLectureTime :: MonadIO m => CourseInfo -> ReaderT SqlBackend m (CourseInfo)
+getLectureTime courseInfo = do
+    maybeEntityLectures <- selectFirst [LectureCode ==. (T.pack . code $ courseInfo),
+                                        LectureSection ==. (T.pack . section $ courseInfo),
+                                        LectureSession ==. (T.pack . session $ courseInfo)]
+                                       []
+    let times = maybe [] (lectureTimes . entityVal) maybeEntityLectures
+    return CourseInfo {code = code courseInfo, section = section courseInfo, session = session courseInfo, time = times}
+
+
+getTutorialTime :: MonadIO m => CourseInfo -> ReaderT SqlBackend m (CourseInfo)
+getTutorialTime courseInfo = do
+    maybeEntityTutorials  <- selectFirst [TutorialCode ==. (T.pack . code $ courseInfo),
+                                          TutorialSection ==. Just (T.pack . section $ courseInfo),
+                                          TutorialSession ==. (T.pack . session $ courseInfo)]
+                                         []
+    let times = maybe [] (tutorialTimes . entityVal) maybeEntityTutorials
+    return CourseInfo {code = code courseInfo, section = section courseInfo, session = session courseInfo, time = times}

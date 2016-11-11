@@ -11,7 +11,7 @@ createImageFile :: String -> String -> IO ()
 createImageFile inName outName =  do
     (_, _, _, pid) <- convertToImage inName outName
     print "Waiting for process..."
-    waitForProcess pid
+    _ <- waitForProcess pid
     print "Process Complete"
 
 -- | Converts an SVG file to a PNG file. Note that image magik's 'convert' command
@@ -22,9 +22,9 @@ convertToImage :: String -> String -> IO
                       Maybe Handle,
                       ProcessHandle)
 convertToImage inName outName = createProcess $ CreateProcess
-                                  (ShellCommand $ "convert " ++
+                                  (ShellCommand $ "rsvg-convert " ++
                                                   inName ++
-                                                  " " ++
+                                                  " > " ++
                                                   outName
                                   )
                                   Nothing
