@@ -4,7 +4,7 @@ module Export.ImageConversion
 import System.Process
 import GHC.IO.Handle.Types
 
--- | Opens a new process to convert an SVG (inName) to a PNG (outName) 
+-- | Opens a new process to convert an SVG (inName) to a PNG (outName)
 -- Note: hGetContents can be used to read Handles. Useful when trying to read from
 -- stdout.
 createImageFile :: String -> String -> IO ()
@@ -22,9 +22,9 @@ convertToImage :: String -> String -> IO
                       Maybe Handle,
                       ProcessHandle)
 convertToImage inName outName = createProcess $ CreateProcess
-                                  (ShellCommand $ "rsvg-convert " ++
+                                  (ShellCommand $ "convert " ++
                                                   inName ++
-                                                  " > " ++
+                                                  " " ++
                                                   outName
                                   )
                                   Nothing
@@ -35,7 +35,7 @@ convertToImage inName outName = createProcess $ CreateProcess
                                   False
                                   False
                                   False
-                                  
+
 -- | Removes a file.
 removeImage :: String -> IO
                      (Maybe Handle,

@@ -24,10 +24,8 @@ timetableImageResponse courses session = do
     (svgFilename, imageFilename) <- liftIO $ getTimetableImage courses session
     liftIO $ returnImageData svgFilename imageFilename
 
-
--- =============================
 -- get timetable from parsing selected-lectures cookie
--- If using returnImageData, can download timetable images to local. 
+-- If using returnImageData, can download timetable images to local.
 -- Elseif using return pdf, suppose to get pdf of timetable
 timetableImageCookieResponse :: String -> ServerPart Response
 timetableImageCookieResponse session = do
@@ -44,8 +42,6 @@ timetablePDFResponse = do
     pdfName <- liftIO $ returnPDF graphSvg graphImg fallsvgFilename fallimageFilename springsvgFilename springimageFilename
     liftIO $ returnPdfData pdfName
 
--- =============================
-
 -- | Creates and converts an SVG file to an image file, deletes them both and
 -- returns the image data as a response.
 returnImageData :: String -> String -> IO Response
@@ -60,6 +56,5 @@ returnImageData svgFilename imageFilename = do
 returnPdfData :: String -> IO Response
 returnPdfData pdfFilename = do
     pdfData <- BS.readFile pdfFilename
-    let encodedData = BEnc.encode pdfData
     _ <- removeImage pdfFilename
-    return $ toResponse encodedData
+    return $ toResponseBS "application/pdf" pdfData

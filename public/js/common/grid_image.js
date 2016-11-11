@@ -14,11 +14,11 @@ function getGridImage(session) {
             var topContentDiv = $('<div></div>');
             var calendarOption = $('<a href="calendar">Download ICS</a>');
             calendarOption.attr('target', '_blank');
-            var calendarOption2 = $('<button onclick="getPDF()" style="color: #6B6882; background-color: Transparent; background-repeat:no-repeat;border: none;cursor:pointer;overflow: hidden;outline:none;">Download PDF</button>');
+            var pdfOption = $('<a href="timetable-pdf" target="_blank">Download PDF</a>');
             topContentDiv.html('<img id="post-image" src="data:image/png;base64,' + data + '" />');
             contentDiv.attr('id', 'modal-content-container')
                       .append(calendarOption)
-                      .append(calendarOption2)
+                      .append(pdfOption)
                       .append(topContentDiv);
 
             var sessionButton = $('<button type="button" class="btn btn-primary" id="switch-session-button">Switch Sessions</button>');

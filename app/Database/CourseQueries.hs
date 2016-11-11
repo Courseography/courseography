@@ -36,7 +36,6 @@ import Control.Monad (liftM)
 import Data.Aeson ((.=), toJSON, object)
 import Database.DataType
 import Svg.Builder
-import Control.Monad.Trans.Reader
 
 
 ---- | Queries db for all matching records with lecture or tutorial code of this course
@@ -274,23 +273,21 @@ queryGraphs =
         do graphs :: [Entity Graph] <- selectList [] [Asc GraphTitle]
            return $ createJSONResponse graphs
 
--- ========================================================
-
-getLectureTime :: MonadIO m => CourseInfo -> ReaderT SqlBackend m (CourseInfo)
+getLectureTime :: CourseInfo -> SqlPersistM CourseInfo
 getLectureTime courseInfo = do
-    maybeEntityLectures <- selectFirst [LectureCode ==. (T.pack . code $ courseInfo),
-                                        LectureSection ==. (T.pack . section $ courseInfo),
-                                        LectureSession ==. (T.pack . session $ courseInfo)]
+    maybeEntityLectures <- selectFirst [LectureCode ==. (T.pack $ code courseInfo),
+                                        LectureSection ==. (T.pack $ section courseInfo),
+                                        LectureSession ==. (T.pack $ session courseInfo)]
                                        []
     let times = maybe [] (lectureTimes . entityVal) maybeEntityLectures
-    return CourseInfo {code = code courseInfo, section = section courseInfo, session = session courseInfo, time = times}
+    return courseInfo { time = times }
 
 
-getTutorialTime :: MonadIO m => CourseInfo -> ReaderT SqlBackend m (CourseInfo)
+getTutorialTime :: CourseInfo -> SqlPersistM CourseInfo
 getTutorialTime courseInfo = do
-    maybeEntityTutorials  <- selectFirst [TutorialCode ==. (T.pack . code $ courseInfo),
-                                          TutorialSection ==. Just (T.pack . section $ courseInfo),
-                                          TutorialSession ==. (T.pack . session $ courseInfo)]
-                                         []
+    maybeEntityTutorials <- selectFirst [TutorialCode ==. (T.pack $ code courseInfo),
+                                         TutorialSection ==. (Just (T.pack $ section courseInfo)),
+                                         TutorialSession ==. (T.pack $ session courseInfo)]
+                                        []
     let times = maybe [] (tutorialTimes . entityVal) maybeEntityTutorials
-    return CourseInfo {code = code courseInfo, section = section courseInfo, session = session courseInfo, time = times}
+    return courseInfo { time = times }

@@ -8,14 +8,12 @@ import Export.ImageConversion (removeImage)
 import Export.PdfGenerator
 import Export.LatexGenerator
 
--- | Serves a pdf file that includes a graph and timetable information from 
+-- | Serves a pdf file that includes a graph and timetable information from
 -- selected course sessions
 exportGraphResponse :: String -> String -> ServerPart Response
 exportGraphResponse courses session = do
     req <- askRq
-    (graphSvg, graphImg) <- liftIO $ getActiveGraphImage req                    -- create image of active graph
-    -- (timetableSvg, timetableImg) <- liftIO $ getTimetableImage courses session  -- create timetable image from course and session 
-    -- pdfName <- liftIO $ returnPDF graphSvg graphImg timetableSvg timetableImg   -- create pdf with both graph and timetable
+    (graphSvg, graphImg) <- liftIO $ getActiveGraphImage req
     (fallsvgFilename, fallimageFilename) <- liftIO $ getActiveTimetable req "Fall"
     (springsvgFilename, springimageFilename) <- liftIO $ getActiveTimetable req "Spring"
     pdfName <- liftIO $ returnPDF graphSvg graphImg fallsvgFilename fallimageFilename springsvgFilename springimageFilename
@@ -31,4 +29,4 @@ returnPDF graphSvg graphImg fallTimetableSvg fallTimetableImg springTimetableSvg
     generateTex [graphImg, fallTimetableImg, springTimetableImg] texName -- generate a temporary TEX file
     createPDF texName                            -- create PDF using TEX and delete the TEX file afterwards
     _ <- removeImage (graphSvg ++ " " ++ graphImg ++ " " ++ fallTimetableSvg ++ " " ++ fallTimetableImg ++ " " ++ springTimetableSvg ++ " " ++ springTimetableImg)
-    return $ (pdfName)
+    return pdfName
