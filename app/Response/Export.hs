@@ -4,7 +4,7 @@ module Response.Export
 import Control.Monad.IO.Class  (liftIO)
 import Happstack.Server
 import Export.GetImages
-import Export.ImageConversion (removeImage)
+import Export.ImageConversion (removeFile)
 import Export.PdfGenerator
 import Export.LatexGenerator
 
@@ -28,5 +28,5 @@ returnPDF graphSvg graphImg fallTimetableSvg fallTimetableImg springTimetableSvg
         pdfName = rand ++ ".pdf"
     generateTex [graphImg, fallTimetableImg, springTimetableImg] texName -- generate a temporary TEX file
     createPDF texName                            -- create PDF using TEX and delete the TEX file afterwards
-    _ <- removeImage (graphSvg ++ " " ++ graphImg ++ " " ++ fallTimetableSvg ++ " " ++ fallTimetableImg ++ " " ++ springTimetableSvg ++ " " ++ springTimetableImg)
+    _ <- removeFile (graphSvg ++ " " ++ graphImg ++ " " ++ fallTimetableSvg ++ " " ++ fallTimetableImg ++ " " ++ springTimetableSvg ++ " " ++ springTimetableImg)
     return pdfName

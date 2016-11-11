@@ -1,5 +1,5 @@
 module Export.ImageConversion
-    (createImageFile, removeImage) where
+    (createImageFile, removeFile) where
 
 import System.Process
 import GHC.IO.Handle.Types
@@ -37,18 +37,18 @@ convertToImage inName outName = createProcess $ CreateProcess
                                   False
 
 -- | Removes a file.
-removeImage :: String -> IO
+removeFile :: String -> IO
                      (Maybe Handle,
                       Maybe Handle,
                       Maybe Handle,
                       ProcessHandle)
-removeImage name = createProcess $ CreateProcess
-                                  (ShellCommand $ "rm " ++ name)
-                                  Nothing
-                                  Nothing
-                                  Inherit
-                                  CreatePipe
-                                  CreatePipe
-                                  False
-                                  False
-                                  False
+removeFile name = createProcess $ CreateProcess
+                                 (ShellCommand $ "rm " ++ name)
+                                 Nothing
+                                 Nothing
+                                 Inherit
+                                 CreatePipe
+                                 CreatePipe
+                                 False
+                                 False
+                                 False

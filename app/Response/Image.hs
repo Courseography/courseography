@@ -47,8 +47,8 @@ timetablePDFResponse = do
 returnImageData :: String -> String -> IO Response
 returnImageData svgFilename imageFilename = do
     imageData <- BS.readFile imageFilename
-    _ <- removeImage imageFilename
-    _ <- removeImage svgFilename
+    _ <- removeFile imageFilename
+    _ <- removeFile svgFilename
     let encodedData = BEnc.encode imageData
     return $ toResponse encodedData
 
@@ -56,5 +56,5 @@ returnImageData svgFilename imageFilename = do
 returnPdfData :: String -> IO Response
 returnPdfData pdfFilename = do
     pdfData <- BS.readFile pdfFilename
-    _ <- removeImage pdfFilename
+    _ <- removeFile pdfFilename
     return $ toResponseBS "application/pdf" pdfData

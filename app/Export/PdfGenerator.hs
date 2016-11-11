@@ -3,7 +3,7 @@ module Export.PdfGenerator
 
 import System.Process
 import GHC.IO.Handle.Types
-import Export.ImageConversion (removeImage)
+import Export.ImageConversion (removeFile)
 import Data.List.Utils (replace)
 
 -- | Opens a new process to create a PDF from a TEX (texName) and deletes
@@ -15,7 +15,7 @@ createPDF texName  = do
   _ <- waitForProcess pid
   let auxFile = replace ".tex" ".aux" texName
       logFile = replace ".tex" ".log" texName
-  _ <- removeImage (auxFile ++ " " ++ logFile ++ " " ++ texName)
+  _ <- removeFile (auxFile ++ " " ++ logFile ++ " " ++ texName)
   print "Process Complete"
 
 -- | Create a process to use the pdflatex program to create a PDF from a TEX 
