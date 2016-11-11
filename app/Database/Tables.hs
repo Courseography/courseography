@@ -189,6 +189,8 @@ data Course =
              videoUrls :: [T.Text]
            } deriving (Show, Generic)
 
+data CourseInfo = CourseInfo {code :: String, section :: String, session :: String, time :: [Time]} deriving (Show)
+
 instance ToJSON Course
 instance ToJSON Session
 instance ToJSON Time
