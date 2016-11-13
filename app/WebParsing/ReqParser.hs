@@ -51,7 +51,7 @@ courseParser2 = do
 -- csc263/csc265, MAT235/Mat237/Mat257
 -- PRECONDITION: '/' infix binary OP => will always have "courses" on both sides
 --                => we will always have "course" followed by (/ "course")s
--- POSTCONDITION: returns list of "courses" that were separated by '/'
+-- POSTCONDITION: returns list of "courses" that were s     eparated by '/'
 orParser1 :: Parsec.Parsec String () [String]
 -- look for whitespaces, /, course, whitespaces. Repeat.
 -- more efficiently, separate by optional whitespaces with '/'
@@ -81,7 +81,7 @@ andParser2 :: Parsec.Parsec String () [String]
 andParser2 = Parsec.sepBy (Parsec.many1 (Parsec.alphaNum <|> Parsec.oneOf "/ ()")) (Parsec.char ',')
 
 -- parse by parantheses, treat everything inside paranthesis as one "req"
-parParser1 :: Parsec.Parsec String () [String]
+--parParser1 :: Parsec.Parsec String () [String]
 
 -- csc263/csc265, MAT235/Mat237/Mat257
 -- PRECONDITION: '/' ',' infix binary OPs => will always have "courses" on both sides
@@ -92,6 +92,9 @@ andorParser = do
     let tmp = map (parse orParser2) andParsed
     return tmp
 
+-- WHY NOT TRY CONTROLLING THE ERROR/ RETURN MSG TO CHECK FOR TYPES
+-- LOOK INTO EITHER TYPE.. SHOULD BE ABLE TO HAVE
+--              A NESTED PARSER
 
 -- IDEA: within parParser, store all chunks of Reqs while parsing Req within parantheses until EOF then call
 --       andorParser on all paranthesized Reqs. then call andorParser on 
