@@ -49,6 +49,7 @@ getActiveTimetable req termSession = do
 -- "CSC148H1-L5101-S_CSC148H1-T0501-S_STA355H1-L0101-F_CSC108H1-L0102-F"
 -- [("STA355H1","LEC-0101","F"),("CSC108H1","LEC-0102","F")], [])
 parseCourseCookie :: String -> String -> ([CourseInfo], [CourseInfo])
+parseCourseCookie "" _ = ([], [])
 parseCourseCookie s termSession =
   let lecAndTut = map (splitOn "-") $ splitOn "_" s
       (lecture, tutorial) = partition isLec lecAndTut
