@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Response.Export
-    (returnPDF, exportTimetableResponse, exportTimetablePDFResponse, returnPdfData) where
+    (returnPDF, exportTimetableResponse, exportTimetablePDFResponse) where
 
 import Control.Monad.IO.Class  (liftIO)
 import Happstack.Server
@@ -27,11 +27,11 @@ exportTimetablePDFResponse = do
     (fallsvgFilename, fallimageFilename) <- liftIO $ getActiveTimetable req "Fall"
     (springsvgFilename, springimageFilename) <- liftIO $ getActiveTimetable req "Spring"
     pdfName <- liftIO $ returnPDF graphSvg graphImg fallsvgFilename fallimageFilename springsvgFilename springimageFilename
-    liftIO $ returnPdfData pdfName
+    liftIO $ returnPdfBS pdfName
 
 -- | Read PDF and convert into bytestring formate, then delete from local
-returnPdfData :: String -> IO Response
-returnPdfData pdfFilename = do
+returnPdfBS :: String -> IO Response
+returnPdfBS pdfFilename = do
     pdfData <- BS.readFile pdfFilename
     _ <- removeFile pdfFilename
     return $ toResponseBS "application/pdf" pdfData
