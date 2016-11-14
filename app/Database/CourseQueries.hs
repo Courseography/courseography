@@ -275,22 +275,22 @@ queryGraphs =
 
 -- | Queries the database for all times regarding a specific lecture for
 -- a @course@, returns a list of Time.
-getLectureTime :: CourseInfo -> SqlPersistM CourseInfo
-getLectureTime courseInfo = do
-    maybeEntityLectures <- selectFirst [LectureCode ==. (T.pack $ code courseInfo),
-                                        LectureSection ==. (T.pack $ section courseInfo),
-                                        LectureSession ==. (T.pack $ session courseInfo)]
+getLectureTime :: (String, String, String) -> SqlPersistM [Time]
+getLectureTime (lecCode, lecSection, lecSession) = do
+    maybeEntityLectures <- selectFirst [LectureCode ==. (T.pack lecCode),
+                                        LectureSection ==. (T.pack lecSection),
+                                        LectureSession ==. (T.pack lecSession)]
                                        []
     let times = maybe [] (lectureTimes . entityVal) maybeEntityLectures
-    return courseInfo { time = times }
+    return times
 
 -- | Queries the database for all times regarding a specific tutorial for
 -- a @course@, returns a list of Time.
-getTutorialTime :: CourseInfo -> SqlPersistM CourseInfo
-getTutorialTime courseInfo = do
-    maybeEntityTutorials <- selectFirst [TutorialCode ==. (T.pack $ code courseInfo),
-                                         TutorialSection ==. (Just (T.pack $ section courseInfo)),
-                                         TutorialSession ==. (T.pack $ session courseInfo)]
+getTutorialTime :: (String, String, String) -> SqlPersistM [Time]
+getTutorialTime (tutCode, tutSection, tutSession) = do
+    maybeEntityTutorials <- selectFirst [TutorialCode ==. (T.pack tutCode),
+                                         TutorialSection ==. Just (T.pack tutSection),
+                                         TutorialSession ==. (T.pack tutSession)]
                                         []
     let times = maybe [] (tutorialTimes . entityVal) maybeEntityTutorials
-    return courseInfo { time = times }
+    return times
