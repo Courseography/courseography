@@ -1,23 +1,40 @@
+{-# LANGUAGE OverloadedStrings #-}
 module Response.Export
-    (exportGraphResponse, returnPDF) where
+    (returnPDF, exportTimetableResponse, exportTimetablePDFResponse, returnPdfData) where
 
 import Control.Monad.IO.Class  (liftIO)
 import Happstack.Server
+import qualified Data.ByteString.Lazy as BS
 import Export.GetImages
 import Export.ImageConversion (removeFile)
 import Export.PdfGenerator
 import Export.LatexGenerator
+import Response.Image (returnImageData)
 
--- | Serves a pdf file that includes a graph and timetable information from
--- selected course sessions
-exportGraphResponse :: String -> String -> ServerPart Response
-exportGraphResponse courses session = do
+-- get timetable from parsing selected-lectures cookie
+-- If using returnImageData, can download timetable images to local.
+-- Elseif using return pdf, suppose to get pdf of timetable
+exportTimetableResponse :: String -> ServerPart Response
+exportTimetableResponse session = do
+    req <- askRq
+    (svgFilename, imageFilename) <- liftIO $ getActiveTimetable req session
+    liftIO $ returnImageData svgFilename imageFilename
+
+exportTimetablePDFResponse :: ServerPart Response
+exportTimetablePDFResponse = do
     req <- askRq
     (graphSvg, graphImg) <- liftIO $ getActiveGraphImage req
     (fallsvgFilename, fallimageFilename) <- liftIO $ getActiveTimetable req "Fall"
     (springsvgFilename, springimageFilename) <- liftIO $ getActiveTimetable req "Spring"
     pdfName <- liftIO $ returnPDF graphSvg graphImg fallsvgFilename fallimageFilename springsvgFilename springimageFilename
-    serveFile (asContentType "application/pdf") pdfName
+    liftIO $ returnPdfData pdfName
+
+-- | Read PDF and convert into bytestring formate, then delete from local
+returnPdfData :: String -> IO Response
+returnPdfData pdfFilename = do
+    pdfData <- BS.readFile pdfFilename
+    _ <- removeFile pdfFilename
+    return $ toResponseBS "application/pdf" pdfData
 
 -- | Returns the name of a generated pdf that contains graphImg and timetableImg
 -- and deletes all of the img and svg files passed as arguments
