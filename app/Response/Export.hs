@@ -1,8 +1,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Response.Export
-    (returnPDF, exportTimetableResponse, exportTimetablePDFResponse) where
+    (returnPDF, exportTimetableImageResponse, exportTimetablePDFResponse) where
 
-import Control.Monad.IO.Class  (liftIO)
+import Control.Monad.IO.Class (liftIO)
 import Happstack.Server
 import qualified Data.ByteString.Lazy as BS
 import Export.GetImages
@@ -14,8 +14,8 @@ import Response.Image (returnImageData)
 -- get timetable from parsing selected-lectures cookie
 -- If using returnImageData, can download timetable images to local.
 -- Elseif using return pdf, suppose to get pdf of timetable
-exportTimetableResponse :: String -> ServerPart Response
-exportTimetableResponse session = do
+exportTimetableImageResponse :: String -> ServerPart Response
+exportTimetableImageResponse session = do
     req <- askRq
     (svgFilename, imageFilename) <- liftIO $ getActiveTimetable req session
     liftIO $ returnImageData svgFilename imageFilename

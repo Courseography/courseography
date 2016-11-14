@@ -58,7 +58,7 @@ cellText :: String -> Diagram B
 cellText s = font "Trebuchet MS" $ text s # fontSizeO fs
 
 makeCell :: Int -> String -> Diagram B
-makeCell maxCourse s = 
+makeCell maxCourse s =
     let sList = splitOn "&" s
         actualCourse = length sList
         extraCell = replicate (maxCourse - actualCourse) [cellPadding # fc white # lc white, cellText "" # fc white <> cell # fc white # lc white]
@@ -81,7 +81,7 @@ makeSessionCell s =
     timeCellPadding === (cellText s <> timeCell)
 
 makeHeaderCell :: String -> Diagram B
-makeHeaderCell s = 
+makeHeaderCell s =
     (cellPadding # lw none # fc white # lc white) === (cellText s <> cell # lw none)
 
 makeTimeCell :: String -> Diagram B
@@ -89,9 +89,9 @@ makeTimeCell s =
     timeCellPadding === (cellText s <> timeCell)
 
 makeRow :: [String] -> Diagram B
-makeRow (x:xs) = 
+makeRow (x:xs) =
     let maxCourse = maximum (map (length . (splitOn "&")) xs)
-    in (# centerX) . hcat $ 
+    in (# centerX) . hcat $
         makeTimeCell x : map (makeCell maxCourse) xs
 makeRow [] = error "invalid timetable format"
 
@@ -127,4 +127,4 @@ renderTableHelper filename schedule session = do
     writeFile filename txt
     where
         -- relative fonts don't play well with ImageMagick, apparently
-        fs' = round $ 1024 / 800 * fs
+        fs' = round $ 1024 / 900 * fs

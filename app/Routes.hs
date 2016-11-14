@@ -13,7 +13,7 @@ routes staticDir aboutContents privacyContents = [
     ("grid", gridResponse),
     ("graph", graphResponse),
     ("image", graphImageResponse),
-    ("timetable-image", look "session" >>= exportTimetableResponse),
+    ("timetable-image", look "session" >>= exportTimetableImageResponse),
     ("timetable-pdf", exportTimetablePDFResponse),
     ("post", postResponse),
     ("draw", drawResponse),
