@@ -62,10 +62,12 @@ isDepartmentName postType = parseUntil (P.string postType)
 
 -- Post Category Parsing
 
-parsingAlgoOne :: Maybe String -> Parser [String]
+parsingAlgoOne :: Maybe String -> Parser (String, [String])
 parsingAlgoOne firstCourse = do
-    getRequirements firstCourse
-    splitPrereqText
+    description <- getRequirements firstCourse
+    categories <- splitPrereqText
+
+    return (description, categories)
 
 getRequirements :: Maybe String -> Parser String
 getRequirements firstCourse =

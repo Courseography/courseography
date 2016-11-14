@@ -10,10 +10,10 @@ import Database.Persist.Sqlite (insert_, runSqlite, runMigration)
 import Database.Tables
 
 -- | Insert a new post into the database
-insertPost :: T.Text -> T.Text -> T.Text -> IO ()
-insertPost departmentName postName postCode =
+insertPost :: T.Text -> T.Text -> T.Text -> T.Text -> IO ()
+insertPost departmentName postName postCode description =
     runSqlite databasePath $ do
-        insert_ $ Post postName departmentName postCode
+        insert_ $ Post postName departmentName postCode description
 
 -- | Insert a new post category into the database
 insertPostCategory :: T.Text -> T.Text -> IO ()

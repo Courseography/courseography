@@ -142,6 +142,7 @@ Post
     name T.Text
     department T.Text
     code T.Text
+    description T.Text
     deriving Show
 
 PostCategory
