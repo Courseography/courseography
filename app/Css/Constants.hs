@@ -81,7 +81,7 @@ module Css.Constants
      pastelBlue,
      pastelPink,
      pastelPurple,
-     pastelBrown,     
+     pastelBrown,
      pastelGrey
      ) where
 
@@ -326,4 +326,3 @@ boolFontSize = 6
 
 regionFontSize :: Num a => a
 regionFontSize = 14
-
