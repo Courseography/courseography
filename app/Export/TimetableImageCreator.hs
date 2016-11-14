@@ -57,6 +57,7 @@ timeCellPadding = rect timeCellWidth cellPaddingHeight # lw none
 cellText :: String -> Diagram B
 cellText s = font "Trebuchet MS" $ text s # fontSizeO fs
 
+-- | Creates and accumulates cells according to the number of course.
 makeCell :: Int -> String -> Diagram B
 makeCell maxCourse s =
     let sList = splitOn "&" s
@@ -111,12 +112,6 @@ renderTable filename courses session = do
     where
         partition5 [] = []
         partition5 lst = take 5 lst : partition5 (drop 5 lst)
-
-
--- =====================================================
-
--- coursetable : [["","","","",""],["","","","",""],["CSC108 (L)","","CSC108 (L)","","CSC108 (L)"],["","","","",""],["","","","",""],["","","","",""],["STA355 (L)","","STA355 (L)","",""],["STA355 (L)","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],[""]]
--- zipwith :  [["8:00","","","","",""],["9:00","","","","",""],["10:00","CSC108 (L)","","CSC108 (L)","","CSC108 (L)"],["11:00","","","","",""],["12:00","","","","",""],["1:00","","","","",""],["2:00","STA355 (L)","","STA355 (L)","",""],["3:00","STA355 (L)","","","",""],["4:00","","","","",""],["5:00","","","","",""],["6:00","","","","",""],["7:00","","","","",""],["8:00","","","","",""]]
 
 renderTableHelper :: String -> [[String]] -> String -> IO ()
 renderTableHelper filename schedule session = do

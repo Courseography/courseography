@@ -11,15 +11,14 @@ import Export.PdfGenerator
 import Export.LatexGenerator
 import Response.Image (returnImageData)
 
--- get timetable from parsing selected-lectures cookie
--- If using returnImageData, can download timetable images to local.
--- Elseif using return pdf, suppose to get pdf of timetable
+-- | Returns an image of the timetable requested by the user.
 exportTimetableImageResponse :: String -> ServerPart Response
 exportTimetableImageResponse session = do
     req <- askRq
     (svgFilename, imageFilename) <- liftIO $ getActiveTimetable req session
     liftIO $ returnImageData svgFilename imageFilename
 
+-- | Returns a PDF containing graph and timetable requested by the user.
 exportTimetablePDFResponse :: ServerPart Response
 exportTimetablePDFResponse = do
     req <- askRq
@@ -29,7 +28,7 @@ exportTimetablePDFResponse = do
     pdfName <- liftIO $ returnPDF graphSvg graphImg fallsvgFilename fallimageFilename springsvgFilename springimageFilename
     liftIO $ returnPdfBS pdfName
 
--- | Read PDF and convert into bytestring formate, then delete from local
+-- | Returns bytestring of PDF for given name, then deletes PDF from local.
 returnPdfBS :: String -> IO Response
 returnPdfBS pdfFilename = do
     pdfData <- BS.readFile pdfFilename
