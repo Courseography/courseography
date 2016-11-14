@@ -281,8 +281,7 @@ getLectureTime (lecCode, lecSection, lecSession) = do
                                         LectureSection ==. (T.pack lecSection),
                                         LectureSession ==. (T.pack lecSession)]
                                        []
-    let times = maybe [] (lectureTimes . entityVal) maybeEntityLectures
-    return times
+    return $ maybe [] (lectureTimes . entityVal) maybeEntityLectures
 
 -- | Queries the database for all times regarding a specific tutorial for
 -- a @course@, returns a list of Time.
@@ -292,5 +291,4 @@ getTutorialTime (tutCode, tutSection, tutSession) = do
                                          TutorialSection ==. Just (T.pack tutSection),
                                          TutorialSession ==. (T.pack tutSession)]
                                         []
-    let times = maybe [] (tutorialTimes . entityVal) maybeEntityTutorials
-    return times
+    return $ maybe [] (tutorialTimes . entityVal) maybeEntityTutorials
