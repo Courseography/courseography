@@ -48,12 +48,12 @@ fromSeparator :: Parsec.Parsec String () ()
 fromSeparator = Parsec.spaces >> Parsec.oneOf "fromFrom" >> Parsec.spaces
 -- potentially have one separator that returns accordingly?
 
--- csc263h1, mat157Y1, STA257H1
--- Parse a single course with spaces before and or after
+length_list :: [Req] -> Int 
+length_list [] = 0
+length_list (x:xs) =1 + length_list xs
+
+-- parse for single course OR req within parantheses
 courseParser :: Parsec.Parsec String () Req
--- alphanumeric? or is it already just strings, 8 characters.
--- 3 letters (not case sensitive), 3 digits, 1 letter, 1 digit
--- take any spaces before and after?
 courseParser = (do
     Parsec.spaces
     -- with no spaces, we expect 3 letters, 3 digits, and (h/H/y/Y)1
@@ -63,136 +63,42 @@ courseParser = (do
     Parsec.spaces
     return $ J (code++num++sess)) <|> (parParser)
 
--- more lenient course parser
--- courseParser2 :: Parsec.Parsec String () String
--- -- alphanumeric, 8 characters alphanumeric?
--- courseParser2 = do
---     Parsec.spaces
---     course <- Parsec.count 8 Parsec.alphaNum
---     Parsec.spaces
---     return (course)
-
--- courseParser3 :: String -> [String]
--- courseParser3 course = 
---     let parsedCourse = parse andParser2 course
---     in
---         case parsedCourse of
---             Right xs -> xs
---             Left _ -> [""]
-
--- csc263/csc265, MAT235/Mat237/Mat257
--- PRECONDITION: '/' infix binary OP => will always have "courses" on both sides
---                => we will always have "course" followed by (/ "course")s
--- POSTCONDITION: returns list of "courses" that were s     eparated by '/'
---orParser1 :: Parsec.Parsec String () [String]
--- look for whitespaces, /, course, whitespaces. Repeat.
--- more efficiently, separate by optional whitespaces with '/'
---orParser1 = Parsec.many $ do
-  --  course <- courseParser
-    --Parsec.eof <|> orSeparator
-   -- return  course
-
--- lenient orParser, will simply parse by / and return list of "reqs"
-orParser2 :: Parsec.Parsec String () Req
--- look for whitespaces, /, course, whitespaces. Repeat.
--- more efficiently, separate by optional whitespaces with '/'
-orParser2 = do
-    --tmp <- Parsec.sepBy (Parsec.many1 (Parsec.alphaNum <|> Parsec.oneOf ", ()")) (Parsec.char '/')
+-- parse for reqs separated by / "or"
+orParser :: Parsec.Parsec String () Req
+orParser = do
     tmp <- Parsec.sepBy (courseParser) (Parsec.char '/')
-    return $ OR tmp
+    if length_list tmp == 1
+    then
+        case tmp of
+        [x] -> return x
+    else
+        return $ OR tmp
 
--- orParser3 :: String -> [String]
--- orParser3 req = 
---     let orParsed = parse orParser2 req
---     in
---         case orParsed of
---             Right xs -> xs
---             Left _ -> [""]
+-- parse for reqs separated by , "and"
+andorParser :: Parsec.Parsec String () Req
+andorParser = do
+    tmp <- Parsec.sepBy (orParser) (Parsec.char ',')
+    if length_list tmp == 1
+    then
+        case tmp of
+        [x] -> return x
+    else
+        return $ AND tmp
 
-
--- mat240,csc263/csc265, MAT235/Mat237/Mat257
--- PRECONDITION: ',' infix binary OP => will always have "courses" on both sides
---                => we will always have "course" followed by (, "course")s
--- POSTCONDITION: returns list of "courses" that were separated by ','
--- andParser1 :: Parsec.Parsec String () [String]
--- andParser1 = Parsec.many $ do
---     req <- courseParser
---     Parsec.eof <|> andSeparator
---     return req
-
--- lenient orParser, will simply parse by , and return list of "reqs"
-andorParser2 :: Parsec.Parsec String () Req
-andorParser2 = do
-    --tmp <- Parsec.sepBy (Parsec.many1 (Parsec.alphaNum <|> Parsec.oneOf "/ ()")) (Parsec.char ',')
-    tmp <- Parsec.sepBy (orParser2) (Parsec.char ',')
-    return $ AND tmp
-
+-- parse for reqs within parantheses
 parParser :: Parsec.Parsec String () Req
 parParser = do
-    lpSeparator
-    req <- andorParser2
-    rpSeparator
-    return req
+  Parsec.spaces
+  Parsec.char '('
+  Parsec.spaces
+  req <- andorParser
+  Parsec.spaces
+  Parsec.char ')'
+  Parsec.spaces
+  return req
 
--- uses andParser2
--- andParser3 :: String -> [String]
--- andParser3 req = 
---     let andParsed = parse andParser2 req
---     in
---         case andParsed of
---             Right xs -> xs
---             Left _ -> [""]
-
-
--- parse by parantheses, treat everything inside paranthesis as one "req"
---parParser1 :: Parsec.Parsec String () [String]
-
--- csc263/csc265, MAT235/Mat237/Mat257
--- PRECONDITION: '/' ',' infix binary OPs => will always have "courses" on both sides
--- POSTCONDITION: returns list of list of "courses". Depth 0 by ','' . Depth 1 by '/'.
--- andorParser :: Parsec.Parsec String () [Either Parsec.ParseError [String]]
--- andorParser = do
---     andParsed <- andParser2
---     let andorParsed = map (parse orParser2) andParsed
---     return andorParsed
-
--- adding functionality to andorParser to let it parse valid courses as well.
--- may be unnecessary since we can assume courses have no typo
--- might be more realistic to NOT expect perfectly formatted course codes due to inconsistencies in html.
--- andorParser2 :: String -> [[String]]
--- andorParser2 req = map (orParser3) $ andParser3 req
-
---reqParser :: String -> [[String]]
-
---lpParser1 :: Parsec.Parsec String () String
---lpParser1 = do
---    req <- Parsec.many1 (Parsec.alphaNum <|> Parsec.oneOf "/, )")
---    Parsec.eof <|> Parsec.char '('
---    return req
-
---rpParser1 :: Parsec.Parsec String () String
---rpParser1 = do
----    req <- Parsec.many1 (Parsec.alphaNum <|> Parsec.oneOf "/, (")
---    Parsec.eof <|> Parsec.char ')'
---    return req
-
-
--- parse everything by parantheses
--- left or right may be empty, meaning it's not in the middle of a req
---parParser1 :: Parsec.Parsec String () [[String]]
---parParser1 = Parsec.many $ do
---    left <- lpParser1
---    right <- rpParser1
---    return [left, right]
-
-
--- recursion comes in with ()
--- (mat136, mat136)
--- parse outer bracket, call lvl 3 then parse closing
--- parsec sepby
-
--- create parser for AND, OR, ANDOR, PARANTHESES, FROM..
--- MUST MAKE SURE TYPES MATCH UP..
--- AM I TRYING TO DO TOO MUCH IN ONE PARSER.. THINK RECURSIVELY.
--- 
--- break down by precedence and try different parsers and merge..?
+-- TODO: error msg
+---- display
+---- recursive structure
+---- unformatted course
+---- FROM value constructor
