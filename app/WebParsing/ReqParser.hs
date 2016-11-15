@@ -5,31 +5,8 @@ import Text.Parsec ((<?>))
 import Control.Applicative
 import Control.Monad.Identity (Identity)
 import qualified Data.String as S
+import qualified Database.Requirement as R
 parse rule text = Parsec.parse rule "(source)" text
-
-data ProgramReq = PRGREQ String [Req] deriving (Show)
-
--- | Returns a well formatted String representing a program requirement for specified program.
--- instance Show ProgramReq where
---     show (PRGREQ program reqs) = "Program Requirements for " ++ program ++ ":\n" ++ map show reqs
-
-
-data CourseReq = CRSREQ String Req Req Req deriving (Show)
-
--- instance Show CourseReq where
---     show (CRSREQ course creq excl preq) = "Corequisites for " ++ course ++ ":\n" ++ show req ++ "\n"
---                                       ++ "Exclusions for " ++ course ++ ":\n" ++ show req ++ "\n"
---                                       ++ "Prerequisites for " ++ course ++ ":\n" ++ show req ++ "\n"
-
-
--- for now J seems to be most readable and convenient value constructor for satisfying rec structure.
-data Req = J String | AND [Req] | OR [Req] | FROM Integer [Req] deriving (Show)
-
--- instance Show Req where
---     show (J course) = course
---     show (AND reqs) = S.intercalate "," $ map show reqs
---     show (OR reqs) = S.intercalate "/" $ map show reqs
---     show (FROM a x) =  show a ++ "FCE(s) from: (" ++ show x ++ ")"
 
 -- define separators for "/"  ","  "("  ")"  "from"
 orSeparator :: Parsec.Parsec String () ()
