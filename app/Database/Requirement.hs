@@ -24,9 +24,9 @@ instance Show ProgramReq where
 data CourseReq = CRSREQ String Req Req Req
 
 instance Show CourseReq where
-    show (CREQ course creq excl preq) = "Corequisites for " ++ course ++ ":\n" ++ show req ++ "\n"
-                                      ++ "Exclusions for " ++ course ++ ":\n" ++ show req ++ "\n"
-                                      ++ "Prerequisites for " ++ course ++ ":\n" ++ show req ++ "\n"
+    show (CRSEQ course creq excl preq) = "Corequisites for " ++ course ++ ":\n" ++ show creq ++ "\n"
+                                      ++ "Exclusions for " ++ course ++ ":\n" ++ show excl ++ "\n"
+                                      ++ "Prerequisites for " ++ course ++ ":\n" ++ show preq ++ "\n"
 
 
 -- for now J seems to be most readable and convenient value constructor for satisfying rec structure.
@@ -36,4 +36,4 @@ instance Show Req where
     show (J course) = course
     show (AND reqs) = S.intercalate "," $ map show reqs
     show (OR reqs) = S.intercalate "/" $ map show reqs
-    show (FROM a x) =  show a ++ "FCE(s) from: (" ++ show x ++ ")"
+    show (FROM a reqs) =  show a ++ "FCE(s) from: (" ++ show reqs ++ ")"
