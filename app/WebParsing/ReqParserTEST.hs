@@ -9,9 +9,9 @@ import qualified Data.String as S
 import qualified Data.List as L
 parse rule text = Parsec.parse rule "(source)" text
 
-data ProgramReq = PRGREQ String Req
+data ProgramReq = PRGREQ String [Req]
 instance Show ProgramReq where
-    show (PRGREQ program reqs) = "Program Requirements for " ++ program ++ ":\n" ++ show reqs
+    show (PRGREQ program reqs) = "Program Requirements for " ++ program ++ ":\n" ++ L.intercalate "\n" (map show reqs)
 
 data CourseReq = CRSREQ String Req Req Req
 instance Show CourseReq where
