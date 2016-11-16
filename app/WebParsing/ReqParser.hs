@@ -8,22 +8,13 @@ import qualified Data.String as S
 import qualified Database.Requirement as R
 parse rule text = Parsec.parse rule "(source)" text
 
--- define separators for "/"  ","  "("  ")"  "from"
-orSeparator :: Parsec.Parsec String () ()
-orSeparator = Parsec.spaces >> Parsec.char '/' >> Parsec.spaces
-
-andSeparator :: Parsec.Parsec String () ()
-andSeparator = Parsec.spaces >> Parsec.char ',' >> Parsec.spaces
-
 lpSeparator :: Parsec.Parsec String () ()
-lpSeparator = Parsec.spaces >> Parsec.char '(' >> Parsec.spaces
+lpSeparator = Parsec.many (Parsec.spaces) >> Parsec.char '('
+            >> Parsec.many (Parsec.spaces)
 
 rpSeparator :: Parsec.Parsec String () ()
-rpSeparator = Parsec.spaces >> Parsec.char ')' >> Parsec.spaces
-
-fromSeparator :: Parsec.Parsec String () ()
-fromSeparator = Parsec.spaces >> Parsec.oneOf "fromFrom" >> Parsec.spaces
--- potentially have one separator that returns accordingly?
+rpSeparator = Parsec.many (Parsec.spaces) >> Parsec.char ')'
+             >> Parsec.many (Parsec.spaces)
 
 length_list :: [Req] -> Int 
 length_list [] = 0
@@ -65,14 +56,10 @@ andorParser = do
 -- parse for reqs within parantheses
 parParser :: Parsec.Parsec String () Req
 parParser = do
-  Parsec.spaces
-  Parsec.char '('
-  Parsec.spaces
-  req <- andorParser
-  Parsec.spaces
-  Parsec.char ')'
-  Parsec.spaces
-  return req
+    lpSeparator
+    req <- andorParser
+    rpSeparator
+    return req
 
 -- TODO: error msg
 ---- display
