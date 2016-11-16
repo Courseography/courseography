@@ -5,7 +5,7 @@ Module containing data type that represents a "Requirement".
 
 We will use parsed data to create instances of this type.
 -}
-module Requirement
+module Database.Requirement
 ( ProgramReq(..)
 , CourseReq(..)
 , Req(..)
