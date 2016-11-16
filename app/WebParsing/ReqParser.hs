@@ -5,16 +5,20 @@ import Text.Parsec ((<?>))
 import Control.Applicative
 import Control.Monad.Identity (Identity)
 import qualified Data.String as S
-import qualified Database.Requirement as R
+import Database.Requirement
 parse rule text = Parsec.parse rule "(source)" text
 
 lpSeparator :: Parsec.Parsec String () ()
-lpSeparator = Parsec.many (Parsec.spaces) >> Parsec.char '('
-            >> Parsec.many (Parsec.spaces)
+lpSeparator = do
+    Parsec.spaces
+    Parsec.char '('
+    Parsec.spaces
 
 rpSeparator :: Parsec.Parsec String () ()
-rpSeparator = Parsec.many (Parsec.spaces) >> Parsec.char ')'
-             >> Parsec.many (Parsec.spaces)
+rpSeparator = do
+    Parsec.spaces
+    Parsec.char ')'
+    Parsec.spaces
 
 length_list :: [Req] -> Int 
 length_list [] = 0
