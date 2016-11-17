@@ -36,7 +36,7 @@ getActiveTimetable :: Request -> String -> IO (String, String)
 getActiveTimetable req termSession = do
     -- get cookie value of "selected-lectures" from browser
     let cookies :: M.Map String Cookie = M.fromList $ rqCookies req
-        coursecookie = maybe "" cookieValue $ M.lookup "selected-selectedLecs" cookies
+        coursecookie = maybe "" cookieValue $ M.lookup "selected-lectures" cookies
         (selectedLecs, selectedTuts) = parseCourseCookie coursecookie termSession
     (lecTimes, tutTimes) <- getTimes (selectedLecs, selectedTuts)
     let schedule = getScheduleByTime selectedLecs selectedTuts lecTimes tutTimes
@@ -53,26 +53,14 @@ parseCourseCookie s termSession =
       (selectedLecs, selectedTuts) = partition isLec lecAndTut
       -- get lecture and tutorial in this session
       [lectureOfSession, tutorialOfSession] = map (filter (\x -> or ([(x !! 2 !! 0) == (head termSession), (x !! 2 !! 0) == 'Y']))) [selectedLecs, selectedTuts]
-      selectedLecs' = map (convertLec . list2tuple) lectureOfSession
-      selectedTuts' = map (convertTut . list2tuple) tutorialOfSession
+      selectedLecs' = map list2tuple lectureOfSession
+      selectedTuts' = map list2tuple tutorialOfSession
   in (selectedLecs', selectedTuts')
   where isLec x = (x !! 1 !! 0) == 'L'
 
 list2tuple :: [String] -> (String, String, String)
 list2tuple [a, b, c] = (a, b, c)
 list2tuple _ = undefined
-
-convertLec :: (String, String, String) -> (String, String, String)
-convertLec (lecCode, lecSection, lecSession) =
-  (lecCode,
-   take 1 lecSection ++ "EC-" ++ drop 1 lecSection,
-   lecSession)
-
-convertTut :: (String, String, String) -> (String, String, String)
-convertTut (tutCode, tutSection, tutSession) =
-  (tutCode,
-   take 1 tutSection ++ "UT-" ++ drop 1 tutSection,
-   tutSession)
 
 -- | Queries the database for times regarding all lectures and tutorials,
 -- returns two lists of list of Time.
