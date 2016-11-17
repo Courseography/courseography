@@ -78,7 +78,6 @@ convertTut (tutCode, tutSection, tutSession) =
 -- returns two lists of list of Time.
 getTimes :: ([(String, String, String)], [(String, String, String)]) -> IO ([[Time]], [[Time]])
 getTimes (selectedLecs, selectedTuts) = runSqlite databasePath $ do
-  runMigration migrateAll
   lecTimes <- mapM getLectureTime selectedLecs
   tutTimes <- mapM getTutorialTime selectedTuts
   return (lecTimes, tutTimes)
