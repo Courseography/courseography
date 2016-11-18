@@ -50,6 +50,36 @@ length_list :: [Req] -> Int
 length_list [] = 0
 length_list (x:xs) =1 + length_list xs
 
+-- "5.0 fces from..." "3 full course from" "2.5 full course from"
+-- Hard-coded for now since all FCEs are of form _._ with anything before
+floatParserLenient :: Parsec.Parsec String () String
+floatParserLenient = do
+    Parsec.try (Parsec.manyTill Parsec.anyChar (Parsec.try 
+               (Parsec.notFollowedBy (Parsec.noneOf ['0'..'9']))))
+    fces <- floatParser
+    return fces
+
+floatParser :: Parsec.Parsec String () String
+floatParser = do
+    Parsec.spaces
+    int <- Parsec.digit
+    Parsec.char '.'
+    float <- Parsec.digit
+    return [int,float]
+
+intParserLenient :: Parsec.Parsec String () String
+intParserLenient = do
+    Parsec.try (Parsec.manyTill Parsec.anyChar (Parsec.try 
+               (Parsec.notFollowedBy (Parsec.noneOf ['0'..'9']))))
+    fces <- intParser
+    return fces
+
+intParser :: Parsec.Parsec String () String
+intParser = do
+    Parsec.spaces
+    fces <- Parsec.digit
+    return [fces]
+
 -- parse for single course OR req within parantheses
 courseParser :: Parsec.Parsec String () Req
 courseParser = Parsec.try (do
@@ -59,7 +89,7 @@ courseParser = Parsec.try (do
     num <- Parsec.count 3 Parsec.digit
     sess <- Parsec.count 2 Parsec.alphaNum
     Parsec.spaces
-    return $ J (code++num++sess)) <|> (parParser) <|> (fromParser)
+    return $ J (code++num++sess)) <|> (parParser)
 
 -- parse for reqs separated by / "or"
 orParser :: Parsec.Parsec String () Req
@@ -99,38 +129,9 @@ fromParser = do
     reqs <- andorParser
     return $ FROM fces reqs
 
--- "5.0 fces from..." "3 full course from" "2.5 full course from"
--- Hard-coded for now since all FCEs are of form _._ with anything before
-floatParserLenient :: Parsec.Parsec String () String
-floatParserLenient = do
-    Parsec.try (Parsec.manyTill Parsec.anyChar (Parsec.try 
-               (Parsec.notFollowedBy (Parsec.noneOf ['0'..'9']))))
-    fces <- Parsec.count 3 Parsec.anyChar
-    return fces
-
--- floatParser :: Parsec.Parsec String () String
--- floatParser = do
---     Parsec.spaces
---     int <- Parsec.digit
---     Parsec.char '.'
---     float <- Parsec.digit
---     return [int]++[float]
-
-intParserLenient :: Parsec.Parsec String () String
-intParserLenient = do
-    Parsec.try (Parsec.manyTill Parsec.anyChar (Parsec.try 
-               (Parsec.notFollowedBy (Parsec.noneOf ['0'..'9']))))
-    fces <- Parsec.count 1 Parsec.anyChar
-    return fces
-
--- intParser :: Parsec.Parsec String () String
--- intParser = do
---     Parsec.spaces
---     fces <- Parsec.digit
---     return [fces]
-
+reqParser :: Parsec.Parsec String () Req
+reqParser = do Parsec.try (orParser <|> andorParser)
 
 -- TODO: error msg
----- FROM value constructor
 ---- NEED TO MAKE IMPORTS AND EXPORTS CONSISTENT
 ----- MUST TEST WITH REPL
