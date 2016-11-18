@@ -15,8 +15,8 @@ import Data.Text.Lazy (unpack)
 days :: [String]
 days = ["Mon", "Tue", "Wed", "Thu", "Fri"]
 
-times :: [String]
-times = map (\x -> show x ++ ":00") ([8..12] ++ [1..8] :: [Int])
+times :: [[String]]
+times = map (\x -> [show x ++ ":00"]) ([8..12] ++ [1..8] :: [Int])
 
 blue3 :: Colour Double
 blue3 = sRGB24read "#437699"
@@ -58,20 +58,20 @@ cellText :: String -> Diagram B
 cellText s = font "Trebuchet MS" $ text s # fontSizeO fs
 
 -- | Creates and accumulates cells according to the number of course.
-makeCell :: Int -> String -> Diagram B
-makeCell maxCourse s =
-    let sList = splitOn "&" s
-        actualCourse = length sList
-        extraCell = replicate (maxCourse - actualCourse) [cellPadding # fc white # lc white, cellText "" # fc white <> cell # fc white # lc white]
+makeCell :: Int -> [String] -> Diagram B
+makeCell maxCourse sList =
+    let actualCourse = length sList
+        emptyCellNum = if maxCourse == 0 then 1 else maxCourse - actualCourse
+        extraCell = replicate emptyCellNum [cellPadding # fc white # lc white, cellText "" # fc white <> cell # fc white # lc white]
     in vsep 0.030 $
         concat $ map (\x -> [cellPadding # fc background # lc background, cellText x # fc white <> cell # fc background # lc background]) sList ++ extraCell
     where
-        background = getBackground s
+        background = getBackground sList
 
-getBackground :: String -> Colour Double
+getBackground :: [String] -> Colour Double
 getBackground s
     | null s = white
-    | elem '&' s = pomegranate
+    | length s > 1 = pomegranate
     | otherwise = blue3
 
 header :: String -> Diagram B
@@ -89,9 +89,9 @@ makeTimeCell :: String -> Diagram B
 makeTimeCell s =
     timeCellPadding === (cellText s <> timeCell)
 
-makeRow :: [String] -> Diagram B
-makeRow (x:xs) =
-    let maxCourse = maximum (map (length . (splitOn "&")) xs)
+makeRow :: [[String]] -> Diagram B
+makeRow ([x]:xs) =
+    let maxCourse = maximum (map length xs)
     in (# centerX) . hcat $
         makeTimeCell x : map (makeCell maxCourse) xs
 makeRow [] = error "invalid timetable format"
@@ -102,18 +102,18 @@ headerBorder = hrule 11.2 # lw medium # lc pink1
 rowBorder :: Diagram B
 rowBorder = hrule 11.2 # lw thin # lc pink1
 
-makeTable :: [[String]] -> String -> Diagram B
+makeTable :: [[[String]]] -> String -> Diagram B
 makeTable s session = vsep 0.04 $ (header session): intersperse rowBorder (map makeRow s)
 
 renderTable :: String -> String -> String -> IO ()
 renderTable filename courses session = do
-    let courseTable = partition5 $ splitOn "_" courses
+    let courseTable = partition5 $ map (\x -> [x]) $ splitOn "_" courses
     renderTableHelper filename (zipWith (:) times courseTable) session
     where
         partition5 [] = []
         partition5 lst = take 5 lst : partition5 (drop 5 lst)
 
-renderTableHelper :: String -> [[String]] -> String -> IO ()
+renderTableHelper :: String -> [[[String]]] -> String -> IO ()
 renderTableHelper filename schedule session = do
     let g = makeTable schedule session
         svg = renderDia SVG (SVGOptions (mkWidth 1024) Nothing "") g

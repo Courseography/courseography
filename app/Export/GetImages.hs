@@ -13,7 +13,7 @@ import Data.List.Split (splitOn)
 import Database.CourseQueries (getLectureTime, getTutorialTime)
 import Database.Tables as Tables
 import Data.List (partition)
-import Database.Persist.Sqlite (runSqlite, runMigration)
+import Database.Persist.Sqlite (runSqlite)
 import Config (databasePath)
 import Data.Fixed (mod')
 
@@ -73,12 +73,12 @@ getTimes (selectedLecs, selectedTuts) = runSqlite databasePath $ do
 -- | Creates a schedule.
 -- It takes information about lectures and tutorials and their corresponding time.
 -- Courses are added to schedule, based on their days and times.
-getScheduleByTime :: [(String, String, String)] -> [(String, String, String)] -> [[Time]] -> [[Time]] -> [[String]]
+getScheduleByTime :: [(String, String, String)] -> [(String, String, String)] -> [[Time]] -> [[Time]] -> [[[String]]]
 getScheduleByTime selectedLecs selectedTuts lecTimes tutTimes =
   let lecture_times = zip selectedLecs lecTimes
       tutorial_times = zip selectedTuts tutTimes
       allTimes = lecture_times ++ tutorial_times
-      schedule = replicate 13 $ replicate 5 ""
+      schedule = replicate 13 $ replicate 5 []
   in foldl addCourseToSchedule schedule allTimes
 
 -- | Take a list of Time and returns a list of tuples that correctly index
@@ -86,7 +86,7 @@ getScheduleByTime selectedLecs selectedTuts lecTimes tutTimes =
 convertTimeToArray :: [Time] -> [(Int, Int)]
 convertTimeToArray = map (\x -> (floor $ timeField x !! 0 , floor $ timeField x !! 1 - 8))
 
-addCourseToSchedule :: [[String]] -> ((String, String, String), [Time]) -> [[String]]
+addCourseToSchedule :: [[[String]]] -> ((String, String, String), [Time]) -> [[[String]]]
 addCourseToSchedule schedule (course, courseTimes) =
   let time' = filter (\t-> (mod' (timeField t !! 1) 1) == 0) courseTimes
       timeArray = convertTimeToArray time'
@@ -94,16 +94,17 @@ addCourseToSchedule schedule (course, courseTimes) =
 
 -- | Appends information of course to the current schedule for specified day and time.
 -- Returns new schedule.
-addCourseHelper :: (String, String, String) -> [[String]] -> (Int, Int) -> [[String]]
+addCourseHelper :: (String, String, String) -> [[[String]]] -> (Int, Int) -> [[[String]]]
 addCourseHelper (courseCode, courseSection, courseSession) currentSchedule (day, courseTime) =
   let time_schedule = currentSchedule !! courseTime
-      current_schedule = if (null $ time_schedule !! day) then (courseCode++courseSession++" "++courseSection) else (time_schedule !! day ++ ("&"++courseCode++courseSession++" "++courseSection))
-      time_schedule' = (take day time_schedule) ++ [current_schedule] ++ (drop (day + 1) time_schedule)
+      -- current_schedule = if (null $ time_schedule !! day) then (courseCode++courseSession++" "++courseSection) else (time_schedule !! day ++ ("&"++courseCode++courseSession++" "++courseSection))
+      -- time_schedule' = (take day time_schedule) ++ [current_schedule] ++ (drop (day + 1) time_schedule)
+      time_schedule' = (take day time_schedule) ++ [time_schedule !! day ++ [courseCode++courseSession++" "++courseSection]] ++ (drop (day + 1) time_schedule)
   in (take courseTime currentSchedule) ++ [time_schedule'] ++ (drop (courseTime+ 1) currentSchedule)
 
 -- | Creates an timetable image based on schedule, and returns the name of the svg
 -- used to create the image and the name of the image
-generateTimetableImg :: [[String]] -> String -> IO(String, String)
+generateTimetableImg :: [[[String]]] -> String -> IO(String, String)
 generateTimetableImg schedule courseSession = do
     rand <- randomName
     let svgFilename = rand ++ ".svg"
