@@ -28,10 +28,11 @@ instance Show CourseReq where
                                       ++ "Prerequisites for " ++ course ++ ":\n" ++ show preq ++ "\n"
 
 -- for now J seems to be most readable and convenient value constructor for satisfying rec structure.
-data Req = J String | AND [Req] | OR [Req] | FROM Integer [Req]
+data Req = J String | AND [Req] | OR [Req] | FROM Integer [Req] | PAR Req
 
 instance Show Req where
     show (J course) = course
     show (AND reqs) = L.intercalate "," $ map show reqs
     show (OR reqs) = L.intercalate "/" $ map show reqs
     show (FROM a reqs) =  show a ++ "FCE(s) from: (" ++ show reqs ++ ")"
+    show (PAR req) = "(" ++ show req ++ ")"
