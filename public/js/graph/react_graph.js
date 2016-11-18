@@ -1,5 +1,5 @@
 import * as tooltip from 'es6!graph/tooltip';
-import {Description} from 'es6!common/react_modal';
+import {Modal} from 'es6!common/react_modal';
 import * as ReactModal from 'vendor/react-modal';
 
 
@@ -159,6 +159,7 @@ var Graph = React.createClass({
             horizontalPanFactor: 0,
             verticalPanFactor: 0,
             mouseDown: false,
+            courseId: ''
             };
             
     },
@@ -303,18 +304,7 @@ var Graph = React.createClass({
             $('#fcecount').text('FCE Count: ' + this.state.fceCount);
         });
     },
-    openModal: function () {  
-    var infoBox = this.refs.infoBox
-    var newCourse = infoBox.state.nodeId.substring(0, 6)
-    var modal = this.refs.modal
-    if (newCourse == modal.state.courseId) {
-            modal.setState({modalIsOpen: true, formatCourse: ''});
-        }
-        else {
-            var formatted = formatCourseName(newCourse);
-            modal.setState({modalIsOpen: true, courseId: newCourse, formatCourse: formatted[0], courseTitle: getCourseTitle(newCourse, formatted)});
-    }
-    },
+
     nodeClick: function (event) {
         var courseId = event.currentTarget.id;
         var currentNode = this.refs.nodes.refs[courseId];
@@ -390,7 +380,11 @@ var Graph = React.createClass({
     },
 
     infoBoxMouseClick: function () {
-        this.openModal();
+        var infoBox = this.refs.infoBox
+        var newCourse = infoBox.state.nodeId.substring(0, 6)
+        var modal = this.refs.modal
+        this.setState({courseId: newCourse});
+        modal.openModal(newCourse);
     },
 
     // Reset graph
@@ -1333,34 +1327,4 @@ var InfoBox = React.createClass({
         }
     }
 });
-var Modal = React.createClass({
-    getInitialState: function () {
-        return {
-            courseId: '',
-            course: [],
-            sessions: [],
-            modalIsOpen: false,
-            courseTitle : '',
-            formatCourse : ''
-        };
-    },
-    closeModal : function() {
-        this.setState({modalIsOpen: false});
-        },
-    render: function () {
-            return (
-                <div>
-                <ReactModal className='ModalClass'
-                    overlayClassName='OverlayClass'
-                    isOpen={this.state.modalIsOpen}
-                    onRequestClose={this.closeModal}>
-                    <div className='modal-header'>
-                        {this.state.courseTitle}
-                          </div>
-                        <div className='modal-body'>
-                            <Description course  = {this.state.formatCourse}/> </div>  
-                </ReactModal>
-                </div> ); 
-        }
-    });
 export default {renderReactGraph: renderReactGraph};

@@ -10,104 +10,85 @@ var ModalContent = React.createClass({
     }
 });
 
-var Modal = React.createClass({
+export var Modal = React.createClass({
     getInitialState: function () {
         return {
             courseId: '',
             course: [],
-            sessions: []
+            sessions: [],
+            modalIsOpen: false,
+            courseTitle : '',
+            formatCourse : ''
         };
     },
 
-    render: function () {
-        if (this.state.courseId) {
-            return (
-                <div className='modal fade'>
-                    <div className='modal-dialog'>
-                        <div className='modal-content'>
-                            <div className='modal-header'>
-                                {getCourseTitle(this.state.courseId)}
-                            </div>
-                            <div className='modal-body'>
-                                <Description course={formatCourseName(this.state.courseId)[0]}/>
-                            </div>
-                            <div className='modal-footer'>
-                            </div>
+    openModal: function(newCourse) {
+        if (newCourse == this.state.courseId) {
+                this.setState({modalIsOpen: true});
+        }else {
+            var formatted = formatCourseName(newCourse);
+            var that = this;
+            this.setState({modalIsOpen: true, courseId: newCourse, courseTitle: getCourseTitle(newCourse, formatted)});
 
-                        </div>
-                    </div>
-                </div>
-            );
-        } else {
-            return <div className='modal fade'></div>;
+            $.ajax({
+                    url: 'course',
+                    data: {name: formatted[0]},
+                    dataType: 'json',
+                    success: function (data) {
+                            //This is getting the session times
+                            var sessions = data.fallSession.lectures
+                                                           .concat(data.springSession.lectures)
+                                                           .concat(data.yearSession.lectures)
+                            //Tutorials don't have a timeStr to print, so I've currently omitted them
+                            that.setState({course: data, sessions: sessions});
+                    },
+                    error: function (xhr, status, err) {
+                        console.error('course-info', status, err.toString());
+                    }
+                });
         }
-    }
+
+    },
+    closeModal : function() {
+        this.setState({modalIsOpen: false});
+    },
+    render: function () {
+            return (
+                <div>
+                <ReactModal className='ModalClass'
+                    overlayClassName='OverlayClass'
+                    isOpen={this.state.modalIsOpen}
+                    onRequestClose={this.closeModal}>
+                    <div className='modal-header'>
+                        {this.state.courseTitle}
+                          </div>
+                        <div className='modal-body'>
+                            <Description ref='desc' 
+                            course = {this.state.course}
+                            sessions = {this.state.sessions} /> </div> 
+                     <div className='modal-footer'> </div>    
+                </ReactModal>
+                </div> );
+       }
+
+
 });
 
 //Use React component from search.js
-export var Description = React.createClass({
-    //static initialState = {course : [], sessions: []}
-    getInitialState: function() {
-
-        return {
-            course: [],
-            sessions: [],
-
-        };
-    },
-
-    componentDidMount: function(newProps) {
-        this.refresh();
-    },
-
-    componentWillUpdate: function (newProps, newState) {
-        if (newProps.course !== this.props.course) {
-            this.refresh(newProps.course);
-        }
-
-        
-    },
-
-    // This loads the course json
-    refresh: function(newCourse) {
-        if (newCourse === undefined) {
-            newCourse = this.props.course;
-        }
-        $.ajax({
-            url: 'course',
-            data: {name: newCourse},
-            dataType: 'json',
-            success: function(data) {
-                if (this.isMounted()) {
-                    this.setState({course: data});
-                    //This is getting the session times
-                    var sessions = data.fallSession.lectures
-                                                   .concat(data.springSession.lectures)
-                                                   .concat(data.yearSession.lectures)
-                    //Tutorials don't have a timeStr to print, so I've currently ommitted them
-                    this.setState({sessions: sessions});
-                }
-            }.bind(this),
-            error: function(xhr, status, err) {
-                console.error('course-info', status, err.toString());
-            }.bind(this)
-            });
-            
-    },
-
+var Description = React.createClass({
     render: function() {
         //We want to use the Timetable component, but that component needs to be independent before using it here
         return (
             <div>
-                <p>{this.state.course.description}</p>
-                <p><strong>Prerequisite: </strong>{this.state.course.prereqString}</p>
-                <p><strong>Distribution Requirement Status: </strong>{this.state.course.distribution}</p>
-                <p><strong>Breadth Requirement: </strong>{this.state.course.breadth}</p>
+                <p>{this.props.course.description}</p>
+                <p><strong>Prerequisite: </strong>{this.props.course.prereqString}</p>
+                <p><strong>Distribution Requirement Status: </strong>{this.props.course.distribution}</p>
+                <p><strong>Breadth Requirement: </strong>{this.props.course.breadth}</p>
                 <p><strong>Timetable: </strong></p>
-                {this.state.sessions.map(function(lecture) {
+                {this.props.sessions.map(function(lecture) {
                     return <p>{lecture.code + lecture.session + '-' + lecture.section + ': ' + lecture.timeStr}</p>;
                 })}
-                <Video urls={this.state.course.videoUrls}/>
+                <Video urls={this.props.course.videoUrls}/>
             </div>
         );
     }
