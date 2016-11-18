@@ -1,7 +1,5 @@
 import * as tooltip from 'es6!graph/tooltip';
 import {Modal} from 'es6!common/react_modal';
-import * as ReactModal from 'vendor/react-modal';
-
 
 /**
  * Search for target node in list of nodes,
@@ -160,8 +158,7 @@ var Graph = React.createClass({
             verticalPanFactor: 0,
             mouseDown: false,
             courseId: ''
-            };
-            
+            };   
     },
 
     componentDidMount: function () {
@@ -547,7 +544,6 @@ var Graph = React.createClass({
         var resetDisabled = this.state.zoomFactor == 1 &&
                             this.state.horizontalPanFactor == 0 &&
                             this.state.verticalPanFactor == 0;
-
         return (
             <div>
                 <Modal ref = 'modal'/>
@@ -1327,4 +1323,5 @@ var InfoBox = React.createClass({
         }
     }
 });
+
 export default {renderReactGraph: renderReactGraph};

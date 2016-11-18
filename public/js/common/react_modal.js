@@ -63,7 +63,7 @@ export var Modal = React.createClass({
                         {this.state.courseTitle}
                           </div>
                         <div className='modal-body'>
-                            <Description ref='desc' 
+                            <Description 
                             course = {this.state.course}
                             sessions = {this.state.sessions} /> </div> 
                      <div className='modal-footer'> </div>    

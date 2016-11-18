@@ -123,14 +123,12 @@ modalCSS = do
         overflowY auto
         backgroundColor white
         boxShadow (px 8) (px 8) (px 8) black
-        
     ".ui-widget-overlay" ? do
         height100
         width100
         position fixed
         left nil
         top nil
-
     ".ModalClass" ? do
         position absolute
         top (px 100)
@@ -140,15 +138,13 @@ modalCSS = do
         borderRadius (px 10)
         backgroundColor white
         boxShadow (px 0) (px 0) (px 30) black
-  
     ".OverlayClass" ? do
         position fixed
         left nil
         right nil
         top nil
         bottom nil
-        backgroundColor (setA (0.5) black)
-        
+        backgroundColor (setA (0.5) black)  
     ".modal-header" ? do
         color blue3
     ".modal-body" ? do
