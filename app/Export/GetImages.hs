@@ -96,11 +96,10 @@ addCourseToSchedule schedule (course, courseTimes) =
 -- Returns new schedule.
 addCourseHelper :: (String, String, String) -> [[[String]]] -> (Int, Int) -> [[[String]]]
 addCourseHelper (courseCode, courseSection, courseSession) currentSchedule (day, courseTime) =
-  let time_schedule = currentSchedule !! courseTime
-      -- current_schedule = if (null $ time_schedule !! day) then (courseCode++courseSession++" "++courseSection) else (time_schedule !! day ++ ("&"++courseCode++courseSession++" "++courseSection))
-      -- time_schedule' = (take day time_schedule) ++ [current_schedule] ++ (drop (day + 1) time_schedule)
-      time_schedule' = (take day time_schedule) ++ [time_schedule !! day ++ [courseCode++courseSession++" "++courseSection]] ++ (drop (day + 1) time_schedule)
-  in (take courseTime currentSchedule) ++ [time_schedule'] ++ (drop (courseTime+ 1) currentSchedule)
+  let timeSchedule = currentSchedule !! courseTime
+      newDaySchedule = timeSchedule !! day ++ [courseCode++courseSession++" "++courseSection]
+      timeSchedule' = (take day timeSchedule) ++ [newDaySchedule] ++ (drop (day + 1) timeSchedule)
+  in (take courseTime currentSchedule) ++ [timeSchedule'] ++ (drop (courseTime + 1) currentSchedule)
 
 -- | Creates an timetable image based on schedule, and returns the name of the svg
 -- used to create the image and the name of the image
