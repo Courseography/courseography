@@ -71,8 +71,8 @@ makeCell maxCourse sList =
 getBackground :: [String] -> Colour Double
 getBackground s
     | null s = white
-    | length s > 1 = pomegranate
-    | otherwise = blue3
+    | length s == 1 = blue3
+    | otherwise = pomegranate
 
 header :: String -> Diagram B
 header session = (hcat $ (makeSessionCell session) : map makeHeaderCell days) # centerX === headerBorder
@@ -107,7 +107,7 @@ makeTable s session = vsep 0.04 $ (header session): intersperse rowBorder (map m
 
 renderTable :: String -> String -> String -> IO ()
 renderTable filename courses session = do
-    let courseTable = partition5 $ map (\x -> [x]) $ splitOn "_" courses
+    let courseTable = partition5 $ map (\x -> if null x then [] else [x]) $ splitOn "_" courses
     renderTableHelper filename (zipWith (:) times courseTable) session
     where
         partition5 [] = []

@@ -25,9 +25,9 @@ convertToImage :: String -> String -> IO
                       Maybe Handle,
                       ProcessHandle)
 convertToImage inName outName = createProcess $ CreateProcess
-                                  (ShellCommand $ "rsvg-convert " ++
+                                  (ShellCommand $ "convert " ++
                                                   inName ++
-                                                  " > " ++
+                                                  " " ++
                                                   outName
                                   )
                                   Nothing
