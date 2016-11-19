@@ -33,6 +33,7 @@ executable courseography
     Database.CourseQueries,
     Database.CourseVideoSeed,
     Database.PostInsertion,
+    Database.Requirement,
     Database.DataType,
     Database.Database,
     Database.Tables,
@@ -67,12 +68,14 @@ executable courseography
     Util.Happstack,
     WebParsing.ArtSciParser,
     WebParsing.HtmlTable,
+    WebParsing.Ligature,
     WebParsing.ParseAll,
     WebParsing.ParsingHelp,
+    WebParsing.PostParser,
     WebParsing.PrerequisiteParsing,
     WebParsing.TimeConverter,
-    WebParsing.PostParser,
-    WebParsing.UtsgJsonParser
+    WebParsing.UtsgJsonParser,
+    WebParsing.ParsecCombinators
   other-extensions:
     OverloadedStrings,
     DataKinds,

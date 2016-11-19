@@ -6,8 +6,7 @@ module Response.Draw
 import           Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
-import qualified Data.Text as T
-import Control.Monad (forM_, mapM_)
+import Control.Monad (forM_)
 import Happstack.Server
 import MasterTemplate
 import Scripts
