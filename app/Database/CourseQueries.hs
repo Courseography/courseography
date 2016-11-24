@@ -1,4 +1,4 @@
-{-# LANGUAGE ScopedTypeVariables, OverloadedStrings, GADTs #-} -- GADTs added by Kael
+{-# LANGUAGE GADTs, OverloadedStrings, ScopedTypeVariables #-}
 
 {-|
 Description: Respond to various requests involving database course information.
@@ -17,7 +17,9 @@ module Database.CourseQueries
      deptList,
      returnTutorial,
      returnLecture,
-     getGraphJSON) where
+     getGraphJSON,
+     getLectureTime,
+     getTutorialTime) where
 
 import Happstack.Server.SimpleHTTP
 import Database.Persist
@@ -34,6 +36,7 @@ import Control.Monad (liftM)
 import Data.Aeson ((.=), toJSON, object)
 import Database.DataType
 import Svg.Builder
+
 
 ---- | Queries db for all matching records with lecture or tutorial code of this course
 lectureQuery :: T.Text -> SqlPersistM [Entity Lecture]
@@ -67,17 +70,17 @@ returnCourse lowerStr = runSqlite databasePath $ do
       Just course -> do
         lecturesList :: [Entity Lecture] <- lectureQuery courseStr
         tutorialsList :: [Entity Tutorial] <- tutorialQuery courseStr
-        let (fallSession, springSession, yearSession) = buildAllSessions lecturesList tutorialsList
-        buildCourse fallSession springSession yearSession (entityVal course)
+        let (fall, spring, year) = buildAllSessions lecturesList tutorialsList
+        buildCourse fall spring year (entityVal course)
 
 buildAllSessions :: [Entity Lecture] -> [Entity Tutorial] -> (Maybe Tables.Session, Maybe Tables.Session, Maybe Tables.Session)
 buildAllSessions entityListL entityListT =
     let (fallLec, springLec, yearLec) = splitSessionsL entityListL
         (fallTut, springTut, yearTut) = splitSessionsT entityListT
-        fallSession = buildSession fallLec fallTut
-        springSession = buildSession springLec springTut
-        yearSession = buildSession yearLec yearTut
-    in (fallSession, springSession, yearSession)
+        fall = buildSession fallLec fallTut
+        spring = buildSession springLec springTut
+        year = buildSession yearLec yearTut
+    in (fall, spring, year)
 
 -- | Takes a course code (e.g. \"CSC108H1\") and sends a JSON representation
 -- of the course as a response.
@@ -114,7 +117,7 @@ returnLecture lowerStr sect session = runSqlite databasePath $ do
 -- | Builds a Course structure from a tuple from the Courses table.
 -- Some fields still need to be added in.
 buildCourse :: Maybe Session -> Maybe Session -> Maybe Session -> Courses -> SqlPersistM Course
-buildCourse fallSession springSession yearSession course = do
+buildCourse fall spring year course = do
     cBreadth <- getDescriptionB (coursesBreadth course)
     cDistribution <- getDescriptionD (coursesDistribution course)
     return $ Course cBreadth
@@ -122,9 +125,9 @@ buildCourse fallSession springSession yearSession course = do
            (fmap (T.filter (/='\"')) (coursesDescription course))
            (fmap (T.filter (/='\"')) (coursesTitle course))
            (coursesPrereqString course)
-           fallSession
-           springSession
-           yearSession
+           fall
+           spring
+           year
            (coursesCode course)
            (coursesExclusions course)
            (coursesManualTutorialEnrolment course)
@@ -141,7 +144,7 @@ getDescriptionB (Just key) = do
     maybeBreadth <- get key
     case maybeBreadth of
         Nothing -> return Nothing
-        Just breadth  -> return $ Just $ T.pack (breadthDescription breadth)
+        Just coursebreadth  -> return $ Just $ T.pack (breadthDescription coursebreadth)
 
 getDescriptionD :: Maybe (Key Distribution) -> SqlPersistM (Maybe T.Text)
 getDescriptionD Nothing = return Nothing
@@ -185,31 +188,31 @@ getGraphJSON graphName =
                     keyAsInt :: PersistEntity a => Entity a -> Integer
                     keyAsInt = fromIntegral . (\(PersistInt64 x) -> x) . head . keyToValues . entityKey
 
-                    texts          = map entityVal sqlTexts
-                    rects          = zipWith (buildRect texts)
+                    graphtexts          = map entityVal sqlTexts
+                    rects          = zipWith (buildRect graphtexts)
                                              (map entityVal sqlRects)
                                              (map keyAsInt sqlRects)
-                    ellipses       = zipWith (buildEllipses texts)
+                    ellipses       = zipWith (buildEllipses graphtexts)
                                              (map entityVal sqlEllipses)
                                              (map keyAsInt sqlEllipses)
-                    paths          = zipWith (buildPath rects ellipses)
+                    graphpaths     = zipWith (buildPath rects ellipses)
                                              (map entityVal sqlPaths)
                                              (map keyAsInt sqlPaths)
-                    (regions, edges) = partition pathIsRegion paths
+                    (regions, _)   = partition pathIsRegion graphpaths
                     regionTexts    = filter (not .
                                              intersectsWithShape (rects ++ ellipses))
-                                            texts
+                                            graphtexts
 
-                    result = createJSONResponse $
+                    response = createJSONResponse $
                         object [
-                            ("texts", toJSON $ texts ++ regionTexts),
+                            ("texts", toJSON $ graphtexts ++ regionTexts),
                             ("shapes", toJSON $ rects ++ ellipses),
-                            ("paths", toJSON $ paths ++ regions),
+                            ("paths", toJSON $ graphpaths ++ regions),
                             ("width", toJSON $ graphWidth $ entityVal graph),
                             ("height", toJSON $ graphHeight $ entityVal graph)
                         ]
 
-                return result
+                return response
 
 -- | Builds a list of all course codes in the database.
 allCourses :: IO Response
@@ -243,11 +246,11 @@ getDeptCourses dept =
                 fallTutorials = filter (\tut -> tutorialSession tut == "F") tuts
                 springTutorials = filter (\tut -> tutorialSession tut == "S") tuts
                 yearTutorials = filter (\tut -> tutorialSession tut == "Y") tuts
-                fallSession   = buildSession' (lecByCode course fallLectures) (tutByCode course fallTutorials)
-                springSession = buildSession' (lecByCode course springLectures) (tutByCode course springTutorials)
-                yearSession   = buildSession' (lecByCode course yearLectures) (tutByCode course yearTutorials)
+                fall   = buildSession' (lecByCode course fallLectures) (tutByCode course fallTutorials)
+                spring = buildSession' (lecByCode course springLectures) (tutByCode course springTutorials)
+                year   = buildSession' (lecByCode course yearLectures) (tutByCode course yearTutorials)
             in
-                buildCourse fallSession springSession yearSession course
+                buildCourse fall spring year course
         buildSession' lecs tuts =
             Just $ Tables.Session lecs
                                   tuts
@@ -269,3 +272,24 @@ queryGraphs =
     runSqlite databasePath $
         do graphs :: [Entity Graph] <- selectList [] [Asc GraphTitle]
            return $ createJSONResponse graphs
+
+
+getLectureTime :: CourseInfo -> SqlPersistM CourseInfo
+getLectureTime courseInfo = do
+    maybeEntityLectures <- selectFirst [LectureCode ==. (T.pack $ code courseInfo),
+                                        LectureSection ==. (T.pack $ section courseInfo),
+                                        LectureSession ==. (T.pack $ session courseInfo)]
+                                       []
+    let times = maybe [] (lectureTimes . entityVal) maybeEntityLectures
+    return courseInfo { time = times }
+
+
+getTutorialTime :: CourseInfo -> SqlPersistM CourseInfo
+getTutorialTime courseInfo = do
+    maybeEntityTutorials <- selectFirst [TutorialCode ==. (T.pack $ code courseInfo),
+                                         TutorialSection ==. (Just (T.pack $ section courseInfo)),
+                                         TutorialSession ==. (T.pack $ session courseInfo)]
+                                        []
+    let times = maybe [] (tutorialTimes . entityVal) maybeEntityTutorials
+    return courseInfo { time = times }
+

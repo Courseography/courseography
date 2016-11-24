@@ -59,7 +59,6 @@ graphScripts = do
          "/static/js/common/image_conversion.js",
          "/static/js/common/graph_image.js",
          "/static/js/vendor/bootstrap.min.3.1.1.js",
-         "/static/js/common/export/export.js",
          "/static/js/common/modal.js"])
     H.script ! A.src "/static/js/requirejs-config.js" $ ""
     H.script ! H.dataAttribute "main" "/static/js/graph" ! A.src "/static/js/vendor/require.js" $ ""
@@ -80,8 +79,9 @@ timetableScripts = do
          "/static/js/draw/draw.js",
          "/static/js/common/course_videos.js",
          "/static/js/common/modal.js",
-         "/static/js/common/course_description.js",
-         "/static/js/common/export/export.js"])
+         "/static/js/common/course_description.js"
+         ])
+    H.script ! A.src "/static/js/requirejs-config.js" $ ""
     H.script ! H.dataAttribute "main" "/static/js/grid" ! A.src "/static/js/vendor/require.js" $ ""
 
 drawScripts :: H.Html
