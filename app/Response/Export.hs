@@ -1,5 +1,5 @@
 module Response.Export
-    (exportGraphResponse) where
+    (exportGraphResponse, returnPDF) where
 
 import Control.Monad.IO.Class  (liftIO)
 import Happstack.Server
@@ -8,24 +8,25 @@ import Export.ImageConversion (removeImage)
 import Export.PdfGenerator
 import Export.LatexGenerator
 
--- | Serves a pdf file that includes a graph and timetable information from 
+-- | Serves a pdf file that includes a graph and timetable information from
 -- selected course sessions
 exportGraphResponse :: String -> String -> ServerPart Response
 exportGraphResponse courses session = do
     req <- askRq
-    (graphSvg, graphImg) <- liftIO $ getActiveGraphImage req                    -- create image of active graph
-    (timetableSvg, timetableImg) <- liftIO $ getTimetableImage courses session  -- create timetable image from course and session 
-    pdfName <- liftIO $ returnPDF graphSvg graphImg timetableSvg timetableImg   -- create pdf with both graph and timetable
+    (graphSvg, graphImg) <- liftIO $ getActiveGraphImage req
+    (fallsvgFilename, fallimageFilename) <- liftIO $ getActiveTimetable req "Fall"
+    (springsvgFilename, springimageFilename) <- liftIO $ getActiveTimetable req "Spring"
+    pdfName <- liftIO $ returnPDF graphSvg graphImg fallsvgFilename fallimageFilename springsvgFilename springimageFilename
     serveFile (asContentType "application/pdf") pdfName
 
 -- | Returns the name of a generated pdf that contains graphImg and timetableImg
 -- and deletes all of the img and svg files passed as arguments
-returnPDF :: String -> String -> String -> String -> IO String
-returnPDF graphSvg graphImg timetableSvg timetableImg = do
+returnPDF :: String -> String -> String -> String -> String -> String -> IO String
+returnPDF graphSvg graphImg fallTimetableSvg fallTimetableImg springTimetableSvg springTimetableImg = do
     rand <- randomName
     let texName = rand ++ ".tex"
         pdfName = rand ++ ".pdf"
-    generateTex [graphImg, timetableImg] texName -- generate a temporary TEX file
+    generateTex [graphImg, fallTimetableImg, springTimetableImg] texName -- generate a temporary TEX file
     createPDF texName                            -- create PDF using TEX and delete the TEX file afterwards
-    removeImage (graphSvg ++ " " ++ graphImg ++ " " ++ timetableSvg ++ " " ++ timetableImg)
-    return $ (pdfName)
+    _ <- removeImage (graphSvg ++ " " ++ graphImg ++ " " ++ fallTimetableSvg ++ " " ++ fallTimetableImg ++ " " ++ springTimetableSvg ++ " " ++ springTimetableImg)
+    return pdfName
