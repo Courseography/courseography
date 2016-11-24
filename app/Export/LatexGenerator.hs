@@ -29,6 +29,19 @@ preamble = do
 -- list of imageNames was provided, the body will be empty.
 body :: Monad m => [String] -> LaTeXT_ m
 body [] = ""
-body (imageName:imageNames) = do
-    center $ includegraphics [IGWidth (CustomMeasure linewidth)] imageName
-    body imageNames
+-- body (imageName:imageNames) = do
+--     center $ includegraphics [IGWidth (CustomMeasure linewidth)] imageName
+--     linebreak
+--     body imageNames
+body [graph, fallTimetable, springTimetable] = do
+    title "Your Graph and Timetables"
+    author "Courseography"
+    maketitle
+    textbf "Graph:"
+    center $ includegraphics [IGWidth (CustomMeasure linewidth)] graph
+    newpage
+    textbf "Fall Timetable:"
+    center $ includegraphics [IGWidth (CustomMeasure linewidth)] fallTimetable
+    newpage
+    textbf "Spring Timetable:"
+    center $ includegraphics [IGWidth (CustomMeasure linewidth)] springTimetable

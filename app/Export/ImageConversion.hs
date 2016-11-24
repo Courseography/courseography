@@ -25,9 +25,9 @@ convertToImage :: String -> String -> IO
                       Maybe Handle,
                       ProcessHandle)
 convertToImage inName outName = createProcess $ CreateProcess
-                                  (ShellCommand $ "convert " ++
+                                  (ShellCommand $ "rsvg-convert " ++
                                                   inName ++
-                                                  " " ++
+                                                  " > " ++
                                                   outName
                                   )
                                   Nothing
@@ -39,6 +39,16 @@ convertToImage inName outName = createProcess $ CreateProcess
                                   False
                                   False
 
+-- removeFile name = createProcess $ CreateProcess
+--                                   (ShellCommand $ "rm " ++ name)
+--                                   Nothing
+--                                   Nothing
+--                                   Inherit
+--                                   CreatePipe
+--                                   CreatePipe
+--                                   False
+--                                   False
+--                                   False
 -- | Removes a file.
 removeFile :: String -> IO ()
 removeFile name = do
