@@ -1,11 +1,14 @@
 requirejs([
     'grid/generate_grid',
     'grid/timetable_util',
-    'common/utilities/trap_scroll'],
+    'common/utilities/trap_scroll',
+    'es6!common/export/export'
+    ],
     function(
         generate_grid,
         timetable_util,
-        trap_scroll
+        trap_scroll,
+        exp
     ) {
 
     $(document).ready(function () {
