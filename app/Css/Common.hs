@@ -128,23 +128,7 @@ modalCSS = do
         width100
         position fixed
         left nil
-        top nil
-    ".ModalClass" ? do
-        position absolute
-        top (px 100)
-        left (px 300)
-        right (px 300)
-        bottom (px 150)
-        borderRadius (px 10)
-        backgroundColor white
-        boxShadow (px 0) (px 0) (px 30) black
-    ".OverlayClass" ? do
-        position fixed
-        left nil
-        right nil
-        top nil
-        bottom nil
-        backgroundColor (setA (0.5) black)  
+        top nil 
     ".modal-header" ? do
         color blue3
     ".modal-body" ? do
@@ -155,6 +139,22 @@ modalCSS = do
             margin (pt 5) 0 (pt 5) 0
             lineHeight (em 1.3)
             textAlign $ alignSide sideLeft
+    ".ModalClass" ? do
+        position absolute
+        top (px 100)
+        left (px 300)
+        right (px 300)
+        bottom (px 150)
+        borderRadius (px 10) (px 10) (px 10) (px 10)
+        backgroundColor white
+        boxShadow (px 0) (px 0) (px 30) black
+    ".OverlayClass" ? do
+        position fixed
+        left nil
+        right nil
+        top nil
+        bottom nil
+        backgroundColor (setA (150) black) 
     ".ui-dialog-titlebar" ? do
         color blue3
         cursor move
@@ -190,7 +190,6 @@ modalCSS = do
         fontSize (em 1)
         borderBottom solid (px 1) black
         textAlign $ alignSide sideLeft
-    
     fbModalCSS
 
 
@@ -206,3 +205,4 @@ fbModalCSS = do
         margin (px 20) auto (px 20) auto
         ".btn" ? do
             margin nil (px 5) nil (px 5)
+

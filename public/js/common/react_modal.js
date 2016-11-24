@@ -18,7 +18,7 @@ export var Modal = React.createClass({
             sessions: [],
             modalIsOpen: false,
             courseTitle : '',
-            formatCourse : ''
+            formatCourse : '',
         };
     },
 
