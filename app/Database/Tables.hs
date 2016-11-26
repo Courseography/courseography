@@ -197,7 +197,7 @@ instance ToJSON Time
 
 -- instance FromJSON required so that tables can be parsed into JSON,
 -- not necessary otherwise.
-instance FromJSON Time
+-- instance FromJSON Time
 instance FromJSON SvgJSON
 
 -- | Converts a Double to a T.Text.
