@@ -30,6 +30,7 @@ import qualified Data.Text as T
 import qualified Data.Vector as V
 import Data.Aeson
 import GHC.Generics
+import WebParsing.PrerequisiteParsing
 
 -- | A data type representing a time for the section of a course.
 -- The first list is comprised of two values: the date (represented as a number
@@ -208,3 +209,28 @@ convertTimeToString :: Time -> [T.Text]
 convertTimeToString (Time [day, timeNum]) =
   [T.pack . show . floor $ day,
    T.replace "." "-" . T.pack . show $ timeNum]
+
+
+-- JSON encoding/decoding
+instance FromJSON Courses where
+  parseJSON (Object o) = do
+    newCode <- o .:? "code" .!= "CSC???"
+    newTitle  <- o .:? "courseTitle"
+    newDescription  <- o .:? "courseDescription"
+    newPrereqString <- o .:? "prerequisite"
+    let newPrereqs = parsePrerequisites newPrereqString
+    newExclusions <- o .:? "exclusion"
+    newCoreqs <- o .:? "corequisite"
+    return $ Courses newCode
+                     newTitle
+                     newDescription
+                     (Just False)
+                     (Just False)
+                     newPrereqs
+                     newExclusions
+                     Nothing -- breadth
+                     Nothing -- distribution
+                     Nothing -- (Just prereqString)
+                     newCoreqs
+                     []
+  parseJSON _ = undefined

@@ -6,29 +6,56 @@ module WebParsing.UtsgJsonParser
       getOrgs,
       insertAllCourses) where
 
-import Data.Aeson ((.:), (.:?), decode, FromJSON(..), Value(..))
-import Data.List
-import Database.Tables
-import WebParsing.PrerequisiteParsing
-import Data.Maybe
+import Data.Aeson ((.:?), (.!=), decode, FromJSON(parseJSON), Value(..), Object)
+import Data.Maybe (fromMaybe)
 import Data.Either (partitionEithers, rights)
-import Data.String
-import Control.Monad
-import Database.Persist.Sqlite (runSqlite, insertMany_, insert_)
-import qualified Data.HashMap.Lazy as M
 import qualified Data.Text as T
-import Text.Read (readMaybe)
-import Config (databasePath)
-import Network.HTTP.Conduit (simpleHttp)
-import Control.Applicative ((<$>), (<*>))
-
-import Data.Traversable
-import Data.Aeson.Types
 import qualified Data.HashMap.Strict as HM
+import Text.Read (readMaybe)
+import Network.HTTP.Conduit (simpleHttp)
 
--- | URL to UofT courses (stored as JSON string)
-jsonURL :: String
-jsonURL = "https://timetable.iit.artsci.utoronto.ca/api/courses?code="
+import Config (databasePath)
+import Database.Tables (Courses(..), Lecture(..), Tutorial(..), Time(..))
+import Database.Persist.Sqlite (runSqlite, insert_)
+
+
+-- | URLs for the Faculty of Arts and Science API
+timetableURL :: String
+timetableURL = "https://timetable.iit.artsci.utoronto.ca/api/courses?code="
+
+orgURL :: String
+orgURL = "https://timetable.iit.artsci.utoronto.ca/api/orgs"
+
+
+-- | Parse all timetable data.
+getAllCourses :: IO ()
+getAllCourses = do
+    orgs <- getOrgs
+    mapM_ (insertAllCourses . T.unpack) orgs
+
+-- | Return a list of all the "orgs" in FAS. These are the values which can be
+--   passed to the timetable API with the "org" key.
+getOrgs :: IO [T.Text]
+getOrgs = do
+    resp <- simpleHttp orgURL
+    let rawJSON :: Maybe Object = decode resp
+    return $ maybe [] HM.keys rawJSON
+
+-- | Retrieve and store all timetable data for the given department.
+insertAllCourses :: String -> IO ()
+insertAllCourses org = do
+    print $ "parsing JSON data from: " ++ org
+    resp <- simpleHttp (timetableURL ++ org)
+    let coursesLst :: Maybe (HM.HashMap T.Text DB) = decode resp
+    let courseData = maybe [] (map dbData . HM.elems) coursesLst
+    -- courseData contains courses and sections;
+    -- only sections are currently stored here.
+    let (_, sections) = unzip courseData
+    let (lectures, tutorials) = partitionEithers $ concat sections
+    runSqlite databasePath (do
+        mapM_ insert_ lectures
+        mapM_ insert_ tutorials)
+
 
 -- | Converts 24-hour time into a double
 -- | Assumes times are rounded to the nearest hour
@@ -38,12 +65,12 @@ getHourVal time = (read $ take 2 time :: Double) + (/) (read $ drop 3 time :: Do
 -- | Converts a weekday into a double
 -- | Monday to Friday becomes 0.0 to 4.0
 getDayVal :: String -> Double
-getDayVal day = case day of
-                    "MO" -> 0.0
-                    "TU" -> 1.0
-                    "WE" -> 2.0
-                    "TH" -> 3.0
-                    "FR" -> 4.0
+getDayVal "MO" = 0.0
+getDayVal "TU" = 0.0
+getDayVal "WE" = 0.0
+getDayVal "TH" = 0.0
+getDayVal "FR" = 0.0
+getDayVal _    = 4.0
 
 -- | Takes a day and start/end times then generates a set of 30-minute timeslots
 getTimeSlots :: Maybe String -> Maybe String -> Maybe String -> [Time]
@@ -55,68 +82,8 @@ getTimeSlots (Just day) (Just start) (Just end) = do
 getTimeSlots _ _ _ = []
 
 
--- | Return a list of all the "orgs" in FAS. These are the values which can be
---   passed to the timetable API with the "org" key.
-getOrgs :: IO [String]
-getOrgs = do
-    resp <- simpleHttp "https://timetable.iit.artsci.utoronto.ca/api/orgs"
-    let rawJSON :: Maybe Object = decode resp
-        orgJSON = maybe [] M.elems rawJSON
-        orgs = case head orgJSON of
-                  (Object v) -> map T.unpack $ M.keys v
-                  _ -> []
-    return orgs
-
-
--- | Parse all timetable data.
-getAllCourses :: IO ()
-getAllCourses = do
-    orgs <- getOrgs
-    forM_ orgs (\org -> do
-        print ("parsing JSON data from: " ++ jsonURL ++ org)
-        insertAllCourses org)
-
-instance FromJSON Courses where
-  parseJSON (Object o) = do
-    code <- o .:? "code" .!= "CSC???"
-    title  <- o .:? "courseTitle"
-    description  <- o .:? "courseDescription"
-    let manualTutorialEnrolment = False
-    let manualPracticalEnrolment = False
-    prereqString <- o .:? "prerequisite"
-    let prereqs = parsePrerequisites prereqString
-    exclusions <- o .:? "exclusion"
-    coreqs <- o .:? "corequisite"
-    let videoUrls = []
-    return $ Courses code
-                     title
-                     description
-                     (Just manualTutorialEnrolment)
-                     (Just manualPracticalEnrolment)
-                     prereqs
-                     exclusions
-                     Nothing -- breadth
-                     Nothing -- distribution
-                     Nothing -- (Just prereqString)
-                     coreqs
-                     videoUrls
-  parseJSON _ = undefined
-
 newtype DB = DB { dbData :: (Courses, [Either Lecture Tutorial]) }
   deriving Show
-
-newtype Meeting = Meeting { meeting :: (Either Lecture Tutorial) }
-  deriving Show
-
-newtype TimeSlot = TimeSlot { times :: [Time] }
-
-instance FromJSON TimeSlot where
-  parseJSON (Object o) = do
-    meetingDay <- o .:? "meetingDay"
-    meetingStartTime <- o .:? "meetingStartTime"
-    meetingEndTime <- o .:? "meetingEndTime"
-    return $ TimeSlot $ getTimeSlots meetingDay meetingStartTime meetingEndTime
-
 
 instance FromJSON DB where
     parseJSON (Object o) = do
@@ -137,13 +104,16 @@ instance FromJSON DB where
             tutorialSession = session} )
     parseJSON _ = error "Invalid section"
 
+newtype Meeting = Meeting { meeting :: (Either Lecture Tutorial) }
+  deriving Show
+
 instance FromJSON Meeting where
     parseJSON (Object o) = do
       teachingMethod :: T.Text <- o .:? "teachingMethod" .!= ""
       sectionNumber :: T.Text <- o .:? "sectionNumber" .!= ""
       timeMap :: Value <- o .:? "schedule" .!= Null
       timeslots <- case timeMap of
-              Object o -> mapM parseJSON (HM.elems o)
+              Object obj -> mapM parseJSON (HM.elems obj)
               _ -> return []
       let allTimes = concatMap times timeslots
       let sectionId = T.concat [teachingMethod, sectionNumber]
@@ -153,22 +123,20 @@ instance FromJSON Meeting where
           actualEnrolment <- o .:? "actualEnrolment" .!= "0"
           actualWaitlist <- o .:? "actualWaitlist" .!= "0"
           instrMap2 :: Value <- o .:? "instructors" .!= Null
-          --let instrMap2 = Null
           let instrList =
                 case instrMap2 of
-                  Object o -> HM.elems o
+                  Object obj -> HM.elems obj
                   _ -> []
 
-          --let instrMap = HM.empty
           instrs <- mapM parseInstr instrList
-          let cap :: Int = fromMaybe (-1) $ readMaybe enrollmentCapacity
-          let enrol :: Int = fromMaybe 0 $ readMaybe actualEnrolment
-          let wait :: Int = fromMaybe 0 $ readMaybe actualWaitlist
+          let cap = fromMaybe (-1) $ readMaybe enrollmentCapacity
+          let enrol = fromMaybe 0 $ readMaybe actualEnrolment
+          let wait = fromMaybe 0 $ readMaybe actualWaitlist
           let extra = 0
           let timeStr = ""
           let instructor = T.intercalate "; " $ filter (not . T.null) instrs
           return $ Meeting $ Left $ Lecture "" "" sectionId allTimes cap instructor enrol wait extra timeStr
-        --"TUT" -> do
+        --"TUT"
         _ ->
           return $ Meeting $ Right $ Tutorial "" (Just sectionId) "" allTimes
       where
@@ -179,14 +147,13 @@ instance FromJSON Meeting where
         parseInstr _ = return ""
     parseJSON _ = error "Invalid meeting"
 
--- | Retrieve and store all timetable data for the given department.
-insertAllCourses :: String -> IO ()
-insertAllCourses org = do
-    resp <- simpleHttp (jsonURL ++ org)
-    let coursesLst :: Maybe (HM.HashMap T.Text DB) = decode resp
-    let courseData = maybe [] (map dbData . HM.elems) coursesLst
-    let (courses, sections) = unzip courseData
-    let (lectures, tutorials) = partitionEithers $ concat sections
-    runSqlite databasePath (do
-        mapM_ insert_ lectures
-        mapM_ insert_ tutorials)
+
+newtype TimeSlot = TimeSlot { times :: [Time] }
+
+instance FromJSON TimeSlot where
+  parseJSON (Object o) = do
+    meetingDay <- o .:? "meetingDay"
+    meetingStartTime <- o .:? "meetingStartTime"
+    meetingEndTime <- o .:? "meetingEndTime"
+    return $ TimeSlot $ getTimeSlots meetingDay meetingStartTime meetingEndTime
+  parseJSON _ = error "Invalid TimeSlot"
