@@ -32,11 +32,17 @@ instance Show CourseReq where
 
 -- define separators for "from"
 -- for now J seems to be most readable and convenient value constructor for satisfying rec structure.
-data Req = J String | AND [Req] | OR [Req] | FROM String Req | PAR Req
+data Req = J String | AND [Req] | OR [Req] | FROM String Req | GRADE String Req
 
 instance Show Req where
     show (J course) = course
-    show (AND reqs) = L.intercalate "," $ map show reqs
-    show (OR reqs) = L.intercalate "/" $ map show reqs
+    show (AND reqs) =
+        case reqs of
+        [x] -> show x
+        otherwise -> "(" ++ (L.intercalate "," $ map show reqs) ++ ")"
+    show (OR reqs) =
+        case reqs of
+        [x] -> show x
+        otherwise -> "(" ++ (L.intercalate "/" $ map show reqs) ++ ")"
     show (FROM fces reqs) =  fces ++ " FCE(s) from:\n" ++ show reqs
-    show (PAR reqs) =  "(" ++ show reqs ++ ")"
+    show (GRADE grade reqs) =  "(" ++ show reqs ++ " with a minimum grade of " ++ grade ++ "%)"
