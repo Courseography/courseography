@@ -44,20 +44,10 @@ instance Show Req where
     show (FROM fces reqs) =  fces ++ " FCE(s) from:\n" ++ show reqs
     show (GRADE grade reqs) =  "(" ++ show reqs ++ " with a minimum grade of " ++ grade ++ "%)"
 
--- define separators for "from"
+-- define separators
 fromSeparator :: Parsec.Parsec String () ()
 fromSeparator = Parsec.spaces >> Parsec.try (Parsec.string "FROM" 
              <|> Parsec.string "from" <|> Parsec.string "From") >> Parsec.spaces
-
-gradeSeparator :: Parsec.Parsec String () ()
-gradeSeparator = Parsec.spaces >> Parsec.try (Parsec.string "MINIMUM" 
-             <|> Parsec.string "Minimum" <|> Parsec.string "minimum") >> Parsec.spaces
-
-cutoffSeparator :: Parsec.Parsec String () ()
-cutoffSeparator = Parsec.spaces >> Parsec.digit >> Parsec.digit >> Parsec.char '%' >> Parsec.spaces
-
-cutoffSeparator1 :: Parsec.Parsec String () ()
-cutoffSeparator1 = Parsec.spaces >> Parsec.char '(' >> Parsec.digit >> Parsec.digit >> Parsec.char '%' >> Parsec.char ')' >> Parsec.spaces
 
 lpSeparator :: Parsec.Parsec String () ()
 lpSeparator = Parsec.spaces >> Parsec.char '(' >> Parsec.spaces
@@ -71,19 +61,6 @@ orSeparator = Parsec.spaces >> (Parsec.string "/" <|> Parsec.string "OR" <|> Par
 andSeparator :: Parsec.Parsec String () ()
 andSeparator = Parsec.spaces >> (Parsec.string "," <|> Parsec.string "AND" <|> Parsec.string "And" <|> Parsec.string "and") >> Parsec.spaces
 
--- helper to find length of list of reqs
-length_list :: [Req] -> Int 
-length_list [] = 0
-length_list (x:xs) =1 + length_list xs
-
--- "5.0 fces from..." "3 full course from" "2.5 full course from"
--- Hard-coded for now since all FCEs are of form _._ with anything before
-floatParserLenient :: Parsec.Parsec String () String
-floatParserLenient = do
-    Parsec.try (Parsec.manyTill Parsec.anyChar (Parsec.try 
-               (Parsec.notFollowedBy (Parsec.noneOf ['0'..'9']))))
-    fces <- floatParser
-    return fces
 
 floatParser :: Parsec.Parsec String () String
 floatParser = do
@@ -92,6 +69,13 @@ floatParser = do
     Parsec.char '.'
     float <- Parsec.digit
     return [int,'.',float]
+
+floatParserLenient :: Parsec.Parsec String () String
+floatParserLenient = do
+    Parsec.try (Parsec.manyTill Parsec.anyChar (Parsec.try 
+               (Parsec.notFollowedBy (Parsec.noneOf ['0'..'9']))))
+    fces <- floatParser
+    return fces
 
 intParser :: Parsec.Parsec String () String
 intParser = do
@@ -106,36 +90,55 @@ intParserLenient = do
     fces <- intParser
     return fces
 
-cutoffParser :: Parsec.Parsec String () String
-cutoffParser = do
+percentParser :: Parsec.Parsec String () String
+percentParser = do
+    Parsec.spaces
+    Parsec.many (Parsec.noneOf ['0'..'9'])
     fces <- Parsec.count 2 Parsec.digit
     Parsec.char '%'
     return fces
 
-cutoffParser1 :: Parsec.Parsec String () String
-cutoffParser1 = do
-    Parsec.char '('
-    fces <- Parsec.count 2 Parsec.digit
-    Parsec.char '%'
-    Parsec.char ')'
-    return fces
+-- parse for cutoff percentage before a course
+coBefParser :: Parsec.Parsec String () Req
+coBefParser = do
+    grade <- percentParser
+    Parsec.manyTill (Parsec.anyChar) (Parsec.try (Parsec.lookAhead (singleParser)))
+    req <- singleParser
+    return $ GRADE grade req
 
-cutoffParserLenient :: Parsec.Parsec String () String
-cutoffParserLenient = do
-    Parsec.manyTill Parsec.anyChar (Parsec.try (Parsec.lookAhead (cutoffParser <|> cutoffParser1)))
-    fces <- cutoffParser <|> cutoffParser1
-    return fces
+-- parse for cutoff percentage after a course
+coAftParser :: Parsec.Parsec String () Req
+coAftParser = do
+    req <- singleParser
+    grade <- percentParser
+    return $ GRADE grade req
 
--- parse for single course OR req within parantheses
-courseParser :: Parsec.Parsec String () Req
-courseParser = Parsec.try (do
+-- parse for courses with cutoffs
+cutoffParser :: Parsec.Parsec String () Req
+cutoffParser = Parsec.try (coAftParser) <|> (coBefParser)
+
+-- parse for reqs within parantheses
+parParser :: Parsec.Parsec String () Req
+parParser = do
+    lpSeparator
+    req <- andorParser
+    rpSeparator
+    return req
+
+-- parse for single course
+singleParser :: Parsec.Parsec String () Req
+singleParser = do
     Parsec.spaces
     -- with no spaces, we expect 3 letters, 3 digits, and (h/H/y/Y)1
     code <- Parsec.count 3 Parsec.letter
     num <- Parsec.count 3 Parsec.digit
     sess <- Parsec.count 2 Parsec.alphaNum
     Parsec.spaces
-    return $ J (code++num++sess)) <|> (parParser)
+    return $ J (code++num++sess)
+
+-- parse for single course with our without cutoff OR a req within parantheses
+courseParser :: Parsec.Parsec String () Req
+courseParser = Parsec.try (cutoffParser) <|> (parParser) <|> (singleParser)
 
 -- parse for reqs separated by / "or"
 orParser :: Parsec.Parsec String () Req
@@ -149,14 +152,6 @@ andorParser = Parsec.try (fromParser) <|> (do
     tmp <- Parsec.sepBy (orParser) (andSeparator)
     return $ AND tmp)
 
--- parse for reqs within parantheses
-parParser :: Parsec.Parsec String () Req
-parParser = do
-    lpSeparator
-    req <- andorParser
-    rpSeparator
-    return req
-
 -- parse for reqs in "from" format
 fromParser :: Parsec.Parsec String () Req
 fromParser = do 
@@ -165,32 +160,9 @@ fromParser = do
     reqs <- andorParser
     return $ FROM fces reqs
 
--- high-level gradeParser
-gradeParser :: Parsec.Parsec String () Req
-gradeParser = Parsec.try gradeParser2 <|> gradeParser1
-
--- parse for "minimum" grade cutoff of form REQ(--%)
-gradeParser1 :: Parsec.Parsec String () Req
-gradeParser1 = do
-    req <- Parsec.manyTill (andorParser) (Parsec.try (Parsec.lookAhead (cutoffParser <|> cutoffParser1)))
-    grade <- cutoffParser <|> cutoffParser1
-    case req of
-        [x] -> return $ GRADE grade x
-
--- parse for "minimum" grade cutoff of form REQ (with a minimum ___ --%)
-gradeParser2 :: Parsec.Parsec String () Req
-gradeParser2 = do
-    req <- Parsec.manyTill (andorParser) (Parsec.try (Parsec.lookAhead (Parsec.string "with a minimum")))
-    grade <- cutoffParserLenient
-    case req of
-        [x] -> return $ GRADE grade x
-
-    -- [x] clean up fromparser, instead of using hardcoded
-    -- [X] get rid of PAR reqtype , get rid of redundant pattern matching, and alter show instead
-    -- [X] create GRADE reqtype and implement show for it
-    -- [X] minimum grade parser
-    -- [X] grade prereq, a 80%
-    -- [] CANT FIGURE OUT WHERE TO PUT GRADEPARSER
-    -- -- I KNOW THAT I WANT TO PLACE IT IN THE COURSEPARSER WITH THE LOWERST PRECEDENCE..
-        -- BUT I DONT KNOW HOW TO CASE CHECK AND MAKE IT RETURN AN ERROR... SO IT GOES INTO INFINITE LOOP
+    -- [x] fix cutoffParser
+    -- [X] cutoffParser can now deal with cutoffs BEFORE a req
+    -- [X] integrate cutoffParser into recursive structure
+    -- [] get andorParser to parse consecutive coBEFs; it works for consecutive coAFTs
+    -- [] create Group Type
     -- [] year (Done by Christine)
