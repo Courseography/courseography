@@ -30,7 +30,6 @@ instance Show CourseReq where
                                         ++ "Prerequisites for " ++ course ++ ":\n"
                                         ++ show preq ++ "\n"
 
--- define separators for "from"
 -- for now J seems to be most readable and convenient value constructor for satisfying rec structure.
 data Req = J String | AND [Req] | OR [Req] | FROM String Req | GRADE String Req
 
