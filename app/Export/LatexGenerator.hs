@@ -5,6 +5,8 @@ module Export.LatexGenerator
 
 import Text.LaTeX
 import Text.LaTeX.Packages.Graphicx
+import Text.LaTeX.Packages.Geometry
+import Text.LaTeX.Packages.Fancyhdr
 
 -- | Create a TEX file named texName that includes all of the images in
 -- imageNames
@@ -24,24 +26,15 @@ preamble :: Monad m => LaTeXT_ m
 preamble = do
     documentclass [] article
     usepackage [] graphicx
+    usepackage [] geometry
+    applyGeometry [GLandscape True, GCentered]
+    let mySettings = defaultHdrSettings {leftHeader = "Graph and Timetables", rightHeader = "courseography.cdf.toronto.edu"}
+    applyHdrSettings mySettings
 
 -- | Adds an includegraphics command for each image in imageNames. If an empty
 -- list of imageNames was provided, the body will be empty.
 body :: Monad m => [String] -> LaTeXT_ m
 body [] = ""
--- body (imageName:imageNames) = do
---     center $ includegraphics [IGWidth (CustomMeasure linewidth)] imageName
---     linebreak
---     body imageNames
-body [graph, fallTimetable, springTimetable] = do
-    title "Your Graph and Timetables"
-    author "Courseography"
-    maketitle
-    textbf "Graph:"
-    center $ includegraphics [IGWidth (CustomMeasure linewidth)] graph
-    newpage
-    textbf "Fall Timetable:"
-    center $ includegraphics [IGWidth (CustomMeasure linewidth)] fallTimetable
-    newpage
-    textbf "Spring Timetable:"
-    center $ includegraphics [IGWidth (CustomMeasure linewidth)] springTimetable
+body (imageName:imageNames) = do
+    center $ includegraphics [IGWidth (CustomMeasure linewidth)] imageName
+    body imageNames
