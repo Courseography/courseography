@@ -8,8 +8,39 @@ import Text.Parsec ((<|>))
 import Control.Monad.Identity (Identity)
 import qualified Data.String as S
 import qualified Data.List as L
-import Database.Requirement
 parse rule text = Parsec.parse rule "(source)" text
+
+data ProgramReq = PRGREQ String [Req]
+
+-- Returns a well formatted String representing a program requirement for specified program.
+instance Show ProgramReq where
+    show (PRGREQ program reqs) = "Program Requirements for " ++ program
+                               ++ ":\n" ++ L.intercalate "\n" (map show reqs)
+
+data CourseReq = CRSREQ String Req Req Req
+
+instance Show CourseReq where
+    show (CRSREQ course creq excl preq) = "Corequisites for " ++ course ++ ":\n"
+                                        ++ show creq ++ "\n" ++ "Exclusions for "
+                                        ++ course ++ ":\n" ++ show excl ++ "\n"
+                                        ++ "Prerequisites for " ++ course ++ ":\n"
+                                        ++ show preq ++ "\n"
+
+-- for now J seems to be most readable and convenient value constructor for satisfying rec structure.
+data Req = J String | AND [Req] | OR [Req] | FROM String Req | GRADE String Req
+
+instance Show Req where
+    show (J course) = course
+    show (AND reqs) =
+        case reqs of
+        [x] -> show x
+        otherwise -> "(" ++ (L.intercalate "," $ map show reqs) ++ ")"
+    show (OR reqs) =
+        case reqs of
+        [x] -> show x
+        otherwise -> "(" ++ (L.intercalate "/" $ map show reqs) ++ ")"
+    show (FROM fces reqs) =  fces ++ " FCE(s) from:\n" ++ show reqs
+    show (GRADE grade reqs) =  "(" ++ show reqs ++ " with a minimum grade of " ++ grade ++ "%)"
 
 -- define separators
 fromSeparator :: Parsec.Parsec String () ()
@@ -174,9 +205,20 @@ semcolParser = do
     return $ AND reqs
 
 -- highest level req parser.
-reqParser :: String -> Req
-reqParser string =
-    let req = parse semcolParser string
-    in case req of
-        Right x -> x
-        Left _ -> J "ERROR"
+reqParser :: Parsec.Parsec String () Req
+reqParser = semcolParser
+
+    -- [x] fix cutoffParser
+    -- [X] cutoffParser can now deal with cutoffs BEFORE a req
+    -- [X] integrate cutoffParser into recursive structure
+    -- [X] get andorParser to parse consecutive cutoffs
+    -- [X] works with english, added more functionality to separators
+    -- [X] fix fromParser to handle text between from and course req
+    -- [X] Fix fromSeparator; FROM ISNT EVERYWHERE, BUT FCES IS.
+    -- [X] Make cutoffParser work with english...
+    -- [X] cutoff parser for letter grades
+    -- [X] CSC165H1/CSC236H1/CSC240H1 (with a minimum grade of 60%), 
+    -- [X] CSC436H1/(CSC336H1 (75%))", nested cutoff
+    -- [x] semicolon parser
+    -- [] create Group Type (Done by Christine)
+    -- [] year (Done by Christine)
