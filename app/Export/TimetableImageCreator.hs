@@ -1,7 +1,7 @@
 {-# LANGUAGE NoMonomorphismRestriction, OverloadedStrings #-}
 
 module Export.TimetableImageCreator
-    (renderTable) where
+    (renderTable, renderTableHelper, times) where
 
 import Diagrams.Prelude
 import Diagrams.Backend.SVG.CmdLine
@@ -23,6 +23,9 @@ blue3 = sRGB24read "#437699"
 
 pink1 :: Colour Double
 pink1 = sRGB24read "#DB94B8"
+
+pomegranate :: Colour Double
+pomegranate = sRGB24read "#F20C00"
 
 cellWidth :: Double
 cellWidth = 2
@@ -54,13 +57,21 @@ timeCellPadding = rect timeCellWidth cellPaddingHeight # lw none
 cellText :: String -> Diagram B
 cellText s = font "Trebuchet MS" $ text s # fontSizeO fs
 
-makeCell :: String -> Diagram B
-makeCell s = vsep 0.030
-    [cellPadding # fc background # lc background,
-     cellText s # fc white <>
-     cell # fc background # lc background]
+makeCell :: Int -> String -> Diagram B
+makeCell maxCourse s = 
+    let sList = splitOn "&" s
+        actualCourse = length sList
+        extraCell = replicate (maxCourse - actualCourse) [cellPadding # fc white # lc white, cellText "" # fc white <> cell # fc white # lc white]
+    in vsep 0.030 $
+        concat $ map (\x -> [cellPadding # fc background # lc background, cellText x # fc white <> cell # fc background # lc background]) sList ++ extraCell
     where
-        background = if null s then white else blue3
+        background = getBackground s
+
+getBackground :: String -> Colour Double
+getBackground s
+    | null s = white
+    | elem '&' s = pomegranate
+    | otherwise = blue3
 
 header :: String -> Diagram B
 header session = (hcat $ (makeSessionCell session) : map makeHeaderCell days) # centerX === headerBorder
@@ -70,16 +81,18 @@ makeSessionCell s =
     timeCellPadding === (cellText s <> timeCell)
 
 makeHeaderCell :: String -> Diagram B
-makeHeaderCell s =
-    cellPadding # lw none === (cellText s <> cell # lw none)
+makeHeaderCell s = 
+    (cellPadding # lw none # fc white # lc white) === (cellText s <> cell # lw none)
 
 makeTimeCell :: String -> Diagram B
 makeTimeCell s =
-    timeCellPadding === (cellText s <> timeCell # lw none)
+    timeCellPadding === (cellText s <> timeCell)
 
 makeRow :: [String] -> Diagram B
-makeRow (x:xs) = (# centerX) . hcat $
-    makeTimeCell x : map makeCell xs
+makeRow (x:xs) = 
+    let maxCourse = maximum (map (length . (splitOn "&")) xs)
+    in (# centerX) . hcat $ 
+        makeTimeCell x : map (makeCell maxCourse) xs
 makeRow [] = error "invalid timetable format"
 
 headerBorder :: Diagram B
@@ -94,15 +107,24 @@ makeTable s session = vsep 0.04 $ (header session): intersperse rowBorder (map m
 renderTable :: String -> String -> String -> IO ()
 renderTable filename courses session = do
     let courseTable = partition5 $ splitOn "_" courses
-    print courseTable
-    let g = makeTable (zipWith (:) times courseTable) session
+    renderTableHelper filename (zipWith (:) times courseTable) session
+    where
+        partition5 [] = []
+        partition5 lst = take 5 lst : partition5 (drop 5 lst)
+
+
+-- =====================================================
+
+-- coursetable : [["","","","",""],["","","","",""],["CSC108 (L)","","CSC108 (L)","","CSC108 (L)"],["","","","",""],["","","","",""],["","","","",""],["STA355 (L)","","STA355 (L)","",""],["STA355 (L)","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],["","","","",""],[""]]
+-- zipwith :  [["8:00","","","","",""],["9:00","","","","",""],["10:00","CSC108 (L)","","CSC108 (L)","","CSC108 (L)"],["11:00","","","","",""],["12:00","","","","",""],["1:00","","","","",""],["2:00","STA355 (L)","","STA355 (L)","",""],["3:00","STA355 (L)","","","",""],["4:00","","","","",""],["5:00","","","","",""],["6:00","","","","",""],["7:00","","","","",""],["8:00","","","","",""]]
+
+renderTableHelper :: String -> [[String]] -> String -> IO ()
+renderTableHelper filename schedule session = do
+    let g = makeTable schedule session
         svg = renderDia SVG (SVGOptions (mkWidth 1024) Nothing "") g
         txt = replace (show (fs :: Double) ++ "px") (show fs' ++ "px") $
               unpack $ renderText svg
     writeFile filename txt
     where
-        partition5 [] = []
-        partition5 lst = take 5 lst : partition5 (drop 5 lst)
-
         -- relative fonts don't play well with ImageMagick, apparently
-        fs' = round $ 1024 / 600 * fs
+        fs' = round $ 1024 / 800 * fs

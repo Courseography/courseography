@@ -33,6 +33,7 @@ executable courseography
     Database.CourseQueries,
     Database.CourseVideoSeed,
     Database.PostInsertion,
+    Database.Requirement,
     Database.DataType,
     Database.Database,
     Database.Tables,

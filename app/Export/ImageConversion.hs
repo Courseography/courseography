@@ -4,14 +4,14 @@ module Export.ImageConversion
 import System.Process
 import GHC.IO.Handle.Types
 
--- | Opens a new process to convert an SVG (inName) to a PNG (outName) 
+-- | Opens a new process to convert an SVG (inName) to a PNG (outName)
 -- Note: hGetContents can be used to read Handles. Useful when trying to read from
 -- stdout.
 createImageFile :: String -> String -> IO ()
 createImageFile inName outName =  do
     (_, _, _, pid) <- convertToImage inName outName
     print "Waiting for process..."
-    waitForProcess pid
+    _ <- waitForProcess pid
     print "Process Complete"
 
 -- | Converts an SVG file to a PNG file. Note that image magik's 'convert' command
@@ -35,7 +35,7 @@ convertToImage inName outName = createProcess $ CreateProcess
                                   False
                                   False
                                   False
-                                  
+
 -- | Removes a file.
 removeImage :: String -> IO
                      (Maybe Handle,
