@@ -33,8 +33,8 @@ import qualified Data.Vector as V
 import qualified Data.HashMap.Strict as HM
 import Data.Maybe (fromMaybe)
 import Text.Read (readMaybe)
-import Data.Aeson ((.:?), (.!=), FromJSON(parseJSON), ToJSON(toJSON), Value(..), genericToJSON)
-import Data.Aeson.Types (Parser, typeMismatch, defaultOptions, Options(..))
+import Data.Aeson ((.:?), (.!=), FromJSON(parseJSON), ToJSON(toJSON), Value(..), genericToJSON, withObject)
+import Data.Aeson.Types (Parser, defaultOptions, Options(..))
 import GHC.Generics
 import WebParsing.PrerequisiteParsing
 
@@ -216,7 +216,7 @@ convertTimeToString (Time [day, timeNum]) =
 
 -- JSON encoding/decoding
 instance FromJSON Courses where
-  parseJSON (Object o) = do
+  parseJSON = withObject "Expected Object for Courses" $ \o -> do
     newCode <- o .:? "code" .!= "CSC???"
     newTitle  <- o .:? "courseTitle"
     newDescription  <- o .:? "courseDescription"
@@ -236,7 +236,6 @@ instance FromJSON Courses where
                      Nothing -- (Just prereqString)
                      newCoreqs
                      []
-  parseJSON v = typeMismatch "Courses" v
 
 instance ToJSON Lecture where
   toJSON = genericToJSON defaultOptions {
@@ -246,7 +245,7 @@ instance ToJSON Lecture where
   }
 
 instance FromJSON Lecture where
-  parseJSON (Object o) = do
+  parseJSON = withObject "Expected Object for Lecture" $ \o -> do
     teachingMethod :: T.Text <- o .:? "teachingMethod" .!= ""
     sectionNumber :: T.Text <- o .:? "sectionNumber" .!= ""
     timeMap :: Value <- o .:? "schedule" .!= Null
@@ -279,8 +278,6 @@ instance FromJSON Lecture where
     else
       fail "Not a lecture"
 
-  parseJSON v = typeMismatch "Courses" v
-
 instance ToJSON Tutorial where
   toJSON = genericToJSON defaultOptions {
     fieldLabelModifier =
@@ -289,7 +286,7 @@ instance ToJSON Tutorial where
   }
 
 instance FromJSON Tutorial where
-  parseJSON (Object o) = do
+  parseJSON = withObject "Expected Object for Tutorial" $ \o -> do
     teachingMethod :: T.Text <- o .:? "teachingMethod" .!= ""
     sectionNumber :: T.Text <- o .:? "sectionNumber" .!= ""
     timeMap :: Value <- o .:? "schedule" .!= Null
@@ -312,8 +309,6 @@ instance FromJSON Tutorial where
       return $ Tutorial "" (Just sectionId) "" allTimes
     else
       fail "Not a tutorial"
-
-  parseJSON v = typeMismatch "Courses" v
 
 
 -- | Helpers for parsing JSON
