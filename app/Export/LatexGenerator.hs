@@ -27,7 +27,6 @@ preamble = do
     documentclass [] article
     usepackage [] graphicx
     usepackage [] geometry
-    usepackage [] pcolor
     applyGeometry [GLandscape True, GCentered, GHeight (In 6)]
     let mySettings = defaultHdrSettings {leftHeader = "Graph and Timetables", rightHeader = "courseography.cdf.toronto.edu"}
     applyHdrSettings mySettings
