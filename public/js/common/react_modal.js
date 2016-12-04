@@ -97,7 +97,7 @@ var Description = React.createClass({
                 <p><strong>Breadth Requirement: </strong>{this.state.course.breadth}</p>
                 <p><strong>Timetable: </strong></p>
                 {this.state.sessions.map(function(lecture) {
-                    return <p>{lecture.code + lecture.session + '-' + lecture.section + ': ' + lecture.timeStr}</p>;
+                    return <p>{lecture.code + lecture.session + '-' + lecture.section}</p>;
                 })}
                 <Video urls={this.state.course.videoUrls}/>
             </div>

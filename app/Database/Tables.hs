@@ -27,13 +27,14 @@ module Database.Tables where
 
 import Database.Persist.TH
 import Database.DataType
+import Data.Char (toLower)
 import qualified Data.Text as T
 import qualified Data.Vector as V
 import qualified Data.HashMap.Strict as HM
 import Data.Maybe (fromMaybe)
 import Text.Read (readMaybe)
-import Data.Aeson ((.:?), (.!=), FromJSON(parseJSON), ToJSON, Value(..))
-import Data.Aeson.Types (Parser, typeMismatch)
+import Data.Aeson ((.:?), (.!=), FromJSON(parseJSON), ToJSON(toJSON), Value(..), genericToJSON)
+import Data.Aeson.Types (Parser, typeMismatch, defaultOptions, Options(..))
 import GHC.Generics
 import WebParsing.PrerequisiteParsing
 
@@ -196,14 +197,11 @@ data Course =
            } deriving (Show, Generic)
 
 instance ToJSON Course
-instance ToJSON Lecture
-instance ToJSON Tutorial
 instance ToJSON Session
 instance ToJSON Time
 
 -- instance FromJSON required so that tables can be parsed into JSON,
 -- not necessary otherwise.
--- instance FromJSON Time
 instance FromJSON SvgJSON
 
 -- | Converts a Double to a T.Text.
@@ -240,6 +238,12 @@ instance FromJSON Courses where
                      []
   parseJSON v = typeMismatch "Courses" v
 
+instance ToJSON Lecture where
+  toJSON = genericToJSON defaultOptions {
+    fieldLabelModifier =
+      (\field -> (toLower $ head field): (tail field)) .
+      drop 7
+  }
 
 instance FromJSON Lecture where
   parseJSON (Object o) = do
@@ -277,6 +281,12 @@ instance FromJSON Lecture where
 
   parseJSON v = typeMismatch "Courses" v
 
+instance ToJSON Tutorial where
+  toJSON = genericToJSON defaultOptions {
+    fieldLabelModifier =
+      (\field -> (toLower $ head field): (tail field)) .
+      drop 8
+  }
 
 instance FromJSON Tutorial where
   parseJSON (Object o) = do
