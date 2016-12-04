@@ -58,7 +58,7 @@ percentParser1 :: Parsec.Parsec String () String
 percentParser1 = do
     Parsec.spaces
     fces <- Parsec.count 2 Parsec.digit
-    Parsec.char '%'
+    Parsec.many (Parsec.char '%')
     Parsec.spaces
     return fces
 
@@ -67,7 +67,7 @@ percentParser2 = do
     Parsec.spaces
     Parsec.char '('
     fces <- Parsec.count 2 Parsec.digit
-    Parsec.char '%'
+    Parsec.many (Parsec.char '%')
     Parsec.char ')'
     Parsec.spaces
     return fces
@@ -77,16 +77,17 @@ percentParser3 = do
     Parsec.spaces
     Parsec.char '('
     Parsec.spaces
-    Parsec.manyTill (Parsec.anyChar) (Parsec.try (Parsec.lookAhead (Parsec.digit)))
+    Parsec.manyTill (Parsec.try (Parsec.noneOf ",/():;")) (Parsec.try (Parsec.lookAhead (Parsec.digit)))
     fces <- Parsec.count 2 Parsec.digit
-    Parsec.char '%'
+    Parsec.many (Parsec.char '%')
     Parsec.char ')'
     Parsec.spaces
     return fces
 
 letterParser :: Parsec.Parsec String () String
 letterParser = do
-    Parsec.manyTill (Parsec.anyChar) (Parsec.try (Parsec.lookAhead (Parsec.oneOf "ABCDEFabcdef"
+    Parsec.manyTill (Parsec.try (Parsec.noneOf ",/():;")) (Parsec.try (Parsec.lookAhead
+                     (Parsec.oneOf "ABCDEFabcdef"
                      >> Parsec.oneOf "+-")))
     letter <- Parsec.oneOf "ABCDEFabcdef"
     plusminus <- Parsec.oneOf "+-"
@@ -97,11 +98,11 @@ letterParser = do
 coBefParser :: Parsec.Parsec String () Req
 coBefParser = do
     Parsec.spaces
-    Parsec.manyTill (Parsec.try (Parsec.noneOf ",/()")) (Parsec.try (Parsec.lookAhead (Parsec.try
+    Parsec.manyTill (Parsec.try (Parsec.noneOf ",/():;")) (Parsec.try (Parsec.lookAhead (Parsec.try
                      letterParser <|> percentParser)))
     grade <- Parsec.try percentParser <|> letterParser
     Parsec.spaces
-    Parsec.manyTill (Parsec.anyChar) (Parsec.try (Parsec.lookAhead (singleParser)))
+    Parsec.manyTill (Parsec.try (Parsec.noneOf ",/():;")) (Parsec.try (Parsec.lookAhead (singleParser)))
     req <- singleParser
     return $ GRADE grade req
 
@@ -109,11 +110,11 @@ coBefParser = do
 coAftParser :: Parsec.Parsec String () Req
 coAftParser = do
     Parsec.spaces
-    Parsec.manyTill (Parsec.anyChar) (Parsec.try (Parsec.lookAhead (singleParser)))
+    Parsec.manyTill (Parsec.try (Parsec.noneOf ",/():;")) (Parsec.try (Parsec.lookAhead (singleParser)))
     req <- singleParser
     Parsec.spaces
-    Parsec.manyTill (Parsec.try (Parsec.noneOf ",/()")) (Parsec.try (Parsec.lookAhead (Parsec.try
-                     andorParser <|> orParser)))
+    Parsec.manyTill (Parsec.try (Parsec.noneOf ",/():;")) (Parsec.try (Parsec.lookAhead (Parsec.try
+                     letterParser <|> percentParser)))
     grade <- Parsec.try percentParser <|> letterParser
     Parsec.spaces
     return $ GRADE grade req
@@ -130,6 +131,26 @@ parParser = do
     rpSeparator
     return req
 
+-- parse for single course with "junk" data
+junkParser :: Parsec.Parsec String () Req
+junkParser = do
+    junk1 <- Parsec.manyTill (Parsec.anyChar) (Parsec.try (Parsec.lookAhead (crsIDParser)))
+    reqs <- crsIDParser
+    junk2 <- Parsec.manyTill Parsec.anyChar (Parsec.try (Parsec.notFollowedBy (Parsec.try
+                                             (Parsec.noneOf ",/():;\r\n"))))
+    return $ J (junk1++reqs++junk2)
+
+-- parse for single course ID
+crsIDParser :: Parsec.Parsec String () String
+crsIDParser = do
+    Parsec.spaces
+    -- with no spaces, we expect 3 letters, 3 digits, and (h/H/y/Y)1
+    code <- Parsec.count 3 Parsec.letter
+    num <- Parsec.count 3 Parsec.digit
+    sess <- Parsec.count 2 Parsec.alphaNum
+    Parsec.spaces
+    return (code++num++sess)
+
 -- parse for single course
 singleParser :: Parsec.Parsec String () Req
 singleParser = do
@@ -143,7 +164,7 @@ singleParser = do
 
 -- parse for single course with our without cutoff OR a req within parantheses
 courseParser :: Parsec.Parsec String () Req
-courseParser = Parsec.try (parParser) <|> (Parsec.try cutoffParser <|> singleParser)
+courseParser = Parsec.try (parParser) <|> (Parsec.try cutoffParser <|> junkParser <|> singleParser)
 
 -- parse for reqs separated by / "or"
 orParser :: Parsec.Parsec String () Req
@@ -180,3 +201,19 @@ reqParser string =
     in case req of
         Right x -> x
         Left _ -> J "ERROR"
+
+    -- [x] fix cutoffParser
+    -- [X] cutoffParser can now deal with cutoffs BEFORE a req
+    -- [X] integrate cutoffParser into recursive structure
+    -- [X] get andorParser to parse consecutive cutoffs
+    -- [X] works with english, added more functionality to separators
+    -- [X] fix fromParser to handle text between from and course req
+    -- [X] Fix fromSeparator; FROM ISNT EVERYWHERE, BUT FCES IS.
+    -- [X] Make cutoffParser work with english...
+    -- [X] PercentParser works for % and not %
+    -- [X]JUNKPARSER
+    -- [X] cutoff parser for letter grades
+    -- CSC165H1/CSC236H1/CSC240H1 (with a minimum grade of 60%), 
+    -- [X] CSC436H1/(CSC336H1 (75%))", nested cutoff
+    -- [] create Group Type
+    -- [] year (Done by Christine)
