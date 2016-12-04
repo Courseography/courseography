@@ -12,10 +12,10 @@ createPDF :: String -> IO ()
 createPDF texName  = do
   (_, _, _, pid) <- convertTexToPDF texName 
   print "Waiting for a process..."
-  waitForProcess pid
-  let aux = replace ".tex" ".aux" texName
-      log = replace ".tex" ".log" texName
-  removeImage (aux ++ " " ++ log ++ " " ++ texName)
+  _ <- waitForProcess pid
+  let auxFile = replace ".tex" ".aux" texName
+      logFile = replace ".tex" ".log" texName
+  _ <- removeImage (auxFile ++ " " ++ logFile ++ " " ++ texName)
   print "Process Complete"
 
 -- | Create a process to use the pdflatex program to create a PDF from a TEX 
