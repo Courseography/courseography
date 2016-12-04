@@ -7,6 +7,7 @@ import Text.LaTeX
 import Text.LaTeX.Packages.Graphicx
 import Text.LaTeX.Packages.Geometry
 import Text.LaTeX.Packages.Fancyhdr
+import Text.LaTeX.Packages.Color
 
 -- | Create a TEX file named texName that includes all of the images in
 -- imageNames
@@ -27,9 +28,11 @@ preamble = do
     documentclass [] article
     usepackage [] graphicx
     usepackage [] geometry
+    usepackage [] pcolor
     applyGeometry [GLandscape True, GCentered, GHeight (In 6)]
     let mySettings = defaultHdrSettings {leftHeader = "Graph and Timetables", rightHeader = "courseography.cdf.toronto.edu"}
     applyHdrSettings mySettings
+    -- color (DefColor White)
 
 -- | Adds an includegraphics command for each image in imageNames. If an empty
 -- list of imageNames was provided, the body will be empty.
