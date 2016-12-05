@@ -5,7 +5,6 @@ module Export.LatexGenerator
 
 import Text.LaTeX
 import Text.LaTeX.Packages.Graphicx
-import Text.LaTeX.Packages.Geometry
 import Text.LaTeX.Packages.Fancyhdr
 
 -- | Create a TEX file named texName that includes all of the images in
@@ -26,10 +25,10 @@ preamble :: Monad m => LaTeXT_ m
 preamble = do
     documentclass [] article
     usepackage [] graphicx
-    usepackage [] geometry
-    applyGeometry [GLandscape True, GCentered, GHeight (In 6)]
+    raw "\\usepackage[margin=1in,footskip=0.25in,landscape]{geometry}"
     let mySettings = defaultHdrSettings {leftHeader = "Graph and Timetables", rightHeader = "courseography.cdf.toronto.edu"}
     applyHdrSettings mySettings
+    raw "\\pagenumbering{gobble}"
 
 -- | Adds an includegraphics command for each image in imageNames. If an empty
 -- list of imageNames was provided, the body will be empty.
