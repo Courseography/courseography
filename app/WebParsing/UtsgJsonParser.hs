@@ -61,7 +61,7 @@ newtype DB = DB { dbData :: (Courses, [Either Lecture Tutorial]) }
 instance FromJSON DB where
     parseJSON (Object o) = do
       course <- parseJSON (Object o)
-      session :: T.Text <- o .:? "section" .!= "CSC???"
+      session :: T.Text <- o .:? "section" .!= "F"
       meetingMap :: HM.HashMap T.Text Meeting <- o .:? "meetings" .!= HM.empty
       let meetings = map (setCode (coursesCode course) session . meeting) (HM.elems meetingMap)
           -- Fix manualTutorialEnrolment and manualPracticalEnrolment
