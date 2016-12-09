@@ -10,7 +10,7 @@ author:              David Liu
 maintainer:          david@cs.toronto.edu
 -- copyright:
 category:            Planning
-build-type:          Simple
+build-type:          Custom
 cabal-version:       >=1.22
 
 executable courseography
