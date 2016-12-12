@@ -134,11 +134,11 @@ parParser = do
 -- parse for single course with "junk" data
 junkParser :: Parsec.Parsec String () Req
 junkParser = do
-    junk1 <- Parsec.manyTill (Parsec.anyChar) (Parsec.try (Parsec.lookAhead (crsIDParser)))
-    reqs <- crsIDParser
+    junk1 <- Parsec.manyTill (Parsec.anyChar) (Parsec.try (Parsec.lookAhead (singleParser)))
+    reqs <- singleParser
     junk2 <- Parsec.manyTill Parsec.anyChar (Parsec.try (Parsec.notFollowedBy (Parsec.try
                                              (Parsec.noneOf ",/():;\r\n"))))
-    return $ J (junk1++reqs++junk2)
+    return $ JUNK junk1 reqs junk2
 
 -- parse for single course ID
 crsIDParser :: Parsec.Parsec String () String
@@ -183,7 +183,7 @@ fromParser :: Parsec.Parsec String () Req
 fromParser = do 
     fces <- fcesParser
     Parsec.manyTill (Parsec.letter) fromSeparator
-    Parsec.manyTill (Parsec.anyChar) (Parsec.try (Parsec.lookAhead (courseParser)))
+    Parsec.manyTill (Parsec.anyChar) (Parsec.try (Parsec.lookAhead (singleParser)))
     req <- andorParser
     return $ FROM fces req
 
@@ -202,18 +202,7 @@ reqParser string =
         Right x -> x
         Left _ -> J "ERROR"
 
-    -- [x] fix cutoffParser
-    -- [X] cutoffParser can now deal with cutoffs BEFORE a req
-    -- [X] integrate cutoffParser into recursive structure
-    -- [X] get andorParser to parse consecutive cutoffs
-    -- [X] works with english, added more functionality to separators
-    -- [X] fix fromParser to handle text between from and course req
-    -- [X] Fix fromSeparator; FROM ISNT EVERYWHERE, BUT FCES IS.
-    -- [X] Make cutoffParser work with english...
-    -- [X] PercentParser works for % and not %
-    -- [X]JUNKPARSER
-    -- [X] cutoff parser for letter grades
-    -- CSC165H1/CSC236H1/CSC240H1 (with a minimum grade of 60%), 
-    -- [X] CSC436H1/(CSC336H1 (75%))", nested cutoff
-    -- [] create Group Type
+    -- [] look for more conrner cases where separators are in english between
+    --    complex reqs.
     -- [] year (Done by Christine)
+    -- [] create Group Type
