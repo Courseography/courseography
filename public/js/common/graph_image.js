@@ -20,6 +20,7 @@ function getGraphImage() {
                       .append(topContentDiv);
 
             openModal('Export', contentDiv);
+            
         },
         error: function () {
             throw 'No image generated';

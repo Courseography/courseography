@@ -6,7 +6,6 @@ $(document).ready(function () {
   });
 });
 
-
 /**
  * Creates and displays the Export modal content div.
  */
@@ -15,7 +14,8 @@ function openExportModal() {
     'use strict';
     var context = $('#courseography-header').attr('context');
     if (!(context === 'graph')) {
-    	ReactDOM.render(<ExportModal context = "grid" session = {'fall'}/>, document.getElementById('disclaimerDiv'));
+        ReactDOM.render(<ExportModal context = "grid" session = "fall"/>, document.getElementById('disclaimerDiv')).openModal();;
+        
     }
 } 
 
@@ -27,29 +27,29 @@ export var ExportModal = React.createClass({
     },
 
     componentDidMount: function() {
-    	if (this.props.context === "graph") {
-	    	$.ajax({
-	        url: 'image',
-	        success: function (data) {
-	        	this.setState({data: "data:image/png;base64," + data});
-	        }.bind(this),
-	        error: function () {
-	            throw 'No image generated';
-	        }
-	    });
+        if (this.props.context === "graph") {
+            $.ajax({
+            url: 'image',
+            success: function (data) {
+                this.setState({data: "data:image/png;base64," + data});
+            }.bind(this),
+            error: function () {
+                throw 'No image generated';
+            }
+        });
     } else {
-    	var session = this.props.session.charAt(0).toUpperCase() + this.props.session.slice(1);
-	    $.ajax({
-	        url: 'timetable-image',
-	        data: {session: session},
-	        success: function (data) {
-	            this.setState({data: "data:image/png;base64," + data, session: session === 'Fall' ? 'Spring' : 'Fall'});
-	        }.bind(this),
-	        error: function () {
-	            throw 'No image generated';
-	        }
+        var session = this.props.session.charAt(0).toUpperCase() + this.props.session.slice(1);
+        $.ajax({
+            url: 'timetable-image',
+            data: {session: session},
+            success: function (data) {
+                this.setState({data: "data:image/png;base64," + data, session: session === 'Fall' ? 'Spring' : 'Fall'});
+            }.bind(this),
+            error: function () {
+                throw 'No image generated';
+            }
     });
-	}
+    }
     },
     openModal: function() {
         this.setState({modalIsOpen: true});
@@ -58,10 +58,11 @@ export var ExportModal = React.createClass({
         this.setState({modalIsOpen: false});
     },
     render: function () {
-    	if (this.context === 'graph') {
+        if (this.context === 'graph') {
             return (
                 <div>
                 <ReactModal
+                    className='ModalClass'
                     overlayClassName='OverlayClass'
                     isOpen={this.state.modalIsOpen}
                     onRequestClose={this.closeModal}>
@@ -69,7 +70,7 @@ export var ExportModal = React.createClass({
                 </ReactModal>
                 </div> );
         } else {
-        	return (
+            return (
                 <div>
                 <ReactModal
                     overlayClassName='OverlayClass'
@@ -83,30 +84,29 @@ export var ExportModal = React.createClass({
        }
 });
 var GraphImage = React.createClass({
-	render: function() {
-		return(
-			<div>
-	            <a href="calendar" target="_blank">Download ICS</a>
-	            <a href="timetable-pdf" target="_blank">Download PDF</a>
-	            <div>
-	            <img id="post-image" src={this.props.data}/>
-	            </div>
-	        </div>
-	    );
-	}
+    render: function() {
+        return(
+            <div>
+                <a href="calendar" target="_blank">Download ICS</a>
+                <a href="timetable-pdf" target="_blank">Download PDF</a>
+                <div>
+                <img id="post-image" src={this.props.data}/>
+                </div>
+            </div>
+        );
+    }
 })
 
 var GridImage = React.createClass({
-	render: function() {
-		console.log(this.props.data);
-		return(
-			<div>
-	            <a href="calendar" target="_blank">Download ICS</a>
-	            <a href="timetable-pdf" target="_blank">Download PDF</a>
-	            <div>
-	            <img id="post-image" src={this.props.data}/>
-	            </div>
-	        </div>
-	    );
-	}
+    render: function() {
+        return(
+            <div>
+                <a href="calendar" target="_blank">Download ICS    </a>
+                <a href="timetable-pdf" target="_blank">Download PDF</a>
+                <div>
+                <img id="post-image" src={this.props.data}/>
+                </div>
+            </div>
+        );
+    }
 })
