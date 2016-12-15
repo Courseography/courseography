@@ -1,5 +1,6 @@
 import * as tooltip from 'es6!graph/tooltip';
 import {Modal} from 'es6!common/react_modal';
+import {ExportModal} from 'es6!common/export/export';
 
 /**
  * Search for target node in list of nodes,
@@ -157,7 +158,6 @@ var Graph = React.createClass({
             horizontalPanFactor: 0,
             verticalPanFactor: 0,
             mouseDown: false,
-            courseId: ''
             };   
     },
 
@@ -383,7 +383,10 @@ var Graph = React.createClass({
         this.setState({courseId: newCourse});
         modal.openModal(newCourse);
     },
-
+    openExportModal: function() {
+        var exportModal = this.refs.exportModal
+        exportModal.openModal();
+    },
     // Reset graph
     reset: function () {
         this.setFCECount(0);
@@ -547,6 +550,7 @@ var Graph = React.createClass({
         return (
             <div>
                 <Modal ref = 'modal'/>
+                <ExportModal context = "graph" session = "" ref = 'exportModal'/>
                 <Button
                     divId='zoom-in-button'
                     text='+'

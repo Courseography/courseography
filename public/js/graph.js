@@ -36,6 +36,12 @@ requirejs([
             graphComponent.reset();
         });
 
+        $(document).ready(function () {
+            $('#nav-export').click(function () {
+                graphComponent.openExportModal();
+            });
+        });
+
         $.ajax({
             url: 'graphs',
             dataType: 'json',
