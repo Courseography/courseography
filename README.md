@@ -55,7 +55,30 @@ Contributors
 
 This project would not exist without the contributions of many students in the Department of Computer Science. In alphabetical order, our contributors are:
 
-Alex Baluta, Alexander Biggs, Kelly Bell, Christina Chen, Eugene Cheung, Spencer Elliott, Ryan Fan, Christian Garcia, Ross Gatih, Philip Kukulak, Tamara Lipowski, Lydia Liu, Jahnavi Matholia, Christine Murad, San Shaftoe, Ian Stewart-Binks
+Alex Baluta,
+Alexander Biggs,
+Kelly Bell,
+Christina Chen,
+Eugene Cheung,
+Kael Deverell,
+Spencer Elliott,
+Lana El Sanyoura,
+Ryan Fan,
+Ailsa Fang,
+Christian Garcia,
+Ross Gatih,
+Parker Hutcheson,
+Philip Kukulak,
+Ryan Lee,
+Tamara Lipowski,
+Lydia Liu,
+Nathan Liu,
+Jahnavi Matholia,
+Hermish Mehta,
+Mia Meng,
+Christine Murad,
+Sam Shaftoe,
+Ian Stewart-Binks
 
 
 Privacy Policy and Licensing
