@@ -1,90 +1,88 @@
 {-# LANGUAGE FlexibleContexts #-}
 module WebParsing.ReqParser
-    (reqParser) where
+    (parseReqs) where
 
 import qualified Text.Parsec as Parsec
-import Text.Parsec.String
+import Text.Parsec.String (Parser)
 import Text.Parsec ((<|>))
+import Control.Monad (msum)
 import Control.Monad.Identity (Identity)
 import qualified Data.String as S
 import qualified Data.List as L
 import Database.Requirement
-parse rule text = Parsec.parse rule "(source)" text
+
 
 -- define separators
-fromSeparator :: Parsec.Parsec String () ()
-fromSeparator = Parsec.spaces >> (Parsec.try (Parsec.string "FCE") 
+fromSeparator :: Parser ()
+fromSeparator = Parsec.spaces >> (Parsec.try (Parsec.string "FCE")
              <|> (Parsec.string "FCEs")) >> Parsec.spaces
 
-lpSeparator :: Parsec.Parsec String () ()
-lpSeparator = Parsec.spaces >> Parsec.char '(' >> Parsec.spaces
+lParen :: Parser Char
+lParen = Parsec.char '('
 
-rpSeparator :: Parsec.Parsec String () ()
-rpSeparator = Parsec.spaces >> Parsec.char ')' >> Parsec.spaces
+rParen :: Parser Char
+rParen = Parsec.char ')'
 
-orSeparator :: Parsec.Parsec String () ()
-orSeparator = Parsec.spaces >> (Parsec.try (Parsec.string "/") <|> (Parsec.string "OR")
-                                 <|> (Parsec.string "Or") <|> (Parsec.string "or")) >> Parsec.spaces
+orSeparator :: Parser String
+orSeparator = Parsec.choice $ map Parsec.string [
+    "/",
+    "OR",
+    "Or",
+    "or"
+    ]
 
-andSeparator :: Parsec.Parsec String () ()
-andSeparator = Parsec.spaces >> (Parsec.try (Parsec.string ",") <|> (Parsec.string "AND")
-                                 <|> (Parsec.string "And") <|> (Parsec.string "and")) >> Parsec.spaces
+andSeparator :: Parser String
+andSeparator = Parsec.choice $ map Parsec.string [
+    ",",
+    "AND",
+    "And",
+    "and"
+    ]
 
-semcolSeparator :: Parsec.Parsec String () ()
-semcolSeparator = Parsec.spaces >> Parsec.char ';' >> Parsec.spaces
+semicolon :: Parser Char
+semicolon = Parsec.char ';'
 
-floatParser :: Parsec.Parsec String () String
-floatParser = do
-    int <- Parsec.digit
-    Parsec.char '.'
-    float <- Parsec.digit
-    return [int,'.',float]
-
-intParser :: Parsec.Parsec String () String
-intParser = do
-    fces <- Parsec.digit
-    return [fces]
-
-fcesParser :: Parsec.Parsec String () String
+fcesParser :: Parser String
 fcesParser = do
-    Parsec.manyTill (Parsec.anyChar) (Parsec.try (Parsec.lookAhead (Parsec.try floatParser <|> intParser)))
-    fces <- Parsec.try floatParser <|> intParser
-    return fces
+    integral <- Parsec.many1 Parsec.digit
+    point <- Parsec.option "" $ Parsec.string "."
+    fractional <- if point == "" then return "" else Parsec.many1 Parsec.digit
+    return $ integral ++ point ++ fractional
 
-percentParser :: Parsec.Parsec String () String
-percentParser = Parsec.try percentParser3 <|> percentParser2 <|> percentParser1
+percentParser :: Parser String
+percentParser = Parsec.choice [percentParser3, percentParser2, percentParser1]
+    where
+    percentParser1 :: Parser String
+    percentParser1 = do
+        Parsec.spaces
+        fces <- Parsec.count 2 Parsec.digit
+        Parsec.many (Parsec.char '%')
+        Parsec.spaces
+        return fces
 
-percentParser1 :: Parsec.Parsec String () String
-percentParser1 = do
-    Parsec.spaces
-    fces <- Parsec.count 2 Parsec.digit
-    Parsec.many (Parsec.char '%')
-    Parsec.spaces
-    return fces
+    percentParser2 :: Parser String
+    percentParser2 = do
+        Parsec.spaces
+        lParen
+        fces <- Parsec.count 2 Parsec.digit
+        Parsec.many (Parsec.char '%')
+        rParen
+        Parsec.spaces
+        return fces
 
-percentParser2 :: Parsec.Parsec String () String
-percentParser2 = do
-    Parsec.spaces
-    Parsec.char '('
-    fces <- Parsec.count 2 Parsec.digit
-    Parsec.many (Parsec.char '%')
-    Parsec.char ')'
-    Parsec.spaces
-    return fces
+    percentParser3 :: Parser String
+    percentParser3 = do
+        Parsec.spaces
+        lParen
+        Parsec.spaces
+        Parsec.manyTill (Parsec.try (Parsec.noneOf ",/():;")) (Parsec.try (Parsec.lookAhead (Parsec.digit)))
+        fces <- Parsec.count 2 Parsec.digit
+        Parsec.many (Parsec.char '%')
+        rParen
+        Parsec.spaces
+        return fces
 
-percentParser3 :: Parsec.Parsec String () String
-percentParser3 = do
-    Parsec.spaces
-    Parsec.char '('
-    Parsec.spaces
-    Parsec.manyTill (Parsec.try (Parsec.noneOf ",/():;")) (Parsec.try (Parsec.lookAhead (Parsec.digit)))
-    fces <- Parsec.count 2 Parsec.digit
-    Parsec.many (Parsec.char '%')
-    Parsec.char ')'
-    Parsec.spaces
-    return fces
-
-letterParser :: Parsec.Parsec String () String
+letterParser :: Parser String
 letterParser = do
     Parsec.manyTill (Parsec.try (Parsec.noneOf ",/():;")) (Parsec.try (Parsec.lookAhead
                      (Parsec.oneOf "ABCDEFabcdef"
@@ -95,7 +93,7 @@ letterParser = do
     return [letter,plusminus]
 
 -- parse for cutoff percentage before a course
-coBefParser :: Parsec.Parsec String () Req
+coBefParser :: Parser Req
 coBefParser = do
     Parsec.spaces
     Parsec.manyTill (Parsec.try (Parsec.noneOf ",/():;")) (Parsec.try (Parsec.lookAhead (Parsec.try
@@ -107,7 +105,7 @@ coBefParser = do
     return $ GRADE grade req
 
 -- parse for cutoff percentage after a course
-coAftParser :: Parsec.Parsec String () Req
+coAftParser :: Parser Req
 coAftParser = do
     Parsec.spaces
     Parsec.manyTill (Parsec.try (Parsec.noneOf ",/():;")) (Parsec.try (Parsec.lookAhead (singleParser)))
@@ -120,19 +118,15 @@ coAftParser = do
     return $ GRADE grade req
 
 -- cutoff parser
-cutoffParser :: Parsec.Parsec String () Req
+cutoffParser :: Parser Req
 cutoffParser = Parsec.try (coAftParser) <|> (coBefParser)
 
--- parse for reqs within parantheses
-parParser :: Parsec.Parsec String () Req
-parParser = do
-    lpSeparator
-    req <- Parsec.try cutoffParser <|> andorParser
-    rpSeparator
-    return req
+-- | Parser for requirements written within parentheses
+parParser :: Parser Req
+parParser = Parsec.between lParen rParen categoryParser
 
 -- parse for single course with "junk" data
-junkParser :: Parsec.Parsec String () Req
+junkParser :: Parser Req
 junkParser = do
     junk1 <- Parsec.manyTill (Parsec.anyChar) (Parsec.try (Parsec.lookAhead (singleParser)))
     reqs <- singleParser
@@ -140,67 +134,64 @@ junkParser = do
                                              (Parsec.noneOf ",/():;\r\n"))))
     return $ JUNK junk1 reqs junk2
 
--- parse for single course ID
-crsIDParser :: Parsec.Parsec String () String
-crsIDParser = do
-    Parsec.spaces
-    -- with no spaces, we expect 3 letters, 3 digits, and (h/H/y/Y)1
-    code <- Parsec.count 3 Parsec.letter
-    num <- Parsec.count 3 Parsec.digit
-    sess <- Parsec.count 2 Parsec.alphaNum
-    Parsec.spaces
-    return (code++num++sess)
-
--- parse for single course
-singleParser :: Parsec.Parsec String () Req
+-- | Parser for a single course.
+-- We expect 3 letters, 3 digits, and a letter and a number.
+singleParser :: Parser Req
 singleParser = do
-    Parsec.spaces
-    -- with no spaces, we expect 3 letters, 3 digits, and (h/H/y/Y)1
     code <- Parsec.count 3 Parsec.letter
     num <- Parsec.count 3 Parsec.digit
+    -- TODO: Make the last two letters more restricted.
     sess <- Parsec.count 2 Parsec.alphaNum
-    Parsec.spaces
-    return $ J (code++num++sess)
+    return $ J (code ++ num ++ sess)
 
 -- parse for single course with our without cutoff OR a req within parantheses
-courseParser :: Parsec.Parsec String () Req
-courseParser = Parsec.try (parParser) <|> (Parsec.try cutoffParser <|> junkParser <|> singleParser)
+courseParser :: Parser Req
+courseParser = Parsec.between Parsec.spaces Parsec.spaces $ Parsec.choice [
+    parParser,
+    Parsec.try cutoffParser,
+    junkParser,
+    singleParser
+    ]
 
--- parse for reqs separated by / "or"
-orParser :: Parsec.Parsec String () Req
+-- | Parser for reqs related through an OR.
+orParser :: Parser Req
 orParser = do
-    reqs <- Parsec.sepBy (courseParser) (orSeparator)
+    reqs <- Parsec.sepBy courseParser orSeparator
+    -- TODO: separate cases when reqs has 1 Req vs. multiple Reqs.
     return $ OR reqs
 
--- parse for reqs separated by , "and"
-andorParser :: Parsec.Parsec String () Req
-andorParser = Parsec.try (fromParser) <|> (do
-    reqs <- Parsec.sepBy (orParser) (andSeparator)
-    return $ AND reqs)
-
--- parse for reqs in "from" format
-fromParser :: Parsec.Parsec String () Req
-fromParser = do 
-    fces <- fcesParser
-    Parsec.manyTill (Parsec.letter) fromSeparator
-    Parsec.manyTill (Parsec.anyChar) (Parsec.try (Parsec.lookAhead (singleParser)))
-    req <- andorParser
-    return $ FROM fces req
-
--- parse for reqs separated by ; "and?"
--- semicolons separate reqs and should have the highest precedence.. simply split by ; with andorParser
-semcolParser :: Parsec.Parsec String () Req
-semcolParser = do
-    reqs <- Parsec.sepBy (andorParser) (Parsec.char ';')
+-- | Parser for for reqs related through an AND.
+andParser :: Parser Req
+andParser = do
+    reqs <- Parsec.sepBy orParser andSeparator
+    -- TODO: separate cases when reqs has 1 Req vs. multiple Reqs.
     return $ AND reqs
 
--- highest level req parser.
-reqParser :: String -> Req
-reqParser string =
-    let req = parse semcolParser string
+-- | Parser for reqs in "from" format:
+-- 4.0 FCEs from CSC108H1, CSC148H1, ...
+fromParser :: Parser Req
+fromParser = do
+    fces <- fcesParser
+    Parsec.manyTill Parsec.anyChar fromSeparator
+    Parsec.manyTill Parsec.anyChar (Parsec.try $ Parsec.lookAhead singleParser)
+    req <- andParser
+    return $ FROM fces req
+
+-- | Parser for requirements separated by a semicolon.
+-- Semicolons are assumed to have the highest precedence.
+categoryParser :: Parser Req
+categoryParser = do
+    reqs <- Parsec.sepBy (fromParser <|> andParser) semicolon
+    -- TODO: separate cases when reqs has 1 Req vs. multiple Reqs.
+    return $ AND reqs
+
+-- | Parse the course requirements from a string.
+parseReqs :: String -> Req
+parseReqs reqString =
+    let req = Parsec.parse categoryParser "" reqString
     in case req of
         Right x -> x
-        Left _ -> J "ERROR"
+        Left e -> J (show e)
 
     -- [] look for more conrner cases where separators are in english between
     --    complex reqs.
