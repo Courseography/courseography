@@ -73,6 +73,7 @@ executable courseography
     WebParsing.ParsingHelp,
     WebParsing.PostParser,
     WebParsing.PrerequisiteParsing,
+    WebParsing.ReqParser,
     WebParsing.TimeConverter,
     WebParsing.UtsgJsonParser,
     WebParsing.ParsecCombinators
