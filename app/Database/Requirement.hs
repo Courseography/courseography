@@ -31,7 +31,7 @@ instance Show CourseReq where
                                         ++ show preq ++ "\n"
 
 -- for now J seems to be most readable and convenient value constructor for satisfying rec structure.
-data Req = J String | AND [Req] | OR [Req] | FROM String Req | GRADE String Req | JUNK String Req String
+data Req = J String | AND [Req] | OR [Req] | FROM String Req | GRADE String Req | RAW String
 
 instance Show Req where
     show (J course) = course
@@ -45,4 +45,4 @@ instance Show Req where
         otherwise -> "(" ++ (L.intercalate "/" $ map show reqs) ++ ")"
     show (FROM fces reqs) =  fces ++ " FCE(s) from:\n" ++ show reqs
     show (GRADE grade reqs) =  "(" ++ show reqs ++ " with a minimum grade of " ++ grade ++ "%)"
-    show (JUNK junk1 reqs junk2) = "(" ++ junk1 ++ show reqs ++ junk2 ++ ")"
+    show (RAW text) = "(" ++ text ++ ")"

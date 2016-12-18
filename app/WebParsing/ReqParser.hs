@@ -125,14 +125,13 @@ cutoffParser = Parsec.try (coAftParser) <|> (coBefParser)
 parParser :: Parser Req
 parParser = Parsec.between lParen rParen categoryParser
 
--- parse for single course with "junk" data
-junkParser :: Parser Req
-junkParser = do
-    junk1 <- Parsec.manyTill (Parsec.anyChar) (Parsec.try (Parsec.lookAhead (singleParser)))
-    reqs <- singleParser
-    junk2 <- Parsec.manyTill Parsec.anyChar (Parsec.try (Parsec.notFollowedBy (Parsec.try
-                                             (Parsec.noneOf ",/():;\r\n"))))
-    return $ JUNK junk1 reqs junk2
+-- | Parser for raw text in a prerequisite, e.g., "proficiency in C/C++".
+-- Note that even if a course code appears in the middle of such text,
+-- this code is treated as plain text.
+rawTextParser :: Parser Req
+rawTextParser = do
+    text <- Parsec.many $ Parsec.noneOf ";\r\n"
+    return $ RAW text
 
 -- | Parser for a single course.
 -- We expect 3 letters, 3 digits, and a letter and a number.
@@ -146,11 +145,11 @@ singleParser = do
 
 -- parse for single course with our without cutoff OR a req within parantheses
 courseParser :: Parser Req
-courseParser = Parsec.between Parsec.spaces Parsec.spaces $ Parsec.choice [
+courseParser = Parsec.between Parsec.spaces Parsec.spaces $ Parsec.choice $ map Parsec.try [
     parParser,
-    Parsec.try cutoffParser,
-    junkParser,
-    singleParser
+    cutoffParser,
+    singleParser,
+    rawTextParser
     ]
 
 -- | Parser for reqs related through an OR.
@@ -174,14 +173,14 @@ fromParser = do
     fces <- fcesParser
     Parsec.manyTill Parsec.anyChar fromSeparator
     Parsec.manyTill Parsec.anyChar (Parsec.try $ Parsec.lookAhead singleParser)
-    req <- andParser
+    req <- (Parsec.try andParser <|> rawTextParser)
     return $ FROM fces req
 
 -- | Parser for requirements separated by a semicolon.
 -- Semicolons are assumed to have the highest precedence.
 categoryParser :: Parser Req
 categoryParser = do
-    reqs <- Parsec.sepBy (fromParser <|> andParser) semicolon
+    reqs <- Parsec.sepBy (fromParser <|> andParser <|> rawTextParser) semicolon
     -- TODO: separate cases when reqs has 1 Req vs. multiple Reqs.
     return $ AND reqs
 
