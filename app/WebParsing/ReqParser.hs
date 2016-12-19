@@ -49,77 +49,64 @@ fcesParser = do
     fractional <- if point == "" then return "" else Parsec.many1 Parsec.digit
     return $ integral ++ point ++ fractional
 
-percentParser :: Parser String
-percentParser = Parsec.choice [percentParser3, percentParser2, percentParser1]
+-- | Parser for a grade, which can be in one of the following forms:
+-- a number with or without a percent symbol, or a letter A-F followed by a +/-.
+gradeParser :: Parser String
+gradeParser = do
+    grade <- percentParser <|> letterParser
+    Parsec.lookAhead $ Parsec.choice $ map Parsec.try [
+        andSeparator,
+        orSeparator,
+        Parsec.space >> return "",
+        Parsec.eof >> return "",
+        Parsec.oneOf "(),/;" >> return ""
+        ]
+    return grade
+
     where
-    percentParser1 :: Parser String
-    percentParser1 = do
-        Parsec.spaces
-        fces <- Parsec.count 2 Parsec.digit
-        Parsec.many (Parsec.char '%')
-        Parsec.spaces
+    percentParser = do
+        fces <- Parsec.many1 Parsec.digit
+        Parsec.optional (Parsec.char '%')
         return fces
 
-    percentParser2 :: Parser String
-    percentParser2 = do
-        Parsec.spaces
-        lParen
-        fces <- Parsec.count 2 Parsec.digit
-        Parsec.many (Parsec.char '%')
-        rParen
-        Parsec.spaces
-        return fces
-
-    percentParser3 :: Parser String
-    percentParser3 = do
-        Parsec.spaces
-        lParen
-        Parsec.spaces
-        Parsec.manyTill (Parsec.try (Parsec.noneOf ",/():;")) (Parsec.try (Parsec.lookAhead (Parsec.digit)))
-        fces <- Parsec.count 2 Parsec.digit
-        Parsec.many (Parsec.char '%')
-        rParen
-        Parsec.spaces
-        return fces
-
-letterParser :: Parser String
-letterParser = do
-    Parsec.manyTill (Parsec.try (Parsec.noneOf ",/():;")) (Parsec.try (Parsec.lookAhead
-                     (Parsec.oneOf "ABCDEFabcdef"
-                     >> Parsec.oneOf "+-")))
-    letter <- Parsec.oneOf "ABCDEFabcdef"
-    plusminus <- Parsec.oneOf "+-"
-    Parsec.spaces
-    return [letter,plusminus]
+    letterParser = do
+        letter <- Parsec.oneOf "ABCDEFabcdef"
+        plusminus <- Parsec.option "" $ Parsec.string "+" <|> Parsec.string "-"
+        return $ letter : plusminus
 
 -- parse for cutoff percentage before a course
 coBefParser :: Parser Req
 coBefParser = do
+    Parsec.choice $ map (Parsec.try . (>> Parsec.space) . Parsec.string) ["a", "A", "an", "An"]
     Parsec.spaces
-    Parsec.manyTill (Parsec.try (Parsec.noneOf ",/():;")) (Parsec.try (Parsec.lookAhead (Parsec.try
-                     letterParser <|> percentParser)))
-    grade <- Parsec.try percentParser <|> letterParser
+    grade <- gradeParser
     Parsec.spaces
-    Parsec.manyTill (Parsec.try (Parsec.noneOf ",/():;")) (Parsec.try (Parsec.lookAhead (singleParser)))
+    Parsec.manyTill Parsec.anyChar (Parsec.try $ Parsec.lookAhead singleParser)
     req <- singleParser
     return $ GRADE grade req
 
 -- parse for cutoff percentage after a course
 coAftParser :: Parser Req
 coAftParser = do
-    Parsec.spaces
-    Parsec.manyTill (Parsec.try (Parsec.noneOf ",/():;")) (Parsec.try (Parsec.lookAhead (singleParser)))
     req <- singleParser
     Parsec.spaces
-    Parsec.manyTill (Parsec.try (Parsec.noneOf ",/():;")) (Parsec.try (Parsec.lookAhead (Parsec.try
-                     letterParser <|> percentParser)))
-    grade <- Parsec.try percentParser <|> letterParser
-    Parsec.spaces
+    grade <- Parsec.between lParen rParen cutoffHelper <|> cutoffHelper
     return $ GRADE grade req
 
--- cutoff parser
+    where
+    cutoffHelper = Parsec.between Parsec.spaces Parsec.spaces $ do
+        Parsec.manyTill (Parsec.noneOf "()")
+          (Parsec.try $ Parsec.lookAhead (orSeparator <|> andSeparator <|> (do
+            gradeParser
+            Parsec.spaces
+            Parsec.notFollowedBy $ Parsec.alphaNum
+            return "")))
+        gradeParser
+
+-- | Parser for a grade cutoff on a course.
+-- This is tricky because the cutoff can come before or after the course code.
 cutoffParser :: Parser Req
-cutoffParser = Parsec.try (coAftParser) <|> (coBefParser)
+cutoffParser = Parsec.try coAftParser <|> coBefParser
 
 -- | Parser for requirements written within parentheses
 parParser :: Parser Req
@@ -181,6 +168,7 @@ fromParser = do
 categoryParser :: Parser Req
 categoryParser = do
     reqs <- Parsec.sepBy (fromParser <|> andParser <|> rawTextParser) semicolon
+    Parsec.eof
     -- TODO: separate cases when reqs has 1 Req vs. multiple Reqs.
     return $ AND reqs
 
