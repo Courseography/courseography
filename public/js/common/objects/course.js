@@ -83,8 +83,8 @@ Course.prototype.parseLectures = function (session, timeSuffix) {
     var sections = [];
 
     session.lectures.forEach(function (lecture, i, arr) {
-        // Convert from 'LEC-0101' to 'L0101'
-        lecture.section = lecture.section.substring(0, 1) + lecture.section.substring(4);
+        // Convert from 'LEC0101' to 'L0101'
+        lecture.section = lecture.section.substring(0, 1) + lecture.section.substring(3);
         if (lecture.section.charAt(1) === '2' ||
             lecture.times === 'Online Web Version') {
             return;
@@ -134,8 +134,8 @@ Course.prototype.parseTutorials = function (session, timeSuffix) {
     var tmp = this;
 
     return session.tutorials.map(function (tutorial) {
-        // Convert from 'TUT-0101' to 'T0101'
-        tutorial.section = tutorial.section.substring(0, 1) + tutorial.section.substring(4);
+        // Convert from 'TUT0101' to 'T0101'
+        tutorial.section = tutorial.section.substring(0, 1) + tutorial.section.substring(3);
 
         var sectionTimes = convertTimes(tutorial.times);
         if (timeSuffix === 'Y') {
