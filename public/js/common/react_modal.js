@@ -59,6 +59,8 @@ var Description = React.createClass({
         if (newProps.course !== this.props.course) {
             this.refresh(newProps.course);
         }
+        var node = ReactDOM.findDOMNode(this);
+        node.scrollIntoView();
     },
 
     // This loads the course json
