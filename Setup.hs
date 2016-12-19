@@ -21,5 +21,5 @@ main = defaultMainWithHooks
         check depdency = do
             result <- system depdency
             case result of
-                ExitFailure 127 -> print $ depdency ++ " is NOT available."
-                _               -> print $ depdency ++ " is available."
+                ExitFailure 127 -> print ("Error Message: " ++ depdency ++ " is NOT available. Please add it in your path.") >> exitFailure
+                _               -> exitSuccess
