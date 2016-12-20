@@ -833,7 +833,7 @@ Calc1<y:LabelModel>
           <y:Geometry height="24.0" width="52.7688438409815" x="821.2357139539039" y="244.52002816922425"/>
           <y:Fill color="#888888" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="10" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="16.2509765625" modelName="custom" textColor="#FFFFFF" visible="true" width="41.7978515625" x="5.485496139240695" y="3.87451171875">CSC373<y:LabelModel>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="10" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="16.2509765625" modelName="custom" textColor="#FFFFFF" visible="true" width="41.7978515625" x="5.485496139240809" y="3.87451171875">CSC373<y:LabelModel>
               <y:SmartNodeLabelModel distance="4.0"/>
             </y:LabelModel>
             <y:ModelParameter>
@@ -1358,7 +1358,7 @@ Calc1<y:LabelModel>
           <y:Geometry height="30.0" width="65.0" x="817.5774715500302" y="-249.1971863172904"/>
           <y:Fill color="#5DD5B8" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="23.6015625" modelName="custom" textColor="#000000" visible="true" width="64.4765625" x="0.26171875" y="3.19921875">CSC120<y:LabelModel>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="16" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="23.6015625" modelName="custom" textColor="#000000" visible="true" width="64.4765625" x="0.26171875" y="3.19921875">CSC121<y:LabelModel>
               <y:SmartNodeLabelModel distance="4.0"/>
             </y:LabelModel>
             <y:ModelParameter>
@@ -2285,7 +2285,6 @@ Calc1<y:LabelModel>
       </data>
     </edge>
     <edge id="e80" source="n52" target="n72">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="10.749343585317092" ty="-15.0234375">
@@ -2298,7 +2297,6 @@ Calc1<y:LabelModel>
       </data>
     </edge>
     <edge id="e81" source="n6" target="n73">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="31.468844576806987" sy="13.64123736061405" tx="0.0" ty="-14.990234375"/>
