@@ -1303,7 +1303,7 @@ var InfoBox = React.createClass({
                 ry: '4',
                 fill: 'white',
                 stroke: 'black',
-                'stroke-width': '2',
+                'strokeWidth': '2',
                 width: '60',
                 height: '30'
             };

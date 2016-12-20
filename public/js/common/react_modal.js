@@ -88,8 +88,8 @@ var Description = React.createClass({
                 <p><strong>Distribution Requirement Status: </strong>{this.props.course.distribution}</p>
                 <p><strong>Breadth Requirement: </strong>{this.props.course.breadth}</p>
                 <p><strong>Timetable: </strong></p>
-                {this.props.sessions.map(function(lecture) {
-                    return <p>{lecture.code + lecture.session + '-' + lecture.section}</p>;
+                {this.props.sessions.map(function(lecture, i) {
+                    return <p key={i}>{lecture.code + lecture.session + '-' + lecture.section}</p>;
                 })}
                 <Video urls={this.props.course.videoUrls}/>
             </div>
