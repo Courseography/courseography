@@ -96,8 +96,8 @@ queryCourse str = do
 
 -- | Queries the database for all information regarding a specific tutorial for
 -- a @course@, returns a Tutorial.
-returnTutorial :: T.Text -> T.Text -> T.Text -> IO (Maybe Tutorial)
-returnTutorial lowerStr sect session = runSqlite databasePath $ do
+returnTutorial :: T.Text -> T.Text -> T.Text -> SqlPersistM (Maybe Tutorial)
+returnTutorial lowerStr sect session = do
     maybeEntityTutorials <- selectFirst [TutorialCode ==. T.toUpper lowerStr,
                                          TutorialSection ==. Just sect,
                                          TutorialSession ==. session]
@@ -106,8 +106,8 @@ returnTutorial lowerStr sect session = runSqlite databasePath $ do
 
 -- | Queries the database for all information regarding a specific lecture for
 --  a @course@, returns a Lecture.
-returnLecture :: T.Text -> T.Text -> T.Text -> IO (Maybe Lecture)
-returnLecture lowerStr sect session = runSqlite databasePath $ do
+returnLecture :: T.Text -> T.Text -> T.Text -> SqlPersistM (Maybe Lecture)
+returnLecture lowerStr sect session = do
     maybeEntityLectures <- selectFirst [LectureCode ==. T.toUpper lowerStr,
                                         LectureSection ==. sect,
                                         LectureSession ==. session]
@@ -170,9 +170,9 @@ getGraphJSON graphName =
     runSqlite databasePath $ do
         graphEnt :: (Maybe (Entity Graph)) <- selectFirst [GraphTitle ==. graphName] []
         case graphEnt of
-            Nothing -> return $ createJSONResponse ["texts" .= ([] :: [Text]),
-                                                    "shapes" .= ([] :: [Shape]),
-                                                    "paths" .= ([] :: [Path])]
+            Nothing -> return $ createJSONResponse $ object ["texts" .= ([] :: [Text]),
+                                                             "shapes" .= ([] :: [Shape]),
+                                                             "paths" .= ([] :: [Path])]
             Just graph -> do
                 let gId = entityKey graph
                 sqlTexts    :: [Entity Text] <- selectList [TextGraph ==. gId] []
@@ -212,7 +212,7 @@ getGraphJSON graphName =
                             ("height", toJSON $ graphHeight $ entityVal graph)
                         ]
 
-                return response
+                return response :: SqlPersistM Response
 
 -- | Builds a list of all course codes in the database.
 allCourses :: IO Response
@@ -220,7 +220,7 @@ allCourses = do
   response <- runSqlite databasePath $ do
       courses :: [Entity Courses] <- selectList [] []
       let codes = map (coursesCode . entityVal) courses
-      return $ T.unlines codes
+      return $ T.unlines codes :: SqlPersistM T.Text
   return $ toResponse response
 
 -- | Returns all course info for a given department.
@@ -260,7 +260,7 @@ deptList :: IO Response
 deptList = do
     depts <- runSqlite databasePath $ do
         courses :: [Entity Courses] <- selectList [] []
-        return $ sort . nub $ map g courses
+        return $ sort . nub $ map g courses :: SqlPersistM [[Char]]
     return $ createJSONResponse depts
     where
         g = take 3 . T.unpack . coursesCode . entityVal
@@ -268,10 +268,9 @@ deptList = do
 -- | Queries the graphs table and returns a JSON response of Graph JSON
 -- objects.
 queryGraphs :: IO Response
-queryGraphs =
-    runSqlite databasePath $
-        do graphs :: [Entity Graph] <- selectList [] [Asc GraphTitle]
-           return $ createJSONResponse graphs
+queryGraphs = runSqlite databasePath $ do
+    graphs :: [Entity Graph] <- selectList [] [Asc GraphTitle]
+    return $ createJSONResponse graphs :: SqlPersistM Response
 
 -- | Queries the database for all times regarding a specific lecture for
 -- a @course@, returns a list of Time.

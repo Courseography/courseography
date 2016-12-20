@@ -30,12 +30,15 @@ saveGraphJSON jsonStr nameStr = do
     case jsonObj of
         Nothing -> return $ toResponse ("Error" :: String)
         Just (SvgJSON texts shapes paths) -> do
-            _ <- runSqlite databasePath $ do
-                gId <- insert $ Graph nameStr 256 256
-                insertMany_ $ map (\text -> text {textGraph = gId}) texts
-                insertMany_ $ map (\shape -> shape {shapeGraph = gId}) shapes
-                insertMany_ $ map (\path -> path {pathGraph = gId}) paths
+            _ <- runSqlite databasePath $ insertGraph nameStr texts shapes paths
             return $ toResponse $ ("Success" :: String)
+    where
+        insertGraph :: String -> [Text] -> [Shape] -> [Path] -> SqlPersistM ()
+        insertGraph nameStr texts shapes paths = do
+            gId <- insert $ Graph nameStr 256 256
+            insertMany_ $ map (\text -> text {textGraph = gId}) texts
+            insertMany_ $ map (\shape -> shape {shapeGraph = gId}) shapes
+            insertMany_ $ map (\path -> path {pathGraph = gId}) paths
 
 --contains' :: PersistEntity m => T.Text -> SqlPersistM m
 --contains field query = Filter field (Left $ T.concat ["%", query, "%"]) (BackendSpecificFilter "LIKE")

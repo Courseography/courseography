@@ -93,7 +93,7 @@ executable courseography
     TemplateHaskell,
     TypeFamilies
   build-depends:
-    base >= 4.8 && < 5,
+    base >= 4.9,
     blaze-markup,
     blaze-html,
     happstack-server,
