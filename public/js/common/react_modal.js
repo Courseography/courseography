@@ -56,9 +56,8 @@ export var Modal = React.createClass({
     },
     render: function () {
         return (
-            <div>
-            <ReactModal className='ModalClass'
-                overlayClassName='OverlayClass'
+            <ReactModal className='modal-class'
+                overlayClassName='overlay'
                 isOpen={this.state.modalIsOpen}
                 onRequestClose={this.closeModal}>
                 <div className='modal-header'>
@@ -68,9 +67,7 @@ export var Modal = React.createClass({
                     <Description
                     course = {this.state.course}
                     sessions = {this.state.sessions} /></div>
-                <div className='modal-footer'></div>
             </ReactModal>
-            </div>
         );
    }
 
@@ -105,14 +102,18 @@ var Video = React.createClass({
     },
 
     render: function() {
-        return (
-            <div id='course-video-div'>
-                <video id='course-video' className='video-js vjs-default-skin' controls='' preload='auto'>
-                    {this.props.urls.map(function(url) {
-                        return <source src={url} type='video/mp4'/>
-                    })}
-                </video>
-            </div>
-        );
+        if (this.props.urls.length > 0) {
+            return (
+                <div id='course-video-div'>
+                    <video id='course-video' className='video-js vjs-default-skin' controls='' preload='auto'>
+                        {this.props.urls.map(function(url) {
+                            return <source src={url} type='video/mp4' key={url}/>
+                        })}
+                    </video>
+                </div>
+            );
+        } else {
+            return <div></div>;
+        }
     }
 });

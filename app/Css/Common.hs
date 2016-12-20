@@ -132,14 +132,13 @@ modalCSS = do
     ".modal-header" ? do
         color blue3
     ".modal-body" ? do
-        overflowY scroll
-        height (px 360)
         p ? do
             fontSize (pt 12)
             margin (pt 5) 0 (pt 5) 0
             lineHeight (em 1.3)
             textAlign $ alignSide sideLeft
-    ".ModalClass" ? do
+    ".modal-class" ? do
+        overflowY auto
         position absolute
         top (px 100)
         left (px 300)
@@ -148,7 +147,7 @@ modalCSS = do
         borderRadius (px 10) (px 10) (px 10) (px 10)
         backgroundColor white
         boxShadow (px 0) (px 0) (px 30) black
-    ".OverlayClass" ? do
+    ".overlay" ? do
         position fixed
         left nil
         right nil
@@ -197,6 +196,7 @@ modalCSS = do
 fbModalCSS :: Css
 fbModalCSS = do
     "#post-image" ? do
+        border solid (px 3) black
         borderRadius (px 5) (px 5) (px 5) (px 5)
         margin nil auto (px 10) auto
         maxWidth (pct 100)

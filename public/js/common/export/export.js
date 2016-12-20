@@ -74,31 +74,28 @@ export var ExportModal = React.createClass({
     },
 
     render: function () {
-        if (this.context === 'graph') {
+        if (this.props.context === 'graph') {
             return (
-                <div>
                 <ReactModal
-                    className='ModalClass'
-                    overlayClassName='OverlayClass'
+                    className='modal-class'
+                    overlayClassName='overlay'
                     isOpen={this.state.modalIsOpen}
                     onRequestClose={this.closeModal}>
                     <GraphImage data={this.state.data}/>
                 </ReactModal>
-                </div>
             );
         } else {
             return (
-                <div>
                 <ReactModal
-                    overlayClassName='OverlayClass'
+                    className='modal-class'
+                    overlayClassName='overlay'
                     isOpen={this.state.modalIsOpen}
                     onRequestClose={this.closeModal}>
                     <GridImage
                         data={this.state.data}
                         toggleSession={this.toggleSession} />
                 </ReactModal>
-                </div> );
-
+            );
         }
     }
 });
@@ -107,25 +104,35 @@ export var ExportModal = React.createClass({
 var GraphImage = function (props) {
     return (
         <div>
-            <a href="calendar" target="_blank">Download ICS</a>
+        <div className='modal-header'>
+            Export
+        </div>
+        <div className='modal-body'>
             <a href="timetable-pdf" target="_blank">Download PDF</a>
             <div>
             <img id="post-image" src={props.data}/>
             </div>
         </div>
+        </div>
     );
 };
+
 
 var GridImage = function (props) {
     return (
         <div>
-            <a href="calendar" target="_blank">Download ICS</a>
+        <div className='modal-header'>
+            Export
+        </div>
+        <div className='modal-body'>
+            <a href="calendar" target="_blank">Download timetable as ICS</a><br />
             <a href="timetable-pdf" target="_blank">Download PDF</a>
             <div>
             <img id="post-image" src={props.data}/>
             </div>
             <button type="button" className="btn btn-primary" id="switch-session-button"
                 onClick={props.toggleSession}>Switch Sessions</button>
+        </div>
         </div>
     );
 };
