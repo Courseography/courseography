@@ -2,9 +2,9 @@ module Response.Image
     (graphImageResponse, timetableImageResponse, returnImageData) where
 
 import Happstack.Server
-import qualified Data.ByteString.Lazy as BS
+import qualified Data.ByteString as BS
 import Control.Monad.IO.Class  (liftIO)
-import qualified Data.ByteString.Base64.Lazy as BEnc
+import qualified Data.ByteString.Base64 as BEnc
 import Export.GetImages
 import Export.ImageConversion
 

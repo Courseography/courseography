@@ -4,7 +4,8 @@ module Response.Export
 
 import Control.Monad.IO.Class (liftIO)
 import Happstack.Server
-import qualified Data.ByteString.Lazy as BS
+import qualified Data.ByteString as BS
+import qualified Data.ByteString.Lazy as L
 import Export.GetImages
 import Export.ImageConversion (removeFile)
 import Export.PdfGenerator
@@ -33,7 +34,7 @@ returnPdfBS :: String -> IO Response
 returnPdfBS pdfFilename = do
     pdfData <- BS.readFile pdfFilename
     _ <- removeFile pdfFilename
-    return $ toResponseBS "application/pdf" pdfData
+    return $ toResponseBS "application/pdf" $ L.fromStrict pdfData
 
 -- | Returns the name of a generated pdf that contains graphImg and timetableImg
 -- and deletes all of the img and svg files passed as arguments
