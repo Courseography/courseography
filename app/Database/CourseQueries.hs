@@ -278,7 +278,7 @@ queryGraphs =
 getLectureTime :: (String, String, String) -> SqlPersistM [Time]
 getLectureTime (lecCode, lecSection, lecSession) = do
     maybeEntityLectures <- selectFirst [LectureCode ==. T.pack lecCode,
-                                        LectureSection ==. (T.pack $ take 1 lecSection ++ "EC-" ++ drop 1 lecSection),
+                                        LectureSection ==. (T.pack $ take 1 lecSection ++ "EC" ++ drop 1 lecSection),
                                         LectureSession ==. T.pack lecSession]
                                        []
     return $ maybe [] (lectureTimes . entityVal) maybeEntityLectures
@@ -288,7 +288,7 @@ getLectureTime (lecCode, lecSection, lecSession) = do
 getTutorialTime :: (String, String, String) -> SqlPersistM [Time]
 getTutorialTime (tutCode, tutSection, tutSession) = do
     maybeEntityTutorials <- selectFirst [TutorialCode ==. T.pack tutCode,
-                                         TutorialSection ==. Just (T.pack $ take 1 tutSection ++ "UT-" ++ drop 1 tutSection),
+                                         TutorialSection ==. Just (T.pack $ take 1 tutSection ++ "UT" ++ drop 1 tutSection),
                                          TutorialSession ==. T.pack tutSession]
                                         []
     return $ maybe [] (tutorialTimes . entityVal) maybeEntityTutorials
