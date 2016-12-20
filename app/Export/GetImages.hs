@@ -103,7 +103,7 @@ addCourseHelper (courseCode, courseSection, courseSession) currentSchedule (day,
 
 -- | Creates an timetable image based on schedule, and returns the name of the svg
 -- used to create the image and the name of the image
-generateTimetableImg :: [[[String]]] -> String -> IO(String, String)
+generateTimetableImg :: [[[String]]] -> String -> IO (String, String)
 generateTimetableImg schedule courseSession = do
     rand <- randomName
     let svgFilename = rand ++ ".svg"
