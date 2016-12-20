@@ -95,7 +95,7 @@ performPost code =
         let id_ = FB.userId user
         liftIO $ createImageFile "" "INSERT_ID-graph.png"
         liftIO $ postPhoto token id_
-        liftIO $ removeImage "INSERT_ID-graph.png"
+        liftIO $ removeFile "INSERT_ID-graph.png"
         return $ toResponse postFB
 
 -- | Gets a user access token.

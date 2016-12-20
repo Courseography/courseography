@@ -20,6 +20,7 @@ timetableStyles = do
     timetableCSS
     courseSelectCSS
     tdColours
+    modalContainerCSS
     --infoCSS
 
 gridCSS :: Css
@@ -275,3 +276,13 @@ tdColours = ".timetable " ?  do
     td # ("hover" *= "conflict") # ("satisfied" *= "true") <>
         td # ("hover" *= "conflict") # ("satisfied" *= "false") ? do
         backgroundColor red1
+
+modalContainerCSS :: Css
+modalContainerCSS = do
+    "#modal-content-container" ? do
+        a <? do
+            textDecoration none
+            marginLeft (px 10)
+            "outline" -: "none"
+            ":hover" & do
+                textDecoration underline
