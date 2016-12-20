@@ -57,7 +57,6 @@ graphScripts = do
          "/static/js/common/objects/section.js",
          "/static/js/common/utilities/util.js",
          "/static/js/common/image_conversion.js",
-         "/static/js/common/graph_image.js",
          "/static/js/vendor/bootstrap.min.3.1.1.js",
          "/static/js/common/modal.js"])
     H.script ! A.src "/static/js/requirejs-config.js" $ ""
@@ -74,7 +73,6 @@ timetableScripts = do
          "/static/js/common/objects/course.js",
          "/static/js/common/objects/section.js",
          "/static/js/common/utilities/util.js",
-         "/static/js/common/grid_image.js",
          "/static/js/common/image_conversion.js",
          "/static/js/draw/draw.js",
          "/static/js/common/course_videos.js",

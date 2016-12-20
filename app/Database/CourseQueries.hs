@@ -273,7 +273,6 @@ queryGraphs =
         do graphs :: [Entity Graph] <- selectList [] [Asc GraphTitle]
            return $ createJSONResponse graphs
 
-
 getLectureTime :: CourseInfo -> SqlPersistM CourseInfo
 getLectureTime courseInfo = do
     maybeEntityLectures <- selectFirst [LectureCode ==. (T.pack $ code courseInfo),
@@ -292,4 +291,3 @@ getTutorialTime courseInfo = do
                                         []
     let times = maybe [] (tutorialTimes . entityVal) maybeEntityTutorials
     return courseInfo { time = times }
-

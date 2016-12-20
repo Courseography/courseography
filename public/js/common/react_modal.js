@@ -23,28 +23,31 @@ export var Modal = React.createClass({
 
     openModal: function(newCourse) {
         if (newCourse == this.state.courseId) {
-                this.setState({modalIsOpen: true});
-        }else {
+            this.setState({modalIsOpen: true});
+        } else {
             var formatted = formatCourseName(newCourse);
             var that = this;
-            this.setState({modalIsOpen: true, courseId: newCourse, courseTitle: getCourseTitle(newCourse, formatted)});
+            this.setState({
+                modalIsOpen: true,
+                courseId: newCourse,
+                courseTitle: getCourseTitle(newCourse, formatted)});
 
             $.ajax({
-                    url: 'course',
-                    data: {name: formatted[0]},
-                    dataType: 'json',
-                    success: function (data) {
-                            //This is getting the session times
-                            var sessions = data.fallSession.lectures
-                                                           .concat(data.springSession.lectures)
-                                                           .concat(data.yearSession.lectures)
-                            //Tutorials don't have a timeStr to print, so I've currently omitted them
-                            that.setState({course: data, sessions: sessions});
-                    },
-                    error: function (xhr, status, err) {
-                        console.error('course-info', status, err.toString());
-                    }
-                });
+                url: 'course',
+                data: {name: formatted[0]},
+                dataType: 'json',
+                success: function (data) {
+                        //This is getting the session times
+                        var sessions = data.fallSession.lectures
+                                                       .concat(data.springSession.lectures)
+                                                       .concat(data.yearSession.lectures)
+                        //Tutorials don't have a timeStr to print, so I've currently omitted them
+                        that.setState({course: data, sessions: sessions});
+                },
+                error: function (xhr, status, err) {
+                    console.error('course-info', status, err.toString());
+                }
+            });
         }
 
     },
@@ -52,23 +55,24 @@ export var Modal = React.createClass({
         this.setState({modalIsOpen: false});
     },
     render: function () {
-            return (
-                <div>
-                <ReactModal className='ModalClass'
-                    overlayClassName='OverlayClass'
-                    isOpen={this.state.modalIsOpen}
-                    onRequestClose={this.closeModal}>
-                    <div className='modal-header'>
-                        {this.state.courseTitle}
-                          </div>
-                        <div className='modal-body'>
-                            <Description 
-                            course = {this.state.course}
-                            sessions = {this.state.sessions} /> </div> 
-                     <div className='modal-footer'> </div>    
-                </ReactModal>
-                </div> );
-       }
+        return (
+            <div>
+            <ReactModal className='ModalClass'
+                overlayClassName='OverlayClass'
+                isOpen={this.state.modalIsOpen}
+                onRequestClose={this.closeModal}>
+                <div className='modal-header'>
+                    {this.state.courseTitle}
+                </div>
+                <div className='modal-body'>
+                    <Description
+                    course = {this.state.course}
+                    sessions = {this.state.sessions} /></div>
+                <div className='modal-footer'></div>
+            </ReactModal>
+            </div>
+        );
+   }
 
 
 });

@@ -158,7 +158,7 @@ var Graph = React.createClass({
             horizontalPanFactor: 0,
             verticalPanFactor: 0,
             mouseDown: false,
-            };   
+        };
     },
 
     componentDidMount: function () {
@@ -377,16 +377,16 @@ var Graph = React.createClass({
     },
 
     infoBoxMouseClick: function () {
-        var infoBox = this.refs.infoBox
-        var newCourse = infoBox.state.nodeId.substring(0, 6)
-        var modal = this.refs.modal
-        this.setState({courseId: newCourse});
-        modal.openModal(newCourse);
+        var infoBox = this.refs.infoBox;
+        var newCourse = infoBox.state.nodeId.substring(0, 6);
+        this.setState({courseId: newCourse});;
+        this.refs.modal.openModal(newCourse);
     },
+
     openExportModal: function() {
-        var exportModal = this.refs.exportModal
-        exportModal.openModal();
+        this.refs.exportModal.openModal();
     },
+
     // Reset graph
     reset: function () {
         this.setFCECount(0);
@@ -549,8 +549,8 @@ var Graph = React.createClass({
                             this.state.verticalPanFactor == 0;
         return (
             <div>
-                <Modal ref = 'modal'/>
-                <ExportModal context = "graph" session = "" ref = 'exportModal'/>
+                <Modal ref='modal'/>
+                <ExportModal context='graph' session='' ref='exportModal'/>
                 <Button
                     divId='zoom-in-button'
                     text='+'

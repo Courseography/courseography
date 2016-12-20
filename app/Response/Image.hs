@@ -9,9 +9,7 @@ import Control.Monad.IO.Class  (liftIO)
 import qualified Data.ByteString.Base64.Lazy as BEnc
 import Export.GetImages
 import Export.ImageConversion
-
 import Response.Export (returnPDF)
-
 
 -- | Returns an image of the graph requested by the user.
 graphImageResponse :: ServerPart Response

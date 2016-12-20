@@ -6,50 +6,51 @@ $(document).ready(function () {
   });
 });
 
+
 /**
  * Creates and displays the Export modal content div.
  */
- 
 function openExportModal() {
     'use strict';
     var context = $('#courseography-header').attr('context');
-    if (!(context === 'graph')) {
-        ReactDOM.render(<ExportModal context = "grid" session = "fall"/>, document.getElementById('disclaimerDiv')).openModal();;
-        
+    if (context !== 'graph') {
+        ReactDOM.render(
+            <ExportModal context='grid' session='fall'/>,
+            document.getElementById('disclaimerDiv')).openModal();
     }
-} 
+}
 
 export var ExportModal = React.createClass({
     getInitialState: function () {
         return {
-            data : "",
+            data: ''
         };
     },
 
     componentDidMount: function() {
-        if (this.props.context === "graph") {
+        if (this.props.context === 'graph') {
             $.ajax({
-            url: 'image',
-            success: function (data) {
-                this.setState({data: "data:image/png;base64," + data});
-            }.bind(this),
-            error: function () {
-                throw 'No image generated';
-            }
-        });
-    } else {
-        var session = this.props.session.charAt(0).toUpperCase() + this.props.session.slice(1);
-        $.ajax({
-            url: 'timetable-image',
-            data: {session: session},
-            success: function (data) {
-                this.setState({data: "data:image/png;base64," + data, session: session === 'Fall' ? 'Spring' : 'Fall'});
-            }.bind(this),
-            error: function () {
-                throw 'No image generated';
-            }
-    });
-    }
+                url: 'image',
+                success: function (data) {
+                    this.setState({data: "data:image/png;base64," + data});
+                }.bind(this),
+                error: function () {
+                    throw 'No image generated';
+                }
+            });
+        } else {
+            var session = this.props.session.charAt(0).toUpperCase() + this.props.session.slice(1);
+            $.ajax({
+                url: 'timetable-image',
+                data: {session: session},
+                success: function (data) {
+                    this.setState({data: "data:image/png;base64," + data, session: session === 'Fall' ? 'Spring' : 'Fall'});
+                }.bind(this),
+                error: function () {
+                    throw 'No image generated';
+                }
+            });
+        }
     },
     openModal: function() {
         this.setState({modalIsOpen: true});
@@ -66,9 +67,10 @@ export var ExportModal = React.createClass({
                     overlayClassName='OverlayClass'
                     isOpen={this.state.modalIsOpen}
                     onRequestClose={this.closeModal}>
-                    <GraphImage data = {this.state.data}/>   
+                    <GraphImage data={this.state.data}/>
                 </ReactModal>
-                </div> );
+                </div>
+            );
         } else {
             return (
                 <div>
@@ -76,37 +78,35 @@ export var ExportModal = React.createClass({
                     overlayClassName='OverlayClass'
                     isOpen={this.state.modalIsOpen}
                     onRequestClose={this.closeModal}>
-                    <GridImage data = {this.state.data}/>   
+                    <GridImage data={this.state.data}/>
                 </ReactModal>
                 </div> );
 
         }
-       }
+    }
 });
-var GraphImage = React.createClass({
-    render: function() {
-        return(
-            <div>
-                <a href="calendar" target="_blank">Download ICS</a>
-                <a href="timetable-pdf" target="_blank">Download PDF</a>
-                <div>
-                <img id="post-image" src={this.props.data}/>
-                </div>
-            </div>
-        );
-    }
-})
 
-var GridImage = React.createClass({
-    render: function() {
-        return(
+
+var GraphImage = function (props) {
+    return (
+        <div>
+            <a href="calendar" target="_blank">Download ICS</a>
+            <a href="timetable-pdf" target="_blank">Download PDF</a>
             <div>
-                <a href="calendar" target="_blank">Download ICS    </a>
-                <a href="timetable-pdf" target="_blank">Download PDF</a>
-                <div>
-                <img id="post-image" src={this.props.data}/>
-                </div>
+            <img id="post-image" src={props.data}/>
             </div>
-        );
-    }
-})
+        </div>
+    );
+};
+
+var GridImage = function (props) {
+    return (
+        <div>
+            <a href="calendar" target="_blank">Download ICS</a>
+            <a href="timetable-pdf" target="_blank">Download PDF</a>
+            <div>
+            <img id="post-image" src={props.data}/>
+            </div>
+        </div>
+    );
+};

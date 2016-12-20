@@ -128,7 +128,7 @@ modalCSS = do
         width100
         position fixed
         left nil
-        top nil 
+        top nil
     ".modal-header" ? do
         color blue3
     ".modal-body" ? do
@@ -154,7 +154,7 @@ modalCSS = do
         right nil
         top nil
         bottom nil
-        backgroundColor (setA (150) black) 
+        backgroundColor (setA (150) black)
     ".ui-dialog-titlebar" ? do
         color blue3
         cursor move
@@ -205,4 +205,3 @@ fbModalCSS = do
         margin (px 20) auto (px 20) auto
         ".btn" ? do
             margin nil (px 5) nil (px 5)
-
