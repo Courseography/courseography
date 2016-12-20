@@ -93,9 +93,9 @@ var Post = React.createClass({
 
     openModal: function (nodeId) {
         var modal = this.refs.modal;
-        modal.setState({courseId: nodeId.substring(0, 6)}, () =>
-            $(modal.getDOMNode()).modal()
-        );
+        var newCourse = nodeId.substring(0, 6);
+        modal.openModal(newCourse);
+        
     },
 
     render: function() {

@@ -34,8 +34,8 @@ jQueryScripts = if enableCdn
 
 reactScripts :: [String]
 reactScripts = if enableCdn
-               then ["https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react.min.js",
-                     "https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react-dom.min.js",
+               then ["https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react.js",
+                     "https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react-dom.js",
                      "https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"]
                else ["/static/js/vendor/react.0.14.3.js",
                      "/static/js/vendor/react-dom.0.14.3.js",
@@ -57,9 +57,7 @@ graphScripts = do
          "/static/js/common/objects/section.js",
          "/static/js/common/utilities/util.js",
          "/static/js/common/image_conversion.js",
-         "/static/js/common/graph_image.js",
          "/static/js/vendor/bootstrap.min.3.1.1.js",
-         "/static/js/common/export/export.js",
          "/static/js/common/modal.js"])
     H.script ! A.src "/static/js/requirejs-config.js" $ ""
     H.script ! H.dataAttribute "main" "/static/js/graph" ! A.src "/static/js/vendor/require.js" $ ""
@@ -75,13 +73,13 @@ timetableScripts = do
          "/static/js/common/objects/course.js",
          "/static/js/common/objects/section.js",
          "/static/js/common/utilities/util.js",
-         "/static/js/common/grid_image.js",
          "/static/js/common/image_conversion.js",
          "/static/js/draw/draw.js",
          "/static/js/common/course_videos.js",
          "/static/js/common/modal.js",
-         "/static/js/common/course_description.js",
-         "/static/js/common/export/export.js"])
+         "/static/js/common/course_description.js"
+         ])
+    H.script ! A.src "/static/js/requirejs-config.js" $ ""
     H.script ! H.dataAttribute "main" "/static/js/grid" ! A.src "/static/js/vendor/require.js" $ ""
 
 drawScripts :: H.Html
