@@ -23,41 +23,56 @@ function openExportModal() {
 export var ExportModal = React.createClass({
     getInitialState: function () {
         return {
-            data: ''
+            data: '',
+            otherSession: 'Spring'
         };
     },
 
     componentDidMount: function() {
         if (this.props.context === 'graph') {
-            $.ajax({
-                url: 'image',
-                success: function (data) {
-                    this.setState({data: "data:image/png;base64," + data});
-                }.bind(this),
-                error: function () {
-                    throw 'No image generated';
-                }
-            });
+            this.getGraphImage();
         } else {
-            var session = this.props.session.charAt(0).toUpperCase() + this.props.session.slice(1);
-            $.ajax({
-                url: 'timetable-image',
-                data: {session: session},
-                success: function (data) {
-                    this.setState({data: "data:image/png;base64," + data, session: session === 'Fall' ? 'Spring' : 'Fall'});
-                }.bind(this),
-                error: function () {
-                    throw 'No image generated';
-                }
-            });
+            this.getGridImage(this.props.session);
         }
     },
+
+    getGraphImage: function() {
+        $.ajax({
+            url: 'image',
+            success: function (data) {
+                this.setState({data: "data:image/png;base64," + data});
+            }.bind(this),
+            error: function () {
+                throw 'No image generated';
+            }
+        });
+    },
+
+    getGridImage: function (session) {
+        var formattedSession = session.charAt(0).toUpperCase() + session.slice(1);
+        $.ajax({
+            url: 'timetable-image',
+            data: {session: formattedSession},
+            success: function (data) {
+                this.setState({data: "data:image/png;base64," + data, otherSession: formattedSession === 'Fall' ? 'Spring' : 'Fall'});
+            }.bind(this),
+            error: function () {
+                throw 'No image generated';
+            }
+        });
+    },
+
     openModal: function() {
         this.setState({modalIsOpen: true});
     },
     closeModal : function() {
         this.setState({modalIsOpen: false});
     },
+
+    toggleSession: function () {
+        this.getGridImage(this.state.otherSession);
+    },
+
     render: function () {
         if (this.context === 'graph') {
             return (
@@ -78,7 +93,9 @@ export var ExportModal = React.createClass({
                     overlayClassName='OverlayClass'
                     isOpen={this.state.modalIsOpen}
                     onRequestClose={this.closeModal}>
-                    <GridImage data={this.state.data}/>
+                    <GridImage
+                        data={this.state.data}
+                        toggleSession={this.toggleSession} />
                 </ReactModal>
                 </div> );
 
@@ -107,6 +124,8 @@ var GridImage = function (props) {
             <div>
             <img id="post-image" src={props.data}/>
             </div>
+            <button type="button" className="btn btn-primary" id="switch-session-button"
+                onClick={props.toggleSession}>Switch Sessions</button>
         </div>
     );
 };
