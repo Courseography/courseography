@@ -18,23 +18,21 @@ import Config (databasePath)
 insertGraph :: String   -- ^ The title of the graph that is being inserted.
             -> Double   -- ^ The width dimension of the graph
             -> Double   -- ^ The height dimension of the graph
-            -> IO GraphId -- ^ The unique identifier of the inserted graph.
-insertGraph graphName graphWidth graphHeight =
-    runSqlite databasePath $ do
-        runMigration migrateAll
-        insert (Graph graphName graphWidth graphHeight)
+            -> SqlPersistM GraphId -- ^ The unique identifier of the inserted graph.
+insertGraph graphName graphWidth graphHeight = do
+    runMigration migrateAll
+    insert (Graph graphName graphWidth graphHeight)
 
 -- | Insert graph components into the database.
-insertElements :: ([Path], [Shape], [Text]) -> IO ()
-insertElements (paths, shapes, texts) =
-    runSqlite databasePath $ do
-        mapM_ insert_ shapes
-        mapM_ insert_ paths
-        mapM_ insert_ texts
+insertElements :: ([Path], [Shape], [Text]) -> SqlPersistM ()
+insertElements (paths, shapes, texts) = do
+    mapM_ insert_ shapes
+    mapM_ insert_ paths
+    mapM_ insert_ texts
 
 -- | Delete graphs from the database.
-deleteGraphs :: IO ()
-deleteGraphs = runSqlite databasePath $ do
+deleteGraphs :: SqlPersistM ()
+deleteGraphs = do
     runMigration migrateAll
     deleteWhere ([] :: [Filter Graph])
     deleteWhere ([] :: [Filter Text])

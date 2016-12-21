@@ -6,7 +6,8 @@ import Data.List.Split (splitOn)
 import Data.Time (Day, addDays, formatTime, getCurrentTime, defaultTimeLocale)
 import Happstack.Server (ServerPart, Response, toResponse)
 import Control.Monad.IO.Class (liftIO)
-import Database.CourseQueries (returnTutorial, returnLecture)
+import Database.Persist.Sqlite (runSqlite)
+import Database.CourseQueries (returnLecture, returnTutorial)
 import qualified Data.Text as T
 import Text.Read (readMaybe)
 import Database.Tables hiding (Session)
@@ -15,7 +16,8 @@ import Config (firstMondayFall,
                firstMondayWinter,
                lastMondayWinter,
                outDay,
-               holidays)
+               holidays,
+               databasePath)
 
 -- | Returns an ICS file of events as requested by the user.
 calendarResponse :: String -> ServerPart Response
@@ -68,14 +70,16 @@ getInfoCookies courses = map courseInfo allCourses
 
 -- | Pulls either a Lecture or Tutorial from the database.
 pullDatabase :: (Code, Section, Session) -> IO (Maybe (Either Lecture Tutorial))
-pullDatabase (code, 'L':sectCode, session) =
-    fmap (fmap Left) (returnLecture (T.pack code)
-                                    (T.pack $ 'L':sectCode)
-                                    (T.pack session))
-pullDatabase (code, sect, session) =
-    fmap (fmap Right) (returnTutorial (T.pack code)
-                                      (T.pack sect)
-                                      (T.pack session))
+pullDatabase (code, 'L':sectCode, session) = runSqlite databasePath $ do
+    lecture <- returnLecture (T.pack code)
+                             (T.pack $ 'L':sectCode)
+                             (T.pack session)
+    return $ fmap Left lecture
+pullDatabase (code, sect, session) = runSqlite databasePath $ do
+    tutorial <- returnTutorial (T.pack code)
+                               (T.pack sect)
+                               (T.pack session)
+    return $ fmap Right tutorial
 
 -- | The current date and time as obtained from the system.
 type SystemTime = String

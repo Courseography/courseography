@@ -7,10 +7,7 @@ import Diagrams.Prelude
 import Diagrams.Backend.SVG.CmdLine
 import Diagrams.Backend.SVG
 import Data.List (intersperse)
-import Data.List.Utils (replace)
 import Data.List.Split (splitOn)
-import Lucid (renderText)
-import Data.Text.Lazy (unpack)
 
 days :: [String]
 days = ["Mon", "Tue", "Wed", "Thu", "Fri"]
@@ -55,7 +52,7 @@ timeCellPadding :: Diagram B
 timeCellPadding = rect timeCellWidth cellPaddingHeight # lw none
 
 cellText :: String -> Diagram B
-cellText s = font "Trebuchet MS" $ text s # fontSizeO fs
+cellText s = font "Trebuchet MS" $ text s # fontSizeO (1024/900 * fs)
 
 -- | Creates and accumulates cells according to the number of course.
 makeCell :: Int -> [String] -> Diagram B
@@ -116,10 +113,4 @@ renderTable filename courses session = do
 renderTableHelper :: String -> [[[String]]] -> String -> IO ()
 renderTableHelper filename schedule session = do
     let g = makeTable schedule session
-        svg = renderDia SVG (SVGOptions (mkWidth 1024) Nothing "") g
-        txt = replace (show (fs :: Double) ++ "px") (show fs' ++ "px") $
-              unpack $ renderText svg
-    writeFile filename txt
-    where
-        -- relative fonts don't play well with ImageMagick, apparently
-        fs' = round $ 1024 / 900 * fs
+    renderSVG filename (mkWidth 1024) g

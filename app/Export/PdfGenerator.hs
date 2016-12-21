@@ -1,7 +1,7 @@
 module Export.PdfGenerator
     (createPDF) where
 
-import System.Process
+import System.Process (createProcess, shell, waitForProcess, ProcessHandle)
 import GHC.IO.Handle.Types
 import Export.ImageConversion (removeFile)
 import Data.List.Utils (replace)
@@ -26,13 +26,5 @@ convertTexToPDF :: String -> IO
                              Maybe Handle,
                              Maybe Handle,
                              ProcessHandle)
-convertTexToPDF texName = createProcess $ CreateProcess
-                      (ShellCommand $ "pdflatex -interaction=nonstopmode " ++ texName)
-                      Nothing
-                      Nothing
-                      CreatePipe
-                      CreatePipe
-                      CreatePipe
-                      False
-                      False
-                      False
+convertTexToPDF texName =
+    createProcess $ shell $ "pdflatex -interaction=nonstopmode " ++ texName
