@@ -100,7 +100,7 @@ buildSVG graphName courseMap filename styled =
                                                     styled
                                                     width
                                                     height
-        liftIO $ writeFile filename stringSVG
+        liftIO $ writeFile filename stringSVG :: SqlPersistM ()
     where
         keyAsInt :: PersistEntity a => Entity a -> Integer
         keyAsInt = fromIntegral . (\(PersistInt64 x) -> x) . head . keyToValues . entityKey

@@ -1,7 +1,7 @@
 module Export.ImageConversion
     (createImageFile, removeFile) where
 
-import System.Process
+import System.Process (createProcess, shell, waitForProcess, ProcessHandle)
 import GHC.IO.Handle.Types
 import Turtle.Prelude (rm)
 import Filesystem.Path.CurrentOS as Path
@@ -24,20 +24,8 @@ convertToImage :: String -> String -> IO
                       Maybe Handle,
                       Maybe Handle,
                       ProcessHandle)
-convertToImage inName outName = createProcess $ CreateProcess
-                                  (ShellCommand $ "convert " ++
-                                                  inName ++
-                                                  " " ++
-                                                  outName
-                                  )
-                                  Nothing
-                                  Nothing
-                                  CreatePipe
-                                  CreatePipe
-                                  CreatePipe
-                                  False
-                                  False
-                                  False
+convertToImage inName outName =
+    createProcess $ shell $ "convert " ++ inName ++ " " ++ outName
 
 -- | Removes a file.
 removeFile :: String -> IO ()
