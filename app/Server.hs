@@ -11,7 +11,7 @@ import Control.Monad (msum)
 import Happstack.Server hiding (host)
 import Response (notFoundResponse)
 import Filesystem.Path.CurrentOS as Path
-import System.Directory (getCurrentDirectory, createDirectoryIfMissing)
+import System.Directory (getCurrentDirectory)
 import System.IO (hSetBuffering, stdout, stderr, BufferMode(LineBuffering))
 import System.Log.Logger (updateGlobalLogger, rootLoggerName, setLevel, Priority(INFO))
 import Data.String (fromString)
@@ -25,8 +25,6 @@ runServer = do
     staticDir <- getStaticDir
     aboutContents <- LazyIO.readFile $ markdownPath ++ "README.md"
     privacyContents <- LazyIO.readFile $ markdownPath ++ "PRIVACY.md"
-    -- Create db folder if it doesn't exist
-    createDirectoryIfMissing False "db"
 
     -- Start the HTTP server
     simpleHTTP serverConf $ do

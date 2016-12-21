@@ -18,8 +18,8 @@ main = defaultMainWithHooks
         checkDependencies _ _ _ _ = do
             mapM_ check ["convert", "pdflatex"]
         check :: String -> IO ()
-        check depdency = do
-            result <- system depdency
+        check dependency = do
+            result <- system dependency
             case result of
-                ExitFailure 127 -> print ("Error Message: " ++ depdency ++ " is NOT available. Please add it in your path.") >> exitFailure
+                ExitFailure 127 -> print ("Error Message: " ++ dependency ++ " is NOT available. Please add it in your path.") >> exitFailure
                 _               -> exitSuccess

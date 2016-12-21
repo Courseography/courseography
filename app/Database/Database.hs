@@ -16,18 +16,26 @@ import Database.Tables
 import WebParsing.ParseAll (parseAll)
 import Database.CourseVideoSeed (seedVideos)
 import Config (databasePath)
+import System.Directory (createDirectoryIfMissing)
+import Data.Text as T (length, findIndex, take, unpack)
+import Data.Maybe (fromMaybe)
 
 -- | Main function for setting up the database with course information.
 --
 -- TODO: Probably combine seeding of Distribution and Breadth tables,
 -- and split off from @parseAll@.
 setupDatabase :: IO ()
-setupDatabase = do setupDistributionTable
-                   print "Distribution table set up"
-                   setupBreadthTable
-                   print "breadth table set up"
-                   parseAll
-                   seedVideos
+setupDatabase = do
+    -- Create db folder if it doesn't exist
+    let ind = fromMaybe (T.length databasePath) (T.findIndex (=='/') databasePath)
+        db = T.unpack $ T.take ind databasePath
+    createDirectoryIfMissing False db
+    setupDistributionTable
+    print "Distribution table set up"
+    setupBreadthTable
+    print "breadth table set up"
+    parseAll
+    seedVideos
 
 -- | Sets up the Distribution table.
 setupDistributionTable :: IO ()
