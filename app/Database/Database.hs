@@ -27,7 +27,7 @@ import Data.Maybe (fromMaybe)
 setupDatabase :: IO ()
 setupDatabase = do
     -- Create db folder if it doesn't exist
-    let ind = T.length databasePath - (fromMaybe 0 . T.findIndex (=='/') . T.reverse $ databasePath)
+    let ind = (T.length databasePath -) . fromMaybe 0 . T.findIndex (=='/') . T.reverse $ databasePath
         db = T.unpack $ T.take ind databasePath
     createDirectoryIfMissing True db
     setupDistributionTable
