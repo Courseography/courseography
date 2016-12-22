@@ -17,7 +17,7 @@ import WebParsing.ParseAll (parseAll)
 import Database.CourseVideoSeed (seedVideos)
 import Config (databasePath)
 import System.Directory (createDirectoryIfMissing)
-import Data.Text as T (length, findIndex, take, unpack)
+import Data.Text as T (length, findIndex, take, unpack, reverse)
 import Data.Maybe (fromMaybe)
 
 -- | Main function for setting up the database with course information.
@@ -27,9 +27,9 @@ import Data.Maybe (fromMaybe)
 setupDatabase :: IO ()
 setupDatabase = do
     -- Create db folder if it doesn't exist
-    let ind = fromMaybe (T.length databasePath) (T.findIndex (=='/') databasePath)
+    let ind = T.length databasePath - (fromMaybe 0 . T.findIndex (=='/') . T.reverse $ databasePath)
         db = T.unpack $ T.take ind databasePath
-    createDirectoryIfMissing False db
+    createDirectoryIfMissing True db
     setupDistributionTable
     print "Distribution table set up"
     setupBreadthTable
