@@ -1,8 +1,11 @@
 module Export.ImageConversion
-    (createImageFile, removeImage) where
+    (createImageFile, removeFile) where
 
-import System.Process
+import System.Process (createProcess, shell, waitForProcess, ProcessHandle)
 import GHC.IO.Handle.Types
+import Turtle.Prelude (rm)
+import Filesystem.Path.CurrentOS as Path
+import Data.List.Split (splitOn)
 
 -- | Opens a new process to convert an SVG (inName) to a PNG (outName)
 -- Note: hGetContents can be used to read Handles. Useful when trying to read from
@@ -21,34 +24,10 @@ convertToImage :: String -> String -> IO
                       Maybe Handle,
                       Maybe Handle,
                       ProcessHandle)
-convertToImage inName outName = createProcess $ CreateProcess
-                                  (ShellCommand $ "convert " ++
-                                                  inName ++
-                                                  " " ++
-                                                  outName
-                                  )
-                                  Nothing
-                                  Nothing
-                                  CreatePipe
-                                  CreatePipe
-                                  CreatePipe
-                                  False
-                                  False
-                                  False
+convertToImage inName outName =
+    createProcess $ shell $ "convert " ++ inName ++ " " ++ outName
 
 -- | Removes a file.
-removeImage :: String -> IO
-                     (Maybe Handle,
-                      Maybe Handle,
-                      Maybe Handle,
-                      ProcessHandle)
-removeImage name = createProcess $ CreateProcess
-                                  (ShellCommand $ "rm " ++ name)
-                                  Nothing
-                                  Nothing
-                                  Inherit
-                                  CreatePipe
-                                  CreatePipe
-                                  False
-                                  False
-                                  False
+removeFile :: String -> IO ()
+removeFile name = do
+  mapM_ (rm . Path.decodeString) $ splitOn " " name

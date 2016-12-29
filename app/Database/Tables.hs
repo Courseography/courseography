@@ -7,6 +7,7 @@
              OverloadedStrings,
              DeriveGeneric,
              QuasiQuotes,
+             ScopedTypeVariables,
              TemplateHaskell,
              TypeFamilies #-}
 
@@ -26,10 +27,16 @@ module Database.Tables where
 
 import Database.Persist.TH
 import Database.DataType
+import Data.Char (toLower)
 import qualified Data.Text as T
 import qualified Data.Vector as V
-import Data.Aeson
+import qualified Data.HashMap.Strict as HM
+import Data.Maybe (fromMaybe)
+import Text.Read (readMaybe)
+import Data.Aeson ((.:?), (.!=), FromJSON(parseJSON), ToJSON(toJSON), Value(..), genericToJSON, withObject)
+import Data.Aeson.Types (Parser, defaultOptions, Options(..))
 import GHC.Generics
+import WebParsing.PrerequisiteParsing
 
 -- | A data type representing a time for the section of a course.
 -- The first list is comprised of two values: the date (represented as a number
@@ -49,7 +56,7 @@ Department json
     code [T.Text]
     name T.Text
 
-Courses json
+Courses
     code T.Text
     Primary code
     title T.Text Maybe
@@ -65,7 +72,7 @@ Courses json
     videoUrls [T.Text]
     deriving Show
 
-Lecture json
+Lecture
     code T.Text
     Foreign Courses fkcourse code
     session T.Text
@@ -77,14 +84,14 @@ Lecture json
     wait Int
     extra Int
     timeStr T.Text
-    deriving Show
+    deriving Generic Show
 
-Tutorial json
+Tutorial
     code T.Text
     section T.Text Maybe
     session T.Text
     times [Time]
-    deriving Show
+    deriving Generic Show
 
 Breadth
     description String
@@ -190,15 +197,12 @@ data Course =
              videoUrls :: [T.Text]
            } deriving (Show, Generic)
 
-data CourseInfo = CourseInfo {code :: String, section :: String, session :: String, time :: [Time]} deriving (Show)
-
 instance ToJSON Course
 instance ToJSON Session
 instance ToJSON Time
 
 -- instance FromJSON required so that tables can be parsed into JSON,
 -- not necessary otherwise.
-instance FromJSON Time
 instance FromJSON SvgJSON
 
 -- | Converts a Double to a T.Text.
@@ -209,3 +213,142 @@ convertTimeToString :: Time -> [T.Text]
 convertTimeToString (Time [day, timeNum]) =
   [T.pack . show . floor $ day,
    T.replace "." "-" . T.pack . show $ timeNum]
+
+
+-- JSON encoding/decoding
+instance FromJSON Courses where
+  parseJSON = withObject "Expected Object for Courses" $ \o -> do
+    newCode <- o .:? "code" .!= "CSC???"
+    newTitle  <- o .:? "courseTitle"
+    newDescription  <- o .:? "courseDescription"
+    newPrereqString <- o .:? "prerequisite"
+    let newPrereqs = parsePrerequisites newPrereqString
+    newExclusions <- o .:? "exclusion"
+    newCoreqs <- o .:? "corequisite"
+    return $ Courses newCode
+                     newTitle
+                     newDescription
+                     (Just False)
+                     (Just False)
+                     newPrereqs
+                     newExclusions
+                     Nothing -- breadth
+                     Nothing -- distribution
+                     Nothing -- (Just prereqString)
+                     newCoreqs
+                     []
+
+instance ToJSON Lecture where
+  toJSON = genericToJSON defaultOptions {
+    fieldLabelModifier =
+      (\field -> (toLower $ head field): (tail field)) .
+      drop 7
+  }
+
+instance FromJSON Lecture where
+  parseJSON = withObject "Expected Object for Lecture" $ \o -> do
+    teachingMethod :: T.Text <- o .:? "teachingMethod" .!= ""
+    sectionNumber :: T.Text <- o .:? "sectionNumber" .!= ""
+    timeMap :: Value <- o .:? "schedule" .!= Null
+    allTimes <- case timeMap of
+        Object obj -> do
+            times <- mapM parseTimes (HM.elems obj)
+            return $ concat times
+        _ -> return []
+    let sectionId = T.concat [teachingMethod, sectionNumber]
+
+    capStr <- o .:? "enrollmentCapacity" .!= "-1"
+    enrolStr <- o .:? "actualEnrolment" .!= "0"
+    waitStr <- o .:? "actualWaitlist" .!= "0"
+    let cap = fromMaybe (-1) $ readMaybe capStr
+        enrol = fromMaybe 0 $ readMaybe enrolStr
+        wait = fromMaybe 0 $ readMaybe waitStr
+    instrMap2 :: Value <- o .:? "instructors" .!= Null
+    let instrList =
+          case instrMap2 of
+            Object obj -> HM.elems obj
+            _ -> []
+
+    instrs <- mapM parseInstr instrList
+    let extra = 0
+    let timeStr = ""
+    let instructor = T.intercalate "; " $ filter (not . T.null) instrs
+    if teachingMethod == "LEC"
+    then
+      return $ Lecture "" "" sectionId allTimes cap instructor enrol wait extra timeStr
+    else
+      fail "Not a lecture"
+
+instance ToJSON Tutorial where
+  toJSON = genericToJSON defaultOptions {
+    fieldLabelModifier =
+      (\field -> (toLower $ head field): (tail field)) .
+      drop 8
+  }
+
+instance FromJSON Tutorial where
+  parseJSON = withObject "Expected Object for Tutorial" $ \o -> do
+    teachingMethod :: T.Text <- o .:? "teachingMethod" .!= ""
+    sectionNumber :: T.Text <- o .:? "sectionNumber" .!= ""
+    timeMap :: Value <- o .:? "schedule" .!= Null
+    allTimes <- case timeMap of
+        Object obj -> do
+            times <- mapM parseTimes (HM.elems obj)
+            return $ concat times
+        _ -> return []
+    let sectionId = T.concat [teachingMethod, sectionNumber]
+
+    -- TODO: Tutorials should have these stats, too!
+    -- capStr <- o .:? "enrollmentCapacity" .!= "-1"
+    -- enrolStr <- o .:? "actualEnrolment" .!= "0"
+    -- waitStr <- o .:? "actualWaitlist" .!= "0"
+    -- let cap = fromMaybe (-1) $ readMaybe capStr
+    --     enrol = fromMaybe 0 $ readMaybe enrolStr
+    --     wait = fromMaybe 0 $ readMaybe waitStr
+    if teachingMethod == "TUT"
+    then
+      return $ Tutorial "" (Just sectionId) "" allTimes
+    else
+      fail "Not a tutorial"
+
+
+-- | Helpers for parsing JSON
+parseInstr :: Value -> Parser T.Text
+parseInstr (Object io) = do
+  firstName <- io .:? "firstName" .!= ""
+  lastName <- io .:? "lastName" .!= ""
+  return (T.concat [firstName, ". ", lastName])
+parseInstr _ = return ""
+
+parseTimes :: Value -> Parser [Time]
+parseTimes (Object obj) = do
+    meetingDay <- obj .:? "meetingDay"
+    meetingStartTime <- obj .:? "meetingStartTime"
+    meetingEndTime <- obj .:? "meetingEndTime"
+    return $ getTimeSlots meetingDay meetingStartTime meetingEndTime
+parseTimes _ = return []
+
+
+-- | Converts 24-hour time into a double
+-- | Assumes times are rounded to the nearest hour
+getHourVal :: String -> Double
+getHourVal time = (read $ take 2 time :: Double) + (/) (read $ drop 3 time :: Double) 60
+
+-- | Converts a weekday into a double
+-- | Monday to Friday becomes 0.0 to 4.0
+getDayVal :: String -> Double
+getDayVal "MO" = 0.0
+getDayVal "TU" = 1.0
+getDayVal "WE" = 2.0
+getDayVal "TH" = 3.0
+getDayVal "FR" = 4.0
+getDayVal _    = 4.0
+
+-- | Takes a day and start/end times then generates a set of 30-minute timeslots
+getTimeSlots :: Maybe String -> Maybe String -> Maybe String -> [Time]
+getTimeSlots (Just day) (Just start) (Just end) = do
+    let dayDbl = getDayVal day
+        startDbl = getHourVal start
+        endDbl = getHourVal end
+    [Time [dayDbl, timeDbl] | timeDbl <- [startDbl, (startDbl + 0.5) .. (endDbl - 0.5)]]
+getTimeSlots _ _ _ = []

@@ -21,16 +21,18 @@ module Svg.Parser
 import Data.Maybe (fromMaybe, fromJust, isNothing)
 import Data.List.Split (splitOn)
 import qualified Text.HTML.TagSoup as TS
+import Database.Persist.Sqlite (runSqlite, SqlPersistM)
 import Text.HTML.TagSoup (Tag)
+import Control.Monad.IO.Class (liftIO)
 import Database.Tables
 import Database.DataType
 import Svg.Database (insertGraph, insertElements, deleteGraphs)
-import Config (graphPath)
+import Config (graphPath, databasePath)
 import Text.Read (readMaybe)
 import Data.Char (isSpace)
 
 parsePrebuiltSvgs :: IO ()
-parsePrebuiltSvgs = do
+parsePrebuiltSvgs = runSqlite databasePath $ do
     deleteGraphs
     performParse "Computer Science" "csc2016.svg"
     performParse "Statistics" "sta2015.svg"
@@ -57,10 +59,10 @@ parsePrebuiltSvgs = do
 -- | The starting point for parsing a graph with a given title and file.
 performParse :: String -- ^ The title of the graph.
              -> String -- ^ The filename of the file that will be parsed.
-             -> IO ()
+             -> SqlPersistM ()
 performParse graphName inputFilename = do
-    print $ "Parsing graph " ++ graphName ++ " from file " ++ inputFilename
-    graphFile <- readFile (graphPath ++ inputFilename)
+    liftIO $ print $ "Parsing graph " ++ graphName ++ " from file " ++ inputFilename
+    graphFile <- liftIO $ readFile (graphPath ++ inputFilename)
     let tags = TS.parseTags graphFile
         svgRoot = head $ filter (TS.isTagOpenName "svg") tags
         (graphWidth, graphHeight) = parseSize svgRoot
@@ -76,6 +78,7 @@ performParse graphName inputFilename = do
                 -- TODO: pull this out into a generic helper
                 (takeWhile (not . TS.isTagOpenName "defs") tags) ++
                 (concatMap (dropWhile (not . TS.isTagCloseName "defs")) defs)
+
         parsedGraph = parseGraph key tagsWithoutDefs
 
     -- Insert the graph components into the database

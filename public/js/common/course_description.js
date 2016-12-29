@@ -102,12 +102,13 @@ function formatCourseDescription(course) {
 /**
  * Returns a course's title.
  * @param {string} id The Node's ID.
+ * @param {string[]} formatted The formatted Course Description.
  * @returns {string} The course's title.
  */
-function getCourseTitle(id) {
+function getCourseTitle(id, formatted) {
     'use strict';
 
-    var name = formatCourseName(id);
+    var name = formatted; 
     if (name.length === 1) {
         var course = new Course(name[0]);
         name = course.title;

@@ -5,7 +5,7 @@ module Database.CourseVideoSeed
 
 import Data.Text (Text)
 import Database.Tables hiding (Text)
-import Database.Persist.Sqlite (runSqlite, updateWhere, (=.), (==.))
+import Database.Persist.Sqlite (runSqlite, updateWhere, (=.), (==.), SqlPersistM)
 import Config (databasePath)
 
 courseVideos :: [(Text, [Text])]
@@ -17,6 +17,7 @@ courseVideos = [
   ("CSC456H1", ["static/videos/csc456.mp4"]),
   ("CSC463H1", ["static/videos/csc463.mp4"])]
 
+seedVideo :: (Text, [Text]) -> SqlPersistM ()
 seedVideo (code, videos) =
     updateWhere [CoursesCode ==. code] [CoursesVideoUrls =. videos]
 

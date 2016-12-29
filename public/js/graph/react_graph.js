@@ -1,6 +1,6 @@
 import * as tooltip from 'es6!graph/tooltip';
 import {Modal} from 'es6!common/react_modal';
-
+import {ExportModal} from 'es6!common/export/export';
 
 /**
  * Search for target node in list of nodes,
@@ -157,7 +157,7 @@ var Graph = React.createClass({
             zoomFactor: 1,
             horizontalPanFactor: 0,
             verticalPanFactor: 0,
-            mouseDown: false
+            mouseDown: false,
         };
     },
 
@@ -378,29 +378,13 @@ var Graph = React.createClass({
 
     infoBoxMouseClick: function () {
         var infoBox = this.refs.infoBox;
-        var modal = this.refs.modal;
-        modal.setState({courseId: infoBox.state.nodeId.substring(0, 6)}, function (){
-            $.ajax({
-                url: 'course',
-                data: {name: formatCourseName(modal.state.courseId)[0]},
-                dataType: 'json',
-                success: function (data) {
-                    if (modal.isMounted()) {
-                        //This is getting the session times
-                        var sessions = data.fallSession.lectures
-                                                       .concat(data.springSession.lectures)
-                                                       .concat(data.yearSession.lectures)
-                        //Tutorials don't have a timeStr to print, so I've currently omitted them
-                        modal.setState({course: data, sessions: sessions});
-                    }
-                },
-                error: function (xhr, status, err) {
-                    console.error('course-info', status, err.toString());
-                }
-            });
-        });
+        var newCourse = infoBox.state.nodeId.substring(0, 6);
+        this.setState({courseId: newCourse});;
+        this.refs.modal.openModal(newCourse);
+    },
 
-        $(this.refs.modal.getDOMNode()).modal();
+    openExportModal: function() {
+        this.refs.exportModal.openModal();
     },
 
     // Reset graph
@@ -565,6 +549,8 @@ var Graph = React.createClass({
                             this.state.verticalPanFactor == 0;
         return (
             <div>
+                <Modal ref='modal'/>
+                <ExportModal context='graph' session='' ref='exportModal'/>
                 <Button
                     divId='zoom-in-button'
                     text='+'
@@ -607,7 +593,7 @@ var Graph = React.createClass({
                     mouseDown={this.resetZoomAndPan}
                     mouseUp={this.onButtonRelease}
                     disabled={resetDisabled}/>
-                <Modal ref='modal' />
+
                 <svg {... svgAttrs} ref='svg' version='1.1'
                     className={this.state.highlightedNodes.length > 0 ?
                                 'highlight-nodes' : ''}>
@@ -1019,7 +1005,8 @@ var Node = React.createClass({
 
 var BoolGroup = React.createClass({
     componentDidMount: function () {
-        for (var ref in this.refs) {
+        for (var boolJSON of this.props.boolsJSON) {
+            var ref = boolJSON.id_;
             this.refs[ref].updateNode(this.props.svg);
         }
     },
@@ -1316,7 +1303,7 @@ var InfoBox = React.createClass({
                 ry: '4',
                 fill: 'white',
                 stroke: 'black',
-                'stroke-width': '2',
+                'strokeWidth': '2',
                 width: '60',
                 height: '30'
             };
