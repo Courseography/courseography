@@ -42,30 +42,27 @@ getPost str = do
 addPostToDatabase :: [Tag String] -> IO ()
 addPostToDatabase tags = do
     let postCode = T.pack (fromAttrib "name" ((take 1 $ filter (isTagOpenName "a") tags) !! 0))
-        fullPostName = innerText (take 1 $ filter (isTagText) tags)
-        postType = T.pack $ getPostType postCode
-        departmentName = T.pack $ (getDepartmentName fullPostName postType)
         prereqs = map getCourseFromTag $ map (fromAttrib "href") $ filter isCourseTag tags
     if null prereqs
     then do
-        description <- addPostCategoriesToDatabase (T.unpack postCode) (innerText tags) Nothing
-        insertPost departmentName postType postCode (T.pack description)
+        (description, departmentName, postType) <- addPostCategoriesToDatabase (T.unpack postCode) (innerText tags) Nothing
+        insertPost (T.pack departmentName) (T.pack postType) postCode (T.pack description)
     else do
-        description <- addPostCategoriesToDatabase (T.unpack postCode) (innerText tags) (Just (head prereqs))
-        insertPost departmentName postType postCode (T.pack description)
+        (description, departmentName, postType) <- addPostCategoriesToDatabase (T.unpack postCode) (innerText tags) (Just (head prereqs))
+        insertPost (T.pack departmentName) (T.pack postType) postCode (T.pack description)
     where
         isCourseTag tag = tagOpenAttrNameLit "a" "href" (\hrefValue -> (length hrefValue) >= 0) tag
 
-addPostCategoriesToDatabase :: String -> String -> Maybe String -> IO String
+addPostCategoriesToDatabase :: String -> String -> Maybe String -> IO (String, String, String)
 addPostCategoriesToDatabase postCode tagText firstCourse = do
     let parsed = P.parse (parsingAlgoOne firstCourse) "(source)" tagText
     case parsed of
-        Right (description, categories) -> do
+        Right (description, departmentName, postType, categories) -> do
             mapM_ (addCategoryToDatabase postCode) (filter isCategory categories)
-            return description
+            return (description, departmentName, postType)
         Left _ -> do
             print "Failed."
-            return ""
+            return ("", "", "")
     where
         isCategory string =
             let infixes = map (containsString string)

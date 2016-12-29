@@ -3,8 +3,6 @@ module WebParsing.ParsecCombinators
     (getCourseFromTag,
      findCourseFromTag,
      getPostType,
-     extractPostType,
-     findPostType,
      getDepartmentName,
      isDepartmentName,
      parsingAlgoOne) where
@@ -29,15 +27,6 @@ findCourseFromTag = do
 
 -- Post Parsing
 
-getPostType :: T.Text -> String
-getPostType postCode =
-    let codeSection = extractPostType (T.unpack postCode)
-    in
-        case codeSection of
-            "SPE" -> "Specialist"
-            "MAJ" -> "Major"
-            "MIN" ->  "Minor"
-
 extractPostType :: String -> String
 extractPostType postCode = do
     let parsed = P.parse findPostType "(source)" postCode
@@ -50,24 +39,34 @@ findPostType = do
    P.string "AS"
    P.many1 P.letter
 
-getDepartmentName :: String -> T.Text -> String
-getDepartmentName fullPostName postType = do
-    let parsed = P.parse (isDepartmentName (T.unpack postType)) "(source)" fullPostName
-    case parsed of
-        Right name -> name
-        Left _ -> ""
+
+getDepartmentName :: Parser String
+getDepartmentName = 
+    (P.try (parseUntil ((P.try (P.lookAhead (P.string " Specialist"))) <|>
+                        (P.try (P.lookAhead (P.string " Major"))) <|> 
+                        (P.try (P.lookAhead (P.string " Minor"))))))   
+
+getPostType :: Parser String 
+getPostType = do
+    P.spaces
+    ((P.try (P.string "Specialist")) <|>
+     (P.try (P.string "Major")) <|>
+     (P.try (P.string "Minor")))
 
 isDepartmentName ::  [Char] -> Parser String
 isDepartmentName postType = parseUntil (P.string postType)
 
+
 -- Post Category Parsing
 
-parsingAlgoOne :: Maybe String -> Parser (String, [String])
+parsingAlgoOne :: Maybe String -> Parser (String, String, String, [String])
 parsingAlgoOne firstCourse = do
+    departmentName <- getDepartmentName
+    postType <- getPostType
     description <- getRequirements firstCourse
     categories <- splitPrereqText
 
-    return (description, categories)
+    return (description, departmentName, postType, categories)
 
 getRequirements :: Maybe String -> Parser String
 getRequirements firstCourse =
@@ -135,3 +134,4 @@ parseUpToSeparator = parseUntil (P.notFollowedBy (P.noneOf ",/();\r\n"))
 -- For testing purposed in REPL
 parseAll :: Parser [String]
 parseAll = P.many (parseCategory False)
+
