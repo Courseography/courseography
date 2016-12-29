@@ -27,19 +27,6 @@ findCourseFromTag = do
 
 -- Post Parsing
 
-extractPostType :: String -> String
-extractPostType postCode = do
-    let parsed = P.parse findPostType "(source)" postCode
-    case parsed of
-        Right name -> name
-        Left _ -> ""
-
-findPostType :: Parser String
-findPostType = do
-   P.string "AS"
-   P.many1 P.letter
-
-
 getDepartmentName :: Parser String
 getDepartmentName = 
     (P.try (parseUntil ((P.try (P.lookAhead (P.string " Specialist"))) <|>
