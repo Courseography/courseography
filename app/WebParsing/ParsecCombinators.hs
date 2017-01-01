@@ -5,7 +5,7 @@ module WebParsing.ParsecCombinators
      getPostType,
      getDepartmentName,
      isDepartmentName,
-     parsingAlgoOne) where
+     generalCategoryParser) where
 
 import qualified Text.Parsec as P
 import Text.Parsec ((<|>))
@@ -25,7 +25,22 @@ findCourseFromTag = do
     parseUntil (P.char '#')
     P.many1 P.anyChar
 
+generalCategoryParser :: Maybe String -> Parser (String, String, String, [String])
+generalCategoryParser firstCourse = do
+    (description, departmentName, postType) <- (postInfoParser firstCourse)
+    categories <- splitPrereqText
+
+    return (description, departmentName, postType, categories)
+
 -- Post Parsing
+
+postInfoParser :: Maybe String -> Parser (String, String, String)
+postInfoParser firstCourse = do
+    departmentName <- getDepartmentName
+    postType <- getPostType
+    description <- getRequirements firstCourse
+
+    return (description, departmentName, postType)
 
 extractPostType :: String -> String
 extractPostType postCode = do
@@ -58,15 +73,6 @@ isDepartmentName postType = parseUntil (P.string postType)
 
 
 -- Post Category Parsing
-
-parsingAlgoOne :: Maybe String -> Parser (String, String, String, [String])
-parsingAlgoOne firstCourse = do
-    departmentName <- getDepartmentName
-    postType <- getPostType
-    description <- getRequirements firstCourse
-    categories <- splitPrereqText
-
-    return (description, departmentName, postType, categories)
 
 getRequirements :: Maybe String -> Parser String
 getRequirements firstCourse =

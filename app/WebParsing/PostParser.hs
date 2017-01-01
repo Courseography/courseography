@@ -10,7 +10,7 @@ import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Match
 import qualified Text.Parsec as P
 import WebParsing.ParsecCombinators (getCourseFromTag, getPostType, getDepartmentName,
-    parsingAlgoOne)
+    generalCategoryParser)
 
 fasCalendarURL :: String
 fasCalendarURL = "http://calendar.artsci.utoronto.ca/"
@@ -44,13 +44,13 @@ addPostToDatabase tags = do
     let postCode = T.pack (fromAttrib "name" ((take 1 $ filter (isTagOpenName "a") tags) !! 0))
         prereqs = map getCourseFromTag $ map (fromAttrib "href") $ filter isCourseTag tags
         firstCourse = if (null prereqs) then Nothing else (Just (head prereqs))
-        parsed = P.parse (parsingAlgoOne firstCourse) "(source)" (innerText tags)
+        parsed = P.parse (generalCategoryParser firstCourse) "Failed." (innerText tags)
     case parsed of
         Right (description, departmentName, postType, categories) -> do
             insertPost (T.pack departmentName) (T.pack postType) postCode (T.pack description)
             addPostCategoriesToDatabase (T.unpack postCode) categories
-        Left _ -> do
-            print "Failed."
+        Left message -> do
+            print message
     where
         isCourseTag tag = tagOpenAttrNameLit "a" "href" (\hrefValue -> (length hrefValue) >= 0) tag
 
