@@ -9,7 +9,8 @@ is that the file name is the same as the page for which it defines the CSS.
 See the notable files for information on the files which do not follow this
 convention.
 
-##### Notable Files
+Notable Files
+-------------
 
 Common.hs defines the CSS that is common across all pages, such as the header
 and disclaimer at the bottom of the page. This also contains the CSS for the
