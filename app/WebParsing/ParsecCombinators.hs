@@ -5,7 +5,9 @@ module WebParsing.ParsecCombinators
      getPostType,
      getDepartmentName,
      isDepartmentName,
-     generalCategoryParser) where
+     generalCategoryParser,
+     parseCategory,
+     postInfoParser) where
 
 import qualified Text.Parsec as P
 import Text.Parsec ((<|>))

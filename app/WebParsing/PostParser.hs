@@ -9,8 +9,8 @@ import Data.List
 import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Match
 import qualified Text.Parsec as P
-import WebParsing.ParsecCombinators (getCourseFromTag, getPostType, getDepartmentName,
-    generalCategoryParser)
+import WebParsing.ParsecCombinators (getCourseFromTag, generalCategoryParser, parseCategory, 
+    postInfoParser)
 
 fasCalendarURL :: String
 fasCalendarURL = "http://calendar.artsci.utoronto.ca/"
@@ -42,17 +42,37 @@ getPost str = do
 addPostToDatabase :: [Tag String] -> IO ()
 addPostToDatabase tags = do
     let postCode = T.pack (fromAttrib "name" ((take 1 $ filter (isTagOpenName "a") tags) !! 0))
+        liPartitions = partitions isLiTag tags
         prereqs = map getCourseFromTag $ map (fromAttrib "href") $ filter isCourseTag tags
         firstCourse = if (null prereqs) then Nothing else (Just (head prereqs))
-        parsed = P.parse (generalCategoryParser firstCourse) "Failed." (innerText tags)
-    case parsed of
-        Right (description, departmentName, postType, categories) -> do
-            insertPost (T.pack departmentName) (T.pack postType) postCode (T.pack description)
-            addPostCategoriesToDatabase (T.unpack postCode) categories
-        Left message -> do
-            print message
+    case liPartitions of
+        [] -> do
+            let parsed = P.parse (generalCategoryParser firstCourse) "Failed." (innerText tags)
+            case parsed of
+                Right (description, departmentName, postType, categories) -> do
+                    insertPost (T.pack departmentName) (T.pack postType) postCode (T.pack description)
+                    addPostCategoriesToDatabase (T.unpack postCode) categories
+                Left message -> do
+                    print message
+        other -> do
+            let categories = map parseLi liPartitions
+                postInfo = P.parse (postInfoParser firstCourse) "Failed." (innerText tags)
+            case postInfo of
+                Right (description, departmentName, postType) -> do
+                    insertPost (T.pack departmentName) (T.pack postType) postCode (T.pack description)
+                    addPostCategoriesToDatabase (T.unpack postCode) categories
+                Left message -> do
+                    print message
     where
         isCourseTag tag = tagOpenAttrNameLit "a" "href" (\hrefValue -> (length hrefValue) >= 0) tag
+        isLiTag tag = isTagOpenName "li" tag
+
+parseLi :: [Tag String] -> String
+parseLi liPartition = do
+    let parsed = P.parse (parseCategory False) "Failed." (innerText liPartition)
+    case parsed of 
+        Right category -> category
+        Left message -> ""
 
 addPostCategoriesToDatabase :: String -> [String] -> IO ()
 addPostCategoriesToDatabase postCode categories = do
