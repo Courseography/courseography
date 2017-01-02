@@ -46,33 +46,11 @@ addPostToDatabase tags = do
         prereqs = map getCourseFromTag $ map (fromAttrib "href") $ filter isCourseTag tags
         firstCourse = if (null prereqs) then Nothing else (Just (head prereqs))
     case liPartitions of
-        [] -> do
-            let parsed = P.parse (generalCategoryParser firstCourse) "Failed." (innerText tags)
-            case parsed of
-                Right (description, departmentName, postType, categories) -> do
-                    insertPost (T.pack departmentName) (T.pack postType) postCode (T.pack description)
-                    addPostCategoriesToDatabase (T.unpack postCode) categories
-                Left message -> do
-                    print message
-        other -> do
-            let categories = map parseLi liPartitions
-                postInfo = P.parse (postInfoParser firstCourse) "Failed." (innerText tags)
-            case postInfo of
-                Right (description, departmentName, postType) -> do
-                    insertPost (T.pack departmentName) (T.pack postType) postCode (T.pack description)
-                    addPostCategoriesToDatabase (T.unpack postCode) categories
-                Left message -> do
-                    print message
+        [] -> generalParser tags firstCourse postCode
+        other -> liParser tags liPartitions firstCourse postCode
     where
         isCourseTag tag = tagOpenAttrNameLit "a" "href" (\hrefValue -> (length hrefValue) >= 0) tag
         isLiTag tag = isTagOpenName "li" tag
-
-parseLi :: [Tag String] -> String
-parseLi liPartition = do
-    let parsed = P.parse (parseCategory False) "Failed." (innerText liPartition)
-    case parsed of 
-        Right category -> category
-        Left message -> ""
 
 addPostCategoriesToDatabase :: String -> [String] -> IO ()
 addPostCategoriesToDatabase postCode categories = do
@@ -88,3 +66,34 @@ addPostCategoriesToDatabase postCode categories = do
 addCategoryToDatabase :: String -> String -> IO ()
 addCategoryToDatabase postCode category =
     insertPostCategory (T.pack category) (T.pack postCode)
+
+
+-- Helpers
+
+generalParser :: [Tag String] -> Maybe String -> T.Text -> IO ()
+generalParser tags firstCourse postCode = do
+    let parsed = P.parse (generalCategoryParser firstCourse) "Failed." (innerText tags)
+    case parsed of
+        Right (description, departmentName, postType, categories) -> do
+            insertPost (T.pack departmentName) (T.pack postType) postCode (T.pack description)
+            addPostCategoriesToDatabase (T.unpack postCode) categories
+        Left message -> do
+            print message
+
+liParser :: [Tag String] -> [[Tag String]] -> Maybe String -> T.Text -> IO ()
+liParser tags liPartitions firstCourse postCode = do
+    let categories = map parseLi liPartitions
+        postInfo = P.parse (postInfoParser firstCourse) "Failed." (innerText tags)
+    case postInfo of
+        Right (description, departmentName, postType) -> do
+            insertPost (T.pack departmentName) (T.pack postType) postCode (T.pack description)
+            addPostCategoriesToDatabase (T.unpack postCode) categories
+        Left message -> do
+            print message
+
+parseLi :: [Tag String] -> String
+parseLi liPartition = do
+    let parsed = P.parse (parseCategory False) "Failed." (innerText liPartition)
+    case parsed of 
+        Right category -> category
+        Left message -> ""
