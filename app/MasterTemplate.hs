@@ -24,7 +24,7 @@ masterTemplate title headers body scripts =
             mapM_ toStylesheet [
                 (if enableCdn
                  then "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"
-                 else "/static/js/common/bootstrap.min.3.1.1.js"),
+                 else "/static/style/bootstrap.min.3.1.1.css"),
                 "static/style/app.css"]
         H.body $ do
             body
