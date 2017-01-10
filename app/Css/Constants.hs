@@ -93,10 +93,11 @@ import Clay
 import Prelude hiding ((**))
 import Data.Text as T
 
-
-{- Empty padding and margins. -}
+-- |Returns CSS for empty margins.
 margin0 :: Css
 margin0 = margin nil nil nil nil
+
+-- |Returns CSS for empty padding.
 padding0 :: Css
 padding0 = padding nil nil nil nil
 
