@@ -1,5 +1,9 @@
 {-# LANGUAGE OverloadedStrings #-}
 
+{-|
+    Module      : Css.Constants
+    Description : Defines the constants for the other CSS modules.
+-}
 module Css.Constants
     (margin0,
      padding0,
