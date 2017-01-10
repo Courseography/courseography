@@ -16,10 +16,10 @@ main = defaultMainWithHooks
 
         -- | check that Imagemagick and LaTeX are available
         checkDependencies _ _ _ _ = do
-            mapM_ check ["convert", "pdflatex"]
+            mapM_ check ["convert -version", "pdflatex -version"]
         check :: String -> IO ()
         check dependency = do
-            result <- system dependency
+            result <- system $ dependency
             case result of
                 ExitFailure 127 -> print ("Error Message: " ++ dependency ++ " is NOT available. Please add it in your path.") >> exitFailure
                 _               -> exitSuccess
