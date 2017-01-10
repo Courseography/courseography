@@ -14,8 +14,7 @@ import Prelude hiding ((**))
 import Data.Monoid
 import Css.Constants
 
-{- aboutStyles
- - Generates CSS for the about page. -}
+-- |Returns the CSS for the about page.
 aboutStyles :: Css
 aboutStyles = "#aboutDiv" ? do
     maxWidth (px 1000)
