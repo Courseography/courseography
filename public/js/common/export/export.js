@@ -15,7 +15,7 @@ function openExportModal() {
     var context = $('#courseography-header').attr('context');
     if (context !== 'graph') {
         ReactDOM.render(
-            <ExportModal context='grid' session='fall'/>,
+            <ExportModal context='grid' session='fall' open={true}/>,
             document.getElementById('disclaimerDiv')).openModal();
     }
 }
@@ -28,7 +28,7 @@ export var ExportModal = React.createClass({
         };
     },
 
-    componentDidMount: function() {
+    getImage: function() {
         if (this.props.context === 'graph') {
             this.getGraphImage();
         } else {
@@ -63,7 +63,7 @@ export var ExportModal = React.createClass({
     },
 
     openModal: function() {
-        this.setState({modalIsOpen: true});
+        this.setState({modalIsOpen: true}, this.getImage);
     },
     closeModal : function() {
         this.setState({modalIsOpen: false});
