@@ -105,40 +105,18 @@ parseUntil parser = P.manyTill P.anyChar (P.try parser)
 splitPrereqText :: Parser [String]
 splitPrereqText = do
     P.manyTill ((P.try parseNotes) <|> (P.try parseNoteLine) <|>
-        (P.try (parseCategory False)) <|> (parseUntil P.eof)) P.eof
+        (P.try parseCategory) <|> (parseUntil P.eof)) P.eof
 
-parseCategory :: Bool -> Parser String
-parseCategory withinBracket = do
+parseCategory :: Parser String
+parseCategory = do
     left <- parseUpToSeparator
     nextChar <- P.anyChar
-    if nextChar == ',' && (not withinBracket)
-    then return left
-    else
-        mergeText left nextChar withinBracket
-
-mergeText :: String -> Char -> Bool -> Parser String
-mergeText left nextChar withinBracket = do
-    case nextChar of
-        '(' -> do
-            right <- P.option " " (parseCategory True)
-            return $ "(" ++ left ++ right
-        ')' -> do
-            right <- P.option " " (parseCategory False)
-            return $ left ++ ")" ++ right
-        '/' -> do
-            right <- P.option " " (parseCategory withinBracket)
-            return $ left ++ " or " ++ right
-        ',' -> do
-            right <- P.option " " (parseCategory withinBracket)
-            case withinBracket of
-                True -> return $ left ++ " and " ++ right
-                False -> return left
-        _ -> return left
+    return left
 
 parseUpToSeparator :: Parser String
 parseUpToSeparator = parseUntil (P.notFollowedBy (P.noneOf ",/();\r\n"))
 
 -- For testing purposed in REPL
 parseAll :: Parser [String]
-parseAll = P.many (parseCategory False)
+parseAll = P.many parseCategory
 

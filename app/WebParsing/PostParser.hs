@@ -93,7 +93,7 @@ liParser tags liPartitions firstCourse postCode = do
 
 parseLi :: [Tag String] -> String
 parseLi liPartition = do
-    let parsed = P.parse (parseCategory False) "Failed." (innerText liPartition)
+    let parsed = P.parse parseCategory "Failed." (innerText liPartition)
     case parsed of 
         Right category -> category
         Left message -> ""
