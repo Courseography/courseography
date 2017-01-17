@@ -9,7 +9,7 @@ import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Match
 import Config (databasePath)
 import Database.Tables
-import Database.Persist.Sqlite (insert_, runSqlite, runMigration, SqlPersistM)
+import Database.Persist.Sqlite (insert_, runMigration, runSqlite, SqlPersistM)
 import qualified Text.Parsec as P
 import WebParsing.ParsecCombinators (getCourseFromTag, generalCategoryParser, parseCategory, 
     postInfoParser)
@@ -25,7 +25,9 @@ getPost str = do
     let tags = filter isNotComment $ parseTags body
         postsSoup = secondH2 tags
         posts = partitions isPostName postsSoup
-    mapM_ addPostToDatabase posts
+    runSqlite databasePath $ do 
+        runMigration migrateAll
+        mapM_ addPostToDatabase posts
     print $ "parsing " ++ str
     where
         isNotComment (TagComment _) = False
@@ -41,15 +43,15 @@ getPost str = do
         isNotCoursesSection tag = not (tagOpenAttrLit "a" ("name", "courses") tag)
         isPostName tag = tagOpenAttrNameLit "a" "name" (\nameValue -> (length nameValue) == 9) tag
 
-addPostToDatabase :: [Tag String] -> IO ()
+addPostToDatabase :: [Tag String] -> SqlPersistM ()
 addPostToDatabase tags = do
     let postCode = T.pack (fromAttrib "name" ((take 1 $ filter (isTagOpenName "a") tags) !! 0))
         liPartitions = partitions isLiTag tags
         prereqs = map getCourseFromTag $ map (fromAttrib "href") $ filter isCourseTag tags
         firstCourse = if (null prereqs) then Nothing else (Just (head prereqs))
     case liPartitions of
-        [] -> runSqlite databasePath $ generalParser tags firstCourse postCode
-        other -> runSqlite databasePath $ liParser tags liPartitions firstCourse postCode
+        [] -> generalParser tags firstCourse postCode
+        other -> liParser tags liPartitions firstCourse postCode
     where
         isCourseTag tag = tagOpenAttrNameLit "a" "href" (\hrefValue -> (length hrefValue) >= 0) tag
         isLiTag tag = isTagOpenName "li" tag
