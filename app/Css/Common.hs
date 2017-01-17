@@ -16,8 +16,7 @@ import Prelude hiding ((**))
 import Data.Monoid
 import Css.Constants
 
-{- common
- - Generates CSS common to all pages. -}
+-- |Defines CSS common to all pages.
 common :: Css
 common = do
     html ?
