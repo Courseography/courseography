@@ -3,7 +3,6 @@ module WebParsing.PostParser
     (getPost) where
 
 import Network.HTTP
-import Database.PostInsertion (insertPost, insertPostCategory)
 import qualified Data.Text as T
 import Data.List
 import Text.HTML.TagSoup
