@@ -1,5 +1,13 @@
 {-# LANGUAGE OverloadedStrings #-}
 
+{-|
+    Module      : Css.Common
+    Description : Defines the CSS present in every page.
+
+The CSS present in every page includes the header, common CSS, disclaimer at
+the bottom, and (oddly enough) the modal that appears when nodes in the
+graph are clicked.
+-}
 module Css.Common
     (common) where
 
