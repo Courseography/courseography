@@ -98,6 +98,9 @@ margin0 :: Css
 margin0 = margin nil nil nil nil
 
 -- |Returns CSS for empty padding.
+--
+-- = Past this point are self-identifying and not Haddocked.
+-- Though it wouldn't hurt if someone decided to.
 padding0 :: Css
 padding0 = padding nil nil nil nil
 
