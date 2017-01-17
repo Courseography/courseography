@@ -114,7 +114,7 @@ parseCategory = do
     return left
 
 parseUpToSeparator :: Parser String
-parseUpToSeparator = parseUntil (P.notFollowedBy (P.noneOf ",/();\r\n"))
+parseUpToSeparator = parseUntil (P.notFollowedBy (P.noneOf ";\r\n"))
 
 -- For testing purposed in REPL
 parseAll :: Parser [String]
