@@ -50,8 +50,8 @@ addPostToDatabase tags = do
         prereqs = map getCourseFromTag $ map (fromAttrib "href") $ filter isCourseTag tags
         firstCourse = if (null prereqs) then Nothing else (Just (head prereqs))
     case liPartitions of
-        [] -> generalParser tags firstCourse postCode
-        other -> liParser tags liPartitions firstCourse postCode
+        [] -> categoryParser tags firstCourse postCode Nothing
+        other -> categoryParser tags firstCourse postCode (Just liPartitions)
     where
         isCourseTag tag = tagOpenAttrNameLit "a" "href" (\hrefValue -> (length hrefValue) >= 0) tag
         isLiTag tag = isTagOpenName "li" tag
@@ -74,26 +74,21 @@ addCategoryToDatabase postCode category =
 
 -- Helpers
 
-generalParser :: [Tag String] -> Maybe String -> T.Text -> SqlPersistM ()
-generalParser tags firstCourse postCode = do
-    let parsed = P.parse (generalCategoryParser firstCourse) "Failed." (innerText tags)
+categoryParser :: [Tag String] -> Maybe String -> T.Text -> Maybe [[Tag String]] -> SqlPersistM ()
+categoryParser tags firstCourse postCode liPartitions = do
     case parsed of
         Right (description, departmentName, postType, categories) -> do
             addPostCategoriesToDatabase (T.unpack postCode) categories
             insert_ $ Post (T.pack postType) (T.pack departmentName) postCode (T.pack description)
         Left message -> do
             return ()
-
-liParser :: [Tag String] -> [[Tag String]] -> Maybe String -> T.Text -> SqlPersistM ()
-liParser tags liPartitions firstCourse postCode = do
-    let categories = map parseLi liPartitions
-        postInfo = P.parse (postInfoParser firstCourse) "Failed." (innerText tags)
-    case postInfo of
-        Right (description, departmentName, postType) -> do
-            addPostCategoriesToDatabase (T.unpack postCode) categories
-            insert_ $ Post (T.pack postType) (T.pack departmentName) postCode (T.pack description)
-        Left message -> do
-           return ()
+    where
+        parsed = case liPartitions of 
+            Nothing -> P.parse (generalCategoryParser firstCourse) "Failed." (innerText tags)
+            Just partitions -> do
+                let categories = map parseLi partitions
+                (description, departmentName, postType) <- P.parse (postInfoParser firstCourse) "Failed." (innerText tags)
+                return (description, departmentName, postType, categories)
 
 parseLi :: [Tag String] -> String
 parseLi liPartition = do
