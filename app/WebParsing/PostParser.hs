@@ -8,6 +8,9 @@ import qualified Data.Text as T
 import Data.List
 import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Match
+import Config (databasePath)
+import Database.Tables
+import Database.Persist.Sqlite (insert_, runSqlite, runMigration, SqlPersistM)
 import qualified Text.Parsec as P
 import WebParsing.ParsecCombinators (getCourseFromTag, generalCategoryParser, parseCategory, 
     postInfoParser)
@@ -46,13 +49,13 @@ addPostToDatabase tags = do
         prereqs = map getCourseFromTag $ map (fromAttrib "href") $ filter isCourseTag tags
         firstCourse = if (null prereqs) then Nothing else (Just (head prereqs))
     case liPartitions of
-        [] -> generalParser tags firstCourse postCode
-        other -> liParser tags liPartitions firstCourse postCode
+        [] -> runSqlite databasePath $ generalParser tags firstCourse postCode
+        other -> runSqlite databasePath $ liParser tags liPartitions firstCourse postCode
     where
         isCourseTag tag = tagOpenAttrNameLit "a" "href" (\hrefValue -> (length hrefValue) >= 0) tag
         isLiTag tag = isTagOpenName "li" tag
 
-addPostCategoriesToDatabase :: String -> [String] -> IO ()
+addPostCategoriesToDatabase :: String -> [String] -> SqlPersistM ()
 addPostCategoriesToDatabase postCode categories = do
     mapM_ (addCategoryToDatabase postCode) (filter isCategory categories)
     where
@@ -63,33 +66,33 @@ addPostCategoriesToDatabase postCode categories = do
                 ((length string) >= 7) && ((length $ filter (\bool -> bool) infixes) <= 0)
         containsString string substring = isInfixOf substring string
 
-addCategoryToDatabase :: String -> String -> IO ()
+addCategoryToDatabase :: String -> String -> SqlPersistM ()
 addCategoryToDatabase postCode category =
-    insertPostCategory (T.pack category) (T.pack postCode)
+    insert_ $ PostCategory (T.pack category) (T.pack postCode)
 
 
 -- Helpers
 
-generalParser :: [Tag String] -> Maybe String -> T.Text -> IO ()
+generalParser :: [Tag String] -> Maybe String -> T.Text -> SqlPersistM ()
 generalParser tags firstCourse postCode = do
     let parsed = P.parse (generalCategoryParser firstCourse) "Failed." (innerText tags)
     case parsed of
         Right (description, departmentName, postType, categories) -> do
-            insertPost (T.pack departmentName) (T.pack postType) postCode (T.pack description)
             addPostCategoriesToDatabase (T.unpack postCode) categories
+            insert_ $ Post (T.pack postType) (T.pack departmentName) postCode (T.pack description)
         Left message -> do
-            print message
+            return ()
 
-liParser :: [Tag String] -> [[Tag String]] -> Maybe String -> T.Text -> IO ()
+liParser :: [Tag String] -> [[Tag String]] -> Maybe String -> T.Text -> SqlPersistM ()
 liParser tags liPartitions firstCourse postCode = do
     let categories = map parseLi liPartitions
         postInfo = P.parse (postInfoParser firstCourse) "Failed." (innerText tags)
     case postInfo of
         Right (description, departmentName, postType) -> do
-            insertPost (T.pack departmentName) (T.pack postType) postCode (T.pack description)
             addPostCategoriesToDatabase (T.unpack postCode) categories
+            insert_ $ Post (T.pack postType) (T.pack departmentName) postCode (T.pack description)
         Left message -> do
-            print message
+           return ()
 
 parseLi :: [Tag String] -> String
 parseLi liPartition = do
