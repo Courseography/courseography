@@ -15,8 +15,7 @@ import Prelude hiding ((**))
 import Css.Constants
 import qualified Data.Text as T
 
-{- drawStyles
- - Generates all CSS for the draw page. -}
+-- |Defines the CSS for the draw page.
 drawStyles :: Css
 drawStyles = do
     colourTableCSS
