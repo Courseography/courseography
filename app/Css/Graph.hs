@@ -12,8 +12,7 @@ import Prelude hiding ((**))
 import Data.Monoid
 import Css.Constants
 
-{- graphStyles
- - Generates all CSS for the graph page. -}
+-- |Defines all CSS for the graph page.
 graphStyles :: Css
 graphStyles = do
     graphContainer
