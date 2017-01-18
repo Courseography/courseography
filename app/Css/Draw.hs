@@ -1,5 +1,12 @@
 {-# LANGUAGE OverloadedStrings #-}
 
+{-|
+    Module      : Css.Draw
+    Description : Defines the CSS for the draw page.
+
+Defines the CSS for the draw page, which includes all of the buttons on the
+draw page.
+-}
 module Css.Draw
     (drawStyles) where
 
