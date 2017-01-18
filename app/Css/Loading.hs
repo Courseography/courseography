@@ -14,8 +14,7 @@ import Prelude hiding ((**))
 import Data.Monoid
 import Css.Constants
 
-{- loadingStyles
- - Generates all CSS for the draw page. -}
+-- |Defines all CSS for the loading animation.
 loadingStyles :: Css
 loadingStyles = do
     spinnerCSS
