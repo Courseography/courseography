@@ -1,5 +1,13 @@
 {-# LANGUAGE OverloadedStrings #-}
 
+{-|
+    Module      : Css.Compiler
+    Description : Generates the CSS file for Courseography.
+
+Uses the all of the other CSS files contained in app/Css to and creates
+the file containing Courseography's CSS. Effectively this is the main
+file of app/Css.
+-}
 module Css.Compiler
     (compileCSS) where
 
