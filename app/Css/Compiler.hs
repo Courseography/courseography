@@ -27,6 +27,7 @@ import Css.Loading (loadingStyles)
 import Config (genCssPath, cssStyle)
 import System.Directory (createDirectoryIfMissing)
 
+-- |Combines the other app/Css files and generates the Courseography CSS file.
 compileCSS :: IO ()
 compileCSS = do
     createDirectoryIfMissing True genCssPath
