@@ -14,7 +14,7 @@ import Clay
 import Prelude hiding ((**))
 import Css.Constants
 
--- Post Styles
+-- |Defines the CSS for the post page.
 postStyles :: Css
 postStyles = do
     body ?
