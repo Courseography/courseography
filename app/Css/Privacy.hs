@@ -12,8 +12,7 @@ import Prelude hiding ((**))
 import Data.Monoid
 import Css.Constants
 
-{- privacyStyles
- - Generates CSS for the Privacy page. -}
+-- |Defines CSS for the privacy page.
 privacyStyles :: Css
 privacyStyles = "#privacyDiv" ? do
     maxWidth (px 1000)
