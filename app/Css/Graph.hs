@@ -1,5 +1,9 @@
 {-# LANGUAGE OverloadedStrings #-}
 
+{-|
+    Module      : Css.Graph
+    Description : Defines the CSS for the graph page.
+-}
 module Css.Graph
     (graphStyles) where
 
