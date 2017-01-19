@@ -15,8 +15,7 @@ import Prelude hiding ((**))
 import Data.Monoid
 import Css.Constants
 
-{- timetableStyles
- - Generates all CSS required for the timetable page. -}
+-- |Defines the CSS for the timetable page.
 timetableStyles :: Css
 timetableStyles = do
     ".main" ? do -- TODO: change to id, and pick better name
