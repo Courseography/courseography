@@ -1,5 +1,12 @@
 {-# LANGUAGE OverloadedStrings #-}
 
+{-|
+    Module      : Css.Timetable
+    Description : Defines the CSS for the timetable page.
+
+The timetable page is found by navigating to the search button at the top of
+Courseography.
+-}
 module Css.Timetable
     (timetableStyles) where
 
