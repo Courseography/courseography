@@ -9,6 +9,7 @@ module Css.Constants
      padding0,
      width100,
      height100,
+     -- * Node and Rectangle Constants
      fill,
      stroke,
      alignCenter,
@@ -19,6 +20,7 @@ module Css.Constants
      strokeRed,
      strokeDashed,
      roundCorners,
+     -- * Colors
      theoryDark,
      coreDark,
      seDark,
@@ -32,6 +34,7 @@ module Css.Constants
      introDark,
      titleColour,
      lightGrey,
+     -- * Background Colors
      purple1,
      purple2,
      purple3,
@@ -46,6 +49,7 @@ module Css.Constants
      pink2,
      borderNone,
      borderPink,
+     -- * More Node Colors!
      teal1,
      orange1,
      blue1,
@@ -73,11 +77,7 @@ module Css.Constants
      grey5,
      grey6,
      beige1,
-     fceCountColor,
-     nodeFontSize,
-     hybridFontSize,
-     boolFontSize,
-     regionFontSize,
+     -- * Color Palette Colors
      pastelRed,
      pastelOrange,
      pastelYellow,
@@ -86,7 +86,14 @@ module Css.Constants
      pastelPink,
      pastelPurple,
      pastelBrown,
-     pastelGrey
+     pastelGrey,
+     -- * FCE Count Color
+     fceCountColor,
+     -- * Graph Styles
+     nodeFontSize,
+     hybridFontSize,
+     boolFontSize,
+     regionFontSize
      ) where
 
 import Clay
