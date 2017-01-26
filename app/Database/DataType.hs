@@ -17,3 +17,17 @@ derivePersistField "ShapeType"
 
 instance ToJSON ShapeType
 instance FromJSON ShapeType
+
+data AlignType = Begin | Start | Middle | End
+ deriving (Show, Read, Eq, Generic)
+derivePersistField "AlignType"
+
+instance ToJSON AlignType
+instance FromJSON AlignType
+
+data PostType = Specialist | Major | Minor
+ deriving (Show, Read, Eq, Generic)
+derivePersistField "PostType"
+
+instance ToJSON PostType
+instance FromJSON PostType

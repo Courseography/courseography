@@ -55,6 +55,7 @@ share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 Department json
     code [T.Text]
     name T.Text
+    Primary name
 
 Courses
     code T.Text
@@ -77,6 +78,7 @@ Lecture
     Foreign Courses fkcourse code
     session T.Text
     section T.Text
+    UniqueLecture code section session
     times [Time]
     cap Int
     instructor T.Text
@@ -88,10 +90,33 @@ Lecture
 
 Tutorial
     code T.Text
+    Foreign Courses fkcourse code
     section T.Text Maybe
     session T.Text
+    UniqueTutorial code section session !force
     times [Time]
+    cap Int
+    -- instructor T.Text
+    enrol Int
+    wait Int
+    extra Int
+    timeStr T.Text
     deriving Generic Show
+
+-- Practical
+--     code T.Text
+--     Foreign Courses fkcourse code
+--     section T.Text Maybe
+--     session T.Text
+--     UniquePractical code section session !force
+--     times [Time]
+--     cap Int
+--     -- instructor T.Text
+--     enrol Int
+--     wait Int
+--     extra Int
+--     timeStr T.Text
+--     deriving Generic Show
 
 Breadth
     description String
@@ -103,6 +128,7 @@ Distribution
 
 Graph json
     title String
+    -- Foreign Department fkname title
     width Double
     height Double
     deriving Show
@@ -146,15 +172,18 @@ FacebookTest
     deriving Show
 
 Post
-    name T.Text
+    name PostType -- T.Text
     department T.Text
+    -- Foreign Department fkname department
     code T.Text
+    -- Primary code
     description T.Text
     deriving Show
 
 PostCategory
     name T.Text
     postCode T.Text
+    -- Foreign Post fkpost postCode
     deriving Show
 |]
 
@@ -299,15 +328,16 @@ instance FromJSON Tutorial where
     let sectionId = T.concat [teachingMethod, sectionNumber]
 
     -- TODO: Tutorials should have these stats, too!
-    -- capStr <- o .:? "enrollmentCapacity" .!= "-1"
-    -- enrolStr <- o .:? "actualEnrolment" .!= "0"
-    -- waitStr <- o .:? "actualWaitlist" .!= "0"
-    -- let cap = fromMaybe (-1) $ readMaybe capStr
-    --     enrol = fromMaybe 0 $ readMaybe enrolStr
-    --     wait = fromMaybe 0 $ readMaybe waitStr
+    capStr <- o .:? "enrollmentCapacity" .!= "-1"
+    enrolStr <- o .:? "actualEnrolment" .!= "0"
+    waitStr <- o .:? "actualWaitlist" .!= "0"
+    let cap = fromMaybe (-1) $ readMaybe capStr
+        enrol = fromMaybe 0 $ readMaybe enrolStr
+        wait = fromMaybe 0 $ readMaybe waitStr
     if teachingMethod == "TUT"
     then
-      return $ Tutorial "" (Just sectionId) "" allTimes
+      -- return $ Tutorial "" (Just sectionId) "" allTimes
+      return $ Tutorial "" (Just sectionId) "" allTimes cap enrol wait 0 ""
     else
       fail "Not a tutorial"
 
