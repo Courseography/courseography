@@ -29,7 +29,7 @@ findCourseFromTag = do
 
 generalCategoryParser :: Maybe String -> Parser (String, String, String, [String])
 generalCategoryParser firstCourse = do
-    (description, departmentName, postType) <- (postInfoParser firstCourse)
+    (description, departmentName, postType) <- postInfoParser firstCourse
     categories <- splitPrereqText
 
     return (description, departmentName, postType, categories)
@@ -58,16 +58,16 @@ findPostType = do
 
 getDepartmentName :: Parser String
 getDepartmentName = 
-    (P.try (parseUntil ((P.try (P.lookAhead (P.string " Specialist"))) <|>
-                        (P.try (P.lookAhead (P.string " Major"))) <|> 
-                        (P.try (P.lookAhead (P.string " Minor"))))))   
+    P.try (parseUntil (P.try (P.lookAhead (P.string " Specialist")) <|>
+                        P.try (P.lookAhead (P.string " Major")) <|> 
+                        P.try (P.lookAhead (P.string " Minor"))))   
 
 getPostType :: Parser String 
 getPostType = do
     P.spaces
-    ((P.try (P.string "Specialist")) <|>
-     (P.try (P.string "Major")) <|>
-     (P.try (P.string "Minor")))
+    (P.try (P.string "Specialist") <|>
+     P.try (P.string "Major") <|>
+     P.try (P.string "Minor"))
 
 isDepartmentName ::  [Char] -> Parser String
 isDepartmentName postType = parseUntil (P.string postType)
@@ -77,25 +77,25 @@ isDepartmentName postType = parseUntil (P.string postType)
 
 getRequirements :: Maybe String -> Parser String
 getRequirements firstCourse =
-    (P.try (parseUntil (P.string "First Year"))) <|>
-    (P.try (parseUntil (P.string "Program Course Requirements:"))) <|>
-    (P.try (parseUntil (P.string "Program requirements:"))) <|>
-    (findFirstCourse firstCourse)
+    P.try (parseUntil (P.string "First Year")) <|>
+    P.try (parseUntil (P.string "Program Course Requirements:")) <|>
+    P.try (parseUntil (P.string "Program requirements:")) <|>
+    findFirstCourse firstCourse
 
 findFirstCourse :: Maybe String -> Parser String
 findFirstCourse firstCourse =
     case firstCourse of
         Nothing -> parseUntil P.eof
-        Just course -> (P.try (parseUntil (P.lookAhead (P.string course)))) <|> (parseUntil P.eof)
+        Just course -> P.try (parseUntil (P.lookAhead (P.string course))) <|> parseUntil P.eof
 
 parseNoteLine :: Parser String
 parseNoteLine = do
     P.string "Note"
-    (P.try (parseUntil (P.char '\n'))) <|> (parseUntil P.eof)
+    P.try (parseUntil (P.char '\n')) <|> parseUntil P.eof
 
 parseNotes :: Parser String
 parseNotes = do
-    (P.try (P.string "Notes")) <|> (P.try (P.string "NOTES"))
+    P.try (P.string "Notes") <|> P.try (P.string "NOTES")
     parseUntil P.eof
     return ""
 
@@ -104,8 +104,8 @@ parseUntil parser = P.manyTill P.anyChar (P.try parser)
 
 splitPrereqText :: Parser [String]
 splitPrereqText = do
-    P.manyTill ((P.try parseNotes) <|> (P.try parseNoteLine) <|>
-        (P.try parseCategory) <|> (parseUntil P.eof)) P.eof
+    P.manyTill (P.try parseNotes <|> P.try parseNoteLine <|>
+        P.try parseCategory <|> parseUntil P.eof) P.eof
 
 parseCategory :: Parser String
 parseCategory = do
