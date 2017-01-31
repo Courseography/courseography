@@ -54,7 +54,7 @@ addPostToDatabase tags = do
         isCourseTag tag = tagOpenAttrNameLit "a" "href" (\hrefValue -> (length hrefValue) >= 0) tag
         isLiTag tag = isTagOpenName "li" tag
 
-addPostCategoriesToDatabase :: String -> [String] -> SqlPersistM ()
+addPostCategoriesToDatabase :: T.Text -> [String] -> SqlPersistM ()
 addPostCategoriesToDatabase postCode categories = do
     mapM_ (addCategoryToDatabase postCode) (filter isCategory categories)
     where
@@ -65,9 +65,9 @@ addPostCategoriesToDatabase postCode categories = do
                 ((length string) >= 7) && ((length $ filter (\bool -> bool) infixes) <= 0)
         containsString string substring = isInfixOf substring string
 
-addCategoryToDatabase :: String -> String -> SqlPersistM ()
+addCategoryToDatabase :: T.Text -> String -> SqlPersistM ()
 addCategoryToDatabase postCode category =
-    insert_ $ PostCategory (T.pack category) (T.pack postCode)
+    insert_ $ PostCategory (T.pack category) postCode
 
 
 -- Helpers
@@ -76,8 +76,8 @@ categoryParser :: [Tag String] -> Maybe String -> T.Text -> [[Tag String]] -> Sq
 categoryParser tags firstCourse postCode liPartitions = do
     case parsed of
         Right (description, departmentName, postType, categories) -> do
-            addPostCategoriesToDatabase (T.unpack postCode) categories
-            insert_ $ Post (T.pack postType) (T.pack departmentName) postCode (T.pack description)
+            addPostCategoriesToDatabase postCode categories
+            insert_ $ Post postType departmentName postCode description
         Left message -> do
             return ()
     where

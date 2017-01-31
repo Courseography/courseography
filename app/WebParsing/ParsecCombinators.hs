@@ -27,7 +27,7 @@ findCourseFromTag = do
     parseUntil (P.char '#')
     P.many1 P.anyChar
 
-generalCategoryParser :: Maybe String -> Parser (String, String, String, [String])
+generalCategoryParser :: Maybe String -> Parser (T.Text, T.Text, T.Text, [String])
 generalCategoryParser firstCourse = do
     (description, departmentName, postType) <- postInfoParser firstCourse
     categories <- splitPrereqText
@@ -36,13 +36,13 @@ generalCategoryParser firstCourse = do
 
 -- Post Parsing
 
-postInfoParser :: Maybe String -> Parser (String, String, String)
+postInfoParser :: Maybe String -> Parser (T.Text, T.Text, T.Text)
 postInfoParser firstCourse = do
     departmentName <- getDepartmentName
     postType <- getPostType
     description <- getRequirements firstCourse
 
-    return (description, departmentName, postType)
+    return (T.pack description, T.pack departmentName, T.pack postType)
 
 extractPostType :: String -> String
 extractPostType postCode = do
