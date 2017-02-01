@@ -30,10 +30,10 @@ saveGraphJSON jsonStr nameStr = do
     case jsonObj of
         Nothing -> return $ toResponse ("Error" :: String)
         Just (SvgJSON texts shapes paths) -> do
-            _ <- runSqlite databasePath $ insertGraph nameStr texts shapes paths
+            _ <- runSqlite databasePath $ insertGraph (T.pack nameStr) texts shapes paths
             return $ toResponse $ ("Success" :: String)
     where
-        insertGraph :: String -> [Text] -> [Shape] -> [Path] -> SqlPersistM ()
+        insertGraph :: T.Text -> [Text] -> [Shape] -> [Path] -> SqlPersistM ()
         insertGraph nameStr texts shapes paths = do
             gId <- insert $ Graph nameStr 256 256
             insertMany_ $ map (\text -> text {textGraph = gId}) texts

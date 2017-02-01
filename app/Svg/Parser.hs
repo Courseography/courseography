@@ -58,11 +58,11 @@ parsePrebuiltSvgs = runSqlite databasePath $ do
 
 
 -- | The starting point for parsing a graph with a given title and file.
-performParse :: String -- ^ The title of the graph.
+performParse :: T.Text -- ^ The title of the graph.
              -> String -- ^ The filename of the file that will be parsed.
              -> SqlPersistM ()
 performParse graphName inputFilename = do
-    liftIO $ print $ "Parsing graph " ++ graphName ++ " from file " ++ inputFilename
+    liftIO $ print $ "Parsing graph " ++ T.unpack graphName ++ " from file " ++ inputFilename
     graphFile <- liftIO $ readFile (graphPath ++ inputFilename)
     let tags = TS.parseTags graphFile
         svgRoot = head $ filter (TS.isTagOpenName "svg") tags

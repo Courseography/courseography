@@ -127,7 +127,7 @@ Distribution
     deriving Show
 
 Graph json
-    title String
+    title T.Text
     -- Foreign Department fkname title
     width Double
     height Double

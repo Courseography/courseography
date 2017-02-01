@@ -59,7 +59,7 @@ buildSVG :: String               -- ^ The name of the graph that is being built.
          -> IO ()
 buildSVG graphName courseMap filename styled =
     runSqlite databasePath $ do
-        gIds        :: [Key Graph]    <- selectKeysList [GraphTitle ==. graphName] []
+        gIds        :: [Key Graph]    <- selectKeysList [GraphTitle ==. T.pack graphName] []
         let gId = if null gIds then toSqlKey 1 else head gIds
 
         sqlRects    :: [Entity Shape] <- selectList

@@ -168,7 +168,7 @@ buildSession lecs tuts =
 getGraphJSON :: String -> IO Response
 getGraphJSON graphName =
     runSqlite databasePath $ do
-        graphEnt :: (Maybe (Entity Graph)) <- selectFirst [GraphTitle ==. graphName] []
+        graphEnt :: (Maybe (Entity Graph)) <- selectFirst [GraphTitle ==. T.pack graphName] []
         case graphEnt of
             Nothing -> return $ createJSONResponse $ object ["texts" .= ([] :: [Text]),
                                                              "shapes" .= ([] :: [Shape]),
