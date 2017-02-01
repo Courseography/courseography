@@ -30,6 +30,7 @@ import Svg.Database (insertGraph, insertElements, deleteGraphs)
 import Config (graphPath, databasePath)
 import Text.Read (readMaybe)
 import Data.Char (isSpace)
+import qualified Data.Text as T
 
 parsePrebuiltSvgs :: IO ()
 parsePrebuiltSvgs = runSqlite databasePath $ do

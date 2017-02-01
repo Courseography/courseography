@@ -47,7 +47,7 @@ saveGraphJSON jsonStr nameStr = do
 getDistributionKey :: Maybe T.Text -> SqlPersistM (Maybe (Key Distribution))
 getDistributionKey Nothing = return Nothing
 getDistributionKey (Just description) = do
-    keyListDistribution :: [Key Distribution] <- selectKeysList [ DistributionDescription ==. (T.unpack description) ] []
+    keyListDistribution :: [Key Distribution] <- selectKeysList [ DistributionDescription ==. description ] []
     -- option: keyListDistribution :: [DistributionId] <- selectKeysList [ DistributionDescription `contains'` description] []
     return $ case keyListDistribution of
         [] -> Nothing
@@ -56,7 +56,7 @@ getDistributionKey (Just description) = do
 getBreadthKey :: Maybe T.Text -> SqlPersistM (Maybe (Key Breadth))
 getBreadthKey Nothing = return Nothing
 getBreadthKey (Just description) = do
-    keyListBreadth :: [Key Breadth] <- selectKeysList [ BreadthDescription ==. (T.unpack description) ] []
+    keyListBreadth :: [Key Breadth] <- selectKeysList [ BreadthDescription ==. description ] []
     -- option: selectKeysList [ BreadthDescription `contains'` description] []
     return $ case keyListBreadth of
         [] -> Nothing

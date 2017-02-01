@@ -119,11 +119,11 @@ Tutorial
 --     deriving Generic Show
 
 Breadth
-    description String
+    description T.Text
     deriving Show
 
 Distribution
-    description String
+    description T.Text
     deriving Show
 
 Graph json

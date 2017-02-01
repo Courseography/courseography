@@ -144,7 +144,7 @@ getDescriptionB (Just key) = do
     maybeBreadth <- get key
     case maybeBreadth of
         Nothing -> return Nothing
-        Just coursebreadth  -> return $ Just $ T.pack (breadthDescription coursebreadth)
+        Just coursebreadth  -> return $ Just $ breadthDescription coursebreadth
 
 getDescriptionD :: Maybe (Key Distribution) -> SqlPersistM (Maybe T.Text)
 getDescriptionD Nothing = return Nothing
@@ -152,7 +152,7 @@ getDescriptionD (Just key) = do
     maybeDistribution <- get key
     case maybeDistribution of
         Nothing -> return Nothing
-        Just dist -> return $ Just $ T.pack (distributionDescription dist)
+        Just dist -> return $ Just $ distributionDescription dist
 
 -- | Builds a Session structure from a list of tuples from the Lecture table,
 -- and a list of tuples from the Tutorial table.
