@@ -135,11 +135,11 @@ Graph json
 
 Text json
     graph GraphId
-    rId String
+    rId T.Text
     pos Point
-    text String
-    align String
-    fill String
+    text T.Text
+    align T.Text
+    fill T.Text
     deriving Show
 
 Shape json
@@ -148,7 +148,7 @@ Shape json
     pos Point
     width Double
     height Double
-    fill String
+    fill T.Text
     stroke T.Text
     text [Text]
     tolerance Double
@@ -159,8 +159,8 @@ Path json
     graph GraphId
     id_ T.Text
     points [Point]
-    fill String
-    stroke String
+    fill T.Text
+    stroke T.Text
     isRegion Bool
     source T.Text
     target T.Text

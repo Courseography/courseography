@@ -212,7 +212,7 @@ rectToSVG styled courseMap rect
                          ! A.y (stringValue . show . snd $ shapePos rect)
                          ! A.width (stringValue . show $ shapeWidth rect)
                          ! A.height (stringValue . show $ shapeHeight rect)
-                         ! A.style (stringValue $ "fill:" ++ shapeFill rect ++ ";")
+                         ! A.style (textValue $ T.concat [T.pack "fill:", shapeFill rect, T.pack ";"])
                   sequence_ $ map
                       (textToSVG
                           styled
@@ -252,7 +252,7 @@ textToSVG styled type_ xPos' text =
         (xPos, yPos) = textPos text
         align = case type_ of
                        Region -> textAlign text
-                       _ -> "middle"
+                       _ -> T.pack "middle"
 
         fontSize = case type_ of
             Hybrid -> hybridFontSize
@@ -264,14 +264,14 @@ textToSVG styled type_ xPos' text =
             if type_ == Hybrid
             then A.fill "white"
             else
-                if null $ textFill text
+                if T.null $ textFill text
                 then mempty
-                else A.fill $ stringValue $ textFill text
+                else A.fill $ textValue $ textFill text
 
         baseStyles = mconcat
             [A.stroke "none",
              fill,
-             A.textAnchor $ stringValue align]
+             A.textAnchor $ textValue align]
 
         allStyles = mconcat
             [A.fontFamily "'Trebuchet MS', 'Arial', sans-serif",
@@ -294,9 +294,9 @@ edgeToSVG styled path =
              then
                  mappend
                      (A.strokeWidth "2px") $
-                     A.style (stringValue $ "fill:" ++
-                          pathFill path ++
-                          ";fill-opacity:1;")
+                     A.style (textValue $ T.concat [T.pack "fill:",
+                          pathFill path,
+                          T.pack ";fill-opacity:1;"])
              else
                  mempty
 
@@ -306,11 +306,11 @@ regionToSVG styled path =
     S.path ! A.id_ (textValue $ T.append (T.pack "region") (pathId_ path))
            ! A.class_ "region"
            ! A.d (stringValue $ 'M' : buildPathString (pathPoints path))
-           ! A.style (stringValue $ "fill:" ++ pathFill path ++ ";" ++
+           ! A.style (textValue $ T.concat [T.pack "fill:", pathFill path, T.pack ";",
                       if styled
                       then
-                          ";opacity:0.7;fill-opacity:0.58;"
-                      else "")
+                          T.pack ";opacity:0.7;fill-opacity:0.58;"
+                      else T.pack ""])
 
 
 -- ** Hard-coded map definitions (should be removed, eventually)

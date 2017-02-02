@@ -119,7 +119,7 @@ parseGraph key tags =
         small shape = shapeWidth shape < 300
         removeRedundant shapes =
             filter (not . \s -> (elem (shapePos s) (map shapePos shapes)) &&
-                                (null (shapeFill s) || shapeFill s == "#000000") &&
+                                (T.null (shapeFill s) || shapeFill s == "#000000") &&
                                 elem (shapeType_ s) [Node, Hybrid]) shapes
 
 
@@ -136,7 +136,7 @@ parseText key tags =
 
 
 parseTextHelper :: GraphId -- ^ The Text's corresponding graph identifier.
-                -> [(String, String)]
+                -> [(String, T.Text)]
                 -> Point
                 -> [Tag String]
                 -> [Text]
@@ -144,10 +144,10 @@ parseTextHelper key styles' trans textTags =
     if null $ filter (TS.isTagOpenName "tspan") (tail textTags)
     then
         [Text key
-              (TS.fromAttrib "id" $ head textTags) -- TODO: Why are we setting an id?
+              (T.pack $ TS.fromAttrib "id" $ head textTags) -- TODO: Why are we setting an id?
               (addTuples newTrans (readAttr "x" $ head textTags,
                                    readAttr "y" $ head textTags))
-              (TS.escapeHTML $ trim $ TS.innerText textTags)
+              (T.pack $ TS.escapeHTML $ trim $ TS.innerText textTags)
               align
               fill
         ]
@@ -160,8 +160,8 @@ parseTextHelper key styles' trans textTags =
         currTrans = getTransform $ head textTags
         newTrans = addTuples trans currTrans
         alignAttr = styleVal "text-anchor" newStyle
-        align = if null alignAttr
-                then "begin"
+        align = if T.null alignAttr
+                then T.pack "begin"
                 else alignAttr
         fill = styleVal "fill" newStyle
 
@@ -215,7 +215,7 @@ parsePathHelper key trans pathTag =
         currTrans = parseTransform $ TS.fromAttrib "transform" $ pathTag
         realD = map (addTuples (addTuples trans currTrans)) $ parsePathD d
         fillAttr = styleVal "fill" styles'
-        isRegion = not (null fillAttr) && fillAttr /= "none"
+        isRegion = not (T.null fillAttr) && fillAttr /= T.pack "none"
     in
         if null d || null realD || (last d == 'z' && not isRegion)
     then []
@@ -273,19 +273,19 @@ readAttr attr tag =
 
 -- | Return a list of styles from the style attribute of an element.
 -- Every style has the form (name, value).
-styles :: Tag String -> [(String, String)]
+styles :: Tag String -> [(String, T.Text)]
 styles tag =
     let styleStr = TS.fromAttrib "style" tag
     in map toStyle $ splitOn ";" styleStr
     where
         toStyle split =
             case splitOn ":" split of
-            [n,v] -> (n,v)
-            _ -> ("","")
+            [n,v] -> (n, T.pack v)
+            _ -> ("",T.pack "")
 
 
 -- | Gets a style attribute from a style string.
-styleVal :: String -> [(String, String)] -> String
+styleVal :: String -> [(String, T.Text)] -> T.Text
 styleVal nameStr styleMap = fromMaybe "" $ lookup nameStr styleMap
 
 
@@ -344,20 +344,20 @@ parsePathD d
 -- Eventually, it would be nice if we removed these functions and
 -- simply passed everything down when making the recursive calls.
 
-updatePath :: String -- ^ The fill that may be added to the Path.
+updatePath :: T.Text -- ^ The fill that may be added to the Path.
            -> Path
            -> Path
 updatePath fill p =
-    p { pathFill = if null (pathFill p) then fill else pathFill p }
+    p { pathFill = if T.null (pathFill p) then fill else pathFill p }
 
-updateShape :: String -- ^ The fill that may be added to the Shape.
+updateShape :: T.Text -- ^ The fill that may be added to the Shape.
             -> Shape
             -> Shape
 updateShape fill r =
-    r { shapeFill = if null (shapeFill r) || shapeFill r == "none"
+    r { shapeFill = if T.null (shapeFill r) || shapeFill r == T.pack "none"
                     then fill
                     else shapeFill r,
-        shapeType_ = if fill == "#888888" then Hybrid
+        shapeType_ = if fill == T.pack "#888888" then Hybrid
                      else case shapeType_ r of
                               Hybrid   -> Hybrid
                               BoolNode -> BoolNode

@@ -67,10 +67,10 @@ buildRect texts entity elementId =
                             0  -- no tolerance for text intersection
                             . textPos
                             ) texts
-        textString = concatMap textText rectTexts
+        textString = T.concat $ map textText rectTexts
         id_ = case shapeType_ entity of
               Hybrid -> T.pack $ 'h' : show elementId
-              Node -> T.map toLower . sanitizeId . T.pack $ textString
+              Node -> T.map toLower . sanitizeId $ textString
     in
         entity {shapeId_ = id_,
                 shapeText = rectTexts,
@@ -94,7 +94,7 @@ buildEllipses texts entity elementId =
                               ) texts
     in
         entity {shapeId_ = T.pack $ "bool" ++ show elementId,
-                shapeFill = "", -- TODO: necessary?
+                -- shapeFill = "", -- TODO: necessary?
                 shapeText = ellipseText,
                 shapeTolerance = 20} -- TODO: necessary?
     where
