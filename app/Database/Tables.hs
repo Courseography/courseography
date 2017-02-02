@@ -167,8 +167,8 @@ Path json
     deriving Show
 
 FacebookTest
-    fId String
-    testString String
+    fId T.Text
+    testString T.Text
     deriving Show
 
 Post
