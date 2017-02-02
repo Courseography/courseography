@@ -25,7 +25,7 @@ import Text.Blaze.Svg11 ((!))
 import qualified Text.Blaze.Svg11 as S
 import qualified Text.Blaze.Svg11.Attributes as A
 import Text.Blaze.Svg.Renderer.String (renderSvg)
-import Text.Blaze.Internal (stringValue)
+import Text.Blaze.Internal (stringValue, textValue)
 import Text.Blaze (toMarkup)
 import Css.Constants (theoryDark,
                       seDark,
@@ -47,7 +47,7 @@ import Config (databasePath)
 -- | This is the main function that retrieves a stored graph
 -- from the database and creates a new SVG file for it.
 buildSVG :: String               -- ^ The name of the graph that is being built.
-         -> M.Map String String  -- ^ A map of courses that holds the course
+         -> M.Map T.Text String  -- ^ A map of courses that holds the course
                                  --   ID as a key, and the data-active
                                  --   attribute as the course's value.
                                  --   The data-active attribute is used in the
@@ -120,7 +120,7 @@ buildSVG graphName courseMap filename styled =
 
 -- | This function does the heavy lifting to actually create
 -- a new SVG value given the graph components.
-makeSVGDoc :: M.Map String String
+makeSVGDoc :: M.Map T.Text String
            -> [Shape] -- ^ A list of the Nodes that will be included
                       --   in the graph. This includes both Hybrids and
                       --   course nodes.
@@ -182,7 +182,7 @@ makeSVGDefs =
                             ! A.fill "black"
 
 -- | Converts a node to SVG.
-rectToSVG :: Bool -> M.Map String String -> Shape -> S.Svg
+rectToSVG :: Bool -> M.Map T.Text String -> Shape -> S.Svg
 rectToSVG styled courseMap rect
     | shapeFill rect == "none" = S.rect
     | otherwise =
@@ -193,7 +193,7 @@ rectToSVG styled courseMap rect
             class_ = case shapeType_ rect of
                          Node -> "node"
                          Hybrid -> "hybrid"
-        in S.g ! A.id_ (stringValue $ sanitizeId $ shapeId_ rect)
+        in S.g ! A.id_ (textValue $ sanitizeId $ shapeId_ rect)
                ! A.class_ (stringValue class_)
                ! S.customAttribute "data-group" (stringValue
                                                  (getArea (shapeId_ rect)))
@@ -223,7 +223,7 @@ rectToSVG styled courseMap rect
 -- | Converts an ellipse to SVG.
 ellipseToSVG :: Bool -> Shape -> S.Svg
 ellipseToSVG styled ellipse =
-    S.g ! A.id_ (stringValue (shapeId_ ellipse))
+    S.g ! A.id_ (textValue (shapeId_ ellipse))
         ! A.class_ "bool" $ do
             S.ellipse ! A.cx (stringValue . show . fst $ shapePos ellipse)
                       ! A.cy (stringValue . show . snd $ shapePos ellipse)
@@ -282,13 +282,13 @@ textToSVG styled type_ xPos' text =
 -- | Converts a path to SVG.
 edgeToSVG :: Bool -> Path -> S.Svg
 edgeToSVG styled path =
-    S.path ! A.id_ (stringValue $ "path" ++ pathId_ path)
+    S.path ! A.id_ (textValue $ T.append (T.pack "path") (pathId_ path))
            ! A.class_ "path"
            ! A.d (stringValue $ 'M' : buildPathString (pathPoints path))
            ! A.markerEnd "url(#arrow)"
-           ! S.customAttribute "data-source-node" (stringValue $ sanitizeId
+           ! S.customAttribute "data-source-node" (textValue $ sanitizeId
                                                           $ pathSource path)
-           ! S.customAttribute "data-target-node" (stringValue $ sanitizeId
+           ! S.customAttribute "data-target-node" (textValue $ sanitizeId
                                                           $ pathTarget path)
            ! if styled
              then
@@ -303,7 +303,7 @@ edgeToSVG styled path =
 -- | Converts a region to SVG.
 regionToSVG :: Bool -> Path -> S.Svg
 regionToSVG styled path =
-    S.path ! A.id_ (stringValue $ "region" ++ pathId_ path)
+    S.path ! A.id_ (textValue $ T.append (T.pack "region") (pathId_ path))
            ! A.class_ "region"
            ! A.d (stringValue $ 'M' : buildPathString (pathPoints path))
            ! A.style (stringValue $ "fill:" ++ pathFill path ++ ";" ++
@@ -317,7 +317,7 @@ regionToSVG styled path =
 
 -- | Gets a tuple from areaMap where id_ is in the list of courses for that
 -- tuple.
-getTuple :: String -- ^ The course's ID.
+getTuple :: T.Text -- ^ The course's ID.
          -> Maybe (T.Text, String)
 getTuple id_
     | M.null tuples = Nothing
@@ -326,13 +326,13 @@ getTuple id_
 
 -- | Gets an area from areaMap where id_ is in the list of courses for the
 -- corresponding tuple.
-getArea :: String -> String
+getArea :: T.Text -> String
 getArea id_ = maybe "" snd $ getTuple id_
 
 -- | A list of tuples that contain disciplines (areas), fill values, and courses
 -- that are in the areas.
 -- TODO: Remove colour dependencies, and probably the whole map.
-areaMap :: M.Map [String] (T.Text, String)
+areaMap :: M.Map [T.Text] (T.Text, String)
 areaMap =  M.fromList
            [
            (["csc165", "csc236", "csc240", "csc263", "csc265",

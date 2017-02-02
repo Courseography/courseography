@@ -4,6 +4,7 @@ module Export.GetImages
 
 import Export.TimetableImageCreator (renderTable, renderTableHelper, times)
 import qualified Data.Map as M
+import qualified Data.Text as T
 import System.Random
 import Svg.Generator
 import Export.ImageConversion
@@ -26,7 +27,7 @@ getActiveGraphImage req = do
         graphName =
             replace "-" " " $
                 maybe "Computer-Science" cookieValue (M.lookup "active-graph" cookies)
-    getGraphImage graphName (M.map cookieValue cookies)
+    getGraphImage graphName (M.mapKeys T.pack $ M.map cookieValue cookies)
 
 -- | If there are selected lectures available, an timetable image of
 -- those lectures in specified session is created.
@@ -114,7 +115,7 @@ generateTimetableImg schedule courseSession = do
 
 -- | Creates an image, and returns the name of the svg used to create the
 -- image and the name of the image
-getGraphImage :: String -> M.Map String String -> IO (String, String)
+getGraphImage :: String -> M.Map T.Text String -> IO (String, String)
 getGraphImage graphName courseMap = do
     rand <- randomName
     let svgFilename = rand ++ ".svg"

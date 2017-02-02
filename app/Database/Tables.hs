@@ -144,12 +144,12 @@ Text json
 
 Shape json
     graph GraphId
-    id_ String
+    id_ T.Text
     pos Point
     width Double
     height Double
     fill String
-    stroke String
+    stroke T.Text
     text [Text]
     tolerance Double
     type_ ShapeType
@@ -157,13 +157,13 @@ Shape json
 
 Path json
     graph GraphId
-    id_ String
+    id_ T.Text
     points [Point]
     fill String
     stroke String
     isRegion Bool
-    source String
-    target String
+    source T.Text
+    target T.Text
     deriving Show
 
 FacebookTest

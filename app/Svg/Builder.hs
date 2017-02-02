@@ -23,6 +23,7 @@ import Data.Char (toLower)
 import Data.List (find)
 import Database.Tables
 import Database.DataType
+import qualified Data.Text as T
 
 -- * Builder functions
 
@@ -36,7 +37,7 @@ buildPath :: [Shape] -- ^ Node elements.
           -> Path
 buildPath rects ellipses entity elementId
     | pathIsRegion entity =
-          entity {pathId_ = pathId_ entity ++ ('p' : show elementId),
+          entity {pathId_ = T.concat [pathId_ entity, T.singleton 'p', T.pack $ show elementId],
                   pathSource = "",
                   pathTarget = ""}
     | otherwise =
@@ -48,7 +49,7 @@ buildPath rects ellipses entity elementId
                                (filter (\r -> shapeId_ r /= sourceNode) rects ++
                                 ellipses)
           in
-              entity {pathId_ = 'p' : show elementId,
+              entity {pathId_ = T.pack $ 'p' : show elementId,
                       pathSource = sourceNode,
                       pathTarget = targetNode}
 
@@ -68,8 +69,8 @@ buildRect texts entity elementId =
                             ) texts
         textString = concatMap textText rectTexts
         id_ = case shapeType_ entity of
-              Hybrid -> 'h' : show elementId
-              Node -> map toLower $ sanitizeId textString
+              Hybrid -> T.pack $ 'h' : show elementId
+              Node -> T.map toLower . sanitizeId . T.pack $ textString
     in
         entity {shapeId_ = id_,
                 shapeText = rectTexts,
@@ -92,7 +93,7 @@ buildEllipses texts entity elementId =
                               . textPos
                               ) texts
     in
-        entity {shapeId_ = "bool" ++ show elementId,
+        entity {shapeId_ = T.pack $ "bool" ++ show elementId,
                 shapeFill = "", -- TODO: necessary?
                 shapeText = ellipseText,
                 shapeTolerance = 20} -- TODO: necessary?
@@ -146,7 +147,7 @@ intersectsWithPoint point shape
 
 -- | Returns the ID of the first shape in a list that intersects
 -- with the given point.
-getIntersectingShape :: Point -> [Shape] -> String
+getIntersectingShape :: Point -> [Shape] -> T.Text
 getIntersectingShape point shapes =
     maybe "" shapeId_ $ find (intersectsWithPoint point) shapes
 
@@ -158,5 +159,5 @@ intersectsWithShape shapes text =
 -- ** Other helpers
 
 -- | Strips disallowed characters from string for DOM id
-sanitizeId :: String -> String
-sanitizeId = filter (\c -> not $ elem c (",()/<>% " :: String))
+sanitizeId :: T.Text -> T.Text
+sanitizeId = T.filter (\c -> not $ elem c (",()/<>% " :: String))
