@@ -146,15 +146,17 @@ FacebookTest
     deriving Show
 
 Post
-    name T.Text
+    name PostType
     department T.Text
     code T.Text
+    -- Primary code
     description T.Text
     deriving Show
 
 PostCategory
     name T.Text
     postCode T.Text
+    -- Foreign Post fkpost postCod
     deriving Show
 |]
 

@@ -57,12 +57,12 @@ findPostType = do
    P.many1 P.letter
 
 getDepartmentName :: Parser String
-getDepartmentName = 
+getDepartmentName =
     (P.try (parseUntil ((P.try (P.lookAhead (P.string " Specialist"))) <|>
-                        (P.try (P.lookAhead (P.string " Major"))) <|> 
-                        (P.try (P.lookAhead (P.string " Minor"))))))   
+                        (P.try (P.lookAhead (P.string " Major"))) <|>
+                        (P.try (P.lookAhead (P.string " Minor"))))))
 
-getPostType :: Parser String 
+getPostType :: Parser String
 getPostType = do
     P.spaces
     ((P.try (P.string "Specialist")) <|>

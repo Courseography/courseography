@@ -17,3 +17,10 @@ derivePersistField "ShapeType"
 
 instance ToJSON ShapeType
 instance FromJSON ShapeType
+
+data PostType = Specialist | Major | Minor
+ deriving (Show, Read, Eq, Generic)
+derivePersistField "PostType"
+
+instance ToJSON PostType
+instance FromJSON PostType
