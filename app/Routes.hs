@@ -20,14 +20,14 @@ routes staticDir aboutContents privacyContents = [
     ("about", aboutResponse aboutContents),
     ("privacy", privacyResponse privacyContents),
     ("static", serveDirectory DisableBrowsing [] staticDir),
-    ("course", look "name" >>= retrieveCourse),
+    ("course", lookText' "name" >>= retrieveCourse),
     ("all-courses", liftIO allCourses),
     ("graphs", liftIO queryGraphs),
-    ("course-info", look "dept" >>= courseInfo),
+    ("course-info", lookText' "dept" >>= courseInfo),
     ("depts", liftIO deptList),
     ("timesearch", searchResponse),
     ("calendar", lookCookieValue "selected-lectures" >>= calendarResponse),
-    ("get-json-data", look "graphName" >>= \graphName -> liftIO $ getGraphJSON graphName),
-    ("loading", look "size" >>= loadingResponse),
-    ("save-json", look "jsonData" >>= \jsonStr -> look "nameData" >>= \nameStr -> liftIO $ saveGraphJSON jsonStr nameStr)
+    ("get-json-data", lookText' "graphName" >>= \graphName -> liftIO $ getGraphJSON graphName),
+    ("loading", lookText' "size" >>= loadingResponse),
+    ("save-json", lookBS "jsonData" >>= \jsonStr -> lookText' "nameData" >>= \nameStr -> liftIO $ saveGraphJSON jsonStr nameStr)
     ]

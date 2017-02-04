@@ -24,13 +24,13 @@ import Database.Tables
 import qualified Data.Aeson as Aeson
 
 -- | Inserts SVG graph data into Texts, Shapes, and Paths tables
-saveGraphJSON :: String -> String -> IO Response
+saveGraphJSON :: BSL.ByteString -> T.Text -> IO Response
 saveGraphJSON jsonStr nameStr = do
-    let jsonObj = Aeson.decode $ BSL.pack jsonStr
+    let jsonObj = Aeson.decode jsonStr
     case jsonObj of
         Nothing -> return $ toResponse ("Error" :: String)
         Just (SvgJSON texts shapes paths) -> do
-            _ <- runSqlite databasePath $ insertGraph (T.pack nameStr) texts shapes paths
+            _ <- runSqlite databasePath $ insertGraph nameStr texts shapes paths
             return $ toResponse $ ("Success" :: String)
     where
         insertGraph :: T.Text -> [Text] -> [Shape] -> [Path] -> SqlPersistM ()

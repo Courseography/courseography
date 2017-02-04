@@ -17,6 +17,7 @@ import Data.List (partition)
 import Database.Persist.Sqlite (runSqlite)
 import Config (databasePath)
 import Data.Fixed (mod')
+import Happstack.Server (readCookieValue)
 
 -- | If there is an active graph available, an image of that graph is created,
 -- otherwise the Computer Science graph is created as a default.
@@ -27,6 +28,7 @@ getActiveGraphImage req = do
         graphName =
             replace "-" " " $
                 maybe "Computer-Science" cookieValue (M.lookup "active-graph" cookies)
+    -- getGraphImage graphName (M.mapKeys readCookieValue $ M.map cookieValue cookies)
     getGraphImage graphName (M.mapKeys T.pack $ M.map cookieValue cookies)
 
 -- | If there are selected lectures available, an timetable image of

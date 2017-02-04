@@ -212,7 +212,7 @@ rectToSVG styled courseMap rect
                          ! A.y (stringValue . show . snd $ shapePos rect)
                          ! A.width (stringValue . show $ shapeWidth rect)
                          ! A.height (stringValue . show $ shapeHeight rect)
-                         ! A.style (textValue $ T.concat [T.pack "fill:", shapeFill rect, T.pack ";"])
+                         ! A.style (textValue $ T.concat ["fill:", shapeFill rect, ";"])
                   sequence_ $ map
                       (textToSVG
                           styled
@@ -252,7 +252,7 @@ textToSVG styled type_ xPos' text =
         (xPos, yPos) = textPos text
         align = case type_ of
                        Region -> textAlign text
-                       _ -> T.pack "middle"
+                       _ -> "middle"
 
         fontSize = case type_ of
             Hybrid -> hybridFontSize
@@ -282,9 +282,9 @@ textToSVG styled type_ xPos' text =
 -- | Converts a path to SVG.
 edgeToSVG :: Bool -> Path -> S.Svg
 edgeToSVG styled path =
-    S.path ! A.id_ (textValue $ T.append (T.pack "path") (pathId_ path))
+    S.path ! A.id_ (textValue . T.append "path" . pathId_ $ path)
            ! A.class_ "path"
-           ! A.d (stringValue $ 'M' : buildPathString (pathPoints path))
+           ! A.d (textValue . T.cons 'M' . buildPathString . pathPoints $ path)
            ! A.markerEnd "url(#arrow)"
            ! S.customAttribute "data-source-node" (textValue $ sanitizeId
                                                           $ pathSource path)
@@ -294,23 +294,23 @@ edgeToSVG styled path =
              then
                  mappend
                      (A.strokeWidth "2px") $
-                     A.style (textValue $ T.concat [T.pack "fill:",
+                     A.style (textValue $ T.concat ["fill:",
                           pathFill path,
-                          T.pack ";fill-opacity:1;"])
+                          ";fill-opacity:1;"])
              else
                  mempty
 
 -- | Converts a region to SVG.
 regionToSVG :: Bool -> Path -> S.Svg
 regionToSVG styled path =
-    S.path ! A.id_ (textValue $ T.append (T.pack "region") (pathId_ path))
+    S.path ! A.id_ (textValue $ T.append ("region") (pathId_ path))
            ! A.class_ "region"
-           ! A.d (stringValue $ 'M' : buildPathString (pathPoints path))
-           ! A.style (textValue $ T.concat [T.pack "fill:", pathFill path, T.pack ";",
+           ! A.d (textValue . T.cons 'M' . buildPathString . pathPoints $ path)
+           ! A.style (textValue $ T.concat ["fill:", pathFill path, ";",
                       if styled
                       then
-                          T.pack ";opacity:0.7;fill-opacity:0.58;"
-                      else T.pack ""])
+                          ";opacity:0.7;fill-opacity:0.58;"
+                      else ""])
 
 
 -- ** Hard-coded map definitions (should be removed, eventually)

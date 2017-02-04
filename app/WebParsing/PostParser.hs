@@ -11,7 +11,6 @@ import Text.HTML.TagSoup.Match
 import qualified Text.Parsec as P
 import WebParsing.ParsecCombinators (getCourseFromTag, generalCategoryParser, parseCategory,
     postInfoParser)
-import Database.DataType
 
 fasCalendarURL :: String
 fasCalendarURL = "http://calendar.artsci.utoronto.ca/"
@@ -76,8 +75,7 @@ generalParser tags firstCourse postCode = do
     let parsed = P.parse (generalCategoryParser firstCourse) "Failed." (innerText tags)
     case parsed of
         Right (description, departmentName, postType, categories) -> do
-            -- insertPost (T.pack departmentName) (T.pack postType) postCode (T.pack description)
-            insertPost (T.pack departmentName) (postTypeParser postType) postCode (T.pack description)
+            insertPost (T.pack departmentName) (T.pack postType) postCode (T.pack description)
             addPostCategoriesToDatabase (T.unpack postCode) categories
         Left message -> do
             print message
@@ -88,8 +86,7 @@ liParser tags liPartitions firstCourse postCode = do
         postInfo = P.parse (postInfoParser firstCourse) "Failed." (innerText tags)
     case postInfo of
         Right (description, departmentName, postType) -> do
-            -- insertPost (T.pack departmentName) (T.pack postType) postCode (T.pack description)
-            insertPost (T.pack departmentName) (postTypeParser postType) postCode (T.pack description)
+            insertPost (T.pack departmentName) (T.pack postType) postCode (T.pack description)
             addPostCategoriesToDatabase (T.unpack postCode) categories
         Left message -> do
             print message
@@ -100,9 +97,3 @@ parseLi liPartition = do
     case parsed of
         Right category -> category
         Left message -> ""
-
-postTypeParser :: String -> PostType
-postTypeParser "Specialist" = Specialist
-postTypeParser "Major" = Major
-postTypeParser "Minor" = Minor
-postTypeParser _ = undefined

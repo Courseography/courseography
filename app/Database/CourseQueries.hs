@@ -84,8 +84,8 @@ buildAllSessions entityListL entityListT =
 
 -- | Takes a course code (e.g. \"CSC108H1\") and sends a JSON representation
 -- of the course as a response.
-retrieveCourse :: String -> ServerPart Response
-retrieveCourse = liftIO . queryCourse . T.pack
+retrieveCourse :: T.Text -> ServerPart Response
+retrieveCourse = liftIO . queryCourse
 
 -- | Queries the database for all information about @course@, constructs a JSON object
 -- representing the course and returns the appropriate JSON response.
@@ -165,10 +165,10 @@ buildSession lecs tuts =
 
 -- | Looks up a graph using its title then gets the Shape, Text and Path elements
 -- for rendering graph (returned as JSON).
-getGraphJSON :: String -> IO Response
+getGraphJSON :: T.Text -> IO Response
 getGraphJSON graphName =
     runSqlite databasePath $ do
-        graphEnt :: (Maybe (Entity Graph)) <- selectFirst [GraphTitle ==. T.pack graphName] []
+        graphEnt :: (Maybe (Entity Graph)) <- selectFirst [GraphTitle ==. graphName] []
         case graphEnt of
             Nothing -> return $ createJSONResponse $ object ["texts" .= ([] :: [Text]),
                                                              "shapes" .= ([] :: [Shape]),
@@ -224,17 +224,17 @@ allCourses = do
   return $ toResponse response
 
 -- | Returns all course info for a given department.
-courseInfo :: String -> ServerPart Response
+courseInfo :: T.Text -> ServerPart Response
 courseInfo dept = liftM createJSONResponse (getDeptCourses dept)
 
 -- | Returns all course info for a given department.
-getDeptCourses :: MonadIO m => String -> m [Course]
+getDeptCourses :: MonadIO m => T.Text -> m [Course]
 getDeptCourses dept =
     liftIO $ runSqlite databasePath $ do
         courses :: [Entity Courses]   <- selectList [] []
         lecs    :: [Entity Lecture]  <- selectList [] []
         tuts    :: [Entity Tutorial] <- selectList [] []
-        let c = filter (startswith dept . T.unpack . coursesCode) $ map entityVal courses
+        let c = filter (T.isPrefixOf dept . coursesCode) $ map entityVal courses
         mapM (buildTimes (map entityVal lecs) (map entityVal tuts)) c
     where
         lecByCode course = filter (\lec -> lectureCode lec == coursesCode course)

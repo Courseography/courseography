@@ -161,7 +161,7 @@ parseTextHelper key styles' trans textTags =
         newTrans = addTuples trans currTrans
         alignAttr = styleVal "text-anchor" newStyle
         align = if T.null alignAttr
-                then T.pack "begin"
+                then "begin"
                 else alignAttr
         fill = styleVal "fill" newStyle
 
@@ -215,7 +215,7 @@ parsePathHelper key trans pathTag =
         currTrans = parseTransform $ TS.fromAttrib "transform" $ pathTag
         realD = map (addTuples (addTuples trans currTrans)) $ parsePathD d
         fillAttr = styleVal "fill" styles'
-        isRegion = not (T.null fillAttr) && fillAttr /= T.pack "none"
+        isRegion = not (T.null fillAttr) && fillAttr /= "none"
     in
         if null d || null realD || (last d == 'z' && not isRegion)
     then []
@@ -281,7 +281,7 @@ styles tag =
         toStyle split =
             case splitOn ":" split of
             [n,v] -> (n, T.pack v)
-            _ -> ("",T.pack "")
+            _ -> ("","")
 
 
 -- | Gets a style attribute from a style string.
@@ -354,10 +354,10 @@ updateShape :: T.Text -- ^ The fill that may be added to the Shape.
             -> Shape
             -> Shape
 updateShape fill r =
-    r { shapeFill = if T.null (shapeFill r) || shapeFill r == T.pack "none"
+    r { shapeFill = if T.null (shapeFill r) || shapeFill r == "none"
                     then fill
                     else shapeFill r,
-        shapeType_ = if fill == T.pack "#888888" then Hybrid
+        shapeType_ = if fill == "#888888" then Hybrid
                      else case shapeType_ r of
                               Hybrid   -> Hybrid
                               BoolNode -> BoolNode
