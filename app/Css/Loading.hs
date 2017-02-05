@@ -5,7 +5,6 @@ module Css.Loading
 
 import Clay
 import Prelude hiding ((**))
-import Css.Constants
 
 {- loadingStyles
  - Generates all CSS for the draw page. -}
