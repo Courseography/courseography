@@ -5,7 +5,6 @@ module Css.Loading
 
 import Clay
 import Prelude hiding ((**))
-import Data.Monoid
 import Css.Constants
 
 {- loadingStyles
