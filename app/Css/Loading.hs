@@ -1,13 +1,18 @@
 {-# LANGUAGE OverloadedStrings #-}
 
+{-|
+    Module      : Css.Loading
+    Description : Defines CSS for the loading animation.
+
+Currently, the loading animation isn't utilized anywhere.
+-}
 module Css.Loading
     (loadingStyles) where
 
 import Clay
 import Prelude hiding ((**))
 
-{- loadingStyles
- - Generates all CSS for the draw page. -}
+-- |Defines all CSS for the loading animation.
 loadingStyles :: Css
 loadingStyles = do
     spinnerCSS
