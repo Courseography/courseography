@@ -9,8 +9,7 @@ import Data.List
 import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Match
 import qualified Text.Parsec as P
-import WebParsing.ParsecCombinators (getCourseFromTag, getPostType, getDepartmentName,
-    parsingAlgoOne)
+import WebParsing.ParsecCombinators (getCourseFromTag, parsingAlgoOne)
 
 fasCalendarURL :: String
 fasCalendarURL = "http://calendar.artsci.utoronto.ca/"
