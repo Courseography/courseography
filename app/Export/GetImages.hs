@@ -29,7 +29,7 @@ getActiveGraphImage req = do
             T.pack $
             replace "-" " " $
                 maybe "Computer-Science" cookieValue (M.lookup "active-graph" cookies)
-    getGraphImage graphName (M.mapKeys T.pack $ M.map cookieValue cookies)
+    getGraphImage graphName (M.mapKeys T.pack $ M.map (T.pack . cookieValue) cookies)
 
 -- | If there are selected lectures available, an timetable image of
 -- those lectures in specified session is created.
@@ -114,7 +114,7 @@ generateTimetableImg schedule courseSession = do
 
 -- | Creates an image, and returns the name of the svg used to create the
 -- image and the name of the image
-getGraphImage :: T.Text -> M.Map T.Text String -> IO (String, String)
+getGraphImage :: T.Text -> M.Map T.Text T.Text -> IO (String, String)
 getGraphImage graphName courseMap = do
     rand <- randomName
     let svgFilename = rand ++ ".svg"

@@ -47,7 +47,7 @@ import Config (databasePath)
 -- | This is the main function that retrieves a stored graph
 -- from the database and creates a new SVG file for it.
 buildSVG :: T.Text               -- ^ The name of the graph that is being built.
-         -> M.Map T.Text String  -- ^ A map of courses that holds the course
+         -> M.Map T.Text T.Text  -- ^ A map of courses that holds the course
                                  --   ID as a key, and the data-active
                                  --   attribute as the course's value.
                                  --   The data-active attribute is used in the
@@ -105,22 +105,22 @@ buildSVG graphName courseMap filename styled =
         keyAsInt :: PersistEntity a => Entity a -> Integer
         keyAsInt = fromIntegral . (\(PersistInt64 x) -> x) . head . keyToValues . entityKey
 
-        convertSelectionToStyle :: String -> String
+        convertSelectionToStyle :: T.Text -> T.Text
         convertSelectionToStyle courseStatus =
             if isSelected courseStatus
             then "stroke-width:4;"
             else "opacity:0.5;stroke-dasharray:8,5;"
 
-        isSelected :: String -> Bool
+        isSelected :: T.Text -> Bool
         isSelected courseStatus =
-            isPrefixOf "active" courseStatus ||
-            isPrefixOf "overridden" courseStatus
+            T.isPrefixOf "active" courseStatus ||
+            T.isPrefixOf "overridden" courseStatus
 
 -- * SVG Creation
 
 -- | This function does the heavy lifting to actually create
 -- a new SVG value given the graph components.
-makeSVGDoc :: M.Map T.Text String
+makeSVGDoc :: M.Map T.Text T.Text
            -> [Shape] -- ^ A list of the Nodes that will be included
                       --   in the graph. This includes both Hybrids and
                       --   course nodes.
@@ -182,7 +182,7 @@ makeSVGDefs =
                             ! A.fill "black"
 
 -- | Converts a node to SVG.
-rectToSVG :: Bool -> M.Map T.Text String -> Shape -> S.Svg
+rectToSVG :: Bool -> M.Map T.Text T.Text -> Shape -> S.Svg
 rectToSVG styled courseMap rect
     | shapeFill rect == "none" = S.rect
     | otherwise =
@@ -194,15 +194,15 @@ rectToSVG styled courseMap rect
                          Node -> "node"
                          Hybrid -> "hybrid"
         in S.g ! A.id_ (textValue $ sanitizeId $ shapeId_ rect)
-               ! A.class_ (stringValue class_)
-               ! S.customAttribute "data-group" (stringValue
+               ! A.class_ (textValue class_)
+               ! S.customAttribute "data-group" (textValue
                                                  (getArea (shapeId_ rect)))
                ! S.customAttribute "text-rendering" "geometricPrecision"
                ! S.customAttribute "shape-rendering" "geometricPrecision"
                -- TODO: Remove the reliance on the colours here
                ! (if styled || class_ /= "hybrid"
                   then
-                      A.style (stringValue style)
+                      A.style (textValue style)
                   else
                       mempty)
                $
@@ -318,7 +318,7 @@ regionToSVG styled path =
 -- | Gets a tuple from areaMap where id_ is in the list of courses for that
 -- tuple.
 getTuple :: T.Text -- ^ The course's ID.
-         -> Maybe (T.Text, String)
+         -> Maybe (T.Text, T.Text)
 getTuple id_
     | M.null tuples = Nothing
     | otherwise   = Just $ snd $ M.elemAt 0 tuples
@@ -326,13 +326,13 @@ getTuple id_
 
 -- | Gets an area from areaMap where id_ is in the list of courses for the
 -- corresponding tuple.
-getArea :: T.Text -> String
+getArea :: T.Text -> T.Text
 getArea id_ = maybe "" snd $ getTuple id_
 
 -- | A list of tuples that contain disciplines (areas), fill values, and courses
 -- that are in the areas.
 -- TODO: Remove colour dependencies, and probably the whole map.
-areaMap :: M.Map [T.Text] (T.Text, String)
+areaMap :: M.Map [T.Text] (T.Text, T.Text)
 areaMap =  M.fromList
            [
            (["csc165", "csc236", "csc240", "csc263", "csc265",
