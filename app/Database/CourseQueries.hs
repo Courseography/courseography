@@ -274,20 +274,20 @@ queryGraphs = runSqlite databasePath $ do
 
 -- | Queries the database for all times regarding a specific lecture for
 -- a @course@, returns a list of Time.
-getLectureTime :: (String, String, String) -> SqlPersistM [Time]
+getLectureTime :: (T.Text, T.Text, T.Text) -> SqlPersistM [Time]
 getLectureTime (lecCode, lecSection, lecSession) = do
-    maybeEntityLectures <- selectFirst [LectureCode ==. T.pack lecCode,
-                                        LectureSection ==. (T.pack $ take 1 lecSection ++ "EC" ++ drop 1 lecSection),
-                                        LectureSession ==. T.pack lecSession]
+    maybeEntityLectures <- selectFirst [LectureCode ==. lecCode,
+                                        LectureSection ==. T.concat [T.take 1 lecSection, "EC" , T.drop 1 lecSection],
+                                        LectureSession ==. lecSession]
                                        []
     return $ maybe [] (lectureTimes . entityVal) maybeEntityLectures
 
 -- | Queries the database for all times regarding a specific tutorial for
 -- a @course@, returns a list of Time.
-getTutorialTime :: (String, String, String) -> SqlPersistM [Time]
+getTutorialTime :: (T.Text, T.Text, T.Text) -> SqlPersistM [Time]
 getTutorialTime (tutCode, tutSection, tutSession) = do
-    maybeEntityTutorials <- selectFirst [TutorialCode ==. T.pack tutCode,
-                                         TutorialSection ==. Just (T.pack $ take 1 tutSection ++ "UT" ++ drop 1 tutSection),
-                                         TutorialSession ==. T.pack tutSession]
+    maybeEntityTutorials <- selectFirst [TutorialCode ==. tutCode,
+                                         TutorialSection ==. Just (T.concat [T.take 1 tutSection, "UT", T.drop 1 tutSection]),
+                                         TutorialSession ==. tutSession]
                                         []
     return $ maybe [] (tutorialTimes . entityVal) maybeEntityTutorials

@@ -51,7 +51,7 @@ buildPath rects ellipses entity elementId
                                (filter (\r -> shapeId_ r /= sourceNode) rects ++
                                 ellipses)
           in
-              entity {pathId_ = T.cons 'p' $ toText elementId,
+              entity {pathId_ = T.pack $ 'p' : show elementId,
                       pathSource = sourceNode,
                       pathTarget = targetNode}
 
@@ -71,7 +71,7 @@ buildRect texts entity elementId =
                             ) texts
         textString = T.concat $ map textText rectTexts
         id_ = case shapeType_ entity of
-              Hybrid -> T.cons 'h' $ toText elementId
+              Hybrid -> T.pack $ 'h' : show elementId
               Node -> T.map toLower . sanitizeId $ textString
     in
         entity {shapeId_ = id_,

@@ -7,6 +7,7 @@ import Control.Monad.IO.Class  (liftIO)
 import qualified Data.ByteString.Base64 as BEnc
 import Export.GetImages
 import Export.ImageConversion
+import qualified Data.Text as T
 
 -- | Returns an image of the graph requested by the user.
 graphImageResponse :: ServerPart Response
@@ -16,7 +17,7 @@ graphImageResponse = do
     liftIO $ returnImageData svgFilename imageFilename
 
 -- | Returns an image of the timetable requested by the user.
-timetableImageResponse :: String -> String -> ServerPart Response
+timetableImageResponse :: T.Text -> T.Text -> ServerPart Response
 timetableImageResponse courses session = do
     (svgFilename, imageFilename) <- liftIO $ getTimetableImage courses session
     liftIO $ returnImageData svgFilename imageFilename

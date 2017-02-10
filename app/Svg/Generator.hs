@@ -46,7 +46,7 @@ import Config (databasePath)
 
 -- | This is the main function that retrieves a stored graph
 -- from the database and creates a new SVG file for it.
-buildSVG :: String               -- ^ The name of the graph that is being built.
+buildSVG :: T.Text               -- ^ The name of the graph that is being built.
          -> M.Map T.Text String  -- ^ A map of courses that holds the course
                                  --   ID as a key, and the data-active
                                  --   attribute as the course's value.
@@ -59,7 +59,7 @@ buildSVG :: String               -- ^ The name of the graph that is being built.
          -> IO ()
 buildSVG graphName courseMap filename styled =
     runSqlite databasePath $ do
-        gIds        :: [Key Graph]    <- selectKeysList [GraphTitle ==. T.pack graphName] []
+        gIds        :: [Key Graph]    <- selectKeysList [GraphTitle ==. graphName] []
         let gId = if null gIds then toSqlKey 1 else head gIds
 
         sqlRects    :: [Entity Shape] <- selectList
