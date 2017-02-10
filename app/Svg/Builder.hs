@@ -17,9 +17,7 @@ module Svg.Builder
      buildEllipses,
      intersectsWithShape,
      buildPathString,
-     sanitizeId,
-     ToText,
-     toText) where
+     sanitizeId) where
 
 import Data.Char (toLower)
 import Data.List (find)
@@ -39,7 +37,7 @@ buildPath :: [Shape] -- ^ Node elements.
           -> Path
 buildPath rects ellipses entity elementId
     | pathIsRegion entity =
-          entity {pathId_ = T.concat [pathId_ entity, "p", toText elementId],
+          entity {pathId_ = T.concat [pathId_ entity, "p", T.pack $ show elementId],
                   pathSource = "",
                   pathTarget = ""}
     | otherwise =
@@ -95,7 +93,7 @@ buildEllipses texts entity elementId =
                               . textPos
                               ) texts
     in
-        entity {shapeId_ = T.append "bool" $ toText elementId,
+        entity {shapeId_ = T.pack $ "bool" ++ show elementId,
                 -- shapeFill = "", -- TODO: necessary?
                 shapeText = ellipseText,
                 shapeTolerance = 20} -- TODO: necessary?
@@ -110,7 +108,7 @@ buildEllipses texts entity elementId =
 buildPathString :: [Point] -> T.Text
 buildPathString d = T.unwords $ map toString d
     where
-        toString (a, b) = T.concat [toText a, ",", toText b]
+        toString (a, b) = T.pack $ show a ++ "," ++ show b
 
 
 -- * Intersection helpers
@@ -163,11 +161,3 @@ intersectsWithShape shapes text =
 -- | Strips disallowed characters from string for DOM id
 sanitizeId :: T.Text -> T.Text
 sanitizeId = T.filter (\c -> not $ elem c (",()/<>% " :: String))
-
--- | Type class can be converted to T.Text
-class ToText a where
-  toText :: (Show a) => a -> T.Text
-  toText x = T.pack (show x)
-
-instance ToText Integer
-instance ToText Double
