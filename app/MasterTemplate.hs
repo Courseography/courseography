@@ -6,12 +6,13 @@ module MasterTemplate
 import           Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
-import Text.Blaze.Internal (stringValue)
+import qualified Data.Text as T
+import Text.Blaze.Internal (textValue)
 import Config (enableFb, enableCdn)
 import Util.Blaze
 import Scripts (globalScripts)
 
-masterTemplate :: String -> [H.Html] -> H.Html -> H.Html -> H.Html
+masterTemplate :: T.Text -> [H.Html] -> H.Html -> H.Html -> H.Html
 masterTemplate title headers body scripts =
     H.html $ do
         H.head $ do
@@ -33,11 +34,11 @@ masterTemplate title headers body scripts =
 
 -- Insert the header of the Grid and Graph. This contains the year of the timetable, and
 -- a link back to the Graph.
-header :: String -> H.Html
+header :: T.Text -> H.Html
 header page =
     H.nav ! A.class_ "row header" $ do
         H.img ! A.id "courseography-header" ! A.src "static/res/img/logo.png"
-             ! H.customAttribute "context" (stringValue page)
+             ! H.customAttribute "context" (textValue page)
         H.ul ! A.id "nav-links" $ do
             H.li $ toLink "graph" "Graph"
             H.li $ toLink "grid" "Grid"
