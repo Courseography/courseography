@@ -14,14 +14,14 @@ module Database.Requirement
 import qualified Data.String as S
 import qualified Data.List as L
 
-data ProgramReq = PRGREQ String [Req]
+data ProgramReq = PRGREQ String [Req] deriving Eq
 
 -- Returns a well formatted String representing a program requirement for specified program.
 instance Show ProgramReq where
     show (PRGREQ program reqs) = "Program Requirements for " ++ program
                                ++ ":\n" ++ L.intercalate "\n" (map show reqs)
 
-data CourseReq = CRSREQ String Req Req Req
+data CourseReq = CRSREQ String Req Req Req deriving Eq
 
 instance Show CourseReq where
     show (CRSREQ course creq excl preq) = "Corequisites for " ++ course ++ ":\n"
@@ -31,7 +31,7 @@ instance Show CourseReq where
                                         ++ show preq ++ "\n"
 
 -- for now J seems to be most readable and convenient value constructor for satisfying rec structure.
-data Req = J String | AND [Req] | OR [Req] | FROM String Req | GRADE String Req | RAW String
+data Req = J String | AND [Req] | OR [Req] | FROM String Req | GRADE String Req | RAW String deriving Eq
 
 instance Show Req where
     show (J course) = course
