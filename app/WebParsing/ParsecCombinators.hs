@@ -13,6 +13,7 @@ import qualified Text.Parsec as P
 import Text.Parsec ((<|>))
 import qualified Data.Text as T
 import Text.Parsec.String (Parser)
+import Database.Tables
 
 getCourseFromTag :: String -> String
 getCourseFromTag courseTag =
@@ -27,22 +28,22 @@ findCourseFromTag = do
     parseUntil (P.char '#')
     P.many1 P.anyChar
 
-generalCategoryParser :: Maybe String -> Parser (T.Text, T.Text, T.Text, [String])
-generalCategoryParser firstCourse = do
-    (description, departmentName, postType) <- postInfoParser firstCourse
+generalCategoryParser :: Maybe String -> T.Text -> Parser (Post, [String])
+generalCategoryParser firstCourse postCode = do
+    post <- postInfoParser firstCourse postCode
     categories <- splitPrereqText
 
-    return (description, departmentName, postType, categories)
+    return (post, categories)
 
 -- Post Parsing
 
-postInfoParser :: Maybe String -> Parser (T.Text, T.Text, T.Text)
-postInfoParser firstCourse = do
+postInfoParser :: Maybe String -> T.Text -> Parser Post
+postInfoParser firstCourse postCode = do
     departmentName <- getDepartmentName
     postType <- getPostType
     description <- getRequirements firstCourse
 
-    return (T.pack description, T.pack departmentName, T.pack postType)
+    return $ Post (T.pack postType) (T.pack departmentName) postCode (T.pack description)
 
 extractPostType :: String -> String
 extractPostType postCode = do

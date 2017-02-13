@@ -75,18 +75,18 @@ addCategoryToDatabase postCode category =
 categoryParser :: [Tag String] -> Maybe String -> T.Text -> [[Tag String]] -> SqlPersistM ()
 categoryParser tags firstCourse postCode liPartitions = do
     case parsed of
-        Right (description, departmentName, postType, categories) -> do
+        Right (post, categories) -> do
             addPostCategoriesToDatabase postCode categories
-            insert_ $ Post postType departmentName postCode description
+            insert_ $ post
         Left message -> do
             return ()
     where
         parsed = case liPartitions of 
-            [] -> P.parse (generalCategoryParser firstCourse) "Failed." (innerText tags)
+            [] -> P.parse (generalCategoryParser firstCourse postCode) "Failed." (innerText tags)
             partitions -> do
                 let categories = map parseLi partitions
-                (description, departmentName, postType) <- P.parse (postInfoParser firstCourse) "Failed." (innerText tags)
-                return (description, departmentName, postType, categories)
+                post <- P.parse (postInfoParser firstCourse postCode) "Failed." (innerText tags)
+                return (post, categories)
 
 parseLi :: [Tag String] -> String
 parseLi liPartition = do
