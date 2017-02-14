@@ -15,8 +15,11 @@ import WebParsing.ParsecCombinators (getCourseFromTag, parsingAlgoOne, generalCa
 fasCalendarURL :: String
 fasCalendarURL = "http://calendar.artsci.utoronto.ca/"
 
+failedString :: String
+failedString = "Failed."
+
 getPost :: String -> IO ()
-getPost str = do
+    getPost str = do
     let path = fasCalendarURL ++ str
     rsp <- simpleHTTP (getRequest path)
     body <- getResponseBody rsp
@@ -72,7 +75,7 @@ addCategoryToDatabase postCode category =
 
 generalParser :: [Tag String] -> Maybe String -> T.Text -> IO ()
 generalParser tags firstCourse postCode = do
-    let parsed = P.parse (generalCategoryParser firstCourse) "Failed." (innerText tags)
+    let parsed = P.parse (generalCategoryParser firstCourse) failedString (innerText tags)
     case parsed of
         Right (description, departmentName, postType, categories) -> do
             insertPost (T.pack departmentName) (T.pack postType) postCode (T.pack description)
@@ -83,7 +86,7 @@ generalParser tags firstCourse postCode = do
 liParser :: [Tag String] -> [[Tag String]] -> Maybe String -> T.Text -> IO ()
 liParser tags liPartitions firstCourse postCode = do
     let categories = map parseLi liPartitions
-        postInfo = P.parse (postInfoParser firstCourse) "Failed." (innerText tags)
+        postInfo = P.parse (postInfoParser firstCourse) failedString (innerText tags)
     case postInfo of
         Right (description, departmentName, postType) -> do
             insertPost (T.pack departmentName) (T.pack postType) postCode (T.pack description)
@@ -93,7 +96,7 @@ liParser tags liPartitions firstCourse postCode = do
 
 parseLi :: [Tag String] -> String
 parseLi liPartition = do
-    let parsed = P.parse (parseCategory False) "Failed." (innerText liPartition)
+    let parsed = P.parse (parseCategory False) failedString (innerText liPartition)
     case parsed of
         Right category -> category
         Left message -> ""
