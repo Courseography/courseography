@@ -21,9 +21,9 @@ import Data.Text as T (length, findIndex, take, unpack, reverse)
 import Data.Maybe (fromMaybe)
 
 
-distTableSetUpStr :: Char
+distTableSetUpStr :: String
 distTableSetUpStr = "Distribution table set up"
-breathTableSetUpStr :: Char
+breathTableSetUpStr :: String
 breathTableSetUpStr = "breadth table set up"
 
 
