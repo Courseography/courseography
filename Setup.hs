@@ -5,21 +5,20 @@ import Distribution.PackageDescription (emptyHookedBuildInfo)
 import System.Directory (doesFileExist, copyFile)
 
 main = defaultMainWithHooks
-        simpleUserHooks { postCopy = checkDependencies, preBuild = checkConfigExist }
+        simpleUserHooks { preBuild = preBuildChecks }
     where
         -- | Checks existence of Config.hs. If it doesn't exist, copy it from DevelopmentConfig.hs
-        checkConfigExist _ _ = do
+        -- And check that Imagemagick and LaTeX are available
+        preBuildChecks _ _ = do
+            mapM_ checkDependency ["convert", "pdflatex"]
             configExistbool <- doesFileExist "app/Config.hs"
             case configExistbool of
                 False -> copyFile "app/DevelopmentConfig.hs" "app/Config.hs" >> return emptyHookedBuildInfo
                 _     -> return emptyHookedBuildInfo
 
-        -- | check that Imagemagick and LaTeX are available
-        checkDependencies _ _ _ _ = do
-            mapM_ check ["convert -version", "pdflatex -version"]
-        check :: String -> IO ()
-        check dependency = do
-            result <- system $ dependency
+        checkDependency :: String -> IO ()
+        checkDependency dependency = do
+            result <- system $ dependency ++ " -version"
             case result of
                 ExitFailure 127 -> print ("Error Message: " ++ dependency ++ " is NOT available. Please add it in your path.") >> exitFailure
-                _               -> exitSuccess
+                _               -> print (dependency ++ " has been installed.")

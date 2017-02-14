@@ -12,7 +12,7 @@ module Svg.Database
 
 import Database.Persist.Sqlite
 import Database.Tables
-import Config (databasePath)
+
 
 -- | Insert a new graph into the database, returning the key of the new graph.
 insertGraph :: String   -- ^ The title of the graph that is being inserted.
