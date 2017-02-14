@@ -255,7 +255,7 @@ textToSVG styled type_ xPos' text =
                        _ -> "middle"
 
         fontSize = case type_ of
-            Hybrid -> hybridFontSize
+            Hybrid -> Integer
             BoolNode -> boolFontSize
             Region -> regionFontSize
             _ -> nodeFontSize
