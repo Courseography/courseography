@@ -23,6 +23,10 @@ import Data.Maybe (fromMaybe)
 
 distTableSetUpStr :: Char
 distTableSetUpStr = "Distribution table set up"
+breathTableSetUpStr :: Char
+breathTableSetUpStr = "breadth table set up"
+
+
 -- | Main function for setting up the database with course information.
 --
 -- TODO: Probably combine seeding of Distribution and Breadth tables,
@@ -36,7 +40,7 @@ setupDatabase = do
     setupDistributionTable
     print distTableSetUpStr
     setupBreadthTable
-    print "breadth table set up"
+    print breathTableSetUpStr
     parseAll
     seedVideos
 
