@@ -44,6 +44,10 @@ import qualified Data.Map.Strict as M
 import Data.Monoid (mempty, mappend, mconcat)
 import Config (databasePath)
 
+hybridFontSize :: Integer
+
+
+
 -- | This is the main function that retrieves a stored graph
 -- from the database and creates a new SVG file for it.
 buildSVG :: String               -- ^ The name of the graph that is being built.
@@ -102,7 +106,7 @@ buildSVG graphName courseMap filename styled =
                                                     height
         liftIO $ writeFile filename stringSVG :: SqlPersistM ()
     where
-        keyAsInt :: PersistEntity a => Entity a -> Integer
+        keyAsInt :: PersistEntity a => Entity a -> hybridFontSize
         keyAsInt = fromIntegral . (\(PersistInt64 x) -> x) . head . keyToValues . entityKey
 
         convertSelectionToStyle :: String -> String
