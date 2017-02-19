@@ -11,7 +11,7 @@ is either:  1) a 1-element list containig a course name
             2) an n-element list containing a list of course names.
 -}
 module WebParsing.PrerequisiteParsing
-    (parsePrerequisites) where
+    (parsePrerequisites, toPreExprs, toPrereq) where
 
 import Text.Regex.Posix ((=~))
 import qualified Data.Text as T

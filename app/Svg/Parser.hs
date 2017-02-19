@@ -19,8 +19,7 @@ module Svg.Parser
     (parsePrebuiltSvgs) where
 
 import Data.Maybe (fromMaybe, fromJust, isNothing)
-import Data.List.Split (splitOn)
-import qualified Text.HTML.TagSoup as TS
+import qualified Text.HTML.TagSoup as TS hiding (fromAttrib)
 import Database.Persist.Sqlite (runSqlite, SqlPersistM)
 import Text.HTML.TagSoup (Tag)
 import Control.Monad.IO.Class (liftIO)
@@ -31,6 +30,7 @@ import Config (graphPath, databasePath)
 import Text.Read (readMaybe)
 import Data.Char (isSpace)
 import qualified Data.Text as T
+import Data.Text.IO as T (readFile)
 
 parsePrebuiltSvgs :: IO ()
 parsePrebuiltSvgs = runSqlite databasePath $ do
@@ -63,7 +63,7 @@ performParse :: T.Text -- ^ The title of the graph.
              -> SqlPersistM ()
 performParse graphName inputFilename = do
     liftIO $ print $ "Parsing graph " ++ T.unpack graphName ++ " from file " ++ inputFilename
-    graphFile <- liftIO $ readFile (graphPath ++ inputFilename)
+    graphFile <- liftIO $ T.readFile (graphPath ++ inputFilename)
     let tags = TS.parseTags graphFile
         svgRoot = head $ filter (TS.isTagOpenName "svg") tags
         (graphWidth, graphHeight) = parseSize svgRoot
@@ -90,7 +90,7 @@ performParse graphName inputFilename = do
 
 -- | Parse the height and width dimensions from the SVG element, respectively,
 -- and return them as a tuple.
-parseSize :: Tag String   -- ^ The file contents of the graph that will be parsed.
+parseSize :: Tag T.Text   -- ^ The file contents of the graph that will be parsed.
           -> (Double, Double)
 parseSize svgRoot =
     (readAttr "width" svgRoot, readAttr "height" svgRoot)
@@ -102,7 +102,7 @@ parseSize svgRoot =
 -- three lists, each containing values corresponding to different graph elements
 -- (edges, nodes, and text).
 parseGraph ::  GraphId                 -- ^ The unique identifier of the graph.
-           -> [Tag String]             -- ^ The tags of the graph.
+           -> [Tag T.Text]             -- ^ The tags of the graph.
            -> ([Path],[Shape],[Text])
 parseGraph key tags =
     let gTags = TS.partitions (TS.isTagOpenName "g") tags
@@ -126,7 +126,7 @@ parseGraph key tags =
 -- | Create text values from g tags.
 -- This searches for nested tspan tags inside text tags using a recursive
 -- helper function.
-parseText :: GraphId -> [Tag String] -> [Text]
+parseText :: GraphId -> [Tag T.Text] -> [Text]
 parseText key tags =
     let trans = getTransform $ head tags
         textTags = TS.partitions (TS.isTagOpenName "text") tags
@@ -136,18 +136,18 @@ parseText key tags =
 
 
 parseTextHelper :: GraphId -- ^ The Text's corresponding graph identifier.
-                -> [(String, T.Text)]
+                -> [(T.Text, T.Text)]
                 -> Point
-                -> [Tag String]
+                -> [Tag T.Text]
                 -> [Text]
 parseTextHelper key styles' trans textTags =
     if null $ filter (TS.isTagOpenName "tspan") (tail textTags)
     then
         [Text key
-              (T.pack $ TS.fromAttrib "id" $ head textTags) -- TODO: Why are we setting an id?
+              (fromAttrib "id" $ head textTags) -- TODO: Why are we setting an id?
               (addTuples newTrans (readAttr "x" $ head textTags,
                                    readAttr "y" $ head textTags))
-              (T.pack $ TS.escapeHTML $ trim $ TS.innerText textTags)
+              (TS.escapeHTML $ trim $ TS.innerText textTags)
               align
               fill
         ]
@@ -168,7 +168,7 @@ parseTextHelper key styles' trans textTags =
 
 -- | Create a rectangle from a list of attributes.
 parseRect :: GraphId -- ^ The Rect's corresponding graph identifier.
-          -> [Tag String]
+          -> [Tag T.Text]
           -> [Shape]
 parseRect key tags =
     let
@@ -197,7 +197,7 @@ parseRect key tags =
 
 -- | Create a path from a list of tags.
 parsePath :: GraphId
-          -> [Tag String]
+          -> [Tag T.Text]
           -> [Path]
 parsePath key tags =
     concatMap (parsePathHelper key trans) (filter (TS.isTagOpenName "path") tags)
@@ -207,17 +207,17 @@ parsePath key tags =
 
 parsePathHelper :: GraphId -- ^ The Path's corresponding graph identifier.
                 -> Point
-                -> Tag String
+                -> Tag T.Text
                 -> [Path]
 parsePathHelper key trans pathTag =
-    let d = TS.fromAttrib "d" pathTag
+    let d = fromAttrib "d" pathTag
         styles' = styles pathTag
-        currTrans = parseTransform $ TS.fromAttrib "transform" $ pathTag
+        currTrans = parseTransform $ fromAttrib "transform" $ pathTag
         realD = map (addTuples (addTuples trans currTrans)) $ parsePathD d
         fillAttr = styleVal "fill" styles'
         isRegion = not (T.null fillAttr) && fillAttr /= "none"
     in
-        if null d || null realD || (last d == 'z' && not isRegion)
+        if T.null d || null realD || (T.last d == 'z' && not isRegion)
     then []
     else [updatePath fillAttr $
             Path key
@@ -232,7 +232,7 @@ parsePathHelper key trans pathTag =
 
 -- | Create an ellipse from an open ellipse tag.
 parseEllipse :: GraphId
-             -> [Tag String]
+             -> [Tag T.Text]
              -> [Shape]
 parseEllipse key tags =
     map (parseEllipseHelper key trans) (filter (TS.isTagOpenName "ellipse") tags)
@@ -242,7 +242,7 @@ parseEllipse key tags =
 
 parseEllipseHelper :: GraphId     -- ^ The related graph id.
                    -> Point       -- ^ The translation to apply.
-                   -> Tag String  -- ^ The open ellipse tag.
+                   -> Tag T.Text  -- ^ The open ellipse tag.
                    -> Shape
 parseEllipseHelper key (dx, dy) ellipseTag =
     Shape key
@@ -262,62 +262,62 @@ parseEllipseHelper key (dx, dy) ellipseTag =
 
 -- | Looks up an attribute value and convert to another type.
 -- Raises an exception if the attribute is not found.
-readAttr :: Read a => String    -- ^ The attribute's name.
-                   -> Tag String -- ^ The element that contains the attribute.
+readAttr :: Read a => T.Text    -- ^ The attribute's name.
+                   -> Tag T.Text -- ^ The element that contains the attribute.
                    -> a
 readAttr attr tag =
-    case readMaybe $ TS.fromAttrib attr tag of
+    case readMaybe $ T.unpack $ fromAttrib attr tag of
         Just x -> x
-        Nothing -> error $ "reading " ++ attr ++ " from " ++ show tag
+        Nothing -> error $ ("reading " ++ (T.unpack attr) ++ " from " ++ show tag)
 
 
 -- | Return a list of styles from the style attribute of an element.
 -- Every style has the form (name, value).
-styles :: Tag String -> [(String, T.Text)]
+styles :: Tag T.Text -> [(T.Text, T.Text)]
 styles tag =
-    let styleStr = TS.fromAttrib "style" tag
-    in map toStyle $ splitOn ";" styleStr
+    let styleStr = fromAttrib "style" tag
+    in map toStyle $ T.splitOn ";" styleStr
     where
         toStyle split =
-            case splitOn ":" split of
-            [n,v] -> (n, T.pack v)
+            case T.splitOn ":" split of
+            [n,v] -> (n, v)
             _ -> ("","")
 
 
 -- | Gets a style attribute from a style string.
-styleVal :: String -> [(String, T.Text)] -> T.Text
+styleVal :: T.Text -> [(T.Text, T.Text)] -> T.Text
 styleVal nameStr styleMap = fromMaybe "" $ lookup nameStr styleMap
 
 
 -- | Gets transform attribute from a tag, and parses it.
-getTransform :: Tag String -> Point
-getTransform = parseTransform . TS.fromAttrib "transform"
+getTransform :: Tag T.Text -> Point
+getTransform = parseTransform . fromAttrib "transform"
 
 
 -- | Parses a transform String into a tuple of Float.
-parseTransform :: String -> Point
+parseTransform :: T.Text -> Point
 parseTransform "" = (0,0)
 parseTransform transform =
-    let parsedTransform = splitOn "," $ drop 10 transform
-        xPos = readMaybe $ parsedTransform !! 0
-        yPos = readMaybe $ init $ parsedTransform !! 1
+    let parsedTransform = T.splitOn "," $ T.drop 10 transform
+        xPos = readMaybe $ T.unpack $ parsedTransform !! 0
+        yPos = readMaybe $ T.unpack $ T.init $ parsedTransform !! 1
     in
         if isNothing xPos || isNothing yPos
         then
-            error transform
+            error $ T.unpack transform
         else
             (fromJust xPos, fromJust yPos)
 
 
 -- | Parses a path's `d` attribute.
-parsePathD :: String -- ^ The 'd' attribute of an SVG path.
+parsePathD :: T.Text -- ^ The 'd' attribute of an SVG path.
            -> [Point]
 parsePathD d
-    | head d == 'm' = relCoords
+    | T.head d == 'm' = relCoords
     | otherwise = absCoords
     where
       lengthMoreThanOne x = length x > 1
-      coordList = filter lengthMoreThanOne (map (splitOn ",") $ splitOn " " d)
+      coordList = filter lengthMoreThanOne (map (T.splitOn ",") $ T.splitOn " " d)
       -- Converts a relative coordinate structure into an absolute one.
       relCoords = tail $ foldl (\x z -> x ++ [addTuples (convertToPoint z)
                                                         (last x)])
@@ -328,8 +328,8 @@ parsePathD d
 
       convertToPoint z =
         let
-            x = readMaybe (head z)
-            y = readMaybe (last z)
+            x = readMaybe (T.unpack $ head z)
+            y = readMaybe (T.unpack $ last z)
         in
             case (x, y) of
                 (Just m, Just n) -> (m, n)
@@ -369,6 +369,12 @@ addTuples :: Point -> Point -> Point
 addTuples (a,b) (c,d) = (a + c, b + d)
 
 -- | Helper to remove leading and trailing whitespace.
-trim :: String -> String
+trim :: T.Text -> T.Text
 trim = f . f
-    where f = reverse . dropWhile isSpace
+    where f = T.reverse . T.dropWhile isSpace
+
+-- | Extract an attribute, crashes if not a 'TagOpen'.
+--   Returns @\"\"@ if no attribute present.
+fromAttrib :: T.Text -> Tag T.Text -> T.Text
+fromAttrib att (TS.TagOpen _ atts) = fromMaybe T.empty $ lookup att atts
+fromAttrib _ x = error $ show x ++ " is not a TagText"
