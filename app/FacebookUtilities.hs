@@ -113,7 +113,7 @@ insertIdIntoDb :: FB.Id -> IO ()
 insertIdIntoDb id_ =
     runSqlite fbdatabasePath $ do
         runMigration migrateAll
-        insert_ $ FacebookTest (show id_) "Test String"
+        insert_ $ FacebookTest (T.pack (show id_)) "Test String"
         liftIO $ print "Inserted..."
         let sql = "SELECT * FROM facebook_test"
         rawQuery sql [] $$ CL.mapM_ (liftIO . print)
