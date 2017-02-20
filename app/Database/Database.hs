@@ -2,7 +2,8 @@
  OverloadedStrings, TypeFamilies #-}
 
 {-|
-Description: Main module for database course seeding.
+    Module      : Database.Database
+    Description : Main module for database course seeding.
 
 The main module for parsing course information from the web and
 inserting it into the database. Run when @cabal run database@ is executed.
