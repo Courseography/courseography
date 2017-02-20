@@ -9,30 +9,31 @@ module Scripts (
 import           Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
+import qualified Data.Text as T
 import Util.Blaze
 import Config (enableFb, enableCdn)
 
 -- | Scripts that are loaded on every page.
-globalScripts :: [String]
+globalScripts :: [T.Text]
 globalScripts =
     concat [jQueryScripts, reactScripts, analyticsScripts] ++
     if enableFb then facebookScripts else []
 
-facebookScripts :: [String]
+facebookScripts :: [T.Text]
 facebookScripts = [
     "/static/js/common/facebook/facebook_login.js",
     "/static/js/common/facebook/facebook_image.js",
     "/static/js/common/facebook/facebook_modal.js"
     ]
 
-jQueryScripts :: [String]
+jQueryScripts :: [T.Text]
 jQueryScripts = if enableCdn
                 then ["https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js",
                       "https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"]
                 else ["/static/js/vendor/jquery.min.1.10.2.js",
                       "/static/js/vendor/jquery-ui.min.1.10.4.js"]
 
-reactScripts :: [String]
+reactScripts :: [T.Text]
 reactScripts = if enableCdn
                then ["https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react.js",
                      "https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react-dom.js",
@@ -41,7 +42,7 @@ reactScripts = if enableCdn
                      "/static/js/vendor/react-dom.0.14.3.js",
                      "/static/js/vendor/browser.5.8.34.js"]
 
-analyticsScripts :: [String]
+analyticsScripts :: [T.Text]
 analyticsScripts = [
     "/static/js/common/google_analytics.js"
     ]

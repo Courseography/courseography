@@ -11,7 +11,7 @@ import Config (databasePath)
 import Database.Tables
 import Database.Persist.Sqlite (insert_, runMigration, runSqlite, SqlPersistM)
 import qualified Text.Parsec as P
-import WebParsing.ParsecCombinators (getCourseFromTag, generalCategoryParser, parseCategory, 
+import WebParsing.ParsecCombinators (getCourseFromTag, generalCategoryParser, parseCategory,
     postInfoParser)
 
 fasCalendarURL :: String
@@ -25,7 +25,7 @@ getPost str = do
     let tags = filter isNotComment $ parseTags body
         postsSoup = secondH2 tags
         posts = partitions isPostName postsSoup
-    runSqlite databasePath $ do 
+    runSqlite databasePath $ do
         runMigration migrateAll
         mapM_ addPostToDatabase posts
     print $ "parsing " ++ str
@@ -81,7 +81,7 @@ categoryParser tags firstCourse postCode liPartitions = do
         Left message -> do
             return ()
     where
-        parsed = case liPartitions of 
+        parsed = case liPartitions of
             [] -> P.parse (generalCategoryParser firstCourse postCode) "Failed." (innerText tags)
             partitions -> do
                 let categories = map parseLi partitions
@@ -91,6 +91,6 @@ categoryParser tags firstCourse postCode liPartitions = do
 parseLi :: [Tag String] -> String
 parseLi liPartition = do
     let parsed = P.parse parseCategory "Failed." (innerText liPartition)
-    case parsed of 
+    case parsed of
         Right category -> category
         Left message -> ""

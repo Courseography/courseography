@@ -24,16 +24,16 @@ import Database.Tables
 import qualified Data.Aeson as Aeson
 
 -- | Inserts SVG graph data into Texts, Shapes, and Paths tables
-saveGraphJSON :: String -> String -> IO Response
+saveGraphJSON :: BSL.ByteString -> T.Text -> IO Response
 saveGraphJSON jsonStr nameStr = do
-    let jsonObj = Aeson.decode $ BSL.pack jsonStr
+    let jsonObj = Aeson.decode jsonStr
     case jsonObj of
         Nothing -> return $ toResponse ("Error" :: String)
         Just (SvgJSON texts shapes paths) -> do
             _ <- runSqlite databasePath $ insertGraph nameStr texts shapes paths
             return $ toResponse $ ("Success" :: String)
     where
-        insertGraph :: String -> [Text] -> [Shape] -> [Path] -> SqlPersistM ()
+        insertGraph :: T.Text -> [Text] -> [Shape] -> [Path] -> SqlPersistM ()
         insertGraph nameStr texts shapes paths = do
             gId <- insert $ Graph nameStr 256 256
             insertMany_ $ map (\text -> text {textGraph = gId}) texts
@@ -47,7 +47,7 @@ saveGraphJSON jsonStr nameStr = do
 getDistributionKey :: Maybe T.Text -> SqlPersistM (Maybe (Key Distribution))
 getDistributionKey Nothing = return Nothing
 getDistributionKey (Just description) = do
-    keyListDistribution :: [Key Distribution] <- selectKeysList [ DistributionDescription ==. (T.unpack description) ] []
+    keyListDistribution :: [Key Distribution] <- selectKeysList [ DistributionDescription ==. description ] []
     -- option: keyListDistribution :: [DistributionId] <- selectKeysList [ DistributionDescription `contains'` description] []
     return $ case keyListDistribution of
         [] -> Nothing
@@ -56,7 +56,7 @@ getDistributionKey (Just description) = do
 getBreadthKey :: Maybe T.Text -> SqlPersistM (Maybe (Key Breadth))
 getBreadthKey Nothing = return Nothing
 getBreadthKey (Just description) = do
-    keyListBreadth :: [Key Breadth] <- selectKeysList [ BreadthDescription ==. (T.unpack description) ] []
+    keyListBreadth :: [Key Breadth] <- selectKeysList [ BreadthDescription ==. description ] []
     -- option: selectKeysList [ BreadthDescription `contains'` description] []
     return $ case keyListBreadth of
         [] -> Nothing
