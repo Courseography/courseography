@@ -108,6 +108,7 @@ rowBorder = hrule 11.2 # lw thin # lc pink1
 makeTable :: [[[String]]] -> String -> Diagram B
 makeTable s session = vsep 0.04 $ (header session): intersperse rowBorder (map makeRow s)
 
+-- |Creates a timetable by zipping the time and course tables.
 renderTable :: String -> String -> String -> IO ()
 renderTable filename courses session = do
     let courseTable = partition5 $ map (\x -> if null x then [] else [x]) $ splitOn "_" courses
