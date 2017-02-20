@@ -47,32 +47,32 @@ addPostToDatabase :: [Tag String] -> SqlPersistM ()
 addPostToDatabase tags = do
     let postCode = T.pack (fromAttrib "name" ((take 1 $ filter (isTagOpenName "a") tags) !! 0))
         liPartitions = partitions isLiTag tags
-        prereqs = map getCourseFromTag $ map (fromAttrib "href") $ filter isCourseTag tags
+        prereqs = map getCourseFromTag $ map T.pack $ map (fromAttrib "href") $ filter isCourseTag tags
         firstCourse = if (null prereqs) then Nothing else (Just (head prereqs))
     categoryParser tags firstCourse postCode liPartitions
     where
         isCourseTag tag = tagOpenAttrNameLit "a" "href" (\hrefValue -> (length hrefValue) >= 0) tag
         isLiTag tag = isTagOpenName "li" tag
 
-addPostCategoriesToDatabase :: T.Text -> [String] -> SqlPersistM ()
+addPostCategoriesToDatabase :: T.Text -> [T.Text] -> SqlPersistM ()
 addPostCategoriesToDatabase postCode categories = do
     mapM_ (addCategoryToDatabase postCode) (filter isCategory categories)
     where
-        isCategory string =
-            let infixes = map (containsString string)
+        isCategory text =
+            let infixes = map (containsText text)
                          ["First", "Second", "Third", "suitable", "Core", "Electives"]
             in
-                ((length string) >= 7) && ((length $ filter (\bool -> bool) infixes) <= 0)
-        containsString string substring = isInfixOf substring string
+                ((T.length text) >= 7) && ((length $ filter (\bool -> bool) infixes) <= 0)
+        containsText text subtext = T.isInfixOf subtext text
 
-addCategoryToDatabase :: T.Text -> String -> SqlPersistM ()
+addCategoryToDatabase :: T.Text -> T.Text -> SqlPersistM ()
 addCategoryToDatabase postCode category =
-    insert_ $ PostCategory (T.pack category) postCode
+    insert_ $ PostCategory category postCode
 
 
 -- Helpers
 
-categoryParser :: [Tag String] -> Maybe String -> T.Text -> [[Tag String]] -> SqlPersistM ()
+categoryParser :: [Tag String] -> Maybe T.Text -> T.Text -> [[Tag String]] -> SqlPersistM ()
 categoryParser tags firstCourse postCode liPartitions = do
     case parsed of
         Right (post, categories) -> do
@@ -82,15 +82,15 @@ categoryParser tags firstCourse postCode liPartitions = do
             return ()
     where
         parsed = case liPartitions of 
-            [] -> P.parse (generalCategoryParser firstCourse postCode) "Failed." (innerText tags)
+            [] -> P.parse (generalCategoryParser firstCourse postCode) "Failed." (T.pack $ innerText tags)
             partitions -> do
                 let categories = map parseLi partitions
-                post <- P.parse (postInfoParser firstCourse postCode) "Failed." (innerText tags)
+                post <- P.parse (postInfoParser firstCourse postCode) "Failed." (T.pack $ innerText tags)
                 return (post, categories)
 
-parseLi :: [Tag String] -> String
+parseLi :: [Tag String] -> T.Text
 parseLi liPartition = do
-    let parsed = P.parse parseCategory "Failed." (innerText liPartition)
+    let parsed = P.parse parseCategory "Failed." (T.pack $ innerText liPartition)
     case parsed of 
         Right category -> category
         Left message -> ""
