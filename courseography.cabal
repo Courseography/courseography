@@ -63,7 +63,7 @@ executable courseography
     Svg.Database,
     Svg.Generator,
     Svg.Parser,
-    Test.ParserTests,
+    tests.ParserTests,
     Util.Blaze,
     Util.Happstack,
     WebParsing.ArtSciParser,
