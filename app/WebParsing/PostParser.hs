@@ -19,7 +19,7 @@ failedString :: String
 failedString = "Failed."
 
 getPost :: String -> IO ()
-    getPost str = do
+getPost str = do
     let path = fasCalendarURL ++ str
     rsp <- simpleHTTP (getRequest path)
     body <- getResponseBody rsp
