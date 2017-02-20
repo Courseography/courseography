@@ -9,7 +9,7 @@ import Data.List
 import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Match
 import qualified Text.Parsec as P
-import WebParsing.ParsecCombinators (getCourseFromTag, parsingAlgoOne, generalCategoryParser, parseCategory,
+import WebParsing.ParsecCombinators (getCourseFromTag, generalCategoryParser, parseCategory,
     postInfoParser)
 
 fasCalendarURL :: String
