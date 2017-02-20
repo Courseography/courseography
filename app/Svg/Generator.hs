@@ -44,8 +44,6 @@ import qualified Data.Map.Strict as M
 import Data.Monoid (mempty, mappend, mconcat)
 import Config (databasePath)
 
-hybridFontSize :: Integer
-
 
 
 -- | This is the main function that retrieves a stored graph
