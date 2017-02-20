@@ -69,7 +69,7 @@ getInfoCookies courses = map courseInfo allCourses
         allCourses = map (splitOn "-") (splitOn "_" courses)
 
 -- | Pulls either a Lecture or Tutorial from the database.
-pullDatabase :: (Code, Section, Session) -> IO (Maybe (Either Lecture Tutorial))
+pullDatabase :: (Code, Section, Session) -> IO (Maybe (Either Meeting Tutorial))
 pullDatabase (code, 'L':sectCode, session) = runSqlite databasePath $ do
     lecture <- returnLecture (T.pack code)
                              (T.pack $ 'L':sectCode)
@@ -85,7 +85,7 @@ pullDatabase (code, sect, session) = runSqlite databasePath $ do
 type SystemTime = String
 
 -- | Creates all the events for a course.
-getEvents :: SystemTime -> Maybe (Either Lecture Tutorial) -> Events
+getEvents :: SystemTime -> Maybe (Either Meeting Tutorial) -> Events
 getEvents _ Nothing = []
 getEvents systemTime (Just lect) =
     concatMap eventsByDate (zip' (third courseInfo)
@@ -121,16 +121,16 @@ type DatesByDay = [(StartDate, EndDate)]
 
 -- | Obtains all the necessary information to create events for a course,
 -- such as code, section, start times, end times and dates.
-getCourseInfo :: Either Lecture Tutorial
+getCourseInfo :: Either Meeting Tutorial
               -> (Code, Section, StartTimesByDay, EndTimesByDay, DatesByDay)
 getCourseInfo (Left lect) = (code, sect, start, end, dates)
     where
-        code = T.unpack $ lectureCode lect
-        sect = maybe "" T.unpack (lectureSection lect)
-        dataInOrder = orderTimeFields $ lectureTimes lect
-        start = startTimesByCourse dataInOrder (T.unpack $ lectureSession lect)
-        end = endTimesByCourse dataInOrder (T.unpack $ lectureSession lect)
-        dates = getDatesByCourse dataInOrder (T.unpack $ lectureSession lect)
+        code = T.unpack $ meetingCode lect
+        sect = maybe "" T.unpack (meetingSection lect)
+        dataInOrder = orderTimeFields $ meetingTimes lect
+        start = startTimesByCourse dataInOrder (T.unpack $ meetingSession lect)
+        end = endTimesByCourse dataInOrder (T.unpack $ meetingSession lect)
+        dates = getDatesByCourse dataInOrder (T.unpack $ meetingSession lect)
 getCourseInfo (Right lect) = (code, sect, start, end, dates)
     where
         code = T.unpack $ tutorialCode lect

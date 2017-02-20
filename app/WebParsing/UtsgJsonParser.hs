@@ -16,7 +16,7 @@ import qualified Data.HashMap.Strict as HM
 import Control.Monad.IO.Class (liftIO)
 import Network.HTTP.Conduit (simpleHttp)
 import Config (databasePath)
-import Database.Tables (Courses(..), Lecture(..), Tutorial(..))
+import Database.Tables (Courses(..), Meeting(..), Tutorial(..))
 import Database.Persist.Sqlite (runSqlite, insert_, SqlPersistM)
 
 -- | URLs for the Faculty of Arts and Science API
@@ -56,14 +56,14 @@ insertAllCourses org = do
     mapM_ insert_ tutorials
 
 
-newtype DB = DB { dbData :: (Courses, [Either Lecture Tutorial]) }
+newtype DB = DB { dbData :: (Courses, [Either Meeting Tutorial]) }
   deriving Show
 
 instance FromJSON DB where
     parseJSON (Object o) = do
       course <- parseJSON (Object o)
       session :: T.Text <- o .:? "section" .!= "F"
-      meetingMap :: HM.HashMap T.Text Meeting <- o .:? "meetings" .!= HM.empty
+      meetingMap :: HM.HashMap T.Text Meeting2 <- o .:? "meetings" .!= HM.empty
       let meetings = map (setCode (coursesCode course) session . meeting) (HM.elems meetingMap)
           -- Fix manualTutorialEnrolment and manualPracticalEnrolment
           manTut = any (maybe False (T.isPrefixOf "TUT") . tutorialSection) $ rights meetings
@@ -72,15 +72,15 @@ instance FromJSON DB where
                             coursesManualPracticalEnrolment = Just manPra },
                    meetings)
         where
-          setCode code session (Left lec) = Left (lec { lectureCode = code,
-            lectureSession = session} )
+          setCode code session (Left lec) = Left (lec { meetingCode = code,
+            meetingSession = session} )
           setCode code session (Right tut) = Right (tut { tutorialCode = code,
             tutorialSession = session} )
     parseJSON _ = fail "Invalid section"
 
-newtype Meeting = Meeting { meeting :: (Either Lecture Tutorial) }
+newtype Meeting2 = Meeting2 { meeting :: (Either Meeting Tutorial) }
   deriving Show
 
-instance FromJSON Meeting where
+instance FromJSON Meeting2 where
   parseJSON x =
-    (parseJSON x >>= return . Meeting . Left) <|> (parseJSON x >>= return . Meeting . Right)
+    (parseJSON x >>= return . Meeting2 . Left) <|> (parseJSON x >>= return . Meeting2 . Right)
