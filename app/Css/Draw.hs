@@ -10,7 +10,7 @@ draw page.
 module Css.Draw
     (drawStyles) where
 
-import Clay hiding (map, repeat, id, i)
+import Clay hiding (map, repeat, id, i, row)
 import Prelude hiding ((**))
 import Css.Constants
 import qualified Data.Text as T
