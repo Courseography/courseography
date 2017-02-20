@@ -9,7 +9,11 @@ Module containing test cases for Requirement Parsers.
 -- For more examples, check out the tests directory.  It contains unit tests
 -- for HUnit.
 
-module ParserTests.ParserTests where
+module ParserTests.ParserTests
+( createTest,
+  runTests,
+  runOrTests
+) where
 
 import Test.HUnit
 import Database.Requirement
@@ -26,19 +30,44 @@ test1 = TestCase (assertEqual "for (parseReqs \"csc108h1 or csc148h1\")," (OR [J
 
 test2 :: Test
 test2 = TestCase(let courseReq = Parsec.parse courseParser "" " csc148h1 "
-                    in assertEqual "for (courseParser \" csc148h1 \")," (Right $ J "csc148h1") courseReq)
+                    in assertEqual "for (courseParser \" csc148h1 \")," (Right $ J"csc148h1") courseReq)
 
 test3 :: Test
 test3 = TestCase(let courseReq = Parsec.parse orParser "" " csc148h1 "
-                    in assertEqual "for (orParser \" csc148h1 \")," (Right $ OR[J "csc148h1"]) courseReq)
+                    in assertEqual "for (orParser \" csc148h1 \")," (Right $ OR[J"csc148h1"]) courseReq)
 
 test4 :: Test
 test4 = TestCase(let courseReq = Parsec.parse andParser "" " csc148h1,csc165h1 "
-                    in assertEqual "for (andParser \" csc148h1,csc165h1 \")," (Right $ AND[J "csc148h1",J "csc165h1"]) courseReq)
+                    in assertEqual "for (andParser \" csc148h1,csc165h1 \")," (Right $ AND[J"csc148h1",J"csc165h1"]) courseReq)
 
-createTest :: Parser Req -> String -> Req -> Test
-createTest parser input expected = TestCase (let courseReq =  Parsec.parse parser "" input
-	in assertEqual ("for (" ++ input ++ "),") (Right expected) courseReq)
+test5 :: Test
+test5 = TestCase(let courseReq = Parsec.parse andParser "" " csc108h1/csc148h1,csc165h1 "
+                    in assertEqual "for (andParser \" csc108h1,csc148h1,csc165h1 \")," (Right $ AND[OR[J"csc108h1",J"csc148h1"],J"csc165h1"]) courseReq)
+
+createTest :: String -> Req -> Parser Req -> Test
+createTest input expected parser = TestCase (let courseReq =  Parsec.parse parser "" input
+    in assertEqual ("for (" ++ input ++ "),") (Right expected) courseReq)
+
+
+-- orTests
+orInputs :: [String]
+orInputs = ["csc108h1","csc108h1 or csc148h1", "csc104h1/csc108h1/csc148h1"]
+
+orExpected :: [Req]
+orExpected = [J"csc108h1",OR[J"csc108h1",J"csc148h1"], OR[J"csc104h1",J"csc108h1",J"csc148h1"]]
+-- map over inputs and expected values
+orTests :: Test
+orTests = TestList $ (map (\parserToTest -> parserToTest orParser) (zipWith createTest orInputs orExpected))
+-- andTests
+andInputs = ["csc148h1 and csc165h1", "csc108h1/csc148h1,csc165h1", "csc104h1/csc108h1/csc148h1,csc165h1"]
+andTests = []
+-- parseReqsTests
 
 tests :: Test
 tests = TestList [TestLabel "parseReqs" test1, TestLabel "testsingleParser" test2]
+
+runTests :: IO Counts
+runTests = runTestTT tests
+
+runOrTests :: IO Counts
+runOrTests = runTestTT orTests
