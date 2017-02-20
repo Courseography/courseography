@@ -26,4 +26,7 @@ derivePersistField "ShapeType"
 -- | Results from call of [ToJSON](https://hackage.haskell.org/package/aeson-1.1.0.0/docs/Data-Aeson.html#t:ToJSON)
 -- .
 instance ToJSON ShapeType
+
+-- | Results from call of [FromJSON](https://hackage.haskell.org/package/aeson-1.1.0.0/docs/Data-Aeson.html#t:FromJSON)
+-- .
 instance FromJSON ShapeType
