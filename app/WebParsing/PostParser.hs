@@ -18,6 +18,9 @@ import WebParsing.ParsecCombinators (getCourseFromTag, generalCategoryParser, pa
 fasCalendarURL :: String
 fasCalendarURL = "http://calendar.artsci.utoronto.ca/"
 
+failedString :: String
+failedString = "Failed."
+
 getPost :: T.Text -> IO ()
 getPost str = do
     let path = fasCalendarURL ++ (T.unpack str)
@@ -80,19 +83,19 @@ categoryParser tags firstCourse postCode liPartitions = do
             addPostCategoriesToDatabase postCode categories
             insert_ $ post
         Left message -> do
-            liftIO $ print "Failed"
+            liftIO $ print failedString
             return ()
     where
         parsed = case liPartitions of
-            [] -> P.parse (generalCategoryParser firstCourse postCode) "Failed." (T.pack $ innerText tags)
+            [] -> P.parse (generalCategoryParser firstCourse postCode) failedString (T.pack $ innerText tags)
             partitions -> do
                 let categories = map parseLi partitions
-                post <- P.parse (postInfoParser firstCourse postCode) "Failed." (T.pack $ innerText tags)
+                post <- P.parse (postInfoParser firstCourse postCode) failedString (T.pack $ innerText tags)
                 return (post, categories)
 
 parseLi :: [Tag String] -> T.Text
 parseLi liPartition = do
-    let parsed = P.parse parseCategory "Failed." (T.pack $ innerText liPartition)
-    case parsed of 
+    let parsed = P.parse parseCategory failedString (T.pack $ innerText liPartition)
+    case parsed of
         Right category -> category
         Left message -> ""

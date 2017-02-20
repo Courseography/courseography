@@ -11,8 +11,6 @@ module Css.Loading
 
 import Clay
 import Prelude hiding ((**))
-import Data.Monoid
-import Css.Constants
 
 -- |Defines all CSS for the loading animation.
 loadingStyles :: Css
