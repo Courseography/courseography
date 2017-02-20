@@ -1,4 +1,13 @@
 {-# LANGUAGE ScopedTypeVariables #-}
+
+{-|
+    Module      : Export.GetImages
+    Description : Defines functions for creating images from graphs and
+                  timetables.
+
+Defines functions for creating images from graphs and timetables, most
+functions return the name of the created svg and png files after creation.
+-}
 module Export.GetImages
     (getActiveGraphImage, getTimetableImage, randomName, getActiveTimetable) where
 
