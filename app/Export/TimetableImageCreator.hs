@@ -1,5 +1,9 @@
 {-# LANGUAGE NoMonomorphismRestriction, OverloadedStrings #-}
 
+{-|
+    Module      : Export.TimetableImageCreator
+    Description : Primarily defines a function used to render SVGs with times.
+-}
 module Export.TimetableImageCreator
     (renderTable, renderTableHelper, times) where
 
