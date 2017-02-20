@@ -1,7 +1,9 @@
 {-# LANGUAGE GADTs, OverloadedStrings, ScopedTypeVariables #-}
 
 {-|
-Description: Respond to various requests involving database course information.
+    Module: Database.CourseQueries
+    Description: Respond to various requests involving database course
+                 information.
 
 This module contains the functions that perform different database queries
 and serve the information back to the client.
