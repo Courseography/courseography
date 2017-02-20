@@ -24,6 +24,9 @@ instance Show ProgramReq where
     show (PRGREQ program reqs) = "Program Requirements for " ++ program
                                ++ ":\n" ++ L.intercalate "\n" (map show reqs)
 
+-- | Defines a course requirement where the first String is the course, the
+-- first requirement is the corequisites, the second requirement is the
+-- exlusions, and the third is the prerequisites requirement.
 data CourseReq = CRSREQ String Req Req Req
 
 instance Show CourseReq where
