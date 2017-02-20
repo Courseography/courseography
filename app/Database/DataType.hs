@@ -1,6 +1,9 @@
 {-# LANGUAGE TemplateHaskell, DeriveGeneric #-}
 
 {-|
+    Module      : Database.DataType
+    Description : Contains a single enumeration type, ShapeType.
+
 This is a small module that contains a single enumeration type.
 Note that we can't include this in "Database.Tables" because of
 a restriction on Template Haskell.
