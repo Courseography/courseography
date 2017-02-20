@@ -11,7 +11,7 @@ module Svg.Database
     (insertGraph, insertElements, deleteGraphs) where
 
 import Database.Persist.Sqlite
-import Database.Tables hiding (graphWidth, graphHeight, paths, shapes)
+import Database.Tables hiding (graphWidth, graphHeight, paths, shapes, texts)
 
 
 -- | Insert a new graph into the database, returning the key of the new graph.
