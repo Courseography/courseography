@@ -9,7 +9,7 @@ Module containing test cases for Requirement Parsers.
 -- For more examples, check out the tests directory.  It contains unit tests
 -- for HUnit.
 
-module Test.ParserTests where
+module ParserTest.ParserTests where
 
 import Test.HUnit
 import Database.Requirement
