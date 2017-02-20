@@ -70,7 +70,6 @@ buildRect texts entity elementId =
         id_ = case shapeType_ entity of
               Hybrid -> 'h' : show elementId
               Node -> map toLower $ sanitizeId textString
-              other
     in
         entity {shapeId_ = id_,
                 shapeText = rectTexts,
