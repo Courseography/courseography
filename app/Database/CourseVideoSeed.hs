@@ -1,5 +1,9 @@
 {-# LANGUAGE OverloadedStrings #-}
 
+{-|
+    Module      : Database.CourseVideoSeed
+    Description : Contains the data and functions for seeding the courseVideos.
+-}
 module Database.CourseVideoSeed
     (courseVideos, seedVideos) where
 
