@@ -14,6 +14,7 @@ import Database.Persist.TH
 import GHC.Generics
 import Data.Aeson
 
+-- | Defines a datatype of a shape, used in Shape json table.
 data ShapeType = BoolNode | Node | Hybrid | Region
  deriving (Show, Read, Eq, Generic)
 derivePersistField "ShapeType"
