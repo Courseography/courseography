@@ -28,7 +28,7 @@ seedVideo :: (Text, [Text]) -> SqlPersistM ()
 seedVideo (code, videos) =
     updateWhere [CoursesCode ==. code] [CoursesVideoUrls =. videos]
 
-
+-- | Sets the video routes of all course rows.
 seedVideos :: IO ()
 seedVideos = runSqlite databasePath $
     mapM_ seedVideo courseVideos
