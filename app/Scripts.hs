@@ -11,13 +11,14 @@ import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 import qualified Data.Text as T
 import Util.Blaze
-import Config (enableFb, enableCdn)
+import Config (enableFb, enableCdn, enableAnalytics)
 
 -- | Scripts that are loaded on every page.
 globalScripts :: [T.Text]
 globalScripts =
-    concat [jQueryScripts, reactScripts, analyticsScripts] ++
-    if enableFb then facebookScripts else []
+    concat [jQueryScripts, reactScripts] ++
+    (if enableFb then facebookScripts else []) ++
+    (if enableAnalytics then analyticsScripts else [])
 
 facebookScripts :: [T.Text]
 facebookScripts = [
