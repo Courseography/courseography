@@ -18,9 +18,9 @@ import WebParsing.ParsecCombinators (getCourseFromTag, generalCategoryParser, pa
 fasCalendarURL :: String
 fasCalendarURL = "http://calendar.artsci.utoronto.ca/"
 
-getPost :: String -> IO ()
+getPost :: T.Text -> IO ()
 getPost str = do
-    let path = fasCalendarURL ++ str
+    let path = fasCalendarURL ++ (T.unpack str)
     rsp <- simpleHTTP (getRequest path)
     body <- getResponseBody rsp
     let tags = filter isNotComment $ parseTags body
@@ -29,7 +29,7 @@ getPost str = do
     runSqlite databasePath $ do
         runMigration migrateAll
         mapM_ addPostToDatabase posts
-    print $ "parsing " ++ str
+    print $ "parsing " ++ (T.unpack str)
     where
         isNotComment (TagComment _) = False
         isNotComment _ = True
