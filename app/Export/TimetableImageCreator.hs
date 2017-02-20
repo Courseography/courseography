@@ -117,6 +117,8 @@ renderTable filename courses session = do
         partition5 [] = []
         partition5 lst = take 5 lst : partition5 (drop 5 lst)
 
+-- |Renders an SVG with a width of 1024, though the documentation doesn't
+-- specify the units, it is assumed that these are pixels.
 renderTableHelper :: String -> [[[String]]] -> String -> IO ()
 renderTableHelper filename schedule session = do
     let g = makeTable schedule session
