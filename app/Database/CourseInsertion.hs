@@ -2,7 +2,9 @@
     OverloadedStrings, TypeFamilies, ScopedTypeVariables #-}
 
 {-|
-Description: Functions that insert/update course information in the database.
+    Module      : Database.CourseInsertion
+    Description : Functions that insert/update course information in the 
+                  database.
 
 This module contains a bunch of functions related to inserting information
 into the database. These functions are used as helpers for the WebParsing module.
