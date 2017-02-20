@@ -17,6 +17,10 @@ import Data.Aeson
 -- | Defines a datatype of a shape, used in Shape json table.
 data ShapeType = BoolNode | Node | Hybrid | Region
  deriving (Show, Read, Eq, Generic)
+
+-- | Results from [derivePersistField](https://hackage.haskell.org/package/persistent-template-2.5.1.6/docs/Database-Persist-TH.html#v:derivePersistField)
+-- call, as does PersistField, most importantly, it allows the data type to be
+-- a column in the database.
 derivePersistField "ShapeType"
 
 instance ToJSON ShapeType
