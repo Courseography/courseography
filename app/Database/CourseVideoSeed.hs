@@ -12,6 +12,9 @@ import Database.Tables hiding (Text)
 import Database.Persist.Sqlite (runSqlite, updateWhere, (=.), (==.), SqlPersistM)
 import Config (databasePath)
 
+-- | Defines the constant list of ordered pairs pertaining to the routes for
+-- course videos. The first Text variable in each ordered pair is the course.
+-- The second List of Text variable is the routes to the videos.
 courseVideos :: [(Text, [Text])]
 courseVideos = [
   ("CSC240H1", ["static/videos/csc240.mp4"]),
