@@ -15,6 +15,8 @@ module Database.Requirement
 import qualified Data.String as S
 import qualified Data.List as L
 
+-- | Defines a program requirement where the first String is the program, and
+-- the list of Req is a list of program requirements.
 data ProgramReq = PRGREQ String [Req]
 
 -- Returns a well formatted String representing a program requirement for specified program.
