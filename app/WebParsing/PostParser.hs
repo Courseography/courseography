@@ -5,6 +5,7 @@ module WebParsing.PostParser
 import Network.HTTP
 import qualified Data.Text as T
 import Data.List
+import Control.Monad.Trans (liftIO)
 import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Match
 import Config (databasePath)
@@ -79,6 +80,7 @@ categoryParser tags firstCourse postCode liPartitions = do
             addPostCategoriesToDatabase postCode categories
             insert_ $ post
         Left message -> do
+            liftIO $ print "Failed"
             return ()
     where
         parsed = case liPartitions of 
