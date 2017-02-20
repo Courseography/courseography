@@ -1,6 +1,5 @@
 {-# LANGUAGE FlexibleContexts #-}
-module WebParsing.ReqParser
-    (parseReqs) where
+module WebParsing.ReqParser where
 
 import qualified Text.Parsec as Parsec
 import Text.Parsec.String (Parser)
