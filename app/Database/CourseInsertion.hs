@@ -20,8 +20,7 @@ import Happstack.Server.SimpleHTTP (Response, toResponse)
 import Config (databasePath)
 import Database.Persist.Class (selectKeysList, Key)
 import Database.Persist.Sqlite (selectFirst, fromSqlKey, toSqlKey, insertMany_, insert_, insert, SqlPersistM, (=.), (==.), updateWhere, runSqlite)
--- import Database.Tables hiding (texts, shapes, paths, nameStr, description)
-import Database.Tables hiding (texts, shapes, paths, nameStr)
+import Database.Tables hiding (texts, shapes, paths)
 import qualified Data.Aeson as Aeson
 
 -- | Inserts SVG graph data into Texts, Shapes, and Paths tables
@@ -35,8 +34,8 @@ saveGraphJSON jsonStr nameStr = do
             return $ toResponse $ ("Success" :: String)
     where
         insertGraph :: String -> [Text] -> [Shape] -> [Path] -> SqlPersistM ()
-        insertGraph nameStr texts shapes paths = do
-            gId <- insert $ Graph nameStr 256 256
+        insertGraph nameStr1 texts shapes paths = do
+            gId <- insert $ Graph nameStr1 256 256
             insertMany_ $ map (\text -> text {textGraph = gId}) texts
             insertMany_ $ map (\shape -> shape {shapeGraph = gId}) shapes
             insertMany_ $ map (\path -> path {pathGraph = gId}) paths
