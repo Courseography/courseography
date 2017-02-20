@@ -1,5 +1,9 @@
 {-# LANGUAGE NoMonomorphismRestriction, OverloadedStrings #-}
 
+{-|
+    Module      : Export.TimetableImageCreator
+    Description : Primarily defines a function used to render SVGs with times.
+-}
 module Export.TimetableImageCreator
     (renderTable, renderTableHelper, times) where
 
@@ -13,6 +17,8 @@ import qualified Data.Text as T
 days :: [T.Text]
 days = ["Mon", "Tue", "Wed", "Thu", "Fri"]
 
+-- |A list of lists of Texts, which has the "times" from 8:00 to 12:00, and
+-- 1:00 to 8:00.times
 times :: [[T.Text]]
 times = map (\x -> [T.pack (show x ++ ":00")]) ([8..12] ++ [1..8] :: [Int])
 
@@ -103,6 +109,7 @@ rowBorder = hrule 11.2 # lw thin # lc pink1
 makeTable :: [[[T.Text]]] -> T.Text -> Diagram B
 makeTable s session = vsep 0.04 $ (header session): intersperse rowBorder (map makeRow s)
 
+-- |Creates a timetable by zipping the time and course tables.
 renderTable :: String -> T.Text -> T.Text -> IO ()
 renderTable filename courses session = do
     let courseTable = partition5 $ map (\x -> if T.null x then [] else [x]) $ T.splitOn "_" courses
@@ -111,6 +118,8 @@ renderTable filename courses session = do
         partition5 [] = []
         partition5 lst = take 5 lst : partition5 (drop 5 lst)
 
+-- |Renders an SVG with a width of 1024, though the documentation doesn't
+-- specify the units, it is assumed that these are pixels.
 renderTableHelper :: String -> [[[T.Text]]] -> T.Text -> IO ()
 renderTableHelper filename schedule session = do
     let g = makeTable schedule session
