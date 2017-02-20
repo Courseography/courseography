@@ -6,10 +6,11 @@ module Response.Loading
 import           Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
+import qualified Data.Text as T
 import Happstack.Server
 import MasterTemplate
 
-loadingResponse :: String -> ServerPart Response
+loadingResponse :: T.Text -> ServerPart Response
 loadingResponse size =
    ok $ toResponse $
     masterTemplate "Courseography - Loading..."
@@ -32,4 +33,4 @@ largeLoadingIcon = H.div ! A.id "loading-icon" $ do
 smallLoadingIcon :: H.Html
 smallLoadingIcon = H.div ! A.id "loading-icon" $ do
               H.img ! A.id "c-logo-small" ! A.src "static/res/img/C-logo-small.png"
-              H.img ! A.id "compass-small" ! A.class_ "spinner" ! A.src "static/res/img/compass-small.png"     
+              H.img ! A.id "compass-small" ! A.class_ "spinner" ! A.src "static/res/img/compass-small.png"

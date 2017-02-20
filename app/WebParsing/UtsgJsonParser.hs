@@ -16,7 +16,7 @@ import qualified Data.HashMap.Strict as HM
 import Control.Monad.IO.Class (liftIO)
 import Network.HTTP.Conduit (simpleHttp)
 import Config (databasePath)
-import Database.Tables (Courses(..), Meeting(..), Tutorial(..))
+import Database.Tables (Courses(..), Meeting(..))
 import Database.Persist.Sqlite (runSqlite, insert_, SqlPersistM)
 
 -- | URLs for the Faculty of Arts and Science API
@@ -56,7 +56,7 @@ insertAllCourses org = do
     mapM_ insert_ tutorials
 
 
-newtype DB = DB { dbData :: (Courses, [Either Meeting Tutorial]) }
+newtype DB = DB { dbData :: (Courses, [Either Meeting Meeting]) }
   deriving Show
 
 instance FromJSON DB where
@@ -66,19 +66,19 @@ instance FromJSON DB where
       meetingMap :: HM.HashMap T.Text Meeting2 <- o .:? "meetings" .!= HM.empty
       let meetings = map (setCode (coursesCode course) session . meeting) (HM.elems meetingMap)
           -- Fix manualTutorialEnrolment and manualPracticalEnrolment
-          manTut = any (maybe False (T.isPrefixOf "TUT") . tutorialSection) $ rights meetings
-          manPra = any (maybe False (T.isPrefixOf "PRA") . tutorialSection) $ rights meetings
+          manTut = any (maybe False (T.isPrefixOf "TUT") . meetingSection) $ rights meetings
+          manPra = any (maybe False (T.isPrefixOf "PRA") . meetingSection) $ rights meetings
       return $ DB (course { coursesManualTutorialEnrolment = Just manTut,
                             coursesManualPracticalEnrolment = Just manPra },
                    meetings)
         where
           setCode code session (Left lec) = Left (lec { meetingCode = code,
             meetingSession = session} )
-          setCode code session (Right tut) = Right (tut { tutorialCode = code,
-            tutorialSession = session} )
+          setCode code session (Right tut) = Right (tut { meetingCode = code,
+            meetingSession = session} )
     parseJSON _ = fail "Invalid section"
 
-newtype Meeting2 = Meeting2 { meeting :: (Either Meeting Tutorial) }
+newtype Meeting2 = Meeting2 { meeting :: (Either Meeting Meeting) }
   deriving Show
 
 instance FromJSON Meeting2 where

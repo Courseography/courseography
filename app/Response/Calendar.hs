@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings, ViewPatterns #-}
 module Response.Calendar
     (calendarResponse) where
 
@@ -7,8 +8,9 @@ import Data.Time (Day, addDays, formatTime, getCurrentTime, defaultTimeLocale)
 import Happstack.Server (ServerPart, Response, toResponse)
 import Control.Monad.IO.Class (liftIO)
 import Database.Persist.Sqlite (runSqlite)
-import Database.CourseQueries (returnLecture, returnTutorial)
+import Database.CourseQueries (returnMeeting)
 import qualified Data.Text as T
+import Data.Maybe (fromMaybe)
 import Text.Read (readMaybe)
 import Database.Tables hiding (Session)
 import Config (firstMondayFall,
@@ -22,10 +24,10 @@ import Config (firstMondayFall,
 -- | Returns an ICS file of events as requested by the user.
 calendarResponse :: String -> ServerPart Response
 calendarResponse courses =
-    liftIO $ getCalendar courses
+    liftIO $ getCalendar $ T.pack courses
 
 -- | Gets together all the pieces of the program.
-getCalendar :: String -> IO Response
+getCalendar :: T.Text -> IO Response
 getCalendar courses = do
     let courseInfo = getInfoCookies courses
     databaseInfo <- mapM pullDatabase courseInfo
@@ -52,40 +54,40 @@ getICS events = unlines $ header ++ events ++ bottom
         bottom = ["END:VCALENDAR"]
 
 -- | The code for a course.
-type Code = String
+type Code = T.Text
 
 -- | The section for a course.
-type Section = String
+type Section = T.Text
 
 -- | The session for a course.
-type Session = String
+type Session = T.Text
 
 -- | Obtains the code, section and session for each course in the cookies.
-getInfoCookies :: String -> [(Code, Section, Session)]
+getInfoCookies :: T.Text -> [(Code, Section, Session)]
 getInfoCookies courses = map courseInfo allCourses
     where
         courseInfo [code, sect, session] = (code, sect, session)
         courseInfo _ = ("", "", "")
-        allCourses = map (splitOn "-") (splitOn "_" courses)
+        allCourses = map (T.splitOn "-") (T.splitOn "_" courses)
 
 -- | Pulls either a Lecture or Tutorial from the database.
-pullDatabase :: (Code, Section, Session) -> IO (Maybe (Either Meeting Tutorial))
-pullDatabase (code, 'L':sectCode, session) = runSqlite databasePath $ do
-    lecture <- returnLecture (T.pack code)
-                             (T.pack $ 'L':sectCode)
-                             (T.pack session)
+pullDatabase :: (Code, Section, Session) -> IO (Maybe (Either Meeting Meeting))
+pullDatabase (code, T.commonPrefixes "L" -> Just ("L", "", sectCode), session) = runSqlite databasePath $ do
+    lecture <- returnMeeting (code)
+                             (T.cons 'L' sectCode)
+                             (session)
     return $ fmap Left lecture
 pullDatabase (code, sect, session) = runSqlite databasePath $ do
-    tutorial <- returnTutorial (T.pack code)
-                               (T.pack sect)
-                               (T.pack session)
+    tutorial <- returnMeeting (code)
+                              (sect)
+                              (session)
     return $ fmap Right tutorial
 
 -- | The current date and time as obtained from the system.
 type SystemTime = String
 
 -- | Creates all the events for a course.
-getEvents :: SystemTime -> Maybe (Either Meeting Tutorial) -> Events
+getEvents :: SystemTime -> Maybe (Either Meeting Meeting) -> Events
 getEvents _ Nothing = []
 getEvents systemTime (Just lect) =
     concatMap eventsByDate (zip' (third courseInfo)
@@ -106,7 +108,7 @@ getEvents systemTime (Just lect) =
                 map (\date -> "EXDATE;TZID=America/Toronto:" ++ date ++ start1)
                     holidays ++
                 ["ORGANIZER:University of Toronto",
-                 "SUMMARY:" ++ first courseInfo ++ " " ++ second courseInfo,
+                 "SUMMARY:" ++ (T.unpack $ first courseInfo) ++ " " ++ (T.unpack $ second courseInfo),
                  "CATEGORIES:EDUCATION",
                  "END:VEVENT"]
 
@@ -121,24 +123,24 @@ type DatesByDay = [(StartDate, EndDate)]
 
 -- | Obtains all the necessary information to create events for a course,
 -- such as code, section, start times, end times and dates.
-getCourseInfo :: Either Meeting Tutorial
+getCourseInfo :: Either Meeting Meeting
               -> (Code, Section, StartTimesByDay, EndTimesByDay, DatesByDay)
 getCourseInfo (Left lect) = (code, sect, start, end, dates)
     where
-        code = T.unpack $ meetingCode lect
-        sect = maybe "" T.unpack (meetingSection lect)
+        code = meetingCode lect
+        sect = fromMaybe "" (meetingSection lect)
         dataInOrder = orderTimeFields $ meetingTimes lect
-        start = startTimesByCourse dataInOrder (T.unpack $ meetingSession lect)
-        end = endTimesByCourse dataInOrder (T.unpack $ meetingSession lect)
-        dates = getDatesByCourse dataInOrder (T.unpack $ meetingSession lect)
+        start = startTimesByCourse dataInOrder (meetingSession lect)
+        end = endTimesByCourse dataInOrder (meetingSession lect)
+        dates = getDatesByCourse dataInOrder (meetingSession lect)
 getCourseInfo (Right lect) = (code, sect, start, end, dates)
     where
-        code = T.unpack $ tutorialCode lect
-        sect = maybe "" T.unpack (tutorialSection lect)
-        dataInOrder = orderTimeFields $ tutorialTimes lect
-        start = startTimesByCourse dataInOrder (T.unpack $ tutorialSession lect)
-        end = endTimesByCourse dataInOrder (T.unpack $ tutorialSession lect)
-        dates = getDatesByCourse dataInOrder (T.unpack $ tutorialSession lect)
+        code = meetingCode lect
+        sect = fromMaybe "" (meetingSection lect)
+        dataInOrder = orderTimeFields $ meetingTimes lect
+        start = startTimesByCourse dataInOrder (meetingSession lect)
+        end = endTimesByCourse dataInOrder (meetingSession lect)
+        dates = getDatesByCourse dataInOrder (meetingSession lect)
 
 -- ** Functions that deal with tuples
 

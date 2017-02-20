@@ -55,6 +55,7 @@ share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 Department json
     code [T.Text]
     name T.Text
+    Primary name
 
 Courses
     code T.Text
@@ -129,36 +130,36 @@ Meeting
     deriving Generic Show
 
 Breadth
-    description String
+    description T.Text
     deriving Show
 
 Distribution
-    description String
+    description T.Text
     deriving Show
 
 Graph json
-    title String
+    title T.Text
     width Double
     height Double
     deriving Show
 
 Text json
     graph GraphId
-    rId String
+    rId T.Text
     pos Point
-    text String
-    align String
-    fill String
+    text T.Text
+    align T.Text
+    fill T.Text
     deriving Show
 
 Shape json
     graph GraphId
-    id_ String
+    id_ T.Text
     pos Point
     width Double
     height Double
-    fill String
-    stroke String
+    fill T.Text
+    stroke T.Text
     text [Text]
     tolerance Double
     type_ ShapeType
@@ -166,18 +167,18 @@ Shape json
 
 Path json
     graph GraphId
-    id_ String
+    id_ T.Text
     points [Point]
-    fill String
-    stroke String
+    fill T.Text
+    stroke T.Text
     isRegion Bool
-    source String
-    target String
+    source T.Text
+    target T.Text
     deriving Show
 
 FacebookTest
-    fId String
-    testString String
+    fId T.Text
+    testString T.Text
     deriving Show
 
 Post

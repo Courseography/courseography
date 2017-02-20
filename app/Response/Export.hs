@@ -11,21 +11,21 @@ import Export.ImageConversion (removeFile)
 import Export.PdfGenerator
 import Export.LatexGenerator
 import Response.Image (returnImageData)
+import qualified Data.Text as T
 
 -- | Returns an image of the timetable requested by the user.
-exportTimetableImageResponse :: String -> ServerPart Response
-exportTimetableImageResponse session = do
-    req <- askRq
-    (svgFilename, imageFilename) <- liftIO $ getActiveTimetable req session
+exportTimetableImageResponse :: T.Text -> String -> ServerPart Response
+exportTimetableImageResponse session coursecookie = do
+    (svgFilename, imageFilename) <- liftIO $ getActiveTimetable (T.pack coursecookie) session
     liftIO $ returnImageData svgFilename imageFilename
 
 -- | Returns a PDF containing graph and timetable requested by the user.
-exportTimetablePDFResponse :: ServerPart Response
-exportTimetablePDFResponse = do
+exportTimetablePDFResponse :: String -> ServerPart Response
+exportTimetablePDFResponse coursecookie = do
     req <- askRq
     (graphSvg, graphImg) <- liftIO $ getActiveGraphImage req
-    (fallsvgFilename, fallimageFilename) <- liftIO $ getActiveTimetable req "Fall"
-    (springsvgFilename, springimageFilename) <- liftIO $ getActiveTimetable req "Spring"
+    (fallsvgFilename, fallimageFilename) <- liftIO $ getActiveTimetable (T.pack coursecookie) "Fall"
+    (springsvgFilename, springimageFilename) <- liftIO $ getActiveTimetable (T.pack coursecookie) "Spring"
     pdfName <- liftIO $ returnPDF graphSvg graphImg fallsvgFilename fallimageFilename springsvgFilename springimageFilename
     liftIO $ returnPdfBS pdfName
 

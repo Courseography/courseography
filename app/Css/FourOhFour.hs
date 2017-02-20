@@ -1,11 +1,15 @@
 {-# LANGUAGE OverloadedStrings #-}
 
+{-|
+    Module      : Css.FourOhFour
+    Description : Defines CSS for the 404 page.
+-}
 module Css.FourOhFour
     (fourOhFourStyles) where
 
 import Clay
 
--- | CSS for the 404 page.
+-- |CSS for the 404 page.
 fourOhFourStyles :: Css
 fourOhFourStyles = do
     "#contentDiv" ? do

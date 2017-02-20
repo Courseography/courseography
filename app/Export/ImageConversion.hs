@@ -1,3 +1,7 @@
+{-|
+    Module      : Export.ImageConversion
+    Description : Includes functions for converting SVG files to PNG.
+-}
 module Export.ImageConversion
     (createImageFile, removeFile) where
 

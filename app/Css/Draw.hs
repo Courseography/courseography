@@ -1,5 +1,12 @@
 {-# LANGUAGE OverloadedStrings #-}
 
+{-|
+    Module      : Css.Draw
+    Description : Defines the CSS for the draw page.
+
+Defines the CSS for the draw page, which includes all of the buttons on the
+draw page.
+-}
 module Css.Draw
     (drawStyles) where
 
@@ -8,8 +15,7 @@ import Prelude hiding ((**))
 import Css.Constants
 import qualified Data.Text as T
 
-{- drawStyles
- - Generates all CSS for the draw page. -}
+-- |Defines the CSS for the draw page.
 drawStyles :: Css
 drawStyles = do
     colourTableCSS

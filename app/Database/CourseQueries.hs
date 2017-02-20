@@ -15,11 +15,9 @@ module Database.CourseQueries
      getDeptCourses,
      queryGraphs,
      deptList,
-     returnTutorial,
-     returnLecture,
+     returnMeeting,
      getGraphJSON,
-     getLectureTime,
-     getTutorialTime) where
+     getMeetingTime) where
 
 import Happstack.Server.SimpleHTTP
 import Database.Persist
@@ -82,8 +80,8 @@ buildAllSessions entityListM =
 
 -- | Takes a course code (e.g. \"CSC108H1\") and sends a JSON representation
 -- of the course as a response.
-retrieveCourse :: String -> ServerPart Response
-retrieveCourse = liftIO . queryCourse . T.pack
+retrieveCourse :: T.Text -> ServerPart Response
+retrieveCourse = liftIO . queryCourse
 
 -- | Queries the database for all information about @course@, constructs a JSON object
 -- representing the course and returns the appropriate JSON response.
@@ -142,7 +140,7 @@ getDescriptionB (Just key) = do
     maybeBreadth <- get key
     case maybeBreadth of
         Nothing -> return Nothing
-        Just coursebreadth  -> return $ Just $ T.pack (breadthDescription coursebreadth)
+        Just coursebreadth  -> return $ Just $ breadthDescription coursebreadth
 
 getDescriptionD :: Maybe (Key Distribution) -> SqlPersistM (Maybe T.Text)
 getDescriptionD Nothing = return Nothing
@@ -150,7 +148,7 @@ getDescriptionD (Just key) = do
     maybeDistribution <- get key
     case maybeDistribution of
         Nothing -> return Nothing
-        Just dist -> return $ Just $ T.pack (distributionDescription dist)
+        Just dist -> return $ Just $ distributionDescription dist
 
 -- | Builds a Session structure from a list of tuples from the Lecture table,
 -- and a list of tuples from the Tutorial table.
@@ -162,7 +160,7 @@ buildSession lecs =
 
 -- | Looks up a graph using its title then gets the Shape, Text and Path elements
 -- for rendering graph (returned as JSON).
-getGraphJSON :: String -> IO Response
+getGraphJSON :: T.Text -> IO Response
 getGraphJSON graphName =
     runSqlite databasePath $ do
         graphEnt :: (Maybe (Entity Graph)) <- selectFirst [GraphTitle ==. graphName] []
@@ -221,16 +219,16 @@ allCourses = do
   return $ toResponse response
 
 -- | Returns all course info for a given department.
-courseInfo :: String -> ServerPart Response
+courseInfo :: T.Text -> ServerPart Response
 courseInfo dept = liftM createJSONResponse (getDeptCourses dept)
 
 -- | Returns all course info for a given department.
-getDeptCourses :: MonadIO m => String -> m [Course]
+getDeptCourses :: MonadIO m => T.Text -> m [Course]
 getDeptCourses dept =
     liftIO $ runSqlite databasePath $ do
         courses  :: [Entity Courses]  <- selectList [] []
         meetings :: [Entity Meeting]  <- selectList [] []
-        let c = filter (startswith dept . T.unpack . coursesCode) $ map entityVal courses
+        let c = filter (T.isPrefixOf dept . coursesCode) $ map entityVal courses
         mapM (buildTimes (map entityVal meetings)) c
     where
         meetingByCode course = filter (\m -> meetingCode m == coursesCode course)
@@ -238,9 +236,9 @@ getDeptCourses dept =
             let fallMeetings = filter (\lec -> meetingSession lec == "F") meetings
                 springMeetings = filter (\lec -> meetingSession lec == "S") meetings
                 yearMeetings = filter (\lec -> meetingSession lec == "Y") meetings
-                fall   = buildSession' (lecByCode course fallMeetings)
-                spring = buildSession' (lecByCode course springMeetings)
-                year   = buildSession' (lecByCode course yearMeetings)
+                fall   = buildSession' (meetingByCode course fallMeetings)
+                spring = buildSession' (meetingByCode course springMeetings)
+                year   = buildSession' (meetingByCode course yearMeetings)
             in
                 buildCourse fall spring year course
         buildSession' meetings =
@@ -265,22 +263,14 @@ queryGraphs = runSqlite databasePath $ do
 
 -- | Queries the database for all times regarding a specific lecture for
 -- a @course@, returns a list of Time.
-getMeetingTime :: (String, String, String) -> SqlPersistM [Time]
+getMeetingTime :: (T.Text, T.Text, T.Text) -> SqlPersistM [Time]
 getMeetingTime (meetingCode, meetingSection, meetingSession) = do
-    maybeEntityMeetings <- selectFirst [MeetingCode ==. T.pack meetingCode,
-                                        MeetingSection ==. Just (T.pack $ take 1 meetingSection ++ "EC" ++ drop 1 lecSection),
-                                        MeetingSession ==. T.pack meetingSession]
+    maybeEntityMeetings <- selectFirst [MeetingCode ==. meetingCode,
+                                        MeetingSection ==. getMeetingSection meetingSection,
+                                        MeetingSession ==. meetingSession]
                                        []
     return $ maybe [] (meetingTimes . entityVal) maybeEntityMeetings
 
-getMeetingSection ::
-
--- -- | Queries the database for all times regarding a specific tutorial for
--- -- a @course@, returns a list of Time.
--- getTutorialTime :: (String, String, String) -> SqlPersistM [Time]
--- getTutorialTime (tutCode, tutSection, tutSession) = do
---     maybeEntityTutorials <- selectFirst [TutorialCode ==. T.pack tutCode,
---                                          TutorialSection ==. Just (T.pack $ take 1 tutSection ++ "UT" ++ drop 1 tutSection),
---                                          TutorialSession ==. T.pack tutSession]
---                                         []
---     return $ maybe [] (tutorialTimes . entityVal) maybeEntityTutorials
+getMeetingSection :: T.Text -> Maybe T.Text
+getMeetingSection sec =
+    if T.isPrefixOf "L" sec then (Just (T.concat [T.take 1 sec, "EC", T.drop 1 sec])) else (Just (T.concat [T.take 1 sec, "UT", T.drop 1 sec]))
