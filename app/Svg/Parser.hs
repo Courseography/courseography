@@ -24,7 +24,7 @@ import qualified Text.HTML.TagSoup as TS
 import Database.Persist.Sqlite (runSqlite, SqlPersistM)
 import Text.HTML.TagSoup (Tag)
 import Control.Monad.IO.Class (liftIO)
-import Database.Tables
+import Database.Tables hiding (graphWidth)
 import Database.DataType
 import Svg.Database (insertGraph, insertElements, deleteGraphs)
 import Config (graphPath, databasePath)
