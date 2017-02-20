@@ -16,6 +16,8 @@ import Data.List.Split (splitOn)
 days :: [String]
 days = ["Mon", "Tue", "Wed", "Thu", "Fri"]
 
+-- |A list of lists of strings, which has the "times" from 8:00 to 12:00, and 
+-- 1:00 to 8:00.
 times :: [[String]]
 times = map (\x -> [show x ++ ":00"]) ([8..12] ++ [1..8] :: [Int])
 
