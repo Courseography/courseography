@@ -7,7 +7,6 @@ module WebParsing.UtsgJsonParser
       insertAllCourses) where
 
 import Data.Aeson ((.:?), (.!=), decode, FromJSON(parseJSON), Value(..), Object)
-import Data.Aeson.Types (Parser)
 import Control.Applicative ((<|>))
 import Data.Maybe (catMaybes)
 import Data.Either (partitionEithers, rights)
