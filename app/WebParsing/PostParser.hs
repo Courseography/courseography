@@ -48,7 +48,7 @@ addPostToDatabase :: [Tag String] -> SqlPersistM ()
 addPostToDatabase tags = do
     let postCode = T.pack (fromAttrib "name" ((take 1 $ filter (isTagOpenName "a") tags) !! 0))
         liPartitions = partitions isLiTag tags
-        prereqs = map getCourseFromTag $ map T.pack $ map (fromAttrib "href") $ filter isCourseTag tags
+        prereqs = map getCourseFromTag $ map (T.pack . fromAttrib "href") $ filter isCourseTag tags
         firstCourse = if (null prereqs) then Nothing else (Just (head prereqs))
     categoryParser tags firstCourse postCode liPartitions
     where
@@ -83,7 +83,7 @@ categoryParser tags firstCourse postCode liPartitions = do
             liftIO $ print "Failed"
             return ()
     where
-        parsed = case liPartitions of 
+        parsed = case liPartitions of
             [] -> P.parse (generalCategoryParser firstCourse postCode) "Failed." (T.pack $ innerText tags)
             partitions -> do
                 let categories = map parseLi partitions

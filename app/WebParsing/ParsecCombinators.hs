@@ -14,7 +14,7 @@ import Text.Parsec ((<|>))
 import qualified Data.Text as T
 import Text.Parsec.Text (Parser)
 import Database.Tables
-import Control.Monad
+import Control.Monad (mapM)
 
 getCourseFromTag :: T.Text -> T.Text
 getCourseFromTag courseTag =
@@ -61,10 +61,10 @@ findPostType = do
    return $ T.pack parsed
 
 getDepartmentName :: Parser T.Text
-getDepartmentName = 
+getDepartmentName =
     P.try (parseUntil (P.try (P.lookAhead (text " Specialist")) <|>
                         P.try (P.lookAhead (text " Major")) <|> 
-                        P.try (P.lookAhead (text " Minor"))))   
+                        P.try (P.lookAhead (text " Minor"))))
 
 getPostType :: Parser T.Text
 getPostType = do
