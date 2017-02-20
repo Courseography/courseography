@@ -37,7 +37,7 @@ Install both of the following.
 2. Create the db folder with `$ mkdir db`
 
 #### Installing
-1. Install GHC 7.10.3 with `$ stack setup 7.10.3`
+1. Install the latest GHC compiler with `$ stack setup`
 2. Compile Courseography with `$ stack build`
 
 #### Parsing and Generation

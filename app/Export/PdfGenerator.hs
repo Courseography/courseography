@@ -1,3 +1,7 @@
+{-|
+    Module      : Export.PdfGenerator
+    Description : Contains functions for generating a PDF from LaTeX text.
+-}
 module Export.PdfGenerator
     (createPDF) where
 

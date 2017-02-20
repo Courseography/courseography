@@ -1,5 +1,12 @@
 {-# LANGUAGE OverloadedStrings #-}
 
+{-|
+    Module      : Css.Post
+    Description : Defines the CSS for the post page.
+
+The post page is navigated to by clicking Check My POSt located at the top of
+any Courseography page.
+-}
 module Css.Post
     (postStyles) where
 
@@ -7,7 +14,7 @@ import Clay
 import Prelude hiding ((**))
 import Css.Constants
 
--- Post Styles
+-- |Defines the CSS for the post page.
 postStyles :: Css
 postStyles = do
     body ?

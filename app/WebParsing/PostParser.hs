@@ -11,7 +11,7 @@ import Config (databasePath)
 import Database.Tables
 import Database.Persist.Sqlite (insert_, runMigration, runSqlite, SqlPersistM)
 import qualified Text.Parsec as P
-import WebParsing.ParsecCombinators (getCourseFromTag, generalCategoryParser, parseCategory, 
+import WebParsing.ParsecCombinators (getCourseFromTag, generalCategoryParser, parseCategory,
     postInfoParser)
 
 fasCalendarURL :: String
@@ -25,7 +25,7 @@ getPost str = do
     let tags = filter isNotComment $ parseTags body
         postsSoup = secondH2 tags
         posts = partitions isPostName postsSoup
-    runSqlite databasePath $ do 
+    runSqlite databasePath $ do
         runMigration migrateAll
         mapM_ addPostToDatabase posts
     print $ "parsing " ++ str

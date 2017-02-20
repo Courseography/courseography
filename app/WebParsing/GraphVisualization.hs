@@ -47,23 +47,24 @@ makeGraph' codes filename =
        (\g -> graphVizProcess filename (graphToDot graphParams g))
 
 -- | constructs a graph of all courses starting with code.
-makeGraph :: String ->  IO ProcessHandle
+makeGraph :: T.Text ->  IO ProcessHandle
 makeGraph code = do
+    let codeStr = T.unpack code
     getDeptCourses code >>=
       toGraph >>=
-       (\g -> graphVizProcess code (graphToDot graphParams g)) >>=
-          (\_ -> runCommand $ "unflatten -f -l50 -c 4 -o out.dot " ++ code) >>=
-            (\_ -> runCommand $ "dot -Tsvg -o ./graphs/" ++ code ++".svg" ++ " out.dot")
+       (\g -> graphVizProcess codeStr (graphToDot graphParams g)) >>=
+          (\_ -> runCommand $ "unflatten -f -l50 -c 4 -o out.dot " ++ codeStr) >>=
+            (\_ -> runCommand $ "dot -Tsvg -o ./graphs/" ++ codeStr ++".svg" ++ " out.dot")
 
 
-junkCodes :: [String]
+junkCodes :: [T.Text]
 junkCodes = ["CMS"]
 
 main :: IO ()
 main = do
     rsp <- simpleHTTP (getRequest fasCalendarURL)
     body <- getResponseBody rsp
-    let depts = filter (isPrefixOf "crs_")  (getDeptList $ parseTags body)
-    let codes = map (drop 4 . takeWhile (/= '.') . map toUpper)  depts\\ junkCodes
+    let depts = filter (T.isPrefixOf "crs_")  (getDeptList $ parseTags $ T.pack body)
+    let codes = map (T.drop 4 . T.takeWhile (/= '.') . T.toUpper)  depts\\ junkCodes
     mapM_ makeGraph codes
     mapM_ (\x -> (runCommand $ "rm " ++ map toUpper x)) codes

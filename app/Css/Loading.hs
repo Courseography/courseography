@@ -1,5 +1,11 @@
 {-# LANGUAGE OverloadedStrings #-}
 
+{-|
+    Module      : Css.Loading
+    Description : Defines CSS for the loading animation.
+
+Currently, the loading animation isn't utilized anywhere.
+-}
 module Css.Loading
     (loadingStyles) where
 
@@ -8,8 +14,7 @@ import Prelude hiding ((**))
 import Data.Monoid
 import Css.Constants
 
-{- loadingStyles
- - Generates all CSS for the draw page. -}
+-- |Defines all CSS for the loading animation.
 loadingStyles :: Css
 loadingStyles = do
     spinnerCSS

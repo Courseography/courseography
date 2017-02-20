@@ -1,5 +1,9 @@
 {-# LANGUAGE NoMonomorphismRestriction, OverloadedStrings #-}
 
+{-|
+    Module      : Export.TimetableImageCreator
+    Description : Primarily defines a function used to render SVGs with times.
+-}
 module Export.TimetableImageCreator
     (renderTable, renderTableHelper, times) where
 
@@ -8,12 +12,15 @@ import Diagrams.Backend.SVG.CmdLine
 import Diagrams.Backend.SVG
 import Data.List (intersperse)
 import Data.List.Split (splitOn)
+import qualified Data.Text as T
 
-days :: [String]
+days :: [T.Text]
 days = ["Mon", "Tue", "Wed", "Thu", "Fri"]
 
-times :: [[String]]
-times = map (\x -> [show x ++ ":00"]) ([8..12] ++ [1..8] :: [Int])
+-- |A list of lists of Texts, which has the "times" from 8:00 to 12:00, and
+-- 1:00 to 8:00.times
+times :: [[T.Text]]
+times = map (\x -> [T.pack (show x ++ ":00")]) ([8..12] ++ [1..8] :: [Int])
 
 blue3 :: Colour Double
 blue3 = sRGB24read "#437699"
@@ -51,11 +58,11 @@ timeCell = rect timeCellWidth cellHeight # lw none
 timeCellPadding :: Diagram B
 timeCellPadding = rect timeCellWidth cellPaddingHeight # lw none
 
-cellText :: String -> Diagram B
-cellText s = font "Trebuchet MS" $ text s # fontSizeO (1024/900 * fs)
+cellText :: T.Text -> Diagram B
+cellText s = font "Trebuchet MS" $ (text $ T.unpack s) # fontSizeO (1024/900 * fs)
 
 -- | Creates and accumulates cells according to the number of course.
-makeCell :: Int -> [String] -> Diagram B
+makeCell :: Int -> [T.Text] -> Diagram B
 makeCell maxCourse sList =
     let actualCourse = length sList
         emptyCellNum = if maxCourse == 0 then 1 else maxCourse - actualCourse
@@ -65,28 +72,28 @@ makeCell maxCourse sList =
     where
         background = getBackground sList
 
-getBackground :: [String] -> Colour Double
+getBackground :: [T.Text] -> Colour Double
 getBackground s
     | null s = white
     | length s == 1 = blue3
     | otherwise = pomegranate
 
-header :: String -> Diagram B
+header :: T.Text -> Diagram B
 header session = (hcat $ (makeSessionCell session) : map makeHeaderCell days) # centerX === headerBorder
 
-makeSessionCell :: String -> Diagram B
+makeSessionCell :: T.Text -> Diagram B
 makeSessionCell s =
     timeCellPadding === (cellText s <> timeCell)
 
-makeHeaderCell :: String -> Diagram B
+makeHeaderCell :: T.Text -> Diagram B
 makeHeaderCell s =
     (cellPadding # lw none # fc white # lc white) === (cellText s <> cell # lw none)
 
-makeTimeCell :: String -> Diagram B
+makeTimeCell :: T.Text -> Diagram B
 makeTimeCell s =
     timeCellPadding === (cellText s <> timeCell)
 
-makeRow :: [[String]] -> Diagram B
+makeRow :: [[T.Text]] -> Diagram B
 makeRow ([x]:xs) =
     let maxCourse = maximum (map length xs)
     in (# centerX) . hcat $
@@ -99,18 +106,21 @@ headerBorder = hrule 11.2 # lw medium # lc pink1
 rowBorder :: Diagram B
 rowBorder = hrule 11.2 # lw thin # lc pink1
 
-makeTable :: [[[String]]] -> String -> Diagram B
+makeTable :: [[[T.Text]]] -> T.Text -> Diagram B
 makeTable s session = vsep 0.04 $ (header session): intersperse rowBorder (map makeRow s)
 
-renderTable :: String -> String -> String -> IO ()
+-- |Creates a timetable by zipping the time and course tables.
+renderTable :: String -> T.Text -> T.Text -> IO ()
 renderTable filename courses session = do
-    let courseTable = partition5 $ map (\x -> if null x then [] else [x]) $ splitOn "_" courses
+    let courseTable = partition5 $ map (\x -> if T.null x then [] else [x]) $ T.splitOn "_" courses
     renderTableHelper filename (zipWith (:) times courseTable) session
     where
         partition5 [] = []
         partition5 lst = take 5 lst : partition5 (drop 5 lst)
 
-renderTableHelper :: String -> [[[String]]] -> String -> IO ()
+-- |Renders an SVG with a width of 1024, though the documentation doesn't
+-- specify the units, it is assumed that these are pixels.
+renderTableHelper :: String -> [[[T.Text]]] -> T.Text -> IO ()
 renderTableHelper filename schedule session = do
     let g = makeTable schedule session
     renderSVG filename (mkWidth 1024) g

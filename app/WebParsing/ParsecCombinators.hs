@@ -130,4 +130,3 @@ text someText = do
 -- For testing purposed in REPL
 parseAll :: Parser [T.Text]
 parseAll = P.many parseCategory
-

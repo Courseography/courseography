@@ -1,5 +1,12 @@
 {-# LANGUAGE OverloadedStrings #-}
 
+{-|
+    Module      : Css.Timetable
+    Description : Defines the CSS for the timetable page.
+
+The timetable page is found by navigating to the search button at the top of
+Courseography.
+-}
 module Css.Timetable
     (timetableStyles) where
 
@@ -8,8 +15,7 @@ import Prelude hiding ((**))
 import Data.Monoid
 import Css.Constants
 
-{- timetableStyles
- - Generates all CSS required for the timetable page. -}
+-- |Defines the CSS for the timetable page.
 timetableStyles :: Css
 timetableStyles = do
     ".main" ? do -- TODO: change to id, and pick better name
