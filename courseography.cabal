@@ -64,6 +64,7 @@ executable courseography
     Svg.Database,
     Svg.Generator,
     Svg.Parser,
+    Test.ParserTests,
     Util.Blaze,
     Util.Happstack,
     WebParsing.ArtSciParser,
@@ -76,8 +77,7 @@ executable courseography
     WebParsing.ReqParser,
     WebParsing.TimeConverter,
     WebParsing.UtsgJsonParser,
-    WebParsing.ParsecCombinators,
-    Test.HUnit
+    WebParsing.ParsecCombinators
   other-extensions:
     OverloadedStrings,
     DataKinds,
@@ -94,9 +94,6 @@ executable courseography
     TemplateHaskell,
     TypeFamilies
   build-depends:
-    deepseq,
-    call-stack,
-    filepath,
     base >= 4.9,
     blaze-markup,
     blaze-html,
