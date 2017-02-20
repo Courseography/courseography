@@ -104,7 +104,7 @@ buildSVG graphName courseMap filename styled =
                                                     height
         liftIO $ writeFile filename stringSVG :: SqlPersistM ()
     where
-        keyAsInt :: PersistEntity a => Entity a -> hybridFontSize
+        keyAsInt :: PersistEntity a => Entity a -> Integer
         keyAsInt = fromIntegral . (\(PersistInt64 x) -> x) . head . keyToValues . entityKey
 
         convertSelectionToStyle :: String -> String
@@ -257,7 +257,7 @@ textToSVG styled type_ xPos' text =
                        _ -> "middle"
 
         fontSize = case type_ of
-            Hybrid -> Integer
+            Hybrid -> hybridFontSize
             BoolNode -> boolFontSize
             Region -> regionFontSize
             _ -> nodeFontSize

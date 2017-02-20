@@ -455,7 +455,7 @@ nodeFontSize :: Num a => a
 nodeFontSize = 12
 
 -- |Defines hybrid font size, 7 in pixels.
-hybridFontSize :: Num a => a
+hybridFontSize :: Double
 hybridFontSize = 7
 
 
