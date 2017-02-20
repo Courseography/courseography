@@ -7,7 +7,7 @@ module Database.PostInsertion(
 import qualified Data.Text as T
 import Config (databasePath)
 import Database.Persist.Sqlite (insert_, runSqlite, runMigration, SqlPersistM)
-import Database.Tables hiding (postCode)
+import Database.Tables hiding (postCode, description)
 
 -- | Insert a new post into the database
 insertPost :: T.Text -> T.Text -> T.Text -> T.Text -> IO ()
