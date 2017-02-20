@@ -12,7 +12,8 @@
              TypeFamilies #-}
 
 {-|
-Description: The database schema (and some helpers).
+    Module      : Database.Tables
+    Description : The database schema (and some helpers).
 
 This module defines the database schema. It uses Template Haskell to also
 create new types for these values so that they can be used in the rest of
