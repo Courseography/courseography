@@ -76,7 +76,8 @@ executable courseography
     WebParsing.ReqParser,
     WebParsing.TimeConverter,
     WebParsing.UtsgJsonParser,
-    WebParsing.ParsecCombinators
+    WebParsing.ParsecCombinators,
+    Test.HUnit
   other-extensions:
     OverloadedStrings,
     DataKinds,
@@ -93,6 +94,9 @@ executable courseography
     TemplateHaskell,
     TypeFamilies
   build-depends:
+    deepseq,
+    call-stack,
+    filepath,
     base >= 4.9,
     blaze-markup,
     blaze-html,
@@ -135,6 +139,7 @@ executable courseography
     time,
     parsec,
     HaTeX,
+    HUnit,
     turtle
   default-language: Haskell2010
   ghc-options: -Wall -fwarn-tabs

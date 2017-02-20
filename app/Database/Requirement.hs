@@ -16,6 +16,7 @@ import qualified Data.List as L
 
 data ProgramReq = PRGREQ String [Req] deriving (Eq, Show)
 
+
 -- -- Returns a well formatted String representing a program requirement for specified program.
 -- instance Show ProgramReq where
 --     show (PRGREQ program reqs) = "Program Requirements for " ++ program
