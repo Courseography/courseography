@@ -76,7 +76,7 @@ Lecture
     code T.Text
     Foreign Courses fkcourse code
     session T.Text
-    section T.Text
+    section T.Text Maybe
     times [Time]
     cap Int
     instructor T.Text
@@ -88,9 +88,44 @@ Lecture
 
 Tutorial
     code T.Text
-    section T.Text Maybe
+    Foreign Courses fkcourse code
     session T.Text
+    section T.Text Maybe
     times [Time]
+    cap Int
+    instructor T.Text
+    enrol Int
+    wait Int
+    extra Int
+    timeStr T.Text
+    deriving Generic Show
+
+Practical
+    code T.Text
+    Foreign Courses fkcourse code
+    session T.Text
+    section T.Text Maybe
+    times [Time]
+    cap Int
+    instructor T.Text
+    enrol Int
+    wait Int
+    extra Int
+    timeStr T.Text
+    deriving Generic Show
+
+LTP
+    code T.Text
+    Foreign Courses fkcourse code
+    session T.Text
+    section T.Text Maybe
+    times [Time]
+    cap Int
+    instructor T.Text
+    enrol Int
+    wait Int
+    extra Int
+    timeStr T.Text
     deriving Generic Show
 
 Breadth
@@ -238,6 +273,57 @@ instance FromJSON Courses where
                      newCoreqs
                      []
 
+
+-- ==================================================
+instance ToJSON LTP where
+  toJSON = genericToJSON defaultOptions {
+    fieldLabelModifier =
+      (\field -> (toLower $ head field): (tail field)) .
+      drop 7
+  }
+
+instance FromJSON LTP where
+  parseJSON = withObject "Expected Object for Lecture, Tutorial or Practical" $ \o -> do
+    teachingMethod :: T.Text <- o .:? "teachingMethod" .!= ""
+    sectionNumber :: T.Text <- o .:? "sectionNumber" .!= ""
+    timeMap :: Value <- o .:? "schedule" .!= Null
+    allTimes <- case timeMap of
+        Object obj -> do
+            times <- mapM parseTimes (HM.elems obj)
+            return $ concat times
+        _ -> return []
+    let sectionId = T.concat [teachingMethod, sectionNumber]
+
+    capStr <- o .:? "enrollmentCapacity" .!= "-1"
+    enrolStr <- o .:? "actualEnrolment" .!= "0"
+    waitStr <- o .:? "actualWaitlist" .!= "0"
+    let cap = fromMaybe (-1) $ readMaybe capStr
+        enrol = fromMaybe 0 $ readMaybe enrolStr
+        wait = fromMaybe 0 $ readMaybe waitStr
+    instrMap2 :: Value <- o .:? "instructors" .!= Null
+    let instrList =
+          case instrMap2 of
+            Object obj -> HM.elems obj
+            _ -> []
+
+    instrs <- mapM parseInstr instrList
+    let extra = 0
+    let timeStr = ""
+    let instructor = T.intercalate "; " $ filter (not . T.null) instrs
+    if teachingMethod == "LEC" || teachingMethod == "TUT" || teachingMethod == "PRA"
+    then
+      return $ LTP "" "" (Just sectionId) allTimes cap instructor enrol wait extra timeStr
+    else
+      fail "Not a lecture, Tutorial or Practical"
+
+-- ===========================================================
+
+
+
+
+
+
+
 instance ToJSON Lecture where
   toJSON = genericToJSON defaultOptions {
     fieldLabelModifier =
@@ -275,7 +361,7 @@ instance FromJSON Lecture where
     let instructor = T.intercalate "; " $ filter (not . T.null) instrs
     if teachingMethod == "LEC"
     then
-      return $ Lecture "" "" sectionId allTimes cap instructor enrol wait extra timeStr
+      return $ Lecture "" "" (Just sectionId) allTimes cap instructor enrol wait extra timeStr
     else
       fail "Not a lecture"
 
@@ -299,15 +385,25 @@ instance FromJSON Tutorial where
     let sectionId = T.concat [teachingMethod, sectionNumber]
 
     -- TODO: Tutorials should have these stats, too!
-    -- capStr <- o .:? "enrollmentCapacity" .!= "-1"
-    -- enrolStr <- o .:? "actualEnrolment" .!= "0"
-    -- waitStr <- o .:? "actualWaitlist" .!= "0"
-    -- let cap = fromMaybe (-1) $ readMaybe capStr
-    --     enrol = fromMaybe 0 $ readMaybe enrolStr
-    --     wait = fromMaybe 0 $ readMaybe waitStr
+    capStr <- o .:? "enrollmentCapacity" .!= "-1"
+    enrolStr <- o .:? "actualEnrolment" .!= "0"
+    waitStr <- o .:? "actualWaitlist" .!= "0"
+    let cap = fromMaybe (-1) $ readMaybe capStr
+        enrol = fromMaybe 0 $ readMaybe enrolStr
+        wait = fromMaybe 0 $ readMaybe waitStr
+    instrMap2 :: Value <- o .:? "instructors" .!= Null
+    let instrList =
+          case instrMap2 of
+            Object obj -> HM.elems obj
+            _ -> []
+
+    instrs <- mapM parseInstr instrList
+    let extra = 0
+    let timeStr = ""
+    let instructor = T.intercalate "; " $ filter (not . T.null) instrs
     if teachingMethod == "TUT"
     then
-      return $ Tutorial "" (Just sectionId) "" allTimes
+      return $ Tutorial "" "" (Just sectionId) allTimes cap instructor enrol wait extra timeStr
     else
       fail "Not a tutorial"
 

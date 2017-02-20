@@ -126,7 +126,7 @@ getCourseInfo :: Either Lecture Tutorial
 getCourseInfo (Left lect) = (code, sect, start, end, dates)
     where
         code = T.unpack $ lectureCode lect
-        sect = T.unpack $ lectureSection lect
+        sect = maybe "" T.unpack (lectureSection lect)
         dataInOrder = orderTimeFields $ lectureTimes lect
         start = startTimesByCourse dataInOrder (T.unpack $ lectureSession lect)
         end = endTimesByCourse dataInOrder (T.unpack $ lectureSession lect)

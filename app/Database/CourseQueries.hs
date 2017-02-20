@@ -109,7 +109,7 @@ returnTutorial lowerStr sect session = do
 returnLecture :: T.Text -> T.Text -> T.Text -> SqlPersistM (Maybe Lecture)
 returnLecture lowerStr sect session = do
     maybeEntityLectures <- selectFirst [LectureCode ==. T.toUpper lowerStr,
-                                        LectureSection ==. sect,
+                                        LectureSection ==. Just sect,
                                         LectureSession ==. session]
                                        []
     return $ fmap entityVal maybeEntityLectures
@@ -277,7 +277,7 @@ queryGraphs = runSqlite databasePath $ do
 getLectureTime :: (String, String, String) -> SqlPersistM [Time]
 getLectureTime (lecCode, lecSection, lecSession) = do
     maybeEntityLectures <- selectFirst [LectureCode ==. T.pack lecCode,
-                                        LectureSection ==. (T.pack $ take 1 lecSection ++ "EC" ++ drop 1 lecSection),
+                                        LectureSection ==. Just (T.pack $ take 1 lecSection ++ "EC" ++ drop 1 lecSection),
                                         LectureSession ==. T.pack lecSession]
                                        []
     return $ maybe [] (lectureTimes . entityVal) maybeEntityLectures
