@@ -21,7 +21,7 @@ module Svg.Builder
 
 import Data.Char (toLower)
 import Data.List (find)
-import Database.Tables
+import Database.Tables hiding texts
 import Database.DataType
 
 -- * Builder functions
