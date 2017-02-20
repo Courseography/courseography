@@ -20,7 +20,7 @@ import Happstack.Server.SimpleHTTP (Response, toResponse)
 import Config (databasePath)
 import Database.Persist.Class (selectKeysList, Key)
 import Database.Persist.Sqlite (selectFirst, insertMany_, insert_, insert, SqlPersistM, (=.), (==.), updateWhere, runSqlite)
-import Database.Tables hiding (texts, shapes, paths, nameStr, description, postCode)
+import Database.Tables hiding (texts, shapes, paths, nameStr, description)
 import qualified Data.Aeson as Aeson
 
 -- | Inserts SVG graph data into Texts, Shapes, and Paths tables
