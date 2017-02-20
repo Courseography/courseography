@@ -21,6 +21,13 @@ import System.Directory (createDirectoryIfMissing)
 import Data.Text as T (length, findIndex, take, unpack, reverse)
 import Data.Maybe (fromMaybe)
 
+
+distTableSetUpStr :: String
+distTableSetUpStr = "Distribution table set up"
+breathTableSetUpStr :: String
+breathTableSetUpStr = "breadth table set up"
+
+
 -- | Main function for setting up the database with course information.
 --
 -- TODO: Probably combine seeding of Distribution and Breadth tables,
@@ -32,9 +39,9 @@ setupDatabase = do
         db = T.unpack $ T.take ind databasePath
     createDirectoryIfMissing True db
     setupDistributionTable
-    print "Distribution table set up"
+    print distTableSetUpStr
     setupBreadthTable
-    print "breadth table set up"
+    print breathTableSetUpStr
     parseAll
     seedVideos
 

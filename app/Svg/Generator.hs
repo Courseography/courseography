@@ -44,6 +44,7 @@ import qualified Data.Map.Strict as M
 import Data.Monoid (mempty, mappend, mconcat)
 import Config (databasePath)
 
+
 -- | This is the main function that retrieves a stored graph
 -- from the database and creates a new SVG file for it.
 buildSVG :: T.Text               -- ^ The name of the graph that is being built.
