@@ -37,6 +37,8 @@ instance Show CourseReq where
                                         ++ show preq ++ "\n"
 
 -- for now J seems to be most readable and convenient value constructor for satisfying rec structure.
+-- | Defines a requirement data type, it should be noted that it can be a
+-- course requirement or a program requirement.
 data Req = J String | AND [Req] | OR [Req] | FROM String Req | GRADE String Req | RAW String
 
 instance Show Req where
