@@ -458,7 +458,6 @@ nodeFontSize = 12
 hybridFontSize :: Double
 hybridFontSize = 7
 
-
 -- |Defines bool font size, 6 in pixels.
 boolFontSize :: Num a => a
 boolFontSize = 6
