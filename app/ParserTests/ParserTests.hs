@@ -10,9 +10,9 @@ Module containing test cases for Requirement Parsers.
 -- for HUnit.
 
 module ParserTests.ParserTests
-( createTest,
-  runTests,
-  runOrTests
+( runPracTests,
+  runOrTests,
+  runAndTests
 ) where
 
 import Test.HUnit
@@ -25,49 +25,51 @@ import Control.Monad.Identity (Identity)
 -- create function that takes in a parser and string,
 -- applies parser to string and creates assertion as in test 2?
 
-test1 :: Test
-test1 = TestCase (assertEqual "for (parseReqs \"csc108h1 or csc148h1\")," (OR [J"csc108h1",J"csc148h1"]) (parseReqs "csc108h1 or csc148h1"))
+pracTest1 :: Test
+pracTest1 = TestCase (assertEqual "for (parseReqs \"csc108h1 or csc148h1\")," (OR [J"csc108h1",J"csc148h1"]) (parseReqs "csc108h1 or csc148h1"))
 
-test2 :: Test
-test2 = TestCase(let courseReq = Parsec.parse courseParser "" " csc148h1 "
+pracTest2 :: Test
+pracTest2 = TestCase(let courseReq = Parsec.parse courseParser "" " csc148h1 "
                     in assertEqual "for (courseParser \" csc148h1 \")," (Right $ J"csc148h1") courseReq)
 
-test3 :: Test
-test3 = TestCase(let courseReq = Parsec.parse orParser "" " csc148h1 "
+pracTest3 :: Test
+pracTest3 = TestCase(let courseReq = Parsec.parse orParser "" " csc148h1 "
                     in assertEqual "for (orParser \" csc148h1 \")," (Right $ OR[J"csc148h1"]) courseReq)
 
-test4 :: Test
-test4 = TestCase(let courseReq = Parsec.parse andParser "" " csc148h1,csc165h1 "
+pracTest4 :: Test
+pracTest4 = TestCase(let courseReq = Parsec.parse andParser "" " csc148h1,csc165h1 "
                     in assertEqual "for (andParser \" csc148h1,csc165h1 \")," (Right $ AND[J"csc148h1",J"csc165h1"]) courseReq)
 
-test5 :: Test
-test5 = TestCase(let courseReq = Parsec.parse andParser "" " csc108h1/csc148h1,csc165h1 "
+pracTest5 :: Test
+pracTest5 = TestCase(let courseReq = Parsec.parse andParser "" " csc108h1/csc148h1,csc165h1 "
                     in assertEqual "for (andParser \" csc108h1,csc148h1,csc165h1 \")," (Right $ AND[OR[J"csc108h1",J"csc148h1"],J"csc165h1"]) courseReq)
 
-createTest :: String -> Req -> Parser Req -> Test
-createTest input expected parser = TestCase (let courseReq =  Parsec.parse parser "" input
+createTest :: (String, Req) -> Parser Req -> Test
+createTest (input, expected) parser = TestCase (let courseReq =  Parsec.parse parser "" input
     in assertEqual ("for (" ++ input ++ "),") (Right expected) courseReq)
 
-
 -- orTests
-orInputs :: [String]
-orInputs = ["csc108h1","csc108h1 or csc148h1", "csc104h1/csc108h1/csc148h1"]
-
-orExpected :: [Req]
-orExpected = [J"csc108h1",OR[J"csc108h1",J"csc148h1"], OR[J"csc104h1",J"csc108h1",J"csc148h1"]]
--- map over inputs and expected values
+orInputs :: [(String, Req)]
+orInputs = [("csc108h1", J"csc108h1"),("csc108h1 or csc148h1", OR[J"csc108h1",J"csc148h1"]), ("csc104h1/csc108h1,csc165h1", AND[OR[J"csc104h1",J"csc108h1"],J"csc165h1"])]
 orTests :: Test
-orTests = TestList $ (map (\parserToTest -> parserToTest orParser) (zipWith createTest orInputs orExpected))
+orTests = TestList $ (map (\parserToTest -> parserToTest orParser) (map createTest orInputs))
+
 -- andTests
-andInputs = ["csc148h1 and csc165h1", "csc108h1/csc148h1,csc165h1", "csc104h1/csc108h1/csc148h1,csc165h1"]
-andTests = []
--- parseReqsTests
+andInputs :: [(String, Req)]
+andInputs = [("csc108h1", J"csc108h1"),("csc108h1 and csc148h1", AND[J"csc108h1",J"csc148h1"]), ("csc104h1/csc108h1/csc165h1", AND[OR[J"csc104h1",J"csc108h1"],J"csc148h1"])]
+andTests :: Test
+andTests = TestList $ (map (\parserToTest -> parserToTest andParser) (map createTest andInputs))
 
+-- functions for running tests in REPL
 tests :: Test
-tests = TestList [TestLabel "parseReqs" test1, TestLabel "testsingleParser" test2]
+tests = TestList [TestLabel "practice test 1" pracTest1, TestLabel "practice test 2" pracTest2, TestLabel "practice test 3" pracTest3]
 
-runTests :: IO Counts
-runTests = runTestTT tests
-
+-- expecting error on practice test 1
+runPracTests :: IO Counts
+runPracTests = runTestTT tests
+-- expecting
 runOrTests :: IO Counts
 runOrTests = runTestTT orTests
+-- expecting 
+runAndTests :: IO Counts
+runAndTests = runTestTT andTests
