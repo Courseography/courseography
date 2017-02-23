@@ -11,9 +11,9 @@ import Database.Tables hiding (postCode, description, postCategoryName)
 
 -- | Insert a new post into the database
 insertPost :: T.Text -> T.Text -> T.Text -> T.Text -> IO ()
-insertPost departmentName1 postName0 postCode description =
+insertPost departmentName1 postName_ postCode description =
     runSqlite databasePath $ do
-        insert_ $ Post postName0 departmentName1 postCode description  :: SqlPersistM ()
+        insert_ $ Post postName_ departmentName_ postCode description  :: SqlPersistM ()
 
 -- | Insert a new post category into the database
 insertPostCategory :: T.Text -> T.Text -> IO ()
