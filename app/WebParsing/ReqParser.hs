@@ -126,6 +126,7 @@ singleParser = do
     code <- Parsec.count 3 Parsec.letter
     num <- Parsec.count 3 Parsec.digit
     -- TODO: Make the last two letters more restricted.
+    -- EITHER 'H' or 'Y' followed by '1'
     sess <- Parsec.count 2 Parsec.alphaNum
     return $ J (code ++ num ++ sess)
 
@@ -143,7 +144,11 @@ orParser :: Parser Req
 orParser = do
     reqs <- Parsec.sepBy courseParser orSeparator
     -- TODO: separate cases when reqs has 1 Req vs. multiple Reqs.
-    return $ OR reqs
+    case reqs of
+        -- must check for nested errors!
+        Right [x] -> reqs
+        Right (x:xs) -> OR reqs
+        Left _ -> reqs
 
 -- | Parser for for reqs related through an AND.
 andParser :: Parser Req
