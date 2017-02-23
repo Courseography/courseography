@@ -145,10 +145,9 @@ orParser = do
     reqs <- Parsec.sepBy courseParser orSeparator
     -- TODO: separate cases when reqs has 1 Req vs. multiple Reqs.
     case reqs of
-        -- must check for nested errors!
         Right [x] -> reqs
         Right (x:xs) -> OR reqs
-        Left _ -> reqs
+        Left _ -> OR reqs
 
 -- | Parser for for reqs related through an AND.
 andParser :: Parser Req
@@ -184,7 +183,9 @@ parseReqs reqString =
         Right x -> x
         Left e -> J (show e)
 
-    -- [] look for more conrner cases where separators are in english between
-    --    complex reqs.
-    -- [] year (Done by Christine)
-    -- [] create Group Type
+    -- [] When using sepby, we are not returning a list of reqs.. we are returning
+    --    a list of Eithers.. should we use nested case matching?
+    --    if so, single case is easy, but how can we pattern match and extract
+    --    all "Right Reqs" and create a list of reqs to call OR value constructor on..
+    --
+    --    MAP??? create lambda function that extracts Right only?
