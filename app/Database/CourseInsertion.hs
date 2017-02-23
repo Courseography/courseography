@@ -34,8 +34,8 @@ saveGraphJSON jsonStr nameStr = do
             return $ toResponse $ ("Success" :: String)
     where
         insertGraph :: String -> [Text] -> [Shape] -> [Path] -> SqlPersistM ()
-        insertGraph nameStr1 texts shapes paths = do
-            gId <- insert $ Graph nameStr1 256 256
+        insertGraph nameStr_ texts shapes paths = do
+            gId <- insert $ Graph nameStr_ 256 256
             insertMany_ $ map (\text -> text {textGraph = gId}) texts
             insertMany_ $ map (\shape -> shape {shapeGraph = gId}) shapes
             insertMany_ $ map (\path -> path {pathGraph = gId}) paths
@@ -46,8 +46,8 @@ saveGraphJSON jsonStr nameStr = do
 -- Get Key of correspondig record in Distribution column
 getDistributionKey :: Maybe T.Text -> SqlPersistM (Maybe (Key Distribution))
 getDistributionKey Nothing = return Nothing
-getDistributionKey (Just description0) = do
-    keyListDistribution :: [Key Distribution] <- selectKeysList [ DistributionDescription ==. (T.unpack description0) ] []
+getDistributionKey (Just description_) = do
+    keyListDistribution :: [Key Distribution] <- selectKeysList [ DistributionDescription ==. (T.unpack description_) ] []
     -- option: keyListDistribution :: [DistributionId] <- selectKeysList [ DistributionDescription `contains'` description] []
     return $ case keyListDistribution of
         [] -> Nothing
@@ -55,8 +55,8 @@ getDistributionKey (Just description0) = do
 
 getBreadthKey :: Maybe T.Text -> SqlPersistM (Maybe (Key Breadth))
 getBreadthKey Nothing = return Nothing
-getBreadthKey (Just description1) = do
-    keyListBreadth :: [Key Breadth] <- selectKeysList [ BreadthDescription ==. (T.unpack description1) ] []
+getBreadthKey (Just description__) = do
+    keyListBreadth :: [Key Breadth] <- selectKeysList [ BreadthDescription ==. (T.unpack description__) ] []
     -- option: selectKeysList [ BreadthDescription `contains'` description] []
     return $ case keyListBreadth of
         [] -> Nothing
