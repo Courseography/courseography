@@ -91,7 +91,6 @@ parseArtSci :: IO ()
 parseArtSci = do
     rsp <- simpleHTTP (getRequest fasCalendarURL)
     body <- (getResponseBody rsp)
-    print body
     let depts = getDeptList $ parseTags (T.pack body)
     putStrLn "Parsing Arts and Science Posts"
     -- mapM_ getPost depts

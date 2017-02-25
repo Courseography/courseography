@@ -26,6 +26,7 @@ import Database.Tables as Tables
 import Control.Monad.IO.Class (liftIO, MonadIO)
 import Util.Happstack (createJSONResponse)
 import qualified Data.Text as T
+import Data.Maybe (fromMaybe)
 import WebParsing.ParsingHelp
 import Data.String.Utils
 import Data.List
@@ -39,16 +40,6 @@ import Svg.Builder
 ---- | Queries db for all matching records with lecture or tutorial code of this course
 meetingQuery :: T.Text -> SqlPersistM [Entity Meeting]
 meetingQuery meetingCode = selectList [MeetingCode ==. meetingCode] []
-
--- tutorialQuery :: T.Text -> SqlPersistM [Entity Tutorial]
--- tutorialQuery courseCode = selectList [TutorialCode ==. courseCode] []
-
--- splitSessionsT :: [Entity Tutorial] -> ([Entity Tutorial], [Entity Tutorial], [Entity Tutorial])
--- splitSessionsT tutorialsList =
---     let fallTut = filter (\tut -> tutorialSession (entityVal tut) == "F") tutorialsList
---         springTut = filter (\tut -> tutorialSession (entityVal tut) == "S") tutorialsList
---         yearTut = filter (\tut -> tutorialSession (entityVal tut) == "Y") tutorialsList
---     in  (fallTut, springTut, yearTut)
 
 splitSessions :: [Entity Meeting] -> ([Entity Meeting], [Entity Meeting], [Entity Meeting])
 splitSessions meetingsList =
@@ -150,11 +141,17 @@ getDescriptionD (Just key) = do
         Nothing -> return Nothing
         Just dist -> return $ Just $ distributionDescription dist
 
--- | Builds a Session structure from a list of tuples from the Lecture table,
--- and a list of tuples from the Tutorial table.
+-- | Builds a Session structure from three lists of tuples from the Meeting table,
+-- representing information for lectures, tutorials and practicals.
 buildSession :: [Entity Meeting] -> Maybe Tables.Session
-buildSession lecs =
-    Just $ Tables.Session (map entityVal lecs)
+buildSession meetings = buildSession' $ map entityVal meetings
+
+buildSession' :: [Meeting] -> Maybe Tables.Session
+buildSession' meetings =
+    let lecs = filter (\m -> (fmap T.head $ meetingSection m) == Just 'L') meetings
+        tuts = filter (\m -> (fmap T.head $ meetingSection m) == Just 'T') meetings
+        pras = filter (\m -> (fmap T.head $ meetingSection m) == Just 'P') meetings
+    in Just $ Tables.Session lecs tuts pras
 
 -- ** Other queries
 
@@ -241,8 +238,6 @@ getDeptCourses dept =
                 year   = buildSession' (meetingByCode course yearMeetings)
             in
                 buildCourse fall spring year course
-        buildSession' meetings =
-            Just $ Tables.Session meetings
 
 -- | Return a list of all departments.
 deptList :: IO Response
