@@ -144,10 +144,7 @@ orParser :: Parser Req
 orParser = do
     reqs <- Parsec.sepBy courseParser orSeparator
     -- TODO: separate cases when reqs has 1 Req vs. multiple Reqs.
-    case reqs of
-        Right [x] -> reqs
-        Right (x:xs) -> OR reqs
-        Left _ -> OR reqs
+    return $ OR reqs
 
 -- | Parser for for reqs related through an AND.
 andParser :: Parser Req
