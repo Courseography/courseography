@@ -44,25 +44,25 @@ postInfoParser firstCourse = do
 
     return (description, departmentName, postType)
 
-extractPostType :: String -> String
-extractPostType postCode = do
-    let parsed = P.parse findPostType "(source)" postCode
-    case parsed of
-        Right name -> name
-        Left _ -> ""
+-- extractPostType :: String -> String
+-- extractPostType postCode = do
+--     let parsed = P.parse findPostType "(source)" postCode
+--     case parsed of
+--         Right name -> name
+--         Left _ -> ""
 
-findPostType :: Parser String
-findPostType = do
-   P.string "AS"
-   P.many1 P.letter
+-- findPostType :: Parser String
+-- findPostType = do
+--    P.string "AS"
+--    P.many1 P.letter
 
 getDepartmentName :: Parser String
-getDepartmentName = 
+getDepartmentName =
     (P.try (parseUntil ((P.try (P.lookAhead (P.string " Specialist"))) <|>
-                        (P.try (P.lookAhead (P.string " Major"))) <|> 
-                        (P.try (P.lookAhead (P.string " Minor"))))))   
+                        (P.try (P.lookAhead (P.string " Major"))) <|>
+                        (P.try (P.lookAhead (P.string " Minor"))))))
 
-getPostType :: Parser String 
+getPostType :: Parser String
 getPostType = do
     P.spaces
     ((P.try (P.string "Specialist")) <|>
@@ -139,6 +139,5 @@ parseUpToSeparator :: Parser String
 parseUpToSeparator = parseUntil (P.notFollowedBy (P.noneOf ",/();\r\n"))
 
 -- For testing purposed in REPL
-parseAll :: Parser [String]
-parseAll = P.many (parseCategory False)
-
+-- parseAll :: Parser [String]
+-- parseAll = P.many (parseCategory False)
