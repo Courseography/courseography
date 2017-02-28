@@ -53,7 +53,7 @@ extractPostType postCode = do
 
 findPostType :: Parser String
 findPostType = do
-   P.string "AS"
+   _ <- P.string "AS"
    P.many1 P.letter
 
 getDepartmentName :: Parser String
@@ -90,7 +90,7 @@ findFirstCourse firstCourse =
 
 parseNoteLine :: Parser String
 parseNoteLine = do
-    P.string "Note"
+    _ <- P.string "Note"
     (P.try (parseUntil (P.char '\n'))) <|> (parseUntil P.eof)
 
 parseNotes :: Parser String
