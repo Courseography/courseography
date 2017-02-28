@@ -95,8 +95,8 @@ parseNoteLine = do
 
 parseNotes :: Parser String
 parseNotes = do
-    (P.try (P.string "Notes")) <|> (P.try (P.string "NOTES"))
-    parseUntil P.eof
+    _ <- (P.try (P.string "Notes")) <|> (P.try (P.string "NOTES"))
+    _ <- parseUntil (P.eof)
     return ""
 
 parseUntil :: Parser a -> Parser String
