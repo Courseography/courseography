@@ -142,11 +142,6 @@ Path json
     target T.Text
     deriving Show
 
-FacebookTest
-    fId T.Text
-    testString T.Text
-    deriving Show
-
 Post
     name T.Text
     department T.Text
