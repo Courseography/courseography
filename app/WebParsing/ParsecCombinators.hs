@@ -24,7 +24,7 @@ getCourseFromTag courseTag =
 
 findCourseFromTag :: Parser String
 findCourseFromTag = do
-    parseUntil (P.char '#')
+    _ <- parseUntil (P.char '#')
     P.many1 P.anyChar
 
 generalCategoryParser :: Maybe String -> Parser (String, String, String, [String])
@@ -57,12 +57,12 @@ findPostType = do
    P.many1 P.letter
 
 getDepartmentName :: Parser String
-getDepartmentName = 
+getDepartmentName =
     (P.try (parseUntil ((P.try (P.lookAhead (P.string " Specialist"))) <|>
-                        (P.try (P.lookAhead (P.string " Major"))) <|> 
-                        (P.try (P.lookAhead (P.string " Minor"))))))   
+                        (P.try (P.lookAhead (P.string " Major"))) <|>
+                        (P.try (P.lookAhead (P.string " Minor"))))))
 
-getPostType :: Parser String 
+getPostType :: Parser String
 getPostType = do
     P.spaces
     ((P.try (P.string "Specialist")) <|>
@@ -141,4 +141,3 @@ parseUpToSeparator = parseUntil (P.notFollowedBy (P.noneOf ",/();\r\n"))
 -- For testing purposed in REPL
 parseAll :: Parser [String]
 parseAll = P.many (parseCategory False)
-

@@ -77,4 +77,4 @@ disclaimer =
         _ <- " take precedence over the information presented here. "
         _ <- "It's important that you double-check your course selection, "
         _ <- "prerequisites, and your program plans."
-        _ <- "Some graph edges may represent a corequisite rather than a prerequisite."
+        "Some graph edges may represent a corequisite rather than a prerequisite."
