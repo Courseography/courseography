@@ -11,8 +11,6 @@ import Config (enableFb, enableCdn)
 import Util.Blaze
 import Scripts (globalScripts)
 
-
-
 masterTemplate :: String -> [H.Html] -> H.Html -> H.Html -> H.Html
 masterTemplate title headers body scripts =
     H.html $ do
