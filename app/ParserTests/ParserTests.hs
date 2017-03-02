@@ -14,7 +14,7 @@ module ParserTests.ParserTests
   runReqTests
 ) where
 
-import Test.HUnit
+import Test.HUnit (runTestTT, TestCase, TestList)
 import Database.Requirement
 import WebParsing.ReqParser
 import qualified Text.Parsec as Parsec
