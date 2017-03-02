@@ -1,5 +1,6 @@
 {-|
-Description: Requirement
+    Module      : Database.Requirement
+    Description : Requirement
 
 Module containing data type that represents a "Requirement".
 
