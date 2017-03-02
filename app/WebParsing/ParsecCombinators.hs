@@ -26,7 +26,7 @@ getCourseFromTag courseTag =
 
 findCourseFromTag :: Parser T.Text
 findCourseFromTag = do
-    parseUntil (P.char '#')
+    _ <- parseUntil (P.char '#')
     parsed <- P.many1 P.anyChar
     return $ T.pack parsed
 
@@ -56,19 +56,19 @@ extractPostType postCode = do
 
 findPostType :: Parser T.Text
 findPostType = do
-   text "AS"
+   _ <- text "AS"
    parsed <- P.many1 P.letter
    return $ T.pack parsed
 
 getDepartmentName :: Parser T.Text
 getDepartmentName =
     P.try (parseUntil (P.try (P.lookAhead (text " Specialist")) <|>
-                        P.try (P.lookAhead (text " Major")) <|> 
+                        P.try (P.lookAhead (text " Major")) <|>
                         P.try (P.lookAhead (text " Minor"))))
 
 getPostType :: Parser T.Text
 getPostType = do
-    P.spaces
+    _ <- P.spaces
     (P.try (text "Specialist") <|>
      P.try (text "Major") <|>
      P.try (text "Minor"))
@@ -94,17 +94,17 @@ findFirstCourse firstCourse =
 
 parseNoteLine :: Parser T.Text
 parseNoteLine = do
-    P.string "Note"
+    _ <- P.string "Note"
     P.try (parseUntil (P.char '\n')) <|> parseUntil P.eof
 
 parseNotes :: Parser T.Text
 parseNotes = do
-    P.try (text "Notes") <|> P.try (text "NOTES")
-    parseUntil P.eof
+    _ <- P.try (text "Notes") <|> P.try (text "NOTES")
+    _ <- parseUntil P.eof
     return ""
 
 parseUntil :: Parser a -> Parser T.Text
-parseUntil parser = do 
+parseUntil parser = do
     parsed <- P.manyTill P.anyChar (P.try parser)
     return $ T.pack parsed
 
