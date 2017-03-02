@@ -14,7 +14,7 @@ module Svg.Generator
     (buildSVG) where
 
 import Svg.Builder
-import Database.Tables
+import Database.Tables hiding (texts, paths)
 import Database.DataType
 import Control.Monad.IO.Class (liftIO)
 import Database.Persist.Sqlite

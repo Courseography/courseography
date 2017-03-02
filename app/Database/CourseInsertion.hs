@@ -3,7 +3,7 @@
 
 {-|
     Module      : Database.CourseInsertion
-    Description : Functions that insert/update course information in the 
+    Description : Functions that insert/update course information in the
                   database.
 
 This module contains a bunch of functions related to inserting information
@@ -21,8 +21,8 @@ import qualified Data.ByteString.Lazy.Char8 as BSL
 import Happstack.Server.SimpleHTTP (Response, toResponse)
 import Config (databasePath)
 import Database.Persist.Class (selectKeysList, Key)
-import Database.Persist.Sqlite (selectFirst, insertMany_, insert_, insert, SqlPersistM, (=.), (==.), updateWhere, runSqlite)
-import Database.Tables
+import Database.Persist.Sqlite (selectFirst, fromSqlKey, toSqlKey, insertMany_, insert_, insert, SqlPersistM, (=.), (==.), updateWhere, runSqlite)
+import Database.Tables hiding (texts, shapes, paths)
 import qualified Data.Aeson as Aeson
 
 -- | Inserts SVG graph data into Texts, Shapes, and Paths tables
@@ -36,8 +36,8 @@ saveGraphJSON jsonStr nameStr = do
             return $ toResponse $ ("Success" :: String)
     where
         insertGraph :: T.Text -> [Text] -> [Shape] -> [Path] -> SqlPersistM ()
-        insertGraph nameStr texts shapes paths = do
-            gId <- insert $ Graph nameStr 256 256
+        insertGraph nameStr_ texts shapes paths = do
+            gId <- insert $ Graph nameStr_ 256 256
             insertMany_ $ map (\text -> text {textGraph = gId}) texts
             insertMany_ $ map (\shape -> shape {shapeGraph = gId}) shapes
             insertMany_ $ map (\path -> path {pathGraph = gId}) paths
@@ -48,8 +48,8 @@ saveGraphJSON jsonStr nameStr = do
 -- Get Key of correspondig record in Distribution column
 getDistributionKey :: Maybe T.Text -> SqlPersistM (Maybe (Key Distribution))
 getDistributionKey Nothing = return Nothing
-getDistributionKey (Just description) = do
-    keyListDistribution :: [Key Distribution] <- selectKeysList [ DistributionDescription ==. description ] []
+getDistributionKey (Just description_) = do
+    keyListDistribution :: [Key Distribution] <- selectKeysList [ DistributionDescription ==. description_ ] []
     -- option: keyListDistribution :: [DistributionId] <- selectKeysList [ DistributionDescription `contains'` description] []
     return $ case keyListDistribution of
         [] -> Nothing
@@ -57,8 +57,8 @@ getDistributionKey (Just description) = do
 
 getBreadthKey :: Maybe T.Text -> SqlPersistM (Maybe (Key Breadth))
 getBreadthKey Nothing = return Nothing
-getBreadthKey (Just description) = do
-    keyListBreadth :: [Key Breadth] <- selectKeysList [ BreadthDescription ==. description ] []
+getBreadthKey (Just description_) = do
+    keyListBreadth :: [Key Breadth] <- selectKeysList [ BreadthDescription ==. description_ ] []
     -- option: selectKeysList [ BreadthDescription `contains'` description] []
     return $ case keyListBreadth of
         [] -> Nothing
