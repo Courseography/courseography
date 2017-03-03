@@ -14,14 +14,14 @@ parseUTSC :: IO ()
 parseUTSC = do
     rsp <- simpleHTTP (getRequest (utscCalendarUrl ++ "Table_of_Contents.html"))
     body <- getResponseBody rsp
-    let depts = getDeptList $ parseTags body
+    let depts = getDeptList $ parseTags (T.pack body)
     putStrLn "Parsing UTSC Calendar..."
     mapM_ getCalendar depts
 
 utscCalendarUrl :: String
 utscCalendarUrl = "http://www.utsc.utoronto.ca/~registrar/calendars/calendar/"
 
-getDeptList :: [Tag String] -> [String]
+getDeptList :: [Tag T.Text] -> [T.Text]
 getDeptList tags =
     let beforeList = dropWhile (/= TagText "\nPrograms and Courses\n") tags
         removeUls = dropBetweenAll (== TagOpen "ul" [("class", "circle")]) (== TagClose "ul") beforeList
@@ -32,15 +32,17 @@ getDeptList tags =
         isHref _ = False
         getAttribute (TagOpen _ [(_, link)]) = link
 
-getCalendar :: String -> IO ()
-getCalendar str = do
-    rsp <- simpleHTTP (getRequest (utscCalendarUrl ++ str))
+getCalendar :: T.Text -> IO ()
+getCalendar htmlText = do
+    let htmlStr = T.unpack htmlText
+        path = utscCalendarUrl ++ htmlStr
+    rsp <- simpleHTTP (getRequest path)
     body <- getResponseBody rsp
     let tags = filter isntComment $ parseTags (T.pack body)
         coursesSoup =  takeWhile (/= TagOpen "div" [("id", "pdf_files")]) $ lastH2 tags
         courses = map (filter (tagText (const True))) $ partitions isCourseTitle coursesSoup
         course = map processCourseToData courses
-    print ("parsing: " ++ str)
+    print ("parsing: " ++ htmlStr)
     runSqlite databasePath $ do
         runMigration migrateAll
         mapM_ insertCourse course

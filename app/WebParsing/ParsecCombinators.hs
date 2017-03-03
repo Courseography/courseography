@@ -12,9 +12,12 @@ module WebParsing.ParsecCombinators
 import qualified Text.Parsec as P
 import Text.Parsec ((<|>))
 import qualified Data.Text as T
-import Text.Parsec.String (Parser)
+import Text.Parsec.Text (Parser)
+import Database.Tables
+import Control.Monad (mapM)
+import Database.DataType
 
-getCourseFromTag :: String -> String
+getCourseFromTag :: T.Text -> T.Text
 getCourseFromTag courseTag =
     let course = P.parse findCourseFromTag "(source)" courseTag
     in
@@ -22,123 +25,116 @@ getCourseFromTag courseTag =
             Right name -> name
             Left _ -> ""
 
-findCourseFromTag :: Parser String
+findCourseFromTag :: Parser T.Text
 findCourseFromTag = do
-    parseUntil (P.char '#')
-    P.many1 P.anyChar
+    _ <- parseUntil (P.char '#')
+    parsed <- P.many1 P.anyChar
+    return $ T.pack parsed
 
-generalCategoryParser :: Maybe String -> Parser (String, String, String, [String])
-generalCategoryParser firstCourse = do
-    (description, departmentName, postType) <- (postInfoParser firstCourse)
+generalCategoryParser :: Maybe T.Text -> T.Text -> Parser (Post, [T.Text])
+generalCategoryParser firstCourse postCode = do
+    post <- postInfoParser firstCourse postCode
     categories <- splitPrereqText
 
-    return (description, departmentName, postType, categories)
+    return (post, categories)
 
 -- Post Parsing
 
-postInfoParser :: Maybe String -> Parser (String, String, String)
-postInfoParser firstCourse = do
+postInfoParser :: Maybe T.Text -> T.Text -> Parser Post
+postInfoParser firstCourse postCode = do
     departmentName <- getDepartmentName
     postType <- getPostType
     description <- getRequirements firstCourse
 
-    return (description, departmentName, postType)
+    return $ Post (postTypeParser postType) departmentName postCode description
 
-extractPostType :: String -> String
+extractPostType :: T.Text -> T.Text
 extractPostType postCode = do
     let parsed = P.parse findPostType "(source)" postCode
     case parsed of
         Right name -> name
         Left _ -> ""
 
-findPostType :: Parser String
+findPostType :: Parser T.Text
 findPostType = do
-   P.string "AS"
-   P.many1 P.letter
+   _ <- text "AS"
+   parsed <- P.many1 P.letter
+   return $ T.pack parsed
 
-getDepartmentName :: Parser String
+getDepartmentName :: Parser T.Text
 getDepartmentName =
-    (P.try (parseUntil ((P.try (P.lookAhead (P.string " Specialist"))) <|>
-                        (P.try (P.lookAhead (P.string " Major"))) <|>
-                        (P.try (P.lookAhead (P.string " Minor"))))))
+    P.try (parseUntil (P.try (P.lookAhead (text " Specialist")) <|>
+                        P.try (P.lookAhead (text " Major")) <|>
+                        P.try (P.lookAhead (text " Minor"))))
 
-getPostType :: Parser String
+getPostType :: Parser T.Text
 getPostType = do
-    P.spaces
-    ((P.try (P.string "Specialist")) <|>
-     (P.try (P.string "Major")) <|>
-     (P.try (P.string "Minor")))
+    _ <- P.spaces
+    (P.try (text "Specialist") <|>
+     P.try (text "Major") <|>
+     P.try (text "Minor"))
 
-isDepartmentName ::  [Char] -> Parser String
-isDepartmentName postType = parseUntil (P.string postType)
+isDepartmentName ::  T.Text -> Parser T.Text
+isDepartmentName postType = parseUntil (text postType)
 
 
 -- Post Category Parsing
 
-getRequirements :: Maybe String -> Parser String
+getRequirements :: Maybe T.Text -> Parser T.Text
 getRequirements firstCourse =
-    (P.try (parseUntil (P.string "First Year"))) <|>
-    (P.try (parseUntil (P.string "Program Course Requirements:"))) <|>
-    (P.try (parseUntil (P.string "Program requirements:"))) <|>
-    (findFirstCourse firstCourse)
+    P.try (parseUntil (text "First Year")) <|>
+    P.try (parseUntil (text "Program Course Requirements:")) <|>
+    P.try (parseUntil (text "Program requirements:")) <|>
+    findFirstCourse firstCourse
 
-findFirstCourse :: Maybe String -> Parser String
+findFirstCourse :: Maybe T.Text -> Parser T.Text
 findFirstCourse firstCourse =
     case firstCourse of
         Nothing -> parseUntil P.eof
-        Just course -> (P.try (parseUntil (P.lookAhead (P.string course)))) <|> (parseUntil P.eof)
+        Just course -> P.try (parseUntil (P.lookAhead (text course))) <|> parseUntil P.eof
 
-parseNoteLine :: Parser String
+parseNoteLine :: Parser T.Text
 parseNoteLine = do
-    P.string "Note"
-    (P.try (parseUntil (P.char '\n'))) <|> (parseUntil P.eof)
+    _ <- P.string "Note"
+    P.try (parseUntil (P.char '\n')) <|> parseUntil P.eof
 
-parseNotes :: Parser String
+parseNotes :: Parser T.Text
 parseNotes = do
-    (P.try (P.string "Notes")) <|> (P.try (P.string "NOTES"))
-    parseUntil P.eof
+    _ <- P.try (text "Notes") <|> P.try (text "NOTES")
+    _ <- parseUntil P.eof
     return ""
 
-parseUntil :: Parser a -> Parser String
-parseUntil parser = P.manyTill P.anyChar (P.try parser)
+parseUntil :: Parser a -> Parser T.Text
+parseUntil parser = do
+    parsed <- P.manyTill P.anyChar (P.try parser)
+    return $ T.pack parsed
 
-splitPrereqText :: Parser [String]
+splitPrereqText :: Parser [T.Text]
 splitPrereqText = do
-    P.manyTill ((P.try parseNotes) <|> (P.try parseNoteLine) <|>
-        (P.try (parseCategory False)) <|> (parseUntil P.eof)) P.eof
+    P.manyTill (P.try parseNotes <|> P.try parseNoteLine <|>
+        P.try parseCategory <|> parseUntil P.eof) P.eof
 
-parseCategory :: Bool -> Parser String
-parseCategory withinBracket = do
+parseCategory :: Parser T.Text
+parseCategory = do
     left <- parseUpToSeparator
     nextChar <- P.anyChar
-    if nextChar == ',' && (not withinBracket)
-    then return left
-    else
-        mergeText left nextChar withinBracket
+    return left
 
-mergeText :: String -> Char -> Bool -> Parser String
-mergeText left nextChar withinBracket = do
-    case nextChar of
-        '(' -> do
-            right <- P.option " " (parseCategory True)
-            return $ "(" ++ left ++ right
-        ')' -> do
-            right <- P.option " " (parseCategory False)
-            return $ left ++ ")" ++ right
-        '/' -> do
-            right <- P.option " " (parseCategory withinBracket)
-            return $ left ++ " or " ++ right
-        ',' -> do
-            right <- P.option " " (parseCategory withinBracket)
-            case withinBracket of
-                True -> return $ left ++ " and " ++ right
-                False -> return left
-        _ -> return left
+parseUpToSeparator :: Parser T.Text
+parseUpToSeparator = parseUntil (P.notFollowedBy (P.noneOf ";\r\n"))
 
-parseUpToSeparator :: Parser String
-parseUpToSeparator = parseUntil (P.notFollowedBy (P.noneOf ",/();\r\n"))
+text :: T.Text -> Parser T.Text
+text someText = do
+    parsed <- mapM P.char (T.unpack someText)
+    return $ T.pack parsed
 
 -- For testing purposed in REPL
-parseAll :: Parser [String]
-parseAll = P.many (parseCategory False)
+parseAll :: Parser [T.Text]
+parseAll = P.many parseCategory
 
+
+postTypeParser :: T.Text -> PostType
+postTypeParser "Specialist" = Specialist
+postTypeParser "Major" = Major
+postTypeParser "Minor" = Minor
+postTypeParser _ = error "Invalid post type"

@@ -17,9 +17,8 @@ import WebParsing.PostParser
 fasCalendarURL :: String
 fasCalendarURL = "http://calendar.artsci.utoronto.ca/"
 
-
 -- | A collection of pages that do not contain any course information
-toDelete :: [String]
+toDelete :: [T.Text]
 toDelete = ["199299398399(Faculty_of_Arts_&_Science_Programs).html",
             "Joint_Courses.html",
             "Writing_in_the_Faculty_of_Arts_&_Science.html",
@@ -27,7 +26,7 @@ toDelete = ["199299398399(Faculty_of_Arts_&_Science_Programs).html",
             "Life_Sciences.html"]
 
 -- | Converts the processed main page and extracts a list of department html pages
-getDeptList :: [Tag String] -> [String]
+getDeptList :: [Tag T.Text] -> [T.Text]
 getDeptList tags =
     let lists = sections (tagOpenAttrNameLit "ul" "class" (== "simple")) tags
         contents = takeWhile (not. isTagCloseName "ul") . head . tail $ lists
@@ -38,15 +37,16 @@ getDeptList tags =
 -- | Takes an html filename of a department (which are found from getDeptList) and returns
 -- a list, where each element is a list of strings and tags relating to a single
 -- course found in that department.
-getCalendar :: String -> IO ()
-getCalendar str = do
-    let path = fasCalendarURL ++ str
+getCalendar :: T.Text -> IO ()
+getCalendar htmlText = do
+    let htmlStr = T.unpack htmlText
+        path = fasCalendarURL ++ htmlStr
     rsp <- simpleHTTP (getRequest path)
     body <- getResponseBody rsp
     let tags = filter isNotComment $ parseTags (T.pack body)
         coursesSoup = lastH2 tags
         course = map (processCourseToData . filter isTagText) $ partitions isCourseTitle coursesSoup
-    print $ "parsing " ++ str
+    print $ "parsing " ++ htmlStr
     runSqlite databasePath $ do
         runMigration migrateAll
         mapM_ insertCourse course
@@ -90,8 +90,9 @@ processCourseToData tags  =
 parseArtSci :: IO ()
 parseArtSci = do
     rsp <- simpleHTTP (getRequest fasCalendarURL)
-    body <- getResponseBody rsp
-    let depts = getDeptList $ parseTags body
+    body <- (getResponseBody rsp)
+    print body
+    let depts = getDeptList $ parseTags (T.pack body)
     putStrLn "Parsing Arts and Science Posts"
     mapM_ getPost depts
     putStrLn "Parsing Arts and Science Calendar..."

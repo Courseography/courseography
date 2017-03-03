@@ -3,29 +3,35 @@ module WebParsing.PostParser
     (getPost) where
 
 import Network.HTTP
-import Database.PostInsertion (insertPost, insertPostCategory)
 import qualified Data.Text as T
-import Data.List
+import Control.Monad.Trans (liftIO)
 import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Match
+import Config (databasePath)
+import Database.Tables
+import Database.Persist.Sqlite (insert_, runMigration, runSqlite, SqlPersistM)
 import qualified Text.Parsec as P
 import WebParsing.ParsecCombinators (getCourseFromTag, generalCategoryParser, parseCategory,
     postInfoParser)
-import Database.DataType
 
 fasCalendarURL :: String
 fasCalendarURL = "http://calendar.artsci.utoronto.ca/"
 
-getPost :: String -> IO ()
+failedString :: String
+failedString = "Failed."
+
+getPost :: T.Text -> IO ()
 getPost str = do
-    let path = fasCalendarURL ++ str
+    let path = fasCalendarURL ++ (T.unpack str)
     rsp <- simpleHTTP (getRequest path)
     body <- getResponseBody rsp
     let tags = filter isNotComment $ parseTags body
         postsSoup = secondH2 tags
         posts = partitions isPostName postsSoup
-    mapM_ addPostToDatabase posts
-    print $ "parsing " ++ str
+    runSqlite databasePath $ do
+        runMigration migrateAll
+        mapM_ addPostToDatabase posts
+    print $ "parsing " ++ (T.unpack str)
     where
         isNotComment (TagComment _) = False
         isNotComment _ = True
@@ -40,67 +46,55 @@ getPost str = do
         isNotCoursesSection tag = not (tagOpenAttrLit "a" ("name", "courses") tag)
         isPostName tag = tagOpenAttrNameLit "a" "name" (\nameValue -> (length nameValue) == 9) tag
 
-addPostToDatabase :: [Tag String] -> IO ()
+addPostToDatabase :: [Tag String] -> SqlPersistM ()
 addPostToDatabase tags = do
     let postCode = T.pack (fromAttrib "name" ((take 1 $ filter (isTagOpenName "a") tags) !! 0))
         liPartitions = partitions isLiTag tags
-        prereqs = map getCourseFromTag $ map (fromAttrib "href") $ filter isCourseTag tags
+        prereqs = map getCourseFromTag $ map (T.pack . fromAttrib "href") $ filter isCourseTag tags
         firstCourse = if (null prereqs) then Nothing else (Just (head prereqs))
-    case liPartitions of
-        [] -> generalParser tags firstCourse postCode
-        other -> liParser tags liPartitions firstCourse postCode
+    categoryParser tags firstCourse postCode liPartitions
     where
         isCourseTag tag = tagOpenAttrNameLit "a" "href" (\hrefValue -> (length hrefValue) >= 0) tag
         isLiTag tag = isTagOpenName "li" tag
 
-addPostCategoriesToDatabase :: String -> [String] -> IO ()
+addPostCategoriesToDatabase :: T.Text -> [T.Text] -> SqlPersistM ()
 addPostCategoriesToDatabase postCode categories = do
     mapM_ (addCategoryToDatabase postCode) (filter isCategory categories)
     where
-        isCategory string =
-            let infixes = map (containsString string)
+        isCategory text =
+            let infixes = map (containsText text)
                          ["First", "Second", "Third", "suitable", "Core", "Electives"]
             in
-                ((length string) >= 7) && ((length $ filter (\bool -> bool) infixes) <= 0)
-        containsString string substring = isInfixOf substring string
+                ((T.length text) >= 7) && ((length $ filter (\bool -> bool) infixes) <= 0)
+        containsText text subtext = T.isInfixOf subtext text
 
-addCategoryToDatabase :: String -> String -> IO ()
+addCategoryToDatabase :: T.Text -> T.Text -> SqlPersistM ()
 addCategoryToDatabase postCode category =
-    insertPostCategory (T.pack category) (T.pack postCode)
+    insert_ $ PostCategory category postCode
 
 
 -- Helpers
 
-generalParser :: [Tag String] -> Maybe String -> T.Text -> IO ()
-generalParser tags firstCourse postCode = do
-    let parsed = P.parse (generalCategoryParser firstCourse) "Failed." (innerText tags)
+categoryParser :: [Tag String] -> Maybe T.Text -> T.Text -> [[Tag String]] -> SqlPersistM ()
+categoryParser tags firstCourse postCode liPartitions = do
     case parsed of
-        Right (description, departmentName, postType, categories) -> do
-            insertPost (T.pack departmentName) (postTypeParser postType) postCode (T.pack description)
-            addPostCategoriesToDatabase (T.unpack postCode) categories
+        Right (post, categories) -> do
+            addPostCategoriesToDatabase postCode categories
+            insert_ $ post
         Left message -> do
-            print message
+            liftIO $ print failedString
+            return ()
+    where
+        parsed = case liPartitions of
+            [] -> P.parse (generalCategoryParser firstCourse postCode) failedString (T.pack $ innerText tags)
+            partitions -> do
+                let categories = map parseLi partitions
+                post <- P.parse (postInfoParser firstCourse postCode) failedString (T.pack $ innerText tags)
+                return (post, categories)
 
-liParser :: [Tag String] -> [[Tag String]] -> Maybe String -> T.Text -> IO ()
-liParser tags liPartitions firstCourse postCode = do
-    let categories = map parseLi liPartitions
-        postInfo = P.parse (postInfoParser firstCourse) "Failed." (innerText tags)
-    case postInfo of
-        Right (description, departmentName, postType) -> do
-            insertPost (T.pack departmentName) (postTypeParser postType) postCode (T.pack description)
-            addPostCategoriesToDatabase (T.unpack postCode) categories
-        Left message -> do
-            print message
-
-parseLi :: [Tag String] -> String
+parseLi :: [Tag String] -> T.Text
 parseLi liPartition = do
-    let parsed = P.parse (parseCategory False) "Failed." (innerText liPartition)
+    let parsed = P.parse parseCategory failedString (T.pack $ innerText liPartition)
     case parsed of
         Right category -> category
         Left message -> ""
-
-postTypeParser :: String -> PostType
-postTypeParser "Specialist" = Specialist
-postTypeParser "Major" = Major
-postTypeParser "Minor" = Minor
-postTypeParser _ = undefined

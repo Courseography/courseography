@@ -1,7 +1,9 @@
 {-# LANGUAGE GADTs, OverloadedStrings, ScopedTypeVariables #-}
 
 {-|
-Description: Respond to various requests involving database course information.
+    Module: Database.CourseQueries
+    Description: Respond to various requests involving database course
+                 information.
 
 This module contains the functions that perform different database queries
 and serve the information back to the client.
@@ -84,8 +86,8 @@ buildAllSessions entityListL entityListT =
 
 -- | Takes a course code (e.g. \"CSC108H1\") and sends a JSON representation
 -- of the course as a response.
-retrieveCourse :: String -> ServerPart Response
-retrieveCourse = liftIO . queryCourse . T.pack
+retrieveCourse :: T.Text -> ServerPart Response
+retrieveCourse = liftIO . queryCourse
 
 -- | Queries the database for all information about @course@, constructs a JSON object
 -- representing the course and returns the appropriate JSON response.
@@ -144,7 +146,7 @@ getDescriptionB (Just key) = do
     maybeBreadth <- get key
     case maybeBreadth of
         Nothing -> return Nothing
-        Just coursebreadth  -> return $ Just $ T.pack (breadthDescription coursebreadth)
+        Just coursebreadth  -> return $ Just $ breadthDescription coursebreadth
 
 getDescriptionD :: Maybe (Key Distribution) -> SqlPersistM (Maybe T.Text)
 getDescriptionD Nothing = return Nothing
@@ -152,7 +154,7 @@ getDescriptionD (Just key) = do
     maybeDistribution <- get key
     case maybeDistribution of
         Nothing -> return Nothing
-        Just dist -> return $ Just $ T.pack (distributionDescription dist)
+        Just dist -> return $ Just $ distributionDescription dist
 
 -- | Builds a Session structure from a list of tuples from the Lecture table,
 -- and a list of tuples from the Tutorial table.
@@ -165,7 +167,7 @@ buildSession lecs tuts =
 
 -- | Looks up a graph using its title then gets the Shape, Text and Path elements
 -- for rendering graph (returned as JSON).
-getGraphJSON :: String -> IO Response
+getGraphJSON :: T.Text -> IO Response
 getGraphJSON graphName =
     runSqlite databasePath $ do
         graphEnt :: (Maybe (Entity Graph)) <- selectFirst [GraphTitle ==. graphName] []
@@ -224,17 +226,17 @@ allCourses = do
   return $ toResponse response
 
 -- | Returns all course info for a given department.
-courseInfo :: String -> ServerPart Response
+courseInfo :: T.Text -> ServerPart Response
 courseInfo dept = liftM createJSONResponse (getDeptCourses dept)
 
 -- | Returns all course info for a given department.
-getDeptCourses :: MonadIO m => String -> m [Course]
+getDeptCourses :: MonadIO m => T.Text -> m [Course]
 getDeptCourses dept =
     liftIO $ runSqlite databasePath $ do
         courses :: [Entity Courses]   <- selectList [] []
         lecs    :: [Entity Lecture]  <- selectList [] []
         tuts    :: [Entity Tutorial] <- selectList [] []
-        let c = filter (startswith dept . T.unpack . coursesCode) $ map entityVal courses
+        let c = filter (T.isPrefixOf dept . coursesCode) $ map entityVal courses
         mapM (buildTimes (map entityVal lecs) (map entityVal tuts)) c
     where
         lecByCode course = filter (\lec -> lectureCode lec == coursesCode course)
@@ -274,20 +276,20 @@ queryGraphs = runSqlite databasePath $ do
 
 -- | Queries the database for all times regarding a specific lecture for
 -- a @course@, returns a list of Time.
-getLectureTime :: (String, String, String) -> SqlPersistM [Time]
+getLectureTime :: (T.Text, T.Text, T.Text) -> SqlPersistM [Time]
 getLectureTime (lecCode, lecSection, lecSession) = do
-    maybeEntityLectures <- selectFirst [LectureCode ==. T.pack lecCode,
-                                        LectureSection ==. (T.pack $ take 1 lecSection ++ "EC" ++ drop 1 lecSection),
-                                        LectureSession ==. T.pack lecSession]
+    maybeEntityLectures <- selectFirst [LectureCode ==. lecCode,
+                                        LectureSection ==. T.concat [T.take 1 lecSection, "EC" , T.drop 1 lecSection],
+                                        LectureSession ==. lecSession]
                                        []
     return $ maybe [] (lectureTimes . entityVal) maybeEntityLectures
 
 -- | Queries the database for all times regarding a specific tutorial for
 -- a @course@, returns a list of Time.
-getTutorialTime :: (String, String, String) -> SqlPersistM [Time]
+getTutorialTime :: (T.Text, T.Text, T.Text) -> SqlPersistM [Time]
 getTutorialTime (tutCode, tutSection, tutSession) = do
-    maybeEntityTutorials <- selectFirst [TutorialCode ==. T.pack tutCode,
-                                         TutorialSection ==. Just (T.pack $ take 1 tutSection ++ "UT" ++ drop 1 tutSection),
-                                         TutorialSession ==. T.pack tutSession]
+    maybeEntityTutorials <- selectFirst [TutorialCode ==. tutCode,
+                                         TutorialSection ==. Just (T.concat [T.take 1 tutSection, "UT", T.drop 1 tutSection]),
+                                         TutorialSession ==. tutSession]
                                         []
     return $ maybe [] (tutorialTimes . entityVal) maybeEntityTutorials
