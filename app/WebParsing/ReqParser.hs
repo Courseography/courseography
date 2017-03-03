@@ -145,7 +145,7 @@ orParser = do
     reqs <- Parsec.sepBy courseParser orSeparator
     -- TODO: separate cases when reqs has 1 Req vs. multiple Reqs.
     case reqs of
-        [x] -> x
+        [x] -> return x
         (x:xs) -> return $ OR reqs
 
 -- | Parser for for reqs related through an AND.
@@ -154,7 +154,7 @@ andParser = do
     reqs <- Parsec.sepBy orParser andSeparator
     -- TODO: separate cases when reqs has 1 Req vs. multiple Reqs.
     case reqs of
-        [x] -> x
+        [x] -> return x
         (x:xs) -> return $ AND reqs
 
 -- | Parser for reqs in "from" format:
@@ -175,7 +175,7 @@ categoryParser = do
     Parsec.eof
     -- TODO: separate cases when reqs has 1 Req vs. multiple Reqs.
     case reqs of
-        [x] -> x
+        [x] -> return x
         (x:xs) -> return $ AND reqs
 
 -- | Parse the course requirements from a string.
