@@ -93,6 +93,6 @@ parseArtSci = do
     body <- (getResponseBody rsp)
     let depts = getDeptList $ parseTags (T.pack body)
     putStrLn "Parsing Arts and Science Posts"
-    -- mapM_ getPost depts
+    mapM_ getPost depts
     putStrLn "Parsing Arts and Science Calendar..."
     mapM_ getCalendar depts
