@@ -146,14 +146,15 @@ Post
     name PostType
     department T.Text
     code T.Text
-    -- Primary code
+    UniquePostode code
+    Primary code
     description T.Text
     deriving Show
 
 PostCategory
     name T.Text
     postCode T.Text
-    -- Foreign Post fkpost postCod
+    Foreign Post fkpost postCode
     deriving Show
 |]
 
