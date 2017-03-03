@@ -37,7 +37,7 @@ import Database.DataType
 import Svg.Builder
 
 
----- | Queries db for all matching records with lecture or tutorial code of this course
+---- | Queries db for all matching records with lecture, tutorial or pratical code of this course
 meetingQuery :: T.Text -> SqlPersistM [Entity Meeting]
 meetingQuery meetingCode = selectList [MeetingCode ==. meetingCode] []
 
@@ -81,22 +81,12 @@ queryCourse str = do
     courseJSON <- returnCourse str
     return $ createJSONResponse courseJSON
 
--- -- | Queries the database for all information regarding a specific tutorial for
--- -- a @course@, returns a Tutorial.
--- returnTutorial :: T.Text -> T.Text -> T.Text -> SqlPersistM (Maybe Tutorial)
--- returnTutorial lowerStr sect session = do
---     maybeEntityTutorials <- selectFirst [TutorialCode ==. T.toUpper lowerStr,
---                                          TutorialSection ==. Just sect,
---                                          TutorialSession ==. session]
---                                         []
---     return $ fmap entityVal maybeEntityTutorials
-
--- | Queries the database for all information regarding a specific lecture for
---  a @course@, returns a Lecture.
+-- | Queries the database for all information regarding a specific meeting for
+--  a @course@, returns a Meeting.
 returnMeeting :: T.Text -> T.Text -> T.Text -> SqlPersistM (Maybe Meeting)
 returnMeeting lowerStr sect session = do
     maybeEntityMeetings <- selectFirst [MeetingCode ==. T.toUpper lowerStr,
-                                        MeetingSection ==. Just sect,
+                                        MeetingSection ==. sect,
                                         MeetingSession ==. session]
                                        []
     return $ fmap entityVal maybeEntityMeetings
@@ -148,9 +138,9 @@ buildSession meetings = buildSession' $ map entityVal meetings
 
 buildSession' :: [Meeting] -> Maybe Tables.Session
 buildSession' meetings =
-    let lecs = filter (\m -> (fmap T.head $ meetingSection m) == Just 'L') meetings
-        tuts = filter (\m -> (fmap T.head $ meetingSection m) == Just 'T') meetings
-        pras = filter (\m -> (fmap T.head $ meetingSection m) == Just 'P') meetings
+    let lecs = filter (\m -> (T.head $ meetingSection m) == 'L') meetings
+        tuts = filter (\m -> (T.head $ meetingSection m) == 'T') meetings
+        pras = filter (\m -> (T.head $ meetingSection m) == 'P') meetings
     in Just $ Tables.Session lecs tuts pras
 
 -- ** Other queries
@@ -256,7 +246,7 @@ queryGraphs = runSqlite databasePath $ do
     graphs :: [Entity Graph] <- selectList [] [Asc GraphTitle]
     return $ createJSONResponse graphs :: SqlPersistM Response
 
--- | Queries the database for all times regarding a specific lecture for
+-- | Queries the database for all times regarding a specific meeting (lecture, tutorial or practial) for
 -- a @course@, returns a list of Time.
 getMeetingTime :: (T.Text, T.Text, T.Text) -> SqlPersistM [Time]
 getMeetingTime (meetingCode, meetingSection, meetingSession) = do
@@ -266,6 +256,10 @@ getMeetingTime (meetingCode, meetingSection, meetingSession) = do
                                        []
     return $ maybe [] (meetingTimes . entityVal) maybeEntityMeetings
 
-getMeetingSection :: T.Text -> Maybe T.Text
-getMeetingSection sec =
-    if T.isPrefixOf "L" sec then (Just (T.concat [T.take 1 sec, "EC", T.drop 1 sec])) else (Just (T.concat [T.take 1 sec, "UT", T.drop 1 sec]))
+getMeetingSection :: T.Text -> T.Text
+getMeetingSection sec
+    | T.isPrefixOf "L" sec = T.append "LEC" sectCode
+    | T.isPrefixOf "T" sec = T.append "TUT" sectCode
+    | T.isPrefixOf "P" sec = T.append "PRA" sectCode
+    | otherwise            = sec
+    where sectCode = T.tail sec

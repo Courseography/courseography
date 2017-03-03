@@ -54,7 +54,6 @@ getActiveTimetable coursecookie termSession = do
 
 -- | Parses cookie string and returns two lists of information about courses
 -- in the format of (code, section, session).
--- One for lecture, the other for tutorial.
 parseCourseCookie :: T.Text -> T.Text -> [(T.Text, T.Text, T.Text)]
 parseCourseCookie "" _ = []
 parseCourseCookie s termSession =
@@ -67,16 +66,15 @@ list2tuple :: [T.Text] -> (T.Text, T.Text, T.Text)
 list2tuple [a, b, c] = (a, b, c)
 list2tuple _ = undefined
 
--- | Queries the database for times regarding all lectures and tutorials,
--- returns two lists of list of Time.
+-- | Queries the database for times regarding all meetings (i.e. lectures, tutorials and praticals),
+-- returns a list of list of Time.
 getTimes :: [(T.Text, T.Text, T.Text)] -> IO [[Time]]
 getTimes selectedMeetings = runSqlite databasePath $ do
   mTimes <- mapM getMeetingTime selectedMeetings
-  -- tutTimes <- mapM getTutorialTime selectedTuts
   return mTimes
 
 -- | Creates a schedule.
--- It takes information about lectures and tutorials and their corresponding time.
+-- It takes information about meetings (i.e. lectures, tutorials and praticals) and their corresponding time.
 -- Courses are added to schedule, based on their days and times.
 getScheduleByTime :: [(T.Text, T.Text, T.Text)] -> [[Time]] -> [[[T.Text]]]
 getScheduleByTime selectedMeetings mTimes =

@@ -10,7 +10,6 @@ import Control.Monad.IO.Class (liftIO)
 import Database.Persist.Sqlite (runSqlite)
 import Database.CourseQueries (returnMeeting)
 import qualified Data.Text as T
-import Data.Maybe (fromMaybe)
 import Text.Read (readMaybe)
 import Database.Tables hiding (Session)
 import Config (firstMondayFall,
@@ -70,24 +69,23 @@ getInfoCookies courses = map courseInfo allCourses
         courseInfo _ = ("", "", "")
         allCourses = map (T.splitOn "-") (T.splitOn "_" courses)
 
--- | Pulls either a Lecture or Tutorial from the database.
-pullDatabase :: (Code, Section, Session) -> IO (Maybe (Either Meeting Meeting))
-pullDatabase (code, T.commonPrefixes "L" -> Just ("L", "", sectCode), session) = runSqlite databasePath $ do
-    lecture <- returnMeeting (code)
-                             (T.cons 'L' sectCode)
-                             (session)
-    return $ fmap Left lecture
-pullDatabase (code, sect, session) = runSqlite databasePath $ do
-    tutorial <- returnMeeting (code)
-                              (sect)
-                              (session)
-    return $ fmap Right tutorial
+-- | Pulls either a Lecture, Tutorial or Pratical from the database.
+pullDatabase :: (Code, Section, Session) -> IO (Maybe Meeting)
+pullDatabase (code, section, session) = runSqlite databasePath $ do
+    returnMeeting code fullSection session
+    where
+        fullSection
+            | T.isPrefixOf "L" section = T.append "LEC" sectCode
+            | T.isPrefixOf "T" section = T.append "TUT" sectCode
+            | T.isPrefixOf "P" section = T.append "PRA" sectCode
+            | otherwise                = section
+        sectCode = T.tail section
 
 -- | The current date and time as obtained from the system.
 type SystemTime = String
 
 -- | Creates all the events for a course.
-getEvents :: SystemTime -> Maybe (Either Meeting Meeting) -> Events
+getEvents :: SystemTime -> Maybe Meeting -> Events
 getEvents _ Nothing = []
 getEvents systemTime (Just lect) =
     concatMap eventsByDate (zip' (third courseInfo)
@@ -123,24 +121,16 @@ type DatesByDay = [(StartDate, EndDate)]
 
 -- | Obtains all the necessary information to create events for a course,
 -- such as code, section, start times, end times and dates.
-getCourseInfo :: Either Meeting Meeting
+getCourseInfo :: Meeting
               -> (Code, Section, StartTimesByDay, EndTimesByDay, DatesByDay)
-getCourseInfo (Left lect) = (code, sect, start, end, dates)
+getCourseInfo meeting = (code, sect, start, end, dates)
     where
-        code = meetingCode lect
-        sect = fromMaybe "" (meetingSection lect)
-        dataInOrder = orderTimeFields $ meetingTimes lect
-        start = startTimesByCourse dataInOrder (meetingSession lect)
-        end = endTimesByCourse dataInOrder (meetingSession lect)
-        dates = getDatesByCourse dataInOrder (meetingSession lect)
-getCourseInfo (Right lect) = (code, sect, start, end, dates)
-    where
-        code = meetingCode lect
-        sect = fromMaybe "" (meetingSection lect)
-        dataInOrder = orderTimeFields $ meetingTimes lect
-        start = startTimesByCourse dataInOrder (meetingSession lect)
-        end = endTimesByCourse dataInOrder (meetingSession lect)
-        dates = getDatesByCourse dataInOrder (meetingSession lect)
+        code = meetingCode meeting
+        sect = meetingSection meeting
+        dataInOrder = orderTimeFields $ meetingTimes meeting
+        start = startTimesByCourse dataInOrder (meetingSession meeting)
+        end = endTimesByCourse dataInOrder (meetingSession meeting)
+        dates = getDatesByCourse dataInOrder (meetingSession meeting)
 
 -- ** Functions that deal with tuples
 

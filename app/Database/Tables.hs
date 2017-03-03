@@ -77,7 +77,7 @@ Meeting
     code T.Text
     Foreign Courses fkcourse code
     session T.Text
-    section T.Text Maybe
+    section T.Text
     times [Time]
     cap Int
     instructor T.Text
@@ -85,7 +85,7 @@ Meeting
     wait Int
     extra Int
     timeStr T.Text
-    room T.Text Maybe
+    room T.Text
     deriving Generic Show
 
 Breadth
@@ -270,7 +270,7 @@ instance FromJSON Meeting where
     let instructor = T.intercalate "; " $ filter (not . T.null) instrs
     if teachingMethod == "LEC" || teachingMethod == "TUT" || teachingMethod == "PRA"
     then
-      return $ Meeting "" "" (Just sectionId) allTimes cap instructor enrol wait extra timeStr (Just "")
+      return $ Meeting "" "" sectionId allTimes cap instructor enrol wait extra timeStr ""
     else
       fail "Not a lecture, Tutorial or Practical"
 

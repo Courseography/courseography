@@ -8,9 +8,7 @@ module WebParsing.UtsgJsonParser
 
 import Data.Aeson ((.:?), (.!=), decode, FromJSON(parseJSON), Value(..), Object)
 import Data.Aeson.Types (Parser)
-import Control.Applicative ((<|>))
 import Data.Maybe (catMaybes)
-import Data.Either (partitionEithers, rights)
 import qualified Data.Text as T
 import qualified Data.HashMap.Strict as HM
 import Control.Monad.IO.Class (liftIO)
@@ -46,41 +44,37 @@ insertAllCourses org = do
     liftIO $ print $ T.append "parsing JSON data from: " org
     resp <- liftIO $ simpleHttp $ T.unpack (T.append timetableURL org)
     let coursesLst :: Maybe (HM.HashMap T.Text (Maybe DB)) = decode resp
-    let courseData = maybe [] (map dbData . catMaybes . HM.elems) coursesLst
-    -- courseData contains courses and sections;
-    -- only sections are currently stored here.
-    let (_, sections) = unzip courseData
-    let (lectures, tutorials) = partitionEithers $ concat sections
-
-    mapM_ insert_ lectures
-    mapM_ insert_ tutorials
+        courseData = maybe [] (map dbData . catMaybes . HM.elems) coursesLst
+        -- courseData contains courses and sections;
+        -- only sections are currently stored here.
+        (_, sections) = unzip courseData
+        meetings = concat sections
+    mapM_ insert_ meetings
 
 
-newtype DB = DB { dbData :: (Courses, [Either Meeting Meeting]) }
+newtype DB = DB { dbData :: (Courses, [Meeting]) }
   deriving Show
 
 instance FromJSON DB where
     parseJSON (Object o) = do
       course <- parseJSON (Object o)
       session :: T.Text <- o .:? "section" .!= "F"
-      meetingMap :: HM.HashMap T.Text Meeting2 <- o .:? "meetings" .!= HM.empty
+      meetingMap :: HM.HashMap T.Text Meetings <- o .:? "meetings" .!= HM.empty
       let meetings = map (setCode (coursesCode course) session . meeting) (HM.elems meetingMap)
           -- Fix manualTutorialEnrolment and manualPracticalEnrolment
-          manTut = any (maybe False (T.isPrefixOf "TUT") . meetingSection) $ rights meetings
-          manPra = any (maybe False (T.isPrefixOf "PRA") . meetingSection) $ rights meetings
+          manTut = any ((T.isPrefixOf "TUT") . meetingSection) meetings
+          manPra = any ((T.isPrefixOf "PRA") . meetingSection) meetings
       return $ DB (course { coursesManualTutorialEnrolment = Just manTut,
                             coursesManualPracticalEnrolment = Just manPra },
                    meetings)
-        where
-          setCode code session (Left lec) = Left (lec { meetingCode = code,
-            meetingSession = session} )
-          setCode code session (Right tut) = Right (tut { meetingCode = code,
-            meetingSession = session} )
+      where
+          setCode code session m = m { meetingCode = code,
+            meetingSession = session}
     parseJSON _ = fail "Invalid section"
 
-newtype Meeting2 = Meeting2 { meeting :: (Either Meeting Meeting) }
+newtype Meetings = Meetings { meeting :: Meeting }
   deriving Show
 
-instance FromJSON Meeting2 where
+instance FromJSON Meetings where
   parseJSON x =
-    (parseJSON x >>= return . Meeting2 . Left) <|> (parseJSON x >>= return . Meeting2 . Right)
+    parseJSON x >>= return . Meetings
