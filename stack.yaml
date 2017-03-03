@@ -22,6 +22,8 @@ system-ghc: false
 # Allow ghc 7.10.3 instead of 7.10.2.
 compiler-check: newer-minor
 
+dump-logs: all
+
 # Require a specific version of stack, using version ranges
 # require-stack-version: -any # Default
 # require-stack-version: >= 0.1.10.0

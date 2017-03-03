@@ -14,7 +14,7 @@ module Svg.Generator
     (buildSVG) where
 
 import Svg.Builder
-import Database.Tables
+import Database.Tables hiding (texts, paths)
 import Database.DataType
 import Control.Monad.IO.Class (liftIO)
 import Database.Persist.Sqlite
@@ -43,6 +43,7 @@ import Css.Constants (theoryDark,
 import qualified Data.Map.Strict as M
 import Data.Monoid (mempty, mappend, mconcat)
 import Config (databasePath)
+
 
 -- | This is the main function that retrieves a stored graph
 -- from the database and creates a new SVG file for it.

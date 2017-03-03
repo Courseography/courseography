@@ -303,7 +303,7 @@ blue1 = parse "#261B2A"
 blue2 :: Color
 blue2 = parse "#336685"
 
--- |Defines the color of a slightly lighter than blue2 dark moderate blue, 
+-- |Defines the color of a slightly lighter than blue2 dark moderate blue,
 -- intended for nodes.
 blue3 :: Color
 blue3 = parse "#437699"
@@ -321,7 +321,7 @@ blue5 = parse "#A5A6F5"
 blue6 :: Color
 blue6 = rgb 184 231 249
 
--- |Defines the color of a slightly more virbrant than blue2 dark moderate 
+-- |Defines the color of a slightly more virbrant than blue2 dark moderate
 -- blue, intended for nodes.
 blueFb :: Color
 blueFb = rgb 59 89 152
@@ -455,8 +455,9 @@ nodeFontSize :: Num a => a
 nodeFontSize = 12
 
 -- |Defines hybrid font size, 7 in pixels.
-hybridFontSize :: Num a => a
+hybridFontSize :: Double
 hybridFontSize = 7
+
 
 -- |Defines bool font size, 6 in pixels.
 boolFontSize :: Num a => a

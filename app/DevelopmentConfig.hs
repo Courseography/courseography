@@ -23,7 +23,8 @@ module Config (
     lastMondayWinter,
     outDay,
     holidays,
-    enableCdn
+    enableCdn,
+    enableAnalytics
     ) where
 
 import Data.Text (Text)
@@ -131,3 +132,7 @@ enableFb = False
 -- | Enable CDN downloads for js and css dependencies. Should be true on the production server.
 enableCdn :: Bool
 enableCdn = True
+
+-- | Enable Google analytics script
+enableAnalytics :: Bool
+enableAnalytics = False
