@@ -185,10 +185,3 @@ parseReqs reqString =
     in case req of
         Right x -> x
         Left e -> J (show e)
-
-    -- [] When using sepby, we are not returning a list of reqs.. we are returning
-    --    a list of Eithers.. should we use nested case matching?
-    --    if so, single case is easy, but how can we pattern match and extract
-    --    all "Right Reqs" and create a list of reqs to call OR value constructor on..
-    --
-    --    MAP??? create lambda function that extracts Right only?
