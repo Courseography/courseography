@@ -23,6 +23,7 @@ toStylesheet href = H.link ! A.rel "stylesheet"
                          ! A.type_ "text/css"
                          ! A.href (H.textValue href)
 
+-- |Sets the script attributes.
 toScript :: T.Text -> H.Html
 toScript src = H.script ! A.src (H.textValue src) $ ""
 
