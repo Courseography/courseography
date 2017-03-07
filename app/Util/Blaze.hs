@@ -27,6 +27,7 @@ toStylesheet href = H.link ! A.rel "stylesheet"
 toScript :: T.Text -> H.Html
 toScript src = H.script ! A.src (H.textValue src) $ ""
 
+-- |Creates a link by setting the href attribute.
 toLink :: T.Text -> T.Text -> H.Html
 toLink link content = H.a ! A.href (H.textValue link)
                           $ H.toHtml content
