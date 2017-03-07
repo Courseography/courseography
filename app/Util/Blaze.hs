@@ -17,6 +17,7 @@ import Text.Markdown (markdown, def)
 import Data.Text.Lazy (Text)
 import qualified Data.Text as T
 
+-- |Sets the html attributes to the href of the style sheet.
 toStylesheet :: T.Text -> H.Html
 toStylesheet href = H.link ! A.rel "stylesheet"
                          ! A.type_ "text/css"
