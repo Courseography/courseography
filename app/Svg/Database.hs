@@ -11,11 +11,12 @@ module Svg.Database
     (insertGraph, insertElements, deleteGraphs) where
 
 import Database.Persist.Sqlite
-import Database.Tables
-
+import Database.Tables hiding (graphWidth, graphHeight, paths, shapes, texts)
+import Config (databasePath)
+import qualified Data.Text as T
 
 -- | Insert a new graph into the database, returning the key of the new graph.
-insertGraph :: String   -- ^ The title of the graph that is being inserted.
+insertGraph :: T.Text   -- ^ The title of the graph that is being inserted.
             -> Double   -- ^ The width dimension of the graph
             -> Double   -- ^ The height dimension of the graph
             -> SqlPersistM GraphId -- ^ The unique identifier of the inserted graph.

@@ -2,7 +2,9 @@
     OverloadedStrings, TypeFamilies, ScopedTypeVariables #-}
 
 {-|
-Description: Functions that insert/update course information in the database.
+    Module      : Database.CourseInsertion
+    Description : Functions that insert/update course information in the
+                  database.
 
 This module contains a bunch of functions related to inserting information
 into the database. These functions are used as helpers for the WebParsing module.
@@ -19,23 +21,23 @@ import qualified Data.ByteString.Lazy.Char8 as BSL
 import Happstack.Server.SimpleHTTP (Response, toResponse)
 import Config (databasePath)
 import Database.Persist.Class (selectKeysList, Key)
-import Database.Persist.Sqlite (selectFirst, insertMany_, insert_, insert, SqlPersistM, (=.), (==.), updateWhere, runSqlite)
-import Database.Tables
+import Database.Persist.Sqlite (selectFirst, fromSqlKey, toSqlKey, insertMany_, insert_, insert, SqlPersistM, (=.), (==.), updateWhere, runSqlite)
+import Database.Tables hiding (texts, shapes, paths)
 import qualified Data.Aeson as Aeson
 
 -- | Inserts SVG graph data into Texts, Shapes, and Paths tables
-saveGraphJSON :: String -> String -> IO Response
+saveGraphJSON :: BSL.ByteString -> T.Text -> IO Response
 saveGraphJSON jsonStr nameStr = do
-    let jsonObj = Aeson.decode $ BSL.pack jsonStr
+    let jsonObj = Aeson.decode jsonStr
     case jsonObj of
         Nothing -> return $ toResponse ("Error" :: String)
         Just (SvgJSON texts shapes paths) -> do
             _ <- runSqlite databasePath $ insertGraph nameStr texts shapes paths
             return $ toResponse $ ("Success" :: String)
     where
-        insertGraph :: String -> [Text] -> [Shape] -> [Path] -> SqlPersistM ()
-        insertGraph nameStr texts shapes paths = do
-            gId <- insert $ Graph nameStr 256 256
+        insertGraph :: T.Text -> [Text] -> [Shape] -> [Path] -> SqlPersistM ()
+        insertGraph nameStr_ texts shapes paths = do
+            gId <- insert $ Graph nameStr_ 256 256
             insertMany_ $ map (\text -> text {textGraph = gId}) texts
             insertMany_ $ map (\shape -> shape {shapeGraph = gId}) shapes
             insertMany_ $ map (\path -> path {pathGraph = gId}) paths
@@ -46,8 +48,8 @@ saveGraphJSON jsonStr nameStr = do
 -- Get Key of correspondig record in Distribution column
 getDistributionKey :: Maybe T.Text -> SqlPersistM (Maybe (Key Distribution))
 getDistributionKey Nothing = return Nothing
-getDistributionKey (Just description) = do
-    keyListDistribution :: [Key Distribution] <- selectKeysList [ DistributionDescription ==. (T.unpack description) ] []
+getDistributionKey (Just description_) = do
+    keyListDistribution :: [Key Distribution] <- selectKeysList [ DistributionDescription ==. description_ ] []
     -- option: keyListDistribution :: [DistributionId] <- selectKeysList [ DistributionDescription `contains'` description] []
     return $ case keyListDistribution of
         [] -> Nothing
@@ -55,8 +57,8 @@ getDistributionKey (Just description) = do
 
 getBreadthKey :: Maybe T.Text -> SqlPersistM (Maybe (Key Breadth))
 getBreadthKey Nothing = return Nothing
-getBreadthKey (Just description) = do
-    keyListBreadth :: [Key Breadth] <- selectKeysList [ BreadthDescription ==. (T.unpack description) ] []
+getBreadthKey (Just description_) = do
+    keyListBreadth :: [Key Breadth] <- selectKeysList [ BreadthDescription ==. description_ ] []
     -- option: selectKeysList [ BreadthDescription `contains'` description] []
     return $ case keyListBreadth of
         [] -> Nothing

@@ -1,4 +1,4 @@
-{-# LANGUAGE OverloadedStrings, FlexibleContexts, GADTs, ScopedTypeVariables #-}
+{-# LANGUAGE OverloadedStrings, FlexibleContexts, GADTs, ScopedTypeVariables, ConstrainedClassMethods #-}
 
 {-|
 Description: Helpers for enabling graph interactitivy.
@@ -21,8 +21,9 @@ module Svg.Builder
 
 import Data.Char (toLower)
 import Data.List (find)
-import Database.Tables
+import Database.Tables hiding (texts, shapes)
 import Database.DataType
+import qualified Data.Text as T
 
 -- * Builder functions
 
@@ -36,7 +37,7 @@ buildPath :: [Shape] -- ^ Node elements.
           -> Path
 buildPath rects ellipses entity elementId
     | pathIsRegion entity =
-          entity {pathId_ = pathId_ entity ++ ('p' : show elementId),
+          entity {pathId_ = T.concat [pathId_ entity, "p", T.pack $ show elementId],
                   pathSource = "",
                   pathTarget = ""}
     | otherwise =
@@ -48,7 +49,7 @@ buildPath rects ellipses entity elementId
                                (filter (\r -> shapeId_ r /= sourceNode) rects ++
                                 ellipses)
           in
-              entity {pathId_ = 'p' : show elementId,
+              entity {pathId_ = T.pack $ 'p' : show elementId,
                       pathSource = sourceNode,
                       pathTarget = targetNode}
 
@@ -66,10 +67,10 @@ buildRect texts entity elementId =
                             0  -- no tolerance for text intersection
                             . textPos
                             ) texts
-        textString = concatMap textText rectTexts
+        textString = T.concat $ map textText rectTexts
         id_ = case shapeType_ entity of
-              Hybrid -> 'h' : show elementId
-              Node -> map toLower $ sanitizeId textString
+              Hybrid -> T.pack $ 'h' : show elementId
+              Node -> T.map toLower . sanitizeId $ textString
     in
         entity {shapeId_ = id_,
                 shapeText = rectTexts,
@@ -92,8 +93,8 @@ buildEllipses texts entity elementId =
                               . textPos
                               ) texts
     in
-        entity {shapeId_ = "bool" ++ show elementId,
-                shapeFill = "", -- TODO: necessary?
+        entity {shapeId_ = T.pack $ "bool" ++ show elementId,
+                -- shapeFill = "", -- TODO: necessary?
                 shapeText = ellipseText,
                 shapeTolerance = 20} -- TODO: necessary?
     where
@@ -104,10 +105,10 @@ buildEllipses texts entity elementId =
                 (dx*dx) / (a*a) + (dy*dy) / (b*b) < 1
 
 -- | Rebuilds a path's `d` attribute based on a list of Rational tuples.
-buildPathString :: [Point] -> String
-buildPathString d = unwords $ map toString d
+buildPathString :: [Point] -> T.Text
+buildPathString d = T.unwords $ map toString d
     where
-        toString (a, b) = show a ++ "," ++ show b
+        toString (a, b) = T.pack $ show a ++ "," ++ show b
 
 
 -- * Intersection helpers
@@ -146,7 +147,7 @@ intersectsWithPoint point shape
 
 -- | Returns the ID of the first shape in a list that intersects
 -- with the given point.
-getIntersectingShape :: Point -> [Shape] -> String
+getIntersectingShape :: Point -> [Shape] -> T.Text
 getIntersectingShape point shapes =
     maybe "" shapeId_ $ find (intersectsWithPoint point) shapes
 
@@ -158,5 +159,5 @@ intersectsWithShape shapes text =
 -- ** Other helpers
 
 -- | Strips disallowed characters from string for DOM id
-sanitizeId :: String -> String
-sanitizeId = filter (\c -> not $ elem c (",()/<>% " :: String))
+sanitizeId :: T.Text -> T.Text
+sanitizeId = T.filter (\c -> not $ elem c (",()/<>% " :: String))
