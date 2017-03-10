@@ -18,7 +18,7 @@ import Database.Persist.Sqlite (runSqlite, insert_, SqlPersistM)
 
 -- | URLs for the Faculty of Arts and Science API
 timetableURL :: T.Text
-timetableURL = "https://timetable.iit.artsci.utoronto.ca/api/courses?code="
+timetableURL = "https://timetable.iit.artsci.utoronto.ca/api/20169/courses?code="
 
 orgURL :: String
 orgURL = "https://timetable.iit.artsci.utoronto.ca/api/orgs"
