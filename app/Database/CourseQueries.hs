@@ -39,7 +39,8 @@ import Database.DataType
 import Svg.Builder
 
 
----- | Queries db for all matching records with lecture, tutorial or pratical code of this course
+-- | Queries the database for all matching lectures, tutorials,
+--   or praticals of this course.
 meetingQuery :: T.Text -> SqlPersistM [Entity Meeting]
 meetingQuery meetingCode = selectList [MeetingCode ==. meetingCode] []
 
@@ -59,11 +60,14 @@ returnCourse lowerStr = runSqlite databasePath $ do
     case sqlCourse of
       Nothing -> return emptyCourse
       Just course -> do
-        meetingList :: [Entity Meeting] <- meetingQuery courseStr
-        let (fall, spring, year) = buildAllSessions meetingList
-        buildCourse fall spring year (entityVal course)
+        meetings <- meetingQuery courseStr
+        let (fall, spring, year) = buildAllSessions meetings
+        buildCourse (Just fall)
+                    (Just spring)
+                    (Just year)
+                    (entityVal course)
 
-buildAllSessions :: [Entity Meeting] -> (Maybe Tables.Session, Maybe Tables.Session, Maybe Tables.Session)
+buildAllSessions :: [Entity Meeting] -> (Tables.Session, Tables.Session, Tables.Session)
 buildAllSessions entityListM =
     let (fallM, springM, yearM) = splitSessions entityListM
         fall = buildSession fallM
@@ -135,15 +139,15 @@ getDescriptionD (Just key) = do
 
 -- | Builds a Session structure from three lists of tuples from the Meeting table,
 -- representing information for lectures, tutorials and practicals.
-buildSession :: [Entity Meeting] -> Maybe Tables.Session
-buildSession meetings = buildSession' $ map entityVal meetings
+buildSession :: [Entity Meeting] -> Tables.Session
+buildSession = buildSession' . map entityVal
 
-buildSession' :: [Meeting] -> Maybe Tables.Session
+buildSession' :: [Meeting] -> Tables.Session
 buildSession' meetings =
     let lecs = filter (\m -> (T.head $ meetingSection m) == 'L') meetings
         tuts = filter (\m -> (T.head $ meetingSection m) == 'T') meetings
         pras = filter (\m -> (T.head $ meetingSection m) == 'P') meetings
-    in Just $ Tables.Session lecs tuts pras
+    in Tables.Session lecs tuts pras
 
 -- ** Other queries
 
@@ -229,7 +233,10 @@ getDeptCourses dept =
                 spring = buildSession' (meetingByCode course springMeetings)
                 year   = buildSession' (meetingByCode course yearMeetings)
             in
-                buildCourse fall spring year course
+                buildCourse (Just fall)
+                            (Just spring)
+                            (Just year)
+                            course
 
 -- | Return a list of all departments.
 deptList :: IO Response

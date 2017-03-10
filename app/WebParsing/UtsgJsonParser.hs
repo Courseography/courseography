@@ -67,8 +67,8 @@ instance FromJSON DB where
                             coursesManualPracticalEnrolment = Just manPra },
                    meetings)
       where
-          setCode code session m = m { meetingCode = code,
-            meetingSession = session}
+          setCode code session m =
+            m {meetingCode = code, meetingSession = session}
     parseJSON _ = fail "Invalid section"
 
 newtype Meetings = Meetings { meeting :: Meeting }

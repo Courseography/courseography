@@ -17,16 +17,13 @@ import qualified Data.Text as T
 import System.Random
 import Svg.Generator
 import Export.ImageConversion
-import Happstack.Server (Request, rqCookies, cookieValue, Cookie)
+import Happstack.Server (Request, rqCookies, cookieValue)
 import Data.List.Utils (replace)
-import Data.List.Split (splitOn)
 import Database.CourseQueries (getMeetingTime)
 import Database.Tables as Tables
-import Data.List (partition)
 import Database.Persist.Sqlite (runSqlite)
 import Config (databasePath)
 import Data.Fixed (mod')
-import Happstack.Server (readCookieValue)
 
 -- | If there is an active graph available, an image of that graph is created,
 -- otherwise the Computer Science graph is created as a default.
@@ -58,8 +55,8 @@ parseCourseCookie :: T.Text -> T.Text -> [(T.Text, T.Text, T.Text)]
 parseCourseCookie "" _ = []
 parseCourseCookie s termSession =
   let selectedMeetings = map (T.splitOn "-") $ T.splitOn "_" s
-      meetingOfSession = filter (\x -> or ([(T.index (x !! 2) 0) == (T.head termSession), (T.index (x !! 2) 0) == 'Y'])) selectedMeetings
-      selectedMeetings' =map list2tuple meetingOfSession
+      meetingOfSession = filter (\x -> or ([T.head (x !! 2) == T.head termSession, T.head (x !! 2) == 'Y'])) selectedMeetings
+      selectedMeetings' = map list2tuple meetingOfSession
   in selectedMeetings'
 
 list2tuple :: [T.Text] -> (T.Text, T.Text, T.Text)
@@ -70,17 +67,16 @@ list2tuple _ = undefined
 -- returns a list of list of Time.
 getTimes :: [(T.Text, T.Text, T.Text)] -> IO [[Time]]
 getTimes selectedMeetings = runSqlite databasePath $ do
-  mTimes <- mapM getMeetingTime selectedMeetings
-  return mTimes
+  mapM getMeetingTime selectedMeetings
 
 -- | Creates a schedule.
 -- It takes information about meetings (i.e. lectures, tutorials and praticals) and their corresponding time.
 -- Courses are added to schedule, based on their days and times.
 getScheduleByTime :: [(T.Text, T.Text, T.Text)] -> [[Time]] -> [[[T.Text]]]
 getScheduleByTime selectedMeetings mTimes =
-  let meeting_times = zip selectedMeetings mTimes
+  let meetingTimes_ = zip selectedMeetings mTimes
       schedule = replicate 13 $ replicate 5 []
-  in foldl addCourseToSchedule schedule meeting_times
+  in foldl addCourseToSchedule schedule meetingTimes_
 
 -- | Take a list of Time and returns a list of tuples that correctly index
 -- into the 2-D table (for generating the image)
