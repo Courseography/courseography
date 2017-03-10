@@ -63,6 +63,7 @@ executable courseography
     Svg.Generator,
     Svg.Parser,
     Util.Blaze,
+    Util.Documentation,
     Util.Happstack,
     WebParsing.ArtSciParser,
     WebParsing.HtmlTable,
