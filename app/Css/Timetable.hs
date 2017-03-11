@@ -147,6 +147,7 @@ timetableCSS = do
             borderPink borderTop
             borderLeftStyle none
             borderRightStyle none
+            color white
         ".timetable-edge" ? do
             borderPink borderTop
             borderBottomStyle none
