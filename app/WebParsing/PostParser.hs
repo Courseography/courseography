@@ -4,7 +4,6 @@ module WebParsing.PostParser
 
 import Network.HTTP
 import qualified Data.Text as T
-import Data.List
 import Control.Monad.Trans (liftIO)
 import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Match
@@ -82,7 +81,7 @@ categoryParser tags firstCourse postCode liPartitions = do
         Right (post, categories) -> do
             addPostCategoriesToDatabase postCode categories
             insert_ $ post
-        Left message -> do
+        Left _ -> do
             liftIO $ print failedString
             return ()
     where
@@ -98,4 +97,4 @@ parseLi liPartition = do
     let parsed = P.parse parseCategory failedString (T.pack $ innerText liPartition)
     case parsed of
         Right category -> category
-        Left message -> ""
+        Left _ -> ""

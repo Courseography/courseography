@@ -73,7 +73,7 @@ lowerTag (TagOpen tag attrs) =
 lowerTag (TagClose tag) = TagClose (T.toLower tag)
 lowerTag text = text
 
--- Returns true if the the row contains a cancelled lecture or tutorial
+-- Returns true if the the row contains a cancelled lecture, tutorial or practical
 isCancelled :: [T.Text] -> Bool
 isCancelled =
     foldl (\bool text -> bool || T.isPrefixOf "Cancel" text) False

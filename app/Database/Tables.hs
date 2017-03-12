@@ -74,7 +74,7 @@ Courses
     videoUrls [T.Text]
     deriving Show
 
-Lecture
+Meeting
     code T.Text
     Foreign Courses fkcourse code
     session T.Text
@@ -86,13 +86,7 @@ Lecture
     wait Int
     extra Int
     timeStr T.Text
-    deriving Generic Show
-
-Tutorial
-    code T.Text
-    section T.Text Maybe
-    session T.Text
-    times [Time]
+    room T.Text
     deriving Generic Show
 
 Breadth
@@ -164,10 +158,10 @@ data SvgJSON =
               paths :: [Path]
             } deriving (Show, Generic)
 
--- | A Session.
 data Session =
-    Session { lectures :: [Lecture],
-              tutorials :: [Tutorial]
+    Session { lectures :: [Meeting],
+              tutorials :: [Meeting],
+              practicals :: [Meeting]
             } deriving (Show, Generic)
 
 -- | A Course.
@@ -235,15 +229,15 @@ instance FromJSON Courses where
                      newCoreqs
                      []
 
-instance ToJSON Lecture where
+instance ToJSON Meeting where
   toJSON = genericToJSON defaultOptions {
     fieldLabelModifier =
       (\field -> (toLower $ head field): (tail field)) .
       drop 7
   }
 
-instance FromJSON Lecture where
-  parseJSON = withObject "Expected Object for Lecture" $ \o -> do
+instance FromJSON Meeting where
+  parseJSON = withObject "Expected Object for Lecture, Tutorial or Practical" $ \o -> do
     teachingMethod :: T.Text <- o .:? "teachingMethod" .!= ""
     sectionNumber :: T.Text <- o .:? "sectionNumber" .!= ""
     timeMap :: Value <- o .:? "schedule" .!= Null
@@ -270,44 +264,11 @@ instance FromJSON Lecture where
     let extra = 0
     let timeStr = ""
     let instructor = T.intercalate "; " $ filter (not . T.null) instrs
-    if teachingMethod == "LEC"
+    if teachingMethod == "LEC" || teachingMethod == "TUT" || teachingMethod == "PRA"
     then
-      return $ Lecture "" "" sectionId allTimes cap instructor enrol wait extra timeStr
+      return $ Meeting "" "" sectionId allTimes cap instructor enrol wait extra timeStr ""
     else
-      fail "Not a lecture"
-
-instance ToJSON Tutorial where
-  toJSON = genericToJSON defaultOptions {
-    fieldLabelModifier =
-      (\field -> (toLower $ head field): (tail field)) .
-      drop 8
-  }
-
-instance FromJSON Tutorial where
-  parseJSON = withObject "Expected Object for Tutorial" $ \o -> do
-    teachingMethod :: T.Text <- o .:? "teachingMethod" .!= ""
-    sectionNumber :: T.Text <- o .:? "sectionNumber" .!= ""
-    timeMap :: Value <- o .:? "schedule" .!= Null
-    allTimes <- case timeMap of
-        Object obj -> do
-            times <- mapM parseTimes (HM.elems obj)
-            return $ concat times
-        _ -> return []
-    let sectionId = T.concat [teachingMethod, sectionNumber]
-
-    -- TODO: Tutorials should have these stats, too!
-    -- capStr <- o .:? "enrollmentCapacity" .!= "-1"
-    -- enrolStr <- o .:? "actualEnrolment" .!= "0"
-    -- waitStr <- o .:? "actualWaitlist" .!= "0"
-    -- let cap = fromMaybe (-1) $ readMaybe capStr
-    --     enrol = fromMaybe 0 $ readMaybe enrolStr
-    --     wait = fromMaybe 0 $ readMaybe waitStr
-    if teachingMethod == "TUT"
-    then
-      return $ Tutorial "" (Just sectionId) "" allTimes
-    else
-      fail "Not a tutorial"
-
+      fail "Not a lecture, Tutorial or Practical"
 
 -- | Helpers for parsing JSON
 parseInstr :: Value -> Parser T.Text
