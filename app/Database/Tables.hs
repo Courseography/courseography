@@ -54,7 +54,7 @@ type Point = (Double, Double)
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 
 Department json
-    code [T.Text]
+    -- code [T.Text]
     name T.Text
     Primary name
 
