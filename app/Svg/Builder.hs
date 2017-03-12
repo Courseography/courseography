@@ -73,9 +73,9 @@ buildRect texts entity elementId =
               Node -> T.map toLower . sanitizeId $ textString
     in
         entity {shapeId_ = id_,
-                shapeText = rectTexts,
+                shapeText = rectTexts}
                 -- TODO: check if already set this one during parsing
-                shapeTolerance = 9}
+                --shapeTolerance = 9}
 
 -- | Builds an ellipse from a database entry.
 -- Fills in the text association and ID.
@@ -94,9 +94,8 @@ buildEllipses texts entity elementId =
                               ) texts
     in
         entity {shapeId_ = T.pack $ "bool" ++ show elementId,
-                -- shapeFill = "", -- TODO: necessary?
-                shapeText = ellipseText,
-                shapeTolerance = 20} -- TODO: necessary?
+                shapeText = ellipseText}
+                -- shapeTolerance = 20} -- TODO: necessary?
     where
         intersectsEllipse a b (cx, cy) (x, y) =
             let dx = x - cx - 5  -- some tolerance
@@ -161,3 +160,9 @@ intersectsWithShape shapes text =
 -- | Strips disallowed characters from string for DOM id
 sanitizeId :: T.Text -> T.Text
 sanitizeId = T.filter (\c -> not $ elem c (",()/<>% " :: String))
+
+shapeTolerance :: Shape -> Double
+shapeTolerance s =
+  case shapeType_ s of
+    BoolNode -> 12.0
+    _ -> 9.0
