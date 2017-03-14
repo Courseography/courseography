@@ -1,3 +1,7 @@
+{-|
+    Module      : Util.Happstack
+    Description : Contains a single method for creating a JSON response.
+-}
 module Util.Happstack
     (createJSONResponse) where
 
