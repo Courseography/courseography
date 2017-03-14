@@ -18,7 +18,7 @@ import Database.Tables hiding (texts, paths)
 import Database.DataType
 import Control.Monad.IO.Class (liftIO)
 import Database.Persist.Sqlite
-import Data.List hiding (map, filter)
+import Data.List()
 import Data.Maybe (fromMaybe)
 import qualified Data.Text as T
 import Text.Blaze.Svg11 ((!))
