@@ -84,10 +84,27 @@ fromInputs = [(" 5.0 fces from csc148h1 ", FROM "5.0" (J "csc148h1")),(" 2 FCEs 
 fromTests :: Test
 fromTests = TestLabel "fromParser" $ TestList $ (map (createTest fromParser) fromInputs)
 
+-- categoryParser Tests
+reqInputs :: [(String, Req)]
+reqInputs = [("CSC120H1/CSC148H1", OR [J "CSC120H1", J "CSC148H1"]), ("CSC120H1, CSC121H1, CSC148H1", AND [J "CSC120H1", J "CSC121H1", J "CSC148H1"]), 
+("CSC148H1/(CSC108H1/CSC120H1, MAT137Y1/MAT157Y1)", OR [J "CSC148H1", AND [OR [J "CSC108H1", J "CSC120H1"], OR [J "MAT137Y1", J "MAT157Y1"]]]), 
+("CSC436H1/(CSC336H1 (75%))", OR [J "CSC436H1", GRADE "75" J "CSC336H1"]), ("60% or higher in CSC148H1/CSC150H1", GRADE "60" OR [J "CSC148H1", J "CSC150H1"]), 
+("60% or higher in CSC148H1/CSC150H1, 60% or higher in CSC165H1/CSC240H1", AND [GRADE "60" OR [J "CSC148H1", J "CSC150H1"], GRADE "60" OR [J "CSC165H1", J "CSC240H1"]]), 
+("CSC240H1 or an A- in CSC236H1", OR [J "CSC240H1", GRADE "A-" J "CSC236H1"]), ("CSC258H1; CSC209H1/proficiency in C", AND [J "CSC258H1", OR [J "CSC209H1", RAW "proficiency in C"]]), 
+("STA247H1/STA255H1/STA257H1/PSY201H1/ECO227Y1, (MAT135H1, MAT136H1)/MAT137Y1/MAT157Y1", AND [OR [J "STA247H1", J "STA255H1", J "STA257H1", J "PSY201H1", J "ECO227Y1"], OR [AND [J "MAT135H1", J "MAT136H1"], J "MAT137Y1", J "MAT157Y1"]]), 
+("(MAT136H1 with a minimum mark of 77)/(MAT137Y1 with a minimum mark of 73)/(MAT157Y1 with a minimum mark of 67)/MAT235Y1/MAT237Y1/MAT257Y1, MAT221H1/MAT223H1/MAT240H1; STA247H1/STA255H1/STA257H1", AND [AND [OR [GRADE "77" J "MAT136H1", GRADE "73" J "MAT137Y1", GRADE "67" J "MAT157Y1", J "MAT235Y1", J "MAT237Y1", J "MAT257Y1"], OR [J "MAT221H1", J "MAT223H1", J "MAT240H1"]], OR [J "STA247H1", J "STA255H1", J "STA257H1"]]), 
+("60% or higher in CSC148H1/CSC150H1; STA247H1/STA255H1/STA257H1; (MAT135H1, MAT136H1)", AND [GRADE "60" OR [J "CSC148H1", J "CSC150H1"], OR [J "STA247H1", J "STA255H1", J "STA257H1"], AND [J "MAT135H1", J "MAT136H1"]]), 
+("CSC209H1/(CSC207H1, proficiency in C or C++); MAT221H1/MAT223H1/MAT240H1, (MAT136H1 with a minimum mark of 77)/(MAT137Y1 with a minimum mark of 73)/(MAT157Y1 with a minimum mark of 67)/MAT235Y1/MAT237Y1/MAT257Y1", AND [OR [J "CSC209H1", AND [J "CSC207H1", RAW "proficiency in C or C++"]], AND [OR [J "MAT221H1", J "MAT223H1", J "MAT240H1"], OR [GRADE "77" J "MAT136H1", GRADE "73" J "MAT137Y1", GRADE "67" J "MAT157Y1", J "MAT235Y1", J "MAT237Y1", J "MAT257Y1"]]]), 
+("CSC148H1/CSC150H1; MAT133Y1(70%)/(MAT135H1, MAT136H1)", AND [OR [J "CSC148H1", J "CSC150H1"], OR [GRADE "70" J "MAT133Y1", AND [J "MAT135H1", J "MAT136H1"]]]), 
+("MAT221H1/MAT223H1/MAT240H1 is strongly recommended", OR [J "MAT221H1", J "MAT223H1", J "MAT240H1"]), ("CSC209H1/proficiency in C or C++;  Prerequisite for Engineering students only: ECE345H1 or ECE352H1", AND [OR [J "CSC209H1", RAW "proficiency in C or C++"], RAW "Prerequisite for Engineering students only: ECE345H1 or ECE352H1"]), 
+("CSC209H1/proficiency in C or C++ or Java", OR [J "CSC209H1", RAW "proficiency in C or C++", RAW "Java"]), ("(CSC336H1 (75%))/equivalent mathematical background; MAT237Y1/MAT257Y1", AND [OR [GRADE "75" J "CSC336H1", RAW "equivalent mathematical background"], OR [J "MAT237Y1", J "MAT257Y1"]])]
+reqTests :: Test
+reqTests = TestLabel "categoryParser" $ TestList $ (map (createTest categoryParser) reqInputs)
+
 
 -- functions for running tests in REPL
 strTestSuite :: Test
 strTestSuite = TestList [fcesTests, gradeTests]
 
 reqTestSuite :: Test
-reqTestSuite = TestList [coBefTests, coAftTests, singleTests, orTests, andTests, fromTests]
+reqTestSuite = TestList [coBefTests, coAftTests, singleTests, orTests, andTests, fromTests, reqTests]
