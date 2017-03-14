@@ -13,6 +13,26 @@ category:            Planning
 build-type:          Custom
 cabal-version:       >=1.22
 
+test-suite ParserTests
+  main-is: ParserTests/ParserTests.hs
+  other-modules:
+    Database.Requirement,
+    WebParsing.ReqParser
+  Type: exitcode-stdio-1.0
+  build-depends:
+    base >=4.6,
+    Cabal >= 1.16.0,
+    HUnit,
+    mtl,
+    parsec,
+    QuickCheck,
+    test-framework,
+    test-framework-hunit,
+    test-framework-quickcheck2
+  default-language: Haskell2010
+  ghc-options: -Wall -fwarn-tabs
+  hs-source-dirs: app
+
 executable courseography
   main-is:             Main.hs
   other-modules:
@@ -42,7 +62,6 @@ executable courseography
     Export.PdfGenerator,
     Export.TimetableImageCreator,
     MasterTemplate,
-    ParserTests.ParserTests,
     Response,
     Response.About,
     Response.Calendar,
