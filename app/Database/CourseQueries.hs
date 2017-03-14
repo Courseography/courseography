@@ -31,7 +31,7 @@ import Control.Monad.IO.Class (liftIO, MonadIO)
 import Util.Happstack (createJSONResponse)
 import qualified Data.Text as T
 import WebParsing.ParsingHelp
-import Data.String.Utils
+import Data.String.Utils hiding (Data.String.Utils)
 import Data.List
 import Config (databasePath)
 import Control.Monad (liftM)

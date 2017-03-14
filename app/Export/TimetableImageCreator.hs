@@ -11,7 +11,7 @@ import Diagrams.Prelude
 import Diagrams.Backend.SVG.CmdLine
 import Diagrams.Backend.SVG
 import Data.List (intersperse)
-import Data.List.Split (splitOn)
+import Data.List.Split()
 import qualified Data.Text as T
 
 days :: [T.Text]
