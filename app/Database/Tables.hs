@@ -99,6 +99,7 @@ Distribution
 
 Graph json
     title T.Text
+    Foreign Department fkdept title
     width Double
     height Double
     deriving Show
@@ -139,6 +140,7 @@ Path json
 Post
     name T.Text
     department T.Text
+    Foreign Department fkdept department
     code T.Text
     description T.Text
     deriving Show

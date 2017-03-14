@@ -4,6 +4,7 @@ module WebParsing.PostParser
 
 import Network.HTTP
 import qualified Data.Text as T
+import Data.List
 import Control.Monad.Trans (liftIO)
 import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Match
