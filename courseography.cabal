@@ -14,9 +14,10 @@ build-type:          Custom
 cabal-version:       >=1.22
 
 test-suite ParserTests
-  main-is: ParserTests/ParserTests.hs
+  main-is: ParserTests/tests.hs
   other-modules:
     Database.Requirement,
+    ParserTests.ParserTests,
     WebParsing.ReqParser
   Type: exitcode-stdio-1.0
   build-depends:
