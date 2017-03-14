@@ -30,7 +30,6 @@ import Database.Persist.TH
 import Database.DataType
 import Data.Char (toLower)
 import qualified Data.Text as T
-import qualified Data.Vector as V
 import qualified Data.HashMap.Strict as HM
 import Data.Maybe (fromMaybe)
 import Text.Read (readMaybe)
