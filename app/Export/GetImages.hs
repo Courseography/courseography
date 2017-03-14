@@ -17,16 +17,14 @@ import qualified Data.Text as T
 import System.Random
 import Svg.Generator
 import Export.ImageConversion
-import Happstack.Server (Request, rqCookies, cookieValue, Cookie)
+import Happstack.Server (Request, rqCookies, cookieValue)
 import Data.List.Utils (replace)
-import Data.List.Split (splitOn)
 import Database.CourseQueries (getLectureTime, getTutorialTime)
 import Database.Tables as Tables
 import Data.List (partition)
 import Database.Persist.Sqlite (runSqlite)
 import Config (databasePath)
 import Data.Fixed (mod')
-import Happstack.Server (readCookieValue)
 
 -- | If there is an active graph available, an image of that graph is created,
 -- otherwise the Computer Science graph is created as a default.
