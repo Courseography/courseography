@@ -74,8 +74,6 @@ buildRect texts entity elementId =
     in
         entity {shapeId_ = id_,
                 shapeText = rectTexts}
-                -- TODO: check if already set this one during parsing
-                --shapeTolerance = 9}
 
 -- | Builds an ellipse from a database entry.
 -- Fills in the text association and ID.
@@ -95,7 +93,6 @@ buildEllipses texts entity elementId =
     in
         entity {shapeId_ = T.pack $ "bool" ++ show elementId,
                 shapeText = ellipseText}
-                -- shapeTolerance = 20} -- TODO: necessary?
     where
         intersectsEllipse a b (cx, cy) (x, y) =
             let dx = x - cx - 5  -- some tolerance

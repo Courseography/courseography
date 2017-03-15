@@ -120,7 +120,6 @@ Shape json
     fill T.Text
     stroke T.Text
     text [Text]
-    -- tolerance Double
     type_ ShapeType
     deriving Show
 
