@@ -158,8 +158,10 @@ intersectsWithShape shapes text =
 sanitizeId :: T.Text -> T.Text
 sanitizeId = T.filter (\c -> not $ elem c (",()/<>% " :: String))
 
+-- | Return shape tolerance according to type of shape.
+-- BoolNode is with 20.0 tolerance, which Node and Hybrid are with 9.0 tolerance.
 shapeTolerance :: Shape -> Double
 shapeTolerance s =
   case shapeType_ s of
-    BoolNode -> 12.0
+    BoolNode -> 20.0
     _ -> 9.0
