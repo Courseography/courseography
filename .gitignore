@@ -26,5 +26,8 @@ cabal.sandbox.config
 # course videos
 /public/videos/
 
+# generated documentation
+/doc
+
 # IDE project files
 .idea

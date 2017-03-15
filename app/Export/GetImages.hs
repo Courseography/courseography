@@ -17,16 +17,13 @@ import qualified Data.Text as T
 import System.Random
 import Svg.Generator
 import Export.ImageConversion
-import Happstack.Server (Request, rqCookies, cookieValue, Cookie)
+import Happstack.Server (Request, rqCookies, cookieValue)
 import Data.List.Utils (replace)
-import Data.List.Split (splitOn)
-import Database.CourseQueries (getLectureTime, getTutorialTime)
+import Database.CourseQueries (getMeetingTime)
 import Database.Tables as Tables
-import Data.List (partition)
 import Database.Persist.Sqlite (runSqlite)
 import Config (databasePath)
 import Data.Fixed (mod')
-import Happstack.Server (readCookieValue)
 
 -- | If there is an active graph available, an image of that graph is created,
 -- otherwise the Computer Science graph is created as a default.
@@ -46,49 +43,40 @@ getActiveGraphImage req = do
 -- Either way, the resulting image's .svg and .png names are returned.
 getActiveTimetable :: T.Text -> T.Text -> IO (String, String)
 getActiveTimetable coursecookie termSession = do
-    let (selectedLecs, selectedTuts) = parseCourseCookie coursecookie termSession
-    (lecTimes, tutTimes) <- getTimes (selectedLecs, selectedTuts)
-    let schedule = getScheduleByTime selectedLecs selectedTuts lecTimes tutTimes
+    let selectedMeetings = parseCourseCookie coursecookie termSession
+    mTimes <- getTimes selectedMeetings
+    let schedule = getScheduleByTime selectedMeetings mTimes
     print schedule
     generateTimetableImg schedule termSession
 
 -- | Parses cookie string and returns two lists of information about courses
 -- in the format of (code, section, session).
--- One for lecture, the other for tutorial.
-parseCourseCookie :: T.Text -> T.Text -> ([(T.Text, T.Text, T.Text)], [(T.Text, T.Text, T.Text)])
-parseCourseCookie "" _ = ([], [])
+parseCourseCookie :: T.Text -> T.Text -> [(T.Text, T.Text, T.Text)]
+parseCourseCookie "" _ = []
 parseCourseCookie s termSession =
-  let lecAndTut = map (T.splitOn "-") $ T.splitOn "_" s
-      (selectedLecs, selectedTuts) = partition isLec lecAndTut
-      -- get lecture and tutorial in this session
-      [lectureOfSession, tutorialOfSession] = map (filter (\x -> or ([(T.index (x !! 2) 0) == (T.head termSession), (T.index (x !! 2) 0) == 'Y']))) [selectedLecs, selectedTuts]
-      selectedLecs' = map list2tuple lectureOfSession
-      selectedTuts' = map list2tuple tutorialOfSession
-  in (selectedLecs', selectedTuts')
-  where isLec x = (T.index (x !! 1) 0)  == 'L'
+  let selectedMeetings = map (T.splitOn "-") $ T.splitOn "_" s
+      meetingOfSession = filter (\x -> or ([T.head (x !! 2) == T.head termSession, T.head (x !! 2) == 'Y'])) selectedMeetings
+      selectedMeetings' = map list2tuple meetingOfSession
+  in selectedMeetings'
 
 list2tuple :: [T.Text] -> (T.Text, T.Text, T.Text)
 list2tuple [a, b, c] = (a, b, c)
 list2tuple _ = undefined
 
--- | Queries the database for times regarding all lectures and tutorials,
--- returns two lists of list of Time.
-getTimes :: ([(T.Text, T.Text, T.Text)], [(T.Text, T.Text, T.Text)]) -> IO ([[Time]], [[Time]])
-getTimes (selectedLecs, selectedTuts) = runSqlite databasePath $ do
-  lecTimes <- mapM getLectureTime selectedLecs
-  tutTimes <- mapM getTutorialTime selectedTuts
-  return (lecTimes, tutTimes)
+-- | Queries the database for times regarding all meetings (i.e. lectures, tutorials and praticals),
+-- returns a list of list of Time.
+getTimes :: [(T.Text, T.Text, T.Text)] -> IO [[Time]]
+getTimes selectedMeetings = runSqlite databasePath $ do
+  mapM getMeetingTime selectedMeetings
 
 -- | Creates a schedule.
--- It takes information about lectures and tutorials and their corresponding time.
+-- It takes information about meetings (i.e. lectures, tutorials and praticals) and their corresponding time.
 -- Courses are added to schedule, based on their days and times.
-getScheduleByTime :: [(T.Text, T.Text, T.Text)] -> [(T.Text, T.Text, T.Text)] -> [[Time]] -> [[Time]] -> [[[T.Text]]]
-getScheduleByTime selectedLecs selectedTuts lecTimes tutTimes =
-  let lecture_times = zip selectedLecs lecTimes
-      tutorial_times = zip selectedTuts tutTimes
-      allTimes = lecture_times ++ tutorial_times
+getScheduleByTime :: [(T.Text, T.Text, T.Text)] -> [[Time]] -> [[[T.Text]]]
+getScheduleByTime selectedMeetings mTimes =
+  let meetingTimes_ = zip selectedMeetings mTimes
       schedule = replicate 13 $ replicate 5 []
-  in foldl addCourseToSchedule schedule allTimes
+  in foldl addCourseToSchedule schedule meetingTimes_
 
 -- | Take a list of Time and returns a list of tuples that correctly index
 -- into the 2-D table (for generating the image)

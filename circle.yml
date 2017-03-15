@@ -1,15 +1,23 @@
+general:
+  artifacts:
+    - "docs"
+
 dependencies:
   cache_directories:
     - "~/.stack"
     - ".stack-work"
   pre:
+    - sudo apt-get install imagemagick texlive-latex-base
     - curl -L https://github.com/commercialhaskell/stack/releases/download/v1.3.0/stack-1.3.0-linux-x86_64.tar.gz | tar zx -C /tmp
     - sudo mv /tmp/stack-1.3.0-linux-x86_64/stack /usr/bin
   override:
     - stack setup
     - rm -fr $(stack path --dist-dir) $(stack path --local-install-root)
-    - stack build
+    - stack build --fast
 
 test:
   override:
     - stack test
+  post:
+    - stack exec courseography docs
+    - cp -r doc $CIRCLE_ARTIFACTS
