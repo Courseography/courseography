@@ -5,10 +5,8 @@ module WebParsing.ReqParser
 import qualified Text.Parsec as Parsec
 import Text.Parsec.String (Parser)
 import Text.Parsec ((<|>))
-import Control.Monad (msum)
-import Control.Monad.Identity (Identity)
-import qualified Data.String as S
-import qualified Data.List as L
+import Control.Monad()
+import Control.Monad.Identity()
 import Database.Requirement
 
 
