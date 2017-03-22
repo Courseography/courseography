@@ -13,8 +13,8 @@ module ParserTests.ParserTests
 (  reqTestSuite  ) where
 
 import Test.HUnit
-import Database.Requirement
-import WebParsing.ReqParser
+import Database.Requirement()
+import WebParsing.ReqParser()
 
 -- create function that takes in a parser and string,
 -- applies parser to string and creates assertion as in test 2?

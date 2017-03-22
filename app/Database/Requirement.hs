@@ -10,7 +10,7 @@ module Database.Requirement
 ( Req(..)
 ) where
 
-import qualified Data.String as S
-import qualified Data.List as L
+import Data.String()
+import Data.List()
 
 data Req = J String | AND [Req] | OR [Req] | FROM String Req | GRADE String Req | RAW String deriving (Eq, Show)
