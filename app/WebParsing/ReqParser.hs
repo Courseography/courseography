@@ -52,7 +52,7 @@ fcesParser = do
 gradeParser :: Parser String
 gradeParser = do
     grade <- percentParser <|> letterParser
-    Parsec.lookAhead $ Parsec.choice $ map Parsec.try [
+    _ <- Parsec.lookAhead $ Parsec.choice $ map Parsec.try [
         andSeparator,
         orSeparator,
         Parsec.space >> return "",
@@ -75,11 +75,11 @@ gradeParser = do
 -- parse for cutoff percentage before a course
 coBefParser :: Parser Req
 coBefParser = do
-    Parsec.choice $ map (Parsec.try . (>> Parsec.space) . Parsec.string) ["a", "A", "an", "An"]
+    _ <- Parsec.choice $ map (Parsec.try . (>> Parsec.space) . Parsec.string) ["a", "A", "an", "An"]
     Parsec.spaces
     grade <- gradeParser
     Parsec.spaces
-    Parsec.manyTill Parsec.anyChar (Parsec.try $ Parsec.lookAhead singleParser)
+    _ <- Parsec.manyTill Parsec.anyChar (Parsec.try $ Parsec.lookAhead singleParser)
     req <- singleParser
     return $ GRADE grade req
 
@@ -93,9 +93,9 @@ coAftParser = do
 
     where
     cutoffHelper = Parsec.between Parsec.spaces Parsec.spaces $ do
-        Parsec.manyTill (Parsec.noneOf "()")
+        _ <- Parsec.manyTill (Parsec.noneOf "()")
           (Parsec.try $ Parsec.lookAhead (orSeparator <|> andSeparator <|> (do
-            gradeParser
+            _ <- gradeParser
             Parsec.spaces
             Parsec.notFollowedBy $ Parsec.alphaNum
             return "")))
@@ -156,8 +156,8 @@ andParser = do
 fromParser :: Parser Req
 fromParser = do
     fces <- fcesParser
-    Parsec.manyTill Parsec.anyChar fromSeparator
-    Parsec.manyTill Parsec.anyChar (Parsec.try $ Parsec.lookAhead singleParser)
+    _ <- Parsec.manyTill Parsec.anyChar fromSeparator
+    _ <- Parsec.manyTill Parsec.anyChar (Parsec.try $ Parsec.lookAhead singleParser)
     req <- (Parsec.try andParser <|> rawTextParser)
     return $ FROM fces req
 
