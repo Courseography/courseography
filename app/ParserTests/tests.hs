@@ -9,9 +9,9 @@ module Main
 (  main  ) where
 
 import qualified System.Exit as Exit
-import qualified Text.Parsec as Parsec
-import ParserTests.ParserTests
-import Test.HUnit ( assertEqual, runTestTT, Test(..), failures )
+import Text.Parsec()
+import ParserTests.ParserTests(  reqTestSuite  )
+import Test.HUnit (  runTestTT, Test(..), failures  )
 
 -- Single test encompassing all test suites
 tests :: Test
