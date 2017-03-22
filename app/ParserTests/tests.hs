@@ -9,7 +9,6 @@ module Main
 (  main  ) where
 
 import qualified System.Exit as Exit
-import Text.Parsec()
 import ParserTests.ParserTests(  reqTestSuite  )
 import Test.HUnit (  runTestTT, Test(..), failures  )
 

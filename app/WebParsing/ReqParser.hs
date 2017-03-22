@@ -1,14 +1,10 @@
 {-# LANGUAGE FlexibleContexts #-}
-module WebParsing.ReqParser
-    where
+module WebParsing.ReqParser where
 
 import qualified Text.Parsec as Parsec
 import Text.Parsec.String (Parser)
 import Text.Parsec ((<|>))
-import Control.Monad()
-import Control.Monad.Identity()
 import Database.Requirement
-
 
 -- define separators
 fromSeparator :: Parser ()
@@ -177,8 +173,3 @@ parseReqs reqString =
     in case req of
         Right x -> x
         Left e -> J (show e)
-
-    -- [] look for more conrner cases where separators are in english between
-    --    complex reqs.
-    -- [] year (Done by Christine)
-    -- [] create Group Type
