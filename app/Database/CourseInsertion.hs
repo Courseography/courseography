@@ -33,7 +33,7 @@ saveGraphJSON jsonStr nameStr = do
         Nothing -> return $ toResponse ("Error" :: String)
         Just (SvgJSON texts shapes paths) -> do
             _ <- runSqlite databasePath $ insertGraph nameStr texts shapes paths
-            return $ toResponse $ ("Success" :: String)
+            return $ toResponse ("Success" :: String)
     where
         insertGraph :: T.Text -> [Text] -> [Shape] -> [Path] -> SqlPersistM ()
         insertGraph nameStr_ texts shapes paths = do
@@ -67,7 +67,7 @@ getBreadthKey (Just description_) = do
 -- | Inserts course into the Courses table.
 insertCourse :: Course -> SqlPersistM ()
 insertCourse course = do
-    maybeCourse <- selectFirst [CoursesCode ==. (name course)] []
+    maybeCourse <- selectFirst [CoursesCode ==. name course] []
     breadthKey <- getBreadthKey (breadth course)
     distributionKey <- getDistributionKey (distribution course)
     case maybeCourse of

@@ -20,7 +20,7 @@ generateDocs :: IO ()
 generateDocs = do
   print "Generating documentation..."
   createDirectoryIfMissing True docPath
-  callCommand $ intercalate " " [
+  callCommand $ unwords [
     "stack exec haddock --",
     "-o",
     docPath,

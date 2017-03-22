@@ -90,7 +90,7 @@ processCourseToData tags  =
 parseArtSci :: IO ()
 parseArtSci = do
     rsp <- simpleHTTP (getRequest fasCalendarURL)
-    body <- (getResponseBody rsp)
+    body <- getResponseBody rsp
     let depts = getDeptList $ parseTags (T.pack body)
     putStrLn "Parsing Arts and Science Posts"
     mapM_ getPost depts

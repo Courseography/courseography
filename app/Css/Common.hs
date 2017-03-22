@@ -46,33 +46,32 @@ headerCSS = do
     ".header" ?
         do margin0
            padding 0 (em 0.5) 0 (em 0.5)
-           backgroundColor $ purple10
+           backgroundColor purple10
            border solid (px 1) black
            color white
            img ?
              do display inlineBlock
                 margin 0 0 (px 5) 0
            height (px 50)
-    "#nav-links" ?
-        do
-            "list-style" -: "none"
-            minWidth (px 687)
-            paddingTop (px 10)
-            margin nil nil nil nil
+    "#nav-links" ? do
+        "list-style" -: "none"
+        minWidth (px 687)
+        paddingTop (px 10)
+        margin nil nil nil nil
+        display inlineBlock
+        a ?
+          fontWeight normal
+        li <? do
+            textAlign $ alignSide sideCenter
             display inlineBlock
-            a ?
-              do fontWeight normal
-            li <? do
-                textAlign $ alignSide sideCenter
-                display inlineBlock
-                padding 0 (px 10) 0 (px 10)
-                a <? do
-                    color white
-                    "text-shadow" -: "0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000;"
-                    hover & do
-                        color darkgray
-            height (px 50)
-            position absolute
+            padding 0 (px 10) 0 (px 10)
+            a <? do
+                color white
+                "text-shadow" -: "0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000;"
+                hover &
+                    color darkgray
+        height (px 50)
+        position absolute
     "#nav-fb" ? do
         float floatRight
         height (px 50)

@@ -46,11 +46,11 @@ instance Show Req where
     show (AND reqs) =
         case reqs of
         [x] -> show x
-        otherwise -> "(" ++ (L.intercalate "," $ map show reqs) ++ ")"
+        _ -> "(" ++ L.intercalate "," (map show reqs) ++ ")"
     show (OR reqs) =
         case reqs of
         [x] -> show x
-        otherwise -> "(" ++ (L.intercalate "/" $ map show reqs) ++ ")"
+        otherwise -> "(" ++ L.intercalate "/" (map show reqs) ++ ")"
     show (FROM fces reqs) =  fces ++ " FCE(s) from:\n" ++ show reqs
     show (GRADE grade reqs) =  "(" ++ show reqs ++ " with a minimum grade of " ++ grade ++ "%)"
     show (RAW text) = "(" ++ text ++ ")"

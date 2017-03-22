@@ -232,7 +232,7 @@ instance FromJSON Courses where
 instance ToJSON Meeting where
   toJSON = genericToJSON defaultOptions {
     fieldLabelModifier =
-      (\field -> (toLower $ head field): (tail field)) .
+      (\field -> toLower (head field): tail field) .
       drop 7
   }
 

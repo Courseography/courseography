@@ -33,5 +33,4 @@ convertToImage inName outName =
 
 -- | Removes a file.
 removeFile :: String -> IO ()
-removeFile name = do
-  mapM_ (rm . Path.decodeString) $ splitOn " " name
+removeFile name = mapM_ (rm . Path.decodeString) (splitOn " " name)
