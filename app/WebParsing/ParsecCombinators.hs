@@ -31,8 +31,8 @@ findCourseFromTag = do
     return $ T.pack parsed
 
 generalCategoryParser :: Maybe T.Text -> T.Text -> Parser (Post, [T.Text])
-generalCategoryParser firstCourse postCode = do
-    post <- postInfoParser firstCourse postCode
+generalCategoryParser firstCourse _postCode = do
+    post <- postInfoParser firstCourse _postCode
     categories <- splitPrereqText
 
     return (post, categories)
