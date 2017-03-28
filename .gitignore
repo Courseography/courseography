@@ -28,4 +28,3 @@ cabal.sandbox.config
 
 # IDE project files
 .idea
-app/Svg/Generator.hs
