@@ -21,7 +21,7 @@ getCourseFromTag courseTag =
     let course = P.parse findCourseFromTag "(source)" courseTag
     in
         case course of
-            Right name -> name
+            Right _name -> _name
             Left _ -> ""
 
 findCourseFromTag :: Parser T.Text
