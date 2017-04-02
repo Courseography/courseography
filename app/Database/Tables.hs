@@ -48,6 +48,10 @@ import WebParsing.PrerequisiteParsing
 data Time = Time { timeField :: [Double] } deriving (Show, Read, Eq, Generic)
 derivePersistField "Time"
 
+data Room = Room { roomField :: (T.Text, T.Text)} deriving (Show, Read, Eq, Generic)
+derivePersistField "Room"
+
+
 -- | A two-dimensional point.
 type Point = (Double, Double)
 
@@ -86,7 +90,7 @@ Meeting
     wait Int
     extra Int
     timeStr T.Text
-    room T.Text
+    room [Room]
     deriving Generic Show
 
 Breadth
@@ -191,6 +195,7 @@ data Course =
 instance ToJSON Course
 instance ToJSON Session
 instance ToJSON Time
+instance ToJSON Room
 
 -- instance FromJSON required so that tables can be parsed into JSON,
 -- not necessary otherwise.
@@ -241,11 +246,11 @@ instance FromJSON Meeting where
     teachingMethod :: T.Text <- o .:? "teachingMethod" .!= ""
     sectionNumber :: T.Text <- o .:? "sectionNumber" .!= ""
     timeMap :: Value <- o .:? "schedule" .!= Null
-    allTimes <- case timeMap of
+    (allTimes, allRooms) <- case timeMap of
         Object obj -> do
-            times <- mapM parseTimes (HM.elems obj)
-            return $ concat times
-        _ -> return []
+            timesAndRooms <- mapM parseSchedules (HM.elems obj)
+            return $ (concat $ map fst timesAndRooms, concat $ map snd timesAndRooms)
+        _ -> return ([], [])
     let sectionId = T.concat [teachingMethod, sectionNumber]
 
     capStr <- o .:? "enrollmentCapacity" .!= "-1"
@@ -266,7 +271,7 @@ instance FromJSON Meeting where
     let instructor = T.intercalate "; " $ filter (not . T.null) instrs
     if teachingMethod == "LEC" || teachingMethod == "TUT" || teachingMethod == "PRA"
     then
-      return $ Meeting "" "" sectionId allTimes cap instructor enrol wait extra timeStr ""
+      return $ Meeting "" "" sectionId allTimes cap instructor enrol wait extra timeStr allRooms
     else
       fail "Not a lecture, Tutorial or Practical"
 
@@ -278,14 +283,18 @@ parseInstr (Object io) = do
   return (T.concat [firstName, ". ", lastName])
 parseInstr _ = return ""
 
-parseTimes :: Value -> Parser [Time]
-parseTimes (Object obj) = do
+parseSchedules :: Value -> Parser ([Time], [Room])
+parseSchedules (Object obj) = do
     meetingDay <- obj .:? "meetingDay"
     meetingStartTime <- obj .:? "meetingStartTime"
     meetingEndTime <- obj .:? "meetingEndTime"
-    return $ getTimeSlots meetingDay meetingStartTime meetingEndTime
-parseTimes _ = return []
+    meetingRoom1 <- obj .:? "assignedRoom1" .!= ""
+    meetingRoom2 <- obj .:? "assignedRoom2" .!= ""
+    let times = getTimeSlots meetingDay meetingStartTime meetingEndTime
+        rooms = replicate (length times) (Room (meetingRoom1, meetingRoom2))
+    return (times, rooms)
 
+parseSchedules _ = return ([], [])
 
 -- | Converts 24-hour time into a double
 -- | Assumes times are rounded to the nearest hour
