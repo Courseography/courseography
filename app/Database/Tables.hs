@@ -137,15 +137,18 @@ Path json
     deriving Show
 
 Post
-    name T.Text
+    name PostType
     department T.Text
     code T.Text
+    UniquePostode code
+    Primary code
     description T.Text
     deriving Show
 
 PostCategory
     name T.Text
     postCode T.Text
+    Foreign Post fkpost postCode
     deriving Show
 |]
 

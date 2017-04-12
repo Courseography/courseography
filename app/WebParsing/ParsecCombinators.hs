@@ -15,6 +15,7 @@ import qualified Data.Text as T
 import Text.Parsec.Text (Parser)
 import Database.Tables
 import Control.Monad (mapM)
+import Database.DataType
 
 getCourseFromTag :: T.Text -> T.Text
 getCourseFromTag courseTag =
@@ -45,7 +46,7 @@ postInfoParser firstCourse postCode = do
     postType <- getPostType
     description <- getRequirements firstCourse
 
-    return $ Post postType departmentName postCode description
+    return $ Post (postTypeParser postType) departmentName postCode description
 
 extractPostType :: T.Text -> T.Text
 extractPostType postCode = do
@@ -130,3 +131,10 @@ text someText = do
 -- For testing purposed in REPL
 parseAll :: Parser [T.Text]
 parseAll = P.many parseCategory
+
+
+postTypeParser :: T.Text -> PostType
+postTypeParser "Specialist" = Specialist
+postTypeParser "Major" = Major
+postTypeParser "Minor" = Minor
+postTypeParser _ = error "Invalid post type"
