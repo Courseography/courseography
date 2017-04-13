@@ -82,10 +82,9 @@ categoryParser tags firstCourse postCode liPartitions = do
         Right (post, categories) -> do
             addPostCategoriesToDatabase postCode categories
             insertUnique post
-            -- insert_ $ post
         Left message -> do
             liftIO $ print failedString
-            return (Nothing)
+            return Nothing
     where
         parsed = case liPartitions of
             [] -> P.parse (generalCategoryParser firstCourse postCode) failedString (T.pack $ innerText tags)

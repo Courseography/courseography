@@ -45,8 +45,7 @@ postInfoParser firstCourse postCode = do
     departmentName <- getDepartmentName
     postType <- getPostType
     description <- getRequirements firstCourse
-
-    return $ Post (postTypeParser postType) departmentName postCode description
+    return $ Post (read $ T.unpack postType) departmentName postCode description
 
 extractPostType :: T.Text -> T.Text
 extractPostType postCode = do
@@ -131,10 +130,3 @@ text someText = do
 -- For testing purposed in REPL
 parseAll :: Parser [T.Text]
 parseAll = P.many parseCategory
-
-
-postTypeParser :: T.Text -> PostType
-postTypeParser "Specialist" = Specialist
-postTypeParser "Major" = Major
-postTypeParser "Minor" = Minor
-postTypeParser _ = error "Invalid post type"
