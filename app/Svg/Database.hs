@@ -7,6 +7,8 @@ in "Svg.Parser", though it is possible to put all of the data retrieval code in
 here as well at some point in the future.
 -}
 
+{-# LANGUAGE OverloadedStrings#-}
+
 module Svg.Database
     (insertGraph, insertElements, deleteGraphs) where
 
@@ -14,6 +16,7 @@ import Database.Persist.Sqlite
 import Database.Tables hiding (graphWidth, graphHeight, paths, shapes, texts)
 import Config (databasePath)
 import qualified Data.Text as T
+import Data.Maybe (fromJust)
 
 -- | Insert a new graph into the database, returning the key of the new graph.
 insertGraph :: T.Text   -- ^ The title of the graph that is being inserted.
@@ -21,8 +24,9 @@ insertGraph :: T.Text   -- ^ The title of the graph that is being inserted.
             -> Double   -- ^ The height dimension of the graph
             -> SqlPersistM GraphId -- ^ The unique identifier of the inserted graph.
 insertGraph graphName graphWidth graphHeight = do
+    maybeEntityDepartment <- selectFirst [DepartmentName ==. graphName] []
     runMigration migrateAll
-    insert (Graph graphName graphWidth graphHeight)
+    insert (Graph graphName (entityKey $ fromJust maybeEntityDepartment) graphWidth graphHeight)
 
 -- | Insert graph components into the database.
 insertElements :: ([Path], [Shape], [Text]) -> SqlPersistM ()

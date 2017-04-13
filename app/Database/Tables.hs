@@ -101,7 +101,7 @@ Distribution
 
 Graph json
     title T.Text
-    Foreign Department fkdept title
+    departmentRef DepartmentId
     width Double
     height Double
     deriving Show
