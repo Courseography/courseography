@@ -6,6 +6,7 @@ import Network.HTTP
 import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Match
 import Database.Persist.Sqlite
+import Database.Persist (insertUnique)
 import Database.CourseInsertion
 import Data.List
 import qualified Data.Text as T
@@ -13,6 +14,7 @@ import Database.Tables
 import WebParsing.ParsingHelp
 import Config (databasePath)
 import WebParsing.PostParser
+import Data.Maybe (mapMaybe)
 
 fasCalendarURL :: String
 fasCalendarURL = "http://calendar.artsci.utoronto.ca/"
@@ -26,13 +28,16 @@ toDelete = ["199299398399(Faculty_of_Arts_&_Science_Programs).html",
             "Life_Sciences.html"]
 
 -- | Converts the processed main page and extracts a list of department html pages
-getDeptList :: [Tag T.Text] -> [T.Text]
+-- and department names
+getDeptList :: [Tag T.Text] -> ([T.Text], [T.Text])
 getDeptList tags =
     let lists = sections (tagOpenAttrNameLit "ul" "class" (== "simple")) tags
         contents = takeWhile (not. isTagCloseName "ul") . head . tail $ lists
         as = filter (isTagOpenName "a") contents
         rawList = nub $ map (fromAttrib "href") as
-    in rawList \\ toDelete
+        ts = mapMaybe maybeTagText $ filter isTagText contents
+        deptNames = filter (not . T.null) $ map T.strip ts
+    in (rawList \\ toDelete, deptNames)
 
 -- | Takes an html filename of a department (which are found from getDeptList) and returns
 -- a list, where each element is a list of strings and tags relating to a single
@@ -85,13 +90,20 @@ processCourseToData tags  =
              parseRecommendedPrep -:
              parseDistAndBreadth
 
+-- | Insert deparment names to database
+getDepts :: [T.Text] -> IO ()
+getDepts depts = runSqlite databasePath $
+    (mapM_ (insertUnique . Department) depts :: SqlPersistM ())
+
 -- | Parses the entire Arts & Science Course Calendar and inserts courses
 -- into the database.
 parseArtSci :: IO ()
 parseArtSci = do
     rsp <- simpleHTTP (getRequest fasCalendarURL)
     body <- (getResponseBody rsp)
-    let depts = getDeptList $ parseTags (T.pack body)
+    let (depts, deptNames) = getDeptList $ parseTags (T.pack body)
+    putStrLn "Inserting departments"
+    getDepts deptNames
     putStrLn "Parsing Arts and Science Posts"
     mapM_ getPost depts
     putStrLn "Parsing Arts and Science Calendar..."

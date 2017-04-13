@@ -82,7 +82,7 @@ categoryParser tags firstCourse postCode liPartitions = do
         Right (post, categories) -> do
             addPostCategoriesToDatabase postCode categories
             insertUnique post
-        Left message -> do
+        Left _ -> do
             liftIO $ print failedString
             return Nothing
     where
@@ -98,4 +98,4 @@ parseLi liPartition = do
     let parsed = P.parse parseCategory failedString (T.pack $ innerText liPartition)
     case parsed of
         Right category -> category
-        Left message -> ""
+        Left _ -> ""

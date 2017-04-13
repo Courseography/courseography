@@ -54,7 +54,6 @@ type Point = (Double, Double)
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 
 Department json
-    code [T.Text]
     name T.Text
     Primary name
 
@@ -99,6 +98,7 @@ Distribution
 
 Graph json
     title T.Text
+    Foreign Department fkdept title
     width Double
     height Double
     deriving Show
@@ -139,6 +139,7 @@ Path json
 Post
     name PostType
     department T.Text
+    Foreign Department fkdept department
     code T.Text
     UniquePostode code
     Primary code
