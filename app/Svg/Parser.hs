@@ -191,7 +191,6 @@ parseRect key tags =
                   fill
                   ""
                   []
-                  9
                   Node
 
 
@@ -254,7 +253,6 @@ parseEllipseHelper key (dx, dy) ellipseTag =
           ""
           ""
           []
-          20
           BoolNode
 
 
