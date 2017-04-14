@@ -59,6 +59,7 @@ share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 Department json
     name T.Text
     Primary name
+    UniqueName name
 
 Courses
     code T.Text

@@ -28,7 +28,7 @@ import Database.Tables as Tables
 import Control.Monad.IO.Class (liftIO, MonadIO)
 import Util.Happstack (createJSONResponse)
 import qualified Data.Text as T
-import WebParsing.ParsingHelp
+import WebParsing.ParsingHelp (emptyCourse)
 import Data.List
 import Config (databasePath)
 import Control.Monad (liftM)
