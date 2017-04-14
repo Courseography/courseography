@@ -114,7 +114,6 @@ buildCourse fall spring year course = do
            (coursesManualTutorialEnrolment course)
            (coursesManualPracticalEnrolment course)
            cDistribution
-           (coursesPrereqs course)
            (coursesCoreqs course)
            (coursesVideoUrls course)
 

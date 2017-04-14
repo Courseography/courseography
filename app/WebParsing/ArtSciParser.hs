@@ -21,6 +21,8 @@ import Database.Persist.Sqlite (runSqlite, SqlPersistM)
 import Database.Persist (insertUnique)
 import Database.CourseInsertion (insertCourse)
 import Database.Tables (Courses(..), Department(..))
+import Database.Requirement (Req)
+import WebParsing.ReqParser (parseReqs)
 import Config (databasePath)
 
 
@@ -114,7 +116,7 @@ parseCourses tags =
                          (Just description)
                          Nothing
                          Nothing
-                         (Just $ fromMaybe "" prereqString)
+                         (fmap (T.pack . show . parseReqs . T.unpack) prereqString)
                          exclusion
                          Nothing
                          Nothing

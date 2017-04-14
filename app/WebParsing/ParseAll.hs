@@ -7,5 +7,4 @@ import WebParsing.UtsgJsonParser (getAllCourses)
 parseAll :: IO ()
 parseAll = do
     parseArtSci
-    --parseUTSC
-    -- getAllCourses
+    getAllCourses
