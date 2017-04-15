@@ -81,7 +81,6 @@ timetableScripts = do
          ]
     H.script ! A.src "/static/js/requirejs-config.js" $ ""
     H.script ! H.dataAttribute "main" "/static/js/grid" ! A.src "/static/js/vendor/require.js" $ ""
-    H.script ! A.type_ "text/jsx" ! A.src "/static/js/grid/react_util.js" $ ""
 
 drawScripts :: H.Html
 drawScripts =

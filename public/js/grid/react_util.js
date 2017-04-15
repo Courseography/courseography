@@ -40,7 +40,7 @@ var CourseList = React.createClass({
             dataType: 'text',
             success: function (data) {
                 this.enableSearch();
-                courses = data.split('\n').map(function (course) {
+                var courses = data.split('\n').map(function (course) {
                     return course.substring(0, 8);
                 });
                 this.setState({courses: courses});
@@ -64,7 +64,7 @@ var CourseList = React.createClass({
             var searchList = state.courses.filter(function (course) {
                 return course.indexOf(state.courseFilter) > -1;
             }).map(function (course) {
-                return <CourseEntry course={course} />
+                return <CourseEntry course={course} key={course} />
             });
         }
 
@@ -112,14 +112,16 @@ var InfoPanel = React.createClass({
 });
 
 
-React.render(
-    <CoursePanel />,
-    document.getElementById('course-select-wrapper'));
+export function initGrid() {
+  // ReactDOM.render(
+  //     <CoursePanel />,
+  //     document.getElementById('course-select-wrapper'));
 
-React.render(
-    <SearchPanel />,
-    document.getElementById('search-layout'));
+  ReactDOM.render(
+      <SearchPanel />,
+      document.getElementById('search-layout'));
 
-React.render(
-    <InfoPanel />,
-    document.getElementsByClassName('col-md-8 col-xs-12 col-md-pull-2')[0]);
+  // ReactDOM.render(
+  //     <InfoPanel />,
+  //     document.getElementsByClassName('col-md-8 col-xs-12 col-md-pull-2')[0]);
+}
