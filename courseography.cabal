@@ -87,13 +87,10 @@ executable courseography
     Util.Documentation,
     Util.Happstack,
     WebParsing.ArtSciParser,
-    WebParsing.HtmlTable,
     WebParsing.Ligature,
     WebParsing.ParseAll,
-    WebParsing.ParsingHelp,
     WebParsing.PostParser,
     WebParsing.ReqParser,
-    WebParsing.TimeConverter,
     WebParsing.UtsgJsonParser,
     WebParsing.ParsecCombinators
   other-extensions:
