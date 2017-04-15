@@ -28,7 +28,6 @@ import Util.Happstack (createJSONResponse)
 import qualified Data.Text as T
 import Data.List
 import Config (databasePath)
-import Control.Monad (liftM)
 import Data.Aeson ((.=), toJSON, object)
 import Database.DataType
 import Svg.Builder
@@ -119,17 +118,13 @@ getDescriptionB :: Maybe (Key Breadth) -> SqlPersistM (Maybe T.Text)
 getDescriptionB Nothing = return Nothing
 getDescriptionB (Just key) = do
     maybeBreadth <- get key
-    case maybeBreadth of
-        Nothing -> return Nothing
-        Just coursebreadth  -> return $ Just $ breadthDescription coursebreadth
+    return $ fmap breadthDescription maybeBreadth
 
 getDescriptionD :: Maybe (Key Distribution) -> SqlPersistM (Maybe T.Text)
 getDescriptionD Nothing = return Nothing
 getDescriptionD (Just key) = do
     maybeDistribution <- get key
-    case maybeDistribution of
-        Nothing -> return Nothing
-        Just dist -> return $ Just $ distributionDescription dist
+    return $ fmap distributionDescription maybeDistribution
 
 -- | Builds a Session structure from three lists of tuples from the Meeting table,
 -- representing information for lectures, tutorials and practicals.
@@ -138,9 +133,9 @@ buildSession = buildSession' . map entityVal
 
 buildSession' :: [Meeting] -> Tables.Session
 buildSession' meetings =
-    let lecs = filter (\m -> (T.head $ meetingSection m) == 'L') meetings
-        tuts = filter (\m -> (T.head $ meetingSection m) == 'T') meetings
-        pras = filter (\m -> (T.head $ meetingSection m) == 'P') meetings
+    let lecs = filter (\m -> T.head (meetingSection m) == 'L') meetings
+        tuts = filter (\m -> T.head (meetingSection m) == 'T') meetings
+        pras = filter (\m -> T.head (meetingSection m) == 'P') meetings
     in Tables.Session lecs tuts pras
 
 -- ** Other queries
@@ -207,7 +202,7 @@ allCourses = do
 
 -- | Returns all course info for a given department.
 courseInfo :: T.Text -> ServerPart Response
-courseInfo dept = liftM createJSONResponse (getDeptCourses dept)
+courseInfo dept = fmap createJSONResponse (getDeptCourses dept)
 
 -- | Returns all course info for a given department.
 getDeptCourses :: MonadIO m => T.Text -> m [Course]
@@ -237,7 +232,7 @@ deptList :: IO Response
 deptList = do
     depts <- runSqlite databasePath $ do
         courses :: [Entity Courses] <- selectList [] []
-        return $ sort . nub $ map g courses :: SqlPersistM [[Char]]
+        return $ sort . nub $ map g courses :: SqlPersistM [String]
     return $ createJSONResponse depts
     where
         g = take 3 . T.unpack . coursesCode . entityVal

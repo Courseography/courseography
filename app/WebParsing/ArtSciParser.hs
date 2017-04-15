@@ -61,7 +61,7 @@ getDeptList tags =
 
 -- | Insert department names to database
 insertDepts :: [T.Text] -> SqlPersistM ()
-insertDepts depts = mapM_ (print >> (insertUnique . Department)) depts
+insertDepts = mapM_ (print >> (insertUnique . Department))
 
 -- | Takes the URL and name of a department name for parsing.
 parseDepartment :: (T.Text, T.Text) -> SqlPersistM ()

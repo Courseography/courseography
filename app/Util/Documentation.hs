@@ -7,7 +7,6 @@ for the Haskell source files of Courseography.
 -}
 module Util.Documentation where
 
-import Data.List (intercalate)
 import System.Process (callCommand)
 import System.Directory (createDirectoryIfMissing)
 
@@ -20,7 +19,7 @@ generateDocs :: IO ()
 generateDocs = do
   putStrLn "Generating documentation..."
   createDirectoryIfMissing True docPath
-  callCommand $ intercalate " " [
+  callCommand $ unwords [
     "stack exec haddock --",
     "-o",
     docPath,

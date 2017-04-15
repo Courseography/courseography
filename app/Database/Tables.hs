@@ -233,7 +233,7 @@ instance FromJSON Courses where
 instance ToJSON Meeting where
   toJSON = genericToJSON defaultOptions {
     fieldLabelModifier =
-      (\field -> (toLower $ head field): (tail field)) .
+      (\field -> toLower (head field): tail field) .
       drop 7
   }
 
@@ -245,7 +245,7 @@ instance FromJSON Meeting where
     (allTimes, allRooms) <- case timeMap of
         Object obj -> do
             timesAndRooms <- mapM parseSchedules (HM.elems obj)
-            return $ (concat $ map fst timesAndRooms, concat $ map snd timesAndRooms)
+            return (concatMap fst timesAndRooms, concatMap snd timesAndRooms)
         _ -> return ([], [])
     let sectionId = T.concat [teachingMethod, sectionNumber]
 

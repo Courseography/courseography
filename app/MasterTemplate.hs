@@ -21,9 +21,9 @@ masterTemplate title headers body scripts =
                    ! A.href "static/res/ico/favicon.png"
             sequence_ headers
             mapM_ toStylesheet [
-                (if enableCdn
-                 then "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"
-                 else "/static/style/bootstrap.min.3.1.1.css"),
+                if enableCdn
+                then "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"
+                else "/static/style/bootstrap.min.3.1.1.css",
                 "static/style/app.css"]
         H.body $ do
             body

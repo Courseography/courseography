@@ -69,9 +69,7 @@ getDepartmentName =
 getPostType :: Parser T.Text
 getPostType = do
     _ <- P.spaces
-    (P.try (text "Specialist") <|>
-     P.try (text "Major") <|>
-     P.try (text "Minor"))
+    P.choice [P.try (text "Specialist"), P.try (text "Major"), P.try (text "Minor")]
 
 isDepartmentName ::  T.Text -> Parser T.Text
 isDepartmentName postType = parseUntil (text postType)

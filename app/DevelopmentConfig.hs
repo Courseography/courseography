@@ -28,7 +28,6 @@ module Config (
 import Data.Text (Text)
 import qualified Clay.Render as Clay
 import Data.Time (Day, fromGregorian)
-import Data.Time.Format (FormatTime)
 import Happstack.Server (Conf(..), LogAccess, nullConf)
 import System.Log.Logger (logM, Priority(INFO))
 

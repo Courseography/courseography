@@ -30,7 +30,7 @@ saveGraphJSON jsonStr nameStr = do
         Nothing -> return $ toResponse ("Error" :: String)
         Just (SvgJSON texts shapes paths) -> do
             _ <- runSqlite databasePath $ insertGraph nameStr texts shapes paths
-            return $ toResponse $ ("Success" :: String)
+            return $ toResponse ("Success" :: String)
     where
         insertGraph :: T.Text -> [Text] -> [Shape] -> [Path] -> SqlPersistM ()
         insertGraph nameStr_ texts shapes paths = do
