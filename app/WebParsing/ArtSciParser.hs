@@ -1,10 +1,8 @@
-{-# LANGUAGE OverloadedStrings #-}
 module WebParsing.ArtSciParser
     (parseArtSci, getDeptList, fasCalendarURL) where
 
 import Data.Either (either)
 import Data.List (elemIndex)
-import Data.Maybe (fromMaybe, maybe)
 import Control.Monad.IO.Class (liftIO)
 import qualified Data.Text as T
 import Data.Text.Lazy (toStrict)
@@ -21,7 +19,6 @@ import Database.Persist.Sqlite (runSqlite, SqlPersistM)
 import Database.Persist (insertUnique)
 import Database.CourseInsertion (insertCourse)
 import Database.Tables (Courses(..), Department(..))
-import Database.Requirement (Req)
 import WebParsing.ReqParser (parseReqs)
 import Config (databasePath)
 

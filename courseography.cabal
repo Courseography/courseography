@@ -93,18 +93,19 @@ executable courseography
     WebParsing.ReqParser,
     WebParsing.UtsgJsonParser,
     WebParsing.ParsecCombinators
-  other-extensions:
+  -- These are compiler extensions used for every module
+  default-extensions:
     OverloadedStrings,
-    DataKinds,
-    NoMonomorphismRestriction,
-    FlexibleContexts,
-    GADTs,
-    ScopedTypeVariables,
+    PartialTypeSignatures,
+    ScopedTypeVariables
+  other-extensions:
+    DeriveGeneric,
     EmptyDataDecls,
+    FlexibleContexts,
     FlexibleInstances,
+    GADTs,
     GeneralizedNewtypeDeriving,
     MultiParamTypeClasses,
-    DeriveGeneric,
     QuasiQuotes,
     TemplateHaskell,
     TypeFamilies

@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 {-|
     Module      : Css.Draw
     Description : Defines the CSS for the draw page.

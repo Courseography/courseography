@@ -1,13 +1,11 @@
-{-# LANGUAGE EmptyDataDecls,
+{-# LANGUAGE DeriveGeneric,
+             EmptyDataDecls,
              FlexibleContexts,
              FlexibleInstances,
              GADTs,
              GeneralizedNewtypeDeriving,
              MultiParamTypeClasses,
-             OverloadedStrings,
-             DeriveGeneric,
              QuasiQuotes,
-             ScopedTypeVariables,
              TemplateHaskell,
              TypeFamilies #-}
 
@@ -204,8 +202,9 @@ instance FromJSON SvgJSON
 -- jQuery. @.@ is a jQuery meta-character, and must be removed from the ID.
 convertTimeToString :: Time -> [T.Text]
 convertTimeToString (Time [day, timeNum]) =
-  [T.pack . show . floor $ day,
+  [T.pack . show $ (floor day :: Int),
    T.replace "." "-" . T.pack . show $ timeNum]
+convertTimeToString _ = undefined
 
 
 -- JSON encoding/decoding

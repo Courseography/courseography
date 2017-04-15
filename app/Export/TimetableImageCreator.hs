@@ -1,5 +1,3 @@
-{-# LANGUAGE NoMonomorphismRestriction, OverloadedStrings #-}
-
 {-|
     Module      : Export.TimetableImageCreator
     Description : Primarily defines a function used to render SVGs with times.
@@ -11,7 +9,6 @@ import Diagrams.Prelude
 import Diagrams.Backend.SVG.CmdLine
 import Diagrams.Backend.SVG
 import Data.List (intersperse)
-import Data.List.Split (splitOn)
 import qualified Data.Text as T
 
 days :: [T.Text]
@@ -98,7 +95,7 @@ makeRow ([x]:xs) =
     let maxCourse = maximum (map length xs)
     in (# centerX) . hcat $
         makeTimeCell x : map (makeCell maxCourse) xs
-makeRow [] = error "invalid timetable format"
+makeRow _ = error "invalid timetable format"
 
 headerBorder :: Diagram B
 headerBorder = hrule 11.2 # lw medium # lc pink1

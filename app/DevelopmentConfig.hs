@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 {-
 Description: Holds constants that could change between the development and production environments.
 
@@ -45,7 +43,7 @@ serverConf = nullConf {
 
 -- | Server log configuration. Default is to log access requests using hslogger
 -- and a condensed log formatting.
-logMAccessShort :: FormatTime t => LogAccess t
+logMAccessShort :: LogAccess t
 logMAccessShort host user _ requestLine responseCode _ referer _ =
     logM "Happstack.Server.AccessLog.Combined" INFO $ unwords [
         host,
