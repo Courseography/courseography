@@ -17,9 +17,9 @@ import Data.List.Split (splitOn)
 createImageFile :: String -> String -> IO ()
 createImageFile inName outName =  do
     (_, _, _, pid) <- convertToImage inName outName
-    print "Waiting for process..."
+    putStrLn "Waiting for process..."
     _ <- waitForProcess pid
-    print "Process Complete"
+    putStrLn "Process Complete"
 
 -- | Converts an SVG file to a PNG file. Note that image magik's 'convert' command
 -- can take in file descriptors.

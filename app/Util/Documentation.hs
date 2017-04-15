@@ -7,7 +7,6 @@ for the Haskell source files of Courseography.
 -}
 module Util.Documentation where
 
-import Data.List (intercalate)
 import System.Process (callCommand)
 import System.Directory (createDirectoryIfMissing)
 
@@ -18,14 +17,17 @@ docPath = "doc"
 -- | Generate documentation for Courseography.
 generateDocs :: IO ()
 generateDocs = do
-  print "Generating documentation..."
+  putStrLn "Generating documentation..."
   createDirectoryIfMissing True docPath
   callCommand $ unwords [
     "stack exec haddock --",
     "-o",
     docPath,
     "-h",
-    "--optghc=\"-iapp\"",
+    "--optghc=-iapp",
+    "--optghc=-XOverloadedStrings",
+    "--optghc=-XPartialTypeSignatures",
+    "--optghc=-XScopedTypeVariables",
     "--ignore-all-exports",
     "app/Main.hs"
     ]

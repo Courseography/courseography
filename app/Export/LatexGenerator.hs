@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 {-|
     Module      : Export.LatexGenerator
     Description : Contains functions for creating LaTeX text.

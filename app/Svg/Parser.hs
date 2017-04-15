@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings, FlexibleContexts, GADTs, ScopedTypeVariables #-}
-
 {-|
 Description: The main graph module. __Start here__.
 
@@ -35,7 +33,7 @@ import Data.Text.IO as T (readFile)
 parsePrebuiltSvgs :: IO ()
 parsePrebuiltSvgs = runSqlite databasePath $ do
     deleteGraphs
-    performParse "Computer Science" "csc2016.svg"
+    performParse "Computer Science" "csc2017.svg"
     performParse "Statistics" "sta2015.svg"
     performParse "Biochemistry" "bch2015.svg"
     performParse "Cell & Systems Biology" "csb2015.svg"
@@ -118,7 +116,7 @@ parseGraph key tags =
         -- Raw SVG seems to have a rectangle the size of the whole image
         small shape = shapeWidth shape < 300
         removeRedundant shapes =
-            filter (not . \s -> (shapePos s) `elem` (map shapePos shapes) &&
+            filter (not . \s -> shapePos s `elem` map shapePos shapes &&
                                 (T.null (shapeFill s) || shapeFill s == "#000000") &&
                                 elem (shapeType_ s) [Node, Hybrid]) shapes
 
@@ -191,7 +189,6 @@ parseRect key tags =
                   fill
                   ""
                   []
-                  9
                   Node
 
 
@@ -254,7 +251,6 @@ parseEllipseHelper key (dx, dy) ellipseTag =
           ""
           ""
           []
-          20
           BoolNode
 
 

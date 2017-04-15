@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 {-
 Description: Holds constants that could change between the development and production environments.
 
@@ -30,7 +28,6 @@ module Config (
 import Data.Text (Text)
 import qualified Clay.Render as Clay
 import Data.Time (Day, fromGregorian)
-import Data.Time.Format (FormatTime)
 import Happstack.Server (Conf(..), LogAccess, nullConf)
 import System.Log.Logger (logM, Priority(INFO))
 
@@ -45,7 +42,7 @@ serverConf = nullConf {
 
 -- | Server log configuration. Default is to log access requests using hslogger
 -- and a condensed log formatting.
-logMAccessShort :: FormatTime t => LogAccess t
+logMAccessShort :: LogAccess t
 logMAccessShort host user _ requestLine responseCode _ referer _ =
     logM "Happstack.Server.AccessLog.Combined" INFO $ unwords [
         host,

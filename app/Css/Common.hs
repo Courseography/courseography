@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 {-|
     Module      : Css.Common
     Description : Defines the CSS present in every page.
@@ -159,7 +157,7 @@ modalCSS = do
         right nil
         top nil
         bottom nil
-        backgroundColor (setA (150) black)
+        backgroundColor (setA 150 black)
     ".ui-dialog-titlebar" ? do
         color blue3
         cursor move

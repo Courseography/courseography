@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings, ScopedTypeVariables, PartialTypeSignatures #-}
-
 module WebParsing.UtsgJsonParser
      (getAllCourses,
       getOrgs,
