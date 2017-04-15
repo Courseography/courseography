@@ -28,7 +28,6 @@ import Database.Tables as Tables
 import Control.Monad.IO.Class (liftIO, MonadIO)
 import Util.Happstack (createJSONResponse)
 import qualified Data.Text as T
-import WebParsing.ParsingHelp (emptyCourse)
 import Data.List
 import Config (databasePath)
 import Control.Monad (liftM)
@@ -40,7 +39,7 @@ import Svg.Builder
 -- | Queries the database for all matching lectures, tutorials,
 --   or praticals of this course.
 meetingQuery :: T.Text -> SqlPersistM [Entity Meeting]
-meetingQuery meetingCode = selectList [MeetingCode ==. meetingCode] []
+meetingQuery meetingCode_ = selectList [MeetingCode ==. meetingCode_] []
 
 splitSessions :: [Entity Meeting] -> ([Entity Meeting], [Entity Meeting], [Entity Meeting])
 splitSessions meetingsList =
@@ -51,19 +50,19 @@ splitSessions meetingsList =
 
 -- | Queries the database for all information about @course@,
 -- constructs and returns a Course value.
-returnCourse :: T.Text -> IO Course
+returnCourse :: T.Text -> IO (Maybe Course)
 returnCourse lowerStr = runSqlite databasePath $ do
     let courseStr = T.toUpper lowerStr
     sqlCourse :: (Maybe (Entity Courses)) <- selectFirst [CoursesCode ==. courseStr] []
     case sqlCourse of
-      Nothing -> return emptyCourse
+      Nothing -> return Nothing
       Just course -> do
         meetings <- meetingQuery courseStr
         let (fall, spring, year) = buildAllSessions meetings
-        buildCourse (Just fall)
-                    (Just spring)
-                    (Just year)
-                    (entityVal course)
+        fmap Just $ buildCourse (Just fall)
+                           (Just spring)
+                           (Just year)
+                           (entityVal course)
 
 buildAllSessions :: [Entity Meeting] -> (Tables.Session, Tables.Session, Tables.Session)
 buildAllSessions entityListM =
@@ -255,10 +254,10 @@ queryGraphs = runSqlite databasePath $ do
 -- | Queries the database for all times regarding a specific meeting (lecture, tutorial or practial) for
 -- a @course@, returns a list of Time.
 getMeetingTime :: (T.Text, T.Text, T.Text) -> SqlPersistM [Time]
-getMeetingTime (meetingCode, meetingSection, meetingSession) = do
-    maybeEntityMeetings <- selectFirst [MeetingCode ==. meetingCode,
-                                        MeetingSection ==. getMeetingSection meetingSection,
-                                        MeetingSession ==. meetingSession]
+getMeetingTime (meetingCode_, meetingSection_, meetingSession_) = do
+    maybeEntityMeetings <- selectFirst [MeetingCode ==. meetingCode_,
+                                        MeetingSection ==. getMeetingSection meetingSection_,
+                                        MeetingSession ==. meetingSession_]
                                        []
     return $ maybe [] (meetingTimes . entityVal) maybeEntityMeetings
 
