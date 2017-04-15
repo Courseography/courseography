@@ -46,18 +46,16 @@ saveGraphJSON jsonStr nameStr = do
 --contains field query = Filter field (Left $ T.concat ["%", query, "%"]) (BackendSpecificFilter "LIKE")
 
 -- Get Key of correspondig record in Distribution column
-getDistributionKey :: Maybe T.Text -> SqlPersistM (Maybe (Key Distribution))
-getDistributionKey Nothing = return Nothing
-getDistributionKey (Just description_) = do
+getDistributionKey :: T.Text -> SqlPersistM (Maybe (Key Distribution))
+getDistributionKey description_ = do
     keyListDistribution :: [Key Distribution] <- selectKeysList [ DistributionDescription ==. description_ ] []
     -- option: keyListDistribution :: [DistributionId] <- selectKeysList [ DistributionDescription `contains'` description] []
     return $ case keyListDistribution of
         [] -> Nothing
         _ -> Just (head keyListDistribution)
 
-getBreadthKey :: Maybe T.Text -> SqlPersistM (Maybe (Key Breadth))
-getBreadthKey Nothing = return Nothing
-getBreadthKey (Just description_) = do
+getBreadthKey :: T.Text -> SqlPersistM (Maybe (Key Breadth))
+getBreadthKey description_ = do
     keyListBreadth :: [Key Breadth] <- selectKeysList [ BreadthDescription ==. description_ ] []
     -- option: selectKeysList [ BreadthDescription `contains'` description] []
     return $ case keyListBreadth of
@@ -65,25 +63,14 @@ getBreadthKey (Just description_) = do
         _ -> Just (head keyListBreadth)
 
 -- | Inserts course into the Courses table.
-insertCourse :: Course -> SqlPersistM ()
-insertCourse course = do
-    maybeCourse <- selectFirst [CoursesCode ==. (name course)] []
-    breadthKey <- getBreadthKey (breadth course)
-    distributionKey <- getDistributionKey (distribution course)
+insertCourse :: (Courses, T.Text, T.Text) -> SqlPersistM ()
+insertCourse (course, breadth, distribution) = do
+    maybeCourse <- selectFirst [CoursesCode ==. coursesCode course] []
+    breadthKey <- getBreadthKey breadth
+    distributionKey <- getDistributionKey distribution
     case maybeCourse of
-        Nothing -> insert_ $ Courses (name course)
-                      (title course)
-                      (description course)
-                      (manualTutorialEnrolment course)
-                      (manualPracticalEnrolment course)
-                      (prereqs course)
-                      (exclusions course)
-                      breadthKey
-                      distributionKey
-                      (prereqString course)
-                      (coreqs course)
-                      []
-
+        Nothing -> insert_ $ course {coursesBreadth = breadthKey,
+                                     coursesDistribution = distributionKey}
         Just _ -> return ()
 
 

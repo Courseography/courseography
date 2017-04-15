@@ -25,7 +25,6 @@ import Text.Regex.Posix ((=~))
 import Text.HTML.TagSoup
 import qualified Data.Text as T
 import Database.Tables
-import WebParsing.PrerequisiteParsing
 import WebParsing.Ligature (expand)
 
 type CoursePart = ([Tag T.Text], Course)
@@ -50,7 +49,6 @@ emptyCourse = Course {
                     manualTutorialEnrolment = Nothing,
                     manualPracticalEnrolment = Nothing,
                     distribution = Nothing,
-                    prereqs = Nothing,
                     coreqs = Nothing,
                     videoUrls = []}
 
@@ -170,8 +168,7 @@ parsePrerequisite :: CoursePart -> CoursePart
 parsePrerequisite (tags, course) =
     let (parsed, rest) = tagBreak ["Corequisite","Exclusion","Recommended","Distribution","Breadth"] tags
         prereqstr = makeEntry parsed (Just ["Prerequisite:"])
-        prereq = parsePrerequisites prereqstr
-    in (rest, course {prereqString = prereqstr, prereqs = prereq})
+    in (rest, course {prereqString = prereqstr})
 
 parseCorequisite :: CoursePart -> CoursePart
 parseCorequisite (tags, course)  =
