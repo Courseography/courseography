@@ -83,6 +83,8 @@ Course.prototype.parseLectures = function (session, timeSuffix) {
     var sections = [];
 
     session.lectures.forEach(function (lecture, i, arr) {
+        // Convert from 'LEC0101' to 'L0101'
+        lecture.section = lecture.section.substring(0, 1) + lecture.section.substring(3);
         if (lecture.section.charAt(1) === '2' ||
             lecture.times === 'Online Web Version') {
             return;
@@ -132,6 +134,9 @@ Course.prototype.parseTutorials = function (session, timeSuffix) {
     var tmp = this;
 
     return session.tutorials.map(function (tutorial) {
+        // Convert from 'TUT0101' to 'T0101'
+        tutorial.section = tutorial.section.substring(0, 1) + tutorial.section.substring(3);
+
         var sectionTimes = convertTimes(tutorial.times);
         if (timeSuffix === 'Y') {
             sectionTimes = sectionTimes.map(function (t) {
@@ -198,7 +203,6 @@ Course.prototype.selectTimes = function (section) {
     'use strict';
 
     $.each(section.times, function (i, time) {
-
         var n = time.charAt(time.length - 1);
 
         if (n === 'H') {
@@ -366,14 +370,16 @@ Course.prototype.renderHeader = function () {
                 .click(function () {
                     deselectCourse(tmp.name);
                 });
+    /* TODO: Make the Course Info Modal work for the grid (uses React)
     var aboutImg = document.createElement('img');
     $(aboutImg).attr('src', 'static/res/ico/about.png')
                .addClass('close-icon')
                .click(function () {
                    openModal(getCourseTitle(tmp.name), createModalDiv(tmp.name));
                });
+    */
     iconDiv.appendChild(courseImg);
-    iconDiv.appendChild(aboutImg);
+    // iconDiv.appendChild(aboutImg);
     headerDiv.appendChild(iconDiv);
     headerDiv.appendChild(header);
 

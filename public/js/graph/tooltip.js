@@ -1,8 +1,26 @@
+import {ModalContent} from 'es6!common/react_modal';
+
+var timeouts = [];            // All timeouts. Used to remove timeouts later on.
+
+
+function openReactModal(courseCode) {
+    'use strict';
+    var courseName = getCourseTitle(courseCode);
+    var formattedName = formatCourseName(courseCode);
+    var courseVideoUrls = getCourseVideoUrls(formattedName);
+
+    React.render(
+        <ModalContent course={formattedName[0]} />,
+        document.getElementById('modal-content-container')
+    );
+}
+
+
 /**
  * Displays a tooltip for a Node.
  * @param {string} nodeId The Node's ID.
  */
-function displayTooltip(nodeId) {
+export function displayTooltip(nodeId) {
     'use strict';
 
     var rectObject = $('#' + nodeId).find('rect');
@@ -126,4 +144,30 @@ function createG(nodeId) {
     $('svg').append(g);
 
     return g;
+}
+
+
+/**
+ * Clears all timeouts.
+ */
+function clearAllTimeouts() {
+    'use strict';
+
+    for (var i = 0; i < timeouts.length; i++) {
+        clearTimeout(timeouts[i]);
+    }
+
+    timeouts = [];
+}
+
+
+/**
+ * Set timeout to remove a tooltip.
+ */
+export function removeTooltip(elem) {
+    var timeout = setTimeout(function () {
+        $('.tooltip-group').hide('slow', function () { $(elem).remove();});
+    }, 100);
+
+    timeouts.push(timeout);
 }
