@@ -1,6 +1,3 @@
-{-# LANGUAGE FlexibleContexts, GADTs, MultiParamTypeClasses,
- OverloadedStrings, TypeFamilies #-}
-
 {-|
     Module      : Database.Database
     Description : Main module for database course seeding.

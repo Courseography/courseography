@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings, FlexibleContexts, GADTs, ScopedTypeVariables, ConstrainedClassMethods #-}
-
 {-|
 Description: Helpers for enabling graph interactitivy.
 

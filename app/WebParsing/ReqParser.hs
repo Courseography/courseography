@@ -1,4 +1,3 @@
-{-# LANGUAGE FlexibleContexts #-}
 module WebParsing.ReqParser where
 
 import qualified Text.Parsec as Parsec

@@ -1,5 +1,3 @@
-{-# LANGUAGE GADTs, OverloadedStrings, ScopedTypeVariables #-}
-
 {-|
     Module: Database.CourseQueries
     Description: Respond to various requests involving database course

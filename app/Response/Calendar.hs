@@ -1,4 +1,3 @@
-{-# LANGUAGE OverloadedStrings, ViewPatterns #-}
 module Response.Calendar
     (calendarResponse) where
 

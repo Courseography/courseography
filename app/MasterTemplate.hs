@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module MasterTemplate
     (masterTemplate, header, disclaimer) where
 

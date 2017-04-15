@@ -1,5 +1,3 @@
-{-# LANGUAGE ScopedTypeVariables, OverloadedStrings #-}
-
 {-|
     Module      : Export.GetImages
     Description : Defines functions for creating images from graphs and

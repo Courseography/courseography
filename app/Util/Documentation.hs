@@ -18,14 +18,17 @@ docPath = "doc"
 -- | Generate documentation for Courseography.
 generateDocs :: IO ()
 generateDocs = do
-  print "Generating documentation..."
+  putStrLn "Generating documentation..."
   createDirectoryIfMissing True docPath
   callCommand $ intercalate " " [
     "stack exec haddock --",
     "-o",
     docPath,
     "-h",
-    "--optghc=\"-iapp\"",
+    "--optghc=-iapp",
+    "--optghc=-XOverloadedStrings",
+    "--optghc=-XPartialTypeSignatures",
+    "--optghc=-XScopedTypeVariables",
     "--ignore-all-exports",
     "app/Main.hs"
     ]
