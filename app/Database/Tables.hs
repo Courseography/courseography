@@ -78,7 +78,8 @@ Courses
 
 Meeting
     code T.Text
-    Foreign Courses fkcourse code
+    -- Foreign Courses fkcourse code
+    -- codeRef CoursesId Maybe
     session T.Text
     section T.Text
     times [Time]
@@ -141,7 +142,7 @@ Path json
 Post
     name PostType
     department T.Text
-    Foreign Department fkdept department
+    -- departmentRef DepartmentId
     code T.Text
     UniquePostode code
     Primary code

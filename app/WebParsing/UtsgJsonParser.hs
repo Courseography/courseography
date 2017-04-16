@@ -13,8 +13,10 @@ import qualified Data.HashMap.Strict as HM
 import Control.Monad.IO.Class (liftIO)
 import Network.HTTP.Conduit (simpleHttp)
 import Config (databasePath)
-import Database.Tables (Courses(..), Meeting(..))
-import Database.Persist.Sqlite (runSqlite, insert_, SqlPersistM)
+import Database.Tables
+import Database.Persist.Sqlite (runSqlite, insert_, SqlPersistM, selectKeysList, (==.))
+import Database.Persist.Class (Key)
+
 
 -- | URLs for the Faculty of Arts and Science API
 timetableURL :: T.Text
@@ -48,8 +50,21 @@ insertAllCourses org = do
         -- only sections are currently stored here.
         (_, sections) = unzip courseData
         meetings = concat sections
-    mapM_ insert_ meetings
+    mapM_ insertCourse meetings
 
+getCourseKey :: T.Text -> SqlPersistM (Maybe (Key Courses))
+getCourseKey code = do
+    keyListCourse :: [Key Courses] <- selectKeysList [ CoursesCode ==. code ] []
+    return $ case keyListCourse of
+        [] -> Nothing
+        _ -> Just (head keyListCourse)
+
+insertCourse :: Meeting -> SqlPersistM ()
+insertCourse meet = do
+    courseKey <- getCourseKey (meetingCode meet)
+    case courseKey of
+        Just _ -> insert_ meet
+        Nothing -> return ()
 
 newtype DB = DB { dbData :: (Courses, [Meeting]) }
   deriving Show
