@@ -47,7 +47,7 @@ getPost str = do
         isNotCoursesSection tag = not (tagOpenAttrLit "a" ("name", "courses") tag)
         isPostName tag = tagOpenAttrNameLit "a" "name" (\nameValue -> (length nameValue) == 9) tag
 
-addPostToDatabase :: [Tag String] -> SqlPersistM (Maybe (Key Post))
+addPostToDatabase :: [Tag String] -> SqlPersistM ()
 addPostToDatabase tags = do
     let postCode = T.pack (fromAttrib "name" ((take 1 $ filter (isTagOpenName "a") tags) !! 0))
         liPartitions = partitions isLiTag tags
@@ -76,15 +76,18 @@ addCategoryToDatabase postCode category =
 
 -- Helpers
 
-categoryParser :: [Tag String] -> Maybe T.Text -> T.Text -> [[Tag String]] -> SqlPersistM (Maybe (Key Post))
+categoryParser :: [Tag String] -> Maybe T.Text -> T.Text -> [[Tag String]] -> SqlPersistM ()
 categoryParser tags firstCourse postCode liPartitions = do
     case parsed of
         Right (post, categories) -> do
-            addPostCategoriesToDatabase postCode categories
-            insertUnique post
+            result <- insertUnique post
+            case result of
+                Just _ -> addPostCategoriesToDatabase postCode categories
+                Nothing -> return ()
+
         Left _ -> do
             liftIO $ print failedString
-            return Nothing
+            return ()
     where
         parsed = case liPartitions of
             [] -> P.parse (generalCategoryParser firstCourse postCode) failedString (T.pack $ innerText tags)
