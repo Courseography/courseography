@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings, FlexibleContexts, ScopedTypeVariables #-}
 module WebParsing.PostParser
-    (getPost, getDeptKey) where
+    (getPost) where
 
 import Network.HTTP
 import qualified Data.Text as T
@@ -80,15 +80,10 @@ categoryParser :: [Tag String] -> Maybe T.Text -> T.Text -> [[Tag String]] -> Sq
 categoryParser tags firstCourse postCode liPartitions = do
     case parsed of
         Right (post, categories) -> do
-            deptExist <- getDeptKey (postDepartment post)
-            case deptExist of
-                Just _ -> do
-                    postExist <- insertUnique post
-                    case postExist of
-                        Just _ -> addPostCategoriesToDatabase postCode categories
-                        Nothing -> return ()
+            postExist <- insertUnique post
+            case postExist of
+                Just _ -> addPostCategoriesToDatabase postCode categories
                 Nothing -> return ()
-
         Left _ -> do
             liftIO $ print failedString
             return ()
@@ -106,10 +101,3 @@ parseLi liPartition = do
     case parsed of
         Right category -> category
         Left _ -> ""
-
-getDeptKey :: T.Text -> SqlPersistM (Maybe (Key Department))
-getDeptKey name = do
-    keyList :: [Key Department] <- selectKeysList [ DepartmentName ==. name ] []
-    return $ case keyList of
-        [] -> Nothing
-        _ -> Just (head keyList)

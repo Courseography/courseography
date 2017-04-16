@@ -24,7 +24,6 @@ import Database.Persist.Class (selectKeysList, Key)
 import Database.Persist.Sqlite (selectFirst, fromSqlKey, toSqlKey, insertMany_, insert_, insert, SqlPersistM, (=.), (==.), updateWhere, runSqlite)
 import Database.Tables hiding (texts, shapes, paths)
 import qualified Data.Aeson as Aeson
-import WebParsing.PostParser (getDeptKey)
 
 -- | Inserts SVG graph data into Texts, Shapes, and Paths tables
 saveGraphJSON :: BSL.ByteString -> T.Text -> IO Response
