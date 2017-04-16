@@ -40,7 +40,7 @@ import Svg.Builder
 -- | Queries the database for all matching lectures, tutorials,
 --   or praticals of this course.
 meetingQuery :: T.Text -> SqlPersistM [Entity Meeting]
-meetingQuery meetingCode = selectList [MeetingCode ==. meetingCode] []
+meetingQuery meetCode = selectList [MeetingCode ==. meetCode] []
 
 splitSessions :: [Entity Meeting] -> ([Entity Meeting], [Entity Meeting], [Entity Meeting])
 splitSessions meetingsList =
@@ -256,10 +256,10 @@ queryGraphs = runSqlite databasePath $ do
 -- | Queries the database for all times regarding a specific meeting (lecture, tutorial or practial) for
 -- a @course@, returns a list of Time.
 getMeetingTime :: (T.Text, T.Text, T.Text) -> SqlPersistM [Time]
-getMeetingTime (meetingCode, meetingSection, meetingSession) = do
-    maybeEntityMeetings <- selectFirst [MeetingCode ==. meetingCode,
-                                        MeetingSection ==. getMeetingSection meetingSection,
-                                        MeetingSession ==. meetingSession]
+getMeetingTime (meetCode, meetSection, meetSession) = do
+    maybeEntityMeetings <- selectFirst [MeetingCode ==. meetCode,
+                                        MeetingSection ==. getMeetingSection meetSection,
+                                        MeetingSession ==. meetSession]
                                        []
     return $ maybe [] (meetingTimes . entityVal) maybeEntityMeetings
 
