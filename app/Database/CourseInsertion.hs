@@ -21,10 +21,10 @@ import qualified Data.ByteString.Lazy.Char8 as BSL
 import Happstack.Server.SimpleHTTP (Response, toResponse)
 import Config (databasePath)
 import Database.Persist.Class (selectKeysList, Key)
-import Database.Persist.Sqlite (selectFirst, fromSqlKey, toSqlKey, insertMany_, insert_, insert, SqlPersistM, (=.), (==.), updateWhere, runSqlite, entityKey)
+import Database.Persist.Sqlite (selectFirst, fromSqlKey, toSqlKey, insertMany_, insert_, insert, SqlPersistM, (=.), (==.), updateWhere, runSqlite)
 import Database.Tables hiding (texts, shapes, paths)
 import qualified Data.Aeson as Aeson
-import Data.Maybe (fromJust)
+import WebParsing.PostParser (getDeptKey)
 
 -- | Inserts SVG graph data into Texts, Shapes, and Paths tables
 saveGraphJSON :: BSL.ByteString -> T.Text -> IO Response
@@ -38,11 +38,10 @@ saveGraphJSON jsonStr nameStr = do
     where
         insertGraph :: T.Text -> [Text] -> [Shape] -> [Path] -> SqlPersistM ()
         insertGraph nameStr_ texts shapes paths = do
-            maybeEntityDepartment <- selectFirst [DepartmentName ==. nameStr_] []
-            gId <- insert $ Graph nameStr_ (entityKey $ fromJust maybeEntityDepartment) 256 256
-            insertMany_ $ map (\text -> text {textGraph = gId}) texts
-            insertMany_ $ map (\shape -> shape {shapeGraph = gId}) shapes
-            insertMany_ $ map (\path -> path {pathGraph = gId}) paths
+          gId <- insert $ Graph nameStr_ 256 256
+          insertMany_ $ map (\text -> text {textGraph = gId}) texts
+          insertMany_ $ map (\shape -> shape {shapeGraph = gId}) shapes
+          insertMany_ $ map (\path -> path {pathGraph = gId}) paths
 
 --contains' :: PersistEntity m => T.Text -> SqlPersistM m
 --contains field query = Filter field (Left $ T.concat ["%", query, "%"]) (BackendSpecificFilter "LIKE")

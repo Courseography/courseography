@@ -78,8 +78,6 @@ Courses
 
 Meeting
     code T.Text
-    -- Foreign Courses fkcourse code
-    -- codeRef CoursesId Maybe
     session T.Text
     section T.Text
     times [Time]
@@ -102,7 +100,6 @@ Distribution
 
 Graph json
     title T.Text
-    departmentRef DepartmentId
     width Double
     height Double
     deriving Show
@@ -142,7 +139,6 @@ Path json
 Post
     name PostType
     department T.Text
-    -- departmentRef DepartmentId
     code T.Text
     UniquePostode code
     Primary code
@@ -152,7 +148,6 @@ Post
 PostCategory
     name T.Text
     postCode T.Text
-    Foreign Post fkpost postCode
     deriving Show
 |]
 

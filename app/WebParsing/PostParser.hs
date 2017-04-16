@@ -1,6 +1,6 @@
-{-# LANGUAGE OverloadedStrings, FlexibleContexts #-}
+{-# LANGUAGE OverloadedStrings, FlexibleContexts, ScopedTypeVariables #-}
 module WebParsing.PostParser
-    (getPost) where
+    (getPost, getDeptKey) where
 
 import Network.HTTP
 import qualified Data.Text as T
@@ -9,7 +9,7 @@ import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Match
 import Config (databasePath)
 import Database.Tables
-import Database.Persist.Sqlite (insert_, runMigration, runSqlite, SqlPersistM)
+import Database.Persist.Sqlite (insert_, runMigration, runSqlite, SqlPersistM, selectKeysList, (==.))
 import Database.Persist (insertUnique)
 import qualified Text.Parsec as P
 import WebParsing.ParsecCombinators (getCourseFromTag, generalCategoryParser, parseCategory,
@@ -80,9 +80,13 @@ categoryParser :: [Tag String] -> Maybe T.Text -> T.Text -> [[Tag String]] -> Sq
 categoryParser tags firstCourse postCode liPartitions = do
     case parsed of
         Right (post, categories) -> do
-            result <- insertUnique post
-            case result of
-                Just _ -> addPostCategoriesToDatabase postCode categories
+            deptExist <- getDeptKey (postDepartment post)
+            case deptExist of
+                Just _ -> do
+                    postExist <- insertUnique post
+                    case postExist of
+                        Just _ -> addPostCategoriesToDatabase postCode categories
+                        Nothing -> return ()
                 Nothing -> return ()
 
         Left _ -> do
@@ -102,3 +106,10 @@ parseLi liPartition = do
     case parsed of
         Right category -> category
         Left _ -> ""
+
+getDeptKey :: T.Text -> SqlPersistM (Maybe (Key Department))
+getDeptKey name = do
+    keyList :: [Key Department] <- selectKeysList [ DepartmentName ==. name ] []
+    return $ case keyList of
+        [] -> Nothing
+        _ -> Just (head keyList)
