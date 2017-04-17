@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 {-|
     Module      : Css.Loading
     Description : Defines CSS for the loading animation.

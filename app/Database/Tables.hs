@@ -1,13 +1,11 @@
-{-# LANGUAGE EmptyDataDecls,
+{-# LANGUAGE DeriveGeneric,
+             EmptyDataDecls,
              FlexibleContexts,
              FlexibleInstances,
              GADTs,
              GeneralizedNewtypeDeriving,
              MultiParamTypeClasses,
-             OverloadedStrings,
-             DeriveGeneric,
              QuasiQuotes,
-             ScopedTypeVariables,
              TemplateHaskell,
              TypeFamilies #-}
 
@@ -36,7 +34,7 @@ import Text.Read (readMaybe)
 import Data.Aeson ((.:?), (.!=), FromJSON(parseJSON), ToJSON(toJSON), Value(..), genericToJSON, withObject)
 import Data.Aeson.Types (Parser, defaultOptions, Options(..))
 import GHC.Generics
-import WebParsing.PrerequisiteParsing
+import WebParsing.ReqParser (parseReqs)
 
 -- | A data type representing a time for the section of a course.
 -- The first list is comprised of two values: the date (represented as a number
@@ -59,6 +57,7 @@ share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 Department json
     name T.Text
     Primary name
+    UniqueName name
 
 Courses
     code T.Text
@@ -166,12 +165,7 @@ data Session =
               practicals :: [Meeting]
             } deriving (Show, Generic)
 
--- | A Course.
--- each element of prereqs can be one of three things:
---
---     * a one-element list containing a course code
---     * a list starting with "and", and 2 or more course codes
---     * a list starting with "or", and 2 or more course codes
+-- | A Course. TODO: remove this data type (it's redundant).
 data Course =
     Course { breadth :: Maybe T.Text,
              description :: Maybe T.Text,
@@ -185,7 +179,6 @@ data Course =
              manualTutorialEnrolment :: Maybe Bool,
              manualPracticalEnrolment :: Maybe Bool,
              distribution :: Maybe T.Text,
-             prereqs :: Maybe T.Text,
              coreqs :: Maybe T.Text,
              videoUrls :: [T.Text]
            } deriving (Show, Generic)
@@ -205,8 +198,9 @@ instance FromJSON SvgJSON
 -- jQuery. @.@ is a jQuery meta-character, and must be removed from the ID.
 convertTimeToString :: Time -> [T.Text]
 convertTimeToString (Time [day, timeNum]) =
-  [T.pack $ show (floor day :: Integer),
+  [T.pack . show $ (floor day :: Int),
    T.replace "." "-" . T.pack . show $ timeNum]
+convertTimeToString _ = undefined
 
 
 -- JSON encoding/decoding
@@ -216,7 +210,7 @@ instance FromJSON Courses where
     newTitle  <- o .:? "courseTitle"
     newDescription  <- o .:? "courseDescription"
     newPrereqString <- o .:? "prerequisite"
-    let newPrereqs = parsePrerequisites newPrereqString
+    let newPrereqs = fmap (T.pack . show . parseReqs . T.unpack) newPrereqString
     newExclusions <- o .:? "exclusion"
     newCoreqs <- o .:? "corequisite"
     return $ Courses newCode
@@ -235,7 +229,7 @@ instance FromJSON Courses where
 instance ToJSON Meeting where
   toJSON = genericToJSON defaultOptions {
     fieldLabelModifier =
-      (\field -> (toLower $ head field): (tail field)) .
+      (\field -> toLower (head field): tail field) .
       drop 7
   }
 
@@ -247,7 +241,7 @@ instance FromJSON Meeting where
     (allTimes, allRooms) <- case timeMap of
         Object obj -> do
             timesAndRooms <- mapM parseSchedules (HM.elems obj)
-            return $ (concat $ map fst timesAndRooms, concat $ map snd timesAndRooms)
+            return (concatMap fst timesAndRooms, concatMap snd timesAndRooms)
         _ -> return ([], [])
     let sectionId = T.concat [teachingMethod, sectionNumber]
 

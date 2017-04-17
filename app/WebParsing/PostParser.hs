@@ -1,4 +1,3 @@
-{-# LANGUAGE OverloadedStrings, FlexibleContexts #-}
 module WebParsing.PostParser
     (getPost) where
 
@@ -49,18 +48,18 @@ getPost str = do
 
 addPostToDatabase :: [Tag String] -> SqlPersistM ()
 addPostToDatabase tags = do
-    let postCode' = T.pack (fromAttrib "name" ((take 1 $ filter (isTagOpenName "a") tags) !! 0))
+    let postCode_ = T.pack (fromAttrib "name" ((take 1 $ filter (isTagOpenName "a") tags) !! 0))
         liPartitions = partitions isLiTag tags
         programPrereqs = map getCourseFromTag $ map (T.pack . fromAttrib "href") $ filter isCourseTag tags
         firstCourse = if (null programPrereqs) then Nothing else (Just (head programPrereqs))
-    categoryParser tags firstCourse postCode' liPartitions
+    categoryParser tags firstCourse postCode_ liPartitions
     where
         isCourseTag tag = tagOpenAttrNameLit "a" "href" (\hrefValue -> (length hrefValue) >= 0) tag
         isLiTag tag = isTagOpenName "li" tag
 
 addPostCategoriesToDatabase :: T.Text -> [T.Text] -> SqlPersistM ()
-addPostCategoriesToDatabase postCode' categories = do
-    mapM_ (addCategoryToDatabase postCode') (filter isCategory categories)
+addPostCategoriesToDatabase postCode_ categories = do
+    mapM_ (addCategoryToDatabase postCode_) (filter isCategory categories)
     where
         isCategory text =
             let infixes = map (containsText text)
@@ -70,29 +69,29 @@ addPostCategoriesToDatabase postCode' categories = do
         containsText text subtext = T.isInfixOf subtext text
 
 addCategoryToDatabase :: T.Text -> T.Text -> SqlPersistM ()
-addCategoryToDatabase postCode' category =
-    insert_ $ PostCategory category postCode'
+addCategoryToDatabase postCode_ category =
+    insert_ $ PostCategory category postCode_
 
 
 -- Helpers
 
 categoryParser :: [Tag String] -> Maybe T.Text -> T.Text -> [[Tag String]] -> SqlPersistM ()
-categoryParser tags firstCourse postCode' liPartitions = do
+categoryParser tags firstCourse postCode_ liPartitions = do
     case parsed of
         Right (post, categories) -> do
             postExist <- insertUnique post
             case postExist of
-                Just _ -> addPostCategoriesToDatabase postCode' categories
+                Just _ -> addPostCategoriesToDatabase postCode_ categories
                 Nothing -> return ()
         Left _ -> do
             liftIO $ print failedString
             return ()
     where
         parsed = case liPartitions of
-            [] -> P.parse (generalCategoryParser firstCourse postCode') failedString (T.pack $ innerText tags)
+            [] -> P.parse (generalCategoryParser firstCourse postCode_) failedString (T.pack $ innerText tags)
             partitionResults -> do
                 let categories = map parseLi partitionResults
-                post <- P.parse (postInfoParser firstCourse postCode') failedString (T.pack $ innerText tags)
+                post <- P.parse (postInfoParser firstCourse postCode_) failedString (T.pack $ innerText tags)
                 return (post, categories)
 
 parseLi :: [Tag String] -> T.Text

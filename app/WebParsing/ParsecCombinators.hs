@@ -1,4 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
 module WebParsing.ParsecCombinators
     (getCourseFromTag,
      findCourseFromTag,
@@ -7,7 +6,8 @@ module WebParsing.ParsecCombinators
      isDepartmentName,
      generalCategoryParser,
      parseCategory,
-     postInfoParser) where
+     postInfoParser,
+     text) where
 
 import qualified Text.Parsec as P
 import Text.Parsec ((<|>))
@@ -55,9 +55,7 @@ getDepartmentName =
 getPostType :: Parser T.Text
 getPostType = do
     _ <- P.spaces
-    (P.try (text "Specialist") <|>
-     P.try (text "Major") <|>
-     P.try (text "Minor"))
+    P.choice [P.try (text "Specialist"), P.try (text "Major"), P.try (text "Minor")]
 
 isDepartmentName ::  T.Text -> Parser T.Text
 isDepartmentName postType = parseUntil (text postType)

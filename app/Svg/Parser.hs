@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings, FlexibleContexts, GADTs, ScopedTypeVariables #-}
-
 {-|
 Description: The main graph module. __Start here__.
 
@@ -35,7 +33,7 @@ import Data.Text.IO as T (readFile)
 parsePrebuiltSvgs :: IO ()
 parsePrebuiltSvgs = runSqlite databasePath $ do
     deleteGraphs
-    performParse "Computer Science" "csc2016.svg"
+    performParse "Computer Science" "csc2017.svg"
     performParse "Statistics" "sta2015.svg"
     performParse "Biochemistry" "bch2015.svg"
     performParse "Cell & Systems Biology" "csb2015.svg"
@@ -62,7 +60,7 @@ performParse :: T.Text -- ^ The title of the graph.
              -> String -- ^ The filename of the file that will be parsed.
              -> SqlPersistM ()
 performParse graphName inputFilename = do
-    liftIO $ print $ "Parsing graph " ++ T.unpack graphName ++ " from file " ++ inputFilename
+    liftIO . print $ "Parsing graph " ++ T.unpack graphName ++ " from file " ++ inputFilename
     graphFile <- liftIO $ T.readFile (graphPath ++ inputFilename)
     let tags = TS.parseTags graphFile
         svgRoot = head $ filter (TS.isTagOpenName "svg") tags
@@ -77,8 +75,8 @@ performParse graphName inputFilename = do
                 tags
             else
                 -- TODO: pull this out into a generic helper
-                (takeWhile (not . TS.isTagOpenName "defs") tags) ++
-                (concatMap (dropWhile (not . TS.isTagCloseName "defs")) defs)
+                takeWhile (not . TS.isTagOpenName "defs") tags ++
+                concatMap (dropWhile (not . TS.isTagCloseName "defs")) defs
 
         parsedGraph = parseGraph key tagsWithoutDefs
 
@@ -118,7 +116,7 @@ parseGraph key tags =
         -- Raw SVG seems to have a rectangle the size of the whole image
         small shape = shapeWidth shape < 300
         removeRedundant shapes =
-            filter (not . \s -> (elem (shapePos s) (map shapePos shapes)) &&
+            filter (not . \s -> shapePos s `elem` map shapePos shapes &&
                                 (T.null (shapeFill s) || shapeFill s == "#000000") &&
                                 elem (shapeType_ s) [Node, Hybrid]) shapes
 
@@ -141,7 +139,7 @@ parseTextHelper :: GraphId -- ^ The Text's corresponding graph identifier.
                 -> [Tag T.Text]
                 -> [Text]
 parseTextHelper key styles' trans textTags =
-    if null $ filter (TS.isTagOpenName "tspan") (tail textTags)
+    if not $ any (TS.isTagOpenName "tspan") (tail textTags)
     then
         [Text key
               (fromAttrib "id" $ head textTags) -- TODO: Why are we setting an id?
@@ -156,7 +154,7 @@ parseTextHelper key styles' trans textTags =
         in
             concatMap (parseTextHelper key newStyle newTrans) tspanTags
     where
-        newStyle = (styles $ head textTags) ++ styles'
+        newStyle = styles (head textTags) ++ styles'
         currTrans = getTransform $ head textTags
         newTrans = addTuples trans currTrans
         alignAttr = styleVal "text-anchor" newStyle
@@ -211,7 +209,7 @@ parsePathHelper :: GraphId -- ^ The Path's corresponding graph identifier.
 parsePathHelper key trans pathTag =
     let d = fromAttrib "d" pathTag
         styles' = styles pathTag
-        currTrans = parseTransform $ fromAttrib "transform" $ pathTag
+        currTrans = parseTransform $ fromAttrib "transform" pathTag
         realD = map (addTuples (addTuples trans currTrans)) $ parsePathD d
         fillAttr = styleVal "fill" styles'
         isRegion = not (T.null fillAttr) && fillAttr /= "none"
@@ -263,11 +261,9 @@ parseEllipseHelper key (dx, dy) ellipseTag =
 readAttr :: Read a => T.Text    -- ^ The attribute's name.
                    -> Tag T.Text -- ^ The element that contains the attribute.
                    -> a
-readAttr attr tag =
-    case readMaybe $ T.unpack $ fromAttrib attr tag of
-        Just x -> x
-        Nothing -> error $ ("reading " ++ (T.unpack attr) ++ " from " ++ show tag)
-
+readAttr attr tag = fromMaybe
+    (error ("reading " ++ T.unpack attr ++ " from " ++ show tag))
+    (readMaybe $ T.unpack $ fromAttrib attr tag)
 
 -- | Return a list of styles from the style attribute of an element.
 -- Every style has the form (name, value).
@@ -297,8 +293,8 @@ parseTransform :: T.Text -> Point
 parseTransform "" = (0,0)
 parseTransform transform =
     let parsedTransform = T.splitOn "," $ T.drop 10 transform
-        xPos = readMaybe $ T.unpack $ parsedTransform !! 0
-        yPos = readMaybe $ T.unpack $ T.init $ parsedTransform !! 1
+        xPos = readMaybe . T.unpack $ head parsedTransform
+        yPos = readMaybe . T.unpack . T.init $ parsedTransform !! 1
     in
         if isNothing xPos || isNothing yPos
         then

@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 {-|
     Module      : Css.Compiler
     Description : Generates the CSS file for Courseography.
