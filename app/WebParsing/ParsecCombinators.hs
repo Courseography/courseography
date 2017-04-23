@@ -13,7 +13,7 @@ import qualified Text.Parsec as P
 import Text.Parsec ((<|>))
 import qualified Data.Text as T
 import Text.Parsec.Text (Parser)
-import Database.Tables hiding (name)
+import Database.Tables hiding (name, departmentName, postCode)
 import Control.Monad (mapM)
 
 getCourseFromTag :: T.Text -> T.Text
