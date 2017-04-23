@@ -362,7 +362,7 @@ updateShape fill r =
                               Hybrid   -> Hybrid
                               BoolNode -> BoolNode
                               Node     -> Node
-                              _ -> ""
+                              _ -> undefined
       }
 
 -- | Adds two tuples together.
