@@ -13,7 +13,7 @@ import qualified Text.Parsec as P
 import Text.Parsec ((<|>))
 import qualified Data.Text as T
 import Text.Parsec.Text (Parser)
-import Database.Tables hiding (name)
+import Database.Tables hiding (name, departmentName, postCode, description, name, prereqs, `partitions)
 import Control.Monad (mapM)
 
 getCourseFromTag :: T.Text -> T.Text
@@ -21,7 +21,7 @@ getCourseFromTag courseTag =
     let course = P.parse findCourseFromTag "(source)" courseTag
     in
         case course of
-            Right name -> name
+            Right _name -> _name
             Left _ -> ""
 
 findCourseFromTag :: Parser T.Text
@@ -31,8 +31,8 @@ findCourseFromTag = do
     return $ T.pack parsed
 
 generalCategoryParser :: Maybe T.Text -> T.Text -> Parser (Post, [T.Text])
-generalCategoryParser firstCourse postCode = do
-    post <- postInfoParser firstCourse postCode
+generalCategoryParser firstCourse _postCode = do
+    post <- postInfoParser firstCourse _postCode
     categories <- splitPrereqText
 
     return (post, categories)
@@ -116,7 +116,7 @@ splitPrereqText = do
 parseCategory :: Parser T.Text
 parseCategory = do
     left <- parseUpToSeparator
-    nextChar <- P.anyChar
+
     return left
 
 parseUpToSeparator :: Parser T.Text
