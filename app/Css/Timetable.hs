@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 {-|
     Module      : Css.Timetable
     Description : Defines the CSS for the timetable page.

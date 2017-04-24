@@ -30,3 +30,10 @@ instance ToJSON ShapeType
 -- | Results from call of [FromJSON](https://hackage.haskell.org/package/aeson-1.1.0.0/docs/Data-Aeson.html#t:FromJSON)
 -- .
 instance FromJSON ShapeType
+
+data PostType = Specialist | Major | Minor
+ deriving (Show, Read, Eq, Generic)
+derivePersistField "PostType"
+
+instance ToJSON PostType
+instance FromJSON PostType

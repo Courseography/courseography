@@ -1,4 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
 module Response.Export
     (returnPDF, exportTimetableImageResponse, exportTimetablePDFResponse) where
 

@@ -20,6 +20,7 @@ import Server (runServer)
 import Database.Database (setupDatabase)
 import Svg.Parser (parsePrebuiltSvgs)
 import Css.Compiler (compileCSS)
+import Util.Documentation (generateDocs)
 
 -- | A map of command-line arguments to their corresponding IO actions.
 taskMap :: Map.Map String (IO ())
@@ -27,7 +28,8 @@ taskMap = Map.fromList [
     ("server", runServer),
     ("database", setupDatabase),
     ("graphs", parsePrebuiltSvgs),
-    ("css", compileCSS)]
+    ("css", compileCSS),
+    ("docs", generateDocs)]
 
 -- | Courseography entry point.
 main :: IO ()

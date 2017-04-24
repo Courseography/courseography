@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 {-|
     Module      : Css.FourOhFour
     Description : Defines CSS for the 404 page.

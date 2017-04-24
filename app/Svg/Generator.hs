@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings, GADTs, ScopedTypeVariables #-}
-
 {-|
 Description: Generate a new SVG file from the database graph representation.
 
@@ -140,7 +138,7 @@ makeSVGDoc courseMap rects ellipses edges regions regionTexts styled width heigh
     S.docTypeSvg ! A.width "100%"
                  ! A.height "100%"
                  ! A.preserveaspectratio "xMinYMin"
-                 ! A.viewbox (stringValue $ "0 0 " ++ (show width) ++ " " ++ (show height))
+                 ! A.viewbox (stringValue $ "0 0 " ++ show width ++ " " ++ show height)
                  ! S.customAttribute "xmlns:svg" "http://www.w3.org/2000/svg"
                  ! S.customAttribute "xmlns:dc" "http://purl.org/dc/elements/1.1/"
                  ! S.customAttribute "xmlns:cc" "http://creativecommons.org/ns#"
@@ -149,22 +147,17 @@ makeSVGDoc courseMap rects ellipses edges regions regionTexts styled width heigh
                  ! A.version "1.1" $ do
                       makeSVGDefs
                       S.g ! A.id_ "regions" $
-                          sequence_ $ map (regionToSVG styled)
-                                          regions
+                          mapM_ (regionToSVG styled) regions
                       S.g ! A.id_ "nodes"
                           ! A.stroke "black" $
-                          sequence_ $ map (rectToSVG styled courseMap)
-                                           rects
+                          mapM_ (rectToSVG styled courseMap) rects
                       S.g ! A.id_ "bools" $
-                          sequence_ $ map (ellipseToSVG styled)
-                                          ellipses
+                          mapM_ (ellipseToSVG styled) ellipses
                       S.g ! A.id_ "edges"
                           ! A.stroke "black" $
-                              sequence_ $ map (edgeToSVG styled)
-                                              edges
+                              mapM_ (edgeToSVG styled) edges
                       S.g ! A.id_ "region-labels" $
-                          sequence_ $ map (textToSVG styled Region 0)
-                                          regionTexts
+                          mapM_ (textToSVG styled Region 0) regionTexts
 
 -- | Builds the SVG defs. Currently, we only use a single one, for the arrowheads.
 makeSVGDefs :: S.Svg
@@ -213,11 +206,10 @@ rectToSVG styled courseMap rect
                          ! A.width (stringValue . show $ shapeWidth rect)
                          ! A.height (stringValue . show $ shapeHeight rect)
                          ! A.style (textValue $ T.concat ["fill:", shapeFill rect, ";"])
-                  sequence_ $ map
-                      (textToSVG
-                          styled
-                          (shapeType_ rect)
-                          (fst (shapePos rect) + (shapeWidth rect / 2)))
+                  mapM_ (textToSVG
+                         styled
+                         (shapeType_ rect)
+                         (fst (shapePos rect) + (shapeWidth rect / 2)))
                       (shapeText rect)
 
 -- | Converts an ellipse to SVG.
@@ -234,9 +226,8 @@ ellipseToSVG styled ellipse =
                             A.stroke "black" `mappend`
                             A.fill "none"
                         else mempty
-            sequence_ $ map
-                (textToSVG styled BoolNode (fst $ shapePos ellipse))
-                (shapeText ellipse)
+            mapM_ (textToSVG styled BoolNode (fst $ shapePos ellipse))
+                  (shapeText ellipse)
 
 -- | Converts a text value to SVG.
 textToSVG :: Bool -> ShapeType -> Double -> Text -> S.Svg
@@ -303,7 +294,7 @@ edgeToSVG styled path =
 -- | Converts a region to SVG.
 regionToSVG :: Bool -> Path -> S.Svg
 regionToSVG styled path =
-    S.path ! A.id_ (textValue $ T.append ("region") (pathId_ path))
+    S.path ! A.id_ (textValue $ T.append "region" (pathId_ path))
            ! A.class_ "region"
            ! A.d (textValue . T.cons 'M' . buildPathString . pathPoints $ path)
            ! A.style (textValue $ T.concat ["fill:", pathFill path, ";",

@@ -1,4 +1,3 @@
-{-# LANGUAGE OverloadedStrings, FlexibleContexts #-}
 module WebParsing.PostParser
     (getPost) where
 
@@ -10,6 +9,7 @@ import Text.HTML.TagSoup.Match
 import Config (databasePath)
 import Database.Tables
 import Database.Persist.Sqlite (insert_, runMigration, runSqlite, SqlPersistM)
+import Database.Persist (insertUnique)
 import qualified Text.Parsec as P
 import WebParsing.ParsecCombinators (getCourseFromTag, generalCategoryParser, parseCategory,
     postInfoParser)
@@ -46,7 +46,7 @@ getPost str = do
         isNotCoursesSection tag = not (tagOpenAttrLit "a" ("name", "courses") tag)
         isPostName tag = tagOpenAttrNameLit "a" "name" (\nameValue -> (length nameValue) == 9) tag
 
-addPostToDatabase :: [Tag String] -> SqlPersistM ()
+addPostToDatabase :: [Tag String] -> SqlPersistM (Maybe (Key Post))
 addPostToDatabase tags = do
     let postCode = T.pack (fromAttrib "name" ((take 1 $ filter (isTagOpenName "a") tags) !! 0))
         liPartitions = partitions isLiTag tags
@@ -75,15 +75,15 @@ addCategoryToDatabase postCode category =
 
 -- Helpers
 
-categoryParser :: [Tag String] -> Maybe T.Text -> T.Text -> [[Tag String]] -> SqlPersistM ()
+categoryParser :: [Tag String] -> Maybe T.Text -> T.Text -> [[Tag String]] -> SqlPersistM (Maybe (Key Post))
 categoryParser tags firstCourse postCode liPartitions = do
     case parsed of
         Right (post, categories) -> do
             addPostCategoriesToDatabase postCode categories
-            insert_ $ post
-        Left message -> do
+            insertUnique post
+        Left _ -> do
             liftIO $ print failedString
-            return ()
+            return Nothing
     where
         parsed = case liPartitions of
             [] -> P.parse (generalCategoryParser firstCourse postCode) failedString (T.pack $ innerText tags)
@@ -97,4 +97,4 @@ parseLi liPartition = do
     let parsed = P.parse parseCategory failedString (T.pack $ innerText liPartition)
     case parsed of
         Right category -> category
-        Left message -> ""
+        Left _ -> ""
