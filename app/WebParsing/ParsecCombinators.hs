@@ -114,7 +114,7 @@ splitPrereqText = do
 parseCategory :: Parser T.Text
 parseCategory = do
     left <- parseUpToSeparator
-    nextChar <- P.anyChar
+    _ <- P.anyChar
     return left
 
 parseUpToSeparator :: Parser T.Text
