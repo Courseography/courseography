@@ -30,10 +30,10 @@ runServer = do
     simpleHTTP serverConf $ do
       decodeBody (defaultBodyPolicy "/tmp/" 4096 4096 4096)
       msum
-           ((map (uncurry dir) $ routes staticDir aboutContents privacyContents ) ++
+           (map (uncurry dir) (routes staticDir aboutContents privacyContents) ++
            [ do
               nullDir
-              seeOther "graph" (toResponse "Redirecting to /graph"),
+              seeOther ("graph" :: String) (toResponse ("Redirecting to /graph" :: String)),
               notFoundResponse
         ])
     where

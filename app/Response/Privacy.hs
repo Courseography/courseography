@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Response.Privacy
     (privacyResponse) where
 

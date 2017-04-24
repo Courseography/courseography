@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 {-|
   Module      : Util.Blaze
   Description : Contains methods for setting various HTML attributes.

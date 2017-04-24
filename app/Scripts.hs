@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Scripts (
     graphScripts, timetableScripts, drawScripts, postScripts, searchScripts,
     globalScripts
@@ -50,7 +48,7 @@ analyticsScripts = [
 
 graphScripts :: H.Html
 graphScripts = do
-    sequence_ (map toScript $
+    mapM_ toScript
         ["/static/js/common/course_videos.js",
          "/static/js/common/modal.js",
          "/static/js/common/objects/course.js",
@@ -60,17 +58,17 @@ graphScripts = do
          "/static/js/common/utilities/util.js",
          "/static/js/common/image_conversion.js",
          "/static/js/vendor/bootstrap.min.3.1.1.js",
-         "/static/js/common/modal.js"])
+         "/static/js/common/modal.js"]
     H.script ! A.src "/static/js/requirejs-config.js" $ ""
     H.script ! H.dataAttribute "main" "/static/js/graph" ! A.src "/static/js/vendor/require.js" $ ""
 
 timetableScripts :: H.Html
 timetableScripts = do
-    sequence_ (map toScript $
+    mapM_ toScript
         ["/static/js/grid/mouse_events.js",
-         (if enableCdn
-          then "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"
-          else "/static/js/vendor/bootstrap.min.3.1.1.js"),
+         if enableCdn
+         then "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"
+         else "/static/js/vendor/bootstrap.min.3.1.1.js",
          "/static/js/common/cookie_handler.js",
          "/static/js/common/objects/course.js",
          "/static/js/common/objects/section.js",
@@ -80,32 +78,32 @@ timetableScripts = do
          "/static/js/common/course_videos.js",
          "/static/js/common/modal.js",
          "/static/js/common/course_description.js"
-         ])
+         ]
     H.script ! A.src "/static/js/requirejs-config.js" $ ""
     H.script ! H.dataAttribute "main" "/static/js/grid" ! A.src "/static/js/vendor/require.js" $ ""
 
 drawScripts :: H.Html
-drawScripts = do
-    sequence_ (map toScript $
+drawScripts =
+    mapM_ toScript
         ["/static/js/draw/variables.js",
          "/static/js/draw/path.js",
          "/static/js/draw/draw.js",
          "/static/js/draw/setup.js",
-         "/static/js/vendor/jscolor.min.js"])
+         "/static/js/vendor/jscolor.min.js"]
 
 postScripts :: H.Html
 postScripts = do
-    sequence_ (map toScript [
-                                          "/static/js/common/cookie_handler.js",
-                                          "/static/js/graph/create_data.js",
-                                          "/static/js/graph/create_data.js",
-                                          "/static/js/common/course_description.js",
-                                          "/static/js/common/objects/course.js",
-                                          "/static/js/common/objects/section.js",
-                                          "/static/js/common/utilities/util.js",
-                                          "/static/js/common/modal.js",
-                                          "/static/js/vendor/bootstrap.min.3.1.1.js",
-                                          "/static/js/common/course_videos.js"])
+    mapM_ toScript [
+        "/static/js/common/cookie_handler.js",
+        "/static/js/graph/create_data.js",
+        "/static/js/graph/create_data.js",
+        "/static/js/common/course_description.js",
+        "/static/js/common/objects/course.js",
+        "/static/js/common/objects/section.js",
+        "/static/js/common/utilities/util.js",
+        "/static/js/common/modal.js",
+        "/static/js/vendor/bootstrap.min.3.1.1.js",
+                                  "/static/js/common/course_videos.js"]
     H.script ! A.src "/static/js/requirejs-config.js" $ ""
     H.script ! H.dataAttribute "main" "/static/js/post" ! A.src "/static/js/vendor/require.js" $ ""
 

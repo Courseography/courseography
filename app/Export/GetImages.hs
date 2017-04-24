@@ -1,5 +1,3 @@
-{-# LANGUAGE ScopedTypeVariables, OverloadedStrings #-}
-
 {-|
     Module      : Export.GetImages
     Description : Defines functions for creating images from graphs and
@@ -55,7 +53,7 @@ parseCourseCookie :: T.Text -> T.Text -> [(T.Text, T.Text, T.Text)]
 parseCourseCookie "" _ = []
 parseCourseCookie s termSession =
   let selectedMeetings = map (T.splitOn "-") $ T.splitOn "_" s
-      meetingOfSession = filter (\x -> or ([T.head (x !! 2) == T.head termSession, T.head (x !! 2) == 'Y'])) selectedMeetings
+      meetingOfSession = filter (\x -> T.head (x !! 2) == T.head termSession || T.head (x !! 2) == 'Y') selectedMeetings
       selectedMeetings' = map list2tuple meetingOfSession
   in selectedMeetings'
 
@@ -66,7 +64,7 @@ list2tuple _ = undefined
 -- | Queries the database for times regarding all meetings (i.e. lectures, tutorials and praticals),
 -- returns a list of list of Time.
 getTimes :: [(T.Text, T.Text, T.Text)] -> IO [[Time]]
-getTimes selectedMeetings = runSqlite databasePath $ do
+getTimes selectedMeetings = runSqlite databasePath $
   mapM getMeetingTime selectedMeetings
 
 -- | Creates a schedule.
@@ -81,11 +79,11 @@ getScheduleByTime selectedMeetings mTimes =
 -- | Take a list of Time and returns a list of tuples that correctly index
 -- into the 2-D table (for generating the image)
 convertTimeToArray :: [Time] -> [(Int, Int)]
-convertTimeToArray = map (\x -> (floor $ timeField x !! 0 , floor $ timeField x !! 1 - 8))
+convertTimeToArray = map (\x -> (floor $ head (timeField x), floor $ timeField x !! 1 - 8))
 
 addCourseToSchedule :: [[[T.Text]]] -> ((T.Text, T.Text, T.Text), [Time]) -> [[[T.Text]]]
 addCourseToSchedule schedule (course, courseTimes) =
-  let time' = filter (\t-> (mod' (timeField t !! 1) 1) == 0) courseTimes
+  let time' = filter (\t-> mod' (timeField t !! 1) 1 == 0) courseTimes
       timeArray = convertTimeToArray time'
   in foldl (addCourseHelper course) schedule timeArray
 
@@ -95,8 +93,8 @@ addCourseHelper :: (T.Text, T.Text, T.Text) -> [[[T.Text]]] -> (Int, Int) -> [[[
 addCourseHelper (courseCode, courseSection, courseSession) currentSchedule (day, courseTime) =
   let timeSchedule = currentSchedule !! courseTime
       newDaySchedule = timeSchedule !! day ++ [T.concat [courseCode, courseSession, " ", courseSection]]
-      timeSchedule' = (take day timeSchedule) ++ [newDaySchedule] ++ (drop (day + 1) timeSchedule)
-  in (take courseTime currentSchedule) ++ [timeSchedule'] ++ (drop (courseTime + 1) currentSchedule)
+      timeSchedule' = take day timeSchedule ++ [newDaySchedule] ++ drop (day + 1) timeSchedule
+  in take courseTime currentSchedule ++ [timeSchedule'] ++ drop (courseTime + 1) currentSchedule
 
 -- | Creates an timetable image based on schedule, and returns the name of the svg
 -- used to create the image and the name of the image
