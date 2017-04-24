@@ -1,5 +1,3 @@
-{-# LANGUAGE NoMonomorphismRestriction, OverloadedStrings #-}
-
 {-|
     Module      : Export.TimetableImageCreator
     Description : Primarily defines a function used to render SVGs with times.
@@ -11,7 +9,6 @@ import Diagrams.Prelude
 import Diagrams.Backend.SVG.CmdLine
 import Diagrams.Backend.SVG
 import Data.List (intersperse)
-import Data.List.Split (splitOn)
 import qualified Data.Text as T
 
 days :: [T.Text]
@@ -59,7 +56,7 @@ timeCellPadding :: Diagram B
 timeCellPadding = rect timeCellWidth cellPaddingHeight # lw none
 
 cellText :: T.Text -> Diagram B
-cellText s = font "Trebuchet MS" $ (text $ T.unpack s) # fontSizeO (1024/900 * fs)
+cellText s = font "Trebuchet MS" $ text (T.unpack s) # fontSizeO (1024/900 * fs)
 
 -- | Creates and accumulates cells according to the number of course.
 makeCell :: Int -> [T.Text] -> Diagram B
@@ -79,7 +76,7 @@ getBackground s
     | otherwise = pomegranate
 
 header :: T.Text -> Diagram B
-header session = (hcat $ (makeSessionCell session) : map makeHeaderCell days) # centerX === headerBorder
+header session = hcat ((makeSessionCell session) : map makeHeaderCell days) # centerX === headerBorder
 
 makeSessionCell :: T.Text -> Diagram B
 makeSessionCell s =
@@ -98,7 +95,7 @@ makeRow ([x]:xs) =
     let maxCourse = maximum (map length xs)
     in (# centerX) . hcat $
         makeTimeCell x : map (makeCell maxCourse) xs
-makeRow [] = error "invalid timetable format"
+makeRow _ = error "invalid timetable format"
 
 headerBorder :: Diagram B
 headerBorder = hrule 11.2 # lw medium # lc pink1
@@ -107,7 +104,7 @@ rowBorder :: Diagram B
 rowBorder = hrule 11.2 # lw thin # lc pink1
 
 makeTable :: [[[T.Text]]] -> T.Text -> Diagram B
-makeTable s session = vsep 0.04 $ (header session): intersperse rowBorder (map makeRow s)
+makeTable s session = vsep 0.04 $ header session: intersperse rowBorder (map makeRow s)
 
 -- |Creates a timetable by zipping the time and course tables.
 renderTable :: String -> T.Text -> T.Text -> IO ()

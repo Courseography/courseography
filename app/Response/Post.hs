@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings, DataKinds #-}
-
 module Response.Post
     (postResponse) where
 
