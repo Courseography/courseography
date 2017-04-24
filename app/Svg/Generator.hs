@@ -186,6 +186,8 @@ rectToSVG styled courseMap rect
             class_ = case shapeType_ rect of
                          Node -> "node"
                          Hybrid -> "hybrid"
+                         _ -> ""
+
         in S.g ! A.id_ (textValue $ sanitizeId $ shapeId_ rect)
                ! A.class_ (textValue class_)
                ! S.customAttribute "data-group" (textValue

@@ -13,7 +13,7 @@ import qualified Text.Parsec as P
 import Text.Parsec ((<|>))
 import qualified Data.Text as T
 import Text.Parsec.Text (Parser)
-import Database.Tables hiding (name, departmentName, postCode, description, name, prereqs, `partitions)
+import Database.Tables (Post(Post))
 import Control.Monad (mapM)
 import Database.DataType
 
@@ -44,8 +44,8 @@ postInfoParser :: Maybe T.Text -> T.Text -> Parser Post
 postInfoParser firstCourse postCode = do
     departmentName <- getDepartmentName
     postType <- getPostType
-    description <- getRequirements firstCourse
-    return $ Post (read $ T.unpack postType) departmentName postCode description
+    postInfoParserDescription <- getRequirements firstCourse
+    return $ Post (read $ T.unpack postType) departmentName postCode postInfoParserDescription
 
 extractPostType :: T.Text -> T.Text
 extractPostType postCode = do
