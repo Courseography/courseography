@@ -13,6 +13,27 @@ category:            Planning
 build-type:          Custom
 cabal-version:       >=1.22
 
+test-suite ParserTests
+  main-is: ParserTests/tests.hs
+  other-modules:
+    Database.Requirement,
+    ParserTests.ParserTests,
+    WebParsing.ReqParser
+  Type: exitcode-stdio-1.0
+  build-depends:
+    base >=4.6,
+    Cabal >= 1.16.0,
+    HUnit,
+    mtl,
+    parsec,
+    QuickCheck,
+    test-framework,
+    test-framework-hunit,
+    test-framework-quickcheck2
+  default-language: Haskell2010
+  ghc-options: -Wall -fwarn-tabs
+  hs-source-dirs: app
+
 executable courseography
   main-is:             Main.hs
   other-modules:
@@ -66,28 +87,25 @@ executable courseography
     Util.Documentation,
     Util.Happstack,
     WebParsing.ArtSciParser,
-    WebParsing.HtmlTable,
     WebParsing.Ligature,
     WebParsing.ParseAll,
-    WebParsing.ParsingHelp,
     WebParsing.PostParser,
-    WebParsing.PrerequisiteParsing,
     WebParsing.ReqParser,
-    WebParsing.TimeConverter,
     WebParsing.UtsgJsonParser,
     WebParsing.ParsecCombinators
-  other-extensions:
+  -- These are compiler extensions used for every module
+  default-extensions:
     OverloadedStrings,
-    DataKinds,
-    NoMonomorphismRestriction,
-    FlexibleContexts,
-    GADTs,
-    ScopedTypeVariables,
+    PartialTypeSignatures,
+    ScopedTypeVariables
+  other-extensions:
+    DeriveGeneric,
     EmptyDataDecls,
+    FlexibleContexts,
     FlexibleInstances,
+    GADTs,
     GeneralizedNewtypeDeriving,
     MultiParamTypeClasses,
-    DeriveGeneric,
     QuasiQuotes,
     TemplateHaskell,
     TypeFamilies
@@ -133,6 +151,7 @@ executable courseography
     time,
     parsec,
     HaTeX,
+    HUnit,
     turtle
   default-language: Haskell2010
   ghc-options: -Wall -fwarn-tabs

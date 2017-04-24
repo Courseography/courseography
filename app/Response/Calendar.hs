@@ -1,8 +1,7 @@
-{-# LANGUAGE OverloadedStrings, ViewPatterns #-}
 module Response.Calendar
     (calendarResponse) where
 
-import Data.List (sort, groupBy, sortBy)
+import Data.List (sort, groupBy)
 import Data.List.Split (splitOn)
 import Data.Time (Day, addDays, formatTime, getCurrentTime, defaultTimeLocale)
 import Happstack.Server (ServerPart, Response, toResponse)
@@ -22,8 +21,7 @@ import Config (firstMondayFall,
 
 -- | Returns an ICS file of events as requested by the user.
 calendarResponse :: String -> ServerPart Response
-calendarResponse courses =
-    liftIO $ getCalendar $ T.pack courses
+calendarResponse = liftIO . getCalendar . T.pack
 
 -- | Gets together all the pieces of the program.
 getCalendar :: T.Text -> IO Response
@@ -71,7 +69,7 @@ getInfoCookies courses = map courseInfo allCourses
 
 -- | Pulls either a Lecture, Tutorial or Pratical from the database.
 pullDatabase :: (Code, Section, Session) -> IO (Maybe Meeting)
-pullDatabase (code, section, session) = runSqlite databasePath $ do
+pullDatabase (code, section, session) = runSqlite databasePath $
     returnMeeting code fullSection session
     where
         fullSection
@@ -106,7 +104,7 @@ getEvents systemTime (Just lect) =
                 map (\date -> "EXDATE;TZID=America/Toronto:" ++ date ++ start1)
                     holidays ++
                 ["ORGANIZER:University of Toronto",
-                 "SUMMARY:" ++ (T.unpack $ first courseInfo) ++ " " ++ (T.unpack $ second courseInfo),
+                 "SUMMARY:" ++ T.unpack (first courseInfo) ++ " " ++ T.unpack (second courseInfo),
                  "CATEGORIES:EDUCATION",
                  "END:VEVENT"]
 
@@ -171,7 +169,7 @@ type InfoTimeFieldsByDay = [[[Double]]]
 orderTimeFields :: [Time] -> InfoTimeFieldsByDay
 orderTimeFields timeFields = groupBy (\x y -> head x == head y) sortedList
     where
-        sortedList = sortBy compare (map timeField timeFields)
+        sortedList = sort (map timeField timeFields)
 
 -- ** Start time
 
@@ -239,7 +237,7 @@ formatTimes fullTime =
     else hour ++ maybe "0000" formatMinutes minutes ++ "00"
     where
         hours = splitOn "." (show fullTime)
-        hour = hours !! 0
+        hour = head hours
         minutes = readMaybe $ hours !! 1
 
 -- | The string representaion for minutes.
