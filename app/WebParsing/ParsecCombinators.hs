@@ -15,7 +15,6 @@ import qualified Data.Text as T
 import Text.Parsec.Text (Parser)
 import Database.Tables (Post(Post))
 import Control.Monad (mapM)
-import Database.DataType
 
 getCourseFromTag :: T.Text -> T.Text
 getCourseFromTag courseTag =
