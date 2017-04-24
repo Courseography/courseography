@@ -1,16 +1,9 @@
-{-# LANGUAGE FlexibleContexts #-}
-module WebParsing.ReqParser
-    (parseReqs) where
+module WebParsing.ReqParser where
 
 import qualified Text.Parsec as Parsec
 import Text.Parsec.String (Parser)
 import Text.Parsec ((<|>))
-import Control.Monad (msum)
-import Control.Monad.Identity (Identity)
-import qualified Data.String as S
-import qualified Data.List as L
 import Database.Requirement
-
 
 -- define separators
 fromSeparator :: Parser ()
@@ -54,7 +47,7 @@ fcesParser = do
 gradeParser :: Parser String
 gradeParser = do
     grade <- percentParser <|> letterParser
-    Parsec.lookAhead $ Parsec.choice $ map Parsec.try [
+    _ <- Parsec.lookAhead $ Parsec.choice $ map Parsec.try [
         andSeparator,
         orSeparator,
         Parsec.space >> return "",
@@ -77,11 +70,11 @@ gradeParser = do
 -- parse for cutoff percentage before a course
 coBefParser :: Parser Req
 coBefParser = do
-    Parsec.choice $ map (Parsec.try . (>> Parsec.space) . Parsec.string) ["a", "A", "an", "An"]
+    _ <- Parsec.choice $ map (Parsec.try . (>> Parsec.space) . Parsec.string) ["a", "A", "an", "An"]
     Parsec.spaces
     grade <- gradeParser
     Parsec.spaces
-    Parsec.manyTill Parsec.anyChar (Parsec.try $ Parsec.lookAhead singleParser)
+    _ <- Parsec.manyTill Parsec.anyChar (Parsec.try $ Parsec.lookAhead singleParser)
     req <- singleParser
     return $ GRADE grade req
 
@@ -95,9 +88,9 @@ coAftParser = do
 
     where
     cutoffHelper = Parsec.between Parsec.spaces Parsec.spaces $ do
-        Parsec.manyTill (Parsec.noneOf "()")
+        _ <- Parsec.manyTill (Parsec.noneOf "()")
           (Parsec.try $ Parsec.lookAhead (orSeparator <|> andSeparator <|> (do
-            gradeParser
+            _ <- gradeParser
             Parsec.spaces
             Parsec.notFollowedBy $ Parsec.alphaNum
             return "")))
@@ -158,8 +151,8 @@ andParser = do
 fromParser :: Parser Req
 fromParser = do
     fces <- fcesParser
-    Parsec.manyTill Parsec.anyChar fromSeparator
-    Parsec.manyTill Parsec.anyChar (Parsec.try $ Parsec.lookAhead singleParser)
+    _ <- Parsec.manyTill Parsec.anyChar fromSeparator
+    _ <- Parsec.manyTill Parsec.anyChar (Parsec.try $ Parsec.lookAhead singleParser)
     req <- (Parsec.try andParser <|> rawTextParser)
     return $ FROM fces req
 
@@ -179,8 +172,3 @@ parseReqs reqString =
     in case req of
         Right x -> x
         Left e -> J (show e)
-
-    -- [] look for more conrner cases where separators are in english between
-    --    complex reqs.
-    -- [] year (Done by Christine)
-    -- [] create Group Type

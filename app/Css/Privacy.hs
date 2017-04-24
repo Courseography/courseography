@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 {-|
     Module      : Css.Privacy
     Description : Defines the CSS for the privacy page.
