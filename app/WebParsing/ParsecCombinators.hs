@@ -21,7 +21,7 @@ getCourseFromTag courseTag =
     let course = P.parse findCourseFromTag "(source)" courseTag
     in
         case course of
-            Right name -> name
+            Right courseName -> courseName
             Left _ -> ""
 
 findCourseFromTag :: Parser T.Text
@@ -31,18 +31,18 @@ findCourseFromTag = do
     return $ T.pack parsed
 
 generalCategoryParser :: Maybe T.Text -> T.Text -> Parser (Post, [T.Text])
-generalCategoryParser firstCourse postCode = do
-    post <- postInfoParser firstCourse postCode
+generalCategoryParser firstCourse postCode' = do
+    post <- postInfoParser firstCourse postCode'
     categories <- splitPrereqText
     return (post, categories)
 
 -- Post Parsing
 postInfoParser :: Maybe T.Text -> T.Text -> Parser Post
 postInfoParser firstCourse postCode = do
-    departmentName <- getDepartmentName
+    deptName <- getDepartmentName
     postType <- getPostType
-    postInfoParserDescription <- getRequirements firstCourse
-    return $ Post (read $ T.unpack postType) departmentName postCode postInfoParserDescription
+    programDescription <- getRequirements firstCourse
+    return $ Post (read $ T.unpack postType) deptName postCode programDescription
 
 getDepartmentName :: Parser T.Text
 getDepartmentName =
