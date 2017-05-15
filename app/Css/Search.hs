@@ -1,5 +1,11 @@
-{-# LANGUAGE OverloadedStrings #-}
+{-|
+    Module      : Css.Search
+    Description : Defines CSS for the search page.
 
+There is a distinction between the search bar, and the search page. The grid
+page has a search bar, but it is not the search page. The search page is found
+by clicking the search button at the top of Courseography.
+-}
 module Css.Search
     (searchStyles) where
 
@@ -7,6 +13,7 @@ import Clay
 import Css.Constants
 import Data.Monoid
 
+-- |Defines the CSS for the search page.
 searchStyles :: Css
 searchStyles = do
     "#timetableSearch" ? do

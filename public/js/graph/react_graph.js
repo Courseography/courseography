@@ -1,5 +1,19 @@
 import * as tooltip from 'es6!graph/tooltip';
 import {Modal} from 'es6!common/react_modal';
+import {ExportModal} from 'es6!common/export/export';
+
+/**
+ * Search for target node in list of nodes,
+ * or if node not found search through list of bools.
+ * @param {React.PropTypes.node} targetNode
+ * @param {React.PropTypes.element} elem
+ * @returns {React.PropTypes.Node}
+ */
+function refLookUp(targetNode, svg) {
+    return svg.refs['nodes'].refs[targetNode] ||
+        svg.refs['bools'].refs[targetNode];
+}
+
 
 /**
  *
@@ -457,29 +471,13 @@ var Graph = React.createClass({
 
     infoBoxMouseClick: function () {
         var infoBox = this.refs.infoBox;
-        var modal = this.refs.modal;
-        modal.setState({courseId: infoBox.state.nodeId.substring(0, 6)}, function (){
-            $.ajax({
-                url: 'course',
-                data: {name: formatCourseName(modal.state.courseId)[0]},
-                dataType: 'json',
-                success: function (data) {
-                    if (modal.isMounted()) {
-                        //This is getting the session times
-                        var sessions = data.fallSession.lectures
-                                                       .concat(data.springSession.lectures)
-                                                       .concat(data.yearSession.lectures)
-                        //Tutorials don't have a timeStr to print, so I've currently omitted them
-                        modal.setState({course: data, sessions: sessions});
-                    }
-                },
-                error: function (xhr, status, err) {
-                    console.error('course-info', status, err.toString());
-                }
-            });
-        });
+        var newCourse = infoBox.state.nodeId.substring(0, 6);
+        this.setState({courseId: newCourse});;
+        this.refs.modal.openModal(newCourse);
+    },
 
-        $(this.refs.modal.getDOMNode()).modal();
+    openExportModal: function() {
+        this.refs.exportModal.openModal();
     },
 
     // Reset graph
@@ -744,6 +742,8 @@ var Graph = React.createClass({
 
         return (
             <div>
+                <Modal ref='modal'/>
+                <ExportModal context='graph' session='' ref='exportModal'/>
                 <Button
                     divId='zoom-in-button'
                     text='+'
@@ -800,7 +800,7 @@ var Graph = React.createClass({
                     onMouseEnter={this.buttonMouseEnter}
                     onMouseLeave={this.buttonMouseLeave}
                     disabled={resetDisabled}/>
-                <Modal ref='modal' />
+
                 <svg {... svgAttrs} ref='svg' version='1.1'
                     className={this.state.highlightedNodes.length > 0 ?
                                 'highlight-nodes' : ''}
@@ -1087,8 +1087,7 @@ var Node = React.createClass({
             this.setState({status: newState}, function () {
                 setCookie(nodeId, newState);
                 this.props.childs.forEach(function (node) {
-                    var currentNode = svg.refs['nodes'].refs[node] ||
-                                      svg.refs['bools'].refs[node];
+                    var currentNode = refLookUp(node, svg);
                     currentNode.updateNode();
                 });
                 var allEdges = this.props.outEdges.concat(this.props.inEdges);
@@ -1117,8 +1116,7 @@ var Node = React.createClass({
             this.setState({status: 'missing'}, function () {
                 this.props.inEdges.forEach(function (edge) {
                     var currentEdge = svg.refs['edges'].refs[edge];
-                    var sourceNode = svg.refs['nodes'].refs[currentEdge.props.source] ||
-                                     svg.refs['bools'].refs[currentEdge.props.source];
+                    var sourceNode = refLookUp(currentEdge.props.source, svg);
                     if (!sourceNode.isSelected()) {
                         currentEdge.setState({status: 'missing'});
                     }
@@ -1126,13 +1124,11 @@ var Node = React.createClass({
                 var isHybrid = this.props.hybrid;
                 this.props.parents.forEach(function (node) {
                     if (typeof node === 'string') {
-                        var currentNode = svg.refs['nodes'].refs[node] ||
-                                          svg.refs['bools'].refs[node];
+                        var currentNode = refLookUp(node, svg);
                         currentNode.focusPrereqs();
                     } else {
                         node.forEach(n => {
-                            var currentNode = svg.refs['nodes'].refs[n] ||
-                                              svg.refs['bools'].refs[n];
+                            var currentNode = refLookUp(n, svg);
                             currentNode.focusPrereqs();
                         });
                     }
@@ -1146,13 +1142,11 @@ var Node = React.createClass({
         this.updateNode(false);
         this.props.parents.forEach(function (node) {
             if (typeof node === 'string') {
-                var currentNode = svg.refs['nodes'].refs[node] ||
-                                  svg.refs['bools'].refs[node];
+                var currentNode = refLookUp(node, svg);
                 currentNode.unfocusPrereqs();
             } else {
                 node.forEach(n => {
-                    var currentNode = svg.refs['nodes'].refs[n] ||
-                                      svg.refs['bools'].refs[n];
+                    var currentNode = refLookUp(n, svg);
                     currentNode.unfocusPrereqs();
                 });
             }
@@ -1227,7 +1221,8 @@ var Node = React.createClass({
 
 var BoolGroup = React.createClass({
     componentDidMount: function () {
-        for (var ref in this.refs) {
+        for (var boolJSON of this.props.boolsJSON) {
+            var ref = boolJSON.id_;
             this.refs[ref].updateNode(this.props.svg);
         }
     },
@@ -1311,8 +1306,7 @@ var Bool = React.createClass({
         this.setState({status: newState}, function () {
             setCookie(boolId, newState);
             this.props.childs.forEach(function (node) {
-                var currentNode = svg.refs['nodes'].refs[node] ||
-                                  svg.refs['bools'].refs[node];
+                var currentNode = refLookUp(node, svg);
                 currentNode.updateNode(svg);
             });
             var allEdges = this.props.outEdges.concat(this.props.inEdges);
@@ -1330,15 +1324,13 @@ var Bool = React.createClass({
             this.setState({status: 'missing'}, () => {
                 this.props.inEdges.forEach(function (edge) {
                     var currentEdge = svg.refs['edges'].refs[edge];
-                    var sourceNode = svg.refs['nodes'].refs[currentEdge.props.source] ||
-                                     svg.refs['bools'].refs[currentEdge.props.source];
+                    var sourceNode = refLookUp(currentEdge.props.source, svg);
                     if (!sourceNode.isSelected()) {
                         currentEdge.setState({status: 'missing'});
                     }
                 });
                 this.props.parents.forEach(function (node) {
-                    var currentNode = svg.refs['nodes'].refs[node] ||
-                                      svg.refs['bools'].refs[node];
+                    var currentNode = refLookUp(node, svg);
                     currentNode.focusPrereqs();
                 });
             });
@@ -1349,8 +1341,7 @@ var Bool = React.createClass({
         var svg = this.props.svg;
         this.updateNode(svg);
         this.props.parents.forEach(function (node, i) {
-            var currentNode = svg.refs['nodes'].refs[node] ||
-                              svg.refs['bools'].refs[node];
+            var currentNode = refLookUp(node, svg);
             currentNode.unfocusPrereqs(svg);
         });
     },
@@ -1465,10 +1456,8 @@ var Edge = React.createClass({
     },
 
     updateStatus: function () {
-        var source = this.props.svg.refs.nodes.refs[this.props.source] ||
-                     this.props.svg.refs.bools.refs[this.props.source];
-        var target = this.props.svg.refs.nodes.refs[this.props.target] ||
-                     this.props.svg.refs.bools.refs[this.props.target];
+        var source = refLookUp(this.props.source, this.props.svg);
+        var target = refLookUp(this.props.target, this.props.svg);
         if (!source.isSelected() && target.state.status === 'missing') {
             this.setState({status: 'missing'});
         } else if (!source.isSelected()) {
@@ -1530,7 +1519,7 @@ var InfoBox = React.createClass({
                 ry: '4',
                 fill: 'white',
                 stroke: 'black',
-                'stroke-width': '2',
+                'strokeWidth': '2',
                 width: '60',
                 height: '30'
             };

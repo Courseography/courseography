@@ -1,0 +1,18 @@
+{
+  "name": "courseography",
+  "version": "0.2.0.0",
+  "repository": "git@github.com:Courseography/courseography.git",
+  "author": "David Liu <david@cs.toronto.edu>",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "path": "^0.12.7",
+    "webpack": "^2.4.1",
+    "webpack-dev-server": "^2.4.2"
+  },
+  "devDependencies": {
+    "babel-core": "^6.24.1",
+    "babel-loader": "^6.4.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1"
+  }
+}

@@ -1,17 +1,16 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module MasterTemplate
     (masterTemplate, header, disclaimer) where
 
 import           Text.Blaze ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
-import Text.Blaze.Internal (stringValue)
+import qualified Data.Text as T
+import Text.Blaze.Internal (textValue)
 import Config (enableFb, enableCdn)
 import Util.Blaze
 import Scripts (globalScripts)
 
-masterTemplate :: String -> [H.Html] -> H.Html -> H.Html -> H.Html
+masterTemplate :: T.Text -> [H.Html] -> H.Html -> H.Html -> H.Html
 masterTemplate title headers body scripts =
     H.html $ do
         H.head $ do
@@ -22,9 +21,9 @@ masterTemplate title headers body scripts =
                    ! A.href "static/res/ico/favicon.png"
             sequence_ headers
             mapM_ toStylesheet [
-                (if enableCdn
-                 then "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"
-                 else "/static/js/common/bootstrap.min.3.1.1.js"),
+                if enableCdn
+                then "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"
+                else "/static/style/bootstrap.min.3.1.1.css",
                 "static/style/app.css"]
         H.body $ do
             body
@@ -33,11 +32,11 @@ masterTemplate title headers body scripts =
 
 -- Insert the header of the Grid and Graph. This contains the year of the timetable, and
 -- a link back to the Graph.
-header :: String -> H.Html
+header :: T.Text -> H.Html
 header page =
     H.nav ! A.class_ "row header" $ do
         H.img ! A.id "courseography-header" ! A.src "static/res/img/logo.png"
-             ! H.customAttribute "context" (stringValue page)
+             ! H.customAttribute "context" (textValue page)
         H.ul ! A.id "nav-links" $ do
             H.li $ toLink "graph" "Graph"
             H.li $ toLink "grid" "Grid"
@@ -66,13 +65,13 @@ header page =
 disclaimer :: H.Html
 disclaimer =
     H.div ! A.id "disclaimerDiv" $ do
-        "DISCLAIMER: Both the "
-        H.a ! A.href "http://www.artsandscience.utoronto.ca/ofr/timetable/winter/csc.html"
+        _ <- "DISCLAIMER: Both the "
+        H.a ! A.href "https://timetable.iit.artsci.utoronto.ca/"
             $ "Official Timetable"
-        " and "
-        H.a ! A.href "http://www.artsandscience.utoronto.ca/ofr/calendar/index.html"
+        _ <- " and "
+        H.a ! A.href "http://calendar.artsci.utoronto.ca/"
             $ "Calendar"
-        " take precedence over the information presented here. "
-        "It's important that you double-check your course selection, "
-        "prerequisites, and your program plans."
+        _ <- " take precedence over the information presented here. "
+        _ <- "It's important that you double-check your course selection, "
+        _ <- "prerequisites, and your program plans."
         "Some graph edges may represent a corequisite rather than a prerequisite."

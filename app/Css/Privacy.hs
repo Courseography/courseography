@@ -1,5 +1,7 @@
-{-# LANGUAGE OverloadedStrings #-}
-
+{-|
+    Module      : Css.Privacy
+    Description : Defines the CSS for the privacy page.
+-}
 module Css.Privacy
     (privacyStyles) where
 
@@ -8,8 +10,7 @@ import Prelude hiding ((**))
 import Data.Monoid
 import Css.Constants
 
-{- privacyStyles
- - Generates CSS for the Privacy page. -}
+-- |Defines CSS for the privacy page.
 privacyStyles :: Css
 privacyStyles = "#privacyDiv" ? do
     maxWidth (px 1000)

@@ -1,5 +1,10 @@
-{-# LANGUAGE OverloadedStrings #-}
+{-|
+    Module      : Css.Timetable
+    Description : Defines the CSS for the timetable page.
 
+The timetable page is found by navigating to the search button at the top of
+Courseography.
+-}
 module Css.Timetable
     (timetableStyles) where
 
@@ -8,8 +13,7 @@ import Prelude hiding ((**))
 import Data.Monoid
 import Css.Constants
 
-{- timetableStyles
- - Generates all CSS required for the timetable page. -}
+-- |Defines the CSS for the timetable page.
 timetableStyles :: Css
 timetableStyles = do
     ".main" ? do -- TODO: change to id, and pick better name
@@ -20,6 +24,7 @@ timetableStyles = do
     timetableCSS
     courseSelectCSS
     tdColours
+    modalContainerCSS
     --infoCSS
 
 gridCSS :: Css
@@ -275,3 +280,13 @@ tdColours = ".timetable " ?  do
     td # ("hover" *= "conflict") # ("satisfied" *= "true") <>
         td # ("hover" *= "conflict") # ("satisfied" *= "false") ? do
         backgroundColor red1
+
+modalContainerCSS :: Css
+modalContainerCSS = do
+    "#modal-content-container" ? do
+        a <? do
+            textDecoration none
+            marginLeft (px 10)
+            "outline" -: "none"
+            ":hover" & do
+                textDecoration underline

@@ -1,13 +1,18 @@
-{-# LANGUAGE OverloadedStrings #-}
-
+{-|
+    Module      : Database.CourseVideoSeed
+    Description : Contains the data and functions for seeding the courseVideos.
+-}
 module Database.CourseVideoSeed
     (courseVideos, seedVideos) where
 
 import Data.Text (Text)
 import Database.Tables hiding (Text)
-import Database.Persist.Sqlite (runSqlite, updateWhere, (=.), (==.))
+import Database.Persist.Sqlite (runSqlite, updateWhere, (=.), (==.), SqlPersistM)
 import Config (databasePath)
 
+-- | Defines the constant list of ordered pairs pertaining to the routes for
+-- course videos. The first Text variable in each ordered pair is the course.
+-- The second List of Text variable is the routes to the videos.
 courseVideos :: [(Text, [Text])]
 courseVideos = [
   ("CSC240H1", ["static/videos/csc240.mp4"]),
@@ -17,10 +22,11 @@ courseVideos = [
   ("CSC456H1", ["static/videos/csc456.mp4"]),
   ("CSC463H1", ["static/videos/csc463.mp4"])]
 
+seedVideo :: (Text, [Text]) -> SqlPersistM ()
 seedVideo (code, videos) =
     updateWhere [CoursesCode ==. code] [CoursesVideoUrls =. videos]
 
-
+-- | Sets the video routes of all course rows.
 seedVideos :: IO ()
 seedVideos = runSqlite databasePath $
     mapM_ seedVideo courseVideos

@@ -1,5 +1,10 @@
-{-# LANGUAGE OverloadedStrings #-}
+{-|
+    Module      : Css.Post
+    Description : Defines the CSS for the post page.
 
+The post page is navigated to by clicking Check My POSt located at the top of
+any Courseography page.
+-}
 module Css.Post
     (postStyles) where
 
@@ -7,12 +12,12 @@ import Clay
 import Prelude hiding ((**))
 import Css.Constants
 
--- Post Styles
+-- |Defines the CSS for the post page.
 postStyles :: Css
 postStyles = do
     body ?
         do color grey1
-           fontWeight $ normal
+           fontWeight normal
     tabsCSS
     postCSS
 
@@ -20,8 +25,8 @@ tabsCSS :: Css
 tabsCSS = do
     "#posts" & do
         fontFamily ["HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", "Lucida Grande"][sansSerif]
-        fontSize $ (px 17)
-        width $ pct 97
+        fontSize (px 17)
+        width (pct 97)
         backgroundColor white
         border solid (px 1) grey2
         "border-radius" -: "4px"

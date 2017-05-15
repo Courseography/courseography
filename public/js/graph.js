@@ -1,11 +1,13 @@
 requirejs([
     'es6!graph/react_graph',
     'es6!graph/sidebar/sidebar_divs',
-    'es6!graph/sidebar/focus_descriptions'],
+    'es6!graph/sidebar/focus_descriptions',
+    'es6!common/export/export'],
     function (
         reactGraph,
         sidebarDivs,
-        focusInfo
+        focusInfo,
+        exp
     ) {
 
     $(document).ready(function () {
@@ -32,6 +34,12 @@ requirejs([
         // TODO: move sidebar into its own React component.
         $('#reset').click(function () {
             graphComponent.reset();
+        });
+
+        $(document).ready(function () {
+            $('#nav-export').click(function () {
+                graphComponent.openExportModal();
+            });
         });
 
         $.ajax({

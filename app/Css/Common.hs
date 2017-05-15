@@ -1,5 +1,11 @@
-{-# LANGUAGE OverloadedStrings #-}
+{-|
+    Module      : Css.Common
+    Description : Defines the CSS present in every page.
 
+The CSS present in every page includes the header, common CSS, disclaimer at
+the bottom, and (oddly enough) the modal that appears when nodes in the
+graph are clicked.
+-}
 module Css.Common
     (common) where
 
@@ -8,8 +14,7 @@ import Prelude hiding ((**))
 import Data.Monoid
 import Css.Constants
 
-{- common
- - Generates CSS common to all pages. -}
+-- |Defines CSS common to all pages.
 common :: Css
 common = do
     html ?
@@ -39,33 +44,32 @@ headerCSS = do
     ".header" ?
         do margin0
            padding 0 (em 0.5) 0 (em 0.5)
-           backgroundColor $ purple10
+           backgroundColor purple10
            border solid (px 1) black
            color white
            img ?
              do display inlineBlock
                 margin 0 0 (px 5) 0
            height (px 50)
-    "#nav-links" ?
-        do
-            "list-style" -: "none"
-            minWidth (px 687)
-            paddingTop (px 10)
-            margin nil nil nil nil
+    "#nav-links" ? do
+        "list-style" -: "none"
+        minWidth (px 687)
+        paddingTop (px 10)
+        margin nil nil nil nil
+        display inlineBlock
+        a ?
+          fontWeight normal
+        li <? do
+            textAlign $ alignSide sideCenter
             display inlineBlock
-            a ?
-              do fontWeight normal
-            li <? do
-                textAlign $ alignSide sideCenter
-                display inlineBlock
-                padding 0 (px 10) 0 (px 10)
-                a <? do
-                    color white
-                    "text-shadow" -: "0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000;"
-                    hover & do
-                        color darkgray
-            height (px 50)
-            position absolute
+            padding 0 (px 10) 0 (px 10)
+            a <? do
+                color white
+                "text-shadow" -: "0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000, 0 0 2px #000;"
+                hover &
+                    color darkgray
+        height (px 50)
+        position absolute
     "#nav-fb" ? do
         float floatRight
         height (px 50)
@@ -132,13 +136,28 @@ modalCSS = do
     ".modal-header" ? do
         color blue3
     ".modal-body" ? do
-        overflowY scroll
-        height (px 360)
         p ? do
             fontSize (pt 12)
             margin (pt 5) 0 (pt 5) 0
             lineHeight (em 1.3)
             textAlign $ alignSide sideLeft
+    ".modal-class" ? do
+        overflowY auto
+        position absolute
+        top (px 100)
+        left (px 300)
+        right (px 300)
+        bottom (px 150)
+        borderRadius (px 10) (px 10) (px 10) (px 10)
+        backgroundColor white
+        boxShadow (px 0) (px 0) (px 30) black
+    ".overlay" ? do
+        position fixed
+        left nil
+        right nil
+        top nil
+        bottom nil
+        backgroundColor (setA 150 black)
     ".ui-dialog-titlebar" ? do
         color blue3
         cursor move
@@ -170,12 +189,10 @@ modalCSS = do
         color blue3
         padding0
         paddingLeft (px 25)
-        height (em 1.8)
         lineHeight (em 1.8)
         fontSize (em 1)
         borderBottom solid (px 1) black
         textAlign $ alignSide sideLeft
-    
     fbModalCSS
 
 
@@ -183,6 +200,7 @@ modalCSS = do
 fbModalCSS :: Css
 fbModalCSS = do
     "#post-image" ? do
+        border solid (px 3) black
         borderRadius (px 5) (px 5) (px 5) (px 5)
         margin nil auto (px 10) auto
         maxWidth (pct 100)

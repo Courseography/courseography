@@ -1,6 +1,7 @@
+{-# LANGUAGE OverloadedStrings, CPP #-}
+
 {-|
 Description: Configure and run the server for Courseography.
-
 This module defines the configuration for the server, including logging.
 It also defines all of the allowed server routes, and the corresponding
 responses.
@@ -9,61 +10,53 @@ module Server
     (runServer) where
 
 import Control.Monad (msum)
-import Control.Monad.IO.Class (liftIO)
+import Control.Concurrent (killThread, forkIO)
 import Happstack.Server hiding (host)
-import Response
-import Database.CourseQueries (retrieveCourse, allCourses, queryGraphs, courseInfo, deptList, getGraphJSON)
-import Database.CourseInsertion (saveGraphJSON)
+import Response (notFoundResponse)
 import Filesystem.Path.CurrentOS as Path
 import System.Directory (getCurrentDirectory)
 import System.IO (hSetBuffering, stdout, stderr, BufferMode(LineBuffering))
 import System.Log.Logger (updateGlobalLogger, rootLoggerName, setLevel, Priority(INFO))
+import System.Process (CreateProcess(std_in), StdStream(CreatePipe), createProcess, proc)
 import Data.String (fromString)
-import FacebookUtilities
 import Config (markdownPath, serverConf)
 import qualified Data.Text.Lazy.IO as LazyIO
-import Data.Int (Int64)
+import Routes (routes)
+import GHC.IO.Handle (hClose)
+
+webpackScript :: Path.FilePath
+#ifdef mingw32_HOST_OS
+webpackScript = Path.concat ["node_modules", ".bin", "webpack.cmd"]
+#else
+webpackScript = Path.concat ["node_modules", ".bin", "webpack"]
+#endif
+
+webpackProcess :: CreateProcess
+webpackProcess = (proc (Path.encodeString webpackScript) ["--watch-stdin"])
+                   {std_in = CreatePipe}
 
 runServer :: IO ()
 runServer = do
+    (Just webpackIn, _, _, _) <- createProcess webpackProcess
     configureLogger
     staticDir <- getStaticDir
-    redirectUrlGraphEmail <- retrieveAuthURL testUrl
-    redirectUrlGraphPost <- retrieveAuthURL testPostUrl
     aboutContents <- LazyIO.readFile $ markdownPath ++ "README.md"
     privacyContents <- LazyIO.readFile $ markdownPath ++ "PRIVACY.md"
 
     -- Start the HTTP server
-    simpleHTTP serverConf $ do
+    httpThreadId <- forkIO $ simpleHTTP serverConf $ do
       decodeBody (defaultBodyPolicy "/tmp/" 4096 4096 4096)
-      msum [ do
+      msum
+           (map (uncurry dir) (routes staticDir aboutContents privacyContents) ++
+           [ do
               nullDir
-              seeOther "graph" (toResponse "Redirecting to /graph"),
-              dir "grid" gridResponse,
-              dir "graph" graphResponse,
-              dir "image" graphImageResponse,
-              dir "timetable-image" $ look "courses" >>= \x -> look "session" >>= timetableImageResponse x,
-              dir "graph-fb" $ seeOther redirectUrlGraphEmail $ toResponse "",
-              dir "post-fb" $ seeOther redirectUrlGraphPost $ toResponse "",
-              dir "test" $ look "code" >>= getEmail,
-              dir "test-post" $ look "code" >>= postToFacebook,
-              dir "post" postResponse,
-              dir "draw" drawResponse,
-              dir "about" $ aboutResponse aboutContents,
-              dir "privacy" $ privacyResponse privacyContents,
-              dir "static" $ serveDirectory DisableBrowsing [] staticDir,
-              dir "course" $ look "name" >>= retrieveCourse,
-              dir "all-courses" $ liftIO allCourses,
-              dir "graphs" $ liftIO queryGraphs,
-              dir "course-info" $ look "dept" >>= courseInfo,
-              dir "depts" $ liftIO deptList,
-              dir "timesearch" searchResponse,
-              dir "calendar" $ lookCookieValue "selected-lectures" >>= calendarResponse,
-              dir "get-json-data" $ look "graphName" >>= \graphName -> liftIO $ getGraphJSON graphName,
-              dir "loading" $ look "size" >>= loadingResponse,
-              dir "save-json" $ look "jsonData" >>= \jsonStr -> look "nameData" >>= \nameStr -> liftIO $ saveGraphJSON jsonStr nameStr,
+              seeOther ("graph" :: String) (toResponse ("Redirecting to /graph" :: String)),
               notFoundResponse
-        ]
+        ])
+    waitForTermination
+    killThread httpThreadId
+    -- Closing the stdin of webpack stops the watch.
+    hClose webpackIn
     where
     -- | Global logger configuration.
     configureLogger :: IO ()

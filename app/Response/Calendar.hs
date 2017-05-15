@@ -1,12 +1,13 @@
 module Response.Calendar
     (calendarResponse) where
 
-import Data.List (sort, groupBy, sortBy)
+import Data.List (sort, groupBy)
 import Data.List.Split (splitOn)
 import Data.Time (Day, addDays, formatTime, getCurrentTime, defaultTimeLocale)
 import Happstack.Server (ServerPart, Response, toResponse)
 import Control.Monad.IO.Class (liftIO)
-import Database.CourseQueries (returnTutorial, returnLecture)
+import Database.Persist.Sqlite (runSqlite)
+import Database.CourseQueries (returnMeeting)
 import qualified Data.Text as T
 import Text.Read (readMaybe)
 import Database.Tables hiding (Session)
@@ -15,15 +16,15 @@ import Config (firstMondayFall,
                firstMondayWinter,
                lastMondayWinter,
                outDay,
-               holidays)
+               holidays,
+               databasePath)
 
 -- | Returns an ICS file of events as requested by the user.
 calendarResponse :: String -> ServerPart Response
-calendarResponse courses =
-    liftIO $ getCalendar courses
+calendarResponse = liftIO . getCalendar . T.pack
 
 -- | Gets together all the pieces of the program.
-getCalendar :: String -> IO Response
+getCalendar :: T.Text -> IO Response
 getCalendar courses = do
     let courseInfo = getInfoCookies courses
     databaseInfo <- mapM pullDatabase courseInfo
@@ -50,38 +51,39 @@ getICS events = unlines $ header ++ events ++ bottom
         bottom = ["END:VCALENDAR"]
 
 -- | The code for a course.
-type Code = String
+type Code = T.Text
 
 -- | The section for a course.
-type Section = String
+type Section = T.Text
 
 -- | The session for a course.
-type Session = String
+type Session = T.Text
 
 -- | Obtains the code, section and session for each course in the cookies.
-getInfoCookies :: String -> [(Code, Section, Session)]
+getInfoCookies :: T.Text -> [(Code, Section, Session)]
 getInfoCookies courses = map courseInfo allCourses
     where
         courseInfo [code, sect, session] = (code, sect, session)
         courseInfo _ = ("", "", "")
-        allCourses = map (splitOn "-") (splitOn "_" courses)
+        allCourses = map (T.splitOn "-") (T.splitOn "_" courses)
 
--- | Pulls either a Lecture or Tutorial from the database.
-pullDatabase :: (Code, Section, Session) -> IO (Maybe (Either Lecture Tutorial))
-pullDatabase (code, 'L':sectCode, session) =
-    fmap (fmap Left) (returnLecture (T.pack code)
-                                    (T.pack $ 'L':sectCode)
-                                    (T.pack session))
-pullDatabase (code, sect, session) =
-    fmap (fmap Right) (returnTutorial (T.pack code)
-                                      (T.pack sect)
-                                      (T.pack session))
+-- | Pulls either a Lecture, Tutorial or Pratical from the database.
+pullDatabase :: (Code, Section, Session) -> IO (Maybe Meeting)
+pullDatabase (code, section, session) = runSqlite databasePath $
+    returnMeeting code fullSection session
+    where
+        fullSection
+            | T.isPrefixOf "L" section = T.append "LEC" sectCode
+            | T.isPrefixOf "T" section = T.append "TUT" sectCode
+            | T.isPrefixOf "P" section = T.append "PRA" sectCode
+            | otherwise                = section
+        sectCode = T.tail section
 
 -- | The current date and time as obtained from the system.
 type SystemTime = String
 
 -- | Creates all the events for a course.
-getEvents :: SystemTime -> Maybe (Either Lecture Tutorial) -> Events
+getEvents :: SystemTime -> Maybe Meeting -> Events
 getEvents _ Nothing = []
 getEvents systemTime (Just lect) =
     concatMap eventsByDate (zip' (third courseInfo)
@@ -102,7 +104,7 @@ getEvents systemTime (Just lect) =
                 map (\date -> "EXDATE;TZID=America/Toronto:" ++ date ++ start1)
                     holidays ++
                 ["ORGANIZER:University of Toronto",
-                 "SUMMARY:" ++ first courseInfo ++ " " ++ second courseInfo,
+                 "SUMMARY:" ++ T.unpack (first courseInfo) ++ " " ++ T.unpack (second courseInfo),
                  "CATEGORIES:EDUCATION",
                  "END:VEVENT"]
 
@@ -117,24 +119,16 @@ type DatesByDay = [(StartDate, EndDate)]
 
 -- | Obtains all the necessary information to create events for a course,
 -- such as code, section, start times, end times and dates.
-getCourseInfo :: Either Lecture Tutorial
+getCourseInfo :: Meeting
               -> (Code, Section, StartTimesByDay, EndTimesByDay, DatesByDay)
-getCourseInfo (Left lect) = (code, sect, start, end, dates)
+getCourseInfo meeting = (code, sect, start, end, dates)
     where
-        code = T.unpack $ lectureCode lect
-        sect = T.unpack $ lectureSection lect
-        dataInOrder = orderTimeFields $ lectureTimes lect
-        start = startTimesByCourse dataInOrder (T.unpack $ lectureSession lect)
-        end = endTimesByCourse dataInOrder (T.unpack $ lectureSession lect)
-        dates = getDatesByCourse dataInOrder (T.unpack $ lectureSession lect)
-getCourseInfo (Right lect) = (code, sect, start, end, dates)
-    where
-        code = T.unpack $ tutorialCode lect
-        sect = maybe "" T.unpack (tutorialSection lect)
-        dataInOrder = orderTimeFields $ tutorialTimes lect
-        start = startTimesByCourse dataInOrder (T.unpack $ tutorialSession lect)
-        end = endTimesByCourse dataInOrder (T.unpack $ tutorialSession lect)
-        dates = getDatesByCourse dataInOrder (T.unpack $ tutorialSession lect)
+        code = meetingCode meeting
+        sect = meetingSection meeting
+        dataInOrder = orderTimeFields $ meetingTimes meeting
+        start = startTimesByCourse dataInOrder (meetingSession meeting)
+        end = endTimesByCourse dataInOrder (meetingSession meeting)
+        dates = getDatesByCourse dataInOrder (meetingSession meeting)
 
 -- ** Functions that deal with tuples
 
@@ -175,7 +169,7 @@ type InfoTimeFieldsByDay = [[[Double]]]
 orderTimeFields :: [Time] -> InfoTimeFieldsByDay
 orderTimeFields timeFields = groupBy (\x y -> head x == head y) sortedList
     where
-        sortedList = sortBy compare (map timeField timeFields)
+        sortedList = sort (map timeField timeFields)
 
 -- ** Start time
 
@@ -243,7 +237,7 @@ formatTimes fullTime =
     else hour ++ maybe "0000" formatMinutes minutes ++ "00"
     where
         hours = splitOn "." (show fullTime)
-        hour = hours !! 0
+        hour = head hours
         minutes = readMaybe $ hours !! 1
 
 -- | The string representaion for minutes.

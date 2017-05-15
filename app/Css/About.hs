@@ -1,5 +1,9 @@
-{-# LANGUAGE OverloadedStrings #-}
+{-|
+    Module      : Css.About
+    Description : Defines the functions for the About page CSS.
 
+Defines the functions which are later used in Compiler.hs.
+-}
 module Css.About
     (aboutStyles) where
 
@@ -8,8 +12,7 @@ import Prelude hiding ((**))
 import Data.Monoid
 import Css.Constants
 
-{- aboutStyles
- - Generates CSS for the about page. -}
+-- |Defines the CSS for the about page.
 aboutStyles :: Css
 aboutStyles = "#aboutDiv" ? do
     maxWidth (px 1000)
