@@ -109,4 +109,4 @@ postScripts = do
 
 searchScripts :: H.Html
 searchScripts =
-    H.script ! A.type_ "text/babel" ! A.src "/static/js/search/timetable.js.jsx" $ ""
+    H.script ! A.src "/static/js/search/timetable.js" $ ""

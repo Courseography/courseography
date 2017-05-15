@@ -77,7 +77,6 @@ Courses
 
 Meeting
     code T.Text
-    Foreign Courses fkcourse code
     session T.Text
     section T.Text
     times [Time]
@@ -100,7 +99,6 @@ Distribution
 
 Graph json
     title T.Text
-    Foreign Department fkdept title
     width Double
     height Double
     deriving Show
@@ -140,7 +138,6 @@ Path json
 Post
     name PostType
     department T.Text
-    Foreign Department fkdept department
     code T.Text
     UniquePostode code
     Primary code
@@ -150,7 +147,6 @@ Post
 PostCategory
     name T.Text
     postCode T.Text
-    Foreign Post fkpost postCode
     deriving Show
 |]
 

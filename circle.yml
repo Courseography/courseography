@@ -1,3 +1,7 @@
+machine:
+  node:
+    version: 6.1.0
+
 general:
   artifacts:
     - "docs"
@@ -6,6 +10,7 @@ dependencies:
   cache_directories:
     - "~/.stack"
     - ".stack-work"
+    - "node_modules"
   pre:
     - sudo apt-get install imagemagick texlive-latex-base
     - curl -L https://github.com/commercialhaskell/stack/releases/download/v1.3.0/stack-1.3.0-linux-x86_64.tar.gz | tar zx -C /tmp
@@ -13,7 +18,8 @@ dependencies:
   override:
     - stack setup
     - rm -fr $(stack path --dist-dir) $(stack path --local-install-root)
-    - stack build --fast
+    - stack build --fast --ghc-options -Werror
+    - yarn install
 
 test:
   override:

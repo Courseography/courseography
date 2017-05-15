@@ -7,22 +7,21 @@ module WebParsing.ParsecCombinators
      generalCategoryParser,
      parseCategory,
      postInfoParser,
-     text) where
+     text, parseAll) where
 
 import qualified Text.Parsec as P
 import Text.Parsec ((<|>))
 import qualified Data.Text as T
 import Text.Parsec.Text (Parser)
-import Database.Tables
+import Database.Tables (Post(Post))
 import Control.Monad (mapM)
-import Database.DataType
 
 getCourseFromTag :: T.Text -> T.Text
 getCourseFromTag courseTag =
     let course = P.parse findCourseFromTag "(source)" courseTag
     in
         case course of
-            Right name -> name
+            Right courseName -> courseName
             Left _ -> ""
 
 findCourseFromTag :: Parser T.Text
@@ -32,33 +31,18 @@ findCourseFromTag = do
     return $ T.pack parsed
 
 generalCategoryParser :: Maybe T.Text -> T.Text -> Parser (Post, [T.Text])
-generalCategoryParser firstCourse postCode = do
-    post <- postInfoParser firstCourse postCode
+generalCategoryParser firstCourse postCode' = do
+    post <- postInfoParser firstCourse postCode'
     categories <- splitPrereqText
-
     return (post, categories)
 
 -- Post Parsing
-
 postInfoParser :: Maybe T.Text -> T.Text -> Parser Post
 postInfoParser firstCourse postCode = do
-    departmentName <- getDepartmentName
+    deptName <- getDepartmentName
     postType <- getPostType
-    description <- getRequirements firstCourse
-    return $ Post (read $ T.unpack postType) departmentName postCode description
-
-extractPostType :: T.Text -> T.Text
-extractPostType postCode = do
-    let parsed = P.parse findPostType "(source)" postCode
-    case parsed of
-        Right name -> name
-        Left _ -> ""
-
-findPostType :: Parser T.Text
-findPostType = do
-   _ <- text "AS"
-   parsed <- P.many1 P.letter
-   return $ T.pack parsed
+    programDescription <- getRequirements firstCourse
+    return $ Post (read $ T.unpack postType) deptName postCode programDescription
 
 getDepartmentName :: Parser T.Text
 getDepartmentName =
@@ -76,7 +60,6 @@ isDepartmentName postType = parseUntil (text postType)
 
 
 -- Post Category Parsing
-
 getRequirements :: Maybe T.Text -> Parser T.Text
 getRequirements firstCourse =
     P.try (parseUntil (text "First Year")) <|>
@@ -114,7 +97,7 @@ splitPrereqText = do
 parseCategory :: Parser T.Text
 parseCategory = do
     left <- parseUpToSeparator
-    nextChar <- P.anyChar
+    _ <- P.anyChar
     return left
 
 parseUpToSeparator :: Parser T.Text

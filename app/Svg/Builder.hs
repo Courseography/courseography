@@ -69,6 +69,8 @@ buildRect texts entity elementId =
         id_ = case shapeType_ entity of
               Hybrid -> T.pack $ 'h' : show elementId
               Node -> T.map toLower . sanitizeId $ textString
+              BoolNode -> ""
+              Region -> ""
     in
         entity {shapeId_ = id_,
                 shapeText = rectTexts}

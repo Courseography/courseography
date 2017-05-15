@@ -31,3 +31,9 @@ cabal.sandbox.config
 
 # IDE project files
 .idea
+
+# Node (Javascript) modules
+/node_modules
+
+# TODO: eventually remove all public/js files from tracking
+/public/js/search
