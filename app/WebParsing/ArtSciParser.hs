@@ -38,8 +38,8 @@ parseArtSci = do
     runSqlite databasePath $ do
         liftIO $ putStrLn "Inserting departments"
         insertDepts $ map snd deptInfo
-        --mapM_ parseDepartment deptInfo
-        parseDepartment ("/section/Computer-Science","Computer Science")
+        mapM_ parseDepartment deptInfo
+        --parseDepartment ("/section/Computer-Science","Computer Science")
 
 
 -- | Converts the processed main page and extracts a list of department html pages
