@@ -81,15 +81,20 @@ parseDepartment (relativeURL, _) = do
 parsePrograms :: [Tag T.Text] -> SqlPersistM ()
 parsePrograms programs = do
     let elems = TS.partitions isPost programs 
-    mapM_ parseProgram elems
+    mapM_ parsePost elems
     return ()
     where
          isPost tag = tagOpenAttrNameLit "h3" "class" (T.isInfixOf "programs_view") tag
 
-parseProgram :: [Tag T.Text] -> SqlPersistM ()
-parseProgram program =
-    liftIO (print program)
-
+-- | Parse a particular post in a program section
+parsePost :: [Tag T.Text] -> SqlPersistM ()
+parsePost programElements = do
+    -- TODO: Remove Focuses from programElements
+    -- TODDO: Store name of post before we lose that information in the next line
+    let requirements = map TS.innerText $ TS.sections isRequirementSection programElements
+    liftIO (print requirements)
+    where
+        isRequirementSection element = tagOpenAttrLit "div" ("class", "field-content") element
 
 -- | Parse the section of the course calendar listing the courses offered by a department.
 parseCourses :: [Tag T.Text] -> [(Courses, T.Text, T.Text)]
