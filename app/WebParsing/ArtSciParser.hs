@@ -38,7 +38,8 @@ parseArtSci = do
     runSqlite databasePath $ do
         liftIO $ putStrLn "Inserting departments"
         insertDepts $ map snd deptInfo
-        mapM_ parseDepartment deptInfo
+        --mapM_ parseDepartment deptInfo
+        parseDepartment ("/section/Computer-Science","Computer Science")
 
 
 -- | Converts the processed main page and extracts a list of department html pages
@@ -78,9 +79,16 @@ parseDepartment (relativeURL, _) = do
 
 -- | Parse the section of the course calendar listing the programs offered by a department.
 parsePrograms :: [Tag T.Text] -> SqlPersistM ()
-parsePrograms _ = do
-    -- let elems = TS.partitions (TS.isTagOpenName "h3") _ -- TODO: complete this function
+parsePrograms programs = do
+    let elems = TS.partitions isPost programs 
+    mapM_ parseProgram elems
     return ()
+    where
+         isPost tag = tagOpenAttrNameLit "h3" "class" (T.isInfixOf "programs_view") tag
+
+parseProgram :: [Tag T.Text] -> SqlPersistM ()
+parseProgram program =
+    liftIO (print program)
 
 
 -- | Parse the section of the course calendar listing the courses offered by a department.
