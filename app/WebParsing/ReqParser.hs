@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleContexts #-}
 module WebParsing.ReqParser where
 
 import qualified Text.Parsec as Parsec
@@ -136,15 +137,17 @@ courseParser = Parsec.between Parsec.spaces Parsec.spaces $ Parsec.choice $ map 
 orParser :: Parser Req
 orParser = do
     reqs <- Parsec.sepBy courseParser orSeparator
-    -- TODO: separate cases when reqs has 1 Req vs. multiple Reqs.
-    return $ OR reqs
+    case reqs of
+        [x] -> return x
+        (x:xs) -> return $ OR (x:xs)
 
 -- | Parser for for reqs related through an AND.
 andParser :: Parser Req
 andParser = do
     reqs <- Parsec.sepBy orParser andSeparator
-    -- TODO: separate cases when reqs has 1 Req vs. multiple Reqs.
-    return $ AND reqs
+    case reqs of
+        [x] -> return x
+        (x:xs) -> return $ AND (x:xs)
 
 -- | Parser for reqs in "from" format:
 -- 4.0 FCEs from CSC108H1, CSC148H1, ...
@@ -162,8 +165,9 @@ categoryParser :: Parser Req
 categoryParser = do
     reqs <- Parsec.sepBy (fromParser <|> andParser <|> rawTextParser) semicolon
     Parsec.eof
-    -- TODO: separate cases when reqs has 1 Req vs. multiple Reqs.
-    return $ AND reqs
+    case reqs of
+        [x] -> return x
+        (x:xs) -> return $ AND (x:xs)
 
 -- | Parse the course requirements from a string.
 parseReqs :: String -> Req
