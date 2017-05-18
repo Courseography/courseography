@@ -42,7 +42,6 @@ parseArtSci = do
         mapM_ parseDepartment deptInfo
         --parseDepartment ("/section/Computer-Science","Computer Science")
 
-
 -- | Converts the processed main page and extracts a list of department html pages
 -- and department names
 getDeptList :: [Tag T.Text] -> [(T.Text, T.Text)]

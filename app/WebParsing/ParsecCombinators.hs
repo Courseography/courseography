@@ -44,7 +44,7 @@ postInfoParser fullPostName firstCourse = do
         Right (deptName, postType) -> do
             programDescription <- getRequirements firstCourse
             return $ Post (read $ T.unpack postType) deptName (T.pack " ") programDescription
-        Left _ -> return $ Post (read "Other") (T.pack " ") (T.pack " ") programDescription
+        Left _ -> return $ Post (read "Other") (T.pack " ") (T.pack " ") (T.pack " ")
 
 getDeptNameAndPostType :: Parser (T.Text, T.Text)
 getDeptNameAndPostType = do
