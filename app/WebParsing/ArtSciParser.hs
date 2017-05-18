@@ -21,6 +21,7 @@ import Database.CourseInsertion (insertCourse)
 import Database.Tables (Courses(..), Department(..))
 import WebParsing.ReqParser (parseReqs)
 import Config (databasePath)
+import WebParsing.PostParser (addPostToDatabase)
 
 
 -- | The URLs of the Faculty of Arts & Science calendar.
@@ -81,20 +82,10 @@ parseDepartment (relativeURL, _) = do
 parsePrograms :: [Tag T.Text] -> SqlPersistM ()
 parsePrograms programs = do
     let elems = TS.partitions isPost programs 
-    mapM_ parsePost elems
+    mapM_ addPostToDatabase elems
     return ()
     where
          isPost tag = tagOpenAttrNameLit "h3" "class" (T.isInfixOf "programs_view") tag
-
--- | Parse a particular post in a program section
-parsePost :: [Tag T.Text] -> SqlPersistM ()
-parsePost programElements = do
-    -- TODO: Remove Focuses from programElements
-    -- TODDO: Store name of post before we lose that information in the next line
-    let requirements = map TS.innerText $ TS.sections isRequirementSection programElements
-    liftIO (print requirements)
-    where
-        isRequirementSection element = tagOpenAttrLit "div" ("class", "field-content") element
 
 -- | Parse the section of the course calendar listing the courses offered by a department.
 parseCourses :: [Tag T.Text] -> [(Courses, T.Text, T.Text)]

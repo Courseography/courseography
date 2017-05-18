@@ -26,23 +26,32 @@ getCourseFromTag courseTag =
 
 findCourseFromTag :: Parser T.Text
 findCourseFromTag = do
-    _ <- parseUntil (P.char '#')
+    _ <- P.string "/course/"
     parsed <- P.many1 P.anyChar
     return $ T.pack parsed
 
-generalCategoryParser :: Maybe T.Text -> T.Text -> Parser (Post, [T.Text])
-generalCategoryParser firstCourse postCode' = do
-    post <- postInfoParser firstCourse postCode'
+generalCategoryParser :: T.Text -> Maybe T.Text -> Parser (Post, [T.Text])
+generalCategoryParser fullPostName firstCourse = do
+    post <- postInfoParser fullPostName firstCourse
     categories <- splitPrereqText
     return (post, categories)
 
 -- Post Parsing
-postInfoParser :: Maybe T.Text -> T.Text -> Parser Post
-postInfoParser firstCourse postCode = do
+postInfoParser :: T.Text -> Maybe T.Text -> Parser Post
+postInfoParser fullPostName firstCourse = do
+    let parsed = P.parse getDeptNameAndPostType "(source)" fullPostName
+    case parsed of
+        Right (deptName, postType) -> do
+            programDescription <- getRequirements firstCourse
+            return $ Post (read $ T.unpack postType) deptName (T.pack " ") programDescription
+        Left _ -> return $ Post (read "Specialist") (T.pack " ") (T.pack " ") programDescription
+
+getDeptNameAndPostType :: Parser (T.Text, T.Text)
+getDeptNameAndPostType = do
+    _ <- P.spaces
     deptName <- getDepartmentName
     postType <- getPostType
-    programDescription <- getRequirements firstCourse
-    return $ Post (read $ T.unpack postType) deptName postCode programDescription
+    return $ (deptName, postType)
 
 getDepartmentName :: Parser T.Text
 getDepartmentName =
