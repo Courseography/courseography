@@ -19,10 +19,6 @@ createTest :: (Eq a, Show a) => Parser a -> (String, a) -> Test
 createTest parser (input, expected) = let courseReq =  Parsec.parse parser "" input
                                       in TestCase $ (assertEqual ("for (" ++ input ++ "),") (Right expected) courseReq)
 
-
-test1 :: Test
-test1 = TestCase (assertEqual "TEST PASS" ("True") ("True"))
-
 -- Basic inputs found on artsci website; only andParser.
 basicInputs :: [(String, Req)]
 basicInputs = [("CSC120H1/CSC148H1", OR [J "CSC120H1", J "CSC148H1"]),
