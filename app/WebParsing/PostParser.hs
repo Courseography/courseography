@@ -1,21 +1,16 @@
 module WebParsing.PostParser
     (addPostToDatabase) where
 
-import Network.HTTP
 import qualified Data.Text as T
 import Control.Monad.Trans (liftIO)
 import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Match
-import Config (databasePath)
 import Database.Tables
-import Database.Persist.Sqlite (insert_, runMigration, runSqlite, SqlPersistM)
+import Database.Persist.Sqlite (insert_, SqlPersistM)
 import Database.Persist (insertUnique)
 import qualified Text.Parsec as P
 import WebParsing.ParsecCombinators (getCourseFromTag, generalCategoryParser, parseCategory,
     postInfoParser)
-
-fasCalendarURL :: String
-fasCalendarURL = "http://calendar.artsci.utoronto.ca/"
 
 failedString :: String
 failedString = "Failed."
@@ -60,7 +55,7 @@ categoryParser tags fullPostName firstCourse liPartitions = do
                 Just _ -> do
                     addPostCategoriesToDatabase categories
                 Nothing -> return ()
-        Left err -> do
+        Left _ -> do
             liftIO $ print failedString
             return ()
     where
