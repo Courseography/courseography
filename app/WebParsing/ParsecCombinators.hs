@@ -15,6 +15,7 @@ import qualified Data.Text as T
 import Text.Parsec.Text (Parser)
 import Database.Tables (Post(Post))
 import Control.Monad (mapM)
+import Database.DataType
 
 getCourseFromTag :: T.Text -> T.Text
 getCourseFromTag courseTag =
@@ -44,7 +45,7 @@ postInfoParser fullPostName firstCourse = do
         Right (deptName, postType) -> do
             programDescription <- getRequirements firstCourse
             return $ Post (read $ T.unpack postType) deptName (T.pack " ") programDescription
-        Left _ -> return $ Post (read "Other") (T.pack " ") (T.pack " ") (T.pack " ")
+        Left _ -> return $ Post Other (fullPostName) (T.pack " ") (T.pack " ")
 
 getDeptNameAndPostType :: Parser (T.Text, T.Text)
 getDeptNameAndPostType = do

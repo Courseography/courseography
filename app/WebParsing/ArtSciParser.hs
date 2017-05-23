@@ -40,7 +40,6 @@ parseArtSci = do
         liftIO $ putStrLn "Inserting departments"
         insertDepts $ map snd deptInfo
         mapM_ parseDepartment deptInfo
-        --parseDepartment ("/section/Computer-Science","Computer Science")
 
 -- | Converts the processed main page and extracts a list of department html pages
 -- and department names
@@ -82,7 +81,6 @@ parsePrograms :: [Tag T.Text] -> SqlPersistM ()
 parsePrograms programs = do
     let elems = TS.partitions isPost programs 
     mapM_ addPostToDatabase elems
-    return ()
     where
          isPost tag = tagOpenAttrNameLit "h3" "class" (T.isInfixOf "programs_view") tag
 
