@@ -8,7 +8,7 @@ import Database.CourseQueries (retrieveCourse, allCourses, queryGraphs, courseIn
 import Database.CourseInsertion (saveGraphJSON)
 import Data.Text.Lazy (Text)
 
-routes :: [Char] -> Text -> Text -> [ (String, ServerPart Response)]
+routes :: String -> Text -> Text -> [ (String, ServerPart Response)]
 routes staticDir aboutContents privacyContents = [
     ("grid", gridResponse),
     ("graph", graphResponse),

@@ -1,8 +1,6 @@
-{-# LANGUAGE FlexibleContexts, GADTs, MultiParamTypeClasses,
- OverloadedStrings, TypeFamilies #-}
-
 {-|
-Description: Main module for database course seeding.
+    Module      : Database.Database
+    Description : Main module for database course seeding.
 
 The main module for parsing course information from the web and
 inserting it into the database. Run when @cabal run database@ is executed.
@@ -49,8 +47,8 @@ setupDistributionTable :: IO ()
 setupDistributionTable = runSqlite databasePath $ do
     runMigration migrateAll
     insert_ $ Distribution "Humanities"
-    insert_ $ Distribution "Social Sciences"
-    insert_ $ Distribution "Sciences"
+    insert_ $ Distribution "Social Science"
+    insert_ $ Distribution "Science"
 
 -- | Sets up the Breadth table.
 setupBreadthTable :: IO ()
@@ -58,7 +56,7 @@ setupBreadthTable = runSqlite databasePath $ do
     runMigration migrateAll
     insert_ $ Breadth "Creative and Cultural Representations (1)"
     insert_ $ Breadth "Thought, Belief, and Behaviour (2)"
-    insert_ $ Breadth "Society and Its Institutions (3)"
+    insert_ $ Breadth "Society and its Institutions (3)"
     insert_ $ Breadth "Living Things and Their Environment (4)"
     insert_ $ Breadth "The Physical and Mathematical Universes (5)"
     insert_ $ Breadth "No Breadth"

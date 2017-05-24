@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 {-|
     Module      : Css.Constants
     Description : Defines the constants for the other CSS modules.
@@ -282,7 +280,7 @@ borderNone :: Css
 borderNone = border solid (px 0) white
 
 -- |Defines a border with a color of pink1, intended for the timetable.
-borderPink :: (Stroke -> Size Abs -> Color -> Css) -> Css
+borderPink :: (Stroke -> Size LengthUnit -> Color -> Css) -> Css
 borderPink borderStroke = borderStroke solid (px 2) pink1
 
 {- More node colours! -}

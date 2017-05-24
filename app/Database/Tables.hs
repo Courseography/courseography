@@ -1,18 +1,17 @@
-{-# LANGUAGE EmptyDataDecls,
+{-# LANGUAGE DeriveGeneric,
+             EmptyDataDecls,
              FlexibleContexts,
              FlexibleInstances,
              GADTs,
              GeneralizedNewtypeDeriving,
              MultiParamTypeClasses,
-             OverloadedStrings,
-             DeriveGeneric,
              QuasiQuotes,
-             ScopedTypeVariables,
              TemplateHaskell,
              TypeFamilies #-}
 
 {-|
-Description: The database schema (and some helpers).
+    Module      : Database.Tables
+    Description : The database schema (and some helpers).
 
 This module defines the database schema. It uses Template Haskell to also
 create new types for these values so that they can be used in the rest of
@@ -29,14 +28,13 @@ import Database.Persist.TH
 import Database.DataType
 import Data.Char (toLower)
 import qualified Data.Text as T
-import qualified Data.Vector as V
 import qualified Data.HashMap.Strict as HM
 import Data.Maybe (fromMaybe)
 import Text.Read (readMaybe)
 import Data.Aeson ((.:?), (.!=), FromJSON(parseJSON), ToJSON(toJSON), Value(..), genericToJSON, withObject)
 import Data.Aeson.Types (Parser, defaultOptions, Options(..))
 import GHC.Generics
-import WebParsing.PrerequisiteParsing
+import WebParsing.ReqParser (parseReqs)
 
 -- | A data type representing a time for the section of a course.
 -- The first list is comprised of two values: the date (represented as a number
@@ -47,15 +45,19 @@ import WebParsing.PrerequisiteParsing
 data Time = Time { timeField :: [Double] } deriving (Show, Read, Eq, Generic)
 derivePersistField "Time"
 
+data Room = Room { roomField :: (T.Text, T.Text)} deriving (Show, Read, Eq, Generic)
+derivePersistField "Room"
+
+
 -- | A two-dimensional point.
 type Point = (Double, Double)
 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 
 Department json
-    code [T.Text]
     name T.Text
     Primary name
+    UniqueName name
 
 Courses
     code T.Text
@@ -73,9 +75,8 @@ Courses
     videoUrls [T.Text]
     deriving Show
 
-Lecture
+Meeting
     code T.Text
-    Foreign Courses fkcourse code
     session T.Text
     section T.Text
     times [Time]
@@ -85,13 +86,7 @@ Lecture
     wait Int
     extra Int
     timeStr T.Text
-    deriving Generic Show
-
-Tutorial
-    code T.Text
-    section T.Text Maybe
-    session T.Text
-    times [Time]
+    room [Room]
     deriving Generic Show
 
 Breadth
@@ -126,7 +121,6 @@ Shape json
     fill T.Text
     stroke T.Text
     text [Text]
-    tolerance Double
     type_ ShapeType
     deriving Show
 
@@ -141,15 +135,12 @@ Path json
     target T.Text
     deriving Show
 
-FacebookTest
-    fId T.Text
-    testString T.Text
-    deriving Show
-
 Post
-    name T.Text
+    name PostType
     department T.Text
     code T.Text
+    --UniquePostCode code
+    --Primary code
     description T.Text
     deriving Show
 
@@ -168,18 +159,13 @@ data SvgJSON =
               paths :: [Path]
             } deriving (Show, Generic)
 
--- | A Session.
 data Session =
-    Session { lectures :: [Lecture],
-              tutorials :: [Tutorial]
+    Session { lectures :: [Meeting],
+              tutorials :: [Meeting],
+              practicals :: [Meeting]
             } deriving (Show, Generic)
 
--- | A Course.
--- each element of prereqs can be one of three things:
---
---     * a one-element list containing a course code
---     * a list starting with "and", and 2 or more course codes
---     * a list starting with "or", and 2 or more course codes
+-- | A Course. TODO: remove this data type (it's redundant).
 data Course =
     Course { breadth :: Maybe T.Text,
              description :: Maybe T.Text,
@@ -193,7 +179,6 @@ data Course =
              manualTutorialEnrolment :: Maybe Bool,
              manualPracticalEnrolment :: Maybe Bool,
              distribution :: Maybe T.Text,
-             prereqs :: Maybe T.Text,
              coreqs :: Maybe T.Text,
              videoUrls :: [T.Text]
            } deriving (Show, Generic)
@@ -201,6 +186,7 @@ data Course =
 instance ToJSON Course
 instance ToJSON Session
 instance ToJSON Time
+instance ToJSON Room
 
 -- instance FromJSON required so that tables can be parsed into JSON,
 -- not necessary otherwise.
@@ -212,8 +198,9 @@ instance FromJSON SvgJSON
 -- jQuery. @.@ is a jQuery meta-character, and must be removed from the ID.
 convertTimeToString :: Time -> [T.Text]
 convertTimeToString (Time [day, timeNum]) =
-  [T.pack . show . floor $ day,
+  [T.pack . show $ (floor day :: Int),
    T.replace "." "-" . T.pack . show $ timeNum]
+convertTimeToString _ = undefined
 
 
 -- JSON encoding/decoding
@@ -223,7 +210,7 @@ instance FromJSON Courses where
     newTitle  <- o .:? "courseTitle"
     newDescription  <- o .:? "courseDescription"
     newPrereqString <- o .:? "prerequisite"
-    let newPrereqs = parsePrerequisites newPrereqString
+    let newPrereqs = fmap (T.pack . show . parseReqs . T.unpack) newPrereqString
     newExclusions <- o .:? "exclusion"
     newCoreqs <- o .:? "corequisite"
     return $ Courses newCode
@@ -239,23 +226,23 @@ instance FromJSON Courses where
                      newCoreqs
                      []
 
-instance ToJSON Lecture where
+instance ToJSON Meeting where
   toJSON = genericToJSON defaultOptions {
     fieldLabelModifier =
-      (\field -> (toLower $ head field): (tail field)) .
+      (\field -> toLower (head field): tail field) .
       drop 7
   }
 
-instance FromJSON Lecture where
-  parseJSON = withObject "Expected Object for Lecture" $ \o -> do
+instance FromJSON Meeting where
+  parseJSON = withObject "Expected Object for Lecture, Tutorial or Practical" $ \o -> do
     teachingMethod :: T.Text <- o .:? "teachingMethod" .!= ""
     sectionNumber :: T.Text <- o .:? "sectionNumber" .!= ""
     timeMap :: Value <- o .:? "schedule" .!= Null
-    allTimes <- case timeMap of
+    (allTimes, allRooms) <- case timeMap of
         Object obj -> do
-            times <- mapM parseTimes (HM.elems obj)
-            return $ concat times
-        _ -> return []
+            timesAndRooms <- mapM parseSchedules (HM.elems obj)
+            return (concatMap fst timesAndRooms, concatMap snd timesAndRooms)
+        _ -> return ([], [])
     let sectionId = T.concat [teachingMethod, sectionNumber]
 
     capStr <- o .:? "enrollmentCapacity" .!= "-1"
@@ -274,44 +261,11 @@ instance FromJSON Lecture where
     let extra = 0
     let timeStr = ""
     let instructor = T.intercalate "; " $ filter (not . T.null) instrs
-    if teachingMethod == "LEC"
+    if teachingMethod == "LEC" || teachingMethod == "TUT" || teachingMethod == "PRA"
     then
-      return $ Lecture "" "" sectionId allTimes cap instructor enrol wait extra timeStr
+      return $ Meeting "" "" sectionId allTimes cap instructor enrol wait extra timeStr allRooms
     else
-      fail "Not a lecture"
-
-instance ToJSON Tutorial where
-  toJSON = genericToJSON defaultOptions {
-    fieldLabelModifier =
-      (\field -> (toLower $ head field): (tail field)) .
-      drop 8
-  }
-
-instance FromJSON Tutorial where
-  parseJSON = withObject "Expected Object for Tutorial" $ \o -> do
-    teachingMethod :: T.Text <- o .:? "teachingMethod" .!= ""
-    sectionNumber :: T.Text <- o .:? "sectionNumber" .!= ""
-    timeMap :: Value <- o .:? "schedule" .!= Null
-    allTimes <- case timeMap of
-        Object obj -> do
-            times <- mapM parseTimes (HM.elems obj)
-            return $ concat times
-        _ -> return []
-    let sectionId = T.concat [teachingMethod, sectionNumber]
-
-    -- TODO: Tutorials should have these stats, too!
-    -- capStr <- o .:? "enrollmentCapacity" .!= "-1"
-    -- enrolStr <- o .:? "actualEnrolment" .!= "0"
-    -- waitStr <- o .:? "actualWaitlist" .!= "0"
-    -- let cap = fromMaybe (-1) $ readMaybe capStr
-    --     enrol = fromMaybe 0 $ readMaybe enrolStr
-    --     wait = fromMaybe 0 $ readMaybe waitStr
-    if teachingMethod == "TUT"
-    then
-      return $ Tutorial "" (Just sectionId) "" allTimes
-    else
-      fail "Not a tutorial"
-
+      fail "Not a lecture, Tutorial or Practical"
 
 -- | Helpers for parsing JSON
 parseInstr :: Value -> Parser T.Text
@@ -321,14 +275,18 @@ parseInstr (Object io) = do
   return (T.concat [firstName, ". ", lastName])
 parseInstr _ = return ""
 
-parseTimes :: Value -> Parser [Time]
-parseTimes (Object obj) = do
+parseSchedules :: Value -> Parser ([Time], [Room])
+parseSchedules (Object obj) = do
     meetingDay <- obj .:? "meetingDay"
     meetingStartTime <- obj .:? "meetingStartTime"
     meetingEndTime <- obj .:? "meetingEndTime"
-    return $ getTimeSlots meetingDay meetingStartTime meetingEndTime
-parseTimes _ = return []
+    meetingRoom1 <- obj .:? "assignedRoom1" .!= ""
+    meetingRoom2 <- obj .:? "assignedRoom2" .!= ""
+    let times = getTimeSlots meetingDay meetingStartTime meetingEndTime
+        rooms = replicate (length times) (Room (meetingRoom1, meetingRoom2))
+    return (times, rooms)
 
+parseSchedules _ = return ([], [])
 
 -- | Converts 24-hour time into a double
 -- | Assumes times are rounded to the nearest hour

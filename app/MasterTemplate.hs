@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module MasterTemplate
     (masterTemplate, header, disclaimer) where
 
@@ -23,9 +21,9 @@ masterTemplate title headers body scripts =
                    ! A.href "static/res/ico/favicon.png"
             sequence_ headers
             mapM_ toStylesheet [
-                (if enableCdn
-                 then "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"
-                 else "/static/style/bootstrap.min.3.1.1.css"),
+                if enableCdn
+                then "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"
+                else "/static/style/bootstrap.min.3.1.1.css",
                 "static/style/app.css"]
         H.body $ do
             body
@@ -67,13 +65,13 @@ header page =
 disclaimer :: H.Html
 disclaimer =
     H.div ! A.id "disclaimerDiv" $ do
-        "DISCLAIMER: Both the "
+        _ <- "DISCLAIMER: Both the "
         H.a ! A.href "https://timetable.iit.artsci.utoronto.ca/"
             $ "Official Timetable"
-        " and "
+        _ <- " and "
         H.a ! A.href "http://calendar.artsci.utoronto.ca/"
             $ "Calendar"
-        " take precedence over the information presented here. "
-        "It's important that you double-check your course selection, "
-        "prerequisites, and your program plans."
+        _ <- " take precedence over the information presented here. "
+        _ <- "It's important that you double-check your course selection, "
+        _ <- "prerequisites, and your program plans."
         "Some graph edges may represent a corequisite rather than a prerequisite."

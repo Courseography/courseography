@@ -1,5 +1,3 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 {-|
     Module      : Css.Draw
     Description : Defines the CSS for the draw page.
@@ -10,7 +8,7 @@ draw page.
 module Css.Draw
     (drawStyles) where
 
-import Clay hiding (map, repeat, id)
+import Clay hiding (map, repeat, id, i, row, col)
 import Prelude hiding ((**))
 import Css.Constants
 import qualified Data.Text as T
