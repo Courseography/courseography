@@ -10,7 +10,7 @@ import Database.Persist.Sqlite (insert_, SqlPersistM)
 import Database.Persist (insertUnique)
 import qualified Text.Parsec as P
 import WebParsing.ParsecCombinators (getCourseFromTag, generalCategoryParser, parseCategory,
-    postInfoParser)
+    postInfoParser, parseNumberedLine)
 
 failedString :: String
 failedString = "Failed."
@@ -21,7 +21,7 @@ addPostToDatabase programElements = do
     let fullPostName = innerText $ take 1 $ filter isTagText programElements
         requirements = last $ sections isRequirementSection programElements
         liPartitions = partitions isLiTag requirements
-        numberedPartitions = getNumberedPartitions requirements
+        numberedPartitions = map parseNumberedPartition $ getNumberedPartitions requirements
         programPrereqs = map getCourseFromTag $ map (fromAttrib "href") $ filter isCourseTag programElements
         firstCourse = if (null programPrereqs) then Nothing else (Just (head programPrereqs))
     categoryParser requirements fullPostName firstCourse liPartitions
@@ -83,3 +83,9 @@ getNumberedPartitions tags = do
         isPTag tag = isTagOpenName "p" tag
         isBRTag tag = isTagOpenName "br" tag
 
+parseNumberedPartition :: [Tag T.Text] -> T.Text
+parseNumberedPartition pPartition = do
+    let parsed = P.parse parseNumberedLine failedString (innerText pPartition)
+    case parsed of
+        Right category -> category
+        Left message -> ""
