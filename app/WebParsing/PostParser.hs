@@ -21,6 +21,7 @@ addPostToDatabase programElements = do
     let fullPostName = innerText $ take 1 $ filter isTagText programElements
         requirements = last $ sections isRequirementSection programElements
         liPartitions = partitions isLiTag requirements
+        numberedPartitions = getNumberedPartitions requirements
         programPrereqs = map getCourseFromTag $ map (fromAttrib "href") $ filter isCourseTag programElements
         firstCourse = if (null programPrereqs) then Nothing else (Just (head programPrereqs))
     categoryParser requirements fullPostName firstCourse liPartitions
@@ -72,3 +73,13 @@ parseLi liPartition = do
     case parsed of
         Right category -> category
         Left _ -> ""
+
+getNumberedPartitions :: [Tag T.Text] -> [[Tag T.Text]]
+getNumberedPartitions tags = do
+    let pTags = partitions isPTag tags
+        pTagsWithoutBr = map (partitions isBRTag) pTags
+    concat pTagsWithoutBr
+    where
+        isPTag tag = isTagOpenName "p" tag
+        isBRTag tag = isTagOpenName "br" tag
+
