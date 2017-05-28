@@ -1,0 +1,184 @@
+name:                courseography
+version:             0.2.0.0
+synopsis:            Program and course planning app for the University of Toronto.
+description:         A web application designed to aid students in planning their courses
+                     at the University of Toronto.
+homepage:            https://courseography.cdf.toronto.edu
+license:             GPL
+license-file:        LICENSE
+author:              David Liu
+maintainer:          david@cs.toronto.edu
+-- copyright:
+category:            Planning
+build-type:          Custom
+cabal-version:       >=1.22
+
+test-suite DynamicGraphs
+  main-is: DynamicGraphs/graph_generator.hs
+  other-modules: 
+    WriteRunDot,
+    Data.Graph,
+    Data.GraphViz,
+    Data.Text,
+    Data.Word,
+    Control.Monad,
+    System.FilePath
+  Type: exitcode-stdio-1.0
+  build-depends:
+    base >=4.6,
+    Cabal >= 1.16.0,
+    HUnit,
+    mtl,
+    parsec,
+    QuickCheck,
+    test-framework,
+    test-framework-hunit,
+    test-framework-quickcheck2
+  default-language: Haskell2010
+  ghc-options: -Wall -fwarn-tabs
+  hs-source-dirs: app
+
+test-suite ParserTests
+  main-is: ParserTests/tests.hs
+  other-modules:
+    Database.Requirement,
+    ParserTests.ParserTests,
+    WebParsing.ReqParser
+  Type: exitcode-stdio-1.0
+  build-depends:
+    base >=4.6,
+    Cabal >= 1.16.0,
+    HUnit,
+    mtl,
+    parsec,
+    QuickCheck,
+    test-framework,
+    test-framework-hunit,
+    test-framework-quickcheck2
+  default-language: Haskell2010
+  ghc-options: -Wall -fwarn-tabs
+  hs-source-dirs: app
+
+executable courseography
+  main-is:             Main.hs
+  other-modules:
+    Config,
+    Css.About,
+    Css.Common,
+    Css.Compiler,
+    Css.Constants,
+    Css.Draw,
+    Css.FourOhFour,
+    Css.Graph,
+    Css.Loading,
+    Css.Post,
+    Css.Privacy,
+    Css.Search,
+    Css.Timetable,
+    Database.CourseInsertion,
+    Database.CourseQueries,
+    Database.CourseVideoSeed,
+    Database.Requirement,
+    Database.DataType,
+    Database.Database,
+    Database.Tables,
+    Export.GetImages,
+    Export.ImageConversion,
+    Export.LatexGenerator,
+    Export.PdfGenerator,
+    Export.TimetableImageCreator,
+    MasterTemplate,
+    Response,
+    Response.About,
+    Response.Calendar,
+    Response.Draw,
+    Response.Export,
+    Response.Graph,
+    Response.Grid,
+    Response.Image,
+    Response.Loading,
+    Response.NotFound,
+    Response.Post,
+    Response.Privacy,
+    Response.Search,
+    Routes,
+    Scripts,
+    Server,
+    Svg.Builder,
+    Svg.Database,
+    Svg.Generator,
+    Svg.Parser,
+    Util.Blaze,
+    Util.Documentation,
+    Util.Happstack,
+    WebParsing.ArtSciParser,
+    WebParsing.Ligature,
+    WebParsing.ParseAll,
+    WebParsing.PostParser,
+    WebParsing.ReqParser,
+    WebParsing.UtsgJsonParser,
+    WebParsing.ParsecCombinators
+  -- These are compiler extensions used for every module
+  default-extensions:
+    OverloadedStrings,
+    PartialTypeSignatures,
+    ScopedTypeVariables
+  other-extensions:
+    DeriveGeneric,
+    EmptyDataDecls,
+    FlexibleContexts,
+    FlexibleInstances,
+    GADTs,
+    GeneralizedNewtypeDeriving,
+    MultiParamTypeClasses,
+    QuasiQuotes,
+    TemplateHaskell,
+    TypeFamilies
+  build-depends:
+    base >= 4.9,
+    blaze-markup,
+    blaze-html,
+    happstack-server,
+    blaze-svg,
+    bytestring,
+    aeson,
+    transformers,
+    base64-bytestring,
+    split,
+    containers,
+    unordered-containers,
+    random,
+    process >= 1.2,
+    diagrams-lib >= 1.3,
+    diagrams-svg >= 1.3.1,
+    lucid,
+    MissingH,
+    text,
+    http-conduit,
+    resourcet,
+    conduit,
+    persistent >= 2.1.2,
+    persistent-sqlite,
+    http-client,
+    network,
+    HTTP,
+    tagsoup,
+    regex-posix,
+    mtl,
+    persistent-template,
+    vector,
+    clay,
+    directory,
+    markdown,
+    system-filepath,
+    hslogger,
+    old-locale,
+    time,
+    parsec,
+    HaTeX,
+    HUnit,
+    graphviz,
+    turtle
+  default-language: Haskell2010
+  ghc-options: -Wall -fwarn-tabs
+  hs-source-dirs: app
