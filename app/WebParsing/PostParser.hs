@@ -97,5 +97,5 @@ parseNumberedPartition :: [Tag T.Text] -> T.Text
 parseNumberedPartition pPartition = do
     let parsed = P.parse parseNumberedLine failedString (innerText pPartition)
     case parsed of
-        Right category -> category
+        Right category ->  T.replace "\n" " " $ T.replace "\8203" " " $ T.replace "\160" " " $ T.strip category
         Left message -> ""
