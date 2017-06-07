@@ -77,11 +77,21 @@ parseLi liPartition = do
 getNumberedPartitions :: [Tag T.Text] -> [[Tag T.Text]]
 getNumberedPartitions tags = do
     let pTags = partitions isPTag tags
-        pTagsWithoutBr = map (partitions isBRTag) pTags
+        pTagsWithoutBr = map splitByBrTag pTags
     concat pTagsWithoutBr
+    --pTagsWithoutBr
     where
         isPTag tag = isTagOpenName "p" tag
-        isBRTag tag = isTagOpenName "br" tag
+       
+
+splitByBrTag :: [Tag T.Text] -> [[Tag T.Text]]
+splitByBrTag tag = do
+    let split = partitions isBRTag tag
+    case split of
+        [] -> [tag]
+        other -> split
+    where
+         isBRTag tag = isTagOpenName "br" tag
 
 parseNumberedPartition :: [Tag T.Text] -> T.Text
 parseNumberedPartition pPartition = do
