@@ -113,9 +113,9 @@ var InfoPanel = React.createClass({
 
 
 export function initGrid() {
-  // ReactDOM.render(
-  //     <CoursePanel />,
-  //     document.getElementById('course-select-wrapper'));
+  ReactDOM.render(
+      <CoursePanel />,
+      document.getElementById('course-select-wrapper'));
 
   ReactDOM.render(
       <SearchPanel />,
