@@ -139,8 +139,8 @@ Post
     name PostType
     department T.Text
     code T.Text
-    UniquePostode code
-    Primary code
+    --UniquePostCode code
+    --Primary code
     description T.Text
     deriving Show
 
