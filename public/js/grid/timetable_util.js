@@ -118,17 +118,17 @@ define(function() {
     function restoreFromCookies() {
         'use strict';
 
-        var selectedCourseCookie = getCookie('selected-courses');
-        var selectedSectionCookie = getCookie('selected-lectures');
+        var selectedCourseCookie = localStorage.getItem('selected-courses');
+        var selectedSectionCookie = localStorage.getItem('selected-lectures');
 
-        if (selectedCourseCookie === undefined ||
+        if (selectedCourseCookie === null ||
             selectedCourseCookie.length === 0) {
             selectedCourseCookie = [];
         } else {
             selectedCourseCookie = selectedCourseCookie.split('_');
         }
 
-        if (selectedSectionCookie === undefined ||
+        if (selectedSectionCookie === null ||
             selectedSectionCookie.length === 0) {
             selectedSectionCookie = [];
         } else {
@@ -215,15 +215,15 @@ function saveCookies(courses, sections) {
     'use strict';
 
     if (courses !== undefined) {
-        setCookie("selected-courses", courses.join('_'));
+        localStorage.setItem("selected-courses", courses.join('_'));
     } else {
-        setCookie("selected-courses", "");
+        localStorage.setItem("selected-courses", "");
     }
 
     if (sections !== undefined) {
-        setCookie("selected-lectures", sections.join('_'));
+        localStorage.setItem("selected-lectures", sections.join('_'));
     } else {
-        setCookie("selected-lectures", "");
+        localStorage.setItem("selected-lectures", "");
     }
 }
 

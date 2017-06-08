@@ -95,7 +95,7 @@ var Post = React.createClass({
         var modal = this.refs.modal;
         var newCourse = nodeId.substring(0, 6);
         modal.openModal(newCourse);
-        
+
     },
 
     render: function() {

@@ -291,4 +291,3 @@ export var InquiryCategory = React.createClass({
         );
     }
 })
-

@@ -52,7 +52,7 @@ export var ExportModal = React.createClass({
         var formattedSession = session.charAt(0).toUpperCase() + session.slice(1);
         $.ajax({
             url: 'timetable-image',
-            data: {session: formattedSession},
+            data: {session: formattedSession, courses: localStorage.getItem("selected-lectures")},
             success: function (data) {
                 this.setState({data: "data:image/png;base64," + data, otherSession: formattedSession === 'Fall' ? 'Spring' : 'Fall'});
             }.bind(this),
@@ -101,6 +101,7 @@ export var ExportModal = React.createClass({
 });
 
 
+
 var GraphImage = function (props) {
     return (
         <div>
@@ -108,13 +109,29 @@ var GraphImage = function (props) {
             Export
         </div>
         <div className='modal-body'>
-            <a href="timetable-pdf" target="_blank">Download PDF</a>
+            <a href="timetable-pdf" onclick="getPDF()">Download PDF</a>
             <div>
             <img id="post-image" src={props.data}/>
             </div>
         </div>
         </div>
     );
+};
+
+
+var getPDF = function() {
+    console.log(localStorage.getItem("selected-lectures"));
+    $.ajax({
+        url: "timetable-pdf",
+        data: {courses: localStorage.getItem("selected-lectures")},
+        success: function (data) {
+            var topContentDiv = $('<div></div>');
+            topContentDiv.html('<img id="post-image" src="data:image/png;base64,' + data + '" />');
+        },
+        error: function () {
+            throw 'No pdf generated';
+        }
+    });
 };
 
 
@@ -125,8 +142,8 @@ var GridImage = function (props) {
             Export
         </div>
         <div className='modal-body'>
-            <a href="calendar" target="_blank">Download timetable as ICS</a><br />
-            <a href="timetable-pdf" target="_blank">Download PDF</a>
+            <a href="calendar" onclick="getCalendar()">Download timetable as ICS</a><br />
+            <a href="timetable-pdf" onclick="getPDF()">Download PDF</a>
             <div>
             <img id="post-image" src={props.data}/>
             </div>

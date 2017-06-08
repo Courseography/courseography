@@ -21,6 +21,7 @@ exportTimetableImageResponse session coursecookie = do
 -- | Returns a PDF containing graph and timetable requested by the user.
 exportTimetablePDFResponse :: String -> ServerPart Response
 exportTimetablePDFResponse coursecookie = do
+    -- let coursecookie = ""
     req <- askRq
     (graphSvg, graphImg) <- liftIO $ getActiveGraphImage req
     (fallsvgFilename, fallimageFilename) <- liftIO $ getActiveTimetable (T.pack coursecookie) "Fall"
