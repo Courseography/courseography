@@ -126,16 +126,32 @@ function Button(props) {
         <button id={props.divId} className='graph-control-button'
         onMouseDown={props.mouseDown}
         onMouseUp={props.mouseUp}
+        onMouseEnter={props.onMouseEnter}
+        onMouseLeave={props.onMouseLeave}
         disabled={props.disabled}>{props.text}</button>
     );
 }
 
 
-function renderReactGraph() {
+function renderReactGraph(graph_container_id, start_blank, edit) {
     'use strict';
+
+    if (start_blank === undefined) {
+        start_blank = false;
+    }
+
+    // If edit is NOT undefined, then the user is on the draw page
+    if (edit === undefined) {
+        edit = false;
+    }
+
     return ReactDOM.render(
-        <Graph/>,
-        document.getElementById('react-graph')
+        <Graph
+            start_blank={start_blank}
+            edit={edit}
+            initialOnDraw={edit}
+            initialDrawMode='draw-node' />,
+        document.getElementById(graph_container_id)
     );
 }
 
@@ -152,20 +168,46 @@ var Graph = React.createClass({
             highlightedNodes: [],
             timeouts: [],
             fceCount: 0,
-            width: 0,
-            height: 0,
+            width: window.innerWidth,
+            height: window.innerHeight,
             zoomFactor: 1,
             horizontalPanFactor: 0,
             verticalPanFactor: 0,
             mouseDown: false,
+            buttonHover: false,
+            onDraw: this.props.initialOnDraw,
+            drawMode: this.props.initialDrawMode,
+            drawNodeID: 0,
+            draggingNode: null
         };
     },
 
     componentDidMount: function () {
-        this.getGraph();
+        if (!this.props.start_blank) {
+            this.getGraph();
+        }
         // can't detect keydown event when adding event listener to react-graph
         document.body.addEventListener('keydown', this.onKeyDown);
         document.getElementById('react-graph').addEventListener('wheel', this.onWheel);
+
+        // Need to hardcode these in because React does not understand these
+        // attributes
+        var svgNode = ReactDOM.findDOMNode(this.refs.svg);
+        var markerNode = ReactDOM.findDOMNode(this.refs.marker);
+
+        svgNode.setAttribute('xmlns','http://www.w3.org/2000/svg');
+        svgNode.setAttribute('xmlns:xlink','http://www.w3.org/1999/xlink');
+        svgNode.setAttribute('xmlns:svg','http://www.w3.org/2000/svg');
+        svgNode.setAttribute('xmlns:dc','http://purl.org/dc/elements/1.1/');
+        svgNode.setAttribute('xmlns:cc','http://creativecommons.org/ns#');
+        svgNode.setAttribute('xmlns:rdf','http://www.w3.org/1999/02/22-rdf-syntax-ns#');
+
+        markerNode.setAttribute('refX', 4);
+        markerNode.setAttribute('refY', 5);
+        markerNode.setAttribute('markerUnits', 'strokeWidth');
+        markerNode.setAttribute('orient', 'auto');
+        markerNode.setAttribute('markerWidth', 7);
+        markerNode.setAttribute('markerHeight', 7);
     },
 
     componentWillUnmount: function () {
@@ -337,10 +379,13 @@ var Graph = React.createClass({
 
         yPos = parseFloat(yPos);
 
-        infoBox.setState({xPos: xPos,
-                          yPos: yPos,
-                          nodeId: courseId,
-                          showInfobox: true});
+        if (!this.state.onDraw) {
+            infoBox.setState({xPos: xPos,
+                              yPos: yPos,
+                              nodeId: courseId,
+                              showInfobox: true});
+        }
+        this.setState({buttonHover: true});
     },
 
     nodeMouseLeave: function (event) {
@@ -355,8 +400,56 @@ var Graph = React.createClass({
         }, 400);
 
 
-        this.setState({timeouts: this.state.timeouts.concat(timeout)});
+        this.setState({timeouts: this.state.timeouts.concat(timeout),
+            buttonHover: false});
+    },
 
+    nodeMouseDown: function (event) {
+        if (this.state.drawMode === 'draw-node' && event.currentTarget.id.startsWith('n')) {
+            var id = event.currentTarget.id;
+            this.setState({draggingNode: id});
+        }
+    },
+
+    drawMouseMove: function (event) {
+        // in draw-node mode, drag a node as the mouse moves
+        if (this.state.drawMode === 'draw-node') {
+            if (this.state.draggingNode !== null) {
+                var newPos = this.getRelativeCoords(event);
+                var currentNode;
+                for (var node of this.state.nodesJSON) {
+                    if (node.id_ === this.state.draggingNode) {
+                        currentNode = node;
+                    }
+                }
+                currentNode.pos = [newPos.x-20, newPos.y-15];
+                currentNode.text[0].pos = [newPos.x, newPos.y+5];
+                var newNodesJSON = $.extend([], this.state.nodesJSON);
+                newNodesJSON.push(currentNode);
+                this.setState({nodesJSON: newNodesJSON});
+            }
+        }
+    },
+
+    drawMouseUp: function (event) {
+        // in draw-node mode, drop a dragged node to a new location
+        if (this.state.drawMode === 'draw-node') {
+            if (this.state.draggingNode !== null) {
+                var newPos = this.getRelativeCoords(event);
+                var currentNode;
+                for (var node of this.state.nodesJSON) {
+                    if (node.id_ === this.state.draggingNode) {
+                        currentNode = node;
+                    }
+                }
+                currentNode.pos = [newPos.x-20, newPos.y-15];
+                currentNode.text[0].pos = [newPos.x, newPos.y+5];
+                var newNodesJSON = $.extend([], this.state.nodesJSON);
+                newNodesJSON.push(currentNode);
+                this.setState({nodesJSON: newNodesJSON,
+                    draggingNode: null});
+            }
+        }
     },
 
     infoBoxMouseEnter: function () {
@@ -515,6 +608,10 @@ var Graph = React.createClass({
             this.panDirection('left', 5);
         } else if (event.keyCode == 38) {
             this.panDirection('up', 5);
+        } else if (this.state.onDraw) {
+            if (event.keyCode == 78) {
+                this.setState({drawMode: 'draw-node'});
+            }
         }
     },
 
@@ -523,6 +620,90 @@ var Graph = React.createClass({
             this.incrementZoom(true, 0.005);
         } else if (event.deltaY > 0) {
             this.incrementZoom(false, 0.005);
+        }
+    },
+
+    buttonMouseEnter: function() {
+        this.setState({buttonHover: true});
+    },
+
+    buttonMouseLeave: function() {
+        this.setState({buttonHover: false});
+    },
+
+    getRelativeCoords: function(event) {
+        var x = event.nativeEvent.offsetX;
+        var y = event.nativeEvent.offsetY;
+        x = (x * this.state.zoomFactor) + this.state.horizontalPanFactor;
+        y = (y * this.state.zoomFactor) + this.state.verticalPanFactor;
+        return {x: x, y: y};
+    },
+
+    drawNode: function(x, y) {
+        var xPos, yPos;
+
+        // if node would extend offscreen, instead place it at the
+        // edge. Give 2 pixels extra for node border width.
+        if (x+42 > this.state.width) {
+            xPos = this.state.width-42;
+        } else if (x < 2) {
+            xPos = 2;
+        } else {
+            xPos = x;
+        }
+
+        if (y+34 > this.state.height) {
+            yPos = this.state.height-34;
+        } else if (y < 2) {
+            yPos = 2;
+        } else {
+            yPos = y;
+        }
+
+        // text is an empty string for now until implementation,
+        // text position uses node position for now
+        var textJSON = {
+            'align': 'begin',
+            'fill': '',
+            'graph': 0,
+            'pos': [xPos, yPos+20],
+            'rId': 'text' + this.state.drawNodeID,
+            'text': 'la'
+        }
+
+        var nodeJSON = {
+            'fill': '#' + $('#select-colour').val(),
+            'graph': 0,
+            // default dimensions for a node
+            'height': 32,
+            'width': 40,
+            'id_': 'n' + this.state.drawNodeID,
+            'pos': [xPos, yPos],
+            'stroke': '',
+            'text': [textJSON],
+            'tolerance': 9,
+            'type_': 'Node'
+        };
+
+        var newNodesJSON = $.extend([], this.state.nodesJSON);
+        newNodesJSON.push(nodeJSON);
+        this.setState({nodesJSON: newNodesJSON,
+            drawNodeID: this.state.drawNodeID + 1});
+    },
+
+    /**
+    * In draw-node creates a new node at the position of the click event on the SVG canvas.
+    * In path-mode creates an elbow at the position of the click event on the SVG canvas,
+      if the startNode is defined.
+    * @param {object} e The mousedown event.
+    */
+    drawGraphObject: function(e) {
+        var pos = this.getRelativeCoords(e);
+        // check if the user is trying to draw a node. Also check
+        // if the user is trying to press a button instead (ie zoom buttons)
+        if (this.state.drawMode === 'draw-node' &&
+            !this.state.buttonHover) {
+            this.drawNode(pos.x, pos.y);
         }
     },
 
@@ -547,6 +728,18 @@ var Graph = React.createClass({
         var resetDisabled = this.state.zoomFactor == 1 &&
                             this.state.horizontalPanFactor == 0 &&
                             this.state.verticalPanFactor == 0;
+
+
+        // Mouse events for draw tool
+        var mouseEvents = {}
+        if (this.state.onDraw) {
+            mouseEvents = {
+                'onMouseDown': this.drawGraphObject,
+                'onMouseUp': this.drawMouseUp,
+                'onMouseMove': this.drawMouseMove
+            };
+        }
+
         return (
             <div>
                 <Modal ref='modal'/>
@@ -556,47 +749,62 @@ var Graph = React.createClass({
                     text='+'
                     mouseDown={() => this.onButtonPress(this.incrementZoom, true, 0.05)}
                     mouseUp={this.onButtonRelease}
+                    onMouseEnter={this.buttonMouseEnter}
+                    onMouseLeave={this.buttonMouseLeave}
                     disabled={zoomInDisabled}/>
                 <Button
                     divId='zoom-out-button'
                     text= '&mdash;'
                     mouseDown={() => this.onButtonPress(this.incrementZoom, false, 0.05)}
                     mouseUp={this.onButtonRelease}
+                    onMouseEnter={this.buttonMouseEnter}
+                    onMouseLeave={this.buttonMouseLeave}
                     disabled={zoomOutDisabled}/>
                 <Button
                     divId='pan-up-button'
                     text='↑'
                     mouseDown={() => this.onButtonPress(this.panDirection, 'up', 10)}
                     mouseUp={this.onButtonRelease}
+                    onMouseEnter={this.buttonMouseEnter}
+                    onMouseLeave={this.buttonMouseLeave}
                     disabled={panUpDisabled}/>
                 <Button
                     divId='pan-down-button'
                     text='↓'
                     mouseDown={() => this.onButtonPress(this.panDirection, 'down', 10)}
                     mouseUp={this.onButtonRelease}
+                    onMouseEnter={this.buttonMouseEnter}
+                    onMouseLeave={this.buttonMouseLeave}
                     disabled={panDownDisabled}/>
                 <Button
                     divId='pan-right-button'
                     text='→'
                     mouseDown={() => this.onButtonPress(this.panDirection, 'right', 10)}
                     mouseUp={this.onButtonRelease}
+                    onMouseEnter={this.buttonMouseEnter}
+                    onMouseLeave={this.buttonMouseLeave}
                     disabled={panRightDisabled}/>
                 <Button
                     divId='pan-left-button'
                     text='←'
                     mouseDown={() => this.onButtonPress(this.panDirection, 'left', 10)}
                     mouseUp={this.onButtonRelease}
+                    onMouseEnter={this.buttonMouseEnter}
+                    onMouseLeave={this.buttonMouseLeave}
                     disabled={panLeftDisabled}/>
                 <Button
                     divId='reset-button'
                     text='Reset'
                     mouseDown={this.resetZoomAndPan}
                     mouseUp={this.onButtonRelease}
+                    onMouseEnter={this.buttonMouseEnter}
+                    onMouseLeave={this.buttonMouseLeave}
                     disabled={resetDisabled}/>
 
                 <svg {... svgAttrs} ref='svg' version='1.1'
                     className={this.state.highlightedNodes.length > 0 ?
-                                'highlight-nodes' : ''}>
+                                'highlight-nodes' : ''}
+                    {... mouseEvents } >
                     {this.renderArrowHead()}
                     <RegionGroup
                         regionsJSON={this.state.regionsJSON}
@@ -606,11 +814,13 @@ var Graph = React.createClass({
                         nodeClick={this.nodeClick}
                         nodeMouseEnter={this.nodeMouseEnter}
                         nodeMouseLeave={this.nodeMouseLeave}
+                        nodeMouseDown={this.nodeMouseDown}
                         svg={this}
                         nodesJSON={this.state.nodesJSON}
                         hybridsJSON={this.state.hybridsJSON}
                         edgesJSON={this.state.edgesJSON}
-                        highlightedNodes={this.state.highlightedNodes}/>
+                        highlightedNodes={this.state.highlightedNodes}
+                        onDraw={this.state.onDraw}/>
                     <BoolGroup
                         ref='bools'
                         boolsJSON={this.state.boolsJSON}
@@ -796,7 +1006,9 @@ var NodeGroup = React.createClass({
                         highlighted={highlighted}
                         onClick={this.props.nodeClick}
                         onMouseEnter={this.props.nodeMouseEnter}
-                        onMouseLeave={this.props.nodeMouseLeave} />
+                        onMouseLeave={this.props.nodeMouseLeave}
+                        onMouseDown={this.props.nodeMouseDown}
+                        onDraw={this.props.onDraw} />
             }, this)}
             </g>
         );
@@ -806,7 +1018,11 @@ var NodeGroup = React.createClass({
 
 var Node = React.createClass({
     getInitialState: function () {
-        var state = getCookie(this.props.JSON.id_);
+        if (!this.props.onDraw) {
+            var state = getCookie(this.props.JSON.id_);
+        } else {
+            var state = '';
+        }
         if (state === '') {
             state = this.props.parents.length === 0 ? 'takeable' : 'inactive';
         }
@@ -1327,5 +1543,6 @@ var InfoBox = React.createClass({
         }
     }
 });
+
 
 export default {renderReactGraph: renderReactGraph};
