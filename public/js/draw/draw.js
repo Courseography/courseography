@@ -118,7 +118,7 @@ function makeNode(posX, posY, jsonObj) {
         node.outEdges = [];
 
         g.appendChild(node);
-        svgDoc.appendChild(g);
+        document.getElementById('nodes').appendChild(g);
         document.getElementById(nodeId_).addEventListener('mousedown', nodeClicked, false);
 
     // Input Text into Shape
@@ -158,9 +158,8 @@ function makeNode(posX, posY, jsonObj) {
                 if the startNode is defined.
  * @param {object} e The mousedown event.
  */
-function makeNodePath(e) {
+export function makeNodePath(e) {
     'use strict';
-
     var position = getClickPosition(e, e.currentTarget);
     if (mode === 'node-mode') {
         makeNode(position.x, position.y);
@@ -326,7 +325,7 @@ function select(newNode) {
  * In change-mode, moves the node or elbow that is currently being moved.
  * @param {object} e The mousemove Event.
  */
-function moveNodeElbow(e) {
+export function moveNodeElbow(e) {
     'use strict';
 
     if (mode === 'change-mode') {
@@ -412,7 +411,7 @@ function moveElbow(elbow, position) {
  * Reinitializes global variables associated with mousedown and mousemove event.
  * @param {object} e The mouseup event.
  */
-function unclickAll(e) {
+export function unclickAll(e) {
     'use strict';
 
     if (mode === 'change-mode') {
