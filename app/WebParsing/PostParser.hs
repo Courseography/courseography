@@ -89,13 +89,13 @@ splitByBrTag tag = do
     let split = partitions isBRTag tag
     case split of
         [] -> [tag]
-        other -> split
+        _ -> split
     where
-         isBRTag tag = isTagOpenName "br" tag
+         isBRTag currentTag = isTagOpenName "br" currentTag
 
 parseNumberedPartition :: [Tag T.Text] -> T.Text
 parseNumberedPartition pPartition = do
     let parsed = P.parse parseNumberedLine failedString (innerText pPartition)
     case parsed of
         Right category ->  T.replace "\n" " " $ T.replace "\8203" " " $ T.replace "\160" " " $ T.strip category
-        Left message -> ""
+        Left _ -> ""
