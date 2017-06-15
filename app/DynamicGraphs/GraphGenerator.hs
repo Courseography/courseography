@@ -3,7 +3,6 @@
 
 module DynamicGraphs.GraphGenerator where
 
-import           Data.Graph.Inductive
 import           Data.GraphViz
 import           Data.GraphViz.Attributes.Complete
 import           Data.GraphViz.Types.Generalised   as G
