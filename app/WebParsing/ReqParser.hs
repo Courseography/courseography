@@ -138,6 +138,7 @@ orParser :: Parser Req
 orParser = do
     reqs <- Parsec.sepBy courseParser orSeparator
     case reqs of
+        [] -> fail "Empty Req."
         [x] -> return x
         (x:xs) -> return $ OR (x:xs)
 
@@ -146,6 +147,7 @@ andParser :: Parser Req
 andParser = do
     reqs <- Parsec.sepBy orParser andSeparator
     case reqs of
+        [] -> fail "Empty Req."
         [x] -> return x
         (x:xs) -> return $ AND (x:xs)
 
@@ -166,6 +168,7 @@ categoryParser = do
     reqs <- Parsec.sepBy (fromParser <|> andParser <|> rawTextParser) semicolon
     Parsec.eof
     case reqs of
+        [] -> fail "Empty Req."
         [x] -> return x
         (x:xs) -> return $ AND (x:xs)
 
