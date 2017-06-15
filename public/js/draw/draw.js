@@ -158,7 +158,7 @@ function makeNode(posX, posY, jsonObj) {
                 if the startNode is defined.
  * @param {object} e The mousedown event.
  */
-export function makeNodePath(e) {
+function makeNodePath(e) {
     'use strict';
     var position = getClickPosition(e, e.currentTarget);
     if (mode === 'node-mode') {
@@ -325,7 +325,7 @@ function select(newNode) {
  * In change-mode, moves the node or elbow that is currently being moved.
  * @param {object} e The mousemove Event.
  */
-export function moveNodeElbow(e) {
+function moveNodeElbow(e) {
     'use strict';
 
     if (mode === 'change-mode') {
@@ -411,7 +411,7 @@ function moveElbow(elbow, position) {
  * Reinitializes global variables associated with mousedown and mousemove event.
  * @param {object} e The mouseup event.
  */
-export function unclickAll(e) {
+function unclickAll(e) {
     'use strict';
 
     if (mode === 'change-mode') {
@@ -623,3 +623,10 @@ function renderJson(jsonStr) {
         }
     });
 }
+
+// Exports using CommonJS syntax
+module.exports = {
+    makeNodePath: makeNodePath,
+    moveNodeElbow: moveNodeElbow,
+    unclickAll: unclickAll
+};
