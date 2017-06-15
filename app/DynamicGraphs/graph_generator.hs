@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 
-module DynamicGraphs.GraphGenerator where
+module Main where
 
 import           Data.GraphViz
 import           Data.GraphViz.Attributes.Complete
@@ -9,7 +9,8 @@ import           Data.GraphViz.Types.Generalised   as G
 import           Data.GraphViz.Types.Monadic
 import           Data.Text.Lazy                    as L
 import           Data.Word
-import           DynamicGraphs.WriteRunDot
+import           WriteRunDot
+
 
 ex3 :: G.DotGraph L.Text
 ex3 = digraph (Str "ex3") $ do
@@ -44,13 +45,13 @@ ex3 = digraph (Str "ex3") $ do
         nodeAttrs               [shape Circle, Width 1, style filled, myColor 4]
         node "ZZ"               [textLabel "STA302"]
 
-    ("A" :: Text)             --> ("ZZ" :: Text)
-    ("B" :: Text)              --> ("ZZ" :: Text)
-    ("C" :: Text)              --> ("ZZ" :: Text)
-    ("D" :: Text)              --> ("Or" :: Text)
-    ("E" :: Text)              --> ("Or" :: Text)
-    ("Or" :: Text)             --> ("A" :: Text)
-    ("F" :: Text)              --> ("B" :: Text)
+    "A"             --> "ZZ"
+    "B"             --> "ZZ"
+    "C"             --> "ZZ"
+    "D"             --> "Or"
+    "E"             --> "Or"
+    "Or"            --> "A"
+    "F"             --> "B"
 
 
 
