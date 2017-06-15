@@ -5,6 +5,7 @@ import qualified Data.Text as T
 import Control.Monad.Trans (liftIO)
 import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Match
+import Data.List.Split
 import Database.Tables
 import Database.Persist.Sqlite (insert_, SqlPersistM)
 import Database.Persist (insertUnique)
@@ -77,21 +78,12 @@ parseLi liPartition = do
 getNumberedPartitions :: [Tag T.Text] -> [[Tag T.Text]]
 getNumberedPartitions tags = do
     let pTags = partitions isPTag tags
-        pTagsWithoutBr = map splitByBrTag pTags
+        pTagsWithoutBr = map (splitWhen isBRTag) pTags
     concat pTagsWithoutBr
-    --pTagsWithoutBr
     where
         isPTag tag = isTagOpenName "p" tag
+        isBRTag currentTag = isTagOpenName "br" currentTag
        
-
-splitByBrTag :: [Tag T.Text] -> [[Tag T.Text]]
-splitByBrTag tag = do
-    let split = partitions isBRTag tag
-    case split of
-        [] -> [tag]
-        _ -> split
-    where
-         isBRTag currentTag = isTagOpenName "br" currentTag
 
 parseNumberedPartition :: [Tag T.Text] -> T.Text
 parseNumberedPartition pPartition = do
