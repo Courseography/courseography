@@ -100,8 +100,6 @@ export var ExportModal = React.createClass({
     }
 });
 
-
-
 var GraphImage = function (props) {
     return (
         <div>
@@ -118,32 +116,43 @@ var GraphImage = function (props) {
     );
 };
 
-
-var getPDF = function() {
-    console.log(localStorage.getItem("selected-lectures"));
-    $.ajax({
-        url: "timetable-pdf",
-        data: {courses: localStorage.getItem("selected-lectures")},
-        success: function (data) {
-            var topContentDiv = $('<div></div>');
-            topContentDiv.html('<img id="post-image" src="data:image/png;base64,' + data + '" />');
-        },
-        error: function () {
-            throw 'No pdf generated';
-        }
-    });
-};
-
-
 var GridImage = function (props) {
+    var getPDF = function() {
+        $.ajax({
+            url: "timetable-pdf",
+            data: {courses: localStorage.getItem("selected-lectures")},
+            success: function (data) {
+                var dataURI = "data:application/pdf;base64," + data;
+                window.open(dataURI);
+            },
+            error: function () {
+                throw 'No pdf generated';
+            }
+        });
+    };
+    var getCalendar = function() {
+        $.ajax({
+            type: "post",
+            url: "calendar",
+            data: {courses: localStorage.getItem("selected-lectures")},
+            success: function (data) {
+                var x=window.open();
+                x.document.write(data);
+            },
+            error: function () {
+                throw 'No calendar avaiable';
+            }
+        });
+    };
+
     return (
         <div>
         <div className='modal-header'>
             Export
         </div>
         <div className='modal-body'>
-            <a href="calendar" onclick="getCalendar()">Download timetable as ICS</a><br />
-            <a href="timetable-pdf" onclick="getPDF()">Download PDF</a>
+            <a href="#" onClick={getCalendar}>Download timetable as ICS</a><br />
+            <a href="#" onClick={getPDF}>Download PDF</a>
             <div>
             <img id="post-image" src={props.data}/>
             </div>
