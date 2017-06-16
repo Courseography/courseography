@@ -24,7 +24,7 @@ import Util.Documentation (generateDocs)
 
 -- dynamicgraph_test
 import DynamicGraphs.WriteRunDot(doDots)
-import DynamicGraphs.GraphGenerator(ex3)
+import DynamicGraphs.GraphGenerator(sampleGraph)
 
 -- | A map of command-line arguments to their corresponding IO actions.
 taskMap :: Map.Map String (IO ())
@@ -34,7 +34,7 @@ taskMap = Map.fromList [
     ("graphs", parsePrebuiltSvgs),
     ("css", compileCSS),
     ("docs", generateDocs),
-    ("minfangraph", doDots [ ("ex3", ex3) ])]
+    ("minfangraph", doDots [ ("sample", sampleGraph) ])]
 
 -- | Courseography entry point.
 main :: IO ()
