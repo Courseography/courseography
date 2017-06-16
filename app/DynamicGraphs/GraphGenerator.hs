@@ -1,6 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-
 module DynamicGraphs.GraphGenerator where
 
 import           Data.GraphViz
@@ -53,7 +52,6 @@ ex3 = digraph (Str "ex3") $ do
     ("F" :: Text)              --> ("B" :: Text)
 
 
-
 -- http://www.colorcombos.com/color-schemes/2025/ColorCombo2025.html
 myColorCL :: Word8 -> ColorList
 myColorCL n | n == 1 = c $ (RGB 127 108 138)
@@ -63,9 +61,9 @@ myColorCL n | n == 1 = c $ (RGB 127 108 138)
             | otherwise = c $ (RGB 127 108 138)
  where c rgb = toColorList [rgb]
 
+
 myColor :: Word8 -> Attribute
 myColor n = Color $ myColorCL n
-
 
 
 main :: IO ()
