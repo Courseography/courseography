@@ -34,7 +34,7 @@ taskMap = Map.fromList [
     ("graphs", parsePrebuiltSvgs),
     ("css", compileCSS),
     ("docs", generateDocs),
-    ("minfangraph", doDots [ ("ex3" , ex3) ])]
+    ("minfangraph", doDots [ ("ex3", ex3) ])]
 
 -- | Courseography entry point.
 main :: IO ()
