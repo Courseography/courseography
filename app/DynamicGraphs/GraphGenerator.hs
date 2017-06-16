@@ -60,6 +60,7 @@ myColorCL n | n == 1 = c $ (RGB 127 108 138)
             | n == 2 = c $ (RGB 175 177 112)
             | n == 3 = c $ (RGB 226 206 179)
             | n == 4 = c $ (RGB 172 126 100)
+            | otherwise = c $ (RGB 127 108 138)
  where c rgb = toColorList [rgb]
 
 myColor :: Word8 -> Attribute
