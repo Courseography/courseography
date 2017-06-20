@@ -5,7 +5,7 @@ import qualified Data.Text as T
 import Control.Monad.Trans (liftIO)
 import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Match
-import Data.List.Split
+import Data.List.Split(splitWhen)
 import Database.Tables
 import Database.Persist.Sqlite (insert_, SqlPersistM)
 import Database.Persist (insertUnique)
@@ -23,10 +23,11 @@ addPostToDatabase programElements = do
         requirements = last $ sections isRequirementSection programElements
         liPartitions = map parseLi $ partitions isLiTag requirements
         numberedPartitions = filter (not . T.null) $ map parseNumberedPartition $ getNumberedPartitions requirements
-        nonEmptyPartitions = if (null liPartitions) then numberedPartitions else liPartitions
+        nonEmptyPartitions = if null liPartitions then numberedPartitions else liPartitions
         programPrereqs = map getCourseFromTag $ map (fromAttrib "href") $ filter isCourseTag programElements
-        firstCourse = if (null programPrereqs) then Nothing else (Just (head programPrereqs))
+        firstCourse = if null programPrereqs then Nothing else (Just (head programPrereqs))
     categoryParser requirements fullPostName firstCourse nonEmptyPartitions
+    liftIO (print numberedPartitions)
     where
         isRequirementSection element = tagOpenAttrLit "div" ("class", "field-content") element
         isCourseTag tag = tagOpenAttrNameLit "a" "href" (\hrefValue -> T.isInfixOf "/course" hrefValue) tag
@@ -76,13 +77,9 @@ parseLi liPartition = do
         Left _ -> ""
 
 getNumberedPartitions :: [Tag T.Text] -> [[Tag T.Text]]
-getNumberedPartitions tags = do
-    let pTags = partitions isPTag tags
-        pTagsWithoutBr = map (splitWhen isBRTag) pTags
-    concat pTagsWithoutBr
-    where
-        isPTag tag = isTagOpenName "p" tag
-        isBRTag currentTag = isTagOpenName "br" currentTag
+getNumberedPartitions tags = 
+    let pTags = partitions (isTagOpenName "p") tags
+    in concatMap (splitWhen (isTagOpenName "br")) pTags
        
 
 parseNumberedPartition :: [Tag T.Text] -> T.Text

@@ -9,7 +9,7 @@ module WebParsing.ParsecCombinators
      postInfoParser,
      parseNumberedLine,
      text, parseAll) where
-        
+
 import qualified Text.Parsec as P
 import Text.Parsec ((<|>))
 import qualified Data.Text as T
