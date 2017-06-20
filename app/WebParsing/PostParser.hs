@@ -23,7 +23,7 @@ addPostToDatabase programElements = do
         requirements = last $ sections isRequirementSection programElements
         liPartitions = map parseLi $ partitions isLiTag requirements
         numberedPartitions = filter (not . T.null) $ map parseNumberedPartition $ getNumberedPartitions requirements
-        nonEmptyPartitions = if null liPartitions then numberedPartitions else liPartitions
+        nonEmptyPartitions = if null numberedPartitions then liPartitions else numberedPartitions
         programPrereqs = map getCourseFromTag $ map (fromAttrib "href") $ filter isCourseTag programElements
         firstCourse = if null programPrereqs then Nothing else (Just (head programPrereqs))
     categoryParser requirements fullPostName firstCourse nonEmptyPartitions
