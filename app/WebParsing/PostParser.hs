@@ -33,9 +33,9 @@ addPostToDatabase programElements = do
         isCourseTag tag = tagOpenAttrNameLit "a" "href" (\hrefValue -> T.isInfixOf "/course" hrefValue) tag
         isLiTag tag = isTagOpenName "li" tag
 
-addPostCategoriesToDatabase :: [T.Text] -> SqlPersistM ()
-addPostCategoriesToDatabase categories = do
-    mapM_ addCategoryToDatabase (filter isCategory categories)
+addPostCategoriesToDatabase :: PostId -> [T.Text] -> SqlPersistM ()
+addPostCategoriesToDatabase key categories = do
+    mapM_ (addCategoryToDatabase key) (filter isCategory categories)
     where
         isCategory text =
             let infixes = map (containsText text)
@@ -44,9 +44,9 @@ addPostCategoriesToDatabase categories = do
                 ((T.length text) >= 7) && ((length $ filter (\bool -> bool) infixes) <= 0)
         containsText text subtext = T.isInfixOf subtext text
 
-addCategoryToDatabase :: T.Text -> SqlPersistM ()
-addCategoryToDatabase category =
-    insert_ $ PostCategory category (T.pack "")
+addCategoryToDatabase :: PostId -> T.Text -> SqlPersistM ()
+addCategoryToDatabase key category =
+    insert_ $ PostCategory key category
 
 -- Helpers
 
@@ -54,10 +54,10 @@ categoryParser :: [Tag T.Text] -> T.Text -> Maybe T.Text -> [T.Text] -> SqlPersi
 categoryParser tags fullPostName firstCourse listPartitions = do
     case parsed of
         Right (post, categories) -> do
-            postExist <- insertUnique post
-            case postExist of
-                Just _ -> do
-                    addPostCategoriesToDatabase categories
+            postExists <- insertUnique post
+            case postExists of
+                Just key -> do
+                    addPostCategoriesToDatabase key categories
                 Nothing -> return ()
         Left _ -> do
             liftIO $ print failedString
