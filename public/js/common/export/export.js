@@ -123,7 +123,14 @@ var GridImage = function (props) {
             data: {courses: localStorage.getItem("selected-lectures")},
             success: function (data) {
                 var dataURI = "data:application/pdf;base64," + data;
-                window.open(dataURI);
+                // window.location= dataURI;
+
+                var downloadLink = document.createElement("a");
+                downloadLink.href = dataURI;
+                downloadLink.download = "timetable.pdf";
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
             },
             error: function () {
                 throw 'No pdf generated';
@@ -136,8 +143,15 @@ var GridImage = function (props) {
             url: "calendar",
             data: {courses: localStorage.getItem("selected-lectures")},
             success: function (data) {
-                var x=window.open();
-                x.document.write(data);
+                // window.open("data:text/calendar;charset=utf8," + escape(data));
+                var dataURI = "data:text/calendar;charset=utf8," + escape(data)
+                var downloadLink = document.createElement("a");
+                downloadLink.href = dataURI;
+                downloadLink.download = "timetable.ics";
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+
             },
             error: function () {
                 throw 'No calendar avaiable';

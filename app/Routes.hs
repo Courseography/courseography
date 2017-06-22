@@ -26,7 +26,6 @@ routes staticDir aboutContents privacyContents = [
     ("course-info", lookText' "dept" >>= courseInfo),
     ("depts", liftIO deptList),
     ("timesearch", searchResponse),
-    -- ("calendar", lookCookieValue "selected-lectures" >>= calendarResponse),
     ("calendar", look "courses" >>= calendarResponse),
     ("get-json-data", lookText' "graphName" >>= \graphName -> liftIO $ getGraphJSON graphName),
     ("loading", lookText' "size" >>= loadingResponse),
