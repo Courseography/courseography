@@ -185,7 +185,7 @@ var Graph = React.createClass({
             } else if (urlSpecifiedGraph !== null) {
                 graphName = 'Computer Science';
             } else {
-                graphName = getCookie('active-graph');
+                graphName = getLocaStorage('active-graph');
                 if (graphName === '') {
                     graphName = 'Computer Science';
                 }
@@ -199,7 +199,7 @@ var Graph = React.createClass({
             url: 'get-json-data',
             data: {'graphName': graphName},
             success: function (data) {
-                setCookie('active-graph', graphName);
+                setLocaStorage('active-graph', graphName);
                 var regionsList = [];
                 var nodesList = [];
                 var hybridsList = [];
@@ -675,14 +675,14 @@ var NodeGroup = React.createClass({
             var node = this.refs[nodeJSON.id_];
             var state = node.props.parents.length === 0 ? 'takeable' : 'inactive';
             node.setState({status: state, selected: false});
-            setCookie(node.props.JSON.id_, state);
+            setLocaStorage(node.props.JSON.id_, state);
         });
 
         this.props.hybridsJSON.forEach(hybridJSON => {
             var hybrid = this.refs[hybridJSON.id_];
             var state = hybrid.props.parents.length === 0 ? 'takeable' : 'inactive';
             hybrid.setState({status: state, selected: false});
-            setCookie(hybrid.props.JSON.id_, state);
+            setLocaStorage(hybrid.props.JSON.id_, state);
         });
     },
 
@@ -806,7 +806,7 @@ var NodeGroup = React.createClass({
 
 var Node = React.createClass({
     getInitialState: function () {
-        var state = getCookie(this.props.JSON.id_);
+        var state = getLocaStorage(this.props.JSON.id_);
         if (state === '') {
             state = this.props.parents.length === 0 ? 'takeable' : 'inactive';
         }
@@ -861,7 +861,7 @@ var Node = React.createClass({
         if ((['active', 'overridden'].indexOf(newState) >= 0) ===
             (['active', 'overridden'].indexOf(this.state.status) >= 0) &&
             this.state.status !== 'missing') {
-            setCookie(nodeId, newState);
+            setLocaStorage(nodeId, newState);
             this.setState({status: newState});
             return;
         }
@@ -869,7 +869,7 @@ var Node = React.createClass({
         if (recursive === undefined || recursive) {
             var svg = this.props.svg;
             this.setState({status: newState}, function () {
-                setCookie(nodeId, newState);
+                setLocaStorage(nodeId, newState);
                 this.props.childs.forEach(function (node) {
                     var currentNode = refLookUp(node, svg);
                     currentNode.updateNode();
@@ -882,7 +882,7 @@ var Node = React.createClass({
             });
         } else {
             this.setState({status: newState});
-            setCookie(nodeId, newState);
+            setLocaStorage(nodeId, newState);
         }
     },
 
@@ -1088,7 +1088,7 @@ var Bool = React.createClass({
 
         var boolId = this.props.JSON.id_;
         this.setState({status: newState}, function () {
-            setCookie(boolId, newState);
+            setLocaStorage(boolId, newState);
             this.props.childs.forEach(function (node) {
                 var currentNode = refLookUp(node, svg);
                 currentNode.updateNode(svg);

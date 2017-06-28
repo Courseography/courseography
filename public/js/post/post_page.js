@@ -56,22 +56,22 @@ var CheckMyPost = React.createClass({
 var PostNav = React.createClass({
     getInitialState: function() {
         return {
-            visible: getCookie('activePost') === '' ? 'spe' : getCookie('activePost'),
+            visible: getLocaStorage('activePost') === '' ? 'spe' : getLocaStorage('activePost'),
             creditCounts: [0.0, 0.0, 0.0],
             completed: [false, false, false],
-            activeTab: getCookie('activePost')
+            activeTab: getLocaStorage('activePost')
         }
     },
 
     getActiveTab: function() {
-        return getCookie('activePost');
+        return getLocaStorage('activePost');
     },
 
     changeActiveTab: function(e) {
         var newVisible = e.target.id.substring(0, 3);
         this.setState({visible: newVisible}, function() {
             this.props.updateTab(newVisible + 'Post');
-            setCookie('activePost', newVisible);
+            setLocaStorage('activePost', newVisible);
         });
     },
 

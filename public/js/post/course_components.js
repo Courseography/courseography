@@ -7,8 +7,8 @@ var CourseCode = React.createClass({
     },
 
     componentWillMount: function() {
-        this.setState({selected: getCookie(this.getIdName()) === 'active' ||
-                                 getCookie(this.getIdName()) === 'overridden'});
+        this.setState({selected: getLocaStorage(this.getIdName()) === 'active' ||
+                                 getLocaStorage(this.getIdName()) === 'overridden'});
     },
 
     toggleFullInfo: function() {
@@ -53,7 +53,7 @@ var CourseCode = React.createClass({
         });
 
         // math and stats courses need extra stuff appended to their IDs
-        // (mainly to check if they are active or not through their cookie)
+        // (mainly to check if they are active or not through their local storage)
         if (this.props.courseIDs[0] === 'mat135') {
             idName += 'calc1';
         } else if (this.props.courseIDs[0] === 'mat221') {

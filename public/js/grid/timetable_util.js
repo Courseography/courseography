@@ -110,59 +110,57 @@ define(function() {
     }
 
 
-    /* Cookie Interaction */
+    /* Local Storage Interaction */
 
     /**
      * Restores selected courses and sections from a previous session.
      */
-    function restoreFromCookies() {
+    function restoreFromLocalStorage() {
         'use strict';
 
-        var selectedCourseCookie = localStorage.getItem('selected-courses');
-        var selectedSectionCookie = localStorage.getItem('selected-lectures');
+        var selectedCourseLocalStorage = localStorage.getItem('selected-courses');
+        var selectedSectionLocalStorage = localStorage.getItem('selected-lectures');
 
-        if (selectedCourseCookie === null ||
-            selectedCourseCookie.length === 0) {
-            selectedCourseCookie = [];
+        if (!selectedCourseLocalStorage) {
+            selectedCourseLocalStorage = [];
         } else {
-            selectedCourseCookie = selectedCourseCookie.split('_');
+            selectedCourseLocalStorage = selectedCourseLocalStorage.split('_');
         }
 
-        if (selectedSectionCookie === null ||
-            selectedSectionCookie.length === 0) {
-            selectedSectionCookie = [];
+        if (!selectedSectionLocalStorage) {
+            selectedSectionLocalStorage = [];
         } else {
-            selectedSectionCookie = selectedSectionCookie.split('_');
+            selectedSectionLocalStorage = selectedSectionLocalStorage.split('_');
         }
 
 
-        if (selectedCourseCookie.length > 0) {
+        if (selectedCourseLocalStorage.length > 0) {
             var newCourses = [];
-            $.each(selectedCourseCookie, function (i, course) {
+            $.each(selectedCourseLocalStorage, function (i, course) {
                 try {
                     selectCourse(course);
                     newCourses.push(course);
                 } catch (e) {
-                    console.log('Removed bad course from cookie: ' + course);
+                    console.log('Removed bad course from local storage: ' + course);
                     console.log(e);
                 }
             });
         }
 
-        if (selectedSectionCookie.length > 0) {
+        if (selectedSectionLocalStorage.length > 0) {
             var newSections = [];
-            $.each(selectedSectionCookie, function (i, section) {
+            $.each(selectedSectionLocalStorage, function (i, section) {
                 try {
                     $('#' + section).click();
                     newSections.push(section);
                 } catch (e) {
-                    console.log('Removed bad section from cookie: ' + section);
+                    console.log('Removed bad section from local storage: ' + section);
                     console.log(e);
                 }
             });
         }
 
-        saveCookies(newCourses, newSections);
+        saveLocalStorage(newCourses, newSections);
     }
 
     /**
@@ -193,25 +191,25 @@ define(function() {
         $('#course-select').append(course.render());
         courseObjects.push(course);
         selectedCourses.push(courseCode);
-        saveCookies(selectedCourses, selectedSections);
+        saveLocalStorage(selectedCourses, selectedSections);
     }
 
     return {
         getVeryLargeCourseArray: getVeryLargeCourseArray,
         enableSearch: enableSearch,
-        restoreFromCookies: restoreFromCookies,
+        restoreFromLocalStorage: restoreFromLocalStorage,
         renderClearAllButton: renderClearAllButton
     };
 });
 
-/* Cookie Interaction */
+/* Local Storage Interaction */
 
 /**
- * Stores courses and sections in cookies.
+ * Stores courses and sections in local storage.
  * @param {string[]} courses All selected courses.
  * @param {string[]} sections All selected sections.
  */
-function saveCookies(courses, sections) {
+function saveLocalStorage(courses, sections) {
     'use strict';
 
     if (courses !== undefined) {
@@ -246,7 +244,7 @@ function deselectCourse(courseCode) {
     removeCourseObject(courseCode);
     removeFromArray(courseCode, selectedCourses);
 
-    saveCookies(selectedCourses, selectedSections);
+    saveLocalStorage(selectedCourses, selectedSections);
 
     // Refresh selected courses
     refreshSelectedCourses();
