@@ -22,6 +22,10 @@ import Svg.Parser (parsePrebuiltSvgs)
 import Css.Compiler (compileCSS)
 import Util.Documentation (generateDocs)
 
+-- dynamicgraph_test
+import DynamicGraphs.WriteRunDot(doDots)
+import DynamicGraphs.GraphGenerator(sampleGraph)
+
 -- | A map of command-line arguments to their corresponding IO actions.
 taskMap :: Map.Map String (IO ())
 taskMap = Map.fromList [
@@ -29,7 +33,8 @@ taskMap = Map.fromList [
     ("database", setupDatabase),
     ("graphs", parsePrebuiltSvgs),
     ("css", compileCSS),
-    ("docs", generateDocs)]
+    ("docs", generateDocs),
+    ("minfangraph", doDots [ ("sample", sampleGraph) ])]
 
 -- | Courseography entry point.
 main :: IO ()
@@ -37,6 +42,7 @@ main = do
     args <- getArgs
     let taskName = if null args then "server" else head args
     fromMaybe putUsage (Map.lookup taskName taskMap)
+
 
 -- | Print usage message to user (when main gets an incorrect argument).
 putUsage :: IO ()
