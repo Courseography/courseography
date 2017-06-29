@@ -15,7 +15,7 @@ var SearchPanel = React.createClass({
         return (
             <div>
                 <div id="filter-container">
-                    <form onsubmit="return false;">
+                    <form>
                         <input id="course-filter" className="form-control" placeholder="Enter a course!" autoComplete="off" type="text" />
                     </form>
                 </div>
