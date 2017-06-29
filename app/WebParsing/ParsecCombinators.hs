@@ -7,6 +7,7 @@ module WebParsing.ParsecCombinators
      generalCategoryParser,
      parseCategory,
      postInfoParser,
+     parseNumberedLine,
      text, parseAll) where
 
 import qualified Text.Parsec as P
@@ -109,6 +110,14 @@ parseCategory = do
     left <- parseUpToSeparator
     _ <- P.anyChar
     return left
+
+parseNumberedLine :: Parser T.Text
+parseNumberedLine = do
+    P.spaces
+    _ <- P.digit 
+    _ <- text "."
+    P.spaces
+    parseUntil P.eof
 
 parseUpToSeparator :: Parser T.Text
 parseUpToSeparator = parseUntil (P.notFollowedBy (P.noneOf ";\r\n"))

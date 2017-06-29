@@ -5,12 +5,13 @@ import qualified Data.Text as T
 import Control.Monad.Trans (liftIO)
 import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Match
+import Data.List.Split(splitWhen)
 import Database.Tables
 import Database.Persist.Sqlite (insert_, SqlPersistM)
 import Database.Persist (insertUnique)
 import qualified Text.Parsec as P
 import WebParsing.ParsecCombinators (getCourseFromTag, generalCategoryParser, parseCategory,
-    postInfoParser)
+    postInfoParser, parseNumberedLine)
 
 failedString :: String
 failedString = "Failed."
@@ -20,10 +21,13 @@ addPostToDatabase programElements = do
     -- TODO: Remove Focuses from programElements
     let fullPostName = innerText $ take 1 $ filter isTagText programElements
         requirements = last $ sections isRequirementSection programElements
-        liPartitions = partitions isLiTag requirements
+        liPartitions = map parseLi $ partitions isLiTag requirements
+        numberedPartitions = filter (not . T.null) $ map parseNumberedPartition $ getNumberedPartitions requirements
+        nonEmptyPartitions = if null liPartitions then numberedPartitions else liPartitions
         programPrereqs = map getCourseFromTag $ map (fromAttrib "href") $ filter isCourseTag programElements
-        firstCourse = if (null programPrereqs) then Nothing else (Just (head programPrereqs))
-    categoryParser requirements fullPostName firstCourse liPartitions
+        firstCourse = if null programPrereqs then Nothing else (Just (head programPrereqs))
+    categoryParser requirements fullPostName firstCourse nonEmptyPartitions
+    liftIO (print numberedPartitions)
     where
         isRequirementSection element = tagOpenAttrLit "div" ("class", "field-content") element
         isCourseTag tag = tagOpenAttrNameLit "a" "href" (\hrefValue -> T.isInfixOf "/course" hrefValue) tag
@@ -46,8 +50,8 @@ addCategoryToDatabase category =
 
 -- Helpers
 
-categoryParser :: [Tag T.Text] -> T.Text -> Maybe T.Text -> [[Tag T.Text]] -> SqlPersistM ()
-categoryParser tags fullPostName firstCourse liPartitions = do
+categoryParser :: [Tag T.Text] -> T.Text -> Maybe T.Text -> [T.Text] -> SqlPersistM ()
+categoryParser tags fullPostName firstCourse listPartitions = do
     case parsed of
         Right (post, categories) -> do
             postExist <- insertUnique post
@@ -59,16 +63,28 @@ categoryParser tags fullPostName firstCourse liPartitions = do
             liftIO $ print failedString
             return ()
     where
-        parsed = case liPartitions of
+        parsed = case listPartitions of
             [] -> P.parse (generalCategoryParser fullPostName firstCourse) failedString (innerText tags)
             partitionResults -> do
-                let categories = map parseLi partitionResults
                 post <- P.parse (postInfoParser fullPostName firstCourse) failedString (innerText tags)
-                return (post, categories)
+                return (post, partitionResults)
 
 parseLi :: [Tag T.Text] -> T.Text
 parseLi liPartition = do
     let parsed = P.parse parseCategory failedString (innerText liPartition)
     case parsed of
         Right category -> category
+        Left _ -> ""
+
+getNumberedPartitions :: [Tag T.Text] -> [[Tag T.Text]]
+getNumberedPartitions tags = 
+    let pTags = partitions (isTagOpenName "p") tags
+    in concatMap (splitWhen (isTagOpenName "br")) pTags
+       
+
+parseNumberedPartition :: [Tag T.Text] -> T.Text
+parseNumberedPartition pPartition = do
+    let parsed = P.parse parseNumberedLine failedString (innerText pPartition)
+    case parsed of
+        Right category ->  T.replace "\n" " " $ T.replace "\8203" " " $ T.replace "\160" " " $ T.strip category
         Left _ -> ""

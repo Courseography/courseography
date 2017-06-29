@@ -148,3 +148,4 @@ httpBodyTags url = do
     req <- parseRequest url
     response <- httpLBS req
     return . TS.parseTags . toStrict . decodeUtf8 . getResponseBody $ response
+
