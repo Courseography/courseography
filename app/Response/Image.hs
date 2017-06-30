@@ -9,11 +9,10 @@ import Export.GetImages
 import Export.ImageConversion
 import qualified Data.Text as T
 
--- | Returns an image of the graph requested by the user.
-graphImageResponse :: ServerPart Response
-graphImageResponse = do
-    req <- askRq
-    (svgFilename, imageFilename) <- liftIO $ getActiveGraphImage req
+-- | Returns an image of the graph requested by the user, given local storage json object.
+graphImageResponse :: String -> ServerPart Response
+graphImageResponse jsonLocalStorageObj = do
+    (svgFilename, imageFilename) <- liftIO $ getActiveGraphImage jsonLocalStorageObj
     liftIO $ returnImageData svgFilename imageFilename
 
 -- | Returns an image of the timetable requested by the user.

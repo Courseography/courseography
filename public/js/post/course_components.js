@@ -7,8 +7,8 @@ var CourseCode = React.createClass({
     },
 
     componentWillMount: function() {
-        this.setState({selected: getLocaStorage(this.getIdName()) === 'active' ||
-                                 getLocaStorage(this.getIdName()) === 'overridden'});
+        this.setState({selected: getLocalStorage(this.getIdName()) === 'active' ||
+                                 getLocalStorage(this.getIdName()) === 'overridden'});
     },
 
     toggleFullInfo: function() {

@@ -3,7 +3,7 @@
  * @param {string} LSName The name of the local storage.
  * @param {string} LSValue The local storage value.
  */
-function setLocaStorage(LSName, LSValue) {
+function setLocalStorage(LSName, LSValue) {
     'use strict';
     localStorage.setItem(
         LSName.replace(/[^0-9a-zA-Z_\-]/g, '-'),
@@ -16,7 +16,7 @@ function setLocaStorage(LSName, LSValue) {
  * @param {string} LSName The name of the local storage being retrieved.
  * @returns {string} The local storage.
  */
-function getLocaStorage(LSName) {
+function getLocalStorage(LSName) {
     'use strict';
 
     var name = LSName.replace(/[^0-9a-zA-Z_\-]/g, '-') + '=';

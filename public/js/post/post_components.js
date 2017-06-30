@@ -26,13 +26,13 @@ var Post = React.createClass({
         var activeCourses = [];
 
         return allCourses.concat(math).filter(function (course) {
-            var status = getLocaStorage(course.toLowerCase());
+            var status = getLocalStorage(course.toLowerCase());
             return status === 'active' || status === 'overridden';
         });
     },
 
     componentWillMount: function() {
-        this.setState({selected: getLocaStorage(this.props.postType) === 'active'});
+        this.setState({selected: getLocalStorage(this.props.postType) === 'active'});
         this.calculateCreditCount();
     },
 
@@ -79,7 +79,7 @@ var Post = React.createClass({
 
         this.state.activeCourses.forEach(function (course) {
             var courseID = course.toLowerCase()
-            if (getLocaStorage(courseID) === 'active' || getLocaStorage(courseID) === 'overridden') {
+            if (getLocalStorage(courseID) === 'active' || getLocalStorage(courseID) === 'overridden') {
                 if (course === 'MAT135136137157Calc1') {
                     count += 1;
                 } else {

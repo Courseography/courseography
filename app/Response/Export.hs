@@ -15,17 +15,16 @@ import Data.ByteString.Base64.Lazy as BEnc
 
 -- | Returns an image of the timetable requested by the user.
 exportTimetableImageResponse :: T.Text -> String -> ServerPart Response
-exportTimetableImageResponse session coursecookie = do
-    (svgFilename, imageFilename) <- liftIO $ getActiveTimetable (T.pack coursecookie) session
+exportTimetableImageResponse session selectedCourses = do
+    (svgFilename, imageFilename) <- liftIO $ getActiveTimetable (T.pack selectedCourses) session
     liftIO $ returnImageData svgFilename imageFilename
 
 -- | Returns a PDF containing graph and timetable requested by the user.
-exportTimetablePDFResponse :: String -> ServerPart Response
-exportTimetablePDFResponse coursecookie = do
-    req <- askRq
-    (graphSvg, graphImg) <- liftIO $ getActiveGraphImage req
-    (fallsvgFilename, fallimageFilename) <- liftIO $ getActiveTimetable (T.pack coursecookie) "Fall"
-    (springsvgFilename, springimageFilename) <- liftIO $ getActiveTimetable (T.pack coursecookie) "Spring"
+exportTimetablePDFResponse :: String -> String -> ServerPart Response
+exportTimetablePDFResponse selectedCourses jsonLocalStorageObj = do
+    (graphSvg, graphImg) <- liftIO $ getActiveGraphImage jsonLocalStorageObj
+    (fallsvgFilename, fallimageFilename) <- liftIO $ getActiveTimetable (T.pack selectedCourses) "Fall"
+    (springsvgFilename, springimageFilename) <- liftIO $ getActiveTimetable (T.pack selectedCourses) "Spring"
     pdfName <- liftIO $ returnPDF graphSvg graphImg fallsvgFilename fallimageFilename springsvgFilename springimageFilename
     liftIO $ returnPdfBS pdfName
 

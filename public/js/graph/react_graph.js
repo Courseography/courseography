@@ -185,7 +185,7 @@ var Graph = React.createClass({
             } else if (urlSpecifiedGraph !== null) {
                 graphName = 'Computer Science';
             } else {
-                graphName = getLocaStorage('active-graph');
+                graphName = getLocalStorage('active-graph');
                 if (graphName === '') {
                     graphName = 'Computer Science';
                 }
@@ -199,7 +199,7 @@ var Graph = React.createClass({
             url: 'get-json-data',
             data: {'graphName': graphName},
             success: function (data) {
-                setLocaStorage('active-graph', graphName);
+                setLocalStorage('active-graph', graphName);
                 var regionsList = [];
                 var nodesList = [];
                 var hybridsList = [];
@@ -675,14 +675,14 @@ var NodeGroup = React.createClass({
             var node = this.refs[nodeJSON.id_];
             var state = node.props.parents.length === 0 ? 'takeable' : 'inactive';
             node.setState({status: state, selected: false});
-            setLocaStorage(node.props.JSON.id_, state);
+            setLocalStorage(node.props.JSON.id_, state);
         });
 
         this.props.hybridsJSON.forEach(hybridJSON => {
             var hybrid = this.refs[hybridJSON.id_];
             var state = hybrid.props.parents.length === 0 ? 'takeable' : 'inactive';
             hybrid.setState({status: state, selected: false});
-            setLocaStorage(hybrid.props.JSON.id_, state);
+            setLocalStorage(hybrid.props.JSON.id_, state);
         });
     },
 
@@ -806,7 +806,7 @@ var NodeGroup = React.createClass({
 
 var Node = React.createClass({
     getInitialState: function () {
-        var state = getLocaStorage(this.props.JSON.id_);
+        var state = getLocalStorage(this.props.JSON.id_);
         if (state === '') {
             state = this.props.parents.length === 0 ? 'takeable' : 'inactive';
         }
@@ -861,7 +861,7 @@ var Node = React.createClass({
         if ((['active', 'overridden'].indexOf(newState) >= 0) ===
             (['active', 'overridden'].indexOf(this.state.status) >= 0) &&
             this.state.status !== 'missing') {
-            setLocaStorage(nodeId, newState);
+            setLocalStorage(nodeId, newState);
             this.setState({status: newState});
             return;
         }
@@ -869,7 +869,7 @@ var Node = React.createClass({
         if (recursive === undefined || recursive) {
             var svg = this.props.svg;
             this.setState({status: newState}, function () {
-                setLocaStorage(nodeId, newState);
+                setLocalStorage(nodeId, newState);
                 this.props.childs.forEach(function (node) {
                     var currentNode = refLookUp(node, svg);
                     currentNode.updateNode();
@@ -882,7 +882,7 @@ var Node = React.createClass({
             });
         } else {
             this.setState({status: newState});
-            setLocaStorage(nodeId, newState);
+            setLocalStorage(nodeId, newState);
         }
     },
 
@@ -1088,7 +1088,7 @@ var Bool = React.createClass({
 
         var boolId = this.props.JSON.id_;
         this.setState({status: newState}, function () {
-            setLocaStorage(boolId, newState);
+            setLocalStorage(boolId, newState);
             this.props.childs.forEach(function (node) {
                 var currentNode = refLookUp(node, svg);
                 currentNode.updateNode(svg);

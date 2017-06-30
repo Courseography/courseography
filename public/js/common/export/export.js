@@ -37,8 +37,10 @@ export var ExportModal = React.createClass({
     },
 
     getGraphImage: function() {
+        var JsonLocalStorageObj = JSON.stringify(localStorage);
         $.ajax({
             url: 'image',
+            data: {JsonLocalStorageObj: JsonLocalStorageObj},
             success: function (data) {
                 this.setState({data: "data:image/png;base64," + data});
             }.bind(this),
@@ -124,7 +126,7 @@ var getCalendar = function() {
 var getPDF = function() {
     $.ajax({
         url: "timetable-pdf",
-        data: {courses: localStorage.getItem("selected-lectures")},
+        data: {courses: localStorage.getItem("selected-lectures"), JsonLocalStorageObj: JSON.stringify(localStorage)},
         success: function (data) {
             var dataURI = "data:application/pdf;base64," + data;
             var downloadLink = document.createElement("a");
