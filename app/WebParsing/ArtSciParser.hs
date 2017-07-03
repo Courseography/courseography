@@ -69,12 +69,15 @@ parseDepartment (relativeURL, _) = do
     bodyTags <- liftIO $ httpBodyTags $ fasCalendarURL ++ T.unpack relativeURL
     let contentTags = dropWhile (not . tagOpenAttrLit "div" ("id", "block-system-main")) bodyTags
         contentTags' = takeWhile (not . tagOpenAttrLit "p" ("class", "rteright")) contentTags
-        programs = dropWhile (not . tagOpenAttrNameLit "div" "class" (T.isInfixOf "view-id-section")) contentTags'
-        programs' = takeWhile (not . tagOpenAttrNameLit "div" "class" (T.isInfixOf "view-id-course_group_view")) programs
+        programs = dropWhile (not . tagOpenAttrNameLit "div" "class" isProgramHeaderInfix) contentTags'
+        programs' = takeWhile (not . tagOpenAttrNameLit "div" "class" (T.isInfixOf "view-id-course_group_view")) programs 
+        -- ^^ Doesn't work with college programs, just takes everything, but posts parse fine
         courseTags = dropWhile (not . tagOpenAttrNameLit "div" "class" (T.isInfixOf "view-id-courses")) contentTags'
     parsePrograms programs'
     let courseList = parseCourses courseTags
     mapM_ insertCourse courseList
+    where
+        isProgramHeaderInfix tag = or [(T.isInfixOf "view-id-section") tag, (T.isInfixOf "view-header") tag]
 
 -- | Parse the section of the course calendar listing the programs offered by a department.
 parsePrograms :: [Tag T.Text] -> SqlPersistM ()
@@ -82,7 +85,8 @@ parsePrograms programs = do
     let elems = TS.partitions isPost programs 
     mapM_ addPostToDatabase elems
     where
-         isPost tag = tagOpenAttrNameLit "h3" "class" (T.isInfixOf "programs_view") tag
+         isPost tag = tagOpenAttrNameLit "h3" "class" isProgramsView tag
+         isProgramsView currentTag = or [(T.isInfixOf "programs_view") currentTag, (T.isInfixOf "college_programs") currentTag]
 
 -- | Parse the section of the course calendar listing the courses offered by a department.
 parseCourses :: [Tag T.Text] -> [(Courses, T.Text, T.Text)]
