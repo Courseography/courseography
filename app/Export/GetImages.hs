@@ -30,10 +30,10 @@ import Data.Maybe (fromMaybe, fromJust)
 -- otherwise the Computer Science graph is created as a default.
 -- Either way, the resulting graph's .svg and .png names are returned.
 getActiveGraphImage :: String -> IO (String, String)
-getActiveGraphImage jsonLocalStorage = do
-    let localStorage = fromJust $ decode $ fromStrict $ BC.pack jsonLocalStorage :: M.Map T.Text T.Text
-        graphName = T.replace "-" " " $ fromMaybe "Computer-Science" $ M.lookup "active-graph" localStorage
-    getGraphImage graphName localStorage
+getActiveGraphImage graphInfo = do
+    let graphInfoMap = fromJust $ decode $ fromStrict $ BC.pack graphInfo :: M.Map T.Text T.Text
+        graphName = fromMaybe "Computer-Science" $ M.lookup "active-graph" graphInfoMap
+    getGraphImage graphName graphInfoMap
 
 
 -- | If there are selected lectures available, an timetable image of

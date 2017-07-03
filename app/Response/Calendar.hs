@@ -26,7 +26,7 @@ calendarResponse = liftIO . getCalendar . T.pack
 -- | Gets together all the pieces of the program.
 getCalendar :: T.Text -> IO Response
 getCalendar courses = do
-    let courseInfo = getInfoLocalStorage courses
+    let courseInfo = getCoursesInfo courses
     databaseInfo <- mapM pullDatabase courseInfo
     currentTime <- getCurrentTime
     let systemTime = formatTime defaultTimeLocale "%Y%m%dT%H%M%SZ" currentTime
@@ -60,8 +60,8 @@ type Section = T.Text
 type Session = T.Text
 
 -- | Obtains the code, section and session for each course in the local storage.
-getInfoLocalStorage :: T.Text -> [(Code, Section, Session)]
-getInfoLocalStorage courses = map courseInfo allCourses
+getCoursesInfo :: T.Text -> [(Code, Section, Session)]
+getCoursesInfo courses = map courseInfo allCourses
     where
         courseInfo [code, sect, session] = (code, sect, session)
         courseInfo _ = ("", "", "")

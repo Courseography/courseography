@@ -21,8 +21,8 @@ exportTimetableImageResponse session selectedCourses = do
 
 -- | Returns a PDF containing graph and timetable requested by the user.
 exportTimetablePDFResponse :: String -> String -> ServerPart Response
-exportTimetablePDFResponse selectedCourses jsonLocalStorageObj = do
-    (graphSvg, graphImg) <- liftIO $ getActiveGraphImage jsonLocalStorageObj
+exportTimetablePDFResponse selectedCourses graphInfo = do
+    (graphSvg, graphImg) <- liftIO $ getActiveGraphImage graphInfo
     (fallsvgFilename, fallimageFilename) <- liftIO $ getActiveTimetable (T.pack selectedCourses) "Fall"
     (springsvgFilename, springimageFilename) <- liftIO $ getActiveTimetable (T.pack selectedCourses) "Spring"
     pdfName <- liftIO $ returnPDF graphSvg graphImg fallsvgFilename fallimageFilename springsvgFilename springimageFilename
