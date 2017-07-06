@@ -37,7 +37,14 @@ export var ExportModal = React.createClass({
     },
 
     getGraphImage: function() {
-        var JsonLocalStorageObj = JSON.stringify(localStorage);
+        var necessaryLS = new Object();
+        for (var elem in localStorage) {
+            if (elem.substring(0,4) !== "bool") {
+                necessaryLS[elem] = localStorage.getItem(elem);
+            }
+        }
+
+        var JsonLocalStorageObj = JSON.stringify(necessaryLS);
         $.ajax({
             url: 'image',
             data: {JsonLocalStorageObj: JsonLocalStorageObj},
@@ -124,9 +131,15 @@ var getCalendar = function() {
 };
 
 var getPDF = function() {
+    var necessaryLS = new Object();
+    for (var elem in localStorage) {
+        if (elem.substring(0,4) !== "bool") {
+            necessaryLS[elem] = localStorage.getItem(elem);
+        }
+    }
     $.ajax({
         url: "timetable-pdf",
-        data: {courses: localStorage.getItem("selected-lectures"), JsonLocalStorageObj: JSON.stringify(localStorage)},
+        data: {courses: localStorage.getItem("selected-lectures"), JsonLocalStorageObj: JSON.stringify(necessaryLS)},
         success: function (data) {
             var dataURI = "data:application/pdf;base64," + data;
             var downloadLink = document.createElement("a");
@@ -149,7 +162,7 @@ var GraphImage = function (props) {
             Export
         </div>
         <div className='modal-body'>
-            <a href="#" onClick={getPDF}>Download PDF</a>
+            <a onClick={getPDF}>Download PDF</a>
             <div>
             <img id="post-image" src={props.data}/>
             </div>
@@ -165,8 +178,8 @@ var GridImage = function (props) {
             Export
         </div>
         <div className='modal-body'>
-            <a href="#" onClick={getCalendar}>Download timetable as ICS</a><br />
-            <a href="#" onClick={getPDF}>Download PDF</a>
+            <a onClick={getCalendar}>Download timetable as ICS</a><br />
+            <a onClick={getPDF}>Download PDF</a>
             <div>
             <img id="post-image" src={props.data}/>
             </div>
