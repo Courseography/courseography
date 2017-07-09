@@ -158,14 +158,14 @@ fromParser = do
     fces <- fcesParser
     _ <- Parsec.manyTill Parsec.anyChar fromSeparator
     _ <- Parsec.manyTill Parsec.anyChar (Parsec.try $ Parsec.lookAhead singleParser)
-    req <- (Parsec.try andParser <|> rawTextParser)
+    req <- (Parsec.try andParser)
     return $ FROM fces req
 
 -- | Parser for requirements separated by a semicolon.
 -- Semicolons are assumed to have the highest precedence.
 categoryParser :: Parser Req
 categoryParser = do
-    reqs <- Parsec.sepBy (fromParser <|> andParser <|> rawTextParser) semicolon
+    reqs <- Parsec.sepBy (Parsec.try fromParser <|> andParser) semicolon
     Parsec.eof
     case reqs of
         [] -> fail "Empty Req."
