@@ -9,7 +9,8 @@ import Database.Requirement
 -- define separators
 fromSeparator :: Parser ()
 fromSeparator = Parsec.spaces >> (Parsec.try (Parsec.string "FCE")
-             <|> (Parsec.string "FCEs")) >> Parsec.spaces
+             <|> (Parsec.string "FCEs") <|> (Parsec.string "fce")
+             <|> (Parsec.string "fces")) >> Parsec.spaces
 
 lParen :: Parser Char
 lParen = Parsec.char '('
@@ -38,6 +39,7 @@ semicolon = Parsec.char ';'
 
 fcesParser :: Parser String
 fcesParser = do
+    Parsec.spaces
     integral <- Parsec.many1 Parsec.digit
     point <- Parsec.option "" $ Parsec.string "."
     fractional <- if point == "" then return "" else Parsec.many1 Parsec.digit
@@ -47,7 +49,9 @@ fcesParser = do
 -- a number with or without a percent symbol, or a letter A-F followed by a +/-.
 gradeParser :: Parser String
 gradeParser = do
-    grade <- percentParser <|> letterParser
+    grade <- Parsec.try (Parsec.between (Parsec.char '(') (Parsec.char ')')
+                        (Parsec.try percentParser <|> letterParser)) <|>
+                        (Parsec.try percentParser <|> letterParser)
     _ <- Parsec.lookAhead $ Parsec.choice $ map Parsec.try [
         andSeparator,
         orSeparator,
@@ -64,14 +68,15 @@ gradeParser = do
         return fces
 
     letterParser = do
-        letter <- Parsec.oneOf "ABCDEFabcdef"
+        letter <- Parsec.oneOf "ABCDEF"
         plusminus <- Parsec.option "" $ Parsec.string "+" <|> Parsec.string "-"
         return $ letter : plusminus
 
 -- parse for cutoff percentage before a course
 coBefParser :: Parser Req
 coBefParser = do
-    _ <- Parsec.choice $ map (Parsec.try . (>> Parsec.space) . Parsec.string) ["a", "A", "an", "An"]
+    _ <- Parsec.optional (Parsec.try $ Parsec.manyTill Parsec.anyChar (Parsec.string "minimum"))
+    _ <- Parsec.manyTill Parsec.anyChar (Parsec.try $ Parsec.lookAhead gradeParser)
     Parsec.spaces
     grade <- gradeParser
     Parsec.spaces
@@ -82,20 +87,24 @@ coBefParser = do
 -- parse for cutoff percentage after a course
 coAftParser :: Parser Req
 coAftParser = do
+    Parsec.spaces
     req <- singleParser
     Parsec.spaces
-    grade <- Parsec.between lParen rParen cutoffHelper <|> cutoffHelper
+    _ <- Parsec.optional (Parsec.try $ Parsec.manyTill Parsec.anyChar (Parsec.string "minimum"))
+    _ <- Parsec.manyTill Parsec.anyChar (Parsec.try $ Parsec.lookAhead gradeParser)
+    Parsec.spaces
+    grade <- gradeParser
     return $ GRADE grade req
 
-    where
-    cutoffHelper = Parsec.between Parsec.spaces Parsec.spaces $ do
-        _ <- Parsec.manyTill (Parsec.noneOf "()")
-          (Parsec.try $ Parsec.lookAhead (orSeparator <|> andSeparator <|> (do
-            _ <- gradeParser
-            Parsec.spaces
-            Parsec.notFollowedBy $ Parsec.alphaNum
-            return "")))
-        gradeParser
+    -- where
+    -- cutoffHelper = Parsec.between Parsec.spaces Parsec.spaces $ do
+    --     _ <- Parsec.manyTill (Parsec.noneOf "()")
+    --       (Parsec.try $ Parsec.lookAhead (orSeparator <|> andSeparator <|> (do
+    --         _ <- gradeParser
+    --         Parsec.spaces
+    --         Parsec.notFollowedBy $ Parsec.alphaNum
+    --         return "")))
+    --     gradeParser
 
 -- | Parser for a grade cutoff on a course.
 -- This is tricky because the cutoff can come before or after the course code.
@@ -128,9 +137,8 @@ singleParser = do
 courseParser :: Parser Req
 courseParser = Parsec.between Parsec.spaces Parsec.spaces $ Parsec.choice $ map Parsec.try [
     parParser,
-    cutoffParser,
-    singleParser,
-    rawTextParser
+    courseParser,
+    singleParser
     ]
 
 -- | Parser for reqs related through an OR.
@@ -138,7 +146,6 @@ orParser :: Parser Req
 orParser = do
     reqs <- Parsec.sepBy courseParser orSeparator
     case reqs of
-        [] -> fail "Empty Req."
         [x] -> return x
         (x:xs) -> return $ OR (x:xs)
 
@@ -147,7 +154,6 @@ andParser :: Parser Req
 andParser = do
     reqs <- Parsec.sepBy orParser andSeparator
     case reqs of
-        [] -> fail "Empty Req."
         [x] -> return x
         (x:xs) -> return $ AND (x:xs)
 
@@ -157,7 +163,7 @@ fromParser :: Parser Req
 fromParser = do
     fces <- fcesParser
     _ <- Parsec.manyTill Parsec.anyChar fromSeparator
-    _ <- Parsec.manyTill Parsec.anyChar (Parsec.try $ Parsec.lookAhead singleParser)
+    _ <- Parsec.manyTill Parsec.anyChar (Parsec.try $ Parsec.lookAhead courseParser)
     req <- (Parsec.try andParser)
     return $ FROM fces req
 
@@ -165,10 +171,9 @@ fromParser = do
 -- Semicolons are assumed to have the highest precedence.
 categoryParser :: Parser Req
 categoryParser = do
-    reqs <- Parsec.sepBy (Parsec.try fromParser <|> andParser) semicolon
+    reqs <- Parsec.sepBy (Parsec.try fromParser <|> Parsec.try andParser) semicolon
     Parsec.eof
     case reqs of
-        [] -> fail "Empty Req."
         [x] -> return x
         (x:xs) -> return $ AND (x:xs)
 
