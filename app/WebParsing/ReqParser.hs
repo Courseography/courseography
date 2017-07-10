@@ -49,9 +49,7 @@ fcesParser = do
 -- a number with or without a percent symbol, or a letter A-F followed by a +/-.
 gradeParser :: Parser String
 gradeParser = do
-    grade <- Parsec.try (Parsec.between (Parsec.char '(') (Parsec.char ')')
-                        (Parsec.try percentParser <|> letterParser)) <|>
-                        (Parsec.try percentParser <|> letterParser)
+    grade <- percentParser <|> letterParser
     _ <- Parsec.lookAhead $ Parsec.choice $ map Parsec.try [
         andSeparator,
         orSeparator,
@@ -68,15 +66,14 @@ gradeParser = do
         return fces
 
     letterParser = do
-        letter <- Parsec.oneOf "ABCDEF"
+        letter <- Parsec.oneOf "ABCDEFabcdef"
         plusminus <- Parsec.option "" $ Parsec.string "+" <|> Parsec.string "-"
         return $ letter : plusminus
 
 -- parse for cutoff percentage before a course
 coBefParser :: Parser Req
 coBefParser = do
-    _ <- Parsec.optional (Parsec.try $ Parsec.manyTill Parsec.anyChar (Parsec.string "minimum"))
-    _ <- Parsec.manyTill Parsec.anyChar (Parsec.try $ Parsec.lookAhead gradeParser)
+    _ <- Parsec.choice $ map (Parsec.try . (>> Parsec.space) . Parsec.string) ["a", "A", "an", "An"]
     Parsec.spaces
     grade <- gradeParser
     Parsec.spaces
@@ -87,24 +84,20 @@ coBefParser = do
 -- parse for cutoff percentage after a course
 coAftParser :: Parser Req
 coAftParser = do
-    Parsec.spaces
     req <- singleParser
     Parsec.spaces
-    _ <- Parsec.optional (Parsec.try $ Parsec.manyTill Parsec.anyChar (Parsec.string "minimum"))
-    _ <- Parsec.manyTill Parsec.anyChar (Parsec.try $ Parsec.lookAhead gradeParser)
-    Parsec.spaces
-    grade <- gradeParser
+    grade <- Parsec.between lParen rParen cutoffHelper <|> cutoffHelper
     return $ GRADE grade req
 
-    -- where
-    -- cutoffHelper = Parsec.between Parsec.spaces Parsec.spaces $ do
-    --     _ <- Parsec.manyTill (Parsec.noneOf "()")
-    --       (Parsec.try $ Parsec.lookAhead (orSeparator <|> andSeparator <|> (do
-    --         _ <- gradeParser
-    --         Parsec.spaces
-    --         Parsec.notFollowedBy $ Parsec.alphaNum
-    --         return "")))
-    --     gradeParser
+    where
+    cutoffHelper = Parsec.between Parsec.spaces Parsec.spaces $ do
+        _ <- Parsec.manyTill (Parsec.noneOf "()")
+          (Parsec.try $ Parsec.lookAhead (orSeparator <|> andSeparator <|> (do
+            _ <- gradeParser
+            Parsec.spaces
+            Parsec.notFollowedBy $ Parsec.alphaNum
+            return "")))
+        gradeParser
 
 -- | Parser for a grade cutoff on a course.
 -- This is tricky because the cutoff can come before or after the course code.
