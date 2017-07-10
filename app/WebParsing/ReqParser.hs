@@ -8,9 +8,9 @@ import Database.Requirement
 
 -- define separators
 fromSeparator :: Parser ()
-fromSeparator = Parsec.spaces >> (Parsec.try (Parsec.string "FCE")
-             <|> (Parsec.string "FCEs") <|> (Parsec.string "fce")
-             <|> (Parsec.string "fces")) >> Parsec.spaces
+fromSeparator = Parsec.spaces >> (Parsec.try (Parsec.string "FCEs from:")
+             <|> (Parsec.string "FCEs from:") <|> (Parsec.string "fce from:")
+             <|> (Parsec.string "fces from:")) >> Parsec.spaces
 
 lParen :: Parser Char
 lParen = Parsec.char '('
@@ -113,7 +113,7 @@ cutoffParser = Parsec.try coAftParser <|> coBefParser
 
 -- | Parser for requirements written within parentheses
 parParser :: Parser Req
-parParser = Parsec.between lParen rParen categoryParser
+parParser = Parsec.between lParen rParen andParser
 
 -- | Parser for raw text in a prerequisite, e.g., "proficiency in C/C++".
 -- Note that even if a course code appears in the middle of such text,
@@ -137,7 +137,6 @@ singleParser = do
 courseParser :: Parser Req
 courseParser = Parsec.between Parsec.spaces Parsec.spaces $ Parsec.choice $ map Parsec.try [
     parParser,
-    courseParser,
     singleParser
     ]
 
@@ -146,6 +145,7 @@ orParser :: Parser Req
 orParser = do
     reqs <- Parsec.sepBy courseParser orSeparator
     case reqs of
+        [] -> fail "Empty Req."
         [x] -> return x
         (x:xs) -> return $ OR (x:xs)
 
@@ -154,6 +154,7 @@ andParser :: Parser Req
 andParser = do
     reqs <- Parsec.sepBy orParser andSeparator
     case reqs of
+        [] -> fail "Empty Req."
         [x] -> return x
         (x:xs) -> return $ AND (x:xs)
 
@@ -162,9 +163,9 @@ andParser = do
 fromParser :: Parser Req
 fromParser = do
     fces <- fcesParser
-    _ <- Parsec.manyTill Parsec.anyChar fromSeparator
-    _ <- Parsec.manyTill Parsec.anyChar (Parsec.try $ Parsec.lookAhead courseParser)
-    req <- (Parsec.try andParser)
+    _ <- fromSeparator
+    Parsec.spaces
+    req <- andParser
     return $ FROM fces req
 
 -- | Parser for requirements separated by a semicolon.
@@ -174,6 +175,7 @@ categoryParser = do
     reqs <- Parsec.sepBy (Parsec.try fromParser <|> Parsec.try andParser) semicolon
     Parsec.eof
     case reqs of
+        [] -> fail "Empty Req."
         [x] -> return x
         (x:xs) -> return $ AND (x:xs)
 
