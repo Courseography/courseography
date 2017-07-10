@@ -137,6 +137,7 @@ singleParser = do
 courseParser :: Parser Req
 courseParser = Parsec.between Parsec.spaces Parsec.spaces $ Parsec.choice $ map Parsec.try [
     parParser,
+    cutoffParser,
     singleParser,
     rawTextParser
     ]
