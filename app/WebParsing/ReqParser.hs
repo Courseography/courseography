@@ -9,8 +9,10 @@ import Database.Requirement
 -- define separators
 fromSeparator :: Parser ()
 fromSeparator = Parsec.spaces >> (Parsec.try (Parsec.string "FCEs from:")
-             <|> (Parsec.string "FCEs from:") <|> (Parsec.string "fce from:")
-             <|> (Parsec.string "fces from:")) >> Parsec.spaces
+             <|> Parsec.try (Parsec.string "FCEs from:") <|> Parsec.try (Parsec.string "fce from:")
+             <|> Parsec.try (Parsec.string "fces from:") <|> Parsec.try (Parsec.string "FCEs from")
+             <|> Parsec.try (Parsec.string "FCEs from") <|> Parsec.try (Parsec.string "fce from")
+             <|> Parsec.try (Parsec.string "fces from")) >> Parsec.spaces
 
 lParen :: Parser Char
 lParen = Parsec.char '('
@@ -66,7 +68,7 @@ gradeParser = do
         return fces
 
     letterParser = do
-        letter <- Parsec.oneOf "ABCDEFabcdef"
+        letter <- Parsec.oneOf "ABCDEF"
         plusminus <- Parsec.option "" $ Parsec.string "+" <|> Parsec.string "-"
         return $ letter : plusminus
 
