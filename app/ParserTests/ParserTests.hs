@@ -46,7 +46,7 @@ fromParInputs = [("1.0 FCE from the following: (CSC148H1)", FROM "1.0" $ J "CSC1
 gradeBefInputs :: [(String, Req)]
 gradeBefInputs = [("minimum mark of A- in CSC236H1", GRADE "A-" $ J "CSC236H1") 
                 , ("minimum grade of 75% CSC236H1", GRADE "75" $ J "CSC236H1")
-                , ("minimum of (75%) CSC236H1", GRADE "75" $ J "CSC236H1")
+                , ("minimum of 75% CSC236H1", GRADE "75" $ J "CSC236H1")
                 , ("minimum (75%) CSC236H1", GRADE "75" $ J "CSC236H1")]
 
 
