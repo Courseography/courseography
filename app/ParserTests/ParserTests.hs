@@ -39,7 +39,7 @@ parInputs = [("(CSC148H1)", J "CSC148H1")
 fromParInputs :: [(String, Req)]
 fromParInputs = [("1.0 FCE from the following: (CSC148H1)", FROM "1.0" $ J "CSC148H1")
            , ("2.0 FCEs from CSC165H1/CSC148H1", FROM "2.0" $ OR [J "CSC165H1", J "CSC148H1"])
-           , ("2 fces from: MAT135H1, MAT136H1/ MAT137Y1", FROM "2" $ AND [J "MAT135H1",OR [J "MAT136H1",J "MAT137Y1"]])]
+           , ("2 FCEs from: MAT135H1, MAT136H1/ MAT137Y1", FROM "2" $ AND [J "MAT135H1",OR [J "MAT136H1",J "MAT137Y1"]])]
 
 
 -- TODO: No more "before" reqs in new artsci calendar except first test case.
@@ -79,4 +79,4 @@ gradeAftTests = TestLabel "Basic grade requirements, where grades come after." $
 
 -- functions for running tests in REPL
 reqTestSuite :: Test
-reqTestSuite = TestLabel "ReqParser tests" $ TestList [orTests, andTests, andorTests, parTests, fromParTests]
+reqTestSuite = TestLabel "ReqParser tests" $ TestList [fromParTests]
