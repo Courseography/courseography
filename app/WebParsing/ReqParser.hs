@@ -10,11 +10,14 @@ import Database.Requirement
 fromSeparator :: Parser ()
 fromSeparator = Parsec.spaces >> (Parsec.choice $ map Parsec.try (map Parsec.string [
             "FCEs",
-            "FCE"
+            "FCE",
+            "FCEs:",
+            "FCE:"
     ])) >> (Parsec.choice $ map Parsec.try (map Parsec.string [
             " from the following: ",
             " from:",
-            " from"
+            " from",
+            " at"
     ])) >> Parsec.spaces
 
 lParen :: Parser Char
