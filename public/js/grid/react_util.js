@@ -11,6 +11,25 @@ var CoursePanel = React.createClass({
 });
 
 var SearchPanel = React.createClass({
+    getInitialState: function() {
+        return {
+            courseList: []
+        };
+    },
+
+    componentDidMount: function() {
+        $.ajax({
+            url: 'all-courses',
+            dataType: 'text',
+            success: function (data) {
+                var courses = data.split('\n').map(function (course) {
+                    return course.substring(0, 8);
+                });
+                this.setState({courseList: courses});
+            }.bind(this)
+        });
+    },
+
     render: function() {
         return (
             <div>
@@ -20,7 +39,7 @@ var SearchPanel = React.createClass({
                     </form>
                 </div>
                 <div id="search-container">
-                    <CourseList />
+                    <CourseList courses={this.state.courseList}/>
                 </div>
             </div>
         );
@@ -30,22 +49,8 @@ var SearchPanel = React.createClass({
 var CourseList = React.createClass({
     getInitialState: function() {
         return {
-            courses: [], courseFilter: ''
+            courseFilter: ''
         };
-    },
-
-    componentDidMount: function() {
-        $.ajax({
-            url: 'all-courses',
-            dataType: 'text',
-            success: function (data) {
-                this.enableSearch();
-                var courses = data.split('\n').map(function (course) {
-                    return course.substring(0, 8);
-                });
-                this.setState({courses: courses});
-            }.bind(this)
-        });
     },
 
     enableSearch: function() {
@@ -56,12 +61,15 @@ var CourseList = React.createClass({
         }.bind(this));
     },
 
-    render: function() {
+    componentDidMount: function() {
+        this.enableSearch();
+    },
 
+    render: function() {
         var state = this.state;
 
         if (state.courseFilter !== '') {
-            var searchList = state.courses.filter(function (course) {
+            var searchList = this.props.courses.filter(function (course) {
                 return course.indexOf(state.courseFilter) > -1;
             }).map(function (course) {
                 return <CourseEntry course={course} key={course} />
@@ -77,7 +85,6 @@ var CourseList = React.createClass({
 });
 
 var CourseEntry = React.createClass({
-
     getInitialState: function() {
         return {
             star: false
