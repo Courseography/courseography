@@ -57,7 +57,7 @@ fcesParser = do
 -- a number with or without a percent symbol, or a letter A-F followed by a +/-.
 gradeParser :: Parser String
 gradeParser = do
-    grade <- percentParser <|> letterParser
+    grade <- Parsec.try ((Parsec.between lParen rParen percentParser <|> letterParser) <|> (percentParser <|> letterParser))
     _ <- Parsec.lookAhead $ Parsec.choice $ map Parsec.try [
         andSeparator,
         orSeparator,
@@ -81,7 +81,7 @@ gradeParser = do
 -- parse for cutoff percentage before a course
 coBefParser :: Parser Req
 coBefParser = do
-    _ <- Parsec.choice $ map (Parsec.try . (>> Parsec.space) . Parsec.string) ["a", "A", "an", "An"]
+    _ <- Parsec.choice $ map (Parsec.try . (>> Parsec.space) . Parsec.string) ["minimum grade of", "minimum mark of"]
     Parsec.spaces
     grade <- gradeParser
     Parsec.spaces
