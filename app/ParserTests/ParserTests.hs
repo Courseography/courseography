@@ -44,17 +44,17 @@ fromParInputs = [("1.0 FCE from the following: (CSC148H1)", FROM "1.0" $ J "CSC1
 
 -- TODO: No more "before" reqs in new artsci calendar except first test case.
 gradeBefInputs :: [(String, Req)]
-gradeBefInputs = [("A- in CSC236H1", GRADE "A-" $ J "CSC236H1") 
+gradeBefInputs = [("minimum mark of A- in CSC236H1", GRADE "A-" $ J "CSC236H1") 
                 , ("minimum grade of 75% CSC236H1", GRADE "75" $ J "CSC236H1")
-                , ("minimum of at least (75%)CSC236H1", GRADE "75" $ J "CSC236H1")
-                , ("minimum of (75%) CSC236H1", GRADE "75" $ J "CSC236H1")]
+                , ("minimum of (75%) CSC236H1", GRADE "75" $ J "CSC236H1")
+                , ("minimum (75%) CSC236H1", GRADE "75" $ J "CSC236H1")]
 
 
 gradeAftInputs :: [(String, Req)]
 gradeAftInputs = [("CSC236H1 75%", GRADE "75" $ J "CSC236H1")
                 , ("CSC236H1 (75%)", GRADE "75" $ J "CSC236H1")
                 , ("CSC236H1(75%)", GRADE "75" $ J "CSC236H1")
-                , ("CSC263H1 A", GRADE "A" $ J "CSC263H1") 
+                , ("CSC263H1 (C+)", GRADE "C+" $ J "CSC263H1")
                 , ("CSC263H1 B-", GRADE "B-" $ J "CSC263H1") 
                 , ("CSC263H1 with a minimum grade of 60%", GRADE "60" $ J "CSC263H1") 
                 , ("CSC263H1 with a minimum mark of B-", GRADE "B-" $ J "CSC263H1")] 
@@ -79,4 +79,4 @@ gradeAftTests = TestLabel "Basic grade requirements, where grades come after." $
 
 -- functions for running tests in REPL
 reqTestSuite :: Test
-reqTestSuite = TestLabel "ReqParser tests" $ TestList [fromParTests]
+reqTestSuite = TestLabel "ReqParser tests" $ TestList [gradeAftTests, gradeBefTests]
