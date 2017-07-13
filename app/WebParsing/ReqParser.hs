@@ -81,7 +81,7 @@ gradeParser = do
 -- parse for cutoff percentage before a course
 coBefParser :: Parser Req
 coBefParser = do
-    _ <- Parsec.choice $ map (Parsec.try . (>> Parsec.space) . Parsec.string) ["minimum grade of", "minimum mark of"]
+    _ <- Parsec.choice $ map (Parsec.try . (>> Parsec.space) . Parsec.string) ["minimum grade of", "minimum mark of", "minimum of", "minimum"]
     Parsec.spaces
     grade <- gradeParser
     Parsec.spaces
