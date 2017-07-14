@@ -16,8 +16,8 @@ import Test.HUnit ( assertEqual, Test(..) )
 
 -- Function to facilitate test case creation given a string, Req tuple
 createTest :: (Eq a, Show a) => Parser a -> (String, a) -> Test
-createTest parser (input, expected) = let courseReq =  Parsec.parse parser "" input
-                                      in TestCase $ (assertEqual ("for (" ++ input ++ "),") (Right expected) courseReq)
+createTest parser (input, expected) = let courseReq = Parsec.parse parser "" input
+                                      in TestCase $ assertEqual "for (" ++ input ++ ")," Right expected courseReq
 
 -- categoryParser Tests
 orInputs :: [(String, Req)]
