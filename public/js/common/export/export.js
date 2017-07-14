@@ -39,7 +39,11 @@ export var ExportModal = React.createClass({
     getGraphImage: function() {
         var necessaryLS = new Object();
         for (var elem in localStorage) {
-            if (elem.substring(0,4) !== "bool") {
+            if (elem.substring(0,3).match(/^[a-zA-Z]+$/) && elem.substring(3,6).match(/^\d+$/)) {
+                if (document.getElementById(elem)) {
+                    necessaryLS[elem] = localStorage.getItem(elem);
+                }
+            } else {
                 necessaryLS[elem] = localStorage.getItem(elem);
             }
         }
@@ -133,10 +137,15 @@ var getCalendar = function() {
 var getPDF = function() {
     var necessaryLS = new Object();
     for (var elem in localStorage) {
-        if (elem.substring(0,4) !== "bool") {
+        if (elem.substring(0,3).match(/^[a-zA-Z]+$/) && elem.substring(3,6).match(/^\d+$/)) {
+            if (document.getElementById(elem)) {
+                necessaryLS[elem] = localStorage.getItem(elem);
+            }
+        } else {
             necessaryLS[elem] = localStorage.getItem(elem);
         }
     }
+
     $.ajax({
         url: "timetable-pdf",
         data: {courses: localStorage.getItem("selected-lectures"), JsonLocalStorageObj: JSON.stringify(necessaryLS)},

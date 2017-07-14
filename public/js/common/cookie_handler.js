@@ -5,9 +5,7 @@
  */
 function setLocalStorage(LSName, LSValue) {
     'use strict';
-    localStorage.setItem(
-        LSName.replace(/[^0-9a-zA-Z_\-\s]/g, '-'),
-        LSValue.replace(/[^0-9a-zA-Z_\-\s]/g, '-'))
+    localStorage.setItem(LSName, LSValue)
 }
 
 
@@ -19,10 +17,9 @@ function setLocalStorage(LSName, LSValue) {
 function getLocalStorage(LSName) {
     'use strict';
 
-    var name = LSName.replace(/[^0-9a-zA-Z_\-\s]/g, '-') + '=';
-    if (!localStorage.getItem(name)) {
+    if (!localStorage.getItem(LSName)) {
         return '';
     } else {
-        return localStorage.getItem(name);
+        return localStorage.getItem(LSName);
     }
 }
