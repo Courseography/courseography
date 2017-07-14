@@ -79,4 +79,4 @@ gradeAftTests = TestLabel "Basic grade requirements, where grades come after." $
 
 -- functions for running tests in REPL
 reqTestSuite :: Test
-reqTestSuite = TestLabel "ReqParser tests" $ TestList [gradeAftTests, gradeBefTests]
+reqTestSuite = TestLabel "ReqParser tests" $ TestList [orTests, andTests, andorTests, parTests, fromParTests, gradeAftTests, gradeBefTests]
