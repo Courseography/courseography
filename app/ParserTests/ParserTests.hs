@@ -17,7 +17,8 @@ import Test.HUnit ( assertEqual, Test(..) )
 -- Function to facilitate test case creation given a string, Req tuple
 createTest :: (Eq a, Show a) => Parser a -> String -> [(String, a)] -> Test
 createTest parser label input = TestLabel label $ TestList $ map (\(x, y) ->
-                                TestCase $ assertEqual ("for (" ++ x ++ "),") (Right y) (Parsec.parse parser "" x)) input
+                                TestCase $ assertEqual ("for (" ++ x ++ "),")
+                                (Right y) (Parsec.parse parser "" x)) input
 
 -- categoryParser Tests
 orInputs :: [(String, Req)]
