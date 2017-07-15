@@ -82,7 +82,7 @@ andTests = createTest categoryParser "Basic and Requirement" andInputs
 andorTests :: Test
 andorTests = createTest categoryParser "Basic and-or-mixed Requirement" andorInputs
 parTests :: Test
-parTests = createTest categoryParser "Basic and-or-paranthesized Requirement" parInputs
+parTests = createTest categoryParser "Basic and-or-parenthesized Requirement" parInputs
 fromParTests :: Test
 fromParTests = createTest categoryParser "Paranthesized From Requirements with integer or float fces" fromParInputs
 gradeBefTests :: Test
