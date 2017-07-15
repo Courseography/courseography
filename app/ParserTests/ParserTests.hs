@@ -35,7 +35,7 @@ andInputs = [
 andorInputs :: [(String, Req)]
 andorInputs = [
       ("CSC148H1/CSC207H1, CSC165H1/CSC236H1", AND [OR [J "CSC148H1", J "CSC207H1"], OR [J "CSC165H1", J "CSC236H1"]])
-      ]
+    ]
 
 parInputs :: [(String, Req)]
 parInputs = [
@@ -77,16 +77,22 @@ gradeAftInputs = [
 
 orTests :: Test
 orTests = createTest categoryParser "Basic or Requirement" orInputs
+
 andTests :: Test
 andTests = createTest categoryParser "Basic and Requirement" andInputs
+
 andorTests :: Test
 andorTests = createTest categoryParser "Basic and-or-mixed Requirement" andorInputs
+
 parTests :: Test
 parTests = createTest categoryParser "Basic and-or-parenthesized Requirement" parInputs
+
 fromParTests :: Test
 fromParTests = createTest categoryParser "Paranthesized From Requirements with integer or float fces" fromParInputs
+
 gradeBefTests :: Test
 gradeBefTests = createTest categoryParser "Basic grade requirements which come before." gradeBefInputs
+
 gradeAftTests :: Test
 gradeAftTests = createTest categoryParser "Basic grade requirements, where grades come after." gradeAftInputs
 
