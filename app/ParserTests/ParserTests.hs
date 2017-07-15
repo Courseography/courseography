@@ -6,7 +6,7 @@ Module containing test cases for Requirement Parsers.
 -}
 
 module ParserTests.ParserTests
-(  reqTestSuite  ) where
+( reqTestSuite ) where
 
 import qualified Text.Parsec as Parsec
 import Text.Parsec.String (Parser)
@@ -15,9 +15,9 @@ import WebParsing.ReqParser
 import Test.HUnit ( assertEqual, Test(..) )
 
 -- Function to facilitate test case creation given a string, Req tuple
-createTest :: (Eq a, Show a) => Parser a -> (String, a) -> Test
-createTest parser (input, expected) = let courseReq = Parsec.parse parser "" input
-                                      in TestCase $ assertEqual "for (" ++ input ++ ")," Right expected courseReq
+createTest :: (Eq a, Show a) => Parser a -> String -> [(String, a)] -> Test
+createTest parser label input = TestLabel label $ TestList $ map (\(x, y) ->
+                                TestCase $ assertEqual ("for (" ++ x ++ "),") (Right y) (Parsec.parse parser "" x)) input
 
 -- categoryParser Tests
 orInputs :: [(String, Req)]
@@ -61,21 +61,20 @@ gradeAftInputs = [("CSC236H1 75%", GRADE "75" $ J "CSC236H1")
 
 
 orTests :: Test
-orTests = TestLabel "Basic or Requirement"  $ TestList $ (map (createTest categoryParser) orInputs)
+orTests = createTest categoryParser "Basic or Requirement" orInputs
 andTests :: Test
-andTests = TestLabel "Basic and Requirement" $ TestList $ (map (createTest categoryParser) andInputs)
+andTests = createTest categoryParser "Basic and Requirement" andInputs
 andorTests :: Test
-andorTests = TestLabel "Basic and-or-mixed Requirement" $ TestList $ (map (createTest categoryParser) andorInputs)
+andorTests = createTest categoryParser "Basic and-or-mixed Requirement" andorInputs
 parTests :: Test
-parTests = TestLabel "Basic and-or-paranthesized Requirement" $ TestList $ (map (createTest categoryParser) parInputs)
+parTests = createTest categoryParser "Basic and-or-paranthesized Requirement" parInputs
 fromParTests :: Test
-fromParTests = TestLabel "Paranthesized From Requirements with integer or float fces" $ TestList $ (map (createTest categoryParser) fromParInputs)
+fromParTests = createTest categoryParser "Paranthesized From Requirements with integer or float fces" fromParInputs
 gradeBefTests :: Test
-gradeBefTests = TestLabel "Basic grade requirements which come before." $ TestList $ (map (createTest categoryParser) gradeBefInputs)
+gradeBefTests = createTest categoryParser "Basic grade requirements which come before." gradeBefInputs
 gradeAftTests :: Test
-gradeAftTests = TestLabel "Basic grade requirements, where grades come after." $ TestList $ (map (createTest categoryParser) gradeAftInputs)
+gradeAftTests = createTest categoryParser "Basic grade requirements, where grades come after." gradeAftInputs
 
--- TODO: CREATE HELPER TO CREATE THE TESTSUITES? SEEING LOTS OF CODE DUPLICATION; (map (createTest categoryParser) _
 
 -- functions for running tests in REPL
 reqTestSuite :: Test
