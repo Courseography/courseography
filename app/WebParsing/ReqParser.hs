@@ -8,17 +8,17 @@ import Database.Requirement
 
 -- define separators
 fromSeparator :: Parser ()
-fromSeparator = Parsec.spaces >> (Parsec.choice $ map Parsec.try (map Parsec.string [
+fromSeparator = Parsec.spaces >> (Parsec.choice $ map (Parsec.try . Parsec.string) [
             "FCEs",
             "FCE",
             "FCEs:",
             "FCE:"
-    ])) >> (Parsec.choice $ map Parsec.try (map Parsec.string [
+    ]) >> (Parsec.choice $ map (Parsec.try . Parsec.string) [
             " from the following: ",
             " from:",
             " from",
             " at"
-    ])) >> Parsec.spaces
+    ]) >> Parsec.spaces
 
 lParen :: Parser Char
 lParen = Parsec.char '('
