@@ -9,11 +9,13 @@ import Database.Requirement
 -- define separators
 fromSeparator :: Parser ()
 fromSeparator = Parsec.spaces >> (Parsec.choice $ map (Parsec.try . Parsec.string) [
+            "full course or its equivalent",
             "FCEs",
             "FCE",
             "FCEs:",
             "FCE:"
     ]) >> (Parsec.choice $ map (Parsec.try . Parsec.string) [
+            " of any of the following:",
             " from the following: ",
             " from:",
             " from",
