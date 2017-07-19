@@ -73,7 +73,14 @@ gradeAftInputs = [
     , ("CSC263H1 B-", GRADE "B-" $ J "CSC263H1") 
     , ("CSC263H1 with a minimum grade of 60%", GRADE "60" $ J "CSC263H1") 
     , ("CSC263H1 with a minimum mark of B-", GRADE "B-" $ J "CSC263H1")
-    ] 
+    ]
+
+artSciInputs :: [(String, Req)]
+artSciInputs = [
+      ("1.0 full course or its equivalent from HIS230H1/ HIS231H1/ NEW220H1/ NEW221H1/ NEW225H1/ NEW226H1", J "")
+    , ("5 FCEs of any of the following: LIN232H1; LIN241H1; JLP315H1; LIN331H1; LIN341H1; JLP374H1", J "") 
+    , ("(ECO101H1, ECO102H1)/ECO100Y1, RSM100H1/ MGT100H1/ RSM100Y1", J "")
+    ]
 
 
 orTests :: Test
@@ -97,7 +104,9 @@ gradeBefTests = createTest categoryParser "Basic grade requirements which come b
 gradeAftTests :: Test
 gradeAftTests = createTest categoryParser "Basic grade requirements, where grades come after." gradeAftInputs
 
+artSciTests :: Test
+artSciTests = createTest categoryParser "Arts and Science requirements from Christine's output" artSciInputs
 
 -- functions for running tests in REPL
 reqTestSuite :: Test
-reqTestSuite = TestLabel "ReqParser tests" $ TestList [orTests, andTests, andorTests, parTests, fromParTests, gradeAftTests, gradeBefTests]
+reqTestSuite = TestLabel "ReqParser tests" $ TestList [artSciTests]
