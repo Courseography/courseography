@@ -77,11 +77,18 @@ gradeAftInputs = [
 
 artSciInputs :: [(String, Req)]
 artSciInputs = [
-      ("1.0 full course or its equivalent from HIS230H1/ HIS231H1/ NEW220H1/ NEW221H1/ NEW225H1/ NEW226H1", J "")
+      ("1.0 full course or its equivalent from HIS230H1/ HIS231H1/ NEW220H1/ NEW221H1/ NEW225H1/ NEW226H1", FROM "1.0" (OR [J "HIS230H1",J "HIS231H1",J "NEW220H1",J "NEW221H1",J "NEW225H1",J "NEW226H1"]))
     , ("5 FCEs of any of the following: LIN232H1; LIN241H1; JLP315H1; LIN331H1; LIN341H1; JLP374H1", J "") 
-    , ("(ECO101H1, ECO102H1)/ECO100Y1, RSM100H1/ MGT100H1/ RSM100Y1", J "")
+    , ("(ECO101H1, ECO102H1)/ECO100Y1, RSM100H1/ MGT100H1/ RSM100Y1", AND [OR [AND [J "ECO101H1",J "ECO102H1"],J "ECO100Y1"],OR [J "RSM100H1",J "MGT100H1",J "RSM100Y1"]])
     ]
 
+{-|
+Right (AND [FROM "5" (GRADE "1" (J "LIN232H1")),GRADE "1" (J "JLP315H1"),GRADE "1" (J "LIN341H1")]
+    vs.
+Right (FROM "5" [J "LIN232H1", J "LIN241H1", J "JLP315H1", J "LIN331H1", J "LIN341H1", J "JLP374H1"])
+
+How do we want to handle semicolons?
+-}
 
 orTests :: Test
 orTests = createTest categoryParser "Basic or Requirement" orInputs
