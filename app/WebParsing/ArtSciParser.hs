@@ -78,7 +78,8 @@ parseDepartment (relativeURL, _) = do
     where
         isProgramHeaderInfix tag = or [(T.isInfixOf "view-id-section") tag, (T.isInfixOf "view-header") tag]
         isCourseSection tag = or [(T.isInfixOf "view-id-courses") tag, 
-            and [(T.isInfixOf "view-") tag, (T.isInfixOf "-college-courses") tag]]
+            and [(T.isInfixOf "view-") tag, (T.isInfixOf "-courses") tag,
+                  not (T.isInfixOf "programs" tag)]]
 
 -- | Parse the section of the course calendar listing the programs offered by a department.
 parsePrograms :: [Tag T.Text] -> SqlPersistM ()
