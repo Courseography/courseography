@@ -1,4 +1,10 @@
 var CoursePanel = React.createClass({
+    getInitialState: function() {
+        return {
+            courseRoster: []
+        };
+    },
+
     render: function() {
         return (
             <ul className="trapScroll-enabled" id="course-select">
