@@ -86,7 +86,7 @@ parsePrograms programs = do
     mapM_ addPostToDatabase elems
     where
          isPost tag = tagOpenAttrNameLit "h3" "class" isProgramsView tag
-         isProgramsView currentTag = or [(T.isInfixOf "programs_view") currentTag, (T.isInfixOf "college_programs") currentTag]
+         isProgramsView currentTag = or [(T.isInfixOf "programs_view") currentTag, (T.isInfixOf "_programs") currentTag]
 
 -- | Parse the section of the course calendar listing the courses offered by a department.
 parseCourses :: [Tag T.Text] -> [(Courses, T.Text, T.Text)]
