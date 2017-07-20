@@ -1,14 +1,18 @@
 var CoursePanel = React.createClass({
     getInitialState: function() {
         return {
-            courseRoster: []
+            courseRoster: [1, 2, 3]
         };
+    },
+
+    clearCourseRoster: function() {
+       this.setState({courseRoster: []});
     },
 
     render: function() {
         return (
             <ul className="trapScroll-enabled" id="course-select">
-                <li id="clear-all">
+                <li id="clear-all" onClick={this.clearCourseRoster}>
                     <h3>Clear All</h3>
                 </li>
             </ul>
