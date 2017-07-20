@@ -22,6 +22,7 @@ cabal.sandbox.config
 
 # generated resources
 /graphs/gen/*.svg
+/graphs/gen/*.png
 
 # course videos
 /public/videos/
