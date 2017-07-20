@@ -71,13 +71,14 @@ parseDepartment (relativeURL, _) = do
         contentTags' = takeWhile (not . tagOpenAttrLit "p" ("class", "rteright")) contentTags
         programs = dropWhile (not . tagOpenAttrNameLit "div" "class" isProgramHeaderInfix) contentTags'
         programs' = takeWhile (not . tagOpenAttrNameLit "div" "class" (T.isInfixOf "view-id-course_group_view")) programs 
-        -- ^^ Doesn't work with college programs, just takes everything, but posts parse fine
-        courseTags = dropWhile (not . tagOpenAttrNameLit "div" "class" (T.isInfixOf "view-id-courses")) contentTags'
+        courseTags = dropWhile (not . tagOpenAttrNameLit "div" "class" isCourseSection) contentTags'
     parsePrograms programs'
     let courseList = parseCourses courseTags
     mapM_ insertCourse courseList
     where
         isProgramHeaderInfix tag = or [(T.isInfixOf "view-id-section") tag, (T.isInfixOf "view-header") tag]
+        isCourseSection tag = or [(T.isInfixOf "view-id-courses") tag, 
+            and [(T.isInfixOf "view-") tag, (T.isInfixOf "-college-courses") tag]]
 
 -- | Parse the section of the course calendar listing the programs offered by a department.
 parsePrograms :: [Tag T.Text] -> SqlPersistM ()
@@ -91,7 +92,7 @@ parsePrograms programs = do
 -- | Parse the section of the course calendar listing the courses offered by a department.
 parseCourses :: [Tag T.Text] -> [(Courses, T.Text, T.Text)]
 parseCourses tags =
-    let elems = drop 1 $ TS.partitions (TS.isTagOpenName "h3") tags -- Remove the first one, which is the header
+    let elems = TS.partitions (tagOpenAttrNameLit "h3" "class" (T.isInfixOf "views-accordion")) tags
         courses = map parseCourse elems
     in
         courses
