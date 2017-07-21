@@ -1,7 +1,7 @@
 var CoursePanel = React.createClass({
     getInitialState: function() {
         return {
-            courseRoster: [1, 2, 3]
+            courseRoster: ["1", "2", "3"]
         };
     },
 
@@ -10,12 +10,27 @@ var CoursePanel = React.createClass({
     },
 
     render: function() {
+        var courseList = [];
+
+        for (let i = 0; i < this.state.courseRoster.length; i++) {
+            courseList.push(<CourseInformation courseCode = {this.state.courseRoster[i]} />);
+        }
+
         return (
             <ul className="trapScroll-enabled" id="course-select">
                 <li id="clear-all" onClick={this.clearCourseRoster}>
                     <h3>Clear All</h3>
                 </li>
+                {courseList}
             </ul>
+        );
+    }
+});
+
+var CourseInformation = React.createClass({
+    render: function() {
+        return (
+            <li id={this.props.courseCode + "-li"}>{this.props.courseCode}</li>
         );
     }
 });
