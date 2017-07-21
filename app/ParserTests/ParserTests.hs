@@ -78,16 +78,40 @@ gradeAftInputs = [
 artSciInputs :: [(String, Req)]
 artSciInputs = [
       ("1.0 full course or its equivalent from HIS230H1/ HIS231H1/ NEW220H1/ NEW221H1/ NEW225H1/ NEW226H1", FROM "1.0" (OR [J "HIS230H1",J "HIS231H1",J "NEW220H1",J "NEW221H1",J "NEW225H1",J "NEW226H1"]))
-    , ("5 FCEs of any of the following: LIN232H1; LIN241H1; JLP315H1; LIN331H1; LIN341H1; JLP374H1", J "") 
+    , ("5 FCEs of any of the following: LIN232H1; LIN241H1; JLP315H1; LIN331H1; LIN341H1; JLP374H1", J "")
     , ("(ECO101H1, ECO102H1)/ECO100Y1, RSM100H1/ MGT100H1/ RSM100Y1", AND [OR [AND [J "ECO101H1",J "ECO102H1"],J "ECO100Y1"],OR [J "RSM100H1",J "MGT100H1",J "RSM100Y1"]])
+    , ("CAS310H1 and CAS320H1", AND [J "CAS310H1",J "CAS320H1"])
     ]
 
 {-|
+"FALSE POSITIVE?"
+
 Right (AND [FROM "5" (GRADE "1" (J "LIN232H1")),GRADE "1" (J "JLP315H1"),GRADE "1" (J "LIN341H1")]
     vs.
 Right (FROM "5" [J "LIN232H1", J "LIN241H1", J "JLP315H1", J "LIN331H1", J "LIN341H1", J "JLP374H1"])
 
 How do we want to handle semicolons?
+
+
+
+"0.5 FCE in statistics from: EEB225H1 (recommended)/ STA220H1/ STA257H1/  STA288H1/ GGR270H1/ PSY201H1","0.5 FCE in core evolution from: EEB318H1, EEB323H1, EEB362H1"
+
+_ FCE [in ?] from Req
+        ? is a program/group.. should this be dealt with in my level..
+        can do a try, with highest precedence trying to parse whatever is between FCE and from; else use the hard-coded methods?
+            - Can store whatever is parsed in between as the Program/Group?
+
+-}
+
+{-
+2.0 FCEs: BIO220H1 (ecology and evolutionary biology); ENV234H1 (cannot be substituted with EEB375H1 for this requirement), ENV334H1 (environmental biology)
+
+finding new pattern:
+
+Req (?)
+?: raw information to be parsed using raw parser?.. should we add attribute to all reqs that holds such info and use rawParser to get whatever is within
+    the paranthesese instead of having the rawParser be the lowest level parser?
+
 -}
 
 orTests :: Test
