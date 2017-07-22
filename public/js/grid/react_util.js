@@ -64,7 +64,11 @@ var SearchPanel = React.createClass({
                     </form>
                 </div>
                 <div id="search-container">
-                    <CourseList courses={this.state.courseList}/>
+                    {/* onKeyUp is a prop, so the only way that I know how to
+                        set a prop is below like I have done with courses, but
+                        I also don't know how to access enableSearch in
+                        CourseList so I can set it to onKeyUp.*/}
+                    <CourseList courses={this.state.courseList} onKeyUp={CourseList.enableSearch}/>
                 </div>
             </div>
         );
@@ -79,15 +83,7 @@ var CourseList = React.createClass({
     },
 
     enableSearch: function() {
-        'use strict';
-
-        $('#course-filter').keyup(function() {
-            this.setState({courseFilter: $('#course-filter').val().toUpperCase()});
-        }.bind(this));
-    },
-
-    componentDidMount: function() {
-        this.enableSearch();
+        this.setState({courseFilter: $('#course-filter').val().toUpperCase()});
     },
 
     render: function() {
