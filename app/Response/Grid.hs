@@ -24,23 +24,12 @@ gridResponse =
 
 coursePanel :: H.Html
 coursePanel =
-    H.div ! A.id "course-select-wrapper" ! A.class_ "col-md-2 col-xs-6" $
-        H.ul ! A.id "course-select" ! A.class_ "trapScroll-enabled" $
-            H.li ! A.id "clear-all" $
-                H.h3 "Clear All"
+    H.div ! A.id "course-select-wrapper" ! A.class_ "col-md-2 col-xs-6" $ ""
 
 searchPanel :: H.Html
 searchPanel =
-    H.div ! A.id "search-layout" ! A.class_ "col-md-2 col-xs-6 col-md-push-8" $ do
-        H.div ! A.id "filter-container" $
-            H.form ! A.onsubmit "return false;" $
-                H.input ! A.id "course-filter"
-                        ! A.class_ "form-control"
-                        ! A.placeholder "Enter a course!"
-                        ! A.autocomplete "off"
-                        ! A.type_ "text"
-        H.div ! A.id "search-container" $
-            H.div ! A.id "search-list" $ ""
+    H.div ! A.id "search-layout" ! A.class_ "col-md-2 col-xs-6 col-md-push-8" $
+        ""
 
 infoPanel :: H.Html
 infoPanel =

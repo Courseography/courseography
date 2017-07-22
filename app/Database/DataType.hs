@@ -31,7 +31,7 @@ instance ToJSON ShapeType
 -- .
 instance FromJSON ShapeType
 
-data PostType = Specialist | Major | Minor
+data PostType = Specialist | Major | Minor | Other
  deriving (Show, Read, Eq, Generic)
 derivePersistField "PostType"
 

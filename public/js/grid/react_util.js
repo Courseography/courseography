@@ -1,26 +1,74 @@
 var CoursePanel = React.createClass({
+    getInitialState: function() {
+        return {
+            courseRoster: ["1", "2", "3"]
+        };
+    },
+
+    clearCourseRoster: function() {
+       this.setState({courseRoster: []});
+    },
+
     render: function() {
+        var courseList = [];
+
+        for (let i = 0; i < this.state.courseRoster.length; i++) {
+            courseList.push(<CourseInformation courseCode = {this.state.courseRoster[i]} />);
+        }
+
         return (
             <ul className="trapScroll-enabled" id="course-select">
-                <li id="clear-all">
+                <li id="clear-all" onClick={this.clearCourseRoster}>
                     <h3>Clear All</h3>
                 </li>
+                {courseList}
             </ul>
         );
     }
 });
 
+var CourseInformation = React.createClass({
+    render: function() {
+        return (
+            <li id={this.props.courseCode + "-li"}>{this.props.courseCode}</li>
+        );
+    }
+});
+
 var SearchPanel = React.createClass({
+    getInitialState: function() {
+        return {
+            courseList: []
+        };
+    },
+
+    componentDidMount: function() {
+        $.ajax({
+            url: 'all-courses',
+            dataType: 'text',
+            success: function (data) {
+                var courses = data.split('\n').map(function (course) {
+                    return course.substring(0, 8);
+                });
+                this.setState({courseList: courses});
+            }.bind(this)
+        });
+    },
+
     render: function() {
         return (
             <div>
                 <div id="filter-container">
-                    <form onsubmit="return false;">
+                    <form>
                         <input id="course-filter" className="form-control" placeholder="Enter a course!" autoComplete="off" type="text" />
                     </form>
                 </div>
                 <div id="search-container">
-                    <CourseList />
+                    {/* onKeyUp is a prop, so the only way that I know how to
+                        set a prop is below like I have done with courses, but
+                        I also don't know how to access enableSearch in
+                        CourseList so I can set it to onKeyUp.*/}
+                    <CourseList courses={this.state.courseList} onKeyUp={CourseList.enableSearch}/>
                 </div>
             </div>
         );
@@ -30,38 +78,19 @@ var SearchPanel = React.createClass({
 var CourseList = React.createClass({
     getInitialState: function() {
         return {
-            courses: [], courseFilter: ''
+            courseFilter: ''
         };
     },
 
-    componentDidMount: function() {
-        $.ajax({
-            url: 'all-courses',
-            dataType: 'text',
-            success: function (data) {
-                this.enableSearch();
-                var courses = data.split('\n').map(function (course) {
-                    return course.substring(0, 8);
-                });
-                this.setState({courses: courses});
-            }.bind(this)
-        });
-    },
-
     enableSearch: function() {
-        'use strict';
-
-        $('#course-filter').keyup(function() {
-            this.setState({courseFilter: $('#course-filter').val().toUpperCase()});
-        }.bind(this));
+        this.setState({courseFilter: $('#course-filter').val().toUpperCase()});
     },
 
     render: function() {
-
         var state = this.state;
 
         if (state.courseFilter !== '') {
-            var searchList = state.courses.filter(function (course) {
+            var searchList = this.props.courses.filter(function (course) {
                 return course.indexOf(state.courseFilter) > -1;
             }).map(function (course) {
                 return <CourseEntry course={course} key={course} />
@@ -77,7 +106,6 @@ var CourseList = React.createClass({
 });
 
 var CourseEntry = React.createClass({
-
     getInitialState: function() {
         return {
             star: false
@@ -113,9 +141,9 @@ var InfoPanel = React.createClass({
 
 
 export function initGrid() {
-  // ReactDOM.render(
-  //     <CoursePanel />,
-  //     document.getElementById('course-select-wrapper'));
+  ReactDOM.render(
+      <CoursePanel />,
+      document.getElementById('course-select-wrapper'));
 
   ReactDOM.render(
       <SearchPanel />,
