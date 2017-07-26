@@ -171,7 +171,7 @@ fcesParser = do
     _ <- fromSeparator
     Parsec.spaces
     req <- andParser
-    return $ FROM fces req
+    return $ FCES fces req
 
 -- | Parser for requirements separated by a semicolon.
 -- Semicolons are assumed to have the highest precedence.
