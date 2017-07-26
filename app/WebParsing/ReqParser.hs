@@ -47,8 +47,8 @@ andSeparator = Parsec.choice $ map Parsec.string [
 semicolon :: Parser Char
 semicolon = Parsec.char ';'
 
-fcesParser :: Parser String
-fcesParser = do
+creditsParser :: Parser String
+creditsParser = do
     Parsec.spaces
     integral <- Parsec.many1 Parsec.digit
     point <- Parsec.option "" $ Parsec.string "."
@@ -165,9 +165,9 @@ andParser = do
 
 -- | Parser for reqs in "from" format:
 -- 4.0 FCEs from CSC108H1, CSC148H1, ...
-fromParser :: Parser Req
-fromParser = do
-    fces <- fcesParser
+fcesParser :: Parser Req
+fcesParser = do
+    fces <- creditsParser
     _ <- fromSeparator
     Parsec.spaces
     req <- andParser
@@ -177,7 +177,7 @@ fromParser = do
 -- Semicolons are assumed to have the highest precedence.
 categoryParser :: Parser Req
 categoryParser = do
-    reqs <- Parsec.sepBy (Parsec.try fromParser <|> Parsec.try andParser) semicolon
+    reqs <- Parsec.sepBy (Parsec.try fcesParser <|> Parsec.try andParser) semicolon
     Parsec.eof
     case reqs of
         [] -> fail "Empty Req."
