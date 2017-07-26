@@ -114,6 +114,24 @@ Req (?)
 
 -}
 
+
+
+
+{-
+"Third Year: 1.0 FCE from FOR300H1, FOR301H1, FOR302H1, FOR303H1, FOR305H1, FOR306H1, FOR307H1, FOR310H1","Fourth Year: FOR400Y1"
+
+FROM parser should parse for single courses? How do we want to parse/represent this req
+
+GROUP "Third Year" $ FCES "1.0" $ FROM [J "FOR300H1", J "FOR301H1", J "FOR302H1", J "FOR303H1", J "FOR305H1", J "FOR306H1", J "FOR307H1", J "FOR310H1"]
+
+THIS SEEMS COMPLETELY MISLEADING, THE CONNECTIONS ARE VERY IMPORTANT BC ANDS AND ORS ARE NATURAL LANGUAGE
+"1.0 FCES FROM THIS, AND THAT, AND THAT, AND THAT OR THAT, AND THAT." VS "1.0 FCES FROM THIS, THIS, THIS, THIS, THIS.."
+
+GROUP "Third Year" $ FCES "1.0" $ FROM [AND [J "FOR300H1", J "FOR301H1", J "FOR302H1", J "FOR303H1", J "FOR305H1", J "FOR306H1", J "FOR307H1", J "FOR310H1"]]
+-}
+
+
+
 orTests :: Test
 orTests = createTest categoryParser "Basic or Requirement" orInputs
 
@@ -140,4 +158,4 @@ artSciTests = createTest categoryParser "Arts and Science requirements from Chri
 
 -- functions for running tests in REPL
 reqTestSuite :: Test
-reqTestSuite = TestLabel "ReqParser tests" $ TestList [artSciTests]
+reqTestSuite = TestLabel "ReqParser tests" $ TestList [orTests, andTests, andorTests, parTests, fromParTests, gradeBefTests, gradeAftTests, artSciTests]
