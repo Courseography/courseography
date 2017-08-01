@@ -2,7 +2,7 @@ module WebParsing.ArtSciParser
     (parseArtSci, getDeptList, fasCalendarURL) where
 
 import Data.Either (either)
-import Data.List (elemIndex)
+import Data.List (elemIndex, nubBy)
 import Control.Monad.IO.Class (liftIO)
 import qualified Data.Text as T
 import Data.Text.Lazy (toStrict)
@@ -39,7 +39,7 @@ parseArtSci = do
     runSqlite databasePath $ do
         liftIO $ putStrLn "Inserting departments"
         insertDepts $ map snd deptInfo
-        mapM_ parseDepartment deptInfo
+        mapM_ parseDepartment (nubBy (\(x, _) (y, _) -> x == y) deptInfo) 
 
 -- | Converts the processed main page and extracts a list of department html pages
 -- and department names
