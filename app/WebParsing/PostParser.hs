@@ -39,7 +39,7 @@ addPostCategoriesToDatabase key categories = do
     where
         isCategory text =
             let infixes = map (containsText text)
-                         ["First", "Second", "Third", "suitable", "Core", "Electives"]
+                         ["First", "Second", "Third"] --, "suitable", "Core", "Electives"]
             in
                 ((T.length text) >= 7) && ((length $ filter (\bool -> bool) infixes) <= 0)
         containsText text subtext = T.isInfixOf subtext text
@@ -57,17 +57,21 @@ categoryParser tags fullPostName firstCourse listPartitions = do
             postExists <- insertUnique post
             case postExists of
                 Just key -> do
-                    addPostCategoriesToDatabase key categories
+                    addPostCategoriesToDatabase key (map removeWhitespace categories)
                 Nothing -> return ()
         Left _ -> do
             liftIO $ print failedString
             return ()
     where
         parsed = case listPartitions of
-            [] -> P.parse (generalCategoryParser fullPostName firstCourse) failedString (innerText tags)
+            [] -> do
+                P.parse (generalCategoryParser fullPostName firstCourse) failedString (innerText tags)
             partitionResults -> do
                 post <- P.parse (postInfoParser fullPostName firstCourse) failedString (innerText tags)
                 return (post, partitionResults)
+
+removeWhitespace :: T.Text -> T.Text
+removeWhitespace category = T.replace "\n" " " $ T.replace "\8203" " " $ T.replace "\160" " " $ T.strip category
 
 parseLi :: [Tag T.Text] -> T.Text
 parseLi liPartition = do
@@ -86,5 +90,5 @@ parseNumberedPartition :: [Tag T.Text] -> T.Text
 parseNumberedPartition pPartition = do
     let parsed = P.parse parseNumberedLine failedString (innerText pPartition)
     case parsed of
-        Right category ->  T.replace "\n" " " $ T.replace "\8203" " " $ T.replace "\160" " " $ T.strip category
+        Right category -> category
         Left _ -> ""
