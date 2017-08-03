@@ -28,9 +28,15 @@ var CoursePanel = React.createClass({
 });
 
 var CourseInformation = React.createClass({
+    getInitialState: function() {
+        return {
+            satisfied: false
+        };
+    },
+
     render: function() {
         return (
-            <li id={this.props.courseCode + "-li"}>{this.props.courseCode}</li>
+            <li id={this.props.courseCode + "-li"} className="ui-accordion ui-widget ui-helper-reset" role="tablist">{this.props.courseCode}</li>
         );
     }
 });
