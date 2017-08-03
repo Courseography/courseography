@@ -1,7 +1,7 @@
 var CoursePanel = React.createClass({
     getInitialState: function() {
         return {
-            courseRoster: ["1", "2", "3"]
+            courseRoster: [["1", [], []], ["2", ["2-1"], ["2-1", "2-2"]], ["3", ["3-1", "3-2"], ["3-1"]]]
         };
     },
 
@@ -13,7 +13,7 @@ var CoursePanel = React.createClass({
         var courseList = [];
 
         for (let i = 0; i < this.state.courseRoster.length; i++) {
-            courseList.push(<CourseInformation courseCode = {this.state.courseRoster[i]} />);
+            courseList.push(<CourseInformation courseCode={this.state.courseRoster[i][0]} />);
         }
 
         return (
@@ -34,10 +34,40 @@ var CourseInformation = React.createClass({
         };
     },
 
+    toggleSatisfied: function() {
+        this.setState({satisfied: !this.state.satisfied});
+    },
+
     render: function() {
-        return (
-            <li id={this.props.courseCode + "-li"} className="ui-accordion ui-widget ui-helper-reset" role="tablist">{this.props.courseCode}</li>
-        );
+        if(this.state.satisfied === false) {
+            return (
+                <li id={this.props.courseCode + "-li"}
+                    className="ui-accordion ui-widget ui-helper-reset"
+                    role="tablist"
+                    onClick={this.toggleSatisfied}>
+                    <div className="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all ui-accordion-icons"
+                         role="tab"
+                         id={"ui-accordion-" + this.props.courseCode + "-li-header-0"}
+                         aria-controls={"ui-accordion-" + this.props.courseCode + "-li-panel-0"}
+                         aria-selected="false"
+                         aria-expanded="false"
+                         tabIndex="0">
+                        <span className="ui-accordion-header-icon ui-icon ui-icon-triangle-1-e"></span>
+                        <div className="icon-div">
+                            <img src="static/res/ico/delete.png" className="close-icon" />
+                        </div>
+                        <h3 taken="true"
+                            satisfied="true">
+                            {this.props.courseCode}
+                        </h3>
+                    </div>
+                </li>
+            );
+        } else {
+            return (
+                <li id={this.props.courseCode + "-li"} className="ui-accordion ui-widget ui-helper-reset" role="tablist" onClick={this.toggleSatisfied}>{this.props.courseCode}</li>
+            );
+        }
     }
 });
 
@@ -66,7 +96,7 @@ var SearchPanel = React.createClass({
             <div>
                 <div id="filter-container">
                     <form>
-                        <input id="course-filter" className="form-control" placeholder="Enter a course!" autoComplete="off" type="text" onKeyUp={this.refs.courseListRef.enableSearch();}/>
+                        <input id="course-filter" className="form-control" placeholder="Enter a course!" autoComplete="off" type="text" onKeyUp={""}/>
                     </form>
                 </div>
                 <div id="search-container">
