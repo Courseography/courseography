@@ -71,6 +71,18 @@ var CourseInformation = React.createClass({
     }
 });
 
+var Lecture = React.createClass({
+    render: function() {
+        return (
+            <li id={this.props.courseCode + "-" + this.props.lectureCode}
+                clicked="false"
+                satisfied="true">
+                {this.props.lectureCode}
+            </li>
+        );
+    }
+});
+
 var SearchPanel = React.createClass({
     getInitialState: function() {
         return {
