@@ -24,7 +24,7 @@ var CheckMyPost = React.createClass({
     },
 
     updateNavCreditCounts: function() {
-        var newCounts = [this.refs.spePost.getCreditCount(), 
+        var newCounts = [this.refs.spePost.getCreditCount(),
                          this.refs.majPost.getCreditCount(),
                          this.refs.minPost.getCreditCount()];
         this.refs.postNav.setState({creditCounts: newCounts},
@@ -32,7 +32,7 @@ var CheckMyPost = React.createClass({
     },
 
     updatePostStatus: function() {
-        var newStatuses = [this.refs.spePost.setIfCompleted(), 
+        var newStatuses = [this.refs.spePost.setIfCompleted(),
                            this.refs.majPost.setIfCompleted(),
                            this.refs.minPost.setIfCompleted()];
         this.refs.postNav.setState({completed: newStatuses});
@@ -41,7 +41,7 @@ var CheckMyPost = React.createClass({
     render: function() {
         return (
             <div id='check_my_post'>
-                <PostNav ref='postNav' 
+                <PostNav ref='postNav'
                          updateTab={this.changeActiveTab}
                          getCreditCountClass={this.getCreditCountClass} />
                 <SpecialistPost ref='spePost' />
@@ -85,21 +85,21 @@ var PostNav = React.createClass({
 
     render: function() {
         return (
-            <nav id='posts'> 
+            <nav id='posts'>
                 <ul>
                     <li id='specialist' className={this.getNavClass('spe')}>
                         <a id='spec_link' onClick={this.changeActiveTab}> Specialist </a>
-                        <div id='spec_creds' className={this.getCreditCountClass(0)}> 
+                        <div id='spec_creds' className={this.getCreditCountClass(0)}>
                             {'(' + this.state.creditCounts[0].toFixed(1) + '/12.0)'} </div>
                     </li>
                     <li id='major' className={this.getNavClass('maj')}>
                         <a id='maj_link' onClick={this.changeActiveTab}> Major </a>
-                        <div id='maj_creds' className={this.getCreditCountClass(1)}> 
+                        <div id='maj_creds' className={this.getCreditCountClass(1)}>
                             {'(' + this.state.creditCounts[1].toFixed(1) + '/8.0)'} </div>
                     </li>
                     <li id='minor' className={this.getNavClass('min')}>
                         <a id='min_link' onClick={this.changeActiveTab}> Minor </a>
-                        <div id='min_creds' className={this.getCreditCountClass(2)}> 
+                        <div id='min_creds' className={this.getCreditCountClass(2)}>
                         {'(' + this.state.creditCounts[2].toFixed(1) + '/4.0)'} </div>
                     </li>
                 </ul>

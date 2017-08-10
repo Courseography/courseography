@@ -1,4 +1,4 @@
-import {CourseCategory, MultipleCourseCode, InquiryCategory} from 'es6!post/course_components';
+import {CourseCategory, CourseCategory2, MultipleCourseCode, InquiryCategory} from 'es6!post/course_components';
 import {Modal} from 'es6!common/react_modal';
 
 /**
@@ -95,7 +95,7 @@ var Post = React.createClass({
         var modal = this.refs.modal;
         var newCourse = nodeId.substring(0, 6);
         modal.openModal(newCourse);
-        
+
     },
 
     render: function() {
@@ -112,12 +112,15 @@ var Post = React.createClass({
         return (
             <div id={'post_' + this.props.postType} className={classes} >
                 <Modal ref='modal' />
-                <CourseCategory yearName='First Year' courses={this.props.firstYearCourses}
+                <CourseCategory2 yearName='First Year' courses={this.props.firstYearCourses}
                                 openModal={this.openModal} />
-                <CourseCategory yearName='Second Year' courses={this.props.secondYearCourses}
+                <CourseCategory2 yearName='Second Year' courses={this.props.secondYearCourses}
                                 openModal={this.openModal} />
-                <CourseCategory yearName='Later Years' courses={this.props.laterYearCourses}
+                <CourseCategory2 yearName='Later Years' courses={this.props.laterYearCourses}
                                 openModal={this.openModal} />
+
+
+
                 {this.props.categoryTitles.map(function (title, i) {
                     return <MultipleCourseCode courseID={me.props.postType + '_category_' + (i + 1)}
                                                textBoxNumber={me.props.textBoxes[i][0]}
