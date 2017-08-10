@@ -43,9 +43,9 @@ var CourseInformation = React.createClass({
             return (
                 <li id={this.props.courseCode + "-li"}
                     className="ui-accordion ui-widget ui-helper-reset"
-                    role="tablist"
-                    onClick={this.toggleSatisfied}>
+                    role="tablist">
                     <div className="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all ui-accordion-icons"
+                         onClick={this.toggleSatisfied}
                          role="tab"
                          id={"ui-accordion-" + this.props.courseCode + "-li-header-0"}
                          aria-controls={"ui-accordion-" + this.props.courseCode + "-li-panel-0"}
