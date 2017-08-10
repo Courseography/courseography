@@ -234,20 +234,14 @@ export var CourseCategory = React.createClass({
 export var CourseCategory2 = React.createClass({
     render: function() {
         return (
-            <div className="col-md-4 col-sm-6">
-                    <div>{this.props.yearName}</div>
-                    <div className="portfolio-thumb">
-                         <ul>
-                            {this.props.courses.map((courses) =>
-                                <CourseCode id={courses[0]}
-                                    key={courses[0]}
-                                    courseIDs={courses}
-                                    openModal={this.props.openModal} />
-                            )}
-                         </ul>
-
-                    </div>
-               </div>
+            <li>
+                {this.props.courses.map((courses) =>
+                    <CourseCode id={courses[0]}
+                        key={courses[0]}
+                        courseIDs={courses}
+                        openModal={this.props.openModal} />
+                )}
+            </li>
         );
     }
 })
