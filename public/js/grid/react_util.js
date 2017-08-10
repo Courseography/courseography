@@ -1,7 +1,7 @@
 var CoursePanel = React.createClass({
     getInitialState: function() {
         return {
-            courseRoster: [["1", [], []], ["2", ["2-1"], ["2-1", "2-2"]], ["3", ["3-1", "3-2"], ["3-1"]]]
+            courseRoster: [["CLS000", [], [], []], ["CLS001", ["LEC1000"], ["LEC1001"], ["LEC1002"]], ["CLS002", [], ["LEC2000", "LEC2001"], ["LEC2002"]]]
         };
     },
 
@@ -13,7 +13,7 @@ var CoursePanel = React.createClass({
         var courseList = [];
 
         for (let i = 0; i < this.state.courseRoster.length; i++) {
-            courseList.push(<CourseInformation courseCode={this.state.courseRoster[i][0]} />);
+            courseList.push(<CourseInformation courseCode={this.state.courseRoster[i][0]} yLectures={this.state.courseRoster[i][1]} fLectures={this.state.courseRoster[i][2]} sLectures={this.state.courseRoster[i][3]}/>);
         }
 
         return (
@@ -39,33 +39,102 @@ var CourseInformation = React.createClass({
     },
 
     render: function() {
+        var courseCodeProp = this.props.courseCode;
+        var yLectureArray = [];
+        var fLectureArray = [];
+        var sLectureArray = [];
+
+        for (let i = 0; i < this.props.yLectures.length; i++) {
+            yLectureArray.push(<Lecture courseCode={courseCodeProp} lectureCode={this.props.yLectures[i]}/>);
+        }
+
+        for (let i = 0; i < this.props.fLectures.length; i++) {
+            fLectureArray.push(<Lecture courseCode={courseCodeProp} lectureCode={this.props.fLectures[i]}/>);
+        }
+
+        for (let i = 0; i < this.props.sLectures.length; i++) {
+            sLectureArray.push(<Lecture courseCode={courseCodeProp} lectureCode={this.props.sLectures[i]}/>);
+        }
+
         if(this.state.satisfied === false) {
             return (
-                <li id={this.props.courseCode + "-li"}
+                <li id={courseCodeProp + "-li"}
                     className="ui-accordion ui-widget ui-helper-reset"
                     role="tablist">
                     <div className="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all ui-accordion-icons"
-                         onClick={this.toggleSatisfied}
-                         role="tab"
-                         id={"ui-accordion-" + this.props.courseCode + "-li-header-0"}
-                         aria-controls={"ui-accordion-" + this.props.courseCode + "-li-panel-0"}
-                         aria-selected="false"
-                         aria-expanded="false"
-                         tabIndex="0">
+                        onClick={this.toggleSatisfied}
+                        role="tab"
+                        id={"ui-accordion-" + courseCodeProp + "-li-header-0"}
+                        aria-controls={"ui-accordion-" + courseCodeProp + "-li-panel-0"}
+                        aria-selected="false"
+                        aria-expanded="false"
+                        tabIndex="0">
                         <span className="ui-accordion-header-icon ui-icon ui-icon-triangle-1-e"></span>
                         <div className="icon-div">
                             <img src="static/res/ico/delete.png" className="close-icon" />
                         </div>
                         <h3 taken="true"
                             satisfied="true">
-                            {this.props.courseCode}
+                            {courseCodeProp}
                         </h3>
+                    </div>
+                    <div className="sections ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom"
+                        id={"ui-accordion-" + courseCodeProp + "-li-panel-0"}
+                        aria-labelledby={"ui-accordion-" + courseCodeProp + "-li-header-0"}
+                        role="tabpanel"
+                        aria-hidden="true"
+                        style={{display: "none"}}>
+                        <ul className="sectionList-Y">
+                            {yLectureArray}
+                        </ul>
+                        <ul className="sectionList-F">
+                            {fLectureArray}
+                        </ul>
+                        <ul className="sectionList-S">
+                            {sLectureArray}
+                        </ul>
                     </div>
                 </li>
             );
         } else {
             return (
-                <li id={this.props.courseCode + "-li"} className="ui-accordion ui-widget ui-helper-reset" role="tablist" onClick={this.toggleSatisfied}>{this.props.courseCode}</li>
+                <li id={courseCodeProp + "-li"}
+                    className="ui-accordion ui-widget ui-helper-reset"
+                    role="tablist">
+                    <div className="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all ui-accordion-icons"
+                        onClick={this.toggleSatisfied}
+                        role="tab"
+                        id={"ui-accordion-" + courseCodeProp + "-li-header-0"}
+                        aria-controls={"ui-accordion-" + courseCodeProp + "-li-panel-0"}
+                        aria-selected="true"
+                        aria-expanded="true"
+                        tabIndex="0">
+                        <span className="ui-accordion-header-icon ui-icon ui-icon-triangle-1-e"></span>
+                        <div className="icon-div">
+                            <img src="static/res/ico/delete.png" className="close-icon" />
+                        </div>
+                        <h3 taken="true"
+                            satisfied="true">
+                            {courseCodeProp}
+                        </h3>
+                    </div>
+                    <div className="sections ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom ui-accordion-content-active"
+                        id={"ui-accordion-" + courseCodeProp + "-li-panel-0"}
+                        aria-labelledby={"ui-accordion-" + courseCodeProp + "-li-header-0"}
+                        role="tabpanel"
+                        aria-hidden="false"
+                        style={{display: "block"}}>
+                        <ul className="sectionList-Y">
+                            {yLectureArray}
+                        </ul>
+                        <ul className="sectionList-F">
+                            {fLectureArray}
+                        </ul>
+                        <ul className="sectionList-S">
+                            {sLectureArray}
+                        </ul>
+                    </div>
+                </li>
             );
         }
     }
