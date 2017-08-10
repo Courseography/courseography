@@ -13,7 +13,7 @@ var CoursePanel = React.createClass({
         var courseList = [];
 
         for (let i = 0; i < this.state.courseRoster.length; i++) {
-            courseList.push(<CourseInformation courseCode={this.state.courseRoster[i][0]} yLectures={this.state.courseRoster[i][1]} fLectures={this.state.courseRoster[i][2]} sLectures={this.state.courseRoster[i][3]}/>);
+            courseList.push(<CourseInformation courseCode={this.state.courseRoster[i][0]} yLectures={this.state.courseRoster[i][1]} fLectures={this.state.courseRoster[i][2]} sLectures={this.state.courseRoster[i][3]} key={i}/>);
         }
 
         return (
@@ -45,15 +45,15 @@ var CourseInformation = React.createClass({
         var sLectureArray = [];
 
         for (let i = 0; i < this.props.yLectures.length; i++) {
-            yLectureArray.push(<Lecture courseCode={courseCodeProp} lectureCode={this.props.yLectures[i]}/>);
+            yLectureArray.push(<Lecture courseCode={courseCodeProp} lectureCode={this.props.yLectures[i]} key={i}/>);
         }
 
         for (let i = 0; i < this.props.fLectures.length; i++) {
-            fLectureArray.push(<Lecture courseCode={courseCodeProp} lectureCode={this.props.fLectures[i]}/>);
+            fLectureArray.push(<Lecture courseCode={courseCodeProp} lectureCode={this.props.fLectures[i]} key={i}/>);
         }
 
         for (let i = 0; i < this.props.sLectures.length; i++) {
-            sLectureArray.push(<Lecture courseCode={courseCodeProp} lectureCode={this.props.sLectures[i]}/>);
+            sLectureArray.push(<Lecture courseCode={courseCodeProp} lectureCode={this.props.sLectures[i]} key={i}/>);
         }
 
         if(this.state.satisfied === false) {
