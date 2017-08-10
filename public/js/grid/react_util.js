@@ -91,12 +91,18 @@ var SearchPanel = React.createClass({
         });
     },
 
+    courseListRefWrapper: function() {
+        return (
+            this.refs.courseListRef.enableSearch()
+        );
+    },
+
     render: function() {
         return (
             <div>
                 <div id="filter-container">
                     <form>
-                        <input id="course-filter" className="form-control" placeholder="Enter a course!" autoComplete="off" type="text" onKeyUp={""}/>
+                        <input id="course-filter" className="form-control" placeholder="Enter a course!" autoComplete="off" type="text" onKeyUp={this.courseListRefWrapper}/>
                     </form>
                 </div>
                 <div id="search-container">
@@ -104,7 +110,7 @@ var SearchPanel = React.createClass({
                         set a prop is below like I have done with courses, but
                         I also don't know how to access enableSearch in
                         CourseList so I can set it to onKeyUp.*/}
-                    <CourseList courses={this.state.courseList} ref={"courseListRef"} />
+                    <CourseList courses={this.state.courseList} ref="courseListRef" />
                 </div>
             </div>
         );
