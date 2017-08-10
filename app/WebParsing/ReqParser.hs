@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleContexts #-}
 module WebParsing.ReqParser where
 
 import qualified Text.Parsec as Parsec
@@ -7,8 +8,17 @@ import Database.Requirement
 
 -- define separators
 fromSeparator :: Parser ()
-fromSeparator = Parsec.spaces >> (Parsec.try (Parsec.string "FCE")
-             <|> (Parsec.string "FCEs")) >> Parsec.spaces
+fromSeparator = Parsec.spaces >> (Parsec.choice $ map (Parsec.try . Parsec.string) [
+            "FCEs",
+            "FCE",
+            "FCEs:",
+            "FCE:"
+    ]) >> (Parsec.choice $ map (Parsec.try . Parsec.string) [
+            " from the following: ",
+            " from:",
+            " from",
+            " at"
+    ]) >> Parsec.spaces
 
 lParen :: Parser Char
 lParen = Parsec.char '('
@@ -37,6 +47,7 @@ semicolon = Parsec.char ';'
 
 fcesParser :: Parser String
 fcesParser = do
+    Parsec.spaces
     integral <- Parsec.many1 Parsec.digit
     point <- Parsec.option "" $ Parsec.string "."
     fractional <- if point == "" then return "" else Parsec.many1 Parsec.digit
@@ -46,7 +57,7 @@ fcesParser = do
 -- a number with or without a percent symbol, or a letter A-F followed by a +/-.
 gradeParser :: Parser String
 gradeParser = do
-    grade <- percentParser <|> letterParser
+    grade <- Parsec.try ((Parsec.between lParen rParen percentParser <|> letterParser) <|> (percentParser <|> letterParser))
     _ <- Parsec.lookAhead $ Parsec.choice $ map Parsec.try [
         andSeparator,
         orSeparator,
@@ -63,14 +74,14 @@ gradeParser = do
         return fces
 
     letterParser = do
-        letter <- Parsec.oneOf "ABCDEFabcdef"
+        letter <- Parsec.oneOf "ABCDEF"
         plusminus <- Parsec.option "" $ Parsec.string "+" <|> Parsec.string "-"
         return $ letter : plusminus
 
 -- parse for cutoff percentage before a course
 coBefParser :: Parser Req
 coBefParser = do
-    _ <- Parsec.choice $ map (Parsec.try . (>> Parsec.space) . Parsec.string) ["a", "A", "an", "An"]
+    _ <- Parsec.choice $ map (Parsec.try . (>> Parsec.space) . Parsec.string) ["minimum grade of", "minimum mark of", "minimum of", "minimum"]
     Parsec.spaces
     grade <- gradeParser
     Parsec.spaces
@@ -103,7 +114,7 @@ cutoffParser = Parsec.try coAftParser <|> coBefParser
 
 -- | Parser for requirements written within parentheses
 parParser :: Parser Req
-parParser = Parsec.between lParen rParen categoryParser
+parParser = Parsec.between lParen rParen andParser
 
 -- | Parser for raw text in a prerequisite, e.g., "proficiency in C/C++".
 -- Note that even if a course code appears in the middle of such text,
@@ -136,34 +147,40 @@ courseParser = Parsec.between Parsec.spaces Parsec.spaces $ Parsec.choice $ map 
 orParser :: Parser Req
 orParser = do
     reqs <- Parsec.sepBy courseParser orSeparator
-    -- TODO: separate cases when reqs has 1 Req vs. multiple Reqs.
-    return $ OR reqs
+    case reqs of
+        [] -> fail "Empty Req."
+        [x] -> return x
+        (x:xs) -> return $ OR (x:xs)
 
 -- | Parser for for reqs related through an AND.
 andParser :: Parser Req
 andParser = do
     reqs <- Parsec.sepBy orParser andSeparator
-    -- TODO: separate cases when reqs has 1 Req vs. multiple Reqs.
-    return $ AND reqs
+    case reqs of
+        [] -> fail "Empty Req."
+        [x] -> return x
+        (x:xs) -> return $ AND (x:xs)
 
 -- | Parser for reqs in "from" format:
 -- 4.0 FCEs from CSC108H1, CSC148H1, ...
 fromParser :: Parser Req
 fromParser = do
     fces <- fcesParser
-    _ <- Parsec.manyTill Parsec.anyChar fromSeparator
-    _ <- Parsec.manyTill Parsec.anyChar (Parsec.try $ Parsec.lookAhead singleParser)
-    req <- (Parsec.try andParser <|> rawTextParser)
+    _ <- fromSeparator
+    Parsec.spaces
+    req <- andParser
     return $ FROM fces req
 
 -- | Parser for requirements separated by a semicolon.
 -- Semicolons are assumed to have the highest precedence.
 categoryParser :: Parser Req
 categoryParser = do
-    reqs <- Parsec.sepBy (fromParser <|> andParser <|> rawTextParser) semicolon
+    reqs <- Parsec.sepBy (Parsec.try fromParser <|> Parsec.try andParser) semicolon
     Parsec.eof
-    -- TODO: separate cases when reqs has 1 Req vs. multiple Reqs.
-    return $ AND reqs
+    case reqs of
+        [] -> fail "Empty Req."
+        [x] -> return x
+        (x:xs) -> return $ AND (x:xs)
 
 -- | Parse the course requirements from a string.
 parseReqs :: String -> Req
