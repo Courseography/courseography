@@ -41,7 +41,8 @@ andSeparator = Parsec.choice $ map Parsec.string [
     ",",
     "AND",
     "And",
-    "and"
+    "and",
+    ";"
     ]
 
 semicolon :: Parser Char
