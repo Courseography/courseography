@@ -9,11 +9,27 @@ var CoursePanel = React.createClass({
        this.setState({courseRoster: []});
     },
 
+    removeCourse: function(i) {
+       console.log("Removing course at index " + i + ".");
+       i = parseInt(i, 10);
+       var newRoster = [];
+
+       for (let s = 0; s < i; s++) {
+           newRoster.push(this.state.courseRoster[s]);
+       }
+
+       for (let s = i + 1; s < this.state.courseRoster.length; s++) {
+           newRoster.push(this.state.courseRoster[s]);
+       }
+
+       this.setState({courseRoster: newRoster});
+    },
+
     render: function() {
         var courseList = [];
 
         for (let i = 0; i < this.state.courseRoster.length; i++) {
-            courseList.push(<CourseInformation courseCode={this.state.courseRoster[i][0]} yLectures={this.state.courseRoster[i][1]} fLectures={this.state.courseRoster[i][2]} sLectures={this.state.courseRoster[i][3]} key={i}/>);
+            courseList.push(<CourseInformation courseCode={this.state.courseRoster[i][0]} yLectures={this.state.courseRoster[i][1]} fLectures={this.state.courseRoster[i][2]} sLectures={this.state.courseRoster[i][3]} key={i} cat={i} removeCourse={this.removeCourse}/>);
         }
 
         return (
@@ -35,10 +51,12 @@ var CourseInformation = React.createClass({
     },
 
     toggleSatisfied: function() {
+        console.log("toggleSatisfied method of CourseInformation component with prop courseCode as " + this.props.courseCode + " has been called.");
         this.setState({satisfied: !this.state.satisfied});
     },
 
     render: function() {
+        console.log("Rendering CourseInformation component with courseCode prop courseCode as " + this.props.courseCode + ".");
         var courseCodeProp = this.props.courseCode;
         var yLectureArray = [];
         var fLectureArray = [];
@@ -71,7 +89,7 @@ var CourseInformation = React.createClass({
                         tabIndex="0">
                         <span className="ui-accordion-header-icon ui-icon ui-icon-triangle-1-e"></span>
                         <div className="icon-div">
-                            <img src="static/res/ico/delete.png" className="close-icon" />
+                            <img src="static/res/ico/delete.png" className="close-icon" onClick={() => this.props.removeCourse(this.props.cat)}/>
                         </div>
                         <h3 taken="true"
                             satisfied="true">
@@ -111,7 +129,7 @@ var CourseInformation = React.createClass({
                         tabIndex="0">
                         <span className="ui-accordion-header-icon ui-icon ui-icon-triangle-1-e"></span>
                         <div className="icon-div">
-                            <img src="static/res/ico/delete.png" className="close-icon" />
+                            <img src="static/res/ico/delete.png" className="close-icon" onClick={() => this.props.removeCourse(this.props.cat)}/>
                         </div>
                         <h3 taken="true"
                             satisfied="true">
