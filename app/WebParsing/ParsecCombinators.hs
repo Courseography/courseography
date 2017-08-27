@@ -114,9 +114,9 @@ parseCategory = do
 parseNumberedLine :: Parser T.Text
 parseNumberedLine = do
     P.spaces
-    _ <- P.digit 
+    _ <- P.digit
     _ <- text "."
-    P.space
+    _ <- P.space
     P.spaces
     parseUntil P.eof
 
