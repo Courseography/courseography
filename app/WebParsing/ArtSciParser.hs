@@ -2,7 +2,7 @@ module WebParsing.ArtSciParser
     (parseArtSci, getDeptList, fasCalendarURL) where
 
 import Data.Either (either)
-import Data.List (elemIndex)
+import Data.List (elemIndex, nubBy)
 import Control.Monad.IO.Class (liftIO)
 import qualified Data.Text as T
 import Data.Text.Lazy (toStrict)
@@ -39,7 +39,7 @@ parseArtSci = do
     runSqlite databasePath $ do
         liftIO $ putStrLn "Inserting departments"
         insertDepts $ map snd deptInfo
-        mapM_ parseDepartment deptInfo
+        mapM_ parseDepartment (nubBy (\(x, _) (y, _) -> x == y) deptInfo) 
 
 -- | Converts the processed main page and extracts a list of department html pages
 -- and department names
@@ -69,12 +69,17 @@ parseDepartment (relativeURL, _) = do
     bodyTags <- liftIO $ httpBodyTags $ fasCalendarURL ++ T.unpack relativeURL
     let contentTags = dropWhile (not . tagOpenAttrLit "div" ("id", "block-system-main")) bodyTags
         contentTags' = takeWhile (not . tagOpenAttrLit "p" ("class", "rteright")) contentTags
-        programs = dropWhile (not . tagOpenAttrNameLit "div" "class" (T.isInfixOf "view-id-section")) contentTags'
-        programs' = takeWhile (not . tagOpenAttrNameLit "div" "class" (T.isInfixOf "view-id-course_group_view")) programs
-        courseTags = dropWhile (not . tagOpenAttrNameLit "div" "class" (T.isInfixOf "view-id-courses")) contentTags'
+        programs = dropWhile (not . tagOpenAttrNameLit "div" "class" isProgramHeaderInfix) contentTags'
+        programs' = takeWhile (not . tagOpenAttrNameLit "div" "class" (T.isInfixOf "view-id-course_group_view")) programs 
+        courseTags = dropWhile (not . tagOpenAttrNameLit "div" "class" isCourseSection) contentTags'
     parsePrograms programs'
     let courseList = parseCourses courseTags
     mapM_ insertCourse courseList
+    where
+        isProgramHeaderInfix tag = or [(T.isInfixOf "view-id-section") tag, (T.isInfixOf "view-header") tag]
+        isCourseSection tag = or [(T.isInfixOf "view-id-courses") tag, 
+            and [(T.isInfixOf "view-") tag, (T.isInfixOf "-courses") tag,
+                  not (T.isInfixOf "programs" tag)]]
 
 -- | Parse the section of the course calendar listing the programs offered by a department.
 parsePrograms :: [Tag T.Text] -> SqlPersistM ()
@@ -82,12 +87,13 @@ parsePrograms programs = do
     let elems = TS.partitions isPost programs 
     mapM_ addPostToDatabase elems
     where
-         isPost tag = tagOpenAttrNameLit "h3" "class" (T.isInfixOf "programs_view") tag
+         isPost tag = tagOpenAttrNameLit "h3" "class" isProgramsView tag
+         isProgramsView currentTag = or [(T.isInfixOf "programs_view") currentTag, (T.isInfixOf "_programs") currentTag]
 
 -- | Parse the section of the course calendar listing the courses offered by a department.
 parseCourses :: [Tag T.Text] -> [(Courses, T.Text, T.Text)]
 parseCourses tags =
-    let elems = drop 1 $ TS.partitions (TS.isTagOpenName "h3") tags -- Remove the first one, which is the header
+    let elems = TS.partitions (tagOpenAttrNameLit "h3" "class" (T.isInfixOf "views-accordion")) tags
         courses = map parseCourse elems
     in
         courses

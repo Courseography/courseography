@@ -23,7 +23,7 @@ addPostToDatabase programElements = do
         requirements = last $ sections isRequirementSection programElements
         liPartitions = map parseLi $ partitions isLiTag requirements
         numberedPartitions = filter (not . T.null) $ map parseNumberedPartition $ getNumberedPartitions requirements
-        nonEmptyPartitions = if null liPartitions then numberedPartitions else liPartitions
+        nonEmptyPartitions = if null numberedPartitions then liPartitions else numberedPartitions
         programPrereqs = map getCourseFromTag $ map (fromAttrib "href") $ filter isCourseTag programElements
         firstCourse = if null programPrereqs then Nothing else (Just (head programPrereqs))
     categoryParser requirements fullPostName firstCourse nonEmptyPartitions
@@ -33,20 +33,20 @@ addPostToDatabase programElements = do
         isCourseTag tag = tagOpenAttrNameLit "a" "href" (\hrefValue -> T.isInfixOf "/course" hrefValue) tag
         isLiTag tag = isTagOpenName "li" tag
 
-addPostCategoriesToDatabase :: [T.Text] -> SqlPersistM ()
-addPostCategoriesToDatabase categories = do
-    mapM_ addCategoryToDatabase (filter isCategory categories)
+addPostCategoriesToDatabase :: PostId -> [T.Text] -> SqlPersistM ()
+addPostCategoriesToDatabase key categories = do
+    mapM_ (addCategoryToDatabase key) (filter isCategory categories)
     where
         isCategory text =
             let infixes = map (containsText text)
-                         ["First", "Second", "Third", "suitable", "Core", "Electives"]
+                         ["First", "Second", "Third"] --, "suitable", "Core", "Electives"]
             in
                 ((T.length text) >= 7) && ((length $ filter (\bool -> bool) infixes) <= 0)
         containsText text subtext = T.isInfixOf subtext text
 
-addCategoryToDatabase :: T.Text -> SqlPersistM ()
-addCategoryToDatabase category =
-    insert_ $ PostCategory category (T.pack "")
+addCategoryToDatabase :: PostId -> T.Text -> SqlPersistM ()
+addCategoryToDatabase key category =
+    insert_ $ PostCategory key category
 
 -- Helpers
 
@@ -54,20 +54,24 @@ categoryParser :: [Tag T.Text] -> T.Text -> Maybe T.Text -> [T.Text] -> SqlPersi
 categoryParser tags fullPostName firstCourse listPartitions = do
     case parsed of
         Right (post, categories) -> do
-            postExist <- insertUnique post
-            case postExist of
-                Just _ -> do
-                    addPostCategoriesToDatabase categories
+            postExists <- insertUnique post
+            case postExists of
+                Just key -> do
+                    addPostCategoriesToDatabase key (map removeWhitespace categories)
                 Nothing -> return ()
         Left _ -> do
             liftIO $ print failedString
             return ()
     where
         parsed = case listPartitions of
-            [] -> P.parse (generalCategoryParser fullPostName firstCourse) failedString (innerText tags)
+            [] -> do
+                P.parse (generalCategoryParser fullPostName firstCourse) failedString (innerText tags)
             partitionResults -> do
                 post <- P.parse (postInfoParser fullPostName firstCourse) failedString (innerText tags)
                 return (post, partitionResults)
+
+removeWhitespace :: T.Text -> T.Text
+removeWhitespace category = T.replace "\n" " " $ T.replace "\8203" " " $ T.replace "\160" " " $ T.strip category
 
 parseLi :: [Tag T.Text] -> T.Text
 parseLi liPartition = do
@@ -86,5 +90,5 @@ parseNumberedPartition :: [Tag T.Text] -> T.Text
 parseNumberedPartition pPartition = do
     let parsed = P.parse parseNumberedLine failedString (innerText pPartition)
     case parsed of
-        Right category ->  T.replace "\n" " " $ T.replace "\8203" " " $ T.replace "\160" " " $ T.strip category
+        Right category -> category
         Left _ -> ""
