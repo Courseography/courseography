@@ -34,7 +34,7 @@ parsePrebuiltSvgs :: IO ()
 parsePrebuiltSvgs = runSqlite databasePath $ do
     deleteGraphs
     performParse "Computer Science" "csc2017.svg"
-    performParse "Statistics" "sta2015.svg"
+    performParse "Statistics" "sta2017.svg"
     performParse "Biochemistry" "bch2015.svg"
     performParse "Cell & Systems Biology" "csb2015.svg"
     performParse "Estonian" "est2015.svg"
