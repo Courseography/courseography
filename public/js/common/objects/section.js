@@ -89,7 +89,7 @@ Section.prototype.onclick = function () {
     course.renderSatisfaction();
     course.renderUpdatedHeader();
 
-    saveCookies(selectedCourses, selectedSections);
+    saveLocalStorage(selectedCourses, selectedSections);
 };
 
 

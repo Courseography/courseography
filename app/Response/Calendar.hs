@@ -26,7 +26,7 @@ calendarResponse = liftIO . getCalendar . T.pack
 -- | Gets together all the pieces of the program.
 getCalendar :: T.Text -> IO Response
 getCalendar courses = do
-    let courseInfo = getInfoCookies courses
+    let courseInfo = getCoursesInfo courses
     databaseInfo <- mapM pullDatabase courseInfo
     currentTime <- getCurrentTime
     let systemTime = formatTime defaultTimeLocale "%Y%m%dT%H%M%SZ" currentTime
@@ -59,9 +59,9 @@ type Section = T.Text
 -- | The session for a course.
 type Session = T.Text
 
--- | Obtains the code, section and session for each course in the cookies.
-getInfoCookies :: T.Text -> [(Code, Section, Session)]
-getInfoCookies courses = map courseInfo allCourses
+-- | Obtains the code, section and session for each course in the local storage.
+getCoursesInfo :: T.Text -> [(Code, Section, Session)]
+getCoursesInfo courses = map courseInfo allCourses
     where
         courseInfo [code, sect, session] = (code, sect, session)
         courseInfo _ = ("", "", "")
