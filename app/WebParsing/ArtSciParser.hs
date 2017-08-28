@@ -54,10 +54,9 @@ getDeptList tags =
         extractDepartments tableTags =
             -- Each aTag consists of a start tag, text, and end tag
             let aTags = TS.partitions (tagOpenAttrNameLit "a" "href" (const True)) tableTags
-                depts = map (\t -> (TS.fromAttrib "href" $ head t,
-                                    T.replace "\8203" " " $ T.replace "\160" " " $ T.strip $ TS.innerText t)) aTags
+                depts = map (\t -> (TS.fromAttrib "href" $ head t, T.strip $ TS.innerText t)) aTags
             in
-                filter (\t -> (not . T.null $ fst t) && (not . T.null $ snd t)) depts
+                filter (\(a, b) -> (not $ T.null a) && (not $ T.null b)) depts
 
 -- | Insert department names to database
 insertDepts :: [T.Text] -> SqlPersistM ()
@@ -84,7 +83,7 @@ parseDepartment (relativeURL, _) = do
 -- | Parse the section of the course calendar listing the programs offered by a department.
 parsePrograms :: [Tag T.Text] -> SqlPersistM ()
 parsePrograms programs = do
-    let elems = TS.partitions isPost programs 
+    let elems = TS.partitions isPost programs
     mapM_ addPostToDatabase elems
     where
          isPost tag = tagOpenAttrNameLit "h3" "class" isProgramsView tag
@@ -103,7 +102,7 @@ parseCourses tags =
             let courseHeader = T.strip . TS.innerText $ takeWhile (not . TS.isTagCloseName "h3") courseTags
                 (code, title) = either (error . show) id $ parse parseCourseTitle "course title" courseHeader
                 spans = TS.partitions (TS.isTagOpenName "span") courseTags
-                courseContents = map (T.strip . T.replace "\160" " " . TS.innerText) spans
+                courseContents = map (T.strip . TS.innerText) spans
                 i1 = elemIndex "Hours:" courseContents
                 -- TODO: add the number of contact hours to the database
                 (_, description) = maybe ("", "") (\i -> either (error . show) id $ parse parseHours "course hours" $ courseContents !! (i+1)) i1
@@ -153,5 +152,8 @@ httpBodyTags :: String -> IO [Tag T.Text]
 httpBodyTags url = do
     req <- parseRequest url
     response <- httpLBS req
-    return . TS.parseTags . toStrict . decodeUtf8 . getResponseBody $ response
+    return . TS.parseTags . cleanText . toStrict . decodeUtf8 . getResponseBody $ response
 
+-- | Remove odd characters from text
+cleanText :: T.Text -> T.Text
+cleanText = T.replace "\n" "" . T.replace "\8203" "" . T.replace "\160" "" . T.strip
