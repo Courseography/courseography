@@ -9,11 +9,13 @@ import Database.Requirement
 -- define separators
 fromSeparator :: Parser ()
 fromSeparator = Parsec.spaces >> (Parsec.choice $ map (Parsec.try . Parsec.string) [
+            "full course or its equivalent",
             "FCEs",
             "FCE",
             "FCEs:",
             "FCE:"
     ]) >> (Parsec.choice $ map (Parsec.try . Parsec.string) [
+            " of any of the following:",
             " from the following: ",
             " from:",
             " from",
@@ -39,14 +41,15 @@ andSeparator = Parsec.choice $ map Parsec.string [
     ",",
     "AND",
     "And",
-    "and"
+    "and",
+    ";"
     ]
 
 semicolon :: Parser Char
 semicolon = Parsec.char ';'
 
-fcesParser :: Parser String
-fcesParser = do
+creditsParser :: Parser String
+creditsParser = do
     Parsec.spaces
     integral <- Parsec.many1 Parsec.digit
     point <- Parsec.option "" $ Parsec.string "."
@@ -163,24 +166,26 @@ andParser = do
 
 -- | Parser for reqs in "from" format:
 -- 4.0 FCEs from CSC108H1, CSC148H1, ...
-fromParser :: Parser Req
-fromParser = do
-    fces <- fcesParser
+fcesParser :: Parser Req
+fcesParser = do
+    fces <- creditsParser
     _ <- fromSeparator
     Parsec.spaces
     req <- andParser
-    return $ FROM fces req
+    return $ FCES fces req
 
 -- | Parser for requirements separated by a semicolon.
 -- Semicolons are assumed to have the highest precedence.
 categoryParser :: Parser Req
-categoryParser = do
-    reqs <- Parsec.sepBy (Parsec.try fromParser <|> Parsec.try andParser) semicolon
-    Parsec.eof
-    case reqs of
-        [] -> fail "Empty Req."
-        [x] -> return x
-        (x:xs) -> return $ AND (x:xs)
+categoryParser = Parsec.try fcesParser <|> Parsec.try andParser
+-- categoryParser :: Parser Req
+-- categoryParser = do
+--     reqs <- Parsec.sepBy (Parsec.try fcesParser <|> Parsec.try andParser) semicolon
+--     Parsec.eof
+--     case reqs of
+--         [] -> fail "Empty Req."
+--         [x] -> return x
+--         (x:xs) -> return $ AND (x:xs)
 
 -- | Parse the course requirements from a string.
 parseReqs :: String -> Req
