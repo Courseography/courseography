@@ -110,4 +110,3 @@ artSciTests = createTest categoryParser "Arts and Science requirements from Chri
 -- functions for running tests in REPL
 reqTestSuite :: Test
 reqTestSuite = TestLabel "ReqParser tests" $ TestList [orTests, andTests, andorTests, parTests, fromParTests, gradeBefTests, gradeAftTests, artSciTests]
- TestLabel "ReqParser tests" $ TestList [orTests, andTests, andorTests, parTests, fromParTests, gradeBefTests, gradeAftTests, artSciTests]
