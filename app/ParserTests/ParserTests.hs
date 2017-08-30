@@ -20,7 +20,6 @@ createTest parser label input = TestLabel label $ TestList $ map (\(x, y) ->
                                 TestCase $ assertEqual ("for (" ++ x ++ "),")
                                 (Right y) (Parsec.parse parser "" x)) input
 
--- categoryParser Tests
 orInputs :: [(String, Req)]
 orInputs = [
       ("CSC120H1/CSC148H1", OR [J "CSC120H1", J "CSC148H1"])
@@ -54,8 +53,6 @@ fromParInputs = [
     , ("2 FCEs from: MAT135H1, MAT136H1/ MAT137Y1", FCES "2" $ AND [J "MAT135H1",OR [J "MAT136H1",J "MAT137Y1"]])
     ]
 
-
--- TODO: No more "before" reqs in new artsci calendar except first test case.
 gradeBefInputs :: [(String, Req)]
 gradeBefInputs = [
       ("minimum mark of A- in CSC236H1", GRADE "A-" $ J "CSC236H1") 
@@ -82,55 +79,6 @@ artSciInputs = [
     , ("(ECO101H1, ECO102H1)/ECO100Y1, RSM100H1/ MGT100H1/ RSM100Y1", AND [OR [AND [J "ECO101H1",J "ECO102H1"],J "ECO100Y1"],OR [J "RSM100H1",J "MGT100H1",J "RSM100Y1"]])
     , ("CAS310H1 and CAS320H1", AND [J "CAS310H1",J "CAS320H1"])
     ]
-
-{-|
-"FALSE POSITIVE?"
-
-Right (AND [FCES "5" (GRADE "1" (J "LIN232H1")),GRADE "1" (J "JLP315H1"),GRADE "1" (J "LIN341H1")]
-    vs.
-Right (FCES "5" [J "LIN232H1", J "LIN241H1", J "JLP315H1", J "LIN331H1", J "LIN341H1", J "JLP374H1"])
-
-How do we want to handle semicolons?
-
-
-
-"0.5 FCE in statistics from: EEB225H1 (recommended)/ STA220H1/ STA257H1/  STA288H1/ GGR270H1/ PSY201H1","0.5 FCE in core evolution from: EEB318H1, EEB323H1, EEB362H1"
-
-_ FCE [in ?] from Req
-        ? is a program/group.. should this be dealt with in my level..
-        can do a try, with highest precedence trying to parse whatever is between FCE and from; else use the hard-coded methods?
-            - Can store whatever is parsed in between as the Program/Group?
-
--}
-
-{-
-2.0 FCEs: BIO220H1 (ecology and evolutionary biology); ENV234H1 (cannot be substituted with EEB375H1 for this requirement), ENV334H1 (environmental biology)
-
-finding new pattern:
-
-Req (?)
-?: raw information to be parsed using raw parser?.. should we add attribute to all reqs that holds such info and use rawParser to get whatever is within
-    the paranthesese instead of having the rawParser be the lowest level parser?
-
--}
-
-
-
-
-{-
-"Third Year: 1.0 FCE from FOR300H1, FOR301H1, FOR302H1, FOR303H1, FOR305H1, FOR306H1, FOR307H1, FOR310H1","Fourth Year: FOR400Y1"
-
-FROM parser should parse for single courses? How do we want to parse/represent this req
-
-GROUP "Third Year" $ FCES "1.0" $ FROM [J "FOR300H1", J "FOR301H1", J "FOR302H1", J "FOR303H1", J "FOR305H1", J "FOR306H1", J "FOR307H1", J "FOR310H1"]
-
-THIS SEEMS COMPLETELY MISLEADING, THE CONNECTIONS ARE VERY IMPORTANT BC ANDS AND ORS ARE NATURAL LANGUAGE
-"1.0 FCES FROM THIS, AND THAT, AND THAT, AND THAT OR THAT, AND THAT." VS "1.0 FCES FROM THIS, THIS, THIS, THIS, THIS.."
-
-GROUP "Third Year" $ FCES "1.0" $ FROM [AND [J "FOR300H1", J "FOR301H1", J "FOR302H1", J "FOR303H1", J "FOR305H1", J "FOR306H1", J "FOR307H1", J "FOR310H1"]]
--}
-
-
 
 orTests :: Test
 orTests = createTest categoryParser "Basic or Requirement" orInputs
