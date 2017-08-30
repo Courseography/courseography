@@ -135,14 +135,73 @@ singleParser = do
     num <- Parsec.count 3 Parsec.digit
     -- TODO: Make the last two letters more restricted.
     sess <- Parsec.count 2 Parsec.alphaNum
-    return $ J (code ++ num ++ sess)
+    return $ J (code ++ num ++ sess) ""
+
+
+-- markInfoParser :: Either a b
+-- markInfoParser = do
+--     grade <- Parsec.try (percentParser <|> letterParser <|> infoParser)
+--     _ <- Parsec.lookAhead $ Parsec.choice $ map Parsec.try [
+--         Parsec.eof >> return "",
+--         Parsec.oneOf "()" >> return ""
+--         ]
+--     return grade
+
+--     where
+--     percentParser = do
+--         fces <- Parsec.many1 Parsec.digit
+--         Parsec.optional (Parsec.char '%')
+--         return $ Left fces
+
+--     letterParser = do
+--         letter <- Parsec.oneOf "ABCDEF"
+--         plusminus <- Parsec.option "" $ Parsec.string "+" <|> Parsec.string "-"
+--         return $ Left $ letter : plusminus
+
+--     infoParser = do
+--         info <- Parsec.manyTill (Parsec.noneOf "()")
+--         return $ Right info
+
+justParser :: Parser Req
+justParser = do
+    code <- Parsec.count 3 Parsec.letter
+    num <- Parsec.count 3 Parsec.digit
+    sess <- Parsec.count 2 Parsec.alphaNum
+    lpar <- Parsec.option "" $ Parsec.string "("
+    tmp <- if lpar == "" then return (Right "") else markInfoParser
+    case tmp of
+        Left mark -> return $ GRADE mark $ J (code ++ num ++ sess) ""
+        Right info -> return $ J (code ++ num ++ sess) info
+    where
+    markInfoParser = do
+        grade <- Parsec.try (percentParser <|> letterParser <|> infoParser)
+        _ <- Parsec.lookAhead $ Parsec.choice $ map Parsec.try [
+            Parsec.eof >> return "",
+            Parsec.oneOf "()" >> return ""
+            ]
+        return grade
+            where
+            percentParser = do
+                fces <- Parsec.many1 Parsec.digit
+                Parsec.optional (Parsec.char '%')
+                return $ Left fces
+
+            letterParser = do
+                letter <- Parsec.oneOf "ABCDEF"
+                plusminus <- Parsec.option "" $ Parsec.string "+" <|> Parsec.string "-"
+                return $ Left $ letter : plusminus
+
+            infoParser = do
+                info <- Parsec.manyTill Parsec.anyChar (Parsec.try $ Parsec.lookAhead $ Parsec.string ")")
+                return $ Right info
+
 
 -- parse for single course with our without cutoff OR a req within parantheses
 courseParser :: Parser Req
 courseParser = Parsec.between Parsec.spaces Parsec.spaces $ Parsec.choice $ map Parsec.try [
     parParser,
     cutoffParser,
-    singleParser,
+    justParser,
     rawTextParser
     ]
 
@@ -183,4 +242,4 @@ parseReqs reqString =
     let req = Parsec.parse categoryParser "" reqString
     in case req of
         Right x -> x
-        Left e -> J (show e)
+        Left e -> J (show e) ""
