@@ -175,19 +175,9 @@ fcesParser = do
     return $ FCES fces req
 
 -- | Parser for requirements separated by a semicolon.
--- Semicolons are assumed to have the highest precedence.
 categoryParser :: Parser Req
 categoryParser = Parsec.try fcesParser <|> Parsec.try andParser
--- categoryParser :: Parser Req
--- categoryParser = do
---     reqs <- Parsec.sepBy (Parsec.try fcesParser <|> Parsec.try andParser) semicolon
---     Parsec.eof
---     case reqs of
---         [] -> fail "Empty Req."
---         [x] -> return x
---         (x:xs) -> return $ AND (x:xs)
 
--- | Parse the course requirements from a string.
 parseReqs :: String -> Req
 parseReqs reqString =
     let req = Parsec.parse categoryParser "" reqString
