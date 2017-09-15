@@ -137,31 +137,6 @@ singleParser = do
     sess <- Parsec.count 2 Parsec.alphaNum
     return $ J (code ++ num ++ sess) ""
 
-
--- markInfoParser :: Either a b
--- markInfoParser = do
---     grade <- Parsec.try (percentParser <|> letterParser <|> infoParser)
---     _ <- Parsec.lookAhead $ Parsec.choice $ map Parsec.try [
---         Parsec.eof >> return "",
---         Parsec.oneOf "()" >> return ""
---         ]
---     return grade
-
---     where
---     percentParser = do
---         fces <- Parsec.many1 Parsec.digit
---         Parsec.optional (Parsec.char '%')
---         return $ Left fces
-
---     letterParser = do
---         letter <- Parsec.oneOf "ABCDEF"
---         plusminus <- Parsec.option "" $ Parsec.string "+" <|> Parsec.string "-"
---         return $ Left $ letter : plusminus
-
---     infoParser = do
---         info <- Parsec.manyTill (Parsec.noneOf "()")
---         return $ Right info
-
 justParser :: Parser Req
 justParser = do
     code <- Parsec.count 3 Parsec.letter
