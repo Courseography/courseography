@@ -167,6 +167,7 @@ justParser = do
     code <- Parsec.count 3 Parsec.letter
     num <- Parsec.count 3 Parsec.digit
     sess <- Parsec.count 2 Parsec.alphaNum
+    Parsec.spaces
     lpar <- Parsec.option "" $ Parsec.string "("
     tmp <- if lpar == "" then return (Right "") else markInfoParser
     case tmp of
@@ -175,10 +176,7 @@ justParser = do
     where
     markInfoParser = do
         grade <- Parsec.try (percentParser <|> letterParser <|> infoParser)
-        _ <- Parsec.lookAhead $ Parsec.choice $ map Parsec.try [
-            Parsec.eof >> return "",
-            Parsec.oneOf "()" >> return ""
-            ]
+        _ <- Parsec.string ")"
         return grade
             where
             percentParser = do
