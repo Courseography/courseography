@@ -16,7 +16,7 @@ import Database.Requirement (Req(..))
 import Data.Sequence as Seq
 import Data.Text.Lazy (Text, pack)
 
---type StmtsWithCounter = ([DotStatement Text], Int)
+type StmtsWithCounter = ([DotStatement Text], Int)
 
 -- Serves as a sort of "interface" for the whole part "dynamic graph"
 sampleGraph :: DotGraph Text
@@ -31,24 +31,25 @@ sampleGraph = reqsToGraph [
 -- single list of DotGraph objects.
 reqsToGraph :: [(Text, Req)] -> DotGraph Text
 reqsToGraph reqs =
-    let stmts = stmtslst (foldUpReqLst reqs 0)
+    let (stmts, _) = foldUpReqLst reqs 0
     in
         buildGraph stmts
 
 -- Convert the original requirement data into dot statements that can be used by buildGraph to create the
 -- corresponding DotGraph objects. ([] is the [] after name the optional parameters for DotNode?)
 reqToStmts :: StmtsWithCounter -> (Text, Req) -> StmtsWithCounter
-reqToStmts stmtcounter (name, NONE) = StmtsWithCounter{stmtslst = (stmtslst stmtcounter) ++ [DN $ DotNode (name `mappend` (pack (show (counter stmtcounter)))) []]
-                                      , counter = (counter stmtcounter) + 1}
-reqToStmts stmtcounter (name, J string1) = StmtsWithCounter{stmtslst = [DE $ DotEdge str1 name []] ++ (stmtslst (foldUpReqLst [(name, NONE), (str1, NONE)] 0))
-                                                           , counter = (counter stmtcounter) + 3}
+reqToStmts (stmtslst, counter) (name, NONE) = let stmtslst0 = let stmtslst1 = stmtslst 
+                                                                  counter1 = counter
+                                                              in  stmtslst1 ++ [DN $ DotNode (name `mappend` (pack (show (counter1)))) []]
+                                                  counter0 =  let counter2 = counter
+                                                              in  (counter2) + 1
+                                              in  (stmtslst0, counter0)
+reqToStmts (stmtslst, counter) (name, J string1) = let (stmtslst0, _) = foldUpReqLst [(name, NONE), (str1, NONE)] 0
+                                                   in ([DE $ DotEdge str1 name []] ++ stmtslst0, counter + 3)
   where str1 = pack string1
 
-data StmtsWithCounter = StmtsWithCounter{ stmtslst :: [DotStatement Text]
-                                        , counter   :: Int }
-
 foldUpReqLst :: [(Text, Req)] -> Int -> StmtsWithCounter
-foldUpReqLst reqlst count = foldl(\acc x -> reqToStmts acc x) StmtsWithCounter{stmtslst = [], counter = count} reqlst
+foldUpReqLst reqlst count = foldl(\acc x -> reqToStmts acc x) ([], count) reqlst
 
 -- Now this only wotks for Req lists of J String. Failed if using [Req] as input and pack x in foldl.
 decompJString :: [String] -> [(Text, Req)]
