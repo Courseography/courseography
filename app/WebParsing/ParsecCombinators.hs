@@ -4,7 +4,6 @@ module WebParsing.ParsecCombinators
      getPostType,
      getDepartmentName,
      isDepartmentName,
-     generalCategoryParser,
      parseCategory,
      postInfoParser,
      parseNumberedLine,
@@ -31,12 +30,6 @@ findCourseFromTag = do
     _ <- P.string "/course/"
     parsed <- P.many1 P.anyChar
     return $ T.pack parsed
-
-generalCategoryParser :: T.Text -> Maybe T.Text -> Parser (Post, [T.Text])
-generalCategoryParser fullPostName firstCourse = do
-    post <- postInfoParser fullPostName firstCourse
-    categories <- splitPrereqText
-    return (post, categories)
 
 -- Post Parsing
 postInfoParser :: T.Text -> Maybe T.Text -> Parser Post
@@ -100,13 +93,17 @@ parseUntil parser = do
     parsed <- P.manyTill P.anyChar (P.try parser)
     return $ T.pack parsed
 
-splitPrereqText :: Parser [T.Text]
-splitPrereqText = do
-    P.manyTill (P.try parseNotes <|> P.try parseNoteLine <|>
-        P.try parseCategory <|> parseUntil P.eof) P.eof
-
 parseCategory :: Parser T.Text
 parseCategory = do
+    parsed <- parseNumberedLine <|> parseLiLine <|> splitPrereqText
+    return parsed
+
+splitPrereqText :: Parser T.Text
+splitPrereqText = do
+    P.try parseNotes <|> P.try parseNoteLine <|> P.try parseCategory <|> parseUntil P.eof
+
+parseLiLine :: Parser T.Text
+parseLiLine = do
     left <- parseUpToSeparator
     _ <- P.anyChar
     return left

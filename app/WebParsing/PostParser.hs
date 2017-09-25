@@ -10,7 +10,7 @@ import Database.Tables
 import Database.Persist.Sqlite (insert_, SqlPersistM)
 import Database.Persist (insertUnique)
 import qualified Text.Parsec as P
-import WebParsing.ParsecCombinators (getCourseFromTag, generalCategoryParser, parseCategory,
+import WebParsing.ParsecCombinators (getCourseFromTag, parseCategory,
     postInfoParser, parseNumberedLine)
 
 failedString :: String
@@ -21,19 +21,15 @@ addPostToDatabase programElements = do
     -- TODO: Remove Focuses from programElements
     let fullPostName = innerText $ take 1 $ filter isTagText programElements
         requirements = last $ sections isRequirementSection programElements
-        liPartitions = map parseLi $ partitions isLiTag requirements
-        numberedPartitions = filter (not . T.null) $ map parseNumberedPartition $ getNumberedPartitions requirements
-        nonEmptyPartitions = if null numberedPartitions then liPartitions else numberedPartitions
+        partitions = reqHtmlToLines requirements
         programPrereqs = map getCourseFromTag $ map (fromAttrib "href") $ filter isCourseTag programElements
         firstCourse = if null programPrereqs then Nothing else (Just (head programPrereqs))
-    categoryParser requirements fullPostName firstCourse nonEmptyPartitions
     liftIO $ print numberedPartitions
     liftIO $ print $ reqHtmlToLines requirements  -- TODO: This is just for debugging purposes, and should be removed.
+    categoryParser requirements partitions fullPostName firstCourse
     where
         isRequirementSection element = tagOpenAttrLit "div" ("class", "field-content") element
         isCourseTag tag = tagOpenAttrNameLit "a" "href" (T.isInfixOf "/course") tag
-        isLiTag tag = isTagOpenName "li" tag
-
 
 -- | Split requirements HTML into individual lines.
 reqHtmlToLines :: [Tag T.Text] -> [[T.Text]]
@@ -56,10 +52,13 @@ parHtmlToLines tags =
             | otherwise = t:ts
 
 -- Helpers
-categoryParser :: [Tag T.Text] -> T.Text -> Maybe T.Text -> [T.Text] -> SqlPersistM ()
-categoryParser tags fullPostName firstCourse listPartitions = do
-    case parsed of
-        Right (post, categories) -> do
+categoryParser :: [Tag T.Text] -> [[T.Text]] -> T.Text -> Maybe T.Text -> SqlPersistM ()
+categoryParser tags requirements fullPostName firstCourse = do
+    let categories = map parseRequirement requirements
+    let parsedPost = P.parse (postInfoParser fullPostName firstCourse) failedString (innerText tags)
+    liftIO (print categories)
+    case parsedPost of
+        Right post -> do
             postExists <- insertUnique post
             case postExists of
                 Just key -> do
@@ -67,33 +66,22 @@ categoryParser tags fullPostName firstCourse listPartitions = do
                 Nothing -> return ()
         Left _ -> do
             liftIO $ print failedString
-    where
-        parsed = case listPartitions of
-            [] -> do
-                P.parse (generalCategoryParser fullPostName firstCourse) failedString (innerText tags)
-            partitionResults -> do
-                post <- P.parse (postInfoParser fullPostName firstCourse) failedString (innerText tags)
-                return (post, partitionResults)
 
 addPostCategoriesToDatabase :: PostId -> [T.Text] -> SqlPersistM ()
 addPostCategoriesToDatabase key categories = do
     mapM_ (insert_ . PostCategory key) (filter isCategory categories)
     where
-        isCategory text = T.length text >= 7 && any (flip T.isInfixOf $ text) ["First", "Second", "Third"] --, "suitable", "Core", "Electives"]
+        isCategory text = T.length text >= 7
 
-parseLi :: [Tag T.Text] -> T.Text
-parseLi liPartition =
-    case P.parse parseCategory failedString (innerText liPartition) of
-        Right c -> c
-        Left _ -> ""
+parseRequirement :: [T.Text] -> T.Text
+parseRequirement requirement = do
+    T.intercalate " " (map parseSingleReq (filter isReq requirement))
+    where
+        isReq text = T.length text >= 7 && not (any (flip T.isInfixOf $ text) ["First", "Second", "Third"]) --, "suitable", "Core", "Electives"]
 
-getNumberedPartitions :: [Tag T.Text] -> [[Tag T.Text]]
-getNumberedPartitions tags = 
-    let pTags = partitions (isTagOpenName "p") tags
-    in concatMap (splitWhen (isTagOpenName "br")) pTags
-
-parseNumberedPartition :: [Tag T.Text] -> T.Text
-parseNumberedPartition pPartition =
-    case P.parse parseNumberedLine failedString (innerText pPartition) of
-        Right c -> c
+parseSingleReq :: T.Text -> T.Text
+parseSingleReq req = do
+    let parsed = P.parse parseCategory failedString req
+    case parsed of
+        Right category -> category
         Left _ -> ""
