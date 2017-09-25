@@ -75,7 +75,7 @@ addPostCategoriesToDatabase key categories = do
 
 parseRequirement :: [T.Text] -> T.Text
 parseRequirement requirement = do
-    T.intercalate " " (map parseSingleReq (filter isReq requirement))
+    T.intercalate ", " (map parseSingleReq (filter isReq requirement))
     where
         isReq text = T.length text >= 7 && not (any (flip T.isInfixOf $ text) ["First", "Second", "Third"]) --, "suitable", "Core", "Electives"]
 
