@@ -94,7 +94,7 @@ createSingleSubStmt text1 counter = createSubnodeCorrespondingEdge (mappendTextW
 
 makeNode :: Text -> Int -> Int -> DotStatement Text
 makeNode text1 counter 0 = DN $ DotNode (mappendTextWithCounter text1 counter) []
-makeNode text1 counter 1 = DN $ DotNode (mappendTextWithCounter text1 counter) [A.shape A.Square, AC.Width 1]
+makeNode text1 counter 1 = DN $ DotNode (mappendTextWithCounter text1 counter) [A.shape A.Ellipse, AC.Width 1, A.fillColor White]
 
 makeEdge :: (Text, Int) -> (Text, Int) -> DotStatement Text
 makeEdge (name1, -1) (name2, -1) = DE $ DotEdge name1 name2 []
