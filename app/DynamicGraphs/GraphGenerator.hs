@@ -44,7 +44,7 @@ reqsToGraph reqs =
 -- corresponding DotGraph objects. ([] is the [] after name the optional parameters for DotNode?)
 reqToStmts :: StmtsWithCounter -> (Text, Req) -> StmtsWithCounter
 reqToStmts (stmtslst, counter) (name, NONE) = 
-    let stmtslst0 = stmtslst ++ [makeNode name counter]
+    let stmtslst0 = stmtslst ++ [makeNode name counter 0]
         counter0 =  counter + 1
     in  (stmtslst0, counter0)
 
@@ -52,37 +52,37 @@ reqToStmts (_, counter) (name, J string1) = let (stmtslst0, _) = foldUpReqLst [(
                                                    in ([makeEdge (str1, counter + 1) (name, counter)] ++ stmtslst0, counter + 2)
   where str1 = pack string1
 
-reqToStmts (stmtslst, counter) (name, AND reqs1) = ([makeNode "and" (counter_sub + 1000), 
+reqToStmts (stmtslst, counter) (name, AND reqs1) = ([makeNode "and" (counter_sub + 1000) 1, 
                                                     makeEdge ("and", (counter_sub + 1000)) (name, counter)] ++ 
                                                     statements_sub, counter_sub + 1)
   where createSubStmts = foldl(\acc x -> createSingleSubStmt "and" (counter_sub + 1000) acc x)
         (statements_sub, counter_sub) = createSubStmts (reqToStmts (stmtslst, counter) (name, NONE)) (decompJString reqs1)
 
-reqToStmts (stmtslst, counter) (name, OR reqs1) = ([makeNode "or" (counter_sub + 1000), 
+reqToStmts (stmtslst, counter) (name, OR reqs1) = ([makeNode "or" (counter_sub + 1000) 1, 
                                                     makeEdge ("or", (counter_sub + 1000)) (name, counter)] ++ 
                                                     statements_sub, counter_sub + 1)
   where createSubStmts = foldl(\acc x -> createSingleSubStmt "or" (counter_sub + 1000) acc x)
         (statements_sub, counter_sub) = createSubStmts (reqToStmts (stmtslst, counter) (name, NONE)) (decompJString reqs1)
 
-reqToStmts (stmtslst, counter) (name, FROM string1 (J string2)) = ([makeNode (pack string1) (counter_sub + 1000), 
+reqToStmts (stmtslst, counter) (name, FROM string1 (J string2)) = ([makeNode (pack string1) (counter_sub + 1000) 1, 
                                                                     makeEdge ((pack string1), (counter_sub + 1000)) (name, counter)] ++ 
                                                                     statements_sub, counter_sub + 1)
   where createSubStmts = foldl(\acc x -> createSingleSubStmt (pack string1) (counter_sub + 1000) acc x)
         (statements_sub, counter_sub) = createSubStmts (reqToStmts (stmtslst, counter) (name, NONE)) [((pack string2), NONE)]
 
-reqToStmts (stmtslst, counter) (name, GRADE string1 (J string2)) = ([makeNode (pack string1) (counter_sub + 1000), 
+reqToStmts (stmtslst, counter) (name, GRADE string1 (J string2)) = ([makeNode (pack string1) (counter_sub + 1000) 1, 
                                                                     makeEdge ((pack string1), (counter_sub + 1000)) (name, counter)] ++ 
                                                                     statements_sub, counter_sub + 1)
   where createSubStmts = foldl(\acc x -> createSingleSubStmt (pack string1) (counter_sub + 1000) acc x)
         (statements_sub, counter_sub) = createSubStmts (reqToStmts (stmtslst, counter) (name, NONE)) [((pack string2), NONE)]
 
-reqToStmts (_, counter) (name, RAW string1) = ([makeNode (pack string1) counter, 
+reqToStmts (_, counter) (name, RAW string1) = ([makeNode (pack string1) counter 0, 
                                                        makeEdge ((pack string1), counter) (name, counter)], counter + 1)
 
 
 
 foldUpReqLst :: [(Text, Req)] -> Int -> StmtsWithCounter
-foldUpReqLst reqlst count = foldl(\acc x -> reqToStmts acc x) ([], count) reqlst
+foldUpReqLst reqlst count = foldl reqToStmts ([], count) reqlst
 
 createSubnodeCorrespondingEdge :: Text -> StmtsWithCounter -> (Text, Req) -> StmtsWithCounter
 createSubnodeCorrespondingEdge parentnode (stmtslst, counter) (name, NONE) = 
@@ -92,8 +92,9 @@ createSubnodeCorrespondingEdge parentnode (stmtslst, counter) (name, NONE) =
 createSingleSubStmt :: Text -> Int -> (StmtsWithCounter -> (Text, Req) -> StmtsWithCounter)
 createSingleSubStmt text1 counter = createSubnodeCorrespondingEdge (mappendTextWithCounter text1 counter)
 
-makeNode :: Text -> Int -> DotStatement Text
-makeNode text1 counter  = DN $ DotNode (mappendTextWithCounter text1 counter) []
+makeNode :: Text -> Int -> Int -> DotStatement Text
+makeNode text1 counter 0 = DN $ DotNode (mappendTextWithCounter text1 counter) []
+makeNode text1 counter 1 = DN $ DotNode (mappendTextWithCounter text1 counter) [A.shape A.Square, AC.Width 1]
 
 makeEdge :: (Text, Int) -> (Text, Int) -> DotStatement Text
 makeEdge (name1, -1) (name2, -1) = DE $ DotEdge name1 name2 []
@@ -133,7 +134,7 @@ graphAttrs = GraphAttrs [AC.RankDir AC.FromLeft]
 
 -- Means the shape of each node in the graph is circle with width 1, and is filled.
 nodeAttrs :: GlobalAttributes
-nodeAttrs = NodeAttrs [A.shape A.Circle, AC.Width 1, A.style A.filled]
+nodeAttrs = NodeAttrs [A.shape A.Circle, AC.Width 4, A.style A.filled]
 
 -- Using default setting for the edges connecting the nodes.
 edgeAttrs :: GlobalAttributes
