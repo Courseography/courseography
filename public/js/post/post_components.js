@@ -113,29 +113,29 @@ var Post = React.createClass({
             <div id={'post_' + this.props.postType} className={classes} >
                 <Modal ref='modal' />
                 <div className="col-md-4 col-sm-6">
-                    <div>First Year</div>
+                    <div className="year_name">First Year</div>
                     <div className="portfolio-thumb">
-                         <ul>
+                         <ul className="year_course_list">
                             <CourseCategory2 yearName='First Year' courses={this.props.firstYearCourses}
                                 openModal={this.openModal} />
                         </ul>
                     </div>
-               </div>
+                </div>
 
-               <div className="col-md-4 col-sm-6">
-                    <div>Second Year</div>
+                <div className="col-md-4 col-sm-6">
+                    <div className="year_name">Second Year</div>
                     <div className="portfolio-thumb">
-                         <ul>
+                         <ul className="year_course_list">
                             <CourseCategory2 yearName='Second Year' courses={this.props.secondYearCourses}
                                             openModal={this.openModal} />
                         </ul>
                     </div>
-               </div>
+                </div>
 
-               <div className="col-md-4 col-sm-6">
-                    <div>Later Years</div>
+                <div className="col-md-4 col-sm-6">
+                    <div className="year_name">Later Years</div>
                     <div className="portfolio-thumb">
-                         <ul>
+                        <ul className="year_course_list">
                         <CourseCategory2 yearName='Later Years' courses={this.props.laterYearCourses}
                                         openModal={this.openModal} />
 
@@ -162,15 +162,17 @@ var Post = React.createClass({
 
                         </ul>
                     </div>
-               </div>
-
-                <h2>Notes</h2>
-                <ul id='notes'>
-                    {this.props.notes.map(function (note, i) {
-                        return <li key={i}>{note}</li>
-                    })}
-                </ul>
+                </div>
+                <div id='notes'>
+                    <h3>Notes</h3>
+                    <ul>
+                        {this.props.notes.map(function (note, i) {
+                            return <li key={i}>{note}</li>
+                        })}
+                    </ul>
+                </div>
             </div>
+
         );
     }
 });
