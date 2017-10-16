@@ -233,15 +233,52 @@ export var CourseCategory = React.createClass({
 
 export var CourseCategory2 = React.createClass({
     render: function() {
+        var yearName = this.props.yearName;
+        var postType = this.props.otherInfo.postType;
+        var textBoxes = this.props.otherInfo.textBoxes;
+        var courseCategoryArrays = this.props.courseCategoryArrays;
+        var changeCreditCount = this.props.changeCreditCount;
+        var getInquiryCourse = this.props.getInquiryCourse;
+        var hasInquiryCategory = this.props.otherInfo.hasInquiryCategory;
+
         return (
-            <li>
-                {this.props.courses.map((courses) =>
-                    <CourseCode id={courses[0]}
-                        key={courses[0]}
-                        courseIDs={courses}
-                        openModal={this.props.openModal} />
-                )}
-            </li>
+            <div className="col-md-4 col-sm-6">
+                <div className="year_name">{yearName}</div>
+                <div className="portfolio-thumb">
+                     <ul className="year_course_list">
+                        <li>
+                            {this.props.courses.map((courses) =>
+                                <CourseCode id={courses[0]}
+                                    key={courses[0]}
+                                    courseIDs={courses}
+                                    openModal={this.props.openModal} />
+                            )}
+                        </li>
+
+                        <li>
+                            {this.props.titles.map(function (title, i) {
+                            return <MultipleCourseCode courseID={postType + '_category_' + (i + 1)}
+                                                       textBoxNumber={textBoxes[i][0]}
+                                                       courses={courseCategoryArrays[i]}
+                                                       textboxesDisabled={textBoxes[i][1]}
+                                                       changeCourseCredit={changeCreditCount}
+                                                       categoryName={title}
+                                                       key={i} />
+                        })}
+                        </li>
+                        <li>
+                            {(() => {
+                                if (hasInquiryCategory && yearName=='Later Years' ) {
+                                    return <InquiryCategory courseID={postType + '_inq'} course={getInquiryCourse()}
+                                            categoryName='Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H,
+                                            CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H, or PEY (0.5 FCEs)
+                                            ** Note: Type "PEY" for Check my POSt to recognize it **' />
+                                }
+                            })()}
+                        </li>
+                    </ul>
+                </div>
+            </div>
         );
     }
 })

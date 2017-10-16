@@ -112,57 +112,23 @@ var Post = React.createClass({
         return (
             <div id={'post_' + this.props.postType} className={classes} >
                 <Modal ref='modal' />
-                <div className="col-md-4 col-sm-6">
-                    <div className="year_name">First Year</div>
-                    <div className="portfolio-thumb">
-                         <ul className="year_course_list">
-                            <CourseCategory2 yearName='First Year' courses={this.props.firstYearCourses}
-                                openModal={this.openModal} />
-                        </ul>
-                    </div>
-                </div>
 
-                <div className="col-md-4 col-sm-6">
-                    <div className="year_name">Second Year</div>
-                    <div className="portfolio-thumb">
-                         <ul className="year_course_list">
-                            <CourseCategory2 yearName='Second Year' courses={this.props.secondYearCourses}
-                                            openModal={this.openModal} />
-                        </ul>
-                    </div>
-                </div>
+                <CourseCategory2 yearName='First Year' courses={this.props.firstYearCourses}
+                    openModal={this.openModal} titles={[]} otherInfo={this.props}
+                    courseCategoryArrays = {courseCategoryArrays}
+                    changeCreditCount={this.changeCreditCount.bind(this)}
+                    getInquiryCourse={this.getInquiryCourse.bind(this) }/>
 
-                <div className="col-md-4 col-sm-6">
-                    <div className="year_name">Later Years</div>
-                    <div className="portfolio-thumb">
-                        <ul className="year_course_list">
-                        <CourseCategory2 yearName='Later Years' courses={this.props.laterYearCourses}
-                                        openModal={this.openModal} />
+                <CourseCategory2 yearName='Second Year' courses={this.props.secondYearCourses}
+                                openModal={this.openModal} titles={[]} otherInfo={this.props}
+                                courseCategoryArrays = {courseCategoryArrays} changeCreditCount={this.changeCreditCount.bind(this)}
+                                getInquiryCourse={this.getInquiryCourse.bind(this)}/>
 
+                <CourseCategory2 yearName='Later Years' courses={this.props.laterYearCourses}
+                                openModal={this.openModal} otherInfo={this.props} titles={this.props.categoryTitles}
+                                courseCategoryArrays = {courseCategoryArrays} changeCreditCount={this.changeCreditCount.bind(this)}
+                                getInquiryCourse={this.getInquiryCourse.bind(this)}/>
 
-
-                        {this.props.categoryTitles.map(function (title, i) {
-                            return <MultipleCourseCode courseID={me.props.postType + '_category_' + (i + 1)}
-                                                       textBoxNumber={me.props.textBoxes[i][0]}
-                                                       courses={courseCategoryArrays[i]}
-                                                       textboxesDisabled={me.props.textBoxes[i][1]}
-                                                       changeCourseCredit={me.changeCreditCount}
-                                                       categoryName={title}
-                                                       key={i} />
-                        })}
-                        {(() => {
-                            if (this.props.hasInquiryCategory) {
-                                return <InquiryCategory courseID={this.props.postType + '_inq'} course={this.getInquiryCourse()}
-                                        categoryName='Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H,
-                                        CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H, or PEY (0.5 FCEs)
-                                        ** Note: Type "PEY" for Check my POSt to recognize it **' />
-                            }
-                        })()}
-
-
-                        </ul>
-                    </div>
-                </div>
                 <div id='notes'>
                     <h3>Notes</h3>
                     <ul>
