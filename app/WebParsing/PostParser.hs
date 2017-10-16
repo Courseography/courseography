@@ -24,9 +24,9 @@ addPostToDatabase programElements = do
         partitions = reqHtmlToLines requirements
         programPrereqs = map getCourseFromTag $ map (fromAttrib "href") $ filter isCourseTag programElements
         firstCourse = if null programPrereqs then Nothing else (Just (head programPrereqs))
-    liftIO $ print numberedPartitions
-    liftIO $ print $ reqHtmlToLines requirements  -- TODO: This is just for debugging purposes, and should be removed.
     categoryParser requirements partitions fullPostName firstCourse
+    --liftIO $ print $ reqHtmlToLines requirements  -- TODO: This is just for debugging purposes, and should be removed.
+    --liftIO (print partitions)
     where
         isRequirementSection element = tagOpenAttrLit "div" ("class", "field-content") element
         isCourseTag tag = tagOpenAttrNameLit "a" "href" (T.isInfixOf "/course") tag
@@ -54,6 +54,7 @@ parHtmlToLines tags =
 -- Helpers
 categoryParser :: [Tag T.Text] -> [[T.Text]] -> T.Text -> Maybe T.Text -> SqlPersistM ()
 categoryParser tags requirements fullPostName firstCourse = do
+    --liftIO (print requirements)
     let categories = map parseRequirement requirements
     let parsedPost = P.parse (postInfoParser fullPostName firstCourse) failedString (innerText tags)
     liftIO (print categories)

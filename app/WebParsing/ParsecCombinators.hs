@@ -94,19 +94,11 @@ parseUntil parser = do
     return $ T.pack parsed
 
 parseCategory :: Parser T.Text
-parseCategory = do
-    parsed <- parseNumberedLine <|> parseLiLine <|> splitPrereqText
-    return parsed
+parseCategory = parseNumberedLine <|> parseLine
 
-splitPrereqText :: Parser T.Text
-splitPrereqText = do
-    P.try parseNotes <|> P.try parseNoteLine <|> P.try parseCategory <|> parseUntil P.eof
-
-parseLiLine :: Parser T.Text
-parseLiLine = do
-    left <- parseUpToSeparator
-    _ <- P.anyChar
-    return left
+parseLine :: Parser T.Text
+parseLine = do
+    P.try parseNotes <|> P.try parseNoteLine <|> parseUpToSeparator <|> parseUntil P.eof
 
 parseNumberedLine :: Parser T.Text
 parseNumberedLine = do
@@ -118,7 +110,7 @@ parseNumberedLine = do
     parseUntil P.eof
 
 parseUpToSeparator :: Parser T.Text
-parseUpToSeparator = parseUntil (P.notFollowedBy (P.noneOf ";\r\n"))
+parseUpToSeparator = parseUntil (P.notFollowedBy (P.noneOf "\r\n"))
 
 text :: T.Text -> Parser T.Text
 text someText = do
