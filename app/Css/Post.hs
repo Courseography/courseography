@@ -68,10 +68,10 @@ tabsCSS = do
                 borderBottom solid (px 1.5) grey5
                 -- backgroundColor white
             ".credits_completed" ? do
-                color mRed
+                color mGreen
                 fontSize (px 15)
             ".credits_not_completed" ? do
-                color mGreen
+                color mRed
                 fontSize (px 15)
 
 postCSS :: Css

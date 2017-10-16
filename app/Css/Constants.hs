@@ -459,7 +459,7 @@ mGreen = parse "#519A73"
 
 -- |Defines the color of a soft dark red for post credits
 mRed :: Color
-mRed = (parse "#C91F37")
+mRed = parse "#C91F37"
 
 -- |Defines the color of a dark rose for bottom bar
 darkRose :: Color
