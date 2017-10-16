@@ -15,43 +15,44 @@ import qualified Data.Text as T
 import System.Random
 import Svg.Generator
 import Export.ImageConversion
-import Happstack.Server (Request, rqCookies, cookieValue)
-import Data.List.Utils (replace)
 import Database.CourseQueries (getMeetingTime)
 import Database.Tables as Tables
 import Database.Persist.Sqlite (runSqlite)
 import Config (databasePath)
 import Data.Fixed (mod')
+import Data.Aeson (decode)
+import Data.ByteString.Char8 as BC (pack)
+import Data.ByteString.Lazy (fromStrict)
+import Data.Maybe (fromMaybe, fromJust)
+
 
 -- | If there is an active graph available, an image of that graph is created,
 -- otherwise the Computer Science graph is created as a default.
 -- Either way, the resulting graph's .svg and .png names are returned.
-getActiveGraphImage :: Request -> IO (String, String)
-getActiveGraphImage req = do
-    let cookies = M.fromList $ rqCookies req
-        graphName =
-            T.pack $
-            replace "-" " " $
-                maybe "Computer-Science" cookieValue (M.lookup "active-graph" cookies)
-    getGraphImage graphName (M.mapKeys T.pack $ M.map (T.pack . cookieValue) cookies)
+getActiveGraphImage :: String -> IO (String, String)
+getActiveGraphImage graphInfo = do
+    let graphInfoMap = fromJust $ decode $ fromStrict $ BC.pack graphInfo :: M.Map T.Text T.Text
+        graphName = fromMaybe "Computer-Science" $ M.lookup "active-graph" graphInfoMap
+    getGraphImage graphName graphInfoMap
+
 
 -- | If there are selected lectures available, an timetable image of
 -- those lectures in specified session is created.
 -- Otherwise an empty timetable image is created as default.
 -- Either way, the resulting image's .svg and .png names are returned.
 getActiveTimetable :: T.Text -> T.Text -> IO (String, String)
-getActiveTimetable coursecookie termSession = do
-    let selectedMeetings = parseCourseCookie coursecookie termSession
+getActiveTimetable selectedCourses termSession = do
+    let selectedMeetings = parseSelectedCourses selectedCourses termSession
     mTimes <- getTimes selectedMeetings
     let schedule = getScheduleByTime selectedMeetings mTimes
     print schedule
     generateTimetableImg schedule termSession
 
--- | Parses cookie string and returns two lists of information about courses
+-- | Parses selected courses local storage and returns two lists of information about courses
 -- in the format of (code, section, session).
-parseCourseCookie :: T.Text -> T.Text -> [(T.Text, T.Text, T.Text)]
-parseCourseCookie "" _ = []
-parseCourseCookie s termSession =
+parseSelectedCourses :: T.Text -> T.Text -> [(T.Text, T.Text, T.Text)]
+parseSelectedCourses "" _ = []
+parseSelectedCourses s termSession =
   let selectedMeetings = map (T.splitOn "-") $ T.splitOn "_" s
       meetingOfSession = filter (\x -> T.head (x !! 2) == T.head termSession || T.head (x !! 2) == 'Y') selectedMeetings
       selectedMeetings' = map list2tuple meetingOfSession

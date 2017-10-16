@@ -57,7 +57,7 @@ logMAccessShort host user _ requestLine responseCode _ referer _ =
 
 -- | The path to the database file, relative to @hs/@.
 databasePath :: Text
-databasePath = "db/database2015.sqlite3"
+databasePath = "db/database.sqlite3"
 
 -- FILE PATH STRINGS
 

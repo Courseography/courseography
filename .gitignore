@@ -32,6 +32,7 @@ cabal.sandbox.config
 
 # IDE project files
 .idea
+.vscode
 
 # Node (Javascript) modules
 /node_modules

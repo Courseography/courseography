@@ -12,9 +12,9 @@ routes :: String -> Text -> Text -> [ (String, ServerPart Response)]
 routes staticDir aboutContents privacyContents = [
     ("grid", gridResponse),
     ("graph", graphResponse),
-    ("image", graphImageResponse),
-    ("timetable-image", lookText' "session" >>= \session -> readCookieValue "selected-lectures" >>= exportTimetableImageResponse session),
-    ("timetable-pdf", lookCookieValue "selected-lectures" >>= exportTimetablePDFResponse),
+    ("image", look "JsonLocalStorageObj" >>= graphImageResponse),
+    ("timetable-image", lookText' "session" >>= \session -> look "courses" >>= exportTimetableImageResponse session),
+    ("timetable-pdf", look "courses" >>= \courses -> look "JsonLocalStorageObj" >>= exportTimetablePDFResponse courses),
     ("post", postResponse),
     ("draw", drawResponse),
     ("about", aboutResponse aboutContents),
@@ -26,7 +26,7 @@ routes staticDir aboutContents privacyContents = [
     ("course-info", lookText' "dept" >>= courseInfo),
     ("depts", liftIO deptList),
     ("timesearch", searchResponse),
-    ("calendar", lookCookieValue "selected-lectures" >>= calendarResponse),
+    ("calendar", look "courses" >>= calendarResponse),
     ("get-json-data", lookText' "graphName" >>= \graphName -> liftIO $ getGraphJSON graphName),
     ("loading", lookText' "size" >>= loadingResponse),
     ("save-json", lookBS "jsonData" >>= \jsonStr -> lookText' "nameData" >>= \nameStr -> liftIO $ saveGraphJSON jsonStr nameStr)

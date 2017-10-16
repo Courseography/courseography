@@ -5,7 +5,7 @@ import qualified Data.Text as T
 import Control.Monad.Trans (liftIO)
 import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Match
-import Data.List.Split(splitWhen)
+import Data.List.Split (splitWhen)
 import Database.Tables
 import Database.Persist.Sqlite (insert_, SqlPersistM)
 import Database.Persist (insertUnique)
@@ -23,68 +23,77 @@ addPostToDatabase programElements = do
         requirements = last $ sections isRequirementSection programElements
         liPartitions = map parseLi $ partitions isLiTag requirements
         numberedPartitions = filter (not . T.null) $ map parseNumberedPartition $ getNumberedPartitions requirements
-        nonEmptyPartitions = if null liPartitions then numberedPartitions else liPartitions
+        nonEmptyPartitions = if null numberedPartitions then liPartitions else numberedPartitions
         programPrereqs = map getCourseFromTag $ map (fromAttrib "href") $ filter isCourseTag programElements
         firstCourse = if null programPrereqs then Nothing else (Just (head programPrereqs))
     categoryParser requirements fullPostName firstCourse nonEmptyPartitions
-    liftIO (print numberedPartitions)
+    liftIO $ print numberedPartitions
+    liftIO $ print $ reqHtmlToLines requirements  -- TODO: This is just for debugging purposes, and should be removed.
     where
         isRequirementSection element = tagOpenAttrLit "div" ("class", "field-content") element
-        isCourseTag tag = tagOpenAttrNameLit "a" "href" (\hrefValue -> T.isInfixOf "/course" hrefValue) tag
+        isCourseTag tag = tagOpenAttrNameLit "a" "href" (T.isInfixOf "/course") tag
         isLiTag tag = isTagOpenName "li" tag
 
-addPostCategoriesToDatabase :: [T.Text] -> SqlPersistM ()
-addPostCategoriesToDatabase categories = do
-    mapM_ addCategoryToDatabase (filter isCategory categories)
-    where
-        isCategory text =
-            let infixes = map (containsText text)
-                         ["First", "Second", "Third", "suitable", "Core", "Electives"]
-            in
-                ((T.length text) >= 7) && ((length $ filter (\bool -> bool) infixes) <= 0)
-        containsText text subtext = T.isInfixOf subtext text
 
-addCategoryToDatabase :: T.Text -> SqlPersistM ()
-addCategoryToDatabase category =
-    insert_ $ PostCategory category (T.pack "")
+-- | Split requirements HTML into individual lines.
+reqHtmlToLines :: [Tag T.Text] -> [[T.Text]]
+reqHtmlToLines tags =
+    let paragraphs = splitWhen (isTagOpenName "p") tags
+    in
+        map parHtmlToLines paragraphs
+
+-- | Split HTML in a single p tag into lines based on <br> and <li> tags.
+parHtmlToLines :: [Tag T.Text] -> [T.Text]
+parHtmlToLines tags =
+    let lines' = splitWhen (\t -> isTagOpenName "br" t || isTagOpenName "li" t) tags
+    in
+        map (T.strip . innerText . convertLine) lines'
+
+    where
+        convertLine [] = []
+        convertLine (t:ts)
+            | isTagOpenName "li" t = t : (TagText "0.") : ts
+            | otherwise = t:ts
 
 -- Helpers
-
 categoryParser :: [Tag T.Text] -> T.Text -> Maybe T.Text -> [T.Text] -> SqlPersistM ()
 categoryParser tags fullPostName firstCourse listPartitions = do
     case parsed of
         Right (post, categories) -> do
-            postExist <- insertUnique post
-            case postExist of
-                Just _ -> do
-                    addPostCategoriesToDatabase categories
+            postExists <- insertUnique post
+            case postExists of
+                Just key -> do
+                    addPostCategoriesToDatabase key categories
                 Nothing -> return ()
         Left _ -> do
             liftIO $ print failedString
-            return ()
     where
         parsed = case listPartitions of
-            [] -> P.parse (generalCategoryParser fullPostName firstCourse) failedString (innerText tags)
+            [] -> do
+                P.parse (generalCategoryParser fullPostName firstCourse) failedString (innerText tags)
             partitionResults -> do
                 post <- P.parse (postInfoParser fullPostName firstCourse) failedString (innerText tags)
                 return (post, partitionResults)
 
+addPostCategoriesToDatabase :: PostId -> [T.Text] -> SqlPersistM ()
+addPostCategoriesToDatabase key categories = do
+    mapM_ (insert_ . PostCategory key) (filter isCategory categories)
+    where
+        isCategory text = T.length text >= 7 && any (flip T.isInfixOf $ text) ["First", "Second", "Third"] --, "suitable", "Core", "Electives"]
+
 parseLi :: [Tag T.Text] -> T.Text
-parseLi liPartition = do
-    let parsed = P.parse parseCategory failedString (innerText liPartition)
-    case parsed of
-        Right category -> category
+parseLi liPartition =
+    case P.parse parseCategory failedString (innerText liPartition) of
+        Right c -> c
         Left _ -> ""
 
 getNumberedPartitions :: [Tag T.Text] -> [[Tag T.Text]]
 getNumberedPartitions tags = 
     let pTags = partitions (isTagOpenName "p") tags
     in concatMap (splitWhen (isTagOpenName "br")) pTags
-       
 
 parseNumberedPartition :: [Tag T.Text] -> T.Text
-parseNumberedPartition pPartition = do
-    let parsed = P.parse parseNumberedLine failedString (innerText pPartition)
-    case parsed of
-        Right category ->  T.replace "\n" " " $ T.replace "\8203" " " $ T.replace "\160" " " $ T.strip category
+parseNumberedPartition pPartition =
+    case P.parse parseNumberedLine failedString (innerText pPartition) of
+        Right c -> c
         Left _ -> ""

@@ -20,7 +20,7 @@ requirejs([
             $(this).data('conflicts', []);
         });
 
-        timetable_util.restoreFromCookies();
+        timetable_util.restoreFromLocalStorage();
         timetable_util.renderClearAllButton();
         timetable_util.enableSearch();
         timetable_util.getVeryLargeCourseArray();
