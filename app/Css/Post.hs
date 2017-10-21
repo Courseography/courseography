@@ -109,6 +109,8 @@ postCSS = do
             color softRose
             -- backgroundColor green2
             -- fontWeight bold
+        ".code:after" ? do
+            "content" -: "'✔'"
         ".full_name" ? do
             backgroundColor green1
     "div" ? do
