@@ -11,7 +11,7 @@ import Database.Persist.Sqlite (insert_, SqlPersistM)
 import Database.Persist (insertUnique)
 import qualified Text.Parsec as P
 import WebParsing.ParsecCombinators (getCourseFromTag, parseCategory,
-    postInfoParser, parseNumberedLine)
+    postInfoParser, parseNumberedLine, parseNotes)
 
 failedString :: String
 failedString = "Failed."
@@ -33,10 +33,11 @@ addPostToDatabase programElements = do
 
 -- | Split requirements HTML into individual lines.
 reqHtmlToLines :: [Tag T.Text] -> [[T.Text]]
-reqHtmlToLines tags =
+reqHtmlToLines tags = 
     let paragraphs = splitWhen (isTagOpenName "p") tags
-    in
-        map parHtmlToLines paragraphs
+        paragraphsWithoutNotes = removeNotes paragraphs
+    in 
+        map parHtmlToLines paragraphsWithoutNotes
 
 -- | Split HTML in a single p tag into lines based on <br> and <li> tags.
 parHtmlToLines :: [Tag T.Text] -> [T.Text]
@@ -73,6 +74,16 @@ addPostCategoriesToDatabase key categories = do
     mapM_ (insert_ . PostCategory key) (filter isCategory categories)
     where
         isCategory text = T.length text >= 7
+
+removeNotes ::[[Tag T.Text]] -> [[Tag T.Text]]
+removeNotes requirements = filter (not . isNote) requirements
+
+isNote :: [Tag T.Text] -> Bool
+isNote req = do
+    let parsed = P.parse parseNotes failedString (innerText req)
+    case parsed of
+        Right _ -> True
+        Left _ -> False
 
 parseRequirement :: [T.Text] -> T.Text
 parseRequirement requirement = do

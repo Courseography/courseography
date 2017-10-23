@@ -7,6 +7,7 @@ module WebParsing.ParsecCombinators
      parseCategory,
      postInfoParser,
      parseNumberedLine,
+     parseNotes,
      text, parseAll) where
 
 import qualified Text.Parsec as P
@@ -77,14 +78,14 @@ findFirstCourse firstCourse =
         Nothing -> parseUntil P.eof
         Just course -> P.try (parseUntil (P.lookAhead (text course))) <|> parseUntil P.eof
 
-parseNoteLine :: Parser T.Text
-parseNoteLine = do
-    _ <- P.string "Note"
-    P.try (parseUntil (P.char '\n')) <|> parseUntil P.eof
+--parseNoteLine :: Parser T.Text
+--parseNoteLine = do
+--    _ <- P.string "Note"
+--    P.try (parseUntil (P.char '\n')) <|> parseUntil P.eof
 
 parseNotes :: Parser T.Text
 parseNotes = do
-    _ <- P.try (text "Notes") <|> P.try (text "NOTES")
+    _ <- P.try (text "Notes") <|> P.try (text "NOTES") <|> P.try (text "Note")
     _ <- parseUntil P.eof
     return ""
 
@@ -97,8 +98,7 @@ parseCategory :: Parser T.Text
 parseCategory = parseNumberedLine <|> parseLine
 
 parseLine :: Parser T.Text
-parseLine = do
-    P.try parseNotes <|> P.try parseNoteLine <|> parseUpToSeparator <|> parseUntil P.eof
+parseLine = parseUpToSeparator <|> parseUntil P.eof
 
 parseNumberedLine :: Parser T.Text
 parseNumberedLine = do
