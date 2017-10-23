@@ -29,6 +29,7 @@ sampleGraph = reqsToGraph [
     ("MAT337H1", GRADE "90%" (J "MAT237H1")),
     ("CSC411H1", FCES "1.0" (OR [J "HIS230H1",J "HIS231H1",J "NEW220H1",J "NEW221H1",J "NEW225H1",J "NEW226H1"]))
     ]
+
 --
 -- ** Main algorithm for converting requirements into a graph
 
@@ -116,7 +117,6 @@ reqToStmtsHelper ((stmtslst, counter), roots) (OR reqs1) = (([makeNode "or" (cou
 reqToStmtsHelper ((stmtslst, counter), roots) (RAW string1) = (([makeNode (pack string1) counter 0] 
                                                             ++ stmtslst, counter + 1), 
                                                             [mappendTextWithCounter (pack string1) counter] ++ roots)
-
 
 connectRootsToName :: [Text] -> Text -> [DotStatement Text]
 connectRootsToName roots name1 = foldl(\acc x -> acc ++ [(makeEdge (x, -1) (name1, -1))]) [] roots
