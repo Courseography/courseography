@@ -21,14 +21,9 @@ type StmtsWithCounter = ([DotStatement Text], Int)
 -- Serves as a sort of "interface" for the whole part "dynamic graph"
 sampleGraph :: DotGraph Text
 sampleGraph = reqsToGraph [
-    ("MAT237H1", J "MAT137H1"),
-    ("MAT133H1", NONE),
-    ("CSC148H1", AND [J "CSC108H1", J "CSC104H1"]),
-    ("CSC265H1", OR [J "CSC240H1", J "CSC236H1"]),
-    ("CSC2503H1", FROM "Two of" (J "CSC411H1,CSC412H1,CSC320H1,CSC420H1")),
-    ("MAT337H1", GRADE "90%" (J "MAT237H1"))
+    ("CSC411H1", FROM "1.0" (OR [J "HIS230H1",J "HIS231H1",J "NEW220H1",J "NEW221H1",J "NEW225H1",J "NEW226H1"]))
     ]
-
+--
 -- ** Main algorithm for converting requirements into a graph
 
 -- The reqToStmts are meant to convert a single requirement and reqsToGraph use concatMap to 
@@ -48,38 +43,75 @@ reqToStmts (stmtslst, counter) (name, NONE) =
         counter0 =  counter + 1
     in  (stmtslst0, counter0)
 
-reqToStmts (_, counter) (name, J string1) = let (stmtslst0, _) = foldUpReqLst [(name, NONE), (str1, NONE)] counter
-                                                   in ([makeEdge (str1, counter + 1) (name, counter)] ++ stmtslst0, counter + 2)
-  where str1 = pack string1
+reqToStmts (stmtslst, counter) (name, J string1) = (stmtslst1 ++ connectRootsToName roots1 uppernode0, counter1)
 
-reqToStmts (stmtslst, counter) (name, AND reqs1) = ([makeNode "and" (counter_sub + 1000) 1, 
-                                                    makeEdge ("and", (counter_sub + 1000)) (name, counter)] ++ 
-                                                    statements_sub, counter_sub + 1)
-  where createSubStmts = foldl(\acc x -> createSingleSubStmt "and" (counter_sub + 1000) acc x)
-        (statements_sub, counter_sub) = createSubStmts (reqToStmts (stmtslst, counter) (name, NONE)) (decompJString reqs1)
+  where stmtslst0 = [makeNode name counter 0] ++ stmtslst
+        uppernode0 = mappendTextWithCounter name counter 
+        ((stmtslst1, counter1), roots1) = reqToStmtsHelper ((stmtslst0, counter + 1), []) (J string1)
 
-reqToStmts (stmtslst, counter) (name, OR reqs1) = ([makeNode "or" (counter_sub + 1000) 1, 
-                                                    makeEdge ("or", (counter_sub + 1000)) (name, counter)] ++ 
-                                                    statements_sub, counter_sub + 1)
-  where createSubStmts = foldl(\acc x -> createSingleSubStmt "or" (counter_sub + 1000) acc x)
-        (statements_sub, counter_sub) = createSubStmts (reqToStmts (stmtslst, counter) (name, NONE)) (decompJString reqs1)
+reqToStmts (stmtslst, counter) (name, AND reqs1) = (stmtslst1 ++ connectRootsToName roots1 uppernode0, counter1)
 
-reqToStmts (stmtslst, counter) (name, FROM string1 (J string2)) = ([makeNode (pack string1) (counter_sub + 1000) 1, 
-                                                                    makeEdge ((pack string1), (counter_sub + 1000)) (name, counter)] ++ 
-                                                                    statements_sub, counter_sub + 1)
-  where createSubStmts = foldl(\acc x -> createSingleSubStmt (pack string1) (counter_sub + 1000) acc x)
-        (statements_sub, counter_sub) = createSubStmts (reqToStmts (stmtslst, counter) (name, NONE)) [((pack string2), NONE)]
+  where stmtslst0 = [makeNode name counter 0] ++ stmtslst
+        uppernode0 = mappendTextWithCounter name counter
+        ((stmtslst1, counter1), roots1) = reqToStmtsHelper ((stmtslst0, counter + 1), []) (AND reqs1)
 
-reqToStmts (stmtslst, counter) (name, GRADE string1 (J string2)) = ([makeNode (pack string1) (counter_sub + 1000) 1, 
-                                                                    makeEdge ((pack string1), (counter_sub + 1000)) (name, counter)] ++ 
-                                                                    statements_sub, counter_sub + 1)
-  where createSubStmts = foldl(\acc x -> createSingleSubStmt (pack string1) (counter_sub + 1000) acc x)
-        (statements_sub, counter_sub) = createSubStmts (reqToStmts (stmtslst, counter) (name, NONE)) [((pack string2), NONE)]
+reqToStmts (stmtslst, counter) (name, OR reqs1) = (stmtslst1 ++ connectRootsToName roots1 uppernode0, counter1)
 
-reqToStmts (_, counter) (name, RAW string1) = ([makeNode (pack string1) counter 0, 
-                                                       makeEdge ((pack string1), counter) (name, counter)], counter + 1)
+  where stmtslst0 = [makeNode name counter 0] ++ stmtslst
+        uppernode0 = mappendTextWithCounter name counter
+        ((stmtslst1, counter1), roots1) = reqToStmtsHelper ((stmtslst0, counter + 1), []) (OR reqs1)
+
+reqToStmts (stmtslst, counter) (name, FROM string1 reqs1) = (stmtslst1 ++ connectRootsToName roots1 uppernode0, counter1)
+
+  where uppernode0 = mappendTextWithCounter (pack string1) (counter + 1)
+        namewithcounter = mappendTextWithCounter name counter
+        stmtslst0 = [makeNode name counter 0] ++ [makeNode (pack string1) (counter + 1) 1] ++ 
+                    [makeEdge (uppernode0, -1) (namewithcounter, -1)] ++ stmtslst
+        ((stmtslst1, counter1), roots1) = reqToStmtsHelper ((stmtslst0, counter + 2), []) reqs1
+
+reqToStmts (stmtslst, counter) (name, GRADE string1 (J string2)) = (stmtslst1 ++ connectRootsToName roots1 uppernode0, counter1)
+
+  where uppernode0 = mappendTextWithCounter (pack string1) (counter + 1)
+        namewithcounter = mappendTextWithCounter name counter
+        stmtslst0 = [makeNode name counter 0] ++ [makeNode (pack string1) (counter + 1) 1] ++ 
+                    [makeEdge (uppernode0, -1) (namewithcounter, -1)] ++ stmtslst
+        ((stmtslst1, counter1), roots1) = reqToStmtsHelper ((stmtslst0, counter + 2), []) (J string2)
+
+reqToStmts (stmtslst, counter) (name, RAW string1) = (stmtslst1 ++ connectRootsToName roots1 uppernode0, counter1)
+
+  where stmtslst0 = [makeNode name counter 0] ++ stmtslst
+        uppernode0 = mappendTextWithCounter name counter 
+        ((stmtslst1, counter1), roots1) = reqToStmtsHelper ((stmtslst0, counter + 1), []) (RAW string1)
+
+reqToStmtsHelper :: (StmtsWithCounter, [Text]) -> Req -> (StmtsWithCounter, [Text])
+
+reqToStmtsHelper ((stmtslst, counter), roots) (J string1) = (([makeNode (pack string1) counter 0] 
+                                                            ++ stmtslst, counter + 1), 
+                                                            [mappendTextWithCounter (pack string1) counter] ++ roots)
+
+reqToStmtsHelper ((stmtslst, counter), roots) (AND reqs1) = (([makeNode "and" (counter + 1000) 1]
+                                                            ++ stmtslst0 ++ 
+                                                            (connectRootsToName roots1 rootwithcounter), counter0), 
+                                                            [rootwithcounter] ++ roots)
+
+  where rootwithcounter = mappendTextWithCounter "and" (counter + 1000)
+        ((stmtslst0, counter0), roots1) = foldl(\acc x -> reqToStmtsHelper acc x) ((stmtslst, counter + 1), []) reqs1
+
+reqToStmtsHelper ((stmtslst, counter), roots) (OR reqs1) = (([makeNode "or" (counter + 1000) 1]
+                                                            ++ stmtslst0 ++ 
+                                                            (connectRootsToName roots1 rootwithcounter), counter0), 
+                                                            [rootwithcounter] ++ roots)
+
+  where rootwithcounter = mappendTextWithCounter "or" (counter + 1000)
+        ((stmtslst0, counter0), roots1) = foldl(\acc x -> reqToStmtsHelper acc x) ((stmtslst, counter + 1), []) reqs1
+
+reqToStmtsHelper ((stmtslst, counter), roots) (RAW string1) = (([makeNode (pack string1) counter 0] 
+                                                            ++ stmtslst, counter + 1), 
+                                                            [mappendTextWithCounter (pack string1) counter] ++ roots)
 
 
+connectRootsToName :: [Text] -> Text -> [DotStatement Text]
+connectRootsToName roots name1 = foldl(\acc x -> acc ++ [(makeEdge (x, -1) (name1, -1))]) [] roots
 
 foldUpReqLst :: [(Text, Req)] -> Int -> StmtsWithCounter
 foldUpReqLst reqlst count = foldl reqToStmts ([], count) reqlst
