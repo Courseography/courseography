@@ -137,6 +137,7 @@ singleParser = do
     sess <- Parsec.count 2 Parsec.alphaNum
     return $ J (code ++ num ++ sess) ""
 
+-- | Parser for single courses or "atomic" Reqs represented by a J.
 justParser :: Parser Req
 justParser = do
     code <- Parsec.count 3 Parsec.letter
