@@ -75,13 +75,13 @@ gradeAftInputs = [
     , ("CSC263H1 with a minimum mark of B-", GRADE "B-" $ J "CSC263H1" "")
     ]
 
-
 artSciInputs :: [(String, Req)]
 artSciInputs = [
       ("BIO220H1 (ecology and evolutionary biology)", J "BIO220H1" "ecology and evolutionary biology")
     , ("EEB223H1/ STA220H1 (recommended)/ STA257H1 (recommended)", (OR [J "EEB223H1" "",J "STA220H1" "recommended",J "STA257H1" "recommended"]))
     , ("EEB223H1 (ecology and evo), STA220H1 (recommended)/ STA257H1 (recommended)", (AND [J "EEB223H1" "ecology and evo",OR [J "STA220H1" "recommended",J "STA257H1" "recommended"]]))
     , ("EEB223H1 (ecology and evo)/ STA220H1 (recommended)/ STA257H1", (OR [J "EEB223H1" "ecology and evo",J "STA220H1" "recommended",J "STA257H1" ""]))
+    , ("EEB223H1 (ecology and evo)/ STA220H1 (B-)/ STA257H1", OR [J "EEB223H1" "ecology and evo", GRADE "B-" $ J "STA220H1" "", J "STA257H1" ""])
     ]
 
 
