@@ -82,6 +82,7 @@ artSciInputs = [
     , ("EEB223H1 (ecology and evo), STA220H1 (recommended)/ STA257H1 (recommended)", (AND [J "EEB223H1" "ecology and evo",OR [J "STA220H1" "recommended",J "STA257H1" "recommended"]]))
     , ("EEB223H1 (ecology and evo)/ STA220H1 (recommended)/ STA257H1", (OR [J "EEB223H1" "ecology and evo",J "STA220H1" "recommended",J "STA257H1" ""]))
     , ("EEB223H1 (ecology and evo)/ STA220H1 (B-)/ STA257H1", OR [J "EEB223H1" "ecology and evo", GRADE "B-" $ J "STA220H1" "", J "STA257H1" ""])
+    , ("0.5 FCE from: EEB225H1 (recommended)/ STA220H1 (B-)/ STA257H1/  STA288H1/ GGR270H1/ PSY201H1", (FCES "0.5" $ OR [J "EEB225H1" "recommended", GRADE "B-" $ J "STA220H1" "", J "STA257H1" "", J "STA288H1" "", J "GGR270H1" "", J "PSY201H1" ""]))
     ]
 
 
