@@ -75,14 +75,14 @@ gradeAftInputs = [
     , ("CSC263H1 with a minimum mark of B-", GRADE "B-" $ J "CSC263H1" "")
     ]
 
+
 artSciInputs :: [(String, Req)]
 artSciInputs = [
       ("BIO220H1 (ecology and evolutionary biology)", J "BIO220H1" "ecology and evolutionary biology")
-    , ("0.5 FCE from: EEB225H1 (recommended)", FCES "0.5" $ J "EEB225H1" "recommended")
-    , ("2.0 FCEs from: BIO220H1 (ecology and evolutionary biology); BIO230H1 (molecular and cell biology); BIO260H1/ HMB265H1 (genetics)", FCES "2.0" $ AND [J "BIO220H1" "ecology and evolutionary biology", J "BIO230H1" "molecular and cell biology", OR [J "BIO260H1" "", J "HMB265H1" "genetics"]])
-    , ("0.5 FCE from: EEB225H1 (recommended)/ STA220H1 / STA257H1/  STA288H1/ GGR270H1/ PSY201H1", (FCES "0.5" $ OR [J "EEB225H1" "recommended", J "STA220H1" "", J "STA257H1" "", J "STA288H1" "", J "GGR270H1" "", J "PSY201H1" ""]))
+    , ("EEB223H1/ STA220H1 (recommended)/ STA257H1 (recommended)", J "" "")
+    , ("EEB223H1 (ecology and evo), STA220H1 (recommended)/ STA257H1 (recommended)", J "" "")
+    , ("EEB223H1 (ecology and evo)/ STA220H1 (recommended)/ STA257H1", J "" "")
     ]
-
 
 
 orTests :: Test
