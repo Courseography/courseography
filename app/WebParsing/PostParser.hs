@@ -11,7 +11,7 @@ import Database.Persist.Sqlite (insert_, SqlPersistM)
 import Database.Persist (insertUnique)
 import qualified Text.Parsec as P
 import WebParsing.ParsecCombinators (getCourseFromTag, parseCategory,
-    postInfoParser, parseNumberedLine, parseNotes)
+    postInfoParser, parseNumberedLine, parseNotes, isNote)
 
 failedString :: String
 failedString = "Failed."
@@ -25,15 +25,13 @@ addPostToDatabase programElements = do
         programPrereqs = map getCourseFromTag $ map (fromAttrib "href") $ filter isCourseTag programElements
         firstCourse = if null programPrereqs then Nothing else (Just (head programPrereqs))
     categoryParser requirements partitions fullPostName firstCourse
-    --liftIO $ print $ reqHtmlToLines requirements  -- TODO: This is just for debugging purposes, and should be removed.
-    --liftIO (print partitions)
     where
         isRequirementSection element = tagOpenAttrLit "div" ("class", "field-content") element
         isCourseTag tag = tagOpenAttrNameLit "a" "href" (T.isInfixOf "/course") tag
 
 -- | Split requirements HTML into individual lines.
 reqHtmlToLines :: [Tag T.Text] -> [[T.Text]]
-reqHtmlToLines tags = 
+reqHtmlToLines tags =
     let paragraphs = splitWhen (isTagOpenName "p") tags
         paragraphsWithoutNotes = removeNotes paragraphs
     in 
@@ -55,7 +53,6 @@ parHtmlToLines tags =
 -- Helpers
 categoryParser :: [Tag T.Text] -> [[T.Text]] -> T.Text -> Maybe T.Text -> SqlPersistM ()
 categoryParser tags requirements fullPostName firstCourse = do
-    --liftIO (print requirements)
     let categories = map parseRequirement requirements
     let parsedPost = P.parse (postInfoParser fullPostName firstCourse) failedString (innerText tags)
     liftIO (print categories)
@@ -77,13 +74,6 @@ addPostCategoriesToDatabase key categories = do
 
 removeNotes ::[[Tag T.Text]] -> [[Tag T.Text]]
 removeNotes requirements = filter (not . isNote) requirements
-
-isNote :: [Tag T.Text] -> Bool
-isNote req = do
-    let parsed = P.parse parseNotes failedString (innerText req)
-    case parsed of
-        Right _ -> True
-        Left _ -> False
 
 parseRequirement :: [T.Text] -> T.Text
 parseRequirement requirement = do
