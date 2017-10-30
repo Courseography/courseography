@@ -6,8 +6,6 @@ module WebParsing.ParsecCombinators
      isDepartmentName,
      parseCategory,
      postInfoParser,
-     parseNumberedLine,
-     parseNotes,
      isNote,
      text, parseAll) where
 
@@ -102,22 +100,7 @@ parseUntil parser = do
     return $ T.pack parsed
 
 parseCategory :: Parser T.Text
-parseCategory = parseNumberedLine <|> parseLine
-
-parseLine :: Parser T.Text
-parseLine = parseUpToSeparator <|> parseUntil P.eof
-
-parseNumberedLine :: Parser T.Text
-parseNumberedLine = do
-    P.spaces
-    _ <- P.digit
-    _ <- text "."
-    _ <- P.space
-    P.spaces
-    parseUntil P.eof
-
-parseUpToSeparator :: Parser T.Text
-parseUpToSeparator = parseUntil (P.notFollowedBy (P.noneOf "\r\n"))
+parseCategory = P.optional (P.spaces >> P.digit >> text "." >> P.space >> P.spaces) >> parseUntil P.eof
 
 text :: T.Text -> Parser T.Text
 text someText = do

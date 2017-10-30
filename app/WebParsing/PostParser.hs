@@ -11,7 +11,7 @@ import Database.Persist.Sqlite (insert_, SqlPersistM)
 import Database.Persist (insertUnique)
 import qualified Text.Parsec as P
 import WebParsing.ParsecCombinators (getCourseFromTag, parseCategory,
-    postInfoParser, parseNumberedLine, parseNotes, isNote)
+    postInfoParser, isNote)
 
 failedString :: String
 failedString = "Failed."
