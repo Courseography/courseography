@@ -118,20 +118,13 @@ reqToStmtsHelper ((stmtslst, counter), roots) (RAW string1) = (([makeNode (pack 
                                                             ++ stmtslst, counter + 1), 
                                                             [mappendTextWithCounter (pack string1) counter] ++ roots)
 
+reqToStmtsHelper _ _ = undefined
+
 connectRootsToName :: [Text] -> Text -> [DotStatement Text]
 connectRootsToName roots name1 = foldl(\acc x -> acc ++ [(makeEdge (x, -1) (name1, -1))]) [] roots
 
 foldUpReqLst :: [(Text, Req)] -> Int -> StmtsWithCounter
 foldUpReqLst reqlst count = foldl reqToStmts ([], count) reqlst
-
-createSubnodeCorrespondingEdge :: Text -> StmtsWithCounter -> (Text, Req) -> StmtsWithCounter
-createSubnodeCorrespondingEdge parentnode (stmtslst, counter) (name, NONE) =
-    let stmtslst1 = stmtslst ++ [makeEdge (name, counter) (parentnode, -1)]
-    in reqToStmts (stmtslst1, counter) (name, NONE)
-createSubnodeCorrespondingEdge _ _ _ = undefined
-
-createSingleSubStmt :: Text -> Int -> (StmtsWithCounter -> (Text, Req) -> StmtsWithCounter)
-createSingleSubStmt text1 counter = createSubnodeCorrespondingEdge (mappendTextWithCounter text1 counter)
 
 makeNode :: Text -> Int -> Int -> DotStatement Text
 makeNode text1 counter 0 = DN $ DotNode (mappendTextWithCounter text1 counter) []
@@ -146,12 +139,6 @@ makeEdge (name1, counter1) (name2, counter2) = DE $ DotEdge (mappendTextWithCoun
 
 mappendTextWithCounter :: Text -> Int -> Text
 mappendTextWithCounter text1 counter = text1 `mappend` "_counter_" `mappend` (pack (show (counter)))
-
--- Now this only wotks for Req lists of J String. Failed if using [Req] as input and pack x in foldl.
-decompJString :: [Req] -> [(Text, Req)]
-decompJString [] = []
-decompJString ((J x):xs) = (pack x, NONE):(decompJString xs)
-decompJString _ = undefined
 
 -- ** Graphviz configuration
 
