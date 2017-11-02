@@ -21,12 +21,13 @@ type StmtsWithCounter = ([DotStatement Text], Int)
 -- Serves as a sort of "interface" for the whole part "dynamic graph"
 sampleGraph :: DotGraph Text
 sampleGraph = reqsToGraph [
-    ("MAT237H1", J "MAT137H1"),
+    ("MAT237H1", J "MAT137H1" ""),
     ("MAT133H1", NONE),
-    ("CSC148H1", AND [J "CSC108H1", J "CSC104H1"]),
-    ("CSC265H1", OR [J "CSC240H1", J "CSC236H1"]),
-    ("CSC2503H1", FCES "Two of" (J "CSC411H1,CSC412H1,CSC320H1,CSC420H1")),
-    ("MAT337H1", GRADE "90%" (J "MAT237H1"))
+    ("CSC148H1", AND [J "CSC108H1" "", J "CSC104H1" ""]),
+    ("CSC265H1", OR [J "CSC240H1" "", J "CSC236H1" ""]),
+    -- TODO: FIX THIS EXAMPLE
+    ("CSC2503H1", FCES "Two of" (J "CSC411H1,CSC412H1,CSC320H1,CSC420H1" "")),
+    ("MAT337H1", GRADE "90%" (J "MAT237H1" ""))
     ]
 
 -- ** Main algorithm for converting requirements into a graph
@@ -48,7 +49,7 @@ reqToStmts (stmtslst, counter) (name, NONE) =
         counter0 =  counter + 1
     in  (stmtslst0, counter0)
 
-reqToStmts (_, counter) (name, J string1) = let (stmtslst0, _) = foldUpReqLst [(name, NONE), (str1, NONE)] counter
+reqToStmts (_, counter) (name, J string1 string2) = let (stmtslst0, _) = foldUpReqLst [(name, NONE), (str1, NONE)] counter
                                                    in ([makeEdge (str1, counter + 1) (name, counter)] ++ stmtslst0, counter + 2)
   where str1 = pack string1
 
@@ -64,13 +65,13 @@ reqToStmts (stmtslst, counter) (name, OR reqs1) = ([makeNode "or" (counter_sub +
   where createSubStmts = foldl(\acc x -> createSingleSubStmt "or" (counter_sub + 1000) acc x)
         (statements_sub, counter_sub) = createSubStmts (reqToStmts (stmtslst, counter) (name, NONE)) (decompJString reqs1)
 
-reqToStmts (stmtslst, counter) (name, FCES string1 (J string2)) = ([makeNode (pack string1) (counter_sub + 1000) 1,
+reqToStmts (stmtslst, counter) (name, FCES string1 (J string2 string3)) = ([makeNode (pack string1) (counter_sub + 1000) 1,
                                                                     makeEdge ((pack string1), (counter_sub + 1000)) (name, counter)] ++
                                                                     statements_sub, counter_sub + 1)
   where createSubStmts = foldl(\acc x -> createSingleSubStmt (pack string1) (counter_sub + 1000) acc x)
         (statements_sub, counter_sub) = createSubStmts (reqToStmts (stmtslst, counter) (name, NONE)) [((pack string2), NONE)]
 
-reqToStmts (stmtslst, counter) (name, GRADE string1 (J string2)) = ([makeNode (pack string1) (counter_sub + 1000) 1,
+reqToStmts (stmtslst, counter) (name, GRADE string1 (J string2 string3)) = ([makeNode (pack string1) (counter_sub + 1000) 1,
                                                                     makeEdge ((pack string1), (counter_sub + 1000)) (name, counter)] ++
                                                                     statements_sub, counter_sub + 1)
   where createSubStmts = foldl(\acc x -> createSingleSubStmt (pack string1) (counter_sub + 1000) acc x)
@@ -110,7 +111,7 @@ mappendTextWithCounter text1 counter = text1 `mappend` "_counter_" `mappend` (pa
 -- Now this only wotks for Req lists of J String. Failed if using [Req] as input and pack x in foldl.
 decompJString :: [Req] -> [(Text, Req)]
 decompJString [] = []
-decompJString ((J x):xs) = (pack x, NONE):(decompJString xs)
+decompJString ((J x y):xs) = (pack x, NONE):(decompJString xs)
 decompJString _ = undefined
 
 -- ** Graphviz configuration
