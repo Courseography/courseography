@@ -20,7 +20,6 @@ createTest parser label input = TestLabel label $ TestList $ map (\(x, y) ->
                                 TestCase $ assertEqual ("for (" ++ x ++ "),")
                                 (Right y) (Parsec.parse parser "" x)) input
 
--- categoryParser Tests
 orInputs :: [(String, Req)]
 orInputs = [
       ("CSC120H1/CSC148H1", OR [J "CSC120H1" "", J "CSC148H1" ""])
@@ -54,8 +53,6 @@ fromParInputs = [
     , ("2 FCEs from: MAT135H1, MAT136H1/ MAT137Y1", FCES "2" $ AND [J "MAT135H1" "",OR [J "MAT136H1" "",J "MAT137Y1" ""]])
     ]
 
-
--- TODO: No more "before" reqs in new artsci calendar except first test case.
 gradeBefInputs :: [(String, Req)]
 gradeBefInputs = [
       ("minimum mark of A- in CSC236H1", GRADE "A-" $ J "CSC236H1" "") 
@@ -82,8 +79,7 @@ artSciInputs = [
     , ("EEB223H1 (ecology and evo), STA220H1 (recommended)/ STA257H1 (recommended)", (AND [J "EEB223H1" "ecology and evo",OR [J "STA220H1" "recommended",J "STA257H1" "recommended"]]))
     , ("EEB223H1 (ecology and evo)/ STA220H1 (recommended)/ STA257H1", (OR [J "EEB223H1" "ecology and evo",J "STA220H1" "recommended",J "STA257H1" ""]))
     , ("EEB223H1 (ecology and evo)/ STA220H1 (B-)/ STA257H1", OR [J "EEB223H1" "ecology and evo", GRADE "B-" $ J "STA220H1" "", J "STA257H1" ""])
-    , ("0.5 FCE from: EEB225H1 (recommended)/ STA220H1 (B-)/ STA257H1/  STA288H1/ GGR270H1/ PSY201H1", (FCES "0.5" $ OR [J "EEB225H1" "recommended", GRADE "B-" $ J "STA220H1" "", J "STA257H1" "", J "STA288H1" "", J "GGR270H1" "", J "PSY201H1" ""]))
-    ]
+    , ("0.5 FCE from: EEB225H1 (recommended)/ STA220H1 (B-)/ STA257H1/  STA288H1/ GGR270H1/ PSY201H1", (FCES "0.5" $ OR [J "EEB225H1" "recommended", GRADE "B-" $ J "STA220H1" "", J "STA257H1" "", J "STA288H1" "", J "GGR270H1" "", J "PSY201H1" ""]))]
 
 
 orTests :: Test
