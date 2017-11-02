@@ -49,6 +49,7 @@ reqToStmts (stmtslst, counter) (name, NONE) =
         counter0 =  counter + 1
     in  (stmtslst0, counter0)
 
+-- TODO: Update function according to new J constructor
 reqToStmts (_, counter) (name, J string1 string2) = let (stmtslst0, _) = foldUpReqLst [(name, NONE), (str1, NONE)] counter
                                                    in ([makeEdge (str1, counter + 1) (name, counter)] ++ stmtslst0, counter + 2)
   where str1 = pack string1
@@ -65,12 +66,14 @@ reqToStmts (stmtslst, counter) (name, OR reqs1) = ([makeNode "or" (counter_sub +
   where createSubStmts = foldl(\acc x -> createSingleSubStmt "or" (counter_sub + 1000) acc x)
         (statements_sub, counter_sub) = createSubStmts (reqToStmts (stmtslst, counter) (name, NONE)) (decompJString reqs1)
 
+-- TODO: Update function according to new J constructor
 reqToStmts (stmtslst, counter) (name, FCES string1 (J string2 string3)) = ([makeNode (pack string1) (counter_sub + 1000) 1,
                                                                     makeEdge ((pack string1), (counter_sub + 1000)) (name, counter)] ++
                                                                     statements_sub, counter_sub + 1)
   where createSubStmts = foldl(\acc x -> createSingleSubStmt (pack string1) (counter_sub + 1000) acc x)
         (statements_sub, counter_sub) = createSubStmts (reqToStmts (stmtslst, counter) (name, NONE)) [((pack string2), NONE)]
 
+-- TODO: Update function according to new J constructor
 reqToStmts (stmtslst, counter) (name, GRADE string1 (J string2 string3)) = ([makeNode (pack string1) (counter_sub + 1000) 1,
                                                                     makeEdge ((pack string1), (counter_sub + 1000)) (name, counter)] ++
                                                                     statements_sub, counter_sub + 1)
@@ -111,6 +114,7 @@ mappendTextWithCounter text1 counter = text1 `mappend` "_counter_" `mappend` (pa
 -- Now this only wotks for Req lists of J String. Failed if using [Req] as input and pack x in foldl.
 decompJString :: [Req] -> [(Text, Req)]
 decompJString [] = []
+-- TODO: Update function according to new J constructor
 decompJString ((J x y):xs) = (pack x, NONE):(decompJString xs)
 decompJString _ = undefined
 
