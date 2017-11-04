@@ -89,7 +89,7 @@ module Css.Constants
      fceCountColor,
      -- * PostPage Color
      darkRose,
-     softRose,
+     softGreen,
      mGreen,
      mRed,
      -- * Graph Styles
@@ -466,8 +466,8 @@ darkRose :: Color
 darkRose = parse "#815463"
 
 -- |Defines the color of a soft dark rose for selected courses
-softRose :: Color
-softRose = parse "#b56161"
+softGreen :: Color
+softGreen = parse "#669966"
 
 {- Graph styles -}
 

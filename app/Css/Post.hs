@@ -91,6 +91,7 @@ postCSS = do
         "list-style-type" -: "none"
         ".code" ? do
             padding0
+            "text-indent" -: "-20px;"
     "input" ? do
         fontSize (px 14)
     "#button_wrapper" ? do
@@ -104,13 +105,17 @@ postCSS = do
         semiVisible
         ":hover" & do
             fullyVisible
+    ".code:before" ? do
+            "content" -: "'✔'"
+            color white
     ".selected" ? do
         ".code" ? do
-            color softRose
+            color softGreen
             -- backgroundColor green2
             -- fontWeight bold
-        ".code:after" ? do
+        ".code:before" ? do
             "content" -: "'✔'"
+            color softGreen
         ".full_name" ? do
             backgroundColor green1
     "div" ? do

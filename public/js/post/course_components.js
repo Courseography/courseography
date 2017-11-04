@@ -34,14 +34,14 @@ var CourseCode = React.createClass({
             // special case for calculus requirement since it doesn't fit the same pattern
             return (
                 <p className='code'>
-                    (<span id='mat135' className='courseName' onClick={this.openModal}>MAT135H</span> and
-                    <span id='mat136' className='courseName' onClick={this.openModal}>MAT136H</span>) or
+                    <span id='mat135' className='courseName' onClick={this.openModal}>( MAT135H</span> and
+                    <span id='mat136' className='courseName' onClick={this.openModal}>MAT136H )</span> or
                     <span id='mat137' className='courseName' onClick={this.openModal}>MAT137Y</span>or
                     <span id='mat157' className='courseName' onClick={this.openModal}>MAT157Y</span>
                  </p>
             )
         } else {
-            return <p className='code'> {editedCourseNames} </p>;
+            return <p className='code'>{editedCourseNames}</p>;
         }
     },
 
@@ -185,7 +185,7 @@ export var MultipleCourseCode = React.createClass({
         return (
             <div id={courseID} className={classes}>
                 <p className='code' onClick={this.toggleFullInfo}>
-                    <span>{this.props.categoryName}</span>
+                    <span className='courseName'>{this.props.categoryName}</span>
                 </p>
                 <div id = {'spec' + this.props.courseID.substring(5, this.props.courseID.length)} className='more-info'>
                     <p className="full_name">
@@ -330,7 +330,7 @@ export var InquiryCategory = React.createClass({
        return (
             <div id={this.props.courseID} className={classes}>
                 <p className='code' onClick={this.toggleFullInfo}>
-                    <span>{this.props.categoryName}</span>
+                    <span className='courseName'>{this.props.categoryName}</span>
                 </p>
                 <div id={'spec' + this.props.courseID.substring(5, this.props.courseID.length)}
                      className='more-info'>
