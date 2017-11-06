@@ -116,8 +116,6 @@ postCSS = do
             "-o-transition" -: "all 0.2s"
             "transition" -: "all 0.2s"
             ".courseName" ? do
-                paddingLeft (px 5)
-                paddingRight (px 5)
                 cursor pointer
                 ":hover" & do
                     fontWeight bold
