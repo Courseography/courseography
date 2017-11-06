@@ -25,7 +25,7 @@ var CourseCode = React.createClass({
         // "or" strings in between to be easily rendered later
         this.props.courseIDs.forEach(function(course) {
             editedCourseNames.push(<span id={course} className='courseName' onClick={me.openModal}>{course.toUpperCase() + 'H'}</span>);
-            editedCourseNames.push('or');
+            editedCourseNames.push(' or ');
         })
 
         editedCourseNames.pop();
@@ -34,9 +34,12 @@ var CourseCode = React.createClass({
             // special case for calculus requirement since it doesn't fit the same pattern
             return (
                 <p className='code'>
-                    <span id='mat135' className='courseName' onClick={this.openModal}>( MAT135H</span> and
-                    <span id='mat136' className='courseName' onClick={this.openModal}>MAT136H )</span> or
-                    <span id='mat137' className='courseName' onClick={this.openModal}>MAT137Y</span>or
+                    (<span id='mat135' className='courseName' onClick={this.openModal}>MAT135H</span>
+                    <span> and </span>
+                    <span id='mat136' className='courseName' onClick={this.openModal}>MAT136H</span>)
+                    <span> or </span>
+                    <span id='mat137' className='courseName' onClick={this.openModal}>MAT137Y</span>
+                    <span> or </span>
                     <span id='mat157' className='courseName' onClick={this.openModal}>MAT157Y</span>
                  </p>
             )
@@ -185,7 +188,7 @@ export var MultipleCourseCode = React.createClass({
         return (
             <div id={courseID} className={classes}>
                 <p className='code' onClick={this.toggleFullInfo}>
-                    <span className='courseName'>{this.props.categoryName}</span>
+                    <span>{this.props.categoryName}</span>
                 </p>
                 <div id = {'spec' + this.props.courseID.substring(5, this.props.courseID.length)} className='more-info'>
                     <p className="full_name">
@@ -330,7 +333,7 @@ export var InquiryCategory = React.createClass({
        return (
             <div id={this.props.courseID} className={classes}>
                 <p className='code' onClick={this.toggleFullInfo}>
-                    <span className='courseName'>{this.props.categoryName}</span>
+                    <span>{this.props.categoryName}</span>
                 </p>
                 <div id={'spec' + this.props.courseID.substring(5, this.props.courseID.length)}
                      className='more-info'>
