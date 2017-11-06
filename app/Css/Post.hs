@@ -80,7 +80,7 @@ postCSS = do
         "list-style-type" -: "none"
         ".code" ? do
             padding0
-            "text-indent" -: "-20px;"
+            "text-indent" -: "-15px;"
     "input" ? do
         fontSize (px 14)
     "#button_wrapper" ? do
