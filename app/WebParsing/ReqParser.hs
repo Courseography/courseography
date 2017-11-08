@@ -144,15 +144,13 @@ justParser = do
     num <- Parsec.count 3 Parsec.digit
     sess <- Parsec.count 2 Parsec.alphaNum
     Parsec.spaces
-    lpar <- Parsec.option "" $ Parsec.string "("
-    tmp <- if lpar == "" then return (Right "") else markInfoParser
-    case tmp of
+    meta <- Parsec.option (Right "") $ Parsec.between lParen rParen markInfoParser
+    case meta of
         Left mark -> return $ GRADE mark $ J (code ++ num ++ sess) ""
         Right info -> return $ J (code ++ num ++ sess) info
     where
     markInfoParser = do
         grade <- Parsec.try (percentParser <|> letterParser <|> infoParser)
-        _ <- Parsec.string ")"
         return grade
             where
             percentParser = do
