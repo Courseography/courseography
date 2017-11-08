@@ -21,10 +21,10 @@ addPostToDatabase programElements = do
     -- TODO: Remove Focuses from programElements
     let fullPostName = innerText $ take 1 $ filter isTagText programElements
         requirements = last $ sections isRequirementSection programElements
-        partitions = reqHtmlToLines requirements
+        reqPartitions = reqHtmlToLines requirements
         programPrereqs = map getCourseFromTag $ map (fromAttrib "href") $ filter isCourseTag programElements
         firstCourse = if null programPrereqs then Nothing else (Just (head programPrereqs))
-    categoryParser requirements partitions fullPostName firstCourse
+    categoryParser requirements reqPartitions fullPostName firstCourse
     where
         isRequirementSection element = tagOpenAttrLit "div" ("class", "field-content") element
         isCourseTag tag = tagOpenAttrNameLit "a" "href" (T.isInfixOf "/course") tag
