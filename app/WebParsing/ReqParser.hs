@@ -150,20 +150,21 @@ justParser = do
         Right info -> return $ J (code ++ num ++ sess) info
     where
     markInfoParser = do
-        grade <- Parsec.try (percentParser <|> letterParser <|> infoParser)
+        grade <- Parsec.try (percentHelper<|> letterHelper <|> infoHelper)
+        _ <- Parsec.string ")"
         return grade
             where
-            percentParser = do
+            percentHelper = do
                 fces <- Parsec.many1 Parsec.digit
                 Parsec.optional (Parsec.char '%')
                 return $ Left fces
 
-            letterParser = do
+            letterHelper = do
                 letter <- Parsec.oneOf "ABCDEF"
                 plusminus <- Parsec.option "" $ Parsec.string "+" <|> Parsec.string "-"
                 return $ Left $ letter : plusminus
 
-            infoParser = do
+            infoHelper = do
                 info <- Parsec.manyTill Parsec.anyChar (Parsec.try $ Parsec.lookAhead $ Parsec.string ")")
                 return $ Right info
 
