@@ -151,7 +151,6 @@ justParser = do
     where
     markInfoParser = do
         grade <- Parsec.try (percentHelper<|> letterHelper <|> infoHelper)
-        _ <- Parsec.string ")"
         return grade
             where
             percentHelper = do
