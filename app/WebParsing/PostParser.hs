@@ -5,7 +5,7 @@ import qualified Data.Text as T
 import Control.Monad.Trans (liftIO)
 import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Match
-import Data.List.Split (splitWhen)
+import Data.List.Split (split, splitWhen, whenElt, keepDelimsL)
 import Database.Tables
 import Database.Persist.Sqlite (insert_, SqlPersistM)
 import Database.Persist (insertUnique)
@@ -29,15 +29,13 @@ addPostToDatabase programElements = do
         isRequirementSection element = tagOpenAttrLit "div" ("class", "field-content") element
         isCourseTag tag = tagOpenAttrNameLit "a" "href" (T.isInfixOf "/course") tag
 
-
--- | Split requirements HTML into individual lines.
 isSectionSplit :: T.Text -> Bool
 isSectionSplit txt = any (flip T.isInfixOf $ txt) ["First", "Second", "Third", "Higher", "Notes", "NOTES"]
 
 -- | Split requirements HTML into individual lines.
 reqHtmlToLines :: [Tag T.Text] -> [[T.Text]]
 reqHtmlToLines tags = 
-    let sections = splitWhen (\t -> (isTagText t) && (isSectionSplit (fromTagText t))) tags
+    let sections = split (keepDelimsL $ whenElt (\t -> (isTagText t) && (isSectionSplit $ fromTagText t))) tags
         paragraphs = concatMap (splitWhen (isTagOpenName "p")) sections
     in 
         map parHtmlToLines paragraphs
