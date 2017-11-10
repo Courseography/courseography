@@ -11,7 +11,7 @@ import Database.Persist.Sqlite (insert_, SqlPersistM)
 import Database.Persist (insertUnique)
 import qualified Text.Parsec as P
 import WebParsing.ParsecCombinators (getCourseFromTag, parseCategory,
-    postInfoParser, isNote)
+    postInfoParser)
 
 failedString :: String
 failedString = "Failed."
@@ -36,7 +36,8 @@ isSectionSplit txt = any (flip T.isInfixOf $ txt) ["First", "Second", "Third", "
 reqHtmlToLines :: [Tag T.Text] -> [[T.Text]]
 reqHtmlToLines tags = 
     let sections = split (keepDelimsL $ whenElt (\t -> (isTagText t) && (isSectionSplit $ fromTagText t))) tags
-        paragraphs = concatMap (splitWhen (isTagOpenName "p")) sections
+        sectionsNoNotes = filter (not . isNoteSection) sections
+        paragraphs = concatMap (splitWhen (isTagOpenName "p")) sectionsNoNotes
     in 
         map parHtmlToLines paragraphs
 
@@ -52,6 +53,12 @@ parHtmlToLines tags =
         convertLine (t:ts)
             | isTagOpenName "li" t = t : (TagText "0.") : ts
             | otherwise = t:ts
+
+isNoteSection :: [Tag T.Text] -> Bool
+isNoteSection section = 
+    let sectionTitleTag = head section
+    in
+        isTagText sectionTitleTag && (any (flip T.isInfixOf $ fromTagText $ sectionTitleTag) ["Notes", "NOTES"])
 
 -- Helpers
 categoryParser :: [Tag T.Text] -> [[T.Text]] -> T.Text -> Maybe T.Text -> SqlPersistM ()
@@ -75,14 +82,11 @@ addPostCategoriesToDatabase key categories = do
     where
         isCategory text = T.length text >= 7
 
-removeNotes ::[[Tag T.Text]] -> [[Tag T.Text]]
-removeNotes requirements = filter (not . isNote) requirements
-
 parseRequirement :: [T.Text] -> T.Text
 parseRequirement requirement = do
     T.intercalate ", " (map parseSingleReq (filter isReq requirement))
     where
-        isReq text = T.length text >= 7 && not (any (flip T.isInfixOf $ text) ["First", "Second", "Third"]) --, "suitable", "Core", "Electives"]
+        isReq text = T.length text >= 7 && not (any (flip T.isInfixOf $ text) ["First", "Second", "Third", "Higher"])
 
 parseSingleReq :: T.Text -> T.Text
 parseSingleReq req = do

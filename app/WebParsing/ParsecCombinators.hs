@@ -6,7 +6,6 @@ module WebParsing.ParsecCombinators
      isDepartmentName,
      parseCategory,
      postInfoParser,
-     isNote,
      text, parseAll) where
 
 import qualified Text.Parsec as P
@@ -80,19 +79,6 @@ findFirstCourse firstCourse =
     case firstCourse of
         Nothing -> parseUntil P.eof
         Just course -> P.try (parseUntil (P.lookAhead (text course))) <|> parseUntil P.eof
-
-parseNotes :: Parser T.Text
-parseNotes = do
-    _ <- P.try (text "Notes") <|> P.try (text "NOTES") <|> P.try (text "Note")
-    _ <- parseUntil P.eof
-    return ""
-
-isNote :: [Tag T.Text] -> Bool
-isNote req = do
-    let parsed = P.parse parseNotes failedString (innerText req)
-    case parsed of
-        Right _ -> True
-        Left _ -> False
 
 parseUntil :: Parser a -> Parser T.Text
 parseUntil parser = do
