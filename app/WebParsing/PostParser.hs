@@ -21,21 +21,26 @@ addPostToDatabase programElements = do
     -- TODO: Remove Focuses from programElements
     let fullPostName = innerText $ take 1 $ filter isTagText programElements
         requirements = last $ sections isRequirementSection programElements
-        reqPartitions = reqHtmlToLines requirements
+        reqByYear = reqHtmlToLines requirements
         programPrereqs = map getCourseFromTag $ map (fromAttrib "href") $ filter isCourseTag programElements
         firstCourse = if null programPrereqs then Nothing else (Just (head programPrereqs))
-    categoryParser requirements reqPartitions fullPostName firstCourse
+    categoryParser requirements reqByYear fullPostName firstCourse
     where
         isRequirementSection element = tagOpenAttrLit "div" ("class", "field-content") element
         isCourseTag tag = tagOpenAttrNameLit "a" "href" (T.isInfixOf "/course") tag
 
+
+-- | Split requirements HTML into individual lines.
+isSectionSplit :: T.Text -> Bool
+isSectionSplit txt = any (flip T.isInfixOf $ txt) ["First", "Second", "Third", "Higher", "Notes", "NOTES"]
+
 -- | Split requirements HTML into individual lines.
 reqHtmlToLines :: [Tag T.Text] -> [[T.Text]]
-reqHtmlToLines tags =
-    let paragraphs = splitWhen (isTagOpenName "p") tags
-        paragraphsWithoutNotes = removeNotes paragraphs
+reqHtmlToLines tags = 
+    let sections = splitWhen (\t -> (isTagText t) && (isSectionSplit (fromTagText t))) tags
+        paragraphs = concatMap (splitWhen (isTagOpenName "p")) sections
     in 
-        map parHtmlToLines paragraphsWithoutNotes
+        map parHtmlToLines paragraphs
 
 -- | Split HTML in a single p tag into lines based on <br> and <li> tags.
 parHtmlToLines :: [Tag T.Text] -> [T.Text]
