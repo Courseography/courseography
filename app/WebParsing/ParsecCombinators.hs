@@ -15,10 +15,6 @@ import Text.Parsec.Text (Parser)
 import Database.Tables (Post(Post))
 import Control.Monad (mapM)
 import Database.DataType
-import Text.HTML.TagSoup
-
-failedString :: String
-failedString = "Failed."
 
 getCourseFromTag :: T.Text -> T.Text
 getCourseFromTag courseTag =
