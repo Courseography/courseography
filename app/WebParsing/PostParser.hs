@@ -35,8 +35,8 @@ isSectionSplit txt = any (flip T.isInfixOf $ txt) ["First", "Second", "Third", "
 -- | Split requirements HTML into individual lines.
 reqHtmlToLines :: [Tag T.Text] -> [[T.Text]]
 reqHtmlToLines tags = 
-    let sections = split (keepDelimsL $ whenElt (\t -> (isTagText t) && (isSectionSplit $ fromTagText t))) tags
-        sectionsNoNotes = filter (not . isNoteSection) sections
+    let sects = split (keepDelimsL $ whenElt (\t -> (isTagText t) && (isSectionSplit $ fromTagText t))) tags
+        sectionsNoNotes = filter (not . isNoteSection) sects
         paragraphs = concatMap (splitWhen (isTagOpenName "p")) sectionsNoNotes
     in 
         map parHtmlToLines paragraphs
