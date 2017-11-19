@@ -80,7 +80,7 @@ postCSS = do
         "list-style-type" -: "none"
         ".code" ? do
             padding0
-            "text-indent" -: "-15px;"
+            "text-indent" -: "-20px;"
     "input" ? do
         fontSize (px 14)
     "#button_wrapper" ? do
@@ -97,6 +97,7 @@ postCSS = do
     ".code:before" ? do
             "content" -: "'\2713'"
             color white
+            paddingRight (px 5)
     ".selected" ? do
         ".code" ? do
             color softGreen
@@ -152,7 +153,6 @@ postCSS = do
     ".info_opened > div" ? do
         display block
     ".full_name" ? do
-        paddingLeft (px 20)
         textAlign $ alignSide sideCenter
         margin0
     "input" ? do
@@ -173,3 +173,11 @@ postCSS = do
         display block
     ".post_not_selected" ? do
         display none
+    "div[id*='_category_']" ? do
+        " .code:after" ? do
+            "content" -: "'\8681'"
+            paddingLeft (px 10)
+    "div[id*='_inq']" ? do
+        " .code:after" ? do
+            "content" -: "'\8681'"
+            paddingLeft (px 10)
