@@ -69,6 +69,11 @@ letterParser = do
     plusminus <- Parsec.option "" $ Parsec.string "+" <|> Parsec.string "-"
     return $ letter : plusminus
 
+infoParser :: Parser String
+infoParser= do
+                info <- Parsec.manyTill Parsec.anyChar (Parsec.try $ Parsec.lookAhead $ Parsec.string ")")
+                return $ Right info
+
 
 -- | Parser for a grade, which can be in one of the following forms:
 -- a number with or without a percent symbol, or a letter A-F followed by a +/-.
@@ -157,21 +162,6 @@ justParser = do
         grade <- Parsec.try (fmap Left percentParser<|> fmap Left letterParser<|> infoHelper)
         return grade
             where
---            percentHelper :: Parser (Either String String)
---            percentHelper = do
---                fces <- Parsec.many1 Parsec.digit
---                Parsec.optional (Parsec.char '%')
---                return $ Left fces
---
---            letterHelper :: Parser (Either String String)
---            letterHelper = do
---                letter <- Parsec.oneOf "ABCDEF"
---                plusminus <- Parsec.option "" $ Parsec.string "+" <|> Parsec.string "-"
---                return $ Left $ letter : plusminus
-
-            infoHelper = do
-                info <- Parsec.manyTill Parsec.anyChar (Parsec.try $ Parsec.lookAhead $ Parsec.string ")")
-                return $ Right info
 
 
 -- parse for single course with our without cutoff OR a req within parantheses
