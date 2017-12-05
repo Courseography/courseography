@@ -153,14 +153,12 @@ singleParser = do
 -- | Parser for single courses or "atomic" Reqs represented by a J.
 justParser :: Parser Req
 justParser = do
-    code <- Parsec.count 3 Parsec.letter
-    num <- Parsec.count 3 Parsec.digit
-    sess <- Parsec.count 2 Parsec.alphaNum
     Parsec.spaces
+    courseID <- courseIDParser
     meta <- Parsec.option (Right "") $ Parsec.between lParen rParen markInfoParser
     return $ case meta of
-        Left mark -> GRADE mark $ J (code ++ num ++ sess) ""
-        Right info -> J (code ++ num ++ sess) info
+        Left mark -> GRADE mark $ J courseID ""
+        Right info -> J courseID info
     where
     markInfoParser :: Parser (Either String String)
     markInfoParser = do
