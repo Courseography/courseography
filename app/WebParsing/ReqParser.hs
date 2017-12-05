@@ -147,7 +147,8 @@ courseIDParser = do
 
 singleParser :: Parser Req
 singleParser = do
-    return $ fmap J courseIDParser
+    courseID <- courseIDParser
+    return $ J courseID ""
 
 -- | Parser for single courses or "atomic" Reqs represented by a J.
 justParser :: Parser Req
