@@ -155,6 +155,7 @@ justParser :: Parser Req
 justParser = do
     Parsec.spaces
     courseID <- courseIDParser
+    Parsec.spaces
     meta <- Parsec.option (Right "") $ Parsec.between lParen rParen markInfoParser
     return $ case meta of
         Left mark -> GRADE mark $ J courseID ""
