@@ -56,6 +56,20 @@ creditsParser = do
     fractional <- if point == "" then return "" else Parsec.many1 Parsec.digit
     return $ integral ++ point ++ fractional
 
+-- | Helpers for parsing grades
+percentParser :: Parser String
+percentParser = do
+    fces <- Parsec.many1 Parsec.digit
+    Parsec.optional (Parsec.char '%')
+    return fces
+
+letterParser :: Parser String
+letterParser = do
+    letter <- Parsec.oneOf "ABCDEF"
+    plusminus <- Parsec.option "" $ Parsec.string "+" <|> Parsec.string "-"
+    return $ letter : plusminus
+
+
 -- | Parser for a grade, which can be in one of the following forms:
 -- a number with or without a percent symbol, or a letter A-F followed by a +/-.
 gradeParser :: Parser String
@@ -69,17 +83,6 @@ gradeParser = do
         Parsec.oneOf "(),/;" >> return ""
         ]
     return grade
-
-    where
-    percentParser = do
-        fces <- Parsec.many1 Parsec.digit
-        Parsec.optional (Parsec.char '%')
-        return fces
-
-    letterParser = do
-        letter <- Parsec.oneOf "ABCDEF"
-        plusminus <- Parsec.option "" $ Parsec.string "+" <|> Parsec.string "-"
-        return $ letter : plusminus
 
 -- parse for cutoff percentage before a course
 coBefParser :: Parser Req
@@ -145,23 +148,26 @@ justParser = do
     sess <- Parsec.count 2 Parsec.alphaNum
     Parsec.spaces
     meta <- Parsec.option (Right "") $ Parsec.between lParen rParen markInfoParser
-    case meta of
-        Left mark -> return $ GRADE mark $ J (code ++ num ++ sess) ""
-        Right info -> return $ J (code ++ num ++ sess) info
+    return $ case meta of
+        Left mark -> GRADE mark $ J (code ++ num ++ sess) ""
+        Right info -> J (code ++ num ++ sess) info
     where
+    markInfoParser :: Parser (Either String String)
     markInfoParser = do
-        grade <- Parsec.try (percentHelper<|> letterHelper <|> infoHelper)
+        grade <- Parsec.try (fmap Left percentParser<|> fmap Left letterParser<|> infoHelper)
         return grade
             where
-            percentHelper = do
-                fces <- Parsec.many1 Parsec.digit
-                Parsec.optional (Parsec.char '%')
-                return $ Left fces
-
-            letterHelper = do
-                letter <- Parsec.oneOf "ABCDEF"
-                plusminus <- Parsec.option "" $ Parsec.string "+" <|> Parsec.string "-"
-                return $ Left $ letter : plusminus
+--            percentHelper :: Parser (Either String String)
+--            percentHelper = do
+--                fces <- Parsec.many1 Parsec.digit
+--                Parsec.optional (Parsec.char '%')
+--                return $ Left fces
+--
+--            letterHelper :: Parser (Either String String)
+--            letterHelper = do
+--                letter <- Parsec.oneOf "ABCDEF"
+--                plusminus <- Parsec.option "" $ Parsec.string "+" <|> Parsec.string "-"
+--                return $ Left $ letter : plusminus
 
             infoHelper = do
                 info <- Parsec.manyTill Parsec.anyChar (Parsec.try $ Parsec.lookAhead $ Parsec.string ")")
