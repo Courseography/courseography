@@ -71,8 +71,8 @@ letterParser = do
 
 infoParser :: Parser String
 infoParser= do
-                info <- Parsec.manyTill Parsec.anyChar (Parsec.try $ Parsec.lookAhead $ Parsec.string ")")
-                return $ Right info
+    info <- Parsec.manyTill Parsec.anyChar (Parsec.try $ Parsec.lookAhead $ Parsec.string ")")
+    return $ info
 
 
 -- | Parser for a grade, which can be in one of the following forms:
@@ -137,13 +137,17 @@ rawTextParser = do
 
 -- | Parser for a single course.
 -- We expect 3 letters, 3 digits, and a letter and a number.
-singleParser :: Parser Req
-singleParser = do
+courseIDParser :: Parser String
+courseIDParser = do
     code <- Parsec.count 3 Parsec.letter
     num <- Parsec.count 3 Parsec.digit
     -- TODO: Make the last two letters more restricted.
     sess <- Parsec.count 2 Parsec.alphaNum
-    return $ J (code ++ num ++ sess) ""
+    return (code ++ num ++ sess)
+
+singleParser :: Parser Req
+singleParser = do
+    return $ fmap J courseIDParser
 
 -- | Parser for single courses or "atomic" Reqs represented by a J.
 justParser :: Parser Req
