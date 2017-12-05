@@ -161,8 +161,6 @@ justParser = do
     markInfoParser = do
         grade <- Parsec.try (fmap Left percentParser<|> fmap Left letterParser<|> infoHelper)
         return grade
-            where
-
 
 -- parse for single course with our without cutoff OR a req within parantheses
 courseParser :: Parser Req
