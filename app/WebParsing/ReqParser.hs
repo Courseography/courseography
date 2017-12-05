@@ -159,7 +159,7 @@ justParser = do
     where
     markInfoParser :: Parser (Either String String)
     markInfoParser = do
-        grade <- Parsec.try (fmap Left percentParser<|> fmap Left letterParser<|> infoHelper)
+        grade <- Parsec.try (fmap Left percentParser <|> fmap Left letterParser <|> fmap Right infoParser)
         return grade
 
 -- parse for single course with our without cutoff OR a req within parantheses
