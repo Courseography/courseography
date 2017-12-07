@@ -24,10 +24,7 @@ sampleGraph = reqsToGraph [
     ("MAT237H1", J "MAT137H1"),
     ("MAT133H1", NONE),
     ("CSC148H1", AND [J "CSC108H1", J "CSC104H1"]),
-    ("CSC265H1", OR [J "CSC240H1", J "CSC236H1"]),
-    ("CSC2503H1", FCES "Two of" (J "CSC411H1,CSC412H1,CSC320H1,CSC420H1")),
-    ("MAT337H1", GRADE "90%" (J "MAT237H1")),
-    ("CSC411H1", FCES "1.0" (OR [J "HIS230H1",J "HIS231H1",J "NEW220H1",J "NEW221H1",J "NEW225H1",J "NEW226H1"]))
+    ("CSC265H1", AND [J "CSC148H1", J "CSC236H1"])
     ]
 
 --
@@ -127,8 +124,8 @@ foldUpReqLst :: [(Text, Req)] -> Int -> StmtsWithCounter
 foldUpReqLst reqlst count = foldl reqToStmts ([], count) reqlst
 
 makeNode :: Text -> Int -> Int -> DotStatement Text
-makeNode text1 counter 0 = DN $ DotNode (mappendTextWithCounter text1 counter) []
-makeNode text1 counter 1 = DN $ DotNode (mappendTextWithCounter text1 counter) [A.shape A.Ellipse, AC.Width 1, A.fillColor White]
+makeNode text1 counter 0 = DN $ DotNode (mappendTextWithCounter text1 counter) [AC.Label (toLabelValue text1)]
+makeNode text1 counter 1 = DN $ DotNode (mappendTextWithCounter text1 counter) [AC.Label (toLabelValue text1), A.shape A.Ellipse, AC.Width 1, AC.Height 0.5, A.fillColor White]
 makeNode _ _ _ = undefined
 
 makeEdge :: (Text, Int) -> (Text, Int) -> DotStatement Text
@@ -164,7 +161,7 @@ graphAttrs = GraphAttrs [AC.RankDir AC.FromLeft]
 
 -- Means the shape of each node in the graph is circle with width 1, and is filled.
 nodeAttrs :: GlobalAttributes
-nodeAttrs = NodeAttrs [A.shape A.Circle, AC.Width 4, A.style A.filled]
+nodeAttrs = NodeAttrs [A.shape A.BoxShape, AC.Width 2, AC.Height 1, A.style A.filled]
 
 -- Using default setting for the edges connecting the nodes.
 edgeAttrs :: GlobalAttributes
