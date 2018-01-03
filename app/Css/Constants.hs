@@ -87,6 +87,11 @@ module Css.Constants
      pastelGrey,
      -- * FCE Count Color
      fceCountColor,
+     -- * PostPage Color
+     darkRose,
+     softGreen,
+     mGreen,
+     mRed,
      -- * Graph Styles
      nodeFontSize,
      hybridFontSize,
@@ -445,6 +450,24 @@ pastelGrey = parse "#A2A9AF"
 -- unused.
 fceCountColor :: Color
 fceCountColor = parse "#66C2FF"
+
+{- PostPage Color -}
+
+-- |Defines the color of a soft dark green for post credits
+mGreen :: Color
+mGreen = parse "#519A73"
+
+-- |Defines the color of a soft dark red for post credits
+mRed :: Color
+mRed = parse "#C91F37"
+
+-- |Defines the color of a dark rose for bottom bar
+darkRose :: Color
+darkRose = parse "#815463"
+
+-- |Defines the color of a soft dark rose for selected courses
+softGreen :: Color
+softGreen = parse "#669966"
 
 {- Graph styles -}
 
