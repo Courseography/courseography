@@ -4,10 +4,8 @@ module WebParsing.ParsecCombinators
      getPostType,
      getDepartmentName,
      isDepartmentName,
-     generalCategoryParser,
      parseCategory,
      postInfoParser,
-     parseNumberedLine,
      text, parseAll) where
 
 import qualified Text.Parsec as P
@@ -31,12 +29,6 @@ findCourseFromTag = do
     _ <- P.string "/course/"
     parsed <- P.many1 P.anyChar
     return $ T.pack parsed
-
-generalCategoryParser :: T.Text -> Maybe T.Text -> Parser (Post, [T.Text])
-generalCategoryParser fullPostName firstCourse = do
-    post <- postInfoParser fullPostName firstCourse
-    categories <- splitPrereqText
-    return (post, categories)
 
 -- Post Parsing
 postInfoParser :: T.Text -> Maybe T.Text -> Parser Post
@@ -84,44 +76,13 @@ findFirstCourse firstCourse =
         Nothing -> parseUntil P.eof
         Just course -> P.try (parseUntil (P.lookAhead (text course))) <|> parseUntil P.eof
 
-parseNoteLine :: Parser T.Text
-parseNoteLine = do
-    _ <- P.string "Note"
-    P.try (parseUntil (P.char '\n')) <|> parseUntil P.eof
-
-parseNotes :: Parser T.Text
-parseNotes = do
-    _ <- P.try (text "Notes") <|> P.try (text "NOTES")
-    _ <- parseUntil P.eof
-    return ""
-
 parseUntil :: Parser a -> Parser T.Text
 parseUntil parser = do
     parsed <- P.manyTill P.anyChar (P.try parser)
     return $ T.pack parsed
 
-splitPrereqText :: Parser [T.Text]
-splitPrereqText = do
-    P.manyTill (P.try parseNotes <|> P.try parseNoteLine <|>
-        P.try parseCategory <|> parseUntil P.eof) P.eof
-
 parseCategory :: Parser T.Text
-parseCategory = do
-    left <- parseUpToSeparator
-    _ <- P.anyChar
-    return left
-
-parseNumberedLine :: Parser T.Text
-parseNumberedLine = do
-    P.spaces
-    _ <- P.digit
-    _ <- text "."
-    _ <- P.space
-    P.spaces
-    parseUntil P.eof
-
-parseUpToSeparator :: Parser T.Text
-parseUpToSeparator = parseUntil (P.notFollowedBy (P.noneOf ";\r\n"))
+parseCategory = P.optional (P.spaces >> P.digit >> text "." >> P.space >> P.spaces) >> parseUntil P.eof
 
 text :: T.Text -> Parser T.Text
 text someText = do
