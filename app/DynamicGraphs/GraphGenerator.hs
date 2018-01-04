@@ -21,10 +21,11 @@ type StmtsWithCounter = ([DotStatement Text], Int)
 -- Serves as a sort of "interface" for the whole part "dynamic graph"
 sampleGraph :: DotGraph Text
 sampleGraph = reqsToGraph [
-    ("MAT237H1", J "MAT137H1"),
+-- TODO: update function
+    ("MAT237H1", J "MAT137H1" ""),
     ("MAT133H1", NONE),
-    ("CSC148H1", AND [J "CSC108H1", J "CSC104H1"]),
-    ("CSC265H1", AND [J "CSC148H1", J "CSC236H1"])
+    ("CSC148H1", AND [J "CSC108H1" "", J "CSC104H1" ""]),
+    ("CSC265H1", AND [J "CSC148H1" "", J "CSC236H1" ""])
     ]
 
 --
@@ -47,11 +48,12 @@ reqToStmts (stmtslst, counter) (name, NONE) =
         counter0 =  counter + 1
     in  (stmtslst0, counter0)
 
-reqToStmts (stmtslst, counter) (name, J string1) = (stmtslst1 ++ connectRootsToName roots1 uppernode0, counter1)
+-- TODO: update function
+reqToStmts (stmtslst, counter) (name, J string1 string2) = (stmtslst1 ++ connectRootsToName roots1 uppernode0, counter1)
 
   where stmtslst0 = [makeNode name counter 0] ++ stmtslst
-        uppernode0 = mappendTextWithCounter name counter 
-        ((stmtslst1, counter1), roots1) = reqToStmtsHelper ((stmtslst0, counter + 1), []) (J string1)
+        uppernode0 = mappendTextWithCounter name counter
+        ((stmtslst1, counter1), roots1) = reqToStmtsHelper ((stmtslst0, counter + 1), []) (J string1 string2)
 
 reqToStmts (stmtslst, counter) (name, AND reqs1) = (stmtslst1 ++ connectRootsToName roots1 uppernode0, counter1)
 
@@ -69,50 +71,53 @@ reqToStmts (stmtslst, counter) (name, FCES string1 reqs1) = (stmtslst1 ++ connec
 
   where uppernode0 = mappendTextWithCounter (pack string1) (counter + 1)
         namewithcounter = mappendTextWithCounter name counter
-        stmtslst0 = [makeNode name counter 0] ++ [makeNode (pack string1) (counter + 1) 1] ++ 
+        stmtslst0 = [makeNode name counter 0] ++ [makeNode (pack string1) (counter + 1) 1] ++
                     [makeEdge (uppernode0, -1) (namewithcounter, -1)] ++ stmtslst
         ((stmtslst1, counter1), roots1) = reqToStmtsHelper ((stmtslst0, counter + 2), []) reqs1
 
-reqToStmts (stmtslst, counter) (name, GRADE string1 (J string2)) = (stmtslst1 ++ connectRootsToName roots1 uppernode0, counter1)
+-- TODO: update function
+reqToStmts (stmtslst, counter) (name, GRADE string1 (J string2 string3)) = (stmtslst1 ++ connectRootsToName roots1 uppernode0, counter1)
 
   where uppernode0 = mappendTextWithCounter (pack string1) (counter + 1)
         namewithcounter = mappendTextWithCounter name counter
-        stmtslst0 = [makeNode name counter 0] ++ [makeNode (pack string1) (counter + 1) 1] ++ 
+        stmtslst0 = [makeNode name counter 0] ++ [makeNode (pack string1) (counter + 1) 1] ++
                     [makeEdge (uppernode0, -1) (namewithcounter, -1)] ++ stmtslst
-        ((stmtslst1, counter1), roots1) = reqToStmtsHelper ((stmtslst0, counter + 2), []) (J string2)
+-- TODO: update function
+        ((stmtslst1, counter1), roots1) = reqToStmtsHelper ((stmtslst0, counter + 2), []) (J string2 string3)
 
 reqToStmts (stmtslst, counter) (name, RAW string1) = (stmtslst1 ++ connectRootsToName roots1 uppernode0, counter1)
 
   where stmtslst0 = [makeNode name counter 0] ++ stmtslst
-        uppernode0 = mappendTextWithCounter name counter 
+        uppernode0 = mappendTextWithCounter name counter
         ((stmtslst1, counter1), roots1) = reqToStmtsHelper ((stmtslst0, counter + 1), []) (RAW string1)
 
 reqToStmts _ _ = undefined
 
 reqToStmtsHelper :: (StmtsWithCounter, [Text]) -> Req -> (StmtsWithCounter, [Text])
 
-reqToStmtsHelper ((stmtslst, counter), roots) (J string1) = (([makeNode (pack string1) counter 0] 
-                                                            ++ stmtslst, counter + 1), 
+-- TODO: update function
+reqToStmtsHelper ((stmtslst, counter), roots) (J string1 _) = (([makeNode (pack string1) counter 0]
+                                                            ++ stmtslst, counter + 1),
                                                             [mappendTextWithCounter (pack string1) counter] ++ roots)
 
 reqToStmtsHelper ((stmtslst, counter), roots) (AND reqs1) = (([makeNode "and" (counter + 1000) 1]
-                                                            ++ stmtslst0 ++ 
-                                                            (connectRootsToName roots1 rootwithcounter), counter0), 
+                                                            ++ stmtslst0 ++
+                                                            (connectRootsToName roots1 rootwithcounter), counter0),
                                                             [rootwithcounter] ++ roots)
 
   where rootwithcounter = mappendTextWithCounter "and" (counter + 1000)
         ((stmtslst0, counter0), roots1) = foldl(\acc x -> reqToStmtsHelper acc x) ((stmtslst, counter + 1), []) reqs1
 
 reqToStmtsHelper ((stmtslst, counter), roots) (OR reqs1) = (([makeNode "or" (counter + 1000) 1]
-                                                            ++ stmtslst0 ++ 
-                                                            (connectRootsToName roots1 rootwithcounter), counter0), 
+                                                            ++ stmtslst0 ++
+                                                            (connectRootsToName roots1 rootwithcounter), counter0),
                                                             [rootwithcounter] ++ roots)
 
   where rootwithcounter = mappendTextWithCounter "or" (counter + 1000)
         ((stmtslst0, counter0), roots1) = foldl(\acc x -> reqToStmtsHelper acc x) ((stmtslst, counter + 1), []) reqs1
 
-reqToStmtsHelper ((stmtslst, counter), roots) (RAW string1) = (([makeNode (pack string1) counter 0] 
-                                                            ++ stmtslst, counter + 1), 
+reqToStmtsHelper ((stmtslst, counter), roots) (RAW string1) = (([makeNode (pack string1) counter 0]
+                                                            ++ stmtslst, counter + 1),
                                                             [mappendTextWithCounter (pack string1) counter] ++ roots)
 
 reqToStmtsHelper _ _ = undefined

@@ -56,6 +56,25 @@ creditsParser = do
     fractional <- if point == "" then return "" else Parsec.many1 Parsec.digit
     return $ integral ++ point ++ fractional
 
+-- | Helpers for parsing grades
+percentParser :: Parser String
+percentParser = do
+    fces <- Parsec.many1 Parsec.digit
+    Parsec.optional (Parsec.char '%')
+    return fces
+
+letterParser :: Parser String
+letterParser = do
+    letter <- Parsec.oneOf "ABCDEF"
+    plusminus <- Parsec.option "" $ Parsec.string "+" <|> Parsec.string "-"
+    return $ letter : plusminus
+
+infoParser :: Parser String
+infoParser= do
+    info <- Parsec.manyTill Parsec.anyChar (Parsec.try $ Parsec.lookAhead $ Parsec.string ")")
+    return $ info
+
+
 -- | Parser for a grade, which can be in one of the following forms:
 -- a number with or without a percent symbol, or a letter A-F followed by a +/-.
 gradeParser :: Parser String
@@ -69,17 +88,6 @@ gradeParser = do
         Parsec.oneOf "(),/;" >> return ""
         ]
     return grade
-
-    where
-    percentParser = do
-        fces <- Parsec.many1 Parsec.digit
-        Parsec.optional (Parsec.char '%')
-        return fces
-
-    letterParser = do
-        letter <- Parsec.oneOf "ABCDEF"
-        plusminus <- Parsec.option "" $ Parsec.string "+" <|> Parsec.string "-"
-        return $ letter : plusminus
 
 -- parse for cutoff percentage before a course
 coBefParser :: Parser Req
@@ -129,20 +137,41 @@ rawTextParser = do
 
 -- | Parser for a single course.
 -- We expect 3 letters, 3 digits, and a letter and a number.
-singleParser :: Parser Req
-singleParser = do
+courseIDParser :: Parser String
+courseIDParser = do
     code <- Parsec.count 3 Parsec.letter
     num <- Parsec.count 3 Parsec.digit
     -- TODO: Make the last two letters more restricted.
     sess <- Parsec.count 2 Parsec.alphaNum
-    return $ J (code ++ num ++ sess)
+    return (code ++ num ++ sess)
+
+singleParser :: Parser Req
+singleParser = do
+    courseID <- courseIDParser
+    return $ J courseID ""
+
+-- | Parser for single courses or "atomic" Reqs represented by a J.
+justParser :: Parser Req
+justParser = do
+    Parsec.spaces
+    courseID <- courseIDParser
+    Parsec.spaces
+    meta <- Parsec.option (Right "") $ Parsec.between lParen rParen markInfoParser
+    return $ case meta of
+        Left mark -> GRADE mark $ J courseID ""
+        Right info -> J courseID info
+    where
+    markInfoParser :: Parser (Either String String)
+    markInfoParser = do
+        grade <- Parsec.try (fmap Left percentParser <|> fmap Left letterParser <|> fmap Right infoParser)
+        return grade
 
 -- parse for single course with our without cutoff OR a req within parantheses
 courseParser :: Parser Req
 courseParser = Parsec.between Parsec.spaces Parsec.spaces $ Parsec.choice $ map Parsec.try [
     parParser,
     cutoffParser,
-    singleParser,
+    justParser,
     rawTextParser
     ]
 
@@ -183,4 +212,4 @@ parseReqs reqString =
     let req = Parsec.parse categoryParser "" reqString
     in case req of
         Right x -> x
-        Left e -> J (show e)
+        Left e -> J (show e) ""
