@@ -14,6 +14,7 @@ dependencies:
   pre:
     - sudo apt-get update
     - sudo apt-get install imagemagick texlive-latex-base
+    - sudo stack upgrade
   override:
     - stack setup
     - rm -fr $(stack path --dist-dir) $(stack path --local-install-root)
