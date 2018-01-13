@@ -10,6 +10,7 @@ import Database.Tables
 import Database.Persist.Sqlite (insert_, SqlPersistM)
 import Database.Persist (insertUnique)
 import qualified Text.Parsec as P
+import WebParsing.ReqParser (parseReqs)
 import WebParsing.ParsecCombinators (getCourseFromTag, parseCategory,
     postInfoParser)
 
@@ -78,7 +79,8 @@ categoryParser tags requirements fullPostName firstCourse = do
 
 addPostCategoriesToDatabase :: PostId -> [T.Text] -> SqlPersistM ()
 addPostCategoriesToDatabase key categories = do
-    mapM_ (insert_ . PostCategory key) (filter isCategory categories)
+    let filtered = map (parseReqs . T.unpack) $ filter isCategory categories
+    mapM_ (insert_ . PostCategory key) (map (T.pack . show) filtered) 
     where
         isCategory text = T.length text >= 7
 
