@@ -39,7 +39,7 @@ parseArtSci = do
     runSqlite databasePath $ do
         liftIO $ putStrLn "Inserting departments"
         insertDepts $ map snd deptInfo
-        mapM_ parseDepartment (nubBy (\(x, _) (y, _) -> x == y) deptInfo) 
+        mapM_ parseDepartment (nubBy (\(x, _) (y, _) -> x == y) deptInfo)
 
 -- | Converts the processed main page and extracts a list of department html pages
 -- and department names
@@ -69,14 +69,13 @@ parseDepartment (relativeURL, _) = do
     let contentTags = dropWhile (not . tagOpenAttrLit "div" ("id", "block-system-main")) bodyTags
         contentTags' = takeWhile (not . tagOpenAttrLit "p" ("class", "rteright")) contentTags
         programs = dropWhile (not . tagOpenAttrNameLit "div" "class" isProgramHeaderInfix) contentTags'
-        programs' = takeWhile (not . tagOpenAttrNameLit "div" "class" (T.isInfixOf "view-id-course_group_view")) programs 
+        programs' = takeWhile (not . tagOpenAttrNameLit "div" "class" (T.isInfixOf "view-id-course_group_view")) programs
         courseTags = dropWhile (not . tagOpenAttrNameLit "div" "class" isCourseSection) contentTags'
     parsePrograms programs'
-    let courseList = parseCourses courseTags
-    mapM_ insertCourse courseList
+    mapM_ insertCourse $ parseCourses courseTags
     where
         isProgramHeaderInfix tag = or [(T.isInfixOf "view-id-section") tag, (T.isInfixOf "view-header") tag]
-        isCourseSection tag = or [(T.isInfixOf "view-id-courses") tag, 
+        isCourseSection tag = or [(T.isInfixOf "view-id-courses") tag,
             and [(T.isInfixOf "view-") tag, (T.isInfixOf "-courses") tag,
                   not (T.isInfixOf "programs" tag)]]
 
