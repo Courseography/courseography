@@ -49,8 +49,8 @@ parsePrebuiltSvgs = runSqlite databasePath $ do
     performParse "East Asian Studies" "eas2015.svg"
     performParse "English" "eng2015.svg"
     performParse "History and Philosophy of Science" "hps2015.svg"
-    performParse "History" "his2015.svg"
-    performParse "Geography" "ggr2015.svg"
+  --  performParse "History" "his2015.svg"
+  --  performParse "Geography" "ggr2015.svg"
     performParse "Aboriginal" "abs2015.svg"
     performParse "German" "ger2015.svg"
 
