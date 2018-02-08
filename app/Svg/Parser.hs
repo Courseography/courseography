@@ -29,6 +29,7 @@ import Text.Read (readMaybe)
 import Data.Char (isSpace)
 import qualified Data.Text as T
 import Data.Text.IO as T (readFile)
+import Data.List.Split
 
 parsePrebuiltSvgs :: IO ()
 parsePrebuiltSvgs = runSqlite databasePath $ do
@@ -53,6 +54,7 @@ parsePrebuiltSvgs = runSqlite databasePath $ do
     performParse "Geography" "ggr2015.svg"
     performParse "Aboriginal" "abs2015.svg"
     performParse "German" "ger2015.svg"
+    performParse "Sample" "gen/sample_edited.svg"
 
 
 -- | The starting point for parsing a graph with a given title and file.
@@ -170,9 +172,9 @@ parseRect :: GraphId -- ^ The Rect's corresponding graph identifier.
           -> [Shape]
 parseRect key tags =
     let
-        rectOpenTags = filter (TS.isTagOpenName "rect") tags
+        rectOpenTags = filter (\tag -> TS.isTagOpenName "rect" tag || TS.isTagOpenName "polygon" tag) tags
     in
-        map makeRect rectOpenTags
+        map (\tag -> if (TS.isTagOpenName "rect" tag) then makeRect tag else makePoly tag) rectOpenTags
     where
         gOpen = head tags
         styles' = styles gOpen
@@ -190,6 +192,24 @@ parseRect key tags =
                   ""
                   []
                   Node
+        makePoly polyOpenTag =
+          let points = map (\coord -> parseCoord $ T.pack coord) $ splitOn " " $ T.unpack $ fromAttrib "points" polyOpenTag -- [(1, 2), (2, 4), ... ]
+          in
+            updateShape fill $
+              Shape key
+                ""
+                --((fst $ points !! 1) + fst trans, -- get x value 
+                -- (snd $ points !! 1) + snd trans) -- get y value
+                --((fst $ points !! 0) - (fst $ points !! 1)) -- calculate width
+                --((snd $ points !! 2) - (snd $ points !! 1)) -- calculate height
+                (1,
+                1)
+                1
+                1
+                fill
+                ""
+                []
+                Node
 
 
 -- | Create a path from a list of tags.
@@ -299,6 +319,20 @@ parseTransform transform =
         if isNothing xPos || isNothing yPos
         then
             error $ T.unpack transform
+        else
+            (fromJust xPos, fromJust yPos)
+
+parseCoord :: T.Text -> Point
+parseCoord "" = (0,0)
+parseCoord coord =
+    let parsedCoord = T.splitOn "," coord
+        xPos = readMaybe . T.unpack $ head parsedCoord
+        yPos = readMaybe . T.unpack $ parsedCoord !! 1
+    in
+        if isNothing xPos || isNothing yPos
+        then
+            --error $ show yPos
+            error $ show coord
         else
             (fromJust xPos, fromJust yPos)
 
