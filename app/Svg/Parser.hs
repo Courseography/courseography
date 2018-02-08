@@ -198,14 +198,10 @@ parseRect key tags =
             updateShape fill $
               Shape key
                 ""
-                --((fst $ points !! 1) + fst trans, -- get x value 
-                -- (snd $ points !! 1) + snd trans) -- get y value
-                --((fst $ points !! 0) - (fst $ points !! 1)) -- calculate width
-                --((snd $ points !! 2) - (snd $ points !! 1)) -- calculate height
-                (1,
-                1)
-                1
-                1
+                ((fst $ points !! 1) + fst trans, -- get x value 
+                (snd $ points !! 1) + snd trans) -- get y value
+                ((fst $ points !! 0) - (fst $ points !! 1)) -- calculate width
+                ((snd $ points !! 2) - (snd $ points !! 1)) -- calculate height
                 fill
                 ""
                 []
