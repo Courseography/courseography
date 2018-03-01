@@ -193,9 +193,9 @@ parseRect key tags =
                   []
                   Node
         makePoly polyOpenTag =
-          let points = map (\coord -> parseCoord $ T.pack coord) $ splitOn " " $ T.unpack $ fromAttrib "points" polyOpenTag -- [(1, 2), (2, 4), ... ]
+          let points = map (\coord -> parseCoord $ T.pack coord) $ splitOn " " $ T.unpack $ fromAttrib "points" polyOpenTag 
           in
-            updateShape fill $
+            updateShape (fromAttrib "fill" polyOpenTag) $
               Shape key
                 ""
                 ((fst $ points !! 1) + fst trans, -- get x value 
@@ -227,7 +227,7 @@ parsePathHelper key trans pathTag =
         styles' = styles pathTag
         currTrans = parseTransform $ fromAttrib "transform" pathTag
         realD = map (addTuples (addTuples trans currTrans)) $ parsePathD d
-        fillAttr = styleVal "fill" styles'
+        fillAttr = if TS.isTagOpenName "rect" pathTag then styleVal "fill" styles' else fromAttrib "fill" pathTag
         isRegion = not (T.null fillAttr) && fillAttr /= "none"
     in
         if T.null d || null realD || (T.last d == 'z' && not isRegion)
