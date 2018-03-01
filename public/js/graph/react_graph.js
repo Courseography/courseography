@@ -1043,7 +1043,7 @@ var BoolGroup = React.createClass({
                 childs={childs}
                 inEdges={inEdges}
                 outEdges={outEdges}
-                logicalType={boolJSON.text[0].text}
+                logicalType={(boolJSON.text[0] && boolJSON.text[0].text) || 'and'}
                 svg={this.props.svg}/>
     },
 
