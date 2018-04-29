@@ -130,6 +130,7 @@ timetableCSS = do
                 fontSize (em 0)
             "rowspan" *= "2" & do
                 fontSize (em 0.9)
+            fontSize (em 0.5)
             height (px 18)
         ".timetable-time" ? do
             width (pct 12)
