@@ -1,30 +1,39 @@
 
 /** Holds the containers of the Fall and Spring timetables,
-    and do some pre-processing steps with the list of 'Lecture' objects*/
+    and performs some pre-processing steps with a list of 'Lecture' objects*/
 var Row = React.createClass({
   render: function(){
     var fallSession = {};
     var springSession = {};
-    var fallWidths = {'M': [], 'T': [], 'W': [], 'R': [], 'F': []};
-    var springWidths = {'M': [], 'T': [], 'W': [], 'R': [], 'F': []};
+
+    // Stores the 'colSpan' attribute value for each day-cell in the header
+    var fallColSpans = {'M': 0, 'T': 0, 'W': 0, 'R': 0, 'F': 0};
+    var springColSpans = {'M': 0, 'T': 0, 'W': 0, 'R': 0, 'F': 0};
+
+    // From a list of Course objects, create a list of Lecture objects
+    var courses = this.props.courses;
+    var lectures = [];
+    storeLectures(courses, lectures);
 
     // Organize the structure of the <fallSession> and <springSession> 2-D dictionaries
     initializeSessions(fallSession, springSession);
-    // Store the list of 'Lecture' objects into <fallSession> and <springSession>
-    organizeLectures(this.props.lectures, springSession, fallSession);
-    // For each session, set the 'width' attribute of each lecture
-    // (the width of a lecture is the maximum number of conflicts it has while it's active)
+    // Store the list of Lecture objects into <fallSession> and <springSession>
+    organizeLectures(lectures, springSession, fallSession);
+
+    // For each session, set the 'width' attribute of each Lecture
+    // (go to Lecture constructor for definition of 'width')
     setWidths(fallSession);
     setWidths(springSession);
-    // For each day, store the widths of each lecture active at that day
-    storeWidths(fallSession, fallWidths);
-    storeWidths(springSession, springWidths);
+
+    // Fill session colSpans dictionaries
+    storeColSpans(fallSession, fallColSpans);
+    storeColSpans(springSession, springColSpans);
 
     // Generate a container for each of the Fall and Spring timetables individually
     return(
       <div className="row">
-        <TimetableContainer session={"F"} lectures={fallSession} widths={fallWidths} />
-        <TimetableContainer session={"S"} lectures={springSession} widths={springWidths} />
+        <TimetableContainer session={"F"} lectures={fallSession} headColSpans={fallColSpans} />
+        <TimetableContainer session={"S"} lectures={springSession} headColSpans={springColSpans} />
       </div>
     );
   }
@@ -36,7 +45,7 @@ var TimetableContainer = React.createClass({
     render: function(){
       return(
         <div className="col-md-6 col-xs-12 timetable-container">
-          <Timetable session={this.props.session} lectures={this.props.lectures} widths={this.props.widths}/>
+          <Timetable session={this.props.session} lectures={this.props.lectures} headColSpans={this.props.headColSpans}/>
         </div>
       );
     }
@@ -47,39 +56,31 @@ var Timetable = React.createClass({
   render: function(){
     return(
       <table className={"timetable table"} id={"timetable-" + this.props.session}>
-        <TimetableHeader session = {this.props.session} lectures={this.props.lectures} widths={this.props.widths}/>
-        <TimetableBody session = {this.props.session} lectures={this.props.lectures} widths={this.props.widths}/>
+        <TimetableHeader session = {this.props.session} lectures={this.props.lectures} headColSpans={this.props.headColSpans}/>
+        <TimetableBody session = {this.props.session} lectures={this.props.lectures} headColSpans={this.props.headColSpans}/>
       </table>
     );
   }
 });
 
 /** Describes what the header of a table should look like, based off the session.
-    The header contains five day cells, a dummy cell and a term-name cell*/
+    The header contains five day cells, a dummy cell, and a term-name cell */
 var TimetableHeader = React.createClass({
   render: function(){
+      var days = ['M', 'T', 'W', 'R', 'F'];
+      var dayStrings = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
       var tableHeader = null;
       var dayCell = null;
       var dayCells = [];
-      var conflicts = this.props.conflicts;
-      var widths = this.props.widths;
-
-      // Variables used to determine the colSpan of each day-cell
-      var widthProd = 1;
-      var days = ['M', 'T', 'W', 'R', 'F'];
-      var dayStrings = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+      var colSpans = this.props.headColSpans;
 
       // Iterate for each day
       for(var i = 0; i<5; i++){
         var dayKey = days[i];
         var dayString = dayStrings[i];
-        // Calculate the product of all the widths occuring on this day
-        widthProd = calculateProduct(widths[dayKey]);
         // Create and store the React element for this day-cell
-        dayCell = <th scope="col" colSpan={widthProd + ""}>{dayString}</th>
+        dayCell = <th scope="col" colSpan={colSpans[dayKey] + ""}>{dayString}</th>
         dayCells.push(dayCell);
-        // Reset widthProd for the next day-cell
-        widthProd = 1;
       }
 
       if(this.props.session == "F"){
@@ -101,14 +102,14 @@ var TimetableHeader = React.createClass({
   }
 });
 
-/** Fills the body of the <table> element with lower React components.*/
+/** Describes the body of the Timetable */
 var TimetableBody = React.createClass({
   render: function(){
     var lectures = this.props.lectures;
     var TableRows = [];
     // For each row from 8 o'clock to 22 o'clock, there is an 'Hour' and 'Half hour' row
     for (var i = 8; i < 22; i++) {
-      var TableRowHour = <TimetableRow session={this.props.session} time={i} currentLectures={lectures[i]} previousLectures={lectures[i-1]} conflicts={this.props.conflicts}/>
+      var TableRowHour = <TimetableRow session={this.props.session} time={i} currentLectures={lectures[i]} previousLectures={lectures[i-1]} headColSpans={this.props.headColSpans}/>
       var TableRowHalfHour = <TimetableRow session={this.props.session} time={i+0.5}/>
       TableRows.push(TableRowHour);
       TableRows.push(TableRowHalfHour);
@@ -137,17 +138,17 @@ var TimetableRow = React.createClass({
     var currSess = this.props.session;
 
     // If the time describes a row that starts at the hour
-    // (for example, at 8:00 rather than 8:30), then place the lecture slot in this row.
+    // (for example, at 8:00 rather than 8:30)
     if (currTime % 1 === 0) {
-      // convert <time> to a 12-hour clock system
+      // Convert <time> to a 12-hour clock system
       var adjustedTime = (currTime === 12 ? 12 : currTime % 12) + ':00';
       var timeCell = <td className="timetable-time" rowSpan="2">{adjustedTime}</td>
 
       // The dictionary of lectures for this hour, and the hour before
       var currentLectures = this.props.currentLectures;
       var previousLectures = this.props.previousLectures;
+      var headColSpans = this.props.headColSpans;
 
-      // Get the lecture that occurs at this time, for each day in the row
       days.forEach(function(day) {
         // Initialize attributes of the cell in this day-and-time slot
         var alreadyGenerated = false;
@@ -156,99 +157,91 @@ var TimetableRow = React.createClass({
         var clicked = false;
         var className = "timetable-cell";
         var rowSpan = 2;
+        var colSpan = 0;
         var inConflict = false;
+
+        // Variables for calculations
         var dayCell = null;
+        var headerColSpan = headColSpans[day];
+        var totalColSpans = 0;
+        var lecColSpan = 0;
 
-        // Store the number of cells (denoted by the number of conflicts) that occur at this day
-        var numCells = conflicts[day];
-        if(numCells==0){
-          numCells = 1;
-        }
-
-        // Get the list of lectures, as well as the list of lectures occuring
-        // one hour prior at this day
+        // Get the list of lectures at this time-day slot, as well as the list of lectures
+        // occuring one hour prior this time-day slot
         var currentLectureList = currentLectures[day];
         var previousLectureList = previousLectures[day];
 
         if(currentLectureList.length != 0){
-          // Check the conflict case; i.e, the course in this day-and-time slot overlaps
-          // with another course. The <inConflict> attribute is true for all such courses.
-          if(currentLectureList[0].inConflict){
-            // Render every course at this day-time slot (there can be more than one in the conflict case)
-            currentLectureList.forEach(function(lecture) {
-              // Check if this course has been previously rendered
-              // (there can also be more than one previously rendered course in the conflict case)
-              previousLectureList.forEach(function(lecturePrev) {
-                if(lecturePrev.courseCode == lecture.courseCode){
-                  alreadyGenerated = true;
-                }
-              });
-
-              if(!alreadyGenerated){
-                lectureStartTime = lecture.times[day][0];
-                lectureEndTime = lecture.times[day][1]
-                rowSpan = 2*(lectureEndTime - lectureStartTime);
-                lectureCode = lecture.courseCode;
-                type = "L"
-                clicked = true;
-                className = "timetable-cell timetable-edge";
-                inConflict = true;
-                dayCell = <td id={'' + day + currTime + '-0' + currSess}
-                                  data-in-conflict={inConflict}
-                                  data-satisfied={"true"}
-                                  rowSpan={rowSpan}
-                                  className={className}
-                                  type={type}
-                                  clicked={clicked}
-                                  data-currentLectureList={currentLectureList}
-                                  >{lectureCode}
-                              </td>;
-                TableData.push(dayCell);
+          // Render every lecture at this day-time slot (there can be more than one in a conflict case)
+          currentLectureList.forEach(function(lecture) {
+            // Check if this lecture has been previously rendered
+            previousLectureList.forEach(function(lecturePrev) {
+              if(lecturePrev.courseCode == lecture.courseCode){
+                alreadyGenerated = true;
               }
             });
-          // Non-conflict case
-          }else{
-            var currentLecture = currentLectureList[0];
-            var previousLecture = previousLectureList[0];
-            alreadyGenerated = previousLecture == currentLecture;
+
+            // The 'colSpan' of the cells taken by this lecture, in this time-day slot
+            // This should always be an integer value, since headerColSpan is the product of all
+            // possible lecture widths in that day.
+            lecColSpan = headerColSpan/lecture.width;
 
             if(!alreadyGenerated){
-              var lectureStartTime = currentLecture.times[day][0];
-              var lectureEndTime = currentLecture.times[day][1]
-              rowSpan = 2*(lectureEndTime - lectureStartTime);
-              lectureCode = currentLecture.courseCode;
+              rowSpan = 2*(lecture.endTime - lecture.startTime);
+              lectureCode = lecture.courseCode;
               type = "L"
               clicked = true;
               className = "timetable-cell timetable-edge";
+              inConflict = lecture.inConflict;
+              colSpan = lecColSpan;
               dayCell = <td id={'' + day + currTime + '-0' + currSess}
                                 data-in-conflict={inConflict}
                                 data-satisfied={"true"}
                                 rowSpan={rowSpan}
-                                colSpan={numCells}
+                                colSpan={colSpan}
                                 className={className}
                                 type={type}
                                 clicked={clicked}
                                 data-currentLectureList={currentLectureList}
                                 >{lectureCode}
                             </td>;
-                            TableData.push(dayCell);
+              TableData.push(dayCell);
             }
+            alreadyGenerated = false;
+
+            // Record the total width taken up by this time-day slot so far,
+            // from all the lectures generated
+            totalColSpans += lecColSpan;
+
+          });
+          // In the case where there are not enough cells to fill the headerColSpan
+          // of this time-day cell, generate remaining number of empty cells
+          var remainingColSpan = headerColSpan-totalColSpans;
+          for(var i = 0; i < remainingColSpan; i++){
+            var dayCell = <td id={'' + days[i] + currTime + '-0' + currSess}
+                            data-in-conflict="false"
+                            data-satisfied={"true"}
+                            rowSpan="2"
+                            className="timetable-cell"></td>;
+            TableData.push(dayCell);
           }
+
+          totalColSpans = 0;
 
         // No courses to be generated at this day-time cell
         }else{
-          // Generate the number of empty cells, as there are conflicts in this day
-            for(var l = 0; l < numCells; l++){
-              var dayCell = <td id={'' + days[i] + currTime + '-0' + currSess}
-                              data-in-conflict="false"
-                              data-satisfied={"true"}
-                              rowSpan="2"
-                              className="timetable-cell"></td>;
-              TableData.push(dayCell);
-            }
+          // Generate the number of empty cells to fill the header colSpan
+          for(var l = 0; l < headerColSpan; l++){
+            var dayCell = <td id={'' + days[i] + currTime + '-0' + currSess}
+                            data-in-conflict="false"
+                            data-satisfied={"true"}
+                            rowSpan="2"
+                            className="timetable-cell"></td>;
+            TableData.push(dayCell);
+          }
         }
       });
-      // Reorder the positions of the timeCell and dummyCell to comply with the CSS
+      // Adjust the order at which these cells are rendered
       if(currSess == 'F'){
         TableData.unshift(timeCell);
         TableData.unshift(dummyCell);
@@ -269,7 +262,7 @@ var TimetableRow = React.createClass({
                       </td>;
         TableData.push(dayCell);
       }
-      // Adjust the order at which these cells are generated
+      // Adjust the order at which these cells are rendered
       if(this.props.session == 'F'){
         TableData.unshift(dummyCell);
       }else if(this.props.session == 'S'){
@@ -286,100 +279,121 @@ var TimetableRow = React.createClass({
 
 /** Renders everything wrapped inside the "Row" component */
 export function drawTimetable() {
-  // Sample course objects, constructed with sample attributes
-  var lecture1 = createNewLecture("CSC108 (L)", "F", {'M': [8, 12],  'W': [8, 12], 'F': [8, 12]});
-  var lecture2 = createNewLecture("CSC236 (L)", "F", {'M': [8, 11]});
-  var lecture3 = createNewLecture("CSC209 (L)", "F", {'M': [8, 10]});
-  var lecture4 = createNewLecture("MAT237 (L)", "F", {'M': [13, 14]});
-  var lecture5 = createNewLecture("CSC209 (L)", "F", {'M': [15, 18]});
-  var lecture6 = createNewLecture("STA257 (L)", "F", {'M': [15, 18]});
-  var lecture7 = createNewLecture("CSC258 (L)", "S", {'M': [15, 18], 'T':[16, 18], 'R':[17, 18]});
-  var lecture8 = createNewLecture("CSC404 (L)", "S", {'T': [15, 16], 'R': [15, 16]});
-  var lecture9 = createNewLecture("CSC343 (L)", "S", {'T': [9, 10], 'R': [9, 10]});
-  var lecture10 = createNewLecture("CSC369 (L)", "S", {'T': [11, 12], 'R': [11, 12]});
-  var lectureList = [lecture1, lecture2, lecture3, lecture4, lecture5, lecture6, lecture7, lecture8, lecture9, lecture10];
+  // Sample Course objects, constructed with sample attributes
+
+  var lecture1 = createNewCourse("CSC100 (L)", "F", {'M': [8, 12],  'W': [8, 12], 'F': [8, 12]});
+  var lecture2 = createNewCourse("CSC101 (L)", "F", {'M': [8, 11]});
+  var lecture3 = createNewCourse("CSC102 (L)", "F", {'M': [10, 12]});
+  var lecture4 = createNewCourse("CSC103 (L)", "F", {'M': [13, 14]});
+  var lecture5 = createNewCourse("CSC104 (L)", "F", {'M': [13, 14]});
+  var lecture6 = createNewCourse("CSC105 (L)", "F", {'M': [13, 14]});
+  var lecture7 = createNewCourse("CSC106 (L)", "F", {'M': [13, 14]});
+  var lecture8 = createNewCourse("CSC107 (L)", "F", {'M': [15, 19]});
+  var lecture9 = createNewCourse("CSC108 (L)", "F", {'M': [15, 18]});
+  var lecture10 = createNewCourse("CSC109 (L)", "F", {'M': [19, 20]});
+  var lecture11 = createNewCourse("CSC110 (L)", "F", {'M': [19, 20]});
+  var lecture12 = createNewCourse("CSC111 (L)", "F", {'M': [19, 20]});
+  var lecture13 = createNewCourse("CSC112 (L)", "F", {'M': [19, 20]});
+  var lecture14 = createNewCourse("CSC113 (L)", "F", {'M': [19, 21]});
+  var lectureList = [lecture1, lecture2, lecture3, lecture4, lecture5, lecture6, lecture7, lecture8, lecture9, lecture10, lecture11, lecture12, lecture13, lecture14];
 
   // Render the React component inside the 'grid-body' HTML tag
   ReactDOM.render(
-    <Row lectures={lectureList}/>,
+    <Row courses={lectureList}/>,
     document.getElementById('grid-body').getElementsByClassName('col-md-8 col-xs-12 col-md-pull-2')[0]
   );
 }
 
-
 /**
- * Constructor for a 'Lecture' object, created in drawTimetable()
+ * Constructor for a 'Course' object
  * @param {string} courseCode : Name of course
  * @param {string} session : Session of course
  * @param {dictionary} times : The days, and corresponding time-slot for which
                                 this course is active
- * @return {dictionary} Represents a 'Lecture' object
+ * @return {dictionary} Represents a 'Course' object
 */
-function createNewLecture(courseCode, session, times) {
-  // Store the active days of this lecture,
-  // and intialize the <widths> and <conflicts> dictionary of this lecture
+function createNewCourse(courseCode, session, times) {
+  var lectures = {};
   var days = [];
-  var widths = {};
-  var conflicts = {};
-  for (var key in times) {
-    days.push(key);
-    widths.key = 1;
-    conflicts.key = false;
+  // Store the active days of this Course, and for each active
+  // day, create and store a 'Lecture' object
+  for (var day in times) {
+    days.push(day);
+    lectures[day] = createNewLecture(courseCode, session, day, times[day]);
   }
 
+  var courseObject = {};
+  courseObject.session = session;
+  courseObject.days = days;
+  courseObject.lectures = lectures;
+  return courseObject;
+}
+
+/**
+ * Constructor for a 'Lecture' object. Represents a single period of time
+ * in which this course is active. (for ex; on Monday from 2-4)
+ * @param {string} courseCode : Name of Lecture
+ * @param {string} session : Session of Lecture
+ * @param {string} day: Day of activity
+ * @param {list} timePeriod : Active start and end time
+ * @return {dictionary} Represents a 'Lecture' object
+*/
+function createNewLecture(courseCode, session, day, timePeriod) {
   var lectureObject = {};
   lectureObject.courseCode = courseCode;
   lectureObject.session = session;
-  lectureObject.times = times;
-  lectureObject.days = days;
-  lectureObject.widths = widths;
-  lectureObject.conflicts = conflicts;
+  lectureObject.day = day;
+  lectureObject.startTime = timePeriod[0];
+  lectureObject.endTime = timePeriod[1];
+  lectureObject.inConflict = false;
+  // The width of a lecture is the maximum number of conflicts it has while it's active;
+  //  if there are no conflicts, the width is 1.
+  lectureObject.width = 1;
   return lectureObject;
 }
 
 /**
- * Helper function to organize a list of 'Lecture' objects in <fallSession> and <springSession>
- * (look at initializeSessions function to see how the
+ * Helper function which stores a list of 'Lecture' objects,
+ * from a list of 'Course' objects
+*/
+function storeLectures(courses, lectures){
+  courses.forEach(function(course){
+    course.days.forEach(function(day){
+      lectures.push(course.lectures[day]);
+    });
+  });
+  return lectures;
+}
+
+/**
+ * Helper function to organize a list of 'Lectures' into <fallSession> and <springSession>
+ * (look at the initializeSessions function to see how the
  * <fallSession> and <springSession> 2-D dictionaries are organized)
  * @param {list} lectures : List of 'Lecture' objects
- * @param {dictionary} fallSession : 2-D Dictionary storing courses active in the fall
- * @param {dictionary} springSession : 2-D Dictionary storing courses active in the spring
+ * @param {dictionary} fallSession : 2-D Dictionary storing LecturePeriods active in the fall
+ * @param {dictionary} springSession : 2-D Dictionary storing LecturePeriods active in the spring
 */
 function organizeLectures(lectures, springSession, fallSession){
-  var lectureStartTime;
-  var lectureEndTime;
-
-  // For each lecture in the list of lectures,
   lectures.forEach(function(lecture) {
     if(lecture.session == 'F'){
-      // For each day that this fall lecture is active
-      lecture.days.forEach(function(day) {
-        lectureStartTime = lecture.times[day][0];
-        lectureEndTime = lecture.times[day][1];
-        for (var i = lectureStartTime; i < lectureEndTime; i++){
-          // Store this lecture in it's active time-slot (denoted by <i>),
-          // and in the list in it's active day slot (denoted by <day>), in <fallSession>.
-          fallSession[i][day].push(lecture);
+        for (var i = lecture.startTime; i < lecture.endTime; i++){
+          // Store this Lecture in it's active time-slot (denoted by <i>),
+          // and in the list in it's active day slot (denoted by <lecture.day>), in <fallSession>.
+          fallSession[i][lecture.day].push(lecture);
         }
-      });
-
     }else if(lecture.session == 'S'){
       // Same process as above for spring lectures in <springSession>
-      lecture.days.forEach(function(day) {
-        lectureStartTime = lecture.times[day][0];
-        lectureEndTime = lecture.times[day][1];
-        for (var i = lectureStartTime; i < lectureEndTime; i++)
-        springSession[i][day].push(lecture);
-      });
+        for (var i = lecture.startTime; i < lecture.endTime; i++){
+          springSession[i][lecture.day].push(lecture);
+        }
     }
   });
 }
 
-
 /**
  * Helper function to initialize the <fallSession> and <springSession> 2-D dictionaries
- * @param {dictionary} fallSession : 2-D Dictionary storing courses active in the fall
- * @param {dictionary} springSession : 2-D Dictionary storing courses active in the spring
+ * @param {dictionary} fallSession : 2-D Dictionary storing lectures active in the fall
+ * @param {dictionary} springSession : 2-D Dictionary storing lectures active in the spring
 */
 function initializeSessions(fallSession, springSession){
   for(var i = 7; i<22; i++){
@@ -393,46 +407,67 @@ function initializeSessions(fallSession, springSession){
 }
 
 /**
- * Helper function which sets the width of each lecture,
- * and also to set the inConflict attribute of all lecture objects
- * @param {dictionary} session : 2-D Dictionary storing courses active in the session
+ * Helper function which sets the width of each Lecture,
+ * and also sets the inConflict attribute of all Lecture objects
+ * @param {dictionary} session : 2-D Dictionary storing lectures active in the session
 */
 function setWidths(session){
   var days = ['M', 'T', 'W', 'R', 'F'];
   // Iterate through every time-slot in the session
   for(var i = 8; i < 22; i++){
-    var currRow = session[i];
+    var timeRow = session[i];
     days.forEach(function(day) {
+      var timeDaySlot = timeRow[day];
       // If in this time-and-day slot there is a lecture conflict
-      if(lectureConflict(currRow[day])){
+      if(lectureConflict(timeDaySlot)){
         // Readjust (if needed) the 'width's of the lectures at this slot
-        currRow[day].forEach(function(lecture) {
-          if(lecture.width[day] < currRow.length){
-            lecture.width[day] = currRow.length;
+        timeDaySlot.forEach(function(lecture) {
+          if(lecture.width < timeDaySlot.length){
+            lecture.width = timeDaySlot.length;
           }
+          // Also specify that this lecture is in conflict
+          lecture.inConflict = true;
         });
-        // Also specify that this lecture is in conflict
-        lecture.inConflict = true;
       }
     });
   }
 }
 
 /**
- * Helper function which stores the widths of each lecture for each day
- * @param {dictionary} widths : Dictionary storing the widths of each lecture for each day
+ * Helper function which stores the 'colSpan' attribute value for each day in the table header
+ * @param {dictionary} colSpans : Dictionary storing the 'colSpan' attribute value for each day
+*/
+function storeColSpans(session, colSpans){
+  var days = ['M', 'T', 'W', 'R', 'F'];
+  // For each day, stores all possible 'width' values every lecture at that day could have
+  var widths = {'M': [], 'T': [], 'W': [], 'R': [], 'F': []};
+  storeWidths(session, widths);
+  days.forEach(function(day) {
+    // The 'colSpan' attribute of a header day cell is defined as the product of all
+    // possible widths that could occur at that day
+    colSpans[day] = calculateProduct(widths[day]);
+  });
+}
+
+/**
+ * Helper function which, for each day, stores all possible 'width' values the lectures in that day could have
+ * @param {dictionary} widths : Dictionary storing all possible widths for each day
 */
 function storeWidths(session, widths){
   var days = ['M', 'T', 'W', 'R', 'F'];
-  // Iterate through every time-slot in the session
+  // Iterate through every time-day slot in the session
   for(var i = 8; i < 22; i++){
-    var currRow = session[i];
+    var timeRow = session[i];
     days.forEach(function(day) {
-      // Retrieve a lecture at this time-day slot
-      currentLecture = currRow[day][0];
-      // Store the width of this lecture, if it hasn't already been stored
-      if(isIn(widths[day], currentLecture.width)){
-        widths[day].push(currentLecture.width);
+      var timeDaySlot = timeRow[day];
+      // If there are lectures running at this time-day slot
+      if(timeDaySlot.length > 0){
+        // Retrieve a lecture at this time-day slot
+        var lecture = timeDaySlot[0];
+        // Store the width of this lecture, if it hasn't already been stored
+        if(!isIn(widths[day], lecture.width)){
+          widths[day].push(lecture.width);
+        }
       }
     });
   }
