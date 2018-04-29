@@ -126,8 +126,6 @@ var TimetableBody = React.createClass({
 
 /** Describes what a row in the Timetable should look like, based off of the session, time,
     and previous cells generated.
-    ***Notice that the ordering in which the 'cell' elements are rendered
-    is important, as it allows the generated HTML to comply with the CSS.***
 */
 var TimetableRow = React.createClass({
   render: function(){
