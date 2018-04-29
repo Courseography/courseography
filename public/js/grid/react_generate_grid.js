@@ -231,7 +231,7 @@ var TimetableRow = React.createClass({
         // No courses to be generated at this day-time cell
         }else{
           // Generate the number of empty cells to fill the header colSpan
-          for(var l = 0; l < headerColSpan; l++){
+          for(var i = 0; i < headerColSpan; i++){
             var dayCell = <td id={'' + days[i] + currTime + '-0' + currSess}
                             data-in-conflict="false"
                             data-satisfied={"true"}
@@ -283,13 +283,13 @@ export function drawTimetable() {
 
   var lecture1 = createNewCourse("CSC100 (L)", "F", {'M': [8, 12],  'W': [8, 12], 'F': [8, 12]});
   var lecture2 = createNewCourse("CSC101 (L)", "F", {'M': [8, 11]});
-  var lecture3 = createNewCourse("CSC102 (L)", "F", {'M': [10, 12]});
+  var lecture3 = createNewCourse("CSC102 (L)", "F", {'M': [10, 13]});
   var lecture4 = createNewCourse("CSC103 (L)", "F", {'M': [13, 14]});
   var lecture5 = createNewCourse("CSC104 (L)", "F", {'M': [13, 14]});
   var lecture6 = createNewCourse("CSC105 (L)", "F", {'M': [13, 14]});
   var lecture7 = createNewCourse("CSC106 (L)", "F", {'M': [13, 14]});
   var lecture8 = createNewCourse("CSC107 (L)", "F", {'M': [15, 19]});
-  var lecture9 = createNewCourse("CSC108 (L)", "F", {'M': [15, 18]});
+  var lecture9 = createNewCourse("CSC108 (L)", "F", {'M': [16, 18]});
   var lecture10 = createNewCourse("CSC109 (L)", "F", {'M': [19, 20]});
   var lecture11 = createNewCourse("CSC110 (L)", "F", {'M': [19, 20]});
   var lecture12 = createNewCourse("CSC111 (L)", "F", {'M': [19, 20]});
