@@ -279,7 +279,8 @@ var TimetableRow = React.createClass({
 export function drawTimetable() {
   // Sample Course objects, constructed with sample attributes
 
-  var lecture1 = createNewCourse("CSC100 (L)", "F", {'M': [8, 12],  'W': [8, 12], 'F': [8, 12]});
+  // Note: W: [8, 12, 14, 15] denotes that this course runs on Wed from 8 to 12, and again on Wed from 14 - 15
+  var lecture1 = createNewCourse("CSC100 (L)", "F", {'M': [8, 12],  'W': [8, 12, 14, 16], 'F': [8, 12]});
   var lecture2 = createNewCourse("CSC101 (L)", "F", {'M': [8, 11]});
   var lecture3 = createNewCourse("CSC102 (L)", "F", {'M': [10, 13]});
   var lecture4 = createNewCourse("CSC103 (L)", "F", {'M': [13, 14]});
@@ -317,7 +318,12 @@ function createNewCourse(courseCode, session, times) {
   // day, create and store a 'Lecture' object
   for (var day in times) {
     days.push(day);
-    lectures[day] = createNewLecture(courseCode, session, day, times[day]);
+    lectures[day] = [];
+    // For the case where this lecture starts and ends more than once in one day
+    for(var i = 0; i< times[day].length; i+=2){
+      var startEndTimes = [times[day][i], times[day][i+1]];
+      lectures[day].push(createNewLecture(courseCode, session, day, startEndTimes));
+    }
   }
 
   var courseObject = {};
@@ -357,7 +363,9 @@ function createNewLecture(courseCode, session, day, timePeriod) {
 function storeLectures(courses, lectures){
   courses.forEach(function(course){
     course.days.forEach(function(day){
-      lectures.push(course.lectures[day]);
+      course.lectures[day].forEach(function(lecture){
+        lectures.push(lecture);
+      });
     });
   });
   return lectures;
