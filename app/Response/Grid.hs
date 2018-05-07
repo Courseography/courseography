@@ -23,13 +23,10 @@ gridResponse =
             timetableScripts
 
 coursePanel :: H.Html
-coursePanel =
-    H.div ! A.id "course-select-wrapper" ! A.class_ "col-md-2 col-xs-6" $ ""
+coursePanel = H.div ! A.id "course-select-wrapper" ! A.class_ "col-md-2 col-xs-6" $ ""
 
 searchPanel :: H.Html
-searchPanel =
-    H.div ! A.id "search-layout" ! A.class_ "col-md-2 col-xs-6 col-md-push-8" $
-        ""
+searchPanel = H.div ! A.id "search-layout" ! A.class_ "col-md-2 col-xs-6 col-md-push-8" $ ""
 
 infoPanel :: H.Html
 infoPanel =

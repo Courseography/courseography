@@ -1,243 +1,131 @@
+// CoursePanel is a React Component which simply renders the "Clear All" text
 var CoursePanel = React.createClass({
-    getInitialState: function() {
-        return {
-            courseRoster: [["CLS000", [], [], []], ["CLS001", ["LEC1000"], ["LEC1001"], ["LEC1002"]], ["CLS002", [], ["LEC2000", "LEC2001"], ["LEC2002"]]]
-        };
-    },
-
-    clearCourseRoster: function() {
-       this.setState({courseRoster: []});
-    },
-
-    removeCourse: function(i) {
-       console.log("Removing course at index " + i + ".");
-       i = parseInt(i, 10);
-       var newRoster = [];
-
-       for (let s = 0; s < i; s++) {
-           newRoster.push(this.state.courseRoster[s]);
-       }
-
-       for (let s = i + 1; s < this.state.courseRoster.length; s++) {
-           newRoster.push(this.state.courseRoster[s]);
-       }
-
-       this.setState({courseRoster: newRoster});
-    },
-
     render: function() {
-        var courseList = [];
-
-        for (let i = 0; i < this.state.courseRoster.length; i++) {
-            courseList.push(<CourseInformation courseCode={this.state.courseRoster[i][0]} yLectures={this.state.courseRoster[i][1]} fLectures={this.state.courseRoster[i][2]} sLectures={this.state.courseRoster[i][3]} key={i} cat={i} removeCourse={this.removeCourse}/>);
-        }
-
         return (
-            <ul className="trapScroll-enabled" id="course-select">
-                <li id="clear-all" onClick={this.clearCourseRoster}>
+            <ul className="trapScroll-enabled" id="course-select" onClick={() => alert("test")}>
+                <li id="clear-all">
                     <h3>Clear All</h3>
                 </li>
-                {courseList}
             </ul>
         );
     }
 });
 
-var CourseInformation = React.createClass({
-    getInitialState: function() {
-        return {
-            satisfied: false
-        };
-    },
 
-    toggleSatisfied: function() {
-        console.log("toggleSatisfied method of CourseInformation component with prop courseCode as " + this.props.courseCode + " has been called.");
-        this.setState({satisfied: !this.state.satisfied});
-    },
-
-    render: function() {
-        console.log("Rendering CourseInformation component with courseCode prop courseCode as " + this.props.courseCode + ".");
-        var courseCodeProp = this.props.courseCode;
-        var yLectureArray = [];
-        var fLectureArray = [];
-        var sLectureArray = [];
-
-        for (let i = 0; i < this.props.yLectures.length; i++) {
-            yLectureArray.push(<Lecture courseCode={courseCodeProp} lectureCode={this.props.yLectures[i]} key={i}/>);
-        }
-
-        for (let i = 0; i < this.props.fLectures.length; i++) {
-            fLectureArray.push(<Lecture courseCode={courseCodeProp} lectureCode={this.props.fLectures[i]} key={i}/>);
-        }
-
-        for (let i = 0; i < this.props.sLectures.length; i++) {
-            sLectureArray.push(<Lecture courseCode={courseCodeProp} lectureCode={this.props.sLectures[i]} key={i}/>);
-        }
-
-        if(this.state.satisfied === false) {
-            return (
-                <li id={courseCodeProp + "-li"}
-                    className="ui-accordion ui-widget ui-helper-reset"
-                    role="tablist">
-                    <div className="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all ui-accordion-icons"
-                        onClick={this.toggleSatisfied}
-                        role="tab"
-                        id={"ui-accordion-" + courseCodeProp + "-li-header-0"}
-                        aria-controls={"ui-accordion-" + courseCodeProp + "-li-panel-0"}
-                        aria-selected="false"
-                        aria-expanded="false"
-                        tabIndex="0">
-                        <span className="ui-accordion-header-icon ui-icon ui-icon-triangle-1-e"></span>
-                        <div className="icon-div">
-                            <img src="static/res/ico/delete.png" className="close-icon" onClick={() => this.props.removeCourse(this.props.cat)}/>
-                        </div>
-                        <h3 taken="true"
-                            satisfied="true">
-                            {courseCodeProp}
-                        </h3>
-                    </div>
-                    <div className="sections ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom"
-                        id={"ui-accordion-" + courseCodeProp + "-li-panel-0"}
-                        aria-labelledby={"ui-accordion-" + courseCodeProp + "-li-header-0"}
-                        role="tabpanel"
-                        aria-hidden="true"
-                        style={{display: "none"}}>
-                        <ul className="sectionList-Y">
-                            {yLectureArray}
-                        </ul>
-                        <ul className="sectionList-F">
-                            {fLectureArray}
-                        </ul>
-                        <ul className="sectionList-S">
-                            {sLectureArray}
-                        </ul>
-                    </div>
-                </li>
-            );
-        } else {
-            return (
-                <li id={courseCodeProp + "-li"}
-                    className="ui-accordion ui-widget ui-helper-reset"
-                    role="tablist">
-                    <div className="ui-accordion-header ui-helper-reset ui-state-default ui-corner-all ui-accordion-icons"
-                        onClick={this.toggleSatisfied}
-                        role="tab"
-                        id={"ui-accordion-" + courseCodeProp + "-li-header-0"}
-                        aria-controls={"ui-accordion-" + courseCodeProp + "-li-panel-0"}
-                        aria-selected="true"
-                        aria-expanded="true"
-                        tabIndex="0">
-                        <span className="ui-accordion-header-icon ui-icon ui-icon-triangle-1-e"></span>
-                        <div className="icon-div">
-                            <img src="static/res/ico/delete.png" className="close-icon" onClick={() => this.props.removeCourse(this.props.cat)}/>
-                        </div>
-                        <h3 taken="true"
-                            satisfied="true">
-                            {courseCodeProp}
-                        </h3>
-                    </div>
-                    <div className="sections ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom ui-accordion-content-active"
-                        id={"ui-accordion-" + courseCodeProp + "-li-panel-0"}
-                        aria-labelledby={"ui-accordion-" + courseCodeProp + "-li-header-0"}
-                        role="tabpanel"
-                        aria-hidden="false"
-                        style={{display: "block"}}>
-                        <ul className="sectionList-Y">
-                            {yLectureArray}
-                        </ul>
-                        <ul className="sectionList-F">
-                            {fLectureArray}
-                        </ul>
-                        <ul className="sectionList-S">
-                            {sLectureArray}
-                        </ul>
-                    </div>
-                </li>
-            );
-        }
-    }
-});
-
-var Lecture = React.createClass({
-    render: function() {
-        return (
-            <li id={this.props.courseCode + "-" + this.props.lectureCode}
-                clicked="false"
-                satisfied="true">
-                {this.props.lectureCode}
-            </li>
-        );
-    }
-});
-
+// Component for the SearchPanel
 var SearchPanel = React.createClass({
     getInitialState: function() {
-        return {
-            courseList: []
-        };
-    },
-
-    componentDidMount: function() {
-        $.ajax({
-            url: 'all-courses',
-            dataType: 'text',
-            success: function (data) {
-                var courses = data.split('\n').map(function (course) {
-                    return course.substring(0, 8);
-                });
-                this.setState({courseList: courses});
-            }.bind(this)
-        });
-    },
-
-    courseListRefWrapper: function() {
-        return (
-            this.refs.courseListRef.enableSearch()
-        );
+        return {value: ''};
     },
 
     render: function() {
         return (
+            // This div is all for the textbox input
             <div>
                 <div id="filter-container">
-                    <form>
-                        <input id="course-filter" className="form-control" placeholder="Enter a course!" autoComplete="off" type="text" onKeyUp={this.courseListRefWrapper}/>
+                    <form onsubmit="return false;">
+                        <input id="course-filter" className="form-control" placeholder="Enter a course!" autoComplete="off" type="text" value={this.state.value}
+                        onChange={this.handleInput}
+                        />
                     </form>
                 </div>
                 <div id="search-container">
-                    {/* onKeyUp is a prop, so the only way that I know how to
-                        set a prop is below like I have done with courses, but
-                        I also don't know how to access enableSearch in
-                        CourseList so I can set it to onKeyUp.*/}
-                    <CourseList courses={this.state.courseList} ref="courseListRef" />
+                    <CourseList  />
                 </div>
             </div>
         );
+
+
+
+    },
+
+    handleInput: function(event) {
+        this.setState({value: event.target.value}, () => {
+            console.log("Input: " + this.state.value);
+        })
     }
 });
 
 var CourseList = React.createClass({
+    // constructor(props) {
+    //   super(props);
+    //   this.state = {
+    //     value: this.props.value
+    //   };
+    // },
+
+    // Function which returns the courses (empty list) and any course filters (blank for now)
     getInitialState: function() {
         return {
-            courseFilter: ''
+            courses: [], courseFilter: ''
         };
     },
 
-    enableSearch: function() {
-        this.setState({courseFilter: $('#course-filter').val().toUpperCase()});
+    componentDidMount: function() {
+        // AJAX requests allow the programmer to:
+        //    1. update a webpage without refreshing
+        //    2. Request data from a server AFTER the webpage is loaded
+        //    3. Receive data from a server AFTER the webpage is loaded
+        //    4. Send data to the server - in the background
+
+        // I believe this makes an ajax call to retrieve courses from the database***
+        $.ajax({
+            // url to which the ajax request is sent to
+            url: 'all-courses',
+            // data which you're expective to receive back from the server
+            dataType: 'text',
+
+            // note: "this" refers to "data"
+            success: function (data) {
+                // searches through all of the courses in "data",
+                // and stores each individual course code name
+                // into 'courses' list
+                this.enableSearch();
+                var courses = data.split('\n').map(function (course) {
+                    return course.substring(0, 8);
+                });
+
+                // sets the state of this React component, which will
+                // ultimately be rendered in SearchPanel
+                this.setState({courses: courses});
+
+            // Bind ensures that "this" refers to "data". ***
+            }.bind(this)
+        });
     },
 
-    render: function() {
-        var state = this.state;
 
+    enableSearch: function() {
+        // ***
+        'use strict';
+        // Whenever a key is released on "(#course-filter)", run this function ***
+        $('#course-filter').keyup(function() {
+            // Sets the state of this component such that it updates the
+            // "courseFilter" attribute
+            this.setState({courseFilter: $('#course-filter').val().toUpperCase()});
+        }.bind(this));
+    },
+
+
+    render: function() {
+        // Stores the state
+        var state = this.state;
+        // If there are courses to be filtered
         if (state.courseFilter !== '') {
-            var searchList = this.props.courses.filter(function (course) {
+            // What is "course" thats being passed? ***
+            // From the "courses" list, filter out elements based off of "courseFilter"
+            var searchList = state.courses.filter(function (course) {
+                // ***
                 return course.indexOf(state.courseFilter) > -1;
+
+            // Render the following tag, with input corresponding to the
+            // filtered course list
             }).map(function (course) {
                 return <CourseEntry course={course} key={course} />
             });
         }
 
+        // Return all the unfiltered courses in the "courses" list in a <ul>
         return (
             <div id="search-list">
                 <ul>{searchList}</ul>
@@ -246,6 +134,7 @@ var CourseList = React.createClass({
     }
 });
 
+
 var CourseEntry = React.createClass({
     getInitialState: function() {
         return {
@@ -253,18 +142,19 @@ var CourseEntry = React.createClass({
         };
     },
 
+    // Inverts the 'star' boolean variable in the state
     toggleStar: function() {
         this.setState({star: !this.state.star});
     },
 
     render: function() {
-
+        // presumably for a "star course" feature.
         var classes = '';
-
         if (this.state.star) {
             classes += 'starred-course';
         }
-
+        // Lists out all the unfiltered courses, and gives the option for
+        // the user to 'star' them ***
         return (
             <li id={this.props.course + '-search'} className={classes} onClick={this.toggleStar}>{this.props.course}</li>
         );
@@ -282,15 +172,15 @@ var InfoPanel = React.createClass({
 
 
 export function initGrid() {
-  ReactDOM.render(
-      <CoursePanel />,
-      document.getElementById('course-select-wrapper'));
+    ReactDOM.render(
+        <CoursePanel />,
+        document.getElementById('course-select-wrapper'));
 
-  ReactDOM.render(
-      <SearchPanel />,
-      document.getElementById('search-layout'));
+    ReactDOM.render(
+        <SearchPanel />,
+        document.getElementById('search-layout'));
 
-  // ReactDOM.render(
-  //     <InfoPanel />,
-  //     document.getElementsByClassName('col-md-8 col-xs-12 col-md-pull-2')[0]);
+    // ReactDOM.render(
+    //     <InfoPanel />,
+    //     document.getElementsByClassName('col-md-8 col-xs-12 col-md-pull-2')[0]);
 }

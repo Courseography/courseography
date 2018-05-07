@@ -106,7 +106,7 @@ timetableCSS = do
                 textAlign $ alignSide sideLeft
                 paddingLeft (px 10) -- important
                 borderPink borderBottom
-        tbody |> tr |> td <> thead |> th ? do
+        tbody |> tr |> td <> thead |> tr |> th ? do
             width (pct 13.5)
             padding0 -- !important
             margin0 -- !important
@@ -130,6 +130,7 @@ timetableCSS = do
                 fontSize (em 0)
             "rowspan" *= "2" & do
                 fontSize (em 0.9)
+            fontSize (em 0.5)
             height (px 18)
         ".timetable-time" ? do
             width (pct 12)
@@ -206,11 +207,11 @@ courseSelectCSS = do
                             backgroundColor blue1
                         ".ui-accordion-header-active" & do
                             backgroundColor blue1 -- important
-                "satisfied" *= "false" & do
+                "data-satisfied" *= "false" & do
                     "taken" *= "true" & do
                         backgroundColor blue3
                     backgroundColor red3
-                "satisfied" *= "true" & do
+                "data-satisfied" *= "true" & do
                     "taken" *= "true" & do
                         backgroundColor blue4
         ".close-icon" ? do
@@ -246,11 +247,11 @@ courseSelectCSS = do
                     ":hover" & do
                         backgroundColor blue3
                     "clicked" *= "true" & do
-                        "satisfied" *= "false" & do
+                        "data-satisfied" *= "false" & do
                             backgroundColor red3
                             ":hover" & do
                                 backgroundColor red4
-                        "satisfied" *= "true" & do
+                        "data-satisfied" *= "true" & do
                             backgroundColor blue3
 
 {- tdColours
@@ -265,20 +266,20 @@ tdColours = ".timetable " ?  do
         "hover" *= "remove" & do
             opacity 0.5
             transition "all" (sec 0.5) easeInOut (sec 0)
-        "satisfied" *= "false" & do
+        "data-satisfied" *= "false" & do
             backgroundColor red3
             ":hover" & do
                 backgroundColor red4
-        "in-conflict" *= "true" & do
+        "data-in-conflict" *= "true" & do
             backgroundColor red1
             ":hover" & do
                 backgroundColor red2
-    td # ("in-conflict" *= "false") # ("satisfied" *= "true") ? do
+    td # ("data-in-conflict" *= "false") # ("data-satisfied" *= "true") ? do
         backgroundColor blue3
         Clay.empty & do
             backgroundColor white
-    td # ("hover" *= "conflict") # ("satisfied" *= "true") <>
-        td # ("hover" *= "conflict") # ("satisfied" *= "false") ? do
+    td # ("hover" *= "conflict") # ("data-satisfied" *= "true") <>
+        td # ("hover" *= "conflict") # ("data-satisfied" *= "false") ? do
         backgroundColor red1
 
 modalContainerCSS :: Css

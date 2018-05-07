@@ -5,21 +5,27 @@
 function setTdHover() {
     'use strict';
 
+    // Controls mouseover (when the mouse hovers over the image)
+    // So when you hover over a lecture session, it displays that session's
+    // time slots on the grid.
+    // This is assuming a course has been selected.
     $('td').mouseover(function () {
-        var courseName = $(this).data('courseName');
+        var courseName = $(this).data('courseName'); //get the name of the course
         if (courseName !== '' && courseName !== undefined) {
-            var course = getCourseObject(courseName, courseObjects);
+            var course = getCourseObject(courseName, courseObjects); // get the actual course object
             if (course !== undefined) {
-                $.each(course.getSectionTimes(), function (i, time) {
+                $.each(course.getSectionTimes(), function (i, time) { // return the section times for this course object
                     $(time).addClass('hover-time');
                 });
 
-                var section = course.selected[$(this).attr('type')];
+                var section = course.selected[$(this).attr('type')] ;
                 renderDisplayCourseInformation(course);
                 renderDisplaySectionInformation(section);
             }
         }
 
+
+    // Controls mouseout (when the mouse leaves the image)
     }).mouseout(function () {
         var course = getCourseObject($(this).data('courseName'), courseObjects);
         if (course !== undefined) {
@@ -30,6 +36,7 @@ function setTdHover() {
             renderClearCourseInformation();
         }
     });
+
 }
 
 
