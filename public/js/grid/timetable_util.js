@@ -1,14 +1,14 @@
 var selectedCourses = [];   // All selected Courses.
 var selectedSections = [];  // All selected sections.
 
-
 /**
  * Updates selectedSections with sectionId.
  * @param {string} sectionId The ID of the lecture section being updated.
  */
+
 function updateSelectedLectures(sectionId) {
     'use strict';
-
+    // If this section is not in the selectedSections list, then add it to the list
     if (!inArray(sectionId, selectedSections)) {
         selectedSections.push(sectionId);
     }
@@ -17,7 +17,8 @@ function updateSelectedLectures(sectionId) {
 
 /**
  * Highlights the selected courses in the course search list.
- */
+ **/
+ //***
 function refreshSelectedCourses() {
     'use strict';
 
@@ -36,6 +37,8 @@ define(function() {
     /**
      * Populate the global list of courses.
      */
+     // Makes an ajax call to the server and stores the data
+     // Similar to how it's done in React
     function getVeryLargeCourseArray() {
         'use strict';
 
@@ -56,7 +59,7 @@ define(function() {
      */
     function enableSearch() {
         'use strict';
-
+        // When you release a key, ***
         $('#course-filter').keyup(function() {
             resetSearchList();
         });
@@ -70,12 +73,15 @@ define(function() {
         'use strict';
 
         var searchListObject = $('#search-list');
+        // Courses to be filtered
         var filter = $('#course-filter').val().toUpperCase();
-        var courseList = document.createElement('ul');
 
+        var courseList = document.createElement('ul');
+        // Empty the SearchListObject
         searchListObject.empty();
 
         if (filter !== '') {
+           // The each() method specifies a function to run for each matched element (like a li)
             $.each(courses, function(i, course) {
 
                 // If the course matches the input text then add it to the list.
@@ -86,6 +92,7 @@ define(function() {
                     // it when it is clicked.
                     $(courseEntry).attr('id', course + '-search')
                                   .html(course)
+                                  // When you click this course, toggle it's star value
                                   .click(function() {
                                        $(this).toggleClass('starred-course');
                                        if (inArray(course, selectedCourses)) {
@@ -94,6 +101,7 @@ define(function() {
                                            selectCourse(course);
                                        }
                                    })
+                                   // Upon mouseover, it displays course title. On mouseout, course info
                                    .mouseover(function() {
                                        var courseResult = getCourse(course);
                                        renderDisplayCourseTitle(courseResult);
@@ -101,10 +109,12 @@ define(function() {
                                    .mouseout(function() {
                                        renderClearCourseInformation();
                                    });
+                    // Add this <li> element to the courseList
                     courseList.appendChild(courseEntry);
                 }
             });
         }
+
         searchListObject.append(courseList);
         refreshSelectedCourses();
     }
@@ -159,7 +169,6 @@ define(function() {
                 }
             });
         }
-
         saveLocalStorage(newCourses, newSections);
     }
 
@@ -168,8 +177,8 @@ define(function() {
      * all selected courses.
      */
     function renderClearAllButton() {
+        return;
         'use strict';
-
         var clearAllItem = document.getElementById('clear-all');
         $(clearAllItem).click(function () {
             if (confirm('Clear all selected courses?')) {
