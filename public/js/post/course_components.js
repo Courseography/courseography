@@ -7,8 +7,8 @@ var CourseCode = React.createClass({
     },
 
     componentWillMount: function() {
-        this.setState({selected: getCookie(this.getIdName()) === 'active' ||
-                                 getCookie(this.getIdName()) === 'overridden'});
+        this.setState({selected: getLocalStorage(this.getIdName()) === 'active' ||
+                                 getLocalStorage(this.getIdName()) === 'overridden'});
     },
 
     toggleFullInfo: function() {
@@ -25,7 +25,7 @@ var CourseCode = React.createClass({
         // "or" strings in between to be easily rendered later
         this.props.courseIDs.forEach(function(course) {
             editedCourseNames.push(<span id={course} className='courseName' onClick={me.openModal}>{course.toUpperCase() + 'H'}</span>);
-            editedCourseNames.push('or');
+            editedCourseNames.push(' or ');
         })
 
         editedCourseNames.pop();
@@ -34,14 +34,17 @@ var CourseCode = React.createClass({
             // special case for calculus requirement since it doesn't fit the same pattern
             return (
                 <p className='code'>
-                    (<span id='mat135' className='courseName' onClick={this.openModal}>MAT135H</span> and
-                    <span id='mat136' className='courseName' onClick={this.openModal}>MAT136H</span>) or
-                    <span id='mat137' className='courseName' onClick={this.openModal}>MAT137Y</span>or
+                    (<span id='mat135' className='courseName' onClick={this.openModal}>MAT135H</span>
+                    <span> and </span>
+                    <span id='mat136' className='courseName' onClick={this.openModal}>MAT136H</span>)
+                    <span> or </span>
+                    <span id='mat137' className='courseName' onClick={this.openModal}>MAT137Y</span>
+                    <span> or </span>
                     <span id='mat157' className='courseName' onClick={this.openModal}>MAT157Y</span>
                  </p>
             )
         } else {
-            return <p className='code'> {editedCourseNames} </p>;
+            return <p className='code'>{editedCourseNames}</p>;
         }
     },
 
@@ -53,7 +56,7 @@ var CourseCode = React.createClass({
         });
 
         // math and stats courses need extra stuff appended to their IDs
-        // (mainly to check if they are active or not through their cookie)
+        // (mainly to check if they are active or not through their local storage)
         if (this.props.courseIDs[0] === 'mat135') {
             idName += 'calc1';
         } else if (this.props.courseIDs[0] === 'mat221') {
@@ -231,6 +234,59 @@ export var CourseCategory = React.createClass({
 })
 
 
+export var CourseCategory2 = React.createClass({
+    render: function() {
+        var yearName = this.props.yearName;
+        var postType = this.props.otherInfo.postType;
+        var textBoxes = this.props.otherInfo.textBoxes;
+        var courseCategoryArrays = this.props.courseCategoryArrays;
+        var changeCreditCount = this.props.changeCreditCount;
+        var getInquiryCourse = this.props.getInquiryCourse;
+        var hasInquiryCategory = this.props.otherInfo.hasInquiryCategory;
+
+        return (
+            <div className="col-md-4 col-sm-6">
+                <div className="year_name">{yearName}</div>
+                <div className="portfolio-thumb">
+                     <ul className="year_course_list">
+                        <li>
+                            {this.props.courses.map((courses) =>
+                                <CourseCode id={courses[0]}
+                                    key={courses[0]}
+                                    courseIDs={courses}
+                                    openModal={this.props.openModal} />
+                            )}
+                        </li>
+
+                        <li>
+                            {this.props.titles.map(function (title, i) {
+                            return <MultipleCourseCode courseID={postType + '_category_' + (i + 1)}
+                                                       textBoxNumber={textBoxes[i][0]}
+                                                       courses={courseCategoryArrays[i]}
+                                                       textboxesDisabled={textBoxes[i][1]}
+                                                       changeCourseCredit={changeCreditCount}
+                                                       categoryName={title}
+                                                       key={i} />
+                        })}
+                        </li>
+                        <li>
+                            {(() => {
+                                if (hasInquiryCategory && yearName=='Later Years' ) {
+                                    return <InquiryCategory courseID={postType + '_inq'} course={getInquiryCourse()}
+                                            categoryName='Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H,
+                                            CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H, or PEY (0.5 FCEs)
+                                            ** Note: Type "PEY" for Check my POSt to recognize it **' />
+                                }
+                            })()}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        );
+    }
+})
+
+
 export var InquiryCategory = React.createClass({
     getInitialState: function() {
         return {
@@ -291,4 +347,3 @@ export var InquiryCategory = React.createClass({
         );
     }
 })
-

@@ -1,4 +1,4 @@
-import {CourseCategory, MultipleCourseCode, InquiryCategory} from 'es6!post/course_components';
+import {CourseCategory, CourseCategory2, MultipleCourseCode, InquiryCategory} from 'es6!post/course_components';
 import {Modal} from 'es6!common/react_modal';
 
 /**
@@ -26,13 +26,13 @@ var Post = React.createClass({
         var activeCourses = [];
 
         return allCourses.concat(math).filter(function (course) {
-            var status = getCookie(course.toLowerCase());
+            var status = getLocalStorage(course.toLowerCase());
             return status === 'active' || status === 'overridden';
         });
     },
 
     componentWillMount: function() {
-        this.setState({selected: getCookie(this.props.postType) === 'active'});
+        this.setState({selected: getLocalStorage(this.props.postType) === 'active'});
         this.calculateCreditCount();
     },
 
@@ -79,7 +79,7 @@ var Post = React.createClass({
 
         this.state.activeCourses.forEach(function (course) {
             var courseID = course.toLowerCase()
-            if (getCookie(courseID) === 'active' || getCookie(courseID) === 'overridden') {
+            if (getLocalStorage(courseID) === 'active' || getLocalStorage(courseID) === 'overridden') {
                 if (course === 'MAT135136137157Calc1') {
                     count += 1;
                 } else {
@@ -95,7 +95,7 @@ var Post = React.createClass({
         var modal = this.refs.modal;
         var newCourse = nodeId.substring(0, 6);
         modal.openModal(newCourse);
-        
+
     },
 
     render: function() {
@@ -112,36 +112,33 @@ var Post = React.createClass({
         return (
             <div id={'post_' + this.props.postType} className={classes} >
                 <Modal ref='modal' />
-                <CourseCategory yearName='First Year' courses={this.props.firstYearCourses}
-                                openModal={this.openModal} />
-                <CourseCategory yearName='Second Year' courses={this.props.secondYearCourses}
-                                openModal={this.openModal} />
-                <CourseCategory yearName='Later Years' courses={this.props.laterYearCourses}
-                                openModal={this.openModal} />
-                {this.props.categoryTitles.map(function (title, i) {
-                    return <MultipleCourseCode courseID={me.props.postType + '_category_' + (i + 1)}
-                                               textBoxNumber={me.props.textBoxes[i][0]}
-                                               courses={courseCategoryArrays[i]}
-                                               textboxesDisabled={me.props.textBoxes[i][1]}
-                                               changeCourseCredit={me.changeCreditCount}
-                                               categoryName={title}
-                                               key={i} />
-                })}
-                {(() => {
-                    if (this.props.hasInquiryCategory) {
-                        return <InquiryCategory courseID={this.props.postType + '_inq'} course={this.getInquiryCourse()}
-                                categoryName='Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H,
-                                CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H, or PEY (0.5 FCEs)
-                                ** Note: Type "PEY" for Check my POSt to recognize it **' />
-                    }
-                })()}
-                <h2>Notes</h2>
-                <ul id='notes'>
-                    {this.props.notes.map(function (note, i) {
-                        return <li key={i}>{note}</li>
-                    })}
-                </ul>
+
+                <CourseCategory2 yearName='First Year' courses={this.props.firstYearCourses}
+                    openModal={this.openModal} titles={[]} otherInfo={this.props}
+                    courseCategoryArrays = {courseCategoryArrays}
+                    changeCreditCount={this.changeCreditCount.bind(this)}
+                    getInquiryCourse={this.getInquiryCourse.bind(this) }/>
+
+                <CourseCategory2 yearName='Second Year' courses={this.props.secondYearCourses}
+                                openModal={this.openModal} titles={[]} otherInfo={this.props}
+                                courseCategoryArrays = {courseCategoryArrays} changeCreditCount={this.changeCreditCount.bind(this)}
+                                getInquiryCourse={this.getInquiryCourse.bind(this)}/>
+
+                <CourseCategory2 yearName='Later Years' courses={this.props.laterYearCourses}
+                                openModal={this.openModal} otherInfo={this.props} titles={this.props.categoryTitles}
+                                courseCategoryArrays = {courseCategoryArrays} changeCreditCount={this.changeCreditCount.bind(this)}
+                                getInquiryCourse={this.getInquiryCourse.bind(this)}/>
+
+                <div id='notes'>
+                    <h3>Notes</h3>
+                    <ul>
+                        {this.props.notes.map(function (note, i) {
+                            return <li key={i}>{note}</li>
+                        })}
+                    </ul>
+                </div>
             </div>
+
         );
     }
 });

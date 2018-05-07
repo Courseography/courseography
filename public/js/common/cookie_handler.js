@@ -1,33 +1,25 @@
 /**
- * Sets a cookie with name cookieName and value cookieValue.
- * @param {string} cookieName The name of the cookie.
- * @param {string} cookieValue The cookies value.
+ * Sets a local storage with name LSName and value LSValue.
+ * @param {string} LSName The name of the local storage.
+ * @param {string} LSValue The local storage value.
  */
-function setCookie(cookieName, cookieValue) {
+function setLocalStorage(LSName, LSValue) {
     'use strict';
-
-    var lifeSpanInDays = 300;
-    document.cookie = cookieName.replace(/[^0-9a-zA-Z_\-]/g, '-') +
-                      '=' + cookieValue.replace(/[^0-9a-zA-Z_\-]/g, '-') +
-                      '; max-age=' + 60 * 60 * 24 * lifeSpanInDays;
+    localStorage.setItem(LSName, LSValue)
 }
 
 
 /**
- * Gets a cookie with name cookieName.
- * @param {string} cookieName The name of the cookie being retrieved.
- * @returns {string} The cookie.
+ * Gets a local storage with name LSName.
+ * @param {string} LSName The name of the local storage being retrieved.
+ * @returns {string} The local storage.
  */
-function getCookie(cookieName) {
+function getLocalStorage(LSName) {
     'use strict';
 
-    var name = cookieName.replace(/[^0-9a-zA-Z_\-]/g, '-') + '=';
-    var cookies = document.cookie.split(';');
-    for (var i = 0; i < cookies.length; i++) {
-        var cookie = cookies[i].trim();
-        if (cookie.indexOf(name) === 0) {
-            return cookie.substring(name.length, cookie.length);
-        }
+    if (!localStorage.getItem(LSName)) {
+        return '';
+    } else {
+        return localStorage.getItem(LSName);
     }
-    return '';
 }

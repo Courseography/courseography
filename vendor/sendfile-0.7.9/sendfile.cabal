@@ -1,0 +1,61 @@
+name:          sendfile
+version:       0.7.9
+stability:     provisional
+synopsis:      A portable sendfile library
+description:   A library which exposes zero-copy sendfile functionality in a portable way. If a platform does not support sendfile, a fallback implementation in haskell is provided.
+               .
+               Currently supported platforms: Windows 2000+ (Native), Linux 2.6+ (Native), FreeBSD (Native), OS-X 10.5+ (Native), Everything else (Portable Haskell code).
+
+license:       BSD3
+license-file:  LICENSE
+author:        Matthew Elder <matt@mattelder.org>
+maintainer:    Jeremy Shaw <jeremy@n-heptane.com>
+homepage:      http://hub.darcs.net/stepcut/sendfile
+category:      Network
+build-type:    Simple
+cabal-version: >= 1.6
+
+flag portable
+    description: Explicitly enable portable sendfile support (implemented in Haskell)
+    default:     False
+
+library
+    hs-source-dirs:  src
+
+    exposed-modules: Network.Socket.SendFile
+                     Network.Socket.SendFile.Iter
+                     Network.Socket.SendFile.Handle
+                     Network.Socket.SendFile.Portable
+
+    other-modules:   Network.Socket.SendFile.Internal
+                     Network.Socket.SendFile.Util
+
+    build-depends:   base >= 3 && < 5,
+                     bytestring >= 0.9.1.4 && < 0.11,
+                     network >= 2 && < 3
+
+    ghc-options: -Wall
+
+    if os(windows) && !flag(portable)
+      cpp-options: -DWIN32_SENDFILE
+      build-depends: Win32 >= 2.2.0.0 && < 2.3
+      extra-libraries: mswsock
+      other-modules: Network.Socket.SendFile.Win32
+    else
+      if os(linux) && !flag(portable)
+        cpp-options: -DLINUX_SENDFILE -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE.
+        other-modules: Network.Socket.SendFile.Linux
+      else
+        if os(freebsd) && !flag(portable)
+          cpp-options: -DFREEBSD_SENDFILE
+          other-modules: Network.Socket.SendFile.FreeBSD
+        else
+          if os(darwin) && !flag(portable)
+            cpp-options: -DDARWIN_SENDFILE
+            other-modules: Network.Socket.SendFile.Darwin
+          else
+            cpp-options: -DPORTABLE_SENDFILE
+
+source-repository head
+    type:     darcs
+    location: http://patch-tag.com/r/mae/sendfile/pullrepo

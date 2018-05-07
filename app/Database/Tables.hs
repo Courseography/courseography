@@ -145,8 +145,8 @@ Post
     deriving Show
 
 PostCategory
+    post PostId
     name T.Text
-    postCode T.Text
     deriving Show
 |]
 
