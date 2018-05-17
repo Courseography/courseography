@@ -1,3 +1,4 @@
+// TODO: remove this file. Kept here for reference until all functionality restored.
 requirejs([
     'grid/generate_grid',
     'grid/timetable_util',

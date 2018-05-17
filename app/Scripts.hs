@@ -79,8 +79,9 @@ timetableScripts = do
          "/static/js/common/modal.js",
          "/static/js/common/course_description.js"
          ]
-    H.script ! A.src "/static/js/requirejs-config.js" $ ""
-    H.script ! H.dataAttribute "main" "/static/js/grid" ! A.src "/static/js/vendor/require.js" $ ""
+    -- H.script ! A.src "/static/js/requirejs-config.js" $ ""
+    -- H.script ! H.dataAttribute "main" "/static/js/grid" ! A.src "/static/js/vendor/require.js" $ ""
+    H.script ! A.src "/static/js/grid/app.js" $ ""
 
 drawScripts :: H.Html
 drawScripts =
