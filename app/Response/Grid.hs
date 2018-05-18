@@ -15,9 +15,10 @@ gridResponse =
             []
             (do header "grid"
                 H.div ! A.id "grid-body"! A.class_ "row main" $ do
-                     coursePanel
-                     searchPanel
-                     infoPanel
+                    ""
+                    --  coursePanel
+                    --  searchPanel
+                    --  infoPanel
                 disclaimer
             )
             timetableScripts

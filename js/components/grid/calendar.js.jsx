@@ -1,13 +1,16 @@
-/** Holds the containers of the Fall and Spring timetables,
-    and performs some pre-processing steps with a list of 'Lecture' objects*/
-let Row = React.createClass({
-  render: function() {
+/* Holds the containers of the Fall and Spring timetables,
+ * and performs some pre-processing steps with a list of 'Lecture' objects
+ */
+export class Row extends React.Component {
+  render() {
     // From a list of Course objects, create a list of Lecture objects
     let courses = this.props.courses;
-    let lectures = courses.map(function (c) {
-      return Array.concat.apply([], Object.values(c.lectures));
-    });
-    lectures = Array.concat.apply([], lectures);
+    let lectures = courses.map(
+      c => Array.concat.apply([], Object.values(c.lectures))
+    );
+    if (lectures.length > 0) {
+      lectures = Array.concat.apply([], lectures);
+    }
 
     // Organize the structure of the <fallSession> and <springSession> 2-D dictionaries
     let fallSession, springSession;
@@ -26,29 +29,33 @@ let Row = React.createClass({
 
     // Generate a container for each of the Fall and Spring timetables individually
     return (
-      <div className="row">
+      <div className="col-md-8 col-xs-12">
         <TimetableContainer session="F" lectures={fallSession} headColSpans={fallColSpans} />
         <TimetableContainer session="S" lectures={springSession} headColSpans={springColSpans} />
       </div>
     );
   }
-});
+}
 
-/** The container specifies formatting for all of the elements wrapped inside,
-    (for example, every element inside a container will follow the same margin rules) */
-let TimetableContainer = React.createClass({
-    render: function() {
-      return (
-        <div className="col-md-6 col-xs-12 timetable-container">
-          <Timetable session={this.props.session} lectures={this.props.lectures} headColSpans={this.props.headColSpans}/>
-        </div>
-      );
-    }
-});
+/*
+ * The container specifies formatting for all of the elements wrapped inside,
+ * (for example, every element inside a container will follow the same margin rules)
+ */
+class TimetableContainer extends React.Component {
+  render() {
+    return (
+      <div className="col-md-6 col-xs-12 timetable-container">
+        <Timetable session={this.props.session} lectures={this.props.lectures} headColSpans={this.props.headColSpans}/>
+      </div>
+    );
+  }
+}
 
-/** A <table> element for the specified session*/
-let Timetable = React.createClass({
-  render: function(){
+/*
+ * A <table> element for the specified session
+ */
+class Timetable extends React.Component {
+  render() {
     return(
       <table className={"timetable table"} id={"timetable-" + this.props.session}>
         <TimetableHeader session={this.props.session} lectures={this.props.lectures} headColSpans={this.props.headColSpans}/>
@@ -56,12 +63,14 @@ let Timetable = React.createClass({
       </table>
     );
   }
-});
+}
 
-/** Describes what the header of a table should look like, based on the session.
-    The header contains five day cells, a dummy cell, and a term-name cell */
-let TimetableHeader = React.createClass({
-  render: function() {
+/*
+ * Describes what the header of a table should look like, based on the session.
+ * The header contains five day cells, a dummy cell, and a term-name cell
+ */
+class TimetableHeader extends React.Component {
+  render() {
     let days = ['M', 'T', 'W', 'R', 'F'];
     let dayStrings = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
     let colSpans = this.props.headColSpans;
@@ -97,11 +106,13 @@ let TimetableHeader = React.createClass({
       );
     }
   }
-});
+}
 
-/** Describes the body of the Timetable */
-let TimetableBody = React.createClass({
-  render: function() {
+/*
+ * Describes the body of the Timetable
+ */
+class TimetableBody extends React.Component {
+  render() {
     let rows = [];
     // For each row from 8 o'clock to 22 o'clock, there is an 'Hour' and 'Half hour' row
     for (let i = 8; i < 22; i++) {
@@ -125,14 +136,14 @@ let TimetableBody = React.createClass({
 
     return <tbody>{rows}</tbody>;
   }
-});
+}
 
-
-/** Describes what a row in the Timetable should look like, based off of the session, time,
-    and previous cells generated.
-*/
-let TimetableRow = React.createClass({
-  render: function() {
+/*
+ * Describes what a row in the Timetable should look like,
+ * based off of the session, time, and previous cells generated.
+ */
+class TimetableRow extends React.Component {
+  render() {
     let tableData = [];
     let days = ['M', 'T', 'W', 'R', 'F'];
     let dummyCell = <td className="timetable-dummy-cell"></td>;
@@ -281,13 +292,12 @@ let TimetableRow = React.createClass({
     }
     return <tr>{tableData}</tr>;
   }
-});
-
+}
 
 /**
- * Helper function to initialize the <fallSession> and <springSession> 2-D dictionaries
- * @param {list} lectures : List of 'Lecture' objects
-*/
+  * Helper function to initialize the <fallSession> and <springSession> 2-D dictionaries
+  * @param {list} lectures : List of 'Lecture' objects
+  */
 function initializeSessions(lectures) {
   let fallSession = {};
   let springSession = {};
@@ -296,7 +306,7 @@ function initializeSessions(lectures) {
     springSession[i] = {"M": [], "T": [], "W": [], "R": [], "F": []};
   }
 
-  lectures.forEach(function(lecture) {
+  lectures.forEach(lecture => {
     if (lecture.session === 'F' || lecture.session === 'Y') {
       for (let i = lecture.startTime; i < lecture.endTime; i++) {
         // Store this Lecture in its active time-slot (denoted by <i>),
@@ -319,7 +329,7 @@ function initializeSessions(lectures) {
  * Helper function which sets the width of each Lecture,
  * and also sets the inConflict attribute of all Lecture objects
  * @param {dictionary} session : 2-D Dictionary storing lectures active in the session
-*/
+ */
 function setWidths(session) {
   let days = ['M', 'T', 'W', 'R', 'F'];
 
@@ -331,7 +341,7 @@ function setWidths(session) {
       // If in this time-and-day slot there is a lecture conflict
       if (lectureConflict(timeDaySlot)) {
         // Readjust (if needed) the 'width's of the lectures at this slot
-        timeDaySlot.forEach(function(lecture) {
+        timeDaySlot.forEach(lecture => {
           if (lecture.width < timeDaySlot.length) {
             lecture.width = timeDaySlot.length;
           }
@@ -346,27 +356,27 @@ function setWidths(session) {
 /**
  * Helper function which stores the 'colSpan' attribute value for each day in the table header
  * @param {dictionary} colSpans : Dictionary storing the 'colSpan' attribute value for each day
-*/
-function storeColSpans(session, colSpans){
+ */
+function storeColSpans(session, colSpans) {
   let days = ['M', 'T', 'W', 'R', 'F'];
   // For each day, stores all possible 'width' values every lecture at that day could have
   let widths = storeWidths(session);
-  days.forEach(function(day) {
+  days.forEach(day => {
     // The 'colSpan' attribute of a header day cell is defined as the product of all
     // possible widths that could occur at that day
-    colSpans[day] = widths[day].reduce(function(a,b) { return a * b; }, 1);
+    colSpans[day] = widths[day].reduce((a, b) => a * b, 1);
   });
 }
 
 /**
  * Helper function which, for each day, stores all possible 'width' values the lectures in that day could have
  * @param {dictionary} session : 2-D Dictionary storing lectures active in the session
-*/
+ */
 function storeWidths(session) {
   let days = ['M', 'T', 'W', 'R', 'F'];
   let widths = {};
   // Iterate through every time-day slot in the session
-  days.forEach(function(day) {
+  days.forEach(day => {
     widths[day] = [];
     for (let i = 8; i < 22; i++) {
       let timeRow = session[i];
@@ -398,7 +408,7 @@ function lectureConflict(courseList) {
  * Renders everything wrapped inside the "Row" component.
  * Contains mock data; for illustrative purposes only.
 */
-export function drawTimetable() {
+function drawTimetable() {
   // Sample Course objects, constructed with sample attributes
 
   // Note: W: [8, 12, 14, 15] denotes that this course runs on Wed from 8 to 12, and again on Wed from 14 - 15
@@ -431,7 +441,7 @@ export function drawTimetable() {
  * @param {string} session : Session of course
  * @param {dictionary} times : The days, and corresponding time-slot for which
                                 this course is active
- * @return {dictionary} Represents a 'Course' object
+  * @return {dictionary} Represents a 'Course' object
 */
 function createNewCourse(courseCode, session, times) {
   let lectures = {};
@@ -442,7 +452,7 @@ function createNewCourse(courseCode, session, times) {
     days.push(day);
     lectures[day] = [];
     // For the case where this lecture starts and ends more than once in one day
-    for(let i = 0; i< times[day].length; i+=2){
+    for (let i = 0; i< times[day].length; i+=2) {
       let startEndTimes = [times[day][i], times[day][i+1]];
       lectures[day].push(createNewLecture(courseCode, session, day, startEndTimes));
     }
