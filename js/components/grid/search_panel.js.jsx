@@ -30,7 +30,7 @@ export class SearchPanel extends React.Component {
           </form>
         </div>
         <div id="search-container">
-          <CourseList />
+          <CourseList courseFilter={this.state.value.toUpperCase()} />
         </div>
       </div>
     );
@@ -42,7 +42,6 @@ class CourseList extends React.Component {
     super(props);
     this.state = {
       courses: [],
-      courseFilter: ''
     };
   }
 
@@ -58,7 +57,6 @@ class CourseList extends React.Component {
     )
     .then(response => response.text())
     .then(data => {
-      this.enableSearch();
       // searches through all of the courses in "data",
       // and stores each individual course code name
       // into 'courses' list
@@ -67,22 +65,13 @@ class CourseList extends React.Component {
     });
   }
 
-  enableSearch() {
-    // Whenever a key is released on "(#course-filter)", run this function ***
-    $('#course-filter').keyup(() => {
-      // Sets the state of this component such that it updates the
-      // "courseFilter" attribute
-      this.setState({ courseFilter: $('#course-filter').val().toUpperCase() });
-    });
-  }
-
   render() {
     let searchList = [];
     // If there are courses to be filtered
-    if (this.state.courseFilter !== '') {
+    if (this.props.courseFilter !== '') {
       // From the "courses" list, filter out elements based off of "courseFilter"
       searchList = this.state.courses.filter(
-        course => course.indexOf(this.state.courseFilter) > -1
+        course => course.indexOf(this.props.courseFilter) > -1
       ).map(course => <CourseEntry course={course} key={course} />
       );
     }
@@ -103,6 +92,7 @@ class CourseEntry extends React.Component {
     this.state = {
       star: false
     };
+    this.toggleStar = this.toggleStar.bind(this);
   }
 
   // Inverts the 'star' boolean attribute in the state
