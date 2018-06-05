@@ -1,3 +1,6 @@
+/*
+ * Creates a search box and stores the current user input that is in the search box.
+ */
 export class SearchPanel extends React.Component {
   constructor(props) {
     super(props);
@@ -37,6 +40,10 @@ export class SearchPanel extends React.Component {
   }
 }
 
+/*
+ * Filters the database of courses based on the user's input in the search box and
+ * generates a list of courses with course codes containing the user input in the search box.
+ */
 class CourseList extends React.Component {
   constructor(props) {
     super(props);
@@ -69,7 +76,8 @@ class CourseList extends React.Component {
     let searchList = [];
     // If there are courses to be filtered
     if (this.props.courseFilter !== '') {
-      // From the "courses" list, filter out elements based off of "courseFilter"
+      // From the "courses" list, filter out elements based off of the prop "courseFilter" passed to 
+      // CourseList by SearchPanel
       searchList = this.state.courses.filter(
         course => course.indexOf(this.props.courseFilter) > -1
       ).map(course => <CourseEntry course={course} key={course} />
@@ -85,7 +93,10 @@ class CourseList extends React.Component {
   }
 }
 
-
+/*
+ * Describes a course based on its course code, and whether or not it has been selected
+ * (If the course is selected, it is a "starred-course").
+ */
 class CourseEntry extends React.Component {
   constructor(props) {
     super(props);
