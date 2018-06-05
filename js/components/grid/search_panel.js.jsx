@@ -1,3 +1,6 @@
+/*
+ * Creates a search box and stores the current user input that is in the search box.
+ */
 export class SearchPanel extends React.Component {
   constructor(props) {
     super(props);
@@ -30,19 +33,22 @@ export class SearchPanel extends React.Component {
           </form>
         </div>
         <div id="search-container">
-          <CourseList />
+          <CourseList courseFilter={this.state.value.toUpperCase()} />
         </div>
       </div>
     );
   }
 }
 
+/*
+ * Filters the database of courses based on the user's input in the search box and
+ * generates a list of courses with course codes containing the user input in the search box.
+ */
 class CourseList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       courses: [],
-      courseFilter: ''
     };
   }
 
@@ -58,7 +64,6 @@ class CourseList extends React.Component {
     )
     .then(response => response.text())
     .then(data => {
-      this.enableSearch();
       // searches through all of the courses in "data",
       // and stores each individual course code name
       // into 'courses' list
@@ -67,22 +72,14 @@ class CourseList extends React.Component {
     });
   }
 
-  enableSearch() {
-    // Whenever a key is released on "(#course-filter)", run this function ***
-    $('#course-filter').keyup(() => {
-      // Sets the state of this component such that it updates the
-      // "courseFilter" attribute
-      this.setState({ courseFilter: $('#course-filter').val().toUpperCase() });
-    });
-  }
-
   render() {
     let searchList = [];
     // If there are courses to be filtered
-    if (this.state.courseFilter !== '') {
-      // From the "courses" list, filter out elements based off of "courseFilter"
+    if (this.props.courseFilter !== '') {
+      // From the "courses" list, filter out elements based off of the prop "courseFilter" passed to 
+      // CourseList by SearchPanel
       searchList = this.state.courses.filter(
-        course => course.indexOf(this.state.courseFilter) > -1
+        course => course.indexOf(this.props.courseFilter) > -1
       ).map(course => <CourseEntry course={course} key={course} />
       );
     }
@@ -96,13 +93,17 @@ class CourseList extends React.Component {
   }
 }
 
-
+/*
+ * Describes a course based on its course code, and whether or not it has been selected
+ * (If the course is selected, it is a "starred-course").
+ */
 class CourseEntry extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       star: false
     };
+    this.toggleStar = this.toggleStar.bind(this);
   }
 
   // Inverts the 'star' boolean attribute in the state
