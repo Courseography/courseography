@@ -33,7 +33,12 @@ export class SearchPanel extends React.Component {
           </form>
         </div>
         <div id="search-container">
-          <CourseList courseFilter={this.state.value.toUpperCase()} />
+          <CourseList
+            courseFilter={this.state.value.toUpperCase()}
+            selectedCourses={this.props.selectedCourses}
+            selectCourse={this.props.selectCourse}
+            removeCourse={this.props.removeCourse}
+          />
         </div>
       </div>
     );
@@ -80,7 +85,13 @@ class CourseList extends React.Component {
       // CourseList by SearchPanel
       searchList = this.state.courses.filter(
         course => course.indexOf(this.props.courseFilter) > -1
-      ).map(course => <CourseEntry course={course} key={course} />
+      ).map(course => <CourseEntry
+                        course={course}
+                        key={course}
+                        selectCourse={this.props.selectCourse}
+                        removeCourse={this.props.removeCourse}
+                        selectedCourses={this.props.selectedCourses}
+                      />
       );
     }
 
@@ -106,8 +117,23 @@ class CourseEntry extends React.Component {
     this.toggleStar = this.toggleStar.bind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.selectedCourses.indexOf(this.props.course) == -1) {
+      this.setState({star: false});
+    }
+    else {
+      this.setState({star: true});
+    }
+  }
+
   // Inverts the 'star' boolean attribute in the state
   toggleStar() {
+    if (this.state.star == false) {
+      this.props.selectCourse(this.props.course);
+    }
+    else {
+      this.props.removeCourse(this.props.course);
+    }
     this.setState({ star: !this.state.star });
   }
 

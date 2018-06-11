@@ -5,8 +5,12 @@ import { Row } from './calendar.js.jsx';
 class Grid extends React.Component {
   constructor(props) {
     super(props);
+    this.addSelectedCourse = this.addSelectedCourse.bind(this);
+    this.removeSelectedCourse = this.removeSelectedCourse.bind(this);
+    this.clearSelectedCourses = this.clearSelectedCourses.bind(this);
     this.state = {
-      selectedLectures: []
+      selectedLectures: [],
+      selectedCourses: []
     };
   }
 
@@ -14,12 +18,37 @@ class Grid extends React.Component {
     this.setState({ selectedLectures: generateData() });
   }
 
+  addSelectedCourse(courseCode) {
+    let updatedCourses = this.state.selectedCourses;
+    updatedCourses.push(courseCode)
+    this.setState({selectedCourses: updatedCourses});
+  }
+
+  removeSelectedCourse(courseCode) {
+    let updatedCourses = this.state.selectedCourses;
+    const index = updatedCourses.indexOf(courseCode);
+    updatedCourses.splice(index, 1);
+    this.setState({selectedCourses: updatedCourses})
+  }
+
+  clearSelectedCourses() {
+    this.setState({selectedCourses: []});
+  }
+
   render() {
     return (
       <div>
-        <CoursePanel />
+        <CoursePanel
+          selectedCourses={this.state.selectedCourses}
+          removeCourse={this.removeSelectedCourse}
+          clearCourses={this.clearSelectedCourses}
+        />
         <Row courses={this.state.selectedLectures}/>
-        <SearchPanel />
+        <SearchPanel
+          selectedCourses={this.state.selectedCourses}
+          selectCourse={this.addSelectedCourse}
+          removeCourse={this.removeSelectedCourse}
+        />
       </div>
     );
   }
