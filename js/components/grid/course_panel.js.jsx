@@ -5,7 +5,7 @@ export class CoursePanel extends React.Component {
 
   render() {
     const courses = this.props.selectedCourses.map(
-                course => <Course courseCode={course} removeCourse={this.props.removeCourse}/>)
+      course => <Course courseCode={course} removeCourse={this.props.removeCourse}/>)
 
     return (
       <div id="course-select-wrapper" className="col-md-2 col-xs-6">
@@ -42,18 +42,64 @@ class Course extends React.Component {
   render() {
     //Why cant directly use onClick={this.props.removeCourse(this.props.courseCode)} in button
     return (
-      <li key={this.props.courseCode} id={this.props.courseCode} >
+      <li key={this.props.courseCode} id={this.props.courseCode + "-li"} >
         <h3>
-          <button onClick={this.removeCourse}>
-            <img src="static/res/ico/delete.png" className="close-icon"/>
-          </button>
+          <div className="icon-div">
+              <img src="static/res/ico/delete.png" className="close-icon" onClick={this.removeCourse}/>
+          </div>
           <div onClick={this.handleSelect}>
-          {this.props.courseCode}
+            {this.props.courseCode}
           </div>
         </h3>
         { this.state.selected &&
-          <h5> Some lecture </h5>
+          <div className="sections ui-accordion-header"
+                id={"ui-accordion-" + this.props.courseCode + "-li-panel-0"}>
+            <SectionList courseCode={this.props.courseCode} section="Y" lectures={["L0101", "L0102"]}/>
+            <SectionList courseCode={this.props.courseCode} section="F" lectures={["L0101", "L0105"]}/>
+            <SectionList courseCode={this.props.courseCode} section="S" lectures={["L5101"]}/>
+          </div>
         }
+      </li>
+    )
+  }
+}
+
+class SectionList extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    const lectureSections = this.props.lectures.map(
+      lecture => <LectureSection section={this.props.section} courseCode={this.props.courseCode} lectureCode={lecture}/>)
+
+    return(
+      <ul className={"sectionList-" + this.props.section} id="lecture-list">
+        {lectureSections}
+      </ul>
+    )
+  }
+}
+
+//Needs to be passed lectureCode, courseCode, lecture time for the code
+class LectureSection extends React.Component {
+  constructor(props) {
+    super(props);
+    this.clickLecture = this.clickLecture.bind(this);
+    this.state = {
+      selected: false
+    }
+  }
+
+  clickLecture() {
+    this.setState({selected: !this.state.selected});
+  }
+
+  render() {
+    return(
+      <li id={this.props.courseCode + "-" + this.props.lectureCode + "-" + this.props.section}
+          onClick={this.clickLecture}>
+        {this.props.lectureCode}
       </li>
     )
   }
