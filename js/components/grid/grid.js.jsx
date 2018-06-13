@@ -18,12 +18,14 @@ class Grid extends React.Component {
     this.setState({ selectedLectures: generateData() });
   }
 
+  // Method passed to child component SearchPanel to add a course to selectedCourses.
   addSelectedCourse(courseCode) {
     let updatedCourses = this.state.selectedCourses;
     updatedCourses.push(courseCode)
     this.setState({selectedCourses: updatedCourses});
   }
 
+  // Method passed to child components, SearchPanel and CoursePanel to remove a course from selectedCourses.
   removeSelectedCourse(courseCode) {
     let updatedCourses = this.state.selectedCourses;
     const index = updatedCourses.indexOf(courseCode);
@@ -31,6 +33,7 @@ class Grid extends React.Component {
     this.setState({selectedCourses: updatedCourses})
   }
 
+  // Method passed to child component CoursePanel to clear all the courses in selectedCourses.
   clearSelectedCourses() {
     this.setState({selectedCourses: []});
   }

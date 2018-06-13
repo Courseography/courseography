@@ -38,9 +38,7 @@ class Course extends React.Component {
     this.props.removeCourse(this.props.courseCode);
   }
 
-
   render() {
-    //Why cant directly use onClick={this.props.removeCourse(this.props.courseCode)} in button
     return (
       <li key={this.props.courseCode} id={this.props.courseCode + "-li"} >
         <h3>
@@ -81,7 +79,6 @@ class SectionList extends React.Component {
   }
 }
 
-//Needs to be passed lectureCode, courseCode, lecture time for the code
 class LectureSection extends React.Component {
   constructor(props) {
     super(props);

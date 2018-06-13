@@ -111,38 +111,22 @@ class CourseList extends React.Component {
 class CourseEntry extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      star: false
-    };
-    this.toggleStar = this.toggleStar.bind(this);
+    this.select = this.select.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.selectedCourses.indexOf(this.props.course) == -1) {
-      this.setState({star: false});
-    }
-    else {
-      this.setState({star: true});
-    }
-  }
-
-  // Inverts the 'star' boolean attribute in the state
-  toggleStar() {
-    if (this.state.star == false) {
-      this.props.selectCourse(this.props.course);
-    }
-    else {
-      this.props.removeCourse(this.props.course);
-    }
-    this.setState({ star: !this.state.star });
+  // Check whether the course is already in the selectCourses list.
+  // Remove the course if it is, or add the course if it is not.
+  select() {
+    this.props.selectedCourses.indexOf(this.props.course) != -1 ? this.props.removeCourse(this.props.course) :
+                        this.props.selectCourse(this.props.course);
   }
 
   render() {
-    let classes = this.state.star ? 'starred-course' : '';
+    let classes = this.props.selectedCourses.indexOf(this.props.course) != -1 ? 'starred-course' : '';
     return (
       <li id={this.props.course + '-search'}
           className={classes}
-          onClick={this.toggleStar}>
+          onClick={this.select}>
         {this.props.course}
       </li>
     );
