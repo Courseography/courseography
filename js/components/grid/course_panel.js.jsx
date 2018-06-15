@@ -1,11 +1,7 @@
 export class CoursePanel extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const courses = this.props.selectedCourses.map(
-      course => <Course courseCode={course} removeCourse={this.props.removeCourse}/>)
+      course => <Course key={course} courseCode={course} removeCourse={this.props.removeCourse}/>)
 
     return (
       <div id="course-select-wrapper" className="col-md-2 col-xs-6">
@@ -23,14 +19,14 @@ export class CoursePanel extends React.Component {
 class Course extends React.Component {
   constructor(props) {
     super(props);
-    this.handleSelect = this.handleSelect.bind(this);
+    this.toggleSelect = this.toggleSelect.bind(this);
     this.removeCourse = this.removeCourse.bind(this);
     this.state = {
       selected: false
     }
   }
 
-  handleSelect() {
+  toggleSelect() {
     this.setState({selected: !this.state.selected})
   }
 
@@ -45,7 +41,7 @@ class Course extends React.Component {
           <div className="icon-div">
               <img src="static/res/ico/delete.png" className="close-icon" onClick={this.removeCourse}/>
           </div>
-          <div onClick={this.handleSelect}>
+          <div onClick={this.toggleSelect}>
             {this.props.courseCode}
           </div>
         </h3>
@@ -63,13 +59,12 @@ class Course extends React.Component {
 }
 
 class SectionList extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const lectureSections = this.props.lectures.map(
-      lecture => <LectureSection section={this.props.section} courseCode={this.props.courseCode} lectureCode={lecture}/>)
+      lecture => <LectureSection key={this.props.courseCode + "-" + lecture + "-" + this.props.section}
+                                  section={this.props.section}
+                                  courseCode={this.props.courseCode}
+                                  lectureCode={lecture}/>)
 
     return(
       <ul className={"sectionList-" + this.props.section} id="lecture-list">
@@ -82,20 +77,20 @@ class SectionList extends React.Component {
 class LectureSection extends React.Component {
   constructor(props) {
     super(props);
-    this.clickLecture = this.clickLecture.bind(this);
+    this.toggleLecture = this.toggleLecture.bind(this);
     this.state = {
-      selected: false
+      lectureSelected: false
     }
   }
 
-  clickLecture() {
-    this.setState({selected: !this.state.selected});
+  toggleLecture() {
+    this.setState({lectureSelected: !this.state.selected});
   }
 
   render() {
     return(
       <li id={this.props.courseCode + "-" + this.props.lectureCode + "-" + this.props.section}
-          onClick={this.clickLecture}>
+          onClick={this.toggleLecture}>
         {this.props.lectureCode}
       </li>
     )
