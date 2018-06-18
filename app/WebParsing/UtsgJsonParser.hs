@@ -17,7 +17,7 @@ import Database.Persist.Class (Key)
 
 -- | URLs for the Faculty of Arts and Science API
 timetableURL :: T.Text
-timetableURL = "https://timetable.iit.artsci.utoronto.ca/api/20179/courses?code="
+timetableURL = "https://timetable.iit.artsci.utoronto.ca/api/20189/courses?org="
 
 orgURL :: String
 orgURL = "https://timetable.iit.artsci.utoronto.ca/api/orgs"
