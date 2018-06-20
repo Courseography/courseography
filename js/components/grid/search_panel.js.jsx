@@ -33,7 +33,12 @@ export class SearchPanel extends React.Component {
           </form>
         </div>
         <div id="search-container">
-          <CourseList courseFilter={this.state.value.toUpperCase()} />
+          <CourseList
+            courseFilter={this.state.value.toUpperCase()}
+            selectedCourses={this.props.selectedCourses}
+            selectCourse={this.props.selectCourse}
+            removeCourse={this.props.removeCourse}
+          />
         </div>
       </div>
     );
@@ -80,7 +85,13 @@ class CourseList extends React.Component {
       // CourseList by SearchPanel
       searchList = this.state.courses.filter(
         course => course.indexOf(this.props.courseFilter) > -1
-      ).map(course => <CourseEntry course={course} key={course} />
+      ).map(course => <CourseEntry
+                        course={course}
+                        key={course}
+                        selectCourse={this.props.selectCourse}
+                        removeCourse={this.props.removeCourse}
+                        selectedCourses={this.props.selectedCourses}
+                      />
       );
     }
 
@@ -100,23 +111,22 @@ class CourseList extends React.Component {
 class CourseEntry extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      star: false
-    };
-    this.toggleStar = this.toggleStar.bind(this);
+    this.select = this.select.bind(this);
   }
 
-  // Inverts the 'star' boolean attribute in the state
-  toggleStar() {
-    this.setState({ star: !this.state.star });
+  // Check whether the course is already in the selectCourses list.
+  // Remove the course if it is, or add the course if it is not.
+  select() {
+    this.props.selectedCourses.indexOf(this.props.course) != -1 ? this.props.removeCourse(this.props.course) :
+                        this.props.selectCourse(this.props.course);
   }
 
   render() {
-    let classes = this.state.star ? 'starred-course' : '';
+    let classes = this.props.selectedCourses.indexOf(this.props.course) != -1 ? 'starred-course' : '';
     return (
       <li id={this.props.course + '-search'}
           className={classes}
-          onClick={this.toggleStar}>
+          onClick={this.select}>
         {this.props.course}
       </li>
     );

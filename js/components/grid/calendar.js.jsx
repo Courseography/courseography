@@ -89,17 +89,21 @@ class TimetableHeader extends React.Component {
     if (this.props.session === "F") {
       return (
         <thead>
-          <th className="timetable-dummy-cell"></th>
-          <th className="term-name">Fall</th>
-          {dayCells}
+          <tr>
+            <th className="timetable-dummy-cell"></th>
+            <th className="term-name">Fall</th>
+            {dayCells}
+          </tr>
         </thead>
       );
     } else {
       return (
         <thead>
-          {dayCells}
-          <th className="term-name">Spring</th>
-          <th className="timetable-dummy-cell"></th>
+          <tr>
+            {dayCells}
+            <th className="term-name">Spring</th>
+            <th className="timetable-dummy-cell"></th>
+          </tr>
         </thead>
       );
     }
@@ -144,7 +148,7 @@ class TimetableRow extends React.Component {
   render() {
     let tableData = [];
     let days = ['M', 'T', 'W', 'R', 'F'];
-    let dummyCell = <td className="timetable-dummy-cell"></td>;
+    let dummyCell = <td key="timetable-dummy-cell" className="timetable-dummy-cell"></td>;
     let currTime = this.props.time;
     let currSess = this.props.session;
 
@@ -153,7 +157,7 @@ class TimetableRow extends React.Component {
     if (currTime % 1 === 0) {
       // Convert <time> to a 12-hour clock system
       let adjustedTime = (currTime === 12 ? 12 : currTime % 12) + ':00';
-      let timeCell = <td className="timetable-time" rowSpan="2">{adjustedTime}</td>
+      let timeCell = <td key="timetable-time" className="timetable-time" rowSpan="2">{adjustedTime}</td>
 
       // The dictionary of lectures for this hour, and the hour before
       let currentLectures = this.props.currentLectures;

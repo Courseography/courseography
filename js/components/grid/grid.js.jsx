@@ -5,8 +5,14 @@ import { Row } from './calendar.js.jsx';
 class Grid extends React.Component {
   constructor(props) {
     super(props);
+    this.addSelectedCourse = this.addSelectedCourse.bind(this);
+    this.removeSelectedCourse = this.removeSelectedCourse.bind(this);
+    this.clearSelectedCourses = this.clearSelectedCourses.bind(this);
+    this.addSelectedLecture = this.addSelectedLecture.bind(this);
+    this.removeSelectedLecture = this.removeSelectedLecture.bind(this);
     this.state = {
-      selectedLectures: []
+      selectedLectures: [],
+      selectedCourses: []
     };
   }
 
@@ -14,12 +20,57 @@ class Grid extends React.Component {
     this.setState({ selectedLectures: generateData() });
   }
 
+  // Method passed to child component SearchPanel to add a course to selectedCourses.
+  // Move into child didMount
+  addSelectedCourse(courseCode) {
+      let updatedCourses = this.state.selectedCourses;
+      updatedCourses.push(courseCode);
+      this.setState({ selectedCourses: updatedCourses });
+  }
+
+  // Method passed to child components, SearchPanel and CoursePanel to remove a course from selectedCourses.
+  removeSelectedCourse(courseCode) {
+    let updatedCourses = this.state.selectedCourses;
+    const index = updatedCourses.indexOf(courseCode);
+    updatedCourses.splice(index, 1);
+    this.setState({selectedCourses: updatedCourses})
+  }
+
+  // Method passed to child component CoursePanel to clear all the courses in selectedCourses.
+  clearSelectedCourses() {
+    this.setState({selectedCourses: []});
+  }
+
+  addSelectedLecture(lectureSession) {
+    let updatedLectures = this.state.selectedLectures;
+    updatedLectures.push(lectureSession);
+    this.setState({selectedLectures: updatedLectures});
+  }
+
+  removeSelectedLecture(lectureSession) {
+    let updatedLectures = this.state.selectedLectures;
+    const index = updatedLectures.indexOf(lectureSession);
+    updatedLectures.splice(index, 1);
+    this.setState({selectedLectures: updatedLectures})
+  }
+
   render() {
     return (
       <div>
-        <CoursePanel />
+        <CoursePanel
+          selectedCourses={this.state.selectedCourses}
+          selectedLectures={this.state.selectedLectures}
+          removeCourse={this.removeSelectedCourse}
+          clearCourses={this.clearSelectedCourses}
+          addSelectedLecture={this.addSelectedLecture}
+          removeSelectedLecture={this.removeSelectedLecture}
+        />
         <Row courses={this.state.selectedLectures}/>
-        <SearchPanel />
+        <SearchPanel
+          selectedCourses={this.state.selectedCourses}
+          selectCourse={this.addSelectedCourse}
+          removeCourse={this.removeSelectedCourse}
+        />
       </div>
     );
   }
