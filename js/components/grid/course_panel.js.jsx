@@ -26,42 +26,81 @@ class Course extends React.Component {
     super(props);
     this.toggleSelect = this.toggleSelect.bind(this);
     this.removeCourse = this.removeCourse.bind(this);
+    this.parseLectures = this.parseLectures.bind(this);
     this.state = {
       selected: false
     }
   }
 
   componentDidMount() {
-    //.ajax.data option add additional data to the requestcan be given as an object with parameters and values to submit,
-    // jQuery's ajax function just appends data to the URL as URL parameters for GET requests
-    // Below the deprecated method of retrieving the course information
-    // var course;
-    // $.ajax({
-    //     url: 'course',
-    //     dataType: 'json',
-    //     data: {name : courseCode},
-    //     async: false,
-    //     success: function (data) {
-    //         course = data;
-    //     },
-    //     error: function () {
-    //         throw 'No course file';
-    //     }
-    // });
-    // console.log(course);
-
     fetch(
       'course?name=' + this.props.courseCode, // url to which the AJAX request is sent to
     )
     .then(response => response.json()) //datatype
     .then(data => {
         console.log(data)
-      // Parse the information
-      // Check data.fall/spring/yearSession
-      // loop through data.fall/spring/yearSession.lectures: check for section(the section code) to remove duplicates
-      // check times: timeField[0] is day index, timeField[1] is hour (there's an extra one for every half hour)
-      // {courseCode: , F: [lectureObject, lectureObject, lectureObjext], S:[], Y:[] }
+        let course = {courseCode: "", F: [], S:[], Y:[]}
+        course.courseCode = data.name;
+
+        let fallLectures = this.parseLectures(data.fallSession.lectures);
+        fallLectures.push(this.parseLectures(data.fallSession.tutorials));
+
+        let springLectures = this.parseLectures(data.springSession.lectures);
+        fallLectures.push(this.parseLectures(data.springSession.tutorials));
+
+        let yearLectures = this.parseLectures(data.yearSession.lectures);
+        yearLectures.push(this.parseLectures(data.yearSession.tutorials));
+
+        course.F = fallLectures;
+        course.S = springLectures;
+        course.Y = yearLectures;
     });
+  }
+
+  parseLectures(lectures) {
+    // Remove duplicated lecture sections
+    lectures = lectures.filter((lecture, index, lectures) => {
+      return lectures.map(lect => lect.section).indexOf(lecture.section) == index
+    });
+    let parsedLectures = [];
+
+    let days = {0: 'M', 1: 'T', 2: 'W', 3: 'R', 4: 'F'};
+    // Loop through the lecture sections to get each section's session code and lecture times
+    for (let i=0; i < lectures.length; i++) {
+      let lec = {lectureCode: lectures[i].section, times: {}};
+      let timeArray = lectures[i].times;
+      // The times in the original data are arrays of form [day, startTime], where day is an integer
+      // between 0 and 4 that corresponds to days Monday to Friday. Eg: [0, 14] is a Monday lecture that 
+      // starts are 2PM. Every half hour is an individual array. 
+      // Loop through each individual time array and add the start time to the corresponding day.  
+      for (let j=0; j < timeArray.length; j++) {
+        let day = days[(timeArray[j].timeField[0])];
+        if (!lec.times[day]) {
+          lec.times[day] = [timeArray[j].timeField[1]];
+        }
+        else {
+          lec.times[day].push(timeArray[j].timeField[1]);
+        }
+      }
+      // Loop through each day of the week and remove the half hour increments.
+      // Only keep start time and end time in the array. 
+      for (let weekday in lec.times) {
+        let times = []
+        if (lec.times.hasOwnProperty(weekday)) {
+          times.push(lec.times[weekday][0]);
+          for (let hour=1; hour < lec.times[weekday].length; hour++) {
+            if (hour+1 >= lec.times[weekday].length || 
+              lec.times[weekday][hour+1] != lec.times[weekday][hour] + 0.5) {
+              times.push(lec.times[weekday][hour] + 0.5);
+            }
+          }
+          lec.times[weekday] = times;
+        }
+      }
+      parsedLectures.push(lec);
+    }
+    console.log(parsedLectures);
+    return parsedLectures;
   }
 
   toggleSelect() {
