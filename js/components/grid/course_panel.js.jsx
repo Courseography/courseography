@@ -28,7 +28,8 @@ class Course extends React.Component {
     this.removeCourse = this.removeCourse.bind(this);
     this.parseLectures = this.parseLectures.bind(this);
     this.state = {
-      selected: false
+      selected: false,
+      courseInfo: {}
     }
   }
 
@@ -41,65 +42,65 @@ class Course extends React.Component {
         console.log(data)
         let course = {courseCode: "", F: [], S:[], Y:[]}
         course.courseCode = data.name;
-
         let fallLectures = this.parseLectures(data.fallSession.lectures);
-        fallLectures.push(this.parseLectures(data.fallSession.tutorials));
+        course.F = fallLectures.concat(this.parseLectures(data.fallSession.tutorials));
 
         let springLectures = this.parseLectures(data.springSession.lectures);
-        fallLectures.push(this.parseLectures(data.springSession.tutorials));
+        course.S = springLectures.concat(this.parseLectures(data.springSession.tutorials));
 
         let yearLectures = this.parseLectures(data.yearSession.lectures);
-        yearLectures.push(this.parseLectures(data.yearSession.tutorials));
-
-        course.F = fallLectures;
-        course.S = springLectures;
-        course.Y = yearLectures;
+        course.Y = yearLectures.concat(this.parseLectures(data.yearSession.tutorials));
+        this.setState({courseInfo: course});
     });
   }
 
   parseLectures(lectures) {
     // Remove duplicated lecture sections
-    lectures = lectures.filter((lecture, index, lectures) => {
-      return lectures.map(lect => lect.section).indexOf(lecture.section) == index
+    let allLectures = lectures.filter((lecture, index, lectures) => {
+      return (lectures.map(lect => lect.section).indexOf(lecture.section) == index)
     });
     let parsedLectures = [];
 
     let days = {0: 'M', 1: 'T', 2: 'W', 3: 'R', 4: 'F'};
     // Loop through the lecture sections to get each section's session code and lecture times
-    for (let i=0; i < lectures.length; i++) {
-      let lec = {lectureCode: lectures[i].section, times: {}};
-      let timeArray = lectures[i].times;
-      // The times in the original data are arrays of form [day, startTime], where day is an integer
-      // between 0 and 4 that corresponds to days Monday to Friday. Eg: [0, 14] is a Monday lecture that 
-      // starts are 2PM. Every half hour is an individual array. 
-      // Loop through each individual time array and add the start time to the corresponding day.  
-      for (let j=0; j < timeArray.length; j++) {
-        let day = days[(timeArray[j].timeField[0])];
-        if (!lec.times[day]) {
-          lec.times[day] = [timeArray[j].timeField[1]];
-        }
-        else {
-          lec.times[day].push(timeArray[j].timeField[1]);
-        }
-      }
-      // Loop through each day of the week and remove the half hour increments.
-      // Only keep start time and end time in the array. 
-      for (let weekday in lec.times) {
-        let times = []
-        if (lec.times.hasOwnProperty(weekday)) {
-          times.push(lec.times[weekday][0]);
-          for (let hour=1; hour < lec.times[weekday].length; hour++) {
-            if (hour+1 >= lec.times[weekday].length || 
-              lec.times[weekday][hour+1] != lec.times[weekday][hour] + 0.5) {
-              times.push(lec.times[weekday][hour] + 0.5);
-            }
+    for (let i=0; i < allLectures.length; i++) {
+      // Check to make sure its not a restricted section. Restricted sections have enrollment
+      // restricted for a particular group of students, but happens at the same time and place as a regular
+      // lecture/tutorial section.
+      if (allLectures[i].section.charAt(3) !== '2' && allLectures[i].times !== 'Online Web Version') {
+        let lecture = {lectureCode: allLectures[i].section, times: {}};
+        let allTimes = allLectures[i].times;
+        // The times in the original data are arrays of form [day, startTime], where day is an integer
+        // between 0 and 4 that corresponds to days Monday to Friday. Eg: [0, 14] is a Monday lecture that
+        // starts are 2PM. Every half hour is an individual array.
+        // Loop through each individual time array and add the start time to the corresponding day.
+        for (let j=0; j < allTimes.length; j++) {
+          let day = days[(allTimes[j].timeField[0])];
+          if (!lecture.times[day]) {
+            lecture.times[day] = [allTimes[j].timeField[1]];
           }
-          lec.times[weekday] = times;
+          else {
+            lecture.times[day].push(allTimes[j].timeField[1]);
+          }
         }
+        // Loop through each day of the week and remove the half hour increments.
+        // Only keep start time and end time in the array.
+        for (let weekday in lecture.times) {
+          let times = []
+          if (lecture.times.hasOwnProperty(weekday)) {
+            times.push(lecture.times[weekday][0]);
+            for (let hour=1; hour < lecture.times[weekday].length; hour++) {
+              if (hour+1 >= lecture.times[weekday].length ||
+                lecture.times[weekday][hour+1] != lecture.times[weekday][hour] + 0.5) {
+                times.push(lecture.times[weekday][hour] + 0.5);
+              }
+            }
+            lecture.times[weekday] = times;
+          }
+        }
+        parsedLectures.push(lecture);
       }
-      parsedLectures.push(lec);
     }
-    console.log(parsedLectures);
     return parsedLectures;
   }
 
@@ -123,22 +124,23 @@ class Course extends React.Component {
           </div>
         </h3>
         { this.state.selected &&
-          <div className="sections ui-accordion-header"
+          <div className="sections ui-accordion-content"
                 id={"ui-accordion-" + this.props.courseCode + "-li-panel-0"}>
             <SectionList courseCode={this.props.courseCode}
                           section="Y"
-                          lectures={this.props.courseSections.Y}
+                          lectures={this.state.courseInfo.Y}
                           addSelectedLecture={this.props.addSelectedLecture}
                           selectedLectures={this.props.selectedLectures}
                           removeSelectedLecture={this.removeSelectedLecture}/>
             <SectionList courseCode={this.props.courseCode}
                           section="F"
-                          lectures={this.props.courseSections.F}
+                          lectures={this.state.courseInfo.F}
                           addSelectedLecture={this.props.addSelectedLecture}
                           selectedLectures={this.props.selectedLectures}
                           removeSelectedLecture={this.removeSelectedLecture}/>
             <SectionList courseCode={this.props.courseCode}
-                          section="S" lectures={this.props.courseSections.S}
+                          section="S"
+                          lectures={this.state.courseInfo.S}
                           addSelectedLecture={this.props.addSelectedLecture}
                           selectedLectures={this.props.selectedLectures}
                           removeSelectedLecture={this.removeSelectedLecture}/>
@@ -151,17 +153,10 @@ class Course extends React.Component {
 
 class SectionList extends React.Component {
   render() {
-    // Remove duplicates from the sessions array generated by the Course object.
-    // Note: this was used to parse information from the deprecated Course object
-    let lectures = this.props.lectures;
-    lectures = lectures.filter((lecture, index, lectures) => {
-      return lectures.map(lect => lect.id).indexOf(lecture.id) == index
-    });
-    const lectureSections = lectures.map(
-      lecture => <LectureSection key={lecture.id}
+    const lectureSections = this.props.lectures.map(
+      lecture => <LectureSection key={this.props.courseCode + lecture.lectureCode + this.props.section}
                                   section={this.props.section}
                                   courseCode={this.props.courseCode}
-                                  lectureCode={lecture.name}
                                   lecture={lecture}
                                   addSelectedLecture={this.props.addSelectedLecture}
                                   selectedLectures={this.props.selectedLectures}
@@ -201,9 +196,9 @@ class LectureSection extends React.Component {
 
   render() {
     return(
-      <li id={this.props.lecture.id}
+      <li id={this.props.courseCode + "-" + this.props.lecture.lectureCode + "-" + this.props.section}
           onClick={this.selectLecture}>
-        {this.props.lectureCode}
+        {this.props.lecture.lectureCode}
       </li>
     )
   }
