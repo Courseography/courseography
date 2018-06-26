@@ -6,7 +6,7 @@ export class CoursePanel extends React.Component {
                         courseCode={course}
                         removeCourse={this.props.removeCourse}
                         addSelectedLecture={this.props.addSelectedLecture}
-                        removeSelectedLecture={this.removeSelectedLecture}/>)
+                        removeSelectedLecture={this.props.removeSelectedLecture}/>)
 
     return (
       <div id="course-select-wrapper" className="col-md-2 col-xs-6">
@@ -39,7 +39,6 @@ class Course extends React.Component {
     )
     .then(response => response.json()) //datatype
     .then(data => {
-        console.log(data)
         let course = {courseCode: "", F: [], S:[], Y:[]}
         course.courseCode = data.name;
         let fallLectures = this.parseLectures(data.fallSession.lectures);
@@ -51,6 +50,7 @@ class Course extends React.Component {
         let yearLectures = this.parseLectures(data.yearSession.lectures);
         course.Y = yearLectures.concat(this.parseLectures(data.yearSession.tutorials));
         this.setState({courseInfo: course});
+        console.log(this.state.courseInfo)
     });
   }
 
@@ -68,7 +68,9 @@ class Course extends React.Component {
       // restricted for a particular group of students, but happens at the same time and place as a regular
       // lecture/tutorial section.
       if (allLectures[i].section.charAt(3) !== '2' && allLectures[i].times !== 'Online Web Version') {
-        let lecture = {lectureCode: allLectures[i].section, times: {}};
+        let lecture = {courseName: allLectures[i].code.substring(0, 6) + " (" + allLectures[i].section.substring(0,1) + ")",
+                       lectureCode: allLectures[i].section.substring(0, 1) + allLectures[i].section.substring(3),
+                       times: {}};
         let allTimes = allLectures[i].times;
         // The times in the original data are arrays of form [day, startTime], where day is an integer
         // between 0 and 4 that corresponds to days Monday to Friday. Eg: [0, 14] is a Monday lecture that
@@ -131,19 +133,19 @@ class Course extends React.Component {
                           lectures={this.state.courseInfo.Y}
                           addSelectedLecture={this.props.addSelectedLecture}
                           selectedLectures={this.props.selectedLectures}
-                          removeSelectedLecture={this.removeSelectedLecture}/>
+                          removeSelectedLecture={this.props.removeSelectedLecture}/>
             <SectionList courseCode={this.props.courseCode}
                           section="F"
                           lectures={this.state.courseInfo.F}
                           addSelectedLecture={this.props.addSelectedLecture}
                           selectedLectures={this.props.selectedLectures}
-                          removeSelectedLecture={this.removeSelectedLecture}/>
+                          removeSelectedLecture={this.props.removeSelectedLecture}/>
             <SectionList courseCode={this.props.courseCode}
                           section="S"
                           lectures={this.state.courseInfo.S}
                           addSelectedLecture={this.props.addSelectedLecture}
                           selectedLectures={this.props.selectedLectures}
-                          removeSelectedLecture={this.removeSelectedLecture}/>
+                          removeSelectedLecture={this.props.removeSelectedLecture}/>
           </div>
         }
       </li>
@@ -160,7 +162,7 @@ class SectionList extends React.Component {
                                   lecture={lecture}
                                   addSelectedLecture={this.props.addSelectedLecture}
                                   selectedLectures={this.props.selectedLectures}
-                                  removeSelectedLecture={this.removeSelectedLecture}/>)
+                                  removeSelectedLecture={this.props.removeSelectedLecture}/>)
     return(
       <ul className={"sectionList-" + this.props.section} id="lecture-list">
         {lectureSections}
@@ -170,18 +172,6 @@ class SectionList extends React.Component {
 }
 
 class LectureSection extends React.Component {
-  // constructor(props) {
-  //   super(props);
-  //   this.toggleLecture = this.toggleLecture.bind(this);
-  //   this.state = {
-  //     lectureSelected: false
-  //   }
-  // }
-
-  // toggleLecture() {
-  //   this.setState({lectureSelected: !this.state.selected});
-  // }
-
   constructor(props) {
     super(props);
     this.selectLecture = this.selectLecture.bind(this);
@@ -190,8 +180,12 @@ class LectureSection extends React.Component {
   // Check whether the course is already in the selectCourses list.
   // Remove the course if it is, or add the course if it is not.
   selectLecture() {
-    this.props.selectedLectures.indexOf(this.props.lecture) != -1 ? this.props.removeSelectedLecture(this.props.lecture) :
-                        this.props.addSelectedLecture(this.props.lecture);
+    const index = this.props.selectedLectures.map(lecture => lecture.course).indexOf(this.props.lecture.courseName);
+    const selectedLecturesCodes = this.props.selectedLectures.map(lecture => lecture.lectureCode);
+    (index != -1 && selectedLecturesCodes[index] === this.props.lecture.lectureCode && this.props.section === this.props.selectedLectures[index].session) ?
+                        this.props.removeSelectedLecture(this.props.lecture.courseName, this.props.lecture) :
+                        this.props.addSelectedLecture(this.props.lecture.courseName, this.props.section,
+                                                      this.props.lecture.lectureCode, this.props.lecture.times);
   }
 
   render() {
