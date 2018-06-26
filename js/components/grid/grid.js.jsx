@@ -47,7 +47,7 @@ class Grid extends React.Component {
   addSelectedLecture(courseCode, session, lectureCode, lectureTimes) {
     let updatedLectures = this.state.selectedLectures;
     if (this.state.selectedLectures.map(lecture => lecture.course).indexOf(courseCode) != -1) {
-      const index = this.state.selectedLectures.map(lecture => lecture.lectures.course).indexOf(courseCode);
+      const index = this.state.selectedLectures.map(lecture => lecture.course).indexOf(courseCode);
       updatedLectures.splice(index, 1);
     }
     let lectureSession = this.createNewCourse(courseCode, session, lectureCode, lectureTimes);
@@ -58,7 +58,7 @@ class Grid extends React.Component {
 
   removeSelectedLecture(courseCode, lectureSession) {
     let updatedLectures = this.state.selectedLectures;
-    const index = updatedLectures.map(lecture => lecture.courseCode).indexOf(courseCode);
+    const index = updatedLectures.map(lecture => lecture.course).indexOf(courseCode);
     updatedLectures.splice(index, 1);
     this.setState({selectedLectures: updatedLectures})
   }
