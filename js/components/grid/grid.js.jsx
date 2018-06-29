@@ -8,6 +8,7 @@ class Grid extends React.Component {
     this.addSelectedCourse = this.addSelectedCourse.bind(this);
     this.removeSelectedCourse = this.removeSelectedCourse.bind(this);
     this.clearSelectedCourses = this.clearSelectedCourses.bind(this);
+
     this.addSelectedLecture = this.addSelectedLecture.bind(this);
     this.removeSelectedLecture = this.removeSelectedLecture.bind(this);
     this.createNewCourse = this.createNewCourse.bind(this);
@@ -46,9 +47,13 @@ class Grid extends React.Component {
 
   addSelectedLecture(courseCode, session, lectureCode, lectureTimes) {
     let updatedLectures = this.state.selectedLectures;
-    if (this.state.selectedLectures.map(lecture => lecture.course).indexOf(courseCode) != -1) {
-      const index = this.state.selectedLectures.map(lecture => lecture.course).indexOf(courseCode);
-      updatedLectures.splice(index, 1);
+    // The maximum number of courses in the lecture list with the same code is 3, one for each session (F, S, Y)
+    let index = this.state.selectedLectures.map(lecture => lecture.course).indexOf(courseCode);
+    while (index != -1) {
+      if (this.state.selectedLectures[index].session === session) {
+        updatedLectures.splice(index, 1);
+      }
+      index = this.state.selectedLectures.map(lecture => lecture.course).indexOf(courseCode, index + 1);
     }
     let lectureSession = this.createNewCourse(courseCode, session, lectureCode, lectureTimes);
     updatedLectures.push(lectureSession);
@@ -58,7 +63,13 @@ class Grid extends React.Component {
 
   removeSelectedLecture(courseCode, lectureSession) {
     let updatedLectures = this.state.selectedLectures;
-    const index = updatedLectures.map(lecture => lecture.course).indexOf(courseCode);
+    let index = updatedLectures.map(lecture => lecture.course).indexOf(courseCode);
+    while (index != -1) {
+      if (this.state.selectedLectures[index].session === lectureSession.session) {
+        updatedLectures.splice(index, 1);
+      }
+      index = this.state.selectedLectures.map(lecture => lecture.course).indexOf(courseCode, index + 1);
+    }
     updatedLectures.splice(index, 1);
     this.setState({selectedLectures: updatedLectures})
   }
@@ -85,7 +96,6 @@ class Grid extends React.Component {
         lectures[day].push(this.createNewLecture(courseCode, session, day, startEndTimes));
       }
     }
-
     let courseObject = {};
     courseObject.course = courseCode;
     courseObject.lectureCode = lectureCode;

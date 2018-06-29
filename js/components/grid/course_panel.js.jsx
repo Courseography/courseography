@@ -103,6 +103,7 @@ class Course extends React.Component {
         parsedLectures.push(lecture);
       }
     }
+    parsedLectures.sort(function (lec1, lec2) {return lec1.lectureCode > lec2.lectureCode});
     return parsedLectures;
   }
 
@@ -116,7 +117,7 @@ class Course extends React.Component {
 
   render() {
     return (
-      <li key={this.props.courseCode} id={this.props.courseCode + "-li"} >
+      <li key={this.props.courseCode} id={this.props.courseCode + "-li"} className={"ui-accordion ui-widget ui-helper-reset"}>
         <h3>
           <div className="icon-div">
               <img src="static/res/ico/delete.png" className="close-icon" onClick={this.removeCourse}/>
@@ -180,11 +181,16 @@ class LectureSection extends React.Component {
   // Check whether the course is already in the selectCourses list.
   // Remove the course if it is, or add the course if it is not.
   selectLecture() {
-    const index = this.props.selectedLectures.map(lecture => lecture.course).indexOf(this.props.lecture.courseName);
+    let index = this.props.selectedLectures.map(lecture => lecture.course).indexOf(this.props.lecture.courseName);
     const selectedLecturesCodes = this.props.selectedLectures.map(lecture => lecture.lectureCode);
-    (index != -1 && selectedLecturesCodes[index] === this.props.lecture.lectureCode && this.props.section === this.props.selectedLectures[index].session) ?
-                        this.props.removeSelectedLecture(this.props.lecture.courseName, this.props.lecture) :
-                        this.props.addSelectedLecture(this.props.lecture.courseName, this.props.section,
+
+    while (index != -1 && (selectedLecturesCodes[index] !== this.props.lecture.lectureCode ||
+          this.props.section !== this.props.selectedLectures[index].session)) {
+      index = this.props.selectedLectures.map(lecture => lecture.course).indexOf(this.props.lecture.courseName, index + 1);
+    }
+    // If index != -1, then the while loop stopped because the lectureCode and section both matched
+    (index != -1) ? this.props.removeSelectedLecture(this.props.lecture.courseName, this.props.lecture) :
+                    this.props.addSelectedLecture(this.props.lecture.courseName, this.props.section,
                                                       this.props.lecture.lectureCode, this.props.lecture.times);
   }
 
