@@ -20,7 +20,6 @@ class Grid extends React.Component {
   }
 
   // Method passed to child component SearchPanel to add a course to selectedCourses.
-  // Move into child didMount
   addSelectedCourse(courseCode) {
     let updatedCourses = this.state.selectedCourses;
     updatedCourses.push(courseCode);
@@ -45,10 +44,11 @@ class Grid extends React.Component {
     this.setState({selectedLectures: []});
   }
 
+  // Method passed to child component CoursePanel to add a lecture to selectedLectures
   addSelectedLecture(courseCode, session, lectureCode, lectureTimes) {
     let updatedLectures = this.state.selectedLectures;
     // The maximum number of courses in the lecture list with the same code is 3, one for each session (F, S, Y)
-    let index = this.state.selectedLectures.map(lecture => lecture.course).indexOf(courseCode);
+    let index = updatedLectures.map(lecture => lecture.course).indexOf(courseCode);
     while (index != -1) {
       if (this.state.selectedLectures[index].session === session) {
         updatedLectures.splice(index, 1);
@@ -61,20 +61,20 @@ class Grid extends React.Component {
     console.log(this.state.selectedLectures)
   }
 
-  removeSelectedLecture(courseCode, lectureSession) {
+  // Method passed to child component CoursePanel to remove a lecture from selectedLectures
+  removeSelectedLecture(courseCode, session) {
     let updatedLectures = this.state.selectedLectures;
     let index = updatedLectures.map(lecture => lecture.course).indexOf(courseCode);
     while (index != -1) {
-      if (this.state.selectedLectures[index].session === lectureSession.session) {
+      if (this.state.selectedLectures[index].session === session) {
         updatedLectures.splice(index, 1);
       }
       index = this.state.selectedLectures.map(lecture => lecture.course).indexOf(courseCode, index + 1);
     }
-    updatedLectures.splice(index, 1);
     this.setState({selectedLectures: updatedLectures})
   }
 
-    /**
+  /**
    * Constructor for a 'Course' object
    * @param {string} courseCode : Name of course
    * @param {string} session : Session of course

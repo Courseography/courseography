@@ -41,16 +41,13 @@ class Course extends React.Component {
     .then(data => {
         let course = {courseCode: "", F: [], S:[], Y:[]}
         course.courseCode = data.name;
-        let fallLectures = this.parseLectures(data.fallSession.lectures);
-        course.F = fallLectures.concat(this.parseLectures(data.fallSession.tutorials));
-
-        let springLectures = this.parseLectures(data.springSession.lectures);
-        course.S = springLectures.concat(this.parseLectures(data.springSession.tutorials));
-
-        let yearLectures = this.parseLectures(data.yearSession.lectures);
-        course.Y = yearLectures.concat(this.parseLectures(data.yearSession.tutorials));
+        course.F = course.F.concat(this.parseLectures(data.fallSession.lectures),
+                                    this.parseLectures(data.fallSession.tutorials));
+        course.S = course.S.concat(this.parseLectures(data.springSession.lectures),
+                                    this.parseLectures(data.springSession.tutorials));
+        course.Y = course.Y.concat(this.parseLectures(data.yearSession.lectures),
+                                    this.parseLectures(data.yearSession.tutorials));
         this.setState({courseInfo: course});
-        console.log(this.state.courseInfo)
     });
   }
 
@@ -130,19 +127,19 @@ class Course extends React.Component {
           <div className="sections ui-accordion-content"
                 id={"ui-accordion-" + this.props.courseCode + "-li-panel-0"}>
             <SectionList courseCode={this.props.courseCode}
-                          section="Y"
+                          session="Y"
                           lectures={this.state.courseInfo.Y}
                           addSelectedLecture={this.props.addSelectedLecture}
                           selectedLectures={this.props.selectedLectures}
                           removeSelectedLecture={this.props.removeSelectedLecture}/>
             <SectionList courseCode={this.props.courseCode}
-                          section="F"
+                          session="F"
                           lectures={this.state.courseInfo.F}
                           addSelectedLecture={this.props.addSelectedLecture}
                           selectedLectures={this.props.selectedLectures}
                           removeSelectedLecture={this.props.removeSelectedLecture}/>
             <SectionList courseCode={this.props.courseCode}
-                          section="S"
+                          session="S"
                           lectures={this.state.courseInfo.S}
                           addSelectedLecture={this.props.addSelectedLecture}
                           selectedLectures={this.props.selectedLectures}
@@ -158,14 +155,14 @@ class SectionList extends React.Component {
   render() {
     const lectureSections = this.props.lectures.map(
       lecture => <LectureSection key={this.props.courseCode + lecture.lectureCode + this.props.section}
-                                  section={this.props.section}
+                                  session={this.props.session}
                                   courseCode={this.props.courseCode}
                                   lecture={lecture}
                                   addSelectedLecture={this.props.addSelectedLecture}
                                   selectedLectures={this.props.selectedLectures}
                                   removeSelectedLecture={this.props.removeSelectedLecture}/>)
     return(
-      <ul className={"sectionList-" + this.props.section} id="lecture-list">
+      <ul className={"sectionList-" + this.props.session} id="lecture-list">
         {lectureSections}
       </ul>
     )
@@ -182,21 +179,20 @@ class LectureSection extends React.Component {
   // Remove the course if it is, or add the course if it is not.
   selectLecture() {
     let index = this.props.selectedLectures.map(lecture => lecture.course).indexOf(this.props.lecture.courseName);
-    const selectedLecturesCodes = this.props.selectedLectures.map(lecture => lecture.lectureCode);
 
-    while (index != -1 && (selectedLecturesCodes[index] !== this.props.lecture.lectureCode ||
-          this.props.section !== this.props.selectedLectures[index].session)) {
+    while (index != -1 && (this.props.selectedLectures[index].lectureCode !== this.props.lecture.lectureCode ||
+          this.props.session !== this.props.selectedLectures[index].session)) {
       index = this.props.selectedLectures.map(lecture => lecture.course).indexOf(this.props.lecture.courseName, index + 1);
     }
-    // If index != -1, then the while loop stopped because the lectureCode and section both matched
-    (index != -1) ? this.props.removeSelectedLecture(this.props.lecture.courseName, this.props.lecture) :
-                    this.props.addSelectedLecture(this.props.lecture.courseName, this.props.section,
+    // If index != -1, then the while loop stopped because the lectureCode and session both matched
+    (index != -1) ? this.props.removeSelectedLecture(this.props.lecture.courseName, this.props.session) :
+                    this.props.addSelectedLecture(this.props.lecture.courseName, this.props.session,
                                                       this.props.lecture.lectureCode, this.props.lecture.times);
   }
 
   render() {
     return(
-      <li id={this.props.courseCode + "-" + this.props.lecture.lectureCode + "-" + this.props.section}
+      <li id={this.props.courseCode + "-" + this.props.lecture.lectureCode + "-" + this.props.session}
           onClick={this.selectLecture}>
         {this.props.lecture.lectureCode}
       </li>
