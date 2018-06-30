@@ -6,7 +6,7 @@ export class Row extends React.Component {
     // From a list of Course objects, create a list of Lecture objects
     let courses = this.props.courses;
     let lectures = courses.map(
-      c => Array.prototype.concat.apply([], Object.values(c.lectures))
+      c => Array.prototype.concat.apply([c.course], Object.values(c.lectures))
     );
     lectures = Array.prototype.concat.apply([], lectures);
     console.log(lectures);
@@ -335,7 +335,17 @@ function initializeSessions(lectures) {
  */
 function setWidths(session) {
   let days = ['M', 'T', 'W', 'R', 'F'];
-
+  // Reset all widths back to 1 and inConflict to false
+  for (let i = 8; i < 22; i++) {
+    let timeRow = session[i];
+    days.forEach(function(day) {
+      let timeDaySlot = timeRow[day];
+      timeDaySlot.forEach(lecture => {
+        lecture.width = 1;
+        lecture.inConflict = false;
+      });
+    });
+  }
   // Iterate through every time-slot in the session
   for (let i = 8; i < 22; i++) {
     let timeRow = session[i];
