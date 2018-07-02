@@ -19,11 +19,45 @@ class Grid extends React.Component {
     };
   }
 
+  // get the previously selected courses and lecture sections from local storage
+  componentDidMount() {
+    let selectedCoursesLocalStorage = localStorage.getItem('selectedCourses');
+    let selectedLecturesLocalStorage = localStorage.getItem('selectedLectures');
+
+    if (!selectedLecturesLocalStorage) {
+      selectedLecturesLocalStorage = [];
+    } else {
+      try {
+        this.setState({selectedLectures: JSON.parse(selectedLecturesLocalStorage)});
+      }
+      catch (e) {
+        console.log(e)
+      }
+    }
+
+    if (!selectedCoursesLocalStorage) {
+      selectedCoursesLocalStorage = [];
+    } else {
+      selectedCoursesLocalStorage = selectedCoursesLocalStorage.split('_');
+      selectedCoursesLocalStorage.forEach((courseCode) => {
+        try {
+          this.addSelectedCourse(courseCode);
+        }
+        catch (e) {
+          console.log('Removed bad course from local storage' + courseCode);
+          console.log(e);
+        }
+      });
+    }
+  }
+
   // Method passed to child component SearchPanel to add a course to selectedCourses.
   addSelectedCourse(courseCode) {
     let updatedCourses = this.state.selectedCourses;
     updatedCourses.push(courseCode);
     this.setState({selectedCourses: updatedCourses});
+
+    localStorage.setItem("selectedCourses", updatedCourses.join('_'));
   }
 
   // Method passed to child components, SearchPanel and CoursePanel to remove a course from selectedCourses.
@@ -36,12 +70,19 @@ class Grid extends React.Component {
     let updatedLectures = this.state.selectedLectures.filter(lecture =>
                           !lecture.course.includes(courseCode.substring(0, 6)));
     this.setState({selectedLectures: updatedLectures});
+
+    localStorage.setItem("selectedCourses", updatedCourses.join('_'));
+    localStorage.setItem("selectedLectures", JSON.stringify(updatedLectures));
+    console.log(JSON.stringify(updatedLectures));
   }
 
   // Method passed to child component CoursePanel to clear all the courses in selectedCourses.
   clearSelectedCourses() {
     this.setState({selectedCourses: []});
     this.setState({selectedLectures: []});
+
+    localStorage.setItem("selectedCourses", "");
+    localStorage.setItem("selectedLectures", "");
   }
 
   // Method passed to child component CoursePanel to add a lecture to selectedLectures
@@ -59,6 +100,8 @@ class Grid extends React.Component {
     updatedLectures.push(lectureSession);
     this.setState({selectedLectures: updatedLectures});
     console.log(this.state.selectedLectures)
+
+    localStorage.setItem("selectedLectures", JSON.stringify(updatedLectures));
   }
 
   // Method passed to child component CoursePanel to remove a lecture from selectedLectures
@@ -72,6 +115,8 @@ class Grid extends React.Component {
       index = this.state.selectedLectures.map(lecture => lecture.course).indexOf(courseCode, index + 1);
     }
     this.setState({selectedLectures: updatedLectures})
+
+    localStorage.setItem("selectedLectures", JSON.stringify(updatedLectures));
   }
 
   /**
