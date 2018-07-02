@@ -115,16 +115,17 @@ class Course extends React.Component {
   render() {
     return (
       <li key={this.props.courseCode} id={this.props.courseCode + "-li"} className={"ui-accordion ui-widget ui-helper-reset"}>
-        <h3>
+        <div className="ui-accordion-header ui-helper-reset ui-state-default ui-accordion-icons ui-accordion-header-active ui-state-active ui-corner-top"
+              id={"ui-accordion-" + this.props.courseCode + "-li-header-0"}>
           <div className="icon-div">
               <img src="static/res/ico/delete.png" className="close-icon" onClick={this.removeCourse}/>
           </div>
-          <div onClick={this.toggleSelect}>
+          <h3 onClick={this.toggleSelect}>
             {this.props.courseCode}
-          </div>
-        </h3>
+          </h3>
+        </div>
         { this.state.selected &&
-          <div className="sections ui-accordion-content"
+          <div className="sections ui-accordion-content ui-helper-reset ui-widget-content ui-corner-bottom ui-accordion-content-active"
                 id={"ui-accordion-" + this.props.courseCode + "-li-panel-0"}>
             <SectionList courseCode={this.props.courseCode}
                           session="Y"
