@@ -164,7 +164,7 @@ class TimetableRow extends React.Component {
       let previousLectures = this.props.previousLectures;
       let headColSpans = this.props.headColSpans;
 
-      days.forEach(function(day) {
+      days.forEach(day => {
         // Initialize attributes of the cell in this day-and-time slot
         let alreadyGenerated = false;
         let lectureCode = "";
@@ -186,11 +186,11 @@ class TimetableRow extends React.Component {
         let currentLectureList = currentLectures[day];
         let previousLectureList = previousLectures[day];
 
-        if (currentLectureList.length != 0) {
+        if (currentLectureList.length !== 0) {
           // Render every lecture at this day-time slot (there can be more than one in a conflict case)
-          currentLectureList.forEach(function(lecture) {
+          currentLectureList.forEach(lecture => {
             // Check if this lecture has been previously rendered
-            previousLectureList.forEach(function(lecturePrev) {
+            previousLectureList.forEach(lecturePrev => {
               if (lecturePrev.courseCode === lecture.courseCode){
                 alreadyGenerated = true;
               }
@@ -334,33 +334,27 @@ function initializeSessions(lectures) {
  */
 function setWidths(session) {
   let days = ['M', 'T', 'W', 'R', 'F'];
-  // Reset all widths back to 1 and inConflict to false
   for (let i = 8; i < 22; i++) {
     let timeRow = session[i];
-    days.forEach(function(day) {
+    // Reset all widths back to 1 and inConflict to false if this time slot is the startTime of
+    // the lecture
+    days.forEach(day => {
       let timeDaySlot = timeRow[day];
       timeDaySlot.forEach(lecture => {
-        lecture.width = 1;
-        lecture.inConflict = false;
-      });
-    });
-  }
-  // Iterate through every time-slot in the session
-  for (let i = 8; i < 22; i++) {
-    let timeRow = session[i];
-    days.forEach(function(day) {
-      let timeDaySlot = timeRow[day];
-      // If in this time-and-day slot there is a lecture conflict
-      if (lectureConflict(timeDaySlot)) {
-        // Readjust (if needed) the 'width's of the lectures at this slot
-        timeDaySlot.forEach(lecture => {
+        if (lecture.startTime === i) {
+          lecture.width = 1;
+          lecture.inConflict = false;
+        }
+        // If in this time-and-day slot there is a lecture conflict
+        if (lectureConflict(timeDaySlot)) {
+          // Readjust (if needed) the 'width's of the lectures at this slot
           if (lecture.width < timeDaySlot.length) {
             lecture.width = timeDaySlot.length;
           }
           // Also specify that this lecture is in conflict
           lecture.inConflict = true;
-        });
-      }
+        }
+      });
     });
   }
 }
