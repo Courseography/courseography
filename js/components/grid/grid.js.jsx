@@ -31,7 +31,7 @@ class Grid extends React.Component {
         this.setState({selectedLectures: JSON.parse(selectedLecturesLocalStorage)});
       }
       catch (e) {
-        console.log(e)
+        console.log(e);
       }
     }
 
@@ -39,30 +39,39 @@ class Grid extends React.Component {
       selectedCoursesLocalStorage = [];
     } else {
       selectedCoursesLocalStorage = selectedCoursesLocalStorage.split('_');
+      let selectedCourses = [];
       selectedCoursesLocalStorage.forEach((courseCode) => {
-        try {
-          this.addSelectedCourse(courseCode);
-        }
-        catch (e) {
-          console.log('Removed bad course from local storage' + courseCode);
-          console.log(e);
-        }
+        // Not using this.addSelectedCourse(courseCode) because each time addSelectedCourse is
+        // called, this.setState is used.
+        // setState is asynchronous and calling it several times in a row can lead to bugs when
+        // new state depends on previous state
+        selectedCourses.push(courseCode);
+        this.setState({selectedCourses: selectedCourses});
       });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.selectedCourses !== prevState.selectedCourses) {
+      localStorage.setItem("selectedCourses", this.state.selectedCourses.join('_'));
+    }
+    if (this.state.selectedLectures !== prevState.selectedLectures) {
+      localStorage.setItem("selectedLectures", JSON.stringify(this.state.selectedLectures));
     }
   }
 
   // Method passed to child component SearchPanel to add a course to selectedCourses.
   addSelectedCourse(courseCode) {
-    let updatedCourses = this.state.selectedCourses;
+    // updatedCourses is a copy of this.state.selectedCourses so that prevState can be distinguished from
+    // the current state in lifecycle methods like componentDidUpdate
+    let updatedCourses = this.state.selectedCourses.slice();
     updatedCourses.push(courseCode);
     this.setState({selectedCourses: updatedCourses});
-
-    localStorage.setItem("selectedCourses", updatedCourses.join('_'));
   }
 
   // Method passed to child components, SearchPanel and CoursePanel to remove a course from selectedCourses.
   removeSelectedCourse(courseCode) {
-    let updatedCourses = this.state.selectedCourses;
+    let updatedCourses = this.state.selectedCourses.slice();
     const index = updatedCourses.indexOf(courseCode);
     updatedCourses.splice(index, 1);
     this.setState({selectedCourses: updatedCourses});
@@ -70,53 +79,33 @@ class Grid extends React.Component {
     let updatedLectures = this.state.selectedLectures.filter(lecture =>
                           !lecture.course.includes(courseCode.substring(0, 6)));
     this.setState({selectedLectures: updatedLectures});
-
-    localStorage.setItem("selectedCourses", updatedCourses.join('_'));
-    localStorage.setItem("selectedLectures", JSON.stringify(updatedLectures));
-    console.log(JSON.stringify(updatedLectures));
   }
 
   // Method passed to child component CoursePanel to clear all the courses in selectedCourses.
   clearSelectedCourses() {
-    this.setState({selectedCourses: []});
-    this.setState({selectedLectures: []});
-
-    localStorage.setItem("selectedCourses", "");
-    localStorage.setItem("selectedLectures", "");
+    this.setState({
+      selectedCourses: [],
+      selectedLectures: []
+    });
   }
 
   // Method passed to child component CoursePanel to add a lecture to selectedLectures
   addSelectedLecture(courseCode, session, lectureCode, lectureTimes) {
-    let updatedLectures = this.state.selectedLectures;
     // The maximum number of courses in the lecture list with the same code is 3, one for each session (F, S, Y)
-    let index = updatedLectures.map(lecture => lecture.course).indexOf(courseCode);
-    while (index != -1) {
-      if (this.state.selectedLectures[index].session === session) {
-        updatedLectures.splice(index, 1);
-      }
-      index = this.state.selectedLectures.map(lecture => lecture.course).indexOf(courseCode, index + 1);
-    }
+    let updatedLectures = this.state.selectedLectures.filter((lecture) => {
+      return lecture.course !== courseCode || lecture.session !== session
+    });
     let lectureSession = this.createNewCourse(courseCode, session, lectureCode, lectureTimes);
     updatedLectures.push(lectureSession);
     this.setState({selectedLectures: updatedLectures});
-    console.log(this.state.selectedLectures)
-
-    localStorage.setItem("selectedLectures", JSON.stringify(updatedLectures));
   }
 
   // Method passed to child component CoursePanel to remove a lecture from selectedLectures
   removeSelectedLecture(courseCode, session) {
-    let updatedLectures = this.state.selectedLectures;
-    let index = updatedLectures.map(lecture => lecture.course).indexOf(courseCode);
-    while (index != -1) {
-      if (this.state.selectedLectures[index].session === session) {
-        updatedLectures.splice(index, 1);
-      }
-      index = this.state.selectedLectures.map(lecture => lecture.course).indexOf(courseCode, index + 1);
-    }
+    let updatedLectures = this.state.selectedLectures.filter((lecture) => {
+      return lecture.course !== courseCode || lecture.session !== session
+    });
     this.setState({selectedLectures: updatedLectures})
-
-    localStorage.setItem("selectedLectures", JSON.stringify(updatedLectures));
   }
 
   /**
@@ -136,7 +125,7 @@ class Grid extends React.Component {
       days.push(day);
       lectures[day] = [];
       // For the case where this lecture starts and ends more than once in one day
-      for(let i = 0; i< times[day].length; i+=2){
+      for(let i = 0; i < times[day].length; i+=2){
         let startEndTimes = [times[day][i], times[day][i+1]];
         lectures[day].push(this.createNewLecture(courseCode, session, day, startEndTimes));
       }
