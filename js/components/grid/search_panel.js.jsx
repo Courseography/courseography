@@ -117,8 +117,12 @@ class CourseEntry extends React.Component {
   // Check whether the course is already in the selectCourses list.
   // Remove the course if it is, or add the course if it is not.
   select() {
-    this.props.selectedCourses.indexOf(this.props.course) != -1 ? this.props.removeCourse(this.props.course) :
-                        this.props.selectCourse(this.props.course);
+    if (this.props.selectedCourses.indexOf(this.props.course) != -1) {
+      this.props.removeCourse(this.props.course);
+    }
+    else {
+      this.props.selectCourse(this.props.course);
+    }
   }
 
   render() {
