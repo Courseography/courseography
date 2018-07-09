@@ -6,6 +6,9 @@
   "license": "GPL-3.0",
   "dependencies": {
     "path": "^0.12.7",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
+    "react-modal": "^3.5.1",
     "webpack": "^2.4.1",
     "webpack-dev-server": "^2.4.2"
   },
