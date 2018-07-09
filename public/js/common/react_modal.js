@@ -1,4 +1,4 @@
-import * as ReactModal from 'vendor/react-modal';
+import * as ReactModal from '../vendor/react-modal';
 
 var ModalContent = React.createClass({
     render: function() {

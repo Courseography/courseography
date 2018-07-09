@@ -1,3 +1,5 @@
+import {Modal} from '../../../public/js/common/react_modal.js';
+
 export class CoursePanel extends React.Component {
   render() {
     const courses = this.props.selectedCourses.map(
@@ -126,6 +128,7 @@ class Course extends React.Component {
               id={"ui-accordion-" + this.props.courseCode + "-li-header-0"}>
           <div className="icon-div">
               <img src="static/res/ico/delete.png" className="close-icon" onClick={this.removeCourse}/>
+              <img src="static/res/ico/about.png" className="close-icon"/>
           </div>
           <h3 onClick={this.toggleSelect}>
             {this.props.courseCode}
