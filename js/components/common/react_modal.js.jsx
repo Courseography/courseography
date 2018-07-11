@@ -12,6 +12,7 @@ class ModalContent extends React.Component {
   }
 }
 
+ReactModal.setAppElement('#grid-body')
 
 class Modal extends React.Component {
   constructor(props) {
@@ -38,21 +39,20 @@ class Modal extends React.Component {
         courseTitle: getCourseTitle(newCourse, formatted)
       });
 
-      $.get({
-        url: 'course',
-        data: { name: formatted[0] },
-        dataType: 'json',
-        success: (data) => {
-          //This is getting the session times
-          let sessions = data.fallSession.lectures
-            .concat(data.springSession.lectures)
-            .concat(data.yearSession.lectures)
-          //Tutorials don't have a timeStr to print, so I've currently omitted them
-          this.setState({ course: data, sessions: sessions });
-        },
-        error: (xhr, status, err) => {
-          console.error('course-info', status, err.toString());
-        }
+      fetch(
+        'course?name=' + formatted[0], // url to which the AJAX request is sent to
+      )
+      .then(response => response.json()) //datatype
+      .then(data => {
+        //This is getting the session times
+        let sessions = data.fallSession.lectures
+          .concat(data.springSession.lectures)
+          .concat(data.yearSession.lectures)
+        //Tutorials don't have a timeStr to print, so I've currently omitted them
+        this.setState({ course: data, sessions: sessions });
+      })
+      .catch((xhr, status, err) => {
+        console.error('course-info', status, err.toString());
       });
     }
   }
@@ -97,7 +97,7 @@ class Description extends React.Component {
         {this.props.sessions.map(function (lecture, i) {
           return <p key={i}>{lecture.code + lecture.session + '-' + lecture.section}</p>;
         })}
-        <Video urls={this.props.course.videoUrls} />
+        {/*<Video urls={this.props.course.videoUrls} />*/}
       </div>
     );
   }

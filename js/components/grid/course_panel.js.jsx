@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal } from '../common/react_modal';
+import { Modal } from '../common/react_modal.js.jsx';
 
 export class CoursePanel extends React.Component {
   render() {
