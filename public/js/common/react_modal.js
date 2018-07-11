@@ -1,14 +1,13 @@
-import ReactModal from 'react-modal';
-
+import * as ReactModal from 'vendor/react-modal';
 
 var ModalContent = React.createClass({
-  render: function() {
-    return (
-      <div>
-        <Description course={this.props.course} />
-      </div>
-    );
-  }
+    render: function() {
+        return (
+            <div>
+                <Description course={this.props.course} />
+            </div>
+        );
+    }
 });
 
 export var Modal = React.createClass({
@@ -55,22 +54,21 @@ export var Modal = React.createClass({
     closeModal : function() {
         this.setState({modalIsOpen: false});
     },
-  render: function () {
-    return(
-      <ReactModal className='modal-class'
+    render: function () {
+        return (
+            <ReactModal className='modal-class'
                 overlayClassName='overlay'
                 isOpen={this.state.modalIsOpen}
                 onRequestClose={this.closeModal}>
-        <div className='modal-header'>
-          {this.state.courseTitle}
-        </div>
-        <div className='modal-body'>
-          <Description
-            course = {this.state.course}
-            sessions = {this.state.sessions}/>
-        </div>
-      </ReactModal>
-    );
+                <div className='modal-header'>
+                    {this.state.courseTitle}
+                </div>
+                <div className='modal-body'>
+                    <Description
+                    course = {this.state.course}
+                    sessions = {this.state.sessions} /></div>
+            </ReactModal>
+        );
    }
 
 
