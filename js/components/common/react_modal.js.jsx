@@ -12,7 +12,6 @@ class ModalContent extends React.Component {
   }
 }
 
-ReactModal.setAppElement('#grid-body')
 
 class Modal extends React.Component {
   constructor(props) {
@@ -67,6 +66,7 @@ class Modal extends React.Component {
         overlayClassName='overlay'
         isOpen={this.state.modalIsOpen}
         onRequestClose={this.closeModal}
+        ariaHideApp={false}
       >
         <div className='modal-header'>
           {this.state.courseTitle}
