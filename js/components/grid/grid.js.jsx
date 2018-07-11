@@ -1,7 +1,10 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+
 import { CoursePanel } from './course_panel.js.jsx';
 import { SearchPanel } from './search_panel.js.jsx';
 import { Row } from './calendar.js.jsx';
-import { Modal } from '../common/react_modal.js';
+import { Modal } from '../common/react_modal.js.jsx';
 
 
 class Grid extends React.Component {
@@ -176,6 +179,7 @@ class Grid extends React.Component {
           removeSelectedLecture={this.removeSelectedLecture}
         />
         <Row courses={this.state.selectedLectures}/>
+        <Modal />
         <SearchPanel
           selectedCourses={this.state.selectedCourses}
           selectCourse={this.addSelectedCourse}

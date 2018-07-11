@@ -1,6 +1,9 @@
 /* Holds the containers of the Fall and Spring timetables,
  * and performs some pre-processing steps with a list of 'Lecture' objects
  */
+import React from 'react';
+
+
 export class Row extends React.Component {
   render() {
     // From a list of Course objects, create a list of Lecture objects
@@ -218,7 +221,7 @@ class TimetableRow extends React.Component {
                   colSpan={colSpan}
                   className={className}
                   type={type}
-                  clicked={clicked}
+                  clicked={clicked.toString()}
                   data-currentlecturelist={currentLectureList}
                 >
                   {lectureCode}

@@ -1,3 +1,6 @@
+import React from 'react';
+
+
 export class CoursePanel extends React.Component {
   render() {
     const courses = this.props.selectedCourses.map(

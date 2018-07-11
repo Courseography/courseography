@@ -1,7 +1,10 @@
 /*
  * Creates a search box and stores the current user input that is in the search box.
  */
-export class SearchPanel extends React.Component {
+import React from 'react';
+
+
+ export class SearchPanel extends React.Component {
   constructor(props) {
     super(props);
     this.state = { value: '' };
@@ -20,7 +23,7 @@ export class SearchPanel extends React.Component {
       // This div is all for the textbox input
       <div id="search-layout" className="col-md-2 col-xs-6">
         <div id="filter-container">
-          <form onsubmit="return false;">
+          <form onSubmit={() => false}>
             <input
               id="course-filter"
               className="form-control"
@@ -81,7 +84,7 @@ class CourseList extends React.Component {
     let searchList = [];
     // If there are courses to be filtered
     if (this.props.courseFilter !== '') {
-      // From the "courses" list, filter out elements based off of the prop "courseFilter" passed to 
+      // From the "courses" list, filter out elements based off of the prop "courseFilter" passed to
       // CourseList by SearchPanel
       searchList = this.state.courses.filter(
         course => course.indexOf(this.props.courseFilter) > -1
