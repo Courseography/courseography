@@ -1,4 +1,3 @@
-// import * as ReactModal from '../vendor/react-modal';
 import React from 'react';
 import ReactModal from 'react-modal';
 

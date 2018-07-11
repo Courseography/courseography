@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { Modal } from '../common/react_modal';
 
 export class CoursePanel extends React.Component {
   render() {
@@ -140,8 +140,8 @@ class Course extends React.Component {
               id={"ui-accordion-" + this.props.courseCode + "-li-header-0"}>
           <Modal ref={this.setModalRef}/>
           <div className="icon-div">
-              <img src="static/res/ico/delete.png" className="close-icon" onClick={this.removeCourse}/>
-              <img src="static/res/ico/about.png" className="close-icon" onClick={this.selectInfo}/>
+            <img src="static/res/ico/delete.png" className="close-icon" onClick={this.removeCourse}/>
+            <img src="static/res/ico/about.png" className="close-icon" onClick={this.selectInfo}/>
           </div>
           <h3 onClick={this.toggleSelect}>
             {this.props.courseCode}
