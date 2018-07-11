@@ -1,13 +1,128 @@
-import * as ReactModal from '../vendor/react-modal';
+import ReactModal from 'react-modal';
+// import React, {Component} from 'react';
+
+// class ModalContent extends Component {
+//     render() {
+//         return (
+//             <div>
+//                 <Description course={this.props.course} />
+//             </div>
+//         );
+//     }
+// }
+
+// export default class Modal extends Component {
+//     constructor(props) {
+//         super(props);
+//         this.openModal = this.openModal.bind(this);
+//         this.closeModal = this.closeModal.bind(this);
+//         this.state = {
+//             courseId: '',
+//             course: [],
+//             sessions: [],
+//             modalIsOpen: false,
+//             courseTitle : '',
+//         };
+//     }
+
+//     openModal(newCourse) {
+//         if (newCourse == this.state.courseId) {
+//             this.setState({modalIsOpen: true});
+//         } else {
+//             var formatted = formatCourseName(newCourse);
+//             var that = this;
+//             this.setState({
+//                 modalIsOpen: true,
+//                 courseId: newCourse,
+//                 courseTitle: getCourseTitle(newCourse, formatted)});
+
+//             $.ajax({
+//                 url: 'course',
+//                 data: {name: formatted[0]},
+//                 dataType: 'json',
+//                 success: function (data) {
+//                         //This is getting the session times
+//                         var sessions = data.fallSession.lectures
+//                                                        .concat(data.springSession.lectures)
+//                                                        .concat(data.yearSession.lectures)
+//                         //Tutorials don't have a timeStr to print, so I've currently omitted them
+//                         that.setState({course: data, sessions: sessions});
+//                 },
+//                 error: function (xhr, status, err) {
+//                     console.error('course-info', status, err.toString());
+//                 }
+//             });
+//         }
+//     }
+
+//     closeModal() {
+//         this.setState({modalIsOpen: false});
+//     }
+
+//     render() {
+//         return (
+//             <ReactModal className='modal-class'
+//                 overlayClassName='overlay'
+//                 isOpen={this.state.modalIsOpen}
+//                 onRequestClose={this.closeModal}>
+//                 <div className='modal-header'>
+//                     {this.state.courseTitle}
+//                 </div>
+//                 <div className='modal-body'>
+//                     <Description
+//                     course = {this.state.course}
+//                     sessions = {this.state.sessions} /></div>
+//             </ReactModal>
+//         );
+//    }
+// }
+
+// //Use React component from search.js
+// class Description extends Component{
+//     render() {
+//         //We want to use the Timetable component, but that component needs to be independent before using it here
+//         return (
+//             <div>
+//                 <p>{this.props.course.description}</p>
+//                 <p><strong>Prerequisite: </strong>{this.props.course.prereqString}</p>
+//                 <p><strong>Distribution Requirement Status: </strong>{this.props.course.distribution}</p>
+//                 <p><strong>Breadth Requirement: </strong>{this.props.course.breadth}</p>
+//                 <p><strong>Timetable: </strong></p>
+//                 {this.props.sessions.map(function(lecture, i) {
+//                     return <p key={i}>{lecture.code + lecture.session + '-' + lecture.section}</p>;
+//                 })}
+//                 <Video urls={this.props.course.videoUrls}/>
+//             </div>
+//         );
+//     }
+// }
+
+// class Video extends React.Component {
+//     render() {
+//         if (this.props.urls.length > 0) {
+//             return (
+//                 <div id='course-video-div'>
+//                     <video id='course-video' className='video-js vjs-default-skin' controls='' preload='auto'>
+//                         {this.props.urls.map(function(url) {
+//                             return <source src={url} type='video/mp4' key={url}/>
+//                         })}
+//                     </video>
+//                 </div>
+//             );
+//         } else {
+//             return <div></div>;
+//         }
+//     }
+// }
 
 var ModalContent = React.createClass({
-    render: function() {
-        return (
-            <div>
-                <Description course={this.props.course} />
-            </div>
-        );
-    }
+  render: function() {
+    return (
+      <div>
+        <Description course={this.props.course} />
+      </div>
+    );
+  }
 });
 
 export var Modal = React.createClass({
@@ -54,21 +169,22 @@ export var Modal = React.createClass({
     closeModal : function() {
         this.setState({modalIsOpen: false});
     },
-    render: function () {
-        return (
-            <ReactModal className='modal-class'
+  render: function () {
+    return(
+      <ReactModal className='modal-class'
                 overlayClassName='overlay'
                 isOpen={this.state.modalIsOpen}
                 onRequestClose={this.closeModal}>
-                <div className='modal-header'>
-                    {this.state.courseTitle}
-                </div>
-                <div className='modal-body'>
-                    <Description
-                    course = {this.state.course}
-                    sessions = {this.state.sessions} /></div>
-            </ReactModal>
-        );
+        <div className='modal-header'>
+          {this.state.courseTitle}
+        </div>
+        <div className='modal-body'>
+          <Description
+            course = {this.state.course}
+            sessions = {this.state.sessions}/>
+        </div>
+      </ReactModal>
+    );
    }
 
 

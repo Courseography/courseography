@@ -1,4 +1,3 @@
-import {Modal} from '../../../public/js/common/react_modal.js';
 import React from 'react';
 
 
@@ -31,6 +30,9 @@ class Course extends React.Component {
     this.toggleSelect = this.toggleSelect.bind(this);
     this.removeCourse = this.removeCourse.bind(this);
     this.parseLectures = this.parseLectures.bind(this);
+    this.selectInfo = this.selectInfo.bind(this);
+    this.modal = null;
+    this.setModalRef = this.setModalRef.bind(this);
     this.state = {
       selected: false,
       courseInfo: {}
@@ -123,14 +125,23 @@ class Course extends React.Component {
     this.props.removeCourse(this.props.courseCode);
   }
 
+  setModalRef(element) {
+    this.modal = element;
+  }
+
+  selectInfo() {
+    this.modal.openModal(this.state.courseInfo.courseCode.substring(0, 6));
+  }
+
   render() {
     return (
       <li key={this.props.courseCode} id={this.props.courseCode + "-li"} className={"ui-accordion ui-widget ui-helper-reset"}>
         <div className="ui-accordion-header ui-helper-reset ui-state-default ui-accordion-icons ui-accordion-header-active ui-state-active ui-corner-top"
               id={"ui-accordion-" + this.props.courseCode + "-li-header-0"}>
+          <Modal ref={this.setModalRef}/>
           <div className="icon-div">
               <img src="static/res/ico/delete.png" className="close-icon" onClick={this.removeCourse}/>
-              <img src="static/res/ico/about.png" className="close-icon"/>
+              <img src="static/res/ico/about.png" className="close-icon" onClick={this.selectInfo}/>
           </div>
           <h3 onClick={this.toggleSelect}>
             {this.props.courseCode}
