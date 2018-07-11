@@ -14,7 +14,7 @@ import Config (enableFb, enableCdn, enableAnalytics)
 -- | Scripts that are loaded on every page.
 globalScripts :: [T.Text]
 globalScripts =
-    concat [jQueryScripts, reactScripts] ++
+    concat [jQueryScripts] ++
     (if enableFb then facebookScripts else []) ++
     (if enableAnalytics then analyticsScripts else [])
 
@@ -48,7 +48,7 @@ analyticsScripts = [
 
 graphScripts :: H.Html
 graphScripts = do
-    mapM_ toScript
+    mapM_ toScript $ reactScripts ++
         ["/static/js/common/course_videos.js",
          "/static/js/common/modal.js",
          "/static/js/common/objects/course.js",
@@ -79,13 +79,11 @@ timetableScripts = do
          "/static/js/common/modal.js",
          "/static/js/common/course_description.js"
          ]
-    -- H.script ! A.src "/static/js/requirejs-config.js" $ ""
-    -- H.script ! H.dataAttribute "main" "/static/js/grid" ! A.src "/static/js/vendor/require.js" $ ""
     H.script ! A.src "/static/js/grid/app.js" $ ""
 
 drawScripts :: H.Html
 drawScripts =
-    mapM_ toScript
+    mapM_ toScript $ reactScripts ++
         ["/static/js/draw/variables.js",
          "/static/js/draw/path.js",
          "/static/js/draw/draw.js",
@@ -94,7 +92,7 @@ drawScripts =
 
 postScripts :: H.Html
 postScripts = do
-    mapM_ toScript [
+    mapM_ toScript $ reactScripts ++ [
         "/static/js/common/cookie_handler.js",
         "/static/js/graph/create_data.js",
         "/static/js/graph/create_data.js",
@@ -104,10 +102,11 @@ postScripts = do
         "/static/js/common/utilities/util.js",
         "/static/js/common/modal.js",
         "/static/js/vendor/bootstrap.min.3.1.1.js",
-                                  "/static/js/common/course_videos.js"]
+        "/static/js/common/course_videos.js"]
     H.script ! A.src "/static/js/requirejs-config.js" $ ""
     H.script ! H.dataAttribute "main" "/static/js/post" ! A.src "/static/js/vendor/require.js" $ ""
 
 searchScripts :: H.Html
-searchScripts =
+searchScripts = do
+    mapM_ toScript reactScripts
     H.script ! A.src "/static/js/search/timetable.js" $ ""

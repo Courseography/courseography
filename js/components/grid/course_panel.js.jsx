@@ -1,4 +1,6 @@
 import {Modal} from '../../../public/js/common/react_modal.js';
+import React from 'react';
+
 
 export class CoursePanel extends React.Component {
   render() {
