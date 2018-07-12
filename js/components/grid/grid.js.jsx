@@ -9,6 +9,11 @@ import { Row } from './calendar.js.jsx';
 class Grid extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      selectedLectures: [],
+      selectedCourses: []
+    };
+
     this.addSelectedCourse = this.addSelectedCourse.bind(this);
     this.removeSelectedCourse = this.removeSelectedCourse.bind(this);
     this.clearSelectedCourses = this.clearSelectedCourses.bind(this);
@@ -17,10 +22,6 @@ class Grid extends React.Component {
     this.removeSelectedLecture = this.removeSelectedLecture.bind(this);
     this.createNewCourse = this.createNewCourse.bind(this);
     this.createNewLecture = this.createNewLecture.bind(this);
-    this.state = {
-      selectedLectures: [],
-      selectedCourses: []
-    };
   }
 
   // get the previously selected courses and lecture sections from local storage

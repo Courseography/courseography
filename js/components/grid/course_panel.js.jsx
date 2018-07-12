@@ -27,16 +27,15 @@ export class CoursePanel extends React.Component {
 class Course extends React.Component {
   constructor(props) {
     super(props);
-    this.toggleSelect = this.toggleSelect.bind(this);
-    this.removeCourse = this.removeCourse.bind(this);
-    this.parseLectures = this.parseLectures.bind(this);
-    this.selectInfo = this.selectInfo.bind(this);
     this.modal = null;
-    this.setModalRef = this.setModalRef.bind(this);
     this.state = {
       selected: false,
       courseInfo: {}
     }
+    this.toggleSelect = this.toggleSelect.bind(this);
+    this.removeCourse = this.removeCourse.bind(this);
+    this.parseLectures = this.parseLectures.bind(this);
+    this.displayInfo = this.displayInfo.bind(this);
   }
 
   componentDidMount() {
@@ -125,11 +124,7 @@ class Course extends React.Component {
     this.props.removeCourse(this.props.courseCode);
   }
 
-  setModalRef(element) {
-    this.modal = element;
-  }
-
-  selectInfo() {
+  displayInfo() {
     this.modal.openModal(this.state.courseInfo.courseCode.substring(0, 6));
   }
 
@@ -138,10 +133,10 @@ class Course extends React.Component {
       <li key={this.props.courseCode} id={this.props.courseCode + "-li"} className={"ui-accordion ui-widget ui-helper-reset"}>
         <div className="ui-accordion-header ui-helper-reset ui-state-default ui-accordion-icons ui-accordion-header-active ui-state-active ui-corner-top"
               id={"ui-accordion-" + this.props.courseCode + "-li-header-0"}>
-          <Modal ref={this.setModalRef}/>
+          <Modal ref={ r => this.modal = r}/>
           <div className="icon-div">
             <img src="static/res/ico/delete.png" className="close-icon" onClick={this.removeCourse}/>
-            <img src="static/res/ico/about.png" className="close-icon" onClick={this.selectInfo}/>
+            <img src="static/res/ico/about.png" className="close-icon" onClick={this.displayInfo}/>
           </div>
           <h3 onClick={this.toggleSelect}>
             {this.props.courseCode}
