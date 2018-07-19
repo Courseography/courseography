@@ -39,11 +39,8 @@ class Course extends React.Component {
   }
 
   componentDidMount() {
-    fetch(
-      'course?name=' + this.props.courseCode, // url to which the AJAX request is sent to
-    )
-    .then(response => response.json()) //datatype
-    .then(data => {
+    getCourse(this.props.courseCode)
+      .then(data => {
         let course = {
           courseCode: "",
           F: [],
@@ -52,20 +49,21 @@ class Course extends React.Component {
         };
         course.courseCode = data.name;
         course.F = course.F.concat(this.parseLectures(data.fallSession.lectures),
-                                    this.parseLectures(data.fallSession.tutorials));
+                                    this.parseLectures(data.fallSession.tutorials),
+                                    this.parseLectures(data.fallSession.practicals));
         course.S = course.S.concat(this.parseLectures(data.springSession.lectures),
-                                    this.parseLectures(data.springSession.tutorials));
+                                    this.parseLectures(data.springSession.tutorials),
+                                    this.parseLectures(data.springSession.practicals));
         course.Y = course.Y.concat(this.parseLectures(data.yearSession.lectures),
-                                    this.parseLectures(data.yearSession.tutorials));
+                                    this.parseLectures(data.yearSession.tutorials),
+                                    this.parseLectures(data.yearSession.practicals));
         this.setState({courseInfo: course});
     });
   }
 
   parseLectures(lectures) {
     // Remove duplicated lecture sections
-    let allLectures = lectures.filter((lecture, index, lectures) => {
-      return (lectures.map(lect => lect.section).indexOf(lecture.section) === index)
-    });
+    let allLectures = removeDuplicateLectures(lectures);
     let parsedLectures = [];
 
     let days = {0: 'M', 1: 'T', 2: 'W', 3: 'R', 4: 'F'};
@@ -112,7 +110,6 @@ class Course extends React.Component {
         parsedLectures.push(lecture);
       }
     });
-    parsedLectures.sort((lec1, lec2) => {return lec1.lectureCode > lec2.lectureCode});
     return parsedLectures;
   }
 

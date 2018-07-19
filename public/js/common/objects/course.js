@@ -1,12 +1,11 @@
 /**
  * Constructs a Course.
- * @param {string} name The course code.
+ * @param {JSON} course The JSON with the course information
  * @constructor
  */
-function Course(name) {
+function Course(course) {
     'use strict';
 
-    var course = getCourse(name);
     // Copy attributes
     this.F = course.fallSession;
     this.S = course.springSession;

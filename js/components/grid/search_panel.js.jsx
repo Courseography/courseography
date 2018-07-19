@@ -13,9 +13,7 @@ import React from 'react';
   }
 
   handleInput(event) {
-    this.setState({ value: event.target.value }, () => {
-      console.log("Input: " + this.state.value);
-    });
+    this.setState({ value: event.target.value });
   }
 
   render() {
