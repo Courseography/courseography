@@ -6,12 +6,16 @@
 function fetchCourseDescription(id) {
     'use strict';
 
+    //TODO: fix this function by resolving issue with using promises inside
+    // forEach
     var result = '';
     var names = formatCourseName(id);
-    $.each(names, function (i, name) {
-        result += readCalendarEntry(name);
+    names.forEach((i, name) => {
+        readCalendarEntry(name)
+            .then(description => {
+                result += description;
+            });
     });
-
     return result;
 }
 
@@ -53,13 +57,15 @@ function formatCourseName(id) {
  * Returns a formatted version of a course's description.
  * TODO: Duplicate description
  * @param {string} name The name of the course.
- * @returns {*} A formatted version of a course's description.
+ * @returns {*} A promise: when fulfilled, it is a formatted version of a course's description.
  */
 function readCalendarEntry(name) {
     'use strict';
-
-    var course = new Course(name);
-    return formatCourseDescription(course);
+    var course;
+    return getCourse(name)
+        .then(course => {
+            return formatCourseDescription(course);
+        });
 }
 
 
@@ -103,16 +109,15 @@ function formatCourseDescription(course) {
  * Returns a course's title.
  * @param {string} id The Node's ID.
  * @param {string[]} formatted The formatted Course Description.
+ * @param {JSON} course The json with the course's information.
  * @returns {string} The course's title.
  */
-function getCourseTitle(id, formatted) {
+function getCourseTitle(id, formatted, course) {
     'use strict';
 
     var name = formatted; 
     if (name.length === 1) {
-        var course = new Course(name[0]);
         name = course.title;
     }
-
     return id.toUpperCase() + ': ' + name;
 }

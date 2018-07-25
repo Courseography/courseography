@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { Modal } from '../common/react_modal.js.jsx';
 
 export class CoursePanel extends React.Component {
   render() {
@@ -27,21 +27,20 @@ export class CoursePanel extends React.Component {
 class Course extends React.Component {
   constructor(props) {
     super(props);
-    this.toggleSelect = this.toggleSelect.bind(this);
-    this.removeCourse = this.removeCourse.bind(this);
-    this.parseLectures = this.parseLectures.bind(this);
+    this.modal = null;
     this.state = {
       selected: false,
       courseInfo: {}
     }
+    this.toggleSelect = this.toggleSelect.bind(this);
+    this.removeCourse = this.removeCourse.bind(this);
+    this.parseLectures = this.parseLectures.bind(this);
+    this.displayInfo = this.displayInfo.bind(this);
   }
 
   componentDidMount() {
-    fetch(
-      'course?name=' + this.props.courseCode, // url to which the AJAX request is sent to
-    )
-    .then(response => response.json()) //datatype
-    .then(data => {
+    getCourse(this.props.courseCode)
+      .then(data => {
         let course = {
           courseCode: "",
           F: [],
@@ -50,20 +49,21 @@ class Course extends React.Component {
         };
         course.courseCode = data.name;
         course.F = course.F.concat(this.parseLectures(data.fallSession.lectures),
-                                    this.parseLectures(data.fallSession.tutorials));
+                                    this.parseLectures(data.fallSession.tutorials),
+                                    this.parseLectures(data.fallSession.practicals));
         course.S = course.S.concat(this.parseLectures(data.springSession.lectures),
-                                    this.parseLectures(data.springSession.tutorials));
+                                    this.parseLectures(data.springSession.tutorials),
+                                    this.parseLectures(data.springSession.practicals));
         course.Y = course.Y.concat(this.parseLectures(data.yearSession.lectures),
-                                    this.parseLectures(data.yearSession.tutorials));
+                                    this.parseLectures(data.yearSession.tutorials),
+                                    this.parseLectures(data.yearSession.practicals));
         this.setState({courseInfo: course});
     });
   }
 
   parseLectures(lectures) {
     // Remove duplicated lecture sections
-    let allLectures = lectures.filter((lecture, index, lectures) => {
-      return (lectures.map(lect => lect.section).indexOf(lecture.section) === index)
-    });
+    let allLectures = removeDuplicateLectures(lectures);
     let parsedLectures = [];
 
     let days = {0: 'M', 1: 'T', 2: 'W', 3: 'R', 4: 'F'};
@@ -110,7 +110,6 @@ class Course extends React.Component {
         parsedLectures.push(lecture);
       }
     });
-    parsedLectures.sort((lec1, lec2) => {return lec1.lectureCode > lec2.lectureCode});
     return parsedLectures;
   }
 
@@ -122,13 +121,19 @@ class Course extends React.Component {
     this.props.removeCourse(this.props.courseCode);
   }
 
+  displayInfo() {
+    this.modal.openModal(this.state.courseInfo.courseCode.substring(0, 6));
+  }
+
   render() {
     return (
       <li key={this.props.courseCode} id={this.props.courseCode + "-li"} className={"ui-accordion ui-widget ui-helper-reset"}>
         <div className="ui-accordion-header ui-helper-reset ui-state-default ui-accordion-icons ui-accordion-header-active ui-state-active ui-corner-top"
               id={"ui-accordion-" + this.props.courseCode + "-li-header-0"}>
+          <Modal ref={ r => this.modal = r}/>
           <div className="icon-div">
-              <img src="static/res/ico/delete.png" className="close-icon" onClick={this.removeCourse}/>
+            <img src="static/res/ico/delete.png" className="close-icon" onClick={this.removeCourse}/>
+            <img src="static/res/ico/about.png" className="close-icon" onClick={this.displayInfo}/>
           </div>
           <h3 onClick={this.toggleSelect}>
             {this.props.courseCode}

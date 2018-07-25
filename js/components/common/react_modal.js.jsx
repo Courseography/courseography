@@ -1,4 +1,3 @@
-// import * as ReactModal from '../vendor/react-modal';
 import React from 'react';
 import ReactModal from 'react-modal';
 
@@ -33,28 +32,21 @@ class Modal extends React.Component {
       this.setState({ modalIsOpen: true });
     } else {
       let formatted = formatCourseName(newCourse);
-      this.setState({
-        modalIsOpen: true,
-        courseId: newCourse,
-        courseTitle: getCourseTitle(newCourse, formatted)
-      });
-
-      $.get({
-        url: 'course',
-        data: { name: formatted[0] },
-        dataType: 'json',
-        success: (data) => {
+      getCourse(formatted[0])
+        .then(course => {
           //This is getting the session times
-          let sessions = data.fallSession.lectures
-            .concat(data.springSession.lectures)
-            .concat(data.yearSession.lectures)
-          //Tutorials don't have a timeStr to print, so I've currently omitted them
-          this.setState({ course: data, sessions: sessions });
-        },
-        error: (xhr, status, err) => {
-          console.error('course-info', status, err.toString());
-        }
-      });
+          let sessions = removeDuplicateLectures(course.fallSession.lectures)
+            .concat(removeDuplicateLectures(course.springSession.lectures))
+            .concat(removeDuplicateLectures(course.yearSession.lectures));
+            //Tutorials don't have a timeStr to print, so I've currently omitted them
+          this.setState({
+            course: course,
+            sessions: sessions,
+            modalIsOpen: true,
+            courseId: newCourse,
+            courseTitle: getCourseTitle(newCourse, formatted, course)
+          });
+        })
     }
   }
 
@@ -68,6 +60,7 @@ class Modal extends React.Component {
         overlayClassName='overlay'
         isOpen={this.state.modalIsOpen}
         onRequestClose={this.closeModal}
+        ariaHideApp={false}
       >
         <div className='modal-header'>
           {this.state.courseTitle}
@@ -98,7 +91,7 @@ class Description extends React.Component {
         {this.props.sessions.map(function (lecture, i) {
           return <p key={i}>{lecture.code + lecture.session + '-' + lecture.section}</p>;
         })}
-        <Video urls={this.props.course.videoUrls} />
+        {/*<Video urls={this.props.course.videoUrls} />*/}
       </div>
     );
   }

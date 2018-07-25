@@ -4,12 +4,16 @@ import ReactDOM from 'react-dom';
 import { CoursePanel } from './course_panel.js.jsx';
 import { SearchPanel } from './search_panel.js.jsx';
 import { Row } from './calendar.js.jsx';
-import { Modal } from '../common/react_modal.js.jsx';
 
 
 class Grid extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      selectedLectures: [],
+      selectedCourses: []
+    };
+
     this.addSelectedCourse = this.addSelectedCourse.bind(this);
     this.removeSelectedCourse = this.removeSelectedCourse.bind(this);
     this.clearSelectedCourses = this.clearSelectedCourses.bind(this);
@@ -18,10 +22,6 @@ class Grid extends React.Component {
     this.removeSelectedLecture = this.removeSelectedLecture.bind(this);
     this.createNewCourse = this.createNewCourse.bind(this);
     this.createNewLecture = this.createNewLecture.bind(this);
-    this.state = {
-      selectedLectures: [],
-      selectedCourses: []
-    };
   }
 
   // get the previously selected courses and lecture sections from local storage
@@ -51,8 +51,8 @@ class Grid extends React.Component {
         // setState is asynchronous and calling it several times in a row can lead to bugs when
         // new state depends on previous state
         selectedCourses.push(courseCode);
-        this.setState({selectedCourses: selectedCourses});
       });
+      this.setState({selectedCourses: selectedCourses});
     }
   }
 
@@ -179,7 +179,6 @@ class Grid extends React.Component {
           removeSelectedLecture={this.removeSelectedLecture}
         />
         <Row courses={this.state.selectedLectures}/>
-        <Modal />
         <SearchPanel
           selectedCourses={this.state.selectedCourses}
           selectCourse={this.addSelectedCourse}
