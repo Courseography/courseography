@@ -121,7 +121,7 @@ class Grid extends React.Component {
           addSelectedLecture={this.addSelectedLecture}
           removeSelectedLecture={this.removeSelectedLecture}
         />
-        <Row courses={this.state.selectedLectures}/>
+        <Row lectureSections={this.state.selectedLectures}/>
         <SearchPanel
           selectedCourses={this.state.selectedCourses}
           selectCourse={this.addSelectedCourse}

@@ -6,11 +6,11 @@ import React from 'react';
 
 export class Row extends React.Component {
   render() {
-    // From a list of Course objects, create a list of Lecture objects
-    let courses = this.props.courses;
+    let lectureSections = this.props.lectureSections;
+    // Create a list of lecture objects
     let lectures = [];
-    courses.forEach(course => {
-      lectures = lectures.concat(createNewCourse(course))
+    lectureSections.forEach(lectureSection => {
+      lectures = lectures.concat(createNewLectures(lectureSection))
     })
 
     // Organize the structure of the <fallSession> and <springSession> 2-D dictionaries
@@ -27,7 +27,6 @@ export class Row extends React.Component {
     let springColSpans = {'M': 0, 'T': 0, 'W': 0, 'R': 0, 'F': 0};
     storeColSpans(fallSession, fallColSpans);
     storeColSpans(springSession, springColSpans);
-    console.log(springSession)
 
     // Generate a container for each of the Fall and Spring timetables individually
     return (
@@ -189,7 +188,6 @@ class TimetableRow extends React.Component {
           currentLectureList.forEach(lecture => {
             // Check if this lecture has been previously rendered
             previousLectureList.forEach(lecturePrev => {
-              //if (lecturePrev.courseCode === lecture.courseCode){
               if (lecturePrev === lecture){
                 alreadyGenerated = true;
               }
@@ -409,23 +407,23 @@ function lectureConflict(courseList) {
   return courseList.length > 1;
 }
 
-  /**
-   * Constructor for a 'Course' object
-   * @param {Object} lecture : Represents a lecture with time periods in which the lecture
-   *                            takes place
-   * @return {array} An array of objects representing each disconnected time period the given
-   *                  lecture occurs in
-  */
-function createNewCourse(lecture) {
+/**
+ * Create a list of lecture objects representing each separate time a given lecture section takes place
+ * @param {Object} lectureSection : Represents a lecture section for a course with time periods in which the lecture
+ *                            takes place
+ * @return {array} An array of objects representing each disconnected time period the given
+ *                  lecture occurs in
+*/
+function createNewLectures(lectureSection) {
     let lectures = [];
     let days = {0: 'M', 1: 'T', 2: 'W', 3: 'R', 4: 'F'};
-    for (let i = 0; i < lecture.times.length; i++) {
+    for (let i = 0; i < lectureSection.times.length; i++) {
       let lectureObject = {
-        courseCode: lecture.courseCode,
-        session: lecture.session,
-        day: days[lecture.times[i].timeField[0]],
-        startTime: lecture.times[i].timeField[1],
-        endTime: lecture.times[i].timeField[2],
+        courseCode: lectureSection.courseCode,
+        session: lectureSection.session,
+        day: days[lectureSection.times[i].timeField[0]],
+        startTime: lectureSection.times[i].timeField[1],
+        endTime: lectureSection.times[i].timeField[2],
         inConflict: false,
         width: 1
       };
