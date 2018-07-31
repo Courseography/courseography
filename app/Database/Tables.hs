@@ -42,6 +42,8 @@ import WebParsing.ReqParser (parseReqs)
 -- by 1-5 respectively. The time is a number between 0-23.
 -- TODO: Change this datatype. This datatype shouldn't be implemented with
 -- a list, perhaps a tuple would be better.
+
+--data Time = Time { timeField :: (Double, Double, Double) } deriving (Show, Read, Eq, Generic)
 data Time = Time { timeField :: [Double] } deriving (Show, Read, Eq, Generic)
 derivePersistField "Time"
 
@@ -197,9 +199,9 @@ instance FromJSON SvgJSON
 -- uses the output in an element's ID, which is then later used in
 -- jQuery. @.@ is a jQuery meta-character, and must be removed from the ID.
 convertTimeToString :: Time -> [T.Text]
-convertTimeToString (Time [day, timeNum]) =
+convertTimeToString (Time [day, startNum, endNum]) =
   [T.pack . show $ (floor day :: Int),
-   T.replace "." "-" . T.pack . show $ timeNum]
+   T.replace "." "-" . T.pack . show $ startNum]
 convertTimeToString _ = undefined
 
 
@@ -309,5 +311,5 @@ getTimeSlots (Just day) (Just start) (Just end) = do
     let dayDbl = getDayVal day
         startDbl = getHourVal start
         endDbl = getHourVal end
-    [Time [dayDbl, timeDbl] | timeDbl <- [startDbl, (startDbl + 0.5) .. (endDbl - 0.5)]]
+    [Time [dayDbl, startDbl, endDbl]]
 getTimeSlots _ _ _ = []

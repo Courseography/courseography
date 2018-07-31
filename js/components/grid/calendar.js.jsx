@@ -8,10 +8,10 @@ export class Row extends React.Component {
   render() {
     // From a list of Course objects, create a list of Lecture objects
     let courses = this.props.courses;
-    let lectures = courses.map(
-      c => Array.prototype.concat.apply([], Object.values(c.lectures))
-    );
-    lectures = Array.prototype.concat.apply([], lectures);
+    let lectures = [];
+    courses.forEach(course => {
+      lectures = lectures.concat(createNewCourse(course))
+    })
 
     // Organize the structure of the <fallSession> and <springSession> 2-D dictionaries
     let fallSession, springSession;
@@ -127,14 +127,18 @@ class TimetableBody extends React.Component {
           time={i}
           key={'timetable-row-' + i + this.props.session}
           currentLectures={this.props.lectures[i]}
-          previousLectures={this.props.lectures[i-1]}
+          previousLectures={this.props.lectures[i-0.5]}
           headColSpans={this.props.headColSpans}
         />
       );
       rows.push(
-        <TimetableRow session={this.props.session}
+        <TimetableRow
+          session={this.props.session}
           time={i+0.5}
           key={'timetable-row-' + (i+0.5) + this.props.session}
+          currentLectures={this.props.lectures[i+0.5]}
+          previousLectures={this.props.lectures[i]}
+          headColSpans={this.props.headColSpans}
         />
       );
     }
@@ -194,7 +198,8 @@ class TimetableRow extends React.Component {
           currentLectureList.forEach(lecture => {
             // Check if this lecture has been previously rendered
             previousLectureList.forEach(lecturePrev => {
-              if (lecturePrev.courseCode === lecture.courseCode){
+              //if (lecturePrev.courseCode === lecture.courseCode){
+              if (lecturePrev === lecture){
                 alreadyGenerated = true;
               }
             });
@@ -308,7 +313,9 @@ function initializeSessions(lectures) {
   let springSession = {};
   for (let i = 7; i < 22; i++) {
     fallSession[i] = {"M": [], "T": [], "W": [], "R": [], "F": []};
+    fallSession[i+0.5] = {"M": [], "T": [], "W": [], "R": [], "F": []};
     springSession[i] = {"M": [], "T": [], "W": [], "R": [], "F": []};
+    springSession[i+0.5] = {"M": [], "T": [], "W": [], "R": [], "F": []};
   }
 
   lectures.forEach(lecture => {
@@ -317,16 +324,17 @@ function initializeSessions(lectures) {
         // Store this Lecture in its active time-slot (denoted by <i>),
         // and in the list in its active day slot (denoted by <lecture.day>), in <fallSession>.
         fallSession[i][lecture.day].push(lecture);
+        fallSession[i+0.5][lecture.day].push(lecture);
       }
     }
     if (lecture.session === 'S' || lecture.session === 'Y') {
       // Same process as above for spring lectures in <springSession>
       for (let i = lecture.startTime; i < lecture.endTime; i++) {
         springSession[i][lecture.day].push(lecture);
+        springSession[i+0.5][lecture.day].push(lecture);
       }
     }
   });
-
   return [fallSession, springSession];
 }
 
@@ -344,7 +352,9 @@ function setWidths(session) {
     days.forEach(day => {
       let timeDaySlot = timeRow[day];
       timeDaySlot.forEach(lecture => {
-        if (lecture.startTime === i) {
+        // Do not set the width back to 1 if there is already a conflict (this situation applies to
+        // 'Y' session lectures)
+        if (lecture.startTime === i && lecture.width === 1) {
           lecture.width = 1;
           lecture.inConflict = false;
         }
@@ -411,3 +421,28 @@ function storeWidths(session) {
 function lectureConflict(courseList) {
   return courseList.length > 1;
 }
+
+  /**
+   * Constructor for a 'Course' object
+   * @param {Object} lecture : Represents a lecture with time periods in which the lecture
+   *                            takes place
+   * @return {array} An array of objects representing each disconnected time period the given
+   *                  lecture occurs in
+  */
+function createNewCourse(lecture) {
+    let lectures = [];
+    let days = {0: 'M', 1: 'T', 2: 'W', 3: 'R', 4: 'F'};
+    for (let i = 0; i < lecture.times.length; i++) {
+      let lectureObject = {
+        courseCode: lecture.courseCode,
+        session: lecture.session,
+        day: days[lecture.times[i].timeField[0]],
+        startTime: lecture.times[i].timeField[1],
+        endTime: lecture.times[i].timeField[2],
+        inConflict: false,
+        width: 1
+      };
+      lectures.push(lectureObject);
+    }
+    return lectures;
+  }

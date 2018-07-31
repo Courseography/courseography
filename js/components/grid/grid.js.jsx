@@ -20,8 +20,6 @@ class Grid extends React.Component {
 
     this.addSelectedLecture = this.addSelectedLecture.bind(this);
     this.removeSelectedLecture = this.removeSelectedLecture.bind(this);
-    this.createNewCourse = this.createNewCourse.bind(this);
-    this.createNewLecture = this.createNewLecture.bind(this);
   }
 
   // get the previously selected courses and lecture sections from local storage
@@ -82,7 +80,7 @@ class Grid extends React.Component {
     this.setState({selectedCourses: updatedCourses});
 
     let updatedLectures = this.state.selectedLectures.filter(lecture =>
-                          !lecture.course.includes(courseCode.substring(0, 6)));
+                          !lecture.courseCode.includes(courseCode.substring(0, 6)));
     this.setState({selectedLectures: updatedLectures});
   }
 
@@ -95,76 +93,21 @@ class Grid extends React.Component {
   }
 
   // Method passed to child component CoursePanel to add a lecture to selectedLectures
-  addSelectedLecture(courseCode, session, lectureCode, lectureTimes) {
+  addSelectedLecture(newLecture) {
     // The maximum number of courses in the lecture list with the same code is 3, one for each session (F, S, Y)
     let updatedLectures = this.state.selectedLectures.filter((lecture) => {
-      return lecture.course !== courseCode || lecture.session !== session
+      return lecture.courseCode !== newLecture.courseCode || lecture.session !== newLecture.session
     });
-    let lectureSession = this.createNewCourse(courseCode, session, lectureCode, lectureTimes);
-    updatedLectures.push(lectureSession);
+    updatedLectures.push(newLecture);
     this.setState({selectedLectures: updatedLectures});
   }
 
   // Method passed to child component CoursePanel to remove a lecture from selectedLectures
   removeSelectedLecture(courseCode, session) {
     let updatedLectures = this.state.selectedLectures.filter((lecture) => {
-      return lecture.course !== courseCode || lecture.session !== session
+      return lecture.courseCode !== courseCode || lecture.session !== session
     });
     this.setState({selectedLectures: updatedLectures})
-  }
-
-  /**
-   * Constructor for a 'Course' object
-   * @param {string} courseCode : Name of course
-   * @param {string} session : Session of course
-   * @param {dictionary} times : The days, and corresponding time-slot for which
-                                  this course is active
-   * @return {dictionary} Represents a 'Course' object
-  */
-  createNewCourse(courseCode, session, lectureCode, times) {
-    let lectures = {};
-    let days = [];
-    // Store the active days of this Course, and for each active
-    // day, create and store a 'Lecture' object
-    for (let day in times) {
-      days.push(day);
-      lectures[day] = [];
-      // For the case where this lecture starts and ends more than once in one day
-      for(let i = 0; i < times[day].length; i+=2){
-        let startEndTimes = [times[day][i], times[day][i+1]];
-        lectures[day].push(this.createNewLecture(courseCode, session, day, startEndTimes));
-      }
-    }
-    let courseObject = {};
-    courseObject.course = courseCode;
-    courseObject.lectureCode = lectureCode;
-    courseObject.session = session;
-    courseObject.days = days;
-    courseObject.lectures = lectures;
-    return courseObject;
-  }
-
-  /**
-   * Constructor for a 'Lecture' object. Represents a single period of time
-   * in which this course is active. (for ex; on Monday from 2-4)
-   * @param {string} courseCode : Name of Lecture
-   * @param {string} session : Session of Lecture
-   * @param {string} day: Day of activity
-   * @param {list} timePeriod : Active start and end time
-   * @return {dictionary} Represents a 'Lecture' object
-  */
-  createNewLecture(courseCode, session, day, timePeriod) {
-    let lectureObject = {};
-    lectureObject.courseCode = courseCode;
-    lectureObject.session = session;
-    lectureObject.day = day;
-    lectureObject.startTime = timePeriod[0];
-    lectureObject.endTime = timePeriod[1];
-    lectureObject.inConflict = false;
-    // The width of a lecture is the maximum number of conflicts it has while it's active;
-    //  if there are no conflicts, the width is 1.
-    lectureObject.width = 1;
-    return lectureObject;
   }
 
   render() {

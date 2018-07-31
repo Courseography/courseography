@@ -66,7 +66,6 @@ class Course extends React.Component {
     let allLectures = removeDuplicateLectures(lectures);
     let parsedLectures = [];
 
-    let days = {0: 'M', 1: 'T', 2: 'W', 3: 'R', 4: 'F'};
     // Loop through the lecture sections to get each section's session code and lecture times
     allLectures.forEach( lectureInfo => {
       // Check to make sure its not a restricted section. Restricted sections have enrollment
@@ -74,39 +73,11 @@ class Course extends React.Component {
       // lecture/tutorial section.
       if (lectureInfo.section.charAt(3) !== '2' && lectureInfo.times !== 'Online Web Version') {
         let lecture = {
-          courseName: lectureInfo.code.substring(0, 6) + " (" + lectureInfo.section.substring(0,1) + ")",
+          courseCode: lectureInfo.code.substring(0, 6) + " (" + lectureInfo.section.substring(0,1) + ")",
           lectureCode: lectureInfo.section.substring(0, 1) + lectureInfo.section.substring(3),
-          times: {}
+          session: lectureInfo.session,
+          times: lectureInfo.times
         };
-        let allTimes = lectureInfo.times;
-        // The times in the original data are arrays of form [day, startTime], where day is an integer
-        // between 0 and 4 that corresponds to days Monday to Friday. Eg: [0, 14] is a Monday lecture that
-        // starts are 2PM. Every half hour is an individual array.
-        // Loop through each individual time array and add the start time to the corresponding day.
-        allTimes.forEach( time => {
-          let day = days[(time.timeField[0])];
-          if (!lecture.times[day]) {
-            lecture.times[day] = [time.timeField[1]];
-          }
-          else {
-            lecture.times[day].push(time.timeField[1]);
-          }
-        });
-        // Loop through each day of the week and remove the half hour increments.
-        // Only keep start time and end time in the array.
-        for (let weekday in lecture.times) {
-          let times = []
-          if (lecture.times.hasOwnProperty(weekday)) {
-            times.push(lecture.times[weekday][0]);
-            for (let hour = 1; hour < lecture.times[weekday].length; hour++) {
-              if (hour+1 >= lecture.times[weekday].length ||
-                lecture.times[weekday][hour+1] !== lecture.times[weekday][hour] + 0.5) {
-                times.push(lecture.times[weekday][hour] + 0.5);
-              }
-            }
-            lecture.times[weekday] = times;
-          }
-        }
         parsedLectures.push(lecture);
       }
     });
@@ -195,15 +166,14 @@ class LectureSection extends React.Component {
   // Remove the course if it is, or add the course if it is not.
   selectLecture() {
     let sameLecture = this.props.selectedLectures.filter((lecture) => {
-      return lecture.course === this.props.lecture.courseName && lecture.session === this.props.session &&
+      return lecture.courseCode === this.props.lecture.courseCode && lecture.session === this.props.session &&
         lecture.lectureCode === this.props.lecture.lectureCode
     });
     // If sameLecture is not an empty array, then this lecture is already selected and should be removed
     if (sameLecture.length > 0) {
-      this.props.removeSelectedLecture(this.props.lecture.courseName, this.props.session);
+      this.props.removeSelectedLecture(this.props.lecture.courseCode, this.props.session);
     } else {
-      this.props.addSelectedLecture(this.props.lecture.courseName, this.props.session,
-                                    this.props.lecture.lectureCode, this.props.lecture.times);
+      this.props.addSelectedLecture(this.props.lecture);
     }
   }
 
