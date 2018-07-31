@@ -27,6 +27,7 @@ export class Row extends React.Component {
     let springColSpans = {'M': 0, 'T': 0, 'W': 0, 'R': 0, 'F': 0};
     storeColSpans(fallSession, fallColSpans);
     storeColSpans(springSession, springColSpans);
+    console.log(springSession)
 
     // Generate a container for each of the Fall and Spring timetables individually
     return (
@@ -120,7 +121,7 @@ class TimetableBody extends React.Component {
   render() {
     let rows = [];
     // For each row from 8 o'clock to 22 o'clock, there is an 'Hour' and 'Half hour' row
-    for (let i = 8; i < 22; i++) {
+    for (let i = 8; i < 22; i+=0.5) {
       rows.push(
         <TimetableRow
           session={this.props.session}
@@ -128,16 +129,6 @@ class TimetableBody extends React.Component {
           key={'timetable-row-' + i + this.props.session}
           currentLectures={this.props.lectures[i]}
           previousLectures={this.props.lectures[i-0.5]}
-          headColSpans={this.props.headColSpans}
-        />
-      );
-      rows.push(
-        <TimetableRow
-          session={this.props.session}
-          time={i+0.5}
-          key={'timetable-row-' + (i+0.5) + this.props.session}
-          currentLectures={this.props.lectures[i+0.5]}
-          previousLectures={this.props.lectures[i]}
           headColSpans={this.props.headColSpans}
         />
       );
@@ -311,27 +302,23 @@ class TimetableRow extends React.Component {
 function initializeSessions(lectures) {
   let fallSession = {};
   let springSession = {};
-  for (let i = 7; i < 22; i++) {
+  for (let i = 7; i < 22; i+=0.5) {
     fallSession[i] = {"M": [], "T": [], "W": [], "R": [], "F": []};
-    fallSession[i+0.5] = {"M": [], "T": [], "W": [], "R": [], "F": []};
     springSession[i] = {"M": [], "T": [], "W": [], "R": [], "F": []};
-    springSession[i+0.5] = {"M": [], "T": [], "W": [], "R": [], "F": []};
   }
 
   lectures.forEach(lecture => {
     if (lecture.session === 'F' || lecture.session === 'Y') {
-      for (let i = lecture.startTime; i < lecture.endTime; i++) {
+      for (let i = lecture.startTime; i < lecture.endTime; i+=0.5) {
         // Store this Lecture in its active time-slot (denoted by <i>),
         // and in the list in its active day slot (denoted by <lecture.day>), in <fallSession>.
         fallSession[i][lecture.day].push(lecture);
-        fallSession[i+0.5][lecture.day].push(lecture);
       }
     }
     if (lecture.session === 'S' || lecture.session === 'Y') {
       // Same process as above for spring lectures in <springSession>
-      for (let i = lecture.startTime; i < lecture.endTime; i++) {
+      for (let i = lecture.startTime; i < lecture.endTime; i+=0.5) {
         springSession[i][lecture.day].push(lecture);
-        springSession[i+0.5][lecture.day].push(lecture);
       }
     }
   });
@@ -345,7 +332,7 @@ function initializeSessions(lectures) {
  */
 function setWidths(session) {
   let days = ['M', 'T', 'W', 'R', 'F'];
-  for (let i = 8; i < 22; i++) {
+  for (let i = 8; i < 22; i+=0.5) {
     let timeRow = session[i];
     // Reset all widths back to 1 and inConflict to false if this time slot is the startTime of
     // the lecture
@@ -397,7 +384,7 @@ function storeWidths(session) {
   // Iterate through every time-day slot in the session
   days.forEach(day => {
     widths[day] = [];
-    for (let i = 8; i < 22; i++) {
+    for (let i = 8; i < 22; i+=0.5) {
       let timeRow = session[i];
       let timeDaySlot = timeRow[day];
       // If there are lectures running at this time-day slot

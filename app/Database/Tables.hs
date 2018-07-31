@@ -37,9 +37,9 @@ import GHC.Generics
 import WebParsing.ReqParser (parseReqs)
 
 -- | A data type representing a time for the section of a course.
--- The first list is comprised of two values: the date (represented as a number
--- of the week), and the time. The dates span Monday-Friday, being represented
--- by 1-5 respectively. The time is a number between 0-23.
+-- The list is comprised of three values: the date (represented as a number
+-- of the week), the start time and the end time. The dates span Monday-Friday, beging represented
+-- by 1-5 respectively. The start time and end time are numbers between 0-23.
 -- TODO: Change this datatype. This datatype shouldn't be implemented with
 -- a list, perhaps a tuple would be better.
 
@@ -201,7 +201,7 @@ instance FromJSON SvgJSON
 convertTimeToString :: Time -> [T.Text]
 convertTimeToString (Time [day, startNum, endNum]) =
   [T.pack . show $ (floor day :: Int),
-   T.replace "." "-" . T.pack . show $ startNum]
+   T.replace "." "-" . T.pack . show $ (show startNum ++ "-" ++ show endNum)]
 convertTimeToString _ = undefined
 
 
@@ -305,7 +305,7 @@ getDayVal "TH" = 3.0
 getDayVal "FR" = 4.0
 getDayVal _    = 4.0
 
--- | Takes a day and start/end times then generates a set of 30-minute timeslots
+-- | Takes a day and start/end times then generates a Time with the day and start/end times
 getTimeSlots :: Maybe String -> Maybe String -> Maybe String -> [Time]
 getTimeSlots (Just day) (Just start) (Just end) = do
     let dayDbl = getDayVal day
