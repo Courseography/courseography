@@ -37,14 +37,11 @@ import GHC.Generics
 import WebParsing.ReqParser (parseReqs)
 
 -- | A data type representing a time for the section of a course.
--- The list is comprised of three values: the date (represented as a number
--- of the week), the start time and the end time. The dates span Monday-Friday, beging represented
--- by 1-5 respectively. The start time and end time are numbers between 0-23.
--- TODO: Change this datatype. This datatype shouldn't be implemented with
--- a list, perhaps a tuple would be better.
-
---data Time = Time { timeField :: (Double, Double, Double) } deriving (Show, Read, Eq, Generic)
-data Time = Time { timeField :: [Double] } deriving (Show, Read, Eq, Generic)
+-- The record is comprised of three fields: weekDay (represented as a number
+-- of the week), startHour (the start time of the lecture) and endHour (the end time of the lecture).
+-- The dates span Monday-Friday, being represented by 0-4 respectively.
+-- The start time and end time are numbers between 0-23.
+data Time = Time { weekDay :: Double, startHour :: Double, endHour :: Double } deriving (Show, Read, Eq, Generic)
 derivePersistField "Time"
 
 data Room = Room { roomField :: (T.Text, T.Text)} deriving (Show, Read, Eq, Generic)
@@ -194,16 +191,16 @@ instance ToJSON Room
 -- not necessary otherwise.
 instance FromJSON SvgJSON
 
--- | Converts a Double to a T.Text.
+-- | Converts a Time to a T.Text.
 -- This removes the period from the double, as the JavaScript code,
 -- uses the output in an element's ID, which is then later used in
 -- jQuery. @.@ is a jQuery meta-character, and must be removed from the ID.
 convertTimeToString :: Time -> [T.Text]
-convertTimeToString (Time [day, startNum, endNum]) =
+convertTimeToString (Time day startNum endNum) =
   [T.pack . show $ (floor day :: Int),
    T.replace "." "-" . T.pack . show $ (show startNum ++ "-" ++ show endNum)]
 convertTimeToString _ = undefined
-
+-- ToDo: remove "pattern match is redundant warning" for line 202.
 
 -- JSON encoding/decoding
 instance FromJSON Courses where
@@ -311,5 +308,5 @@ getTimeSlots (Just day) (Just start) (Just end) = do
     let dayDbl = getDayVal day
         startDbl = getHourVal start
         endDbl = getHourVal end
-    [Time [dayDbl, startDbl, endDbl]]
+    [Time dayDbl startDbl endDbl]
 getTimeSlots _ _ _ = []
