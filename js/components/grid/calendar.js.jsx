@@ -189,34 +189,21 @@ class TimetableRow extends React.Component {
           // from all the lectures generated
           totalColSpans += lecColSpan;
         });
-
-        // In the case where there are not enough cells to fill the headerColSpan
-        // of this time-day cell, generate remaining number of empty cells
-        for (let i = totalColSpans; i < headerColSpan; i++) {
-          tableData.push(
-            <td id={'' + day + currTime + '-0' + i + currSess}
-              key={'' + day + currTime + '-0' + i + currSess}
-              data-in-conflict="false"
-              data-satisfied="true"
-              rowSpan="1"
-              className="timetable-cell">
-            </td>
-          );
-        }
-      } else {
-        // No courses to be generated at this day-time cell
-        // Generate the number of empty cells to fill the header colSpan
-        for (let i = 0; i < headerColSpan; i++) {
-          tableData.push(
-            <td id={'' + day + currTime + '-0' + i + currSess}
-              key={'' + day + currTime + '-0' + i + currSess}
-              data-in-conflict="false"
-              data-satisfied="true"
-              rowSpan="1"
-              className="timetable-cell">
-            </td>
-          );
-        }
+      }
+      // In the case where there are not enough cells to fill the headerColSpan
+      // of this time-day cell or if there are no courses to be generated at this time-day cell,
+      // generate remaining number of empty cells
+      // Note: totalColSpans is 0 if there are no courses to be generated at this time-day cell
+      for (let i = totalColSpans; i < headerColSpan; i++) {
+        tableData.push(
+          <td id={'' + day + currTime + '-0' + i + currSess}
+            key={'' + day + currTime + '-0' + i + currSess}
+            data-in-conflict="false"
+            data-satisfied="true"
+            rowSpan="1"
+            className={currTime % 1 === 0 ? "timetable-cell-tophalf" : "timetable-cell-bottomhalf"}>
+          </td>
+        );
       }
     });
 
