@@ -63,7 +63,7 @@ class Course extends React.Component {
 
   parseLectures(lectures) {
     // Remove duplicated lecture sections
-    let allLectures = removeDuplicateLectures(lectures);
+    const allLectures = removeDuplicateLectures(lectures);
     let parsedLectures = [];
 
     // Loop through the lecture sections to get each section's session code and lecture times
@@ -165,7 +165,7 @@ class LectureSection extends React.Component {
   // Check whether the course is already in the selectCourses list.
   // Remove the course if it is, or add the course if it is not.
   selectLecture() {
-    let sameLecture = this.props.selectedLectures.filter((lecture) => {
+    const sameLecture = this.props.selectedLectures.filter((lecture) => {
       return lecture.courseCode === this.props.lecture.courseCode && lecture.session === this.props.session &&
         lecture.lectureCode === this.props.lecture.lectureCode
     });
