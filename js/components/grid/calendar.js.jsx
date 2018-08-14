@@ -68,17 +68,15 @@ class Timetable extends React.Component {
  */
 class TimetableHeader extends React.Component {
   render() {
-    const days = ['M', 'T', 'W', 'R', 'F'];
     const dayStrings = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
     let colSpans = this.props.headColSpans;
 
     let dayCells = [];
     for (let i = 0; i < 5; i++) {
-      let dayKey = days[i];
       let dayString = dayStrings[i];
       // Store the React element for this day-cell
       dayCells.push(
-        <th scope="col" colSpan={colSpans[dayKey]}
+        <th scope="col" colSpan={colSpans[i]}
           key={"day-header-" + i}>
           {dayString}
         </th>
@@ -138,7 +136,6 @@ class TimetableBody extends React.Component {
 class TimetableRow extends React.Component {
   render() {
     let tableData = [];
-    const days = ['M', 'T', 'W', 'R', 'F'];
     const dummyCell = <td key="timetable-dummy-cell" className="timetable-dummy-cell"></td>;
     const currTime = this.props.time;
     const currSess = this.props.session;
@@ -147,7 +144,7 @@ class TimetableRow extends React.Component {
     const currentLectures = this.props.currentLectures;
     const headColSpans = this.props.headColSpans;
 
-    days.forEach(day => {
+    for (let day = 0; day < 5; day++) {
       // Variables for calculations
       const headerColSpan = headColSpans[day];
       let totalColSpans = 0;
@@ -168,8 +165,8 @@ class TimetableRow extends React.Component {
           if (lecture.startTime === currTime) {
             const rowSpan = 2 * (lecture.endTime - lecture.startTime);
             tableData.push(
-              <td id={'' + day + currTime + '-0' + totalColSpans + currSess}
-                key={'' + day + currTime + '-0' + totalColSpans + currSess}
+              <td id={'' + day.toString() + currTime + '-0' + totalColSpans + currSess}
+                key={'' + day.toString() + currTime + '-0' + totalColSpans + currSess}
                 data-in-conflict={lecture.inConflict}
                 data-satisfied={"true"}
                 rowSpan={rowSpan}
@@ -194,8 +191,8 @@ class TimetableRow extends React.Component {
       // Note: totalColSpans is 0 if there are no courses to be generated at this time-day cell
       for (let i = totalColSpans; i < headerColSpan; i++) {
         tableData.push(
-          <td id={'' + day + currTime + '-0' + i + currSess}
-            key={'' + day + currTime + '-0' + i + currSess}
+          <td id={'' + day.toString() + currTime + '-0' + i + currSess}
+            key={'' + day.toString() + currTime + '-0' + i + currSess}
             data-in-conflict="false"
             data-satisfied="true"
             rowSpan="1"
@@ -203,7 +200,7 @@ class TimetableRow extends React.Component {
           </td>
         );
       }
-    });
+    }
 
     if (currTime % 1 === 0) {
       // Convert <time> to a 12-hour clock system
@@ -238,8 +235,8 @@ function initializeSessions(lectures) {
   let fallSession = {};
   let springSession = {};
   for (let i = 7; i < 22; i+=0.5) {
-    fallSession[i] = {"M": [], "T": [], "W": [], "R": [], "F": []};
-    springSession[i] = {"M": [], "T": [], "W": [], "R": [], "F": []};
+    fallSession[i] = {0: [], 1: [], 2: [], 3: [], 4: []};
+    springSession[i] = {0: [], 1: [], 2: [], 3: [], 4: []};
   }
 
   lectures.forEach(lecture => {
@@ -266,12 +263,11 @@ function initializeSessions(lectures) {
  * @param {dictionary} session : 2-D Dictionary storing lectures active in the session
  */
 function setWidths(session) {
-  const days = ['M', 'T', 'W', 'R', 'F'];
   for (let i = 8; i < 22; i+=0.5) {
     const timeRow = session[i];
     // Reset all widths back to 1 and inConflict to false if this time slot is the startTime of
     // the lecture
-    days.forEach(day => {
+    for (let day = 0; day < 5; day++) {
       const timeDaySlot = timeRow[day];
       timeDaySlot.forEach(lecture => {
         // Do not set the width back to 1 if there is already a conflict (this situation applies to
@@ -290,7 +286,7 @@ function setWidths(session) {
           lecture.inConflict = true;
         }
       });
-    });
+    }
   }
 }
 
@@ -299,14 +295,13 @@ function setWidths(session) {
  * @param {dictionary} colSpans : Dictionary storing the 'colSpan' attribute value for each day
  */
 function storeColSpans(session, colSpans) {
-  const days = ['M', 'T', 'W', 'R', 'F'];
   // For each day, stores all possible 'width' values every lecture at that day could have
   let widths = storeWidths(session);
-  days.forEach(day => {
+  for (let day = 0; day < 5; day++) {
     // The 'colSpan' attribute of a header day cell is defined as the product of all
     // possible widths that could occur at that day
     colSpans[day] = widths[day].reduce((a, b) => a * b, 1);
-  });
+  }
 }
 
 /**
@@ -314,10 +309,9 @@ function storeColSpans(session, colSpans) {
  * @param {dictionary} session : 2-D Dictionary storing lectures active in the session
  */
 function storeWidths(session) {
-  const days = ['M', 'T', 'W', 'R', 'F'];
   let widths = {};
   // Iterate through every time-day slot in the session
-  days.forEach(day => {
+  for (let day = 0; day < 5; day++) {
     widths[day] = [];
     for (let i = 8; i < 22; i+=0.5) {
       const timeRow = session[i];
@@ -332,7 +326,7 @@ function storeWidths(session) {
         }
       }
     }
-  });
+  }
   return widths;
 }
 
@@ -352,13 +346,11 @@ function lectureConflict(courseList) {
  *                  lecture occurs in
 */
 function createNewLectures(lectureSection) {
-  const days = {0: 'M', 1: 'T', 2: 'W', 3: 'R', 4: 'F'};
-
   const lectures = lectureSection.times.map(time => {
     return {
       courseCode: lectureSection.courseCode,
       session: lectureSection.session,
-      day: days[time.weekDay],
+      day: time.weekDay,
       startTime: time.startHour,
       endTime: time.endHour,
       inConflict: false,

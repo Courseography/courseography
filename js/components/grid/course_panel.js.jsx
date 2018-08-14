@@ -2,6 +2,17 @@ import React from 'react';
 import { Modal } from '../common/react_modal.js.jsx';
 
 export class CoursePanel extends React.Component {
+  constructor(props) {
+    super(props);
+    this.clearAllCourses = this.clearAllCourses.bind(this);
+  }
+
+  clearAllCourses() {
+    if (window.confirm("Clear all selected courses?")) {
+      this.props.clearCourses();
+    }
+  }
+
   render() {
     const courses = this.props.selectedCourses.map(
       course => <Course key={course}
@@ -14,7 +25,7 @@ export class CoursePanel extends React.Component {
     return (
       <div id="course-select-wrapper" className="col-md-2 col-xs-6">
         <ul className="trapScroll-enabled" id="course-select">
-          <li id="clear-all" key="clear-all-grid" onClick={this.props.clearCourses}>
+          <li id="clear-all" key="clear-all-grid" onClick={this.clearAllCourses}>
             <h3>Clear All</h3>
           </li>
           {courses}
@@ -68,15 +79,16 @@ class Course extends React.Component {
 
     // Loop through the lecture sections to get each section's session code and lecture times
     allLectures.forEach( lectureInfo => {
-      // Check to make sure its not a restricted section. Restricted sections have enrollment
-      // restricted for a particular group of students, but happens at the same time and place as a regular
-      // lecture/tutorial section.
-      if (lectureInfo.section.charAt(3) !== '2' && lectureInfo.times !== 'Online Web Version') {
+      // Check to make sure its not an online section (online sections have course codes beginning with 9) or
+      // restricted section. Restricted sections have enrollment restricted for a particular group of students,
+      // but happens at the same time and place as a regular lecture/tutorial section.
+      if (lectureInfo.section.charAt(3) !== '2' && lectureInfo.section.charAt(3) !== '9' &&
+        lectureInfo.times !== 'Online Web Version') {
         let lecture = {
           courseCode: lectureInfo.code.substring(0, 6) + " (" + lectureInfo.section.substring(0,1) + ")",
           lectureCode: lectureInfo.section.substring(0, 1) + lectureInfo.section.substring(3),
           session: lectureInfo.session,
-          times: lectureInfo.times
+          times: lectureInfo.times,
         };
         parsedLectures.push(lecture);
       }
@@ -160,27 +172,34 @@ class LectureSection extends React.Component {
   constructor(props) {
     super(props);
     this.selectLecture = this.selectLecture.bind(this);
+    this.isSelectedLecture = this.isSelectedLecture.bind(this);
   }
 
-  // Check whether the course is already in the selectCourses list.
-  // Remove the course if it is, or add the course if it is not.
+  // Remove the lecture if it is already in the selectedLectures list, or add the lecture if it is not.
   selectLecture() {
-    const sameLecture = this.props.selectedLectures.filter((lecture) => {
-      return lecture.courseCode === this.props.lecture.courseCode && lecture.session === this.props.session &&
-        lecture.lectureCode === this.props.lecture.lectureCode
-    });
-    // If sameLecture is not an empty array, then this lecture is already selected and should be removed
-    if (sameLecture.length > 0) {
+    if (this.isSelectedLecture()) {
       this.props.removeSelectedLecture(this.props.lecture.courseCode, this.props.session);
     } else {
       this.props.addSelectedLecture(this.props.lecture);
     }
   }
 
+  // Check whether the lecture is in the selectedLectures list, return true if it is, false it is not.
+  isSelectedLecture() {
+    const sameLecture = this.props.selectedLectures.filter((lecture) => {
+      return lecture.courseCode === this.props.lecture.courseCode && lecture.session === this.props.session &&
+        lecture.lectureCode === this.props.lecture.lectureCode
+    });
+    // If sameLecture is not an empty array, then this lecture is already selected and should be removed
+    return sameLecture.length > 0;
+  }
+
   render() {
     return(
       <li id={this.props.courseCode + "-" + this.props.lecture.lectureCode + "-" + this.props.session}
-          onClick={this.selectLecture}>
+          onClick={this.selectLecture}
+          clicked={this.isSelectedLecture() ? "true" : "false"}
+          data-satisfied={"true"}>
         {this.props.lecture.lectureCode}
       </li>
     )
