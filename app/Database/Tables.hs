@@ -199,8 +199,6 @@ convertTimeToString :: Time -> [T.Text]
 convertTimeToString (Time day startNum endNum) =
   [T.pack . show $ (floor day :: Int),
    T.replace "." "-" . T.pack . show $ (show startNum ++ "-" ++ show endNum)]
-convertTimeToString _ = undefined
--- ToDo: remove "pattern match is redundant warning" for line 202.
 
 -- JSON encoding/decoding
 instance FromJSON Courses where
