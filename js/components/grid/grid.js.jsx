@@ -5,7 +5,10 @@ import { CoursePanel } from './course_panel.js.jsx';
 import { SearchPanel } from './search_panel.js.jsx';
 import { Row } from './calendar.js.jsx';
 
-
+/**
+ * Renders the course panel, the Fall and Spring timetable grids and search panel.
+ * Also keeps track of all the selected courses and lectures.
+ */
 class Grid extends React.Component {
   constructor(props) {
     super(props);

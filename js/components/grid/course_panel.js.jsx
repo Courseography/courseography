@@ -1,12 +1,18 @@
 import React from 'react';
 import { Modal } from '../common/react_modal.js.jsx';
 
+/**
+ * Holds courses selected from the search bar, and lists of their F, S and Y lecture, tutorial,
+ * and practical sections.
+ */
 export class CoursePanel extends React.Component {
   constructor(props) {
     super(props);
     this.clearAllCourses = this.clearAllCourses.bind(this);
   }
 
+  // Only clear all selected courses if the user confirms in the alert
+  // pop up window.
   clearAllCourses() {
     if (window.confirm("Clear all selected courses?")) {
       this.props.clearCourses();
@@ -35,6 +41,12 @@ export class CoursePanel extends React.Component {
   }
 }
 
+/**
+ * A selected course with a delete button, and info button, which displays information
+ * about the course when clicked.
+ * Also retrieves the course information. It holds list of F, S and Y lecture, tutorial
+ * and practical sections for the course.
+ */
 class Course extends React.Component {
   constructor(props) {
     super(props);
@@ -47,6 +59,7 @@ class Course extends React.Component {
     this.removeCourse = this.removeCourse.bind(this);
     this.parseLectures = this.parseLectures.bind(this);
     this.displayInfo = this.displayInfo.bind(this);
+    this.containsSelectedLecture = this.containsSelectedLecture.bind(this);
   }
 
   componentDidMount() {
@@ -108,6 +121,17 @@ class Course extends React.Component {
     this.modal.openModal(this.state.courseInfo.courseCode.substring(0, 6));
   }
 
+  containsSelectedLecture() {
+    // Only use method subString on the value of this.state.courseInfo.courseCode if
+    // if the this.state.courseInfo.courseCode exists (ie the course information has already been fetched)
+    if (this.state.courseInfo.courseCode) {
+      const lectures = this.props.selectedLectures.map(lecture => lecture.courseCode.substring(0, 6));
+      const courseCode = (this.state.courseInfo.courseCode)
+      return lectures.indexOf(courseCode.substring(0, 6)) >= 0;
+    }
+    return false;
+  }
+
   render() {
     return (
       <li key={this.props.courseCode} id={this.props.courseCode + "-li"} className={"ui-accordion ui-widget ui-helper-reset"}>
@@ -118,7 +142,7 @@ class Course extends React.Component {
             <img src="static/res/ico/delete.png" className="close-icon" onClick={this.removeCourse}/>
             <img src="static/res/ico/about.png" className="close-icon" onClick={this.displayInfo}/>
           </div>
-          <h3 onClick={this.toggleSelect}>
+          <h3 onClick={this.toggleSelect} data-satisfied="true" taken={this.containsSelectedLecture() ? "true" : "false"}>
             {this.props.courseCode}
           </h3>
         </div>
@@ -150,6 +174,10 @@ class Course extends React.Component {
   }
 }
 
+/**
+ * A list of lecture, tutorial and practical sections for the specified course for the specified
+ * session.
+ */
 class SectionList extends React.Component {
   render() {
     const lectureSections = this.props.lectures.map(lecture =>
@@ -168,6 +196,10 @@ class SectionList extends React.Component {
   }
 }
 
+/**
+ * A lecture, tutorial or practical section for the specified course in the specified
+ * session. The section is added to or removed from a list of selected lecture upon click.
+ */
 class LectureSection extends React.Component {
   constructor(props) {
     super(props);

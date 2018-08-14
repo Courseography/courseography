@@ -1,9 +1,9 @@
-/* Holds the containers of the Fall and Spring timetables,
- * and performs some pre-processing steps with a list of 'Lecture' objects
- */
 import React from 'react';
 
-
+/*
+ * Holds the containers of the Fall and Spring timetables,
+ * and performs some pre-processing steps with a list of 'Lecture' objects
+ */
 export class Row extends React.Component {
   render() {
     // Create a list of lecture objects
