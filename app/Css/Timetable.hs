@@ -146,6 +146,16 @@ timetableCSS = do
             borderPink borderTop
             borderLeftStyle none
             borderRightStyle none
+        ".timetable-cell-tophalf" ? do
+            borderBottomStyle none
+            borderPink borderTop
+            borderLeftStyle none
+            borderRightStyle none
+        ".timetable-cell-bottomhalf" ? do
+            borderPink borderBottom
+            borderTopStyle none
+            borderLeftStyle none
+            borderRightStyle none
         ".timetable-edge" ? do
             borderPink borderTop
             borderBottomStyle none

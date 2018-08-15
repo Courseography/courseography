@@ -1,8 +1,9 @@
 module Response.Calendar
     (calendarResponse) where
 
-import Data.List (sort, groupBy)
+import Data.List (sort, groupBy, sortBy)
 import Data.List.Split (splitOn)
+import Data.Ord (comparing)
 import Data.Time (Day, addDays, formatTime, getCurrentTime, defaultTimeLocale)
 import Happstack.Server (ServerPart, Response, toResponse)
 import Control.Monad.IO.Class (liftIO)
@@ -163,13 +164,13 @@ fifth (_, _, _, _, dates) = dates
 -- ** Ordering data
 
 -- | A list of the information within the time fields ordered by day.
-type InfoTimeFieldsByDay = [[[Double]]]
+type InfoTimeFieldsByDay = [[Time]]
 
--- | Orders by day the time fields obtained from the database.
+-- | Orders by day the start and endtimes obtained from the database.
 orderTimeFields :: [Time] -> InfoTimeFieldsByDay
-orderTimeFields timeFields = groupBy (\x y -> head x == head y) sortedList
+orderTimeFields timeFields = groupBy (\x y -> weekDay x == weekDay y) sortedList
     where
-        sortedList = sort (map timeField timeFields)
+        sortedList = sortBy (comparing weekDay) timeFields
 
 -- ** Start time
 
@@ -182,20 +183,9 @@ startTimesByCourse dataInOrder _ = startTime dataInOrder
 -- | Obtains the start times for each course by day.
 startTime :: InfoTimeFieldsByDay -> StartTimesByDay
 startTime =
-    map (\dataByDay -> map formatTimes
-                           (head (timesOrdered dataByDay) :
-                                   getStartConsecutives (timesOrdered dataByDay)))
+    map (\dataByDay -> map formatTimes (timesOrdered dataByDay))
     where
-        timesOrdered dataDay = sort $ map (!! 1) dataDay
-
--- | Gets the start times that are not the very first start time.
-getStartConsecutives :: [Double] -> [Double]
-getStartConsecutives listTimes =
-    filter (/= 30.0) [if listTimes !! i == listTimes !! (i + 1) - 0.5
-                      then 30.0
-                      else listTimes !! (i + 1)| i <- [0 .. lenForComparison]]
-    where
-        lenForComparison = length listTimes - 2
+        timesOrdered dataDay = sort $ map startHour dataDay
 
 -- ** End time
 
@@ -208,20 +198,9 @@ endTimesByCourse dataInOrder _ = endTime dataInOrder
 -- | Obtains the end times for each course by day.
 endTime :: InfoTimeFieldsByDay -> EndTimesByDay
 endTime =
-    map (\dataByDay -> map (formatTimes . (+ 0.5))
-                           (getEndConsecutives $ timesOrdered dataByDay ++
-                            [last $ timesOrdered dataByDay]))
+    map (\dataByDay -> map formatTimes (timesOrdered dataByDay))
     where
-        timesOrdered dataDay = sort $ map (!! 1) dataDay
-
--- | Gets the end times that are not the very first end time.
-getEndConsecutives :: [Double] -> [Double]
-getEndConsecutives listTimes =
-    filter (/= 30.0) [if listTimes !! i == listTimes !! (i + 1) - 0.5
-                      then 30.0
-                      else listTimes !! i| i <- [0 .. lenForComparison]]
-    where
-        lenForComparison = length listTimes - 2
+        timesOrdered dataDay = sort $ map endHour dataDay
 
 -- ** Functions that work for both start and end times
 
@@ -268,10 +247,10 @@ type EndDate = String
 
 -- | Gives the appropiate starting and ending dates for each day,in which the
 -- course takes place, depending on the course session.
-getDatesByDay :: Session -> [[Double]] -> (StartDate, EndDate)
+getDatesByDay :: Session -> [Time] -> (StartDate, EndDate)
 getDatesByDay session dataByDay
-    | session ==  "F" = formatDates $ getDatesFall $ head $ concat dataByDay
-    | otherwise = formatDates $ getDatesWinter $ head $ concat dataByDay
+    | session ==  "F" = formatDates $ getDatesFall $ weekDay $ head dataByDay
+    | otherwise = formatDates $ getDatesWinter $ weekDay $ head dataByDay
 
 -- | Formats the date in the following way: YearMonthDayT.
 -- For instance, 20150720T corresponds to July 20th, 2015.

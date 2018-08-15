@@ -37,12 +37,11 @@ import GHC.Generics
 import WebParsing.ReqParser (parseReqs)
 
 -- | A data type representing a time for the section of a course.
--- The first list is comprised of two values: the date (represented as a number
--- of the week), and the time. The dates span Monday-Friday, being represented
--- by 1-5 respectively. The time is a number between 0-23.
--- TODO: Change this datatype. This datatype shouldn't be implemented with
--- a list, perhaps a tuple would be better.
-data Time = Time { timeField :: [Double] } deriving (Show, Read, Eq, Generic)
+-- The record is comprised of three fields: weekDay (represented as a number
+-- of the week), startHour (the start time of the lecture) and endHour (the end time of the lecture).
+-- The dates span Monday-Friday, being represented by 0-4 respectively.
+-- The start time and end time are numbers between 0-23.
+data Time = Time { weekDay :: Double, startHour :: Double, endHour :: Double } deriving (Show, Read, Eq, Generic)
 derivePersistField "Time"
 
 data Room = Room { roomField :: (T.Text, T.Text)} deriving (Show, Read, Eq, Generic)
@@ -192,16 +191,14 @@ instance ToJSON Room
 -- not necessary otherwise.
 instance FromJSON SvgJSON
 
--- | Converts a Double to a T.Text.
+-- | Converts a Time to a T.Text.
 -- This removes the period from the double, as the JavaScript code,
 -- uses the output in an element's ID, which is then later used in
 -- jQuery. @.@ is a jQuery meta-character, and must be removed from the ID.
 convertTimeToString :: Time -> [T.Text]
-convertTimeToString (Time [day, timeNum]) =
+convertTimeToString (Time day startNum endNum) =
   [T.pack . show $ (floor day :: Int),
-   T.replace "." "-" . T.pack . show $ timeNum]
-convertTimeToString _ = undefined
-
+   T.replace "." "-" . T.pack . show $ (show startNum ++ "-" ++ show endNum)]
 
 -- JSON encoding/decoding
 instance FromJSON Courses where
@@ -303,11 +300,11 @@ getDayVal "TH" = 3.0
 getDayVal "FR" = 4.0
 getDayVal _    = 4.0
 
--- | Takes a day and start/end times then generates a set of 30-minute timeslots
+-- | Takes a day and start/end times then generates a Time with the day and start/end times
 getTimeSlots :: Maybe String -> Maybe String -> Maybe String -> [Time]
 getTimeSlots (Just day) (Just start) (Just end) = do
     let dayDbl = getDayVal day
         startDbl = getHourVal start
         endDbl = getHourVal end
-    [Time [dayDbl, timeDbl] | timeDbl <- [startDbl, (startDbl + 0.5) .. (endDbl - 0.5)]]
+    [Time dayDbl startDbl endDbl]
 getTimeSlots _ _ _ = []

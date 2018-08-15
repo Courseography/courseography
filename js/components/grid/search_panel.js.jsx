@@ -127,7 +127,7 @@ class CourseEntry extends React.Component {
   }
 
   render() {
-    let classes = this.props.selectedCourses.indexOf(this.props.course) != -1 ? 'starred-course' : '';
+    const classes = this.props.selectedCourses.indexOf(this.props.course) != -1 ? 'starred-course' : '';
     return (
       <li id={this.props.course + '-search'}
           className={classes}

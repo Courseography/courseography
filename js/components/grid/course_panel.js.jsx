@@ -1,7 +1,24 @@
 import React from 'react';
 import { Modal } from '../common/react_modal.js.jsx';
 
+/**
+ * Holds courses selected from the search bar, and lists of their F, S and Y lecture, tutorial,
+ * and practical sections.
+ */
 export class CoursePanel extends React.Component {
+  constructor(props) {
+    super(props);
+    this.clearAllCourses = this.clearAllCourses.bind(this);
+  }
+
+  // Only clear all selected courses if the user confirms in the alert
+  // pop up window.
+  clearAllCourses() {
+    if (window.confirm("Clear all selected courses?")) {
+      this.props.clearCourses();
+    }
+  }
+
   render() {
     const courses = this.props.selectedCourses.map(
       course => <Course key={course}
@@ -14,7 +31,7 @@ export class CoursePanel extends React.Component {
     return (
       <div id="course-select-wrapper" className="col-md-2 col-xs-6">
         <ul className="trapScroll-enabled" id="course-select">
-          <li id="clear-all" key="clear-all-grid" onClick={this.props.clearCourses}>
+          <li id="clear-all" key="clear-all-grid" onClick={this.clearAllCourses}>
             <h3>Clear All</h3>
           </li>
           {courses}
@@ -24,6 +41,12 @@ export class CoursePanel extends React.Component {
   }
 }
 
+/**
+ * A selected course with a delete button, and info button, which displays information
+ * about the course when clicked.
+ * Also retrieves the course information. It holds list of F, S and Y lecture, tutorial
+ * and practical sections for the course.
+ */
 class Course extends React.Component {
   constructor(props) {
     super(props);
@@ -36,6 +59,7 @@ class Course extends React.Component {
     this.removeCourse = this.removeCourse.bind(this);
     this.parseLectures = this.parseLectures.bind(this);
     this.displayInfo = this.displayInfo.bind(this);
+    this.containsSelectedLecture = this.containsSelectedLecture.bind(this);
   }
 
   componentDidMount() {
@@ -63,50 +87,22 @@ class Course extends React.Component {
 
   parseLectures(lectures) {
     // Remove duplicated lecture sections
-    let allLectures = removeDuplicateLectures(lectures);
+    const allLectures = removeDuplicateLectures(lectures);
     let parsedLectures = [];
 
-    let days = {0: 'M', 1: 'T', 2: 'W', 3: 'R', 4: 'F'};
     // Loop through the lecture sections to get each section's session code and lecture times
     allLectures.forEach( lectureInfo => {
-      // Check to make sure its not a restricted section. Restricted sections have enrollment
-      // restricted for a particular group of students, but happens at the same time and place as a regular
-      // lecture/tutorial section.
-      if (lectureInfo.section.charAt(3) !== '2' && lectureInfo.times !== 'Online Web Version') {
+      // Check to make sure its not an online section (online sections have course codes beginning with 9) or
+      // restricted section. Restricted sections have enrollment restricted for a particular group of students,
+      // but happens at the same time and place as a regular lecture/tutorial section.
+      if (lectureInfo.section.charAt(3) !== '2' && lectureInfo.section.charAt(3) !== '9' &&
+        lectureInfo.times !== 'Online Web Version') {
         let lecture = {
-          courseName: lectureInfo.code.substring(0, 6) + " (" + lectureInfo.section.substring(0,1) + ")",
+          courseCode: lectureInfo.code.substring(0, 6) + " (" + lectureInfo.section.substring(0,1) + ")",
           lectureCode: lectureInfo.section.substring(0, 1) + lectureInfo.section.substring(3),
-          times: {}
+          session: lectureInfo.session,
+          times: lectureInfo.times,
         };
-        let allTimes = lectureInfo.times;
-        // The times in the original data are arrays of form [day, startTime], where day is an integer
-        // between 0 and 4 that corresponds to days Monday to Friday. Eg: [0, 14] is a Monday lecture that
-        // starts are 2PM. Every half hour is an individual array.
-        // Loop through each individual time array and add the start time to the corresponding day.
-        allTimes.forEach( time => {
-          let day = days[(time.timeField[0])];
-          if (!lecture.times[day]) {
-            lecture.times[day] = [time.timeField[1]];
-          }
-          else {
-            lecture.times[day].push(time.timeField[1]);
-          }
-        });
-        // Loop through each day of the week and remove the half hour increments.
-        // Only keep start time and end time in the array.
-        for (let weekday in lecture.times) {
-          let times = []
-          if (lecture.times.hasOwnProperty(weekday)) {
-            times.push(lecture.times[weekday][0]);
-            for (let hour = 1; hour < lecture.times[weekday].length; hour++) {
-              if (hour+1 >= lecture.times[weekday].length ||
-                lecture.times[weekday][hour+1] !== lecture.times[weekday][hour] + 0.5) {
-                times.push(lecture.times[weekday][hour] + 0.5);
-              }
-            }
-            lecture.times[weekday] = times;
-          }
-        }
         parsedLectures.push(lecture);
       }
     });
@@ -125,6 +121,17 @@ class Course extends React.Component {
     this.modal.openModal(this.state.courseInfo.courseCode.substring(0, 6));
   }
 
+  containsSelectedLecture() {
+    // Only use method subString on the value of this.state.courseInfo.courseCode if
+    // if the this.state.courseInfo.courseCode exists (ie the course information has already been fetched)
+    if (this.state.courseInfo.courseCode) {
+      const lectures = this.props.selectedLectures.map(lecture => lecture.courseCode.substring(0, 6));
+      const courseCode = (this.state.courseInfo.courseCode)
+      return lectures.indexOf(courseCode.substring(0, 6)) >= 0;
+    }
+    return false;
+  }
+
   render() {
     return (
       <li key={this.props.courseCode} id={this.props.courseCode + "-li"} className={"ui-accordion ui-widget ui-helper-reset"}>
@@ -135,7 +142,7 @@ class Course extends React.Component {
             <img src="static/res/ico/delete.png" className="close-icon" onClick={this.removeCourse}/>
             <img src="static/res/ico/about.png" className="close-icon" onClick={this.displayInfo}/>
           </div>
-          <h3 onClick={this.toggleSelect}>
+          <h3 onClick={this.toggleSelect} data-satisfied="true" taken={this.containsSelectedLecture() ? "true" : "false"}>
             {this.props.courseCode}
           </h3>
         </div>
@@ -167,6 +174,10 @@ class Course extends React.Component {
   }
 }
 
+/**
+ * A list of lecture, tutorial and practical sections for the specified course for the specified
+ * session.
+ */
 class SectionList extends React.Component {
   render() {
     const lectureSections = this.props.lectures.map(lecture =>
@@ -185,32 +196,42 @@ class SectionList extends React.Component {
   }
 }
 
+/**
+ * A lecture, tutorial or practical section for the specified course in the specified
+ * session. The section is added to or removed from a list of selected lecture upon click.
+ */
 class LectureSection extends React.Component {
   constructor(props) {
     super(props);
     this.selectLecture = this.selectLecture.bind(this);
+    this.isSelectedLecture = this.isSelectedLecture.bind(this);
   }
 
-  // Check whether the course is already in the selectCourses list.
-  // Remove the course if it is, or add the course if it is not.
+  // Remove the lecture if it is already in the selectedLectures list, or add the lecture if it is not.
   selectLecture() {
-    let sameLecture = this.props.selectedLectures.filter((lecture) => {
-      return lecture.course === this.props.lecture.courseName && lecture.session === this.props.session &&
+    if (this.isSelectedLecture()) {
+      this.props.removeSelectedLecture(this.props.lecture.courseCode, this.props.session);
+    } else {
+      this.props.addSelectedLecture(this.props.lecture);
+    }
+  }
+
+  // Check whether the lecture is in the selectedLectures list, return true if it is, false it is not.
+  isSelectedLecture() {
+    const sameLecture = this.props.selectedLectures.filter((lecture) => {
+      return lecture.courseCode === this.props.lecture.courseCode && lecture.session === this.props.session &&
         lecture.lectureCode === this.props.lecture.lectureCode
     });
     // If sameLecture is not an empty array, then this lecture is already selected and should be removed
-    if (sameLecture.length > 0) {
-      this.props.removeSelectedLecture(this.props.lecture.courseName, this.props.session);
-    } else {
-      this.props.addSelectedLecture(this.props.lecture.courseName, this.props.session,
-                                    this.props.lecture.lectureCode, this.props.lecture.times);
-    }
+    return sameLecture.length > 0;
   }
 
   render() {
     return(
       <li id={this.props.courseCode + "-" + this.props.lecture.lectureCode + "-" + this.props.session}
-          onClick={this.selectLecture}>
+          onClick={this.selectLecture}
+          clicked={this.isSelectedLecture() ? "true" : "false"}
+          data-satisfied={"true"}>
         {this.props.lecture.lectureCode}
       </li>
     )
