@@ -349,16 +349,15 @@ function lectureConflict(courseList) {
 function createNewLectures(lectureSection, index, lectureSections) {
   // data_satisfied is false if a tutorial or practical for a course is selected in a particular session(F or S) and there
   // is no lecture selected for that course in the given session.
-  let data_satisfied = false;
+  lectureSection.data_satisfied = false;
   const lectureSelected = lectureSections.filter((lecture) => {
       return lecture.lectureCode.substring(0, 1) === "L" &&
         lecture.courseCode.substring(0, 6) === lectureSection.courseCode.substring(0, 6) &&
         lecture.session === lectureSection.session
   });
   if (lectureSelected.length > 0) {
-    data_satisfied = true;
+    lectureSection.data_satisfied = true;
   }
-  lectureSection.data_satisfied = data_satisfied;
   const lectures = lectureSection.times.map(time => {
     return {
       courseCode: lectureSection.courseCode,
