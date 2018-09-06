@@ -7,7 +7,8 @@ import React from 'react';
 export class Row extends React.Component {
   render() {
     // Create a list of lecture objects
-    let lectures = this.props.lectureSections.map(lectureSection => createNewLectures(lectureSection));
+    let lectures = this.props.lectureSections.map(
+      (lectureSection, index, lectureSections) => createNewLectures(lectureSection, index, lectureSections));
     lectures = [].concat.apply([], lectures);
 
     // Organize the structure of the <fallSession> and <springSession> 2-D dictionaries
@@ -168,7 +169,7 @@ class TimetableRow extends React.Component {
               <td id={'' + day.toString() + currTime + '-0' + totalColSpans + currSess}
                 key={'' + day.toString() + currTime + '-0' + totalColSpans + currSess}
                 data-in-conflict={lecture.inConflict}
-                data-satisfied={"true"}
+                data-satisfied={lecture.data_satisfied}
                 rowSpan={rowSpan}
                 colSpan={lecColSpan}
                 className="timetable-cell timetable-edge"
@@ -345,7 +346,19 @@ function lectureConflict(courseList) {
  * @return {array} An array of objects representing each disconnected time period the given
  *                  lecture occurs in
 */
-function createNewLectures(lectureSection) {
+function createNewLectures(lectureSection, index, lectureSections) {
+  // data_satisfied is false if a tutorial or practical for a course is selected in a particular session(F or S) and there
+  // is no lecture selected for that course in the given session.
+  let data_satisfied = false;
+  const lectureSelected = lectureSections.filter((lecture) => {
+      return lecture.lectureCode.substring(0, 1) === "L" &&
+        lecture.courseCode.substring(0, 6) === lectureSection.courseCode.substring(0, 6) &&
+        lecture.session === lectureSection.session
+  });
+  if (lectureSelected.length > 0) {
+    data_satisfied = true;
+  }
+  lectureSection.data_satisfied = data_satisfied;
   const lectures = lectureSection.times.map(time => {
     return {
       courseCode: lectureSection.courseCode,
@@ -354,7 +367,8 @@ function createNewLectures(lectureSection) {
       startTime: time.startHour,
       endTime: time.endHour,
       inConflict: false,
-      width: 1
+      width: 1,
+      data_satisfied: lectureSection.data_satisfied
     }
   });
   return lectures;
