@@ -169,7 +169,7 @@ class TimetableRow extends React.Component {
               <td id={'' + day.toString() + currTime + '-0' + totalColSpans + currSess}
                 key={'' + day.toString() + currTime + '-0' + totalColSpans + currSess}
                 data-in-conflict={lecture.inConflict}
-                data-satisfied={lecture.data_satisfied}
+                data-satisfied={lecture.dataSatisfied}
                 rowSpan={rowSpan}
                 colSpan={lecColSpan}
                 className="timetable-cell timetable-edge"
@@ -347,16 +347,16 @@ function lectureConflict(courseList) {
  *                  lecture occurs in
 */
 function createNewLectures(lectureSection, index, lectureSections) {
-  // data_satisfied is false if a tutorial or practical for a course is selected in a particular session(F or S) and there
+  // dataSatisfied is false if a tutorial or practical for a course is selected in a particular session(F or S) and there
   // is no lecture selected for that course in the given session.
-  lectureSection.data_satisfied = false;
+  lectureSection.dataSatisfied = false;
   const lectureSelected = lectureSections.filter((lecture) => {
       return lecture.lectureCode.substring(0, 1) === "L" &&
         lecture.courseCode.substring(0, 6) === lectureSection.courseCode.substring(0, 6) &&
         lecture.session === lectureSection.session
   });
   if (lectureSelected.length > 0) {
-    lectureSection.data_satisfied = true;
+    lectureSection.dataSatisfied = true;
   }
   const lectures = lectureSection.times.map(time => {
     return {
@@ -367,7 +367,7 @@ function createNewLectures(lectureSection, index, lectureSections) {
       endTime: time.endHour,
       inConflict: false,
       width: 1,
-      data_satisfied: lectureSection.data_satisfied
+      dataSatisfied: lectureSection.dataSatisfied
     }
   });
   return lectures;
