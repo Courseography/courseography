@@ -88,6 +88,15 @@ Meeting
     room [Room]
     deriving Generic Show
 
+Times
+    weekDay Double
+    startHour Double
+    endHour Double
+    meeting MeetingId Maybe
+    firstRoom T.Text Maybe
+    secondRoom T.Text Maybe
+    deriving Show
+
 Breadth
     description T.Text
     deriving Show
@@ -264,6 +273,18 @@ instance FromJSON Meeting where
     else
       fail "Not a lecture, Tutorial or Practical"
 
+
+instance FromJSON Times where
+  parseJSON = withObject "Expected Object for Times"$ \o -> do
+    meetingDay <- o .:? "meetingDay"
+    meetingStartTime <- o .:? "meetingStartTime"
+    meetingEndTime <- o .:? "meetingEndTime"
+    meetingRoom1 <- o .:? "assignedRoom1"
+    meetingRoom2 <- o .:? "assignedRoom2"
+    let (dayDbl, startDbl, endDbl) = getTimeDbls meetingDay meetingStartTime meetingEndTime
+    return $ Times dayDbl startDbl endDbl Nothing meetingRoom1 meetingRoom2
+
+
 -- | Helpers for parsing JSON
 parseInstr :: Value -> Parser T.Text
 parseInstr (Object io) = do
@@ -271,6 +292,15 @@ parseInstr (Object io) = do
   lastName <- io .:? "lastName" .!= ""
   return (T.concat [firstName, ". ", lastName])
 parseInstr _ = return ""
+
+parseTime :: Value -> Parser (Double, Double, Double)
+parseTime (Object obj) = do
+    meetingDay <- obj .:? "meetingDay"
+    meetingStartTime <- obj .:? "meetingStartTime"
+    meetingEndTime <- obj .:? "meetingEndTime"
+    let time = getTimeDbls meetingDay meetingStartTime meetingEndTime
+    return time
+parseTime _ = return (5.0, 5.0, 5.0)
 
 parseSchedules :: Value -> Parser ([Time], [Room])
 parseSchedules (Object obj) = do
@@ -299,6 +329,15 @@ getDayVal "WE" = 2.0
 getDayVal "TH" = 3.0
 getDayVal "FR" = 4.0
 getDayVal _    = 4.0
+
+getTimeDbls :: Maybe String -> Maybe String -> Maybe String -> (Double, Double, Double)
+getTimeDbls (Just day) (Just start) (Just end) = do
+    let dayDbl = getDayVal day
+        startDbl = getHourVal start
+        endDbl = getHourVal end
+    (dayDbl, startDbl, endDbl)
+getTimeDbls _ _ _ = (5.0, 5.0, 5.0)
+
 
 -- | Takes a day and start/end times then generates a Time with the day and start/end times
 getTimeSlots :: Maybe String -> Maybe String -> Maybe String -> [Time]
