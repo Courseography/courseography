@@ -13,12 +13,11 @@ import Config (databasePath)
 import Database.Tables (Courses(..), EntityField(CoursesCode), Meeting(..), EntityField(MeetingCode), EntityField(MeetingSection), EntityField(MeetingSession), Times(..))
 import Database.Persist.Sqlite (runSqlite, insert_, SqlPersistM, selectKeysList, (==.))
 import Database.Persist.Class (Key)
---import Text.Parsec.Text (Parser)
 
 
 -- | URLs for the Faculty of Arts and Science API
 timetableURL :: T.Text
-timetableURL = "https://timetable.iit.artsci.utoronto.ca/api/20179/courses?code="
+timetableURL = "https://timetable.iit.artsci.utoronto.ca/api/20189/courses?code="
 
 orgURL :: String
 orgURL = "https://timetable.iit.artsci.utoronto.ca/api/orgs"
@@ -67,15 +66,13 @@ getMeetingKey meetCode meetSession meetSection = do
 
 insertMeeting :: MeetingTimes -> SqlPersistM ()
 insertMeeting meet = do
-    let meetingInfo = meetingData meet
-    courseKey <- getCourseKey (meetingCode meetingInfo)
+    courseKey <- getCourseKey (meetingCode $ meetingData meet)
     case courseKey of
         Just _ -> do
-          insert_ meetingInfo
-          meetingKey <- getMeetingKey (meetingCode meetingInfo) (meetingSession meetingInfo) (meetingSection meetingInfo)
+          insert_ $ meetingData meet
+          meetingKey <- getMeetingKey (meetingCode $meetingData meet) (meetingSession $ meetingData meet) (meetingSection $ meetingData meet)
           case meetingKey of
-              Just _ -> do
-                mapM_ (\t -> insert_ $ t {timesMeeting = meetingKey}) $ times meet
+              Just _ -> mapM_ (\t -> insert_ $ t {timesMeeting = meetingKey}) $ times meet
               Nothing -> return ()
         Nothing -> return ()
 
@@ -90,8 +87,8 @@ newtype DB = DB { dbData :: (Courses, [MeetingTimes]) }
 --     return (meetingData, timeMap)
 -- parseMeetingTimes _ = return (Nothing, [])
 
-parseMeetingTimes:: (T.Text, T.Text, Meeting, [Times]) -> MeetingTimes
-parseMeetingTimes (code, session, meetTimes, allTimes) =
+parseMeetingTimes:: T.Text -> T.Text -> Meeting -> [Times] -> MeetingTimes
+parseMeetingTimes code session meetTimes allTimes =
     MeetingTimes {meetingData = meetTimes {meetingCode = code, meetingSession = session}, times = allTimes }
 
 instance FromJSON DB where
@@ -99,7 +96,7 @@ instance FromJSON DB where
       course <- parseJSON (Object o)
       session :: T.Text <- o .:? "section" .!= "F"
       meetingTimesMap :: HM.HashMap T.Text MeetingTimes <- o .:? "meetings" .!= HM.empty
-      let allMeetingsTimes = map (\meetTime -> parseMeetingTimes ((coursesCode course), session, (meetingData meetTime), (times meetTime))) (HM.elems meetingTimesMap)
+      let allMeetingsTimes = map (\meetTime -> parseMeetingTimes (coursesCode course) session (meetingData meetTime) (times meetTime)) (HM.elems meetingTimesMap)
           -- Fix manualTutorialEnrolment and manualPracticalEnrolment
           manTut = any (T.isPrefixOf "TUT" . meetingSection) $ map (\m -> meetingData m) allMeetingsTimes
           manPra = any (T.isPrefixOf "PRA" . meetingSection) $ map (\m -> meetingData m) allMeetingsTimes
@@ -117,21 +114,18 @@ instance FromJSON DB where
 -- instance FromJSON Meetings where
 --   parseJSON x = fmap Meetings (parseJSON x)
 
-newtype AllTimes = AllTimes { timesData :: Times }
-  deriving Show
+-- newtype AllTimes = AllTimes { timesData :: Times }
+--   deriving Show
 
 instance FromJSON MeetingTimes where
-  parseJSON = withObject "meetingtimes" $ \o -> do
+  parseJSON = withObject "Expected Object for Meeting and Times" $ \o -> do
     meeting <- parseJSON (Object o)
-    timeMap :: HM.HashMap T.Text AllTimes <- o .:? "schedule" .!= HM.empty
-    let allTimes = map (toTime timesData) (HM.elems timeMap)
-    return $ MeetingTimes meeting allTimes
-    where
-      toTime time =
-        time
+    timeMap :: HM.HashMap T.Text Times <- o .:? "schedule" .!= HM.empty
+    return $ MeetingTimes meeting (HM.elems timeMap)
+
 
 data MeetingTimes = MeetingTimes { meetingData :: Meeting, times :: [Times] }
   deriving Show
 
-instance FromJSON AllTimes where
-  parseJSON x = fmap AllTimes (parseJSON x)
+-- instance FromJSON AllTimes where
+--   parseJSON x = fmap AllTimes (parseJSON x)
