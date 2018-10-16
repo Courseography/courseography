@@ -167,6 +167,7 @@ data SvgJSON =
               paths :: [Path]
             } deriving (Show, Generic)
 
+-- change session to be lectures :: [(Meeting, [Times])], or perhaps MeetingTimes {meeting:: Meeting, times :; [Times]}
 data Session =
     Session { lectures :: [Meeting],
               tutorials :: [Meeting],
