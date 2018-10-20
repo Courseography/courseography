@@ -277,11 +277,14 @@ instance FromJSON Meeting where
 
 instance FromJSON Times where
   parseJSON = withObject "Expected Object for Times"$ \o -> do
-    meetingDay <- o .:? "meetingDay"
-    meetingStartTime <- o .:? "meetingStartTime"
-    meetingEndTime <- o .:? "meetingEndTime"
-    meetingRoom1 <- o .:? "assignedRoom1"
-    meetingRoom2 <- o .:? "assignedRoom2"
+    meetingDayStr <- o .:? "meetingDay" .!= "5.0"
+    meetingStartTimeStr <- o .:? "meetingStartTime" .!= "5.0"
+    meetingEndTimeStr <- o .:? "meetingEndTime" .!= "5.0"
+    meetingRoom1 <- o .:? "assignedRoom1" .!= Nothing
+    meetingRoom2 <- o .:? "assignedRoom2" .!= Nothing
+    let meetingDay = readMaybe meetingDayStr
+        meetingStartTime = readMaybe meetingStartTimeStr
+        meetingEndTime = readMaybe meetingEndTimeStr
     let (dayDbl, startDbl, endDbl) = getTimeDbls meetingDay meetingStartTime meetingEndTime
     return $ Times dayDbl startDbl endDbl Nothing meetingRoom1 meetingRoom2
 
@@ -331,6 +334,7 @@ getDayVal "TH" = 3.0
 getDayVal "FR" = 4.0
 getDayVal _    = 4.0
 
+-- | Takes a string representation of the weekday, start time and end time, and convert them to a tuple of doubles
 getTimeDbls :: Maybe String -> Maybe String -> Maybe String -> (Double, Double, Double)
 getTimeDbls (Just day) (Just start) (Just end) = do
     let dayDbl = getDayVal day
@@ -338,7 +342,6 @@ getTimeDbls (Just day) (Just start) (Just end) = do
         endDbl = getHourVal end
     (dayDbl, startDbl, endDbl)
 getTimeDbls _ _ _ = (5.0, 5.0, 5.0)
-
 
 -- | Takes a day and start/end times then generates a Time with the day and start/end times
 getTimeSlots :: Maybe String -> Maybe String -> Maybe String -> [Time]
