@@ -2,7 +2,6 @@
     Module: Database.CourseQueries
     Description: Respond to various requests involving database course
                  information.
-
 This module contains the functions that perform different database queries
 and serve the information back to the client.
 -}
@@ -113,26 +112,6 @@ buildCourse fall spring year course = do
            (coursesCoreqs course)
            (coursesVideoUrls course)
 
--- buildMeeting :: Meeting -> SqlPersistM MeetingData
--- buildMeeting meeting = do
---     allMeetingTimes <- getMeetingTimes (meetingTimes meeting)
---     return $ MeetingData (meetingCode meeting)
---         (meetingSession meeting)
---         (meetingSection meeting)
---         allMeetingTimes
---         (meetingCap meeting)
---         (meetingInstructor meeting)
---         (meetingEnrol meeting)
---         (meetingWait meeting)
---         (meetingExtra meeting)
---         (meetingTimeStr meeting)
---         (meetingRoom meeting)
-
--- getMeetingTimes :: Maybe [TimeId] -> SqlPersistM (Maybe [Time])
--- getMeetingTimes Nothing = return Nothing
--- getMeetingTimes (Just keys) = do
---     maybeMeetingTimes <- map (\key -> entityVal (get key)) keys
---     return $ fmap meetingTimes maybeMeetingTimes
 
 getDescriptionB :: Maybe (Key Breadth) -> SqlPersistM (Maybe T.Text)
 getDescriptionB Nothing = return Nothing
