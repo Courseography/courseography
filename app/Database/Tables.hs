@@ -35,6 +35,8 @@ import Data.Aeson ((.:?), (.!=), FromJSON(parseJSON), ToJSON(toJSON), Value(..),
 import Data.Aeson.Types (Parser, defaultOptions, Options(..))
 import GHC.Generics
 import WebParsing.ReqParser (parseReqs)
+import Control.Applicative ((<|>))
+
 
 -- | A data type representing a time for the section of a course.
 -- The record is comprised of three fields: weekDay (represented as a number
@@ -95,7 +97,7 @@ Times
     meeting MeetingId Maybe
     firstRoom T.Text Maybe
     secondRoom T.Text Maybe
-    deriving Show
+    deriving Generic Show
 
 Breadth
     description T.Text
@@ -196,6 +198,7 @@ instance ToJSON Course
 instance ToJSON Session
 instance ToJSON Time
 instance ToJSON Room
+instance ToJSON MeetTimes
 
 -- instance FromJSON required so that tables can be parsed into JSON,
 -- not necessary otherwise.
@@ -240,6 +243,13 @@ instance ToJSON Meeting where
       drop 7
   }
 
+instance ToJSON Times where
+  toJSON = genericToJSON defaultOptions {
+    fieldLabelModifier =
+      (\field -> toLower (head field): tail field) .
+      drop 7
+  }
+
 instance FromJSON Meeting where
   parseJSON = withObject "Expected Object for Lecture, Tutorial or Practical" $ \o -> do
     teachingMethod :: T.Text <- o .:? "teachingMethod" .!= ""
@@ -276,17 +286,27 @@ instance FromJSON Meeting where
 
 
 instance FromJSON Times where
-  parseJSON = withObject "Expected Object for Times"$ \o -> do
+  parseJSON = withObject "Expected Object for Times" $ \o -> do
     meetingDayStr <- o .:? "meetingDay" .!= "5.0"
     meetingStartTimeStr <- o .:? "meetingStartTime" .!= "5.0"
     meetingEndTimeStr <- o .:? "meetingEndTime" .!= "5.0"
     meetingRoom1 <- o .:? "assignedRoom1" .!= Nothing
     meetingRoom2 <- o .:? "assignedRoom2" .!= Nothing
-    let meetingDay = readMaybe meetingDayStr
-        meetingStartTime = readMaybe meetingStartTimeStr
-        meetingEndTime = readMaybe meetingEndTimeStr
-    let (dayDbl, startDbl, endDbl) = getTimeDbls meetingDay meetingStartTime meetingEndTime
-    return $ Times dayDbl startDbl endDbl Nothing meetingRoom1 meetingRoom2
+    let meetingDay = fromMaybe 5.0 (readMaybe meetingDayStr)
+        meetingStartTime = fromMaybe 5.0 (readMaybe meetingStartTimeStr)
+        meetingEndTime = fromMaybe 5.0 (readMaybe meetingEndTimeStr)
+    return $ Times meetingDay meetingStartTime meetingEndTime Nothing meetingRoom1 meetingRoom2
+
+
+data MeetTimes = MeetTimes { meetingData :: Meeting, timesData :: [Times] }
+  deriving (Show, Generic)
+
+instance FromJSON MeetTimes where
+  parseJSON (Object o) = do
+    meeting <- parseJSON (Object o)
+    timeMap :: HM.HashMap T.Text Times <- o .:? "schedule" .!= HM.empty <|> return HM.empty
+    return $ MeetTimes meeting (HM.elems timeMap)
+  parseJSON _ = fail "Invalid meeting"
 
 
 -- | Helpers for parsing JSON
@@ -296,15 +316,6 @@ parseInstr (Object io) = do
   lastName <- io .:? "lastName" .!= ""
   return (T.concat [firstName, ". ", lastName])
 parseInstr _ = return ""
-
-parseTime :: Value -> Parser (Double, Double, Double)
-parseTime (Object obj) = do
-    meetingDay <- obj .:? "meetingDay"
-    meetingStartTime <- obj .:? "meetingStartTime"
-    meetingEndTime <- obj .:? "meetingEndTime"
-    let time = getTimeDbls meetingDay meetingStartTime meetingEndTime
-    return time
-parseTime _ = return (5.0, 5.0, 5.0)
 
 parseSchedules :: Value -> Parser ([Time], [Room])
 parseSchedules (Object obj) = do
