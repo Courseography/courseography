@@ -10,9 +10,8 @@ import qualified Data.HashMap.Strict as HM
 import Control.Monad.IO.Class (liftIO)
 import Network.HTTP.Conduit (simpleHttp)
 import Config (databasePath)
-import Database.Tables (Courses(..), EntityField(CoursesCode), Meeting(..), EntityField(MeetingCode), EntityField(MeetingSection), EntityField(MeetingSession), Times(..), MeetTimes(..))
-import Database.Persist.Sqlite (runSqlite, insert_, SqlPersistM, selectKeysList, (==.))
-import Database.Persist.Class (Key)
+import Database.Tables (Courses(..), EntityField(CoursesCode), Meeting(..), Times(..), MeetTimes(..))
+import Database.Persist.Sqlite (runSqlite, insert_, SqlPersistM, (==.), insert, selectFirst)
 -- import Control.Applicative ((<|>))
 
 
@@ -50,34 +49,16 @@ insertAllMeetings org = do
         meetings = concat sections
     mapM_ insertMeeting meetings
 
--- | Retrieve the key for the course with the given course code.
-getCourseKey :: T.Text -> SqlPersistM (Maybe (Key Courses))
-getCourseKey code = do
-    keyListCourse :: [Key Courses] <- selectKeysList [ CoursesCode ==. code ] []
-    return $ case keyListCourse of
-        [] -> Nothing
-        _ -> Just (head keyListCourse)
-
--- | Retrieve the key for the meeting with the given meeting code, session and section.
-getMeetingKey :: T.Text -> T.Text -> T.Text -> SqlPersistM (Maybe (Key Meeting))
-getMeetingKey meetCode meetSession meetSection = do
-  keyListMeeting :: [Key Meeting] <- selectKeysList [ (MeetingCode ==. meetCode), (MeetingSection ==. meetSection), (MeetingSession ==. meetSession)] []
-  return $ case keyListMeeting of
-    [] -> Nothing
-    _ -> Just (head keyListMeeting)
-
 -- | Store a meeting's data and times.
 insertMeeting :: MeetTimes -> SqlPersistM ()
 insertMeeting meet = do
     -- Check that the meeting belongs to a course that exists
-    courseKey <- getCourseKey (meetingCode $ meetingData meet)
+    let code = meetingCode $ meetingData meet
+    courseKey <- selectFirst [ CoursesCode ==. code ] []
     case courseKey of
         Just _ -> do
-          insert_ $ meetingData meet
-          meetingKey <- getMeetingKey (meetingCode $ meetingData meet) (meetingSession $ meetingData meet) (meetingSection $ meetingData meet)
-          case meetingKey of
-              Just _ -> mapM_ (\t -> insert_ $ t {timesMeeting = meetingKey}) $ timesData meet
-              Nothing -> return ()
+          meetingKey <- insert $ meetingData meet
+          mapM_ (\t -> insert_ $ t {timesMeeting = Just meetingKey}) $ timesData meet
         Nothing -> return ()
 
 parseMeetingTimes:: T.Text -> T.Text -> Meeting -> [Times] -> MeetTimes
