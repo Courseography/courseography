@@ -55,7 +55,6 @@ parsePrebuiltSvgs = runSqlite databasePath $ do
     performParse "Geography" "ggr2015.svg"
     performParse "Aboriginal" "abs2015.svg"
     performParse "German" "ger2015.svg"
-    performParse "Sample" "gen/sample_edited.svg"
 
 
 -- | The starting point for parsing a graph with a given title and file.
