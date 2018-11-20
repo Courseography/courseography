@@ -362,9 +362,9 @@ function createNewLectures(lectureSection, index, lectureSections) {
     return {
       courseCode: lectureSection.courseCode,
       session: lectureSection.session,
-      day: time.weekDay,
-      startTime: time.startHour,
-      endTime: time.endHour,
+      day: time.timesWeekDay,
+      startTime: time.timesStartHour,
+      endTime: time.timesEndHour,
       inConflict: false,
       width: 1,
       dataSatisfied: lectureSection.dataSatisfied
