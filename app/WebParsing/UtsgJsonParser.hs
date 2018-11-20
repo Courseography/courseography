@@ -12,7 +12,6 @@ import Network.HTTP.Conduit (simpleHttp)
 import Config (databasePath)
 import Database.Tables (Courses(..), EntityField(CoursesCode), Meeting(..), Times(..), MeetTimes(..))
 import Database.Persist.Sqlite (runSqlite, insert_, SqlPersistM, (==.), insert, selectFirst)
--- import Control.Applicative ((<|>))
 
 
 -- | URLs for the Faculty of Arts and Science API
@@ -51,6 +50,7 @@ insertAllMeetings org = do
 
 -- | Store a meeting's data and times.
 insertMeeting :: MeetTimes -> SqlPersistM ()
+-- insertMeeting meet{meetingData = meetData, timesData = meetTimes} = do
 insertMeeting meet = do
     -- Check that the meeting belongs to a course that exists
     let code = meetingCode $ meetingData meet
@@ -61,10 +61,6 @@ insertMeeting meet = do
           mapM_ (\t -> insert_ $ t {timesMeeting = Just meetingKey}) $ timesData meet
         Nothing -> return ()
 
-parseMeetingTimes:: T.Text -> T.Text -> Meeting -> [Times] -> MeetTimes
-parseMeetingTimes code session meetTimes allTimes =
-    MeetTimes {meetingData = meetTimes {meetingCode = code, meetingSession = session}, timesData = allTimes }
-
 newtype DB = DB { dbData :: (Courses, [MeetTimes]) }
   deriving Show
 
@@ -73,7 +69,7 @@ instance FromJSON DB where
       course <- parseJSON (Object o)
       session :: T.Text <- o .:? "section" .!= "F"
       meetingTimesMap :: HM.HashMap T.Text MeetTimes <- o .:? "meetings" .!= HM.empty
-      let allMeetingsTimes = map (\meetTime -> parseMeetingTimes (coursesCode course) session (meetingData meetTime) (timesData meetTime)) (HM.elems meetingTimesMap)
+      let allMeetingsTimes = map (\m -> m {meetingData = (meetingData m) { meetingCode = (coursesCode course), meetingSession = session}}) (HM.elems meetingTimesMap)
           -- Fix manualTutorialEnrolment and manualPracticalEnrolment
           manTut = any (T.isPrefixOf "TUT" . meetingSection) $ map meetingData allMeetingsTimes
           manPra = any (T.isPrefixOf "PRA" . meetingSection) $ map meetingData allMeetingsTimes

@@ -64,14 +64,14 @@ list2tuple _ = undefined
 
 -- | Queries the database for times regarding all meetings (i.e. lectures, tutorials and praticals),
 -- returns a list of list of Time.
-getTimes :: [(T.Text, T.Text, T.Text)] -> IO [[Time]]
+getTimes :: [(T.Text, T.Text, T.Text)] -> IO [[Times]]
 getTimes selectedMeetings = runSqlite databasePath $
   mapM getMeetingTime selectedMeetings
 
 -- | Creates a schedule.
 -- It takes information about meetings (i.e. lectures, tutorials and praticals) and their corresponding time.
 -- Courses are added to schedule, based on their days and times.
-getScheduleByTime :: [(T.Text, T.Text, T.Text)] -> [[Time]] -> [[[T.Text]]]
+getScheduleByTime :: [(T.Text, T.Text, T.Text)] -> [[Times]] -> [[[T.Text]]]
 getScheduleByTime selectedMeetings mTimes =
   let meetingTimes_ = zip selectedMeetings mTimes
       schedule = replicate 13 $ replicate 5 []
@@ -79,12 +79,12 @@ getScheduleByTime selectedMeetings mTimes =
 
 -- | Take a list of Time and returns a list of tuples that correctly index
 -- into the 2-D table (for generating the image)
-convertTimeToArray :: [Time] -> [(Int, Int)]
-convertTimeToArray = concatMap (\x -> [(day, start) | day <- [floor $ weekDay x], start <- [(floor $ startHour x)..(floor $ (endHour x - 0.5))]])
+convertTimeToArray :: [Times] -> [(Int, Int)]
+convertTimeToArray = concatMap (\x -> [(day, start) | day <- [floor $ timesWeekDay x], start <- [(floor $ timesStartHour x)..(floor $ (timesEndHour x - 0.5))]])
 
-addCourseToSchedule :: [[[T.Text]]] -> ((T.Text, T.Text, T.Text), [Time]) -> [[[T.Text]]]
+addCourseToSchedule :: [[[T.Text]]] -> ((T.Text, T.Text, T.Text), [Times]) -> [[[T.Text]]]
 addCourseToSchedule schedule (course, courseTimes) =
-  let time' = filter (\t-> mod' (startHour t) 1 == 0) courseTimes
+  let time' = filter (\t-> mod' (timesStartHour t) 1 == 0) courseTimes
       timeArray = convertTimeToArray time'
   in foldl (addCourseHelper course) schedule timeArray
 
