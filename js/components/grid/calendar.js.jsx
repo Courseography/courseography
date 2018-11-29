@@ -27,7 +27,7 @@ export class Row extends React.Component {
     storeColSpans(springSession, springColSpans);
     // Generate a container for each of the Fall and Spring timetables individually
     return (
-      <div className="col-md-8 col-xs-12">
+      <div className="col-md-9 col-xs-12" id="grid-body">
         <TimetableContainer session="F" lectures={fallSession} headColSpans={fallColSpans} />
         <TimetableContainer session="S" lectures={springSession} headColSpans={springColSpans} />
       </div>

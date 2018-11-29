@@ -30,6 +30,7 @@ timetableStyles = do
 gridCSS :: Css
 gridCSS = do
     "#grid-body" ? do
+        padding0
         minHeight (px 540)
 
 {- searchCss
@@ -48,26 +49,28 @@ searchCSS = do
         height (pct 10)
         form <? do
             background ((url "/static/res/ico/search.png", noRepeat), placed sideRight sideCenter)
-            margin (em 1) 0 0 0
+            margin (em 0.5) 0 0 0
             paddingRight (px 34)
     "#search-container" ? do
         alignCenter
         color white
-        height (pct 90)
+        height auto
+        maxHeight (pct 25)
         width100
         margin0
-        padding (em 0.5) 0 (em 1) 0
+        padding0
         overflowY auto
     "#search-list" ? do
         margin0
-        padding nil nil nil nil
-        height100
+        padding nil (pct 5) nil (pct 5)
+        height auto
         width100
         ul <? do
             margin0
             padding0
             li <? do
                 display block
+                backgroundColor purple7
                 margin0
                 padding0
                 ":hover" & do
@@ -185,7 +188,8 @@ courseSelectCSS = do
     "#course-select-wrapper" ? do
         margin0
         padding0
-        height100
+        height auto
+        minHeight (pct 70)
         backgroundColor purple8
         color white
     "#course-select" ? do
