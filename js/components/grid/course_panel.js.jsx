@@ -262,6 +262,8 @@ class LectureSection extends React.Component {
       <li id={this.props.courseCode + "-" + this.props.lecture.lectureCode + "-" + this.props.session}
           onClick={this.selectLecture}
           clicked={this.isSelectedLecture() ? "true" : "false"}
+          onMouseOver={this.selectLecture}
+					onMouseOut={this.selectLecture}
           data-satisfied={"true"}>
         {this.props.lecture.lectureCode}
       </li>
