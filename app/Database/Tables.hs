@@ -38,14 +38,6 @@ import WebParsing.ReqParser (parseReqs)
 import Control.Applicative ((<|>))
 
 
--- | A data type representing a time for the section of a course.
--- The record is comprised of three fields: weekDay (represented as a number
--- of the week), startHour (the start time of the lecture) and endHour (the end time of the lecture).
--- The dates span Monday-Friday, being represented by 0-4 respectively.
--- The start time and end time are numbers between 0-23.
--- data Time = Time { weekDay :: Double, startHour :: Double, endHour :: Double } deriving (Show, Read, Eq, Generic)
--- derivePersistField "Time"
-
 data Room = Room { roomField :: (T.Text, T.Text)} deriving (Show, Read, Eq, Generic)
 derivePersistField "Room"
 
@@ -166,12 +158,9 @@ data SvgJSON =
               paths :: [Path]
             } deriving (Show, Generic)
 
--- change session to be lectures :: [(Meeting, [Times])], or perhaps MeetingTimes {meeting:: Meeting, times :; [Times]}
-data Session =
-    Session { lec :: [Meeting],
-              tut :: [Meeting],
-              prac :: [Meeting]
-            } deriving (Show, Generic)
+-- | A Meeting with its associated Times.
+data MeetTimes = MeetTimes { meetingData :: Meeting, timesData :: [Times] }
+  deriving (Show, Generic)
 
 data SessionTimes =
     SessionTimes { lectures :: [MeetTimes],
@@ -198,7 +187,6 @@ data Course =
            } deriving (Show, Generic)
 
 instance ToJSON Course
-instance ToJSON Session
 instance ToJSON Room
 instance ToJSON MeetTimes
 instance ToJSON SessionTimes
@@ -207,15 +195,6 @@ instance ToJSON Times
 -- instance FromJSON required so that tables can be parsed into JSON,
 -- not necessary otherwise.
 instance FromJSON SvgJSON
-
--- | Converts a Time to a T.Text.
--- This removes the period from the double, as the JavaScript code,
--- uses the output in an element's ID, which is then later used in
--- jQuery. @.@ is a jQuery meta-character, and must be removed from the ID.
--- convertTimeToString :: Time -> [T.Text]
--- convertTimeToString (Time day startNum endNum) =
---   [T.pack . show $ (floor day :: Int),
---    T.replace "." "-" . T.pack . show $ (show startNum ++ "-" ++ show endNum)]
 
 -- JSON encoding/decoding
 instance FromJSON Courses where
@@ -284,9 +263,6 @@ instance FromJSON Times where
     let (meetingDay, meetingStartTime, meetingEndTime) = getTimeVals meetingDayStr meetingStartTimeStr meetingEndTimeStr
     return $ Times meetingDay meetingStartTime meetingEndTime Nothing meetingRoom1 meetingRoom2
 
-data MeetTimes = MeetTimes { meetingData :: Meeting, timesData :: [Times] }
-  deriving (Show, Generic)
-
 instance FromJSON MeetTimes where
   parseJSON (Object o) = do
     meeting <- parseJSON (Object o)
@@ -317,10 +293,12 @@ getDayVal "TH" = 3.0
 getDayVal "FR" = 4.0
 getDayVal _    = 4.0
 
+-- | Convert the given day, start time and end time to a tuple of Doubles. If nothing is given,
+--   the place holder is 5 and 25, indicating the day and times are invalid.
 getTimeVals :: Maybe String -> Maybe String -> Maybe String -> (Double, Double, Double)
 getTimeVals (Just day) (Just start) (Just end) = do
     let dayDbl = getDayVal day
         startDbl = getHourVal start
         endDbl = getHourVal end
     (dayDbl, startDbl, endDbl)
-getTimeVals _ _ _ = (5.0, 5.0, 5.0)
+getTimeVals _ _ _ = (5.0, 25.0, 25.0)

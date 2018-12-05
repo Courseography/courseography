@@ -11,7 +11,7 @@ import Database.Persist.Sqlite (runSqlite, (==.), entityVal, selectList, entityK
 import Database.CourseQueries (returnMeeting)
 import qualified Data.Text as T
 import Text.Read (readMaybe)
-import Database.Tables hiding (Session)
+import Database.Tables
 import Config (firstMondayFall,
                lastWednesdayFall,
                firstMondayWinter,

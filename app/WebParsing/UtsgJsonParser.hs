@@ -50,7 +50,6 @@ insertAllMeetings org = do
 
 -- | Store a meeting's data and times.
 insertMeeting :: MeetTimes -> SqlPersistM ()
--- insertMeeting meet{meetingData = meetData, timesData = meetTimes} = do
 insertMeeting meet = do
     -- Check that the meeting belongs to a course that exists
     let code = meetingCode $ meetingData meet
