@@ -263,7 +263,7 @@ class LectureSection extends React.Component {
           onClick={this.selectLecture}
           clicked={this.isSelectedLecture() ? "true" : "false"}
           onMouseOver={this.selectLecture}
-					onMouseOut={this.selectLecture}
+	    onMouseOut={this.selectLecture}
           data-satisfied={"true"}>
         {this.props.lecture.lectureCode}
       </li>
