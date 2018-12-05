@@ -49,14 +49,14 @@ insertAllMeetings org = do
 
 -- | Store a meeting's data and times.
 insertMeeting :: MeetTimes -> SqlPersistM ()
-insertMeeting meet = do
+insertMeeting (MeetTimes meetData meetTimes) = do
     -- Check that the meeting belongs to a course that exists
-    let code = meetingCode $ meetingData meet
+    let code = meetingCode meetData
     courseKey <- selectFirst [ CoursesCode ==. code ] []
     case courseKey of
         Just _ -> do
-          meetingKey <- insert $ meetingData meet
-          mapM_ (\t -> insert_ $ t {timesMeeting = Just meetingKey}) $ timesData meet
+          meetingKey <- insert meetData
+          mapM_ (\t -> insert_ $ t {timesMeeting = Just meetingKey}) meetTimes
         Nothing -> return ()
 
 newtype DB = DB { dbData :: (Courses, [MeetTimes]) }
