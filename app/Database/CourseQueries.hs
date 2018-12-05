@@ -33,7 +33,6 @@ import Database.DataType
 import Svg.Builder
 import Control.Monad
 
-
 -- | Queries the database for all matching lectures, tutorials,
 --   or praticals of this course and construct MeetTimes with the
 --   Times corresponding to each lecture, tutorial or practial.
@@ -136,7 +135,6 @@ getDescriptionD (Just key) = do
     maybeDistribution <- get key
     return $ fmap distributionDescription maybeDistribution
 
-
 -- Filter each meeting's time here and construct session
 buildSession :: [MeetTimes] -> Tables.SessionTimes
 buildSession meetings =
@@ -151,7 +149,6 @@ buildMeetTimes meet = do
     allTimes :: [Entity Times] <- selectList [TimesMeeting ==. Just (entityKey meet)] []
     let allMeetingTimes = fmap entityVal allTimes
     return $ Tables.MeetTimes {meetingData = (entityVal meet), timesData = allMeetingTimes}
-
 
 -- ** Other queries
 

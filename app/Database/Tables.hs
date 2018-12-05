@@ -37,7 +37,6 @@ import GHC.Generics
 import WebParsing.ReqParser (parseReqs)
 import Control.Applicative ((<|>))
 
-
 data Room = Room { roomField :: (T.Text, T.Text)} deriving (Show, Read, Eq, Generic)
 derivePersistField "Room"
 
@@ -162,6 +161,7 @@ data SvgJSON =
 data MeetTimes = MeetTimes { meetingData :: Meeting, timesData :: [Times] }
   deriving (Show, Generic)
 
+-- | Lists of MeetTimes for a particular course split up by lecture, tutorial and practical.
 data SessionTimes =
     SessionTimes { lectures :: [MeetTimes],
               tutorials :: [MeetTimes],

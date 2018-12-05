@@ -13,7 +13,6 @@ import Config (databasePath)
 import Database.Tables (Courses(..), EntityField(CoursesCode), Meeting(..), Times(..), MeetTimes(..))
 import Database.Persist.Sqlite (runSqlite, insert_, SqlPersistM, (==.), insert, selectFirst)
 
-
 -- | URLs for the Faculty of Arts and Science API
 timetableURL :: T.Text
 timetableURL = "https://timetable.iit.artsci.utoronto.ca/api/20189/courses?org="
