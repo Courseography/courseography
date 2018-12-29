@@ -50,7 +50,7 @@ searchCSS = do
         form <? do
             background ((url "/static/res/ico/search.png", noRepeat), placed sideRight sideCenter)
             margin (em 0.5) 0 0 0
-            paddingRight (px 34)
+            paddingRight (px 40)
     "#search-container" ? do
         alignCenter
         color white
@@ -131,10 +131,8 @@ timetableCSS = do
         td ? do
             "rowspan" *= "1" & do
                 fontSize (em 0)
-            "rowspan" *= "2" & do
-                fontSize (em 0.9)
-            fontSize (em 0.5)
-            height (px 18)
+            fontSize (em 0.9)
+            height (px 21)
         ".timetable-time" ? do
             width (pct 12)
         ".timetable-dummy-cell" ? do
