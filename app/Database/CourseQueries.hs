@@ -31,7 +31,6 @@ import Config (databasePath)
 import Data.Aeson ((.=), toJSON, object)
 import Database.DataType
 import Svg.Builder
-import Control.Monad
 
 -- | Queries the database for all matching lectures, tutorials,
 --   or praticals of this course and construct MeetTimes with the
@@ -39,8 +38,7 @@ import Control.Monad
 meetingQuery :: T.Text -> SqlPersistM [MeetTimes]
 meetingQuery meetingCode_ = do
     allMeetings <- selectList [MeetingCode ==. meetingCode_] []
-    allMeetTimes <- mapM buildMeetTimes allMeetings
-    return allMeetTimes
+    mapM buildMeetTimes allMeetings
 
 -- | Split a list of lectures, tutorials and practicals by their sessions: Fall,
 --  Spring and Winter.
@@ -63,9 +61,9 @@ returnCourse lowerStr = runSqlite databasePath $ do
         meetings <- meetingQuery courseStr
         let (fall, spring, year) = buildAllSessions meetings
         fmap Just $ buildCourse (Just fall)
-                   (Just spring)
-                   (Just year)
-                   (entityVal course)
+                                (Just spring)
+                                (Just year)
+                                (entityVal course)
 
 -- | Split a list of lectures, tutorials and practicals by their sessions and store each session
 --   by lecture, tutorial and practical in their respective SessionTimes
@@ -93,15 +91,15 @@ queryCourse str = do
 --  a @course@, returns a Meeting.
 returnMeeting :: T.Text -> T.Text -> T.Text -> SqlPersistM (Entity Meeting)
 returnMeeting lowerStr sect session = do
-    maybeEntityMeetings <- selectList [MeetingCode ==. T.toUpper lowerStr,
-                                        MeetingSection ==. sect,
-                                        MeetingSession ==. session]
-                                       []
-    return $ maybeEntityMeetings!!0
+    entityMeetings <- selectList [MeetingCode ==. T.toUpper lowerStr,
+                                  MeetingSection ==. sect,
+                                  MeetingSession ==. session]
+                                 []
+    return $ head entityMeetings
 
 -- | Builds a Course structure from a tuple from the Courses table.
 -- Some fields still need to be added in.
-buildCourse :: Maybe (SessionTimes) -> Maybe (SessionTimes) -> Maybe ( SessionTimes) -> Courses -> SqlPersistM Course
+buildCourse :: Maybe SessionTimes -> Maybe SessionTimes -> Maybe SessionTimes -> Courses -> SqlPersistM Course
 buildCourse fall spring year course = do
     cBreadth <- getDescriptionB (coursesBreadth course)
     cDistribution <- getDescriptionD (coursesDistribution course)
@@ -148,7 +146,7 @@ buildMeetTimes :: Entity Meeting -> SqlPersistM Tables.MeetTimes
 buildMeetTimes meet = do
     allTimes :: [Entity Times] <- selectList [TimesMeeting ==. Just (entityKey meet)] []
     let allMeetingTimes = fmap entityVal allTimes
-    return $ Tables.MeetTimes {meetingData = (entityVal meet), timesData = allMeetingTimes}
+    return $ Tables.MeetTimes {meetingData = entityVal meet, timesData = allMeetingTimes}
 
 -- ** Other queries
 
@@ -259,7 +257,7 @@ getMeetingTime (meetingCode_, meetingSection_, meetingSession_) = do
                                         MeetingSection ==. getMeetingSection meetingSection_,
                                         MeetingSession ==. meetingSession_]
                                        []
-    allTimes <- selectList [TimesMeeting ==. (liftM entityKey maybeEntityMeetings)] []
+    allTimes <- selectList [TimesMeeting ==. fmap entityKey maybeEntityMeetings] []
     return $ map entityVal allTimes
 
 getMeetingSection :: T.Text -> T.Text

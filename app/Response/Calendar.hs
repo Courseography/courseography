@@ -73,7 +73,7 @@ pullDatabase :: (Code, Section, Session) -> IO (MeetTimes)
 pullDatabase (code, section, session) = runSqlite databasePath $ do
     meet <- returnMeeting code fullSection session
     allTimes <- selectList [TimesMeeting ==. Just (entityKey meet)] []
-    return $ MeetTimes {meetingData = (entityVal meet), timesData = map entityVal allTimes}
+    return $ MeetTimes {meetingData = entityVal meet, timesData = map entityVal allTimes}
     where
     fullSection
         | T.isPrefixOf "L" section = T.append "LEC" sectCode
@@ -87,7 +87,7 @@ type SystemTime = String
 
 -- | Creates all the events for a course.
 getEvents :: SystemTime -> MeetTimes -> Events
-getEvents systemTime (lect) =
+getEvents systemTime lect =
     concatMap eventsByDate (zip' (third courseInfo)
                                  (fourth courseInfo)
                                  (fifth courseInfo))

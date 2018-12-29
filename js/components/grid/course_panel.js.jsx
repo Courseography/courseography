@@ -96,23 +96,22 @@ class Course extends React.Component {
   componentDidMount() {
     getCourse(this.props.courseCode)
       .then(data => {
-        console.log(data);
         let course = {
           courseCode: "",
           F: [],
-          S:[],
-          Y:[]
+          S: [],
+          Y: []
         };
         course.courseCode = data.name;
         course.F = course.F.concat(this.parseLectures(data.fallSession.lectures),
-                                    this.parseLectures(data.fallSession.tutorials),
-                                    this.parseLectures(data.fallSession.practicals));
+                                   this.parseLectures(data.fallSession.tutorials),
+                                   this.parseLectures(data.fallSession.practicals));
         course.S = course.S.concat(this.parseLectures(data.springSession.lectures),
-                                    this.parseLectures(data.springSession.tutorials),
-                                    this.parseLectures(data.springSession.practicals));
+                                   this.parseLectures(data.springSession.tutorials),
+                                   this.parseLectures(data.springSession.practicals));
         course.Y = course.Y.concat(this.parseLectures(data.yearSession.lectures),
-                                    this.parseLectures(data.yearSession.tutorials),
-                                    this.parseLectures(data.yearSession.practicals));
+                                   this.parseLectures(data.yearSession.tutorials),
+                                   this.parseLectures(data.yearSession.practicals));
         this.setState({courseInfo: course});
     });
   }
