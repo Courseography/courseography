@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 
 import { CoursePanel } from './course_panel.js.jsx';
 import { Row } from './calendar.js.jsx';
+import { ExportModal } from '../common/export.js.jsx';
 
 /**
  * Renders the course panel, the Fall and Spring timetable grids and search panel.
@@ -54,6 +55,9 @@ class Grid extends React.Component {
       });
       this.setState({selectedCourses: selectedCourses});
     }
+
+    // Enable "Export" link
+    $('#nav-export').click(() => this.exportModal.openModal());
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -82,7 +86,7 @@ class Grid extends React.Component {
     this.setState({selectedCourses: updatedCourses});
 
     let updatedLectures = this.state.selectedLectures.filter(lecture =>
-                          !lecture.courseCode.includes(courseCode.substring(0, 6)));
+                          !lecture.courseCode.includes(courseCode));
     this.setState({selectedLectures: updatedLectures});
   }
 
@@ -125,6 +129,10 @@ class Grid extends React.Component {
           selectCourse={this.addSelectedCourse}
         />
         <Row lectureSections={this.state.selectedLectures}/>
+        <ExportModal
+          context='grid'
+          session='fall'
+          ref={r => this.exportModal = r} />
       </div>
     );
   }

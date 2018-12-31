@@ -28,23 +28,23 @@ class Modal extends React.Component {
   }
 
   openModal(newCourse) {
-    if (newCourse == this.state.courseId) {
+    if (newCourse === this.state.courseId) {
       this.setState({ modalIsOpen: true });
     } else {
       let formatted = formatCourseName(newCourse);
       getCourse(formatted[0])
         .then(course => {
           //This is getting the session times
-          let sessions = removeDuplicateLectures(course.fallSession.lectures)
-            .concat(removeDuplicateLectures(course.springSession.lectures))
-            .concat(removeDuplicateLectures(course.yearSession.lectures));
+          let sessions = course.fallSession.lectures
+            .concat(course.springSession.lectures)
+            .concat(course.yearSession.lectures);
             //Tutorials don't have a timeStr to print, so I've currently omitted them
           this.setState({
             course: course,
             sessions: sessions,
             modalIsOpen: true,
             courseId: newCourse,
-            courseTitle: getCourseTitle(newCourse, formatted, course)
+            courseTitle: `${newCourse.toUpperCase()} ${course.title}`
           });
         })
     }

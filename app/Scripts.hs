@@ -48,7 +48,7 @@ analyticsScripts = [
 
 graphScripts :: H.Html
 graphScripts = do
-    mapM_ toScript $ reactScripts ++
+    mapM_ toScript $
         ["/static/js/common/course_videos.js",
          "/static/js/common/modal.js",
          "/static/js/common/objects/course.js",
@@ -59,12 +59,11 @@ graphScripts = do
          "/static/js/common/image_conversion.js",
          "/static/js/vendor/bootstrap.min.3.1.1.js",
          "/static/js/common/modal.js"]
-    H.script ! A.src "/static/js/requirejs-config.js" $ ""
-    H.script ! H.dataAttribute "main" "/static/js/graph" ! A.src "/static/js/vendor/require.js" $ ""
+    H.script ! A.src "/static/js/graph/app.js" $ ""
 
 timetableScripts :: H.Html
 timetableScripts = do
-    mapM_ toScript
+    mapM_ toScript $
         ["/static/js/grid/mouse_events.js",
          if enableCdn
          then "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"

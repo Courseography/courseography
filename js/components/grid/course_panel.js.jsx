@@ -129,7 +129,7 @@ class Course extends React.Component {
       if (lectureInfo.meetingData.section.charAt(3) !== '2' && lectureInfo.meetingData.section.charAt(3) !== '9' &&
         lectureInfo.meetingData.times !== 'Online Web Version') {
         let lecture = {
-          courseCode: lectureInfo.meetingData.code.substring(0, 6) + " (" + lectureInfo.meetingData.section.substring(0,1) + ")",
+          courseCode: lectureInfo.meetingData.code + " (" + lectureInfo.meetingData.section.substring(0,1) + ")",
           lectureCode: lectureInfo.meetingData.section.substring(0, 1) + lectureInfo.meetingData.section.substring(3),
           session: lectureInfo.meetingData.session,
           times: lectureInfo.timesData,
