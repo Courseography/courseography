@@ -22,15 +22,6 @@ jQueryScripts = if enableCdn
                 else ["/static/js/vendor/jquery.min.1.10.2.js",
                       "/static/js/vendor/jquery-ui.min.1.10.4.js"]
 
-reactScripts :: [T.Text]
-reactScripts = if enableCdn
-               then ["https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react.js",
-                     "https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react-dom.js",
-                     "https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"]
-               else ["/static/js/vendor/react.0.14.3.js",
-                     "/static/js/vendor/react-dom.0.14.3.js",
-                     "/static/js/vendor/browser.5.8.34.js"]
-
 graphScripts :: H.Html
 graphScripts = do
     mapM_ toScript $
@@ -54,7 +45,7 @@ timetableScripts = do
 
 drawScripts :: H.Html
 drawScripts =
-    mapM_ toScript $ reactScripts ++
+    mapM_ toScript $
         ["/static/js/draw/variables.js",
          "/static/js/draw/path.js",
          "/static/js/draw/draw.js",
