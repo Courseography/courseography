@@ -1,12 +1,14 @@
-var filterCourse = function (inst, time, lec) {
-    'use strict';
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+
+function filterCourse(inst, time, lec) {
     return lec.instructor.indexOf(inst) > -1 &&
            (time.length < 2 || hasTime(time, lec.time));
 };
 
 
-var hasTime = function (timeStr, times) {
-    'use strict';
+function hasTime(timeStr, times) {
     var time = ['MTWRF'.indexOf(timeStr[0]) + '',
                 timeStr.substr(1) + '-0'];
     for (var i = 0; i < times.length; i++) {
@@ -18,43 +20,53 @@ var hasTime = function (timeStr, times) {
 };
 
 
-var Search = React.createClass({
-    getInitialState: function () {
-        return {curDept: '', depts: []};
-    },
+class Search extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            curDept: '',
+            depts: []
+        }
+        this.updateDept = this.updateDept.bind(this);
+    }
 
-    componentDidMount: function () {
+    componentDidMount() {
         $.ajax({
             url: 'depts',
             dataType: 'json',
-            success: function(data) {
+            success: (data) => {
                 this.setState({depts: data});
-            }.bind(this),
-            error: function(xhr, status, err) {
+            },
+            error: (xhr, status, err) => {
                 console.error('course-info', status, err.toString());
-            }.bind(this)
+            }
         });
-    },
+    }
 
-    updateDept: function () {
-        var selectedDept = React.findDOMNode(this.refs.deptSelect).value;
+    updateDept() {
+        var selectedDept = ReactDOM.findDOMNode(this.refs.deptSelect).value;
         this.setState({curDept: selectedDept});
         this.refs.timetable.populateTable(selectedDept);
-    },
+    }
 
-    render: function () {
-        var options = this.state.depts.map(function(dept) {
-            return (<option value={dept}>{dept}</option>);
+    render() {
+        var options = this.state.depts.map((dept) => {
+            return (<option key={dept} value={dept}>{dept}</option>);
         });
 
         return (
             <div id="search">
             <div id="timetableSearch">
-                <h2>2015-2016 Timetable Search</h2>
+                <h2>Timetable Search</h2>
                 <div id="searchOptions">
                 <label htmlFor="deptSelect">Dept:</label>
-                <select ref="deptSelect" name="dept" onChange={this.updateDept} id="deptSelect">
-                    <option value="none" selected="selected">---</option>
+                <select
+                    ref="deptSelect"
+                    name="dept"
+                    onChange={this.updateDept}
+                    id="deptSelect"
+                    defaultValue="none">
+                    <option value="none">---</option>
                     {options}
                 </select>
                 <br />
@@ -74,111 +86,111 @@ var Search = React.createClass({
             </div>
         );
     }
-});
+}
 
 
-var Timetable = React.createClass({
-    getInitialState: function () {
-        return {courses: [], codeSearch: '', instSearch: '', timeSearch: ''};
-    },
+class Timetable extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {courses: [], codeSearch: '', instSearch: '', timeSearch: ''};
+        this.populateTable = this.populateTable.bind(this);
+    }
 
-    componentDidMount: function() {
-        $('#codeFilter').keyup(function() {
+    componentDidMount() {
+        $('#codeFilter').keyup(() => {
             this.setState({codeSearch: $('#codeFilter').val()});
-        }.bind(this));
-        $('#instFilter').keyup(function() {
+        });
+        $('#instFilter').keyup(() => {
             this.setState({instSearch: $('#instFilter').val()});
-        }.bind(this));
-        $('#timeFilter').keyup(function() {
+        });
+        $('#timeFilter').keyup(() => {
             this.setState({timeSearch: $('#timeFilter').val()});
-        }.bind(this));
-    },
+        });
+    }
 
-    populateTable: function(dept) {
+    populateTable(dept) {
         $.ajax({
             url: 'course-info',
             data: {dept: dept},
             dataType: 'json',
-            success: function(data) {
+            success: (data) => {
                 this.setState({courses: data});
-            }.bind(this),
-            error: function(xhr, status, err) {
+            },
+            error: (xhr, status, err) => {
                 console.error('course-info', status, err.toString());
-            }.bind(this)
+            }
         });
-    },
+    }
 
-    render: function() {
+    render() {
         var state = this.state;
-        var courseRows = this.state.courses.filter(function (course) {
+        var courseRows = this.state.courses.filter((course) => {
             var lecs = course.fallSession.lectures
                                          .concat(course.springSession.lectures)
                                          .concat(course.yearSession.lectures);
 
             return course.name.indexOf(state.codeSearch) > -1 &&
-                   lecs.some(function (lec) {
-                       return filterCourse(state.instSearch, state.timeSearch, lec);
-                   });
-        }).map(function (course) {
+                   lecs.some(({meetingData}) => filterCourse(state.instSearch, state.timeSearch, meetingData));
+        }).map((course) => {
             if (course.yearSession.lectures.length === 0) {
                 var fallLec = '';
                 var springLec = '';
 
-                fallLec = course.fallSession.lectures.filter(function (lec) {
-                    return filterCourse(state.instSearch, state.timeSearch, lec);
-                }).map(function (lec) {
+                fallLec = course.fallSession.lectures.filter(({meetingData}) => {
+                    return filterCourse(state.instSearch, state.timeSearch, meetingData);
+                }).map(({meetingData}) => {
                     return (
                         <tr>
                         <td className="timetableSection">
-                            {lec.section.substring(0, 1) + lec.section.substring(4)}
+                            {meetingData.section}
                         </td>
-                        <td className="timetableTime">{lec.timeStr}</td>
-                        <td className="timetableInstructor">{lec.instructor}</td>
-                        <td className="timetableCap">{lec.cap}</td>
-                        <td className="timetableWait">{lec.wait}</td>
+                        <td className="timetableTime">{meetingData.timeStr}</td>
+                        <td className="timetableInstructor">{meetingData.instructor}</td>
+                        <td className="timetableCap">{meetingData.cap}</td>
+                        <td className="timetableWait">{meetingData.wait}</td>
                         </tr>);
                 });
 
-                springLec = course.springSession.lectures.filter(function (lec) {
-                    return filterCourse(state.instSearch, state.timeSearch, lec);
-                }).map(function (lec) {
+                springLec = course.springSession.lectures.filter(({meetingData}) => {
+                    return filterCourse(state.instSearch, state.timeSearch, meetingData);
+                }).map(({meetingData}) => {
                     return (
-                        <tr>
+                        <tr key={meetingData.section}>
                         <td className="timetableSection">
-                            {lec.section.substring(0, 1) + lec.section.substring(4)}
+                            {meetingData.section}
                         </td>
-                        <td className="timetableTime">{lec.timeStr}</td>
-                        <td className="timetableInstructor">{lec.instructor}</td>
-                        <td className="timetableCap">{lec.cap}</td>
-                        <td className="timetableWait">{lec.wait}</td>
+                        <td className="timetableTime">{meetingData.timeStr}</td>
+                        <td className="timetableInstructor">{meetingData.instructor}</td>
+                        <td className="timetableCap">{meetingData.cap}</td>
+                        <td className="timetableWait">{meetingData.wait}</td>
                         </tr>);
                 });
 
                 return (
-                    <tr>
+                    <tr key={course.name}>
                         <td className="timetableCourseName">{course.name}</td>
                         <td className="FOffering"><table className="courseTable"><tbody>{fallLec}</tbody></table></td>
                         <td className="SOffering"><table className="courseTable"><tbody>{springLec}</tbody></table></td>
                     </tr>
                 );
             } else {
-                var yearLec = course.yearSession.lectures.filter(function (lec) {
-                        return filterCourse(state.instSearch, state.timeSearch, lec);
-                    }).map(function (lec) {
+                var yearLec = course.yearSession.lectures.filter(({meetingData}) => {
+                        return filterCourse(state.instSearch, state.timeSearch, meetingData);
+                    }).map(({meetingData}) => {
                         return (
-                            <tr>
+                            <tr key={meetingData.section}>
                             <td className="timetableSection">
-                                {lec.section.substring(0, 1) + lec.section.substring(4)}
+                                {meetingData.section}
                             </td>
-                            <td className="timetableTime">{lec.time_str}</td>
-                            <td className="timetableInstructor">{lec.instructor}</td>
-                            <td className="timetableCap">{lec.cap}</td>
-                            <td className="timetableWait">{lec.wait}</td>
+                            <td className="timetableTime">{meetingData.time_str}</td>
+                            <td className="timetableInstructor">{meetingData.instructor}</td>
+                            <td className="timetableCap">{meetingData.cap}</td>
+                            <td className="timetableWait">{meetingData.wait}</td>
                             </tr>);
                     });
 
                 return (
-                    <tr>
+                    <tr key={course.name}>
                         <td className="timetableCourseName">{course.name}</td>
                         <td colSpan="2" className="YOffering"><table className="courseTable"><tbody>{yearLec}</tbody></table></td>
                     </tr>
@@ -222,9 +234,9 @@ var Timetable = React.createClass({
             </table>
         );
     }
-});
+}
 
 
-React.render(
+ReactDOM.render(
     <Search />,
     document.getElementById('content'));

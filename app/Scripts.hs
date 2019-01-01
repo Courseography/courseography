@@ -71,5 +71,4 @@ postScripts = do
 
 searchScripts :: H.Html
 searchScripts = do
-    mapM_ toScript reactScripts
-    H.script ! A.src "/static/js/search/timetable.js" $ ""
+    H.script ! A.src "/static/js/search/app.js" $ ""
