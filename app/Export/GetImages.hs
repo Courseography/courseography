@@ -15,43 +15,43 @@ import qualified Data.Text as T
 import System.Random
 import Svg.Generator
 import Export.ImageConversion
-import Happstack.Server (Request, rqCookies, cookieValue)
-import Data.List.Utils (replace)
 import Database.CourseQueries (getMeetingTime)
 import Database.Tables as Tables
 import Database.Persist.Sqlite (runSqlite)
 import Config (databasePath)
 import Data.Fixed (mod')
+import Data.Aeson (decode)
+import Data.ByteString.Char8 as BC (pack)
+import Data.ByteString.Lazy (fromStrict)
+import Data.Maybe (fromMaybe)
+
 
 -- | If there is an active graph available, an image of that graph is created,
 -- otherwise the Computer Science graph is created as a default.
 -- Either way, the resulting graph's .svg and .png names are returned.
-getActiveGraphImage :: Request -> IO (String, String)
-getActiveGraphImage req = do
-    let cookies = M.fromList $ rqCookies req
-        graphName =
-            T.pack $
-            replace "-" " " $
-                maybe "Computer-Science" cookieValue (M.lookup "active-graph" cookies)
-    getGraphImage graphName (M.mapKeys T.pack $ M.map (T.pack . cookieValue) cookies)
+getActiveGraphImage :: String -> IO (String, String)
+getActiveGraphImage graphInfo = do
+    let graphInfoMap = fromMaybe M.empty $ decode $ fromStrict $ BC.pack graphInfo :: M.Map T.Text T.Text
+        graphName = fromMaybe "Computer-Science" $ M.lookup "active-graph" graphInfoMap
+    getGraphImage graphName graphInfoMap
+
 
 -- | If there are selected lectures available, an timetable image of
 -- those lectures in specified session is created.
 -- Otherwise an empty timetable image is created as default.
 -- Either way, the resulting image's .svg and .png names are returned.
 getActiveTimetable :: T.Text -> T.Text -> IO (String, String)
-getActiveTimetable coursecookie termSession = do
-    let selectedMeetings = parseCourseCookie coursecookie termSession
+getActiveTimetable selectedCourses termSession = do
+    let selectedMeetings = parseSelectedCourses selectedCourses termSession
     mTimes <- getTimes selectedMeetings
     let schedule = getScheduleByTime selectedMeetings mTimes
-    print schedule
     generateTimetableImg schedule termSession
 
--- | Parses cookie string and returns two lists of information about courses
+-- | Parses selected courses local storage and returns two lists of information about courses
 -- in the format of (code, section, session).
-parseCourseCookie :: T.Text -> T.Text -> [(T.Text, T.Text, T.Text)]
-parseCourseCookie "" _ = []
-parseCourseCookie s termSession =
+parseSelectedCourses :: T.Text -> T.Text -> [(T.Text, T.Text, T.Text)]
+parseSelectedCourses "" _ = []
+parseSelectedCourses s termSession =
   let selectedMeetings = map (T.splitOn "-") $ T.splitOn "_" s
       meetingOfSession = filter (\x -> T.head (x !! 2) == T.head termSession || T.head (x !! 2) == 'Y') selectedMeetings
       selectedMeetings' = map list2tuple meetingOfSession
@@ -63,28 +63,30 @@ list2tuple _ = undefined
 
 -- | Queries the database for times regarding all meetings (i.e. lectures, tutorials and praticals),
 -- returns a list of list of Time.
-getTimes :: [(T.Text, T.Text, T.Text)] -> IO [[Time]]
+getTimes :: [(T.Text, T.Text, T.Text)] -> IO [[Times]]
 getTimes selectedMeetings = runSqlite databasePath $
   mapM getMeetingTime selectedMeetings
 
 -- | Creates a schedule.
 -- It takes information about meetings (i.e. lectures, tutorials and praticals) and their corresponding time.
 -- Courses are added to schedule, based on their days and times.
-getScheduleByTime :: [(T.Text, T.Text, T.Text)] -> [[Time]] -> [[[T.Text]]]
+getScheduleByTime :: [(T.Text, T.Text, T.Text)] -> [[Times]] -> [[[T.Text]]]
 getScheduleByTime selectedMeetings mTimes =
   let meetingTimes_ = zip selectedMeetings mTimes
-      schedule = replicate 13 $ replicate 5 []
+      schedule = replicate 26 $ replicate 5 []
   in foldl addCourseToSchedule schedule meetingTimes_
 
 -- | Take a list of Time and returns a list of tuples that correctly index
--- into the 2-D table (for generating the image)
-convertTimeToArray :: [Time] -> [(Int, Int)]
-convertTimeToArray = map (\x -> (floor $ head (timeField x), floor $ timeField x !! 1 - 8))
+-- into the 2-D table (for generating the image).
+-- TODO: Make this support half-hour times.
+convertTimeToArray :: Times -> [(Int, Int)]
+convertTimeToArray Times{timesWeekDay=weekDay, timesStartHour=startHour, timesEndHour=endHour} =
+    [(floor weekDay, row) | row <- [(floor startHour - 8)..(floor endHour - 8) - 1]]
 
-addCourseToSchedule :: [[[T.Text]]] -> ((T.Text, T.Text, T.Text), [Time]) -> [[[T.Text]]]
+addCourseToSchedule :: [[[T.Text]]] -> ((T.Text, T.Text, T.Text), [Times]) -> [[[T.Text]]]
 addCourseToSchedule schedule (course, courseTimes) =
-  let time' = filter (\t-> mod' (timeField t !! 1) 1 == 0) courseTimes
-      timeArray = convertTimeToArray time'
+  let time' = filter (\t-> mod' (timesStartHour t) 1 == 0) courseTimes
+      timeArray = concatMap convertTimeToArray time'
   in foldl (addCourseHelper course) schedule timeArray
 
 -- | Appends information of course to the current schedule for specified day and time.

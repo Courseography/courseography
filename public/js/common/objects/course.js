@@ -1,12 +1,11 @@
 /**
  * Constructs a Course.
- * @param {string} name The course code.
+ * @param {JSON} course The JSON with the course information
  * @constructor
  */
-function Course(name) {
+function Course(course) {
     'use strict';
 
-    var course = getCourse(name);
     // Copy attributes
     this.F = course.fallSession;
     this.S = course.springSession;
@@ -114,6 +113,9 @@ Course.prototype.parseLectures = function (session, timeSuffix) {
         sections.push(makeLecture(lecture, tmp, id, sectionTimes));
     });
 
+    sections.sort(function(a, b) {
+        return a.name > b.name;
+    });
     return sections;
 };
 
@@ -133,7 +135,7 @@ Course.prototype.parseTutorials = function (session, timeSuffix) {
 
     var tmp = this;
 
-    return session.tutorials.map(function (tutorial) {
+    var sections = session.tutorials.map(function (tutorial) {
         // Convert from 'TUT0101' to 'T0101'
         tutorial.section = tutorial.section.substring(0, 1) + tutorial.section.substring(3);
 
@@ -156,6 +158,12 @@ Course.prototype.parseTutorials = function (session, timeSuffix) {
         sectionTimes = cleanUpTimes(sectionTimes);
         return makeTutorial(tutorial, tmp, id, sectionTimes);
     });
+
+    sections.sort(function(a, b) {
+        return a.name > b.name;
+    });
+
+    return sections;
 };
 
 

@@ -11,7 +11,14 @@ maintainer:          david@cs.toronto.edu
 -- copyright:
 category:            Planning
 build-type:          Custom
-cabal-version:       >=1.22
+cabal-version:       >=1.24
+
+custom-setup
+  setup-depends:
+    base >= 4.9,
+    Cabal >= 1.24,
+    process >= 1.2,
+    directory
 
 test-suite ParserTests
   main-is: ParserTests/tests.hs
@@ -57,6 +64,8 @@ executable courseography
     Database.DataType,
     Database.Database,
     Database.Tables,
+    DynamicGraphs.WriteRunDot,
+    DynamicGraphs.GraphGenerator,
     Export.GetImages,
     Export.ImageConversion,
     Export.LatexGenerator,
@@ -120,6 +129,9 @@ executable courseography
     transformers,
     base64-bytestring,
     split,
+    fgl,
+    graphviz,
+    filepath,
     containers,
     unordered-containers,
     random,

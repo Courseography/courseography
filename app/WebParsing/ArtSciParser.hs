@@ -2,7 +2,7 @@ module WebParsing.ArtSciParser
     (parseArtSci, getDeptList, fasCalendarURL) where
 
 import Data.Either (either)
-import Data.List (elemIndex)
+import Data.List (elemIndex, nubBy)
 import Control.Monad.IO.Class (liftIO)
 import qualified Data.Text as T
 import Data.Text.Lazy (toStrict)
@@ -21,6 +21,7 @@ import Database.CourseInsertion (insertCourse)
 import Database.Tables (Courses(..), Department(..))
 import WebParsing.ReqParser (parseReqs)
 import Config (databasePath)
+import WebParsing.PostParser (addPostToDatabase)
 
 
 -- | The URLs of the Faculty of Arts & Science calendar.
@@ -38,8 +39,7 @@ parseArtSci = do
     runSqlite databasePath $ do
         liftIO $ putStrLn "Inserting departments"
         insertDepts $ map snd deptInfo
-        mapM_ parseDepartment deptInfo
-
+        mapM_ parseDepartment (nubBy (\(x, _) (y, _) -> x == y) deptInfo)
 
 -- | Converts the processed main page and extracts a list of department html pages
 -- and department names
@@ -54,10 +54,9 @@ getDeptList tags =
         extractDepartments tableTags =
             -- Each aTag consists of a start tag, text, and end tag
             let aTags = TS.partitions (tagOpenAttrNameLit "a" "href" (const True)) tableTags
-                depts = map (\t -> (TS.fromAttrib "href" $ head t,
-                                    T.replace "\8203" " " $ T.replace "\160" " " $ T.strip $ TS.innerText t)) aTags
+                depts = map (\t -> (TS.fromAttrib "href" $ head t, T.strip $ TS.innerText t)) aTags
             in
-                filter (\t -> (not . T.null $ fst t) && (not . T.null $ snd t)) depts
+                filter (\(a, b) -> (not $ T.null a) && (not $ T.null b)) depts
 
 -- | Insert department names to database
 insertDepts :: [T.Text] -> SqlPersistM ()
@@ -69,24 +68,30 @@ parseDepartment (relativeURL, _) = do
     bodyTags <- liftIO $ httpBodyTags $ fasCalendarURL ++ T.unpack relativeURL
     let contentTags = dropWhile (not . tagOpenAttrLit "div" ("id", "block-system-main")) bodyTags
         contentTags' = takeWhile (not . tagOpenAttrLit "p" ("class", "rteright")) contentTags
-        programs = dropWhile (not . tagOpenAttrNameLit "div" "class" (T.isInfixOf "view-id-section")) contentTags'
+        programs = dropWhile (not . tagOpenAttrNameLit "div" "class" isProgramHeaderInfix) contentTags'
         programs' = takeWhile (not . tagOpenAttrNameLit "div" "class" (T.isInfixOf "view-id-course_group_view")) programs
-        courseTags = dropWhile (not . tagOpenAttrNameLit "div" "class" (T.isInfixOf "view-id-courses")) contentTags'
+        courseTags = dropWhile (not . tagOpenAttrNameLit "div" "class" isCourseSection) contentTags'
     parsePrograms programs'
-    let courseList = parseCourses courseTags
-    mapM_ insertCourse courseList
+    mapM_ insertCourse $ parseCourses courseTags
+    where
+        isProgramHeaderInfix tag = or [(T.isInfixOf "view-id-section") tag, (T.isInfixOf "view-header") tag]
+        isCourseSection tag = or [(T.isInfixOf "view-id-courses") tag,
+            and [(T.isInfixOf "view-") tag, (T.isInfixOf "-courses") tag,
+                  not (T.isInfixOf "programs" tag)]]
 
 -- | Parse the section of the course calendar listing the programs offered by a department.
 parsePrograms :: [Tag T.Text] -> SqlPersistM ()
-parsePrograms _ = do
-    -- let elems = TS.partitions (TS.isTagOpenName "h3") _ -- TODO: complete this function
-    return ()
-
+parsePrograms programs = do
+    let elems = TS.partitions isPost programs
+    mapM_ addPostToDatabase elems
+    where
+         isPost tag = tagOpenAttrNameLit "h3" "class" isProgramsView tag
+         isProgramsView currentTag = or [(T.isInfixOf "programs_view") currentTag, (T.isInfixOf "_programs") currentTag]
 
 -- | Parse the section of the course calendar listing the courses offered by a department.
 parseCourses :: [Tag T.Text] -> [(Courses, T.Text, T.Text)]
 parseCourses tags =
-    let elems = drop 1 $ TS.partitions (TS.isTagOpenName "h3") tags -- Remove the first one, which is the header
+    let elems = TS.partitions (tagOpenAttrNameLit "h3" "class" (T.isInfixOf "views-accordion")) tags
         courses = map parseCourse elems
     in
         courses
@@ -96,7 +101,7 @@ parseCourses tags =
             let courseHeader = T.strip . TS.innerText $ takeWhile (not . TS.isTagCloseName "h3") courseTags
                 (code, title) = either (error . show) id $ parse parseCourseTitle "course title" courseHeader
                 spans = TS.partitions (TS.isTagOpenName "span") courseTags
-                courseContents = map (T.strip . T.replace "\160" " " . TS.innerText) spans
+                courseContents = map (T.strip . TS.innerText) spans
                 i1 = elemIndex "Hours:" courseContents
                 -- TODO: add the number of contact hours to the database
                 (_, description) = maybe ("", "") (\i -> either (error . show) id $ parse parseHours "course hours" $ courseContents !! (i+1)) i1
@@ -146,4 +151,8 @@ httpBodyTags :: String -> IO [Tag T.Text]
 httpBodyTags url = do
     req <- parseRequest url
     response <- httpLBS req
-    return . TS.parseTags . toStrict . decodeUtf8 . getResponseBody $ response
+    return . TS.parseTags . cleanText . toStrict . decodeUtf8 . getResponseBody $ response
+
+-- | Remove odd characters from text
+cleanText :: T.Text -> T.Text
+cleanText = T.replace "\n" "" . T.replace "\8203" "" . T.replace "\160" "" . T.strip

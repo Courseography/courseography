@@ -12,13 +12,13 @@ dependencies:
     - ".stack-work"
     - "node_modules"
   pre:
+    - sudo apt-get update
     - sudo apt-get install imagemagick texlive-latex-base
-    - curl -L https://github.com/commercialhaskell/stack/releases/download/v1.3.0/stack-1.3.0-linux-x86_64.tar.gz | tar zx -C /tmp
-    - sudo mv /tmp/stack-1.3.0-linux-x86_64/stack /usr/bin
+    - stack upgrade
   override:
     - stack setup
     - rm -fr $(stack path --dist-dir) $(stack path --local-install-root)
-    - stack build --fast --ghc-options -Werror
+    - stack build --fast -j1 --ghc-options -Werror
     - yarn install
 
 test:

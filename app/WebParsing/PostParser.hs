@@ -1,102 +1,112 @@
 module WebParsing.PostParser
-    (getPost) where
+    (addPostToDatabase) where
 
-import Network.HTTP
 import qualified Data.Text as T
+import Data.Either (fromRight)
+import Data.Maybe (maybe)
+import Data.List (find)
+import Data.Text (strip)
 import Control.Monad.Trans (liftIO)
 import Text.HTML.TagSoup
 import Text.HTML.TagSoup.Match
-import Config (databasePath)
+import Data.List.Split (split, splitWhen, whenElt, keepDelimsL)
 import Database.Tables
-import Database.Persist.Sqlite (insert_, runMigration, runSqlite, SqlPersistM)
+import Database.DataType (PostType(..))
+import Database.Persist.Sqlite (insert_, SqlPersistM)
 import Database.Persist (insertUnique)
 import qualified Text.Parsec as P
-import WebParsing.ParsecCombinators (getCourseFromTag, generalCategoryParser, parseCategory,
-    postInfoParser)
-
-fasCalendarURL :: String
-fasCalendarURL = "http://calendar.artsci.utoronto.ca/"
-
-failedString :: String
-failedString = "Failed."
-
-getPost :: T.Text -> IO ()
-getPost str = do
-    let path = fasCalendarURL ++ (T.unpack str)
-    rsp <- simpleHTTP (getRequest path)
-    body <- getResponseBody rsp
-    let tags = filter isNotComment $ parseTags body
-        postsSoup = secondH2 tags
-        posts = partitions isPostName postsSoup
-    runSqlite databasePath $ do
-        runMigration migrateAll
-        mapM_ addPostToDatabase posts
-    print $ "parsing " ++ (T.unpack str)
-    where
-        isNotComment (TagComment _) = False
-        isNotComment _ = True
-        secondH2 tags =
-            let sect = sections (isTagOpenName "h2") tags
-            in
-                if (length sect) < 2
-                then
-                    []
-                else
-                    takeWhile isNotCoursesSection tags
-        isNotCoursesSection tag = not (tagOpenAttrLit "a" ("name", "courses") tag)
-        isPostName tag = tagOpenAttrNameLit "a" "name" (\nameValue -> (length nameValue) == 9) tag
-
-addPostToDatabase :: [Tag String] -> SqlPersistM ()
-addPostToDatabase tags = do
-    let postCode_ = T.pack (fromAttrib "name" ((take 1 $ filter (isTagOpenName "a") tags) !! 0))
-        liPartitions = partitions isLiTag tags
-        programPrereqs = map getCourseFromTag $ map (T.pack . fromAttrib "href") $ filter isCourseTag tags
-        firstCourse = if (null programPrereqs) then Nothing else (Just (head programPrereqs))
-    categoryParser tags firstCourse postCode_ liPartitions
-    where
-        isCourseTag tag = tagOpenAttrNameLit "a" "href" (\hrefValue -> (length hrefValue) >= 0) tag
-        isLiTag tag = isTagOpenName "li" tag
-
-addPostCategoriesToDatabase :: T.Text -> [T.Text] -> SqlPersistM ()
-addPostCategoriesToDatabase postCode_ categories = do
-    mapM_ (addCategoryToDatabase postCode_) (filter isCategory categories)
-    where
-        isCategory text =
-            let infixes = map (containsText text)
-                         ["First", "Second", "Third", "suitable", "Core", "Electives"]
-            in
-                ((T.length text) >= 7) && ((length $ filter (\bool -> bool) infixes) <= 0)
-        containsText text subtext = T.isInfixOf subtext text
-
-addCategoryToDatabase :: T.Text -> T.Text -> SqlPersistM ()
-addCategoryToDatabase postCode_ category =
-    insert_ $ PostCategory category postCode_
+import Text.Parsec.Text (Parser)
+import WebParsing.ReqParser (parseReqs)
+import WebParsing.ParsecCombinators (parseUntil, text)
 
 
--- Helpers
+addPostToDatabase :: [Tag T.Text] -> SqlPersistM ()
+addPostToDatabase programElements = do
+    let fullPostName = maybe "" (strip . fromTagText) $ find isTagText programElements
+        requirementLines = reqHtmlToLines $ last $ sections isRequirementSection programElements
+        requirements = concatMap parseRequirement requirementLines
+    liftIO $ print fullPostName
 
-categoryParser :: [Tag String] -> Maybe T.Text -> T.Text -> [[Tag String]] -> SqlPersistM ()
-categoryParser tags firstCourse postCode_ liPartitions = do
-    case parsed of
-        Right (post, categories) -> do
-            postExist <- insertUnique post
-            case postExist of
-                Just _ -> addPostCategoriesToDatabase postCode_ categories
+    case P.parse postInfoParser "POSt information" fullPostName of
+        Left _ -> return ()
+        Right post -> do
+            postExists <- insertUnique post
+            case postExists of
+                Just key ->
+                    mapM_ (insert_ . PostCategory key) requirements
                 Nothing -> return ()
-        Left _ -> do
-            liftIO $ print failedString
-            return ()
     where
-        parsed = case liPartitions of
-            [] -> P.parse (generalCategoryParser firstCourse postCode_) failedString (T.pack $ innerText tags)
-            partitionResults -> do
-                let categories = map parseLi partitionResults
-                post <- P.parse (postInfoParser firstCourse postCode_) failedString (T.pack $ innerText tags)
-                return (post, categories)
+        isRequirementSection = tagOpenAttrLit "div" ("class", "field-content")
 
-parseLi :: [Tag String] -> T.Text
-parseLi liPartition = do
-    let parsed = P.parse parseCategory failedString (T.pack $ innerText liPartition)
-    case parsed of
-        Right category -> category
-        Left _ -> ""
+
+-- | Parse a Post value from its title.
+-- Titles are usually of the form "Actuarial Science Major (Science Program)".
+postInfoParser :: Parser Post
+postInfoParser = do
+    deptName <- parseDepartmentName
+    postType <- parsePostType P.<|> return Other
+    return $ Post postType deptName "" ""
+
+    where
+        parseDepartmentName :: Parser T.Text
+        parseDepartmentName = parseUntil $ P.choice [
+            P.lookAhead parsePostType >> return (),
+            P.char '(' >> return ()
+            ]
+
+        parsePostType :: Parser PostType
+        parsePostType = do
+            postTypeName <- P.choice $ map (P.try . text) ["Specialist", "Major", "Minor"]
+            return $ read $ T.unpack postTypeName
+
+
+-- | Split requirements HTML into individual lines.
+reqHtmlToLines :: [Tag T.Text] -> [[T.Text]]
+reqHtmlToLines tags =
+    let sects = split (keepDelimsL $ whenElt isSectionSplit) tags
+        sectionsNoNotes = filter (not . isNoteSection) sects
+        paragraphs = concatMap (splitWhen (isTagOpenName "p")) sectionsNoNotes
+        lines' = map (map (T.strip . convertLine) . splitLines) paragraphs
+    in
+        lines'
+
+    where
+        isSectionSplit :: Tag T.Text -> Bool
+        isSectionSplit tag =
+            isTagText tag &&
+            any (flip T.isInfixOf $ fromTagText tag) ["First", "Second", "Third", "Higher", "Notes", "NOTES"]
+
+        isNoteSection :: [Tag T.Text] -> Bool
+        isNoteSection (sectionTitleTag:_) =
+            isTagText sectionTitleTag && (any (flip T.isInfixOf $ fromTagText $ sectionTitleTag) ["Notes", "NOTES"])
+        isNoteSection [] = False
+
+        splitLines :: [Tag T.Text] -> [[Tag T.Text]]
+        splitLines = splitWhen (\tag -> isTagOpenName "br" tag || isTagOpenName "li" tag)
+
+        convertLine :: [Tag T.Text] -> T.Text
+        convertLine [] = ""
+        convertLine (t:ts)
+            | isTagOpenName "li" t = T.append "0." (innerText ts)
+            | otherwise = innerText (t:ts)
+
+
+parseRequirement :: [T.Text] -> [T.Text]
+parseRequirement requirement = map parseSingleReq $ filter isReq requirement
+    where
+        isReq t = T.length t >= 7 &&
+            not (any (flip T.isInfixOf $ t) ["First", "Second", "Third", "Higher"])
+
+        parseSingleReq =
+            T.pack . show .
+            parseReqs .      -- Using parser for new Req type
+            T.unpack .
+            fromRight "" .
+            P.parse getLineText "Reading a requirement line" .
+            T.strip
+
+        -- Strips the optional leading numbering (#.) from a line.
+        getLineText :: Parser T.Text
+        getLineText = do
+            P.optional (P.digit >> P.char '.' >> P.space)
+            parseUntil P.eof

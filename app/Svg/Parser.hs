@@ -29,12 +29,14 @@ import Text.Read (readMaybe)
 import Data.Char (isSpace)
 import qualified Data.Text as T
 import Data.Text.IO as T (readFile)
+import Data.List.Split (splitOn)
+
 
 parsePrebuiltSvgs :: IO ()
 parsePrebuiltSvgs = runSqlite databasePath $ do
     deleteGraphs
     performParse "Computer Science" "csc2017.svg"
-    performParse "Statistics" "sta2015.svg"
+    performParse "Statistics" "sta2017.svg"
     performParse "Biochemistry" "bch2015.svg"
     performParse "Cell & Systems Biology" "csb2015.svg"
     performParse "Estonian" "est2015.svg"
@@ -104,14 +106,18 @@ parseGraph ::  GraphId                 -- ^ The unique identifier of the graph.
            -> ([Path],[Shape],[Text])
 parseGraph key tags =
     let gTags = TS.partitions (TS.isTagOpenName "g") tags
+        globalTransform = getTransform $ head $ head gTags
         ellipses = concatMap (parseEllipse key) gTags
         paths = concatMap (parsePath key) gTags
         rects = concatMap (parseRect key) gTags
         texts = concatMap (parseText key) gTags
-
         shapes = removeRedundant (ellipses ++ rects)
+
+        paths' = map (\p -> p { pathPoints = map (addTuples globalTransform) $ pathPoints p}) paths
+        shapes' = map (\s -> s { shapePos = addTuples globalTransform (shapePos s)}) $ filter small shapes
+        texts' = map (\t -> t { textPos = addTuples globalTransform (textPos t)}) texts
     in
-        (paths, filter small shapes, texts)
+        (paths', shapes', texts')
     where
         -- Raw SVG seems to have a rectangle the size of the whole image
         small shape = shapeWidth shape < 300
@@ -119,6 +125,7 @@ parseGraph key tags =
             filter (not . \s -> shapePos s `elem` map shapePos shapes &&
                                 (T.null (shapeFill s) || shapeFill s == "#000000") &&
                                 elem (shapeType_ s) [Node, Hybrid]) shapes
+
 
 
 -- | Create text values from g tags.
@@ -170,9 +177,9 @@ parseRect :: GraphId -- ^ The Rect's corresponding graph identifier.
           -> [Shape]
 parseRect key tags =
     let
-        rectOpenTags = filter (TS.isTagOpenName "rect") tags
+        rectOpenTags = filter (\tag -> TS.isTagOpenName "rect" tag || TS.isTagOpenName "polygon" tag) tags
     in
-        map makeRect rectOpenTags
+        map (\tag -> if (TS.isTagOpenName "rect" tag) then makeRect tag else makePoly tag) rectOpenTags
     where
         gOpen = head tags
         styles' = styles gOpen
@@ -190,6 +197,20 @@ parseRect key tags =
                   ""
                   []
                   Node
+        makePoly polyOpenTag =
+          let points = map (\coord -> parseCoord $ T.pack coord) $ splitOn " " $ T.unpack $ fromAttrib "points" polyOpenTag
+          in
+            updateShape (fromAttrib "fill" polyOpenTag) $
+              Shape key
+                ""
+                ((fst $ points !! 1) + fst trans, -- get x value
+                (snd $ points !! 1) + snd trans) -- get y value
+                ((fst $ points !! 0) - (fst $ points !! 1)) -- calculate width
+                ((snd $ points !! 2) - (snd $ points !! 1)) -- calculate height
+                fill
+                ""
+                []
+                Node
 
 
 -- | Create a path from a list of tags.
@@ -290,7 +311,7 @@ getTransform = parseTransform . fromAttrib "transform"
 
 -- | Parses a transform String into a tuple of Float.
 parseTransform :: T.Text -> Point
-parseTransform "" = (0,0)
+parseTransform "" = (0, 0)
 parseTransform transform =
     let parsedTransform = T.splitOn "," $ T.drop 10 transform
         xPos = readMaybe . T.unpack $ head parsedTransform
@@ -299,6 +320,19 @@ parseTransform transform =
         if isNothing xPos || isNothing yPos
         then
             error $ T.unpack transform
+        else
+            (fromJust xPos, fromJust yPos)
+
+parseCoord :: T.Text -> Point
+parseCoord "" = (0, 0)
+parseCoord coord =
+    let parsedCoord = T.splitOn "," coord
+        xPos = readMaybe . T.unpack $ head parsedCoord
+        yPos = readMaybe . T.unpack $ parsedCoord !! 1
+    in
+        if isNothing xPos || isNothing yPos
+        then
+            error $ show coord
         else
             (fromJust xPos, fromJust yPos)
 
@@ -315,7 +349,7 @@ parsePathD d
       -- Converts a relative coordinate structure into an absolute one.
       relCoords = tail $ foldl (\x z -> x ++ [addTuples (convertToPoint z)
                                                         (last x)])
-                               [(0,0)]
+                               [(0, 0)]
                                coordList
       -- Converts a relative coordinate structure into an absolute one.
       absCoords = map convertToPoint coordList

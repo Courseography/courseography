@@ -82,26 +82,18 @@ function getCourseObject(courseName, courseArray) {
 /**
  * Retrieves a course from file.
  * @param {string} courseName The course code. This + '.txt' is the name of the file.
- * @returns {undefined|JSON} The JSON object representing the course.
+ * @returns {Promise} Promise object representing the JSON object containing course information.
  */
 function getCourse(courseName) {
     'use strict';
 
-    var course;
-    $.ajax({
-        url: 'course',
-        dataType: 'json',
-        data: {name : courseName},
-        async: false,
-        success: function (data) {
-            course = data;
-        },
-        error: function () {
-            throw 'No course file';
-        }
-    });
-
-    return course;
+    return fetch(
+        'course?name=' + courseName,
+        )
+        .then(response => response.json())
+        .catch(error => {
+            throw(error);
+        });
 }
 
 
@@ -192,4 +184,18 @@ function cleanUpTimes(times) {
     }
 
     return timeList;
+}
+
+/**
+ * Returns a copy of lectures with duplicate lecture sessions removed, and lectures
+ * sorted by section.
+ * @param {object[]} lectures The lectures to remove duplicates from.
+ * @returns {object[]} The lectures without duplicates.
+ */
+function removeDuplicateLectures(lectures) {
+    'use strict'
+
+    return lectures.filter((lecture, index, lectures) =>
+            lectures.map(lect => lect.meetingData.section).indexOf(lecture.meetingData.section) === index)
+        .sort((lec1, lec2) => lec1.meetingData.section > lec2.meetingData.section);
 }

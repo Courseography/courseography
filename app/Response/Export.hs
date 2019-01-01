@@ -11,29 +11,29 @@ import Export.PdfGenerator
 import Export.LatexGenerator
 import Response.Image (returnImageData)
 import qualified Data.Text as T
+import Data.ByteString.Base64.Lazy as BEnc
 
 -- | Returns an image of the timetable requested by the user.
 exportTimetableImageResponse :: T.Text -> String -> ServerPart Response
-exportTimetableImageResponse session coursecookie = do
-    (svgFilename, imageFilename) <- liftIO $ getActiveTimetable (T.pack coursecookie) session
+exportTimetableImageResponse session selectedCourses = do
+    (svgFilename, imageFilename) <- liftIO $ getActiveTimetable (T.pack selectedCourses) session
     liftIO $ returnImageData svgFilename imageFilename
 
 -- | Returns a PDF containing graph and timetable requested by the user.
-exportTimetablePDFResponse :: String -> ServerPart Response
-exportTimetablePDFResponse coursecookie = do
-    req <- askRq
-    (graphSvg, graphImg) <- liftIO $ getActiveGraphImage req
-    (fallsvgFilename, fallimageFilename) <- liftIO $ getActiveTimetable (T.pack coursecookie) "Fall"
-    (springsvgFilename, springimageFilename) <- liftIO $ getActiveTimetable (T.pack coursecookie) "Spring"
+exportTimetablePDFResponse :: String -> String -> ServerPart Response
+exportTimetablePDFResponse selectedCourses graphInfo = do
+    (graphSvg, graphImg) <- liftIO $ getActiveGraphImage graphInfo
+    (fallsvgFilename, fallimageFilename) <- liftIO $ getActiveTimetable (T.pack selectedCourses) "Fall"
+    (springsvgFilename, springimageFilename) <- liftIO $ getActiveTimetable (T.pack selectedCourses) "Spring"
     pdfName <- liftIO $ returnPDF graphSvg graphImg fallsvgFilename fallimageFilename springsvgFilename springimageFilename
     liftIO $ returnPdfBS pdfName
 
--- | Returns bytestring of PDF for given name, then deletes PDF from local.
+-- | Returns 64base bytestring of PDF for given name, then deletes PDF from local.
 returnPdfBS :: String -> IO Response
 returnPdfBS pdfFilename = do
     pdfData <- BS.readFile pdfFilename
     _ <- removeFile pdfFilename
-    return $ toResponseBS "application/pdf" $ L.fromStrict pdfData
+    return $ toResponseBS "application/pdf" $ BEnc.encode $ L.fromStrict pdfData
 
 -- | Returns the name of a generated pdf that contains graphImg and timetableImg
 -- and deletes all of the img and svg files passed as arguments

@@ -5,15 +5,14 @@ import Happstack.Server
 import qualified Data.ByteString as BS
 import Control.Monad.IO.Class  (liftIO)
 import qualified Data.ByteString.Base64 as BEnc
-import Export.GetImages
+import Export.GetImages (getActiveGraphImage, getTimetableImage)
 import Export.ImageConversion
 import qualified Data.Text as T
 
--- | Returns an image of the graph requested by the user.
-graphImageResponse :: ServerPart Response
-graphImageResponse = do
-    req <- askRq
-    (svgFilename, imageFilename) <- liftIO $ getActiveGraphImage req
+-- | Returns an image of the graph requested by the user, given graphInfo stored in local storage.
+graphImageResponse :: String -> ServerPart Response
+graphImageResponse graphInfo = do
+    (svgFilename, imageFilename) <- liftIO $ getActiveGraphImage graphInfo
     liftIO $ returnImageData svgFilename imageFilename
 
 -- | Returns an image of the timetable requested by the user.
