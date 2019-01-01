@@ -66,10 +66,10 @@ class PostNav extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            visible: getLocalStorage('activePost') === '' ? 'spe' : getLocalStorage('activePost'),
+            visible: localStorage.getItem('activePost') === '' ? 'spe' : localStorage.getItem('activePost'),
             creditCounts: [0.0, 0.0, 0.0],
             completed: [false, false, false],
-            activeTab: getLocalStorage('activePost')
+            activeTab: localStorage.getItem('activePost')
         };
 
         this.getActiveTab = this.getActiveTab.bind(this);
@@ -79,14 +79,14 @@ class PostNav extends React.Component {
     }
 
     getActiveTab() {
-        return getLocalStorage('activePost');
+        return localStorage.getItem('activePost');
     }
 
     changeActiveTab(e) {
         var newVisible = e.target.id.substring(0, 3);
         this.setState({visible: newVisible}, () => {
             this.props.updateTab(newVisible + 'Post');
-            setLocalStorage('activePost', newVisible);
+            localStorage.setItem('activePost', newVisible);
         });
     }
 

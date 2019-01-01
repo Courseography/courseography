@@ -14,15 +14,13 @@ module Config (
     genCssPath,
     timetableUrl,
     cssStyle,
-    enableFb,
     firstMondayFall,
     lastWednesdayFall,
     firstMondayWinter,
     lastMondayWinter,
     outDay,
     holidays,
-    enableCdn,
-    enableAnalytics
+    enableCdn
     ) where
 
 import Data.Text (Text)
@@ -118,18 +116,8 @@ holidays = ["20151012T", "20151109T", "20151110T",
             "20160215T", "20160216T", "20160217T",
             "20160218T", "20160219T", "20160325T"]
 
--- FACEBOOK CONFIGURATION
-
--- | Enable Facebook integration. Should only be true on the production server.
-enableFb :: Bool
-enableFb = False
-
 -- SCRIPT DEPENDENCIES CONFIGURATION
 
 -- | Enable CDN downloads for js and css dependencies. Should be true on the production server.
 enableCdn :: Bool
 enableCdn = True
-
--- | Enable Google analytics script
-enableAnalytics :: Bool
-enableAnalytics = False

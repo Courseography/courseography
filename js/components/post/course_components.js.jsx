@@ -16,8 +16,8 @@ class CourseCode extends React.Component {
     }
 
     componentWillMount() {
-        this.setState({selected: getLocalStorage(this.getIdName()) === 'active' ||
-                                 getLocalStorage(this.getIdName()) === 'overridden'});
+        this.setState({selected: localStorage.getItem(this.getIdName()) === 'active' ||
+                                 localStorage.getItem(this.getIdName()) === 'overridden'});
     }
 
     toggleFullInfo() {

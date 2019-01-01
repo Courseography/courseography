@@ -215,10 +215,7 @@ class Graph extends React.Component {
             } else if (urlSpecifiedGraph !== null) {
                 graphName = 'Computer Science';
             } else {
-                graphName = getLocalStorage('active-graph');
-                if (graphName === '') {
-                    graphName = 'Computer Science';
-                }
+                graphName = localStorage.getItem('active-graph') || 'Computer Science';
             }
         }
 
@@ -229,7 +226,7 @@ class Graph extends React.Component {
             url: 'get-json-data',
             data: {'graphName': graphName},
             success: function (data) {
-                setLocalStorage('active-graph', graphName);
+                localStorage.setItem('active-graph', graphName);
                 var regionsList = [];
                 var nodesList = [];
                 var hybridsList = [];
@@ -712,14 +709,14 @@ class NodeGroup extends React.Component {
             var node = this.refs[nodeJSON.id_];
             var state = node.props.parents.length === 0 ? 'takeable' : 'inactive';
             node.setState({status: state, selected: false});
-            setLocalStorage(node.props.JSON.id_, state);
+            localStorage.setItem(node.props.JSON.id_, state);
         });
 
         this.props.hybridsJSON.forEach(hybridJSON => {
             var hybrid = this.refs[hybridJSON.id_];
             var state = hybrid.props.parents.length === 0 ? 'takeable' : 'inactive';
             hybrid.setState({status: state, selected: false});
-            setLocalStorage(hybrid.props.JSON.id_, state);
+            localStorage.setItem(hybrid.props.JSON.id_, state);
         });
     }
 
@@ -844,8 +841,8 @@ class NodeGroup extends React.Component {
 class Node extends React.Component {
     constructor(props) {
         super(props);
-        var state = getLocalStorage(this.props.JSON.id_);
-        if (state === '') {
+        var state = localStorage.getItem(this.props.JSON.id_);
+        if (state === null) {
             state = this.props.parents.length === 0 ? 'takeable' : 'inactive';
         }
         this.state = {
@@ -905,7 +902,7 @@ class Node extends React.Component {
         if ((['active', 'overridden'].indexOf(newState) >= 0) ===
             (['active', 'overridden'].indexOf(this.state.status) >= 0) &&
             this.state.status !== 'missing') {
-            setLocalStorage(nodeId, newState);
+            localStorage.setItem(nodeId, newState);
             this.setState({status: newState});
             return;
         }
@@ -913,7 +910,7 @@ class Node extends React.Component {
         if (recursive === undefined || recursive) {
             var svg = this.props.svg;
             this.setState({status: newState}, function () {
-                setLocalStorage(nodeId, newState);
+                localStorage.setItem(nodeId, newState);
                 this.props.childs.forEach(function (node) {
                     var currentNode = refLookUp(node, svg);
                     currentNode.updateNode();
@@ -926,7 +923,7 @@ class Node extends React.Component {
             });
         } else {
             this.setState({status: newState});
-            setLocalStorage(nodeId, newState);
+            localStorage.setItem(nodeId, newState);
         }
     }
 
@@ -1151,7 +1148,7 @@ class Bool extends React.Component {
 
         var boolId = this.props.JSON.id_;
         this.setState({status: newState}, function () {
-            setLocalStorage(boolId, newState);
+            localStorage.setItem(boolId, newState);
             this.props.childs.forEach(function (node) {
                 var currentNode = refLookUp(node, svg);
                 currentNode.updateNode(svg);

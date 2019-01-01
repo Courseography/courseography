@@ -1,6 +1,7 @@
 import React from 'react';
 import { CourseCategory2 } from './course_components.js.jsx';
 import { Modal } from '../common/react_modal.js.jsx';
+import * as Data from './post_data';
 
 
 /**
@@ -9,12 +10,12 @@ import { Modal } from '../common/react_modal.js.jsx';
  * @return {boolean} True if course is a specialist, False otherwise
  */
 function notSpecialistCourse(course) {
-    return specialistCourses.indexOf(course) === -1;
+    return Data.specialistCourses.indexOf(course) === -1;
 }
 
 
 function isInquiryCourse(course) {
-    return CSCinq.indexOf(course) >= 0;
+    return Data.CSCinq.indexOf(course) >= 0;
 }
 
 
@@ -32,8 +33,8 @@ function isLevelExtra(course, levelExtraArray) {
 
 
 function updateActiveCourses() {
-    return allCourses.concat(math).filter((course) => {
-        var status = getLocalStorage(course.toLowerCase());
+    return Data.allCourses.concat(Data.math).filter((course) => {
+        var status = localStorage.getItem(course.toLowerCase());
         return status === 'active' || status === 'overridden';
     });
 }
@@ -56,7 +57,7 @@ class Post extends React.Component {
     }
 
     componentWillMount() {
-        this.setState({selected: getLocalStorage(this.props.postType) === 'active'});
+        this.setState({selected: localStorage.getItem(this.props.postType) === 'active'});
         this.calculateCreditCount();
     }
 
@@ -99,7 +100,7 @@ class Post extends React.Component {
 
         this.state.activeCourses.forEach((course) => {
             var courseID = course.toLowerCase()
-            if (getLocalStorage(courseID) === 'active' || getLocalStorage(courseID) === 'overridden') {
+            if (localStorage.getItem(courseID) === 'active' || localStorage.getItem(courseID) === 'overridden') {
                 if (course === 'MAT135136137157Calc1') {
                     count += 1;
                 } else {

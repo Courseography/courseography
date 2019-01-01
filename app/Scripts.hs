@@ -9,21 +9,11 @@ import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 import qualified Data.Text as T
 import Util.Blaze
-import Config (enableFb, enableCdn, enableAnalytics)
+import Config (enableCdn)
 
 -- | Scripts that are loaded on every page.
 globalScripts :: [T.Text]
-globalScripts =
-    concat [jQueryScripts] ++
-    (if enableFb then facebookScripts else []) ++
-    (if enableAnalytics then analyticsScripts else [])
-
-facebookScripts :: [T.Text]
-facebookScripts = [
-    "/static/js/common/facebook/facebook_login.js",
-    "/static/js/common/facebook/facebook_image.js",
-    "/static/js/common/facebook/facebook_modal.js"
-    ]
+globalScripts = jQueryScripts
 
 jQueryScripts :: [T.Text]
 jQueryScripts = if enableCdn
@@ -41,42 +31,24 @@ reactScripts = if enableCdn
                      "/static/js/vendor/react-dom.0.14.3.js",
                      "/static/js/vendor/browser.5.8.34.js"]
 
-analyticsScripts :: [T.Text]
-analyticsScripts = [
-    "/static/js/common/google_analytics.js"
-    ]
-
 graphScripts :: H.Html
 graphScripts = do
     mapM_ toScript $
-        ["/static/js/common/course_videos.js",
-         "/static/js/common/modal.js",
-         "/static/js/common/objects/course.js",
-         "/static/js/common/cookie_handler.js",
-         "/static/js/common/course_description.js",
+        ["/static/js/common/objects/course.js",
          "/static/js/common/objects/section.js",
          "/static/js/common/utilities/util.js",
-         "/static/js/common/image_conversion.js",
-         "/static/js/vendor/bootstrap.min.3.1.1.js",
-         "/static/js/common/modal.js"]
+         "/static/js/vendor/bootstrap.min.3.1.1.js"]
     H.script ! A.src "/static/js/graph/app.js" $ ""
 
 timetableScripts :: H.Html
 timetableScripts = do
     mapM_ toScript $
-        ["/static/js/grid/mouse_events.js",
-         if enableCdn
+        [if enableCdn
          then "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"
          else "/static/js/vendor/bootstrap.min.3.1.1.js",
-         "/static/js/common/cookie_handler.js",
          "/static/js/common/objects/course.js",
          "/static/js/common/objects/section.js",
-         "/static/js/common/utilities/util.js",
-         "/static/js/common/image_conversion.js",
-         "/static/js/draw/draw.js",
-         "/static/js/common/course_videos.js",
-         "/static/js/common/modal.js",
-         "/static/js/common/course_description.js"
+         "/static/js/common/utilities/util.js"
          ]
     H.script ! A.src "/static/js/grid/app.js" $ ""
 
@@ -92,15 +64,9 @@ drawScripts =
 postScripts :: H.Html
 postScripts = do
     mapM_ toScript [
-        "/static/js/common/cookie_handler.js",
-        "/static/js/graph/create_data.js",
-        "/static/js/common/course_description.js",
         "/static/js/common/objects/course.js",
         "/static/js/common/objects/section.js",
-        "/static/js/common/utilities/util.js",
-        "/static/js/common/modal.js",
-        "/static/js/vendor/bootstrap.min.3.1.1.js",
-        "/static/js/common/course_videos.js"]
+        "/static/js/common/utilities/util.js"]
     H.script ! A.src "/static/js/post/app.js" $ ""
 
 searchScripts :: H.Html
