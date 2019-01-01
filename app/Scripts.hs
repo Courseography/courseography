@@ -91,9 +91,8 @@ drawScripts =
 
 postScripts :: H.Html
 postScripts = do
-    mapM_ toScript $ reactScripts ++ [
+    mapM_ toScript [
         "/static/js/common/cookie_handler.js",
-        "/static/js/graph/create_data.js",
         "/static/js/graph/create_data.js",
         "/static/js/common/course_description.js",
         "/static/js/common/objects/course.js",
@@ -102,8 +101,7 @@ postScripts = do
         "/static/js/common/modal.js",
         "/static/js/vendor/bootstrap.min.3.1.1.js",
         "/static/js/common/course_videos.js"]
-    H.script ! A.src "/static/js/requirejs-config.js" $ ""
-    H.script ! H.dataAttribute "main" "/static/js/post" ! A.src "/static/js/vendor/require.js" $ ""
+    H.script ! A.src "/static/js/post/app.js" $ ""
 
 searchScripts :: H.Html
 searchScripts = do

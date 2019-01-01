@@ -1,44 +1,53 @@
-import {CourseCategory, MultipleCourseCode, InquiryCategory} from 'es6!post/course_components';
-import {SpecialistPost, MajorPost, MinorPost} from 'es6!post/post_components';
+import {SpecialistPost, MajorPost, MinorPost} from './post_components.js.jsx';
 
-var CheckMyPost = React.createClass({
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-    componentDidMount: function() {
+
+export default class CheckMyPost extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.changeActiveTab = this.changeActiveTab.bind(this);
+        this.updateNavCreditCounts = this.updateNavCreditCounts.bind(this);
+        this.updatePostStatus = this.updatePostStatus.bind(this);
+    }
+
+    componentDidMount() {
         var activeTab = this.refs.postNav.state.activeTab + 'Post';
         this.changeActiveTab(activeTab);
         this.updateNavCreditCounts();
-    },
+    }
 
-    changeActiveTab: function(newTab) {
+    changeActiveTab(newTab) {
         var activeTab = newTab;
         var tabs = ['spePost', 'majPost', 'minPost'];
-        var me = this;
 
-        tabs.forEach(function(tab) {
+        tabs.forEach((tab) => {
             if (tab === activeTab) {
-                me.refs[tab].changeTabView(true);
+                this.refs[tab].changeTabView(true);
             } else {
-                me.refs[tab].changeTabView(false);
+                this.refs[tab].changeTabView(false);
             }
         });
-    },
+    }
 
-    updateNavCreditCounts: function() {
+    updateNavCreditCounts() {
         var newCounts = [this.refs.spePost.getCreditCount(),
                          this.refs.majPost.getCreditCount(),
                          this.refs.minPost.getCreditCount()];
         this.refs.postNav.setState({creditCounts: newCounts},
             this.updatePostStatus());
-    },
+    }
 
-    updatePostStatus: function() {
+    updatePostStatus() {
         var newStatuses = [this.refs.spePost.setIfCompleted(),
                            this.refs.majPost.setIfCompleted(),
                            this.refs.minPost.setIfCompleted()];
         this.refs.postNav.setState({completed: newStatuses});
-    },
+    }
 
-    render: function() {
+    render() {
         return (
             <div id='check_my_post'>
                 <PostNav ref='postNav'
@@ -50,40 +59,46 @@ var CheckMyPost = React.createClass({
             </div>
         );
     }
-});
+}
 
 
-var PostNav = React.createClass({
-    getInitialState: function() {
-        return {
+class PostNav extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
             visible: getLocalStorage('activePost') === '' ? 'spe' : getLocalStorage('activePost'),
             creditCounts: [0.0, 0.0, 0.0],
             completed: [false, false, false],
             activeTab: getLocalStorage('activePost')
-        }
-    },
+        };
 
-    getActiveTab: function() {
+        this.getActiveTab = this.getActiveTab.bind(this);
+        this.changeActiveTab = this.changeActiveTab.bind(this);
+        this.getNavClass = this.getNavClass.bind(this);
+        this.getCreditCountClass = this.getCreditCountClass.bind(this);
+    }
+
+    getActiveTab() {
         return getLocalStorage('activePost');
-    },
+    }
 
-    changeActiveTab: function(e) {
+    changeActiveTab(e) {
         var newVisible = e.target.id.substring(0, 3);
-        this.setState({visible: newVisible}, function() {
+        this.setState({visible: newVisible}, () => {
             this.props.updateTab(newVisible + 'Post');
             setLocalStorage('activePost', newVisible);
         });
-    },
+    }
 
-    getNavClass: function(type) {
+    getNavClass(type) {
         return this.state.visible === type ? 'nav_selected' : 'nav_not_selected';
-    },
+    }
 
-    getCreditCountClass: function(postIndex) {
+    getCreditCountClass(postIndex) {
         return this.state.completed[postIndex] ? 'credits_completed' : 'credits_not_completed';
-    },
+    }
 
-    render: function() {
+    render() {
         return (
             <nav id='posts'>
                 <ul>
@@ -107,7 +122,10 @@ var PostNav = React.createClass({
         );
     }
 
-});
+}
 
 
-export default {CheckMyPost: CheckMyPost};
+ReactDOM.render(
+    <CheckMyPost />,
+    document.getElementById('all_posts')
+);

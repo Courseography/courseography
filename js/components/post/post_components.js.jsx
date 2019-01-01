@@ -1,5 +1,7 @@
-import {CourseCategory, CourseCategory2, MultipleCourseCode, InquiryCategory} from 'es6!post/course_components';
-import {Modal} from 'es6!common/react_modal';
+import React from 'react';
+import { CourseCategory2 } from './course_components.js.jsx';
+import { Modal } from '../common/react_modal.js.jsx';
+
 
 /**
  * Returns whether course is a specialist course or not
@@ -7,44 +9,62 @@ import {Modal} from 'es6!common/react_modal';
  * @return {boolean} True if course is a specialist, False otherwise
  */
 function notSpecialistCourse(course) {
-    'use strict';
-
     return specialistCourses.indexOf(course) === -1;
 }
 
 
-var Post = React.createClass({
-    getInitialState: function() {
-        return {
+function isInquiryCourse(course) {
+    return CSCinq.indexOf(course) >= 0;
+}
+
+
+function isLevel400(course, level400Array) {
+    return notSpecialistCourse(course) && course.substring(3, 4) === '4' && level400Array.length < 3;
+}
+
+function isLevel300(course, level300Array) {
+    return notSpecialistCourse(course) && course.substring(3, 4) >= '3' && level300Array.length < 3;
+}
+
+function isLevelExtra(course, levelExtraArray) {
+    return notSpecialistCourse(course) && course.substring(3, 4) >= '3' && levelExtraArray.length < 4;
+}
+
+
+function updateActiveCourses() {
+    return allCourses.concat(math).filter((course) => {
+        var status = getLocalStorage(course.toLowerCase());
+        return status === 'active' || status === 'overridden';
+    });
+}
+
+
+class Post extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
             selected: false,
-            activeCourses: this.updateActiveCourses(),
+            activeCourses: updateActiveCourses(),
             creditCount: 0
-        }
-    },
+        };
 
-    updateActiveCourses: function() {
-        var activeCourses = [];
+        this.getCourses = this.getCourses.bind(this);
+        this.getInquiryCourse = this.getInquiryCourse.bind(this);
+        this.changeCreditCount = this.changeCreditCount.bind(this);
+        this.calculateCreditCount = this.calculateCreditCount.bind(this);
+        this.openModal = this.openModal.bind(this);
+    }
 
-        return allCourses.concat(math).filter(function (course) {
-            var status = getLocalStorage(course.toLowerCase());
-            return status === 'active' || status === 'overridden';
-        });
-    },
-
-    componentWillMount: function() {
+    componentWillMount() {
         this.setState({selected: getLocalStorage(this.props.postType) === 'active'});
         this.calculateCreditCount();
-    },
+    }
 
-    componentWillReceiveProps: function(newProps) {
+    componentWillReceiveProps(newProps) {
         this.setState({selected: newProps.isSelected});
-    },
+    }
 
-    isInquiryCourse: function(course) {
-        return CSCinq.indexOf(course) >= 0;
-    },
-
-    getCourses: function () {
+    getCourses() {
         var courseChecks = this.props.courseChecks;
         var courseArrays = [];
 
@@ -63,21 +83,21 @@ var Post = React.createClass({
         });
 
         return courseArrays;
-    },
+    }
 
-    getInquiryCourse: function () {
-        var inquiryCourses = this.state.activeCourses.filter(this.isInquiryCourse);
+    getInquiryCourse() {
+        var inquiryCourses = this.state.activeCourses.filter(isInquiryCourse);
         return inquiryCourses.length === 0 ? '' : inquiryCourses[0];
-    },
+    }
 
-    changeCreditCount: function (value) {
+    changeCreditCount(value) {
         this.setState({creditCount: this.state.creditCount + value});
-    },
+    }
 
-    calculateCreditCount: function() {
+    calculateCreditCount() {
         var count = 0;
 
-        this.state.activeCourses.forEach(function (course) {
+        this.state.activeCourses.forEach((course) => {
             var courseID = course.toLowerCase()
             if (getLocalStorage(courseID) === 'active' || getLocalStorage(courseID) === 'overridden') {
                 if (course === 'MAT135136137157Calc1') {
@@ -89,17 +109,15 @@ var Post = React.createClass({
         });
 
         this.changeCreditCount(count);
-    },
+    }
 
-    openModal: function (nodeId) {
+    openModal(nodeId) {
         var modal = this.refs.modal;
         var newCourse = nodeId.substring(0, 6);
         modal.openModal(newCourse);
+    }
 
-    },
-
-    render: function() {
-
+    render() {
         if (this.state.selected) {
             var classes = 'post_selected';
         } else {
@@ -107,7 +125,6 @@ var Post = React.createClass({
         }
 
         var courseCategoryArrays = this.getCourses();
-        var me = this;
 
         return (
             <div id={'post_' + this.props.postType} className={classes} >
@@ -116,70 +133,59 @@ var Post = React.createClass({
                 <CourseCategory2 yearName='First Year' courses={this.props.firstYearCourses}
                     openModal={this.openModal} titles={[]} otherInfo={this.props}
                     courseCategoryArrays = {courseCategoryArrays}
-                    changeCreditCount={this.changeCreditCount.bind(this)}
-                    getInquiryCourse={this.getInquiryCourse.bind(this) }/>
+                    changeCreditCount={this.changeCreditCount}
+                    getInquiryCourse={this.getInquiryCourse}/>
 
                 <CourseCategory2 yearName='Second Year' courses={this.props.secondYearCourses}
                                 openModal={this.openModal} titles={[]} otherInfo={this.props}
-                                courseCategoryArrays = {courseCategoryArrays} changeCreditCount={this.changeCreditCount.bind(this)}
-                                getInquiryCourse={this.getInquiryCourse.bind(this)}/>
+                                courseCategoryArrays = {courseCategoryArrays} changeCreditCount={this.changeCreditCount}
+                                getInquiryCourse={this.getInquiryCourse}/>
 
                 <CourseCategory2 yearName='Later Years' courses={this.props.laterYearCourses}
                                 openModal={this.openModal} otherInfo={this.props} titles={this.props.categoryTitles}
-                                courseCategoryArrays = {courseCategoryArrays} changeCreditCount={this.changeCreditCount.bind(this)}
-                                getInquiryCourse={this.getInquiryCourse.bind(this)}/>
+                                courseCategoryArrays = {courseCategoryArrays} changeCreditCount={this.changeCreditCount}
+                                getInquiryCourse={this.getInquiryCourse}/>
 
                 <div id='notes'>
                     <h3>Notes</h3>
                     <ul>
-                        {this.props.notes.map(function (note, i) {
-                            return <li key={i}>{note}</li>
-                        })}
+                        {this.props.notes.map((note, i) => <li key={i}>{note}</li>)}
                     </ul>
                 </div>
             </div>
 
         );
     }
-});
+}
 
 
-var SpecialistPost = React.createClass({
-    getInitialState: function() {
-        return {
+export class SpecialistPost extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
             selected: false,
             completed: false
         }
-    },
+        this.changeTabView = this.changeTabView.bind(this);
+        this.setIfCompleted = this.setIfCompleted.bind(this);
+        this.getCreditCount = this.getCreditCount.bind(this);
+    }
 
-    changeTabView: function(isSelected) {
+    changeTabView(isSelected) {
         this.setState({selected: isSelected});
-    },
+    }
 
-    setIfCompleted: function() {
+    setIfCompleted() {
         var isCompleted = this.refs.post.state.creditCount >= 12.0;
         this.setState({completed: isCompleted});
         return isCompleted;
-    },
+    }
 
-    isLevel400: function (course, level400Array) {
-        return notSpecialistCourse(course) && course.substring(3, 4) === '4' && level400Array.length < 3;
-    },
-
-    isLevel300: function (course, level300Array) {
-        return notSpecialistCourse(course) && course.substring(3, 4) >= '3' && level300Array.length < 3;
-    },
-
-    isLevelExtra: function (course, levelExtraArray) {
-        return notSpecialistCourse(course) && course.substring(3, 4) >= '3' && levelExtraArray.length < 4;
-    },
-
-    getCreditCount: function() {
+    getCreditCount() {
         return this.refs.post.state.creditCount < 12.0 ? this.refs.post.state.creditCount : 12.0;
-    },
+    }
 
-    render: function() {
-
+    render() {
         var categoryTitles = ['Any 400-level CSC course, BCB410H, BCB420H, BCB430Y, ECE489H (1.5 FCEs)',
                               'Any 300+ level CSC course, BCB410H, BCB420H, BCB430Y, ECE385H, ECE489H (1.5 FCEs)',
                               'Any of the following: 300+ level CSC course; MAT: 235/237/257, any 300+ \
@@ -200,52 +206,55 @@ var SpecialistPost = React.createClass({
                   secondYearCourses={secondYearCourses}
                   laterYearCourses={laterYearCourses}
                   textBoxes={[[3, true], [3, true], [4, false]]}
-                  courseChecks={[this.isLevel400, this.isLevel300, this.isLevelExtra]}
+                  courseChecks={[isLevel400, isLevel300, isLevelExtra]}
                   categoryTitles={categoryTitles}
                   notes={notes}
                   hasInquiryCategory={true}
                   isSelected={this.state.selected} />
         );
     }
-});
+}
 
 
-var MajorPost = React.createClass({
-    getInitialState: function() {
-        return {
+export class MajorPost extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
             selected: false,
             completed: false
         }
-    },
+        this.changeTabView = this.changeTabView.bind(this);
+        this.setIfCompleted = this.setIfCompleted.bind(this);
+        this.getCreditCount = this.getCreditCount.bind(this);
+    }
 
-    changeTabView: function(isSelected) {
+    changeTabView(isSelected) {
         this.setState({selected: isSelected});
-    },
+    }
 
-    setIfCompleted: function() {
+    setIfCompleted() {
         var isCompleted = this.refs.post.state.creditCount >= 8.0;
         this.setState({completed: isCompleted});
         return isCompleted;
-    },
+    }
 
-    isLevel400: function (course, level400Array) {
+    getCreditCount() {
+        return this.refs.post.state.creditCount < 8.0 ? this.refs.post.state.creditCount : 8.0;
+    }
+
+    isLevel400(course, level400Array) {
         return course.substring(3, 4) === '4' && level400Array.length < 1;
-    },
+    }
 
-    isLevel300: function (course, level300Array) {
+    isLevel300(course, level300Array) {
         return course.substring(3, 4) >= '3' && level300Array.length < 2;
-    },
+    }
 
-    isLevelExtra: function (course, levelExtraArray) {
+    isLevelExtra(course, levelExtraArray) {
         return course.substring(3, 4) >= '3' && levelExtraArray.length < 3;
-    },
+    }
 
-    getCreditCount: function() {
-        return this.refs.post.state.creditCount < 8.0 ? this.refs.post.state.creditCount : 8.0
-    },
-
-    render: function() {
-
+    render() {
         var categoryTitles = ['Any 400-level CSC course, BCB410H, BCB420H, BCB430Y (0.5 FCEs)',
                               'Any 300+ level CSC course, BCB410H, BCB420H, BCB430Y, ECE385H, ECE489H (1.0 FCEs)',
                               'Any of the following: 200+ level CSC course; MAT: 221/223/240, 235/237/257, any 300+ \
@@ -273,38 +282,41 @@ var MajorPost = React.createClass({
                   isSelected={this.state.selected} />
         );
     }
-});
+}
 
 
-var MinorPost = React.createClass({
-    getInitialState: function() {
-        return {
+export class MinorPost extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
             selected: false,
             completed: false
         }
-    },
+        this.changeTabView = this.changeTabView.bind(this);
+        this.setIfCompleted = this.setIfCompleted.bind(this);
+        this.getCreditCount = this.getCreditCount.bind(this);
+    }
 
-    changeTabView: function(isSelected) {
+    changeTabView(isSelected) {
         this.setState({selected: isSelected});
-    },
+    }
 
-    setIfCompleted: function() {
+    setIfCompleted() {
         var isCompleted = this.refs.post.state.creditCount >= 4.0;
         this.setState({completed: isCompleted});
         return isCompleted;
-    },
+    }
 
-    isLevelExtra: function (course, levelExtraArray) {
+    getCreditCount() {
+        return this.refs.post.state.creditCount < 4.0 ? this.refs.post.state.creditCount : 4.0;
+    }
+
+    isLevelExtra(course, levelExtraArray) {
         var nonValidCourses = ['CSC207', 'CSC236240'];
         return course.substring(3, 4) >= '2' && nonValidCourses.indexOf(course) < 0 && levelExtraArray.length < 3;
-    },
+    }
 
-    getCreditCount: function() {
-        return this.refs.post.state.creditCount < 4.0 ? this.refs.post.state.creditCount : 4.0;
-    },
-
-    render: function() {
-
+    render() {
         var categoryTitles = ['200+ CSC courses (1.5 FCEs, with at least 1.0 FCE in the 300+ levels)'];
         var notes = ['You may take no more than three 300+ CSC/ECE courses'];
 
@@ -326,6 +338,4 @@ var MinorPost = React.createClass({
                   isSelected={this.state.selected} />
         );
     }
-});
-
-export default {SpecialistPost: SpecialistPost, MajorPost: MajorPost, MinorPost: MinorPost};
+}

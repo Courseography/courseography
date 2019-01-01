@@ -1,30 +1,42 @@
-var CourseCode = React.createClass({
-    getInitialState: function() {
-        return {
+import React from 'react';
+
+
+class CourseCode extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
             selected: false,
             infoOpened: false
         }
-    },
+        this.toggleFullInfo = this.toggleFullInfo.bind(this);
+        this.getCategory = this.getCategory.bind(this);
+        this.getIdName = this.getIdName.bind(this);
+        this.getTitle = this.getTitle.bind(this);
+        this.getIdName = this.getIdName.bind(this);
+    }
 
-    componentWillMount: function() {
+    componentWillMount() {
         this.setState({selected: getLocalStorage(this.getIdName()) === 'active' ||
                                  getLocalStorage(this.getIdName()) === 'overridden'});
-    },
+    }
 
-    toggleFullInfo: function() {
+    toggleFullInfo() {
         this.setState({infoOpened: !this.state.infoOpened});
-    },
+    }
 
-    getCategory: function() {
+    getCategory() {
         var categoryName = '';
-        var me = this;
 
         var editedCourseNames = [];
 
         // since you can render an array with a combination of jsx elements and strings, this combines all span elements and
         // "or" strings in between to be easily rendered later
-        this.props.courseIDs.forEach(function(course) {
-            editedCourseNames.push(<span id={course} className='courseName' onClick={me.openModal}>{course.toUpperCase() + 'H'}</span>);
+        this.props.courseIDs.forEach((course, i) => {
+            editedCourseNames.push(
+                <span id={course} key={i} className='courseName'
+                    onClick={(e) => this.props.openModal(e.target.id)}>
+                    {course.toUpperCase() + 'H'}
+                </span>);
             editedCourseNames.push(' or ');
         })
 
@@ -46,12 +58,12 @@ var CourseCode = React.createClass({
         } else {
             return <p className='code'>{editedCourseNames}</p>;
         }
-    },
+    }
 
-    getIdName: function() {
+    getIdName() {
         var idName = this.props.courseIDs[0].substring(0, 3);
 
-        this.props.courseIDs.forEach(function (course) {
+        this.props.courseIDs.forEach((course) => {
             idName += course.substring(3, 6);
         });
 
@@ -66,9 +78,9 @@ var CourseCode = React.createClass({
         }
 
         return idName;
-    },
+    }
 
-    getTitle: function(id) {
+    getTitle(id) {
         if (id == 'mat137' || id == 'mat157') {
             var course = new Course(id + 'Y1')
         } else {
@@ -76,16 +88,10 @@ var CourseCode = React.createClass({
         }
 
         return id.toUpperCase() + ": " + course.title;
-    },
+    }
 
-    openModal: function(e) {
-        this.props.openModal(e.target.id);
-    },
-
-    render: function() {
-        var me = this;
+    render() {
         var classes = '';
-        var id = this.getIdName();
 
         if (this.state.selected) {
             classes += ' selected';
@@ -101,48 +107,55 @@ var CourseCode = React.createClass({
             </div>
         );
     }
-})
+}
 
 
-export var MultipleCourseCode = React.createClass({
-    getInitialState: function() {
-        return {
+export class MultipleCourseCode extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
             completed: false,
             completedTextBoxes: 0,
             infoOpened: false,
             textboxValues: this.createInitialValueArray()
-        }
-    },
+        };
 
-    componentWillMount: function() {
+        this.toggleFullInfo = this.toggleFullInfo.bind(this);
+        this.checkIfCompleted = this.checkIfCompleted.bind(this);
+        this.isValidExtraCourse = this.isValidExtraCourse.bind(this);
+        this.handleOnChange = this.handleOnChange.bind(this);
+        this.countCompletedTextBoxes = this.countCompletedTextBoxes.bind(this);
+    }
+
+    componentWillMount() {
         this.setState({completedTextBoxes: this.state.completedTextBoxes +
                                            this.props.courses.length},
                       this.checkIfCompleted);
-    },
+    }
 
-    toggleFullInfo: function() {
+    toggleFullInfo() {
         this.setState({infoOpened: !this.state.infoOpened});
-    },
+    }
 
-    checkIfCompleted: function() {
+    checkIfCompleted() {
         this.setState({completed: this.state.completedTextBoxes === this.props.textBoxNumber});
-    },
+    }
 
-    createInitialValueArray: function() {
+    createInitialValueArray() {
         var array = this.props.courses.slice();
         for (var i = this.props.courses.length; i < this.props.textBoxNumber; i++) {
             array.push('');
         }
         return array;
-    },
+    }
 
-    isValidExtraCourse: function(course) {
+    isValidExtraCourse(course) {
         var validCourseCodes = ['CSC', 'MAT', 'STA', 'ECE', 'BCB'];
         return validCourseCodes.indexOf(course.substring(0, 3)) > -1 &&
                course.length === 6;
-    },
+    }
 
-    handleOnChange: function(e) {
+    handleOnChange(e) {
         var newValues = this.state.textboxValues.slice();
         var oldCourse = newValues[e.target.id];
         var newCourse = e.target.value.substring(0, 6);
@@ -163,16 +176,15 @@ export var MultipleCourseCode = React.createClass({
             !(this.isValidExtraCourse(oldCourse))) {
             this.props.changeCourseCredit(0.5);
         }
-    },
+    }
 
-    countCompletedTextBoxes: function() {
+    countCompletedTextBoxes() {
         return this.state.textboxValues.filter((v) => {
             return this.isValidExtraCourse(v);
         }).length;
-    },
+    }
 
-    render: function() {
-        var me = this;
+    render() {
         var classes = '';
 
         if (this.state.completed) {
@@ -192,8 +204,8 @@ export var MultipleCourseCode = React.createClass({
                 </p>
                 <div id = {'spec' + this.props.courseID.substring(5, this.props.courseID.length)} className='more-info'>
                     <p className="full_name">
-                        {Array.apply(0, Array(this.props.textBoxNumber)).map(function (x, i) {
-                            if (me.isValidExtraCourse(me.state.textboxValues[i].substring(0, 6))) {
+                        {Array.apply(0, Array(this.props.textBoxNumber)).map((x, i) => {
+                            if (this.isValidExtraCourse(this.state.textboxValues[i].substring(0, 6))) {
                                 var className = 'valid_extra_course';
                             } else {
                                 var className = 'not_valid_extra_course';
@@ -204,9 +216,9 @@ export var MultipleCourseCode = React.createClass({
                                        key={i}
                                        id={i}
                                        className={className}
-                                       value={me.state.textboxValues[i].substring(0, 6)}
-                                       onChange={me.handleOnChange}
-                                       disabled={me.props.textboxesDisabled} />
+                                       value={this.state.textboxValues[i].substring(0, 6)}
+                                       onChange={this.handleOnChange}
+                                       disabled={this.props.textboxesDisabled} />
                             );
                         })}
                     </p>
@@ -214,101 +226,97 @@ export var MultipleCourseCode = React.createClass({
             </div>
         );
     }
-})
+}
 
 
-export var CourseCategory = React.createClass({
-    render: function() {
-        return (
-            <div>
-                <h2>{this.props.yearName}</h2>
-                {this.props.courses.map((courses) =>
-                        <CourseCode id={courses[0]}
-                                    key={courses[0]}
-                                    courseIDs={courses}
-                                    openModal={this.props.openModal} />
-                )}
+export function CourseCategory(props) {
+    return (
+        <div>
+            <h2>{props.yearName}</h2>
+            {props.courses.map((courses) =>
+                    <CourseCode id={courses[0]}
+                                key={courses[0]}
+                                courseIDs={courses}
+                                openModal={props.openModal} />
+            )}
+        </div>
+    );
+}
+
+
+export function CourseCategory2(props) {
+    var yearName = props.yearName;
+    var postType = props.otherInfo.postType;
+    var textBoxes = props.otherInfo.textBoxes;
+    var courseCategoryArrays = props.courseCategoryArrays;
+    var changeCreditCount = props.changeCreditCount;
+    var getInquiryCourse = props.getInquiryCourse;
+    var hasInquiryCategory = props.otherInfo.hasInquiryCategory;
+
+    return (
+        <div className="col-md-4 col-sm-6">
+            <div className="year_name">{yearName}</div>
+            <div className="portfolio-thumb">
+                    <ul className="year_course_list">
+                    <li>
+                        {props.courses.map((courses, i) =>
+                            <CourseCode id={courses[0]}
+                                key={i}
+                                courseIDs={courses}
+                                openModal={props.openModal} />
+                        )}
+                    </li>
+
+                    <li>
+                        {props.titles.map((title, i) => {
+                        return <MultipleCourseCode courseID={postType + '_category_' + (i + 1)}
+                                                    textBoxNumber={textBoxes[i][0]}
+                                                    courses={courseCategoryArrays[i]}
+                                                    textboxesDisabled={textBoxes[i][1]}
+                                                    changeCourseCredit={changeCreditCount}
+                                                    categoryName={title}
+                                                    key={i} />
+                    })}
+                    </li>
+                    <li>
+                        {(() => {
+                            if (hasInquiryCategory && yearName=='Later Years' ) {
+                                return <InquiryCategory courseID={postType + '_inq'} course={getInquiryCourse()}
+                                        categoryName='Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H,
+                                        CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H, or PEY (0.5 FCEs)
+                                        ** Note: Type "PEY" for Check my POSt to recognize it **' />
+                            }
+                        })()}
+                    </li>
+                </ul>
             </div>
-        );
-    }
-})
+        </div>
+    );
+}
 
 
-export var CourseCategory2 = React.createClass({
-    render: function() {
-        var yearName = this.props.yearName;
-        var postType = this.props.otherInfo.postType;
-        var textBoxes = this.props.otherInfo.textBoxes;
-        var courseCategoryArrays = this.props.courseCategoryArrays;
-        var changeCreditCount = this.props.changeCreditCount;
-        var getInquiryCourse = this.props.getInquiryCourse;
-        var hasInquiryCategory = this.props.otherInfo.hasInquiryCategory;
-
-        return (
-            <div className="col-md-4 col-sm-6">
-                <div className="year_name">{yearName}</div>
-                <div className="portfolio-thumb">
-                     <ul className="year_course_list">
-                        <li>
-                            {this.props.courses.map((courses) =>
-                                <CourseCode id={courses[0]}
-                                    key={courses[0]}
-                                    courseIDs={courses}
-                                    openModal={this.props.openModal} />
-                            )}
-                        </li>
-
-                        <li>
-                            {this.props.titles.map(function (title, i) {
-                            return <MultipleCourseCode courseID={postType + '_category_' + (i + 1)}
-                                                       textBoxNumber={textBoxes[i][0]}
-                                                       courses={courseCategoryArrays[i]}
-                                                       textboxesDisabled={textBoxes[i][1]}
-                                                       changeCourseCredit={changeCreditCount}
-                                                       categoryName={title}
-                                                       key={i} />
-                        })}
-                        </li>
-                        <li>
-                            {(() => {
-                                if (hasInquiryCategory && yearName=='Later Years' ) {
-                                    return <InquiryCategory courseID={postType + '_inq'} course={getInquiryCourse()}
-                                            categoryName='Any from this list: CSC301H, CSC318H, CSC404H, CSC411H, CSC418H, CSC420H,
-                                            CSC428H, CSC454H, CSC485H, CSC490H, CSC491H, CSC494H, or PEY (0.5 FCEs)
-                                            ** Note: Type "PEY" for Check my POSt to recognize it **' />
-                                }
-                            })()}
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        );
-    }
-})
-
-
-export var InquiryCategory = React.createClass({
-    getInitialState: function() {
-        return {
+export class InquiryCategory extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
             completed: false,
             infoOpened: false,
-            value: this.getDefaultCourse()
-        }
-    },
+            value: this.props.course
+        };
 
-    componentWillMount: function() {
+        this.toggleFullInfo = this.toggleFullInfo.bind(this);
+        this.handleOnChange = this.handleOnChange.bind(this);
+    }
+
+    componentWillMount() {
         this.setState({completed: this.props.course !== ''});
-    },
+    }
 
-    toggleFullInfo: function() {
+    toggleFullInfo() {
         this.setState({infoOpened: !this.state.infoOpened});
-    },
+    }
 
-    getDefaultCourse: function() {
-        return this.props.course;
-    },
-
-    handleOnChange: function(e) {
+    handleOnChange(e) {
         var newValue = e.target.value;
         this.setState({value: newValue}, function () {
             if (this.state.value === 'PEY' || CSCinq.indexOf(this.state.value) >= 0) {
@@ -317,9 +325,9 @@ export var InquiryCategory = React.createClass({
                 this.setState({completed : false});
             }
         });
-    },
+    }
 
-    render: function() {
+    render() {
         var classes = '';
 
         if (this.state.completed) {
@@ -346,4 +354,4 @@ export var InquiryCategory = React.createClass({
             </div>
         );
     }
-})
+}
