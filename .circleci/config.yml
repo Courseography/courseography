@@ -1,0 +1,66 @@
+version: 2.1
+
+jobs:
+  build:
+    docker:
+      - image: fpco/stack-build:lts
+    steps:
+      - checkout
+
+      - restore_cache:
+          name: Restore Cached Dependencies (Haskell)
+          keys:
+            - v1.1-courseography-haskell-{{ checksum "courseography.cabal" }}
+      - restore_cache:
+          name: Restore Cached Dependencies (JavaScript)
+          keys:
+            - v1.1-courseography-js-{{ checksum "package.json" }}
+
+      - run:
+          name: Install Package Dependencies
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y imagemagick texlive-latex-base
+            stack update
+
+            curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+            sudo apt-get install -y nodejs
+
+            curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+            echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+            sudo apt-get update && sudo apt-get install -y yarn
+
+      - run:
+          name: Resolve/Update Dependencies
+          command: |
+            stack setup
+            rm -fr $(stack path --dist-dir) $(stack path --local-install-root)
+            yarn install
+
+      - save_cache:
+          name: Cache Dependencies (Haskell)
+          key: v1.1-courseography-haskell-{{ checksum "courseography.cabal" }}
+          paths:
+            - ~/.stack
+            - ~/.stack-work
+
+      - save_cache:
+          name: Cache Dependencies (JavaScript)
+          key: v1.1-courseography-js-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+
+      - run:
+          name: Run tests
+          command: |
+            stack build --fast -j1 --ghc-options -Werror
+            stack test
+
+      - run:
+          name: Generate documentation
+          command: |
+            stack exec courseography docs
+
+      - store_artifacts:
+          path: doc
+          destination: docs
