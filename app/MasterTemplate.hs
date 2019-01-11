@@ -17,6 +17,14 @@ masterTemplate title headers body scripts =
             H.meta ! A.httpEquiv "Content-Type"
                    ! A.content "text/html;charset=utf-8"
             H.title (H.toHtml title)
+            H.meta ! A.name "viewport"
+                   ! A.content "width=device-width, initial-scale=1.0"
+            H.meta ! A.name "description"
+                   ! A.content "Course and scheduling information in a set of graphical interactive tools, making it easier to choose the right courses at the University of Toronto."
+            H.meta ! A.property "og:title"
+                   ! A.content "Courseography"
+            H.meta ! A.property "og:description"
+                   ! A.content "Course and scheduling information in a set of graphical interactive tools, making it easier to choose the right courses at the University of Toronto."
             H.link ! A.rel "icon" ! A.type_ "image/png"
                    ! A.href "static/res/ico/favicon.png"
             sequence_ headers
