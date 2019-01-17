@@ -161,22 +161,13 @@ data SvgJSON =
 data MeetTimes = MeetTimes { meetingData :: Meeting, timesData :: [Times] }
   deriving (Show, Generic)
 
--- | Lists of MeetTimes for a particular course split up by lecture, tutorial and practical.
-data SessionTimes =
-    SessionTimes { lectures :: [MeetTimes],
-              tutorials :: [MeetTimes],
-              practicals :: [MeetTimes]
-            } deriving (Show, Generic)
-
 -- | A Course. TODO: remove this data type (it's redundant).
 data Course =
     Course { breadth :: Maybe T.Text,
              description :: Maybe T.Text,
              title :: Maybe T.Text,
              prereqString :: Maybe T.Text,
-             fallSession :: Maybe SessionTimes,
-             springSession :: Maybe SessionTimes,
-             yearSession :: Maybe SessionTimes,
+             allMeetingTimes :: Maybe [MeetTimes],
              name :: !T.Text,
              exclusions :: Maybe T.Text,
              manualTutorialEnrolment :: Maybe Bool,
@@ -189,7 +180,6 @@ data Course =
 instance ToJSON Course
 instance ToJSON Room
 instance ToJSON MeetTimes
-instance ToJSON SessionTimes
 instance ToJSON Times
 
 -- instance FromJSON required so that tables can be parsed into JSON,

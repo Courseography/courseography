@@ -91,6 +91,7 @@ class Course extends React.Component {
     this.parseLectures = this.parseLectures.bind(this);
     this.displayInfo = this.displayInfo.bind(this);
     this.containsSelectedLecture = this.containsSelectedLecture.bind(this);
+    this.filterLectureList = this.filterLectureList.bind(this);
   }
 
   componentDidMount() {
@@ -103,26 +104,30 @@ class Course extends React.Component {
           Y: []
         };
         course.courseCode = data.name;
-        course.F = course.F.concat(this.parseLectures(data.fallSession.lectures),
-                                   this.parseLectures(data.fallSession.tutorials),
-                                   this.parseLectures(data.fallSession.practicals));
-        course.S = course.S.concat(this.parseLectures(data.springSession.lectures),
-                                   this.parseLectures(data.springSession.tutorials),
-                                   this.parseLectures(data.springSession.practicals));
-        course.Y = course.Y.concat(this.parseLectures(data.yearSession.lectures),
-                                   this.parseLectures(data.yearSession.tutorials),
-                                   this.parseLectures(data.yearSession.practicals));
+
+        // Remove duplicated lecture sections
+        const allLectures = removeDuplicateLectures(data.allMeetingTimes);
+        let parsedLectures = this.parseLectures(allLectures);
+
+        // Split the lecture sections into Fall, Spring and Years
+        course.F = this.filterLectureList(parsedLectures, "F");
+        course.S = this.filterLectureList(parsedLectures, "S");
+        course.Y = this.filterLectureList(parsedLectures, "Y");
+
         this.setState({courseInfo: course});
     });
   }
 
+  filterLectureList(lectures, session) {
+    return lectures.filter(lec => lec.session === session)
+      .sort((firstLec, secondLec) => firstLec.lectureCode > secondLec.lectureCode ? 1 : -1);
+  }
+
   parseLectures(lectures) {
-    // Remove duplicated lecture sections
-    const allLectures = removeDuplicateLectures(lectures);
     let parsedLectures = [];
 
     // Loop through the lecture sections to get each section's session code and lecture times
-    allLectures.forEach( lectureInfo => {
+    lectures.forEach( lectureInfo => {
       // Check to make sure its not an online section (online sections have course codes beginning with 9) or
       // restricted section. Restricted sections have enrollment restricted for a particular group of students,
       // but happens at the same time and place as a regular lecture/tutorial section.
