@@ -1,6 +1,6 @@
-import { renderReactGraph } from './graph.js.jsx';
 import * as sidebarDivs from './sidebar/sidebar_divs.js';
 import * as focusInfo from './sidebar/focus_descriptions';
+import renderReactGraph from './renderReactGraph';
 
 
 // The "main"
