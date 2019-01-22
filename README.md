@@ -30,8 +30,14 @@ First install both of the following.
 1. [Stack](https://docs.haskellstack.org/en/stable/README/)
 2. [ImageMagick](http://www.imagemagick.org/script/download.php)
 
-On Windows, install [Chocolatey](https://chocolatey.org/install); on Mac, install [Homebrew](https://brew.sh/).
-Then, open a terminal (in Windows, run as Administrator) and run `scripts/setup_<your os>`.
+On Windows, install Chocolatey.
+
+On Mac, install Homebrew.
+
+Then, open a terminal (in Windows, run as Administrator) and run
+
+```$ scripts/setup_<your os>```
+
 *Note*: this is a script intended for beginners; you may wish to read through the script and run modified commands to suit your own needs.
 
 #### Other Files
