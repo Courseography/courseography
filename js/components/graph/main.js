@@ -57,7 +57,8 @@ document.addEventListener('DOMContentLoaded', () => {
     sidebarDivs.activateSidebar();
 });
 
-function renderReactGraph(graph_container_id, start_blank, edit) {
+
+export function renderReactGraph(graph_container_id, start_blank, edit) {
     if (start_blank === undefined) {
         start_blank = false;
     }
