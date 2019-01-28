@@ -4,6 +4,20 @@
   "repository": "git@github.com:Courseography/courseography.git",
   "author": "David Liu <david@cs.toronto.edu>",
   "license": "GPL-3.0",
+  "scripts": {
+    "start": "stack exec courseography",
+    "test": "jest",
+    "//": " yarn test:debug <fileName>",
+    "test:debug": "node --inspect node_modules/.bin/jest --runInBand"
+  },
+  "jest": {
+    "setupFiles": [
+      "./js/setupTests.js"
+    ],
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ]
+  },
   "dependencies": {
     "path": "^0.12.7",
     "react": "^16.4.1",
@@ -14,9 +28,14 @@
   },
   "devDependencies": {
     "@babel/core": "^7.2.2",
+    "@babel/plugin-proposal-class-properties": "^7.2.3",
     "@babel/preset-env": "^7.2.3",
     "@babel/preset-react": "^7.0.0",
-    "@babel/plugin-proposal-class-properties": "^7.2.3",
-    "babel-loader": "^8.0.0"
+    "babel-jest": "24.0.0",
+    "babel-loader": "^8.0.0",
+    "enzyme": "3.8.0",
+    "enzyme-adapter-react-16": "1.8.0",
+    "enzyme-to-json": "3.3.5",
+    "jest": "24.0.0"
   }
 }
