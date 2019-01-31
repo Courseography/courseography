@@ -1,7 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Button should render correctly with no props 1`] = `
+exports[`Button Empty Button group should just have an empty g tag 1`] = `
 <button
   className="graph-control-button"
-/>
+  disabled={true}
+  id="reset-button"
+>
+  Reset
+</button>
 `;

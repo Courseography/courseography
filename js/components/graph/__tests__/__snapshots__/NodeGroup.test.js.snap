@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NodeGroup Empty Node group should just have an empty g tag 1`] = `
+<g
+  id="nodes"
+/>
+`;

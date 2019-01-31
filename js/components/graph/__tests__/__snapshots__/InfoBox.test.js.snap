@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`InfoBox Empty InfoBox group should just have an empty g tag 1`] = `<g />`;

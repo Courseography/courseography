@@ -3,12 +3,18 @@ import { shallow } from 'enzyme';
 
 import Edge from '../Edge'
 
-describe('Edge',() => {
-    it('1 + 1 should be 2', () => {
-        expect(1).toBe(2);
-    });
-    it('should render correctly with no props', () => {
-        const component = shallow(<Edge points={[[1, 1], [2, 2]]}/>);
+describe('Edge', () => {
+    it('Empty Edge group should just have an empty g tag', () => {
+        const EdgeProps = {
+            className: "path",
+            edgeID: "p1",
+            points: [[497.651848, 69.09890799999998], [497.651848, 130.885308]],
+            source: "csc165240",
+            target: "csc236240",
+            updateEdgeStatus: null,
+            svg: null
+        };
+        const component = shallow(<Edge {...EdgeProps} />);
         expect(component).toMatchSnapshot();
     });
 });
