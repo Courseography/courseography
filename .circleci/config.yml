@@ -55,6 +55,11 @@ jobs:
           command: |
             stack build --fast -j1 --ghc-options -Werror
             stack test
+      
+      - run:
+          name: Lint JS
+          command: |
+            yarn run eslint
 
       - run:
           name: Generate documentation
