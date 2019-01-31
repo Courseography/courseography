@@ -55,6 +55,7 @@ jobs:
           command: |
             stack build --fast -j1 --ghc-options -Werror
             stack test
+            yarn test
 
       - run:
           name: Generate documentation

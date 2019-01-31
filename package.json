@@ -6,7 +6,7 @@
   "license": "GPL-3.0",
   "scripts": {
     "start": "stack exec courseography",
-    "test": "jest",
+    "test": "./node_modules/.bin/jest",
     "//": " yarn test:debug <fileName>",
     "test:debug": "node --inspect node_modules/.bin/jest --runInBand"
   },
