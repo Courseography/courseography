@@ -4,7 +4,7 @@ import { shallow } from 'enzyme';
 import Bool from '../Bool'
 
 describe('Bool', () => {
-    it('Empty bool group should just have an empty g tag', () => {
+    it('Bool', () => {
         const BoolProps = {
             JSON: {
                 fill: "",
@@ -30,7 +30,7 @@ describe('Bool', () => {
             logicalType: "and",
             outEdges: ["p41", "p42", "p43", "p59", "p82"],
             parents: ["csc209, csc258"],
-            svg = null
+            svg: null
         };
         const component = shallow(<Bool {...BoolProps} />);
         expect(component).toMatchSnapshot();

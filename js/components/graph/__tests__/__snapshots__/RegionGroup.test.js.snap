@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`RegionGroup Empty RegionGroup group should just have an empty g tag 1`] = `
+exports[`RegionGroup RegionGroup 1`] = `
 <g
   id="regions"
 >

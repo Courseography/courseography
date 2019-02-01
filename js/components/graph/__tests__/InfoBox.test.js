@@ -4,7 +4,7 @@ import { shallow } from 'enzyme';
 import InfoBox from '../InfoBox'
 
 describe('InfoBox', () => {
-    it('Empty InfoBox group should just have an empty g tag', () => {
+    it('InfoBox', () => {
         const infoBoxProps = { 
             onClick: null,
             onMouseDown: null,

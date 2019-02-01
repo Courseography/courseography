@@ -4,7 +4,7 @@ import { shallow } from 'enzyme';
 import Edge from '../Edge'
 
 describe('Edge', () => {
-    it('Empty Edge group should just have an empty g tag', () => {
+    it('Edge', () => {
         const EdgeProps = {
             className: "path",
             edgeID: "p1",

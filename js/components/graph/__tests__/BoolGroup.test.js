@@ -4,7 +4,7 @@ import { shallow } from 'enzyme';
 import BoolGroup from '../BoolGroup'
 
 describe('BoolGroup', () => {
-    it('Empty bool group should just have an empty g tag', () => {
+    it('BoolGroup', () => {
         const boolGroupProps = {
             boolsJSON: [],
             egesJSON: [],

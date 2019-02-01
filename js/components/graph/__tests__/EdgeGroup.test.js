@@ -4,7 +4,7 @@ import { shallow } from 'enzyme';
 import EdgeGroup from '../EdgeGroup'
 
 describe('EdgeGroup', () => {
-    it('Empty EdgeGroup group should just have an empty g tag', () => {
+    it('EdgeGroup', () => {
         const EdgeGroupProps = { 
             edgesJSON: [],
             svg: null

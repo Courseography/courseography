@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Button Empty Button group should just have an empty g tag 1`] = `
+exports[`Button Reset button 1`] = `
 <button
   className="graph-control-button"
   disabled={true}

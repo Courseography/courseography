@@ -5,7 +5,7 @@ import NodeGroup from '../NodeGroup'
 
 describe('NodeGroup',() => {
 
-    it('Empty Node group should just have an empty g tag', () => {
+    it('Node Group', () => {
         const props = {
             edgesJSON: [],
             highlightedNodes: [],

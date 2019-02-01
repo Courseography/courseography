@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Edge Empty Edge group should just have an empty g tag 1`] = `
+exports[`Edge Edge 1`] = `
 <path
   className="path inactive"
   d="M497.651848,69.09890799999998 497.651848,130.885308 "

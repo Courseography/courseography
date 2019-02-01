@@ -4,7 +4,7 @@ import { shallow } from 'enzyme';
 import Node from '../Node'
 
 describe('Node', () => {
-    it('Empty Node group should just have an empty g tag', () => {
+    it('Node', () => {
         const NodeProps = { 
             JSON: {
                 fill: "#888888",
@@ -43,7 +43,7 @@ describe('Node', () => {
             logicalType: "AND",
             outEdges: ["p32"],
             parents: [Array(4)],
-            svg: Graph { props: { … }, context: { … }, refs: { … }, updater: { … }, getGraph: ƒ, … },
+            svg: null
         };
         const component = shallow(<Node {...NodeProps} />);
         expect(component).toMatchSnapshot();
