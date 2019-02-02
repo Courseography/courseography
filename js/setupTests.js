@@ -2,6 +2,6 @@ import { configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 configure({ adapter: new Adapter() });
 
-Object.defineProperty(document, 'currentScript', {
-    value: document.createElement('script'),
-});
+document.body.innerHTML = '<div id="react-graph" class="react-graph">...</div>'
+
+let getURLParameter = jest.fn(x => "");

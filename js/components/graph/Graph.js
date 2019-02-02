@@ -8,6 +8,8 @@ import EdgeGroup from './EdgeGroup';
 import InfoBox from './InfoBox';
 import NodeGroup from './NodeGroup';
 import RegionGroup from './RegionGroup';
+import {getURLParameter} from '../../../public/js/common/utilities/util';
+import $ from 'jquery';
 
 export default class Graph extends React.Component {
     constructor(props) {

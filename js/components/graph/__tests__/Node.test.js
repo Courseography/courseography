@@ -4,7 +4,7 @@ import { shallow } from 'enzyme';
 import Node from '../Node'
 
 describe('Node', () => {
-    it('Node', () => {
+    it('Node Hybrid node', () => {
         const NodeProps = { 
             JSON: {
                 fill: "#888888",

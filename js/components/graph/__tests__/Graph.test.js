@@ -11,6 +11,7 @@ describe('Graph', () => {
             initialOnDraw: false,
             start_blank: false
         }
+        const getURLParameter = jest.fn();
         const component = shallow(<Graph {...graphProps} />);
         expect(component).toMatchSnapshot();
     });

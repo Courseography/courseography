@@ -1,5 +1,6 @@
 import React from 'react';
 import Edge from './Edge';
+import $ from "jquery";
 
 export default class EdgeGroup extends React.Component {
     constructor(props) {
