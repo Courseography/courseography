@@ -147,6 +147,8 @@ export default class Graph extends React.Component {
 
         // Need to hardcode these in because React does not understand these
         // attributes
+        console.log(this.refs);
+        console.log(this.refs.svg);
         var svgNode = ReactDOM.findDOMNode(this.refs.svg);
         var markerNode = ReactDOM.findDOMNode(this.refs.marker);
 
