@@ -1,11 +1,20 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
 
 import Node from '../Node'
+import Graph from '../Graph'
 
 describe('Node', () => {
     it('Node Hybrid node', () => {
-        const NodeProps = { 
+        const graphProps = {
+            edit: false,
+            initialDrawMode: "draw-node",
+            initialOnDraw: false,
+            start_blank: false
+        }
+        const wrapper = mount(<Graph {...graphProps} />);
+        const graph = wrapper.instance();
+        const nodeProps = { 
             JSON: {
                 fill: "#888888",
                 graph: 1,
@@ -43,9 +52,9 @@ describe('Node', () => {
             logicalType: "AND",
             outEdges: ["p32"],
             parents: [Array(4)],
-            svg: null
+            svg: graph
         };
-        const component = shallow(<Node {...NodeProps} />);
+        const component = mount(<Node {...nodeProps} />);
         expect(component).toMatchSnapshot();
     });
 });
