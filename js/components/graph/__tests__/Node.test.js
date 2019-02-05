@@ -6,14 +6,6 @@ import Graph from '../Graph'
 
 describe('Node', () => {
     it('Node Hybrid node', () => {
-        const graphProps = {
-            edit: false,
-            initialDrawMode: "draw-node",
-            initialOnDraw: false,
-            start_blank: false
-        }
-        const wrapper = mount(<Graph {...graphProps} />);
-        const graph = wrapper.instance();
         const nodeProps = { 
             JSON: {
                 fill: "#888888",
@@ -52,7 +44,9 @@ describe('Node', () => {
             logicalType: "AND",
             outEdges: ["p32"],
             parents: [Array(4)],
-            svg: graph
+            svg: {
+                onKeyDown: () => {}
+            }
         };
         const component = mount(<Node {...nodeProps} />);
         expect(component).toMatchSnapshot();

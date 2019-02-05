@@ -35,7 +35,7 @@ describe('Graph Node', () => {
         // before
         const hybridCSC165 = graph.find("g#h68"); // hardcoded
         const csc165 = graph.find('g#csc165240');
-        const csc165To236 = graph.find('path[d="M497.651848,69.09890799999998 497.651848,130.885308 "')  // extremely hard-coded
+        const csc165To236 = graph.find('path[d="M497.651848,69.09890799999998 497.651848,130.885308 "]')  // extremely hard-coded
         expect(csc165.hasClass("takeable"));
         expect(csc165To236.hasClass("inactive"));
         expect(hybridCSC165.hasClass("inactive"));
