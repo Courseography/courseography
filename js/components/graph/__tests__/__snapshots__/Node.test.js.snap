@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Node Node Hybrid node 1`] = `
+exports[`Node Hybrid node 1`] = `
 <Node
   JSON={
     Object {
@@ -72,14 +72,14 @@ exports[`Node Node Hybrid node 1`] = `
   }
   svg={
     Object {
-      "onKeyDown": [Function],
+      "onKeyDown": [MockFunction],
     }
   }
 >
   <g
     className="hybrid "
     id="h46"
-    onKeyDown={[Function]}
+    onKeyDown={[MockFunction]}
     shapeRendering="geometricPrecision"
     textRendering="geometricPrecision"
   >

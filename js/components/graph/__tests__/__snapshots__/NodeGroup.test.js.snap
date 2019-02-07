@@ -1,7 +1,20 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`NodeGroup Node Group 1`] = `
-<g
-  id="nodes"
-/>
+<NodeGroup
+  edgesJSON={Array []}
+  highlightedNodes={Array []}
+  hybridsJSON={Array []}
+  nodeClick={[MockFunction]}
+  nodeMouseDown={[MockFunction]}
+  nodeMouseEnter={[MockFunction]}
+  nodeMouseLeave={[MockFunction]}
+  nodesJSON={Array []}
+  onDraw={false}
+  svg={null}
+>
+  <g
+    id="nodes"
+  />
+</NodeGroup>
 `;

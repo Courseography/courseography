@@ -2,10 +2,9 @@ import React from 'react';
 import { mount } from 'enzyme';
 
 import Node from '../Node'
-import Graph from '../Graph'
 
 describe('Node', () => {
-    it('Node Hybrid node', () => {
+    it('Hybrid node', () => {
         const nodeProps = { 
             JSON: {
                 fill: "#888888",
@@ -45,7 +44,7 @@ describe('Node', () => {
             outEdges: ["p32"],
             parents: [Array(4)],
             svg: {
-                onKeyDown: () => {}
+                onKeyDown: jest.fn()
             }
         };
         const component = mount(<Node {...nodeProps} />);
