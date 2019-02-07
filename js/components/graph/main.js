@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Graph from './Graph';
-
 import * as sidebarDivs from './sidebar/sidebar_divs.js';
 import * as focusInfo from './sidebar/focus_descriptions';
 

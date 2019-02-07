@@ -8,30 +8,17 @@ import EdgeGroup from './EdgeGroup';
 import InfoBox from './InfoBox';
 import NodeGroup from './NodeGroup';
 import RegionGroup from './RegionGroup';
-import $ from 'jquery';
-
-/**
- * Gets the value of a parameter in the query string by name.
- * @param name The name of the parameter to retrieve.
- * @returns {string|null} The value of the parameter as a string, or null if it does not exist.
- */
-function getURLParameter(name) {
-    'use strict';
-
-    return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [, ""])[1].replace(/\+/g, '%20')) || null;
-}
-
 
 export default class Graph extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            labelsJSON: this.props.labelsJSON || [],
-            regionsJSON: this.props.regionsJSON || [],
-            nodesJSON: this.props.nodesJSON || [],
-            hybridsJSON: this.props.hybridsJSON || [],
-            boolsJSON: this.props.boolsJSON || [],
-            edgesJSON: this.props.edgesJSON || [],
+            labelsJSON: [],
+            regionsJSON: [],
+            nodesJSON: [],
+            hybridsJSON: [],
+            boolsJSON: [],
+            edgesJSON: [],
             highlightedNodes: [],
             timeouts: [],
             fceCount: 0,
