@@ -6,7 +6,7 @@
   "license": "GPL-3.0",
   "scripts": {
     "start": "stack exec courseography",
-    "prettier": "./node_modules/.bin/prettier --write js/components/Button.js*",
+    "prettier": "./node_modules/.bin/prettier --write .js/components/graph/Button.js",
     "eslint": "./node_modules/.bin/eslint --fix-dry-run ./js/components/graph/Button.js"
   },
   "husky": {
