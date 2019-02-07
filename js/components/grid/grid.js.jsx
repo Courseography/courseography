@@ -14,15 +14,21 @@ class Grid extends React.Component {
     super(props);
     this.state = {
       selectedLectures: [],
-      selectedCourses: []
+      selectedCourses: [],
+      hoveredLecture: null,
     };
 
+    this.selectLecture = this.selectLecture.bind(this);
     this.addSelectedCourse = this.addSelectedCourse.bind(this);
     this.removeSelectedCourse = this.removeSelectedCourse.bind(this);
     this.clearSelectedCourses = this.clearSelectedCourses.bind(this);
 
     this.addSelectedLecture = this.addSelectedLecture.bind(this);
     this.removeSelectedLecture = this.removeSelectedLecture.bind(this);
+    this.isSelectedLecture = this.isSelectedLecture.bind(this);
+
+    this.hoverLecture = this.hoverLecture.bind(this);
+    this.unhoverLecture = this.unhoverLecture.bind(this);
   }
 
   // get the previously selected courses and lecture sections from local storage
@@ -116,7 +122,42 @@ class Grid extends React.Component {
     this.setState({selectedLectures: updatedLectures})
   }
 
+
+  // Remove the lecture if it is already in the selectedLectures list, or add the lecture if it is not.
+  selectLecture(lecture) {
+    if (this.isSelectedLecture(lecture)) {
+      this.removeSelectedLecture(lecture.courseCode, lecture.session);
+    } else {
+      this.addSelectedLecture(lecture);
+      this.unhoverLecture();
+    }
+  }
+
+  // Check whether the lecture is in the selectedLectures list, return true if it is, false it is not.
+  isSelectedLecture(lecture) {
+    const sameLecture = this.state.selectedLectures.filter((selectedLecture) => {
+      return selectedLecture.courseCode === lecture.courseCode && selectedLecture.session === lecture.session &&
+        selectedLecture.lectureCode === lecture.lectureCode
+    });
+    // If sameLecture is not an empty array, then this lecture is already selected and should be removed
+    return sameLecture.length > 0;
+  }
+
+  // Method passed to child component CoursePanel to hover over a lecture section
+  hoverLecture(lecture) {
+    if (!this.isSelectedLecture(lecture)) {
+      this.setState({hoveredLecture: lecture});
+    }
+  }
+
+  // Method passed to child component CoursePanel to stop hovering over a lecture section
+  unhoverLecture() {
+    this.setState({hoveredLecture: null});
+  }
+
+
   render() {
+    const updatedList = this.state.hoveredLecture ? this.state.selectedLectures.concat(this.state.hoveredLecture) : this.state.selectedLectures;
     return (
       <div>
         <CoursePanel
@@ -124,11 +165,12 @@ class Grid extends React.Component {
           selectedLectures={this.state.selectedLectures}
           removeCourse={this.removeSelectedCourse}
           clearCourses={this.clearSelectedCourses}
-          addSelectedLecture={this.addSelectedLecture}
-          removeSelectedLecture={this.removeSelectedLecture}
+          hoverLecture={this.hoverLecture}
+          unhoverLecture={this.unhoverLecture}
+          selectLecture={this.selectLecture}
           selectCourse={this.addSelectedCourse}
         />
-        <Row lectureSections={this.state.selectedLectures}/>
+        <Row lectureSections={updatedList}/>
         <ExportModal
           context='grid'
           session='fall'
