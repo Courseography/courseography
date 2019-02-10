@@ -58,6 +58,11 @@ jobs:
             yarn test
 
       - run:
+          name: Lint JS
+          command: |
+            yarn run eslint
+
+      - run:
           name: Generate documentation
           command: |
             stack exec courseography docs
