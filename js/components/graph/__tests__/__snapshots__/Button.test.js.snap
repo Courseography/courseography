@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Button should match shallow snapshot 1`] = `
+<button
+  className="graph-control-button"
+  disabled={true}
+  id="reset-button"
+>
+  Reset
+</button>
+`;

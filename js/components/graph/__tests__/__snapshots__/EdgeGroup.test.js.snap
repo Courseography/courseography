@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EdgeGroup should match shallow snapshot 1`] = `
+<g
+  id="edges"
+/>
+`;

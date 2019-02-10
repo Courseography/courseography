@@ -7,8 +7,6 @@
   "scripts": {
     "start": "stack exec courseography",
     "test": "./node_modules/.bin/jest",
-    "//": " yarn test:debug <fileName>",
-    "test:debug": "node --inspect node_modules/.bin/jest --runInBand",
     "prettier": "./node_modules/.bin/prettier --write ./js/components/graph/Button.js",
     "eslint": "./node_modules/.bin/eslint --fix-dry-run ./js/components/graph/Button.js"
   },
@@ -26,7 +24,6 @@
     }
   },
   "dependencies": {
-    "jquery": "1.12.4",
     "path": "^0.12.7",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
@@ -39,9 +36,9 @@
     "@babel/plugin-proposal-class-properties": "^7.2.3",
     "@babel/preset-env": "^7.2.3",
     "@babel/preset-react": "^7.0.0",
+    "babel-eslint": "10.0.1",
     "babel-jest": "24.0.0",
     "babel-loader": "^8.0.0",
-    "babel-eslint": "10.0.1",
     "enzyme": "3.8.0",
     "enzyme-adapter-react-16": "1.8.0",
     "enzyme-to-json": "3.3.5",
