@@ -18,54 +18,45 @@ beforeAll(() => {
 });
 
 describe("Unselected Node", () => {
+  it("should be red when hovered over", () => {
+    // Hover over EST100
+  });
 
-    it('should be red when hovered over', () => {
-        // Hover over EST100
-    });
-
-    it('should have a solid border if you have the prerequisites', () => {
-        // EST100: solid border
-        // EST101: dotted border
-
-        // select EST100
-
-        // check EST101 (solid), check EST102 (still dotted)
-
-        // deselect EST100 
-        // recheck EST100, 101
-    });
+  it("should have a solid border if you have the prerequisites", () => {
+    // EST100: solid border
+    // EST101: dotted border
+    // select EST100
+    // check EST101 (solid), check EST102 (still dotted)
+    // deselect EST100
+    // recheck EST100, 101
+  });
 });
 
-describe('Selected Course Node', () => {
-    it('should black when pre-reqs are met', () => {
-        // Select EST100
-        
-        // check border
+describe("Selected Course Node", () => {
+  it("should black when pre-reqs are met", () => {
+    // Select EST100
+    // check border
+    // deselect EST100
+  });
+  it("should be red with unmet pre-reqs", () => {
+    // select EST101
+    // expect EST100
+    // deselect EST101
+  });
 
-        // deselect EST100
-    });
-    it('should be red with unmet pre-reqs', () => {
-        // select EST101
-
-        // expect EST100
-        // deselect EST101
-    });
-
-    it('when hovered, should highlight all unmet pre-reqs', () => {
-        // select EST300
-
-        // expect EST201, EST200, EST101, EST1000 to be all red
-
-        // deselect EST300
-    });
-})
+  it("when hovered, should highlight all unmet pre-reqs", () => {
+    // select EST300
+    // expect EST201, EST200, EST101, EST1000 to be all red
+    // deselect EST300
+  });
+});
 
 describe("Boolean node", () => {
-    it("should not do anything when you hover or click on it", () => { });
-    it("should become selected when its pre-req parent is satisfied", () => { });
+  it("should not do anything when you hover or click on it", () => {});
+  it("should become selected when its pre-req parent is satisfied", () => {});
 });
 
 describe("Hybrid Node", () => {
-    it("shouldn't do anything when you hover or click it", () => { });
-    it("should become selected when its pre-req parent is satisfied", () => { });
+  it("shouldn't do anything when you hover or click it", () => {});
+  it("should become selected when its pre-req parent is satisfied", () => {});
 });
