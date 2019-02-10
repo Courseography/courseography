@@ -7,7 +7,7 @@
   "scripts": {
     "start": "stack exec courseography",
     "test": "./node_modules/.bin/jest",
-    "prettier": "./node_modules/.bin/prettier --write .js/components/graph/Button.js",
+    "prettier": "./node_modules/.bin/prettier --write ./js/components/graph/Button.js",
     "eslint": "./node_modules/.bin/eslint --fix-dry-run ./js/components/graph/Button.js"
   },
   "jest": {
