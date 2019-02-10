@@ -20,7 +20,7 @@ beforeAll(() => {
 describe("Unselected Node", () => {
 
     it('should be red when hovered over', () => {
-        // hover over CSC
+        // Hover over EST100
     });
 
     it('should have a solid border if you have the prerequisites', () => {
@@ -59,3 +59,13 @@ describe('Selected Course Node', () => {
         // deselect EST300
     });
 })
+
+describe("Boolean node", () => {
+    it("should not do anything when you hover or click on it", () => { });
+    it("should become selected when its pre-req parent is satisfied", () => { });
+});
+
+describe("Hybrid Node", () => {
+    it("shouldn't do anything when you hover or click it", () => { });
+    it("should become selected when its pre-req parent is satisfied", () => { });
+});
