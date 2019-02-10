@@ -484,12 +484,12 @@ export default {
   ],
   hybridsJSON: [
     {
-      graph: 1,
+      graph: 5,
       height: 14.7368002,
       type_: "BoolNode",
       text: [
         {
-          graph: 1,
+          graph: 5,
           rId: "text512",
           text: "and",
           pos: [1012.903868, 246.655709],
@@ -506,7 +506,7 @@ export default {
   ],
   edgesJSON: [
     {
-      graph: 1,
+      graph: 5,
       points: [[497.651848, 69.09890799999998], [497.651848, 130.885308]],
       isRegion: false,
       stroke: "",
