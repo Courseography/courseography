@@ -1,5 +1,5 @@
 import React from "react";
-import { mount } from "enzyme";
+import { shallow } from "enzyme";
 
 import Node from "../Node";
 
@@ -45,12 +45,53 @@ describe("Hybrid Node", () => {
       inEdges: [],
       logicalType: "AND",
       outEdges: ["p32"],
-      parents: [Array(4)],
+      parents: [],
       svg: {
         onKeyDown: jest.fn()
       }
     };
-    const component = mount(<Node {...nodeProps} />);
-    expect(component).toMatchSnapshot();
+    const wrapper = shallow(<Node {...nodeProps} />);
+    expect(wrapper).toMatchSnapshot();
+  });
+});
+
+describe("Course Node", () => {
+  it("should match shallow snapshot", () => {
+    const courseProps = {
+      JSON: {
+        fill: "#5dd5b8",
+        graph: 1,
+        height: 30,
+        id_: "csc108",
+        pos: [594.294128, 38.09390799999999],
+        stroke: "",
+        text: [
+          {
+            align: "begin",
+            fill: "",
+            graph: 1,
+            pos: [596.555968, 59.379107999999995],
+            rId: "text102",
+            text: "CSC108",
+            type_: "Node",
+            width: 65
+          }
+        ]
+      },
+      childs: ["csc148"],
+      className: "node",
+      highlighted: false,
+      hybrid: false,
+      inEdges: [],
+      onClick: jest.fn(),
+      onMouseEnter: jest.fn(),
+      onMouseLeave: jest.fn(),
+      outEdges: ["p6"],
+      parents: [],
+      svg: {}
+    };
+
+    const wrapper = shallow(<Node {...courseProps} />);
+    expect(wrapper).toMatchSnapshot();
   });
 });
