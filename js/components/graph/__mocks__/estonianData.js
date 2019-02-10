@@ -481,39 +481,5 @@ export default {
       source: "",
       target: ""
     }
-  ],
-  hybridsJSON: [
-    {
-      graph: 5,
-      height: 14.7368002,
-      type_: "BoolNode",
-      text: [
-        {
-          graph: 5,
-          rId: "text512",
-          text: "and",
-          pos: [1012.903868, 246.655709],
-          fill: "",
-          align: "begin"
-        }
-      ],
-      width: 19.7600002,
-      stroke: "",
-      pos: [1020.015148, 243.51310800000002],
-      fill: "",
-      id_: "bool1"
-    }
-  ],
-  edgesJSON: [
-    {
-      graph: 5,
-      points: [[497.651848, 69.09890799999998], [497.651848, 130.885308]],
-      isRegion: false,
-      stroke: "",
-      fill: "none",
-      id_: "p1",
-      source: "csc165240",
-      target: "csc236240"
-    }
   ]
 };
