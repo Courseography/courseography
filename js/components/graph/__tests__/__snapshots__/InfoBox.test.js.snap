@@ -1,3 +1,3 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`InfoBox InfoBox 1`] = `<g />`;
+exports[`InfoBox should match shallow snapshot 1`] = `<g />`;

@@ -4,7 +4,7 @@ import { shallow } from "enzyme";
 import BoolGroup from "../BoolGroup";
 
 describe("BoolGroup", () => {
-  it("BoolGroup", () => {
+  it("BoolGroup should match shallow snapshot", () => {
     const boolGroupProps = {
       boolsJSON: [],
       egesJSON: [],

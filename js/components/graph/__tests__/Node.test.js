@@ -3,8 +3,8 @@ import { mount } from "enzyme";
 
 import Node from "../Node";
 
-describe("Node", () => {
-  it("Hybrid node", () => {
+describe("Hybrid Node", () => {
+  it("node", () => {
     const nodeProps = {
       JSON: {
         fill: "#888888",

@@ -4,13 +4,13 @@ import { shallow } from "enzyme";
 import Button from "../Button";
 
 describe("Button", () => {
-  it("Reset button", () => {
-    const ButtonProps = {
+  it("should match shallow snapshot", () => {
+    const buttonProps = {
       divId: "reset-button",
       text: "Reset",
       disabled: true
     };
-    const component = shallow(<Button {...ButtonProps} />);
+    const component = shallow(<Button {...buttonProps} />);
     expect(component).toMatchSnapshot();
   });
 });

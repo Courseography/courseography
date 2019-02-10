@@ -1,20 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`NodeGroup Node Group 1`] = `
-<NodeGroup
-  edgesJSON={Array []}
-  highlightedNodes={Array []}
-  hybridsJSON={Array []}
-  nodeClick={[MockFunction]}
-  nodeMouseDown={[MockFunction]}
-  nodeMouseEnter={[MockFunction]}
-  nodeMouseLeave={[MockFunction]}
-  nodesJSON={Array []}
-  onDraw={false}
-  svg={null}
->
-  <g
-    id="nodes"
-  />
-</NodeGroup>
+exports[`NodeGroup should match shallow snapshot 1`] = `
+<g
+  id="nodes"
+/>
 `;

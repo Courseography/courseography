@@ -4,8 +4,8 @@ import { shallow } from "enzyme";
 import Bool from "../Bool";
 
 describe("Bool", () => {
-  it("Bool", () => {
-    const BoolProps = {
+  it("should match shallow snapshot", () => {
+    const boolProps = {
       JSON: {
         fill: "",
         graph: 1,
@@ -32,9 +32,9 @@ describe("Bool", () => {
       logicalType: "and",
       outEdges: ["p41", "p42", "p43", "p59", "p82"],
       parents: ["csc209, csc258"],
-      svg: null
+      svg: {}
     };
-    const component = shallow(<Bool {...BoolProps} />);
-    expect(component).toMatchSnapshot();
+    const wrapper = shallow(<Bool {...boolProps} />);
+    expect(wrapper).toMatchSnapshot();
   });
 });

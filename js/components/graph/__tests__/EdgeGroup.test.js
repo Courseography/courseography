@@ -4,12 +4,12 @@ import { shallow } from "enzyme";
 import EdgeGroup from "../EdgeGroup";
 
 describe("EdgeGroup", () => {
-  it("EdgeGroup", () => {
-    const EdgeGroupProps = {
+  it("should match shallow snapshot", () => {
+    const edgeGroupProps = {
       edgesJSON: [],
-      svg: null
+      svg: {}
     };
-    const component = shallow(<EdgeGroup {...EdgeGroupProps} />);
+    const component = shallow(<EdgeGroup {...edgeGroupProps} />);
     expect(component).toMatchSnapshot();
   });
 });

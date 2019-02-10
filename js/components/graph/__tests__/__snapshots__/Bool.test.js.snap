@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Bool Bool 1`] = `
+exports[`Bool should match shallow snapshot 1`] = `
 <g
   className="bool inactive"
   fill=""

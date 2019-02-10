@@ -4,11 +4,11 @@ import { shallow } from "enzyme";
 import InfoBox from "../InfoBox";
 
 describe("InfoBox", () => {
-  it("InfoBox", () => {
+  it("should match shallow snapshot", () => {
     const infoBoxProps = {
-      onClick: null,
-      onMouseDown: null,
-      onMouseLeave: null
+      onClick: jest.fn(),
+      onMouseDown: jest.fn(),
+      onMouseLeave: jest.fn()
     };
     const component = shallow(<InfoBox {...infoBoxProps} />);
     expect(component).toMatchSnapshot();

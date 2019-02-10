@@ -4,7 +4,7 @@ import { shallow } from "enzyme";
 import NodeGroup from "../NodeGroup";
 
 describe("NodeGroup", () => {
-  it("Node Group", () => {
+  it("should match shallow snapshot", () => {
     const props = {
       edgesJSON: [],
       highlightedNodes: [],
@@ -15,7 +15,7 @@ describe("NodeGroup", () => {
       nodeMouseLeave: jest.fn(),
       nodesJSON: [],
       onDraw: false,
-      svg: null
+      svg: null 
     };
     const component = shallow(<NodeGroup {...props} />);
     expect(component).toMatchSnapshot();
