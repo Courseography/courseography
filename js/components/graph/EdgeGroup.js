@@ -1,6 +1,5 @@
 import React from 'react';
 import Edge from './Edge';
-import $ from "jquery";
 
 export default class EdgeGroup extends React.Component {
     constructor(props) {
@@ -52,7 +51,7 @@ export default class EdgeGroup extends React.Component {
         // method custom sorts a copy of edgesJSON so that all missing edges
         // are last in the list. Then render based on that list.
         var edges = this.props.edgesJSON;
-        var edgesCopy = $.extend([], edges);
+        var edgesCopy = [ ...edges ];
         var state = this.state;
         edgesCopy.sort((a, b) => {
             // If an edge is missing, its edgeID should be in EdgeGroup's
