@@ -46,7 +46,7 @@ export default class Graph extends React.Component {
         document.getElementById('react-graph').addEventListener('wheel', this.onWheel);
 
         // Enable "Export" link
-        $('#nav-export').click(() => this.exportModal.openModal());
+        document.getElementById('nav-export').click(() => this.exportModal.openModal());
 
         // Need to hardcode these in because React does not understand these attributes
         var svgNode = ReactDOM.findDOMNode(this.refs.svg);
@@ -88,60 +88,74 @@ export default class Graph extends React.Component {
             }
         }
 
-        graphName = graphName.replace('-', ' ');
+        graphName = graphName.replace("-", " ").replace(" ", "%20");
 
-        $.ajax({
-            dataType: 'json',
-            url: 'get-json-data',
-            data: { 'graphName': graphName },
-            success: function (data) {
-                localStorage.setItem('active-graph', graphName);
-                var regionsList = [];
-                var nodesList = [];
-                var hybridsList = [];
-                var boolsList = [];
-                var edgesList = [];
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', `get-json-data?graphName=${graphName}`);
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+              // success
+              const data = JSON.parse(xhr.responseText);
+              localStorage.setItem("active-graph", graphName);
+              var regionsList = [];
+              var nodesList = [];
+              var hybridsList = [];
+              var boolsList = [];
+              var edgesList = [];
 
-                var labelsList = data.texts.filter(function (entry) {
-                    return entry.rId.startsWith('tspan');
-                });
+              var labelsList = data.texts.filter(function(entry) {
+                return entry.rId.startsWith("tspan");
+              });
 
-                data.shapes.forEach(function (entry) {
-                    if (entry.type_ === 'Node') {
-                        nodesList.push(entry);
-                    } else if (entry.type_ === 'Hybrid') {
-                        hybridsList.push(entry);
-                    } else if (entry.type_ === 'BoolNode') {
-                        boolsList.push(entry);
-                    }
-                });
+              data.shapes.forEach(function(entry) {
+                if (entry.type_ === "Node") {
+                  nodesList.push(entry);
+                } else if (entry.type_ === "Hybrid") {
+                  hybridsList.push(entry);
+                } else if (entry.type_ === "BoolNode") {
+                  boolsList.push(entry);
+                }
+              });
 
-                data.paths.forEach(function (entry) {
-                    if (entry.isRegion) {
-                        regionsList.push(entry);
-                    } else {
-                        edgesList.push(entry);
-                    }
-                });
+              data.paths.forEach(function(entry) {
+                if (entry.isRegion) {
+                  regionsList.push(entry);
+                } else {
+                  edgesList.push(entry);
+                }
+              });
 
-                this.setState({
-                    labelsJSON: labelsList,
-                    regionsJSON: regionsList,
-                    nodesJSON: nodesList,
-                    hybridsJSON: hybridsList,
-                    boolsJSON: boolsList,
-                    edgesJSON: edgesList,
-                    width: data.width,
-                    height: data.height,
-                    zoomFactor: 1,
-                    horizontalPanFactor: 0,
-                    verticalPanFactor: 0
-                });
-            }.bind(this),
-            error: function (xhr, status, err) {
-                console.error('graph-json', status, err.toString());
+              this.setState({
+                labelsJSON: labelsList,
+                regionsJSON: regionsList,
+                nodesJSON: nodesList,
+                hybridsJSON: hybridsList,
+                boolsJSON: boolsList,
+                edgesJSON: edgesList,
+                width: data.width,
+                height: data.height,
+                zoomFactor: 1,
+                horizontalPanFactor: 0,
+                verticalPanFactor: 0
+              });
+            } else {
+              console.error("graph-json", xhr.status);
+              // err.toString()
+              console.log(this); // TODO: remove console.log()
             }
-        });
+        }.bind(this);
+        xhr.send();
+        // $.ajax({
+        //     dataType: 'json',
+        //     url: 'get-json-data',
+        //     data: { 'graphName': graphName },
+        //     success: function (data) {
+                
+        //     }.bind(this),
+        //     error: function (xhr, status, err) {
+                
+        //     }
+        // });
 
         // Need to hardcode these in because React does not understand these
         // attributes
@@ -186,13 +200,13 @@ export default class Graph extends React.Component {
 
     setFCECount = (credits) => {
         this.setState({ fceCount: credits }, function () {
-            $('#fcecount').text('FCE Count: ' + this.state.fceCount);
+            document.getElementById('fcecount').textContent = 'FCE Count: ' + this.state.fceCount;
         });
     }
 
     incrementFCECount = (credits) => {
         this.setState({ fceCount: this.state.fceCount + credits }, function () {
-            $('#fcecount').text('FCE Count: ' + this.state.fceCount);
+            document.getElementById('fcecount').textContent = 'FCE Count: ' + this.state.fceCount;
         });
     }
 
@@ -279,7 +293,7 @@ export default class Graph extends React.Component {
                 }
                 currentNode.pos = [newPos.x - 20, newPos.y - 15];
                 currentNode.text[0].pos = [newPos.x, newPos.y + 5];
-                var newNodesJSON = $.extend([], this.state.nodesJSON);
+                var newNodesJSON = [ ...this.state.nodesJSON];
                 newNodesJSON.push(currentNode);
                 this.setState({ nodesJSON: newNodesJSON });
             }
@@ -299,7 +313,7 @@ export default class Graph extends React.Component {
                 }
                 currentNode.pos = [newPos.x - 20, newPos.y - 15];
                 currentNode.text[0].pos = [newPos.x, newPos.y + 5];
-                var newNodesJSON = $.extend([], this.state.nodesJSON);
+                var newNodesJSON = [ ...this.state.nodesJSON];
                 newNodesJSON.push(currentNode);
                 this.setState({
                     nodesJSON: newNodesJSON,
@@ -530,7 +544,7 @@ export default class Graph extends React.Component {
         }
 
         var nodeJSON = {
-            'fill': '#' + $('#select-colour').val(),
+            'fill': '#' + document.getElementById('select-colour').val(),
             'graph': 0,
             // default dimensions for a node
             'height': 32,
@@ -543,7 +557,7 @@ export default class Graph extends React.Component {
             'type_': 'Node'
         };
 
-        var newNodesJSON = $.extend([], this.state.nodesJSON);
+        var newNodesJSON = [ ...this.state.nodesJSON];
         newNodesJSON.push(nodeJSON);
         this.setState({
             nodesJSON: newNodesJSON,
