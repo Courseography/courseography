@@ -10,8 +10,11 @@ import qualified Data.HashMap.Strict as HM
 import Control.Monad.IO.Class (liftIO)
 import Network.HTTP.Conduit (simpleHttp)
 import Config (databasePath)
-import Database.Tables (Courses(..), EntityField(CoursesCode), Meeting(..), Times(..), MeetTimes(..))
+import Database.Tables (Courses(..), EntityField(CoursesCode), Meeting(..), Times(..), MeetTimes(..), MeetingId, Time(..), MeetTime(..), getTimeVals)
 import Database.Persist.Sqlite (runSqlite, insert_, SqlPersistM, (==.), insert, selectFirst)
+import Control.Applicative ((<|>))
+import Data.Aeson.Types (Parser, defaultOptions, Options(..))
+import Control.Monad(liftM)
 
 -- | URLs for the Faculty of Arts and Science API
 timetableURL :: T.Text
@@ -34,7 +37,7 @@ getOrgs = do
     let rawJSON :: Maybe (HM.HashMap T.Text Object) = decode resp
     return $ maybe [] (concatMap HM.keys . HM.elems) rawJSON
 
--- | Retrieve and store all timetable data for the given department.
+
 insertAllMeetings :: T.Text -> SqlPersistM ()
 insertAllMeetings org = do
     liftIO . print $ T.append "parsing JSON data from: " org
@@ -47,31 +50,43 @@ insertAllMeetings org = do
         meetings = concat sections
     mapM_ insertMeeting meetings
 
--- | Store a meeting's data and times.
-insertMeeting :: MeetTimes -> SqlPersistM ()
-insertMeeting (MeetTimes meetData meetTimes) = do
+insertMeeting :: MeetTime -> SqlPersistM ()
+insertMeeting (MeetTime meetingData meetingTime) = do
     -- Check that the meeting belongs to a course that exists
-    let code = meetingCode meetData
+    let code = meetingCode meetingData
     courseKey <- selectFirst [ CoursesCode ==. code ] []
     case courseKey of
         Just _ -> do
-          meetingKey <- insert meetData
-          mapM_ (\t -> insert_ $ t {timesMeeting = Just meetingKey}) meetTimes
+          meetingKey <- insert meetingData
+          mapM_ (\t -> insert_ $ Times (weekDay t) (startingTime t) (endingTime t) meetingKey (fstRoom t) (secRoom t)) meetingTime
         Nothing -> return ()
 
-newtype DB = DB { dbData :: (Courses, [MeetTimes]) }
+
+newtype DB = DB { dbData :: (Courses, [MeetTime]) }
   deriving Show
 
+-- | A Meeting with its associated Times.
+data MeetSchedule = MeetSchedule { meetingInfo :: Meeting, sched :: [Value] }
+  deriving Show
+
+-- keep times a string then decode it from the string after meeting is inserted
 instance FromJSON DB where
     parseJSON (Object o) = do
       course <- parseJSON (Object o)
       session :: T.Text <- o .:? "section" .!= "F"
-      meetingTimesMap :: HM.HashMap T.Text MeetTimes <- o .:? "meetings" .!= HM.empty
-      let allMeetingsTimes = map (\m -> m {meetingData = (meetingData m) { meetingCode = (coursesCode course), meetingSession = session}}) (HM.elems meetingTimesMap)
+      meetingTimesMap :: HM.HashMap T.Text MeetTime <- o .:? "meetings" .!= HM.empty
+      let allMeetingsTimes = map (\m -> m {meetData = (meetData m) { meetingCode = (coursesCode course), meetingSession = session}}) (HM.elems meetingTimesMap)
           -- Fix manualTutorialEnrolment and manualPracticalEnrolment
-          manTut = any (T.isPrefixOf "TUT" . meetingSection) $ map meetingData allMeetingsTimes
-          manPra = any (T.isPrefixOf "PRA" . meetingSection) $ map meetingData allMeetingsTimes
+          manTut = any (T.isPrefixOf "TUT" . meetingSection) $ map meetData allMeetingsTimes
+          manPra = any (T.isPrefixOf "PRA" . meetingSection) $ map meetData allMeetingsTimes
       return $ DB (course { coursesManualTutorialEnrolment = Just manTut,
                             coursesManualPracticalEnrolment = Just manPra },
                   allMeetingsTimes)
     parseJSON _ = fail "Invalid section"
+
+instance FromJSON MeetSchedule where
+  parseJSON (Object o) = do
+    meeting <- parseJSON (Object o)
+    schedule :: HM.HashMap T.Text Value <- o .:? "schedule" .!= HM.empty <|> return HM.empty
+    return $ MeetSchedule meeting (HM.elems schedule)
+  parseJSON _ = fail "Invalid meeting"

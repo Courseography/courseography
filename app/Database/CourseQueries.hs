@@ -31,11 +31,17 @@ import Config (databasePath)
 import Data.Aeson ((.=), toJSON, object)
 import Database.DataType
 import Svg.Builder
+import Data.Maybe
 
 -- | Queries the database for all matching lectures, tutorials,
 --   or praticals of this course and construct MeetTimes with the
 --   Times corresponding to each lecture, tutorial or practial.
-meetingQuery :: T.Text -> SqlPersistM [MeetTimes]
+-- meetingQuery :: T.Text -> SqlPersistM [MeetTimes]
+-- meetingQuery meetingCode_ = do
+--     allMeetings <- selectList [MeetingCode ==. meetingCode_] []
+--     mapM buildMeetTimes allMeetings
+
+meetingQuery :: T.Text -> SqlPersistM [MeetTime]
 meetingQuery meetingCode_ = do
     allMeetings <- selectList [MeetingCode ==. meetingCode_] []
     mapM buildMeetTimes allMeetings
@@ -77,7 +83,7 @@ returnMeeting lowerStr sect session = do
 
 -- | Builds a Course structure from a tuple from the Courses table.
 -- Some fields still need to be added in.
-buildCourse :: Maybe [MeetTimes] -> Courses -> SqlPersistM Course
+buildCourse :: Maybe [MeetTime] -> Courses -> SqlPersistM Course
 buildCourse allMeetings course = do
     cBreadth <- getDescriptionB (coursesBreadth course)
     cDistribution <- getDescriptionD (coursesDistribution course)
@@ -110,11 +116,22 @@ getDescriptionD (Just key) = do
     return $ fmap distributionDescription maybeDistribution
 
 -- | Queries the database for all times corresponding to a given meeting.
-buildMeetTimes :: Entity Meeting -> SqlPersistM Tables.MeetTimes
-buildMeetTimes meet = do
-    allTimes :: [Entity Times] <- selectList [TimesMeeting ==. Just (entityKey meet)] []
-    return $ Tables.MeetTimes {meetingData = entityVal meet, timesData = fmap entityVal allTimes}
+-- buildMeetTimes :: Entity Meeting -> SqlPersistM Tables.MeetTimes
+-- buildMeetTimes meet = do
+--     allTimes :: [Entity Times] <- selectList [TimesMeeting ==. Just (entityKey meet)] []
+--     return $ Tables.MeetTimes {meetingData = entityVal meet, timesData = fmap entityVal allTimes}
 
+-- | Queries the database for all times corresponding to a given meeting.
+buildMeetTimes :: Entity Meeting -> SqlPersistM Tables.MeetTime
+buildMeetTimes meet = do
+    allTimes :: [Entity Times] <- selectList [TimesMeeting ==. entityKey meet] []
+    parsedTime <- mapM buildTime $ map entityVal allTimes
+    return $ Tables.MeetTime {meetData = entityVal meet, meetTime = parsedTime}
+
+
+buildTime :: Times -> SqlPersistM Tables.Time
+buildTime t = do
+    return $ Tables.Time (timesWeekDay t) (timesStartHour t) (timesEndHour t) (timesFirstRoom t) (timesSecondRoom t)
 -- ** Other queries
 
 -- | Looks up a graph using its title then gets the Shape, Text and Path elements
@@ -215,7 +232,7 @@ getMeetingTime (meetingCode_, meetingSection_, meetingSession_) = do
                                         MeetingSection ==. getMeetingSection meetingSection_,
                                         MeetingSession ==. meetingSession_]
                                        []
-    allTimes <- selectList [TimesMeeting ==. fmap entityKey maybeEntityMeetings] []
+    allTimes <- selectList [TimesMeeting ==. fromJust (fmap entityKey maybeEntityMeetings)] []
     return $ map entityVal allTimes
 
 getMeetingSection :: T.Text -> T.Text

@@ -72,7 +72,7 @@ getCoursesInfo courses = map courseInfo allCourses
 pullDatabase :: (Code, Section, Session) -> IO (MeetTimes)
 pullDatabase (code, section, session) = runSqlite databasePath $ do
     meet <- returnMeeting code fullSection session
-    allTimes <- selectList [TimesMeeting ==. Just (entityKey meet)] []
+    allTimes <- selectList [TimesMeeting ==. entityKey meet] []
     return $ MeetTimes {meetingData = entityVal meet, timesData = map entityVal allTimes}
     where
     fullSection

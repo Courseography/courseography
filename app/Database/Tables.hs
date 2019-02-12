@@ -82,7 +82,7 @@ Times
     weekDay Double
     startHour Double
     endHour Double
-    meeting MeetingId Maybe
+    meeting MeetingId
     firstRoom T.Text Maybe
     secondRoom T.Text Maybe
     deriving Generic Show
@@ -161,13 +161,24 @@ data SvgJSON =
 data MeetTimes = MeetTimes { meetingData :: Meeting, timesData :: [Times] }
   deriving (Show, Generic)
 
+data Time =
+  Time { weekDay :: Double,
+          startingTime :: Double,
+          endingTime :: Double,
+          fstRoom :: Maybe T.Text,
+          secRoom :: Maybe T.Text
+} deriving (Show, Generic)
+
+data MeetTime = MeetTime {meetData :: Meeting, meetTime :: [Time] }
+  deriving (Show, Generic)
+
 -- | A Course. TODO: remove this data type (it's redundant).
 data Course =
     Course { breadth :: Maybe T.Text,
              description :: Maybe T.Text,
              title :: Maybe T.Text,
              prereqString :: Maybe T.Text,
-             allMeetingTimes :: Maybe [MeetTimes],
+             allMeetingTimes :: Maybe [MeetTime],
              name :: !T.Text,
              exclusions :: Maybe T.Text,
              manualTutorialEnrolment :: Maybe Bool,
@@ -181,6 +192,8 @@ instance ToJSON Course
 instance ToJSON Room
 instance ToJSON MeetTimes
 instance ToJSON Times
+instance ToJSON Time
+instance ToJSON MeetTime
 
 -- instance FromJSON required so that tables can be parsed into JSON,
 -- not necessary otherwise.
@@ -243,7 +256,7 @@ instance FromJSON Meeting where
     else
       fail "Not a lecture, Tutorial or Practical"
 
-instance FromJSON Times where
+instance FromJSON Time where
   parseJSON = withObject "Expected Object for Times" $ \o -> do
     meetingDayStr <- o .:? "meetingDay"
     meetingStartTimeStr <- o .:? "meetingStartTime"
@@ -251,13 +264,14 @@ instance FromJSON Times where
     meetingRoom1 <- o .:? "assignedRoom1" .!= Nothing
     meetingRoom2 <- o .:? "assignedRoom2" .!= Nothing
     let (meetingDay, meetingStartTime, meetingEndTime) = getTimeVals meetingDayStr meetingStartTimeStr meetingEndTimeStr
-    return $ Times meetingDay meetingStartTime meetingEndTime Nothing meetingRoom1 meetingRoom2
+    return $ Time meetingDay meetingStartTime meetingEndTime meetingRoom1 meetingRoom2
 
-instance FromJSON MeetTimes where
+instance FromJSON MeetTime where
   parseJSON (Object o) = do
     meeting <- parseJSON (Object o)
-    timeMap :: HM.HashMap T.Text Times <- o .:? "schedule" .!= HM.empty <|> return HM.empty
-    return $ MeetTimes meeting (HM.elems timeMap)
+    -- meetingKey <- insert meeting
+    timeMap :: HM.HashMap T.Text Time <- o .:? "schedule" .!= HM.empty <|> return HM.empty
+    return $ MeetTime meeting (HM.elems timeMap)
   parseJSON _ = fail "Invalid meeting"
 
 -- | Helpers for parsing JSON
