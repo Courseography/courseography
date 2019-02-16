@@ -8,7 +8,7 @@ import Data.Time (Day, addDays, formatTime, getCurrentTime, defaultTimeLocale)
 import Happstack.Server (ServerPart, Response, toResponse)
 import Control.Monad.IO.Class (liftIO)
 import Database.Persist.Sqlite (runSqlite, (==.), entityVal, selectList, entityKey)
-import Database.CourseQueries (returnMeeting)
+import Database.CourseQueries (returnMeeting, buildTime)
 import qualified Data.Text as T
 import Text.Read (readMaybe)
 import Database.Tables
@@ -69,11 +69,12 @@ getCoursesInfo courses = map courseInfo allCourses
         allCourses = map (T.splitOn "-") (T.splitOn "_" courses)
 
 -- | Pulls either a Lecture, Tutorial or Pratical from the database.
-pullDatabase :: (Code, Section, Session) -> IO (MeetTimes)
+pullDatabase :: (Code, Section, Session) -> IO (MeetTime)
 pullDatabase (code, section, session) = runSqlite databasePath $ do
     meet <- returnMeeting code fullSection session
     allTimes <- selectList [TimesMeeting ==. entityKey meet] []
-    return $ MeetTimes {meetingData = entityVal meet, timesData = map entityVal allTimes}
+    parsedTime <- mapM buildTime $ map entityVal allTimes
+    return $ MeetTime {meetData = entityVal meet, timeData = parsedTime}
     where
     fullSection
         | T.isPrefixOf "L" section = T.append "LEC" sectCode
@@ -86,7 +87,7 @@ pullDatabase (code, section, session) = runSqlite databasePath $ do
 type SystemTime = String
 
 -- | Creates all the events for a course.
-getEvents :: SystemTime -> MeetTimes -> Events
+getEvents :: SystemTime -> MeetTime -> Events
 getEvents systemTime lect =
     concatMap eventsByDate (zip' (third courseInfo)
                                  (fourth courseInfo)
@@ -121,10 +122,10 @@ type DatesByDay = [(StartDate, EndDate)]
 
 -- | Obtains all the necessary information to create events for a course,
 -- such as code, section, start times, end times and dates.
-getCourseInfo :: MeetTimes -> (Code, Section, StartTimesByDay, EndTimesByDay, DatesByDay)
+getCourseInfo :: MeetTime -> (Code, Section, StartTimesByDay, EndTimesByDay, DatesByDay)
 getCourseInfo meeting =
-    let meet = meetingData meeting
-        allTimes = timesData meeting
+    let meet = meetData meeting
+        allTimes = timeData meeting
         code = meetingCode meet
         sect = meetingSection meet
         dataInOrder = orderTimeFields allTimes
@@ -166,13 +167,13 @@ fifth (_, _, _, _, dates) = dates
 -- ** Ordering data
 
 -- | A list of the information within the time fields ordered by day.
-type InfoTimeFieldsByDay = [[Times]]
+type InfoTimeFieldsByDay = [[Time]]
 
 -- | Orders by day the start and endtimes obtained from the database.
-orderTimeFields :: [Times] -> InfoTimeFieldsByDay
-orderTimeFields timeFields = groupBy (\x y -> timesWeekDay x == timesWeekDay y) sortedList
+orderTimeFields :: [Time] -> InfoTimeFieldsByDay
+orderTimeFields timeFields = groupBy (\x y -> weekDay x == weekDay y) sortedList
     where
-        sortedList = sortBy (comparing timesWeekDay) timeFields
+        sortedList = sortBy (comparing weekDay) timeFields
 
 -- ** Start time
 
@@ -187,7 +188,7 @@ startTime :: InfoTimeFieldsByDay -> StartTimesByDay
 startTime =
     map (\dataByDay -> map formatTimes (timesOrdered dataByDay))
     where
-        timesOrdered dataDay = sort $ map timesStartHour dataDay
+        timesOrdered dataDay = sort $ map startingTime dataDay
 
 -- ** End time
 
@@ -202,7 +203,7 @@ endTime :: InfoTimeFieldsByDay -> EndTimesByDay
 endTime =
     map (\dataByDay -> map formatTimes (timesOrdered dataByDay))
     where
-        timesOrdered dataDay = sort $ map timesEndHour dataDay
+        timesOrdered dataDay = sort $ map endingTime dataDay
 
 -- ** Functions that work for both start and end times
 
@@ -249,10 +250,10 @@ type EndDate = String
 
 -- | Gives the appropiate starting and ending dates for each day,in which the
 -- course takes place, depending on the course session.
-getDatesByDay :: Session -> [Times] -> (StartDate, EndDate)
+getDatesByDay :: Session -> [Time] -> (StartDate, EndDate)
 getDatesByDay session dataByDay
-    | session ==  "F" = formatDates $ getDatesFall $ timesWeekDay $ head dataByDay
-    | otherwise = formatDates $ getDatesWinter $ timesWeekDay $ head dataByDay
+    | session ==  "F" = formatDates $ getDatesFall $ weekDay $ head dataByDay
+    | otherwise = formatDates $ getDatesWinter $ weekDay $ head dataByDay
 
 -- | Formats the date in the following way: YearMonthDayT.
 -- For instance, 20150720T corresponds to July 20th, 2015.

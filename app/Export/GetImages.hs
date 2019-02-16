@@ -63,14 +63,14 @@ list2tuple _ = undefined
 
 -- | Queries the database for times regarding all meetings (i.e. lectures, tutorials and praticals),
 -- returns a list of list of Time.
-getTimes :: [(T.Text, T.Text, T.Text)] -> IO [[Times]]
+getTimes :: [(T.Text, T.Text, T.Text)] -> IO [[Time]]
 getTimes selectedMeetings = runSqlite databasePath $
   mapM getMeetingTime selectedMeetings
 
 -- | Creates a schedule.
 -- It takes information about meetings (i.e. lectures, tutorials and praticals) and their corresponding time.
 -- Courses are added to schedule, based on their days and times.
-getScheduleByTime :: [(T.Text, T.Text, T.Text)] -> [[Times]] -> [[[T.Text]]]
+getScheduleByTime :: [(T.Text, T.Text, T.Text)] -> [[Time]] -> [[[T.Text]]]
 getScheduleByTime selectedMeetings mTimes =
   let meetingTimes_ = zip selectedMeetings mTimes
       schedule = replicate 26 $ replicate 5 []
@@ -79,13 +79,13 @@ getScheduleByTime selectedMeetings mTimes =
 -- | Take a list of Time and returns a list of tuples that correctly index
 -- into the 2-D table (for generating the image).
 -- TODO: Make this support half-hour times.
-convertTimeToArray :: Times -> [(Int, Int)]
-convertTimeToArray Times{timesWeekDay=weekDay, timesStartHour=startHour, timesEndHour=endHour} =
-    [(floor weekDay, row) | row <- [(floor startHour - 8)..(floor endHour - 8) - 1]]
+convertTimeToArray :: Time -> [(Int, Int)]
+convertTimeToArray Time {weekDay=day, startingTime=startTime, endingTime=endTime} =
+    [(floor day, row) | row <- [(floor startTime - 8)..(floor endTime - 8) - 1]]
 
-addCourseToSchedule :: [[[T.Text]]] -> ((T.Text, T.Text, T.Text), [Times]) -> [[[T.Text]]]
+addCourseToSchedule :: [[[T.Text]]] -> ((T.Text, T.Text, T.Text), [Time]) -> [[[T.Text]]]
 addCourseToSchedule schedule (course, courseTimes) =
-  let time' = filter (\t-> mod' (timesStartHour t) 1 == 0) courseTimes
+  let time' = filter (\t-> mod' (startingTime t) 1 == 0) courseTimes
       timeArray = concatMap convertTimeToArray time'
   in foldl (addCourseHelper course) schedule timeArray
 

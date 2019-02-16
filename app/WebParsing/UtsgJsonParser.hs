@@ -10,11 +10,8 @@ import qualified Data.HashMap.Strict as HM
 import Control.Monad.IO.Class (liftIO)
 import Network.HTTP.Conduit (simpleHttp)
 import Config (databasePath)
-import Database.Tables (Courses(..), EntityField(CoursesCode), Meeting(..), Times(..), MeetTimes(..), MeetingId, Time(..), MeetTime(..), getTimeVals)
+import Database.Tables (Courses(..), EntityField(CoursesCode), Meeting(..), Times(..), Time(..), MeetTime(..))
 import Database.Persist.Sqlite (runSqlite, insert_, SqlPersistM, (==.), insert, selectFirst)
-import Control.Applicative ((<|>))
-import Data.Aeson.Types (Parser, defaultOptions, Options(..))
-import Control.Monad(liftM)
 
 -- | URLs for the Faculty of Arts and Science API
 timetableURL :: T.Text
@@ -36,7 +33,6 @@ getOrgs = do
     resp <- simpleHttp orgURL
     let rawJSON :: Maybe (HM.HashMap T.Text Object) = decode resp
     return $ maybe [] (concatMap HM.keys . HM.elems) rawJSON
-
 
 insertAllMeetings :: T.Text -> SqlPersistM ()
 insertAllMeetings org = do
@@ -61,12 +57,7 @@ insertMeeting (MeetTime meetingData meetingTime) = do
           mapM_ (\t -> insert_ $ Times (weekDay t) (startingTime t) (endingTime t) meetingKey (fstRoom t) (secRoom t)) meetingTime
         Nothing -> return ()
 
-
 newtype DB = DB { dbData :: (Courses, [MeetTime]) }
-  deriving Show
-
--- | A Meeting with its associated Times.
-data MeetSchedule = MeetSchedule { meetingInfo :: Meeting, sched :: [Value] }
   deriving Show
 
 -- keep times a string then decode it from the string after meeting is inserted
@@ -83,10 +74,3 @@ instance FromJSON DB where
                             coursesManualPracticalEnrolment = Just manPra },
                   allMeetingsTimes)
     parseJSON _ = fail "Invalid section"
-
-instance FromJSON MeetSchedule where
-  parseJSON (Object o) = do
-    meeting <- parseJSON (Object o)
-    schedule :: HM.HashMap T.Text Value <- o .:? "schedule" .!= HM.empty <|> return HM.empty
-    return $ MeetSchedule meeting (HM.elems schedule)
-  parseJSON _ = fail "Invalid meeting"

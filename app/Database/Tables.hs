@@ -35,7 +35,8 @@ import Data.Aeson ((.:?), (.!=), FromJSON(parseJSON), ToJSON(toJSON), Value(..),
 import Data.Aeson.Types (Parser, defaultOptions, Options(..))
 import GHC.Generics
 import WebParsing.ReqParser (parseReqs)
-import Control.Applicative ((<|>))
+import Control.Applicative((<|>))
+
 
 data Room = Room { roomField :: (T.Text, T.Text)} deriving (Show, Read, Eq, Generic)
 derivePersistField "Room"
@@ -157,10 +158,6 @@ data SvgJSON =
               paths :: [Path]
             } deriving (Show, Generic)
 
--- | A Meeting with its associated Times.
-data MeetTimes = MeetTimes { meetingData :: Meeting, timesData :: [Times] }
-  deriving (Show, Generic)
-
 data Time =
   Time { weekDay :: Double,
           startingTime :: Double,
@@ -169,7 +166,8 @@ data Time =
           secRoom :: Maybe T.Text
 } deriving (Show, Generic)
 
-data MeetTime = MeetTime {meetData :: Meeting, meetTime :: [Time] }
+-- | A Meeting with its associated Times.
+data MeetTime = MeetTime {meetData :: Meeting, timeData :: [Time] }
   deriving (Show, Generic)
 
 -- | A Course. TODO: remove this data type (it's redundant).
@@ -190,7 +188,6 @@ data Course =
 
 instance ToJSON Course
 instance ToJSON Room
-instance ToJSON MeetTimes
 instance ToJSON Times
 instance ToJSON Time
 instance ToJSON MeetTime
@@ -273,6 +270,7 @@ instance FromJSON MeetTime where
     timeMap :: HM.HashMap T.Text Time <- o .:? "schedule" .!= HM.empty <|> return HM.empty
     return $ MeetTime meeting (HM.elems timeMap)
   parseJSON _ = fail "Invalid meeting"
+
 
 -- | Helpers for parsing JSON
 parseInstr :: Value -> Parser T.Text
