@@ -153,7 +153,7 @@ class Course extends React.Component {
   }
 
   displayInfo() {
-    this.modal.openModal(this.state.courseInfo.courseCode.substring(0, 6));
+    this.modal.openModal(this.props.courseCode);
   }
 
   containsSelectedLecture() {
