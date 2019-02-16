@@ -37,7 +37,6 @@ import GHC.Generics
 import WebParsing.ReqParser (parseReqs)
 import Control.Applicative((<|>))
 
-
 data Room = Room { roomField :: (T.Text, T.Text)} deriving (Show, Read, Eq, Generic)
 derivePersistField "Room"
 
@@ -264,11 +263,9 @@ instance FromJSON Time where
 instance FromJSON MeetTime where
   parseJSON (Object o) = do
     meeting <- parseJSON (Object o)
-    -- meetingKey <- insert meeting
     timeMap :: HM.HashMap T.Text Time <- o .:? "schedule" .!= HM.empty <|> return HM.empty
     return $ MeetTime meeting (HM.elems timeMap)
   parseJSON _ = fail "Invalid meeting"
-
 
 -- | Helpers for parsing JSON
 parseInstr :: Value -> Parser T.Text

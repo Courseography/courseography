@@ -118,7 +118,6 @@ getDescriptionD (Just key) = do
     maybeDistribution <- get key
     return $ fmap distributionDescription maybeDistribution
 
-
 -- | Queries the database for all times corresponding to a given meeting and construct a MeetTime
 buildMeetTimes :: Entity Meeting -> SqlPersistM Tables.MeetTime
 buildMeetTimes meet = do
@@ -217,7 +216,6 @@ queryGraphs :: IO Response
 queryGraphs = runSqlite databasePath $ do
     graphs :: [Entity Graph] <- selectList [] [Asc GraphTitle]
     return $ createJSONResponse graphs :: SqlPersistM Response
-
 
 -- | Queries the database for all times regarding a specific meeting (lecture, tutorial or practial) for
 -- a @course@, returns a list of Time.
