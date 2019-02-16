@@ -131,13 +131,12 @@ class Course extends React.Component {
       // Check to make sure its not an online section (online sections have course codes beginning with 9) or
       // restricted section. Restricted sections have enrollment restricted for a particular group of students,
       // but happens at the same time and place as a regular lecture/tutorial section.
-      if (lectureInfo.meetingData.section.charAt(3) !== '2' && lectureInfo.meetingData.section.charAt(3) !== '9' &&
-        lectureInfo.meetingData.times !== 'Online Web Version') {
+      if (lectureInfo.meetData.section.charAt(3) !== '2' && lectureInfo.meetData.section.charAt(3) !== '9') {
         let lecture = {
-          courseCode: lectureInfo.meetingData.code + " (" + lectureInfo.meetingData.section.substring(0,1) + ")",
-          lectureCode: lectureInfo.meetingData.section.substring(0, 1) + lectureInfo.meetingData.section.substring(3),
-          session: lectureInfo.meetingData.session,
-          times: lectureInfo.timesData,
+          courseCode: lectureInfo.meetData.code + " (" + lectureInfo.meetData.section.substring(0,1) + ")",
+          lectureCode: lectureInfo.meetData.section.substring(0, 1) + lectureInfo.meetData.section.substring(3),
+          session: lectureInfo.meetData.session,
+          times: lectureInfo.timeData,
         };
         parsedLectures.push(lecture);
       }
