@@ -119,7 +119,7 @@ getDescriptionD (Just key) = do
     return $ fmap distributionDescription maybeDistribution
 
 
--- | Queries the database for all times corresponding to a given meeting.
+-- | Queries the database for all times corresponding to a given meeting and construct a MeetTime
 buildMeetTimes :: Entity Meeting -> SqlPersistM Tables.MeetTime
 buildMeetTimes meet = do
     allTimes :: [Entity Times] <- selectList [TimesMeeting ==. entityKey meet] []

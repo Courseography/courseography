@@ -46,6 +46,7 @@ insertAllMeetings org = do
         meetings = concat sections
     mapM_ insertMeeting meetings
 
+-- insert a meeting and its corresponding Times into the database
 insertMeeting :: MeetTime -> SqlPersistM ()
 insertMeeting (MeetTime meetingData meetingTime) = do
     -- Check that the meeting belongs to a course that exists
@@ -60,7 +61,6 @@ insertMeeting (MeetTime meetingData meetingTime) = do
 newtype DB = DB { dbData :: (Courses, [MeetTime]) }
   deriving Show
 
--- keep times a string then decode it from the string after meeting is inserted
 instance FromJSON DB where
     parseJSON (Object o) = do
       course <- parseJSON (Object o)

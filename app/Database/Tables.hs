@@ -86,7 +86,6 @@ Times
     meeting MeetingId
     firstRoom T.Text Maybe
     secondRoom T.Text Maybe
-    deriving Generic Show
 
 Breadth
     description T.Text
@@ -188,7 +187,6 @@ data Course =
 
 instance ToJSON Course
 instance ToJSON Room
-instance ToJSON Times
 instance ToJSON Time
 instance ToJSON MeetTime
 
