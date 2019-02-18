@@ -16,6 +16,7 @@ export default function Button(props) {
     </button>
   );
 }
+
 Button.propTypes = {
   divId: PropTypes.string,
   mouseDown: PropTypes.func,
