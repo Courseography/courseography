@@ -24,11 +24,7 @@ export default class NodeGroup extends React.Component {
         });
     }
 
-    /**
-     * Helper for hybrid computation
-     * @param {string} course
-     * @returns {Node}
-     */
+    // Helper for hybrid computation
     findRelationship(course) {
         var nodes = this.props.nodesJSON;
         var node = nodes.find(n =>
@@ -91,11 +87,10 @@ export default class NodeGroup extends React.Component {
                             }
                         });
                     }
-                    return (
-                      <Node
+                    return <Node
                         JSON={entry}
-                        className={"hybrid"}
-                        keynodesJSON={entry.id_}
+                        className={'hybrid'}
+                        key={entry.id_}
                         hybrid={true}
                         ref={entry.id_}
                         parents={parents}
@@ -103,9 +98,7 @@ export default class NodeGroup extends React.Component {
                         inEdges={[]}
                         outEdges={outEdges}
                         svg={svg}
-                        logicalType={"AND"}
-                      />
-                    );
+                        logicalType={'AND'} />
                 })}
                 {this.props.nodesJSON.map((entry, value) => {
                     var highlighted = highlightedNodes.indexOf(entry.id_) >= 0;
