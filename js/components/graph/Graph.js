@@ -116,11 +116,11 @@ export default class Graph extends React.Component {
                 });
 
                 data.shapes.forEach(function (entry) {
-                    if (entry.type_ === "Node") {
+                    if (entry.type_ === 'Node') {
                         nodesList.push(entry);
-                    } else if (entry.type_ === "Hybrid") {
+                    } else if (entry.type_ === 'Hybrid') {
                         hybridsList.push(entry);
-                    } else if (entry.type_ === "BoolNode") {
+                    } else if (entry.type_ === 'BoolNode') {
                         boolsList.push(entry);
                     }
                 });
