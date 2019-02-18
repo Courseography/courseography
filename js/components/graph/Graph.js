@@ -91,9 +91,19 @@ export default class Graph extends React.Component {
         graphName = graphName.replace("-", " ").replace(" ", "%20");
 
         const res = fetch(`get-json-data?graphName=${graphName}`)
-            .then((res) => res.json())
+            .then((res) => {
+                if (!res.ok) {
+                    // can't just return res
+                    return Promise.reject({
+                        status: res.status,
+                        statusText: res.statusText,
+                        type: res.type,
+                        url: res.url
+                    });
+                }
+                return res.json();  // only received headers, waiting for data
+            })
             .then((data) => {
-                // TODO: check for errors
                 localStorage.setItem("active-graph", graphName);
                 var regionsList = [];
                 var nodesList = [];
@@ -136,7 +146,12 @@ export default class Graph extends React.Component {
                     horizontalPanFactor: 0,
                     verticalPanFactor: 0
                 });
-            });
+            })
+            .catch((err) => {
+                console.log("Fetch API failed.");
+                console.log("Here are the headers of the failed response:");
+                console.error(err);
+            })
         // Need to hardcode these in because React does not understand these
         // attributes
         var svgNode = ReactDOM.findDOMNode(this.refs.svg);
