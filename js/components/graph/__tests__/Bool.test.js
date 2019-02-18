@@ -28,10 +28,10 @@ describe("Bool", () => {
       },
       childs: ["csc369", "csc358", "csc458", "csc385", "csc367"],
       className: "bool",
-      inEdges: ["p39, p40"],
+      inEdges: ["p39", "p40"],
       logicalType: "and",
       outEdges: ["p41", "p42", "p43", "p59", "p82"],
-      parents: ["csc209, csc258"],
+      parents: ["csc209", "csc258"],
       svg: {}
     };
     const wrapper = shallow(<Bool {...boolProps} />);

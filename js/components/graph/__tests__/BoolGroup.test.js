@@ -7,7 +7,7 @@ describe("BoolGroup", () => {
   it("BoolGroup should match shallow snapshot", () => {
     const boolGroupProps = {
       boolsJSON: [],
-      egesJSON: [],
+      edgesJSON: [],
       svg: null
     };
     const component = shallow(<BoolGroup {...boolGroupProps} />);
