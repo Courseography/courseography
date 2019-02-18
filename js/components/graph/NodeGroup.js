@@ -24,7 +24,11 @@ export default class NodeGroup extends React.Component {
         });
     }
 
-    // Helper for hybrid computation
+    /**
+     * Helper for hybrid computation
+     * @param {string} course
+     * @returns {Node}
+     */
     findRelationship(course) {
         var nodes = this.props.nodesJSON;
         var node = nodes.find(n =>
