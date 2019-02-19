@@ -167,10 +167,10 @@ fifth (_, _, _, _, dates) = dates
 -- ** Ordering data
 
 -- | A list of the information within the time fields ordered by day.
-type InfoTimeFieldsByDay = [[Time]]
+type InfoTimeFieldsByDay = [[Times']]
 
 -- | Orders by day the start and endtimes obtained from the database.
-orderTimeFields :: [Time] -> InfoTimeFieldsByDay
+orderTimeFields :: [Times'] -> InfoTimeFieldsByDay
 orderTimeFields timeFields = groupBy (\x y -> weekDay x == weekDay y) sortedList
     where
         sortedList = sortBy (comparing weekDay) timeFields
@@ -250,7 +250,7 @@ type EndDate = String
 
 -- | Gives the appropiate starting and ending dates for each day,in which the
 -- course takes place, depending on the course session.
-getDatesByDay :: Session -> [Time] -> (StartDate, EndDate)
+getDatesByDay :: Session -> [Times'] -> (StartDate, EndDate)
 getDatesByDay session dataByDay
     | session ==  "F" = formatDates $ getDatesFall $ weekDay $ head dataByDay
     | otherwise = formatDates $ getDatesWinter $ weekDay $ head dataByDay

@@ -10,7 +10,7 @@ import qualified Data.HashMap.Strict as HM
 import Control.Monad.IO.Class (liftIO)
 import Network.HTTP.Conduit (simpleHttp)
 import Config (databasePath)
-import Database.Tables (Courses(..), EntityField(CoursesCode), Meeting(..), Times(..), Time(..), MeetTime(..))
+import Database.Tables (Courses(..), EntityField(CoursesCode), Meeting(..), Times(..), Times'(..), MeetTime(..))
 import Database.Persist.Sqlite (runSqlite, insert_, SqlPersistM, (==.), insert, selectFirst)
 
 -- | URLs for the Faculty of Arts and Science API

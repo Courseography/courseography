@@ -76,9 +76,9 @@ returnMeeting lowerStr sect session = do
     return $ head entityMeetings
 
 -- | Convert Times into Time
-buildTime :: Times -> SqlPersistM Time
+buildTime :: Times -> SqlPersistM Times'
 buildTime t =
-  return $ Time (timesWeekDay t)
+  return $ Times' (timesWeekDay t)
           (timesStartHour t)
           (timesEndHour t)
           (timesFirstRoom t)
@@ -219,7 +219,7 @@ queryGraphs = runSqlite databasePath $ do
 
 -- | Queries the database for all times regarding a specific meeting (lecture, tutorial or practial) for
 -- a @course@, returns a list of Time.
-getMeetingTime :: (T.Text, T.Text, T.Text) -> SqlPersistM [Time]
+getMeetingTime :: (T.Text, T.Text, T.Text) -> SqlPersistM [Times']
 getMeetingTime (meetingCode_, meetingSection_, meetingSession_) = do
     maybeEntityMeetings <- selectFirst [MeetingCode ==. meetingCode_,
                                         MeetingSection ==. getMeetingSection meetingSection_,
