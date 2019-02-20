@@ -13,12 +13,12 @@ export default class Graph extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            labelsJSON: [],
-            regionsJSON: [],
-            nodesJSON: [],
-            hybridsJSON: [],
-            boolsJSON: [],
-            edgesJSON: [],
+            labelsJSON: props.labelsJSON || [],
+            regionsJSON: props.regionsJSON || [],
+            nodesJSON: props.nodesJSON || [],
+            hybridsJSON: props.hybridsJSON || [],
+            boolsJSON: props.boolsJSON || [],
+            edgesJSON: props.edgesJSON || [],
             highlightedNodes: [],
             timeouts: [],
             fceCount: 0,
