@@ -5,6 +5,7 @@ import Graph from "../Graph";
 import Node from "../Node";
 
 let graph;
+let nodeGroup;
 
 beforeAll(() => {
   const graphProps = {
@@ -19,15 +20,48 @@ beforeAll(() => {
 
 describe("Unselected Node", () => {
   it("should be red when hovered over", () => {
-    // Hover over EST100
+    // find EST100
+    // let nodes = graph.find("Node");
+    // let est100 = nodes.findWhere(node => node.key() === "est100");
+    // console.log(est100.state());
+    // expect(est100.state("status")).toBe("takeable");
+    
+    const est100 = graph.find("g#est100");
+
+    expect(est100.hasClass("node")).toBe(true);
+
+    // TODO: missing class
+    // expect(est100.hasClass("takeable")).toBe(true);
+    // Hover over EST100    
+    est100.simulate("mouseover");
+
+    // TODO: check if the border is actually red
+
+
+    // TODO: missing class
+    // expect(est100.hasClass("missing")).toBe(true);
+
+    est100.simulate("mouseout");
+    // TODO: missing class
+    // expect(est100.hasClass("takeable")).toBe(true);
+
   });
 
-  it("should have a solid border if you have the prerequisites", () => {
-    // EST100: solid border
-    // EST101: dotted border
+  it.skip("should have a solid border if you have the prerequisites", () => {
+    const est100 = graph.find("g#est100");
+    const est101 = graph.find("g#est101");
+    // TODO: EST100: solid border
+    // TODO: EST101: dotted border
+
+    expect(est100.hasClass("takeable")).toBe(true);
+    expect(est100.hasClass("inactive")).toBe(true);
     // select EST100
+    est100.simulate("click");
     // check EST101 (solid), check EST102 (still dotted)
+
     // deselect EST100
+    est100.simulate("click");
+
     // recheck EST100, 101
   });
 });
@@ -42,6 +76,8 @@ describe("Selected Course Node", () => {
     // select EST101
     // expect EST100
     // deselect EST101
+
+    // inactive, not takeable
   });
 
   it("when hovered, should highlight all unmet pre-reqs", () => {
