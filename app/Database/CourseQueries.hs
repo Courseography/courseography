@@ -18,7 +18,7 @@ module Database.CourseQueries
      returnMeeting,
      getGraphJSON,
      getMeetingTime,
-     buildTime) where
+     buildTimes') where
 
 import Happstack.Server.SimpleHTTP
 import Database.Persist
@@ -75,15 +75,6 @@ returnMeeting lowerStr sect session = do
                                  []
     return $ head entityMeetings
 
--- | Convert Times into Time
-buildTime :: Times -> SqlPersistM Times'
-buildTime t =
-  return $ Times' (timesWeekDay t)
-          (timesStartHour t)
-          (timesEndHour t)
-          (timesFirstRoom t)
-          (timesSecondRoom t)
-
 -- | Builds a Course structure from a tuple from the Courses table.
 -- Some fields still need to be added in.
 buildCourse :: [MeetTime] -> Courses -> SqlPersistM Course
@@ -118,11 +109,11 @@ getDescriptionD (Just key) = do
     maybeDistribution <- get key
     return $ fmap distributionDescription maybeDistribution
 
--- | Queries the database for all times corresponding to a given meeting and construct a MeetTime
+-- | Queries the database for all times corresponding to a given meeting.
 buildMeetTimes :: Entity Meeting -> SqlPersistM Tables.MeetTime
 buildMeetTimes meet = do
     allTimes :: [Entity Times] <- selectList [TimesMeeting ==. entityKey meet] []
-    parsedTime <- mapM buildTime $ map entityVal allTimes
+    parsedTime <- mapM buildTimes' $ map entityVal allTimes
     return $ Tables.MeetTime {meetData = entityVal meet, timeData = parsedTime}
 
 -- ** Other queries
@@ -226,7 +217,7 @@ getMeetingTime (meetingCode_, meetingSection_, meetingSession_) = do
                                         MeetingSession ==. meetingSession_]
                                        []
     allTimes <- selectList [TimesMeeting ==. fromJust (fmap entityKey maybeEntityMeetings)] []
-    parsedTime <- mapM buildTime $ map entityVal allTimes
+    parsedTime <- mapM buildTimes' $ map entityVal allTimes
     return parsedTime
 
 getMeetingSection :: T.Text -> T.Text

@@ -10,7 +10,7 @@ import qualified Data.HashMap.Strict as HM
 import Control.Monad.IO.Class (liftIO)
 import Network.HTTP.Conduit (simpleHttp)
 import Config (databasePath)
-import Database.Tables (Courses(..), EntityField(CoursesCode), Meeting(..), Times(..), Times'(..), MeetTime(..))
+import Database.Tables (Courses(..), EntityField(CoursesCode), Meeting(..), MeetTime(..), buildTimes)
 import Database.Persist.Sqlite (runSqlite, insert_, SqlPersistM, (==.), insert, selectFirst)
 
 -- | URLs for the Faculty of Arts and Science API
@@ -55,7 +55,8 @@ insertMeeting (MeetTime meetingData meetingTime) = do
     case courseKey of
         Just _ -> do
           meetingKey <- insert meetingData
-          mapM_ (\t -> insert_ $ Times (weekDay t) (startingTime t) (endingTime t) meetingKey (fstRoom t) (secRoom t)) meetingTime
+          allTimes <- mapM (\t-> buildTimes t meetingKey) meetingTime
+          mapM_ insert_ allTimes
         Nothing -> return ()
 
 newtype DB = DB { dbData :: (Courses, [MeetTime]) }

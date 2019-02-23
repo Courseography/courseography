@@ -8,7 +8,7 @@ import Data.Time (Day, addDays, formatTime, getCurrentTime, defaultTimeLocale)
 import Happstack.Server (ServerPart, Response, toResponse)
 import Control.Monad.IO.Class (liftIO)
 import Database.Persist.Sqlite (runSqlite, (==.), entityVal, selectList, entityKey)
-import Database.CourseQueries (returnMeeting, buildTime)
+import Database.CourseQueries (returnMeeting, buildTimes')
 import qualified Data.Text as T
 import Text.Read (readMaybe)
 import Database.Tables
@@ -73,7 +73,7 @@ pullDatabase :: (Code, Section, Session) -> IO (MeetTime)
 pullDatabase (code, section, session) = runSqlite databasePath $ do
     meet <- returnMeeting code fullSection session
     allTimes <- selectList [TimesMeeting ==. entityKey meet] []
-    parsedTime <- mapM buildTime $ map entityVal allTimes
+    parsedTime <- mapM buildTimes' $ map entityVal allTimes
     return $ MeetTime {meetData = entityVal meet, timeData = parsedTime}
     where
     fullSection

@@ -36,6 +36,7 @@ import Data.Aeson.Types (Parser, defaultOptions, Options(..))
 import GHC.Generics
 import WebParsing.ReqParser (parseReqs)
 import Control.Applicative((<|>))
+import Database.Persist.Sqlite( SqlPersistM, Key )
 
 data Room = Room { roomField :: (T.Text, T.Text)} deriving (Show, Read, Eq, Generic)
 derivePersistField "Room"
@@ -299,3 +300,21 @@ getTimeVals (Just day) (Just start) (Just end) = do
         endDbl = getHourVal end
     (dayDbl, startDbl, endDbl)
 getTimeVals _ _ _ = (5.0, 25.0, 25.0)
+
+-- | Convert Times into Times'
+buildTimes' :: Times -> SqlPersistM Times'
+buildTimes' t =
+  return $ Times' (timesWeekDay t)
+          (timesStartHour t)
+          (timesEndHour t)
+          (timesFirstRoom t)
+          (timesSecondRoom t)
+
+buildTimes :: Times' -> Key Meeting -> SqlPersistM Times
+buildTimes t meetingKey =
+  return $ Times (weekDay t)
+  (startingTime t)
+  (endingTime t)
+  meetingKey
+  (fstRoom t)
+  (secRoom t)
