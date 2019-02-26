@@ -46,7 +46,7 @@ export default class Graph extends React.Component {
         document.getElementById('react-graph').addEventListener('wheel', this.onWheel);
 
         // Enable "Export" link
-        $('#nav-export').click(() => this.exportModal.openModal());
+        document.getElementById('nav-export').click(() => this.exportModal.openModal());
 
         // Need to hardcode these in because React does not understand these attributes
         var svgNode = ReactDOM.findDOMNode(this.refs.svg);
@@ -87,14 +87,27 @@ export default class Graph extends React.Component {
                 graphName = localStorage.getItem('active-graph') || 'Computer Science';
             }
         }
-
         graphName = graphName.replace('-', ' ');
 
-        $.ajax({
-            dataType: 'json',
-            url: 'get-json-data',
-            data: { 'graphName': graphName },
-            success: function (data) {
+        let url = new URL('/get-json-data', window.location.href);
+        const params = {graphName: graphName};
+        Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
+
+        fetch(url)
+            .then((headers) => {
+                if (!headers.ok) {
+                    // can't just return res
+                    const headerInfo = {
+                        status: headers.status,
+                        statusText: headers.statusText,
+                        type: headers.type,
+                        url: headers.url
+                    };
+                    throw new Error("When fetching from the url with info " + JSON.stringify(headerInfo));
+                }
+                return headers.json();  // only received headers, waiting for data
+            })
+            .then((data) => {
                 localStorage.setItem('active-graph', graphName);
                 var regionsList = [];
                 var nodesList = [];
@@ -137,12 +150,12 @@ export default class Graph extends React.Component {
                     horizontalPanFactor: 0,
                     verticalPanFactor: 0
                 });
-            }.bind(this),
-            error: function (xhr, status, err) {
-                console.error('graph-json', status, err.toString());
-            }
-        });
-
+            })
+            .catch((err) => {
+                console.log("Fetch API failed.");
+                console.log("Here are the headers of the failed response:");
+                console.error(err);
+            });
         // Need to hardcode these in because React does not understand these
         // attributes
         var svgNode = ReactDOM.findDOMNode(this.refs.svg);
@@ -186,13 +199,13 @@ export default class Graph extends React.Component {
 
     setFCECount = (credits) => {
         this.setState({ fceCount: credits }, function () {
-            $('#fcecount').text('FCE Count: ' + this.state.fceCount);
+            document.getElementById('fcecount').textContent = 'FCE Count: ' + this.state.fceCount;
         });
     }
 
     incrementFCECount = (credits) => {
         this.setState({ fceCount: this.state.fceCount + credits }, function () {
-            $('#fcecount').text('FCE Count: ' + this.state.fceCount);
+            document.getElementById('fcecount').textContent = 'FCE Count: ' + this.state.fceCount;
         });
     }
 
@@ -279,7 +292,7 @@ export default class Graph extends React.Component {
                 }
                 currentNode.pos = [newPos.x - 20, newPos.y - 15];
                 currentNode.text[0].pos = [newPos.x, newPos.y + 5];
-                var newNodesJSON = $.extend([], this.state.nodesJSON);
+                var newNodesJSON = [...this.state.nodesJSON];
                 newNodesJSON.push(currentNode);
                 this.setState({ nodesJSON: newNodesJSON });
             }
@@ -299,7 +312,7 @@ export default class Graph extends React.Component {
                 }
                 currentNode.pos = [newPos.x - 20, newPos.y - 15];
                 currentNode.text[0].pos = [newPos.x, newPos.y + 5];
-                var newNodesJSON = $.extend([], this.state.nodesJSON);
+                var newNodesJSON = [...this.state.nodesJSON];
                 newNodesJSON.push(currentNode);
                 this.setState({
                     nodesJSON: newNodesJSON,
@@ -530,7 +543,7 @@ export default class Graph extends React.Component {
         }
 
         var nodeJSON = {
-            'fill': '#' + $('#select-colour').val(),
+            'fill': '#' + document.getElementById('select-colour').val(),
             'graph': 0,
             // default dimensions for a node
             'height': 32,
@@ -543,7 +556,7 @@ export default class Graph extends React.Component {
             'type_': 'Node'
         };
 
-        var newNodesJSON = $.extend([], this.state.nodesJSON);
+        var newNodesJSON = [...this.state.nodesJSON];
         newNodesJSON.push(nodeJSON);
         this.setState({
             nodesJSON: newNodesJSON,
@@ -700,4 +713,15 @@ export default class Graph extends React.Component {
 
         );
     }
+}
+
+/**
+ * Gets the value of a parameter in the query string by name.
+ * @param name The name of the parameter to retrieve.
+ * @returns {string|null} The value of the parameter as a string, or null if it does not exist.
+ */
+function getURLParameter(name) {
+    'use strict';
+
+    return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [, ""])[1].replace(/\+/g, '%20')) || null;
 }
