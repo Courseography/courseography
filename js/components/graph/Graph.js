@@ -74,7 +74,8 @@ export default class Graph extends React.Component {
 
     getGraph = (graphName) => {
         if (graphName === undefined) {
-            var urlSpecifiedGraph = getURLParameter('dept');
+            const params = (new URL(document.location)).searchParams;
+            const urlSpecifiedGraph = params.get('dept');
 
             // HACK: Temporary workaround for giving the statistics department a
             // link to our graph.
@@ -87,9 +88,10 @@ export default class Graph extends React.Component {
                 graphName = localStorage.getItem('active-graph') || 'Computer Science';
             }
         }
+
         graphName = graphName.replace('-', ' ');
 
-        let url = new URL('/get-json-data', window.location.href);
+        let url = new URL('/get-json-data', document.location);
         const params = {graphName: graphName};
         Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
 
@@ -152,8 +154,7 @@ export default class Graph extends React.Component {
                 });
             })
             .catch((err) => {
-                console.log("Fetch API failed.");
-                console.log("Here are the headers of the failed response:");
+                console.error("Fetch API failed. Here are the headers: ");
                 console.error(err);
             });
         // Need to hardcode these in because React does not understand these
@@ -713,15 +714,4 @@ export default class Graph extends React.Component {
 
         );
     }
-}
-
-/**
- * Gets the value of a parameter in the query string by name.
- * @param name The name of the parameter to retrieve.
- * @returns {string|null} The value of the parameter as a string, or null if it does not exist.
- */
-function getURLParameter(name) {
-    'use strict';
-
-    return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [, ""])[1].replace(/\+/g, '%20')) || null;
 }
