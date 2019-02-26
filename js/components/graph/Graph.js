@@ -37,6 +37,9 @@ export default class Graph extends React.Component {
     }
 
     componentDidMount() {
+        if (this.props.graphData) {
+            this.initializeState(this.props.graphData);
+        }
         if (!this.props.start_blank) {
             this.getGraph();
         }
@@ -96,47 +99,7 @@ export default class Graph extends React.Component {
             data: { 'graphName': graphName },
             success: function (data) {
                 localStorage.setItem('active-graph', graphName);
-                var regionsList = [];
-                var nodesList = [];
-                var hybridsList = [];
-                var boolsList = [];
-                var edgesList = [];
-
-                var labelsList = data.texts.filter(function (entry) {
-                    return entry.rId.startsWith('tspan');
-                });
-
-                data.shapes.forEach(function (entry) {
-                    if (entry.type_ === 'Node') {
-                        nodesList.push(entry);
-                    } else if (entry.type_ === 'Hybrid') {
-                        hybridsList.push(entry);
-                    } else if (entry.type_ === 'BoolNode') {
-                        boolsList.push(entry);
-                    }
-                });
-
-                data.paths.forEach(function (entry) {
-                    if (entry.isRegion) {
-                        regionsList.push(entry);
-                    } else {
-                        edgesList.push(entry);
-                    }
-                });
-
-                this.setState({
-                    labelsJSON: labelsList,
-                    regionsJSON: regionsList,
-                    nodesJSON: nodesList,
-                    hybridsJSON: hybridsList,
-                    boolsJSON: boolsList,
-                    edgesJSON: edgesList,
-                    width: data.width,
-                    height: data.height,
-                    zoomFactor: 1,
-                    horizontalPanFactor: 0,
-                    verticalPanFactor: 0
-                });
+                this.initializeState(data);
             }.bind(this),
             error: function (xhr, status, err) {
                 console.error('graph-json', status, err.toString());
@@ -161,6 +124,55 @@ export default class Graph extends React.Component {
         markerNode.setAttribute('orient', 'auto');
         markerNode.setAttribute('markerWidth', 7);
         markerNode.setAttribute('markerHeight', 7);
+    }
+
+    /**
+     * Initialize the state given Graph data
+     * @param {Object} data - graph data received from /get-json-data
+     * @returns {undefined}
+     */
+    initializeState(data) {
+        var regionsList = [];
+        var nodesList = [];
+        var hybridsList = [];
+        var boolsList = [];
+        var edgesList = [];
+
+        var labelsList = data.texts.filter(function (entry) {
+            return entry.rId.startsWith('tspan');
+        });
+
+        data.shapes.forEach(function (entry) {
+            if (entry.type_ === 'Node') {
+                nodesList.push(entry);
+            } else if (entry.type_ === 'Hybrid') {
+                hybridsList.push(entry);
+            } else if (entry.type_ === 'BoolNode') {
+                boolsList.push(entry);
+            }
+        });
+
+        data.paths.forEach(function (entry) {
+            if (entry.isRegion) {
+                regionsList.push(entry);
+            } else {
+                edgesList.push(entry);
+            }
+        });
+
+        this.setState({
+            labelsJSON: labelsList,
+            regionsJSON: regionsList,
+            nodesJSON: nodesList,
+            hybridsJSON: hybridsList,
+            boolsJSON: boolsList,
+            edgesJSON: edgesList,
+            width: data.width,
+            height: data.height,
+            zoomFactor: 1,
+            horizontalPanFactor: 0,
+            verticalPanFactor: 0
+        });
     }
 
     componentDidUpdate(prevProps, prevState) {
