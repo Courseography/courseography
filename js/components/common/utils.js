@@ -6,6 +6,6 @@
  * @returns {React.PropTypes.Node}
  */
 export function refLookUp(targetNode, svg) {
-    return svg.refs['nodes'].refs[targetNode] ||
-        svg.refs['bools'].refs[targetNode];
+    return svg.nodes.current[targetNode] ||
+        svg.bools.current[targetNode];
 }

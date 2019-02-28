@@ -20,9 +20,9 @@ export default class Bool extends React.Component {
   arePrereqsSatisfied() {
     var svg = this.props.svg;
     function isAllTrue(element) {
-      return svg.refs["nodes"].refs[element]
-        ? svg.refs["nodes"].refs[element].isSelected()
-        : svg.refs["bools"].refs[element].isSelected();
+      return svg.nodes.current[element]
+        ? svg.nodes.current[element].isSelected()
+        : svg.nodes.current[element].isSelected();
     }
 
     if (this.props.logicalType === "and") {
@@ -45,7 +45,7 @@ export default class Bool extends React.Component {
       });
       var allEdges = this.props.outEdges.concat(this.props.inEdges);
       allEdges.forEach(function(edge) {
-        var currentEdge = svg.refs["edges"].refs[edge];
+        var currentEdge = svg.edges.current[edge];
         currentEdge.updateStatus();
       });
     });
@@ -56,14 +56,14 @@ export default class Bool extends React.Component {
     // Check if there are any missing prerequisites.
     if (this.state.status !== "active") {
       this.setState({ status: "missing" }, () => {
-        this.props.inEdges.forEach(function(edge) {
-          var currentEdge = svg.refs["edges"].refs[edge];
+        this.props.inEdges.forEach(edge => {
+          var currentEdge = svg.edges.current[edge];
           var sourceNode = refLookUp(currentEdge.props.source, svg);
           if (!sourceNode.isSelected()) {
             currentEdge.setState({ status: "missing" });
           }
         });
-        this.props.parents.forEach(function(node) {
+        this.props.parents.forEach(node => {
           var currentNode = refLookUp(node, svg);
           currentNode.focusPrereqs();
         });

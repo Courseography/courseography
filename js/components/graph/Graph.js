@@ -1,5 +1,4 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 import { Modal } from "../common/react_modal.js.jsx";
 import { ExportModal } from "../common/export.js.jsx";
@@ -35,6 +34,15 @@ export default class Graph extends React.Component {
       drawNodeID: 0,
       draggingNode: null
     };
+
+    this.svg = React.createRef();
+    this.marker = React.createRef();
+    this.nodes = React.createRef();
+    this.bools = React.createRef();
+    this.edges = React.createRef();
+    this.infoBox = React.createRef();
+    this.modal = React.createRef();
+    this.exportModal = React.createRef();
   }
 
   componentDidMount() {
@@ -51,11 +59,11 @@ export default class Graph extends React.Component {
     // Enable "Export" link
     document
       .getElementById("nav-export")
-      .click(() => this.exportModal.openModal());
+      .addEventListener("click", this.exportModal.current.openModal);
 
     // Need to hardcode these in because React does not understand these attributes
-    var svgNode = ReactDOM.findDOMNode(this.refs.svg);
-    var markerNode = ReactDOM.findDOMNode(this.refs.marker);
+    var svgNode = this.svg.current;
+    var markerNode = this.marker.current;
 
     svgNode.setAttribute("xmlns", "http://www.w3.org/2000/svg");
     svgNode.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
@@ -173,8 +181,8 @@ export default class Graph extends React.Component {
       });
     // Need to hardcode these in because React does not understand these
     // attributes
-    var svgNode = ReactDOM.findDOMNode(this.refs.svg);
-    var markerNode = ReactDOM.findDOMNode(this.refs.marker);
+    var svgNode = this.svg.current;
+    var markerNode = this.marker.current;
 
     svgNode.setAttribute("xmlns", "http://www.w3.org/2000/svg");
     svgNode.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
@@ -197,12 +205,12 @@ export default class Graph extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     if (prevState.nodesJSON !== this.state.nodesJSON) {
       var totalFCEs = 0;
-      for (var ref in this.refs.nodes.refs) {
-        var node = this.refs.nodes.refs[ref];
+      this.state.nodesJSON.forEach(nodeJSON => {
+        let node = this.nodes.current[nodeJSON.id_];
         if (!node.props.hybrid && node.state.selected) {
           totalFCEs += 0.5;
         }
-      }
+      });
       this.setFCECount(totalFCEs);
     }
   }
@@ -231,7 +239,7 @@ export default class Graph extends React.Component {
 
   nodeClick = event => {
     var courseId = event.currentTarget.id;
-    var currentNode = this.refs.nodes.refs[courseId];
+    var currentNode = this.nodes.current[courseId];
     var wasSelected = currentNode.state.selected;
     currentNode.toggleSelection(this);
     if (wasSelected) {
@@ -244,12 +252,12 @@ export default class Graph extends React.Component {
 
   nodeMouseEnter = event => {
     var courseId = event.currentTarget.id;
-    var currentNode = this.refs.nodes.refs[courseId];
+    var currentNode = this.nodes.current[courseId];
     currentNode.focusPrereqs(this);
 
     this.clearAllTimeouts();
 
-    var infoBox = this.infoBox;
+    var infoBox = this.infoBox.current;
 
     var xPos = currentNode.props.JSON.pos[0];
     var yPos = currentNode.props.JSON.pos[1];
@@ -276,10 +284,10 @@ export default class Graph extends React.Component {
 
   nodeMouseLeave = event => {
     var courseId = event.currentTarget.id;
-    var currentNode = this.refs.nodes.refs[courseId];
+    var currentNode = this.nodes.current[courseId];
     currentNode.unfocusPrereqs(this);
 
-    var infoBox = this.infoBox;
+    var infoBox = this.infoBox.current;
 
     var timeout = setTimeout(function() {
       infoBox.setState({ showInfobox: false });
@@ -346,12 +354,12 @@ export default class Graph extends React.Component {
   infoBoxMouseEnter = () => {
     this.clearAllTimeouts();
 
-    var infoBox = this.infoBox;
+    var infoBox = this.infoBox.current;
     infoBox.setState({ showInfobox: true });
   };
 
   infoBoxMouseLeave = () => {
-    var infoBox = this.infoBox;
+    var infoBox = this.infoBox.current;
 
     var timeout = setTimeout(function() {
       infoBox.setState({ showInfobox: false });
@@ -361,11 +369,10 @@ export default class Graph extends React.Component {
   };
 
   infoBoxMouseClick = () => {
-    var infoBox = this.infoBox;
+    var infoBox = this.infoBox.current;
     var newCourse = infoBox.state.nodeId.substring(0, 6);
-    console.log(newCourse);
     this.setState({ courseId: newCourse });
-    this.modal.openModal(newCourse);
+    this.modal.current.openModal(newCourse);
   };
 
   openExportModal = () => {
@@ -375,16 +382,16 @@ export default class Graph extends React.Component {
   // Reset graph
   reset = () => {
     this.setFCECount(0);
-    this.refs.nodes.reset();
-    this.refs.bools.reset();
-    this.refs.edges.reset();
+    this.nodes.current.reset();
+    this.bools.current.reset();
+    this.edges.current.reset();
   };
 
   renderArrowHead = () => {
     var polylineAttrs = { points: "0,1 10,5 0,9", fill: "black" };
     return (
       <defs>
-        <marker id="arrowHead" ref="marker" viewBox="0 0 10 10">
+        <marker id="arrowHead" ref={this.marker} viewBox="0 0 10 10">
           <polyline {...polylineAttrs} />
         </marker>
       </defs>
@@ -657,12 +664,8 @@ export default class Graph extends React.Component {
 
     return (
       <div>
-        <Modal ref={r => (this.modal = r)} />
-        <ExportModal
-          context="graph"
-          session=""
-          ref={r => (this.exportModal = r)}
-        />
+        <Modal ref={this.modal} />
+        <ExportModal context="graph" session="" ref={this.exportModal} />
         <Button
           divId="zoom-in-button"
           text="+"
@@ -729,7 +732,7 @@ export default class Graph extends React.Component {
 
         <svg
           {...svgAttrs}
-          ref="svg"
+          ref={this.svg}
           version="1.1"
           className={
             this.state.highlightedNodes.length > 0 ? "highlight-nodes" : ""
@@ -742,7 +745,7 @@ export default class Graph extends React.Component {
             labelsJSON={this.state.labelsJSON}
           />
           <NodeGroup
-            ref="nodes"
+            ref={this.nodes}
             nodeClick={this.nodeClick}
             nodeMouseEnter={this.nodeMouseEnter}
             nodeMouseLeave={this.nodeMouseLeave}
@@ -755,14 +758,18 @@ export default class Graph extends React.Component {
             onDraw={this.state.onDraw}
           />
           <BoolGroup
-            ref="bools"
+            ref={this.bools}
             boolsJSON={this.state.boolsJSON}
             edgesJSON={this.state.edgesJSON}
             svg={this}
           />
-          <EdgeGroup svg={this} ref="edges" edgesJSON={this.state.edgesJSON} />
+          <EdgeGroup
+            svg={this}
+            ref={this.edges}
+            edgesJSON={this.state.edgesJSON}
+          />
           <InfoBox
-            ref={r => (this.infoBox = r)}
+            ref={this.infoBox}
             onClick={this.infoBoxMouseClick}
             onMouseEnter={this.infoBoxMouseEnter}
             onMouseLeave={this.infoBoxMouseLeave}
