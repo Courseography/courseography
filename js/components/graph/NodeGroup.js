@@ -11,14 +11,14 @@ export default class NodeGroup extends React.Component {
 
   reset() {
     this.props.nodesJSON.forEach(nodeJSON => {
-      var node = this.refs[nodeJSON.id_];
+      var node = this[nodeJSON.id_];
       var state = node.props.parents.length === 0 ? "takeable" : "inactive";
       node.setState({ status: state, selected: false });
       localStorage.setItem(node.props.JSON.id_, state);
     });
 
     this.props.hybridsJSON.forEach(hybridJSON => {
-      var hybrid = this.refs[hybridJSON.id_];
+      var hybrid = this[hybridJSON.id_];
       var state = hybrid.props.parents.length === 0 ? "takeable" : "inactive";
       hybrid.setState({ status: state, selected: false });
       localStorage.setItem(hybrid.props.JSON.id_, state);
@@ -96,7 +96,7 @@ export default class NodeGroup extends React.Component {
               className={"hybrid"}
               key={entry.id_}
               hybrid={true}
-              ref={entry.id_}
+              ref={elem => (this[entry.id_] = elem)}
               parents={parents}
               childs={childs}
               inEdges={[]}
@@ -131,7 +131,7 @@ export default class NodeGroup extends React.Component {
               JSON={entry}
               className="node"
               key={entry.id_}
-              ref={entry.id_}
+              ref={elem => (this[entry.id_] = elem)}
               hybrid={false}
               parents={parents}
               childs={childs}

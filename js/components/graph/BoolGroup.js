@@ -10,15 +10,14 @@ export default class BoolGroup extends React.Component {
   }
 
   componentDidMount() {
-    for (var boolJSON of this.props.boolsJSON) {
-      var ref = boolJSON.id_;
-      this.refs[ref].updateNode(this.props.svg);
-    }
+    this.props.boolsJSON.forEach(boolJSON => {
+      this[boolJSON.id_].updateNode(this.props.svg);
+    });
   }
 
   reset() {
     this.props.boolsJSON.forEach(boolJSON => {
-      var bool = this.refs[boolJSON.id_];
+      var bool = this[boolJSON.id_];
       bool.setState({ status: "inactive" });
     });
   }
@@ -44,7 +43,7 @@ export default class BoolGroup extends React.Component {
         JSON={boolJSON}
         className="bool"
         key={boolJSON.id_}
-        ref={boolJSON.id_}
+        ref={elem => (this[boolJSON.id_] = elem)}
         parents={parents}
         childs={childs}
         inEdges={inEdges}

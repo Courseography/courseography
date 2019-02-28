@@ -23,14 +23,14 @@ export default class EdgeGroup extends React.Component {
   }
 
   componentDidUpdate() {
-    for (var ref in this.refs) {
-      this.refs[ref].updateStatus();
-    }
+    this.props.edgesJSON.forEach(edgeJSON => {
+      this[edgeJSON.id_].updateStatus();
+    });
   }
 
   reset() {
     this.props.edgesJSON.forEach(edgeJSON => {
-      this.refs[edgeJSON.id_].setState({ status: "inactive" });
+      this[edgeJSON.id_].setState({ status: "inactive" });
     });
   }
 
@@ -40,7 +40,7 @@ export default class EdgeGroup extends React.Component {
       <Edge
         className="path"
         key={edgeJSON.id_}
-        ref={edgeJSON.id_}
+        ref={elem => (this[edgeJSON.id_] = elem)}
         source={edgeJSON.source}
         target={edgeJSON.target}
         points={edgeJSON.points}

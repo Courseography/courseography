@@ -35,9 +35,13 @@ export default class Node extends React.Component {
     var svg = this.props.svg;
     function isAllTrue(element) {
       if (typeof element === "string") {
-        return svg.refs["nodes"].refs[element]
-          ? svg.refs["nodes"].refs[element].isSelected()
-          : svg.refs["bools"].refs[element].isSelected();
+        if (svg.nodes.current[element] !== undefined) {
+          return svg.nodes.current[element].isSelected();
+        } else if (svg.bools.current[element] !== undefined) {
+          return svg.bools.current[element].isSelected();
+        } else {
+          return false;
+        }
       } else {
         return element.some(isAllTrue);
       }
@@ -81,15 +85,17 @@ export default class Node extends React.Component {
         localStorage.setItem(nodeId, newState);
         this.props.childs.forEach(function(node) {
           var currentNode = refLookUp(node, svg);
-          currentNode.updateNode();
+          if (currentNode !== undefined) {
+            currentNode.updateNode();
+          }
         });
         var allEdges = this.props.outEdges.concat(this.props.inEdges);
-        allEdges.forEach(
-          function(edge) {
-            var currentEdge = svg.refs["edges"].refs[edge];
+        allEdges.forEach(edge => {
+          var currentEdge = svg.edges.current[edge];
+          if (currentEdge !== undefined) {
             currentEdge.updateStatus();
-          }.bind(this)
-        );
+          }
+        });
       });
     } else {
       this.setState({ status: newState });
@@ -111,7 +117,10 @@ export default class Node extends React.Component {
     ) {
       this.setState({ status: "missing" }, () => {
         this.props.inEdges.forEach(edge => {
-          var currentEdge = svg.refs["edges"].refs[edge];
+          var currentEdge = svg.edges.current[edge];
+          if (currentEdge === null || currentEdge === undefined) {
+            return;
+          }
           var sourceNode = refLookUp(currentEdge.props.source, svg);
           if (!sourceNode.isSelected()) {
             currentEdge.setState({ status: "missing" });
@@ -120,11 +129,15 @@ export default class Node extends React.Component {
         this.props.parents.forEach(node => {
           if (typeof node === "string") {
             var currentNode = refLookUp(node, svg);
-            currentNode.focusPrereqs();
+            if (currentNode !== undefined) {
+              currentNode.focusPrereqs();
+            }
           } else {
             node.forEach(n => {
               var currentNode = refLookUp(n, svg);
-              currentNode.focusPrereqs();
+              if (currentNode !== undefined) {
+                currentNode.focusPrereqs();
+              }
             });
           }
         });
@@ -147,7 +160,7 @@ export default class Node extends React.Component {
       }
     });
     this.props.inEdges.forEach(function(edge) {
-      var currentEdge = svg.refs["edges"].refs[edge];
+      var currentEdge = svg.edges.current[edge];
       if (currentEdge.state.status === "missing") {
         currentEdge.updateStatus();
       }
