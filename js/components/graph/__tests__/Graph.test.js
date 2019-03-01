@@ -14,11 +14,13 @@ beforeAll(() => {
 
     // TODO: mount has the ajax call
     graph = mount(<Graph {...graphProps} />);
-    console.log(graph.debug());
+    graph.update(); // force update, wait for the async fetch
 });
 
 describe("Graph Node", () => {
     it("Hovering over a course node should make a info box appear", () => {
+        graph.update();  // not ideal, basically stalling, may not work on a faster computer
+        // produces unexpected behaviour
 
     });
     it("clicking a course node: triggers changes in the path and children nodes (including hybrid nodes)", () => {
