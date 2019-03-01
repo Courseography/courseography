@@ -8,7 +8,7 @@ global.fetch = require("node-fetch");
 
 // when running with Jest, it asks for
 // http://localhost/get-json-data?graphName=Computer+Science
-nock('http://localhost/')// TODO: double check the url
+nock('http://localhost/')
     .get('/get-json-data?graphName=Computer+Science')
     .reply(200, () => {
         return cscData;
