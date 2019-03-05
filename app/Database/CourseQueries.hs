@@ -113,7 +113,8 @@ getDescriptionD (Just key) = do
 buildMeetTimes :: Entity Meeting -> SqlPersistM Tables.MeetTime
 buildMeetTimes meet = do
     allTimes :: [Entity Times] <- selectList [TimesMeeting ==. entityKey meet] []
-    parsedTime <- mapM buildTimes' $ map entityVal allTimes
+    -- let allentvaltimes = map entityVal allTimes
+    let parsedTime = map buildTimes' $ map entityVal allTimes
     return $ Tables.MeetTime {meetData = entityVal meet, timeData = parsedTime}
 
 -- ** Other queries
@@ -217,7 +218,7 @@ getMeetingTime (meetingCode_, meetingSection_, meetingSession_) = do
                                         MeetingSession ==. meetingSession_]
                                        []
     allTimes <- selectList [TimesMeeting ==. fromJust (fmap entityKey maybeEntityMeetings)] []
-    parsedTime <- mapM buildTimes' $ map entityVal allTimes
+    let parsedTime = map buildTimes' $ map entityVal allTimes
     return parsedTime
 
 getMeetingSection :: T.Text -> T.Text

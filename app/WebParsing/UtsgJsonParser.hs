@@ -55,7 +55,7 @@ insertMeeting (MeetTime meetingData meetingTime) = do
     case courseKey of
         Just _ -> do
           meetingKey <- insert meetingData
-          allTimes <- mapM (\t-> buildTimes t meetingKey) meetingTime
+          let allTimes = map (buildTimes meetingKey) meetingTime
           mapM_ insert_ allTimes
         Nothing -> return ()
 
