@@ -96,7 +96,7 @@ export default class NodeGroup extends React.Component {
               className={"hybrid"}
               key={entry.id_}
               hybrid={true}
-              ref={elem => (this[entry.id_] = elem)}
+              ref={elem => elem && (this[entry.id_] = elem)}
               parents={parents}
               childs={childs}
               inEdges={[]}
@@ -131,7 +131,7 @@ export default class NodeGroup extends React.Component {
               JSON={entry}
               className="node"
               key={entry.id_}
-              ref={elem => (this[entry.id_] = elem)}
+              ref={elem => elem && (this[entry.id_] = elem)}
               hybrid={false}
               parents={parents}
               childs={childs}

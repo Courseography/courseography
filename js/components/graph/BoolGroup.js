@@ -43,7 +43,7 @@ export default class BoolGroup extends React.Component {
         JSON={boolJSON}
         className="bool"
         key={boolJSON.id_}
-        ref={elem => (this[boolJSON.id_] = elem)}
+        ref={elem => elem && (this[boolJSON.id_] = elem)}
         parents={parents}
         childs={childs}
         inEdges={inEdges}

@@ -40,7 +40,7 @@ export default class EdgeGroup extends React.Component {
       <Edge
         className="path"
         key={edgeJSON.id_}
-        ref={elem => (this[edgeJSON.id_] = elem)}
+        ref={elem => elem && (this[edgeJSON.id_] = elem)}
         source={edgeJSON.source}
         target={edgeJSON.target}
         points={edgeJSON.points}
