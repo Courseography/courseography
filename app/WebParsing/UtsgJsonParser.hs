@@ -10,7 +10,7 @@ import qualified Data.HashMap.Strict as HM
 import Control.Monad.IO.Class (liftIO)
 import Network.HTTP.Conduit (simpleHttp)
 import Config (databasePath)
-import Database.Tables (Courses(..), EntityField(CoursesCode), Meeting(..), Times(..), MeetTimes(..))
+import Database.Tables (Courses(..), EntityField(CoursesCode), Meeting(..), MeetTime(..), buildTimes)
 import Database.Persist.Sqlite (runSqlite, insert_, SqlPersistM, (==.), insert, selectFirst)
 
 -- | URLs for the Faculty of Arts and Science API
@@ -47,30 +47,31 @@ insertAllMeetings org = do
         meetings = concat sections
     mapM_ insertMeeting meetings
 
--- | Store a meeting's data and times.
-insertMeeting :: MeetTimes -> SqlPersistM ()
-insertMeeting (MeetTimes meetData meetTimes) = do
+-- | Insert a meeting and its corresponding Times into the database.
+insertMeeting :: MeetTime -> SqlPersistM ()
+insertMeeting (MeetTime meetingData meetingTime) = do
     -- Check that the meeting belongs to a course that exists
-    let code = meetingCode meetData
+    let code = meetingCode meetingData
     courseKey <- selectFirst [ CoursesCode ==. code ] []
     case courseKey of
         Just _ -> do
-          meetingKey <- insert meetData
-          mapM_ (\t -> insert_ $ t {timesMeeting = Just meetingKey}) meetTimes
+          meetingKey <- insert meetingData
+          let allTimes = map (buildTimes meetingKey) meetingTime
+          mapM_ insert_ allTimes
         Nothing -> return ()
 
-newtype DB = DB { dbData :: (Courses, [MeetTimes]) }
+newtype DB = DB { dbData :: (Courses, [MeetTime]) }
   deriving Show
 
 instance FromJSON DB where
     parseJSON (Object o) = do
       course <- parseJSON (Object o)
       session :: T.Text <- o .:? "section" .!= "F"
-      meetingTimesMap :: HM.HashMap T.Text MeetTimes <- o .:? "meetings" .!= HM.empty
-      let allMeetingsTimes = map (\m -> m {meetingData = (meetingData m) { meetingCode = (coursesCode course), meetingSession = session}}) (HM.elems meetingTimesMap)
+      meetingTimesMap :: HM.HashMap T.Text MeetTime <- o .:? "meetings" .!= HM.empty
+      let allMeetingsTimes = map (\m -> m {meetData = (meetData m) { meetingCode = (coursesCode course), meetingSession = session}}) (HM.elems meetingTimesMap)
           -- Fix manualTutorialEnrolment and manualPracticalEnrolment
-          manTut = any (T.isPrefixOf "TUT" . meetingSection) $ map meetingData allMeetingsTimes
-          manPra = any (T.isPrefixOf "PRA" . meetingSection) $ map meetingData allMeetingsTimes
+          manTut = any (T.isPrefixOf "TUT" . meetingSection) $ map meetData allMeetingsTimes
+          manPra = any (T.isPrefixOf "PRA" . meetingSection) $ map meetData allMeetingsTimes
       return $ DB (course { coursesManualTutorialEnrolment = Just manTut,
                             coursesManualPracticalEnrolment = Just manPra },
                   allMeetingsTimes)

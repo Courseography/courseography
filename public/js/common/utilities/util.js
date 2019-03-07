@@ -196,6 +196,6 @@ function removeDuplicateLectures(lectures) {
     'use strict'
 
     return lectures.filter((lecture, index, lectures) =>
-            lectures.map(lect => lect.meetingData.section).indexOf(lecture.meetingData.section) === index)
-        .sort((lec1, lec2) => lec1.meetingData.section > lec2.meetingData.section);
+            lectures.map(lect => lect.meetData.section).indexOf(lecture.meetData.section) === index)
+        .sort((lec1, lec2) => lec1.meetData.section > lec2.meetData.section);
 }

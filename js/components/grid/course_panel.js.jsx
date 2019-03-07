@@ -87,6 +87,7 @@ class Course extends React.Component {
       selected: false,
       courseInfo: {}
     }
+    this.filterLectureList = this.filterLectureList.bind(this);
     this.toggleSelect = this.toggleSelect.bind(this);
     this.removeCourse = this.removeCourse.bind(this);
     this.parseLectures = this.parseLectures.bind(this);
@@ -104,17 +105,19 @@ class Course extends React.Component {
           Y: []
         };
         course.courseCode = data.name;
-        course.F = course.F.concat(this.parseLectures(data.fallSession.lectures),
-                                   this.parseLectures(data.fallSession.tutorials),
-                                   this.parseLectures(data.fallSession.practicals));
-        course.S = course.S.concat(this.parseLectures(data.springSession.lectures),
-                                   this.parseLectures(data.springSession.tutorials),
-                                   this.parseLectures(data.springSession.practicals));
-        course.Y = course.Y.concat(this.parseLectures(data.yearSession.lectures),
-                                   this.parseLectures(data.yearSession.tutorials),
-                                   this.parseLectures(data.yearSession.practicals));
+
+        let parsedLectures = this.parseLectures(data.allMeetingTimes);
+        // Split the lecture sections into Fall, Spring and Years
+        course.F = this.filterLectureList(parsedLectures, "F");
+        course.S = this.filterLectureList(parsedLectures, "S");
+        course.Y = this.filterLectureList(parsedLectures, "Y");
         this.setState({courseInfo: course});
     });
+  }
+
+  filterLectureList(lectures, session) {
+    return lectures.filter(lec => lec.session === session)
+      .sort((firstLec, secondLec) => firstLec.lectureCode > secondLec.lectureCode ? 1 : -1);
   }
 
   parseLectures(lectures) {
@@ -127,13 +130,12 @@ class Course extends React.Component {
       // Check to make sure its not an online section (online sections have course codes beginning with 9) or
       // restricted section. Restricted sections have enrollment restricted for a particular group of students,
       // but happens at the same time and place as a regular lecture/tutorial section.
-      if (lectureInfo.meetingData.section.charAt(3) !== '2' && lectureInfo.meetingData.section.charAt(3) !== '9' &&
-        lectureInfo.meetingData.times !== 'Online Web Version') {
+      if (lectureInfo.meetData.section.charAt(3) !== '2' && lectureInfo.meetData.section.charAt(3) !== '9') {
         let lecture = {
-          courseCode: lectureInfo.meetingData.code + " (" + lectureInfo.meetingData.section.substring(0,1) + ")",
-          lectureCode: lectureInfo.meetingData.section.substring(0, 1) + lectureInfo.meetingData.section.substring(3),
-          session: lectureInfo.meetingData.session,
-          times: lectureInfo.timesData,
+          courseCode: lectureInfo.meetData.code + " (" + lectureInfo.meetData.section.substring(0,1) + ")",
+          lectureCode: lectureInfo.meetData.section.substring(0, 1) + lectureInfo.meetData.section.substring(3),
+          session: lectureInfo.meetData.session,
+          times: lectureInfo.timeData,
         };
         parsedLectures.push(lecture);
       }
@@ -150,7 +152,7 @@ class Course extends React.Component {
   }
 
   displayInfo() {
-    this.modal.openModal(this.state.courseInfo.courseCode.substring(0, 6));
+    this.modal.openModal(this.props.courseCode);
   }
 
   containsSelectedLecture() {

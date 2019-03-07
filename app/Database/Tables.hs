@@ -35,7 +35,8 @@ import Data.Aeson ((.:?), (.!=), FromJSON(parseJSON), ToJSON(toJSON), Value(..),
 import Data.Aeson.Types (Parser, defaultOptions, Options(..))
 import GHC.Generics
 import WebParsing.ReqParser (parseReqs)
-import Control.Applicative ((<|>))
+import Control.Applicative((<|>))
+import Database.Persist.Sqlite(Key)
 
 data Room = Room { roomField :: (T.Text, T.Text)} deriving (Show, Read, Eq, Generic)
 derivePersistField "Room"
@@ -82,10 +83,9 @@ Times
     weekDay Double
     startHour Double
     endHour Double
-    meeting MeetingId Maybe
+    meeting MeetingId
     firstRoom T.Text Maybe
     secondRoom T.Text Maybe
-    deriving Generic Show
 
 Breadth
     description T.Text
@@ -157,8 +157,16 @@ data SvgJSON =
               paths :: [Path]
             } deriving (Show, Generic)
 
+data Times' =
+  Times' { weekDay :: Double,
+          startingTime :: Double,
+          endingTime :: Double,
+          fstRoom :: Maybe T.Text,
+          secRoom :: Maybe T.Text
+} deriving (Show, Generic)
+
 -- | A Meeting with its associated Times.
-data MeetTimes = MeetTimes { meetingData :: Meeting, timesData :: [Times] }
+data MeetTime = MeetTime {meetData :: Meeting, timeData :: [Times'] }
   deriving (Show, Generic)
 
 -- | A Course. TODO: remove this data type (it's redundant).
@@ -167,7 +175,7 @@ data Course =
              description :: Maybe T.Text,
              title :: Maybe T.Text,
              prereqString :: Maybe T.Text,
-             allMeetingTimes :: Maybe [MeetTimes],
+             allMeetingTimes :: Maybe [MeetTime],
              name :: !T.Text,
              exclusions :: Maybe T.Text,
              manualTutorialEnrolment :: Maybe Bool,
@@ -179,8 +187,8 @@ data Course =
 
 instance ToJSON Course
 instance ToJSON Room
-instance ToJSON MeetTimes
-instance ToJSON Times
+instance ToJSON Times'
+instance ToJSON MeetTime
 
 -- instance FromJSON required so that tables can be parsed into JSON,
 -- not necessary otherwise.
@@ -243,7 +251,7 @@ instance FromJSON Meeting where
     else
       fail "Not a lecture, Tutorial or Practical"
 
-instance FromJSON Times where
+instance FromJSON Times' where
   parseJSON = withObject "Expected Object for Times" $ \o -> do
     meetingDayStr <- o .:? "meetingDay"
     meetingStartTimeStr <- o .:? "meetingStartTime"
@@ -251,13 +259,13 @@ instance FromJSON Times where
     meetingRoom1 <- o .:? "assignedRoom1" .!= Nothing
     meetingRoom2 <- o .:? "assignedRoom2" .!= Nothing
     let (meetingDay, meetingStartTime, meetingEndTime) = getTimeVals meetingDayStr meetingStartTimeStr meetingEndTimeStr
-    return $ Times meetingDay meetingStartTime meetingEndTime Nothing meetingRoom1 meetingRoom2
+    return $ Times' meetingDay meetingStartTime meetingEndTime meetingRoom1 meetingRoom2
 
-instance FromJSON MeetTimes where
+instance FromJSON MeetTime where
   parseJSON (Object o) = do
     meeting <- parseJSON (Object o)
-    timeMap :: HM.HashMap T.Text Times <- o .:? "schedule" .!= HM.empty <|> return HM.empty
-    return $ MeetTimes meeting (HM.elems timeMap)
+    timeMap :: HM.HashMap T.Text Times' <- o .:? "schedule" .!= HM.empty <|> return HM.empty
+    return $ MeetTime meeting (HM.elems timeMap)
   parseJSON _ = fail "Invalid meeting"
 
 -- | Helpers for parsing JSON
@@ -292,3 +300,21 @@ getTimeVals (Just day) (Just start) (Just end) = do
         endDbl = getHourVal end
     (dayDbl, startDbl, endDbl)
 getTimeVals _ _ _ = (5.0, 25.0, 25.0)
+
+-- | Convert Times into Times'
+buildTimes' :: Times -> Times'
+buildTimes' t =
+  Times' (timesWeekDay t)
+    (timesStartHour t)
+    (timesEndHour t)
+    (timesFirstRoom t)
+    (timesSecondRoom t)
+
+buildTimes :: Key Meeting -> Times' -> Times
+buildTimes meetingKey t =
+  Times (weekDay t)
+    (startingTime t)
+    (endingTime t)
+    meetingKey
+    (fstRoom t)
+    (secRoom t)
