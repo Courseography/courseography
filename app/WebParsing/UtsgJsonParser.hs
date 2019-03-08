@@ -11,7 +11,7 @@ import Control.Monad.IO.Class (liftIO)
 import Network.HTTP.Conduit (simpleHttp)
 import Config (databasePath)
 import Database.Tables (Courses(..), EntityField(CoursesCode), Meeting(..), MeetTime(..), buildTimes)
-import Database.Persist.Sqlite (runSqlite, insert_, SqlPersistM, (==.), insert, selectFirst)
+import Database.Persist.Sqlite (runSqlite, insert, SqlPersistM, (==.), insertMany_, selectFirst)
 
 -- | URLs for the Faculty of Arts and Science API
 timetableURL :: T.Text
@@ -56,7 +56,7 @@ insertMeeting (MeetTime meetingData meetingTime) = do
         Just _ -> do
           meetingKey <- insert meetingData
           let allTimes = map (buildTimes meetingKey) meetingTime
-          mapM_ insert_ allTimes
+          insertMany_ allTimes
         Nothing -> return ()
 
 newtype DB = DB { dbData :: (Courses, [MeetTime]) }
