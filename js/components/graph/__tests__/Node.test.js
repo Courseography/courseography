@@ -3,12 +3,11 @@ import Graph from "../Graph";
 import { shallow } from "enzyme";
 import waitUntil from "async-wait-until";
 import { render, fireEvent } from "react-testing-library";
-
 import Node from "../Node";
 
 let graph;
 
-beforeAll(async done => {
+beforeEach(async done => {
   const graphProps = {
     edit: false,
     initialDrawMode: "draw-node",
@@ -16,7 +15,6 @@ beforeAll(async done => {
     start_blank: false
   };
 
-  // TODO: mount has the ajax call
   graph = render(<Graph {...graphProps} />);
   // wait until the graph's fetch() call is complete
   await waitUntil(() => graph.queryByText("CSC104") !== null);
@@ -118,12 +116,9 @@ describe("Course Node", () => {
   });
 
   it("should render Node component properly with proper course code", () => {
-    // TODO: not good to use global variables, it's just faster
     const courseTextNode = graph.getByText("CSC104");
     // Check if svg container id is consistent with course code
-    expect(courseTextNode.parentNode.id.toUpperCase()).toBe(
-      courseTextNode.innerHTML
-    );
+    expect(courseTextNode.parentNode.id.toUpperCase()).toBe(courseTextNode.innerHTML);
     // TODO: Check if it has a sibling rect element?
   });
 

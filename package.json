@@ -12,6 +12,7 @@
   },
   "jest": {
     "setupFiles": [
+      "react-testing-library/cleanup-after-each",
       "./js/setupTests.js"
     ],
     "snapshotSerializers": [
