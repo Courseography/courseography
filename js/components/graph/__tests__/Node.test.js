@@ -2,7 +2,7 @@ import React from "react";
 import Graph from "../Graph";
 import { shallow } from "enzyme";
 import waitUntil from "async-wait-until";
-import { render, fireEvent } from "react-testing-library";
+import { render, fireEvent, cleanup } from "react-testing-library";
 import Node from "../Node";
 
 let graph;
@@ -22,6 +22,8 @@ beforeEach(async done => {
   expect(graph.queryByText("CSC104")).toBeTruthy();
   done();
 });
+
+afterEach(cleanup);
 
 describe("Hybrid Node", () => {
   it("node", () => {
