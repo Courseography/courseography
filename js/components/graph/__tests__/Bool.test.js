@@ -37,4 +37,7 @@ describe("Bool", () => {
     const wrapper = shallow(<Bool {...boolProps} />);
     expect(wrapper).toMatchSnapshot();
   });
+
+  it("should not do anything when you hover or click on it", () => { });
+  it("should become selected when its pre-req parent is satisfied", () => { });
 });

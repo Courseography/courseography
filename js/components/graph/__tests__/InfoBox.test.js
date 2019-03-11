@@ -13,4 +13,7 @@ describe("InfoBox", () => {
     const component = shallow(<InfoBox {...infoBoxProps} />);
     expect(component).toMatchSnapshot();
   });
+
+  it("Hovering over a course node should make a info box appear", () => { });
+  it("Pressing on the info box should create a new pop up", () => { });
 });

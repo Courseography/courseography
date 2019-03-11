@@ -76,6 +76,10 @@ describe("Hybrid Node", () => {
     const wrapper = shallow(<Node {...nodeProps} />);
     expect(wrapper).toMatchSnapshot();
   });
+
+
+  it("shouldn't do anything when you hover or click it", () => { });
+  it("should become selected when its pre-req parent is satisfied", () => { });
 });
 
 describe("Course Node", () => {
@@ -124,5 +128,39 @@ describe("Course Node", () => {
     expect(courseTextNode.parentNode.id.toUpperCase()).toBe(
       courseTextNode.innerHTML
     );
+  });
+
+  it("should create an info box when hovering over the course", () => {});
+
+  it.skip("should have a solid border if you have the prerequisites", () => {});
+
+
+});
+
+describe("Unselected Course Node", () => {
+  it ('should be red when hovered over', () => {});
+
+  it.skip("should have a solid border if you have the prerequisites", () => {});
+});
+
+describe("Selected Course Node", () => {
+  it("should black when pre-reqs are met", () => {
+    // Select EST100
+    // check border
+    // deselect EST100
+  });
+
+  it("should be red with unmet pre-reqs", () => {
+    // select EST101
+    // expect EST100
+    // deselect EST101
+
+    // inactive, not takeable
+  });
+
+  it("when hovered, should highlight all unmet pre-reqs", () => {
+    // select EST300
+    // expect EST201, EST200, EST101, EST1000 to be all red
+    // deselect EST300
   });
 });
