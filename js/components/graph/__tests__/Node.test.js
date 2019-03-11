@@ -1,7 +1,30 @@
 import React from "react";
+import Graph from "../Graph";
 import { shallow } from "enzyme";
-
+import waitUntil from "async-wait-until";
+import { render, cleanup } from "react-testing-library";
 import Node from "../Node";
+
+/**
+ * @param {function} done - provided by Jest to indicate the completion of an async operation
+ * @returns {Graph}
+ */
+async function setupGraph(done) {
+  const graphProps = {
+    edit: false,
+    initialDrawMode: "draw-node",
+    initialOnDraw: false,
+    start_blank: false
+  };
+
+  const graph = render(<Graph {...graphProps} />);
+  await waitUntil(() => graph.queryByText("AAA100") !== null);
+  expect(graph.queryByText("AAA100")).toBeTruthy();
+  done();
+  return graph;
+}
+
+afterEach(cleanup);
 
 describe("Hybrid Node", () => {
   it("node", () => {
@@ -93,5 +116,13 @@ describe("Course Node", () => {
 
     const wrapper = shallow(<Node {...courseProps} />);
     expect(wrapper).toMatchSnapshot();
+  });
+
+  it("should render Node component properly with proper course code", async done => {
+    const graph = await setupGraph(done);
+    const courseTextNode = graph.getByText("AAA100");
+    expect(courseTextNode.parentNode.id.toUpperCase()).toBe(
+      courseTextNode.innerHTML
+    );
   });
 });
