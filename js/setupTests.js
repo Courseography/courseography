@@ -1,10 +1,10 @@
 import { configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 configure({ adapter: new Adapter() });  // enzyme
-import cscData from './components/graph/__mocks__/cscData';
+import testData from './components/graph/__mocks__/testData';
 import fetchMock from 'fetch-mock';
 
-fetchMock.get('http://localhost/get-json-data?graphName=Computer+Science', cscData);
+fetchMock.get('http://localhost/get-json-data?graphName=Computer+Science', testData);
 
 document.body.innerHTML = `
 <nav>

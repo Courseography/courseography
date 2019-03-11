@@ -10,7 +10,7 @@ export default {
         {
           graph: 1,
           rId: "text620",
-          text: "CSC104",
+          text: "AAA100",
           pos: [676.445738, 59.379107999999995],
           fill: "",
           align: "begin"
@@ -20,7 +20,7 @@ export default {
       stroke: "",
       pos: [674.184078, 38.09390799999999],
       fill: "#5dd5b8",
-      id_: "csc104"
+      id_: "aaa100"
     },
     {
       graph: 1,
@@ -30,7 +30,7 @@ export default {
         {
           graph: 1,
           rId: "text102",
-          text: "CSC108",
+          text: "AAA101",
           pos: [596.555968, 30.379107999999995],
           fill: "",
           align: "begin"
@@ -40,7 +40,7 @@ export default {
       stroke: "",
       pos: [594.294128, 10.09390799999999],
       fill: "#5dd5b8",
-      id_: "csc108"
+      id_: "aaa101"
     },
     {
       graph: 1,
@@ -50,7 +50,7 @@ export default {
         {
           graph: 1,
           rId: "text102",
-          text: "CSC108",
+          text: "AAA101",
           pos: [596.555968, 59.379107999999995],
           fill: "",
           align: "begin"
@@ -70,17 +70,17 @@ export default {
         {
           graph: 1,
           rId: "text54",
-          text: "CSC165/240",
+          text: "AAA102",
           pos: [469.783538, 59.379107999999995],
           fill: "",
           align: "begin"
         }
       ],
-      width: 100.185,
+      width: 65.185,
       stroke: "",
       pos: [465.499658, 37.09390799999999],
       fill: "#b1c8d1",
-      id_: "csc165240"
+      id_: "aaa102"
     },
     {
       graph: 1,
@@ -90,7 +90,7 @@ export default {
         {
           graph: 1,
           rId: "text114",
-          text: "CSC148",
+          text: "AAA201",
           pos: [596.555968, 110.15400799999999],
           fill: "",
           align: "begin"
@@ -100,7 +100,7 @@ export default {
       stroke: "",
       pos: [594.294128, 88.86880799999999],
       fill: "#5dd5b8",
-      id_: "csc148"
+      id_: "aaa201"
     },
     {
       graph: 1,
@@ -130,7 +130,7 @@ export default {
         {
           graph: 1,
           rId: "text126",
-          text: "CSC207",
+          text: "AAA303",
           pos: [735.713858, 201.168708],
           fill: "",
           align: "begin"
@@ -140,7 +140,7 @@ export default {
       stroke: "",
       pos: [733.452148, 179.883608],
       fill: "#e68080",
-      id_: "csc207"
+      id_: "aaa303CSC"
     },
     {
       graph: 1,
@@ -170,7 +170,7 @@ export default {
         {
           graph: 1,
           rId: "text126",
-          text: "CSC111",
+          text: "AAA202",
           pos: [500, 201.168708],
           fill: "",
           align: "begin"
@@ -180,14 +180,14 @@ export default {
       stroke: "",
       pos: [500, 179.883608],
       fill: "#e68080",
-      id_: "csc111"
+      id_: "aaa202"
     },
   ],
   texts: [
     {
       graph: 1,
       rId: "text54",
-      text: "CSC165/240",
+      text: "AAA102",
       pos: [469.783538, 59.379107999999995],
       fill: "",
       align: "begin"
@@ -195,7 +195,7 @@ export default {
     {
       graph: 1,
       rId: "text620",
-      text: "CSC104",
+      text: "AAA100",
       pos: [676.445738, 59.379107999999995],
       fill: "",
       align: "begin"
@@ -203,7 +203,7 @@ export default {
     {
       graph: 1,
       rId: "text102",
-      text: "CSC108",
+      text: "AAA101",
       pos: [596.555968, 50.379107999999995],
       fill: "",
       align: "begin"
@@ -211,7 +211,7 @@ export default {
     {
       graph: 1,
       rId: "text114",
-      text: "CSC148",
+      text: "AAA201",
       pos: [596.555968, 110.15400799999999],
       fill: "",
       align: "begin"
@@ -219,7 +219,7 @@ export default {
     {
       graph: 1,
       rId: "text126",
-      text: "CSC207",
+      text: "AAA303",
       pos: [735.713858, 161.168708],
       fill: "",
       align: "begin"
@@ -227,7 +227,7 @@ export default {
     {
       graph: 1,
       rId: "text126",
-      text: "CSC111",
+      text: "AAA202",
       pos: [735.713858, 161.168708],
       fill: "",
       align: "begin"
@@ -261,7 +261,7 @@ export default {
       fill: "none",
       id_: "p6",
       source: "h108",
-      target: "csc148"
+      target: "aaa201"
     },
     {
       graph: 1,
@@ -274,7 +274,7 @@ export default {
       stroke: "",
       fill: "none",
       id_: "p8",
-      source: "csc148",
+      source: "aaa201",
       target: "bool1"
     },
     {
@@ -288,7 +288,7 @@ export default {
       stroke: "",
       fill: "none",
       id_: "p9",
-      source: "csc165240",
+      source: "aaa102",
       target: "bool1"
     },
     {
@@ -302,7 +302,7 @@ export default {
       fill: "none",
       id_: "p11",
       source: "bool1",
-      target: "csc207"
+      target: "aaa303CSC"
     },
     {
       graph: 1,
@@ -314,7 +314,7 @@ export default {
       stroke: "",
       fill: "none",
       id_: "p12",
-      source: "csc165240",
+      source: "aaa102",
       target: "bool2"
     },
     {
@@ -327,7 +327,7 @@ export default {
       stroke: "",
       fill: "none",
       id_: "p13",
-      source: "csc148",
+      source: "aaa201",
       target: "bool2"
     },
     {
@@ -341,7 +341,7 @@ export default {
       fill: "none",
       id_: "p14",
       source: "bool2",
-      target: "csc111"
+      target: "aaa202"
     },
   ]
 };
