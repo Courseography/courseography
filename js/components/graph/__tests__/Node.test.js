@@ -1,26 +1,8 @@
 import React from "react";
-import Graph from "../Graph";
 import { shallow } from "enzyme";
-import { render, cleanup, wait } from "react-testing-library";
+import { cleanup } from "react-testing-library";
 import Node from "../Node";
-
-/**
- * @param {function} done - provided by Jest to indicate the completion of an async operation
- * @returns {Graph}
- */
-async function setupGraph() {
-  const graphProps = {
-    edit: false,
-    initialDrawMode: "draw-node",
-    initialOnDraw: false,
-    start_blank: false
-  };
-
-  const graph = render(<Graph {...graphProps} />);
-  await wait(() => graph.queryByText("AAA100") !== null);
-  expect(graph.queryByText("AAA100")).toBeTruthy();
-  return graph;
-}
+import setupGraph from './setupGraph';
 
 afterEach(cleanup);
 

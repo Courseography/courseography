@@ -1,32 +1,8 @@
 import React from "react";
 import { shallow } from "enzyme";
 import Bool from "../Bool";
-import {
-  render,
-  cleanup,
-  prettyDOM,
-  wait,
-  fireEvent
-} from "react-testing-library";
-import Graph from "../Graph";
-
-/**
- * @param {function} done - provided by Jest to indicate the completion of an async operation
- * @returns {Graph}
- */
-async function setupGraph() {
-  const graphProps = {
-    edit: false,
-    initialDrawMode: "draw-node",
-    initialOnDraw: false,
-    start_blank: false
-  };
-
-  const graph = render(<Graph {...graphProps} />);
-  await wait(() => graph.queryByText("AAA100") !== null);
-  expect(graph.queryByText("AAA100")).toBeTruthy();
-  return graph;
-}
+import { cleanup, prettyDOM, fireEvent } from "react-testing-library";
+import setupGraph from "./setupGraph";
 
 afterEach(cleanup);
 
@@ -128,7 +104,7 @@ describe("OR Bool", () => {
 
     // AAA201 or AAA102 => AAA202
     expect(orBool.classList.contains("inactive")).toBeTruthy();
-    
+
     fireEvent.click(aaa102);
     expect(orBool.classList.contains("active")).toBeTruthy();
     expect(aaa202.classList.contains("takeable")).toBeTruthy();
