@@ -68,10 +68,5 @@ instance FromJSON DB where
       session :: T.Text <- o .:? "section" .!= "F"
       meetingTimesMap :: HM.HashMap T.Text MeetTime <- o .:? "meetings" .!= HM.empty
       let allMeetingsTimes = map (\m -> m {meetData = (meetData m) { meetingCode = (coursesCode course), meetingSession = session}}) (HM.elems meetingTimesMap)
-          -- Fix manualTutorialEnrolment and manualPracticalEnrolment
-          manTut = any (T.isPrefixOf "TUT" . meetingSection) $ map meetData allMeetingsTimes
-          manPra = any (T.isPrefixOf "PRA" . meetingSection) $ map meetData allMeetingsTimes
-      return $ DB (course { coursesManualTutorialEnrolment = Just manTut,
-                            coursesManualPracticalEnrolment = Just manPra },
-                  allMeetingsTimes)
+      return $ DB (course, allMeetingsTimes)
     parseJSON _ = fail "Invalid section"

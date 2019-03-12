@@ -57,8 +57,6 @@ Courses
     Primary code
     title T.Text Maybe
     description T.Text Maybe
-    manualTutorialEnrolment Bool Maybe
-    manualPracticalEnrolment Bool Maybe
     prereqs T.Text Maybe
     exclusions T.Text Maybe
     breadth BreadthId Maybe
@@ -178,8 +176,6 @@ data Course =
              allMeetingTimes :: Maybe [MeetTime],
              name :: !T.Text,
              exclusions :: Maybe T.Text,
-             manualTutorialEnrolment :: Maybe Bool,
-             manualPracticalEnrolment :: Maybe Bool,
              distribution :: Maybe T.Text,
              coreqs :: Maybe T.Text,
              videoUrls :: [T.Text]
@@ -207,8 +203,6 @@ instance FromJSON Courses where
     return $ Courses newCode
                      newTitle
                      newDescription
-                     (Just False)
-                     (Just False)
                      newPrereqs
                      newExclusions
                      Nothing -- breadth
