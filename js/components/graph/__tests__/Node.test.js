@@ -9,7 +9,7 @@ import Node from "../Node";
  * @param {function} done - provided by Jest to indicate the completion of an async operation
  * @returns {Graph}
  */
-async function setupGraph(done) {
+async function setupGraph() {
   const graphProps = {
     edit: false,
     initialDrawMode: "draw-node",
@@ -20,7 +20,6 @@ async function setupGraph(done) {
   const graph = render(<Graph {...graphProps} />);
   await waitUntil(() => graph.queryByText("AAA100") !== null);
   expect(graph.queryByText("AAA100")).toBeTruthy();
-  done();
   return graph;
 }
 
@@ -122,17 +121,15 @@ describe("Course Node", () => {
     expect(wrapper).toMatchSnapshot();
   });
 
-  it("should render Node component properly with proper course code", async done => {
-    const graph = await setupGraph(done);
+  it("should render Node component properly with proper course code", async () => {
+    const graph = await setupGraph();
     const courseTextNode = graph.getByText("AAA100");
-    expect(courseTextNode.parentNode.id.toUpperCase()).toBe(
-      courseTextNode.innerHTML
-    );
+    expect(courseTextNode.parentNode.id.toUpperCase()).toBe(courseTextNode.innerHTML);
   });
 
   it("should create an info box when hovering over the course", () => {});
 
-  it.skip("should have a solid border if you have the prerequisites", () => {});
+  it("should have a solid border if you have the prerequisites", () => {});
 
 
 });
@@ -140,7 +137,7 @@ describe("Course Node", () => {
 describe("Unselected Course Node", () => {
   it ('should be red when hovered over', () => {});
 
-  it.skip("should have a solid border if you have the prerequisites", () => {});
+  it("should have a solid border if you have the prerequisites", () => {});
 });
 
 describe("Selected Course Node", () => {
