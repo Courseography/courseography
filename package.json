@@ -37,7 +37,6 @@
     "@babel/plugin-proposal-class-properties": "^7.2.3",
     "@babel/preset-env": "^7.2.3",
     "@babel/preset-react": "^7.0.0",
-    "async-wait-until": "^1.2.4",
     "babel-eslint": "10.0.1",
     "babel-jest": "24.0.0",
     "babel-loader": "^8.0.0",

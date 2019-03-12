@@ -1,8 +1,7 @@
 import React from "react";
 import Graph from "../Graph";
 import { shallow } from "enzyme";
-import waitUntil from "async-wait-until";
-import { render, cleanup } from "react-testing-library";
+import { render, cleanup, wait } from "react-testing-library";
 import Node from "../Node";
 
 /**
@@ -18,7 +17,7 @@ async function setupGraph() {
   };
 
   const graph = render(<Graph {...graphProps} />);
-  await waitUntil(() => graph.queryByText("AAA100") !== null);
+  await wait(() => graph.queryByText("AAA100") !== null);
   expect(graph.queryByText("AAA100")).toBeTruthy();
   return graph;
 }

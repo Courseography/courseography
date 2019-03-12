@@ -1,7 +1,6 @@
 import React from "react";
 import { shallow } from "enzyme";
 import Bool from "../Bool";
-import waitUntil from "async-wait-until";
 import {
   render,
   cleanup,
