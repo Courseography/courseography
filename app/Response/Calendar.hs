@@ -73,7 +73,7 @@ pullDatabase :: (Code, Section, Session) -> IO (MeetTime)
 pullDatabase (code, section, session) = runSqlite databasePath $ do
     meet <- returnMeeting code fullSection session
     allTimes <- selectList [TimesMeeting ==. entityKey meet] []
-    let parsedTime = map buildTimes' $ map entityVal allTimes
+    let parsedTime = map (buildTimes' . entityVal) allTimes
     return $ MeetTime {meetData = entityVal meet, timeData = parsedTime}
     where
     fullSection

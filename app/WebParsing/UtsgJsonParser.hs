@@ -46,7 +46,7 @@ insertAllMeetings org = do
         meetings = concat sections
     mapM_ insertMeeting meetings
 
--- insert a meeting and its corresponding Times into the database
+-- | Insert a meeting and its corresponding Times into the database.
 insertMeeting :: MeetTime -> SqlPersistM ()
 insertMeeting (MeetTime meetingData meetingTime) = do
     -- Check that the meeting belongs to a course that exists

@@ -28,11 +28,11 @@ import Control.Monad.IO.Class (liftIO, MonadIO)
 import Util.Happstack (createJSONResponse)
 import qualified Data.Text as T
 import Data.List
+import Data.Maybe (fromJust)
 import Config (databasePath)
 import Data.Aeson ((.=), toJSON, object)
 import Database.DataType
 import Svg.Builder
-import Data.Maybe
 
 -- | Queries the database for all matching lectures, tutorials,
 meetingQuery :: T.Text -> SqlPersistM [MeetTime]
@@ -45,7 +45,9 @@ meetingQuery meetingCode_ = do
 returnCourse :: T.Text -> IO (Maybe Course)
 returnCourse lowerStr = runSqlite databasePath $ do
     let courseStr = T.toUpper lowerStr
-    sqlCourse :: (Maybe (Entity Courses)) <- selectFirst [CoursesCode ==. courseStr] []
+    -- TODO: require the client to pass the full course code
+    let fullCodes = [courseStr, T.append courseStr "H1", T.append courseStr "Y1"]
+    sqlCourse :: (Maybe (Entity Courses)) <- selectFirst [CoursesCode <-. fullCodes] []
     case sqlCourse of
       Nothing -> return Nothing
       Just course -> do
@@ -111,8 +113,7 @@ getDescriptionD (Just key) = do
 buildMeetTimes :: Entity Meeting -> SqlPersistM Tables.MeetTime
 buildMeetTimes meet = do
     allTimes :: [Entity Times] <- selectList [TimesMeeting ==. entityKey meet] []
-    -- let allentvaltimes = map entityVal allTimes
-    let parsedTime = map buildTimes' $ map entityVal allTimes
+    let parsedTime = map (buildTimes' . entityVal) allTimes
     return $ Tables.MeetTime {meetData = entityVal meet, timeData = parsedTime}
 
 -- ** Other queries
@@ -216,8 +217,7 @@ getMeetingTime (meetingCode_, meetingSection_, meetingSession_) = do
                                         MeetingSession ==. meetingSession_]
                                        []
     allTimes <- selectList [TimesMeeting ==. fromJust (fmap entityKey maybeEntityMeetings)] []
-    let parsedTime = map buildTimes' $ map entityVal allTimes
-    return parsedTime
+    return $ map (buildTimes' . entityVal) allTimes
 
 getMeetingSection :: T.Text -> T.Text
 getMeetingSection sec

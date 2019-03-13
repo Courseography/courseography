@@ -33,8 +33,9 @@ export class CoursePanel extends React.Component {
                         selectedLectures={this.props.selectedLectures}
                         courseCode={course}
                         removeCourse={this.props.removeCourse}
-                        addSelectedLecture={this.props.addSelectedLecture}
-                        removeSelectedLecture={this.props.removeSelectedLecture}/>)
+                        hoverLecture={this.props.hoverLecture}
+                        unhoverLecture={this.props.unhoverLecture}
+                        selectLecture={this.props.selectLecture}/>)
 
     return (
       <div id="search-layout" className="col-md-3 col-xs-6">
@@ -86,12 +87,12 @@ class Course extends React.Component {
       selected: false,
       courseInfo: {}
     }
+    this.filterLectureList = this.filterLectureList.bind(this);
     this.toggleSelect = this.toggleSelect.bind(this);
     this.removeCourse = this.removeCourse.bind(this);
     this.parseLectures = this.parseLectures.bind(this);
     this.displayInfo = this.displayInfo.bind(this);
     this.containsSelectedLecture = this.containsSelectedLecture.bind(this);
-    this.filterLectureList = this.filterLectureList.bind(this);
   }
 
   componentDidMount() {
@@ -105,15 +106,11 @@ class Course extends React.Component {
         };
         course.courseCode = data.name;
 
-        // Remove duplicated lecture sections
-        const allLectures = removeDuplicateLectures(data.allMeetingTimes);
-        let parsedLectures = this.parseLectures(allLectures);
-
+        let parsedLectures = this.parseLectures(data.allMeetingTimes);
         // Split the lecture sections into Fall, Spring and Years
         course.F = this.filterLectureList(parsedLectures, "F");
         course.S = this.filterLectureList(parsedLectures, "S");
         course.Y = this.filterLectureList(parsedLectures, "Y");
-
         this.setState({courseInfo: course});
     });
   }
@@ -124,10 +121,12 @@ class Course extends React.Component {
   }
 
   parseLectures(lectures) {
+    // Remove duplicated lecture sections
+    const allLectures = removeDuplicateLectures(lectures);
     let parsedLectures = [];
 
     // Loop through the lecture sections to get each section's session code and lecture times
-    lectures.forEach( lectureInfo => {
+    allLectures.forEach( lectureInfo => {
       // Check to make sure its not an online section (online sections have course codes beginning with 9) or
       // restricted section. Restricted sections have enrollment restricted for a particular group of students,
       // but happens at the same time and place as a regular lecture/tutorial section.
@@ -187,21 +186,21 @@ class Course extends React.Component {
             <SectionList courseCode={this.props.courseCode}
                           session="Y"
                           lectures={this.state.courseInfo.Y}
-                          addSelectedLecture={this.props.addSelectedLecture}
-                          selectedLectures={this.props.selectedLectures}
-                          removeSelectedLecture={this.props.removeSelectedLecture}/>
+                          hoverLecture={this.props.hoverLecture}
+                          unhoverLecture={this.props.unhoverLecture}
+                          selectLecture={this.props.selectLecture}/>
             <SectionList courseCode={this.props.courseCode}
                           session="F"
                           lectures={this.state.courseInfo.F}
-                          addSelectedLecture={this.props.addSelectedLecture}
-                          selectedLectures={this.props.selectedLectures}
-                          removeSelectedLecture={this.props.removeSelectedLecture}/>
+                          hoverLecture={this.props.hoverLecture}
+                          unhoverLecture={this.props.unhoverLecture}
+                          selectLecture={this.props.selectLecture}/>
             <SectionList courseCode={this.props.courseCode}
                           session="S"
                           lectures={this.state.courseInfo.S}
-                          addSelectedLecture={this.props.addSelectedLecture}
-                          selectedLectures={this.props.selectedLectures}
-                          removeSelectedLecture={this.props.removeSelectedLecture}/>
+                          hoverLecture={this.props.hoverLecture}
+                          unhoverLecture={this.props.unhoverLecture}
+                          selectLecture={this.props.selectLecture}/>
           </div>
         }
       </li>
@@ -220,9 +219,9 @@ class SectionList extends React.Component {
                       session={this.props.session}
                       courseCode={this.props.courseCode}
                       lecture={lecture}
-                      addSelectedLecture={this.props.addSelectedLecture}
-                      selectedLectures={this.props.selectedLectures}
-                      removeSelectedLecture={this.props.removeSelectedLecture}/>);
+                      hoverLecture={this.props.hoverLecture}
+                      unhoverLecture={this.props.unhoverLecture}
+                      selectLecture={this.props.selectLecture}/>);
     return(
       <ul className={"sectionList-" + this.props.session} id="lecture-list">
         {lectureSections}
@@ -235,51 +234,18 @@ class SectionList extends React.Component {
  * A lecture, tutorial or practical section for the specified course in the specified
  * session. The section is added to or removed from a list of selected lecture upon click.
  */
-class LectureSection extends React.Component {
-  constructor(props) {
-    super(props);
-    this.selectLecture = this.selectLecture.bind(this);
-    this.isSelectedLecture = this.isSelectedLecture.bind(this);
-  }
-
-  // Remove the lecture if it is already in the selectedLectures list, or add the lecture if it is not.
-  selectLecture() {
-    if (this.isSelectedLecture()) {
-      this.props.removeSelectedLecture(this.props.lecture.courseCode, this.props.session);
-    } else {
-      this.props.addSelectedLecture(this.props.lecture);
-    }
-  }
-
-  // Check whether the lecture is in the selectedLectures list, return true if it is, false it is not.
-  isSelectedLecture() {
-    const sameLecture = this.props.selectedLectures.filter((lecture) => {
-      return lecture.courseCode === this.props.lecture.courseCode && lecture.session === this.props.session &&
-        lecture.lectureCode === this.props.lecture.lectureCode
-    });
-    // If sameLecture is not an empty array, then this lecture is already selected and should be removed
-    return sameLecture.length > 0;
-  }
-
-  render() {
-    return(
-      <li id={this.props.courseCode + "-" + this.props.lecture.lectureCode + "-" + this.props.session}
-          onClick={this.selectLecture}
-          clicked={this.isSelectedLecture() ? "true" : "false"}
-          // TODO: Cannot re-use this.selectLecture.
-          // onMouseOver={this.selectLecture}
-          // onMouseOut={this.selectLecture}
-          data-satisfied={"true"}>
-        {this.props.lecture.lectureCode}
-      </li>
-    )
-  }
+const LectureSection = (props) => {
+  return (
+    <li id={props.courseCode + "-" + props.lecture.lectureCode + "-" + props.session}
+        onClick={ () => props.selectLecture(props.lecture) }
+        onMouseOver={ () => props.hoverLecture(props.lecture) }
+        onMouseOut={ () => props.unhoverLecture() }
+        data-satisfied={"true"}>
+      {props.lecture.lectureCode}
+    </li>
+  )
 }
 
-/**
- * Filters the database of courses based on the user's input in the search box and
- * generates a list of courses with course codes containing the user input in the search box.
- */
 class CourseList extends React.Component {
   constructor(props) {
     super(props);
