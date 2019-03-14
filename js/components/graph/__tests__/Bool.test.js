@@ -1,7 +1,7 @@
 import React from "react";
 import { shallow } from "enzyme";
 import Bool from "../Bool";
-import { cleanup, prettyDOM, fireEvent } from "react-testing-library";
+import { cleanup, fireEvent } from "react-testing-library";
 import setupGraph from "./setupGraph";
 
 afterEach(cleanup);
@@ -68,16 +68,18 @@ describe("AND Bool", () => {
     expect(andBool.classList.contains("active")).toBeTruthy();
     expect(aaa303.classList.contains("takeable")).toBeTruthy();
   });
-  it.skip("AND should have the missing class when the mouse is hovering over a child class.", async () => {
+  it("AND should have the missing class when the mouse is hovering over a child class.", async () => {
     const graph = await setupGraph();
     const andBool = graph.getByText("and").parentNode;
     const aaa303 = graph.getByText("AAA303").parentNode;
 
     // AAA201 and AAA102 => AAA303
     expect(andBool.classList.contains("inactive")).toBeTruthy();
+
+    // mouseout or clicking triggers code to set the CSS class
     fireEvent.mouseOver(aaa303);
-    console.log(prettyDOM(andBool));
-    console.log(prettyDOM(aaa303));
+    fireEvent.mouseOut(aaa303);
+    fireEvent.mouseOver(aaa303);
     expect(andBool.classList.contains("missing")).toBeTruthy();
   });
 });
@@ -113,7 +115,7 @@ describe("OR Bool", () => {
     expect(orBool.classList.contains("active")).toBeTruthy();
     expect(aaa202.classList.contains("takeable")).toBeTruthy();
   });
-  it.skip("or should have the missing class when the mouse is hovering over a child class.", async () => {
+  it("or should have the missing class when the mouse is hovering over a child class.", async () => {
     const graph = await setupGraph();
     const orBool = graph.getByText("or").parentNode;
     const aaa202 = graph.getByText("AAA202").parentNode;
@@ -121,8 +123,8 @@ describe("OR Bool", () => {
     // AAA201 or AAA102 => AAA202
     expect(orBool.classList.contains("inactive")).toBeTruthy();
     fireEvent.mouseOver(aaa202);
-    console.log(prettyDOM(orBool));
-    console.log(prettyDOM(aaa202));
+    fireEvent.mouseOut(aaa202);
+    fireEvent.mouseOver(aaa202);
     expect(orBool.classList.contains("missing")).toBeTruthy();
   });
 });
