@@ -6,6 +6,19 @@ import setupGraph from "./setupGraph";
 
 afterEach(cleanup);
 
+describe("Bool", () => {
+  it("should already have two classes when instantated by Graph", async () => {
+    const graph = await setupGraph();
+    const andBool = graph.getByText("and").parentNode;
+    const orBool = graph.getByText("or").parentNode;
+
+    expect(andBool.classList[0]).toBe("bool");
+    expect(andBool.classList[1]).toBe("inactive");
+    expect(orBool.classList[0]).toBe("bool");
+    expect(orBool.classList[1]).toBe("inactive");
+  });
+});
+
 describe("AND Bool", () => {
   it("should match shallow snapshot", () => {
     const boolProps = {
