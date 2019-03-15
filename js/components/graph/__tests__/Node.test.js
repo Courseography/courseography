@@ -1,10 +1,67 @@
 import React from "react";
 import { shallow } from "enzyme";
-import { cleanup } from "react-testing-library";
+import { cleanup, fireEvent } from "react-testing-library";
 import Node from "../Node";
 import setupGraph from './setupGraph';
 
 afterEach(cleanup);
+
+/**
+ * CSS classes are only initialized after a mouseOut or a click event
+ *
+ * @param {React.Component.Node} node
+ */
+function initializeNode(node) {
+  fireEvent.mouseOver(node);
+  fireEvent.mouseOut(node);
+}
+
+describe("Node initialization", () => {
+  it("should only be initialized with the 'hybrid' or 'node' CSS class", async () => {
+    const graph = await setupGraph();
+    // the first node with AAA101 happens to be the hybrid
+    const hybrid101 = graph.getByText("AAA101").parentNode;
+    expect(hybrid101.classList.contains(('hybrid'))).toBe(true);
+    expect(hybrid101.classList.length).toBe(1);
+
+    const aaa100 = graph.getByText("AAA100").parentNode;
+    expect(aaa100.classList.contains(('node'))).toBe(true);
+    expect(aaa100.classList.length).toBe(1);
+  });
+
+  it("has a new CSS class when hovered over", async () => {
+    const graph = await setupGraph();
+    const aaa100 = graph.getByText("AAA100").parentNode;
+    expect(aaa100.classList.contains(('node'))).toBe(true);
+    expect(aaa100.classList.length).toBe(1);
+
+    fireEvent.mouseOver(aaa100);
+    expect(aaa100.classList.length).toBe(1);
+
+    fireEvent.mouseOut(aaa100);
+    expect(aaa100.classList.length).toBe(2);
+    expect(aaa100.classList.contains(('takeable'))).toBe(true);
+
+    fireEvent.mouseOver(aaa100);
+    expect(aaa100.classList.contains(('missing'))).toBe(true);
+    expect(aaa100.classList.length).toBe(2);
+  });
+
+  it("has a new CSS class when clicked over", async () => {
+    const graph = await setupGraph();
+    const aaa100 = graph.getByText("AAA100").parentNode;
+    expect(aaa100.classList.contains(('node'))).toBe(true);
+    expect(aaa100.classList.length).toBe(1);
+
+    fireEvent.click(aaa100);
+    expect(aaa100.classList.length).toBe(2);
+    expect(aaa100.classList.contains(('active'))).toBe(true);
+
+    fireEvent.click(aaa100);
+    expect(aaa100.classList.length).toBe(2);
+    expect(aaa100.classList.contains(('takeable'))).toBe(true);
+  });
+})
 
 describe("Hybrid Node", () => {
   it("node", () => {
@@ -57,9 +114,40 @@ describe("Hybrid Node", () => {
     expect(wrapper).toMatchSnapshot();
   });
 
+  it("should only be initialized with one CSS class: hybrid", async() => {
+    const graph = await setupGraph();
+    // the first node with AAA101 happens to be the hybrid
+    const hybrid101 = graph.getByText("AAA101").parentNode;
+    expect(hybrid101.classList.contains(('hybrid'))).toBe(true);
+    expect(hybrid101.classList.length).toBe(1);
+  });
+  
+  it("shouldn't do anything when you hover or click it", async () => {
+    const graph = await setupGraph();
+    // the first node with AAA101 happens to be the hybrid
+    const hybrid101 = graph.getByText("AAA101").parentNode;
 
-  it("shouldn't do anything when you hover or click it", () => { });
-  it("should become selected when its pre-req parent is satisfied", () => { });
+    fireEvent.click(hybrid101);
+    expect(hybrid101.classList.length).toBe(1);
+    fireEvent.click(hybrid101);
+    expect(hybrid101.classList.length).toBe(1);
+    fireEvent.mouseOver(hybrid101);
+    expect(hybrid101.classList.length).toBe(1);
+    fireEvent.mouseOut(hybrid101);
+    expect(hybrid101.classList.length).toBe(1);
+  });
+  it("should be active when its pre-req parent(s) are met, and inactive otherwise", async () => {
+    const graph = await setupGraph();
+    const hybrid101 = graph.getByText("AAA101").parentNode;
+    const aaa101 = graph.getAllByText("AAA101")[1].parentNode;
+
+    fireEvent.click(aaa101);
+
+    expect(hybrid101.classList.contains(('active'))).toBe(true);
+    expect(aaa101.classList.contains(('active'))).toBe(true);
+    fireEvent.click(aaa101);
+    expect(hybrid101.classList.contains(('inactive'))).toBe(true);
+  });
 });
 
 describe("Course Node", () => {
@@ -108,37 +196,105 @@ describe("Course Node", () => {
     expect(courseTextNode.parentNode.id.toUpperCase()).toBe(courseTextNode.innerHTML);
   });
 
-  it("should create an info box when hovering over the course", () => {});
+  it("should create an info box when hovering over the course", async () => {
+    const graph = await setupGraph();
+    const aaa100 = graph.getByText("AAA100");
+    let infoBox = graph.queryByText("Info");
 
-  it("should have a solid border if you have the prerequisites", () => {});
+    expect(infoBox).toBe(null);
+    fireEvent.mouseOver(aaa100);
+    // fireEvent.mouseOut(aaa100);
+    // fireEvent.mouseOver(aaa100);
 
-
-});
-
-describe("Unselected Course Node", () => {
-  it ('should be red when hovered over', () => {});
-
-  it("should have a solid border if you have the prerequisites", () => {});
-});
-
-describe("Selected Course Node", () => {
-  it("should black when pre-reqs are met", () => {
-    // Select EST100
-    // check border
-    // deselect EST100
+    infoBox = graph.getByText("Info").parentNode;
+    expect(infoBox.classList.contains("tooltip-group")).toBe(true);
   });
 
-  it("should be red with unmet pre-reqs", () => {
-    // select EST101
-    // expect EST100
-    // deselect EST101
+  it("should have a solid border if you have the prerequisites", async () => {
+    const graph = await setupGraph();
+    const aaa101 = graph.getByText("AAA101").parentNode;
+    const aaa201 = graph.getByText("AAA201").parentNode;
+    initializeNode(aaa201);
+    
+    fireEvent.click(aaa101);
 
-    // inactive, not takeable
+    expect(aaa201.classList.contains('inactive')).toBe(true);
+  });
+  describe("Unselected Course Node", async () => {
+    it('should be red when hovered over', async () => {
+      const graph = await setupGraph();
+
+      const aaa100 = graph.getByText('AAA100').parentNode;
+      initializeNode(aaa100);
+      fireEvent.mouseOver(aaa100);
+      expect(aaa100.classList.contains('missing')).toBe(true);
+    });
+
+    it("should have a solid border if you have the prerequisites", async () => {
+      const graph = await setupGraph();
+
+      const aaa100 = graph.getByText('AAA100').parentNode;
+      initializeNode(aaa100);
+      expect(aaa100.classList.contains('takeable')).toBe(true);
+
+      const aaa101 = graph.getByText('AAA101').parentNode;
+      const aaa201 = graph.getByText('AAA201').parentNode;
+      initializeNode(aaa201);
+      fireEvent.click(aaa101);
+      expect(aaa201.classList.contains('inactive')).toBe(true);
+    });
   });
 
-  it("when hovered, should highlight all unmet pre-reqs", () => {
-    // select EST300
-    // expect EST201, EST200, EST101, EST1000 to be all red
-    // deselect EST300
+  describe("Selected Course Node", async () => {
+    it("should black when pre-reqs are met", async () => {
+      const graph = await setupGraph();
+
+      const aaa100 = graph.getByText('AAA100').parentNode;
+      fireEvent.click(aaa100);
+      expect(aaa100.classList.contains('active')).toBe(true);
+    });
+
+    it("should be red with unmet pre-reqs", async () => {
+      const graph = await setupGraph();
+      const aaa201 = graph.getByText('AAA201').parentNode;
+      fireEvent.click(aaa201);
+      expect(aaa201.classList.contains('overridden')).toBe(true);
+    });
+
+    it("when hovered, should highlight all unmet pre-reqs", async () => {
+      const graph = await setupGraph();
+      const aaa101 = graph.getByText('AAA101').parentNode;
+      const aaa201 = graph.getByText('AAA201').parentNode;
+      const aaa102 = graph.getByText('AAA102').parentNode;
+      const aaa303 = graph.getByText('AAA303').parentNode;
+      initializeNode(aaa101);
+      initializeNode(aaa201);
+      initializeNode(aaa102);
+      initializeNode(aaa303);
+
+      fireEvent.mouseOver(aaa303);
+      expect(aaa101.classList.contains('missing')).toBe(true);
+      expect(aaa102.classList.contains('missing')).toBe(true);
+      expect(aaa201.classList.contains('missing')).toBe(true);
+      expect(aaa303.classList.contains('missing')).toBe(true);
+    });
+    it("when clicking a node with unmet prereqs, it shouldn't affect other nodess", async () => {
+      const graph = await setupGraph();
+      const aaa101 = graph.getByText('AAA101').parentNode;
+      const aaa201 = graph.getByText('AAA201').parentNode;
+      const aaa102 = graph.getByText('AAA102').parentNode;
+      const aaa303 = graph.getByText('AAA303').parentNode;
+      initializeNode(aaa101);
+      initializeNode(aaa201);
+      initializeNode(aaa102);
+      initializeNode(aaa303);
+
+      fireEvent.click(aaa303);
+
+      expect(aaa101.classList.contains('inactive')).toBe(true);
+      expect(aaa102.classList.contains('takeable')).toBe(true);
+      expect(aaa201.classList.contains('inactive')).toBe(true);
+      expect(aaa303.classList.contains('overridden')).toBe(true);
+    });
   });
 });
