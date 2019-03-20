@@ -196,20 +196,6 @@ describe("Course Node", () => {
     expect(courseTextNode.parentNode.id.toUpperCase()).toBe(courseTextNode.innerHTML);
   });
 
-  it("should create an info box when hovering over the course", async () => {
-    const graph = await setupGraph();
-    const aaa100 = graph.getByText("AAA100");
-    let infoBox = graph.queryByText("Info");
-
-    expect(infoBox).toBe(null);
-    fireEvent.mouseOver(aaa100);
-    // fireEvent.mouseOut(aaa100);
-    // fireEvent.mouseOver(aaa100);
-
-    infoBox = graph.getByText("Info").parentNode;
-    expect(infoBox.classList.contains("tooltip-group")).toBe(true);
-  });
-
   it("should have a solid border if you have the prerequisites", async () => {
     const graph = await setupGraph();
     const aaa101 = graph.getByText("AAA101").parentNode;
