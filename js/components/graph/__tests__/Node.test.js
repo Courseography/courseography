@@ -128,12 +128,16 @@ describe("Hybrid Node", () => {
     const hybrid101 = graph.getByText("AAA101").parentNode;
 
     fireEvent.click(hybrid101);
+    expect(document.getElementById('fcecount').textContent).toBe('FCE Count: 0');
     expect(hybrid101.classList.length).toBe(1);
     fireEvent.click(hybrid101);
+    expect(document.getElementById('fcecount').textContent).toBe('FCE Count: 0');
     expect(hybrid101.classList.length).toBe(1);
     fireEvent.mouseOver(hybrid101);
+    expect(document.getElementById('fcecount').textContent).toBe('FCE Count: 0');
     expect(hybrid101.classList.length).toBe(1);
     fireEvent.mouseOut(hybrid101);
+    expect(document.getElementById('fcecount').textContent).toBe('FCE Count: 0');
     expect(hybrid101.classList.length).toBe(1);
   });
   it("should be active when its pre-req parent(s) are met, and inactive otherwise", async () => {
@@ -281,6 +285,21 @@ describe("Course Node", () => {
       expect(aaa102.classList.contains('takeable')).toBe(true);
       expect(aaa201.classList.contains('inactive')).toBe(true);
       expect(aaa303.classList.contains('overridden')).toBe(true);
+    });
+
+    it("Pressing a course node should increase the FCE count by 0.5 if it's a half-year course", async () => {
+      const graph = await setupGraph();
+      const aaa100 = graph.getByText("AAA100");
+      const aaa201 = graph.getByText("AAA201");
+
+      fireEvent.click(aaa100);
+      expect(document.getElementById('fcecount').textContent).toBe('FCE Count: 0.5');
+      fireEvent.click(aaa201);
+      expect(document.getElementById('fcecount').textContent).toBe('FCE Count: 1');
+      fireEvent.click(aaa100);
+      expect(document.getElementById('fcecount').textContent).toBe('FCE Count: 0.5');
+      fireEvent.click(aaa201);
+      expect(document.getElementById('fcecount').textContent).toBe('FCE Count: 0');
     });
   });
 });
