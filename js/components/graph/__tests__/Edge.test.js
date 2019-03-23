@@ -21,7 +21,11 @@ describe("Edge", () => {
     expect(component).toMatchSnapshot();
   });
 
-  it("with unmet pre-req should be inactive", () => {});
+  it("with unmet pre-req should be inactive", async () => {
+    const graph = await setupGraph();
+    // console.log(prettyDOM(graph));
+
+  });
 
   it("with unmet re-req with selected child class should still be inactive", () => {});
 
