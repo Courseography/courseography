@@ -31,7 +31,15 @@ export default {
           graph: 1,
           rId: "text102",
           text: "AAA101",
-          pos: [596.555968, 30.379107999999995],
+          pos: [596.555968, 25.379107999999995],
+          fill: "",
+          align: "begin"
+        },
+        {
+          graph: 1,
+          rId: "text103",
+          text: "(H101)",
+          pos: [596.555968, 34.379107999999995],
           fill: "",
           align: "begin"
         }
@@ -49,8 +57,8 @@ export default {
       text: [
         {
           graph: 1,
-          rId: "text102",
-          text: "AAA101",
+          rId: "text103",
+          text: "(H101)",
           pos: [596.555968, 59.379107999999995],
           fill: "",
           align: "begin"
