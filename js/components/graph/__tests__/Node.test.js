@@ -222,7 +222,7 @@ describe("Course Node", () => {
     });
   });
 
-  describe.only("Selected Course Node", async () => {
+  describe("Selected Course Node", async () => {
     it("should black when pre-reqs are met", async () => {
       const graph = await setupGraph();
 

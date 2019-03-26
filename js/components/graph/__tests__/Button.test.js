@@ -1,6 +1,6 @@
 import React from "react";
 import { shallow } from "enzyme";
-import { cleanup, fireEvent } from "react-testing-library";
+import { cleanup } from "react-testing-library";
 import setupGraph from "./setupGraph";
 
 afterEach(cleanup);
