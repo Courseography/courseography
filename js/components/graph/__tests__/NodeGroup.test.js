@@ -15,7 +15,7 @@ describe("NodeGroup", () => {
       nodeMouseLeave: jest.fn(),
       nodesJSON: [],
       onDraw: false,
-      svg: {}
+      svg: null
     };
     const component = shallow(<NodeGroup {...props} />);
     expect(component).toMatchSnapshot();
