@@ -1,22 +1,6 @@
 import React from 'react';
 import ReactModal from 'react-modal';
 
-/**
- * Retrieves a course from file.
- * @param {string} courseName The course code. This + '.txt' is the name of the file.
- * @returns {Promise} Promise object representing the JSON object containing course information.
- */
-function getCourse(courseName) {
-  'use strict';
-
-  return fetch(
-    'course?name=' + courseName,
-  )
-    .then(response => response.json())
-    .catch(error => {
-      throw (error);
-    });
-}
 
 class ModalContent extends React.Component {
   render() {
