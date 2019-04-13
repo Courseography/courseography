@@ -140,6 +140,13 @@ PostCategory
     post PostId
     name T.Text
     deriving Show
+
+Building
+    code T.Text
+    name T.Text
+    address T.Text
+    postalCode T.Text
+    deriving Show
 |]
 
 -- ** TODO: Remove these extra types and class instances
