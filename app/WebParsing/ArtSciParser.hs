@@ -116,8 +116,6 @@ parseCourses tags =
                 (Courses code
                          (Just title)
                          (Just description)
-                         Nothing
-                         Nothing
                          (fmap (T.pack . show . parseReqs . T.unpack) prereqString)
                          exclusion
                          Nothing

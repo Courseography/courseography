@@ -91,8 +91,6 @@ buildCourse allMeetings course = do
            (Just allMeetings)
            (coursesCode course)
            (coursesExclusions course)
-           (coursesManualTutorialEnrolment course)
-           (coursesManualPracticalEnrolment course)
            cDistribution
            (coursesCoreqs course)
            (coursesVideoUrls course)

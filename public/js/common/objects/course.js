@@ -20,8 +20,6 @@ function Course(course) {
     this.description = course.description;
     this.exclusions = course.exclusions;
     this.distribution = course.distribution;
-    this.manualTutorialEnrolment = course.manualTutorialEnrolment;
-    this.manualPracticalEnrolment = course.manualPracticalEnrolment;
     this.videoUrls = course.videoUrls;
 
     // Create sections
@@ -31,7 +29,8 @@ function Course(course) {
 
     this.status = 'inactive';
 
-    this.manual = {'T': this.manualTutorialEnrolment, 'P': this.manualPracticalEnrolment};
+    // TODO: Compute this based on meeting sections.
+    this.manual = {'T': false, 'P': false};
 }
 
 

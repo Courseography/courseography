@@ -9,8 +9,6 @@ into the database. These functions are used as helpers for the WebParsing module
 
 module Database.CourseInsertion
     (insertCourse,
-     setTutorialEnrolment,
-     setPracticalEnrolment,
      saveGraphJSON) where
 
 import qualified Data.Text as T
@@ -69,16 +67,3 @@ insertCourse (course, breadth, distribution) = do
         Nothing -> insert_ $ course {coursesBreadth = breadthKey,
                                      coursesDistribution = distributionKey}
         Just _ -> return ()
-
-
--- | Updates the manualTutorialEnrolment field of the given course.
-setTutorialEnrolment :: T.Text -> Bool -> SqlPersistM ()
-setTutorialEnrolment course val =
-    updateWhere [CoursesCode ==. course]
-                [CoursesManualTutorialEnrolment =. Just val]
-
--- | Updates the manualPracticalEnrolment field of the given course.
-setPracticalEnrolment :: T.Text -> Bool -> SqlPersistM ()
-setPracticalEnrolment course val =
-    updateWhere [CoursesCode ==. course]
-                [CoursesManualPracticalEnrolment =. Just val]
