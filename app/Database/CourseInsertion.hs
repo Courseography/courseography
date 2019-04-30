@@ -16,7 +16,7 @@ import qualified Data.ByteString.Lazy.Char8 as BSL
 import Happstack.Server.SimpleHTTP (Response, toResponse)
 import Config (databasePath)
 import Database.Persist.Class (selectKeysList, Key)
-import Database.Persist.Sqlite (selectFirst, insertMany_, insert_, insert, SqlPersistM, (=.), (==.), updateWhere, runSqlite)
+import Database.Persist.Sqlite (selectFirst, insertMany_, insert_, insert, SqlPersistM, (==.), runSqlite)
 import Database.Tables hiding (texts, shapes, paths, breadth, distribution)
 import qualified Data.Aeson as Aeson
 

@@ -38,10 +38,6 @@ import WebParsing.ReqParser (parseReqs)
 import Control.Applicative((<|>))
 import Database.Persist.Sqlite(Key)
 
-data Room = Room { roomField :: (T.Text, T.Text)} deriving (Show, Read, Eq, Generic)
-derivePersistField "Room"
-
-
 -- | A two-dimensional point.
 type Point = (Double, Double)
 
@@ -144,6 +140,13 @@ PostCategory
     post PostId
     name T.Text
     deriving Show
+
+Building
+    code T.Text
+    name T.Text
+    address T.Text
+    postalCode T.Text
+    deriving Show
 |]
 
 -- ** TODO: Remove these extra types and class instances
@@ -182,7 +185,6 @@ data Course =
            } deriving (Show, Generic)
 
 instance ToJSON Course
-instance ToJSON Room
 instance ToJSON Times'
 instance ToJSON MeetTime
 
