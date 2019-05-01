@@ -7,7 +7,6 @@ module Css.Privacy
 
 import Clay
 import Prelude hiding ((**))
-import Data.Monoid
 import Css.Constants
 
 -- |Defines CSS for the privacy page.
