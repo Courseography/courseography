@@ -11,7 +11,6 @@ module Css.Search
 
 import Clay
 import Css.Constants
-import Data.Monoid
 
 -- |Defines the CSS for the search page.
 searchStyles :: Css

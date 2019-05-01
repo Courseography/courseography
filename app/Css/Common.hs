@@ -11,7 +11,6 @@ module Css.Common
 
 import Clay
 import Prelude hiding ((**))
-import Data.Monoid
 import Css.Constants
 
 -- |Defines CSS common to all pages.
@@ -126,7 +125,7 @@ modalCSS = do
         overflowX hidden
         overflowY auto
         backgroundColor white
-        boxShadow (px 8) (px 8) (px 8) black
+        boxShadow . pure $ shadowWithBlur (px 8) (px 8) (px 8)
     ".ui-widget-overlay" ? do
         height100
         width100
@@ -150,7 +149,7 @@ modalCSS = do
         bottom (px 150)
         borderRadius (px 10) (px 10) (px 10) (px 10)
         backgroundColor white
-        boxShadow (px 0) (px 0) (px 30) black
+        boxShadow . pure $ shadowWithBlur (px 0) (px 0) (px 30)
     ".overlay" ? do
         position fixed
         left nil

@@ -9,7 +9,6 @@ module Css.About
 
 import Clay
 import Prelude hiding ((**))
-import Data.Monoid
 import Css.Constants
 
 -- |Defines the CSS for the about page.

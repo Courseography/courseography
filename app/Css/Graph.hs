@@ -7,7 +7,6 @@ module Css.Graph
 
 import Clay
 import Prelude hiding ((**))
-import Data.Monoid
 import Css.Constants
 
 -- |Defines all CSS for the graph page.
