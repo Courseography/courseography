@@ -1,16 +1,17 @@
 module Response.Calendar
     (calendarResponse) where
 
-import Data.List (sort, groupBy)
+import Data.List (sort, groupBy, sortBy)
 import Data.List.Split (splitOn)
+import Data.Ord (comparing)
 import Data.Time (Day, addDays, formatTime, getCurrentTime, defaultTimeLocale)
 import Happstack.Server (ServerPart, Response, toResponse)
 import Control.Monad.IO.Class (liftIO)
-import Database.Persist.Sqlite (runSqlite)
-import Database.CourseQueries (returnMeeting)
+import Database.Persist.Sqlite (runSqlite, (==.), entityVal, selectList, entityKey)
+import Database.CourseQueries (returnMeeting, buildTimes')
 import qualified Data.Text as T
 import Text.Read (readMaybe)
-import Database.Tables hiding (Session)
+import Database.Tables
 import Config (firstMondayFall,
                lastWednesdayFall,
                firstMondayWinter,
@@ -68,24 +69,26 @@ getCoursesInfo courses = map courseInfo allCourses
         allCourses = map (T.splitOn "-") (T.splitOn "_" courses)
 
 -- | Pulls either a Lecture, Tutorial or Pratical from the database.
-pullDatabase :: (Code, Section, Session) -> IO (Maybe Meeting)
-pullDatabase (code, section, session) = runSqlite databasePath $
-    returnMeeting code fullSection session
+pullDatabase :: (Code, Section, Session) -> IO (MeetTime)
+pullDatabase (code, section, session) = runSqlite databasePath $ do
+    meet <- returnMeeting code fullSection session
+    allTimes <- selectList [TimesMeeting ==. entityKey meet] []
+    let parsedTime = map (buildTimes' . entityVal) allTimes
+    return $ MeetTime {meetData = entityVal meet, timeData = parsedTime}
     where
-        fullSection
-            | T.isPrefixOf "L" section = T.append "LEC" sectCode
-            | T.isPrefixOf "T" section = T.append "TUT" sectCode
-            | T.isPrefixOf "P" section = T.append "PRA" sectCode
-            | otherwise                = section
-        sectCode = T.tail section
+    fullSection
+        | T.isPrefixOf "L" section = T.append "LEC" sectCode
+        | T.isPrefixOf "T" section = T.append "TUT" sectCode
+        | T.isPrefixOf "P" section = T.append "PRA" sectCode
+        | otherwise                = section
+    sectCode = T.tail section
 
 -- | The current date and time as obtained from the system.
 type SystemTime = String
 
 -- | Creates all the events for a course.
-getEvents :: SystemTime -> Maybe Meeting -> Events
-getEvents _ Nothing = []
-getEvents systemTime (Just lect) =
+getEvents :: SystemTime -> MeetTime -> Events
+getEvents systemTime lect =
     concatMap eventsByDate (zip' (third courseInfo)
                                  (fourth courseInfo)
                                  (fifth courseInfo))
@@ -119,16 +122,17 @@ type DatesByDay = [(StartDate, EndDate)]
 
 -- | Obtains all the necessary information to create events for a course,
 -- such as code, section, start times, end times and dates.
-getCourseInfo :: Meeting
-              -> (Code, Section, StartTimesByDay, EndTimesByDay, DatesByDay)
-getCourseInfo meeting = (code, sect, start, end, dates)
-    where
-        code = meetingCode meeting
-        sect = meetingSection meeting
-        dataInOrder = orderTimeFields $ meetingTimes meeting
-        start = startTimesByCourse dataInOrder (meetingSession meeting)
-        end = endTimesByCourse dataInOrder (meetingSession meeting)
-        dates = getDatesByCourse dataInOrder (meetingSession meeting)
+getCourseInfo :: MeetTime -> (Code, Section, StartTimesByDay, EndTimesByDay, DatesByDay)
+getCourseInfo meeting =
+    let meet = meetData meeting
+        allTimes = timeData meeting
+        code = meetingCode meet
+        sect = meetingSection meet
+        dataInOrder = orderTimeFields allTimes
+        start = startTimesByCourse dataInOrder (meetingSession meet)
+        end = endTimesByCourse dataInOrder (meetingSession meet)
+        dates = getDatesByCourse dataInOrder (meetingSession meet)
+    in (code, sect, start, end, dates)
 
 -- ** Functions that deal with tuples
 
@@ -163,13 +167,13 @@ fifth (_, _, _, _, dates) = dates
 -- ** Ordering data
 
 -- | A list of the information within the time fields ordered by day.
-type InfoTimeFieldsByDay = [[[Double]]]
+type InfoTimeFieldsByDay = [[Times']]
 
--- | Orders by day the time fields obtained from the database.
-orderTimeFields :: [Time] -> InfoTimeFieldsByDay
-orderTimeFields timeFields = groupBy (\x y -> head x == head y) sortedList
+-- | Orders by day the start and endtimes obtained from the database.
+orderTimeFields :: [Times'] -> InfoTimeFieldsByDay
+orderTimeFields timeFields = groupBy (\x y -> weekDay x == weekDay y) sortedList
     where
-        sortedList = sort (map timeField timeFields)
+        sortedList = sortBy (comparing weekDay) timeFields
 
 -- ** Start time
 
@@ -182,20 +186,9 @@ startTimesByCourse dataInOrder _ = startTime dataInOrder
 -- | Obtains the start times for each course by day.
 startTime :: InfoTimeFieldsByDay -> StartTimesByDay
 startTime =
-    map (\dataByDay -> map formatTimes
-                           (head (timesOrdered dataByDay) :
-                                   getStartConsecutives (timesOrdered dataByDay)))
+    map (\dataByDay -> map formatTimes (timesOrdered dataByDay))
     where
-        timesOrdered dataDay = sort $ map (!! 1) dataDay
-
--- | Gets the start times that are not the very first start time.
-getStartConsecutives :: [Double] -> [Double]
-getStartConsecutives listTimes =
-    filter (/= 30.0) [if listTimes !! i == listTimes !! (i + 1) - 0.5
-                      then 30.0
-                      else listTimes !! (i + 1)| i <- [0 .. lenForComparison]]
-    where
-        lenForComparison = length listTimes - 2
+        timesOrdered dataDay = sort $ map startingTime dataDay
 
 -- ** End time
 
@@ -208,20 +201,9 @@ endTimesByCourse dataInOrder _ = endTime dataInOrder
 -- | Obtains the end times for each course by day.
 endTime :: InfoTimeFieldsByDay -> EndTimesByDay
 endTime =
-    map (\dataByDay -> map (formatTimes . (+ 0.5))
-                           (getEndConsecutives $ timesOrdered dataByDay ++
-                            [last $ timesOrdered dataByDay]))
+    map (\dataByDay -> map formatTimes (timesOrdered dataByDay))
     where
-        timesOrdered dataDay = sort $ map (!! 1) dataDay
-
--- | Gets the end times that are not the very first end time.
-getEndConsecutives :: [Double] -> [Double]
-getEndConsecutives listTimes =
-    filter (/= 30.0) [if listTimes !! i == listTimes !! (i + 1) - 0.5
-                      then 30.0
-                      else listTimes !! i| i <- [0 .. lenForComparison]]
-    where
-        lenForComparison = length listTimes - 2
+        timesOrdered dataDay = sort $ map endingTime dataDay
 
 -- ** Functions that work for both start and end times
 
@@ -268,10 +250,10 @@ type EndDate = String
 
 -- | Gives the appropiate starting and ending dates for each day,in which the
 -- course takes place, depending on the course session.
-getDatesByDay :: Session -> [[Double]] -> (StartDate, EndDate)
+getDatesByDay :: Session -> [Times'] -> (StartDate, EndDate)
 getDatesByDay session dataByDay
-    | session ==  "F" = formatDates $ getDatesFall $ head $ concat dataByDay
-    | otherwise = formatDates $ getDatesWinter $ head $ concat dataByDay
+    | session ==  "F" = formatDates $ getDatesFall $ weekDay $ head dataByDay
+    | otherwise = formatDates $ getDatesWinter $ weekDay $ head dataByDay
 
 -- | Formats the date in the following way: YearMonthDayT.
 -- For instance, 20150720T corresponds to July 20th, 2015.

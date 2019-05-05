@@ -23,7 +23,7 @@ import Data.Fixed (mod')
 import Data.Aeson (decode)
 import Data.ByteString.Char8 as BC (pack)
 import Data.ByteString.Lazy (fromStrict)
-import Data.Maybe (fromMaybe, fromJust)
+import Data.Maybe (fromMaybe)
 
 
 -- | If there is an active graph available, an image of that graph is created,
@@ -31,7 +31,7 @@ import Data.Maybe (fromMaybe, fromJust)
 -- Either way, the resulting graph's .svg and .png names are returned.
 getActiveGraphImage :: String -> IO (String, String)
 getActiveGraphImage graphInfo = do
-    let graphInfoMap = fromJust $ decode $ fromStrict $ BC.pack graphInfo :: M.Map T.Text T.Text
+    let graphInfoMap = fromMaybe M.empty $ decode $ fromStrict $ BC.pack graphInfo :: M.Map T.Text T.Text
         graphName = fromMaybe "Computer-Science" $ M.lookup "active-graph" graphInfoMap
     getGraphImage graphName graphInfoMap
 
@@ -45,7 +45,6 @@ getActiveTimetable selectedCourses termSession = do
     let selectedMeetings = parseSelectedCourses selectedCourses termSession
     mTimes <- getTimes selectedMeetings
     let schedule = getScheduleByTime selectedMeetings mTimes
-    print schedule
     generateTimetableImg schedule termSession
 
 -- | Parses selected courses local storage and returns two lists of information about courses
@@ -63,29 +62,31 @@ list2tuple [a, b, c] = (a, b, c)
 list2tuple _ = undefined
 
 -- | Queries the database for times regarding all meetings (i.e. lectures, tutorials and praticals),
--- returns a list of list of Time.
-getTimes :: [(T.Text, T.Text, T.Text)] -> IO [[Time]]
+-- returns a list of list of Times'.
+getTimes :: [(T.Text, T.Text, T.Text)] -> IO [[Times']]
 getTimes selectedMeetings = runSqlite databasePath $
   mapM getMeetingTime selectedMeetings
 
 -- | Creates a schedule.
 -- It takes information about meetings (i.e. lectures, tutorials and praticals) and their corresponding time.
 -- Courses are added to schedule, based on their days and times.
-getScheduleByTime :: [(T.Text, T.Text, T.Text)] -> [[Time]] -> [[[T.Text]]]
+getScheduleByTime :: [(T.Text, T.Text, T.Text)] -> [[Times']] -> [[[T.Text]]]
 getScheduleByTime selectedMeetings mTimes =
   let meetingTimes_ = zip selectedMeetings mTimes
-      schedule = replicate 13 $ replicate 5 []
+      schedule = replicate 26 $ replicate 5 []
   in foldl addCourseToSchedule schedule meetingTimes_
 
 -- | Take a list of Time and returns a list of tuples that correctly index
--- into the 2-D table (for generating the image)
-convertTimeToArray :: [Time] -> [(Int, Int)]
-convertTimeToArray = map (\x -> (floor $ head (timeField x), floor $ timeField x !! 1 - 8))
+-- into the 2-D table (for generating the image).
+-- TODO: Make this support half-hour times.
+convertTimeToArray :: Times' -> [(Int, Int)]
+convertTimeToArray Times' {weekDay=day, startingTime=startTime, endingTime=endTime} =
+    [(floor day, row) | row <- [(floor startTime - 8)..(floor endTime - 8) - 1]]
 
-addCourseToSchedule :: [[[T.Text]]] -> ((T.Text, T.Text, T.Text), [Time]) -> [[[T.Text]]]
+addCourseToSchedule :: [[[T.Text]]] -> ((T.Text, T.Text, T.Text), [Times']) -> [[[T.Text]]]
 addCourseToSchedule schedule (course, courseTimes) =
-  let time' = filter (\t-> mod' (timeField t !! 1) 1 == 0) courseTimes
-      timeArray = convertTimeToArray time'
+  let time' = filter (\t-> mod' (startingTime t) 1 == 0) courseTimes
+      timeArray = concatMap convertTimeToArray time'
   in foldl (addCourseHelper course) schedule timeArray
 
 -- | Appends information of course to the current schedule for specified day and time.

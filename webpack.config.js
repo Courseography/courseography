@@ -2,7 +2,10 @@ const path = require('path');
 
 module.exports = {
   entry: {
-    'js/search/timetable': './js/timetable.js.jsx'
+    'js/search/app': './js/components/search/search.js.jsx',
+    'js/grid/app': './js/components/grid/grid.js.jsx',
+    'js/graph/app': './js/components/graph/main.js',
+    'js/post/app': './js/components/post/post.js.jsx',
   },
   output: {
     path: path.resolve(__dirname, 'public'),

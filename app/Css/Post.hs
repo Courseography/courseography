@@ -95,14 +95,14 @@ postCSS = do
         ":hover" & do
             fullyVisible
     ".code:before" ? do
-            "content" -: "'\2713'"
+            "content" -: "'\\2713'"
             color white
             paddingRight (px 5)
     ".selected" ? do
         ".code" ? do
             color softGreen
         ".code:before" ? do
-            "content" -: "'\2713'"
+            "content" -: "'\\2713'"
             color softGreen
         ".full_name" ? do
             backgroundColor green1
@@ -175,9 +175,11 @@ postCSS = do
         display none
     "div[id*='_category_']" ? do
         " .code:after" ? do
-            "content" -: "'\8681'"
+            "content" -: "'\\2B9F'"
             paddingLeft (px 10)
+            cursor pointer
     "div[id*='_inq']" ? do
         " .code:after" ? do
-            "content" -: "'\8681'"
+            "content" -: "'\\2B9F'"
             paddingLeft (px 10)
+            cursor pointer

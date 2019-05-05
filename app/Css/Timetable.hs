@@ -29,6 +29,7 @@ timetableStyles = do
 gridCSS :: Css
 gridCSS = do
     "#grid-body" ? do
+        padding0
         minHeight (px 540)
 
 {- searchCss
@@ -47,34 +48,36 @@ searchCSS = do
         height (pct 10)
         form <? do
             background ((url "/static/res/ico/search.png", noRepeat), placed sideRight sideCenter)
-            margin (em 1) 0 0 0
-            paddingRight (px 34)
+            margin (em 0.5) 0 0 0
+            paddingRight (px 40)
     "#search-container" ? do
         alignCenter
         color white
-        height (pct 90)
+        height auto
+        maxHeight (pct 25)
         width100
         margin0
-        padding (em 0.5) 0 (em 1) 0
+        padding0
         overflowY auto
     "#search-list" ? do
         margin0
-        padding nil nil nil nil
-        height100
+        padding nil (pct 5) nil (pct 5)
+        height auto
         width100
         ul <? do
             margin0
             padding0
             li <? do
                 display block
+                backgroundColor purple7
                 margin0
                 padding0
                 ":hover" & do
                     fontWeight bold
                     cursor pointer
                     textDecoration underline
-            ".starred-course" & do
-                backgroundColor blue1
+                ".starred-course" & do
+                    backgroundColor blue1
 
 {- timetableCSS
  - Generates CSS for the timetable. -}
@@ -105,7 +108,7 @@ timetableCSS = do
                 textAlign $ alignSide sideLeft
                 paddingLeft (px 10) -- important
                 borderPink borderBottom
-        tbody |> tr |> td <> thead |> th ? do
+        tbody |> tr |> td <> thead |> tr |> th ? do
             width (pct 13.5)
             padding0 -- !important
             margin0 -- !important
@@ -127,9 +130,8 @@ timetableCSS = do
         td ? do
             "rowspan" *= "1" & do
                 fontSize (em 0)
-            "rowspan" *= "2" & do
-                fontSize (em 0.9)
-            height (px 18)
+            fontSize (em 0.9)
+            height (px 21)
         ".timetable-time" ? do
             width (pct 12)
         ".timetable-dummy-cell" ? do
@@ -142,6 +144,16 @@ timetableCSS = do
         ".timetable-cell" ? do
             borderPink borderBottom
             borderPink borderTop
+            borderLeftStyle none
+            borderRightStyle none
+        ".timetable-cell-tophalf" ? do
+            borderBottomStyle none
+            borderPink borderTop
+            borderLeftStyle none
+            borderRightStyle none
+        ".timetable-cell-bottomhalf" ? do
+            borderPink borderBottom
+            borderTopStyle none
             borderLeftStyle none
             borderRightStyle none
         ".timetable-edge" ? do
@@ -173,7 +185,8 @@ courseSelectCSS = do
     "#course-select-wrapper" ? do
         margin0
         padding0
-        height100
+        height auto
+        minHeight (pct 70)
         backgroundColor purple8
         color white
     "#course-select" ? do
@@ -205,11 +218,11 @@ courseSelectCSS = do
                             backgroundColor blue1
                         ".ui-accordion-header-active" & do
                             backgroundColor blue1 -- important
-                "satisfied" *= "false" & do
+                "data-satisfied" *= "false" & do
                     "taken" *= "true" & do
                         backgroundColor blue3
                     backgroundColor red3
-                "satisfied" *= "true" & do
+                "data-satisfied" *= "true" & do
                     "taken" *= "true" & do
                         backgroundColor blue4
         ".close-icon" ? do
@@ -245,11 +258,11 @@ courseSelectCSS = do
                     ":hover" & do
                         backgroundColor blue3
                     "clicked" *= "true" & do
-                        "satisfied" *= "false" & do
+                        "data-satisfied" *= "false" & do
                             backgroundColor red3
                             ":hover" & do
                                 backgroundColor red4
-                        "satisfied" *= "true" & do
+                        "data-satisfied" *= "true" & do
                             backgroundColor blue3
 
 {- tdColours
@@ -264,20 +277,20 @@ tdColours = ".timetable " ?  do
         "hover" *= "remove" & do
             opacity 0.5
             transition "all" (sec 0.5) easeInOut (sec 0)
-        "satisfied" *= "false" & do
+        "data-satisfied" *= "false" & do
             backgroundColor red3
             ":hover" & do
                 backgroundColor red4
-        "in-conflict" *= "true" & do
+        "data-in-conflict" *= "true" & do
             backgroundColor red1
             ":hover" & do
                 backgroundColor red2
-    td # ("in-conflict" *= "false") # ("satisfied" *= "true") ? do
+    td # ("data-in-conflict" *= "false") # ("data-satisfied" *= "true") ? do
         backgroundColor blue3
         Clay.empty & do
             backgroundColor white
-    td # ("hover" *= "conflict") # ("satisfied" *= "true") <>
-        td # ("hover" *= "conflict") # ("satisfied" *= "false") ? do
+    td # ("hover" *= "conflict") # ("data-satisfied" *= "true") <>
+        td # ("hover" *= "conflict") # ("data-satisfied" *= "false") ? do
         backgroundColor red1
 
 modalContainerCSS :: Css

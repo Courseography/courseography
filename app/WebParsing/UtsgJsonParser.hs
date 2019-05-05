@@ -1,7 +1,7 @@
 module WebParsing.UtsgJsonParser
      (getAllCourses,
       getOrgs,
-      insertAllCourses) where
+      insertAllMeetings) where
 
 import Data.Aeson ((.:?), (.!=), decode, FromJSON(parseJSON), Value(..), Object)
 import Data.Maybe (catMaybes)
@@ -10,10 +10,8 @@ import qualified Data.HashMap.Strict as HM
 import Control.Monad.IO.Class (liftIO)
 import Network.HTTP.Conduit (simpleHttp)
 import Config (databasePath)
-import Database.Tables (Courses(..), EntityField(CoursesCode), Meeting(..))
-import Database.Persist.Sqlite (runSqlite, insert_, SqlPersistM, selectKeysList, (==.))
-import Database.Persist.Class (Key)
-
+import Database.Tables (Courses(..), EntityField(CoursesCode), Meeting(..), MeetTime(..), buildTimes)
+import Database.Persist.Sqlite (runSqlite, insert, SqlPersistM, (==.), insertMany_, selectFirst)
 
 -- | URLs for the Faculty of Arts and Science API
 timetableURL :: T.Text
@@ -26,7 +24,7 @@ orgURL = "https://timetable.iit.artsci.utoronto.ca/api/orgs"
 getAllCourses :: IO ()
 getAllCourses = do
     orgs <- getOrgs
-    runSqlite databasePath $ mapM_ insertAllCourses orgs
+    runSqlite databasePath $ mapM_ insertAllMeetings orgs
 
 -- | Return a list of all the "orgs" in FAS. These are the values which can be
 --   passed to the timetable API with the "org" key.
@@ -37,8 +35,8 @@ getOrgs = do
     return $ maybe [] (concatMap HM.keys . HM.elems) rawJSON
 
 -- | Retrieve and store all timetable data for the given department.
-insertAllCourses :: T.Text -> SqlPersistM ()
-insertAllCourses org = do
+insertAllMeetings :: T.Text -> SqlPersistM ()
+insertAllMeetings org = do
     liftIO . print $ T.append "parsing JSON data from: " org
     resp <- liftIO . simpleHttp $ T.unpack (T.append timetableURL org)
     let coursesLst :: Maybe (HM.HashMap T.Text (Maybe DB)) = decode resp
@@ -47,44 +45,29 @@ insertAllCourses org = do
         -- only sections are currently stored here.
         (_, sections) = unzip courseData
         meetings = concat sections
-    mapM_ insertCourse meetings
+    mapM_ insertMeeting meetings
 
-getCourseKey :: T.Text -> SqlPersistM (Maybe (Key Courses))
-getCourseKey code = do
-    keyListCourse :: [Key Courses] <- selectKeysList [ CoursesCode ==. code ] []
-    return $ case keyListCourse of
-        [] -> Nothing
-        _ -> Just (head keyListCourse)
-
-insertCourse :: Meeting -> SqlPersistM ()
-insertCourse meet = do
-    courseKey <- getCourseKey (meetingCode meet)
+-- | Insert a meeting and its corresponding Times into the database.
+insertMeeting :: MeetTime -> SqlPersistM ()
+insertMeeting (MeetTime meetingData meetingTime) = do
+    -- Check that the meeting belongs to a course that exists
+    let code = meetingCode meetingData
+    courseKey <- selectFirst [ CoursesCode ==. code ] []
     case courseKey of
-        Just _ -> insert_ meet
+        Just _ -> do
+          meetingKey <- insert meetingData
+          let allTimes = map (buildTimes meetingKey) meetingTime
+          insertMany_ allTimes
         Nothing -> return ()
 
-newtype DB = DB { dbData :: (Courses, [Meeting]) }
+newtype DB = DB { dbData :: (Courses, [MeetTime]) }
   deriving Show
 
 instance FromJSON DB where
     parseJSON (Object o) = do
       course <- parseJSON (Object o)
       session :: T.Text <- o .:? "section" .!= "F"
-      meetingMap :: HM.HashMap T.Text Meetings <- o .:? "meetings" .!= HM.empty
-      let meetings = map (setCode (coursesCode course) session . meeting) (HM.elems meetingMap)
-          -- Fix manualTutorialEnrolment and manualPracticalEnrolment
-          manTut = any (T.isPrefixOf "TUT" . meetingSection) meetings
-          manPra = any (T.isPrefixOf "PRA" . meetingSection) meetings
-      return $ DB (course { coursesManualTutorialEnrolment = Just manTut,
-                            coursesManualPracticalEnrolment = Just manPra },
-                   meetings)
-      where
-          setCode code session m =
-            m {meetingCode = code, meetingSession = session}
+      meetingTimesMap :: HM.HashMap T.Text MeetTime <- o .:? "meetings" .!= HM.empty
+      let allMeetingsTimes = map (\m -> m {meetData = (meetData m) { meetingCode = (coursesCode course), meetingSession = session}}) (HM.elems meetingTimesMap)
+      return $ DB (course, allMeetingsTimes)
     parseJSON _ = fail "Invalid section"
-
-newtype Meetings = Meetings { meeting :: Meeting }
-  deriving Show
-
-instance FromJSON Meetings where
-  parseJSON x = fmap Meetings (parseJSON x)

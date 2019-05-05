@@ -51,12 +51,6 @@ export var webFocusList = [
     'csc458', 'csc411', 'csc310', 'csc443', 'csc469'
 ];
 
-// Courses that can be taken with no other prerequisites
-export var initiallyTakeable = [
-    'csc104', 'csc120', 'csc108', 'CSC165240',
-    'MAT135136137157Calc1', 'MAT221223240Lin1', 'csc200', 'csc300'
-];
-
 // Focus descriptions
 export var HCIDescription = 'Human-Computer Interaction (HCI) is the scientific study of the use of ' +
                      'computers by people and the design discipline that informs the creation of ' +

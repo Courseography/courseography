@@ -35,19 +35,8 @@ import Data.Aeson ((.:?), (.!=), FromJSON(parseJSON), ToJSON(toJSON), Value(..),
 import Data.Aeson.Types (Parser, defaultOptions, Options(..))
 import GHC.Generics
 import WebParsing.ReqParser (parseReqs)
-
--- | A data type representing a time for the section of a course.
--- The first list is comprised of two values: the date (represented as a number
--- of the week), and the time. The dates span Monday-Friday, being represented
--- by 1-5 respectively. The time is a number between 0-23.
--- TODO: Change this datatype. This datatype shouldn't be implemented with
--- a list, perhaps a tuple would be better.
-data Time = Time { timeField :: [Double] } deriving (Show, Read, Eq, Generic)
-derivePersistField "Time"
-
-data Room = Room { roomField :: (T.Text, T.Text)} deriving (Show, Read, Eq, Generic)
-derivePersistField "Room"
-
+import Control.Applicative((<|>))
+import Database.Persist.Sqlite(Key)
 
 -- | A two-dimensional point.
 type Point = (Double, Double)
@@ -64,8 +53,6 @@ Courses
     Primary code
     title T.Text Maybe
     description T.Text Maybe
-    manualTutorialEnrolment Bool Maybe
-    manualPracticalEnrolment Bool Maybe
     prereqs T.Text Maybe
     exclusions T.Text Maybe
     breadth BreadthId Maybe
@@ -79,15 +66,20 @@ Meeting
     code T.Text
     session T.Text
     section T.Text
-    times [Time]
     cap Int
     instructor T.Text
     enrol Int
     wait Int
     extra Int
-    timeStr T.Text
-    room [Room]
     deriving Generic Show
+
+Times
+    weekDay Double
+    startHour Double
+    endHour Double
+    meeting MeetingId
+    firstRoom T.Text Maybe
+    secondRoom T.Text Maybe
 
 Breadth
     description T.Text
@@ -148,6 +140,13 @@ PostCategory
     post PostId
     name T.Text
     deriving Show
+
+Building
+    code T.Text
+    name T.Text
+    address T.Text
+    postalCode T.Text
+    deriving Show
 |]
 
 -- ** TODO: Remove these extra types and class instances
@@ -159,11 +158,17 @@ data SvgJSON =
               paths :: [Path]
             } deriving (Show, Generic)
 
-data Session =
-    Session { lectures :: [Meeting],
-              tutorials :: [Meeting],
-              practicals :: [Meeting]
-            } deriving (Show, Generic)
+data Times' =
+  Times' { weekDay :: Double,
+          startingTime :: Double,
+          endingTime :: Double,
+          fstRoom :: Maybe T.Text,
+          secRoom :: Maybe T.Text
+} deriving (Show, Generic)
+
+-- | A Meeting with its associated Times.
+data MeetTime = MeetTime {meetData :: Meeting, timeData :: [Times'] }
+  deriving (Show, Generic)
 
 -- | A Course. TODO: remove this data type (it's redundant).
 data Course =
@@ -171,37 +176,21 @@ data Course =
              description :: Maybe T.Text,
              title :: Maybe T.Text,
              prereqString :: Maybe T.Text,
-             fallSession :: Maybe Session,
-             springSession :: Maybe Session,
-             yearSession :: Maybe Session,
+             allMeetingTimes :: Maybe [MeetTime],
              name :: !T.Text,
              exclusions :: Maybe T.Text,
-             manualTutorialEnrolment :: Maybe Bool,
-             manualPracticalEnrolment :: Maybe Bool,
              distribution :: Maybe T.Text,
              coreqs :: Maybe T.Text,
              videoUrls :: [T.Text]
            } deriving (Show, Generic)
 
 instance ToJSON Course
-instance ToJSON Session
-instance ToJSON Time
-instance ToJSON Room
+instance ToJSON Times'
+instance ToJSON MeetTime
 
 -- instance FromJSON required so that tables can be parsed into JSON,
 -- not necessary otherwise.
 instance FromJSON SvgJSON
-
--- | Converts a Double to a T.Text.
--- This removes the period from the double, as the JavaScript code,
--- uses the output in an element's ID, which is then later used in
--- jQuery. @.@ is a jQuery meta-character, and must be removed from the ID.
-convertTimeToString :: Time -> [T.Text]
-convertTimeToString (Time [day, timeNum]) =
-  [T.pack . show $ (floor day :: Int),
-   T.replace "." "-" . T.pack . show $ timeNum]
-convertTimeToString _ = undefined
-
 
 -- JSON encoding/decoding
 instance FromJSON Courses where
@@ -216,8 +205,6 @@ instance FromJSON Courses where
     return $ Courses newCode
                      newTitle
                      newDescription
-                     (Just False)
-                     (Just False)
                      newPrereqs
                      newExclusions
                      Nothing -- breadth
@@ -237,12 +224,6 @@ instance FromJSON Meeting where
   parseJSON = withObject "Expected Object for Lecture, Tutorial or Practical" $ \o -> do
     teachingMethod :: T.Text <- o .:? "teachingMethod" .!= ""
     sectionNumber :: T.Text <- o .:? "sectionNumber" .!= ""
-    timeMap :: Value <- o .:? "schedule" .!= Null
-    (allTimes, allRooms) <- case timeMap of
-        Object obj -> do
-            timesAndRooms <- mapM parseSchedules (HM.elems obj)
-            return (concatMap fst timesAndRooms, concatMap snd timesAndRooms)
-        _ -> return ([], [])
     let sectionId = T.concat [teachingMethod, sectionNumber]
 
     capStr <- o .:? "enrollmentCapacity" .!= "-1"
@@ -259,13 +240,29 @@ instance FromJSON Meeting where
 
     instrs <- mapM parseInstr instrList
     let extra = 0
-    let timeStr = ""
     let instructor = T.intercalate "; " $ filter (not . T.null) instrs
     if teachingMethod == "LEC" || teachingMethod == "TUT" || teachingMethod == "PRA"
     then
-      return $ Meeting "" "" sectionId allTimes cap instructor enrol wait extra timeStr allRooms
+      return $ Meeting "" "" sectionId cap instructor enrol wait extra
     else
       fail "Not a lecture, Tutorial or Practical"
+
+instance FromJSON Times' where
+  parseJSON = withObject "Expected Object for Times" $ \o -> do
+    meetingDayStr <- o .:? "meetingDay"
+    meetingStartTimeStr <- o .:? "meetingStartTime"
+    meetingEndTimeStr <- o .:? "meetingEndTime"
+    meetingRoom1 <- o .:? "assignedRoom1" .!= Nothing
+    meetingRoom2 <- o .:? "assignedRoom2" .!= Nothing
+    let (meetingDay, meetingStartTime, meetingEndTime) = getTimeVals meetingDayStr meetingStartTimeStr meetingEndTimeStr
+    return $ Times' meetingDay meetingStartTime meetingEndTime meetingRoom1 meetingRoom2
+
+instance FromJSON MeetTime where
+  parseJSON (Object o) = do
+    meeting <- parseJSON (Object o)
+    timeMap :: HM.HashMap T.Text Times' <- o .:? "schedule" .!= HM.empty <|> return HM.empty
+    return $ MeetTime meeting (HM.elems timeMap)
+  parseJSON _ = fail "Invalid meeting"
 
 -- | Helpers for parsing JSON
 parseInstr :: Value -> Parser T.Text
@@ -274,19 +271,6 @@ parseInstr (Object io) = do
   lastName <- io .:? "lastName" .!= ""
   return (T.concat [firstName, ". ", lastName])
 parseInstr _ = return ""
-
-parseSchedules :: Value -> Parser ([Time], [Room])
-parseSchedules (Object obj) = do
-    meetingDay <- obj .:? "meetingDay"
-    meetingStartTime <- obj .:? "meetingStartTime"
-    meetingEndTime <- obj .:? "meetingEndTime"
-    meetingRoom1 <- obj .:? "assignedRoom1" .!= ""
-    meetingRoom2 <- obj .:? "assignedRoom2" .!= ""
-    let times = getTimeSlots meetingDay meetingStartTime meetingEndTime
-        rooms = replicate (length times) (Room (meetingRoom1, meetingRoom2))
-    return (times, rooms)
-
-parseSchedules _ = return ([], [])
 
 -- | Converts 24-hour time into a double
 -- | Assumes times are rounded to the nearest hour
@@ -303,11 +287,30 @@ getDayVal "TH" = 3.0
 getDayVal "FR" = 4.0
 getDayVal _    = 4.0
 
--- | Takes a day and start/end times then generates a set of 30-minute timeslots
-getTimeSlots :: Maybe String -> Maybe String -> Maybe String -> [Time]
-getTimeSlots (Just day) (Just start) (Just end) = do
+-- | Convert the given day, start time and end time to a tuple of Doubles. If nothing is given,
+--   the place holder is 5 and 25, indicating the day and times are invalid.
+getTimeVals :: Maybe String -> Maybe String -> Maybe String -> (Double, Double, Double)
+getTimeVals (Just day) (Just start) (Just end) = do
     let dayDbl = getDayVal day
         startDbl = getHourVal start
         endDbl = getHourVal end
-    [Time [dayDbl, timeDbl] | timeDbl <- [startDbl, (startDbl + 0.5) .. (endDbl - 0.5)]]
-getTimeSlots _ _ _ = []
+    (dayDbl, startDbl, endDbl)
+getTimeVals _ _ _ = (5.0, 25.0, 25.0)
+
+-- | Convert Times into Times'
+buildTimes' :: Times -> Times'
+buildTimes' t =
+  Times' (timesWeekDay t)
+    (timesStartHour t)
+    (timesEndHour t)
+    (timesFirstRoom t)
+    (timesSecondRoom t)
+
+buildTimes :: Key Meeting -> Times' -> Times
+buildTimes meetingKey t =
+  Times (weekDay t)
+    (startingTime t)
+    (endingTime t)
+    meetingKey
+    (fstRoom t)
+    (secRoom t)

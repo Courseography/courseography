@@ -1,12 +1,11 @@
 /**
  * Constructs a Course.
- * @param {string} name The course code.
+ * @param {JSON} course The JSON with the course information
  * @constructor
  */
-function Course(name) {
+function Course(course) {
     'use strict';
 
-    var course = getCourse(name);
     // Copy attributes
     this.F = course.fallSession;
     this.S = course.springSession;
@@ -21,8 +20,6 @@ function Course(name) {
     this.description = course.description;
     this.exclusions = course.exclusions;
     this.distribution = course.distribution;
-    this.manualTutorialEnrolment = course.manualTutorialEnrolment;
-    this.manualPracticalEnrolment = course.manualPracticalEnrolment;
     this.videoUrls = course.videoUrls;
 
     // Create sections
@@ -32,7 +29,8 @@ function Course(name) {
 
     this.status = 'inactive';
 
-    this.manual = {'T': this.manualTutorialEnrolment, 'P': this.manualPracticalEnrolment};
+    // TODO: Compute this based on meeting sections.
+    this.manual = {'T': false, 'P': false};
 }
 
 

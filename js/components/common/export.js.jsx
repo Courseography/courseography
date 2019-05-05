@@ -1,44 +1,38 @@
-import * as ReactModal from 'vendor/react-modal';
-
-$(document).ready(function () {
-  $('#nav-export').click(function () {
-    openExportModal();
-  });
-});
+import React from 'react';
+import ReactDOM from 'react-dom';
+import ReactModal from 'react-modal';
 
 
-/**
- * Creates and displays the Export modal content div.
- */
-function openExportModal() {
-    'use strict';
-    var context = $('#courseography-header').attr('context');
-    if (context !== 'graph') {
-        ReactDOM.render(
-            <ExportModal context='grid' session='fall' open={true}/>,
-            document.getElementById('disclaimerDiv')).openModal();
-    }
-}
-
-export var ExportModal = React.createClass({
-    getInitialState: function () {
-        return {
+export class ExportModal extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
             data: '',
             otherSession: 'Spring'
         };
-    },
+        this.getImage = this.getImage.bind(this);
+        this.getGraphImage = this.getGraphImage.bind(this);
+        this.getGridImage = this.getGridImage.bind(this);
+        this.openModal = this.openModal.bind(this);
+        this.closeModal = this.closeModal.bind(this);
+        this.toggleSession = this.toggleSession.bind(this);
+    }
 
-    getImage: function() {
+    getImage() {
         if (this.props.context === 'graph') {
             this.getGraphImage();
         } else {
             this.getGridImage(this.props.session);
         }
-    },
+    }
 
-    getGraphImage: function() {
+    getGraphImage() {
         var necessaryLS = new Object();
-        for (var elem in localStorage) {
+        for (const elem in localStorage) {
+            if (!localStorage.hasOwnProperty(elem)) {
+                continue;
+            }
+
             if (elem.substring(0,3).match(/^[a-zA-Z]+$/) && elem.substring(3,6).match(/^\d+$/)) {
                 if (document.getElementById(elem)) {
                     necessaryLS[elem] = localStorage.getItem(elem);
@@ -59,13 +53,15 @@ export var ExportModal = React.createClass({
                 throw 'No image generated';
             }
         });
-    },
+    }
 
-    getGridImage: function (session) {
+    getGridImage(session) {
         var formattedSession = session.charAt(0).toUpperCase() + session.slice(1);
+        let allCourses = JSON.parse(localStorage.getItem('selectedLectures'));
+        let courseData = allCourses.map((data) => `${data.courseCode.split(' ')[0]}-${data.lectureCode}-${data.session}`);
         $.ajax({
             url: 'timetable-image',
-            data: {session: formattedSession, courses: localStorage.getItem("selected-lectures")},
+            data: {session: formattedSession, courses: courseData.join('_')},
             success: function (data) {
                 this.setState({data: "data:image/png;base64," + data, otherSession: formattedSession === 'Fall' ? 'Spring' : 'Fall'});
             }.bind(this),
@@ -73,20 +69,21 @@ export var ExportModal = React.createClass({
                 throw 'No image generated';
             }
         });
-    },
+    }
 
-    openModal: function() {
+    openModal() {
         this.setState({modalIsOpen: true}, this.getImage);
-    },
-    closeModal : function() {
+    }
+
+    closeModal() {
         this.setState({modalIsOpen: false});
-    },
+    }
 
-    toggleSession: function () {
+    toggleSession() {
         this.getGridImage(this.state.otherSession);
-    },
+    }
 
-    render: function () {
+    render() {
         if (this.props.context === 'graph') {
             return (
                 <ReactModal
@@ -111,13 +108,16 @@ export var ExportModal = React.createClass({
             );
         }
     }
-});
+}
 
-var getCalendar = function() {
+
+function getCalendar() {
+    let allCourses = JSON.parse(localStorage.getItem('selectedLectures'));
+    let courseData = allCourses.map((data) => `${data.courseCode.split(' ')[0]}-${data.lectureCode}-${data.session}`);
     $.ajax({
         type: "post",
         url: "calendar",
-        data: {courses: localStorage.getItem("selected-lectures")},
+        data: {courses: courseData.join('_')},
         success: function (data) {
             var dataURI = "data:text/calendar;charset=utf8," + escape(data)
             var downloadLink = document.createElement("a");
@@ -132,11 +132,16 @@ var getCalendar = function() {
             throw 'No calendar avaiable';
         }
     });
-};
+}
 
-var getPDF = function() {
+
+function getPDF() {
     var necessaryLS = new Object();
-    for (var elem in localStorage) {
+    for (const elem in localStorage) {
+        if (!localStorage.hasOwnProperty(elem)) {
+            continue;
+        }
+
         if (elem.substring(0,3).match(/^[a-zA-Z]+$/) && elem.substring(3,6).match(/^\d+$/)) {
             if (document.getElementById(elem)) {
                 necessaryLS[elem] = localStorage.getItem(elem);
@@ -146,9 +151,12 @@ var getPDF = function() {
         }
     }
 
+    let allCourses = JSON.parse(localStorage.getItem('selectedLectures'));
+    let courseData = allCourses.map((data) => `${data.courseCode.split(' ')[0]}-${data.lectureCode}-${data.session}`);
+
     $.ajax({
         url: "timetable-pdf",
-        data: {courses: localStorage.getItem("selected-lectures"), JsonLocalStorageObj: JSON.stringify(necessaryLS)},
+        data: {courses: courseData.join('_'), JsonLocalStorageObj: JSON.stringify(necessaryLS)},
         success: function (data) {
             var dataURI = "data:application/pdf;base64," + data;
             var downloadLink = document.createElement("a");
@@ -162,39 +170,41 @@ var getPDF = function() {
             throw 'No pdf generated';
         }
     });
-};
+}
 
-var GraphImage = function (props) {
+
+function GraphImage(props) {
     return (
         <div>
         <div className='modal-header'>
             Export
         </div>
         <div className='modal-body'>
-            <a onClick={getPDF}>Download PDF</a>
+            <a onClick={getPDF} href="#">Download PDF</a>
             <div>
-            <img id="post-image" src={props.data}/>
+            {props.data && <img id="post-image" src={props.data}/>}
             </div>
         </div>
         </div>
     );
-};
+}
 
-var GridImage = function (props) {
+
+function GridImage(props) {
     return (
         <div>
         <div className='modal-header'>
             Export
         </div>
         <div className='modal-body'>
-            <a onClick={getCalendar}>Download timetable as ICS</a><br />
-            <a onClick={getPDF}>Download PDF</a>
+            <a onClick={getCalendar} href="#">Download timetable as ICS</a><br />
+            <a onClick={getPDF} href="#">Download PDF</a>
             <div>
-            <img id="post-image" src={props.data}/>
+            {props.data && <img id="post-image" src={props.data}/>}
             </div>
             <button type="button" className="btn btn-primary" id="switch-session-button"
                 onClick={props.toggleSession}>Switch Sessions</button>
         </div>
         </div>
     );
-};
+}

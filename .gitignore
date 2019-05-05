@@ -39,3 +39,6 @@ cabal.sandbox.config
 
 # TODO: eventually remove all public/js files from tracking
 /public/js/search
+/public/js/grid/app.js
+/public/js/post/app.js
+/public/js/graph/app.js

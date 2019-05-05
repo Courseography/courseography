@@ -1,6 +1,8 @@
-import * as tooltip from 'es6!graph/tooltip';
-import {Modal} from 'es6!common/react_modal';
-import {ExportModal} from 'es6!common/export/export';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Modal } from '../common/react_modal.js.jsx';
+import { ExportModal } from '../common/export.js.jsx';
+
 
 /**
  * Search for target node in list of nodes,
@@ -131,8 +133,7 @@ function Button(props) {
 }
 
 
-function renderReactGraph() {
-    'use strict';
+export function renderReactGraph() {
     return ReactDOM.render(
         <Graph/>,
         document.getElementById('react-graph')
@@ -140,9 +141,10 @@ function renderReactGraph() {
 }
 
 
-var Graph = React.createClass({
-    getInitialState: function () {
-        return {
+class Graph extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
             labelsJSON: [],
             regionsJSON: [],
             nodesJSON: [],
@@ -159,21 +161,49 @@ var Graph = React.createClass({
             verticalPanFactor: 0,
             mouseDown: false,
         };
-    },
+        this.getGraph = this.getGraph.bind(this);
+        this.clearAllTimeouts = this.clearAllTimeouts.bind(this);
+        this.setFCECount = this.setFCECount.bind(this);
+        this.incrementFCECount = this.incrementFCECount.bind(this);
+        this.nodeClick = this.nodeClick.bind(this);
+        this.nodeMouseEnter = this.nodeMouseEnter.bind(this);
+        this.nodeMouseLeave = this.nodeMouseLeave.bind(this);
+        this.infoBoxMouseEnter = this.infoBoxMouseEnter.bind(this);
+        this.infoBoxMouseLeave = this.infoBoxMouseLeave.bind(this);
+        this.infoBoxMouseClick = this.infoBoxMouseClick.bind(this);
+        this.openExportModal = this.openExportModal.bind(this);
+        this.reset = this.reset.bind(this);
+        this.renderArrowHead = this.renderArrowHead.bind(this);
+        this.incrementZoom = this.incrementZoom.bind(this);
+        this.calculateRatioGraphSizeToContainerSize = this.calculateRatioGraphSizeToContainerSize.bind(this);
+        this.graphRightEdgeOffScreen = this.graphRightEdgeOffScreen.bind(this);
+        this.graphBottomEdgeOffScreen = this.graphBottomEdgeOffScreen.bind(this);
+        this.graphTopEdgeOffScreen = this.graphTopEdgeOffScreen.bind(this);
+        this.graphLeftEdgeOffScreen = this.graphLeftEdgeOffScreen.bind(this);
+        this.panDirection = this.panDirection.bind(this);
+        this.resetZoomAndPan = this.resetZoomAndPan.bind(this);
+        this.onButtonPress = this.onButtonPress.bind(this);
+        this.onButtonRelease = this.onButtonRelease.bind(this);
+        this.onKeyDown = this.onKeyDown.bind(this);
+        this.onWheel = this.onWheel.bind(this);
+    }
 
-    componentDidMount: function () {
+    componentDidMount() {
         this.getGraph();
         // can't detect keydown event when adding event listener to react-graph
         document.body.addEventListener('keydown', this.onKeyDown);
         document.getElementById('react-graph').addEventListener('wheel', this.onWheel);
-    },
 
-    componentWillUnmount: function () {
+        // Enable "Export" link
+        $('#nav-export').click(() => this.exportModal.openModal());
+    }
+
+    componentWillUnmount() {
         document.body.removeEventListener('keydown', this.onKeyDown);
         document.getElementById('react-graph').removeEventListener('wheel', this.onWheel);
-    },
+    }
 
-    getGraph: function (graphName) {
+    getGraph(graphName) {
         if (graphName === undefined) {
             var urlSpecifiedGraph = getURLParameter('dept');
 
@@ -185,10 +215,7 @@ var Graph = React.createClass({
             } else if (urlSpecifiedGraph !== null) {
                 graphName = 'Computer Science';
             } else {
-                graphName = getLocalStorage('active-graph');
-                if (graphName === '') {
-                    graphName = 'Computer Science';
-                }
+                graphName = localStorage.getItem('active-graph') || 'Computer Science';
             }
         }
 
@@ -199,7 +226,7 @@ var Graph = React.createClass({
             url: 'get-json-data',
             data: {'graphName': graphName},
             success: function (data) {
-                setLocalStorage('active-graph', graphName);
+                localStorage.setItem('active-graph', graphName);
                 var regionsList = [];
                 var nodesList = [];
                 var hybridsList = [];
@@ -228,21 +255,19 @@ var Graph = React.createClass({
                     }
                 });
 
-                if (this.isMounted()) {
-                    this.setState({
-                        labelsJSON: labelsList,
-                        regionsJSON: regionsList,
-                        nodesJSON: nodesList,
-                        hybridsJSON: hybridsList,
-                        boolsJSON: boolsList,
-                        edgesJSON: edgesList,
-                        width: data.width,
-                        height: data.height,
-                        zoomFactor: 1,
-                        horizontalPanFactor: 0,
-                        verticalPanFactor: 0
-                    });
-                }
+                this.setState({
+                    labelsJSON: labelsList,
+                    regionsJSON: regionsList,
+                    nodesJSON: nodesList,
+                    hybridsJSON: hybridsList,
+                    boolsJSON: boolsList,
+                    edgesJSON: edgesList,
+                    width: data.width,
+                    height: data.height,
+                    zoomFactor: 1,
+                    horizontalPanFactor: 0,
+                    verticalPanFactor: 0
+                });
             }.bind(this),
             error: function (xhr, status, err) {
                 console.error('graph-json', status, err.toString());
@@ -267,9 +292,9 @@ var Graph = React.createClass({
         markerNode.setAttribute('orient', 'auto');
         markerNode.setAttribute('markerWidth', 7);
         markerNode.setAttribute('markerHeight', 7);
-    },
+    }
 
-    componentDidUpdate: function (prevProps, prevState) {
+    componentDidUpdate(prevProps, prevState) {
         if (prevState.nodesJSON !== this.state.nodesJSON) {
             var totalFCEs = 0;
             for (var ref in this.refs.nodes.refs) {
@@ -280,29 +305,29 @@ var Graph = React.createClass({
             }
             this.setFCECount(totalFCEs);
         }
-    },
+    }
 
-    clearAllTimeouts: function () {
+    clearAllTimeouts() {
         for (var i = 0; i < this.state.timeouts.length; i++) {
             clearTimeout(this.state.timeouts[i]);
         }
 
         this.setState({timeouts: []});
-    },
+    }
 
-    setFCECount: function (credits) {
+    setFCECount(credits) {
         this.setState({fceCount: credits}, function () {
             $('#fcecount').text('FCE Count: ' + this.state.fceCount);
         });
-    },
+    }
 
-    incrementFCECount: function (credits) {
+    incrementFCECount(credits) {
         this.setState({fceCount: this.state.fceCount + credits}, function () {
             $('#fcecount').text('FCE Count: ' + this.state.fceCount);
         });
-    },
+    }
 
-    nodeClick: function (event) {
+    nodeClick(event) {
         var courseId = event.currentTarget.id;
         var currentNode = this.refs.nodes.refs[courseId];
         var wasSelected = currentNode.state.selected;
@@ -313,16 +338,16 @@ var Graph = React.createClass({
         } else {
             this.incrementFCECount(0.5);
         }
-    },
+    }
 
-    nodeMouseEnter: function (event) {
+    nodeMouseEnter(event) {
         var courseId = event.currentTarget.id;
         var currentNode = this.refs.nodes.refs[courseId];
         currentNode.focusPrereqs(this);
 
         this.clearAllTimeouts();
 
-        var infoBox = this.refs.infoBox;
+        var infoBox = this.infoBox;
 
         var xPos = currentNode.props.JSON.pos[0];
         var yPos = currentNode.props.JSON.pos[1];
@@ -341,14 +366,14 @@ var Graph = React.createClass({
                           yPos: yPos,
                           nodeId: courseId,
                           showInfobox: true});
-    },
+    }
 
-    nodeMouseLeave: function (event) {
+    nodeMouseLeave(event) {
         var courseId = event.currentTarget.id;
         var currentNode = this.refs.nodes.refs[courseId];
         currentNode.unfocusPrereqs(this);
 
-        var infoBox = this.refs.infoBox;
+        var infoBox = this.infoBox;
 
         var timeout = setTimeout(function () {
                 infoBox.setState({showInfobox: false});
@@ -356,46 +381,46 @@ var Graph = React.createClass({
 
 
         this.setState({timeouts: this.state.timeouts.concat(timeout)});
+    }
 
-    },
-
-    infoBoxMouseEnter: function () {
+    infoBoxMouseEnter() {
         this.clearAllTimeouts();
 
-        var infoBox = this.refs.infoBox;
+        var infoBox = this.infoBox;
         infoBox.setState({showInfobox: true});
-    },
+    }
 
-    infoBoxMouseLeave: function () {
-        var infoBox = this.refs.infoBox;
+    infoBoxMouseLeave() {
+        var infoBox = this.infoBox;
 
         var timeout = setTimeout(function () {
                 infoBox.setState({showInfobox: false});
         }, 400);
 
         this.setState({timeouts: this.state.timeouts.concat(timeout)});
-    },
+    }
 
-    infoBoxMouseClick: function () {
-        var infoBox = this.refs.infoBox;
+    infoBoxMouseClick() {
+        var infoBox = this.infoBox;
         var newCourse = infoBox.state.nodeId.substring(0, 6);
+        console.log(newCourse);
         this.setState({courseId: newCourse});;
-        this.refs.modal.openModal(newCourse);
-    },
+        this.modal.openModal(newCourse);
+    }
 
-    openExportModal: function() {
-        this.refs.exportModal.openModal();
-    },
+    openExportModal() {
+        this.exportModal.openModal();
+    }
 
     // Reset graph
-    reset: function () {
+    reset() {
         this.setFCECount(0);
         this.refs.nodes.reset();
         this.refs.bools.reset();
         this.refs.edges.reset();
-    },
+    }
 
-    renderArrowHead: function () {
+    renderArrowHead() {
         var polylineAttrs = {points: '0,1 10,5 0,9', fill: 'black'};
         return (
             <defs>
@@ -405,9 +430,9 @@ var Graph = React.createClass({
                 </marker>
             </defs>
         );
-    },
+    }
 
-    incrementZoom: function(increase, zoomFactorRate) {
+    incrementZoom(increase, zoomFactorRate) {
         // onButtonRelease calls are required when a button becomes disabled
         // because it loses its ability to detect mouseUp event
         if (increase) {
@@ -423,41 +448,41 @@ var Graph = React.createClass({
                 this.onButtonRelease();
             }
         }
-    },
+    }
 
-    calculateRatioGraphSizeToContainerSize: function() {
+    calculateRatioGraphSizeToContainerSize() {
         var containerWidth = document.getElementById('react-graph').clientWidth;
         var containerHeight = document.getElementById('react-graph').clientHeight;
         var heightToContainerRatio = this.state.height / containerHeight;
         var widthToContainerRatio = this.state.width / containerWidth;
         return Math.max(heightToContainerRatio, widthToContainerRatio);
-    },
+    }
 
-    graphRightEdgeOffScreen: function() {
+    graphRightEdgeOffScreen() {
         // Calculate right edge prior to auto adjusting to fill container.
         var rightEdge = (this.state.width - this.state.horizontalPanFactor) / this.state.zoomFactor;
         // Adjust right edge position to account for auto resize.
         rightEdge /= this.calculateRatioGraphSizeToContainerSize();
         return rightEdge > document.getElementById('react-graph').clientWidth;
-    },
+    }
 
-    graphBottomEdgeOffScreen: function() {
+    graphBottomEdgeOffScreen() {
         // Calculate bottom edge prior to auto adjusting to fill container.
         var bottomEdge = (this.state.height - this.state.verticalPanFactor) / this.state.zoomFactor;
         // Adjust bottom edge position to account for auto resize.
         bottomEdge /= this.calculateRatioGraphSizeToContainerSize();
         return bottomEdge > document.getElementById('react-graph').clientHeight;;
-    },
+    }
 
-    graphTopEdgeOffScreen: function() {
+    graphTopEdgeOffScreen() {
         return this.state.verticalPanFactor > 0;
-    },
+    }
 
-    graphLeftEdgeOffScreen: function() {
+    graphLeftEdgeOffScreen() {
         return this.state.horizontalPanFactor > 0;
-    },
+    }
 
-    panDirection: function(direction, panFactorRate) {
+    panDirection(direction, panFactorRate) {
         // onButtonRelease calls are required when a button becomes disabled
         // because it loses its ability to detect mouseUp event
         if (direction === 'up') {
@@ -485,28 +510,28 @@ var Graph = React.createClass({
                 this.onButtonRelease();
             }
         }
-    },
+    }
 
-    resetZoomAndPan: function() {
+    resetZoomAndPan() {
         this.setState({
             zoomFactor: 1,
             verticalPanFactor: 0,
             horizontalPanFactor: 0
         });
-    },
+    }
 
-    onButtonPress: function(zoomOrPanFunction, direction, rateOfChange) {
+    onButtonPress(zoomOrPanFunction, direction, rateOfChange) {
         zoomOrPanFunction(direction, rateOfChange);
         var mouseIsDown = setInterval(() => zoomOrPanFunction(direction, rateOfChange), 500);
         this.setState({mouseDown: mouseIsDown});
-    },
+    }
 
-    onButtonRelease: function() {
+    onButtonRelease() {
         var mouseIsDown = clearInterval(this.state.mouseDown)
         this.setState({mouseDown: mouseIsDown});
-    },
+    }
 
-    onKeyDown: function(event) {
+    onKeyDown(event) {
         if (event.keyCode == 39) {
             this.panDirection('right', 5);
         } else if (event.keyCode == 40) {
@@ -516,17 +541,17 @@ var Graph = React.createClass({
         } else if (event.keyCode == 38) {
             this.panDirection('up', 5);
         }
-    },
+    }
 
-    onWheel: function(event) {
+    onWheel(event) {
         if (event.deltaY < 0) {
             this.incrementZoom(true, 0.005);
         } else if (event.deltaY > 0) {
             this.incrementZoom(false, 0.005);
         }
-    },
+    }
 
-    render: function () {
+    render() {
         // not all of these properties are supported in React
         var svgAttrs = {
             width: '100%',
@@ -549,8 +574,11 @@ var Graph = React.createClass({
                             this.state.verticalPanFactor == 0;
         return (
             <div>
-                <Modal ref='modal'/>
-                <ExportModal context='graph' session='' ref='exportModal'/>
+                <Modal ref={r => this.modal = r} />
+                <ExportModal
+                    context='graph'
+                    session=''
+                    ref={r => this.exportModal = r} />
                 <Button
                     divId='zoom-in-button'
                     text='+'
@@ -618,7 +646,7 @@ var Graph = React.createClass({
                         svg={this}/>
                     <EdgeGroup svg={this} ref='edges' edgesJSON={this.state.edgesJSON}/>
                     <InfoBox
-                        ref='infoBox'
+                        ref={r => this.infoBox = r}
                         onClick={this.infoBoxMouseClick}
                         onMouseEnter={this.infoBoxMouseEnter}
                         onMouseLeave={this.infoBoxMouseLeave}/>
@@ -627,7 +655,7 @@ var Graph = React.createClass({
 
         );
     }
-});
+}
 
 
 // This now uses the new syntax for a stateless React component
@@ -669,33 +697,39 @@ var RegionGroup = ({regionsJSON, labelsJSON}) => (
 );
 
 
-var NodeGroup = React.createClass({
-    reset: function () {
+class NodeGroup extends React.Component {
+    constructor(props) {
+        super(props);
+        this.reset = this.reset.bind(this);
+        this.findRelationship = this.findRelationship.bind(this);
+    }
+
+    reset() {
         this.props.nodesJSON.forEach(nodeJSON => {
             var node = this.refs[nodeJSON.id_];
             var state = node.props.parents.length === 0 ? 'takeable' : 'inactive';
             node.setState({status: state, selected: false});
-            setLocalStorage(node.props.JSON.id_, state);
+            localStorage.setItem(node.props.JSON.id_, state);
         });
 
         this.props.hybridsJSON.forEach(hybridJSON => {
             var hybrid = this.refs[hybridJSON.id_];
             var state = hybrid.props.parents.length === 0 ? 'takeable' : 'inactive';
             hybrid.setState({status: state, selected: false});
-            setLocalStorage(hybrid.props.JSON.id_, state);
+            localStorage.setItem(hybrid.props.JSON.id_, state);
         });
-    },
+    }
 
     // Helper for hybrid computation
-    findRelationship: function (course) {
+    findRelationship(course) {
         var nodes = this.props.nodesJSON;
         var node = nodes.find(n =>
             n.type_ === 'Node' &&
             n.text.some(textTag => textTag.text.includes(course)));
         return node;
-    },
+    }
 
-    render: function () {
+    render() {
         var svg = this.props.svg;
         var highlightedNodes = this.props.highlightedNodes;
         var nodes = this.props.nodesJSON;
@@ -761,14 +795,14 @@ var NodeGroup = React.createClass({
                         outEdges={outEdges}
                         svg={svg}
                         logicalType={'AND'}/>
-            }, this)}
-            {this.props.nodesJSON.map(function (entry, value) {
+            })}
+            {this.props.nodesJSON.map((entry, value) => {
                 var highlighted = highlightedNodes.indexOf(entry.id_) >= 0;
                 var parents = [];
                 var childs = [];
                 var outEdges = [];
                 var inEdges = [];
-                this.props.edgesJSON.forEach(function (element, key) {
+                this.props.edgesJSON.forEach((element, key) => {
                     if (entry.id_ === element.target) {
                         parents.push(element.source);
                         inEdges.push(element.id_);
@@ -777,7 +811,7 @@ var NodeGroup = React.createClass({
                         outEdges.push(element.id_);
                     }
                 });
-                hybridRelationships.forEach(function (element, key) {
+                hybridRelationships.forEach((element, key) => {
                     if (element[0] === entry.id_) {
                         childs.push(element[1]);
                     }
@@ -797,34 +831,41 @@ var NodeGroup = React.createClass({
                         onClick={this.props.nodeClick}
                         onMouseEnter={this.props.nodeMouseEnter}
                         onMouseLeave={this.props.nodeMouseLeave} />
-            }, this)}
+            })}
             </g>
         );
     }
-});
+}
 
 
-var Node = React.createClass({
-    getInitialState: function () {
-        var state = getLocalStorage(this.props.JSON.id_);
-        if (state === '') {
+class Node extends React.Component {
+    constructor(props) {
+        super(props);
+        var state = localStorage.getItem(this.props.JSON.id_);
+        if (state === null) {
             state = this.props.parents.length === 0 ? 'takeable' : 'inactive';
         }
-        return {
+        this.state = {
             status: state,
             selected: ['active', 'overridden'].indexOf(state) >= 0
         };
-    },
+        this.isSelected = this.isSelected.bind(this);
+        this.arePrereqsSatisfied = this.arePrereqsSatisfied.bind(this);
+        this.updateNode = this.updateNode.bind(this);
+        this.toggleSelection = this.toggleSelection.bind(this);
+        this.focusPrereqs = this.focusPrereqs.bind(this);
+        this.unfocusPrereqs = this.unfocusPrereqs.bind(this);
+    }
 
-    isSelected: function () {
+    isSelected() {
         if (this.props.hybrid) {
             return this.state.status === 'active';
         } else {
             return this.state.selected;
         }
-    },
+    }
 
-    arePrereqsSatisfied: function () {
+    arePrereqsSatisfied() {
         var svg = this.props.svg;
         function isAllTrue(element) {
             if (typeof element === 'string') {
@@ -837,9 +878,9 @@ var Node = React.createClass({
         }
 
         return this.props.parents.every(isAllTrue);
-    },
+    }
 
-    updateNode: function (recursive) {
+    updateNode(recursive) {
         var newState;
         if (this.arePrereqsSatisfied()) {
             if (this.isSelected() || this.props.hybrid) {
@@ -861,7 +902,7 @@ var Node = React.createClass({
         if ((['active', 'overridden'].indexOf(newState) >= 0) ===
             (['active', 'overridden'].indexOf(this.state.status) >= 0) &&
             this.state.status !== 'missing') {
-            setLocalStorage(nodeId, newState);
+            localStorage.setItem(nodeId, newState);
             this.setState({status: newState});
             return;
         }
@@ -869,7 +910,7 @@ var Node = React.createClass({
         if (recursive === undefined || recursive) {
             var svg = this.props.svg;
             this.setState({status: newState}, function () {
-                setLocalStorage(nodeId, newState);
+                localStorage.setItem(nodeId, newState);
                 this.props.childs.forEach(function (node) {
                     var currentNode = refLookUp(node, svg);
                     currentNode.updateNode();
@@ -882,17 +923,17 @@ var Node = React.createClass({
             });
         } else {
             this.setState({status: newState});
-            setLocalStorage(nodeId, newState);
+            localStorage.setItem(nodeId, newState);
         }
-    },
+    }
 
-    toggleSelection: function () {
+    toggleSelection() {
         this.setState({selected: !this.state.selected}, function () {
             this.updateNode();
         })
-    },
+    }
 
-    focusPrereqs: function () {
+    focusPrereqs() {
         var svg = this.props.svg;
         var id = this.props.JSON.id_;
         // Check if there are any missing prerequisites.
@@ -919,9 +960,9 @@ var Node = React.createClass({
                 });
             });
         }
-    },
+    }
 
-    unfocusPrereqs: function () {
+    unfocusPrereqs() {
         var svg = this.props.svg;
         this.updateNode(false);
         this.props.parents.forEach(function (node) {
@@ -941,9 +982,9 @@ var Node = React.createClass({
                 currentEdge.updateStatus();
             }
         });
-    },
+    }
 
-    render: function () {
+    render() {
         var newClassName = this.props.className + ' ' + this.state.status;
         if (this.props.highlighted) {
             var attrs = this.props.JSON;
@@ -962,8 +1003,13 @@ var Node = React.createClass({
         }
 
         var gAttrs = {
-            'text-rendering': 'geometricPrecision',
-            'shape-rendering': 'geometricPrecision'
+            'textRendering': 'geometricPrecision',
+            'shapeRendering': 'geometricPrecision',
+            'onKeyDown': this.props.svg.onKeyDown,
+            'onWheel': this.props.svg.onWheel,
+            'onMouseEnter': this.props.onMouseEnter,
+            'onMouseLeave': this.props.onMouseLeave,
+            'onClick': this.props.onClick,
         };
 
         var rectAttrs = {
@@ -981,8 +1027,10 @@ var Node = React.createClass({
 
         var textXOffset = this.props.JSON.pos[0] + this.props.JSON.width / 2;
 
+        // TODO: Look at this.props to see what we need to give the g
         return (
-            <g {... this.props} {... gAttrs}
+            <g {... gAttrs}
+
                id={this.props.JSON.id_}
                className={newClassName} >
                 {ellipse}
@@ -1000,31 +1048,37 @@ var Node = React.createClass({
             </g>
         );
     }
-});
+}
 
 
-var BoolGroup = React.createClass({
-    componentDidMount: function () {
+class BoolGroup extends React.Component {
+    constructor(props) {
+        super(props);
+        this.reset = this.reset.bind(this);
+        this.generateBool = this.generateBool.bind(this);
+    }
+
+    componentDidMount() {
         for (var boolJSON of this.props.boolsJSON) {
             var ref = boolJSON.id_;
             this.refs[ref].updateNode(this.props.svg);
         }
-    },
+    }
 
-    reset: function () {
+    reset() {
         this.props.boolsJSON.forEach((boolJSON) => {
             var bool = this.refs[boolJSON.id_];
             bool.setState({status: 'inactive'});
         });
-    },
+    }
 
     // Generate data for a Bool node
-    generateBool: function (boolJSON) {
+    generateBool(boolJSON) {
         var parents = [];
         var childs = [];
         var outEdges = [];
         var inEdges = [];
-        this.props.edgesJSON.map(function (edge) {
+        this.props.edgesJSON.map((edge) => {
             if (boolJSON.id_ === edge.target) {
                 parents.push(edge.source);
                 inEdges.push(edge.id_);
@@ -1045,28 +1099,34 @@ var BoolGroup = React.createClass({
                 outEdges={outEdges}
                 logicalType={(boolJSON.text[0] && boolJSON.text[0].text) || 'and'}
                 svg={this.props.svg}/>
-    },
+    }
 
-    render: function () {
+    render() {
         return (
             <g id='bools'>
                 {this.props.boolsJSON.map(this.generateBool)}
             </g>
         );
     }
-});
+}
 
 
-var Bool = React.createClass({
-    getInitialState: function () {
-        return {status: 'inactive'};
-    },
+class Bool extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {status: 'inactive'};
+        this.isSelected = this.isSelected.bind(this);
+        this.arePrereqsSatisfied = this.arePrereqsSatisfied.bind(this);
+        this.updateNode = this.updateNode.bind(this);
+        this.focusPrereqs = this.focusPrereqs.bind(this);
+        this.unfocusPrereqs = this.unfocusPrereqs.bind(this);
+    }
 
-    isSelected: function () {
+    isSelected() {
         return this.state.status == 'active';
-    },
+    }
 
-    arePrereqsSatisfied: function () {
+    arePrereqsSatisfied() {
         var svg = this.props.svg;
         function isAllTrue(element) {
             return (
@@ -1080,15 +1140,15 @@ var Bool = React.createClass({
         } else if (this.props.logicalType === 'or') {
             return this.props.parents.some(isAllTrue);
         }
-    },
+    }
 
-    updateNode: function () {
+    updateNode() {
         var svg = this.props.svg;
         var newState = this.arePrereqsSatisfied() ? 'active' : 'inactive';
 
         var boolId = this.props.JSON.id_;
         this.setState({status: newState}, function () {
-            setLocalStorage(boolId, newState);
+            localStorage.setItem(boolId, newState);
             this.props.childs.forEach(function (node) {
                 var currentNode = refLookUp(node, svg);
                 currentNode.updateNode(svg);
@@ -1099,9 +1159,9 @@ var Bool = React.createClass({
                 currentEdge.updateStatus();
             });
         });
-    },
+    }
 
-    focusPrereqs: function () {
+    focusPrereqs() {
         var svg = this.props.svg;
         // Check if there are any missing prerequisites.
         if (this.state.status !== 'active') {
@@ -1119,18 +1179,18 @@ var Bool = React.createClass({
                 });
             });
         }
-    },
+    }
 
-    unfocusPrereqs: function () {
+    unfocusPrereqs() {
         var svg = this.props.svg;
         this.updateNode(svg);
         this.props.parents.forEach(function (node, i) {
             var currentNode = refLookUp(node, svg);
             currentNode.unfocusPrereqs(svg);
         });
-    },
+    }
 
-    render: function () {
+    render() {
         var ellipseAttrs = {
             cx: this.props.JSON.pos[0],
             cy: this.props.JSON.pos[1],
@@ -1154,39 +1214,43 @@ var Bool = React.createClass({
             </g>
         );
     }
-});
+}
 
 
-var EdgeGroup = React.createClass({
-    // EdgeGroup's state is used to keep track of the edgeIDs of
-    // edges that are missing. Void is just a placeholder state so
-    // we can declare an initial state; it does nothing.
-    getInitialState: function() {
-        return {};
-    },
+class EdgeGroup extends React.Component {
+    constructor(props) {
+        super(props);
+        // EdgeGroup's state is used to keep track of the edgeIDs of
+        // edges that are missing. Void is just a placeholder state so
+        // we can declare an initial state; it does nothing.
+        this.state = {}
+        this.updateEdgeStatus = this.updateEdgeStatus.bind(this);
+        this.reset = this.reset.bind(this);
+        this.generateEdge = this.generateEdge.bind(this);
+    }
 
     // When an edge's state changes and the edge is not undefined,
     // it will call updateEdgeStatus and update EdgeGroup's state with its
     // edgeID and status. This function is passed as a props to Edge.
-    updateEdgeStatus: function(edgeID, state) {
+    updateEdgeStatus(edgeID, state) {
         var isMissing = state === 'missing';
         this.setState({[edgeID]: isMissing});
-    },
+    }
 
-    componentDidUpdate: function () {
+    componentDidUpdate() {
         for (var ref in this.refs) {
             this.refs[ref].updateStatus();
         }
-    },
+    }
 
-    reset: function () {
+    reset() {
         this.props.edgesJSON.forEach((edgeJSON) => {
             this.refs[edgeJSON.id_].setState({status: 'inactive'});
         });
-    },
+    }
 
     // Generate data for an Edge component
-    generateEdge: function (edgeJSON) {
+    generateEdge(edgeJSON) {
         return <Edge className='path'
                      key={edgeJSON.id_}
                      ref={edgeJSON.id_}
@@ -1196,16 +1260,16 @@ var EdgeGroup = React.createClass({
                      svg={this.props.svg}
                      edgeID={edgeJSON.id_}
                      updateEdgeStatus={this.updateEdgeStatus} />;
-    },
+    }
 
-    render: function () {
+    render() {
         // Missing edges must be rendered last. The sort
         // method custom sorts a copy of edgesJSON so that all missing edges
         // are last in the list. Then render based on that list.
         var edges = this.props.edgesJSON;
         var edgesCopy = $.extend([], edges);
         var state = this.state;
-        edgesCopy.sort(function(a, b) {
+        edgesCopy.sort((a, b) => {
             // If an edge is missing, its edgeID should be in EdgeGroup's
             // state and its value should be true.
             var aID = a.id_;
@@ -1231,15 +1295,17 @@ var EdgeGroup = React.createClass({
             </g>
         );
     }
-});
+}
 
 
-var Edge = React.createClass({
-    getInitialState: function () {
-        return {status: 'inactive'};
-    },
+class Edge extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {status: 'inactive'};
+        this.updateStatus = this.updateStatus.bind(this);
+    }
 
-    updateStatus: function () {
+    updateStatus() {
         var source = refLookUp(this.props.source, this.props.svg);
         var target = refLookUp(this.props.target, this.props.svg);
         if (!source.isSelected() && target.state.status === 'missing') {
@@ -1251,17 +1317,17 @@ var Edge = React.createClass({
         } else {
             this.setState({status: 'active'});
         }
-    },
+    }
 
-    componentDidUpdate : function(prevProps, prevState) {
+    componentDidUpdate(prevProps, prevState) {
         // After each render, check if the edge's state has changed. If so,
         // notify the state of EdgeGroup with updateEdgeStatus.
         if (this.state.status !== prevState.status) {
             this.props.updateEdgeStatus(this.props.edgeID, this.state.status);
         }
-    },
+    }
 
-    render: function () {
+    render() {
         var pathAttrs = {d: 'M'};
         this.props.points.forEach(function (p) {
             pathAttrs.d += p[0] + ',' + p[1] + ' ';
@@ -1274,20 +1340,21 @@ var Edge = React.createClass({
             </path>
         );
     }
-});
+}
 
 
-var InfoBox = React.createClass({
-    getInitialState: function () {
-        return {
+class InfoBox extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
             xPos: '0',
             yPos: '0',
             nodeId: '',
             showInfobox: false
         };
-    },
+    }
 
-    render: function () {
+    render() {
         if (this.state.showInfobox) {
             //TODO: move to CSS
             var gStyles = {
@@ -1326,6 +1393,4 @@ var InfoBox = React.createClass({
             return <g></g>;
         }
     }
-});
-
-export default {renderReactGraph: renderReactGraph};
+}
