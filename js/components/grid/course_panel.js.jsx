@@ -121,12 +121,10 @@ class Course extends React.Component {
   }
 
   parseLectures(lectures) {
-    // Remove duplicated lecture sections
-    const allLectures = removeDuplicateLectures(lectures);
     let parsedLectures = [];
 
     // Loop through the lecture sections to get each section's session code and lecture times
-    allLectures.forEach( lectureInfo => {
+    lectures.forEach( lectureInfo => {
       // Check to make sure its not an online section (online sections have course codes beginning with 9) or
       // restricted section. Restricted sections have enrollment restricted for a particular group of students,
       // but happens at the same time and place as a regular lecture/tutorial section.
