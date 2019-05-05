@@ -44,13 +44,13 @@ timetableScripts = do
     H.script ! A.src "/static/js/grid/app.js" $ ""
 
 drawScripts :: H.Html
-drawScripts =
+drawScripts = do
     mapM_ toScript $
         ["/static/js/draw/variables.js",
          "/static/js/draw/path.js",
-         "/static/js/draw/draw.js",
          "/static/js/draw/setup.js",
          "/static/js/vendor/jscolor.min.js"]
+    H.script ! A.src "/static/js/draw/app.js" $ ""
 
 postScripts :: H.Html
 postScripts = do

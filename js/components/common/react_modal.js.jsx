@@ -118,4 +118,35 @@ class Video extends React.Component {
 }
 
 
+/**
+ * Returns and formats all course codes in id.
+ * @param {string} id The Node's ID.
+ * @returns {string[]} All formatted course codes.
+ * TODO: Change function name
+ */
+function formatCourseName(id) {
+  var names;
+
+  if (id === 'CSC200') {
+      names = id + 'Y1';
+  } else if (id === 'Calc1') {
+      names = 'MAT135H1' + ' ' + 'MAT136H1' + ' ' + 'MAT137Y1' + ' ' +
+              'MAT157Y1';
+  } else if (id === 'Lin1') {
+      names = 'MAT221H1' + ' ' + 'MAT223H1' + ' ' + 'MAT240H1';
+  } else if (id === 'Sta1') {
+      names = 'STA247H1' + ' ' + 'STA255H1';
+  } else if (id === 'Sta2') {
+      names = 'STA248H1' + ' ' + 'STA261H1';
+  } else if (id.indexOf('H1', id.length - 2) !== -1) {
+      names = id;
+  } else {
+      names = id + 'H1';
+  }
+
+  names = names.split(" ");
+  return names;
+}
+
+
 export { Modal };

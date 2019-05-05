@@ -18,6 +18,7 @@ drawResponse =
                     header "draw"
                     drawContent
                     modePanel
+                    H.div ! A.id "react-graph" $ ""
                 )
                 drawScripts
 

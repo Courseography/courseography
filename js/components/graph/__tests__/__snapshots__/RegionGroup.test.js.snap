@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RegionGroup should match shallow snapshot 1`] = `
+<g
+  id="regions"
+>
+  <path
+    className="region"
+    d="M17.386348,281.07376883 17.386348,14.41568908 316.385978,14.41576883 316.386348,281.07376883 "
+    key="0"
+    style={
+      Object {
+        "fill": "#6276b9",
+      }
+    }
+  />
+  <text
+    className="region-label"
+    key="0"
+    style={
+      Object {
+        "fill": "#000000",
+      }
+    }
+    x={1088.1677413999998}
+    y={201.36453113000002}
+  >
+    Systems
+  </text>
+</g>
+`;

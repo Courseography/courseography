@@ -6,6 +6,7 @@ module.exports = {
     'js/grid/app': './js/components/grid/grid.js.jsx',
     'js/graph/app': './js/components/graph/main.js',
     'js/post/app': './js/components/post/post.js.jsx',
+    'js/draw/app': './js/components/draw/main.js',
   },
   output: {
     path: path.resolve(__dirname, 'public'),
