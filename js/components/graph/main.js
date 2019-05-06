@@ -59,6 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 export function renderReactGraph(graph_container_id, start_blank, edit) {
+  console.log(start_blank, edit);
   if (start_blank === undefined) {
     start_blank = false;
   }
