@@ -10,7 +10,6 @@ module Css.Timetable
 
 import Clay
 import Prelude hiding ((**))
-import Data.Monoid
 import Css.Constants
 
 -- |Defines the CSS for the timetable page.

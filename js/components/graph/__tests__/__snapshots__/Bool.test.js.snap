@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Bool should match shallow snapshot 1`] = `
+exports[`AND Bool should match shallow snapshot 1`] = `
 <g
   className="bool inactive"
   fill=""
@@ -44,6 +44,54 @@ exports[`Bool should match shallow snapshot 1`] = `
     y={246.655709}
   >
     and
+  </text>
+</g>
+`;
+
+exports[`OR Bool should match shallow snapshot 1`] = `
+<g
+  className="bool inactive"
+  fill=""
+  graph={1}
+  height={14.7368002}
+  id="bool1"
+  pos={
+    Array [
+      1020.015148,
+      243.51310800000002,
+    ]
+  }
+  stroke=""
+  text={
+    Array [
+      Object {
+        "align": "begin",
+        "fill": "",
+        "graph": 1,
+        "pos": Array [
+          1012.903868,
+          246.655709,
+        ],
+        "rID": "text512",
+        "text": "or",
+      },
+    ]
+  }
+  type_="BoolNode"
+  width={19.7600002}
+>
+  <ellipse
+    cx={1020.015148}
+    cy={243.51310800000002}
+    rx="9.8800001"
+    ry="7.3684001"
+  />
+  <text
+    key="0"
+    x={1020.015148}
+    y={246.655709}
+  >
+    or
   </text>
 </g>
 `;

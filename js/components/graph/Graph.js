@@ -57,9 +57,10 @@ export default class Graph extends React.Component {
       .addEventListener("wheel", this.onWheel);
 
     // Enable "Export" link
-    document
-      .getElementById("nav-export")
-      .addEventListener("click", this.exportModal.current.openModal);
+    if (document.getElementById("nav-export")) {
+      document.getElementById("nav-export")
+        .addEventListener("click", this.exportModal.current.openModal);
+    }
 
     // Need to hardcode these in because React does not understand these attributes
     var svgNode = this.svg.current;
@@ -225,15 +226,19 @@ export default class Graph extends React.Component {
 
   setFCECount = credits => {
     this.setState({ fceCount: credits }, function() {
-      document.getElementById("fcecount").textContent =
-        "FCE Count: " + this.state.fceCount;
+      if (document.getElementById("fcecount")) {
+        document.getElementById("fcecount").textContent =
+          "FCE Count: " + this.state.fceCount;
+      }
     });
   };
 
   incrementFCECount = credits => {
     this.setState({ fceCount: this.state.fceCount + credits }, function() {
-      document.getElementById("fcecount").textContent =
-        "FCE Count: " + this.state.fceCount;
+      if (document.getElementById("fcecount")) {
+        document.getElementById("fcecount").textContent =
+          "FCE Count: " + this.state.fceCount;
+      }
     });
   };
 
@@ -589,7 +594,7 @@ export default class Graph extends React.Component {
     };
 
     var nodeJSON = {
-      fill: "#" + document.getElementById("select-colour").val(),
+      fill: "#" + document.getElementById("select-colour").value,
       graph: 0,
       // default dimensions for a node
       height: 32,

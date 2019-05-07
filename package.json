@@ -1,6 +1,6 @@
 {
   "name": "courseography",
-  "version": "0.2.0.0",
+  "version": "0.2.0",
   "repository": "git@github.com:Courseography/courseography.git",
   "author": "David Liu <david@cs.toronto.edu>",
   "license": "GPL-3.0",

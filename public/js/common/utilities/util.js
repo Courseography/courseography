@@ -185,17 +185,3 @@ function cleanUpTimes(times) {
 
     return timeList;
 }
-
-/**
- * Returns a copy of lectures with duplicate lecture sessions removed, and lectures
- * sorted by section.
- * @param {object[]} lectures The lectures to remove duplicates from.
- * @returns {object[]} The lectures without duplicates.
- */
-function removeDuplicateLectures(lectures) {
-    'use strict'
-
-    return lectures.filter((lecture, index, lectures) =>
-            lectures.map(lect => lect.meetingData.section).indexOf(lecture.meetingData.section) === index)
-        .sort((lec1, lec2) => lec1.meetingData.section > lec2.meetingData.section);
-}

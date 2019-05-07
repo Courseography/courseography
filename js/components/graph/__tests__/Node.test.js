@@ -1,28 +1,8 @@
 import React from "react";
-import Graph from "../Graph";
 import { shallow } from "enzyme";
-import waitUntil from "async-wait-until";
-import { render, cleanup } from "react-testing-library";
+import { cleanup } from "react-testing-library";
 import Node from "../Node";
-
-/**
- * @param {function} done - provided by Jest to indicate the completion of an async operation
- * @returns {Graph}
- */
-async function setupGraph(done) {
-  const graphProps = {
-    edit: false,
-    initialDrawMode: "draw-node",
-    initialOnDraw: false,
-    start_blank: false
-  };
-
-  const graph = render(<Graph {...graphProps} />);
-  await waitUntil(() => graph.queryByText("AAA100") !== null);
-  expect(graph.queryByText("AAA100")).toBeTruthy();
-  done();
-  return graph;
-}
+import setupGraph from "./setupGraph";
 
 afterEach(cleanup);
 
@@ -118,8 +98,8 @@ describe("Course Node", () => {
     expect(wrapper).toMatchSnapshot();
   });
 
-  it("should render Node component properly with proper course code", async done => {
-    const graph = await setupGraph(done);
+  it("should render Node component properly with proper course code", async () => {
+    const graph = await setupGraph();
     const courseTextNode = graph.getByText("AAA100");
     expect(courseTextNode.parentNode.id.toUpperCase()).toBe(
       courseTextNode.innerHTML

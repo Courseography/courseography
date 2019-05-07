@@ -31,17 +31,13 @@ class Modal extends React.Component {
     if (newCourse === this.state.courseId) {
       this.setState({ modalIsOpen: true });
     } else {
-      let formatted = formatCourseName(newCourse);
-      getCourse(formatted[0])
+      getCourse(newCourse)
         .then(course => {
-          //This is getting the session times
-          let sessions = course.fallSession.lectures
-            .concat(course.springSession.lectures)
-            .concat(course.yearSession.lectures);
             //Tutorials don't have a timeStr to print, so I've currently omitted them
           this.setState({
             course: course,
-            sessions: sessions,
+            sessions: course.allMeetingTimes.sort((firstLec, secondLec) =>
+              firstLec.meetData.session > secondLec.meetData.session ? 1 : -1),
             modalIsOpen: true,
             courseId: newCourse,
             courseTitle: `${newCourse.toUpperCase()} ${course.title}`
@@ -89,7 +85,7 @@ class Description extends React.Component {
         <p><strong>Breadth Requirement: </strong>{this.props.course.breadth}</p>
         <p><strong>Timetable: </strong></p>
         {this.props.sessions.map(function (lecture, i) {
-          return <p key={i}>{lecture.code + lecture.session + '-' + lecture.section}</p>;
+          return <p key={i}>{lecture.meetData.code + lecture.meetData.session + '-' + lecture.meetData.section}</p>;
         })}
         {/*<Video urls={this.props.course.videoUrls} />*/}
       </div>

@@ -1,5 +1,5 @@
 module WebParsing.ArtSciParser
-    (parseArtSci, getDeptList, fasCalendarURL) where
+    (parseArtSci, getDeptList, fasCalendarURL, parseBuildings) where
 
 import Data.Either (either)
 import Data.List (elemIndex, nubBy)
@@ -14,11 +14,11 @@ import WebParsing.ParsecCombinators (text)
 import Network.HTTP.Simple (parseRequest, getResponseBody, httpLBS)
 import qualified Text.HTML.TagSoup as TS
 import Text.HTML.TagSoup (Tag)
-import Text.HTML.TagSoup.Match (tagOpenAttrLit, tagOpenAttrNameLit)
-import Database.Persist.Sqlite (runSqlite, SqlPersistM)
+import Text.HTML.TagSoup.Match (tagOpenAttrLit, tagOpenAttrNameLit, tagText)
+import Database.Persist.Sqlite (runSqlite, SqlPersistM, insertMany_)
 import Database.Persist (insertUnique)
 import Database.CourseInsertion (insertCourse)
-import Database.Tables (Courses(..), Department(..))
+import Database.Tables (Courses(..), Department(..), Building(..))
 import WebParsing.ReqParser (parseReqs)
 import Config (databasePath)
 import WebParsing.PostParser (addPostToDatabase)
@@ -29,6 +29,36 @@ fasCalendarURL :: String
 fasCalendarURL = "https://fas.calendar.utoronto.ca/"
 programsURL :: String
 programsURL = "https://fas.calendar.utoronto.ca/listing-program-subject-areas"
+buildingsURL :: String
+buildingsURL = "http://map.utoronto.ca/utsg/c/buildings"
+
+parseBuildings :: IO ()
+parseBuildings = do
+    bodyTags <- httpBodyTags buildingsURL
+    let buildingInfo = getBuildingList bodyTags
+    runSqlite databasePath $ do
+        liftIO $ putStrLn "Inserting buildings"
+        insertMany_ buildingInfo :: SqlPersistM ()
+
+-- | Extract building names, codes, addresses and postal codes from the html building listing page.
+getBuildingList :: [Tag T.Text] -> [Building]
+getBuildingList tags =
+    let listing = TS.partitions (TS.isTagOpenName "dl") tags
+        listing' = map (takeWhile (not . TS.isTagCloseName "dl")) listing
+        buildings = map extractBuildings listing'
+    in buildings
+    where
+        extractBuildings :: [Tag T.Text] -> Building
+        extractBuildings listTags =
+            let buildInfo = filter (tagText (const True)) listTags
+                buildName = TS.fromTagText $ buildInfo !! 1
+                buildCode = T.drop 3 $ TS.fromTagText $ buildInfo !! 2
+                buildAddress = T.breakOn "," $ TS.fromTagText $ buildInfo !! 4
+            in
+                Building buildCode
+                         buildName
+                         (fst buildAddress)
+                         (T.takeEnd 7 (snd buildAddress))
 
 -- | Parses the entire Arts & Science Course Calendar and inserts courses
 -- into the database.
@@ -116,8 +146,6 @@ parseCourses tags =
                 (Courses code
                          (Just title)
                          (Just description)
-                         Nothing
-                         Nothing
                          (fmap (T.pack . show . parseReqs . T.unpack) prereqString)
                          exclusion
                          Nothing
