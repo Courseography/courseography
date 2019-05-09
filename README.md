@@ -77,6 +77,7 @@ Ryan Fan,
 Ailsa Fang,
 Christian Garcia,
 Ross Gatih,
+Sidharth Gupta
 Parker Hutcheson,
 Philip Kukulak,
 Ryan Lee,
@@ -87,9 +88,12 @@ Jahnavi Matholia,
 Hermish Mehta,
 Mia Meng,
 Christine Murad,
+Justin Park,
 Sam Shaftoe,
-Ian Stewart-Binks
-
+Ian Stewart-Binks,
+Betty Wang,
+Fullchee Zhang,
+Minfan Zhang
 
 Privacy Policy and Licensing
 --------------------------------------
@@ -97,7 +101,3 @@ Privacy Policy and Licensing
 Click [here](/PRIVACY.md) to learn about our Privacy Policy.
 
 Click [here](/LICENSE) to learn about our licensing.
-
-
-[slackin]: https://courseography-slack.herokuapp.com/
-[slackin-badge]: https://courseography-slack.herokuapp.com/badge.svg
