@@ -16,7 +16,7 @@ directly to the client when viewing the @/graph@ page.
 module Svg.Parser
     (parsePrebuiltSvgs) where
 
-import Data.Maybe (fromMaybe, fromJust, isNothing)
+import Data.Maybe (fromMaybe, fromJust, isNothing, catMaybes)
 import qualified Text.HTML.TagSoup as TS hiding (fromAttrib)
 import Database.Persist.Sqlite (runSqlite, SqlPersistM)
 import Text.HTML.TagSoup (Tag)
@@ -35,7 +35,7 @@ import Data.List.Split (splitOn)
 parsePrebuiltSvgs :: IO ()
 parsePrebuiltSvgs = runSqlite databasePath $ do
     deleteGraphs
-    performParse "Computer Science" "csc2017.svg"
+    performParse "Computer Science" "csc2019.svg"
     performParse "Statistics" "sta2017.svg"
     performParse "Biochemistry" "bch2015.svg"
     performParse "Cell & Systems Biology" "csb2015.svg"
@@ -338,30 +338,56 @@ parseCoord coord =
 
 
 -- | Parses a path's `d` attribute.
+-- See <https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d>.
 parsePathD :: T.Text -- ^ The 'd' attribute of an SVG path.
            -> [Point]
-parsePathD d
-    | T.head d == 'm' = relCoords
-    | otherwise = absCoords
+parsePathD d = catMaybes $ parseTokens (tokenize d) []
     where
-      lengthMoreThanOne x = length x > 1
-      coordList = filter lengthMoreThanOne (map (T.splitOn ",") $ T.splitOn " " d)
-      -- Converts a relative coordinate structure into an absolute one.
-      relCoords = tail $ foldl (\x z -> x ++ [addTuples (convertToPoint z)
-                                                        (last x)])
-                               [(0, 0)]
-                               coordList
-      -- Converts a relative coordinate structure into an absolute one.
-      absCoords = map convertToPoint coordList
+      -- Split d text into tokens of a single string (for commands)
+      -- or a list of two strings (for points).
+      tokenize d' = map (T.splitOn ",") $ filter (not . T.null) $ T.splitOn " " d'
 
-      convertToPoint z =
-        let
-            x = readMaybe (T.unpack $ head z)
-            y = readMaybe (T.unpack $ last z)
-        in
-            case (x, y) of
-                (Just m, Just n) -> (m, n)
-                _ -> error $ show z
+      parseTokens :: [[T.Text]] -> [Maybe Point] -> [Maybe Point]
+      parseTokens [] points = points
+      -- TODO: Fix support for Bezier curves (indicated by the "C"/"c").
+      parseTokens (["C"]:_:_:d') points = parseTokens d' points
+      parseTokens (["c"]:_:_:d') points = parseTokens d' points
+
+      -- Close loop to beginning of path.
+      parseTokens [["Z"]] points = points ++ [head points]
+      parseTokens [["z"]] points = points ++ [head points]
+
+      -- Absolute move.
+      parseTokens (["L"]:d') points = parseTokens d' points
+      parseTokens (["M"]:d') points = parseTokens d' points
+
+      -- Relative move.
+      parseTokens (["m"]:[x,y]:d') points =
+        parseTokens (["m"]:d') $
+          points ++ [addTuples <$> convertToPoint (x,y) <*> (if null points then Just (0, 0) else last points)]
+      parseTokens (["m"]:d') points = parseTokens d' points
+      parseTokens ([x, y]:d') points = parseTokens d' $ points ++ [convertToPoint (x, y)]
+    --   parseTokens (["l"]:d') points = parseTokens d' points
+
+      -- Absolute horizontal/vertical move.
+      parseTokens (["H"]:[x2]:d') points =
+        parseTokens d' $ points ++ [(,) <$> readMaybe (T.unpack x2) <*> (snd <$> last points)]
+      parseTokens (["V"]:[y2]:d') points =
+        parseTokens d' $ points ++ [(,) <$> (fst <$> last points) <*> readMaybe (T.unpack y2)]
+
+      -- Relative horizontal/vertical move.
+      parseTokens (["h"]:[x2]:d') points =
+        parseTokens d' $ points ++ [(,) <$> ((+) <$> (fst <$> last points) <*> readMaybe (T.unpack x2)) <*> (snd <$> last points)]
+      parseTokens (["v"]:[y2]:d') points =
+        parseTokens d' $ points ++ [(,) <$> (fst <$> last points) <*> ((+) <$> (snd <$> last points) <*> readMaybe (T.unpack y2))]
+
+      -- Error case.
+      parseTokens d' _ = error (show d')
+
+      convertToPoint (x, y) =
+        case (readMaybe (T.unpack x), readMaybe (T.unpack y)) of
+            (Just m, Just n) -> Just (m, n)
+            _ -> Nothing
 
 
 -- * Other helpers
