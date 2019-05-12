@@ -54,18 +54,22 @@ describe("Edge", () => {
     }
   });
 
-  describe("clicking behaviour", () => {
-    it("with selected source and unselected destination should be takeable", async () => {
+  describe("Clicking course nodes", () => {
+    it("unselected source and destination should have an 'inactive' Edge", async () => {
+      const graph = await setupGraph();
+      const h101_201 = getPath(graph, "h101-201");
+      expect(h101_201.classList.contains("inactive")).toBe(true);
+    });
+    it("with selected source and unselected destination should have a 'takeable' Edge", async () => {
       const graph = await setupGraph();
       const aaa101 = graph.getByText("AAA101").parentNode;
       const h101_201 = getPath(graph, "h101-201");
-      expect(h101_201.classList.contains("inactive")).toBe(true);
 
       fireEvent.click(aaa101);
       expect(h101_201.classList.contains("takeable")).toBe(true);
     });
 
-    it("with selected source with unselected selected destination should still be inactive", async () => {
+    it("with selected source with unselected selected destination should still have an 'inactive' Edge", async () => {
       const graph = await setupGraph();
       const aaa201 = graph.getByText("AAA201").parentNode;
       const h101_201 = getPath(graph, "h101-201");
@@ -75,7 +79,7 @@ describe("Edge", () => {
       expect(h101_201.classList.contains("inactive")).toBe(true);
     });
 
-    it("with selected source and destination should be active", async () => {
+    it("with selected source and destination should have an 'active' Edge", async () => {
       const graph = await setupGraph();
       const aaa101 = graph.getByText("AAA101").parentNode;
       const aaa201 = graph.getByText("AAA201").parentNode;
@@ -88,15 +92,67 @@ describe("Edge", () => {
   });
 
   describe("hovering behaviour", async () => {
+    it("hovering over the source does nothing, regardless of the state of the source and destination", async () => {
+      const graph = await setupGraph();
+      const aaa101 = graph.getByText("AAA101").parentNode;
+      const aaa201 = graph.getByText("AAA201").parentNode;
+      const h101_201 = getPath(graph, "h101-201");
+
+      expect(h101_201.classList.contains("inactive")).toBe(true);
+      fireEvent.mouseOver(aaa101);
+      expect(h101_201.classList.contains("inactive")).toBe(true);
+      fireEvent.mouseOut(aaa101);
+
+      fireEvent.click(aaa101); // select
+      expect(h101_201.classList.contains("takeable")).toBe(true);
+      fireEvent.mouseOver(aaa101);
+      expect(h101_201.classList.contains("takeable")).toBe(true);
+      fireEvent.mouseOut(aaa101);
+
+      fireEvent.click(aaa201); // select
+      expect(h101_201.classList.contains("active")).toBe(true);
+      fireEvent.mouseOver(aaa101);
+      expect(h101_201.classList.contains("active")).toBe(true);
+      fireEvent.mouseOut(aaa101);
+
+      fireEvent.click(aaa101); // deselect
+      expect(h101_201.classList.contains("inactive")).toBe(true);
+      fireEvent.mouseOver(aaa101);
+      expect(h101_201.classList.contains("inactive")).toBe(true);
+      fireEvent.mouseOut(aaa101);
+    });
+
+    it("selected source and unselected destination, hovering over the destination will have the Edge remain 'takeable'", async () => {
+      const graph = await setupGraph();
+      const aaa101 = graph.getByText("AAA101").parentNode;
+      const aaa201 = graph.getByText("AAA201").parentNode;
+      const h101_201 = getPath(graph, "h101-201");
+      fireEvent.click(aaa101);
+      expect(h101_201.classList.contains("takeable")).toBe(true);
+      fireEvent.mouseOver(aaa201);
+      expect(h101_201.classList.contains("takeable")).toBe(true);
+    });
+
+    it("selected source and selected destination, hovering over the destination will have the Edge remain 'active'", async () => {
+      const graph = await setupGraph();
+      const aaa101 = graph.getByText("AAA101").parentNode;
+      const aaa201 = graph.getByText("AAA201").parentNode;
+      const h101_201 = getPath(graph, "h101-201");
+      fireEvent.click(aaa101);
+      fireEvent.click(aaa201);
+      expect(h101_201.classList.contains("active")).toBe(true);
+      fireEvent.mouseOver(aaa201);
+      expect(h101_201.classList.contains("active")).toBe(true);
+    });
     // the graph creates a new <path> instead of modifying the existing graph
     // when the hovering is over, the original path is put back in the exact same order
-    it("hovering over a destination => edge should be missing only if the source is unselected", async () => {
+    it("hovering over a destination && unselected source => edge should be 'missing'", async () => {
       const graph = await setupGraph();
-      const aaa201 = graph.getByText("AAA201").parentNode;
       const aaa303 = graph.getByText("AAA303").parentNode;
-      // initialize aaa303
+      // initialize node
       fireEvent.mouseOver(aaa303);
       fireEvent.mouseOut(aaa303);
+
       fireEvent.mouseOver(aaa303);
 
       const h101_201 = getPath(graph, "h101-201");
@@ -108,12 +164,12 @@ describe("Edge", () => {
       expect(n201_and.classList.contains("missing")).toBe(true);
       expect(n102_and.classList.contains("missing")).toBe(true);
       expect(and_303.classList.contains("missing")).toBe(true);
+      fireEvent.mouseOut(aaa303);
 
-      fireEvent.click(aaa201);
+      fireEvent.click(aaa303); // selected node with missing pre-reqs
       fireEvent.mouseOver(aaa303);
-
       expect(h101_201.classList.contains("missing")).toBe(true);
-      expect(n201_and.classList.contains("takeable")).toBe(true); // the source is selected
+      expect(n201_and.classList.contains("missing")).toBe(true);
       expect(n102_and.classList.contains("missing")).toBe(true);
       expect(and_303.classList.contains("missing")).toBe(true);
     });
