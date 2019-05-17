@@ -23,6 +23,10 @@ export default class Node extends React.Component {
     this.unfocusPrereqs = this.unfocusPrereqs.bind(this);
   }
 
+  componentDidMount() {
+    this.updateNode();
+  }
+
   isSelected() {
     if (this.props.hybrid) {
       return this.state.status === "active";
