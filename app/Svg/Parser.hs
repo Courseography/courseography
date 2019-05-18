@@ -16,7 +16,7 @@ directly to the client when viewing the @/graph@ page.
 module Svg.Parser
     (parsePrebuiltSvgs) where
 
-import Data.Maybe (fromMaybe, fromJust, isNothing, catMaybes)
+import Data.Maybe (fromMaybe, catMaybes)
 import qualified Text.HTML.TagSoup as TS hiding (fromAttrib)
 import Database.Persist.Sqlite (runSqlite, SqlPersistM)
 import Text.HTML.TagSoup (Tag)
@@ -25,6 +25,8 @@ import Database.Tables hiding (graphWidth, paths, texts, shapes, graphHeight)
 import Database.DataType
 import Svg.Database (insertGraph, insertElements, deleteGraphs)
 import Config (graphPath, databasePath)
+import qualified Text.Parsec as P
+import Text.Parsec.String (Parser)
 import Text.Read (readMaybe)
 import Data.Char (isSpace)
 import qualified Data.Text as T
@@ -93,7 +95,8 @@ performParse graphName inputFilename = do
 parseSize :: Tag T.Text   -- ^ The file contents of the graph that will be parsed.
           -> (Double, Double)
 parseSize svgRoot =
-    (readAttr "width" svgRoot, readAttr "height" svgRoot)
+    (parseDouble "width" svgRoot, parseDouble "height" svgRoot)
+    where parseDouble = parseAttr double
 
 
 -- | Parses an SVG file.
@@ -286,6 +289,39 @@ readAttr attr tag = fromMaybe
     (error ("reading " ++ T.unpack attr ++ " from " ++ show tag))
     (readMaybe $ T.unpack $ fromAttrib attr tag)
 
+-- | Runs a parser on a text object.
+-- Throws an exception on any parse errors.
+parseVal :: Parser a -> T.Text -> a
+parseVal parser input =
+    case P.parse parser "" strippedInput of
+        Left err ->
+            error ("reading " ++ T.unpack input ++ ":" ++ show err)
+        Right val -> val
+    where strippedInput = filter (not . isSpace) (T.unpack input)
+
+-- | Looks up an attribute value using the given parser.
+parseAttr :: Parser a -> T.Text     -- ^ The attribute's name.
+                      -> Tag T.Text -- ^ The element containing the attribute.
+                      -> a
+parseAttr parser attr tag = parseVal parser $ fromAttrib attr tag
+
+-- | Parses one or more digit characters.
+digits :: Parser String
+digits = P.many1 P.digit
+
+-- | Parses a double value, ignoring units if present.
+double :: Parser Double
+double = do
+    sign <- P.option "" (P.string "-")
+    whole <- digits
+    fractional <- P.option ".0" parseFractional
+    return (read $ sign ++ whole ++ fractional)
+    where
+        parseFractional = do
+            _ <- P.string "."
+            decimals <- digits
+            return ("." ++ decimals)
+
 -- | Return a list of styles from the style attribute of an element.
 -- Every style has the form (name, value).
 styles :: Tag T.Text -> [(T.Text, T.Text)]
@@ -309,32 +345,29 @@ getTransform :: Tag T.Text -> Point
 getTransform = parseTransform . fromAttrib "transform"
 
 
--- | Parses a transform String into a tuple of Float.
+-- | Parses a translation String into a tuple of Float.
 parseTransform :: T.Text -> Point
 parseTransform "" = (0, 0)
 parseTransform transform =
-    let parsedTransform = T.splitOn "," $ T.drop 10 transform
-        xPos = readMaybe . T.unpack $ head parsedTransform
-        yPos = readMaybe . T.unpack . T.init $ parsedTransform !! 1
-    in
-        if isNothing xPos || isNothing yPos
-        then
-            error $ T.unpack transform
-        else
-            (fromJust xPos, fromJust yPos)
+    parseVal parser transform
+    where
+        parser = do
+            _ <- P.string "translate("
+            xPos <- double
+            _ <- P.string ","
+            yPos <- double
+            return (xPos, yPos)
 
 parseCoord :: T.Text -> Point
 parseCoord "" = (0, 0)
 parseCoord coord =
-    let parsedCoord = T.splitOn "," coord
-        xPos = readMaybe . T.unpack $ head parsedCoord
-        yPos = readMaybe . T.unpack $ parsedCoord !! 1
-    in
-        if isNothing xPos || isNothing yPos
-        then
-            error $ show coord
-        else
-            (fromJust xPos, fromJust yPos)
+    parseVal parser coord
+    where
+        parser = do
+            xPos <- double
+            _ <- P.string ","
+            yPos <- double
+            return (xPos, yPos)
 
 
 -- | Parses a path's `d` attribute.
