@@ -7,6 +7,112 @@ import setupGraph from "./setupGraph";
 afterEach(cleanup);
 
 describe("Hybrid Node", () => {
+  it("should match snapshot", () => {
+    const hybridNodeProps = {
+      JSON: {
+        fill: "#888888",
+        graph: 1,
+        height: 24,
+        id_: "h46",
+        pos: [18.168848, 471.586698],
+        stroke: "",
+        type_: "Hybrid",
+        text: [
+          {
+            align: "begin",
+            fill: "",
+            graph: 1,
+            pos: [20.753048200000002, 481.389408],
+            rId: "text454",
+            text: "CSC318/418/",
+            type_: "Hybrid",
+            width: 65.207497
+          },
+          {
+            align: "begin",
+            fill: "",
+            graph: 1,
+            pos: [32.698848, 493.640408],
+            rId: "text456",
+            text: "301/384",
+            length: 2,
+            type_: "Hybrid",
+            width: 65.207497
+          }
+        ],
+        width: 65.207497,
+      },
+
+      "parents": [],
+      "state": {
+        "labelsJSON": [],
+        "regionsJSON": [],
+        "nodesJSON": [{
+          "graph": 1,
+          "height": 30,
+          "type_": "Node",
+          "text": [{
+            "graph": 1,
+            "rId": "text102",
+            "text": "AAA101",
+            "pos": [596.555968, 25.379107999999995],
+            "fill": "",
+            "align": "begin"
+          }, {
+            "graph": 1,
+            "rId": "text103",
+            "text": "(H101)",
+            "pos": [596.555968, 34.379107999999995],
+            "fill": "",
+            "align": "begin"
+          }],
+          "width": 65,
+          "stroke": "",
+          "pos": [594.294128, 10.09390799999999],
+          "fill": "#5dd5b8",
+          "id_": "aaa101"
+        },],
+        "hybridsJSON": [{
+          "graph": 1,
+          "height": 24,
+          "type_": "Hybrid",
+          "text": [{
+            "graph": 1,
+            "rId": "text103",
+            "text": "(H101)",
+            "pos": [596.555968, 59.379107999999995],
+            "fill": "",
+            "align": "begin"
+          }],
+          "width": 52.768799,
+          "stroke": "",
+          "pos": [18.168848, 471.586698],
+          "fill": "#888888",
+          "id_": "h108"
+        }],
+        "boolsJSON": [],
+        "edgesJSON": [],
+        "highlightedNodes": [],
+        "timeouts": [],
+        "fceCount": 0,
+        "width": 1217.9941,
+        "height": 646.78271,
+        "zoomFactor": 1,
+        "horizontalPanFactor": 0,
+        "verticalPanFactor": 0,
+        "mouseDown": false,
+        "buttonHover": false,
+        "onDraw": false,
+      },
+      className: "hybrid",
+      "svg": {
+        "current": {},
+        onKeyDown: jest.fn(),
+      }
+    };
+    const wrapper = shallow(<Node {...hybridNodeProps} />);
+    expect(wrapper).toMatchSnapshot();
+  });
 
   it("should have the 'hybrid CSS class", async () => {
     const graph = await setupGraph();

@@ -31,3 +31,41 @@ exports[`Course Node should match shallow snapshot 1`] = `
   </text>
 </g>
 `;
+
+exports[`Hybrid Node should match snapshot 1`] = `
+<g
+  className="hybrid takeable"
+  id="h46"
+  onKeyDown={[MockFunction]}
+  shapeRendering="geometricPrecision"
+  textRendering="geometricPrecision"
+>
+  <rect
+    height={24}
+    rx="4"
+    ry="4"
+    style={
+      Object {
+        "fill": "#888888",
+      }
+    }
+    width={65.207497}
+    x={18.168848}
+    y={471.586698}
+  />
+  <text
+    key="0"
+    x={50.772596500000006}
+    y={481.389408}
+  >
+    CSC318/418/
+  </text>
+  <text
+    key="1"
+    x={50.772596500000006}
+    y={493.640408}
+  >
+    301/384
+  </text>
+</g>
+`;
