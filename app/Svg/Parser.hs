@@ -293,11 +293,10 @@ readAttr attr tag = fromMaybe
 -- Throws an exception on any parse errors.
 parseVal :: Parser a -> T.Text -> a
 parseVal parser input =
-    case P.parse parser "" strippedInput of
+    case P.parse parser "" $ T.unpack input of
         Left err ->
             error ("reading " ++ T.unpack input ++ ":" ++ show err)
         Right val -> val
-    where strippedInput = filter (not . isSpace) (T.unpack input)
 
 -- | Looks up an attribute value using the given parser.
 parseAttr :: Parser a -> T.Text     -- ^ The attribute's name.
@@ -312,13 +311,13 @@ digits = P.many1 P.digit
 -- | Parses a double value, ignoring units if present.
 double :: Parser Double
 double = do
-    sign <- P.option "" (P.string "-")
+    sign <- P.option ' ' (P.char '-')
     whole <- digits
     fractional <- P.option ".0" parseFractional
-    return (read $ sign ++ whole ++ fractional)
+    return (read $ sign : whole ++ fractional)
     where
         parseFractional = do
-            _ <- P.string "."
+            _ <- P.char '.'
             decimals <- digits
             return ("." ++ decimals)
 
@@ -354,7 +353,7 @@ parseTransform transform =
         parser = do
             _ <- P.string "translate("
             xPos <- double
-            _ <- P.string ","
+            _ <- P.char ','
             yPos <- double
             return (xPos, yPos)
 
@@ -365,7 +364,7 @@ parseCoord coord =
     where
         parser = do
             xPos <- double
-            _ <- P.string ","
+            _ <- P.char ','
             yPos <- double
             return (xPos, yPos)
 
