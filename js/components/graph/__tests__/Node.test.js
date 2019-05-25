@@ -1,10 +1,7 @@
 import React from "react";
 import { shallow } from "enzyme";
-import { cleanup } from "react-testing-library";
 import Node from "../Node";
 import setupGraph from "./setupGraph";
-
-afterEach(cleanup);
 
 describe("Hybrid Node", () => {
   it("node", () => {

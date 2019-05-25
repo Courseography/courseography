@@ -1,10 +1,8 @@
 import React from "react";
 import { shallow } from "enzyme";
 import Bool from "../Bool";
-import { cleanup, fireEvent } from "react-testing-library";
+import { fireEvent } from "react-testing-library";
 import setupGraph from "./setupGraph";
-
-afterEach(cleanup);
 
 describe("Bool", () => {
   it("should already have two classes when instantated by Graph", async () => {
