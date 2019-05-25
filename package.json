@@ -19,7 +19,11 @@
     ],
     "testPathIgnorePatterns": [
       "<rootDir>/node_modules/",
-      "<rootDir>/js/components/graph/__tests__/setupGraph.js"
+      "<rootDir>/js/components/graph/__tests__/setupGraph.js",
+      "<rootDir>/js/components/graph/__tests__/cleanup-after-each.js"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/js/components/graph/__tests__/cleanup-after-each.js"
     ]
   },
   "husky": {
