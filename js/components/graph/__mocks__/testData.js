@@ -148,7 +148,7 @@ export default {
       stroke: "",
       pos: [733.452148, 179.883608],
       fill: "#e68080",
-      id_: "aaa303CSC"
+      id_: "aaa303"
     },
     {
       graph: 1,
@@ -310,7 +310,7 @@ export default {
       fill: "none",
       id_: "p11",
       source: "bool1",
-      target: "aaa303CSC"
+      target: "aaa303"
     },
     {
       graph: 1,
