@@ -11,14 +11,12 @@
     "$": "readonly",
     "getURLParameter": "readonly"
   },
-  "overrides": [
-    {
-      "files": ["*.test.js"],
-      "env": {
-        "jest": true
-      }
+  "overrides": [{
+    "files": ["*.js"],
+    "env": {
+      "jest": true
     }
-  ],
+  }],
   "parser": "babel-eslint",
   "rules": {
     "no-console": "off",

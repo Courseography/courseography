@@ -11,22 +11,25 @@ import Data.GraphViz.Types.Generalised (
   DotGraph(..),
   DotNode(..),
   DotStatement(..),
-  GlobalAttributes(..))
+  GlobalAttributes(..)
+  )
 import Database.Requirement (Req(..))
 import Data.Sequence as Seq
 import Data.Text.Lazy (Text, pack)
+import Control.Monad.State (State)
+import qualified Control.Monad.State as State
+import Control.Monad (mapM)
 
-type StmtsWithCounter = ([DotStatement Text], Int)
 
 -- Serves as a sort of "interface" for the whole part "dynamic graph"
 sampleGraph :: DotGraph Text
-sampleGraph = reqsToGraph [
--- TODO: update function
+sampleGraph = fst $ State.runState (reqsToGraph [
     ("MAT237H1", J "MAT137H1" ""),
     ("MAT133H1", NONE),
     ("CSC148H1", AND [J "CSC108H1" "", J "CSC104H1" ""]),
     ("CSC265H1", AND [J "CSC148H1" "", J "CSC236H1" ""])
-    ]
+    ])
+    0
 
 --
 -- ** Main algorithm for converting requirements into a graph
@@ -34,112 +37,75 @@ sampleGraph = reqsToGraph [
 -- The reqToStmts are meant to convert a single requirement and reqsToGraph use concatMap to
 -- use reqToStmts to converts a list of requirements all at once and concatenate the results into a
 -- single list of DotGraph objects.
-reqsToGraph :: [(Text, Req)] -> DotGraph Text
-reqsToGraph reqs =
-    let (stmts, _) = foldUpReqLst reqs 0
-    in
-        buildGraph stmts
+reqsToGraph :: [(Text, Req)] -> State Integer (DotGraph Text)
+reqsToGraph reqs = do
+    allStmts <- mapM reqToStmts reqs
+    return $ buildGraph $ concat allStmts
+
 
 -- Convert the original requirement data into dot statements that can be used by buildGraph to create the
--- corresponding DotGraph objects. ([] is the [] after name the optional parameters for DotNode?)
-reqToStmts :: StmtsWithCounter -> (Text, Req) -> StmtsWithCounter
-reqToStmts (stmtslst, counter) (name, NONE) =
-    let stmtslst0 = stmtslst ++ [makeNode name counter 0]
-        counter0 =  counter + 1
-    in  (stmtslst0, counter0)
+-- corresponding DotGraph objects.
+reqToStmts :: (Text, Req) -> State Integer [DotStatement Text]
+reqToStmts (name, req) = do
+    node <- makeNode name
+    stmts <- reqToStmts' (nodeID node) req
+    return $ (DN node):stmts
 
--- TODO: update function
-reqToStmts (stmtslst, counter) (name, J string1 string2) = (stmtslst1 ++ connectRootsToName roots1 uppernode0, counter1)
+reqToStmts' :: Text -> Req -> State Integer [DotStatement Text]
+-- No prerequisites.
+reqToStmts' _ NONE = return []
+-- A single course prerequisite.
+reqToStmts' parentID (J name2 _) = do
+    prereq <- makeNode (pack name2)
+    edge <- makeEdge (nodeID prereq) parentID
+    return [DN prereq, DE edge]
+-- Two or more required prerequisites.
+reqToStmts' parentID (AND reqs) = do
+    andNode <- makeBool "and"
+    edge <- makeEdge (nodeID andNode) parentID
+    prereqStmts <- mapM (reqToStmts' (nodeID andNode)) reqs
+    return $ [DN andNode, DE edge] ++ concat prereqStmts
+-- A choice from two or more prerequisites.
+reqToStmts' parentID (OR reqs) = do
+    orNode <- makeBool "or"
+    edge <- makeEdge (nodeID orNode) parentID
+    prereqStmts <- mapM (reqToStmts' (nodeID orNode)) reqs
+    return $ [DN orNode, DE edge] ++ concat prereqStmts
+-- A prerequisite with a grade requirement.
+reqToStmts' parentID (GRADE description req) = do
+    gradeNode <- makeNode (pack description)
+    edge <- makeEdge (nodeID gradeNode) parentID
+    prereqStmts <- reqToStmts' (nodeID gradeNode) req
+    return $ [DN gradeNode, DE edge] ++ prereqStmts
 
-  where stmtslst0 = [makeNode name counter 0] ++ stmtslst
-        uppernode0 = mappendTextWithCounter name counter
-        ((stmtslst1, counter1), roots1) = reqToStmtsHelper ((stmtslst0, counter + 1), []) (J string1 string2)
+-- A raw string description of a prerequisite.
+reqToStmts' parentID (RAW rawText) = do
+    prereq <- makeNode (pack rawText)
+    edge <- makeEdge (nodeID prereq) parentID
+    return [DN prereq, DE edge]
 
-reqToStmts (stmtslst, counter) (name, AND reqs1) = (stmtslst1 ++ connectRootsToName roots1 uppernode0, counter1)
+-- TODO: Complete this one.
+reqToStmts' _ (FCES _ _) = return []
 
-  where stmtslst0 = [makeNode name counter 0] ++ stmtslst
-        uppernode0 = mappendTextWithCounter name counter
-        ((stmtslst1, counter1), roots1) = reqToStmtsHelper ((stmtslst0, counter + 1), []) (AND reqs1)
 
-reqToStmts (stmtslst, counter) (name, OR reqs1) = (stmtslst1 ++ connectRootsToName roots1 uppernode0, counter1)
+makeNode :: Text -> State Integer (DotNode Text)
+makeNode name = do
+    i <- State.get
+    _ <- State.put (i + 1)
+    return $ DotNode (mappendTextWithCounter name i) [AC.Label $ toLabelValue name]
 
-  where stmtslst0 = [makeNode name counter 0] ++ stmtslst
-        uppernode0 = mappendTextWithCounter name counter
-        ((stmtslst1, counter1), roots1) = reqToStmtsHelper ((stmtslst0, counter + 1), []) (OR reqs1)
+makeBool :: Text -> State Integer (DotNode Text)
+makeBool text1 = do
+    i <- State.get
+    _ <- State.put (i + 1)
+    return $ DotNode (mappendTextWithCounter text1 i) (AC.Label (toLabelValue text1) : ellipseAttrs)
 
-reqToStmts (stmtslst, counter) (name, FCES string1 reqs1) = (stmtslst1 ++ connectRootsToName roots1 uppernode0, counter1)
 
-  where uppernode0 = mappendTextWithCounter (pack string1) (counter + 1)
-        namewithcounter = mappendTextWithCounter name counter
-        stmtslst0 = [makeNode name counter 0] ++ [makeNode (pack string1) (counter + 1) 1] ++
-                    [makeEdge (uppernode0, -1) (namewithcounter, -1)] ++ stmtslst
-        ((stmtslst1, counter1), roots1) = reqToStmtsHelper ((stmtslst0, counter + 2), []) reqs1
+makeEdge :: Text -> Text -> State Integer (DotEdge Text)
+makeEdge id1 id2 = do
+    return $ DotEdge id1 id2 []
 
--- TODO: update function
-reqToStmts (stmtslst, counter) (name, GRADE string1 (J string2 string3)) = (stmtslst1 ++ connectRootsToName roots1 uppernode0, counter1)
-
-  where uppernode0 = mappendTextWithCounter (pack string1) (counter + 1)
-        namewithcounter = mappendTextWithCounter name counter
-        stmtslst0 = [makeNode name counter 0] ++ [makeNode (pack string1) (counter + 1) 1] ++
-                    [makeEdge (uppernode0, -1) (namewithcounter, -1)] ++ stmtslst
--- TODO: update function
-        ((stmtslst1, counter1), roots1) = reqToStmtsHelper ((stmtslst0, counter + 2), []) (J string2 string3)
-
-reqToStmts (stmtslst, counter) (name, RAW string1) = (stmtslst1 ++ connectRootsToName roots1 uppernode0, counter1)
-
-  where stmtslst0 = [makeNode name counter 0] ++ stmtslst
-        uppernode0 = mappendTextWithCounter name counter
-        ((stmtslst1, counter1), roots1) = reqToStmtsHelper ((stmtslst0, counter + 1), []) (RAW string1)
-
-reqToStmts _ _ = undefined
-
-reqToStmtsHelper :: (StmtsWithCounter, [Text]) -> Req -> (StmtsWithCounter, [Text])
-
--- TODO: update function
-reqToStmtsHelper ((stmtslst, counter), roots) (J string1 _) = (([makeNode (pack string1) counter 0]
-                                                            ++ stmtslst, counter + 1),
-                                                            [mappendTextWithCounter (pack string1) counter] ++ roots)
-
-reqToStmtsHelper ((stmtslst, counter), roots) (AND reqs1) = (([makeNode "and" (counter + 1000) 1]
-                                                            ++ stmtslst0 ++
-                                                            (connectRootsToName roots1 rootwithcounter), counter0),
-                                                            [rootwithcounter] ++ roots)
-
-  where rootwithcounter = mappendTextWithCounter "and" (counter + 1000)
-        ((stmtslst0, counter0), roots1) = foldl(\acc x -> reqToStmtsHelper acc x) ((stmtslst, counter + 1), []) reqs1
-
-reqToStmtsHelper ((stmtslst, counter), roots) (OR reqs1) = (([makeNode "or" (counter + 1000) 1]
-                                                            ++ stmtslst0 ++
-                                                            (connectRootsToName roots1 rootwithcounter), counter0),
-                                                            [rootwithcounter] ++ roots)
-
-  where rootwithcounter = mappendTextWithCounter "or" (counter + 1000)
-        ((stmtslst0, counter0), roots1) = foldl(\acc x -> reqToStmtsHelper acc x) ((stmtslst, counter + 1), []) reqs1
-
-reqToStmtsHelper ((stmtslst, counter), roots) (RAW string1) = (([makeNode (pack string1) counter 0]
-                                                            ++ stmtslst, counter + 1),
-                                                            [mappendTextWithCounter (pack string1) counter] ++ roots)
-
-reqToStmtsHelper _ _ = undefined
-
-connectRootsToName :: [Text] -> Text -> [DotStatement Text]
-connectRootsToName roots name1 = foldl(\acc x -> acc ++ [(makeEdge (x, -1) (name1, -1))]) [] roots
-
-foldUpReqLst :: [(Text, Req)] -> Int -> StmtsWithCounter
-foldUpReqLst reqlst count = foldl reqToStmts ([], count) reqlst
-
-makeNode :: Text -> Int -> Int -> DotStatement Text
-makeNode text1 counter 0 = DN $ DotNode (mappendTextWithCounter text1 counter) [AC.Label (toLabelValue text1)]
-makeNode text1 counter 1 = DN $ DotNode (mappendTextWithCounter text1 counter) [AC.Label (toLabelValue text1), A.shape A.Ellipse, AC.Width 1, AC.Height 0.5, A.fillColor White]
-makeNode _ _ _ = undefined
-
-makeEdge :: (Text, Int) -> (Text, Int) -> DotStatement Text
-makeEdge (name1, -1) (name2, -1) = DE $ DotEdge name1 name2 []
-makeEdge (name1, counter1) (name2, -1) = DE $ DotEdge (mappendTextWithCounter name1 counter1) name2 []
-makeEdge (name1, counter1) (name2, counter2) = DE $ DotEdge (mappendTextWithCounter name1 counter1)
-                                               (mappendTextWithCounter name2 counter2) []
-
-mappendTextWithCounter :: Text -> Int -> Text
+mappendTextWithCounter :: Text -> Integer -> Text
 mappendTextWithCounter text1 counter = text1 `mappend` "_counter_" `mappend` (pack (show (counter)))
 
 -- ** Graphviz configuration
@@ -168,6 +134,13 @@ graphAttrs = GraphAttrs [AC.RankDir AC.FromLeft]
 nodeAttrs :: GlobalAttributes
 nodeAttrs = NodeAttrs [A.shape A.BoxShape, AC.Width 2, AC.Height 1, A.style A.filled]
 
+ellipseAttrs :: A.Attributes
+ellipseAttrs = [
+    A.shape A.Ellipse,
+    AC.Width 1,
+    AC.Height 0.5,
+    A.fillColor White
+    ]
 -- Using default setting for the edges connecting the nodes.
 edgeAttrs :: GlobalAttributes
 edgeAttrs = EdgeAttrs []

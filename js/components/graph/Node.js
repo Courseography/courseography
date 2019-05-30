@@ -6,8 +6,8 @@ export default class Node extends React.Component {
   constructor(props) {
     super(props);
     var state = localStorage.getItem(this.props.JSON.id_);
-    if (!this.props.editMode) {
-      state = "";
+    if (this.props.editMode) {
+      state = ""; // TODO: define what editMode is
     } else if (state === null) {
       state = this.props.parents.length === 0 ? "takeable" : "inactive";
     }
