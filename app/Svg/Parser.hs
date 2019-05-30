@@ -368,7 +368,7 @@ parseTransform "" = (0, 0)
 parseTransform transform =
     parseVal parser transform
     where
-        parser = P.many1 (scale <|> rotate) >> translate
+        parser = P.many (scale <|> rotate) >> translate
         scale = P.string "scale(" >> double >> P.spaces >> P.option 0 double
             >> P.char ')' >> P.spaces
         rotate = P.string "rotate(" >> double >> P.char ')' >> P.spaces
