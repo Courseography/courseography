@@ -2,6 +2,7 @@ import React from 'react';
 import ReactModal from 'react-modal';
 import Leaflet from 'leaflet';
 import {CircleMarker, Polygon, Polyline, Map, TileLayer, Marker, Popup, Tooltip, Circle } from "react-leaflet";
+import L from 'leaflet'
 import 'leaflet/dist/leaflet.css';
 
 class ModalContent extends React.Component {
@@ -199,6 +200,16 @@ class TestMap extends React.Component {
 
     const polygon = [[43.66977015, -79.3972632658009], [43.6623705, -79.39859815008], [43.6623705, -79.40859815008]]
 
+    const customMarker = new L.Icon({
+      iconUrl: 'static/res/ico/map.png',
+      shadowUrl: 'static/res/ico/shadow.png',
+      iconAnchor: [5, 55],
+      popupAnchor: [10, -44],
+      iconSize: [25, 42],
+      shadowSize: [50, 85],
+      shadowAnchor: [2, 95],
+    })
+
     return (
       <div id="campus-map">
         <Map
@@ -213,10 +224,10 @@ class TestMap extends React.Component {
           animate={true}
         >
           <TileLayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png" />
-          <Marker position={[43.65977015, -79.3972632658009]}>
+          <Marker icon={customMarker} position={[43.65977015, -79.3972632658009]}>
             <Popup><p>ACT348</p> Date and Time</Popup>
           </Marker>
-          <Marker position={[43.6623705, -79.398659815008]}>
+          <Marker icon={customMarker} position={[43.6623705, -79.398659815008]}>
             <Popup>popup 2.</Popup>
           </Marker>
           <Circle
