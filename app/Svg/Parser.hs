@@ -448,8 +448,8 @@ parsePathD d = parseValWithState parser initialState d
         closeLoop = do
             _ <- (P.char 'Z' <|> P.char 'z')
             state <- P.getState
-            _ <- P.modifyState $ \st -> st { mode = AbsoluteMove }
-            return $ firstPoint state
+            _ <- setMode AbsoluteMove
+            return (firstPoint state)
         moveArg = do -- Read a movement argument (can be a point or a double).
             val <- double
             sep <- P.option ' ' $ P.char ','
