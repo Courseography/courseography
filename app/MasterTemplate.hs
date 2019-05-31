@@ -1,7 +1,7 @@
 module MasterTemplate
     (masterTemplate, header, disclaimer) where
 
-import           Text.Blaze ((!))
+import           Text.Blaze ((!), customAttribute)
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 import qualified Data.Text as T
@@ -19,6 +19,11 @@ masterTemplate title headers body scripts =
             H.title (H.toHtml title)
             H.link ! A.rel "icon" ! A.type_ "image/png"
                    ! A.href "static/res/ico/favicon.png"
+            H.link ! A.rel "stylesheet" ! A.href "https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+                   ! customAttribute "integrity" "sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+            H.script ! A.src "https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+                     ! customAttribute "integrity" "sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
+                     $ H.toHtml ("" :: String)
             sequence_ headers
             mapM_ toStylesheet [
                 if enableCdn
