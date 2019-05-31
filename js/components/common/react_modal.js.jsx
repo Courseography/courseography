@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactModal from 'react-modal';
-
+import Leaflet from 'leaflet';
+import {CircleMarker, Polygon, Polyline, Map, TileLayer, Marker, Popup, Tooltip, Circle } from "react-leaflet";
+import 'leaflet/dist/leaflet.css';
 
 class ModalContent extends React.Component {
   render() {
@@ -149,4 +151,92 @@ function formatCourseName(id) {
 }
 
 
-export { Modal };
+class MapModal extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      modalIsOpen: false
+    };
+    this.openModal = this.openModal.bind(this);
+    this.closeModal = this.closeModal.bind(this);
+  }
+
+  openModal() {
+    this.setState({ modalIsOpen: true });
+  }
+
+  closeModal() {
+    this.setState({ modalIsOpen: false });
+  }
+
+  render() {
+    return (
+      <ReactModal className='modal-class'
+        overlayClassName='overlay'
+        isOpen={this.state.modalIsOpen}
+        onRequestClose={this.closeModal}
+        ariaHideApp={false}
+      >
+        <div className='modal-body'>
+          <TestMap/>
+        </div>
+      </ReactModal>
+    );
+  }
+}
+
+
+// A Temporary component as a placeholder for the campus map
+class TestMap extends React.Component {
+  render() {
+    const center = [43.65977015, -79.3972632658009];
+    const polyline = [[43.65977015, -79.3972632658009], [43.6623705, -79.398659815008]]
+
+    const multiPolyline = [
+      [[43.66977015, -79.3972632658009], [43.6623705, -79.39859815008]],
+      [[43.66987015, -79.398632658009], [43.6633705, -79.398659815008]],
+    ]
+
+    const polygon = [[43.66977015, -79.3972632658009], [43.6623705, -79.39859815008], [43.6623705, -79.40859815008]]
+
+    return (
+      <div id="campus-map">
+        <Map
+          center={[43.65977015, -79.3972632658009]}
+          zoom={16}
+          maxZoom={40}
+          attributionControl={true}
+          zoomControl={true}
+          doubleClickZoom={true}
+          scrollWheelZoom={true}
+          dragging={true}
+          animate={true}
+        >
+          <TileLayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png" />
+          <Marker position={[43.65977015, -79.3972632658009]}>
+            <Popup><p>ACT348</p> Date and Time</Popup>
+          </Marker>
+          <Marker position={[43.6623705, -79.398659815008]}>
+            <Popup>popup 2.</Popup>
+          </Marker>
+          <Circle
+          center={[43.65977015, -79.3972632658009]}
+          fillColor="blue"
+          radius={200}>
+          <Tooltip>hello</Tooltip>
+          </Circle>
+
+          <Circle center={center} fillColor="blue" radius={200} />
+          <CircleMarker center={[51.51, -0.12]} color="red" radius={20}>
+            <Popup>Popup in CircleMarker</Popup>
+          </CircleMarker>
+          <Polyline color="lime" positions={polyline} />
+          <Polyline color="red" positions={multiPolyline} />
+          <Polygon color="purple" positions={polygon} />
+        </Map>
+      </div>
+    );
+  }
+}
+
+export { Modal, MapModal };

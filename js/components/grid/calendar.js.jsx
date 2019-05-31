@@ -1,4 +1,5 @@
 import React from 'react';
+import { MapModal } from '../common/react_modal.js.jsx';
 
 /*
  * Holds the containers of the Fall and Spring timetables,
@@ -68,6 +69,16 @@ class Timetable extends React.Component {
  * The header contains five day cells, a dummy cell, and a term-name cell
  */
 class TimetableHeader extends React.Component {
+  constructor(props) {
+    super(props);
+    this.modal = null;
+    this.displayMap = this.displayMap.bind(this);
+  }
+
+  displayMap() {
+    this.modal.openModal(this.props.courseCode);
+  }
+
   render() {
     const dayStrings = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
     let colSpans = this.props.headColSpans;
@@ -89,7 +100,11 @@ class TimetableHeader extends React.Component {
         <thead>
           <tr>
             <th className="timetable-dummy-cell"></th>
-            <th className="term-name">Fall</th>
+            <th className="term-name">
+              <MapModal ref={ r => this.modal = r}/>
+              <img src="static/res/ico/map.png" className="map-icon" onClick={this.displayMap}/>
+              Fall
+            </th>
             {dayCells}
           </tr>
         </thead>
@@ -99,7 +114,11 @@ class TimetableHeader extends React.Component {
         <thead>
           <tr>
             {dayCells}
-            <th className="term-name">Spring</th>
+            <th className="term-name">
+              Spring
+              <MapModal ref={ r => this.modal = r}/>
+              <img src="static/res/ico/map.png" className="map-icon" onClick={this.displayMap}/>
+            </th>
             <th className="timetable-dummy-cell"></th>
           </tr>
         </thead>
