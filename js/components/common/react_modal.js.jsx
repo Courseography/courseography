@@ -15,7 +15,7 @@ class ModalContent extends React.Component {
 }
 
 
-class Modal extends React.Component {
+class CourseModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -239,4 +239,4 @@ class TestMap extends React.Component {
   }
 }
 
-export { Modal, MapModal };
+export { CourseModal, MapModal };

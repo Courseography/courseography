@@ -1,6 +1,6 @@
 import React from 'react';
 import { CourseCategory2 } from './course_components.js.jsx';
-import { Modal } from '../common/react_modal.js.jsx';
+import { CourseModal } from '../common/react_modal.js.jsx';
 import * as Data from './post_data';
 
 
@@ -129,7 +129,7 @@ class Post extends React.Component {
 
         return (
             <div id={'post_' + this.props.postType} className={classes} >
-                <Modal ref='modal' />
+                <CourseModal ref='modal' />
 
                 <CourseCategory2 yearName='First Year' courses={this.props.firstYearCourses}
                     openModal={this.openModal} titles={[]} otherInfo={this.props}

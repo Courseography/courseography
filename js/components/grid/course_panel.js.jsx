@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal } from '../common/react_modal.js.jsx';
+import { CourseModal } from '../common/react_modal.js.jsx';
 
 /**
  * Creates a search box and stores the current user input that is in the search box
@@ -169,7 +169,7 @@ class Course extends React.Component {
       <li key={this.props.courseCode} id={this.props.courseCode + "-li"} className={"ui-accordion ui-widget ui-helper-reset"}>
         <div className="ui-accordion-header ui-helper-reset ui-state-default ui-accordion-icons ui-accordion-header-active ui-state-active ui-corner-top"
               id={"ui-accordion-" + this.props.courseCode + "-li-header-0"}>
-          <Modal ref={ r => this.modal = r}/>
+          <CourseModal ref={ r => this.modal = r}/>
           <div className="icon-div">
             <img src="static/res/ico/delete.png" className="close-icon" onClick={this.removeCourse}/>
             <img src="static/res/ico/about.png" className="close-icon" onClick={this.displayInfo}/>
