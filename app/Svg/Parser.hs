@@ -318,23 +318,29 @@ parseAttr parser attr tag = parseVal parser $ fromAttrib attr tag
 digits :: StatefulParser u String
 digits = P.many1 P.digit
 
--- | Parses a double value, ignoring units if present.
+-- | Parses a double literal, optionally in scientific notation.
 double :: StatefulParser u Double
 double = do
     sign <- P.option ' ' (P.char '-')
     whole <- digits
     fractional <- P.option ".0" parseFractional
-    return (read $ sign : whole ++ fractional)
+    magnitude <- P.option "e0" parseMagnitude
+    return (read $ sign : whole ++ fractional ++ magnitude)
     where
         parseFractional = do
             _ <- P.char '.'
             decimals <- digits
             return ("." ++ decimals)
+        parseMagnitude = do
+            ch <- P.char 'e'
+            sign <- P.option "" $ P.string "-"
+            power <- digits
+            return (ch : sign ++ power)
 
 point :: StatefulParser u Point
 point = do
     xPos <- double
-    _ <- P.char ',' <|> P.space
+    _ <- P.char ','
     yPos <- double
     return (xPos, yPos)
 
@@ -374,7 +380,10 @@ parseTransform transform =
         rotate = P.string "rotate(" >> double >> P.char ')' >> P.spaces
         translate = do
             _ <- P.string "translate("
-            point
+            xPos <- double
+            _ <- P.char ',' <|> P.char ' '
+            yPos <- double
+            return (xPos, yPos)
 
 parseCoord :: T.Text -> Point
 parseCoord "" = (0, 0)
@@ -382,58 +391,82 @@ parseCoord coord =
     parseVal point coord
 
 
+data PathMode = AbsoluteMove
+              | RelativeMove
+              | AbsoluteHorizontal
+              | RelativeHorizontal
+              | AbsoluteVertical
+              | RelativeVertical
+
+data PathDParserState = PathDState
+    { firstPoint :: Point
+    , mode :: PathMode
+    , currentPoint :: Point }
+
 -- | Parses a path's `d` attribute.
 -- See <https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d>.
 parsePathD :: T.Text -- ^ The 'd' attribute of an SVG path.
            -> [Point]
 parsePathD d = parseValWithState parser initialState d
     where
-        initialState :: (Point, Point)
-        -- Keep track of the (first point, most recent point)
-        initialState = ((0, 0), (0, 0))
-        updateMostRecent p (first, _) = (first, p)
+        -- Keep track of the (first point, path mode, most recent point)
+        initialState = PathDState { firstPoint = (0, 0)
+                                  , mode = AbsoluteMove
+                                  , currentPoint = (0, 0) }
+
         parser = do
             p <- parseStep
             -- Record the first point added.
-            _ <- P.modifyState $ \_ -> (p, p)
+            _ <- P.modifyState $ \st -> st { firstPoint = p, currentPoint = p }
             rest <- P.many parseStep
             return (p : rest)
         parseStep = do
-            _ <- (P.option ' ' $ bezier <|> absoluteMove) >> P.spaces
-            p <- (closeLoop <|> relativeMove <|>
+            _ <- (P.option () $ bezier <|>
+                absoluteMove <|> relativeMove <|>
                 absHorizontalMove <|> absVerticalMove <|>
-                relHorizontalMove <|> relVerticalMove <|> point)
-            -- Every time a new point is added, update the user state.
-            _ <- P.spaces >> (P.modifyState $ updateMostRecent p)
-            return p
+                relHorizontalMove <|> relVerticalMove) >> P.spaces
+            p <- closeLoop <|> moveArg
+            state <- P.getState
+            let (currentX, currentY) = currentPoint state
+                (newX, newY) = p
+                p' = case mode state of
+                    AbsoluteMove       -> p
+                    AbsoluteHorizontal -> (newX, currentY)
+                    AbsoluteVertical   -> (currentX, newY)
+                    RelativeMove       -> addTuples (currentPoint state) p
+                    RelativeHorizontal -> (currentX + newX, currentY)
+                    RelativeVertical   -> (currentX, currentY + newY)
+            -- Every time a new point is added, update the parser state.
+            _ <- P.spaces >> (P.modifyState $ \st -> st { currentPoint = p' })
+            return p'
 
         bezier = -- Discard the next two points. TODO: Add full support for Bezier curves
-            (P.char 'C' <|> P.char 'c') >> P.spaces >> point >> P.spaces >> point >> return ' '
+            (P.char 'C' <|> P.char 'c') >>
+            P.spaces >> point >>
+            P.spaces >> point >>
+            return ()
         closeLoop = do
             _ <- (P.char 'Z' <|> P.char 'z')
-            (first, _) <- P.getState
-            return first
-        absoluteMove = (P.char 'L' <|> P.char 'M')
-        relativeMove = do
-            deltaP <- P.char 'm' >> P.spaces >> point
-            (_, mostRecent) <- P.getState
-            return (addTuples deltaP mostRecent)
-        absHorizontalMove = do
-            newX <- P.char 'H' >> P.spaces >> double
-            (_, (_, currentY)) <- P.getState
-            return (newX, currentY)
-        absVerticalMove = do
-            newY <- P.char 'V' >> P.spaces >> double
-            (_, (currentX, _)) <- P.getState
-            return (currentX, newY)
-        relHorizontalMove = do
-            deltaX <- P.char 'h' >> P.spaces >> double
-            (_, (currentX, currentY)) <- P.getState
-            return (currentX + deltaX, currentY)
-        relVerticalMove = do
-            deltaY <- P.char 'v' >> P.spaces >> double
-            (_, (currentX, currentY)) <- P.getState
-            return (currentX, currentY + deltaY)
+            state <- P.getState
+            _ <- P.modifyState $ \st -> st { mode = AbsoluteMove }
+            return $ firstPoint state
+        moveArg = do -- Read a movement argument (can be a point or a double).
+            val <- double
+            sep <- P.option ' ' $ P.char ','
+            if sep == ',' then do
+                yVal <- double
+                return (val, yVal)
+            else
+                return (val, val)
+
+        absoluteMove      = (P.char 'L' <|> P.char 'M') >> setMode AbsoluteMove
+        relativeMove      = P.char 'm' >> setMode RelativeMove
+        absHorizontalMove = P.char 'H' >> setMode AbsoluteHorizontal
+        absVerticalMove   = P.char 'V' >> setMode AbsoluteVertical
+        relHorizontalMove = P.char 'h' >> setMode RelativeHorizontal
+        relVerticalMove   = P.char 'v' >> setMode RelativeVertical
+
+        setMode newMode = P.modifyState $ \state -> state { mode = newMode }
 
 
 -- * Other helpers
