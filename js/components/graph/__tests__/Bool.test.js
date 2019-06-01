@@ -2,13 +2,13 @@ import React from "react";
 import { shallow } from "enzyme";
 import Bool from "../Bool";
 import { fireEvent } from "react-testing-library";
-import setupGraph from "./setupGraph";
+import TestGraph from "./TestGraph";
 
 describe("Bool", () => {
   it("should already have two classes when instantated by Graph", async () => {
-    const graph = await setupGraph();
-    const andBool = graph.getByText("and").parentNode;
-    const orBool = graph.getByText("or").parentNode;
+    const graph = await TestGraph.build();
+    const andBool = graph.getNodeByText("and");
+    const orBool = graph.getNodeByText("or");
 
     expect(andBool.classList[0]).toBe("bool");
     expect(andBool.classList[1]).toBe("inactive");
@@ -53,8 +53,8 @@ describe("AND Bool", () => {
   });
 
   it("should not do anything when you hover or click on it", async () => {
-    const graph = await setupGraph();
-    const andBool = graph.getByText("and").parentNode;
+    const graph = await TestGraph.build();
+    const andBool = graph.getNodeByText("and");
 
     expect(andBool.classList.contains("inactive")).toBe(true);
 
@@ -65,11 +65,11 @@ describe("AND Bool", () => {
     expect(andBool.classList.contains("inactive")).toBe(true);
   });
   it("AND should become selected when its prereq parents are satisfied", async () => {
-    const graph = await setupGraph();
-    const andBool = graph.getByText("and").parentNode;
-    const aaa102 = graph.getByText("AAA102").parentNode;
-    const aaa201 = graph.getByText("AAA201").parentNode;
-    const aaa303 = graph.getByText("AAA303").parentNode;
+    const graph = await TestGraph.build();
+    const andBool = graph.getNodeByText("and");
+    const aaa102 = graph.getNodeByText("AAA102");
+    const aaa201 = graph.getNodeByText("AAA201");
+    const aaa303 = graph.getNodeByText("AAA303");
 
     // AAA201 and AAA102 => AAA303
     expect(andBool.classList.contains("inactive")).toBe(true);
@@ -80,9 +80,9 @@ describe("AND Bool", () => {
     expect(aaa303.classList.contains("takeable")).toBe(true);
   });
   it("AND should have the missing class when the mouse is hovering over a child class.", async () => {
-    const graph = await setupGraph();
-    const andBool = graph.getByText("and").parentNode;
-    const aaa303 = graph.getByText("AAA303").parentNode;
+    const graph = await TestGraph.build();
+    const andBool = graph.getNodeByText("and");
+    const aaa303 = graph.getNodeByText("AAA303");
 
     // AAA201 and AAA102 => AAA303
     expect(andBool.classList.contains("inactive")).toBe(true);
@@ -131,8 +131,8 @@ describe("OR Bool", () => {
   });
 
   it("should not do anything when you hover or click on it", async () => {
-    const graph = await setupGraph();
-    const orBool = graph.getByText("or").parentNode;
+    const graph = await TestGraph.build();
+    const orBool = graph.getNodeByText("or");
 
     expect(orBool.classList.contains("inactive")).toBe(true);
 
@@ -143,11 +143,11 @@ describe("OR Bool", () => {
     expect(orBool.classList.contains("inactive")).toBe(true);
   });
   it("or should become selected when its prereq parents are satisfied", async () => {
-    const graph = await setupGraph();
-    const orBool = graph.getByText("or").parentNode;
-    const aaa102 = graph.getByText("AAA102").parentNode;
-    const aaa201 = graph.getByText("AAA201").parentNode;
-    const aaa202 = graph.getByText("AAA202").parentNode;
+    const graph = await TestGraph.build();
+    const orBool = graph.getNodeByText("or");
+    const aaa102 = graph.getNodeByText("AAA102");
+    const aaa201 = graph.getNodeByText("AAA201");
+    const aaa202 = graph.getNodeByText("AAA202");
 
     // AAA201 or AAA102 => AAA202
     expect(orBool.classList.contains("inactive")).toBe(true);
@@ -161,9 +161,9 @@ describe("OR Bool", () => {
     expect(aaa202.classList.contains("takeable")).toBe(true);
   });
   it("or should have the missing class when the mouse is hovering over a child class.", async () => {
-    const graph = await setupGraph();
-    const orBool = graph.getByText("or").parentNode;
-    const aaa202 = graph.getByText("AAA202").parentNode;
+    const graph = await TestGraph.build();
+    const orBool = graph.getNodeByText("or");
+    const aaa202 = graph.getNodeByText("AAA202");
 
     // AAA201 or AAA102 => AAA202
     expect(orBool.classList.contains("inactive")).toBe(true);
