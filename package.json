@@ -19,7 +19,7 @@
     ],
     "testPathIgnorePatterns": [
       "<rootDir>/node_modules/",
-      "<rootDir>/js/components/graph/__tests__/setupGraph.js",
+      "<rootDir>/js/components/graph/__tests__/TestGraph.js",
       "<rootDir>/js/components/graph/__tests__/cleanup-after-each.js"
     ],
     "setupFilesAfterEnv": [
