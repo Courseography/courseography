@@ -64,7 +64,7 @@ describe("AND Bool", () => {
     fireEvent.click(andBool);
     expect(andBool.classList.contains("inactive")).toBe(true);
   });
-  it("AND should become selected when its pre-req parents are satisfied", async () => {
+  it("AND should become selected when its prereq parents are satisfied", async () => {
     const graph = await setupGraph();
     const andBool = graph.getByText("and").parentNode;
     const aaa102 = graph.getByText("AAA102").parentNode;
@@ -142,7 +142,7 @@ describe("OR Bool", () => {
     fireEvent.click(orBool);
     expect(orBool.classList.contains("inactive")).toBe(true);
   });
-  it("or should become selected when its pre-req parents are satisfied", async () => {
+  it("or should become selected when its prereq parents are satisfied", async () => {
     const graph = await setupGraph();
     const orBool = graph.getByText("or").parentNode;
     const aaa102 = graph.getByText("AAA102").parentNode;
