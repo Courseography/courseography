@@ -77,7 +77,7 @@ describe("Hybrid Node", () => {
     fireEvent.mouseOut(hybrid101);
     expect({ ...hybrid101.classList }).toEqual(cssClassDeepCopy);
   });
-  it("should be 'active' when its pre-req parent is met, and 'inactive' otherwise", async () => {
+  it("should be 'active' when its prereq parent is met, and 'inactive' otherwise", async () => {
     const graph = await setupGraph();
     const hybrid101 = graph.getByText("(H101)").parentNode;
     const aaa101 = graph.getByText("AAA101").parentNode;
@@ -89,7 +89,7 @@ describe("Hybrid Node", () => {
     expect(hybrid101.classList.contains("inactive")).toBe(true);
   });
 
-  it("should be 'missing' if not 'active' and it's an unmet pre-req of the currently hovered course", async () => {
+  it("should be 'missing' if not 'active' and it's an unmet prereq of the currently hovered course", async () => {
     const graph = await setupGraph();
     const hybrid101 = graph.getByText("(H101)").parentNode;
     const aaa303 = graph.getByText("AAA303").parentNode;
@@ -145,7 +145,7 @@ describe("Course Node", () => {
   });
 
   describe("Unselected Course Node", async () => {
-    it("should be 'takeable' if pre-reqs met and 'inactive' otherwise", async () => {
+    it("should be 'takeable' if prereqs met and 'inactive' otherwise", async () => {
       const graph = await setupGraph();
       const aaa101 = graph.getByText("AAA101").parentNode;
       const aaa201 = graph.getByText("AAA201").parentNode;
@@ -159,7 +159,7 @@ describe("Course Node", () => {
       expect(aaa100.classList.contains("missing")).toBe(true);
     });
 
-    it("when hovered, should set all unmet pre-reqs and itself as 'missing'", async () => {
+    it("when hovered, should set all unmet prereqs and itself as 'missing'", async () => {
       const graph = await setupGraph();
       const aaa101 = graph.getByText("AAA101").parentNode;
       const aaa201 = graph.getByText("AAA201").parentNode;
@@ -175,13 +175,13 @@ describe("Course Node", () => {
   });
 
   describe("Selected Course Node", async () => {
-    it("with met pre-reqs should 'active'", async () => {
+    it("with met prereqs should 'active'", async () => {
       const graph = await setupGraph();
       const aaa100 = graph.getByText("AAA100").parentNode;
       fireEvent.click(aaa100);
       expect(aaa100.classList.contains("active")).toBe(true);
     });
-    describe("selected course with un-met pre-reqs", async () => {
+    describe("selected course with un-met prereqs", async () => {
       it("should be 'overridden'", async () => {
         const graph = await setupGraph();
         const aaa201 = graph.getByText("AAA201").parentNode;
@@ -189,7 +189,7 @@ describe("Course Node", () => {
         expect(aaa201.classList.contains("overridden")).toBe(true);
       });
 
-      it("'overridden' course counts as a satisfied pre-req (acts like 'active')", async () => {
+      it("'overridden' course counts as a satisfied prereq (acts like 'active')", async () => {
         const graph = await setupGraph();
         const aaa201 = graph.getByText("AAA201").parentNode;
         const aaa202 = graph.getByText("AAA202").parentNode;
@@ -198,7 +198,7 @@ describe("Course Node", () => {
         expect(aaa202.classList.contains("takeable")).toBe(true);
       });
 
-      it("hovering over a course with an 'overridden' pre-req does not mark the 'overridden' unmet pre-reqs as missings", async () => {
+      it("hovering over a course with an 'overridden' prereq does not mark the 'overridden' unmet prereqs as missings", async () => {
         const graph = await setupGraph();
         const aaa101 = graph.getByText("AAA101").parentNode;
         const aaa201 = graph.getByText("AAA201").parentNode;
@@ -209,7 +209,7 @@ describe("Course Node", () => {
         expect(aaa101.classList.contains("takeable")).toBe(true);
       });
 
-      it("selected and hovered over: sets itself and all unmet pre-reqs to be 'missing'", async () => {
+      it("selected and hovered over: sets itself and all unmet prereqs to be 'missing'", async () => {
         const graph = await setupGraph();
         const aaa101 = graph.getByText("AAA101").parentNode;
         const aaa201 = graph.getByText("AAA201").parentNode;
@@ -230,7 +230,7 @@ describe("Course Node", () => {
         expect(aaa303.classList.contains("missing")).toBe(true);
       });
 
-      it("selected + hovered over + unmet pre-reqs: 'missing'", async () => {
+      it("selected + hovered over + unmet prereqs: 'missing'", async () => {
         const graph = await setupGraph();
         const aaa303 = graph.getByText("AAA303").parentNode;
         fireEvent.click(aaa303);
