@@ -33,11 +33,7 @@ import Data.Char (isSpace)
 import qualified Data.Text as T
 import Data.Text.IO as T (readFile)
 import Data.List.Split (splitOn)
-import Data.Functor.Identity (Identity)
 
--- A Parsec parser with user defined state. This can be made stateless by
--- assigning () to u.
-type StatefulParser u a = P.ParsecT String u Identity a
 
 parsePrebuiltSvgs :: IO ()
 parsePrebuiltSvgs = runSqlite databasePath $ do
@@ -296,7 +292,7 @@ readAttr attr tag = fromMaybe
 
 -- | Runs a parser on a text object.
 -- Throws an exception on any parse errors.
-parseValWithState :: StatefulParser u a -> u -> T.Text -> a
+parseValWithState :: P.Parsec String u a -> u -> T.Text -> a
 parseValWithState parser initialState input =
     case P.runParser parser initialState "" $ T.unpack input of
         Left err ->
@@ -315,11 +311,11 @@ parseAttr :: Parser a -> T.Text     -- ^ The attribute's name.
 parseAttr parser attr tag = parseVal parser $ fromAttrib attr tag
 
 -- | Parses one or more digit characters.
-digits :: StatefulParser u String
+digits :: P.Parsec String u String
 digits = P.many1 P.digit
 
 -- | Parses a double literal, optionally in scientific notation.
-double :: StatefulParser u Double
+double :: P.Parsec String u Double
 double = do
     sign <- P.option ' ' (P.char '-')
     whole <- digits
@@ -337,7 +333,7 @@ double = do
             power <- digits
             return (ch : sign ++ power)
 
-point :: StatefulParser u Point
+point :: P.Parsec String u Point
 point = do
     xPos <- double
     _ <- P.char ','
@@ -374,10 +370,10 @@ parseTransform "" = (0, 0)
 parseTransform transform =
     parseVal parser transform
     where
-        parser = P.many (scale <|> rotate) >> translate
+        parser = P.sepBy (scale <|> rotate) P.spaces >> translate
         scale = P.string "scale(" >> double >> P.spaces >> P.option 0 double
-            >> P.char ')' >> P.spaces
-        rotate = P.string "rotate(" >> double >> P.char ')' >> P.spaces
+            >> P.char ')'
+        rotate = P.string "rotate(" >> double >> P.char ')'
         translate = do
             _ <- P.string "translate("
             xPos <- double
@@ -398,7 +394,7 @@ data PathMode = AbsoluteMove
               | AbsoluteVertical
               | RelativeVertical
 
-data PathDParserState = PathDState
+data PathDState = PathDState
     { firstPoint :: Point
     , mode :: PathMode
     , currentPoint :: Point }
@@ -421,35 +417,52 @@ parsePathD d = parseValWithState parser initialState d
             rest <- P.many parseStep
             return (p : rest)
         parseStep = do
-            _ <- (P.option () $ bezier <|>
-                absoluteMove <|> relativeMove <|>
-                absHorizontalMove <|> absVerticalMove <|>
-                relHorizontalMove <|> relVerticalMove) >> P.spaces
-            p <- closeLoop <|> moveArg
+            _ <- P.option () $ P.choice
+                [ bezier
+                , absoluteMove
+                , relativeMove
+                , absHorizontalMove
+                , absVerticalMove
+                , relHorizontalMove
+                , relVerticalMove ]
+            _ <- P.spaces
+            arg <- closeLoop <|> moveArg
+            _ <- P.spaces
             state <- P.getState
+            let p = nextPoint arg state
+            -- Every time a new point is added, update the parser state.
+            _ <- (P.modifyState $ \st -> st { currentPoint = p })
+            return p
+
+        -- Compute the next point given the input argument and current state.
+        nextPoint :: Point -> PathDState -> Point
+        nextPoint arg state =
             let (currentX, currentY) = currentPoint state
-                (newX, newY) = p
-                p' = case mode state of
-                    AbsoluteMove       -> p
+                (newX, newY) = arg
+            in
+                case mode state of
+                    AbsoluteMove       -> arg
                     AbsoluteHorizontal -> (newX, currentY)
                     AbsoluteVertical   -> (currentX, newY)
-                    RelativeMove       -> addTuples (currentPoint state) p
+                    RelativeMove       -> addTuples (currentPoint state) arg
                     RelativeHorizontal -> (currentX + newX, currentY)
                     RelativeVertical   -> (currentX, currentY + newY)
-            -- Every time a new point is added, update the parser state.
-            _ <- P.spaces >> (P.modifyState $ \st -> st { currentPoint = p' })
-            return p'
 
+        bezier :: P.Parsec String PathDState ()
         bezier = -- Discard the next two points. TODO: Add full support for Bezier curves
             (P.char 'C' <|> P.char 'c') >>
             P.spaces >> point >>
             P.spaces >> point >>
             return ()
+
+        closeLoop :: P.Parsec String PathDState Point
         closeLoop = do
             _ <- (P.char 'Z' <|> P.char 'z')
             state <- P.getState
             _ <- setMode AbsoluteMove
             return (firstPoint state)
+
+        moveArg :: P.Parsec String PathDState Point
         moveArg = do -- Read a movement argument (can be a point or a double).
             val <- double
             sep <- P.option ' ' $ P.char ','
@@ -459,13 +472,20 @@ parsePathD d = parseValWithState parser initialState d
             else
                 return (val, val)
 
+        absoluteMove      :: P.Parsec String PathDState ()
         absoluteMove      = (P.char 'L' <|> P.char 'M') >> setMode AbsoluteMove
+        relativeMove      :: P.Parsec String PathDState ()
         relativeMove      = P.char 'm' >> setMode RelativeMove
+        absHorizontalMove :: P.Parsec String PathDState ()
         absHorizontalMove = P.char 'H' >> setMode AbsoluteHorizontal
+        absVerticalMove   :: P.Parsec String PathDState ()
         absVerticalMove   = P.char 'V' >> setMode AbsoluteVertical
+        relHorizontalMove :: P.Parsec String PathDState ()
         relHorizontalMove = P.char 'h' >> setMode RelativeHorizontal
+        relVerticalMove   :: P.Parsec String PathDState ()
         relVerticalMove   = P.char 'v' >> setMode RelativeVertical
 
+        setMode :: PathMode -> P.Parsec String PathDState ()
         setMode newMode = P.modifyState $ \state -> state { mode = newMode }
 
 
