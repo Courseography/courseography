@@ -54,10 +54,26 @@ class TimetableContainer extends React.Component {
  * A <table> element for the specified session
  */
 class Timetable extends React.Component {
+  constructor(props) {
+    super(props);
+    this.modal = React.createRef();
+    this.displayMap = this.displayMap.bind(this);
+  }
+
+  displayMap(session) {
+    this.modal.current.openModal();
+  }
+
   render() {
     return(
       <table className={"timetable table"} id={"timetable-" + this.props.session}>
-        <TimetableHeader session={this.props.session} lectures={this.props.lectures} headColSpans={this.props.headColSpans}/>
+        <MapModal ref={this.modal}/>
+        <TimetableHeader
+          session={this.props.session}
+          lectures={this.props.lectures}
+          headColSpans={this.props.headColSpans}
+          openMap={this.displayMap}
+        />
         <TimetableBody session={this.props.session} lectures={this.props.lectures} headColSpans={this.props.headColSpans}/>
       </table>
     );
@@ -69,16 +85,6 @@ class Timetable extends React.Component {
  * The header contains five day cells, a dummy cell, and a term-name cell
  */
 class TimetableHeader extends React.Component {
-  constructor(props) {
-    super(props);
-    this.modal = null;
-    this.displayMap = this.displayMap.bind(this);
-  }
-
-  displayMap() {
-    this.modal.openModal(this.props.courseCode);
-  }
-
   render() {
     const dayStrings = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
     let colSpans = this.props.headColSpans;
@@ -101,8 +107,7 @@ class TimetableHeader extends React.Component {
           <tr>
             <th className="timetable-dummy-cell"></th>
             <th className="term-name">
-              <MapModal ref={ r => this.modal = r}/>
-              <img src="static/res/ico/map.png" className="map-icon" onClick={this.displayMap}/>
+              <img src="static/res/ico/map.png" className="map-icon" onClick={ () => this.props.openMap(this.props.session) }/>
               Fall
             </th>
             {dayCells}
@@ -116,8 +121,7 @@ class TimetableHeader extends React.Component {
             {dayCells}
             <th className="term-name">
               Spring
-              <MapModal ref={ r => this.modal = r}/>
-              <img src="static/res/ico/map.png" className="map-icon" onClick={this.displayMap}/>
+              <img src="static/res/ico/map.png" className="map-icon" onClick={ () => this.props.openMap(this.props.session) }/>
             </th>
             <th className="timetable-dummy-cell"></th>
           </tr>

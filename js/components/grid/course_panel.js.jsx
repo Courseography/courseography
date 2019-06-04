@@ -82,7 +82,7 @@ export class CoursePanel extends React.Component {
 class Course extends React.Component {
   constructor(props) {
     super(props);
-    this.modal = null;
+    this.modal = React.createRef();
     this.state = {
       selected: false,
       courseInfo: {}
@@ -150,7 +150,7 @@ class Course extends React.Component {
   }
 
   displayInfo() {
-    this.modal.openModal(this.props.courseCode);
+    this.modal.current.openModal(this.props.courseCode);
   }
 
   containsSelectedLecture() {
@@ -169,7 +169,7 @@ class Course extends React.Component {
       <li key={this.props.courseCode} id={this.props.courseCode + "-li"} className={"ui-accordion ui-widget ui-helper-reset"}>
         <div className="ui-accordion-header ui-helper-reset ui-state-default ui-accordion-icons ui-accordion-header-active ui-state-active ui-corner-top"
               id={"ui-accordion-" + this.props.courseCode + "-li-header-0"}>
-          <CourseModal ref={ r => this.modal = r}/>
+          <CourseModal ref={this.modal}/>
           <div className="icon-div">
             <img src="static/res/ico/delete.png" className="close-icon" onClick={this.removeCourse}/>
             <img src="static/res/ico/about.png" className="close-icon" onClick={this.displayInfo}/>
