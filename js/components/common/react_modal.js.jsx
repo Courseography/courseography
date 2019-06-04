@@ -2,7 +2,6 @@ import React from 'react';
 import ReactModal from 'react-modal';
 import Leaflet from 'leaflet';
 import {CircleMarker, Polygon, Polyline, Map, TileLayer, Marker, Popup, Tooltip, Circle } from 'react-leaflet';
-import L from 'leaflet'
 
 class ModalContent extends React.Component {
   render() {
