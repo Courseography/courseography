@@ -410,12 +410,15 @@ parsePathD d = parseValWithState parser initialState d
                                   , mode = AbsoluteMove
                                   , currentPoint = (0, 0) }
 
+        parser :: P.Parsec String PathDState [Point]
         parser = do
             p <- parseStep
             -- Record the first point added.
             _ <- P.modifyState $ \st -> st { firstPoint = p, currentPoint = p }
             rest <- P.many parseStep
             return (p : rest)
+
+        parseStep :: P.Parsec String PathDState Point
         parseStep = do
             _ <- P.option () $ P.choice
                 [ bezier
