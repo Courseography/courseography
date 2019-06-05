@@ -16,7 +16,7 @@ directly to the client when viewing the @/graph@ page.
 module Svg.Parser
     (parsePrebuiltSvgs) where
 
-import Data.Maybe (fromMaybe, catMaybes)
+import Data.Maybe (fromMaybe)
 import qualified Text.HTML.TagSoup as TS hiding (fromAttrib)
 import Database.Persist.Sqlite (runSqlite, SqlPersistM)
 import Text.HTML.TagSoup (Tag)
@@ -26,6 +26,7 @@ import Database.DataType
 import Svg.Database (insertGraph, insertElements, deleteGraphs)
 import Config (graphPath, databasePath)
 import qualified Text.Parsec as P
+import Text.Parsec ((<|>))
 import Text.Parsec.String (Parser)
 import Text.Read (readMaybe)
 import Data.Char (isSpace)
@@ -291,12 +292,17 @@ readAttr attr tag = fromMaybe
 
 -- | Runs a parser on a text object.
 -- Throws an exception on any parse errors.
-parseVal :: Parser a -> T.Text -> a
-parseVal parser input =
-    case P.parse parser "" $ T.unpack input of
+parseValWithState :: P.Parsec String u a -> u -> T.Text -> a
+parseValWithState parser initialState input =
+    case P.runParser parser initialState "" $ T.unpack input of
         Left err ->
             error ("reading " ++ T.unpack input ++ ":" ++ show err)
         Right val -> val
+
+-- | Runs a parser on a text object without internal parser state.
+-- Throws an exception on any parse errors.
+parseVal :: Parser a -> T.Text -> a
+parseVal parser input = parseValWithState parser () input
 
 -- | Looks up an attribute value using the given parser.
 parseAttr :: Parser a -> T.Text     -- ^ The attribute's name.
@@ -305,21 +311,34 @@ parseAttr :: Parser a -> T.Text     -- ^ The attribute's name.
 parseAttr parser attr tag = parseVal parser $ fromAttrib attr tag
 
 -- | Parses one or more digit characters.
-digits :: Parser String
+digits :: P.Parsec String u String
 digits = P.many1 P.digit
 
--- | Parses a double value, ignoring units if present.
-double :: Parser Double
+-- | Parses a double literal, optionally in scientific notation.
+double :: P.Parsec String u Double
 double = do
     sign <- P.option ' ' (P.char '-')
     whole <- digits
     fractional <- P.option ".0" parseFractional
-    return (read $ sign : whole ++ fractional)
+    magnitude <- P.option "e0" parseMagnitude
+    return (read $ sign : whole ++ fractional ++ magnitude)
     where
         parseFractional = do
             _ <- P.char '.'
             decimals <- digits
             return ("." ++ decimals)
+        parseMagnitude = do
+            ch <- P.char 'e'
+            sign <- P.option "" $ P.string "-"
+            power <- digits
+            return (ch : sign ++ power)
+
+point :: P.Parsec String u Point
+point = do
+    xPos <- double
+    _ <- P.char ','
+    yPos <- double
+    return (xPos, yPos)
 
 -- | Return a list of styles from the style attribute of an element.
 -- Every style has the form (name, value).
@@ -344,82 +363,133 @@ getTransform :: Tag T.Text -> Point
 getTransform = parseTransform . fromAttrib "transform"
 
 
--- | Parses a translation String into a tuple of Float.
+-- | Parses a translation String into a tuple of Float, ignoring scaling and
+-- rotation.
 parseTransform :: T.Text -> Point
 parseTransform "" = (0, 0)
 parseTransform transform =
     parseVal parser transform
     where
-        parser = do
+        parser = P.sepBy (scale <|> rotate) P.spaces >> translate
+        scale = P.string "scale(" >> double >> P.spaces >> P.option 0 double
+            >> P.char ')'
+        rotate = P.string "rotate(" >> double >> P.char ')'
+        translate = do
             _ <- P.string "translate("
             xPos <- double
-            _ <- P.char ','
+            _ <- P.char ',' <|> P.char ' '
             yPos <- double
             return (xPos, yPos)
 
 parseCoord :: T.Text -> Point
 parseCoord "" = (0, 0)
 parseCoord coord =
-    parseVal parser coord
-    where
-        parser = do
-            xPos <- double
-            _ <- P.char ','
-            yPos <- double
-            return (xPos, yPos)
+    parseVal point coord
 
+
+data PathMode = AbsoluteMove
+              | RelativeMove
+              | AbsoluteHorizontal
+              | RelativeHorizontal
+              | AbsoluteVertical
+              | RelativeVertical
+
+data PathDState = PathDState
+    { firstPoint :: Point
+    , mode :: PathMode
+    , currentPoint :: Point }
 
 -- | Parses a path's `d` attribute.
 -- See <https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d>.
 parsePathD :: T.Text -- ^ The 'd' attribute of an SVG path.
            -> [Point]
-parsePathD d = catMaybes $ parseTokens (tokenize d) []
+parsePathD d = parseValWithState parser initialState d
     where
-      -- Split d text into tokens of a single string (for commands)
-      -- or a list of two strings (for points).
-      tokenize d' = map (T.splitOn ",") $ filter (not . T.null) $ T.splitOn " " d'
+        -- Keep track of the (first point, path mode, most recent point)
+        initialState = PathDState { firstPoint = (0, 0)
+                                  , mode = AbsoluteMove
+                                  , currentPoint = (0, 0) }
 
-      parseTokens :: [[T.Text]] -> [Maybe Point] -> [Maybe Point]
-      parseTokens [] points = points
-      -- TODO: Fix support for Bezier curves (indicated by the "C"/"c").
-      parseTokens (["C"]:_:_:d') points = parseTokens d' points
-      parseTokens (["c"]:_:_:d') points = parseTokens d' points
+        parser :: P.Parsec String PathDState [Point]
+        parser = do
+            p <- parseStep
+            -- Record the first point added.
+            _ <- P.modifyState $ \st -> st { firstPoint = p, currentPoint = p }
+            rest <- P.many parseStep
+            return (p : rest)
 
-      -- Close loop to beginning of path.
-      parseTokens [["Z"]] points = points ++ [head points]
-      parseTokens [["z"]] points = points ++ [head points]
+        parseStep :: P.Parsec String PathDState Point
+        parseStep = do
+            _ <- P.option () $ P.choice
+                [ bezier
+                , absoluteMove
+                , relativeMove
+                , absHorizontalMove
+                , absVerticalMove
+                , relHorizontalMove
+                , relVerticalMove ]
+            _ <- P.spaces
+            arg <- closeLoop <|> moveArg
+            _ <- P.spaces
+            state <- P.getState
+            let p = nextPoint arg state
+            -- Every time a new point is added, update the parser state.
+            _ <- (P.modifyState $ \st -> st { currentPoint = p })
+            return p
 
-      -- Absolute move.
-      parseTokens (["L"]:d') points = parseTokens d' points
-      parseTokens (["M"]:d') points = parseTokens d' points
+        -- Compute the next point given the input argument and current state.
+        nextPoint :: Point -> PathDState -> Point
+        nextPoint arg state =
+            let (currentX, currentY) = currentPoint state
+                (newX, newY) = arg
+            in
+                case mode state of
+                    AbsoluteMove       -> arg
+                    AbsoluteHorizontal -> (newX, currentY)
+                    AbsoluteVertical   -> (currentX, newY)
+                    RelativeMove       -> addTuples (currentPoint state) arg
+                    RelativeHorizontal -> (currentX + newX, currentY)
+                    RelativeVertical   -> (currentX, currentY + newY)
 
-      -- Relative move.
-      parseTokens (["m"]:[x,y]:d') points =
-        parseTokens (["m"]:d') $
-          points ++ [addTuples <$> convertToPoint (x,y) <*> (if null points then Just (0, 0) else last points)]
-      parseTokens (["m"]:d') points = parseTokens d' points
-      parseTokens ([x, y]:d') points = parseTokens d' $ points ++ [convertToPoint (x, y)]
-    --   parseTokens (["l"]:d') points = parseTokens d' points
+        bezier :: P.Parsec String PathDState ()
+        bezier = -- Discard the next two points. TODO: Add full support for Bezier curves
+            (P.char 'C' <|> P.char 'c') >>
+            P.spaces >> point >>
+            P.spaces >> point >>
+            return ()
 
-      -- Absolute horizontal/vertical move.
-      parseTokens (["H"]:[x2]:d') points =
-        parseTokens d' $ points ++ [(,) <$> readMaybe (T.unpack x2) <*> (snd <$> last points)]
-      parseTokens (["V"]:[y2]:d') points =
-        parseTokens d' $ points ++ [(,) <$> (fst <$> last points) <*> readMaybe (T.unpack y2)]
+        closeLoop :: P.Parsec String PathDState Point
+        closeLoop = do
+            _ <- (P.char 'Z' <|> P.char 'z')
+            state <- P.getState
+            _ <- setMode AbsoluteMove
+            return (firstPoint state)
 
-      -- Relative horizontal/vertical move.
-      parseTokens (["h"]:[x2]:d') points =
-        parseTokens d' $ points ++ [(,) <$> ((+) <$> (fst <$> last points) <*> readMaybe (T.unpack x2)) <*> (snd <$> last points)]
-      parseTokens (["v"]:[y2]:d') points =
-        parseTokens d' $ points ++ [(,) <$> (fst <$> last points) <*> ((+) <$> (snd <$> last points) <*> readMaybe (T.unpack y2))]
+        moveArg :: P.Parsec String PathDState Point
+        moveArg = do -- Read a movement argument (can be a point or a double).
+            val <- double
+            sep <- P.option ' ' $ P.char ','
+            if sep == ',' then do
+                yVal <- double
+                return (val, yVal)
+            else
+                return (val, val)
 
-      -- Error case.
-      parseTokens d' _ = error (show d')
+        absoluteMove      :: P.Parsec String PathDState ()
+        absoluteMove      = (P.char 'L' <|> P.char 'M') >> setMode AbsoluteMove
+        relativeMove      :: P.Parsec String PathDState ()
+        relativeMove      = P.char 'm' >> setMode RelativeMove
+        absHorizontalMove :: P.Parsec String PathDState ()
+        absHorizontalMove = P.char 'H' >> setMode AbsoluteHorizontal
+        absVerticalMove   :: P.Parsec String PathDState ()
+        absVerticalMove   = P.char 'V' >> setMode AbsoluteVertical
+        relHorizontalMove :: P.Parsec String PathDState ()
+        relHorizontalMove = P.char 'h' >> setMode RelativeHorizontal
+        relVerticalMove   :: P.Parsec String PathDState ()
+        relVerticalMove   = P.char 'v' >> setMode RelativeVertical
 
-      convertToPoint (x, y) =
-        case (readMaybe (T.unpack x), readMaybe (T.unpack y)) of
-            (Just m, Just n) -> Just (m, n)
-            _ -> Nothing
+        setMode :: PathMode -> P.Parsec String PathDState ()
+        setMode newMode = P.modifyState $ \state -> state { mode = newMode }
 
 
 -- * Other helpers
