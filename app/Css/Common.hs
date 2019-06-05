@@ -140,6 +140,12 @@ modalCSS = do
             margin (pt 5) 0 (pt 5) 0
             lineHeight (em 1.3)
             textAlign $ alignSide sideLeft
+        "#campus-map" ? do
+            height (px 600)
+            width (px 800)
+        ".leaflet-container" ? do
+            height (px 570)
+            width (px 700)
     ".modal-class" ? do
         overflowY auto
         position absolute

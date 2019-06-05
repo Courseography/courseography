@@ -1,4 +1,5 @@
 import React from 'react';
+import { MapModal } from '../common/react_modal.js.jsx';
 
 /*
  * Holds the containers of the Fall and Spring timetables,
@@ -53,10 +54,26 @@ class TimetableContainer extends React.Component {
  * A <table> element for the specified session
  */
 class Timetable extends React.Component {
+  constructor(props) {
+    super(props);
+    this.modal = React.createRef();
+    this.displayMap = this.displayMap.bind(this);
+  }
+
+  displayMap(session) {
+    this.modal.current.openModal();
+  }
+
   render() {
     return(
       <table className={"timetable table"} id={"timetable-" + this.props.session}>
-        <TimetableHeader session={this.props.session} lectures={this.props.lectures} headColSpans={this.props.headColSpans}/>
+        <MapModal ref={this.modal}/>
+        <TimetableHeader
+          session={this.props.session}
+          lectures={this.props.lectures}
+          headColSpans={this.props.headColSpans}
+          openMap={this.displayMap}
+        />
         <TimetableBody session={this.props.session} lectures={this.props.lectures} headColSpans={this.props.headColSpans}/>
       </table>
     );
@@ -89,7 +106,10 @@ class TimetableHeader extends React.Component {
         <thead>
           <tr>
             <th className="timetable-dummy-cell"></th>
-            <th className="term-name">Fall</th>
+            <th className="term-name">
+              <img src="static/res/ico/map.png" className="map-icon" onClick={ () => this.props.openMap(this.props.session) }/>
+              Fall
+            </th>
             {dayCells}
           </tr>
         </thead>
@@ -99,7 +119,10 @@ class TimetableHeader extends React.Component {
         <thead>
           <tr>
             {dayCells}
-            <th className="term-name">Spring</th>
+            <th className="term-name">
+              Spring
+              <img src="static/res/ico/map.png" className="map-icon" onClick={ () => this.props.openMap(this.props.session) }/>
+            </th>
             <th className="timetable-dummy-cell"></th>
           </tr>
         </thead>

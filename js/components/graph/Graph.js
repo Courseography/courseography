@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Modal } from "../common/react_modal.js.jsx";
+import { CourseModal } from "../common/react_modal.js.jsx";
 import { ExportModal } from "../common/export.js.jsx";
 import BoolGroup from "./BoolGroup";
 import Button from "./Button";
@@ -669,7 +669,7 @@ export default class Graph extends React.Component {
 
     return (
       <div>
-        <Modal ref={this.modal} />
+        <CourseModal ref={this.modal} />
         <ExportModal context="graph" session="" ref={this.exportModal} />
         <Button
           divId="zoom-in-button"

@@ -19,6 +19,9 @@ masterTemplate title headers body scripts =
             H.title (H.toHtml title)
             H.link ! A.rel "icon" ! A.type_ "image/png"
                    ! A.href "static/res/ico/favicon.png"
+            H.link ! A.rel "stylesheet" ! A.href "https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+            H.script ! A.src "https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+                     $ H.toHtml ("" :: String)
             sequence_ headers
             mapM_ toStylesheet [
                 if enableCdn

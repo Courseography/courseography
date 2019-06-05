@@ -45,7 +45,7 @@ getBuildingList :: [Tag T.Text] -> [Building]
 getBuildingList tags =
     let listing = TS.partitions (TS.isTagOpenName "dl") tags
         listing' = map (takeWhile (not . TS.isTagCloseName "dl")) listing
-        buildings = map extractBuildings listing'
+        buildings = filter (\b -> not $ T.null (buildingAddress b)) $ map extractBuildings listing'
     in buildings
     where
         extractBuildings :: [Tag T.Text] -> Building
@@ -57,8 +57,8 @@ getBuildingList tags =
             in
                 Building buildCode
                          buildName
-                         (fst buildAddress)
-                         (T.takeEnd 7 (snd buildAddress))
+                         (T.strip (fst buildAddress))
+                         (T.strip $ T.takeEnd 7 (snd buildAddress))
 
 -- | Parses the entire Arts & Science Course Calendar and inserts courses
 -- into the database.

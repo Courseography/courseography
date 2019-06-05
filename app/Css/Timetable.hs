@@ -127,6 +127,13 @@ timetableCSS = do
                 width (pct 10)
                 fontWeight bold
             height (px 35)
+            ".map-icon" ? do
+                width (px 15)
+                height (px 24)
+                cursor pointer
+                opacity 0.5
+                ":hover" & do
+                    opacity 1.0
         td ? do
             "rowspan" *= "1" & do
                 fontSize (em 0)
