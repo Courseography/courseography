@@ -145,7 +145,7 @@ describe("Course Node", () => {
     expect(aaa100.classList.contains("node")).toBe(true);
   });
 
-  describe("Unselected Course Node", async () => {
+  describe("Unselected Course Node", () => {
     it("should be 'takeable' if it has no prereqs", async () => {
       const graph = await TestGraph.build();
       const aaa101 = graph.getNodeByText("AAA101");
@@ -185,14 +185,14 @@ describe("Course Node", () => {
     });
   });
 
-  describe("Selected Course Node", async () => {
+  describe("Selected Course Node", () => {
     it("with met prereqs should 'active'", async () => {
       const graph = await TestGraph.build();
       const aaa100 = graph.getNodeByText("AAA100");
       fireEvent.click(aaa100);
       expect(aaa100.classList.contains("active")).toBe(true);
     });
-    describe("selected course with un-met prereqs", async () => {
+    describe("selected course with un-met prereqs", () => {
       it("should be 'overridden' (if you don't hover over it)", async () => {
         const graph = await TestGraph.build();
         const aaa201 = graph.getNodeByText("AAA201");
