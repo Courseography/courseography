@@ -34,7 +34,6 @@
   "dependencies": {
     "@babel/polyfill": "^7.2.5",
     "leaflet": "^1.5.1",
-    "path": "^0.12.7",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-leaflet": "^2.3.0",
