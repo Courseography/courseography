@@ -14,7 +14,6 @@ import WebParsing.ParsecCombinators (text)
 import Network.HTTP.Simple (parseRequest, getResponseBody, httpLBS)
 import qualified Text.HTML.TagSoup as TS
 import Text.HTML.TagSoup (Tag)
-import Text.HTML.TagSoup.Match (tagOpenAttrLit, tagOpenAttrNameLit, tagText)
 import Database.Persist.Sqlite (runSqlite, SqlPersistM, insertMany_)
 import Database.Persist (insertUnique)
 import Database.CourseInsertion (insertCourse)
@@ -22,43 +21,45 @@ import Database.Tables (Courses(..), Department(..), Building(..))
 import WebParsing.ReqParser (parseReqs)
 import Config (databasePath)
 import WebParsing.PostParser (addPostToDatabase)
-
+import Data.CSV
+import Text.ParserCombinators.Parsec (parseFromFile)
+import Text.HTML.TagSoup.Match (tagOpenAttrLit, tagOpenAttrNameLit)
+import System.Directory (getCurrentDirectory)
+import Filesystem.Path.CurrentOS as Path
 
 -- | The URLs of the Faculty of Arts & Science calendar.
 fasCalendarURL :: String
 fasCalendarURL = "https://fas.calendar.utoronto.ca/"
 programsURL :: String
 programsURL = "https://fas.calendar.utoronto.ca/listing-program-subject-areas"
-buildingsURL :: String
-buildingsURL = "http://map.utoronto.ca/utsg/c/buildings"
+
+-- The file name is building.csv and it is in the main courseography folder
+buildingsCSV :: IO Prelude.FilePath
+buildingsCSV = do
+    curDir <- getCurrentDirectory
+    let parentDir = Path.parent $ Path.decodeString curDir
+    return $ Path.encodeString $ Path.append parentDir $ Path.decodeString "buildings.csv"
 
 parseBuildings :: IO ()
 parseBuildings = do
-    bodyTags <- httpBodyTags buildingsURL
-    let buildingInfo = getBuildingList bodyTags
+    buildingInfo <- getBuildingsFromCSV =<< buildingsCSV
     runSqlite databasePath $ do
         liftIO $ putStrLn "Inserting buildings"
         insertMany_ buildingInfo :: SqlPersistM ()
 
--- | Extract building names, codes, addresses and postal codes from the html building listing page.
-getBuildingList :: [Tag T.Text] -> [Building]
-getBuildingList tags =
-    let listing = TS.partitions (TS.isTagOpenName "dl") tags
-        listing' = map (takeWhile (not . TS.isTagCloseName "dl")) listing
-        buildings = filter (\b -> not $ T.null (buildingAddress b)) $ map extractBuildings listing'
-    in buildings
-    where
-        extractBuildings :: [Tag T.Text] -> Building
-        extractBuildings listTags =
-            let buildInfo = filter (tagText (const True)) listTags
-                buildName = TS.fromTagText $ buildInfo !! 1
-                buildCode = T.drop 3 $ TS.fromTagText $ buildInfo !! 2
-                buildAddress = T.breakOn "," $ TS.fromTagText $ buildInfo !! 4
-            in
-                Building buildCode
-                         buildName
-                         (T.strip (fst buildAddress))
-                         (T.strip $ T.takeEnd 7 (snd buildAddress))
+-- | Extract building names, codes, addresses, postal codes, latitude and longitude from csv file
+getBuildingsFromCSV :: String -> IO [Building]
+getBuildingsFromCSV buildsCSVFile = do
+    buildsCSVData <- parseFromFile csvFile buildsCSVFile
+    case buildsCSVData of
+        Left _ -> error "csv parse error"
+        Right buildsData -> do
+            return $ map (\b -> Building (T.pack (b !! 0))
+                                        (T.pack (b !! 1))
+                                        (T.pack (b !! 2))
+                                        (T.pack (b !! 3))
+                                        (read (b !! 4) :: Double)
+                                        (read (b !! 5) :: Double)) $ drop 1 buildsData
 
 -- | Parses the entire Arts & Science Course Calendar and inserts courses
 -- into the database.
