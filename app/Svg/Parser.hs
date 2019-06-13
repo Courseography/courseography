@@ -370,7 +370,7 @@ parseTransform "" = (0, 0)
 parseTransform transform =
     parseVal parser transform
     where
-        parser = P.sepBy (scale <|> rotate) P.spaces >> translate
+        parser = P.sepEndBy (scale <|> rotate) P.spaces >> translate
         scale = P.string "scale(" >> double >> P.spaces >> P.option 0 double
             >> P.char ')'
         rotate = P.string "rotate(" >> double >> P.char ')'
