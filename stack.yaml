@@ -12,6 +12,7 @@ extra-deps:
 - happstack-server-7.5.1.3
 - sendfile-0.7.9
 - wl-pprint-extras-3.5.0.5
+- binary-0.8.7.0@sha256:ae3e6cca723ac55c54bbb3fa771bcf18142bc727afd57818e66d6ee6c8044f12,7705
 compiler-check: newer-minor
 resolver: lts-13.19
 dump-logs: all
