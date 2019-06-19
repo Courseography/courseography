@@ -33,12 +33,11 @@ fasCalendarURL = "https://fas.calendar.utoronto.ca/"
 programsURL :: String
 programsURL = "https://fas.calendar.utoronto.ca/listing-program-subject-areas"
 
--- The file name is building.csv and it is in the main courseography folder
+-- The file name is building.csv and it is in the courseography/db folder
 buildingsCSV :: IO Prelude.FilePath
 buildingsCSV = do
     curDir <- getCurrentDirectory
-    let parentDir = Path.parent $ Path.decodeString curDir
-    return $ Path.encodeString $ Path.append parentDir $ Path.decodeString "buildings.csv"
+    return $ Path.encodeString $ Path.append (Path.decodeString curDir) $ Path.append (Path.decodeString "db") (Path.decodeString "building.csv")
 
 parseBuildings :: IO ()
 parseBuildings = do
@@ -49,17 +48,17 @@ parseBuildings = do
 
 -- | Extract building names, codes, addresses, postal codes, latitude and longitude from csv file
 getBuildingsFromCSV :: String -> IO [Building]
-getBuildingsFromCSV buildsCSVFile = do
-    buildsCSVData <- parseFromFile csvFile buildsCSVFile
-    case buildsCSVData of
+getBuildingsFromCSV buildingCSVFile = do
+    buildingCSVData <- parseFromFile csvFile buildingCSVFile
+    case buildingCSVData of
         Left _ -> error "csv parse error"
-        Right buildsData -> do
+        Right buildingData -> do
             return $ map (\b -> Building (T.pack (b !! 0))
                                         (T.pack (b !! 1))
                                         (T.pack (b !! 2))
                                         (T.pack (b !! 3))
                                         (read (b !! 4) :: Double)
-                                        (read (b !! 5) :: Double)) $ drop 1 buildsData
+                                        (read (b !! 5) :: Double)) $ drop 1 buildingData
 
 -- | Parses the entire Arts & Science Course Calendar and inserts courses
 -- into the database.
