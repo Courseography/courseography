@@ -6,6 +6,7 @@ packages:
 - .
 allow-newer: true
 extra-deps:
+- binary-0.8.7.0
 - HaTeX-3.20.0.0
 - containers-0.5.11.0
 - graphviz-2999.20.0.3
