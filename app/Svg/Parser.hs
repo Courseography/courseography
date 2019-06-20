@@ -434,7 +434,7 @@ parsePathD d = parseValWithState parser initialState d
             state <- P.getState
             let p = nextPoint arg state
             -- Every time a new point is added, update the parser state.
-            _ <- (P.modifyState $ \st -> st { currentPoint = p })
+            _ <- P.modifyState $ \st -> st { currentPoint = p }
             return p
 
         -- Compute the next point given the input argument and current state.
@@ -460,7 +460,7 @@ parsePathD d = parseValWithState parser initialState d
 
         closeLoop :: P.Parsec String PathDState Point
         closeLoop = do
-            _ <- (P.char 'Z' <|> P.char 'z')
+            _ <- P.char 'Z' <|> P.char 'z'
             state <- P.getState
             _ <- setMode AbsoluteMove
             return (firstPoint state)
