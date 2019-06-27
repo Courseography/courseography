@@ -1,7 +1,9 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module DynamicGraphs.GraphGenerator
-  (sampleGraph)
+  ( sampleGraph
+  , nodeToGraph
+  )
   where
 
 import Data.GraphViz.Attributes as A
@@ -14,6 +16,7 @@ import Data.GraphViz.Types.Generalised (
   GlobalAttributes(..)
   )
 import Database.Requirement (Req(..))
+import DynamicGraphs.Node (Node(..))
 import Data.Sequence as Seq
 import Data.Text.Lazy (Text, pack)
 import Control.Monad.State (State)
@@ -22,6 +25,9 @@ import Control.Monad (mapM)
 
 
 -- Serves as a sort of "interface" for the whole part "dynamic graph"
+nodeToGraph :: Node -> DotGraph Text
+nodeToGraph node = fst $ State.runState (buildGraphFromNode node) 0
+
 sampleGraph :: DotGraph Text
 sampleGraph = fst $ State.runState (reqsToGraph [
     ("MAT237H1", J "MAT137H1" ""),
@@ -42,6 +48,35 @@ reqsToGraph reqs = do
     allStmts <- mapM reqToStmts reqs
     return $ buildGraph $ concat allStmts
 
+buildGraphFromNode :: Node -> State Integer (DotGraph Text)
+buildGraphFromNode node = nodeToStmts node >>= (return . buildGraph)
+
+nodeToStmts :: Node -> State Integer [DotStatement Text]
+nodeToStmts (Leaf name) = do
+    node <- makeNode $ pack name
+    return [DN node]
+nodeToStmts (Parent name child) = do
+    node <- makeNode $ pack name
+    children <- nodeToStmts child
+    edge <- makeEdge (nodeID $ headNode children) (nodeID node)
+    return $ [DN node, DE edge] ++ children
+nodeToStmts (Conj children) = nodeToBoolStmts "and" children
+nodeToStmts (Disj children) = nodeToBoolStmts "or" children
+
+nodeToBoolStmts :: Text -> [Node] -> State Integer [DotStatement Text]
+nodeToBoolStmts name children = do
+    node <- makeBool name
+    prereqStmts <- mapM nodeToStmts children
+    -- Create edges from each eldest prereq to this boolean node.
+    let childNodes = map headNode prereqStmts
+        pointToThis child = makeEdge (nodeID child) (nodeID node)
+    edges <- mapM pointToThis childNodes
+    return $ DN node : map DE edges ++ concat prereqStmts
+
+headNode :: [DotStatement Text] -> DotNode Text
+headNode children =
+    let (DN node) = head children
+    in node
 
 -- Convert the original requirement data into dot statements that can be used by buildGraph to create the
 -- corresponding DotGraph objects.
@@ -102,8 +137,7 @@ makeBool text1 = do
 
 
 makeEdge :: Text -> Text -> State Integer (DotEdge Text)
-makeEdge id1 id2 = do
-    return $ DotEdge id1 id2 []
+makeEdge id1 id2 = return $ DotEdge id1 id2 []
 
 mappendTextWithCounter :: Text -> Integer -> Text
 mappendTextWithCounter text1 counter = text1 `mappend` "_counter_" `mappend` (pack (show (counter)))
