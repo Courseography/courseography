@@ -18,7 +18,7 @@ module Database.CourseQueries
      returnMeeting,
      getGraphJSON,
      getMeetingTime,
-     buildTimes') where
+     buildTime) where
 
 import Happstack.Server.SimpleHTTP
 import Database.Persist
@@ -35,7 +35,7 @@ import Database.DataType
 import Svg.Builder
 
 -- | Queries the database for all matching lectures, tutorials,
-meetingQuery :: T.Text -> SqlPersistM [MeetTime]
+meetingQuery :: T.Text -> SqlPersistM [MeetTime']
 meetingQuery meetingCode_ = do
     allMeetings <- selectList [MeetingCode ==. meetingCode_] []
     mapM buildMeetTimes allMeetings
@@ -79,7 +79,7 @@ returnMeeting lowerStr sect session = do
 
 -- | Builds a Course structure from a tuple from the Courses table.
 -- Some fields still need to be added in.
-buildCourse :: [MeetTime] -> Courses -> SqlPersistM Course
+buildCourse :: [MeetTime'] -> Courses -> SqlPersistM Course
 buildCourse allMeetings course = do
     cBreadth <- getDescriptionB (coursesBreadth course)
     cDistribution <- getDescriptionD (coursesDistribution course)
@@ -110,11 +110,11 @@ getDescriptionD (Just key) = do
     return $ fmap distributionDescription maybeDistribution
 
 -- | Queries the database for all times corresponding to a given meeting.
-buildMeetTimes :: Entity Meeting -> SqlPersistM Tables.MeetTime
+buildMeetTimes :: Entity Meeting -> SqlPersistM Tables.MeetTime'
 buildMeetTimes meet = do
     allTimes :: [Entity Times] <- selectList [TimesMeeting ==. entityKey meet] []
-    let parsedTime = map (buildTimes' . entityVal) allTimes
-    return $ Tables.MeetTime {meetData = entityVal meet, timeData = parsedTime}
+    parsedTime <- mapM (buildTime . entityVal) allTimes
+    return $ Tables.MeetTime' (entityVal meet) (parsedTime)
 
 -- ** Other queries
 
@@ -210,14 +210,15 @@ queryGraphs = runSqlite databasePath $ do
 
 -- | Queries the database for all times regarding a specific meeting (lecture, tutorial or practial) for
 -- a @course@, returns a list of Time.
-getMeetingTime :: (T.Text, T.Text, T.Text) -> SqlPersistM [Times']
+getMeetingTime :: (T.Text, T.Text, T.Text) -> SqlPersistM [Time]
 getMeetingTime (meetingCode_, meetingSection_, meetingSession_) = do
     maybeEntityMeetings <- selectFirst [MeetingCode ==. meetingCode_,
                                         MeetingSection ==. getMeetingSection meetingSection_,
                                         MeetingSession ==. meetingSession_]
                                        []
     allTimes <- selectList [TimesMeeting ==. fromJust (fmap entityKey maybeEntityMeetings)] []
-    return $ map (buildTimes' . entityVal) allTimes
+    parsedTimes <- mapM (buildTime . entityVal) allTimes
+    return parsedTimes
 
 getMeetingSection :: T.Text -> T.Text
 getMeetingSection sec
