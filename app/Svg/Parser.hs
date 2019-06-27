@@ -318,17 +318,23 @@ digits = P.many1 P.digit
 double :: P.Parsec String u Double
 double = do
     sign <- P.option ' ' (P.char '-')
-    whole <- digits
-    fractional <- P.option ".0" parseFractional
-    magnitude <- P.option "e0" parseMagnitude
-    return (read $ sign : whole ++ fractional ++ magnitude)
+    number <- wholeAndFractional
+    magnitude <- P.option "" parseMagnitude
+    return (read $ sign : number ++ magnitude)
     where
+        wholeAndFractional = do
+            whole <- digits <|> parseFractional
+            if head whole == '.' then
+                return $ '0' : whole
+            else do
+                fractional <- P.option "" parseFractional
+                return $ whole ++ fractional
         parseFractional = do
             _ <- P.char '.'
             decimals <- digits
             return ("." ++ decimals)
         parseMagnitude = do
-            ch <- P.char 'e'
+            ch <- P.oneOf "eE"
             sign <- P.option "" $ P.string "-"
             power <- digits
             return (ch : sign ++ power)
