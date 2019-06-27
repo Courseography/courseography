@@ -22,7 +22,7 @@ export default class Bool extends React.Component {
     function isAllTrue(element) {
       return svg.nodes.current[element]
         ? svg.nodes.current[element].isSelected()
-        : svg.nodes.current[element].isSelected();
+        : svg.bools.current[element].isSelected();
     }
 
     if (this.props.logicalType === "and") {
