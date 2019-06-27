@@ -42,7 +42,7 @@ jobs:
           key: v1.1-courseography-haskell-{{ checksum "courseography.cabal" }}
           paths:
             - ~/.stack
-            - ~/.stack-work
+            - .stack-work
 
       - save_cache:
           name: Cache Dependencies (JavaScript)
@@ -56,7 +56,7 @@ jobs:
             stack build --fast -j1 --ghc-options -Werror
             stack test
             yarn test
-      
+
       - run:
           name: Lint JS
           command: |
