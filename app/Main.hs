@@ -22,9 +22,8 @@ import Svg.Parser (parsePrebuiltSvgs)
 import Css.Compiler (compileCSS)
 import Util.Documentation (generateDocs)
 
--- dynamicgraph_test
-import DynamicGraphs.WriteRunDot(doDots)
-import DynamicGraphs.GraphGenerator(sampleGraph)
+-- dynamic graph generation
+import DynamicGraphs.WriteRunDot(generatePrereqsForCourse)
 
 -- | A map of command-line arguments to their corresponding IO actions.
 taskMap :: Map.Map String (IO ())
@@ -34,7 +33,7 @@ taskMap = Map.fromList [
     ("graphs", parsePrebuiltSvgs),
     ("css", compileCSS),
     ("docs", generateDocs),
-    ("minfangraph", doDots [ ("sample", sampleGraph) ])]
+    ("generate", generatePrereqsForCourse ("CSC401H1", "CSC401H1"))]
 
 -- | Courseography entry point.
 main :: IO ()

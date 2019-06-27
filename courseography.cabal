@@ -64,6 +64,7 @@ executable courseography
     Database.DataType,
     Database.Database,
     Database.Tables,
+    DynamicGraphs.Node,
     DynamicGraphs.WriteRunDot,
     DynamicGraphs.GraphGenerator,
     Export.GetImages,
