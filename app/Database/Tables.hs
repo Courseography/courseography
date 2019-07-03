@@ -170,11 +170,11 @@ data Time' =
 
 data Time =
   Time { weekDay :: Double,
-            startHour :: Double,
-            endHour :: Double,
-            firstRoom :: Maybe Location,
-            secondRoom :: Maybe Location
-          } deriving (Show, Generic)
+          startHour :: Double,
+          endHour :: Double,
+          firstRoom :: Maybe Location,
+          secondRoom :: Maybe Location
+        } deriving (Show, Generic)
 
 data Location =
   Location { room :: T.Text,
