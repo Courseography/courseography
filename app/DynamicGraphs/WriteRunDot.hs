@@ -3,8 +3,7 @@ module DynamicGraphs.WriteRunDot where
 import           Control.Monad   (forM_)
 import           Data.GraphViz
 import           System.FilePath (FilePath, combine, normalise)
-import           DynamicGraphs.Node (lookupCourse)
-import           DynamicGraphs.GraphGenerator (nodeToGraph)
+import           DynamicGraphs.GraphGenerator (coursePrereqsToGraph)
 
 doDots :: PrintDotRepr dg n => [(FilePath, dg n)] -> IO ()
 doDots cases = do
@@ -13,8 +12,8 @@ doDots cases = do
 
 generatePrereqsForCourse :: (FilePath, String) -> IO ()
 generatePrereqsForCourse (output, course) = do
-  node <- lookupCourse course
-  _ <- createImage (output, nodeToGraph node)
+  graph <- coursePrereqsToGraph course
+  _ <- createImage (output, graph)
   putStrLn $ "Generated prerequisite graph for " ++ course
 
 createImage :: PrintDotRepr dg n => (FilePath, dg n) -> IO FilePath
