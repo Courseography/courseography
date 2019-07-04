@@ -26,26 +26,26 @@ import Util.Documentation (generateDocs)
 import DynamicGraphs.WriteRunDot(generatePrereqsForCourse)
 
 -- | A map of command-line arguments to their corresponding IO actions.
-taskMap :: Map.Map String (IO ())
+taskMap :: Map.Map String ([String] -> IO ())
 taskMap = Map.fromList [
-    ("server", runServer),
-    ("database", setupDatabase),
-    ("graphs", parsePrebuiltSvgs),
-    ("css", compileCSS),
-    ("docs", generateDocs),
-    ("generate", generatePrereqsForCourse ("CSC401H1", "CSC401H1"))]
+    ("server", const runServer),
+    ("database", const setupDatabase),
+    ("graphs", const parsePrebuiltSvgs),
+    ("css", const compileCSS),
+    ("docs", const generateDocs),
+    ("generate", \[name] -> generatePrereqsForCourse (name, name))]
 
 -- | Courseography entry point.
 main :: IO ()
 main = do
     args <- getArgs
     let taskName = if null args then "server" else head args
-    fromMaybe putUsage (Map.lookup taskName taskMap)
+    fromMaybe putUsage (Map.lookup taskName taskMap) $ tail args
 
 
 -- | Print usage message to user (when main gets an incorrect argument).
-putUsage :: IO ()
-putUsage = hPutStrLn stderr usageMsg
+putUsage :: [String] -> IO ()
+putUsage _ = hPutStrLn stderr usageMsg
     where
         taskNames = Map.keys taskMap
         usageMsg = "Unrecognized argument. Available arguments:\n" ++

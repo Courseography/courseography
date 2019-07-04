@@ -11,7 +11,7 @@ module Database.CourseQueries
     (retrieveCourse,
      returnCourse,
      allCourses,
-     coursesToPrereqs,
+     prereqsForCourse,
      courseInfo,
      getDeptCourses,
      queryGraphs,
@@ -29,8 +29,7 @@ import Control.Monad.IO.Class (liftIO, MonadIO)
 import Util.Happstack (createJSONResponse)
 import qualified Data.Text as T
 import Data.List
-import qualified Data.Map.Strict as Map
-import Data.Maybe (fromJust, catMaybes)
+import Data.Maybe (fromJust, fromMaybe)
 import Config (databasePath)
 import Data.Aeson ((.=), toJSON, object)
 import Database.DataType
@@ -180,20 +179,13 @@ allCourses = do
       return $ T.unlines codes :: SqlPersistM T.Text
   return $ toResponse response
 
--- | Builds a map that maps courses with prerequisites to a string
--- representation of their prereqs.
-coursesToPrereqs :: IO (Map.Map String String)
-coursesToPrereqs = runSqlite databasePath $ do
-    courses :: [Entity Courses] <- selectList [] []
-    -- Filter out the courses that have no prerequisites.
-    let getCodeAndPrereqs :: Courses -> Maybe (String, String)
-        getCodeAndPrereqs entity = do
-            prereqs <- coursesPrereqString entity
-            Just (T.unpack $ coursesCode entity, T.unpack prereqs)
-
-        codesAndPrereqs = map (getCodeAndPrereqs . entityVal) courses
-        codesWithPrereqs = catMaybes codesAndPrereqs
-    return $ Map.fromList codesWithPrereqs :: SqlPersistM (Map.Map String String)
+-- | Retrieves the prerequisites for a course (code) as a string.
+prereqsForCourse :: T.Text -> IO (Either String T.Text)
+prereqsForCourse course = runSqlite databasePath $ do
+    courses :: [Entity Courses] <- selectList [CoursesCode ==. course] []
+    if null courses then return (Left "Course not found")
+        else
+        return (Right $ fromMaybe "" $ coursesPrereqString $ entityVal (head courses)) :: SqlPersistM (Either String T.Text)
 
 -- | Returns all course info for a given department.
 courseInfo :: T.Text -> ServerPart Response

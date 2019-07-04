@@ -2,7 +2,7 @@
 
 module DynamicGraphs.GraphGenerator
   ( sampleGraph
-  , nodeToGraph
+  , coursePrereqsToGraph
   )
   where
 
@@ -15,8 +15,9 @@ import Data.GraphViz.Types.Generalised (
   DotStatement(..),
   GlobalAttributes(..)
   )
+import DynamicGraphs.Node (lookupCourse)
+import qualified Data.Map.Strict as Map
 import Database.Requirement (Req(..))
-import DynamicGraphs.Node (Node(..))
 import Data.Sequence as Seq
 import Data.Text.Lazy (Text, pack)
 import Control.Monad.State (State)
@@ -25,8 +26,13 @@ import Control.Monad (mapM)
 
 
 -- Serves as a sort of "interface" for the whole part "dynamic graph"
-nodeToGraph :: Node -> DotGraph Text
-nodeToGraph node = fst $ State.runState (buildGraphFromNode node) 0
+-- TODO: rename this
+coursePrereqsToGraph :: String -> IO (DotGraph Text)
+coursePrereqsToGraph course = do
+    reqs <- lookupCourse $ pack course
+    return $ fst $ State.runState (reqsToGraph reqs) initialState
+    where
+        initialState = GeneratorState 0 Map.empty
 
 sampleGraph :: DotGraph Text
 sampleGraph = fst $ State.runState (reqsToGraph [
@@ -35,7 +41,7 @@ sampleGraph = fst $ State.runState (reqsToGraph [
     ("CSC148H1", AND [J "CSC108H1" "", J "CSC104H1" ""]),
     ("CSC265H1", AND [J "CSC148H1" "", J "CSC236H1" ""])
     ])
-    0
+    (GeneratorState 0 Map.empty)
 
 --
 -- ** Main algorithm for converting requirements into a graph
@@ -43,50 +49,23 @@ sampleGraph = fst $ State.runState (reqsToGraph [
 -- The reqToStmts are meant to convert a single requirement and reqsToGraph use concatMap to
 -- use reqToStmts to converts a list of requirements all at once and concatenate the results into a
 -- single list of DotGraph objects.
-reqsToGraph :: [(Text, Req)] -> State Integer (DotGraph Text)
+reqsToGraph :: [(Text, Req)] -> State GeneratorState (DotGraph Text)
 reqsToGraph reqs = do
     allStmts <- mapM reqToStmts reqs
     return $ buildGraph $ concat allStmts
 
-buildGraphFromNode :: Node -> State Integer (DotGraph Text)
-buildGraphFromNode node = nodeToStmts node >>= (return . buildGraph)
+data GeneratorState = GeneratorState Integer (Map.Map Text (DotNode Text))
 
-nodeToStmts :: Node -> State Integer [DotStatement Text]
-nodeToStmts (Leaf name) = do
-    node <- makeNode $ pack name
-    return [DN node]
-nodeToStmts (Parent name child) = do
-    node <- makeNode $ pack name
-    children <- nodeToStmts child
-    edge <- makeEdge (nodeID $ headNode children) (nodeID node)
-    return $ [DN node, DE edge] ++ children
-nodeToStmts (Conj children) = nodeToBoolStmts "and" children
-nodeToStmts (Disj children) = nodeToBoolStmts "or" children
-
-nodeToBoolStmts :: Text -> [Node] -> State Integer [DotStatement Text]
-nodeToBoolStmts name children = do
-    node <- makeBool name
-    prereqStmts <- mapM nodeToStmts children
-    -- Create edges from each eldest prereq to this boolean node.
-    let childNodes = map headNode prereqStmts
-        pointToThis child = makeEdge (nodeID child) (nodeID node)
-    edges <- mapM pointToThis childNodes
-    return $ DN node : map DE edges ++ concat prereqStmts
-
-headNode :: [DotStatement Text] -> DotNode Text
-headNode children =
-    let (DN node) = head children
-    in node
-
+-- lookupCourse :: Text -> 
 -- Convert the original requirement data into dot statements that can be used by buildGraph to create the
 -- corresponding DotGraph objects.
-reqToStmts :: (Text, Req) -> State Integer [DotStatement Text]
+reqToStmts :: (Text, Req) -> State GeneratorState [DotStatement Text]
 reqToStmts (name, req) = do
     node <- makeNode name
     stmts <- reqToStmts' (nodeID node) req
     return $ (DN node):stmts
 
-reqToStmts' :: Text -> Req -> State Integer [DotStatement Text]
+reqToStmts' :: Text -> Req -> State GeneratorState [DotStatement Text]
 -- No prerequisites.
 reqToStmts' _ NONE = return []
 -- A single course prerequisite.
@@ -123,24 +102,31 @@ reqToStmts' parentID (RAW rawText) = do
 reqToStmts' _ (FCES _ _) = return []
 
 
-makeNode :: Text -> State Integer (DotNode Text)
+makeNode :: Text -> State GeneratorState (DotNode Text)
 makeNode name = do
-    i <- State.get
-    _ <- State.put (i + 1)
-    return $ DotNode (mappendTextWithCounter name i) [AC.Label $ toLabelValue name]
+    GeneratorState i nodesMap <- State.get
+    case Map.lookup name nodesMap of
+        Nothing -> do
+            let node = DotNode
+                        (mappendTextWithCounter name i)
+                        [AC.Label $ toLabelValue name]
+                nodesMap' = Map.insert name node nodesMap
+            _ <- State.put (GeneratorState (i + 1) nodesMap')
+            return node
+        Just node -> return node
 
-makeBool :: Text -> State Integer (DotNode Text)
+makeBool :: Text -> State GeneratorState (DotNode Text)
 makeBool text1 = do
-    i <- State.get
-    _ <- State.put (i + 1)
+    GeneratorState i nodesMap <- State.get
+    _ <- State.put (GeneratorState (i + 1) nodesMap)
     return $ DotNode (mappendTextWithCounter text1 i) (AC.Label (toLabelValue text1) : ellipseAttrs)
 
 
-makeEdge :: Text -> Text -> State Integer (DotEdge Text)
+makeEdge :: Text -> Text -> State GeneratorState (DotEdge Text)
 makeEdge id1 id2 = return $ DotEdge id1 id2 []
 
 mappendTextWithCounter :: Text -> Integer -> Text
-mappendTextWithCounter text1 counter = text1 `mappend` "_counter_" `mappend` (pack (show (counter)))
+mappendTextWithCounter text1 counter = text1 `mappend` "_counter_" `mappend` (pack (show counter))
 
 -- ** Graphviz configuration
 
