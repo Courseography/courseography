@@ -178,7 +178,7 @@ class MapModal extends React.Component {
         ariaHideApp={false}
       >
         <div className='modal-body'>
-          <TestMap/>
+          <CampusMap lectures={this.props.lectures}/>
         </div>
       </ReactModal>
     );
@@ -186,19 +186,49 @@ class MapModal extends React.Component {
 }
 
 
-// A Temporary component as a placeholder for the campus map
-class TestMap extends React.Component {
+// The campus map used in the map modal
+class CampusMap extends React.Component {
+  constructor(props) {
+    super(props);
+    this.groupByBuilding = this.groupByBuilding.bind(this);
+  }
+
+  groupByBuilding(lecsByBuilding, lecture, roomNum) {
+    const found = lecsByBuilding.find(b => b.buildingName === lecture[roomNum].bName);
+    const value = {
+      courseCode: lecture.courseCode,
+      session: lecture.session,
+      timeframe: [{
+        day: lecture.day,
+        startTime: lecture.startTime,
+        endTime: lecture.endTime,
+        room: lecture[roomNum].room
+      }]
+    };
+
+    if (!found) {
+      lecsByBuilding.push({
+        buildingName: lecture[roomNum].bName,
+        address: lecture[roomNum].address,
+        lat: lecture[roomNum].lat,
+        lng: lecture[roomNum].lng,
+        postalCode: lecture[roomNum].postalCode,
+        courses: [value]
+      });
+    }
+    else {
+      const foundCourse = found.courses.find(c => c.courseCode === lecture.courseCode && c.session === lecture.session);
+
+      if (!foundCourse) {
+        found.courses.push(value);
+      }
+      else {
+        foundCourse.timeframe.push({day: lecture.day, startTime: lecture.startTime, endTime: lecture.endTime, room:lecture[roomNum].room});
+      }
+    }
+  }
+
   render() {
-    const center = [43.65977015, -79.3972632658009];
-    const polyline = [[43.65977015, -79.3972632658009], [43.6623705, -79.398659815008]]
-
-    const multiPolyline = [
-      [[43.66977015, -79.3972632658009], [43.6623705, -79.39859815008]],
-      [[43.66987015, -79.398632658009], [43.6633705, -79.398659815008]],
-    ]
-
-    const polygon = [[43.66977015, -79.3972632658009], [43.6623705, -79.39859815008], [43.6623705, -79.40859815008]]
-
     const customMarker = new L.Icon({
       iconUrl: 'static/res/ico/map.png',
       shadowUrl: 'static/res/ico/shadow.png',
@@ -209,10 +239,53 @@ class TestMap extends React.Component {
       shadowAnchor: [2, 95],
     })
 
+    let lecturesByBuilding = [];
+
+    this.props.lectures.forEach(lecture => {
+      if (lecture.fstRoom) {
+        this.groupByBuilding(lecturesByBuilding, lecture, 'fstRoom');
+      }
+      if (lecture.secRoom) {
+        this.groupByBuilding(lecturesByBuilding, lecture, 'secRoom');
+      }
+    });
+
+    const locationMarkers = lecturesByBuilding.map(building => {
+      const description = building.courses.map(course => {
+        const courseTimes = course.timeframe.map(time =>
+          <li key={time.day + "-" + time.startTime + "-" + time.endTime}>
+            {"day: " + time.day + ", time: " + time.startTime + "-" +time.endTime + ", room: " + time.room}
+          </li>
+        );
+
+        return (<div key={course.courseCode}>
+          <p>
+            {course.courseCode}
+          </p>
+          {courseTimes}
+        </div>)
+      });
+
+      return (
+        <Marker key={building.buildingName} icon={customMarker} position={[building.lat, building.lng]}>
+          <Popup key={building.postalCode}>
+            <p>
+              <b> {building.buildingName} </b>
+            </p>
+            <p>
+              <em>{building.address}</em>
+            </p>
+            {description}
+          </Popup>
+        </Marker>);
+    });
+
+    const center = [43.65977015, -79.3972632658009];
+
     return (
       <div id="campus-map">
         <Map
-          center={[43.65977015, -79.3972632658009]}
+          center={center}
           zoom={16}
           maxZoom={40}
           attributionControl={true}
@@ -223,26 +296,7 @@ class TestMap extends React.Component {
           animate={true}
         >
           <TileLayer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png" />
-          <Marker icon={customMarker} position={[43.65977015, -79.3972632658009]}>
-            <Popup><p>ACT348</p> Date and Time</Popup>
-          </Marker>
-          <Marker icon={customMarker} position={[43.6623705, -79.398659815008]}>
-            <Popup>popup 2.</Popup>
-          </Marker>
-          <Circle
-          center={[43.65977015, -79.3972632658009]}
-          fillColor="blue"
-          radius={200}>
-          <Tooltip>hello</Tooltip>
-          </Circle>
-
-          <Circle center={center} fillColor="blue" radius={200} />
-          <CircleMarker center={[51.51, -0.12]} color="red" radius={20}>
-            <Popup>Popup in CircleMarker</Popup>
-          </CircleMarker>
-          <Polyline color="lime" positions={polyline} />
-          <Polyline color="red" positions={multiPolyline} />
-          <Polygon color="purple" positions={polygon} />
+          {locationMarkers}
         </Map>
       </div>
     );

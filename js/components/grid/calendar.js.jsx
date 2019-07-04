@@ -12,6 +12,14 @@ export class Row extends React.Component {
       (lectureSection, index, lectureSections) => createNewLectures(lectureSection, index, lectureSections));
     lectures = [].concat.apply([], lectures);
 
+    let fallLectures = lectures.filter((lecture) => {
+      return lecture.session === 'F' || lecture.session === 'Y'
+    });
+
+    let springLectures = lectures.filter((lecture) => {
+      return lecture.session === 'S' || lecture.session === 'Y'
+    });
+
     // Organize the structure of the <fallSession> and <springSession> 2-D dictionaries
     let fallSession, springSession;
     [fallSession, springSession] = initializeSessions(lectures);
@@ -29,8 +37,18 @@ export class Row extends React.Component {
     // Generate a container for each of the Fall and Spring timetables individually
     return (
       <div className="col-md-9 col-xs-12" id="grid-body">
-        <TimetableContainer session="F" lectures={fallSession} headColSpans={fallColSpans} />
-        <TimetableContainer session="S" lectures={springSession} headColSpans={springColSpans} />
+        <TimetableContainer
+          session="F"
+          lecturesByTime={fallSession}
+          headColSpans={fallColSpans}
+          lectures={fallLectures}
+        />
+        <TimetableContainer
+          session="S"
+          lecturesByTime={springSession}
+          headColSpans={springColSpans}
+          lectures={springLectures}
+        />
       </div>
     );
   }
@@ -44,7 +62,12 @@ class TimetableContainer extends React.Component {
   render() {
     return (
       <div className="col-md-6 col-xs-12 timetable-container">
-        <Timetable session={this.props.session} lectures={this.props.lectures} headColSpans={this.props.headColSpans}/>
+        <Timetable
+          session={this.props.session}
+          lecturesByTime={this.props.lecturesByTime}
+          headColSpans={this.props.headColSpans}
+          lectures={this.props.lectures}
+        />
       </div>
     );
   }
@@ -67,14 +90,14 @@ class Timetable extends React.Component {
   render() {
     return(
       <table className={"timetable table"} id={"timetable-" + this.props.session}>
-        <MapModal ref={this.modal}/>
+        <MapModal ref={this.modal} lectures={this.props.lectures}/>
         <TimetableHeader
           session={this.props.session}
-          lectures={this.props.lectures}
+          lecturesByTime={this.props.lecturesByTime}
           headColSpans={this.props.headColSpans}
           openMap={this.displayMap}
         />
-        <TimetableBody session={this.props.session} lectures={this.props.lectures} headColSpans={this.props.headColSpans}/>
+        <TimetableBody session={this.props.session} lecturesByTime={this.props.lecturesByTime} headColSpans={this.props.headColSpans}/>
       </table>
     );
   }
@@ -144,7 +167,7 @@ class TimetableBody extends React.Component {
           session={this.props.session}
           time={i}
           key={'timetable-row-' + i + this.props.session}
-          currentLectures={this.props.lectures[i]}
+          currentLectures={this.props.lecturesByTime[i]}
           headColSpans={this.props.headColSpans}
         />
       );
@@ -386,8 +409,10 @@ function createNewLectures(lectureSection, index, lectureSections) {
       courseCode: lectureSection.courseCode,
       session: lectureSection.session,
       day: time.weekDay,
-      startTime: time.startingTime,
-      endTime: time.endingTime,
+      startTime: time.startHour,
+      endTime: time.endHour,
+      fstRoom: time.firstRoom,
+      secRoom: time.secondRoom,
       inConflict: false,
       width: 1,
       dataSatisfied: lectureSection.dataSatisfied
