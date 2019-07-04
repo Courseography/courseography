@@ -186,44 +186,55 @@ class MapModal extends React.Component {
 }
 
 
-// The campus map used in the map modal
+/**
+ * The map of the St.George campus used in the map modal
+ */
 class CampusMap extends React.Component {
   constructor(props) {
     super(props);
-    this.groupByBuilding = this.groupByBuilding.bind(this);
+    this.groupLecturesByBuilding = this.groupLecturesByBuilding.bind(this);
   }
 
-  groupByBuilding(lecsByBuilding, lecture, roomNum) {
-    const found = lecsByBuilding.find(b => b.buildingName === lecture[roomNum].bName);
-    const value = {
+  // Group each lecture time by the building they occur in. If the lecture has 2 rooms in different
+  // buildings, it will appear under both of the buildings. Lectures for each building are grouped by
+  // their course codes
+  groupLecturesByBuilding(lecsByBuilding, lecture, roomNum) {
+    const foundBuilding = lecsByBuilding.find(b => b.buildingName === lecture[roomNum].bName);
+
+    const timeframeData = {
+      day: lecture.day,
+      startTime: lecture.startTime,
+      endTime: lecture.endTime,
+      room: lecture[roomNum].room
+    }
+
+    const courseData = {
       courseCode: lecture.courseCode,
       session: lecture.session,
-      timeframe: [{
-        day: lecture.day,
-        startTime: lecture.startTime,
-        endTime: lecture.endTime,
-        room: lecture[roomNum].room
-      }]
+      timeframe: [timeframeData]
     };
 
-    if (!found) {
+    // if the building is not in the lecsByBuilding yet, add it into the array
+    if (!foundBuilding) {
       lecsByBuilding.push({
         buildingName: lecture[roomNum].bName,
         address: lecture[roomNum].address,
         lat: lecture[roomNum].lat,
         lng: lecture[roomNum].lng,
         postalCode: lecture[roomNum].postalCode,
-        courses: [value]
+        courses: [courseData]
       });
     }
+    // the building is already in lecsByBuilding, so add the timeframe to the course if the course already
+    // exists. Otherwise, add the course with the timeframe
     else {
-      const foundCourse = found.courses.find(c => c.courseCode === lecture.courseCode && c.session === lecture.session);
+      const foundCourse = foundBuilding.courses.find(c => c.courseCode === lecture.courseCode && c.session === lecture.session);
 
       if (!foundCourse) {
-        found.courses.push(value);
+        foundBuilding.courses.push(courseData);
       }
       else {
-        foundCourse.timeframe.push({day: lecture.day, startTime: lecture.startTime, endTime: lecture.endTime, room:lecture[roomNum].room});
+        foundCourse.timeframe.push(timeframeData);
       }
     }
   }
@@ -243,10 +254,10 @@ class CampusMap extends React.Component {
 
     this.props.lectures.forEach(lecture => {
       if (lecture.fstRoom) {
-        this.groupByBuilding(lecturesByBuilding, lecture, 'fstRoom');
+        this.groupLecturesByBuilding(lecturesByBuilding, lecture, 'fstRoom');
       }
       if (lecture.secRoom) {
-        this.groupByBuilding(lecturesByBuilding, lecture, 'secRoom');
+        this.groupLecturesByBuilding(lecturesByBuilding, lecture, 'secRoom');
       }
     });
 
