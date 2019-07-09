@@ -179,6 +179,7 @@ data Time =
 data Location =
   Location { room :: T.Text,
             bName :: T.Text,
+            bCode :: T.Text,
             address :: T.Text,
             postalCode :: T.Text,
             lat :: Double,
@@ -353,6 +354,7 @@ buildLocation rm = do
           let building = entityVal entBuilding
           return $ Just $ Location r
                                   (buildingName building)
+                                  (buildingCode building)
                                   (buildingAddress building)
                                   (buildingPostalCode building)
                                   (buildingLat building)

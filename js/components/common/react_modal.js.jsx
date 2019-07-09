@@ -159,6 +159,7 @@ class MapModal extends React.Component {
     };
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
+    this.groupLecturesByBuilding = this.groupLecturesByBuilding.bind(this);
   }
 
   openModal() {
@@ -169,7 +170,63 @@ class MapModal extends React.Component {
     this.setState({ modalIsOpen: false });
   }
 
+  // Group each lecture time by the building they occur in. If the lecture has 2 rooms in different
+  // buildings, it will appear under both of the buildings. Lectures for each building are grouped by
+  // their course codes
+  groupLecturesByBuilding(lecsByBuilding, lecture, roomNum) {
+    const foundBuilding = lecsByBuilding.find(b => b.buildingName === lecture[roomNum].bName);
+
+    const timeframeData = {
+      courseCode: lecture.courseCode,
+      session: lecture.session,
+      startTime: lecture.startTime,
+      endTime: lecture.endTime,
+      room: lecture[roomNum].room
+    }
+
+    const dayData = {
+      day: lecture.day,
+      timeframes: [timeframeData]
+    };
+
+    // if the building is not in the lecsByBuilding yet, add it into the array
+    if (!foundBuilding) {
+      lecsByBuilding.push({
+        buildingName: lecture[roomNum].bName,
+        buildingCode: lecture[roomNum].bCode,
+        address: lecture[roomNum].address,
+        lat: lecture[roomNum].lat,
+        lng: lecture[roomNum].lng,
+        postalCode: lecture[roomNum].postalCode,
+        days: [dayData]
+      });
+    }
+    // the building is already in lecsByBuilding, so add the timeframe to the course if the course already
+    // exists. Otherwise, add the course with the timeframe
+    else {
+      const foundDay = foundBuilding.days.find(c => c.day === lecture.day);
+
+      if (!foundDay) {
+        foundBuilding.days.push(dayData);
+      }
+      else {
+        foundDay.timeframes.push(timeframeData);
+      }
+    }
+  }
+
   render() {
+    let lecturesByBuilding = [];
+
+    this.props.lectures.forEach(lecture => {
+      if (lecture.fstRoom) {
+        this.groupLecturesByBuilding(lecturesByBuilding, lecture, 'fstRoom');
+      }
+      if (lecture.secRoom) {
+        this.groupLecturesByBuilding(lecturesByBuilding, lecture, 'secRoom');
+      }
+    });
+
     return (
       <ReactModal className='modal-class'
         overlayClassName='overlay'
@@ -178,7 +235,7 @@ class MapModal extends React.Component {
         ariaHideApp={false}
       >
         <div className='modal-body'>
-          <CampusMap lectures={this.props.lectures}/>
+          <CampusMap lecturesByBuilding={lecturesByBuilding}/>
         </div>
       </ReactModal>
     );
@@ -192,51 +249,6 @@ class MapModal extends React.Component {
 class CampusMap extends React.Component {
   constructor(props) {
     super(props);
-    this.groupLecturesByBuilding = this.groupLecturesByBuilding.bind(this);
-  }
-
-  // Group each lecture time by the building they occur in. If the lecture has 2 rooms in different
-  // buildings, it will appear under both of the buildings. Lectures for each building are grouped by
-  // their course codes
-  groupLecturesByBuilding(lecsByBuilding, lecture, roomNum) {
-    const foundBuilding = lecsByBuilding.find(b => b.buildingName === lecture[roomNum].bName);
-
-    const timeframeData = {
-      day: lecture.day,
-      startTime: lecture.startTime,
-      endTime: lecture.endTime,
-      room: lecture[roomNum].room
-    }
-
-    const courseData = {
-      courseCode: lecture.courseCode,
-      session: lecture.session,
-      timeframe: [timeframeData]
-    };
-
-    // if the building is not in the lecsByBuilding yet, add it into the array
-    if (!foundBuilding) {
-      lecsByBuilding.push({
-        buildingName: lecture[roomNum].bName,
-        address: lecture[roomNum].address,
-        lat: lecture[roomNum].lat,
-        lng: lecture[roomNum].lng,
-        postalCode: lecture[roomNum].postalCode,
-        courses: [courseData]
-      });
-    }
-    // the building is already in lecsByBuilding, so add the timeframe to the course if the course already
-    // exists. Otherwise, add the course with the timeframe
-    else {
-      const foundCourse = foundBuilding.courses.find(c => c.courseCode === lecture.courseCode && c.session === lecture.session);
-
-      if (!foundCourse) {
-        foundBuilding.courses.push(courseData);
-      }
-      else {
-        foundCourse.timeframe.push(timeframeData);
-      }
-    }
   }
 
   render() {
@@ -250,30 +262,19 @@ class CampusMap extends React.Component {
       shadowAnchor: [2, 95],
     })
 
-    let lecturesByBuilding = [];
-
-    this.props.lectures.forEach(lecture => {
-      if (lecture.fstRoom) {
-        this.groupLecturesByBuilding(lecturesByBuilding, lecture, 'fstRoom');
-      }
-      if (lecture.secRoom) {
-        this.groupLecturesByBuilding(lecturesByBuilding, lecture, 'secRoom');
-      }
-    });
-
-    const locationMarkers = lecturesByBuilding.map(building => {
-      const description = building.courses.map(course => {
-        const courseTimes = course.timeframe.map(time =>
-          <li key={time.day + "-" + time.startTime + "-" + time.endTime}>
-            {"day: " + time.day + ", time: " + time.startTime + "-" +time.endTime + ", room: " + time.room}
+    const locationMarkers = this.props.lecturesByBuilding.map(building => {
+      const description = building.days.map(day => {
+        const dayTimes = day.timeframes.map(time =>
+          <li key={time.startTime + "-" + time.endTime}>
+            {time.startTime + "-" + time.endTime + ", "+ time.room + ": " + time.courseCode}
           </li>
         );
 
-        return (<div key={course.courseCode}>
+        return (<div key={day.day}>
           <p>
-            {course.courseCode}
+            {day.day}
           </p>
-          {courseTimes}
+          {dayTimes}
         </div>)
       });
 
@@ -281,7 +282,7 @@ class CampusMap extends React.Component {
         <Marker key={building.buildingName} icon={customMarker} position={[building.lat, building.lng]}>
           <Popup key={building.postalCode}>
             <p>
-              <b> {building.buildingName} </b>
+              <b> {building.buildingName + " | " + building.buildingCode} </b>
             </p>
             <p>
               <em>{building.address}</em>
