@@ -36,9 +36,7 @@ export default class EdgeGroup extends React.Component {
   }
 
   setRefEntry(edgeJSON) {
-    return function(elem) {
-      return elem && (this[edgeJSON.id_] = elem);
-    }
+    return (elem) => elem && (this[edgeJSON.id_] = elem);
   }
 
   // Generate data for an Edge component

@@ -9,10 +9,9 @@ document.addEventListener("DOMContentLoaded", () => {
   var graphComponent = renderReactGraph("react-graph");
 
   // Set focus button onclicks
-  $(".focus").click(() => {
-    var id = $(this).attr("id");
+  $(".focus").click((event) => {
+    var id = $(event.target).attr("id");
     var focusDetails = $("#" + id + "-details");
-
     if (graphComponent.state.highlightedNodes == focusInfo[id + "FocusList"]) {
       graphComponent.setState({ highlightedNodes: [] });
       focusDetails.animate({ height: "2px" }, "fast");
@@ -59,7 +58,6 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 export function renderReactGraph(graph_container_id, start_blank, edit) {
-  console.log(start_blank, edit);
   if (start_blank === undefined) {
     start_blank = false;
   }
