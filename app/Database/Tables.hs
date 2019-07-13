@@ -146,6 +146,8 @@ Building
     name T.Text
     address T.Text
     postalCode T.Text
+    lat Double
+    lng Double
     deriving Show
 |]
 
