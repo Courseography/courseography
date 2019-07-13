@@ -12,6 +12,7 @@ export default class EdgeGroup extends React.Component {
     this.updateEdgeStatus = this.updateEdgeStatus.bind(this);
     this.reset = this.reset.bind(this);
     this.generateEdge = this.generateEdge.bind(this);
+    this.setRefEntry = this.setRefEntry.bind(this);
   }
 
   // When an edge's state changes and the edge is not undefined,
@@ -34,13 +35,19 @@ export default class EdgeGroup extends React.Component {
     });
   }
 
+  setRefEntry(edgeJSON) {
+    return function(elem) {
+      return elem && (this[edgeJSON.id_] = elem);
+    }
+  }
+
   // Generate data for an Edge component
   generateEdge(edgeJSON) {
     return (
       <Edge
         className="path"
         key={edgeJSON.id_}
-        ref={elem => elem && (this[edgeJSON.id_] = elem)}
+        ref={this.setRefEntry(edgeJSON)}
         source={edgeJSON.source}
         target={edgeJSON.target}
         points={edgeJSON.points}
