@@ -38,9 +38,7 @@ export default class NodeGroup extends React.Component {
   }
 
   setRefEntry(entry) {
-    return function(elem) {
-      return elem && (this[entry.id_] = elem);
-    }
+    return (elem) => elem && (this[entry.id_] = elem);
   }
 
   render() {

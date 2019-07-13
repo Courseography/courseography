@@ -24,9 +24,7 @@ export default class BoolGroup extends React.Component {
   }
 
   setRefEntry(boolJSON) {
-    return function(elem) {
-      return elem && (this[boolJSON.id_] = elem);
-    }
+    return (elem) => elem && (this[boolJSON.id_] = elem);
   }
 
   // Generate data for a Bool node
