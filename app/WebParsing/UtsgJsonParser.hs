@@ -9,16 +9,9 @@ import qualified Data.Text as T
 import qualified Data.HashMap.Strict as HM
 import Control.Monad.IO.Class (liftIO)
 import Network.HTTP.Conduit (simpleHttp)
-import Config (databasePath)
+import Config (databasePath, timetableApiUrl, orgApiUrl)
 import Database.Tables (Courses(..), EntityField(CoursesCode), Meeting(..), MeetTime(..), buildTimes)
 import Database.Persist.Sqlite (runSqlite, insert, SqlPersistM, (==.), insertMany_, selectFirst)
-
--- | URLs for the Faculty of Arts and Science API
-timetableURL :: T.Text
-timetableURL = "https://timetable.iit.artsci.utoronto.ca/api/20189/courses?org="
-
-orgURL :: String
-orgURL = "https://timetable.iit.artsci.utoronto.ca/api/orgs"
 
 -- | Parse all timetable data.
 getAllCourses :: IO ()
@@ -30,7 +23,7 @@ getAllCourses = do
 --   passed to the timetable API with the "org" key.
 getOrgs :: IO [T.Text]
 getOrgs = do
-    resp <- simpleHttp orgURL
+    resp <- simpleHttp orgApiUrl
     let rawJSON :: Maybe (HM.HashMap T.Text Object) = decode resp
     return $ maybe [] (concatMap HM.keys . HM.elems) rawJSON
 
@@ -38,7 +31,7 @@ getOrgs = do
 insertAllMeetings :: T.Text -> SqlPersistM ()
 insertAllMeetings org = do
     liftIO . print $ T.append "parsing JSON data from: " org
-    resp <- liftIO . simpleHttp $ T.unpack (T.append timetableURL org)
+    resp <- liftIO . simpleHttp $ T.unpack (T.append timetableApiUrl org)
     let coursesLst :: Maybe (HM.HashMap T.Text (Maybe DB)) = decode resp
         courseData = maybe [] (map dbData . catMaybes . HM.elems) coursesLst
         -- courseData contains courses and sections;

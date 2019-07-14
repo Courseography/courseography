@@ -4,7 +4,8 @@ module Response.Calendar
 import Data.List (sort, groupBy, sortBy)
 import Data.List.Split (splitOn)
 import Data.Ord (comparing)
-import Data.Time (Day, addDays, formatTime, getCurrentTime, defaultTimeLocale)
+import Data.Time (Day, formatTime, getCurrentTime, defaultTimeLocale, toGregorian)
+import Data.Time.Calendar.OrdinalDate (mondayStartWeek, fromMondayStartWeek)
 import Happstack.Server (ServerPart, Response, toResponse)
 import Control.Monad.IO.Class (liftIO)
 import Database.Persist.Sqlite (runSqlite, (==.), entityVal, selectList, entityKey)
@@ -12,10 +13,10 @@ import Database.CourseQueries (returnMeeting, buildTimes')
 import qualified Data.Text as T
 import Text.Read (readMaybe)
 import Database.Tables
-import Config (firstMondayFall,
-               lastWednesdayFall,
-               firstMondayWinter,
-               lastMondayWinter,
+import Config (fallStartDate,
+               fallEndDate,
+               winterStartDate,
+               winterEndDate,
                outDay,
                holidays,
                databasePath)
@@ -252,8 +253,8 @@ type EndDate = String
 -- course takes place, depending on the course session.
 getDatesByDay :: Session -> [Times'] -> (StartDate, EndDate)
 getDatesByDay session dataByDay
-    | session ==  "F" = formatDates $ getDatesFall $ weekDay $ head dataByDay
-    | otherwise = formatDates $ getDatesWinter $ weekDay $ head dataByDay
+    | session ==  "F" = formatDates $ getDates fallStartDate fallEndDate $ weekDay $ head dataByDay
+    | otherwise = formatDates $ getDates winterStartDate winterEndDate $ weekDay $ head dataByDay
 
 -- | Formats the date in the following way: YearMonthDayT.
 -- For instance, 20150720T corresponds to July 20th, 2015.
@@ -265,20 +266,24 @@ formatDates (start, end)
         startStr = formatTime defaultTimeLocale "%Y%m%dT" start
         endStr = formatTime defaultTimeLocale "%Y%m%dT" end
 
--- | Gives the appropriate starting and ending dates for courses in the Fall.
-getDatesFall :: Double -> (Day, Day)
-getDatesFall 0.0 = (firstMondayFall, addDays 6 lastWednesdayFall)
-getDatesFall 1.0 = (addDays 1 firstMondayFall, addDays 7 lastWednesdayFall)
-getDatesFall 2.0 = (addDays 2 firstMondayFall, addDays 1 lastWednesdayFall)
-getDatesFall 3.0 = (addDays 3 firstMondayFall, addDays 2 lastWednesdayFall)
-getDatesFall 4.0 = (addDays 4 firstMondayFall, addDays 3 lastWednesdayFall)
-getDatesFall _ = (outDay, outDay)
+-- | Gives the appropriate starting and ending dates for courses in the given
+-- range.
+getDates :: Day -> Day -> Double -> (Day, Day)
+getDates startDate endDate x =
+    (fromMondayStartWeek year firstWeek' dayOfWeek,
+     fromMondayStartWeek year endWeek' dayOfWeek)
+    where
+        (year, _, _) = toGregorian startDate
+        (firstWeek, firstDay) = mondayStartWeek startDate
+        (endWeek, endDay) = mondayStartWeek endDate
 
--- | Gives the appropriate starting and ending dates for courses in the Winter.
-getDatesWinter :: Double -> (Day, Day)
-getDatesWinter 0.0 = (firstMondayWinter, addDays 1 lastMondayWinter)
-getDatesWinter 1.0 = (addDays 1 firstMondayWinter, addDays 2 lastMondayWinter)
-getDatesWinter 2.0 = (addDays 2 firstMondayWinter, addDays 3 lastMondayWinter)
-getDatesWinter 3.0 = (addDays 3 firstMondayWinter, addDays 4 lastMondayWinter)
-getDatesWinter 4.0 = (addDays 4 firstMondayWinter, addDays 5 lastMondayWinter)
-getDatesWinter _ = (outDay, outDay)
+        convertDay 0.0 = 1
+        convertDay 1.0 = 2
+        convertDay 2.0 = 3
+        convertDay 3.0 = 4
+        convertDay _ = 5
+
+        dayOfWeek = convertDay x
+
+        firstWeek' = if firstDay <= dayOfWeek then firstWeek else firstWeek + 1
+        endWeek' = if endDay >= dayOfWeek then endWeek else endWeek - 1

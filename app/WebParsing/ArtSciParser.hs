@@ -1,5 +1,5 @@
 module WebParsing.ArtSciParser
-    (parseArtSci, getDeptList, fasCalendarURL, parseBuildings) where
+    (parseArtSci, getDeptList, parseBuildings) where
 
 import Data.Either (either)
 import Data.List (elemIndex, nubBy)
@@ -26,12 +26,7 @@ import Text.ParserCombinators.Parsec (parseFromFile)
 import Text.HTML.TagSoup.Match (tagOpenAttrLit, tagOpenAttrNameLit)
 import System.Directory (getCurrentDirectory)
 import Filesystem.Path.CurrentOS as Path
-
--- | The URLs of the Faculty of Arts & Science calendar.
-fasCalendarURL :: String
-fasCalendarURL = "https://fas.calendar.utoronto.ca/"
-programsURL :: String
-programsURL = "https://fas.calendar.utoronto.ca/listing-program-subject-areas"
+import Config (fasCalendarUrl, programsUrl)
 
 -- The file name is building.csv and it is in the courseography/db folder
 buildingsCSV :: IO Prelude.FilePath
@@ -64,7 +59,7 @@ getBuildingsFromCSV buildingCSVFile = do
 -- into the database.
 parseArtSci :: IO ()
 parseArtSci = do
-    bodyTags <- httpBodyTags programsURL
+    bodyTags <- httpBodyTags programsUrl
     let deptInfo = getDeptList bodyTags
     runSqlite databasePath $ do
         liftIO $ putStrLn "Inserting departments"
@@ -95,7 +90,7 @@ insertDepts = mapM_ (print >> (insertUnique . Department))
 -- | Takes the URL and name of a department name for parsing.
 parseDepartment :: (T.Text, T.Text) -> SqlPersistM ()
 parseDepartment (relativeURL, _) = do
-    bodyTags <- liftIO $ httpBodyTags $ fasCalendarURL ++ T.unpack relativeURL
+    bodyTags <- liftIO $ httpBodyTags $ fasCalendarUrl ++ T.unpack relativeURL
     let contentTags = dropWhile (not . tagOpenAttrLit "div" ("id", "block-system-main")) bodyTags
         contentTags' = takeWhile (not . tagOpenAttrLit "p" ("class", "rteright")) contentTags
         programs = dropWhile (not . tagOpenAttrNameLit "div" "class" isProgramHeaderInfix) contentTags'
