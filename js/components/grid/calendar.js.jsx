@@ -130,7 +130,7 @@ class TimetableHeader extends React.Component {
           <tr>
             <th className="timetable-dummy-cell"></th>
             <th className="term-name">
-              <img src="static/res/ico/map.png" className="map-icon" onClick={ () => this.props.openMap(this.props.session) }/>
+              <img src="static/res/ico/blue-marker.png" className="map-icon" onClick={ () => this.props.openMap(this.props.session) }/>
               Fall
             </th>
             {dayCells}
@@ -144,7 +144,7 @@ class TimetableHeader extends React.Component {
             {dayCells}
             <th className="term-name">
               Spring
-              <img src="static/res/ico/map.png" className="map-icon" onClick={ () => this.props.openMap(this.props.session) }/>
+              <img src="static/res/ico/blue-marker.png" className="map-icon" onClick={ () => this.props.openMap(this.props.session) }/>
             </th>
             <th className="timetable-dummy-cell"></th>
           </tr>
@@ -404,11 +404,14 @@ function createNewLectures(lectureSection, index, lectureSections) {
   if (lectureSelected.length > 0) {
     lectureSection.dataSatisfied = true;
   }
+
+  const dayStrings = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
   const lectures = lectureSection.times.map(time => {
     return {
       courseCode: lectureSection.courseCode,
       session: lectureSection.session,
       day: time.weekDay,
+      dayString: dayStrings[time.weekDay],
       startTime: time.startHour,
       endTime: time.endHour,
       fstRoom: time.firstRoom,

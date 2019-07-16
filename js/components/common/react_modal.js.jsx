@@ -155,11 +155,17 @@ class MapModal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      modalIsOpen: false
+      modalIsOpen: false,
+      selectedLecTimeframes: []
     };
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
     this.groupLecturesByBuilding = this.groupLecturesByBuilding.bind(this);
+    this.selectLecTimeframe = this.selectLecTimeframe.bind(this);
+    this.addDayTimeframes = this.addDayTimeframes.bind(this);
+    this.removeDayTimeframes = this.removeDayTimeframes.bind(this);
+    this.isDaySelected = this.isDaySelected.bind(this);
+    this.selectDayTimeframes = this.selectDayTimeframes.bind(this);
   }
 
   openModal() {
@@ -185,7 +191,7 @@ class MapModal extends React.Component {
     }
 
     const dayData = {
-      day: lecture.day,
+      day: lecture.dayString,
       timeframes: [timeframeData]
     };
 
@@ -215,8 +221,80 @@ class MapModal extends React.Component {
     }
   }
 
+  // Add lecture to selectedLecTimeframes if lecture does not already exist in selectedLecTimeframes.
+  // Otherwise, remove it from selectedLecTimeframes
+  selectLecTimeframe(lecture) {
+    let updatedLecTimeframes = this.state.selectedLecTimeframes.slice();
+
+    const lecTimeframeInd = this.findSelectedLecTimeframe(lecture);
+
+    if (lecTimeframeInd == -1) {
+      updatedLecTimeframes.push(lecture);
+    }
+    else {
+      updatedLecTimeframes.splice(lecTimeframeInd, 1);
+    }
+
+    this.setState({selectedLecTimeframes: updatedLecTimeframes});
+  }
+
+  // Add each element of lectures that does not already exist in selectedLecTimeframes to selectedLecTimeframes
+  addDayTimeframes(lectures) {
+    let updatedLecTimeframes = this.state.selectedLecTimeframes.slice();
+
+    for (let lec of lectures) {
+      if (this.findSelectedLecTimeframe(lec) == -1) {
+        updatedLecTimeframes.push(lec);
+      }
+    }
+
+    this.setState({selectedLecTimeframes: updatedLecTimeframes});
+  }
+
+  // Remove each element of lectures from selectedLecTimeframes
+  removeDayTimeframes(lectures) {
+    let updatedLecTimeframes = this.state.selectedLecTimeframes.slice();
+
+    for (let lec of lectures) {
+      const lecTimeframeInd = this.findSelectedLecTimeframe(lec);
+      if (lecTimeframeInd != -1) {
+        updatedLecTimeframes.splice(lec);
+      }
+    }
+    this.setState({selectedLecTimeframes: updatedLecTimeframes});
+  }
+
+  // If all elements of lectures are in selectedLecTimeframes, remove all elements of lectures
+  // from selectedLecTimeframes. Otherwise, add all elements of lectures to selectedLecTimeframes
+  selectDayTimeframes(lectures) {
+    if (this.isDaySelected(lectures)) {
+      this.removeDayTimeframes(lectures);
+    }
+    else {
+      this.addDayTimeframes(lectures);
+    }
+  }
+
+  // Returns True if all elements of lectures are in selectedLecTimeframes
+  isDaySelected(lectures) {
+    return lectures.every(lec => this.findSelectedLecTimeframe(lec) != -1);
+  }
+
+  // Returns the index of lecture in selectedLecTimeframes if it exists. Otherwise, return -1
+  findSelectedLecTimeframe(lecture) {
+    return this.state.selectedLecTimeframes.findIndex(lec =>
+      lec.courseCode === lecture.courseCode &&
+      lec.session === lecture.session &&
+      lec.day == lecture.day &&
+      lec.startTime == lecture.startTime &&
+      lec.endTime == lecture.endTime
+    );
+  }
+
   render() {
     let lecturesByBuilding = [];
+
+    let lecturesByDay = {};
 
     this.props.lectures.forEach(lecture => {
       if (lecture.fstRoom) {
@@ -224,6 +302,13 @@ class MapModal extends React.Component {
       }
       if (lecture.secRoom) {
         this.groupLecturesByBuilding(lecturesByBuilding, lecture, 'secRoom');
+      }
+
+      if (lecturesByDay[lecture.dayString]) {
+        lecturesByDay[lecture.dayString].push(lecture);
+      }
+      else {
+        lecturesByDay[lecture.dayString] = [lecture];
       }
     });
 
@@ -235,9 +320,56 @@ class MapModal extends React.Component {
         ariaHideApp={false}
       >
         <div className='modal-body'>
-          <CampusMap lecturesByBuilding={lecturesByBuilding}/>
+          <CampusMap
+            lecturesByBuilding={lecturesByBuilding}
+            selectedLecTimeframes={this.state.selectedLecTimeframes}
+          />
+          <MapSidebar
+            lecturesByDay={lecturesByDay}
+            selectLecTimeframe={this.selectLecTimeframe}
+            isDaySelected={this.isDaySelected}
+            selectDayTimeframes={this.selectDayTimeframes}
+          />
         </div>
       </ReactModal>
+    );
+  }
+}
+
+
+/**
+ * The sidebar for the Map modal
+ */
+class MapSidebar extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    let dayLectures = [];
+
+    const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+
+    for (let day of days) {
+      if (this.props.lecturesByDay[day]) {
+        const daySelected = this.props.isDaySelected(this.props.lecturesByDay[day]);
+        dayLectures.push(
+          <div>
+            <p onClick={ () => this.props.selectDayTimeframes(this.props.lecturesByDay[day]) }> {day} </p>
+            {this.props.lecturesByDay[day].map(lec =>
+              <li onClick={ () => this.props.selectLecTimeframe(lec) }>{lec.courseCode}</li>
+              )
+            }
+          </div>
+        );
+      }
+    }
+
+    return (
+      <div>
+        {dayLectures}
+      </div>
+
     );
   }
 }
@@ -252,14 +384,24 @@ class CampusMap extends React.Component {
   }
 
   render() {
-    const customMarker = new L.Icon({
-      iconUrl: 'static/res/ico/map.png',
+    const blueMarker = new L.Icon({
+      iconUrl: 'static/res/ico/blue-marker.png',
       shadowUrl: 'static/res/ico/shadow.png',
-      iconAnchor: [5, 55],
-      popupAnchor: [10, -44],
-      iconSize: [25, 42],
+      iconAnchor: [5, 35],
+      popupAnchor: [13, -35],
+      iconSize: [34, 35],
       shadowSize: [50, 85],
-      shadowAnchor: [2, 95],
+      shadowAnchor: [2, 90]
+    })
+
+    const redMarker = new L.Icon({
+      iconUrl: 'static/res/ico/red-marker.png',
+      shadowUrl: 'static/res/ico/shadow.png',
+      iconAnchor: [5, 35],
+      popupAnchor: [13, -35],
+      iconSize: [34, 35],
+      shadowSize: [50, 85],
+      shadowAnchor: [2, 90]
     })
 
     const locationMarkers = this.props.lecturesByBuilding.map(building => {
@@ -270,16 +412,31 @@ class CampusMap extends React.Component {
           </li>
         );
 
-        return (<div key={day.day}>
-          <p>
-            {day.day}
-          </p>
-          {dayTimes}
-        </div>)
+        return (
+          <div key={day.day}>
+            <p>
+              {day.day}
+            </p>
+            {dayTimes}
+          </div>
+        );
       });
 
+      let colouredMarker;
+      const buildingInd = this.props.selectedLecTimeframes.findIndex(lec =>
+        (lec.fstRoom && lec.fstRoom.bCode === building.buildingCode) ||
+        (lec.secRoom && lec.secRoom.bCode === building.buildingCode)
+      );
+
+      if (buildingInd == -1) {
+        colouredMarker = blueMarker;
+      }
+      else {
+        colouredMarker = redMarker;
+      }
+
       return (
-        <Marker key={building.buildingName} icon={customMarker} position={[building.lat, building.lng]}>
+        <Marker key={building.buildingName} icon={colouredMarker} position={[building.lat, building.lng]}>
           <Popup key={building.postalCode}>
             <p>
               <b> {building.buildingName + " | " + building.buildingCode} </b>
@@ -289,7 +446,8 @@ class CampusMap extends React.Component {
             </p>
             {description}
           </Popup>
-        </Marker>);
+        </Marker>
+      );
     });
 
     const center = [43.65977015, -79.3972632658009];
