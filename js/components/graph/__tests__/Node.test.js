@@ -1,6 +1,6 @@
 import React from "react";
 import { shallow } from "enzyme";
-import { fireEvent } from "react-testing-library";
+import { fireEvent } from "@testing-library/react";
 import Node from "../Node";
 import TestGraph from "./TestGraph";
 
