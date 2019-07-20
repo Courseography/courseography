@@ -2,7 +2,7 @@
     Module      : DynamicGraphs.CourseFinder
     Description : Retrieve course information needed to generate graphs.
 
-This module contains the logic  requests for information needed to
+This module contains the logic requests for information needed to
 generate graphs before retrieving and structuring the necessary data.
 -}
 module DynamicGraphs.CourseFinder (lookupCourses) where
