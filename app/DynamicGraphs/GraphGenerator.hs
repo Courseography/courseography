@@ -56,7 +56,6 @@ reqsToGraph reqs = do
 
 data GeneratorState = GeneratorState Integer (Map.Map Text (DotNode Text))
 
--- lookupCourse :: Text -> 
 -- Convert the original requirement data into dot statements that can be used by buildGraph to create the
 -- corresponding DotGraph objects.
 reqToStmts :: (Text, Req) -> State GeneratorState [DotStatement Text]
@@ -111,14 +110,14 @@ makeNode name = do
                         (mappendTextWithCounter name i)
                         [AC.Label $ toLabelValue name]
                 nodesMap' = Map.insert name node nodesMap
-            _ <- State.put (GeneratorState (i + 1) nodesMap')
+            State.put (GeneratorState (i + 1) nodesMap')
             return node
         Just node -> return node
 
 makeBool :: Text -> State GeneratorState (DotNode Text)
 makeBool text1 = do
     GeneratorState i nodesMap <- State.get
-    _ <- State.put (GeneratorState (i + 1) nodesMap)
+    State.put (GeneratorState (i + 1) nodesMap)
     return $ DotNode (mappendTextWithCounter text1 i) (AC.Label (toLabelValue text1) : ellipseAttrs)
 
 

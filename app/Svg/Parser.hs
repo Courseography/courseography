@@ -420,7 +420,7 @@ parsePathD d = parseValWithState parser initialState d
         parser = do
             p <- parseStep
             -- Record the first point added.
-            _ <- P.modifyState $ \st -> st { firstPoint = p, currentPoint = p }
+            P.modifyState $ \st -> st { firstPoint = p, currentPoint = p }
             rest <- P.many parseStep
             return (p : rest)
 
@@ -440,7 +440,7 @@ parsePathD d = parseValWithState parser initialState d
             state <- P.getState
             let p = nextPoint arg state
             -- Every time a new point is added, update the parser state.
-            _ <- P.modifyState $ \st -> st { currentPoint = p }
+            P.modifyState $ \st -> st { currentPoint = p }
             return p
 
         -- Compute the next point given the input argument and current state.
