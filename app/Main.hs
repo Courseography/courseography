@@ -23,7 +23,7 @@ import Css.Compiler (compileCSS)
 import Util.Documentation (generateDocs)
 
 -- dynamic graph generation
-import DynamicGraphs.WriteRunDot(generatePrereqsForCourse)
+import DynamicGraphs.WriteRunDot(generatePrereqsForCourses)
 
 -- | A map of command-line arguments to their corresponding IO actions.
 taskMap :: Map.Map String ([String] -> IO ())
@@ -33,7 +33,7 @@ taskMap = Map.fromList [
     ("graphs", const parsePrebuiltSvgs),
     ("css", const compileCSS),
     ("docs", const generateDocs),
-    ("generate", \[name] -> generatePrereqsForCourse (name, name))]
+    ("generate", \(name : courses) -> generatePrereqsForCourses (name, courses))]
 
 -- | Courseography entry point.
 main :: IO ()
