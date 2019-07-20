@@ -3,18 +3,18 @@ module DynamicGraphs.WriteRunDot where
 import           Control.Monad   (forM_)
 import           Data.GraphViz
 import           System.FilePath (FilePath, combine, normalise)
-import           DynamicGraphs.GraphGenerator (coursePrereqsToGraph)
+import           DynamicGraphs.GraphGenerator (coursesToPrereqGraph)
 
 doDots :: PrintDotRepr dg n => [(FilePath, dg n)] -> IO ()
 doDots cases = do
   forM_ cases createImage
   putStrLn "Look in graphs/gen to see the created graphs"
 
-generatePrereqsForCourse :: (FilePath, String) -> IO ()
-generatePrereqsForCourse (output, course) = do
-  graph <- coursePrereqsToGraph course
+generatePrereqsForCourses :: (FilePath, [String]) -> IO ()
+generatePrereqsForCourses (output, courses) = do
+  graph <- coursesToPrereqGraph courses
   _ <- createImage (output, graph)
-  putStrLn $ "Generated prerequisite graph for " ++ course
+  putStrLn $ "Generated prerequisite graph for " ++ show courses
 
 createImage :: PrintDotRepr dg n => (FilePath, dg n) -> IO FilePath
 createImage (n, g) = createImageInDir (normalise "graphs/gen") n Svg g

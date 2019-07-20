@@ -2,7 +2,7 @@
 
 module DynamicGraphs.GraphGenerator
   ( sampleGraph
-  , coursePrereqsToGraph
+  , coursesToPrereqGraph
   )
   where
 
@@ -15,7 +15,7 @@ import Data.GraphViz.Types.Generalised (
   DotStatement(..),
   GlobalAttributes(..)
   )
-import DynamicGraphs.Node (lookupCourse)
+import DynamicGraphs.CourseFinder (lookupCourses)
 import qualified Data.Map.Strict as Map
 import Database.Requirement (Req(..))
 import Data.Sequence as Seq
@@ -26,11 +26,11 @@ import Control.Monad (mapM)
 
 
 -- Serves as a sort of "interface" for the whole part "dynamic graph"
--- TODO: rename this
-coursePrereqsToGraph :: String -> IO (DotGraph Text)
-coursePrereqsToGraph course = do
-    reqs <- lookupCourse $ pack course
-    return $ fst $ State.runState (reqsToGraph reqs) initialState
+coursesToPrereqGraph :: [String] -> IO (DotGraph Text)
+coursesToPrereqGraph courses = do
+    reqs <- lookupCourses $ map pack courses
+    let reqs' = Map.toList reqs
+    return $ fst $ State.runState (reqsToGraph reqs') initialState
     where
         initialState = GeneratorState 0 Map.empty
 
