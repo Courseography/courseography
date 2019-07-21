@@ -11,6 +11,11 @@ export default class TestGraph {
     }
     this.rtlGraph = graph;
   }
+
+  /**
+   * For async construction of the TestGraph
+   * @return {TestGraph}
+   */
   static async build() {
     const graphProps = {
       edit: false,
@@ -24,12 +29,17 @@ export default class TestGraph {
     return new TestGraph(rtlGraph);
   }
 
+  /**
+   * @param {string} text
+   * @returns {DOM Element}
+   */
   getNodeByText(text) {
     return this.rtlGraph.getByText(text).parentNode;
   }
 
   /**
-   * 
+   * @param {string} testId - value of the "data-testId" attribute
+   * @returns {DOM Element}
    */
   getByTestId(testId) {
     return this.rtlGraph.getByTestId(testId);
