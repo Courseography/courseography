@@ -212,7 +212,7 @@ export default class Node extends React.Component {
 
     // TODO: Look at this.props to see what we need to give the g
     return (
-      <g {...gAttrs} id={this.props.JSON.id_} className={newClassName}>
+      <g {...gAttrs} id={this.props.JSON.id_} className={newClassName} data-testid={this.props.JSON.id_}>
         {ellipse}
         <rect {...rectAttrs} style={rectStyle} />
         {this.props.JSON.text.map(function(textTag, i) {

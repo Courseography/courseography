@@ -9,7 +9,7 @@ export default class TestGraph {
         "Cannot call constructor directly. Please call `await TestGraph.build()`"
       );
     }
-    this.graph = graph;
+    this.rtlGraph = graph;
   }
   static async build() {
     const graphProps = {
@@ -19,13 +19,20 @@ export default class TestGraph {
       start_blank: false
     };
 
-    const graph = render(<Graph {...graphProps} />);
-    await wait(() => graph.queryByText("AAA100") !== null);
-    return new TestGraph(graph);
+    const rtlGraph = render(<Graph {...graphProps} />);
+    await wait(() => rtlGraph.queryByText("AAA100") !== null);
+    return new TestGraph(rtlGraph);
   }
 
   getNodeByText(text) {
-    return this.graph.getByText(text).parentNode;
+    return this.rtlGraph.getByText(text).parentNode;
+  }
+
+  /**
+   * 
+   */
+  getByTestId(testId) {
+    return this.rtlGraph.getByTestId(testId);
   }
 
   /**
@@ -55,7 +62,7 @@ export default class TestGraph {
     }
 
     // HTMLCollection doesn't have a forEach
-    const paths = this.graph.container.getElementsByTagName("path");
+    const paths = this.rtlGraph.container.getElementsByTagName("path");
     for (let i = 0; i < paths.length; i += 1) {
       if (paths[i].getAttribute("d") === edgeLocation[name]) {
         return paths[i];
