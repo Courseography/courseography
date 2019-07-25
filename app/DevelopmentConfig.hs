@@ -13,11 +13,15 @@ module Config (
     graphPath,
     genCssPath,
     timetableUrl,
+    timetableApiUrl,
+    orgApiUrl,
+    fasCalendarUrl,
+    programsUrl,
     cssStyle,
-    firstMondayFall,
-    lastWednesdayFall,
-    firstMondayWinter,
-    lastMondayWinter,
+    fallStartDate,
+    fallEndDate,
+    winterStartDate,
+    winterEndDate,
     outDay,
     holidays,
     enableCdn
@@ -77,6 +81,21 @@ genCssPath = "./public/style/"
 timetableUrl :: String
 timetableUrl = "http://www.artsandscience.utoronto.ca/ofr/timetable/winter/"
 
+-- | The Faculty of Arts and Science API for course timetables (by unit).
+timetableApiUrl :: Text
+timetableApiUrl = "https://timetable.iit.artsci.utoronto.ca/api/20199/courses?org="
+
+-- | The Faculty of Arts and Science API for a list of all units.
+orgApiUrl :: String
+orgApiUrl = "https://timetable.iit.artsci.utoronto.ca/api/orgs"
+
+-- | The URLs of the Faculty of Arts & Science calendar.
+fasCalendarUrl :: String
+fasCalendarUrl = "https://fas.calendar.utoronto.ca/"
+
+programsUrl :: String
+programsUrl = "https://fas.calendar.utoronto.ca/listing-program-subject-areas"
+
 -- ASSET COMPILATION
 
 -- | Output css style. Either @Clay.pretty@ for human-readable output or
@@ -86,35 +105,32 @@ cssStyle = Clay.pretty
 
 -- CALENDAR RESPONSE DATES
 
--- | First day of classes for the fall term. Also the first day to be
--- assigned for a course scheduled on a Monday.
-firstMondayFall :: Day
-firstMondayFall = fromGregorian 2015 09 14
+-- | First day of classes for the fall term.
+fallStartDate :: Day
+fallStartDate = fromGregorian 2019 09 05
 
--- | Last Wednesday of the fall term. Used to generate the last
--- event for all courses that take place during the fall.
-lastWednesdayFall :: Day
-lastWednesdayFall = fromGregorian 2015 12 02
+-- | Last day of classes for the fall term.
+fallEndDate :: Day
+fallEndDate = fromGregorian 2019 12 04
 
--- | First day of classes for the winter term. Also the first day to be
--- assigned for a course scheduled on a Wednesday.
-firstMondayWinter :: Day
-firstMondayWinter = fromGregorian 2016 01 11
+-- | First day of classes for the winter term.
+winterStartDate :: Day
+winterStartDate = fromGregorian 2020 01 06
 
--- | Last Monday of the winter term. Used to generate the last
--- event for all courses that take place during the winter.
-lastMondayWinter :: Day
-lastMondayWinter = fromGregorian 2016 04 04
+-- | Last day of classes for the winter term.
+winterEndDate :: Day
+winterEndDate = fromGregorian 2020 04 03
 
 -- | Out of date day. Used to control forbidden inputs for days.
 outDay :: Day
-outDay = fromGregorian 2014 01 01
+outDay = fromGregorian 2019 01 01
 
--- Holidays for the fall and winter term 2015/2016.
+-- Holidays for the fall and winter term.
 holidays :: [String]
-holidays = ["20151012T", "20151109T", "20151110T",
-            "20160215T", "20160216T", "20160217T",
-            "20160218T", "20160219T", "20160325T"]
+holidays = ["20191014T", "20191104T", "20191105T",
+            "20191106T", "20191107T", "20191108T",
+            "20200217T", "20200218T", "20200219T",
+            "20200220T", "20200221T"]
 
 -- SCRIPT DEPENDENCIES CONFIGURATION
 

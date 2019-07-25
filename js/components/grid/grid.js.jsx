@@ -29,6 +29,7 @@ class Grid extends React.Component {
 
     this.hoverLecture = this.hoverLecture.bind(this);
     this.unhoverLecture = this.unhoverLecture.bind(this);
+    this.setExportRef = this.setExportRef.bind(this);
   }
 
   // get the previously selected courses and lecture sections from local storage
@@ -155,6 +156,9 @@ class Grid extends React.Component {
     this.setState({hoveredLecture: null});
   }
 
+  setExportRef(r) {
+    this.exportModal = r;
+  }
 
   render() {
     const updatedList = this.state.hoveredLecture ? this.state.selectedLectures.concat(this.state.hoveredLecture) : this.state.selectedLectures;
@@ -174,7 +178,7 @@ class Grid extends React.Component {
         <ExportModal
           context='grid'
           session='fall'
-          ref={r => this.exportModal = r} />
+          ref={this.setExportRef} />
       </div>
     );
   }

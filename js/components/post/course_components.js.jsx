@@ -11,8 +11,6 @@ class CourseCode extends React.Component {
         this.toggleFullInfo = this.toggleFullInfo.bind(this);
         this.getCategory = this.getCategory.bind(this);
         this.getIdName = this.getIdName.bind(this);
-        this.getTitle = this.getTitle.bind(this);
-        this.getIdName = this.getIdName.bind(this);
     }
 
     componentWillMount() {
@@ -78,16 +76,6 @@ class CourseCode extends React.Component {
         }
 
         return idName;
-    }
-
-    getTitle(id) {
-        if (id == 'mat137' || id == 'mat157') {
-            var course = new Course(id + 'Y1')
-        } else {
-            var course = new Course(id + 'H1');
-        }
-
-        return id.toUpperCase() + ": " + course.title;
     }
 
     render() {
