@@ -42,7 +42,6 @@ main = do
     let (taskName, rest) =
             case args of
                 [] -> ("server", [])
-                [command] -> (command, [])
                 (command : remaining) -> (command, remaining)
     fromMaybe putUsage (Map.lookup taskName taskMap) rest
 
