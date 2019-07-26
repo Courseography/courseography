@@ -1,7 +1,7 @@
 import React from "react";
 import { shallow } from "enzyme";
 import Bool from "../Bool";
-import { fireEvent } from "react-testing-library";
+import { fireEvent } from "@testing-library/react";
 import TestGraph from "./TestGraph";
 
 describe("Bool", () => {

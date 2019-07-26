@@ -1,6 +1,6 @@
 import React from "react";
 import Graph from "../Graph";
-import { render, wait } from "react-testing-library";
+import { render, wait } from "@testing-library/react";
 
 export default class TestGraph {
   constructor(graph) {

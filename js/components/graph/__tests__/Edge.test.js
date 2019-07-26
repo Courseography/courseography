@@ -1,7 +1,7 @@
 import React from "react";
 import { shallow } from "enzyme";
 import TestGraph from "./TestGraph";
-import { fireEvent } from "react-testing-library";
+import { fireEvent } from "@testing-library/react";
 
 import Edge from "../Edge";
 
