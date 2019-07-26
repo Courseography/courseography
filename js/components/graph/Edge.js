@@ -41,6 +41,7 @@ export default class Edge extends React.Component {
       <path
         {...pathAttrs}
         className={this.props.className + " " + this.state.status}
+        data-testid={`${this.props.source}->${this.props.target}`}
         markerEnd="url(#arrowHead)"
       />
     );
