@@ -14,7 +14,9 @@ generatePrereqsForCourses :: (FilePath, [String]) -> IO ()
 generatePrereqsForCourses (output, courses) = do
   graph <- coursesToPrereqGraph courses
   _ <- createImage (output, graph)
-  putStrLn $ "Generated prerequisite graph for " ++ show courses
+  putStrLn $ "Generated prerequisite graph for "
+    ++ show courses
+    ++ " in graphs/gen"
 
 createImage :: PrintDotRepr dg n => (FilePath, dg n) -> IO FilePath
 createImage (n, g) = createImageInDir (normalise "graphs/gen") n Svg g
