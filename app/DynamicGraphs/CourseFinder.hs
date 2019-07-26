@@ -25,11 +25,10 @@ lookupCourse :: T.Text -> StateT (Map.Map T.Text Req) IO ()
 lookupCourse code = do
     prereqResults <- lift $ prereqsForCourse $ T.toStrict code
     case prereqResults of
-        Left _ -> lift $ return ()
+        Left _ -> return ()
         Right prereqStr -> do
             let prereqs = parseReqs (T.unpack $ T.fromStrict prereqStr)
-            prereqMap <- get
-            put $ Map.insert code prereqs prereqMap
+            modify $ Map.insert code prereqs
             lookupReqs prereqs
 
 lookupReqs :: Req -> StateT (Map.Map T.Text Req) IO ()
@@ -39,4 +38,4 @@ lookupReqs (OR parents) = mapM_ lookupReqs parents
 lookupReqs (FCES _ parent) = lookupReqs parent
 lookupReqs (GRADE _ parent) = lookupReqs parent
 -- This will catch both NONE and RAW values.
-lookupReqs _ = lift $ return ()
+lookupReqs _ = return ()
