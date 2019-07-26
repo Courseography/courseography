@@ -9,7 +9,7 @@ module DynamicGraphs.CourseFinder (lookupCourses) where
 
 import qualified Data.Text.Lazy as T
 import qualified Data.Map.Strict as Map
-import Control.Monad.Trans.State
+import Control.Monad.Trans.State (StateT, execStateT, modify)
 import Control.Monad.Trans.Class (lift)
 import Database.CourseQueries (prereqsForCourse)
 import Database.Requirement (Req(..))

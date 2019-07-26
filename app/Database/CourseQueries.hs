@@ -181,13 +181,15 @@ allCourses = do
 
 -- | Retrieves the prerequisites for a course (code) as a string.
 prereqsForCourse :: T.Text -> IO (Either String T.Text)
-prereqsForCourse course = runSqlite databasePath $ do
-    courses :: [Entity Courses] <- selectList [CoursesCode ==. course] []
-    if null courses then return (Left "Course not found")
-        else return (Right $
-            fromMaybe "" $
-            coursesPrereqString $
-            entityVal (head courses)) :: SqlPersistM (Either String T.Text)
+prereqsForCourse courseCode = runSqlite databasePath $ do
+    course <- selectFirst [CoursesCode ==. courseCode] []
+    case course of
+        Nothing -> return (Left "Course not found")
+        Just courseEntity ->
+            return (Right $
+                fromMaybe "" $
+                coursesPrereqString $
+                entityVal courseEntity) :: SqlPersistM (Either String T.Text)
 
 -- | Returns all course info for a given department.
 courseInfo :: T.Text -> ServerPart Response
