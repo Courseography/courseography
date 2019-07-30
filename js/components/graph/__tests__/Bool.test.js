@@ -1,7 +1,7 @@
 import React from "react";
 import { shallow } from "enzyme";
 import Bool from "../Bool";
-import { fireEvent } from "react-testing-library";
+import { fireEvent } from "@testing-library/react";
 import TestGraph from "./TestGraph";
 
 describe("Bool", () => {
@@ -67,9 +67,9 @@ describe("AND Bool", () => {
   it("AND should become selected when its prereq parents are satisfied", async () => {
     const graph = await TestGraph.build();
     const andBool = graph.getNodeByText("and");
-    const aaa102 = graph.getNodeByText("AAA102");
-    const aaa201 = graph.getNodeByText("AAA201");
-    const aaa303 = graph.getNodeByText("AAA303");
+    const aaa102 = graph.getByTestId("aaa102");
+    const aaa201 = graph.getByTestId("aaa201");
+    const aaa303 = graph.getByTestId("aaa303");
 
     // AAA201 and AAA102 => AAA303
     expect(andBool.classList.contains("inactive")).toBe(true);
@@ -82,7 +82,7 @@ describe("AND Bool", () => {
   it("AND should have the missing class when the mouse is hovering over a child class.", async () => {
     const graph = await TestGraph.build();
     const andBool = graph.getNodeByText("and");
-    const aaa303 = graph.getNodeByText("AAA303");
+    const aaa303 = graph.getByTestId("aaa303");
 
     // AAA201 and AAA102 => AAA303
     expect(andBool.classList.contains("inactive")).toBe(true);
@@ -145,9 +145,9 @@ describe("OR Bool", () => {
   it("or should become selected when its prereq parents are satisfied", async () => {
     const graph = await TestGraph.build();
     const orBool = graph.getNodeByText("or");
-    const aaa102 = graph.getNodeByText("AAA102");
-    const aaa201 = graph.getNodeByText("AAA201");
-    const aaa202 = graph.getNodeByText("AAA202");
+    const aaa102 = graph.getByTestId("aaa102");
+    const aaa201 = graph.getByTestId("aaa201");
+    const aaa202 = graph.getByTestId("aaa202");
 
     // AAA201 or AAA102 => AAA202
     expect(orBool.classList.contains("inactive")).toBe(true);
@@ -163,7 +163,7 @@ describe("OR Bool", () => {
   it("or should have the missing class when the mouse is hovering over a child class.", async () => {
     const graph = await TestGraph.build();
     const orBool = graph.getNodeByText("or");
-    const aaa202 = graph.getNodeByText("AAA202");
+    const aaa202 = graph.getByTestId("aaa202");
 
     // AAA201 or AAA102 => AAA202
     expect(orBool.classList.contains("inactive")).toBe(true);

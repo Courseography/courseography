@@ -33,14 +33,17 @@ taskMap = Map.fromList [
     ("graphs", const parsePrebuiltSvgs),
     ("css", const compileCSS),
     ("docs", const generateDocs),
-    ("generate", \(name : courses) -> generatePrereqsForCourses (name, courses))]
+    ("generate", generate)]
 
 -- | Courseography entry point.
 main :: IO ()
 main = do
     args <- getArgs
-    let taskName = if null args then "server" else head args
-    fromMaybe putUsage (Map.lookup taskName taskMap) $ tail args
+    let (taskName, rest) =
+            case args of
+                [] -> ("server", [])
+                (command : remaining) -> (command, remaining)
+    fromMaybe putUsage (Map.lookup taskName taskMap) rest
 
 
 -- | Print usage message to user (when main gets an incorrect argument).
@@ -50,3 +53,9 @@ putUsage _ = hPutStrLn stderr usageMsg
         taskNames = Map.keys taskMap
         usageMsg = "Unrecognized argument. Available arguments:\n" ++
                    intercalate "\n" taskNames
+
+generate :: [String] -> IO ()
+generate (name : courses) = generatePrereqsForCourses (name, courses)
+generate _ = hPutStrLn
+    stderr
+    "Generate Usage: generate <filename> <course1> <course2> ..."
