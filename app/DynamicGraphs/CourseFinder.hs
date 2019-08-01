@@ -22,7 +22,7 @@ import WebParsing.ReqParser (parseReqs)
 lookupCourses ::  [String] -- ^ a list of courses that have been taken
                   -> [T.Text]
                   -> IO (Map.Map T.Text Req)
-lookupCoursesExcluding taken courses =
+lookupCourses taken courses =
     execStateT (mapM_ (lookupCourse $ Set.fromList taken) courses) Map.empty
 
 lookupCourse :: Set.Set String -> T.Text -> StateT (Map.Map T.Text Req) IO ()
