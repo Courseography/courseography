@@ -1,0 +1,17 @@
+{
+    "configurations": [{
+        "type": "node",
+        "request": "launch",
+        "name": "Courseography Tests",
+        "program": "${workspaceRoot}/node_modules/.bin/jest",
+        "args": [
+            "-i"
+        ],
+        "disableOptimisticBPs": true,
+        "skipFiles": [
+            "<node_internals>/**",
+            "${workspaceFolder}/node_modules/**/*.js"
+        ]
+    }]
+}
+
