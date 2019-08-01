@@ -17,6 +17,7 @@ module Database.CourseQueries
      queryGraphs,
      deptList,
      returnMeeting,
+     getGraph,
      getGraphJSON,
      getMeetingTime,
      buildTimes') where
@@ -122,13 +123,21 @@ buildMeetTimes meet = do
 -- | Looks up a graph using its title then gets the Shape, Text and Path elements
 -- for rendering graph (returned as JSON).
 getGraphJSON :: T.Text -> IO Response
-getGraphJSON graphName =
+getGraphJSON graphName = getGraph graphName >>= withDefault
+    where
+        withDefault (Just response) = return response
+        withDefault Nothing = return $
+            createJSONResponse $
+            object ["texts" .= ([] :: [Text]),
+                    "shapes" .= ([] :: [Text]),
+                    "paths" .= ([] :: [Text])]
+
+getGraph :: T.Text -> IO (Maybe Response)
+getGraph graphName =
     runSqlite databasePath $ do
         graphEnt :: (Maybe (Entity Graph)) <- selectFirst [GraphTitle ==. graphName] []
         case graphEnt of
-            Nothing -> return $ createJSONResponse $ object ["texts" .= ([] :: [Text]),
-                                                             "shapes" .= ([] :: [Shape]),
-                                                             "paths" .= ([] :: [Path])]
+            Nothing -> return Nothing
             Just graph -> do
                 let gId = entityKey graph
                 sqlTexts    :: [Entity Text] <- selectList [TextGraph ==. gId] []
@@ -168,7 +177,7 @@ getGraphJSON graphName =
                             ("height", toJSON $ graphHeight $ entityVal graph)
                         ]
 
-                return response :: SqlPersistM Response
+                return (Just response) :: SqlPersistM (Maybe Response)
 
 -- | Builds a list of all course codes in the database.
 allCourses :: IO Response

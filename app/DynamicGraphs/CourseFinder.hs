@@ -16,17 +16,12 @@ import Database.CourseQueries (prereqsForCourse)
 import Database.Requirement (Req(..))
 import WebParsing.ReqParser (parseReqs)
 
--- | Return a map from course codes to prerequisites for the given courses and
--- all of their prerequisites, followed by their prerequisites' prerequisites,
--- and so on.
-lookupCourses :: [T.Text] -> IO (Map.Map T.Text Req)
-lookupCourses = lookupCoursesExcluding []
-
 -- | Recursively populate the map from courses to prerequisites, excluding the
 -- prerequisites of courses that have been taken and courses in OR clauses where
 -- at least one of the satisfying courses has been taken.
-lookupCoursesExcluding :: [String] -- ^ a list of courses that have been taken
-                            -> [T.Text] -> IO (Map.Map T.Text Req)
+lookupCourses ::  [String] -- ^ a list of courses that have been taken
+                  -> [T.Text]
+                  -> IO (Map.Map T.Text Req)
 lookupCoursesExcluding taken courses =
     execStateT (mapM_ (lookupCourse $ Set.fromList taken) courses) Map.empty
 
