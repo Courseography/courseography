@@ -35,7 +35,8 @@ coursesToPrereqGraphExcluding taken courses = do
     reqs <- lookupCourses taken $ map pack courses
     let reqs' = Map.toList reqs
     return $ fst $ State.runState (reqsToGraph reqs') initialState
-    where initialState = GeneratorState 0 Map.empty
+    where
+        initialState = GeneratorState 0 Map.empty
 
 sampleGraph :: DotGraph Text
 sampleGraph = fst $ State.runState (reqsToGraph [

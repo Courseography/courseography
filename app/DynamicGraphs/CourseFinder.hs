@@ -19,9 +19,9 @@ import WebParsing.ReqParser (parseReqs)
 -- | Recursively populate the map from courses to prerequisites, excluding the
 -- prerequisites of courses that have been taken and courses in OR clauses where
 -- at least one of the satisfying courses has been taken.
-lookupCourses ::  [String] -- ^ a list of courses that have been taken
-                  -> [T.Text]
-                  -> IO (Map.Map T.Text Req)
+lookupCourses :: [String] -- ^ a list of courses that have been taken
+                 -> [T.Text]
+                 -> IO (Map.Map T.Text Req)
 lookupCourses taken courses =
     execStateT (mapM_ (lookupCourse $ Set.fromList taken) courses) Map.empty
 
