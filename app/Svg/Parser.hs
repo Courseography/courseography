@@ -14,7 +14,7 @@ directly to the client when viewing the @/graph@ page.
 -}
 
 module Svg.Parser
-    (parsePrebuiltSvgs) where
+    (parsePrebuiltSvgs, parseDynamicSvg) where
 
 import Data.Maybe (fromMaybe)
 import qualified Text.HTML.TagSoup as TS hiding (fromAttrib)
@@ -59,6 +59,9 @@ parsePrebuiltSvgs = runSqlite databasePath $ do
     performParse "Aboriginal" "abs2015.svg"
     performParse "German" "ger2015.svg"
 
+parseDynamicSvg :: T.Text -> T.Text -> IO ()
+parseDynamicSvg graphName graphContents =
+    runSqlite databasePath $ performParseFromMemory graphName graphContents
 
 -- | The starting point for parsing a graph with a given title and file.
 performParse :: T.Text -- ^ The title of the graph.
@@ -67,7 +70,11 @@ performParse :: T.Text -- ^ The title of the graph.
 performParse graphName inputFilename = do
     liftIO . print $ "Parsing graph " ++ T.unpack graphName ++ " from file " ++ inputFilename
     graphFile <- liftIO $ T.readFile (graphPath ++ inputFilename)
-    let tags = TS.parseTags graphFile
+    performParseFromMemory graphName graphFile
+
+performParseFromMemory :: T.Text -> T.Text -> SqlPersistM ()
+performParseFromMemory graphName graphContents = do
+    let tags = TS.parseTags graphContents
         svgRoot = head $ filter (TS.isTagOpenName "svg") tags
         (graphWidth, graphHeight) = parseSize svgRoot
     key <- insertGraph graphName graphWidth graphHeight
@@ -302,7 +309,7 @@ parseValWithState parser initialState input =
 -- | Runs a parser on a text object without internal parser state.
 -- Throws an exception on any parse errors.
 parseVal :: Parser a -> T.Text -> a
-parseVal parser input = parseValWithState parser () input
+parseVal parser = parseValWithState parser ()
 
 -- | Looks up an attribute value using the given parser.
 parseAttr :: Parser a -> T.Text     -- ^ The attribute's name.
@@ -409,7 +416,7 @@ data PathDState = PathDState
 -- See <https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d>.
 parsePathD :: T.Text -- ^ The 'd' attribute of an SVG path.
            -> [Point]
-parsePathD d = parseValWithState parser initialState d
+parsePathD = parseValWithState parser initialState
     where
         -- Keep track of the (first point, path mode, most recent point)
         initialState = PathDState { firstPoint = (0, 0)

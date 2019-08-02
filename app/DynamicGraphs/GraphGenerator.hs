@@ -3,6 +3,7 @@
 module DynamicGraphs.GraphGenerator
   ( sampleGraph
   , coursesToPrereqGraph
+  , coursesToPrereqGraphExcluding
   )
   where
 
@@ -27,8 +28,11 @@ import Control.Monad (mapM)
 
 -- Serves as a sort of "interface" for the whole part "dynamic graph"
 coursesToPrereqGraph :: [String] -> IO (DotGraph Text)
-coursesToPrereqGraph courses = do
-    reqs <- lookupCourses $ map pack courses
+coursesToPrereqGraph = coursesToPrereqGraphExcluding []
+
+coursesToPrereqGraphExcluding :: [String] -> [String] -> IO (DotGraph Text)
+coursesToPrereqGraphExcluding taken courses = do
+    reqs <- lookupCourses taken $ map pack courses
     let reqs' = Map.toList reqs
     return $ fst $ State.runState (reqsToGraph reqs') initialState
     where
