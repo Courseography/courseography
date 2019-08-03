@@ -32,7 +32,7 @@ timetableScripts :: H.Html
 timetableScripts = do
     mapM_ toScript $
         [if enableCdn
-         then "//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"
+         then "https://maxcdn.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"
          else "/static/js/vendor/bootstrap.min.3.1.1.js"
          ]
     H.script ! A.src "/static/js/grid/app.js" $ ""
