@@ -8,8 +8,7 @@
     "start": "stack exec courseography",
     "test": "./node_modules/.bin/jest",
     "prettier": "./node_modules/.bin/prettier --write ./js/components/graph/",
-    "eslint": "./node_modules/.bin/eslint --fix-dry-run ./js/components/graph",
-    "cypress:open": "cypress open"
+    "eslint": "./node_modules/.bin/eslint --fix-dry-run ./js/components/graph"
   },
   "jest": {
     "setupFiles": [
