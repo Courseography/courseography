@@ -216,7 +216,7 @@ describe("Course Node", () => {
         const aaa202 = graph.getByTestId("aaa202");
         fireEvent.click(aaa201);
         fireEvent.mouseOver(aaa202);
-        // not missing!
+        // not missing because aaa201 is overridden
         expect(aaa101.classList.contains("takeable")).toBe(true);
       });
 
